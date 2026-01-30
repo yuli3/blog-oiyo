@@ -1,0 +1,49 @@
+---
+import { getCollection } from 'astro:content';
+import BlogList from '../../../components/BlogList.astro';
+import { getLocaleFromPath, getTranslations } from '../../../lib/i18n';
+import { siteConfig } from '../../../config/site.config';
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection('blog', ({ data }) => data.draft !== true);
+  const categories = [...new Set(allPosts.map((post) => post.data.category))];
+  
+  return categories.map((category) => ({
+    params: { category: category.toLowerCase().replace(/[^a-z0-9]+/g, '-') },
+    props: { originalCategory: category },
+  }));
+}
+
+const locale = getLocaleFromPath(Astro.url.pathname);
+const t = await getTranslations(locale);
+const { category } = Astro.params;
+const { originalCategory } = Astro.props;
+
+const posts = await getCollection('blog', ({ data }) => {
+  return data.draft !== true && 
+         data.locale === locale && 
+         data.category.toLowerCase().replace(/[^a-z0-9]+/g, '-') === category;
+});
+
+posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const paginationEnabled = siteConfig.features.pagination;
+const postsPerPage = 6;
+const totalPages = Math.ceil(posts.length / postsPerPage);
+
+const page = {
+  data: paginationEnabled ? posts.slice(0, postsPerPage) : posts,
+  currentPage: 1,
+  lastPage: totalPages,
+};
+---
+
+<BlogList 
+  page={page}
+  locale={locale}
+  translations={t}
+  baseUrl={`/category/${category}`}
+  title={originalCategory}
+  subtitle={`Technical insights and deep-dives in ${originalCategory}.`}
+  activeCategory={category}
+/>

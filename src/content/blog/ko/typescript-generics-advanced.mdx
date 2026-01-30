@@ -1,0 +1,427 @@
+---
+title: "타입스크립트 제네릭 심화: 고급 패턴과 실용 사례"
+description: "타입스크립트 제네릭의 심화 개념부터 실전 프로젝트 적용까지, 전문가 수준의 타입 설계를 마스터하세요"
+pubDate: 2025-01-24
+category: "Tools & Frameworks"
+tags: ["typescript", "generics", "programming-patterns", "고급-패턴", "타입-설계"]
+locale: "ko"
+author: "Oiyo 팀"
+featured: false
+---
+
+# 타입스크립트 제네릭 심화: 고급 패턴과 실용 사례
+
+타입스크립트 제네릭은 타입 안정성과 코드 재사용성을 동시에 잡는 강력한 도구입니다. 이 글에서는 기본을 넘어 실전에서 사용하는 고급 패턴들을 다룹니다.
+
+## 🎯 제네릭의 본질
+
+제네릭은 타입을 변수처럼 다루는 방법입니다:
+
+```typescript
+// 기본 제네릭
+function identity<T>(arg: T): T {
+  return arg;
+}
+
+// 여러 타입 매개변수
+function pair<T, U>(first: T, second: U): [T, U] {
+  return [first, second];
+}
+```
+
+## 🏗️ 고급 제네릭 패턴
+
+### 1. 조건부 타입
+
+타입을 조건에 따라 다르게 처리합니다:
+
+```typescript
+// 조건부 타입 기본 문법
+type IsArray<T> = T extends any[] ? true : false;
+
+type Test1 = IsArray<string[]>; // true
+type Test2 = IsArray<string>;   // false
+
+// 더 복잡한 조건부 타입
+type UnpackArray<T> = T extends (infer U)[] ? U : never;
+type UnpackedString = UnpackArray<string[]>; // string
+```
+
+### 2. 매핑 타입
+
+객체의 모든 속성을 변환합니다:
+
+```typescript
+type Optional<T> = {
+  [K in keyof T]?: T[K];
+};
+
+type Person = {
+  name: string;
+  age: number;
+};
+
+type OptionalPerson = Optional<Person>;
+// { name?: string; age?: number; }
+
+// 더 복잡한 매핑
+type ReadonlyDeep<T> = {
+  readonly [K in keyof T]: T[K] extends object ? ReadonlyDeep<T[K]> : T[K];
+};
+```
+
+### 3. 템플릿 리터럴 타입
+
+문자열을 타입 레벨에서 조작합니다:
+
+```typescript
+type Getters<T> = {
+  [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K];
+};
+
+interface User {
+  name: string;
+  age: number;
+  email: string;
+}
+
+type UserGetters = Getters<User>;
+/*
+{
+  getName: () => string;
+  getAge: () => number;
+  getEmail: () => string;
+}
+*/
+
+// URL 파라미터 타입 만들기
+type UrlParams<T extends string> = T extends `${infer Param}=${infer Value}`
+  ? { [K in Param]: Value }
+  : never;
+
+type Params = UrlParams<"id=123&name=john&active=true">;
+// { id: "123"; name: "john"; active: "true" }
+```
+
+## 🔧 실전 제네릭 유틸리티
+
+### 1. API 응답 타입
+
+```typescript
+interface ApiResponse<T = any> {
+  data: T;
+  message: string;
+  status: 'success' | 'error';
+  code: number;
+}
+
+// 사용 예시
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+async function fetchUser(id: number): Promise<ApiResponse<User>> {
+  const response = await fetch(`/api/users/${id}`);
+  return response.json();
+}
+
+// 에러 응답도 타입 안정성 유지
+type ErrorResponse = ApiResponse<never>;
+```
+
+### 2. 상태 관리 제네릭
+
+```typescript
+interface State<T> {
+  data: T | null;
+  loading: boolean;
+  error: string | null;
+}
+
+type Actions<T> = {
+  setLoading: (loading: boolean) => void;
+  setData: (data: T) => void;
+  setError: (error: string | null) => void;
+  reset: () => void;
+}
+
+function createState<T>(initial: T | null = null): [State<T>, Actions<T>] {
+  let state: State<T> = {
+    data: initial,
+    loading: false,
+    error: null
+  };
+
+  const actions: Actions<T> = {
+    setLoading: (loading) => { state.loading = loading; },
+    setData: (data) => { state.data = data; state.error = null; },
+    setError: (error) => { state.error = error; state.data = null; },
+    reset: () => { state = { data: initial, loading: false, error: null }; }
+  };
+
+  return [state, actions];
+}
+```
+
+### 3. 이벤트 시스템 제네릭
+
+```typescript
+type EventMap<T extends Record<string, any>> = {
+  [K in keyof T]: (payload: T[K]) => void;
+};
+
+class EventEmitter<T extends Record<string, any>> {
+  private listeners: { [K in keyof T]?: Array<(payload: T[K]) => void> } = {};
+
+  on<K extends keyof T>(event: K, callback: (payload: T[K]) => void) {
+    if (!this.listeners[event]) {
+      this.listeners[event] = [];
+    }
+    this.listeners[event]!.push(callback);
+  }
+
+  emit<K extends keyof T>(event: K, payload: T[K]) {
+    const callbacks = this.listeners[event];
+    if (callbacks) {
+      callbacks.forEach(callback => callback(payload));
+    }
+  }
+}
+
+// 사용 예시
+interface AppEvents {
+  userLoggedIn: { userId: string; timestamp: Date };
+  dataUpdated: { type: string; data: any };
+  errorOccurred: { message: string; code: number };
+}
+
+const emitter = new EventEmitter<AppEvents>();
+
+emitter.on('userLoggedIn', ({ userId, timestamp }) => {
+  console.log(`User ${userId} logged in at ${timestamp}`);
+});
+```
+
+## 🧮 고급 타입 추론
+
+### 1. infer 키워드 심화
+
+```typescript
+// 배열 요소 타입 추론
+type ArrayElement<T> = T extends (infer U)[] ? U : never;
+
+// 함수 반환 타입 추론
+type ReturnType<T> = T extends (...args: any[]) => infer R ? R : never;
+
+// 함수 파라미터 타입 추론
+type Parameters<T> = T extends (...args: infer P) => any ? P : never;
+
+// Promise 타입 추론
+type UnpackPromise<T> = T extends Promise<infer U> ? U : T;
+
+// 중첩된 타입 추론
+type DeepUnpackPromise<T> = T extends Promise<infer U>
+  ? U extends Promise<any>
+    ? DeepUnpackPromise<U>
+    : U
+  : T;
+
+// 사용 예시
+type UsersPromise = Promise<User[]>;
+type Users = UnpackPromise<UsersPromise>; // User[]
+type NestedPromise = Promise<Promise<string>>;
+type NestedString = DeepUnpackPromise<NestedPromise>; // string
+```
+
+### 2. 재귀적 타입
+
+```typescript
+// 깊이 있는 선택적 타입
+type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
+};
+
+// 객체의 모든 경로를 문자열로
+type Path<T> = T extends object
+  ? {
+      [K in keyof T]: K extends string
+        ? T[K] extends object
+          ? `${K}.${Path<T[K]>}`
+          : K
+        : never;
+    }[keyof T]
+  : never;
+
+interface NestedObject {
+  user: {
+    profile: {
+      name: string;
+      email: string;
+    };
+    settings: {
+      theme: 'light' | 'dark';
+      notifications: boolean;
+    };
+  };
+}
+
+type ObjectPaths = Path<NestedObject>;
+/*
+"user.profile.name" |
+"user.profile.email" | 
+"user.settings.theme" |
+"user.settings.notifications"
+*/
+```
+
+## 🎯 실전 사례: 데이터베이스 쿼리 빌더
+
+```typescript
+interface QueryCondition {
+  equals?: any;
+  in?: any[];
+  contains?: string;
+  greaterThan?: number;
+  lessThan?: number;
+}
+
+type Query<T> = {
+  [K in keyof T]?: QueryCondition;
+};
+
+type SortOrder = 'asc' | 'desc';
+type Sort<T> = {
+  field: keyof T;
+  order: SortOrder;
+};
+
+interface QueryBuilder<T> {
+  where(conditions: Query<T>): QueryBuilder<T>;
+  sortBy(sort: Sort<T>): QueryBuilder<T>;
+  limit(count: number): QueryBuilder<T>;
+  offset(count: number): QueryBuilder<T>;
+  execute(): Promise<T[]>;
+  count(): Promise<number>;
+}
+
+class RealQueryBuilder<T> implements QueryBuilder<T> {
+  private query: {
+    where: Query<T> = {};
+    sort?: Sort<T>;
+    limit?: number;
+    offset?: number;
+  } = {};
+
+  where(conditions: Query<T>): this {
+    this.query.where = { ...this.query.where, ...conditions };
+    return this;
+  }
+
+  sortBy(sort: Sort<T>): this {
+    this.query.sort = sort;
+    return this;
+  }
+
+  limit(count: number): this {
+    this.query.limit = count;
+    return this;
+  }
+
+  offset(count: number): this {
+    this.query.offset = count;
+    return this;
+  }
+
+  async execute(): Promise<T[]> {
+    // 실제 데이터베이스 쿼리 실행 로직
+    console.log('Executing query:', this.query);
+    return [];
+  }
+
+  async count(): Promise<number> {
+    console.log('Counting with query:', this.query);
+    return 0;
+  }
+}
+
+// 사용 예시
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  age: number;
+  isActive: boolean;
+  createdAt: Date;
+}
+
+const userQuery = new RealQueryBuilder<User>()
+  .where({
+    isActive: { equals: true },
+    age: { greaterThan: 18 },
+    name: { contains: 'John' }
+  })
+  .sortBy({ field: 'createdAt', order: 'desc' })
+  .limit(10)
+  .offset(0);
+
+const users = await userQuery.execute();
+```
+
+## 🚀 성능 최적화 팁
+
+### 1. 타입 너비 최소화
+
+```typescript
+// 나쁜 예시: 너무 넓은 타입
+function processData<T extends any>(data: T): void {
+  // any와 다름 없음
+}
+
+// 좋은 예시: 구체적인 제약
+function processData<T extends { id: string }>(data: T): void {
+  // 최소한 id 속성이 있다는 것을 보장
+}
+```
+
+### 2. 조건부 타입 최적화
+
+```typescript
+// 복잡한 조건부 타입은 분리해서 사용
+type ComplexCondition<T> = T extends string
+  ? T extends `${infer Prefix}_${infer Suffix}`
+    ? { prefix: Prefix; suffix: Suffix }
+    : never
+  : never;
+
+// 더 읽기 쉬게 분리
+type HasUnderscore<T> = T extends `${string}_${string}` ? T : never;
+type SplitByUnderscore<T> = T extends `${infer Prefix}_${infer Suffix}`
+  ? { prefix: Prefix; suffix: Suffix }
+  : never;
+
+type ParseString<T> = HasUnderscore<T> extends never
+  ? never
+  : SplitByUnderscore<T>;
+```
+
+## 📚 모범 사례
+
+1. **항상 구체적인 제약 조건 사용**: `any` 대신 구체적인 타입
+2. **복잡한 타입은 작게 분리**: 가독성과 유지보수성 향상
+3. **타입 너비 최소화**: 불필요한 일반화 피하기
+4. **문서화 주석 추가**: 복잡한 제네릭은 설명 필요
+5. **테스트 코드 작성**: 타입이 의도대로 동작하는지 확인
+
+## 🎉 결론
+
+타입스크립트 제네릭은 단순한 문법이 아니라, 타입 수준에서 추상화와 재사용성을 구현하는 강력한 패러다임입니다. 고급 패턴들을 마스터하면 더 안정적이고 유지보수하기 쉬운 코드를 작성할 수 있습니다.
+
+실전 프로젝트에서 이 패턴들을 적용해보며 타입스크립트의 진정한 힘을 경험해보세요! 💪
+
+## 🔗 추가 학습 자료
+
+- [TypeScript Handbook - Generics](https://www.typescriptlang.org/docs/handbook/2/generics.html)
+- [Advanced TypeScript Types](https://type-level-typescript.com/)
+- [Utility Types](https://www.typescriptlang.org/docs/handbook/utility-types.html)

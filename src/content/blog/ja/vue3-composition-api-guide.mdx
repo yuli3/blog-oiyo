@@ -1,0 +1,411 @@
+---
+title: "Vue 3 Composition API 完全ガイド：実践的なコード例付き"
+description: "Vue 3 Composition APIの基本から応用まで、実践的なコード例と共に完全マスター"
+pubDate: 2025-01-26
+category: "Web Development"
+tags: ["vue", "javascript", "frontend", "チュートリアル", "composition-api"]
+locale: "ja"
+author: "Oiyo チーム"
+featured: true
+---
+
+# Vue 3 Composition API 完全ガイド：実践的なコード例付き
+
+Vue 3のComposition APIは、より柔軟で再利用可能なコードを書くための強力な機能です。このガイドでは、基本から応用までを実際のコード例と共に解説します。
+
+## 🎯 Composition APIとは？
+
+Composition APIは、Options APIに代わる新しいコンポーネント記述方法です。TypeScriptとの相性が良く、ロジックの再利用が容易になります。
+
+### 基本的なセットアップ
+
+```vue
+<script setup lang="ts">
+import { ref, reactive, computed, onMounted } from 'vue'
+
+// リアクティブな状態
+const count = ref(0)
+const user = reactive({
+  name: '山田太郎',
+  age: 25
+})
+
+// 算出プロパティ
+const doubleCount = computed(() => count.value * 2)
+
+// ライフサイクルフック
+onMounted(() => {
+  console.log('コンポーネントがマウントされました')
+})
+</script>
+
+<template>
+  <div>
+    <p>カウント: {{ count }}</p>
+    <p>2倍のカウント: {{ doubleCount }}</p>
+    <p>ユーザー: {{ user.name }} ({{ user.age }}歳)</p>
+  </div>
+</template>
+```
+
+## 🏗️ リアクティブシステムの深掘り
+
+### ref vs reactive
+
+```vue
+<script setup lang="ts">
+// ref - プリミティブ値用
+const count = ref(0)
+console.log(count.value) // 0
+
+// reactive - オブジェクト用
+const state = reactive({
+  items: [],
+  loading: false
+})
+console.log(state.items) // 直接アクセス可能
+
+// computed - 算出プロパティ
+const evenNumbers = computed(() => 
+  state.items.filter(item => item % 2 === 0)
+)
+
+// watch - 副作用
+watch(count, (newValue, oldValue) => {
+  console.log(`カウントが ${oldValue} から ${newValue} に変わりました`)
+})
+
+// watchEffect - 即時実行
+watchEffect(() => {
+  console.log(`現在のカウント: ${count.value}`)
+})
+</script>
+```
+
+## 🧩 カスタムコンポーザブルの作成
+
+ロジックを再利用可能な部品として抽出できます：
+
+### useCounterコンポーザブル
+
+```typescript
+// composables/useCounter.ts
+import { ref, computed } from 'vue'
+
+export function useCounter(initialValue = 0) {
+  const count = ref(initialValue)
+  
+  const doubleCount = computed(() => count.value * 2)
+  
+  function increment() {
+    count.value++
+  }
+  
+  function decrement() {
+    count.value--
+  }
+  
+  function reset() {
+    count.value = initialValue
+  }
+  
+  return {
+    count: readonly(count),
+    doubleCount,
+    increment,
+    decrement,
+    reset
+  }
+}
+```
+
+```vue
+<script setup lang="ts">
+import { useCounter } from './composables/useCounter'
+
+const { count, doubleCount, increment, decrement, reset } = useCounter(10)
+</script>
+
+<template>
+  <div>
+    <p>カウント: {{ count }}</p>
+    <p>2倍: {{ doubleCount }}</p>
+    <button @click="increment">+1</button>
+    <button @click="decrement">-1</button>
+    <button @click="reset">リセット</button>
+  </div>
+</template>
+```
+
+### useAPIコンポーザブル
+
+```typescript
+// composables/useAPI.ts
+import { ref } from 'vue'
+
+export function useAPI<T>(url: string) {
+  const data = ref<T | null>(null)
+  const error = ref<string | null>(null)
+  const loading = ref(false)
+
+  async function fetch() {
+    loading.value = true
+    error.value = null
+    
+    try {
+      const response = await fetch(url)
+      data.value = await response.json()
+    } catch (err) {
+      error.value = err instanceof Error ? err.message : '不明なエラー'
+    } finally {
+      loading.value = false
+    }
+  }
+
+  return {
+    data: readonly(data),
+    error: readonly(error),
+    loading: readonly(loading),
+    fetch
+  }
+}
+```
+
+## 🔄 状態管理の高度なパターン
+
+### トランザクションシステム
+
+```vue
+<script setup lang="ts">
+interface Transaction {
+  id: string
+  description: string
+  amount: number
+  category: string
+  date: Date
+}
+
+const transactions = ref<Transaction[]>([])
+const balance = computed(() => 
+  transactions.value.reduce((sum, tx) => sum + tx.amount, 0)
+)
+
+const filter = reactive({
+  category: 'all',
+  dateRange: 'all'
+})
+
+const filteredTransactions = computed(() => {
+  return transactions.value.filter(tx => {
+    if (filter.category !== 'all' && tx.category !== filter.category) {
+      return false
+    }
+    // 日付範囲フィルターのロジック
+    return true
+  })
+})
+
+function addTransaction(transaction: Omit<Transaction, 'id'>) {
+  const newTransaction: Transaction = {
+    ...transaction,
+    id: Date.now().toString(),
+    date: new Date()
+  }
+  transactions.value.push(newTransaction)
+}
+
+function removeTransaction(id: string) {
+  const index = transactions.value.findIndex(tx => tx.id === id)
+  if (index > -1) {
+    transactions.value.splice(index, 1)
+  }
+}
+</script>
+```
+
+## 🎨 スタイルとアニメーション
+
+### 動的スタイリング
+
+```vue
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+
+const isDark = ref(false)
+
+const theme = computed(() => ({
+  backgroundColor: isDark.value ? '#1a1a1a' : '#ffffff',
+  color: isDark.value ? '#ffffff' : '#1a1a1a'
+}))
+
+function toggleTheme() {
+  isDark.value = !isDark.value
+}
+</script>
+
+<template>
+  <div :style="theme" class="app">
+    <button @click="toggleTheme">
+      {{ isDark ? '☀️ ライトモード' : '🌙 ダークモード' }}
+    </button>
+  </div>
+</template>
+
+<style scoped>
+.app {
+  transition: all 0.3s ease;
+  padding: 20px;
+  border-radius: 8px;
+  min-height: 100vh;
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+</style>
+```
+
+## 🎯 パフォーマンス最適化
+
+### 遅延読みとスロット
+
+```vue
+<script setup lang="ts">
+const heavyComponent = shallowRef(null)
+const showHeavy = ref(false)
+
+async function loadHeavyComponent() {
+  if (!heavyComponent.value) {
+    const module = await import('./HeavyComponent.vue')
+    heavyComponent.value = module.default
+  }
+  showHeavy.value = true
+}
+</script>
+
+<template>
+  <div>
+    <button @click="loadHeavyComponent">
+      重いコンポーネントを読み込む
+    </button>
+    
+    <HeavyComponent v-if="showHeavy" />
+  </div>
+</template>
+```
+
+### メモ化と仮想化
+
+```vue
+<script setup lang="ts">
+const searchTerm = ref('')
+const items = ref(Array.from({ length: 1000 }, (_, i) => ({
+  id: i,
+  name: `アイテム ${i}`
+})))
+
+// 重い計算をメモ化
+const filteredItems = computed(() => {
+  return items.value.filter(item => 
+    item.name.toLowerCase().includes(searchTerm.value.toLowerCase())
+  )
+})
+
+// リストの仮想化
+const visibleItems = ref([])
+const itemHeight = 50
+const containerHeight = 400
+
+function updateVisibleItems(scrollTop: number) {
+  const startIndex = Math.floor(scrollTop / itemHeight)
+  const endIndex = Math.min(
+    startIndex + Math.ceil(containerHeight / itemHeight) + 1,
+    filteredItems.value.length
+  )
+  
+  visibleItems.value = filteredItems.value.slice(startIndex, endIndex)
+}
+</script>
+
+<template>
+  <div class="virtual-list" @scroll="updateVisibleItems($event.target.scrollTop)">
+    <div class="spacer" :style="{ height: filteredItems.length * itemHeight + 'px' }"></div>
+    <div class="items" :style="{ transform: `translateY(${startIndex * itemHeight}px)` }">
+      <div 
+        v-for="item in visibleItems" 
+        :key="item.id"
+        class="list-item"
+        :style="{ height: itemHeight + 'px' }"
+      >
+        {{ item.name }}
+      </div>
+    </div>
+  </div>
+</template>
+```
+
+## 🧪 テスト戦略
+
+### ユニットテスト
+
+```typescript
+// tests/composables/useCounter.test.ts
+import { describe, it, expect } from 'vitest'
+import { useCounter } from '../../composables/useCounter'
+
+describe('useCounter', () => {
+  it('初期値を正しく設定すること', () => {
+    const { count } = useCounter(5)
+    expect(count.value).toBe(5)
+  })
+
+  it('カウントを増減できること', () => {
+    const { count, increment, decrement } = useCounter(0)
+    
+    increment()
+    expect(count.value).toBe(1)
+    
+    decrement()
+    expect(count.value).toBe(0)
+  })
+
+  it('リセット機能が動作すること', () => {
+    const { count, increment, reset } = useCounter(5)
+    
+    increment()
+    increment()
+    expect(count.value).toBe(7)
+    
+    reset()
+    expect(count.value).toBe(5)
+  })
+})
+```
+
+## 📚 ベストプラクティス
+
+1. ** TypeScriptを常に使用する**: 型安全性の確保
+2. ** ロジックをコンポーザブルに分離**: 再利用性の向上
+3. ** 適切なリアクティブを選択**: ref vs reactive
+4. ** パフォーマンスを考慮**: メモ化、仮想化
+5. ** エラーハンドリングを実装**: try-catch、error boundaries
+
+## 🎉 まとめ
+
+Vue 3 Composition APIは、より現代的でスケーラブルなアプリケーション開発を可能にします。基本を理解し、コンポーザブルを活用することで、クリーンで再利用可能なコードを書くことができます。
+
+## 🔗 さらなる学習リソース
+
+- [Vue 3公式ドキュメント](https://vuejs.org/)
+- [Composition APIガイド](https://vuejs.org/guide/extras/composition-api-faq.html)
+- [Vue School](https://vueschool.io/)
+
+Happy Vue.js開発! 🚀

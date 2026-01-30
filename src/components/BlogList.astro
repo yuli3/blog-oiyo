@@ -1,0 +1,72 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Pagination from './Pagination.astro';
+import CategoryCloud from './CategoryCloud.astro';
+import { siteConfig } from '../config/site.config';
+
+interface Props {
+  page: any;
+  locale: string;
+  translations: any;
+  baseUrl: string;
+  title: string;
+  subtitle: string;
+  activeCategory?: string;
+}
+
+const { page, locale, translations: t, baseUrl, title, subtitle, activeCategory } = Astro.props;
+const paginationEnabled = siteConfig.features.pagination;
+---
+
+<BaseLayout title={title} description={subtitle}>
+  <section class="py-24">
+    <div class="container px-4">
+      <div class="mb-20 animate-fade-up max-w-3xl">
+        <h1 class="text-5xl font-extrabold tracking-tight sm:text-6xl mb-6 font-heading text-primary">
+          {title} 
+          {page.currentPage > 1 && <span class="text-2xl text-muted-foreground font-normal ml-4">Page {page.currentPage}</span>}
+        </h1>
+        <p class="text-xl text-muted-foreground leading-relaxed italic">{subtitle}</p>
+      </div>
+
+      <CategoryCloud {locale} {activeCategory} />
+
+      <div class="grid gap-x-12 gap-y-16 md:grid-cols-2 lg:grid-cols-3">
+        {page.data.map((post: any) => (
+          <article class="group flex flex-col items-start gap-4 animate-fade-up">
+            {post.data.heroImage && (
+              <a href={`/blog/${post.slug}/`} class="w-full aspect-[16/10] overflow-hidden rounded-2xl border border-border/40 bg-muted/20">
+                <img 
+                  src={post.data.heroImage} 
+                  alt={post.data.title} 
+                  class="w-full h-full object-cover transition-all duration-700 group-hover:scale-105 group-hover:opacity-90"
+                />
+              </a>
+            )}
+            <div class="flex items-center gap-2 text-[10px] font-bold text-primary uppercase tracking-[0.2em]">
+              <span>{post.data.category}</span>
+              <span class="text-muted-foreground/30">•</span>
+              <span class="text-muted-foreground/60">{post.data.pubDate.toLocaleDateString(locale === 'ko' ? 'ko-KR' : 'en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+            </div>
+            <h2 class="text-2xl font-bold leading-tight group-hover:text-primary transition-colors font-heading tracking-tight">
+              <a href={`/blog/${post.slug}/`}>
+                {post.data.title}
+              </a>
+            </h2>
+            <p class="text-muted-foreground line-clamp-3 text-base leading-relaxed">
+              {post.data.description}
+            </p>
+          </article>
+        ))}
+      </div>
+
+      {paginationEnabled && page.lastPage > 1 && (
+        <Pagination 
+          currentPage={page.currentPage} 
+          totalPages={page.lastPage} 
+          baseUrl={baseUrl} 
+        />
+      )}
+    </div>
+  </section>
+</BaseLayout>

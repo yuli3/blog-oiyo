@@ -1,0 +1,27 @@
+---
+import { getCollection } from 'astro:content';
+import BlogList from '../../components/BlogList.astro';
+import { getTranslations } from '../../lib/i18n';
+
+export async function getStaticPaths({ paginate }) {
+  const posts = await getCollection('blog', ({ data }) => {
+    return data.draft !== true && data.locale === 'en';
+  });
+  posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+  return paginate(posts, { pageSize: 6 });
+}
+
+const { page } = Astro.props;
+const locale = 'en';
+const t = await getTranslations(locale);
+---
+
+<BlogList 
+  page={page}
+  locale={locale}
+  translations={t}
+  baseUrl="/blog"
+  title={t.blog.title}
+  subtitle={t.blog.searchPlaceholder}
+/>

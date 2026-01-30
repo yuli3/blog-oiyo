@@ -1,0 +1,75 @@
+---
+import SEO from '../components/SEO.astro';
+import { getLocaleFromPath, getTranslations } from '../lib/i18n';
+import { siteConfig } from '../config/site.config';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+}
+
+const { title, description, image, type } = Astro.props;
+const locale = getLocaleFromPath(Astro.url.pathname);
+const t = await getTranslations(locale);
+
+const scrollSnapEnabled = siteConfig.features.scrollSnap;
+---
+
+<html lang={locale} class:list={["scroll-smooth", { "snap-y snap-mandatory": scrollSnapEnabled }]}>
+  <head>
+    <SEO {title} {description} {image} {type} />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="robots" content="index, follow" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="application/rss+xml" title={siteConfig.title} href="/rss.xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body class="min-h-screen bg-background text-foreground font-sans antialiased text-pretty selection:bg-primary/20 selection:text-primary">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-[100] bg-primary text-primary-foreground px-4 py-2 rounded-lg">
+      Skip to content
+    </a>
+    <header role="banner" class="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl">
+      <div class="container flex h-16 items-center justify-between px-4">
+        <div class="flex items-center gap-8">
+          <a href="/" class="flex items-center space-x-2">
+            <span class="inline-block font-bold text-xl tracking-tighter">
+              OIYO
+            </span>
+          </a>
+          <nav class="hidden md:flex gap-6">
+            <a href="/blog" class="text-sm font-bold uppercase tracking-widest text-muted-foreground transition-colors hover:text-primary">{t.nav.blog}</a>
+            <a href="/about" class="text-sm font-bold uppercase tracking-widest text-muted-foreground transition-colors hover:text-primary">{t.nav.about}</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main id="main-content" role="main" class="flex-1">
+      <slot />
+    </main>
+
+    <footer class="py-12 border-t border-border/40 text-center md:text-left">
+      <div class="container px-4">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-8">
+          <span class="font-bold text-lg tracking-tighter">OIYO</span>
+          <nav class="flex gap-8 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+            <a href="/rss.xml" class="hover:text-primary transition-colors">RSS Feed</a>
+            <a href="/sitemap-index.xml" class="hover:text-primary transition-colors">Sitemap</a>
+            <a href="mailto:support@oiyo.net" class="hover:text-primary transition-colors">support@oiyo.net</a>
+          </nav>
+          <div class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/50">
+            © {new Date().getFullYear()} Oiyo Tech
+          </div>
+        </div>
+      </div>
+    </footer>
+
+  </body>
+</html>
+
+

@@ -1,0 +1,326 @@
+---
+title: "Next.js 14 앱 라우터 마스터하기"
+description: "Next.js 14 앱 라우터의 새로운 기능과 실전 예제를 통해 최신 웹 개발 방법을 마스터하세요"
+pubDate: 2025-01-26
+category: "Web Development"
+tags: ["nextjs", "react", "frontend", "튜토리얼", "라우팅"]
+locale: "ko"
+author: "Oiyo 팀"
+featured: true
+---
+
+# Next.js 14 앱 라우터 마스터하기
+
+import Calculator from '../../../components/Calculator';
+
+Next.js 14의 앱 라우터는 웹 개발의 패러다임을 바꾸었습니다. 이 가이드에서는 새로운 기능들을 실전 예제와 함께 다뤄보겠습니다.
+
+<Calculator client:load />
+
+## 🆕 앱 라우터란?
+
+앱 라우터는 React Server Components 기반의 새로운 라우팅 시스템입니다. 페이지 기반 라우팅을 넘어 더 유연한 구조를 제공합니다.
+
+### 새로운 폴더 구조
+
+```
+app/
+├── layout.tsx          # 루트 레이아웃
+├── page.tsx           # 홈페이지
+├── posts/
+│   ├── layout.tsx      # 포스트 레이아웃
+│   ├── page.tsx       # 포스트 목록
+│   └── [slug]/
+│       └── page.tsx    # 개별 포스트
+└── loading.tsx        # 로딩 UI
+```
+
+## 🚀 주요 기능들
+
+### 1. 서버 컴포넌트 기본
+
+이제 모든 컴포넌트가 기본적으로 서버 컴포넌트입니다:
+
+```tsx
+// app/posts/page.tsx - 자동으로 서버 컴포넌트
+async function PostsPage() {
+  const posts = await getPosts(); // 데이터베이스 직접 접근 가능
+  return (
+    <div>
+      {posts.map(post => (
+        <PostCard key={post.id} post={post} />
+      ))}
+    </div>
+  );
+}
+```
+
+### 2. 병렬 라우팅
+
+여러 페이지를 동시에 로드하여 사용자 경험을 향상시킵니다:
+
+```tsx
+// app/dashboard/layout.tsx
+export default function DashboardLayout({
+  children,
+  analytics,
+  notifications,
+}: {
+  children: React.ReactNode;
+  analytics: React.ReactNode;
+  notifications: React.ReactNode;
+}) {
+  return (
+    <section>
+      <nav>{/* 네비게이션 */}</nav>
+      <section>{children}</section>
+      <aside>
+        {analytics}
+        {notifications}
+      </aside>
+    </section>
+  );
+}
+```
+
+### 3. 스트리밍 SSR
+
+로딩 상태를 즉시 표시하고 데이터가 준비되는 대로 렌더링:
+
+```tsx
+// app/posts/loading.tsx
+export default function Loading() {
+  return (
+    <div className="animate-pulse">
+      <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+      <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+    </div>
+  );
+}
+```
+
+## 🎯 데이터 페칭 패턴
+
+### Server Actions
+
+서버 측에서 직접 데이터를 조작할 수 있습니다:
+
+```tsx
+// app/actions/posts.ts
+"use server";
+
+import { revalidatePath } from 'next/cache';
+
+export async function createPost(formData: FormData) {
+  const title = formData.get('title') as string;
+  const content = formData.get('content') as string;
+  
+  // 데이터베이스에 포스트 저장
+  await db.posts.create({ title, content });
+  
+  // 캐시 무효화
+  revalidatePath('/posts');
+}
+```
+
+```tsx
+// app/posts/create/page.tsx
+import { createPost } from '@/app/actions/posts';
+
+export default function CreatePost() {
+  return (
+    <form action={createPost}>
+      <input name="title" placeholder="제목" />
+      <textarea name="content" placeholder="내용"></textarea>
+      <button type="submit">게시</button>
+    </form>
+  );
+}
+```
+
+## 📊 성능 최적화
+
+### 동적 라우팅과 캐싱
+
+```tsx
+// app/posts/[slug]/page.tsx
+import { notFound } from 'next/navigation';
+
+// 동적 렌더링
+export const dynamic = 'force-dynamic';
+
+// 재검증 시간 설정
+export const revalidate = 3600; // 1시간
+
+async function getPost(slug: string) {
+  const post = await db.posts.findUnique({ 
+    where: { slug },
+    cache: {
+      ttl: 3600 // 1시간 캐시
+    }
+  });
+  
+  if (!post) notFound();
+  return post;
+}
+
+export default async function PostPage({ params }: { params: { slug: string } }) {
+  const post = await getPost(params.slug);
+  
+  return (
+    <article>
+      <h1>{post.title}</h1>
+      <div>{post.content}</div>
+    </article>
+  );
+}
+```
+
+### 이미지 최적화
+
+```tsx
+import Image from 'next/image';
+
+export default function PostImage({ src, alt }: { src: string; alt: string }) {
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      width={800}
+      height={400}
+      priority={false}
+      placeholder="blur"
+      className="rounded-lg"
+    />
+  );
+}
+```
+
+## 🔧 미들웨어 구현
+
+인증, 로깅, A/B 테스트 등을 구현할 수 있습니다:
+
+```tsx
+// middleware.ts
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+
+export function middleware(request: NextRequest) {
+  // 인증 확인
+  const token = request.cookies.get('auth-token');
+  
+  if (!token && request.nextUrl.pathname.startsWith('/dashboard')) {
+    return NextResponse.redirect(new URL('/login', request.url));
+  }
+  
+  // 지역별 리다이렉션
+  const country = request.geo?.country;
+  if (country === 'KR') {
+    request.nextUrl.pathname = `/ko${request.nextUrl.pathname}`;
+  }
+  
+  return NextResponse.next();
+}
+
+export const config = {
+  matcher: ['/dashboard/:path*', '/((?!api|_next/static|_next/image|favicon.ico).*)'],
+};
+```
+
+## 📱 모바일 최적화
+
+### 반응형 디자인
+
+```tsx
+// app/components/PostCard.tsx
+export default function PostCard({ post }: { post: Post }) {
+  return (
+    <div className="bg-white rounded-lg shadow-md p-6 
+                hover:shadow-lg transition-shadow duration-300
+                dark:bg-gray-800 dark:text-white">
+      <h2 className="text-xl font-bold mb-2 
+                 text-gray-800 dark:text-gray-100">
+        {post.title}
+      </h2>
+      <p className="text-gray-600 dark:text-gray-300 mb-4">
+        {post.excerpt}
+      </p>
+      <div className="flex justify-between items-center">
+        <span className="text-sm text-gray-500">
+          {new Date(post.createdAt).toLocaleDateString('ko-KR')}
+        </span>
+        <button className="bg-blue-500 text-white px-4 py-2 rounded
+                       hover:bg-blue-600 transition-colors">
+          읽기
+        </button>
+      </div>
+    </div>
+  );
+}
+```
+
+## 🎨 스타일링 전략
+
+### Tailwind CSS와 함께
+
+```tsx
+// app/globals.css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --foreground-rgb: 0, 0, 0;
+    --background-start-rgb: 214, 219, 220;
+    --background-end-rgb: 255, 255, 255;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --foreground-rgb: 255, 255, 255;
+      --background-start-rgb: 0, 0, 0;
+      --background-end-rgb: 0, 0, 0;
+    }
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+```
+
+## 🚀 배포 전략
+
+### Vercel 최적화 설정
+
+```json
+// vercel.json
+{
+  "buildCommand": "next build",
+  "outputDirectory": ".next",
+  "framework": "nextjs",
+  "regions": ["hkg1", "sin1"],
+  "functions": {
+    "app/api/**/*.ts": {
+      "maxDuration": 30
+    }
+  }
+}
+```
+
+## 📚 모범 사례
+
+1. **항상 TypeScript 사용**: 타입 안정성 확보
+2. **에러 핸들링**: error.tsx로 글로벌 에러 처리
+3. **성능 모니터링**: Web Vitals 추적
+4. **보안**: CORS, XSS 방어 구현
+5. **SEO**: 메타 태그, 구조화된 데이터
+
+## 🎉 결론
+
+Next.js 14 앱 라우터는 현대적 웹 개발을 위한 강력한 도구입니다. 서버 컴포넌트, 스트리밍, 병렬 라우팅을 통해 사용자 경험을 크게 향상시킬 수 있습니다.
+
+더 많은 Next.js 14 튜토리얼과 예제를 기대해주세요! 🚀

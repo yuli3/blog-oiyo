@@ -1,0 +1,106 @@
+---
+import { siteConfig } from '../config/site.config';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  canonicalURL?: URL | string;
+  type?: 'website' | 'article';
+}
+
+const {
+  title = siteConfig.title,
+  description = siteConfig.description,
+  image = siteConfig.seo.ogImage,
+  canonicalURL = new URL(Astro.url.pathname, Astro.site),
+  type = 'website',
+} = Astro.props;
+
+const siteTitle = title === siteConfig.title ? title : `${title} | ${siteConfig.title}`;
+---
+
+<!-- Global Metadata -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" href="/favicon.ico" />
+<meta name="generator" content={Astro.generator} />
+
+<!-- Canonical URL -->
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Primary Meta Tags -->
+<title>{siteTitle}</title>
+<meta name="title" content={siteTitle} />
+<meta name="description" content={description} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={type} />
+<meta property="og:url" content={Astro.url} />
+<meta property="og:title" content={siteTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={new URL(image, Astro.url)} />
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={Astro.url} />
+<meta property="twitter:title" content={siteTitle} />
+<meta property="twitter:description" content={description} />
+<meta property="twitter:image" content={new URL(image, Astro.url)} />
+{siteConfig.seo.twitterHandle && <meta property="twitter:creator" content={siteConfig.seo.twitterHandle} />}
+
+<!-- Web Manifest -->
+<link rel="manifest" href="/manifest.json" />
+
+<!-- Sitemap -->
+<link rel="sitemap" href="/sitemap-index.xml" />
+
+<!-- RSS Feed -->
+<link rel="alternate" type="application/rss+xml" title={siteConfig.title} href="/rss.xml" />
+
+<!-- JSON-LD Schemas -->
+<script type="application/ld+json" is:inline set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": siteConfig.seo.organization.name,
+  "url": siteConfig.url,
+  "logo": new URL(siteConfig.seo.organization.logo, siteConfig.url),
+  "sameAs": siteConfig.seo.organization.sameAs
+})} />
+
+<script type="application/ld+json" is:inline set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": siteConfig.title,
+  "url": siteConfig.url,
+  "description": description,
+  "publisher": {
+    "@type": "Organization",
+    "name": siteConfig.seo.organization.name
+  }
+})} />
+
+{type === 'article' && (
+  <script type="application/ld+json" is:inline set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": title,
+    "description": description,
+    "image": [new URL(image, Astro.url)],
+    "author": {
+      "@type": "Person",
+      "name": siteConfig.author,
+      "url": siteConfig.url
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": siteConfig.seo.organization.name,
+      "logo": {
+        "@type": "ImageObject",
+        "url": new URL(siteConfig.seo.organization.logo, siteConfig.url)
+      }
+    },
+    "datePublished": new Date().toISOString() // This should ideally be passed from props
+  })} />
+)}

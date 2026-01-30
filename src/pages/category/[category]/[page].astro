@@ -1,0 +1,39 @@
+---
+import { getCollection } from 'astro:content';
+import BlogList from '../../../components/BlogList.astro';
+import { getTranslations } from '../../../lib/i18n';
+
+export async function getStaticPaths({ paginate }) {
+  const allPosts = await getCollection('blog', ({ data }) => data.draft !== true);
+  const categories = [...new Set(allPosts.map((post) => post.data.category))];
+
+  return categories.flatMap((category) => {
+    const filteredPosts = allPosts
+      .filter((post) => post.data.category === category && post.data.locale === 'en')
+      .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+      
+    return paginate(filteredPosts, {
+      params: { category: category.toLowerCase().replace(/[^a-z0-9]+/g, '-') },
+      pageSize: 6,
+    });
+  });
+}
+
+const { page } = Astro.props;
+const { category } = Astro.params;
+const locale = 'en';
+const t = await getTranslations(locale);
+
+// Find the original category name from the first post if available
+const displayCategory = page.data[0]?.data.category || category;
+---
+
+<BlogList 
+  page={page}
+  locale={locale}
+  translations={t}
+  baseUrl={`/category/${category}`}
+  title={displayCategory}
+  subtitle={`Technical insights and deep-dives in ${displayCategory.toLowerCase()}.`}
+  activeCategory={category}
+/>
