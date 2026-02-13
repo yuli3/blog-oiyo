@@ -7,6 +7,10 @@ import sitemap from '@astrojs/sitemap';
 import mdx from '@astrojs/mdx';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import robotsTxt from 'astro-robots-txt';
+import wikiLinkPlugin from 'remark-wiki-link';
+import rehypeSlug from 'rehype-slug';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 
 import cloudflare from '@astrojs/cloudflare';
 
@@ -20,7 +24,8 @@ export default defineConfig({
   integrations: [
     react(),
     mdx(),
-    sitemap()
+    sitemap(),
+    robotsTxt(),
   ],
   image: {
     service: {
@@ -56,7 +61,11 @@ export default defineConfig({
       theme: 'github-dark',
       wrap: true
     },
-    remarkPlugins: [remarkMath],
-    rehypePlugins: [rehypeKatex]
+    remarkPlugins: [remarkMath, [wikiLinkPlugin, { hrefTemplate: (permalink) => `/${permalink}` }]],
+    rehypePlugins: [
+      rehypeKatex,
+      rehypeSlug,
+      [rehypeAutolinkHeadings, { behavior: 'wrap' }]
+    ]
   }
 });
