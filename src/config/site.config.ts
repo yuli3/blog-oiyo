@@ -30,7 +30,8 @@ export const siteConfig = {
     }
   },
   analytics: {
-    googleAnalyticsId: "", 
+    googleAnalyticsId: "G-915L6V38X6",
+    googleAdsenseId: "ca-pub-9541920090543312",
   }
 };
 

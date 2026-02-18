@@ -65,6 +65,9 @@ const getLocalizedUrl = (locale: string) => {
 
   return new URL(localizedPath, Astro.site);
 };
+
+const googleAnalyticsId = siteConfig.analytics.googleAnalyticsId;
+const googleAdsenseId = siteConfig.analytics.googleAdsenseId;
 ---
 
 <!-- Global Metadata -->
@@ -75,6 +78,21 @@ const getLocalizedUrl = (locale: string) => {
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 <meta name="generator" content={Astro.generator} />
 <meta name="theme-color" content={siteConfig.themeColor} />
+
+{googleAnalyticsId && (
+  <script async src={`https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`}></script>
+  <script is:inline define:vars={{ googleAnalyticsId }}>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', googleAnalyticsId);
+  </script>
+)}
+
+{googleAdsenseId && (
+  <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${googleAdsenseId}`}
+     crossorigin="anonymous"></script>
+)}
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
