@@ -1,12 +1,15 @@
 ---
-import { siteConfig } from '../config/site.config';
+import { siteConfig } from "../config/site.config";
 
 interface Props {
   title?: string;
   description?: string;
   image?: string;
   canonicalURL?: URL | string;
-  type?: 'website' | 'article';
+  type?: "website" | "article";
+  pubDate?: Date;
+  updatedDate?: Date;
+  category?: string;
 }
 
 const {
@@ -14,21 +17,75 @@ const {
   description = siteConfig.description,
   image = siteConfig.seo.ogImage,
   canonicalURL = new URL(Astro.url.pathname, Astro.site),
-  type = 'website',
+  type = "website",
+  pubDate,
+  updatedDate,
+  category,
 } = Astro.props;
 
-const siteTitle = title === siteConfig.title ? title : `${title} | ${siteConfig.title}`;
+const siteTitle =
+  title === siteConfig.title ? title : `${title} | ${siteConfig.title}`;
+
+// Multilingual Hreflang logic
+const locales = siteConfig.locales;
+const currentPathname = Astro.url.pathname;
+
+// Helper to generate localized URLs
+const getLocalizedUrl = (locale: string) => {
+  const parts = currentPathname.split("/").filter(Boolean);
+  // If the first segment is a locale, replace it
+  if (locales.includes(parts[0])) {
+    parts[0] = locale;
+  } else {
+    // If it's the default locale (no prefix), add the prefix if not 'en'
+    if (locale !== "en") {
+      parts.unshift(locale);
+    }
+  }
+  // Special case: if it's 'en' (prefixDefaultLocale: false), remove the prefix if it was there
+  if (locale === "en" && locales.includes(currentPathname.split("/")[1])) {
+    // This logic depends on prefixDefaultLocale: false
+    // If current path starts with /ko/... and we want 'en', it should be /...
+  }
+
+  // Refined logic for prefixDefaultLocale: false
+  let localizedPath = currentPathname;
+  const firstSegment = currentPathname.split("/")[1];
+
+  if (locales.includes(firstSegment)) {
+    // Current is prefixed (e.g., /ko/blog)
+    const restOfPath = currentPathname.replace(`/${firstSegment}`, "");
+    localizedPath =
+      locale === "en" ? restOfPath || "/" : `/${locale}${restOfPath}`;
+  } else {
+    // Current is NOT prefixed (e.g., /blog)
+    localizedPath =
+      locale === "en" ? currentPathname : `/${locale}${currentPathname}`;
+  }
+
+  return new URL(localizedPath, Astro.site);
+};
 ---
 
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/png" href="/favicon.png" />
 <link rel="icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 <meta name="generator" content={Astro.generator} />
+<meta name="theme-color" content={siteConfig.themeColor} />
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
+
+<!-- Multilingual SEO (Hreflang) -->
+{
+  locales.map((locale) => (
+    <link rel="alternate" hreflang={locale} href={getLocalizedUrl(locale)} />
+  ))
+}
+<link rel="alternate" hreflang="x-default" href={getLocalizedUrl("en")} />
 
 <!-- Primary Meta Tags -->
 <title>{siteTitle}</title>
@@ -38,6 +95,7 @@ const siteTitle = title === siteConfig.title ? title : `${title} | ${siteConfig.
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content={type} />
 <meta property="og:url" content={Astro.url} />
+<meta property="og:site_name" content={siteConfig.name} />
 <meta property="og:title" content={siteTitle} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={new URL(image, Astro.url)} />
@@ -48,7 +106,16 @@ const siteTitle = title === siteConfig.title ? title : `${title} | ${siteConfig.
 <meta property="twitter:title" content={siteTitle} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image, Astro.url)} />
-{siteConfig.seo.twitterHandle && <meta property="twitter:creator" content={siteConfig.seo.twitterHandle} />}
+{
+  siteConfig.seo.twitterHandle && (
+    <meta property="twitter:site" content={siteConfig.seo.twitterHandle} />
+  )
+}
+{
+  siteConfig.seo.twitterHandle && (
+    <meta property="twitter:creator" content={siteConfig.seo.twitterHandle} />
+  )
+}
 
 <!-- Web Manifest -->
 <link rel="manifest" href="/manifest.json" />
@@ -57,50 +124,104 @@ const siteTitle = title === siteConfig.title ? title : `${title} | ${siteConfig.
 <link rel="sitemap" href="/sitemap-index.xml" />
 
 <!-- RSS Feed -->
-<link rel="alternate" type="application/rss+xml" title={siteConfig.title} href="/rss.xml" />
+<link
+  rel="alternate"
+  type="application/rss+xml"
+  title={siteConfig.title}
+  href="/rss.xml"
+/>
 
 <!-- JSON-LD Schemas -->
-<script type="application/ld+json" is:inline set:html={JSON.stringify({
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": siteConfig.seo.organization.name,
-  "url": siteConfig.url,
-  "logo": new URL(siteConfig.seo.organization.logo, siteConfig.url),
-  "sameAs": siteConfig.seo.organization.sameAs
-})} />
-
-<script type="application/ld+json" is:inline set:html={JSON.stringify({
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": siteConfig.title,
-  "url": siteConfig.url,
-  "description": description,
-  "publisher": {
-    "@type": "Organization",
-    "name": siteConfig.seo.organization.name
-  }
-})} />
-
-{type === 'article' && (
-  <script type="application/ld+json" is:inline set:html={JSON.stringify({
+<script
+  type="application/ld+json"
+  is:inline
+  set:html={JSON.stringify({
     "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": title,
-    "description": description,
-    "image": [new URL(image, Astro.url)],
-    "author": {
-      "@type": "Person",
-      "name": siteConfig.author,
-      "url": siteConfig.url
-    },
-    "publisher": {
+    "@type": "Organization",
+    name: siteConfig.seo.organization.name,
+    url: siteConfig.url,
+    logo: new URL(siteConfig.seo.organization.logo, siteConfig.url),
+    sameAs: siteConfig.seo.organization.sameAs,
+  })}
+/>
+
+<script
+  type="application/ld+json"
+  is:inline
+  set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: siteConfig.name,
+    url: siteConfig.url,
+    description: siteConfig.description,
+    publisher: {
       "@type": "Organization",
-      "name": siteConfig.seo.organization.name,
-      "logo": {
-        "@type": "ImageObject",
-        "url": new URL(siteConfig.seo.organization.logo, siteConfig.url)
-      }
+      name: siteConfig.seo.organization.name,
     },
-    "datePublished": new Date().toISOString() // This should ideally be passed from props
-  })} />
-)}
+    potentialAction: {
+      "@type": "SearchAction",
+      target: `${siteConfig.url}/search?q={search_term_string}`,
+      "query-input": "required name=search_term_string",
+    },
+  })}
+/>
+
+<!-- Breadcrumb Schema -->
+<script
+  type="application/ld+json"
+  is:inline
+  set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: Astro.url.pathname
+      .split("/")
+      .filter(Boolean)
+      .map((segment, index, array) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: segment.charAt(0).toUpperCase() + segment.slice(1),
+        item: new URL("/" + array.slice(0, index + 1).join("/"), Astro.site),
+      })),
+  })}
+/>
+
+{
+  type === "article" && (
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        headline: title,
+        description: description,
+        image: [new URL(image, Astro.url)],
+        datePublished: pubDate
+          ? pubDate.toISOString()
+          : new Date().toISOString(),
+        dateModified: updatedDate
+          ? updatedDate.toISOString()
+          : pubDate
+            ? pubDate.toISOString()
+            : new Date().toISOString(),
+        author: {
+          "@type": "Person",
+          name: siteConfig.author,
+          url: siteConfig.url,
+        },
+        publisher: {
+          "@type": "Organization",
+          name: siteConfig.seo.organization.name,
+          logo: {
+            "@type": "ImageObject",
+            url: new URL(siteConfig.seo.organization.logo, siteConfig.url),
+          },
+        },
+        mainEntityOfPage: {
+          "@type": "WebPage",
+          "@id": Astro.url,
+        },
+      })}
+    />
+  )
+}

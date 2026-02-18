@@ -1,38 +1,63 @@
-# New York Times level Article.
+# Oiyo Content Strategy & Future Topics
 
-## 1.논문 급 글 작성.
+This document outlines the core values, writing guidelines, and planned topics for the Oiyo blog. Every article must adhere to these standards to ensure a "New York Times / FAANG-level" reading experience.
 
-## 2.최소 3000자 이상, 5문단 이상.
+## Core Writing Principles
 
-## 3.친절하고 온화한 말투, 어려운 내용도 쉽게 설명할 줄 알아야 함.
+1.  **Level of Quality**: Every article should feel like a deep-dive essay or a research paper, yet remain accessible.
+2.  **Volume & Structure**:
+    - Minimum **3000 characters** per article.
+    - Minimum **5 major paragraphs/sections**.
+    - Use clear headings (`##`, `###`) to structure the content logic.
+3.  **Tone & Voice**:
+    - **Kind and Gentle**: Use an empathetic and warm tone.
+    - **Simple Explanations**: Capable of explaining complex psychological or scientific concepts in a way that anyone can understand.
+    - **Insightful**: Avoid hollow advice; provide "Aha!" moments through deep reasoning.
+4.  **Workflow**:
+    - Write the **Korean (ko)** version first as the master copy.
+    - Translate and localize into **English (en)** and **Japanese (ja)**.
+    - **Cross-Linking**: Link to relevant Wikipedia pages and internal Oiyo resources (Psychological counseling, MBTI, TAI, HSP, etc.) using `target="_blank"`.
 
-## 4.소주제 하나마다 글 하나씩 작성.
+## Multilingual Style Guidelines
 
-## 5.한글로 먼저 작성한 후, English, Japanese 로 번역하기.
+| Language     | Tone Style                | Key Characteristics                             |
+| :----------- | :------------------------ | :---------------------------------------------- |
+| **Korean**   | 친절하고 지적인 대화체    | 존댓말 사용, 신망 있는 전문가의 정중한 어조     |
+| **English**  | Professional & Insightful | Analytical yet warm, clear and direct sentences |
+| **Japanese** | 丁寧で共感的な文体        | です・ます調, 読者の心に寄り添う繊細な表現      |
 
-## 6.위키피디아에 링크걸기(blank).
+## Future Blog Topics
 
-## 7.oiyo링크도걸기(심리상담, mbti, tai, hsp 등등 blank)
+### 1. Adlerian Psychology (Completed/Ongoing)
 
-## 8.해당 소주제에 대해 글을 작성하고 나면 [x] 표시하기.
+- [x] 지금처럼 살아도 괜찮을까?
+- [x] 게으른 완벽주의자를 위한 아들러 심리학의 정수 5가지
+- [x] 주어가 관계의 거리를 결정한다
+- [x] 삶은 어려움을 극복하는 게임이다
+- [x] 인생의 의미는 주변에 의해 정해지지 않는다
+- [x] 인간은 자기 인생을 그리는 화가다
+- [x] 지금의 결정 안에 미래가 있다
+- [x] 행복은 삶을 책임질 때 비로소 모습을 보인다
+- [x] 라이프스타일의 3가지 요소
+- [x] 비교의 그늘 아래 자기 가치는 가려질 뿐이다
+- [x] 목표를 이루었을 때의 모습을 구체적으로 그려라
+- [ ] 모두에게 중요한 존재일 필요 없다
 
-### 소주제 모음
+### 2. Relationship & Courage (Next Focus)
 
-#### 이 아래는 한 문장 한 문장이 모두 소주제 입니다.
-
-지금처럼 살아도 괜찮을까? [x]
-게으른 완벽주의자를 위한 아들러 심리학의 정수 5가지 [x]
-주어가 관계의 거리를 결정한다 [x]
-
-3장. 삶은 어려움을 극복하는 게임이다 [x]
-인생의 의미는 주변에 의해 정해지지 않는다 [x]
-인간은 자기 인생을 그리는 화가다 [x]
-
-- 지금의 결정 안에 미래가 있다 [x]
-- 행복은 삶을 책임질 때 비로소 모습을 보인다 [x]
-- 라이프스타일의 3가지 요소 [x]
-- 비교의 그늘 아래 자기 가치는 가려질 뿐이다 [x]
-- 목표를 이루었을 때의 모습을 구체적으로 그려라
+- [ ] 마침내 나를 지킬 용기를 내다
+- [ ] 곁에 둘 사람을 선택하는 것은 곧 미래를 선택하는 것이다
+- [ ] 인간관계는 자신이 뿜어낸 에너지의 결과물이다
+- [ ] 모든 고민은 인간관계에서 비롯된다
+- [ ] 무심코 내뱉는 말이 인연을 바꾼다
+- [ ] 인생의 목적이 분명한 자는 자기를 채워줄 사람을 만난다
+- [ ] 자기를 지키는 것이야말로 가장 고귀한 용기다
+- [ ] 타인을 바꾸려는 순간 내면의 평화는 깨진다
+- [ ] 내면에 존재하는 것은 사실이 아니라 그에 대한 해석뿐이다
+- [ ] 나에게 상처를 줄 수 있는 건 오직 나 자신뿐
+- [ ] 신뢰는 배신의 가능성을 감내하는 용기에서 피어난다
+- [ ] 팔로워 수는 신뢰의 증거가 아니다
+- [ ] ‘가로의 관계’로 용기를 부여하라
 - 모두에게 중요한 존재일 필요 없다
 
 4장. 누구와 함께하느냐에 따라 인생의 깊이가 달라진다
