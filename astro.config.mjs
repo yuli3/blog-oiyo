@@ -34,16 +34,7 @@ export default defineConfig({
   i18n: {
     defaultLocale: "en",
     locales: ["en", "ko", "ja", "fr", "es"],
-    fallback: {
-      ko: "en",
-      ja: "en",
-      fr: "en",
-      es: "en",
-    },
-    routing: {
-      prefixDefaultLocale: false,
-      redirectToDefaultLocale: true,
-    },
+    routing: "manual",
   },
   build: {
     format: "directory",
@@ -58,7 +49,10 @@ export default defineConfig({
     },
     remarkPlugins: [
       remarkMath,
-      [wikiLinkPlugin, { hrefTemplate: (/** @type {string} */ permalink) => `/${permalink}` }],
+      [
+        wikiLinkPlugin,
+        { hrefTemplate: (/** @type {string} */ permalink) => `/${permalink}` },
+      ],
     ],
     rehypePlugins: [
       [rehypeKatex, { strict: "ignore" }],

@@ -47,7 +47,7 @@ const paginationEnabled = siteConfig.features.pagination;
             <article class="group flex flex-col items-start gap-4 animate-fade-up">
               {post.data.heroImage && (
                 <a
-                  href={`/blog/${post.slug}/`}
+                  href={`${locale === "en" ? "" : `/${locale}`}/blog/${post.slug}/`}
                   class="w-full aspect-[16/10] overflow-hidden rounded-2xl border border-border/40 bg-muted/20"
                 >
                   <img
@@ -61,14 +61,20 @@ const paginationEnabled = siteConfig.features.pagination;
                 <span>{post.data.category}</span>
                 <span class="text-muted-foreground/30">•</span>
                 <span class="text-muted-foreground/60">
-                  {post.data.pubDate.toLocaleDateString(
-                    locale === "ko" ? "ko-KR" : "en-US",
-                    { month: "short", day: "numeric", year: "numeric" },
-                  )}
+                  {post.data.pubDate
+                    ? post.data.pubDate.toLocaleDateString(
+                        locale === "ko" ? "ko-KR" : "en-US",
+                        { month: "short", day: "numeric", year: "numeric" },
+                      )
+                    : "Ongoing"}
                 </span>
               </div>
               <h2 class="text-2xl font-bold leading-tight group-hover:text-primary transition-colors font-heading tracking-tight">
-                <a href={`/blog/${post.slug}/`}>{post.data.title}</a>
+                <a
+                  href={`${locale === "en" ? "" : `/${locale}`}/blog/${post.slug}/`}
+                >
+                  {post.data.title}
+                </a>
               </h2>
               <p class="text-muted-foreground line-clamp-3 text-base leading-relaxed">
                 {post.data.description}

@@ -27,7 +27,7 @@ const categories = Object.keys(categoryCounts).sort();
 
 <div class="flex flex-wrap gap-2 mb-12 animate-fade-up">
   <a
-    href="/blog"
+    href={locale === "en" ? "/blog" : `/${locale}/blog`}
     class:list={[
       "px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-widest transition-all border",
       !activeCategory
@@ -44,7 +44,11 @@ const categories = Object.keys(categoryCounts).sort();
 
       return (
         <a
-          href={`/category/${slug}`}
+          href={
+            locale === "en"
+              ? `/category/${slug}`
+              : `/${locale}/category/${slug}`
+          }
           class:list={[
             "px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-widest transition-all border",
             isActive

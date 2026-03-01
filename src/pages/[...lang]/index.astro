@@ -1,0 +1,41 @@
+---
+import { getCollection } from "astro:content";
+import BlogList from "../../components/BlogList.astro";
+import { getTranslations, locales } from "../../lib/i18n";
+import { siteConfig } from "../../config/site.config";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang: lang === "en" ? undefined : lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props;
+const t = await getTranslations(locale);
+
+const posts = await getCollection("blog", ({ data }) => {
+  return data.draft !== true && data.locale === locale;
+});
+
+posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const paginationEnabled = siteConfig.features.pagination;
+const postsPerPage = 6;
+const totalPages = Math.ceil(posts.length / postsPerPage);
+
+// Create a mock 'page' object compatible with BlogList props
+const page = {
+  data: paginationEnabled ? posts.slice(0, postsPerPage) : posts,
+  currentPage: 1,
+  lastPage: totalPages,
+};
+---
+
+<BlogList
+  page={page}
+  locale={locale}
+  baseUrl="/blog"
+  title={t.nav.home}
+  subtitle="Engineering the Future with Astro & Cloudflare"
+/>

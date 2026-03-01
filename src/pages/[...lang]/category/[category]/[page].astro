@@ -1,0 +1,63 @@
+---
+import { getCollection } from "astro:content";
+import BlogList from "../../../../components/BlogList.astro";
+import { locales } from "../../../../lib/i18n";
+
+import type { PaginateFunction } from "astro";
+
+export async function getStaticPaths({
+  paginate,
+}: {
+  paginate: PaginateFunction;
+}) {
+  const allPosts = await getCollection(
+    "blog",
+    ({ data }) => data.draft !== true,
+  );
+
+  return locales.flatMap((lang) => {
+    const langPosts = allPosts.filter((post) => post.data.locale === lang);
+    const categories = [
+      ...new Set(
+        langPosts
+          .map((post) => post.data.category)
+          .filter((cat): cat is string => !!cat),
+      ),
+    ];
+
+    return categories.flatMap((category) => {
+      const filteredPosts = langPosts
+        .filter((post) => post.data.category === category)
+        .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+      return paginate(filteredPosts, {
+        params: {
+          lang: lang === "en" ? undefined : lang,
+          category:
+            category?.toLowerCase().replace(/[^a-z0-9]+/g, "-") ?? "unknown",
+        },
+        pageSize: 6,
+        props: { locale: lang },
+      });
+    });
+  });
+}
+
+const { page, locale } = Astro.props;
+const { category } = Astro.params;
+
+// Find the original category name from the first post if available
+const displayCategory = page.data[0]?.data.category || category;
+
+const isDefault = locale === "en";
+const localePrefix = isDefault ? "" : `/${locale}`;
+---
+
+<BlogList
+  page={page}
+  locale={locale}
+  baseUrl={`${localePrefix}/category/${category}`}
+  title={displayCategory}
+  subtitle={`Technical insights and deep-dives in ${displayCategory.toLowerCase()}.`}
+  activeCategory={category}
+/>

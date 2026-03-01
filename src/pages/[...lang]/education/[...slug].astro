@@ -1,0 +1,123 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import TOC from "../../../components/TOC.astro";
+import { siteConfig } from "../../../config/site.config";
+import Callout from "../../../components/mdx/Callout.astro";
+import FormulaBlock from "../../../components/mdx/FormulaBlock.astro";
+import {
+  LectureTable,
+  LectureProcess,
+  LecturePieChart,
+  LectureBarChart,
+} from "@/features/education-common/components/LectureVisuals";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("education");
+  return posts.map((post) => {
+    // ID format: 'en/course-name/ch1' or 'ko/course-name/ch1'
+    const [lang, ...slugParts] = post.slug.split("/");
+    const slug = slugParts.join("/");
+
+    return {
+      params: {
+        lang: lang === "en" ? undefined : lang,
+        slug,
+      },
+      props: { post, locale: lang },
+    };
+  });
+}
+
+const { post, locale } = Astro.props;
+const { Content, headings } = await post.render();
+const tocEnabled = siteConfig.features.toc;
+
+const isDefault = locale === "en";
+const localePrefix = isDefault ? "" : `/${locale}`;
+---
+
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description || "Education deep dive"}
+  image={""}
+  type="article"
+  pubDate={post.data.pubDate || new Date()}
+>
+  <article
+    class:list={[
+      "py-24 animate-fade-up",
+      { "snap-start": siteConfig.features.scrollSnap },
+    ]}
+  >
+    <div class="container px-4">
+      <div
+        class:list={[
+          { "lg:grid lg:grid-cols-[1fr_240px] lg:gap-16": tocEnabled },
+        ]}
+      >
+        <div class="max-w-2xl mx-auto lg:mx-0">
+          <header class="mb-16">
+            <div
+              class="flex items-center gap-3 text-xs font-bold text-primary uppercase tracking-widest mb-6"
+            >
+              <a
+                href={`${localePrefix}/education`}
+                class="hover:underline decoration-2 underline-offset-4 transition-all"
+              >
+                Education
+              </a>
+              <span class="text-muted-foreground/30">•</span>
+              <span class="text-muted-foreground/60"
+                >{post.data.category || "Course Module"}</span
+              >
+            </div>
+
+            <h1
+              class="text-5xl md:text-6xl font-extrabold tracking-tight mb-10 leading-tight font-heading"
+            >
+              {post.data.title}
+            </h1>
+          </header>
+
+          <div
+            class="prose prose-stone dark:prose-invert prose-lg max-w-none prose-headings:font-heading prose-headings:font-bold prose-a:text-primary prose-pre:rounded-2xl prose-pre:bg-muted/10 prose-pre:border prose-pre:border-border/40 leading-relaxed text-pretty"
+          >
+            <Content
+              components={{
+                Callout,
+                FormulaBlock,
+                LectureTable,
+                LectureProcess,
+                LecturePieChart,
+                LectureBarChart,
+              }}
+            />
+          </div>
+
+          <footer class="mt-24 pt-12 border-t border-border/40">
+            <a
+              href={`${localePrefix}/education`}
+              class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg
+              >
+              Back to Education Hub
+            </a>
+          </footer>
+        </div>
+
+        {tocEnabled && <TOC headings={headings} />}
+      </div>
+    </div>
+  </article>
+</BaseLayout>

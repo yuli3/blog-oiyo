@@ -1,0 +1,70 @@
+---
+import { getCollection } from "astro:content";
+import BlogList from "../../../../components/BlogList.astro";
+import { getTranslations, locales } from "../../../../lib/i18n";
+import { siteConfig } from "../../../../config/site.config";
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection(
+    "blog",
+    ({ data }) => data.draft !== true,
+  );
+
+  return locales.flatMap((lang) => {
+    // Only get categories that have posts in this language
+    const langPosts = allPosts.filter((post) => post.data.locale === lang);
+    const categories = [
+      ...new Set(
+        langPosts
+          .map((post) => post.data.category)
+          .filter((cat): cat is string => !!cat),
+      ),
+    ];
+
+    return categories.map((category) => ({
+      params: {
+        lang: lang === "en" ? undefined : lang,
+        category:
+          category?.toLowerCase().replace(/[^a-z0-9]+/g, "-") ?? "unknown",
+      },
+      props: { originalCategory: category, locale: lang },
+    }));
+  });
+}
+
+const { category } = Astro.params;
+const { originalCategory, locale } = Astro.props;
+const t = await getTranslations(locale);
+
+const posts = await getCollection("blog", ({ data }) => {
+  return (
+    data.draft !== true &&
+    data.locale === locale &&
+    data.category?.toLowerCase().replace(/[^a-z0-9]+/g, "-") === category
+  );
+});
+
+posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const paginationEnabled = siteConfig.features.pagination;
+const postsPerPage = 6;
+const totalPages = Math.ceil(posts.length / postsPerPage);
+
+const page = {
+  data: paginationEnabled ? posts.slice(0, postsPerPage) : posts,
+  currentPage: 1,
+  lastPage: totalPages,
+};
+
+const isDefault = locale === "en";
+const localePrefix = isDefault ? "" : `/${locale}`;
+---
+
+<BlogList
+  page={page}
+  locale={locale}
+  baseUrl={`${localePrefix}/category/${category}`}
+  title={originalCategory as string}
+  subtitle={`Technical insights and deep-dives in ${originalCategory}.`}
+  activeCategory={category}
+/>
