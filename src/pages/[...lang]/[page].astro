@@ -1,0 +1,53 @@
+---
+import { getCollection } from "astro:content";
+import BlogList from "../../components/BlogList.astro";
+import { getTranslations, locales } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  const postsPerPage = 10;
+  const paths = [];
+
+  for (const lang of locales) {
+    const posts = await getCollection("blog", ({ data }) => {
+      return data.draft !== true && data.locale === lang;
+    });
+
+    posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+    const totalPages = Math.ceil(posts.length / postsPerPage);
+
+    // Only generate pages 2+; page 1 is handled by index.astro
+    for (let p = 2; p <= totalPages; p++) {
+      paths.push({
+        params: { lang, page: String(p) },
+        props: {
+          locale: lang,
+          pageData: posts.slice((p - 1) * postsPerPage, p * postsPerPage),
+          currentPage: p,
+          totalPages,
+        },
+      });
+    }
+  }
+
+  return paths;
+}
+
+const { locale, pageData, currentPage, totalPages } = Astro.props;
+const t = await getTranslations(locale);
+
+const page = {
+  data: pageData,
+  currentPage,
+  lastPage: totalPages,
+};
+---
+
+<BlogList
+  page={page}
+  locale={locale}
+  baseUrl={`/${locale}`}
+  title={t.nav.home}
+  subtitle={locale === "ko"
+    ? "우리는 스스로 나아지려는 노력을 할 때 늙지 않습니다."
+    : "We do not grow old as long as we strive to improve ourselves."}
+/>

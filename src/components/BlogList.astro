@@ -43,40 +43,53 @@ const paginationEnabled = siteConfig.features.pagination;
 
       <div class="grid gap-x-12 gap-y-16 md:grid-cols-2 lg:grid-cols-3">
         {
-          page.data.map((post: any) => (
-            <article class="group flex flex-col items-start gap-4 animate-fade-up">
-              {post.data.heroImage && (
-                <a
-                  href={`/${locale}/blog/${post.slug}/`}
-                  class="w-full aspect-[16/10] overflow-hidden rounded-2xl border border-border/40 bg-muted/20"
-                >
-                  <img
-                    src={post.data.heroImage}
-                    alt={post.data.title}
-                    class="w-full h-full object-cover transition-all duration-700 group-hover:scale-105 group-hover:opacity-90"
-                  />
-                </a>
-              )}
-              <div class="flex items-center gap-2 text-[10px] font-bold text-primary uppercase tracking-[0.2em]">
-                <span>{post.data.category}</span>
-                <span class="text-muted-foreground/30">•</span>
-                <span class="text-muted-foreground/60">
-                  {post.data.pubDate
-                    ? post.data.pubDate.toLocaleDateString(
-                        locale === "ko" ? "ko-KR" : "en-US",
-                        { month: "short", day: "numeric", year: "numeric" },
-                      )
-                    : "Ongoing"}
-                </span>
-              </div>
-              <h2 class="text-2xl font-bold leading-tight group-hover:text-primary transition-colors font-heading tracking-tight">
-                <a href={`/${locale}/blog/${post.slug}/`}>{post.data.title}</a>
-              </h2>
-              <p class="text-muted-foreground line-clamp-3 text-base leading-relaxed">
-                {post.data.description}
-              </p>
-            </article>
-          ))
+          page.data.map((post: any) => {
+            // post.slug is like 'ko/visualizing-goals'; strip the lang prefix
+            const slug = post.slug.split("/").slice(1).join("/");
+            const href = `/${locale}/${slug}/`;
+            const chMatch = post.slug.match(/-ch(\d+)$/);
+            const chapter = chMatch ? parseInt(chMatch[1], 10) : null;
+            return (
+              <article class="group flex flex-col items-start gap-4 animate-fade-up">
+                {post.data.heroImage && (
+                  <a
+                    href={href}
+                    class="w-full aspect-[16/10] overflow-hidden rounded-2xl border border-border/40 bg-muted/20"
+                  >
+                    <img
+                      src={post.data.heroImage}
+                      alt={post.data.title}
+                      class="w-full h-full object-cover transition-all duration-700 group-hover:scale-105 group-hover:opacity-90"
+                    />
+                  </a>
+                )}
+                <div class="flex items-center gap-2 text-[10px] font-bold text-primary uppercase tracking-[0.2em]">
+                  <span>{post.data.category}</span>
+                  <span class="text-muted-foreground/30">•</span>
+                  {chapter !== null ? (
+                    <span class="bg-primary/10 text-primary px-2 py-0.5 rounded-full text-[9px] font-bold tracking-widest">
+                      Ch.{chapter}
+                    </span>
+                  ) : (
+                    <span class="text-muted-foreground/60">
+                      {post.data.pubDate
+                        ? post.data.pubDate.toLocaleDateString(
+                            locale === "ko" ? "ko-KR" : "en-US",
+                            { month: "short", day: "numeric", year: "numeric" },
+                          )
+                        : "Ongoing"}
+                    </span>
+                  )}
+                </div>
+                <h2 class="text-2xl font-bold leading-tight group-hover:text-primary transition-colors font-heading tracking-tight">
+                  <a href={href}>{post.data.title}</a>
+                </h2>
+                <p class="text-muted-foreground line-clamp-3 text-base leading-relaxed">
+                  {post.data.description}
+                </p>
+              </article>
+            );
+          })
         }
       </div>
 

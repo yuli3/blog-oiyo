@@ -15,12 +15,11 @@ interface Props {
 const {
   title = siteConfig.title,
   description = siteConfig.description,
-  image = siteConfig.seo.ogImage,
+  image,
   canonicalURL = new URL(Astro.url.pathname, Astro.site),
   type = "website",
   pubDate,
   updatedDate,
-
 } = Astro.props;
 
 const siteTitle =
@@ -116,14 +115,14 @@ const googleAdsenseId = siteConfig.analytics.googleAdsenseId;
 <meta property="og:site_name" content={siteConfig.name} />
 <meta property="og:title" content={siteTitle} />
 <meta property="og:description" content={description} />
-<meta property="og:image" content={new URL(image, Astro.url)} />
+{image && <meta property="og:image" content={new URL(image, Astro.url)} />}
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />
 <meta property="twitter:url" content={Astro.url} />
 <meta property="twitter:title" content={siteTitle} />
 <meta property="twitter:description" content={description} />
-<meta property="twitter:image" content={new URL(image, Astro.url)} />
+{image && <meta property="twitter:image" content={new URL(image, Astro.url)} />}
 {
   siteConfig.seo.twitterHandle && (
     <meta property="twitter:site" content={siteConfig.seo.twitterHandle} />
@@ -213,7 +212,7 @@ const googleAdsenseId = siteConfig.analytics.googleAdsenseId;
         "@type": "BlogPosting",
         headline: title,
         description: description,
-        image: [new URL(image, Astro.url)],
+        ...(image ? { image: [new URL(image, Astro.url)] } : {}),
         datePublished: pubDate
           ? pubDate.toISOString()
           : new Date().toISOString(),
