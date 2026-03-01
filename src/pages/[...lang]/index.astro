@@ -2,7 +2,6 @@
 import { getCollection } from "astro:content";
 import BlogList from "../../components/BlogList.astro";
 import { getTranslations, locales } from "../../lib/i18n";
-import { siteConfig } from "../../config/site.config";
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -20,13 +19,11 @@ const posts = await getCollection("blog", ({ data }) => {
 
 posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-const paginationEnabled = siteConfig.features.pagination;
-const postsPerPage = 6;
+const postsPerPage = 10;
 const totalPages = Math.ceil(posts.length / postsPerPage);
 
-// Create a mock 'page' object compatible with BlogList props
 const page = {
-  data: paginationEnabled ? posts.slice(0, postsPerPage) : posts,
+  data: posts.slice(0, postsPerPage),
   currentPage: 1,
   lastPage: totalPages,
 };
@@ -35,7 +32,7 @@ const page = {
 <BlogList
   page={page}
   locale={locale}
-  baseUrl="/blog"
+  baseUrl={`/${locale}`}
   title={t.nav.home}
   subtitle={locale === "ko"
     ? "우리는 스스로 나아지려는 노력을 할 때 늙지 않습니다."

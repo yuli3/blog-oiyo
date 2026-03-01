@@ -26,9 +26,25 @@ export async function getStaticPaths({
     ];
 
     return categories.flatMap((category) => {
-      const filteredPosts = langPosts
-        .filter((post) => post.data.category === category)
-        .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+      const filteredPosts = langPosts.filter(
+        (post) => post.data.category === category,
+      );
+
+      // Extract chapter number from slug (e.g. 'ko/education-finance-ch3' -> 3)
+      const getChapter = (slug: string) => {
+        const m = slug.match(/-ch(\d+)$/);
+        return m ? parseInt(m[1], 10) : Infinity;
+      };
+
+      // If all posts in this category have chapter numbers, sort by chapter
+      const hasChapters = filteredPosts.every(
+        (p) => getChapter(p.slug) !== Infinity,
+      );
+      filteredPosts.sort((a, b) =>
+        hasChapters
+          ? getChapter(a.slug) - getChapter(b.slug)
+          : b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+      );
 
       return paginate(filteredPosts, {
         params: {
@@ -36,8 +52,8 @@ export async function getStaticPaths({
           category:
             category?.toLowerCase().replace(/[^a-z0-9]+/g, "-") ?? "unknown",
         },
-        pageSize: 6,
-        props: { locale: lang },
+        pageSize: 10,
+        props: { locale: lang, hasChapters },
       });
     });
   });
