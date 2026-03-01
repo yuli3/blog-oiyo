@@ -1,4 +1,4 @@
-import { defineConfig } from 'astro-robots-txt';
+import defineConfig from 'astro-robots-txt';
 
 export default defineConfig({
     policy: [

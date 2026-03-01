@@ -1,0 +1,58 @@
+--- 
+chapter: 4
+title: "옵션 거래와 수익 구조: 비대칭적 보상의 마법"
+language: ko
+summary: "옵션의 기초 개념인 콜 옵션과 풋 옵션을 이해하고, 가격 변동에 따른 매수자와 매도자의 비대칭적 수익 구조를 시각화하여 확인합니다."
+keyTerms: ["옵션", "콜 옵션", "풋 옵션", "페이오프", "머니니스"]
+---
+
+import {
+  LectureTable,
+  LectureProcess,
+  LecturePieChart,
+  LectureBarChart,
+} from "@/features/education-common/components/LectureVisuals";
+import {
+  NPVChart,
+  FrontierChart,
+  SMLChart,
+  OptionPayoffChart,
+} from "@/features/education-finance/FinanceCharts";
+
+# 옵션 거래: 선택권에 가격을 매기다
+
+옵션(Options)은 '특정 기초자산을 미리 정한 가격으로 사거나 팔 수 있는 **권리**'입니다. 권리이지 의무가 아니라는 점이 앞서 배운 선도 계약(Forward)과의 가장 큰 차이점입니다.
+
+## 1. 콜 옵션(Call Option)과 풋 옵션(Put Option)
+
+- **콜 옵션**: 자산을 살 수 있는 권리 (가격 상승 시 유리)
+- **풋 옵션**: 자산을 팔 수 있는 권리 (가격 하락 시 유리)
+
+옵션을 사기 위해서는 권리에 대한 대가인 **프리미엄(Premium)**을 지불해야 합니다.
+
+## 2. 콜 옵션의 수익 구조
+
+콜 옵션 매수자는 주가가 행사가격(Strike Price)보다 높을 때 권리를 행사하여 이익을 얻습니다. 반대로 주가가 행사가격보다 낮으면 권리를 포기하며, 이때 손실은 지불한 프리미엄으로 한정됩니다.
+
+<OptionPayoffChart
+  title="콜 옵션 매수자의 수익 곡선 (행사가 100, 프리미엄 10)"
+  type="call"
+  strike={100}
+  premium={10}
+  client:load
+/>
+
+## 3. 옵션이 가진 비대칭성의 가치
+
+위 차트에서 볼 수 있듯이, 옵션은 손실은 제한적이면서 이익은 무한대(콜 옵션 기준)로 열려 있는 **비대칭적(Asymmetric)** 구조를 가집니다. 금융공학자들은 이러한 비대칭성을 활용해 복잡한 리스크 헤징 전략을 설계합니다.
+
+---
+
+### 💡 교수님의 팁
+
+> 옵션은 '보험'과 성격이 매우 비슷합니다. 보험료(프리미엄)를 내고 사고(가격 변동)가 났을 때 보상을 받는 것이죠. 우리가 일상에서 가입하는 자동차 보험도 일종의 풋 옵션이라고 볼 수 있습니다.
+
+### 🔗 다음 단계
+
+- [**회계학 마스터: 재무제표의 이해**](/education-accounting/)
+- [**보험수리 입문: 보험료 산출의 원리**](/education-actuarial-science/ch4/)

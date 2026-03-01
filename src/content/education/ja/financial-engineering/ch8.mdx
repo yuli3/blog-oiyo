@@ -1,0 +1,94 @@
+--- 
+chapter: 8
+title: "リスク測定と管理 (VaR)：最悪のシナリオを数値化する"
+language: ja
+summary: "金融機関のリスク管理の標準的な指標である Value at Risk (VaR) の概念、算出方法、そしてその限界を学びます。"
+keyTerms: ["Value at Risk (VaR)", "信頼水準", "保有期間", "テールリスク (Tail Risk)"]
+---
+
+import {
+  LectureTable,
+  LectureProcess,
+  LecturePieChart,
+  LectureBarChart,
+} from "@/features/education-common/components/LectureVisuals";
+import {
+  NPVChart,
+  FrontierChart,
+  SMLChart,
+  OptionPayoffChart,
+} from "@/features/education-finance/FinanceCharts";
+
+# リスク測定：いくら失う可能性があるのか？
+
+金融市場におけるリスク管理とは、単に「危険だ」と言うことではなく、「正確にいくらまで損失が出る可能性があるのか？」を数値で答えるプロセスです。そのために最も広く使われている指標が、**VaR (Value at Risk)** です。
+
+## 1. VaR の定義と3つの要素
+
+VaR とは、「通常の見通しにおいて、特定の保有期間中、特定の信頼水準の下で発生し得る **最大損失額**」を意味します。
+
+- **保有期間 (Holding Period)**: リスクを測定する時間の単位（例：1日、10日）。
+- **信頼水準 (Confidence Level)**: 統計的に確信している度合い（例：95%、99%）。
+- **最大損失額**: その確率の範囲内における境界点（しきい値）。
+
+<Callout type="note">
+「1日の 99% VaR が 10億円である」ということは、1日の間に 10億円を超える損失が発生する確率はわずか 1% であるという意味です。
+</Callout>
+## 2. VaR の視覚化：確率分布としきい値
+
+下のチャートは、収益率の分布の中で VaR がどこに位置するかを示しています。左端の「テール（裾）」の領域こそ、私たちが警戒すべき損失区間です。
+
+<LectureBarChart
+  title="収益率分布と 95% VaR のしきい値"
+  description="左側の赤い棒グラフの領域が、発生確率 5% 以下の極端な損失区間です。"
+  data={[
+    { name: "-5% 以下 (VaR)", value: 5, color: "#ef4444" },
+    { name: "-5% ~ -2.5%", value: 15, color: "#94a3b8" },
+    { name: "-2.5% ~ 0%", value: 30, color: "#60a5fa" },
+    { name: "0% ~ 2.5%", value: 35, color: "#3b82f6" },
+    { name: "2.5% ~ 5%", value: 10, color: "#94a3b8" },
+    { name: "5% 以上", value: 5, color: "#94a3b8" },
+  ]}
+  client:load
+/>
+
+## 3. VaR を算出する3つの方法
+
+実務では、データの性質に応じて異なる計算方式が選択されます。
+
+<LectureTable
+  title="VaR 算出方法の比較"
+  headers={["手法", "主な特徴", "メリット", "デメリット"]}
+  rows={[
+    [
+      "ヒストリカル・シミュレーション",
+      "過去の収益率データをそのまま使用",
+      "計算が容易で、分布の仮定が不要",
+      "過去が将来を保証するわけではない",
+    ],
+    [
+      "デルタ・ノーマル法",
+      "正規分布と感度 (Δ) を利用",
+      "計算速度が非常に速い",
+      "非線形な商品（オプションなど）の測定に弱い",
+    ],
+    [
+      "モンテカルロ・シミュレーション",
+      "数万回のランダムなシナリオを生成",
+      "最も正確で、複雑な商品にも対応可能",
+      "計算時間が非常に長くかかる",
+    ],
+  ]}
+  highlightColumns={[0]}
+  client:load
+/>
+
+---
+
+### 💡 教授からのヒント
+
+> VaR は非常に優れたツールですが、限界も明確です。VaR はあくまでにしきい値（10億円）を教えてくれるだけで、その 1% の区間に突入したときに **正確にいくら（20億？ 100億？）まで膨らむのか** は教えてくれません。これを補完するために、私たちは「期待ショートフォール (Expected Shortfall, ES)」という指標を併用します。
+
+### 🔗 次のステップ
+
+- [**第9章：利子率モデル入門**](/education-financial-engineering/ch9/)

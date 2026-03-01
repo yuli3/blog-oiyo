@@ -1,0 +1,108 @@
+--- 
+chapter: 9
+title: "金利モデル入門：金利の確率的変動"
+language: ja
+summary: "時間とともに変化する金利の動きをモデリングする Vasicek モデルと CIR モデルを通じて、債券価格決定と平均回帰 (Mean Reversion) の原理を理解します。"
+keyTerms: ["平均回帰 (Mean Reversion)", "Vasicek モデル", "CIR モデル", "無リスク金利"]
+---
+
+import {
+  LectureTable,
+  LectureProcess,
+  LecturePieChart,
+  LectureBarChart,
+} from "@/features/education-common/components/LectureVisuals";
+import {
+  NPVChart,
+  FrontierChart,
+  SMLChart,
+  OptionPayoffChart,
+} from "@/features/education-finance/FinanceCharts";
+
+# 金利モデル：お金の価格に対する地図
+
+これまで、私たちは金利 ($r$) を固定された定数として扱ってきました。しかし、実務的に10年、20年の長期商品を扱う際、金利は絶えず変化する **確率変数** です。金利モデルは、このランダムな動きの中に「平均に戻ろうとする性質」を付与します。
+
+## 1. 平均回帰 (Mean Reversion) の概念
+
+株価とは異なり、金利は無限に上昇したり、（一般的な場合）0を下回ったりすることは困難です。高すぎれば経済が冷え込んで下がり、低すぎれば再び上がる性質を持ちます。
+
+<LectureProcess
+  steps={[
+    {
+      label: "短期金利の測定",
+      description: "現在の市場の最も短い期間の金利 (Short Rate) を確認します。",
+    },
+    {
+      label: "中心点 (Mean) の設定",
+      description: "金利が長期的にとどまると予想される水準を定義します。",
+    },
+    {
+      label: "回帰速度の決定",
+      description: "中心点から離れたときに、どのくらいの速さ ($k$) で戻るかを設定します。",
+    },
+    {
+      label: "ランダムなショックの付与",
+      description: "予測不可能な市場のノイズ (Volatility) を追加します。",
+    },
+  ]}
+  client:load
+/>
+
+## 2. 代表的な短期金利モデルの比較
+
+数学的な構造によって、金利の特性が異なります。
+
+<LectureTable
+  title="Vasicek vs CIR モデルの比較"
+  headers={["モデル名", "核心方程式の特徴", "金利の性質", "メリットとデメリット"]}
+  rows={[
+    [
+      "Vasicek モデル",
+      "定数ボラティリティ (Normal)",
+      "金利がマイナスになる可能性がある",
+      "数学的に簡潔で分析が容易",
+    ],
+    [
+      "CIR モデル",
+      "金利の平方根に比例するボラティリティ",
+      "金利が常に0以上に維持される",
+      "現実的だが、数学的な処理が相対的に複雑",
+    ],
+    [
+      "Hull-White",
+      "時間とともに変化するパラメータ",
+      "現在の金利期間構造を100%反映",
+      "実務で最も広く使われている",
+    ],
+  ]}
+  highlightColumns={[0, 2]}
+  client:load
+/>
+
+## 3. 金利シミュレーション：平均回帰の視覚化
+
+下のチャートは、Vasicek モデルにおいて金利が特定の水準（3%）を中心にどのように収束していくかを示すシナリオです。
+
+<LectureBarChart
+  title="金利シナリオシミュレーション（平均 3% 仮定）"
+  description="現在の金利が低くても (1%)、時間が経つにつれて設定された平均値 (3%) に収束するパターンを示しています。"
+  data={[
+    { name: "現在 (T0)", value: 1.0, color: "#94a3b8" },
+    { name: "1年後", value: 1.8, color: "#60a5fa" },
+    { name: "3年後", value: 2.5, color: "#3b82f6" },
+    { name: "5年後", value: 2.9, color: "#2563eb" },
+    { name: "10年後", value: 3.0, color: "#1d4ed8" },
+  ]}
+  client:load
+/>
+
+---
+
+### 💡 教授からのヒント
+
+> 金利モデルは債券だけでなく、年金数理や保険会社の ALM (資産負債管理) においても核心となります。特に長期負債を抱える機関は、金利が 0.1% 変化するだけで負債価値が数千億ウォン単位で変動するため、この確率的な動きを精緻にモデリングすることは生存に関わる問題です。
+
+### 🔗 次のステップ
+
+- [**第10章：ポートフォリオ最適化**](/education-financial-engineering/ch10/)

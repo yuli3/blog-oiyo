@@ -1,0 +1,108 @@
+--- 
+chapter: 9
+title: "Introduction to Interest Rate Models: Stochastic Movement of Interest Rates"
+language: en
+summary: "Understand the principles of bond pricing and Mean Reversion through the Vasicek and CIR models, which describe how interest rates change over time."
+keyTerms: ["Mean Reversion", "Vasicek Model", "CIR Model", "Risk-Free Rate"]
+---
+
+import {
+  LectureTable,
+  LectureProcess,
+  LecturePieChart,
+  LectureBarChart,
+} from "@/features/education-common/components/LectureVisuals";
+import {
+  NPVChart,
+  FrontierChart,
+  SMLChart,
+  OptionPayoffChart,
+} from "@/features/education-finance/FinanceCharts";
+
+# Interest Rate Models: A Map for the Price of Money
+
+Until now, we have treated the interest rate ($r$) as a fixed constant. However, in practice, when dealing with 10-year or 20-year products, the interest rate is a constantly changing **stochastic variable**. Interest rate models assign the property of 'tending to return to a mean' to this random movement.
+
+## 1. The Concept of Mean Reversion
+
+Unlike stock prices, interest rates find it difficult to rise infinitely or fall below zero (in general cases). They tend to decrease if too high (stifling the economy) and rise if too low.
+
+<LectureProcess
+  steps={[
+    {
+      label: "Measure Short Rate",
+      description: "Check the current shortest-term interest rate (Short Rate) in the market.",
+    },
+    {
+      label: "Set the Mean",
+      description: "Define the level where interest rates are expected to stay in the long term.",
+    },
+    {
+      label: "Determine Reversion Speed",
+      description: "Set how quickly ($k$) the rate will return when it moves away from the mean.",
+    },
+    {
+      label: "Add Random Shock",
+      description: "Add unpredictable market noise (Volatility).",
+    },
+  ]}
+  client:load
+/>
+
+## 2. Comparison of Representative Short-Rate Models
+
+Characteristics of interest rates vary depending on the mathematical structure of the model.
+
+<LectureTable
+  title="Comparison of Vasicek vs. CIR Models"
+  headers={["Model Name", "Key Equation Feature", "Property of Interest Rate", "Pros and Cons"]}
+  rows={[
+    [
+      "Vasicek Model",
+      "Constant Volatility (Normal)",
+      "Possibility of interest rates becoming negative",
+      "Mathematically clean and easy to analyze",
+    ],
+    [
+      "CIR Model",
+      "Volatility proportional to square root of rate",
+      "Interest rates always remain above zero",
+      "Realistic, but mathematically more complex",
+    ],
+    [
+      "Hull-White",
+      "Time-varying parameters",
+      "Fits the current initial term structure of rates 100%",
+      "Most widely used in industry practice",
+    ],
+  ]}
+  highlightColumns={[0, 2]}
+  client:load
+/>
+
+## 3. Rate Simulation: Visualizing Mean Reversion
+
+The chart below shows a scenario of how interest rates converge towards a specific level (3%) in the Vasicek model.
+
+<LectureBarChart
+  title="Interest Rate Scenario Simulation (Assuming Mean 3%)"
+  description="Even if the current rate is low (1%), it shows a pattern of converging to the set mean value (3%) over time."
+  data={[
+    { name: "Now (T0)", value: 1.0, color: "#94a3b8" },
+    { name: "1 Year After", value: 1.8, color: "#60a5fa" },
+    { name: "3 Years After", value: 2.5, color: "#3b82f6" },
+    { name: "5 Years After", value: 2.9, color: "#2563eb" },
+    { name: "10 Years After", value: 3.0, color: "#1d4ed8" },
+  ]}
+  client:load
+/>
+
+---
+
+### 💡 Professor's Tip
+
+> Interest rate models are core not only for bonds but also for actuarial mathematics and ALM (Asset Liability Management) in insurance companies. For institutions with long-term liabilities, even a 0.1% change in rates can shift liability values by hundreds of billions of won, making sophisticated modeling of this stochastic movement a matter of survival.
+
+### 🔗 Next Step
+
+- [**Ch10: Portfolio Optimization**](/education-financial-engineering/ch10/)

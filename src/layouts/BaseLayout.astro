@@ -11,11 +11,9 @@ interface Props {
   type?: "website" | "article";
   pubDate?: Date;
   updatedDate?: Date;
-  category?: string;
 }
 
-const { title, description, image, type, pubDate, updatedDate, category } =
-  Astro.props;
+const { title, description, image, type, pubDate, updatedDate } = Astro.props;
 const locale = getLocaleFromPath(Astro.url.pathname);
 const t = await getTranslations(locale);
 
@@ -27,15 +25,7 @@ const scrollSnapEnabled = siteConfig.features.scrollSnap;
   class:list={["scroll-smooth", { "snap-y snap-mandatory": scrollSnapEnabled }]}
 >
   <head>
-    <SEO
-      {title}
-      {description}
-      {image}
-      {type}
-      {pubDate}
-      {updatedDate}
-      {category}
-    />
+    <SEO {title} {description} {image} {type} {pubDate} {updatedDate} />
     <meta name="robots" content="index, follow" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

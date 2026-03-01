@@ -1,0 +1,47 @@
+export const categoryLabels: Record<string, Record<string, string>> = {
+  en: {
+    finance: "Finance",
+    accounting: "Accounting",
+    tax: "Tax Law",
+    management: "Business Management",
+    cost_management: "Cost Management",
+    economics: "Economics",
+    productivity: "Productivity",
+    util: "Utilities",
+    other: "Other",
+  },
+  ko: {
+    finance: "재무/금융",
+    accounting: "회계",
+    tax: "세법",
+    management: "경영",
+    cost_management: "원가관리",
+    economics: "경제학",
+    productivity: "생산성",
+    util: "유틸리티",
+    other: "기타",
+  },
+  ja: {
+    finance: "財務・金融",
+    accounting: "会計",
+    tax: "税法",
+    management: "経営",
+    cost_management: "原価管理",
+    economics: "経済学",
+    productivity: "生産性",
+    util: "ユーティリティ",
+    other: "その他",
+  },
+};
+
+export const categoryIcons: Record<string, string> = {
+  finance: "📈",
+  accounting: "📊",
+  tax: "⚖️",
+  management: "🏢",
+  cost_management: "📉",
+  economics: "🌍",
+  productivity: "⏱️",
+  util: "⚙️",
+  other: "📁",
+};

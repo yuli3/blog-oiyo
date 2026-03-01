@@ -1,13 +1,13 @@
 ---
-import { getCollection } from 'astro:content';
-import BlogList from '../../components/BlogList.astro';
-import { getLocaleFromPath, getTranslations } from '../../lib/i18n';
-import { siteConfig } from '../../config/site.config';
+import { getCollection } from "astro:content";
+import BlogList from "../../components/BlogList.astro";
+import { getLocaleFromPath, getTranslations } from "../../lib/i18n";
+import { siteConfig } from "../../config/site.config";
 
 const locale = getLocaleFromPath(Astro.url.pathname);
 const t = await getTranslations(locale);
 
-const posts = await getCollection('blog', ({ data }) => {
+const posts = await getCollection("blog", ({ data }) => {
   return data.draft !== true && data.locale === locale;
 });
 
@@ -25,10 +25,9 @@ const page = {
 };
 ---
 
-<BlogList 
+<BlogList
   page={page}
   locale={locale}
-  translations={t}
   baseUrl="/blog"
   title={t.blog.title}
   subtitle={t.blog.searchPlaceholder}

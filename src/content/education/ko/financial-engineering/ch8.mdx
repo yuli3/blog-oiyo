@@ -1,0 +1,95 @@
+--- 
+chapter: 8
+title: "리스크 측정과 관리 (VaR): 최악의 시나리오를 수치화하다"
+language: ko
+summary: "금융 기관의 리스크 관리 표준 지표인 Value at Risk(VaR)의 개념과 산출 방법, 그리고 그 한계를 학습합니다."
+keyTerms: ["Value at Risk (VaR)", "신뢰수준", "보유기간", "꼬리 리스크(Tail Risk)"]
+---
+
+import {
+  LectureTable,
+  LectureProcess,
+  LecturePieChart,
+  LectureBarChart,
+} from "@/features/education-common/components/LectureVisuals";
+import {
+  NPVChart,
+  FrontierChart,
+  SMLChart,
+  OptionPayoffChart,
+} from "@/features/education-finance/FinanceCharts";
+
+# 리스크 측정: 얼마나 잃을 수 있는가?
+
+금융 시장에서 리스크 관리는 단순히 "위험하다"라고 말하는 것이 아니라, "정확히 얼마까지 손실이 날 수 있는가?"를 수치로 답하는 과정입니다. 이를 위해 가장 널리 쓰이는 지표가 바로 **VaR(Value at Risk)**입니다.
+
+## 1. VaR의 정의와 3대 요소
+
+VaR은 "정상적인 시장 조건에서, 특정 보유기간 동안, 특정 신뢰수준 하에서 발생할 수 있는 **최대 손실 금액**"을 의미합니다.
+
+- **보유기간 (Holding Period)**: 리스크를 측정하는 시간 단위 (예: 1일, 10일)
+- **신뢰수준 (Confidence Level)**: 통계적으로 확신하는 정도 (예: 95%, 99%)
+- **최대 손실액**: 해당 확률 범위 내에서의 임계점
+
+<Callout type="note">
+"1일 99% VaR가 10억 원이다"라는 말은, 하루 동안 10억 원 이상의 손실이 발생할 확률이 단 1%라는 뜻입니다.
+</Callout>
+## 2. VaR의 시각화: 확률 분포와 임계점
+
+아래 차트는 수익률 분포에서 VaR가 어디에 위치하는지 보여줍니다. 왼쪽 끝의 '꼬리' 영역이 바로 우리가 경계해야 할 손실 구간입니다.
+
+<LectureBarChart
+  title="수익률 분포와 95% VaR 임계점"
+  description="왼쪽 빨간색 막대 영역이 발생 확률 5% 이하의 극단적 손실 구간입니다."
+  data={[
+    { name: "-5% 이하 (VaR)", value: 5, color: "#ef4444" },
+    { name: "-5% ~ -2.5%", value: 15, color: "#94a3b8" },
+    { name: "-2.5% ~ 0%", value: 30, color: "#60a5fa" },
+    { name: "0% ~ 2.5%", value: 35, color: "#3b82f6" },
+    { name: "2.5% ~ 5%", value: 10, color: "#94a3b8" },
+    { name: "5% 이상", value: 5, color: "#94a3b8" },
+  ]}
+  client:load
+/>
+
+## 3. VaR를 구하는 세 가지 방법
+
+금융 현장에서는 데이터의 성격에 따라 다른 계산 방식을 선택합니다.
+
+<LectureTable
+  title="VaR 산출 방법론 비교"
+  headers={["방법론", "주요 특징", "장점", "단점"]}
+  rows={[
+    [
+      "역사적 시뮬레이션",
+      "과거 수익률 데이터를 그대로 사용",
+      "계산이 쉽고 분포 가정이 필요 없음",
+      "과거가 미래를 보장 못 함",
+    ],
+    [
+      "델타-노멀 방법",
+      "정규분포와 민감도(Δ)를 이용",
+      "계산 속도가 매우 빠름",
+      "비선형 상품(옵션) 측정에 취약",
+    ],
+    [
+      "몬테카를로",
+      "수만 번의 무작위 시나리오 생성",
+      "가장 정확하고 복잡한 상품도 가능",
+      "계산 시간이 매우 오래 걸림",
+    ],
+  ]}
+  highlightColumns={[0]}
+  client:load
+/>
+
+---
+
+### 💡 교수님의 팁
+
+> VaR는 매우 훌륭한 도구이지만 한계가 명확합니다. VaR는 임계점(10억 원)만 알려줄 뿐, 그 1%의 구간에 진입했을 때 **정확히 얼마(20억? 100억?)까지 터질 수 있는지**는 알려주지 않습니다. 이를 보완하기 위해 우리는 '기대 숏폴(Expected Shortfall, ES)'이라는 지표를 함께 사용합니다.
+
+### 🔗 다음 단계
+
+- [**금융공학 심화: 이자율 모형 입문**](/education-financial-engineering/ch9/)
+- [**보험수리 심화: 리스크 이론(Ruin Theory)**](/education-actuarial-science/ch8/)

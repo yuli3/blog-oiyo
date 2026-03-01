@@ -1,0 +1,92 @@
+--- 
+chapter: 6
+title: "The Greeks: The Language of Risk"
+language: en
+summary: "Learn about the Greek letters that quantify the impact of changes in underlying asset price, time, and volatility on option prices, and understand risk hedging techniques using them."
+keyTerms: ["Delta", "Gamma", "Theta", "Vega", "Rho"]
+---
+
+import {
+  LectureTable,
+  LectureProcess,
+  LecturePieChart,
+  LectureBarChart,
+} from "@/features/education-common/components/LectureVisuals";
+import {
+  NPVChart,
+  FrontierChart,
+  SMLChart,
+  OptionPayoffChart,
+} from "@/features/education-finance/FinanceCharts";
+
+# The Greeks: What Moves the Price?
+
+Once you have determined the price of an option using the Black-Scholes model, the next step is to answer questions like, "How much will the option price change if the stock price rises by $1?" In financial engineering, these answers are derived through mathematical derivatives, with each component represented by a Greek letter.
+
+## 1. Delta (Δ): Sensitivity to Price Changes
+
+Delta measures how much the option price changes for a one-unit change in the underlying asset's price.
+
+- **Call Option Delta**: Between 0 and 1 (option price rises as stock price rises).
+- **Put Option Delta**: Between -1 and 0 (option price falls as stock price rises).
+
+<Callout type="tip">
+Delta is also used as an approximation of the **probability** that the option will expire in the money.
+</Callout>
+## 2. Summary of Key Greeks
+
+<LectureTable
+  title="Definition and Risk Management Significance of the Greeks"
+  headers={["Greek", "Sensitivity Target", "Core Meaning", "Hedging Strategy"]}
+  rows={[
+    ["Delta (Δ)", "Stock Price (S)", "Directional Risk", "Delta Neutral (Stock Trading)"],
+    ["Gamma (Γ)", "Delta (Δ)", "Curvature (Acceleration) Risk", "Gamma Hedging (Option Trading)"],
+    [
+      "Theta (Θ)",
+      "Time (T)",
+      "Time Value Erosion (Time Decay)",
+      "Disadvantageous for Buyers, Advantageous for Sellers",
+    ],
+    ["Vega (v)", "Volatility (σ)", "Volatility Risk", "Price fluctuation due to IV changes"],
+    [
+      "Rho (ρ)",
+      "Interest Rate (r)",
+      "Interest Rate Sensitivity",
+      "Opportunity cost due to interest rate changes",
+    ],
+  ]}
+  highlightColumns={[0, 2]}
+  client:load
+/>
+
+## 3. Risk Profiling: Relationship Between Delta and Gamma
+
+The rate at which Delta itself changes as the stock price changes is called **Gamma**. A large Gamma means that Delta changes rapidly even with minor stock price movements, which implies a very urgent situation for risk managers.
+
+<LectureProcess
+  steps={[
+    {
+      label: "Establish Delta Neutrality",
+      description: "Buying or selling stocks to set the portfolio's total Delta to zero.",
+    },
+    {
+      label: "Market Volatility Occurs",
+      description: "When the stock price moves, Delta is generated again due to Gamma.",
+    },
+    {
+      label: "Rebalancing",
+      description: "Buying or selling stocks again to reset the Delta to zero.",
+    },
+  ]}
+  client:load
+/>
+
+---
+
+### 💡 Professor's Tip
+
+> Quants are not just people who guess "will it go up or down." They are mathematical designers who combine these Greeks to selectively hold **specific risks they desire**, such as eliminating Delta while keeping Vega.
+
+### 🔗 Next Step
+
+- [**Ch7: Monte Carlo Simulation**](/education-financial-engineering/ch7/)

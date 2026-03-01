@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 export default function Calculator() {
     const [display, setDisplay] = useState('0');

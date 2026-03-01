@@ -9,7 +9,7 @@ interface Props {
   type?: "website" | "article";
   pubDate?: Date;
   updatedDate?: Date;
-  category?: string;
+
 }
 
 const {
@@ -20,7 +20,7 @@ const {
   type = "website",
   pubDate,
   updatedDate,
-  category,
+
 } = Astro.props;
 
 const siteTitle =
@@ -80,7 +80,7 @@ const googleAdsenseId = siteConfig.analytics.googleAdsenseId;
 <meta name="theme-color" content={siteConfig.themeColor} />
 
 {googleAnalyticsId && (
-  <script async src={`https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`}></script>
+  <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`}></script>
   <script is:inline define:vars={{ googleAnalyticsId }}>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -90,7 +90,7 @@ const googleAdsenseId = siteConfig.analytics.googleAdsenseId;
 )}
 
 {googleAdsenseId && (
-  <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${googleAdsenseId}`}
+  <script is:inline async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${googleAdsenseId}`}
      crossorigin="anonymous"></script>
 )}
 
