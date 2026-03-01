@@ -32,7 +32,7 @@ export async function getStaticPaths({
 
       return paginate(filteredPosts, {
         params: {
-          lang: lang === "en" ? undefined : lang,
+          lang,
           category:
             category?.toLowerCase().replace(/[^a-z0-9]+/g, "-") ?? "unknown",
         },
@@ -49,8 +49,7 @@ const { category } = Astro.params;
 // Find the original category name from the first post if available
 const displayCategory = page.data[0]?.data.category || category;
 
-const isDefault = locale === "en";
-const localePrefix = isDefault ? "" : `/${locale}`;
+const localePrefix = `/${locale}`;
 ---
 
 <BlogList

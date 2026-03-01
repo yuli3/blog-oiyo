@@ -1,0 +1,66 @@
+---
+title: "Multiple Regression Analysis: Variables of a Complex World"
+description: "Analyze the complex influence of multiple independent variables on a result, rather than just a single cause. Learn about multicollinerity and the importance of variable selection."
+pubDate: 2026-03-01
+category: "Education"
+tags: ["Education", "statistics"]
+locale: "en"
+author: "Oiyo" 
+---
+
+
+import { LectureTable, LectureProcess, LecturePieChart, LectureBarChart } from "@/features/education-common/components/LectureVisuals";
+
+
+# Multiple Regression Analysis: One Reason is Rarely Enough
+
+Real-world events are seldom explained by a single cause. For example, apartment prices are determined not just by size (simple regression) but also by age, distance to transit, and school district quality. Statistics addresses this through **Multiple Regression Analysis**.
+
+## 1. Structure of the Multiple Regression Equation
+
+$$y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + ... + \beta_k x_k + \epsilon$$
+
+Each $\beta$ value represents the **unique influence** a variable has on the dependent variable ($y$) when other variables are held constant, specifically for a one-unit change in that variable.
+
+## 2. The Conflict Between Variables: Multicollinearity
+
+The most significant pitfall to watch out for in multiple regression analysis is 'multicollinearity.' This occurs when independent variables are too strongly correlated with each other.
+
+<LectureTable
+  title="Case Study: Accounting Data and Multicollinearity"
+  headers={["Variable A", "Variable B", "Status", "Problem"]}
+  rows={[
+    [
+      "Ad Spend",
+      "Brand Awareness",
+      "High Correlation",
+      "Inability to distinguish which variable contributed to sales",
+    ],
+    [
+      "Height",
+      "Weight",
+      "High Correlation",
+      "One variable already contains the information of the other",
+    ],
+    ["Temperature", "Humidity", "Moderate Correlation", "Common scenario, manageable"],
+  ]}
+  highlightColumns={[2]}
+  client:load
+/>
+
+<Callout type="important">
+Multicollinearity causes the statistical significance of individual regression coefficients to decrease and results to become unstable. To check for this, we use the **VIF (Variance Inflation Factor)** index; typically, a value of 10 or higher indicates a problem.
+</Callout>
+## 3. Evaluating Model Quality: Adjusted $R^2$
+
+While simple regression uses the coefficient of determination ($R^2$), multiple regression has a problem where $R^2$ automatically increases as more variables are added. **Adjusted $R^2$** corrects for this by penalizing the addition of unnecessary variables.
+
+---
+
+### 💡 Professor's Tip
+
+> A good regression model is not one with 'many variables,' but one that 'explains the phenomenon best with the fewest number of key variables.' This is often called **Occam's Razor**, and statisticians measure this efficiency using indices such as AIC or BIC.
+
+### 🔗 Next Step
+
+- [**Ch7: Logistic Regression Analysis**](/education-statistics/ch7/)

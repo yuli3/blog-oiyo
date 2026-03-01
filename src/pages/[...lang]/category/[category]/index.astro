@@ -23,7 +23,7 @@ export async function getStaticPaths() {
 
     return categories.map((category) => ({
       params: {
-        lang: lang === "en" ? undefined : lang,
+        lang,
         category:
           category?.toLowerCase().replace(/[^a-z0-9]+/g, "-") ?? "unknown",
       },
@@ -56,8 +56,7 @@ const page = {
   lastPage: totalPages,
 };
 
-const isDefault = locale === "en";
-const localePrefix = isDefault ? "" : `/${locale}`;
+const localePrefix = `/${locale}`;
 ---
 
 <BlogList

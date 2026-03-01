@@ -10,7 +10,7 @@ export const localeNames: Record<Locale, string> = {
 };
 
 export const localePaths: Record<Locale, string> = {
-  en: '',
+  en: '/en',
   ko: '/ko',
   ja: '/ja',
   fr: '/fr',

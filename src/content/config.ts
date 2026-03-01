@@ -18,15 +18,4 @@ const blog = defineCollection({
 
 
 
-const education = defineCollection({
-  schema: z.object({
-    title: z.string(),
-    description: z.string().optional(),
-    pubDate: z.coerce.date().optional(),
-    updatedDate: z.coerce.date().optional(),
-    category: z.string().optional(),
-    author: z.string().optional(),
-  })
-});
-
-export const collections = { blog, education };
+export const collections = { blog };

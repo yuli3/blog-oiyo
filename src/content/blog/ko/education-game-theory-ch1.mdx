@@ -1,0 +1,96 @@
+---
+title: "제1강: 죄수의 딜레마와 보상 매트릭스"
+description: "개인의 합리적 선택이 어떻게 집단의 비극을 초래하는지, 보상 매트릭스를 통해 이해합니다. This comprehensive guide covers key concepts and practical applications in the field."
+pubDate: 2026-03-01
+category: "Education"
+tags: ["Education", "game-theory"]
+locale: "ko"
+author: "Oiyo" 
+---
+
+
+import { GameTheoryPlayground } from '@/features/education-game-theory';
+import { LectureTable, LectureProcess } from "@/features/education-common/components/LectureVisuals";
+import Callout from "@/components/mdx/Callout.astro";
+
+# 제1강: 죄수의 딜레마 — 개인의 합리성이 집단의 비극을 만드는 방식
+
+> "모두에게 더 나은 결과가 있음에도 불구하고, 왜 우리는 서로를 배신하게 되는가?"
+
+게임 이론(Game Theory)은 **의사결정자들이 서로의 행동에 영향을 받는 상황**에서 최적 전략을 연구하는 학문입니다. 존 폰 노이만과 오스카 모르겐슈테른의 1944년 저작 *Theory of Games and Economic Behavior*에서 출발했으며, 경제학·정치학·진화생물학·컴퓨터과학에 걸쳐 폭넓게 적용됩니다.
+
+<LectureTable
+  title="게임 이론의 기본 구성요소"
+  headers={["요소", "정의", "죄수의 딜레마 예시"]}
+  rows={[
+    ["플레이어 (Players)", "의사결정 주체", "죄수 A, 죄수 B"],
+    ["전략 (Strategies)", "각 플레이어가 선택할 수 있는 행동", "침묵(협력) 또는 자백(배신)"],
+    ["보상 (Payoffs)", "전략 선택 결과로 얻는 결과값", "형량 (낮을수록 좋음)"],
+    ["균형 (Equilibrium)", "아무도 전략을 바꾸고 싶지 않은 상태", "둘 다 배신 (내쉬 균형)"],
+  ]}
+  highlightColumns={[2]}
+/>
+
+---
+
+## 1. 시나리오: 죄수의 딜레마
+
+두 명의 용의자가 분리된 심문실에 있습니다. 서로 소통할 수 없는 상황에서 검사는 각자에게 다음 제안을 합니다.
+
+<LectureTable
+  title="죄수의 딜레마 — 결과 매트릭스"
+  headers={["나의 선택 \\ 상대의 선택", "상대: 침묵 (협력)", "상대: 자백 (배신)"]}
+  rows={[
+    ["나: 침묵 (협력)", "나 1년 / 상대 1년 ✅ 최선의 사회적 결과", "나 5년 / 상대 석방 ❌ 최악"],
+    ["나: 자백 (배신)", "나 석방 / 상대 5년 ⚡ 유혹", "나 3년 / 상대 3년 ⚠️ 내쉬 균형"],
+  ]}
+  highlightColumns={[1, 2]}
+/>
+
+<Callout type="important" title="우월 전략 (Dominant Strategy)">
+  상대방이 어떤 선택을 하더라도, 나에게 더 유리한 전략을 **우월 전략**이라 합니다. 죄수의 딜레마에서 '자백'은 양 당사자 모두에게 우월 전략입니다. 따라서 두 합리적 플레이어는 모두 자백을 선택해 서로 3년형이라는 **사회적 최적보다 나쁜 결과**에 도달합니다.
+</Callout>
+
+---
+
+<GameTheoryPlayground client:load />
+
+---
+
+## 2. 내쉬 균형 (Nash Equilibrium)
+
+존 내쉬(John Nash)가 1950년 프린스턴 박사논문에서 제시한 **내쉬 균형**은 모든 플레이어가 상대방의 전략을 알고 있을 때, 아무도 자신의 전략을 바꿀 유인이 없는 상태입니다. 이 공로로 내쉬는 1994년 노벨 경제학상을 수상했습니다.
+
+죄수의 딜레마에서 내쉬 균형은 **(배신, 배신)** — 사회적 최적인 **(협력, 협력)**과 다르다는 점이 이론의 핵심적 통찰입니다.
+
+<LectureTable
+  title="내쉬 균형과 사회적 최적의 괴리 — 다양한 예시"
+  headers={["상황", "개인 합리적 선택", "집단 최적", "결과의 괴리"]}
+  rows={[
+    ["죄수의 딜레마", "둘 다 자백 (3년형)", "둘 다 침묵 (1년형)", "2년씩 더 복역"],
+    ["군비 경쟁 (냉전)", "군사비 증강", "상호 군축", "과도한 군사 지출"],
+    ["교통 혼잡", "자가용 이용", "대중교통 이용", "교통 정체"],
+    ["어업 남획", "최대한 많이 어획", "지속 가능 어획", "수산 자원 고갈"],
+    ["광고 경쟁", "광고비 증가", "업계 광고 자제", "수익성 저하"],
+  ]}
+  highlightColumns={[3]}
+/>
+
+---
+
+## 3. 죄수의 딜레마를 깨는 방법
+
+협력은 어떻게 가능할까요? **반복 게임(Repeated Games)**이 열쇠입니다.
+
+<LectureProcess
+  steps={[
+    { label: "반복 게임", description: "한 번으로 끝나지 않는 관계에서는 배신의 미래 비용이 커져 협력이 합리적 선택이 됩니다." },
+    { label: "평판 메커니즘", description: "배신자로 알려지면 미래 협력 기회를 잃습니다. 장기 반복 게임에서 '팃포탯(Tit-for-Tat)' 전략이 강력합니다." },
+    { label: "제도적 강제", description: "규제, 계약, 법률로 배신에 패널티를 부여하면 협력이 우월 전략으로 바뀝니다." },
+    { label: "소통과 신뢰", description: "분리된 심문실 구조를 깸으로써(사전 소통 허용) 협조가 가능해집니다." },
+  ]}
+/>
+
+<Callout type="tip" title="오늘의 과제">
+  일상 생활(기후 변화 대응, 공용 냉장고 관리, 출퇴근 차선 선택)에서 '죄수의 딜레마'와 유사한 상황을 찾아보세요. 이 딜레마를 깨기 위해 어떤 제도적 장치가 필요할까요?
+</Callout>

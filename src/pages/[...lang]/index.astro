@@ -6,7 +6,7 @@ import { siteConfig } from "../../config/site.config";
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
-    params: { lang: lang === "en" ? undefined : lang },
+    params: { lang },
     props: { locale: lang },
   }));
 }
@@ -37,5 +37,7 @@ const page = {
   locale={locale}
   baseUrl="/blog"
   title={t.nav.home}
-  subtitle="Engineering the Future with Astro & Cloudflare"
+  subtitle={locale === "ko"
+    ? "우리는 스스로 나아지려는 노력을 할 때 늙지 않습니다."
+    : "We do not grow old as long as we strive to improve ourselves."}
 />

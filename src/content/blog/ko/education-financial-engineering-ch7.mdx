@@ -1,0 +1,86 @@
+---
+title: "몬테카를로 시뮬레이션: 수만 번의 미래를 그리다"
+description: "공식으로 풀기 어려운 복잡한 파생상품의 가치를 구하기 위해, 난수를 활용하여 수만 개의 가상 시나리오를 생성하고 평균을 내는 수치적 기법을 배웁니다."
+pubDate: 2026-03-01
+category: "Education"
+tags: ["Education", "financial-engineering"]
+locale: "ko"
+author: "Oiyo" 
+---
+
+
+import {
+  LectureTable,
+  LectureProcess,
+  LecturePieChart,
+  LectureBarChart,
+} from "@/features/education-common/components/LectureVisuals";
+import {
+  NPVChart,
+  FrontierChart,
+  SMLChart,
+  OptionPayoffChart,
+} from "@/features/education-finance/FinanceCharts";
+
+# 몬테카를로 시뮬레이션: 데이터로 만든 가상 현실
+
+모든 금융 상품이 블랙-숄즈 같은 예쁜 공식으로 풀리는 것은 아닙니다. 특히 만기 시점의 가격뿐만 아니라 **가격이 움직인 경로**에 따라 가치가 결정되는 복잡한 상품(Exortic Options)의 경우, 우리는 컴퓨터를 이용해 수만 번의 가상 미래를 시뮬레이션합니다.
+
+## 1. 왜 '몬테카를로'인가?
+
+모나코의 유명한 도박 도시 이름에서 유래한 이 기법은, 확률적인 사건을 수많은 반복 시행을 통해 근사적으로 계산합니다. 금융공학에서는 주가의 움직임을 확률 과정(Stochastic Process)으로 정의하고 이를 실행합니다.
+
+## 2. 시뮬레이션의 4단계 프로세스
+
+컴퓨터가 금융 상품의 가격을 결정하는 논리적 흐름은 다음과 같습니다.
+
+<LectureProcess
+  steps={[
+    {
+      label: "확률 모델 정의",
+      description: "주가의 변동성, 금리 등을 바탕으로 기하 브라운 운동(GBM) 모델을 설정합니다.",
+    },
+    {
+      label: "난수 생성 및 경로 구축",
+      description: "수만 개의 정규분포 난수를 생성하여 주가의 가상 이동 경로를 그립니다.",
+    },
+    {
+      label: "페이오프 계산",
+      description: "각 시나리오에서 옵션이 만기 시(혹은 중간에) 줄 수 있는 수익을 구합니다.",
+    },
+    {
+      label: "현재가치 할인 및 평균",
+      description:
+        "모든 시나리오의 수익을 무위험 금리로 할인한 뒤 평균을 내어 현재 가격을 도출합니다.",
+    },
+  ]}
+  client:load
+/>
+
+## 3. 시뮬레이션 횟수와 정확도의 관계
+
+시뮬레이션을 많이 할수록 결과값은 이론적인 참값에 수렴합니다. 하지만 계산 비용(시간)과 정확도 사이의 균형을 맞추는 것이 실무적으로 중요합니다.
+
+<LectureBarChart
+  title="시행 횟수에 따른 옵션 가격 수렴 (예시)"
+  description="시행 횟수가 늘어날수록 오차가 줄어들며 이론적 가격($10.45)에 가까워집니다."
+  data={[
+    { name: "100회", value: 12.5, color: "#94a3b8" },
+    { name: "1,000회", value: 9.8, color: "#60a5fa" },
+    { name: "10,000회", value: 10.6, color: "#3b82f6" },
+    { name: "10만회", value: 10.47, color: "#2563eb" },
+    { name: "100만회", value: 10.45, color: "#1d4ed8" },
+  ]}
+  client:load
+/>
+
+---
+
+### 💡 교수님의 팁
+
+> 몬테카를로 시뮬레이션은 '망치'와 같습니다. 아주 강력하지만, 모델 설정을 잘못하면 잘못된 결과를 대량으로 찍어내게 됩니다. 이를 **GIGO(Garbage In, Garbage Out)**라고 부릅니다. 정교한 난수 생성기와 정확한 변동성 입력이 필수적인 이유입니다.
+
+### 🔗 다음 단계
+
+- [**금융공학 심화: 리스크 측정(VaR)**](/education-financial-engineering/ch8/)
+- [**통계학 심화: 로지스틱 회귀 분석**](/education-statistics/ch7/)

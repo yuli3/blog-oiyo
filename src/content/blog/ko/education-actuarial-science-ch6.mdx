@@ -1,0 +1,64 @@
+---
+title: "사망률 모델링: 인간의 수명을 예측하는 공식"
+description: "단순한 통계를 넘어 시간에 따른 사망률의 변화 추세를 분석하고, 고령화 리스크를 측정하기 위한 리-카터(Lee-Carter) 모델과 확률론적 접근법을 학습합니다."
+pubDate: 2026-03-01
+category: "Education"
+tags: ["Education", "actuarial-science"]
+locale: "ko"
+author: "Oiyo" 
+---
+
+
+import {
+  LectureTable,
+  LectureProcess,
+  LecturePieChart,
+  LectureBarChart,
+} from "@/features/education-common/components/LectureVisuals";
+
+# 사망률 모델링: 정적인 숫자에서 동적인 예측으로
+
+과거의 보험수리는 현재의 사망 통계(정적 생명표)를 그대로 미래에 적용했습니다. 하지만 인간의 수명은 의학의 발전과 함께 지속적으로 늘어나고 있습니다. 현대 계리학은 이 **사망률의 개선 추세**를 모델링하는 데 집중합니다.
+
+## 1. 정적 모델 vs 동적 모델
+
+- **정적 모델 (Static Model)**: "올해 60세가 사망할 확률은 2%다." (현재의 관찰값 고정)
+- **동적 모델 (Dynamic Model)**: "올해 60세가 사망할 확률은 2%지만, 매년 1%씩 줄어드는 추세다." (시간에 따른 변화 반영)
+
+## 2. 리-카터 (Lee-Carter) 모델의 구조
+
+1992년 발표된 Lee-Carter 모델은 사망률 예측의 표준으로 자리 잡았습니다.
+
+$$\ln(m_{x,t}) = \alpha_x + \beta_x \kappa_t + \epsilon_{x,t}$$
+
+- **$\alpha_x$**: 연령별 평균 사망률 수준
+- **$\kappa_t$**: 시간의 흐름에 따른 전반적인 사망률 변화 (추세)
+- **$\beta_x$**: 시간의 변화($\kappa_t$)에 대해 특정 연령대가 반응하는 감도
+
+## 3. 고령화와 장수 리스크 (Longevity Risk)
+
+사람들이 예상보다 오래 살게 되는 것은 개인에게는 축복이지만, 연금을 지급해야 하는 보험사와 연금 기금에는 거대한 리스크입니다.
+
+<LectureBarChart
+  title="기대 수명의 변화와 예측 오차 (가상)"
+  description="과거의 예측치보다 실제 기대 수명이 더 빠르게 증가하며 발생하는 리스크를 보여줍니다."
+  data={[
+    { name: "1990년", value: 71.3, color: "#94a3b8" },
+    { name: "2000년", value: 75.9, color: "#94a3b8" },
+    { name: "2010년", value: 80.2, color: "#60a5fa" },
+    { name: "2020년", value: 83.5, color: "#3b82f6" },
+    { name: "2030년(예상)", value: 86.8, color: "#2563eb" },
+  ]}
+  client:load
+/>
+
+---
+
+### 💡 교수님의 팁
+
+> 사망률 모델링은 단순한 수학을 넘어 사회 구조를 진단하는 도구입니다. 최근에는 기후 변화나 팬데믹 같은 특이 이벤트가 미래 사망률 추세에 어떤 '충격'을 줄 것인지에 대한 확률론적 연구(Stochastic Modeling)가 활발히 진행되고 있습니다.
+
+### 🔗 다음 단계
+
+- [**보험수리 심화: 손해보험 수리 기초**](/education-actuarial-science/ch7/)
+- [**금융공학 심화: 몬테카를로 시뮬레이션**](/education-financial-engineering/ch7/)

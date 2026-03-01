@@ -6,6 +6,20 @@ import { siteConfig } from "../../../config/site.config";
 import Callout from "../../../components/mdx/Callout.astro";
 import FormulaBlock from "../../../components/mdx/FormulaBlock.astro";
 
+import {
+  LectureTable,
+  LectureProcess,
+  LecturePieChart,
+  LectureBarChart,
+} from "@/features/education-common/components/LectureVisuals";
+import {
+  OptionPayoffChart,
+  FrontierChart,
+  NPVChart,
+  SMLChart,
+} from "@/features/education-finance/FinanceCharts";
+import { GameTheoryPlayground } from "@/features/education-game-theory";
+
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
   return posts.map((post) => {
@@ -15,7 +29,7 @@ export async function getStaticPaths() {
 
     return {
       params: {
-        lang: lang === "en" ? undefined : lang,
+        lang,
         slug,
       },
       props: { post, locale: lang },
@@ -27,8 +41,7 @@ const { post, locale } = Astro.props;
 const { Content, headings } = await post.render();
 const tocEnabled = siteConfig.features.toc;
 
-const isDefault = locale === "en";
-const localePrefix = isDefault ? "" : `/${locale}`;
+const localePrefix = `/${locale}`;
 ---
 
 <BaseLayout
@@ -115,7 +128,21 @@ const localePrefix = isDefault ? "" : `/${locale}`;
           <div
             class="prose prose-stone dark:prose-invert prose-lg max-w-none prose-headings:font-heading prose-headings:font-bold prose-a:text-primary prose-pre:rounded-2xl prose-pre:bg-muted/10 prose-pre:border prose-pre:border-border/40 leading-relaxed text-pretty"
           >
-            <Content components={{ Callout, FormulaBlock }} />
+            <Content
+              components={{
+                Callout,
+                FormulaBlock,
+                LectureTable,
+                LectureProcess,
+                LecturePieChart,
+                LectureBarChart,
+                OptionPayoffChart,
+                FrontierChart,
+                NPVChart,
+                SMLChart,
+                GameTheoryPlayground,
+              }}
+            />
           </div>
 
           <footer class="mt-24 pt-12 border-t border-border/40">
