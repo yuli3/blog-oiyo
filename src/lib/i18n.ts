@@ -1,4 +1,4 @@
-export const locales = ['en', 'ko', 'ja', 'fr', 'es'] as const;
+export const locales = ['en', 'ko', 'ja', 'fr', 'es', 'zh', 'cn'] as const;
 export type Locale = typeof locales[number];
 
 export const localeNames: Record<Locale, string> = {
@@ -6,7 +6,9 @@ export const localeNames: Record<Locale, string> = {
   ko: '한국어',
   ja: '日本語',
   fr: 'Français',
-  es: 'Español'
+  es: 'Español',
+  zh: '繁体中文',
+  cn: '简体中文'
 };
 
 export const localePaths: Record<Locale, string> = {
@@ -14,7 +16,9 @@ export const localePaths: Record<Locale, string> = {
   ko: '/ko',
   ja: '/ja',
   fr: '/fr',
-  es: '/es'
+  es: '/es',
+  zh: '/zh',
+  cn: '/cn'
 };
 
 // 번역 함수
@@ -33,11 +37,11 @@ export async function getTranslations(locale: Locale) {
 export function getLocaleFromPath(pathname: string): Locale {
   const segments = pathname.split('/').filter(Boolean);
   const potentialLocale = segments[0] as Locale;
-  
+
   if (locales.includes(potentialLocale)) {
     return potentialLocale;
   }
-  
+
   return 'en'; // Default fallback
 }
 
