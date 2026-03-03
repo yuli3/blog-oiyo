@@ -12,7 +12,14 @@ export async function getStaticPaths() {
       return data.draft !== true && data.locale === lang;
     });
 
-    posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+    posts.sort((a, b) => {
+      const aMatch = a.slug.match(/-ch(\d+)$/);
+      const bMatch = b.slug.match(/-ch(\d+)$/);
+      if (aMatch && bMatch && a.data.category === b.data.category) {
+        return parseInt(aMatch[1], 10) - parseInt(bMatch[1], 10);
+      }
+      return b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
+    });
     const totalPages = Math.ceil(posts.length / postsPerPage);
 
     // Only generate pages 2+; page 1 is handled by index.astro

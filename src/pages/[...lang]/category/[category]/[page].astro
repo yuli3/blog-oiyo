@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import BlogList from "../../../../components/BlogList.astro";
 import { getTranslations, locales } from "../../../../lib/i18n";
 import { siteConfig } from "../../../../config/site.config";
+import { getTrack } from "../../../../lib/taxonomy";
 
 export async function getStaticPaths() {
   const postsPerPage = 6;
@@ -34,9 +35,14 @@ export async function getStaticPaths() {
           categorySlug,
       );
 
-      categoryPosts.sort(
-        (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-      );
+      categoryPosts.sort((a, b) => {
+        const aMatch = a.slug.match(/-ch(\d+)$/);
+        const bMatch = b.slug.match(/-ch(\d+)$/);
+        if (aMatch && bMatch) {
+          return parseInt(aMatch[1], 10) - parseInt(bMatch[1], 10);
+        }
+        return b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
+      });
 
       const totalPages = Math.ceil(categoryPosts.length / postsPerPage);
 
@@ -74,6 +80,12 @@ const page = {
 };
 
 const localePrefix = `/${locale}`;
+const track = getTrack(originalCategory);
+const isAcademy = track === "academy";
+
+const displaySubtitle = isAcademy
+  ? `Comprehensive study guide and lecture series on ${originalCategory}.`
+  : `Technical insights and deep-dives in ${originalCategory}.`;
 ---
 
 <BlogList
@@ -81,6 +93,6 @@ const localePrefix = `/${locale}`;
   locale={locale}
   baseUrl={`${localePrefix}/category/${category}`}
   title={originalCategory as string}
-  subtitle={`Technical insights and deep-dives in ${originalCategory}.`}
+  subtitle={displaySubtitle}
   activeCategory={category}
 />

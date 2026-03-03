@@ -3,6 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Pagination from "./Pagination.astro";
 import CategoryCloud from "./CategoryCloud.astro";
 import { siteConfig } from "../config/site.config";
+import { getTrack } from "../lib/taxonomy";
 
 interface Props {
   page: any;
@@ -49,8 +50,19 @@ const paginationEnabled = siteConfig.features.pagination;
             const href = `/${locale}/${slug}/`;
             const chMatch = post.slug.match(/-ch(\d+)$/);
             const chapter = chMatch ? parseInt(chMatch[1], 10) : null;
+            const track = getTrack(post.data.category);
+            const isAcademy = track === "academy";
+
             return (
-              <article class="group flex flex-col items-start gap-4 animate-fade-up">
+              <article
+                class:list={[
+                  "group flex flex-col items-start gap-4 animate-fade-up",
+                  {
+                    "bg-primary/5 p-6 rounded-3xl -m-6 border border-transparent hover:border-primary/20 transition-all":
+                      isAcademy,
+                  },
+                ]}
+              >
                 {post.data.heroImage && (
                   <a
                     href={href}
@@ -63,28 +75,50 @@ const paginationEnabled = siteConfig.features.pagination;
                     />
                   </a>
                 )}
-                <div class="flex items-center gap-2 text-[10px] font-bold text-primary uppercase tracking-[0.2em]">
-                  <span>{post.data.category}</span>
-                  <span class="text-muted-foreground/30">•</span>
-                  {chapter !== null ? (
-                    <span class="bg-primary/10 text-primary px-2 py-0.5 rounded-full text-[9px] font-bold tracking-widest">
-                      Ch.{chapter}
-                    </span>
-                  ) : (
-                    <span class="text-muted-foreground/60">
-                      {post.data.pubDate
-                        ? post.data.pubDate.toLocaleDateString(
-                            locale === "ko" ? "ko-KR" : "en-US",
-                            { month: "short", day: "numeric", year: "numeric" },
-                          )
-                        : "Ongoing"}
+                <div class="flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.2em]">
+                  <span
+                    class:list={[
+                      "px-2 py-1 rounded-md",
+                      isAcademy
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-foreground text-background",
+                    ]}
+                  >
+                    {isAcademy ? "Academy" : "Magazine"}
+                  </span>
+                  <span class="text-muted-foreground/40 font-normal">/</span>
+                  <span class="text-muted-foreground">
+                    {post.data.category}
+                  </span>
+                </div>
+
+                <h2 class="text-2xl font-bold leading-tight group-hover:text-primary transition-colors font-heading tracking-tight mt-2">
+                  <a href={href}>
+                    {isAcademy && chapter !== null && (
+                      <span class="text-primary mr-2">#{chapter}</span>
+                    )}
+                    {post.data.title}
+                  </a>
+                </h2>
+
+                <div class="flex items-center gap-4 text-[10px] font-medium text-muted-foreground/60">
+                  {post.data.pubDate && (
+                    <span>
+                      {post.data.pubDate.toLocaleDateString(
+                        locale === "ko" ? "ko-KR" : "en-US",
+                        { month: "short", day: "numeric", year: "numeric" },
+                      )}
                     </span>
                   )}
+                  {post.data.author && (
+                    <>
+                      <span>•</span>
+                      <span>{post.data.author}</span>
+                    </>
+                  )}
                 </div>
-                <h2 class="text-2xl font-bold leading-tight group-hover:text-primary transition-colors font-heading tracking-tight">
-                  <a href={href}>{post.data.title}</a>
-                </h2>
-                <p class="text-muted-foreground line-clamp-3 text-base leading-relaxed">
+
+                <p class="text-muted-foreground line-clamp-3 text-base leading-relaxed mt-1">
                   {post.data.description}
                 </p>
               </article>

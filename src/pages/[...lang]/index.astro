@@ -17,7 +17,14 @@ const posts = await getCollection("blog", ({ data }) => {
   return data.draft !== true && data.locale === locale;
 });
 
-posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+posts.sort((a, b) => {
+  const aMatch = a.slug.match(/-ch(\d+)$/);
+  const bMatch = b.slug.match(/-ch(\d+)$/);
+  if (aMatch && bMatch && a.data.category === b.data.category) {
+    return parseInt(aMatch[1], 10) - parseInt(bMatch[1], 10);
+  }
+  return b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
+});
 
 const postsPerPage = 10;
 const totalPages = Math.ceil(posts.length / postsPerPage);
