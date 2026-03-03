@@ -9,7 +9,7 @@ const blog = defineCollection({
     heroImage: z.string().optional(),
     tags: z.array(z.string()).default([]),
     category: z.string().optional(),
-    locale: z.enum(['en', 'ko', 'ja', 'fr', 'es']).optional(),
+    locale: z.enum(['en', 'ko', 'ja', 'fr', 'es', 'zh', 'cn']).optional(),
     draft: z.boolean().default(false),
     featured: z.boolean().default(false),
     author: z.string().default("Oiyo"),

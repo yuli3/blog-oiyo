@@ -1,21 +1,19 @@
 ---
 import { getCollection } from "astro:content";
 import BlogList from "../../../../components/BlogList.astro";
-import { locales } from "../../../../lib/i18n";
+import { getTranslations, locales } from "../../../../lib/i18n";
+import { siteConfig } from "../../../../config/site.config";
 
-import type { PaginateFunction } from "astro";
+export async function getStaticPaths() {
+  const postsPerPage = 6;
+  const paths = [];
 
-export async function getStaticPaths({
-  paginate,
-}: {
-  paginate: PaginateFunction;
-}) {
   const allPosts = await getCollection(
     "blog",
     ({ data }) => data.draft !== true,
   );
 
-  return locales.flatMap((lang) => {
+  for (const lang of locales) {
     const langPosts = allPosts.filter((post) => post.data.locale === lang);
     const categories = [
       ...new Set(
@@ -25,45 +23,55 @@ export async function getStaticPaths({
       ),
     ];
 
-    return categories.flatMap((category) => {
-      const filteredPosts = langPosts.filter(
-        (post) => post.data.category === category,
+    for (const category of categories) {
+      if (!category) continue;
+
+      const categorySlug = category.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+
+      const categoryPosts = langPosts.filter(
+        (post) =>
+          post.data.category?.toLowerCase().replace(/[^a-z0-9]+/g, "-") ===
+          categorySlug,
       );
 
-      // Extract chapter number from slug (e.g. 'ko/education-finance-ch3' -> 3)
-      const getChapter = (slug: string) => {
-        const m = slug.match(/-ch(\d+)$/);
-        return m ? parseInt(m[1], 10) : Infinity;
-      };
-
-      // If all posts in this category have chapter numbers, sort by chapter
-      const hasChapters = filteredPosts.every(
-        (p) => getChapter(p.slug) !== Infinity,
-      );
-      filteredPosts.sort((a, b) =>
-        hasChapters
-          ? getChapter(a.slug) - getChapter(b.slug)
-          : b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+      categoryPosts.sort(
+        (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
       );
 
-      return paginate(filteredPosts, {
-        params: {
-          lang,
-          category:
-            category?.toLowerCase().replace(/[^a-z0-9]+/g, "-") ?? "unknown",
-        },
-        pageSize: 10,
-        props: { locale: lang, hasChapters },
-      });
-    });
-  });
+      const totalPages = Math.ceil(categoryPosts.length / postsPerPage);
+
+      // Only generate pages 2+; page 1 is handled by index.astro
+      for (let p = 2; p <= totalPages; p++) {
+        paths.push({
+          params: { lang, category: categorySlug, page: String(p) },
+          props: {
+            locale: lang,
+            originalCategory: category,
+            pageData: categoryPosts.slice(
+              (p - 1) * postsPerPage,
+              p * postsPerPage,
+            ),
+            currentPage: p,
+            totalPages,
+          },
+        });
+      }
+    }
+  }
+
+  return paths;
 }
 
-const { page, locale } = Astro.props;
 const { category } = Astro.params;
+const { locale, originalCategory, pageData, currentPage, totalPages } =
+  Astro.props;
+const t = await getTranslations(locale);
 
-// Find the original category name from the first post if available
-const displayCategory = page.data[0]?.data.category || category;
+const page = {
+  data: pageData,
+  currentPage,
+  lastPage: totalPages,
+};
 
 const localePrefix = `/${locale}`;
 ---
@@ -72,7 +80,7 @@ const localePrefix = `/${locale}`;
   page={page}
   locale={locale}
   baseUrl={`${localePrefix}/category/${category}`}
-  title={displayCategory}
-  subtitle={`Technical insights and deep-dives in ${displayCategory.toLowerCase()}.`}
+  title={originalCategory as string}
+  subtitle={`Technical insights and deep-dives in ${originalCategory}.`}
   activeCategory={category}
 />
