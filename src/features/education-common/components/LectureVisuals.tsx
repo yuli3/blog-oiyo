@@ -1,5 +1,4 @@
 
-import React from 'react';
 
 /**
  * LectureTable: Standard table for educational content with highlighting support.
