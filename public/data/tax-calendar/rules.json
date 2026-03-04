@@ -1,0 +1,316 @@
+[
+  {
+    "id": "corporate-final-return",
+    "taxType": "corporate",
+    "category": "filing",
+    "trigger": {
+      "anchor": "fiscalYearEnd",
+      "offset": {
+        "value": 3,
+        "unit": "month"
+      }
+    },
+    "window": {
+      "startOffset": {
+        "value": 2,
+        "unit": "month"
+      },
+      "endOffset": {
+        "value": 3,
+        "unit": "month"
+      }
+    },
+    "conditions": [
+      {
+        "field": "type",
+        "operator": "equals",
+        "value": "corporate"
+      }
+    ],
+    "labels": {
+      "titleKey": "corporateFinalReturn.title",
+      "descriptionKey": "corporateFinalReturn.description"
+    },
+    "legalRefs": [
+      {
+        "law": "법인세법",
+        "article": "제60조"
+      }
+    ],
+    "effective": {
+      "from": "2020-01-01"
+    },
+    "priority": "critical"
+  },
+  {
+    "id": "corporate-interim-tax",
+    "taxType": "corporate",
+    "category": "payment",
+    "trigger": {
+      "anchor": "fiscalYearEnd",
+      "offset": {
+        "value": 6,
+        "unit": "month"
+      }
+    },
+    "conditions": [
+      {
+        "field": "type",
+        "operator": "equals",
+        "value": "corporate"
+      }
+    ],
+    "labels": {
+      "titleKey": "corporateInterimPayment.title",
+      "descriptionKey": "corporateInterimPayment.description"
+    },
+    "legalRefs": [
+      {
+        "law": "법인세법",
+        "article": "제63조"
+      }
+    ],
+    "effective": {
+      "from": "2020-01-01"
+    },
+    "priority": "warning"
+  },
+  {
+    "id": "corporate-vat-quarterly",
+    "taxType": "vat",
+    "category": "filing",
+    "trigger": {
+      "anchor": "fixedDate",
+      "fixedDate": "01-25"
+    },
+    "conditions": [
+      {
+        "field": "type",
+        "operator": "equals",
+        "value": "corporate"
+      },
+      {
+        "field": "vatCycle",
+        "operator": "in",
+        "value": [
+          "monthly",
+          "quarterly"
+        ]
+      }
+    ],
+    "labels": {
+      "titleKey": "vatFirstQuarter.title",
+      "descriptionKey": "vatFirstQuarter.description"
+    },
+    "legalRefs": [
+      {
+        "law": "부가가치세법",
+        "article": "제48조"
+      }
+    ],
+    "effective": {
+      "from": "2020-01-01"
+    },
+    "priority": "warning"
+  },
+  {
+    "id": "individual-income-final",
+    "taxType": "income",
+    "category": "filing",
+    "trigger": {
+      "anchor": "fixedDate",
+      "fixedDate": "05-31"
+    },
+    "conditions": [
+      {
+        "field": "type",
+        "operator": "equals",
+        "value": "individual-general"
+      }
+    ],
+    "labels": {
+      "titleKey": "individualIncomeReturn.title",
+      "descriptionKey": "individualIncomeReturn.description"
+    },
+    "legalRefs": [
+      {
+        "law": "소득세법",
+        "article": "제70조"
+      }
+    ],
+    "effective": {
+      "from": "2020-01-01"
+    },
+    "priority": "critical"
+  },
+  {
+    "id": "individual-vat-final",
+    "taxType": "vat",
+    "category": "filing",
+    "trigger": {
+      "anchor": "fixedDate",
+      "fixedDate": "07-25"
+    },
+    "conditions": [
+      {
+        "field": "type",
+        "operator": "equals",
+        "value": "individual-general"
+      },
+      {
+        "field": "vatCycle",
+        "operator": "in",
+        "value": [
+          "quarterly",
+          "semiannual"
+        ]
+      }
+    ],
+    "labels": {
+      "titleKey": "vatSecondQuarter.title",
+      "descriptionKey": "vatSecondQuarter.description"
+    },
+    "legalRefs": [
+      {
+        "law": "부가가치세법",
+        "article": "제48조"
+      }
+    ],
+    "effective": {
+      "from": "2020-01-01"
+    },
+    "priority": "warning"
+  },
+  {
+    "id": "individual-amended-claim",
+    "taxType": "income",
+    "category": "claim",
+    "trigger": {
+      "anchor": "fixedDate",
+      "fixedDate": "12-31"
+    },
+    "window": {
+      "startOffset": {
+        "value": -60,
+        "unit": "month"
+      }
+    },
+    "conditions": [
+      {
+        "field": "type",
+        "operator": "equals",
+        "value": "individual-general"
+      }
+    ],
+    "labels": {
+      "titleKey": "individualClaimWindow.title",
+      "descriptionKey": "individualClaimWindow.description"
+    },
+    "legalRefs": [
+      {
+        "law": "국세기본법",
+        "article": "제45조"
+      }
+    ],
+    "effective": {
+      "from": "2020-01-01"
+    },
+    "priority": "info"
+  },
+  {
+    "id": "simple-vat-annual",
+    "taxType": "vat",
+    "category": "filing",
+    "trigger": {
+      "anchor": "fixedDate",
+      "fixedDate": "01-25"
+    },
+    "conditions": [
+      {
+        "field": "type",
+        "operator": "equals",
+        "value": "individual-simple"
+      }
+    ],
+    "labels": {
+      "titleKey": "simpleVatAnnual.title",
+      "descriptionKey": "simpleVatAnnual.description"
+    },
+    "legalRefs": [
+      {
+        "law": "부가가치세법",
+        "article": "제61조"
+      }
+    ],
+    "effective": {
+      "from": "2020-01-01"
+    },
+    "priority": "critical"
+  },
+  {
+    "id": "simple-income-return",
+    "taxType": "income",
+    "category": "filing",
+    "trigger": {
+      "anchor": "fixedDate",
+      "fixedDate": "05-31"
+    },
+    "conditions": [
+      {
+        "field": "type",
+        "operator": "equals",
+        "value": "individual-simple"
+      }
+    ],
+    "labels": {
+      "titleKey": "simpleIncomeReturn.title",
+      "descriptionKey": "simpleIncomeReturn.description"
+    },
+    "legalRefs": [
+      {
+        "law": "소득세법",
+        "article": "제70조"
+      }
+    ],
+    "effective": {
+      "from": "2020-01-01"
+    },
+    "priority": "warning"
+  },
+  {
+    "id": "simple-claim-window",
+    "taxType": "income",
+    "category": "claim",
+    "trigger": {
+      "anchor": "fixedDate",
+      "fixedDate": "12-31"
+    },
+    "window": {
+      "startOffset": {
+        "value": -60,
+        "unit": "month"
+      }
+    },
+    "conditions": [
+      {
+        "field": "type",
+        "operator": "equals",
+        "value": "individual-simple"
+      }
+    ],
+    "labels": {
+      "titleKey": "simpleClaimWindow.title",
+      "descriptionKey": "simpleClaimWindow.description"
+    },
+    "legalRefs": [
+      {
+        "law": "국세기본법",
+        "article": "제45조"
+      }
+    ],
+    "effective": {
+      "from": "2020-01-01"
+    },
+    "priority": "info"
+  }
+]

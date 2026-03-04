@@ -1,0 +1,88 @@
+[
+  {
+    "id": "individual-income-final",
+    "taxType": "income",
+    "category": "filing",
+    "trigger": {
+      "anchor": "fixedDate",
+      "fixedDate": "05-31"
+    },
+    "conditions": [
+      {
+        "field": "type",
+        "operator": "equals",
+        "value": "individual-general"
+      }
+    ],
+    "labels": {
+      "titleKey": "individualIncomeReturn.title",
+      "descriptionKey": "individualIncomeReturn.description"
+    },
+    "legalRefs": [
+      { "law": "소득세법", "article": "제70조" }
+    ],
+    "effective": { "from": "2020-01-01" },
+    "priority": "critical"
+  },
+  {
+    "id": "individual-vat-final",
+    "taxType": "vat",
+    "category": "filing",
+    "trigger": {
+      "anchor": "fixedDate",
+      "fixedDate": "07-25"
+    },
+    "conditions": [
+      {
+        "field": "type",
+        "operator": "equals",
+        "value": "individual-general"
+      },
+      {
+        "field": "vatCycle",
+        "operator": "in",
+        "value": ["quarterly", "semiannual"]
+      }
+    ],
+    "labels": {
+      "titleKey": "vatSecondQuarter.title",
+      "descriptionKey": "vatSecondQuarter.description"
+    },
+    "legalRefs": [
+      { "law": "부가가치세법", "article": "제48조" }
+    ],
+    "effective": { "from": "2020-01-01" },
+    "priority": "warning"
+  },
+  {
+    "id": "individual-amended-claim",
+    "taxType": "income",
+    "category": "claim",
+    "trigger": {
+      "anchor": "fixedDate",
+      "fixedDate": "12-31"
+    },
+    "window": {
+      "startOffset": {
+        "value": -60,
+        "unit": "month"
+      }
+    },
+    "conditions": [
+      {
+        "field": "type",
+        "operator": "equals",
+        "value": "individual-general"
+      }
+    ],
+    "labels": {
+      "titleKey": "individualClaimWindow.title",
+      "descriptionKey": "individualClaimWindow.description"
+    },
+    "legalRefs": [
+      { "law": "국세기본법", "article": "제45조" }
+    ],
+    "effective": { "from": "2020-01-01" },
+    "priority": "info"
+  }
+]
