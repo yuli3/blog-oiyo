@@ -32,6 +32,28 @@ export const categoryLabels: Record<string, Record<string, string>> = {
     util: "ユーティリティ",
     other: "その他",
   },
+  fr: {
+    finance: "Finance",
+    accounting: "Comptabilité",
+    tax: "Droit fiscal",
+    management: "Gestion",
+    cost_management: "Gestion des coûts",
+    economics: "Économie",
+    productivity: "Productivité",
+    util: "Utilitaires",
+    other: "Autre",
+  },
+  es: {
+    finance: "Finanzas",
+    accounting: "Contabilidad",
+    tax: "Derecho fiscal",
+    management: "Gestión",
+    cost_management: "Gestión de costos",
+    economics: "Economía",
+    productivity: "Productividad",
+    util: "Utilidades",
+    other: "Otro",
+  },
 };
 
 export const categoryIcons: Record<string, string> = {

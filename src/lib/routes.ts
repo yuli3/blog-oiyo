@@ -4,7 +4,7 @@
  */
 import { getRelativeLocaleUrl } from "astro:i18n";
 
-export const SUPPORTED_LOCALES = ["ko", "en", "ja"] as const;
+export const SUPPORTED_LOCALES = ["ko", "en", "ja", "fr", "es"] as const;
 export const supportLocales = SUPPORTED_LOCALES;
 export type Locale = (typeof SUPPORTED_LOCALES)[number];
 
