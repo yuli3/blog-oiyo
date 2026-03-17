@@ -20,29 +20,29 @@ const paginationEnabled = siteConfig.features.pagination;
 ---
 
 <BaseLayout title={title} description={subtitle}>
-  <section class="py-24">
+  <section class="py-16 md:py-20">
     <div class="container px-4">
-      <div class="mb-20 animate-fade-up max-w-3xl">
+      <div class="mb-12 max-w-2xl">
         <h1
-          class="text-5xl font-extrabold tracking-tight sm:text-6xl mb-6 font-heading text-primary"
+          class="text-4xl font-bold tracking-tight sm:text-5xl mb-4 text-foreground"
         >
           {title}
           {
             page.currentPage > 1 && (
-              <span class="text-2xl text-muted-foreground font-normal ml-4">
+              <span class="text-xl text-muted-foreground font-normal ml-3">
                 Page {page.currentPage}
               </span>
             )
           }
         </h1>
-        <p class="text-xl text-muted-foreground leading-relaxed italic">
+        <p class="text-lg text-muted-foreground leading-relaxed">
           {subtitle}
         </p>
       </div>
 
       <CategoryCloud {locale} {activeCategory} />
 
-      <div class="grid gap-x-12 gap-y-16 md:grid-cols-2 lg:grid-cols-3">
+      <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
         {
           page.data.map((post: any) => {
             // post.slug is like 'ko/visualizing-goals'; strip the lang prefix
@@ -56,9 +56,9 @@ const paginationEnabled = siteConfig.features.pagination;
             return (
               <article
                 class:list={[
-                  "group flex flex-col items-start gap-4 animate-fade-up",
+                  "group flex flex-col items-start gap-3",
                   {
-                    "bg-primary/5 p-6 rounded-3xl -m-6 border border-transparent hover:border-primary/20 transition-all":
+                    "bg-primary/5 p-5 rounded-xl border border-primary/10 hover:border-primary/20 transition-colors":
                       isAcademy,
                   },
                 ]}
@@ -66,19 +66,19 @@ const paginationEnabled = siteConfig.features.pagination;
                 {post.data.heroImage && (
                   <a
                     href={href}
-                    class="w-full aspect-[16/10] overflow-hidden rounded-2xl border border-border/40 bg-muted/20"
+                    class="w-full aspect-[16/10] overflow-hidden rounded-lg border border-border bg-muted/20"
                   >
                     <img
                       src={post.data.heroImage}
                       alt={post.data.title}
-                      class="w-full h-full object-cover transition-all duration-700 group-hover:scale-105 group-hover:opacity-90"
+                      class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   </a>
                 )}
-                <div class="flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.2em]">
+                <div class="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-widest">
                   <span
                     class:list={[
-                      "px-2 py-1 rounded-md",
+                      "px-2 py-0.5 rounded-md",
                       isAcademy
                         ? "bg-primary text-primary-foreground"
                         : "bg-foreground text-background",
@@ -86,22 +86,22 @@ const paginationEnabled = siteConfig.features.pagination;
                   >
                     {isAcademy ? "Academy" : "Magazine"}
                   </span>
-                  <span class="text-muted-foreground/40 font-normal">/</span>
+                  <span class="text-muted-foreground/40">/</span>
                   <span class="text-muted-foreground">
                     {post.data.category}
                   </span>
                 </div>
 
-                <h2 class="text-2xl font-bold leading-tight group-hover:text-primary transition-colors font-heading tracking-tight mt-2">
+                <h2 class="text-xl font-bold leading-snug group-hover:text-primary transition-colors tracking-tight">
                   <a href={href}>
                     {isAcademy && chapter !== null && (
-                      <span class="text-primary mr-2">#{chapter}</span>
+                      <span class="text-primary mr-1.5">#{chapter}</span>
                     )}
                     {post.data.title}
                   </a>
                 </h2>
 
-                <div class="flex items-center gap-4 text-[10px] font-medium text-muted-foreground/60">
+                <div class="flex items-center gap-3 text-[11px] text-muted-foreground/60">
                   {post.data.pubDate && (
                     <span>
                       {post.data.pubDate.toLocaleDateString(
@@ -112,13 +112,13 @@ const paginationEnabled = siteConfig.features.pagination;
                   )}
                   {post.data.author && (
                     <>
-                      <span>•</span>
+                      <span>·</span>
                       <span>{post.data.author}</span>
                     </>
                   )}
                 </div>
 
-                <p class="text-muted-foreground line-clamp-3 text-base leading-relaxed mt-1">
+                <p class="text-muted-foreground line-clamp-3 text-sm leading-relaxed">
                   {post.data.description}
                 </p>
               </article>

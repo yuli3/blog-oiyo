@@ -1,0 +1,141 @@
+---
+import { siteConfig } from "../config/site.config";
+
+interface Props {
+  locale?: string;
+}
+
+const { locale = "en" } = Astro.props;
+
+const labels: Record<string, { title: string; desc: string; placeholder: string; button: string; success: string; error: string }> = {
+  en: {
+    title: "Stay in the loop",
+    desc: "Get the latest articles delivered to your inbox. No spam, unsubscribe anytime.",
+    placeholder: "your@email.com",
+    button: "Subscribe",
+    success: "You're in! Check your inbox to confirm.",
+    error: "Something went wrong. Please try again.",
+  },
+  ko: {
+    title: "새 글 알림 받기",
+    desc: "최신 글을 이메일로 받아보세요. 스팸 없음, 언제든 취소 가능.",
+    placeholder: "이메일 주소",
+    button: "구독하기",
+    success: "구독 신청 완료! 이메일을 확인해주세요.",
+    error: "오류가 발생했습니다. 다시 시도해주세요.",
+  },
+  ja: {
+    title: "最新記事を受け取る",
+    desc: "新しい記事をメールでお届けします。スパムなし、いつでも解除可能。",
+    placeholder: "メールアドレス",
+    button: "購読する",
+    success: "登録しました！メールを確認してください。",
+    error: "エラーが発生しました。もう一度お試しください。",
+  },
+  fr: {
+    title: "Restez informé",
+    desc: "Recevez les derniers articles par email. Sans spam, désinscription à tout moment.",
+    placeholder: "votre@email.com",
+    button: "S'abonner",
+    success: "Inscrit ! Vérifiez votre boîte mail.",
+    error: "Une erreur est survenue. Réessayez.",
+  },
+  es: {
+    title: "Mantente al día",
+    desc: "Recibe los últimos artículos en tu email. Sin spam, cancela cuando quieras.",
+    placeholder: "tu@email.com",
+    button: "Suscribirse",
+    success: "¡Suscrito! Revisa tu bandeja de entrada.",
+    error: "Algo salió mal. Inténtalo de nuevo.",
+  },
+};
+
+const t = labels[locale] ?? labels.en;
+const { buttondownUsername, fallbackEmail } = siteConfig.newsletter;
+---
+
+<section class="my-12 rounded-2xl border border-border/60 bg-muted/40 p-8 not-prose">
+  <div class="max-w-xl">
+    <h3 class="text-lg font-bold tracking-tight mb-2">{t.title}</h3>
+    <p class="text-sm text-muted-foreground mb-5">{t.desc}</p>
+
+    {buttondownUsername ? (
+      <form
+        id="newsletter-form"
+        class="flex gap-3 flex-col sm:flex-row"
+        novalidate
+      >
+        <input
+          id="newsletter-email"
+          type="email"
+          required
+          placeholder={t.placeholder}
+          class="flex-1 rounded-lg border border-border bg-background px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+          aria-label={t.placeholder}
+        />
+        <button
+          type="submit"
+          class="rounded-lg bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 transition-opacity whitespace-nowrap"
+        >
+          {t.button}
+        </button>
+      </form>
+    ) : (
+      <a
+        href={`mailto:${fallbackEmail}?subject=Newsletter subscription`}
+        class="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 transition-opacity"
+      >
+        {t.button} →
+      </a>
+    )}
+
+    <p id="newsletter-msg" class="text-sm mt-3 hidden"></p>
+  </div>
+</section>
+
+{buttondownUsername && (
+  <script is:inline define:vars={{ buttondownUsername, successMsg: t.success, errorMsg: t.error }}>
+    (function () {
+      const form = document.getElementById("newsletter-form");
+      const msg = document.getElementById("newsletter-msg");
+      if (!form || !msg) return;
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const email = document.getElementById("newsletter-email").value.trim();
+        if (!email) return;
+
+        const btn = form.querySelector("button[type=submit]");
+        btn.disabled = true;
+        btn.textContent = "…";
+
+        try {
+          const res = await fetch(
+            `https://api.buttondown.email/v1/subscribers`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Token ${buttondownUsername}`,
+              },
+              body: JSON.stringify({ email_address: email }),
+            }
+          );
+
+          if (res.ok || res.status === 201) {
+            form.style.display = "none";
+            msg.textContent = successMsg;
+            msg.className = "text-sm mt-3 text-emerald-600 font-medium";
+          } else {
+            throw new Error("API error");
+          }
+        } catch {
+          msg.textContent = errorMsg;
+          msg.className = "text-sm mt-3 text-destructive";
+          btn.disabled = false;
+          btn.textContent = successMsg.includes("Subscribe") ? "Subscribe" : "구독하기";
+        }
+      });
+    })();
+  </script>
+)}

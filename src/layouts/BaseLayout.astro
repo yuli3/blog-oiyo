@@ -65,7 +65,7 @@ const scrollSnapEnabled = siteConfig.features.scrollSnap;
     </a>
     <header
       role="banner"
-      class="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl"
+      class="sticky top-0 z-50 w-full border-b bg-background"
     >
       <div class="container flex h-16 items-center justify-between px-4">
         <div class="flex items-center gap-8">
@@ -82,6 +82,14 @@ const scrollSnapEnabled = siteConfig.features.scrollSnap;
               class="text-sm font-bold uppercase tracking-widest text-muted-foreground transition-colors hover:text-primary whitespace-nowrap"
               >{t.nav.home}</a
             >
+            <a
+              href={`/${locale}/search`}
+              class="flex items-center gap-1.5 text-sm font-bold uppercase tracking-widest text-muted-foreground transition-colors hover:text-primary whitespace-nowrap"
+              aria-label="Search"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              Search
+            </a>
             <div
               class="flex items-center gap-3 space-x-2 text-xs font-bold uppercase tracking-widest text-muted-foreground/70 border-l border-border/40 pl-6 whitespace-nowrap"
             >
@@ -125,6 +133,30 @@ const scrollSnapEnabled = siteConfig.features.scrollSnap;
         </div>
       </div>
     </header>
+
+    <!-- Reading progress bar -->
+    <div
+      id="reading-progress"
+      class="fixed top-[64px] left-0 z-50 h-0.5 bg-primary transition-none"
+      style="width: 0%"
+      aria-hidden="true"
+    ></div>
+    <script is:inline>
+      (function () {
+        var bar = document.getElementById("reading-progress");
+        if (!bar) return;
+        function update() {
+          var scrollTop = window.scrollY || document.documentElement.scrollTop;
+          var docHeight =
+            document.documentElement.scrollHeight -
+            document.documentElement.clientHeight;
+          var pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+          bar.style.width = Math.min(100, pct).toFixed(1) + "%";
+        }
+        window.addEventListener("scroll", update, { passive: true });
+        update();
+      })();
+    </script>
 
     <main id="main-content" role="main" class="flex-1">
       <slot />

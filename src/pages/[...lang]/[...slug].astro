@@ -2,6 +2,9 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import TOC from "../../components/TOC.astro";
+import BlogCTA from "../../components/BlogCTA.astro";
+import NewsletterCTA from "../../components/NewsletterCTA.astro";
+import RelatedPosts from "../../components/RelatedPosts.astro";
 import { siteConfig } from "../../config/site.config";
 import Callout from "../../components/mdx/Callout.astro";
 import FormulaBlock from "../../components/mdx/FormulaBlock.astro";
@@ -39,25 +42,82 @@ import {
 import { GameTheoryPlayground } from "@/features/education-game-theory";
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog");
-  return posts.map((post) => {
-    // post.slug is like 'ko/post-slug'; split into lang + slug
+  const allPosts = await getCollection("blog", (p) => !p.data.draft);
+  // Group by locale, sort by pubDate ascending within each locale
+  const byLocale: Record<string, typeof allPosts> = {};
+  for (const post of allPosts) {
+    const lang = post.slug.split("/")[0];
+    (byLocale[lang] ??= []).push(post);
+  }
+  for (const list of Object.values(byLocale)) {
+    list.sort((a, b) => a.data.pubDate.getTime() - b.data.pubDate.getTime());
+  }
+
+  return allPosts.map((post) => {
     const parts = post.slug.split("/");
     const lang = parts[0];
     const slug = parts.slice(1).join("/");
+    const localePosts = byLocale[lang] ?? [];
+    const idx = localePosts.findIndex((p) => p.slug === post.slug);
+    const prevPost = idx > 0 ? localePosts[idx - 1] : null;
+    const nextPost = idx < localePosts.length - 1 ? localePosts[idx + 1] : null;
 
     return {
       params: { lang, slug },
-      props: { post, locale: lang },
+      props: { post, locale: lang, prevPost, nextPost },
     };
   });
 }
 
-const { post, locale } = Astro.props;
-const { Content, headings } = await post.render();
+const { post, locale, prevPost, nextPost } = Astro.props;
+const { Content, headings, remarkPluginFrontmatter } = await post.render();
 const tocEnabled = siteConfig.features.toc;
 const chMatch = post.slug.match(/-ch(\d+)$/);
 const chapter = chMatch ? parseInt(chMatch[1], 10) : null;
+
+// Series JSON-LD for chapter posts
+let seriesJsonLd: string | null = null;
+if (chapter !== null) {
+  const seriesSlugBase = post.slug.replace(/-ch\d+$/, "").replace(/^[a-z]+\//, "");
+  const allPosts = await getCollection("blog", (p) => !p.data.draft);
+  const seriesPosts = allPosts.filter(
+    (p) => p.slug.replace(/^[a-z]+\//, "").replace(/-ch\d+$/, "") === seriesSlugBase &&
+           p.slug.match(/-ch\d+$/)
+  );
+  const totalChapters = seriesPosts.length;
+  const seriesName = seriesSlugBase
+    .replace(/^education-/, "")
+    .replace(/-/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+
+  seriesJsonLd = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.data.title,
+    description: post.data.description,
+    isPartOf: {
+      "@type": "Course",
+      name: `${seriesName} Course`,
+      description: `A ${totalChapters}-chapter educational series on ${seriesName}.`,
+      url: `${siteConfig.url}/${locale}/${seriesSlugBase}-ch1/`,
+    },
+    position: chapter,
+    numberOfItems: totalChapters,
+    url: `${siteConfig.url}/${locale}/${seriesSlugBase}-ch${chapter}/`,
+  });
+}
+
+// Estimate reading time from word count (~200 wpm)
+const wordCount = (post.body ?? "").split(/\s+/).filter(Boolean).length;
+const readingMinutes = Math.max(1, Math.ceil(wordCount / 200));
+const readingTimeLabels: Record<string, string> = {
+  en: `${readingMinutes} min read`,
+  ko: `약 ${readingMinutes}분`,
+  ja: `約${readingMinutes}分`,
+  fr: `${readingMinutes} min de lecture`,
+  es: `${readingMinutes} min de lectura`,
+};
+const readingTimeLabel = readingTimeLabels[locale] ?? readingTimeLabels.en;
 ---
 
 <BaseLayout
@@ -67,6 +127,7 @@ const chapter = chMatch ? parseInt(chMatch[1], 10) : null;
   type="article"
   pubDate={post.data.pubDate}
 >
+  {seriesJsonLd && <script type="application/ld+json" set:html={seriesJsonLd} />}
   <article
     class:list={[
       "py-24 animate-fade-up",
@@ -105,6 +166,8 @@ const chapter = chMatch ? parseInt(chMatch[1], 10) : null;
                   </span>
                 )
               }
+              <span class="text-muted-foreground/30">•</span>
+              <span class="text-muted-foreground/60">{readingTimeLabel}</span>
             </div>
 
             <h1
@@ -180,6 +243,58 @@ const chapter = chMatch ? parseInt(chMatch[1], 10) : null;
               }}
             />
           </div>
+
+          <NewsletterCTA locale={locale} />
+
+          <BlogCTA category={post.data.category} locale={locale} />
+
+          <RelatedPosts
+            currentSlug={post.slug}
+            tags={post.data.tags ?? []}
+            category={post.data.category}
+            locale={locale}
+          />
+
+          {(prevPost || nextPost) && (
+            <nav class="mt-16 grid grid-cols-2 gap-4 not-prose" aria-label="Article navigation">
+              {prevPost ? (() => {
+                const prevParts = prevPost.slug.split("/");
+                const prevSlug = prevParts.slice(1).join("/");
+                return (
+                  <a
+                    href={`/${locale}/${prevSlug}/`}
+                    class="group col-start-1 flex flex-col gap-1 rounded-xl border border-border/60 bg-card p-4 hover:border-primary/50 hover:bg-primary/5 transition-colors"
+                  >
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                      Previous
+                    </span>
+                    <span class="text-sm font-semibold leading-snug group-hover:text-primary transition-colors line-clamp-2">
+                      {prevPost.data.title}
+                    </span>
+                  </a>
+                );
+              })() : <div />}
+              {nextPost ? (() => {
+                const nextParts = nextPost.slug.split("/");
+                const nextSlug = nextParts.slice(1).join("/");
+                return (
+                  <a
+                    href={`/${locale}/${nextSlug}/`}
+                    class="group col-start-2 flex flex-col gap-1 rounded-xl border border-border/60 bg-card p-4 text-right hover:border-primary/50 hover:bg-primary/5 transition-colors"
+                  >
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground flex items-center justify-end gap-1">
+                      Next
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                    </span>
+                    <span class="text-sm font-semibold leading-snug group-hover:text-primary transition-colors line-clamp-2">
+                      {nextPost.data.title}
+                    </span>
+                  </a>
+                );
+              })() : <div />}
+            </nav>
+          )}
 
           <footer class="mt-24 pt-12 border-t border-border/40">
             <a

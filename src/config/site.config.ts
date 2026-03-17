@@ -32,6 +32,11 @@ export const siteConfig = {
   analytics: {
     googleAnalyticsId: "G-915L6V38X6",
     googleAdsenseId: "ca-pub-9541920090543312",
+  },
+  newsletter: {
+    // Set to your Buttondown account slug to enable API subscription, or null to use mailto fallback
+    buttondownUsername: null as string | null,
+    fallbackEmail: "support@oiyo.net",
   }
 };
 

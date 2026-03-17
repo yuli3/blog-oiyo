@@ -1,0 +1,95 @@
+---
+interface Props {
+  category?: string;
+  locale?: string;
+}
+
+const { category = '', locale = 'en' } = Astro.props;
+
+const cat = category.toLowerCase();
+
+type CTAConfig = {
+  icon: string;
+  title: Record<string, string>;
+  desc: Record<string, string>;
+  cta: Record<string, string>;
+  href: string;
+  utm: string;
+};
+
+const CTA_MAP: Record<string, CTAConfig> = {
+  psychology: {
+    icon: '🧠',
+    title: { en: 'Discover Your Personality Type', ko: '나의 성격 유형 알아보기', ja: '自分の性格タイプを発見', fr: 'Découvrez votre type de personnalité', es: 'Descubre tu tipo de personalidad' },
+    desc: { en: 'Take the free MBTI-based personality test on oiyo.net and uncover your cognitive style.', ko: 'oiyo.net에서 MBTI 기반 무료 성격 테스트를 받고 나의 인지 스타일을 발견하세요.', ja: 'oiyo.netで無料のMBTIベース性格テストを受けて認知スタイルを発見してください。', fr: 'Passez le test de personnalité gratuit basé sur MBTI sur oiyo.net.', es: 'Realiza el test de personalidad gratuito basado en MBTI en oiyo.net.' },
+    cta: { en: 'Take Free MBTI Test →', ko: '무료 MBTI 테스트 시작 →', ja: '無料MBTIテストを受ける →', fr: 'Passer le test MBTI →', es: 'Hacer el test MBTI →' },
+    href: 'https://oiyo.net/mbti',
+    utm: 'psychology',
+  },
+  finance: {
+    icon: '💰',
+    title: { en: 'Know Your Financial Personality', ko: '나의 금융 성향 테스트', ja: '投資性格診断', fr: 'Testez votre personnalité financière', es: 'Conoce tu perfil financiero' },
+    desc: { en: 'Your numbers tell one story — your personality tells another. Discover your investor profile on oiyo.net.', ko: '숫자는 하나의 이야기, 성격은 다른 이야기를 합니다. oiyo.net에서 투자 성향을 알아보세요.', ja: '数字は一つの物語、性格は別の物語を語ります。oiyo.netで投資家プロフィールを発見してください。', fr: 'Les chiffres racontent une histoire, votre personnalité en raconte une autre.', es: 'Los números cuentan una historia, tu personalidad cuenta otra.' },
+    cta: { en: 'Find Your Investor Type →', ko: '투자 성향 테스트 →', ja: '投資家タイプを調べる →', fr: 'Trouver mon profil investisseur →', es: 'Descubrir mi perfil inversor →' },
+    href: 'https://oiyo.net/spending-habits',
+    utm: 'finance',
+  },
+  'behavioral economics': {
+    icon: '🎯',
+    title: { en: 'Understand Your Decision-Making Style', ko: '나의 의사결정 성향 파악', ja: '意思決定スタイルを理解する', fr: 'Comprendre votre style de décision', es: 'Comprende tu estilo de toma de decisiones' },
+    desc: { en: 'Behavioral biases shape your choices more than you know. Take the investment personality test on oiyo.net.', ko: '행동 편향이 당신의 선택에 생각보다 더 큰 영향을 미칩니다. oiyo.net에서 테스트해보세요.', ja: '行動バイアスはあなたの選択に想像以上の影響を与えます。oiyo.netでテストしてみてください。', fr: 'Les biais comportementaux influencent vos choix plus que vous ne le croyez.', es: 'Los sesgos conductuales moldean tus elecciones más de lo que crees.' },
+    cta: { en: 'Take the Investment Style Test →', ko: '투자 성향 테스트 →', ja: '投資スタイルテストを受ける →', fr: 'Tester mon style d\'investissement →', es: 'Probar mi estilo de inversión →' },
+    href: 'https://oiyo.net/riasec',
+    utm: 'behavioral-economics',
+  },
+  philosophy: {
+    icon: '🔮',
+    title: { en: 'Explore Your Core Motivations', ko: '나의 근본 동기 탐구', ja: '核心的な動機を探求する', fr: 'Explorez vos motivations profondes', es: 'Explora tus motivaciones fundamentales' },
+    desc: { en: 'The Enneagram reveals the deep drives behind how you think and act. Explore your type on oiyo.net.', ko: '에니어그램은 당신의 생각과 행동 이면의 깊은 동기를 드러냅니다. oiyo.net에서 유형을 탐구해보세요.', ja: 'エニアグラムはあなたの思考と行動の背後にある深い動機を明らかにします。', fr: 'L\'Ennéagramme révèle les motivations profondes derrière vos pensées et actions.', es: 'El Eneagrama revela las motivaciones profundas detrás de cómo piensas y actúas.' },
+    cta: { en: 'Discover Your Enneagram Type →', ko: '에니어그램 타입 알아보기 →', ja: 'エニアグラムタイプを発見 →', fr: 'Découvrir mon type d\'Ennéagramme →', es: 'Descubrir mi tipo de Eneagrama →' },
+    href: 'https://oiyo.net/enneagram',
+    utm: 'philosophy',
+  },
+  life: {
+    icon: '✨',
+    title: { en: 'Check Your Daily Energy', ko: '오늘의 에너지 체크', ja: '今日のエネルギーチェック', fr: 'Vérifiez votre énergie quotidienne', es: 'Verifica tu energía diaria' },
+    desc: { en: 'Your biorhythm shapes your focus, creativity, and endurance each day. Calculate yours on ahoxy.com.', ko: '바이오리듬이 매일의 집중력, 창의력, 지구력을 좌우합니다. ahoxy.com에서 계산해보세요.', ja: 'バイオリズムは毎日の集中力、創造性、持久力を形作ります。ahoxy.comで計算してください。', fr: 'Votre biorythme façonne votre concentration, créativité et endurance chaque jour.', es: 'Tu biorritmo determina tu concentración, creatividad y resistencia cada día.' },
+    cta: { en: 'Check My Biorhythm →', ko: '바이오리듬 체크 →', ja: 'バイオリズムを確認 →', fr: 'Vérifier mon biorythme →', es: 'Verificar mi biorritmo →' },
+    href: 'https://ahoxy.com/biorhythm',
+    utm: 'life',
+  },
+};
+
+// Category matching — try exact, then partial
+function matchCTA(category: string): CTAConfig | null {
+  const lower = category.toLowerCase();
+  if (CTA_MAP[lower]) return CTA_MAP[lower];
+  for (const key of Object.keys(CTA_MAP)) {
+    if (lower.includes(key) || key.includes(lower)) return CTA_MAP[key];
+  }
+  return null;
+}
+
+const config = matchCTA(cat);
+if (!config) return Astro.response;
+
+const l = (locale in (config.title)) ? locale : 'en';
+const title = config.title[l] ?? config.title['en'];
+const desc = config.desc[l] ?? config.desc['en'];
+const cta = config.cta[l] ?? config.cta['en'];
+const href = `${config.href}?utm_source=blog_oiyo&utm_medium=article_cta&utm_campaign=${config.utm}`;
+---
+
+<aside class="my-12 rounded-2xl border border-primary/20 bg-primary/5 px-6 py-8 text-center not-prose">
+  <div class="text-3xl mb-3">{config.icon}</div>
+  <h3 class="text-lg font-bold tracking-tight mb-2">{title}</h3>
+  <p class="text-sm text-muted-foreground max-w-md mx-auto mb-5">{desc}</p>
+  <a
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 transition-colors"
+  >
+    {cta}
+  </a>
+</aside>
