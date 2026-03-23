@@ -68,16 +68,17 @@ const localePrefix = `/${locale}`;
 const track = getTrack(originalCategory);
 const isAcademy = track === "academy";
 
+const displayName = (t.category.names as Record<string, string>)?.[originalCategory] ?? originalCategory;
 const displaySubtitle = isAcademy
-  ? t.category.academySubtitle.replace("{category}", originalCategory)
-  : t.category.magazineSubtitle.replace("{category}", originalCategory);
+  ? t.category.academySubtitle.replace("{category}", displayName)
+  : t.category.magazineSubtitle.replace("{category}", displayName);
 ---
 
 <BlogList
   page={page}
   locale={locale}
   baseUrl={`${localePrefix}/category/${category}`}
-  title={originalCategory as string}
+  title={displayName}
   subtitle={displaySubtitle}
   activeCategory={category}
 />

@@ -20,6 +20,7 @@ interface Props {
 const { page, locale, baseUrl, title, subtitle, activeCategory } = Astro.props;
 const paginationEnabled = siteConfig.features.pagination;
 const t = await getTranslations(locale as Locale);
+const categoryNames = (t.category.names ?? {}) as unknown as { [key: string]: string };
 ---
 
 <BaseLayout title={title} description={subtitle}>
@@ -91,7 +92,7 @@ const t = await getTranslations(locale as Locale);
                   </span>
                   <span class="text-muted-foreground/40">/</span>
                   <span class="text-muted-foreground">
-                    {post.data.category}
+                    {categoryNames[post.data.category] ?? post.data.category}
                   </span>
                 </div>
 

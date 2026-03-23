@@ -1,5 +1,8 @@
 ---
 import { getCollection } from "astro:content";
+import { getTranslations } from "../lib/i18n";
+import type { Locale } from "../lib/i18n";
+import { ACADEMY_CATEGORIES } from "../lib/taxonomy";
 
 interface Props {
   activeCategory?: string;
@@ -7,6 +10,9 @@ interface Props {
 }
 
 const { activeCategory, locale } = Astro.props;
+
+const t = await getTranslations(locale as Locale);
+const categoryNames = (t.category.names ?? {}) as unknown as { [key: string]: string };
 
 const allPosts = await getCollection(
   "blog",
@@ -21,8 +27,6 @@ const categoryCounts = allPosts.reduce(
   },
   {} as Record<string, number>,
 );
-
-import { ACADEMY_CATEGORIES } from "../lib/taxonomy";
 
 const categories = Object.keys(categoryCounts).sort();
 
@@ -65,7 +69,7 @@ const magazineCats = categories.filter(
                       : "bg-primary/5 text-primary/70 border-primary/20 hover:border-primary/40",
                   ]}
                 >
-                  {cat}{" "}
+                  {categoryNames[cat] ?? cat}{" "}
                   <span class="ml-1 opacity-40">({categoryCounts[cat]})</span>
                 </a>
               );
@@ -98,7 +102,7 @@ const magazineCats = categories.filter(
                   : "bg-muted/30 text-muted-foreground border-border/40 hover:border-foreground/40 hover:text-foreground",
               ]}
             >
-              All Insights
+              {t.category.allInsights}
             </a>
             {magazineCats.map((cat) => {
               const slug = cat.toLowerCase().replace(/[^a-z0-9]+/g, "-");
@@ -117,7 +121,7 @@ const magazineCats = categories.filter(
                       : "bg-muted/30 text-muted-foreground border-border/40 hover:border-foreground/40 hover:text-foreground",
                   ]}
                 >
-                  {cat}{" "}
+                  {categoryNames[cat] ?? cat}{" "}
                   <span class="ml-1 opacity-40">({categoryCounts[cat]})</span>
                 </a>
               );
