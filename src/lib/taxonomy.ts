@@ -17,6 +17,15 @@ export const ACADEMY_CATEGORIES = [
     "Computer Science",
     "Finance",
     "Behavioral Science",
+    "Nursing",
+    "Medicine",
+    "Art Psychotherapy",
+    "Music History",
+    "Zoology",
+    "English Grammar",
+    "Technical Analysis",
+    "Negotiation",
+    "Advanced Bonds",
 ];
 
 export const MAGAZINE_CATEGORIES = [
