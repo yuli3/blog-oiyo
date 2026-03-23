@@ -1,0 +1,124 @@
+---
+interface ToolMeta {
+  name_ko: string;
+  name_en: string;
+  description_ko: string;
+  description_en: string;
+  icon: string;
+}
+
+interface Props {
+  tool: string;
+  locale?: string;
+}
+
+const TOOL_META: Record<string, ToolMeta> = {
+  compound: {
+    name_ko: "복리 계산기",
+    name_en: "Compound Interest",
+    description_ko: "장기 투자 수익을 직접 계산해보세요",
+    description_en: "Calculate your long-term investment returns",
+    icon: "📈",
+  },
+  bmi: {
+    name_ko: "BMI 계산기",
+    name_en: "BMI Calculator",
+    description_ko: "나의 체질량지수를 확인해보세요",
+    description_en: "Check your body mass index",
+    icon: "⚖️",
+  },
+  "year-end-settlement": {
+    name_ko: "연말정산 계산기",
+    name_en: "Year-End Settlement",
+    description_ko: "연말정산 환급액을 미리 계산해보세요",
+    description_en: "Calculate your tax refund",
+    icon: "💰",
+  },
+  "salary-calculator": {
+    name_ko: "연봉 계산기",
+    name_en: "Salary Calculator",
+    description_ko: "월 실수령액을 바로 확인하세요",
+    description_en: "Calculate your take-home pay",
+    icon: "💵",
+  },
+  "insurance-premium": {
+    name_ko: "4대보험 계산기",
+    name_en: "Insurance Calculator",
+    description_ko: "4대보험료를 정확하게 계산해보세요",
+    description_en: "Calculate your social insurance premiums",
+    icon: "🏥",
+  },
+  "early-repayment": {
+    name_ko: "중도상환수수료 계산기",
+    name_en: "Early Repayment Fee",
+    description_ko: "중도상환 시 발생하는 수수료를 알아보세요",
+    description_en: "Calculate early repayment fees",
+    icon: "🏦",
+  },
+  "property-tax": {
+    name_ko: "재산세 계산기",
+    name_en: "Property Tax",
+    description_ko: "재산세를 미리 계산해보세요",
+    description_en: "Calculate your property tax",
+    icon: "🏘️",
+  },
+  pension: {
+    name_ko: "국민연금 계산기",
+    name_en: "Pension Calculator",
+    description_ko: "예상 연금 수령액을 확인해보세요",
+    description_en: "Estimate your pension benefits",
+    icon: "🎯",
+  },
+  mbti: {
+    name_ko: "MBTI 성격 테스트",
+    name_en: "MBTI Personality Test",
+    description_ko: "나의 MBTI 유형을 빠르게 알아보세요",
+    description_en: "Discover your MBTI type in minutes",
+    icon: "🧠",
+  },
+  riasec: {
+    name_ko: "RIASEC 직업 적성 테스트",
+    name_en: "RIASEC Career Test",
+    description_ko: "나에게 맞는 직업 코드를 확인해보세요",
+    description_en: "Find your career personality code",
+    icon: "🎯",
+  },
+};
+
+const { tool, locale = "ko" } = Astro.props;
+
+const meta = TOOL_META[tool];
+if (!meta) return Astro.response;
+
+const isKo = locale === "ko";
+const name = isKo ? meta.name_ko : meta.name_en;
+const description = isKo ? meta.description_ko : meta.description_en;
+const ctaLabel = isKo ? "계산해보기 →" : "Try it →";
+const href = `https://ahoxy.com/${locale}/${tool}?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta`;
+---
+
+<aside class="not-prose my-8 rounded-2xl border border-sky-200 bg-sky-50/80 dark:border-sky-800/50 dark:bg-sky-950/30 shadow-sm">
+  <a
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="flex items-center justify-between gap-4 px-6 py-5 group"
+  >
+    <div class="flex items-center gap-4 min-w-0">
+      <span class="text-3xl shrink-0" aria-hidden="true">{meta.icon}</span>
+      <div class="min-w-0">
+        <div class="font-bold text-base text-sky-900 dark:text-sky-100 leading-snug">
+          {name}
+        </div>
+        <div class="text-sm text-sky-700/80 dark:text-sky-300/70 mt-0.5 leading-relaxed">
+          {description}
+        </div>
+      </div>
+    </div>
+    <span
+      class="shrink-0 inline-flex items-center rounded-lg bg-sky-600 px-4 py-2 text-sm font-semibold text-white shadow-sm group-hover:bg-sky-700 transition-colors whitespace-nowrap"
+    >
+      {ctaLabel}
+    </span>
+  </a>
+</aside>

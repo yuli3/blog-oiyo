@@ -4,6 +4,8 @@ import Pagination from "./Pagination.astro";
 import CategoryCloud from "./CategoryCloud.astro";
 import { siteConfig } from "../config/site.config";
 import { getTrack } from "../lib/taxonomy";
+import { getTranslations } from "../lib/i18n";
+import type { Locale } from "../lib/i18n";
 
 interface Props {
   page: any;
@@ -17,6 +19,7 @@ interface Props {
 
 const { page, locale, baseUrl, title, subtitle, activeCategory } = Astro.props;
 const paginationEnabled = siteConfig.features.pagination;
+const t = await getTranslations(locale as Locale);
 ---
 
 <BaseLayout title={title} description={subtitle}>
@@ -30,7 +33,7 @@ const paginationEnabled = siteConfig.features.pagination;
           {
             page.currentPage > 1 && (
               <span class="text-xl text-muted-foreground font-normal ml-3">
-                Page {page.currentPage}
+                {t.blog.page} {page.currentPage}
               </span>
             )
           }
@@ -84,7 +87,7 @@ const paginationEnabled = siteConfig.features.pagination;
                         : "bg-foreground text-background",
                     ]}
                   >
-                    {isAcademy ? "Academy" : "Magazine"}
+                    {isAcademy ? t.blog.badgeAcademy : t.blog.badgeMagazine}
                   </span>
                   <span class="text-muted-foreground/40">/</span>
                   <span class="text-muted-foreground">

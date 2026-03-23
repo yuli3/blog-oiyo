@@ -33,7 +33,7 @@ export default defineConfig({
   },
   i18n: {
     defaultLocale: "en",
-    locales: ["en", "ko", "ja", "fr", "es"],
+    locales: ["en", "ko", "ja", "fr", "es", "zh", "cn"],
     routing: "manual",
   },
   build: {

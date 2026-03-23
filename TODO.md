@@ -223,3 +223,41 @@ IV부 인지 심리학과 메타인지
 전기경련요법과 경두개자기자극술 404 | 뇌수술과 전기자극치료 406 | 요약 407
 20장 대사 치료 계획 접근법 [x]
 21장 대사 건강과 정신 건강을 위한 새로운 시작 [x]
+
+### 10. Psychology & Philosophy Series (Batch 20 - 2026-03-23)
+
+- [x] 신화와 국가무의식: 영웅 콤플렉스의 실체 (Hero Complexes)
+- [x] 스토아 철학의 지혜: 마르쿠스 아우렐리우스와 회복탄력성 (Stoic Resilience)
+- [x] 습관의 과학: 뇌가소성을 이용한 변화의 기술 (Habit Science)
+- [x] 삶의 의미를 찾아서: 빅터 프랭클과 로고테라피 (Viktor Frankl)
+- [x] 어린 시절의 애착이 성인 관계에 미치는 영향 (Attachment Theory)
+- [x] 몰입의 심리학: 최상의 수행 능력을 끌어내는 기술 (Flow)
+- [x] 마인드풀니스와 뇌과학: 평온을 위한 뇌의 재배합 (Mindfulness)
+- [x] 취약함의 힘: 브레네 브라운과 진정한 연결 (Vulnerability)
+- [x] 직장 내 정서 지능(EQ): 성공의 숨겨진 열쇠 (EQ)
+- [x] 부의 심리학: 돈과 맺는 정서적 관계의 힘 (Psychology of Money)
+
+### 11. Railway Law & Regulations (Batch 21 - Completed 2026-03-24)
+
+- [x] 철도안전법 핵심 요약 (1) - 목적 및 정의 (Safety Act Basics)
+- [x] 철도안전 관리체계와 승인 절차 (Safety Management System)
+- [x] 철도종사자의 안전관리: 적성 및 신체검사 (Staff Exams)
+- [x] 철도차량 운전면허 취득과 교육훈련 (Driving Licenses)
+- [x] 철도차량 운전규칙: 열차의 조성과 운전 (Operation Rules)
+- [x] 철도 신호와 전호, 표지의 모든 것 (Signals & Signs)
+- [x] 철도산업발전기본법: 미래 철도의 초석 (Framework Act)
+- [x] 한국철도공사법: 코레일의 역할과 책임 (KORAIL Act)
+- [x] 철도사업법: 운송 사업의 면허와 운임 (Service Act)
+- [x] 철도 사고 조사와 안전 보고 의무 (Accident Investigation)
+
+### 12. Diversified Knowledge Repository- [x] Batch 22: "Logic, Car Ownership, English Grammar & Specialized AI-Resistant Series" <!-- id: 251 -->
+  - [x] Logic Foundations (Converse/Inverse/Contrapositive) <!-- id: 252 -->
+  - [x] Quantifiers (All vs Some) <!-- id: 253 -->
+  - [x] Symbolic Logic & Operators (->, ^, v) <!-- id: 254 -->
+  - [x] Post-Purchase Car Checklist (Localized for KR, US, JP) <!-- id: 255 -->
+  - [x] Mileage-Based Car Maintenance (Localized for KR, US, JP) <!-- id: 256 -->
+  - [x] Grammar: Subjunctive usage examples <!-- id: 257 -->
+  - [x] Grammar: Inversion for emphasis <!-- id: 258 -->
+  - [x] Grammar: Participle phrases <!-- id: 259 -->
+  - [x] Specialized: Cognitive Load Management (AI-Resistant) <!-- id: 260 -->
+  - [x] Specialized: Social Prescribing (AI-Resistant) <!-- id: 261 -->

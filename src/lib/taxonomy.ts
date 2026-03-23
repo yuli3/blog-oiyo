@@ -15,7 +15,8 @@ export const ACADEMY_CATEGORIES = [
     "Psychology",
     "Actuarial Science",
     "Computer Science",
-    "Finance"
+    "Finance",
+    "Behavioral Science",
 ];
 
 export const MAGAZINE_CATEGORIES = [
@@ -23,7 +24,10 @@ export const MAGAZINE_CATEGORIES = [
     "Mythology",
     "Philosophy",
     "Insights",
-    "Life & Spirit"
+    "Life & Spirit",
+    "Personality",
+    "Career & Vocation",
+    "Generational",
 ];
 
 export function getTrack(category: string | undefined): "academy" | "magazine" {

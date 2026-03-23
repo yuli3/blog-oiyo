@@ -2,12 +2,15 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { siteConfig } from "../../config/site.config";
+import { getTranslations } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
 
 export async function getStaticPaths() {
   return siteConfig.locales.map((lang) => ({ params: { lang } }));
 }
 
 const { lang: locale } = Astro.params;
+const translations = await getTranslations(locale as Locale);
 
 // Build a serializable search index at build time
 const allPosts = await getCollection("blog", (post) => {
@@ -28,48 +31,60 @@ const searchIndex = allPosts.map((post) => {
   };
 });
 
-const labels: Record<string, Record<string, string>> = {
-  en: { title: "Search", placeholder: "Search articles…", results: "results for", no_results: "No results for" },
-  ko: { title: "검색", placeholder: "글 검색…", results: "개 결과:", no_results: "검색 결과 없음:" },
-  ja: { title: "検索", placeholder: "記事を検索…", results: "件の結果:", no_results: "結果なし:" },
-  fr: { title: "Recherche", placeholder: "Rechercher des articles…", results: "résultats pour", no_results: "Aucun résultat pour" },
-  es: { title: "Búsqueda", placeholder: "Buscar artículos…", results: "resultados para", no_results: "Sin resultados para" },
+const searchLabels = {
+  title: translations.search.title,
+  placeholder: translations.search.placeholder,
+  results: translations.search.results,
+  no_results: translations.search.noResults,
 };
-const t = labels[locale ?? "en"] ?? labels.en;
 ---
 
-<BaseLayout title={t.title}>
+<BaseLayout title={searchLabels.title}>
   <div class="container mx-auto px-4 py-24 max-w-2xl">
-    <h1 class="text-4xl font-extrabold tracking-tight mb-10">{t.title}</h1>
+    <h1 class="text-4xl font-extrabold tracking-tight mb-10">{searchLabels.title}</h1>
 
-    <div id="search-root" data-index={JSON.stringify(searchIndex)} data-labels={JSON.stringify(t)}>
+    <div id="search-root" data-index={JSON.stringify(searchIndex)} data-labels={JSON.stringify(searchLabels)}>
       <input
         id="search-input"
         type="search"
-        placeholder={t.placeholder}
+        placeholder={searchLabels.placeholder}
         class="w-full rounded-xl border border-border bg-card px-4 py-3 text-base shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/50 mb-6"
         autofocus
-        aria-label={t.placeholder}
+        aria-label={searchLabels.placeholder}
       />
       <div id="search-meta" class="text-sm text-muted-foreground mb-4 min-h-[1.25rem]"></div>
       <ul id="search-results" class="space-y-4" role="list" aria-live="polite" aria-atomic="true"></ul>
     </div>
 
-    <script is:inline>
-      (function () {
-        const root = document.getElementById("search-root");
-        if (!root) return;
-        const index = JSON.parse(root.dataset.index || "[]");
-        const labels = JSON.parse(root.dataset.labels || "{}");
-        const input = document.getElementById("search-input");
-        const resultsList = document.getElementById("search-results");
-        const metaEl = document.getElementById("search-meta");
+    <script>
+      import Fuse, { type FuseResult } from "fuse.js";
 
-        let fuse = null;
+      interface SearchItem {
+        slug: string;
+        title: string;
+        description: string;
+        category: string;
+        tags: string[];
+        pubDate: string;
+      }
 
-        async function initFuse() {
+      interface SearchLabels {
+        results: string;
+        no_results: string;
+      }
+
+      const root = document.getElementById("search-root");
+      if (root) {
+        const index: SearchItem[] = JSON.parse(root.dataset.index || "[]");
+        const labels: SearchLabels = JSON.parse(root.dataset.labels || "{}");
+        const input = document.getElementById("search-input") as HTMLInputElement | null;
+        const resultsList = document.getElementById("search-results") as HTMLUListElement | null;
+        const metaEl = document.getElementById("search-meta") as HTMLDivElement | null;
+
+        let fuse: Fuse<SearchItem> | null = null;
+
+        function initFuse(): void {
           if (fuse) return;
-          const Fuse = (await import("https://cdn.jsdelivr.net/npm/fuse.js@7/dist/fuse.esm.min.mjs")).default;
           fuse = new Fuse(index, {
             keys: [
               { name: "title", weight: 3 },
@@ -81,12 +96,12 @@ const t = labels[locale ?? "en"] ?? labels.en;
             includeScore: true,
             minMatchCharLength: 2,
           });
-          // Run initial search if URL has query
           const q = new URLSearchParams(window.location.search).get("q");
-          if (q) { input.value = q; runSearch(q); }
+          if (q && input) { input.value = q; runSearch(q); }
         }
 
-        function renderResults(results, query) {
+        function renderResults(results: FuseResult<SearchItem>[], query: string): void {
+          if (!resultsList || !metaEl) return;
           resultsList.innerHTML = "";
           if (results.length === 0) {
             metaEl.textContent = `${labels.no_results} "${query}"`;
@@ -106,28 +121,30 @@ const t = labels[locale ?? "en"] ?? labels.en;
           }
         }
 
-        function runSearch(query) {
-          if (!fuse || !query.trim()) {
+        function runSearch(query: string): void {
+          if (!fuse || !resultsList || !metaEl) return;
+          if (!query.trim()) {
             resultsList.innerHTML = "";
             metaEl.textContent = "";
             return;
           }
           const results = fuse.search(query);
           renderResults(results, query);
-          // Update URL without reload
           const url = new URL(window.location.href);
           url.searchParams.set("q", query);
           history.replaceState(null, "", url.toString());
         }
 
-        let debounceTimer;
-        input.addEventListener("input", (e) => {
-          clearTimeout(debounceTimer);
-          debounceTimer = setTimeout(() => runSearch(e.target.value), 200);
-        });
+        let debounceTimer: ReturnType<typeof setTimeout>;
+        if (input) {
+          input.addEventListener("input", (e) => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => runSearch((e.target as HTMLInputElement).value), 200);
+          });
+        }
 
         initFuse();
-      })();
+      }
     </script>
   </div>
 </BaseLayout>
