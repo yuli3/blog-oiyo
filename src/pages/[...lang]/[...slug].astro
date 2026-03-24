@@ -72,7 +72,7 @@ export async function getStaticPaths() {
 }
 
 const { post, locale, prevPost, nextPost } = Astro.props;
-const { Content, headings, remarkPluginFrontmatter } = await post.render();
+const { Content, headings } = await post.render();
 const tocEnabled = siteConfig.features.toc;
 const chMatch = post.slug.match(/-ch(\d+)$/);
 const chapter = chMatch ? parseInt(chMatch[1], 10) : null;
@@ -129,7 +129,7 @@ const readingTimeLabel = readingTimeLabels[locale] ?? readingTimeLabels.en;
   type="article"
   pubDate={post.data.pubDate}
 >
-  {seriesJsonLd && <script type="application/ld+json" set:html={seriesJsonLd} />}
+  {seriesJsonLd && <script is:inline type="application/ld+json" set:html={seriesJsonLd} />}
   <article
     class:list={[
       "py-24 animate-fade-up",

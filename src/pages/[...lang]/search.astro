@@ -110,13 +110,33 @@ const searchLabels = {
           metaEl.textContent = `${results.length} ${labels.results} "${query}"`;
           for (const { item } of results) {
             const li = document.createElement("li");
-            li.innerHTML = `
-              <a href="${item.slug}" class="group block rounded-xl border border-border/60 bg-card p-4 hover:border-primary/50 hover:bg-primary/5 transition-colors">
-                ${item.category ? `<span class="text-[10px] font-bold uppercase tracking-wider text-primary/70 mb-1 block">${item.category}</span>` : ""}
-                <p class="font-semibold text-sm leading-snug group-hover:text-primary transition-colors mb-1">${item.title}</p>
-                <p class="text-xs text-muted-foreground line-clamp-2">${item.description}</p>
-                <time class="text-[11px] text-muted-foreground/60 mt-2 block">${item.pubDate}</time>
-              </a>`;
+            const a = document.createElement("a");
+            a.href = item.slug;
+            a.className = "group block rounded-xl border border-border/60 bg-card p-4 hover:border-primary/50 hover:bg-primary/5 transition-colors";
+
+            if (item.category) {
+              const cat = document.createElement("span");
+              cat.className = "text-[10px] font-bold uppercase tracking-wider text-primary/70 mb-1 block";
+              cat.textContent = item.category;
+              a.appendChild(cat);
+            }
+
+            const title = document.createElement("p");
+            title.className = "font-semibold text-sm leading-snug group-hover:text-primary transition-colors mb-1";
+            title.textContent = item.title;
+            a.appendChild(title);
+
+            const desc = document.createElement("p");
+            desc.className = "text-xs text-muted-foreground line-clamp-2";
+            desc.textContent = item.description;
+            a.appendChild(desc);
+
+            const time = document.createElement("time");
+            time.className = "text-[11px] text-muted-foreground/60 mt-2 block";
+            time.textContent = item.pubDate;
+            a.appendChild(time);
+
+            li.appendChild(a);
             resultsList.appendChild(li);
           }
         }
