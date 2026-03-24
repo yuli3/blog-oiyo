@@ -5,7 +5,7 @@ export const siteConfig = {
   url: "https://blog.oiyo.net",
   author: "Oiyo Team",
   locale: "en",
-  locales: ["en", "ko", "ja", "fr", "es"],
+  locales: ["en", "ko", "ja", "fr", "es", "zh", "cn"],
   themeColor: "#10b981", // Emerald/Green
   features: {
     scrollSnap: false,
