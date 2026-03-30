@@ -47,14 +47,16 @@ const typeParam = type ? `?type=${type}` : ''
 const utmAhoxy = `utm_source=blog_oiyo&utm_medium=referral&utm_campaign=${framework}_cta`
 const utmOiyo  = `utm_source=blog_oiyo&utm_medium=referral&utm_campaign=${framework}_deep`
 
+const sep = type ? '&' : '?'
+
 const ahoxySuffix = AHOXY_PATHS[framework]
 const ahoxyHref = ahoxySuffix
-  ? `https://ahoxy.com/${locale}/${ahoxySuffix}${typeParam}?${utmAhoxy}`
+  ? `https://ahoxy.com/${locale}/${ahoxySuffix}${typeParam}${sep}${utmAhoxy}`
   : null
 
 const oiyoSuffix = OIYO_PATHS[framework]
 const oiyoHref = oiyoSuffix
-  ? `https://oiyo.net/${locale}/${oiyoSuffix}${typeParam}&${utmOiyo}`
+  ? `https://oiyo.net/${locale}/${oiyoSuffix}${typeParam}${sep}${utmOiyo}`
   : null
 
 const showAhoxy = (variant === 'ahoxy' || variant === 'both') && ahoxyHref
