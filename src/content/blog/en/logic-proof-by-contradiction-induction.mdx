@@ -1,0 +1,225 @@
+---
+title: 'Proof by Contradiction and Mathematical Induction'
+description: 'Master proof by contradiction and mathematical induction — with classic proofs, liar paradox puzzles, and exam strategies for logical reasoning tests.'
+pubDate: 2026-04-01
+category: Logic
+tags:
+  - logic
+  - proof by contradiction
+  - mathematical induction
+  - reductio ad absurdum
+  - public exam
+author: Oiyo
+locale: en
+---
+
+We have spent this series building forward — if A then B, chain A to B to C, check necessary and sufficient conditions. This chapter introduces two powerful *backward* strategies: **proof by contradiction** (assume the opposite, derive a paradox) and **mathematical induction** (prove it for one step, then prove the next step always works).
+
+Both appear in advanced logical reasoning sections of Korean public exams, and both have an elegance that makes them worth understanding deeply, not just memorizing.
+
+## Part 1: Proof by Contradiction
+
+### The Strategy
+
+To prove **P is true**, assume **¬P** (P is false) and show that this assumption leads to a **contradiction** — a statement that is logically impossible (both Q and ¬Q simultaneously).
+
+Since ¬P leads to impossibility, ¬P must be false, therefore **P must be true**.
+
+Formal structure:
+1. Assume ¬P.
+2. Derive valid consequences.
+3. Reach a contradiction (some statement is both true and false).
+4. Conclude P is true (because ¬P is impossible).
+
+This method is also called **reductio ad absurdum** (Latin: "reduction to absurdity").
+
+---
+
+### Classic Example 1: √2 is Irrational
+
+**Claim**: √2 is not a rational number.
+
+**Proof**:
+Assume the opposite — that √2 **is** rational.
+Then √2 = p/q where p and q are integers with no common factors (the fraction is in lowest terms).
+
+Squaring: 2 = p²/q², so p² = 2q².
+This means p² is even, which means p is even (if p were odd, p² would be odd).
+Write p = 2k for some integer k.
+Then (2k)² = 2q² → 4k² = 2q² → q² = 2k².
+So q² is even, meaning q is also even.
+
+But now both p and q are even — they share a factor of 2. This contradicts our assumption that p/q was in lowest terms.
+
+**Contradiction** → Our assumption (√2 is rational) is false → √2 is irrational. ∎
+
+---
+
+### Classic Example 2: There Are Infinitely Many Primes
+
+**Claim**: There is no largest prime number.
+
+**Proof**:
+Assume the opposite — that there are finitely many primes: p₁, p₂, ..., pₙ (a complete list).
+
+Construct: N = (p₁ × p₂ × ... × pₙ) + 1.
+
+N is larger than all listed primes. Is N prime?
+- If N is prime, we found a prime not on our "complete" list — contradiction.
+- If N is composite, it must have a prime factor. But N divided by any pᵢ leaves remainder 1 — so none of the listed primes divides N. Where is N's prime factor? It must be an unlisted prime — contradiction.
+
+Either way, our assumption (finitely many primes) leads to contradiction.
+**Contradiction** → There are infinitely many primes. ∎
+
+---
+
+### Exam Application: The Liar's Puzzle
+
+Proof by contradiction is the engine behind the classic "who is lying" exam format.
+
+**Problem**:
+Three people each make a statement. Exactly one is lying.
+- Alex: "I am telling the truth."
+- Blake: "Alex is lying."
+- Casey: "Blake is lying."
+
+Who is the liar?
+
+**Method**: Assume each person is the liar in turn, check for contradictions.
+
+*Assume Alex lies*:
+- Alex is lying → "I am telling the truth" is false → Alex is indeed lying (consistent so far).
+- Blake says "Alex is lying" → this is TRUE → Blake is truthful (consistent).
+- Casey says "Blake is lying" → but Blake is truthful, so this is FALSE → Casey is lying.
+- But we assumed exactly one liar, and both Alex and Casey would be lying. **Contradiction.**
+
+*Assume Blake lies*:
+- "Alex is lying" is false → Alex is truthful.
+- Alex says "I am telling the truth" → consistent (Alex is truthful).
+- Casey says "Blake is lying" → Blake is lying, TRUE → Casey is truthful.
+- Exactly one liar (Blake). **No contradiction.** ✅
+
+*Assume Casey lies*: (You can verify this also creates contradiction.)
+
+**Answer**: Blake is the liar.
+
+---
+
+## Part 2: Mathematical Induction
+
+### The Strategy
+
+Mathematical induction proves that a statement P(n) is true for all natural numbers n ≥ 1 (or some starting value).
+
+**Two steps**:
+1. **Base case**: Prove P(1) is true.
+2. **Inductive step**: Assume P(k) is true (the *induction hypothesis*), then prove P(k+1) is true.
+
+If both steps succeed, P(n) is true for all n ≥ 1.
+
+### The Domino Metaphor
+
+Imagine an infinite row of dominoes:
+- **Base case**: The first domino falls (P(1) is true).
+- **Inductive step**: Whenever domino k falls, it knocks over domino k+1.
+- **Conclusion**: All dominoes fall — all P(n) are true.
+
+The key insight: you do not need to check every domino individually. You only need to confirm (1) the first one falls and (2) the falling mechanism propagates.
+
+---
+
+### Classic Example: Sum of First n Natural Numbers
+
+**Claim**: 1 + 2 + 3 + ... + n = n(n+1)/2 for all n ≥ 1.
+
+**Base case** (n = 1): 1 = 1(2)/2 = 1. ✓
+
+**Inductive step**: Assume the formula holds for n = k:
+1 + 2 + ... + k = k(k+1)/2.
+
+Now prove it for n = k+1:
+1 + 2 + ... + k + (k+1) = k(k+1)/2 + (k+1)
+= (k+1)[k/2 + 1]
+= (k+1)(k+2)/2
+= (k+1)((k+1)+1)/2. ✓
+
+This is exactly the formula with n = k+1. Induction complete. ∎
+
+---
+
+### Exam Application: Step-by-Step Verification
+
+Exam problems rarely ask you to perform full induction proofs. Instead, they ask you to *verify* that an inductive argument is valid:
+
+1. Does the base case hold?
+2. Does the inductive step logically follow?
+3. Is the conclusion properly bounded?
+
+**Pitfall — Vacuous Base Case**: If your "base case" is actually impossible or undefined, the induction proves nothing. Always check that P(1) is a meaningful, true statement.
+
+**Pitfall — Circular Induction**: The inductive step assumes what it is trying to prove. Watch for arguments that say "assuming P(k) is true... therefore P(k) is true" — they have not actually proved P(k+1).
+
+---
+
+## Connecting the Two Methods
+
+Both methods share the same logical structure: they work by **elimination**.
+
+- Contradiction eliminates ¬P, leaving only P.
+- Induction eliminates all finite gaps (we prove each step is reachable), leaving only "all n."
+
+When you face a problem where direct proof seems impossible, ask: *Can I assume the opposite and show it cannot hold?* Or: *Can I show this holds for a base case and then propagates?*
+
+---
+
+## Practice Problems
+
+**Problem 1** (contradiction): Prove that there is no integer n such that n is both even and odd.
+
+<details>
+<summary>Solution</summary>
+
+Assume there is such an integer n — both even and odd.
+Even: n = 2a for some integer a.
+Odd: n = 2b + 1 for some integer b.
+Then 2a = 2b + 1, so 2a − 2b = 1, so 2(a−b) = 1.
+But 2(a−b) is even and 1 is odd. Contradiction.
+No integer can be both even and odd. ∎
+
+</details>
+
+**Problem 2** (exam liar puzzle): Four colleagues, exactly one is lying.
+- Mia: "I am not the liar."
+- Noah: "Mia is telling the truth."
+- Olivia: "Noah is lying."
+- Pita: "Olivia is lying."
+
+Who is the liar?
+
+<details>
+<summary>Solution</summary>
+
+Assume Olivia is the liar:
+- Olivia says "Noah is lying" → FALSE → Noah is truthful.
+- Noah says "Mia is telling the truth" → TRUE and Noah is truthful → Mia is truthful.
+- Mia says "I am not the liar" → TRUE, consistent.
+- Pita says "Olivia is lying" → TRUE → Pita is truthful.
+Exactly one liar (Olivia). No contradiction. ✅
+
+Answer: Olivia is the liar.
+
+</details>
+
+**Problem 3** (induction base case): Someone claims "For all n ≥ 1, n² + n is odd." Check the base case.
+
+<details>
+<summary>Solution</summary>
+
+Base case n = 1: 1² + 1 = 2, which is **even**, not odd.
+The base case fails. The claim is false. (In fact n² + n = n(n+1), which is always even — the product of consecutive integers.)
+
+</details>
+
+---
+
+Contradiction and induction are among the most elegant tools in logical reasoning. When you feel stuck proving something directly, flip the question: assume the opposite or build from the ground up. The impossibility you reveal — or the propagating truth you establish — is the proof itself.

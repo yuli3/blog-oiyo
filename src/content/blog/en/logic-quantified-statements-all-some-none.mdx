@@ -1,0 +1,206 @@
+---
+title: 'Quantified Statements: All, Some, and None in Logic'
+description: 'Master universal and existential quantifiers in formal logic — translating all/some/no statements, negations, and inference rules with exam practice.'
+pubDate: 2026-04-01
+category: Logic
+tags:
+  - logic
+  - quantifiers
+  - universal
+  - existential
+  - public exam
+author: Oiyo
+locale: en
+---
+
+So far in this series we have worked with **propositional logic** — statements that are simply true or false (P, Q, A, B...). But many real arguments involve claims about **groups**: *all* members of a set, *some* of them, or *none*. To handle these, we need **predicate logic** and its quantifiers.
+
+This chapter covers everything you need for exam-level quantified reasoning.
+
+## The Two Quantifiers
+
+| Symbol | Name | Meaning | Example |
+|--------|------|---------|---------|
+| ∀x | Universal | "For all x..." | ∀x: If x is a bird, x has wings |
+| ∃x | Existential | "There exists an x..." | ∃x: x is a bird that cannot fly |
+
+In plain exam language:
+
+| Phrase | Quantifier |
+|--------|------------|
+| All, every, each, any | ∀ (universal) |
+| Some, at least one, there is | ∃ (existential) |
+| No, none, not any | ∀... ¬ (universal negation) |
+
+---
+
+## Standard Statement Forms
+
+### Universal Affirmative: "All A are B"
+Formal: ∀x: A(x) → B(x)
+Example: "All senators are politicians."
+
+### Universal Negative: "No A are B"
+Formal: ∀x: A(x) → ¬B(x)
+Example: "No senators are private citizens."
+
+### Particular Affirmative: "Some A are B"
+Formal: ∃x: A(x) ∧ B(x)
+Example: "Some politicians are honest."
+
+### Particular Negative: "Some A are not B"
+Formal: ∃x: A(x) ∧ ¬B(x)
+Example: "Some politicians are not honest."
+
+---
+
+## The Square of Opposition
+
+These four forms are related in specific ways:
+
+```
+Universal Affirmative ←— Contrary —→ Universal Negative
+"All A are B"                         "No A are B"
+       |                                    |
+   Subaltern                           Subaltern
+       |                                    |
+Particular Affirmative ←— Subcontrary —→ Particular Negative
+"Some A are B"                          "Some A are not B"
+```
+
+Key relationships:
+- **Contradictories** (diagonals): If one is true, the other is false; if one is false, the other is true.
+  - "All A are B" ↔ contradicts ↔ "Some A are not B"
+  - "No A are B" ↔ contradicts ↔ "Some A are B"
+
+---
+
+## Negating Quantified Statements
+
+This is the most exam-tested skill:
+
+| Original | Negation |
+|----------|----------|
+| All A are B (∀: A → B) | Some A are not B (∃: A ∧ ¬B) |
+| No A are B (∀: A → ¬B) | Some A are B (∃: A ∧ B) |
+| Some A are B (∃: A ∧ B) | No A are B (∀: A → ¬B) |
+| Some A are not B (∃: A ∧ ¬B) | All A are B (∀: A → B) |
+
+**Rule**: The negation of a **universal** is a **particular** (and vice versa), with the predicate flipped.
+
+**Example**:
+- Original: "All civil servants are trustworthy."
+- Negation: "Some civil servants are not trustworthy." (You only need *one* counter-example to disprove a universal claim.)
+
+---
+
+## Inference Rules: Categorical Syllogism
+
+The classic three-line argument:
+
+**Barbara** (most common exam form):
+1. All A are B.
+2. All B are C.
+3. Therefore: All A are C. ✅
+
+**Celarent**:
+1. No A are B.
+2. All C are A.
+3. Therefore: No C are B. ✅
+
+**Darii**:
+1. All A are B.
+2. Some C are A.
+3. Therefore: Some C are B. ✅
+
+**Ferio**:
+1. No A are B.
+2. Some C are A.
+3. Therefore: Some C are not B. ✅
+
+---
+
+## Common Invalid Inferences
+
+**Undistributed Middle**:
+1. All A are C.
+2. All B are C.
+3. Therefore: All A are B. ❌
+
+Both A and B share property C, but that does not mean they share *each other*.
+
+Example: "All dogs are animals. All cats are animals. Therefore all dogs are cats." — Clearly invalid.
+
+**Illicit Conversion of "All"**:
+"All A are B" does NOT imply "All B are A."
+"All senators are politicians" does NOT imply "All politicians are senators."
+
+**Existential Fallacy**:
+From a universal statement alone, you cannot derive a particular *about existence*.
+"All dragons are fire-breathing" does not imply "Some dragons exist."
+
+---
+
+## "Only" Statements
+
+"Only A are B" means **B → A**, not A → B.
+
+**Example**: "Only licensed professionals may prescribe medication."
+Translation: Prescribes → Licensed. (Being licensed is necessary to prescribe.)
+
+**Example**: "Only members may attend" = Attend → Member.
+Does this say members will attend? No. Does it say non-members definitely cannot attend? Yes.
+
+---
+
+## Practice Problems
+
+**Problem 1**: "All applicants must speak English." An applicant does not speak English. What follows?
+
+<details>
+<summary>Solution</summary>
+
+Universal affirmative: Applicant → SpeaksEnglish.
+Contrapositive: ¬SpeaksEnglish → ¬Applicant.
+The person who does not speak English is not (or cannot be) an applicant.
+
+</details>
+
+**Problem 2**: Negate "No department head failed the evaluation."
+
+<details>
+<summary>Solution</summary>
+
+"No A are B" negated = "Some A are B."
+Negation: "Some department heads failed the evaluation."
+
+</details>
+
+**Problem 3**:
+1. All engineers know mathematics.
+2. Some engineers work in government.
+3. What follows?
+
+<details>
+<summary>Solution</summary>
+
+From (1) and (2): Some engineers work in government AND know mathematics (applying Darii: All engineers know math + Some engineers work in government → Some government workers know math).
+Conclusion: Some government workers know mathematics.
+
+</details>
+
+**Problem 4** (exam style): "Only those who score in the top 10% on the first round advance to interviews."
+
+Does advancing to an interview mean you scored in the top 10%?
+
+<details>
+<summary>Solution</summary>
+
+"Only A advance" = Advance → Top10%.
+Yes: if you advanced to an interview, you must have scored in the top 10% (necessary condition).
+
+</details>
+
+---
+
+Quantified logic is the bridge between the neat world of A → B and the messier world of real arguments about groups and categories. Master these four forms, their negations, and the basic syllogisms — and you will handle any categorical reasoning question the exam can produce.
