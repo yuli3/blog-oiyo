@@ -1,3 +1,6 @@
+export const AHOXY_URL = 'https://ahoxy.com';
+export const OIYO_URL = 'https://oiyo.net';
+
 export const siteConfig = {
   name: "Oiyo",
   title: "Oiyo Blog",
