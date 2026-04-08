@@ -71,15 +71,15 @@ function matchCTA(category: string): CTAConfig | null {
 }
 
 const config = matchCTA(cat);
-if (!config) return Astro.response;
 
-const l = (locale in (config.title)) ? locale : 'en';
-const title = config.title[l] ?? config.title['en'];
-const desc = config.desc[l] ?? config.desc['en'];
-const cta = config.cta[l] ?? config.cta['en'];
-const href = `${config.href}?utm_source=blog_oiyo&utm_medium=article_cta&utm_campaign=${config.utm}`;
+const l = config && (locale in config.title) ? locale : 'en';
+const title = config?.title[l] ?? config?.title['en'];
+const desc = config?.desc[l] ?? config?.desc['en'];
+const cta = config?.cta[l] ?? config?.cta['en'];
+const href = config ? `${config.href}?utm_source=blog_oiyo&utm_medium=article_cta&utm_campaign=${config.utm}` : '';
 ---
 
+{config && (
 <aside class="my-12 rounded-2xl border border-primary/20 bg-primary/5 px-6 py-8 text-center not-prose">
   <div class="text-3xl mb-3">{config.icon}</div>
   <h3 class="text-lg font-bold tracking-tight mb-2">{title}</h3>
@@ -93,3 +93,4 @@ const href = `${config.href}?utm_source=blog_oiyo&utm_medium=article_cta&utm_cam
     {cta}
   </a>
 </aside>
+)}

@@ -1,4 +1,5 @@
 ---
+import type { CollectionEntry } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Pagination from "./Pagination.astro";
 import CategoryCloud from "./CategoryCloud.astro";
@@ -7,8 +8,14 @@ import { getTrack } from "../lib/taxonomy";
 import { getTranslations } from "../lib/i18n";
 import type { Locale } from "../lib/i18n";
 
+interface PageData {
+  data: CollectionEntry<"blog">[];
+  currentPage: number;
+  lastPage: number;
+}
+
 interface Props {
-  page: any;
+  page: PageData;
   locale: string;
 
   baseUrl: string;
@@ -48,7 +55,7 @@ const categoryNames = (t.category.names ?? {}) as unknown as { [key: string]: st
 
       <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
         {
-          page.data.map((post: any) => {
+          page.data.map((post) => {
             // post.slug is like 'ko/visualizing-goals'; strip the lang prefix
             const slug = post.slug.split("/").slice(1).join("/");
             const href = `/${locale}/${slug}/`;
@@ -92,7 +99,7 @@ const categoryNames = (t.category.names ?? {}) as unknown as { [key: string]: st
                   </span>
                   <span class="text-muted-foreground/40">/</span>
                   <span class="text-muted-foreground">
-                    {categoryNames[post.data.category] ?? post.data.category}
+                    {(post.data.category ? categoryNames[post.data.category] : undefined) ?? post.data.category}
                   </span>
                 </div>
 
