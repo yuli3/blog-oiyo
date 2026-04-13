@@ -38,6 +38,16 @@ import PyramidDiagram from "../../components/mdx/PyramidDiagram.astro";
 import ForceDiagram from "../../components/mdx/ForceDiagram.astro";
 import ValueChain from "../../components/mdx/ValueChain.astro";
 import ConceptCard from "../../components/mdx/ConceptCard.astro";
+import SupplyDemandChart from "../../components/mdx/SupplyDemandChart.astro";
+import ASADChart from "../../components/mdx/ASADChart.astro";
+import PhillipsCurveChart from "../../components/mdx/PhillipsCurveChart.astro";
+import LorenzCurve from "../../components/mdx/LorenzCurve.astro";
+import PPFChart from "../../components/mdx/PPFChart.astro";
+import BusinessCycle from "../../components/mdx/BusinessCycle.astro";
+import ProductLifeCycle from "../../components/mdx/ProductLifeCycle.astro";
+import KeynesianCross from "../../components/mdx/KeynesianCross.astro";
+import OrgChart from "../../components/mdx/OrgChart.astro";
+import PolicyCycle from "../../components/mdx/PolicyCycle.astro";
 import ISLMSimulator from "../../components/mdx/ISLMSimulator.tsx";
 
 import {
@@ -166,15 +176,17 @@ const readingTimeLabels: Record<string, string> = {
   ja: `約${readingMinutes}分`,
   fr: `${readingMinutes} min de lecture`,
   es: `${readingMinutes} min de lectura`,
+  zh: `${readingMinutes} 分钟`,
+  cn: `${readingMinutes} 分鐘`,
 };
 const readingTimeLabel = readingTimeLabels[locale] ?? readingTimeLabels.en;
 
-const chapterLabel: Record<string, string> = { en: "Chapter", ko: "챕터", ja: "第", fr: "Chapitre", es: "Capítulo" };
-const prevLabel: Record<string, string> = { en: "Previous", ko: "이전", ja: "前へ", fr: "Précédent", es: "Anterior" };
-const nextLabel: Record<string, string> = { en: "Next", ko: "다음", ja: "次へ", fr: "Suivant", es: "Siguiente" };
-const backLabel: Record<string, string> = { en: "Back to Home", ko: "홈으로", ja: "ホームへ戻る", fr: "Retour à l'accueil", es: "Volver al inicio" };
-const contributorLabel: Record<string, string> = { en: "Contributor", ko: "기여자", ja: "寄稿者", fr: "Contributeur", es: "Colaborador" };
-const coursesLabel: Record<string, string> = { en: "All Courses", ko: "전체 강의", ja: "コース一覧", fr: "Tous les cours", es: "Todos los cursos" };
+const chapterLabel: Record<string, string> = { en: "Chapter", ko: "챕터", ja: "第", fr: "Chapitre", es: "Capítulo", zh: "章节", cn: "章節" };
+const prevLabel: Record<string, string> = { en: "Previous", ko: "이전", ja: "前へ", fr: "Précédent", es: "Anterior", zh: "上一页", cn: "上一頁" };
+const nextLabel: Record<string, string> = { en: "Next", ko: "다음", ja: "次へ", fr: "Suivant", es: "Siguiente", zh: "下一页", cn: "下一頁" };
+const backLabel: Record<string, string> = { en: "Back to Home", ko: "홈으로", ja: "ホームへ戻る", fr: "Retour à l'accueil", es: "Volver al inicio", zh: "回到首页", cn: "回到首頁" };
+const contributorLabel: Record<string, string> = { en: "Contributor", ko: "기여자", ja: "寄稿者", fr: "Contributeur", es: "Colaborador", zh: "贡献者", cn: "貢獻者" };
+const coursesLabel: Record<string, string> = { en: "All Courses", ko: "전체 강의", ja: "コース一覧", fr: "Tous les cours", es: "Todos los cursos", zh: "全部课程", cn: "全部課程" };
 
 const chapterStr = (n: number) =>
   locale === "ja" ? `第${n}章` : `${chapterLabel[locale] ?? "Chapter"} ${n}`;
@@ -188,6 +200,10 @@ const coursesHref = `/${locale}/courses`;
   image={post.data.heroImage}
   type="article"
   pubDate={post.data.pubDate}
+  updatedDate={post.data.updatedDate}
+  tags={post.data.tags}
+  category={post.data.category}
+  author={post.data.author}
 >
   {seriesJsonLd && <script is:inline type="application/ld+json" set:html={seriesJsonLd} />}
 
@@ -401,6 +417,16 @@ const coursesHref = `/${locale}/courses`;
                 ForceDiagram,
                 ValueChain,
                 ConceptCard,
+                SupplyDemandChart,
+                ASADChart,
+                PhillipsCurveChart,
+                LorenzCurve,
+                PPFChart,
+                BusinessCycle,
+                ProductLifeCycle,
+                KeynesianCross,
+                OrgChart,
+                PolicyCycle,
                 ISLMSimulator,
               }}
             />

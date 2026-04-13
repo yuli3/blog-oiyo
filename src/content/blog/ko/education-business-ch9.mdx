@@ -18,6 +18,9 @@ import CompareTable from "@/components/mdx/CompareTable.astro";
 import FlowChart from "@/components/mdx/FlowChart.astro";
 import Callout from "@/components/mdx/Callout.astro";
 import RadarChart from "@/components/mdx/RadarChart.astro";
+import QuadrantMatrix from "@/components/mdx/QuadrantMatrix.astro";
+import ForceDiagram from "@/components/mdx/ForceDiagram.astro";
+import ValueChain from "@/components/mdx/ValueChain.astro";
 
 # 공기업 경영학 Ch9. 전략경영과 국제경영
 
@@ -216,9 +219,30 @@ import RadarChart from "@/components/mdx/RadarChart.astro";
   highlightColumns={[0]}
 />
 
+<ForceDiagram
+  title="포터의 5 Forces"
+  center="산업 내 경쟁자"
+  centerDescription="기존 기업 간 경쟁 강도"
+  forces={[
+    { position: "top", label: "잠재적 진입자", description: "새로운 경쟁자의 진입 위협", strength: "medium" },
+    { position: "bottom", label: "대체재", description: "타 산업 제품·서비스 위협", strength: "medium" },
+    { position: "left", label: "공급자", description: "공급자의 교섭 능력", strength: "high" },
+    { position: "right", label: "구매자", description: "구매자의 교섭 능력", strength: "high" },
+  ]}
+  caption="5가지 경쟁 요인의 강도가 높을수록 해당 산업의 수익성은 낮아집니다."
+/>
+
 ---
 
 ## 6. 포터의 가치사슬 모형 (Value Chain)
+
+<ValueChain
+  title="포터의 가치사슬 모형"
+  primary={["구매 물류", "제조·운영", "출하 물류", "마케팅·판매", "서비스"]}
+  support={["기업 하부구조 (재무·법무·경영기획)", "인적자원관리 (채용·교육·평가)", "기술 개발 (R&D·자동화)", "구매 조달 (원자재·부품 구매)"]}
+  margin="이윤 (Margin)"
+  caption="본원적 활동은 이윤에 직접 영향 / 지원 활동은 본원적 활동을 가능하게 하는 보조 역할"
+/>
 
 | 활동 분류                 | 구성                                         | 역할                 |
 | ------------------------- | -------------------------------------------- | -------------------- |
@@ -228,6 +252,18 @@ import RadarChart from "@/components/mdx/RadarChart.astro";
 ---
 
 ## 7. ★★ BCG 매트릭스 (성장-점유율 매트릭스)
+
+<QuadrantMatrix
+  title="BCG 매트릭스"
+  xAxis="상대적 시장점유율" xLow="낮음" xHigh="높음"
+  yAxis="시장성장률" yLow="낮음" yHigh="높음"
+  quadrants={[
+    { position: "top-left", icon: "❓", label: "Question Mark", description: "고성장·저점유율 — 투자 or 철수", color: "yellow", bullets: ["현금흐름 (−)", "적극 투자 필요"] },
+    { position: "top-right", icon: "⭐", label: "Star", description: "고성장·고점유율 — 확대 투자", color: "blue", bullets: ["현금흐름 중립", "Cash Cow로 육성 목표"] },
+    { position: "bottom-left", icon: "🐕", label: "Dog", description: "저성장·저점유율 — 철수 검토", color: "gray", bullets: ["현금흐름 중립~(−)", "시장 철수·매각"] },
+    { position: "bottom-right", icon: "🐄", label: "Cash Cow", description: "저성장·고점유율 — 수익 극대화", color: "green", bullets: ["현금흐름 (+)", "기업의 돈줄"] },
+  ]}
+/>
 
 <LectureTable
   title="BCG 매트릭스 4분면"
