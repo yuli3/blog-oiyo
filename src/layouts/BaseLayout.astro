@@ -21,6 +21,7 @@ interface Props {
 const { title, description, image, type, pubDate, updatedDate } = Astro.props;
 const locale = getLocaleFromPath(Astro.url.pathname);
 const t = await getTranslations(locale);
+const nav = t.nav as Record<string, string>;
 
 const scrollSnapEnabled = siteConfig.features.scrollSnap;
 ---
@@ -32,6 +33,26 @@ const scrollSnapEnabled = siteConfig.features.scrollSnap;
   <head>
     <SEO {title} {description} {image} {type} {pubDate} {updatedDate} />
     <meta name="robots" content="index, follow" />
+    
+    {type === "article" && (
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": title,
+        "description": description,
+        "author": {
+          "@type": "Person",
+          "name": "Oiyo",
+          "url": "https://blog.oiyo.net/about"
+        },
+        "datePublished": pubDate ? pubDate.toISOString() : undefined,
+        "dateModified": updatedDate ? updatedDate.toISOString() : undefined,
+        "publisher": { "@type": "Organization", "name": "Oiyo" }
+      })} />
+    )}
+
+    <!-- KaTeX CSS: prevents duplicate math text (MathML + HTML both showing) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5" crossorigin="anonymous" />
     <!-- Mermaid diagram rendering -->
     <script type="module" is:inline>
       import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
@@ -81,6 +102,14 @@ const scrollSnapEnabled = siteConfig.features.scrollSnap;
               class="text-sm font-bold uppercase tracking-widest text-muted-foreground transition-colors hover:text-primary whitespace-nowrap"
               >{t.nav.home}</a
             >
+            <a
+              href={`/${locale}/courses`}
+              class="text-sm font-bold uppercase tracking-widest text-muted-foreground transition-colors hover:text-primary whitespace-nowrap"
+            >{nav.courses ?? "Courses"}</a>
+            <a
+              href={`/${locale}/magazine`}
+              class="text-sm font-bold uppercase tracking-widest text-muted-foreground transition-colors hover:text-primary whitespace-nowrap"
+            >{nav.magazine ?? "Magazine"}</a>
             <a
               href={`/${locale}/search`}
               class="flex items-center gap-1.5 text-sm font-bold uppercase tracking-widest text-muted-foreground transition-colors hover:text-primary whitespace-nowrap"

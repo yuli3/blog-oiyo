@@ -2,10 +2,15 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import TOC from "../../components/TOC.astro";
+import ChapterSidebar from "../../components/ChapterSidebar.astro";
 import BlogCTA from "../../components/BlogCTA.astro";
 import { siteConfig } from "../../config/site.config";
 import { getTranslations } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
+import AuthorProfile from "../../components/AuthorProfile.astro";
+
+
+// MDX components
 import Callout from "../../components/mdx/Callout.astro";
 import FormulaBlock from "../../components/mdx/FormulaBlock.astro";
 import HighlightBox from "../../components/mdx/HighlightBox.astro";
@@ -28,6 +33,12 @@ import StatCards from "../../components/mdx/StatCards.astro";
 import RadarChart from "../../components/mdx/RadarChart.astro";
 import ToolCTA from "../../components/mdx/ToolCTA.astro";
 import ToolCTAInline from "../../components/mdx/ToolCTAInline.astro";
+import QuadrantMatrix from "../../components/mdx/QuadrantMatrix.astro";
+import PyramidDiagram from "../../components/mdx/PyramidDiagram.astro";
+import ForceDiagram from "../../components/mdx/ForceDiagram.astro";
+import ValueChain from "../../components/mdx/ValueChain.astro";
+import ConceptCard from "../../components/mdx/ConceptCard.astro";
+import ISLMSimulator from "../../components/mdx/ISLMSimulator.tsx";
 
 import {
   LectureTable,
@@ -45,7 +56,8 @@ import { GameTheoryPlayground } from "@/features/education-game-theory";
 
 export async function getStaticPaths() {
   const allPosts = await getCollection("blog", (p) => !p.data.draft);
-  // Group by locale, sort by pubDate ascending within each locale
+
+  // Group by locale for non-series navigation
   const byLocale: Record<string, typeof allPosts> = {};
   for (const post of allPosts) {
     const lang = post.slug.split("/")[0];
@@ -59,40 +71,74 @@ export async function getStaticPaths() {
     const parts = post.slug.split("/");
     const lang = parts[0];
     const slug = parts.slice(1).join("/");
-    const localePosts = byLocale[lang] ?? [];
-    const idx = localePosts.findIndex((p) => p.slug === post.slug);
-    const prevPost = idx > 0 ? localePosts[idx - 1] : null;
-    const nextPost = idx < localePosts.length - 1 ? localePosts[idx + 1] : null;
+
+    const chMatch = post.slug.match(/-ch(\d+)$/);
+
+    let prevPost: (typeof allPosts)[0] | null = null;
+    let nextPost: (typeof allPosts)[0] | null = null;
+    let seriesPosts: typeof allPosts | null = null;
+
+    if (chMatch) {
+      // Series-aware navigation: find all posts in the same series (same locale prefix + series base)
+      const seriesBase = post.slug.replace(/-ch\d+$/, ""); // e.g. "ko/education-english-grammar"
+      const sorted = allPosts
+        .filter(
+          (p) =>
+            p.slug.replace(/-ch\d+$/, "") === seriesBase &&
+            p.slug.match(/-ch\d+$/)
+        )
+        .sort((a, b) => {
+          const aNum = parseInt(a.slug.match(/-ch(\d+)$/)![1], 10);
+          const bNum = parseInt(b.slug.match(/-ch(\d+)$/)![1], 10);
+          return aNum - bNum;
+        });
+      seriesPosts = sorted;
+      const idx = sorted.findIndex((p) => p.slug === post.slug);
+      prevPost = idx > 0 ? sorted[idx - 1] : null;
+      nextPost = idx < sorted.length - 1 ? sorted[idx + 1] : null;
+    } else {
+      // Non-series: pubDate-based across locale
+      const localePosts = byLocale[lang] ?? [];
+      const idx = localePosts.findIndex((p) => p.slug === post.slug);
+      prevPost = idx > 0 ? localePosts[idx - 1] : null;
+      nextPost = idx < localePosts.length - 1 ? localePosts[idx + 1] : null;
+      seriesPosts = null;
+    }
 
     return {
       params: { lang, slug },
-      props: { post, locale: lang, prevPost, nextPost },
+      props: { post, locale: lang, prevPost, nextPost, seriesPosts },
     };
   });
 }
 
-const { post, locale, prevPost, nextPost } = Astro.props;
+const { post, locale, prevPost, nextPost, seriesPosts } = Astro.props;
 const { Content, headings } = await post.render();
 const tocEnabled = siteConfig.features.toc;
 const t = await getTranslations(locale as Locale);
 const categoryNames = (t.category.names ?? {}) as Record<string, string>;
+
 const chMatch = post.slug.match(/-ch(\d+)$/);
 const chapter = chMatch ? parseInt(chMatch[1], 10) : null;
+const isSeriesPost = chapter !== null && seriesPosts !== null && seriesPosts.length > 0;
+
+// Derive series name for sidebar
+const seriesName = isSeriesPost
+  ? (post.slug
+      .replace(/-ch\d+$/, "")
+      .replace(/^[a-z]+\//, "")
+      .replace(/^education-/, "")
+      .replace(/-/g, " ")
+      .replace(/\b\w/g, (c) => c.toUpperCase()))
+  : null;
 
 // Series JSON-LD for chapter posts
 let seriesJsonLd: string | null = null;
-if (chapter !== null) {
-  const seriesSlugBase = post.slug.replace(/-ch\d+$/, "").replace(/^[a-z]+\//, "");
-  const allPosts = await getCollection("blog", (p) => !p.data.draft);
-  const seriesPosts = allPosts.filter(
-    (p) => p.slug.replace(/^[a-z]+\//, "").replace(/-ch\d+$/, "") === seriesSlugBase &&
-           p.slug.match(/-ch\d+$/)
-  );
-  const totalChapters = seriesPosts.length;
-  const seriesName = seriesSlugBase
-    .replace(/^education-/, "")
-    .replace(/-/g, " ")
-    .replace(/\b\w/g, (c) => c.toUpperCase());
+if (isSeriesPost && chapter !== null) {
+  const totalChapters = seriesPosts!.length;
+  const courseSlugBase = post.slug
+    .replace(/-ch\d+$/, "")
+    .replace(/^[a-z]+\//, "");
 
   seriesJsonLd = JSON.stringify({
     "@context": "https://schema.org",
@@ -103,15 +149,15 @@ if (chapter !== null) {
       "@type": "Course",
       name: `${seriesName} Course`,
       description: `A ${totalChapters}-chapter educational series on ${seriesName}.`,
-      url: `${siteConfig.url}/${locale}/${seriesSlugBase}-ch1/`,
+      url: `${siteConfig.url}/${locale}/${courseSlugBase}-ch1/`,
     },
     position: chapter,
     numberOfItems: totalChapters,
-    url: `${siteConfig.url}/${locale}/${seriesSlugBase}-ch${chapter}/`,
+    url: `${siteConfig.url}/${locale}/${post.slug.split("/").slice(1).join("/")}/`,
   });
 }
 
-// Estimate reading time from word count (~200 wpm)
+// Reading time
 const wordCount = (post.body ?? "").split(/\s+/).filter(Boolean).length;
 const readingMinutes = Math.max(1, Math.ceil(wordCount / 200));
 const readingTimeLabels: Record<string, string> = {
@@ -128,7 +174,12 @@ const prevLabel: Record<string, string> = { en: "Previous", ko: "이전", ja: "�
 const nextLabel: Record<string, string> = { en: "Next", ko: "다음", ja: "次へ", fr: "Suivant", es: "Siguiente" };
 const backLabel: Record<string, string> = { en: "Back to Home", ko: "홈으로", ja: "ホームへ戻る", fr: "Retour à l'accueil", es: "Volver al inicio" };
 const contributorLabel: Record<string, string> = { en: "Contributor", ko: "기여자", ja: "寄稿者", fr: "Contributeur", es: "Colaborador" };
-const chapterStr = (n: number) => locale === "ja" ? `第${n}章` : `${chapterLabel[locale] ?? "Chapter"} ${n}`;
+const coursesLabel: Record<string, string> = { en: "All Courses", ko: "전체 강의", ja: "コース一覧", fr: "Tous les cours", es: "Todos los cursos" };
+
+const chapterStr = (n: number) =>
+  locale === "ja" ? `第${n}章` : `${chapterLabel[locale] ?? "Chapter"} ${n}`;
+
+const coursesHref = `/${locale}/courses`;
 ---
 
 <BaseLayout
@@ -139,6 +190,7 @@ const chapterStr = (n: number) => locale === "ja" ? `第${n}章` : `${chapterLab
   pubDate={post.data.pubDate}
 >
   {seriesJsonLd && <script is:inline type="application/ld+json" set:html={seriesJsonLd} />}
+
   <article
     class:list={[
       "py-24 animate-fade-up",
@@ -146,16 +198,41 @@ const chapterStr = (n: number) => locale === "ja" ? `第${n}章` : `${chapterLab
     ]}
   >
     <div class="container px-4">
+      <!--
+        Layout grid:
+        - Series chapter: [ChapterSidebar 200px | Content 1fr | TOC 240px]
+        - Regular post:   [Content 1fr | TOC 240px]
+      -->
       <div
         class:list={[
-          { "lg:grid lg:grid-cols-[1fr_240px] lg:gap-16": tocEnabled },
+          isSeriesPost
+            ? "lg:grid lg:grid-cols-[200px_1fr_240px] lg:gap-10 xl:gap-16"
+            : tocEnabled
+            ? "lg:grid lg:grid-cols-[1fr_240px] lg:gap-16"
+            : "",
         ]}
       >
-        <div class="max-w-2xl mx-auto lg:mx-0">
+        <!-- Left: Chapter Sidebar (series posts only, desktop) -->
+        {isSeriesPost && (
+          <div class="hidden lg:block">
+            <div class="sticky top-28">
+              <ChapterSidebar
+                seriesPosts={seriesPosts!}
+                currentChapter={chapter!}
+                locale={locale}
+                seriesName={seriesName!}
+                coursesHref={coursesHref}
+              />
+            </div>
+          </div>
+        )}
+
+        <!-- Center: Main content -->
+        <div class:list={[isSeriesPost ? "" : "max-w-2xl mx-auto lg:mx-0"]}>
+
+          <!-- Article header -->
           <header class="mb-16">
-            <div
-              class="flex items-center gap-3 text-xs font-bold text-primary uppercase tracking-widest mb-6"
-            >
+            <div class="flex items-center gap-3 text-xs font-bold text-primary uppercase tracking-widest mb-6 flex-wrap">
               <a
                 href={`/${locale}/category/${post.data.category?.toLowerCase().replace(/[^a-z0-9]+/g, "-") ?? "unknown"}`}
                 class="hover:underline decoration-2 underline-offset-4 transition-all"
@@ -163,63 +240,129 @@ const chapterStr = (n: number) => locale === "ja" ? `第${n}章` : `${chapterLab
                 {categoryNames[post.data.category ?? ""] ?? post.data.category}
               </a>
               <span class="text-muted-foreground/30">•</span>
-              {
-                chapter !== null ? (
-                  <span class="bg-primary/10 text-primary px-2.5 py-1 rounded-full text-[10px] font-bold tracking-widest">
-                    {chapterStr(chapter!)}
-                  </span>
-                ) : (
-                  <span class="text-muted-foreground/60">
-                    {post.data.pubDate.toLocaleDateString(
-                      locale === "ko" ? "ko-KR" : "en-US",
-                      { month: "long", day: "numeric", year: "numeric" },
-                    )}
-                  </span>
-                )
-              }
+              {chapter !== null ? (
+                <span class="bg-primary/10 text-primary px-2.5 py-1 rounded-full text-[10px] font-bold tracking-widest">
+                  {chapterStr(chapter!)}
+                </span>
+              ) : (
+                <span class="text-muted-foreground/60">
+                  {post.data.pubDate.toLocaleDateString(
+                    locale === "ko" ? "ko-KR" : "en-US",
+                    { month: "long", day: "numeric", year: "numeric" },
+                  )}
+                </span>
+              )}
               <span class="text-muted-foreground/30">•</span>
               <span class="text-muted-foreground/60">{readingTimeLabel}</span>
             </div>
 
-            <h1
-              class="text-5xl md:text-6xl font-extrabold tracking-tight mb-10 leading-tight font-heading"
-            >
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-10 leading-tight font-heading">
               {post.data.title}
             </h1>
 
-            <div class="flex items-center gap-4 py-8 border-y border-border/40">
-              <div
-                class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold"
-              >
+            <!-- Author row -->
+            <div class="flex items-center gap-4 py-6 border-y border-border/40">
+              <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold flex-shrink-0">
                 {post.data.author.charAt(0)}
               </div>
               <div class="flex flex-col">
-                <span class="text-sm font-bold uppercase tracking-widest"
-                  >{post.data.author}</span
-                >
-                <span
-                  class="text-xs text-muted-foreground uppercase tracking-tighter"
-                  >{contributorLabel[locale] ?? contributorLabel.en}</span
-                >
+                <span class="text-sm font-bold uppercase tracking-widest">{post.data.author}</span>
+                <span class="text-xs text-muted-foreground uppercase tracking-tighter">
+                  {contributorLabel[locale] ?? contributorLabel.en}
+                </span>
               </div>
+
+              <!-- Mobile chapter quick nav (only for series) -->
+              {isSeriesPost && (
+                <div class="ml-auto lg:hidden flex items-center gap-2">
+                  {prevPost && (() => {
+                    const ps = prevPost.slug.split("/");
+                    return (
+                      <a
+                        href={`/${locale}/${ps.slice(1).join("/")}/`}
+                        class="w-8 h-8 flex items-center justify-center rounded-lg border border-border/60 bg-card hover:bg-primary/10 hover:border-primary/40 transition-colors"
+                        aria-label={prevLabel[locale] ?? "Previous"}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                      </a>
+                    );
+                  })()}
+                  <span class="text-[10px] font-black text-muted-foreground">{chapter}/{seriesPosts!.length}</span>
+                  {nextPost && (() => {
+                    const ns = nextPost.slug.split("/");
+                    return (
+                      <a
+                        href={`/${locale}/${ns.slice(1).join("/")}/`}
+                        class="w-8 h-8 flex items-center justify-center rounded-lg border border-border/60 bg-card hover:bg-primary/10 hover:border-primary/40 transition-colors"
+                        aria-label={nextLabel[locale] ?? "Next"}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                      </a>
+                    );
+                  })()}
+                </div>
+              )}
             </div>
+
+            <!-- Series progress banner (below author row, desktop) -->
+            {isSeriesPost && (
+              <div class="mt-6 hidden lg:flex items-center gap-4 px-4 py-3 rounded-xl bg-muted/30 border border-border/40 not-prose">
+                <div class="flex-1">
+                  <div class="flex justify-between items-center mb-1.5">
+                    <span class="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">{seriesName}</span>
+                    <span class="text-[10px] font-black text-primary">{chapter} / {seriesPosts!.length}</span>
+                  </div>
+                  <div class="h-1 bg-border rounded-full overflow-hidden">
+                    <div
+                      class="h-full bg-primary rounded-full"
+                      style={`width: ${Math.round((chapter! / seriesPosts!.length) * 100)}%`}
+                    />
+                  </div>
+                </div>
+                <!-- Quick prev/next for desktop -->
+                <div class="flex items-center gap-1.5 flex-shrink-0">
+                  {prevPost && (() => {
+                    const ps = prevPost.slug.split("/");
+                    return (
+                      <a
+                        href={`/${locale}/${ps.slice(1).join("/")}/`}
+                        class="w-7 h-7 flex items-center justify-center rounded-lg border border-border/60 bg-card hover:bg-primary/10 hover:border-primary/40 transition-colors"
+                        title={prevPost.data.title}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                      </a>
+                    );
+                  })()}
+                  {nextPost && (() => {
+                    const ns = nextPost.slug.split("/");
+                    return (
+                      <a
+                        href={`/${locale}/${ns.slice(1).join("/")}/`}
+                        class="w-7 h-7 flex items-center justify-center rounded-lg border border-border/60 bg-card hover:bg-primary/10 hover:border-primary/40 transition-colors"
+                        title={nextPost.data.title}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                      </a>
+                    );
+                  })()}
+                </div>
+              </div>
+            )}
           </header>
 
-          {
-            post.data.heroImage && (
-              <div class="mb-16 rounded-2xl overflow-hidden border border-border/40 aspect-[16/9]">
-                <img
-                  src={post.data.heroImage}
-                  alt={post.data.title}
-                  class="w-full h-full object-cover"
-                />
-              </div>
-            )
-          }
+          <!-- Hero image -->
+          {post.data.heroImage && (
+            <div class="mb-16 rounded-2xl overflow-hidden border border-border/40 aspect-[16/9]">
+              <img
+                src={post.data.heroImage}
+                alt={post.data.title}
+                class="w-full h-full object-cover"
+              />
+            </div>
+          )}
 
-          <div
-            class="prose prose-stone dark:prose-invert prose-lg max-w-none prose-headings:font-heading prose-headings:font-bold prose-a:text-primary prose-pre:rounded-2xl prose-pre:bg-muted/10 prose-pre:border prose-pre:border-border/40 leading-relaxed text-pretty"
-          >
+          <!-- Main content -->
+          <div class="prose prose-stone dark:prose-invert prose-lg max-w-none prose-headings:font-heading prose-headings:font-bold prose-a:text-primary prose-pre:rounded-2xl prose-pre:bg-muted/10 prose-pre:border prose-pre:border-border/40 leading-relaxed text-pretty">
             <Content
               components={{
                 Callout,
@@ -253,25 +396,37 @@ const chapterStr = (n: number) => locale === "ja" ? `第${n}章` : `${chapterLab
                 RadarChart,
                 ToolCTA,
                 ToolCTAInline,
+                QuadrantMatrix,
+                PyramidDiagram,
+                ForceDiagram,
+                ValueChain,
+                ConceptCard,
+                ISLMSimulator,
               }}
             />
           </div>
 
+          <!-- Author Profile Component for E-E-A-T SEO -->
+          <AuthorProfile authorName={post.data.author} />
+
           <BlogCTA category={post.data.category} locale={locale} />
 
+          <!-- Bottom prev/next navigation -->
           {(prevPost || nextPost) && (
             <nav class="mt-16 grid grid-cols-2 gap-4 not-prose" aria-label="Article navigation">
               {prevPost ? (() => {
                 const prevParts = prevPost.slug.split("/");
                 const prevSlug = prevParts.slice(1).join("/");
+                const prevCh = prevPost.slug.match(/-ch(\d+)$/);
                 return (
                   <a
                     href={`/${locale}/${prevSlug}/`}
-                    class="group col-start-1 flex flex-col gap-1 rounded-xl border border-border/60 bg-card p-4 hover:border-primary/50 hover:bg-primary/5 transition-colors"
+                    class="group col-start-1 flex flex-col gap-1.5 rounded-xl border border-border/60 bg-card p-4 hover:border-primary/50 hover:bg-primary/5 transition-colors"
                   >
                     <span class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1">
                       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
                       {prevLabel[locale] ?? prevLabel.en}
+                      {prevCh && <span class="text-primary/60 ml-1">Ch.{prevCh[1]}</span>}
                     </span>
                     <span class="text-sm font-semibold leading-snug group-hover:text-primary transition-colors line-clamp-2">
                       {prevPost.data.title}
@@ -282,12 +437,14 @@ const chapterStr = (n: number) => locale === "ja" ? `第${n}章` : `${chapterLab
               {nextPost ? (() => {
                 const nextParts = nextPost.slug.split("/");
                 const nextSlug = nextParts.slice(1).join("/");
+                const nextCh = nextPost.slug.match(/-ch(\d+)$/);
                 return (
                   <a
                     href={`/${locale}/${nextSlug}/`}
-                    class="group col-start-2 flex flex-col gap-1 rounded-xl border border-border/60 bg-card p-4 text-right hover:border-primary/50 hover:bg-primary/5 transition-colors"
+                    class="group col-start-2 flex flex-col gap-1.5 rounded-xl border border-border/60 bg-card p-4 text-right hover:border-primary/50 hover:bg-primary/5 transition-colors"
                   >
                     <span class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground flex items-center justify-end gap-1">
+                      {nextCh && <span class="text-primary/60 mr-1">Ch.{nextCh[1]}</span>}
                       {nextLabel[locale] ?? nextLabel.en}
                       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
                     </span>
@@ -300,27 +457,31 @@ const chapterStr = (n: number) => locale === "ja" ? `第${n}章` : `${chapterLab
             </nav>
           )}
 
-          <footer class="mt-24 pt-12 border-t border-border/40">
+          <!-- Footer -->
+          <footer class="mt-24 pt-12 border-t border-border/40 flex items-center gap-4 flex-wrap">
             <a
               href={`/${locale}/`}
               class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg
-              >
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
               {backLabel[locale] ?? backLabel.en}
             </a>
+            {isSeriesPost && (
+              <>
+                <span class="text-muted-foreground/30">·</span>
+                <a
+                  href={coursesHref}
+                  class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+                  {coursesLabel[locale] ?? coursesLabel.en}
+                </a>
+              </>
+            )}
           </footer>
         </div>
 
+        <!-- Right: TOC sidebar -->
         {tocEnabled && <TOC headings={headings} />}
       </div>
     </div>
