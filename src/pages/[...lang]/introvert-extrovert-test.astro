@@ -1,0 +1,29 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import IntroExtroTest from "../../components/tests/IntroExtroTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "내향/외향 스펙트럼 테스트 — 나는 어디에 있나요?", description: "12가지 질문으로 내향인, 양향인, 외향인 스펙트럼에서 나의 위치를 알아보세요. 칼 융의 성격 이론 기반." },
+  en: { title: "Introvert/Extrovert Spectrum Test — Where Do I Fall?", description: "Find your position on the introvert-extrovert spectrum with 12 questions. Based on Carl Jung's personality theory." },
+  ja: { title: "内向/外向スペクトラムテスト — 私はどこにいる？", description: "12の質問で内向型、両向型、外向型スペクトラムでの自分の位置を確認。カール・ユングの性格理論に基づく。" },
+  fr: { title: "Test Spectre Introverti/Extraverti — Où suis-je?", description: "Trouvez votre position sur le spectre introverti-extraverti avec 12 questions." },
+  es: { title: "Test Espectro Introvertido/Extrovertido — ¿Dónde estoy?", description: "Encuentra tu posición en el espectro introvertido-extrovertido con 12 preguntas." },
+  zh: { title: "內向/外向光譜測試 — 我在哪裡？", description: "通過12個問題找到你在內向-外向光譜上的位置。基於卡爾·榮格的人格理論。" },
+  cn: { title: "内向/外向光谱测试 — 我在哪里？", description: "通过12个问题找到你在内向-外向光谱上的位置。基于卡尔·荣格的人格理论。" },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <IntroExtroTest client:load locale={locale} />
+  </main>
+</BaseLayout>

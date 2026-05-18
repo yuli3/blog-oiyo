@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PensionOptimizerCalculatorComp from "../../components/calculators/PensionOptimizerCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "연금 최적화 계산기 — 연말정산 환급액과 노후 자산 계산",
+    description: "연금저축과 IRP 납입액을 최적화해 연말정산 환급액과 65세 노후 자산을 계산합니다. 세액공제 최대 활용 전략을 확인하세요.",
+  },
+  en: {
+    title: "Pension Optimizer — Maximize Tax Credits & Retirement Savings",
+    description: "Optimize Korean pension savings (연금저축) and IRP contributions to maximize year-end tax refunds and retirement assets.",
+  },
+  ja: {
+    title: "年金最適化計算機 — 年末精算還付額と老後資産を計算",
+    description: "年金貯蓄とIRP納入額を最適化して年末精算還付額と65歳時点の老後資産を計算します。",
+  },
+  fr: {
+    title: "Optimiseur de Retraite — Crédits Fiscaux et Épargne Retraite",
+    description: "Optimisez vos cotisations retraite coréennes pour maximiser les remboursements fiscaux et l'épargne retraite.",
+  },
+  es: {
+    title: "Optimizador de Pensión — Créditos Fiscales y Ahorro Jubilación",
+    description: "Optimiza tus contribuciones al plan de pensiones coreano para maximizar devoluciones fiscales y ahorros para la jubilación.",
+  },
+  zh: {
+    title: "年金最優化計算機 — 年終退稅與退休資產計算",
+    description: "最優化韓國年金儲蓄和IRP繳納，計算年終退稅和65歲時的退休資產。",
+  },
+  cn: {
+    title: "年金最优化计算器 — 年终退税与退休资产计算",
+    description: "最优化韩国年金储蓄和IRP缴纳，计算年终退税和65岁时的退休资产。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <PensionOptimizerCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

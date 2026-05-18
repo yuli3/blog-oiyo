@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import BigFivePersonalityTestComp from "../../components/tests/BigFivePersonalityTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "빅5 성격 테스트 (OCEAN) — 나의 다섯 가지 성격 차원",
+    description: "개방성·성실성·외향성·친화성·신경성 — 20가지 문항으로 나의 성격 프로파일을 정밀하게 측정하세요.",
+  },
+  en: {
+    title: "Big Five Personality Test (OCEAN) — Your Five Personality Dimensions",
+    description: "Openness, Conscientiousness, Extraversion, Agreeableness, Neuroticism — measure your personality profile with 20 items.",
+  },
+  ja: {
+    title: "ビッグファイブ性格テスト（OCEAN）— 5つの性格次元",
+    description: "開放性・誠実性・外向性・協調性・神経症的傾向 — 20問で自分の性格プロファイルを精密に測定しましょう。",
+  },
+  fr: {
+    title: "Test de Personnalité Big Five (OCEAN) — Vos Cinq Dimensions",
+    description: "Ouverture, Conscienciosité, Extraversion, Agréabilité, Névrosisme — mesurez votre profil de personnalité avec 20 questions.",
+  },
+  es: {
+    title: "Test de Personalidad Big Five (OCEAN) — Tus Cinco Dimensiones",
+    description: "Apertura, Responsabilidad, Extraversión, Amabilidad, Neuroticismo — mide tu perfil de personalidad con 20 preguntas.",
+  },
+  zh: {
+    title: "大五人格測試（OCEAN）— 您的五個性格維度",
+    description: "開放性、盡責性、外向性、親和性、神經質 — 通過20道題精確測量您的性格特徵。",
+  },
+  cn: {
+    title: "大五人格测试（OCEAN）— 您的五个性格维度",
+    description: "开放性、尽责性、外向性、亲和性、神经质 — 通过20道题精确测量您的性格特征。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <BigFivePersonalityTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

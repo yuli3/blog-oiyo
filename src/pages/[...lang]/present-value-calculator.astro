@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PresentValueCalculatorComp from "../../components/calculators/PresentValueCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "연금 현재가치 계산기 — 라이프니츠·호프만 방식",
+    description: "월 수령액, 기간, 할인율을 입력해 연금 현재가치를 라이프니츠(복리) 또는 호프만(단리) 방식으로 계산합니다.",
+  },
+  en: {
+    title: "Present Value (Annuity) Calculator — Leibniz & Hoffman Methods",
+    description: "Calculate the present value of periodic payments using compound interest (Leibniz) or simple interest (Hoffman) discounting.",
+  },
+  ja: {
+    title: "年金現在価値計算機 — ライプニッツ・ホフマン方式",
+    description: "月次受取額、期間、割引率を入力して、ライプニッツ（複利）またはホフマン（単利）方式で年金現在価値を計算します。",
+  },
+  fr: {
+    title: "Calculateur de Valeur Actuelle d'une Rente — Leibniz & Hoffman",
+    description: "Calculez la valeur actuelle de paiements périodiques avec la méthode à intérêts composés ou simples.",
+  },
+  es: {
+    title: "Calculadora de Valor Presente de Anualidad — Leibniz y Hoffman",
+    description: "Calcula el valor presente de pagos periódicos usando descuento con interés compuesto o simple.",
+  },
+  zh: {
+    title: "年金現值計算機 — 萊布尼茲·霍夫曼方式",
+    description: "輸入月付款、期限和折扣率，以複利（萊布尼茲）或單利（霍夫曼）方式計算年金現值。",
+  },
+  cn: {
+    title: "年金现值计算器 — 莱布尼茨·霍夫曼方式",
+    description: "输入月付款、期限和折扣率，以复利（莱布尼茨）或单利（霍夫曼）方式计算年金现值。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <PresentValueCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

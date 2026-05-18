@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import HomeBuyingCalculatorComp from "../../components/calculators/HomeBuyingCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "내집마련 비용 계산기 — 주택 매수 총비용 한눈에",
+    description: "매매가, 취득세, 중개수수료, 이사비 등 내 집 마련에 드는 모든 비용을 한눈에 계산해보세요.",
+  },
+  en: {
+    title: "Home Buying Cost Calculator",
+    description: "Calculate the total cost of buying a home including purchase price, acquisition tax, agent fees, and moving costs.",
+  },
+  ja: {
+    title: "住宅購入費用計算機 — 総費用を一目で確認",
+    description: "購入価格、取得税、仲介手数料、引越し費用など、住宅購入にかかるすべての費用を計算します。",
+  },
+  fr: {
+    title: "Calculatrice d'Achat Immobilier",
+    description: "Calculez le coût total de l'achat d'un logement incluant le prix d'achat, les taxes, les frais d'agence et les frais de déménagement.",
+  },
+  es: {
+    title: "Calculadora de Compra de Vivienda",
+    description: "Calcula el costo total de comprar una vivienda incluyendo precio, impuestos, honorarios de agencia y gastos de mudanza.",
+  },
+  zh: {
+    title: "購房費用計算器 — 一目了然購屋總成本",
+    description: "計算購買房屋的總費用，包括購買價格、取得稅、仲介費用和搬家費用。",
+  },
+  cn: {
+    title: "购房费用计算器 — 一目了然购屋总成本",
+    description: "计算购买房屋的总费用，包括购买价格、取得税、中介费用和搬家费用。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-3xl px-4 py-8">
+    <HomeBuyingCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

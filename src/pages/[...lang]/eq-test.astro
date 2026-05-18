@@ -1,0 +1,29 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import EmotionalIntelligenceTest from "../../components/tests/EmotionalIntelligenceTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "감성 지능(EQ) 테스트 — 나의 5가지 EQ 요소는?", description: "다니엘 골먼의 EQ 이론 기반 15문항 테스트. 자기인식, 자기조절, 동기부여, 공감, 사회적 기술 5가지 요소로 나의 EQ를 진단합니다." },
+  en: { title: "Emotional Intelligence (EQ) Test — What's My EQ Profile?", description: "A 15-question EQ test based on Daniel Goleman's theory. Assess your self-awareness, self-regulation, motivation, empathy, and social skills." },
+  ja: { title: "感情知性(EQ)テスト — 私のEQプロファイルは？", description: "ダニエル・ゴールマンの理論に基づく15問EQテスト。自己認識、自己調節、動機付け、共感、社会的スキルの5要素を診断します。" },
+  fr: { title: "Test d'Intelligence Émotionnelle (EQ) — Quel est mon profil EQ?", description: "Un test EQ de 15 questions basé sur la théorie de Daniel Goleman." },
+  es: { title: "Test de Inteligencia Emocional (EQ) — ¿Cuál es mi perfil EQ?", description: "Un test EQ de 15 preguntas basado en la teoría de Daniel Goleman." },
+  zh: { title: "情緒智力(EQ)測試 — 我的EQ檔案是什麼？", description: "基於丹尼爾·高爾曼理論的15題EQ測試。診斷自我認知、自我調節、動機、共情和社交技能。" },
+  cn: { title: "情绪智力(EQ)测试 — 我的EQ档案是什么？", description: "基于丹尼尔·高尔曼理论的15题EQ测试。诊断自我认知、自我调节、动机、共情和社交技能。" },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <EmotionalIntelligenceTest client:load locale={locale} />
+  </main>
+</BaseLayout>

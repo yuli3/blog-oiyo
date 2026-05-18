@@ -1,0 +1,29 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SelfCompassionTestComp from "../../components/tests/SelfCompassionTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "자기연민 테스트 — 나는 나에게 얼마나 친절한가?", description: "크리스틴 네프의 자기연민 이론 기반 12가지 질문으로 자기친절·보편적 인류·마음챙김 3가지 요소를 진단하세요." },
+  en: { title: "Self-Compassion Test — How Kind Are You to Yourself?", description: "Diagnose your self-kindness, common humanity, and mindfulness through 12 questions based on Kristin Neff's self-compassion theory." },
+  ja: { title: "自己思いやりテスト — 自分にどれくらい優しい？", description: "クリスティン・ネフの自己思いやり理論に基づく12の質問で、自己親切・共通の人間性・マインドフルネスの3要素を診断しましょう。" },
+  fr: { title: "Test d'Auto-Compassion — Êtes-vous gentil avec vous-même?", description: "Évaluez votre auto-compassion à travers 12 questions basées sur la théorie de Kristin Neff." },
+  es: { title: "Test de Autocompasión — ¿Eres amable contigo mismo?", description: "Evalúa tu autocompasión a través de 12 preguntas basadas en la teoría de Kristin Neff." },
+  zh: { title: "自我慈悲測試 — 你對自己有多友善？", description: "通過基於克里斯汀·內夫理論的12個問題評估你的自我慈悲。" },
+  cn: { title: "自我慈悲测试 — 你对自己有多友善？", description: "通过基于克里斯汀·内夫理论的12个问题评估你的自我慈悲。" },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <SelfCompassionTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

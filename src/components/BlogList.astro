@@ -3,8 +3,9 @@ import type { CollectionEntry } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Pagination from "./Pagination.astro";
 import CategoryCloud from "./CategoryCloud.astro";
+import IntentBundles from "./IntentBundles.astro";
 import { siteConfig } from "../config/site.config";
-import { getTrack } from "../lib/taxonomy";
+import { getTrackFromData } from "../lib/taxonomy";
 import { getTranslations } from "../lib/i18n";
 import type { Locale } from "../lib/i18n";
 
@@ -17,16 +18,17 @@ interface PageData {
 interface Props {
   page: PageData;
   locale: string;
-
   baseUrl: string;
   title: string;
   subtitle: string;
   activeCategory?: string;
+  showIntentBundles?: boolean;
 }
 
-const { page, locale, baseUrl, title, subtitle, activeCategory } = Astro.props;
+const { page, locale, baseUrl, title, subtitle, activeCategory, showIntentBundles = false } = Astro.props;
 const paginationEnabled = siteConfig.features.pagination;
 const t = await getTranslations(locale as Locale);
+const blogT = t.blog as Record<string, string>;
 const categoryNames = (t.category.names ?? {}) as unknown as { [key: string]: string };
 ---
 
@@ -51,9 +53,12 @@ const categoryNames = (t.category.names ?? {}) as unknown as { [key: string]: st
         </p>
       </div>
 
-      <CategoryCloud {locale} {activeCategory} />
+      {showIntentBundles
+        ? <IntentBundles locale={locale} />
+        : <CategoryCloud {locale} {activeCategory} />
+      }
 
-      <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+      <div class="flex flex-col divide-y divide-border/60">
         {
           page.data.map((post) => {
             // post.slug is like 'ko/visualizing-goals'; strip the lang prefix
@@ -61,77 +66,94 @@ const categoryNames = (t.category.names ?? {}) as unknown as { [key: string]: st
             const href = `/${locale}/${slug}/`;
             const chMatch = post.slug.match(/-ch(\d+)$/);
             const chapter = chMatch ? parseInt(chMatch[1], 10) : null;
-            const track = getTrack(post.data.category);
+            const track = getTrackFromData(post.data);
             const isAcademy = track === "academy";
+            const isInteractive = track === "interactive";
+            const badgeLabel = isAcademy
+              ? blogT.badgeAcademy
+              : isInteractive
+                ? (blogT.badgeInteractive ?? "Interactive")
+                : blogT.badgeMagazine;
 
             return (
               <article
                 class:list={[
-                  "group flex flex-col items-start gap-3",
+                  "group flex flex-col gap-4 py-6 md:flex-row md:items-center",
                   {
-                    "bg-primary/5 p-5 rounded-xl border border-primary/10 hover:border-primary/20 transition-colors":
+                    "bg-primary/5 px-4 py-6 md:px-6 rounded-2xl border border-primary/10 hover:border-primary/20 transition-colors":
                       isAcademy,
+                    "bg-foreground/[0.03] px-4 py-6 md:px-6 rounded-2xl border border-foreground/10 hover:border-foreground/20 transition-colors":
+                      isInteractive,
                   },
                 ]}
               >
-                {post.data.heroImage && (
-                  <a
-                    href={href}
-                    class="w-full aspect-[16/10] overflow-hidden rounded-lg border border-border bg-muted/20"
-                  >
+                <a
+                  href={href}
+                  class="w-full md:w-48 lg:w-56 aspect-[16/10] overflow-hidden rounded-xl border border-border bg-muted/20 shrink-0"
+                >
+                  {post.data.heroImage ? (
                     <img
                       src={post.data.heroImage}
                       alt={post.data.title}
                       class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                  </a>
-                )}
-                <div class="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-widest">
-                  <span
-                    class:list={[
-                      "px-2 py-0.5 rounded-md",
-                      isAcademy
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-foreground text-background",
-                    ]}
-                  >
-                    {isAcademy ? t.blog.badgeAcademy : t.blog.badgeMagazine}
-                  </span>
-                  <span class="text-muted-foreground/40">/</span>
-                  <span class="text-muted-foreground">
-                    {(post.data.category ? categoryNames[post.data.category] : undefined) ?? post.data.category}
-                  </span>
-                </div>
+                  ) : (
+                    <div class="w-full h-full flex items-center justify-center text-xs text-muted-foreground">
+                      No image
+                    </div>
+                  )}
+                </a>
 
-                <h2 class="text-xl font-bold leading-snug group-hover:text-primary transition-colors tracking-tight">
-                  <a href={href}>
-                    {isAcademy && chapter !== null && (
-                      <span class="text-primary mr-1.5">#{chapter}</span>
-                    )}
-                    {post.data.title}
-                  </a>
-                </h2>
-
-                <div class="flex items-center gap-3 text-[11px] text-muted-foreground/60">
-                  {post.data.pubDate && (
-                    <span>
-                      {post.data.pubDate.toLocaleDateString(
-                        locale === "ko" ? "ko-KR" : "en-US",
-                        { month: "short", day: "numeric", year: "numeric" },
-                      )}
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-widest">
+                    <span
+                      class:list={[
+                        "px-2 py-0.5 rounded-md",
+                        isAcademy
+                          ? "bg-primary text-primary-foreground"
+                          : isInteractive
+                            ? "bg-secondary text-secondary-foreground"
+                            : "bg-foreground text-background",
+                      ]}
+                    >
+                      {badgeLabel}
                     </span>
-                  )}
-                  {post.data.author && (
-                    <>
-                      <span>·</span>
-                      <span>{post.data.author}</span>
-                    </>
-                  )}
-                </div>
+                    <span class="text-muted-foreground/40">/</span>
+                    <span class="text-muted-foreground">
+                      {(post.data.category ? categoryNames[post.data.category] : undefined) ?? post.data.category}
+                    </span>
+                  </div>
 
-                <p class="text-muted-foreground line-clamp-3 text-sm leading-relaxed">
-                  {post.data.description}
-                </p>
+                  <h2 class="mt-2 text-xl font-bold leading-snug group-hover:text-primary transition-colors tracking-tight">
+                    <a href={href}>
+                      {isAcademy && chapter !== null && (
+                        <span class="text-primary mr-1.5">#{chapter}</span>
+                      )}
+                      {post.data.title}
+                    </a>
+                  </h2>
+
+                  <div class="mt-2 flex items-center gap-3 text-[11px] text-muted-foreground/60">
+                    {post.data.pubDate && (
+                      <span>
+                        {post.data.pubDate.toLocaleDateString(
+                          locale === "ko" ? "ko-KR" : "en-US",
+                          { month: "short", day: "numeric", year: "numeric" },
+                        )}
+                      </span>
+                    )}
+                    {post.data.author && (
+                      <>
+                        <span>·</span>
+                        <span>{post.data.author}</span>
+                      </>
+                    )}
+                  </div>
+
+                  <p class="mt-3 text-muted-foreground line-clamp-3 text-sm leading-relaxed">
+                    {post.data.description}
+                  </p>
+                </div>
               </article>
             );
           })

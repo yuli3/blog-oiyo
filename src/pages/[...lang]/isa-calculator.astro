@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import IsaCalculatorComp from "../../components/tools/IsaCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "ISA 계산기 — 개인종합자산관리계좌 절세 효과 계산",
+    description: "ISA 계좌의 비과세·분리과세 혜택을 계산합니다. 일반형·서민형 유형별 절세 효과를 미리 확인하세요.",
+  },
+  en: {
+    title: "ISA Tax Savings Calculator",
+    description: "Calculate tax benefits of Korea's ISA (Individual Savings Account). Compare tax-free and separate taxation advantages.",
+  },
+  ja: {
+    title: "ISA節税計算機",
+    description: "韓国のISA（個人総合資産管理口座）の非課税・分離課税メリットを計算します。",
+  },
+  fr: {
+    title: "Calculateur ISA — Économies fiscales",
+    description: "Calculez les avantages fiscaux du compte ISA coréen.",
+  },
+  es: {
+    title: "Calculadora ISA — Ahorro fiscal",
+    description: "Calcula los beneficios fiscales de la cuenta ISA de Corea.",
+  },
+  zh: {
+    title: "ISA 節稅計算機",
+    description: "計算韓國ISA個人綜合資產管理帳戶的免稅和分離課稅優惠效果。",
+  },
+  cn: {
+    title: "ISA 节税计算器",
+    description: "计算韩国ISA个人综合资产管理账户的免税和分离课税优惠效果。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <IsaCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

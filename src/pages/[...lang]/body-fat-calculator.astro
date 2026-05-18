@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import BodyFatCalculatorComp from "../../components/tools/BodyFatCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "체지방률 계산기 (해군 공식) — 정확한 체지방 측정",
+    description: "목둘레·허리둘레·엉덩이둘레를 이용한 미국 해군 공식으로 체지방률을 정확하게 계산합니다. 체지방량·제지방량·이상 체중 범위도 함께 확인하세요.",
+  },
+  en: {
+    title: "Body Fat Calculator (Navy Method) — Accurate Body Fat Measurement",
+    description: "Calculate your body fat percentage accurately using the US Navy formula based on neck, waist, and hip measurements. Also shows fat mass, lean mass, and ideal weight range.",
+  },
+  ja: {
+    title: "体脂肪率計算機（海軍式）— 正確な体脂肪測定",
+    description: "首周り・ウエスト・ヒップの測定値を使った米海軍式公式で体脂肪率を正確に計算します。",
+  },
+  fr: {
+    title: "Calculateur de Taux de Graisse Corporelle (Méthode Navy)",
+    description: "Calculez votre taux de graisse corporelle avec la méthode Navy basée sur les mesures du cou, de la taille et des hanches.",
+  },
+  es: {
+    title: "Calculadora de Grasa Corporal (Método Navy)",
+    description: "Calcula tu porcentaje de grasa corporal con el método Navy usando medidas de cuello, cintura y cadera.",
+  },
+  zh: {
+    title: "體脂率計算機（海軍公式）— 精確體脂測量",
+    description: "使用美國海軍公式，根據頸圍、腰圍和臀圍精確計算體脂率。同時顯示脂肪量、瘦體重和理想體重範圍。",
+  },
+  cn: {
+    title: "体脂率计算器（海军公式）— 精确体脂测量",
+    description: "使用美国海军公式，根据颈围、腰围和臀围精确计算体脂率。同时显示脂肪量、瘦体重和理想体重范围。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <BodyFatCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

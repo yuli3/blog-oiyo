@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import InflationCalculatorComp from "../../components/tools/InflationCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "물가상승률 계산기 — 과거 돈의 현재 가치는?",
+    description: "인플레이션을 고려한 돈의 실질 가치를 계산합니다. 과거 금액이 현재 얼마의 가치인지 확인하세요.",
+  },
+  en: {
+    title: "Inflation Calculator",
+    description: "Calculate the real value of money adjusted for inflation. Find out what a past amount is worth in today's prices.",
+  },
+  ja: {
+    title: "インフレ計算機",
+    description: "インフレを考慮したお金の実質価値を計算します。過去の金額が現在いくらの価値があるか確認しましょう。",
+  },
+  fr: {
+    title: "Calculateur d'inflation",
+    description: "Calculez la valeur réelle de l'argent ajustée à l'inflation.",
+  },
+  es: {
+    title: "Calculadora de inflación",
+    description: "Calcula el valor real del dinero ajustado por inflación.",
+  },
+  zh: {
+    title: "通貨膨脹計算機",
+    description: "計算考慮通膨後的金錢實際價值，了解過去的金額在今日的購買力。",
+  },
+  cn: {
+    title: "通货膨胀计算器",
+    description: "计算考虑通膨后的金钱实际价值，了解过去的金额在今日的购买力。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <InflationCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

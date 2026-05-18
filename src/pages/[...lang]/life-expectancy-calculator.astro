@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import LifeExpectancyCalculatorComp from "../../components/calculators/LifeExpectancyCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "기대수명 계산기 — 나의 예상 수명과 노후 준비 기간 확인",
+    description: "성별, 흡연·음주·운동·BMI·만성질환 여부를 입력해 통계청 2023 생명표 기준 예상 기대수명과 건강수명을 계산합니다.",
+  },
+  en: {
+    title: "Life Expectancy Calculator — Personalized Lifespan Estimate",
+    description: "Estimate your life expectancy based on gender, smoking, drinking, exercise, BMI, and chronic disease using 2023 Korean life tables.",
+  },
+  ja: {
+    title: "平均寿命計算機 — 個人の予想寿命と老後準備期間",
+    description: "性別、喫煙・飲酒・運動・BMI・慢性疾患を入力して統計庁2023生命表基準の予想寿命と健康寿命を計算します。",
+  },
+  fr: {
+    title: "Calculateur d'Espérance de Vie — Estimation personnalisée",
+    description: "Estimez votre espérance de vie en fonction du sexe, du tabagisme, de l'alcool, de l'exercice, de l'IMC et des maladies chroniques.",
+  },
+  es: {
+    title: "Calculadora de Esperanza de Vida — Estimación personalizada",
+    description: "Estima tu esperanza de vida según género, tabaquismo, alcohol, ejercicio, IMC y enfermedades crónicas.",
+  },
+  zh: {
+    title: "預期壽命計算機 — 個性化壽命估算",
+    description: "根據性別、吸菸、飲酒、運動、BMI和慢性病，使用2023年統計廳生命表估算預期壽命和健康壽命。",
+  },
+  cn: {
+    title: "预期寿命计算器 — 个性化寿命估算",
+    description: "根据性别、吸烟、饮酒、运动、BMI和慢性病，使用2023年统计厅生命表估算预期寿命和健康寿命。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <LifeExpectancyCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

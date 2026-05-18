@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import GpaCalculatorComp from "../../components/tools/GpaCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "학점 계산기 — GPA 및 평균 학점 계산",
+    description: "과목별 성적과 학점을 입력해 평균 학점(GPA)을 계산하세요. 4.5점 만점과 4.3점 만점 방식 모두 지원합니다.",
+  },
+  en: {
+    title: "GPA Calculator",
+    description: "Calculate your GPA by entering grades and credit hours for each course. Supports both 4.5 and 4.3 scale systems.",
+  },
+  ja: {
+    title: "GPA計算機",
+    description: "各科目の成績と単位数を入力してGPAを計算します。4.5点満点と4.3点満点の両方に対応しています。",
+  },
+  fr: {
+    title: "Calculateur de GPA",
+    description: "Calculez votre GPA en saisissant les notes et les heures de crédit pour chaque cours.",
+  },
+  es: {
+    title: "Calculadora de GPA",
+    description: "Calcula tu GPA ingresando calificaciones y créditos para cada materia.",
+  },
+  zh: {
+    title: "GPA計算機",
+    description: "輸入各科成績和學分計算平均績點(GPA)。支援4.5分制和4.3分制。",
+  },
+  cn: {
+    title: "GPA计算器",
+    description: "输入各科成绩和学分计算平均绩点(GPA)。支持4.5分制和4.3分制。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <GpaCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

@@ -1,0 +1,29 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import BoundaryStyleTestComp from "../../components/tests/BoundaryStyleTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "경계 설정 스타일 테스트 — 나는 어떻게 경계를 긋는가?", description: "6가지 질문으로 경계 희박형·강직형·유연형·맥락형·공감형 중 나의 경계 설정 패턴을 발견하세요." },
+  en: { title: "Boundary Style Test — How Do You Set Limits?", description: "Discover your boundary-setting pattern — Porous, Rigid, Flexible, Contextual, or Empathic — through 6 questions." },
+  ja: { title: "境界設定スタイルテスト — あなたはどのように境界を引きますか？", description: "6つの質問で希薄型・強直型・柔軟型・文脈型・共感型のどれかを発見しましょう。" },
+  fr: { title: "Test de Style de Limites — Comment établissez-vous vos limites?", description: "Découvrez votre style de limites à travers 6 questions." },
+  es: { title: "Test de Estilo de Límites — ¿Cómo estableces tus límites?", description: "Descubre tu estilo de límites a través de 6 preguntas." },
+  zh: { title: "邊界設定風格測試 — 你如何設定界限？", description: "通過6個問題發現你的邊界設定模式。" },
+  cn: { title: "边界设定风格测试 — 你如何设定界限？", description: "通过6个问题发现你的边界设定模式。" },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <BoundaryStyleTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

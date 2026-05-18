@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CareerValuesTestComp from "../../components/tests/CareerValuesTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "직업 가치관 테스트 — 나는 일에서 무엇을 원하는가?",
+    description: "18가지 질문으로 안정성, 성취, 자율성, 봉사, 창의성, 지위 중 나의 핵심 직업 가치관 2가지를 발견해보세요.",
+  },
+  en: {
+    title: "Career Values Test — What Do You Want From Work?",
+    description: "Discover your top 2 career values across Security, Achievement, Autonomy, Service, Creativity, and Status with 18 questions.",
+  },
+  ja: {
+    title: "職業価値観テスト — 私は仕事に何を求めるか？",
+    description: "18の質問で、安定性・達成・自律性・奉仕・創造性・地位の中から自分の核となる職業価値観を2つ見つけましょう。",
+  },
+  fr: {
+    title: "Test de Valeurs Professionnelles — Que voulez-vous du travail?",
+    description: "Découvrez vos 2 principales valeurs professionnelles avec 18 questions.",
+  },
+  es: {
+    title: "Test de Valores Profesionales — ¿Qué quieres del trabajo?",
+    description: "Descubre tus 2 valores profesionales principales con 18 preguntas.",
+  },
+  zh: {
+    title: "職業價值觀測試 — 我想從工作中得到什麼？",
+    description: "通過18個問題，在安全感、成就、自主性、服務、創意和地位中發現您最重要的2個職業價值觀。",
+  },
+  cn: {
+    title: "职业价值观测试 — 我想从工作中得到什么？",
+    description: "通过18个问题，在安全感、成就、自主性、服务、创意和地位中发现您最重要的2个职业价值观。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <CareerValuesTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

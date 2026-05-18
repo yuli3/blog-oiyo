@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ImageCropperComp from "../../components/tools/ImageCropper";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "이미지 비율 크롭 — 원하는 비율로 사진 자르기",
+    description: "1:1, 4:3, 16:9 등 원하는 비율로 이미지를 자르세요. 브라우저에서 바로 처리하며 서버에 업로드되지 않습니다.",
+  },
+  en: {
+    title: "Image Ratio Cropper",
+    description: "Crop images to any aspect ratio — 1:1, 4:3, 16:9, and more. Processed entirely in your browser, no upload required.",
+  },
+  ja: {
+    title: "画像比率クロップツール",
+    description: "1:1、4:3、16:9など任意のアスペクト比で画像を切り抜きます。ブラウザ内で処理されサーバーにアップロードされません。",
+  },
+  fr: {
+    title: "Outil de Recadrage d'Image par Ratio",
+    description: "Recadrez des images selon n'importe quel rapport d'aspect. Traitement entièrement dans le navigateur.",
+  },
+  es: {
+    title: "Recortador de Imagen por Proporción",
+    description: "Recorta imágenes a cualquier relación de aspecto. Procesado completamente en tu navegador.",
+  },
+  zh: {
+    title: "圖片比例裁剪工具",
+    description: "按1:1、4:3、16:9等任意比例裁剪圖片。完全在瀏覽器中處理，無需上傳至伺服器。",
+  },
+  cn: {
+    title: "图片比例裁剪工具",
+    description: "按1:1、4:3、16:9等任意比例裁剪图片。完全在浏览器中处理，无需上传至服务器。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <ImageCropperComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

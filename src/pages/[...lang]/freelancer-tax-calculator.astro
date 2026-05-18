@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import FreelancerTaxCalculatorComp from "../../components/tools/FreelancerTaxCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "프리랜서 세금 계산기 — 종합소득세·건강보험료 예상 계산",
+    description: "프리랜서 연 수입에 따른 종합소득세와 건강보험료를 미리 계산하세요. 절세 전략 수립에 활용하세요.",
+  },
+  en: {
+    title: "Freelancer Tax Calculator",
+    description: "Estimate comprehensive income tax and health insurance premiums for freelancers in Korea. Plan your tax strategy.",
+  },
+  ja: {
+    title: "フリーランス税金計算機",
+    description: "フリーランスの年収に基づく総合所得税と健康保険料を計算します。節税戦略の立案にご活用ください。",
+  },
+  fr: {
+    title: "Calculateur d'impôts pour freelances",
+    description: "Estimez l'impôt sur le revenu et les cotisations d'assurance maladie pour les freelances en Corée.",
+  },
+  es: {
+    title: "Calculadora de impuestos para freelancers",
+    description: "Estima el impuesto sobre la renta y las primas de seguro médico para freelancers en Corea.",
+  },
+  zh: {
+    title: "自由職業者稅務計算機",
+    description: "計算自由職業者的年收入對應的綜合所得稅和健康保險費，制定節稅策略。",
+  },
+  cn: {
+    title: "自由职业者税务计算器",
+    description: "计算自由职业者的年收入对应的综合所得税和健康保险费，制定节税策略。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <FreelancerTaxCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

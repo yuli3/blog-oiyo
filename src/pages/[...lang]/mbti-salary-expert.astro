@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import MbtiSalaryExpertComp from "../../components/calculators/MbtiSalaryExpert";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "MBTI 연봉 전문가 — 성격 유형별 연봉 인상 전략",
+    description: "나의 MBTI 유형에 맞는 연봉 협상 전략과 인사이트를 확인하세요. 맞춤형 협상 스크립트도 제공합니다.",
+  },
+  en: {
+    title: "MBTI Salary Expert",
+    description: "Get salary negotiation strategies tailored to your MBTI personality type, including personalized negotiation scripts and insights.",
+  },
+  ja: {
+    title: "MBTI給与エキスパート — 性格タイプ別給与交渉戦略",
+    description: "MBTIタイプに合わせた給与交渉戦略とインサイトを確認。カスタマイズされた交渉スクリプトも提供します。",
+  },
+  fr: {
+    title: "Expert Salaire MBTI",
+    description: "Obtenez des stratégies de négociation salariale adaptées à votre type MBTI, avec des scripts de négociation personnalisés.",
+  },
+  es: {
+    title: "Experto en Salario MBTI",
+    description: "Obtén estrategias de negociación salarial adaptadas a tu tipo MBTI, incluyendo scripts de negociación personalizados.",
+  },
+  zh: {
+    title: "MBTI薪資專家 — 性格類型別薪資談判策略",
+    description: "確認適合您MBTI類型的薪資談判策略和洞察。還提供個性化的談判腳本。",
+  },
+  cn: {
+    title: "MBTI薪资专家 — 性格类型别薪资谈判策略",
+    description: "确认适合您MBTI类型的薪资谈判策略和洞察。还提供个性化的谈判脚本。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-3xl px-4 py-8">
+    <MbtiSalaryExpertComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

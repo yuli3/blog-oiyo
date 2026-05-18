@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import JeonsevsBuyCalculator from "../../components/calculators/JeonsevsBuyCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "전세 vs 매매 비교 계산기 — 어느 쪽이 유리할까?",
+    description: "매매가, 전세가, 대출 금리, 거주 기간을 입력해 전세와 매매 중 어느 쪽이 경제적으로 유리한지 비교합니다.",
+  },
+  en: {
+    title: "Jeonse vs Buy Calculator — Korea Housing Cost Comparison",
+    description: "Compare the total cost of jeonse (Korean lease) vs buying a home over your expected holding period.",
+  },
+  ja: {
+    title: "チョンセ vs 購入比較計算機",
+    description: "チョンセと購入の総費用を比較します。",
+  },
+  fr: {
+    title: "Calculateur Jeonse vs Achat — Corée",
+    description: "Comparez le coût total du jeonse et de l'achat immobilier en Corée.",
+  },
+  es: {
+    title: "Calculadora Jeonse vs Compra — Corea",
+    description: "Compara el costo total del jeonse y la compra de vivienda en Corea.",
+  },
+  zh: {
+    title: "全稅 vs 購買比較計算機",
+    description: "比較韓國全稅租房與購房的總成本差異。",
+  },
+  cn: {
+    title: "全税 vs 购买比较计算器",
+    description: "比较韩国全税租房与购房的总成本差异。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <JeonsevsBuyCalculator client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

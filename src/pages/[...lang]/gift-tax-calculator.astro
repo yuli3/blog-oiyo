@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import GiftTaxCalculatorComp from "../../components/calculators/GiftTaxCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "증여세 계산기 2024 — 공제 한도와 납부 세액 계산",
+    description: "증여 금액과 수증자 관계를 입력해 2024년 기준 증여세 공제 한도, 과세표준, 세율, 납부세액을 계산합니다.",
+  },
+  en: {
+    title: "Korean Gift Tax Calculator 2024 — Deductions & Tax Due",
+    description: "Calculate gift tax under 2024 Korean tax law. Enter gift amount and relationship to get deductions, taxable base, and tax due.",
+  },
+  ja: {
+    title: "韓国贈与税計算機2024 — 控除額と納税額の計算",
+    description: "2024年基準の韓国贈与税を計算します。贈与額と関係を入力して控除額、課税標準、税額を確認できます。",
+  },
+  fr: {
+    title: "Calculateur de Droits de Donation Corée 2024",
+    description: "Calculez les droits de donation selon la loi fiscale coréenne de 2024.",
+  },
+  es: {
+    title: "Calculadora Impuesto Donación Corea 2024",
+    description: "Calcula el impuesto sobre donaciones según la ley fiscal coreana de 2024.",
+  },
+  zh: {
+    title: "韓國贈與稅計算機2024 — 扣除額與應納稅額",
+    description: "根據2024年韓國稅法計算贈與稅，輸入贈與金額和關係查看扣除額和應納稅額。",
+  },
+  cn: {
+    title: "韩国赠与税计算器2024 — 扣除额与应纳税额",
+    description: "根据2024年韩国税法计算赠与税，输入赠与金额和关系查看扣除额和应纳税额。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <GiftTaxCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

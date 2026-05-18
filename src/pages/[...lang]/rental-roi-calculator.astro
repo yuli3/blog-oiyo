@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import RentalRoiCalculatorComp from "../../components/calculators/RentalRoiCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "임대수익률 계산기 — 실투자 대비 ROI 계산",
+    description: "매수가, 대출금, 임대보증금, 월세를 입력해 실투자금 대비 임대수익률(ROI)을 계산합니다.",
+  },
+  en: {
+    title: "Rental ROI Calculator — Return on Actual Investment",
+    description: "Calculate rental ROI based on purchase price, loan, security deposit, and monthly rent.",
+  },
+  ja: {
+    title: "賃貸収益率計算機 — 実投資対比ROI計算",
+    description: "購入価格、ローン、敷金・保証金、月家賃を入力して実投資対比賃貸収益率を計算します。",
+  },
+  fr: {
+    title: "Calculateur de Rentabilité Locative — ROI sur Investissement Réel",
+    description: "Calculez la rentabilité locative en tenant compte du prix d'achat, du crédit, du dépôt et du loyer mensuel.",
+  },
+  es: {
+    title: "Calculadora de Rentabilidad de Alquiler — ROI sobre Inversión Real",
+    description: "Calcula la rentabilidad del alquiler considerando precio de compra, préstamo, depósito y renta mensual.",
+  },
+  zh: {
+    title: "租金收益率計算機 — 實際投資回報率計算",
+    description: "輸入購買價格、貸款、租賃押金和月租金，計算實際投資的租金回報率。",
+  },
+  cn: {
+    title: "租金收益率计算器 — 实际投资回报率计算",
+    description: "输入购买价格、贷款、租赁押金和月租金，计算实际投资的租金回报率。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <RentalRoiCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

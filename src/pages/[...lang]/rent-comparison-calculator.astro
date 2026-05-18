@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import RentComparisonCalculatorComp from "../../components/tools/RentComparisonCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "전세 vs 월세 비교 계산기 — 어떤 선택이 유리할까?",
+    description: "전세와 월세의 실질 비용을 비교 계산합니다. 이자율과 주거비를 고려해 최적의 주거 형태를 선택하세요.",
+  },
+  en: {
+    title: "Jeonse vs Monthly Rent Comparison",
+    description: "Compare the true cost of Jeonse (lump-sum deposit) vs monthly rent. Factor in interest rates to find the best option.",
+  },
+  ja: {
+    title: "チョンセ vs 月払い家賃 比較計算機",
+    description: "チョンセと月払い家賃の実質コストを比較計算します。金利を考慮して最適な住居形態を選択しましょう。",
+  },
+  fr: {
+    title: "Comparateur Jeonse vs loyer mensuel",
+    description: "Comparez le coût réel du Jeonse (caution forfaitaire) et du loyer mensuel en Corée.",
+  },
+  es: {
+    title: "Comparadora Jeonse vs renta mensual",
+    description: "Compara el costo real del Jeonse (depósito global) vs renta mensual en Corea.",
+  },
+  zh: {
+    title: "全稅 vs 月租比較計算機",
+    description: "比較計算全稅和月租的實際成本，考慮利率因素選擇最優居住方式。",
+  },
+  cn: {
+    title: "全税 vs 月租比较计算器",
+    description: "比较计算全税和月租的实际成本，考虑利率因素选择最优居住方式。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <RentComparisonCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

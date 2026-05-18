@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import IncorporationCalculatorComp from "../../components/calculators/IncorporationCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "개인사업자 vs 법인 절세 계산기 — 세금 부담 비교",
+    description: "연 매출, 비용, 대표이사 급여를 입력해 개인사업자와 법인의 세금 부담을 비교하고 유리한 사업 형태를 확인하세요.",
+  },
+  en: {
+    title: "Sole Proprietor vs Corporation Tax Calculator — Tax Burden Comparison",
+    description: "Enter annual revenue, expenses, and founder salary to compare tax burden between sole proprietorship and corporation.",
+  },
+  ja: {
+    title: "個人事業主 vs 法人 節税計算機 — 税負担比較",
+    description: "年間売上・費用・役員報酬を入力して個人事業主と法人の税負担を比較します。",
+  },
+  fr: {
+    title: "Calculateur Entreprise Individuelle vs Société — Comparaison Fiscale",
+    description: "Entrez le chiffre d'affaires, les charges et le salaire du dirigeant pour comparer la charge fiscale entre les deux structures.",
+  },
+  es: {
+    title: "Calculadora Autónomo vs Sociedad — Comparación de Carga Fiscal",
+    description: "Ingresa ingresos anuales, gastos y salario del fundador para comparar la carga fiscal entre autónomo y sociedad.",
+  },
+  zh: {
+    title: "個人事業主 vs 法人節稅計算機 — 稅負比較",
+    description: "輸入年收入、費用和創辦人薪資，比較個人事業主與法人的稅負，找出最優架構。",
+  },
+  cn: {
+    title: "个人事业主 vs 法人节税计算器 — 税负比较",
+    description: "输入年收入、费用和创始人薪资，比较个人事业主与法人的税负，找出最优结构。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <IncorporationCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

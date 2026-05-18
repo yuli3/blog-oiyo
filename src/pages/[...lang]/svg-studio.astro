@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SvgStudioComp from "../../components/tools/SvgStudio";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "SVG 스튜디오 — SVG 편집·뷰어",
+    description: "SVG 파일을 브라우저에서 편집하고 미리봅니다. 코드 직접 편집, 크기 조정, PNG 변환 등의 기능을 제공합니다.",
+  },
+  en: {
+    title: "SVG Studio Editor",
+    description: "Edit and preview SVG files directly in your browser. Features include code editing, resizing, and PNG export.",
+  },
+  ja: {
+    title: "SVGスタジオエディター",
+    description: "ブラウザでSVGファイルを編集・プレビューします。コード直接編集、サイズ変更、PNG変換などの機能を提供します。",
+  },
+  fr: {
+    title: "Éditeur SVG Studio",
+    description: "Modifiez et prévisualisez des fichiers SVG directement dans votre navigateur.",
+  },
+  es: {
+    title: "Editor SVG Studio",
+    description: "Edita y previsualiza archivos SVG directamente en tu navegador.",
+  },
+  zh: {
+    title: "SVG工作室編輯器",
+    description: "直接在瀏覽器中編輯和預覽SVG文件。提供代碼編輯、調整大小和PNG導出功能。",
+  },
+  cn: {
+    title: "SVG工作室编辑器",
+    description: "直接在浏览器中编辑和预览SVG文件。提供代码编辑、调整大小和PNG导出功能。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <SvgStudioComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

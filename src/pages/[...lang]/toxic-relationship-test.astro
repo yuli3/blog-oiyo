@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ToxicRelationshipTestComp from "../../components/tests/ToxicRelationshipTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "관계 독성 패턴 테스트 — 내 관계는 건강한가요?",
+    description: "15가지 질문으로 내 관계 패턴을 점검해보세요. 건강한 관계부터 독성 패턴까지, 비판단적이고 따뜻한 시각으로 관계를 돌아봅니다.",
+  },
+  en: {
+    title: "Relationship Pattern Test — Is My Relationship Healthy?",
+    description: "Check your relationship patterns with 15 non-judgmental questions. From healthy connections to toxic patterns, reflect on your relationship with care.",
+  },
+  ja: {
+    title: "関係の毒性パターンテスト — 私の関係は健全ですか？",
+    description: "15の質問で自分の関係パターンを確認しましょう。健全な関係から毒性パターンまで、非批判的で温かい視点で振り返ります。",
+  },
+  fr: {
+    title: "Test de Modèle de Relation — Ma relation est-elle saine?",
+    description: "Vérifiez vos modèles relationnels avec 15 questions bienveillantes.",
+  },
+  es: {
+    title: "Test de Patrón Relacional — ¿Es saludable mi relación?",
+    description: "Analiza tus patrones relacionales con 15 preguntas no críticas.",
+  },
+  zh: {
+    title: "關係毒性模式測試 — 我的關係健康嗎？",
+    description: "通過15個不帶批判的問題檢視您的關係模式。從健康關係到毒性模式，以溫和的視角回顧您的關係。",
+  },
+  cn: {
+    title: "关系毒性模式测试 — 我的关系健康吗？",
+    description: "通过15个不带批判的问题检视您的关系模式。从健康关系到毒性模式，以温和的视角回顾您的关系。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <ToxicRelationshipTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

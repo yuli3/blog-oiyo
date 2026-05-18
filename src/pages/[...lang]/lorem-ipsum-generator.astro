@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import LoremIpsumGeneratorComp from "../../components/tools/LoremIpsumGenerator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "로렘 입숨 생성기 — 더미 텍스트 즉시 생성",
+    description: "라틴어 Lorem Ipsum 또는 한국어 더미 텍스트를 단락 수 또는 단어 수 기준으로 즉시 생성하세요.",
+  },
+  en: {
+    title: "Lorem Ipsum Generator — Generate Placeholder Text Instantly",
+    description: "Generate Latin Lorem Ipsum or Korean placeholder text instantly by paragraph count or word count.",
+  },
+  ja: {
+    title: "ロレムイプサム生成器 — ダミーテキストを即時生成",
+    description: "ラテン語のLorem IpsumまたはKorean韓国語のダミーテキストを段落数または単語数で即座に生成します。",
+  },
+  fr: {
+    title: "Générateur Lorem Ipsum — Texte de Remplissage Instantané",
+    description: "Générez du Lorem Ipsum latin ou du texte de remplacement coréen instantanément par nombre de paragraphes ou de mots.",
+  },
+  es: {
+    title: "Generador Lorem Ipsum — Texto de Relleno al Instante",
+    description: "Genera texto Lorem Ipsum en latín o texto de marcador de posición en coreano al instante por número de párrafos o palabras.",
+  },
+  zh: {
+    title: "Lorem Ipsum生成器 — 即時生成佔位文字",
+    description: "按段落數或單詞數即時生成拉丁語Lorem Ipsum或韓語佔位文字。",
+  },
+  cn: {
+    title: "Lorem Ipsum生成器 — 即时生成占位文字",
+    description: "按段落数或单词数即时生成拉丁语Lorem Ipsum或韩语占位文字。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <LoremIpsumGeneratorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

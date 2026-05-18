@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import FastingTimerComp from "../../components/tools/FastingTimer";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "간헐적 단식 타이머 — 16:8 단식 시간 계산기",
+    description: "16:8, 18:6, 20:4 등 다양한 간헐적 단식 방법의 시작·종료 시간을 계산하고 타이머로 관리하세요.",
+  },
+  en: {
+    title: "Intermittent Fasting Timer",
+    description: "Calculate start and end times for 16:8, 18:6, and 20:4 intermittent fasting protocols. Track your fasting window with a built-in timer.",
+  },
+  ja: {
+    title: "間欠的断食タイマー",
+    description: "16:8、18:6、20:4などの断食プロトコルの開始・終了時間を計算し、タイマーで管理します。",
+  },
+  fr: {
+    title: "Minuteur de Jeûne Intermittent",
+    description: "Calculez les heures de début et de fin pour les protocoles de jeûne 16:8, 18:6 et 20:4.",
+  },
+  es: {
+    title: "Temporizador de Ayuno Intermitente",
+    description: "Calcula las horas de inicio y fin para los protocolos de ayuno 16:8, 18:6 y 20:4.",
+  },
+  zh: {
+    title: "間歇性斷食計時器",
+    description: "計算16:8、18:6、20:4等各種間歇性斷食方案的開始和結束時間。",
+  },
+  cn: {
+    title: "间歇性断食计时器",
+    description: "计算16:8、18:6、20:4等各种间歇性断食方案的开始和结束时间。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <FastingTimerComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

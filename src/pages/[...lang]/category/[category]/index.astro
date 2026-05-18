@@ -3,7 +3,7 @@ import { getCollection } from "astro:content";
 import BlogList from "../../../../components/BlogList.astro";
 import { getTranslations, locales } from "../../../../lib/i18n";
 import { siteConfig } from "../../../../config/site.config";
-import { getTrack } from "../../../../lib/taxonomy";
+import { getTrack, getTrackFromData, slugifyCategory } from "../../../../lib/taxonomy";
 
 export async function getStaticPaths() {
   const allPosts = await getCollection(
@@ -25,8 +25,7 @@ export async function getStaticPaths() {
     return categories.map((category) => ({
       params: {
         lang,
-        category:
-          category?.toLowerCase().replace(/[^a-z0-9]+/g, "-") ?? "unknown",
+        category: category ? slugifyCategory(category) : "unknown",
       },
       props: { originalCategory: category, locale: lang },
     }));
@@ -41,7 +40,7 @@ const posts = await getCollection("blog", ({ data }) => {
   return (
     data.draft !== true &&
     data.locale === locale &&
-    data.category?.toLowerCase().replace(/[^a-z0-9]+/g, "-") === category
+    data.category && slugifyCategory(data.category) === category
   );
 });
 
@@ -65,13 +64,14 @@ const page = {
 };
 
 const localePrefix = `/${locale}`;
-const track = getTrack(originalCategory);
-const isAcademy = track === "academy";
+const track = posts[0] ? getTrackFromData(posts[0].data) : getTrack(originalCategory);
 
 const displayName = (t.category.names as Record<string, string>)?.[originalCategory] ?? originalCategory;
-const displaySubtitle = isAcademy
+const displaySubtitle = track === "academy"
   ? t.category.academySubtitle.replace("{category}", displayName)
-  : t.category.magazineSubtitle.replace("{category}", displayName);
+  : track === "interactive"
+    ? (((t as Record<string, unknown>).interactive as Record<string, string> | undefined)?.categorySubtitle ?? "Interactive reading and embedded tools related to {category}.").replace("{category}", displayName)
+    : t.category.magazineSubtitle.replace("{category}", displayName);
 ---
 
 <BlogList

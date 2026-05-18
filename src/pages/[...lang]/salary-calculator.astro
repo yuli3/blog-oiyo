@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SalaryCalculatorComp from "../../components/tools/SalaryCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "연봉 실수령액 계산기 — 세전/세후 급여 차이 완벽 정리",
+    description: "연봉을 입력하면 4대보험과 소득세 공제 후 실제 수령액을 월별·연간으로 계산합니다. 세전·세후 급여 차이를 한눈에 확인하세요.",
+  },
+  en: {
+    title: "Salary Net Pay Calculator — Before & After Tax Breakdown",
+    description: "Enter your annual salary to see monthly and annual net pay after social insurance and income tax deductions in Korea.",
+  },
+  ja: {
+    title: "年俸手取り額計算機 — 税引前・税引後給与の違い",
+    description: "年俸を入力して4大保険と所得税控除後の実際の手取り額を月別・年間で計算します。",
+  },
+  fr: {
+    title: "Calculateur de salaire net — Déductions fiscales coréennes",
+    description: "Calculez votre salaire net mensuel et annuel après déductions d'assurance sociale et d'impôt en Corée.",
+  },
+  es: {
+    title: "Calculadora de salario neto — Deducciones fiscales coreanas",
+    description: "Calcula tu salario neto mensual y anual después de deducciones de seguro social e impuesto en Corea.",
+  },
+  zh: {
+    title: "年薪實際到手金額計算機",
+    description: "輸入年薪，計算扣除四大保險和所得稅後的月薪和年薪實際到手金額。",
+  },
+  cn: {
+    title: "年薪实际到手金额计算器",
+    description: "输入年薪，计算扣除四大保险和所得税后的月薪和年薪实际到手金额。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <SalaryCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

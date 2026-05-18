@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import DutchPayCalculatorComp from "../../components/calculators/DutchPayCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "더치페이 계산기 — 균등·비율·개별 분배 지원",
+    description: "총 금액과 인원을 입력해 더치페이를 계산합니다. 균등, 비율, 개별 고정금액 방식을 모두 지원합니다.",
+  },
+  en: {
+    title: "Dutch Pay Calculator — Equal, Ratio, or Custom Split",
+    description: "Calculate how to split a bill equally, by ratio, or with custom fixed amounts for each person.",
+  },
+  ja: {
+    title: "割り勘計算機 — 均等・比率・個別設定に対応",
+    description: "合計金額と人数を入力して割り勘を計算します。均等、比率、個別固定額の分割に対応しています。",
+  },
+  fr: {
+    title: "Calculateur de partage — Égal, ratio ou montant fixe",
+    description: "Calculez comment partager une note de façon égale, par ratio ou avec des montants fixes personnalisés.",
+  },
+  es: {
+    title: "Calculadora de pago compartido — Igual, ratio o personalizado",
+    description: "Calcula cómo dividir una cuenta de forma igual, por ratio o con montos fijos personalizados.",
+  },
+  zh: {
+    title: "AA制計算機 — 支援均分、比例和個別設定",
+    description: "輸入總金額和人數，計算AA制分攤金額，支援均等、比例和個別固定金額模式。",
+  },
+  cn: {
+    title: "AA制计算器 — 支持均分、比例和个别设定",
+    description: "输入总金额和人数，计算AA制分摊金额，支持均等、比例和个别固定金额模式。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <DutchPayCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

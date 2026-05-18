@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceDot } from 'recharts';
 
 export default function ISLMSimulator() {
@@ -105,7 +105,7 @@ export default function ISLMSimulator() {
               />
               <Tooltip 
                 contentStyle={{ borderRadius: '8px', border: '1px solid rgba(150,150,150,0.2)', backgroundColor: 'var(--color-card)', color: 'var(--color-card-foreground)' }}
-                formatter={(value: number, name: string) => [value.toFixed(1), name === 'isCurve' ? 'IS (생산물시장)' : 'LM (화폐시장)']}
+                formatter={((value: number, name: string) => [value.toFixed(1), name === 'isCurve' ? 'IS (생산물시장)' : 'LM (화폐시장)']) as any}
                 labelFormatter={(label) => `국민소득: ${label}`}
               />
               

@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import AsciiArtGeneratorComp from "../../components/tools/AsciiArtGenerator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "ASCII 아트 생성기 — 텍스트로 만드는 아스키 아트",
+    description: "텍스트나 이미지를 ASCII 문자 아트로 변환하세요. 다양한 폰트와 스타일을 선택할 수 있습니다.",
+  },
+  en: {
+    title: "ASCII Art Generator",
+    description: "Convert text or images into ASCII art. Choose from multiple fonts and character styles.",
+  },
+  ja: {
+    title: "ASCIIアートジェネレーター",
+    description: "テキストや画像をASCII文字アートに変換します。さまざまなフォントとスタイルから選べます。",
+  },
+  fr: {
+    title: "Générateur d'Art ASCII",
+    description: "Convertissez du texte ou des images en art ASCII. Choisissez parmi plusieurs polices et styles.",
+  },
+  es: {
+    title: "Generador de Arte ASCII",
+    description: "Convierte texto o imágenes en arte ASCII. Elige entre múltiples fuentes y estilos de caracteres.",
+  },
+  zh: {
+    title: "ASCII藝術生成器",
+    description: "將文字或圖片轉換為ASCII字符藝術。可從多種字體和風格中選擇。",
+  },
+  cn: {
+    title: "ASCII艺术生成器",
+    description: "将文字或图片转换为ASCII字符艺术。可从多种字体和风格中选择。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <AsciiArtGeneratorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

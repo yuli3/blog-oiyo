@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import StockYieldCalculatorComp from "../../components/calculators/StockYieldCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "주식 수익률 계산기 — 물타기 평균단가 계산",
+    description: "현재 보유 주식과 추가 매수 정보를 입력해 새 평균단가, 총 투자금, 미실현 손익을 계산하세요.",
+  },
+  en: {
+    title: "Stock Yield Calculator — Average Down Cost Basis",
+    description: "Enter your current holdings and new purchase to calculate the new average cost, total invested, and unrealized P&L.",
+  },
+  ja: {
+    title: "株式利回り計算機 — 平均取得単価・損益計算",
+    description: "現在の保有株と追加購入情報を入力して、新しい平均取得単価と未実現損益を計算します。",
+  },
+  fr: {
+    title: "Calculateur de Rendement Boursier — Prix de Revient Moyen",
+    description: "Entrez vos actions actuelles et vos nouveaux achats pour calculer le nouveau prix de revient moyen et la P&L.",
+  },
+  es: {
+    title: "Calculadora de Rentabilidad de Acciones — Precio Medio",
+    description: "Ingrese sus acciones actuales y nuevas compras para calcular el nuevo precio promedio y las ganancias no realizadas.",
+  },
+  zh: {
+    title: "股票收益率計算機 — 攤平成本計算",
+    description: "輸入當前持股和新購資訊，計算新平均成本、總投資額和未實現損益。",
+  },
+  cn: {
+    title: "股票收益率计算器 — 摊平成本计算",
+    description: "输入当前持股和新购信息，计算新平均成本、总投资额和未实现损益。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <StockYieldCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

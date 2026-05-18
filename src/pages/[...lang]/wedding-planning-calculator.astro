@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import WeddingPlanningCalculatorComp from "../../components/calculators/WeddingPlanningCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "결혼 비용 플래너 — 예식·스드메·신혼여행 총비용 계산",
+    description: "하객 수, 식사비, 예식장, 스드메, 신혼여행 비용을 입력해 총 결혼 비용과 축의금 수지, 결혼 후 순자산을 계산합니다.",
+  },
+  en: {
+    title: "Wedding Budget Planner — Total Cost & Net Worth After Wedding",
+    description: "Enter guest count, meal cost, venue, photo/dress/makeup, and honeymoon to calculate total wedding cost, gift revenue, and net worth.",
+  },
+  ja: {
+    title: "結婚費用プランナー — 式場・スタジオ・ハネムーン費用計算",
+    description: "ゲスト数、食事代、式場、スタジオ撮影、ハネムーンを入力して総費用とご祝儀収支を計算します。",
+  },
+  fr: {
+    title: "Planificateur de Budget Mariage — Coût Total et Bilan Net",
+    description: "Entrez les invités, le repas, le lieu, la photo/robe et la lune de miel pour calculer le coût total et le bilan après mariage.",
+  },
+  es: {
+    title: "Planificador de Presupuesto de Boda — Coste Total y Patrimonio Neto",
+    description: "Ingresa invitados, comida, local, foto/vestido y luna de miel para calcular el coste total, ingresos de regalos y patrimonio neto.",
+  },
+  zh: {
+    title: "婚禮費用規劃師 — 總費用與婚後淨資產計算",
+    description: "輸入賓客數、餐費、宴會廳、婚紗攝影及蜜月費用，計算婚禮總費用、禮金收入及婚後淨資產。",
+  },
+  cn: {
+    title: "婚礼费用规划师 — 总费用与婚后净资产计算",
+    description: "输入宾客数、餐费、宴会厅、婚纱摄影及蜜月费用，计算婚礼总费用、礼金收入及婚后净资产。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <WeddingPlanningCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

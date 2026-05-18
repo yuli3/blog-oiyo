@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CaffelatteCalculatorComp from "../../components/tools/CaffelatteCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "카페라떼 칼로리 계산기 — 내 커피 한 잔의 칼로리는?",
+    description: "우유 종류·시럽·샷 수에 따른 카페라떼 칼로리를 계산하세요. 아메리카노·카푸치노 등 다양한 음료도 지원합니다.",
+  },
+  en: {
+    title: "Café Latte Calorie Calculator",
+    description: "Calculate the calorie content of your café latte based on milk type, syrups, and espresso shots.",
+  },
+  ja: {
+    title: "カフェラテカロリー計算機",
+    description: "ミルクの種類・シロップ・ショット数に応じたカフェラテのカロリーを計算します。",
+  },
+  fr: {
+    title: "Calculateur de Calories Café Latte",
+    description: "Calculez les calories de votre café latte selon le type de lait, les sirops et les shots d'espresso.",
+  },
+  es: {
+    title: "Calculadora de Calorías Café Latte",
+    description: "Calcula las calorías de tu café latte según el tipo de leche, jarabes y shots de espresso.",
+  },
+  zh: {
+    title: "咖啡拿鐵熱量計算機",
+    description: "根據牛奶種類、糖漿和濃縮咖啡份數計算咖啡拿鐵的熱量。",
+  },
+  cn: {
+    title: "咖啡拿铁热量计算器",
+    description: "根据牛奶种类、糖浆和浓缩咖啡份数计算咖啡拿铁的热量。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <CaffelatteCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

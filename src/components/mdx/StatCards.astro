@@ -13,16 +13,22 @@ interface StatItem {
   value: string;
   unit?: string;
   description?: string;
+  note?: string;
   color?: string;
   icon?: string;
 }
 interface Props {
   title?: string;
-  items: StatItem[];
+  items?: StatItem[];
+  stats?: StatItem[];
   cols?: number;
 }
 
-const { title, items, cols = 3 } = Astro.props;
+const { title, cols = 3 } = Astro.props;
+const items = (Astro.props.items ?? Astro.props.stats ?? []).map((item) => ({
+  ...item,
+  description: item.description ?? item.note,
+}));
 const defaultColors = [
   "#3b82f6",
   "#10b981",

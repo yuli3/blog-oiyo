@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import YearEndSettlementCalculatorComp from "../../components/tools/YearEndSettlementCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "연말정산 환급 예측기 — 내 환급액 미리 계산해보기",
+    description: "연봉과 주요 공제 항목을 입력해 연말정산 예상 환급액 또는 추가 납부 세액을 미리 계산합니다. 절세 전략 수립에 활용하세요.",
+  },
+  en: {
+    title: "Year-End Tax Settlement Estimator — Predict Your Refund",
+    description: "Enter your salary and deduction items to predict your year-end tax refund or additional payment in Korea. Plan your tax savings strategy.",
+  },
+  ja: {
+    title: "年末調整還付予測ツール — 還付額を事前に計算",
+    description: "年俸と主要控除項目を入力して年末調整の予想還付額または追加納付税額を事前に計算します。",
+  },
+  fr: {
+    title: "Estimateur de régularisation fiscale de fin d'année",
+    description: "Estimez votre remboursement fiscal ou paiement supplémentaire de fin d'année en Corée.",
+  },
+  es: {
+    title: "Estimador de liquidación fiscal de fin de año",
+    description: "Estima tu reembolso fiscal o pago adicional de fin de año en Corea.",
+  },
+  zh: {
+    title: "年末結算退稅預測器 — 提前計算退稅金額",
+    description: "輸入年薪和主要扣除項目，提前計算年末結算預估退稅金額或額外應繳稅額，制定節稅策略。",
+  },
+  cn: {
+    title: "年末结算退税预测器 — 提前计算退税金额",
+    description: "输入年薪和主要扣除项目，提前计算年末结算预估退税金额或额外应缴税额，制定节税策略。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <YearEndSettlementCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

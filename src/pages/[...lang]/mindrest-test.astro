@@ -1,0 +1,29 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import MindRestTestComp from "../../components/tests/MindRestTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "마인드레스트 테스트: 나의 번아웃 수준은?", description: "15개의 질문으로 소진, 냉소, 효능감 3가지 차원에서 번아웃 수준을 진단하세요. 5단계 결과 제공." },
+  en: { title: "MindRest Test: What's Your Burnout Level?", description: "Measure your burnout level across 3 dimensions — exhaustion, cynicism, and efficacy — with 15 questions. 5-level results." },
+  ja: { title: "マインドレストテスト：あなたのバーンアウトレベルは？", description: "15の質問で消耗・冷笑・効力感の3次元からバーンアウトレベルを診断。5段階の結果。" },
+  fr: { title: "Test MindRest : Quel est votre niveau d'épuisement professionnel?", description: "Mesurez votre niveau de burnout sur 3 dimensions — épuisement, cynisme et efficacité — avec 15 questions." },
+  es: { title: "Test MindRest: ¿Cuál es tu nivel de agotamiento laboral?", description: "Mide tu nivel de burnout en 3 dimensiones — agotamiento, cinismo y eficacia — con 15 preguntas. 5 niveles de resultados." },
+  zh: { title: "職業倦怠測試：你的倦怠水平如何？", description: "通過15個問題從耗盡、冷嘲熱諷、效能感3個維度診斷你的職業倦怠水平。5個等級的結果。" },
+  cn: { title: "职业倦怠测试：你的倦怠水平如何？", description: "通过15个问题从耗尽、冷嘲热讽、效能感3个维度诊断你的职业倦怠水平。5个等级的结果。" },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <MindRestTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

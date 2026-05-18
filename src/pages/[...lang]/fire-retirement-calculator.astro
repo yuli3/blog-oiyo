@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import FireRetirementCalculatorComp from "../../components/calculators/FireRetirementCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "FIRE 조기 은퇴 계산기 — 4% 룰로 재정적 자유 시점 계산",
+    description: "현재 자산, 월 저축액, 연 지출액을 입력해 FIRE(재정적 자유·조기 은퇴) 달성 시점과 필요 자산을 계산합니다.",
+  },
+  en: {
+    title: "FIRE Retirement Calculator — When Can You Retire Early?",
+    description: "Calculate your FIRE number and years to financial independence using the 4% rule.",
+  },
+  ja: {
+    title: "FIRE早期退職計算機 — 4%ルールで経済的自由の時期を計算",
+    description: "現在の資産、月の貯蓄、年間支出を入力してFIRE達成時期と必要資産を計算します。",
+  },
+  fr: {
+    title: "Calculateur FIRE — Quand pouvez-vous prendre votre retraite?",
+    description: "Calculez votre numéro FIRE et le temps jusqu'à l'indépendance financière avec la règle des 4%.",
+  },
+  es: {
+    title: "Calculadora FIRE — ¿Cuándo puedes jubilarte anticipadamente?",
+    description: "Calcula tu número FIRE y los años hasta la independencia financiera usando la regla del 4%.",
+  },
+  zh: {
+    title: "FIRE提前退休計算機 — 4%法則計算財務自由",
+    description: "輸入資產、月儲蓄和年支出，計算FIRE達成時間點和所需資產。",
+  },
+  cn: {
+    title: "FIRE提前退休计算器 — 4%法则计算财务自由",
+    description: "输入资产、月储蓄和年支出，计算FIRE达成时间点和所需资产。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <FireRetirementCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

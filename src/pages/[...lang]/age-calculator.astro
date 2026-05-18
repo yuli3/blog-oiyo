@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import AgeCalculatorComp from "../../components/tools/AgeCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "나이 계산기 — 만 나이·한국 나이·개월 수 계산",
+    description: "생년월일을 입력해 만 나이, 한국식 나이, 개월 수, 일수를 한 번에 계산합니다. 2023년 만 나이 통일 기준 적용.",
+  },
+  en: {
+    title: "Age Calculator — Korean & International Age",
+    description: "Calculate your exact age in years, months, and days. Supports both international (exact) age and Korean age systems.",
+  },
+  ja: {
+    title: "年齢計算機 — 満年齢・韓国式年齢・月数計算",
+    description: "生年月日を入力して満年齢、韓国式年齢、月数、日数を一度に計算します。",
+  },
+  fr: {
+    title: "Calculateur d'Âge — Âge Coréen et International",
+    description: "Calculez votre âge exact en années, mois et jours. Supporte les systèmes d'âge international et coréen.",
+  },
+  es: {
+    title: "Calculadora de Edad — Edad Coreana e Internacional",
+    description: "Calcula tu edad exacta en años, meses y días. Compatible con los sistemas de edad internacional y coreano.",
+  },
+  zh: {
+    title: "年齡計算機 — 實際年齡·韓國年齡·月齡計算",
+    description: "輸入生日，一次計算實際年齡、韓國式年齡、月齡和天數。",
+  },
+  cn: {
+    title: "年龄计算器 — 实际年龄·韩国年龄·月龄计算",
+    description: "输入生日，一次计算实际年龄、韩国式年龄、月龄和天数。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <AgeCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

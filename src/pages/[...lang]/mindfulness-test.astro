@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import MindfulnessTestComp from "../../components/tests/MindfulnessTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "마음챙김 수준 테스트 — 나는 지금 이 순간에 얼마나 있는가?",
+    description: "MAAS 기반 15가지 질문으로 나의 마음챙김 수준을 진단해보세요. 자동조종, 발전 중, 마음챙김형, 깊은 현재형 중 나는 어디에 있을까요?",
+  },
+  en: {
+    title: "Mindfulness Test — How Present Are You in the Moment?",
+    description: "Assess your mindfulness level with 15 MAAS-based questions. Discover whether you are on Autopilot, Developing, Mindful, or Deeply Present.",
+  },
+  ja: {
+    title: "マインドフルネステスト — 私は今この瞬間にどのくらいいるか？",
+    description: "MAASをベースにした15の質問でマインドフルネスレベルを診断。オートパイロット、発展中、マインドフル型、深い現在型のどれですか？",
+  },
+  fr: {
+    title: "Test de Pleine Conscience — Êtes-vous présent dans le moment?",
+    description: "Évaluez votre niveau de pleine conscience avec 15 questions basées sur le MAAS.",
+  },
+  es: {
+    title: "Test de Mindfulness — ¿Qué tan presente estás en el momento?",
+    description: "Evalúa tu nivel de mindfulness con 15 preguntas basadas en el MAAS.",
+  },
+  zh: {
+    title: "正念測試 — 你有多活在當下？",
+    description: "通過15個基於MAAS的問題評估您的正念水平。了解您是否處於自動駕駛、發展中、正念型或深度臨在狀態。",
+  },
+  cn: {
+    title: "正念测试 — 你有多活在当下？",
+    description: "通过15个基于MAAS的问题评估您的正念水平。了解您是否处于自动驾驶、发展中、正念型或深度临在状态。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <MindfulnessTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

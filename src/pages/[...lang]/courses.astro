@@ -3,7 +3,7 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getTranslations, locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
-import { ACADEMY_CATEGORIES } from "../../lib/taxonomy";
+import { getTrackFromData } from "../../lib/taxonomy";
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -20,7 +20,7 @@ const allPosts = await getCollection("blog", ({ data }) => {
   return (
     data.draft !== true &&
     data.locale === locale &&
-    ACADEMY_CATEGORIES.includes(data.category ?? "")
+    getTrackFromData(data) === "academy"
   );
 });
 
@@ -103,6 +103,9 @@ const pageSubtitle = courseT?.subtitle ?? "Structured chapter-by-chapter learnin
 const chaptersLabel = courseT?.chapters ?? "chapters";
 const startLabel = courseT?.startCourse ?? "Start Course";
 const noChaptersLabel = courseT?.noChapters ?? "Read article";
+const searchPlaceholder = courseT?.searchPlaceholder ?? "Search category...";
+const clearLabel = courseT?.clearLabel ?? "Clear";
+const clearAriaLabel = courseT?.clearAriaLabel ?? "Clear category search";
 
 // Category icon mapping
 const categoryIcons: Record<string, string> = {
@@ -166,22 +169,54 @@ function estimateReadingTime(words: number): string {
         </div>
       </div>
 
-      <!-- Category filter pills (client-side JS) -->
-      <div class="mb-10 flex gap-2 flex-wrap" id="category-filters">
-        <button
-          data-filter="all"
-          class="filter-btn active px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest border transition-colors bg-primary text-primary-foreground border-primary"
-        >
-          All
-        </button>
-        {categoryGroups.map(([cat]) => (
+      <!-- Category tabs + search combobox (client-side JS) -->
+      <div class="mb-10 flex flex-col gap-4 md:flex-row md:items-center md:justify-between" id="category-filters">
+        <div class="flex flex-wrap gap-2" role="tablist" aria-label="Course categories">
           <button
-            data-filter={cat}
-            class="filter-btn px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest border transition-colors border-border/60 text-muted-foreground hover:border-primary/40 hover:text-primary bg-card"
+            data-filter="all"
+            role="tab"
+            aria-selected="true"
+            class="filter-tab active px-4 py-2 rounded-full text-[11px] font-black uppercase tracking-[0.2em] border transition-colors bg-primary text-primary-foreground border-primary"
           >
-            {getIcon(categoryNames[cat] ?? cat)} {categoryNames[cat] ?? cat}
+            All
           </button>
-        ))}
+          {categoryGroups.map(([cat]) => (
+            <button
+              data-filter={cat}
+              role="tab"
+              aria-selected="false"
+              class="filter-tab px-4 py-2 rounded-full text-[11px] font-black uppercase tracking-[0.2em] border transition-colors border-border/60 text-muted-foreground hover:border-primary/40 hover:text-primary bg-card"
+            >
+              {getIcon(categoryNames[cat] ?? cat)} {categoryNames[cat] ?? cat}
+            </button>
+          ))}
+        </div>
+
+        <div class="relative w-full md:w-80">
+          <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground/70">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-3.5-3.5"/></svg>
+          </span>
+          <input
+            id="category-combobox"
+            list="category-options"
+            placeholder={searchPlaceholder}
+            class="w-full rounded-full border border-border/60 bg-card pl-9 pr-10 py-2 text-sm font-semibold text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50"
+          />
+          <button
+            id="category-clear"
+            type="button"
+            class="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground/60 hover:text-primary text-xs font-bold px-2 py-1 rounded-full border border-transparent hover:border-primary/20"
+            aria-label={clearAriaLabel}
+          >
+            {clearLabel}
+          </button>
+          <datalist id="category-options">
+            <option value="All"></option>
+            {categoryGroups.map(([cat]) => (
+              <option value={categoryNames[cat] ?? cat}></option>
+            ))}
+          </datalist>
+        </div>
       </div>
 
       <!-- Category groups -->
@@ -207,7 +242,7 @@ function estimateReadingTime(words: number): string {
               const isMultiChapter = s.chapterCount > 1;
 
               // Build readable course title from first chapter title (strip "Chapter N:" prefix if present)
-              const rawTitle = s.firstPost.data.title;
+              const rawTitle = s.firstPost.data.chapterTitleShort ?? s.firstPost.data.title;
               const cleanTitle = rawTitle
                 .replace(/^(Chapter|챕터|第\d+章|Chapitre|Capítulo)\s*\d+[：:·\-–—\s]*/i, "")
                 .replace(/^第\d+講[：:·\-–—\s]*/u, "")
@@ -254,7 +289,7 @@ function estimateReadingTime(words: number): string {
                   <!-- Chapter preview (multi-chapter only) -->
                   {isMultiChapter && s.chapters.length > 1 && (
                     <div class="space-y-1">
-                      {s.chapters.slice(0, 3).map((ch, ci) => {
+                      {s.chapters.slice(0, 3).map((ch) => {
                         const chNum = parseInt(ch.slug.match(/-ch(\d+)$/)?.[1] ?? "1", 10);
                         const chTitle = ch.data.title
                           .replace(/^(Chapter|챕터|第\d+章|Chapitre|Capítulo)\s*\d+[：:·\-–—\s]*/i, "")
@@ -299,33 +334,93 @@ function estimateReadingTime(words: number): string {
   </section>
 </BaseLayout>
 
+<script type="application/json" id="__courses-cat-labels__" is:inline set:html={JSON.stringify(categoryGroups.map(([cat]) => [cat, categoryNames[cat] ?? cat]))}></script>
+
 <script>
-  // Category filter
-  const filterBtns = document.querySelectorAll<HTMLButtonElement>(".filter-btn");
+  // Category filter (tabs + combobox)
+  const filterTabs = document.querySelectorAll<HTMLElement>(".filter-tab");
   const groups = document.querySelectorAll<HTMLElement>(".course-group");
+  const combo = document.getElementById("category-combobox") as HTMLInputElement | null;
+  const clearBtn = document.getElementById("category-clear");
 
-  filterBtns.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const filter = btn.dataset.filter ?? "all";
+  const categoryLabels = new Map<string, string>(
+    JSON.parse(document.getElementById("__courses-cat-labels__")?.textContent ?? "[]") as [string, string][]
+  );
 
-      // Update active state
-      filterBtns.forEach((b) => {
-        const isActive = b.dataset.filter === filter;
-        b.classList.toggle("active", isActive);
-        b.classList.toggle("bg-primary", isActive);
-        b.classList.toggle("text-primary-foreground", isActive);
-        b.classList.toggle("border-primary", isActive);
-        b.classList.toggle("bg-card", !isActive);
-        b.classList.toggle("text-muted-foreground", !isActive);
-        b.classList.toggle("border-border/60", !isActive);
-      });
+  const normalize = (value: string) => value.toLowerCase().trim();
 
-      // Show/hide groups
-      groups.forEach((g) => {
-        const cat = g.dataset.category ?? "";
-        const visible = filter === "all" || cat === filter;
-        g.style.display = visible ? "" : "none";
-      });
+  const setActiveTab = (filter: string | null) => {
+    filterTabs.forEach((tab) => {
+      const isActive = filter !== null && tab.dataset.filter === filter;
+      tab.classList.toggle("active", isActive);
+      tab.classList.toggle("bg-primary", isActive);
+      tab.classList.toggle("text-primary-foreground", isActive);
+      tab.classList.toggle("border-primary", isActive);
+      tab.classList.toggle("bg-card", !isActive);
+      tab.classList.toggle("text-muted-foreground", !isActive);
+      tab.classList.toggle("border-border/60", !isActive);
+      tab.setAttribute("aria-selected", isActive ? "true" : "false");
     });
+  };
+
+  const applyFilter = (filter: string) => {
+    groups.forEach((g) => {
+      const cat = g.dataset.category ?? "";
+      const visible = filter === "all" || cat === filter;
+      g.style.display = visible ? "" : "none";
+    });
+  };
+
+  const findCategoryByLabel = (query: string) => {
+    const normalized = normalize(query);
+    for (const [cat, label] of categoryLabels.entries()) {
+      if (normalize(cat) === normalized || normalize(label) === normalized) {
+        return cat;
+      }
+    }
+    return null;
+  };
+
+  const applySearch = (query: string) => {
+    const normalized = normalize(query);
+    if (!normalized) {
+      applyFilter("all");
+      setActiveTab("all");
+      return;
+    }
+
+    const exact = findCategoryByLabel(query);
+    if (exact) {
+      applyFilter(exact);
+      setActiveTab(exact);
+      return;
+    }
+
+    // Strict mode: only filter on exact (autocomplete) selection
+    applyFilter("all");
+    setActiveTab("all");
+  };
+
+  filterTabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      const filter = tab.dataset.filter ?? "all";
+      const label = filter === "all" ? "All" : categoryLabels.get(filter) ?? filter;
+
+      applyFilter(filter);
+      setActiveTab(filter);
+      if (combo) combo.value = label;
+    });
+  });
+
+  combo?.addEventListener("input", (event) => {
+    // Only react to autocomplete selection clicks (replacement text)
+    if ((event as InputEvent).inputType !== "insertReplacementText") return;
+    applySearch(combo!.value);
+  });
+
+  clearBtn?.addEventListener("click", () => {
+    if (combo) combo.value = "";
+    applyFilter("all");
+    setActiveTab("all");
   });
 </script>

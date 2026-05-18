@@ -1,0 +1,29 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import HormonesTestComp from "../../components/tests/HormonesTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "호르몬 성격 테스트: 나를 움직이는 호르몬은?", description: "14개의 질문으로 도파민, 세로토닌, 테스토스테론 등 7가지 호르몬 중 나의 주도 호르몬을 알아보세요." },
+  en: { title: "Hormones Test: What Hormone Drives You?", description: "Discover your dominant hormone among 7 types — dopamine, serotonin, testosterone, and more — with 14 questions." },
+  ja: { title: "ホルモン性格テスト：あなたを動かすホルモンは？", description: "14の質問でドーパミン、セロトニン、テストステロンなど7種類のホルモンの中からあなたの主導ホルモンを診断。" },
+  fr: { title: "Test Hormones : Quel hormone vous motive?", description: "Découvrez votre hormone dominante parmi 7 types — dopamine, sérotonine, testostérone et plus — avec 14 questions." },
+  es: { title: "Test de Hormonas: ¿Qué hormona te impulsa?", description: "Descubre tu hormona dominante entre 7 tipos — dopamina, serotonina, testosterona y más — con 14 preguntas." },
+  zh: { title: "荷爾蒙性格測試：驅動你的是哪種荷爾蒙？", description: "通過14個問題，在多巴胺、血清素、睪固酮等7種荷爾蒙中，找出你的主導荷爾蒙。" },
+  cn: { title: "荷尔蒙性格测试：驱动你的是哪种荷尔蒙？", description: "通过14个问题，在多巴胺、血清素、睾酮等7种荷尔蒙中，找出你的主导荷尔蒙。" },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <HormonesTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

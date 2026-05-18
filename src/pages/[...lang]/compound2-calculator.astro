@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Compound2CalculatorComp from "../../components/calculators/Compound2Calculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "복리 수익 시뮬레이터 — 최저·평균·최고 시나리오 계산",
+    description: "초기 투자금, 월 납입액, 기간, 수익률을 입력해 복리 수익을 세 가지 시나리오로 계산합니다.",
+  },
+  en: {
+    title: "Compound Interest Simulator — Best, Average & Worst Cases",
+    description: "Enter initial investment, monthly contribution, period, and return rate to simulate compound growth across three scenarios.",
+  },
+  ja: {
+    title: "複利収益シミュレーター — 最低・平均・最高シナリオ",
+    description: "初期投資額、月次積立額、期間、収益率を入力して複利成長を3つのシナリオで計算します。",
+  },
+  fr: {
+    title: "Simulateur d'Intérêts Composés — Scénarios Min, Moyen, Max",
+    description: "Calculez la croissance composée en entrant l'investissement initial, l'apport mensuel, la durée et le taux.",
+  },
+  es: {
+    title: "Simulador de Interés Compuesto — Escenarios Mín, Promedio, Máx",
+    description: "Calcula el crecimiento compuesto introduciendo inversión inicial, aportación mensual, plazo y tasa.",
+  },
+  zh: {
+    title: "複利收益模擬器 — 最低、平均、最高情境",
+    description: "輸入初始投資、月供、期限和收益率，以三種情境模擬複利增長。",
+  },
+  cn: {
+    title: "复利收益模拟器 — 最低、平均、最高情境",
+    description: "输入初始投资、月供、期限和收益率，以三种情境模拟复利增长。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <Compound2CalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

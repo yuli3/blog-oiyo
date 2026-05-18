@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import IsaVsPensionCalculatorComp from "../../components/calculators/IsaVsPensionCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "ISA vs 연금저축 비교 계산기 — 세제 혜택 시뮬레이션",
+    description: "ISA와 연금저축·IRP 중 어느 쪽이 세제 혜택이 더 큰지 납입액, 기간, 수익률을 기반으로 비교합니다.",
+  },
+  en: {
+    title: "ISA vs Pension Savings Comparison — Tax Benefit Simulator",
+    description: "Compare tax benefits between ISA and pension savings (IRP) accounts based on annual investment, period, and expected return.",
+  },
+  ja: {
+    title: "ISA vs 年金貯蓄 比較計算機 — 税制優遇シミュレーション",
+    description: "ISAと年金貯蓄・IRPの税制優遇を年間投資額、期間、期待収益率に基づいて比較します。",
+  },
+  fr: {
+    title: "Comparateur ISA vs Épargne Retraite — Avantages Fiscaux",
+    description: "Comparez les avantages fiscaux entre ISA et épargne retraite selon l'investissement annuel et la durée.",
+  },
+  es: {
+    title: "Comparador ISA vs Plan de Pensiones — Beneficios Fiscales",
+    description: "Compara los beneficios fiscales entre ISA y plan de pensiones según la inversión anual y el plazo.",
+  },
+  zh: {
+    title: "ISA vs 養老金儲蓄比較計算機 — 稅收優惠模擬",
+    description: "根據年投資額、期限和預期收益率，比較ISA和養老金儲蓄的稅收優惠。",
+  },
+  cn: {
+    title: "ISA vs 养老金储蓄比较计算器 — 税收优惠模拟",
+    description: "根据年投资额、期限和预期收益率，比较ISA和养老金储蓄的税收优惠。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <IsaVsPensionCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import StatuteLimitationsCalculatorComp from "../../components/calculators/StatuteLimitationsCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "소멸시효 계산기 — 민사·상사·불법행위 청구 만료일 계산",
+    description: "청구 유형과 기산일을 입력해 소멸시효 만료일과 남은 일수를 계산하세요. 민사(10년), 상사(5년), 임금(3년), 불법행위 등 유형별 안내.",
+  },
+  en: {
+    title: "Statute of Limitations Calculator — Find Expiry Date",
+    description: "Select your claim type and base date to calculate the statute of limitations expiry date and days remaining.",
+  },
+  ja: {
+    title: "時効計算機 — 民事・商事・不法行為の消滅時効期限",
+    description: "請求の種類と起算日を入力して、消滅時効の満了日と残り日数を計算します。",
+  },
+  fr: {
+    title: "Calculateur de Prescription — Date d'Expiration de la Prescription",
+    description: "Sélectionnez le type de créance et la date de départ pour calculer la date d'expiration de la prescription.",
+  },
+  es: {
+    title: "Calculadora de Prescripción — Fecha de Caducidad",
+    description: "Seleccione el tipo de reclamación y la fecha base para calcular la fecha de prescripción y los días restantes.",
+  },
+  zh: {
+    title: "訴訟時效計算機 — 計算索賠到期日",
+    description: "選擇索賠類型和起算日期，計算訴訟時效到期日和剩餘天數。",
+  },
+  cn: {
+    title: "诉讼时效计算器 — 计算索赔到期日",
+    description: "选择索赔类型和起算日期，计算诉讼时效到期日和剩余天数。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <StatuteLimitationsCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

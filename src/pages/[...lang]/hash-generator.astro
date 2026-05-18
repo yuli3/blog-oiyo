@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import HashGeneratorComp from "../../components/tools/HashGenerator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "해시 생성기 — SHA-256 / SHA-384 / SHA-512 변환",
+    description: "텍스트를 SHA-256, SHA-384, SHA-512 해시로 즉시 변환하세요. Web Crypto API 기반의 안전한 브라우저 내 해시 생성.",
+  },
+  en: {
+    title: "Hash Generator — SHA-256 / SHA-384 / SHA-512",
+    description: "Instantly convert text to SHA-256, SHA-384, and SHA-512 hashes. Secure, browser-side hashing powered by the Web Crypto API.",
+  },
+  ja: {
+    title: "ハッシュ生成器 — SHA-256 / SHA-384 / SHA-512変換",
+    description: "テキストをSHA-256、SHA-384、SHA-512ハッシュに即座に変換。Web Crypto APIによる安全なブラウザ内ハッシュ生成。",
+  },
+  fr: {
+    title: "Générateur de Hachage — SHA-256 / SHA-384 / SHA-512",
+    description: "Convertissez instantanément du texte en hachages SHA-256, SHA-384 et SHA-512. Hachage sécurisé côté navigateur via l'API Web Crypto.",
+  },
+  es: {
+    title: "Generador de Hash — SHA-256 / SHA-384 / SHA-512",
+    description: "Convierte texto a hashes SHA-256, SHA-384 y SHA-512 al instante. Hash seguro en el navegador con la API Web Crypto.",
+  },
+  zh: {
+    title: "雜湊生成器 — SHA-256 / SHA-384 / SHA-512轉換",
+    description: "即時將文字轉換為SHA-256、SHA-384和SHA-512雜湊值。基於Web Crypto API的安全瀏覽器端雜湊生成。",
+  },
+  cn: {
+    title: "哈希生成器 — SHA-256 / SHA-384 / SHA-512转换",
+    description: "即时将文字转换为SHA-256、SHA-384和SHA-512哈希值。基于Web Crypto API的安全浏览器端哈希生成。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <HashGeneratorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import AspectRatioCalculatorComp from "../../components/tools/AspectRatioCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "화면 비율 계산기 — 종횡비 계산 및 화면 크기 변환",
+    description: "가로×세로 픽셀로 종횡비를 계산하거나, 비율과 한 값으로 다른 값을 구하세요. 16:9, 4:3, 1:1 등 일반 프리셋 지원.",
+  },
+  en: {
+    title: "Aspect Ratio Calculator — Calculate & Convert Screen Sizes",
+    description: "Calculate aspect ratios from width × height pixels, or find a missing dimension from a known ratio. Supports common presets like 16:9, 4:3, and 1:1.",
+  },
+  ja: {
+    title: "画面比率計算機 — アスペクト比の計算と画面サイズ変換",
+    description: "幅×高さのピクセルからアスペクト比を計算したり、既知の比率と一方の値から他方の値を求められます。16:9、4:3、1:1などのプリセット対応。",
+  },
+  fr: {
+    title: "Calculateur de rapport d'aspect — Calculez et convertissez les tailles d'écran",
+    description: "Calculez les rapports d'aspect à partir de la largeur × hauteur en pixels, ou trouvez une dimension manquante à partir d'un rapport connu.",
+  },
+  es: {
+    title: "Calculadora de relación de aspecto — Calcule y convierta tamaños de pantalla",
+    description: "Calcule relaciones de aspecto a partir de píxeles de ancho × alto, o encuentre una dimensión faltante a partir de una relación conocida.",
+  },
+  zh: {
+    title: "畫面比例計算器 — 計算和轉換縱橫比及螢幕尺寸",
+    description: "通過寬×高像素計算縱橫比，或從已知比例和一個值求另一個值。支援16:9、4:3、1:1等常用預設。",
+  },
+  cn: {
+    title: "画面比例计算器 — 计算和转换纵横比及屏幕尺寸",
+    description: "通过宽×高像素计算纵横比，或从已知比例和一个值求另一个值。支持16:9、4:3、1:1等常用预设。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <AspectRatioCalculatorComp client:load locale={locale} />
+  </main>
+</BaseLayout>

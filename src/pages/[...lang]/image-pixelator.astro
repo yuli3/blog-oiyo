@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ImagePixelatorComp from "../../components/tools/ImagePixelator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "이미지 픽셀화 — 사진을 픽셀아트로 변환",
+    description: "사진을 픽셀아트 스타일로 변환하세요. 픽셀 크기를 조절해 레트로 감성의 픽셀 이미지를 만들 수 있습니다.",
+  },
+  en: {
+    title: "Image Pixelator",
+    description: "Transform your photos into pixel art. Adjust the pixel size to create retro-style pixelated images in your browser.",
+  },
+  ja: {
+    title: "画像ピクセル化ツール",
+    description: "写真をピクセルアートスタイルに変換します。ピクセルサイズを調整してレトロなピクセル画像を作成できます。",
+  },
+  fr: {
+    title: "Pixeliseur d'Image",
+    description: "Transformez vos photos en pixel art. Ajustez la taille des pixels pour créer des images pixelisées rétro.",
+  },
+  es: {
+    title: "Pixelador de Imágenes",
+    description: "Transforma tus fotos en pixel art. Ajusta el tamaño del píxel para crear imágenes pixeladas retro.",
+  },
+  zh: {
+    title: "圖片像素化工具",
+    description: "將照片轉換為像素藝術風格。調整像素大小，在瀏覽器中創建復古風格的像素圖像。",
+  },
+  cn: {
+    title: "图片像素化工具",
+    description: "将照片转换为像素艺术风格。调整像素大小，在浏览器中创建复古风格的像素图像。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <ImagePixelatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

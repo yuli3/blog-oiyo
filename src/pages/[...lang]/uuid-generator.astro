@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import UuidGeneratorComp from "../../components/tools/UuidGenerator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "UUID 생성기 — UUID v4 즉시 생성 & 복사",
+    description: "UUID v4를 1개부터 50개까지 즉시 생성하세요. 대문자/소문자 토글, 하이픈 포함/제외, 전체 복사 기능 제공.",
+  },
+  en: {
+    title: "UUID Generator — Generate & Copy UUID v4 Instantly",
+    description: "Generate 1 to 50 UUID v4s instantly. Supports uppercase toggle, hyphen toggle, and copy-all functionality.",
+  },
+  ja: {
+    title: "UUID生成器 — UUID v4を即時生成&コピー",
+    description: "UUID v4を1個から50個まで即座に生成。大文字/小文字切替、ハイフン有無、一括コピー機能を提供。",
+  },
+  fr: {
+    title: "Générateur UUID — Générer et Copier des UUID v4",
+    description: "Générez de 1 à 50 UUID v4 instantanément. Supporte la bascule majuscule, la bascule tirets et la copie globale.",
+  },
+  es: {
+    title: "Generador UUID — Genera y Copia UUID v4 al Instante",
+    description: "Genera de 1 a 50 UUID v4 al instante. Soporta alternancia de mayúsculas, guiones y copia de todos los resultados.",
+  },
+  zh: {
+    title: "UUID生成器 — 即時生成並複製UUID v4",
+    description: "即時生成1至50個UUID v4。支持大小寫切換、連字符切換和全部複製功能。",
+  },
+  cn: {
+    title: "UUID生成器 — 即时生成并复制UUID v4",
+    description: "即时生成1至50个UUID v4。支持大小写切换、连字符切换和全部复制功能。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <UuidGeneratorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

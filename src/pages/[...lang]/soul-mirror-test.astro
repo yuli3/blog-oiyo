@@ -1,0 +1,29 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SoulMirrorTestComp from "../../components/tests/SoulMirrorTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "소울 미러 테스트: 나의 에니어그램 유형은?", description: "27개의 질문으로 9가지 에니어그램 성격 유형 중 나의 핵심 유형을 발견하세요. 완벽주의자·조력가·성취가·개인주의자·탐구자·충성가·열정가·도전자·평화주의자 중 어느 유형?" },
+  en: { title: "Soul Mirror Test: What's Your Enneagram Type?", description: "Discover your core Enneagram type among 9 personality types through 27 questions. Perfectionist, Helper, Achiever, Individualist, Investigator, Loyalist, Enthusiast, Challenger, or Peacemaker?" },
+  ja: { title: "ソウルミラーテスト：あなたのエニアグラムタイプは？", description: "27の質問で9つのエニアグラム性格タイプの中から自分のコアタイプを発見しましょう。完全主義者・助力者・達成者・個人主義者・研究者・忠誠家・熱狂者・挑戦者・平和主義者のどれ？" },
+  fr: { title: "Test Soul Mirror : Quel est votre type d'Ennéagramme ?", description: "Découvrez votre type central d'Ennéagramme parmi 9 types de personnalité à travers 27 questions. Perfectionniste, Aidant, Battant, Individualiste, Investigateur, Loyal, Enthousiaste, Meneur ou Pacificateur ?" },
+  es: { title: "Test Soul Mirror: ¿Cuál es tu tipo de Eneagrama?", description: "Descubre tu tipo central del Eneagrama entre 9 tipos de personalidad a través de 27 preguntas. ¿Perfeccionista, Ayudador, Triunfador, Individualista, Investigador, Leal, Entusiasta, Desafiador o Pacificador?" },
+  zh: { title: "靈魂鏡測試：你的九型人格是哪一型？", description: "透過27個問題，在9種九型人格類型中發現你的核心類型。完美主義者、助人者、成就者、個人主義者、探索者、忠誠者、熱情者、挑戰者還是和平者？" },
+  cn: { title: "灵魂镜测试：你的九型人格是哪一型？", description: "通过27个问题，在9种九型人格类型中发现你的核心类型。完美主义者、助人者、成就者、个人主义者、探索者、忠诚者、热情者、挑战者还是和平者？" },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <SoulMirrorTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

@@ -1,0 +1,29 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import StrengthSageTestComp from "../../components/tests/StrengthSageTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "강점 발견 테스트: 나의 숨겨진 강점은?", description: "12개의 상황 질문으로 창조자·분석자·연결자·실행자·치유자·리더 중 나의 핵심 강점 유형을 발견하세요." },
+  en: { title: "Strength Sage Test: What's Your Hidden Strength?", description: "Discover your core strength type — Creator, Analyzer, Connector, Achiever, Healer, or Leader — through 12 situational questions." },
+  ja: { title: "ストレングスセージテスト：あなたの隠れた強みは？", description: "12の状況質問で、クリエイター・アナライザー・コネクター・アチーバー・ヒーラー・リーダーのうちあなたのコア強みタイプを発見しましょう。" },
+  fr: { title: "Test Strength Sage : Quelle est votre force cachée?", description: "Découvrez votre type de force fondamentale — Créateur, Analyste, Connecteur, Réalisateur, Guérisseur ou Leader — à travers 12 questions situationnelles." },
+  es: { title: "Test Strength Sage: ¿Cuál es tu fuerza oculta?", description: "Descubre tu tipo de fortaleza principal — Creador, Analizador, Conector, Logrador, Sanador o Líder — a través de 12 preguntas situacionales." },
+  zh: { title: "優勢賢者測試：你的隱藏優勢是什麼？", description: "通過12個情境問題發現你的核心優勢類型——創造者、分析者、連接者、成就者、治癒者或領導者。" },
+  cn: { title: "优势贤者测试：你的隐藏优势是什么？", description: "通过12个情境问题发现你的核心优势类型——创造者、分析者、连接者、成就者、治愈者或领导者。" },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <StrengthSageTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

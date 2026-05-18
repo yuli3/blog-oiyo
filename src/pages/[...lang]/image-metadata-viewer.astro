@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import MetadataViewer from "../../components/tools/MetadataViewer";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "이미지 메타데이터 뷰어 — 사진 EXIF 정보 확인",
+    description: "사진의 EXIF 메타데이터(촬영 날짜, 카메라 기종, GPS 위치 등)를 확인하세요. 개인정보 보호를 위한 메타데이터 삭제 방법도 안내합니다.",
+  },
+  en: {
+    title: "Image Metadata Viewer",
+    description: "View EXIF metadata from your photos including capture date, camera model, GPS location, and more.",
+  },
+  ja: {
+    title: "画像メタデータビューアー",
+    description: "写真のEXIFメタデータ（撮影日時、カメラ機種、GPS位置情報など）を確認します。",
+  },
+  fr: {
+    title: "Visionneur de Métadonnées d'Image",
+    description: "Visualisez les métadonnées EXIF de vos photos incluant la date de prise, le modèle d'appareil et la localisation GPS.",
+  },
+  es: {
+    title: "Visor de Metadatos de Imagen",
+    description: "Ve los metadatos EXIF de tus fotos incluyendo fecha de captura, modelo de cámara y ubicación GPS.",
+  },
+  zh: {
+    title: "圖片元數據查看器",
+    description: "查看照片的EXIF元數據，包括拍攝日期、相機型號、GPS位置等信息。",
+  },
+  cn: {
+    title: "图片元数据查看器",
+    description: "查看照片的EXIF元数据，包括拍摄日期、相机型号、GPS位置等信息。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <MetadataViewer client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

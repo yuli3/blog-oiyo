@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import AnimalPersonalityTestComp from "../../components/tests/AnimalPersonalityTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "나의 정신 동물 테스트 — 내 본능을 대표하는 동물은?",
+    description: "16가지 질문으로 당신의 정신 동물(독수리·늑대·여우·곰·돌고래·부엉이·호랑이·토끼)을 알아보세요. 핵심 강점, 그림자 면, 잘 맞는 동물도 확인할 수 있습니다.",
+  },
+  en: {
+    title: "Spirit Animal Test — What Animal Represents You?",
+    description: "Discover your spirit animal (Eagle, Wolf, Fox, Bear, Dolphin, Owl, Tiger, Rabbit) through 16 questions. Includes core strengths, shadow sides, and compatible animals.",
+  },
+  ja: {
+    title: "私の精神動物テスト — 私の本能を表す動物は？",
+    description: "16の質問で精神動物（ワシ・オオカミ・キツネ・クマ・イルカ・フクロウ・トラ・ウサギ）を発見しましょう。核心的強み、シャドウ面、相性の良い動物も確認できます。",
+  },
+  fr: {
+    title: "Test de l'Animal Spirituel — Quel Animal Êtes-vous?",
+    description: "Découvrez votre animal spirituel parmi 8 archétypes à travers 16 questions. Inclut forces, côté ombre et animaux compatibles.",
+  },
+  es: {
+    title: "Test del Animal Espiritual — ¿Qué Animal Te Representa?",
+    description: "Descubre tu animal espiritual entre 8 arquetipos con 16 preguntas. Incluye fortalezas, lado sombra y animales compatibles.",
+  },
+  zh: {
+    title: "精神動物測試 — 哪種動物代表您？",
+    description: "通過16個問題發現您的精神動物（老鷹、狼、狐狸、熊、海豚、貓頭鷹、老虎、兔子）。包括核心優勢、陰暗面和相容動物。",
+  },
+  cn: {
+    title: "精神动物测试 — 哪种动物代表您？",
+    description: "通过16个问题发现您的精神动物（老鹰、狼、狐狸、熊、海豚、猫头鹰、老虎、兔子）。包括核心优势、阴暗面和相容动物。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <AnimalPersonalityTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

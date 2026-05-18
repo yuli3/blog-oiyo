@@ -1,0 +1,123 @@
+---
+locale: en
+title: "Developer Unit Converter — Bits, Bytes, Number Bases, and Time Units in One Place"
+category: Technology
+author: OIYO Editorial
+tags:
+  - DeveloperTools
+  - UnitConversion
+  - Programming
+  - ComputerScience
+  - BaseConversion
+description: >-
+  A unit conversion tool built for developers. Covers data size conversions between bits, bytes, and kilobytes; number base conversions between binary, octal, and hexadecimal; and time unit conversions between milliseconds, seconds, and minutes — all in one place.
+pubDate: '2026-05-12'
+---
+
+## Unit Conversion for Developers
+
+When coding, you repeatedly need to convert between units. Is this file size in bytes or kilobytes? How many minutes is that API response time in milliseconds? How do you convert hexadecimal to decimal? This tool handles those calculations quickly.
+
+<DeveloperUnitConverter locale="en" />
+
+---
+
+## Data Size Units
+
+The basic unit of computer data is the **bit**, and 8 bits make one byte.
+
+| Unit | Size | Abbreviation |
+|------|------|-------------|
+| Bit | 0 or 1 | bit |
+| Byte | 8 bits | B |
+| Kilobyte | 1,024 B | KB |
+| Megabyte | 1,024 KB | MB |
+| Gigabyte | 1,024 MB | GB |
+| Terabyte | 1,024 GB | TB |
+| Petabyte | 1,024 TB | PB |
+
+**Note**: Hard disk manufacturers label drives using 1 KB = 1,000 B (decimal), but operating systems calculate 1 KB = 1,024 B (binary). This difference is why a "500 GB hard drive" actually shows up as about 465 GiB in your OS.
+
+---
+
+## Number Base Conversion
+
+### Decimal → Binary
+
+Repeatedly divide by 2 and read the remainders in reverse order.
+
+```
+10 ÷ 2 = 5 remainder 0
+ 5 ÷ 2 = 2 remainder 1
+ 2 ÷ 2 = 1 remainder 0
+ 1 ÷ 2 = 0 remainder 1
+Result: 1010₂ (read remainders in reverse)
+```
+
+### Hexadecimal (Hex)
+
+Hexadecimal uses digits 0–9 and letters A–F. It appears frequently in color codes (`#FF5733`), memory addresses, and SHA hashes.
+
+| Decimal | Hex |
+|---------|-----|
+| 10 | A |
+| 11 | B |
+| 12 | C |
+| 13 | D |
+| 14 | E |
+| 15 | F |
+| 16 | 10 |
+| 255 | FF |
+
+**CSS color example**: `#FF5733` = R:255, G:87, B:51
+
+### Quick Base Conversion (JavaScript/Python)
+
+```javascript
+// JavaScript
+(255).toString(2)   // → "11111111" (binary)
+(255).toString(16)  // → "ff" (hexadecimal)
+parseInt("ff", 16)  // → 255 (hex → decimal)
+```
+
+```python
+# Python
+bin(255)   # → '0b11111111'
+hex(255)   # → '0xff'
+int('ff', 16)  # → 255
+```
+
+---
+
+## Time Unit Conversion
+
+These come up constantly with API response times, cache TTLs, and timer configurations.
+
+| Unit | Conversion |
+|------|-----------|
+| 1 second | 1,000 milliseconds (ms) |
+| 1 minute | 60 seconds = 60,000 ms |
+| 1 hour | 3,600 seconds = 3,600,000 ms |
+| 1 day | 86,400 seconds |
+| 1 week | 604,800 seconds |
+
+**Pro tip**: JWT expiration times, Redis TTLs, and setTimeout values all use milliseconds or seconds. Since it is easy to mix them up, define them as named constants:
+
+```typescript
+const ONE_HOUR_MS = 60 * 60 * 1000;
+const ONE_DAY_SECONDS = 24 * 60 * 60;
+```
+
+---
+
+## Network Speed Units
+
+| Unit | Description |
+|------|------------|
+| bps | bits per second |
+| Kbps | 1,000 bps |
+| Mbps | 1,000,000 bps |
+| Gbps | 1,000,000,000 bps |
+
+**Note**: Internet speeds are measured in **bits** (lowercase b), while file sizes use **Bytes** (uppercase B).
+- Download time for a 100 MB file over a 100 Mbps connection: 100 MB × 8 = 800 Mb ÷ 100 Mbps = **8 seconds**

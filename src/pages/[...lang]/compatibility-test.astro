@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CompatibilityTestComp from "../../components/tests/CompatibilityTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "궁합 테스트 — 나와 파트너의 성격 궁합 분석",
+    description: "소통, 가치관, 라이프스타일, 정서 4가지 차원에서 나와 파트너의 궁합을 분석합니다. 24개 질문으로 차원별 호환성 % 확인.",
+  },
+  en: {
+    title: "Compatibility Test — Analyzing Your Personality Compatibility",
+    description: "Analyze your compatibility with your partner across 4 dimensions: communication, values, lifestyle, and emotional. Check compatibility % per dimension with 24 questions.",
+  },
+  ja: {
+    title: "相性テスト — 自分とパートナーの性格相性分析",
+    description: "コミュニケーション、価値観、ライフスタイル、情緒の4つの次元でパートナーとの相性を分析します。24の質問で各次元の相性%を確認。",
+  },
+  fr: {
+    title: "Test de compatibilité — Analyse de la compatibilité de personnalité",
+    description: "Analysez votre compatibilité avec votre partenaire sur 4 dimensions : communication, valeurs, style de vie et émotionnel.",
+  },
+  es: {
+    title: "Test de compatibilidad — Análisis de compatibilidad de personalidad",
+    description: "Analice su compatibilidad con su pareja en 4 dimensiones: comunicación, valores, estilo de vida y emocional.",
+  },
+  zh: {
+    title: "相容性測試 — 分析您與伴侶的性格相容性",
+    description: "從溝通、價值觀、生活方式、情感4個維度分析您與伴侶的相容性。通過24個問題查看各維度相容性百分比。",
+  },
+  cn: {
+    title: "相容性测试 — 分析您与伴侣的性格相容性",
+    description: "从沟通、价值观、生活方式、情感4个维度分析您与伴侣的相容性。通过24个问题查看各维度相容性百分比。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <CompatibilityTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

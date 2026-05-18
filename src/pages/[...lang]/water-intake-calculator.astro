@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import WaterIntakeCalculatorComp from "../../components/tools/WaterIntakeCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "하루 물 섭취량 계산기 — 내 적정 수분 섭취량은?",
+    description: "체중·활동량·기온을 고려해 오늘 마셔야 할 적정 수분량을 계산합니다. 커피·알코올 이뇨 효과도 반영합니다.",
+  },
+  en: {
+    title: "Daily Water Intake Calculator — How Much Should You Drink?",
+    description: "Calculate your optimal daily water intake based on weight, activity level, and temperature. Includes caffeine and alcohol dehydration offsets.",
+  },
+  ja: {
+    title: "1日水分摂取量計算機 — 適切な水分補給量は？",
+    description: "体重・活動量・気温を考慮して1日に飲むべき適切な水分量を計算します。",
+  },
+  fr: {
+    title: "Calculateur d'Apport en Eau Quotidien",
+    description: "Calculez votre apport en eau optimal selon votre poids, niveau d'activité et la température.",
+  },
+  es: {
+    title: "Calculadora de Ingesta Diaria de Agua",
+    description: "Calcula tu ingesta óptima de agua según tu peso, nivel de actividad y temperatura.",
+  },
+  zh: {
+    title: "每日飲水量計算機 — 我應該喝多少水？",
+    description: "根據體重、活動量和氣溫計算最佳每日飲水量，還考慮咖啡因和酒精的脫水效果。",
+  },
+  cn: {
+    title: "每日饮水量计算器 — 我应该喝多少水？",
+    description: "根据体重、活动量和气温计算最佳每日饮水量，还考虑咖啡因和酒精的脱水效果。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <WaterIntakeCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

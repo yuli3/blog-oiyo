@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CaffeineCalculatorComp from "../../components/tools/CaffeineCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "카페인 계산기 — 오늘 마신 카페인 안전한가요?",
+    description: "커피·에너지드링크·차 등 음료별 카페인 함량을 계산하고 하루 권장 섭취량과 비교해보세요.",
+  },
+  en: {
+    title: "Caffeine Intake Calculator",
+    description: "Calculate your daily caffeine intake from coffee, energy drinks, tea, and more. Compare against recommended daily limits.",
+  },
+  ja: {
+    title: "カフェイン摂取量計算機",
+    description: "コーヒー・エナジードリンク・お茶などのカフェイン含量を計算し、1日の推奨摂取量と比較します。",
+  },
+  fr: {
+    title: "Calculateur d'Apport en Caféine",
+    description: "Calculez votre apport quotidien en caféine depuis le café, les boissons énergisantes et le thé.",
+  },
+  es: {
+    title: "Calculadora de Consumo de Cafeína",
+    description: "Calcula tu ingesta diaria de cafeína del café, bebidas energéticas, té y más.",
+  },
+  zh: {
+    title: "咖啡因攝取量計算機",
+    description: "計算咖啡、能量飲料、茶等飲品的咖啡因含量，並與每日建議攝取量比較。",
+  },
+  cn: {
+    title: "咖啡因摄入量计算器",
+    description: "计算咖啡、能量饮料、茶等饮品的咖啡因含量，并与每日建议摄入量比较。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <CaffeineCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

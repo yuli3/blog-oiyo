@@ -1,0 +1,161 @@
+---
+locale: en
+title: "Operating Systems Fundamentals — Between Hardware and Software"
+category: Computer Science
+author: OIYO Editorial
+tags:
+  - OperatingSystems
+  - Processes
+  - MemoryManagement
+  - Scheduling
+  - Deadlock
+description: >-
+  Understand how an operating system manages processes, memory, and file systems. Learn the principles behind process scheduling, deadlocks, and virtual memory to grasp how computer systems truly work.
+pubDate: '2026-05-16'
+---
+
+## What Is an Operating System?
+
+An operating system is the intermediate layer between hardware and users/applications.
+
+```
+Roles of an OS:
+→ Process management: allocating CPU time
+→ Memory management: allocating and reclaiming RAM
+→ File system: abstracting storage devices
+→ I/O management: device drivers
+→ Security: access control
+
+Major operating systems: Linux, Windows, macOS, Android, iOS
+```
+
+---
+
+## Process vs. Thread
+
+```
+Process:
+→ An instance of a running program
+→ Has its own isolated memory space (code, data, stack, heap)
+→ Inter-process communication: IPC (pipes, sockets)
+
+Thread:
+→ A unit of execution within a process
+→ Shares the memory of its parent process
+→ Lower creation/context-switch cost than a process
+→ Can cause synchronization issues
+
+Multi-core utilization:
+→ Single core: time-shares between processes (appears concurrent)
+→ Multi-core: enables genuine parallel execution
+```
+
+---
+
+## Process Scheduling
+
+The OS decides which process gets CPU time:
+
+```
+Scheduling algorithms:
+
+FCFS (First-Come, First-Served):
+→ Executes in the order of arrival
+→ Simple, but long jobs block short ones (convoy effect)
+
+SJF (Shortest Job First):
+→ Runs the shortest job next
+→ Optimal average wait time, but long jobs may starve
+
+Round Robin:
+→ Each process gets a fixed time quantum
+→ When quantum expires → moved to the back of the ready queue
+→ Most widely used (Linux, Windows)
+
+Priority Scheduling:
+→ Higher-priority processes run first
+→ Starvation prevention via aging (priority increases the longer a job waits)
+```
+
+---
+
+## Synchronization Issues — Race Conditions
+
+```
+Race Condition:
+Two threads access the same resource simultaneously → unpredictable results
+
+Example:
+count = 0
+Thread A: count = count + 1  (read → compute → write)
+Thread B: count = count + 1  (runs concurrently)
+→ Result might be count = 1  (should be 2)
+
+Solutions:
+Mutex:     only one thread can access at a time
+Semaphore: allows up to n threads simultaneously
+```
+
+### Deadlock
+
+```
+4 Necessary Conditions (Coffman Conditions):
+1. Mutual Exclusion: resources are held exclusively
+2. Hold and Wait: a process holds resources while waiting for others
+3. No Preemption: resources cannot be forcibly taken away
+4. Circular Wait: A → B → C → A cycle
+
+Solutions:
+Prevention: eliminate one of the four conditions (difficult in practice)
+Avoidance:  Banker's Algorithm (maintain a safe state)
+Detection & Recovery: detect deadlock then terminate a process
+```
+
+---
+
+## Memory Management
+
+```
+Virtual Memory:
+→ Creates the illusion of a larger address space than physical RAM
+→ Only the needed portion is loaded into RAM at any time
+→ The rest resides on disk (swap space)
+
+Page Replacement Algorithms:
+LRU (Least Recently Used): replace the page not used for the longest time — most widely used
+FIFO: replace the oldest page
+Optimal: requires knowing future references — theoretical only
+
+Cache hierarchy (fast → slow, small → large):
+Registers (ps) → L1 Cache (1ns) → L2 Cache (5ns) → L3 (20ns)
+→ RAM (100ns) → SSD (100µs) → HDD (10ms)
+```
+
+---
+
+## File System
+
+```
+File system roles:
+→ Manages the logical structure of files and directories
+→ Allocates and tracks storage device blocks
+
+Common file systems:
+FAT32: legacy Windows, USB drives (4 GB file size limit)
+NTFS:  modern Windows (large files, security, journaling)
+ext4:  Linux default
+APFS:  macOS (encryption, snapshots)
+
+inode (Linux):
+→ Stores file metadata (size, permissions, timestamps, data block pointers)
+→ Filename ≠ inode (hard links are possible because of this)
+```
+
+---
+
+## Key Takeaways
+
+*Process: isolated memory / Thread: shared memory (lighter, but requires synchronization)*
+*Round Robin: the most practical scheduling algorithm (time-quantum based)*
+*Deadlock 4 conditions: mutual exclusion, hold-and-wait, no preemption, circular wait*
+*Virtual memory: illusion of more space than physical RAM — managed via page replacement*

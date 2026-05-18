@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import NarcissismTestComp from "../../components/tests/NarcissismTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "자기애 성향 테스트 — 나는 얼마나 자기중심적인가?",
+    description: "NPI 기반 16가지 강제 선택 문항으로 나의 자기애 성향을 알아보세요. 겸손형부터 높은 자기애까지 4가지 유형으로 분석합니다.",
+  },
+  en: {
+    title: "Narcissism Trait Test — How Self-Centered Are You?",
+    description: "Explore your narcissistic traits with 16 forced-choice NPI-based questions. Get insights across 4 profiles from humble to high narcissism.",
+  },
+  ja: {
+    title: "自己愛傾向テスト — 私はどれだけ自己中心的？",
+    description: "NPI基準の16問の強制選択で自己愛傾向を調べましょう。謙虚型から高自己愛まで4つのプロフィールで分析します。",
+  },
+  fr: {
+    title: "Test de narcissisme — Êtes-vous centré sur vous-même?",
+    description: "Explorez vos traits narcissiques avec 16 questions à choix forcé basées sur le NPI. Analyse en 4 profils.",
+  },
+  es: {
+    title: "Test de narcisismo — ¿Qué tan egocéntrico eres?",
+    description: "Explora tus rasgos narcisistas con 16 preguntas de elección forzada basadas en el NPI. Análisis en 4 perfiles.",
+  },
+  zh: {
+    title: "自戀特質測試 — 你有多自我中心？",
+    description: "通過16道NPI強制選擇題探索你的自戀特質，分析4種類型從謙遜到高自戀。",
+  },
+  cn: {
+    title: "自恋特质测试 — 你有多自我中心？",
+    description: "通过16道NPI强制选择题探索你的自恋特质，分析4种类型从谦逊到高自恋。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <NarcissismTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

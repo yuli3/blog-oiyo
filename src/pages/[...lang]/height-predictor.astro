@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import HeightPredictorComp from "../../components/tools/HeightPredictor";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "자녀 키 예측 계산기 — 부모 키로 예측하는 아이 최종 키",
+    description: "아버지와 어머니의 키를 입력하면 자녀의 예상 최종 신장을 계산합니다. 중간 부모 키 공식 기반 예측 도구입니다.",
+  },
+  en: {
+    title: "Child Height Predictor",
+    description: "Predict your child's adult height based on parents' heights using the mid-parent height formula.",
+  },
+  ja: {
+    title: "子供の身長予測計算機",
+    description: "父親と母親の身長を入力すると、子供の予測最終身長を計算します。中間親身長公式に基づく予測ツールです。",
+  },
+  fr: {
+    title: "Prédicteur de Taille de l'Enfant",
+    description: "Prédisez la taille adulte de votre enfant en fonction des tailles des parents.",
+  },
+  es: {
+    title: "Predictor de Estatura del Niño",
+    description: "Predice la estatura adulta de tu hijo basándose en las estaturas de los padres.",
+  },
+  zh: {
+    title: "子女身高預測計算機",
+    description: "輸入父母身高，使用中間親本身高公式預測子女的最終成人身高。",
+  },
+  cn: {
+    title: "子女身高预测计算器",
+    description: "输入父母身高，使用中间亲本身高公式预测子女的最终成人身高。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <HeightPredictorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CognitiveBiasTestComp from "../../components/tests/CognitiveBiasTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "인지 편향 유형 테스트 — 나는 어떤 편향에 취약한가?",
+    description: "15가지 문항으로 확증 편향·더닝-크루거·가용성 휴리스틱·손실 회피·귀인 편향 5가지 유형을 분석합니다. 가장 강한 편향 Top 2와 개선 방법을 알아보세요.",
+  },
+  en: {
+    title: "Cognitive Bias Test — Which Biases Affect You Most?",
+    description: "15 questions to analyze your susceptibility to 5 bias types: confirmation bias, Dunning-Kruger, availability heuristic, loss aversion, and attribution bias. Discover your top 2 biases and how to reduce them.",
+  },
+  ja: {
+    title: "認知バイアスタイプテスト — 私はどんなバイアスに弱い？",
+    description: "15問で確証バイアス・ダニング＝クルーガー効果・利用可能性ヒューリスティック・損失回避・帰属バイアスの5種類を分析。最も強いTop 2バイアスと改善策を発見しましょう。",
+  },
+  fr: {
+    title: "Test de biais cognitifs — Quels biais vous affectent le plus?",
+    description: "15 questions pour analyser 5 types de biais: biais de confirmation, effet Dunning-Kruger, heuristique de disponibilité, aversion aux pertes, biais d'attribution.",
+  },
+  es: {
+    title: "Test de sesgos cognitivos — ¿Qué sesgos te afectan más?",
+    description: "15 preguntas para analizar 5 tipos de sesgos: sesgo de confirmación, efecto Dunning-Kruger, heurística de disponibilidad, aversión a las pérdidas y sesgo de atribución.",
+  },
+  zh: {
+    title: "認知偏誤類型測試 — 我對哪種偏誤最脆弱？",
+    description: "通過15道題分析確認偏誤、鄧寧-克魯格效應、可用性啟發、損失厭惡、歸因偏誤5種類型。發現你最強的Top 2偏誤及改善方法。",
+  },
+  cn: {
+    title: "认知偏见类型测试 — 我对哪种偏见最脆弱？",
+    description: "通过15道题分析确认偏见、邓宁-克鲁格效应、可用性启发、损失厌恶、归因偏见5种类型。发现你最强的Top 2偏见及改善方法。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <CognitiveBiasTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

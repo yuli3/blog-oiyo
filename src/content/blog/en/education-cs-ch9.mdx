@@ -1,0 +1,148 @@
+---
+locale: en
+title: "Cloud Computing and Distributed Systems Fundamentals"
+category: Computer Science
+author: OIYO Editorial
+tags:
+  - Cloud
+  - AWS
+  - DistributedSystems
+  - Microservices
+  - Scalability
+description: >-
+  Understand the differences between IaaS, PaaS, and SaaS and the core services of AWS, GCP, and Azure. This chapter covers horizontal scaling, load balancing, microservice architecture, and the CAP theorem for designing systems in the cloud era.
+pubDate: '2026-05-16'
+---
+
+## What Is Cloud Computing
+
+Cloud computing delivers computing resources (servers, storage, databases, networking) on demand over the internet.
+
+```
+On-Premises vs Cloud:
+On-Premises: buy, install, and manage your own servers
+→ High upfront cost, slow to change, requires dedicated staff
+
+Cloud: use and pay for only what you need
+→ No upfront cost, elastic scaling, reduced management burden
+→ Long-term cost comparison analysis still needed
+```
+
+---
+
+## Cloud Service Models
+
+```
+IaaS (Infrastructure as a Service):
+→ Provides virtual servers, storage, and networking
+→ User manages OS, middleware, and applications
+→ Examples: AWS EC2, Google Compute Engine
+
+PaaS (Platform as a Service):
+→ Provides a development and deployment platform
+→ User only manages application code (infrastructure is automated)
+→ Examples: Google App Engine, Heroku, AWS Elastic Beanstalk
+
+SaaS (Software as a Service):
+→ Subscribe to finished software
+→ Provider manages infrastructure, platform, and application
+→ Examples: Gmail, Slack, Salesforce, Office 365
+```
+
+---
+
+## Key Cloud Services (AWS)
+
+```
+Compute:
+EC2: Virtual servers (instances)
+Lambda: Serverless function execution (event-driven)
+ECS/EKS: Container management (Docker/Kubernetes)
+
+Storage:
+S3: Object storage (images, files, static assets)
+EBS: Block storage attached to EC2 (virtual HDD)
+EFS: Shared file system
+
+Databases:
+RDS: Managed relational DB (MySQL, PostgreSQL)
+DynamoDB: Managed NoSQL
+ElastiCache: Redis/Memcached cache
+
+Networking:
+CloudFront: CDN (global content delivery)
+Route 53: DNS service
+VPC: Virtual Private Cloud
+```
+
+---
+
+## Scalability
+
+```
+Vertical Scaling (Scale Up):
+→ Upgrade server hardware (add CPU, RAM)
+→ Has physical limits, single point of failure
+
+Horizontal Scaling (Scale Out):
+→ Add more servers
+→ Theoretically unlimited
+→ Requires a load balancer
+
+Load Balancing:
+→ Distribute traffic across multiple servers
+→ Round Robin, Least Connections, IP Hash
+→ Health checks automatically remove failed servers
+```
+
+---
+
+## Microservice Architecture
+
+```
+Monolithic:
+→ All features in a single deployable unit
+→ Simple but hard to scale and change
+
+Microservices:
+→ Each feature separated into an independent service
+→ Each service deployed and scaled independently
+→ Services communicate via APIs (REST, gRPC, message queues)
+
+Pros: Independent deployment, technology diversity, fault isolation
+Cons: Complex operations, distributed transactions, network overhead
+
+Real world: Used by large-scale services like Netflix and Amazon
+```
+
+---
+
+## CAP Theorem
+
+In a distributed system, you cannot guarantee all three simultaneously:
+
+```
+Consistency:
+→ All nodes see the same data at the same time
+
+Availability:
+→ Every request receives a response (even with failed nodes)
+
+Partition Tolerance:
+→ System continues to operate despite network partitions
+
+In practice:
+→ P (Partition Tolerance) is required in distributed systems
+→ CP: Consistency + Partition Tolerance (HBase, MongoDB with config)
+→ AP: Availability + Partition Tolerance (Cassandra, DynamoDB)
+→ Choose based on your trade-off requirements
+```
+
+---
+
+## Key Takeaways
+
+*IaaS(virtual servers) > PaaS(platform) > SaaS(finished app) — decreasing management responsibility*
+*Horizontal scaling (more servers) + load balancer = the core of cloud scalability*
+*CAP theorem: choose only 2 of Consistency, Availability, and Partition Tolerance*
+*Serverless (Lambda): deploy only code, no infrastructure management needed*

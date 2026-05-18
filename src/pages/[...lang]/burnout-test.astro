@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import BurnoutTestComp from "../../components/tests/BurnoutTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "번아웃 자가 진단 — 나는 지금 번아웃 상태일까?",
+    description: "10가지 질문으로 나의 번아웃 수준을 진단해보세요. 심각도에 따른 회복 전략과 자기돌봄 방법을 알아봅니다.",
+  },
+  en: {
+    title: "Burnout Self-Assessment — Am I Burned Out?",
+    description: "Diagnose your burnout level with 10 questions. Get personalized recovery strategies and self-care tips based on your results.",
+  },
+  ja: {
+    title: "バーンアウト自己診断 — 今、燃え尽きていますか？",
+    description: "10の質問でバーンアウトレベルを診断。深刻度に応じた回復戦略とセルフケア方法をご紹介します。",
+  },
+  fr: {
+    title: "Auto-diagnostic du Burnout — Êtes-vous en burnout?",
+    description: "Diagnostiquez votre niveau de burnout en 10 questions. Obtenez des stratégies de récupération personnalisées.",
+  },
+  es: {
+    title: "Autodiagnóstico de Burnout — ¿Estás agotado?",
+    description: "Diagnostica tu nivel de burnout con 10 preguntas. Obtén estrategias de recuperación personalizadas.",
+  },
+  zh: {
+    title: "職業倦怠自我評估 — 我現在精疲力竭嗎？",
+    description: "通過10個問題診斷您的職業倦怠程度。根據結果獲得個性化的恢復策略。",
+  },
+  cn: {
+    title: "职业倦怠自我评估 — 我现在精疲力竭吗？",
+    description: "通过10个问题诊断您的职业倦怠程度。根据结果获得个性化的恢复策略。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <BurnoutTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

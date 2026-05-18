@@ -1,0 +1,104 @@
+---
+track: academy
+series: '금융공학 기초'
+chapter: 11
+title: 金融機械学習の基礎：データが資本を動かす
+description: >-
+  伝統的な量子戦略を超えて、膨大なデータを介して非線形パターンを学習する機械学習の基本概念と、アルゴリズムトレーディングと信用評価などの実用的な活用事例を学びます。
+pubDate: 2026-03-01T00:00:00.000Z
+category: Financial Engineering
+tags:
+  - Education
+  - financial-engineering
+locale: ja
+author: Oiyo
+---
+
+
+import {
+  LectureTable,
+  LectureProcess,
+  LecturePieChart,
+  LectureBarChart,
+} from "@/features/education-common/components/LectureVisuals";
+import {
+  NPVChart,
+  FrontierChart,
+  SMLChart,
+  OptionPayoffChart,
+} from "@/features/education-finance/FinanceCharts";
+
+# 금융 머신러닝: 퀀트의 새로운 무기
+
+블랙-숄즈나 MPT(현대 포트폴리오 이론)가 수학적 가정을 세우고 답을 구하는 **연역적 모델링**이라면, 머신러닝은 방대한 시장 데이터로부터 스스로 규칙을 찾아내는 **귀납적 모델링**입니다. 최근의 금융공학은 이 두 세계의 융합으로 나아가고 있습니다.
+
+## 1. 금융 분야에서의 머신러닝 활용
+
+금융 데이터는 소음(Noise)이 매우 많고 변동성이 심하기 때문에 일반적인 머신러닝보다 더 정교한 접근이 필요합니다.
+
+<LectureTable
+  title="금융 분야별 주요 머신러닝 활용 사례"
+  headers={["분야", "활용 목적", "주요 알고리즘"]}
+  rows={[
+    ["트레이딩", "가격 방향성 예측 및 알파 발굴", "Random Forest, LSTM, XGBoost"],
+    ["리스크 관리", "이상 거래 탐지(FDS) 및 부도 예측", "SVM, Isolation Forest"],
+    ["포트폴리오", "자산 간 복잡한 비선형 관계 파악", "Clustering (HRP), 강화학습"],
+    ["고객 분석", "신용 점수 산출 및 이탈 확률 예측", "Logistic Regression, Gradient Boosting"],
+  ]}
+  highlightColumns={[0]}
+  client:load
+/>
+
+## 2. 알고리즘 트레이딩의 워크플로우
+
+머신러닝 기반의 투자 전략이 수립되고 실행되는 과정은 다음과 같습니다.
+
+<LectureProcess
+  steps={[
+    {
+      label: "데이터 전처리",
+      description: "금융 시계열 데이터의 결측치를 처리하고 정상성(Stationarity)을 확보합니다.",
+    },
+    {
+      label: "특성 추출 (Feature Engineering)",
+      description: "이동평균, RSI 등 기술적 지표나 대체 데이터(뉴스 등)를 생성합니다.",
+    },
+    {
+      label: "모델 학습 및 백테스팅",
+      description: "과거 데이터를 통해 모델을 훈련시키고 가상 수익률을 검증합니다.",
+    },
+    {
+      label: "실행 및 모니터링",
+      description: "실제 시장에서 주문을 집행하며 오버피팅 여부를 감시합니다.",
+    },
+  ]}
+  client:load
+/>
+
+## 3. 전통적 통계 vs 머신러닝
+
+두 방식은 경쟁 관계가 아닌 보완 관계에 있습니다.
+
+<LecturePieChart
+  title="현대 자산운용사의 팩터 비중 변화 (예시)"
+  description="전통적 가치/성장 팩터와 머신러닝 기반의 비정형 팩터가 공존하는 모습입니다."
+  data={[
+    { name: "전통적 펀더멘털", value: 45, color: "#94a3b8" },
+    { name: "거시 경제 지표", value: 25, color: "#60a5fa" },
+    { name: "ML 기반 대체 데이터", value: 20, color: "#3b82f6" },
+    { name: "기술적 지표", value: 10, color: "#2563eb" },
+  ]}
+  donut={true}
+  client:load
+/>
+
+---
+
+### 💡 교수님의 팁
+
+> 머신러닝의 가장 큰 적은 '과적합(Overfitting)'입니다. 과거 데이터에 너무 완벽하게 끼워 맞춘 모델은 미래 시장에서 처참하게 실패할 수 있습니다. 그래서 금융공학자들은 '성능'보다 '설명 가능성'과 '강건함(Robustness)'을 더 중요하게 생각합니다.
+
+### 🔗 다음 단계
+
+- [**금융공학의 대단원: 한계와 미래**](/education-financial-engineering/ch12/)
+- [**통계학 마스터: 비모수 통계와 PCA**](/education-statistics/ch10/)

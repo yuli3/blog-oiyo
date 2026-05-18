@@ -12,7 +12,8 @@ export const siteConfig = {
   themeColor: "#10b981", // Emerald/Green
   features: {
     scrollSnap: false,
-    toc: true,
+    // TOC intentionally disabled (commented out in article layout as well)
+    toc: false,
     pagination: true,
   },
   socials: {

@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CulturalGreetingGuideComp from "../../components/calculators/CulturalGreetingGuide";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "세계 인사 문화 가이드 — 나라별 인사 방식 완벽 정리",
+    description: "대한민국, 일본, 미국, 프랑스, 중국 등 세계 각국의 인사 문화와 비즈니스 에티켓을 알아보세요.",
+  },
+  en: {
+    title: "Cultural Greeting Guide",
+    description: "Explore greeting customs and business etiquette from around the world, including Korea, Japan, USA, France, and China.",
+  },
+  ja: {
+    title: "世界の挨拶文化ガイド — 国別の挨拶方法を完全解説",
+    description: "韓国、日本、アメリカ、フランス、中国など世界各国の挨拶文化とビジネスエチケットを学びましょう。",
+  },
+  fr: {
+    title: "Guide des Salutations Culturelles",
+    description: "Découvrez les coutumes de salutation et l'étiquette commerciale du monde entier, incluant la Corée, le Japon, les États-Unis et la France.",
+  },
+  es: {
+    title: "Guía de Saludos Culturales",
+    description: "Explora las costumbres de saludo y etiqueta de negocios de todo el mundo, incluyendo Corea, Japón, EE.UU., Francia y China.",
+  },
+  zh: {
+    title: "世界問候文化指南 — 各國問候方式完整整理",
+    description: "了解韓國、日本、美國、法國、中國等世界各國的問候文化和商務禮儀。",
+  },
+  cn: {
+    title: "世界问候文化指南 — 各国问候方式完整整理",
+    description: "了解韩国、日本、美国、法国、中国等世界各国的问候文化和商务礼仪。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-4xl px-4 py-8">
+    <CulturalGreetingGuideComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

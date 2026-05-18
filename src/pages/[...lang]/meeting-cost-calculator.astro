@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import MeetingCostCalculatorComp from "../../components/tools/MeetingCostCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "회의 비용 계산기 — 이 회의의 진짜 비용은?",
+    description: "참석자 수, 평균 연봉, 회의 시간을 입력해 회의의 실제 인건비 비용을 계산합니다. 효율적인 회의 문화를 만드세요.",
+  },
+  en: {
+    title: "Meeting Cost Calculator",
+    description: "Calculate the real cost of a meeting by number of attendees, average salary, and meeting duration. Promote meeting efficiency.",
+  },
+  ja: {
+    title: "会議コスト計算機",
+    description: "参加者数、平均年収、会議時間を入力して会議の実際の人件費コストを計算します。",
+  },
+  fr: {
+    title: "Calculateur de coût de réunion",
+    description: "Calculez le coût réel d'une réunion par nombre de participants, salaire moyen et durée.",
+  },
+  es: {
+    title: "Calculadora de costo de reuniones",
+    description: "Calcula el costo real de una reunión por número de participantes, salario promedio y duración.",
+  },
+  zh: {
+    title: "會議成本計算機",
+    description: "輸入參與人數、平均薪資和會議時間，計算會議的實際人力成本，推動高效會議文化。",
+  },
+  cn: {
+    title: "会议成本计算器",
+    description: "输入参与人数、平均薪资和会议时间，计算会议的实际人力成本，推动高效会议文化。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <MeetingCostCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

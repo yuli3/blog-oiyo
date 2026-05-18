@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PerfectionismTestComp from "../../components/tests/PerfectionismTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "완벽주의 유형 테스트 — 나의 완벽주의는 건강한가요?",
+    description: "10가지 질문으로 나의 완벽주의 유형을 알아보세요. 건강한 완벽주의, 자기 지향, 타인 지향, 사회적 완벽주의 중 어떤 유형인지 분석합니다.",
+  },
+  en: {
+    title: "Perfectionism Type Test — Is Your Perfectionism Healthy?",
+    description: "Discover your perfectionism type through 10 questions. Find out if you have healthy, self-oriented, other-oriented, or socially prescribed perfectionism.",
+  },
+  ja: {
+    title: "完璧主義タイプテスト — あなたの完璧主義は健全ですか？",
+    description: "10の質問で完璧主義のタイプを診断。健全な完璧主義、自己指向、他者指向、社会的完璧主義のどれかを分析します。",
+  },
+  fr: {
+    title: "Test de Type de Perfectionnisme — Votre perfectionnisme est-il sain?",
+    description: "Découvrez votre type de perfectionnisme à travers 10 questions.",
+  },
+  es: {
+    title: "Test de Tipo de Perfeccionismo — ¿Es tu perfeccionismo saludable?",
+    description: "Descubre tu tipo de perfeccionismo con 10 preguntas.",
+  },
+  zh: {
+    title: "完美主義類型測試 — 你的完美主義是否健康？",
+    description: "通過10個問題了解你的完美主義類型。健康完美主義、自我導向、他者導向還是社會規定型？",
+  },
+  cn: {
+    title: "完美主义类型测试 — 你的完美主义是否健康？",
+    description: "通过10个问题了解你的完美主义类型。健康完美主义、自我导向、他者导向还是社会规定型？",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <PerfectionismTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

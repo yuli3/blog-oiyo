@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import RentalYieldCalculatorComp from "../../components/tools/RentalYieldCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "임대 수익률 계산기 — 부동산 투자 수익성 분석",
+    description: "매입가, 임대료, 관리비를 입력해 임대 수익률을 계산합니다. 실질 수익률과 세후 수익률을 비교하세요.",
+  },
+  en: {
+    title: "Rental Yield Calculator",
+    description: "Analyze real estate investment profitability. Calculate gross and net rental yield with purchase price and rent.",
+  },
+  ja: {
+    title: "賃貸利回り計算機",
+    description: "購入価格、賃料、管理費を入力して賃貸利回りを計算します。実質利回りと税引後利回りを比較しましょう。",
+  },
+  fr: {
+    title: "Calculateur de rendement locatif",
+    description: "Analysez la rentabilité d'un investissement immobilier. Calculez le rendement locatif brut et net.",
+  },
+  es: {
+    title: "Calculadora de rendimiento de alquiler",
+    description: "Analiza la rentabilidad de inversión inmobiliaria. Calcula el rendimiento bruto y neto del alquiler.",
+  },
+  zh: {
+    title: "租金收益率計算機",
+    description: "輸入購買價格、租金和管理費計算租金收益率，比較毛收益率和稅後淨收益率。",
+  },
+  cn: {
+    title: "租金收益率计算器",
+    description: "输入购买价格、租金和管理费计算租金收益率，比较毛收益率和税后净收益率。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <RentalYieldCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

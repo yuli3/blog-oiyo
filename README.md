@@ -1,13 +1,22 @@
-# Astro with Tailwind
+# blog-oiyo
 
-```sh
-npm create astro@latest -- --template with-tailwindcss
-```
+Long-form content, lecture, and interactive reading platform for Oiyo, optimized for Astro and Cloudflare Pages.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/with-tailwindcss)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/with-tailwindcss)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/with-tailwindcss/devcontainer.json)
+## Start Here
 
-Astro comes with [Tailwind](https://tailwindcss.com) support out of the box. This example showcases how to style your Astro project with Tailwind.
+The operational documentation now lives in [docs/README.md](/Users/seuncho/coding/blog-oiyo/docs/README.md).
 
-For complete setup instructions, please see our [Tailwind Styling Guide](https://docs.astro.build/en/guides/styling/#tailwind).
+Read in this order:
+
+1. [Content Charter](/Users/seuncho/coding/blog-oiyo/docs/content-charter.md)
+2. [MDOC Authoring Spec](/Users/seuncho/coding/blog-oiyo/docs/mdoc-authoring-spec.md)
+3. [Lecture System Blueprint](/Users/seuncho/coding/blog-oiyo/docs/lecture-system-blueprint.md)
+4. [Credential Catalog Blueprint](/Users/seuncho/coding/blog-oiyo/docs/credential-catalog-blueprint.md)
+5. [Content Inventory Blueprint](/Users/seuncho/coding/blog-oiyo/docs/content-inventory-blueprint.md)
+
+## Key Direction
+
+1. Tracks are `academy`, `magazine`, and `interactive`.
+2. New authoring should move toward strict `MDOC` rules rather than free-form MDX usage.
+3. Qualification and lecture metadata should be stored as structured data, not buried only inside prose.
+4. The platform should remain static-first and Cloudflare Pages-friendly.

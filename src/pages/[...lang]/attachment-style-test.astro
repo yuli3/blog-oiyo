@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import AttachmentStyleTestComp from "../../components/tests/AttachmentStyleTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "애착 유형 테스트 — 나의 관계 패턴은?",
+    description: "12가지 상황 질문으로 나의 애착 유형을 알아보세요. 안정, 불안, 회피, 두려움-회피 애착 중 어떤 유형인지 분석해드립니다.",
+  },
+  en: {
+    title: "Attachment Style Test — What's Your Relationship Pattern?",
+    description: "Discover your attachment style through 12 situational questions. Find out if you're secure, anxious, avoidant, or fearful-avoidant.",
+  },
+  ja: {
+    title: "愛着スタイルテスト — あなたの関係パターンは？",
+    description: "12の状況質問で愛着スタイルを診断。安定・不安・回避・恐れ-回避のどのタイプか分析します。",
+  },
+  fr: {
+    title: "Test de Style d'Attachement — Quel est votre modèle relationnel?",
+    description: "Découvrez votre style d'attachement à travers 12 questions situationnelles. Analysez si vous êtes sécurisé, anxieux, évitant ou craintif.",
+  },
+  es: {
+    title: "Test de Estilo de Apego — ¿Cuál es tu patrón relacional?",
+    description: "Descubre tu estilo de apego con 12 preguntas situacionales. Encuentra si eres seguro, ansioso, evitativo o temeroso-evitativo.",
+  },
+  zh: {
+    title: "依附風格測試 — 你的關係模式是什麼？",
+    description: "透過12個情境問題了解你的依附風格。分析你是安全、焦慮、迴避還是恐懼-迴避型。",
+  },
+  cn: {
+    title: "依恋风格测试 — 你的关系模式是什么？",
+    description: "通过12个情境问题了解你的依恋风格。分析你是安全、焦虑、回避还是恐惧-回避型。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <AttachmentStyleTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

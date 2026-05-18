@@ -1,0 +1,29 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import BondInsightTestComp from "../../components/tests/BondInsightTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "본드 인사이트: 나의 애착 유형은?", description: "12개의 질문으로 안정형, 불안형, 회피형, 두려움-회피형 중 나의 관계 애착 유형을 알아보세요." },
+  en: { title: "Bond Insight Test: What's Your Attachment Style?", description: "Discover your relationship attachment style — Secure, Anxious, Avoidant, or Fearful-Avoidant — with 12 questions." },
+  ja: { title: "ボンドインサイト：あなたの愛着スタイルは？", description: "12の質問で安定型、不安型、回避型、恐れ-回避型の中からあなたの愛着スタイルを診断します。" },
+  fr: { title: "Bond Insight : Quel est votre style d'attachement?", description: "Découvrez votre style d'attachement relationnel — Sécurisé, Anxieux, Évitant ou Craintif-Évitant — avec 12 questions." },
+  es: { title: "Bond Insight: ¿Cuál es tu estilo de apego?", description: "Descubre tu estilo de apego relacional — Seguro, Ansioso, Evitativo o Temeroso-Evitativo — con 12 preguntas." },
+  zh: { title: "依附風格測試：你的關係依附類型是什麼？", description: "通過12個問題了解你的依附風格：安全型、焦慮型、迴避型或恐懼-迴避型。" },
+  cn: { title: "依附风格测试：你的关系依附类型是什么？", description: "通过12个问题了解你的依附风格：安全型、焦虑型、回避型或恐惧-回避型。" },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <BondInsightTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import JeonseVsRentCalculatorComp from "../../components/calculators/JeonseVsRentCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "전세 vs 월세 비교 계산기 — 월 실질 비용 비교",
+    description: "전세 대출이자와 기회비용, 월세 금액과 보증금 기회비용을 비교해 어느 쪽이 실제로 저렴한지 계산합니다.",
+  },
+  en: {
+    title: "Jeonse vs Monthly Rent Calculator — Real Monthly Cost Comparison",
+    description: "Compare the true monthly cost of jeonse (loan interest + opportunity cost) vs monthly rent including deposit opportunity cost.",
+  },
+  ja: {
+    title: "チョンセ vs 月極家賃 比較計算機",
+    description: "チョンセのローン利息と機会費用、月極家賃と保証金の機会費用を比較してどちらが実際に安いかを計算します。",
+  },
+  fr: {
+    title: "Calculateur Jeonse vs Loyer Mensuel — Comparaison des Coûts Réels",
+    description: "Comparez le coût mensuel réel du jeonse (intérêts + coût d'opportunité) par rapport au loyer mensuel.",
+  },
+  es: {
+    title: "Calculadora Jeonse vs Alquiler Mensual — Comparación de Costes Reales",
+    description: "Compara el coste mensual real del jeonse (intereses + coste de oportunidad) frente al alquiler mensual.",
+  },
+  zh: {
+    title: "全租 vs 月租比較計算機 — 每月實際成本對比",
+    description: "比較全租（貸款利息+機會成本）與月租（月租金+保證金機會成本）的每月實際成本。",
+  },
+  cn: {
+    title: "全租 vs 月租比较计算器 — 每月实际成本对比",
+    description: "比较全租（贷款利息+机会成本）与月租（月租金+保证金机会成本）的每月实际成本。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <JeonseVsRentCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

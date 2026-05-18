@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import LatteFactorCalculatorComp from "../../components/calculators/LatteFactorCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "라떼 팩터 계산기 — 매일 소비를 아끼면 얼마나 모일까?",
+    description: "커피 한 잔 등 매일의 습관적 소비를 절약해 투자하면 10·20·30년 후 얼마가 되는지 복리로 계산합니다.",
+  },
+  en: {
+    title: "Latte Factor Calculator — What If You Invested That Coffee Money?",
+    description: "See how much your daily small expenses could grow over 10, 20, and 30 years if invested with compound interest.",
+  },
+  ja: {
+    title: "ラテファクター計算機 — 毎日の小さな出費が将来いくらになる？",
+    description: "コーヒー代などの習慣的な出費を節約して投資した場合、10・20・30年後にいくらになるかを複利計算します。",
+  },
+  fr: {
+    title: "Calculateur Latte Factor — Et si vous investissiez ce café?",
+    description: "Voyez combien vos petites dépenses quotidiennes pourraient croître sur 10, 20 et 30 ans avec les intérêts composés.",
+  },
+  es: {
+    title: "Calculadora Latte Factor — ¿Qué pasa si inviertes ese café?",
+    description: "Descubre cuánto podrían crecer tus pequeños gastos diarios a lo largo de 10, 20 y 30 años con interés compuesto.",
+  },
+  zh: {
+    title: "拿鐵因子計算機 — 節省每日小額消費能存多少錢？",
+    description: "計算每日習慣性消費節省後投資，10、20、30年後的複利累積金額。",
+  },
+  cn: {
+    title: "拿铁因子计算器 — 节省每日小额消费能存多少钱？",
+    description: "计算每日习惯性消费节省后投资，10、20、30年后的复利累积金额。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <LatteFactorCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

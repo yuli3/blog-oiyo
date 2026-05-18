@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import LaborLawQuickCheckComp from "../../components/calculators/LaborLawQuickCheck";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "노동법 빠른 검색 — 내 권리를 빠르게 확인",
+    description: "사회 초년생을 위한 필수 노동법 가이드. 최저임금, 연차, 퇴직금, 부당해고 등 핵심 권리를 빠르게 확인하세요.",
+  },
+  en: {
+    title: "Labor Law Quick Reference",
+    description: "Essential labor law guide for new workers. Quickly check your rights on minimum wage, annual leave, severance pay, and unfair dismissal.",
+  },
+  ja: {
+    title: "労働法クイックチェック — 私の権利をすぐ確認",
+    description: "新社会人のための必須労働法ガイド。最低賃金、有給休暇、退職金、不当解雇などの権利をすぐに確認できます。",
+  },
+  fr: {
+    title: "Référence Rapide Droit du Travail",
+    description: "Guide essentiel du droit du travail pour les nouveaux employés. Vérifiez rapidement vos droits sur le salaire minimum, les congés et les indemnités.",
+  },
+  es: {
+    title: "Referencia Rápida de Derecho Laboral",
+    description: "Guía esencial de derecho laboral para nuevos trabajadores. Verifica rápidamente tus derechos sobre salario mínimo, vacaciones y liquidación.",
+  },
+  zh: {
+    title: "勞動法快速查詢 — 快速確認我的權利",
+    description: "職場新人必備勞動法指南。快速確認最低工資、年假、退職金、不當解僱等核心權利。",
+  },
+  cn: {
+    title: "劳动法快速查询 — 快速确认我的权利",
+    description: "职场新人必备劳动法指南。快速确认最低工资、年假、退职金、不当解雇等核心权利。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-3xl px-4 py-8">
+    <LaborLawQuickCheckComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

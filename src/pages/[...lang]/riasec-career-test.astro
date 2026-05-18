@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import RiasecCareerTestComp from "../../components/tests/RiasecCareerTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "RIASEC 직업 흥미 유형 검사 — 내게 맞는 직업 찾기",
+    description: "Holland Code RIASEC 이론 기반 24개 질문으로 나의 직업 흥미 유형을 알아보세요. 현실형·탐구형·예술형·사회형·진취형·관습형 6가지 차원을 분석합니다.",
+  },
+  en: {
+    title: "RIASEC Career Interest Test — Holland Code Career Guide",
+    description: "Discover your career interest type through 24 Holland Code RIASEC questions. Analyzes 6 dimensions: Realistic, Investigative, Artistic, Social, Enterprising, and Conventional.",
+  },
+  ja: {
+    title: "RIASEC 職業興味検査 — 自分に合った職業を見つける",
+    description: "ホランドコードRIASEC理論に基づく24問で職業興味タイプを発見しましょう。現実型・研究型・芸術型・社会型・企業型・慣習型の6次元を分析します。",
+  },
+  fr: {
+    title: "Test d'Intérêt Professionnel RIASEC — Code Holland",
+    description: "Découvrez votre type d'intérêt professionnel avec 24 questions basées sur la théorie de Holland. Analyse 6 dimensions: Réaliste, Investigateur, Artistique, Social, Entreprenant, Conventionnel.",
+  },
+  es: {
+    title: "Test de Interés Profesional RIASEC — Código Holland",
+    description: "Descubre tu tipo de interés profesional con 24 preguntas basadas en la teoría de Holland. Analiza 6 dimensiones: Realista, Investigador, Artístico, Social, Emprendedor, Convencional.",
+  },
+  zh: {
+    title: "RIASEC職業興趣測試 — 霍蘭德職業代碼指南",
+    description: "通過24個基於霍蘭德代碼RIASEC理論的問題發現您的職業興趣類型。分析6個維度：現實型、研究型、藝術型、社會型、企業型、傳統型。",
+  },
+  cn: {
+    title: "RIASEC职业兴趣测试 — 霍兰德职业代码指南",
+    description: "通过24个基于霍兰德代码RIASEC理论的问题发现您的职业兴趣类型。分析6个维度：现实型、研究型、艺术型、社会型、企业型、传统型。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <RiasecCareerTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

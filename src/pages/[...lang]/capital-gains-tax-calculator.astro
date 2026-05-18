@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CapitalGainsTaxCalculatorComp from "../../components/tools/CapitalGainsTaxCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "양도소득세 계산기 — 부동산·주식 양도세 미리 계산하기",
+    description: "부동산·국내주식·해외주식 매도 시 예상 양도소득세를 계산합니다. 보유 기간, 주택 수, 조정대상지역 여부를 반영한 정확한 세금 예측.",
+  },
+  en: {
+    title: "Capital Gains Tax Calculator — Real Estate & Stocks",
+    description: "Calculate estimated capital gains tax on real estate, domestic stocks, and foreign stocks in Korea. Factors in holding period and property count.",
+  },
+  ja: {
+    title: "譲渡所得税計算機 — 不動産・株式",
+    description: "不動産・国内株式・海外株式の売却時の予想譲渡所得税を計算します。保有期間・住宅数・調整対象地域を考慮します。",
+  },
+  fr: {
+    title: "Calculateur de plus-value — Immobilier et actions",
+    description: "Calculez la taxe sur les plus-values immobilières et boursières en Corée.",
+  },
+  es: {
+    title: "Calculadora de ganancias de capital — Inmuebles y acciones",
+    description: "Calcula el impuesto sobre ganancias de capital en inmuebles y acciones en Corea.",
+  },
+  zh: {
+    title: "資本利得稅計算機 — 不動產與股票",
+    description: "計算韓國不動產、國內股票和海外股票賣出時的預估資本利得稅，考慮持有期間和房產數量。",
+  },
+  cn: {
+    title: "资本利得税计算器 — 不动产与股票",
+    description: "计算韩国不动产、国内股票和海外股票卖出时的预估资本利得税，考虑持有期间和房产数量。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <CapitalGainsTaxCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

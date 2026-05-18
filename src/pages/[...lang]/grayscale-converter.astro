@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import GrayscaleConverterComp from "../../components/tools/GrayscaleConverter";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "이미지 흑백 변환 — 컬러 사진을 흑백으로",
+    description: "컬러 이미지를 흑백(그레이스케일)으로 변환하세요. 밝기 조절 옵션도 제공하며 서버 업로드 없이 브라우저에서 처리됩니다.",
+  },
+  en: {
+    title: "Grayscale Image Converter",
+    description: "Convert color images to grayscale. Adjust brightness and contrast. Processed entirely in your browser.",
+  },
+  ja: {
+    title: "グレースケール画像変換ツール",
+    description: "カラー画像をグレースケールに変換します。明るさ調整オプションもあり、ブラウザ内で処理されます。",
+  },
+  fr: {
+    title: "Convertisseur d'Image en Niveaux de Gris",
+    description: "Convertissez des images couleur en niveaux de gris. Traitement entièrement dans le navigateur.",
+  },
+  es: {
+    title: "Convertidor de Imagen a Escala de Grises",
+    description: "Convierte imágenes a color en escala de grises. Procesado completamente en tu navegador.",
+  },
+  zh: {
+    title: "圖片灰階轉換工具",
+    description: "將彩色圖片轉換為灰階。提供亮度調整選項，完全在瀏覽器中處理。",
+  },
+  cn: {
+    title: "图片灰度转换工具",
+    description: "将彩色图片转换为灰度。提供亮度调整选项，完全在浏览器中处理。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <GrayscaleConverterComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

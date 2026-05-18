@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import DsrCalculatorComp from "../../components/calculators/DsrCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "DSR 계산기 — 내 대출 가능 한도 계산하기",
+    description: "연소득 대비 총부채원리금상환비율(DSR)을 계산합니다. 주택담보대출·신용대출 한도를 미리 파악하세요.",
+  },
+  en: {
+    title: "DSR Debt Service Ratio Calculator",
+    description: "Calculate your Debt Service Ratio (DSR) against annual income. Determine your maximum loan eligibility in Korea.",
+  },
+  ja: {
+    title: "DSR（総負債元利金返済比率）計算機",
+    description: "年収対比の総負債元利金返済比率（DSR）を計算します。住宅ローン・信用ローンの限度額を事前に確認しましょう。",
+  },
+  fr: {
+    title: "Calculateur DSR — Ratio de service de la dette",
+    description: "Calculez votre ratio de service de la dette totale par rapport à votre revenu annuel.",
+  },
+  es: {
+    title: "Calculadora DSR — Ratio de servicio de deuda",
+    description: "Calcula tu ratio de servicio de deuda total respecto a tu ingreso anual.",
+  },
+  zh: {
+    title: "DSR 總負債償還比率計算機",
+    description: "計算年收入對比總負債本息償還比率（DSR），提前了解住房貸款和信用貸款限額。",
+  },
+  cn: {
+    title: "DSR 总负债偿还比率计算器",
+    description: "计算年收入对比总负债本息偿还比率（DSR），提前了解住房贷款和信用贷款限额。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <DsrCalculatorComp client:load />
+  </main>
+</BaseLayout>

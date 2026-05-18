@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CompoundInterestCalculatorComp from "../../components/tools/CompoundInterestCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "복리 계산기 — 시간이 돈이 되는 복리의 마법",
+    description: "원금, 이율, 기간을 입력해 복리 수익을 계산하세요. 시간이 지날수록 불어나는 복리의 힘을 확인합니다.",
+  },
+  en: {
+    title: "Compound Interest Calculator",
+    description: "Calculate compound interest returns with principal, rate, and time. Visualize the power of compounding over time.",
+  },
+  ja: {
+    title: "複利計算機",
+    description: "元本、金利、期間を入力して複利収益を計算します。時間の経過とともに増える複利の力を実感しましょう。",
+  },
+  fr: {
+    title: "Calculateur d'intérêts composés",
+    description: "Calculez les rendements des intérêts composés avec le principal, le taux et la durée.",
+  },
+  es: {
+    title: "Calculadora de interés compuesto",
+    description: "Calcula rendimientos de interés compuesto con capital, tasa y tiempo.",
+  },
+  zh: {
+    title: "複利計算機",
+    description: "輸入本金、利率和期限計算複利收益，感受時間複利的強大力量。",
+  },
+  cn: {
+    title: "复利计算器",
+    description: "输入本金、利率和期限计算复利收益，感受时间复利的强大力量。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <CompoundInterestCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

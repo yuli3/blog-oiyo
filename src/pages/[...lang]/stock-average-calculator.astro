@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import StockAverageCalculatorComp from "../../components/tools/StockAverageCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "주식 평균단가 계산기 — 물타기·불타기 단가 계산",
+    description: "여러 번의 주식 매수 후 평균 단가를 계산합니다. 물타기·불타기 전략의 단가 변화를 즉시 확인하세요.",
+  },
+  en: {
+    title: "Stock Average Price Calculator",
+    description: "Calculate the average cost basis after multiple stock purchases. Instantly see how averaging down or up affects your cost.",
+  },
+  ja: {
+    title: "株式平均単価計算機",
+    description: "複数回の株式購入後の平均単価を計算します。ナンピン・買い増し戦略の単価変化を即座に確認しましょう。",
+  },
+  fr: {
+    title: "Calculateur de prix moyen d'actions",
+    description: "Calculez le prix de revient moyen après plusieurs achats d'actions.",
+  },
+  es: {
+    title: "Calculadora de precio promedio de acciones",
+    description: "Calcula el precio de costo promedio después de múltiples compras de acciones.",
+  },
+  zh: {
+    title: "股票平均成本計算機",
+    description: "計算多次買入股票後的平均成本價，即時查看攤平或加倉策略的成本變化。",
+  },
+  cn: {
+    title: "股票平均成本计算器",
+    description: "计算多次买入股票后的平均成本价，即时查看摊平或加仓策略的成本变化。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <StockAverageCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

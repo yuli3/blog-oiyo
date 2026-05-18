@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ColorAuraTestComp from "../../components/tests/ColorAuraTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "나의 오라 색깔은? — 에너지 오라 컬러 테스트",
+    description: "14가지 질문으로 나의 에너지 오라 색깔을 알아보세요. 빨강, 주황, 노랑, 초록, 파랑, 남색, 보라 — 7가지 오라 컬러 중 나의 지배적인 에너지는?",
+  },
+  en: {
+    title: "What Color is My Aura? — Energy Aura Color Test",
+    description: "Discover your energy aura color through 14 questions. Which of the 7 aura colors — red, orange, yellow, green, blue, indigo, violet — is your dominant energy?",
+  },
+  ja: {
+    title: "私のオーラの色は？ — エネルギーオーラカラーテスト",
+    description: "14の質問であなたのエネルギーオーラの色を調べましょう。赤、オレンジ、黄色、緑、青、インディゴ、バイオレット — 7つのオーラカラーの中で私の支配的なエネルギーは？",
+  },
+  fr: {
+    title: "Quelle est la couleur de mon aura ? — Test de couleur d'aura énergétique",
+    description: "Découvrez la couleur de votre aura énergétique à travers 14 questions. Laquelle des 7 couleurs d'aura est votre énergie dominante ?",
+  },
+  es: {
+    title: "¿Cuál es el color de mi aura? — Test de color de aura energética",
+    description: "Descubre el color de tu aura energética a través de 14 preguntas. ¿Cuál de los 7 colores de aura es tu energía dominante?",
+  },
+  zh: {
+    title: "我的靈光色彩是什麼？— 能量靈光顏色測試",
+    description: "通過14個問題了解您的能量靈光色彩。紅色、橙色、黃色、綠色、藍色、靛藍、紫色 — 7種靈光色彩中哪種是您的主導能量？",
+  },
+  cn: {
+    title: "我的灵光色彩是什么？— 能量灵光颜色测试",
+    description: "通过14个问题了解您的能量灵光色彩。红色、橙色、黄色、绿色、蓝色、靛蓝、紫色 — 7种灵光色彩中哪种是您的主导能量？",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <ColorAuraTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

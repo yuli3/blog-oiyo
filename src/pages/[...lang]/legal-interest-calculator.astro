@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import LegalInterestCalculatorComp from "../../components/calculators/LegalInterestCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "법정 이자 계산기 — 민사·상사·연체 이자 계산",
+    description: "원금과 기간을 입력해 민사(5%), 상사(6%), 연체(12%) 법정 이자를 계산하세요. 사용자 정의 이율도 지원합니다.",
+  },
+  en: {
+    title: "Legal Interest Calculator — Civil & Overdue Interest",
+    description: "Calculate legal interest on unpaid debt using civil (5%), commercial (6%), overdue (12%), or custom rates.",
+  },
+  ja: {
+    title: "法定利息計算機 — 民事・商事・延滞利息",
+    description: "元金と期間を入力して、民事(5%)・商事(6%)・延滞(12%)の法定利息を計算します。",
+  },
+  fr: {
+    title: "Calculateur d'Intérêts Légaux — Intérêts Civils et Retard",
+    description: "Calculez les intérêts légaux sur les dettes impayées avec les taux civil (5%), commercial (6%) ou en retard (12%).",
+  },
+  es: {
+    title: "Calculadora de Intereses Legales — Intereses Civiles y por Mora",
+    description: "Calcula los intereses legales sobre deudas impagadas con tasas civil (5%), comercial (6%) o mora (12%).",
+  },
+  zh: {
+    title: "法定利息計算機 — 民事·商事·延遲利息",
+    description: "輸入本金和期間，計算民事(5%)、商事(6%)或延遲(12%)法定利息。",
+  },
+  cn: {
+    title: "法定利息计算器 — 民事·商事·逾期利息",
+    description: "输入本金和期间，计算民事(5%)、商事(6%)或逾期(12%)法定利息。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <LegalInterestCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

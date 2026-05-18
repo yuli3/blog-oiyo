@@ -2,7 +2,7 @@
 import { getCollection } from "astro:content";
 import BlogList from "../../../../components/BlogList.astro";
 import { getTranslations, locales } from "../../../../lib/i18n";
-import { getTrack } from "../../../../lib/taxonomy";
+import { getTrack, getTrackFromData, slugifyCategory } from "../../../../lib/taxonomy";
 
 export async function getStaticPaths() {
   const postsPerPage = 6;
@@ -26,12 +26,11 @@ export async function getStaticPaths() {
     for (const category of categories) {
       if (!category) continue;
 
-      const categorySlug = category.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+      const normalizedCategorySlug = slugifyCategory(category);
 
       const categoryPosts = langPosts.filter(
         (post) =>
-          post.data.category?.toLowerCase().replace(/[^a-z0-9]+/g, "-") ===
-          categorySlug,
+          post.data.category && slugifyCategory(post.data.category) === normalizedCategorySlug,
       );
 
       categoryPosts.sort((a, b) => {
@@ -48,7 +47,7 @@ export async function getStaticPaths() {
       // Only generate pages 2+; page 1 is handled by index.astro
       for (let p = 2; p <= totalPages; p++) {
         paths.push({
-          params: { lang, category: categorySlug, page: String(p) },
+          params: { lang, category: normalizedCategorySlug, page: String(p) },
           props: {
             locale: lang,
             originalCategory: category,
@@ -79,13 +78,14 @@ const page = {
 };
 
 const localePrefix = `/${locale}`;
-const track = getTrack(originalCategory);
-const isAcademy = track === "academy";
+const track = pageData[0] ? getTrackFromData(pageData[0].data) : getTrack(originalCategory);
 
 const displayName = (t.category.names as Record<string, string>)?.[originalCategory] ?? originalCategory;
-const displaySubtitle = isAcademy
+const displaySubtitle = track === "academy"
   ? t.category.academySubtitle.replace("{category}", displayName)
-  : t.category.magazineSubtitle.replace("{category}", displayName);
+  : track === "interactive"
+    ? (((t as Record<string, unknown>).interactive as Record<string, string> | undefined)?.categorySubtitle ?? "Interactive reading and embedded tools related to {category}.").replace("{category}", displayName)
+    : t.category.magazineSubtitle.replace("{category}", displayName);
 ---
 
 <BlogList

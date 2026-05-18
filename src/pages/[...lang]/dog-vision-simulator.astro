@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import DogVisionSimulatorComp from "../../components/tools/DogVisionSimulator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "강아지 시각 시뮬레이터 — 개가 보는 세상은 어떤 모습?",
+    description: "강아지의 시각으로 세상을 경험해보세요. 개는 파란색과 노란색만 구분하며 색각이 제한적입니다. 사진으로 직접 확인해보세요.",
+  },
+  en: {
+    title: "Dog Vision Simulator",
+    description: "See the world through a dog's eyes. Dogs have dichromatic vision — upload a photo to simulate how your dog sees it.",
+  },
+  ja: {
+    title: "犬の視覚シミュレーター",
+    description: "犬の目から世界を体験しましょう。犬は2色型色覚を持ちます。写真をアップロードして犬がどう見るか確認できます。",
+  },
+  fr: {
+    title: "Simulateur de Vision de Chien",
+    description: "Voyez le monde à travers les yeux d'un chien. Les chiens ont une vision dichromatique.",
+  },
+  es: {
+    title: "Simulador de Visión Canina",
+    description: "Ve el mundo a través de los ojos de un perro. Los perros tienen visión dicromática.",
+  },
+  zh: {
+    title: "狗狗視覺模擬器",
+    description: "透過狗狗的眼睛看世界。狗狗具有二色視覺，上傳照片模擬狗狗看到的樣子。",
+  },
+  cn: {
+    title: "狗狗视觉模拟器",
+    description: "透过狗狗的眼睛看世界。狗狗具有二色视觉，上传照片模拟狗狗看到的样子。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <DogVisionSimulatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

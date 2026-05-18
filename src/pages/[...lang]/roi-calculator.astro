@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import RoiCalculatorComp from "../../components/tools/RoiCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "ROI 계산기 — 투자 수익률 간편 계산",
+    description: "투자 비용과 수익을 입력해 ROI(투자수익률)를 간편하게 계산합니다. 다양한 투자 대안을 비교하세요.",
+  },
+  en: {
+    title: "ROI Return on Investment Calculator",
+    description: "Calculate ROI (Return on Investment) quickly by entering cost and gain. Compare different investment options.",
+  },
+  ja: {
+    title: "ROI（投資収益率）計算機",
+    description: "投資コストと収益を入力してROIを簡単に計算します。さまざまな投資の選択肢を比較しましょう。",
+  },
+  fr: {
+    title: "Calculateur ROI — Retour sur investissement",
+    description: "Calculez rapidement le ROI en entrant le coût et le gain. Comparez différentes options d'investissement.",
+  },
+  es: {
+    title: "Calculadora ROI — Retorno de inversión",
+    description: "Calcula el ROI rápidamente ingresando costo y ganancia. Compara diferentes opciones de inversión.",
+  },
+  zh: {
+    title: "ROI 投資報酬率計算機",
+    description: "輸入投資成本和收益快速計算ROI投資報酬率，比較不同投資選項。",
+  },
+  cn: {
+    title: "ROI 投资回报率计算器",
+    description: "输入投资成本和收益快速计算ROI投资回报率，比较不同投资选项。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <RoiCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

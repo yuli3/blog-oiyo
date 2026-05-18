@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import LearningStyleTestComp from "../../components/tests/LearningStyleTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "학습 유형 테스트 (VARK) — 나는 어떻게 배우나?",
+    description: "시각형·청각형·읽기쓰기형·체험형 — 16가지 상황으로 나의 학습 스타일을 발견하세요.",
+  },
+  en: {
+    title: "Learning Style Test (VARK) — How Do You Learn Best?",
+    description: "Visual, Auditory, Reading/Writing, Kinesthetic — discover your learning style with 16 scenarios.",
+  },
+  ja: {
+    title: "学習スタイルテスト (VARK) — あなたはどう学びますか？",
+    description: "視覚型・聴覚型・読み書き型・体験型 — 16のシナリオであなたの学習スタイルを発見しましょう。",
+  },
+  fr: {
+    title: "Test de Style d'Apprentissage (VARK) — Comment apprenez-vous ?",
+    description: "Visuel, Auditif, Lecture/Écriture, Kinesthésique — découvrez votre style d'apprentissage en 16 scénarios.",
+  },
+  es: {
+    title: "Test de Estilo de Aprendizaje (VARK) — ¿Cómo aprendes mejor?",
+    description: "Visual, Auditivo, Lectura/Escritura, Kinestésico — descubre tu estilo de aprendizaje con 16 situaciones.",
+  },
+  zh: {
+    title: "學習風格測試 (VARK) — 你如何學習最有效？",
+    description: "視覺型、聽覺型、讀寫型、體驗型 — 透過16個情境發現你的學習風格。",
+  },
+  cn: {
+    title: "学习风格测试 (VARK) — 你如何学习最有效？",
+    description: "视觉型、听觉型、读写型、体验型 — 通过16个情境发现你的学习风格。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <LearningStyleTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

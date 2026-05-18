@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PropertyTaxCalculatorComp from "../../components/tools/PropertyTaxCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "재산세 계산기 — 부동산 보유세 미리 계산하기",
+    description: "공시가격을 기준으로 재산세와 종합부동산세를 계산합니다. 주택 보유 비용을 미리 파악하세요.",
+  },
+  en: {
+    title: "Property Tax Calculator",
+    description: "Calculate property tax and comprehensive real estate tax based on assessed value in Korea.",
+  },
+  ja: {
+    title: "財産税計算機",
+    description: "公示価格を基準に財産税と総合不動産税を計算します。住宅保有コストを事前に把握しましょう。",
+  },
+  fr: {
+    title: "Calculateur de taxe foncière",
+    description: "Calculez la taxe foncière et la taxe immobilière globale en Corée.",
+  },
+  es: {
+    title: "Calculadora de impuesto a la propiedad",
+    description: "Calcula el impuesto a la propiedad e impuesto inmobiliario integral en Corea.",
+  },
+  zh: {
+    title: "財產稅計算機",
+    description: "根據公示地價計算財產稅和綜合不動產稅，提前了解持有房產的稅務成本。",
+  },
+  cn: {
+    title: "财产税计算器",
+    description: "根据公示地价计算财产税和综合不动产税，提前了解持有房产的税务成本。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <PropertyTaxCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import AutoTaxCalculatorComp from "../../components/tools/AutoTaxCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "자동차세 계산기 — 연간 자동차세 미리 확인하기",
+    description: "차량 배기량과 연식에 따른 연간 자동차세를 계산합니다. 연납 할인 혜택도 함께 확인하세요.",
+  },
+  en: {
+    title: "Vehicle Tax Calculator",
+    description: "Calculate annual vehicle tax in Korea based on engine displacement and vehicle age. Includes annual prepayment discount.",
+  },
+  ja: {
+    title: "自動車税計算機",
+    description: "排気量と車齢に基づいて韓国の年間自動車税を計算します。年納割引も確認できます。",
+  },
+  fr: {
+    title: "Calculateur de taxe sur les véhicules",
+    description: "Calculez la taxe annuelle sur les véhicules en Corée selon la cylindrée et l'ancienneté.",
+  },
+  es: {
+    title: "Calculadora de impuesto vehicular",
+    description: "Calcula el impuesto anual de vehículos en Corea según cilindrada y antigüedad del vehículo.",
+  },
+  zh: {
+    title: "汽車稅計算機",
+    description: "根據排氣量和車齡計算韓國年度汽車稅，並提供年繳折扣資訊。",
+  },
+  cn: {
+    title: "汽车税计算器",
+    description: "根据排量和车龄计算韩国年度汽车税，并提供年缴折扣信息。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <AutoTaxCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

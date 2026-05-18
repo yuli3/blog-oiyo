@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import AdhdScreeningTestComp from "../../components/tests/AdhdScreeningTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "성인 ADHD 자가 스크리닝 — 나의 집중 패턴 확인하기",
+    description: "WHO ASRS 기반 6가지 질문으로 성인 ADHD 특성을 확인하세요. 전문가 상담 전 참고용 도구입니다.",
+  },
+  en: {
+    title: "Adult ADHD Self-Screening — Check Your Focus Patterns",
+    description: "6 WHO ASRS-based questions to check adult ADHD characteristics. A reference tool before professional consultation.",
+  },
+  ja: {
+    title: "成人ADHD自己スクリーニング — 集中パターンを確認",
+    description: "WHO ASRSに基づく6つの質問で成人ADHDの特性を確認。専門家への相談前の参考ツールです。",
+  },
+  fr: {
+    title: "Dépistage TDAH adulte — Vérifiez vos schémas de concentration",
+    description: "6 questions basées sur l'ASRS de l'OMS pour vérifier les caractéristiques du TDAH adulte. Un outil de référence avant une consultation professionnelle.",
+  },
+  es: {
+    title: "Cribado TDAH adulto — Comprueba tus patrones de concentración",
+    description: "6 preguntas basadas en ASRS de la OMS para verificar características del TDAH adulto. Una herramienta de referencia antes de la consulta profesional.",
+  },
+  zh: {
+    title: "成人ADHD自我篩查 — 確認您的注意力模式",
+    description: "基於WHO ASRS的6個問題，確認成人ADHD特徵。專業諮詢前的參考工具。",
+  },
+  cn: {
+    title: "成人ADHD自我筛查 — 确认您的注意力模式",
+    description: "基于WHO ASRS的6个问题，确认成人ADHD特征。专业咨询前的参考工具。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <AdhdScreeningTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

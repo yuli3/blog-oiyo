@@ -8,20 +8,30 @@
  *   title   - 제목 (optional)
  *   layout  - "vertical" | "horizontal" (default "vertical")
  */
-interface Event {
-  year: string;
-  title: string;
+interface EventItem {
+  year?: string;
+  label?: string;
+  title?: string;
   description?: string;
+  content?: string;
+  note?: string;
   color?: string;
   icon?: string;
 }
 interface Props {
   title?: string;
-  events: Event[];
+  events?: EventItem[];
+  items?: EventItem[];
   layout?: "vertical" | "horizontal";
 }
 
-const { title, events, layout = "vertical" } = Astro.props;
+const { title, layout = "vertical" } = Astro.props;
+const events = (Astro.props.events ?? Astro.props.items ?? []).map((ev) => ({
+  ...ev,
+  year: ev.year ?? ev.label ?? "",
+  title: ev.title ?? ev.label ?? "",
+  description: ev.description ?? ev.content ?? ev.note,
+}));
 const defaultColors = [
   "#3b82f6",
   "#8b5cf6",

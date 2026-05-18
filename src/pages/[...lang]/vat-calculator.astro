@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import VatCalculatorComp from "../../components/tools/VatCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "부가가치세 계산기 — VAT 포함·제외 금액 즉시 계산",
+    description: "VAT 포함/제외 금액을 즉시 계산하고, 사업자의 분기별 부가가치세 납부 예상액도 추정합니다. 프리랜서·소상공인 필수 도구.",
+  },
+  en: {
+    title: "VAT Calculator — Instantly Calculate Tax-inclusive/Exclusive",
+    description: "Instantly calculate VAT-inclusive and exclusive amounts. Also estimate quarterly VAT payable for freelancers and small business owners in Korea.",
+  },
+  ja: {
+    title: "消費税（VAT）計算機 — 税込・税抜金額を即計算",
+    description: "消費税込み・税抜き金額を即座に計算します。フリーランス・事業者の四半期VAT納付予想額も推定できます。",
+  },
+  fr: {
+    title: "Calculateur TVA — Montants TTC et HT instantanés",
+    description: "Calculez instantanément les montants TTC et HT. Estimez aussi la TVA trimestrielle pour les auto-entrepreneurs.",
+  },
+  es: {
+    title: "Calculadora IVA — Calcule montos con y sin impuesto",
+    description: "Calcula instantáneamente montos con y sin IVA. Estima también el IVA trimestral para freelancers y pequeñas empresas.",
+  },
+  zh: {
+    title: "增值稅計算機 — 含稅/不含稅金額即時計算",
+    description: "即時計算含稅和不含稅金額，並可估算自由職業者和小企業主的每季VAT應繳金額。",
+  },
+  cn: {
+    title: "增值税计算器 — 含税/不含税金额即时计算",
+    description: "即时计算含税和不含税金额，并可估算自由职业者和小企业主的每季VAT应缴金额。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <VatCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

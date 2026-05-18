@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import WordCounterToolComp from "../../components/tools/WordCounterTool";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "글자수·단어수 계산기 — 텍스트 통계 즉시 확인",
+    description: "텍스트를 붙여넣으면 단어 수, 글자 수, 문장 수, 단락 수, 읽기 시간, 자주 쓴 단어 TOP 5를 즉시 확인합니다.",
+  },
+  en: {
+    title: "Word & Character Counter — Instant Text Stats",
+    description: "Paste your text to instantly see word count, character count, sentence count, paragraph count, reading time, and top 5 words.",
+  },
+  ja: {
+    title: "文字数・単語数カウンター — テキスト統計を即時確認",
+    description: "テキストを貼り付けると単語数、文字数、文章数、段落数、読書時間、頻出単語TOP5を即座に確認できます。",
+  },
+  fr: {
+    title: "Compteur de Mots et Caractères",
+    description: "Collez votre texte pour voir instantanément le nombre de mots, caractères, phrases, paragraphes, le temps de lecture et les 5 mots les plus fréquents.",
+  },
+  es: {
+    title: "Contador de Palabras y Caracteres",
+    description: "Pega tu texto para ver al instante el recuento de palabras, caracteres, oraciones, párrafos, tiempo de lectura y las 5 palabras más frecuentes.",
+  },
+  zh: {
+    title: "字數·單詞計數器 — 即時確認文字統計",
+    description: "貼上文字後可立即查看單詞數、字符數、句子數、段落數、閱讀時間和使用頻率最高的5個詞。",
+  },
+  cn: {
+    title: "字数·单词计数器 — 即时确认文字统计",
+    description: "粘贴文字后可立即查看单词数、字符数、句子数、段落数、阅读时间和使用频率最高的5个词。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-3xl px-4 py-8">
+    <WordCounterToolComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

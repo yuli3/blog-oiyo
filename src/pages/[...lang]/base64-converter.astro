@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Base64ConverterComp from "../../components/tools/Base64Converter";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "Base64 인코더/디코더 — 텍스트·파일 변환",
+    description: "이미지 및 텍스트를 Base64로 즉시 인코딩·디코딩하세요. Data URI 형식과 순수 Base64 출력을 모두 지원합니다.",
+  },
+  en: {
+    title: "Base64 Encoder / Decoder",
+    description: "Instantly encode and decode images and text to Base64. Supports both Data URI format and raw Base64 output.",
+  },
+  ja: {
+    title: "Base64エンコーダー / デコーダー",
+    description: "画像やテキストをBase64に即時エンコード・デコードします。Data URI形式と純粋なBase64出力の両方をサポートします。",
+  },
+  fr: {
+    title: "Encodeur / Décodeur Base64",
+    description: "Encodez et décodez instantanément des images et du texte en Base64. Supporte le format Data URI et la sortie Base64 brute.",
+  },
+  es: {
+    title: "Codificador / Decodificador Base64",
+    description: "Codifica y decodifica imágenes y texto en Base64 al instante. Soporta el formato Data URI y la salida Base64 pura.",
+  },
+  zh: {
+    title: "Base64 編碼器 / 解碼器",
+    description: "即時將圖片和文字編碼或解碼為Base64。支援Data URI格式和純Base64輸出。",
+  },
+  cn: {
+    title: "Base64 编码器 / 解码器",
+    description: "即时将图片和文字编码或解码为Base64。支持Data URI格式和纯Base64输出。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-4xl px-4 py-8">
+    <Base64ConverterComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

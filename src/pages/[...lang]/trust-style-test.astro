@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import TrustStyleTestComp from "../../components/tests/TrustStyleTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "신뢰 스타일 테스트 — 나는 어떻게 타인을 믿는가?",
+    description: "16가지 시나리오 질문으로 나의 신뢰 스타일을 알아보세요. 빠른 신뢰형, 검증형, 신중형, 방어형 중 나는 어떤 유형일까요?",
+  },
+  en: {
+    title: "Trust Style Test — How Do You Trust Others?",
+    description: "Discover your trust style through 16 scenario-based questions. Are you a Quick Truster, Earned Truster, Cautious, or Guarded type?",
+  },
+  ja: {
+    title: "信頼スタイルテスト — 私はどのように他者を信じるか？",
+    description: "16のシナリオ質問で自分の信頼スタイルを発見しましょう。即時信頼型、検証型、慎重型、防衛型のどれですか？",
+  },
+  fr: {
+    title: "Test de Style de Confiance — Comment faites-vous confiance aux autres?",
+    description: "Découvrez votre style de confiance à travers 16 questions basées sur des scénarios.",
+  },
+  es: {
+    title: "Test de Estilo de Confianza — ¿Cómo confías en los demás?",
+    description: "Descubre tu estilo de confianza a través de 16 preguntas basadas en escenarios.",
+  },
+  zh: {
+    title: "信任風格測試 — 你如何信任他人？",
+    description: "通過16個情境問題發現您的信任風格。您是快速信任型、驗證型、謹慎型還是防衛型？",
+  },
+  cn: {
+    title: "信任风格测试 — 你如何信任他人？",
+    description: "通过16个情境问题发现您的信任风格。您是快速信任型、验证型、谨慎型还是防卫型？",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <TrustStyleTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

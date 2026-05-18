@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SleepChronotypeTestComp from "../../components/tests/SleepChronotypeTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "수면 크로노타입 테스트 — 나는 사자형, 곰형, 늑대형, 돌고래형?",
+    description: "16가지 질문으로 나의 생체 리듬 유형을 발견하고 최적의 수면·업무·운동 시간을 알아보세요.",
+  },
+  en: {
+    title: "Sleep Chronotype Test — Are You a Lion, Bear, Wolf, or Dolphin?",
+    description: "Discover your chronotype with 16 questions and find your optimal sleep, work, and exercise schedule.",
+  },
+  ja: {
+    title: "睡眠クロノタイプテスト — あなたはライオン型？クマ型？オオカミ型？イルカ型？",
+    description: "16の質問で自分の体内時計のタイプを発見し、最適な睡眠・仕事・運動の時間帯を見つけましょう。",
+  },
+  fr: {
+    title: "Test de Chronotype Sommeil — Lion, Ours, Loup ou Dauphin ?",
+    description: "Découvrez votre chronotype en 16 questions et trouvez votre fenêtre idéale de sommeil et de productivité.",
+  },
+  es: {
+    title: "Test de Cronotipo del Sueño — ¿Eres León, Oso, Lobo o Delfín?",
+    description: "Descubre tu cronotipo con 16 preguntas y encuentra tu horario óptimo de sueño, trabajo y ejercicio.",
+  },
+  zh: {
+    title: "睡眠時型測試 — 你是獅子型、熊型、狼型還是海豚型？",
+    description: "通過16個問題發現您的時型，找到最佳的睡眠、工作和運動時間。",
+  },
+  cn: {
+    title: "睡眠时型测试 — 你是狮子型、熊型、狼型还是海豚型？",
+    description: "通过16个问题发现您的时型，找到最佳的睡眠、工作和运动时间。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <SleepChronotypeTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

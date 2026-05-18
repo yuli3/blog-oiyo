@@ -1,68 +1,15 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import TOC from "../../components/TOC.astro";
+// import TOC from "../../components/TOC.astro";
 import ChapterSidebar from "../../components/ChapterSidebar.astro";
 import BlogCTA from "../../components/BlogCTA.astro";
 import { siteConfig } from "../../config/site.config";
 import { getTranslations } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
+import { getRegisteredMdxComponents } from "../../lib/mdx-component-registry";
+import { getTrackFromData } from "../../lib/taxonomy";
 import AuthorProfile from "../../components/AuthorProfile.astro";
-
-
-// MDX components
-import Callout from "../../components/mdx/Callout.astro";
-import FormulaBlock from "../../components/mdx/FormulaBlock.astro";
-import HighlightBox from "../../components/mdx/HighlightBox.astro";
-import Term from "../../components/mdx/Term.astro";
-import ResearchReference from "../../components/mdx/ResearchReference.astro";
-import Reference from "../../components/mdx/Reference.astro";
-import Quiz from "../../components/mdx/Quiz.astro";
-import ResultGraph from "../../components/mdx/ResultGraph.astro";
-import BarChart from "../../components/mdx/BarChart.astro";
-import PieChart from "../../components/mdx/PieChart.astro";
-import FlowChart from "../../components/mdx/FlowChart.astro";
-import CompareTable from "../../components/mdx/CompareTable.astro";
-import Fraction from "../../components/mdx/Fraction.astro";
-import FormulaBox from "../../components/mdx/FormulaBox.astro";
-import LineChart from "../../components/mdx/LineChart.astro";
-import ProgressBar from "../../components/mdx/ProgressBar.astro";
-import Timeline from "../../components/mdx/Timeline.astro";
-import HeatMap from "../../components/mdx/HeatMap.astro";
-import StatCards from "../../components/mdx/StatCards.astro";
-import RadarChart from "../../components/mdx/RadarChart.astro";
-import ToolCTA from "../../components/mdx/ToolCTA.astro";
-import ToolCTAInline from "../../components/mdx/ToolCTAInline.astro";
-import QuadrantMatrix from "../../components/mdx/QuadrantMatrix.astro";
-import PyramidDiagram from "../../components/mdx/PyramidDiagram.astro";
-import ForceDiagram from "../../components/mdx/ForceDiagram.astro";
-import ValueChain from "../../components/mdx/ValueChain.astro";
-import ConceptCard from "../../components/mdx/ConceptCard.astro";
-import SupplyDemandChart from "../../components/mdx/SupplyDemandChart.astro";
-import ASADChart from "../../components/mdx/ASADChart.astro";
-import PhillipsCurveChart from "../../components/mdx/PhillipsCurveChart.astro";
-import LorenzCurve from "../../components/mdx/LorenzCurve.astro";
-import PPFChart from "../../components/mdx/PPFChart.astro";
-import BusinessCycle from "../../components/mdx/BusinessCycle.astro";
-import ProductLifeCycle from "../../components/mdx/ProductLifeCycle.astro";
-import KeynesianCross from "../../components/mdx/KeynesianCross.astro";
-import OrgChart from "../../components/mdx/OrgChart.astro";
-import PolicyCycle from "../../components/mdx/PolicyCycle.astro";
-import ISLMSimulator from "../../components/mdx/ISLMSimulator.tsx";
-
-import {
-  LectureTable,
-  LectureProcess,
-  LecturePieChart,
-  LectureBarChart,
-} from "@/features/education-common/components/LectureVisuals";
-import {
-  OptionPayoffChart,
-  FrontierChart,
-  NPVChart,
-  SMLChart,
-} from "@/features/education-finance/FinanceCharts";
-import { GameTheoryPlayground } from "@/features/education-game-theory";
 
 export async function getStaticPaths() {
   const allPosts = await getCollection("blog", (p) => !p.data.draft);
@@ -123,10 +70,12 @@ export async function getStaticPaths() {
 }
 
 const { post, locale, prevPost, nextPost, seriesPosts } = Astro.props;
-const { Content, headings } = await post.render();
+const { Content } = await post.render();
 const tocEnabled = siteConfig.features.toc;
 const t = await getTranslations(locale as Locale);
 const categoryNames = (t.category.names ?? {}) as Record<string, string>;
+const track = getTrackFromData(post.data);
+const mdxComponents = getRegisteredMdxComponents(track);
 
 const chMatch = post.slug.match(/-ch(\d+)$/);
 const chapter = chMatch ? parseInt(chMatch[1], 10) : null;
@@ -379,57 +328,7 @@ const coursesHref = `/${locale}/courses`;
 
           <!-- Main content -->
           <div class="prose prose-stone dark:prose-invert prose-lg max-w-none prose-headings:font-heading prose-headings:font-bold prose-a:text-primary prose-pre:rounded-2xl prose-pre:bg-muted/10 prose-pre:border prose-pre:border-border/40 leading-relaxed text-pretty">
-            <Content
-              components={{
-                Callout,
-                FormulaBlock,
-                LectureTable,
-                LectureProcess,
-                LecturePieChart,
-                LectureBarChart,
-                OptionPayoffChart,
-                FrontierChart,
-                NPVChart,
-                SMLChart,
-                GameTheoryPlayground,
-                HighlightBox,
-                Term,
-                ResearchReference,
-                Reference,
-                Quiz,
-                ResultGraph,
-                BarChart,
-                PieChart,
-                FlowChart,
-                CompareTable,
-                Fraction,
-                FormulaBox,
-                LineChart,
-                ProgressBar,
-                Timeline,
-                HeatMap,
-                StatCards,
-                RadarChart,
-                ToolCTA,
-                ToolCTAInline,
-                QuadrantMatrix,
-                PyramidDiagram,
-                ForceDiagram,
-                ValueChain,
-                ConceptCard,
-                SupplyDemandChart,
-                ASADChart,
-                PhillipsCurveChart,
-                LorenzCurve,
-                PPFChart,
-                BusinessCycle,
-                ProductLifeCycle,
-                KeynesianCross,
-                OrgChart,
-                PolicyCycle,
-                ISLMSimulator,
-              }}
-            />
+            <Content components={mdxComponents} />
           </div>
 
           <!-- Author Profile Component for E-E-A-T SEO -->
@@ -507,8 +406,10 @@ const coursesHref = `/${locale}/courses`;
           </footer>
         </div>
 
-        <!-- Right: TOC sidebar -->
-        {tocEnabled && <TOC headings={headings} />}
+        <!-- Right: TOC sidebar (disabled by request) -->
+        {/*
+          {tocEnabled && <TOC headings={headings} />}
+        */}
       </div>
     </div>
   </article>

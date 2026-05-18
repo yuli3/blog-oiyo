@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SavingsComparisonCalculatorComp from "../../components/calculators/SavingsComparisonCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "저축 상품 비교 계산기 — 세후 수령액으로 최적 상품 비교",
+    description: "정기예금, 적금, ISA, 파킹통장을 이자소득세 15.4% 적용 후 세후 수령액으로 비교합니다. 최적 저축 상품을 추천해 드립니다.",
+  },
+  en: {
+    title: "Savings Product Comparison — After-tax Returns Compared",
+    description: "Compare fixed deposits, installment savings, ISA, and high-yield savings accounts by after-tax returns (15.4% interest tax applied).",
+  },
+  ja: {
+    title: "貯蓄商品比較計算機 — 税引き後受取額で最適商品を比較",
+    description: "定期預金、積立、ISA、パーキング通帳を利子所得税15.4%適用後の手取り額で比較します。",
+  },
+  fr: {
+    title: "Comparateur d'épargne — Rendements après impôts",
+    description: "Comparez dépôts fixes, épargne mensuelle, ISA et comptes à haut rendement après impôt sur les intérêts.",
+  },
+  es: {
+    title: "Comparador de Ahorro — Rendimientos después de impuestos",
+    description: "Compare depósitos fijos, ahorro mensual, ISA y cuentas de alto rendimiento por rendimientos netos de impuestos.",
+  },
+  zh: {
+    title: "儲蓄商品比較計算機 — 稅後收益比較",
+    description: "比較定存、定期儲蓄、ISA和活期儲蓄的稅後收益（利息所得稅15.4%）。",
+  },
+  cn: {
+    title: "储蓄产品比较计算器 — 税后收益比较",
+    description: "比较定存、定期储蓄、ISA和活期储蓄的税后收益（利息所得税15.4%）。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <SavingsComparisonCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

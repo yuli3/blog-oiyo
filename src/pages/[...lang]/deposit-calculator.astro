@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import DepositCalculatorComp from "../../components/calculators/DepositCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "예금·적금 계산기 — 세후 이자·만기 수령액 계산",
+    description: "정기예금과 적금의 세후 이자와 만기 수령액을 단리·복리, 과세 유형별로 계산합니다.",
+  },
+  en: {
+    title: "Deposit & Savings Calculator — After-Tax Interest Calculation",
+    description: "Calculate after-tax interest and maturity amount for lump-sum deposits and monthly savings with simple or compound interest.",
+  },
+  ja: {
+    title: "定期預金・積立計算機 — 税引後利息の計算",
+    description: "定期預金と積立の税引後利息と満期受取額を単利・複利、課税タイプ別に計算します。",
+  },
+  fr: {
+    title: "Calculateur de Dépôt — Intérêts Après Impôt",
+    description: "Calculez les intérêts nets et le montant à l'échéance pour dépôts et épargne mensuelle.",
+  },
+  es: {
+    title: "Calculadora de Depósito — Intereses Netos de Impuestos",
+    description: "Calcula los intereses netos y el importe al vencimiento para depósitos y ahorro mensual.",
+  },
+  zh: {
+    title: "定存·儲蓄計算機 — 稅後利息計算",
+    description: "計算定期存款和每月儲蓄的稅後利息和到期金額，支援單利和複利。",
+  },
+  cn: {
+    title: "定存·储蓄计算器 — 税后利息计算",
+    description: "计算定期存款和每月储蓄的税后利息和到期金额，支持单利和复利。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <DepositCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

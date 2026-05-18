@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import TaxCalendarComp from "../../components/calculators/TaxCalendar";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "세금 납부 일정 캘린더 2025 — 직장인·자영업자·프리랜서별 정리",
+    description: "2025년 주요 세금 납부 일정을 직종별(직장인·자영업자·프리랜서)로 한눈에 확인하세요. 종합소득세, 부가세, 재산세 등 월별 정리.",
+  },
+  en: {
+    title: "Korea Tax Calendar 2025 — Payment Deadlines by Job Type",
+    description: "View 2025 Korean tax payment deadlines organized by job type: employees, self-employed, and freelancers.",
+  },
+  ja: {
+    title: "韓国税金納付カレンダー2025 — 職種別スケジュール",
+    description: "2025年の主要税金納付スケジュールを職種別（会社員・自営業者・フリーランス）に確認できます。",
+  },
+  fr: {
+    title: "Calendrier Fiscal Corée 2025 — Échéances par type d'emploi",
+    description: "Consultez les échéances de paiement des impôts coréens en 2025 organisées par type d'emploi.",
+  },
+  es: {
+    title: "Calendario Fiscal Corea 2025 — Plazos por tipo de empleo",
+    description: "Consulta los plazos de pago de impuestos coreanos en 2025 organizados por tipo de empleo.",
+  },
+  zh: {
+    title: "韓國稅務日曆2025 — 按職業類型的納稅期限",
+    description: "查看2025年韓國按職業類型（員工、個體戶、自由職業者）整理的主要稅金納付時程。",
+  },
+  cn: {
+    title: "韩国税务日历2025 — 按职业类型的纳税期限",
+    description: "查看2025年韩国按职业类型（员工、个体户、自由职业者）整理的主要税金纳付时程。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-3xl px-4 py-8">
+    <TaxCalendarComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

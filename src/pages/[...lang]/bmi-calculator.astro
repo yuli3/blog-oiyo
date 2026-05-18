@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import BmiCalculatorComp from "../../components/tools/BmiCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "BMI & 체지방률 계산기 — 내 건강 지표 확인하기",
+    description: "키·몸무게·나이·성별을 입력하면 BMI와 체지방률을 즉시 계산합니다. 정상 범위와 건강 조언도 함께 확인하세요.",
+  },
+  en: {
+    title: "BMI & Body Fat Calculator",
+    description: "Instantly calculate your BMI and estimated body fat percentage. Enter height, weight, age, and gender to check your health indicators.",
+  },
+  ja: {
+    title: "BMI・体脂肪率計算機",
+    description: "身長・体重・年齢・性別を入力してBMIと体脂肪率を即座に計算します。正常範囲と健康アドバイスも確認できます。",
+  },
+  fr: {
+    title: "Calculateur IMC et Taux de Graisse Corporelle",
+    description: "Calculez instantanément votre IMC et votre taux de graisse corporelle estimé.",
+  },
+  es: {
+    title: "Calculadora de IMC y Grasa Corporal",
+    description: "Calcula instantáneamente tu IMC y porcentaje de grasa corporal estimado.",
+  },
+  zh: {
+    title: "BMI與體脂率計算機",
+    description: "輸入身高、體重、年齡和性別，立即計算BMI和體脂率。",
+  },
+  cn: {
+    title: "BMI与体脂率计算器",
+    description: "输入身高、体重、年龄和性别，立即计算BMI和体脂率。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <BmiCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CalorieCalculatorComp from "../../components/tools/CalorieCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "하루 칼로리 계산기 — BMR·TDEE 및 목표 칼로리 계산",
+    description: "Mifflin-St Jeor 공식으로 기초대사량(BMR)과 총 에너지 소비량(TDEE)을 계산합니다. 체중 감량·유지·증량 목표 칼로리와 3대 영양소 비율도 확인하세요.",
+  },
+  en: {
+    title: "Daily Calorie Calculator — BMR, TDEE & Target Calories",
+    description: "Calculate your Basal Metabolic Rate (BMR) and Total Daily Energy Expenditure (TDEE) using the Mifflin-St Jeor formula. Includes calorie targets for weight loss, maintenance, and gain.",
+  },
+  ja: {
+    title: "1日カロリー計算機 — BMR・TDEE・目標カロリー計算",
+    description: "Mifflin-St Jeor公式で基礎代謝量(BMR)と総エネルギー消費量(TDEE)を計算します。",
+  },
+  fr: {
+    title: "Calculateur de Calories Journalières — BMR, TDEE et Objectifs",
+    description: "Calculez votre métabolisme de base (BMR) et dépense énergétique totale (TDEE) avec la formule Mifflin-St Jeor.",
+  },
+  es: {
+    title: "Calculadora de Calorías Diarias — BMR, TDEE y Objetivos",
+    description: "Calcula tu tasa metabólica basal (BMR) y gasto energético total (TDEE) con la fórmula Mifflin-St Jeor.",
+  },
+  zh: {
+    title: "每日熱量計算機 — BMR、TDEE及目標熱量計算",
+    description: "使用Mifflin-St Jeor公式計算基礎代謝率(BMR)和每日總能量消耗(TDEE)，包含減重、維持和增重目標熱量。",
+  },
+  cn: {
+    title: "每日热量计算器 — BMR、TDEE及目标热量计算",
+    description: "使用Mifflin-St Jeor公式计算基础代谢率(BMR)和每日总能量消耗(TDEE)，包含减重、维持和增重目标热量。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <CalorieCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

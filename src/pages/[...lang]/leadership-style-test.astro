@@ -1,0 +1,29 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import LeadershipStyleTestComp from "../../components/tests/LeadershipStyleTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "리더십 스타일 테스트 — 나는 어떤 리더인가?", description: "7가지 상황 질문으로 변혁형·서번트·민주형·코칭형·지시형 중 나의 리더십 스타일을 발견하세요." },
+  en: { title: "Leadership Style Test — What Kind of Leader Are You?", description: "Discover your leadership style — Transformational, Servant, Democratic, Coaching, or Directive — through 7 scenario questions." },
+  ja: { title: "リーダーシップスタイルテスト — あなたはどんなリーダー？", description: "7つの状況質問で変革型・サーバント・民主型・コーチング型・指示型のどれかを発見しましょう。" },
+  fr: { title: "Test de Style de Leadership — Quel type de leader êtes-vous?", description: "Découvrez votre style de leadership à travers 7 questions de scénario." },
+  es: { title: "Test de Estilo de Liderazgo — ¿Qué tipo de líder eres?", description: "Descubre tu estilo de liderazgo a través de 7 preguntas de escenario." },
+  zh: { title: "領導力風格測試 — 你是什麼樣的領導者？", description: "通過7個情境問題發現你的領導力風格。" },
+  cn: { title: "领导力风格测试 — 你是什么样的领导者？", description: "通过7个情境问题发现你的领导力风格。" },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <LeadershipStyleTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

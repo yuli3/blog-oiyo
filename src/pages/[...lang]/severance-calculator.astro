@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SeveranceCalculatorComp from "../../components/tools/SeveranceCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "퇴직금 계산기 — 예상 퇴직금 미리 계산하기",
+    description: "입사일, 퇴직일, 평균 임금을 입력해 예상 퇴직금을 계산합니다. 근로기준법 기준의 정확한 퇴직금 산출.",
+  },
+  en: {
+    title: "Severance Pay Calculator",
+    description: "Calculate expected severance pay by entering employment dates and average wage. Based on Korean Labor Standards Act.",
+  },
+  ja: {
+    title: "退職金計算機",
+    description: "入社日、退職日、平均賃金を入力して予想退職金を計算します。労働基準法に基づいた正確な退職金算出。",
+  },
+  fr: {
+    title: "Calculateur d'indemnité de licenciement",
+    description: "Calculez l'indemnité de licenciement prévue en entrant les dates d'emploi et le salaire moyen.",
+  },
+  es: {
+    title: "Calculadora de indemnización por despido",
+    description: "Calcula la indemnización por despido esperada ingresando fechas de empleo y salario promedio.",
+  },
+  zh: {
+    title: "退職金計算機",
+    description: "輸入入職日、離職日和平均工資計算預估退職金，依據勞動基準法精確計算。",
+  },
+  cn: {
+    title: "退职金计算器",
+    description: "输入入职日、离职日和平均工资计算预估退职金，依据劳动基准法精确计算。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <SeveranceCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

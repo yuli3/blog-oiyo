@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import BrokerageCalculatorComp from "../../components/tools/BrokerageCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "주식 수수료 계산기 — 매수·매도 수수료 총비용 계산",
+    description: "주식 매수·매도 시 발생하는 증권사 수수료와 거래세를 계산합니다. 실제 투자 비용을 미리 파악하세요.",
+  },
+  en: {
+    title: "Stock Brokerage Fee Calculator",
+    description: "Calculate total brokerage fees and transaction taxes for stock buy/sell orders. Know your real investment cost upfront.",
+  },
+  ja: {
+    title: "株式手数料計算機",
+    description: "株式売買時の証券会社手数料と取引税を計算します。実際の投資コストを事前に把握しましょう。",
+  },
+  fr: {
+    title: "Calculateur de frais de courtage boursier",
+    description: "Calculez les frais de courtage et taxes sur les transactions boursières.",
+  },
+  es: {
+    title: "Calculadora de comisiones de corretaje",
+    description: "Calcula comisiones de corretaje e impuestos de transacción para compra/venta de acciones.",
+  },
+  zh: {
+    title: "股票手續費計算機",
+    description: "計算股票買賣時的券商手續費和交易稅，提前了解實際投資成本。",
+  },
+  cn: {
+    title: "股票手续费计算器",
+    description: "计算股票买卖时的券商手续费和交易税，提前了解实际投资成本。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <BrokerageCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

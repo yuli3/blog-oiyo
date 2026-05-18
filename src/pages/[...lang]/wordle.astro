@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PsychologyWordleComp from "../../components/games/PsychologyWordle";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "심리학 워들 — 심리 용어로 즐기는 단어 맞추기",
+    description: "심리학 용어로 즐기는 워들 게임. 6번의 시도 안에 숨겨진 심리학 단어를 맞춰보세요.",
+  },
+  en: {
+    title: "Psychology Wordle",
+    description: "A Wordle game with psychology terms. Guess the hidden psychology word within 6 attempts.",
+  },
+  ja: {
+    title: "心理学ワードル — 心理用語で楽しむ単語当て",
+    description: "心理学用語で楽しむワードルゲーム。6回以内に隠された心理学単語を当ててください。",
+  },
+  fr: {
+    title: "Wordle Psychologie",
+    description: "Un jeu Wordle avec des termes de psychologie. Devinez le mot de psychologie caché en 6 tentatives.",
+  },
+  es: {
+    title: "Wordle de Psicología",
+    description: "Un juego Wordle con términos de psicología. Adivina la palabra de psicología oculta en 6 intentos.",
+  },
+  zh: {
+    title: "心理學文字猜謎",
+    description: "用心理學術語玩的文字猜謎遊戲。在6次嘗試內猜出隱藏的心理學單詞。",
+  },
+  cn: {
+    title: "心理学文字猜谜",
+    description: "用心理学术语玩的文字猜谜游戏。在6次尝试内猜出隐藏的心理学单词。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <PsychologyWordleComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

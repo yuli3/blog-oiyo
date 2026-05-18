@@ -1,0 +1,717 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+// ─── Meta ───────────────────────────────────────────────────────────────────
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "도구 모음 — 심리테스트·계산기·유틸리티 한곳에",
+    description:
+      "심리 테스트, 세금 계산기, 건강 도구, 이미지 도구, 게임까지 — blog.oiyo.net의 모든 인터랙티브 도구 모음",
+  },
+  en: {
+    title: "Tools Hub — Psychology Tests, Calculators & Utilities",
+    description:
+      "Psychology tests, tax calculators, health tools, image utilities, and games — every interactive tool on blog.oiyo.net in one place.",
+  },
+  ja: {
+    title: "ツール一覧 — 心理テスト・計算機・ユーティリティ",
+    description:
+      "心理テスト、税金計算機、健康ツール、画像ツール、ゲームまで — blog.oiyo.netのすべてのインタラクティブツール",
+  },
+  fr: {
+    title: "Centre d'outils — Tests psychologiques, calculateurs et utilitaires",
+    description:
+      "Tests psychologiques, calculateurs fiscaux, outils santé, outils image et jeux — tous les outils interactifs de blog.oiyo.net.",
+  },
+  es: {
+    title: "Centro de herramientas — Tests psicológicos, calculadoras y utilidades",
+    description:
+      "Tests psicológicos, calculadoras fiscales, herramientas de salud, imagen y juegos — todas las herramientas interactivas de blog.oiyo.net.",
+  },
+  zh: {
+    title: "工具中心 — 心理測驗、計算機與實用工具",
+    description:
+      "心理測驗、稅務計算機、健康工具、圖像工具和遊戲 — blog.oiyo.net 所有互動工具一站匯集。",
+  },
+  cn: {
+    title: "工具中心 — 心理测验、计算器与实用工具",
+    description:
+      "心理测验、税务计算器、健康工具、图像工具和游戏 — blog.oiyo.net 所有互动工具一站汇集。",
+  },
+};
+
+// ─── Category labels ─────────────────────────────────────────────────────────
+const categoryLabels: Record<string, Record<Locale, string>> = {
+  psychology: {
+    ko: "심리 테스트",
+    en: "Psychology Tests",
+    ja: "心理テスト",
+    fr: "Tests psychologiques",
+    es: "Tests psicológicos",
+    zh: "心理測驗",
+    cn: "心理测验",
+  },
+  finance: {
+    ko: "세금·금융",
+    en: "Tax & Finance",
+    ja: "税金・金融",
+    fr: "Impôts & Finances",
+    es: "Impuestos y Finanzas",
+    zh: "稅務·金融",
+    cn: "税务·金融",
+  },
+  health: {
+    ko: "건강",
+    en: "Health",
+    ja: "健康",
+    fr: "Santé",
+    es: "Salud",
+    zh: "健康",
+    cn: "健康",
+  },
+  image: {
+    ko: "이미지 도구",
+    en: "Image Tools",
+    ja: "画像ツール",
+    fr: "Outils Image",
+    es: "Herramientas de imagen",
+    zh: "圖像工具",
+    cn: "图像工具",
+  },
+  utilities: {
+    ko: "텍스트·유틸리티",
+    en: "Utilities",
+    ja: "テキスト・ユーティリティ",
+    fr: "Utilitaires",
+    es: "Utilidades",
+    zh: "文字·工具",
+    cn: "文字·工具",
+  },
+  games: {
+    ko: "게임",
+    en: "Games",
+    ja: "ゲーム",
+    fr: "Jeux",
+    es: "Juegos",
+    zh: "遊戲",
+    cn: "游戏",
+  },
+};
+
+// ─── Hero copy ────────────────────────────────────────────────────────────────
+const heroTitle: Record<Locale, string> = {
+  ko: "모든 도구 한곳에",
+  en: "All Tools, One Place",
+  ja: "すべてのツールを一か所に",
+  fr: "Tous les outils, en un seul endroit",
+  es: "Todas las herramientas, en un solo lugar",
+  zh: "所有工具，一站集合",
+  cn: "所有工具，一站汇集",
+};
+
+const heroSubtitle: Record<Locale, string> = {
+  ko: "심리 테스트부터 세금 계산기, 건강 체크, 이미지 도구, 게임까지 — 무료로 즉시 사용하세요.",
+  en: "From psychology tests to tax calculators, health checks, image tools, and games — all free, right now.",
+  ja: "心理テストから税金計算機、健康チェック、画像ツール、ゲームまで — 無料で今すぐご利用ください。",
+  fr: "Des tests psychologiques aux calculateurs fiscaux, outils santé, image et jeux — tout gratuit, maintenant.",
+  es: "Desde tests psicológicos hasta calculadoras fiscales, salud, imagen y juegos — todo gratis, ahora mismo.",
+  zh: "從心理測驗到稅務計算機、健康檢查、圖像工具和遊戲 — 全部免費，立即使用。",
+  cn: "从心理测验到税务计算器、健康检查、图像工具和游戏 — 全部免费，立即使用。",
+};
+
+// ─── Tool data ────────────────────────────────────────────────────────────────
+interface Tool {
+  slug: string;
+  emoji: string;
+  title: Record<Locale, string>;
+  description: Record<Locale, string>;
+}
+
+const psychologyTools: Tool[] = [
+  {
+    slug: "burnout-test",
+    emoji: "🔥",
+    title: { ko: "번아웃 자가 진단", en: "Burnout Self-Assessment", ja: "バーンアウト診断", fr: "Test de Burnout", es: "Test de Burnout", zh: "職業倦怠診斷", cn: "职业倦怠诊断" },
+    description: { ko: "나는 지금 번아웃 상태일까?", en: "Am I burned out right now?", ja: "今、燃え尽きていますか？", fr: "Suis-je en burnout?", es: "¿Estoy agotado?", zh: "我現在精疲力竭嗎？", cn: "我现在精疲力竭吗？" },
+  },
+  {
+    slug: "big-five-personality-test",
+    emoji: "🧬",
+    title: { ko: "빅파이브 성격 테스트", en: "Big Five Personality Test", ja: "ビッグファイブ性格テスト", fr: "Test Big Five", es: "Test Big Five", zh: "大五人格測驗", cn: "大五人格测验" },
+    description: { ko: "OCEAN 5가지 성격 특성 분석", en: "OCEAN five-factor personality analysis", ja: "OCEAN5因子性格分析", fr: "Analyse de personnalité OCEAN", es: "Análisis OCEAN de personalidad", zh: "OCEAN五因素性格分析", cn: "OCEAN五因素性格分析" },
+  },
+  {
+    slug: "enneagram-test",
+    emoji: "🔢",
+    title: { ko: "에니어그램 테스트", en: "Enneagram Test", ja: "エニアグラムテスト", fr: "Test Ennéagramme", es: "Test Eneagrama", zh: "九型人格測驗", cn: "九型人格测验" },
+    description: { ko: "9가지 성격 유형 중 나는?", en: "Which of 9 personality types am I?", ja: "9つの性格タイプ中、私は？", fr: "Lequel des 9 types suis-je?", es: "¿Cuál de los 9 tipos soy yo?", zh: "九種性格類型，我是哪一種？", cn: "九种性格类型，我是哪一种？" },
+  },
+  {
+    slug: "mbti-love-test",
+    emoji: "💑",
+    title: { ko: "MBTI 연애 유형 테스트", en: "MBTI Love Type Test", ja: "MBTI恋愛タイプテスト", fr: "Test MBTI Amour", es: "Test MBTI Amor", zh: "MBTI戀愛類型測驗", cn: "MBTI恋爱类型测验" },
+    description: { ko: "당신의 연애 스타일은?", en: "What is your love style?", ja: "あなたの恋愛スタイルは？", fr: "Quel est votre style amoureux?", es: "¿Cuál es tu estilo amoroso?", zh: "你的戀愛風格是？", cn: "你的恋爱风格是？" },
+  },
+  {
+    slug: "mbti-career-test",
+    emoji: "💼",
+    title: { ko: "MBTI 직업 유형 테스트", en: "MBTI Career Test", ja: "MBTI職業タイプテスト", fr: "Test MBTI Carrière", es: "Test MBTI Carrera", zh: "MBTI職業類型測驗", cn: "MBTI职业类型测验" },
+    description: { ko: "성격으로 찾는 최적 직업", en: "Find your ideal career by personality", ja: "性格から最適職業を探す", fr: "Trouvez la carrière idéale", es: "Encuentra tu carrera ideal", zh: "透過性格找最適職業", cn: "通过性格找最适职业" },
+  },
+  {
+    slug: "love-language-test",
+    emoji: "💬",
+    title: { ko: "사랑의 언어 테스트", en: "Love Language Test", ja: "愛の言語テスト", fr: "Test Langage de l'Amour", es: "Test Lenguaje del Amor", zh: "愛的語言測驗", cn: "爱的语言测验" },
+    description: { ko: "나의 사랑 표현 방식은?", en: "How do I express love?", ja: "私の愛の表現方法は？", fr: "Comment j'exprime l'amour?", es: "¿Cómo expreso el amor?", zh: "我的愛的表達方式是？", cn: "我的爱的表达方式是？" },
+  },
+  {
+    slug: "attachment-style-test",
+    emoji: "🔗",
+    title: { ko: "애착 유형 테스트", en: "Attachment Style Test", ja: "愛着スタイルテスト", fr: "Test Style d'Attachement", es: "Test Estilo de Apego", zh: "依附風格測驗", cn: "依附风格测验" },
+    description: { ko: "안정형·불안형·회피형 중 나는?", en: "Secure, anxious, or avoidant?", ja: "安定型・不安型・回避型？", fr: "Style sécurisé, anxieux ou évitant?", es: "¿Seguro, ansioso o evitativo?", zh: "安全型、焦慮型還是迴避型？", cn: "安全型、焦虑型还是回避型？" },
+  },
+  {
+    slug: "grit-scale-test",
+    emoji: "💪",
+    title: { ko: "그릿 척도 테스트", en: "Grit Scale Test", ja: "グリットスケールテスト", fr: "Test Échelle Grit", es: "Test Escala Grit", zh: "毅力量表測驗", cn: "毅力量表测验" },
+    description: { ko: "나의 열정과 끈기 수준 측정", en: "Measure my passion and perseverance", ja: "情熱と忍耐力のレベルを測定", fr: "Mesurer passion et persévérance", es: "Medir pasión y perseverancia", zh: "測量我的熱情和毅力水平", cn: "测量我的热情和毅力水平" },
+  },
+  {
+    slug: "imposter-syndrome-test",
+    emoji: "🎭",
+    title: { ko: "가면 증후군 테스트", en: "Imposter Syndrome Test", ja: "インポスター症候群テスト", fr: "Test Syndrome de l'Imposteur", es: "Test Síndrome del Impostor", zh: "冒名頂替症候群測驗", cn: "冒名顶替综合征测验" },
+    description: { ko: "나는 가면 증후군이 있을까?", en: "Do I have imposter syndrome?", ja: "インポスター症候群があるか？", fr: "Ai-je le syndrome de l'imposteur?", es: "¿Tengo síndrome del impostor?", zh: "我有冒名頂替症候群嗎？", cn: "我有冒名顶替综合征吗？" },
+  },
+  {
+    slug: "depression-screening-test",
+    emoji: "🌧️",
+    title: { ko: "우울증 자가 진단", en: "Depression Screening", ja: "うつ病スクリーニング", fr: "Dépistage Dépression", es: "Detección de Depresión", zh: "憂鬱症自我篩查", cn: "抑郁症自我筛查" },
+    description: { ko: "PHQ-9 기반 우울증 자가 체크", en: "PHQ-9 based depression self-check", ja: "PHQ-9ベースうつ病自己チェック", fr: "Auto-contrôle dépression PHQ-9", es: "Autocontrol depresión PHQ-9", zh: "基於PHQ-9的憂鬱症自我檢查", cn: "基于PHQ-9的抑郁症自我检查" },
+  },
+  {
+    slug: "anxiety-screening-test",
+    emoji: "😰",
+    title: { ko: "불안 자가 진단", en: "Anxiety Screening", ja: "不安スクリーニング", fr: "Dépistage Anxiété", es: "Detección de Ansiedad", zh: "焦慮症自我篩查", cn: "焦虑症自我筛查" },
+    description: { ko: "GAD-7 기반 불안 수준 확인", en: "GAD-7 based anxiety level check", ja: "GAD-7ベース不安レベル確認", fr: "Vérification niveau d'anxiété GAD-7", es: "Verificación nivel ansiedad GAD-7", zh: "基於GAD-7的焦慮水平檢查", cn: "基于GAD-7的焦虑水平检查" },
+  },
+  {
+    slug: "stress-type-test",
+    emoji: "😤",
+    title: { ko: "스트레스 유형 테스트", en: "Stress Type Test", ja: "ストレスタイプテスト", fr: "Test Type de Stress", es: "Test Tipo de Estrés", zh: "壓力類型測驗", cn: "压力类型测验" },
+    description: { ko: "나의 스트레스 원인과 패턴", en: "My stress sources and patterns", ja: "私のストレス原因とパターン", fr: "Mes sources et patterns de stress", es: "Mis fuentes y patrones de estrés", zh: "我的壓力來源和模式", cn: "我的压力来源和模式" },
+  },
+  {
+    slug: "perfectionism-test",
+    emoji: "✨",
+    title: { ko: "완벽주의 테스트", en: "Perfectionism Test", ja: "完璧主義テスト", fr: "Test Perfectionnisme", es: "Test Perfeccionismo", zh: "完美主義測驗", cn: "完美主义测验" },
+    description: { ko: "건강한 완벽주의 vs 불건강한 완벽주의", en: "Healthy vs unhealthy perfectionism", ja: "健全vs不健全な完璧主義", fr: "Perfectionnisme sain vs malsain", es: "Perfeccionismo saludable vs poco saludable", zh: "健康vs不健康的完美主義", cn: "健康vs不健康的完美主义" },
+  },
+  {
+    slug: "procrastination-type-test",
+    emoji: "⏰",
+    title: { ko: "미루기 유형 테스트", en: "Procrastination Type Test", ja: "先延ばしタイプテスト", fr: "Test Type de Procrastination", es: "Test Tipo de Procrastinación", zh: "拖延類型測驗", cn: "拖延类型测验" },
+    description: { ko: "나는 왜 미루는가?", en: "Why do I procrastinate?", ja: "なぜ先延ばしにするのか？", fr: "Pourquoi est-ce que je procrastine?", es: "¿Por qué procrastino?", zh: "我為什麼拖延？", cn: "我为什么拖延？" },
+  },
+  {
+    slug: "emotional-eating-test",
+    emoji: "🍫",
+    title: { ko: "감정적 식사 테스트", en: "Emotional Eating Test", ja: "感情的食事テスト", fr: "Test Alimentation Émotionnelle", es: "Test Alimentación Emocional", zh: "情緒性飲食測驗", cn: "情绪性饮食测验" },
+    description: { ko: "스트레스로 먹는 나의 패턴", en: "My stress-eating patterns", ja: "私のストレス食いパターン", fr: "Mes patterns d'alimentation émotionnelle", es: "Mis patrones de alimentación emocional", zh: "我的壓力飲食模式", cn: "我的压力饮食模式" },
+  },
+  {
+    slug: "sleep-chronotype-test",
+    emoji: "🦉",
+    title: { ko: "수면 크로노타입 테스트", en: "Sleep Chronotype Test", ja: "睡眠クロノタイプテスト", fr: "Test Chronotype Sommeil", es: "Test Cronotipo Sueño", zh: "睡眠時型測驗", cn: "睡眠时型测验" },
+    description: { ko: "나는 아침형? 저녁형?", en: "Am I a morning or evening type?", ja: "朝型？夜型？", fr: "Suis-je du matin ou du soir?", es: "¿Soy matutino o vespertino?", zh: "我是早晨型還是夜晚型？", cn: "我是早晨型还是夜晚型？" },
+  },
+  {
+    slug: "resilience-test",
+    emoji: "🌱",
+    title: { ko: "회복탄력성 테스트", en: "Resilience Test", ja: "レジリエンステスト", fr: "Test de Résilience", es: "Test de Resiliencia", zh: "心理韌性測驗", cn: "心理韧性测验" },
+    description: { ko: "역경을 극복하는 나의 능력", en: "My ability to overcome adversity", ja: "逆境を乗り越える私の能力", fr: "Ma capacité à surmonter l'adversité", es: "Mi capacidad para superar la adversidad", zh: "我克服逆境的能力", cn: "我克服逆境的能力" },
+  },
+  {
+    slug: "self-esteem-test",
+    emoji: "🌟",
+    title: { ko: "자존감 테스트", en: "Self-Esteem Test", ja: "自尊心テスト", fr: "Test d'Estime de Soi", es: "Test de Autoestima", zh: "自尊心測驗", cn: "自尊心测验" },
+    description: { ko: "로젠버그 자존감 척도 측정", en: "Rosenberg self-esteem scale", ja: "ローゼンバーグ自尊心尺度", fr: "Échelle d'estime de soi de Rosenberg", es: "Escala de autoestima de Rosenberg", zh: "羅森伯格自尊量表", cn: "罗森伯格自尊量表" },
+  },
+  {
+    slug: "social-anxiety-test",
+    emoji: "😶",
+    title: { ko: "사회 불안 테스트", en: "Social Anxiety Test", ja: "社交不安テスト", fr: "Test Anxiété Sociale", es: "Test Ansiedad Social", zh: "社交焦慮測驗", cn: "社交焦虑测验" },
+    description: { ko: "사회적 상황에서 나의 불안 수준", en: "My anxiety level in social situations", ja: "社会的状況での不安レベル", fr: "Mon niveau d'anxiété en situation sociale", es: "Mi nivel de ansiedad en situaciones sociales", zh: "我在社交場合的焦慮水平", cn: "我在社交场合的焦虑水平" },
+  },
+  {
+    slug: "riasec-career-test",
+    emoji: "🎯",
+    title: { ko: "RIASEC 직업 흥미 검사", en: "RIASEC Career Interest Test", ja: "RIASECキャリア興味検査", fr: "Test d'Intérêt RIASEC", es: "Test de Interés RIASEC", zh: "RIASEC職業興趣測驗", cn: "RIASEC职业兴趣测验" },
+    description: { ko: "홀랜드 직업 코드로 찾는 진로", en: "Find your career with Holland codes", ja: "ホランドコードでキャリアを探す", fr: "Trouvez votre carrière avec Holland", es: "Encuentra tu carrera con Holland", zh: "用霍蘭德代碼找職業", cn: "用霍兰德代码找职业" },
+  },
+];
+
+const financeTools: Tool[] = [
+  {
+    slug: "salary-calculator",
+    emoji: "💰",
+    title: { ko: "연봉 계산기", en: "Salary Calculator", ja: "年収計算機", fr: "Calculateur de Salaire", es: "Calculadora de Salario", zh: "薪資計算機", cn: "薪资计算器" },
+    description: { ko: "세전/세후 연봉 및 실수령액 계산", en: "Pre/post-tax salary and take-home pay", ja: "税前/税後年収と手取り計算", fr: "Salaire brut/net et revenu net", es: "Salario bruto/neto y sueldo neto", zh: "稅前/稅後年薪及實領薪資計算", cn: "税前/税后年薪及实领薪资计算" },
+  },
+  {
+    slug: "acquisition-tax-calculator",
+    emoji: "🏠",
+    title: { ko: "취득세 계산기", en: "Acquisition Tax Calculator", ja: "取得税計算機", fr: "Calculateur Taxe d'Acquisition", es: "Calculadora Impuesto de Adquisición", zh: "取得稅計算機", cn: "取得税计算器" },
+    description: { ko: "부동산 취득세 자동 계산", en: "Automatic property acquisition tax", ja: "不動産取得税の自動計算", fr: "Calcul automatique taxe acquisition", es: "Cálculo automático impuesto adquisición", zh: "房產取得稅自動計算", cn: "房产取得税自动计算" },
+  },
+  {
+    slug: "capital-gains-tax-calculator",
+    emoji: "📈",
+    title: { ko: "양도소득세 계산기", en: "Capital Gains Tax Calculator", ja: "譲渡所得税計算機", fr: "Calculateur Plus-Value", es: "Calculadora Ganancias de Capital", zh: "資本利得稅計算機", cn: "资本利得税计算器" },
+    description: { ko: "부동산·주식 양도소득세 계산", en: "Real estate and stock capital gains tax", ja: "不動産・株式の譲渡所得税", fr: "Impôt sur les plus-values immobilières", es: "Impuesto ganancias inmobiliarias y bursátiles", zh: "房產和股票資本利得稅計算", cn: "房产和股票资本利得税计算" },
+  },
+  {
+    slug: "property-tax-calculator",
+    emoji: "🏡",
+    title: { ko: "재산세 계산기", en: "Property Tax Calculator", ja: "固定資産税計算機", fr: "Calculateur Taxe Foncière", es: "Calculadora Impuesto Predial", zh: "房產稅計算機", cn: "房产税计算器" },
+    description: { ko: "보유 부동산 재산세 산출", en: "Calculate property holding tax", ja: "保有不動産の固定資産税算出", fr: "Calcul taxe foncière propriété", es: "Calcular impuesto predial", zh: "計算持有房產的房產稅", cn: "计算持有房产的房产税" },
+  },
+  {
+    slug: "severance-calculator",
+    emoji: "📋",
+    title: { ko: "퇴직금 계산기", en: "Severance Calculator", ja: "退職金計算機", fr: "Calculateur Indemnité", es: "Calculadora Indemnización", zh: "退休金計算機", cn: "退休金计算器" },
+    description: { ko: "근속 기간별 퇴직금 예상액", en: "Estimated severance by tenure", ja: "勤続期間別退職金見積もり", fr: "Indemnité estimée par ancienneté", es: "Indemnización estimada por antigüedad", zh: "按服務年限計算退休金", cn: "按服务年限计算退休金" },
+  },
+  {
+    slug: "freelancer-tax-calculator",
+    emoji: "🧾",
+    title: { ko: "프리랜서 세금 계산기", en: "Freelancer Tax Calculator", ja: "フリーランス税金計算機", fr: "Calculateur Impôt Freelance", es: "Calculadora Impuesto Freelance", zh: "自由職業者稅務計算機", cn: "自由职业者税务计算器" },
+    description: { ko: "사업소득 세금 및 4대보험 계산", en: "Business income tax and insurance", ja: "事業所得税と4大保険計算", fr: "Impôt revenu freelance et assurances", es: "Impuesto ingresos freelance y seguros", zh: "個人所得稅及社會保險計算", cn: "个人所得税及社会保险计算" },
+  },
+  {
+    slug: "year-end-settlement-calculator",
+    emoji: "🗓️",
+    title: { ko: "연말정산 계산기", en: "Year-End Tax Settlement", ja: "年末調整計算機", fr: "Régularisation Fin d'Année", es: "Liquidación Fin de Año", zh: "年終結算計算機", cn: "年终结算计算器" },
+    description: { ko: "연말정산 예상 환급·납부액 계산", en: "Estimated refund or payment amount", ja: "年末調整の還付・納付額見積もり", fr: "Remboursement ou paiement estimé", es: "Estimación reembolso o pago", zh: "預計退稅或補繳金額計算", cn: "预计退税或补缴金额计算" },
+  },
+  {
+    slug: "compound-interest-calculator",
+    emoji: "💹",
+    title: { ko: "복리 계산기", en: "Compound Interest Calculator", ja: "複利計算機", fr: "Calculateur Intérêts Composés", es: "Calculadora Interés Compuesto", zh: "複利計算機", cn: "复利计算器" },
+    description: { ko: "시간에 따른 자산 성장 시뮬레이션", en: "Simulate asset growth over time", ja: "時間による資産成長シミュレーション", fr: "Simuler la croissance des actifs", es: "Simular crecimiento de activos", zh: "模擬資產隨時間增長", cn: "模拟资产随时间增长" },
+  },
+  {
+    slug: "pension-calculator",
+    emoji: "👴",
+    title: { ko: "연금 계산기", en: "Pension Calculator", ja: "年金計算機", fr: "Calculateur de Retraite", es: "Calculadora de Pensión", zh: "退休金計算機", cn: "退休金计算器" },
+    description: { ko: "국민연금 예상 수령액 계산", en: "Estimated national pension benefits", ja: "国民年金の予想受取額計算", fr: "Prestations retraite estimées", es: "Beneficios de pensión estimados", zh: "預計國民年金領取金額", cn: "预计国民年金领取金额" },
+  },
+  {
+    slug: "isa-calculator",
+    emoji: "🏦",
+    title: { ko: "ISA 계산기", en: "ISA Calculator", ja: "ISA計算機", fr: "Calculateur ISA", es: "Calculadora ISA", zh: "ISA計算機", cn: "ISA计算器" },
+    description: { ko: "개인종합자산관리계좌 수익 계산", en: "Individual savings account returns", ja: "個人総合資産管理口座の収益計算", fr: "Rendement compte épargne individuel", es: "Rendimiento cuenta ahorro individual", zh: "個人綜合資產管理賬戶收益計算", cn: "个人综合资产管理账户收益计算" },
+  },
+  {
+    slug: "dsr-calculator",
+    emoji: "🏗️",
+    title: { ko: "DSR 계산기", en: "DSR Calculator", ja: "DSR計算機", fr: "Calculateur DSR", es: "Calculadora DSR", zh: "DSR計算機", cn: "DSR计算器" },
+    description: { ko: "총부채원리금상환비율 계산", en: "Debt service ratio calculation", ja: "総負債元利金返済比率計算", fr: "Calcul ratio service de la dette", es: "Cálculo ratio servicio deuda", zh: "總債務還款比例計算", cn: "总债务还款比例计算" },
+  },
+  {
+    slug: "rent-comparison-calculator",
+    emoji: "🔄",
+    title: { ko: "전월세 전환율 계산기", en: "Rent Conversion Calculator", ja: "賃貸転換率計算機", fr: "Calculateur Conversion Loyer", es: "Calculadora Conversión Alquiler", zh: "租金換算計算機", cn: "租金换算计算器" },
+    description: { ko: "전세 vs 월세 비교 계산", en: "Compare monthly rent vs lump-sum", ja: "一括払いと月払い賃貸比較", fr: "Comparer loyer mensuel et caution", es: "Comparar alquiler mensual vs depósito", zh: "比較一次性租金與月租", cn: "比较一次性租金与月租" },
+  },
+  {
+    slug: "rental-yield-calculator",
+    emoji: "📊",
+    title: { ko: "임대 수익률 계산기", en: "Rental Yield Calculator", ja: "賃貸利回り計算機", fr: "Calculateur Rendement Locatif", es: "Calculadora Rentabilidad Alquiler", zh: "租金收益率計算機", cn: "租金收益率计算器" },
+    description: { ko: "투자 부동산 임대 수익률 계산", en: "Investment property rental yield", ja: "投資不動産の賃貸利回り計算", fr: "Rendement locatif bien immobilier", es: "Rentabilidad alquiler inmueble inversión", zh: "投資房產租金收益率計算", cn: "投资房产租金收益率计算" },
+  },
+  {
+    slug: "vat-calculator",
+    emoji: "🧮",
+    title: { ko: "부가세 계산기", en: "VAT Calculator", ja: "消費税計算機", fr: "Calculateur TVA", es: "Calculadora IVA", zh: "增值稅計算機", cn: "增值税计算器" },
+    description: { ko: "부가가치세 공급가액·세액 계산", en: "Calculate supply price and VAT", ja: "供給価格と消費税額計算", fr: "Calculer prix HT et TVA", es: "Calcular precio base e IVA", zh: "計算供應價格和增值稅", cn: "计算供应价格和增值税" },
+  },
+  {
+    slug: "stock-average-calculator",
+    emoji: "📉",
+    title: { ko: "주식 평단가 계산기", en: "Stock Average Calculator", ja: "株式平均単価計算機", fr: "Calculateur Prix Moyen Action", es: "Calculadora Precio Promedio Acción", zh: "股票平均成本計算機", cn: "股票平均成本计算器" },
+    description: { ko: "추가 매수 시 평균 단가 계산", en: "Average cost with additional buys", ja: "追加購入時の平均単価計算", fr: "Prix moyen avec achats additionnels", es: "Precio promedio con compras adicionales", zh: "追加買入時的平均成本計算", cn: "追加买入时的平均成本计算" },
+  },
+  {
+    slug: "brokerage-calculator",
+    emoji: "🏛️",
+    title: { ko: "증권사 수수료 계산기", en: "Brokerage Fee Calculator", ja: "証券会社手数料計算機", fr: "Calculateur Frais Courtage", es: "Calculadora Comisión Corretaje", zh: "證券手續費計算機", cn: "证券手续费计算器" },
+    description: { ko: "주식·ETF 매매 수수료 비교", en: "Compare stock and ETF trading fees", ja: "株式・ETF売買手数料比較", fr: "Comparer frais trading actions/ETF", es: "Comparar comisiones trading acciones/ETF", zh: "比較股票和ETF交易手續費", cn: "比较股票和ETF交易手续费" },
+  },
+  {
+    slug: "inflation-calculator",
+    emoji: "📆",
+    title: { ko: "물가 상승률 계산기", en: "Inflation Calculator", ja: "物価上昇率計算機", fr: "Calculateur d'Inflation", es: "Calculadora de Inflación", zh: "通貨膨脹計算機", cn: "通货膨胀计算器" },
+    description: { ko: "연도별 실질 구매력 계산", en: "Real purchasing power by year", ja: "年度別実質購買力計算", fr: "Pouvoir d'achat réel par année", es: "Poder adquisitivo real por año", zh: "按年計算實際購買力", cn: "按年计算实际购买力" },
+  },
+  {
+    slug: "roi-calculator",
+    emoji: "🎰",
+    title: { ko: "ROI 계산기", en: "ROI Calculator", ja: "ROI計算機", fr: "Calculateur ROI", es: "Calculadora ROI", zh: "投資回報率計算機", cn: "投资回报率计算器" },
+    description: { ko: "투자 수익률 및 순이익 계산", en: "Calculate return on investment", ja: "投資収益率と純利益計算", fr: "Calculer le retour sur investissement", es: "Calcular retorno de inversión", zh: "計算投資回報率", cn: "计算投资回报率" },
+  },
+];
+
+const healthTools: Tool[] = [
+  {
+    slug: "bmi-calculator",
+    emoji: "⚖️",
+    title: { ko: "BMI 계산기", en: "BMI Calculator", ja: "BMI計算機", fr: "Calculateur IMC", es: "Calculadora IMC", zh: "BMI計算機", cn: "BMI计算器" },
+    description: { ko: "체질량지수 및 체중 범주 확인", en: "Body mass index and weight category", ja: "体格指数と体重カテゴリー確認", fr: "Indice de masse corporelle et catégorie", es: "Índice de masa corporal y categoría", zh: "體質指數及體重類別確認", cn: "体质指数及体重类别确认" },
+  },
+  {
+    slug: "body-fat-calculator",
+    emoji: "🫀",
+    title: { ko: "체지방률 계산기", en: "Body Fat Calculator", ja: "体脂肪率計算機", fr: "Calculateur Masse Grasse", es: "Calculadora Grasa Corporal", zh: "體脂率計算機", cn: "体脂率计算器" },
+    description: { ko: "체지방률 추정 및 분류", en: "Estimate and classify body fat %", ja: "体脂肪率推定と分類", fr: "Estimer et classer le % de masse grasse", es: "Estimar y clasificar % grasa corporal", zh: "估算並分類體脂百分比", cn: "估算并分类体脂百分比" },
+  },
+  {
+    slug: "calorie-calculator",
+    emoji: "🥗",
+    title: { ko: "칼로리 계산기", en: "Calorie Calculator", ja: "カロリー計算機", fr: "Calculateur de Calories", es: "Calculadora de Calorías", zh: "卡路里計算機", cn: "卡路里计算器" },
+    description: { ko: "하루 필요 칼로리 및 영양소 계산", en: "Daily calorie and nutrient needs", ja: "1日必要カロリーと栄養素計算", fr: "Besoins caloriques et nutritionnels", es: "Necesidades calóricas y nutricionales", zh: "每日所需卡路里及營養素計算", cn: "每日所需卡路里及营养素计算" },
+  },
+  {
+    slug: "water-intake-calculator",
+    emoji: "💧",
+    title: { ko: "하루 물 섭취량 계산기", en: "Water Intake Calculator", ja: "水分摂取量計算機", fr: "Calculateur Hydratation", es: "Calculadora Ingesta de Agua", zh: "每日飲水量計算機", cn: "每日饮水量计算器" },
+    description: { ko: "체중·활동량별 권장 수분 섭취량", en: "Recommended water by weight/activity", ja: "体重・活動量別推奨水分量", fr: "Eau recommandée par poids/activité", es: "Agua recomendada por peso/actividad", zh: "按體重和活動量計算建議飲水量", cn: "按体重和活动量计算建议饮水量" },
+  },
+  {
+    slug: "sleep-calculator",
+    emoji: "😴",
+    title: { ko: "수면 계산기", en: "Sleep Calculator", ja: "睡眠計算機", fr: "Calculateur de Sommeil", es: "Calculadora de Sueño", zh: "睡眠計算機", cn: "睡眠计算器" },
+    description: { ko: "수면 사이클 기반 최적 기상 시간", en: "Optimal wake time by sleep cycle", ja: "睡眠サイクル基準最適起床時間", fr: "Heure de réveil optimale par cycle", es: "Hora óptima de despertar por ciclo", zh: "基於睡眠周期的最佳起床時間", cn: "基于睡眠周期的最佳起床时间" },
+  },
+  {
+    slug: "caffeine-calculator",
+    emoji: "☕",
+    title: { ko: "카페인 계산기", en: "Caffeine Calculator", ja: "カフェイン計算機", fr: "Calculateur de Caféine", es: "Calculadora de Cafeína", zh: "咖啡因計算機", cn: "咖啡因计算器" },
+    description: { ko: "카페인 반감기 및 안전 섭취량 계산", en: "Caffeine half-life and safe intake", ja: "カフェイン半減期と安全摂取量", fr: "Demi-vie caféine et apport sûr", es: "Semivida cafeína e ingesta segura", zh: "咖啡因半衰期及安全攝入量計算", cn: "咖啡因半衰期及安全摄入量计算" },
+  },
+  {
+    slug: "age-calculator",
+    emoji: "🎂",
+    title: { ko: "나이 계산기", en: "Age Calculator", ja: "年齢計算機", fr: "Calculateur d'Âge", es: "Calculadora de Edad", zh: "年齡計算機", cn: "年龄计算器" },
+    description: { ko: "만 나이·한국 나이 동시 계산", en: "International and Korean age calculator", ja: "満年齢・韓国年齢同時計算", fr: "Âge international et coréen", es: "Edad internacional y coreana", zh: "國際年齡和韓國年齡同時計算", cn: "国际年龄和韩国年龄同时计算" },
+  },
+  {
+    slug: "pregnancy-calculator",
+    emoji: "🤰",
+    title: { ko: "임신 주수 계산기", en: "Pregnancy Calculator", ja: "妊娠週数計算機", fr: "Calculateur de Grossesse", es: "Calculadora de Embarazo", zh: "孕週計算機", cn: "孕周计算器" },
+    description: { ko: "임신 주수 및 출산 예정일 계산", en: "Gestational age and due date", ja: "妊娠週数と予定日計算", fr: "Âge gestationnel et date d'accouchement", es: "Edad gestacional y fecha de parto", zh: "妊娠週數及預產期計算", cn: "妊娠周数及预产期计算" },
+  },
+  {
+    slug: "height-predictor",
+    emoji: "📏",
+    title: { ko: "키 예측 계산기", en: "Height Predictor", ja: "身長予測計算機", fr: "Prédicteur de Taille", es: "Predictor de Estatura", zh: "身高預測計算機", cn: "身高预测计算器" },
+    description: { ko: "부모 키 기반 자녀 예상 키 계산", en: "Child height prediction by parent height", ja: "親の身長から子供の予測身長計算", fr: "Prédire la taille de l'enfant", es: "Predecir talla del niño por padres", zh: "根據父母身高預測孩子身高", cn: "根据父母身高预测孩子身高" },
+  },
+  {
+    slug: "pet-age-calculator",
+    emoji: "🐾",
+    title: { ko: "반려동물 나이 계산기", en: "Pet Age Calculator", ja: "ペット年齢計算機", fr: "Calculateur Âge Animal", es: "Calculadora Edad Mascota", zh: "寵物年齡計算機", cn: "宠物年龄计算器" },
+    description: { ko: "반려동물 나이를 인간 나이로 환산", en: "Convert pet age to human years", ja: "ペットの年齢を人間年齢に換算", fr: "Convertir l'âge animal en années humaines", es: "Convertir edad mascota a años humanos", zh: "將寵物年齡換算成人類年齡", cn: "将宠物年龄换算成人类年龄" },
+  },
+  {
+    slug: "fasting-timer",
+    emoji: "⏱️",
+    title: { ko: "간헐적 단식 타이머", en: "Fasting Timer", ja: "断食タイマー", fr: "Minuteur de Jeûne", es: "Temporizador de Ayuno", zh: "間歇性斷食計時器", cn: "间歇性断食计时器" },
+    description: { ko: "16:8, 5:2 등 단식 타이머", en: "16:8, 5:2 and other fasting timers", ja: "16:8、5:2などの断食タイマー", fr: "Minuteur jeûne 16:8, 5:2 etc.", es: "Temporizador ayuno 16:8, 5:2 etc.", zh: "16:8、5:2等斷食計時器", cn: "16:8、5:2等断食计时器" },
+  },
+  {
+    slug: "gpa-calculator",
+    emoji: "🎓",
+    title: { ko: "학점 계산기", en: "GPA Calculator", ja: "GPA計算機", fr: "Calculateur GPA", es: "Calculadora GPA", zh: "學分計算機", cn: "学分计算器" },
+    description: { ko: "학점 평균 및 졸업 요건 계산", en: "GPA average and graduation requirements", ja: "GPA平均と卒業要件計算", fr: "Moyenne GPA et conditions diplôme", es: "Promedio GPA y requisitos graduación", zh: "學分平均及畢業要求計算", cn: "学分平均及毕业要求计算" },
+  },
+];
+
+const imageTools: Tool[] = [
+  {
+    slug: "image-cropper",
+    emoji: "✂️",
+    title: { ko: "이미지 자르기", en: "Image Cropper", ja: "画像クロッパー", fr: "Rogneur d'Image", es: "Recortador de Imágenes", zh: "圖片裁剪工具", cn: "图片裁剪工具" },
+    description: { ko: "브라우저에서 이미지 자르고 저장", en: "Crop and save images in-browser", ja: "ブラウザで画像を切り取り保存", fr: "Rogner et sauvegarder dans le navigateur", es: "Recortar y guardar en el navegador", zh: "在瀏覽器中裁剪並保存圖片", cn: "在浏览器中裁剪并保存图片" },
+  },
+  {
+    slug: "image-pixelator",
+    emoji: "🎨",
+    title: { ko: "픽셀 아트 변환기", en: "Image Pixelator", ja: "ピクセルアート変換機", fr: "Pixéliseur d'Image", es: "Pixelador de Imágenes", zh: "像素藝術轉換器", cn: "像素艺术转换器" },
+    description: { ko: "이미지를 픽셀 아트로 변환", en: "Convert images to pixel art", ja: "画像をピクセルアートに変換", fr: "Convertir images en pixel art", es: "Convertir imágenes en pixel art", zh: "將圖片轉換為像素藝術", cn: "将图片转换为像素艺术" },
+  },
+  {
+    slug: "grayscale-converter",
+    emoji: "⬛",
+    title: { ko: "흑백 변환기", en: "Grayscale Converter", ja: "グレースケール変換機", fr: "Convertisseur Niveaux de Gris", es: "Convertidor Escala de Grises", zh: "灰度轉換器", cn: "灰度转换器" },
+    description: { ko: "컬러 이미지를 흑백으로 변환", en: "Convert color images to grayscale", ja: "カラー画像をグレースケールに変換", fr: "Convertir images couleur en NB", es: "Convertir imágenes color a escala grises", zh: "將彩色圖片轉換為灰度圖", cn: "将彩色图片转换为灰度图" },
+  },
+  {
+    slug: "palette-extractor",
+    emoji: "🖌️",
+    title: { ko: "색상 팔레트 추출기", en: "Palette Extractor", ja: "カラーパレット抽出機", fr: "Extracteur de Palette", es: "Extractor de Paleta", zh: "色彩調色板提取器", cn: "色彩调色板提取器" },
+    description: { ko: "이미지에서 주요 색상 팔레트 추출", en: "Extract dominant color palettes", ja: "画像から主要カラーパレット抽出", fr: "Extraire les palettes de couleurs dominantes", es: "Extraer paletas de colores dominantes", zh: "從圖片中提取主要色彩調色板", cn: "从图片中提取主要色彩调色板" },
+  },
+  {
+    slug: "ascii-art-generator",
+    emoji: "🔡",
+    title: { ko: "ASCII 아트 생성기", en: "ASCII Art Generator", ja: "ASCIIアート生成機", fr: "Générateur Art ASCII", es: "Generador Arte ASCII", zh: "ASCII藝術生成器", cn: "ASCII艺术生成器" },
+    description: { ko: "이미지를 ASCII 문자 아트로 변환", en: "Convert images to ASCII character art", ja: "画像をASCII文字アートに変換", fr: "Convertir images en art ASCII", es: "Convertir imágenes en arte ASCII", zh: "將圖片轉換為ASCII字符藝術", cn: "将图片转换为ASCII字符艺术" },
+  },
+  {
+    slug: "dog-vision-simulator",
+    emoji: "🐕",
+    title: { ko: "강아지 시각 시뮬레이터", en: "Dog Vision Simulator", ja: "犬の視覚シミュレーター", fr: "Simulateur Vision Chien", es: "Simulador Visión Perro", zh: "狗眼視覺模擬器", cn: "狗眼视觉模拟器" },
+    description: { ko: "강아지 눈으로 보는 세상 시뮬레이션", en: "See the world through a dog's eyes", ja: "犬の目から見る世界のシミュレーション", fr: "Voir le monde avec les yeux d'un chien", es: "Ver el mundo con ojos de perro", zh: "用狗的眼睛看世界的模擬", cn: "用狗的眼睛看世界的模拟" },
+  },
+  {
+    slug: "image-metadata-viewer",
+    emoji: "🔍",
+    title: { ko: "이미지 메타데이터 뷰어", en: "Image Metadata Viewer", ja: "画像メタデータビューワー", fr: "Visionneuse Métadonnées Image", es: "Visor Metadatos Imagen", zh: "圖片元數據查看器", cn: "图片元数据查看器" },
+    description: { ko: "EXIF 데이터 및 이미지 속성 확인", en: "View EXIF data and image properties", ja: "EXIFデータと画像属性の確認", fr: "Voir données EXIF et propriétés image", es: "Ver datos EXIF y propiedades imagen", zh: "查看EXIF數據和圖片屬性", cn: "查看EXIF数据和图片属性" },
+  },
+  {
+    slug: "svg-studio",
+    emoji: "🖊️",
+    title: { ko: "SVG 스튜디오", en: "SVG Studio", ja: "SVGスタジオ", fr: "Studio SVG", es: "Estudio SVG", zh: "SVG工作室", cn: "SVG工作室" },
+    description: { ko: "SVG 이미지 편집 및 최적화", en: "Edit and optimize SVG images", ja: "SVG画像の編集と最適化", fr: "Éditer et optimiser images SVG", es: "Editar y optimizar imágenes SVG", zh: "編輯和優化SVG圖像", cn: "编辑和优化SVG图像" },
+  },
+];
+
+const utilityTools: Tool[] = [
+  {
+    slug: "word-counter",
+    emoji: "📝",
+    title: { ko: "글자수 세기", en: "Word Counter", ja: "文字数カウンター", fr: "Compteur de Mots", es: "Contador de Palabras", zh: "字數計算器", cn: "字数计算器" },
+    description: { ko: "글자 수·단어 수·문단 수 실시간 카운트", en: "Real-time character, word, paragraph count", ja: "文字・単語・段落のリアルタイムカウント", fr: "Comptage en temps réel caractères/mots", es: "Conteo tiempo real caracteres/palabras", zh: "即時計算字數、詞數、段落數", cn: "即时计算字数、词数、段落数" },
+  },
+  {
+    slug: "password-generator",
+    emoji: "🔐",
+    title: { ko: "비밀번호 생성기", en: "Password Generator", ja: "パスワード生成機", fr: "Générateur de Mot de Passe", es: "Generador de Contraseña", zh: "密碼生成器", cn: "密码生成器" },
+    description: { ko: "강력한 랜덤 비밀번호 즉시 생성", en: "Generate strong random passwords instantly", ja: "強力なランダムパスワードを即時生成", fr: "Générer des mots de passe forts", es: "Generar contraseñas fuertes al instante", zh: "立即生成強隨機密碼", cn: "立即生成强随机密码" },
+  },
+  {
+    slug: "uuid-generator",
+    emoji: "🆔",
+    title: { ko: "UUID 생성기", en: "UUID Generator", ja: "UUID生成機", fr: "Générateur UUID", es: "Generador UUID", zh: "UUID生成器", cn: "UUID生成器" },
+    description: { ko: "UUID v4 랜덤 식별자 생성", en: "Generate UUID v4 random identifiers", ja: "UUID v4ランダム識別子生成", fr: "Générer des identifiants UUID v4", es: "Generar identificadores UUID v4", zh: "生成UUID v4隨機標識符", cn: "生成UUID v4随机标识符" },
+  },
+  {
+    slug: "hash-generator",
+    emoji: "🔒",
+    title: { ko: "해시 생성기", en: "Hash Generator", ja: "ハッシュ生成機", fr: "Générateur de Hachage", es: "Generador de Hash", zh: "雜湊生成器", cn: "哈希生成器" },
+    description: { ko: "MD5·SHA-1·SHA-256 해시값 생성", en: "Generate MD5, SHA-1, SHA-256 hashes", ja: "MD5・SHA-1・SHA-256ハッシュ値生成", fr: "Générer des hachages MD5/SHA", es: "Generar hashes MD5/SHA", zh: "生成MD5、SHA-1、SHA-256雜湊值", cn: "生成MD5、SHA-1、SHA-256哈希值" },
+  },
+  {
+    slug: "lorem-ipsum-generator",
+    emoji: "📄",
+    title: { ko: "로렘 입숨 생성기", en: "Lorem Ipsum Generator", ja: "ロレム・イプサム生成機", fr: "Générateur Lorem Ipsum", es: "Generador Lorem Ipsum", zh: "Lorem Ipsum生成器", cn: "Lorem Ipsum生成器" },
+    description: { ko: "디자인용 더미 텍스트 즉시 생성", en: "Generate dummy placeholder text", ja: "デザイン用ダミーテキスト即時生成", fr: "Générer du texte de remplissage", es: "Generar texto de marcador de posición", zh: "立即生成設計用佔位文字", cn: "立即生成设计用占位文字" },
+  },
+  {
+    slug: "base64-converter",
+    emoji: "🔄",
+    title: { ko: "Base64 변환기", en: "Base64 Converter", ja: "Base64変換機", fr: "Convertisseur Base64", es: "Convertidor Base64", zh: "Base64轉換器", cn: "Base64转换器" },
+    description: { ko: "텍스트·파일을 Base64로 인코딩/디코딩", en: "Encode/decode text and files to Base64", ja: "テキスト・ファイルをBase64にエンコード/デコード", fr: "Encoder/décoder texte et fichiers", es: "Codificar/decodificar texto y archivos", zh: "將文字和文件編碼/解碼為Base64", cn: "将文字和文件编码/解码为Base64" },
+  },
+];
+
+const gameTools: Tool[] = [
+  {
+    slug: "sudoku",
+    emoji: "🔢",
+    title: { ko: "스도쿠", en: "Sudoku", ja: "数独", fr: "Sudoku", es: "Sudoku", zh: "數獨", cn: "数独" },
+    description: { ko: "클래식 스도쿠 3단계 난이도", en: "Classic Sudoku with 3 difficulty levels", ja: "3難易度のクラシック数独", fr: "Sudoku classique 3 niveaux", es: "Sudoku clásico 3 niveles", zh: "三種難度的經典數獨", cn: "三种难度的经典数独" },
+  },
+  {
+    slug: "minesweeper",
+    emoji: "💣",
+    title: { ko: "지뢰찾기", en: "Minesweeper", ja: "マインスイーパー", fr: "Démineur", es: "Buscaminas", zh: "踩地雷", cn: "扫雷" },
+    description: { ko: "클래식 지뢰찾기 게임", en: "Classic minesweeper game", ja: "クラシックマインスイーパーゲーム", fr: "Jeu classique de démineur", es: "Juego clásico buscaminas", zh: "經典踩地雷遊戲", cn: "经典扫雷游戏" },
+  },
+  {
+    slug: "snake-game",
+    emoji: "🐍",
+    title: { ko: "스네이크 게임", en: "Snake Game", ja: "スネークゲーム", fr: "Jeu du Serpent", es: "Juego de la Serpiente", zh: "貪吃蛇遊戲", cn: "贪吃蛇游戏" },
+    description: { ko: "고전 스네이크 게임", en: "Classic snake arcade game", ja: "クラシックスネークゲーム", fr: "Jeu d'arcade serpent classique", es: "Juego arcade serpiente clásico", zh: "經典貪吃蛇街機遊戲", cn: "经典贪吃蛇街机游戏" },
+  },
+  {
+    slug: "game-2048",
+    emoji: "🎯",
+    title: { ko: "2048 게임", en: "2048 Game", ja: "2048ゲーム", fr: "Jeu 2048", es: "Juego 2048", zh: "2048遊戲", cn: "2048游戏" },
+    description: { ko: "숫자 타일 합산 퍼즐 게임", en: "Number tile merging puzzle game", ja: "数字タイル合算パズルゲーム", fr: "Puzzle fusion de tuiles numériques", es: "Puzzle fusión de fichas numéricas", zh: "數字方塊合併益智遊戲", cn: "数字方块合并益智游戏" },
+  },
+  {
+    slug: "wordle",
+    emoji: "📖",
+    title: { ko: "워들", en: "Wordle", ja: "ワードル", fr: "Wordle", es: "Wordle", zh: "Wordle", cn: "Wordle" },
+    description: { ko: "6번 안에 단어 맞추기 게임", en: "Guess the word in 6 tries", ja: "6回以内に単語を当てるゲーム", fr: "Deviner le mot en 6 essais", es: "Adivina la palabra en 6 intentos", zh: "6次以內猜出單詞的遊戲", cn: "6次以内猜出单词的游戏" },
+  },
+  {
+    slug: "chimp-test",
+    emoji: "🐒",
+    title: { ko: "침팬지 테스트", en: "Chimp Test", ja: "チンパンジーテスト", fr: "Test Chimpanzé", es: "Test Chimpancé", zh: "黑猩猩測試", cn: "黑猩猩测试" },
+    description: { ko: "침팬지 vs 인간 기억력 대결", en: "Chimp vs human working memory test", ja: "チンパンジーvs人間の記憶力対決", fr: "Test mémoire chimpanzé vs humain", es: "Test memoria chimpancé vs humano", zh: "黑猩猩與人類工作記憶對決", cn: "黑猩猩与人类工作记忆对决" },
+  },
+  {
+    slug: "lotto-generator",
+    emoji: "🎱",
+    title: { ko: "로또 번호 생성기", en: "Lotto Number Generator", ja: "ロト番号生成機", fr: "Générateur Numéros Loto", es: "Generador Números Lotería", zh: "樂透號碼生成器", cn: "彩票号码生成器" },
+    description: { ko: "랜덤 로또 번호 즉시 생성", en: "Generate random lottery numbers", ja: "ランダムロト番号即時生成", fr: "Générer des numéros de loterie", es: "Generar números de lotería aleatorios", zh: "立即生成隨機樂透號碼", cn: "立即生成随机彩票号码" },
+  },
+  {
+    slug: "wheel-spinner",
+    emoji: "🎡",
+    title: { ko: "랜덤 룰렛", en: "Wheel Spinner", ja: "ランダムルーレット", fr: "Roue Aléatoire", es: "Ruleta Aleatoria", zh: "隨機轉盤", cn: "随机转盘" },
+    description: { ko: "커스텀 항목 랜덤 선택 룰렛", en: "Custom item random selection wheel", ja: "カスタム項目ランダム選択ルーレット", fr: "Roue de sélection aléatoire", es: "Ruleta de selección aleatoria", zh: "自定義項目隨機選擇轉盤", cn: "自定义项目随机选择转盘" },
+  },
+];
+
+// ─── Category config ──────────────────────────────────────────────────────────
+interface Category {
+  id: string;
+  emoji: string;
+  tools: Tool[];
+  color: string;
+  bgColor: string;
+}
+
+const categories: Category[] = [
+  { id: "psychology", emoji: "🧠", tools: psychologyTools, color: "text-violet-700", bgColor: "bg-violet-50 border-violet-200" },
+  { id: "finance",    emoji: "💰", tools: financeTools,    color: "text-emerald-700", bgColor: "bg-emerald-50 border-emerald-200" },
+  { id: "health",     emoji: "🏥", tools: healthTools,     color: "text-sky-700",     bgColor: "bg-sky-50 border-sky-200" },
+  { id: "image",      emoji: "🖼️", tools: imageTools,      color: "text-amber-700",   bgColor: "bg-amber-50 border-amber-200" },
+  { id: "utilities",  emoji: "🔧", tools: utilityTools,    color: "text-rose-700",    bgColor: "bg-rose-50 border-rose-200" },
+  { id: "games",      emoji: "🎮", tools: gameTools,       color: "text-indigo-700",  bgColor: "bg-indigo-50 border-indigo-200" },
+];
+
+const totalCount = categories.reduce((sum, c) => sum + c.tools.length, 0);
+const m = meta[locale] ?? meta.en;
+
+// ─── "More" label ─────────────────────────────────────────────────────────────
+const moreLabel: Record<Locale, string> = {
+  ko: "더보기",
+  en: "View all",
+  ja: "すべて見る",
+  fr: "Voir tout",
+  es: "Ver todo",
+  zh: "查看全部",
+  cn: "查看全部",
+};
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <section class="py-16 md:py-24">
+    <div class="container px-4">
+
+      {/* ── Hero ── */}
+      <div class="mb-16 max-w-3xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/10 border border-secondary/20 text-secondary text-[10px] font-black uppercase tracking-[0.2em] mb-6">
+          Tools Hub
+        </div>
+        <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight mb-6">
+          {heroTitle[locale]}
+        </h1>
+        <p class="text-lg text-muted-foreground leading-relaxed max-w-2xl">
+          {heroSubtitle[locale]}
+        </p>
+        <p class="mt-2 text-sm text-muted-foreground/50">{totalCount} tools</p>
+      </div>
+
+      {/* ── Category quick-nav ── */}
+      <nav aria-label="Tool categories" class="flex flex-wrap gap-2 mb-16">
+        {categories.map((cat) => (
+          <a
+            href={`#category-${cat.id}`}
+            class={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-semibold transition-colors hover:bg-secondary/10 ${cat.bgColor} ${cat.color}`}
+          >
+            <span aria-hidden="true">{cat.emoji}</span>
+            {categoryLabels[cat.id][locale]}
+            <span class="opacity-60 font-normal">({cat.tools.length})</span>
+          </a>
+        ))}
+      </nav>
+
+      {/* ── Category sections ── */}
+      {categories.map((cat) => (
+        <section id={`category-${cat.id}`} class="mb-20 scroll-mt-8" aria-labelledby={`heading-${cat.id}`}>
+
+          {/* Category header */}
+          <div class="flex items-center gap-4 mb-8">
+            <div class={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border text-sm font-bold ${cat.bgColor} ${cat.color}`}>
+              <span aria-hidden="true">{cat.emoji}</span>
+              <h2 id={`heading-${cat.id}`}>{categoryLabels[cat.id][locale]}</h2>
+            </div>
+            <div class="h-px flex-1 bg-border/40" />
+            <span class="text-xs text-muted-foreground/50 tabular-nums">
+              {cat.tools.length} tools
+            </span>
+          </div>
+
+          {/* Tool grid */}
+          <div class="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            {cat.tools.map((tool) => {
+              const href = `/${locale}/${tool.slug}/`;
+              const title = tool.title[locale] ?? tool.title.en;
+              const desc  = tool.description[locale] ?? tool.description.en;
+              return (
+                <a
+                  href={href}
+                  class="group flex flex-col gap-3 p-4 rounded-2xl border border-secondary/20 bg-secondary/5 hover:border-secondary/40 hover:bg-secondary/10 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
+                  aria-label={title}
+                >
+                  <span class="text-2xl leading-none" aria-hidden="true">{tool.emoji}</span>
+                  <div class="space-y-1 min-w-0">
+                    <p class="font-bold text-sm leading-snug group-hover:text-secondary transition-colors line-clamp-2">
+                      {title}
+                    </p>
+                    <p class="text-xs text-muted-foreground leading-relaxed line-clamp-2">
+                      {desc}
+                    </p>
+                  </div>
+                  <span class="mt-auto text-[10px] font-bold uppercase tracking-widest text-secondary/60 group-hover:text-secondary transition-colors">
+                    →
+                  </span>
+                </a>
+              );
+            })}
+          </div>
+
+          {/* "더보기" — only for psychology since it's the largest */}
+          {cat.id === "psychology" && (
+            <div class="mt-6 text-center">
+              <a
+                href={`/${locale}/`}
+                class="inline-flex items-center gap-1 text-sm font-semibold text-secondary hover:underline"
+              >
+                {moreLabel[locale]} →
+              </a>
+            </div>
+          )}
+        </section>
+      ))}
+
+    </div>
+  </section>
+</BaseLayout>

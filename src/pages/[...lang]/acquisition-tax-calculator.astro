@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import AcquisitionTaxCalculatorComp from "../../components/tools/AcquisitionTaxCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "부동산 취득세 계산기 — 주택 매수 전 세금 미리 계산하기",
+    description: "주택 가격과 취득 유형에 따른 취득세를 미리 계산하세요. 1주택·2주택·법인 등 상황별 세율을 반영합니다.",
+  },
+  en: {
+    title: "Real Estate Acquisition Tax Calculator",
+    description: "Calculate acquisition tax before buying property in Korea. Supports first home, second home, and corporate purchase rates.",
+  },
+  ja: {
+    title: "不動産取得税計算機",
+    description: "韓国の不動産取得税を事前に計算します。1軒目・2軒目・法人など状況別の税率に対応しています。",
+  },
+  fr: {
+    title: "Calculateur de taxe d'acquisition immobilière",
+    description: "Calculez la taxe d'acquisition avant d'acheter un bien immobilier en Corée.",
+  },
+  es: {
+    title: "Calculadora de impuesto de adquisición inmobiliaria",
+    description: "Calcula el impuesto de adquisición antes de comprar una propiedad en Corea.",
+  },
+  zh: {
+    title: "不動產取得稅計算機",
+    description: "購買韓國不動產前預先計算取得稅。支援首套房、二套房及法人購房稅率。",
+  },
+  cn: {
+    title: "不动产取得税计算器",
+    description: "购买韩国不动产前预先计算取得税。支持首套房、二套房及法人购房税率。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <AcquisitionTaxCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

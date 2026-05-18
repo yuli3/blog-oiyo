@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SpendingHabitsTestComp from "../../components/tests/SpendingHabitsTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "소비 습관 테스트 — 나는 어떤 소비 유형?",
+    description: "계획형, 충동형, 경험형, 가치형 — 12가지 상황으로 나만의 소비 패턴을 알아보세요.",
+  },
+  en: {
+    title: "Spending Habits Test — What's Your Consumer Type?",
+    description: "Planner, Impulsive, Experiential, or Value Seeker? Discover your spending personality with 12 scenarios.",
+  },
+  ja: {
+    title: "消費習慣テスト — あなたの消費タイプは？",
+    description: "計画型、衝動型、体験型、価値型 — 12のシナリオで消費パターンを発見。",
+  },
+  fr: {
+    title: "Test d'habitudes de dépenses — Quel est votre type de consommateur?",
+    description: "Planificateur, impulsif, expérientiel ou chercheur de valeur? Découvrez votre personnalité de dépenses avec 12 scénarios.",
+  },
+  es: {
+    title: "Test de hábitos de gasto — ¿Cuál es tu tipo de consumidor?",
+    description: "¿Planificador, impulsivo, experiencial o buscador de valor? Descubre tu personalidad de gasto con 12 escenarios.",
+  },
+  zh: {
+    title: "消費習慣測試 — 您是哪種消費類型？",
+    description: "計劃型、衝動型、體驗型還是價值型？通過12個場景發現您的消費模式。",
+  },
+  cn: {
+    title: "消费习惯测试 — 您是哪种消费类型？",
+    description: "计划型、冲动型、体验型还是价值型？通过12个场景发现您的消费模式。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <SpendingHabitsTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

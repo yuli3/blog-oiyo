@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import EnneagramTestComp from "../../components/tests/EnneagramTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "에니어그램 테스트 — 나의 9가지 성격 유형 찾기",
+    description: "개혁가부터 평화주의자까지 — 27가지 문항으로 나의 핵심 동기와 두려움을 탐색하세요.",
+  },
+  en: {
+    title: "Enneagram Test — Discover Your Personality Type",
+    description: "From Reformer to Peacemaker — explore your core motivations and fears with 27 questions.",
+  },
+  ja: {
+    title: "エニアグラムテスト — 9つの性格タイプを発見",
+    description: "改革者から平和主義者まで — 27問で自分の核心的な動機と恐怖を探求しましょう。",
+  },
+  fr: {
+    title: "Test Ennéagramme — Découvrez Votre Type de Personnalité",
+    description: "Du Réformateur au Pacificateur — explorez vos motivations et peurs fondamentales avec 27 questions.",
+  },
+  es: {
+    title: "Test Eneagrama — Descubre Tu Tipo de Personalidad",
+    description: "Del Reformador al Pacificador — explora tus motivaciones y miedos centrales con 27 preguntas.",
+  },
+  zh: {
+    title: "九型人格測試 — 發現您的性格類型",
+    description: "從改革者到和平締造者 — 通過27道題探索您的核心動機與恐懼。",
+  },
+  cn: {
+    title: "九型人格测试 — 发现您的性格类型",
+    description: "从改革者到和平缔造者 — 通过27道题探索您的核心动机与恐惧。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <EnneagramTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

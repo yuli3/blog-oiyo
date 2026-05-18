@@ -3,7 +3,7 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getTranslations, locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
-import { MAGAZINE_CATEGORIES } from "../../lib/taxonomy";
+import { getTrackFromData, slugifyCategory } from "../../lib/taxonomy";
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -20,7 +20,7 @@ const allPosts = await getCollection("blog", ({ data }) => {
   return (
     data.draft !== true &&
     data.locale === locale &&
-    MAGAZINE_CATEGORIES.includes(data.category ?? "")
+    getTrackFromData(data) === "magazine"
   );
 });
 
@@ -178,7 +178,7 @@ const latestLabel = magazineT?.latestIssue ?? "Latest";
                 </h2>
                 <div class="h-px flex-1 bg-border/40" />
                 <a
-                  href={`/${locale}/category/${category.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
+                  href={`/${locale}/category/${slugifyCategory(category)}`}
                   class="text-xs text-muted-foreground/50 hover:text-primary transition-colors"
                 >
                   All →

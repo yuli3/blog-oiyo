@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import EgogramTestComp from "../../components/tests/EgogramTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "에고그램 자아 상태 테스트 — 나의 다섯 가지 자아는?",
+    description: "교류분석(TA) 기반의 10문항 에고그램 테스트. 비판적 부모, 양육적 부모, 성인, 자유로운 아이, 순응하는 아이 중 내 주된 자아 상태를 알아보세요.",
+  },
+  en: {
+    title: "Egogram Test — What Are Your Five Ego States?",
+    description: "A 10-question egogram test based on Transactional Analysis. Discover your dominant ego state among Critical Parent, Nurturing Parent, Adult, Free Child, and Adapted Child.",
+  },
+  ja: {
+    title: "エゴグラムテスト — あなたの5つの自我状態は？",
+    description: "交流分析(TA)に基づく10問エゴグラムテスト。批判的親、養育的親、成人、自由な子供、順応した子供の中で、自分の主要な自我状態を発見しましょう。",
+  },
+  fr: {
+    title: "Test Égodiagramme — Quels sont vos cinq états du moi?",
+    description: "Un test égodiagramme de 10 questions basé sur l'Analyse Transactionnelle. Découvrez votre état du moi dominant.",
+  },
+  es: {
+    title: "Test de Egograma — ¿Cuáles son tus cinco estados del yo?",
+    description: "Un test de egograma de 10 preguntas basado en el Análisis Transaccional. Descubre tu estado del yo dominante.",
+  },
+  zh: {
+    title: "自我圖測試 — 你的五種自我狀態是什麼？",
+    description: "基於交流分析(TA)的10題自我圖測試。了解你的主要自我狀態。",
+  },
+  cn: {
+    title: "自我图测试 — 你的五种自我状态是什么？",
+    description: "基于交流分析(TA)的10题自我图测试。了解你的主要自我状态。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <EgogramTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

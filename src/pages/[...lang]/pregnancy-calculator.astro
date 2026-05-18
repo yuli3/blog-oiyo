@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PregnancyCalculatorComp from "../../components/tools/PregnancyCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "임신 주수 계산기 — 출산 예정일 및 임신 주수 계산",
+    description: "마지막 생리일 또는 수정일을 입력해 현재 임신 주수와 출산 예정일을 계산합니다. 임신 3분기 단계도 함께 확인하세요.",
+  },
+  en: {
+    title: "Pregnancy Week Calculator",
+    description: "Calculate your current pregnancy week and estimated due date from your last menstrual period or conception date.",
+  },
+  ja: {
+    title: "妊娠週数計算機",
+    description: "最終月経日または受精日を入力して、現在の妊娠週数と出産予定日を計算します。",
+  },
+  fr: {
+    title: "Calculateur de Semaines de Grossesse",
+    description: "Calculez votre semaine de grossesse actuelle et la date d'accouchement prévue.",
+  },
+  es: {
+    title: "Calculadora de Semanas de Embarazo",
+    description: "Calcula tu semana de embarazo actual y la fecha estimada de parto.",
+  },
+  zh: {
+    title: "妊娠週數計算機",
+    description: "輸入最後一次月經日期或受孕日期，計算當前懷孕週數和預產期。",
+  },
+  cn: {
+    title: "妊娠周数计算器",
+    description: "输入最后一次月经日期或受孕日期，计算当前怀孕周数和预产期。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <PregnancyCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

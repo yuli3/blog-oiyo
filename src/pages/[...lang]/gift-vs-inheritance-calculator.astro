@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import GiftVsInheritanceCalculatorComp from "../../components/calculators/GiftVsInheritanceCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "증여 vs 상속 비교 계산기 — 세금 시뮬레이션",
+    description: "현재 자산 가치, 예상 상승률, 기간을 입력해 지금 증여하는 것과 나중에 상속받는 것 중 어느 쪽이 세금 부담이 낮은지 비교합니다.",
+  },
+  en: {
+    title: "Gift vs Inheritance Tax Comparison Calculator",
+    description: "Compare whether gifting assets now or inheriting them later results in lower taxes, based on asset value, growth rate, and time horizon.",
+  },
+  ja: {
+    title: "贈与 vs 相続 比較計算機 — 税金シミュレーション",
+    description: "現在の資産価値、成長率、期間を入力して、今贈与するのと将来相続するのどちらが税負担が少ないかを比較します。",
+  },
+  fr: {
+    title: "Calculateur Donation vs Succession — Comparaison Fiscale",
+    description: "Comparez la donation maintenant et la succession plus tard pour minimiser votre charge fiscale.",
+  },
+  es: {
+    title: "Calculadora Donación vs Herencia — Comparación Fiscal",
+    description: "Compara si donar ahora o heredar después resulta en menor carga fiscal según el valor del activo.",
+  },
+  zh: {
+    title: "贈與 vs 繼承比較計算機 — 稅務模擬",
+    description: "輸入資產現值、增長率和年數，比較現在贈與或以後繼承哪種稅負更低。",
+  },
+  cn: {
+    title: "赠与 vs 继承比较计算器 — 税务模拟",
+    description: "输入资产现值、增长率和年数，比较现在赠与或以后继承哪种税负更低。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <GiftVsInheritanceCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

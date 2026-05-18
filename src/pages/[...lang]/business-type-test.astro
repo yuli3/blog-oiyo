@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import BusinessTypeTestComp from "../../components/tests/BusinessTypeTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "창업 성향 테스트 — 나는 어떤 사업가 유형인가?",
+    description: "혁신가, 구축가, 연결가, 분석가, 리더 — 15가지 질문으로 나의 창업 성향과 사업가 유형을 알아보세요.",
+  },
+  en: {
+    title: "Business Type Test — What Kind of Entrepreneur Am I?",
+    description: "Innovator, Builder, Connector, Analyst, or Leader — discover your entrepreneurship type and business personality with 15 questions.",
+  },
+  ja: {
+    title: "起業タイプテスト — 私はどんなビジネスパーソン？",
+    description: "革新家、構築家、コネクター、アナリスト、リーダー — 15の質問で自分の起業タイプとビジネスパーソンとしての個性を調べましょう。",
+  },
+  fr: {
+    title: "Test de type entrepreneur — Quel genre d'entrepreneur suis-je ?",
+    description: "Innovateur, Constructeur, Connecteur, Analyste ou Leader — découvrez votre type d'entrepreneuriat avec 15 questions.",
+  },
+  es: {
+    title: "Test de tipo empresarial — ¿Qué tipo de emprendedor soy?",
+    description: "Innovador, Constructor, Conector, Analista o Líder — descubra su tipo de emprendimiento con 15 preguntas.",
+  },
+  zh: {
+    title: "創業類型測試 — 我是什麼類型的企業家？",
+    description: "創新者、建設者、連接者、分析師、領導者 — 通過15個問題了解您的創業傾向和企業家類型。",
+  },
+  cn: {
+    title: "创业类型测试 — 我是什么类型的企业家？",
+    description: "创新者、建设者、连接者、分析师、领导者 — 通过15个问题了解您的创业倾向和企业家类型。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <BusinessTypeTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

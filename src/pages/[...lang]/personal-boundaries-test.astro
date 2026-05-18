@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PersonalBoundariesTestComp from "../../components/tests/PersonalBoundariesTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "개인 경계선 강도 테스트 — 나의 경계는 얼마나 건강한가?",
+    description: "감정·신체·시간·디지털 4가지 영역의 12개 질문으로 나의 개인 경계선 강도를 알아보세요. 영역별 프로필과 경계선 강화 조언을 제공합니다.",
+  },
+  en: {
+    title: "Personal Boundaries Test — How Strong Are Your Limits?",
+    description: "Discover your personal boundary strength across 4 domains (emotional, physical, time, digital) with 12 questions. Includes domain profile and boundary-building guidance.",
+  },
+  ja: {
+    title: "個人境界線強度テスト — 私の境界線はどれほど健全か？",
+    description: "感情・身体・時間・デジタルの4領域12問で個人境界線の強度を確認しましょう。領域別プロフィールと境界線強化のアドバイスを提供します。",
+  },
+  fr: {
+    title: "Test des Limites Personnelles — Quelle est la force de vos limites?",
+    description: "Découvrez la solidité de vos limites personnelles dans 4 domaines avec 12 questions. Inclut un profil par domaine et des conseils pour renforcer vos limites.",
+  },
+  es: {
+    title: "Test de Límites Personales — ¿Qué tan Fuertes son tus Límites?",
+    description: "Descubre la solidez de tus límites personales en 4 dominios con 12 preguntas. Incluye perfil por dominio y orientación para fortalecer límites.",
+  },
+  zh: {
+    title: "個人界限強度測試 — 您的界限有多健康？",
+    description: "通過4個領域（情感、身體、時間、數字）的12個問題了解您的個人界限強度。包括領域別分析和加強界限的建議。",
+  },
+  cn: {
+    title: "个人界限强度测试 — 您的界限有多健康？",
+    description: "通过4个领域（情感、身体、时间、数字）的12个问题了解您的个人界限强度。包括领域分析和加强界限的建议。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <PersonalBoundariesTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

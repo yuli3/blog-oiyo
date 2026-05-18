@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ColorPickerToolComp from "../../components/tools/ColorPickerTool";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "색상 선택기 — HEX·RGB·HSL 색상 코드 변환기",
+    description: "HEX, RGB, HSL 색상 코드를 자유롭게 변환하고 보색·유사색을 확인하세요. 클릭 한 번으로 색상 코드를 복사할 수 있습니다.",
+  },
+  en: {
+    title: "Color Picker — HEX · RGB · HSL Color Code Converter",
+    description: "Freely convert between HEX, RGB, and HSL color codes and explore complementary and analogous colors. Copy any color code with a single click.",
+  },
+  ja: {
+    title: "カラーピッカー — HEX・RGB・HSL カラーコード変換器",
+    description: "HEX、RGB、HSLのカラーコードを自由に変換し、補色・類似色を確認できます。クリック一つでカラーコードをコピーできます。",
+  },
+  fr: {
+    title: "Sélecteur de couleurs — Convertisseur de codes HEX·RGB·HSL",
+    description: "Convertissez librement entre les codes de couleur HEX, RGB et HSL et explorez les couleurs complémentaires et analogues.",
+  },
+  es: {
+    title: "Selector de color — Convertidor de códigos HEX·RGB·HSL",
+    description: "Convierte libremente entre códigos de color HEX, RGB y HSL y explora colores complementarios y análogos.",
+  },
+  zh: {
+    title: "顏色選擇器 — HEX·RGB·HSL 顏色代碼轉換器",
+    description: "自由轉換HEX、RGB、HSL顏色代碼，查看補色和類似色。一鍵複製顏色代碼。",
+  },
+  cn: {
+    title: "颜色选择器 — HEX·RGB·HSL 颜色代码转换器",
+    description: "自由转换HEX、RGB、HSL颜色代码，查看补色和类似色。一键复制颜色代码。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <ColorPickerToolComp client:load locale={locale} />
+  </main>
+</BaseLayout>

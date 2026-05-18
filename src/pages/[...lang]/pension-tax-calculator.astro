@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PensionTaxCalculatorComp from "../../components/calculators/PensionTaxCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "연금저축 세액공제 계산기 — 환급액 계산",
+    description: "연금저축과 IRP 납입액으로 받을 수 있는 연말정산 세액공제 환급액을 계산합니다. 총급여 기준 세액공제율 자동 적용.",
+  },
+  en: {
+    title: "Pension Savings Tax Credit Calculator — Year-End Refund",
+    description: "Calculate your year-end tax credit refund from pension savings and IRP contributions. Applies 16.5% or 13.2% rate based on income.",
+  },
+  ja: {
+    title: "年金貯蓄税額控除計算機 — 年末精算還付額",
+    description: "年金貯蓄とIRPの納付額から受け取れる年末精算税額控除還付額を計算します。",
+  },
+  fr: {
+    title: "Calculateur Crédit d'Impôt Épargne Retraite",
+    description: "Calculez votre remboursement d'impôt de fin d'année grâce à vos versements d'épargne retraite et IRP.",
+  },
+  es: {
+    title: "Calculadora Deducción Fiscal Plan de Pensiones",
+    description: "Calcula tu devolución fiscal de fin de año por aportaciones a plan de pensiones e IRP.",
+  },
+  zh: {
+    title: "養老金儲蓄稅收抵免計算機 — 年末退稅",
+    description: "計算養老金儲蓄和IRP繳費的年末稅收抵免退款，自動應用16.5%或13.2%稅率。",
+  },
+  cn: {
+    title: "养老金储蓄税收抵免计算器 — 年末退税",
+    description: "计算养老金储蓄和IRP缴费的年末税收抵免退款，自动应用16.5%或13.2%税率。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <PensionTaxCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

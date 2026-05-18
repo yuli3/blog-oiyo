@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import AnxietyScreeningTestComp from "../../components/tests/AnxietyScreeningTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "불안감 자가 점검 (GAD-7) — 내 불안 수준 확인하기",
+    description: "GAD-7 기반 7가지 질문으로 불안 수준을 점검해보세요. 선별 검사이며 진단이 아닙니다. 결과에 따라 불안 완화 전략과 전문 자원 안내를 제공합니다.",
+  },
+  en: {
+    title: "Anxiety Screening (GAD-7) — Check Your Anxiety Level",
+    description: "Check your anxiety level with 7 GAD-7 based questions. A screening tool, not a diagnosis. Provides anxiety management strategies and professional resources based on your result.",
+  },
+  ja: {
+    title: "不安スクリーニング (GAD-7) — 不安レベルを確認する",
+    description: "GAD-7に基づく7つの質問で不安レベルを確認しましょう。スクリーニングツールであり診断ではありません。結果に応じた不安緩和戦略と専門リソースを提供します。",
+  },
+  fr: {
+    title: "Dépistage d'Anxiété (GAD-7) — Vérifiez votre niveau d'anxiété",
+    description: "Vérifiez votre niveau d'anxiété avec 7 questions basées sur le GAD-7. Outil de dépistage, pas un diagnostic. Fournit des stratégies et ressources professionnelles.",
+  },
+  es: {
+    title: "Cribado de Ansiedad (GAD-7) — Verifica tu Nivel de Ansiedad",
+    description: "Verifica tu nivel de ansiedad con 7 preguntas basadas en el GAD-7. Herramienta de cribado, no diagnóstico. Proporciona estrategias y recursos profesionales.",
+  },
+  zh: {
+    title: "焦慮篩查 (GAD-7) — 檢查您的焦慮程度",
+    description: "通過7個基於GAD-7的問題檢查焦慮程度。篩查工具，非診斷。根據結果提供焦慮管理策略和專業資源。",
+  },
+  cn: {
+    title: "焦虑筛查 (GAD-7) — 检查您的焦虑程度",
+    description: "通过7个基于GAD-7的问题检查焦虑程度。筛查工具，非诊断。根据结果提供焦虑管理策略和专业资源。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <AnxietyScreeningTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ExpenseRatioCalculatorComp from "../../components/calculators/ExpenseRatioCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "추계 vs 기장 경비율 계산기 — 사업자 세금 비교",
+    description: "표준경비율(추계)과 실제 경비(기장) 중 어느 방식이 과세소득을 더 낮추는지 비교합니다.",
+  },
+  en: {
+    title: "Estimated vs Bookkeeping Expense Calculator — Tax Comparison",
+    description: "Compare taxable income under the standard estimated expense ratio versus actual bookkeeping expenses.",
+  },
+  ja: {
+    title: "推計申告 vs 帳簿申告 経費率計算機 — 税負担比較",
+    description: "標準経費率（推計）と実際経費（帳簿）のどちらが課税所得を低くするか比較します。",
+  },
+  fr: {
+    title: "Comparateur Forfait vs Comptabilité — Taux de Charges",
+    description: "Comparez le revenu imposable entre le taux de charges forfaitaire et les charges réelles comptabilisées.",
+  },
+  es: {
+    title: "Comparador Módulos vs Contabilidad — Ratio de Gastos",
+    description: "Compara la renta imponible entre el ratio de gastos estimado y los gastos reales contabilizados.",
+  },
+  zh: {
+    title: "推計 vs 帳簿申報費用率計算機 — 稅負比較",
+    description: "比較標準費用率（推計）和實際費用（帳簿）哪種方式降低應稅所得更多。",
+  },
+  cn: {
+    title: "推计 vs 账簿申报费用率计算器 — 税负比较",
+    description: "比较标准费用率（推计）和实际费用（账簿）哪种方式降低应税所得更多。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <ExpenseRatioCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

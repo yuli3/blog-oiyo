@@ -1,0 +1,29 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import EmotionRegulationTestComp from "../../components/tests/EmotionRegulationTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "감정 조절 전략 테스트 — 나는 감정을 어떻게 다루는가?", description: "James Gross의 감정 조절 이론 기반 5가지 전략(재평가·억압·수용·반추·문제해결)으로 나만의 감정 조절 패턴을 알아보세요." },
+  en: { title: "Emotion Regulation Strategy Test — How Do You Handle Your Emotions?", description: "Discover your dominant emotion regulation strategy — reappraisal, suppression, acceptance, rumination, or problem-solving — based on James Gross's research." },
+  ja: { title: "感情調整戦略テスト — あなたはどのように感情を扱いますか？", description: "James Grossの感情調整理論に基づき、再評価・抑制・受容・反芻・問題解決の5つの戦略でパターンを発見しましょう。" },
+  fr: { title: "Test de Régulation Émotionnelle — Comment gérez-vous vos émotions?", description: "Découvrez votre stratégie dominante de régulation émotionnelle à travers 5 questions." },
+  es: { title: "Test de Regulación Emocional — ¿Cómo manejas tus emociones?", description: "Descubre tu estrategia dominante de regulación emocional a través de 5 preguntas." },
+  zh: { title: "情緒調節策略測試 — 你如何處理情緒？", description: "通過5個問題發現你的主要情緒調節策略。" },
+  cn: { title: "情绪调节策略测试 — 你如何处理情绪？", description: "通过5个问题发现你的主要情绪调节策略。" },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <EmotionRegulationTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

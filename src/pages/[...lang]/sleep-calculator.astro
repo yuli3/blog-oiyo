@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SleepCalculatorComp from "../../components/tools/SleepCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "수면 계산기 — 최적 기상 시간·취침 시간 계산하기",
+    description: "90분 수면 주기를 기반으로 최적의 기상 시간 또는 취침 시간을 계산합니다. 크로노타입 기반 추천과 수면 부채 계산기도 제공합니다.",
+  },
+  en: {
+    title: "Sleep Calculator — Find Your Optimal Wake-up or Bedtime",
+    description: "Calculate the best wake-up or bedtime based on 90-minute sleep cycles. Includes chronotype recommendations and sleep debt tracker.",
+  },
+  ja: {
+    title: "睡眠計算機 — 最適な起床時間・就寝時間を計算",
+    description: "90分の睡眠サイクルに基づいて最適な起床時間または就寝時間を計算します。クロノタイプ推奨と睡眠負債計算機も提供します。",
+  },
+  fr: {
+    title: "Calculateur de Sommeil — Heure de Réveil et de Coucher Optimales",
+    description: "Calculez la meilleure heure de réveil ou de coucher basée sur des cycles de sommeil de 90 minutes.",
+  },
+  es: {
+    title: "Calculadora de Sueño — Hora Óptima para Despertar o Dormir",
+    description: "Calcula la mejor hora para despertar o dormir basada en ciclos de sueño de 90 minutos.",
+  },
+  zh: {
+    title: "睡眠計算機 — 計算最佳起床時間和就寢時間",
+    description: "根據90分鐘睡眠週期計算最佳起床時間或就寢時間，包含晝夜節律類型建議和睡眠債務追蹤器。",
+  },
+  cn: {
+    title: "睡眠计算器 — 计算最佳起床时间和就寝时间",
+    description: "根据90分钟睡眠周期计算最佳起床时间或就寝时间，包含昼夜节律类型建议和睡眠债务追踪器。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <SleepCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

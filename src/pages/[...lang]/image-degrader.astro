@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ImageDegraderComp from "../../components/tools/ImageDegrader";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "이미지 품질 저하 도구 — 이미지 압축·품질 조정",
+    description: "이미지 품질과 압축률을 조절하세요. JPEG 품질 설정, 해상도 축소, 파일 크기 최적화 기능을 제공합니다.",
+  },
+  en: {
+    title: "Image Quality Degrader",
+    description: "Adjust image quality and compression. Set JPEG quality, reduce resolution, and optimize file size directly in your browser.",
+  },
+  ja: {
+    title: "画像品質調整ツール",
+    description: "画像の品質と圧縮率を調整します。JPEG品質設定、解像度縮小、ファイルサイズ最適化機能を提供します。",
+  },
+  fr: {
+    title: "Outil de Dégradation d'Image",
+    description: "Ajustez la qualité et la compression des images. Paramètres de qualité JPEG, réduction de résolution.",
+  },
+  es: {
+    title: "Herramienta de Degradación de Imagen",
+    description: "Ajusta la calidad y compresión de imágenes. Configuración de calidad JPEG, reducción de resolución.",
+  },
+  zh: {
+    title: "圖片品質調整工具",
+    description: "調整圖片品質和壓縮率。提供JPEG品質設定、解析度縮小和文件大小優化功能。",
+  },
+  cn: {
+    title: "图片质量调整工具",
+    description: "调整图片质量和压缩率。提供JPEG质量设置、分辨率缩小和文件大小优化功能。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <ImageDegraderComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

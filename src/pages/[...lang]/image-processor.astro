@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ImageProcessorComp from "../../components/tools/ImageProcessor";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "이미지 처리 도구 — 리사이즈·필터·변환",
+    description: "이미지 크기 조정, 다양한 필터 적용, 포맷 변환을 브라우저에서 바로 처리하세요. PNG, JPEG, WebP 변환을 지원합니다.",
+  },
+  en: {
+    title: "Image Processor",
+    description: "Resize, apply filters, and convert image formats directly in your browser. Supports PNG, JPEG, and WebP.",
+  },
+  ja: {
+    title: "画像処理ツール",
+    description: "ブラウザで画像のリサイズ、フィルター適用、フォーマット変換を行います。PNG、JPEG、WebP変換に対応しています。",
+  },
+  fr: {
+    title: "Processeur d'Image",
+    description: "Redimensionnez, appliquez des filtres et convertissez des formats d'image directement dans le navigateur.",
+  },
+  es: {
+    title: "Procesador de Imágenes",
+    description: "Redimensiona, aplica filtros y convierte formatos de imagen directamente en tu navegador.",
+  },
+  zh: {
+    title: "圖片處理工具",
+    description: "直接在瀏覽器中調整圖片大小、應用濾鏡和轉換格式。支持PNG、JPEG和WebP轉換。",
+  },
+  cn: {
+    title: "图片处理工具",
+    description: "直接在浏览器中调整图片大小、应用滤镜和转换格式。支持PNG、JPEG和WebP转换。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <ImageProcessorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

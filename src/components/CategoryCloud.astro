@@ -2,7 +2,7 @@
 import { getCollection } from "astro:content";
 import { getTranslations } from "../lib/i18n";
 import type { Locale } from "../lib/i18n";
-import { ACADEMY_CATEGORIES } from "../lib/taxonomy";
+import { getTrackFromData, slugifyCategory } from "../lib/taxonomy";
 
 interface Props {
   activeCategory?: string;
@@ -29,12 +29,14 @@ const categoryCounts = allPosts.reduce(
 );
 
 const categories = Object.keys(categoryCounts).sort();
-
 const academyCats = categories.filter((cat) =>
-  ACADEMY_CATEGORIES.includes(cat),
+  allPosts.some((post) => post.data.category === cat && getTrackFromData(post.data) === "academy"),
 );
-const magazineCats = categories.filter(
-  (cat) => !ACADEMY_CATEGORIES.includes(cat),
+const interactiveCats = categories.filter((cat) =>
+  allPosts.some((post) => post.data.category === cat && getTrackFromData(post.data) === "interactive"),
+);
+const magazineCats = categories.filter((cat) =>
+  allPosts.some((post) => post.data.category === cat && getTrackFromData(post.data) === "magazine"),
 );
 ---
 
@@ -53,7 +55,7 @@ const magazineCats = categories.filter(
         <div class="relative">
           <div class="flex overflow-x-auto whitespace-nowrap gap-2 pb-4 scrollbar-hide w-full max-w-full snap-x snap-mandatory mask-gradient">
             {academyCats.map((cat) => {
-              const slug = cat.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+              const slug = slugifyCategory(cat);
               const isActive = activeCategory === slug;
               return (
                 <a
@@ -105,7 +107,7 @@ const magazineCats = categories.filter(
               {t.category.allInsights}
             </a>
             {magazineCats.map((cat) => {
-              const slug = cat.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+              const slug = slugifyCategory(cat);
               const isActive = activeCategory === slug;
               return (
                 <a
@@ -119,6 +121,47 @@ const magazineCats = categories.filter(
                     isActive
                       ? "bg-foreground text-background border-foreground shadow-lg shadow-foreground/10"
                       : "bg-muted/30 text-muted-foreground border-border/40 hover:border-foreground/40 hover:text-foreground",
+                  ]}
+                >
+                  {categoryNames[cat] ?? cat}{" "}
+                  <span class="ml-1 opacity-40">({categoryCounts[cat]})</span>
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  {/* Interactive Section */}
+  {
+    interactiveCats.length > 0 && (
+      <div class="animate-fade-up delay-150">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="h-px flex-1 bg-border/40" />
+          <h2 class="text-[10px] font-bold uppercase tracking-[0.3em] text-secondary/70">
+            OIYO Interactive
+          </h2>
+          <div class="h-px flex-1 bg-border/40" />
+        </div>
+        <div class="relative">
+          <div class="flex overflow-x-auto whitespace-nowrap gap-2 pb-4 scrollbar-hide w-full max-w-full snap-x snap-mandatory mask-gradient">
+            {interactiveCats.map((cat) => {
+              const slug = slugifyCategory(cat);
+              const isActive = activeCategory === slug;
+              return (
+                <a
+                  href={
+                    locale === "en"
+                      ? `/category/${slug}`
+                      : `/${locale}/category/${slug}`
+                  }
+                  class:list={[
+                    "px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all border snap-start",
+                    isActive
+                      ? "bg-secondary text-secondary-foreground border-secondary shadow-lg shadow-secondary/10"
+                      : "bg-secondary/10 text-secondary/80 border-secondary/20 hover:border-secondary/40",
                   ]}
                 >
                   {categoryNames[cat] ?? cat}{" "}

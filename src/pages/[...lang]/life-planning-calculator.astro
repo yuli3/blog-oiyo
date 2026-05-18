@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import LifePlanningCalculatorComp from "../../components/calculators/LifePlanningCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "생애 설계 계산기 — 결혼 비용·교육 자금·전세 보호금",
+    description: "결혼 비용 시뮬레이션, 자녀 교육 자금 계산, 전세 보증금 안전도 확인을 한 곳에서 계산하는 생애 설계 계산기입니다.",
+  },
+  en: {
+    title: "Life Planning Calculator — Wedding, Education Fund & Jeonse Safety",
+    description: "An all-in-one life planning calculator for wedding budget simulation, education fund planning, and jeonse deposit safety check.",
+  },
+  ja: {
+    title: "ライフプランニング計算機 — 結婚費用・教育資金・チョンセ保護金",
+    description: "結婚費用シミュレーション、教育資金計算、チョンセ保証金の安全確認を一か所で行えるライフプランニング計算機です。",
+  },
+  fr: {
+    title: "Calculateur de Planification de Vie — Mariage, Études & Dépôt",
+    description: "Calculateur tout-en-un pour simuler les frais de mariage, planifier les fonds d'études et vérifier la sécurité du dépôt.",
+  },
+  es: {
+    title: "Calculadora de Planificación Vital — Boda, Educación y Depósito",
+    description: "Calculadora integral para simular costes de boda, planificar fondos de educación y verificar la seguridad del depósito.",
+  },
+  zh: {
+    title: "人生規劃計算機 — 婚禮費用·教育基金·全租保護金",
+    description: "結婚費用模擬、教育基金計算及全租保證金安全確認一站式生活規劃計算機。",
+  },
+  cn: {
+    title: "人生规划计算器 — 婚礼费用·教育基金·全租保护金",
+    description: "婚礼费用模拟、教育基金计算及全租保证金安全确认一站式生活规划计算器。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <LifePlanningCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

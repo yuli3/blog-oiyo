@@ -1,0 +1,29 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SocialAnxietyTestComp from "../../components/tests/SocialAnxietyTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "사회불안 자가 진단 — 나의 사회적 불안 수준은?", description: "12가지 증상으로 사회적 불안 수준을 확인하세요. 최소·경미·중간·심각 중 어디에 해당하며 어떻게 대처할 수 있는지 알아보세요." },
+  en: { title: "Social Anxiety Self-Assessment — What Is Your Level?", description: "Check your social anxiety level through 12 symptoms. Find out which level — minimal, mild, moderate, or severe — you fall into and how to cope." },
+  ja: { title: "社会不安自己評価 — あなたの不安レベルは？", description: "12の症状で社会不安のレベルを確認しましょう。最小・軽度・中程度・重度のどれに該当し、どう対処するか探りましょう。" },
+  fr: { title: "Auto-évaluation de l'anxiété sociale — Quel est votre niveau?", description: "Évaluez votre niveau d'anxiété sociale à travers 12 symptômes." },
+  es: { title: "Autoevaluación de Ansiedad Social — ¿Cuál es tu nivel?", description: "Evalúa tu nivel de ansiedad social a través de 12 síntomas." },
+  zh: { title: "社交焦慮自我評估 — 你的程度如何？", description: "通過12個症狀評估你的社交焦慮程度。" },
+  cn: { title: "社交焦虑自我评估 — 你的程度如何？", description: "通过12个症状评估你的社交焦虑程度。" },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <SocialAnxietyTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

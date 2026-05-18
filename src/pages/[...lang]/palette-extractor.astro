@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PaletteExtractorComp from "../../components/tools/PaletteExtractor";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "이미지 색상 팔레트 추출기 — 사진에서 색상 코드 추출",
+    description: "이미지에서 주요 색상을 추출하고 HEX, RGB, HSL 코드를 확인하세요. 디자인 작업에 바로 활용할 수 있습니다.",
+  },
+  en: {
+    title: "Image Color Palette Extractor",
+    description: "Extract dominant colors from any image and get HEX, RGB, and HSL color codes ready for your design work.",
+  },
+  ja: {
+    title: "画像カラーパレット抽出ツール",
+    description: "画像から主要な色を抽出し、HEX、RGB、HSLコードを確認します。デザイン作業にすぐ活用できます。",
+  },
+  fr: {
+    title: "Extracteur de Palette de Couleurs",
+    description: "Extrayez les couleurs dominantes de n'importe quelle image et obtenez des codes HEX, RGB et HSL.",
+  },
+  es: {
+    title: "Extractor de Paleta de Colores",
+    description: "Extrae los colores dominantes de cualquier imagen y obtén códigos HEX, RGB y HSL.",
+  },
+  zh: {
+    title: "圖片顏色調色板提取器",
+    description: "從任何圖片中提取主要顏色，獲取HEX、RGB和HSL色彩代碼。",
+  },
+  cn: {
+    title: "图片颜色调色板提取器",
+    description: "从任何图片中提取主要颜色，获取HEX、RGB和HSL色彩代码。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <PaletteExtractorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

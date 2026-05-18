@@ -1,0 +1,29 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CollabRiskTestComp from "../../components/tests/CollabRiskTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "협업 리스크 테스트: 나는 팀워크에 얼마나 안전한가?", description: "12개의 질문으로 팀워크 내 협업 리스크와 갈등 요인을 진단합니다. 낮음·보통·높음·위험 4단계 평가." },
+  en: { title: "Collab Risk Test: How Safe Are You for Teamwork?", description: "Assess your collaboration risk factors in teamwork with 12 questions. Rated Low, Moderate, High, or Critical." },
+  ja: { title: "コラボリスクテスト：チームワークにどれくらい安全？", description: "12の質問でチームワークにおける協業リスクと対立要因を診断。低・中・高・危険の4段階評価。" },
+  fr: { title: "Test Collab Risk : Êtes-vous fiable pour le travail en équipe?", description: "Évaluez vos facteurs de risque de collaboration en équipe avec 12 questions. Évalué Faible, Modéré, Élevé ou Critique." },
+  es: { title: "Test Collab Risk: ¿Qué tan seguro eres para el trabajo en equipo?", description: "Evalúa tus factores de riesgo de colaboración con 12 preguntas. Calificado como Bajo, Moderado, Alto o Crítico." },
+  zh: { title: "協作風險測試：你對團隊合作有多安全？", description: "通過12個問題診斷團隊協作中的風險因素。低、中、高、危險四個等級評估。" },
+  cn: { title: "协作风险测试：你对团队合作有多安全？", description: "通过12个问题诊断团队协作中的风险因素。低、中、高、危险四个等级评估。" },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <CollabRiskTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

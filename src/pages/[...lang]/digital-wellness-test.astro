@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import DigitalWellnessTestComp from "../../components/tests/DigitalWellnessTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "디지털 웰니스 테스트 — 나는 스마트폰에 얼마나 의존하나?",
+    description: "15가지 문항으로 나의 디지털 건강 수준을 확인하고 균형 잡힌 디지털 생활을 위한 팁을 알아보세요.",
+  },
+  en: {
+    title: "Digital Wellness Test — How Dependent Are You on Your Smartphone?",
+    description: "15 questions to assess your digital health and get practical tips for balanced screen time.",
+  },
+  ja: {
+    title: "デジタルウェルネステスト — スマートフォンにどのくらい依存していますか？",
+    description: "15の設問でデジタル健康レベルを確認し、バランスの取れたスクリーンタイムのための実践的ヒントを得ましょう。",
+  },
+  fr: {
+    title: "Test de Bien-être Numérique — Êtes-vous dépendant de votre smartphone ?",
+    description: "15 questions pour évaluer votre santé numérique et obtenir des conseils pratiques pour un temps d'écran équilibré.",
+  },
+  es: {
+    title: "Test de Bienestar Digital — ¿Cuánto dependes de tu smartphone?",
+    description: "15 preguntas para evaluar tu salud digital y obtener consejos prácticos para un uso equilibrado de las pantallas.",
+  },
+  zh: {
+    title: "數位健康測試 — 你對智慧型手機的依賴有多深？",
+    description: "15個問題評估你的數位健康水準，並獲得均衡使用螢幕的實用建議。",
+  },
+  cn: {
+    title: "数字健康测试 — 你对智能手机的依赖有多深？",
+    description: "15个问题评估你的数字健康水平，并获得均衡使用屏幕的实用建议。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <DigitalWellnessTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

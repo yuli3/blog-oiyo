@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import OverseasStockSaverCalculatorComp from "../../components/calculators/OverseasStockSaverCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "해외주식 절세 전략 계산기 — 250만원 공제 활용",
+    description: "연간 실현 수익이 기본공제 250만원을 초과하는지 확인하고, 손실 매도 또는 추가 수익 실현 전략을 찾아보세요.",
+  },
+  en: {
+    title: "Overseas Stock Tax Saver — ₩2.5M Annual Deduction Strategy",
+    description: "Check if your realized gains exceed the ₩2.5M annual deduction limit and find your optimal loss harvesting or cost-up strategy.",
+  },
+  ja: {
+    title: "海外株式節税戦略計算機 — 250万ウォン控除活用",
+    description: "年間実現利益が250万ウォンの基本控除を超えているか確認し、損失売却またはコストアップ戦略を見つけましょう。",
+  },
+  fr: {
+    title: "Calculateur d'Optimisation Fiscale Actions Étrangères",
+    description: "Vérifiez si vos plus-values dépassent la déduction annuelle de 2,5 M₩ et trouvez votre stratégie optimale.",
+  },
+  es: {
+    title: "Calculadora de Ahorro Fiscal en Acciones Extranjeras",
+    description: "Comprueba si tus ganancias superan la deducción anual de ₩2,5M y encuentra tu estrategia óptima.",
+  },
+  zh: {
+    title: "海外股票節稅策略計算機 — 250萬韓元扣除活用",
+    description: "檢查您的年度實現收益是否超過250萬韓元的基本扣除額，並找到最佳的損失收割或成本提升策略。",
+  },
+  cn: {
+    title: "海外股票节税策略计算器 — 250万韩元扣除活用",
+    description: "检查您的年度实现收益是否超过250万韩元的基本扣除额，并找到最佳的损失收割或成本提升策略。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <OverseasStockSaverCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

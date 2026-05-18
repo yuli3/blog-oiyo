@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import EtfRecommenderComp from "../../components/tools/EtfRecommender";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "ETF 추천기 — 투자 성향에 맞는 ETF 찾기",
+    description: "간단한 설문으로 나의 투자 성향을 분석하고, 최적화된 글로벌 ETF 포트폴리오를 추천받으세요.",
+  },
+  en: {
+    title: "ETF Recommender",
+    description: "Analyze your investment propensity with a quick quiz and get a recommended global ETF portfolio tailored to your style.",
+  },
+  ja: {
+    title: "ETFレコメンダー — 投資傾向に合ったETFを探す",
+    description: "簡単なアンケートで投資傾向を分析し、最適なグローバルETFポートフォリオをご提案します。",
+  },
+  fr: {
+    title: "Recommandeur ETF",
+    description: "Analysez votre profil d'investisseur avec un quiz rapide et obtenez un portefeuille ETF mondial adapté à votre style.",
+  },
+  es: {
+    title: "Recomendador de ETF",
+    description: "Analiza tu perfil inversor con un cuestionario rápido y obtén un portafolio de ETF global adaptado a tu estilo.",
+  },
+  zh: {
+    title: "ETF推薦器 — 找到符合投資傾向的ETF",
+    description: "通過簡單問卷分析您的投資傾向，獲得最優化的全球ETF投資組合推薦。",
+  },
+  cn: {
+    title: "ETF推荐器 — 找到符合投资倾向的ETF",
+    description: "通过简单问卷分析您的投资倾向，获得最优化的全球ETF投资组合推荐。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-3xl px-4 py-8">
+    <EtfRecommenderComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

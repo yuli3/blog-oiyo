@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PetAgeCalculatorComp from "../../components/tools/PetAgeCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "반려동물 나이 계산기 — 강아지·고양이 인간 나이로 환산",
+    description: "강아지와 고양이의 나이를 인간 나이로 환산합니다. 견종 크기(소형·중형·대형)별 환산 공식을 적용합니다.",
+  },
+  en: {
+    title: "Pet Age Calculator",
+    description: "Convert your dog or cat's age to human years. Uses size-based formulas for small, medium, and large dog breeds.",
+  },
+  ja: {
+    title: "ペット年齢計算機",
+    description: "犬や猫の年齢を人間の年齢に換算します。小型・中型・大型犬のサイズ別換算式を使用します。",
+  },
+  fr: {
+    title: "Calculateur d'Âge des Animaux de Compagnie",
+    description: "Convertissez l'âge de votre chien ou chat en années humaines.",
+  },
+  es: {
+    title: "Calculadora de Edad de Mascotas",
+    description: "Convierte la edad de tu perro o gato a años humanos.",
+  },
+  zh: {
+    title: "寵物年齡計算機",
+    description: "將狗或貓的年齡換算為人類年齡。根據小型、中型和大型犬的體型使用不同換算公式。",
+  },
+  cn: {
+    title: "宠物年龄计算器",
+    description: "将狗或猫的年龄换算为人类年龄。根据小型、中型和大型犬的体型使用不同换算公式。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <PetAgeCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

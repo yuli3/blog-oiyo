@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PensionCalculatorComp from "../../components/tools/PensionCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "국민연금 예상 수령액 계산기 — 내 노후 준비 점검",
+    description: "납부 기간과 평균 소득을 기반으로 국민연금 예상 수령액을 계산합니다. 은퇴 후 생활비를 미리 계획하세요.",
+  },
+  en: {
+    title: "National Pension Benefit Calculator",
+    description: "Estimate your National Pension (NPS) benefit based on contribution period and average income. Plan for retirement.",
+  },
+  ja: {
+    title: "国民年金受給額計算機",
+    description: "納付期間と平均所得を基に国民年金の予想受給額を計算します。老後の生活費を事前に計画しましょう。",
+  },
+  fr: {
+    title: "Calculateur de pension nationale",
+    description: "Estimez vos prestations de pension nationale en fonction de la durée de cotisation et du revenu moyen.",
+  },
+  es: {
+    title: "Calculadora de pensión nacional",
+    description: "Estima tu beneficio de pensión nacional basado en el período de cotización y el ingreso promedio.",
+  },
+  zh: {
+    title: "國民年金預估計算機",
+    description: "根據繳費期間和平均收入計算國民年金預估受領金額，提前規劃退休後生活費。",
+  },
+  cn: {
+    title: "国民年金预估计算器",
+    description: "根据缴费期间和平均收入计算国民年金预估受领金额，提前规划退休后生活费。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <PensionCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>
