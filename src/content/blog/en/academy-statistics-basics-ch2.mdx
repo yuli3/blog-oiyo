@@ -1,0 +1,155 @@
+---
+locale: en
+title: 'Ch2. Probability Theory — Quantifying Uncertainty with Numbers'
+category: Academy
+author: OIYO Editorial
+tags:
+  - probability
+  - conditional probability
+  - Bayes theorem
+  - independent events
+  - statistics
+description: >-
+  Definitions of probability and axioms, conditional probability, Bayes'
+  theorem, and independent events — Chapter 2 of the Statistics Basics series.
+pubDate: '2026-05-12'
+---
+
+## Definition of Probability
+
+**Probability**: A number between 0 and 1 representing the likelihood that an event occurs.
+
+**Three Interpretations**:
+- **Classical probability**: Ratio of favorable outcomes to equally-likely outcomes in the sample space
+- **Frequentist probability**: Relative frequency over many repeated trials
+- **Subjective probability**: An individual's degree of belief (Bayesian perspective)
+
+```
+Probability Axioms (Kolmogorov):
+1. P(A) ≥ 0  (non-negativity)
+2. P(entire sample space) = 1
+3. Mutually exclusive events A, B: P(A∪B) = P(A) + P(B)
+```
+
+---
+
+## Sets and Events
+
+| Notation | Meaning |
+|------|------|
+| **A∪B** (Union) | A or B occurs |
+| **A∩B** (Intersection) | Both A and B occur |
+| **Aᶜ** (Complement) | A does not occur |
+| **∅** (Empty set) | An impossible event |
+
+**Mutually Exclusive**: A∩B = ∅  
+**Collectively Exhaustive**: A∪B = entire sample space
+
+---
+
+## Addition Rule
+
+```
+P(A∪B) = P(A) + P(B) − P(A∩B)
+
+If mutually exclusive: P(A∪B) = P(A) + P(B)
+```
+
+---
+
+## Conditional Probability
+
+**Conditional Probability P(A|B)**: The probability that A occurs given that B has occurred
+
+```
+P(A|B) = P(A∩B) / P(B)   (provided P(B) > 0)
+```
+
+**Example**: A die is rolled and shows an even number (B). What is the probability that it is 4 or higher (A)?
+- B = {2, 4, 6}: P(B) = 3/6
+- A∩B = {4, 6}: P(A∩B) = 2/6
+- P(A|B) = (2/6) / (3/6) = 2/3
+
+---
+
+## Independent Events
+
+**Independence**: A's occurrence does not affect the probability of B
+
+```
+Independence condition: P(A∩B) = P(A) × P(B)
+                        P(A|B) = P(A)
+```
+
+**Important**: Mutually exclusive ≠ Independent  
+If events are mutually exclusive, knowing one occurred makes the other impossible → they are strongly **dependent**
+
+---
+
+## Multiplication Rule (Chain Rule)
+
+```
+P(A∩B) = P(A) × P(B|A) = P(B) × P(A|B)
+
+Three events: P(A∩B∩C) = P(A) × P(B|A) × P(C|A∩B)
+```
+
+---
+
+## Law of Total Probability
+
+When events B₁, B₂, ..., Bₙ are collectively exhaustive and mutually exclusive:
+
+```
+P(A) = Σ P(A|Bᵢ) × P(Bᵢ)
+```
+
+---
+
+## Bayes' Theorem
+
+A formula for updating prior beliefs in light of new evidence.
+
+```
+P(B|A) = P(A|B) × P(B) / P(A)
+```
+
+**Real-World Example — Medical Diagnosis**:
+```
+Disease prevalence (prior): P(Disease) = 0.01
+Probability of actually having the disease given a positive test (posterior): ?
+
+Sensitivity (true positive rate): P(Positive | Disease) = 0.99
+Specificity (true negative rate): P(Negative | Healthy) = 0.95
+→ P(Positive | Healthy) = 0.05
+
+P(Disease | Positive) = [0.99 × 0.01] / [0.99 × 0.01 + 0.05 × 0.99]
+                      ≈ 16.7%
+```
+→ When prevalence is low, even a positive test result is likely a false positive!
+
+---
+
+## Key Concept Cards
+
+**Conditional Probability** ★★★★★
+: P(A|B) = P(A∩B)/P(B). Probability of A given that B has occurred. Core concept in many statistical problems.
+*Memory tip: conditional = denominator is the probability of the conditioning event*
+
+**Independent Events** ★★★★★
+: P(A∩B) = P(A)×P(B) if independent. One event's occurrence does not affect the other's probability.
+*Memory tip: independent = intersection = product of probabilities*
+
+**Bayes' Theorem** ★★★★☆
+: Updates prior probability with new evidence. Core principle of spam filters, medical diagnosis, and AI classification.
+*Memory tip: posterior = likelihood × prior / evidence*
+
+---
+
+## Practice Questions
+
+**Q. From a standard deck, drawing a red card (R) and drawing a heart (H) — are these events independent?**
+> Not independent. P(H) = 13/52 = 1/4. P(R) = 26/52 = 1/2. P(H∩R) = 13/52 = 1/4. P(H)×P(R) = 1/4 × 1/2 = 1/8 ≠ 1/4. → Not independent! (If a card is a heart it must be red, so these events are dependent.)
+
+**Q. Factory A produces 60% of output with a 2% defect rate; Factory B produces 40% with a 5% defect rate. What is the probability that a randomly selected product is defective?**
+> P(Defective) = P(Defective|A)×P(A) + P(Defective|B)×P(B) = 0.02×0.6 + 0.05×0.4 = 0.012 + 0.020 = 0.032 = 3.2%.

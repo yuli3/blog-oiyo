@@ -1,0 +1,122 @@
+---
+locale: en
+title: 'Ch5. Statistical Estimation — Confidence Intervals for Population Parameters'
+category: Academy
+author: OIYO Editorial
+tags:
+  - statistical estimation
+  - confidence intervals
+  - point estimation
+  - interval estimation
+  - statistics
+description: >-
+  Point estimation and interval estimation, the correct interpretation of
+  confidence intervals, and how to determine required sample size — Chapter 5
+  of the Statistics Basics series.
+pubDate: '2026-05-12'
+---
+
+## What Is Statistical Estimation?
+
+**Estimation**: The process of using sample data to infer population parameters (μ, σ, p).
+
+**Point Estimation**: Estimating a parameter with a single number (e.g., using sample mean x̄ to estimate population mean μ)  
+**Interval Estimation**: Estimating a range likely to contain the parameter (e.g., 95% confidence interval)
+
+---
+
+## Properties of Good Estimators
+
+| Property | Meaning |
+|------|------|
+| **Unbiasedness** | E(estimator) = parameter (no systematic bias) |
+| **Efficiency** | Minimum variance among all unbiased estimators for the same n |
+| **Consistency** | Converges to the true parameter as n → ∞ |
+| **Sufficiency** | Uses all available information in the sample |
+
+**Why sample variance uses n−1**: s² = Σ(xᵢ−x̄)²/(n−1) — dividing by n−1 instead of n produces an **unbiased estimator** of the population variance (Bessel's correction).
+
+---
+
+## Confidence Interval
+
+**Confidence Interval**: A range expected to contain the true parameter
+
+**Incorrect interpretation**: "There is a 95% probability that the population mean lies in this interval"  
+**Correct interpretation**: "If we repeated this procedure 100 times, approximately 95 of those intervals would contain the true population mean"
+
+### Confidence Interval for the Population Mean
+
+**When σ (population SD) is known** (Z distribution):
+```
+CI = x̄ ± Zα/2 × (σ/√n)
+
+95% CI: Z₀.₀₂₅ = 1.96
+99% CI: Z₀.₀₀₅ = 2.576
+```
+
+**When σ is unknown** (t distribution, small samples):
+```
+CI = x̄ ± t(α/2, n−1) × (s/√n)
+```
+
+### Confidence Interval for a Population Proportion
+```
+p̂ ± Zα/2 × √[p̂(1−p̂)/n]
+```
+
+---
+
+## Confidence Level vs Interval Width
+
+| Confidence Level | Z value | Interval Width |
+|---------|-----|---------|
+| 90% | 1.645 | Narrower |
+| 95% | 1.960 | Moderate |
+| 99% | 2.576 | Wider |
+
+**Higher confidence level**: Wider interval (more accurate, less precise)  
+**Larger sample size**: Narrower interval (more precise)
+
+---
+
+## Determining Sample Size
+
+Minimum sample size to achieve a desired margin of error (E):
+
+```
+n ≥ (Zα/2 × σ / E)²
+
+For proportion estimation:
+n ≥ (Zα/2)² × p̂(1−p̂) / E²
+(When p̂ is unknown, use p̂ = 0.5 → maximum sample size)
+```
+
+**Example**: 95% confidence, σ = 10, margin of error E = 2  
+n ≥ (1.96 × 10 / 2)² = 9.8² = 96.04 → n = 97
+
+---
+
+## Key Concept Cards
+
+**Correct Interpretation of a 95% CI** ★★★★★
+: If we repeated this sampling procedure 100 times, approximately 95 of the resulting intervals would contain the true population parameter. It does NOT mean there is a 95% probability the parameter is in this specific interval.
+*Memory tip: CI = long-run frequency interpretation*
+
+**Sample Variance Denominator n−1** ★★★★☆
+: Dividing by n underestimates the population variance (bias). Dividing by n−1 produces an unbiased estimator. Related to degrees of freedom.
+*Memory tip: sample variance = divide by n−1 (unbiasedness)*
+
+**Higher Confidence Level → Wider Interval** ★★★★☆
+: A 99% CI is wider than a 95% CI. To be more certain of capturing the parameter, you need a wider net.
+*Memory tip: confidence level ↑ → interval ↑ → precision ↓*
+
+---
+
+## Practice Questions
+
+**Q. With n = 100, x̄ = 50, σ = 20, what is the 95% confidence interval?**
+> SE = 20/√100 = 2. 95% CI = 50 ± 1.96×2 = [46.08, 53.92].
+
+**Q. To cut the margin of error in half at 95% confidence, how must the sample size change?**
+> Since E ∝ 1/√n, halving the margin of error requires multiplying n by 4.

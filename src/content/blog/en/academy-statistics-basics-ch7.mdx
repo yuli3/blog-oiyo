@@ -1,0 +1,138 @@
+---
+locale: en
+title: 'Ch7. Correlation and Regression Analysis — Analyzing Relationships Between Variables'
+category: Academy
+author: OIYO Editorial
+tags:
+  - correlation analysis
+  - regression analysis
+  - ordinary least squares
+  - coefficient of determination
+  - statistics
+description: >-
+  Pearson and Spearman correlation coefficients, simple linear regression,
+  ordinary least squares, R-squared, and an introduction to multiple regression
+  — Chapter 7 of the Statistics Basics series.
+pubDate: '2026-05-12'
+---
+
+## Correlation vs Causation
+
+**Correlation**: The tendency for two variables to change together  
+**Causation**: One variable directly causes the other
+
+> **"Correlation does not imply causation"**  
+> Example: Ice cream sales and drowning deaths are positively correlated → both share a common cause (summer heat), not a causal relationship
+
+---
+
+## Pearson Correlation Coefficient (r)
+
+Measures the strength and direction of a **linear** relationship between two continuous variables.
+
+```
+r = Σ[(xᵢ − x̄)(yᵢ − ȳ)] / √[Σ(xᵢ−x̄)² × Σ(yᵢ−ȳ)²]
+
+Range: −1 ≤ r ≤ 1
+```
+
+| r value | Interpretation |
+|------|------|
+| r = 1 | Perfect positive linear relationship |
+| 0.7 ≤ r < 1 | Strong positive correlation |
+| 0 < r < 0.7 | Weak/moderate positive correlation |
+| r = 0 | No linear relationship |
+| r < 0 | Negative correlation |
+
+**Caution**: r only measures linear relationships. A strong non-linear relationship can have r ≈ 0.
+
+**Spearman rank correlation**: Rank-based, can detect non-linear monotonic relationships.
+
+---
+
+## Simple Linear Regression
+
+A linear model for predicting Y from X.
+
+```
+Y = β₀ + β₁X + ε
+
+β₀: y-intercept (predicted value of Y when X = 0)
+β₁: slope (change in Y for a one-unit increase in X)
+ε:  error term (residual)
+```
+
+---
+
+## Ordinary Least Squares (OLS)
+
+Finds β₀ and β₁ by minimizing the sum of squared residuals.
+
+```
+β₁ = Σ(xᵢ−x̄)(yᵢ−ȳ) / Σ(xᵢ−x̄)²  = r × (sy/sx)
+
+β₀ = ȳ − β₁x̄
+```
+
+---
+
+## Coefficient of Determination (R²)
+
+```
+R² = (Variation explained by regression) / (Total variation)
+   = 1 − SSE/SST
+
+Range: 0 ≤ R² ≤ 1
+```
+
+R² = 0.85: The X variable explains 85% of the variability in Y  
+R² = r² (in simple linear regression)
+
+---
+
+## Regression Assumptions
+
+1. **Linearity**: Linear relationship between the independent and dependent variables
+2. **Independence**: Residuals are independent of each other
+3. **Homoscedasticity**: Constant variance of residuals across all levels of X
+4. **Normality**: Residuals are normally distributed
+
+**Residual analysis**: Use scatter plots and Q-Q plots to verify assumptions.
+
+---
+
+## Multiple Regression
+
+```
+Y = β₀ + β₁X₁ + β₂X₂ + ... + βₖXₖ + ε
+```
+
+**Adjusted R²**: Corrects for the inflation of R² caused by adding more predictors.
+
+**Multicollinearity**: Strong correlation among predictors → unstable coefficient estimates. Diagnosed using the Variance Inflation Factor (VIF).
+
+---
+
+## Key Concept Cards
+
+**Pearson Correlation Coefficient (r)** ★★★★★
+: Value between −1 and 1. Larger absolute value = stronger linear relationship. Correlation ≠ causation.
+*Memory tip: |r| → 0 (none), 0.7+ (strong), 1 (perfect)*
+
+**Coefficient of Determination (R²)** ★★★★★
+: What percentage of the variation in Y the regression explains. R² = 0.8 means 80% of variability explained.
+*Memory tip: R² = proportion of variance explained*
+
+**Ordinary Least Squares (OLS)** ★★★★☆
+: Finds the regression line that minimizes the sum of squared differences between observed and predicted values (residuals).
+*Memory tip: OLS = minimizes sum of squared residuals*
+
+---
+
+## Practice Questions
+
+**Q. Study hours (X) and exam scores (Y) have r = 0.85 and β₁ = 2.0. What is the predicted change in score for 1 additional hour of study?**
+> β₁ = 2.0, so each additional hour of study predicts a 2.0-point increase in exam score.
+
+**Q. For a regression model with R² = 0.64, what is the correlation coefficient r?**
+> r = √R² = √0.64 = 0.8. (Valid only for simple linear regression. If the slope is positive, r = +0.8.)

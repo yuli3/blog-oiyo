@@ -1,0 +1,158 @@
+---
+locale: en
+title: 'Ch3. Probability Distributions — Normal, Binomial, and Poisson Distributions'
+category: Academy
+author: OIYO Editorial
+tags:
+  - probability distributions
+  - normal distribution
+  - binomial distribution
+  - Poisson distribution
+  - statistics
+description: >-
+  Discrete and continuous probability distributions, the normal distribution and
+  Z-scores, binomial distribution, and Poisson distribution — Chapter 3 of the
+  Statistics Basics series.
+pubDate: '2026-05-12'
+---
+
+## Types of Probability Distributions
+
+**Discrete Probability Distribution**: X takes countable values (e.g., number of heads in coin flips)  
+**Continuous Probability Distribution**: X takes continuous values (e.g., height, weight)
+
+---
+
+## Binomial Distribution
+
+**Conditions**:
+1. n independent trials
+2. Each trial results in exactly two outcomes: success (p) or failure (1−p)
+3. Probability of success p is the same for every trial
+
+```
+X ~ B(n, p)
+
+P(X = k) = C(n,k) × pᵏ × (1−p)ⁿ⁻ᵏ
+
+Expected value  E(X) = np
+Variance       Var(X) = np(1−p)
+```
+
+**Example**: Rolling a die 10 times — number of times a "1" appears  
+→ B(10, 1/6), E(X) = 10/6 ≈ 1.67
+
+**When n is large and p is small**: Approximate with the Poisson distribution (λ = np)
+
+---
+
+## Poisson Distribution
+
+Distribution of the number of events occurring in a fixed unit of time (or space).
+
+**Conditions**:
+- Events occur independently and randomly
+- Average rate λ is constant
+
+```
+X ~ Poisson(λ)
+
+P(X = k) = (e⁻λ × λᵏ) / k!
+
+E(X) = Var(X) = λ
+```
+
+**Applications**: Number of customers arriving per hour, number of defects per 1,000 items (e.g., manufacturing quality control, rare disease incidence)
+
+---
+
+## Normal Distribution
+
+The most important continuous probability distribution in statistics.
+
+```
+X ~ N(μ, σ²)
+
+f(x) = (1/√(2πσ²)) × exp(−(x−μ)²/2σ²)
+```
+
+**Properties**:
+- Symmetric about the mean μ
+- Mean = Median = Mode
+- Wider spread as σ (standard deviation) increases
+- Total area under the curve = 1
+
+### Empirical Rule (68–95–99.7 Rule)
+
+```
+μ ± 1σ range: approximately 68.27%
+μ ± 2σ range: approximately 95.45%
+μ ± 3σ range: approximately 99.73%
+```
+
+---
+
+## Standard Normal Distribution and Z-Scores
+
+**Standardization**:
+```
+Z = (X − μ) / σ
+
+Z ~ N(0, 1)  (standard normal distribution)
+```
+
+**Interpretation of Z-score**: How many standard deviations above or below the mean the original value falls.
+
+```
+Example: An exam with mean 75 and SD 10
+A student scoring 95: Z = (95 − 75) / 10 = 2.0
+→ 2 standard deviations above mean = approximately top 2.3%
+```
+
+**Applications**:
+- Comparing variables with different units (e.g., SAT vs ACT scores)
+- Outlier detection (|Z| > 3: extreme value)
+- Probability calculations using the standard normal table (Z-table)
+
+---
+
+## Exponential Distribution
+
+Distribution of the waiting time between events in a Poisson process.
+
+```
+X ~ Exp(λ)
+
+E(X) = 1/λ     (mean waiting time)
+Var(X) = 1/λ²
+
+Memoryless Property: P(X > s+t | X > s) = P(X > t)
+```
+
+**Applications**: Electronic device lifetimes, customer service wait times, time between system failures
+
+---
+
+## Key Concept Cards
+
+**68–95–99.7 Rule (Empirical Rule)** ★★★★★
+: μ±1σ = 68%, μ±2σ = 95%, μ±3σ = 99.7%. The foundational benchmark for quality control and statistical testing.
+*Memory tip: 1σ=68, 2σ=95, 3σ=99.7*
+
+**Z-Score (Standardization)** ★★★★★
+: Z = (X−μ)/σ. Converts raw scores to the standard normal distribution. Enables comparison of data with different units.
+*Memory tip: Z = deviation ÷ standard deviation*
+
+**Binomial Expected Value** ★★★★☆
+: E(X) = np, Var(X) = np(1−p). n trials, probability of success p.
+*Memory tip: expected value = number of trials × probability of success*
+
+---
+
+## Practice Questions
+
+**Q. If test scores follow N(70, 100), what is the probability of scoring 80 or higher? (Z = 1.0 → cumulative probability 84.1%)**
+> Z = (80−70)/10 = 1.0. P(X ≥ 80) = 1 − 0.841 = 0.159 ≈ 15.9%.
+
+**Q. What is the relationship between the Poisson and binomial distributions?**
+> When n is large (many trials) and p is small (low success rate), the binomial distribution B(n,p) can be approximated by a Poisson distribution with λ = np. Example applications: modeling defects, rare disease events, or call center arrivals.

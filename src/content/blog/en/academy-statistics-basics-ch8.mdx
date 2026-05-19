@@ -1,0 +1,136 @@
+---
+locale: en
+title: 'Ch8. ANOVA — Testing Mean Differences Across Three or More Groups'
+category: Academy
+author: OIYO Editorial
+tags:
+  - ANOVA
+  - analysis of variance
+  - F-test
+  - chi-square test
+  - statistics
+description: >-
+  One-way ANOVA, the F-statistic, post-hoc tests, and chi-square tests for
+  categorical data — Chapter 8 of the Statistics Basics series.
+pubDate: '2026-05-12'
+---
+
+## Why ANOVA Is Necessary
+
+When comparing means of three or more groups, running multiple t-tests accumulates **Type I error**.
+
+Comparing 3 groups with 3 separate t-tests:  
+P(at least 1 error) = 1 − (0.95)³ ≈ 14.3% (actual error rate ≈ 14% even with α = 0.05)
+
+**ANOVA (Analysis of Variance)**: Tests all group means simultaneously in a single procedure.
+
+---
+
+## One-Way ANOVA
+
+**Hypotheses**:
+```
+H₀: μ₁ = μ₂ = ... = μₖ  (all group means are equal)
+H₁: At least one group mean differs
+```
+
+**Core Idea**:
+```
+Total Variation = Between-Group Variation + Within-Group Variation
+SST             = SSB                     + SSW
+```
+
+| Source of Variation | Sum of Squares | df | Mean Square |
+|---------|--------|-------|---------|
+| Between Groups | SSB | k−1 | MSB = SSB/(k−1) |
+| Within Groups  | SSW | N−k | MSW = SSW/(N−k) |
+| Total          | SST | N−1 | |
+
+**F-Statistic**:
+```
+F = MSB / MSW ~ F(k−1, N−k)
+
+If F > F_α (critical value), reject H₀
+```
+
+---
+
+## ANOVA Assumptions
+
+1. Each group follows a normal distribution
+2. Equal variances across groups (homoscedasticity)
+3. Observations are independent
+
+---
+
+## Post-Hoc Tests
+
+After rejecting H₀ with ANOVA, determine **which specific groups** differ.
+
+| Method | Characteristics |
+|------|------|
+| **Tukey HSD** | Recommended when group sizes are equal |
+| **Bonferroni** | Conservative correction for multiple comparisons |
+| **Scheffé** | Most conservative; applicable to all contrasts |
+| **Duncan** | Less strict; pairwise comparisons |
+
+---
+
+## Chi-Square Test
+
+Used for **categorical data** analysis.
+
+### Test of Independence
+Tests whether two categorical variables are independent of each other.
+
+```
+H₀: The two variables are independent
+H₁: The two variables are not independent
+
+χ² = Σ[(Observed − Expected)² / Expected]
+
+Degrees of freedom: (rows − 1) × (columns − 1)
+```
+
+**Example**: Relationship between gender and job satisfaction (contingency table analysis)
+
+### Goodness-of-Fit Test
+Tests whether an observed distribution matches a theoretical distribution.
+
+---
+
+## Nonparametric Tests
+
+Alternatives when normality assumptions are not met.
+
+| Situation | Parametric Test | Nonparametric Alternative |
+|------|---------|-----------|
+| Comparing 2 groups | t-test | Mann-Whitney U |
+| Comparing 3+ groups | ANOVA | Kruskal-Wallis |
+| Paired samples | Paired t-test | Wilcoxon Signed-Rank |
+
+---
+
+## Key Concept Cards
+
+**ANOVA F-Statistic** ★★★★★
+: F = Between-group variation / Within-group variation. A large F means the differences between groups exceed within-group noise → reject H₀.
+*Memory tip: F = MSB/MSW; larger F = more significant group differences*
+
+**Chi-Square Test of Independence** ★★★★★
+: Tests independence of two categorical variables. χ² = Σ(Observed − Expected)²/Expected.
+*Memory tip: chi-square = independence test for categorical data*
+
+**Post-Hoc Tests** ★★★★☆
+: After ANOVA, identify which specific pairs of groups differ. Choose Tukey, Bonferroni, or Scheffé depending on the situation.
+*Memory tip: ANOVA → post-hoc → identify specific group pairs*
+
+---
+
+## Practice Questions
+
+**Q. You want to compare exam scores for three teaching methods A, B, and C. Which test should you use?**
+> One-way ANOVA. H₀: μA = μB = μC. Use the F-statistic to test overall differences. If significant, apply a post-hoc test (e.g., Tukey HSD) to identify which specific pairs differ.
+
+**Q. What test should you use to examine the relationship between gender (male/female) and purchase behavior (yes/no)?**
+> Chi-square test of independence. Create a 2×2 contingency table and compute the χ² statistic with degrees of freedom = (2−1) × (2−1) = 1.

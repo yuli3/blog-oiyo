@@ -1,0 +1,139 @@
+---
+locale: en
+title: 'Ch9. Time Series Analysis — Forecasting the Future from Historical Data'
+category: Academy
+author: OIYO Editorial
+tags:
+  - time series analysis
+  - trend analysis
+  - moving average
+  - exponential smoothing
+  - ARIMA
+  - statistics
+description: >-
+  Time series components (trend, seasonality, cycle, irregular), moving
+  averages, exponential smoothing, and an introduction to ARIMA — Chapter 9 of
+  the Statistics Basics series.
+pubDate: '2026-05-12'
+---
+
+## What Is Time Series Data?
+
+**Time Series**: Data collected sequentially over time.
+
+**Examples**: Stock prices, GDP, Consumer Price Index (CPI), monthly retail sales, temperature readings
+
+---
+
+## The Four Components of a Time Series
+
+```
+Multiplicative model: Y_t = T_t × S_t × C_t × I_t
+Additive model:       Y_t = T_t + S_t + C_t + I_t
+```
+
+| Component | Symbol | Description |
+|------|------|------|
+| **Trend (T)** | T | Long-term increase or decrease in the series |
+| **Seasonality (S)** | S | Regular, repeating pattern within a year |
+| **Cycle (C)** | C | Multi-year fluctuations (e.g., business cycles) |
+| **Irregular (I)** | I | Random, unpredictable variation |
+
+---
+
+## Moving Average Method
+
+Forecasts the next period using the average of the past n periods.
+
+```
+MA(n) = (Y_t + Y_{t−1} + ... + Y_{t−n+1}) / n
+```
+
+**Advantage**: Smooths out short-term noise; reveals trend  
+**Disadvantage**: Assigns equal weight to recent and older data
+
+---
+
+## Exponential Smoothing
+
+Assigns higher weights to more recent observations.
+
+```
+Ŷ_{t+1} = α × Y_t + (1−α) × Ŷ_t
+
+α: smoothing parameter  (0 < α < 1)
+  α → 1: heavily weights recent data (sensitive to fluctuations)
+  α → 0: heavily weights past data (smoother forecasts)
+```
+
+**Holt-Winters Method**: Extends exponential smoothing to capture both trend and seasonality.
+
+---
+
+## Autocorrelation and Stationarity
+
+**Autocorrelation (ACF)**: The degree to which a time series is correlated with its own past values
+
+**Stationary Time Series**: Mean and variance remain constant over time  
+→ Non-stationary series can be made stationary through **differencing**
+
+**Differencing**:
+```
+ΔY_t = Y_t − Y_{t−1}  (first-order differencing)
+```
+
+---
+
+## ARIMA Model
+
+**ARIMA(p, d, q)**: Autoregressive Integrated Moving Average
+
+| Symbol | Meaning |
+|------|------|
+| p | AR order (number of autoregressive terms) |
+| d | Number of differences required for stationarity |
+| q | MA order (number of lagged forecast errors) |
+
+```
+AR(p):        Y_t = φ₁Y_{t−1} + ... + φₚY_{t−p} + ε_t
+MA(q):        Y_t = ε_t + θ₁ε_{t−1} + ... + θ_qε_{t−q}
+ARMA(p,q):    Combines AR and MA components
+ARIMA(p,d,q): Applies d rounds of differencing before fitting ARMA
+```
+
+---
+
+## Forecast Accuracy Metrics
+
+```
+MAE  = Σ|Y_t − Ŷ_t| / n          (Mean Absolute Error)
+MSE  = Σ(Y_t − Ŷ_t)² / n         (Mean Squared Error)
+RMSE = √MSE                        (Root Mean Squared Error)
+MAPE = Σ|Y_t − Ŷ_t| / Y_t / n × 100%  (Mean Absolute Percentage Error)
+```
+
+---
+
+## Key Concept Cards
+
+**Four Components of a Time Series** ★★★★★
+: Trend (T), Seasonality (S), Cycle (C), Irregular (I). The foundation for decomposing and forecasting time series.
+*Memory tip: T-S-C-I (Trend, Seasonal, Cyclical, Irregular)*
+
+**Exponential Smoothing** ★★★★☆
+: Higher α → more weight on recent data. Variants: simple, double (Holt), triple (Holt-Winters).
+*Memory tip: α → 1 = sensitive to recent data; α → 0 = slow to react*
+
+**ARIMA(p,d,q)** ★★★★☆
+: Standard model for forecasting non-stationary time series. d = differencing order, p = AR terms, q = MA terms.
+*Memory tip: d = stationarity, p = autoregression, q = moving average errors*
+
+---
+
+## Practice Questions
+
+**Q. Sales data shows strong seasonality. Which forecasting method is most appropriate?**
+> Holt-Winters exponential smoothing or SARIMA (Seasonal ARIMA). Both explicitly model seasonal patterns, allowing forecasts to reflect the repeating seasonal structure (e.g., holiday retail spikes, quarterly earnings cycles).
+
+**Q. What does ARIMA(1,1,0) mean?**
+> One AR term (p = 1), one round of differencing (d = 1, treating a non-stationary series), and no MA terms (q = 0). The model applies first differencing to achieve stationarity, then fits an AR(1) model to the differenced series.

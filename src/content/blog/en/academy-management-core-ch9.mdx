@@ -1,0 +1,247 @@
+---
+locale: en
+title: 'Ch9. Management Science — Making Decisions with Data and Mathematics'
+category: Academy
+author: OIYO Editorial
+tags:
+  - management
+  - operations-research
+  - management-science
+  - decision-making
+  - linear-programming
+  - PERT
+  - simulation
+description: >-
+  Core techniques in Management Science (Operations Research) — decision trees, linear programming, PERT/CPM scheduling, queuing theory, Monte Carlo simulation basics, and real-world applications. The ninth lecture in the Management Essentials series.
+pubDate: '2026-05-05'
+---
+
+## What Is Management Science?
+
+**Management Science (also called Operations Research, or OR)** is the discipline of using mathematics, statistics, and computer modeling to find optimal solutions to complex business problems.
+
+It supplements the limitations of decision-making based purely on intuition and experience. It is especially powerful when dealing with large data sets and problems involving complex constraints.
+
+**Application areas of Management Science**:
+- Logistics and inventory optimization (where to place warehouses; how much stock to hold)
+- Project scheduling (in what sequence to carry out tasks)
+- Workforce scheduling (which employees to assign and when)
+- Financial portfolio optimization (maximizing returns while minimizing risk)
+
+---
+
+## Decision Analysis
+
+### Decision-Making Under Uncertainty
+
+In reality, many decisions must be made without knowing future outcomes.
+
+**Types of decisions**:
+
+| Type | Characteristics | Criterion |
+|------|----------------|-----------|
+| Decision under certainty | Outcome is known | Simply choose the optimal option |
+| Decision under risk | Probabilities are known | Expected Monetary Value (EMV) |
+| Decision under uncertainty | Probabilities are unknown | Maximin / Maximax |
+
+### Expected Monetary Value (EMV)
+
+**EMV = Σ (Outcome × Probability)**
+
+**Example**:
+- Decision: whether to launch a new product
+- Market boom (probability 0.6): $500,000 profit
+- Market downturn (probability 0.4): $150,000 loss
+
+EMV = $500,000 × 0.6 + (−$150,000) × 0.4
+= $300,000 − $60,000 = **$240,000**
+
+Since EMV > 0, launching the product is the favorable decision.
+
+### Decision Tree
+
+Sequential decisions are visualized as a tree structure.
+
+```
+              [Boom: 0.6]  → +$500k
+Launch ──────
+              [Bust:  0.4] → −$150k
+
+No Launch ── [Certain]    → $0
+```
+
+A decision tree is analyzed using **rollback (backward induction)**. Starting from the end, EMV is calculated up through each branch, selecting the optimal decision at each node.
+
+---
+
+## Linear Programming (LP)
+
+### Concept
+
+**Maximizing (or minimizing) an objective function subject to multiple constraints.**
+
+"Given limited resources, how should we allocate them to achieve the greatest profit?"
+
+### Basic LP Structure
+
+```
+Maximize: Z = 5X + 4Y      ← Objective function (profit)
+Subject to:
+  6X + 4Y ≤ 24             ← Resource A usage limit
+  X + 2Y  ≤ 6              ← Resource B usage limit
+  X, Y ≥ 0                 ← Non-negativity constraints
+```
+
+**Solution**: When constraints are graphed, they define a feasible region. The optimal value of the objective function always lies at one of the **corner points** of that region.
+
+### Real-World Applications
+
+- **Production planning**: Maximize profit within machine, labor, and material limits when producing products A and B
+- **Logistics**: Minimize shipping costs from multiple warehouses to multiple demand locations (transportation problem)
+- **Marketing budget allocation**: Maximize reach subject to per-channel spending limits
+
+---
+
+## PERT / CPM — Project Scheduling
+
+### Concept
+
+Complex projects are represented as a **network of activities**, and the total project completion time is calculated.
+
+- **CPM (Critical Path Method)**: Used when activity durations are deterministic
+- **PERT (Program Evaluation and Review Technique)**: Used when durations are uncertain (uses optimistic, pessimistic, and most-likely estimates)
+
+### Key Concepts
+
+**Critical Path**: The longest path through the project network. Any delay on this path equals a delay in the entire project.
+
+**Slack (Float)**: The amount of time an activity can be delayed without affecting the overall schedule.
+```
+Slack = Latest Start (LS) − Earliest Start (ES)
+```
+
+Activities on the critical path have Slack = 0.
+
+### PERT Time Estimation
+
+Expected time is calculated using optimistic (a), pessimistic (b), and most-likely (m) estimates.
+
+```
+Expected time = (a + 4m + b) / 6
+Variance      = [(b − a) / 6]²
+```
+
+### Practical Use
+
+Used in large IT projects, construction projects, and new manufacturing line setups for resource allocation and schedule optimization.
+
+---
+
+## Inventory Management Models
+
+### EOQ (Economic Order Quantity) Revisited
+
+(Introduced in Ch6) With annual demand D, ordering cost per order S, and holding cost per unit H, the optimal order quantity is:
+
+```
+EOQ = √(2DS / H)
+```
+
+### Safety Stock and Reorder Point
+
+**Safety Stock**: Buffer inventory held against demand variability. There is a trade-off between service level (probability of stockout) and holding costs.
+
+**Reorder Point (ROP)**:
+```
+ROP = Average demand during lead time + Safety stock
+```
+
+An order is placed when inventory falls to the reorder point.
+
+---
+
+## Queuing Theory
+
+A mathematical model for situations where customers wait for service.
+
+**Key parameters**:
+- λ: Customer arrival rate (arrivals per unit time)
+- μ: Service rate (customers served per unit time)
+- ρ = λ/μ: Server utilization rate
+
+**M/M/1 Queuing Model** (single server, random arrivals, random service times):
+```
+Average waiting time     = ρ / [μ(1 − ρ)]
+Average customers in system = ρ / (1 − ρ)
+```
+
+As ρ approaches 1, waiting times increase explosively.
+
+**Real-world applications**: Determining the number of bank tellers, staffing call centers, optimizing hospital emergency rooms.
+
+---
+
+## Simulation
+
+### Monte Carlo Simulation
+
+Complex systems with uncertainty are modeled by running thousands of trials using **random numbers**.
+
+**Principle**: Draw random values from a probability distribution, calculate outcomes → repeat tens of thousands of times → estimate the distribution and expected value of results.
+
+**Applications**:
+- Estimating the NPV distribution of a new product launch (when demand and costs are stochastic)
+- Assessing the risk of schedule and cost overruns in construction projects
+- Calculating Value at Risk (VaR) for financial portfolios
+
+### Discrete Event Simulation
+
+Complex operational systems such as manufacturing lines, logistics networks, and service processes are run as computer simulations. Used to find bottlenecks, plan capacity, and evaluate the impact of rule changes before implementation.
+
+---
+
+## Limitations of Management Science
+
+Management science models are powerful, but they have clear limitations.
+
+**Limitations**:
+1. **Models simplify reality**: Not all variables can be included
+2. **Sensitive to assumptions**: If assumptions about demand distribution, cost structure, etc. are wrong, so are the conclusions
+3. **Dependent on data quality**: Garbage In, Garbage Out
+4. **Human and organizational factors excluded**: Culture, politics, and resistance are difficult to model
+
+**How to compensate**:
+- Sensitivity analysis: Check how conclusions change when key assumptions are varied
+- Scenario analysis: Calculate results for optimistic, baseline, and pessimistic scenarios
+- Combine model output with experienced judgment
+
+---
+
+## Study Checklist
+
+- [ ] Can calculate EMV and make expected-value-based decisions
+- [ ] Can explain the structure of an LP objective function and constraints
+- [ ] Can find the critical path and slack times in a PERT/CPM network
+- [ ] Can explain how to calculate a reorder point
+- [ ] Can explain the principle of Monte Carlo simulation
+
+---
+
+## Key Concept Cards
+
+**Leadership Theory Evolution** ★★★★
+: ① Trait Theory: innate traits determine leaders (early; weakness: ignores context). ② Behavioral Theory: Ohio State/Michigan studies, Blake-Mouton Managerial Grid. ③ Contingency Theory: Fiedler, Hersey-Blanchard (situational leadership). ④ Transformational vs. Transactional. ⑤ Servant and Authentic Leadership.
+
+**Hersey-Blanchard Situational Leadership** ★★★★★
+: Adjust leadership style to subordinate maturity (ability + willingness). S1 (Telling, low maturity): high task, low relationship. S2 (Selling): high task, high relationship. S3 (Participating): low task, high relationship. S4 (Delegating, high maturity): low task, low relationship.
+*Memory tip: Low maturity → Telling; High maturity → Delegating*
+
+**Transformational vs. Transactional Leadership** ★★★★
+: Transactional: motivates through rewards and punishment (exchange relationship, status quo). Transformational: motivates through vision, inspiration, intellectual stimulation, and individualized consideration — followers voluntarily exceed expectations (4 I's: Idealized Influence, Inspirational Motivation, Intellectual Stimulation, Individualized Consideration).
+
+---
+
+## Practice Quiz
+
+**Q. In the Hersey-Blanchard model, which leadership style is appropriate for a subordinate with high ability but low willingness?**
+> S3 — Participating (Supporting). The subordinate has the skills but lacks confidence or motivation. Minimize task direction; strengthen the relationship through encouragement and support.
