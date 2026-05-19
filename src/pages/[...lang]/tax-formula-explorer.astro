@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { TaxFormulaExplorer } from "../../features/education-calculators/TaxFormulaExplorer";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "세법 계산 산식 인터랙티브 — 소득세·법인세·부가세·양도세·상속세·증여세",
+    description: "6대 세목의 공식 계산 구조를 단계별로 확인하세요. 숫자를 바꾸면 결과가 즉시 업데이트됩니다.",
+  },
+  en: {
+    title: "Korean Tax Formula Explorer — Income, Corporate, VAT, Capital Gains, Inheritance & Gift Tax",
+    description: "Explore the official Korean tax calculation formulas for 6 major tax types with live interactive inputs.",
+  },
+  ja: {
+    title: "韓国税法計算式インタラクティブ — 所得税・法人税・消費税・譲渡税・相続税・贈与税",
+    description: "6つの主要税目の計算構造をステップ別に確認。数値を変えると即座に結果が更新されます。",
+  },
+  fr: {
+    title: "Explorateur de Formules Fiscales Coréennes",
+    description: "Explorez les formules officielles de calcul des impôts coréens pour 6 types de taxes majeurs.",
+  },
+  es: {
+    title: "Explorador de Fórmulas Tributarias Coreanas",
+    description: "Explora las fórmulas oficiales de cálculo de impuestos coreanos para 6 tipos principales de tributos.",
+  },
+  zh: {
+    title: "韓國稅法計算公式互動工具",
+    description: "逐步確認6大稅目的計算結構，修改數值即時更新結果。",
+  },
+  cn: {
+    title: "韩国税法计算公式互动工具",
+    description: "逐步确认6大税目的计算结构，修改数值即时更新结果。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-4xl px-4 py-8">
+    <TaxFormulaExplorer client:load />
+  </main>
+</BaseLayout>

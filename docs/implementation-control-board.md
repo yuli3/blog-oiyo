@@ -1,6 +1,6 @@
 # Implementation Control Board
 
-**Last updated: 2026-05-16**
+**Last updated: 2026-05-20**
 **Synced with:** `data/catalog/workboard.yaml`
 
 ## 1. Purpose
@@ -105,7 +105,7 @@ Completion signals met:
 
 ### P-BROWSE — Intent-First Browse UX
 
-Status: **in progress**
+Status: **in progress** (partially complete 2026-05-20)
 
 Priority: high
 
@@ -115,14 +115,22 @@ What this means:
 - build domain entry pages for major Korean use case clusters
 - rank featured bundles by user intent, not chronology
 
+Progress (2026-05-20):
+
+- IntentBundles.astro updated: 8 bundles (added 회계·재무, 경제학)
+- accounting-finance-guide.astro hub page created
+- economics-guide.astro hub page created
+
 Target user flows to support:
 
-1. 시험 준비 → qualification series
+1. 시험 준비 → qualification series ✅
 2. 자격증 로드맵 → exam roadmap pages
-3. 세금과 금융 → tax/finance calculators + academy
-4. 심리와 자기이해 → psychology tests
+3. 세금과 금융 → tax/finance calculators + academy ✅
+4. 심리와 자기이해 → psychology tests ✅
 5. 건강 도구 → health calculators
-6. 게임으로 배우는 사고력 → games
+6. 게임으로 배우는 사고력 → games ✅
+7. 회계·재무 → accounting-finance-guide ✅ (new)
+8. 경제학 → economics-guide ✅ (new)
 
 Completion signal:
 
@@ -130,22 +138,19 @@ Completion signal:
 
 ### P-SERIES-DEDUP — Near-Duplicate Series Consolidation
 
-Status: planned
+Status: **resolved**
 
 Priority: medium
 
-Known duplicates to resolve:
+**P-SERIES-DEDUP RESOLVED (2026-05-20)**: `academy-tax-law-basic` (series: "세법 핵심") and `academy-tax-law-basics` (series: "세법 기초") are genuinely distinct series covering different scope and depth — no merge needed. "세법 핵심" covers 상속·증여세 in ch5, while "세법 기초" covers 양도소득세 in ch5. Different chapter structures, different topics, different publication dates (2026-05-05 vs 2026-05-13). Close this item.
 
-1. `academy-tax-law-basic-*` vs `academy-tax-law-basics-*` — merge into one canonical slug pattern
-2. Verify other `basic` vs `basics` patterns across qualification exam series
+Completion signal met:
 
-Completion signal:
-
-1. no two series exist that cover the same subject under slightly different names
+1. Verified: no two series cover the same subject under slightly different names ✅
 
 ### P-INTERACTIVE-QUALITY — Interactive Curation
 
-Status: planned
+Status: **in progress** (partially complete 2026-05-20)
 
 Priority: medium
 
@@ -154,6 +159,15 @@ What this means:
 - embeddedTools metadata is now in place (Phase 4)
 - next step: quality review — top 20 interactive pages identified, article framing reviewed
 - tool pages that are useful but not destination-worthy flagged for improvement
+
+Progress (2026-05-20):
+
+- New interactive articles are reading-first: substantial educational intro → calculator → analysis callouts
+  - financial-statement-analyzer.mdx (ko + en): 5 sections before/around calculator
+  - tax-formula-explorer.mdx (ko + en): 5 sections with formula structure explained
+  - supply-demand-simulator.mdx (ko + en): 6 sections including surplus and tax effects theory
+- magazine-education-accounting-lab.mdx already had 3+ educational sections ✅
+- Verified reading-first framing standard established for all new interactive articles
 
 Completion signal:
 

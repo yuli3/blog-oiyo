@@ -1,0 +1,55 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { SupplyDemandSimulator, ElasticityCalculator } from "../../features/education-calculators/EconomicsInteractives";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "수요공급 시뮬레이터 + 탄력성 계산기 — 경제학 인터랙티브",
+    description: "수요·공급 곡선을 직접 이동하며 균형가격과 수량을 확인하세요. 소비자·생산자 잉여, 조세 귀착, 자중손실도 시각화됩니다.",
+  },
+  en: {
+    title: "Supply & Demand Simulator + Elasticity Calculator — Economics Interactive",
+    description: "Shift supply and demand curves to find equilibrium. Visualize consumer/producer surplus, tax incidence, and deadweight loss.",
+  },
+  ja: {
+    title: "需要供給シミュレーター + 弾力性計算機",
+    description: "需要・供給曲線を動かして均衡価格と数量を確認。消費者余剰・生産者余剰・課税の帰着も可視化。",
+  },
+  fr: {
+    title: "Simulateur Offre et Demande + Calculateur d'Élasticité",
+    description: "Déplacez les courbes d'offre et de demande pour trouver l'équilibre. Visualisez les surplus et la charge fiscale.",
+  },
+  es: {
+    title: "Simulador de Oferta y Demanda + Calculadora de Elasticidad",
+    description: "Mueve las curvas de oferta y demanda para encontrar el equilibrio. Visualiza excedentes e impacto fiscal.",
+  },
+  zh: {
+    title: "供需模擬器 + 彈性計算機",
+    description: "移動供需曲線查看均衡價格與數量，並視覺化消費者、生產者剩餘與稅收歸宿。",
+  },
+  cn: {
+    title: "供需模拟器 + 弹性计算机",
+    description: "移动供需曲线查看均衡价格与数量，并可视化消费者、生产者剩余与税收归宿。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-4xl px-4 py-8">
+    <SupplyDemandSimulator client:load />
+    <ElasticityCalculator client:load />
+  </main>
+</BaseLayout>

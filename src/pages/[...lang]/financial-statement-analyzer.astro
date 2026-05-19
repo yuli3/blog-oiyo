@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { FinancialStatementAnalyzer } from "../../features/education-calculators/FinancialStatementAnalyzer";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "재무제표 분석기 — B/S·I/S·현금흐름·비율 한번에",
+    description: "재무상태표·손익계산서를 입력하면 유동비율·ROE·부채비율 등 핵심 재무비율을 자동 계산합니다. 현금흐름표와 비율 벤치마크도 제공.",
+  },
+  en: {
+    title: "Financial Statement Analyzer — Balance Sheet, Income Statement & Ratios",
+    description: "Enter balance sheet and income statement data to instantly calculate key financial ratios: current ratio, ROE, debt ratio, and more.",
+  },
+  ja: {
+    title: "財務諸表分析ツール — B/S・P/L・キャッシュフロー一括分析",
+    description: "貸借対照表・損益計算書を入力して、流動比率・ROE・負債比率などの主要財務指標を自動計算します。",
+  },
+  fr: {
+    title: "Analyseur d'États Financiers — Bilan, Compte de Résultat et Ratios",
+    description: "Saisissez vos données financières pour calculer automatiquement les ratios clés : ratio de liquidité, ROE, ratio d'endettement.",
+  },
+  es: {
+    title: "Analizador de Estados Financieros — Balance, PyG y Ratios",
+    description: "Ingresa datos del balance y la cuenta de resultados para calcular ratios financieros clave: liquidez, ROE, endeudamiento y más.",
+  },
+  zh: {
+    title: "財務報表分析工具 — 資產負債表、損益表與比率",
+    description: "輸入資產負債表和損益表數據，自動計算流動比率、ROE、負債比率等主要財務指標。",
+  },
+  cn: {
+    title: "财务报表分析工具 — 资产负债表、损益表与比率",
+    description: "输入资产负债表和损益表数据，自动计算流动比率、ROE、负债比率等主要财务指标。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-4xl px-4 py-8">
+    <FinancialStatementAnalyzer client:load />
+  </main>
+</BaseLayout>

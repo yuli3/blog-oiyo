@@ -1,0 +1,518 @@
+import React, { useState, useMemo } from 'react';
+import { Card } from '@/components/ui/card';
+
+// ── Types ────────────────────────────────────────────────────────────────────
+
+interface BSData {
+  // Current assets
+  cash: number;
+  receivables: number;
+  inventory: number;
+  // Non-current assets
+  ppe: number;
+  intangibles: number;
+  // Current liabilities
+  payables: number;
+  shortTermDebt: number;
+  // Non-current liabilities
+  longTermDebt: number;
+  bonds: number;
+  // Equity
+  capital: number;
+  retainedEarnings: number;
+}
+
+interface ISData {
+  revenue: number;
+  cogs: number;
+  sga: number;
+  interestExpense: number;
+  incomeTax: number;
+}
+
+interface CFData {
+  depreciation: number;
+  arIncrease: number;
+  inventoryIncrease: number;
+  apIncrease: number;
+  capex: number;
+  investmentAcquisition: number;
+  debtIncrease: number;
+  debtRepayment: number;
+  dividendPaid: number;
+  beginningCash: number;
+}
+
+// ── Input field component ─────────────────────────────────────────────────────
+
+interface InputRowProps {
+  label: string;
+  value: number;
+  onChange: (v: number) => void;
+  unit?: string;
+  readOnly?: boolean;
+  highlight?: boolean;
+}
+
+const InputRow: React.FC<InputRowProps> = ({ label, value, onChange, unit = '억원', readOnly = false, highlight = false }) => (
+  <div className={`flex items-center gap-2 py-1.5 border-b border-emerald-100 ${highlight ? 'bg-emerald-50 rounded-lg px-2' : ''}`}>
+    <span className="flex-1 text-xs text-slate-600 font-normal min-w-0">{label}</span>
+    <div className="flex items-center gap-1 shrink-0">
+      {readOnly ? (
+        <span className="w-24 text-right text-sm font-bold text-emerald-700 pr-1">{value.toFixed(1)}</span>
+      ) : (
+        <input
+          type="number"
+          value={value}
+          onChange={e => onChange(Number(e.target.value))}
+          className="w-24 text-right text-sm bg-white border border-emerald-200 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+          aria-label={label}
+        />
+      )}
+      <span className="text-[10px] text-slate-400 w-8">{unit}</span>
+    </div>
+  </div>
+);
+
+// ── Ratio badge ───────────────────────────────────────────────────────────────
+
+type RatioLevel = 'good' | 'warning' | 'danger' | 'info';
+
+const levelColors: Record<RatioLevel, { bar: string; text: string; bg: string }> = {
+  good:    { bar: 'bg-emerald-500', text: 'text-emerald-700', bg: 'bg-emerald-50' },
+  warning: { bar: 'bg-amber-400',   text: 'text-amber-700',   bg: 'bg-amber-50'   },
+  danger:  { bar: 'bg-rose-500',    text: 'text-rose-700',    bg: 'bg-rose-50'    },
+  info:    { bar: 'bg-sky-400',     text: 'text-sky-700',     bg: 'bg-sky-50'     },
+};
+
+interface RatioGaugeProps {
+  label: string;
+  value: number;
+  unit: string;
+  level: RatioLevel;
+  description: string;
+  barPct: number; // 0-100 for visual
+}
+
+const RatioGauge: React.FC<RatioGaugeProps> = ({ label, value, unit, level, description, barPct }) => {
+  const colors = levelColors[level];
+  const levelLabel: Record<RatioLevel, string> = { good: '우수', warning: '보통', danger: '위험', info: '참고' };
+  return (
+    <div className={`rounded-2xl border border-slate-100 p-4 ${colors.bg}`}>
+      <div className="flex items-start justify-between mb-2">
+        <span className="text-xs font-bold text-slate-700">{label}</span>
+        <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${colors.bg} ${colors.text} border border-current`}>
+          {levelLabel[level]}
+        </span>
+      </div>
+      <div className="flex items-end gap-1 mb-2">
+        <span className={`text-2xl font-bold ${colors.text}`}>
+          {isFinite(value) ? value.toFixed(1) : '—'}
+        </span>
+        <span className="text-xs text-slate-500 mb-1">{unit}</span>
+      </div>
+      <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden mb-2">
+        <div
+          className={`h-full rounded-full transition-all duration-500 ${colors.bar}`}
+          style={{ width: `${Math.min(Math.max(barPct, 0), 100)}%` }}
+          role="progressbar"
+          aria-valuenow={barPct}
+          aria-valuemin={0}
+          aria-valuemax={100}
+        />
+      </div>
+      <p className="text-[10px] text-slate-500 leading-relaxed">{description}</p>
+    </div>
+  );
+};
+
+// ── Section header ────────────────────────────────────────────────────────────
+
+const SectionHeader: React.FC<{ title: string }> = ({ title }) => (
+  <div className="flex items-center gap-2 mb-3 mt-5 first:mt-0">
+    <div className="w-1 h-4 bg-emerald-500 rounded-full" />
+    <h4 className="text-xs font-bold text-emerald-800 uppercase tracking-wider">{title}</h4>
+  </div>
+);
+
+// ── Tab button ────────────────────────────────────────────────────────────────
+
+interface TabButtonProps {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}
+
+const TabButton: React.FC<TabButtonProps> = ({ active, onClick, children }) => (
+  <button
+    onClick={onClick}
+    className={`px-3 py-2 text-xs font-bold rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 ${
+      active
+        ? 'bg-emerald-600 text-white shadow-sm'
+        : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'
+    }`}
+    aria-selected={active}
+    role="tab"
+  >
+    {children}
+  </button>
+);
+
+// ── Main component ────────────────────────────────────────────────────────────
+
+export const FinancialStatementAnalyzer: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<0 | 1 | 2>(0);
+
+  // B/S + I/S state
+  const [bs, setBS] = useState<BSData>({
+    cash: 500, receivables: 300, inventory: 200,
+    ppe: 800, intangibles: 100,
+    payables: 200, shortTermDebt: 150,
+    longTermDebt: 400, bonds: 100,
+    capital: 500, retainedEarnings: 550,
+  });
+
+  const [is, setIS] = useState<ISData>({
+    revenue: 2000, cogs: 1200, sga: 300,
+    interestExpense: 30, incomeTax: 60,
+  });
+
+  // Cash flow state
+  const [cf, setCF] = useState<CFData>({
+    depreciation: 80,
+    arIncrease: 20,
+    inventoryIncrease: 10,
+    apIncrease: 15,
+    capex: 120,
+    investmentAcquisition: 50,
+    debtIncrease: 100,
+    debtRepayment: 80,
+    dividendPaid: 30,
+    beginningCash: 450,
+  });
+
+  // ── Derived values ─────────────────────────────────────────────────────────
+
+  const derived = useMemo(() => {
+    const currentAssets = bs.cash + bs.receivables + bs.inventory;
+    const nonCurrentAssets = bs.ppe + bs.intangibles;
+    const totalAssets = currentAssets + nonCurrentAssets;
+    const currentLiabilities = bs.payables + bs.shortTermDebt;
+    const nonCurrentLiabilities = bs.longTermDebt + bs.bonds;
+    const totalLiabilities = currentLiabilities + nonCurrentLiabilities;
+    const equity = bs.capital + bs.retainedEarnings;
+
+    const grossProfit = is.revenue - is.cogs;
+    const ebit = grossProfit - is.sga;
+    const ebt = ebit - is.interestExpense;
+    const netIncome = ebt - is.incomeTax;
+
+    // Ratios
+    const currentRatio = currentLiabilities > 0 ? (currentAssets / currentLiabilities) * 100 : 0;
+    const quickRatio = currentLiabilities > 0 ? ((currentAssets - bs.inventory) / currentLiabilities) * 100 : 0;
+    const debtRatio = equity > 0 ? (totalLiabilities / equity) * 100 : 0;
+    const interestCoverage = is.interestExpense > 0 ? ebit / is.interestExpense : 0;
+    const roe = equity > 0 ? (netIncome / equity) * 100 : 0;
+    const roa = totalAssets > 0 ? (netIncome / totalAssets) * 100 : 0;
+    const operatingMargin = is.revenue > 0 ? (ebit / is.revenue) * 100 : 0;
+    const grossMargin = is.revenue > 0 ? (grossProfit / is.revenue) * 100 : 0;
+
+    return {
+      currentAssets, nonCurrentAssets, totalAssets,
+      currentLiabilities, nonCurrentLiabilities, totalLiabilities, equity,
+      grossProfit, ebit, ebt, netIncome,
+      currentRatio, quickRatio, debtRatio, interestCoverage,
+      roe, roa, operatingMargin, grossMargin,
+    };
+  }, [bs, is]);
+
+  const cfDerived = useMemo(() => {
+    const operatingCF = derived.netIncome + cf.depreciation
+      - cf.arIncrease - cf.inventoryIncrease + cf.apIncrease;
+    const investingCF = -(cf.capex + cf.investmentAcquisition);
+    const financingCF = cf.debtIncrease - cf.debtRepayment - cf.dividendPaid;
+    const endingCash = cf.beginningCash + operatingCF + investingCF + financingCF;
+    const fcf = operatingCF - cf.capex;
+    const ebitda = derived.ebit + cf.depreciation;
+
+    return { operatingCF, investingCF, financingCF, endingCash, fcf, ebitda };
+  }, [derived, cf]);
+
+  // ── Gauge helpers ──────────────────────────────────────────────────────────
+
+  const getCRLevel = (v: number): RatioLevel => v >= 200 ? 'good' : v >= 100 ? 'warning' : 'danger';
+  const getQRLevel = (v: number): RatioLevel => v >= 100 ? 'good' : v >= 50 ? 'warning' : 'danger';
+  const getDebtLevel = (v: number): RatioLevel => v <= 100 ? 'good' : v <= 200 ? 'warning' : 'danger';
+  const getROELevel = (v: number): RatioLevel => v >= 15 ? 'good' : v >= 8 ? 'warning' : 'danger';
+
+  const clampPct = (v: number, max: number) => Math.min((v / max) * 100, 100);
+
+  const bsUpdater = (field: keyof BSData) => (v: number) => setBS(prev => ({ ...prev, [field]: v }));
+  const isUpdater = (field: keyof ISData) => (v: number) => setIS(prev => ({ ...prev, [field]: v }));
+  const cfUpdater = (field: keyof CFData) => (v: number) => setCF(prev => ({ ...prev, [field]: v }));
+
+  // ── Render ─────────────────────────────────────────────────────────────────
+
+  return (
+    <Card className="bg-white border border-emerald-100 shadow-xl rounded-2xl overflow-hidden mt-8">
+      {/* Header */}
+      <div className="bg-emerald-700 px-6 py-5">
+        <h3 className="text-lg font-bold text-white">재무제표 분석기</h3>
+        <p className="text-xs text-emerald-200 mt-1">재무상태표 · 손익계산서 · 현금흐름표 · 비율 벤치마크</p>
+      </div>
+
+      {/* Tabs */}
+      <div className="flex gap-2 px-6 pt-4 pb-0" role="tablist" aria-label="재무제표 분석 탭">
+        <TabButton active={activeTab === 0} onClick={() => setActiveTab(0)}>B/S + I/S</TabButton>
+        <TabButton active={activeTab === 1} onClick={() => setActiveTab(1)}>현금흐름표</TabButton>
+        <TabButton active={activeTab === 2} onClick={() => setActiveTab(2)}>비율 벤치마크</TabButton>
+      </div>
+
+      <div className="px-6 pb-6 pt-4">
+
+        {/* ── Tab 0: B/S + I/S ── */}
+        {activeTab === 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Left: Inputs */}
+            <div>
+              <SectionHeader title="재무상태표 (B/S)" />
+
+              <div className="mb-2">
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">유동자산</p>
+                <InputRow label="현금 및 단기투자" value={bs.cash} onChange={bsUpdater('cash')} />
+                <InputRow label="매출채권" value={bs.receivables} onChange={bsUpdater('receivables')} />
+                <InputRow label="재고자산" value={bs.inventory} onChange={bsUpdater('inventory')} />
+              </div>
+
+              <div className="mb-2">
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">비유동자산</p>
+                <InputRow label="유형자산 (PPE)" value={bs.ppe} onChange={bsUpdater('ppe')} />
+                <InputRow label="무형자산" value={bs.intangibles} onChange={bsUpdater('intangibles')} />
+              </div>
+
+              <div className="mb-2">
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">유동부채</p>
+                <InputRow label="매입채무" value={bs.payables} onChange={bsUpdater('payables')} />
+                <InputRow label="단기차입금" value={bs.shortTermDebt} onChange={bsUpdater('shortTermDebt')} />
+              </div>
+
+              <div className="mb-2">
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">비유동부채</p>
+                <InputRow label="장기차입금" value={bs.longTermDebt} onChange={bsUpdater('longTermDebt')} />
+                <InputRow label="사채" value={bs.bonds} onChange={bsUpdater('bonds')} />
+              </div>
+
+              <div className="mb-2">
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">자본</p>
+                <InputRow label="자본금" value={bs.capital} onChange={bsUpdater('capital')} />
+                <InputRow label="이익잉여금" value={bs.retainedEarnings} onChange={bsUpdater('retainedEarnings')} />
+              </div>
+
+              <SectionHeader title="손익계산서 (I/S)" />
+              <InputRow label="매출액" value={is.revenue} onChange={isUpdater('revenue')} />
+              <InputRow label="매출원가" value={is.cogs} onChange={isUpdater('cogs')} />
+              <InputRow label="판매관리비 (SG&A)" value={is.sga} onChange={isUpdater('sga')} />
+              <InputRow label="영업이익 (EBIT)" value={derived.ebit} onChange={() => {}} readOnly highlight />
+              <InputRow label="이자비용" value={is.interestExpense} onChange={isUpdater('interestExpense')} />
+              <InputRow label="법인세비용" value={is.incomeTax} onChange={isUpdater('incomeTax')} />
+              <InputRow label="당기순이익" value={derived.netIncome} onChange={() => {}} readOnly highlight />
+            </div>
+
+            {/* Right: Ratios */}
+            <div>
+              <SectionHeader title="요약 재무 지표" />
+              <div className="grid grid-cols-2 gap-3 mb-4">
+                {[
+                  { label: '총자산', value: derived.totalAssets, color: 'text-slate-700' },
+                  { label: '총부채', value: derived.totalLiabilities, color: 'text-rose-600' },
+                  { label: '자본 합계', value: derived.equity, color: 'text-emerald-700' },
+                  { label: '매출총이익', value: derived.grossProfit, color: 'text-sky-700' },
+                ].map(item => (
+                  <div key={item.label} className="rounded-xl bg-slate-50 border border-slate-100 p-3">
+                    <p className="text-[10px] text-slate-400 font-bold">{item.label}</p>
+                    <p className={`text-lg font-bold ${item.color}`}>{item.value.toFixed(0)}<span className="text-xs font-normal text-slate-400 ml-1">억원</span></p>
+                  </div>
+                ))}
+              </div>
+
+              <SectionHeader title="주요 재무 비율" />
+              <div className="space-y-2">
+                {[
+                  { label: '유동비율', value: derived.currentRatio, unit: '%', formula: '유동자산 / 유동부채' },
+                  { label: '당좌비율', value: derived.quickRatio, unit: '%', formula: '(유동자산-재고) / 유동부채' },
+                  { label: '부채비율', value: derived.debtRatio, unit: '%', formula: '총부채 / 자본' },
+                  { label: '이자보상배율', value: derived.interestCoverage, unit: '배', formula: '영업이익 / 이자비용' },
+                  { label: 'ROE', value: derived.roe, unit: '%', formula: '당기순이익 / 자본' },
+                  { label: 'ROA', value: derived.roa, unit: '%', formula: '당기순이익 / 총자산' },
+                  { label: '영업이익률', value: derived.operatingMargin, unit: '%', formula: '영업이익 / 매출액' },
+                  { label: '매출총이익률', value: derived.grossMargin, unit: '%', formula: '매출총이익 / 매출액' },
+                ].map(item => (
+                  <div key={item.label} className="flex items-center justify-between py-1.5 border-b border-emerald-50">
+                    <div>
+                      <span className="text-xs font-bold text-slate-700">{item.label}</span>
+                      <span className="text-[10px] text-slate-400 ml-2">{item.formula}</span>
+                    </div>
+                    <span className="text-sm font-bold text-emerald-700 tabular-nums">
+                      {isFinite(item.value) ? item.value.toFixed(1) : '—'}{item.unit}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ── Tab 1: Cash Flow ── */}
+        {activeTab === 1 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <SectionHeader title="영업활동 조정 항목" />
+              <InputRow label="당기순이익 (I/S 연동)" value={derived.netIncome} onChange={() => {}} readOnly highlight />
+              <InputRow label="감가상각비 (비현금 가산)" value={cf.depreciation} onChange={cfUpdater('depreciation')} />
+
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-3 mb-1">운전자본 변동</p>
+              <InputRow label="매출채권 증가 (-)" value={cf.arIncrease} onChange={cfUpdater('arIncrease')} />
+              <InputRow label="재고자산 증가 (-)" value={cf.inventoryIncrease} onChange={cfUpdater('inventoryIncrease')} />
+              <InputRow label="매입채무 증가 (+)" value={cf.apIncrease} onChange={cfUpdater('apIncrease')} />
+
+              <SectionHeader title="투자활동" />
+              <InputRow label="유형자산 취득 (-)" value={cf.capex} onChange={cfUpdater('capex')} />
+              <InputRow label="투자자산 취득 (-)" value={cf.investmentAcquisition} onChange={cfUpdater('investmentAcquisition')} />
+
+              <SectionHeader title="재무활동" />
+              <InputRow label="차입금 증가 (+)" value={cf.debtIncrease} onChange={cfUpdater('debtIncrease')} />
+              <InputRow label="차입금 상환 (-)" value={cf.debtRepayment} onChange={cfUpdater('debtRepayment')} />
+              <InputRow label="배당금 지급 (-)" value={cf.dividendPaid} onChange={cfUpdater('dividendPaid')} />
+
+              <SectionHeader title="기초 현금" />
+              <InputRow label="기초 현금 잔액" value={cf.beginningCash} onChange={cfUpdater('beginningCash')} />
+            </div>
+
+            <div>
+              <SectionHeader title="현금흐름 요약" />
+              <div className="space-y-3">
+                {[
+                  { label: '영업활동현금흐름 (OCF)', value: cfDerived.operatingCF, positive: cfDerived.operatingCF >= 0 },
+                  { label: '투자활동현금흐름', value: cfDerived.investingCF, positive: cfDerived.investingCF >= 0 },
+                  { label: '재무활동현금흐름', value: cfDerived.financingCF, positive: cfDerived.financingCF >= 0 },
+                ].map(item => (
+                  <div key={item.label} className={`rounded-2xl p-4 border ${item.positive ? 'bg-emerald-50 border-emerald-200' : 'bg-rose-50 border-rose-200'}`}>
+                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">{item.label}</p>
+                    <p className={`text-2xl font-bold mt-1 ${item.positive ? 'text-emerald-700' : 'text-rose-600'}`}>
+                      {item.positive ? '+' : ''}{item.value.toFixed(1)} <span className="text-sm font-normal text-slate-400">억원</span>
+                    </p>
+                  </div>
+                ))}
+
+                <div className="border-t border-slate-100 pt-3 mt-3 space-y-2">
+                  <div className="flex justify-between items-center py-1 border-b border-slate-100">
+                    <span className="text-xs font-bold text-slate-600">기말 현금</span>
+                    <span className="text-sm font-bold text-slate-800 tabular-nums">{cfDerived.endingCash.toFixed(1)} 억원</span>
+                  </div>
+                  <div className="flex justify-between items-center py-1 border-b border-slate-100">
+                    <span className="text-xs font-bold text-slate-600">FCF (잉여현금흐름)</span>
+                    <span className={`text-sm font-bold tabular-nums ${cfDerived.fcf >= 0 ? 'text-emerald-700' : 'text-rose-600'}`}>
+                      {cfDerived.fcf >= 0 ? '+' : ''}{cfDerived.fcf.toFixed(1)} 억원
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center py-1">
+                    <span className="text-xs font-bold text-slate-600">EBITDA</span>
+                    <span className="text-sm font-bold text-sky-700 tabular-nums">{cfDerived.ebitda.toFixed(1)} 억원</span>
+                  </div>
+                </div>
+
+                <div className="rounded-2xl bg-slate-50 border border-slate-200 p-4 mt-2">
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">현금흐름 패턴 해석</p>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    {cfDerived.operatingCF > 0 && cfDerived.investingCF < 0 && cfDerived.financingCF < 0
+                      ? '성숙 기업 패턴: 영업흑자로 투자와 부채상환 모두 충당.'
+                      : cfDerived.operatingCF > 0 && cfDerived.investingCF < 0 && cfDerived.financingCF > 0
+                      ? '성장 기업 패턴: 외부자금 조달로 적극 투자 진행 중.'
+                      : cfDerived.operatingCF < 0
+                      ? '주의 필요: 영업활동 자체에서 현금이 유출되고 있습니다.'
+                      : '현금흐름을 종합적으로 검토하세요.'}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ── Tab 2: Benchmarks ── */}
+        {activeTab === 2 && (
+          <div>
+            <p className="text-xs text-slate-500 mb-4 leading-relaxed">
+              B/S + I/S 탭의 값을 기반으로 계산됩니다. 한국 상장사 평균 기준으로 색상 신호를 표시합니다.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <RatioGauge
+                label="유동비율 (Current Ratio)"
+                value={derived.currentRatio}
+                unit="%"
+                level={getCRLevel(derived.currentRatio)}
+                description="유동자산/유동부채. ≥200% 우수 | 100~200% 보통 | <100% 위험"
+                barPct={clampPct(derived.currentRatio, 300)}
+              />
+              <RatioGauge
+                label="당좌비율 (Quick Ratio)"
+                value={derived.quickRatio}
+                unit="%"
+                level={getQRLevel(derived.quickRatio)}
+                description="(유동자산-재고)/유동부채. ≥100% 우수 | 50~100% 보통 | <50% 위험"
+                barPct={clampPct(derived.quickRatio, 200)}
+              />
+              <RatioGauge
+                label="부채비율 (D/E Ratio)"
+                value={derived.debtRatio}
+                unit="%"
+                level={getDebtLevel(derived.debtRatio)}
+                description="총부채/자본. ≤100% 우수 | 100~200% 보통 | >200% 위험"
+                barPct={Math.min((derived.debtRatio / 300) * 100, 100)}
+              />
+              <RatioGauge
+                label="이자보상배율"
+                value={derived.interestCoverage}
+                unit="배"
+                level={derived.interestCoverage >= 3 ? 'good' : derived.interestCoverage >= 1.5 ? 'warning' : 'danger'}
+                description="영업이익/이자비용. ≥3배 우수 | 1.5~3배 보통 | <1.5배 위험"
+                barPct={clampPct(derived.interestCoverage, 10)}
+              />
+              <RatioGauge
+                label="ROE (자기자본이익률)"
+                value={derived.roe}
+                unit="%"
+                level={getROELevel(derived.roe)}
+                description="당기순이익/자본. ≥15% 우수 | 8~15% 보통 | <8% 낮음"
+                barPct={clampPct(derived.roe, 30)}
+              />
+              <RatioGauge
+                label="ROA (총자산이익률)"
+                value={derived.roa}
+                unit="%"
+                level={derived.roa >= 5 ? 'good' : derived.roa >= 2 ? 'warning' : 'danger'}
+                description="당기순이익/총자산. ≥5% 우수 | 2~5% 보통 | <2% 낮음"
+                barPct={clampPct(derived.roa, 15)}
+              />
+              <RatioGauge
+                label="영업이익률"
+                value={derived.operatingMargin}
+                unit="%"
+                level={derived.operatingMargin >= 10 ? 'good' : derived.operatingMargin >= 5 ? 'warning' : 'danger'}
+                description="영업이익/매출액. ≥10% 우수 | 5~10% 보통 | <5% 낮음"
+                barPct={clampPct(derived.operatingMargin, 30)}
+              />
+              <RatioGauge
+                label="매출총이익률"
+                value={derived.grossMargin}
+                unit="%"
+                level={derived.grossMargin >= 30 ? 'good' : derived.grossMargin >= 15 ? 'warning' : 'danger'}
+                description="(매출-원가)/매출액. ≥30% 우수 | 15~30% 보통 | <15% 낮음"
+                barPct={clampPct(derived.grossMargin, 60)}
+              />
+            </div>
+          </div>
+        )}
+      </div>
+    </Card>
+  );
+};
