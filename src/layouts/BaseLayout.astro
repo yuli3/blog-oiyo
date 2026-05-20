@@ -329,6 +329,23 @@ const langItems = [
         });
       })();
 
+      // ── Back to top ──────────────────────────────────────────────────────
+      (function () {
+        var btn = document.getElementById("back-to-top");
+        if (!btn) return;
+        function toggleVisibility() {
+          var show = window.scrollY > 400;
+          btn.classList.toggle("opacity-0", !show);
+          btn.classList.toggle("pointer-events-none", !show);
+          btn.classList.toggle("opacity-100", show);
+        }
+        window.addEventListener("scroll", toggleVisibility, { passive: true });
+        btn.addEventListener("click", function () {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+        toggleVisibility();
+      })();
+
       // ── Mobile menu ───────────────────────────────────────────────────────
       (function () {
         var openBtn   = document.getElementById("menu-open");
@@ -373,6 +390,15 @@ const langItems = [
     <main id="main-content" role="main" class="flex-1">
       <slot />
     </main>
+
+    <!-- Back to top button -->
+    <button
+      id="back-to-top"
+      aria-label={t.common?.goToTop ?? "Go to top"}
+      class="fixed bottom-6 right-6 z-40 h-10 w-10 rounded-full bg-primary text-primary-foreground shadow-lg flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-200 hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg>
+    </button>
 
     <footer class="py-12 border-t border-border/40 text-center md:text-left">
       <div class="container px-4 space-y-6">
