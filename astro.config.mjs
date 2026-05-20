@@ -12,15 +12,10 @@ import wikiLinkPlugin from "remark-wiki-link";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 
-import cloudflare from "@astrojs/cloudflare";
-
 // https://astro.build/config
 export default defineConfig({
   site: "https://blog.oiyo.net",
   output: "static",
-  adapter: cloudflare({
-    imageService: "compile",
-  }),
   integrations: [react(), mdx(), sitemap(), robotsTxt()],
   image: {
     service: {

@@ -1,0 +1,137 @@
+---
+track: interactive
+embeddedTools:
+  - 'Financial Statement Analyzer'
+title: "Financial Statement Analyzer — Reading the Numbers, Interpreting the Ratios"
+description: "Enter balance sheet and income statement data to instantly calculate current ratio, ROE, debt ratio, and more. Cash flow patterns and benchmark signals included."
+pubDate: 2026-05-20
+category: Finance
+tags:
+  - financial-statements
+  - financial-ratios
+  - ROE
+  - debt-ratio
+  - cash-flow
+  - accounting
+locale: en
+author: Oiyo
+---
+
+import { FinancialStatementAnalyzer } from "@/features/education-calculators/FinancialStatementAnalyzer";
+import Callout from "@/components/mdx/Callout.astro";
+import CompareTable from "@/components/mdx/CompareTable.astro";
+
+# Reading Financial Statements
+
+Financial statements are a company's health report. Just as a doctor reads blood pressure and glucose levels, investors and managers diagnose company health through financial ratios.
+
+The problem is that financial statements can initially look like a wall of numbers. The goal of this article is to help you feel those numbers as a **connected structure**.
+
+---
+
+## 1. The Three Pillars of Financial Statements
+
+**Balance Sheet (B/S)**
+
+Shows assets, liabilities, and equity at a specific point in time. It answers: what does the company own, what does it owe, and what belongs to shareholders?
+
+Core identity:
+> Assets = Liabilities + Equity
+
+**Income Statement (I/S)**
+
+Shows revenue, expenses, and profit over a period of time. It tells the story of "how much was earned and how much was kept."
+
+**Cash Flow Statement**
+
+Separates actual cash inflows and outflows into operating, investing, and financing activities. A company can be profitable but still go bankrupt if it runs out of cash.
+
+<Callout type="info">
+**Why do you need all three?** The balance sheet is a snapshot, the income statement is a video, and the cash flow statement is the actual wallet ledger. You need all three to see the full picture.
+</Callout>
+
+---
+
+## 2. Key Financial Ratios Explained
+
+Financial ratios judge company health through the relationship between two numbers.
+
+### Stability Ratios
+
+<CompareTable
+  headers={["Ratio", "Formula", "Meaning", "Benchmark"]}
+  rows={[
+    ["Current Ratio", "Current Assets/Current Liabilities×100", "Short-term debt repayment ability", "≥200% excellent"],
+    ["Quick Ratio", "(Current Assets−Inventory)/Current Liabilities×100", "Immediate repayment excluding inventory", "≥100% excellent"],
+    ["Debt-to-Equity", "Total Liabilities/Equity×100", "Financial leverage level", "≤100% excellent"],
+    ["Interest Coverage", "EBIT/Interest Expense", "Ability to service interest payments", "≥3× excellent"],
+  ]}
+/>
+
+### Profitability Ratios
+
+<CompareTable
+  headers={["Ratio", "Formula", "Meaning"]}
+  rows={[
+    ["ROE", "Net Income/Equity×100", "Capital efficiency from the shareholder's perspective"],
+    ["ROA", "Net Income/Total Assets×100", "Overall asset productivity"],
+    ["Operating Margin", "EBIT/Revenue×100", "Core business competitiveness"],
+    ["Gross Margin", "(Revenue−COGS)/Revenue×100", "Product-level margin structure"],
+  ]}
+/>
+
+---
+
+## 3. Try the Analyzer
+
+Enter your numbers below — ratios update in real time.
+
+- **B/S + I/S tab**: Input balance sheet and income statement data → 8 ratios calculated automatically
+- **Cash Flow tab**: Operating/investing/financing CF + FCF and EBITDA
+- **Benchmarks tab**: Color-coded signals for excellent/fair/at-risk
+
+<FinancialStatementAnalyzer client:load />
+
+---
+
+## 4. Three Principles for Interpreting Ratios
+
+Looking at a single number in isolation is dangerous. Here are three principles for correct interpretation.
+
+**Principle 1 — Industry Comparison**
+
+A retailer's current ratio and a manufacturer's should be evaluated against different benchmarks. Always compare to industry averages.
+
+**Principle 2 — Trend Analysis**
+
+An ROE of 15% this year means more when it was 8% last year. The direction of the number matters more than its absolute value.
+
+**Principle 3 — Ratio Interconnection**
+
+ROE = Net Margin × Asset Turnover × Leverage (DuPont decomposition). When ROE is high, identify which driver is responsible.
+
+<Callout type="warning">
+**ROE trap**: High debt can inflate ROE through leverage. Always examine ROE alongside the debt-to-equity ratio.
+</Callout>
+
+---
+
+## 5. Reading Company Stage from Cash Flow Patterns
+
+<CompareTable
+  headers={["Operating CF", "Investing CF", "Financing CF", "Company Stage"]}
+  rows={[
+    ["+", "−", "−", "Mature — funding investments and debt repayment from operations"],
+    ["+", "−", "+", "Growth — raising capital to fund expansion"],
+    ["+", "+", "−", "Restructuring — selling assets, repaying debt"],
+    ["−", "−", "+", "Early-stage — funded by external investment"],
+  ]}
+/>
+
+<Callout type="tip">
+**Free Cash Flow (FCF)** that remains consistently positive signals the company has capacity for dividends, buybacks, or reinvestment. FCF = Operating CF − Capital Expenditures
+</Callout>
+
+---
+
+Financial statements do not become readable overnight. But the habit of calculating ratios, practiced consistently, turns numbers into narratives.
