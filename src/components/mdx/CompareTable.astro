@@ -26,6 +26,7 @@ interface Props {
   rightColor?: string;
 }
 
+import { inlineMd } from "../../lib/utils";
 const {
   title,
   leftTitle,
@@ -37,26 +38,26 @@ const {
 ---
 
 <div class="edu-compare-table">
-  {title && <div class="edu-compare-table__title">{title}</div>}
+  {title && <div class="edu-compare-table__title" set:html={inlineMd(title)} />}
   <table>
     <thead>
       <tr>
         <th class="edu-compare-table__label-header">구분</th>
         <th style={`border-top: 3px solid ${leftColor}; color: ${leftColor};`}
-          >{leftTitle}</th
-        >
+          set:html={inlineMd(leftTitle)}
+        ></th>
         <th style={`border-top: 3px solid ${rightColor}; color: ${rightColor};`}
-          >{rightTitle}</th
-        >
+          set:html={inlineMd(rightTitle)}
+        ></th>
       </tr>
     </thead>
     <tbody>
       {
         rows.map((row, i) => (
           <tr class={i % 2 === 0 ? "even" : "odd"}>
-            <td class="edu-compare-table__label">{row.label}</td>
-            <td class="edu-compare-table__left">{row.left}</td>
-            <td class="edu-compare-table__right">{row.right}</td>
+            <td class="edu-compare-table__label" set:html={inlineMd(row.label)} />
+            <td class="edu-compare-table__left" set:html={inlineMd(row.left)} />
+            <td class="edu-compare-table__right" set:html={inlineMd(row.right)} />
           </tr>
         ))
       }

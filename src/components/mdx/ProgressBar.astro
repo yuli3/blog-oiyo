@@ -23,6 +23,7 @@ interface Props {
   unit?: string;
 }
 
+import { inlineMd } from "../../lib/utils";
 const { title, items, max = 100, unit = "%" } = Astro.props;
 const colors = [
   "#3b82f6",
@@ -46,7 +47,7 @@ const colors = [
         return (
           <div class="edu-progress__item">
             <div class="edu-progress__meta">
-              <span class="edu-progress__label">{item.label}</span>
+              <span class="edu-progress__label" set:html={inlineMd(item.label)} />
               <span class="edu-progress__value" style={`color: ${color};`}>
                 {item.value}
                 {unit}

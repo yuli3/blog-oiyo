@@ -25,6 +25,7 @@ interface Props {
   layout?: "vertical" | "horizontal";
 }
 
+import { inlineMd } from "../../lib/utils";
 const { title, layout = "vertical" } = Astro.props;
 const events = (Astro.props.events ?? Astro.props.items ?? []).map((ev) => ({
   ...ev,
@@ -60,9 +61,9 @@ const defaultColors = [
               <div class="edu-timeline__year" style={`color: ${color};`}>
                 {ev.year}
               </div>
-              <div class="edu-timeline__heading">{ev.title}</div>
+              <div class="edu-timeline__heading" set:html={inlineMd(ev.title)} />
               {ev.description && (
-                <div class="edu-timeline__desc">{ev.description}</div>
+                <div class="edu-timeline__desc" set:html={inlineMd(ev.description)} />
               )}
             </div>
           </div>

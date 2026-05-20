@@ -24,6 +24,7 @@ interface Props {
   cols?: number;
 }
 
+import { inlineMd } from "../../lib/utils";
 const { title, cols = 3 } = Astro.props;
 const items = (Astro.props.items ?? Astro.props.stats ?? []).map((item) => ({
   ...item,
@@ -64,9 +65,9 @@ const defaultColors = [
                 <span class="edu-statcards__unit">{item.unit}</span>
               )}
             </div>
-            <div class="edu-statcards__label">{item.label}</div>
+            <div class="edu-statcards__label" set:html={inlineMd(item.label)} />
             {item.description && (
-              <div class="edu-statcards__description">{item.description}</div>
+              <div class="edu-statcards__description" set:html={inlineMd(item.description)} />
             )}
           </div>
         );
