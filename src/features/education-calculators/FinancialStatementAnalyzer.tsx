@@ -516,3 +516,313 @@ export const FinancialStatementAnalyzer: React.FC = () => {
     </Card>
   );
 };
+
+// ── FinancialRatioTrendAnalyzer ───────────────────────────────────────────────
+
+interface YearData {
+  label: string;
+  currentAssets: number;
+  currentLiabilities: number;
+  totalAssets: number;
+  totalLiabilities: number;
+  equity: number;
+  operatingIncome: number;
+  netIncome: number;
+  revenue: number;
+}
+
+interface RatioResult {
+  name: string;
+  nameEn: string;
+  unit: string;
+  values: number[];
+  benchmark: number;
+  higherIsBetter: boolean;
+}
+
+function calcRatios(years: YearData[]): RatioResult[] {
+  const safe = (n: number, d: number) => (d !== 0 ? (n / d) * 100 : 0);
+
+  return [
+    {
+      name: '유동비율',
+      nameEn: 'Current Ratio',
+      unit: '%',
+      values: years.map((y) => safe(y.currentAssets, y.currentLiabilities)),
+      benchmark: 200,
+      higherIsBetter: true,
+    },
+    {
+      name: '부채비율',
+      nameEn: 'Debt Ratio',
+      unit: '%',
+      values: years.map((y) => safe(y.totalLiabilities, y.equity)),
+      benchmark: 100,
+      higherIsBetter: false,
+    },
+    {
+      name: '자기자본비율',
+      nameEn: 'Equity Ratio',
+      unit: '%',
+      values: years.map((y) => safe(y.equity, y.totalAssets)),
+      benchmark: 50,
+      higherIsBetter: true,
+    },
+    {
+      name: '총자산이익률(ROA)',
+      nameEn: 'ROA',
+      unit: '%',
+      values: years.map((y) => safe(y.netIncome, y.totalAssets)),
+      benchmark: 5,
+      higherIsBetter: true,
+    },
+    {
+      name: '자기자본이익률(ROE)',
+      nameEn: 'ROE',
+      unit: '%',
+      values: years.map((y) => safe(y.netIncome, y.equity)),
+      benchmark: 10,
+      higherIsBetter: true,
+    },
+    {
+      name: '영업이익률',
+      nameEn: 'Operating Margin',
+      unit: '%',
+      values: years.map((y) => safe(y.operatingIncome, y.revenue)),
+      benchmark: 10,
+      higherIsBetter: true,
+    },
+    {
+      name: '순이익률',
+      nameEn: 'Net Margin',
+      unit: '%',
+      values: years.map((y) => safe(y.netIncome, y.revenue)),
+      benchmark: 5,
+      higherIsBetter: true,
+    },
+    {
+      name: '총자산회전율',
+      nameEn: 'Asset Turnover',
+      unit: '회',
+      values: years.map((y) => y.totalAssets !== 0 ? y.revenue / y.totalAssets : 0),
+      benchmark: 1,
+      higherIsBetter: true,
+    },
+  ];
+}
+
+const DEFAULT_YEARS: YearData[] = [
+  { label: '2022', currentAssets: 500, currentLiabilities: 300, totalAssets: 1200, totalLiabilities: 600, equity: 600, operatingIncome: 80, netIncome: 60, revenue: 800 },
+  { label: '2023', currentAssets: 550, currentLiabilities: 280, totalAssets: 1300, totalLiabilities: 580, equity: 720, operatingIncome: 100, netIncome: 75, revenue: 950 },
+  { label: '2024', currentAssets: 620, currentLiabilities: 260, totalAssets: 1450, totalLiabilities: 550, equity: 900, operatingIncome: 130, netIncome: 95, revenue: 1100 },
+];
+
+function getRatioColor(value: number, benchmark: number, higherIsBetter: boolean): string {
+  const ratio = value / benchmark;
+  if (higherIsBetter) {
+    if (ratio >= 1.2) return 'bg-emerald-500';
+    if (ratio >= 0.8) return 'bg-amber-400';
+    return 'bg-rose-400';
+  } else {
+    if (ratio <= 0.8) return 'bg-emerald-500';
+    if (ratio <= 1.2) return 'bg-amber-400';
+    return 'bg-rose-400';
+  }
+}
+
+function getRatioTextColor(value: number, benchmark: number, higherIsBetter: boolean): string {
+  const ratio = value / benchmark;
+  if (higherIsBetter) {
+    if (ratio >= 1.2) return 'text-emerald-700';
+    if (ratio >= 0.8) return 'text-amber-700';
+    return 'text-rose-700';
+  } else {
+    if (ratio <= 0.8) return 'text-emerald-700';
+    if (ratio <= 1.2) return 'text-amber-700';
+    return 'text-rose-700';
+  }
+}
+
+interface TrendYearInputProps {
+  year: YearData;
+  idx: number;
+  onChange: (idx: number, field: keyof YearData, value: string) => void;
+  locale: 'ko' | 'en';
+}
+
+const TrendYearInput: React.FC<TrendYearInputProps> = ({ year, idx, onChange, locale }) => {
+  const fields: Array<{ key: keyof YearData; ko: string; en: string }> = [
+    { key: 'currentAssets', ko: '유동자산', en: 'Current Assets' },
+    { key: 'currentLiabilities', ko: '유동부채', en: 'Current Liab.' },
+    { key: 'totalAssets', ko: '총자산', en: 'Total Assets' },
+    { key: 'totalLiabilities', ko: '총부채', en: 'Total Liab.' },
+    { key: 'equity', ko: '자본', en: 'Equity' },
+    { key: 'operatingIncome', ko: '영업이익', en: 'Oper. Income' },
+    { key: 'netIncome', ko: '순이익', en: 'Net Income' },
+    { key: 'revenue', ko: '매출액', en: 'Revenue' },
+  ];
+
+  return (
+    <div className="bg-white border border-emerald-200 rounded-2xl p-4">
+      <div className="mb-3">
+        <label className="text-xs text-slate-500 block mb-1">{locale === 'ko' ? '연도' : 'Year'}</label>
+        <input
+          type="text"
+          value={year.label}
+          onChange={(e) => onChange(idx, 'label', e.target.value)}
+          className="w-full border border-emerald-200 rounded-xl px-3 py-1.5 text-sm font-bold text-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+          aria-label={locale === 'ko' ? '연도' : 'Year label'}
+        />
+      </div>
+      <div className="space-y-2">
+        {fields.map((f) => (
+          <div key={f.key} className="flex items-center gap-2">
+            <span className="text-xs text-slate-500 w-24 shrink-0">{locale === 'ko' ? f.ko : f.en}</span>
+            <input
+              type="number"
+              value={year[f.key]}
+              onChange={(e) => onChange(idx, f.key, e.target.value)}
+              className="flex-1 border border-emerald-100 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-400"
+              aria-label={`${locale === 'ko' ? f.ko : f.en} ${year.label}`}
+            />
+            <span className="text-xs text-slate-400 w-8">{locale === 'ko' ? '억원' : 'B'}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export const FinancialRatioTrendAnalyzer: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
+  const [years, setYears] = React.useState<YearData[]>(DEFAULT_YEARS);
+  const [activeView, setActiveView] = React.useState<'input' | 'ratios'>('ratios');
+
+  const handleChange = React.useCallback((idx: number, field: keyof YearData, value: string) => {
+    setYears((prev) => {
+      const next = [...prev];
+      next[idx] = {
+        ...next[idx],
+        [field]: field === 'label' ? value : parseFloat(value) || 0,
+      };
+      return next;
+    });
+  }, []);
+
+  const ratios = React.useMemo(() => calcRatios(years), [years]);
+
+  return (
+    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-emerald-50 to-green-50 border border-emerald-200 rounded-3xl shadow-xl">
+      <h3 className="text-xl font-bold text-emerald-900 mb-2">
+        {locale === 'ko' ? '재무비율 추세 분석기' : 'Financial Ratio Trend Analyzer'}
+      </h3>
+      <p className="text-sm text-emerald-600 mb-6">
+        {locale === 'ko'
+          ? '3개년 재무 데이터를 입력하면 8대 재무비율의 추세와 벤치마크 비교를 자동으로 표시합니다.'
+          : 'Enter 3 years of financial data to auto-display 8 key ratio trends vs benchmarks.'}
+      </p>
+
+      {/* View toggle */}
+      <div className="flex gap-2 mb-6" role="group" aria-label={locale === 'ko' ? '뷰 선택' : 'View selection'}>
+        {([['input', '데이터 입력', 'Input Data'], ['ratios', '비율 분석', 'Ratio Analysis']] as const).map(([key, ko, en]) => (
+          <button
+            key={key}
+            onClick={() => setActiveView(key as 'input' | 'ratios')}
+            aria-pressed={activeView === key}
+            className={`flex-1 py-2.5 rounded-xl text-sm font-bold border transition-colors ${
+              activeView === key
+                ? 'bg-emerald-600 text-white border-emerald-600'
+                : 'bg-white text-emerald-700 border-emerald-200 hover:bg-emerald-50'
+            }`}
+          >
+            {locale === 'ko' ? ko : en}
+          </button>
+        ))}
+      </div>
+
+      {/* Input view */}
+      {activeView === 'input' && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {years.map((y, idx) => (
+            <TrendYearInput key={idx} year={y} idx={idx} onChange={handleChange} locale={locale} />
+          ))}
+        </div>
+      )}
+
+      {/* Ratios view */}
+      {activeView === 'ratios' && (
+        <div className="space-y-4">
+          {/* Year headers */}
+          <div className="grid grid-cols-4 gap-2 px-2">
+            <span className="text-xs font-bold text-slate-500">
+              {locale === 'ko' ? '지표' : 'Metric'}
+            </span>
+            {years.map((y, i) => (
+              <span key={i} className="text-xs font-bold text-emerald-700 text-center">{y.label}</span>
+            ))}
+          </div>
+
+          {ratios.map((ratio) => {
+            const maxVal = Math.max(...ratio.values.map(Math.abs), ratio.benchmark, 0.01);
+            const lastIdx = ratio.values.length - 1;
+            const trend = lastIdx > 0 ? ratio.values[lastIdx] - ratio.values[lastIdx - 1] : 0;
+            const trendPositive = ratio.higherIsBetter ? trend >= 0 : trend <= 0;
+
+            return (
+              <div key={ratio.name} className="bg-white border border-emerald-100 rounded-2xl p-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-sm font-bold text-slate-800">
+                    {locale === 'ko' ? ratio.name : ratio.nameEn}
+                  </span>
+                  <span className={`text-xs font-bold ${trendPositive ? 'text-emerald-600' : 'text-rose-600'}`}
+                    aria-label={trendPositive ? 'improving trend' : 'declining trend'}>
+                    {lastIdx > 0 ? (trendPositive ? '▲' : '▼') : ''}
+                  </span>
+                  <span className="text-xs text-slate-400 ml-auto">
+                    {locale === 'ko' ? '벤치마크' : 'Benchmark'}: {ratio.benchmark}{ratio.unit}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-4 gap-2 items-center">
+                  <div /> {/* spacer */}
+                  {ratio.values.map((val, i) => {
+                    const barWidth = Math.max(0, Math.min(100, (Math.abs(val) / maxVal) * 100));
+                    const color = getRatioColor(val, ratio.benchmark, ratio.higherIsBetter);
+                    const textColor = getRatioTextColor(val, ratio.benchmark, ratio.higherIsBetter);
+
+                    return (
+                      <div key={i} className="flex flex-col gap-1">
+                        <div className="w-full bg-slate-100 rounded-full h-3 overflow-hidden" role="meter" aria-valuenow={val} aria-label={`${years[i].label} ${ratio.name}`}>
+                          <div
+                            className={`h-3 rounded-full transition-all ${color}`}
+                            style={{ width: `${barWidth}%` }}
+                          />
+                        </div>
+                        <span className={`text-xs font-bold text-center ${textColor}`}>
+                          {val.toFixed(1)}{ratio.unit}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+
+          {/* Legend */}
+          <div className="flex gap-4 text-xs flex-wrap justify-center mt-2">
+            {[
+              { color: 'bg-emerald-500', label: locale === 'ko' ? '양호 (벤치마크 이상)' : 'Good (above benchmark)' },
+              { color: 'bg-amber-400', label: locale === 'ko' ? '보통 (±20%)' : 'Fair (±20%)' },
+              { color: 'bg-rose-400', label: locale === 'ko' ? '주의 (벤치마크 이하)' : 'Caution (below benchmark)' },
+            ].map((l) => (
+              <div key={l.label} className="flex items-center gap-1.5">
+                <span className={`w-3 h-3 rounded-full ${l.color}`} aria-hidden="true" />
+                <span className="text-slate-500">{l.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};

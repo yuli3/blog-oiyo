@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { InheritanceTaxCalculator } from "../../components/calculators/InheritanceTaxCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "상속세 계산기 — 배우자·자녀공제·누진세율 단계별 계산",
+    description: "총 상속재산부터 배우자공제·자녀공제·일괄공제 비교, 누진세율 적용까지 상속세를 단계별로 계산하는 무료 계산기.",
+  },
+  en: {
+    title: "Korean Inheritance Tax Calculator — Step-by-Step with Spouse & Child Deductions",
+    description: "Calculate Korean inheritance tax step by step: estate value, deductions (spouse, children, lump-sum comparison), progressive rates, and final tax.",
+  },
+  ja: {
+    title: "韓国相続税計算機 — 配偶者・子供控除・累進税率の段階的計算",
+    description: "総相続財産から配偶者控除・子供控除・一括控除の比較、累進税率適用まで段階的に計算。",
+  },
+  fr: {
+    title: "Calculateur de Droits de Succession Coréens",
+    description: "Calculez les droits de succession coréens étape par étape avec déductions et taux progressifs.",
+  },
+  es: {
+    title: "Calculadora de Impuesto de Herencia Coreano",
+    description: "Calcule el impuesto de herencia coreano paso a paso con deducciones y tasas progresivas.",
+  },
+  zh: {
+    title: "韓國遺產稅計算器 — 配偶者·子女扣除·累進稅率逐步計算",
+    description: "逐步計算韓國遺產稅：總遺產、配偶者扣除、子女扣除、累進稅率和最終稅額。",
+  },
+  cn: {
+    title: "韩国遗产税计算器 — 配偶者·子女扣除·累进税率逐步计算",
+    description: "逐步计算韩国遗产税：总遗产、配偶者扣除、子女扣除、累进税率和最终税额。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-3xl px-4 py-8">
+    <InheritanceTaxCalculator client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

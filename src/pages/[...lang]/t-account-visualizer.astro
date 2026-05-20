@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { TAccountVisualizer } from "../../features/education-calculators/TAccountVisualizer";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "T계정 시각화기 — 분개 입력으로 T계정·잔액시산표 자동 생성",
+    description: "분개를 입력하면 T계정 그리드와 잔액시산표가 자동 생성됩니다. 복식부기 원리를 시각적으로 학습하세요.",
+  },
+  en: {
+    title: "T-Account Visualizer — Auto-Generate T-Accounts & Trial Balance",
+    description: "Enter journal entries to auto-generate a T-account grid and trial balance. Learn double-entry bookkeeping visually.",
+  },
+  ja: {
+    title: "T勘定可視化ツール — 仕訳からT勘定・試算表を自動生成",
+    description: "仕訳を入力するとT勘定グリッドと試算表が自動生成されます。",
+  },
+  fr: {
+    title: "Visualiseur de Comptes T — Génération automatique du bilan",
+    description: "Saisissez des écritures pour générer automatiquement les comptes T et la balance.",
+  },
+  es: {
+    title: "Visualizador de Cuentas T — Balance de Comprobación Automático",
+    description: "Ingrese asientos contables para generar automáticamente las cuentas T y el balance.",
+  },
+  zh: {
+    title: "T帳戶可視化器 — 自動生成T帳戶和試算表",
+    description: "輸入分錄即可自動生成T帳戶網格和試算表，視覺化學習複式記帳。",
+  },
+  cn: {
+    title: "T账户可视化器 — 自动生成T账户和试算表",
+    description: "输入分录即可自动生成T账户网格和试算表，可视化学习复式记账。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-3xl px-4 py-8">
+    <TAccountVisualizer client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

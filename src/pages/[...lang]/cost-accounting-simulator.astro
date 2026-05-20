@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { CostAccountingSimulator } from "../../features/education-calculators/CostAccountingSimulator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "원가계산 시스템 — 전통적 원가계산·ABC 원가계산·손익분기점 분석기",
+    description: "전통적 원가계산, 활동기준원가계산(ABC), 손익분기점·목표이익·영업레버리지를 대화형으로 실습하세요.",
+  },
+  en: {
+    title: "Cost Accounting Simulator — Traditional, ABC Costing & Break-Even Analysis",
+    description: "Practice traditional costing, activity-based costing (ABC), break-even analysis, target profit, and operating leverage interactively.",
+  },
+  ja: {
+    title: "原価計算シミュレーター — 伝統的原価計算・ABC原価計算・CVP分析",
+    description: "伝統的原価計算、活動基準原価計算（ABC）、損益分岐点分析を対話形式で練習。",
+  },
+  fr: {
+    title: "Simulateur de Comptabilité des Coûts — ABC et Seuil de Rentabilité",
+    description: "Pratiquez la comptabilité analytique traditionnelle, la méthode ABC et l'analyse du seuil de rentabilité.",
+  },
+  es: {
+    title: "Simulador de Contabilidad de Costos — ABC y Punto de Equilibrio",
+    description: "Practica la contabilidad de costos tradicional, ABC y análisis del punto de equilibrio.",
+  },
+  zh: {
+    title: "成本計算系統 — 傳統成本計算·作業成本法·損益平衡分析",
+    description: "互動練習傳統成本計算、作業基礎成本法（ABC）和損益平衡分析。",
+  },
+  cn: {
+    title: "成本计算系统 — 传统成本计算·作业成本法·损益平衡分析",
+    description: "互动练习传统成本计算、作业基础成本法（ABC）和损益平衡分析。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-3xl px-4 py-8">
+    <CostAccountingSimulator client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

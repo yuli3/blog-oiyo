@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { MacroCalculators } from "../../features/education-calculators/MacroCalculators";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "거시경제 계산기 — GDP·케인즈 승수·인플레이션 대화형 학습",
+    description: "GDP 3대 접근법, 케인즈 승수·균형재정승수, CPI 기반 실질구매력·피셔 방정식을 슬라이더로 직접 탐구하세요.",
+  },
+  en: {
+    title: "Macroeconomics Calculator — GDP, Keynesian Multiplier, Inflation",
+    description: "Explore GDP approaches, Keynesian multiplier, balanced budget multiplier, CPI purchasing power, and the Fisher equation interactively.",
+  },
+  ja: {
+    title: "マクロ経済計算機 — GDP・ケインズ乗数・インフレ対話型学習",
+    description: "GDPの3つのアプローチ、ケインズ乗数、フィッシャー方程式をスライダーで探索。",
+  },
+  fr: {
+    title: "Calculateur Macroéconomique — PIB, Multiplicateur, Inflation",
+    description: "Explorez les approches du PIB, le multiplicateur keynésien et l'équation de Fisher.",
+  },
+  es: {
+    title: "Calculadora Macroeconómica — PIB, Multiplicador Keynesiano, Inflación",
+    description: "Explore los enfoques del PIB, el multiplicador keynesiano y la ecuación de Fisher.",
+  },
+  zh: {
+    title: "宏觀經濟計算器 — GDP、凱恩斯乘數、通膨互動學習",
+    description: "用滑塊探索GDP三種方法、凱恩斯乘數、費雪方程式。",
+  },
+  cn: {
+    title: "宏观经济计算器 — GDP、凯恩斯乘数、通胀互动学习",
+    description: "用滑块探索GDP三种方法、凯恩斯乘数、费雪方程式。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-3xl px-4 py-8">
+    <MacroCalculators client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

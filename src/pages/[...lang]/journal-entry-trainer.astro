@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { JournalEntryTrainer } from "../../features/education-calculators/JournalEntryTrainer";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "회계 분개 연습기 — 차변·대변 15문제 퀴즈 & T계정 시각화",
+    description: "분개의 기본 원리를 15가지 실전 문제로 연습하세요. 차변·대변 계정 선택 후 즉시 정오답 확인 및 T계정 시각화 제공.",
+  },
+  en: {
+    title: "Journal Entry Trainer — 15-Question Debit/Credit Quiz with T-Account",
+    description: "Practice double-entry bookkeeping with 15 real-world scenarios. Select debit/credit accounts and get instant feedback with T-account visualization.",
+  },
+  ja: {
+    title: "仕訳練習ツール — 借方・貸方15問クイズ＆T勘定可視化",
+    description: "15の実務シナリオで複式簿記を練習。借方・貸方勘定を選択し、即座にフィードバックとT勘定可視化を取得。",
+  },
+  fr: {
+    title: "Entraîneur d'Écritures Comptables — Quiz Débit/Crédit",
+    description: "Pratiquez la comptabilité en partie double avec 15 scénarios réels.",
+  },
+  es: {
+    title: "Entrenador de Asientos Contables — Quiz Debe/Haber",
+    description: "Practica contabilidad de partida doble con 15 escenarios del mundo real.",
+  },
+  zh: {
+    title: "會計分錄練習器 — 借貸15題測驗",
+    description: "通過15個實務場景練習複式記帳，即時獲得反饋和T帳戶可視化。",
+  },
+  cn: {
+    title: "会计分录练习器 — 借贷15题测验",
+    description: "通过15个实务场景练习复式记账，即时获得反馈和T账户可视化。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-3xl px-4 py-8">
+    <JournalEntryTrainer client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>

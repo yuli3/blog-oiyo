@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 
-type JobType = 'employee' | 'self' | 'freelance';
+type JobType = 'employee' | 'self' | 'freelance' | 'corp';
 
 interface TaxEvent {
   month: number;
@@ -15,21 +15,40 @@ interface TaxEvent {
 }
 
 const TAX_EVENTS: TaxEvent[] = [
-  { month: 1, name: '부가가치세 확정신고 (전년도 2기)', nameEn: 'VAT Final (Prior yr 2nd half)', relevantTo: ['self'], detail: '1.1~1.25 신고·납부', detailEn: 'File & pay Jan 1–25', color: 'rose' },
+  // Employee events
   { month: 1, name: '근로소득 지급명세서 제출', nameEn: 'Employment Income Statement', relevantTo: ['employee'], detail: '3월 10일까지 제출', detailEn: 'Submit by Mar 10', color: 'blue' },
   { month: 2, name: '연말정산 환급·추가납부', nameEn: 'Year-end Tax Reconciliation', relevantTo: ['employee'], detail: '급여일에 환급 또는 추가납부', detailEn: 'Refund or payment on payday', color: 'emerald' },
-  { month: 3, name: '법인세 신고·납부', nameEn: 'Corporate Tax Filing', relevantTo: ['self'], detail: '12월 결산법인 3.31 기한', detailEn: 'Dec FY deadline Mar 31', color: 'rose' },
-  { month: 4, name: '부가가치세 예정신고 (1기)', nameEn: 'VAT Preliminary (1st half)', relevantTo: ['self', 'freelance'], detail: '4.1~4.25 신고·납부', detailEn: 'File & pay Apr 1–25', color: 'rose' },
   { month: 5, name: '종합소득세 신고·납부', nameEn: 'Global Income Tax', relevantTo: ['self', 'freelance', 'employee'], detail: '5.1~5.31 신고·납부 (성실신고 6.30)', detailEn: 'May 1–31 (Sincere filers Jun 30)', color: 'amber' },
-  { month: 6, name: '지방소득세 납부', nameEn: 'Local Income Tax', relevantTo: ['self', 'freelance'], detail: '5월 종소세 신고 후 별도 납부', detailEn: 'Separate payment after May filing', color: 'blue' },
-  { month: 7, name: '부가가치세 확정신고 (1기)', nameEn: 'VAT Final (1st half)', relevantTo: ['self', 'freelance'], detail: '7.1~7.25 신고·납부', detailEn: 'File & pay Jul 1–25', color: 'rose' },
   { month: 7, name: '재산세 1기분 납부', nameEn: 'Property Tax 1st installment', relevantTo: ['employee', 'self', 'freelance'], detail: '7.16~7.31 납부', detailEn: 'Pay Jul 16–31', color: 'emerald' },
   { month: 8, name: '건강보험료 정산', nameEn: 'Health Insurance Settlement', relevantTo: ['employee'], detail: '전년도 보수 기준 정산', detailEn: 'Based on prior yr salary', color: 'blue' },
   { month: 9, name: '재산세 2기분 납부', nameEn: 'Property Tax 2nd installment', relevantTo: ['employee', 'self', 'freelance'], detail: '9.16~9.30 납부', detailEn: 'Pay Sep 16–30', color: 'emerald' },
-  { month: 10, name: '부가가치세 예정신고 (2기)', nameEn: 'VAT Preliminary (2nd half)', relevantTo: ['self', 'freelance'], detail: '10.1~10.25 신고·납부', detailEn: 'File & pay Oct 1–25', color: 'rose' },
-  { month: 11, name: '종합소득세 중간예납', nameEn: 'Income Tax Prepayment', relevantTo: ['self', 'freelance'], detail: '11.1~11.30 납부', detailEn: 'Pay Nov 1–30', color: 'amber' },
   { month: 11, name: '종합부동산세 납부', nameEn: 'Comprehensive Real Estate Tax', relevantTo: ['employee', 'self', 'freelance'], detail: '12.1~12.15 납부', detailEn: 'Pay Dec 1–15', color: 'emerald' },
   { month: 12, name: '연말정산 간소화 자료 수집', nameEn: 'Year-end Tax Data Collection', relevantTo: ['employee'], detail: '소득·세액공제 자료 준비', detailEn: 'Prepare deduction documents', color: 'blue' },
+
+  // Self-employed events
+  { month: 1, name: '부가가치세 확정신고 (전년도 2기)', nameEn: 'VAT Final (Prior yr 2nd half)', relevantTo: ['self'], detail: '1.1~1.25 신고·납부', detailEn: 'File & pay Jan 1–25', color: 'rose' },
+  { month: 3, name: '법인세 신고·납부', nameEn: 'Corporate Tax Filing', relevantTo: ['self'], detail: '12월 결산법인 3.31 기한', detailEn: 'Dec FY deadline Mar 31', color: 'rose' },
+  { month: 4, name: '부가가치세 예정신고 (1기)', nameEn: 'VAT Preliminary (1st half)', relevantTo: ['self', 'freelance'], detail: '4.1~4.25 신고·납부', detailEn: 'File & pay Apr 1–25', color: 'rose' },
+  { month: 6, name: '지방소득세 납부', nameEn: 'Local Income Tax', relevantTo: ['self', 'freelance'], detail: '5월 종소세 신고 후 별도 납부', detailEn: 'Separate payment after May filing', color: 'blue' },
+  { month: 7, name: '부가가치세 확정신고 (1기)', nameEn: 'VAT Final (1st half)', relevantTo: ['self', 'freelance'], detail: '7.1~7.25 신고·납부', detailEn: 'File & pay Jul 1–25', color: 'rose' },
+  { month: 10, name: '부가가치세 예정신고 (2기)', nameEn: 'VAT Preliminary (2nd half)', relevantTo: ['self', 'freelance'], detail: '10.1~10.25 신고·납부', detailEn: 'File & pay Oct 1–25', color: 'rose' },
+  { month: 11, name: '종합소득세 중간예납', nameEn: 'Income Tax Prepayment', relevantTo: ['self', 'freelance'], detail: '11.1~11.30 납부', detailEn: 'Pay Nov 1–30', color: 'amber' },
+
+  // Corporation events
+  { month: 1, name: '부가가치세 확정신고 (전년도 2기)', nameEn: 'VAT Final (Prior yr 2nd half)', relevantTo: ['corp'], detail: '1.1~1.25 신고·납부', detailEn: 'File & pay Jan 1–25', color: 'rose' },
+  { month: 3, name: '법인세 신고·납부 (12월 결산법인)', nameEn: 'Corporate Tax Filing (Dec FY)', relevantTo: ['corp'], detail: '3월 31일 기한', detailEn: 'Deadline Mar 31', color: 'amber' },
+  { month: 3, name: '지방소득세 납부 (법인)', nameEn: 'Local Income Tax (Corp)', relevantTo: ['corp'], detail: '법인세 신고 후 4월 30일까지', detailEn: 'By Apr 30 after corp tax filing', color: 'blue' },
+  { month: 4, name: '부가가치세 예정신고 (1기)', nameEn: 'VAT Preliminary (1st half)', relevantTo: ['corp'], detail: '4.1~4.25 신고·납부', detailEn: 'File & pay Apr 1–25', color: 'rose' },
+  { month: 5, name: '법인 종합소득세 미적용', nameEn: 'No Global Income Tax for Corps', relevantTo: ['corp'], detail: '법인은 종합소득세 적용 대상 아님', detailEn: 'Corporations not subject to global income tax', color: 'emerald' },
+  { month: 6, name: '결산 중간배당 (이사회 결의)', nameEn: 'Interim Dividend (Board Resolution)', relevantTo: ['corp'], detail: '이사회 결의 후 주주 지급', detailEn: 'Board approval required before shareholder payment', color: 'blue' },
+  { month: 7, name: '부가가치세 확정신고 (1기)', nameEn: 'VAT Final (1st half)', relevantTo: ['corp'], detail: '7.1~7.25 신고·납부', detailEn: 'File & pay Jul 1–25', color: 'rose' },
+  { month: 7, name: '재산세 납부 (보유 부동산)', nameEn: 'Property Tax (Real Estate Held)', relevantTo: ['corp'], detail: '7.16~7.31 납부', detailEn: 'Pay Jul 16–31', color: 'emerald' },
+  { month: 8, name: '법인 중간예납 (8월 결산법인)', nameEn: 'Corp Tax Prepayment (Aug FY)', relevantTo: ['corp'], detail: '해당 사업연도 6개월분 선납', detailEn: '6-month prepayment for applicable fiscal year', color: 'amber' },
+  { month: 9, name: '재산세 2기분 납부', nameEn: 'Property Tax 2nd installment', relevantTo: ['corp'], detail: '9.16~9.30 납부', detailEn: 'Pay Sep 16–30', color: 'emerald' },
+  { month: 10, name: '부가가치세 예정신고 (2기)', nameEn: 'VAT Preliminary (2nd half)', relevantTo: ['corp'], detail: '10.1~10.25 신고·납부', detailEn: 'File & pay Oct 1–25', color: 'rose' },
+  { month: 11, name: '레저세·담배세 (해당 사업자)', nameEn: 'Leisure Tax / Tobacco Tax', relevantTo: ['corp'], detail: '오락시설·담배 판매 사업자 매월 납부', detailEn: 'Monthly payment for entertainment/tobacco sellers', color: 'blue' },
+  { month: 11, name: '개별소비세 (해당 사업자)', nameEn: 'Individual Consumption Tax', relevantTo: ['corp'], detail: '특별소비세 해당 사업자 납부', detailEn: 'Payment for applicable special consumption tax businesses', color: 'blue' },
+  { month: 12, name: '결산 준비 · 감사보고서 수령', nameEn: 'Year-end Closing & Audit Report', relevantTo: ['corp'], detail: '외부감사 대상법인 감사보고서 수령', detailEn: 'Receive audit report for externally audited corporations', color: 'emerald' },
 ];
 
 const MONTH_NAMES_KO = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
@@ -53,12 +72,20 @@ const JOB_LABELS: Record<JobType, { ko: string; en: string }> = {
   employee: { ko: '직장인', en: 'Employee' },
   self: { ko: '자영업자', en: 'Self-Employed' },
   freelance: { ko: '프리랜서', en: 'Freelancer' },
+  corp: { ko: '법인', en: 'Corporation' },
+};
+
+const JOB_DESCRIPTIONS: Record<JobType, { ko: string; en: string }> = {
+  employee: { ko: '근로소득세·4대보험 중심', en: 'Employment income tax & 4 major insurances' },
+  self: { ko: '부가세·종합소득세 중심', en: 'VAT & global income tax focus' },
+  freelance: { ko: '3.3% 원천징수·종합소득세', en: '3.3% withholding & global income tax' },
+  corp: { ko: '법인세·부가세·지방소득세', en: 'Corporate tax, VAT & local income tax' },
 };
 
 const TaxCalendar: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
   const [jobType, setJobType] = useState<JobType>('employee');
 
-  const currentMonth = new Date().getMonth() + 1; // 1-indexed
+  const currentMonth = new Date().getMonth() + 1;
 
   const filtered = TAX_EVENTS.filter((e) => e.relevantTo.includes(jobType));
 
@@ -72,12 +99,16 @@ const TaxCalendar: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
       </p>
 
       {/* Job type selector */}
-      <div className="flex gap-2 mb-8" role="group" aria-label={locale === 'ko' ? '직종 선택' : 'Job type selection'}>
+      <div
+        className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4"
+        role="group"
+        aria-label={locale === 'ko' ? '직종 선택' : 'Job type selection'}
+      >
         {(Object.keys(JOB_LABELS) as JobType[]).map((type) => (
           <button
             key={type}
             onClick={() => setJobType(type)}
-            className={`flex-1 py-3 rounded-xl text-sm font-bold transition-colors border ${
+            className={`py-3 rounded-xl text-sm font-bold transition-colors border ${
               jobType === type
                 ? 'bg-emerald-600 text-white border-emerald-600'
                 : 'bg-white text-emerald-700 border-emerald-200 hover:bg-emerald-50'
@@ -87,6 +118,12 @@ const TaxCalendar: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
             {locale === 'ko' ? JOB_LABELS[type].ko : JOB_LABELS[type].en}
           </button>
         ))}
+      </div>
+
+      {/* Description panel */}
+      <div className="mb-6 px-4 py-2.5 bg-white border border-emerald-100 rounded-xl text-sm text-emerald-700">
+        <span className="font-bold mr-2">{locale === 'ko' ? JOB_LABELS[jobType].ko : JOB_LABELS[jobType].en}:</span>
+        <span>{locale === 'ko' ? JOB_DESCRIPTIONS[jobType].ko : JOB_DESCRIPTIONS[jobType].en}</span>
       </div>
 
       {/* Calendar grid */}
@@ -151,11 +188,11 @@ const TaxCalendar: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
         </div>
         <div className="flex items-center gap-1.5">
           <span className={`w-2.5 h-2.5 rounded-full ${COLOR_DOT.emerald}`} aria-hidden="true" />
-          <span className="text-slate-600">{locale === 'ko' ? '재산·종합부동산세' : 'Property Tax'}</span>
+          <span className="text-slate-600">{locale === 'ko' ? '재산·기타' : 'Property/Other'}</span>
         </div>
         <div className="flex items-center gap-1.5">
           <span className={`w-2.5 h-2.5 rounded-full ${COLOR_DOT.blue}`} aria-hidden="true" />
-          <span className="text-slate-600">{locale === 'ko' ? '4대보험·기타' : '4 Insurances/Other'}</span>
+          <span className="text-slate-600">{locale === 'ko' ? '4대보험·지방세·기타' : '4 Insurances/Local/Other'}</span>
         </div>
       </div>
 

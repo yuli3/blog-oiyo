@@ -61,6 +61,12 @@ import { CompAdvantageCalculator } from "@/features/education-calculators/TradeS
 import { PersonalColorMiniTest } from "@/features/education-calculators/PersonalColorTools";
 import { CAPMCalculator, WACCCalculator } from "@/features/education-calculators/AdvancedFinanceCalculators";
 import { VarianceAnalysis } from "@/features/education-calculators/AccountingSimulators";
+import { JournalEntryTrainer } from "@/features/education-calculators/JournalEntryTrainer";
+import { TAccountVisualizer } from "@/features/education-calculators/TAccountVisualizer";
+import { MacroCalculators, GDPCalculator, MultiplierCalculator, InflationCalculator as MacroInflationCalculator } from "@/features/education-calculators/MacroCalculators";
+import { CostAccountingSimulator } from "@/features/education-calculators/CostAccountingSimulator";
+import { FinancialRatioTrendAnalyzer } from "@/features/education-calculators/FinancialStatementAnalyzer";
+import InheritanceTaxCalculator from "../components/calculators/InheritanceTaxCalculator";
 import { BondPricer, PortfolioVisualizer } from "@/features/education-calculators/BondAndPortfolioTools";
 import { TypingSpeedTest, PrisonersDilemma } from "@/features/education-calculators/UtilityGames";
 import { AttachmentTest } from "@/features/education-calculators/PsychologyTools";
@@ -276,6 +282,15 @@ const islandComponents = {
   CAPMCalculator,
   WACCCalculator,
   VarianceAnalysis,
+  JournalEntryTrainer,
+  TAccountVisualizer,
+  MacroCalculators,
+  GDPCalculator,
+  MultiplierCalculator,
+  MacroInflationCalculator,
+  CostAccountingSimulator,
+  FinancialRatioTrendAnalyzer,
+  InheritanceTaxCalculator,
   BondPricer,
   PortfolioVisualizer,
   TypingSpeedTest,

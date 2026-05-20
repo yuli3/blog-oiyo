@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { FinancialRatioTrendAnalyzer } from "../../features/education-calculators/FinancialStatementAnalyzer";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "재무비율 추세 분석기 — 3개년 8대 재무비율 벤치마크 비교",
+    description: "3개년 재무 데이터를 입력하면 유동비율·부채비율·ROE·ROA 등 8대 재무비율의 추세와 벤치마크 비교를 자동으로 시각화합니다.",
+  },
+  en: {
+    title: "Financial Ratio Trend Analyzer — 3-Year 8-Ratio Benchmark Comparison",
+    description: "Enter 3 years of financial data to auto-visualize trends for 8 key ratios (current ratio, debt ratio, ROE, ROA, etc.) vs benchmarks.",
+  },
+  ja: {
+    title: "財務比率トレンド分析器 — 3年間8大財務比率ベンチマーク比較",
+    description: "3年分の財務データを入力すると、流動比率・負債比率・ROE・ROAなど8大財務比率のトレンドとベンチマーク比較を自動可視化。",
+  },
+  fr: {
+    title: "Analyseur de Tendances des Ratios Financiers — 3 ans, 8 Ratios",
+    description: "Saisissez 3 ans de données financières pour visualiser automatiquement les tendances de 8 ratios clés.",
+  },
+  es: {
+    title: "Analizador de Tendencias de Ratios Financieros — 3 Años, 8 Ratios",
+    description: "Ingrese 3 años de datos financieros para visualizar tendencias de 8 ratios clave vs benchmarks.",
+  },
+  zh: {
+    title: "財務比率趨勢分析器 — 3年8大財務比率基準比較",
+    description: "輸入3年財務數據，自動可視化流動比率、負債比率、ROE、ROA等8大財務比率趨勢。",
+  },
+  cn: {
+    title: "财务比率趋势分析器 — 3年8大财务比率基准比较",
+    description: "输入3年财务数据，自动可视化流动比率、负债比率、ROE、ROA等8大财务比率趋势。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-3xl px-4 py-8">
+    <FinancialRatioTrendAnalyzer client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  </main>
+</BaseLayout>
