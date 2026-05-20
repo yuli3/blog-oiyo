@@ -1,0 +1,55 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import FranceSalaryCalculatorComp from "../../components/tools/FranceSalaryCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  fr: {
+    title: "Calculateur de salaire net France 2024 — Cotisations sociales et impôt sur le revenu",
+    description: "Calculez votre salaire net en France : CSG/CRDS, retraite CNAV, AGIRC-ARRCO, impôt sur le revenu selon le barème 2024 et votre quotient familial.",
+  },
+  en: {
+    title: "France Net Salary Calculator 2024 — Social Contributions & Income Tax",
+    description: "Calculate your net salary in France: CSG/CRDS, CNAV pension, AGIRC-ARRCO, and income tax under the 2024 progressive scale with family quotient.",
+  },
+  ko: {
+    title: "프랑스 급여 실수령액 계산기 2024",
+    description: "프랑스 사회보험료 및 소득세를 자동 계산합니다.",
+  },
+  ja: {
+    title: "フランス給与手取り計算機 2024",
+    description: "フランスの社会保険料と所得税を自動計算します。",
+  },
+  es: {
+    title: "Calculadora de salario neto Francia 2024",
+    description: "Calcula tu salario neto en Francia con cotizaciones sociales e IRPF 2024.",
+  },
+  zh: {
+    title: "法國薪資計算機 2024",
+    description: "計算法國社會保險費及所得稅後的淨薪資。",
+  },
+  cn: {
+    title: "法国薪资计算器 2024",
+    description: "计算法国社会保险费及所得税后的净薪资。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+const calcLocale = locale === 'fr' ? 'fr' : 'en';
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <FranceSalaryCalculatorComp client:load locale={calcLocale} />
+  </main>
+</BaseLayout>

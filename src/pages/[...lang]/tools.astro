@@ -639,6 +639,82 @@ const moreLabel: Record<Locale, string> = {
         <p class="mt-2 text-sm text-muted-foreground/50">{totalCount} tools</p>
       </div>
 
+      {/* ── Japan-specific tools (ja locale only) ── */}
+      {locale === "ja" && (
+        <section class="mb-16" aria-labelledby="heading-japan">
+          <div class="flex items-center gap-4 mb-8">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border text-sm font-bold bg-red-50 border-red-200 text-red-700">
+              <span aria-hidden="true">🇯🇵</span>
+              <h2 id="heading-japan">日本専用ツール</h2>
+            </div>
+            <div class="h-px flex-1 bg-border/40" />
+          </div>
+          <div class="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            {[
+              { slug: "japan-salary-calculator", emoji: "💴", title: "日本の給与手取り計算機", desc: "所得税・社会保険・住民税を自動計算 (令和6年度)" },
+              { slug: "japan-consumption-tax-calculator", emoji: "🧾", title: "消費税計算機", desc: "10%・8%軽減税率に対応した消費税の計算" },
+              { slug: "japan-income-tax-complete-guide", emoji: "📋", title: "所得税完全ガイド", desc: "税率・控除・確定申告の仕組みを解説" },
+              { slug: "japan-social-insurance-guide", emoji: "🏥", title: "社会保険料ガイド", desc: "健康保険・厚生年金・雇用保険の料率と計算方法" },
+              { slug: "japan-tax-return-guide", emoji: "🗂️", title: "確定申告ガイド", desc: "確定申告が必要なケースと e-Tax の使い方" },
+              { slug: "japan-pension-system-guide", emoji: "👴", title: "年金制度ガイド", desc: "国民年金・厚生年金の受取額計算方法" },
+              { slug: "japan-fp-exam-guide", emoji: "📊", title: "FP試験ガイド", desc: "ファイナンシャルプランナー2・3級の勉強法" },
+              { slug: "japan-takken-exam-guide", emoji: "🏠", title: "宅建試験ガイド", desc: "宅地建物取引士試験の合格率と効率的な勉強法" },
+            ].map((tool) => (
+              <a
+                href={`/${locale}/${tool.slug}/`}
+                class="group flex flex-col gap-3 p-4 rounded-2xl border border-red-100 bg-red-50/50 hover:border-red-300 hover:bg-red-50 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
+                aria-label={tool.title}
+              >
+                <span class="text-2xl leading-none" aria-hidden="true">{tool.emoji}</span>
+                <div class="space-y-1 min-w-0">
+                  <p class="font-bold text-sm leading-snug text-red-900 group-hover:text-red-700 transition-colors line-clamp-2">{tool.title}</p>
+                  <p class="text-xs text-red-700/60 leading-relaxed line-clamp-2">{tool.desc}</p>
+                </div>
+                <span class="mt-auto text-[10px] font-bold uppercase tracking-widest text-red-400 group-hover:text-red-600 transition-colors">→</span>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* ── France-specific tools (fr locale only) ── */}
+      {locale === "fr" && (
+        <section class="mb-16" aria-labelledby="heading-france">
+          <div class="flex items-center gap-4 mb-8">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border text-sm font-bold bg-blue-50 border-blue-200 text-blue-700">
+              <span aria-hidden="true">🇫🇷</span>
+              <h2 id="heading-france">Outils France</h2>
+            </div>
+            <div class="h-px flex-1 bg-border/40" />
+          </div>
+          <div class="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            {[
+              { slug: "france-salary-calculator", emoji: "💶", title: "Calculateur salaire net", desc: "Cotisations sociales et impôt sur le revenu 2024" },
+              { slug: "france-vat-calculator", emoji: "🧾", title: "Calculateur TVA", desc: "Taux 20%, 10%, 5.5% et 2.1% — calcul automatique" },
+              { slug: "france-impot-revenu-guide", emoji: "📋", title: "Guide impôt sur le revenu", desc: "Barème progressif, quotient familial, déductions" },
+              { slug: "france-cotisations-sociales-guide", emoji: "🏥", title: "Guide cotisations sociales", desc: "CSG, CRDS, retraite AGIRC-ARRCO : tout comprendre" },
+              { slug: "france-retraite-guide", emoji: "👴", title: "Guide retraite France", desc: "Régime général, complémentaire et réforme 2023" },
+              { slug: "france-tva-guide", emoji: "🛒", title: "Guide TVA France", desc: "Taux applicables, franchise en base, déclaration CA3" },
+              { slug: "france-dcg-dscg-guide", emoji: "🎓", title: "Guide DCG / DSCG", desc: "Parcours comptabilité-gestion vers l'expertise comptable" },
+              { slug: "france-micro-entrepreneur-guide", emoji: "🚀", title: "Guide micro-entrepreneur", desc: "Charges, plafonds et versement libératoire 2024" },
+            ].map((tool) => (
+              <a
+                href={`/${locale}/${tool.slug}/`}
+                class="group flex flex-col gap-3 p-4 rounded-2xl border border-blue-100 bg-blue-50/50 hover:border-blue-300 hover:bg-blue-50 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
+                aria-label={tool.title}
+              >
+                <span class="text-2xl leading-none" aria-hidden="true">{tool.emoji}</span>
+                <div class="space-y-1 min-w-0">
+                  <p class="font-bold text-sm leading-snug text-blue-900 group-hover:text-blue-700 transition-colors line-clamp-2">{tool.title}</p>
+                  <p class="text-xs text-blue-700/60 leading-relaxed line-clamp-2">{tool.desc}</p>
+                </div>
+                <span class="mt-auto text-[10px] font-bold uppercase tracking-widest text-blue-400 group-hover:text-blue-600 transition-colors">→</span>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* ── Category quick-nav ── */}
       <nav aria-label="Tool categories" class="flex flex-wrap gap-2 mb-16">
         {categories.map((cat) => (

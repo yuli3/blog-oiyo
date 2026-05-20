@@ -1,0 +1,55 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import JapanSalaryCalculatorComp from "../../components/tools/JapanSalaryCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ja: {
+    title: "日本の給与手取り計算機 2024 — 所得税・社会保険・住民税を自動計算",
+    description: "年収を入力するだけで健康保険・厚生年金・雇用保険・所得税・住民税を自動計算。令和6年度の最新税率に対応した日本向け給与手取りシミュレーター。",
+  },
+  en: {
+    title: "Japan Salary Calculator 2024 — Income Tax & Social Insurance",
+    description: "Enter your annual salary to instantly calculate health insurance, pension, employment insurance, income tax, and resident tax under Japan's FY2024 rules.",
+  },
+  ko: {
+    title: "일본 급여 실수령액 계산기 2024",
+    description: "일본 소득세·사회보험·주민세를 자동 계산합니다.",
+  },
+  fr: {
+    title: "Calculateur de salaire japonais 2024",
+    description: "Calculez votre salaire net au Japon avec les taux 2024.",
+  },
+  es: {
+    title: "Calculadora de salario japonés 2024",
+    description: "Calcula tu salario neto en Japón con las tasas de 2024.",
+  },
+  zh: {
+    title: "日本薪資計算機 2024",
+    description: "計算日本所得稅、社會保險及住民稅後的實際到手薪資。",
+  },
+  cn: {
+    title: "日本薪资计算器 2024",
+    description: "计算日本所得税、社会保险及住民税后的实际到手薪资。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+const calcLocale = locale === 'ja' ? 'ja' : 'en';
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <JapanSalaryCalculatorComp client:load locale={calcLocale} />
+  </main>
+</BaseLayout>

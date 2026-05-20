@@ -1,0 +1,270 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ja: {
+    title: "消費税計算機 2024 — 税抜き・税込み価格を瞬時に計算",
+    description: "税率10%・軽減税率8%に対応した消費税計算機。税抜き価格から税込み価格、または税込み価格から税抜き価格を即時計算します。",
+  },
+  en: {
+    title: "Japan Consumption Tax Calculator 2024",
+    description: "Instantly calculate prices with or without Japan's consumption tax (10% standard / 8% reduced rate).",
+  },
+  ko: {
+    title: "일본 소비세 계산기 2024",
+    description: "일본 소비세(10%/경감세율 8%) 세전/세후 가격을 즉시 계산합니다.",
+  },
+  fr: {
+    title: "Calculateur de taxe à la consommation japonaise 2024",
+    description: "Calculez les prix HT/TTC avec la taxe à la consommation japonaise (10%/8%).",
+  },
+  es: {
+    title: "Calculadora del impuesto al consumo japonés 2024",
+    description: "Calcula precios con o sin el impuesto al consumo japonés (10%/8%).",
+  },
+  zh: {
+    title: "日本消費稅計算機 2024",
+    description: "即時計算日本消費稅（10%/8%）含稅及未稅價格。",
+  },
+  cn: {
+    title: "日本消费税计算器 2024",
+    description: "即时计算日本消费税（10%/8%）含税及未税价格。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+
+const uiLabels: Record<Locale, {
+  heading: string;
+  desc: string;
+  priceLabel: string;
+  modeLabel: string;
+  modeExcl: string;
+  modeIncl: string;
+  rateLabel: string;
+  rateStandard: string;
+  rateReduced: string;
+  resultExcl: string;
+  resultTax: string;
+  resultIncl: string;
+}> = {
+  ja: {
+    heading: "消費税計算機",
+    desc: "税率10%（標準）または8%（軽減税率）に対応しています。",
+    priceLabel: "価格を入力",
+    modeLabel: "入力価格の種類",
+    modeExcl: "税抜き価格",
+    modeIncl: "税込み価格",
+    rateLabel: "税率",
+    rateStandard: "10%（標準税率）",
+    rateReduced: "8%（軽減税率・食品・新聞等）",
+    resultExcl: "税抜き価格",
+    resultTax: "消費税額",
+    resultIncl: "税込み価格",
+  },
+  en: {
+    heading: "Consumption Tax Calculator",
+    desc: "Supports standard rate 10% and reduced rate 8% (food, newspapers, etc.)",
+    priceLabel: "Enter price",
+    modeLabel: "Input price type",
+    modeExcl: "Price excl. tax",
+    modeIncl: "Price incl. tax",
+    rateLabel: "Tax rate",
+    rateStandard: "10% (Standard)",
+    rateReduced: "8% (Reduced — food, newspapers, etc.)",
+    resultExcl: "Price excl. tax",
+    resultTax: "Consumption tax",
+    resultIncl: "Price incl. tax",
+  },
+  ko: {
+    heading: "소비세 계산기",
+    desc: "표준세율 10%, 경감세율 8%(식료품·신문 등)에 대응합니다.",
+    priceLabel: "가격 입력",
+    modeLabel: "입력 가격 종류",
+    modeExcl: "세전 가격",
+    modeIncl: "세후 가격",
+    rateLabel: "세율",
+    rateStandard: "10% (표준세율)",
+    rateReduced: "8% (경감세율)",
+    resultExcl: "세전 가격",
+    resultTax: "소비세액",
+    resultIncl: "세후 가격",
+  },
+  fr: {
+    heading: "Calculateur de taxe à la consommation",
+    desc: "Taux standard 10% et taux réduit 8% (alimentation, journaux, etc.)",
+    priceLabel: "Saisir le prix",
+    modeLabel: "Type de prix saisi",
+    modeExcl: "Prix HT",
+    modeIncl: "Prix TTC",
+    rateLabel: "Taux de taxe",
+    rateStandard: "10% (taux standard)",
+    rateReduced: "8% (taux réduit)",
+    resultExcl: "Prix HT",
+    resultTax: "Taxe à la consommation",
+    resultIncl: "Prix TTC",
+  },
+  es: {
+    heading: "Calculadora de impuesto al consumo",
+    desc: "Tasa estándar 10% y tasa reducida 8% (alimentos, periódicos, etc.)",
+    priceLabel: "Ingresa el precio",
+    modeLabel: "Tipo de precio ingresado",
+    modeExcl: "Precio sin impuesto",
+    modeIncl: "Precio con impuesto",
+    rateLabel: "Tasa impositiva",
+    rateStandard: "10% (estándar)",
+    rateReduced: "8% (reducida)",
+    resultExcl: "Precio sin impuesto",
+    resultTax: "Impuesto al consumo",
+    resultIncl: "Precio con impuesto",
+  },
+  zh: {
+    heading: "消費稅計算機",
+    desc: "支援標準稅率10%及輕減稅率8%（食品、報紙等）。",
+    priceLabel: "輸入價格",
+    modeLabel: "輸入價格類型",
+    modeExcl: "未含稅價格",
+    modeIncl: "含稅價格",
+    rateLabel: "稅率",
+    rateStandard: "10%（標準稅率）",
+    rateReduced: "8%（輕減稅率）",
+    resultExcl: "未含稅價格",
+    resultTax: "消費稅額",
+    resultIncl: "含稅價格",
+  },
+  cn: {
+    heading: "消费税计算器",
+    desc: "支持标准税率10%及轻减税率8%（食品、报纸等）。",
+    priceLabel: "输入价格",
+    modeLabel: "输入价格类型",
+    modeExcl: "未含税价格",
+    modeIncl: "含税价格",
+    rateLabel: "税率",
+    rateStandard: "10%（标准税率）",
+    rateReduced: "8%（轻减税率）",
+    resultExcl: "未含税价格",
+    resultTax: "消费税额",
+    resultIncl: "含税价格",
+  },
+};
+
+const ui = uiLabels[locale] ?? uiLabels.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-xl px-4 py-8">
+    <div class="rounded-2xl border border-border bg-card p-6 md:p-8 shadow-sm flex flex-col gap-6">
+      <div>
+        <h1 class="text-2xl font-bold text-foreground mb-2">{ui.heading}</h1>
+        <p class="text-sm text-muted-foreground">{ui.desc}</p>
+      </div>
+
+      <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-2">
+          <label for="ctc-price" class="text-sm font-bold text-foreground">{ui.priceLabel} (¥)</label>
+          <input
+            id="ctc-price"
+            type="number"
+            min="0"
+            step="1"
+            value="1000"
+            class="w-full rounded-xl border border-border bg-background px-4 py-3 text-base font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            aria-label={ui.priceLabel}
+          />
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <span class="text-sm font-bold text-foreground">{ui.modeLabel}</span>
+          <div class="flex gap-4">
+            <label class="flex items-center gap-2 cursor-pointer text-sm font-medium">
+              <input type="radio" name="ctc-mode" value="excl" checked class="accent-emerald-600" />
+              {ui.modeExcl}
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer text-sm font-medium">
+              <input type="radio" name="ctc-mode" value="incl" class="accent-emerald-600" />
+              {ui.modeIncl}
+            </label>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <span class="text-sm font-bold text-foreground">{ui.rateLabel}</span>
+          <div class="flex flex-col gap-2">
+            <label class="flex items-center gap-2 cursor-pointer text-sm font-medium">
+              <input type="radio" name="ctc-rate" value="0.10" checked class="accent-emerald-600" />
+              {ui.rateStandard}
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer text-sm font-medium">
+              <input type="radio" name="ctc-rate" value="0.08" class="accent-emerald-600" />
+              {ui.rateReduced}
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="ctc-results">
+        <div class="rounded-2xl bg-emerald-50 border border-emerald-200 p-4 flex flex-col gap-1">
+          <span class="text-xs font-bold text-emerald-700 uppercase tracking-wide">{ui.resultExcl}</span>
+          <span class="text-2xl font-bold text-emerald-900" id="ctc-excl">¥1,000</span>
+        </div>
+        <div class="rounded-2xl bg-amber-50 border border-amber-200 p-4 flex flex-col gap-1">
+          <span class="text-xs font-bold text-amber-700 uppercase tracking-wide">{ui.resultTax}</span>
+          <span class="text-2xl font-bold text-amber-900" id="ctc-tax">¥100</span>
+        </div>
+        <div class="rounded-2xl bg-emerald-500 p-4 flex flex-col gap-1">
+          <span class="text-xs font-bold text-emerald-100 uppercase tracking-wide">{ui.resultIncl}</span>
+          <span class="text-2xl font-bold text-white" id="ctc-incl">¥1,100</span>
+        </div>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<script>
+  function recalc() {
+    const priceInput = document.getElementById('ctc-price') as HTMLInputElement | null;
+    const modeInputs = document.querySelectorAll<HTMLInputElement>('input[name="ctc-mode"]');
+    const rateInputs = document.querySelectorAll<HTMLInputElement>('input[name="ctc-rate"]');
+
+    if (!priceInput) return;
+
+    const price = Math.max(0, Number(priceInput.value) || 0);
+    const mode = Array.from(modeInputs).find((r) => r.checked)?.value ?? 'excl';
+    const rate = Number(Array.from(rateInputs).find((r) => r.checked)?.value ?? '0.10');
+
+    let excl: number, tax: number, incl: number;
+    if (mode === 'excl') {
+      excl = price;
+      tax = Math.round(price * rate);
+      incl = excl + tax;
+    } else {
+      incl = price;
+      excl = Math.round(price / (1 + rate));
+      tax = incl - excl;
+    }
+
+    const fmt = (n: number) => `¥${n.toLocaleString('ja-JP')}`;
+    const exclEl = document.getElementById('ctc-excl');
+    const taxEl = document.getElementById('ctc-tax');
+    const inclEl = document.getElementById('ctc-incl');
+    if (exclEl) exclEl.textContent = fmt(excl);
+    if (taxEl) taxEl.textContent = fmt(tax);
+    if (inclEl) inclEl.textContent = fmt(incl);
+  }
+
+  document.getElementById('ctc-price')?.addEventListener('input', recalc);
+  document.querySelectorAll('input[name="ctc-mode"]').forEach((r) => r.addEventListener('change', recalc));
+  document.querySelectorAll('input[name="ctc-rate"]').forEach((r) => r.addEventListener('change', recalc));
+  recalc();
+</script>

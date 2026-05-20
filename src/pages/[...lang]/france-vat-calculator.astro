@@ -1,0 +1,303 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  fr: {
+    title: "Calculateur de TVA France 2024 — Taux 20%, 10%, 5,5%, 2,1%",
+    description: "Calculez instantanément les prix HT et TTC selon les 4 taux de TVA français 2024 : 20% (normal), 10% (restauration), 5,5% (alimentaire), 2,1% (médicaments remboursés).",
+  },
+  en: {
+    title: "France VAT Calculator 2024 — 20%, 10%, 5.5%, 2.1% Rates",
+    description: "Instantly calculate prices excl. and incl. VAT for all four French VAT rates: 20% standard, 10% reduced, 5.5% food, 2.1% reimbursed medicines.",
+  },
+  ko: {
+    title: "프랑스 부가가치세(TVA) 계산기 2024",
+    description: "프랑스 TVA 4가지 세율(20%/10%/5.5%/2.1%)로 세전/세후 가격을 즉시 계산합니다.",
+  },
+  ja: {
+    title: "フランス付加価値税（TVA）計算機 2024",
+    description: "フランスTVA 4税率（20%/10%/5.5%/2.1%）で税抜き・税込み価格を即時計算します。",
+  },
+  es: {
+    title: "Calculadora de IVA Francia 2024",
+    description: "Calcula precios con y sin IVA para los cuatro tipos de TVA francés 2024.",
+  },
+  zh: {
+    title: "法國增值稅（TVA）計算機 2024",
+    description: "按法國四種TVA稅率（20%/10%/5.5%/2.1%）即時計算含稅及未稅價格。",
+  },
+  cn: {
+    title: "法国增值税（TVA）计算器 2024",
+    description: "按法国四种TVA税率（20%/10%/5.5%/2.1%）即时计算含税及未税价格。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+
+const uiLabels: Record<Locale, {
+  heading: string;
+  desc: string;
+  priceLabel: string;
+  modeLabel: string;
+  modeHT: string;
+  modeTTC: string;
+  rateLabel: string;
+  resultHT: string;
+  resultTVA: string;
+  resultTTC: string;
+  rates: { value: string; label: string }[];
+}> = {
+  fr: {
+    heading: "Calculateur de TVA",
+    desc: "Quatre taux de TVA français 2024 : 20% normal, 10% réduit, 5,5% alimentaire, 2,1% médicaments.",
+    priceLabel: "Saisir le prix (€)",
+    modeLabel: "Type de prix saisi",
+    modeHT: "Prix HT",
+    modeTTC: "Prix TTC",
+    rateLabel: "Taux de TVA",
+    resultHT: "Prix HT",
+    resultTVA: "Montant TVA",
+    resultTTC: "Prix TTC",
+    rates: [
+      { value: "0.20", label: "20% — Taux normal (général)" },
+      { value: "0.10", label: "10% — Taux intermédiaire (restauration, travaux)" },
+      { value: "0.055", label: "5,5% — Taux réduit (alimentation, livres, abonnements)" },
+      { value: "0.021", label: "2,1% — Taux particulier (médicaments remboursés, presse)" },
+    ],
+  },
+  en: {
+    heading: "France VAT Calculator",
+    desc: "Four French VAT rates 2024: 20% standard, 10% intermediate, 5.5% food, 2.1% reimbursed medicines.",
+    priceLabel: "Enter price (€)",
+    modeLabel: "Input price type",
+    modeHT: "Price excl. VAT",
+    modeTTC: "Price incl. VAT",
+    rateLabel: "VAT rate",
+    resultHT: "Price excl. VAT",
+    resultTVA: "VAT amount",
+    resultTTC: "Price incl. VAT",
+    rates: [
+      { value: "0.20", label: "20% — Standard rate (general)" },
+      { value: "0.10", label: "10% — Intermediate (restaurants, renovation works)" },
+      { value: "0.055", label: "5.5% — Reduced (food, books, energy)" },
+      { value: "0.021", label: "2.1% — Super-reduced (reimbursed medicines, press)" },
+    ],
+  },
+  ko: {
+    heading: "프랑스 TVA 계산기",
+    desc: "2024년 프랑스 4가지 TVA 세율: 20% 일반, 10% 중간, 5.5% 식료품, 2.1% 의약품.",
+    priceLabel: "가격 입력 (€)",
+    modeLabel: "입력 가격 종류",
+    modeHT: "세전 가격",
+    modeTTC: "세후 가격",
+    rateLabel: "TVA 세율",
+    resultHT: "세전 가격",
+    resultTVA: "TVA 금액",
+    resultTTC: "세후 가격",
+    rates: [
+      { value: "0.20", label: "20% — 일반세율" },
+      { value: "0.10", label: "10% — 중간세율 (음식점, 공사)" },
+      { value: "0.055", label: "5.5% — 경감세율 (식료품, 도서)" },
+      { value: "0.021", label: "2.1% — 특별세율 (환급 의약품)" },
+    ],
+  },
+  ja: {
+    heading: "フランスTVA計算機",
+    desc: "2024年フランス4税率: 20%標準、10%中間、5.5%食料品、2.1%医薬品。",
+    priceLabel: "価格を入力 (€)",
+    modeLabel: "入力価格の種類",
+    modeHT: "税抜き価格（HT）",
+    modeTTC: "税込み価格（TTC）",
+    rateLabel: "TVA税率",
+    resultHT: "税抜き価格（HT）",
+    resultTVA: "TVA金額",
+    resultTTC: "税込み価格（TTC）",
+    rates: [
+      { value: "0.20", label: "20% — 標準税率" },
+      { value: "0.10", label: "10% — 中間税率（飲食店、工事）" },
+      { value: "0.055", label: "5.5% — 軽減税率（食料品、書籍）" },
+      { value: "0.021", label: "2.1% — 特別税率（医薬品）" },
+    ],
+  },
+  es: {
+    heading: "Calculadora de TVA Francia",
+    desc: "4 tipos de IVA francés 2024: 20% normal, 10% intermedio, 5,5% alimentación, 2,1% medicamentos.",
+    priceLabel: "Ingresa el precio (€)",
+    modeLabel: "Tipo de precio ingresado",
+    modeHT: "Precio sin IVA",
+    modeTTC: "Precio con IVA",
+    rateLabel: "Tipo de TVA",
+    resultHT: "Precio sin IVA",
+    resultTVA: "Importe TVA",
+    resultTTC: "Precio con IVA",
+    rates: [
+      { value: "0.20", label: "20% — Tasa normal" },
+      { value: "0.10", label: "10% — Tasa intermedia" },
+      { value: "0.055", label: "5,5% — Tasa reducida (alimentos)" },
+      { value: "0.021", label: "2,1% — Tasa especial (medicamentos)" },
+    ],
+  },
+  zh: {
+    heading: "法國TVA計算機",
+    desc: "2024年法國4種TVA稅率：20%標準、10%中間、5.5%食品、2.1%藥品。",
+    priceLabel: "輸入價格（€）",
+    modeLabel: "輸入價格類型",
+    modeHT: "未含稅價格（HT）",
+    modeTTC: "含稅價格（TTC）",
+    rateLabel: "TVA稅率",
+    resultHT: "未含稅價格",
+    resultTVA: "TVA金額",
+    resultTTC: "含稅價格",
+    rates: [
+      { value: "0.20", label: "20% — 標準稅率" },
+      { value: "0.10", label: "10% — 中間稅率（餐飲、裝修）" },
+      { value: "0.055", label: "5.5% — 輕減稅率（食品、書籍）" },
+      { value: "0.021", label: "2.1% — 特別稅率（報銷藥品）" },
+    ],
+  },
+  cn: {
+    heading: "法国TVA计算器",
+    desc: "2024年法国4种TVA税率：20%标准、10%中间、5.5%食品、2.1%药品。",
+    priceLabel: "输入价格（€）",
+    modeLabel: "输入价格类型",
+    modeHT: "未含税价格（HT）",
+    modeTTC: "含税价格（TTC）",
+    rateLabel: "TVA税率",
+    resultHT: "未含税价格",
+    resultTVA: "TVA金额",
+    resultTTC: "含税价格",
+    rates: [
+      { value: "0.20", label: "20% — 标准税率" },
+      { value: "0.10", label: "10% — 中间税率（餐饮、装修）" },
+      { value: "0.055", label: "5.5% — 轻减税率（食品、书籍）" },
+      { value: "0.021", label: "2.1% — 特别税率（报销药品）" },
+    ],
+  },
+};
+
+const ui = uiLabels[locale] ?? uiLabels.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-xl px-4 py-8">
+    <div class="rounded-2xl border border-border bg-card p-6 md:p-8 shadow-sm flex flex-col gap-6">
+      <div>
+        <h1 class="text-2xl font-bold text-foreground mb-2">{ui.heading}</h1>
+        <p class="text-sm text-muted-foreground">{ui.desc}</p>
+      </div>
+
+      <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-2">
+          <label for="tva-price" class="text-sm font-bold text-foreground">{ui.priceLabel}</label>
+          <input
+            id="tva-price"
+            type="number"
+            min="0"
+            step="0.01"
+            value="100"
+            class="w-full rounded-xl border border-border bg-background px-4 py-3 text-base font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            aria-label={ui.priceLabel}
+          />
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <span class="text-sm font-bold text-foreground">{ui.modeLabel}</span>
+          <div class="flex gap-4">
+            <label class="flex items-center gap-2 cursor-pointer text-sm font-medium">
+              <input type="radio" name="tva-mode" value="ht" checked class="accent-emerald-600" />
+              {ui.modeHT}
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer text-sm font-medium">
+              <input type="radio" name="tva-mode" value="ttc" class="accent-emerald-600" />
+              {ui.modeTTC}
+            </label>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <span class="text-sm font-bold text-foreground">{ui.rateLabel}</span>
+          <div class="flex flex-col gap-2">
+            {ui.rates.map((rate, i) => (
+              <label class="flex items-center gap-2 cursor-pointer text-sm font-medium">
+                <input
+                  type="radio"
+                  name="tva-rate"
+                  value={rate.value}
+                  checked={i === 0}
+                  class="accent-emerald-600"
+                />
+                {rate.label}
+              </label>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="rounded-2xl bg-emerald-50 border border-emerald-200 p-4 flex flex-col gap-1">
+          <span class="text-xs font-bold text-emerald-700 uppercase tracking-wide">{ui.resultHT}</span>
+          <span class="text-2xl font-bold text-emerald-900" id="tva-ht">100,00 €</span>
+        </div>
+        <div class="rounded-2xl bg-amber-50 border border-amber-200 p-4 flex flex-col gap-1">
+          <span class="text-xs font-bold text-amber-700 uppercase tracking-wide">{ui.resultTVA}</span>
+          <span class="text-2xl font-bold text-amber-900" id="tva-amount">20,00 €</span>
+        </div>
+        <div class="rounded-2xl bg-emerald-500 p-4 flex flex-col gap-1">
+          <span class="text-xs font-bold text-emerald-100 uppercase tracking-wide">{ui.resultTTC}</span>
+          <span class="text-2xl font-bold text-white" id="tva-ttc">120,00 €</span>
+        </div>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<script>
+  function recalcTVA() {
+    const priceInput = document.getElementById('tva-price') as HTMLInputElement | null;
+    const modeInputs = document.querySelectorAll<HTMLInputElement>('input[name="tva-mode"]');
+    const rateInputs = document.querySelectorAll<HTMLInputElement>('input[name="tva-rate"]');
+
+    if (!priceInput) return;
+
+    const price = Math.max(0, Number(priceInput.value) || 0);
+    const mode = Array.from(modeInputs).find((r) => r.checked)?.value ?? 'ht';
+    const rate = Number(Array.from(rateInputs).find((r) => r.checked)?.value ?? '0.20');
+
+    let ht: number, tva: number, ttc: number;
+    if (mode === 'ht') {
+      ht = price;
+      tva = Math.round(price * rate * 100) / 100;
+      ttc = Math.round((ht + tva) * 100) / 100;
+    } else {
+      ttc = price;
+      ht = Math.round((price / (1 + rate)) * 100) / 100;
+      tva = Math.round((ttc - ht) * 100) / 100;
+    }
+
+    const fmt = (n: number) =>
+      n.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+
+    const htEl = document.getElementById('tva-ht');
+    const tvaEl = document.getElementById('tva-amount');
+    const ttcEl = document.getElementById('tva-ttc');
+    if (htEl) htEl.textContent = fmt(ht);
+    if (tvaEl) tvaEl.textContent = fmt(tva);
+    if (ttcEl) ttcEl.textContent = fmt(ttc);
+  }
+
+  document.getElementById('tva-price')?.addEventListener('input', recalcTVA);
+  document.querySelectorAll('input[name="tva-mode"]').forEach((r) => r.addEventListener('change', recalcTVA));
+  document.querySelectorAll('input[name="tva-rate"]').forEach((r) => r.addEventListener('change', recalcTVA));
+  recalcTVA();
+</script>
