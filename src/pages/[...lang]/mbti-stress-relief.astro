@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import MbtiStressTest from "../../components/tests/MbtiStressTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "MBTI 스트레스 해소법 — 내 성격 유형에 맞는 방법",
+    description: "16가지 MBTI 유형별 스트레스 유발 요인, 스트레스 신호, 가장 효과적인 해소법을 알아보세요.",
+  },
+  en: {
+    title: "MBTI Stress Relief Guide — Find Your Best Coping Method",
+    description: "Discover stress triggers, warning signs, and the most effective relief methods for all 16 MBTI personality types.",
+  },
+  ja: {
+    title: "MBTIストレス解消ガイド — 自分のタイプに合った方法",
+    description: "16種類のMBTIタイプ別ストレス誘発要因、サイン、最も効果的な解消法をご覧ください。",
+  },
+  fr: {
+    title: "Guide Anti-Stress MBTI — Trouvez votre méthode",
+    description: "Découvrez les déclencheurs, les signes et les méthodes de soulagement les plus efficaces pour les 16 types MBTI.",
+  },
+  es: {
+    title: "Guía Anti-Estrés MBTI — Encuentra tu método",
+    description: "Descubre los desencadenantes, señales y métodos de alivio más efectivos para los 16 tipos de personalidad MBTI.",
+  },
+  zh: {
+    title: "MBTI壓力解除指南 — 找到你的最佳方法",
+    description: "了解16種MBTI類型的壓力誘因、警示信號及最有效的壓力解除方法。",
+  },
+  cn: {
+    title: "MBTI压力解除指南 — 找到你的最佳方法",
+    description: "了解16种MBTI类型的压力诱因、警示信号及最有效的压力解除方法。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <MbtiStressTest client:load locale={locale} />
+  </main>
+</BaseLayout>
