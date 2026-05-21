@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import TypingTest from "../../components/tools/TypingTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "타이핑 속도 테스트 — WPM 측정",
+    description: "15초·30초·1분 모드로 타이핑 속도(WPM)와 정확도를 즉시 측정해보세요.",
+  },
+  en: {
+    title: "Typing Speed Test — Measure Your WPM",
+    description: "Test your typing speed and accuracy in 15s, 30s or 1-minute mode. Track WPM, accuracy, and errors in real time.",
+  },
+  ja: {
+    title: "タイピング速度テスト — WPM測定",
+    description: "15秒・30秒・1分モードでタイピング速度(WPM)と正確率を即時測定できます。",
+  },
+  fr: {
+    title: "Test de vitesse de frappe — Mesurez votre WPM",
+    description: "Testez votre vitesse et précision de frappe en mode 15s, 30s ou 1 minute. Suivi en temps réel.",
+  },
+  es: {
+    title: "Test de velocidad de escritura — Mide tu PPM",
+    description: "Prueba tu velocidad y precisión de escritura en modo 15s, 30s o 1 minuto. Seguimiento en tiempo real.",
+  },
+  zh: {
+    title: "打字速度測試 — 測量你的WPM",
+    description: "在15秒、30秒或1分鐘模式下測試您的打字速度和準確率，即時追蹤WPM。",
+  },
+  cn: {
+    title: "打字速度测试 — 测量你的WPM",
+    description: "在15秒、30秒或1分钟模式下测试您的打字速度和准确率，实时追踪WPM。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <TypingTest client:load locale={locale} />
+  </main>
+</BaseLayout>

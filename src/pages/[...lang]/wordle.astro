@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import PsychologyWordleComp from "../../components/games/PsychologyWordle";
+import WordleGame from "../../components/games/WordleGame";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -12,32 +12,32 @@ const { locale } = Astro.props as { locale: Locale };
 
 const meta: Record<Locale, { title: string; description: string }> = {
   ko: {
-    title: "심리학 워들 — 심리 용어로 즐기는 단어 맞추기",
-    description: "심리학 용어로 즐기는 워들 게임. 6번의 시도 안에 숨겨진 심리학 단어를 맞춰보세요.",
+    title: "Wordle — 매일 5글자 영단어 맞추기",
+    description: "매일 새로운 5글자 영단어를 6번 안에 맞춰보세요. 초록=정답 위치, 노란색=다른 위치, 회색=없음.",
   },
   en: {
-    title: "Psychology Wordle",
-    description: "A Wordle game with psychology terms. Guess the hidden psychology word within 6 attempts.",
+    title: "Wordle — Guess the Daily 5-Letter Word",
+    description: "Guess the hidden 5-letter word in 6 tries. Green = correct position, yellow = wrong position, grey = not in word.",
   },
   ja: {
-    title: "心理学ワードル — 心理用語で楽しむ単語当て",
-    description: "心理学用語で楽しむワードルゲーム。6回以内に隠された心理学単語を当ててください。",
+    title: "Wordle — 毎日の5文字英単語パズル",
+    description: "6回以内に隠された5文字の英単語を当ててください。緑=正解位置、黄=別の位置、灰=不在。",
   },
   fr: {
-    title: "Wordle Psychologie",
-    description: "Un jeu Wordle avec des termes de psychologie. Devinez le mot de psychologie caché en 6 tentatives.",
+    title: "Wordle — Devinez le mot du jour en 5 lettres",
+    description: "Devinez le mot de 5 lettres caché en 6 tentatives. Vert = bonne position, jaune = mauvaise position, gris = absent.",
   },
   es: {
-    title: "Wordle de Psicología",
-    description: "Un juego Wordle con términos de psicología. Adivina la palabra de psicología oculta en 6 intentos.",
+    title: "Wordle — Adivina la palabra de 5 letras del día",
+    description: "Adivina la palabra de 5 letras en 6 intentos. Verde = posición correcta, amarillo = posición incorrecta, gris = ausente.",
   },
   zh: {
-    title: "心理學文字猜謎",
-    description: "用心理學術語玩的文字猜謎遊戲。在6次嘗試內猜出隱藏的心理學單詞。",
+    title: "Wordle — 每日5字母英文猜字",
+    description: "6次內猜出隱藏的5個字母英文單詞。綠色=正確位置，黃色=不同位置，灰色=不存在。",
   },
   cn: {
-    title: "心理学文字猜谜",
-    description: "用心理学术语玩的文字猜谜游戏。在6次尝试内猜出隐藏的心理学单词。",
+    title: "Wordle — 每日5字母英文猜字",
+    description: "6次内猜出隐藏的5个字母英文单词。绿色=正确位置，黄色=不同位置，灰色=不存在。",
   },
 };
 
@@ -45,7 +45,7 @@ const m = meta[locale] ?? meta.en;
 ---
 
 <BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <PsychologyWordleComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  <main class="mx-auto max-w-lg px-4 py-4">
+    <WordleGame client:load />
   </main>
 </BaseLayout>
