@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import JeonseGuaranteeCalculator from "../../components/tools/JeonseGuaranteeCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "전세보증금 안전성 계산기 — 내 전세금은 안전할까?",
+    description: "전세보증금 + 선순위 채권이 주택 시세의 몇 %인지 계산해 회수 가능성을 확인하세요. 경매 시 보증금 회수율 자동 계산.",
+  },
+  en: {
+    title: "Jeonse Deposit Safety Calculator — Is Your Deposit Safe?",
+    description: "Calculate your Korean jeonse deposit risk. Check the LTV ratio of deposit + prior claims vs property value, and estimate recovery in foreclosure.",
+  },
+  ja: {
+    title: "チョンセ保証金安全性計算機 — 保証金は安全？",
+    description: "韓国のチョンセ保証金と先順位債権を合算して、競売時の回収率を自動計算します。",
+  },
+  fr: {
+    title: "Calculateur Sécurité Dépôt Jeonse",
+    description: "Calculez le risque de votre dépôt Jeonse coréen. Vérifiez le ratio LTV et estimez la récupération en cas de saisie.",
+  },
+  es: {
+    title: "Calculadora Seguridad Depósito Jeonse",
+    description: "Calcule el riesgo de su depósito Jeonse coreano. Verifique el ratio LTV y estime la recuperación en caso de ejecución hipotecaria.",
+  },
+  zh: {
+    title: "全租保證金安全性計算機 — 你的保證金安全嗎？",
+    description: "計算韓國全租保證金的風險。確認（保證金+先順位債權）佔房屋市值的比率，估算拍賣時的回收率。",
+  },
+  cn: {
+    title: "全租保证金安全性计算器 — 你的保证金安全吗？",
+    description: "计算韩国全租保证金的风险。确认（保证金+先顺位债权）占房屋市值的比率，估算拍卖时的回收率。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <JeonseGuaranteeCalculator client:load locale={locale} />
+  </main>
+</BaseLayout>
