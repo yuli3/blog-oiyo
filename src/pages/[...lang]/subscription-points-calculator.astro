@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SubscriptionPointsCalculator from "../../components/tools/SubscriptionPointsCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "청약가점 계산기 — 부양가족·통장기간·무주택 가점 자동 계산",
+    description: "부양가족 수(최대 35점), 청약통장 가입 기간(최대 17점), 무주택 기간(최대 32점)을 입력하면 청약가점 만점 84점 중 내 점수를 자동으로 계산합니다.",
+  },
+  en: {
+    title: "Korean Apartment Subscription Points Calculator (청약가점)",
+    description: "Calculate your Korean apartment lottery score (청약가점): dependents (max 35 pts), savings account years (max 17 pts), and no-property years (max 32 pts). Total max 84 points.",
+  },
+  ja: {
+    title: "韓国마이홈청약加点計算機（청약가점）",
+    description: "韓国の公共マンション抽選スコア(청약가점)を計算します：扶養家族数（最大35点）、청약通帳加入期間（最大17点）、無住宅期間（最大32点）。満点84点。",
+  },
+  fr: {
+    title: "Calculateur de points 청약 — Loterie logement coréenne",
+    description: "Calculez votre score de loterie de logement coréen (청약가점) : personnes à charge (35 pts max), années de compte épargne (17 pts max), sans propriété (32 pts max). Max 84 pts.",
+  },
+  es: {
+    title: "Calculadora de puntos 청약 — Lotería vivienda coreana",
+    description: "Calcula tu puntuación de lotería de vivienda coreana (청약가점): dependientes (máx. 35 pts), años de cuenta ahorro (máx. 17 pts), años sin propiedad (máx. 32 pts). Máx. 84 pts.",
+  },
+  zh: {
+    title: "청약加分計算機 — 韓國公寓抽籤積分",
+    description: "計算韓國公寓抽籤積分（청약가점）：扶養家屬數（最多35分）、청약帳戶年數（最多17分）、無住宅年數（最多32分），滿分84分。",
+  },
+  cn: {
+    title: "청약加分计算器 — 韩国公寓抽签积分",
+    description: "计算韩国公寓抽签积分（청약가점）：扶养家属数（最多35分）、청약账户年数（最多17分）、无住宅年数（最多32分），满分84分。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <SubscriptionPointsCalculator client:load locale={locale} />
+  </main>
+</BaseLayout>

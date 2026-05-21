@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import EarlyRepaymentCalculator from "../../components/tools/EarlyRepaymentCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "중도상환 계산기 — 이자 절감·기간 단축 효과 계산",
+    description: "대출 원금·이자율·경과 기간을 입력하고 중도상환 금액을 설정하면 이자 절감액, 기간 단축, 수수료 차감 후 순 절감액을 자동으로 계산합니다.",
+  },
+  en: {
+    title: "Early Repayment Calculator — Loan Payoff Savings",
+    description: "Enter your loan principal, interest rate, and elapsed months, then set an extra payment amount to instantly see interest saved, term reduction, and net savings after prepayment penalty.",
+  },
+  ja: {
+    title: "繰上返済計算機 — 利息節約・期間短縮の効果",
+    description: "借入元金・利率・経過月数を入力し、繰上返済額を設定すると、利息節約額・期間短縮・手数料差引後の実質節約額を自動計算します。",
+  },
+  fr: {
+    title: "Calculateur de remboursement anticipé — Économies d'intérêts",
+    description: "Entrez le capital, le taux, les mois écoulés et le montant anticipé pour voir les intérêts économisés, la réduction de durée et l'économie nette après pénalité.",
+  },
+  es: {
+    title: "Calculadora de amortización anticipada — Ahorro en intereses",
+    description: "Introduce el capital, la tasa, los meses transcurridos y el monto a amortizar para ver los intereses ahorrados, la reducción del plazo y el ahorro neto tras comisiones.",
+  },
+  zh: {
+    title: "提前還款計算機 — 節省利息與縮短期限計算",
+    description: "輸入貸款本金、利率、已還月數及提前還款金額，立即計算節省利息、縮短期限及扣除手續費後的實際節省金額。",
+  },
+  cn: {
+    title: "提前还款计算器 — 节省利息与缩短期限计算",
+    description: "输入贷款本金、利率、已还月数及提前还款金额，立即计算节省利息、缩短期限及扣除手续费后的实际节省金额。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <EarlyRepaymentCalculator client:load locale={locale} />
+  </main>
+</BaseLayout>
