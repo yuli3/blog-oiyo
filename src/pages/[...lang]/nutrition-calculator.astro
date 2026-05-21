@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import NutritionCalculator from "../../components/tools/NutritionCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "영양소 & 칼로리 계산기 — 하루 필요 영양소 자동 계산",
+    description: "나이, 성별, 체중, 신장, 활동량, 목표별로 하루 칼로리·단백질·탄수화물·지방·수분 권장량을 자동 계산합니다.",
+  },
+  en: {
+    title: "Nutrition & Calorie Calculator — Daily Macro Planner",
+    description: "Calculate your daily calorie needs, macros (protein, carbs, fat), fiber, and water intake by age, gender, weight, height, activity level, and goal.",
+  },
+  ja: {
+    title: "栄養素・カロリー計算機 — 1日の栄養プランナー",
+    description: "年齢、性別、体重、身長、活動量、目標別に1日のカロリー・たんぱく質・炭水化物・脂質・水分必要量を計算します。",
+  },
+  fr: {
+    title: "Calculateur Nutrition & Calories — Planificateur Journalier",
+    description: "Calculez vos besoins caloriques journaliers, macros (protéines, glucides, lipides), fibres et eau selon âge, sexe, poids, taille, activité et objectif.",
+  },
+  es: {
+    title: "Calculadora Nutrición & Calorías — Planificador Diario",
+    description: "Calcula tus necesidades calóricas diarias, macros (proteínas, carbohidratos, grasas), fibra y agua según edad, sexo, peso, talla, actividad y objetivo.",
+  },
+  zh: {
+    title: "營養素與熱量計算機 — 每日營養規劃器",
+    description: "根據年齡、性別、體重、身高、活動量和目標，計算每日所需熱量、蛋白質、碳水化合物、脂肪、纖維和水分。",
+  },
+  cn: {
+    title: "营养素与热量计算器 — 每日营养规划器",
+    description: "根据年龄、性别、体重、身高、活动量和目标，计算每日所需热量、蛋白质、碳水化合物、脂肪、纤维和水分。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <NutritionCalculator client:load locale={locale} />
+  </main>
+</BaseLayout>
