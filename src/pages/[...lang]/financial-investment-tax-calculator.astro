@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import FinancialInvestmentTaxCalculator from "../../components/tools/FinancialInvestmentTaxCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "금융투자소득세 계산기 — 금투세 납부액 자동 계산",
+    description: "국내·해외 주식, ETF, 펀드, 채권 수익에 대한 금융투자소득세를 기본공제·이월손실 포함해 자동 계산합니다.",
+  },
+  en: {
+    title: "Korean Financial Investment Tax Calculator",
+    description: "Calculate Korea's financial investment income tax (금투세) on domestic/foreign stocks, ETFs, funds, and bonds — with basic deductions and loss carry-forward.",
+  },
+  ja: {
+    title: "韓国金融投資所得税計算機",
+    description: "国内・海外株式、ETF、ファンド、債券の金融投資所得税を基本控除・繰越損失込みで試算します。",
+  },
+  fr: {
+    title: "Calculateur Impôt Investissement Coréen (금투세)",
+    description: "Calculez l'impôt sur les revenus d'investissement financier coréen sur actions, ETF, fonds et obligations, avec déductions et report de pertes.",
+  },
+  es: {
+    title: "Calculadora Impuesto Inversión Coreano (금투세)",
+    description: "Calcule el impuesto coreano sobre ingresos de inversión financiera en acciones, ETF, fondos y bonos, con deducciones básicas y compensación de pérdidas.",
+  },
+  zh: {
+    title: "韓國金融投資所得稅計算機（금투세）",
+    description: "計算韓國金融投資所得稅，涵蓋國內外股票、ETF、基金和債券，包含基本扣除和虧損結轉。",
+  },
+  cn: {
+    title: "韩国金融投资所得税计算器（금투세）",
+    description: "计算韩国金融投资所得税，涵盖国内外股票、ETF、基金和债券，包含基本扣除和亏损结转。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <FinancialInvestmentTaxCalculator client:load locale={locale} />
+  </main>
+</BaseLayout>
