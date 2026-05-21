@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import HexacoPersonalityTest from "../../components/tests/HexacoPersonalityTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "HEXACO 성격 검사 — 6차원 성격 분석",
+    description: "정직·겸손(H), 정서성(E), 외향성(X), 원만성(A), 성실성(C), 경험 개방성(O) 6개 차원으로 당신의 성격을 분석합니다. 60문항 무료 검사.",
+  },
+  en: {
+    title: "HEXACO Personality Test — 6-Dimension Analysis",
+    description: "Analyze your personality across 6 dimensions: Honesty-Humility (H), Emotionality (E), eXtraversion (X), Agreeableness (A), Conscientiousness (C), and Openness (O). Free 60-question test.",
+  },
+  ja: {
+    title: "HEXACO性格検査 — 6次元性格分析",
+    description: "誠実・謙虚(H)、情緒性(E)、外向性(X)、協調性(A)、誠実性(C)、経験への開放性(O)の6次元で性格を分析します。60問の無料テスト。",
+  },
+  fr: {
+    title: "Test de Personnalité HEXACO — Analyse en 6 Dimensions",
+    description: "Analysez votre personnalité en 6 dimensions : Honnêteté-Humilité (H), Émotivité (E), Extraversion (X), Agréabilité (A), Conscience (C) et Ouverture (O). Test gratuit de 60 questions.",
+  },
+  es: {
+    title: "Test de Personalidad HEXACO — Análisis en 6 Dimensiones",
+    description: "Analiza tu personalidad en 6 dimensiones: Honestidad-Humildad (H), Emocionalidad (E), Extraversión (X), Amabilidad (A), Escrupulosidad (C) y Apertura (O). Test gratuito de 60 preguntas.",
+  },
+  zh: {
+    title: "HEXACO人格測驗 — 6維度人格分析",
+    description: "從誠實謙遜(H)、情緒性(E)、外向性(X)、宜人性(A)、盡責性(C)和開放性(O)6個維度分析您的性格。免費60題測驗。",
+  },
+  cn: {
+    title: "HEXACO人格测验 — 6维度人格分析",
+    description: "从诚实谦逊(H)、情绪性(E)、外向性(X)、宜人性(A)、尽责性(C)和开放性(O)6个维度分析您的性格。免费60题测验。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <HexacoPersonalityTest client:load locale={locale} />
+  </main>
+</BaseLayout>
