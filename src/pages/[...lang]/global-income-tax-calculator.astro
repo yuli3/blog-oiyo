@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import GlobalIncomeTaxCalculator from "../../components/tools/GlobalIncomeTaxCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "글로벌 소득세 계산기 — 7개국 소득세 비교",
+    description: "한국·미국·일본·프랑스·스페인·중국·대만 7개국의 소득세와 사회보험료를 계산하고 비교해보세요.",
+  },
+  en: {
+    title: "Global Income Tax Calculator — Compare 7 Countries",
+    description: "Calculate and compare income tax and social insurance for South Korea, USA, Japan, France, Spain, China, and Taiwan.",
+  },
+  ja: {
+    title: "グローバル所得税計算機 — 7カ国比較",
+    description: "韓国・米国・日本・フランス・スペイン・中国・台湾の所得税と社会保険料を計算・比較できます。",
+  },
+  fr: {
+    title: "Calculateur Impôt Mondial — Comparez 7 pays",
+    description: "Calculez et comparez l'impôt sur le revenu et les cotisations sociales pour la Corée, les USA, le Japon, la France, l'Espagne, la Chine et Taïwan.",
+  },
+  es: {
+    title: "Calculadora IRPF Global — Compara 7 países",
+    description: "Calcula y compara el IRPF y las cotizaciones sociales de Corea, EE.UU., Japón, Francia, España, China y Taiwán.",
+  },
+  zh: {
+    title: "全球所得稅計算機 — 7國稅率比較",
+    description: "計算並比較韓國、美國、日本、法國、西班牙、中國和台灣的所得稅及社會保險費用。",
+  },
+  cn: {
+    title: "全球所得税计算器 — 7国税率比较",
+    description: "计算并比较韩国、美国、日本、法国、西班牙、中国和台湾的所得税及社会保险费用。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <GlobalIncomeTaxCalculator client:load locale={locale} />
+  </main>
+</BaseLayout>
