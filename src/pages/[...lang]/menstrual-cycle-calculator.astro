@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import MenstrualCycleCalculator from "../../components/tools/MenstrualCycleCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "생리 주기 계산기 — 다음 생리일·배란일·가임기 계산",
+    description: "마지막 생리일과 평균 주기를 입력하면 다음 생리 예정일, 배란일, 가임기, 황체기를 자동으로 계산합니다. 향후 3주기 예측 포함.",
+  },
+  en: {
+    title: "Menstrual Cycle Calculator — Period, Ovulation & Fertile Window",
+    description: "Enter your last period date and average cycle length to predict your next period, ovulation day, fertile window, and luteal phase. Includes a 3-cycle forecast.",
+  },
+  ja: {
+    title: "月経周期計算機 — 次の生理日・排卵日・妊娠可能期間を計算",
+    description: "最終生理日と平均周期を入力すると、次の生理予定日、排卵日、妊娠可能期間、黄体期を自動計算します。3周期先まで予測。",
+  },
+  fr: {
+    title: "Calculateur de Cycle Menstruel — Règles, Ovulation & Fenêtre Fertile",
+    description: "Entrez votre date de dernières règles et votre durée de cycle pour prédire la prochaine menstruation, l'ovulation, la fenêtre fertile et la phase lutéale.",
+  },
+  es: {
+    title: "Calculadora de Ciclo Menstrual — Período, Ovulación y Ventana Fértil",
+    description: "Ingresa tu última fecha de menstruación y duración del ciclo para predecir el próximo período, día de ovulación, ventana fértil y fase lútea.",
+  },
+  zh: {
+    title: "月經週期計算機 — 月經、排卵日與受孕窗口期",
+    description: "輸入最後一次月經日期和平均週期長度，自動計算下次月經日期、排卵日、受孕窗口期和黃體期，包含未來3個週期預測。",
+  },
+  cn: {
+    title: "月经周期计算器 — 月经、排卵日与受孕窗口期",
+    description: "输入最后一次月经日期和平均周期长度，自动计算下次月经日期、排卵日、受孕窗口期和黄体期，包含未来3个周期预测。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <MenstrualCycleCalculator client:load locale={locale} />
+  </main>
+</BaseLayout>
