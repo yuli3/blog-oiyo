@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import TaxSavingsRoadmap from "../../components/tools/TaxSavingsRoadmap";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "절세 로드맵 — 나에게 맞는 세금 절약 전략",
+    description: "직업·소득·가족·주택 정보를 입력하면 IRP, ISA, 연금저축, 의료비 공제 등 나에게 맞는 절세 전략을 우선순위별로 안내합니다.",
+  },
+  en: {
+    title: "Tax Savings Roadmap — Personalized Tax Strategies",
+    description: "Enter your income, employment, family, and housing details to get a prioritized roadmap of Korean tax-saving strategies including IRP, ISA, pension savings, and deductions.",
+  },
+  ja: {
+    title: "節税ロードマップ — 自分に合った節税戦略",
+    description: "職業・所得・家族・住宅情報を入力して、IRP・ISA・年金貯蓄・医療費控除などの優先順位付き節税戦略をご案内します。",
+  },
+  fr: {
+    title: "Feuille de Route Fiscale — Stratégies Fiscales Personnalisées",
+    description: "Entrez vos revenus, type d'emploi, situation familiale et immobilière pour obtenir une feuille de route priorisée des stratégies fiscales coréennes : IRP, ISA, retraite, déductions.",
+  },
+  es: {
+    title: "Hoja de Ruta Fiscal — Estrategias Fiscales Personalizadas",
+    description: "Introduce ingresos, empleo, familia y vivienda para obtener una hoja de ruta priorizada de estrategias de ahorro fiscal coreanas: IRP, ISA, pensión y deducciones.",
+  },
+  zh: {
+    title: "節稅路線圖 — 個性化節稅策略",
+    description: "輸入您的收入、職業、家庭和住宅資訊，獲得IRP、ISA、年金儲蓄、醫療費用扣除等按優先順序排列的節稅策略路線圖。",
+  },
+  cn: {
+    title: "节税路线图 — 个性化节税策略",
+    description: "输入您的收入、职业、家庭和住宅信息，获得IRP、ISA、年金储蓄、医疗费用扣除等按优先顺序排列的节税策略路线图。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <TaxSavingsRoadmap client:load locale={locale} />
+  </main>
+</BaseLayout>
