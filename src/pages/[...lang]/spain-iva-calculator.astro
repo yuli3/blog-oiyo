@@ -1,0 +1,296 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  es: {
+    title: "Calculadora de IVA España 2024 — Tipos 21%, 10%, 4%",
+    description: "Calcula al instante los precios sin IVA y con IVA para los tres tipos de IVA español: 21% general, 10% reducido, 4% superreducido.",
+  },
+  en: {
+    title: "Spain VAT Calculator 2024 — 21%, 10%, 4% Rates",
+    description: "Instantly calculate prices excl. and incl. VAT for all three Spanish VAT rates: 21% standard, 10% reduced, 4% super-reduced.",
+  },
+  ko: {
+    title: "스페인 부가가치세(IVA) 계산기 2024",
+    description: "스페인 IVA 3가지 세율(21%/10%/4%)로 세전/세후 가격을 즉시 계산합니다.",
+  },
+  ja: {
+    title: "スペインIVA（付加価値税）計算機 2024",
+    description: "スペインIVA 3税率（21%/10%/4%）で税抜き・税込み価格を即時計算します。",
+  },
+  fr: {
+    title: "Calculateur de TVA Espagne 2024",
+    description: "Calculez les prix HT et TTC pour les trois types de TVA espagnole 2024 : 21% normal, 10% réduit, 4% super-réduit.",
+  },
+  zh: {
+    title: "西班牙增值稅（IVA）計算機 2024",
+    description: "按西班牙三種IVA稅率（21%/10%/4%）即時計算含稅及未稅價格。",
+  },
+  cn: {
+    title: "西班牙增值税（IVA）计算器 2024",
+    description: "按西班牙三种IVA税率（21%/10%/4%）即时计算含税及未税价格。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+
+const uiLabels: Record<Locale, {
+  heading: string;
+  desc: string;
+  priceLabel: string;
+  modeLabel: string;
+  modeEx: string;
+  modeInc: string;
+  rateLabel: string;
+  resultEx: string;
+  resultIVA: string;
+  resultInc: string;
+  rates: { value: string; label: string }[];
+}> = {
+  es: {
+    heading: "Calculadora de IVA",
+    desc: "Tres tipos de IVA español 2024: 21% general, 10% reducido, 4% superreducido.",
+    priceLabel: "Precio (€)",
+    modeLabel: "Tipo de precio",
+    modeEx: "Precio sin IVA",
+    modeInc: "Precio con IVA",
+    rateLabel: "Tipo de IVA",
+    resultEx: "Sin IVA",
+    resultIVA: "Importe IVA",
+    resultInc: "Con IVA",
+    rates: [
+      { value: "0.21", label: "21% — Tipo general (electrónica, ropa, servicios)" },
+      { value: "0.10", label: "10% — Tipo reducido (alimentos, transporte, hostelería)" },
+      { value: "0.04", label: "4% — Tipo superreducido (pan, leche, medicamentos)" },
+    ],
+  },
+  en: {
+    heading: "Spain VAT Calculator",
+    desc: "Three Spanish VAT rates 2024: 21% standard, 10% reduced, 4% super-reduced.",
+    priceLabel: "Enter price (€)",
+    modeLabel: "Input price type",
+    modeEx: "Price excl. VAT",
+    modeInc: "Price incl. VAT",
+    rateLabel: "VAT rate",
+    resultEx: "Price excl. VAT",
+    resultIVA: "VAT amount",
+    resultInc: "Price incl. VAT",
+    rates: [
+      { value: "0.21", label: "21% — Standard rate (electronics, clothes, services)" },
+      { value: "0.10", label: "10% — Reduced (food, transport, hospitality)" },
+      { value: "0.04", label: "4% — Super-reduced (bread, milk, medicines)" },
+    ],
+  },
+  ko: {
+    heading: "스페인 IVA 계산기",
+    desc: "2024년 스페인 3가지 IVA 세율: 21% 일반, 10% 경감, 4% 초경감.",
+    priceLabel: "가격 입력 (€)",
+    modeLabel: "입력 가격 종류",
+    modeEx: "세전 가격",
+    modeInc: "세후 가격",
+    rateLabel: "IVA 세율",
+    resultEx: "세전 가격",
+    resultIVA: "IVA 금액",
+    resultInc: "세후 가격",
+    rates: [
+      { value: "0.21", label: "21% — 일반세율" },
+      { value: "0.10", label: "10% — 경감세율 (식품, 교통, 숙박)" },
+      { value: "0.04", label: "4% — 초경감세율 (빵, 우유, 의약품)" },
+    ],
+  },
+  ja: {
+    heading: "スペインIVA計算機",
+    desc: "2024年スペイン3税率: 21%標準、10%軽減、4%特別軽減。",
+    priceLabel: "価格を入力 (€)",
+    modeLabel: "入力価格の種類",
+    modeEx: "税抜き価格",
+    modeInc: "税込み価格",
+    rateLabel: "IVA税率",
+    resultEx: "税抜き価格",
+    resultIVA: "IVA金額",
+    resultInc: "税込み価格",
+    rates: [
+      { value: "0.21", label: "21% — 標準税率" },
+      { value: "0.10", label: "10% — 軽減税率（食品、交通、宿泊）" },
+      { value: "0.04", label: "4% — 特別軽減税率（パン、牛乳、医薬品）" },
+    ],
+  },
+  fr: {
+    heading: "Calculateur de TVA Espagne",
+    desc: "3 types de TVA espagnole 2024 : 21% normal, 10% réduit, 4% super-réduit.",
+    priceLabel: "Saisir le prix (€)",
+    modeLabel: "Type de prix saisi",
+    modeEx: "Prix HT",
+    modeInc: "Prix TTC",
+    rateLabel: "Type de TVA",
+    resultEx: "Prix HT",
+    resultIVA: "Montant TVA",
+    resultInc: "Prix TTC",
+    rates: [
+      { value: "0.21", label: "21% — Taux normal" },
+      { value: "0.10", label: "10% — Taux réduit (alimentation, transport, hôtellerie)" },
+      { value: "0.04", label: "4% — Taux super-réduit (pain, lait, médicaments)" },
+    ],
+  },
+  zh: {
+    heading: "西班牙IVA計算機",
+    desc: "2024年西班牙三種IVA稅率：21%標準、10%優惠、4%特別優惠。",
+    priceLabel: "輸入價格（€）",
+    modeLabel: "輸入價格類型",
+    modeEx: "未含稅價格",
+    modeInc: "含稅價格",
+    rateLabel: "IVA稅率",
+    resultEx: "未含稅價格",
+    resultIVA: "IVA金額",
+    resultInc: "含稅價格",
+    rates: [
+      { value: "0.21", label: "21% — 標準稅率" },
+      { value: "0.10", label: "10% — 優惠稅率（食品、交通、住宿）" },
+      { value: "0.04", label: "4% — 特別優惠稅率（麵包、牛奶、藥品）" },
+    ],
+  },
+  cn: {
+    heading: "西班牙IVA计算器",
+    desc: "2024年西班牙三种IVA税率：21%标准、10%优惠、4%特别优惠。",
+    priceLabel: "输入价格（€）",
+    modeLabel: "输入价格类型",
+    modeEx: "未含税价格",
+    modeInc: "含税价格",
+    rateLabel: "IVA税率",
+    resultEx: "未含税价格",
+    resultIVA: "IVA金额",
+    resultInc: "含税价格",
+    rates: [
+      { value: "0.21", label: "21% — 标准税率" },
+      { value: "0.10", label: "10% — 优惠税率（食品、交通、住宿）" },
+      { value: "0.04", label: "4% — 特别优惠税率（面包、牛奶、药品）" },
+    ],
+  },
+};
+
+const ui = uiLabels[locale] ?? uiLabels.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-xl px-4 py-8">
+    <div class="rounded-2xl border border-border bg-card p-6 md:p-8 shadow-sm flex flex-col gap-6">
+      <div>
+        <h1 class="text-2xl font-bold text-foreground mb-2">{ui.heading}</h1>
+        <p class="text-sm text-muted-foreground">{ui.desc}</p>
+      </div>
+
+      <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-2">
+          <label for="iva-price" class="text-sm font-bold text-foreground">{ui.priceLabel}</label>
+          <input
+            id="iva-price"
+            type="number"
+            min="0"
+            step="0.01"
+            value="100"
+            class="w-full rounded-xl border border-border bg-background px-4 py-3 text-base font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-red-500"
+            aria-label={ui.priceLabel}
+          />
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <span class="text-sm font-bold text-foreground">{ui.modeLabel}</span>
+          <div class="flex gap-4">
+            <label class="flex items-center gap-2 cursor-pointer text-sm font-medium">
+              <input type="radio" name="iva-mode" value="ex" checked class="accent-red-600" />
+              {ui.modeEx}
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer text-sm font-medium">
+              <input type="radio" name="iva-mode" value="inc" class="accent-red-600" />
+              {ui.modeInc}
+            </label>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <span class="text-sm font-bold text-foreground">{ui.rateLabel}</span>
+          <div class="flex flex-col gap-2">
+            {ui.rates.map((rate, i) => (
+              <label class="flex items-center gap-2 cursor-pointer text-sm font-medium">
+                <input
+                  type="radio"
+                  name="iva-rate"
+                  value={rate.value}
+                  checked={i === 0}
+                  class="accent-red-600"
+                />
+                {rate.label}
+              </label>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="rounded-2xl bg-red-50 border border-red-200 p-4 flex flex-col gap-1">
+          <span class="text-xs font-bold text-red-700 uppercase tracking-wide">{ui.resultEx}</span>
+          <span class="text-2xl font-bold text-red-900" id="iva-ex">100,00 €</span>
+        </div>
+        <div class="rounded-2xl bg-amber-50 border border-amber-200 p-4 flex flex-col gap-1">
+          <span class="text-xs font-bold text-amber-700 uppercase tracking-wide">{ui.resultIVA}</span>
+          <span class="text-2xl font-bold text-amber-900" id="iva-amount">21,00 €</span>
+        </div>
+        <div class="rounded-2xl bg-red-600 p-4 flex flex-col gap-1">
+          <span class="text-xs font-bold text-red-100 uppercase tracking-wide">{ui.resultInc}</span>
+          <span class="text-2xl font-bold text-white" id="iva-inc">121,00 €</span>
+        </div>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<script>
+  function recalcIVA() {
+    const priceInput = document.getElementById('iva-price') as HTMLInputElement | null;
+    const modeInputs = document.querySelectorAll<HTMLInputElement>('input[name="iva-mode"]');
+    const rateInputs = document.querySelectorAll<HTMLInputElement>('input[name="iva-rate"]');
+
+    if (!priceInput) return;
+
+    const price = Math.max(0, Number(priceInput.value) || 0);
+    const mode = Array.from(modeInputs).find((r) => r.checked)?.value ?? 'ex';
+    const rate = Number(Array.from(rateInputs).find((r) => r.checked)?.value ?? '0.21');
+
+    let ex: number, iva: number, inc: number;
+    if (mode === 'ex') {
+      ex  = price;
+      iva = Math.round(price * rate * 100) / 100;
+      inc = Math.round((ex + iva) * 100) / 100;
+    } else {
+      inc = price;
+      ex  = Math.round((price / (1 + rate)) * 100) / 100;
+      iva = Math.round((inc - ex) * 100) / 100;
+    }
+
+    const fmt = (n: number) =>
+      n.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+
+    const exEl  = document.getElementById('iva-ex');
+    const ivaEl = document.getElementById('iva-amount');
+    const incEl = document.getElementById('iva-inc');
+    if (exEl)  exEl.textContent  = fmt(ex);
+    if (ivaEl) ivaEl.textContent = fmt(iva);
+    if (incEl) incEl.textContent = fmt(inc);
+  }
+
+  document.getElementById('iva-price')?.addEventListener('input', recalcIVA);
+  document.querySelectorAll('input[name="iva-mode"]').forEach((r) => r.addEventListener('change', recalcIVA));
+  document.querySelectorAll('input[name="iva-rate"]').forEach((r) => r.addEventListener('change', recalcIVA));
+  recalcIVA();
+</script>

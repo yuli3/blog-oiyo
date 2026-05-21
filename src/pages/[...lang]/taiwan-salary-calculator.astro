@@ -1,0 +1,55 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import TaiwanSalaryCalculatorComp from "../../components/tools/TaiwanSalaryCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  cn: {
+    title: "台灣薪資試算表 2024 — 勞保、健保與所得稅",
+    description: "輸入月薪，自動計算勞保費（2.508%）、健保費（1.551%）與綜合所得稅後的實際到手金額。依2024年費率試算。",
+  },
+  zh: {
+    title: "台湾薪资试算表 2024 — 劳保、健保与所得税",
+    description: "输入月薪，自动计算劳保费（2.508%）、健保费（1.551%）与综合所得税后的实际到手金额。依2024年费率试算。",
+  },
+  en: {
+    title: "Taiwan Salary Calculator 2024 — Labor Insurance, NHI & Income Tax",
+    description: "Enter monthly salary to instantly calculate Labor Insurance (2.508%), National Health Insurance (1.551%), and income tax under Taiwan's 2024 rates.",
+  },
+  ko: {
+    title: "대만 급여 계산기 2024",
+    description: "대만 노동보험, 건강보험, 소득세 후 실수령액을 자동 계산합니다.",
+  },
+  ja: {
+    title: "台湾給与計算機 2024",
+    description: "台湾の労保・健保・所得税を自動計算します。",
+  },
+  fr: {
+    title: "Calculateur de salaire Taïwan 2024",
+    description: "Calculez votre salaire net à Taïwan avec les cotisations d'assurance et l'impôt 2024.",
+  },
+  es: {
+    title: "Calculadora de salario Taiwán 2024",
+    description: "Calcula tu salario neto en Taiwán con seguros laborales e impuesto sobre la renta 2024.",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+const calcLocale = locale === 'cn' ? 'cn' : locale === 'zh' ? 'zh' : 'en';
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <TaiwanSalaryCalculatorComp client:load locale={calcLocale} />
+  </main>
+</BaseLayout>

@@ -1,0 +1,55 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ChinaSalaryCalculatorComp from "../../components/tools/ChinaSalaryCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  cn: {
+    title: "中国个人所得税计算器 2024 — 五险一金与个税",
+    description: "输入月薪，自动计算五险一金（养老8%+医疗2%+失业0.5%+公积金）及个人所得税。基于北京/上海2024年标准费率。",
+  },
+  zh: {
+    title: "中國個人所得稅計算機 2024 — 五險一金與個稅",
+    description: "輸入月薪，自動計算五險一金（養老8%+醫療2%+失業0.5%+公積金）及個人所得稅。基於北京/上海2024年標準費率。",
+  },
+  en: {
+    title: "China Salary Calculator 2024 — 五险一金 & Income Tax",
+    description: "Enter monthly salary to instantly calculate 五险一金 social insurance (pension 8%, medical 2%, unemployment 0.5%, housing fund) and personal income tax under China's 2024 rates.",
+  },
+  ko: {
+    title: "중국 급여 계산기 2024",
+    description: "중국 오험일금(五险一金)과 개인소득세를 자동 계산합니다.",
+  },
+  ja: {
+    title: "中国給与計算機 2024",
+    description: "中国の五険一金と個人所得税を自動計算します。",
+  },
+  fr: {
+    title: "Calculateur de salaire Chine 2024",
+    description: "Calculez votre salaire net en Chine avec les cotisations 五险一金 et l'impôt sur le revenu 2024.",
+  },
+  es: {
+    title: "Calculadora de salario China 2024",
+    description: "Calcula tu salario neto en China con cotizaciones 五险一金 e impuesto sobre la renta 2024.",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+const calcLocale = locale === 'cn' ? 'cn' : locale === 'zh' ? 'zh' : 'en';
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <ChinaSalaryCalculatorComp client:load locale={calcLocale} />
+  </main>
+</BaseLayout>

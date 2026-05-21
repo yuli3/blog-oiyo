@@ -1,0 +1,55 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SpainSalaryCalculatorComp from "../../components/tools/SpainSalaryCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  es: {
+    title: "Calculadora de salario neto España 2024 — IRPF y Seguridad Social",
+    description: "Calcula tu salario neto mensual en España 2024: cotizaciones a la Seguridad Social (6,47%) e IRPF según el baremo progresivo. Introduce tu bruto anual y situación familiar.",
+  },
+  en: {
+    title: "Spain Net Salary Calculator 2024 — IRPF & Social Security",
+    description: "Calculate your monthly net salary in Spain 2024: Social Security contributions (6.47%) and IRPF income tax by progressive scale. Enter your annual gross and family situation.",
+  },
+  ko: {
+    title: "스페인 세후 급여 계산기 2024",
+    description: "스페인 사회보장세(6.47%)와 IRPF 소득세를 자동 계산합니다.",
+  },
+  ja: {
+    title: "スペイン給与手取り計算機 2024",
+    description: "スペインの社会保障料とIRPF所得税を計算します。",
+  },
+  fr: {
+    title: "Calculateur de salaire net Espagne 2024",
+    description: "Calculez votre salaire net en Espagne avec les cotisations SS et l'IRPF 2024.",
+  },
+  zh: {
+    title: "西班牙薪資淨值計算機 2024",
+    description: "計算西班牙社會保障費和個人所得稅（IRPF）後的實際薪資。",
+  },
+  cn: {
+    title: "西班牙薪资净值计算器 2024",
+    description: "计算西班牙社会保障费和个人所得税（IRPF）后的实际薪资。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+const calcLocale = locale === 'es' ? 'es' : 'en';
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <SpainSalaryCalculatorComp client:load locale={calcLocale} />
+  </main>
+</BaseLayout>
