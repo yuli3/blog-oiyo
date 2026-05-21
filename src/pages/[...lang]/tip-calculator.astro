@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import TipCalculator from "../../components/tools/TipCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "팁 계산기 — 총액·1인당·비율 계산",
+    description: "청구 금액에 팁 비율을 적용하고 인원수로 나누어 1인당 부담액을 계산합니다. 10~25% 프리셋 제공.",
+  },
+  en: {
+    title: "Tip Calculator — Split Bills with Any Tip %",
+    description: "Enter bill amount, tip percentage, and number of people to instantly calculate total, tip per person, and amount each owes.",
+  },
+  ja: {
+    title: "チップ計算機 — 合計・1人分・割り勘対応",
+    description: "請求額・チップ率・人数を入力してチップ合計と1人あたりの負担額を即座に計算します。",
+  },
+  fr: {
+    title: "Calculateur de pourboire — Partager l'addition facilement",
+    description: "Saisissez le montant, le pourcentage de pourboire et le nombre de personnes pour calculer le total et la part de chacun.",
+  },
+  es: {
+    title: "Calculadora de propina — Divide la cuenta fácilmente",
+    description: "Ingresa el importe, el porcentaje de propina y el número de personas para calcular el total y la parte de cada uno al instante.",
+  },
+  zh: {
+    title: "小費計算機 — 輕鬆分攤帳單",
+    description: "輸入消費金額、小費比例與人數，立即計算每人應付金額，支援10%至25%常見比例。",
+  },
+  cn: {
+    title: "小费计算器 — 轻松分摊账单",
+    description: "输入消费金额、小费比例与人数，立即计算每人应付金额，支持10%至25%常见比例。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <TipCalculator client:load locale={locale} />
+  </main>
+</BaseLayout>

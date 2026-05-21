@@ -7,8 +7,8 @@ export const localeNames: Record<Locale, string> = {
   ja: '日本語',
   fr: 'Français',
   es: 'Español',
-  zh: '繁体中文',
-  cn: '简体中文'
+  zh: '简体中文',
+  cn: '繁體中文'
 };
 
 export const localePaths: Record<Locale, string> = {

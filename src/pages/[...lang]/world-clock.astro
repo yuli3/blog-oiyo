@@ -1,0 +1,151 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "세계 시계 — 주요 도시 실시간 시각",
+    description: "서울·뉴욕·런던·파리·도쿄·시드니 등 세계 주요 도시의 현재 시각을 실시간으로 확인합니다. UTC 오프셋 및 날짜 표시 지원.",
+  },
+  en: {
+    title: "World Clock — Live Time in Major Cities",
+    description: "See the current local time in Seoul, New York, London, Paris, Tokyo, Sydney and more. Real-time clock with UTC offset and date display.",
+  },
+  ja: {
+    title: "世界時計 — 主要都市のリアルタイム時刻",
+    description: "ソウル・ニューヨーク・ロンドン・パリ・東京・シドニーなど世界の主要都市の現在時刻をリアルタイムで確認。UTC時差と日付表示対応。",
+  },
+  fr: {
+    title: "Horloge Mondiale — Heure en direct dans les grandes villes",
+    description: "Consultez l'heure locale actuelle à Séoul, New York, Londres, Paris, Tokyo, Sydney et ailleurs. Horloge en temps réel avec décalage UTC.",
+  },
+  es: {
+    title: "Reloj Mundial — Hora en vivo en ciudades principales",
+    description: "Consulta la hora local actual en Seúl, Nueva York, Londres, París, Tokio, Sídney y más. Reloj en tiempo real con desplazamiento UTC.",
+  },
+  zh: {
+    title: "世界時鐘 — 主要城市即時時間",
+    description: "即時查看首爾、紐約、倫敦、巴黎、東京、雪梨等世界主要城市的當前時間，支援UTC時差與日期顯示。",
+  },
+  cn: {
+    title: "世界时钟 — 主要城市实时时间",
+    description: "即时查看首尔、纽约、伦敦、巴黎、东京、悉尼等世界主要城市的当前时间，支持UTC时差与日期显示。",
+  },
+};
+
+const cityLabels: Record<Locale, string[]> = {
+  ko: ["서울", "뉴욕", "로스앤젤레스", "런던", "파리", "베를린", "마드리드", "두바이", "도쿄", "베이징", "홍콩", "싱가포르", "시드니", "상파울루", "멕시코시티"],
+  en: ["Seoul", "New York", "Los Angeles", "London", "Paris", "Berlin", "Madrid", "Dubai", "Tokyo", "Beijing", "Hong Kong", "Singapore", "Sydney", "São Paulo", "Mexico City"],
+  ja: ["ソウル", "ニューヨーク", "ロサンゼルス", "ロンドン", "パリ", "ベルリン", "マドリード", "ドバイ", "東京", "北京", "香港", "シンガポール", "シドニー", "サンパウロ", "メキシコシティ"],
+  fr: ["Séoul", "New York", "Los Angeles", "Londres", "Paris", "Berlin", "Madrid", "Dubaï", "Tokyo", "Pékin", "Hong Kong", "Singapour", "Sydney", "São Paulo", "Mexico"],
+  es: ["Seúl", "Nueva York", "Los Ángeles", "Londres", "París", "Berlín", "Madrid", "Dubái", "Tokio", "Pekín", "Hong Kong", "Singapur", "Sídney", "São Paulo", "Ciudad de México"],
+  zh: ["首爾", "紐約", "洛杉磯", "倫敦", "巴黎", "柏林", "馬德里", "杜拜", "東京", "北京", "香港", "新加坡", "雪梨", "聖保羅", "墨西哥城"],
+  cn: ["首尔", "纽约", "洛杉矶", "伦敦", "巴黎", "柏林", "马德里", "迪拜", "东京", "北京", "香港", "新加坡", "悉尼", "圣保罗", "墨西哥城"],
+};
+
+const m = meta[locale] ?? meta.en;
+const cities = cityLabels[locale] ?? cityLabels.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-4xl px-4 py-8">
+    <div class="not-prose my-8 p-6 sm:p-10 bg-card border border-border rounded-4xl shadow-sm max-w-4xl mx-auto">
+      <div class="flex justify-between items-end mb-8">
+        <div>
+          <h1 id="wc-title" class="text-2xl font-black text-foreground">{m.title.split("—")[0].trim()}</h1>
+          <p class="text-[10px] text-muted-foreground font-bold uppercase tracking-[0.2em] mt-1">Live World Clock</p>
+        </div>
+        <div id="wc-local" class="text-right">
+          <p class="text-xs font-bold text-muted-foreground uppercase tracking-widest" id="wc-local-label">Local</p>
+          <p class="text-2xl font-black tabular-nums" id="wc-local-time">--:--:--</p>
+        </div>
+      </div>
+
+      <!-- City grid -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3" id="wc-grid">
+        {[
+          { tz: "Asia/Seoul",              emoji: "🇰🇷" },
+          { tz: "America/New_York",        emoji: "🗽" },
+          { tz: "America/Los_Angeles",     emoji: "🎬" },
+          { tz: "Europe/London",           emoji: "🇬🇧" },
+          { tz: "Europe/Paris",            emoji: "🇫🇷" },
+          { tz: "Europe/Berlin",           emoji: "🇩🇪" },
+          { tz: "Europe/Madrid",           emoji: "🇪🇸" },
+          { tz: "Asia/Dubai",              emoji: "🇦🇪" },
+          { tz: "Asia/Tokyo",              emoji: "🇯🇵" },
+          { tz: "Asia/Shanghai",           emoji: "🇨🇳" },
+          { tz: "Asia/Hong_Kong",          emoji: "🇭🇰" },
+          { tz: "Asia/Singapore",          emoji: "🇸🇬" },
+          { tz: "Australia/Sydney",        emoji: "🦘" },
+          { tz: "America/Sao_Paulo",       emoji: "🇧🇷" },
+          { tz: "America/Mexico_City",     emoji: "🇲🇽" },
+        ].map(({ tz, emoji }, i) => (
+          <div
+            data-tz={tz}
+            class="wc-card p-4 rounded-2xl bg-muted/30 border border-border hover:border-primary/30 hover:bg-muted/50 transition-all"
+          >
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-lg" aria-hidden="true">{emoji}</span>
+              <span class="text-[10px] font-black uppercase tracking-widest text-muted-foreground truncate">{cities[i]}</span>
+            </div>
+            <p class="wc-time text-2xl font-black tabular-nums">--:--</p>
+            <p class="wc-date text-[10px] text-muted-foreground font-medium mt-0.5">---</p>
+            <p class="wc-utc text-[9px] text-muted-foreground/60 font-mono mt-0.5"></p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<script>
+  const locale = document.documentElement.lang || navigator.language || 'en';
+
+  function pad(n: number) { return String(n).padStart(2, '0'); }
+
+  function getUTCOffset(tz: string): string {
+    try {
+      const now = new Date();
+      const fmt = new Intl.DateTimeFormat('en', { timeZone: tz, timeZoneName: 'shortOffset' });
+      const parts = fmt.formatToParts(now);
+      const offset = parts.find(p => p.type === 'timeZoneName')?.value ?? '';
+      return offset;
+    } catch { return ''; }
+  }
+
+  function tick() {
+    const now = new Date();
+
+    // Local time
+    const localEl = document.getElementById('wc-local-time');
+    if (localEl) {
+      localEl.textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+    }
+
+    // City cards
+    document.querySelectorAll<HTMLElement>('.wc-card').forEach(card => {
+      const tz = card.dataset.tz;
+      if (!tz) return;
+      try {
+        const timeFmt = new Intl.DateTimeFormat(locale, { timeZone: tz, hour: '2-digit', minute: '2-digit', hour12: false });
+        const dateFmt = new Intl.DateTimeFormat(locale, { timeZone: tz, month: 'short', day: 'numeric', weekday: 'short' });
+        const timeEl = card.querySelector<HTMLElement>('.wc-time');
+        const dateEl = card.querySelector<HTMLElement>('.wc-date');
+        const utcEl = card.querySelector<HTMLElement>('.wc-utc');
+        if (timeEl) timeEl.textContent = timeFmt.format(now);
+        if (dateEl) dateEl.textContent = dateFmt.format(now);
+        if (utcEl && !utcEl.textContent) utcEl.textContent = getUTCOffset(tz);
+      } catch { /* unsupported timezone */ }
+    });
+  }
+
+  tick();
+  setInterval(tick, 1000);
+</script>

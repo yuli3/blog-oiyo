@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import MorseCodeConverter from "../../components/tools/MorseCodeConverter";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "모스 부호 변환기 — 텍스트↔모스 부호 변환",
+    description: "텍스트를 모스 부호로, 모스 부호를 텍스트로 즉시 변환합니다. A–Z, 0–9, 특수문자 지원. 알파벳 대조표 내장.",
+  },
+  en: {
+    title: "Morse Code Converter — Encode & Decode Instantly",
+    description: "Convert text to Morse code and Morse code back to text instantly. Supports A–Z, 0–9, punctuation. Built-in alphabet reference table.",
+  },
+  ja: {
+    title: "モールス信号変換機 — テキスト↔モールス変換",
+    description: "テキストをモールス信号に、モールス信号をテキストに即座に変換します。A-Z、0-9、記号に対応。アルファベット対応表内蔵。",
+  },
+  fr: {
+    title: "Convertisseur Code Morse — Encoder et Décoder",
+    description: "Convertissez du texte en code Morse et du code Morse en texte instantanément. Supporte A–Z, 0–9 et la ponctuation. Table de référence intégrée.",
+  },
+  es: {
+    title: "Conversor de Código Morse — Codificar y Decodificar",
+    description: "Convierte texto a código Morse y código Morse a texto de forma instantánea. Soporte A–Z, 0–9, puntuación. Tabla de referencia incluida.",
+  },
+  zh: {
+    title: "摩斯電碼轉換器 — 文字與電碼互換",
+    description: "即時將文字轉換為摩斯電碼，或將摩斯電碼還原為文字。支援A–Z、0–9及標點符號，內建字母對照表。",
+  },
+  cn: {
+    title: "摩斯电码转换器 — 文字与电码互换",
+    description: "即时将文字转换为摩斯电码，或将摩斯电码还原为文字。支持A–Z、0–9及标点符号，内置字母对照表。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <MorseCodeConverter client:load locale={locale} />
+  </main>
+</BaseLayout>

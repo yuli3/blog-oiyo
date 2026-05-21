@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import AnniversaryCalculator from "../../components/tools/AnniversaryCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "기념일·디데이 계산기 — 100일·1주년·D-Day 카운트",
+    description: "연인·결혼·입사 등 중요한 날부터 지난 일수(D+N)를 계산하고, 100일·200일·1000일 등 주요 기념일 날짜를 한눈에 확인합니다.",
+  },
+  en: {
+    title: "Anniversary & D-Day Calculator — Count Days & Milestones",
+    description: "Calculate days since any special event (D+ mode) or days until a future target (D-Day mode). See key milestones like 100, 365, 1000 days at a glance.",
+  },
+  ja: {
+    title: "記念日・Dデイ計算機 — 経過日数と節目を確認",
+    description: "大切な日からの経過日数(D+N)を計算し、100日・365日・1000日などの節目の日付を一覧表示します。",
+  },
+  fr: {
+    title: "Calculateur d'anniversaire & Compte à rebours",
+    description: "Calculez le nombre de jours depuis un événement spécial ou le nombre de jours avant une date cible. Visualisez les jalons clés : 100, 365, 1000 jours.",
+  },
+  es: {
+    title: "Calculadora de aniversario y cuenta atrás",
+    description: "Calcula los días transcurridos desde una fecha especial o los días restantes hasta un objetivo. Muestra hitos clave como 100, 365 y 1000 días.",
+  },
+  zh: {
+    title: "紀念日・倒數計算機 — 天數與重要里程碑",
+    description: "計算特別日期起的經過天數（D+N），或距離目標日期的倒數天數，並自動顯示100天、週年、1000天等重要里程碑。",
+  },
+  cn: {
+    title: "纪念日·倒计时计算器 — 天数与重要纪念日",
+    description: "计算特别日期起的经过天数（D+N），或距离目标日期的倒计时天数，自动显示100天、周年、1000天等重要纪念日。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <AnniversaryCalculator client:load locale={locale} />
+  </main>
+</BaseLayout>

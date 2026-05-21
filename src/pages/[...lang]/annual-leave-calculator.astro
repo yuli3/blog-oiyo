@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import AnnualLeaveCalculator from "../../components/tools/AnnualLeaveCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "연차 계산기 — 발생·잔여 연차 자동 계산 (근로기준법)",
+    description: "입사일을 입력하면 근로기준법에 따른 연차 발생일수(최대 25일), 사용 연차, 잔여 연차를 자동으로 계산합니다. 1년 미만 월 단위 산정도 지원.",
+  },
+  en: {
+    title: "Annual Leave Calculator — Accrued & Remaining PTO",
+    description: "Enter your start date to calculate accrued annual leave days under Korean labor law (up to 25 days/year). Track used days and see your remaining balance.",
+  },
+  ja: {
+    title: "年次有給休暇計算機 — 付与・残日数を自動計算",
+    description: "入社日を入力すると、韓国労働基準法に基づく年次有給休暇の付与日数（最大25日）、取得済み日数、残日数を自動計算します。",
+  },
+  fr: {
+    title: "Calculateur de congés annuels — Acquis et solde restant",
+    description: "Saisissez votre date d'embauche pour calculer vos congés annuels acquis (loi du travail coréenne, max 25 jours), les jours utilisés et le solde restant.",
+  },
+  es: {
+    title: "Calculadora de vacaciones anuales — Días acumulados y restantes",
+    description: "Introduce tu fecha de inicio para calcular los días de vacaciones acumulados (ley laboral coreana, máx. 25 días), usados y el saldo restante.",
+  },
+  zh: {
+    title: "年假計算機 — 自動計算累積與剩餘天數",
+    description: "輸入入職日期，依韓國勞動基準法自動計算累積年假天數（最多25天）、已使用天數及剩餘天數。",
+  },
+  cn: {
+    title: "年假计算器 — 自动计算累积与剩余天数",
+    description: "输入入职日期，依韩国劳动基准法自动计算累积年假天数（最多25天）、已使用天数及剩余天数。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <AnnualLeaveCalculator client:load locale={locale} />
+  </main>
+</BaseLayout>
