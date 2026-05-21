@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import InsurancePremiumCalculator from "../../components/tools/InsurancePremiumCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "보험료 계산기 — 나이·건강·흡연으로 예상 보험료 계산",
+    description: "종신보험·정기보험·건강보험·자동차보험 월 보험료를 나이, 성별, 흡연 여부, 건강 상태로 빠르게 예상해보세요.",
+  },
+  en: {
+    title: "Insurance Premium Calculator — Estimate Your Monthly Cost",
+    description: "Quickly estimate term life, whole life, health, and auto insurance premiums based on age, gender, smoking status, and health rating.",
+  },
+  ja: {
+    title: "保険料計算機 — 年齢・健康・喫煙で試算",
+    description: "終身・定期・医療・自動車保険の月額保険料を年齢、性別、喫煙状況、健康状態で素早く試算します。",
+  },
+  fr: {
+    title: "Calculateur de Prime d'Assurance",
+    description: "Estimez rapidement vos primes d'assurance vie entière, temporaire, santé et auto selon l'âge, le sexe, le tabagisme et la santé.",
+  },
+  es: {
+    title: "Calculadora de Prima de Seguro",
+    description: "Estima rápidamente las primas de seguro de vida, temporal, salud y auto según edad, género, tabaquismo y estado de salud.",
+  },
+  zh: {
+    title: "保險費計算機 — 依年齡、健康、吸菸估算",
+    description: "快速估算終身壽險、定期壽險、健康險、汽車險的每月保費，依年齡、性別、吸菸狀況和健康狀況計算。",
+  },
+  cn: {
+    title: "保险费计算器 — 依年龄、健康、吸烟估算",
+    description: "快速估算终身寿险、定期寿险、健康险、汽车险的每月保费，依年龄、性别、吸烟状况和健康状况计算。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <InsurancePremiumCalculator client:load locale={locale} />
+  </main>
+</BaseLayout>
