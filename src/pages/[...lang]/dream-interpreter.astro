@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import DreamInterpreter from "../../components/tools/DreamInterpreter";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "꿈 해몽 인터프리터 — 꿈 키워드로 무의식 탐구",
+    description: "물·불·뱀·이빨·추락·비행 등 꿈에 등장한 상징을 선택해 심리적 의미와 무의식의 메시지를 무료로 해석합니다.",
+  },
+  en: {
+    title: "Dream Interpreter — Decode Your Dream Symbols",
+    description: "Select symbols from your dream — water, fire, snake, teeth, falling, flying and more — to reveal their psychological meaning and unconscious messages.",
+  },
+  ja: {
+    title: "夢占いインタープリター — 夢のシンボルを解読",
+    description: "水・火・蛇・歯・落下・飛ぶなど夢に登場したシンボルを選んで、心理的意味と潜在意識のメッセージを無料で解釈します。",
+  },
+  fr: {
+    title: "Interpréteur de Rêves — Décodez vos Symboles Oniriques",
+    description: "Sélectionnez des symboles de votre rêve — eau, feu, serpent, dents, chute, vol et plus — pour révéler leur signification psychologique.",
+  },
+  es: {
+    title: "Intérprete de Sueños — Descifra tus Símbolos Oníricos",
+    description: "Selecciona símbolos de tu sueño — agua, fuego, serpiente, dientes, caída, volar y más — para revelar su significado psicológico.",
+  },
+  zh: {
+    title: "夢境解析器 — 解讀你的夢境符號",
+    description: "選擇夢中出現的符號——水、火、蛇、牙齒、墜落、飛翔等——揭示其心理含義和潛意識信息，完全免費。",
+  },
+  cn: {
+    title: "梦境解析器 — 解读你的梦境符号",
+    description: "选择梦中出现的符号——水、火、蛇、牙齿、坠落、飞翔等——揭示其心理含义和潜意识信息，完全免费。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <DreamInterpreter client:load locale={locale} />
+  </main>
+</BaseLayout>
