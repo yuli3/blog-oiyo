@@ -14,7 +14,7 @@ const L: Record<Locale, {
   male: string; female: string;
   never: string; former: string; current: string;
   excellent: string; good: string; average: string; poor: string;
-  life: string; health: string; auto: string; termLife: string;
+  life: string; healthIns: string; auto: string; termLife: string;
   calc: string; reset: string;
   monthlyPremium: string; annualPremium: string; totalCost: string;
   riskScore: string; low: string; medium: string; high: string;
@@ -30,7 +30,7 @@ const L: Record<Locale, {
     male: '남성', female: '여성',
     never: '비흡연', former: '금연 (1년 이상)', current: '현재 흡연',
     excellent: '매우 좋음', good: '양호', average: '보통', poor: '미흡',
-    life: '종신보험', health: '실손/건강보험', auto: '자동차보험', termLife: '정기보험',
+    life: '종신보험', healthIns: '실손/건강보험', auto: '자동차보험', termLife: '정기보험',
     calc: '보험료 계산', reset: '초기화',
     monthlyPremium: '월 보험료', annualPremium: '연 보험료', totalCost: '총 납입 예상액',
     riskScore: '위험도 점수', low: '낮음', medium: '보통', high: '높음',
@@ -52,7 +52,7 @@ const L: Record<Locale, {
     male: 'Male', female: 'Female',
     never: 'Never smoked', former: 'Former smoker (1+ yr)', current: 'Current smoker',
     excellent: 'Excellent', good: 'Good', average: 'Average', poor: 'Poor',
-    life: 'Whole Life', health: 'Health Insurance', auto: 'Auto Insurance', termLife: 'Term Life',
+    life: 'Whole Life', healthIns: 'Health Insurance', auto: 'Auto Insurance', termLife: 'Term Life',
     calc: 'Calculate Premium', reset: 'Reset',
     monthlyPremium: 'Monthly Premium', annualPremium: 'Annual Premium', totalCost: 'Total Policy Cost',
     riskScore: 'Risk Score', low: 'Low', medium: 'Medium', high: 'High',
@@ -74,7 +74,7 @@ const L: Record<Locale, {
     male: '男性', female: '女性',
     never: '非喫煙者', former: '禁煙（1年以上）', current: '現在喫煙中',
     excellent: '非常に良い', good: '良い', average: '普通', poor: '要注意',
-    life: '終身保険', health: '医療保険', auto: '自動車保険', termLife: '定期保険',
+    life: '終身保険', healthIns: '医療保険', auto: '自動車保険', termLife: '定期保険',
     calc: '保険料を計算', reset: 'リセット',
     monthlyPremium: '月額保険料', annualPremium: '年間保険料', totalCost: '総支払額',
     riskScore: 'リスクスコア', low: '低い', medium: '普通', high: '高い',
@@ -96,7 +96,7 @@ const L: Record<Locale, {
     male: 'Homme', female: 'Femme',
     never: 'Non-fumeur', former: 'Ex-fumeur (1+ an)', current: 'Fumeur actuel',
     excellent: 'Excellent', good: 'Bon', average: 'Moyen', poor: 'Médiocre',
-    life: 'Vie entière', health: 'Assurance santé', auto: 'Assurance auto', termLife: 'Temporaire',
+    life: 'Vie entière', healthIns: 'Assurance santé', auto: 'Assurance auto', termLife: 'Temporaire',
     calc: 'Calculer la prime', reset: 'Réinitialiser',
     monthlyPremium: 'Prime mensuelle', annualPremium: 'Prime annuelle', totalCost: 'Coût total',
     riskScore: 'Score de risque', low: 'Faible', medium: 'Moyen', high: 'Élevé',
@@ -118,7 +118,7 @@ const L: Record<Locale, {
     male: 'Hombre', female: 'Mujer',
     never: 'No fumador', former: 'Ex fumador (+1 año)', current: 'Fumador actual',
     excellent: 'Excelente', good: 'Bueno', average: 'Medio', poor: 'Deficiente',
-    life: 'Vida entera', health: 'Seguro salud', auto: 'Seguro auto', termLife: 'Temporal',
+    life: 'Vida entera', healthIns: 'Seguro salud', auto: 'Seguro auto', termLife: 'Temporal',
     calc: 'Calcular prima', reset: 'Restablecer',
     monthlyPremium: 'Prima mensual', annualPremium: 'Prima anual', totalCost: 'Coste total',
     riskScore: 'Puntuación de riesgo', low: 'Bajo', medium: 'Medio', high: 'Alto',
@@ -140,7 +140,7 @@ const L: Record<Locale, {
     male: '男性', female: '女性',
     never: '從不吸菸', former: '已戒菸（1年以上）', current: '目前吸菸',
     excellent: '非常好', good: '良好', average: '一般', poor: '欠佳',
-    life: '終身壽險', health: '健康險', auto: '汽車險', termLife: '定期壽險',
+    life: '終身壽險', healthIns: '健康險', auto: '汽車險', termLife: '定期壽險',
     calc: '計算保費', reset: '重置',
     monthlyPremium: '每月保費', annualPremium: '年保費', totalCost: '總繳費',
     riskScore: '風險評分', low: '低', medium: '中等', high: '高',
@@ -162,7 +162,7 @@ const L: Record<Locale, {
     male: '男性', female: '女性',
     never: '从不吸烟', former: '已戒烟（1年以上）', current: '目前吸烟',
     excellent: '非常好', good: '良好', average: '一般', poor: '欠佳',
-    life: '终身寿险', health: '健康险', auto: '汽车险', termLife: '定期寿险',
+    life: '终身寿险', healthIns: '健康险', auto: '汽车险', termLife: '定期寿险',
     calc: '计算保费', reset: '重置',
     monthlyPremium: '每月保费', annualPremium: '年保费', totalCost: '总缴费',
     riskScore: '风险评分', low: '低', medium: '中等', high: '高',
@@ -280,7 +280,7 @@ const InsurancePremiumCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'e
           {(['term', 'life', 'health', 'auto'] as InsuranceType[]).map(type => (
             <button key={type} onClick={() => setInsuranceType(type)}
               className={`py-2 rounded-xl text-xs font-black border-2 transition-all ${insuranceType === type ? 'bg-primary text-primary-foreground border-primary' : 'border-border hover:border-primary/40'}`}>
-              {type === 'life' ? t.life : type === 'health' ? t.health : type === 'auto' ? t.auto : t.termLife}
+              {type === 'life' ? t.life : type === 'health' ? t.healthIns : type === 'auto' ? t.auto : t.termLife}
             </button>
           ))}
         </div>

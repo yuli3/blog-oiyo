@@ -56,7 +56,7 @@ const TypingTest: React.FC<{ locale?: Locale }> = ({ locale = 'en' }) => {
   const [finalWPM, setFinalWPM] = useState(0);
   const [finalAcc, setFinalAcc] = useState(100);
   const inputRef = useRef<HTMLInputElement>(null);
-  const timerRef = useRef<ReturnType<typeof setInterval>>();
+  const timerRef = useRef<ReturnType<typeof setInterval>>(undefined);
 
   const reset = useCallback(() => {
     clearInterval(timerRef.current);

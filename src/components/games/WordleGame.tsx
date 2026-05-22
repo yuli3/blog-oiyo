@@ -93,7 +93,7 @@ const WordleGame: React.FC = () => {
   const [shake, setShake] = useState(false);
   const [message, setMessage] = useState('');
   const [usedKeys, setUsedKeys] = useState<Record<string, TileState>>({});
-  const msgTimeout = useRef<ReturnType<typeof setTimeout>>();
+  const msgTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   // Load words
   useEffect(() => {
@@ -154,7 +154,7 @@ const WordleGame: React.FC = () => {
         const newState = evaluation[i];
         if (prevState !== 'correct') {
           if (newState === 'correct' || !prevState) next[letter] = newState;
-          else if (newState === 'present' && prevState !== 'correct') next[letter] = newState;
+          else if (newState === 'present') next[letter] = newState;
         }
       });
       return next;
