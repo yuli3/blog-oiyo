@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PersonalColorTest from "../../components/tests/PersonalColorTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "퍼스널 컬러 테스트 — 봄·여름·가을·겨울 무료 진단",
+    description: "10가지 질문으로 나만의 퍼스널 컬러(봄·여름·가을·겨울 웜톤·쿨톤)를 무료로 진단합니다. 추천 색상, 메이크업, 패션 스타일까지 제안해드려요.",
+  },
+  en: {
+    title: "Personal Color Test — Spring, Summer, Autumn or Winter?",
+    description: "10 questions to discover your personal color season — warm or cool tone. Get your best colors, makeup tips, fashion advice and celebrity matches for free.",
+  },
+  ja: {
+    title: "パーソナルカラー診断 — 春・夏・秋・冬 無料テスト",
+    description: "10問の質問でパーソナルカラー（スプリング・サマー・オータム・ウィンター）を無料診断。おすすめカラー・メイク・ファッションアドバイス付き。",
+  },
+  fr: {
+    title: "Test Colorimétrie Personnelle — Printemps, Été, Automne ou Hiver ?",
+    description: "10 questions pour découvrir votre saison colorimétrique. Tons chauds ou froids — obtenez vos meilleures couleurs, conseils maquillage et mode gratuitement.",
+  },
+  es: {
+    title: "Test de Color Personal — ¿Primavera, Verano, Otoño o Invierno?",
+    description: "10 preguntas para descubrir tu estación de color personal — tonos cálidos o fríos. Obtén tus mejores colores, consejos de maquillaje y moda gratis.",
+  },
+  zh: {
+    title: "個人色彩診斷 — 春夏秋冬季型免費測驗",
+    description: "10道問題診斷你的個人色彩季型（春·夏·秋·冬暖色調·冷色調）。免費獲取最適色彩、妝容和穿搭建議。",
+  },
+  cn: {
+    title: "个人色彩诊断 — 春夏秋冬季型免费测试",
+    description: "10道问题诊断你的个人色彩季型（春·夏·秋·冬暖色调·冷色调）。免费获取最适色彩、妆容和穿搭建议。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <PersonalColorTest client:load locale={locale} />
+  </main>
+</BaseLayout>
