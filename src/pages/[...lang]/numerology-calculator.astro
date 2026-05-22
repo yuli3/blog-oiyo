@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import NumerologyCalculator from "../../components/tools/NumerologyCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "수비학 계산기 — 생명수·표현수·영혼수·성격수 무료 분석",
+    description: "생년월일과 이름을 입력하면 수비학 4대 핵심 수(생명수·표현수·영혼수·성격수)를 계산하고, 마스터 넘버(11·22·33)를 포함한 성격·재능·과제를 분석합니다.",
+  },
+  en: {
+    title: "Numerology Calculator — Life Path, Expression, Soul Urge & Personality",
+    description: "Enter your birth date and full name to calculate your four core numerology numbers: Life Path, Expression, Soul Urge, and Personality — including Master Numbers 11, 22, 33.",
+  },
+  ja: {
+    title: "数秘術計算機 — ライフパス・表現数・魂の数・個性数 無料分析",
+    description: "生年月日と名前を入力して数秘術の4つの核心数（ライフパス・表現数・魂の数・個性数）を計算。マスターナンバー(11・22・33)の詳細解説付き。",
+  },
+  fr: {
+    title: "Calculateur de Numérologie — Chemin de Vie, Expression, Âme & Personnalité",
+    description: "Entrez votre date de naissance et nom complet pour calculer vos 4 nombres clés : Chemin de Vie, Expression, Âme et Personnalité — avec les Nombres Maîtres 11, 22, 33.",
+  },
+  es: {
+    title: "Calculadora de Numerología — Camino de Vida, Expresión, Alma y Personalidad",
+    description: "Ingresa tu fecha de nacimiento y nombre completo para calcular tus 4 números clave de numerología: Camino de Vida, Expresión, Alma y Personalidad — incluye Números Maestros.",
+  },
+  zh: {
+    title: "數字命理計算機 — 生命靈數、表達數、靈魂數和個性數免費分析",
+    description: "輸入出生日期和英文全名，計算數字命理四大核心數（生命靈數、表達數、靈魂衝動數、個性數），包含主數11、22、33的詳細解析。",
+  },
+  cn: {
+    title: "数字命理计算器 — 生命灵数、表达数、灵魂数和个性数免费分析",
+    description: "输入出生日期和英文全名，计算数字命理四大核心数（生命灵数、表达数、灵魂冲动数、个性数），包含主数11、22、33的详细解析。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <NumerologyCalculator client:load locale={locale} />
+  </main>
+</BaseLayout>
