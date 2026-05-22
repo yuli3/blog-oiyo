@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ChineseZodiac from "../../components/tools/ChineseZodiac";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "중국 별자리 — 12지신 성격·궁합·운세 무료 분석",
+    description: "태어난 연도를 입력해 쥐·소·호랑이·토끼·용·뱀·말·양·원숭이·닭·개·돼지 중 나의 띠를 찾고 성격, 강점, 궁합, 직업운, 연애운을 알아보세요.",
+  },
+  en: {
+    title: "Chinese Zodiac — 12 Animal Signs Personality & Compatibility",
+    description: "Enter your birth year to find your Chinese zodiac sign — Rat, Ox, Tiger, Rabbit, Dragon, Snake, Horse, Goat, Monkey, Rooster, Dog, or Pig — and discover your personality, strengths, compatibility, career and love fortune.",
+  },
+  ja: {
+    title: "中国星座 — 十二支性格・相性・運勢 無料分析",
+    description: "生まれた年を入力して干支（子・丑・寅・卯・辰・巳・午・未・申・酉・戌・亥）を調べ、性格、強み、相性、仕事運、恋愛運を確認しましょう。",
+  },
+  fr: {
+    title: "Zodiaque Chinois — 12 Signes Animaux Personnalité & Compatibilité",
+    description: "Entrez votre année de naissance pour trouver votre signe du zodiaque chinois et découvrir personnalité, forces, compatibilité, fortune professionnelle et amoureuse.",
+  },
+  es: {
+    title: "Zodíaco Chino — 12 Signos Animales Personalidad y Compatibilidad",
+    description: "Ingresa tu año de nacimiento para encontrar tu signo zodiacal chino y descubrir personalidad, fortalezas, compatibilidad, fortuna laboral y amorosa.",
+  },
+  zh: {
+    title: "中國生肖 — 十二生肖性格、相容性和運勢免費分析",
+    description: "輸入出生年份找出你的生肖（鼠牛虎兔龍蛇馬羊猴雞狗豬），了解性格特質、優勢、相容性、事業運和感情運。",
+  },
+  cn: {
+    title: "中国生肖 — 十二生肖性格、相容性和运势免费分析",
+    description: "输入出生年份找出你的生肖（鼠牛虎兔龙蛇马羊猴鸡狗猪），了解性格特质、优势、相容性、事业运和感情运。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <ChineseZodiac client:load locale={locale} />
+  </main>
+</BaseLayout>
