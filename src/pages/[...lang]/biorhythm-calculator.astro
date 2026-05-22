@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import BiorhythmCalculator from "../../components/tools/BiorhythmCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "바이오리듬 계산기 — 신체·감성·지성·직관 리듬 무료 분석",
+    description: "생년월일을 입력하면 오늘의 신체(23일)·감성(28일)·지성(33일)·직관(38일) 바이오리듬을 사인파로 계산하고, 7일 예측과 단계별 조언을 제공합니다.",
+  },
+  en: {
+    title: "Biorhythm Calculator — Physical, Emotional, Intellectual & Intuitive Cycles",
+    description: "Enter your birth date to calculate today's biorhythm cycles: Physical (23d), Emotional (28d), Intellectual (33d), Intuitive (38d). Includes 7-day forecast and phase-specific tips.",
+  },
+  ja: {
+    title: "バイオリズム計算機 — 身体・感情・知性・直感リズム無料分析",
+    description: "生年月日を入力して今日のバイオリズム（身体23日・感情28日・知性33日・直感38日）をサイン波で計算し、7日間予測とアドバイスを提供します。",
+  },
+  fr: {
+    title: "Calculateur Biorythme — Cycles Physique, Émotionnel, Intellectuel & Intuitif",
+    description: "Entrez votre date de naissance pour calculer vos biorythmes du jour : Physique (23j), Émotionnel (28j), Intellectuel (33j), Intuitif (38j). Prévision 7 jours incluse.",
+  },
+  es: {
+    title: "Calculadora de Biorritmo — Ciclos Físico, Emocional, Intelectual e Intuitivo",
+    description: "Ingresa tu fecha de nacimiento para calcular tus biorritmos de hoy: Físico (23d), Emocional (28d), Intelectual (33d), Intuitivo (38d). Incluye pronóstico de 7 días.",
+  },
+  zh: {
+    title: "生理節律計算機 — 身體、情感、智力與直覺週期免費分析",
+    description: "輸入出生日期，計算今日生理節律：身體週期(23天)、情感週期(28天)、智力週期(33天)、直覺週期(38天)，並提供7天預測和建議。",
+  },
+  cn: {
+    title: "生理节律计算器 — 身体、情感、智力与直觉周期免费分析",
+    description: "输入出生日期，计算今日生理节律：身体周期(23天)、情感周期(28天)、智力周期(33天)、直觉周期(38天)，并提供7天预测和建议。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <BiorhythmCalculator client:load locale={locale} />
+  </main>
+</BaseLayout>
