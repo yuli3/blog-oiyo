@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Metronome from "../../components/tools/Metronome";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "메트로놈 — 온라인 무료 메트로놈",
+    description: "Web Audio API 기반 정확한 타이밍의 온라인 메트로놈. BPM 40~240, 탭 템포, 박자표(2/4·3/4·4/4·6/8), 프리셋 지원.",
+  },
+  en: {
+    title: "Metronome — Free Online Metronome",
+    description: "Precise Web Audio API metronome. BPM 40–240, tap tempo, time signatures (2/4·3/4·4/4·6/8), and BPM presets included.",
+  },
+  ja: {
+    title: "メトロノーム — 無料オンラインメトロノーム",
+    description: "Web Audio API ベースの正確なタイミングのオンラインメトロノーム。BPM 40〜240、タップテンポ、拍子記号(2/4・3/4・4/4・6/8)対応。",
+  },
+  fr: {
+    title: "Métronome — Métronome en Ligne Gratuit",
+    description: "Métronome en ligne précis basé sur Web Audio API. BPM 40–240, tap tempo, signatures rythmiques (2/4·3/4·4/4·6/8) et préréglages.",
+  },
+  es: {
+    title: "Metrónomo — Metrónomo en Línea Gratuito",
+    description: "Metrónomo en línea preciso basado en Web Audio API. BPM 40–240, tap tempo, compases (2/4·3/4·4/4·6/8) y ajustes preestablecidos.",
+  },
+  zh: {
+    title: "节拍器 — 免费在线节拍器",
+    description: "基于 Web Audio API 的精准在线节拍器。支持 BPM 40–240、点击速度、拍号(2/4·3/4·4/4·6/8)和预设。",
+  },
+  cn: {
+    title: "節拍器 — 免費在線節拍器",
+    description: "基於 Web Audio API 的精準在線節拍器。支持 BPM 40–240、點擊速度、拍號(2/4·3/4·4/4·6/8)和預設。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <Metronome client:load locale={locale} />
+  </main>
+</BaseLayout>

@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import DividendCalendar from "../../components/tools/DividendCalendar";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "배당 캘린더 — 배당주·ETF 배당락일 일정",
+    description: "KODEX·TIGER·SCHD·VYM·JEPI 등 국내외 배당주와 ETF의 배당락일을 달력으로 확인하세요. 월별 배당 일정, 수익률, 배당 주기 정보 제공.",
+  },
+  en: {
+    title: "Dividend Calendar — Ex-Dividend Date Schedule",
+    description: "Track ex-dividend dates for popular dividend stocks and ETFs including SCHD, VYM, JEPI, QYLD, Realty Income, and more. Monthly calendar view with yield info.",
+  },
+  ja: {
+    title: "配当カレンダー — 権利落ち日スケジュール",
+    description: "SCHD、VYM、JEPI、QYLD、リアルティ・インカムなどの人気配当株・ETFの権利落ち日を月別カレンダーで確認できます。",
+  },
+  fr: {
+    title: "Calendrier des Dividendes — Dates Ex-Dividende",
+    description: "Suivez les dates ex-dividende des actions et ETF populaires : SCHD, VYM, JEPI, QYLD, Realty Income. Vue calendrier mensuelle avec rendements.",
+  },
+  es: {
+    title: "Calendario de Dividendos — Fechas Ex-Dividendo",
+    description: "Sigue las fechas ex-dividendo de acciones y ETFs populares: SCHD, VYM, JEPI, QYLD, Realty Income y más. Vista de calendario mensual con rendimientos.",
+  },
+  zh: {
+    title: "股息日曆 — 除息日時間表",
+    description: "追蹤熱門股息股票和ETF的除息日，包括SCHD、VYM、JEPI、QYLD、房地產收入公司等。月曆檢視，含股息收益率資訊。",
+  },
+  cn: {
+    title: "股息日历 — 除息日时间表",
+    description: "追踪热门股息股票和ETF的除息日，包括SCHD、VYM、JEPI、QYLD、房地产收入公司等。月历视图，含股息收益率信息。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-4xl px-4 py-8">
+    <DividendCalendar client:load locale={locale} />
+  </main>
+</BaseLayout>

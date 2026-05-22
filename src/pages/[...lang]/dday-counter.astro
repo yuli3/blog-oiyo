@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import DdayCounter from "../../components/tools/DdayCounter";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "D-Day 카운터 — 이벤트별 디데이 관리",
+    description: "생일, 시험, 기념일 등 중요한 날을 D-Day로 등록하고 남은 날수를 실시간으로 확인하세요. 7일 이내는 초 단위 카운트다운 제공.",
+  },
+  en: {
+    title: "D-Day Counter — Track Important Dates",
+    description: "Add birthdays, exams, anniversaries and more as D-Day events. See countdowns in real-time. Events within 7 days show a live seconds countdown.",
+  },
+  ja: {
+    title: "Dデイカウンター — 重要な日程を管理",
+    description: "誕生日、試験、記念日などをDデイとして登録し、残り日数をリアルタイムで確認。7日以内のイベントは秒単位のカウントダウンも表示。",
+  },
+  fr: {
+    title: "Compteur J-Day — Suivez vos dates importantes",
+    description: "Ajoutez vos anniversaires, examens et événements spéciaux. Voyez le compte à rebours en temps réel. Les événements dans les 7 jours affichent un décompte en secondes.",
+  },
+  es: {
+    title: "Contador D-Day — Gestiona tus fechas importantes",
+    description: "Agrega cumpleaños, exámenes, aniversarios y más como eventos D-Day. Ve las cuentas regresivas en tiempo real. Los eventos en 7 días muestran cuenta regresiva en segundos.",
+  },
+  zh: {
+    title: "倒數計時器 — 追蹤重要日期",
+    description: "將生日、考試、紀念日等重要日期設為倒數事件，即時查看剩餘天數。7天以內的事件顯示秒數倒計時。",
+  },
+  cn: {
+    title: "倒计时计数器 — 追踪重要日期",
+    description: "将生日、考试、纪念日等重要日期设为倒计时事件，实时查看剩余天数。7天以内的事件显示秒数倒计时。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <DdayCounter client:load locale={locale} />
+  </main>
+</BaseLayout>

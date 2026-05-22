@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CountdownTimer from "../../components/tools/CountdownTimer";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "타이머 — 스톱워치 & 카운트다운",
+    description: "랩 기능이 있는 스톱워치와 알람 카운트다운 타이머. 스페이스바로 시작/정지, 원형 프로그레스바, Web Audio 알람음 제공.",
+  },
+  en: {
+    title: "Timer — Stopwatch & Countdown",
+    description: "Stopwatch with lap tracking and a countdown timer with alarm. Start/stop with spacebar, circular progress bar, and Web Audio API alarm.",
+  },
+  ja: {
+    title: "タイマー — ストップウォッチ & カウントダウン",
+    description: "ラップ機能付きストップウォッチとアラーム付きカウントダウンタイマー。スペースキーで開始・停止、円形プログレスバー、Web Audioアラーム。",
+  },
+  fr: {
+    title: "Minuteur — Chronomètre & Compte à rebours",
+    description: "Chronomètre avec suivi des tours et minuterie avec alarme. Démarrez/arrêtez avec la barre d'espace, barre de progression circulaire et alarme Web Audio.",
+  },
+  es: {
+    title: "Temporizador — Cronómetro & Cuenta regresiva",
+    description: "Cronómetro con seguimiento de vueltas y temporizador con alarma. Inicia/detén con la barra espaciadora, progreso circular y alarma Web Audio.",
+  },
+  zh: {
+    title: "計時器 — 碼錶與倒數計時",
+    description: "帶分段記錄的碼錶和倒數計時鬧鐘。空白鍵開始/暫停，圓形進度條，Web Audio API鬧鐘提示音。",
+  },
+  cn: {
+    title: "计时器 — 秒表与倒计时",
+    description: "带计次功能的秒表和倒计时闹钟。空格键开始/暂停，圆形进度条，Web Audio API闹钟提示音。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <CountdownTimer client:load locale={locale} />
+  </main>
+</BaseLayout>

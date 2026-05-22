@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ColorConverter from "../../components/tools/ColorConverter";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "색상 변환기 — HEX · RGB · HSL · HSV · CMYK",
+    description: "HEX, RGB, HSL, HSV, CMYK 색상 코드를 자유롭게 변환하세요. RGB 슬라이더, 최근 색상 기록, CSS 색상 이름 표시 기능 포함.",
+  },
+  en: {
+    title: "Color Converter — HEX · RGB · HSL · HSV · CMYK",
+    description: "Convert between HEX, RGB, HSL, HSV, and CMYK color formats instantly. Includes RGB sliders, recent color history, and nearest CSS color name.",
+  },
+  ja: {
+    title: "カラーコード変換器 — HEX · RGB · HSL · HSV · CMYK",
+    description: "HEX、RGB、HSL、HSV、CMYKを相互変換。RGBスライダー、最近の色履歴、CSS色名表示機能つき。",
+  },
+  fr: {
+    title: "Convertisseur de couleurs — HEX · RGB · HSL · HSV · CMYK",
+    description: "Convertissez entre les formats HEX, RGB, HSL, HSV et CMYK. Inclut des curseurs RGB, l'historique des couleurs récentes et le nom CSS le plus proche.",
+  },
+  es: {
+    title: "Convertidor de colores — HEX · RGB · HSL · HSV · CMYK",
+    description: "Convierte entre formatos HEX, RGB, HSL, HSV y CMYK al instante. Incluye controles RGB, historial de colores recientes y nombre CSS más cercano.",
+  },
+  zh: {
+    title: "顏色轉換器 — HEX · RGB · HSL · HSV · CMYK",
+    description: "即時轉換HEX、RGB、HSL、HSV和CMYK顏色格式。包含RGB滑桿、最近顏色記錄和最近CSS顏色名稱。",
+  },
+  cn: {
+    title: "颜色转换器 — HEX · RGB · HSL · HSV · CMYK",
+    description: "即时转换HEX、RGB、HSL、HSV和CMYK颜色格式。包含RGB滑块、最近颜色记录和最近CSS颜色名称。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <ColorConverter client:load locale={locale} />
+  </main>
+</BaseLayout>

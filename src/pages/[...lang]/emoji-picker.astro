@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import EmojiPicker from "../../components/tools/EmojiPicker";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "이모지 픽커 — 이모지 검색 & 클립보드 복사",
+    description: "카테고리 탭으로 이모지를 탐색하거나 한국어/영어로 검색하세요. 클릭 한 번으로 클립보드에 복사하고 최근 사용 이모지도 확인할 수 있습니다.",
+  },
+  en: {
+    title: "Emoji Picker — Search & Copy Emoji to Clipboard",
+    description: "Browse emoji by category or search by name. Click to copy any emoji to your clipboard instantly. Recent emoji history included.",
+  },
+  ja: {
+    title: "絵文字ピッカー — 絵文字を検索してコピー",
+    description: "カテゴリ別に絵文字を閲覧するか、名前で検索してください。クリックでクリップボードに即座にコピーできます。",
+  },
+  fr: {
+    title: "Sélecteur d'Emoji — Rechercher et Copier des Emoji",
+    description: "Parcourez les emoji par catégorie ou recherchez par nom. Cliquez pour copier instantanément dans le presse-papier.",
+  },
+  es: {
+    title: "Selector de Emoji — Buscar y Copiar Emoji",
+    description: "Explora emoji por categoría o busca por nombre. Haz clic para copiar al portapapeles al instante.",
+  },
+  zh: {
+    title: "表情符號選擇器 — 搜尋並複製表情符號",
+    description: "按類別瀏覽表情符號或按名稱搜尋。點擊即可立即複製到剪貼板。",
+  },
+  cn: {
+    title: "表情符号选择器 — 搜索并复制表情符号",
+    description: "按类别浏览表情符号或按名称搜索。点击即可立即复制到剪贴板。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <EmojiPicker client:load locale={locale} />
+  </main>
+</BaseLayout>

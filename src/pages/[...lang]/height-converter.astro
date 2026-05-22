@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import HeightConverter from "../../components/tools/HeightConverter";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "키 변환 & 비교기 — cm↔ft/in 단위 변환, 성별 키 비교",
+    description: "키를 cm와 ft/in으로 즉시 변환하고, 한국 평균 신장 기준으로 상대 성별 동등 키를 계산합니다. 국가별 평균 신장 비교도 제공합니다.",
+  },
+  en: {
+    title: "Height Converter & Comparison — cm ↔ ft/in, Gender Height",
+    description: "Instantly convert height between cm and ft/in, calculate your equivalent height in the opposite gender based on Korean averages, and compare by country.",
+  },
+  ja: {
+    title: "身長変換・比較ツール — cm↔ft/in、性別身長比較",
+    description: "身長をcmとフィート/インチで変換し、韓国の平均身長に基づいて異性別での等身長を計算します。国別平均身長も比較できます。",
+  },
+  fr: {
+    title: "Convertisseur de Taille — cm ↔ ft/in, Comparaison par Sexe",
+    description: "Convertissez instantanément la taille entre cm et pieds/pouces, calculez votre taille équivalente pour le sexe opposé et comparez par pays.",
+  },
+  es: {
+    title: "Conversor de Estatura — cm ↔ ft/in, Comparación por Género",
+    description: "Convierte estatura entre cm y pies/pulgadas al instante, calcula tu estatura equivalente en el género opuesto y compara por país.",
+  },
+  zh: {
+    title: "身高換算與比較工具 — 公分↔英尺/英寸、性別身高比較",
+    description: "即時換算公分與英尺/英寸，依韓國平均身高計算異性別等效身高，並比較各國平均身高。",
+  },
+  cn: {
+    title: "身高换算与比较工具 — 厘米↔英尺/英寸、性别身高比较",
+    description: "即时换算厘米与英尺/英寸，根据韩国平均身高计算异性别等效身高，并比较各国平均身高。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <HeightConverter client:load locale={locale} />
+  </main>
+</BaseLayout>

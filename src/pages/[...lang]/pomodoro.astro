@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PomodoroTimer from "../../components/tools/PomodoroTimer";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "뽀모도로 타이머 — 집중력 향상 시간 관리 도구",
+    description: "25분 집중 + 5분 휴식 사이클로 생산성을 높이는 뽀모도로 타이머. SVG 원형 프로그레스, 소리 알림, 오늘 통계 지원.",
+  },
+  en: {
+    title: "Pomodoro Timer — Focus & Productivity Tool",
+    description: "Boost your productivity with the Pomodoro technique. 25-min focus + 5-min break cycles with visual progress ring, sound alerts, and daily stats.",
+  },
+  ja: {
+    title: "ポモドーロタイマー — 集中力・生産性向上ツール",
+    description: "ポモドーロテクニックで生産性を高めよう。25分集中＋5分休憩サイクル、ビジュアルプログレスリング、音声アラート、本日の統計対応。",
+  },
+  fr: {
+    title: "Minuterie Pomodoro — Outil de Concentration et Productivité",
+    description: "Boostez votre productivité avec la technique Pomodoro. Cycles de 25 min de concentration + 5 min de pause avec anneau de progression visuel.",
+  },
+  es: {
+    title: "Temporizador Pomodoro — Herramienta de Enfoque y Productividad",
+    description: "Aumenta tu productividad con la técnica Pomodoro. Ciclos de 25 min de enfoque + 5 min de pausa con anillo de progreso visual y estadísticas diarias.",
+  },
+  zh: {
+    title: "番茄钟计时器 — 专注力与生产力工具",
+    description: "用番茄工作法提升生产力。25分钟专注+5分钟休息循环，带可视化进度环、声音提醒和今日统计。",
+  },
+  cn: {
+    title: "番茄鐘計時器 — 專注力與生產力工具",
+    description: "用番茄工作法提升生產力。25分鐘專注+5分鐘休息循環，帶可視化進度環、聲音提醒和今日統計。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <PomodoroTimer client:load locale={locale} />
+  </main>
+</BaseLayout>
