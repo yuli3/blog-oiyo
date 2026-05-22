@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import MBTICompatibility from "../../components/tools/MBTICompatibility";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "MBTI 궁합 매트릭스 — 16유형 전체 궁합 무료 분석",
+    description: "두 MBTI 유형을 선택해 소울메이트부터 도전적 궁합까지 관계 궁합, 소통 방식, 구체적인 관계 팁을 무료로 분석합니다.",
+  },
+  en: {
+    title: "MBTI Compatibility Matrix — All 16 Types Free Analysis",
+    description: "Select two MBTI types to analyze compatibility from soulmate to challenging match — including communication style and practical relationship tips.",
+  },
+  ja: {
+    title: "MBTI相性マトリックス — 16タイプ全相性 無料分析",
+    description: "2つのMBTIタイプを選択してソウルメイトから難しい相性まで、コミュニケーションスタイルと具体的な関係ヒントを無料で分析します。",
+  },
+  fr: {
+    title: "Matrice de Compatibilité MBTI — 16 Types Analyse Gratuite",
+    description: "Sélectionnez deux types MBTI pour analyser la compatibilité — de l'âme sœur aux correspondances difficiles — avec style de communication et conseils pratiques.",
+  },
+  es: {
+    title: "Matriz de Compatibilidad MBTI — 16 Tipos Análisis Gratis",
+    description: "Selecciona dos tipos MBTI para analizar la compatibilidad — de alma gemela a combinación difícil — con estilo de comunicación y consejos prácticos.",
+  },
+  zh: {
+    title: "MBTI相容性矩陣 — 16種類型免費分析",
+    description: "選擇兩種MBTI類型，分析從靈魂伴侶到具挑戰性的匹配——包括溝通方式和實用關係技巧，完全免費。",
+  },
+  cn: {
+    title: "MBTI相容性矩阵 — 16种类型免费分析",
+    description: "选择两种MBTI类型，分析从灵魂伴侣到具挑战性的匹配——包括沟通方式和实用关系技巧，完全免费。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-3xl px-4 py-8">
+    <MBTICompatibility client:load locale={locale} />
+  </main>
+</BaseLayout>
