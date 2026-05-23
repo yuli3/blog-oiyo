@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ToeicScoreConverter from "../../components/tools/ToeicScoreConverter";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "TOEIC 점수 환산기 — CEFR / IELTS / TOEFL 환산 무료",
+    description: "TOEIC 점수를 CEFR 등급, IELTS, TOEFL iBT로 환산하세요. 취업·진학 활용도와 맞춤 학습법도 확인하세요.",
+  },
+  en: {
+    title: "TOEIC Score Converter — CEFR / IELTS / TOEFL Equivalent",
+    description: "Convert your TOEIC score to CEFR level, IELTS, and TOEFL iBT. See career utility and personalized study tips.",
+  },
+  ja: {
+    title: "TOEICスコア換算器 — CEFR / IELTS / TOEFL換算",
+    description: "TOEICスコアをCEFRレベル、IELTS、TOEFL iBTに換算。就職・進学の活用度と学習アドバイスも確認できます。",
+  },
+  fr: {
+    title: "Convertisseur Score TOEIC — Équivalent CECRL / IELTS / TOEFL",
+    description: "Convertissez votre score TOEIC en niveau CECRL, IELTS et TOEFL iBT. Découvrez les débouchés professionnels et conseils d'étude.",
+  },
+  es: {
+    title: "Convertidor de Puntuación TOEIC — Equivalente MCERL / IELTS / TOEFL",
+    description: "Convierte tu puntuación TOEIC al nivel MCERL, IELTS y TOEFL iBT. Descubre usos profesionales y recomendaciones de estudio.",
+  },
+  zh: {
+    title: "TOEIC分数换算器 — CEFR / 雅思 / 托福换算",
+    description: "将TOEIC分数换算为CEFR等级、雅思和托福iBT。查看求职升学用途和个性化学习建议。",
+  },
+  cn: {
+    title: "TOEIC分數換算器 — CEFR / 雅思 / 托福換算",
+    description: "將TOEIC分數換算為CEFR等級、雅思和托福iBT。查看求職升學用途和個性化學習建議。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <ToeicScoreConverter client:load locale={locale} />
+  </main>
+</BaseLayout>

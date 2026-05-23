@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CurrencyConverter from "../../components/tools/CurrencyConverter";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "환율 계산기 — 20개 통화 실시간 변환",
+    description: "원화, 달러, 엔화, 유로 등 20개 주요 통화 간 환율을 쉽게 계산하세요. 여행 전 필수 환율 변환 도구.",
+  },
+  en: {
+    title: "Currency Converter — 20 Major Currencies",
+    description: "Convert between 20 major currencies including KRW, USD, EUR, JPY and more. Essential tool for travelers.",
+  },
+  ja: {
+    title: "通貨換算機 — 主要20通貨対応",
+    description: "円、ドル、ウォン、ユーロなど主要20通貨を簡単に換算。旅行前の必須ツール。",
+  },
+  fr: {
+    title: "Convertisseur de devises — 20 devises majeures",
+    description: "Convertissez entre 20 devises majeures incluant EUR, USD, KRW, JPY. Outil indispensable pour les voyageurs.",
+  },
+  es: {
+    title: "Conversor de divisas — 20 divisas principales",
+    description: "Convierte entre 20 divisas principales incluyendo EUR, USD, KRW, JPY. Herramienta esencial para viajeros.",
+  },
+  zh: {
+    title: "汇率换算器 — 20种主要货币",
+    description: "轻松换算韩元、美元、欧元、日元等20种主要货币。旅行必备汇率工具。",
+  },
+  cn: {
+    title: "匯率換算器 — 20種主要貨幣",
+    description: "輕鬆換算韓元、美元、歐元、日元等20種主要貨幣。旅遊必備匯率工具。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <CurrencyConverter client:load locale={locale} />
+  </main>
+</BaseLayout>

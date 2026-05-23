@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import BabyFoodScheduler from "../../components/tools/BabyFoodScheduler";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "이유식 스케줄러 — 월령별 이유식 가이드",
+    description: "아이 개월 수에 따른 이유식 단계(초기/중기/후기/완료기)와 추천 식재료, 주의사항을 확인하세요.",
+  },
+  en: {
+    title: "Baby Food Scheduler — Weaning Guide by Age",
+    description: "Get stage-specific weaning food information (early/mid/late/finishing) with recommended ingredients and cautions for each age.",
+  },
+  ja: {
+    title: "離乳食スケジューラー — 月齢別離乳食ガイド",
+    description: "月齢に合った離乳食ステージ（初期・中期・後期・完了期）と推奨食材、注意事項を確認できます。",
+  },
+  fr: {
+    title: "Planificateur d'Alimentation Bébé — Guide de Diversification par Âge",
+    description: "Obtenez des informations sur chaque étape de diversification (précoce/intermédiaire/avancée/finale) avec des ingrédients recommandés.",
+  },
+  es: {
+    title: "Planificador de Alimentación del Bebé — Guía por Edad",
+    description: "Obtén información específica por etapa de alimentación complementaria (temprana/intermedia/avanzada/final) con ingredientes recomendados.",
+  },
+  zh: {
+    title: "辅食调度器 — 月龄辅食指南",
+    description: "获取各月龄辅食阶段（初期/中期/后期/完成期）的推荐食材和注意事项。",
+  },
+  cn: {
+    title: "副食調度器 — 月齡副食指南",
+    description: "獲取各月齡副食階段（初期/中期/後期/完成期）的推薦食材和注意事項。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <BabyFoodScheduler client:load locale={locale} />
+  </main>
+</BaseLayout>

@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import VocabFlashcard from "../../components/tools/VocabFlashcard";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "영단어 플래시카드 — TOEIC·비즈니스·수능 단어 무료 학습",
+    description: "플래시카드로 TOEIC 필수 100단어, 비즈니스 80단어, 일상회화 60단어, 수능 80단어를 학습하세요. 모르는 단어만 반복 학습 지원.",
+  },
+  en: {
+    title: "Vocabulary Flashcards — Free TOEIC, Business & Daily Word Study",
+    description: "Study TOEIC essential (100), business (80), daily conversation (60), and CSAT (80) vocabulary with interactive flashcards. Review unknown words with spaced repetition.",
+  },
+  ja: {
+    title: "英単語フラッシュカード — TOEIC・ビジネス・日常会話 無料学習",
+    description: "フラッシュカードでTOEIC必須100語・ビジネス80語・日常会話60語・センター80語を学習。わからない単語だけ繰り返し学習できます。",
+  },
+  fr: {
+    title: "Cartes Mémoire de Vocabulaire — TOEIC, Affaires et Quotidien Gratuit",
+    description: "Étudiez le vocabulaire TOEIC essentiel (100), affaires (80), quotidien (60) et scolaire (80) avec des cartes mémoire interactives.",
+  },
+  es: {
+    title: "Tarjetas de Vocabulario — TOEIC, Negocios y Conversación Gratis",
+    description: "Estudia vocabulario TOEIC esencial (100), negocios (80), conversación diaria (60) y examen (80) con tarjetas interactivas. Repasa las desconocidas.",
+  },
+  zh: {
+    title: "词汇闪卡 — TOEIC必备·商务·日常对话免费学习",
+    description: "用闪卡学习TOEIC必备100词、商务80词、日常对话60词、高考80词。支持仅复习未知单词。",
+  },
+  cn: {
+    title: "詞彙閃卡 — TOEIC必備·商務·日常對話免費學習",
+    description: "用閃卡學習TOEIC必備100詞、商務80詞、日常對話60詞、學測80詞。支援僅複習未知單字。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <VocabFlashcard client:load locale={locale} />
+  </main>
+</BaseLayout>

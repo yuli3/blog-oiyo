@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import TravelBudgetCalculator from "../../components/tools/TravelBudgetCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "여행 예산 계산기 — 목적지별 여행 비용 계산",
+    description: "일본, 태국, 유럽 등 10개 여행지의 항공, 숙박, 식비, 교통비를 한번에 계산하세요. 예산 절약 팁도 제공.",
+  },
+  en: {
+    title: "Travel Budget Calculator — Estimate Trip Costs by Destination",
+    description: "Calculate flight, accommodation, food, and transport costs for 10 destinations. Get money-saving tips for your next trip.",
+  },
+  ja: {
+    title: "旅行予算計算機 — 目的地別旅行費用の見積もり",
+    description: "日本、タイ、ヨーロッパなど10か所の航空券、宿泊、食費、交通費を一括計算。節約ヒントも提供。",
+  },
+  fr: {
+    title: "Calculateur de budget voyage — Estimez vos coûts par destination",
+    description: "Calculez les frais de vol, hébergement, nourriture et transport pour 10 destinations. Obtenez des conseils pour économiser.",
+  },
+  es: {
+    title: "Calculadora de presupuesto de viaje — Costos por destino",
+    description: "Calcula vuelos, alojamiento, comida y transporte para 10 destinos. Obtén consejos para ahorrar en tu próximo viaje.",
+  },
+  zh: {
+    title: "旅行预算计算器 — 按目的地估算旅行费用",
+    description: "一键计算日本、泰国、欧洲等10个目的地的机票、住宿、餐饮和交通费用，并获取省钱攻略。",
+  },
+  cn: {
+    title: "旅遊預算計算機 — 依目的地估算旅遊費用",
+    description: "一鍵計算日本、泰國、歐洲等10個目的地的機票、住宿、餐飲和交通費用，並獲取省錢攻略。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <TravelBudgetCalculator client:load locale={locale} />
+  </main>
+</BaseLayout>

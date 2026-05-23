@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import BabyNameGenerator from "../../components/tools/BabyNameGenerator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "아기 이름 생성기 — 성별·의미·오행으로 추천",
+    description: "성별, 어감 스타일, 의미 키워드로 아기 이름을 추천받으세요. 오행 정보와 이름 의미 설명을 함께 제공합니다.",
+  },
+  en: {
+    title: "Baby Name Generator — Name by Meaning & Style",
+    description: "Find the perfect baby name by gender, style, and meaning. Includes Five Elements and detailed name meanings.",
+  },
+  ja: {
+    title: "赤ちゃんの名前ジェネレーター — 意味・スタイル別に提案",
+    description: "性別・スタイル・意味キーワードで赤ちゃんの名前を提案します。五行情報と名前の意味を解説します。",
+  },
+  fr: {
+    title: "Générateur de Prénoms Bébé — Par Signification et Style",
+    description: "Trouvez le prénom parfait pour votre bébé selon le genre, le style et la signification. Inclut les cinq éléments.",
+  },
+  es: {
+    title: "Generador de Nombres de Bebé — Por Significado y Estilo",
+    description: "Encuentra el nombre perfecto para tu bebé según el género, el estilo y el significado. Incluye los cinco elementos.",
+  },
+  zh: {
+    title: "婴儿名字生成器 — 按含义和风格推荐",
+    description: "按性别、风格和含义关键词为您的宝宝推荐名字。包含五行信息和名字含义说明。",
+  },
+  cn: {
+    title: "嬰兒名字生成器 — 按含義和風格推薦",
+    description: "按性別、風格和含義關鍵詞為您的寶寶推薦名字。包含五行信息和名字含義說明。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <BabyNameGenerator client:load locale={locale} />
+  </main>
+</BaseLayout>
