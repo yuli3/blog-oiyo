@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import DailyHoroscope from "../../components/tools/DailyHoroscope";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "오늘의 별자리 운세 — 12별자리 일일 운세 무료",
+    description: "양자리부터 물고기자리까지 12별자리의 오늘 운세를 확인하세요. 종합운·애정운·금전운·건강운 + 행운의 색과 숫자.",
+  },
+  en: {
+    title: "Daily Horoscope — Free Zodiac Readings for All 12 Signs",
+    description: "Get your daily horoscope for all 12 zodiac signs. Check overall, love, money & health fortune plus your lucky color and number.",
+  },
+  ja: {
+    title: "今日の星座運勢 — 12星座の無料デイリーホロスコープ",
+    description: "牡羊座から魚座まで12星座の今日の運勢を確認しましょう。総合運・恋愛運・金運・健康運とラッキーカラー・ナンバーも。",
+  },
+  fr: {
+    title: "Horoscope du Jour — Prédictions Gratuites pour les 12 Signes",
+    description: "Consultez votre horoscope quotidien pour les 12 signes du zodiaque. Fortune générale, amour, argent, santé + couleur et numéro chanceux.",
+  },
+  es: {
+    title: "Horóscopo del Día — Lecturas Gratuitas para los 12 Signos",
+    description: "Obtén tu horóscopo diario para los 12 signos del zodiaco. Fortuna general, amor, dinero, salud + color y número de suerte.",
+  },
+  zh: {
+    title: "今日星座运势 — 12星座每日免费运势",
+    description: "查看12星座的今日运势，包括综合运势、爱情运、财运、健康运，以及幸运颜色和幸运数字。",
+  },
+  cn: {
+    title: "今日星座運勢 — 12星座每日免費運勢",
+    description: "查看12星座的今日運勢，包括綜合運勢、愛情運、財運、健康運，以及幸運顏色和幸運數字。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <DailyHoroscope client:load locale={locale} />
+  </main>
+</BaseLayout>

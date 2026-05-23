@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import MarriageAgeCalculator from "../../components/tools/MarriageAgeCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "결혼 적령기 계산기 — MBTI·직업·성별로 예측",
+    description: "MBTI 유형과 직업군, 성별을 바탕으로 나의 결혼 적령기와 결혼 준비 점수를 계산해 보세요.",
+  },
+  en: {
+    title: "Marriage Age Calculator — Predict by MBTI, Occupation & Gender",
+    description: "Find your ideal marriage age range and readiness score based on your MBTI type, occupation, and gender.",
+  },
+  ja: {
+    title: "結婚適齢期計算機 — MBTI・職業・性別で予測",
+    description: "MBTIタイプ・職業・性別をもとに結婚適齢期と結婚準備スコアを計算しましょう。",
+  },
+  fr: {
+    title: "Calculateur d'Âge Idéal pour le Mariage — MBTI, Profession & Genre",
+    description: "Calculez votre tranche d'âge idéale pour le mariage et votre score de préparation selon votre MBTI, profession et genre.",
+  },
+  es: {
+    title: "Calculadora de Edad Ideal para el Matrimonio — MBTI, Ocupación y Género",
+    description: "Calcula tu rango de edad ideal para el matrimonio y tu puntuación de preparación según tu MBTI, ocupación y género.",
+  },
+  zh: {
+    title: "结婚适龄期计算器 — 通过MBTI、职业和性别预测",
+    description: "根据MBTI类型、职业和性别计算你的理想结婚年龄范围和结婚准备分数。",
+  },
+  cn: {
+    title: "結婚適齡期計算器 — 通過MBTI、職業和性別預測",
+    description: "根據MBTI類型、職業和性別計算你的理想結婚年齡範圍和結婚準備分數。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <MarriageAgeCalculator client:load locale={locale} />
+  </main>
+</BaseLayout>

@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SalaryNegotiationCalculator from "../../components/tools/SalaryNegotiationCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "연봉 협상 시뮬레이터 — 시나리오별 인상 결과 계산",
+    description: "현재 연봉과 희망 인상률을 입력하면 낙관·중간·보수 시나리오별 협상 결과와 세후 월급을 계산합니다. 협상 팁도 함께 제공.",
+  },
+  en: {
+    title: "Salary Negotiation Simulator — Scenario-Based Raise Calculator",
+    description: "Enter your current salary and desired raise rate to see optimistic, moderate, and conservative negotiation outcomes with monthly net pay estimates.",
+  },
+  ja: {
+    title: "給与交渉シミュレーター — シナリオ別昇給結果計算",
+    description: "現在の年俸と希望昇給率を入力すると、楽観・中間・保守シナリオ別の交渉結果と手取り月給を計算します。",
+  },
+  fr: {
+    title: "Simulateur de Négociation Salariale — Calcul par Scénario",
+    description: "Entrez votre salaire actuel et le taux d'augmentation souhaité pour voir les résultats selon trois scénarios de négociation.",
+  },
+  es: {
+    title: "Simulador de Negociación Salarial — Cálculo por Escenario",
+    description: "Introduce tu salario actual y la tasa de aumento deseada para ver los resultados según tres escenarios de negociación.",
+  },
+  zh: {
+    title: "薪資談判模擬器 — 情境別加薪結果計算",
+    description: "輸入目前年薪與期望加薪率，即可查看樂觀、中間、保守三種談判情境下的結果與稅後月薪。",
+  },
+  cn: {
+    title: "薪资谈判模拟器 — 情境别加薪结果计算",
+    description: "输入当前年薪与期望加薪率，即可查看乐观、中间、保守三种谈判情境下的结果与税后月薪。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <SalaryNegotiationCalculator client:load locale={locale} />
+  </main>
+</BaseLayout>

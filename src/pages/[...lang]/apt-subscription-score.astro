@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import AptSubscriptionScore from "../../components/tools/AptSubscriptionScore";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "청약 가점 계산기 — 무주택·부양가족·청약통장 점수 자동 계산",
+    description: "청약 가점제 3가지 항목(무주택 기간 32점+부양가족 수 35점+청약통장 가입기간 17점)을 자동으로 계산하세요. 최대 84점.",
+  },
+  en: {
+    title: "Korean Housing Subscription Score Calculator — Free Apt Lottery Score",
+    description: "Calculate your Korean apartment subscription lottery score: homeless period (32pts) + dependents (35pts) + savings account (17pts). Max 84 points.",
+  },
+  ja: {
+    title: "청약 가점 계산기 — 韓国住宅申込みポイント自動計算",
+    description: "韓国のアパート申込みポイント（無住宅期間32点＋扶養家族35点＋청약통장17点）を自動計算します。最大84点。",
+  },
+  fr: {
+    title: "Calculateur de Points de Loterie Immobilière Coréenne",
+    description: "Calculez votre score de loterie pour les appartements coréens : période sans logement (32pts) + personnes à charge (35pts) + compte d'épargne (17pts). Max 84 points.",
+  },
+  es: {
+    title: "Calculadora de Puntos de Lotería de Vivienda Coreana",
+    description: "Calcula tu puntuación para la lotería de apartamentos coreanos: período sin vivienda (32pts) + dependientes (35pts) + cuenta de ahorro (17pts). Máx 84 puntos.",
+  },
+  zh: {
+    title: "韩国购房积分计算器 — 无房期间·赡养人口·储蓄账户",
+    description: "计算韩国公寓摇号积分：无房期间（32分）+赡养人口（35分）+公积金账户（17分），最高84分。",
+  },
+  cn: {
+    title: "韓國購房積分計算器 — 無房期間·贍養人口·儲蓄帳戶",
+    description: "計算韓國公寓搖號積分：無房期間（32分）+贍養人口（35分）+公積金帳戶（17分），最高84分。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <AptSubscriptionScore client:load locale={locale} />
+  </main>
+</BaseLayout>

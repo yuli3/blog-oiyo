@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import FuelCostCalculator from "../../components/tools/FuelCostCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "주유비 계산기 — 구간별 연료비·1인당 비용 무료 계산",
+    description: "서울↔부산 등 자주 찾는 구간 프리셋과 휘발유·경유·LPG 유종 선택으로 총 연료비와 1인당 주유비를 빠르게 계산하세요.",
+  },
+  en: {
+    title: "Fuel Cost Calculator — Trip Fuel Cost & Per-Person Split",
+    description: "Quickly calculate total fuel cost and cost per person for popular routes. Preset routes and fuel types (gasoline, diesel, LPG) included.",
+  },
+  ja: {
+    title: "ガソリン代計算機 — ルート別燃料費・1人あたり費用を無料計算",
+    description: "ソウル↔釜山などよく使うルートと燃料種別（ガソリン・軽油・LPG）を選ぶだけで総燃料費と1人あたり費用をすぐ計算。",
+  },
+  fr: {
+    title: "Calculateur de coût de carburant — Coût par trajet et par personne",
+    description: "Calculez rapidement le coût total en carburant et le coût par personne pour les trajets fréquents. Prédéfinis de routes et types de carburant inclus.",
+  },
+  es: {
+    title: "Calculadora de coste de combustible — Coste por trayecto y por persona",
+    description: "Calcula rápidamente el coste total de combustible y el coste por persona para rutas habituales. Incluye rutas y tipos de combustible predefinidos.",
+  },
+  zh: {
+    title: "油費計算器 — 路線油費與每人費用免費計算",
+    description: "透過首爾↔釜山等常用路線預設和汽油、柴油、LPG燃料類型快速計算總油費及每人費用。",
+  },
+  cn: {
+    title: "油费计算器 — 路线油费与每人费用免费计算",
+    description: "通过首尔↔釜山等常用路线预设和汽油、柴油、LPG燃料类型快速计算总油费及每人费用。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <FuelCostCalculator client:load locale={locale} />
+  </main>
+</BaseLayout>

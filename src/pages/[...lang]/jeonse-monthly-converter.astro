@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import JeonseMonthlyConverter from "../../components/tools/JeonseMonthlyConverter";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "전월세 전환 계산기 — 전세↔월세 전환율 계산",
+    description: "전세금을 월세로, 또는 월세를 전세금으로 전환하는 계산기. 전환율 조정 및 시세 유불리 판단 기능 제공.",
+  },
+  en: {
+    title: "Jeonse ↔ Monthly Rent Converter — Korean Lease Conversion Calculator",
+    description: "Convert Korean jeonse (lump-sum deposit) to monthly rent or vice versa. Adjust the conversion rate and see whether the current rent is favorable or unfavorable.",
+  },
+  ja: {
+    title: "チョンセ↔月極家賃変換計算機 — 韓国賃貸転換率計算",
+    description: "チョンセを月極家賃に、または月極家賃をチョンセに変換する計算機。転換率の調整と市場比較機能付き。",
+  },
+  fr: {
+    title: "Convertisseur Jeonse ↔ Loyer Mensuel — Calcul du Bail Coréen",
+    description: "Convertissez le jeonse coréen (caution forfaitaire) en loyer mensuel ou vice versa. Ajustez le taux de conversion et évaluez si le loyer est favorable.",
+  },
+  es: {
+    title: "Convertidor Jeonse ↔ Alquiler Mensual — Cálculo de Arrendamiento Coreano",
+    description: "Convierte el jeonse coreano (depósito a tanto alzado) en alquiler mensual o viceversa. Ajusta la tasa de conversión y compara con el mercado.",
+  },
+  zh: {
+    title: "全租↔月租轉換計算機 — 韓國租賃轉換率計算",
+    description: "將全租金換算為月租，或將月租換算為全租金。可調整轉換率並判斷目前租金的市場優劣。",
+  },
+  cn: {
+    title: "全租↔月租转换计算器 — 韩国租赁转换率计算",
+    description: "将全租金换算为月租，或将月租换算为全租金。可调整转换率并判断目前租金的市场优劣。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <JeonseMonthlyConverter client:load locale={locale} />
+  </main>
+</BaseLayout>

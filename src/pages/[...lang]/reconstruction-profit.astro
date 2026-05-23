@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ReconstructionProfitCalculator from "../../components/tools/ReconstructionProfitCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "재건축 수익성 계산기 — ROI·연평균 수익률 무료 계산",
+    description: "재건축 아파트의 총 투자금, 순이익, ROI, 연평균 수익률을 한눈에 계산해보세요. 추가 분담금·보유 기간도 반영합니다.",
+  },
+  en: {
+    title: "Reconstruction Profit Calculator — Apartment Redevelopment ROI",
+    description: "Calculate total investment, net profit, ROI, and annual return for apartment reconstruction projects. Includes additional contribution and holding period.",
+  },
+  ja: {
+    title: "再建築収益性計算機 — ROI・年平均収益率を無料計算",
+    description: "再建築マンションの総投資額・純利益・ROI・年平均収益率をまとめて計算。追加負担金や保有期間も考慮します。",
+  },
+  fr: {
+    title: "Calculateur de rentabilité de reconstruction — ROI & rendement annuel",
+    description: "Calculez l'investissement total, le bénéfice net, le ROI et le rendement annuel moyen pour un projet de reconstruction d'appartement.",
+  },
+  es: {
+    title: "Calculadora de rentabilidad de reconstrucción — ROI y rendimiento anual",
+    description: "Calcula la inversión total, el beneficio neto, el ROI y la rentabilidad anual media de proyectos de reconstrucción de apartamentos.",
+  },
+  zh: {
+    title: "重建獲利計算器 — ROI 與年均報酬率免費計算",
+    description: "計算公寓重建項目的總投資金額、淨利潤、投資報酬率及年均報酬率，包含額外分擔金與持有期間。",
+  },
+  cn: {
+    title: "重建盈利计算器 — ROI 和年均回报率免费计算",
+    description: "计算公寓重建项目的总投资金额、净利润、投资回报率及年均回报率，包含额外分担金和持有期间。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <ReconstructionProfitCalculator client:load locale={locale} />
+  </main>
+</BaseLayout>

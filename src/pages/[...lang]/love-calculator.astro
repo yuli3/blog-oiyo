@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import LoveCalculator from "../../components/tools/LoveCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "러브 계산기 — 이름/MBTI 궁합 무료 테스트",
+    description: "이름 또는 MBTI로 두 사람의 연애 궁합을 계산해보세요. 재미로 보는 사랑 지수 계산기.",
+  },
+  en: {
+    title: "Love Calculator — Name & MBTI Compatibility Test",
+    description: "Calculate your love compatibility by name or MBTI type. A fun tool to find your love percentage!",
+  },
+  ja: {
+    title: "ラブ計算機 — 名前・MBTI相性テスト",
+    description: "名前またはMBTIで二人の恋愛相性を計算しましょう。楽しい愛情指数計算機です。",
+  },
+  fr: {
+    title: "Calculateur d'Amour — Test de Compatibilité Prénom & MBTI",
+    description: "Calculez votre compatibilité amoureuse par prénom ou type MBTI. Un outil amusant pour trouver votre pourcentage d'amour !",
+  },
+  es: {
+    title: "Calculadora de Amor — Test de Compatibilidad por Nombre y MBTI",
+    description: "Calcula tu compatibilidad amorosa por nombre o tipo MBTI. ¡Una herramienta divertida para encontrar tu porcentaje de amor!",
+  },
+  zh: {
+    title: "爱情计算器 — 名字和MBTI契合度测试",
+    description: "通过名字或MBTI类型计算你们的爱情契合度。有趣的爱情指数计算工具！",
+  },
+  cn: {
+    title: "愛情計算器 — 名字和MBTI契合度測試",
+    description: "通過名字或MBTI類型計算你們的愛情契合度。有趣的愛情指數計算工具！",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <LoveCalculator client:load locale={locale} />
+  </main>
+</BaseLayout>

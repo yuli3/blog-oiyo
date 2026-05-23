@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import FuelEfficiencyCalculator from "../../components/tools/FuelEfficiencyCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "연비 계산기 — km/L · L/100km · MPG 단위 변환",
+    description: "연비를 km/L, L/100km, MPG 세 단위로 자유롭게 변환하세요. 자동차 연비 비교 무료 계산기.",
+  },
+  en: {
+    title: "Fuel Efficiency Calculator — km/L · L/100km · MPG Converter",
+    description: "Convert fuel efficiency between km/L, L/100km, and MPG instantly. Free car fuel economy comparison calculator.",
+  },
+  ja: {
+    title: "燃費計算機 — km/L・L/100km・MPG 単位変換",
+    description: "燃費をkm/L、L/100km、MPGの3単位で自由に変換。自動車燃費比較の無料計算ツール。",
+  },
+  fr: {
+    title: "Calculateur de Consommation de Carburant — km/L · L/100km · MPG",
+    description: "Convertissez la consommation de carburant entre km/L, L/100km et MPG instantanément. Calculateur gratuit d'économie de carburant.",
+  },
+  es: {
+    title: "Calculadora de Eficiencia de Combustible — km/L · L/100km · MPG",
+    description: "Convierte la eficiencia de combustible entre km/L, L/100km y MPG al instante. Calculadora gratuita de comparación de consumo de combustible.",
+  },
+  zh: {
+    title: "油耗计算器 — km/L · L/100km · MPG 单位换算",
+    description: "即时换算km/L、L/100km和MPG之间的油耗。免费汽车油耗比较计算器。",
+  },
+  cn: {
+    title: "油耗計算器 — km/L · L/100km · MPG 單位換算",
+    description: "即時換算km/L、L/100km和MPG之間的油耗。免費汽車油耗比較計算器。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <FuelEfficiencyCalculator client:load locale={locale} />
+  </main>
+</BaseLayout>

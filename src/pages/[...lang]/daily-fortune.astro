@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import DailyFortune from "../../components/tools/DailyFortune";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "오늘의 운세 — 생년월일로 보는 무료 운세",
+    description: "생년월일을 입력하면 오늘의 종합운·애정운·금전운·건강운·직업운·학업운을 무료로 확인하세요.",
+  },
+  en: {
+    title: "Daily Fortune — Free Horoscope by Birth Date",
+    description: "Enter your birth date to get your free daily fortune: overall, love, money, health, career, and study luck.",
+  },
+  ja: {
+    title: "今日の運勢 — 生年月日で見る無料占い",
+    description: "生年月日を入力すると今日の総合運・恋愛運・金運・健康運・仕事運・学業運が無料でわかります。",
+  },
+  fr: {
+    title: "Horoscope du Jour — Bonne Fortune Gratuite par Date de Naissance",
+    description: "Entrez votre date de naissance pour obtenir votre fortune quotidienne gratuite : chance générale, amour, argent, santé, carrière et études.",
+  },
+  es: {
+    title: "Fortuna del Día — Horóscopo Gratis por Fecha de Nacimiento",
+    description: "Ingresa tu fecha de nacimiento para obtener tu fortuna diaria gratuita: suerte general, amor, dinero, salud, carrera y estudio.",
+  },
+  zh: {
+    title: "每日运势 — 免费生日运势查询",
+    description: "输入生日即可免费查看今日综合运、爱情运、财运、健康运、事业运和学业运。",
+  },
+  cn: {
+    title: "每日運勢 — 免費生日運勢查詢",
+    description: "輸入生日即可免費查看今日綜合運、愛情運、財運、健康運、事業運和學業運。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <DailyFortune client:load locale={locale} />
+  </main>
+</BaseLayout>
