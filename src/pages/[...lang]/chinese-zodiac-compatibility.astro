@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ChineseZodiacCompatibility from "../../components/tools/ChineseZodiacCompatibility";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "띠 궁합 — 12지신 출생연도 궁합 테스트",
+    description: "태어난 연도를 선택해 띠를 확인하고 삼합·육합·충 등 144가지 조합의 띠 궁합을 알아보세요.",
+  },
+  en: {
+    title: "Chinese Zodiac Compatibility — 12 Animal Sign Compatibility Test",
+    description: "Select birth years to find your zodiac animals and check compatibility including Triad, Six Harmony, and Clash across 144 combinations.",
+  },
+  ja: {
+    title: "干支相性診断 — 十二支 生まれ年 相性テスト",
+    description: "生まれた年を選んで干支を確認し、三合・六合・沖など144通りの干支の相性を調べましょう。",
+  },
+  fr: {
+    title: "Compatibilité Zodiaque Chinois — Test de Compatibilité 12 Animaux",
+    description: "Sélectionnez les années de naissance pour trouver vos animaux du zodiaque et vérifiez la compatibilité incluant Triade, Six Harmonies et Conflit.",
+  },
+  es: {
+    title: "Compatibilidad Zodiaco Chino — Test de Compatibilidad de 12 Animales",
+    description: "Selecciona los años de nacimiento para encontrar tus animales del zodiaco y verifica la compatibilidad incluyendo Tríada, Seis Armonías y Choque.",
+  },
+  zh: {
+    title: "生肖配对 — 12生肖出生年份配对测试",
+    description: "选择出生年份查看生肖，了解包括三合、六合、相冲在内的144种生肖配对结果。",
+  },
+  cn: {
+    title: "生肖配對 — 12生肖出生年份配對測試",
+    description: "選擇出生年份查看生肖，了解包括三合、六合、相沖在內的144種生肖配對結果。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <ChineseZodiacCompatibility client:load locale={locale} />
+  </main>
+</BaseLayout>

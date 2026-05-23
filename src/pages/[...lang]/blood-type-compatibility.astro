@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import BloodTypeCompatibility from "../../components/tools/BloodTypeCompatibility";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "혈액형 궁합 — A/B/O/AB 두 사람 궁합 테스트",
+    description: "두 사람의 혈액형으로 궁합 점수, 등급, 관계 특징을 알아보세요. 16가지 혈액형 조합 궁합 분석.",
+  },
+  en: {
+    title: "Blood Type Compatibility — A/B/O/AB Relationship Test",
+    description: "Discover your compatibility score, grade, and relationship traits based on blood types. All 16 blood type combinations analyzed.",
+  },
+  ja: {
+    title: "血液型相性診断 — A/B/O/AB 二人の相性テスト",
+    description: "二人の血液型で相性スコア・ランク・関係の特徴を調べましょう。16通りの血液型の組み合わせを分析。",
+  },
+  fr: {
+    title: "Compatibilité par Groupe Sanguin — Test A/B/O/AB",
+    description: "Découvrez votre score de compatibilité, votre niveau et vos traits relationnels selon les groupes sanguins. Les 16 combinaisons analysées.",
+  },
+  es: {
+    title: "Compatibilidad por Tipo de Sangre — Test A/B/O/AB",
+    description: "Descubre tu puntuación de compatibilidad, nivel y rasgos relacionales según los tipos de sangre. Las 16 combinaciones analizadas.",
+  },
+  zh: {
+    title: "血型配对 — A/B/O/AB 两人配对测试",
+    description: "通过血型了解配对分数、等级和关系特征。分析全部16种血型组合。",
+  },
+  cn: {
+    title: "血型配對 — A/B/O/AB 兩人配對測試",
+    description: "透過血型了解配對分數、等級和關係特徵。分析全部16種血型組合。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <BloodTypeCompatibility client:load locale={locale} />
+  </main>
+</BaseLayout>
