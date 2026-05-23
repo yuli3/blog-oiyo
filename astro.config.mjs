@@ -16,7 +16,48 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings";
 export default defineConfig({
   site: "https://blog.oiyo.net",
   output: "static",
-  integrations: [react(), mdx(), sitemap(), robotsTxt()],
+  integrations: [
+    react(),
+    mdx(),
+    sitemap({
+      // Exclude dev/utility paths and underscore-prefixed routes
+      filter: (page) => {
+        const url = new URL(page);
+        const path = url.pathname;
+        // Exclude paths with underscore segments
+        if (path.split("/").some((seg) => seg.startsWith("_"))) return false;
+        // Exclude /index duplicate (trailing slash version is canonical)
+        if (path.endsWith("/index/") || path === "/index") return false;
+        return true;
+      },
+      // Set lastmod to today's build date
+      lastmod: new Date(),
+      // Use serialize for per-URL priority and changefreq
+      serialize: (item) => {
+        const url = new URL(item.url);
+        const path = url.pathname;
+        // Homepage — highest priority
+        if (path === "/" || path === "") {
+          return { ...item, priority: 1.0, changefreq: "daily" };
+        }
+        // Locale homepages (e.g. /ko/, /ja/, /fr/)
+        if (/^\/(ko|ja|fr|es|zh|cn)\/$/.test(path)) {
+          return { ...item, priority: 0.9, changefreq: "daily" };
+        }
+        // Blog article pages (contain at least 2 path segments after locale)
+        if (/^\/(en|ko|ja|fr|es|zh|cn)\/[^/]+\/$/.test(path)) {
+          return { ...item, priority: 0.8, changefreq: "weekly" };
+        }
+        // Pagination pages (/2/, /3/, …)
+        if (/\/\d+\/$/.test(path)) {
+          return { ...item, priority: 0.4, changefreq: "weekly" };
+        }
+        // Everything else (about, tools, calculators, etc.)
+        return { ...item, priority: 0.6, changefreq: "monthly" };
+      },
+    }),
+    robotsTxt(),
+  ],
   image: {
     service: {
       entrypoint: "astro/assets/services/sharp",
