@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import type { Locale } from "../../lib/i18n";
 
 interface Props {
@@ -565,7 +565,6 @@ export default function VocabFlashcard({ locale }: Props) {
   const [flipped, setFlipped] = useState(false);
   const [known, setKnown] = useState<Set<number>>(new Set());
   const [unknown, setUnknown] = useState<Set<number>>(new Set());
-  const [reviewMode, setReviewMode] = useState(false);
   const [todayCount, setTodayCount] = useState(() => getTodayCount());
 
   const current = queue[idx] ?? null;

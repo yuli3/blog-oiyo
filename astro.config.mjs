@@ -38,22 +38,22 @@ export default defineConfig({
         const path = url.pathname;
         // Homepage — highest priority
         if (path === "/" || path === "") {
-          return { ...item, priority: 1.0, changefreq: "daily" };
+          return { ...item, priority: 1.0 };
         }
         // Locale homepages (e.g. /ko/, /ja/, /fr/)
         if (/^\/(ko|ja|fr|es|zh|cn)\/$/.test(path)) {
-          return { ...item, priority: 0.9, changefreq: "daily" };
+          return { ...item, priority: 0.9 };
         }
-        // Blog article pages (contain at least 2 path segments after locale)
+        // Blog article pages
         if (/^\/(en|ko|ja|fr|es|zh|cn)\/[^/]+\/$/.test(path)) {
-          return { ...item, priority: 0.8, changefreq: "weekly" };
+          return { ...item, priority: 0.8 };
         }
         // Pagination pages (/2/, /3/, …)
         if (/\/\d+\/$/.test(path)) {
-          return { ...item, priority: 0.4, changefreq: "weekly" };
+          return { ...item, priority: 0.4 };
         }
-        // Everything else (about, tools, calculators, etc.)
-        return { ...item, priority: 0.6, changefreq: "monthly" };
+        // Everything else
+        return { ...item, priority: 0.6 };
       },
     }),
     robotsTxt(),
