@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useRef, useCallback } from "react";
 import type { Locale } from "../../lib/i18n";
 
 interface Props {
@@ -230,6 +230,38 @@ export default function TarotDailyCard({ locale }: Props) {
   const [isMajor, setIsMajor] = useState(false);
   const [flipped, setFlipped] = useState(false);
 
+  const cardRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef<number | undefined>(undefined);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const el = cardRef.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width;
+    const py = (e.clientY - r.top) / r.height;
+    const ry = (px - 0.5) * 28;
+    const rx = -(py - 0.5) * 28;
+    const angle = Math.atan2(py - 0.5, px - 0.5) * 180 / Math.PI + 180;
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    rafRef.current = requestAnimationFrame(() => {
+      el.style.setProperty("--rx", rx + "deg");
+      el.style.setProperty("--ry", ry + "deg");
+      el.style.setProperty("--mx", (px * 100) + "%");
+      el.style.setProperty("--my", (py * 100) + "%");
+      el.style.setProperty("--iri-angle", angle + "deg");
+    });
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    const el = cardRef.current;
+    if (!el) return;
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    el.style.setProperty("--rx", "0deg");
+    el.style.setProperty("--ry", "0deg");
+    el.style.setProperty("--mx", "50%");
+    el.style.setProperty("--my", "50%");
+  }, []);
+
   const ui = UI[locale] ?? UI.en;
 
   async function drawCard() {
@@ -324,21 +356,25 @@ export default function TarotDailyCard({ locale }: Props) {
 
       {(phase === "flipping" || phase === "revealed") && card && (
         <div className="flex flex-col items-center gap-6">
-          {/* Card flip area */}
-          <div
-            className="cursor-pointer"
-            onClick={handleCardClick}
-            style={{ perspective: "1000px" }}
-          >
+          {/* Card flip area — 3D tilt + iridescent */}
+          <div style={{ perspective: "1400px" }}>
             <div
+              ref={cardRef}
+              onClick={handleCardClick}
+              onMouseMove={handleMouseMove}
+              onMouseLeave={handleMouseLeave}
+              className="cursor-pointer"
               style={{
-                width: "160px",
-                height: "256px",
+                width: "200px",
+                height: "320px",
                 position: "relative",
                 transformStyle: "preserve-3d",
-                transition: "transform 0.6s",
-                transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
-              }}
+                transition: flipped ? "transform 1.1s cubic-bezier(.22,.92,.18,1)" : "transform 1.1s cubic-bezier(.22,.92,.18,1)",
+                transform: flipped
+                  ? `rotateX(var(--rx, 0deg)) rotateY(calc(180deg + var(--ry, 0deg)))`
+                  : `rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg))`,
+                willChange: "transform",
+              } as React.CSSProperties}
             >
               {/* Card back */}
               <div
@@ -348,9 +384,11 @@ export default function TarotDailyCard({ locale }: Props) {
                   height: "100%",
                   backfaceVisibility: "hidden",
                   WebkitBackfaceVisibility: "hidden",
-                  borderRadius: "12px",
-                  background: "linear-gradient(135deg, #4c1d95, #1e1b4b)",
-                  border: "2px solid #7c3aed",
+                  borderRadius: "8px",
+                  background: "linear-gradient(180deg, #0e0a1c 0%, #0a0716 60%, #07040e 100%)",
+                  border: "1px solid rgba(139,92,246,0.35)",
+                  boxShadow: "0 30px 60px -20px rgba(0,0,0,.9), 0 10px 20px -5px rgba(0,0,0,.7)",
+                  overflow: "hidden",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -358,9 +396,20 @@ export default function TarotDailyCard({ locale }: Props) {
                   gap: "8px",
                 }}
               >
-                <span className="text-purple-300 text-4xl">✦</span>
+                {/* Mystical back pattern */}
+                <div style={{ position: "absolute", inset: "14px", border: "1px solid rgba(192,168,255,0.22)", borderRadius: "3px", display: "grid", placeItems: "center" }}>
+                  <div style={{ position: "absolute", inset: "24px", border: "1px solid rgba(192,168,255,0.14)", borderRadius: "2px" }} />
+                  <div style={{ width: "60%", aspectRatio: "1", border: "1px solid rgba(192,168,255,0.28)", borderRadius: "50%", display: "grid", placeItems: "center", position: "relative" }}>
+                    <span style={{ position: "absolute", fontFamily: "serif", fontSize: "32px", color: "rgba(192,168,255,0.6)" }}>✦</span>
+                  </div>
+                  <span style={{ position: "absolute", bottom: "10px", left: 0, right: 0, textAlign: "center", fontSize: "8px", letterSpacing: "0.36em", color: "rgba(192,168,255,0.45)", textTransform: "uppercase" }}>oracle</span>
+                </div>
+                {/* Iridescent layers */}
+                <div style={{ position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "screen", opacity: 0.7, background: "conic-gradient(from var(--iri-angle, 220deg) at var(--mx, 50%) var(--my, 50%), #b8e8ff, #f4d4ff, #ffe4d0, #d0fff4, #e0d4ff, #b8e8ff)", filter: "blur(14px) saturate(1.2)" }} />
+                <div style={{ position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "overlay", opacity: 0.45, background: "radial-gradient(120% 140% at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,.7), transparent 38%)", filter: "blur(18px)" }} />
+                <div style={{ position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "screen", opacity: 0.6, background: "radial-gradient(180px 220px at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,.5) 0%, rgba(255,255,255,.15) 30%, transparent 60%)" }} />
                 {!flipped && (
-                  <p className="text-purple-300 text-xs px-4 text-center mt-2">{ui.clickToReveal}</p>
+                  <p style={{ position: "absolute", bottom: "44px", fontSize: "10px", letterSpacing: "0.2em", color: "rgba(192,168,255,0.6)", textTransform: "uppercase" }}>{ui.clickToReveal}</p>
                 )}
               </div>
 
@@ -373,36 +422,36 @@ export default function TarotDailyCard({ locale }: Props) {
                   backfaceVisibility: "hidden",
                   WebkitBackfaceVisibility: "hidden",
                   transform: "rotateY(180deg)",
-                  borderRadius: "12px",
+                  borderRadius: "8px",
                   background: isReversed
-                    ? "linear-gradient(135deg, #fef3c7, #fde68a)"
-                    : "linear-gradient(135deg, #ede9fe, #ddd6fe)",
-                  border: `2px solid ${isReversed ? "#d97706" : "#7c3aed"}`,
+                    ? "linear-gradient(180deg, #1c1008 0%, #100a04 100%)"
+                    : "linear-gradient(180deg, #100a22 0%, #0a0716 60%, #08050f 100%)",
+                  border: `1px solid ${isReversed ? "rgba(217,119,6,0.4)" : "rgba(139,92,246,0.35)"}`,
+                  boxShadow: "0 30px 60px -20px rgba(0,0,0,.9)",
+                  overflow: "hidden",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   flexDirection: "column",
-                  padding: "12px",
+                  padding: "14px",
                 }}
               >
-                <div
-                  style={{
-                    transform: isReversed ? "rotate(180deg)" : "none",
-                    textAlign: "center",
-                  }}
-                >
-                  {card.suit ? (
-                    <span className="text-5xl block mb-1">{SUIT_SYMBOLS[card.suit] ?? "🔮"}</span>
-                  ) : (
-                    <span className="text-5xl block mb-1">🌟</span>
-                  )}
-                  <p
-                    className="font-bold text-xs"
-                    style={{ color: isReversed ? "#92400e" : "#4c1d95" }}
-                  >
-                    {cardName}
-                  </p>
+                <div style={{ position: "absolute", inset: "14px", border: `1px solid ${isReversed ? "rgba(217,119,6,0.3)" : "rgba(192,168,255,0.22)"}`, borderRadius: "3px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "8px" }}>
+                  <span style={{ fontSize: "10px", letterSpacing: "0.4em", color: isReversed ? "rgba(217,119,6,0.7)" : "rgba(192,168,255,0.6)", textTransform: "uppercase", fontFamily: "monospace" }}>{isReversed ? ui.reversed : ui.upright}</span>
+                  <div style={{ transform: isReversed ? "rotate(180deg)" : "none", textAlign: "center" }}>
+                    {card.suit ? (
+                      <span style={{ fontSize: "40px", display: "block", marginBottom: "8px" }}>{SUIT_SYMBOLS[card.suit] ?? "🔮"}</span>
+                    ) : (
+                      <span style={{ fontSize: "40px", display: "block", marginBottom: "8px" }}>🌟</span>
+                    )}
+                    <p style={{ fontFamily: "serif", fontWeight: "bold", fontSize: "13px", letterSpacing: "0.2em", color: isReversed ? "#d97706" : "rgba(232,228,255,0.9)", textTransform: "uppercase" }}>
+                      {cardName}
+                    </p>
+                  </div>
                 </div>
+                {/* Iridescent on front too */}
+                <div style={{ position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "screen", opacity: 0.5, background: "conic-gradient(from var(--iri-angle, 220deg) at var(--mx, 50%) var(--my, 50%), #b8e8ff, #f4d4ff, #ffe4d0, #d0fff4, #e0d4ff, #b8e8ff)", filter: "blur(16px)" }} />
+                <div style={{ position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "screen", opacity: 0.45, background: "radial-gradient(160px 200px at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,.45) 0%, rgba(255,255,255,.1) 30%, transparent 60%)" }} />
               </div>
             </div>
           </div>

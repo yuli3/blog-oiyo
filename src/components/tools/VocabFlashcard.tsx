@@ -579,7 +579,6 @@ export default function VocabFlashcard({ locale }: Props) {
     setFlipped(false);
     setKnown(new Set());
     setUnknown(new Set());
-    setReviewMode(false);
   }
 
   function handleFlip() {
@@ -615,7 +614,6 @@ export default function VocabFlashcard({ locale }: Props) {
     setFlipped(false);
     setKnown(new Set());
     setUnknown(new Set());
-    setReviewMode(true);
   }
 
   function handleReset() {
@@ -625,7 +623,6 @@ export default function VocabFlashcard({ locale }: Props) {
     setFlipped(false);
     setKnown(new Set());
     setUnknown(new Set());
-    setReviewMode(false);
   }
 
   const progress = total > 0 ? (idx / total) * 100 : 0;
