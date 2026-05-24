@@ -74,6 +74,9 @@ const { Content } = await post.render();
 const tocEnabled = siteConfig.features.toc;
 const t = await getTranslations(locale as Locale);
 const categoryNames = (t.category.names ?? {}) as Record<string, string>;
+// Strip surrounding quotes that some frontmatter values may carry (e.g. category: "Psychology")
+const rawCategory = (post.data.category ?? "").replace(/^["']|["']$/g, "");
+const displayCategory = categoryNames[rawCategory] ?? rawCategory;
 const track = getTrackFromData(post.data);
 const mdxComponents = getRegisteredMdxComponents(track);
 
@@ -199,10 +202,10 @@ const coursesHref = `/${locale}/courses`;
           <header class="mb-16">
             <div class="flex items-center gap-3 text-xs font-bold text-primary uppercase tracking-widest mb-6 flex-wrap">
               <a
-                href={`/${locale}/category/${post.data.category?.toLowerCase().replace(/[^a-z0-9]+/g, "-") ?? "unknown"}`}
+                href={`/${locale}/category/${rawCategory.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
                 class="hover:underline decoration-2 underline-offset-4 transition-all"
               >
-                {categoryNames[post.data.category ?? ""] ?? post.data.category}
+                {displayCategory}
               </a>
               <span class="text-muted-foreground/30">•</span>
               {chapter !== null ? (
