@@ -1,0 +1,56 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import MenuGenerator from "../../components/tools/MenuGenerator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "랜덤 메뉴 고르기 — 오늘 뭐 먹지? 한식·일식·중식·양식 랜덤 추천",
+    description: "메뉴 고민 끝! 버튼 하나로 한식, 일식, 중식, 양식 등 300가지 이상 메뉴 중 랜덤 추천. 즐겨찾기·메뉴배틀·맛집 검색 지원.",
+  },
+  en: {
+    title: "Random Food Picker — What Should I Eat Today?",
+    description: "Can't decide what to eat? Pick a random menu from 300+ Korean, Japanese, Chinese, Western dishes. Supports favorites, battle mode, and restaurant search.",
+  },
+  ja: {
+    title: "ランダムメニュー — 今日は何を食べる？",
+    description: "メニューで悩んでいる？ボタン一つで韓食・日食・中食・洋食から300種以上のランダム推薦。お気に入り・バトルモード・レストラン検索対応。",
+  },
+  fr: {
+    title: "Menu Aléatoire — Que Manger Aujourd'hui ?",
+    description: "Choisissez un plat au hasard parmi plus de 300 menus coréens, japonais, chinois et occidentaux.",
+  },
+  es: {
+    title: "Menú Aleatorio — ¿Qué Comer Hoy?",
+    description: "¿No puedes decidir qué comer? Elige un menú aleatorio entre más de 300 platos coreanos, japoneses, chinos y occidentales.",
+  },
+  zh: {
+    title: "隨機菜單 — 今天吃什麼？",
+    description: "從300多種韓食、日食、中食、西食中隨機推薦。支援收藏、菜單對決和餐廳搜索。",
+  },
+  cn: {
+    title: "随机菜单 — 今天吃什么？",
+    description: "从300多种韩食、日食、中食、西食中随机推荐。支持收藏、菜单对决和餐厅搜索。",
+  },
+};
+
+const m = meta[locale] ?? meta.ko;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <div class="mb-8 text-center">
+      <div class="text-5xl mb-3">🍽️</div>
+      <h1 class="text-3xl font-bold tracking-tight mb-2">랜덤 메뉴 고르기</h1>
+      <p class="text-muted-foreground">오늘 뭐 먹지? 버튼 하나로 메뉴 결정!</p>
+    </div>
+    <MenuGenerator client:load />
+  </main>
+</BaseLayout>
