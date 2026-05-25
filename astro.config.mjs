@@ -5,6 +5,7 @@ import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import mdx from "@astrojs/mdx";
+import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import robotsTxt from "astro-robots-txt";
@@ -79,11 +80,17 @@ export default defineConfig({
     plugins: [/** @type {any} */ (tailwindcss())],
   },
   markdown: {
+    // Disable built-in GFM so we can re-apply it with singleTilde: false.
+    // Korean content uses ~ as a range character (e.g. "1~2번 12일~13일"),
+    // which MDX would otherwise parse as strikethrough.
+    // Intentional strikethrough should use <del>text</del> instead.
+    gfm: false,
     shikiConfig: {
       theme: "github-dark",
       wrap: true,
     },
     remarkPlugins: [
+      [remarkGfm, { singleTilde: false }],
       remarkMath,
       [
         wikiLinkPlugin,

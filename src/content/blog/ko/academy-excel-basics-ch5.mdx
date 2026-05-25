@@ -1,0 +1,431 @@
+---
+track: academy
+locale: ko
+title: "Ch5. 엑셀 기초~고급 — 매크로와 실전 활용"
+category: "Computer Science"
+series: "엑셀 기초~고급"
+chapter: 5
+chapterTitleShort: '매크로·실전'
+author: OIYO 편집부
+tags:
+  - 엑셀
+  - Excel
+  - 매크로
+  - VBA
+  - 자동화
+  - 업무효율
+  - 직장인
+description: "엑셀 매크로와 실전 자동화 완전 가이드 — 매크로 기록·실행, VBA 기초(Sub·변수·If·Loop), 실무 자동화 스크립트, 보고서·가계부·재고관리 템플릿."
+pubDate: '2026-05-25'
+layoutVariant: lecture-series
+---
+
+## 매크로란?
+
+매크로(Macro)는 **반복 작업을 자동화**하는 엑셀의 기능입니다. 매일 하는 데이터 정렬, 서식 적용, 보고서 생성 같은 작업을 버튼 하나로 처리할 수 있습니다.
+
+**매크로의 두 가지 방식:**
+- **기록 방식**: 사용자 동작을 녹화 → 빠르고 쉬움
+- **VBA 코딩**: Visual Basic for Applications로 직접 작성 → 유연하고 강력
+
+---
+
+## 매크로 기록
+
+### 기록 시작
+
+```
+개발 도구 탭 → 매크로 기록
+(개발 도구 탭이 없으면: 파일 → 옵션 → 리본 사용자 지정 → 개발 도구 체크)
+```
+
+### 매크로 기록 설정 항목
+
+| 항목 | 설명 |
+|------|------|
+| **매크로 이름** | 영문+숫자 조합, 공백 불가 (예: FormatReport) |
+| **바로 가기 키** | Ctrl+단축키 지정 (예: Ctrl+Shift+F) |
+| **저장 위치** | 현재 통합 문서 / 개인용 매크로 통합 문서 |
+| **설명** | 매크로 용도 메모 |
+
+### 기록 주의사항
+
+```
+기록 시작 후:
+- 클릭, 키보드 입력, 메뉴 선택 모두 기록됨
+- 마우스 이동만으로는 기록되지 않음
+- 셀 선택 위치도 기록됨 (절대참조 주의)
+→ 상대 참조로 기록: 개발 도구 → 상대 참조로 기록 활성화
+```
+
+### 매크로 실행
+
+```
+방법 1: 지정한 단축키 (예: Ctrl+Shift+F)
+방법 2: 개발 도구 → 매크로 → 목록에서 선택 → 실행
+방법 3: 도형/버튼에 매크로 연결 → 클릭으로 실행
+  (삽입 → 도형 → 우클릭 → 매크로 지정)
+```
+
+---
+
+## VBA 편집기
+
+기록된 매크로를 수정하거나 새 코드를 직접 작성하는 환경입니다.
+
+```
+Alt+F11 → VBA 편집기 열기
+또는: 개발 도구 → Visual Basic
+```
+
+### VBA 편집기 구조
+
+```
+┌─────────────────────────────────────┐
+│  프로젝트 창  │    코드 편집 영역     │
+│  (좌측)      │    (우측)            │
+│  - ThisWorkbook                     │
+│  - Sheet1                          │
+│  - Module1   │  여기에 코드 작성     │
+└─────────────────────────────────────┘
+```
+
+**모듈 추가**: 프로젝트 창 우클릭 → 삽입 → 모듈
+
+---
+
+## VBA 기초 문법
+
+### Sub 프로시저 구조
+
+```
+Sub 매크로이름()
+    ' 작은따옴표: 주석
+    ' 코드 작성
+End Sub
+```
+
+### 변수 선언과 타입
+
+```
+Dim 변수명 As 타입
+
+Dim 이름 As String       ' 문자열
+Dim 나이 As Integer      ' 정수 (-32768 ~ 32767)
+Dim 금액 As Long         ' 큰 정수
+Dim 비율 As Double       ' 소수
+Dim 완료 As Boolean      ' True/False
+
+' 여러 변수 한 번에:
+Dim i As Integer, j As Integer, 결과 As Double
+```
+
+### 셀 참조
+
+```
+' 단일 셀:
+Range("A1").Value = "안녕"
+Cells(1, 1).Value = "안녕"    ' Cells(행, 열)
+
+' 범위:
+Range("A1:D10").ClearContents  ' 내용 삭제
+Range("B2:B100").Interior.Color = RGB(255, 255, 0)  ' 배경 노란색
+
+' 현재 셀:
+ActiveCell.Value = "현재 위치"
+
+' 마지막 데이터 행 찾기:
+Dim 마지막행 As Long
+마지막행 = Cells(Rows.Count, 1).End(xlUp).Row
+```
+
+### 조건문 If
+
+```
+If 조건 Then
+    ' 참일 때
+ElseIf 다른조건 Then
+    ' 다른 조건 참일 때
+Else
+    ' 나머지
+End If
+
+' 예시:
+If Cells(i, 3).Value >= 80 Then
+    Cells(i, 4).Value = "합격"
+Else
+    Cells(i, 4).Value = "불합격"
+End If
+```
+
+### 반복문 For
+
+```
+' 정해진 횟수:
+For i = 1 To 10
+    Cells(i, 1).Value = i
+Next i
+
+' 마지막 행까지:
+Dim 마지막행 As Long
+마지막행 = Cells(Rows.Count, 1).End(xlUp).Row
+For i = 2 To 마지막행
+    ' 처리
+Next i
+
+' 역방향:
+For i = 마지막행 To 2 Step -1
+    If Cells(i, 1).Value = "" Then Rows(i).Delete
+Next i
+```
+
+### 반복문 Do While
+
+```
+Dim i As Integer
+i = 1
+Do While Cells(i, 1).Value <> ""
+    ' 처리
+    i = i + 1
+Loop
+```
+
+---
+
+## 실무 자동화 스크립트 5가지
+
+### 1. 서식 자동 적용
+
+```
+Sub 보고서서식적용()
+    ' 제목 행 서식
+    With Range("A1:F1")
+        .Interior.Color = RGB(0, 112, 192)  ' 파란 배경
+        .Font.Color = RGB(255, 255, 255)     ' 흰 글씨
+        .Font.Bold = True
+        .Font.Size = 12
+    End With
+    
+    ' 데이터 행 테두리
+    Dim 마지막행 As Long
+    마지막행 = Cells(Rows.Count, 1).End(xlUp).Row
+    Range("A1:F" & 마지막행).Borders.LineStyle = xlContinuous
+    
+    MsgBox "서식 적용 완료!"
+End Sub
+```
+
+### 2. 데이터 자동 정렬 및 필터 초기화
+
+```
+Sub 데이터정렬()
+    Dim ws As Worksheet
+    Set ws = ActiveSheet
+    
+    ' 기존 필터 해제
+    If ws.AutoFilterMode Then ws.AutoFilterMode = False
+    
+    ' A열 기준 오름차순 정렬
+    ws.UsedRange.Sort Key1:=ws.Range("A2"), _
+        Order1:=xlAscending, Header:=xlYes
+    
+    MsgBox "정렬 완료"
+End Sub
+```
+
+### 3. 빈 행 자동 삭제
+
+```
+Sub 빈행삭제()
+    Dim 마지막행 As Long
+    Dim i As Long
+    
+    마지막행 = Cells(Rows.Count, 1).End(xlUp).Row
+    
+    ' 역방향으로 순회 (삭제 시 행 번호 밀림 방지)
+    For i = 마지막행 To 2 Step -1
+        If Cells(i, 1).Value = "" Then
+            Rows(i).Delete
+        End If
+    Next i
+    
+    MsgBox "빈 행 삭제 완료"
+End Sub
+```
+
+### 4. 월별 시트 자동 생성
+
+```
+Sub 월별시트생성()
+    Dim 월 As Integer
+    Dim 시트명 As String
+    
+    For 월 = 1 To 12
+        시트명 = 월 & "월"
+        
+        ' 이미 있으면 건너뜀
+        On Error Resume Next
+        If Worksheets(시트명) Is Nothing Then
+            Worksheets.Add(After:=Worksheets(Worksheets.Count)).Name = 시트명
+        End If
+        On Error GoTo 0
+    Next 월
+    
+    MsgBox "12개월 시트 생성 완료"
+End Sub
+```
+
+### 5. 결과 자동 집계 및 이메일 준비
+
+```
+Sub 월간요약생성()
+    Dim ws As Worksheet
+    Dim 요약시트 As Worksheet
+    
+    ' 요약 시트 초기화
+    Set 요약시트 = Worksheets("요약")
+    요약시트.Cells.ClearContents
+    
+    ' 헤더 작성
+    요약시트.Range("A1").Value = "부서"
+    요약시트.Range("B1").Value = "총매출"
+    요약시트.Range("C1").Value = "건수"
+    
+    ' 각 시트 데이터 집계
+    Dim 행 As Integer
+    행 = 2
+    For Each ws In Worksheets
+        If ws.Name <> "요약" Then
+            요약시트.Cells(행, 1).Value = ws.Name
+            요약시트.Cells(행, 2).Value = Application.WorksheetFunction.Sum(ws.Range("D:D"))
+            요약시트.Cells(행, 3).Value = ws.Cells(Rows.Count, 1).End(xlUp).Row - 1
+            행 = 행 + 1
+        End If
+    Next ws
+    
+    MsgBox "요약 완료"
+End Sub
+```
+
+---
+
+## 매크로 보안 설정
+
+매크로 파일을 열 때 보안 경고가 나타납니다.
+
+```
+파일 → 옵션 → 보안 센터 → 보안 센터 설정
+→ 매크로 설정:
+  - 모든 매크로 사용 안 함 (알림 표시): 권장
+  - 디지털 서명된 매크로만 허용: 기업 환경
+  - 모든 매크로 사용: 신뢰할 수 있는 경우만
+```
+
+**매크로 파일 저장:**
+```
+일반 .xlsx 파일은 매크로 저장 불가
+→ 파일 → 다른 이름으로 저장 → Excel 매크로 사용 통합 문서 (.xlsm)
+```
+
+---
+
+## 실무 템플릿 활용 예시
+
+### 가계부 자동화
+
+```
+매크로 기능:
+1. 입력 폼에서 날짜·항목·금액 입력
+2. 버튼 클릭 → 자동으로 데이터 시트에 추가
+3. 월별 탭에 자동 집계
+4. 연간 지출 차트 자동 업데이트
+```
+
+### 재고 관리 시트
+
+```
+자동화 항목:
+- 재고 수량 마이너스 시 빨간색 강조
+- 재주문점 이하 품목 자동 목록화
+- 입고·출고 자동 재고 계산
+- 월말 재고 현황 자동 보고서 생성
+```
+
+### 업무 보고서 자동 생성
+
+```
+버튼 하나로:
+1. 원본 데이터 시트에서 이번 달 데이터 추출
+2. 보고서 시트에 표 및 차트 자동 생성
+3. 전월 대비 증감율 자동 계산
+4. PDF로 자동 저장 (선택)
+```
+
+---
+
+## 엑셀 시리즈 마무리 — 학습 로드맵
+
+| 단계 | 목표 | 주요 기능 |
+|------|------|---------|
+| **Ch1 기초** | 엑셀 시작 | 인터페이스, SUM/IF/ROUND |
+| **Ch2 데이터관리** | 데이터 정리 | 정렬, 필터, 조건부 서식 |
+| **Ch3 고급함수** | 데이터 연결 | VLOOKUP, INDEX/MATCH, SUMIFS |
+| **Ch4 피벗·차트** | 데이터 시각화 | 피벗테이블, 슬라이서, 차트 |
+| **Ch5 매크로** | 업무 자동화 | VBA, 반복 작업 자동화 |
+
+**다음 단계 추천:**
+- 파워쿼리 (Power Query): 외부 데이터 자동 연결·변환
+- 파워피벗 (Power Pivot): 대용량 데이터 분석
+- 파워BI: 엑셀 데이터 시각화 고도화
+
+---
+
+## 실전 퀴즈 5문항
+
+**Q1.** 매크로를 "개인용 매크로 통합 문서"에 저장하면?
+- ① 현재 파일에서만 사용 가능하다
+- ② Excel을 열 때마다 자동으로 불러와 모든 파일에서 사용 가능하다
+- ③ OneDrive에 자동 저장된다
+- ④ 다른 사람과 공유된다
+
+**정답**: ② *(개인용 매크로 통합 문서는 숨겨진 파일로 항상 로드됨)*
+
+---
+
+**Q2.** VBA에서 `Cells(Rows.Count, 1).End(xlUp).Row` 의 의미는?
+- ① A1 셀의 값을 반환한다
+- ② A열의 마지막 데이터가 있는 행 번호를 찾는다
+- ③ 시트의 총 행 수를 반환한다
+- ④ A열의 데이터 개수를 센다
+
+**정답**: ② *(맨 아래서 위로 올라가며 첫 데이터 셀의 행 번호 반환)*
+
+---
+
+**Q3.** 빈 행을 삭제하는 반복문에서 역방향(마지막 행 → 2행) 순회가 필요한 이유는?
+- ① 코드 실행 속도가 빠르기 때문
+- ② 행을 삭제하면 이후 행 번호가 당겨지는데, 역방향이면 이미 처리한 행에 영향 없음
+- ③ Excel의 제한으로 정방향 삭제가 불가능
+- ④ For Each 문은 역방향만 지원
+
+**정답**: ② *(행 삭제 시 번호 이동 문제 — 역방향의 핵심 이유)*
+
+---
+
+**Q4.** 매크로가 포함된 파일을 저장할 때 사용해야 하는 형식은?
+- ① .xlsx (Excel 통합 문서)
+- ② .xlsm (Excel 매크로 사용 통합 문서)
+- ③ .xls (Excel 97-2003)
+- ④ .csv (쉼표로 분리된 값)
+
+**정답**: ② *(.xlsx는 매크로를 저장하지 않음 — .xlsm 필수)*
+
+---
+
+**Q5.** VBA에서 오류가 발생할 수 있는 코드를 건너뛰려면?
+- ① `Skip Error Next`
+- ② `On Error Resume Next`
+- ③ `Try ... Catch`
+- ④ `If Error Then Skip`
+
+**정답**: ② *(`On Error Resume Next` — 오류 발생 시 다음 줄로 넘어감)*
