@@ -117,11 +117,15 @@ The following files are adapters and should point back here:
 
 ## 8. Current State
 
-As of 2026-05-09:
+As of 2026-05-25 — see `/Users/seuncho/coding/MASTER_PLAN.md` for the live cross-project roadmap.
 
-1. schema transition is in progress
-2. track-aware MDX registry split is in place
-3. inventory operation is in progress
-4. renderer narrowing is active but not finished
-5. broad content expansion should remain subordinate to normalization
-6. CI harness checks and magazine compatibility audit are in place
+1. Schema transition complete — all `academy` files have `series:` + `chapter:`, all `interactive` have `embeddedTools:`
+2. Track-aware MDX registry split complete
+3. Series normalization complete — Korean `series:` field used everywhere (display bugs fixed 2026-05-25)
+4. Build pipeline green — `npm run build` + `type-check` 0 errors
+5. Content: **742 pieces** (Academy 437 · Magazine 280 · Lecture 25) across 7 locales
+6. Civil-law series reclassified: `track: magazine` → `track: academy` (2026-05-25)
+7. Cross-project promotion: ahoxy BlogBanner, footer card, home cross-promo pending commit
+8. Intent-first browse UX: 8 intent bundles, hub pages for accounting/economics live
+9. Data integrity items outstanding: `academy-labor-law-basic` ↔ `academy-labor-law-basics` duplicate; `academy-tax-basics`+`academy-tax-intro` split series
+10. Phase A content: 10 series each at ch1–2, need 3–5 more chapters each (see MASTER_PLAN § 4)

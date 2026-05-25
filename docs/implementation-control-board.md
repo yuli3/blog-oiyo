@@ -1,7 +1,7 @@
 # Implementation Control Board
 
-**Last updated: 2026-05-20**
-**Synced with:** `data/catalog/workboard.yaml`
+**Last updated: 2026-05-25**
+**Master roadmap:** `/Users/seuncho/coding/MASTER_PLAN.md`
 
 ## 1. Purpose
 
@@ -18,26 +18,26 @@ It exists to prevent drift between:
 
 Use these files in this order:
 
-1. [Content Charter](./content-charter.md)
-2. [MDOC Authoring Spec](./mdoc-authoring-spec.md)
-3. [Category and Track Map](./category-and-track-map.md)
-4. [data/catalog/workboard.yaml](/Users/seuncho/coding/blog-oiyo/data/catalog/workboard.yaml)
+1. `/Users/seuncho/coding/MASTER_PLAN.md` — cross-project roadmap (canonical)
+2. [Content Charter](./content-charter.md)
+3. [MDOC Authoring Spec](./mdoc-authoring-spec.md)
+4. [Category and Track Map](./category-and-track-map.md)
 5. [data/catalog/content-inventory.master.csv](/Users/seuncho/coding/blog-oiyo/data/catalog/content-inventory.master.csv)
-6. [reports/260515-faang-audit-blog-oiyo.md](/Users/seuncho/coding/blog-oiyo/reports/260515-faang-audit-blog-oiyo.md)
 
 ## 3. Current Operational Status
 
-| Area | Status | Meaning |
+| Area | Status | Notes |
 | --- | --- | --- |
-| Strategy definition | complete | One-site strategy confirmed: blog.oiyo.net is the primary destination |
-| Build pipeline | **complete** | `npm run build` passes, `npm run type-check` 0 errors |
-| Schema transition | **complete** | All academy files have `series:`, all interactive have `embeddedTools:` |
-| Taxonomy transition | complete | `interactive`, `academy`, `magazine` tracks all established and enforced |
-| Rendering control | stable | MDX component registry is track-aware, build is green |
-| Content migration | complete | 1,834+ pieces across all tracks, Korean-first, 7 locales |
-| Content governance | in progress | Series normalization done; near-duplicate merging is next |
-| Browse UX | **in progress** | Intent-first navigation being built to replace category chip browsing |
-| Analytics review | planned | Checklist exists but routine review loop not yet active |
+| Build pipeline | ✅ complete | `npm run build` + `type-check` 0 errors |
+| Schema transition | ✅ complete | All `academy` have `series:`, all `interactive` have `embeddedTools:` |
+| Series display | ✅ complete | Korean `series:` frontmatter field used in display (fixed 2026-05-25) |
+| Taxonomy | ✅ complete | `interactive` / `academy` / `magazine` tracks enforced |
+| Civil law reclassification | ✅ complete | 10 files moved `magazine` → `academy` (2026-05-25) |
+| Content count | ✅ 742 pieces | Academy 437 · Magazine 280 · Lecture 25 (ko-primary, 7 locales) |
+| Browse UX | ✅ stable | 8 intent bundles + hub pages for accounting/economics |
+| Data integrity | ⚠️ pending | labor-law-basic duplicate; tax-basics/tax-intro split — see MASTER_PLAN § 3 |
+| Phase A series | ⚠️ in progress | 10 series at ch1–2 only; need 3–5 more chapters each |
+| Phase B series | 🔲 planned | Python, ADsP, TOEIC, 투자자산운용사, FRM, 엑셀 — see MASTER_PLAN § 4B |
 
 ## 4. Completed Phases
 
