@@ -84,9 +84,9 @@ const chMatch = post.slug.match(/-ch(\d+)$/);
 const chapter = chMatch ? parseInt(chMatch[1], 10) : null;
 const isSeriesPost = chapter !== null && seriesPosts !== null && seriesPosts.length > 0;
 
-// Derive series name for sidebar
+// Derive series name for sidebar — prefer frontmatter `series` field over slug-derived name
 const seriesName = isSeriesPost
-  ? (post.slug
+  ? (post.data.series ?? post.slug
       .replace(/-ch\d+$/, "")
       .replace(/^[a-z]+\//, "")
       .replace(/^education-/, "")
