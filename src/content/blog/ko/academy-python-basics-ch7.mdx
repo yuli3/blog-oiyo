@@ -1,0 +1,528 @@
+---
+track: academy
+locale: ko
+title: "Ch7. Python 기초 — 라이브러리 활용: numpy·pandas 기초"
+category: "Computer Science"
+series: "Python 기초"
+chapter: 7
+chapterTitleShort: 'numpy·pandas'
+author: OIYO 편집부
+tags:
+  - 파이썬
+  - 프로그래밍
+  - Python
+  - numpy
+  - pandas
+  - 데이터분석
+  - DataFrame
+  - 배열
+description: "pip로 패키지 설치, numpy 배열 연산, pandas DataFrame 생성과 기초 분석까지 — Python 기초 시리즈 일곱 번째 강의입니다."
+pubDate: '2026-05-25'
+layoutVariant: lecture-series
+---
+
+## 외부 라이브러리란
+
+파이썬의 표준 라이브러리(math, os 등) 외에도 **PyPI(Python Package Index)**를 통해 수십만 개의 서드파티 패키지를 설치하여 사용할 수 있습니다.
+
+데이터 분석 분야에서 가장 핵심적인 두 라이브러리는 다음과 같습니다:
+- **numpy**: 수치 계산, 다차원 배열 처리
+- **pandas**: 구조화된 데이터 처리, 표 형태 데이터 분석
+
+---
+
+## pip로 패키지 설치
+
+```
+# numpy와 pandas 설치
+pip install numpy pandas
+
+# 또는 따로 설치
+pip install numpy
+pip install pandas
+
+# 특정 버전 설치
+pip install numpy==1.26.0
+
+# 설치 확인
+pip show numpy
+pip list | grep -E "numpy|pandas"
+```
+
+가상환경을 활성화한 상태에서 설치하면 프로젝트별로 독립적으로 관리됩니다.
+
+---
+
+## numpy 기초
+
+**numpy(Numerical Python)**는 파이썬에서 고성능 수치 계산을 위한 라이브러리입니다. 핵심은 **ndarray(N차원 배열)**입니다.
+
+### numpy 불러오기
+
+```
+import numpy as np   # np라는 별칭 사용 (관례)
+print(np.__version__)
+```
+
+### 배열(ndarray) 생성
+
+```
+# 리스트로부터 생성
+arr1 = np.array([1, 2, 3, 4, 5])
+print(arr1)          # [1 2 3 4 5]
+print(type(arr1))    # <class 'numpy.ndarray'>
+print(arr1.dtype)    # int64
+
+# 2차원 배열
+arr2d = np.array([[1, 2, 3],
+                   [4, 5, 6],
+                   [7, 8, 9]])
+print(arr2d.shape)   # (3, 3)
+print(arr2d.ndim)    # 2
+print(arr2d.size)    # 9
+```
+
+### 특수 배열 생성 함수
+
+```
+# 0으로 채운 배열
+zeros = np.zeros((3, 4))
+print(zeros)
+# [[0. 0. 0. 0.]
+#  [0. 0. 0. 0.]
+#  [0. 0. 0. 0.]]
+
+# 1로 채운 배열
+ones = np.ones((2, 3))
+
+# 단위 행렬
+eye = np.eye(3)
+print(eye)
+# [[1. 0. 0.]
+#  [0. 1. 0.]
+#  [0. 0. 1.]]
+
+# 범위 배열
+arange = np.arange(0, 10, 2)   # [0 2 4 6 8]
+
+# 균일 간격 n개
+linspace = np.linspace(0, 1, 5)  # [0. 0.25 0.5 0.75 1.]
+
+# 난수 배열
+random_arr = np.random.rand(3, 3)         # 0~1 균일 분포
+normal_arr = np.random.randn(3, 3)        # 표준 정규 분포
+int_arr = np.random.randint(1, 7, (2, 3)) # 1~6 정수
+```
+
+---
+
+## numpy 배열 연산
+
+numpy의 가장 큰 장점은 **벡터화 연산(Vectorized Operation)**입니다. 반복문 없이 배열 전체에 한 번에 연산을 적용합니다.
+
+```
+a = np.array([1, 2, 3, 4, 5])
+b = np.array([10, 20, 30, 40, 50])
+
+# 기본 연산 (요소별)
+print(a + b)    # [11 22 33 44 55]
+print(a * 2)    # [ 2  4  6  8 10]
+print(b / a)    # [10. 10. 10. 10. 10.]
+print(a ** 2)   # [ 1  4  9 16 25]
+```
+
+파이썬 리스트와 비교:
+```
+# 파이썬 리스트는 반복문 필요
+lst = [1, 2, 3, 4, 5]
+squared_list = [x**2 for x in lst]   # 반복문 필요
+
+# numpy는 한 줄로
+arr = np.array([1, 2, 3, 4, 5])
+squared_arr = arr ** 2                # 즉시 적용
+```
+
+---
+
+## numpy 인덱싱과 슬라이싱
+
+```
+arr = np.array([10, 20, 30, 40, 50])
+
+print(arr[0])      # 10
+print(arr[-1])     # 50
+print(arr[1:4])    # [20 30 40]
+print(arr[::2])    # [10 30 50]
+
+# 2차원 배열
+mat = np.array([[1,  2,  3],
+                [4,  5,  6],
+                [7,  8,  9]])
+
+print(mat[0])        # [1 2 3] (첫 번째 행)
+print(mat[:, 1])     # [2 5 8] (두 번째 열)
+print(mat[1, 2])     # 6 (두 번째 행, 세 번째 열)
+print(mat[0:2, 0:2]) # 2x2 서브행렬
+# [[1 2]
+#  [4 5]]
+```
+
+### 불리언 인덱싱 (조건 필터링)
+
+```
+scores = np.array([85, 92, 68, 74, 90, 55, 88])
+
+# 80 이상인 점수만 추출
+high_scores = scores[scores >= 80]
+print(high_scores)   # [85 92 90 88]
+
+# 조건 마스크
+mask = scores >= 80
+print(mask)   # [ True  True False False  True False  True]
+print(scores[mask])
+```
+
+---
+
+## numpy 통계 함수
+
+```
+data = np.array([15, 22, 8, 34, 27, 12, 45, 19])
+
+print(f"합계: {np.sum(data)}")        # 182
+print(f"평균: {np.mean(data):.2f}")   # 22.75
+print(f"중앙값: {np.median(data)}")   # 20.5
+print(f"표준편차: {np.std(data):.2f}")# 11.51
+print(f"분산: {np.var(data):.2f}")    # 132.44
+print(f"최솟값: {np.min(data)}")      # 8
+print(f"최댓값: {np.max(data)}")      # 45
+print(f"최솟값 인덱스: {np.argmin(data)}")  # 2
+print(f"최댓값 인덱스: {np.argmax(data)}")  # 6
+```
+
+---
+
+## numpy 배열 변형
+
+```
+arr = np.arange(1, 13)    # [1,2,3,...,12]
+
+# 모양 변경 (reshape)
+mat = arr.reshape(3, 4)   # 3행 4열
+print(mat)
+# [[ 1  2  3  4]
+#  [ 5  6  7  8]
+#  [ 9 10 11 12]]
+
+# 1차원으로 펼치기
+flat = mat.flatten()
+print(flat)   # [ 1  2  3  4  5  6  7  8  9 10 11 12]
+
+# 전치 행렬 (행/열 바꾸기)
+print(mat.T)
+```
+
+---
+
+## pandas 기초
+
+**pandas**는 구조화된 데이터(표 형태)를 처리하기 위한 라이브러리입니다. Excel처럼 행과 열로 이루어진 데이터를 다루는 데 최적화되어 있습니다.
+
+### pandas 불러오기
+
+```
+import pandas as pd   # pd라는 별칭 사용 (관례)
+print(pd.__version__)
+```
+
+### 핵심 자료구조: Series와 DataFrame
+
+| 자료구조 | 설명 | 비유 |
+|---------|------|------|
+| `Series` | 1차원 레이블 배열 | Excel 열 하나 |
+| `DataFrame` | 2차원 레이블 표 | Excel 시트 |
+
+---
+
+## Series 생성 및 활용
+
+```
+# 리스트로 생성
+s1 = pd.Series([10, 20, 30, 40, 50])
+print(s1)
+# 0    10
+# 1    20
+# 2    30
+# 3    40
+# 4    50
+# dtype: int64
+
+# 인덱스 지정
+s2 = pd.Series(
+    [85, 92, 78, 90],
+    index=["수학", "영어", "국어", "과학"]
+)
+print(s2["수학"])    # 85
+print(s2[["수학", "영어"]])  # 두 과목만
+
+# 딕셔너리로 생성
+s3 = pd.Series({"서울": 9.7, "부산": 3.4, "인천": 3.0})
+print(s3.values)   # [9.7 3.4 3. ]
+print(s3.index)    # Index(['서울', '부산', '인천'], dtype='object')
+```
+
+---
+
+## DataFrame 생성
+
+```
+# 딕셔너리로 생성
+data = {
+    "이름": ["김철수", "이영희", "박민준", "최수연"],
+    "나이": [25, 30, 22, 28],
+    "도시": ["서울", "부산", "인천", "서울"],
+    "점수": [85, 92, 78, 90],
+}
+
+df = pd.DataFrame(data)
+print(df)
+#     이름  나이  도시  점수
+# 0  김철수   25  서울   85
+# 1  이영희   30  부산   92
+# 2  박민준   22  인천   78
+# 3  최수연   28  서울   90
+
+print(df.shape)    # (4, 4) — 4행 4열
+print(df.dtypes)   # 각 열의 타입
+```
+
+---
+
+## DataFrame 탐색
+
+```
+# 기본 정보
+print(df.info())       # 전체 요약 정보
+print(df.describe())   # 수치형 열 통계
+
+# 상위/하위 n행
+print(df.head(2))    # 처음 2행
+print(df.tail(2))    # 마지막 2행
+
+# 열 접근
+print(df["이름"])          # 이름 열 (Series 반환)
+print(df[["이름", "점수"]]) # 여러 열 (DataFrame 반환)
+
+# 행 접근
+print(df.iloc[0])          # 위치 기반 첫 번째 행
+print(df.loc[2])           # 레이블(인덱스) 기반 접근
+```
+
+---
+
+## 데이터 필터링 및 정렬
+
+```
+# 조건 필터링
+high = df[df["점수"] >= 85]
+print(high)
+
+# 여러 조건
+seoul_high = df[(df["도시"] == "서울") & (df["점수"] >= 85)]
+print(seoul_high)
+
+# 정렬
+sorted_df = df.sort_values("점수", ascending=False)
+print(sorted_df)
+
+# 상위 2명
+top2 = df.nlargest(2, "점수")
+print(top2)
+```
+
+---
+
+## 데이터 추가·수정·삭제
+
+```
+# 새 열 추가
+df["합격"] = df["점수"] >= 85
+df["등급"] = df["점수"].apply(lambda x: "A" if x >= 90 else ("B" if x >= 80 else "C"))
+
+# 특정 값 수정
+df.loc[0, "점수"] = 88
+
+# 행 추가
+new_row = {"이름": "정다은", "나이": 26, "도시": "대전", "점수": 95, "합격": True, "등급": "A"}
+df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
+
+# 열 삭제
+df = df.drop("합격", axis=1)
+```
+
+---
+
+## 기초 통계 분석
+
+```
+print(df["점수"].mean())    # 평균
+print(df["점수"].median())  # 중앙값
+print(df["점수"].std())     # 표준편차
+print(df["점수"].max())     # 최댓값
+print(df["점수"].min())     # 최솟값
+
+# 그룹별 집계
+city_avg = df.groupby("도시")["점수"].mean()
+print(city_avg)
+
+# 값 빈도 세기
+print(df["도시"].value_counts())
+```
+
+---
+
+## CSV 파일 읽기/쓰기
+
+```
+# DataFrame을 CSV로 저장
+df.to_csv("students.csv", index=False, encoding="utf-8-sig")
+
+# CSV 파일 읽기
+df_loaded = pd.read_csv("students.csv", encoding="utf-8-sig")
+print(df_loaded.head())
+
+# Excel 파일 (openpyxl 필요)
+df.to_excel("students.xlsx", index=False)
+df_excel = pd.read_excel("students.xlsx")
+```
+
+---
+
+## 결측값 처리
+
+```
+import numpy as np
+
+# 결측값 포함 데이터 예시
+df2 = pd.DataFrame({
+    "A": [1, 2, np.nan, 4],
+    "B": [5, np.nan, 7, 8],
+    "C": [9, 10, 11, 12],
+})
+
+print(df2.isnull())          # 결측값 위치 (True/False)
+print(df2.isnull().sum())    # 열별 결측값 개수
+
+# 결측값 제거
+df_dropped = df2.dropna()    # 결측값이 있는 행 전체 삭제
+
+# 결측값 채우기
+df_filled = df2.fillna(0)                    # 0으로 채우기
+df_filled2 = df2.fillna(df2.mean())          # 평균으로 채우기
+```
+
+---
+
+## 실전 예제 — 성적 데이터 분석
+
+```
+import pandas as pd
+import numpy as np
+
+# 데이터 생성
+np.random.seed(42)
+n = 20
+data = {
+    "학번": [f"2024{i:03d}" for i in range(1, n+1)],
+    "국어": np.random.randint(50, 101, n),
+    "영어": np.random.randint(50, 101, n),
+    "수학": np.random.randint(50, 101, n),
+}
+df = pd.DataFrame(data)
+
+# 평균 계산
+df["평균"] = df[["국어", "영어", "수학"]].mean(axis=1).round(1)
+
+# 등급 계산
+def get_grade(avg):
+    if avg >= 90: return "A"
+    elif avg >= 80: return "B"
+    elif avg >= 70: return "C"
+    elif avg >= 60: return "D"
+    else: return "F"
+
+df["등급"] = df["평균"].apply(get_grade)
+
+# 분석 결과 출력
+print("=== 성적 분석 결과 ===")
+print(f"전체 학생 수: {len(df)}명")
+print(f"\n과목별 평균:")
+print(df[["국어", "영어", "수학"]].mean().round(1))
+print(f"\n등급 분포:")
+print(df["등급"].value_counts().sort_index())
+print(f"\n상위 5명:")
+print(df.nlargest(5, "평균")[["학번", "평균", "등급"]])
+```
+
+---
+
+## 학습 정리
+
+| 항목 | 핵심 명령 |
+|------|----------|
+| 설치 | `pip install numpy pandas` |
+| numpy 배열 | `np.array()`, `np.zeros()`, `np.arange()` |
+| 배열 연산 | 벡터화 연산 (반복문 불필요) |
+| numpy 통계 | `np.mean()`, `np.std()`, `np.sum()` |
+| pandas Series | 1차원 레이블 배열 |
+| pandas DataFrame | 2차원 표 구조 |
+| 필터링 | `df[조건]`, `.loc[]`, `.iloc[]` |
+| 통계 | `.describe()`, `.groupby()`, `.value_counts()` |
+| CSV | `.to_csv()`, `pd.read_csv()` |
+
+---
+
+## 실전 퀴즈 5문항
+
+**Q1.** numpy 배열과 파이썬 리스트의 가장 큰 성능적 차이는 무엇인가요?
+
+**A1.** numpy 배열은 **벡터화 연산(Vectorized Operation)**을 지원하여 반복문 없이 배열 전체에 한 번에 연산을 적용할 수 있습니다. 내부적으로 C 언어로 구현되어 있어 파이썬 리스트보다 훨씬 빠릅니다. 예: `arr * 2` 는 배열 모든 요소에 2를 곱하고, 파이썬 리스트는 `[x*2 for x in lst]` 와 같은 반복문이 필요합니다.
+
+---
+
+**Q2.** `np.array([[1,2,3],[4,5,6]])`의 `.shape`, `.ndim`, `.size` 값을 각각 쓰세요.
+
+**A2.**
+- `.shape` → `(2, 3)` (2행 3열)
+- `.ndim` → `2` (2차원)
+- `.size` → `6` (전체 요소 수: 2×3)
+
+---
+
+**Q3.** pandas DataFrame에서 `df["점수"]`와 `df[["점수"]]`의 차이는 무엇인가요?
+
+**A3.**
+- `df["점수"]`: 단일 열을 **Series** 타입으로 반환합니다.
+- `df[["점수"]]`: 열 하나를 **DataFrame** 타입으로 반환합니다. 대괄호를 두 번 사용하면 항상 DataFrame이 반환됩니다. 여러 열 선택 시에는 `df[["국어", "영어"]]` 형태를 사용합니다.
+
+---
+
+**Q4.** 다음 코드의 출력 결과를 쓰세요.
+```
+import numpy as np
+a = np.array([3, 1, 4, 1, 5, 9, 2, 6])
+print(a[a > 4])
+print(np.mean(a))
+```
+
+**A4.**
+- `a[a > 4]` → `[5 9 6]` (4보다 큰 요소만 불리언 인덱싱)
+- `np.mean(a)` → `3.875` (합 31 / 개수 8)
+
+---
+
+**Q5.** pandas DataFrame에서 결측값(NaN)을 처리하는 방법 두 가지를 설명하세요.
+
+**A5.**
+1. **`dropna()`**: 결측값이 있는 **행(또는 열) 전체를 제거**합니다. 데이터 손실이 발생하지만 간단합니다. `df.dropna()`
+2. **`fillna(값)`**: 결측값을 **지정한 값으로 채웁니다**. `df.fillna(0)` 은 0으로, `df.fillna(df.mean())` 은 각 열의 평균값으로 채웁니다. 데이터를 유지하면서 처리할 수 있습니다.

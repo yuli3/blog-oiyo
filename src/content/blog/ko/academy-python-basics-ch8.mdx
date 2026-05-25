@@ -1,0 +1,590 @@
+---
+track: academy
+locale: ko
+title: "Ch8. Python 기초 — 실전 프로젝트와 Python 활용 분야"
+category: "Computer Science"
+series: "Python 기초"
+chapter: 8
+chapterTitleShort: '실전·활용'
+author: OIYO 편집부
+tags:
+  - 파이썬
+  - 프로그래밍
+  - Python
+  - 자동화
+  - 데이터처리
+  - 웹스크래핑
+  - 취업
+  - 프로젝트
+description: "자동화 스크립트 작성, 데이터 처리 실습, Python 취업 활용 로드맵, 모의고사 10문항으로 마무리 — Python 기초 시리즈 마지막 강의입니다."
+pubDate: '2026-05-25'
+layoutVariant: lecture-series
+---
+
+## Python 기초 시리즈를 마무리하며
+
+지금까지 7개 챕터에 걸쳐 파이썬의 핵심 문법을 체계적으로 학습했습니다. 마지막 챕터에서는 그동안 배운 내용을 종합하여 **실전 프로젝트**를 작성하고, 파이썬이 어떤 분야에서 어떻게 활용되는지, 그리고 취업·진로와 어떻게 연결되는지 살펴봅니다.
+
+---
+
+## Python으로 할 수 있는 것들
+
+### 1. 업무 자동화
+
+반복적인 작업을 파이썬 스크립트로 자동화하면 수십 시간의 작업을 몇 초로 줄일 수 있습니다.
+
+- 파일/폴더 일괄 이름 변경
+- 엑셀 보고서 자동 생성
+- 이메일 자동 발송
+- 웹 크롤링 및 스크래핑
+- PDF 자동 처리
+
+### 2. 데이터 분석 및 시각화
+
+- pandas로 데이터 정제·분석
+- matplotlib/seaborn으로 그래프 생성
+- 통계 분석 및 리포트 작성
+
+### 3. 인공지능 및 머신러닝
+
+- scikit-learn으로 머신러닝 모델 구축
+- TensorFlow/PyTorch로 딥러닝
+- 자연어 처리 (NLP)
+
+### 4. 웹 개발
+
+- Django: 대규모 웹 서비스
+- Flask: 경량 웹 프레임워크
+- FastAPI: 고성능 REST API
+
+### 5. 임베디드 및 IoT
+
+- Raspberry Pi 제어
+- 센서 데이터 처리
+- MicroPython으로 마이크로컨트롤러 프로그래밍
+
+---
+
+## 실전 프로젝트 1: 파일 정리 자동화 스크립트
+
+다운로드 폴더의 파일을 확장자별로 자동 분류합니다.
+
+```
+import os
+import shutil
+from datetime import datetime
+
+def organize_files(source_dir):
+    """
+    지정된 디렉토리의 파일을 확장자별로 분류합니다.
+    """
+    # 확장자별 폴더 매핑
+    categories = {
+        "이미지": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".svg", ".webp"],
+        "문서": [".pdf", ".doc", ".docx", ".txt", ".hwp", ".pptx", ".xlsx"],
+        "동영상": [".mp4", ".avi", ".mov", ".mkv", ".wmv"],
+        "음악": [".mp3", ".wav", ".flac", ".aac"],
+        "압축파일": [".zip", ".rar", ".7z", ".tar", ".gz"],
+        "코드": [".py", ".js", ".html", ".css", ".java", ".cpp"],
+    }
+
+    # 역방향 매핑: 확장자 → 카테고리명
+    ext_to_category = {}
+    for category, extensions in categories.items():
+        for ext in extensions:
+            ext_to_category[ext] = category
+
+    moved_count = 0
+    log_entries = []
+
+    for filename in os.listdir(source_dir):
+        filepath = os.path.join(source_dir, filename)
+
+        # 폴더는 건너뜀
+        if os.path.isdir(filepath):
+            continue
+
+        # 확장자 추출
+        _, ext = os.path.splitext(filename)
+        ext = ext.lower()
+
+        # 카테고리 결정
+        category = ext_to_category.get(ext, "기타")
+
+        # 대상 폴더 생성
+        dest_dir = os.path.join(source_dir, category)
+        os.makedirs(dest_dir, exist_ok=True)
+
+        # 파일 이동
+        dest_path = os.path.join(dest_dir, filename)
+        shutil.move(filepath, dest_path)
+        moved_count += 1
+
+        log_msg = f"{filename} → {category}/"
+        log_entries.append(log_msg)
+        print(f"이동: {log_msg}")
+
+    # 로그 파일 저장
+    log_filename = f"organize_log_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+    log_path = os.path.join(source_dir, log_filename)
+    with open(log_path, "w", encoding="utf-8") as f:
+        f.write(f"파일 정리 완료: {datetime.now()}\n")
+        f.write(f"총 {moved_count}개 파일 이동\n\n")
+        f.write("\n".join(log_entries))
+
+    print(f"\n완료! 총 {moved_count}개 파일을 정리했습니다.")
+    print(f"로그: {log_path}")
+
+# 실행 예시
+# organize_files("/Users/username/Downloads")
+```
+
+---
+
+## 실전 프로젝트 2: 성적 분석 리포트 생성기
+
+CSV 파일의 학생 성적 데이터를 분석하고 리포트를 출력합니다.
+
+```
+import pandas as pd
+import numpy as np
+from datetime import date
+
+def analyze_grades(csv_path):
+    """성적 CSV 파일을 분석하고 리포트를 생성합니다."""
+
+    # 데이터 로드
+    try:
+        df = pd.read_csv(csv_path, encoding="utf-8-sig")
+    except FileNotFoundError:
+        print(f"오류: '{csv_path}' 파일을 찾을 수 없습니다.")
+        return
+
+    # 필요한 열 확인
+    required_cols = ["학번", "이름", "국어", "영어", "수학"]
+    missing = [c for c in required_cols if c not in df.columns]
+    if missing:
+        print(f"오류: 필수 열이 없습니다: {missing}")
+        return
+
+    # 평균 계산
+    subjects = ["국어", "영어", "수학"]
+    df["평균"] = df[subjects].mean(axis=1).round(1)
+
+    # 등급 산정
+    def to_grade(score):
+        if score >= 90: return "A"
+        elif score >= 80: return "B"
+        elif score >= 70: return "C"
+        elif score >= 60: return "D"
+        else: return "F"
+
+    df["등급"] = df["평균"].apply(to_grade)
+    df["석차"] = df["평균"].rank(ascending=False, method="min").astype(int)
+
+    # 리포트 헤더
+    separator = "=" * 60
+    print(separator)
+    print(f"  성적 분석 리포트 — {date.today()}")
+    print(separator)
+    print(f"  총 학생 수: {len(df)}명")
+    print()
+
+    # 과목별 통계
+    print("[ 과목별 통계 ]")
+    stats = df[subjects].agg(["mean", "max", "min", "std"]).round(1)
+    stats.index = ["평균", "최고", "최저", "표준편차"]
+    print(stats.to_string())
+    print()
+
+    # 등급 분포
+    print("[ 등급 분포 ]")
+    for grade in ["A", "B", "C", "D", "F"]:
+        count = len(df[df["등급"] == grade])
+        bar = "█" * count
+        print(f"  {grade}: {bar} ({count}명)")
+    print()
+
+    # 상위 5명
+    print("[ 상위 5명 ]")
+    top5 = df.nsmallest(5, "석차")[["석차", "이름", "평균", "등급"]]
+    print(top5.to_string(index=False))
+    print()
+
+    # 결과 저장
+    output_path = csv_path.replace(".csv", "_분석결과.csv")
+    df.to_csv(output_path, index=False, encoding="utf-8-sig")
+    print(f"분석 결과 저장: {output_path}")
+
+# analyze_grades("students.csv")
+```
+
+---
+
+## 실전 프로젝트 3: 간단한 단어장 앱 (CLI)
+
+JSON 파일을 사용한 영단어 암기 프로그램입니다.
+
+```
+import json
+import random
+import os
+
+WORDBOOK_FILE = "wordbook.json"
+
+def load_wordbook():
+    if os.path.exists(WORDBOOK_FILE):
+        with open(WORDBOOK_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return {}
+
+def save_wordbook(wb):
+    with open(WORDBOOK_FILE, "w", encoding="utf-8") as f:
+        json.dump(wb, f, ensure_ascii=False, indent=2)
+
+def add_word(wb):
+    word = input("영단어: ").strip()
+    meaning = input("뜻: ").strip()
+    if word and meaning:
+        wb[word] = meaning
+        save_wordbook(wb)
+        print(f"'{word}' 추가 완료!")
+
+def quiz(wb):
+    if len(wb) < 2:
+        print("단어가 2개 이상 필요합니다.")
+        return
+    words = list(wb.keys())
+    word = random.choice(words)
+    print(f"\n문제: '{word}'의 뜻은?")
+    answer = input("답: ").strip()
+    correct = wb[word]
+    if answer == correct:
+        print("정답!")
+    else:
+        print(f"오답! 정답: {correct}")
+
+def list_words(wb):
+    if not wb:
+        print("저장된 단어가 없습니다.")
+        return
+    print(f"\n{'단어':15s} {'뜻'}")
+    print("-" * 35)
+    for word, meaning in sorted(wb.items()):
+        print(f"{word:15s} {meaning}")
+
+def main():
+    wb = load_wordbook()
+    while True:
+        print("\n=== 단어장 ===")
+        print("1. 단어 추가  2. 퀴즈  3. 목록  4. 종료")
+        choice = input("선택: ").strip()
+        if choice == "1":
+            add_word(wb)
+        elif choice == "2":
+            quiz(wb)
+        elif choice == "3":
+            list_words(wb)
+        elif choice == "4":
+            print("종료합니다.")
+            break
+        else:
+            print("1~4 중 선택해주세요.")
+
+# main()
+```
+
+---
+
+## Python 취업 활용 로드맵
+
+### 직무별 주요 스킬
+
+| 직무 | 핵심 기술 | 추천 프레임워크 |
+|------|----------|---------------|
+| 데이터 분석가 | pandas, numpy, matplotlib | seaborn, plotly |
+| 데이터 사이언티스트 | scikit-learn, 통계학 | XGBoost, LightGBM |
+| ML 엔지니어 | 딥러닝, MLOps | TensorFlow, PyTorch |
+| 백엔드 개발자 | REST API, DB 설계 | Django, FastAPI |
+| 자동화 엔지니어 | 스크래핑, RPA | Selenium, BeautifulSoup |
+| 퀀트/핀테크 | 금융 수학, 통계 | QuantLib, zipline |
+
+### 단계별 학습 로드맵
+
+**1단계 — 기초 (0~3개월)**
+- Python 문법 마스터 (이 시리즈 완성!)
+- git/GitHub 기초
+- 간단한 CLI 프로젝트 2~3개
+
+**2단계 — 심화 (3~6개월)**
+- OOP(객체지향 프로그래밍) 이해
+- 데이터베이스 기초 (SQLite, PostgreSQL)
+- 원하는 분야 라이브러리 집중 학습
+
+**3단계 — 프로젝트 (6~12개월)**
+- 실전 프로젝트 GitHub에 공개
+- 포트폴리오 구성
+- Kaggle 참여 (데이터 분야) 또는 오픈소스 기여
+
+**4단계 — 취업 준비**
+- 코딩 테스트 준비 (프로그래머스, 백준)
+- 기술 면접 대비
+- 인턴십 및 공채 지원
+
+---
+
+## Python 커뮤니티 및 학습 자료
+
+| 자료 | 설명 | 링크 |
+|------|------|------|
+| 공식 문서 | 파이썬 공식 튜토리얼 | docs.python.org/ko |
+| 프로그래머스 | 코딩 테스트 실전 연습 | programmers.co.kr |
+| Kaggle | 데이터 분석 실전 | kaggle.com |
+| PyPI | 패키지 검색 | pypi.org |
+| Stack Overflow | 기술 Q&A | stackoverflow.com |
+| 파이콘 한국 | 파이썬 컨퍼런스 | pycon.kr |
+
+---
+
+## 시리즈 전체 복습 요약
+
+| 챕터 | 주제 | 핵심 키워드 |
+|------|------|------------|
+| Ch1 | 소개·설치 | 설치, IDLE, VS Code, print() |
+| Ch2 | 변수·타입 | int, float, str, bool, 형변환, input() |
+| Ch3 | 조건·반복 | if/elif/else, for, while, break, continue |
+| Ch4 | 함수·모듈 | def, return, *args, **kwargs, import |
+| Ch5 | 자료구조 | list, tuple, dict, set, 컴프리헨션 |
+| Ch6 | 파일·예외 | open(), with, try/except/finally |
+| Ch7 | numpy·pandas | ndarray, DataFrame, 데이터 분석 |
+| Ch8 | 실전·활용 | 자동화, 프로젝트, 취업 로드맵 |
+
+---
+
+## 모의고사 10문항 — Python 기초 종합
+
+이 시리즈에서 배운 모든 내용을 아우르는 종합 모의고사입니다.
+
+---
+
+**[문제 1]** 다음 코드의 출력 결과를 쓰세요.
+```
+x = [1, 2, 3, 4, 5]
+print(x[1:4:2])
+print(x[::-1][::2])
+```
+
+**[정답 1]**
+- `x[1:4:2]` → `[2, 4]` (인덱스 1~3에서 2칸 간격: 인덱스 1, 3의 값)
+- `x[::-1][::2]` → `[5, 3, 1]` (역순 `[5,4,3,2,1]`에서 2칸 간격)
+
+---
+
+**[문제 2]** 아래 함수의 반환값을 쓰세요.
+```
+def mystery(n):
+    if n <= 1:
+        return n
+    return mystery(n-1) + mystery(n-2)
+
+print(mystery(6))
+```
+
+**[정답 2]** `8` — 피보나치 수열 함수입니다. mystery(1)=1, mystery(2)=1, mystery(3)=2, mystery(4)=3, mystery(5)=5, mystery(6)=8.
+
+---
+
+**[문제 3]** 다음 중 올바른 딕셔너리 키로 사용할 수 없는 것을 모두 고르세요.
+① `"hello"` ② `42` ③ `[1, 2, 3]` ④ `(1, 2)` ⑤ `True`
+
+**[정답 3]** ③ `[1, 2, 3]` — 리스트는 변경 가능(mutable)하므로 딕셔너리 키로 사용할 수 없습니다. 키는 반드시 해시 가능한(hashable) 타입이어야 하며, 문자열, 정수, 튜플, 불리언은 모두 키로 사용 가능합니다.
+
+---
+
+**[문제 4]** 다음 코드에서 오류가 발생하는 라인과 오류 종류를 쓰고, 수정 방법을 설명하세요.
+```
+def divide(a, b):
+    return a / b
+
+result = divide(10, 0)
+print(result)
+```
+
+**[정답 4]** 4번 라인 `divide(10, 0)` 에서 **ZeroDivisionError**가 발생합니다. 수정 방법:
+```
+def divide(a, b):
+    try:
+        return a / b
+    except ZeroDivisionError:
+        print("0으로 나눌 수 없습니다.")
+        return None
+```
+
+---
+
+**[문제 5]** 리스트 컴프리헨션으로 다음 조건을 만족하는 코드를 작성하세요. 1~100 사이 숫자 중 3의 배수이거나 7의 배수인 숫자의 합계를 구하세요.
+
+**[정답 5]**
+```
+total = sum([x for x in range(1, 101) if x % 3 == 0 or x % 7 == 0])
+print(total)   # 2208
+```
+
+---
+
+**[문제 6]** 다음 코드를 실행하면 파일에 어떤 내용이 저장되나요?
+```
+data = ["사과", "바나나", "딸기"]
+with open("fruits.txt", "w", encoding="utf-8") as f:
+    for item in data:
+        f.write(item + "\n")
+```
+
+**[정답 6]** `fruits.txt` 파일에 다음 내용이 저장됩니다:
+```
+사과
+바나나
+딸기
+```
+각 항목 뒤에 `\n`(줄바꿈)이 추가되므로 세 줄로 저장됩니다.
+
+---
+
+**[문제 7]** `*args`와 `**kwargs`를 모두 받는 함수 `log_event`를 정의하세요. 이 함수는 위치 인수들은 번호를 매겨 출력하고, 키워드 인수들은 `키=값` 형식으로 출력해야 합니다.
+
+**[정답 7]**
+```
+def log_event(*args, **kwargs):
+    print("위치 인수:")
+    for i, arg in enumerate(args, 1):
+        print(f"  {i}. {arg}")
+    print("키워드 인수:")
+    for key, value in kwargs.items():
+        print(f"  {key}={value}")
+
+log_event("이벤트A", "이벤트B", user="홍길동", level="INFO")
+```
+
+---
+
+**[문제 8]** numpy 배열 `a = np.array([1,2,3,4,5,6,7,8,9])`를 3×3 행렬로 변환하고, 대각선(왼쪽 위 → 오른쪽 아래) 요소의 합을 구하는 코드를 작성하세요.
+
+**[정답 8]**
+```
+import numpy as np
+a = np.array([1,2,3,4,5,6,7,8,9])
+mat = a.reshape(3, 3)
+diagonal_sum = np.trace(mat)   # 또는 sum(mat[i][i] for i in range(3))
+print(mat)
+print(f"대각선 합: {diagonal_sum}")   # 1+5+9 = 15
+```
+
+---
+
+**[문제 9]** 다음 pandas 관련 코드에서 빈칸을 채우세요.
+```
+import pandas as pd
+data = {"이름": ["A","B","C","D"], "점수": [85, 92, 70, 88]}
+df = pd.DataFrame(data)
+
+# 점수가 85 이상인 행만 필터링
+high = df[_______________]
+
+# 점수 기준 내림차순 정렬
+sorted_df = df._______________("점수", ascending=False)
+
+# 점수 평균 출력
+avg = df["점수"]._______()
+```
+
+**[정답 9]**
+```
+high = df[df["점수"] >= 85]
+sorted_df = df.sort_values("점수", ascending=False)
+avg = df["점수"].mean()
+```
+
+---
+
+**[문제 10]** 아래 코드는 학생 성적을 처리합니다. 실행 결과를 예측하고, 코드의 의도를 설명하세요.
+```
+students = {
+    "김철수": [80, 85, 90],
+    "이영희": [95, 88, 92],
+    "박민준": [70, 60, 75],
+}
+
+result = {
+    name: {"평균": sum(scores)/len(scores), "합격": sum(scores)/len(scores) >= 80}
+    for name, scores in students.items()
+}
+
+for name, info in result.items():
+    status = "합격" if info["합격"] else "불합격"
+    print(f"{name}: {info['평균']:.1f}점 — {status}")
+```
+
+**[정답 10]** 출력:
+```
+김철수: 85.0점 — 합격
+이영희: 91.7점 — 합격
+박민준: 68.3점 — 불합격
+```
+코드 의도: 딕셔너리 컴프리헨션을 사용하여 각 학생의 성적 리스트로부터 평균과 합격 여부(평균 80점 이상)를 계산해 새로운 딕셔너리를 만들고, 결과를 f-string으로 출력합니다.
+
+---
+
+## 실전 퀴즈 5문항
+
+**Q1.** 파이썬에서 **OOP(객체지향 프로그래밍)**의 4가지 핵심 개념을 나열하고 간단히 설명하세요.
+
+**A1.**
+1. **캡슐화(Encapsulation)**: 데이터와 메서드를 하나의 클래스로 묶고 외부에서의 접근을 제한합니다.
+2. **상속(Inheritance)**: 부모 클래스의 속성과 메서드를 자식 클래스가 물려받아 재사용합니다.
+3. **다형성(Polymorphism)**: 같은 이름의 메서드가 클래스에 따라 다르게 동작합니다.
+4. **추상화(Abstraction)**: 복잡한 내부 구현을 숨기고 필요한 인터페이스만 노출합니다.
+
+---
+
+**Q2.** 파이썬을 이용한 업무 자동화에서 가장 많이 쓰이는 라이브러리 3가지를 들고 각각의 용도를 설명하세요.
+
+**A2.**
+1. **pandas**: CSV/Excel 데이터 처리, 보고서 자동 생성
+2. **openpyxl/xlwings**: Excel 파일 읽기·쓰기, 서식 지정, 차트 생성
+3. **selenium/playwright**: 웹 브라우저 자동화, 웹 스크래핑, 반복 입력 작업 자동화
+
+---
+
+**Q3.** 프로젝트 폴더에 `requirements.txt`를 만들어 놓는 이유는 무엇이며, 어떻게 생성하나요?
+
+**A3.** `requirements.txt`는 프로젝트에 사용된 모든 패키지와 버전을 기록한 파일입니다. 다른 환경(팀원 PC, 서버 등)에서 동일한 패키지를 쉽게 설치할 수 있어 **재현성(reproducibility)**을 보장합니다.
+```
+# 현재 환경의 패키지 목록 저장
+pip freeze > requirements.txt
+
+# 다른 환경에서 동일하게 설치
+pip install -r requirements.txt
+```
+
+---
+
+**Q4.** 데이터 분석 직무에서 Python과 함께 알아야 할 필수 기술 스택을 3가지 이상 나열하세요.
+
+**A4.**
+- **SQL**: 데이터베이스 쿼리, 데이터 추출
+- **pandas/numpy**: 데이터 조작과 수치 계산
+- **matplotlib/seaborn**: 데이터 시각화
+- **통계학 기초**: 평균, 분산, 가설 검정, 상관관계
+- **Jupyter Notebook**: 분석 과정 문서화, 대화형 실행
+- **git/GitHub**: 코드 버전 관리 및 협업
+
+---
+
+**Q5.** Python을 처음 배우는 사람이 실력을 빠르게 키우는 가장 효과적인 방법은 무엇인가요?
+
+**A5.** 가장 효과적인 방법은 **실제 문제를 해결하는 프로젝트를 만드는 것**입니다. 구체적으로:
+1. **본인이 필요한 것을 자동화** — 반복하는 작업을 파이썬으로 해결 (가장 동기부여가 큼)
+2. **작은 프로젝트를 완성** — 완벽하지 않아도 실행되는 프로그램을 완성하는 경험 축적
+3. **코딩 테스트 풀기** — 프로그래머스 Level 1부터 매일 1~2문제
+4. **코드 리뷰 받기** — GitHub에 올리고 다른 사람의 풀이와 비교
+5. **에러를 두려워하지 않기** — 오류 메시지를 읽고 이해하는 것이 실력 향상의 핵심

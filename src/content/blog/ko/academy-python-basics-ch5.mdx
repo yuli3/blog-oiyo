@@ -1,0 +1,435 @@
+---
+track: academy
+locale: ko
+title: "Ch5. Python 기초 — 리스트·딕셔너리·집합·튜플"
+category: "Computer Science"
+series: "Python 기초"
+chapter: 5
+chapterTitleShort: '자료구조'
+author: OIYO 편집부
+tags:
+  - 파이썬
+  - 프로그래밍
+  - Python
+  - 리스트
+  - 딕셔너리
+  - 집합
+  - 튜플
+  - 자료구조
+  - 컴프리헨션
+description: "리스트·딕셔너리·집합·튜플 각 자료구조의 특성과 메서드, 컴프리헨션 작성법까지 — Python 기초 시리즈 다섯 번째 강의입니다."
+pubDate: '2026-05-25'
+layoutVariant: lecture-series
+---
+
+## 파이썬의 내장 자료구조
+
+파이썬은 다양한 데이터를 효율적으로 저장·관리하기 위해 4가지 핵심 자료구조를 제공합니다.
+
+| 자료구조 | 표기 | 순서 | 중복 | 변경 가능 |
+|---------|------|------|------|----------|
+| **리스트(list)** | `[1, 2, 3]` | O | O | O |
+| **튜플(tuple)** | `(1, 2, 3)` | O | O | X |
+| **딕셔너리(dict)** | `{"a": 1}` | O(3.7+) | 키X 값O | O |
+| **집합(set)** | `{1, 2, 3}` | X | X | O |
+
+---
+
+## 리스트 (List)
+
+**리스트**는 순서가 있는 **변경 가능한(mutable)** 자료구조입니다. 가장 자주 사용되는 자료구조 중 하나입니다.
+
+### 리스트 생성
+
+```
+# 빈 리스트
+empty = []
+empty2 = list()
+
+# 값이 있는 리스트
+fruits = ["사과", "바나나", "딸기"]
+numbers = [1, 2, 3, 4, 5]
+mixed = [1, "hello", True, 3.14]   # 다양한 타입 혼합 가능
+
+# 리스트 안의 리스트 (2차원)
+matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+print(matrix[1][2])   # 6 (두 번째 행, 세 번째 열)
+```
+
+### 인덱싱과 슬라이싱
+
+```
+fruits = ["사과", "바나나", "딸기", "포도", "오렌지"]
+#          0       1        2      3      4
+#         -5      -4       -3     -2     -1
+
+print(fruits[0])     # 사과
+print(fruits[-1])    # 오렌지
+print(fruits[1:3])   # ['바나나', '딸기']
+print(fruits[::2])   # ['사과', '딸기', '오렌지'] (2칸씩)
+print(fruits[::-1])  # ['오렌지', '포도', '딸기', '바나나', '사과'] (역순)
+```
+
+### 리스트 주요 메서드
+
+```
+nums = [3, 1, 4, 1, 5, 9, 2, 6]
+
+# 추가
+nums.append(7)          # 끝에 추가: [3,1,4,1,5,9,2,6,7]
+nums.insert(2, 99)      # 인덱스 2에 삽입: [3,1,99,4,1,5,9,2,6,7]
+nums.extend([10, 11])   # 여러 요소 추가
+
+# 삭제
+nums.remove(99)         # 값 99를 찾아 첫 번째 항목 삭제
+popped = nums.pop()     # 마지막 요소 꺼내기 (반환)
+popped2 = nums.pop(0)   # 인덱스 0 요소 꺼내기
+del nums[2]             # 인덱스 2 삭제
+
+# 탐색
+print(nums.index(5))    # 5의 인덱스 반환
+print(nums.count(1))    # 1이 몇 번 등장하는지
+print(5 in nums)        # True/False
+
+# 정렬
+nums.sort()             # 오름차순 정렬 (원본 변경)
+nums.sort(reverse=True) # 내림차순 정렬
+sorted_nums = sorted(nums)  # 정렬된 새 리스트 반환 (원본 유지)
+
+# 기타
+nums.reverse()          # 역순 (원본 변경)
+nums.clear()            # 모든 요소 삭제
+print(len(nums))        # 리스트 길이
+```
+
+---
+
+## 리스트 컴프리헨션 (List Comprehension)
+
+리스트를 간결하게 생성하는 파이썬의 강력한 문법입니다.
+
+```
+# 기본 형식
+결과_리스트 = [표현식 for 변수 in 시퀀스]
+
+# 조건부
+결과_리스트 = [표현식 for 변수 in 시퀀스 if 조건]
+```
+
+```
+# 1~10의 제곱수 리스트
+squares = [x**2 for x in range(1, 11)]
+print(squares)   # [1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
+
+# 짝수만 필터링
+evens = [x for x in range(1, 21) if x % 2 == 0]
+print(evens)   # [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
+
+# 문자열 처리
+words = ["hello", "world", "python"]
+upper_words = [w.upper() for w in words]
+print(upper_words)   # ['HELLO', 'WORLD', 'PYTHON']
+
+# 중첩 컴프리헨션 (2차원 → 1차원 평탄화)
+matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+flat = [num for row in matrix for num in row]
+print(flat)   # [1, 2, 3, 4, 5, 6, 7, 8, 9]
+```
+
+---
+
+## 튜플 (Tuple)
+
+**튜플**은 순서가 있지만 **변경 불가능한(immutable)** 자료구조입니다.
+
+```
+# 튜플 생성
+point = (3, 5)
+rgb = (255, 128, 0)
+single = (42,)    # 요소가 1개인 튜플 — 쉼표 필수!
+empty_tuple = ()
+
+# 패킹/언패킹
+coordinates = (10, 20, 30)
+x, y, z = coordinates   # 언패킹
+print(x, y, z)           # 10 20 30
+
+# 함수의 다중 반환값 처리
+def get_info():
+    return "Alice", 25, "서울"   # 자동으로 튜플로 묶임
+
+name, age, city = get_info()
+print(name, age, city)   # Alice 25 서울
+```
+
+### 튜플 vs 리스트
+
+| 항목 | 리스트 | 튜플 |
+|------|--------|------|
+| 변경 | 가능 | 불가 |
+| 성능 | 상대적으로 느림 | 빠름 |
+| 메모리 | 더 사용 | 적게 사용 |
+| 용도 | 동적으로 변하는 데이터 | 변하지 않는 좌표, 설정값 |
+
+```
+# 튜플은 딕셔너리 키로 사용 가능
+locations = {(37.5, 127.0): "서울", (35.1, 129.0): "부산"}
+```
+
+---
+
+## 딕셔너리 (Dictionary)
+
+**딕셔너리**는 **키(key)-값(value) 쌍**으로 데이터를 저장하는 자료구조입니다.
+
+### 딕셔너리 생성
+
+```
+# 기본 생성
+person = {
+    "name": "홍길동",
+    "age": 25,
+    "city": "서울",
+    "is_student": True
+}
+
+# dict() 생성자
+person2 = dict(name="이순신", age=40)
+
+# 빈 딕셔너리
+empty = {}
+empty2 = dict()
+```
+
+### 딕셔너리 접근 및 수정
+
+```
+# 값 접근
+print(person["name"])          # 홍길동
+print(person.get("age"))       # 25
+print(person.get("email", "없음"))  # 없음 (키가 없으면 기본값 반환)
+
+# 값 추가/수정
+person["email"] = "hong@email.com"   # 새 키 추가
+person["age"] = 26                   # 기존 값 수정
+
+# 값 삭제
+del person["city"]           # 특정 키 삭제
+removed = person.pop("age")  # 키 삭제 후 값 반환
+print(removed)               # 26
+
+# 존재 확인
+print("name" in person)      # True (키 기준)
+print("이순신" in person)    # False
+```
+
+### 딕셔너리 순회
+
+```
+student = {"국어": 85, "영어": 92, "수학": 78}
+
+# 키만 순회
+for key in student:
+    print(key)
+
+# 값만 순회
+for value in student.values():
+    print(value)
+
+# 키와 값 함께 순회
+for key, value in student.items():
+    print(f"{key}: {value}점")
+```
+
+### 딕셔너리 주요 메서드
+
+```
+info = {"a": 1, "b": 2, "c": 3}
+
+print(info.keys())    # dict_keys(['a', 'b', 'c'])
+print(info.values())  # dict_values([1, 2, 3])
+print(info.items())   # dict_items([('a', 1), ('b', 2), ('c', 3)])
+
+# 병합 (Python 3.9+)
+extra = {"d": 4, "e": 5}
+merged = info | extra
+print(merged)   # {'a': 1, 'b': 2, 'c': 3, 'd': 4, 'e': 5}
+
+# 업데이트
+info.update({"b": 99, "f": 6})
+print(info)     # {'a': 1, 'b': 99, 'c': 3, 'f': 6}
+
+# 복사
+copy_info = info.copy()
+```
+
+### 딕셔너리 컴프리헨션
+
+```
+# 제곱수 딕셔너리
+squares = {x: x**2 for x in range(1, 6)}
+print(squares)   # {1: 1, 2: 4, 3: 9, 4: 16, 5: 25}
+
+# 키-값 뒤집기
+original = {"a": 1, "b": 2, "c": 3}
+inverted = {v: k for k, v in original.items()}
+print(inverted)   # {1: 'a', 2: 'b', 3: 'c'}
+```
+
+---
+
+## 집합 (Set)
+
+**집합**은 **중복 없는** 요소들의 순서 없는 컬렉션입니다.
+
+### 집합 생성
+
+```
+# 집합 생성 — 중복 자동 제거
+nums = {1, 2, 3, 2, 1, 4}
+print(nums)   # {1, 2, 3, 4} (순서 보장 없음)
+
+# 리스트에서 생성 (중복 제거 트릭)
+lst = [1, 2, 2, 3, 3, 3, 4]
+unique = set(lst)
+print(unique)   # {1, 2, 3, 4}
+
+# 빈 집합 — {} 는 딕셔너리이므로 set() 사용
+empty_set = set()
+```
+
+### 집합 연산
+
+```
+a = {1, 2, 3, 4, 5}
+b = {3, 4, 5, 6, 7}
+
+print(a | b)     # 합집합: {1, 2, 3, 4, 5, 6, 7}
+print(a & b)     # 교집합: {3, 4, 5}
+print(a - b)     # 차집합: {1, 2} (a에서 b를 뺀 것)
+print(a ^ b)     # 대칭차집합: {1, 2, 6, 7} (둘 다 아닌 것)
+```
+
+### 집합 메서드
+
+```
+colors = {"빨강", "파랑", "초록"}
+
+colors.add("노랑")        # 요소 추가
+colors.remove("빨강")     # 요소 삭제 (없으면 KeyError)
+colors.discard("없는색")  # 요소 삭제 (없어도 오류 없음)
+
+print("파랑" in colors)   # True (포함 여부 검사)
+print(len(colors))        # 집합 크기
+```
+
+---
+
+## 실전 예제 — 학생 성적 분석
+
+```
+# grade_analysis.py
+
+# 학생별 점수 딕셔너리
+scores = {
+    "김철수": [85, 90, 78],
+    "이영희": [92, 88, 95],
+    "박민준": [70, 65, 80],
+    "최수연": [88, 82, 91],
+}
+
+print("=" * 40)
+print(f"{'이름':8s} {'평균':>6s} {'최고':>6s} {'최저':>6s}")
+print("-" * 40)
+
+averages = {}
+for name, score_list in scores.items():
+    avg = sum(score_list) / len(score_list)
+    averages[name] = avg
+    print(f"{name:8s} {avg:6.1f} {max(score_list):6d} {min(score_list):6d}")
+
+print("=" * 40)
+top_student = max(averages, key=averages.get)
+print(f"최우수 학생: {top_student} ({averages[top_student]:.1f}점)")
+```
+
+---
+
+## 자료구조 변환
+
+```
+lst = [1, 2, 3, 2, 1]
+t = tuple(lst)       # 리스트 → 튜플
+s = set(lst)         # 리스트 → 집합 (중복 제거)
+back = list(s)       # 집합 → 리스트
+
+# 딕셔너리 키·값을 리스트로
+d = {"a": 1, "b": 2}
+keys = list(d.keys())
+values = list(d.values())
+pairs = list(d.items())
+```
+
+---
+
+## 학습 정리
+
+| 자료구조 | 생성 | 특징 | 주요 용도 |
+|---------|------|------|----------|
+| list | `[1,2,3]` | 순서O, 중복O, 변경O | 일반 목록, 순서 중요 |
+| tuple | `(1,2,3)` | 순서O, 중복O, 변경X | 좌표, 고정 설정값 |
+| dict | `{"k":v}` | 키-값 쌍, 키 중복X | 데이터 매핑, JSON 처리 |
+| set | `{1,2,3}` | 순서X, 중복X | 중복 제거, 집합 연산 |
+
+---
+
+## 실전 퀴즈 5문항
+
+**Q1.** 다음 코드의 출력을 예측하세요.
+```
+lst = [1, 2, 3, 4, 5]
+print(lst[1:4])
+print(lst[::-1])
+print(lst[::2])
+```
+
+**A1.**
+- `lst[1:4]` → `[2, 3, 4]` (인덱스 1~3)
+- `lst[::-1]` → `[5, 4, 3, 2, 1]` (역순)
+- `lst[::2]` → `[1, 3, 5]` (2칸 간격)
+
+---
+
+**Q2.** 리스트 컴프리헨션으로 `1~20` 사이 3의 배수만 담은 리스트를 만드세요.
+
+**A2.**
+```
+multiples_of_3 = [x for x in range(1, 21) if x % 3 == 0]
+print(multiples_of_3)   # [3, 6, 9, 12, 15, 18]
+```
+
+---
+
+**Q3.** 빈 집합을 만들 때 `{}`를 사용하면 안 되는 이유는 무엇인가요?
+
+**A3.** `{}`는 파이썬에서 **빈 딕셔너리**를 생성합니다. 빈 집합을 만들려면 반드시 `set()`을 사용해야 합니다. `type({})` 은 `<class 'dict'>`를 반환합니다.
+
+---
+
+**Q4.** 딕셔너리의 `.get()` 메서드와 `[]` 접근의 차이를 설명하세요.
+
+**A4.**
+- `d["key"]`: 키가 존재하지 않으면 **KeyError** 예외가 발생합니다.
+- `d.get("key")`: 키가 존재하지 않으면 `None`을 반환합니다 (예외 없음). `d.get("key", "기본값")`처럼 기본값도 지정할 수 있어 더 안전합니다.
+
+---
+
+**Q5.** 두 리스트 `a = [1, 2, 3, 4, 5]`와 `b = [3, 4, 5, 6, 7]`의 공통 원소(교집합)를 집합 연산으로 구하고, 결과를 정렬된 리스트로 출력하세요.
+
+**A5.**
+```
+a = [1, 2, 3, 4, 5]
+b = [3, 4, 5, 6, 7]
+common = set(a) & set(b)
+print(sorted(list(common)))   # [3, 4, 5]
+```

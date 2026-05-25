@@ -1,0 +1,436 @@
+---
+track: academy
+locale: ko
+title: "Ch1. Python 기초 — 파이썬 소개와 개발환경 설정"
+category: "Computer Science"
+series: "Python 기초"
+chapter: 1
+chapterTitleShort: '소개·설치'
+author: OIYO 편집부
+tags:
+  - 파이썬
+  - 프로그래밍
+  - Python
+  - 개발환경
+  - 설치
+  - IDLE
+  - VSCode
+description: "파이썬의 특징과 역사, 설치 방법, IDLE 및 VS Code 개발환경 설정, 첫 번째 프로그램 작성까지 — Python 기초 시리즈 첫 번째 강의입니다."
+pubDate: '2026-05-25'
+layoutVariant: lecture-series
+---
+
+## 파이썬이란 무엇인가
+
+**파이썬(Python)**은 1991년 귀도 반 로섬(Guido van Rossum)이 발표한 **고급 프로그래밍 언어**입니다. 이름은 영국 코미디 그룹 '몬티 파이썬(Monty Python)'에서 따왔습니다.
+
+오늘날 파이썬은 **세계에서 가장 인기 있는 프로그래밍 언어** 중 하나로, 다음과 같은 분야에서 폭넓게 활용됩니다.
+
+- 웹 개발 (Django, Flask, FastAPI)
+- 데이터 분석 및 과학 (pandas, numpy, scipy)
+- 인공지능 / 머신러닝 (TensorFlow, PyTorch, scikit-learn)
+- 자동화 스크립트 (파일 처리, 크롤링)
+- 교육 및 학술 연구
+
+---
+
+## 파이썬의 주요 특징
+
+### 1. 읽기 쉬운 문법
+
+파이썬은 **들여쓰기(indentation)**로 코드 블록을 구분합니다. 중괄호 `{}` 없이도 깔끔하게 코드를 작성할 수 있어 처음 배우는 사람도 이해하기 쉽습니다.
+
+```
+# 파이썬 코드 예시
+if 10 > 5:
+    print("10이 5보다 큽니다")
+```
+
+### 2. 인터프리터 언어
+
+파이썬은 컴파일 과정 없이 코드를 **한 줄씩 즉시 실행**합니다. 덕분에 빠른 테스트와 실험이 가능합니다.
+
+### 3. 동적 타이핑
+
+변수의 자료형을 미리 선언하지 않아도 됩니다. 파이썬이 값을 보고 자동으로 타입을 결정합니다.
+
+```
+x = 10        # 정수형으로 자동 인식
+y = 3.14      # 실수형으로 자동 인식
+z = "안녕"    # 문자열로 자동 인식
+```
+
+### 4. 풍부한 표준 라이브러리
+
+수학, 날짜/시간, 파일 처리, 네트워크 등 방대한 표준 라이브러리가 기본 내장되어 있으며, PyPI를 통해 수십만 개의 서드파티 패키지를 추가로 설치할 수 있습니다.
+
+### 5. 크로스 플랫폼
+
+Windows, macOS, Linux 등 다양한 운영체제에서 동일하게 동작합니다.
+
+---
+
+## 파이썬 버전 이해하기
+
+| 버전 | 상태 | 비고 |
+|------|------|------|
+| Python 2.x | 지원 종료(2020년) | 레거시 코드에만 존재 |
+| Python 3.6 이하 | 지원 종료 | 사용 지양 |
+| Python 3.8 ~ 3.11 | 안정 버전 | 현업에서 많이 사용 |
+| Python 3.12 이상 | 최신 버전 | 새 프로젝트 권장 |
+
+> **주의**: Python 2와 Python 3는 문법이 달라 호환되지 않는 부분이 많습니다. 반드시 **Python 3**를 사용하세요.
+
+---
+
+## 파이썬 설치하기
+
+### Windows 설치
+
+1. [https://www.python.org/downloads/](https://www.python.org/downloads/) 접속
+2. "Download Python 3.x.x" 버튼 클릭
+3. 설치 파일 실행
+4. **중요**: 설치 화면 하단의 **"Add Python to PATH"** 체크박스를 반드시 체크
+5. "Install Now" 클릭
+
+설치 후 확인:
+```
+# 명령 프롬프트(CMD) 또는 PowerShell에서
+python --version
+```
+
+출력 예시:
+```
+Python 3.12.3
+```
+
+### macOS 설치
+
+macOS에는 Python이 기본 설치되어 있지만, 최신 버전 사용을 권장합니다.
+
+**방법 1: 공식 홈페이지**
+1. [https://www.python.org/downloads/](https://www.python.org/downloads/) 접속
+2. macOS용 설치 파일 다운로드 및 실행
+
+**방법 2: Homebrew 사용 (권장)**
+```
+# 터미널에서
+brew install python3
+```
+
+확인:
+```
+python3 --version
+```
+
+### Linux (Ubuntu/Debian) 설치
+
+대부분의 Linux에는 Python이 기본 설치되어 있습니다.
+
+```
+# 최신 버전 설치
+sudo apt update
+sudo apt install python3 python3-pip
+```
+
+---
+
+## pip — 파이썬 패키지 관리자
+
+**pip**는 파이썬 패키지를 설치·관리하는 도구입니다. Python 3.4 이상부터는 자동으로 함께 설치됩니다.
+
+```
+# pip 버전 확인
+pip --version
+
+# 패키지 설치
+pip install requests
+
+# 설치된 패키지 목록
+pip list
+
+# 패키지 업그레이드
+pip install --upgrade requests
+
+# 패키지 제거
+pip uninstall requests
+```
+
+---
+
+## 개발환경 설정 — IDLE
+
+**IDLE(Integrated Development and Learning Environment)**은 파이썬 설치 시 자동으로 포함되는 기본 통합 개발 환경입니다.
+
+### IDLE 실행
+
+- **Windows**: 시작 메뉴 → Python → IDLE
+- **macOS**: 응용 프로그램 → Python → IDLE
+
+### IDLE 주요 기능
+
+| 기능 | 설명 |
+|------|------|
+| Shell 창 | 대화형 모드로 코드 한 줄씩 실행 |
+| 편집기 창 | 스크립트 파일 작성 및 저장 |
+| 구문 강조 | 키워드·문자열·주석 색상 구분 |
+| 자동 완성 | Tab 키로 변수명·함수명 자동 완성 |
+| 디버거 | 코드 단계별 실행 및 오류 탐색 |
+
+### IDLE에서 첫 코드 실행
+
+1. IDLE 실행 → Shell 창이 열림
+2. `>>>` 프롬프트에 입력:
+
+```
+>>> print("Hello, World!")
+Hello, World!
+>>> 2 + 3
+5
+>>> "파이썬" * 3
+'파이썬파이썬파이썬'
+```
+
+---
+
+## 개발환경 설정 — VS Code
+
+**Visual Studio Code(VS Code)**는 Microsoft가 만든 무료 코드 편집기로, 현재 가장 널리 사용되는 파이썬 개발환경입니다.
+
+### VS Code 설치
+
+1. [https://code.visualstudio.com/](https://code.visualstudio.com/) 접속
+2. 운영체제에 맞는 버전 다운로드 및 설치
+
+### Python 확장 설치
+
+1. VS Code 실행
+2. 왼쪽 사이드바 확장(Extensions) 아이콘 클릭 (단축키: `Ctrl+Shift+X`)
+3. 검색창에 "Python" 입력
+4. **Microsoft의 Python 확장** 설치 (다운로드 수 1억 회 이상)
+
+### 첫 번째 파이썬 파일 만들기
+
+1. `Ctrl+Shift+P` → "Python: Select Interpreter" → 설치된 Python 버전 선택
+2. `Ctrl+N` → 새 파일 생성
+3. `Ctrl+S` → `hello.py`로 저장 (확장자 `.py` 필수)
+4. 코드 입력 후 실행
+
+### VS Code 유용한 단축키
+
+| 단축키 | 기능 |
+|--------|------|
+| `F5` | 디버그 실행 |
+| `Ctrl+F5` | 디버그 없이 실행 |
+| `Ctrl+/` | 주석 토글 |
+| `Alt+↑/↓` | 줄 이동 |
+| `Ctrl+D` | 같은 단어 다중 선택 |
+| `Ctrl+\`` | 터미널 열기 |
+
+---
+
+## 첫 번째 프로그램 — Hello, World!
+
+파이썬에서 화면에 출력하는 함수는 `print()`입니다.
+
+```
+print("Hello, World!")
+```
+
+출력:
+```
+Hello, World!
+```
+
+### 다양한 print() 활용
+
+```
+# 문자열 출력
+print("안녕하세요, 파이썬!")
+
+# 숫자 출력
+print(42)
+print(3.14)
+
+# 여러 값을 한 번에 출력 (sep로 구분자 지정)
+print("사과", "바나나", "딸기", sep=", ")
+# 출력: 사과, 바나나, 딸기
+
+# end 파라미터로 줄바꿈 제어
+print("첫 번째 줄", end=" ")
+print("같은 줄에 이어서")
+# 출력: 첫 번째 줄 같은 줄에 이어서
+
+# 빈 줄 출력
+print()
+
+# 이스케이프 문자
+print("탭\t사이")       # 탭 문자
+print("줄\n바꿈")       # 줄바꿈
+print("따옴표: \"큰따옴표\"")
+```
+
+---
+
+## 주석 작성법
+
+**주석(Comment)**은 코드 실행에 영향을 주지 않는 설명문입니다. 코드의 가독성을 높이고 유지보수를 쉽게 합니다.
+
+```
+# 이것은 한 줄 주석입니다
+
+print("Hello")  # 이렇게 코드 뒤에도 주석을 붙일 수 있습니다
+
+"""
+이것은
+여러 줄
+주석입니다.
+(정확히는 문자열 리터럴이지만 주석처럼 사용)
+"""
+```
+
+---
+
+## 파이썬 파일 실행 방법 정리
+
+### 방법 1: 명령줄(터미널)에서 실행
+```
+python hello.py
+# 또는 macOS/Linux에서
+python3 hello.py
+```
+
+### 방법 2: IDLE에서 실행
+- 파일을 열고 `F5` 키 또는 Run → Run Module
+
+### 방법 3: VS Code에서 실행
+- `Ctrl+F5` 또는 우상단 실행 버튼(▶) 클릭
+
+### 방법 4: 대화형 인터프리터(REPL)
+```
+# 터미널에서 python 입력
+python
+>>> print("대화형 모드")
+대화형 모드
+>>> exit()  # 종료
+```
+
+---
+
+## 가상환경(Virtual Environment) 입문
+
+프로젝트마다 다른 버전의 패키지를 사용해야 할 때 **가상환경**을 활용합니다.
+
+```
+# 가상환경 생성
+python -m venv myenv
+
+# 활성화 (Windows)
+myenv\Scripts\activate
+
+# 활성화 (macOS/Linux)
+source myenv/bin/activate
+
+# 프롬프트 앞에 (myenv) 표시되면 성공
+(myenv) $ pip install requests
+
+# 가상환경 비활성화
+deactivate
+```
+
+> 프로젝트를 시작할 때마다 새로운 가상환경을 만드는 것이 **모범 사례(best practice)**입니다.
+
+---
+
+## 첫 번째 종합 예제
+
+지금까지 배운 내용을 활용한 간단한 프로그램입니다.
+
+```
+# my_first_program.py
+# 사용자 정보를 출력하는 프로그램
+
+print("=" * 30)
+print("  나의 첫 번째 파이썬 프로그램")
+print("=" * 30)
+
+print("프로그래밍 언어:", "Python")
+print("버전:", "3.12")
+print("제작자:", "Guido van Rossum")
+print()
+print("파이썬으로 할 수 있는 것들:")
+print("  - 웹 개발")
+print("  - 데이터 분석")
+print("  - 인공지능")
+print("  - 자동화")
+print()
+print("오늘부터 파이썬을 시작합니다!")
+print("=" * 30)
+```
+
+출력 결과:
+```
+==============================
+  나의 첫 번째 파이썬 프로그램
+==============================
+프로그래밍 언어: Python
+버전: 3.12
+제작자: Guido van Rossum
+
+파이썬으로 할 수 있는 것들:
+  - 웹 개발
+  - 데이터 분석
+  - 인공지능
+  - 자동화
+
+오늘부터 파이썬을 시작합니다!
+==============================
+```
+
+---
+
+## 학습 정리
+
+이번 챕터에서 학습한 내용을 정리합니다.
+
+| 항목 | 핵심 내용 |
+|------|----------|
+| 파이썬 특징 | 읽기 쉬운 문법, 인터프리터, 동적 타이핑, 풍부한 라이브러리 |
+| 설치 | python.org에서 다운로드, PATH 추가 필수 |
+| 개발환경 | IDLE(기본), VS Code(권장) |
+| 패키지 관리 | pip install / pip list / pip uninstall |
+| 첫 출력 | print("Hello, World!") |
+| 주석 | # 한 줄 주석, """ 여러 줄 주석 |
+| 가상환경 | python -m venv + activate |
+
+---
+
+## 실전 퀴즈 5문항
+
+**Q1.** 파이썬에서 화면에 텍스트를 출력하는 기본 함수는 무엇인가요?
+
+**A1.** `print()` 함수입니다. 예: `print("Hello, World!")`
+
+---
+
+**Q2.** Windows에서 파이썬을 설치할 때 반드시 체크해야 하는 옵션은 무엇인가요? 그 이유도 설명하세요.
+
+**A2.** **"Add Python to PATH"** 옵션을 체크해야 합니다. 이 옵션이 체크되어야 명령 프롬프트(CMD)나 PowerShell에서 `python` 명령어를 어느 경로에서나 실행할 수 있기 때문입니다. 체크하지 않으면 매번 파이썬 설치 경로를 직접 입력해야 합니다.
+
+---
+
+**Q3.** `print("파이썬", "최고", sep="!")` 를 실행하면 어떤 결과가 출력되나요?
+
+**A3.** `파이썬!최고` 가 출력됩니다. `sep` 파라미터는 여러 인수 사이에 들어갈 구분자를 지정합니다. 기본값은 공백(" ")입니다.
+
+---
+
+**Q4.** 가상환경(Virtual Environment)을 사용하는 이유를 설명하세요.
+
+**A4.** 프로젝트마다 서로 다른 버전의 패키지가 필요할 수 있는데, 가상환경을 사용하면 각 프로젝트가 독립적인 패키지 공간을 가질 수 있습니다. 예를 들어 프로젝트 A는 requests 2.0을, 프로젝트 B는 requests 3.0을 사용하더라도 충돌 없이 운용할 수 있습니다.
+
+---
+
+**Q5.** 파이썬 2와 파이썬 3의 차이점을 간단히 설명하고, 현재 어떤 버전을 사용해야 하는지 답하세요.
+
+**A5.** 파이썬 2는 2020년에 공식 지원이 종료된 구버전으로, `print` 문 사용 방식, 문자열 처리, 정수 나눗셈 등 여러 문법이 파이썬 3와 다릅니다. 현재는 반드시 **파이썬 3**를 사용해야 합니다. 특히 Python 3.8 이상의 최신 안정 버전 사용을 권장합니다.

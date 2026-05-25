@@ -1,0 +1,468 @@
+---
+track: academy
+locale: ko
+title: "Ch2. Python 기초 — 변수와 데이터 타입"
+category: "Computer Science"
+series: "Python 기초"
+chapter: 2
+chapterTitleShort: '변수·타입'
+author: OIYO 편집부
+tags:
+  - 파이썬
+  - 프로그래밍
+  - Python
+  - 변수
+  - 데이터타입
+  - 형변환
+  - 문자열
+description: "파이썬의 변수 선언, int/float/str/bool 기본 자료형, 형변환, input() 함수, 문자열 연산 — Python 기초 시리즈 두 번째 강의입니다."
+pubDate: '2026-05-25'
+layoutVariant: lecture-series
+---
+
+## 변수(Variable)란 무엇인가
+
+**변수(Variable)**는 데이터를 저장하기 위한 **이름이 붙은 메모리 공간**입니다. 파이썬에서는 `=` 기호를 사용해 변수에 값을 할당합니다.
+
+```
+# 변수 선언과 할당
+이름 = "김파이썬"
+나이 = 25
+키 = 175.5
+학생여부 = True
+```
+
+파이썬은 **동적 타이핑(Dynamic Typing)** 언어이므로, 변수 선언 시 자료형을 명시하지 않아도 됩니다. 할당된 값을 보고 파이썬이 자동으로 자료형을 결정합니다.
+
+---
+
+## 변수 이름 규칙
+
+파이썬 변수 이름에는 다음 규칙이 있습니다.
+
+| 규칙 | 설명 | 예시 |
+|------|------|------|
+| 허용 문자 | 영문자, 숫자, 밑줄(_) | `my_var`, `score1` |
+| 시작 문자 | 영문자 또는 밑줄(_)로 시작 | `_private`, `name` |
+| 대소문자 구분 | `Name`과 `name`은 다른 변수 | `Name != name` |
+| 예약어 사용 불가 | if, for, while 등 사용 불가 | ~~`if = 5`~~ |
+
+**권장 네이밍 컨벤션 (스네이크 케이스)**:
+```
+# 좋은 예
+student_name = "홍길동"
+total_score = 95
+is_active = True
+
+# 나쁜 예 (틀린 건 아니지만 관례에 어긋남)
+StudentName = "홍길동"
+totalScore = 95
+```
+
+---
+
+## 기본 자료형 4가지
+
+### 1. int — 정수형
+
+소수점 없는 정수를 나타냅니다. 파이썬 3에서는 정수 크기에 제한이 없습니다.
+
+```
+a = 10
+b = -5
+c = 0
+d = 1000000000
+
+# 다양한 진수 표현
+이진수 = 0b1010      # 10 (2진수)
+팔진수 = 0o12        # 10 (8진수)
+십육진수 = 0x0A      # 10 (16진수)
+
+print(이진수, 팔진수, 십육진수)   # 10 10 10
+```
+
+### 2. float — 실수형
+
+소수점이 있는 숫자를 나타냅니다. 내부적으로 부동소수점 방식을 사용합니다.
+
+```
+pi = 3.14159
+temperature = -2.5
+speed = 1.5e3    # 과학적 표기법: 1500.0
+
+print(pi)        # 3.14159
+print(speed)     # 1500.0
+
+# 부동소수점 주의 사항
+print(0.1 + 0.2)           # 0.30000000000000004 (부동소수점 오차)
+print(round(0.1 + 0.2, 1)) # 0.3 (round로 해결)
+```
+
+### 3. str — 문자열형
+
+텍스트 데이터를 나타냅니다. 작은따옴표(`'`) 또는 큰따옴표(`"`) 로 감쌉니다.
+
+```
+name1 = "파이썬"
+name2 = '프로그래밍'
+long_text = """
+이것은
+여러 줄
+문자열입니다.
+"""
+
+print(name1)        # 파이썬
+print(name2)        # 프로그래밍
+print(long_text)
+```
+
+### 4. bool — 논리형
+
+`True` 또는 `False` 두 가지 값만 가집니다. 대소문자에 주의하세요.
+
+```
+is_raining = True
+is_sunny = False
+
+print(is_raining)          # True
+print(type(is_raining))    # <class 'bool'>
+
+# 비교 연산의 결과는 bool
+print(5 > 3)    # True
+print(5 < 3)    # False
+print(5 == 5)   # True
+```
+
+---
+
+## type() 함수 — 자료형 확인
+
+`type()` 함수로 변수의 자료형을 확인할 수 있습니다.
+
+```
+a = 10
+b = 3.14
+c = "안녕"
+d = True
+
+print(type(a))  # <class 'int'>
+print(type(b))  # <class 'float'>
+print(type(c))  # <class 'str'>
+print(type(d))  # <class 'bool'>
+```
+
+---
+
+## 형변환 (Type Casting)
+
+한 자료형을 다른 자료형으로 변환하는 것을 **형변환**이라고 합니다.
+
+### 명시적 형변환
+
+```
+# str → int
+age_str = "25"
+age_int = int(age_str)
+print(age_int + 1)   # 26
+
+# str → float
+price_str = "9.99"
+price_float = float(price_str)
+print(price_float * 2)   # 19.98
+
+# int → str
+score = 95
+score_str = str(score)
+print("점수: " + score_str)   # 점수: 95
+
+# int → float
+x = 5
+y = float(x)
+print(y)   # 5.0
+
+# float → int (소수점 버림)
+z = 3.9
+print(int(z))   # 3 (반올림 아님, 버림!)
+
+# str → bool
+print(bool(""))       # False (빈 문자열)
+print(bool("hello"))  # True
+print(bool(0))        # False
+print(bool(1))        # True
+```
+
+### 형변환 오류 주의
+
+```
+# 이런 변환은 오류 발생!
+wrong = int("abc")   # ValueError: invalid literal for int()
+```
+
+---
+
+## 산술 연산자
+
+```
+a = 17
+b = 5
+
+print(a + b)   # 22  (덧셈)
+print(a - b)   # 12  (뺄셈)
+print(a * b)   # 85  (곱셈)
+print(a / b)   # 3.4 (나눗셈, 항상 float 반환)
+print(a // b)  # 3   (몫, 정수 나눗셈)
+print(a % b)   # 2   (나머지)
+print(a ** b)  # 1419857 (거듭제곱: 17^5)
+```
+
+### 복합 할당 연산자
+
+```
+x = 10
+x += 5    # x = x + 5 → 15
+x -= 3    # x = x - 3 → 12
+x *= 2    # x = x * 2 → 24
+x //= 5   # x = x // 5 → 4
+print(x)  # 4
+```
+
+---
+
+## input() 함수 — 사용자 입력받기
+
+`input()` 함수는 사용자로부터 키보드 입력을 받습니다. **반환값은 항상 문자열(str)**입니다.
+
+```
+# 기본 사용법
+name = input("이름을 입력하세요: ")
+print("안녕하세요,", name + "님!")
+```
+
+```
+# 숫자 입력받기 — 반드시 형변환 필요
+age = int(input("나이를 입력하세요: "))
+print("내년 나이:", age + 1)
+```
+
+```
+# 실수 입력받기
+height = float(input("키를 입력하세요(cm): "))
+print("키(m):", height / 100)
+```
+
+**중요**: `input()`은 항상 문자열을 반환합니다. 숫자 계산이 필요하다면 반드시 `int()` 또는 `float()`로 변환하세요.
+
+```
+# 이렇게 하면 안 됨!
+n = input("숫자 입력: ")
+print(n + 1)   # TypeError: can only concatenate str (not "int") to str
+
+# 이렇게 해야 함
+n = int(input("숫자 입력: "))
+print(n + 1)   # 정상 동작
+```
+
+---
+
+## 문자열 심화
+
+### 문자열 연산
+
+```
+first = "Hello"
+second = "World"
+
+# 연결 (concatenation)
+combined = first + ", " + second + "!"
+print(combined)   # Hello, World!
+
+# 반복
+print("=" * 20)   # ====================
+print("ha" * 3)   # hahaha
+```
+
+### 문자열 인덱싱과 슬라이싱
+
+```
+s = "Python"
+#    0 1 2 3 4 5   (양수 인덱스)
+#   -6-5-4-3-2-1   (음수 인덱스)
+
+print(s[0])     # P (첫 번째 문자)
+print(s[-1])    # n (마지막 문자)
+print(s[2:5])   # tho (인덱스 2~4)
+print(s[:3])    # Pyt (처음부터 인덱스 2까지)
+print(s[3:])    # hon (인덱스 3부터 끝까지)
+print(s[::-1])  # nohtyP (문자열 뒤집기)
+```
+
+### 주요 문자열 메서드
+
+```
+text = "  Hello, Python World!  "
+
+print(text.strip())          # "Hello, Python World!" (앞뒤 공백 제거)
+print(text.lower())          # "  hello, python world!  " (소문자)
+print(text.upper())          # "  HELLO, PYTHON WORLD!  " (대문자)
+print(text.replace("Python", "파이썬"))  # "  Hello, 파이썬 World!  "
+print(text.split(","))       # ['  Hello', ' Python World!  '] (분리)
+print(len(text))             # 24 (문자열 길이)
+print(text.count("l"))       # 3 (문자 개수)
+print(text.find("Python"))   # 9 (처음 나타나는 인덱스)
+print("Python" in text)      # True (포함 여부)
+```
+
+### f-문자열 (f-string) — 권장 방식
+
+파이썬 3.6 이상에서 사용 가능한 강력한 문자열 포매팅 방법입니다.
+
+```
+name = "Alice"
+age = 30
+score = 95.5
+
+# f-string
+print(f"이름: {name}, 나이: {age}세")
+# 출력: 이름: Alice, 나이: 30세
+
+# 수식도 가능
+print(f"내년 나이: {age + 1}세")
+# 출력: 내년 나이: 31세
+
+# 소수점 자리수 제어
+print(f"점수: {score:.1f}점")
+# 출력: 점수: 95.5점
+
+# 정수 자릿수 맞추기
+print(f"번호: {42:03d}")
+# 출력: 번호: 042
+```
+
+---
+
+## None — 아무것도 없음
+
+**None**은 파이썬의 특별한 값으로, '값이 없음' 또는 '아직 정해지지 않음'을 나타냅니다.
+
+```
+result = None
+print(result)           # None
+print(type(result))     # <class 'NoneType'>
+
+# None 여부 확인
+if result is None:
+    print("값이 없습니다")
+```
+
+---
+
+## 다중 할당
+
+파이썬에서는 여러 변수에 동시에 값을 할당할 수 있습니다.
+
+```
+# 동시 할당
+x, y, z = 1, 2, 3
+print(x, y, z)   # 1 2 3
+
+# 같은 값 할당
+a = b = c = 0
+print(a, b, c)   # 0 0 0
+
+# 값 교환 (swap) — 파이썬의 우아한 방법
+a, b = 10, 20
+a, b = b, a
+print(a, b)   # 20 10
+```
+
+---
+
+## 실전 예제 — 간단한 계산기
+
+```
+# simple_calc.py
+print("=== 간단한 계산기 ===")
+a = float(input("첫 번째 숫자를 입력하세요: "))
+b = float(input("두 번째 숫자를 입력하세요: "))
+
+print(f"\n{a} + {b} = {a + b}")
+print(f"{a} - {b} = {a - b}")
+print(f"{a} * {b} = {a * b}")
+
+if b != 0:
+    print(f"{a} / {b} = {a / b:.4f}")
+else:
+    print("나눗셈: 0으로 나눌 수 없습니다!")
+```
+
+---
+
+## 학습 정리
+
+| 항목 | 핵심 내용 |
+|------|----------|
+| 변수 | `=`으로 값 할당, 동적 타이핑 |
+| int | 정수형, 사칙연산 + 몫`//` 나머지`%` 거듭제곱`**` |
+| float | 실수형, 부동소수점 오차 주의 |
+| str | 문자열, 인덱싱/슬라이싱, 메서드 활용 |
+| bool | True/False, 비교연산 결과 |
+| 형변환 | int(), float(), str(), bool() |
+| input() | 항상 str 반환 → 숫자 계산 시 형변환 필수 |
+| f-string | f"{변수}" 형식으로 문자열 안에 변수 삽입 |
+
+---
+
+## 실전 퀴즈 5문항
+
+**Q1.** 다음 코드의 출력 결과를 쓰세요.
+```
+x = "5"
+y = 3
+print(int(x) + y)
+print(x * y)
+```
+
+**A1.**
+- 첫 번째 줄: `8` — `int("5")`는 정수 5가 되고, 3을 더하면 8
+- 두 번째 줄: `555` — 문자열 `"5"`에 `* 3`은 문자열 반복이므로 `"555"`
+
+---
+
+**Q2.** `input()` 함수가 반환하는 자료형은 무엇인가요? 사용자로부터 나이를 입력받아 10년 후 나이를 출력하는 코드를 작성하세요.
+
+**A2.** `input()`은 항상 **문자열(str)**을 반환합니다.
+```
+age = int(input("나이를 입력하세요: "))
+print("10년 후 나이:", age + 10)
+```
+
+---
+
+**Q3.** 아래 코드에서 오류가 발생하는 이유와 수정 방법을 설명하세요.
+```
+num = input("숫자 입력: ")
+result = num + 5
+print(result)
+```
+
+**A3.** `input()`은 항상 문자열을 반환하므로 `num`은 str 타입입니다. str과 int를 `+`로 연산하면 `TypeError`가 발생합니다. 수정 방법: `num = int(input("숫자 입력: "))` 으로 즉시 정수로 형변환해야 합니다.
+
+---
+
+**Q4.** f-string을 사용하여 변수 `name = "홍길동"`, `score = 88.7`을 활용해 `"홍길동 님의 점수: 88.7점"` 을 출력하는 코드를 작성하세요.
+
+**A4.**
+```
+name = "홍길동"
+score = 88.7
+print(f"{name} 님의 점수: {score}점")
+```
+
+---
+
+**Q5.** 다음 코드를 실행하면 `result`에 어떤 값이 저장될까요? 이유도 함께 설명하세요.
+```
+result = int(3.9)
+```
+
+**A5.** `result`에는 **3**이 저장됩니다. `int()`는 반올림이 아니라 **소수점 이하를 버림(truncation)**합니다. 따라서 3.9에서 소수점 이하 .9를 버리고 3이 됩니다. 반올림을 원한다면 `round(3.9)`를 사용해야 합니다 (결과: 4).
