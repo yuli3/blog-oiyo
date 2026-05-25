@@ -1,7 +1,7 @@
 # Implementation Control Board
 
 **Last updated: 2026-05-25**
-**Master roadmap:** `/Users/seuncho/coding/MASTER_PLAN.md`
+**Master roadmap:** `/Users/seuncho/coding/docs/MASTER_PLAN.md`
 
 ## 1. Purpose
 
@@ -18,7 +18,7 @@ It exists to prevent drift between:
 
 Use these files in this order:
 
-1. `/Users/seuncho/coding/MASTER_PLAN.md` — cross-project roadmap (canonical)
+1. `/Users/seuncho/coding/docs/MASTER_PLAN.md` — cross-project roadmap (canonical)
 2. [Content Charter](./content-charter.md)
 3. [MDOC Authoring Spec](./mdoc-authoring-spec.md)
 4. [Category and Track Map](./category-and-track-map.md)

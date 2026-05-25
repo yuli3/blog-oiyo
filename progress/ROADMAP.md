@@ -2,7 +2,7 @@
 
 > **⚠️ 이 파일은 MASTER_PLAN.md를 가리키는 포인터입니다.**
 > 전체 로드맵·우선순위·진척도는 여기서 관리합니다:
-> **`/Users/seuncho/coding/MASTER_PLAN.md`**
+> **`/Users/seuncho/coding/docs/MASTER_PLAN.md`**
 
 ---
 

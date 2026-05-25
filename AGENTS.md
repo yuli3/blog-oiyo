@@ -117,7 +117,7 @@ The following files are adapters and should point back here:
 
 ## 8. Current State
 
-As of 2026-05-25 — see `/Users/seuncho/coding/MASTER_PLAN.md` for the live cross-project roadmap.
+As of 2026-05-25 — see `/Users/seuncho/coding/docs/MASTER_PLAN.md` for the live cross-project roadmap.
 
 1. Schema transition complete — all `academy` files have `series:` + `chapter:`, all `interactive` have `embeddedTools:`
 2. Track-aware MDX registry split complete
