@@ -30,6 +30,10 @@ interface ISData {
   incomeTax: number;
 }
 
+interface MarketData {
+  marketCap: number;
+}
+
 interface CFData {
   depreciation: number;
   arIncrease: number;
@@ -85,6 +89,13 @@ const levelColors: Record<RatioLevel, { bar: string; text: string; bg: string }>
   info:    { bar: 'bg-sky-400',     text: 'text-sky-700',     bg: 'bg-sky-50'     },
 };
 
+const sourceBadgeClasses: Record<'BS' | 'IS' | 'MKT' | 'DERIVED', string> = {
+  BS: 'bg-sky-50 text-sky-700 border-sky-200',
+  IS: 'bg-violet-50 text-violet-700 border-violet-200',
+  MKT: 'bg-amber-50 text-amber-700 border-amber-200',
+  DERIVED: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+};
+
 interface RatioGaugeProps {
   label: string;
   value: number;
@@ -135,6 +146,65 @@ const SectionHeader: React.FC<{ title: string }> = ({ title }) => (
   </div>
 );
 
+const SourceBadge: React.FC<{ label: 'B/S' | 'I/S' | 'MKT' | 'DERIVED' }> = ({ label }) => {
+  const key = label === 'B/S' ? 'BS' : label === 'I/S' ? 'IS' : label === 'MKT' ? 'MKT' : 'DERIVED';
+  return (
+    <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-bold ${sourceBadgeClasses[key]}`}>
+      {label}
+    </span>
+  );
+};
+
+interface FormulaNode {
+  label: string;
+  value: number;
+  unit?: string;
+  source: 'B/S' | 'I/S' | 'MKT' | 'DERIVED';
+}
+
+interface FormulaFlowCardProps {
+  title: string;
+  formula: string;
+  takeaway: string;
+  nodes: FormulaNode[];
+  result: { label: string; value: number; unit: string };
+}
+
+const FormulaFlowCard: React.FC<FormulaFlowCardProps> = ({ title, formula, takeaway, nodes, result }) => (
+  <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+    <div className="flex items-start justify-between gap-3">
+      <div>
+        <h5 className="text-sm font-bold text-slate-800">{title}</h5>
+        <p className="mt-1 text-[11px] text-slate-500">{formula}</p>
+      </div>
+      <div className="text-right">
+        <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">{result.label}</p>
+        <p className="text-lg font-bold text-emerald-700">
+          {isFinite(result.value) ? result.value.toFixed(1) : '—'}
+          <span className="ml-1 text-xs font-normal text-slate-400">{result.unit}</span>
+        </p>
+      </div>
+    </div>
+
+    <div className="mt-3 grid gap-2 sm:grid-cols-[repeat(auto-fit,minmax(120px,1fr))]">
+      {nodes.map((node) => (
+        <div key={node.label} className="rounded-xl border border-slate-100 bg-slate-50 p-3">
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-[11px] font-bold text-slate-700">{node.label}</span>
+            <SourceBadge label={node.source} />
+          </div>
+          <p className="mt-2 text-base font-bold text-slate-800">
+            {node.value.toFixed(1)}
+            <span className="ml-1 text-[10px] font-normal text-slate-400">{node.unit ?? '억원'}</span>
+          </p>
+        </div>
+      ))}
+    </div>
+
+    <p className="mt-3 text-xs leading-relaxed text-slate-600">{takeaway}</p>
+  </div>
+);
+
 // ── Tab button ────────────────────────────────────────────────────────────────
 
 interface TabButtonProps {
@@ -177,6 +247,10 @@ export const FinancialStatementAnalyzer: React.FC = () => {
     interestExpense: 30, incomeTax: 60,
   });
 
+  const [market, setMarket] = useState<MarketData>({
+    marketCap: 1800,
+  });
+
   // Cash flow state
   const [cf, setCF] = useState<CFData>({
     depreciation: 80,
@@ -216,6 +290,12 @@ export const FinancialStatementAnalyzer: React.FC = () => {
     const roa = totalAssets > 0 ? (netIncome / totalAssets) * 100 : 0;
     const operatingMargin = is.revenue > 0 ? (ebit / is.revenue) * 100 : 0;
     const grossMargin = is.revenue > 0 ? (grossProfit / is.revenue) * 100 : 0;
+    const assetTurnover = totalAssets > 0 ? is.revenue / totalAssets : 0;
+    const equityMultiplier = equity > 0 ? totalAssets / equity : 0;
+    const netMargin = is.revenue > 0 ? (netIncome / is.revenue) * 100 : 0;
+    const per = netIncome > 0 ? market.marketCap / netIncome : 0;
+    const priceToBook = equity > 0 ? market.marketCap / equity : 0;
+    const dupontRoe = (netMargin / 100) * assetTurnover * equityMultiplier * 100;
 
     return {
       currentAssets, nonCurrentAssets, totalAssets,
@@ -223,8 +303,9 @@ export const FinancialStatementAnalyzer: React.FC = () => {
       grossProfit, ebit, ebt, netIncome,
       currentRatio, quickRatio, debtRatio, interestCoverage,
       roe, roa, operatingMargin, grossMargin,
+      assetTurnover, equityMultiplier, netMargin, per, priceToBook, dupontRoe,
     };
-  }, [bs, is]);
+  }, [bs, is, market]);
 
   const cfDerived = useMemo(() => {
     const operatingCF = derived.netIncome + cf.depreciation
@@ -250,6 +331,7 @@ export const FinancialStatementAnalyzer: React.FC = () => {
   const bsUpdater = (field: keyof BSData) => (v: number) => setBS(prev => ({ ...prev, [field]: v }));
   const isUpdater = (field: keyof ISData) => (v: number) => setIS(prev => ({ ...prev, [field]: v }));
   const cfUpdater = (field: keyof CFData) => (v: number) => setCF(prev => ({ ...prev, [field]: v }));
+  const marketUpdater = (field: keyof MarketData) => (v: number) => setMarket(prev => ({ ...prev, [field]: v }));
 
   // ── Render ─────────────────────────────────────────────────────────────────
 
@@ -312,10 +394,14 @@ export const FinancialStatementAnalyzer: React.FC = () => {
               <InputRow label="매출액" value={is.revenue} onChange={isUpdater('revenue')} />
               <InputRow label="매출원가" value={is.cogs} onChange={isUpdater('cogs')} />
               <InputRow label="판매관리비 (SG&A)" value={is.sga} onChange={isUpdater('sga')} />
+              <InputRow label="매출총이익" value={derived.grossProfit} onChange={() => {}} readOnly highlight />
               <InputRow label="영업이익 (EBIT)" value={derived.ebit} onChange={() => {}} readOnly highlight />
               <InputRow label="이자비용" value={is.interestExpense} onChange={isUpdater('interestExpense')} />
               <InputRow label="법인세비용" value={is.incomeTax} onChange={isUpdater('incomeTax')} />
               <InputRow label="당기순이익" value={derived.netIncome} onChange={() => {}} readOnly highlight />
+
+              <SectionHeader title="시장 정보 (MKT)" />
+              <InputRow label="시가총액" value={market.marketCap} onChange={marketUpdater('marketCap')} />
             </div>
 
             {/* Right: Ratios */}
@@ -327,10 +413,12 @@ export const FinancialStatementAnalyzer: React.FC = () => {
                   { label: '총부채', value: derived.totalLiabilities, color: 'text-rose-600' },
                   { label: '자본 합계', value: derived.equity, color: 'text-emerald-700' },
                   { label: '매출총이익', value: derived.grossProfit, color: 'text-sky-700' },
+                  { label: '시가총액', value: market.marketCap, color: 'text-amber-700' },
+                  { label: '순이익률', value: derived.netMargin, color: 'text-violet-700', unit: '%' },
                 ].map(item => (
                   <div key={item.label} className="rounded-xl bg-slate-50 border border-slate-100 p-3">
                     <p className="text-[10px] text-slate-400 font-bold">{item.label}</p>
-                    <p className={`text-lg font-bold ${item.color}`}>{item.value.toFixed(0)}<span className="text-xs font-normal text-slate-400 ml-1">억원</span></p>
+                    <p className={`text-lg font-bold ${item.color}`}>{item.value.toFixed(1)}<span className="text-xs font-normal text-slate-400 ml-1">{item.unit ?? '억원'}</span></p>
                   </div>
                 ))}
               </div>
@@ -344,6 +432,8 @@ export const FinancialStatementAnalyzer: React.FC = () => {
                   { label: '이자보상배율', value: derived.interestCoverage, unit: '배', formula: '영업이익 / 이자비용' },
                   { label: 'ROE', value: derived.roe, unit: '%', formula: '당기순이익 / 자본' },
                   { label: 'ROA', value: derived.roa, unit: '%', formula: '당기순이익 / 총자산' },
+                  { label: 'PER', value: derived.per, unit: '배', formula: '시가총액 / 당기순이익' },
+                  { label: 'PBR', value: derived.priceToBook, unit: '배', formula: '시가총액 / 자본' },
                   { label: '영업이익률', value: derived.operatingMargin, unit: '%', formula: '영업이익 / 매출액' },
                   { label: '매출총이익률', value: derived.grossMargin, unit: '%', formula: '매출총이익 / 매출액' },
                 ].map(item => (
@@ -357,6 +447,80 @@ export const FinancialStatementAnalyzer: React.FC = () => {
                     </span>
                   </div>
                 ))}
+              </div>
+
+              <SectionHeader title="숫자가 비율로 바뀌는 흐름" />
+              <div className="space-y-3">
+                <FormulaFlowCard
+                  title="매출총이익률"
+                  formula="(매출액 - 매출원가) / 매출액 × 100"
+                  takeaway="매출총이익률은 제품 자체의 마진을 봅니다. 원가 통제가 흔들리면 가장 먼저 무너지는 비율입니다."
+                  nodes={[
+                    { label: '매출액', value: is.revenue, source: 'I/S' },
+                    { label: '매출원가', value: is.cogs, source: 'I/S' },
+                    { label: '매출총이익', value: derived.grossProfit, source: 'DERIVED' },
+                  ]}
+                  result={{ label: '매출총이익률', value: derived.grossMargin, unit: '%' }}
+                />
+                <FormulaFlowCard
+                  title="ROE"
+                  formula="당기순이익 / 자본 × 100"
+                  takeaway="ROE는 주주가 맡긴 자본이 얼마나 효율적으로 불어났는지를 보여줍니다. 다만 레버리지가 큰 기업은 ROE가 부풀려질 수 있습니다."
+                  nodes={[
+                    { label: '당기순이익', value: derived.netIncome, source: 'I/S' },
+                    { label: '자본', value: derived.equity, source: 'B/S' },
+                    { label: '레버리지', value: derived.equityMultiplier, unit: '배', source: 'DERIVED' },
+                  ]}
+                  result={{ label: 'ROE', value: derived.roe, unit: '%' }}
+                />
+                <FormulaFlowCard
+                  title="ROA"
+                  formula="당기순이익 / 총자산 × 100"
+                  takeaway="ROA는 기업이 가진 전체 자산이 얼마나 이익으로 바뀌는지 보는 비율입니다. 자산이 무거운 업종일수록 낮게 나올 수 있습니다."
+                  nodes={[
+                    { label: '당기순이익', value: derived.netIncome, source: 'I/S' },
+                    { label: '총자산', value: derived.totalAssets, source: 'B/S' },
+                    { label: '총자산회전율', value: derived.assetTurnover, unit: '회', source: 'DERIVED' },
+                  ]}
+                  result={{ label: 'ROA', value: derived.roa, unit: '%' }}
+                />
+                <FormulaFlowCard
+                  title="PER"
+                  formula="시가총액 / 당기순이익"
+                  takeaway="PER은 시장이 현재 이익에 몇 배의 가격을 붙이는지 보여줍니다. 성장 기대가 크면 높고, 이익이 흔들리면 해석이 더 까다로워집니다."
+                  nodes={[
+                    { label: '시가총액', value: market.marketCap, source: 'MKT' },
+                    { label: '당기순이익', value: derived.netIncome, source: 'I/S' },
+                    { label: 'PBR', value: derived.priceToBook, unit: '배', source: 'DERIVED' },
+                  ]}
+                  result={{ label: 'PER', value: derived.per, unit: '배' }}
+                />
+              </div>
+
+              <SectionHeader title="ROE 분해 보기" />
+              <div className="rounded-2xl border border-emerald-100 bg-emerald-50/60 p-4">
+                <p className="text-xs font-bold text-emerald-800">듀퐁 분석: 순이익률 × 총자산회전율 × 레버리지 = ROE</p>
+                <div className="mt-3 grid gap-3 sm:grid-cols-4">
+                  <div className="rounded-xl bg-white p-3">
+                    <p className="text-[10px] font-bold text-slate-400">순이익률</p>
+                    <p className="text-lg font-bold text-violet-700">{derived.netMargin.toFixed(1)}%</p>
+                  </div>
+                  <div className="rounded-xl bg-white p-3">
+                    <p className="text-[10px] font-bold text-slate-400">총자산회전율</p>
+                    <p className="text-lg font-bold text-sky-700">{derived.assetTurnover.toFixed(2)}회</p>
+                  </div>
+                  <div className="rounded-xl bg-white p-3">
+                    <p className="text-[10px] font-bold text-slate-400">레버리지</p>
+                    <p className="text-lg font-bold text-amber-700">{derived.equityMultiplier.toFixed(2)}배</p>
+                  </div>
+                  <div className="rounded-xl bg-emerald-700 p-3">
+                    <p className="text-[10px] font-bold text-emerald-100">분해된 ROE</p>
+                    <p className="text-lg font-bold text-white">{derived.dupontRoe.toFixed(1)}%</p>
+                  </div>
+                </div>
+                <p className="mt-3 text-xs leading-relaxed text-slate-600">
+                  ROE를 숫자 하나로 보지 말고, 이익률이 좋은 기업인지, 자산을 빠르게 돌리는 기업인지, 부채를 크게 쓰는 기업인지로 분해해 읽는 습관이 중요합니다.
+                </p>
               </div>
             </div>
           </div>
@@ -492,6 +656,14 @@ export const FinancialStatementAnalyzer: React.FC = () => {
                 level={derived.roa >= 5 ? 'good' : derived.roa >= 2 ? 'warning' : 'danger'}
                 description="당기순이익/총자산. ≥5% 우수 | 2~5% 보통 | <2% 낮음"
                 barPct={clampPct(derived.roa, 15)}
+              />
+              <RatioGauge
+                label="PER (주가수익비율)"
+                value={derived.per}
+                unit="배"
+                level={derived.per > 0 && derived.per <= 15 ? 'good' : derived.per <= 25 ? 'warning' : 'danger'}
+                description="시가총액/당기순이익. 낮을수록 저평가 가능성, 높을수록 성장 기대 반영"
+                barPct={clampPct(derived.per, 40)}
               />
               <RatioGauge
                 label="영업이익률"
