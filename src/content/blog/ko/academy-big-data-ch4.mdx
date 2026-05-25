@@ -1,0 +1,592 @@
+---
+track: academy
+locale: ko
+title: "Ch4. 빅데이터 분석기사 — 데이터 시각화와 EDA"
+category: "Computer Science"
+series: "빅데이터 분석기사"
+chapter: 4
+chapterTitleShort: '시각화·EDA'
+author: OIYO 편집부
+tags:
+  - 빅데이터
+  - 시각화
+  - EDA
+  - matplotlib
+  - seaborn
+  - 탐색적데이터분석
+description: "빅데이터 분석기사 필기·실기 — 탐색적 데이터 분석(EDA) 방법론, matplotlib/seaborn 시각화, 이상값 탐지, 상관분석."
+pubDate: '2026-05-25'
+layoutVariant: lecture-series
+---
+
+## EDA(탐색적 데이터 분석)란?
+
+**탐색적 데이터 분석(Exploratory Data Analysis, EDA)**은 1977년 통계학자 존 투키(John Tukey)가 제안한 데이터 분석 접근법입니다. 가설 검정보다 데이터 자체를 먼저 **탐색·이해**하는 것을 우선시합니다.
+
+```
+EDA의 목적:
+1. 데이터 분포와 특성 파악 (어떤 데이터인가?)
+2. 이상값·결측치 발견 (데이터 품질은 어떤가?)
+3. 변수 간 관계 탐색 (어떤 변수가 중요한가?)
+4. 모델링 전 가정 검토 (어떤 방법을 쓸 수 있는가?)
+5. 데이터 스토리텔링 (무엇을 말해주는가?)
+```
+
+빅데이터 분석기사 시험에서는 EDA의 각 단계에서 어떤 기법을 적용하는지, 그리고 시각화 차트의 종류와 용도를 명확히 이해해야 합니다.
+
+### EDA 단계별 체크리스트
+
+```
+1단계: 데이터 구조 파악
+  □ 행/열 수 (shape)
+  □ 변수 타입 (dtypes)
+  □ 결측치 현황 (isnull().sum())
+  □ 중복 데이터 (duplicated().sum())
+
+2단계: 기술통계 분석
+  □ 수치형: 평균, 중앙값, 표준편차, 분위수
+  □ 범주형: 빈도, 비율, 최빈값
+
+3단계: 분포 시각화
+  □ 히스토그램, 박스플롯, 바이올린 플롯
+  □ 왜도(Skewness), 첨도(Kurtosis) 확인
+
+4단계: 변수 간 관계 탐색
+  □ 상관행렬 히트맵
+  □ 산점도, 산점도 행렬 (pairplot)
+  □ 범주형 vs 수치형: 박스플롯, 바플롯
+
+5단계: 이상값 탐지 및 처리
+  □ IQR 방법
+  □ Z-score 방법
+  □ 시각적 탐지 (박스플롯, 산점도)
+```
+
+---
+
+## 기술통계 완전 정리
+
+### 중심 경향치 (Central Tendency)
+
+데이터의 **"중심"**을 나타내는 대표값입니다.
+
+```
+평균 (Mean)
+  공식: x̄ = (x₁ + x₂ + ... + xₙ) / n
+  특징: 모든 값을 사용, 이상치에 민감
+  언제 쓰나: 정규분포에 가까운 데이터
+
+중앙값 (Median)
+  공식: 정렬 후 중간 순서 값
+        홀수 개: 가운데 값
+        짝수 개: 가운데 두 값의 평균
+  특징: 이상치에 강건 (robust)
+  언제 쓰나: 이상치가 있거나 왜도가 높은 데이터
+             예) 주택 가격 중앙값
+
+최빈값 (Mode)
+  특징: 가장 자주 등장하는 값
+        범주형 데이터에 적용 가능
+        하나 이상의 최빈값(이봉분포 등) 가능
+  언제 쓰나: 범주형 변수, 최빈 패턴 파악
+```
+
+**평균 vs 중앙값 해석**:
+
+```
+평균 > 중앙값 → 오른쪽 꼬리 (우측 왜도, 양의 왜도)
+               예) 소득 분포 (소수의 고소득자 영향)
+
+평균 < 중앙값 → 왼쪽 꼬리 (좌측 왜도, 음의 왜도)
+               예) 시험 점수가 전반적으로 높고 일부만 낮은 경우
+
+평균 ≈ 중앙값 → 대칭 분포 (정규분포에 가까움)
+```
+
+### 산포도 (Spread / Variability)
+
+데이터가 얼마나 **퍼져있는지**를 나타내는 측도입니다.
+
+```
+범위 (Range)
+  = 최댓값 - 최솟값
+  단점: 이상치에 매우 민감
+
+사분위범위 (IQR, Interquartile Range)
+  = Q3 - Q1
+  중간 50% 데이터의 범위
+  이상치에 강건
+
+분산 (Variance)
+  모분산: σ² = Σ(xᵢ - μ)² / N
+  표본분산: s² = Σ(xᵢ - x̄)² / (n-1)  ← 불편추정량 (ddof=1)
+  단위: 원래 단위의 제곱 → 해석 불편
+
+표준편차 (Standard Deviation)
+  σ = √분산
+  원래 단위와 동일 → 해석 편리
+  68-95-99.7 규칙 적용
+```
+
+### 분포의 모양: 왜도와 첨도
+
+```
+왜도 (Skewness): 분포의 비대칭성
+  왜도 = 0    → 대칭 (정규분포)
+  왜도 > 0    → 우측 꼬리 (오른쪽으로 기울어짐)
+  왜도 < 0    → 좌측 꼬리 (왼쪽으로 기울어짐)
+  |왜도| > 1  → 심한 비대칭으로 변환 고려
+
+첨도 (Kurtosis): 분포의 뾰족함 (꼬리 두께)
+  첨도 = 3    → 정규분포 (excess kurtosis = 0)
+  첨도 > 3    → 뾰족한 분포 (heavy tail, 극단값 多)
+  첨도 < 3    → 납작한 분포 (light tail)
+```
+
+---
+
+## 시각화 차트 종류와 용도
+
+### 차트 선택 가이드
+
+```
+변수 유형에 따른 차트 선택:
+
+단변량 수치형:
+  → 히스토그램 (분포 확인)
+  → 박스플롯 (이상치 + 사분위수)
+  → 바이올린 플롯 (분포 + 사분위수)
+
+단변량 범주형:
+  → 막대 그래프 (빈도)
+  → 파이 차트 (비율, 카테고리 5개 이하 권장)
+
+이변량 수치형 vs 수치형:
+  → 산점도 (scatter plot)
+  → 선 그래프 (시계열)
+
+이변량 범주형 vs 수치형:
+  → 박스플롯 (그룹별 분포)
+  → 바이올린 플롯
+  → 막대 그래프 (그룹별 평균)
+
+다변량:
+  → 히트맵 (상관행렬)
+  → 산점도 행렬 (pairplot)
+  → 버블 차트 (3변수 동시 표현)
+```
+
+---
+
+## matplotlib 핵심 코드
+
+### 기본 설정
+
+```python
+import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.rcParams['font.family'] = 'Malgun Gothic'  # 한글 폰트 (Windows)
+# Mac: 'AppleGothic', Linux: 'NanumGothic'
+matplotlib.rcParams['axes.unicode_minus'] = False  # 마이너스 부호 깨짐 방지
+```
+
+### 히스토그램 (Histogram)
+
+```python
+# 단순 히스토그램
+plt.figure(figsize=(8, 5))
+plt.hist(df['Age'], bins=20, edgecolor='black', color='steelblue', alpha=0.7)
+plt.title('나이 분포')
+plt.xlabel('나이')
+plt.ylabel('빈도')
+plt.axvline(df['Age'].mean(), color='red', linestyle='--', label='평균')
+plt.axvline(df['Age'].median(), color='green', linestyle='--', label='중앙값')
+plt.legend()
+plt.tight_layout()
+plt.show()
+```
+
+### 박스플롯 (Box Plot)
+
+```python
+# 단순 박스플롯
+plt.figure(figsize=(8, 5))
+plt.boxplot(df['Income'], vert=True)
+plt.title('소득 분포 박스플롯')
+plt.ylabel('소득')
+plt.show()
+
+# 그룹별 박스플롯
+groups = [df[df['Gender'] == g]['Income'] for g in df['Gender'].unique()]
+plt.boxplot(groups, labels=df['Gender'].unique())
+plt.title('성별 소득 분포')
+plt.show()
+```
+
+박스플롯 해석:
+
+```
+          ┌─────┐
+  최솟값 ├─    │ Q1 (25분위수)
+          │     │ 중앙값 (Q2)
+          │     │ Q3 (75분위수)
+  최댓값 ├─    │
+          └─────┘
+  ● ● ●  ← 이상치 (IQR×1.5 초과)
+
+박스 크기 = IQR (중간 50% 범위)
+수염 길이 = Q1 - 1.5×IQR ~ Q3 + 1.5×IQR 이내
+```
+
+### 산점도 (Scatter Plot)
+
+```python
+plt.figure(figsize=(8, 6))
+plt.scatter(df['Age'], df['Income'], alpha=0.5, c='steelblue')
+plt.title('나이 vs 소득 산점도')
+plt.xlabel('나이')
+plt.ylabel('소득')
+
+# 추세선 추가
+import numpy as np
+z = np.polyfit(df['Age'], df['Income'], 1)
+p = np.poly1d(z)
+plt.plot(sorted(df['Age']), p(sorted(df['Age'])), 'r--', label='추세선')
+plt.legend()
+plt.show()
+```
+
+---
+
+## seaborn 핵심 코드
+
+seaborn은 matplotlib 기반의 고수준 시각화 라이브러리로, 더 적은 코드로 아름다운 차트를 만들 수 있습니다.
+
+### seaborn 기본 설정
+
+```python
+import seaborn as sns
+sns.set_theme(style='whitegrid')  # 배경 테마
+sns.set_palette('pastel')          # 색상 팔레트
+```
+
+### 분포 시각화
+
+```python
+# 히스토그램 + KDE 곡선
+sns.histplot(df['Age'], kde=True, color='steelblue')
+plt.title('나이 분포')
+plt.show()
+
+# 바이올린 플롯 (분포 + 박스플롯 결합)
+sns.violinplot(x='Gender', y='Income', data=df)
+plt.title('성별 소득 분포 (바이올린 플롯)')
+plt.show()
+
+# 박스플롯
+sns.boxplot(x='Category', y='Sales', data=df, palette='Set2')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+```
+
+### 상관행렬 히트맵
+
+```python
+# 상관행렬 계산
+corr_matrix = df.corr()
+
+# 히트맵 그리기
+plt.figure(figsize=(10, 8))
+sns.heatmap(
+    corr_matrix,
+    annot=True,       # 셀에 수치 표시
+    fmt='.2f',        # 소수점 2자리
+    cmap='coolwarm',  # 색상 맵 (파랑=음, 빨강=양)
+    vmin=-1, vmax=1,  # 범례 범위 고정
+    center=0,
+    square=True,
+    linewidths=0.5
+)
+plt.title('변수 간 상관관계 히트맵')
+plt.tight_layout()
+plt.show()
+```
+
+### 산점도 행렬 (pairplot)
+
+```python
+# 모든 수치형 변수 쌍 산점도 + 대각선에 분포
+sns.pairplot(df, hue='Category', diag_kind='kde')
+plt.suptitle('변수 간 관계 탐색', y=1.02)
+plt.show()
+```
+
+### 막대 그래프 (countplot / barplot)
+
+```python
+# 빈도 막대 그래프
+sns.countplot(x='Region', data=df, order=df['Region'].value_counts().index)
+plt.title('지역별 빈도')
+plt.xticks(rotation=45)
+plt.show()
+
+# 그룹별 평균 + 오차막대
+sns.barplot(x='Region', y='Sales', data=df, estimator='mean', ci=95)
+plt.title('지역별 평균 매출')
+plt.show()
+```
+
+---
+
+## 이상값 탐지와 처리
+
+### IQR 방법
+
+가장 보편적으로 사용되는 이상값 탐지 방법입니다.
+
+```python
+import numpy as np
+
+def detect_outliers_iqr(series):
+    Q1 = series.quantile(0.25)
+    Q3 = series.quantile(0.75)
+    IQR = Q3 - Q1
+    lower = Q1 - 1.5 * IQR
+    upper = Q3 + 1.5 * IQR
+    return series[(series < lower) | (series > upper)]
+
+# 이상값 인덱스 확인
+outliers = detect_outliers_iqr(df['Income'])
+print(f'이상값 수: {len(outliers)}')
+print(f'이상값 인덱스: {outliers.index.tolist()}')
+
+# 이상값 제거
+Q1 = df['Income'].quantile(0.25)
+Q3 = df['Income'].quantile(0.75)
+IQR = Q3 - Q1
+df_clean = df[(df['Income'] >= Q1 - 1.5*IQR) & (df['Income'] <= Q3 + 1.5*IQR)]
+```
+
+### Z-score 방법
+
+```python
+from scipy import stats
+
+z_scores = np.abs(stats.zscore(df['Income']))
+
+# |Z| > 3 인 관측치를 이상값으로 간주
+threshold = 3
+outliers_z = df[z_scores > threshold]
+df_clean_z = df[z_scores <= threshold]
+
+print(f'Z-score 방법 이상값 수: {len(outliers_z)}')
+```
+
+### IQR vs Z-score 비교
+
+```
+IQR 방법:
+  - 분포 가정 없음 (비모수적)
+  - 중앙값과 사분위수 기반 → 이상치에 강건
+  - 박스플롯과 직관적으로 연결
+  - 소규모 데이터셋에 적합
+
+Z-score 방법:
+  - 정규분포 가정 (모수적)
+  - 평균·표준편차 기반 → 이상치에 민감
+  - 대규모 데이터에서 안정적
+  - 임계값(보통 3) 설정 필요
+```
+
+### 이상값 처리 방법
+
+```
+1. 제거 (Deletion)
+   - 이상값이 측정 오류임이 확실한 경우
+   - 이상값 비율이 낮은 경우
+
+2. 대체 (Imputation / Capping)
+   - Winsorizing: 이상값을 Q1-1.5×IQR 또는 Q3+1.5×IQR로 교체
+   - 평균/중앙값으로 대체
+
+3. 변환 (Transformation)
+   - 로그 변환: log(x) — 우측 꼬리 분포에 효과적
+   - 제곱근 변환: √x
+   - 박스-콕스 변환 (Box-Cox)
+
+4. 별도 모델링
+   - 이상치 자체가 관심 대상인 경우 (이상 탐지 모델)
+```
+
+---
+
+## 상관분석
+
+### 피어슨 상관계수 (Pearson Correlation)
+
+**선형 관계**를 측정하는 가장 기본적인 상관계수입니다.
+
+```
+공식: r = Σ(xᵢ - x̄)(yᵢ - ȳ) / √[Σ(xᵢ - x̄)² × Σ(yᵢ - ȳ)²]
+
+범위: -1 ≤ r ≤ 1
+
+해석:
+  r =  1.0: 완전 양의 선형 관계
+  r =  0.7: 강한 양의 선형 관계
+  r =  0.3: 약한 양의 선형 관계
+  r =  0.0: 선형 관계 없음
+  r = -0.3: 약한 음의 선형 관계
+  r = -0.7: 강한 음의 선형 관계
+  r = -1.0: 완전 음의 선형 관계
+
+주의: 피어슨 r은 비선형 관계를 포착하지 못함
+      두 변수가 비선형 관계이더라도 r ≈ 0일 수 있음
+```
+
+```python
+# 두 변수 간 피어슨 상관계수
+from scipy.stats import pearsonr
+
+r, p_value = pearsonr(df['Age'], df['Income'])
+print(f'피어슨 r = {r:.4f}, p-value = {p_value:.4f}')
+
+# pandas로 전체 상관행렬
+corr_matrix = df.corr(method='pearson')
+print(corr_matrix)
+```
+
+### 스피어만 순위 상관계수 (Spearman Correlation)
+
+**순위(rank)** 기반 상관계수로, 비선형 단조 관계를 측정합니다.
+
+```
+특징:
+  - 데이터를 순위로 변환한 후 피어슨 상관계수 계산
+  - 정규분포 가정 불필요 (비모수적)
+  - 이상치에 강건
+  - 순서만 의미있는 서열 데이터에 적합 (리커트 척도 등)
+
+피어슨 vs 스피어만 선택 기준:
+  - 정규분포 + 선형 관계 → 피어슨
+  - 비정규분포 또는 이상치 존재 → 스피어만
+  - 순서 데이터 → 스피어만
+```
+
+```python
+from scipy.stats import spearmanr
+
+rho, p_value = spearmanr(df['Age'], df['Income'])
+print(f'스피어만 ρ = {rho:.4f}, p-value = {p_value:.4f}')
+
+# 전체 상관행렬
+corr_spearman = df.corr(method='spearman')
+```
+
+### 상관분석 해석 주의사항
+
+```
+1. 상관 ≠ 인과
+   → r이 높다고 원인-결과 관계가 있는 것이 아님
+   → 제3의 변수(교란변수, Confounding Variable) 가능성
+
+2. 범위 제한 (Range Restriction)
+   → 특정 범위로 데이터가 제한되면 r이 낮게 추정될 수 있음
+
+3. 비선형 관계
+   → 피어슨 r = 0이더라도 강한 비선형 관계 존재 가능
+   → 반드시 산점도로 시각적 확인 필요
+
+4. 다중공선성
+   → 독립변수들 간 높은 상관관계 (|r| > 0.8)는
+     회귀분석에서 계수 추정 불안정 야기
+```
+
+---
+
+## EDA 실전 템플릿
+
+```python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# ── 1. 데이터 로드 및 기본 탐색 ──────────────────────
+df = pd.read_csv('data.csv')
+print('Shape:', df.shape)
+print('\nData Types:\n', df.dtypes)
+print('\nMissing Values:\n', df.isnull().sum())
+print('\nDescribe:\n', df.describe())
+
+# ── 2. 수치형 변수 분포 시각화 ────────────────────────
+num_cols = df.select_dtypes(include='number').columns
+fig, axes = plt.subplots(len(num_cols), 2, figsize=(12, 4*len(num_cols)))
+for i, col in enumerate(num_cols):
+    sns.histplot(df[col], kde=True, ax=axes[i, 0])
+    axes[i, 0].set_title(f'{col} 분포')
+    sns.boxplot(y=df[col], ax=axes[i, 1])
+    axes[i, 1].set_title(f'{col} 박스플롯')
+plt.tight_layout()
+plt.show()
+
+# ── 3. 상관행렬 히트맵 ──────────────────────────────
+plt.figure(figsize=(10, 8))
+sns.heatmap(df[num_cols].corr(), annot=True, fmt='.2f',
+            cmap='coolwarm', center=0, square=True)
+plt.title('상관관계 히트맵')
+plt.tight_layout()
+plt.show()
+
+# ── 4. 이상값 탐지 (IQR) ──────────────────────────
+for col in num_cols:
+    Q1 = df[col].quantile(0.25)
+    Q3 = df[col].quantile(0.75)
+    IQR = Q3 - Q1
+    outliers = df[(df[col] < Q1 - 1.5*IQR) | (df[col] > Q3 + 1.5*IQR)]
+    print(f'{col}: 이상값 {len(outliers)}개')
+```
+
+---
+
+## 핵심 개념 카드
+
+**EDA 5단계** ★★★★★
+: 구조 파악 → 기술통계 → 분포 시각화 → 변수 간 관계 → 이상값 처리. 모델링 전 필수 과정.
+*암기: "구기분관이"*
+
+**평균 vs 중앙값 해석** ★★★★★
+: 평균>중앙값이면 우측 꼬리(양의 왜도). 소득·자산처럼 소수의 극단값이 있는 데이터에서 중앙값이 더 대표성 있음.
+*암기: 평균은 부자 친구의 영향을 받는다*
+
+**박스플롯 5가지 요소** ★★★★★
+: 최솟값, Q1, 중앙값(Q2), Q3, 최댓값. 수염 끝은 1.5×IQR 범위, 점으로 표시된 것이 이상치.
+*시험 팁: 박스플롯 그림에서 각 위치 묻는 문제 빈출*
+
+**피어슨 vs 스피어만** ★★★★☆
+: 피어슨=선형 관계, 정규분포 가정. 스피어만=순위 기반, 비모수, 이상치에 강건.
+*선택 기준: 정규성 확인 후 결정*
+
+**IQR 이상값 기준** ★★★★☆
+: Q1 - 1.5×IQR 미만 또는 Q3 + 1.5×IQR 초과. 박스플롯의 수염 기준과 동일.
+*암기: 1.5가 핵심 — 3.0이 아님*
+
+---
+
+## 실전 퀴즈
+
+**Q1. 박스플롯에서 수염(whisker)의 끝이 나타내는 값은?**
+> 수염의 끝은 **Q1 - 1.5×IQR 이상, Q3 + 1.5×IQR 이하** 범위 내에서 실제 데이터의 최솟값과 최댓값을 나타냅니다. 이 범위를 벗어나는 점(●)이 이상치로 표시됩니다. 따라서 수염 끝은 '이상치를 제외한 최솟값·최댓값'입니다.
+
+**Q2. 소득 데이터에서 평균이 중앙값보다 훨씬 클 때, 적절한 시각화와 중심 경향치는?**
+> 이는 **오른쪽 꼬리 분포(양의 왜도)**를 의미합니다. 히스토그램에서 오른쪽에 긴 꼬리가 형성되며, 박스플롯에서 위쪽 수염이 길어집니다. 이 경우 이상치의 영향을 덜 받는 **중앙값(Median)**이 더 적절한 대표값입니다. 로그 변환으로 분포를 정규화할 수도 있습니다.
+
+**Q3. 상관계수 r = 0이 의미하는 것과, 이 경우에도 확인해야 하는 것은?**
+> r = 0은 **선형 관계가 없음**을 의미하지만, 비선형 관계(U자형, 역U자형 등)가 없다는 뜻은 아닙니다. 반드시 **산점도**를 그려 관계의 패턴을 시각적으로 확인해야 합니다. 예를 들어 이차 관계(포물선 형태)는 r ≈ 0이 나올 수 있습니다.
+
+**Q4. 피어슨 상관계수 대신 스피어만 상관계수를 사용해야 하는 경우는?**
+> (1) 데이터가 정규분포를 따르지 않을 때, (2) 이상치가 많을 때, (3) 데이터가 서열 척도(순위형)일 때, (4) 단조 비선형 관계를 탐지하고 싶을 때입니다. 스피어만은 원래 값 대신 순위(rank)를 사용하므로 분포 가정이 없는 **비모수 통계**입니다.
+
+**Q5. seaborn의 heatmap에서 annot=True, fmt='.2f'의 역할은?**
+> `annot=True`는 각 셀에 **수치값을 표시**하도록 합니다. `fmt='.2f'`는 표시되는 숫자의 형식을 **소수점 2자리 실수**로 지정합니다. 이 두 파라미터를 함께 사용하면 상관행렬 히트맵에서 각 셀 안에 '0.87'과 같이 읽기 쉬운 상관계수가 표시됩니다.

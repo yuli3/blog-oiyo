@@ -1,0 +1,554 @@
+---
+track: academy
+locale: ko
+title: "Ch5. 빅데이터 분석기사 — 핵심 정리와 모의고사"
+category: "Computer Science"
+series: "빅데이터 분석기사"
+chapter: 5
+chapterTitleShort: '핵심정리·모의고사'
+author: OIYO 편집부
+tags:
+  - 빅데이터
+  - 모의고사
+  - 핵심정리
+  - 자격증
+  - 시험전략
+description: "빅데이터 분석기사 최종 핵심 정리 — 필기 4과목 요약, 실기 출제 패턴 분석, 모의고사 20문항 + 해설."
+pubDate: '2026-05-25'
+layoutVariant: lecture-series
+---
+
+## 최종 정리를 시작하며
+
+이번 챕터는 빅데이터 분석기사 시험 직전 최종 정리를 위한 내용입니다. Ch1~Ch4에서 다룬 핵심 개념을 4과목 요약표로 압축하고, 실기 출제 패턴 분석과 실전 모의고사 20문항을 제공합니다.
+
+```
+학습 목표:
+1. 필기 4과목 핵심 키워드를 한눈에 정리한다.
+2. 실기 출제 패턴 5가지를 파악하고 대비 전략을 세운다.
+3. 모의고사 20문항으로 최종 실력을 점검한다.
+4. D-30, D-7, D-1 맞춤 학습 플랜을 수립한다.
+```
+
+---
+
+## 필기 4과목 핵심 요약표
+
+### 1과목: 빅데이터 분석 기획
+
+| 핵심 주제 | 핵심 키워드 | 빈출 포인트 |
+|---------|-----------|-----------|
+| 빅데이터 5V | Volume, Velocity, Variety, Veracity, Value | 각 V의 정의·예시 연결 |
+| 분석 방법론 | KDD, CRISP-DM, SEMMA | 단계 순서 암기 |
+| 분석 마스터플랜 | 과제 우선순위화, Quick Win | 난이도-가치 매트릭스 |
+| 데이터 거버넌스 | 데이터 표준화, 마스터 데이터 | 거버넌스 구성 요소 |
+| 개인정보 보호 | 가명화, 익명화, GDPR | 가명화 ≠ 익명화 구분 |
+
+```
+CRISP-DM 6단계 (순서 암기 필수):
+업무 이해 → 데이터 이해 → 데이터 준비 → 모델링 → 평가 → 전개
+(업데준모평전 — "업데이트된 모든 것을 평가해서 전개")
+```
+
+### 2과목: 빅데이터 탐색
+
+| 핵심 주제 | 핵심 키워드 | 빈출 포인트 |
+|---------|-----------|-----------|
+| 데이터 수집 | 크롤링, API, ETL, ELT | ETL vs ELT 순서 차이 |
+| 전처리 | 결측치·이상치 처리, 정규화, 표준화 | Min-Max vs Z-score |
+| EDA | 기술통계, 분포, 왜도·첨도 | 평균>중앙값 = 양의 왜도 |
+| 상관분석 | 피어슨, 스피어만 | 사용 기준 구분 |
+| 차원 축소 | PCA, LDA, t-SNE | 주성분 분석 목적 |
+
+```
+정규화 vs 표준화 비교:
+  Min-Max 정규화: [0,1] 범위로 압축, 이상치 민감
+  Z-score 표준화: 평균 0, 표준편차 1, 분포 무관
+  사용 기준: 거리 기반 알고리즘 → 표준화 선호
+```
+
+### 3과목: 빅데이터 모델링
+
+| 핵심 주제 | 핵심 키워드 | 빈출 포인트 |
+|---------|-----------|-----------|
+| 지도학습 분류 | 로지스틱회귀, 의사결정나무, SVM, 랜덤포레스트 | 각 알고리즘 특성 비교 |
+| 지도학습 회귀 | 선형회귀, Ridge, Lasso, ElasticNet | L1 vs L2 차이 |
+| 비지도학습 | K-means, DBSCAN, 계층적 군집 | 엘보우 방법 |
+| 앙상블 | 배깅, 부스팅, 스태킹 | 배깅=병렬, 부스팅=순차 |
+| 과적합 방지 | 교차검증, 정규화, 드롭아웃 | K-Fold 5 or 10 사용 |
+
+```
+의사결정나무 분할 기준:
+  정보이득 (ID3): 엔트로피 감소 최대화
+  지니 불순도 (CART): scikit-learn 기본값
+  이득 비율 (C4.5): 정보이득 편향 보정
+```
+
+### 4과목: 빅데이터 결과 해석
+
+| 핵심 주제 | 핵심 키워드 | 빈출 포인트 |
+|---------|-----------|-----------|
+| 분류 평가 | 혼동행렬, 정확도, 정밀도, 재현율, F1 | 공식 암기 |
+| 회귀 평가 | MAE, MSE, RMSE, R² | 이상치 민감도 비교 |
+| ROC·AUC | TPR, FPR, AUC 해석 | AUC=0.5: 무작위 |
+| 시각화 | 히스토그램, 박스플롯, 히트맵 | 차트 선택 기준 |
+| 보고서 작성 | 인사이트, 대시보드, 스토리텔링 | 비즈니스 관점 해석 |
+
+```
+분류 평가 공식 (필수 암기):
+  Accuracy  = (TP+TN) / (TP+FP+FN+TN)
+  Precision = TP / (TP+FP)  ← "예측 양성" 분모
+  Recall    = TP / (TP+FN)  ← "실제 양성" 분모
+  F1 Score  = 2 × (P × R) / (P + R)
+```
+
+---
+
+## 실기 출제 패턴 5가지
+
+### 패턴 1: 결측치 처리 후 통계값 계산
+
+```
+문제 형식: "OO 열의 결측치를 중앙값으로 대체한 후, 
+           전체 평균을 소수점 2자리까지 출력하시오."
+
+핵심 코드:
+  df['col'].fillna(df['col'].median(), inplace=True)
+  print(round(df['col'].mean(), 2))
+
+주의사항:
+  - fillna 후 inplace=True 또는 재할당 확인
+  - round() 자릿수 정확히 맞추기
+  - 결측치 처리 전후 shape 변화 확인
+```
+
+### 패턴 2: 그룹별 집계 및 필터링
+
+```
+문제 형식: "특정 조건을 만족하는 그룹의 통계값을 구하시오."
+
+핵심 코드:
+  # 그룹별 합계 중 최댓값
+  result = df.groupby('Category')['Sales'].sum().max()
+  
+  # 그룹별 집계 후 특정 조건
+  grouped = df.groupby('Region')['Sales'].mean().reset_index()
+  answer = grouped[grouped['Sales'] > 1000]['Region'].tolist()
+
+주의사항:
+  - groupby 후 reset_index() 호출 여부
+  - .idxmax(), .idxmin() 활용 (최댓값 인덱스 반환)
+```
+
+### 패턴 3: 데이터 결합 후 분석
+
+```
+문제 형식: "두 데이터프레임을 특정 키로 병합한 후 분석하시오."
+
+핵심 코드:
+  merged = pd.merge(df1, df2, on='ID', how='left')
+  # 또는
+  merged = pd.merge(df1, df2, 
+                    left_on='user_id', right_on='customer_id',
+                    how='inner')
+
+주의사항:
+  - left/right/inner/outer 조인 종류 정확히 선택
+  - 병합 후 결측치 발생 여부 확인
+  - 중복 열 이름 처리 (suffixes 파라미터)
+```
+
+### 패턴 4: 분류 모델 학습 및 평가
+
+```
+문제 형식: "주어진 데이터로 분류 모델을 학습하고
+           AUC-ROC 점수를 소수점 4자리까지 출력하시오."
+
+핵심 코드:
+  from sklearn.ensemble import RandomForestClassifier
+  from sklearn.metrics import roc_auc_score
+  
+  model = RandomForestClassifier(random_state=42)
+  model.fit(X_train, y_train)
+  y_prob = model.predict_proba(X_test)[:, 1]
+  auc = roc_auc_score(y_test, y_prob)
+  print(round(auc, 4))
+
+주의사항:
+  - AUC 계산에는 predict_proba()[:, 1] 사용 (확률값)
+  - predict()는 클래스 레이블 반환 → AUC에 사용 불가
+  - random_state 지정 (문제에서 명시하면 그 값 사용)
+```
+
+### 패턴 5: 회귀 모델 학습 및 RMSE 계산
+
+```
+문제 형식: "선형회귀 모델로 예측하고 RMSE를 출력하시오."
+
+핵심 코드:
+  from sklearn.linear_model import LinearRegression
+  from sklearn.metrics import mean_squared_error
+  import numpy as np
+  
+  model = LinearRegression()
+  model.fit(X_train, y_train)
+  y_pred = model.predict(X_test)
+  
+  mse = mean_squared_error(y_test, y_pred)
+  rmse = np.sqrt(mse)
+  print(round(rmse, 4))
+
+주의사항:
+  - MSE에 np.sqrt() 적용하여 RMSE 계산
+  - sklearn의 mean_squared_error는 MSE 반환 (RMSE 아님)
+  - 스케일링 적용 시 테스트 데이터는 transform()만
+```
+
+---
+
+## 시험 D-30 / D-7 / D-1 학습 전략
+
+### D-30 (한 달 전): 기초 완성 단계
+
+```
+목표: 4과목 전 범위 1회독 완성
+
+주간 계획:
+  1주차: 1과목(빅데이터 기획) + 기본 Python 문법 복습
+  2주차: 2과목(데이터 탐색) + pandas/numpy 핵심 함수
+  3주차: 3과목(모델링) + sklearn 머신러닝 파이프라인
+  4주차: 4과목(결과 해석) + 모의고사 1회 풀기
+
+실기 준비:
+  - pandas: read_csv, dropna, fillna, groupby, merge
+  - numpy: array 생성, 통계 함수, percentile
+  - sklearn: train_test_split, 모델 fit/predict, 평가 지표
+
+핵심 행동:
+  □ 기출문제 유형 파악 (한국데이터산업진흥원 공개 문제)
+  □ 오답 노트 시작
+  □ 코드 직접 작성 연습 (암기만 하면 실기에서 막힘)
+```
+
+### D-7 (일주일 전): 집중 정리 단계
+
+```
+목표: 취약 부분 집중 보완 + 모의고사 3회 이상
+
+매일 계획:
+  - 오전: 핵심 개념 카드 & 오답 노트 복습 (2시간)
+  - 오후: 실기 코드 연습 — 패턴 5가지 반복 (2시간)
+  - 저녁: 모의고사 1회 + 해설 분석 (1시간)
+
+암기 체크리스트:
+  □ 분류 평가 4공식 (Accuracy, Precision, Recall, F1)
+  □ CRISP-DM 6단계 순서
+  □ 빅데이터 5V 각 특성과 예시
+  □ IQR 이상값 기준 (Q1-1.5×IQR, Q3+1.5×IQR)
+  □ Ridge(L2) vs Lasso(L1) 차이
+  □ 배깅 vs 부스팅 특성
+  □ 1종 오류 vs 2종 오류 구분
+
+실기 집중:
+  □ fillna(method='ffill')과 fillna(mean()) 차이 확인
+  □ predict() vs predict_proba() 차이 확인
+  □ to_csv(index=False) 반드시 확인
+```
+
+### D-1 (시험 전날): 컨디션 관리 단계
+
+```
+목표: 과도한 공부 금지 — 컨디션이 합격을 결정
+
+오전: 핵심 키워드 카드만 훑기 (1시간 이내)
+오후: 실기 코드 패턴 손으로 써보기 (1시간)
+저녁: 충분한 휴식, 일찍 취침
+
+시험장 준비물:
+  □ 신분증 (주민등록증 또는 운전면허증)
+  □ 수험표
+  □ 필기도구
+  □ 시계 (스마트워치 불가)
+
+시험 당일 전략:
+  - 필기: 모르는 문제는 빠르게 넘기고 아는 것 먼저
+  - 실기: 작업형 1유형(쉬움) 먼저 → 2유형 → 단답형 순
+  - 코드 오류 시: 에러 메시지 읽고 변수명·들여쓰기 확인
+  - 시간 배분: 단답형 20분, 1유형 40분, 2유형 120분
+```
+
+---
+
+## 모의고사 20문항
+
+### [필기 유형] 10문항
+
+**1번. 빅데이터 5V 중 데이터의 다양성을 의미하는 것은?**
+① Volume ② Velocity ③ Variety ④ Veracity
+
+**2번. 다음 중 CRISP-DM 방법론의 6단계를 올바른 순서로 나열한 것은?**
+① 업무이해 → 데이터이해 → 데이터준비 → 모델링 → 평가 → 전개  
+② 데이터이해 → 업무이해 → 모델링 → 데이터준비 → 평가 → 전개  
+③ 업무이해 → 데이터준비 → 데이터이해 → 모델링 → 전개 → 평가  
+④ 데이터수집 → 데이터이해 → 모델링 → 평가 → 전개 → 운영
+
+**3번. 분류 모델 평가에서 실제 양성 중 올바르게 양성으로 예측한 비율을 나타내는 지표는?**
+① 정확도(Accuracy) ② 정밀도(Precision) ③ 재현율(Recall) ④ F1 Score
+
+**4번. 다음 중 이상치(Outlier) 탐지에 IQR 방법을 사용할 때 이상치로 판단하는 기준은?**
+① Q1 - 2×IQR 미만 또는 Q3 + 2×IQR 초과  
+② Q1 - 1.5×IQR 미만 또는 Q3 + 1.5×IQR 초과  
+③ Q1 - 1×IQR 미만 또는 Q3 + 1×IQR 초과  
+④ 평균 ± 2 표준편차 범위를 벗어난 값
+
+**5번. 랜덤포레스트(Random Forest)에 대한 설명으로 옳지 않은 것은?**
+① 여러 의사결정나무를 앙상블하는 배깅 기반 알고리즘이다.  
+② 특성 중요도(Feature Importance)를 산출할 수 있다.  
+③ 단일 의사결정나무보다 과적합 위험이 낮다.  
+④ 각 트리를 순차적으로 학습하여 이전 트리의 오류를 보정한다.
+
+**6번. 다음 중 지도학습 알고리즘이 아닌 것은?**
+① 로지스틱 회귀 ② K-means 클러스터링 ③ 랜덤포레스트 ④ 선형회귀
+
+**7번. Lasso(L1) 정규화의 특징으로 가장 적절한 것은?**
+① 계수를 0에 가깝게 축소하지만 완전히 0이 되지는 않는다.  
+② 계수를 정확히 0으로 만들어 변수 선택 효과가 있다.  
+③ Ridge와 Lasso를 결합한 방법이다.  
+④ 모든 계수를 동일한 값으로 축소한다.
+
+**8번. 정규분포의 68-95-99.7 규칙에 따르면, 평균 ± 2σ 범위에 포함되는 데이터의 비율은?**
+① 약 68% ② 약 95% ③ 약 99% ④ 약 99.7%
+
+**9번. 두 변수가 상관관계를 갖는다고 해서 인과관계가 성립하지 않는 이유로 가장 적절한 것은?**
+① 상관계수는 항상 0과 1 사이의 값을 가지기 때문이다.  
+② 제3의 변수(교란변수)가 두 변수 모두에 영향을 미칠 수 있기 때문이다.  
+③ 상관관계는 선형 관계만을 측정하기 때문이다.  
+④ 표본 크기가 클수록 상관관계가 과대 추정되기 때문이다.
+
+**10번. K-Fold 교차검증에서 일반적으로 권장되는 K 값은?**
+① K = 2 또는 K = 3 ② K = 5 또는 K = 10 ③ K = 20 또는 K = 50 ④ K는 데이터 행 수와 동일하게 설정
+
+---
+
+### [실기 유형] 10문항
+
+**11번. pandas에서 데이터프레임의 'Score' 열 결측치를 평균값으로 대체하는 코드는?**
+① `df['Score'] = df['Score'].mean()`  
+② `df['Score'].fillna(df['Score'].mean(), inplace=True)`  
+③ `df['Score'].dropna(df['Score'].mean())`  
+④ `df.fillna('Score')`
+
+**12번. scikit-learn에서 훈련 데이터와 테스트 데이터를 7:3으로 분할하고 재현성을 보장하는 코드로 옳은 것은?**
+① `train_test_split(X, y, test_size=0.7, random_state=42)`  
+② `train_test_split(X, y, test_size=0.3, random_state=42)`  
+③ `train_test_split(X, y, train_size=0.3)`  
+④ `train_test_split(X, test_size=0.3)`
+
+**13번. StandardScaler를 사용할 때 테스트 데이터에 fit_transform() 대신 transform()만 사용하는 이유는?**
+> 서술형 — 직접 작성
+
+**14번. 다음 코드의 출력 결과로 가장 적절한 것은?**
+
+```python
+import numpy as np
+arr = np.array([10, 20, 30, 40, 50])
+print(np.percentile(arr, 75) - np.percentile(arr, 25))
+```
+
+① 10.0 ② 20.0 ③ 30.0 ④ 40.0
+
+**15번. pandas groupby를 사용하여 'Category'별 'Revenue' 합계를 구하고 내림차순으로 정렬하는 코드는?**
+① `df.groupby('Category')['Revenue'].sum().sort_values()`  
+② `df.groupby('Category')['Revenue'].sum().sort_values(ascending=False)`  
+③ `df.sort_values('Revenue').groupby('Category').sum()`  
+④ `df.groupby('Revenue')['Category'].sum().sort_values(ascending=False)`
+
+**16번. 분류 모델에서 AUC-ROC 점수를 계산하기 위해 사용해야 하는 예측 메서드는?**
+① `model.predict(X_test)` — 클래스 레이블  
+② `model.predict_proba(X_test)[:, 1]` — 양성 클래스 확률  
+③ `model.score(X_test, y_test)` — 정확도  
+④ `model.decision_function(X_test)` — 결정 함수값
+
+**17번. 다음 중 데이터프레임에서 'A' 열이 10 이상이고 'B' 열이 'X'인 행을 필터링하는 코드로 옳은 것은?**
+① `df[df['A'] >= 10 and df['B'] == 'X']`  
+② `df[df['A'] >= 10 & df['B'] == 'X']`  
+③ `df[(df['A'] >= 10) & (df['B'] == 'X')]`  
+④ `df.filter(A>=10, B=='X')`
+
+**18번. 두 데이터프레임 df1, df2를 'ID' 열을 기준으로 left join으로 병합하는 코드는?**
+① `pd.merge(df1, df2, on='ID')`  
+② `pd.merge(df1, df2, on='ID', how='left')`  
+③ `pd.concat([df1, df2], on='ID', how='left')`  
+④ `df1.join(df2, on='ID', how='outer')`
+
+**19번. 선형회귀 모델의 RMSE를 소수점 4자리까지 계산하여 출력하는 코드 중 올바른 것은?**
+① `print(round(mean_squared_error(y_test, y_pred), 4))`  
+② `print(round(np.sqrt(mean_squared_error(y_test, y_pred)), 4))`  
+③ `print(round(r2_score(y_test, y_pred), 4))`  
+④ `print(round(mean_absolute_error(y_test, y_pred), 4))`
+
+**20번. 예측 결과를 'result.csv'로 저장할 때, 인덱스를 포함하지 않고 저장하는 코드는?**
+① `pd.DataFrame({'pred': y_pred}).to_csv('result.csv')`  
+② `pd.DataFrame({'pred': y_pred}).to_csv('result.csv', index=False)`  
+③ `y_pred.to_csv('result.csv', header=False)`  
+④ `pd.Series(y_pred).to_csv('result.csv', index=True)`
+
+---
+
+## 정답 및 해설
+
+### 필기 유형 정답
+
+**1번 정답: ③ Variety**
+> 빅데이터 5V — Volume(규모), Velocity(속도), **Variety(다양성)**, Veracity(진실성), Value(가치). Variety는 정형·반정형·비정형 등 다양한 형태의 데이터를 의미합니다.
+
+**2번 정답: ① 업무이해 → 데이터이해 → 데이터준비 → 모델링 → 평가 → 전개**
+> CRISP-DM의 6단계는 반드시 이 순서대로 암기해야 합니다. 실무에서는 반복적(iterative)으로 진행되지만, 시험에서는 기본 순서를 묻습니다. 암기법: "업데준모평전"
+
+**3번 정답: ③ 재현율(Recall)**
+> Recall = TP / (TP + FN). 분모가 **실제 양성 전체(TP + FN)**입니다. 정밀도(Precision)의 분모는 예측 양성 전체(TP + FP)입니다.
+
+**4번 정답: ② Q1 - 1.5×IQR 미만 또는 Q3 + 1.5×IQR 초과**
+> IQR 이상치 기준의 계수는 반드시 **1.5**입니다. 2.0이 아닙니다. 박스플롯 수염의 길이가 이 기준으로 결정됩니다.
+
+**5번 정답: ④ 각 트리를 순차적으로 학습하여 이전 트리의 오류를 보정한다**
+> ④는 **부스팅(Boosting)**의 설명입니다. 랜덤포레스트는 배깅 기반으로 각 트리를 **병렬**로 독립적으로 학습합니다.
+
+**6번 정답: ② K-means 클러스터링**
+> K-means는 레이블(정답)이 없는 **비지도학습** 알고리즘입니다. 나머지 ①③④는 모두 정답 레이블을 사용하는 지도학습입니다.
+
+**7번 정답: ② 계수를 정확히 0으로 만들어 변수 선택 효과가 있다**
+> Lasso(L1)는 일부 계수를 정확히 0으로 만들어 **자동 변수 선택** 효과를 제공합니다. ①은 Ridge(L2), ③은 ElasticNet의 설명입니다.
+
+**8번 정답: ② 약 95%**
+> 정규분포 경험적 규칙: μ±1σ = 68%, **μ±2σ = 95%**, μ±3σ = 99.7%. 시험에서 가장 자주 나오는 값은 95%와 99.7%입니다.
+
+**9번 정답: ② 제3의 변수(교란변수)가 두 변수 모두에 영향을 미칠 수 있기 때문이다**
+> 상관관계에서 인과관계를 주장할 수 없는 핵심 이유는 **교란변수(Confounding Variable)**의 존재 가능성입니다. 예: 아이스크림 판매량 ↑, 익사 ↑ → 실제 원인은 "여름(열)", 아이스크림이 익사를 유발하지 않음.
+
+**10번 정답: ② K = 5 또는 K = 10**
+> K-Fold에서 K=5는 20% 검증셋, K=10은 10% 검증셋을 사용합니다. 너무 작으면 편향이 높고, 너무 크면 계산 비용이 증가합니다. K=데이터 행 수이면 LOOCV(Leave-One-Out)가 됩니다.
+
+---
+
+### 실기 유형 정답
+
+**11번 정답: ② `df['Score'].fillna(df['Score'].mean(), inplace=True)`**
+> ①은 모든 값을 평균으로 덮어쓰는 잘못된 코드. ③은 dropna 오용. fillna()의 첫 번째 인자에 대체할 값, inplace=True로 원본 수정.
+
+**12번 정답: ② `train_test_split(X, y, test_size=0.3, random_state=42)`**
+> test_size=0.3이 테스트 30%, 훈련 70%를 의미합니다. ①은 훈련/테스트 비율이 반대입니다.
+
+**13번 정답 (서술형)**
+> 테스트 데이터에 fit을 적용하면 **테스트 데이터의 통계 정보(평균, 표준편차)**가 스케일러에 반영되어 **데이터 누수(Data Leakage)**가 발생합니다. 실제 배포 환경에서는 미래 데이터의 전체 분포를 알 수 없으므로, 반드시 훈련 데이터의 통계로만 변환해야 합니다.
+
+**14번 정답: ② 20.0**
+> np.percentile([10,20,30,40,50], 75) = 40, np.percentile([10,20,30,40,50], 25) = 20. IQR = 40 - 20 = **20.0**.
+
+**15번 정답: ② `df.groupby('Category')['Revenue'].sum().sort_values(ascending=False)`**
+> sort_values()의 기본값은 ascending=True(오름차순). 내림차순은 ascending=False 명시 필요.
+
+**16번 정답: ② `model.predict_proba(X_test)[:, 1]` — 양성 클래스 확률**
+> AUC-ROC 계산의 roc_auc_score()는 확률값이 필요합니다. predict()는 0/1 레이블을 반환하므로 AUC 계산에 부적합합니다. [:, 1]은 양성 클래스(인덱스 1)의 확률을 추출합니다.
+
+**17번 정답: ③ `df[(df['A'] >= 10) & (df['B'] == 'X')]`**
+> pandas에서 다중 조건은 반드시 각 조건을 **괄호로 묶고** `&`(AND) 또는 `|`(OR)로 연결. Python의 `and`/`or` 키워드는 pandas Series에서 사용 불가.
+
+**18번 정답: ② `pd.merge(df1, df2, on='ID', how='left')`**
+> how='left'가 left join. 기본값 how='inner'. pd.concat()은 축 방향 연결(join 아님). join()은 인덱스 기반이므로 on 파라미터 동작이 다름.
+
+**19번 정답: ② `print(round(np.sqrt(mean_squared_error(y_test, y_pred)), 4))`**
+> mean_squared_error()는 **MSE**를 반환합니다. RMSE를 얻으려면 반드시 np.sqrt()를 적용해야 합니다. ①은 MSE, ③은 R², ④는 MAE입니다.
+
+**20번 정답: ② `pd.DataFrame({'pred': y_pred}).to_csv('result.csv', index=False)`**
+> index=False가 핵심. 기본값 index=True이면 불필요한 인덱스 열이 CSV에 포함됩니다. 실기 채점 시스템은 정확한 열 구조를 요구하므로 반드시 index=False 지정.
+
+---
+
+## 합격 후 활용 방안
+
+빅데이터 분석기사 합격 이후에는 자격증을 발판으로 다양한 방향으로 경력을 확장할 수 있습니다.
+
+### 취업·이직 활용
+
+```
+데이터 분석가 (Data Analyst)
+  - SQL + Python + 시각화 (Tableau, Power BI) 역량 추가
+  - 비즈니스 도메인 지식과 분석 역량 결합
+  - 포트폴리오: 실제 데이터 분석 프로젝트 2~3개
+
+데이터 과학자 (Data Scientist)
+  - 머신러닝 심화 (딥러닝, 자연어처리)
+  - 통계학 심화 (베이지안 통계, 시계열 분석)
+  - Kaggle 대회 참가로 실력 검증
+
+데이터 엔지니어 (Data Engineer)
+  - 빅데이터 플랫폼 (Hadoop, Spark, Kafka)
+  - 클라우드 (AWS, GCP, Azure) 데이터 서비스
+  - SQL 최적화, ETL 파이프라인 구축
+```
+
+### 연계 자격증 로드맵
+
+```
+기초 완성 후 추천 연계 자격증:
+
+데이터 분석 심화:
+  ADsP(데이터분석 준전문가) — 이미 취득했다면 패스
+  ADP(데이터분석 전문가) — 빅분기보다 심화, 통계·SQL 비중 높음
+
+SQL 역량:
+  SQLD → SQLP (한국데이터산업진흥원)
+
+클라우드·엔지니어링:
+  AWS Solutions Architect Associate
+  Google Professional Data Engineer
+  Azure Data Scientist Associate
+
+통계·분석:
+  사회조사분석사 2급
+  통계분석사 (한국통계진흥원)
+```
+
+### 자기계발 추천 경로
+
+```
+1개월 ~ 3개월: 기초 심화
+  - SQL 중급 (서브쿼리, 윈도우 함수, 집계)
+  - Python pandas 고급 (apply, pivot_table, 시계열)
+  - Kaggle의 Getting Started 대회 1~2개 완주
+
+3개월 ~ 6개월: 실무 역량
+  - 공공데이터포털(data.go.kr) 데이터로 개인 프로젝트
+  - GitHub에 분석 포트폴리오 공개
+  - Power BI 또는 Tableau 기초 대시보드 제작
+
+6개월 이상: 전문화
+  - 관심 도메인(금융, 마케팅, 의료, 제조) 선택
+  - 도메인 데이터 + 머신러닝 결합 프로젝트
+  - 분석 결과의 비즈니스 임팩트 측정 및 문서화
+```
+
+---
+
+## 최종 핵심 암기 카드
+
+**CRISP-DM 6단계** ★★★★★
+: 업무이해 → 데이터이해 → 데이터준비 → 모델링 → 평가 → 전개.
+*암기: "업데준모평전" (업데이트된 모든 것을 평가해서 전개)*
+
+**분류 평가 4공식** ★★★★★
+: Accuracy=(TP+TN)/전체, Precision=TP/(TP+FP), Recall=TP/(TP+FN), F1=2PR/(P+R).
+*암기: 정밀도 분모="예측 양성", 재현율 분모="실제 양성"*
+
+**IQR 이상치 기준** ★★★★★
+: Q1-1.5×IQR 미만 또는 Q3+1.5×IQR 초과. 계수 1.5 반드시 암기.
+*시험 함정: 2.0이 아니라 1.5*
+
+**실기 필수 코드 5줄** ★★★★★
+: `df.fillna(df.mean())` / `train_test_split(test_size=0.2, random_state=42)` / `scaler.transform(X_test)` / `predict_proba(X_test)[:, 1]` / `to_csv(index=False)`
+*이 5줄을 눈 감고 쓸 수 있어야 합격*
+
+**배깅 vs 부스팅** ★★★★☆
+: 배깅=병렬학습·분산감소·랜덤포레스트. 부스팅=순차학습·편향감소·XGBoost.
+*암기: 배(깅)=병렬, 부(스팅)=순차*

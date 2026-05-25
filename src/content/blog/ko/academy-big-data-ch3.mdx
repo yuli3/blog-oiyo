@@ -1,0 +1,582 @@
+---
+track: academy
+locale: ko
+title: "Ch3. 빅데이터 분석기사 — Python 실기 완전 정복"
+category: "Computer Science"
+series: "빅데이터 분석기사"
+chapter: 3
+chapterTitleShort: 'Python 실기'
+author: OIYO 편집부
+tags:
+  - 빅데이터
+  - Python
+  - pandas
+  - numpy
+  - 실기
+  - 자격증
+description: "빅데이터 분석기사 실기 시험 완전 정복 — pandas 데이터 전처리, numpy 통계 연산, sklearn 머신러닝 모델 적용까지."
+pubDate: '2026-05-25'
+layoutVariant: lecture-series
+---
+
+## 실기 시험 구조 이해
+
+빅데이터 분석기사 실기 시험은 Python 또는 R을 사용하여 데이터를 분석하는 **작업형** 시험입니다. 시험 환경에는 인터넷 접속이 불가하며, 지정된 라이브러리만 사용할 수 있습니다.
+
+```
+실기 시험 구성:
+┌─────────────────────────────────────────────────────┐
+│ 단답형 (10점)                                        │
+│  → 데이터 분석 용어, 통계 개념 5~10문항              │
+│                                                     │
+│ 작업형 1유형 (20점)                                  │
+│  → 데이터 전처리 + 특정 값 계산 후 출력               │
+│  → pandas, numpy 활용                               │
+│                                                     │
+│ 작업형 2유형 (40점)                                  │
+│  → 머신러닝 모델 학습 → 예측 → CSV 저장              │
+│  → sklearn 활용                                     │
+└─────────────────────────────────────────────────────┘
+
+합격 기준: 총 70점 만점에서 42점(60%) 이상
+시험 시간: 180분
+```
+
+실기 시험에서는 **정확한 함수 이름과 파라미터**를 알고 있어야 하며, 결측치 처리·스케일링·모델 학습의 전체 흐름을 손으로 코딩할 수 있어야 합니다.
+
+**시험에서 사용 가능한 주요 라이브러리**:
+
+```
+pandas      — 데이터프레임 조작, 전처리
+numpy       — 배열 연산, 수치 통계
+scikit-learn — 머신러닝 모델, 전처리, 평가
+scipy       — 통계 검정
+statsmodels — 회귀분석
+matplotlib  — 시각화 (실기에서는 거의 미출제)
+```
+
+---
+
+## pandas 핵심 — 데이터 불러오기와 기본 탐색
+
+### CSV 파일 읽기
+
+```python
+import pandas as pd
+
+# 기본 읽기
+df = pd.read_csv('data.csv')
+
+# 인코딩 지정 (한글 데이터)
+df = pd.read_csv('data.csv', encoding='utf-8')
+df = pd.read_csv('data.csv', encoding='cp949')
+
+# 헤더 없는 경우
+df = pd.read_csv('data.csv', header=None)
+
+# 특정 열을 인덱스로
+df = pd.read_csv('data.csv', index_col='ID')
+
+# 구분자 지정 (탭 분리)
+df = pd.read_csv('data.csv', sep='\t')
+```
+
+### 데이터 기본 탐색
+
+```python
+# 데이터 크기
+df.shape          # (행 수, 열 수)
+len(df)           # 행 수
+
+# 데이터 타입
+df.dtypes         # 각 열의 데이터 타입
+df.info()         # 열별 타입 + 결측치 요약
+
+# 기술통계
+df.describe()     # 수치형 열 통계 (평균, 표준편차, 분위수 등)
+df.describe(include='all')  # 범주형 포함
+
+# 처음/끝 확인
+df.head(5)        # 상위 5행
+df.tail(5)        # 하위 5행
+
+# 열 목록
+df.columns.tolist()
+
+# 유일값 확인
+df['column'].unique()
+df['column'].value_counts()
+df['column'].nunique()   # 유일값 개수
+```
+
+---
+
+## pandas 핵심 — 결측치 처리
+
+결측치(NaN)는 실기 시험에서 **거의 모든 문제에 등장**합니다. 정확한 처리 방법을 암기해야 합니다.
+
+### 결측치 확인
+
+```python
+# 결측치 수 확인
+df.isnull().sum()           # 열별 결측치 수
+df.isnull().sum().sum()     # 전체 결측치 수
+
+# 결측치 비율
+df.isnull().mean()          # 열별 결측치 비율
+
+# 결측치가 있는 행만 추출
+df[df.isnull().any(axis=1)]
+```
+
+### 결측치 제거 (dropna)
+
+```python
+# 결측치가 있는 모든 행 제거
+df.dropna()
+
+# 특정 열에 결측치가 있는 행만 제거
+df.dropna(subset=['Age', 'Income'])
+
+# 모든 열이 결측치인 행만 제거
+df.dropna(how='all')
+
+# 결측치가 있는 열 제거
+df.dropna(axis=1)
+
+# 원본 수정
+df.dropna(inplace=True)
+```
+
+### 결측치 채우기 (fillna)
+
+```python
+# 특정 값으로 채우기
+df['Age'].fillna(0)
+df['Name'].fillna('Unknown')
+
+# 평균값으로 채우기 (수치형)
+df['Age'].fillna(df['Age'].mean())
+
+# 중앙값으로 채우기
+df['Income'].fillna(df['Income'].median())
+
+# 최빈값으로 채우기 (범주형)
+df['Gender'].fillna(df['Gender'].mode()[0])
+
+# 전방 채우기 (ffill): 바로 앞의 값으로 채움
+df['Value'].fillna(method='ffill')
+# 또는 df['Value'].ffill()
+
+# 후방 채우기 (bfill): 바로 뒤의 값으로 채움
+df['Value'].fillna(method='bfill')
+
+# 원본 수정
+df['Age'].fillna(df['Age'].mean(), inplace=True)
+```
+
+---
+
+## pandas 핵심 — groupby와 집계
+
+### groupby 기본 사용
+
+```python
+# 단일 열로 그룹화
+grouped = df.groupby('Region')
+
+# 집계 함수 적용
+df.groupby('Region')['Sales'].mean()     # 지역별 매출 평균
+df.groupby('Region')['Sales'].sum()      # 지역별 매출 합계
+df.groupby('Region')['Sales'].max()      # 지역별 매출 최대
+df.groupby('Region')['Sales'].count()    # 지역별 건수
+
+# 여러 집계 함수 동시 적용
+df.groupby('Region')['Sales'].agg(['mean', 'sum', 'count'])
+
+# 여러 열에 대해 집계
+df.groupby('Region').agg({'Sales': 'sum', 'Profit': 'mean'})
+```
+
+### 다중 그룹화 및 reset_index
+
+```python
+# 복수 기준으로 그룹화
+df.groupby(['Region', 'Category'])['Sales'].sum()
+
+# 인덱스 초기화 (결과를 일반 데이터프레임으로 변환)
+result = df.groupby('Region')['Sales'].sum().reset_index()
+```
+
+### 유용한 집계 패턴
+
+```python
+# 그룹별 중앙값
+df.groupby('Category')['Price'].median()
+
+# 그룹별 표준편차
+df.groupby('Category')['Price'].std()
+
+# 그룹별 상위 N개
+df.groupby('Category').apply(lambda x: x.nlargest(3, 'Price'))
+
+# 그룹 내 순위
+df['rank'] = df.groupby('Category')['Sales'].rank(ascending=False)
+```
+
+---
+
+## pandas 핵심 — merge와 데이터 결합
+
+### merge (SQL JOIN과 동일 개념)
+
+```python
+# inner join (기본값) — 두 테이블에 모두 있는 키만 포함
+result = pd.merge(df1, df2, on='ID')
+
+# left join — df1의 모든 행 유지
+result = pd.merge(df1, df2, on='ID', how='left')
+
+# right join — df2의 모든 행 유지
+result = pd.merge(df1, df2, on='ID', how='right')
+
+# outer join — 두 테이블의 모든 행 포함
+result = pd.merge(df1, df2, on='ID', how='outer')
+
+# 열 이름이 다른 경우
+result = pd.merge(df1, df2, left_on='user_id', right_on='customer_id')
+```
+
+### concat — 데이터프레임 연결
+
+```python
+# 행 방향으로 연결 (위아래)
+result = pd.concat([df1, df2], axis=0, ignore_index=True)
+
+# 열 방향으로 연결 (좌우)
+result = pd.concat([df1, df2], axis=1)
+```
+
+---
+
+## numpy 핵심 — 배열 생성과 기본 연산
+
+### numpy 배열 생성
+
+```python
+import numpy as np
+
+# 리스트로 배열 생성
+arr = np.array([1, 2, 3, 4, 5])
+
+# 2차원 배열
+matrix = np.array([[1, 2, 3], [4, 5, 6]])
+
+# 특수 배열
+np.zeros(5)           # [0, 0, 0, 0, 0]
+np.ones((2, 3))       # 2×3 행렬, 전부 1
+np.arange(0, 10, 2)  # [0, 2, 4, 6, 8]
+np.linspace(0, 1, 5)  # 0~1 사이 균등 5개
+```
+
+### 통계 연산
+
+```python
+arr = np.array([2, 4, 6, 8, 10])
+
+np.mean(arr)       # 평균: 6.0
+np.median(arr)     # 중앙값: 6.0
+np.std(arr)        # 표준편차: 2.8...
+np.var(arr)        # 분산: 8.0
+np.sum(arr)        # 합계: 30
+np.min(arr)        # 최솟값: 2
+np.max(arr)        # 최댓값: 10
+
+# 분위수 (백분위수)
+np.percentile(arr, 25)   # 1사분위수(Q1)
+np.percentile(arr, 50)   # 중앙값 (Q2)
+np.percentile(arr, 75)   # 3사분위수(Q3)
+
+# IQR 계산
+Q1 = np.percentile(arr, 25)
+Q3 = np.percentile(arr, 75)
+IQR = Q3 - Q1
+```
+
+### 배열 조작
+
+```python
+arr = np.array([3, 1, 4, 1, 5, 9, 2, 6])
+
+np.sort(arr)          # 정렬된 새 배열
+np.argsort(arr)       # 정렬 인덱스
+np.unique(arr)        # 유일값
+arr.reshape(2, 4)     # 형태 변환
+
+# 조건 필터링
+arr[arr > 4]          # 4 초과 원소만
+np.where(arr > 4, 1, 0)  # 조건부 값 변환
+```
+
+---
+
+## sklearn 핵심 — 머신러닝 파이프라인
+
+### 작업형 2유형 전체 흐름
+
+실기 시험에서 작업형 2유형은 다음 흐름을 따릅니다.
+
+```
+1. 데이터 로드
+2. 탐색 및 전처리 (결측치, 인코딩, 스케일링)
+3. 특성(X) / 레이블(y) 분리
+4. 훈련/테스트 분할
+5. 모델 학습
+6. 예측
+7. 평가 지표 계산
+8. 결과 CSV 저장
+```
+
+### train_test_split — 데이터 분할
+
+```python
+from sklearn.model_selection import train_test_split
+
+X = df.drop('target', axis=1)  # 특성 행렬
+y = df['target']                # 레이블 벡터
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y,
+    test_size=0.2,      # 테스트셋 비율 (20%)
+    random_state=42,    # 재현성을 위한 난수 시드
+    stratify=y          # 분류 문제: 클래스 비율 유지
+)
+```
+
+### 스케일링 (StandardScaler)
+
+```python
+from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+
+# 훈련 데이터로 fit, 변환
+X_train_scaled = scaler.fit_transform(X_train)
+
+# 테스트 데이터는 변환만 (fit 금지 — 데이터 누수 방지)
+X_test_scaled = scaler.transform(X_test)
+```
+
+### 범주형 인코딩
+
+```python
+from sklearn.preprocessing import LabelEncoder
+
+le = LabelEncoder()
+df['Gender'] = le.fit_transform(df['Gender'])  # 'M'→1, 'F'→0
+
+# pandas get_dummies (원-핫 인코딩)
+df = pd.get_dummies(df, columns=['Region'], drop_first=True)
+```
+
+### 선형회귀 (LinearRegression)
+
+```python
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+import numpy as np
+
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+# 평가
+mse = mean_squared_error(y_test, y_pred)
+rmse = np.sqrt(mse)
+r2 = r2_score(y_test, y_pred)
+
+print(f'RMSE: {rmse:.4f}')
+print(f'R²: {r2:.4f}')
+```
+
+### 분류 모델 (LogisticRegression, RandomForestClassifier)
+
+```python
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, f1_score, roc_auc_score
+
+# 로지스틱 회귀
+clf = LogisticRegression(random_state=42, max_iter=1000)
+clf.fit(X_train, y_train)
+
+y_pred = clf.predict(X_test)
+y_prob = clf.predict_proba(X_test)[:, 1]  # 양성 클래스 확률
+
+acc = accuracy_score(y_test, y_pred)
+f1 = f1_score(y_test, y_pred)
+auc = roc_auc_score(y_test, y_prob)
+
+print(f'Accuracy: {acc:.4f}')
+print(f'F1 Score: {f1:.4f}')
+print(f'AUC: {auc:.4f}')
+
+# 랜덤포레스트
+rf = RandomForestClassifier(n_estimators=100, random_state=42)
+rf.fit(X_train, y_train)
+y_pred_rf = rf.predict(X_test)
+```
+
+### 예측 결과 CSV 저장
+
+```python
+# 실기 시험에서 자주 요구되는 패턴
+result = pd.DataFrame({'pred': y_pred})
+result.to_csv('result.csv', index=False)
+
+# 확률 포함 저장 (AUC 평가 시)
+result = pd.DataFrame({'pred': y_pred, 'prob': y_prob})
+result.to_csv('result.csv', index=False)
+```
+
+---
+
+## 실전 문제 유형 3가지
+
+### 유형 1: 특정 통계값 추출
+
+```
+문제 예시: 나이(Age) 열의 3사분위수(Q3)에서 1사분위수(Q1)를 뺀
+IQR 값을 계산하고, 소수점 첫째 자리에서 반올림하여 출력하시오.
+
+풀이:
+import pandas as pd
+import numpy as np
+
+df = pd.read_csv('data.csv')
+Q1 = df['Age'].quantile(0.25)
+Q3 = df['Age'].quantile(0.75)
+IQR = Q3 - Q1
+print(round(IQR, 1))
+```
+
+### 유형 2: 조건부 집계
+
+```
+문제 예시: 성별(Gender)이 'M'이고 나이(Age)가 30 이상인
+고객들의 평균 구매금액(Purchase)을 소수점 둘째 자리까지 출력하시오.
+
+풀이:
+import pandas as pd
+
+df = pd.read_csv('data.csv')
+filtered = df[(df['Gender'] == 'M') & (df['Age'] >= 30)]
+result = filtered['Purchase'].mean()
+print(round(result, 2))
+```
+
+### 유형 3: 모델 학습 및 예측
+
+```
+문제 예시: 주어진 훈련 데이터로 로지스틱 회귀 모델을 학습하고,
+테스트 데이터의 예측 결과를 result.csv로 저장하시오.
+단, 정확도(Accuracy)를 소수점 넷째 자리까지 출력하시오.
+
+풀이:
+import pandas as pd
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+train = pd.read_csv('train.csv')
+test = pd.read_csv('test.csv')
+
+# 특성/레이블 분리
+X_train = train.drop('target', axis=1)
+y_train = train['target']
+X_test = test.drop('target', axis=1)
+y_test = test['target']
+
+# 결측치 처리
+X_train = X_train.fillna(X_train.mean())
+X_test = X_test.fillna(X_test.mean())
+
+# 모델 학습
+model = LogisticRegression(random_state=42, max_iter=1000)
+model.fit(X_train, y_train)
+
+# 예측 및 저장
+y_pred = model.predict(X_test)
+pd.DataFrame({'pred': y_pred}).to_csv('result.csv', index=False)
+
+# 정확도 출력
+acc = accuracy_score(y_test, y_pred)
+print(round(acc, 4))
+```
+
+---
+
+## 자주 나오는 실수와 함정
+
+```
+1. scaler.fit_transform(X_test) 사용 — 반드시 transform()만 사용
+   → 테스트 데이터로 fit하면 데이터 누수(Data Leakage) 발생
+
+2. fillna 후 inplace=True 미사용 — 원본 데이터프레임이 변경 안됨
+   → df['col'].fillna(0, inplace=True) 또는
+   → df['col'] = df['col'].fillna(0) 사용
+
+3. groupby 결과를 인덱스 포함 그대로 사용
+   → reset_index() 호출하여 일반 데이터프레임으로 변환
+
+4. 분류 문제에서 predict_proba()[:, 1] 누락
+   → AUC/ROC 계산 시 확률값 필요, predict()는 클래스 레이블 반환
+
+5. CSV 저장 시 index=True (기본값) 사용
+   → to_csv('result.csv', index=False) 명시 필수
+```
+
+---
+
+## 핵심 개념 카드
+
+**pandas read_csv 핵심 파라미터** ★★★★★
+: encoding, sep, index_col, header. 한글 데이터는 encoding='utf-8' 또는 'cp949'.
+*시험 팁: 파일 읽기 오류의 99%는 인코딩 문제*
+
+**fillna vs dropna 선택 기준** ★★★★★
+: 결측치 비율이 낮으면 dropna, 높으면 fillna로 대체. 수치형은 평균/중앙값, 범주형은 최빈값 대체.
+*암기: 수치→평균/중앙값, 범주→최빈값(mode()[0])*
+
+**train_test_split random_state** ★★★★☆
+: 재현성을 위해 항상 random_state=42 지정. 분류 문제에서 stratify=y로 클래스 비율 유지.
+*시험 팁: 문제에서 random_state 값을 명시하면 반드시 그 값 사용*
+
+**데이터 누수(Data Leakage)** ★★★★☆
+: 테스트 데이터 정보가 훈련 과정에 유입되는 오류. 스케일러는 반드시 훈련 데이터로만 fit().
+*암기: fit은 train에만, transform은 train+test 모두*
+
+**accuracy_score vs f1_score** ★★★☆☆
+: 클래스 불균형 데이터에서 accuracy는 misleading. F1 Score로 보완. 이진분류 AUC도 중요.
+
+---
+
+## 실전 퀴즈
+
+**Q1. pandas에서 'Age' 열의 결측치를 중앙값으로 대체하는 코드를 작성하라.**
+> `df['Age'].fillna(df['Age'].median(), inplace=True)`  
+> 또는 `df['Age'] = df['Age'].fillna(df['Age'].median())`  
+> 중앙값은 이상치에 강건하여 수치형 변수의 결측치 대체에 자주 사용됩니다.
+
+**Q2. 훈련/테스트 데이터를 8:2로 분할하고 클래스 비율을 유지하는 코드는?**
+> `X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)`  
+> `stratify=y`가 핵심 — 클래스 불균형 데이터에서 비율 유지.
+
+**Q3. StandardScaler를 적용할 때 테스트 데이터에 fit_transform이 아닌 transform만 써야 하는 이유는?**
+> 테스트 데이터에 fit을 적용하면 테스트 데이터의 통계 정보(평균, 표준편차)가 스케일링에 사용되어 **데이터 누수(Data Leakage)**가 발생합니다. 현실에서 모델 배포 후에는 테스트/미래 데이터의 전체 분포를 알 수 없으므로, 반드시 훈련 데이터의 통계로만 변환해야 합니다.
+
+**Q4. np.percentile(arr, 75) - np.percentile(arr, 25)가 의미하는 것은?**
+> **IQR(사분위범위, Interquartile Range)**. 3사분위수(Q3)에서 1사분위수(Q1)를 뺀 값으로, 데이터의 중간 50% 범위를 나타냅니다. 이상치 탐지에 사용되며, Q1 - 1.5×IQR 미만 또는 Q3 + 1.5×IQR 초과인 값을 이상치로 판단합니다.
+
+**Q5. 분류 모델에서 예측 확률을 얻으려면 어떤 메서드를 사용해야 하는가?**
+> `model.predict_proba(X_test)[:, 1]`. `predict()`는 클래스 레이블(0 또는 1)을 반환하고, `predict_proba()`는 각 클래스에 속할 확률을 반환합니다. `[:, 1]`은 양성 클래스(1)의 확률만 추출합니다. AUC-ROC 계산 시 반드시 확률값이 필요합니다.
