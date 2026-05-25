@@ -1,0 +1,425 @@
+---
+track: academy
+locale: ko
+title: "Ch3. SQLD 자격증 — 절차형 SQL과 데이터 모델링"
+category: "Computer Science"
+series: "SQLD 자격증 준비"
+chapter: 3
+chapterTitleShort: '절차형SQL·데이터모델링'
+author: OIYO 편집부
+tags:
+  - SQLD
+  - SQL
+  - 절차형SQL
+  - 데이터모델링
+  - 정규화
+  - ERD
+  - 트랜잭션
+description: "SQLD 절차형 SQL — PL/SQL 기초(변수·조건·반복·커서), 트리거·저장 프로시저, 데이터 모델링(정규화·ERD·관계)."
+pubDate: '2026-05-25'
+layoutVariant: lecture-series
+---
+
+## 절차형 SQL 개요
+
+SQL은 기본적으로 **비절차적 언어**입니다 — 무엇을 할지만 지정하고, 어떻게 할지는 DBMS가 결정합니다.
+
+하지만 **절차형 SQL(Procedural SQL)**은 조건문·반복문·변수를 사용해 프로그래밍처럼 작성할 수 있습니다.
+
+| 구분 | 언어 |
+|------|------|
+| Oracle | PL/SQL (Procedural Language/SQL) |
+| SQL Server | T-SQL (Transact-SQL) |
+| MySQL | Stored Procedure (유사 문법) |
+
+---
+
+## PL/SQL 기본 구조
+
+```sql
+DECLARE
+    -- 변수 선언 영역
+    v_name   VARCHAR2(50);
+    v_salary NUMBER(10,2) := 0;
+    v_count  NUMBER;
+BEGIN
+    -- 실행 영역
+    SELECT name, salary
+    INTO v_name, v_salary
+    FROM employees
+    WHERE emp_id = 101;
+    
+    DBMS_OUTPUT.PUT_LINE('이름: ' || v_name);
+    DBMS_OUTPUT.PUT_LINE('급여: ' || v_salary);
+EXCEPTION
+    -- 예외 처리 영역
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('데이터 없음');
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('오류 발생: ' || SQLERRM);
+END;
+/
+```
+
+---
+
+## 변수와 데이터 타입
+
+```sql
+DECLARE
+    -- 직접 타입 지정
+    v_id     NUMBER := 1;
+    v_name   VARCHAR2(100) := '홍길동';
+    v_date   DATE := SYSDATE;
+    v_flag   BOOLEAN := TRUE;
+    
+    -- %TYPE: 테이블 컬럼 타입 자동 참조 (권장)
+    v_emp_name employees.name%TYPE;
+    v_emp_sal  employees.salary%TYPE;
+    
+    -- %ROWTYPE: 행 전체 타입
+    v_emp_row  employees%ROWTYPE;
+BEGIN
+    SELECT * INTO v_emp_row
+    FROM employees WHERE emp_id = 101;
+    
+    DBMS_OUTPUT.PUT_LINE(v_emp_row.name || ': ' || v_emp_row.salary);
+END;
+```
+
+---
+
+## 조건문
+
+### IF-THEN-ELSIF-ELSE
+
+```sql
+BEGIN
+    IF v_salary >= 8000000 THEN
+        DBMS_OUTPUT.PUT_LINE('고액연봉');
+    ELSIF v_salary >= 5000000 THEN
+        DBMS_OUTPUT.PUT_LINE('중간연봉');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('신입연봉');
+    END IF;
+END;
+```
+
+### CASE 문
+
+```sql
+DECLARE
+    v_grade CHAR(1) := 'A';
+BEGIN
+    CASE v_grade
+        WHEN 'A' THEN DBMS_OUTPUT.PUT_LINE('우수');
+        WHEN 'B' THEN DBMS_OUTPUT.PUT_LINE('양호');
+        WHEN 'C' THEN DBMS_OUTPUT.PUT_LINE('보통');
+        ELSE           DBMS_OUTPUT.PUT_LINE('미흡');
+    END CASE;
+END;
+```
+
+---
+
+## 반복문
+
+### LOOP (기본)
+
+```sql
+DECLARE
+    v_i NUMBER := 1;
+BEGIN
+    LOOP
+        DBMS_OUTPUT.PUT_LINE(v_i);
+        v_i := v_i + 1;
+        EXIT WHEN v_i > 5;  -- 탈출 조건
+    END LOOP;
+END;
+```
+
+### WHILE LOOP
+
+```sql
+DECLARE
+    v_i NUMBER := 1;
+BEGIN
+    WHILE v_i <= 5 LOOP
+        DBMS_OUTPUT.PUT_LINE(v_i);
+        v_i := v_i + 1;
+    END LOOP;
+END;
+```
+
+### FOR LOOP
+
+```sql
+BEGIN
+    FOR i IN 1..5 LOOP  -- 1부터 5까지
+        DBMS_OUTPUT.PUT_LINE(i);
+    END LOOP;
+    
+    FOR i IN REVERSE 5..1 LOOP  -- 역순
+        DBMS_OUTPUT.PUT_LINE(i);
+    END LOOP;
+END;
+```
+
+---
+
+## 커서(Cursor)
+
+여러 행을 반환하는 쿼리 결과를 한 행씩 처리할 때 사용합니다.
+
+```sql
+DECLARE
+    CURSOR emp_cursor IS
+        SELECT name, salary FROM employees
+        WHERE dept_id = 10;
+    
+    v_name   employees.name%TYPE;
+    v_salary employees.salary%TYPE;
+BEGIN
+    OPEN emp_cursor;
+    
+    LOOP
+        FETCH emp_cursor INTO v_name, v_salary;
+        EXIT WHEN emp_cursor%NOTFOUND;  -- 더 이상 행 없을 때 종료
+        DBMS_OUTPUT.PUT_LINE(v_name || ': ' || v_salary);
+    END LOOP;
+    
+    CLOSE emp_cursor;
+END;
+```
+
+**커서 속성**:
+
+| 속성 | 의미 |
+|------|------|
+| `%FOUND` | 마지막 FETCH가 행을 반환했으면 TRUE |
+| `%NOTFOUND` | 마지막 FETCH가 행을 반환 못 했으면 TRUE |
+| `%ROWCOUNT` | 지금까지 FETCH한 행 수 |
+| `%ISOPEN` | 커서가 열려 있으면 TRUE |
+
+---
+
+## 저장 프로시저와 함수
+
+### 저장 프로시저 (Stored Procedure)
+
+```sql
+-- 생성
+CREATE OR REPLACE PROCEDURE raise_salary(
+    p_emp_id  IN  NUMBER,
+    p_rate    IN  NUMBER,
+    p_new_sal OUT NUMBER
+)
+IS
+BEGIN
+    UPDATE employees
+    SET salary = salary * (1 + p_rate/100)
+    WHERE emp_id = p_emp_id;
+    
+    SELECT salary INTO p_new_sal
+    FROM employees WHERE emp_id = p_emp_id;
+    
+    COMMIT;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RAISE_APPLICATION_ERROR(-20001, '직원 없음');
+END raise_salary;
+
+-- 실행
+DECLARE
+    v_new_sal NUMBER;
+BEGIN
+    raise_salary(101, 10, v_new_sal);
+    DBMS_OUTPUT.PUT_LINE('새 급여: ' || v_new_sal);
+END;
+```
+
+### 함수(Function)와 프로시저 차이
+
+| 구분 | 프로시저 | 함수 |
+|------|---------|------|
+| 반환값 | RETURN 없음 (OUT 파라미터 사용) | RETURN 있음 (반드시 반환) |
+| SQL에서 호출 | 불가 | 가능 (`SELECT get_salary(101) FROM dual`) |
+| DML 사용 | 가능 | 제한적 |
+
+---
+
+## 트리거(Trigger)
+
+특정 이벤트(INSERT/UPDATE/DELETE) 발생 시 자동 실행되는 코드입니다.
+
+```sql
+CREATE OR REPLACE TRIGGER salary_audit
+BEFORE UPDATE OF salary ON employees
+FOR EACH ROW
+BEGIN
+    IF :NEW.salary < :OLD.salary THEN
+        RAISE_APPLICATION_ERROR(-20002, '급여 삭감 불가');
+    END IF;
+    
+    INSERT INTO salary_log(emp_id, old_sal, new_sal, change_date)
+    VALUES(:OLD.emp_id, :OLD.salary, :NEW.salary, SYSDATE);
+END;
+```
+
+**트리거 유형**:
+
+| 시점 | 대상 | 설명 |
+|------|------|------|
+| BEFORE | ROW / STATEMENT | DML 실행 전 동작 |
+| AFTER | ROW / STATEMENT | DML 실행 후 동작 |
+| INSTEAD OF | VIEW | 뷰에 대한 DML을 다른 동작으로 대체 |
+
+---
+
+## 데이터 모델링
+
+### 3단계 설계 과정
+
+```
+개념적 설계 → 논리적 설계 → 물리적 설계
+(E-R 다이어그램)  (릴레이션 스키마)  (테이블 정의)
+```
+
+| 단계 | 도구 | 결과물 |
+|------|------|--------|
+| 개념적 | ERD | 엔티티·속성·관계 다이어그램 |
+| 논리적 | 정규화 | 릴레이션 스키마 (정규형) |
+| 물리적 | DBMS 종류 | CREATE TABLE, 인덱스 |
+
+---
+
+## 정규화 (Normalization)
+
+데이터 중복을 제거하고 일관성을 높이는 과정입니다.
+
+### 제1정규형 (1NF)
+
+**조건**: 모든 속성이 원자값(Atomic Value) — 반복 그룹 없음
+
+```
+위반 예:
+학생ID | 이름 | 수강과목
+1      | 홍길동 | 수학, 영어, 과학  ← 반복 그룹
+
+1NF 적용:
+학생ID | 이름 | 수강과목
+1      | 홍길동 | 수학
+1      | 홍길동 | 영어
+1      | 홍길동 | 과학
+```
+
+### 제2정규형 (2NF)
+
+**조건**: 1NF + **부분 함수 종속 제거** (복합 기본키에서 일부에만 종속되는 속성 분리)
+
+### 제3정규형 (3NF)
+
+**조건**: 2NF + **이행 함수 종속 제거** (비키 속성이 다른 비키 속성에 종속)
+
+```
+위반: 학번 → 학과코드 → 학과명  (학과명이 학번에 이행 종속)
+3NF: 학생(학번, 학과코드) + 학과(학과코드, 학과명) 분리
+```
+
+### BCNF (Boyce-Codd 정규형)
+
+**조건**: 3NF + 모든 결정자가 후보키
+
+---
+
+## ERD 표기법 (IE 표기법)
+
+SQLD에서 자주 출제되는 ERD 읽기:
+
+```
+[학생] ─────< [수강] >───── [강좌]
+  |              |               |
+학번(PK)    학번(FK)         강좌코드(PK)
+이름         강좌코드(FK)     강좌명
+```
+
+**관계 표기**:
+- `|` : 정확히 1개 (필수)
+- `O` : 0개 가능 (선택)
+- `<` : 여러 개 가능 (Many)
+
+---
+
+## 트랜잭션 (Transaction)
+
+```sql
+BEGIN TRANSACTION;
+
+UPDATE accounts SET balance = balance - 100000 WHERE acc_id = 'A';
+UPDATE accounts SET balance = balance + 100000 WHERE acc_id = 'B';
+
+COMMIT;   -- 정상 완료 시 확정
+-- 또는
+ROLLBACK; -- 오류 시 전체 취소
+```
+
+**ACID 속성**:
+
+| 속성 | 설명 |
+|------|------|
+| **Atomicity (원자성)** | 전부 실행 or 전부 취소 |
+| **Consistency (일관성)** | 트랜잭션 전후 DB 상태 일관 유지 |
+| **Isolation (고립성)** | 동시 실행 트랜잭션이 서로 간섭 않음 |
+| **Durability (지속성)** | COMMIT된 결과는 영구 저장 |
+
+---
+
+## 실전 퀴즈 5문항
+
+**Q1.** PL/SQL에서 `%TYPE`을 사용하는 이유로 가장 적절한 것은?
+- ① 더 빠른 실행 속도
+- ② 테이블 컬럼 타입 변경 시 자동 반영
+- ③ NULL 값 허용
+- ④ 커서 선언 가능
+
+**정답**: ②
+
+---
+
+**Q2.** 트리거(Trigger)에 대한 설명으로 옳지 않은 것은?
+- ① 특정 이벤트 발생 시 자동 실행
+- ② BEFORE, AFTER, INSTEAD OF 유형이 있다
+- ③ 명시적으로 호출해야 실행된다
+- ④ :NEW, :OLD 로 변경 전후 값 참조 가능
+
+**정답**: ③
+
+---
+
+**Q3.** 제3정규형(3NF) 위반의 예로 옳은 것은?
+- ① 반복 그룹이 존재하는 경우
+- ② 복합 키의 일부에만 종속되는 속성
+- ③ 비키 속성이 다른 비키 속성에 종속
+- ④ 모든 결정자가 후보키가 아닌 경우
+
+**정답**: ③
+
+---
+
+**Q4.** ROLLBACK이 가능한 SQL 명령어는?
+- ① TRUNCATE
+- ② DROP
+- ③ DELETE
+- ④ ALTER
+
+**정답**: ③
+
+---
+
+**Q5.** 저장 프로시저와 함수의 차이로 옳은 것은?
+- ① 프로시저는 SELECT에서 호출 가능
+- ② 함수는 반드시 값을 반환한다
+- ③ 프로시저는 DML 사용 불가
+- ④ 함수와 프로시저 모두 트리거로 사용 가능
+
+**정답**: ②

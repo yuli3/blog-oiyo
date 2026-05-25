@@ -1,0 +1,457 @@
+---
+track: academy
+locale: ko
+title: "Ch4. SQLD 자격증 — 최종 핵심 정리와 모의고사"
+category: "Computer Science"
+series: "SQLD 자격증 준비"
+chapter: 4
+chapterTitleShort: '최종정리·모의고사'
+author: OIYO 편집부
+tags:
+  - SQLD
+  - SQL
+  - 모의고사
+  - 핵심정리
+  - 자격증
+  - 시험전략
+  - 윈도우함수
+description: "SQLD 최종 합격 전략 — SQL 전 범위 핵심 요약, 윈도우 함수·NULL 처리 완전 정리, 모의고사 20문항 + 해설."
+pubDate: '2026-05-25'
+layoutVariant: lecture-series
+---
+
+## SQLD 시험 출제 비중 분석
+
+시험은 총 **50문항**, 60분입니다.
+
+| 과목 | 주요 내용 | 문항 수 | 비중 |
+|------|----------|---------|------|
+| **1과목: 데이터 모델링의 이해** | 모델링 개념, 엔티티, 속성, 관계, 식별자, 정규화, 반정규화 | 10문항 | 20% |
+| **2과목: SQL 기본 및 활용** | SELECT, DML, DDL, DCL, 조인, 서브쿼리, 집계함수, 윈도우함수, 절차형 SQL | 40문항 | 80% |
+
+**합격 기준**: 총점 60점 이상 (60/100) + 과목별 40% 이상
+
+---
+
+## 1과목 핵심 요약
+
+### 데이터 모델링 3단계
+
+```
+개념적 모델링 → 논리적 모델링 → 물리적 모델링
+ERD 작성       정규화·스키마    CREATE TABLE
+```
+
+### 엔티티 종류
+
+| 구분 | 설명 | 예 |
+|------|------|---|
+| 독립 엔티티 | 다른 엔티티에 의존하지 않음 | 학생, 과목 |
+| 의존 엔티티 | 부모 엔티티 없이 존재 불가 | 수강(학생+과목 필요) |
+| 중심 엔티티 | 업무 핵심 데이터 | 주문, 계약 |
+| 행위 엔티티 | 특정 행위를 나타냄 | 구매이력, 접속로그 |
+
+### 정규화 요약
+
+| 정규형 | 제거 대상 |
+|--------|----------|
+| 1NF | 반복 그룹(다값 속성) |
+| 2NF | 부분 함수 종속 |
+| 3NF | 이행 함수 종속 |
+| BCNF | 후보키가 아닌 결정자 |
+
+### 반정규화(Denormalization)
+
+성능 향상을 위해 의도적으로 정규화를 되돌리는 것:
+- 테이블 병합, 테이블 분리
+- 컬럼 중복 추가
+- 계산값 미리 저장(파생 컬럼)
+
+> **주의**: 반정규화는 조회 성능↑ vs 데이터 정합성·수정 성능↓ 트레이드오프
+
+---
+
+## 2과목 핵심 요약
+
+### SQL 실행 순서 (중요!)
+
+```
+FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY
+```
+
+> **자주 출제**: WHERE에서는 집계함수 사용 불가 → HAVING을 써야 함
+
+### DDL 핵심
+
+```sql
+-- 테이블 생성
+CREATE TABLE students (
+    student_id  NUMBER       CONSTRAINT pk_student PRIMARY KEY,
+    name        VARCHAR2(50) NOT NULL,
+    email       VARCHAR2(100) UNIQUE,
+    dept_id     NUMBER       REFERENCES departments(dept_id),
+    birth_date  DATE,
+    gpa         NUMBER(3,2)  CHECK(gpa BETWEEN 0 AND 4.5)
+);
+
+-- 컬럼 추가
+ALTER TABLE students ADD phone VARCHAR2(20);
+
+-- 컬럼 수정
+ALTER TABLE students MODIFY phone VARCHAR2(30) NOT NULL;
+
+-- 컬럼 삭제
+ALTER TABLE students DROP COLUMN phone;
+
+-- 테이블 삭제 (구조+데이터)
+DROP TABLE students;
+
+-- 테이블 이름 변경
+RENAME students TO student_info;
+```
+
+### DCL (권한 관리)
+
+```sql
+-- 권한 부여
+GRANT SELECT, INSERT ON employees TO user1;
+GRANT ALL PRIVILEGES ON employees TO manager WITH GRANT OPTION;
+
+-- 권한 회수
+REVOKE INSERT ON employees FROM user1;
+```
+
+### 뷰(View)
+
+```sql
+-- 뷰 생성
+CREATE OR REPLACE VIEW emp_dept_view AS
+SELECT e.name, e.salary, d.dept_name
+FROM employees e
+JOIN departments d ON e.dept_id = d.dept_id
+WHERE e.salary > 5000000;
+
+-- 뷰 사용
+SELECT * FROM emp_dept_view;
+
+-- 뷰 삭제
+DROP VIEW emp_dept_view;
+```
+
+---
+
+## 윈도우 함수 완전 정리
+
+### 순위 함수
+
+```sql
+SELECT name, dept_id, salary,
+    RANK()        OVER (ORDER BY salary DESC) AS rank_all,
+    DENSE_RANK()  OVER (ORDER BY salary DESC) AS dense_rank,
+    ROW_NUMBER()  OVER (ORDER BY salary DESC) AS row_num,
+    NTILE(4)      OVER (ORDER BY salary DESC) AS quartile
+FROM employees;
+```
+
+**차이 비교** (급여: 5000, 5000, 4000):
+
+| 함수 | 결과 |
+|------|------|
+| RANK | 1, 1, 3 (3위로 건너뜀) |
+| DENSE_RANK | 1, 1, 2 (건너뜀 없음) |
+| ROW_NUMBER | 1, 2, 3 (무조건 고유) |
+
+### 집계 윈도우 함수
+
+```sql
+-- 부서별 누적 합계
+SELECT name, dept_id, salary,
+    SUM(salary) OVER (PARTITION BY dept_id ORDER BY hire_date
+                      ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS cum_sum
+FROM employees;
+
+-- 이동 평균 (앞뒤 1행씩 포함)
+AVG(salary) OVER (ORDER BY hire_date
+                  ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING)
+```
+
+### LAG / LEAD (이전/다음 행)
+
+```sql
+SELECT name, salary,
+    LAG(salary, 1, 0) OVER (ORDER BY hire_date) AS prev_salary,  -- 이전 행 (없으면 0)
+    LEAD(salary, 1, 0) OVER (ORDER BY hire_date) AS next_salary   -- 다음 행
+FROM employees;
+```
+
+---
+
+## NULL 처리 완전 정리
+
+### NULL 기본 규칙
+
+```sql
+-- NULL은 비교 연산자 사용 불가
+WHERE salary = NULL   -- 결과 없음 (항상 FALSE)
+WHERE salary <> NULL  -- 결과 없음 (항상 FALSE)
+
+-- 올바른 NULL 비교
+WHERE salary IS NULL
+WHERE salary IS NOT NULL
+```
+
+### NULL 처리 함수
+
+```sql
+-- NVL: NULL이면 대체값
+SELECT NVL(comm, 0) FROM employees;
+
+-- NVL2: NULL 여부에 따라 다른 값
+SELECT NVL2(comm, '수당 있음', '수당 없음') FROM employees;
+
+-- NULLIF: 두 값이 같으면 NULL
+SELECT NULLIF(salary, 0) FROM employees;  -- 0이면 NULL 반환
+
+-- COALESCE: 첫 번째 NOT NULL 값 반환 (여러 인자)
+SELECT COALESCE(comm, bonus, 0) FROM employees;
+
+-- DECODE (Oracle 전용)
+SELECT DECODE(dept_id, 10, '영업', 20, '개발', '기타') FROM employees;
+
+-- CASE WHEN (표준 SQL)
+SELECT CASE
+    WHEN salary >= 8000000 THEN '고급'
+    WHEN salary >= 5000000 THEN '중급'
+    ELSE '초급'
+END AS salary_grade
+FROM employees;
+```
+
+### NULL과 집계함수
+
+```sql
+-- 집계함수는 NULL 무시
+SELECT COUNT(*),       -- 전체 행 수 (NULL 포함)
+       COUNT(comm),    -- comm이 NOT NULL인 행 수만
+       AVG(comm),      -- NULL 제외하고 평균
+       SUM(comm)       -- NULL 제외하고 합계
+FROM employees;
+```
+
+---
+
+## 모의고사 20문항
+
+**1.** 다음 SQL의 실행 결과로 옳은 것은?
+```sql
+SELECT 1 + NULL FROM dual;
+```
+- ① 1  ② NULL  ③ 0  ④ 오류
+
+**정답**: ②
+
+---
+
+**2.** WHERE 절과 HAVING 절의 차이로 옳은 것은?
+- ① WHERE는 그룹화 후 적용, HAVING은 그룹화 전 적용
+- ② WHERE에서는 집계함수 사용 불가, HAVING에서는 가능
+- ③ HAVING은 인덱스를 활용한다
+- ④ 두 절의 기능은 동일하다
+
+**정답**: ②
+
+---
+
+**3.** SQL 실행 순서로 올바른 것은?
+- ① FROM → SELECT → WHERE → GROUP BY → HAVING → ORDER BY
+- ② SELECT → FROM → WHERE → GROUP BY → HAVING → ORDER BY
+- ③ FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY
+- ④ FROM → GROUP BY → WHERE → HAVING → SELECT → ORDER BY
+
+**정답**: ③
+
+---
+
+**4.** RANK()와 DENSE_RANK()의 차이는?
+- ① RANK는 중복 순위를 허용하지 않는다
+- ② DENSE_RANK는 중복 순위가 있을 때 다음 순위를 건너뛴다
+- ③ RANK는 중복 시 다음 순위를 건너뛰고, DENSE_RANK는 건너뛰지 않는다
+- ④ 두 함수는 동일하다
+
+**정답**: ③
+
+---
+
+**5.** 다음 중 DDL에 해당하지 않는 것은?
+- ① CREATE  ② ALTER  ③ DROP  ④ UPDATE
+
+**정답**: ④ (UPDATE는 DML)
+
+---
+
+**6.** GRANT 문으로 부여된 권한을 다른 사용자에게도 부여할 수 있게 하는 옵션은?
+- ① WITH CHECK OPTION
+- ② WITH ADMIN OPTION
+- ③ WITH GRANT OPTION
+- ④ CASCADE
+
+**정답**: ③
+
+---
+
+**7.** 반정규화(Denormalization)의 목적으로 가장 적절한 것은?
+- ① 데이터 중복 제거
+- ② 데이터 정합성 향상
+- ③ 조회 성능 향상
+- ④ 저장 공간 절약
+
+**정답**: ③
+
+---
+
+**8.** 다음 SQL의 결과 행 수는?
+```sql
+SELECT name FROM emp WHERE dept_id = 10
+UNION
+SELECT name FROM emp WHERE dept_id = 20;
+-- dept_id=10: 홍길동, 이순신 / dept_id=20: 이순신, 강감찬
+```
+- ① 2  ② 3  ③ 4  ④ 오류
+
+**정답**: ② *(UNION은 중복 제거 — 이순신 1번만 포함)*
+
+---
+
+**9.** UNION ALL과 UNION의 차이는?
+- ① UNION ALL은 컬럼 수가 달라도 된다
+- ② UNION ALL은 중복 행을 제거하지 않는다
+- ③ UNION ALL이 더 느리다
+- ④ 차이 없음
+
+**정답**: ②
+
+---
+
+**10.** COALESCE(NULL, NULL, 3, 4)의 결과는?
+- ① NULL  ② 0  ③ 3  ④ 4
+
+**정답**: ③
+
+---
+
+**11.** 다음 ERD에서 학생(1) ─── 수강 ───(N) 강좌 관계의 의미는?
+- ① 학생 한 명이 여러 강좌를 수강할 수 없다
+- ② 강좌 하나에 여러 학생이 수강할 수 없다
+- ③ 학생 한 명이 여러 강좌를 수강하고, 강좌 하나를 여러 학생이 수강한다
+- ④ 강좌와 학생은 1:1 관계이다
+
+**정답**: ③
+
+---
+
+**12.** 제2정규형(2NF) 위반의 예는?
+- ① 복합 기본키에서 일부 키에만 종속되는 비키 속성 존재
+- ② 비키 속성이 다른 비키 속성에 종속
+- ③ 반복 그룹 존재
+- ④ 결정자가 후보키가 아닌 경우
+
+**정답**: ①
+
+---
+
+**13.** 다음 SQL에서 오류가 발생하는 이유는?
+```sql
+SELECT dept_id, name, AVG(salary)
+FROM employees
+GROUP BY dept_id;
+```
+- ① AVG 함수 오류
+- ② GROUP BY에 없는 컬럼 name이 SELECT에 있다
+- ③ WHERE 절이 없다
+- ④ dept_id가 GROUP BY에 있으면 안 된다
+
+**정답**: ②
+
+---
+
+**14.** INNER JOIN의 특징으로 옳은 것은?
+- ① 두 테이블의 모든 행을 반환한다
+- ② 조인 조건을 만족하는 행만 반환한다
+- ③ 왼쪽 테이블의 모든 행을 반환한다
+- ④ 카티션 곱을 반환한다
+
+**정답**: ②
+
+---
+
+**15.** 뷰(View)에 대한 설명으로 옳지 않은 것은?
+- ① 가상 테이블로 실제 데이터를 저장하지 않는다
+- ② 보안을 위해 특정 컬럼만 노출할 수 있다
+- ③ 뷰를 통한 DML은 항상 가능하다
+- ④ 복잡한 쿼리를 단순하게 사용할 수 있다
+
+**정답**: ③ *(WITH CHECK OPTION, 읽기 전용 뷰 등 제약 있음)*
+
+---
+
+**16.** 트랜잭션의 ACID 중 "동시에 실행되는 트랜잭션들이 서로 영향을 주지 않는" 속성은?
+- ① Atomicity
+- ② Consistency
+- ③ Isolation
+- ④ Durability
+
+**정답**: ③
+
+---
+
+**17.** 다음 중 SAVEPOINT를 사용하는 이유는?
+- ① 트랜잭션 전체를 취소하기 위해
+- ② 특정 시점까지만 롤백하기 위해
+- ③ COMMIT 없이 변경을 확정하기 위해
+- ④ 다른 사용자의 접근을 막기 위해
+
+**정답**: ②
+
+---
+
+**18.** LAG(salary, 2, 0)의 의미는?
+- ① 현재 행 기준 2행 앞의 salary, 없으면 0 반환
+- ② 현재 행 기준 2행 뒤의 salary, 없으면 0 반환
+- ③ salary를 2로 나눈 값
+- ④ salary의 2번째 자릿수
+
+**정답**: ①
+
+---
+
+**19.** CHAR(10)과 VARCHAR2(10)의 차이로 옳은 것은?
+- ① CHAR는 가변 길이, VARCHAR2는 고정 길이
+- ② CHAR는 고정 길이(공백 채움), VARCHAR2는 가변 길이
+- ③ 두 타입은 동일하다
+- ④ CHAR는 숫자만 저장 가능
+
+**정답**: ②
+
+---
+
+**20.** SQLD 합격 후 연계 자격증으로 가장 자연스러운 것은?
+- ① 정보보안기사
+- ② SQLP(SQL 전문가)
+- ③ TOEIC
+- ④ 정보처리산업기사
+
+**정답**: ②
+
+---
+
+## 합격 후 로드맵
+
+```
+SQLD (입문) → SQLP (전문가, 실무 3년 이상)
+     ↓
+정보처리기사 → 빅데이터 분석기사
+     ↓
+클라우드 DB (AWS RDS, Azure SQL) 자격증
+```
+
+SQLD는 **IT 취업 준비생의 필수 자격증** 중 하나입니다. 데이터베이스를 다루는 모든 개발자·DBA·데이터 엔지니어에게 요구되며, 취업 공고의 50% 이상에서 우대 또는 필수 요건으로 명시됩니다.
