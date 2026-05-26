@@ -1,0 +1,239 @@
+---
+track: education
+locale: ko
+title: "컴퓨터 네트워크 — 2강: 응용 계층과 네트워크 보안"
+category: "Computer Science"
+author: OIYO 편집부
+tags:
+  - 컴퓨터네트워크
+  - HTTP
+  - DNS
+  - 네트워크보안
+  - 암호화
+description: "컴퓨터 네트워크 2강 — 응용 계층(HTTP·DNS·SMTP), HTTPS와 TLS, 대칭·비대칭 암호화, 방화벽·VPN, 무선 네트워크(Wi-Fi) 완전 가이드."
+pubDate: '2026-05-27'
+---
+
+## 응용 계층 (Application Layer)
+
+```
+응용 계층의 역할:
+→ 사용자와 네트워크의 접점
+→ 이메일, 웹, DNS 등 서비스 제공
+→ 하위 계층의 통신 세부사항 추상화
+
+클라이언트-서버 모델:
+→ 서버: 항상 켜져 있고, 고정 IP, 서비스 제공
+→ 클라이언트: 필요할 때 연결, 동적 IP 가능
+→ 예: 웹 브라우저(클라이언트) ↔ 웹 서버
+
+P2P (Peer-to-Peer) 모델:
+→ 서버 없이 피어간 직접 통신
+→ BitTorrent, Skype(일부)
+→ 확장성 우수 but 관리 어려움
+
+소켓 (Socket):
+→ 응용 계층과 전송 계층의 인터페이스
+→ IP 주소 + 포트 번호
+→ TCP 소켓 vs UDP 소켓
+```
+
+---
+
+## HTTP 프로토콜
+
+```
+HTTP (HyperText Transfer Protocol):
+→ 웹 통신의 기반 프로토콜
+→ TCP 위에서 동작
+→ 무상태 (Stateless): 각 요청은 독립적
+
+HTTP 메서드:
+→ GET: 리소스 조회 (캐시 가능)
+→ POST: 데이터 전송 (서버 상태 변경)
+→ PUT: 리소스 교체/생성
+→ DELETE: 리소스 삭제
+→ PATCH: 리소스 부분 수정
+
+HTTP 상태 코드:
+→ 2xx: 성공 (200 OK, 201 Created)
+→ 3xx: 리다이렉션 (301 Moved Permanently, 302 Found)
+→ 4xx: 클라이언트 오류 (400 Bad Request, 401 Unauthorized, 404 Not Found)
+→ 5xx: 서버 오류 (500 Internal Server Error, 503 Service Unavailable)
+
+HTTP 버전 발전:
+→ HTTP/1.0: 요청마다 TCP 연결 (비효율)
+→ HTTP/1.1: 지속 연결, 파이프라이닝 (1997~)
+→ HTTP/2: 멀티플렉싱, 헤더 압축, 서버 푸시
+→ HTTP/3: UDP(QUIC) 기반, 지연 감소
+
+쿠키와 세션:
+→ 쿠키: 클라이언트 측 상태 저장 (브라우저)
+→ 세션: 서버 측 상태 저장 (세션 ID를 쿠키로)
+→ HTTP 무상태 문제 해결
+```
+
+---
+
+## DNS (Domain Name System)
+
+```
+DNS의 역할:
+→ 도메인 이름 → IP 주소 변환
+→ www.google.com → 142.250.196.68
+
+DNS 계층 구조:
+→ 루트 DNS 서버: 최상위 (.)
+→ TLD DNS 서버: .com, .kr, .org 등
+→ 권한 DNS 서버: 특정 도메인 담당
+→ 로컬(재귀) DNS 서버: ISP가 제공, 캐시
+
+DNS 조회 과정:
+1. 브라우저 캐시 확인
+2. OS 캐시·hosts 파일 확인
+3. 로컬 DNS 서버에 요청
+4. 로컬이 모르면 루트→TLD→권한 DNS 차례로 질의
+5. IP 주소 반환·캐시
+
+주요 레코드 유형:
+→ A: 도메인 → IPv4 주소
+→ AAAA: 도메인 → IPv6 주소
+→ MX: 이메일 서버 주소
+→ CNAME: 도메인 별칭
+→ NS: 권한 네임서버 정보
+→ TXT: 임의 텍스트 (SPF, DKIM 등 이메일 인증)
+
+DNS 캐싱:
+→ TTL (Time to Live): 캐시 유효 시간
+→ DNS 전파 지연: 변경 후 TTL 만료까지 대기
+```
+
+---
+
+## 이메일 프로토콜
+
+```
+이메일 시스템 구성:
+→ MUA (Mail User Agent): 이메일 클라이언트 (Gmail앱)
+→ MTA (Mail Transfer Agent): 메일 전송 서버
+→ MDA (Mail Delivery Agent): 수신 메일 배달
+
+SMTP (Simple Mail Transfer Protocol):
+→ 이메일 송신·서버 간 전달
+→ TCP 포트 25 (서버-서버), 587 (클라이언트-서버)
+→ Push 방식: 능동적으로 메일 전달
+
+POP3 (Post Office Protocol 3):
+→ 메일 서버에서 로컬로 다운로드
+→ TCP 포트 110
+→ 다운로드 후 서버에서 삭제 (기본)
+→ 단일 기기 사용에 적합
+
+IMAP (Internet Message Access Protocol):
+→ 메일 서버에서 직접 관리
+→ TCP 포트 143
+→ 여러 기기에서 동기화
+→ 메일을 서버에 유지
+
+이메일 보안:
+→ SPF: 발신 서버 인증 (스팸 방지)
+→ DKIM: 디지털 서명으로 메일 무결성 확인
+→ DMARC: SPF+DKIM 정책 정의
+→ S/MIME: 이메일 암호화·서명
+```
+
+---
+
+## 네트워크 보안
+
+```
+암호화의 종류:
+
+대칭 암호화 (Symmetric Encryption):
+→ 암호화·복호화에 동일 키 사용
+→ 빠름, 대용량 데이터 적합
+→ 키 배분 문제: 안전하게 공유 어려움
+→ 알고리즘: AES (현재 표준), DES (구식)
+
+비대칭 암호화 (Asymmetric Encryption):
+→ 공개키(암호화)·개인키(복호화) 쌍
+→ 공개키는 공개, 개인키는 비밀
+→ 느림, 작은 데이터에 사용 (키 교환에 활용)
+→ 알고리즘: RSA, ECC
+
+HTTPS와 TLS:
+→ HTTP + TLS(Transport Layer Security)
+→ 핸드셰이크 과정:
+  1. 클라이언트→서버: 지원 TLS 버전, 암호 알고리즘 목록
+  2. 서버→클라이언트: 서버 인증서(공개키 포함)
+  3. 인증서 검증 (CA 확인)
+  4. 세션 키 교환 (비대칭 암호화 활용)
+  5. 이후 통신은 세션 키로 대칭 암호화
+
+인증서(Certificate):
+→ CA(인증기관)가 발급하는 신뢰 문서
+→ 서버 공개키 + 도메인명 + CA 서명
+→ 자체 서명 인증서: 브라우저 경고
+
+방화벽 (Firewall):
+→ 네트워크 트래픽을 규칙에 따라 차단·허용
+→ 패킷 필터링, 상태 기반, 애플리케이션 레벨
+
+VPN (Virtual Private Network):
+→ 공용 네트워크에서 사설 터널 생성
+→ 암호화된 통신, 원격 접속
+→ IPSec, OpenVPN, WireGuard
+
+DoS/DDoS:
+→ DoS: 단일 공격자의 서비스 방해
+→ DDoS: 분산 공격 (봇넷 활용)
+→ 방어: CDN, 트래픽 필터링, Rate Limiting
+```
+
+---
+
+## 무선 네트워크
+
+```
+Wi-Fi (IEEE 802.11):
+
+주요 표준:
+→ 802.11n (Wi-Fi 4): 2.4/5GHz, 최대 600Mbps
+→ 802.11ac (Wi-Fi 5): 5GHz, 최대 3.5Gbps
+→ 802.11ax (Wi-Fi 6): 2.4/5GHz, 최대 9.6Gbps
+
+Wi-Fi 보안:
+→ WEP: 취약 (사용 금지)
+→ WPA2: 현재 표준 (AES-CCMP)
+→ WPA3: 최신 (개선된 개인 정보 보호)
+
+주요 개념:
+→ SSID: 네트워크 이름
+→ 채널: 주파수 대역 (2.4GHz: 채널 혼잡, 5GHz: 빠름)
+→ AP (Access Point): 무선 기지국
+→ BSSID: AP의 MAC 주소
+
+셀룰러 네트워크 (이동통신):
+→ 4G LTE: 최대 100Mbps~1Gbps
+→ 5G: 최대 20Gbps, 초저지연 (1ms 목표)
+→ 기지국(Cell): 이동하면 핸드오버
+
+Bluetooth:
+→ 근거리 무선 (10~100m)
+→ 주파수: 2.4GHz
+→ 저전력 BLE (IoT 기기)
+
+NFC (Near Field Communication):
+→ 초근거리 (수cm 이내)
+→ 접촉 결제, 교통 카드
+```
+
+---
+
+## 자주 묻는 질문
+
+**Q. HTTPS를 쓰면 항상 안전한가요?**
+A. HTTPS는 전송 중 데이터를 암호화하지만 모든 위협을 막지는 못합니다. 서버 자체가 해킹되면 데이터가 노출됩니다. 피싱 사이트도 HTTPS를 사용할 수 있습니다 (자물쇠 = 암호화만 의미, 사이트 신뢰성 보장 아님). XSS(크로스사이트 스크립팅)나 SQL 인젝션 같은 공격은 HTTPS로 막을 수 없습니다.
+
+**Q. 공공 와이파이 사용이 위험한 이유는 무엇인가요?**
+A. 암호화되지 않은 공공 와이파이에서는 같은 네트워크의 다른 사용자가 패킷을 가로챌 수 있습니다(스니핑). 중간자 공격(MITM)으로 통신을 도청·변조할 수 있습니다. 단, 이미 HTTPS가 표준인 현대에는 위험이 다소 줄었지만, VPN 사용이 추가 보호를 제공합니다.
