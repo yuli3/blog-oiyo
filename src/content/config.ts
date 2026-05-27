@@ -12,7 +12,7 @@ const blog = defineCollection({
     tags: z.array(z.string()).default([]),
     keywords: z.array(z.string()).optional(), // Additional SEO keywords beyond tags
     category: z.string().optional(),
-    track: z.enum(["academy", "magazine", "interactive"]).optional(),
+    track: z.enum(["academy", "magazine", "interactive", "education"]).optional(),
     series: z.string().optional(),
     chapter: z.coerce.number().int().positive().optional(),
     chapterTitleShort: z.string().max(80).optional(),

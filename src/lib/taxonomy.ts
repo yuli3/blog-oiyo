@@ -1,4 +1,16 @@
-export type ContentTrack = "academy" | "magazine" | "interactive";
+export type ContentTrack = "academy" | "magazine" | "interactive" | "education";
+
+export const EDUCATION_CATEGORIES = [
+  "Natural Science",
+  "Social Science",
+  "Humanities",
+  "Liberal Arts",
+  "Health",
+  "Engineering",
+  "Education",
+  "Mathematics",
+  "Science",
+] as const;
 
 export const ACADEMY_CATEGORIES = [
   "Accounting",
@@ -51,6 +63,9 @@ export function slugifyCategory(category: string): string {
 
 export function inferTrackFromCategory(category: string | undefined): ContentTrack {
   if (!category) return "magazine";
+  if (EDUCATION_CATEGORIES.includes(category as (typeof EDUCATION_CATEGORIES)[number])) {
+    return "education";
+  }
   if (ACADEMY_CATEGORIES.includes(category as (typeof ACADEMY_CATEGORIES)[number])) {
     return "academy";
   }
