@@ -1,0 +1,190 @@
+---
+track: education
+locale: ko
+title: "딥러닝 — 3강: 강화학습·생성 모델·최신 트렌드"
+category: "Computer Science"
+author: OIYO 편집부
+tags:
+  - 딥러닝
+  - 강화학습
+  - 생성AI
+  - GAN
+  - 대형언어모델
+description: "딥러닝 3강 — 강화학습(마르코프결정과정·Q-러닝·PPO), GAN·VAE·Diffusion 모델, 대형 언어 모델(GPT·BERT·LLaMA), 멀티모달AI, AI 안전성과 정렬 문제 완전 가이드."
+pubDate: '2026-05-27'
+---
+
+## 강화학습 (Reinforcement Learning)
+
+```
+강화학습의 기본 구조:
+→ 에이전트(Agent): 행동 주체
+→ 환경(Environment): 상태와 보상 제공
+→ 상태(State): 현재 상황 관찰값
+→ 행동(Action): 에이전트의 선택
+→ 보상(Reward): 행동에 대한 즉각 피드백
+→ 정책(Policy π): 상태 → 행동 매핑
+
+마르코프 결정 과정 (MDP):
+→ (S, A, P, R, γ) 튜플로 정의
+→ P: 전이 확률 (다음 상태 확률)
+→ γ: 할인율 (미래 보상 현재 가치)
+→ 누적 보상 극대화 목표
+
+가치 기반 방법:
+
+Q-러닝 (Q-Learning):
+→ Q(s,a): 상태 s에서 행동 a의 기대 누적 보상
+→ 벨만 방정식으로 업데이트:
+  Q(s,a) ← Q(s,a) + α[r + γ max Q(s',a') - Q(s,a)]
+→ 탐색 vs 활용: ε-greedy 전략
+
+DQN (Deep Q-Network):
+→ 딥 뉴럴 네트워크로 Q 함수 근사
+→ 경험 재현(Experience Replay): 상관성 제거
+→ 목표 네트워크(Target Network): 안정적 학습
+→ 아타리 게임 달인 수준 달성
+
+정책 기반 방법:
+
+REINFORCE:
+→ 직접 정책 파라미터 학습 (경사 상승)
+→ 높은 분산 문제
+
+Actor-Critic:
+→ 정책(Actor) + 가치함수(Critic) 동시 학습
+→ PPO (Proximal Policy Optimization):
+  신뢰 영역 제약으로 안정적 업데이트
+  ChatGPT RLHF 훈련에 사용
+
+응용:
+→ 알파고/알파제로: 바둑·체스 세계 최강
+→ 로봇 제어: 보행·조작·드론
+→ 자율주행: 경로 계획
+→ 게임 AI: OpenAI Five (도타2)
+→ 추천 시스템: 장기적 사용자 만족
+```
+
+---
+
+## 생성 모델
+
+```
+GAN (Generative Adversarial Network):
+→ 생성자(Generator)와 판별자(Discriminator)의 경쟁
+→ 생성자: 가짜 데이터 생성
+→ 판별자: 진짜/가짜 구별
+→ 목표: 생성자가 판별자를 속이는 진짜 같은 데이터
+
+GAN 활용:
+→ 딥페이크 이미지 생성
+→ 이미지-이미지 변환 (pix2pix, CycleGAN)
+→ 얼굴 합성 (StyleGAN, StyleGAN2)
+→ 이미지 해상도 향상 (SRGAN)
+
+GAN 학습 문제:
+→ 모드 붕괴(Mode Collapse): 일부 패턴만 생성
+→ 훈련 불안정: 균형 잡기 어려움
+
+VAE (Variational Autoencoder):
+→ 인코더: 잠재 공간(Latent Space)에 분포 학습
+→ 디코더: 잠재 벡터 → 데이터 재구성
+→ 잠재 공간이 연속·구조화 → 부드러운 보간 가능
+→ ELBO(Evidence Lower Bound) 최대화
+
+Diffusion 모델:
+→ Forward: 데이터에 노이즈 점진적 추가
+→ Reverse: 노이즈에서 단계적으로 복원 학습
+→ DDPM → DDIM → Score-Based Models
+→ Stable Diffusion: 잠재 공간에서 확산 (효율적)
+→ DALL-E 3·Midjourney·Imagen: 텍스트→이미지 생성
+
+VQ-VAE / VQGAN:
+→ 벡터 양자화: 잠재 공간 이산화
+→ 고품질 이미지 생성 기반
+```
+
+---
+
+## 대형 언어 모델 (LLM)
+
+```
+GPT 계열 (Decoder-Only):
+→ 자기회귀(Autoregressive) 언어 모델
+→ 다음 토큰 예측으로 사전 학습
+→ GPT-1(2018) → GPT-2 → GPT-3(175B) → GPT-4
+→ ChatGPT: RLHF로 사람 선호도에 맞게 미세 조정
+
+BERT 계열 (Encoder-Only):
+→ 마스킹된 언어 모델(MLM): 중간 토큰 예측
+→ 다음 문장 예측(NSP)
+→ 양방향 컨텍스트 이해 → 분류·NLU 강점
+
+T5·BART (Encoder-Decoder):
+→ 텍스트-to-텍스트 통합 프레임워크
+→ 번역·요약·질문 답변에 적합
+
+LLaMA / Mistral / Gemma (오픈소스):
+→ 메타·Mistral AI·구글 오픈 가중치 모델
+→ 로컬 실행·파인튜닝 가능
+
+스케일링 법칙 (Scaling Laws):
+→ 모델 크기·데이터·계산량 늘릴수록 성능 향상
+→ 창발적 능력(Emergent Abilities): 규모 넘으면 갑자기 나타나는 능력
+  - 맥락 내 학습(In-Context Learning, Few-Shot)
+  - 사고 연쇄(Chain-of-Thought Reasoning)
+
+파인튜닝 기법:
+→ Full Fine-tuning: 전체 파라미터 업데이트
+→ LoRA (Low-Rank Adaptation): 행렬 분해로 효율적 미세 조정
+→ PEFT: 파라미터 효율적 미세 조정 기법 총칭
+→ RLHF: 인간 피드백 강화학습
+→ DPO (Direct Preference Optimization): RLHF 대안
+```
+
+---
+
+## 멀티모달 AI와 최신 트렌드
+
+```
+멀티모달 AI:
+→ 텍스트·이미지·오디오·비디오 통합 처리
+→ CLIP: 이미지-텍스트 대조 학습 (OpenAI)
+→ GPT-4V: 이미지 이해 + 텍스트 생성
+→ Gemini: 텍스트·이미지·오디오·비디오 네이티브 처리
+→ LLaVA: 오픈소스 시각-언어 모델
+
+RAG (Retrieval-Augmented Generation):
+→ 외부 지식 검색 + LLM 생성 결합
+→ 최신 정보·전문 지식 활용 가능
+→ 벡터 DB: Pinecone, Weaviate, ChromaDB
+
+에이전트 AI:
+→ LLM이 도구(Tool)를 직접 사용
+→ ReAct: 추론(Reasoning) + 행동(Act) 반복
+→ 도구: 웹 검색·코드 실행·데이터베이스 조회
+→ AutoGPT·LangChain·LlamaIndex 프레임워크
+
+AI 안전성 및 정렬:
+→ 정렬 문제 (Alignment Problem): AI 목표가 인간 의도와 일치
+→ 환각(Hallucination): 없는 사실 자신 있게 생성
+→ 편향(Bias): 학습 데이터의 사회적 편향 재현
+→ 탈옥(Jailbreak): 안전 장치 우회
+→ Anthropic Constitutional AI·OpenAI Superalignment
+
+AI 거버넌스:
+→ EU AI Act: 위험 기반 규제 프레임워크
+→ 고위험 AI (의료·채용·신용): 엄격한 규제
+→ 범용 목적 AI (GPAI): 투명성·저작권 요건
+→ 금지 AI: 실시간 원격 생체 인식 (예외 있음)
+```
+
+---
+
+## 자주 묻는 질문
+
+**Q. GPT와 BERT의 가장 큰 차이는 무엇인가요?**
+A. 아키텍처와 학습 방식이 다릅니다. GPT는 디코더만 사용하는 자기회귀 모델로 왼쪽 컨텍스트만 보면서 다음 토큰을 예측합니다. 텍스트 생성에 강합니다. BERT는 인코더만 사용하는 모델로 마스킹된 토큰을 양방향(좌우 모두)으로 예측합니다. 문장 분류·개체명 인식 등 이해 과제에 강합니다. 현재 LLM 트렌드는 GPT 계열(디코더만)이 주도하고 있는데, 인스트럭션 튜닝과 RLHF로 이해 과제도 잘 수행하기 때문입니다.
+
+**Q. Diffusion 모델이 GAN보다 뛰어난 이유는 무엇인가요?**
+A. Diffusion 모델은 학습 안정성과 생성 다양성에서 GAN보다 우수합니다. GAN은 생성자-판별자 균형을 맞추기 어렵고 모드 붕괴 문제가 있지만, Diffusion은 최대우도 추정 기반의 안정적 학습이 가능합니다. 또한 텍스트 프롬프트로 생성을 세밀히 제어할 수 있고, 잠재 공간에서 의미 있는 보간(interpolation)이 잘 됩니다. 단점은 반복적 역방향 확산 과정 때문에 생성 속도가 느리다는 것인데, DDIM 등의 방법으로 가속화하고 있습니다.
