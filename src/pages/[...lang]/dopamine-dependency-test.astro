@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import DopamineDependencyTestComp from "../../components/tests/DopamineDependencyTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "도파민 의존도 자가 진단 — 나는 디지털 자극에 얼마나 의존할까?",
+    description: "10가지 질문으로 스마트폰·SNS·숏폼에 대한 도파민 의존도를 확인하세요. 균형 회복을 위한 맞춤 전략을 제공합니다.",
+  },
+  en: {
+    title: "Dopamine Dependency Self-Check — How Dependent Are You on Instant Gratification?",
+    description: "Check your dopamine dependency on smartphones, social media, and short videos with 10 questions. Get personalized balance recovery strategies.",
+  },
+  ja: {
+    title: "ドーパミン依存度自己診断 — スマホ・SNSにどれくらい依存している？",
+    description: "10の質問でスマートフォン・SNS・ショート動画へのドーパミン依存度を確認。バランス回復のための戦略を提供します。",
+  },
+  fr: {
+    title: "Auto-diagnostic de Dépendance à la Dopamine — Êtes-vous Dépendant?",
+    description: "Vérifiez votre dépendance à la dopamine via smartphones et réseaux sociaux avec 10 questions.",
+  },
+  es: {
+    title: "Autodiagnóstico de Dependencia a la Dopamina — ¿Qué tan dependiente eres?",
+    description: "Verifica tu dependencia a la dopamina en smartphones y redes sociales con 10 preguntas.",
+  },
+  zh: {
+    title: "多巴胺依賴自我診斷 — 你對即時刺激依賴多少？",
+    description: "通過10個問題檢查您對智能手機、社交媒體和短視頻的多巴胺依賴程度。",
+  },
+  cn: {
+    title: "多巴胺依赖自我诊断 — 你对即时刺激依赖多少？",
+    description: "通过10个问题检查您对智能手机、社交媒体和短视频的多巴胺依赖程度。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-xl px-4 py-8">
+    <DopamineDependencyTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

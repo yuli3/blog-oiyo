@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import KoreanSpellingQuizComp from "../../components/tests/KoreanSpellingQuiz";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "한국어 맞춤법 퀴즈 — 헷갈리는 맞춤법 테스트",
+    description: "돼/되, 왠/웬, 며칠/몇일 등 헷갈리는 한국어 맞춤법을 테스트해보세요. 무작위 10문제로 나의 맞춤법 실력을 확인합니다.",
+  },
+  en: {
+    title: "Korean Spelling Quiz — Test Your Knowledge of Tricky Korean Spelling",
+    description: "Test your knowledge of confusing Korean spelling rules like 됐/됬, 왠지/웬지, and more. 10 random questions to check your spelling skills.",
+  },
+  ja: {
+    title: "韓国語スペルクイズ — 間違いやすい綴りをテスト",
+    description: "돼/되、왠/웬、며칠/몇일など、間違いやすい韓国語の綴りをテスト。ランダム10問で実力を確認しましょう。",
+  },
+  fr: {
+    title: "Quiz d'Orthographe Coréenne — Testez les Règles Difficiles",
+    description: "Testez votre connaissance des règles d'orthographe coréenne difficiles avec 10 questions aléatoires.",
+  },
+  es: {
+    title: "Quiz de Ortografía Coreana — Prueba las Reglas Difíciles",
+    description: "Pon a prueba tu conocimiento de las reglas de ortografía coreana difíciles con 10 preguntas aleatorias.",
+  },
+  zh: {
+    title: "韓語拼寫測驗 — 測試容易混淆的拼寫規則",
+    description: "測試돼/되、왠/웬、며칠/몇일等容易混淆的韓語拼寫規則，10道隨機題目。",
+  },
+  cn: {
+    title: "韩语拼写测验 — 测试容易混淆的拼写规则",
+    description: "测试됐/됬、왠지/웬지等容易混淆的韩语拼写规则，10道随机题目。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-xl px-4 py-8">
+    <KoreanSpellingQuizComp client:load locale={locale} />
+  </main>
+</BaseLayout>

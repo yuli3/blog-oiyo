@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import WealthSimulatorComp from "../../components/tests/WealthSimulator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "10년 재산 시뮬레이터 — 월 저축·투자로 미래 자산 계산",
+    description: "월 수입·지출·현재 자산·투자 수익률을 입력하면 10년 후 자산을 시뮬레이션합니다. 명목·실질 자산, 자산 마일스톤(1억·3억·5억·10억) 달성 시기를 확인하세요.",
+  },
+  en: {
+    title: "10-Year Wealth Simulator — Calculate Future Assets with Monthly Savings",
+    description: "Enter your monthly income, expenses, current savings, and investment return to simulate your wealth over 10 years. See nominal vs. real wealth and when you'll hit key milestones.",
+  },
+  ja: {
+    title: "10年資産シミュレーター — 月次貯蓄と投資で将来の資産を計算",
+    description: "月収・月支出・現在の資産・投資収益率を入力して10年後の資産をシミュレーション。名目・実質資産と主要マイルストーン達成時期を確認できます。",
+  },
+  fr: {
+    title: "Simulateur de Patrimoine 10 ans — Calculez vos Actifs Futurs",
+    description: "Entrez vos revenus mensuels, dépenses, épargne actuelle et taux de rendement pour simuler votre richesse sur 10 ans.",
+  },
+  es: {
+    title: "Simulador de Patrimonio a 10 años — Calcula tus Activos Futuros",
+    description: "Ingresa tus ingresos mensuales, gastos, ahorros actuales y tasa de rendimiento para simular tu riqueza en 10 años.",
+  },
+  zh: {
+    title: "10年財富模擬器 — 用月儲蓄計算未來資產",
+    description: "輸入月收入、月支出、當前資產和投資回報率，模擬10年後的財富。查看名義和實際財富及關鍵里程碑達成時間。",
+  },
+  cn: {
+    title: "10年财富模拟器 — 用月储蓄计算未来资产",
+    description: "输入月收入、月支出、当前资产和投资回报率，模拟10年后的财富。查看名义和实际财富及关键里程碑达成时间。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-xl px-4 py-8">
+    <WealthSimulatorComp client:load locale={locale} />
+  </main>
+</BaseLayout>

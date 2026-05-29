@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import EconomicsSchoolTestComp from "../../components/tests/EconomicsSchoolTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "경제학파 성향 테스트 — 나는 케인스, 고전, 행동경제학자?",
+    description: "12가지 경제 이슈에 대한 답으로 나의 경제학파를 찾아보세요. 케인스학파·신고전학파·행동경제학·오스트리아학파·제도학파 중 내 성향은?",
+  },
+  en: {
+    title: "Economics School of Thought Test — Are You Keynesian, Classical, or Behavioral?",
+    description: "Discover which school of economics matches your views through 12 questions on key economic issues. Keynesian, Neoclassical, Behavioral, Austrian, or Institutional?",
+  },
+  ja: {
+    title: "経済学派傾向テスト — あなたはケインズ派？古典派？",
+    description: "12の経済問題への回答であなたの経済学派を見つけましょう。ケインズ・新古典・行動経済学・オーストリア・制度学派のどれ？",
+  },
+  fr: {
+    title: "Test d'École de Pensée Économique — Êtes-vous Keynésien, Classique ou Comportemental ?",
+    description: "Découvrez quelle école économique correspond à vos vues à travers 12 questions sur les enjeux économiques clés.",
+  },
+  es: {
+    title: "Test de Escuela de Pensamiento Económico — ¿Eres Keynesiano, Clásico o Conductual?",
+    description: "Descubre qué escuela de pensamiento económico coincide con tus puntos de vista a través de 12 preguntas sobre temas económicos clave.",
+  },
+  zh: {
+    title: "經濟學派傾向測試 — 你是凱恩斯主義者還是古典主義者？",
+    description: "通過12個關鍵經濟問題的回答，找出與您的觀點相符的經濟學派。",
+  },
+  cn: {
+    title: "经济学派倾向测试 — 你是凯恩斯主义者还是古典主义者？",
+    description: "通过12个关键经济问题的回答，找出与您的观点相符的经济学派。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-xl px-4 py-8">
+    <EconomicsSchoolTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>
