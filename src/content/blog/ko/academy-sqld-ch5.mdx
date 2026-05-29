@@ -1,0 +1,207 @@
+---
+track: academy
+locale: ko
+title: "SQLD — 5강: SQL 최적화·실행 계획·성능 튜닝"
+category: "Liberal Arts"
+author: OIYO 편집부
+tags:
+  - SQLD
+  - SQL최적화
+  - 실행계획
+  - 인덱스튜닝
+  - 옵티마이저
+description: "SQLD 5강 — SQL 처리 구조(옵티마이저·실행계획), 인덱스 튜닝(B-Tree·범위 스캔·선택도), 조인 최적화(NL Join·Sort Merge·Hash Join), SQL 안티패턴과 리팩토링, 시험 빈출 실행 계획 분석 완전 가이드."
+pubDate: '2026-05-29'
+---
+
+## SQL 처리 구조와 옵티마이저
+
+```
+SQL 처리 단계:
+→ 1. 구문 분석 (Parse):
+  SQL 문법 오류 확인
+  공유 풀 캐시 확인 (Soft/Hard Parse)
+→ 2. 최적화 (Optimize):
+  옵티마이저가 최적 실행 계획 생성
+→ 3. 행 소스 생성 (Row Source Generation):
+  실행 계획을 실제 실행 구조로 변환
+→ 4. 실행 (Execute):
+  데이터 읽기·변경 수행
+
+옵티마이저 (Optimizer):
+→ 규칙 기반 옵티마이저 (RBO):
+  미리 정의된 우선순위 규칙으로 계획 수립
+  인덱스 사용 > 풀 스캔 등 고정 규칙
+→ 비용 기반 옵티마이저 (CBO):
+  통계 정보 (행 수·블록 수·선택도·히스토그램)
+  I/O·CPU 비용 추정→최소 비용 계획 선택
+  현대 DBMS 기본 (Oracle·MySQL·PostgreSQL)
+→ 통계 정보:
+  ANALYZE TABLE·DBMS_STATS 갱신
+  오래된 통계→잘못된 실행 계획 선택
+
+실행 계획 (Execution Plan):
+→ 옵티마이저가 선택한 SQL 수행 절차
+→ 확인 방법:
+  Oracle: EXPLAIN PLAN→SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY)
+  MySQL: EXPLAIN SELECT ...
+  SQL Server: 예상 실행 계획 (Ctrl+L)
+→ 실행 계획 요소:
+  Operation: 수행 작업 (TABLE ACCESS, INDEX RANGE SCAN)
+  Cost: 예상 비용
+  Rows: 예상 행 수
+  Bytes: 예상 데이터 크기
+→ 읽는 방법:
+  들여쓰기 가장 깊은 → 가장 먼저 실행
+  같은 깊이: 위에서 아래로 실행
+```
+
+---
+
+## 인덱스 구조와 튜닝
+
+```
+B-Tree 인덱스:
+→ 구조: 루트 블록 → 브랜치 블록 → 리프 블록
+→ 리프 블록: 인덱스 키 값 + ROWID 저장
+→ 리프 블록 간 양방향 링크: 범위 스캔 가능
+→ 선택도 (Selectivity) = 선택 행 수 / 전체 행 수
+  낮을수록 인덱스 효율적 (5% 이하 권장)
+
+인덱스 스캔 유형:
+→ Index Range Scan:
+  범위 조건에서 리프 블록 연속 스캔
+  = · BETWEEN · > · < · LIKE 'ABC%'
+→ Index Unique Scan:
+  유일 인덱스에서 단일 값 = 조건
+  한 번의 스캔으로 결과
+→ Index Full Scan:
+  인덱스 전체 스캔
+  테이블 풀 스캔보다 유리한 경우 선택
+→ Index Fast Full Scan:
+  멀티블록 I/O로 인덱스 전체 스캔
+  정렬 불필요 시 Index Full Scan보다 빠름
+→ Index Skip Scan:
+  복합 인덱스의 선두 컬럼 조건 없을 때 사용
+
+인덱스 설계 원칙:
+→ 카디널리티 (Cardinality): 인덱스 컬럼 유니크 값 수
+  높을수록 인덱스 효과적
+→ 복합 인덱스 컬럼 순서:
+  선택도 높은 컬럼 선두 배치
+  범위 조건 컬럼 후순위
+  = 조건 컬럼 선두 배치
+→ 인덱스 레인지 스캔을 막는 패턴:
+  인덱스 컬럼에 함수 적용: UPPER(name) = 'KIM'
+  묵시적 형변환: char_col = 123 (숫자 상수)
+  LIKE '%ABC' (앞 와일드카드)
+  NOT, != 조건: 인덱스 범위 스캔 불가
+```
+
+---
+
+## 조인 최적화
+
+```
+중첩 루프 조인 (Nested Loop Join, NL Join):
+→ 외부 테이블 (Outer)의 각 행에 대해
+  내부 테이블 (Inner)을 반복 검색
+→ Inner 테이블에 인덱스 있으면 효율적
+→ 결과 행 수 적을 때 유리
+→ 수행 방법:
+  FOR each row in Outer DO
+    FOR each matching row in Inner (by index) DO
+      OUTPUT row
+→ 드라이빙 테이블 선택: 행 수 적은 테이블 Outer
+
+정렬 병합 조인 (Sort Merge Join):
+→ 양쪽 테이블을 조인 키 기준으로 정렬 후 병합
+→ 큰 테이블 범위 스캔 시 유리
+→ 인덱스 없어도 효율적
+→ 이미 정렬된 데이터·ORDER BY 있을 때 유리
+→ 정렬 비용: 메모리 충분 시 효율 높음
+
+해시 조인 (Hash Join):
+→ 작은 테이블 해시 맵 생성 후 큰 테이블 프로브
+→ 등치 조인 (=) 에서만 사용 가능
+→ 대용량 배치·DW 처리에서 효율적
+→ 메모리 부족 시 디스크 사용 (성능 저하)
+→ 선택 기준: 중소 테이블 해시 빌드·대 테이블 프로브
+
+조인 순서 최적화:
+→ 첫 번째 조인 테이블: 가장 적은 결과 행 생성
+→ 카티션 곱 (Cartesian Product) 방지:
+  누락된 조인 조건 확인
+→ 세미 조인 (Semi Join):
+  EXISTS·IN 서브쿼리의 최적화
+  한 쪽 행이 발견되면 즉시 중단
+→ 안티 조인 (Anti Join):
+  NOT EXISTS·NOT IN의 최적화
+
+서브쿼리 최적화:
+→ 비상관 서브쿼리 (Non-Correlated):
+  외부 쿼리와 독립 실행·한 번만 실행
+→ 상관 서브쿼리 (Correlated):
+  외부 쿼리 행마다 실행→성능 주의
+  JOIN 또는 윈도우 함수로 변환 권장
+→ 인라인 뷰 (Inline View):
+  FROM 절 서브쿼리: 병합 (Merging) 최적화 가능
+```
+
+---
+
+## SQL 안티패턴과 리팩토링
+
+```
+성능 저하 SQL 패턴:
+→ SELECT * 사용:
+  불필요한 컬럼 전송·인덱스 전용 쿼리 불가
+  해결: 필요한 컬럼만 명시적 선택
+
+→ 인덱스 컬럼 변형:
+  나쁜: WHERE TO_CHAR(order_date, 'YYYY') = '2024'
+  좋은: WHERE order_date BETWEEN TO_DATE('20240101','YYYYMMDD')
+               AND TO_DATE('20241231','YYYYMMDD')
+
+→ 묵시적 형변환:
+  나쁜: WHERE char_id = 123 (숫자 상수→char_id에 형변환)
+  좋은: WHERE char_id = '123'
+
+→ 부정형 조건:
+  나쁜: WHERE status != 'CLOSED'
+  좋은: WHERE status IN ('OPEN','PENDING','PROCESSING')
+
+→ OR 조건:
+  나쁜: WHERE a = 1 OR b = 2 (인덱스 활용 어려움)
+  좋은: UNION ALL로 분리 후 결합
+
+→ LIKE 앞 와일드카드:
+  나쁜: WHERE name LIKE '%김'
+  좋은: 전문 검색 인덱스 (Full-Text Index) 활용
+
+페이지네이션 최적화:
+→ ROWNUM/LIMIT+OFFSET 방식:
+  오프셋이 커지면 건너뛸 행을 모두 읽음
+  나쁜: SELECT ... ORDER BY id LIMIT 100 OFFSET 900000
+→ 커서 기반 페이지네이션:
+  좋은: WHERE id > 마지막_조회_id ORDER BY id LIMIT 100
+  마지막 조회 ID 기준으로 시작→대용량에서 효율적
+
+배치 처리 최적화:
+→ 대용량 UPDATE/DELETE:
+  한 번에 처리 대신 청크 단위 처리
+  커밋 주기 설정→트랜잭션 로그 관리
+→ 대량 INSERT:
+  단건 INSERT 반복 대신 BULK INSERT
+  INSERT INTO ... SELECT ... 활용
+```
+
+---
+
+## 자주 묻는 질문
+
+**Q. SQLD 시험에서 실행 계획 문제를 잘 풀기 위한 방법이 있나요?**
+A. 실행 계획 문제는 실행 순서 파악과 조인 방식 이해가 핵심입니다. 먼저 실행 계획 읽는 순서를 정확히 익혀야 합니다. 가장 안쪽(들여쓰기 깊은) 노드부터 실행되고, 같은 깊이에서는 위에서 아래로 처리됩니다. 시험에서 자주 나오는 패턴은 세 가지입니다. 첫째, TABLE ACCESS FULL vs INDEX RANGE SCAN 선택 기준입니다. 조건의 선택도와 인덱스 유무, 힌트 사용 여부를 확인하세요. 둘째, NL Join vs Hash Join 특성입니다. NL Join은 소량 데이터+Inner 테이블 인덱스, Hash Join은 대량 등치 조인에서 유리합니다. 셋째, 서브쿼리의 처리 방식입니다. 상관 서브쿼리는 외부 행마다 실행되므로 성능이 나쁠 수 있습니다. 실제 DBMS(무료 MySQL이나 SQLite)에서 EXPLAIN을 직접 실행해 보는 것이 가장 효과적인 학습법입니다. 실행 계획의 숫자(Cost·Rows)가 실제 데이터와 얼마나 차이 나는지 직접 확인해 보면 개념이 명확해집니다.
+
+**Q. 인덱스를 너무 많이 만들면 안 좋은 이유는 무엇인가요?**
+A. 인덱스는 조회 속도를 높이지만 DML 비용을 증가시킵니다. 구체적으로 세 가지 비용이 있습니다. 첫째, INSERT 시 모든 인덱스에 새 항목을 추가해야 합니다. 인덱스가 10개면 행 하나 삽입에 10번의 인덱스 갱신이 발생합니다. 둘째, UPDATE·DELETE 시에도 관련 인덱스를 모두 갱신해야 합니다. 특히 UPDATE는 기존 인덱스 항목 삭제+새 인덱스 항목 추가의 이중 작업이 필요합니다. 셋째, 저장 공간입니다. 인덱스 자체도 물리적 공간을 차지하며, 데이터 증가에 따라 함께 증가합니다. OLTP(온라인 트랜잭션) 시스템에서 인덱스가 지나치게 많으면 쓰기 속도가 크게 느려집니다. 반면 DW/OLAP(분석) 시스템은 조회 위주이므로 인덱스를 더 많이 활용합니다. 실무 가이드: 자주 사용되는 WHERE·JOIN·ORDER BY 컬럼에 집중하고, 카디널리티 낮은 컬럼(성별·상태 코드 등)의 단독 인덱스는 효과가 적습니다.
