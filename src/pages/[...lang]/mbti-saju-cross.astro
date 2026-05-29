@@ -1,0 +1,18 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import MbtiSajuCrossComp from "../../components/tests/MbtiSajuCross";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+const { locale } = Astro.props as { locale: Locale };
+const titles: Record<string,string> = { ko:"MBTI × 오행 교차 분석 — 심리 유형과 한국 전통 오행의 결합", en:"MBTI × Five Elements Cross Analysis — Psychology Meets Korean Tradition", ja:"MBTI×五行クロス分析 — 心理タイプと韓国伝統五行の融合", fr:"Analyse Croisée MBTI × Cinq Éléments", es:"Análisis Cruzado MBTI × Cinco Elementos", zh:"MBTI×五行交叉分析", cn:"MBTI×五行交叉分析" };
+const descs: Record<string,string> = { ko:"MBTI 16가지 유형과 한국 전통 오행(목·화·토·금·수)을 교차 분석합니다. 심리학과 동양 철학의 흥미로운 융합.", en:"Cross-analyze 16 MBTI types with Korean traditional Five Elements (Wood·Fire·Earth·Metal·Water). An interesting fusion of psychology and Eastern philosophy.", ja:"MBTI16タイプと韓国伝統五行(木・火・土・金・水)をクロス分析。心理学と東洋哲学の興味深い融合。", fr:"Analyse croisée des 16 types MBTI avec les Cinq Éléments coréens traditionnels.", es:"Análisis cruzado de los 16 tipos MBTI con los Cinco Elementos coreanos tradicionales.", zh:"交叉分析MBTI16種類型與韓國傳統五行（木·火·土·金·水）。", cn:"交叉分析MBTI16种类型与韩国传统五行（木·火·土·金·水）。" };
+const m = { title: titles[locale]??titles.en, description: descs[locale]??descs.en };
+---
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-xl px-4 py-8">
+    <MbtiSajuCrossComp client:load locale={locale} />
+  </main>
+</BaseLayout>

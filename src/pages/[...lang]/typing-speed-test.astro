@@ -1,0 +1,18 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import TypingSpeedTestComp from "../../components/tests/TypingSpeedTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+const { locale } = Astro.props as { locale: Locale };
+const titles: Record<string, string> = { ko: "타이핑 속도 테스트 — WPM 측정", en: "Typing Speed Test — Measure Your WPM", ja: "タイピング速度テスト — WPM測定", fr: "Test de Vitesse de Frappe — Mesurez votre MPM", es: "Prueba de Velocidad de Mecanografía — Mida su PPM", zh: "打字速度測試 — 測量您的WPM", cn: "打字速度测试 — 测量您的WPM" };
+const descs: Record<string, string> = { ko: "1분간 타이핑하여 WPM(분당 단어)과 정확도를 측정합니다. 한국어·영어 텍스트로 실력을 테스트해보세요.", en: "Type for 1 minute to measure your WPM (words per minute) and accuracy. Test your skills in Korean or English.", ja: "1分間タイピングしてWPM(1分あたりの単語数)と精度を測定します。", fr: "Tapez pendant 1 minute pour mesurer votre vitesse et précision.", es: "Escribe durante 1 minuto para medir tu velocidad y precisión.", zh: "打字1分鐘測量您的WPM和準確率。", cn: "打字1分钟测量您的WPM和准确率。" };
+const m = { title: titles[locale] ?? titles.en, description: descs[locale] ?? descs.en };
+---
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-xl px-4 py-8">
+    <TypingSpeedTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>
