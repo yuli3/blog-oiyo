@@ -1,0 +1,61 @@
+---
+track: interactive
+embeddedTools:
+  - 'Lost Ark Raid Splitter (Q1Q3)'
+title: "Lost Ark Raid Splitter (Q1Q3): Auto-Balance Main & Alt Character Groups"
+description: "Automatically distribute DPS and support characters across multiple games using the main-1-alt-1 (본1부1) or main-1-alt-3 (본1부3) format. Minimizes support imbalance across each game in the session."
+pubDate: 2026-05-30
+category: Magazine
+tags:
+  - LostArk
+  - RaidSplitter
+  - Q1Q3
+  - PartyDistribution
+  - LostArkRaid
+locale: en
+author: OIYO Editorial
+series: "Lost Ark Tools"
+chapter: 2
+---
+
+import { LostArkRaidSplitter } from "@/features/games/LostArkTools";
+import Callout from "@/components/mdx/Callout.astro";
+
+# Lost Ark Raid Splitter
+
+When running a Legion Commander Raid across multiple games, this tool automatically distributes DPS and support characters to keep each party balanced in every game.
+
+## Run Formats
+
+**Main-1-Alt-1 (2 games)**: Each player runs their main once and one alt once.  
+**Main-1-Alt-3 (4 games)**: Each player runs their main once and three alts.
+
+For each game, the algorithm minimizes support/DPS imbalance.
+
+## How to Input
+
+```
+D(M) D S ㄷ
+```
+
+| Symbol | Meaning |
+|---|---|
+| `D`, `ㄷ`, `d` | DPS (dealer) |
+| `S`, `ㅍ`, `s` | Support |
+| `(M)` suffix | Main character |
+
+Enter one character per line, separated by spaces.
+
+---
+
+<LostArkRaidSplitter client:load />
+
+---
+
+<Callout type="tip">
+**Support shortage warning**: If there are too few supports relative to the number of games, a warning is displayed. Some games may have an uneven party composition when supports are scarce.
+</Callout>
+
+## Balancing Algorithm
+
+The tool uses a swap-based optimization algorithm to minimize the variance in main supports, sub-supports, and main DPS across all games. It runs until the max–min difference for each role across games is no greater than 1.

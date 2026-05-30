@@ -1,0 +1,71 @@
+---
+track: interactive
+embeddedTools:
+  - 'UUID生成器'
+title: "UUID生成器：UUID v4ランダム一意識別子を無料生成"
+description: "UUID（Universally Unique Identifier）v4を即時生成します。一括生成・大文字/小文字選択・ハイフン除去オプション対応。データベースのPK・APIリクエストID・ファイル名に活用。"
+pubDate: 2026-05-30
+category: Magazine
+tags:
+  - UUID生成器
+  - UUID生成
+  - GUID生成器
+  - 一意識別子
+  - UUIDランダム
+locale: ja
+author: OIYO編集部
+series: "開発者・実用ツール集"
+chapter: 7
+---
+
+import UuidGenerator from "@/components/tools/UuidGenerator";
+import Callout from "@/components/mdx/Callout.astro";
+
+# UUID生成器
+
+UUID（Universally Unique Identifier）はソフトウェアで一意な識別子が必要なときに使う128ビット（32文字の16進数）の標準フォーマットです。世界中で衝突なく一意の値を保証します。
+
+---
+
+<UuidGenerator client:load locale="ja" />
+
+---
+
+## UUIDバージョン比較
+
+| バージョン | 生成方式 | 用途 |
+|---|---|---|
+| v1 | タイムスタンプ＋MACアドレス | 順序保証が必要な場合 |
+| v3 | MD5ハッシュ（名前空間） | URLベースの一意ID |
+| **v4** | **完全ランダム** | **一般的な使用（最も多く使われる）** |
+| v5 | SHA-1ハッシュ（名前空間） | v3よりセキュリティ強化 |
+
+<Callout type="tip">
+**UUID v4のフォーマット**：`xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx`（4：バージョン表示、y：8・9・a・bのいずれか）  
+衝突確率：10億個生成時の衝突確率は約10億分の1以下。
+</Callout>
+
+## 開発での活用例
+
+```javascript
+// JavaScript
+crypto.randomUUID() // ブラウザ内蔵（最新）
+// または uuid ライブラリ
+import { v4 as uuidv4 } from 'uuid';
+uuidv4(); // '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'
+
+// Python
+import uuid
+str(uuid.uuid4()) # '110e8400-e29b-41d4-a716-446655440000'
+
+// SQL (PostgreSQL)
+SELECT gen_random_uuid();
+```
+
+## UUID vs ULID vs NanoID
+
+| 方式 | 長さ | ソート可能 | 可読性 | 推奨シーン |
+|---|---|---|---|---|
+| UUID v4 | 36文字 | ❌ | 普通 | 汎用 |
+| ULID | 26文字 | ✅ | 良い | DBのPK・ソートが必要な場合 |
+| NanoID | 21文字 | ❌ | 良い | URL・短いID |

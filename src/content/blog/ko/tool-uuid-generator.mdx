@@ -1,0 +1,74 @@
+---
+track: interactive
+embeddedTools:
+  - 'UUID 생성기'
+title: "UUID 생성기: UUID v4 랜덤 고유 식별자 무료 생성"
+description: "UUID(Universally Unique Identifier) v4를 즉시 생성합니다. 대량 생성, 대문자/소문자 선택, 하이픈 제거 옵션 지원. 데이터베이스 PK, API 요청 ID, 파일명에 활용."
+pubDate: 2026-05-30
+category: Magazine
+tags:
+  - UUID생성기
+  - UUID생성
+  - GUID생성기
+  - 고유식별자
+  - UUID랜덤
+locale: ko
+author: OIYO 편집부
+series: "개발자·실용 도구 모음"
+chapter: 7
+---
+
+import UuidGenerator from "@/components/tools/UuidGenerator";
+import Callout from "@/components/mdx/Callout.astro";
+
+# UUID 생성기
+
+UUID(Universally Unique Identifier)는 소프트웨어에서 고유한 식별자가 필요할 때 사용하는 128비트(32자 16진수) 표준 형식입니다. 전 세계에서 충돌 없이 고유한 값을 보장합니다.
+
+---
+
+<UuidGenerator client:load locale="ko" />
+
+---
+
+## UUID 버전 비교
+
+| 버전 | 생성 방식 | 용도 |
+|---|---|---|
+| v1 | 타임스탬프 + MAC 주소 | 순서 보장 필요 시 |
+| v3 | MD5 해시 (네임스페이스) | URL 기반 고유 ID |
+| **v4** | **완전 랜덤** | **일반적 사용 (가장 많이 쓰임)** |
+| v5 | SHA-1 해시 (네임스페이스) | v3보다 보안 강화 |
+
+<Callout type="tip">
+**UUID v4 형식**: `xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx` (4: 버전 표시, y: 8, 9, a, b 중 하나)
+충돌 확률: 10억 개 생성 시 충돌 확률 약 10억분의 1 이하.
+</Callout>
+
+## 개발 활용 예시
+
+```
+// JavaScript
+crypto.randomUUID() // 브라우저 내장 (최신)
+// 또는 uuid 라이브러리
+import { v4 as uuidv4 } from 'uuid';
+uuidv4(); // '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'
+
+// Python
+import uuid
+str(uuid.uuid4()) # '110e8400-e29b-41d4-a716-446655440000'
+
+// SQL (PostgreSQL)
+SELECT gen_random_uuid();
+```
+
+## UUID vs ULID vs NanoID
+
+| 방식 | 길이 | 정렬 가능 | 가독성 | 추천 상황 |
+|---|---|---|---|---|
+| UUID v4 | 36자 | ❌ | 보통 | 범용 |
+| ULID | 26자 | ✅ | 좋음 | DB PK, 정렬 필요 |
+| NanoID | 21자 | ❌ | 좋음 | URL, 짧은 ID |
+
+
+<Callout type="tip">**관련 도구**: [개발자 유틸리티 모음](/ko/tool-developer-utilities) · [비밀번호 생성기](/ko/tool-password-generator)</Callout>

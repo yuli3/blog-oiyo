@@ -1,0 +1,76 @@
+---
+track: interactive
+embeddedTools:
+  - 'UUID Generator'
+title: "UUID Generator: Free Instant UUID v4 Random Identifier"
+description: "Generate UUID v4 (Universally Unique Identifier) instantly. Supports bulk generation, uppercase/lowercase toggle, and hyphen removal. Use for database primary keys, API request IDs, and filenames."
+pubDate: 2026-05-30
+category: Magazine
+tags:
+  - UUIDGenerator
+  - UUIDv4
+  - GUIDGenerator
+  - UniqueIdentifier
+  - RandomUUID
+locale: en
+author: OIYO Editorial
+series: "Developer & Utility Tools"
+chapter: 7
+---
+
+import UuidGenerator from "@/components/tools/UuidGenerator";
+import Callout from "@/components/mdx/Callout.astro";
+
+# UUID Generator
+
+A UUID (Universally Unique Identifier) is a 128-bit (32 hex character) standard format used in software to generate identifiers that are globally unique without requiring a central coordinator.
+
+---
+
+<UuidGenerator client:load locale="en" />
+
+---
+
+## UUID Version Comparison
+
+| Version | Generation Method | Best For |
+|---|---|---|
+| v1 | Timestamp + MAC address | When sequential ordering is needed |
+| v3 | MD5 hash (namespace-based) | URL-derived unique IDs |
+| **v4** | **Fully random** | **General use (most widely used)** |
+| v5 | SHA-1 hash (namespace-based) | More secure alternative to v3 |
+
+<Callout type="tip">
+**UUID v4 format**: `xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx` (4: version indicator; y: one of 8, 9, a, b).  
+Collision probability: generating 1 billion UUIDs gives a collision chance of roughly 1 in a billion.
+</Callout>
+
+## Code Examples
+
+```javascript
+// JavaScript (modern browser)
+crypto.randomUUID()
+
+// Node.js with uuid library
+import { v4 as uuidv4 } from 'uuid';
+uuidv4(); // '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'
+```
+
+```python
+# Python
+import uuid
+str(uuid.uuid4())  # '110e8400-e29b-41d4-a716-446655440000'
+```
+
+```sql
+-- PostgreSQL
+SELECT gen_random_uuid();
+```
+
+## UUID vs. ULID vs. NanoID
+
+| Format | Length | Sortable | Readability | Recommended When |
+|---|---|---|---|---|
+| UUID v4 | 36 chars | ❌ | Average | General purpose |
+| ULID | 26 chars | ✅ | Good | DB primary keys, sort needed |
+| NanoID | 21 chars | ❌ | Good | URLs, short IDs |

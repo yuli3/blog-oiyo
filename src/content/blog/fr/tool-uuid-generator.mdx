@@ -1,0 +1,74 @@
+---
+track: interactive
+embeddedTools:
+  - 'Générateur UUID'
+title: "Générateur UUID v4: Identifiants Uniques Instantanés"
+description: "Générez des UUID v4 (Universally Unique Identifiers) aléatoires en un clic. Copiez un UUID unique ou générez-en plusieurs en lot pour vos bases de données et APIs."
+pubDate: 2026-05-30
+category: Magazine
+tags:
+  - GenerateurUUID
+  - UUIDv4
+  - IdentifiantUnique
+  - OutilsDeveloppeur
+  - BaseDeDonnees
+locale: fr
+author: Équipe OIYO
+series: "Outils Développeur"
+chapter: 6
+---
+
+import UuidGenerator from "@/components/tools/UuidGenerator";
+import Callout from "@/components/mdx/Callout.astro";
+
+# Générateur UUID v4
+
+Un UUID (Universally Unique Identifier) est une chaîne de 128 bits garantissant un identifiant pratiquement unique à l'échelle mondiale, sans coordination centralisée. La probabilité de collision entre deux UUID v4 est de 1 sur 5,3 × 10³⁶.
+
+---
+
+<UuidGenerator client:load locale="fr" />
+
+---
+
+## Format UUID
+
+```
+xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx
+ex: 550e8400-e29b-41d4-a716-446655440000
+```
+
+- **8 caractères** - 4 - 4 - 4 - **12 caractères**
+- Total : 32 caractères hexadécimaux + 4 tirets = **36 caractères**
+
+## Versions UUID et usages
+
+| Version | Méthode de génération | Cas d'usage |
+|---|---|---|
+| **v1** | Horodatage + adresse MAC | Débogage, traçabilité temporelle |
+| **v3** | Hash MD5 d'un namespace + nom | Reproductible, déterministe |
+| **v4** | **Aléatoire** | **Usage général (recommandé)** |
+| **v5** | Hash SHA-1 d'un namespace + nom | Reproductible, plus sûr que v3 |
+| **v7** | Horodatage millisecondes | Tri chronologique (nouveau) |
+
+<Callout type="tip">
+**UUID v4 vs. auto-increment** : Les IDs auto-incrémentés (`1, 2, 3...`) exposent le volume de données de votre API. Avec les UUID, impossible de deviner qu'un objet a l'ID `X+1`. Préférez les UUID pour les ressources publiques ; gardez les auto-increments pour les performances internes.
+</Callout>
+
+## Utilisation en base de données
+
+```sql
+-- PostgreSQL (type natif UUID)
+CREATE TABLE users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email TEXT NOT NULL
+);
+
+-- MySQL
+CREATE TABLE users (
+    id CHAR(36) PRIMARY KEY,
+    email VARCHAR(255) NOT NULL
+);
+```
+
+<Callout type="tip">**Outils associés** : [Générateur de mots de passe](/fr/tool-password-generator) · [Utilitaires développeur](/fr/tool-developer-utilities)</Callout>

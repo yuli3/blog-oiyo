@@ -1,0 +1,55 @@
+---
+track: interactive
+embeddedTools:
+  - 'UUID生成器'
+title: "UUID v4生成器：一键生成全球唯一标识符"
+description: "一键生成随机UUID v4（通用唯一标识符）。单个复制或批量生成，满足数据库主键、API资源标识等各类开发需求。"
+pubDate: 2026-05-30
+category: Magazine
+tags:
+  - UUID生成器
+  - UUIDv4
+  - 唯一标识符
+  - 开发者工具
+  - 数据库
+locale: cn
+author: OIYO编辑部
+series: "开发者工具"
+chapter: 6
+---
+
+import UuidGenerator from "@/components/tools/UuidGenerator";
+import Callout from "@/components/mdx/Callout.astro";
+
+# UUID v4生成器
+
+UUID（通用唯一标识符）是一个128位字符串，无需中心化协调即可在全球范围内保证唯一性。两个UUID v4发生碰撞的概率约为1/5.3×10³⁶，几乎不可能重复。
+
+---
+
+<UuidGenerator client:load locale="cn" />
+
+---
+
+## UUID格式
+
+```
+xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx
+示例：550e8400-e29b-41d4-a716-446655440000
+```
+
+## UUID版本对比
+
+| 版本 | 生成方式 | 适用场景 |
+|---|---|---|
+| **v1** | 时间戳 + MAC地址 | 调试、时间追踪 |
+| **v3** | MD5(命名空间+名称) | 可重现、确定性场景 |
+| **v4** | **随机生成** | **通用场景（推荐）** |
+| **v5** | SHA-1(命名空间+名称) | 比v3更安全的可重现场景 |
+| **v7** | 毫秒级时间戳 | 可排序的时间序列（较新） |
+
+<Callout type="tip">
+**UUID vs. 自增ID**：自增ID（1、2、3...）会暴露API的数据量，攻击者可轻易枚举资源。UUID让外部无法猜测下一个ID，更适合面向公众的资源接口。内部性能优先的场景可继续使用自增ID。
+</Callout>
+
+<Callout type="tip">**相关工具**：[密码生成器](/cn/tool-password-generator) · [开发者工具集](/cn/tool-developer-utilities)</Callout>

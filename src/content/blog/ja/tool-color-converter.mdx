@@ -1,0 +1,66 @@
+---
+track: interactive
+embeddedTools:
+  - 'カラーコード変換器'
+title: "カラーコード変換器：HEX ↔ RGB ↔ HSL ↔ HSV を即時変換"
+description: "HEX（#ffffff）・RGB（255,255,255）・HSL・HSVのカラーコードを相互変換します。カラーピッカーで色を選択後、すべての形式のコードを一度にコピーできます。"
+pubDate: 2026-05-30
+category: Magazine
+tags:
+  - カラーコード変換
+  - HEXtoRGB
+  - カラーコード変換器
+  - CSSカラー
+  - カラーピッカー
+locale: ja
+author: OIYO編集部
+series: "開発者・実用ツール集"
+chapter: 9
+---
+
+import ColorConverter from "@/components/tools/ColorConverter";
+import Callout from "@/components/mdx/Callout.astro";
+
+# カラーコード変換器
+
+FigmaはHEXを基本表示し、CSSはRGB、PhotoshopはHSB（HSV）を使います。各ツール間のカラーコードをすぐに変換します。
+
+---
+
+<ColorConverter client:load locale="ja" />
+
+---
+
+## カラー表現方式の比較
+
+| 方式 | 例 | 主な用途 |
+|---|---|---|
+| **HEX** | `#FF5733` | HTML・CSS・デザインツール |
+| **RGB** | `rgb(255, 87, 51)` | CSS・Web開発 |
+| **RGBA** | `rgba(255, 87, 51, 0.8)` | CSS（透明度付き） |
+| **HSL** | `hsl(11°, 100%, 60%)` | CSS・色調調整 |
+| **HSV/HSB** | `hsv(11°, 80%, 100%)` | Adobe Photoshop・Illustrator |
+| **CMYK** | `C:0 M:66 Y:80 K:0` | 印刷物カラー |
+
+<Callout type="tip">
+**HEX省略表記**：`#RRGGBB`で各ペアの文字が同じ場合、3文字に省略できます。例：`#FFFFFF` → `#FFF`、`#336699` → `#369`
+</Callout>
+
+## よく使うカラー参照
+
+| カラー | HEX | RGB |
+|---|---|---|
+| 純白 | `#FFFFFF` | 255, 255, 255 |
+| 純黒 | `#000000` | 0, 0, 0 |
+| 赤 | `#FF0000` | 255, 0, 0 |
+| 緑 | `#00FF00` | 0, 255, 0 |
+| 青 | `#0000FF` | 0, 0, 255 |
+| グレー50% | `#808080` | 128, 128, 128 |
+
+## HSLの理解
+
+- **H（色相）**：0〜360°、赤（0°）→ 緑（120°）→ 青（240°）→ 赤（360°）
+- **S（彩度）**：0%（無彩色）→ 100%（鮮明）
+- **L（明度）**：0%（黒）→ 50%（純色）→ 100%（白）
+
+HSLは色を直感的に調整する際に特に有用です。
