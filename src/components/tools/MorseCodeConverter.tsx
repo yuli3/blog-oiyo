@@ -66,6 +66,8 @@ const MorseCodeConverter: React.FC<{ locale?: Locale }> = ({ locale = 'en' }) =>
             <button
               key={m}
               onClick={() => { setMode(m); setInput(''); }}
+              aria-pressed={mode === m}
+              aria-label={m === 'encode' ? t.encode : t.decode}
               className={`flex-1 py-3 text-xs font-black uppercase tracking-widest transition-all ${mode === m ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-accent'}`}
             >
               {m === 'encode' ? t.encode : t.decode}
@@ -80,6 +82,7 @@ const MorseCodeConverter: React.FC<{ locale?: Locale }> = ({ locale = 'en' }) =>
             value={input}
             onChange={e => setInput(e.target.value)}
             placeholder={mode === 'encode' ? t.inputPlaceholder : t.decodePlaceholder}
+            aria-label={t.input}
             rows={4}
             className="w-full px-4 py-3 bg-muted/30 rounded-2xl border border-border font-mono text-sm outline-none focus:border-primary transition-colors resize-none"
           />
@@ -92,6 +95,7 @@ const MorseCodeConverter: React.FC<{ locale?: Locale }> = ({ locale = 'en' }) =>
             <button
               onClick={handleCopy}
               disabled={!output}
+              aria-label={copied ? t.copied : t.copy}
               className="px-3 py-1 rounded-lg bg-muted border border-border text-xs font-bold hover:bg-accent transition-colors disabled:opacity-40"
             >
               {copied ? t.copied : t.copy}

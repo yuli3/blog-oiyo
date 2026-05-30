@@ -436,6 +436,7 @@ export default function HeightConverter({ locale }: Props) {
                 type="number"
                 value={cmVal}
                 onChange={(e) => handleCmChange(e.target.value)}
+                aria-label={t.cmLabel}
                 className="w-full p-4 bg-muted/30 rounded-2xl border border-border font-black text-lg"
                 placeholder="170"
               />
@@ -450,6 +451,7 @@ export default function HeightConverter({ locale }: Props) {
                   type="number"
                   value={ftVal}
                   onChange={(e) => handleFtInChange(e.target.value, inVal)}
+                  aria-label={t.ftLabel}
                   className="w-1/2 p-4 bg-muted/30 rounded-2xl border border-border font-black text-lg"
                   placeholder="5"
                 />
@@ -457,6 +459,7 @@ export default function HeightConverter({ locale }: Props) {
                   type="number"
                   value={inVal}
                   onChange={(e) => handleFtInChange(ftVal, e.target.value)}
+                  aria-label={t.inLabel}
                   className="w-1/2 p-4 bg-muted/30 rounded-2xl border border-border font-black text-lg"
                   placeholder="7"
                   step="0.1"
@@ -500,6 +503,7 @@ export default function HeightConverter({ locale }: Props) {
                 type="number"
                 value={myHeight}
                 onChange={(e) => setMyHeight(e.target.value)}
+                aria-label={t.myHeight}
                 className="w-full p-4 bg-muted/30 rounded-2xl border border-border font-black text-lg"
                 placeholder="170"
               />
@@ -511,6 +515,8 @@ export default function HeightConverter({ locale }: Props) {
               <div className="flex gap-2 p-1 bg-muted rounded-xl h-[60px] items-center">
                 <button
                   onClick={() => setMyGender("male")}
+                  aria-pressed={myGender === "male"}
+                  aria-label={t.male}
                   className={`flex-1 py-2 rounded-lg font-black text-xs transition-colors ${
                     myGender === "male"
                       ? "bg-background shadow-sm text-primary"
@@ -521,6 +527,8 @@ export default function HeightConverter({ locale }: Props) {
                 </button>
                 <button
                   onClick={() => setMyGender("female")}
+                  aria-pressed={myGender === "female"}
+                  aria-label={t.female}
                   className={`flex-1 py-2 rounded-lg font-black text-xs transition-colors ${
                     myGender === "female"
                       ? "bg-background shadow-sm text-primary"

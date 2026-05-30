@@ -54,6 +54,9 @@ Read these in order before making substantial changes:
 3. `magazine` should remain the narrowest rendering surface
 4. `interactive` must be reading-first, not tool-only
 5. do not add image-heavy assumptions; the design direction is image-light
+6. **Prose Minimum (FAANG gate)**: any `track: interactive` article must contain ≥ 400 Korean characters of prose before the first component. Count only non-heading, non-import, non-component, non-table lines. Tool-dump articles without context paragraphs will be rejected.
+7. **CSV-on-Create**: every new MDX article must have its row in `data/catalog/content-inventory.master.csv` created in the same commit. Run `verify:harness` immediately after; a missing CSV row is a blocking failure.
+8. **Hreflang Gate (SEO)**: ko-only `interactive` articles must NOT emit hreflang alternate tags for locales without actual content. The `availableLocales` prop mechanism in `[...slug].astro` → `BaseLayout` → `SEO.astro` handles this automatically — do not bypass it by hardcoding locales in frontmatter or layouts.
 
 ### Rendering rules
 
@@ -103,6 +106,9 @@ Pause and re-align if:
 3. `magazine` grows toward an unrestricted MDX surface
 4. content is added without `track`, `series`, or `chapter` where required
 5. an agent starts optimizing for speed over auditability
+6. a new `interactive` article is created without a corresponding CSV row (see Content Rule 7)
+7. `client:load` is used for the 2nd or later component on a multi-component page (use `client:visible` instead)
+8. `dangerouslySetInnerHTML` is used without DOMPurify sanitization in any user-input component
 
 ## 7. Agent Adapters
 

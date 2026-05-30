@@ -24,6 +24,17 @@ export async function getStaticPaths() {
     list.sort((a, b) => a.data.pubDate.getTime() - b.data.pubDate.getTime());
   }
 
+  // Build a map from base-slug → set of locales that actually have that slug.
+  // e.g. "tool-annual-leave-calculator" → ["ko"]
+  //      "education-accounting-ch1"    → ["ko", "en", "ja"]
+  const localesByBaseSlug: Record<string, Set<string>> = {};
+  for (const post of allPosts) {
+    const parts = post.slug.split("/");
+    const lang = parts[0];
+    const baseSlug = parts.slice(1).join("/");
+    (localesByBaseSlug[baseSlug] ??= new Set()).add(lang);
+  }
+
   return allPosts.map((post) => {
     const parts = post.slug.split("/");
     const lang = parts[0];
@@ -62,14 +73,16 @@ export async function getStaticPaths() {
       seriesPosts = null;
     }
 
+    const availableLocales = Array.from(localesByBaseSlug[slug] ?? [lang]);
+
     return {
       params: { lang, slug },
-      props: { post, locale: lang, prevPost, nextPost, seriesPosts },
+      props: { post, locale: lang, prevPost, nextPost, seriesPosts, availableLocales },
     };
   });
 }
 
-const { post, locale, prevPost, nextPost, seriesPosts } = Astro.props;
+const { post, locale, prevPost, nextPost, seriesPosts, availableLocales } = Astro.props;
 const { Content } = await post.render();
 const tocEnabled = siteConfig.features.toc;
 const t = await getTranslations(locale as Locale);
@@ -156,6 +169,7 @@ const coursesHref = `/${locale}/courses`;
   tags={post.data.tags}
   category={post.data.category}
   author={post.data.author}
+  availableLocales={availableLocales}
 >
   {seriesJsonLd && <script is:inline type="application/ld+json" set:html={seriesJsonLd} />}
 

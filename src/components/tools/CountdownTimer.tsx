@@ -273,12 +273,15 @@ const Stopwatch: React.FC<{ t: Labels }> = ({ t }) => {
         <button
           onClick={handleLap}
           disabled={!running && elapsed === 0}
+          aria-label={t.lap}
           className="py-3 rounded-2xl border border-border bg-muted/40 text-sm font-black uppercase tracking-widest hover:bg-accent transition-colors disabled:opacity-40"
         >
           {t.lap}
         </button>
         <button
           onClick={handleStartPause}
+          aria-label={running ? t.pause : t.start}
+          aria-pressed={running}
           className={`py-3 rounded-2xl text-sm font-black uppercase tracking-widest transition-colors ${
             running
               ? "bg-amber-500 text-white hover:bg-amber-600"
@@ -289,6 +292,7 @@ const Stopwatch: React.FC<{ t: Labels }> = ({ t }) => {
         </button>
         <button
           onClick={handleReset}
+          aria-label={t.reset}
           className="py-3 rounded-2xl border border-border bg-muted/40 text-sm font-black uppercase tracking-widest hover:bg-accent transition-colors"
         >
           {t.reset}

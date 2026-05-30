@@ -12,6 +12,7 @@ interface Props {
   tags?: string[];
   category?: string;
   author?: string;
+  availableLocales?: string[];
 }
 
 const {
@@ -25,13 +26,16 @@ const {
   tags,
   category,
   author = siteConfig.author,
+  availableLocales,
 } = Astro.props;
 
 const siteTitle =
   title === siteConfig.title ? title : `${title} | ${siteConfig.title}`;
 
 // Multilingual Hreflang logic
-const locales = siteConfig.locales;
+// availableLocales: restrict hreflang to locales that actually have content.
+// Falls back to all site locales (e.g. non-blog pages, homepage).
+const locales = availableLocales ?? siteConfig.locales;
 const currentPathname = Astro.url.pathname;
 
 // Helper to generate localized URLs

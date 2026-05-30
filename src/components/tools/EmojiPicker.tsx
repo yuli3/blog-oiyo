@@ -547,9 +547,12 @@ export default function EmojiPicker({ locale }: Props) {
         // fallback
         const ta = document.createElement("textarea");
         ta.value = item.emoji;
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
         document.body.appendChild(ta);
+        ta.focus();
         ta.select();
-        document.execCommand("copy");
+        try { document.execCommand("copy"); } catch { /* ignore */ }
         document.body.removeChild(ta);
       });
 

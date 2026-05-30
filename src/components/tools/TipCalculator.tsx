@@ -59,6 +59,7 @@ const TipCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'en' }) => {
               type="number"
               value={bill}
               min={0}
+              aria-label={t.bill}
               onChange={e => setBill(Math.max(0, Number(e.target.value)))}
               className="w-full pl-10 pr-4 py-4 bg-muted/30 rounded-2xl border border-border font-black text-xl outline-none focus:border-primary transition-colors"
             />
@@ -75,6 +76,8 @@ const TipCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'en' }) => {
               <button
                 key={p}
                 onClick={() => setTipPct(p)}
+                aria-pressed={tipPct === p}
+                aria-label={`${t.tip} ${p}%`}
                 className={`px-4 py-2 rounded-xl border-2 text-xs font-black transition-all ${tipPct === p ? 'bg-primary text-primary-foreground border-primary shadow-md' : 'bg-muted border-transparent text-muted-foreground hover:border-primary/40'}`}
               >
                 {p}%
@@ -87,6 +90,7 @@ const TipCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'en' }) => {
               min={0}
               max={50}
               value={tipPct}
+              aria-label={`${t.tip} ${tipPct}%`}
               onChange={e => setTipPct(Number(e.target.value))}
               className="flex-1 accent-primary"
             />
@@ -102,11 +106,13 @@ const TipCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'en' }) => {
           <div className="flex items-center gap-4">
             <button
               onClick={() => setSplit(s => Math.max(1, s - 1))}
+              aria-label={`${t.split} 감소`}
               className="w-12 h-12 rounded-2xl bg-muted border border-border font-black text-xl hover:bg-accent transition-colors"
             >−</button>
-            <span className="text-4xl font-black w-12 text-center">{split}</span>
+            <span className="text-4xl font-black w-12 text-center" aria-live="polite">{split}</span>
             <button
               onClick={() => setSplit(s => s + 1)}
+              aria-label={`${t.split} 증가`}
               className="w-12 h-12 rounded-2xl bg-muted border border-border font-black text-xl hover:bg-accent transition-colors"
             >+</button>
           </div>

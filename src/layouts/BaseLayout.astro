@@ -26,9 +26,10 @@ interface Props {
   tags?: string[];
   category?: string;
   author?: string;
+  availableLocales?: string[];
 }
 
-const { title, description, image, type, pubDate, updatedDate, tags, category, author } = Astro.props;
+const { title, description, image, type, pubDate, updatedDate, tags, category, author, availableLocales } = Astro.props;
 const locale = getLocaleFromPath(Astro.url.pathname);
 const t = await getTranslations(locale);
 const nav = t.nav as Record<string, string>;
@@ -78,7 +79,7 @@ const langItems = [
   class:list={["scroll-smooth", { "snap-y snap-mandatory": scrollSnapEnabled }]}
 >
   <head>
-    <SEO {title} {description} {image} {type} {pubDate} {updatedDate} {tags} {category} {author} />
+    <SEO {title} {description} {image} {type} {pubDate} {updatedDate} {tags} {category} {author} {availableLocales} />
 
     <!-- Inline dark-mode init: runs before first paint to prevent flash -->
     <script is:inline>

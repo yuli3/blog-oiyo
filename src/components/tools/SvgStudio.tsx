@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
+import DOMPurify from 'dompurify';
 import { GameContainer } from '../ui/game/GamePrimitives';
 
 const DEFAULT_SVG = `<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -12,6 +13,11 @@ const SvgStudio: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
     }[locale === 'ko' ? 'ko' : 'en'];
 
     const [code, setCode] = useState(DEFAULT_SVG);
+    const safeHtml = useMemo(() =>
+      typeof window !== 'undefined'
+        ? DOMPurify.sanitize(code, { USE_PROFILES: { svg: true, svgFilters: true } })
+        : '',
+    [code]);
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(code);
@@ -50,7 +56,7 @@ const SvgStudio: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
                         <div className="w-full h-80 bg-card rounded-3xl border border-border shadow-sm flex items-center justify-center p-8 overflow-hidden relative group">
                             <div 
                                 className="max-w-full max-h-full flex items-center justify-center"
-                                dangerouslySetInnerHTML={{ __html: code }}
+                                dangerouslySetInnerHTML={{ __html: safeHtml }}
                             />
                             {/* Grid Overlay for feel */}
                             <div className="absolute inset-0 pointer-events-none opacity-5 bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:16px_16px]" />

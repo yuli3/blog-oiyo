@@ -99,12 +99,6 @@ interface CategoryTexts {
   health: Record<SignKey, Record<Tier, string[]>>;
 }
 
-// Helper to build per-sign text pools from a template
-function buildTexts(locale: Locale): CategoryTexts {
-  const t = SIGN_TEXTS[locale];
-  return t;
-}
-
 // We store texts per locale × sign × category. Each sign has 5+ texts per category (across tiers).
 // To keep file size reasonable we use shared tier texts and inject sign-specific flavor.
 
