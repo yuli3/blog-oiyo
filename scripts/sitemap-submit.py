@@ -136,21 +136,32 @@ def submit_google_gsc(
             "reason": "google-api-python-client not installed. Run: pip install google-api-python-client google-auth",
         }
 
+    # Support JSON content via env var (for CI) or file path (for local)
+    json_content = os.environ.get("GSC_SERVICE_ACCOUNT_JSON")
     creds_path = credentials_path or os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
-    if not creds_path or not Path(creds_path).exists():
+
+    if not json_content and (not creds_path or not Path(creds_path).exists()):
         return {
             "status": "skip",
-            "reason": f"Service account JSON not found at: {creds_path or 'GOOGLE_APPLICATION_CREDENTIALS not set'}",
+            "reason": "Set GSC_SERVICE_ACCOUNT_JSON (CI) or GOOGLE_APPLICATION_CREDENTIALS (local)",
         }
 
     if dry_run:
         return {"status": "dry-run", "would_submit": sitemap_url, "to": "Google Search Console"}
 
     try:
-        creds = service_account.Credentials.from_service_account_file(
-            creds_path,
-            scopes=["https://www.googleapis.com/auth/webmasters"],
-        )
+        if json_content:
+            import json as _json
+            info = _json.loads(json_content)
+            creds = service_account.Credentials.from_service_account_info(
+                info,
+                scopes=["https://www.googleapis.com/auth/webmasters"],
+            )
+        else:
+            creds = service_account.Credentials.from_service_account_file(
+                creds_path,
+                scopes=["https://www.googleapis.com/auth/webmasters"],
+            )
         service = google_build("webmasters", "v3", credentials=creds)
         service.sitemaps().submit(siteUrl=site_url, feedpath=sitemap_url).execute()
         return {"status": "ok", "submitted": sitemap_url}
