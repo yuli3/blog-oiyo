@@ -1,0 +1,126 @@
+---
+track: academy
+locale: en
+title: "Ch5. Computer Vision — How Computers See the World"
+category: IT
+series: "AI & Machine Learning Fundamentals"
+chapter: 5
+chapterTitleShort: 'Computer Vision'
+author: OIYO Editorial
+tags:
+  - computer vision
+  - CNN
+  - image recognition
+  - object detection
+  - AI
+description: "From pixels to meaning — image classification, object detection, semantic segmentation, and medical imaging. Chapter 5 of AI & Machine Learning Fundamentals."
+pubDate: '2026-05-31'
+---
+
+import Callout from "@/components/mdx/Callout.astro";
+
+## What Is Computer Vision?
+
+**Computer Vision** is the AI field focused on extracting meaningful information from images and video. It mimics the human visual system — and in specific tasks, surpasses it.
+
+Applications: autonomous vehicles, medical image diagnosis, facial recognition, quality inspection, augmented reality, satellite imagery analysis.
+
+---
+
+## CNN: The Architecture Behind Modern Vision
+
+**Convolutional Neural Networks (CNNs)** are the backbone of modern computer vision.
+
+### Convolution: Detecting Patterns
+
+The core operation that finds patterns (edges, textures, shapes) in images:
+
+```
+Input image: 228×228×3 (height×width×RGB channels)
+Filter (kernel): 3×3 learnable weights
+Output: a feature map showing how strongly each position activates
+```
+
+**Key insight**: The same filter slides across the entire image (parameter sharing). A cat-ear filter detects ears wherever they appear in the image.
+
+### Pooling: Reducing Dimensions
+
+Pooling reduces the feature map size while retaining the most important information:
+- **MaxPooling**: Keep the maximum value in each 2×2 region
+- Creates **translation invariance**: small shifts in the image produce the same features
+
+### CNN Layer Hierarchy
+
+```
+Input image
+→ Conv (edge detection) → Conv (texture) → Conv (patterns) → Conv (high-level features)
+→ Flatten → Fully Connected → Output
+```
+
+Lower layers: edges, lines (low-level)
+Higher layers: eyes, faces, objects (high-level)
+
+<Callout type="tip">
+**Transfer Learning**: In practice, you almost never train a CNN from scratch. Instead, take a model pre-trained on ImageNet (ResNet, EfficientNet, ViT) and fine-tune it on your data. This achieves high performance with far less data and training time.
+</Callout>
+
+---
+
+## Major Computer Vision Tasks
+
+### 1. Image Classification
+Assign a single category label to an entire image.
+- Example: "Is this photo a cat or a dog?"
+- Key models: AlexNet (2012 breakthrough), VGG, ResNet, EfficientNet
+
+### 2. Object Detection
+Simultaneously locate (bounding box) and classify multiple objects in an image.
+- Example: Autonomous car detecting pedestrians, traffic lights, lane markings
+- Key models: YOLO series, Faster R-CNN, SSD
+
+| Model | Speed | Accuracy | Use Case |
+|-------|-------|----------|----------|
+| YOLO | Very fast | Good | Real-time detection |
+| Faster R-CNN | Slower | Very high | Precision analysis |
+
+### 3. Semantic Segmentation
+Classify every pixel with a category label.
+- Example: Autonomous driving — every pixel labeled as "road," "pedestrian," or "vehicle"
+- Key models: U-Net (medical imaging), DeepLab
+
+### 4. Instance Segmentation
+Semantic segmentation + distinguishing individual object instances.
+- Example: Identify each specific person in a crowd separately
+
+---
+
+## Computer Vision in Medicine
+
+**Skin cancer diagnosis**: A Stanford team trained a CNN to classify skin lesions at dermatologist level (2017, *Nature*).
+
+**Retinal disease**: Google DeepMind's system diagnoses 50+ retinal conditions at specialist-level accuracy.
+
+**Radiology**: AI systems detect pneumonia patterns in chest X-rays, helping prioritize urgent cases.
+
+---
+
+## Key Concept Cards
+
+**CNN** ★★★★★
+: Convolution→Pooling→Classification hierarchy. Learns hierarchical image features via parameter sharing. The standard architecture for visual AI.
+
+**YOLO** ★★★★☆
+: "You Only Look Once." Single forward pass detects all objects simultaneously. Essential for real-time applications: autonomous vehicles, CCTV analysis.
+
+**Transfer Learning** ★★★★★
+: Fine-tune a model pre-trained on large data for your specific task. Industry standard — rarely train from scratch.
+
+---
+
+## Practice Quiz
+
+**Q1. Why is YOLO faster than Faster R-CNN for real-time applications?**
+> YOLO divides the image into a grid and predicts all bounding boxes and class probabilities in a single neural network pass. Faster R-CNN uses a two-stage pipeline: first generate region proposals (RPN), then classify each region. YOLO's single-pass approach is much faster, though slightly less precise on small objects.
+
+**Q2. Why is U-Net particularly suited to medical image segmentation?**
+> U-Net's encoder-decoder structure with skip connections combines low-resolution contextual information (from deep layers) with high-resolution spatial detail (from early layers). This allows precise pixel-level segmentation even with limited training data — crucial in medical imaging where labeled data is scarce and expensive.

@@ -1,0 +1,139 @@
+---
+track: academy
+locale: en
+title: "Ch4. NLP and LLMs — How Transformers and Large Language Models Work"
+category: IT
+series: "AI & Machine Learning Fundamentals"
+chapter: 4
+chapterTitleShort: 'NLP & LLMs'
+author: OIYO Editorial
+tags:
+  - NLP
+  - natural language processing
+  - Transformer
+  - LLM
+  - ChatGPT
+description: "Tokenization, embeddings, attention mechanisms, BERT vs. GPT, prompt engineering — Chapter 4 of AI & Machine Learning Fundamentals."
+pubDate: '2026-05-31'
+---
+
+import Callout from "@/components/mdx/Callout.astro";
+
+## What is Natural Language Processing?
+
+**Natural Language Processing (NLP)** is the AI field focused on enabling computers to understand, interpret, and generate human language — text and speech. Applications include machine translation, sentiment analysis, question answering, text summarization, and chatbots.
+
+---
+
+## Core NLP Concepts
+
+### 1. Tokenization
+Breaking text into units (tokens) that a model can process:
+
+```
+Input: "ChatGPT is a powerful AI."
+Tokens: ["Chat", "G", "PT", " is", " a", " powerful", " AI", "."]
+```
+
+Modern LLMs use **subword tokenizers** (BPE, WordPiece) that handle rare words by breaking them into known subparts.
+
+### 2. Embeddings
+Converting tokens into high-dimensional numeric vectors:
+
+```
+"king"  → [0.2, 0.8, -0.3, ...]  (e.g., 300-dimensional vector)
+"queen" → [0.1, 0.9, -0.2, ...]
+"king" - "man" + "woman" ≈ "queen"  (Word2Vec's famous example)
+```
+
+**Semantically similar words are close together in vector space.**
+
+---
+
+## Transformer: The Architecture That Changed Everything
+
+Proposed in Google's 2017 paper "Attention Is All You Need," the Transformer is the foundation of modern AI.
+
+### The Attention Mechanism
+
+<Callout type="tip">
+**The key idea**: Every word in a sequence computes its relevance to every other word simultaneously. In "I went to the bank," the word "bank" uses context (nearby words) to determine whether it means "financial institution" or "riverbank." This is self-attention.
+</Callout>
+
+**Self-Attention formula**:
+```
+Attention(Q,K,V) = softmax(QKᵀ/√d) × V
+Q(Query), K(Key), V(Value) = matrices learned from input
+```
+
+### Why Transformers Dominate
+
+- **Parallelism**: Unlike RNNs, processes entire sequences simultaneously → GPU efficiency
+- **Long-range dependencies**: Captures relationships between distant parts of text
+- **Scalability**: Performance keeps improving with more parameters and data
+
+---
+
+## BERT vs. GPT: Two Transformer Paradigms
+
+| | BERT | GPT |
+|--|------|-----|
+| **Direction** | Bidirectional | Left-to-right only |
+| **Pre-training** | Masked language modeling | Next-token prediction |
+| **Strengths** | Understanding (classification, QA) | Generation (text writing) |
+| **Examples** | BERT, RoBERTa, ELECTRA | GPT-4, Claude, Gemini |
+| **Developed by** | Google | OpenAI / Anthropic / Google |
+
+---
+
+## How LLMs Are Trained
+
+Modern LLMs like ChatGPT, Claude, and Gemini are trained in three stages:
+
+### Stage 1: Pre-training
+- Self-supervised learning on trillions of tokens of internet text
+- The model learns to predict the next token, internalizing language patterns, knowledge, and reasoning
+
+### Stage 2: Supervised Fine-Tuning (SFT)
+- Fine-tuning on high-quality human-written conversations
+- The model learns the desired response format and style
+
+### Stage 3: RLHF (Reinforcement Learning from Human Feedback)
+- Human raters rank model responses
+- The model learns to produce more helpful and safe responses
+
+---
+
+## Prompt Engineering
+
+LLM performance depends heavily on how you phrase your input:
+
+| Technique | Description | Example |
+|-----------|-------------|---------|
+| **Zero-shot** | Direct question, no examples | "Summarize this article." |
+| **Few-shot** | Provide examples first | "Classify like these 3 examples: [examples]" |
+| **Chain-of-Thought** | Ask for step-by-step reasoning | "Think step by step." |
+| **System prompt** | Set role and context | "You are an expert legal advisor." |
+
+---
+
+## Key Concept Cards
+
+**Attention Mechanism** ★★★★★
+: Each element in a sequence computes relevance scores against all other elements simultaneously — overcoming RNN's sequential bottleneck. The core of modern AI.
+
+**BERT vs. GPT** ★★★★★
+: BERT=bidirectional understanding (classification/QA), GPT=unidirectional generation. Choose based on the task.
+
+**RLHF** ★★★★☆
+: Human feedback used to align LLMs. Why ChatGPT is helpful and safe rather than just statistically plausible.
+
+---
+
+## Practice Quiz
+
+**Q1. Why is BERT better suited for text classification than GPT?**
+> BERT's bidirectional attention sees the full context of a sentence simultaneously. GPT's left-to-right unidirectional attention can only see context from previous tokens. For classification and comprehension tasks that benefit from understanding the full sentence meaning, BERT's full-context approach has a natural advantage.
+
+**Q2. Why do LLMs "hallucinate" — generating confident-sounding but false statements?**
+> LLMs are statistical models that predict the next most likely token given context. They're not databases storing verified facts. When asked about topics that are rare in training data, or when the model's learned patterns conflict, it generates plausible-sounding text that may be factually wrong. This is an intrinsic property of next-token prediction models.

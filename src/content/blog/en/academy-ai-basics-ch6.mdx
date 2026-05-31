@@ -1,0 +1,141 @@
+---
+track: academy
+locale: en
+title: "Ch6. Model Evaluation and Optimization — What Makes a Good AI Model?"
+category: IT
+series: "AI & Machine Learning Fundamentals"
+chapter: 6
+chapterTitleShort: 'Model Evaluation'
+author: OIYO Editorial
+tags:
+  - model evaluation
+  - hyperparameter tuning
+  - cross-validation
+  - machine learning
+  - AI
+description: "Accuracy alone isn't enough. Precision, recall, F1, ROC-AUC, cross-validation, hyperparameter tuning — the evaluation toolkit of real ML practice. Chapter 6."
+pubDate: '2026-05-31'
+---
+
+import Callout from "@/components/mdx/Callout.astro";
+
+## Why Accuracy Isn't Enough
+
+Imagine a cancer detection model where only 1% of patients actually have cancer. A model that predicts "no cancer" for everyone achieves **99% accuracy** — and is completely useless.
+
+In practice, you need a richer set of evaluation metrics.
+
+---
+
+## Classification Metrics
+
+### The Confusion Matrix
+
+|  | Predicted: Positive | Predicted: Negative |
+|--|---------------------|---------------------|
+| **Actual: Positive** | TP (True Positive) | FN (False Negative) |
+| **Actual: Negative** | FP (False Positive) | TN (True Negative) |
+
+- **TP**: Cancer patient correctly flagged as cancer
+- **FN**: Cancer patient missed — the dangerous error
+- **FP**: Healthy patient flagged as cancer — unnecessary follow-up
+- **TN**: Healthy patient correctly cleared
+
+### Core Metrics
+
+**Precision** = TP / (TP + FP)
+- "Of all my positive predictions, what fraction were actually positive?"
+- Spam filter priority: high precision → don't misclassify real emails as spam
+
+**Recall** = TP / (TP + FN)
+- "Of all actual positives, what fraction did I catch?"
+- Cancer diagnosis priority: high recall → don't miss cancer cases
+
+**F1 Score** = 2 × (Precision × Recall) / (Precision + Recall)
+- Harmonic mean of precision and recall. Balances both.
+
+<Callout type="tip">
+**The Precision-Recall Tradeoff**: Raising the classification threshold increases precision but decreases recall, and vice versa. Which matters more depends on the cost of each error type. Cancer screening: prioritize recall. Spam filter: prioritize precision.
+</Callout>
+
+**ROC-AUC**
+- ROC curve: plot TPR (recall) vs. FPR as the threshold varies
+- AUC: area under the curve. 1.0 = perfect, 0.5 = random
+- Reliable even with class imbalance
+
+---
+
+## Regression Metrics
+
+**MAE** (Mean Absolute Error): Average absolute difference between prediction and truth
+**MSE** (Mean Squared Error): Average squared difference — penalizes large errors more
+**RMSE**: Square root of MSE — in the same units as the target variable
+**R²**: Proportion of variance explained. 1.0 = perfect fit
+
+---
+
+## Cross-Validation
+
+A single train/test split can give misleading results depending on how the split falls.
+
+**K-Fold Cross-Validation**:
+1. Split data into K folds (typically K=5 or 10)
+2. Each fold takes a turn as the test set; the others train
+3. Report the mean (and std) of K evaluation scores as the final metric
+
+Benefit: every sample is tested exactly once, providing a more reliable performance estimate.
+
+---
+
+## Hyperparameter Tuning
+
+**Model parameters** (learned during training): weights, biases
+**Hyperparameters** (set before training): learning rate, batch size, number of layers, dropout rate
+
+### Search Strategies
+
+**Grid Search**: Try every combination exhaustively. Complete but expensive.
+
+**Random Search**: Sample random combinations. More efficient than grid search in high dimensions.
+
+**Bayesian Optimization**: Use previous results to intelligently decide where to search next. Most efficient.
+
+**AutoML**: Tools that automate the search (Google AutoML, H2O AutoML).
+
+---
+
+## Reading Learning Curves
+
+```python
+plt.plot(train_loss, label='Train Loss')
+plt.plot(val_loss, label='Validation Loss')
+```
+
+| Pattern | Diagnosis | Solution |
+|---------|-----------|----------|
+| Both losses high and similar | Underfitting | More complex model, more features |
+| Train↓, Val↑ (large gap) | Overfitting | Dropout, L2 regularization, more data |
+| Both losses low and similar | Ideal | Ready to deploy |
+
+---
+
+## Key Concept Cards
+
+**Precision vs. Recall** ★★★★★
+: Precision=how many of my positive predictions are correct. Recall=how many actual positives I caught. Which to prioritize depends on the cost of each error type.
+
+**K-Fold Cross-Validation** ★★★★☆
+: Split into K folds, train and evaluate K times, average results. The standard method for reliable performance estimation.
+
+**Learning Curves** ★★★★★
+: Track train/validation loss per epoch. The primary visual tool for diagnosing overfitting and underfitting.
+
+---
+
+## Practice Quiz
+
+**Q1. A cancer model has high recall but low precision. What is the practical problem?**
+> High recall means it rarely misses actual cancer cases (good). Low precision means it flags many healthy people as having cancer. In practice: unnecessary invasive follow-up procedures, patient anxiety, and healthcare costs. Precision must be balanced against recall for a clinically useful model.
+
+**Q2. Why does 10-fold cross-validation give a more reliable estimate than a single train/test split?**
+> A single split's performance estimate depends on which samples happen to land in the test set — a matter of random chance. 10-fold cross-validation tests on every sample exactly once across 10 different splits, averaging 10 estimates. This dramatically reduces the variance of the performance estimate and detects more of the model's true generalization behavior.

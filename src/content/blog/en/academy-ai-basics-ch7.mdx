@@ -1,0 +1,142 @@
+---
+track: academy
+locale: en
+title: "Ch7. Generative AI — GANs, Diffusion Models, and How ChatGPT Works"
+category: IT
+series: "AI & Machine Learning Fundamentals"
+chapter: 7
+chapterTitleShort: 'Generative AI'
+author: OIYO Editorial
+tags:
+  - generative AI
+  - GAN
+  - diffusion models
+  - ChatGPT
+  - Stable Diffusion
+description: "AI that creates images, writes text, and composes music. From GANs to diffusion models to GPT-4 — the core principles of generative AI. Chapter 7."
+pubDate: '2026-05-31'
+---
+
+import Callout from "@/components/mdx/Callout.astro";
+
+## What Is Generative AI?
+
+**Generative AI** models produce new data — images, text, audio, video, or code — that resembles human-created content.
+
+The distinction:
+- **Discriminative models**: Input → Label (e.g., "Is this a cat?")
+- **Generative models**: Input → New data (e.g., "Generate an image of a cat")
+
+---
+
+## GANs: Generative Adversarial Networks
+
+Introduced by Ian Goodfellow in 2014, GANs are an elegant two-model system.
+
+### The Adversarial Game
+
+```
+Generator ←→ Discriminator
+Creates fake data    Classifies real vs. fake
+↓ Learns to fool     ↓ Learns to detect
+```
+
+- **Generator**: Random noise → fake image. Goal: fool the discriminator
+- **Discriminator**: Real vs. fake. Goal: not be fooled
+- **Equilibrium**: Generator produces images the discriminator can't distinguish from real (50/50 chance)
+
+<Callout type="tip">
+**The GAN analogy**: A counterfeiter (generator) versus a detective (discriminator). The counterfeiter makes increasingly convincing fakes; the detective develops keener detection. They push each other to improve until the fakes become indistinguishable.
+</Callout>
+
+### GAN Applications
+
+- **StyleGAN**: Photorealistic images of people who don't exist (thispersondoesnotexist.com)
+- **DeepFake**: Face-swapping in video
+- **Super-resolution**: Low → high resolution
+- **Image-to-image translation**: Day → night, sketch → photo
+
+---
+
+## Diffusion Models: How Stable Diffusion Works
+
+**Diffusion models** are now the dominant paradigm for image generation — used by Stable Diffusion, DALL-E 3, and Midjourney.
+
+### Core Idea: Learn to Denoise
+
+```
+Training:
+Clean image → Gradually add Gaussian noise T times → Pure noise
+                ↓ Learn to reverse this process
+Generation:
+Pure random noise → Gradually remove noise T times → Generated image
+```
+
+1. **Forward process**: Progressively add Gaussian noise to a clean image over T steps
+2. **Backward process (learning)**: Train a neural network to predict the noise added at each step
+3. **Generation**: Starting from pure noise, apply T denoising steps to produce an image
+
+### Text-to-Image
+
+"A cat floating in space, impressionist style" → image. A CLIP model maps the text description into image feature space, and the diffusion model generates an image matching those features.
+
+---
+
+## GPT: Autoregressive Text Generation
+
+GPT (Generative Pre-trained Transformer) is the architecture behind ChatGPT, Claude, and Gemini.
+
+### How It Works
+
+```
+Input: "The capital of France is"
+Output: " Paris"  (predict next token)
+        " , a"    (predict next token, given all previous tokens)
+        ...
+```
+
+**Autoregressive generation**: repeatedly predict the next token conditioned on all previously generated tokens.
+
+### The GPT Scaling Ladder
+
+| Model | Parameters | Key Capability |
+|-------|------------|----------------|
+| GPT-1 | 117M | Transfer learning for NLP |
+| GPT-2 | 1.5B | General text generation |
+| GPT-3 | 175B | Few-shot learning from examples |
+| GPT-4 | Undisclosed | Multimodal (text + images) |
+
+---
+
+## VAEs: Learning Latent Spaces
+
+**Variational Autoencoders (VAEs)** compress images into low-dimensional latent vectors, then reconstruct them.
+
+```
+Image → Encoder → Latent vector z → Decoder → Reconstructed image
+```
+
+Interpolating between two images in latent space produces a smooth natural-looking transition — a useful property for image editing and synthesis.
+
+---
+
+## Key Concept Cards
+
+**GAN** ★★★★★
+: Generator-discriminator adversarial training. The counterfeiter-detective game. Pioneer of high-quality image generation.
+
+**Diffusion Models** ★★★★★
+: Learn to remove noise from noisy images. Underlying technology of Stable Diffusion, DALL-E 3, Midjourney. The current dominant image generation paradigm.
+
+**Autoregressive Generation (GPT)** ★★★★★
+: Repeatedly predict next token conditioned on previous tokens to generate text. The core mechanism of ChatGPT.
+
+---
+
+## Practice Quiz
+
+**Q1. What is "mode collapse" in GAN training?**
+> Mode collapse occurs when the generator learns to produce only a narrow set of outputs that fool the discriminator — e.g., generating only one type of face rather than diverse examples. The generator exploits a weakness in the discriminator rather than learning the full distribution. This is a fundamental training instability in GANs, partially addressed by architectures like Wasserstein GAN.
+
+**Q2. Why do diffusion models produce more diverse outputs than GANs?**
+> GANs depend on unstable adversarial equilibrium and are prone to mode collapse. Diffusion models use stochastic sampling during the denoising process — different noise samples lead to genuinely different outputs even from the same prompt. Training is also more stable since the model learns a well-defined denoising objective rather than playing an adversarial game.
