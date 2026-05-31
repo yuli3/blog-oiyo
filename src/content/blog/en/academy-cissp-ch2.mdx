@@ -1,0 +1,114 @@
+---
+track: academy
+locale: en
+title: "Ch2. Cryptography — The Mathematics of Secrets"
+category: IT
+series: "CISSP Information Security Professional"
+chapter: 2
+chapterTitleShort: 'Cryptography'
+author: OIYO Editorial
+tags:
+  - CISSP
+  - cryptography
+  - PKI
+  - symmetric encryption
+  - asymmetric encryption
+description: "Symmetric/asymmetric encryption, hashing, PKI, digital signatures, TLS — the mathematical foundation of modern security. CISSP Chapter 2."
+pubDate: '2026-05-31'
+---
+
+import Callout from "@/components/mdx/Callout.astro";
+
+## Cryptographic Goals
+
+Cryptography achieves four security objectives:
+- **Confidentiality**: Data is unreadable to unauthorized parties
+- **Integrity**: Tampering is detectable
+- **Authentication**: Identity is verifiable
+- **Non-repudiation**: Actions cannot be later denied
+
+---
+
+## Symmetric Encryption
+
+Same key for encryption and decryption. Fast but has key distribution problem.
+
+| Algorithm | Key Length | Status |
+|-----------|-----------|--------|
+| DES | 56-bit | Broken (retired) |
+| 3DES | 112/168-bit | Legacy |
+| AES-128 | 128-bit | Current standard |
+| AES-256 | 256-bit | Maximum strength |
+
+---
+
+## Asymmetric Encryption
+
+Public key (encrypt) + Private key (decrypt) pair. Slow but solves key distribution.
+
+```
+Sender: Encrypt with recipient's public key
+Recipient: Decrypt with their own private key
+```
+
+**Algorithms**:
+- **RSA**: Most widely used, based on integer factorization difficulty
+- **ECC (Elliptic Curve)**: Same security with smaller keys
+- **Diffie-Hellman**: Key exchange protocol
+
+<Callout type="tip">
+**Hybrid encryption (TLS pattern)**: Asymmetric is too slow for bulk data. In practice: use asymmetric to exchange a session key, then encrypt all data with fast symmetric (AES). This is exactly how TLS works.
+</Callout>
+
+---
+
+## Hash Functions
+
+One-way function: Input → Fixed-length output (digest). **Not reversible**.
+
+**Properties**: Deterministic, avalanche effect (1-bit input change → completely different output), collision resistance.
+
+**Algorithms**:
+- MD5: 128-bit, **broken** (collisions found)
+- SHA-1: 160-bit, **deprecated**
+- **SHA-256/SHA-3**: Current standard
+
+---
+
+## PKI (Public Key Infrastructure)
+
+Trust system for issuing and managing digital certificates.
+
+**CA (Certificate Authority)**: Issues and signs certificates.
+**Root CA → Intermediate CA → End-Entity Certificate**
+
+**Digital certificate (X.509)**: Public key + Owner info + CA signature.
+
+**Digital signatures**:
+```
+Sender: Hash document → Sign with private key
+Recipient: Verify signature with public key → Confirms integrity + authentication + non-repudiation
+```
+
+---
+
+## Key Concept Cards
+
+**Symmetric vs. Asymmetric** ★★★★★
+: Symmetric=fast (AES, data encryption), Asymmetric=slow (RSA, key exchange). TLS combines both.
+
+**Hash Functions** ★★★★★
+: One-way, fixed-length output. SHA-256 is the current standard. MD5/SHA-1=broken.
+
+**PKI and Digital Signatures** ★★★★★
+: CA vouches for public key authenticity. Digital signatures = integrity + authentication + non-repudiation.
+
+---
+
+## Practice Quiz
+
+**Q1. To verify a received file hasn't been tampered with, what cryptographic tool do you use?**
+> Hash function. The sender computes a SHA-256 hash of the file and transmits it alongside the file. The recipient recomputes the hash upon receipt and compares. A match confirms integrity. No encryption is needed for integrity verification — hashing alone suffices.
+
+**Q2. Why do digital signatures provide non-repudiation?**
+> A digital signature uses the signer's private key — a key only they possess. The resulting signature mathematically proves the signer created it. To deny signing, the signer would have to claim their private key was stolen, which is difficult to establish retroactively. This is what makes digital signatures legally binding in many jurisdictions.
