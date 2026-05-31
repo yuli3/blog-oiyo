@@ -1,0 +1,138 @@
+---
+track: academy
+locale: en
+title: "Ch4. S3 — Infinitely Scalable Object Storage"
+category: IT
+series: "AWS Solutions Architect Associate"
+chapter: 4
+chapterTitleShort: 'S3 Storage'
+author: OIYO Editorial
+tags:
+  - AWS
+  - S3
+  - storage
+  - object storage
+  - SAA
+description: "S3 buckets/objects, storage classes, versioning, static website hosting, lifecycle policies, and security — mastering S3. AWS SAA Chapter 4."
+pubDate: '2026-05-31'
+---
+
+import Callout from "@/components/mdx/Callout.astro";
+
+## What Is S3?
+
+**Amazon S3 (Simple Storage Service)** is AWS's core object storage service.
+
+**Key characteristics**:
+- Unlimited storage (no limit on number of objects per bucket)
+- Durability: **99.999999999% (11 nines)** — automatic replication across multiple AZs
+- Availability: 99.99%
+- Object max size: 5 TB (multipart upload required above 5 GB)
+
+**Global namespace**: Bucket names must be globally unique across all AWS accounts.
+
+---
+
+## Buckets and Objects
+
+**Bucket**: Container for objects. Created in a specific region.
+**Object**: File in a bucket. Key (path + filename) + Value (data) + Metadata.
+
+```
+Bucket: my-company-bucket
+Object key: images/2026/photo.jpg
+URL: https://my-company-bucket.s3.amazonaws.com/images/2026/photo.jpg
+```
+
+---
+
+## S3 Storage Classes
+
+| Class | Use Case | Retrieval | Cost |
+|-------|---------|-----------|------|
+| **Standard** | Frequently accessed | Instant | High |
+| **Standard-IA** | Infrequent access, 30+ days | Instant | Medium |
+| **One Zone-IA** | Infrequent, non-critical | Instant | Lower |
+| **Glacier Instant** | Archive, instant retrieval | Instant | Very low |
+| **Glacier Flexible** | Archive | 1–12 hours | Very low |
+| **Glacier Deep Archive** | Compliance retention | 12 hours | Lowest |
+| **Intelligent-Tiering** | Unpredictable access | Instant | Auto-optimized |
+
+<Callout type="tip">
+**Lifecycle Policies**: Automatically transition objects between storage classes based on age. Example: Day 0 → Standard, Day 30 → Standard-IA, Day 90 → Glacier, Day 365 → delete. This is the key tool for automatic cost optimization.
+</Callout>
+
+---
+
+## S3 Versioning
+
+Enable versioning on a bucket to preserve all versions of every object.
+
+```
+photo.jpg (v1) → overwrite → photo.jpg (v2, current)
+                           → photo.jpg (v1, preserved)
+```
+
+**Delete markers**: When versioning is enabled, "deleting" an object adds a delete marker (not permanent deletion). Previous versions remain recoverable.
+
+---
+
+## S3 Security
+
+### Block Public Access
+All public access is blocked by default — keep it this way except for public static websites.
+
+### Bucket Policies
+JSON policies applied at the bucket level:
+
+```json
+{
+  "Effect": "Allow",
+  "Principal": "*",
+  "Action": "s3:GetObject",
+  "Resource": "arn:aws:s3:::my-website-bucket/*"
+}
+```
+
+### Encryption
+
+- **SSE-S3**: AWS-managed keys, server-side (default, free)
+- **SSE-KMS**: AWS KMS keys — audit trail, key rotation
+- **SSE-C**: Customer-provided keys
+- **Client-side**: Encrypt before uploading
+
+---
+
+## Static Website Hosting
+
+Host HTML/CSS/JS directly from S3:
+
+1. Bucket → Properties → Enable static website hosting
+2. Allow public access
+3. Bucket policy: Allow s3:GetObject for all
+4. URL: `http://bucket-name.s3-website-region.amazonaws.com`
+
+Combine with CloudFront for HTTPS + CDN caching + custom domain.
+
+---
+
+## Key Concept Cards
+
+**11 Nines Durability** ★★★★★
+: 99.999999999% — industry leading. Achieved by automatic multi-AZ replication.
+
+**Storage Classes** ★★★★★
+: Standard (frequent) → Standard-IA (infrequent) → Glacier (archive). Use lifecycle policies to automate transitions.
+
+**Versioning** ★★★★☆
+: Preserves all object versions. "Deleted" objects recoverable via delete marker removal.
+
+---
+
+## Practice Quiz
+
+**Q1. A company must retain compliance data for 7 years but rarely needs to access it. What is the most cost-effective S3 storage class?**
+> S3 Glacier Deep Archive. It's the cheapest S3 storage class, with retrieval within 12 hours. For compliance archiving where data is almost never accessed but must be retained long-term, this is the optimal choice.
+
+**Q2. With versioning enabled, what happens when you delete an object from an S3 bucket?**
+> The object is not permanently deleted. A "delete marker" is added, making the object appear deleted to normal requests. All previous versions remain intact. To recover, simply delete the delete marker. For permanent deletion, you must explicitly delete specific version IDs.

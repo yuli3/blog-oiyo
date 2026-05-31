@@ -1,0 +1,119 @@
+---
+track: academy
+locale: en
+title: "Ch2. IAM — The Core of AWS Security"
+category: IT
+series: "AWS Solutions Architect Associate"
+chapter: 2
+chapterTitleShort: 'IAM Security'
+author: OIYO Editorial
+tags:
+  - AWS
+  - IAM
+  - security
+  - access management
+  - SAA
+description: "IAM users/groups/roles/policies, least privilege, MFA, STS, and identity federation — the foundation of AWS security. AWS SAA Chapter 2."
+pubDate: '2026-05-31'
+---
+
+import Callout from "@/components/mdx/Callout.astro";
+
+## What Is IAM?
+
+**AWS Identity and Access Management (IAM)** controls who can access which AWS resources and how. It answers: "Who (authentication) can do what (authorization)?"
+
+**Key characteristics**: Global service (not region-specific), free, root account must not be used for daily operations.
+
+---
+
+## IAM Core Components
+
+### Users
+Individual people or applications accessing AWS. Up to 5,000 per account.
+
+### Groups
+Collections of users. Attach a policy to a group and all members inherit it.
+
+### Roles
+Permission sets used **temporarily by AWS services or external entities** — not people.
+
+Key use cases:
+- EC2 instance accessing S3
+- Lambda function querying DynamoDB
+- Cross-account access
+
+<Callout type="tip">
+**Roles vs. Access Keys**: Never embed access keys in EC2 instance code. Attach an IAM role to the EC2 instance instead. Roles use STS to automatically refresh temporary credentials — no key management, no key exposure risk. This is the AWS best practice.
+</Callout>
+
+### Policies
+JSON documents defining permissions:
+
+```json
+{
+  "Effect": "Allow",
+  "Action": ["s3:GetObject", "s3:PutObject"],
+  "Resource": "arn:aws:s3:::my-bucket/*"
+}
+```
+
+**Policy types**: AWS managed (pre-built), customer managed (your reusable policies), inline (attached directly to one entity).
+
+---
+
+## Principle of Least Privilege
+
+Grant only the minimum permissions needed to perform a task. On the exam, this is almost always the correct answer for security questions.
+
+---
+
+## MFA (Multi-Factor Authentication)
+
+Required for root accounts and privileged users.
+
+- **Virtual MFA**: Google Authenticator, Authy (most common)
+- **Hardware MFA**: YubiKey physical device
+- **U2F**: FIDO2 security key
+
+---
+
+## STS and Temporary Credentials
+
+**AWS Security Token Service (STS)** issues temporary security credentials (up to 12 hours).
+
+**AssumeRole**: Switch to another role. Used for cross-account access.
+
+---
+
+## IAM Best Practices
+
+1. Enable MFA on the root account
+2. Use root account only for initial setup
+3. Apply least privilege everywhere
+4. Manage permissions via groups, not individual users
+5. Use roles for service-to-service access (never embed access keys)
+6. Audit with IAM credential reports
+
+---
+
+## Key Concept Cards
+
+**Users / Groups / Roles / Policies** ★★★★★
+: User=person, Group=user collection, Role=service/temporary permission, Policy=JSON permission definition.
+
+**Least Privilege** ★★★★★
+: Grant minimum necessary permissions. On the exam, always the correct security answer.
+
+**Explicit Deny Wins** ★★★★★
+: When Allow and Deny conflict, Deny always wins. Default is implicit deny for everything not explicitly allowed.
+
+---
+
+## Practice Quiz
+
+**Q1. An EC2 instance needs to upload files to S3. What is the most secure approach?**
+> Attach an IAM role with S3 write permissions to the EC2 instance. Never embed access keys in code or environment variables — if the code is ever exposed, the keys are compromised. Roles automatically rotate temporary credentials via STS with no manual key management required.
+
+**Q2. A user has both an "Allow S3 read" policy and a "Deny S3 all" policy. What happens?**
+> The user cannot read S3. Explicit Deny overrides any Allow. AWS's IAM evaluation logic: start with implicit deny, evaluate all applicable policies, grant if there's an Allow — but if there's any explicit Deny, that action is denied regardless of any Allow.

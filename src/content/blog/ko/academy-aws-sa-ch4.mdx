@@ -1,0 +1,137 @@
+---
+track: academy
+locale: ko
+title: "Ch4. S3 — 무한 확장 객체 스토리지와 활용 패턴"
+category: IT
+series: "AWS Solutions Architect Associate"
+chapter: 4
+chapterTitleShort: 'S3 스토리지'
+author: OIYO 편집부
+tags:
+  - AWS
+  - S3
+  - 스토리지
+  - 객체스토리지
+  - SAA
+description: "S3 버킷/객체, 스토리지 클래스, 버전 관리, 정적 웹사이트 호스팅, 수명주기 정책, 보안 — S3 완전 정복. AWS Solutions Architect Associate 4강."
+pubDate: '2026-05-31'
+---
+
+import Callout from "@/components/mdx/Callout.astro";
+
+## S3란?
+
+**Amazon S3(Simple Storage Service)**는 AWS의 핵심 객체 스토리지 서비스입니다.
+
+**특징**:
+- 무제한 저장 (버킷 당 객체 수 제한 없음)
+- 내구성: **99.999999999% (11 9s)** — 1만 년에 한 번 데이터 손실
+- 가용성: 99.99%
+- 객체 최대 크기: 5TB (단일 업로드 5GB, 이상은 멀티파트)
+
+**글로벌 네임스페이스**: 버킷 이름은 전 세계에서 고유해야 합니다.
+
+---
+
+## 버킷과 객체
+
+**버킷**: S3의 컨테이너. 리전에 생성.
+**객체**: 버킷 내 파일. Key(경로+파일명) + Value(데이터) + Metadata.
+
+```
+버킷: my-company-bucket
+객체 키: images/2026/photo.jpg
+URL: https://my-company-bucket.s3.amazonaws.com/images/2026/photo.jpg
+```
+
+---
+
+## S3 스토리지 클래스
+
+| 클래스 | 사용 사례 | 검색 지연 | 비용 |
+|-------|---------|---------|------|
+| **Standard** | 자주 접근 데이터 | 즉시 | 높음 |
+| **Standard-IA** | 비정기 접근, 30일+ | 즉시 | 중간 |
+| **One Zone-IA** | 비정기, 복구 불필요 | 즉시 | 낮음 |
+| **Glacier Instant** | 아카이브, 즉시 검색 | 즉시 | 매우 낮음 |
+| **Glacier Flexible** | 아카이브 | 1~12시간 | 매우 낮음 |
+| **Glacier Deep Archive** | 규정 준수 보관 | 12시간 | 최저 |
+| **Intelligent-Tiering** | 접근 패턴 불규칙 | 즉시 | 자동 최적화 |
+
+<Callout type="tip">
+**수명주기 정책(Lifecycle Policy)**: 객체를 자동으로 스토리지 클래스 간 이동시킵니다. 예: 생성 후 30일 → Standard-IA, 90일 → Glacier, 365일 → 삭제. 비용 자동 최적화의 핵심 도구입니다.
+</Callout>
+
+---
+
+## S3 버전 관리
+
+버킷에 버전 관리를 활성화하면 모든 객체 버전이 보존됩니다.
+
+```
+photo.jpg (버전 1) → 덮어쓰기 → photo.jpg (버전 2, 현재)
+                              → photo.jpg (버전 1, 보존됨)
+```
+
+**삭제 마커**: 버전 관리 활성화 상태에서 삭제 시 실제 삭제가 아닌 삭제 마커 추가. 복원 가능.
+
+---
+
+## S3 보안
+
+### 퍼블릭 액세스 차단
+기본적으로 모든 퍼블릭 액세스가 차단됩니다. 정적 웹사이트 호스팅 외에는 유지 권장.
+
+### 버킷 정책
+버킷 전체에 적용되는 JSON 정책. IAM 정책과 유사한 구조.
+
+```json
+{
+  "Effect": "Allow",
+  "Principal": "*",
+  "Action": "s3:GetObject",
+  "Resource": "arn:aws:s3:::my-website-bucket/*"
+}
+```
+
+### 암호화
+- **SSE-S3**: AWS가 관리하는 키로 서버측 암호화 (기본, 무료)
+- **SSE-KMS**: AWS KMS 키 사용. 감사 로그, 키 순환
+- **SSE-C**: 고객이 키 제공
+- **클라이언트측 암호화**: 업로드 전 직접 암호화
+
+---
+
+## 정적 웹사이트 호스팅
+
+S3 버킷에 HTML/CSS/JS 파일을 올리면 정적 웹사이트를 호스팅할 수 있습니다.
+
+1. 버킷 → 속성 → 정적 웹사이트 호스팅 활성화
+2. 퍼블릭 액세스 허용
+3. 버킷 정책: GetObject 허용
+4. URL: `http://버킷이름.s3-website-리전.amazonaws.com`
+
+CloudFront와 결합하면 HTTPS + CDN 캐싱으로 성능 향상.
+
+---
+
+## 핵심 개념 카드
+
+**11 9s 내구성** ★★★★★
+: 99.999999999% — 업계 최고 수준. 데이터를 여러 AZ에 자동 복제.
+
+**스토리지 클래스** ★★★★★
+: Standard(자주 접근) → Standard-IA(비정기) → Glacier(아카이브). 수명주기 정책으로 자동화.
+
+**버전 관리** ★★★★☆
+: 덮어쓰기/삭제 시 이전 버전 보존. 실수로 삭제해도 복원 가능.
+
+---
+
+## 실전 퀴즈
+
+**Q1. 규정 준수를 위해 데이터를 7년간 보관해야 한다. 가장 비용 효율적인 S3 스토리지 클래스는?**
+> S3 Glacier Deep Archive입니다. 12시간 이내 검색 가능하고 S3 스토리지 중 가장 저렴합니다. 컴플라이언스 아카이브처럼 거의 접근하지 않지만 장기 보관이 필요한 데이터에 최적입니다.
+
+**Q2. S3 버전 관리가 활성화된 버킷에서 객체를 삭제하면 어떻게 되는가?**
+> 실제 데이터가 삭제되지 않습니다. '삭제 마커(Delete Marker)'가 추가됩니다. S3는 삭제 마커를 현재 버전으로 보여주어 파일이 삭제된 것처럼 보이지만, 이전 버전은 모두 보존되어 있어 삭제 마커를 제거하면 복원됩니다.

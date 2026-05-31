@@ -1,0 +1,129 @@
+---
+track: academy
+locale: en
+title: "Ch1. AWS SAA Exam Overview and Global Infrastructure"
+category: IT
+series: "AWS Solutions Architect Associate"
+chapter: 1
+chapterTitleShort: 'AWS Basics'
+author: OIYO Editorial
+tags:
+  - AWS
+  - SAA
+  - cloud
+  - certification
+  - Solutions Architect
+description: "AWS SAA-C03 exam overview, global infrastructure (Regions/AZs/Edge), cloud computing models, and the Shared Responsibility Model. AWS SAA Chapter 1."
+pubDate: '2026-05-31'
+---
+
+import Callout from "@/components/mdx/Callout.astro";
+
+## AWS SAA-C03 Exam Overview
+
+**AWS Certified Solutions Architect – Associate (SAA-C03)** is one of AWS's most popular certifications, validating the ability to design secure, highly available systems on AWS.
+
+**Exam details**:
+- Duration: 130 minutes
+- Questions: 65 (multiple choice, multiple response)
+- Passing score: 720/1000
+- Cost: $150 USD
+- Valid for: 3 years
+
+**Domain weights**:
+| Domain | Weight |
+|--------|--------|
+| Design Secure Architectures | 30% |
+| Design Resilient Architectures | 26% |
+| Design High-Performing Architectures | 24% |
+| Design Cost-Optimized Architectures | 20% |
+
+---
+
+## AWS Global Infrastructure
+
+### Regions
+Physical geographic areas with AWS data centers. 30+ worldwide.
+
+**Key regions**: us-east-1 (Virginia — most services, lowest cost), ap-northeast-2 (Seoul), eu-west-1 (Ireland).
+
+**Region selection criteria**: Data residency (legal requirements), latency, service availability, pricing.
+
+### Availability Zones (AZs)
+Clusters of one or more discrete data centers within a region. Typically 3–4 per region.
+
+<Callout type="tip">
+**Key principle**: High-availability architectures deploy across **at least 2 AZs**. If one AZ fails, the other(s) continue serving traffic. This is AWS's core availability pattern.
+</Callout>
+
+### Edge Locations
+Used by CloudFront CDN and Route 53. 400+ worldwide — more than regions, closer to users.
+
+```
+User → Nearest Edge Location → (cache hit) → Response
+                             → (cache miss) → Origin → Cache → Response
+```
+
+---
+
+## Cloud Computing Models
+
+### Deployment Models
+- **Public cloud**: AWS, Azure, GCP — shared infrastructure
+- **Private cloud**: Dedicated enterprise data center
+- **Hybrid**: Public + private combined
+
+### Service Models
+
+| Model | Customer manages | Examples |
+|-------|-----------------|---------|
+| **IaaS** | OS, middleware, data, apps | EC2, S3 |
+| **PaaS** | Data and apps only | Elastic Beanstalk, RDS |
+| **SaaS** | App configuration only | Gmail, Salesforce |
+
+---
+
+## AWS Shared Responsibility Model
+
+**AWS responsibility ("Security OF the cloud")**: Physical infrastructure, hardware, network, virtualization layer.
+
+**Customer responsibility ("Security IN the cloud")**: OS patches, application security, data encryption, network configuration, IAM management.
+
+```
+Customer: "My data, my app, my OS, my network config = my responsibility"
+AWS:      "Data centers, servers, storage, networking hardware = our responsibility"
+```
+
+---
+
+## AWS Well-Architected Framework — 6 Pillars
+
+1. **Operational Excellence**: Automate operations, make small changes, iterate
+2. **Security**: Security at every layer, principle of least privilege
+3. **Reliability**: Automatic failure recovery, horizontal scaling
+4. **Performance Efficiency**: Right resource types, serverless where applicable
+5. **Cost Optimization**: Eliminate waste, analyze usage
+6. **Sustainability**: Minimize energy consumption
+
+---
+
+## Key Concept Cards
+
+**Region vs AZ vs Edge** ★★★★★
+: Region=geographic area (Seoul), AZ=data center cluster (2a/2b/2c), Edge=CDN cache node. HA=minimum 2 AZ deployment.
+
+**Shared Responsibility Model** ★★★★★
+: AWS=infrastructure security, Customer=data/app/OS/network security. One of the exam's most-tested concepts.
+
+**6 Pillars** ★★★★☆
+: Operational Excellence, Security, Reliability, Performance Efficiency, Cost Optimization, Sustainability. The framework for all architectural decisions.
+
+---
+
+## Practice Quiz
+
+**Q1. A Korean web application must keep all user data within South Korea for legal compliance. Which region should you use?**
+> ap-northeast-2 (Seoul Region). AWS guarantees that data stored in a region does not leave that region unless you explicitly configure cross-region replication. Data residency requirements are the highest-priority factor in region selection.
+
+**Q2. Who is responsible for patching the operating system on an EC2 instance — AWS or the customer?**
+> The customer. EC2 is an IaaS service. AWS manages the physical host and hypervisor, but the operating system running on the EC2 instance is the customer's responsibility to patch and maintain. Contrast with managed services like RDS, where AWS handles the database engine patching.
