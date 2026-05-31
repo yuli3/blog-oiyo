@@ -1,0 +1,135 @@
+---
+track: academy
+locale: en
+title: "Ch2. Machine Learning Basics — Supervised, Unsupervised, and Reinforcement Learning"
+category: IT
+series: "AI & Machine Learning Fundamentals"
+chapter: 2
+chapterTitleShort: 'ML Basics'
+author: OIYO Editorial
+tags:
+  - machine learning
+  - supervised learning
+  - unsupervised learning
+  - reinforcement learning
+description: "The three ML paradigms, key algorithms, overfitting vs. underfitting, and the bias-variance tradeoff — Chapter 2 of AI & Machine Learning Fundamentals."
+pubDate: '2026-05-31'
+---
+
+import Callout from "@/components/mdx/Callout.astro";
+
+## What is Machine Learning?
+
+**Machine Learning (ML)** is a subfield of AI that enables systems to learn patterns from data and make predictions or decisions without being explicitly programmed for each task.
+
+Traditional programming: **Rules + Data → Output**  
+Machine Learning: **Data + Output → Rules (Model)**
+
+---
+
+## The Three Learning Paradigms
+
+### 1. Supervised Learning
+
+**Definition**: Learning from data where inputs (X) are paired with labeled outputs (Y)
+
+**Goal**: Find the mapping function X → Y
+
+| Problem Type | Examples | Key Algorithms |
+|-------------|---------|----------------|
+| **Classification** | Spam detection, image classification | Logistic Regression, SVM, Random Forest, Neural Networks |
+| **Regression** | House price prediction, stock forecasting | Linear Regression, Ridge, Lasso, Gradient Boosting |
+
+<Callout type="tip">
+**The key bottleneck in supervised learning is labeled data.** Labeling is expensive and time-consuming — the quantity and quality of labeled data sets the performance ceiling of your model.
+</Callout>
+
+### 2. Unsupervised Learning
+
+**Definition**: Finding hidden structure or patterns in unlabeled data
+
+**Goal**: Discover the underlying structure of data without predefined answers
+
+| Problem Type | Examples | Key Algorithms |
+|-------------|---------|----------------|
+| **Clustering** | Customer segmentation, document grouping | K-means, DBSCAN, Hierarchical Clustering |
+| **Dimensionality Reduction** | Visualization, noise removal | PCA, t-SNE, UMAP, Autoencoders |
+| **Anomaly Detection** | Fraud detection, defect detection | Isolation Forest, LOF |
+
+### 3. Reinforcement Learning
+
+**Definition**: An agent learns to maximize cumulative reward by interacting with an environment
+
+**Core Components**:
+- **Agent**: The learning entity
+- **Environment**: The world the agent interacts with
+- **State**: The current situation in the environment
+- **Action**: Choices available to the agent
+- **Reward**: Feedback signal from the environment
+
+**Applications**: AlphaGo, autonomous driving, robotics, recommendation systems
+
+---
+
+## Model Evaluation: Overfitting vs. Underfitting
+
+```
+           Underfitting       Just Right       Overfitting
+Train Error:   High        →    Low       →    Very Low
+Valid Error:   High        →    Low       →    High
+```
+
+**Underfitting**: Model too simple to capture patterns even in training data  
+→ Fix: More complex model, more features, less regularization
+
+**Overfitting**: Model memorizes training data noise, fails to generalize  
+→ Fix: More data, regularization (L1/L2), dropout, early stopping
+
+---
+
+## The Bias-Variance Tradeoff
+
+**Bias**: Error from incorrect assumptions (underfitting)  
+**Variance**: Error from sensitivity to fluctuations in training data (overfitting)
+
+```
+Total Error = Bias² + Variance + Irreducible Noise
+```
+
+A good model finds the optimal balance between bias and variance.
+
+---
+
+## Comparing Key ML Algorithms
+
+| Algorithm | Strengths | Weaknesses | Best For |
+|-----------|----------|------------|---------|
+| Linear Regression | Interpretable, fast | Cannot capture nonlinearity | Clear linear relationships |
+| Decision Tree | Intuitive, handles nonlinearity | Prone to overfitting | Interpretability-critical tasks |
+| Random Forest | Robust, resists overfitting | Slow, hard to interpret | General classification/regression |
+| SVM | Effective in high dimensions | Slow on large datasets | Medium-scale classification |
+| Neural Network | Learns complex patterns | Needs lots of data + compute | Images, text, audio |
+| XGBoost | High accuracy, fast | Many hyperparameters | Tabular data competitions |
+
+---
+
+## Key Concept Cards
+
+**Supervised / Unsupervised / Reinforcement Learning** ★★★★★
+: Supervised=has labels, Unsupervised=no labels, Reinforcement=reward signal. Know the clear distinctions.
+
+**Overfitting vs. Underfitting** ★★★★★
+: Overfitting=train↑ valid↓, Underfitting=both↑. Fix overfitting with regularization, dropout, or more data.
+
+**Bias-Variance Tradeoff** ★★★★☆
+: Simple model=high bias/low variance. Complex model=low bias/high variance. Finding the optimal balance is core ML.
+
+---
+
+## Practice Quiz
+
+**Q1. What learning paradigm is appropriate for an email spam classifier?**
+> Supervised learning. You train a classification model on emails already labeled as "spam" or "not spam." There are clear labels and a defined output (spam probability), making supervised learning the right choice.
+
+**Q2. A model has 99% training accuracy but 72% test accuracy. What is the problem?**
+> Overfitting. The model has memorized the training data rather than learning generalizable patterns. Solutions include stronger regularization, dropout, data augmentation, or using a simpler model architecture.

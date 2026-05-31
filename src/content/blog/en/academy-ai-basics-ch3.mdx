@@ -1,0 +1,136 @@
+---
+track: academy
+locale: en
+title: "Ch3. Deep Learning Basics — Neural Network Architecture and How It Works"
+category: IT
+series: "AI & Machine Learning Fundamentals"
+chapter: 3
+chapterTitleShort: 'Deep Learning'
+author: OIYO Editorial
+tags:
+  - deep learning
+  - neural networks
+  - backpropagation
+  - activation functions
+description: "Artificial neural network architecture, activation functions, backpropagation, CNN vs. RNN vs. Transformer — Chapter 3 of AI & Machine Learning Fundamentals."
+pubDate: '2026-05-31'
+---
+
+import Callout from "@/components/mdx/Callout.astro";
+
+## What is Deep Learning?
+
+**Deep Learning** is a subfield of machine learning that uses multi-layered artificial neural networks to automatically learn hierarchical representations from data.
+
+"Deep" refers to the number of layers. Traditional ML required humans to manually engineer features from raw data; deep learning learns those features automatically.
+
+---
+
+## Anatomy of a Neural Network
+
+```
+Input Layer → [Hidden 1] → [Hidden 2] → ... → [Hidden N] → Output Layer
+```
+
+### How a Neuron Works
+
+1. Multiply inputs from the previous layer by **weights**
+2. Add a **bias** term
+3. Pass through an **activation function** to introduce nonlinearity
+
+```
+Output = Activation(∑(weight × input) + bias)
+```
+
+---
+
+## Key Activation Functions
+
+| Function | Formula | Characteristics | Typical Use |
+|----------|---------|-----------------|-------------|
+| **Sigmoid** | 1/(1+e⁻ˣ) | Output 0–1, vanishing gradient | Binary output layer |
+| **Tanh** | (eˣ-e⁻ˣ)/(eˣ+e⁻ˣ) | Output -1 to 1, more robust | RNN hidden layers |
+| **ReLU** | max(0, x) | Fast, reduces vanishing gradient | Standard hidden layers |
+| **Leaky ReLU** | max(0.01x, x) | Preserves gradient for negatives | ReLU alternative |
+| **Softmax** | eˣⁱ/∑eˣʲ | Probability distribution (sum=1) | Multiclass output layer |
+
+<Callout type="tip">
+**Why ReLU became the standard**: Sigmoid and Tanh have near-zero gradients for large inputs (vanishing gradient), making deep networks hard to train. ReLU maintains a gradient of 1 for positive inputs, allowing gradients to flow through deep networks.
+</Callout>
+
+---
+
+## The Training Loop: Forward Pass and Backpropagation
+
+### 1. Forward Propagation
+Data flows from input → hidden layers → output, generating a prediction.
+
+### 2. Loss Calculation
+The difference between prediction and ground truth is measured by a **loss function**.
+
+| Problem Type | Loss Function |
+|-------------|--------------|
+| Regression | MSE (Mean Squared Error), MAE |
+| Binary Classification | Binary Cross-Entropy |
+| Multiclass Classification | Categorical Cross-Entropy |
+
+### 3. Backpropagation
+Gradients of the loss are propagated backward using the **chain rule**. Weights are updated via **gradient descent**:
+
+```
+weight ← weight - learning_rate × ∂loss/∂weight
+```
+
+---
+
+## Major Deep Learning Architectures
+
+### CNN (Convolutional Neural Network)
+- **Strength**: Learns spatial hierarchies via convolution operations
+- **Applications**: Image classification, object detection, medical imaging
+- **Core layers**: Convolution → Pooling → Fully Connected
+
+### RNN / LSTM (Recurrent Neural Network)
+- **Strength**: Processes sequential data with memory of previous states
+- **Applications**: NLP, time-series forecasting, speech recognition
+- **LSTM**: Solves the long-term dependency problem via gating mechanisms
+
+### Transformer
+- **Strength**: Processes entire sequences in parallel via attention mechanisms
+- **Applications**: GPT (text generation), BERT (comprehension), ViT (images), multimodal
+- **The backbone of modern AI**: ChatGPT, Gemini, and Claude are all Transformer-based
+
+---
+
+## Training Optimization Techniques
+
+**Dropout**: Randomly deactivates neurons during training to prevent overfitting
+
+**Batch Normalization**: Normalizes inputs at each layer to stabilize training
+
+**Adam Optimizer**: Adaptively adjusts learning rates — the current de facto standard
+
+**Transfer Learning**: Fine-tune a pretrained model on a specific downstream task
+
+---
+
+## Key Concept Cards
+
+**Backpropagation** ★★★★★
+: Propagates loss gradients backward from output to input, updating weights via gradient descent. The core algorithm of deep learning training.
+
+**ReLU** ★★★★★
+: Current standard hidden-layer activation. max(0, x) alleviates the vanishing gradient problem.
+
+**CNN vs. RNN vs. Transformer** ★★★★★
+: CNN=images (spatial), RNN=sequences (temporal), Transformer=language and multimodal (attention). Each architecture dominates a different input domain.
+
+---
+
+## Practice Quiz
+
+**Q1. Why is CNN preferred over RNN for image classification?**
+> Images have spatial structure — the relationship between neighboring pixels matters. CNN's convolution operations are designed to capture spatial patterns (edges, textures, shapes). RNN processes sequential data one step at a time and is not well-suited for the 2D spatial structure of images.
+
+**Q2. What is the vanishing gradient problem and how is it addressed?**
+> During backpropagation, gradients shrink exponentially as they propagate through many layers, causing early-layer weights to receive near-zero updates and fail to learn. Solutions: ReLU activation (maintains gradient=1 for positives), LSTM gating (controls gradient flow), Batch Normalization, and residual connections (ResNet).
