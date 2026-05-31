@@ -1,0 +1,144 @@
+---
+track: academy
+locale: en
+title: "Ch2. Exploratory Data Analysis and Data Preprocessing"
+category: IT
+series: "Big Data Analytics"
+chapter: 2
+chapterTitleShort: 'EDA & Preprocessing'
+author: OIYO Editorial
+tags:
+  - big data
+  - EDA
+  - data preprocessing
+  - missing values
+  - outliers
+description: "Descriptive statistics, distributions, missing value treatment, outlier detection, normalization and encoding — the essential steps before modeling. Chapter 2."
+pubDate: '2026-05-31'
+---
+
+import Callout from "@/components/mdx/Callout.astro";
+
+## Exploratory Data Analysis (EDA)
+
+The process of understanding data before formal modeling — discovering patterns, checking assumptions, detecting anomalies.
+
+### Descriptive Statistics
+
+| Metric | Description |
+|--------|-------------|
+| **Mean** | Sum / Count. Sensitive to outliers |
+| **Median** | Middle value after sorting. Robust to outliers |
+| **Mode** | Most frequent value |
+| **Std Dev** | Average distance from the mean |
+| **Quantiles** | Q1 (25%), Q2/median (50%), Q3 (75%) |
+
+### Distribution Shape
+
+**Skewness**: Right-skewed (positive) → mean > median, long right tail. Left-skewed (negative) → mean < median.
+
+**Kurtosis**: Peakedness of the distribution. Normal distribution = 3.
+
+---
+
+## Missing Values
+
+**Causes**: Data entry errors, survey non-response, system failures.
+
+| Method | When to Use |
+|--------|-------------|
+| **Deletion** | Missing rate < 5%, MCAR assumption |
+| **Mean/Median imputation** | Numerical, symmetric distribution |
+| **Mode imputation** | Categorical variables |
+| **Predictive model** | When the variable is important and missingness is patterned |
+
+<Callout type="tip">
+**MCAR vs MAR vs MNAR**: Missing Completely At Random (MCAR) can be safely deleted. Missing Not At Random (MNAR) requires careful analysis — the missingness carries information about what the value would have been.
+</Callout>
+
+---
+
+## Outlier Detection
+
+### IQR Method
+```
+Outlier if: x < Q1 - 1.5×IQR  OR  x > Q3 + 1.5×IQR
+IQR = Q3 - Q1
+```
+
+### Z-Score Method
+```
+Outlier if: |Z| > 3
+Z = (x - mean) / std_dev
+```
+
+**Handling options**: Remove, cap/floor to boundary values, log transform, or model separately.
+
+---
+
+## Data Transformation
+
+### Normalization vs. Standardization
+
+**Min-Max Normalization**:
+```
+x' = (x - min) / (max - min)   →   Range: [0, 1]
+```
+
+**Z-Score Standardization**:
+```
+x' = (x - mean) / std_dev   →   Mean=0, Std=1
+```
+
+Use Z-score when outliers are present (Min-Max is distorted by outliers).
+
+### Encoding Categorical Variables
+
+**One-Hot Encoding** (for nominal categories):
+```
+Color: [Red, Blue, Green]
+→ Red: [1, 0, 0],  Blue: [0, 1, 0],  Green: [0, 0, 1]
+```
+
+**Label Encoding** (for ordinal categories):
+```
+[Small→0, Medium→1, Large→2]
+Order must be meaningful — never use for nominal categories
+```
+
+---
+
+## Correlation Analysis
+
+**Pearson correlation (r)**: Measures linear relationship, range [-1, +1].
+
+| Range | Interpretation |
+|-------|---------------|
+| 0.7–1.0 | Strong positive |
+| 0.3–0.7 | Moderate positive |
+| -0.3–0.3 | Weak |
+| -0.7–-0.3 | Moderate negative |
+| -1.0–-0.7 | Strong negative |
+
+---
+
+## Key Concept Cards
+
+**Mean vs. Median** ★★★★★
+: With outliers, median is more representative. Salary median reflects typical worker pay better than mean (which is skewed by top earners).
+
+**Missing Value Treatment** ★★★★★
+: <5% missing → delete. More → impute. Numerical: mean/median. Categorical: mode.
+
+**Normalization vs. Standardization** ★★★★★
+: Min-Max → [0,1] range. Z-score → mean=0, std=1. Prefer Z-score when outliers exist.
+
+---
+
+## Practice Quiz
+
+**Q1. Salary data includes a handful of multi-million dollar earners. Which metric best represents the typical employee's salary?**
+> Median. The extreme high-earners (outliers) pull the mean upward, misrepresenting what most employees earn. Median is robust to outliers and accurately reflects the typical salary level.
+
+**Q2. Why must numerical features be normalized before training a K-nearest neighbors model?**
+> KNN computes distances between data points. Features with larger scales (e.g., salary in millions) dominate the distance calculation over features with smaller scales (e.g., age 0–100). Normalization ensures all features contribute equally to distance computations, preventing any single feature from overwhelming the others.

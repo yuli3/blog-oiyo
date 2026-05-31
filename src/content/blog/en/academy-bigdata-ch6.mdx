@@ -1,0 +1,107 @@
+---
+track: academy
+locale: en
+title: "Ch6. Clustering and Unsupervised Learning"
+category: IT
+series: "Big Data Analytics"
+chapter: 6
+chapterTitleShort: 'Clustering'
+author: OIYO Editorial
+tags:
+  - big data
+  - clustering
+  - unsupervised learning
+  - K-means
+  - dimensionality reduction
+description: "K-means, hierarchical clustering, DBSCAN, PCA dimensionality reduction — finding patterns in unlabeled data. Chapter 6."
+pubDate: '2026-05-31'
+---
+
+import Callout from "@/components/mdx/Callout.astro";
+
+## Unsupervised Learning
+
+Discovers structure and patterns in data without labels. No predefined "correct answers."
+
+**Applications**: Customer segmentation, anomaly detection, dimensionality reduction, data compression.
+
+---
+
+## K-Means Clustering
+
+**Algorithm**:
+1. Initialize K centroids randomly
+2. Assign each point to its nearest centroid
+3. Recompute each centroid as the cluster mean
+4. Repeat steps 2–3 until convergence
+
+**Choosing optimal K**: The **Elbow Method** — plot WCSS (within-cluster sum of squares) vs. K; choose the K where WCSS improvement "elbows" (diminishing returns).
+
+**Limitations**: Must specify K, assumes spherical clusters, sensitive to outliers, sensitive to initialization.
+
+---
+
+## Hierarchical Clustering
+
+**Agglomerative (Bottom-Up)**: Start with each point as its own cluster, merge the two most similar clusters iteratively.
+
+**Dendrogram**: Tree diagram showing the merging hierarchy. You choose where to "cut" the tree to determine cluster count.
+
+**Advantage**: No need to pre-specify K — choose the number after seeing the dendrogram.
+
+---
+
+## DBSCAN
+
+Density-Based Spatial Clustering of Applications with Noise. Clusters dense regions, labels sparse points as noise.
+
+**Key parameters**:
+- ε (epsilon): Neighborhood radius
+- MinPts: Minimum points to form a dense region
+
+**Point types**:
+- **Core point**: Has ≥ MinPts within radius ε
+- **Border point**: Within ε of a core point but not itself core
+- **Noise point**: Not within ε of any core point — treated as outlier
+
+<Callout type="tip">
+**DBSCAN vs. K-Means**: Unknown K → DBSCAN. Many outliers → DBSCAN. Spherical clusters, speed matters → K-Means. Non-convex cluster shapes → DBSCAN.
+</Callout>
+
+---
+
+## PCA (Principal Component Analysis)
+
+Reduces high-dimensional data to lower dimensions while maximizing variance preserved.
+
+**Principle**: Find new axes (principal components) in directions of maximum variance; project data onto these axes.
+
+```
+Original: 784 dimensions (28×28 image)
+PCA → 50 components retaining 90% of variance
+```
+
+**Explained variance ratio**: The fraction of total variance captured by each principal component.
+
+---
+
+## Key Concept Cards
+
+**K-Means vs. DBSCAN** ★★★★★
+: K-Means=specify K, spherical, outlier-sensitive. DBSCAN=no K needed, any shape, automatic outlier detection.
+
+**Elbow Method** ★★★★☆
+: Plot WCSS vs. K — the "elbow" (sharpest bend) indicates the optimal K.
+
+**PCA** ★★★★★
+: Variance-maximizing dimensionality reduction. Use for visualization, multicollinearity, and speeding up downstream models.
+
+---
+
+## Practice Quiz
+
+**Q1. Customer segmentation with unknown number of segments — which algorithm?**
+> DBSCAN or Hierarchical Clustering. Hierarchical clustering lets you choose the number of segments after examining the dendrogram. DBSCAN automatically determines cluster count based on density and automatically identifies outlier customers who don't fit any segment.
+
+**Q2. Why apply PCA to 784-dimensional image data before training a classifier?**
+> 1) Faster training (50 components vs. 784 features). 2) Less memory. 3) Reduces overfitting (fewer parameters). 4) Alleviates the curse of dimensionality. If 50 principal components retain 90%+ of variance, model performance barely suffers while efficiency improves dramatically.

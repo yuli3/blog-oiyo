@@ -1,0 +1,119 @@
+---
+track: academy
+locale: en
+title: "Ch5. Regression Analysis and Time Series Forecasting"
+category: IT
+series: "Big Data Analytics"
+chapter: 5
+chapterTitleShort: 'Regression & Time Series'
+author: OIYO Editorial
+tags:
+  - big data
+  - regression analysis
+  - time series
+  - ARIMA
+  - linear regression
+description: "Linear regression, Ridge/Lasso regularization, time series decomposition, ARIMA — predicting numerical outcomes. Chapter 5."
+pubDate: '2026-05-31'
+---
+
+import Callout from "@/components/mdx/Callout.astro";
+
+## Linear Regression
+
+Predicts a continuous numerical outcome from input features.
+
+### Simple Linear Regression
+```
+Y = β₀ + β₁X + ε
+β₀: intercept, β₁: slope (coefficient), ε: error
+```
+
+**Ordinary Least Squares (OLS)**: Finds β₀ and β₁ that minimize the sum of squared residuals.
+
+### Multiple Linear Regression
+```
+Y = β₀ + β₁X₁ + β₂X₂ + ... + βₙXₙ + ε
+```
+
+**Key assumptions**: Linearity, normality of residuals, homoscedasticity (constant variance), independence, no multicollinearity.
+
+---
+
+## Regularization
+
+Penalizes large coefficients to prevent overfitting:
+
+### Ridge (L2 Regularization)
+```
+Cost = MSE + λΣβᵢ²
+```
+- Shrinks coefficients toward zero but never exactly to zero
+- Effective for multicollinearity
+
+### Lasso (L1 Regularization)
+```
+Cost = MSE + λΣ|βᵢ|
+```
+- Drives some coefficients exactly to zero → **automatic feature selection**
+- Produces sparse models
+
+### ElasticNet
+Combination of L1 + L2. Useful when features are many and correlated.
+
+<Callout type="tip">
+**Lasso for feature selection**: Lasso is the go-to when you suspect many features are irrelevant. It automatically zeroes out unimportant features, leaving only the signal. Ridge keeps all features but shrinks them — no selection effect.
+</Callout>
+
+---
+
+## Time Series Analysis
+
+**Time series data**: Observations collected in temporal order (stock prices, temperature, sales).
+
+### Decomposition
+```
+Time series = Trend + Seasonality + Residual
+```
+
+**Trend**: Long-term direction (rising/falling).
+**Seasonality**: Recurring patterns (summer AC sales spike).
+**Residual**: Unexplained variation.
+
+### ARIMA Model
+
+**AR (AutoRegressive)**: Current value predicted from past values
+```
+Yₜ = c + φ₁Yₜ₋₁ + ... + φₚYₜ₋ₚ + εₜ
+```
+
+**I (Integrated)**: Differencing to achieve stationarity.
+
+**MA (Moving Average)**: Current value predicted from past errors.
+
+**ARIMA(p, d, q)**: p=AR order, d=differencing steps, q=MA order.
+
+**SARIMA**: Extends ARIMA with seasonal terms.
+
+---
+
+## Key Concept Cards
+
+**Ridge vs. Lasso** ★★★★★
+: Ridge=L2, shrinks coefficients (not to zero), handles multicollinearity. Lasso=L1, zeroes out coefficients (feature selection), sparse model.
+
+**Time Series Decomposition** ★★★★★
+: Trend + Seasonality + Residual. Remove seasonality before modeling if present.
+
+**ARIMA(p,d,q)** ★★★★☆
+: AR(autoregression)+I(differencing)+MA(moving average). Requires stationary data — difference first if non-stationary.
+
+---
+
+## Practice Quiz
+
+**Q1. A house price model has 50 features. How can you automatically identify which features matter most?**
+> Use Lasso regression. L1 regularization drives unimportant feature coefficients exactly to zero, effectively performing automatic feature selection from the 50 candidates. Ridge shrinks coefficients toward zero but keeps all of them — no selection effect.
+
+**Q2. Monthly sales data shows a sharp peak every December. Which model should you use instead of basic ARIMA?**
+> SARIMA (Seasonal ARIMA). Standard ARIMA doesn't handle seasonality. SARIMA adds seasonal AR, differencing, and MA terms to capture periodic patterns. Facebook Prophet is another strong option — it automatically handles seasonality and holiday effects.

@@ -1,0 +1,121 @@
+---
+track: academy
+locale: en
+title: "Ch4. Classification Algorithms — Logistic Regression to Random Forest"
+category: IT
+series: "Big Data Analytics"
+chapter: 4
+chapterTitleShort: 'Classification'
+author: OIYO Editorial
+tags:
+  - big data
+  - machine learning
+  - classification
+  - random forest
+  - logistic regression
+description: "Logistic regression, decision trees, random forests, SVM, naive Bayes — comparing classification algorithms. Chapter 4."
+pubDate: '2026-05-31'
+---
+
+import Callout from "@/components/mdx/Callout.astro";
+
+## Classification
+
+Predicts which predefined category an input belongs to. Supervised learning with labeled outputs.
+
+Examples: Email → spam/not-spam, Patient data → cancer/healthy, Image → cat/dog.
+
+---
+
+## Key Classification Algorithms
+
+### Logistic Regression
+Applies a sigmoid function to linear regression output to predict class probability (0–1).
+
+```
+P(Y=1|X) = 1 / (1 + e^(-z)),  z = β₀ + β₁X₁ + β₂X₂ + ...
+```
+
+**Characteristics**: Interpretable, fast, linear boundary only.
+
+### Decision Tree
+Recursive question-answer splits. Highly interpretable.
+
+```
+Age < 30?
+  ├─ Yes: Income > $30K?
+  │    ├─ Yes: Buy → Yes
+  │    └─ No:  Buy → No
+  └─ No:  Buy → Yes
+```
+
+Split criterion: **Gini impurity** — minimize impurity at each split.
+
+### Random Forest
+
+Ensemble of many decision trees using **bagging** (bootstrap aggregating).
+
+```
+Training data → [Tree 1, Tree 2, ..., Tree N]
+Each tree predicts → Majority vote → Final prediction
+```
+
+**Advantages**: Resistant to overfitting, provides feature importance, high accuracy.
+
+<Callout type="tip">
+**The ensemble advantage**: Individual trees may be wrong, but many diverse trees making the same mistake simultaneously is unlikely. This is why Random Forest consistently outperforms a single decision tree.
+</Callout>
+
+### SVM (Support Vector Machine)
+Finds the hyperplane that maximizes the margin between classes.
+
+**Kernel trick**: Projects non-linearly separable data into higher dimensions where linear separation is possible.
+
+| Kernel | Use Case |
+|--------|---------|
+| Linear | Linearly separable data |
+| RBF (Gaussian) | General-purpose, non-linear |
+| Polynomial | Polynomial decision boundaries |
+
+### Naive Bayes
+Bayes' theorem + feature independence assumption:
+```
+P(Y|X) ∝ P(Y) × P(X₁|Y) × P(X₂|Y) × ...
+```
+
+**Characteristics**: Extremely fast, excellent for text classification.
+
+---
+
+## Algorithm Comparison
+
+| Algorithm | Strengths | Weaknesses | Best For |
+|-----------|----------|------------|---------|
+| Logistic Regression | Fast, interpretable | Linear boundary only | Linearly separable data |
+| Decision Tree | Intuitive, interpretable | Prone to overfitting | Explainability-critical tasks |
+| Random Forest | Robust, accurate | Black box | General-purpose |
+| SVM | Effective in high dimensions | Slow, no probabilities | Medium-scale problems |
+| Naive Bayes | Very fast | Independence assumption | Text classification |
+
+---
+
+## Key Concept Cards
+
+**Random Forest** ★★★★★
+: Ensemble of decision trees. Bagging + random feature selection. Robust to overfitting, provides feature importance.
+
+**SVM Kernel Trick** ★★★★☆
+: Projects non-linear data into higher dimensions for linear separation. RBF kernel is the most versatile.
+
+**Ensemble Methods** ★★★★★
+: Bagging (parallel, reduces variance)=Random Forest. Boosting (sequential, reduces bias)=XGBoost/LightGBM.
+
+---
+
+## Practice Quiz
+
+**Q1. When is Random Forest preferable to Logistic Regression for credit card fraud detection?**
+> When fraud patterns are non-linear and involve complex feature interactions that Logistic Regression (linear boundary only) cannot capture. However, Logistic Regression's interpretability may be preferred in regulated financial environments where model decisions must be explainable.
+
+**Q2. Why is Naive Bayes so effective for email spam filtering despite its unrealistic independence assumption?**
+> 1) Computationally very fast. 2) Works well with word frequency features (bag-of-words). 3) Performs well even with limited training data. 4) Interpretable — you can see which words most increase spam probability. Despite violating independence in practice, Naive Bayes delivers surprisingly strong performance on text classification tasks.

@@ -1,0 +1,116 @@
+---
+track: academy
+locale: en
+title: "Ch3. Statistics for Data Science — Hypothesis Testing and Distributions"
+category: IT
+series: "Big Data Analytics"
+chapter: 3
+chapterTitleShort: 'Statistics'
+author: OIYO Editorial
+tags:
+  - big data
+  - statistics
+  - hypothesis testing
+  - p-value
+  - probability distributions
+description: "Probability distributions, hypothesis testing (t-test/chi-square/ANOVA), p-values, Type I/II errors — the statistical foundation of data analytics. Chapter 3."
+pubDate: '2026-05-31'
+---
+
+import Callout from "@/components/mdx/Callout.astro";
+
+## Key Probability Distributions
+
+**Normal distribution**: Bell-shaped, symmetric around the mean. The 68-95-99.7 rule: 68% of data within ±1σ, 95% within ±2σ, 99.7% within ±3σ.
+
+**t-distribution**: Used when sample size is small (n<30) or population variance is unknown. Heavier tails than normal.
+
+**Chi-square distribution**: Used for categorical data analysis and goodness-of-fit tests.
+
+**Binomial distribution**: Number of successes in n independent Bernoulli trials (coin flips).
+
+**Poisson distribution**: Number of events in a fixed time/space interval (customers per hour).
+
+---
+
+## Hypothesis Testing
+
+### The Process
+
+1. Set **null hypothesis (H₀)**: "No difference," "No effect"
+2. Set **alternative hypothesis (H₁)**: What you're trying to demonstrate
+3. Choose **significance level (α)**: Typically 0.05
+4. Calculate the **test statistic**
+5. Compute the **p-value**
+6. **Decision**: p-value < α → Reject H₀
+
+<Callout type="tip">
+**Interpreting p-value**: "The probability of observing results this extreme (or more) assuming H₀ is true." p < 0.05 means "hard to explain by chance alone" → reject H₀. A smaller p-value does not tell you the effect size — a statistically significant result can be practically meaningless.
+</Callout>
+
+### Type I and Type II Errors
+
+| | H₀ is True | H₀ is False |
+|--|-----------|------------|
+| **Fail to Reject H₀** | Correct | **Type II Error (β)** |
+| **Reject H₀** | **Type I Error (α)** | Correct |
+
+- **Type I Error (α, significance level)**: False positive — claiming an effect that doesn't exist
+- **Type II Error (β)**: False negative — missing a real effect
+
+---
+
+## Key Statistical Tests
+
+### t-Test: Comparing Means
+
+| Type | When to Use |
+|------|------------|
+| **One-sample** | Sample mean vs. known value |
+| **Independent samples** | Compare two independent groups |
+| **Paired** | Same subjects before and after |
+
+### ANOVA: More Than Two Groups
+Compare means across three or more groups:
+```
+F = Variance between groups / Variance within groups
+Large F → groups are different
+```
+
+### Chi-Square Test: Categorical Variables
+Test independence between categorical variables:
+```
+Example: Is gender independent of purchase decision?
+Male purchase: 60%, Female: 45% → Is this difference statistically significant?
+```
+
+---
+
+## Correlation ≠ Causation
+
+Ice cream sales and drowning deaths show a strong positive correlation. Ice cream does not cause drowning — **temperature** (a confounding variable) drives both.
+
+Establishing causation requires controlled experiments or careful causal inference methods.
+
+---
+
+## Key Concept Cards
+
+**p-Value** ★★★★★
+: p < α (usually 0.05) → reject null hypothesis → statistically significant. Probability of the data given H₀ is true.
+
+**Type I vs. Type II Error** ★★★★★
+: Type I=false alarm (α, your significance threshold). Type II=missed detection (β). In medicine: Type I=overdiagnosis, Type II=missed diagnosis.
+
+**t-test vs. ANOVA vs. Chi-square** ★★★★★
+: t-test=compare means (2 groups, numerical), ANOVA=compare means (3+ groups), chi-square=categorical independence.
+
+---
+
+## Practice Quiz
+
+**Q1. Testing whether a new drug lowers blood pressure. p-value = 0.03. What is the conclusion?**
+> Since p=0.03 < α=0.05, reject the null hypothesis (drug has no effect). Conclude statistically significant blood pressure reduction. Important caveat: statistical significance doesn't guarantee clinical significance — the effect size matters too.
+
+**Q2. Comparing marketing campaign effectiveness across three cities. Which test?**
+> One-way ANOVA. Comparing means across three or more groups simultaneously requires ANOVA. Running multiple t-tests inflates the Type I error rate (multiple testing problem). If ANOVA is significant, post-hoc tests (Tukey, Bonferroni) identify which specific pairs differ.

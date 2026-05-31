@@ -1,0 +1,123 @@
+---
+track: academy
+locale: en
+title: "Ch8. Text Mining and Big Data Platforms — Completing Big Data Analytics"
+category: IT
+series: "Big Data Analytics"
+chapter: 8
+chapterTitleShort: 'Text Mining'
+author: OIYO Editorial
+tags:
+  - big data
+  - text mining
+  - NLP
+  - TF-IDF
+  - sentiment analysis
+description: "TF-IDF, morphological analysis, sentiment analysis, LDA topic modeling, Apache Spark — the final chapter of Big Data Analytics. Chapter 8."
+pubDate: '2026-05-31'
+---
+
+import Callout from "@/components/mdx/Callout.astro";
+
+## Text Mining
+
+Extracting meaningful patterns and information from unstructured text data.
+
+**Applications**: Sentiment analysis, topic modeling, spam filtering, document classification, information extraction.
+
+---
+
+## Text Preprocessing
+
+**Tokenization**: Split text into words or phrases.
+
+**Stop word removal**: Eliminate words with little meaning ("the", "a", "is").
+
+**Stemming/Lemmatization**: Reduce words to base form ("studying" → "study", "ran" → "run").
+
+**Part-of-speech tagging**: Label each token with its grammatical role.
+
+---
+
+## TF-IDF
+
+**TF (Term Frequency)**: How often a term appears in a document.
+```
+TF(t, d) = count of term t in doc d / total terms in doc d
+```
+
+**IDF (Inverse Document Frequency)**: How rare the term is across all documents.
+```
+IDF(t) = log(total documents / documents containing t)
+```
+
+**TF-IDF = TF × IDF**: High score for terms that are frequent in one document but rare overall.
+
+<Callout type="tip">
+**TF-IDF intuition**: Common words like "the", "a" appear in every document → IDF≈0 → TF-IDF≈0. Domain-specific terms like "algorithm" appear rarely → high IDF → high TF-IDF when present. This automatically surfaces document-specific keywords.
+</Callout>
+
+---
+
+## Sentiment Analysis
+
+Classifies text as positive, negative, or neutral.
+
+**Rule-based**: Sentiment lexicon (lists of positive/negative words).
+**ML-based**: TF-IDF features + classification model.
+**Deep learning**: Pre-trained language models (BERT, RoBERTa) — current state of the art.
+
+**Applications**: Product review analysis, social media monitoring, customer satisfaction measurement.
+
+---
+
+## LDA Topic Modeling
+
+Probabilistic model that discovers latent topics in a document collection.
+
+**Assumption**: Each document is a mixture of topics; each topic is a distribution of words.
+
+```
+Topic 1 (Finance): rates, inflation, GDP, currency, investment
+Topic 2 (Technology): AI, algorithm, data, model, training
+Topic 3 (Health): exercise, diet, weight, calories, sleep
+```
+
+Discovered **without any labels** — pure unsupervised learning.
+
+---
+
+## Apache Spark for Big Data
+
+**RDD (Resilient Distributed Dataset)**: Spark's fundamental distributed data structure.
+
+**DataFrame/Dataset**: SQL-like interface with optimized execution plans.
+
+**Core modules**:
+- Spark SQL: Distributed SQL queries
+- Spark Streaming: Real-time stream processing
+- MLlib: Distributed machine learning
+- GraphX: Graph computation
+
+---
+
+## Key Concept Cards
+
+**TF-IDF** ★★★★★
+: Document-term weighting. TF=in-document frequency, IDF=corpus-wide rarity. Foundation of information retrieval and document classification.
+
+**Sentiment Analysis** ★★★★★
+: Text sentiment classification. Core for review analytics and social media monitoring. BERT-based models are the current performance leader.
+
+**LDA** ★★★★☆
+: Unsupervised topic discovery. Reveals latent themes in a document collection without any labels. Used for news categorization, document clustering.
+
+---
+
+## Practice Quiz
+
+**Q1. The word "love" appears in 5,000 of 10,000 documents. Why is its IDF low?**
+> IDF = log(10000/5000) = log(2) ≈ 0.3. It appears in half of all documents, making it a common word that doesn't discriminate between documents. Compare with "ARIMA", appearing in just 100 documents: IDF = log(10000/100) = log(100) = 2 — much higher, reflecting its rarity and topic-specificity.
+
+**Q2. Automatically categorizing complaint types from 100,000 customer reviews without pre-labeled categories — which technique?**
+> LDA (Latent Dirichlet Allocation) topic modeling. It discovers latent topics (complaint types) unsupervised — no labeled data needed. Topics like "shipping," "product quality," and "customer service" emerge automatically from word co-occurrence patterns. After modeling, examine the top words per topic to interpret each complaint category.
