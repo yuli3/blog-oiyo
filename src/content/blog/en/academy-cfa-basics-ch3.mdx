@@ -1,0 +1,313 @@
+---
+track: academy
+locale: en
+title: "Ch3. CFA Study Guide — Fixed Income and Bond Analysis"
+category: Finance
+series: "CFA Study Guide"
+chapter: 3
+chapterTitleShort: 'Fixed Income'
+author: OIYO Editorial
+tags:
+  - CFA
+  - finance
+  - certification
+  - investment
+  - portfolio
+description: "CFA Level I Fixed Income — bond pricing, yield measures (YTM, current yield, realized return), duration, convexity, and the yield curve explained."
+pubDate: '2026-05-31'
+---
+import Callout from "@/components/mdx/Callout.astro";
+
+## What is Fixed Income?
+
+**Fixed income** refers to financial instruments that make predetermined payments of interest and principal on a set schedule. Government bonds, corporate bonds, and mortgage-backed securities are prime examples. Fixed income accounts for approximately **11–14%** of the CFA Level I exam.
+
+Although bonds offer more predictable cash flows than equities, they expose investors to various risks: interest rate risk, credit risk, liquidity risk, and reinvestment risk. This chapter covers bond structure and pricing, yield measures, duration and convexity, the yield curve, and credit risk and spreads.
+
+---
+
+## Basic Bond Structure
+
+A bond is a contractual loan between an issuer (borrower) and an investor (lender). Key components include:
+
+| Component | Description |
+|-----------|-------------|
+| **Face Value (Par Value)** | Principal repaid at maturity; typically $1,000 |
+| **Coupon Rate** | Annual interest payment as a percentage of face value |
+| **Coupon Payment** | Face value × coupon rate (paid 1–2× per year) |
+| **Maturity** | Date on which principal is repaid |
+| **Issue Price** | Bond price at issuance (may be at discount or premium to par) |
+
+**Bond Classifications**:
+- **Government Bonds**: Issued by governments; minimal credit risk
+- **Corporate Bonds**: Issued by companies; higher yield and risk than government bonds
+- **Mortgage-Backed Securities (MBS)**: Backed by a pool of residential mortgages
+- **Asset-Backed Securities (ABS)**: Backed by various asset pools (auto loans, credit cards)
+- **Convertible Bonds**: Can be converted into equity under specified conditions
+- **Floating Rate Notes (FRN)**: Coupon tied to a benchmark rate (LIBOR/SOFR)
+
+---
+
+## Bond Pricing — Present Value Calculation
+
+The theoretical price of a bond is the **sum of the present values** of all future cash flows (coupons + par value).
+
+```
+Bond Price Formula:
+
+P = Σ [C / (1 + r)^t] + [FV / (1 + r)^n]
+
+Where:
+P   = current bond price
+C   = coupon payment per period (= Face Value × coupon rate / payments per year)
+r   = periodic discount rate (= YTM / payments per year)
+n   = total number of periods
+FV  = face value (par repaid at maturity)
+t   = timing of each cash flow (1, 2, ..., n)
+```
+
+**Example**: Face value $1,000, coupon rate 6% (semi-annual), 5-year maturity, YTM 8%
+
+```
+Semi-annual coupon = $1,000 × 6% / 2 = $30
+Semi-annual discount rate r = 8% / 2 = 4%
+Total periods n = 5 × 2 = 10
+
+P = 30/1.04 + 30/1.04² + ... + 30/1.04¹⁰ + 1,000/1.04¹⁰
+  = 30 × [1 - (1.04)⁻¹⁰] / 0.04 + 1,000 / (1.04)¹⁰
+  ≈ 243.32 + 675.56
+  ≈ $918.88
+```
+
+Since YTM (8%) > coupon rate (6%), the bond trades at a **discount** — below par ($918.88 < $1,000).
+
+---
+
+## Yield Measures
+
+Bond yields can be measured in several ways, each capturing different aspects of return.
+
+### 1. Yield to Maturity (YTM)
+
+**YTM** is the **annualized compound return** earned by buying a bond at its current price and holding it to maturity. It is the most widely used yield measure in CFA exam questions.
+
+```
+YTM: solve for r in the bond pricing formula
+P = Σ [C / (1 + YTM/2)^t] + [FV / (1 + YTM/2)^n]
+→ Compute YTM using the BA II Plus calculator
+```
+
+YTM assumptions: ① held to maturity ② coupons reinvested at YTM ③ no issuer default
+
+### 2. Current Yield
+
+```
+Current Yield = Annual Coupon Payment / Current Bond Price
+Example: $60 coupon / $918 price = 6.54%
+```
+
+Current yield captures only coupon income — it excludes capital gains/losses and reinvestment income.
+
+### 3. Realized Return
+
+YTM assumes coupons are reinvested at the same YTM rate; in practice, reinvestment rates vary. The **realized return** reflects actual reinvestment rates over the holding period.
+
+- Reinvestment rate > YTM → Realized return > YTM
+- Reinvestment rate < YTM → Realized return < YTM
+- Longer-maturity bonds and higher-coupon bonds carry greater reinvestment risk.
+
+---
+
+## Price–Yield Inverse Relationship
+
+Bond prices and yields move in **opposite directions** — an essential principle in fixed income:
+
+- **YTM rises** → PV of future cash flows falls → **bond price falls**
+- **YTM falls** → PV of future cash flows rises → **bond price rises**
+
+```
+Bond price categories:
+- Discount Bond:  Coupon rate < YTM → Price < Par
+- Par Bond:       Coupon rate = YTM → Price = Par
+- Premium Bond:   Coupon rate > YTM → Price > Par
+```
+
+In practice: when central banks raise policy rates, existing bond prices fall; newly issued bonds carry higher coupons.
+
+---
+
+## Duration
+
+Duration is the primary measure of interest rate (price) risk for bonds.
+
+### Macaulay Duration
+
+**Macaulay duration** is the **weighted average time to receipt** of all cash flows, with weights equal to the present value of each cash flow divided by the bond price. Measured in years.
+
+```
+Macaulay Duration:
+
+D_Mac = Σ [t × (PV of CFt)] / P
+
+Where:
+t         = timing of cash flow (years)
+PV of CFt = present value of cash flow at time t
+P         = current bond price
+
+Example: 3-year bond, 8% coupon, YTM 8%
+→ D_Mac ≈ 2.78 years
+```
+
+### Modified Duration
+
+**Modified duration** measures the **percentage price change** of a bond for a 1% change in YTM.
+
+```
+Modified Duration:
+D_Mod = D_Mac / (1 + YTM/m)
+where m = coupon payments per year
+
+Price change approximation:
+%ΔP ≈ -D_Mod × ΔYTM
+
+Example: D_Mod = 4.5, YTM rises by 0.5% (+0.005)
+%ΔP ≈ -4.5 × 0.005 = -2.25%
+→ Bond price expected to fall ~2.25%
+```
+
+### Key Duration Principles
+
+1. **Longer maturity** → higher duration → greater interest rate risk
+2. **Lower coupon rate** → higher duration (zero-coupon bond's duration = maturity)
+3. **Lower YTM** → higher duration
+4. Perpetuity duration = (1 + YTM) / YTM
+
+---
+
+## Convexity
+
+Modified duration is a first-order (linear) approximation of the price–yield relationship. The actual relationship is a convex curve. **Convexity** is the second-order correction that captures this non-linearity.
+
+```
+Improved price change (duration + convexity):
+%ΔP ≈ -D_Mod × ΔYTM + (1/2) × Convexity × (ΔYTM)²
+
+Convexity effect:
+- When yields rise: actual price decline is smaller than duration estimate
+- When yields fall: actual price increase is larger than duration estimate
+→ Greater convexity is always favorable to investors
+```
+
+Convexity increases with lower coupon rates, longer maturities, and lower YTM. **Callable bonds** can exhibit **negative convexity** in certain yield ranges — be aware.
+
+---
+
+## Yield Curve
+
+The **yield curve** is a graph of YTMs for bonds of the same credit quality across different maturities. It is typically constructed using government bond yields.
+
+### Four Yield Curve Shapes
+
+| Shape | Form | Economic Signal |
+|-------|------|----------------|
+| **Normal (Upward Sloping)** | Long-term > short-term rates | Economic expansion expected; inflation concerns |
+| **Inverted (Downward Sloping)** | Long-term < short-term rates | Historically a reliable recession leading indicator |
+| **Flat** | Similar rates across maturities | Economic inflection point; high uncertainty |
+| **Humped** | Medium-term rates are highest | Near-term rate hikes expected; long-term stability anticipated |
+
+### Yield Curve Theories
+
+1. **Expectations Theory**: Long-term rates = geometric average of current and expected short-term rates. The shape reflects market expectations of future rates.
+
+2. **Liquidity Preference Theory**: Long-term bonds are less liquid; investors demand an additional premium (liquidity premium) → explains the normal upward-sloping curve.
+
+3. **Market Segmentation Theory**: Supply and demand in short-term and long-term bond markets are determined independently. Each maturity segment has its own equilibrium rate.
+
+4. **Preferred Habitat Theory**: Investors prefer specific maturity ranges but will shift to others for sufficient compensation. Combines expectations theory and liquidity premium.
+
+---
+
+## Credit Risk and Spreads
+
+### Credit Risk
+
+Credit risk is the probability that a bond issuer will fail to make timely principal or interest payments.
+
+**Credit rating scale** (S&P):
+
+| Rating | Meaning |
+|--------|---------|
+| AAA to AA | Highest investment grade |
+| A to BBB | Investment grade |
+| BB to B | Speculative grade (Junk / High Yield) |
+| CCC to D | Distressed or in default |
+
+BBB- and above = **Investment Grade**; BB+ and below = **Speculative Grade**
+
+### Credit Spread
+
+**Credit spread** = Corporate bond YTM − YTM of same-maturity government bond
+
+```
+Spread = compensation for credit risk + liquidity risk
+
+Spread widening: rising credit concerns, recession fears
+Spread tightening: improving economic conditions, credit quality improving
+```
+
+**Option-Adjusted Spread (OAS)**: For bonds with embedded options (callable, putable), OAS removes the option value to isolate the pure credit and liquidity spread. Essential for comparing bonds with different embedded option structures.
+
+---
+
+## Key Concept Cards
+
+<Callout type="warning">
+**Price–Yield Inverse Relationship** ★★★★★
+
+YTM rises → bond price falls; YTM falls → bond price rises. If coupon rate < YTM → discount bond; if coupon rate > YTM → premium bond.
+
+*Rate hike environment: existing bondholders lose value; new buyers get higher coupons.*
+</Callout>
+
+<Callout type="info">
+**Macaulay vs Modified Duration** ★★★★★
+
+Macaulay duration = weighted average time to cash flows (years). Modified duration = D_Mac / (1 + YTM/m) → percentage price change for a 1% YTM move.
+
+*Modified duration 4 → 1%pt YTM increase → ~4% bond price decline.*
+</Callout>
+
+<Callout type="info">
+**Convexity** ★★★★☆
+
+Second-order correction to the linear duration approximation. Greater convexity is always favorable — it cushions price declines and amplifies price gains.
+
+*Zero-coupon bonds have more convexity than coupon bonds (cash flows concentrated at maturity).*
+</Callout>
+
+<Callout type="warning">
+**Inverted Yield Curve** ★★★★☆
+
+Long-term rates < short-term rates. Historically a reliable recession leading indicator by 6–18 months.
+
+*Historical examples: 2006 inversion → 2008 financial crisis; 2019 inversion → 2020 recession.*
+</Callout>
+
+---
+
+## Practice Questions
+
+**Q1. A bond has face value $1,000, coupon rate 5% (annual), and 3-year maturity. If YTM is 6%, is this bond a discount or premium bond? Explain.**
+> Since coupon rate (5%) < YTM (6%), this is a **discount bond**. The price is below par: P = 50/1.06 + 50/1.06² + 1,050/1.06³ ≈ $973.27. As maturity approaches, the price will converge toward $1,000 (pull-to-par effect).
+
+**Q2. A bond has modified duration of 5. If YTM rises by 0.5 percentage points, approximately how much does the bond price change?**
+> %ΔP ≈ −D_Mod × ΔYTM = −5 × 0.005 = −0.025, or **approximately −2.5%**. Due to positive convexity, the actual price decline will be slightly less than 2.5%. For a $1,000 bond, expect roughly a $25 decline to approximately $975.
+
+**Q3. Why is an inverted yield curve considered a leading indicator of recession?**
+> An inverted yield curve (short-term rates > long-term rates) signals that market participants strongly expect future economic deterioration and central bank rate cuts. Historically, in the US, yield curve inversions (2yr–10yr spread) have preceded recessions by an average of 12–18 months. Additionally, banks face a margin squeeze — borrowing costs rise while long-term lending yields fall — leading to tighter credit conditions, reduced lending, and economic contraction.
+
+**Q4. Why is Option-Adjusted Spread (OAS) necessary when evaluating callable bonds?**
+> Callable bonds embed an option that allows the issuer to repay early when rates fall. The nominal spread includes the value of this call option, making it impossible to compare credit risk fairly across bonds with different option structures. OAS strips out the option value to isolate the pure credit and liquidity risk premium, enabling fair comparison.
+
+**Q5. What is special about the duration of a zero-coupon bond?**
+> A zero-coupon bond makes a single lump-sum payment at maturity, so all cash flows are concentrated at that point. Therefore, its Macaulay duration equals exactly its maturity in years. A 10-year zero-coupon bond has Macaulay duration = 10 years. This makes zero-coupon bonds far more sensitive to interest rate changes than coupon-paying bonds of the same maturity. They also carry zero reinvestment risk, since there are no coupons to reinvest.

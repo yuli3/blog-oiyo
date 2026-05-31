@@ -1,0 +1,362 @@
+---
+track: academy
+locale: en
+title: "Ch4. CFA Study Guide — Derivatives and Alternative Investments"
+category: Finance
+series: "CFA Study Guide"
+chapter: 4
+chapterTitleShort: 'Derivatives & Alternatives'
+author: OIYO Editorial
+tags:
+  - CFA
+  - finance
+  - certification
+  - investment
+  - portfolio
+description: "CFA Level I Derivatives — forwards, futures, options, swaps, put-call parity, Greeks, and an overview of alternative investments including private equity and hedge funds."
+pubDate: '2026-05-31'
+---
+import Callout from "@/components/mdx/Callout.astro";
+
+## Derivatives Overview
+
+**Derivatives** are financial contracts whose value is linked to the price of an underlying asset. Underlying assets include equities, bonds, currencies, commodities, interest rates, and stock indices.
+
+Derivatives account for approximately **5–8%** of CFA Level I weight; alternative investments account for **7–10%**. The two topics complement each other and are efficiently studied together.
+
+Primary functions of derivatives:
+1. **Hedging**: Reducing risk in an existing position
+2. **Speculation**: Profiting from directional price bets using leverage
+3. **Arbitrage**: Exploiting price discrepancies across markets for risk-free profit
+
+---
+
+## Forwards vs. Futures
+
+### Forward Contract
+
+A forward contract is a **private (OTC) bilateral agreement** to buy or sell an asset at a predetermined price on a specified future date.
+
+```
+Forward Contract Characteristics:
+- OTC (over-the-counter): contract terms customized by parties
+- Settlement: at contract expiry (typically one settlement date)
+- Counterparty risk exists
+- No margin requirement
+- Examples: FX forwards, forward rate agreements (FRAs)
+```
+
+### Futures Contract
+
+A futures contract is a **standardized forward contract** traded on an exchange, with **daily mark-to-market** settlement in which gains and losses are exchanged in cash each day.
+
+```
+Futures Contract Characteristics:
+- Exchange-listed: standardized terms
+- Daily settlement (mark-to-market): daily cash exchange of price changes
+- Initial Margin + Maintenance Margin system
+- Minimal counterparty risk (exchange clearinghouse acts as counterparty)
+- Most contracts closed via offsetting trades before expiry
+```
+
+| Feature | Forward | Futures |
+|---------|---------|---------|
+| Venue | OTC | Exchange |
+| Standardization | Customized | Standardized |
+| Counterparty risk | High | Low (clearinghouse) |
+| Margin | None | Required |
+| Liquidity | Low | High |
+| Daily settlement | No (at expiry) | Yes (daily) |
+
+---
+
+## Futures Pricing — Cost-of-Carry Model
+
+The **cost-of-carry model** determines the theoretical futures price based on the no-arbitrage principle.
+
+```
+Basic Futures Price Formula (no carrying costs, financial asset):
+
+F₀ = S₀ × (1 + r)ᵀ
+
+Where:
+F₀ = theoretical futures price
+S₀ = current spot price
+r  = risk-free rate (annualized)
+T  = time to maturity (years)
+
+For dividend-paying assets (stocks, indices):
+F₀ = (S₀ - PV(D)) × (1 + r)ᵀ
+or with continuous dividend yield δ:
+F₀ = S₀ × e^(r - δ)T
+
+For commodities (storage cost c, convenience yield y):
+F₀ = S₀ × e^(r + c - y)T
+```
+
+**Futures arbitrage**: If F₀ > theoretical price → sell futures + buy spot (cash-and-carry). If F₀ < theoretical price → buy futures + sell spot (reverse cash-and-carry). Arbitrageurs force prices back to equilibrium.
+
+---
+
+## Options — Types and Basic Structure
+
+An **option** grants the buyer the **right (not obligation)** to buy or sell an asset at a specified price (strike price). The seller (option writer) is obligated to fulfill the buyer's right upon exercise.
+
+### Option Classifications
+
+```
+Call Option: right to buy the underlying at the strike price
+Put Option:  right to sell the underlying at the strike price
+
+American Option: exercisable at any time before expiry
+European Option: exercisable only at expiry
+```
+
+### Intrinsic Value and Exercise Decision
+
+```
+Call payoff at expiry = max(S_T - X, 0)
+Put payoff at expiry  = max(X - S_T, 0)
+
+Where:
+S_T = underlying price at expiry
+X   = strike price
+
+In-the-Money (ITM): exercise is profitable
+  - Call: S > X / Put: S < X
+At-the-Money (ATM): S = X
+Out-of-the-Money (OTM): exercise is not profitable
+  - Call: S < X / Put: S > X
+```
+
+---
+
+## Option Price Components
+
+Option premium = **Intrinsic Value + Time Value**
+
+```
+Intrinsic Value:
+- Call: max(S - X, 0)
+- Put:  max(X - S, 0)
+- OTM options have zero intrinsic value
+
+Time Value:
+- Longer time to expiry → more opportunity for favorable price moves
+- Decreases as expiry approaches (time decay)
+- Time value = 0 at expiry
+```
+
+**Six factors affecting option price**:
+
+| Factor | Effect on Call | Effect on Put |
+|--------|---------------|--------------|
+| Underlying price (S) ↑ | Increases | Decreases |
+| Strike price (X) ↑ | Decreases | Increases |
+| Time to expiry (T) ↑ | Increases | Increases |
+| Volatility (σ) ↑ | Increases | Increases |
+| Risk-free rate (r) ↑ | Increases | Decreases |
+| Dividends (D) ↑ | Decreases | Increases |
+
+---
+
+## Put-Call Parity
+
+**Put-call parity** is the no-arbitrage relationship between European calls and puts with the same underlying, strike price, and expiry.
+
+```
+Put-Call Parity (European options):
+
+C + PV(X) = P + S₀
+
+Alternatively:
+C - P = S₀ - PV(X)
+
+Where:
+C     = call premium
+P     = put premium
+S₀    = current underlying price
+PV(X) = present value of strike = X / (1 + r)^T
+
+Synthetic Positions:
+Synthetic call  = long put + long underlying − long bond
+Synthetic put   = long call − long underlying + long bond
+Synthetic stock = long call + long bond − long put
+```
+
+Put-call parity is used to identify arbitrage opportunities, construct synthetic positions, and verify option pricing.
+
+---
+
+## The Greeks
+
+The Greeks measure how sensitive an option's price is to changes in each underlying variable.
+
+```
+Delta (Δ):
+- Change in option price per unit change in underlying price
+- Call delta: 0 to +1 / Put delta: −1 to 0
+- ATM option delta ≈ ±0.5
+- Delta hedging: eliminates directional risk in option positions
+
+Gamma (Γ):
+- Rate of change in delta per unit change in underlying price
+- High gamma → delta changes rapidly → frequent hedge rebalancing needed
+- Gamma is highest for ATM options
+
+Vega (ν):
+- Change in option price per 1% change in underlying volatility
+- Volatility increase → both calls and puts increase in value (vega always positive)
+- Vega is highest for ATM options
+
+Theta (Θ):
+- Change in option price per day elapsed (time decay)
+- Accelerates as expiry approaches
+- Unfavorable for buyers; favorable for sellers
+
+Rho (ρ):
+- Change in option price per change in the risk-free rate
+```
+
+---
+
+## Swaps
+
+A **swap** is an OTC agreement between two parties to exchange future cash flows.
+
+```
+Interest Rate Swap (most common):
+- Fixed-rate payer: pays fixed rate ↔ receives floating rate
+- Floating-rate payer: pays floating rate ↔ receives fixed rate
+- Notional principal is NOT exchanged (reference amount only)
+- Application: floating-rate borrower uses swap to create synthetic fixed-rate exposure
+
+Currency Swap:
+- Exchange principal and interest in different currencies
+- Both initial and final principal amounts are exchanged
+
+Credit Default Swap (CDS):
+- Insurance-like instrument transferring credit risk
+- Protection buyer: pays periodic premium → receives compensation on default
+- Protection seller: collects premium → bears loss on default
+```
+
+---
+
+## Alternative Investments
+
+Alternative investments are asset classes beyond traditional stocks and bonds. CFA Level I covers private equity, hedge funds, real estate, commodities, and infrastructure.
+
+### Private Equity
+
+```
+Types:
+1. Venture Capital (VC): equity investment in early-stage startups
+2. Buyout: acquisition of mature companies (often using leverage → LBO)
+3. Growth Capital: expansion-stage investment in mid/late-stage companies
+
+Key features:
+- Long holding periods (5–10 years)
+- Illiquidity premium sought
+- J-Curve effect: negative returns early (fees, underperforming investments)
+  → performance recovers as portfolio matures and exits occur
+- Carried interest: 20% of profits above the hurdle rate
+```
+
+### Hedge Funds
+
+```
+Key features:
+- Use long/short, leverage, derivatives — wide range of strategies
+- Target absolute returns: profitable regardless of market direction
+- High minimum investment (institutional and high-net-worth clients)
+- "2 and 20" fee structure: 2% management fee + 20% performance fee
+
+Major strategies:
+- Long/Short Equity
+- Global Macro
+- Event-Driven (M&A, distressed debt)
+- Relative Value (arbitrage strategies)
+```
+
+### Real Estate
+
+```
+Types:
+- Direct ownership: buying and managing physical properties
+- REITs: publicly traded real estate investment trusts (like stocks)
+- CMBS: commercial mortgage-backed securities
+- Private real estate funds
+
+Key features:
+- Inflation hedge
+- Lower correlation with equities → diversification benefit
+- Disadvantages: illiquidity, management costs
+```
+
+### Commodities
+
+```
+Investment methods:
+- Physical ownership (gold, silver)
+- Futures contracts
+- Commodity ETFs / commodity company stocks
+
+Key features:
+- Inflation hedge (energy, agriculture)
+- Cyclical sensitivity (except gold, which has safe-haven characteristics)
+- Roll costs in contango markets (near-month futures premium → losses on rolling)
+```
+
+---
+
+## Key Concept Cards
+
+<Callout type="warning">
+**Forwards vs Futures** ★★★★★
+
+Forwards (OTC, customized, counterparty risk, no daily settlement) vs Futures (exchange, standardized, clearinghouse, daily mark-to-market). Economically equivalent, but structurally different.
+
+*Futures eliminate counterparty risk through the clearinghouse and margin system.*
+</Callout>
+
+<Callout type="info">
+**Put-Call Parity** ★★★★★
+
+C + PV(X) = P + S₀. Applies to European options only. Violation implies arbitrage opportunity.
+
+*If the equation is violated → arbitrage → market returns to equilibrium.*
+</Callout>
+
+<Callout type="info">
+**Delta Hedging** ★★★★☆
+
+If a call has delta = 0.6, sell 0.6 shares of stock to hedge one call option. As stock price moves, delta changes → hedge must be rebalanced (dynamic hedging).
+
+*Delta-neutral position provides an instantaneous hedge only — continuous adjustment required.*
+</Callout>
+
+<Callout type="info">
+**Hedge Fund 2/20** ★★★★☆
+
+2% management fee on total AUM + 20% performance fee on profits above the hurdle rate. High-water mark ensures performance fees only apply on net new gains above the previous peak.
+</Callout>
+
+---
+
+## Practice Questions
+
+**Q1. How does daily mark-to-market in futures contracts reduce counterparty risk?**
+> Daily mark-to-market requires the losing party to pay gains to the winning party each trading day. Losses cannot accumulate unchecked. If a party's account falls below the maintenance margin, a margin call is triggered — requiring additional deposits or forced position liquidation. This mechanism prevents the large bilateral credit exposures that can accumulate in forward contracts over their lifespan.
+
+**Q2. Using put-call parity (C + PV(X) = P + S₀), construct a synthetic call option.**
+> Rearrange to: C = P + S₀ − PV(X). A **synthetic call = long put + long underlying + short bond** (borrowing the PV of the strike). In practice: buy a put option, buy the underlying asset, and borrow an amount equal to the present value of the strike price. This replicates the payoff profile of a call option exactly.
+
+**Q3. How does a hedge fund's "absolute return" strategy differ from a traditional equity fund?**
+> A traditional equity fund targets outperformance relative to a benchmark (e.g., S&P 500). If markets fall, the fund typically falls too. Hedge funds target positive returns regardless of market direction. For example, a long/short equity strategy buys undervalued stocks while shorting overvalued ones, creating a market-neutral position. Note: absolute returns are not guaranteed — hedge funds carry risks from leverage, complex strategies, and high fees.
+
+**Q4. List three advantages of REITs compared to direct real estate investment.**
+> ① **Liquidity**: Exchange-listed REITs can be bought and sold like stocks, solving the illiquidity problem of physical property. ② **Small-ticket diversification**: Investors can gain exposure to diverse property portfolios with modest capital. ③ **Professional management**: REIT managers handle property acquisition, leasing, and maintenance — no direct involvement required. Additionally, many REITs are required to distribute at least 90% of taxable income as dividends (US standard), providing stable income.
+
+**Q5. In what market environment does a high-vega position perform best?**
+> Vega measures the change in an option's price per 1% change in implied volatility. A high-vega position (e.g., long ATM options, long straddle) benefits from rising volatility. Events such as major economic data releases, earnings announcements, or geopolitical shocks that cause volatility spikes increase option premiums, generating gains. Conversely, high-vega positions suffer when volatility contracts after uncertainty resolves.
