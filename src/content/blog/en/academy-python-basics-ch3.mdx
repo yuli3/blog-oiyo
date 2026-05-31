@@ -1,0 +1,128 @@
+---
+track: academy
+locale: en
+title: "Ch3. Python — Functions & Object-Oriented Programming"
+category: "Technology"
+series: "Python Complete Guide"
+chapter: 3
+chapterTitleShort: 'Functions & OOP'
+author: OIYO Editorial
+tags:
+  - Python
+  - functions
+  - classes
+  - OOP
+  - inheritance
+description: "Python function writing (parameters, return values, lambdas), object-oriented programming (classes, inheritance, encapsulation), and practical bank account example."
+pubDate: '2026-05-26'
+layoutVariant: lecture-series
+---
+
+## Functions
+
+```python
+# Basic function
+def greet(name, greeting="Hello"):
+    """Return a greeting message."""
+    return f"{greeting}, {name}!"
+
+print(greet("Alice"))              # Hello, Alice!
+print(greet("Bob", "Good morning")) # Good morning, Bob!
+
+# Variable positional arguments (*args)
+def sum_all(*numbers):
+    return sum(numbers)
+
+print(sum_all(1, 2, 3, 4, 5))  # 15
+
+# Variable keyword arguments (**kwargs)
+def print_info(**kwargs):
+    for key, value in kwargs.items():
+        print(f"{key}: {value}")
+
+print_info(name="Alice", age=30, city="NYC")
+```
+
+---
+
+## Lambda Functions
+
+```python
+# Lambda: anonymous one-liner
+square = lambda x: x ** 2
+print(square(5))  # 25
+
+# Use with sorted()
+students = [("Alice", 92), ("Bob", 78), ("Charlie", 88)]
+sorted_by_score = sorted(students, key=lambda x: x[1], reverse=True)
+# [('Alice', 92), ('Charlie', 88), ('Bob', 78)]
+
+# Use with filter() and map()
+numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+evens = list(filter(lambda x: x % 2 == 0, numbers))
+squared = list(map(lambda x: x**2, numbers))
+```
+
+---
+
+## Classes and OOP
+
+```python
+class BankAccount:
+    """Bank account class."""
+    
+    def __init__(self, owner, balance=0):
+        self.owner = owner
+        self.__balance = balance  # Private attribute (encapsulation)
+    
+    def deposit(self, amount):
+        if amount > 0:
+            self.__balance += amount
+            print(f"Deposited ${amount:,.2f}. Balance: ${self.__balance:,.2f}")
+    
+    def withdraw(self, amount):
+        if amount > self.__balance:
+            print("Insufficient funds!")
+        else:
+            self.__balance -= amount
+            print(f"Withdrew ${amount:,.2f}. Balance: ${self.__balance:,.2f}")
+    
+    def get_balance(self):
+        return self.__balance
+    
+    def __str__(self):
+        return f"{self.owner}'s account (Balance: ${self.__balance:,.2f})"
+
+# Usage
+account = BankAccount("Alice", 1000)
+account.deposit(500)
+account.withdraw(300)
+print(account)  # Alice's account (Balance: $1,200.00)
+```
+
+---
+
+## Inheritance
+
+```python
+class SavingsAccount(BankAccount):
+    """Savings account that earns interest."""
+    
+    def __init__(self, owner, balance=0, interest_rate=0.03):
+        super().__init__(owner, balance)
+        self.interest_rate = interest_rate
+    
+    def add_interest(self):
+        interest = self.get_balance() * self.interest_rate
+        self.deposit(interest)
+        print(f"Interest added: ${interest:,.2f}")
+
+savings = SavingsAccount("Bob", 5000, 0.05)
+savings.add_interest()  # Interest added: $250.00
+```
+
+---
+
+## Chapter 4 Preview
+
+Next: **File Handling & Exception Management** — reading and writing files (text, CSV, JSON), try-except error handling.

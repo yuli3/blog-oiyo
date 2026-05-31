@@ -1,0 +1,411 @@
+---
+track: academy
+locale: en
+title: "Ch2. Machine Learning — Classification Algorithms and Model Selection"
+category: "Computer Science"
+series: "Machine Learning Fundamentals"
+chapter: 2
+chapterTitleShort: 'Classification'
+author: OIYO Editorial
+tags:
+  - machine learning
+  - classification
+  - logistic regression
+  - decision tree
+  - random forest
+  - SVM
+description: "Logistic regression, decision trees, random forests, and SVM — intuitive understanding of classification algorithms, bias-variance tradeoff, and class imbalance handling."
+pubDate: '2026-05-25'
+layoutVariant: lecture-series
+---
+
+## What Is a Classification Problem?
+
+**Classification** is a supervised learning problem where the goal is to predict which **category (class)** an input belongs to. Unlike regression, the output is a **discrete label**, not a continuous value.
+
+```
+Regression:      "What is the price of this house?"   → continuous ($325,000)
+Classification:  "Is this email spam?"                → discrete (spam / not spam)
+```
+
+### Binary vs. Multi-class
+
+**Binary Classification**: exactly two classes
+
+```
+Output: {0, 1} or {negative, positive}
+Examples:
+  - Email: spam (1) vs. ham (0)
+  - Medicine: malignant (1) vs. benign (0)
+  - Finance: fraud (1) vs. legitimate (0)
+```
+
+**Multi-class Classification**: three or more classes
+
+```
+Output: {0, 1, 2, ..., k}
+Examples:
+  - Handwritten digit recognition: {0, 1, 2, ..., 9}
+  - Flower species: {setosa, versicolor, virginica}
+  - Language detection: {English, French, Spanish, ...}
+```
+
+---
+
+## Logistic Regression
+
+Despite the name, logistic regression is a **classification algorithm**. It transforms a linear combination of features into a probability (0–1) using the **sigmoid function**.
+
+### Sigmoid Function
+
+```
+σ(z) = 1 / (1 + e^(−z))
+
+Input range:  (−∞, +∞)
+Output range: (0, 1) — interpretable as probability
+
+z >> 0  →  σ(z) → 1   (confident: class 1)
+z = 0   →  σ(z) = 0.5 (decision boundary)
+z << 0  →  σ(z) → 0   (confident: class 0)
+```
+
+```
+Logistic regression model:
+z = θ₀ + θ₁x₁ + θ₂x₂ + ... + θₙxₙ
+P(y=1|x) = σ(z) = 1 / (1 + e^(−z))
+
+Decision rule:
+P(y=1|x) ≥ 0.5  →  ŷ = 1
+P(y=1|x) < 0.5  →  ŷ = 0
+```
+
+### Decision Boundary
+
+The decision boundary is the line (or surface) where σ(z) = 0.5, i.e., z = 0.
+
+```
+Example (2 features):
+θ₀ + θ₁x₁ + θ₂x₂ = 0
+
+With θ = [−3, 1, 1]:  x₁ + x₂ = 3
+→ This straight line separates the two classes
+```
+
+Logistic regression can only represent **linear decision boundaries**. For non-linear boundaries, add polynomial features or use a different algorithm.
+
+### Cost Function: Log Loss (Cross-Entropy)
+
+```
+Per-sample cost:
+L(y, ŷ) = −[y × log(ŷ) + (1−y) × log(1−ŷ)]
+
+Full cost function:
+J(θ) = −(1/m) × Σ [yᵢ×log(h(xᵢ)) + (1−yᵢ)×log(1−h(xᵢ))]
+
+Intuition:
+y=1 and ŷ=1 → L=0 (perfect)
+y=1 and ŷ≈0 → L→∞ (worst case — heavy penalty)
+```
+
+---
+
+## Decision Tree
+
+A decision tree classifies data through a **sequence of questions (conditions)** — intuitive and interpretable without domain expertise.
+
+### Tree Terminology
+
+```
+Root Node:     topmost split (contains all data)
+Internal Node: intermediate split (contains a condition)
+Leaf Node:     terminal node (contains the prediction)
+Depth:         distance from root to a node
+```
+
+### Split Criterion: Impurity
+
+The tree selects the feature and threshold that **most reduces node impurity** after each split.
+
+**Entropy:**
+
+```
+H(S) = −Σ pᵢ × log₂(pᵢ)
+
+pᵢ: fraction of class i
+
+Pure node (100% one class):    H = 0
+50/50 mix:                     H = 1 (maximum)
+
+→ Lower entropy = purer node = better split
+```
+
+**Information Gain:**
+
+```
+IG = H(parent) − [weighted average H(child nodes)]
+
+→ Split on the feature with the highest IG
+→ Used by ID3 and C4.5 algorithms
+```
+
+**Gini Impurity:**
+
+```
+Gini(S) = 1 − Σ pᵢ²
+
+Pure node:     Gini = 0
+50/50 mix:     Gini = 0.5
+
+→ Default criterion in scikit-learn
+→ Faster to compute than entropy
+```
+
+### Overfitting and Pruning
+
+```
+Overfitted tree:
+→ Memorizes all training patterns including noise
+→ Near-100% training accuracy but poor test accuracy
+
+Pre-pruning (set before training):
+  max_depth:          limit tree depth
+  min_samples_split:  minimum samples required to split a node
+  min_samples_leaf:   minimum samples required in a leaf
+```
+
+```python
+from sklearn.tree import DecisionTreeClassifier
+
+clf = DecisionTreeClassifier(
+    max_depth=5,
+    min_samples_split=20,
+    min_samples_leaf=10,
+    criterion='gini',
+    random_state=42
+)
+```
+
+---
+
+## Ensemble Learning: Random Forest
+
+Random forest solves the single decision tree's overfitting problem by **combining many trees**.
+
+### Bagging (Bootstrap Aggregating)
+
+```
+Random Forest = Bagging + random feature selection
+
+Step 1 — Bootstrap sampling:
+→ Draw n samples with replacement from n training samples
+→ Each tree gets a different subset
+→ ~63.2% of samples are selected; ~36.8% are out-of-bag (OOB)
+
+Step 2 — Random feature selection:
+→ At each split, consider only √p (or log₂p) of the p features
+→ Ensures diversity across trees (diversity = better ensemble)
+
+Step 3 — Aggregate predictions:
+→ Classification: majority vote
+→ Regression: average
+```
+
+**OOB Error**: Each tree is validated on the ~36.8% samples not in its bootstrap set — provides a free validation estimate without a separate validation set.
+
+### Feature Importance
+
+```python
+from sklearn.ensemble import RandomForestClassifier
+
+rf = RandomForestClassifier(n_estimators=100, random_state=42)
+rf.fit(X_train, y_train)
+
+importances = rf.feature_importances_
+# Higher value = more important feature
+```
+
+---
+
+## SVM — Support Vector Machine
+
+SVM finds the decision boundary that **maximizes the margin** between classes.
+
+### Margin Maximization — Intuition
+
+```
+Imagine a "road" between two classes of data:
+→ Road width = margin
+→ Wider margin → better generalization to new data
+→ SVM = finding the road with the maximum width
+
+Support Vectors:
+→ Training samples closest to the decision boundary
+→ Only these points determine the boundary position
+→ Removing other data points does not change the boundary
+```
+
+```
+Hard-margin SVM: all samples must be on the correct side
+→ Sensitive to outliers; fails when classes are not linearly separable
+
+Soft-margin SVM: allows some samples to violate the margin
+→ Parameter C: penalty for violations
+  Large C  → narrow margin, risk of overfitting
+  Small C  → wide margin, risk of underfitting
+```
+
+### Kernel Trick
+
+Mapping non-linear data to a **higher-dimensional feature space** can make it linearly separable. The kernel trick computes inner products in that high-dimensional space without explicitly constructing it.
+
+```
+K(x, z) = φ(x)ᵀφ(z)
+
+Common kernels:
+Linear:      K(x, z) = xᵀz
+Polynomial:  K(x, z) = (γxᵀz + r)^d
+RBF:         K(x, z) = exp(−γ||x−z||²)  ← most general-purpose
+Sigmoid:     K(x, z) = tanh(γxᵀz + r)
+```
+
+```python
+from sklearn.svm import SVC
+
+svm = SVC(kernel='rbf', C=1.0, gamma='scale', random_state=42)
+svm.fit(X_train, y_train)
+```
+
+---
+
+## Bias-Variance Tradeoff
+
+```
+Total error = Bias² + Variance + Irreducible noise
+
+Bias:
+→ Systematic error from a model that is too simple
+→ "Fails to capture the true pattern"
+→ High in underfitted models
+
+Variance:
+→ Sensitivity to small fluctuations in training data
+→ "Memorizes training noise"
+→ High in overfitted models
+```
+
+```
+Tradeoff:
+Model complexity ↑ → Bias ↓, Variance ↑ (toward overfitting)
+Model complexity ↓ → Bias ↑, Variance ↓ (toward underfitting)
+
+Optimal point = model complexity that minimizes (Bias² + Variance)
+```
+
+### Bias-Variance Profile by Algorithm
+
+| Algorithm | Bias | Variance | Notes |
+|-----------|------|----------|-------|
+| Linear / Logistic Regression | High | Low | Simple, interpretable |
+| Deep Decision Tree | Low | High | Prone to overfitting |
+| Random Forest | Low | Medium | Reduces variance vs. single tree |
+| SVM (RBF, small C) | High | Low | Large margin, strong regularization |
+| SVM (RBF, large C) | Low | High | Tight margin, overfitting risk |
+
+---
+
+## Model Comparison with Cross-Validation
+
+```python
+from sklearn.model_selection import cross_val_score
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import SVC
+
+models = {
+    'Logistic Regression':  LogisticRegression(max_iter=1000),
+    'Decision Tree':        DecisionTreeClassifier(max_depth=5),
+    'Random Forest':        RandomForestClassifier(n_estimators=100),
+    'SVM (RBF)':            SVC(kernel='rbf', C=1.0),
+}
+
+for name, model in models.items():
+    scores = cross_val_score(model, X, y, cv=5, scoring='f1')
+    print(f"{name}: mean F1={scores.mean():.3f}, std={scores.std():.3f}")
+```
+
+**Model selection criteria:**
+
+```
+1. Performance (accuracy, F1)
+2. Interpretability: Decision Tree > Logistic Regression > Random Forest > SVM
+3. Training speed: Logistic Regression > Decision Tree > SVM > Random Forest
+4. Dataset size: SVM is slow on very large datasets
+5. Feature types: tree-based models handle categorical features naturally
+```
+
+---
+
+## Handling Class Imbalance
+
+Real classification problems often have severely imbalanced class distributions (e.g., fraud detection where fraudulent transactions are 0.1%).
+
+```
+The problem with imbalanced data:
+→ A model that predicts "legitimate" for every transaction achieves 99.9% accuracy
+→ But it detects zero fraudulent transactions (recall = 0)
+```
+
+**Solutions:**
+
+```
+1. Oversampling (e.g., SMOTE):
+   → Synthesize new minority-class samples
+   → Increases total data
+
+2. Undersampling:
+   → Use only a portion of majority-class samples
+   → Reduces data (information loss)
+
+3. Class weights:
+   → Assign higher cost to minority class errors
+   → class_weight='balanced' in scikit-learn
+
+4. Change evaluation metric:
+   → Use F1, AUC-ROC, or Precision-Recall curve instead of accuracy
+```
+
+---
+
+## Key Concept Cards
+
+**Logistic regression decision boundary** ★★★★★  
+Decision boundary where σ(z) = 0.5, i.e., z = θᵀx = 0. Predicted class 1 when P ≥ 0.5.
+
+**Gini impurity vs. Entropy** ★★★★★  
+Gini = 1−Σpᵢ², Entropy = −Σpᵢlog₂pᵢ. Both measure node purity; pure node = 0. scikit-learn defaults to Gini.
+
+**Random Forest = Bagging + random features** ★★★★★  
+Bootstrap sampling for diversity; random feature subset at each split reduces correlation between trees → lower variance → better performance.
+
+**SVM margin maximization** ★★★★☆  
+Maximizes the margin between support vectors. Kernel trick enables non-linear separation.
+
+**Bias-Variance Tradeoff** ★★★★★  
+Total error = Bias² + Variance + noise. Complex model → low bias, high variance. Simple model → high bias, low variance.
+
+---
+
+## Practice Quiz
+
+**Q1. Why is logistic regression a classification algorithm despite having "regression" in its name?**
+
+> Logistic regression computes a linear combination z = θᵀx (a regression step), then passes it through a sigmoid function to produce a probability in (0, 1). The output is a **class probability**, not a continuous number. A threshold of 0.5 converts the probability to a binary class prediction.
+
+**Q2. A node in a decision tree has Gini impurity = 0. What does this mean?**
+
+> Gini = 1 − Σpᵢ² = 0 requires one class to occupy 100% of the node (p₁ = 1, all others = 0). This is a **pure node** — every sample belongs to the same class. Splitting stops here; the node becomes a leaf.
+
+**Q3. Why is accuracy a poor metric for a heavily imbalanced dataset (99% negative, 1% positive)?**
+
+> A model that predicts "negative" for every sample achieves 99% accuracy — yet detects zero positive cases (recall = 0). Accuracy masks this failure. For imbalanced problems, use **F1 score** (harmonic mean of precision and recall), **AUC-ROC**, or a Precision-Recall curve that focuses on the minority class.

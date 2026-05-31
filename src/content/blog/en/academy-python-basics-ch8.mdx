@@ -1,0 +1,472 @@
+---
+track: academy
+locale: en
+title: "Ch8. Python — Real-World Projects & Career Paths"
+category: "Technology"
+series: "Python Complete Guide"
+chapter: 8
+chapterTitleShort: 'Projects & Careers'
+author: OIYO Editorial
+tags:
+  - Python
+  - projects
+  - career
+  - portfolio
+  - API
+  - CLI
+  - automation
+description: "Build a complete CLI vocabulary app, integrate a public REST API, map Python skills to job roles, and finish with a 10-question series final exam."
+pubDate: '2026-05-26'
+layoutVariant: lecture-series
+---
+
+## You've Made It to the Final Chapter
+
+Over seven chapters you've covered Python's core syntax, data structures, OOP, file handling, the standard library, data analysis, and automation. This chapter brings everything together:
+
+- **Three real-world projects** that combine multiple skills
+- **A career roadmap** mapping Python knowledge to job roles
+- **A 10-question final exam** spanning the entire series
+
+---
+
+## What Python Developers Actually Build
+
+| Domain | Common Tasks | Key Libraries |
+|--------|-------------|---------------|
+| Data Analysis | Clean, transform, visualize data | pandas, matplotlib, seaborn |
+| Machine Learning | Train and deploy models | scikit-learn, TensorFlow, PyTorch |
+| Web Backend | REST APIs, databases | FastAPI, Django, Flask |
+| Automation | Scheduled jobs, file pipelines | os, shutil, schedule, Selenium |
+| Finance / Quant | Backtesting, risk models | QuantLib, zipline, yfinance |
+| DevOps | CI scripts, infra tooling | boto3, paramiko, fabric |
+
+---
+
+## Project 1: CLI Vocabulary Flashcard App
+
+A complete, runnable program using file I/O, JSON, and control flow.
+
+```python
+import json
+import random
+import os
+
+DB_FILE = "vocab.json"
+
+def load() -> dict:
+    if os.path.exists(DB_FILE):
+        with open(DB_FILE) as f:
+            return json.load(f)
+    return {}
+
+def save(db: dict) -> None:
+    with open(DB_FILE, "w") as f:
+        json.dump(db, f, indent=2)
+
+def add_word(db: dict) -> None:
+    word    = input("Word: ").strip().lower()
+    meaning = input("Meaning: ").strip()
+    if word and meaning:
+        db[word] = meaning
+        save(db)
+        print(f"✓ '{word}' saved.")
+
+def quiz(db: dict) -> None:
+    if len(db) < 2:
+        print("Add at least 2 words first.")
+        return
+    word = random.choice(list(db))
+    print(f"\nWhat does '{word}' mean?")
+    answer = input("Your answer: ").strip().lower()
+    if answer == db[word].lower():
+        print("Correct!")
+    else:
+        print(f"Wrong. Answer: {db[word]}")
+
+def list_words(db: dict) -> None:
+    if not db:
+        print("No words yet.")
+        return
+    print(f"\n{'Word':<20} Meaning")
+    print("-" * 40)
+    for w, m in sorted(db.items()):
+        print(f"{w:<20} {m}")
+
+def main() -> None:
+    db = load()
+    menu = {"1": ("Add word", add_word),
+            "2": ("Quiz",     quiz),
+            "3": ("List all", list_words)}
+    while True:
+        print("\n=== Vocab App ===")
+        for k, (label, _) in menu.items():
+            print(f"  {k}. {label}")
+        print("  4. Quit")
+        choice = input("Choose: ").strip()
+        if choice in menu:
+            menu[choice][1](db)
+        elif choice == "4":
+            print("Goodbye!")
+            break
+
+# main()
+```
+
+---
+
+## Project 2: REST API Client — Weather Dashboard
+
+Demonstrates `requests`, JSON parsing, and error handling together.
+
+```python
+import requests
+
+API_KEY = "your_api_key"   # sign up at openweathermap.org
+BASE    = "https://api.openweathermap.org/data/2.5/weather"
+
+def get_weather(city: str) -> dict | None:
+    params = {"q": city, "appid": API_KEY,
+              "units": "metric", "lang": "en"}
+    try:
+        r = requests.get(BASE, params=params, timeout=5)
+        r.raise_for_status()
+        return r.json()
+    except requests.exceptions.HTTPError as e:
+        if r.status_code == 404:
+            print(f"City '{city}' not found.")
+        else:
+            print(f"HTTP error: {e}")
+    except requests.exceptions.RequestException as e:
+        print(f"Connection error: {e}")
+    return None
+
+def display(data: dict) -> None:
+    w = data["weather"][0]["description"].capitalize()
+    t = data["main"]["temp"]
+    feels = data["main"]["feels_like"]
+    hum   = data["main"]["humidity"]
+    wind  = data["wind"]["speed"]
+    print(f"\n=== {data['name']}, {data['sys']['country']} ===")
+    print(f"  {w}")
+    print(f"  Temperature : {t}°C  (feels like {feels}°C)")
+    print(f"  Humidity    : {hum}%")
+    print(f"  Wind        : {wind} m/s")
+
+cities = ["London", "Tokyo", "Sydney"]
+for city in cities:
+    data = get_weather(city)
+    if data:
+        display(data)
+```
+
+---
+
+## Project 3: Grade Report Generator
+
+Combines pandas, file I/O, and formatted output.
+
+```python
+import pandas as pd
+import numpy as np
+from datetime import date
+
+def grade_report(csv_path: str) -> None:
+    try:
+        df = pd.read_csv(csv_path)
+    except FileNotFoundError:
+        print(f"File not found: {csv_path}")
+        return
+
+    subjects = ["math", "english", "science"]
+    df["avg"]   = df[subjects].mean(axis=1).round(1)
+    df["grade"] = df["avg"].apply(
+        lambda x: "A" if x >= 90 else ("B" if x >= 80
+                  else ("C" if x >= 70 else "D")))
+    df["rank"]  = df["avg"].rank(ascending=False, method="min").astype(int)
+
+    sep = "=" * 56
+    print(sep)
+    print(f"  Grade Report — {date.today()}")
+    print(sep)
+    print(f"  Students: {len(df)}")
+
+    print("\n[ Subject Averages ]")
+    print(df[subjects].mean().round(1).to_string())
+
+    print("\n[ Grade Distribution ]")
+    for g in "ABCD":
+        n = (df["grade"] == g).sum()
+        print(f"  {g}: {'█' * n} ({n})")
+
+    print("\n[ Top 5 ]")
+    cols = ["rank"] + subjects + ["avg", "grade"]
+    print(df.nsmallest(5, "rank")[cols].to_string(index=False))
+
+    out = csv_path.replace(".csv", "_report.csv")
+    df.to_csv(out, index=False)
+    print(f"\nSaved: {out}")
+
+# grade_report("students.csv")
+```
+
+---
+
+## Python Career Roadmap
+
+### Phase 1 — Foundation (0–3 months)
+
+- Complete this series
+- Learn `git` and GitHub basics
+- Build 2–3 small CLI projects
+
+### Phase 2 — Depth (3–6 months)
+
+- Pick a domain (data, web, automation)
+- Study its core libraries deeply
+- Learn SQL basics
+
+### Phase 3 — Portfolio (6–12 months)
+
+- Publish 3+ projects on GitHub with READMEs
+- Contribute to an open-source project
+- Participate in Kaggle (data) or build a live web app
+
+### Phase 4 — Job Search
+
+- Practice coding challenges (LeetCode, HackerRank)
+- Prepare for technical interviews
+- Apply to internships and entry-level roles
+
+---
+
+## Series Review
+
+| Chapter | Topic | Key Concepts |
+|---------|-------|-------------|
+| Ch1 | Setup & First Program | install, variables, `print()`, `input()` |
+| Ch2 | Data Structures | list, dict, tuple, set, comprehensions |
+| Ch3 | Functions & OOP | `def`, `class`, inheritance, encapsulation |
+| Ch4 | File Handling & Exceptions | `open()`, `with`, `try/except/finally` |
+| Ch5 | Standard Library & pip | `datetime`, `os`, `random`, virtual envs |
+| Ch6 | NumPy & pandas | `ndarray`, `DataFrame`, filtering, groupby |
+| Ch7 | Scraping & Automation | `requests`, BeautifulSoup, `shutil`, `schedule` |
+| Ch8 | Projects & Careers | CLI app, API client, career roadmap |
+
+---
+
+## Final Exam — 10 Questions
+
+---
+
+**[Q1]** What is the output of this code?
+
+```python
+x = [1, 2, 3, 4, 5]
+print(x[1:4:2])
+print(x[::-1][::2])
+```
+
+**[A1]**
+- `x[1:4:2]` → `[2, 4]` (indices 1 and 3 from slice 1:4, step 2)
+- `x[::-1]` is `[5,4,3,2,1]`, then `[::2]` picks every other: `[5, 3, 1]`
+
+---
+
+**[Q2]** What does this function return for `mystery(6)`?
+
+```python
+def mystery(n):
+    if n <= 1:
+        return n
+    return mystery(n-1) + mystery(n-2)
+```
+
+**[A2]** `8` — this is the Fibonacci function. mystery(0)=0, mystery(1)=1, mystery(2)=1, mystery(3)=2, mystery(4)=3, mystery(5)=5, mystery(6)=8.
+
+---
+
+**[Q3]** Which of the following **cannot** be used as a dictionary key, and why?
+
+① `"hello"` ② `42` ③ `[1, 2, 3]` ④ `(1, 2)` ⑤ `True`
+
+**[A3]** ③ `[1, 2, 3]` — lists are **mutable** and therefore not hashable. Dictionary keys must be hashable (their hash value must remain constant). Strings, integers, tuples, and booleans are all hashable.
+
+---
+
+**[Q4]** Identify the error and fix it.
+
+```python
+def divide(a, b):
+    return a / b
+
+result = divide(10, 0)
+print(result)
+```
+
+**[A4]** `ZeroDivisionError` on line 4. Fix:
+
+```python
+def divide(a, b):
+    try:
+        return a / b
+    except ZeroDivisionError:
+        print("Cannot divide by zero.")
+        return None
+```
+
+---
+
+**[Q5]** Write a one-liner using a list comprehension to find the sum of all integers from 1 to 100 that are divisible by 3 or 7.
+
+**[A5]**
+```python
+total = sum(x for x in range(1, 101) if x % 3 == 0 or x % 7 == 0)
+print(total)   # 2208
+```
+
+---
+
+**[Q6]** What content ends up in `fruits.txt`?
+
+```python
+items = ["apple", "banana", "strawberry"]
+with open("fruits.txt", "w") as f:
+    for item in items:
+        f.write(item + "\n")
+```
+
+**[A6]** Three lines:
+```
+apple
+banana
+strawberry
+```
+Each item is written followed by `\n`, so the file has three newline-terminated lines.
+
+---
+
+**[Q7]** Define a function `log_event` that accepts any positional and keyword arguments and prints them formatted as shown:
+
+```
+Positional:
+  1. eventA
+  2. eventB
+Keyword:
+  user=alice
+  level=INFO
+```
+
+**[A7]**
+```python
+def log_event(*args, **kwargs):
+    print("Positional:")
+    for i, v in enumerate(args, 1):
+        print(f"  {i}. {v}")
+    print("Keyword:")
+    for k, v in kwargs.items():
+        print(f"  {k}={v}")
+
+log_event("eventA", "eventB", user="alice", level="INFO")
+```
+
+---
+
+**[Q8]** Reshape `np.arange(1, 10)` into a 3×3 matrix and compute the sum of its main diagonal.
+
+**[A8]**
+```python
+import numpy as np
+mat = np.arange(1, 10).reshape(3, 3)
+print(np.trace(mat))   # 1 + 5 + 9 = 15
+```
+
+---
+
+**[Q9]** Fill in the blanks.
+
+```python
+import pandas as pd
+df = pd.DataFrame({"name": ["A","B","C","D"],
+                   "score": [85, 92, 70, 88]})
+
+high       = df[_______________]               # score >= 85
+sorted_df  = df._____________("score", ascending=False)
+avg        = df["score"].______()
+```
+
+**[A9]**
+```python
+high      = df[df["score"] >= 85]
+sorted_df = df.sort_values("score", ascending=False)
+avg       = df["score"].mean()
+```
+
+---
+
+**[Q10]** Predict the output and explain the intent of this code.
+
+```python
+students = {
+    "Alice": [80, 85, 90],
+    "Bob":   [95, 88, 92],
+    "Carol": [70, 60, 75],
+}
+
+result = {
+    name: {"avg": sum(s)/len(s), "pass": sum(s)/len(s) >= 80}
+    for name, s in students.items()
+}
+
+for name, info in result.items():
+    status = "Pass" if info["pass"] else "Fail"
+    print(f"{name}: {info['avg']:.1f} — {status}")
+```
+
+**[A10]** Output:
+```
+Alice: 85.0 — Pass
+Bob:   91.7 — Pass
+Carol: 68.3 — Fail
+```
+
+Intent: a dictionary comprehension builds a summary for each student — average score and whether it meets the 80-point threshold — then iterates over the result to print formatted status lines using f-strings.
+
+---
+
+## Practice Quiz
+
+**Q1.** What are the four pillars of OOP in Python? Briefly define each.
+
+**A1.**
+1. **Encapsulation** — bundle data and methods in a class; restrict direct access to internals.
+2. **Inheritance** — a subclass inherits attributes and methods from a parent class, enabling reuse.
+3. **Polymorphism** — different classes implement the same method name with different behavior.
+4. **Abstraction** — expose only what callers need; hide implementation complexity.
+
+---
+
+**Q2.** Name three Python libraries commonly used for workplace automation and their use cases.
+
+**A2.**
+1. **pandas** — read, clean, and write CSV/Excel files; generate reports automatically.
+2. **openpyxl** — create formatted Excel workbooks, add charts and formulas.
+3. **Selenium / Playwright** — control a web browser programmatically: form filling, scraping, UI testing.
+
+---
+
+**Q3.** What is `requirements.txt`, how do you create it, and why does it matter?
+
+**A3.** It records every installed package and its exact version. Create it with `pip freeze > requirements.txt`. It matters because it lets anyone reproduce your exact environment: `pip install -r requirements.txt` installs identical versions, preventing "works on my machine" bugs.
+
+---
+
+**Q4.** List at least five skills you should learn alongside Python for a data-analysis role.
+
+**A4.** SQL, pandas/NumPy, matplotlib/seaborn, statistics fundamentals, Jupyter Notebook, and version control with git/GitHub.
+
+---
+
+**Q5.** What is the single most effective habit for becoming a proficient Python developer?
+
+**A5.** **Build things you actually need.** Automating a real annoyance — renaming files, generating a weekly report, tracking prices — forces you to read documentation, debug real errors, and finish something end-to-end. Completed small projects compound faster than unfinished grand ones. Add daily coding-challenge practice (LeetCode/HackerRank) to sharpen fundamentals.

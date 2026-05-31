@@ -1,0 +1,376 @@
+---
+track: academy
+locale: en
+title: "Ch5. Machine Learning — Real-World Projects and Model Evaluation"
+category: "Computer Science"
+series: "Machine Learning Fundamentals"
+chapter: 5
+chapterTitleShort: 'ML Projects'
+author: OIYO Editorial
+tags:
+  - machine learning
+  - cross-validation
+  - hyperparameter tuning
+  - XGBoost
+  - LightGBM
+  - model deployment
+description: "End-to-end ML project pipeline — EDA, cross-validation, hyperparameter tuning with Grid Search and Random Search, XGBoost/LightGBM, model serialization, and a churn-prediction case study."
+pubDate: '2026-05-25'
+layoutVariant: lecture-series
+---
+
+## The Full ML Project Pipeline
+
+A real machine learning project is far more than training a model. It requires a systematic pipeline from **problem definition to deployment and monitoring**.
+
+```
+ML project lifecycle:
+
+1. Problem Definition
+   └─ Business goal → ML problem formulation
+   └─ Choose evaluation metric
+
+2. Data Collection
+   └─ Internal databases, public datasets, web scraping, labeling
+
+3. Exploratory Data Analysis (EDA)
+   └─ Distribution checks, missing values, outlier detection, correlations
+
+4. Preprocessing & Feature Engineering
+   └─ Imputation, scaling, encoding, derived features
+
+5. Modeling & Evaluation
+   └─ Baseline → experiments → cross-validation → hyperparameter tuning
+
+6. Deployment
+   └─ REST API, batch processing, edge devices
+
+7. Monitoring
+   └─ Data drift detection, performance degradation, retraining triggers
+```
+
+---
+
+## Exploratory Data Analysis (EDA)
+
+EDA is the process of **deeply understanding your data before modeling**. "Know the data before building the model."
+
+```python
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+df = pd.read_csv('data.csv')
+
+# Basic info
+print(df.shape)        # rows × columns
+print(df.dtypes)       # column data types
+print(df.describe())   # descriptive statistics for numeric columns
+
+# Missing values
+print(df.isnull().sum())
+
+# Target distribution (classification)
+print(df['label'].value_counts())
+
+# Feature correlation heatmap
+plt.figure(figsize=(10, 8))
+sns.heatmap(df.corr(), annot=True, cmap='coolwarm')
+plt.show()
+```
+
+### Missing Value Strategies
+
+```
+1. Deletion
+   → Drop rows: when missing rate is low and data is plentiful
+   → Drop columns: when missing rate exceeds 50%
+
+2. Simple Imputation
+   → Numeric: mean, median, or mode
+   → Categorical: most frequent value or a separate "Unknown" category
+
+3. Advanced Imputation
+   → KNN Imputation: use values from similar samples
+   → Regression imputation: predict missing values from other features
+   → MICE: multiple imputation by chained equations
+```
+
+---
+
+## Cross-Validation
+
+A simple train/test split can produce highly variable evaluation results depending on which samples end up in each set. Cross-validation produces more reliable performance estimates.
+
+### K-Fold Cross-Validation
+
+```
+K=5 fold process:
+
+Split data into 5 equal folds
+
+Fold 1: [Val] [Trn] [Trn] [Trn] [Trn] → score 1
+Fold 2: [Trn] [Val] [Trn] [Trn] [Trn] → score 2
+Fold 3: [Trn] [Trn] [Val] [Trn] [Trn] → score 3
+Fold 4: [Trn] [Trn] [Trn] [Val] [Trn] → score 4
+Fold 5: [Trn] [Trn] [Trn] [Trn] [Val] → score 5
+
+Final score = mean ± std of 5 scores
+```
+
+```python
+from sklearn.model_selection import cross_val_score, KFold
+from sklearn.ensemble import RandomForestClassifier
+
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+kf = KFold(n_splits=5, shuffle=True, random_state=42)
+
+scores = cross_val_score(model, X, y, cv=kf, scoring='f1_macro')
+print(f"F1: {scores.mean():.3f} ± {scores.std():.3f}")
+```
+
+### Stratified K-Fold
+
+For imbalanced datasets, use Stratified K-Fold to **preserve the class distribution in each fold**.
+
+```python
+from sklearn.model_selection import StratifiedKFold
+
+skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+scores = cross_val_score(model, X, y, cv=skf, scoring='f1')
+```
+
+---
+
+## Hyperparameter Tuning
+
+Optimizing **hyperparameters** (values set by the user before training) to improve model performance.
+
+```
+Parameters vs. Hyperparameters:
+Parameters:      learned automatically during training (weights w, biases b)
+Hyperparameters: set by the user before training (learning rate, tree depth, etc.)
+```
+
+### Grid Search
+
+```python
+from sklearn.model_selection import GridSearchCV
+
+param_grid = {
+    'n_estimators': [50, 100, 200],
+    'max_depth':    [None, 5, 10, 20],
+    'min_samples_split': [2, 5, 10],
+}
+
+# 3 × 4 × 3 = 36 combinations, each evaluated with 5-fold CV
+grid_search = GridSearchCV(
+    RandomForestClassifier(random_state=42),
+    param_grid,
+    cv=5,
+    scoring='f1_macro',
+    n_jobs=-1
+)
+grid_search.fit(X_train, y_train)
+
+print(f"Best params: {grid_search.best_params_}")
+print(f"Best CV score: {grid_search.best_score_:.3f}")
+```
+
+**Downside**: combinations grow exponentially — becomes impractical with many hyperparameters.
+
+### Random Search
+
+```python
+from sklearn.model_selection import RandomizedSearchCV
+from scipy.stats import randint, uniform
+
+param_dist = {
+    'n_estimators':      randint(50, 500),
+    'max_depth':         [None] + list(range(3, 30)),
+    'min_samples_split': randint(2, 20),
+    'max_features':      uniform(0.1, 0.9),
+}
+
+random_search = RandomizedSearchCV(
+    RandomForestClassifier(random_state=42),
+    param_dist,
+    n_iter=100,    # try 100 random combinations
+    cv=5,
+    scoring='f1_macro',
+    n_jobs=-1,
+    random_state=42
+)
+random_search.fit(X_train, y_train)
+```
+
+**Advantage**: covers a wider search space with the same computational budget. Random search typically outperforms grid search when some hyperparameters have little effect.
+
+---
+
+## Ensemble Methods: Boosting
+
+### Bagging vs. Boosting
+
+```
+Bagging (e.g., Random Forest):
+→ Train the same algorithm on different subsets (in parallel)
+→ Aggregate by majority vote / average
+→ Reduces variance
+
+Boosting (e.g., XGBoost, LightGBM):
+→ Sequentially add models that focus on previous mistakes
+→ Each model corrects residual errors
+→ Reduces both bias and variance
+→ Cannot parallelize training; risk of overfitting
+```
+
+### XGBoost (eXtreme Gradient Boosting)
+
+```
+Key features:
+  - Built-in L1/L2 regularization → controls overfitting
+  - Handles missing values automatically
+  - Column-based parallelization
+  - Supports early stopping
+
+Key hyperparameters:
+  n_estimators:      number of trees (100–1,000)
+  learning_rate:     step size (0.01–0.3)
+  max_depth:         tree depth (3–10)
+  subsample:         row sampling fraction (0.5–1.0)
+  colsample_bytree:  column sampling fraction (0.5–1.0)
+```
+
+```python
+from xgboost import XGBClassifier
+
+xgb = XGBClassifier(
+    n_estimators=300,
+    learning_rate=0.05,
+    max_depth=6,
+    subsample=0.8,
+    colsample_bytree=0.8,
+    eval_metric='logloss',
+    random_state=42
+)
+xgb.fit(
+    X_train, y_train,
+    eval_set=[(X_val, y_val)],
+    early_stopping_rounds=20,
+    verbose=50
+)
+```
+
+### LightGBM
+
+```
+Microsoft's ultra-fast gradient boosting framework
+
+Advantages over XGBoost:
+  - Leaf-wise tree growth → deeper trees, lower loss
+  - GOSS sampling: prioritizes high-gradient samples
+  - Native categorical feature support (no encoding needed)
+  - Much faster on large datasets (millions of rows)
+
+Caveat: more prone to overfitting on small datasets
+```
+
+---
+
+## Model Serialization and Deployment
+
+### Saving and Loading Models
+
+```python
+import joblib
+
+# Save (recommended for scikit-learn)
+joblib.dump(model, 'random_forest_v1.joblib')
+
+# Load
+loaded_model = joblib.load('random_forest_v1.joblib')
+predictions = loaded_model.predict(X_new)
+```
+
+### Simple REST API with Flask
+
+```python
+from flask import Flask, request, jsonify
+import joblib
+import numpy as np
+
+app = Flask(__name__)
+model = joblib.load('model.joblib')
+
+@app.route('/predict', methods=['POST'])
+def predict():
+    data = request.json
+    features = np.array(data['features']).reshape(1, -1)
+    prediction   = model.predict(features)[0]
+    probability  = model.predict_proba(features)[0].tolist()
+    return jsonify({'prediction': int(prediction),
+                    'probability': probability})
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
+```
+
+---
+
+## Case Study: Customer Churn Prediction
+
+**Problem**: Predict whether a telecom subscriber will churn next month (binary classification).
+
+```
+Dataset:
+  Rows: 7,000 customers
+  Features: tenure, monthly charges, data usage, support calls, 20 total
+  Target: churned (1) / retained (0); class ratio 85:15 (imbalanced)
+
+Pipeline:
+1. EDA → churned customers average 2.3× more support calls
+2. Preprocessing → median imputation, standardization
+3. Imbalance → SMOTE oversampling
+4. Baseline → Logistic Regression F1 = 0.62
+5. Improved → LightGBM F1 = 0.81
+6. Tuned → RandomizedSearchCV → F1 = 0.83
+7. Feature importance → "support_calls" and "months_since_last_price_increase"
+8. Deploy → daily batch: top 100 high-risk customers sent to marketing team
+```
+
+---
+
+## Key Concept Cards
+
+**K-Fold cross-validation** ★★★★★  
+Solves variance from a single train/test split. K train-validate cycles → average score is a more reliable estimate. K=5 uses 80% of data for training, 20% for validation, per fold.
+
+**Grid Search vs. Random Search** ★★★★☆  
+Grid: exhaustive search (complete but slow). Random: random sampling (faster, broader coverage). Random search is usually more efficient when hyperparameter count exceeds 4–5.
+
+**Bagging vs. Boosting** ★★★★★  
+Bagging = parallel, independent → reduces variance (Random Forest). Boosting = sequential, error-focused → reduces bias and variance (XGBoost, LightGBM).
+
+**XGBoost vs. LightGBM** ★★★☆☆  
+XGBoost: stable and accurate. LightGBM: extremely fast on large data. Use LightGBM when you have millions of rows; caution with small datasets.
+
+---
+
+## Practice Quiz
+
+**Q1. What are the trade-offs of using leave-one-out cross-validation (K = n)?**
+
+> **Advantage**: maximizes training data — each fold uses n−1 samples. **Disadvantage**: requires n training runs (expensive), and validation results based on single samples have high variance. K = 5 or 10 is the practical sweet spot.
+
+**Q2. Why does random search often outperform grid search with the same computational budget?**
+
+> Not all hyperparameters matter equally. Grid search wastes trials on irrelevant parameter combinations. Random search samples independently from each dimension, exploring the important parameter ranges more broadly. Bergstra & Bengio (2012) showed random search finds better parameters in the same number of trials.
+
+**Q3. Why does bagging reduce variance while boosting reduces bias?**
+
+> **Bagging**: independent models trained on different subsets make uncorrelated errors; averaging cancels those errors → variance decreases. **Boosting**: each new model targets the residual errors of the ensemble — systematically fixing under-predicted regions → bias decreases.
+
+**Q4. Why does a deployed model's performance degrade over time?**
+
+> **Data drift**: the statistical distribution of incoming data diverges from the training distribution over time. Customer behavior patterns, seasonal shifts, and product changes alter feature distributions. Monitor input statistics and prediction performance continuously, and retrain when performance falls below a threshold.

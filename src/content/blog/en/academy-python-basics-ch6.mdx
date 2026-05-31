@@ -1,0 +1,347 @@
+---
+track: academy
+locale: en
+title: "Ch6. Python — Data Analysis with NumPy & pandas"
+category: "Technology"
+series: "Python Complete Guide"
+chapter: 6
+chapterTitleShort: 'NumPy & pandas'
+author: OIYO Editorial
+tags:
+  - Python
+  - NumPy
+  - pandas
+  - data analysis
+  - DataFrame
+  - array
+description: "NumPy arrays and vectorized operations, pandas Series and DataFrame for structured data analysis, filtering, groupby, and CSV/JSON workflows."
+pubDate: '2026-05-26'
+layoutVariant: lecture-series
+---
+
+## Why NumPy and pandas?
+
+Python's standard library handles general programming well, but **data analysis** demands specialized tools. Two libraries dominate the field:
+
+| Library | Purpose | Key Abstraction |
+|---------|---------|----------------|
+| **NumPy** | Numerical computation, multi-dimensional arrays | `ndarray` |
+| **pandas** | Structured / tabular data manipulation | `DataFrame` |
+
+```bash
+pip install numpy pandas
+```
+
+---
+
+## NumPy Arrays
+
+```python
+import numpy as np
+
+# Create from a list
+arr = np.array([1, 2, 3, 4, 5])
+print(arr)          # [1 2 3 4 5]
+print(arr.dtype)    # int64
+print(arr.shape)    # (5,)
+
+# 2-D array
+matrix = np.array([[1, 2, 3],
+                   [4, 5, 6]])
+print(matrix.shape)  # (2, 3)
+print(matrix.ndim)   # 2
+print(matrix.size)   # 6
+```
+
+### Convenience constructors
+
+```python
+np.zeros((3, 4))           # 3×4 array of 0.0
+np.ones((2, 3))            # 2×3 array of 1.0
+np.eye(3)                  # 3×3 identity matrix
+np.arange(0, 10, 2)        # [0 2 4 6 8]
+np.linspace(0, 1, 5)       # [0. 0.25 0.5 0.75 1.]
+np.random.randint(1, 7, (2, 3))  # 2×3 random ints 1–6
+```
+
+---
+
+## Vectorized Operations
+
+NumPy's biggest advantage: **no loops needed**.
+
+```python
+a = np.array([1, 2, 3, 4, 5])
+b = np.array([10, 20, 30, 40, 50])
+
+print(a + b)    # [11 22 33 44 55]
+print(a * 2)    # [ 2  4  6  8 10]
+print(b / a)    # [10. 10. 10. 10. 10.]
+print(a ** 2)   # [ 1  4  9 16 25]
+
+# Compare with plain Python:
+# [x**2 for x in [1,2,3,4,5]]  — loop required
+```
+
+---
+
+## Indexing and Boolean Filtering
+
+```python
+arr = np.array([10, 20, 30, 40, 50])
+
+print(arr[0])     # 10
+print(arr[-1])    # 50
+print(arr[1:4])   # [20 30 40]
+
+# 2-D slicing
+mat = np.arange(1, 10).reshape(3, 3)
+print(mat[:, 1])       # second column: [2 5 8]
+print(mat[0:2, 0:2])   # 2×2 sub-matrix
+
+# Boolean indexing
+scores = np.array([85, 92, 68, 74, 90, 55, 88])
+print(scores[scores >= 80])   # [85 92 90 88]
+```
+
+---
+
+## NumPy Statistics
+
+```python
+data = np.array([15, 22, 8, 34, 27, 12, 45, 19])
+
+print(f"Sum:    {np.sum(data)}")           # 182
+print(f"Mean:   {np.mean(data):.2f}")      # 22.75
+print(f"Median: {np.median(data)}")        # 20.5
+print(f"Std:    {np.std(data):.2f}")       # 11.51
+print(f"Min:    {np.min(data)} at [{np.argmin(data)}]")
+print(f"Max:    {np.max(data)} at [{np.argmax(data)}]")
+```
+
+---
+
+## pandas: Series
+
+```python
+import pandas as pd
+
+# Series — a labelled 1-D array
+s = pd.Series([85, 92, 78, 90],
+              index=["Math", "English", "Korean", "Science"])
+
+print(s["Math"])            # 85
+print(s[["Math", "English"]])   # two-item subset
+print(s.mean())             # 86.25
+```
+
+---
+
+## pandas: DataFrame
+
+```python
+data = {
+    "name":  ["Alice", "Bob", "Carol", "Dan"],
+    "age":   [25, 30, 22, 28],
+    "city":  ["Seoul", "Busan", "Incheon", "Seoul"],
+    "score": [85, 92, 78, 90],
+}
+
+df = pd.DataFrame(data)
+print(df)
+#     name  age     city  score
+# 0  Alice   25    Seoul     85
+# 1    Bob   30    Busan     92
+# 2  Carol   22  Incheon     78
+# 3    Dan   28    Seoul     90
+
+print(df.shape)    # (4, 4)
+print(df.dtypes)
+```
+
+---
+
+## Exploring a DataFrame
+
+```python
+print(df.info())       # column types, non-null counts
+print(df.describe())   # numeric statistics
+
+print(df.head(2))   # first 2 rows
+print(df.tail(2))   # last 2 rows
+
+# Column access
+print(df["name"])              # Series
+print(df[["name", "score"]])   # DataFrame
+
+# Row access
+print(df.iloc[0])     # position-based
+print(df.loc[2])      # label-based
+```
+
+---
+
+## Filtering and Sorting
+
+```python
+# Single condition
+high = df[df["score"] >= 85]
+
+# Multiple conditions
+seoul_high = df[(df["city"] == "Seoul") & (df["score"] >= 85)]
+
+# Sort descending
+sorted_df = df.sort_values("score", ascending=False)
+
+# Top 2 by score
+top2 = df.nlargest(2, "score")
+```
+
+---
+
+## Adding Columns and Grouping
+
+```python
+# Derived column
+df["grade"] = df["score"].apply(
+    lambda x: "A" if x >= 90 else ("B" if x >= 80 else "C")
+)
+
+# Group aggregation
+city_avg = df.groupby("city")["score"].mean()
+print(city_avg)
+
+# Value counts
+print(df["city"].value_counts())
+```
+
+---
+
+## Missing Values
+
+```python
+df2 = pd.DataFrame({
+    "A": [1, 2, None, 4],
+    "B": [5, None, 7, 8],
+})
+
+print(df2.isnull().sum())   # missing count per column
+
+df2.dropna()                # drop rows with any NaN
+df2.fillna(0)               # replace NaN with 0
+df2.fillna(df2.mean())      # replace NaN with column mean
+```
+
+---
+
+## CSV and JSON Workflows
+
+```python
+# Save DataFrame
+df.to_csv("students.csv", index=False)
+df.to_json("students.json", orient="records", indent=2)
+
+# Load DataFrame
+df_csv  = pd.read_csv("students.csv")
+df_json = pd.read_json("students.json")
+```
+
+---
+
+## Practical Example — Grade Report
+
+```python
+import numpy as np
+import pandas as pd
+
+np.random.seed(42)
+n = 20
+df = pd.DataFrame({
+    "id":      [f"S{i:03d}" for i in range(1, n + 1)],
+    "math":    np.random.randint(50, 101, n),
+    "english": np.random.randint(50, 101, n),
+    "science": np.random.randint(50, 101, n),
+})
+
+subjects = ["math", "english", "science"]
+df["avg"]   = df[subjects].mean(axis=1).round(1)
+df["grade"] = df["avg"].apply(
+    lambda x: "A" if x >= 90 else ("B" if x >= 80 else ("C" if x >= 70 else "D"))
+)
+
+print(f"Class average: {df['avg'].mean():.1f}")
+print("\nSubject means:")
+print(df[subjects].mean().round(1))
+print("\nGrade distribution:")
+print(df["grade"].value_counts().sort_index())
+print("\nTop 5 students:")
+print(df.nlargest(5, "avg")[["id", "avg", "grade"]])
+```
+
+---
+
+## Quick Reference
+
+| Task | Code |
+|------|------|
+| Create array | `np.array([...])` |
+| Array shape | `.shape`, `.ndim`, `.size` |
+| Vectorized math | `arr * 2`, `arr + arr2` |
+| Boolean filter | `arr[arr > 4]` |
+| NumPy stats | `np.mean()`, `np.std()`, `np.sum()` |
+| Create DataFrame | `pd.DataFrame(dict)` |
+| Column select | `df["col"]` / `df[["c1","c2"]]` |
+| Row filter | `df[df["col"] > val]` |
+| Sort | `df.sort_values("col")` |
+| Groupby | `df.groupby("col")["val"].mean()` |
+| Missing values | `.isnull()`, `.dropna()`, `.fillna()` |
+| CSV round-trip | `.to_csv()` / `pd.read_csv()` |
+
+---
+
+## Practice Quiz
+
+**Q1.** What is "vectorized operation" and why is it faster than a Python loop?
+
+**A1.** A vectorized operation applies a computation to an entire NumPy array at once, without a Python-level loop. NumPy delegates the work to compiled C code, bypassing Python's per-element overhead. For example, `arr * 2` multiplies every element simultaneously, while `[x * 2 for x in lst]` interprets each iteration in Python.
+
+---
+
+**Q2.** What is the difference between `df["score"]` and `df[["score"]]`?
+
+**A2.** `df["score"]` returns a **Series** (1-D). `df[["score"]]` returns a **DataFrame** (2-D, one column). Use the double-bracket form when you need a DataFrame or when selecting multiple columns: `df[["math", "english"]]`.
+
+---
+
+**Q3.** Write one line that selects students whose average is above 85 and whose city is "Seoul".
+
+**A3.**
+```python
+result = df[(df["avg"] > 85) & (df["city"] == "Seoul")]
+```
+
+---
+
+**Q4.** What does `np.array([[1,2,3],[4,5,6]]).reshape(3, 2)` produce? What are its `.shape`, `.ndim`, and `.size`?
+
+**A4.** A 3-row × 2-column matrix:
+```
+[[1 2]
+ [3 4]
+ [5 6]]
+```
+`.shape` → `(3, 2)`, `.ndim` → `2`, `.size` → `6`.
+
+---
+
+**Q5.** What are two strategies for dealing with NaN values in a DataFrame, and when would you choose each?
+
+**A5.**
+- **`dropna()`** — removes rows (or columns) containing any NaN. Choose when missing data is rare and you can afford to lose those rows.
+- **`fillna(value)`** — replaces NaN with a constant or derived value (e.g., column mean). Choose when you want to retain all rows and missing values can be reasonably estimated.
+
+---
+
+## Chapter 7 Preview
+
+Next: **Web Scraping & Automation** — requests, BeautifulSoup, file automation with `os` and `shutil`, and scheduling scripts.

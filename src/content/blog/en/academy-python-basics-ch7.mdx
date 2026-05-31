@@ -1,0 +1,368 @@
+---
+track: academy
+locale: en
+title: "Ch7. Python — Web Scraping & Task Automation"
+category: "Technology"
+series: "Python Complete Guide"
+chapter: 7
+chapterTitleShort: 'Scraping & Automation'
+author: OIYO Editorial
+tags:
+  - Python
+  - web scraping
+  - BeautifulSoup
+  - requests
+  - automation
+  - os
+  - shutil
+description: "Fetch web pages with requests, parse HTML with BeautifulSoup, automate file and folder tasks with os/shutil, and schedule recurring scripts."
+pubDate: '2026-05-26'
+layoutVariant: lecture-series
+---
+
+## Two Pillars of Practical Python
+
+Once you know Python's core syntax, the two most immediately useful skill areas are:
+
+1. **Web scraping** — pulling data from websites automatically
+2. **File/task automation** — eliminating repetitive manual work
+
+Both require only the standard library plus two widely-used packages.
+
+```bash
+pip install requests beautifulsoup4
+```
+
+---
+
+## requests: Fetching Web Pages
+
+```python
+import requests
+
+response = requests.get("https://httpbin.org/get")
+
+print(response.status_code)    # 200
+print(response.headers["Content-Type"])
+
+# JSON response
+data = response.json()
+print(data["origin"])           # your IP address
+
+# Text response
+page = requests.get("https://example.com")
+print(page.text[:200])          # first 200 chars of HTML
+```
+
+### Handling errors
+
+```python
+try:
+    r = requests.get("https://example.com", timeout=5)
+    r.raise_for_status()    # raises HTTPError for 4xx/5xx
+except requests.exceptions.Timeout:
+    print("Request timed out.")
+except requests.exceptions.HTTPError as e:
+    print(f"HTTP error: {e}")
+except requests.exceptions.RequestException as e:
+    print(f"Request failed: {e}")
+```
+
+---
+
+## BeautifulSoup: Parsing HTML
+
+```python
+from bs4 import BeautifulSoup
+import requests
+
+html = requests.get("https://example.com").text
+soup = BeautifulSoup(html, "html.parser")
+
+# Tag navigation
+print(soup.title.text)          # page title
+print(soup.h1.text)             # first <h1>
+
+# Find one element
+first_link = soup.find("a")
+print(first_link["href"])
+
+# Find all matching elements
+links = soup.find_all("a")
+for link in links:
+    print(link.get("href"), link.text)
+```
+
+### CSS selector syntax
+
+```python
+# By class
+items = soup.select(".product-card")
+
+# By id
+header = soup.select_one("#main-header")
+
+# Nested selector
+prices = soup.select("ul.price-list li span.amount")
+for p in prices:
+    print(p.text.strip())
+```
+
+---
+
+## Practical Scraper — Quotes of the Day
+
+```python
+import requests
+from bs4 import BeautifulSoup
+import json
+
+def scrape_quotes(url="https://quotes.toscrape.com"):
+    """Scrape quotes, authors, and tags from the first page."""
+    r = requests.get(url, timeout=10)
+    r.raise_for_status()
+    soup = BeautifulSoup(r.text, "html.parser")
+
+    quotes = []
+    for block in soup.select("div.quote"):
+        quotes.append({
+            "text":   block.select_one("span.text").text.strip('""“”'),
+            "author": block.select_one("small.author").text,
+            "tags":   [t.text for t in block.select("a.tag")],
+        })
+
+    return quotes
+
+quotes = scrape_quotes()
+print(f"Scraped {len(quotes)} quotes")
+for q in quotes[:3]:
+    print(f'\n"{q["text"]}" — {q["author"]}')
+    print(f'  Tags: {", ".join(q["tags"])}')
+
+# Save to JSON
+with open("quotes.json", "w") as f:
+    json.dump(quotes, f, indent=2)
+```
+
+---
+
+## os and shutil: File Automation
+
+```python
+import os
+import shutil
+
+# Directory operations
+os.makedirs("reports/2026/May", exist_ok=True)
+print(os.listdir("."))           # list current directory
+
+# File info
+path = "reports/2026/May/summary.txt"
+print(os.path.exists(path))     # False
+print(os.path.basename(path))   # summary.txt
+print(os.path.dirname(path))    # reports/2026/May
+_, ext = os.path.splitext(path) # ext = ".txt"
+
+# Copy / move / delete
+shutil.copy("source.txt", "backup/source.txt")
+shutil.move("temp.txt", "archive/temp.txt")
+os.remove("unwanted.txt")
+shutil.rmtree("old_folder")     # delete folder and contents
+```
+
+---
+
+## Project: Download Organizer
+
+Sort files in a folder by type automatically.
+
+```python
+import os
+import shutil
+from datetime import datetime
+
+CATEGORIES = {
+    "Images":    [".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg"],
+    "Documents": [".pdf", ".docx", ".txt", ".xlsx", ".pptx"],
+    "Videos":    [".mp4", ".mov", ".avi", ".mkv"],
+    "Audio":     [".mp3", ".wav", ".flac"],
+    "Archives":  [".zip", ".rar", ".7z", ".tar", ".gz"],
+    "Code":      [".py", ".js", ".ts", ".html", ".css"],
+}
+
+# Reverse map: extension → category
+EXT_MAP = {ext: cat for cat, exts in CATEGORIES.items() for ext in exts}
+
+def organize(source: str) -> None:
+    moved, log = 0, []
+
+    for name in os.listdir(source):
+        src = os.path.join(source, name)
+        if os.path.isdir(src):
+            continue
+
+        _, ext = os.path.splitext(name)
+        category = EXT_MAP.get(ext.lower(), "Other")
+
+        dest_dir = os.path.join(source, category)
+        os.makedirs(dest_dir, exist_ok=True)
+
+        dest = os.path.join(dest_dir, name)
+        shutil.move(src, dest)
+        moved += 1
+        log.append(f"{name} → {category}/")
+        print(f"  {log[-1]}")
+
+    stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    with open(os.path.join(source, f"organize_{stamp}.log"), "w") as f:
+        f.write(f"Organized {moved} files on {datetime.now()}\n\n")
+        f.write("\n".join(log))
+
+    print(f"\nDone — {moved} files organized.")
+
+# organize("/Users/you/Downloads")
+```
+
+---
+
+## Project: Bulk File Renamer
+
+```python
+import os
+import re
+
+def batch_rename(folder: str, pattern: str, replacement: str) -> None:
+    """
+    Rename all files in folder by replacing `pattern` (regex)
+    with `replacement` in each filename.
+    """
+    renamed = 0
+    for name in sorted(os.listdir(folder)):
+        new_name = re.sub(pattern, replacement, name)
+        if new_name == name:
+            continue
+        src = os.path.join(folder, name)
+        dst = os.path.join(folder, new_name)
+        os.rename(src, dst)
+        print(f"{name}  →  {new_name}")
+        renamed += 1
+    print(f"\n{renamed} files renamed.")
+
+# Example: strip leading numbers like "01_report.pdf" → "report.pdf"
+# batch_rename("./docs", r"^\d+_", "")
+```
+
+---
+
+## Scheduling Scripts
+
+### Simple interval loop (blocking)
+
+```python
+import time
+
+def check_updates():
+    print(f"Checking at {time.strftime('%H:%M:%S')}...")
+
+while True:
+    check_updates()
+    time.sleep(300)   # every 5 minutes
+```
+
+### Cross-platform: schedule library
+
+```bash
+pip install schedule
+```
+
+```python
+import schedule
+import time
+
+def daily_report():
+    print("Generating daily report...")
+
+schedule.every().day.at("09:00").do(daily_report)
+schedule.every(30).minutes.do(check_updates)
+
+while True:
+    schedule.run_pending()
+    time.sleep(60)
+```
+
+---
+
+## Ethics and Robots.txt
+
+Before scraping any website:
+
+1. **Check `robots.txt`** — `https://example.com/robots.txt` lists which paths crawlers may not access.
+2. **Respect rate limits** — add `time.sleep(1)` between requests to avoid overloading servers.
+3. **Check the Terms of Service** — some sites prohibit automated access.
+4. **Prefer APIs** — if the site offers a public API, use it instead of scraping HTML.
+
+---
+
+## Quick Reference
+
+| Task | Tool / Code |
+|------|------------|
+| HTTP GET | `requests.get(url)` |
+| Parse HTML | `BeautifulSoup(html, "html.parser")` |
+| CSS selector | `soup.select(".cls")` / `soup.select_one("#id")` |
+| List directory | `os.listdir(path)` |
+| Copy file | `shutil.copy(src, dst)` |
+| Move file | `shutil.move(src, dst)` |
+| Delete file | `os.remove(path)` |
+| Delete folder | `shutil.rmtree(path)` |
+| Schedule task | `schedule.every().day.at("HH:MM").do(fn)` |
+
+---
+
+## Practice Quiz
+
+**Q1.** What does `response.raise_for_status()` do and why is it useful?
+
+**A1.** It raises an `HTTPError` if the response status code indicates a client error (4xx) or server error (5xx). Without it, `requests.get()` returns a response object regardless of the status code — you wouldn't know the request failed unless you checked `response.status_code` manually. Using `raise_for_status()` makes error handling explicit and concise.
+
+---
+
+**Q2.** What is the difference between `soup.find("a")` and `soup.find_all("a")`?
+
+**A2.** `find()` returns the **first** matching element (or `None` if not found). `find_all()` returns a **list** of all matching elements (empty list if none). Use `find()` when you expect a unique element (e.g., the page title); use `find_all()` when you want every occurrence.
+
+---
+
+**Q3.** Why should you add `time.sleep()` between scraping requests?
+
+**A3.** To avoid overloading the server. Sending dozens of requests per second mimics a denial-of-service attack, may trigger rate limiting or an IP ban, and is generally considered impolite. A 1–2 second delay between requests is a common courtesy and often required by `robots.txt`.
+
+---
+
+**Q4.** What does `shutil.move()` do that `os.rename()` does not?
+
+**A4.** `os.rename()` only works within the same filesystem. If `src` and `dst` are on different drives or filesystems, it raises an error. `shutil.move()` handles cross-filesystem moves transparently by copying the file and then deleting the original.
+
+---
+
+**Q5.** You want to rename every `.jpeg` file in a folder to `.jpg`. Write the code.
+
+**A5.**
+```python
+import os
+
+folder = "./photos"
+for name in os.listdir(folder):
+    if name.lower().endswith(".jpeg"):
+        base = name[:-5]   # strip ".jpeg"
+        src = os.path.join(folder, name)
+        dst = os.path.join(folder, base + ".jpg")
+        os.rename(src, dst)
+        print(f"{name} → {base}.jpg")
+```
+
+---
+
+## Chapter 8 Preview
+
+Next: **Real-World Projects & Python Career Paths** — a complete CLI app, API integration, portfolio tips, and a 10-question final exam covering the full series.

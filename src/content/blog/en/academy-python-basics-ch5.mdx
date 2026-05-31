@@ -1,0 +1,157 @@
+---
+track: academy
+locale: en
+title: "Ch5. Python — Standard Library & Package Management"
+category: "Technology"
+series: "Python Complete Guide"
+chapter: 5
+chapterTitleShort: 'Libraries & pip'
+author: OIYO Editorial
+tags:
+  - Python
+  - standard library
+  - pip
+  - datetime
+  - virtual environment
+description: "Python essential standard library modules (os, datetime, random, collections), pip package management, and virtual environment setup."
+pubDate: '2026-05-26'
+layoutVariant: lecture-series
+---
+
+## datetime: Date and Time
+
+```python
+from datetime import datetime, timedelta, date
+
+# Current date/time
+now = datetime.now()
+print(now)  # 2026-05-26 14:30:15.123456
+
+# Format output
+print(now.strftime("%B %d, %Y"))  # May 26, 2026
+print(now.strftime("%Y-%m-%d"))   # 2026-05-26
+
+# Date arithmetic
+tomorrow = now + timedelta(days=1)
+next_week = now + timedelta(weeks=1)
+
+# Difference between dates
+date1 = date(2024, 1, 1)
+date2 = date(2026, 5, 26)
+diff = date2 - date1
+print(f"{diff.days} days apart")  # 876 days apart
+```
+
+---
+
+## os: Operating System Interface
+
+```python
+import os
+
+# Current working directory
+print(os.getcwd())
+
+# List directory contents
+files = os.listdir(".")
+
+# Create directories
+os.makedirs("data/outputs", exist_ok=True)
+
+# Environment variables
+api_key = os.environ.get("API_KEY", "default_value")
+
+# Path operations
+path = os.path.join("data", "results.csv")
+print(os.path.exists(path))      # File exists?
+print(os.path.basename(path))    # results.csv
+print(os.path.dirname(path))     # data
+```
+
+---
+
+## random: Random Number Generation
+
+```python
+import random
+
+print(random.randint(1, 100))    # Random integer 1-100
+print(random.random())           # Random float 0.0-1.0
+
+items = ["apple", "banana", "cherry", "mango"]
+print(random.choice(items))      # Random single item
+print(random.sample(items, 2))   # 2 unique random items
+
+random.shuffle(items)             # Shuffle in place
+print(items)
+```
+
+---
+
+## collections: Advanced Data Structures
+
+```python
+from collections import Counter, defaultdict, deque
+
+# Counter: count element frequencies
+text = "hello world python programming"
+word_count = Counter(text.split())
+print(word_count.most_common(3))
+
+# defaultdict: auto-create missing keys
+grades = defaultdict(list)
+grades["Alice"].append(90)
+grades["Alice"].append(85)
+
+# deque: double-ended queue
+queue = deque([1, 2, 3])
+queue.appendleft(0)   # Add to left
+queue.append(4)       # Add to right
+queue.popleft()       # Remove from left
+```
+
+---
+
+## pip: Package Management
+
+```bash
+# Install packages
+pip install requests
+pip install pandas numpy matplotlib
+
+# Install specific version
+pip install requests==2.31.0
+
+# List installed packages
+pip list
+
+# Save requirements
+pip freeze > requirements.txt
+
+# Install from requirements
+pip install -r requirements.txt
+```
+
+---
+
+## Virtual Environments
+
+```bash
+# Create virtual environment
+python -m venv myenv
+
+# Activate (Windows)
+myenv\Scripts\activate
+
+# Activate (Mac/Linux)
+source myenv/bin/activate
+
+# Deactivate
+deactivate
+```
+
+---
+
+## Chapter 6 Preview
+
+Next: **Data Analysis Basics** — pandas and NumPy for data manipulation, matplotlib for visualization.

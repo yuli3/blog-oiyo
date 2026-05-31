@@ -1,0 +1,403 @@
+---
+track: academy
+locale: en
+title: "Ch3. Machine Learning — Deep Learning and Neural Networks"
+category: "Computer Science"
+series: "Machine Learning Fundamentals"
+chapter: 3
+chapterTitleShort: 'Deep Learning'
+author: OIYO Editorial
+tags:
+  - machine learning
+  - deep learning
+  - neural networks
+  - perceptron
+  - backpropagation
+  - TensorFlow
+description: "Deep learning fundamentals — from the perceptron to multi-layer networks (MLP), backpropagation, activation functions, and overfitting prevention with dropout and batch normalization."
+pubDate: '2026-05-25'
+layoutVariant: lecture-series
+---
+
+## What Is Deep Learning?
+
+Deep learning is a subfield of machine learning based on **multi-layer artificial neural networks inspired by the brain**, which automatically learn hierarchical representations from data.
+
+```
+Traditional ML:
+  Raw data → [Feature engineering (human-designed)] → Model → Prediction
+
+Deep Learning:
+  Raw data → [Automatic feature extraction (learned by the network)] → Prediction
+```
+
+Deep learning's power comes from **automating feature engineering**. It excels with data where rules are hard to define explicitly — images, audio, and text.
+
+**Where deep learning shines:**
+- Image recognition and object detection (CNN-based)
+- Speech recognition and NLP (RNN, Transformer-based)
+- Game playing and robot control (reinforcement learning + DL)
+- Medical imaging analysis and drug discovery
+
+---
+
+## The Perceptron — Origin of Neural Networks
+
+### Single Perceptron
+
+Proposed by Frank Rosenblatt in 1957, the perceptron is the **fundamental unit of an artificial neural network**.
+
+```
+Single perceptron structure:
+
+Inputs:   x₁, x₂, ..., xₙ
+Weights:  w₁, w₂, ..., wₙ
+Bias:     b
+
+Linear combination: z = w₁x₁ + w₂x₂ + ... + wₙxₙ + b
+                      = wᵀx + b
+
+Activation: y = f(z)
+```
+
+A single perceptron can represent **AND and OR** logic gates but cannot solve **XOR** — it only produces linear decision boundaries. This limitation motivated stacking perceptrons into **multi-layer perceptrons (MLP)**.
+
+### Biological Neuron vs. Artificial Perceptron
+
+```
+Biological Neuron       Artificial Perceptron
+────────────────       ─────────────────────
+Dendrites              → Input values xᵢ
+Synaptic strength      → Weights wᵢ
+Cell body summation    → Linear combination z = wᵀx + b
+Action potential firing→ Activation function f(z)
+Axon output            → Output y
+```
+
+---
+
+## Multi-Layer Perceptron (MLP)
+
+MLP consists of an **input layer, one or more hidden layers, and an output layer**.
+
+```
+Example MLP (2 hidden layers):
+
+Input Layer   Hidden Layer 1  Hidden Layer 2  Output Layer
+[x₁]    →    [h₁¹]     →    [h₁²]     →    [y₁]
+[x₂]    →    [h₂¹]     →    [h₂²]     →    [y₂]
+[x₃]    →    [h₃¹]     →    [h₃²]
+             [h₄¹]
+
+Each arrow represents a weight w (a learnable parameter)
+```
+
+**What "Deep" means**: two or more hidden layers. Deeper networks can learn more complex representations.
+
+```
+What each layer learns (example — image classification):
+Layer 1: edges and lines
+Layer 2: curves and patterns
+Layer 3: parts like eyes, nose, ears
+Layer 4: high-level concepts like faces or cars
+```
+
+### Forward Propagation
+
+The process of computing the output by passing the input through each layer.
+
+```python
+# Forward pass equations (layer l → l+1)
+z[l] = W[l] @ a[l-1] + b[l]   # linear transformation
+a[l] = f(z[l])                  # activation function
+
+# Example: 2-layer MLP
+z1 = W1 @ x + b1               # hidden layer linear combination
+a1 = relu(z1)                   # hidden layer activation
+z2 = W2 @ a1 + b2              # output layer linear combination
+y_hat = softmax(z2)             # output layer activation (multi-class)
+```
+
+---
+
+## Activation Functions
+
+Activation functions introduce **non-linearity** into the network. Without them, stacking any number of layers is equivalent to a single linear transformation — no matter how deep.
+
+### Sigmoid
+
+```
+σ(z) = 1 / (1 + e^(−z))
+
+Output range: (0, 1)
+Use: binary classification output layer
+Drawback: Vanishing Gradient — when z is very large or small,
+          gradient ≈ 0 → learning stalls
+```
+
+### Tanh
+
+```
+tanh(z) = (e^z − e^(−z)) / (e^z + e^(−z))
+
+Output range: (−1, 1)
+Advantage: zero-centered → faster convergence than sigmoid
+Drawback: same vanishing gradient problem as sigmoid
+```
+
+### ReLU (Rectified Linear Unit)
+
+```
+ReLU(z) = max(0, z)
+
+z < 0: output 0 (neuron inactive)
+z ≥ 0: output z (passes through)
+
+Advantages:
+  - Computationally simple → faster training
+  - Largely alleviates vanishing gradients
+  - Default choice for hidden layers in most networks
+
+Drawback:
+  - Dying ReLU: for negative inputs, gradient is permanently 0
+  - Fixes: Leaky ReLU, ELU, GELU
+```
+
+### Leaky ReLU
+
+```
+Leaky ReLU(z) = max(0.01z, z)
+
+Small gradient (0.01) preserved in the negative region
+→ Alleviates Dying ReLU
+```
+
+### Softmax
+
+```
+softmax(zᵢ) = e^zᵢ / Σⱼ e^zʲ
+
+Output range: (0, 1), sum = 1 (probability distribution)
+Use: multi-class classification output layer
+
+Example (3 classes):
+z = [2.0, 1.0, 0.5]
+softmax(z) ≈ [0.659, 0.242, 0.099]
+→ Class 0 predicted with 65.9% probability
+```
+
+### Activation Function Selection Guide
+
+| Location | Recommended Activation |
+|----------|----------------------|
+| Hidden layers (general) | ReLU (default) |
+| Hidden layers (very deep) | Leaky ReLU, GELU |
+| Output — binary classification | Sigmoid |
+| Output — multi-class classification | Softmax |
+| Output — regression | None (linear) |
+
+---
+
+## Backpropagation
+
+Backpropagation computes the gradient of the loss function with respect to every weight, propagating from the output layer toward the input layer using the **chain rule**.
+
+### Intuition
+
+```
+Forward Pass:
+  Input → ... → Output → Compute Loss
+
+Backward Pass:
+  Loss → gradient at output layer
+       → gradient at hidden layer 2 (chain rule)
+       → gradient at hidden layer 1 (chain rule)
+       → update all weights
+
+"Distributing blame for the wrong prediction back to each weight"
+```
+
+### Chain Rule
+
+```
+For a composite function y = f(g(x)):
+dy/dx = (dy/dg) × (dg/dx)
+
+In a neural network:
+L = Loss(y_hat, y)
+y_hat = f(z) = f(Wx + b)
+
+∂L/∂W = (∂L/∂y_hat) × (∂y_hat/∂z) × (∂z/∂W)
+         ────────────  ─────────────  ──────────
+         loss gradient  activation     input x
+                        derivative
+```
+
+### Weight Update (Gradient Descent + Backprop)
+
+```python
+# One epoch of training (pseudocode)
+for X_batch, y_batch in data_loader:
+    y_hat = model.forward(X_batch)     # forward pass
+    loss = criterion(y_hat, y_batch)   # compute loss
+
+    optimizer.zero_grad()              # clear previous gradients
+    loss.backward()                    # backprop (compute gradients)
+    optimizer.step()                   # update weights
+```
+
+---
+
+## Regularization Techniques
+
+Deep learning models have millions of parameters and are highly prone to overfitting.
+
+### Dropout
+
+```
+During training: randomly deactivate a fraction of neurons each batch
+
+Dropout rate p = 0.5 → 50% of neurons randomly dropped
+
+Effects:
+  - Forces the network not to rely on any single neuron → better generalization
+  - Equivalent to training an ensemble of different sub-networks
+  - Disabled at inference time (all neurons active)
+```
+
+```python
+import tensorflow as tf
+
+model = tf.keras.Sequential([
+    tf.keras.layers.Dense(256, activation='relu'),
+    tf.keras.layers.Dropout(0.5),
+    tf.keras.layers.Dense(128, activation='relu'),
+    tf.keras.layers.Dropout(0.3),
+    tf.keras.layers.Dense(10, activation='softmax')
+])
+```
+
+### Batch Normalization
+
+```
+Normalizes each mini-batch input to mean=0, variance=1,
+then applies learnable scale (γ) and shift (β) parameters
+
+Effects:
+  - Reduces internal covariate shift
+  - Allows higher learning rates → faster training
+  - Mild regularization effect
+  - Less sensitive to weight initialization
+
+Formula:
+  x_norm = (x − μ_batch) / √(σ²_batch + ε)
+  output  = γ × x_norm + β
+```
+
+### L1 / L2 Regularization (Weight Decay)
+
+```
+L2 (Ridge):  Loss = original loss + λ × Σwᵢ²
+→ Keeps weights small; most commonly used
+
+L1 (Lasso):  Loss = original loss + λ × Σ|wᵢ|
+→ Drives some weights exactly to zero (sparsity / feature selection)
+```
+
+### Early Stopping
+
+```
+Stop training when validation loss stops decreasing
+
+  Training loss    ↓↓↓↓↓↓↓↓↓↓↓↓↓
+  Validation loss  ↓↓↓↓→→↑↑↑  ← stop here!
+
+Save the model weights at the validation loss minimum
+```
+
+---
+
+## CNN Basics (Convolutional Neural Network)
+
+CNNs are **specialized for image processing**, efficiently detecting local spatial patterns.
+
+### Core Operation: Convolution
+
+```
+A small filter (kernel) slides over the image, computing dot products
+
+3×3 edge detection filter:
+┌─────────────┐
+│ −1  −1  −1  │
+│  0   0   0  │
+│  1   1   1  │
+└─────────────┘
+→ Emphasizes horizontal edges
+→ Different filters automatically learn different features
+```
+
+### CNN Building Blocks
+
+```
+Convolutional Layer:
+  - Applies learnable filters to produce feature maps
+  - Parameter sharing → far fewer parameters than fully connected MLP
+
+Pooling Layer (Max Pooling):
+  - Reduces spatial dimensions of feature maps
+  - Provides translation invariance
+  - 2×2 Max Pooling: keeps only the maximum of each 2×2 region
+
+Flatten + Dense Layer:
+  - Converts feature maps to 1D vector
+  - Connects to fully connected classification layers
+```
+
+```python
+# Basic CNN in TensorFlow/Keras
+model = tf.keras.Sequential([
+    tf.keras.layers.Conv2D(32, (3,3), activation='relu', input_shape=(28,28,1)),
+    tf.keras.layers.MaxPooling2D(2, 2),
+    tf.keras.layers.Conv2D(64, (3,3), activation='relu'),
+    tf.keras.layers.MaxPooling2D(2, 2),
+    tf.keras.layers.Flatten(),
+    tf.keras.layers.Dense(128, activation='relu'),
+    tf.keras.layers.Dropout(0.5),
+    tf.keras.layers.Dense(10, activation='softmax')
+])
+```
+
+---
+
+## Key Concept Cards
+
+**Perceptron → MLP evolution** ★★★★★  
+A single perceptron handles only linear separation. MLP with hidden layers can learn non-linear patterns. "Deep" = 2+ hidden layers.
+
+**Role of activation functions** ★★★★★  
+Introduce non-linearity. Without them, any depth collapses to a single linear transformation. Hidden layers → ReLU; output layer → task-dependent.
+
+**Backpropagation = chain-rule gradient propagation** ★★★★★  
+Computes gradient of loss with respect to each weight using chain rule, then applies gradient descent.
+
+**Dropout regularization** ★★★★☆  
+Randomly deactivates neurons during training → prevents co-adaptation → better generalization. Disabled at inference.
+
+**Batch normalization** ★★★★☆  
+Normalizes mini-batch inputs per layer → stabilizes and accelerates training. γ and β are learned parameters.
+
+---
+
+## Practice Quiz
+
+**Q1. Why is adding more layers pointless without activation functions?**
+
+> Without activation functions, each layer performs only y = Wx + b (a linear transformation). A composition of linear transformations is itself a single linear transformation: W₂(W₁x + b₁) + b₂ = W′x + b′. No matter how many layers you stack, the network has the same expressive power as linear regression. Activation functions introduce non-linearity, enabling learning of complex patterns.
+
+**Q2. Why is ReLU preferred over sigmoid in hidden layers?**
+
+> Sigmoid's derivative approaches 0 when z is very large or small, causing the **vanishing gradient** problem — gradients shrink as they propagate backward, and deep layers stop learning. ReLU's gradient is 1 for all positive z, largely eliminating this problem while also being computationally trivial to evaluate.
+
+**Q3. Why is dropout applied only during training and not at inference?**
+
+> Dropout is a **regularization technique** that trains an ensemble of different sub-networks. At inference, we want the best single deterministic prediction, so all neurons are active. The weights are scaled by the dropout keep-probability to keep the expected output magnitude consistent between training and inference.
