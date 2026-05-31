@@ -1,0 +1,112 @@
+---
+track: academy
+locale: en
+title: "Ch7. ELB and Auto Scaling — Building Highly Available Architectures"
+category: IT
+series: "AWS Solutions Architect Associate"
+chapter: 7
+chapterTitleShort: 'ELB/Auto Scaling'
+author: OIYO Editorial
+tags:
+  - AWS
+  - ELB
+  - Auto Scaling
+  - load balancer
+  - SAA
+description: "ALB, NLB, GLB comparison, Auto Scaling Groups, scaling policies, health checks — implementing elastic architectures. AWS SAA Chapter 7."
+pubDate: '2026-05-31'
+---
+
+import Callout from "@/components/mdx/Callout.astro";
+
+## Elastic Load Balancing (ELB)
+
+Distributes incoming traffic across multiple backend servers.
+
+### ALB (Application Load Balancer)
+**Layer 7 (HTTP/HTTPS)** load balancer.
+
+**Advanced routing**:
+- Path-based: `/api/*` → API servers, `/static/*` → S3
+- Host-based: `api.example.com` → API tier, `www.example.com` → web tier
+- HTTP header and query string routing
+- WebSocket and HTTP/2 support
+
+**Best for**: Web applications, REST APIs, microservices.
+
+### NLB (Network Load Balancer)
+**Layer 4 (TCP/UDP)** load balancer.
+
+- Ultra-low latency, extreme performance
+- Static IP or Elastic IP support
+- Handles millions of requests per second
+
+**Best for**: Gaming servers, IoT, financial trading, real-time streaming.
+
+<Callout type="tip">
+**Exam decision tree**: Need HTTP routing rules? → ALB. Need ultra-low latency TCP/UDP or a static IP? → NLB. Need to integrate with third-party firewalls/IDS/IPS? → GLB.
+</Callout>
+
+### GLB (Gateway Load Balancer)
+**Layer 3** load balancer. Integrates with third-party network appliances (firewalls, IDS/IPS).
+
+---
+
+## Auto Scaling Group (ASG)
+
+### Components
+1. **Launch Template**: AMI, instance type, security groups, IAM role
+2. **Group size**: Minimum / Maximum / Desired capacity
+3. **Scaling policies**
+
+### Scaling Policy Types
+
+**Dynamic scaling**:
+- **Simple**: CloudWatch alarm → add/remove a fixed number
+- **Step**: Different scaling steps for different alarm thresholds
+- **Target Tracking**: Maintain a target metric (e.g., keep CPU at 50%)
+
+**Scheduled scaling**: Pre-scale for known patterns (e.g., scale to 10 instances every weekday at 8 AM).
+
+**Predictive scaling**: ML analyzes historical patterns → scales proactively before demand arrives.
+
+### Health Checks
+
+- **EC2 health check**: Hardware/software status of the instance
+- **ELB health check**: Application-level response (recommended — more granular)
+
+Unhealthy instances are automatically terminated and replaced.
+
+---
+
+## HA Architecture Pattern
+
+**Standard multi-tier HA**:
+```
+Internet → ALB (public subnets, multi-AZ)
+              → ASG (private subnets, multi-AZ)
+                   → RDS Multi-AZ (private subnets)
+```
+
+---
+
+## Key Concept Cards
+
+**ALB vs. NLB** ★★★★★
+: ALB=Layer 7 HTTP routing, NLB=Layer 4 high-performance TCP. HTTP web app=ALB, gaming/real-time=NLB.
+
+**Target Tracking Scaling** ★★★★★
+: Set a target (e.g., CPU 50%) and ASG automatically adjusts instance count. Simplest and most recommended approach.
+
+**ELB Health Checks** ★★★★☆
+: More granular than EC2 health checks. Validates application-level responses (/health endpoint) to replace truly unhealthy instances.
+
+---
+
+## Practice Quiz
+
+**Q1. A microservices app needs /api/v1, /api/v2, and /web to route to different server groups. What load balancer?**
+> ALB (Application Load Balancer). ALB path-based routing rules can direct /api/v1 to Target Group 1, /api/v2 to Target Group 2, and /web to Target Group 3. NLB operates at Layer 4 and cannot inspect URL paths.
+
+**Q2. Traffic predictably spikes 10x between 9 AM and 6 PM. What scaling approach is optimal?**
+> Combine Scheduled Scaling with Target Tracking. Use Scheduled Scaling to pre-scale capacity before 9 AM (before load arrives), then let Target Tracking handle real-time adjustments during the day. Predictive Scaling is also valid if the pattern repeats consistently across weeks.

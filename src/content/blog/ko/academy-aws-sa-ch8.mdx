@@ -1,0 +1,121 @@
+---
+track: academy
+locale: ko
+title: "Ch8. CloudFront, Route 53, 비용 최적화 — SAA 완성"
+category: IT
+series: "AWS Solutions Architect Associate"
+chapter: 8
+chapterTitleShort: 'CDN/DNS/비용'
+author: OIYO 편집부
+tags:
+  - AWS
+  - CloudFront
+  - Route 53
+  - 비용최적화
+  - SAA
+description: "CloudFront CDN, Route 53 라우팅 정책, 비용 최적화 전략 — SAA 시험 마지막 핵심 주제. AWS SAA 8강."
+pubDate: '2026-05-31'
+---
+
+import Callout from "@/components/mdx/Callout.astro";
+
+## CloudFront
+
+AWS의 CDN(Content Delivery Network) 서비스. 전 세계 엣지 로케이션에서 콘텐츠를 캐싱해 지연 시간 감소.
+
+**작동 원리**:
+1. 사용자가 콘텐츠 요청
+2. 가장 가까운 엣지 로케이션 확인
+3. **캐시 적중(Hit)**: 엣지에서 즉시 응답
+4. **캐시 미스(Miss)**: 오리진 서버에서 가져와 엣지 캐시 후 응답
+
+**오리진(Origin)**:
+- S3 버킷: 정적 파일, 정적 웹사이트
+- ALB: 동적 콘텐츠
+- EC2: 커스텀 오리진
+- API Gateway: API 응답 캐싱
+
+**주요 기능**:
+- HTTPS 강제
+- 지역 제한(Geo Restriction): 특정 국가 차단/허용
+- **OAC(Origin Access Control)**: CloudFront만 S3에 접근 허용, S3 직접 접근 차단
+
+<Callout type="tip">
+**S3 정적 웹사이트 보안 패턴**: S3 퍼블릭 액세스 차단 + CloudFront OAC 설정. 사용자는 CloudFront URL로만 접근, S3 직접 URL로는 접근 불가. 성능과 보안 동시 확보.
+</Callout>
+
+---
+
+## Route 53
+
+AWS의 DNS(Domain Name System) 서비스.
+
+**라우팅 정책**:
+
+| 정책 | 설명 | 사용 사례 |
+|------|------|---------|
+| **단순** | 단일 리소스로 라우팅 | 기본 DNS |
+| **가중치 기반** | 트래픽 비율 분배 | A/B 테스트, 점진적 배포 |
+| **지연 시간** | 가장 낮은 지연 리전으로 | 글로벌 저지연 |
+| **장애 조치** | 기본→대기 자동 전환 | 재해 복구 |
+| **지리적** | 사용자 위치 기반 | 콘텐츠 현지화 |
+| **다중값** | 여러 IP 반환 | 기본 부하분산 |
+
+**상태 확인(Health Check)**:
+Route 53이 오리진 서버를 모니터링해 장애 시 자동으로 다른 엔드포인트로 라우팅.
+
+---
+
+## 비용 최적화 전략
+
+**AWS Cost Explorer**: 비용 시각화 및 예측
+
+**Savings Plans vs 예약 인스턴스**:
+- Savings Plans: 더 유연 (EC2, Fargate, Lambda 모두 적용)
+- 예약 인스턴스: 특정 인스턴스 유형에 최적화
+
+**Spot 인스턴스 전략**:
+- Spot Fleets: 여러 인스턴스 유형/AZ에서 Spot 구매
+- 중단 내성 있는 워크로드: 배치 처리, CI/CD, 빅데이터
+
+**스토리지 비용 최적화**:
+- S3 Intelligent-Tiering: 접근 패턴 불규칙 데이터 자동 최적화
+- EBS 스냅샷 수명주기: 오래된 스냅샷 자동 삭제
+- 미사용 EBS 볼륨 정리
+
+**AWS Trusted Advisor**: 비용, 보안, 성능, 내결함성 최적화 권장사항 자동 제공
+
+---
+
+## SAA 시험 핵심 정리
+
+**보안**: IAM 최소 권한, 다중 AZ 배포, 암호화(저장/전송)
+
+**신뢰성**: 다중 AZ, Auto Scaling, ELB, Route 53 장애 조치
+
+**성능**: CloudFront CDN, ElastiCache, DynamoDB, 읽기 복제본
+
+**비용**: 스팟 인스턴스, Savings Plans, S3 수명주기, 서버리스
+
+---
+
+## 핵심 개념 카드
+
+**CloudFront OAC** ★★★★★
+: S3 직접 접근 차단, CloudFront만 허용. 정적 웹사이트 보안의 표준 패턴.
+
+**Route 53 가중치 기반** ★★★★☆
+: 트래픽 비율 분배. 새 버전 배포 시 10% → 50% → 100% 점진적 전환에 활용.
+
+**Trusted Advisor** ★★★☆☆
+: AWS가 자동으로 분석하는 최적화 조언 도구. 비용절감 기회, 보안 취약점 자동 탐지.
+
+---
+
+## 실전 퀴즈
+
+**Q1. 한국 사용자에게는 한국 콘텐츠를, 미국 사용자에게는 미국 콘텐츠를 제공하려면?**
+> Route 53 지리적 라우팅 정책을 사용합니다. 한국 IP → 한국 서버, 미국 IP → 미국 서버로 라우팅합니다. CloudFront를 함께 사용하면 각 지역 엣지 캐싱으로 성능도 최적화됩니다.
+
+**Q2. 개발 환경에서 비용을 최소화하면서 EC2를 사용하는 방법은?**
+> 1) t3.micro/t4g.micro 같은 버스터블 인스턴스 사용. 2) 업무 시간 외 자동 중지(AWS Instance Scheduler). 3) 스팟 인스턴스 활용(개발 환경은 중단 내성 있음). 4) EC2 절약 플랜(1년 약정)으로 비용 절감.

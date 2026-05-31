@@ -1,0 +1,120 @@
+---
+track: academy
+locale: en
+title: "Ch8. CloudFront, Route 53, and Cost Optimization — Completing Your SAA Prep"
+category: IT
+series: "AWS Solutions Architect Associate"
+chapter: 8
+chapterTitleShort: 'CDN/DNS/Cost'
+author: OIYO Editorial
+tags:
+  - AWS
+  - CloudFront
+  - Route 53
+  - cost optimization
+  - SAA
+description: "CloudFront CDN, Route 53 routing policies, and cost optimization strategies — the final SAA exam topics. AWS SAA Chapter 8."
+pubDate: '2026-05-31'
+---
+
+import Callout from "@/components/mdx/Callout.astro";
+
+## CloudFront
+
+AWS's CDN (Content Delivery Network). Caches content at global edge locations to reduce latency.
+
+**How it works**:
+1. User requests content
+2. Route to nearest edge location
+3. **Cache hit**: Response from edge immediately
+4. **Cache miss**: Fetch from origin, cache at edge, respond
+
+**Origins**:
+- S3 bucket: Static files, static websites
+- ALB: Dynamic content
+- EC2: Custom origin
+- API Gateway: API response caching
+
+**Key features**:
+- HTTPS enforcement
+- Geo Restriction: block/allow specific countries
+- **OAC (Origin Access Control)**: Allow only CloudFront to access S3, block direct S3 URLs
+
+<Callout type="tip">
+**Secure S3 static site pattern**: Block S3 public access + configure CloudFront OAC. Users access only via CloudFront URL; direct S3 URL returns access denied. Achieves both performance and security.
+</Callout>
+
+---
+
+## Route 53
+
+AWS's DNS service.
+
+**Routing policies**:
+
+| Policy | Description | Use Case |
+|--------|-------------|---------|
+| **Simple** | Single resource | Basic DNS |
+| **Weighted** | Traffic split by percentage | A/B testing, canary deployments |
+| **Latency** | Route to lowest-latency region | Global low-latency |
+| **Failover** | Primary → standby automatic | Disaster recovery |
+| **Geolocation** | Based on user location | Content localization |
+| **Multivalue** | Return multiple IPs | Basic load distribution |
+
+**Health Checks**: Route 53 monitors endpoints and automatically routes away from unhealthy ones.
+
+---
+
+## Cost Optimization Strategies
+
+**AWS Cost Explorer**: Visualize and forecast costs.
+
+**Savings Plans vs. Reserved Instances**:
+- Savings Plans: More flexible (applies to EC2, Fargate, Lambda)
+- Reserved Instances: Optimized for specific instance types
+
+**Spot Instance strategy**:
+- Spot Fleets: Buy across multiple instance types and AZs for resilience
+- Fault-tolerant workloads: batch processing, CI/CD, big data
+
+**Storage cost optimization**:
+- S3 Intelligent-Tiering for unpredictable access patterns
+- EBS snapshot lifecycle policies
+- Delete unattached EBS volumes
+
+**AWS Trusted Advisor**: Automated recommendations for cost, security, performance, and fault tolerance.
+
+---
+
+## SAA Exam Core Summary
+
+**Security**: IAM least privilege, multi-AZ, encryption (at rest + in transit)
+
+**Reliability**: Multi-AZ, Auto Scaling, ELB, Route 53 failover
+
+**Performance**: CloudFront CDN, ElastiCache, DynamoDB, Read Replicas
+
+**Cost**: Spot instances, Savings Plans, S3 lifecycle, serverless
+
+---
+
+## Key Concept Cards
+
+**CloudFront OAC** ★★★★★
+: Block direct S3 access, allow only CloudFront. Standard security pattern for static website hosting.
+
+**Route 53 Weighted Routing** ★★★★☆
+: Split traffic by percentage. Use for canary deployments: 10% → 50% → 100% gradual rollout.
+
+**Trusted Advisor** ★★★☆☆
+: AWS's automated optimization advisor. Detects cost-saving opportunities and security vulnerabilities.
+
+---
+
+## Practice Quiz
+
+**Q1. Korean users should see Korean content; US users should see US content. What Route 53 policy?**
+> Geolocation routing. Configure: Korean IPs → Korean servers, US IPs → US servers. Combined with CloudFront, each region's content is also cached at nearby edge locations for performance.
+
+**Q2. How can you minimize EC2 costs in a development environment?**
+> 1) Use burstable instances (t3.micro, t4g.micro). 2) Auto-stop outside business hours (AWS Instance Scheduler). 3) Use Spot Instances — dev environments tolerate interruption. 4) EC2 Savings Plans for predictable baseline capacity.

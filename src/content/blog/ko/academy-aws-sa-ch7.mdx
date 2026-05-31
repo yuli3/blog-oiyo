@@ -1,0 +1,116 @@
+---
+track: academy
+locale: ko
+title: "Ch7. ELB와 Auto Scaling — 고가용성 아키텍처 구현"
+category: IT
+series: "AWS Solutions Architect Associate"
+chapter: 7
+chapterTitleShort: 'ELB/Auto Scaling'
+author: OIYO 편집부
+tags:
+  - AWS
+  - ELB
+  - Auto Scaling
+  - 로드밸런서
+  - SAA
+description: "ALB, NLB, GLB 비교, Auto Scaling 그룹, 스케일링 정책, 상태 확인 — 탄력적 아키텍처 구현. AWS SAA 7강."
+pubDate: '2026-05-31'
+---
+
+import Callout from "@/components/mdx/Callout.astro";
+
+## Elastic Load Balancing(ELB)
+
+들어오는 트래픽을 여러 서버에 분산시키는 서비스.
+
+### ALB (Application Load Balancer)
+**7계층(HTTP/HTTPS)** 로드 밸런서.
+
+**고급 라우팅 기능**:
+- URL 경로 기반: `/api/*` → API 서버, `/static/*` → S3
+- 호스트 기반: `api.example.com` → API 서버, `www.example.com` → 웹 서버
+- HTTP 헤더/쿼리 기반 라우팅
+- WebSocket, HTTP/2 지원
+
+**적합한 사용 사례**: 웹 애플리케이션, REST API, 마이크로서비스
+
+### NLB (Network Load Balancer)
+**4계층(TCP/UDP)** 로드 밸런서.
+
+- 초저지연, 극고성능
+- 고정 IP 또는 Elastic IP 지원
+- 초당 수백만 요청 처리
+
+**적합한 사용 사례**: 게임 서버, IoT, 금융 거래, 실시간 스트리밍
+
+<Callout type="tip">
+**시험 결정 트리**: HTTP/HTTPS 라우팅 필요? → ALB. 초저지연 TCP/UDP, 고정 IP 필요? → NLB. 서드파티 방화벽과 통합 필요? → GLB.
+</Callout>
+
+### GLB (Gateway Load Balancer)
+**3계층** 로드 밸런서. 서드파티 방화벽, IDS/IPS 어플라이언스와 통합.
+
+---
+
+## Auto Scaling Group (ASG)
+
+### 구성 요소
+1. **시작 템플릿**: AMI, 인스턴스 유형, 보안 그룹, IAM 역할
+2. **그룹 크기**: 최소/최대/원하는(Desired) 용량
+3. **스케일링 정책**
+
+### 스케일링 정책 유형
+
+**동적 스케일링**:
+- **단순(Simple)**: CloudWatch 알람 → 정해진 수만큼 추가/제거
+- **단계(Step)**: 알람 임계값에 따라 다른 스텝 적용
+- **대상 추적(Target Tracking)**: 목표 지표 유지 (예: CPU 50% 유지)
+
+**예약 스케일링**: 알려진 패턴에 맞춰 미리 확장 (예: 매일 오전 9시에 10개로 확장)
+
+**예측 스케일링**: ML이 과거 패턴 분석 → 사전 확장
+
+### 상태 확인 (Health Check)
+
+- **EC2 상태 확인**: 인스턴스 하드웨어/소프트웨어 상태
+- **ELB 상태 확인**: 애플리케이션 레벨 응답 확인 (더 권장)
+
+비정상 인스턴스는 자동 종료 후 새 인스턴스로 교체.
+
+---
+
+## 고가용성 아키텍처 패턴
+
+**기본 HA 패턴**:
+```
+인터넷 → ALB (퍼블릭 서브넷, 다중 AZ)
+           → ASG (프라이빗 서브넷, 다중 AZ)
+                → RDS Multi-AZ (프라이빗 서브넷)
+```
+
+**지역 기반 재해 복구(Cross-Region)**:
+- Route 53 → Primary 리전 (평소)
+            → Secondary 리전 (장애 시)
+
+---
+
+## 핵심 개념 카드
+
+**ALB vs NLB** ★★★★★
+: ALB=7계층 HTTP 라우팅, NLB=4계층 고성능 TCP. HTTP 웹앱=ALB, 게임/실시간=NLB.
+
+**대상 추적 스케일링** ★★★★★
+: 목표 CPU(예: 50%)를 설정하면 ASG가 자동으로 인스턴스 수를 조정. 가장 간단하고 권장되는 방식.
+
+**ELB 상태 확인** ★★★★☆
+: EC2 상태 확인보다 세밀. 앱 레벨 응답(/health 엔드포인트)을 확인해 비정상 인스턴스 교체.
+
+---
+
+## 실전 퀴즈
+
+**Q1. 마이크로서비스 아키텍처에서 /api/v1, /api/v2, /web 세 경로를 각각 다른 서버 그룹으로 라우팅하려면?**
+> ALB(Application Load Balancer)를 사용합니다. ALB의 경로 기반 라우팅 규칙으로 /api/v1 → 서버그룹1, /api/v2 → 서버그룹2, /web → 서버그룹3 으로 설정할 수 있습니다. NLB는 URL 경로를 인식하지 못합니다.
+
+**Q2. 오전 9시에서 오후 6시 사이에 트래픽이 10배 증가하는 패턴이 예측될 때 최적의 스케일링 방식은?**
+> 예약 스케일링(Scheduled Scaling)과 대상 추적(Target Tracking)을 조합합니다. 오전 8:50에 예약 스케일링으로 최소 용량을 높여두고, 대상 추적으로 실제 부하에 반응해 추가 조정합니다. 예측 스케일링도 유사 패턴이 반복된다면 사용할 수 있습니다.

@@ -1,0 +1,121 @@
+---
+track: academy
+locale: en
+title: "Ch5. VPC — Building Your Own Virtual Network"
+category: IT
+series: "AWS Solutions Architect Associate"
+chapter: 5
+chapterTitleShort: 'VPC Networking'
+author: OIYO Editorial
+tags:
+  - AWS
+  - VPC
+  - networking
+  - subnets
+  - SAA
+description: "VPC, public/private subnets, Internet Gateway, NAT Gateway, routing tables, Security Groups vs NACLs — mastering VPC. AWS SAA Chapter 5."
+pubDate: '2026-05-31'
+---
+
+import Callout from "@/components/mdx/Callout.astro";
+
+## What Is VPC?
+
+**Amazon VPC (Virtual Private Cloud)** lets you create your own isolated virtual network within AWS.
+
+**Key characteristics**: Created per region. You define CIDR block (e.g., 10.0.0.0/16 = 65,536 IPs). Each account gets a default VPC per region.
+
+---
+
+## Subnets
+
+Subdivisions of a VPC's IP range. Created per **Availability Zone**.
+
+### Public Subnets
+Can communicate directly with the internet. Requires Internet Gateway + routing table entry.
+- Use for: web servers, load balancers, NAT Gateways
+
+### Private Subnets
+Not directly reachable from the internet. Protected from external traffic.
+- Use for: databases, application servers, backend services
+
+<Callout type="tip">
+**3-tier architecture**: Public subnet (load balancer) → Private subnet (app servers) → Private subnet (database). Separating tiers hardens security.
+</Callout>
+
+---
+
+## Gateways
+
+### Internet Gateway (IGW)
+Connects VPC to the internet. One per VPC. Required for public subnet internet communication.
+
+### NAT Gateway
+Allows private subnet resources to initiate **outbound** internet connections. Blocks inbound.
+- Deployed in the public subnet
+- HA best practice: one NAT Gateway per AZ
+
+```
+Private EC2 → NAT GW (public subnet) → IGW → Internet
+         (software updates, API calls possible)
+```
+
+---
+
+## Routing Tables
+
+Rules determining where traffic is sent.
+
+**Public subnet routing table**:
+```
+Destination: 10.0.0.0/16  →  Local (VPC traffic)
+Destination: 0.0.0.0/0    →  Internet Gateway
+```
+
+**Private subnet routing table**:
+```
+Destination: 10.0.0.0/16  →  Local
+Destination: 0.0.0.0/0    →  NAT Gateway
+```
+
+---
+
+## Security Groups vs. NACLs
+
+| | Security Group | NACL |
+|--|----------------|------|
+| Level | Instance | Subnet |
+| State | **Stateful** | **Stateless** |
+| Rules | Allow only | Allow + Deny |
+| Applied to | Explicit attachment | All traffic in subnet |
+
+---
+
+## VPC Peering and Transit Gateway
+
+**VPC Peering**: Direct connection between two VPCs. **No transitive routing** (A-B peering + B-C peering does NOT allow A→C).
+
+**Transit Gateway**: Hub-and-spoke model for multiple VPCs. Supports transitive routing. Standard for large multi-VPC environments.
+
+---
+
+## Key Concept Cards
+
+**Public vs. Private Subnets** ★★★★★
+: Public=IGW attached (web servers), Private=no direct internet (DB, app servers). 3-tier separation is the fundamental pattern.
+
+**NAT Gateway** ★★★★★
+: Private subnet outbound internet allowed, inbound blocked. Deployed in public subnet. Per-AZ for HA.
+
+**Security Group (Stateful) vs. NACL (Stateless)** ★★★★★
+: SG=instance-level Allow-only, NACL=subnet-level Allow+Deny. Two layers of defense.
+
+---
+
+## Practice Quiz
+
+**Q1. A private subnet EC2 instance cannot download software updates. What is needed?**
+> A NAT Gateway. Deploy it in the public subnet, add a route in the private subnet's routing table: 0.0.0.0/0 → NAT Gateway. The NAT Gateway routes outbound traffic to the Internet Gateway while blocking any inbound connections initiated from the internet.
+
+**Q2. You've allowed inbound HTTP (port 80) on a NACL but responses aren't returning. Why?**
+> NACLs are stateless — return traffic must be explicitly allowed. Add an outbound rule allowing the ephemeral port range (1024–65535) for response traffic. Security Groups (stateful) handle this automatically, which is why this problem doesn't occur with security groups alone.

@@ -1,0 +1,121 @@
+---
+track: academy
+locale: ko
+title: "Ch6. RDS와 데이터베이스 서비스 — 관리형 DB 완전 정복"
+category: IT
+series: "AWS Solutions Architect Associate"
+chapter: 6
+chapterTitleShort: 'RDS/DB'
+author: OIYO 편집부
+tags:
+  - AWS
+  - RDS
+  - 데이터베이스
+  - Aurora
+  - DynamoDB
+  - SAA
+description: "RDS 다중 AZ, 읽기 전용 복제본, Aurora, DynamoDB, ElastiCache — AWS 데이터베이스 서비스 비교. AWS SAA 6강."
+pubDate: '2026-05-31'
+---
+
+import Callout from "@/components/mdx/Callout.astro";
+
+## RDS (Relational Database Service)
+
+AWS가 관리하는 관계형 데이터베이스 서비스. OS 패치, DB 설치, 백업을 AWS가 처리합니다.
+
+**지원 엔진**: MySQL, PostgreSQL, MariaDB, Oracle, SQL Server, Aurora
+
+### 다중 AZ (Multi-AZ)
+고가용성을 위한 RDS 복제 방식.
+
+```
+기본 DB (ap-northeast-2a) → 동기 복제 → 대기 DB (ap-northeast-2b)
+                               (자동 장애 조치: ~60-120초)
+```
+
+- **동기 복제**: 기본에 쓰면 동시에 대기에도 쓰임
+- **자동 장애 조치**: 기본 DB 장애 시 대기 DB가 자동으로 승격
+- **주의**: 읽기 성능 향상 목적이 아님! 고가용성 목적
+
+### 읽기 전용 복제본 (Read Replica)
+읽기 부하를 분산하기 위한 복사본.
+
+```
+기본 DB → 비동기 복제 → 읽기 복제본 1 (읽기 전용)
+                    → 읽기 복제본 2 (읽기 전용)
+```
+
+- 쓰기: 기본 DB만
+- 읽기: 기본 DB + 복제본으로 분산
+- 리전 간 복제 가능 (재해 복구)
+
+<Callout type="tip">
+**시험 구분**: 다중 AZ = 고가용성/재해복구. 읽기 복제본 = 성능/읽기 확장. 혼동하지 마세요!
+</Callout>
+
+---
+
+## Amazon Aurora
+
+AWS가 개발한 클라우드 네이티브 DB. MySQL/PostgreSQL 호환.
+
+**Aurora의 특징**:
+- 스토리지: 3 AZ에 6개 복사본 자동 유지
+- 성능: MySQL 대비 5배, PostgreSQL 대비 3배 성능
+- 자동 스케일링: 10GB에서 128TB까지 자동 증가
+- Aurora Serverless: 사용량에 따라 자동으로 용량 조정
+
+---
+
+## DynamoDB
+
+AWS의 완전 관리형 **NoSQL** 키-값/문서 데이터베이스.
+
+**특징**:
+- 서버리스: 용량 계획 불필요
+- 단일 자릿수 밀리초 지연
+- 자동 수평 확장
+- 다중 AZ 기본 적용
+
+**적합한 사용 사례**: 세션 데이터, 쇼핑 카트, 게임 리더보드, IoT 데이터, 모바일 백엔드
+
+---
+
+## ElastiCache
+
+인메모리 캐싱 서비스. DB 부하 감소, 응답 속도 향상.
+
+| 엔진 | 특징 |
+|------|------|
+| **Redis** | 고급 자료구조, 복제, 영속성, 클러스터 |
+| **Memcached** | 단순 캐싱, 멀티스레드, 수평 확장 |
+
+**사용 패턴**:
+```
+사용자 요청 → ElastiCache 확인 (Cache Hit) → 즉시 응답
+                             (Cache Miss) → DB 쿼리 → 캐시에 저장 → 응답
+```
+
+---
+
+## 핵심 개념 카드
+
+**Multi-AZ vs 읽기 복제본** ★★★★★
+: Multi-AZ=고가용성(자동장애조치), 읽기 복제본=성능(읽기확장). 목적이 다릅니다.
+
+**Aurora** ★★★★☆
+: MySQL/PostgreSQL 호환, 3 AZ 6복사본, MySQL 5배 성능. RDS의 고성능 옵션.
+
+**DynamoDB** ★★★★★
+: 완전 관리형 NoSQL. 서버리스, 밀리초 지연, 자동 확장. 세션/게임/IoT 데이터에 최적.
+
+---
+
+## 실전 퀴즈
+
+**Q1. RDS 읽기 복제본을 사용해야 하는 상황은?**
+> 읽기 쿼리가 많아 기본 DB가 과부하 상태일 때입니다. 읽기 트래픽을 복제본으로 분산합니다. 보고서 생성, 분석 쿼리처럼 읽기 집약적 작업을 복제본으로 오프로딩할 수 있습니다. 고가용성(장애 복구)이 목적이라면 Multi-AZ를 사용해야 합니다.
+
+**Q2. 세션 데이터 저장에 RDS vs DynamoDB 중 어느 것이 더 적합한가?**
+> DynamoDB가 더 적합합니다. 세션 데이터는 단순 키-값 구조, 빠른 읽기/쓰기, 자동 만료(TTL 기능)가 필요합니다. DynamoDB는 단일 자릿수 밀리초 지연, TTL 기능, 자동 확장을 제공합니다. RDS는 복잡한 관계형 쿼리가 필요할 때 적합합니다.

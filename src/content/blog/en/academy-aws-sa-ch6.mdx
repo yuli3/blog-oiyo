@@ -1,0 +1,121 @@
+---
+track: academy
+locale: en
+title: "Ch6. RDS and Database Services — Managed Databases on AWS"
+category: IT
+series: "AWS Solutions Architect Associate"
+chapter: 6
+chapterTitleShort: 'RDS/Databases'
+author: OIYO Editorial
+tags:
+  - AWS
+  - RDS
+  - databases
+  - Aurora
+  - DynamoDB
+  - SAA
+description: "RDS Multi-AZ, Read Replicas, Aurora, DynamoDB, ElastiCache — comparing AWS database services. AWS SAA Chapter 6."
+pubDate: '2026-05-31'
+---
+
+import Callout from "@/components/mdx/Callout.astro";
+
+## RDS (Relational Database Service)
+
+AWS-managed relational database service. AWS handles OS patching, DB installation, and backups.
+
+**Supported engines**: MySQL, PostgreSQL, MariaDB, Oracle, SQL Server, Aurora.
+
+### Multi-AZ Deployment
+High availability configuration:
+
+```
+Primary DB (AZ-a) → Synchronous replication → Standby DB (AZ-b)
+                    (Automatic failover: ~60-120 seconds)
+```
+
+- **Synchronous replication**: Write to primary simultaneously writes to standby
+- **Automatic failover**: Standby promoted automatically on primary failure
+- **Purpose**: High availability, NOT read performance improvement
+
+### Read Replicas
+Copies that handle read traffic to offload the primary:
+
+```
+Primary DB → Asynchronous replication → Read Replica 1 (read-only)
+                                     → Read Replica 2 (read-only)
+```
+
+- Writes: primary DB only
+- Reads: distribute across primary + replicas
+- Cross-region replicas: for disaster recovery
+
+<Callout type="tip">
+**Exam distinction**: Multi-AZ = high availability / failover. Read Replicas = performance / read scaling. Don't confuse the two — this is one of the exam's most common trick questions.
+</Callout>
+
+---
+
+## Amazon Aurora
+
+AWS's cloud-native database, compatible with MySQL and PostgreSQL.
+
+**Aurora advantages**:
+- Storage: 6 copies across 3 AZs, automatic
+- Performance: 5x MySQL, 3x PostgreSQL
+- Auto-scaling storage: 10 GB to 128 TB automatically
+- Aurora Serverless: scales capacity up/down automatically
+
+---
+
+## DynamoDB
+
+AWS's fully managed **NoSQL** key-value and document database.
+
+**Characteristics**:
+- Serverless (no capacity planning needed)
+- Single-digit millisecond latency
+- Automatic horizontal scaling
+- Multi-AZ by default
+
+**Ideal use cases**: Session data, shopping carts, gaming leaderboards, IoT data, mobile backends.
+
+---
+
+## ElastiCache
+
+In-memory caching service — reduces database load and improves response time.
+
+| Engine | Best for |
+|--------|---------|
+| **Redis** | Advanced data structures, replication, persistence, clustering |
+| **Memcached** | Simple caching, multi-threaded, horizontal scaling |
+
+**Cache-aside pattern**:
+```
+Request → Check ElastiCache (Cache Hit) → Immediate response
+                            (Cache Miss) → Query DB → Store in cache → Response
+```
+
+---
+
+## Key Concept Cards
+
+**Multi-AZ vs. Read Replicas** ★★★★★
+: Multi-AZ=high availability (auto-failover), Read Replicas=performance (read scaling). Different purposes.
+
+**Aurora** ★★★★☆
+: MySQL/PostgreSQL compatible, 6 copies across 3 AZs, 5x MySQL performance. The high-performance RDS option.
+
+**DynamoDB** ★★★★★
+: Fully managed NoSQL, serverless, millisecond latency, automatic scaling. Optimal for session/gaming/IoT data.
+
+---
+
+## Practice Quiz
+
+**Q1. When should you use RDS Read Replicas?**
+> When your read workload is overwhelming the primary database. Read-heavy workloads like reporting queries, analytics, and BI tools are ideal candidates for offloading to replicas. If your goal is high availability and automatic failover, use Multi-AZ instead.
+
+**Q2. For storing session data, which is better — RDS or DynamoDB?**
+> DynamoDB. Session data has a simple key-value structure, requires fast reads/writes, and benefits from TTL (auto-expiry). DynamoDB provides single-digit millisecond latency, built-in TTL, and automatic scaling. RDS is better suited for complex relational queries and joins.
