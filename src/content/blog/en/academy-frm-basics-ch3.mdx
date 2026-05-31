@@ -1,0 +1,152 @@
+---
+track: academy
+locale: en
+title: "Ch3. FRM Financial Risk Manager — Operational Risk & Quantitative Analysis"
+category: "Finance"
+series: "FRM Financial Risk Manager"
+chapter: 3
+chapterTitleShort: 'OpRisk & Quant'
+author: OIYO Editorial
+tags:
+  - FRM
+  - operational risk
+  - quantitative analysis
+  - finance
+  - certification
+  - Basel
+description: "Operational risk frameworks (Basel IV, AMA), quantitative tools (regression, time series, extreme value theory), and key statistical concepts tested on the FRM exam."
+pubDate: '2026-05-25'
+layoutVariant: lecture-series
+---
+
+## Operational Risk: Definition and Scope
+
+**Operational risk** is defined by Basel as *"the risk of loss resulting from inadequate or failed internal processes, people, systems, or external events."* It explicitly **excludes** strategic and reputational risk (though these may result from operational failures).
+
+### The Seven Basel Operational Risk Event Categories
+
+| Category | Example |
+|----------|---------|
+| Internal Fraud | Employee embezzlement, unauthorized trading |
+| External Fraud | ATM skimming, phishing attacks |
+| Employment Practices | Discrimination lawsuits, workplace injuries |
+| Clients, Products & Business Practices | Mis-selling, market manipulation |
+| Damage to Physical Assets | Natural disasters, terrorism |
+| Business Disruption & System Failures | IT outages, power failures |
+| Execution, Delivery & Process Management | Settlement errors, data entry mistakes |
+
+---
+
+## Measuring Operational Risk
+
+### Basel III/IV Approaches
+
+**Basic Indicator Approach (BIA)**: Capital = 15% × Average Gross Income (3 years)
+
+**Standardized Approach (SA)**: Similar to BIA but broken down by business line, each with its own alpha multiplier.
+
+**Advanced Measurement Approach (AMA)**: Internal loss data + external data + scenario analysis + business environment factors. Allowed pre-Basel IV; being phased out.
+
+**Standardized Measurement Approach (SMA)** — Basel IV:
+- SMA replaces AMA for international banks
+- Capital = Business Indicator Component (BIC) × Internal Loss Multiplier (ILM)
+- Penalizes banks with high historical losses
+
+### Loss Distribution Approach (LDA)
+The standard quantitative model under AMA:
+1. Fit a **frequency distribution** to loss counts (Poisson is typical)
+2. Fit a **severity distribution** to loss sizes (lognormal, Weibull, GPD)
+3. Convolve the two using Monte Carlo to get the aggregate annual loss distribution
+4. Read off the **99.9% quantile** as the operational VaR (OpVaR)
+
+---
+
+## Quantitative Analysis: The FRM Math Foundation
+
+FRM Part I requires strong statistical and econometric skills. This section covers the highest-yield topics.
+
+### Probability & Statistics
+
+**Descriptive statistics**:
+- Mean, variance, standard deviation, skewness (asymmetry), kurtosis (tail fatness)
+- **Excess kurtosis > 0** (leptokurtic / fat tails) is the norm for financial returns
+
+**Key distributions**:
+| Distribution | Use Case |
+|-------------|---------|
+| Normal | Benchmark; VaR parametric method |
+| Lognormal | Asset prices (always positive) |
+| Student-t | Fat tails; better for financial returns |
+| Poisson | Operational loss frequency |
+| Generalized Pareto (GPD) | Extreme Value Theory (EVT) tail losses |
+
+### Regression Analysis
+
+**OLS (Ordinary Least Squares)**: y = α + β₁x₁ + ... + βₙxₙ + ε
+
+Key FRM applications:
+- **Beta estimation**: Regress stock returns on market returns → β = Cov(R_i, R_m)/Var(R_m)
+- **Factor models**: Fama-French three-factor, Carhart four-factor
+- **Multicollinearity, heteroskedasticity, autocorrelation**: Understand how each violates OLS assumptions and remedies
+
+### Time Series Analysis
+
+**Autocorrelation**: Past returns predict future returns — violates the efficient market hypothesis (weak form). Measured by ACF/PACF plots.
+
+**ARCH/GARCH models**: Capture **volatility clustering** (calm periods followed by turbulent periods):
+- GARCH(1,1): σ²ₜ = ω + α·ε²ₜ₋₁ + β·σ²ₜ₋₁
+- Parameters: α (reaction to shocks) + β (persistence) < 1 for stationarity
+
+**EWMA (Exponentially Weighted Moving Average)**: Special case of GARCH(1,1) with ω = 0:
+- σ²ₜ = (1−λ)·r²ₜ₋₁ + λ·σ²ₜ₋₁ (λ ≈ 0.94 for daily data — RiskMetrics standard)
+
+### Extreme Value Theory (EVT)
+
+EVT addresses the FRM's central problem: **standard distributions underestimate tail risk**.
+
+**Peaks Over Threshold (POT)** method:
+1. Set a high threshold u
+2. Fit a **Generalized Pareto Distribution** to exceedances (losses above u)
+3. Extrapolate to get VaR and ES at extreme quantiles (99.9%+)
+
+This is the theoretically sound approach for operational risk capital and stress VaR.
+
+---
+
+## Correlation, Copulas, and Tail Dependence
+
+Standard linear correlation (Pearson's ρ) is insufficient for capturing how assets co-move during crises.
+
+**Copulas** separate the marginal distributions from their dependence structure:
+- **Gaussian copula**: Zero tail dependence — underestimated CDO losses in 2008
+- **t-copula**: Positive tail dependence — more realistic for stress scenarios
+- **Archimedean copulas**: Clayton (lower tail), Gumbel (upper tail)
+
+The 2008 financial crisis exposed the dangers of assuming Gaussian copulas for correlated mortgage defaults.
+
+---
+
+## Key Formulas to Memorize
+
+| Formula | Use |
+|---------|-----|
+| σ²ₜ = ω + α·ε²ₜ₋₁ + β·σ²ₜ₋₁ | GARCH(1,1) conditional variance |
+| EWMA: λ ≈ 0.94 | RiskMetrics daily volatility |
+| EVT GPD: ξ, β parameters | Tail loss modeling |
+| OLS β = Cov(x,y)/Var(x) | Regression/Beta estimation |
+| Skewness < 0 | Left tail / negative skew (common in equity returns) |
+
+---
+
+## Summary
+
+| Area | Key Exam Points |
+|------|----------------|
+| OpRisk categories | 7 Basel event types; internal vs. external |
+| Basel IV SMA | Replaces AMA; uses BIC × ILM |
+| LDA | Poisson frequency × severity → convolve → 99.9% OpVaR |
+| GARCH(1,1) | Volatility clustering; α + β < 1 |
+| EVT | GPD for tail modeling; superior to normal for extremes |
+| Copulas | Capture non-linear correlation; t-copula for tail dependence |
+
+**Chapter 4** provides a comprehensive review of FRM high-yield formulas and a 20-question mock exam to test your readiness.

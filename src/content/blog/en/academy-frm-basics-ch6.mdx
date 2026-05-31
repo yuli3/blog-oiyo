@@ -1,0 +1,121 @@
+---
+track: academy
+locale: en
+title: "Ch6. FRM Financial Risk Manager — Basel IV & FRTB Deep Dive"
+category: "Finance"
+series: "FRM Financial Risk Manager"
+chapter: 6
+chapterTitleShort: 'Basel IV & FRTB'
+author: OIYO Editorial
+tags:
+  - FRM
+  - Basel IV
+  - FRTB
+  - market risk
+  - regulatory capital
+  - internal models
+description: "FRM current-issues depth — Basel IV key changes, FRTB (Fundamental Review of the Trading Book), SA-CVA, IMA eligibility, and P&L attribution testing."
+pubDate: '2026-05-26'
+layoutVariant: lecture-series
+---
+
+## What Is Basel IV?
+
+**Basel IV** refers to the 2017 finalization package (fully effective 2025), officially called **"Basel III Finalisation."** Its core goal is to reduce excessive variability in risk-weighted assets (RWA) caused by banks' internal models.
+
+### Basel IV Key Changes
+
+| Area | Pre-Basel IV | Basel IV |
+|------|-------------|---------|
+| Credit risk | High IRB model flexibility | IRB output floor (72.5% of SA) |
+| Operational risk | AMA (internal model) allowed | SMA only |
+| Market risk | VaR-based (99%) | FRTB — ES-based (97.5%) |
+| RWA output floor | None | Total RWA ≥ 72.5% of standardized RWA |
+
+**Output Floor**: Even banks using internal models must keep RWA at or above 72.5% of the standardized approach. This prevents capital underestimation through model optimism.
+
+---
+
+## FRTB: Fundamental Review of the Trading Book
+
+### Why FRTB Was Needed
+
+During the 2008 financial crisis, market risk capital in the trading book proved drastically insufficient. The Basel Committee redesigned the entire trading book capital framework from the ground up.
+
+### FRTB Core Changes
+
+**1. VaR → Expected Shortfall (ES)**
+
+| Standard | Old IMA | FRTB IMA |
+|---------|---------|---------|
+| Risk measure | VaR 99%, 10-day | ES 97.5%, variable liquidity |
+| Tail risk | Not captured | Captured (ES > VaR) |
+| Liquidity adjustment | None | Asset class LH (10–120 days) |
+
+**2. IMA Eligibility per Trading Desk**
+- IMA approval is granted at the **desk level**, not firm-wide
+- P&L Attribution (PLA) test: model-based P&L must align with actual P&L
+- Failed backtesting at a desk → forced migration to Standardized Approach (SA)
+
+**3. Clearer Trading Book / Banking Book Boundary**
+- Trading intent must be documented and demonstrated
+- Mid-stream reclassification heavily restricted (anti-regulatory-arbitrage)
+
+### FRTB Standardized Approach (SA-FRTB)
+
+**Sensitivities-Based Method (SBM)**:
+- Capital charges for Delta (Δ), Gamma (Γ), Vega (ν) across risk factors
+- Use the maximum across three correlation scenarios (low / medium / high)
+
+**Jump-to-Default (JTD)**:
+- Captures immediate default loss on bonds, equities, credit positions
+
+**Residual Risk Add-On (RRAO)**:
+- Additional charge for exotic options, gap risk, and risks not captured by SBM
+
+---
+
+## SA-CVA (Standardized CVA Capital)
+
+Under Basel IV, CVA capital uses either **Basic Approach (BA-CVA)** or **Standardized Approach (SA-CVA)**.
+
+### BA-CVA
+- Uses regulatory parameters; no sensitivity calculations required
+- CVA capital = RW × EAD × DF (simplified formula)
+
+### SA-CVA
+- Sensitivity-based, similar to FRTB SA
+- Hedging credit recognized: CDS bought as CVA hedges reduce capital
+- IMA-CVA abolished under Basel IV
+
+---
+
+## P&L Attribution (PLA) Testing
+
+**PLA testing** is the gatekeeper for maintaining FRTB IMA eligibility.
+
+### Testing Methodology
+1. **Risk-theoretical P&L (RTPL)**: Model sensitivities × market movements = predicted P&L
+2. **Actual P&L (APL)**: Actual change in portfolio value
+3. **Compare**: Difference between RTPL and APL must stay within tolerance
+
+### Traffic Light Zones
+| Zone | Condition | Consequence |
+|------|-----------|-------------|
+| Green | Good alignment | IMA maintained |
+| Amber | Minor divergence | Capital surcharge |
+| Red | Significant divergence | IMA revoked → SA required |
+
+---
+
+## FRTB Exam Summary
+
+| Item | Key Takeaway |
+|------|-------------|
+| ES confidence level | 97.5% (captures more tail than 99% VaR) |
+| Liquidity horizon (LH) | 10 days (FX, large-cap) to 120 days (small-cap, credit) |
+| IMA approval unit | Trading desk (not firm-wide) |
+| PLA traffic light | Green/Amber/Red — surcharges or revocation on failure |
+| Output floor | Internal model RWA ≥ 72.5% of standardized RWA |
+
+**Chapter 7** covers **Investment Management Risk** — hedge fund analysis, ALM, and economic capital allocation.

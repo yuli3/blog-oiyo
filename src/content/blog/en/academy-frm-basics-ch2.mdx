@@ -1,0 +1,151 @@
+---
+track: academy
+locale: en
+title: "Ch2. FRM Financial Risk Manager — Credit Risk Management"
+category: "Finance"
+series: "FRM Financial Risk Manager"
+chapter: 2
+chapterTitleShort: 'Credit Risk'
+author: OIYO Editorial
+tags:
+  - FRM
+  - credit risk
+  - risk management
+  - finance
+  - certification
+  - PD
+  - LGD
+description: "Credit risk fundamentals for the FRM exam — PD, LGD, EAD, expected loss, credit derivatives, CVA, counterparty risk, and the IRB approach under Basel III."
+pubDate: '2026-05-25'
+layoutVariant: lecture-series
+---
+
+## What Is Credit Risk?
+
+**Credit risk** is the risk that a borrower or counterparty will fail to meet its contractual obligations, resulting in financial loss. It is the largest single risk category for most banks and financial institutions and commands roughly **20% of the FRM Part II exam**.
+
+Credit risk encompasses:
+- **Default risk**: Will the counterparty default?
+- **Spread risk**: Will the credit spread widen, reducing market value?
+- **Recovery risk**: If default occurs, how much will be recovered?
+- **Concentration risk**: Is the portfolio overly exposed to a single borrower or sector?
+
+---
+
+## The Credit Risk Trinity: PD, LGD, EAD
+
+Every credit risk model revolves around three parameters:
+
+### Probability of Default (PD)
+The likelihood that a borrower defaults over a given time horizon (typically 1 year).
+
+- **Through-the-cycle (TTC)**: Long-run average default rate, used for regulatory capital
+- **Point-in-time (PIT)**: Current economic cycle estimate, used in IFRS 9 provisioning
+
+### Loss Given Default (LGD)
+The fraction of exposure lost when a default occurs.
+
+**LGD = 1 − Recovery Rate**
+
+Typical recovery rates by seniority:
+| Seniority | Recovery Rate | LGD |
+|-----------|--------------|-----|
+| Senior Secured | 60–70% | 30–40% |
+| Senior Unsecured | 40–50% | 50–60% |
+| Subordinated | 20–30% | 70–80% |
+
+### Exposure at Default (EAD)
+The amount outstanding at the moment of default.
+
+- For term loans: EAD ≈ outstanding balance
+- For revolving credit/derivatives: EAD includes potential future exposure (PFE)
+
+---
+
+## Expected Loss (EL) and Unexpected Loss (UL)
+
+**Expected Loss (EL)** = PD × LGD × EAD
+
+EL is the average loss the bank anticipates and should price into the loan rate (credit spread). It is NOT held as capital.
+
+**Unexpected Loss (UL)** is the volatility of losses around EL. This is the driver of **regulatory and economic capital requirements**.
+
+---
+
+## The IRB Approach: Basel III Internal Ratings-Based
+
+Under **Basel III**, sophisticated banks may use internal models (IRB) to estimate risk-weighted assets (RWA):
+
+**Foundation IRB (F-IRB)**: Banks estimate PD internally; regulators provide LGD and EAD.
+
+**Advanced IRB (A-IRB)**: Banks estimate all three parameters internally.
+
+The **IRB capital formula** uses the Vasicek single-factor model to derive a capital requirement that covers unexpected losses at a 99.9% confidence level over 1 year:
+
+K = LGD × [N(G(PD)/√(1−ρ) + √(ρ/(1−ρ)) × G(0.999)) − PD]
+
+Where ρ is the asset correlation (Basel-specified) and N/G are the normal CDF and inverse CDF.
+
+---
+
+## Credit Derivatives
+
+Credit derivatives allow banks to transfer credit risk without selling the underlying loan.
+
+### Credit Default Swap (CDS)
+- **Protection buyer** pays a periodic premium (spread)
+- **Protection seller** pays the notional if a credit event occurs
+- **Credit events**: bankruptcy, failure to pay, restructuring
+
+CDS spreads reflect market perception of default probability:
+> CDS spread ≈ PD × LGD (for small PD)
+
+### CDO (Collateralized Debt Obligation)
+- Pools loans/bonds and tranches cash flows by risk priority
+- Senior tranches: low yield, first to receive payments
+- Equity tranche: highest yield, first to absorb losses (called the "first loss" piece)
+- Correlation between underlying assets is the key risk driver
+
+---
+
+## Counterparty Credit Risk (CCR) and CVA
+
+**Counterparty Credit Risk** arises from OTC derivatives where the counterparty may default before contract maturity.
+
+**Credit Valuation Adjustment (CVA)** is the market price of counterparty credit risk:
+
+CVA ≈ (1 − Recovery) × ∑[PD(t) × Discount(t) × EPE(t)]
+
+Where EPE = Expected Positive Exposure at time t.
+
+Post-2008 regulatory changes:
+- **Basel III CVA capital charge**: Banks must hold capital for CVA volatility
+- **Central clearing mandate**: Most standardized derivatives now cleared through CCPs (Central Counterparties)
+- **Initial margin requirements**: Bilateral OTC trades must post initial margin (ISDA SIMM)
+
+---
+
+## Scoring Strategy for FRM Credit Risk
+
+| Topic | Exam Weight | Action |
+|-------|-------------|--------|
+| PD/LGD/EAD/EL | High | Memorize formulas cold |
+| IRB approach | High | Understand conceptually; formula given |
+| CDS mechanics | High | Be able to price and describe cash flows |
+| CVA/DVA/FVA | Medium-High | Know the concept and direction of adjustment |
+| Securitization/CDO | Medium | Focus on tranche structure and correlation |
+| Basel capital formulas | Medium | Know capital = f(UL, confidence 99.9%) |
+
+---
+
+## Summary
+
+| Concept | Formula / Key Point |
+|---------|---------------------|
+| Expected Loss | PD × LGD × EAD |
+| LGD | 1 − Recovery Rate |
+| CDS spread | ≈ PD × LGD |
+| CVA | Mark-to-market of counterparty default risk |
+| Basel capital | Protects to 99.9% confidence, covers UL not EL |
+
+**Chapter 3** covers **Operational Risk & Quantitative Analysis** — the final pillar of the FRM foundation.
