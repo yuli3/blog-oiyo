@@ -84,7 +84,7 @@ def parse_sitemap(url: str, visited: set | None = None) -> list[str]:
 
     urls: list[str] = []
     try:
-        resp = requests.get(url, timeout=30, headers={"User-Agent": "sitemap-submit/1.0"})
+        resp = requests.get(url, timeout=30, headers={"User-Agent": "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"})
         resp.raise_for_status()
         root = ET.fromstring(resp.content)
     except Exception as exc:
@@ -354,9 +354,16 @@ def main() -> int:
     if args.json_out:
         print(json.dumps(all_results, indent=2, ensure_ascii=False))
 
-    errors = [k for k, v in all_results.items() if isinstance(v, dict) and v.get("status") == "error"]
-    if errors:
-        log(f"Completed with errors: {errors}", "WARN")
+    # Bing Webmaster API is treated as non-fatal (endpoint frequently changes,
+    # IndexNow already covers Bing crawling via the same protocol).
+    fatal_errors = [
+        k for k, v in all_results.items()
+        if isinstance(v, dict) and v.get("status") == "error" and k != "bing"
+    ]
+    all_errors = [k for k, v in all_results.items() if isinstance(v, dict) and v.get("status") == "error"]
+    if all_errors:
+        log(f"Submission errors (bing is non-fatal): {all_errors}", "WARN")
+    if fatal_errors:
         return 1
 
     log("All submissions complete.", "OK")
