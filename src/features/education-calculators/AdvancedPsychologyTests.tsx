@@ -3,25 +3,23 @@ import React, { useState, useCallback, useReducer } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import {
-  Target,
-  Users,
-  Shield,
-  BarChart3,
-  Copy,
-  Check,
-  ChevronRight,
-  Brain,
-  Heart,
-  Anchor,
-  CloudRain,
-  AlertCircle,
-  Smile,
-  Star,
-  Lightbulb,
-  TrendingUp,
-  BookOpen,
-} from 'lucide-react';
+import Target from 'lucide-react/dist/esm/icons/target'
+import Users from 'lucide-react/dist/esm/icons/users'
+import Shield from 'lucide-react/dist/esm/icons/shield'
+import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3'
+import Copy from 'lucide-react/dist/esm/icons/copy'
+import Check from 'lucide-react/dist/esm/icons/check'
+import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right'
+import Brain from 'lucide-react/dist/esm/icons/brain'
+import Heart from 'lucide-react/dist/esm/icons/heart'
+import Anchor from 'lucide-react/dist/esm/icons/anchor'
+import CloudRain from 'lucide-react/dist/esm/icons/cloud-rain'
+import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle'
+import Smile from 'lucide-react/dist/esm/icons/smile'
+import Star from 'lucide-react/dist/esm/icons/star'
+import Lightbulb from 'lucide-react/dist/esm/icons/lightbulb'
+import TrendingUp from 'lucide-react/dist/esm/icons/trending-up'
+import BookOpen from 'lucide-react/dist/esm/icons/book-open';
 
 // ─────────────────────────────────────────────
 // Shared sub-components

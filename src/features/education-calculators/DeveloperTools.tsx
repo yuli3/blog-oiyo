@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
-import { ArrowLeftRight, Code, Copy } from 'lucide-react';
+import ArrowLeftRight from 'lucide-react/dist/esm/icons/arrow-left-right'
+import Code from 'lucide-react/dist/esm/icons/code'
+import Copy from 'lucide-react/dist/esm/icons/copy';
 
 /**
  * Designer & Developer Unit Converter

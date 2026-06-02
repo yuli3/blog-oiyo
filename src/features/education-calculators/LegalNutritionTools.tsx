@@ -1,7 +1,12 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
 import { Card } from '@/components/ui/card';
-import { Copy, Check, Search, Plus, X, Percent } from 'lucide-react';
+import Copy from 'lucide-react/dist/esm/icons/copy'
+import Check from 'lucide-react/dist/esm/icons/check'
+import Search from 'lucide-react/dist/esm/icons/search'
+import Plus from 'lucide-react/dist/esm/icons/plus'
+import X from 'lucide-react/dist/esm/icons/x'
+import Percent from 'lucide-react/dist/esm/icons/percent';
 
 // ─────────────────────────────────────────────
 // LEGAL INTEREST CALCULATOR

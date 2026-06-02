@@ -1,7 +1,12 @@
 'use client';
 import { useState, useCallback } from 'react';
 import { Card } from '@/components/ui/card';
-import { Copy, Check, RotateCcw, AlertCircle, ChevronDown, ChevronUp } from 'lucide-react';
+import Copy from 'lucide-react/dist/esm/icons/copy'
+import Check from 'lucide-react/dist/esm/icons/check'
+import RotateCcw from 'lucide-react/dist/esm/icons/rotate-ccw'
+import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle'
+import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down'
+import ChevronUp from 'lucide-react/dist/esm/icons/chevron-up';
 
 // ─────────────────────────────────────────────
 // LOST ARK AUCTION CALCULATOR (lostarkCalculator port)

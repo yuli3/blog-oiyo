@@ -1,7 +1,14 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Shuffle, Heart, Share2, History, Trash2, Search, CheckCircle, Swords } from 'lucide-react';
+import Shuffle from 'lucide-react/dist/esm/icons/shuffle'
+import Heart from 'lucide-react/dist/esm/icons/heart'
+import Share2 from 'lucide-react/dist/esm/icons/share-2'
+import History from 'lucide-react/dist/esm/icons/history'
+import Trash2 from 'lucide-react/dist/esm/icons/trash-2'
+import Search from 'lucide-react/dist/esm/icons/search'
+import CheckCircle from 'lucide-react/dist/esm/icons/check-circle'
+import Swords from 'lucide-react/dist/esm/icons/swords';
 import menuData, { countryLabels, type CountryType, type MenuItem } from '@/lib/menu-data';
 
 const MAX_HISTORY = 10;

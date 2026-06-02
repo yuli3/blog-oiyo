@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
-import { TrendingUp, Landmark } from 'lucide-react';
+import TrendingUp from 'lucide-react/dist/esm/icons/trending-up'
+import Landmark from 'lucide-react/dist/esm/icons/landmark';
 
 /**
  * CAPM (Capital Asset Pricing Model) Calculator

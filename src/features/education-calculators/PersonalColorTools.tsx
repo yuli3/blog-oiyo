@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Palette, Sparkles, CheckCircle2 } from 'lucide-react';
+import Palette from 'lucide-react/dist/esm/icons/palette'
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles'
+import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
 
 /**
  * Simplified Personal Color Mini-Test

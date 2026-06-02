@@ -1,10 +1,20 @@
 'use client';
 import { useState, useEffect, useReducer, useCallback } from 'react';
 import { Card } from '@/components/ui/card';
-import {
-  Heart, Star, Briefcase, GraduationCap, Gift, Plane, Music, Trophy,
-  Calendar, Copy, Check, Plus, Trash2, Clock
-} from 'lucide-react';
+import Heart from 'lucide-react/dist/esm/icons/heart'
+import Star from 'lucide-react/dist/esm/icons/star'
+import Briefcase from 'lucide-react/dist/esm/icons/briefcase'
+import GraduationCap from 'lucide-react/dist/esm/icons/graduation-cap'
+import Gift from 'lucide-react/dist/esm/icons/gift'
+import Plane from 'lucide-react/dist/esm/icons/plane'
+import Music from 'lucide-react/dist/esm/icons/music'
+import Trophy from 'lucide-react/dist/esm/icons/trophy'
+import Calendar from 'lucide-react/dist/esm/icons/calendar'
+import Copy from 'lucide-react/dist/esm/icons/copy'
+import Check from 'lucide-react/dist/esm/icons/check'
+import Plus from 'lucide-react/dist/esm/icons/plus'
+import Trash2 from 'lucide-react/dist/esm/icons/trash-2'
+import Clock from 'lucide-react/dist/esm/icons/clock';
 
 // ─────────────────────────────────────────────
 // Shared utils

@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LabelList } from 'recharts';
-import { Landmark, TrendingUp, Info } from 'lucide-react';
+import Landmark from 'lucide-react/dist/esm/icons/landmark'
+import TrendingUp from 'lucide-react/dist/esm/icons/trending-up'
+import Info from 'lucide-react/dist/esm/icons/info';
 
 /**
  * Bond Pricing Calculator

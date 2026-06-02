@@ -1,7 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { Card } from '@/components/ui/card';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceDot } from 'recharts';
-import { Sliders, Activity } from 'lucide-react';
+import Sliders from 'lucide-react/dist/esm/icons/sliders'
+import Activity from 'lucide-react/dist/esm/icons/activity';
 
 /**
  * IS-LM Model Simulator

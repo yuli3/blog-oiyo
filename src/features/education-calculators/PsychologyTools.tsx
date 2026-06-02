@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Heart, Shield, Anchor, CloudRain, Sparkles, Compass, Brain, Zap, Layers } from 'lucide-react';
+import Heart from 'lucide-react/dist/esm/icons/heart'
+import Shield from 'lucide-react/dist/esm/icons/shield'
+import Anchor from 'lucide-react/dist/esm/icons/anchor'
+import CloudRain from 'lucide-react/dist/esm/icons/cloud-rain'
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles'
+import Compass from 'lucide-react/dist/esm/icons/compass'
+import Brain from 'lucide-react/dist/esm/icons/brain'
+import Zap from 'lucide-react/dist/esm/icons/zap'
+import Layers from 'lucide-react/dist/esm/icons/layers';
 
 /**
  * Simplified Attachment Theory Test

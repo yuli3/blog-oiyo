@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Dice5, RefreshCw, Zap } from 'lucide-react';
+import Dice5 from 'lucide-react/dist/esm/icons/dice-5'
+import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw'
+import Zap from 'lucide-react/dist/esm/icons/zap';
 
 /**
  * Lost Ark Style Faceting Simulator

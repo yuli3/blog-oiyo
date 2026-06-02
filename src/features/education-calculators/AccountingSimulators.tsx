@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
-import { ArrowLeftRight, TrendingDown, TrendingUp, AlertCircle } from 'lucide-react';
+import ArrowLeftRight from 'lucide-react/dist/esm/icons/arrow-left-right'
+import TrendingDown from 'lucide-react/dist/esm/icons/trending-down'
+import TrendingUp from 'lucide-react/dist/esm/icons/trending-up'
+import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle';
 
 /**
  * Standard Costing Variance Analysis Simulator

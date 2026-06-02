@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Coins, TrendingUp, TrendingDown, Target } from 'lucide-react';
+import Coins from 'lucide-react/dist/esm/icons/coins'
+import TrendingUp from 'lucide-react/dist/esm/icons/trending-up'
+import TrendingDown from 'lucide-react/dist/esm/icons/trending-down'
+import Target from 'lucide-react/dist/esm/icons/target';
 
 /**
  * CVP Decision Making Game

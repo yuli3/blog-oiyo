@@ -1,6 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { Card } from '@/components/ui/card';
-import { TrendingUp, Calculator, Target } from 'lucide-react';
+import TrendingUp from 'lucide-react/dist/esm/icons/trending-up'
+import Calculator from 'lucide-react/dist/esm/icons/calculator'
+import Target from 'lucide-react/dist/esm/icons/target';
 
 /**
  * CVP (Cost-Volume-Profit) Calculator

@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
-import { Target, TrendingUp } from "lucide-react";
+import Target from 'lucide-react/dist/esm/icons/target'
+import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
 import { CVPChart } from "@/features/education-calculators/FinancialCharts";
 
 /**

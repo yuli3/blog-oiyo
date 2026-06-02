@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
-import { Table, Check, X, Info } from 'lucide-react';
+import Table from 'lucide-react/dist/esm/icons/table'
+import Check from 'lucide-react/dist/esm/icons/check'
+import X from 'lucide-react/dist/esm/icons/x'
+import Info from 'lucide-react/dist/esm/icons/info';
 
 /**
  * Basic Truth Table Generator for A and B

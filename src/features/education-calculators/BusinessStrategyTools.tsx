@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Target, Users, Zap, AlertTriangle, Download } from 'lucide-react';
+import Target from 'lucide-react/dist/esm/icons/target'
+import Users from 'lucide-react/dist/esm/icons/users'
+import Zap from 'lucide-react/dist/esm/icons/zap'
+import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle'
+import Download from 'lucide-react/dist/esm/icons/download';
 
 /**
  * Interactive SWOT Analysis Builder

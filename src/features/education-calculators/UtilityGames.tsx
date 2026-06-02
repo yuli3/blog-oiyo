@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Zap, Keyboard, RefreshCw, Trophy } from 'lucide-react';
+import Zap from 'lucide-react/dist/esm/icons/zap'
+import Keyboard from 'lucide-react/dist/esm/icons/keyboard'
+import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw'
+import Trophy from 'lucide-react/dist/esm/icons/trophy';
 
 /**
  * Premium Typing Speed Test

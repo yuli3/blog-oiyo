@@ -3,7 +3,20 @@ import React, { useReducer } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Heart, Smile, Zap, Copy, Check, Brain, Leaf, Star, Users, Clock, Gift, MessageCircle, HandHeart, Moon } from 'lucide-react';
+import Heart from 'lucide-react/dist/esm/icons/heart'
+import Smile from 'lucide-react/dist/esm/icons/smile'
+import Zap from 'lucide-react/dist/esm/icons/zap'
+import Copy from 'lucide-react/dist/esm/icons/copy'
+import Check from 'lucide-react/dist/esm/icons/check'
+import Brain from 'lucide-react/dist/esm/icons/brain'
+import Leaf from 'lucide-react/dist/esm/icons/leaf'
+import Star from 'lucide-react/dist/esm/icons/star'
+import Users from 'lucide-react/dist/esm/icons/users'
+import Clock from 'lucide-react/dist/esm/icons/clock'
+import Gift from 'lucide-react/dist/esm/icons/gift'
+import MessageCircle from 'lucide-react/dist/esm/icons/message-circle'
+import HandHeart from 'lucide-react/dist/esm/icons/hand-heart'
+import Moon from 'lucide-react/dist/esm/icons/moon';
 
 // ─────────────────────────────────────────────
 // Shared

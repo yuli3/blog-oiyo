@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
-import { Scale, Globe, ArrowRight } from 'lucide-react';
+import Scale from 'lucide-react/dist/esm/icons/scale'
+import Globe from 'lucide-react/dist/esm/icons/globe'
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 
 /**
  * Comparative Advantage Calculator
