@@ -41,6 +41,9 @@ jobs:
         env:
           # Suppress interactive prompts
           CI: true
+          # GitHub Actions ubuntu-latest has 7 GB RAM; cap Node heap at 6 GB
+          # (package.json also sets --max-old-space-size=6144 as a fallback)
+          NODE_OPTIONS: --max-old-space-size=6144
 
   sitemap-submit:
     name: Submit Sitemap (GSC + Bing + IndexNow)
