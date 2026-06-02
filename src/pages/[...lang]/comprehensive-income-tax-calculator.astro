@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ComprehensiveIncomeTaxCalc from "../../components/tools/ComprehensiveIncomeTaxCalc";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "종합소득세 계산기 — 사업·금융·근로소득 세금 비교",
+    description: "2024년 기준 종합소득세를 사업소득·금융소득·근로소득별로 계산하고 분리과세와 비교합니다. 누진세율과 세율 구간을 차트로 확인하세요.",
+  },
+  en: {
+    title: "Comprehensive Income Tax Calculator — Compare Business, Investment & Employment Income",
+    description: "Calculate Korean comprehensive income tax for 2024 across business, financial, and employment income. Visualize progressive brackets and compare with separate taxation.",
+  },
+  ja: {
+    title: "総合所得税計算機 — 事業・金融・勤労所得の税金比較",
+    description: "2024年基準で事業所得・金融所得・勤労所得の総合所得税を計算し、分離課税と比較します。累進税率をグラフで確認。",
+  },
+  fr: {
+    title: "Calculateur d'Impôt Global sur le Revenu — Comparaison des Sources de Revenus",
+    description: "Calculez l'impôt global coréen sur le revenu pour 2024 selon les revenus d'activité, financiers et salariaux. Visualisez les tranches progressives.",
+  },
+  es: {
+    title: "Calculadora de Impuesto Global sobre la Renta — Comparación de Fuentes de Ingreso",
+    description: "Calcula el impuesto global coreano sobre la renta para 2024 por ingresos de negocio, financieros y laborales. Visualiza los tramos progresivos.",
+  },
+  zh: {
+    title: "綜合所得稅計算機 — 比較事業、金融與勞動所得稅",
+    description: "依2024年標準計算事業所得、金融所得與勤勞所得的綜合所得稅，並與分離課稅比較，圖表顯示累進稅率。",
+  },
+  cn: {
+    title: "综合所得税计算器 — 比较事业、金融与劳动所得税",
+    description: "依2024年标准计算事业所得、金融所得与劳动所得的综合所得税，并与分离课税比较，图表显示累进税率。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <ComprehensiveIncomeTaxCalc client:load locale={locale === "ko" ? "ko" : "en"} />
+  </main>
+</BaseLayout>

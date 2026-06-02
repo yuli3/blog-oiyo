@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import RealEstateCapitalGainsTaxCalc from "../../components/tools/RealEstateCapitalGainsTaxCalc";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "부동산 양도소득세 계산기 — 1주택·2주택·3주택 세금 비교",
+    description: "2024년 기준 부동산 양도소득세를 보유주택 수(1·2·3주택)별, 보유기간별로 자동 계산합니다. 단기양도세율과 누진세율을 차트로 비교하세요.",
+  },
+  en: {
+    title: "Real Estate Capital Gains Tax Calculator — 1, 2 & 3+ Properties (Korea)",
+    description: "Calculate Korean real estate capital gains tax by number of properties owned and holding period. Compare short-term rates and progressive brackets with charts.",
+  },
+  ja: {
+    title: "不動産譲渡所得税計算機 — 1住宅・2住宅・3住宅の税金比較",
+    description: "2024年基準で保有住宅数（1・2・3住宅）と保有期間別に不動産譲渡所得税を自動計算します。短期譲渡税率と累進税率をグラフで比較。",
+  },
+  fr: {
+    title: "Calculateur de Plus-Value Immobilière — 1, 2 et 3+ Biens (Corée)",
+    description: "Calculez l'impôt coréen sur les plus-values immobilières selon le nombre de biens détenus et la durée de détention. Comparez les taux à l'aide de graphiques.",
+  },
+  es: {
+    title: "Calculadora de Impuesto a la Plusvalía Inmobiliaria — 1, 2 y 3+ Propiedades (Corea)",
+    description: "Calcula el impuesto coreano a la ganancia de capital inmobiliaria según el número de propiedades y el período de tenencia. Compara tramos con gráficos.",
+  },
+  zh: {
+    title: "房地產資本利得稅計算機 — 1戶、2戶、3戶以上稅金比較",
+    description: "依2024年標準，按持有房屋數（1·2·3戶）及持有期間自動計算房地產資本利得稅，圖表比較短期稅率與累進稅率。",
+  },
+  cn: {
+    title: "房地产资本利得税计算器 — 1套、2套、3套以上税金比较",
+    description: "依2024年标准，按持有房屋数（1·2·3套）及持有期间自动计算房地产资本利得税，图表比较短期税率与累进税率。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <RealEstateCapitalGainsTaxCalc client:load locale={locale === "ko" ? "ko" : "en"} />
+  </main>
+</BaseLayout>

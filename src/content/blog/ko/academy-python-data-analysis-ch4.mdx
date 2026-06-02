@@ -1,0 +1,175 @@
+---
+track: academy
+locale: ko
+title: "Python 데이터분석 심화 4강: EDA 완전 가이드 — 탐색적 데이터 분석의 모든 것"
+description: "Exploratory Data Analysis(EDA)를 체계적으로 수행하는 프레임워크를 배웁니다. 데이터를 처음 받았을 때부터 인사이트 도출까지, 실무 분석가의 사고 과정을 그대로 따라갑니다."
+pubDate: "2026-06-02"
+category: Programming
+author: OIYO 편집부
+tags:
+  - Python
+  - EDA
+  - 탐색적데이터분석
+  - 데이터분석
+  - 데이터사이언스
+series: "Python 데이터분석 심화"
+chapter: 4
+---
+import Callout from "@/components/mdx/Callout.astro";
+
+## 4강 개요
+
+EDA(Exploratory Data Analysis, 탐색적 데이터 분석)는 데이터를 이해하고 가설을 세우는 과정입니다. 존 투키(John Tukey)가 정립한 이 개념은 "데이터가 무엇을 말하는지 먼저 들어라"는 철학에서 출발합니다. 모델링 전에 EDA를 철저히 하면 잘못된 방향으로 가는 것을 막을 수 있습니다.
+
+---
+
+## EDA 5단계 프레임워크
+
+### 1단계: 데이터 구조 파악
+
+```python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+def eda_basic(df):
+    print("=== 기본 정보 ===")
+    print(f"Shape: {df.shape}")
+    print(f"\nDtypes:\n{df.dtypes}")
+    print(f"\n결측값:\n{df.isnull().sum()}")
+    print(f"\n중복 행: {df.duplicated().sum()}")
+    print(f"\n기술 통계:\n{df.describe()}")
+    return
+
+eda_basic(df)
+```
+
+### 2단계: 단변량 분석 (Univariate)
+
+각 변수 하나씩의 분포를 파악합니다.
+
+```python
+# 수치형 변수
+fig, axes = plt.subplots(len(numeric_cols), 2, figsize=(12, 4*len(numeric_cols)))
+for i, col in enumerate(numeric_cols):
+    # 히스토그램
+    df[col].hist(ax=axes[i, 0], bins=30)
+    axes[i, 0].set_title(f'{col} 분포')
+    
+    # 박스플롯 (이상값 확인)
+    df.boxplot(column=col, ax=axes[i, 1])
+    axes[i, 1].set_title(f'{col} 박스플롯')
+
+# 범주형 변수
+for col in cat_cols:
+    df[col].value_counts().plot(kind='bar')
+    plt.title(f'{col} 빈도')
+    plt.show()
+```
+
+### 3단계: 이변량 분석 (Bivariate)
+
+두 변수 간의 관계를 탐색합니다.
+
+```python
+# 수치형 vs 수치형 → 산점도 + 상관계수
+corr_matrix = df[numeric_cols].corr()
+sns.heatmap(corr_matrix, annot=True, cmap='RdYlGn', center=0)
+
+# 범주형 vs 수치형 → 박스플롯/바이올린플롯
+sns.boxplot(x='category', y='target', data=df)
+
+# 범주형 vs 범주형 → 크로스탭 + 히트맵
+ct = pd.crosstab(df['col1'], df['col2'], normalize='index')
+sns.heatmap(ct, annot=True, cmap='Blues')
+```
+
+### 4단계: 다변량 분석
+
+```python
+# pairplot — 여러 변수 간 관계 한번에
+sns.pairplot(df[numeric_cols + ['target']], hue='target', diag_kind='kde')
+
+# 3D 산점도 (plotly)
+import plotly.express as px
+fig = px.scatter_3d(df, x='x1', y='x2', z='x3', color='target')
+fig.show()
+```
+
+### 5단계: 시계열 분석 (해당 시)
+
+```python
+df_time = df.set_index('date')
+
+# 트렌드 시각화
+df_time['value'].plot(figsize=(14, 5))
+plt.title('시계열 추이')
+
+# 이동 평균으로 노이즈 제거
+df_time['MA_7'] = df_time['value'].rolling(7).mean()
+df_time['MA_30'] = df_time['value'].rolling(30).mean()
+df_time[['value', 'MA_7', 'MA_30']].plot(figsize=(14, 5))
+
+# 월/요일별 패턴
+df['month'] = df['date'].dt.month
+df.groupby('month')['value'].mean().plot(kind='bar')
+```
+
+---
+
+## 자동 EDA 라이브러리
+
+반복적인 EDA 작업을 자동화하는 도구들이 있습니다.
+
+```python
+# ydata-profiling (구 pandas-profiling)
+from ydata_profiling import ProfileReport
+profile = ProfileReport(df, title="EDA Report", explorative=True)
+profile.to_file("eda_report.html")
+
+# sweetviz
+import sweetviz as sv
+report = sv.analyze(df)
+report.show_html("sweetviz_report.html")
+
+# dtale — 인터랙티브 탐색
+import dtale
+d = dtale.show(df)
+d.open_browser()
+```
+
+<Callout type="tip">
+자동 EDA 라이브러리는 빠른 개요를 파악하기 좋지만, 도메인 지식을 반영한 깊은 분석은 수동으로 해야 합니다. 자동화 도구는 시작점으로만 활용하세요.
+</Callout>
+
+---
+
+## EDA 체크리스트
+
+**기본 파악:**
+- [ ] 행, 열 수 확인
+- [ ] 각 컬럼 데이터 타입 적절한가?
+- [ ] 결측값 비율과 패턴
+- [ ] 중복 행 존재 여부
+
+**분포 파악:**
+- [ ] 수치형: 분포 형태, 왜도(skewness), 이상값
+- [ ] 범주형: 클래스 불균형(class imbalance)
+
+**관계 파악:**
+- [ ] 타깃 변수와 각 피처의 상관관계
+- [ ] 피처 간 다중공선성(multicollinearity)
+- [ ] 시계열이면 계절성·트렌드 확인
+
+---
+
+## 자주 묻는 질문
+
+**Q: EDA에 얼마나 시간을 써야 하나요?**
+A: 프로젝트 초기에 전체 작업 시간의 20~30%를 EDA에 투자하면 모델링 단계에서 훨씬 효율적으로 작업할 수 있습니다. 서두르지 마세요.
+
+**Q: 상관계수가 높으면 인과관계가 있나요?**
+A: 아닙니다. 상관관계는 인과관계를 의미하지 않습니다. 인과관계를 파악하려면 실험 설계(A/B 테스트) 또는 인과 추론(Causal Inference) 기법이 필요합니다.
+
+<Callout type="tip">**시리즈 이어보기**: [3강: 시각화](/ko/academy-python-data-analysis-ch3) · [5강: 머신러닝 실전 입문](/ko/academy-python-data-analysis-ch5) · [Python 기초 시리즈](/ko/academy-python-basics-ch1)</Callout>

@@ -168,6 +168,24 @@ import MindRestTest from "../components/tests/MindRestTest";
 import MeetingStyleTest from "../components/tests/MeetingStyleTest";
 import PersonaScopeTest from "../components/tests/PersonaScopeTest";
 
+// Batch-5 psych/social tests (2026-06-02)
+import MbtiCareerTest from "../components/tests/MbtiCareerTest";
+import MbtiLoveTest from "../components/tests/MbtiLoveTest";
+import MbtiStressTest from "../components/tests/MbtiStressTest";
+import SocialAnxietyTest from "../components/tests/SocialAnxietyTest";
+import NarcissismTest from "../components/tests/NarcissismTest";
+import ResilienceTest from "../components/tests/ResilienceTest";
+import LeadershipStyleTest from "../components/tests/LeadershipStyleTest";
+import GrowthMindsetTest from "../components/tests/GrowthMindsetTest";
+import LonelinessTest from "../components/tests/LonelinessTest";
+import ProcrastinationTypeTest from "../components/tests/ProcrastinationTypeTest";
+import MotivationTypeTest from "../components/tests/MotivationTypeTest";
+import DopamineDependencyTest from "../components/tests/DopamineDependencyTest";
+import AngerStyleTest from "../components/tests/AngerStyleTest";
+import SleepChronotypeTest from "../components/tests/SleepChronotypeTest";
+import EmotionalIntelligenceTest from "../components/tests/EmotionalIntelligenceTest";
+import HomeBuyingCalculator from "../components/calculators/HomeBuyingCalculator";
+
 // Batch-4 psych/health tests (2026-06-02)
 import BigFivePersonalityTest from "../components/tests/BigFivePersonalityTest";
 import BurnoutTest from "../components/tests/BurnoutTest";
@@ -408,6 +426,23 @@ const islandComponents = {
   MindRestTest,
   MeetingStyleTest,
   PersonaScopeTest,
+  // Batch-5 psych/social tests (2026-06-02)
+  MbtiCareerTest,
+  MbtiLoveTest,
+  MbtiStressTest,
+  SocialAnxietyTest,
+  NarcissismTest,
+  ResilienceTest,
+  LeadershipStyleTest,
+  GrowthMindsetTest,
+  LonelinessTest,
+  ProcrastinationTypeTest,
+  MotivationTypeTest,
+  DopamineDependencyTest,
+  AngerStyleTest,
+  SleepChronotypeTest,
+  EmotionalIntelligenceTest,
+  HomeBuyingCalculator,
   // Batch-4 psych/health tests (2026-06-02)
   BigFivePersonalityTest,
   BurnoutTest,

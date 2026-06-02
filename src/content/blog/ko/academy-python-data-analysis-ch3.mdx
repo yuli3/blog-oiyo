@@ -1,0 +1,160 @@
+---
+track: academy
+locale: ko
+title: "Python 데이터분석 심화 3강: matplotlib·seaborn·plotly 시각화 완전 가이드"
+description: "데이터 시각화의 세 가지 핵심 라이브러리를 완전 정복합니다. 정적 차트(matplotlib·seaborn)와 인터랙티브 차트(plotly), 그리고 언제 어떤 차트를 써야 하는지 기준을 제시합니다."
+pubDate: "2026-06-02"
+category: Programming
+author: OIYO 편집부
+tags:
+  - Python
+  - matplotlib
+  - seaborn
+  - plotly
+  - 데이터시각화
+series: "Python 데이터분석 심화"
+chapter: 3
+---
+import Callout from "@/components/mdx/Callout.astro";
+
+## 3강 개요
+
+"그래프 하나가 테이블 천 개보다 낫다"는 말이 있습니다. 데이터 시각화는 패턴을 발견하고, 이해관계자에게 인사이트를 전달하는 핵심 스킬입니다. matplotlib으로 기초를 잡고, seaborn으로 통계 시각화를, plotly로 인터랙티브 대시보드를 구현합니다.
+
+---
+
+## 어떤 차트를 써야 하는가?
+
+시각화에서 가장 중요한 것은 차트 선택입니다.
+
+| 목적 | 추천 차트 | 라이브러리 |
+|---|---|---|
+| 분포 보기 | 히스토그램, KDE, 박스플롯 | seaborn |
+| 비교 | 막대 차트, 박스플롯 | seaborn, matplotlib |
+| 관계 파악 | 산점도, 히트맵 | seaborn |
+| 시계열 추세 | 선 그래프 | matplotlib, plotly |
+| 비율 | 파이 차트, 누적 막대 | matplotlib |
+| 대시보드 | 인터랙티브 차트 | plotly |
+
+---
+
+## 1. matplotlib 기초
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+
+# 기본 선 그래프
+fig, ax = plt.subplots(figsize=(10, 6))
+ax.plot(x, y, color='steelblue', linewidth=2, label='실적')
+ax.set_title('월별 매출 추이', fontsize=14, fontweight='bold')
+ax.set_xlabel('월')
+ax.set_ylabel('매출 (백만원)')
+ax.legend()
+ax.grid(True, alpha=0.3)
+plt.tight_layout()
+plt.show()
+
+# 여러 서브플롯
+fig, axes = plt.subplots(2, 2, figsize=(12, 8))
+axes[0, 0].hist(df['age'], bins=30, color='steelblue', alpha=0.7)
+axes[0, 0].set_title('나이 분포')
+axes[0, 1].scatter(df['age'], df['income'], alpha=0.5)
+axes[0, 1].set_title('나이 vs 소득')
+plt.tight_layout()
+```
+
+<Callout type="note">
+한글 폰트는 별도 설정이 필요합니다. `matplotlib.rcParams['font.family'] = 'Malgun Gothic'` (Windows) 또는 `'AppleGothic'` (Mac)을 사용하세요.
+</Callout>
+
+---
+
+## 2. seaborn: 통계 시각화
+
+seaborn은 matplotlib 위에서 동작하며 통계 시각화에 최적화되어 있습니다.
+
+```python
+import seaborn as sns
+
+# 히스토그램 + KDE
+sns.histplot(df['score'], kde=True, bins=30)
+
+# 박스플롯 — 분포와 이상값 한눈에
+sns.boxplot(x='dept', y='score', data=df, palette='Set2')
+
+# 바이올린플롯 — 분포 모양까지 보여줌
+sns.violinplot(x='dept', y='score', data=df)
+
+# 산점도 + 회귀선
+sns.regplot(x='experience', y='salary', data=df, scatter_kws={'alpha': 0.5})
+
+# 상관관계 히트맵 — EDA 필수
+corr = df.corr()
+sns.heatmap(corr, annot=True, fmt='.2f', cmap='RdYlGn', center=0)
+
+# pairplot — 모든 컬럼 쌍 관계 한번에
+sns.pairplot(df[['age', 'income', 'score', 'dept']], hue='dept')
+```
+
+### FacetGrid — 조건별 다중 플롯
+
+```python
+g = sns.FacetGrid(df, col='dept', hue='gender', height=4)
+g.map(sns.scatterplot, 'experience', 'salary')
+g.add_legend()
+```
+
+---
+
+## 3. plotly: 인터랙티브 시각화
+
+대시보드나 Jupyter Notebook에서 상호작용하며 탐색할 때 사용합니다.
+
+```python
+import plotly.express as px
+import plotly.graph_objects as go
+
+# 기본 산점도
+fig = px.scatter(df, x='experience', y='salary', color='dept',
+                 hover_data=['name'], size='score',
+                 title='경력 vs 연봉')
+fig.show()
+
+# 시계열 라인 차트
+fig = px.line(df_time, x='date', y='value', color='category',
+              title='카테고리별 시계열 추이')
+fig.update_traces(mode='lines+markers')
+
+# 인터랙티브 막대 차트
+fig = px.bar(df.groupby('dept')['score'].mean().reset_index(),
+             x='dept', y='score', color='dept',
+             title='부서별 평균 점수')
+fig.show()
+```
+
+<Callout type="tip">
+plotly로 만든 차트는 HTML로 저장해 웹에서 공유할 수 있습니다: `fig.write_html('chart.html')`
+</Callout>
+
+---
+
+## 실무 시각화 체크리스트
+
+1. **제목과 레이블**: 모든 축, 범례에 명확한 설명 추가
+2. **색상**: 색맹 친화적 팔레트 사용 (`colorblind` 또는 `Set2`)
+3. **스케일**: 0에서 시작하지 않는 y축은 오해를 유발할 수 있음
+4. **밀도 vs 빈도**: 비율로 비교할 때는 density 사용
+5. **적절한 해상도**: `plt.savefig('plot.png', dpi=300, bbox_inches='tight')`
+
+---
+
+## 자주 묻는 질문
+
+**Q: seaborn과 plotly 중 어느 것을 배워야 하나요?**
+A: 보고서·논문용 정적 이미지는 seaborn, 웹 대시보드·탐색적 분석은 plotly입니다. 데이터 분석 실무에서는 둘 다 필요합니다.
+
+**Q: 대용량 데이터(100만 행)를 시각화하면 느린가요?**
+A: 100만 개 점을 그리면 느립니다. 샘플링, 집계, 히트맵/2D 히스토그램 등으로 요약해서 시각화하세요. plotly의 `datashader` 연동도 방법입니다.
+
+<Callout type="tip">**시리즈 이어보기**: [2강: 데이터 전처리](/ko/academy-python-data-analysis-ch2) · [4강: EDA 완전 가이드](/ko/academy-python-data-analysis-ch4) · [5강: 머신러닝 실전 입문](/ko/academy-python-data-analysis-ch5)</Callout>

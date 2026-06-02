@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SeparateVsComprehensiveTaxCalc from "../../components/tools/SeparateVsComprehensiveTaxCalc";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "분리과세 vs 종합과세 비교 계산기 — 어느 쪽이 유리할까?",
+    description: "금융소득·사업소득·기타소득에 대해 분리과세(14~25%)와 종합과세를 비교해 실제 세액 차이를 계산합니다. 절세 전략을 시각적으로 확인하세요.",
+  },
+  en: {
+    title: "Separate vs. Comprehensive Tax Calculator — Which Is More Beneficial?",
+    description: "Compare separate taxation (14–25%) against comprehensive income tax for financial, business, and miscellaneous income. Find your optimal tax strategy with visual charts.",
+  },
+  ja: {
+    title: "分離課税 vs 総合課税 比較計算機 — どちらが有利？",
+    description: "金融所得・事業所得・その他所得に対する分離課税（14〜25%）と総合課税を比較し、実際の税額差を計算します。節税戦略を視覚的に確認。",
+  },
+  fr: {
+    title: "Calculateur Imposition Séparée vs Globale — Laquelle est Plus Avantageuse?",
+    description: "Comparez l'imposition séparée (14–25%) à l'imposition globale pour les revenus financiers, professionnels et divers. Trouvez la stratégie fiscale optimale.",
+  },
+  es: {
+    title: "Calculadora Impuesto Separado vs Global — ¿Cuál es Más Beneficioso?",
+    description: "Compara la tributación separada (14–25%) con el impuesto global sobre ingresos financieros, empresariales y varios. Encuentra tu estrategia fiscal óptima.",
+  },
+  zh: {
+    title: "分離課稅 vs 綜合課稅 比較計算機 — 哪個更划算？",
+    description: "比較金融所得、事業所得、其他所得的分離課稅（14–25%）與綜合課稅的實際稅額差異，以圖表視覺化節稅策略。",
+  },
+  cn: {
+    title: "分离课税 vs 综合课税 比较计算器 — 哪个更划算？",
+    description: "比较金融所得、事业所得、其他所得的分离课税（14–25%）与综合课税的实际税额差异，以图表可视化节税策略。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <SeparateVsComprehensiveTaxCalc client:load locale={locale === "ko" ? "ko" : "en"} />
+  </main>
+</BaseLayout>

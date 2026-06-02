@@ -1,0 +1,143 @@
+---
+track: academy
+locale: ko
+title: "Python 데이터분석 심화 1강: pandas 완전 정복 — DataFrame 구조와 핵심 연산"
+description: "pandas DataFrame의 구조, 인덱싱, 필터링, groupby, merge를 실전 데이터로 완전 정복합니다. 데이터 분석 실무에서 80%는 pandas 하나로 해결됩니다."
+pubDate: "2026-06-02"
+category: Programming
+author: OIYO 편집부
+tags:
+  - Python
+  - pandas
+  - 데이터분석
+  - DataFrame
+  - 데이터사이언스
+series: "Python 데이터분석 심화"
+chapter: 1
+---
+import Callout from "@/components/mdx/Callout.astro";
+
+## 1강 개요
+
+Python 데이터분석에서 pandas는 사실상 표준 라이브러리입니다. SQL을 다룰 줄 안다면 pandas의 논리 구조가 매우 친숙하게 느껴질 것입니다. 이 강의에서는 단순한 문법 소개가 아니라, **실무에서 실제로 마주치는 패턴** 중심으로 pandas를 완전히 이해합니다.
+
+---
+
+## pandas DataFrame의 핵심 구조
+
+DataFrame은 2차원 레이블 데이터 구조입니다. 스프레드시트나 SQL 테이블과 동일한 개념이지만, Python에서 훨씬 강력하게 다룰 수 있습니다.
+
+```python
+import pandas as pd
+import numpy as np
+
+# 기본 DataFrame 생성
+df = pd.DataFrame({
+    'name': ['Alice', 'Bob', 'Charlie', 'Diana'],
+    'score': [85, 92, 78, 96],
+    'dept': ['A', 'B', 'A', 'B'],
+    'date': pd.to_datetime(['2024-01-15', '2024-01-20', '2024-02-01', '2024-02-10'])
+})
+
+# 기본 정보 확인 — 실무에서 데이터를 받으면 제일 먼저 실행
+print(df.shape)        # (4, 4) — 행, 열 수
+print(df.dtypes)       # 각 컬럼의 데이터 타입
+print(df.info())       # null 여부 포함 요약
+print(df.describe())   # 수치형 컬럼 통계 요약
+```
+
+### Index와 Column의 개념
+
+DataFrame의 `index`는 행 레이블, `columns`는 열 레이블입니다. 기본 RangeIndex(0, 1, 2, …)를 사용하지만, 의미 있는 컬럼으로 바꾸면 분석이 더 직관적입니다.
+
+```python
+# 특정 컬럼을 인덱스로 설정
+df = df.set_index('name')
+# 다시 초기화
+df = df.reset_index()
+```
+
+---
+
+## 핵심 인덱싱 방법: iloc vs loc
+
+pandas 인덱싱에서 가장 많이 실수하는 부분입니다.
+
+| 방법 | 기준 | 예시 |
+|---|---|---|
+| `df.iloc[행, 열]` | 정수 위치 | `df.iloc[0, 1]` → 0행 1열 값 |
+| `df.loc[레이블, 컬럼명]` | 레이블 | `df.loc[0, 'score']` |
+| `df['컬럼명']` | 컬럼 선택 | `df['score']` → Series 반환 |
+| `df[['A', 'B']]` | 다중 컬럼 | DataFrame 반환 |
+
+```python
+# 조건 필터링 — SQL WHERE절과 동일한 개념
+high_score = df[df['score'] >= 90]
+dept_a = df[df['dept'] == 'A']
+
+# 복합 조건 — & (AND), | (OR), ~ (NOT) 사용
+result = df[(df['score'] >= 85) & (df['dept'] == 'A')]
+
+# query 메서드 — 더 가독성 좋은 방식
+result = df.query("score >= 85 and dept == 'A'")
+```
+
+---
+
+## groupby: 분석의 핵심
+
+`groupby`는 SQL의 `GROUP BY`와 동일합니다. 데이터를 그룹으로 나누고 집계 함수를 적용합니다.
+
+```python
+# 부서별 평균 점수
+df.groupby('dept')['score'].mean()
+
+# 여러 집계 함수 동시 적용
+df.groupby('dept')['score'].agg(['mean', 'max', 'min', 'count'])
+
+# 여러 컬럼 동시 groupby
+df.groupby(['dept', 'date'])['score'].sum()
+
+# transform — 원본 df 크기 유지하면서 그룹 통계값 추가
+df['dept_avg'] = df.groupby('dept')['score'].transform('mean')
+```
+
+<Callout type="tip">
+`groupby` 후 `agg` vs `transform`의 차이를 정확히 이해하세요. `agg`는 행 수가 줄어들고(집계), `transform`은 원본 크기 유지(각 행에 그룹 통계값 입력)입니다.
+</Callout>
+
+---
+
+## merge와 join: 데이터 결합
+
+실무에서는 여러 테이블을 합치는 작업이 빈번합니다.
+
+```python
+# SQL INNER JOIN과 동일
+result = pd.merge(df1, df2, on='key', how='inner')
+
+# LEFT JOIN — df1의 모든 행 유지
+result = pd.merge(df1, df2, on='key', how='left')
+
+# 다른 컬럼명으로 join
+result = pd.merge(df1, df2, left_on='id', right_on='user_id', how='left')
+```
+
+| how 옵션 | SQL 대응 | 설명 |
+|---|---|---|
+| `inner` | INNER JOIN | 양쪽 모두 매칭되는 행만 |
+| `left` | LEFT JOIN | 왼쪽 df 전체 유지 |
+| `right` | RIGHT JOIN | 오른쪽 df 전체 유지 |
+| `outer` | FULL OUTER JOIN | 양쪽 전체 유지 |
+
+---
+
+## 자주 묻는 질문
+
+**Q: pandas vs polars, 어떤 것을 배워야 하나요?**
+A: 현재 업무가 100만 행 이하라면 pandas로 충분합니다. polars는 대용량 데이터에서 pandas보다 10~100배 빠르지만 생태계가 아직 작습니다. pandas 마스터 후 필요시 polars로 이동하는 것이 현실적입니다.
+
+**Q: `SettingWithCopyWarning`은 왜 뜨나요?**
+A: DataFrame의 복사본(copy)에 값을 쓸 때 발생합니다. 체인 인덱싱 대신 `.loc` 또는 `.copy()`를 명시적으로 사용하면 해결됩니다.
+
+<Callout type="tip">**시리즈 이어보기**: [2강: 데이터 전처리 완전 가이드](/ko/academy-python-data-analysis-ch2) · [3강: 시각화 (matplotlib·seaborn)](/ko/academy-python-data-analysis-ch3) · [Python 기초 시리즈](/ko/academy-python-basics-ch1)</Callout>

@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ZodiacCompatibilityCalculator from "../../components/tools/ZodiacCompatibilityCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "별자리 궁합 계산기 — 12별자리 원소·양식별 궁합 분석",
+    description: "두 별자리를 선택하면 궁합 점수(0–100), 원소(불·흙·공기·물) 조화, 양식(활동·고정·변화) 관계, 구체적인 관계 팁을 즉시 분석합니다.",
+  },
+  en: {
+    title: "Zodiac Compatibility Calculator — Elements & Modalities Analysis",
+    description: "Select two zodiac signs to get a compatibility score (0–100), element harmony, modality dynamics, and specific relationship tips — instant analysis.",
+  },
+  ja: {
+    title: "星座相性計算機 — 12星座の元素・モダリティ別相性分析",
+    description: "2つの星座を選択すると相性スコア（0–100）、元素（火・土・風・水）の調和、モダリティ（活動・固定・変化）関係、具体的なアドバイスを即座に分析。",
+  },
+  fr: {
+    title: "Calculateur de Compatibilité Zodiacale — Analyse Éléments et Modalités",
+    description: "Sélectionnez deux signes du zodiaque pour obtenir un score de compatibilité (0–100), l'harmonie des éléments, la dynamique des modalités et des conseils relationnels.",
+  },
+  es: {
+    title: "Calculadora de Compatibilidad del Zodíaco — Análisis de Elementos y Modalidades",
+    description: "Selecciona dos signos del zodiaco para obtener un puntaje de compatibilidad (0–100), armonía de elementos, dinámica de modalidades y consejos de relación.",
+  },
+  zh: {
+    title: "星座相容性計算機 — 12星座元素與模式分析",
+    description: "選擇兩個星座，立即獲得相容性評分（0–100）、元素（火·土·風·水）和諧度、模式（本位·固定·變動）關係及具體關係建議。",
+  },
+  cn: {
+    title: "星座相容性计算器 — 12星座元素与模式分析",
+    description: "选择两个星座，立即获得相容性评分（0–100）、元素（火·土·风·水）和谐度、模式（本位·固定·变动）关系及具体关系建议。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <ZodiacCompatibilityCalculator client:load locale={locale} />
+  </main>
+</BaseLayout>

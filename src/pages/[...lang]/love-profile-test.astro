@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import LoveProfileTest from "../../components/tools/LoveProfileTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "연애 프로필 테스트 — 애착 유형·사랑의 언어·갈등 스타일 분석",
+    description: "28문항으로 나의 애착 유형(안정·불안·회피·혼란), 사랑의 언어(말·행위·선물·시간·스킨십), 갈등 스타일을 한 번에 분석합니다.",
+  },
+  en: {
+    title: "Love Profile Test — Attachment Style, Love Language & Conflict Style",
+    description: "28 questions reveal your attachment type (secure, anxious, avoidant, disorganized), love language, and conflict style — your complete relationship profile.",
+  },
+  ja: {
+    title: "恋愛プロフィールテスト — 愛着タイプ・愛の言語・葛藤スタイル分析",
+    description: "28問で愛着タイプ（安定・不安・回避・混乱）、愛の言語（言葉・行為・贈り物・時間・スキンシップ）、葛藤スタイルを一度に分析します。",
+  },
+  fr: {
+    title: "Test de Profil Amoureux — Style d'Attachement, Langage de l'Amour & Gestion des Conflits",
+    description: "28 questions révèlent votre type d'attachement (sécure, anxieux, évitant, désorganisé), votre langage de l'amour et votre style de gestion des conflits.",
+  },
+  es: {
+    title: "Test de Perfil Amoroso — Estilo de Apego, Lenguaje del Amor y Estilo de Conflicto",
+    description: "28 preguntas revelan tu tipo de apego (seguro, ansioso, evitativo, desorganizado), lenguaje del amor y estilo de manejo de conflictos.",
+  },
+  zh: {
+    title: "戀愛檔案測試 — 依附類型·愛的語言·衝突風格分析",
+    description: "透過28題分析你的依附類型（安全·焦慮·迴避·混亂）、愛的語言（話語·行動·禮物·時間·肢體接觸）及衝突風格。",
+  },
+  cn: {
+    title: "恋爱档案测试 — 依附类型·爱的语言·冲突风格分析",
+    description: "通过28题分析你的依附类型（安全·焦虑·回避·混乱）、爱的语言（话语·行动·礼物·时间·肢体接触）及冲突风格。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <LoveProfileTest client:load locale={locale} />
+  </main>
+</BaseLayout>

@@ -1,0 +1,184 @@
+---
+track: academy
+locale: ko
+title: "Python 데이터분석 심화 5강: 머신러닝 실전 입문 — scikit-learn 워크플로우 완전 정복"
+description: "scikit-learn으로 머신러닝 프로젝트를 처음부터 끝까지 구현합니다. 데이터 분할, 파이프라인, 모델 선택, 평가 지표까지 실무 워크플로우를 코드로 완전히 정리합니다."
+pubDate: "2026-06-02"
+category: Programming
+author: OIYO 편집부
+tags:
+  - Python
+  - scikit-learn
+  - 머신러닝
+  - 데이터사이언스
+  - ML
+series: "Python 데이터분석 심화"
+chapter: 5
+---
+import Callout from "@/components/mdx/Callout.astro";
+
+## 5강 개요
+
+scikit-learn은 Python 머신러닝의 사실상 표준 라이브러리입니다. 일관된 API(`fit`, `transform`, `predict`)로 수십 가지 알고리즘을 동일한 방식으로 사용할 수 있습니다. 이번 강의에서는 실전 프로젝트를 처음부터 끝까지 따라가며 scikit-learn 워크플로우를 완전히 체화합니다.
+
+---
+
+## scikit-learn 전체 워크플로우
+
+```
+데이터 준비 → 훈련/테스트 분할 → 전처리 파이프라인 →
+모델 선택 → 교차 검증 → 하이퍼파라미터 튜닝 → 최종 평가
+```
+
+---
+
+## 1. 데이터 분할
+
+```python
+from sklearn.model_selection import train_test_split
+
+X = df.drop('target', axis=1)
+y = df['target']
+
+# 기본 분할 (테스트 20%)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42, stratify=y  # 분류 시 stratify 권장
+)
+```
+
+<Callout type="note">
+테스트 세트는 최종 평가 때만 사용합니다. 하이퍼파라미터 튜닝에는 교차 검증(CV)을 사용하세요. 테스트 세트를 반복 확인하면 데이터 누수가 발생합니다.
+</Callout>
+
+---
+
+## 2. 파이프라인 (Pipeline)
+
+전처리 + 모델을 하나의 파이프라인으로 묶으면 데이터 누수를 방지하고 코드가 깔끔해집니다.
+
+```python
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.compose import ColumnTransformer
+from sklearn.ensemble import RandomForestClassifier
+
+# 컬럼별 전처리 정의
+numeric_features = ['age', 'income', 'score']
+categorical_features = ['dept', 'region']
+
+preprocessor = ColumnTransformer([
+    ('num', StandardScaler(), numeric_features),
+    ('cat', OneHotEncoder(drop='first'), categorical_features)
+])
+
+# 파이프라인 구성
+pipeline = Pipeline([
+    ('preprocessor', preprocessor),
+    ('classifier', RandomForestClassifier(n_estimators=100, random_state=42))
+])
+
+# 훈련과 예측
+pipeline.fit(X_train, y_train)
+y_pred = pipeline.predict(X_test)
+```
+
+---
+
+## 3. 모델 선택 가이드
+
+| 문제 유형 | 데이터 크기 | 추천 모델 |
+|---|---|---|
+| 분류 | 소~중간 | LogisticRegression, RandomForest |
+| 분류 | 대용량 | XGBoost, LightGBM |
+| 회귀 | 소~중간 | Ridge, RandomForestRegressor |
+| 회귀 | 대용량 | XGBoost, LightGBM |
+| 클러스터링 | 모든 크기 | KMeans, DBSCAN |
+
+```python
+# 여러 모델 비교 (실무에서 자주 쓰는 패턴)
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+from sklearn.svm import SVC
+from sklearn.model_selection import cross_val_score
+
+models = {
+    'Logistic': LogisticRegression(max_iter=1000),
+    'RandomForest': RandomForestClassifier(n_estimators=100, random_state=42),
+    'GBM': GradientBoostingClassifier(random_state=42),
+}
+
+for name, model in models.items():
+    scores = cross_val_score(model, X_train, y_train, cv=5, scoring='f1_macro')
+    print(f"{name}: {scores.mean():.4f} ± {scores.std():.4f}")
+```
+
+---
+
+## 4. 평가 지표
+
+### 분류 지표
+
+```python
+from sklearn.metrics import (
+    accuracy_score, precision_score, recall_score, f1_score,
+    confusion_matrix, classification_report, roc_auc_score
+)
+
+print(classification_report(y_test, y_pred))
+
+# ROC-AUC
+from sklearn.metrics import RocCurveDisplay
+RocCurveDisplay.from_estimator(pipeline, X_test, y_test)
+```
+
+| 지표 | 설명 | 중요한 상황 |
+|---|---|---|
+| Accuracy | 전체 정확도 | 클래스 균형일 때 |
+| Precision | 양성 예측 중 실제 양성 비율 | False Positive 비용이 클 때 (스팸 필터) |
+| Recall | 실제 양성 중 탐지 비율 | False Negative 비용이 클 때 (암 진단) |
+| F1-Score | Precision과 Recall의 조화 평균 | 불균형 데이터 |
+| ROC-AUC | 전반적인 분류 성능 | 임계값 독립적 평가 |
+
+### 회귀 지표
+
+```python
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+
+rmse = np.sqrt(mean_squared_error(y_test, y_pred))
+mae = mean_absolute_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+```
+
+---
+
+## 5. 하이퍼파라미터 튜닝
+
+```python
+from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
+
+param_grid = {
+    'classifier__n_estimators': [100, 200, 300],
+    'classifier__max_depth': [None, 5, 10],
+    'classifier__min_samples_split': [2, 5, 10]
+}
+
+grid_search = GridSearchCV(
+    pipeline, param_grid, cv=5,
+    scoring='f1_macro', n_jobs=-1
+)
+grid_search.fit(X_train, y_train)
+print(f"최적 파라미터: {grid_search.best_params_}")
+print(f"최고 CV 점수: {grid_search.best_score_:.4f}")
+```
+
+---
+
+## 자주 묻는 질문
+
+**Q: 과적합(Overfitting)을 어떻게 감지하나요?**
+A: 훈련 점수는 높고 검증/테스트 점수가 낮으면 과적합입니다. 더 많은 데이터, 정규화(L1/L2), 드롭아웃, 단순한 모델로 해결합니다.
+
+**Q: XGBoost를 쓸 때 scikit-learn과 어떻게 통합하나요?**
+A: XGBoost는 scikit-learn API를 지원하므로 `XGBClassifier`를 그대로 Pipeline에 넣을 수 있습니다. `from xgboost import XGBClassifier`로 import하면 됩니다.
+
+<Callout type="tip">**시리즈 완결**: [1강: pandas](/ko/academy-python-data-analysis-ch1) · [2강: 전처리](/ko/academy-python-data-analysis-ch2) · [3강: 시각화](/ko/academy-python-data-analysis-ch3) · [4강: EDA](/ko/academy-python-data-analysis-ch4)</Callout>

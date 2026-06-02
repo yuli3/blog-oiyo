@@ -1,0 +1,194 @@
+---
+track: academy
+locale: ko
+title: "Python 데이터분석 심화 2강: 데이터 전처리 완전 가이드 — 결측값·이상값·인코딩"
+description: "실무 데이터의 80%는 전처리가 필요합니다. 결측값 처리, 이상값 탐지, 데이터 타입 변환, 범주형 인코딩까지 — 분석 전 필수 과정을 완전 정리합니다."
+pubDate: "2026-06-02"
+category: Programming
+author: OIYO 편집부
+tags:
+  - Python
+  - pandas
+  - 데이터전처리
+  - 결측값
+  - 데이터사이언스
+series: "Python 데이터분석 심화"
+chapter: 2
+---
+import Callout from "@/components/mdx/Callout.astro";
+
+## 2강 개요
+
+데이터 과학자들은 작업 시간의 70~80%를 데이터 전처리에 사용한다고 말합니다. 깨끗한 데이터 없이는 아무리 정교한 모델도 의미 없습니다("Garbage in, garbage out"). 이번 강의에서는 실무에서 반드시 마주치는 전처리 작업을 체계적으로 다룹니다.
+
+---
+
+## 1. 결측값(Missing Values) 처리
+
+### 결측값 탐지
+
+```python
+import pandas as pd
+import numpy as np
+
+# 결측값 개수 확인
+df.isnull().sum()
+df.isna().sum()  # 동일
+
+# 결측값 비율 확인
+(df.isnull().sum() / len(df) * 100).sort_values(ascending=False)
+
+# 결측값이 있는 행만 보기
+df[df.isnull().any(axis=1)]
+```
+
+### 결측값 처리 전략
+
+| 전략 | 코드 | 적합한 경우 |
+|---|---|---|
+| 행 삭제 | `df.dropna()` | 결측 비율 < 5%, 데이터 충분 |
+| 컬럼 삭제 | `df.drop(columns=['col'])` | 결측 비율 > 70% |
+| 평균/중앙값 대체 | `df.fillna(df.mean())` | 수치형, 분포 왜곡 없음 |
+| 최빈값 대체 | `df.fillna(df.mode()[0])` | 범주형 |
+| 앞/뒤 값 채우기 | `df.fillna(method='ffill')` | 시계열 데이터 |
+| 모델 기반 대체 | KNNImputer | 정밀도 중요 시 |
+
+```python
+from sklearn.impute import SimpleImputer, KNNImputer
+
+# 평균값으로 대체
+imputer = SimpleImputer(strategy='mean')
+df[['age', 'income']] = imputer.fit_transform(df[['age', 'income']])
+
+# KNN 기반 대체 (더 정밀)
+knn_imputer = KNNImputer(n_neighbors=5)
+df_imputed = pd.DataFrame(knn_imputer.fit_transform(df_numeric), columns=df_numeric.columns)
+```
+
+<Callout type="note">
+결측값을 무작정 평균으로 채우면 분포가 왜곡됩니다. 결측이 완전히 무작위인지(MCAR), 조건부 무작위인지(MAR), 아니면 결측 자체에 의미가 있는지(MNAR)를 먼저 파악하세요.
+</Callout>
+
+---
+
+## 2. 이상값(Outlier) 탐지 및 처리
+
+### IQR 방법
+
+```python
+Q1 = df['score'].quantile(0.25)
+Q3 = df['score'].quantile(0.75)
+IQR = Q3 - Q1
+
+lower = Q1 - 1.5 * IQR
+upper = Q3 + 1.5 * IQR
+
+# 이상값 탐지
+outliers = df[(df['score'] < lower) | (df['score'] > upper)]
+
+# 이상값 클리핑 (범위로 제한)
+df['score_clipped'] = df['score'].clip(lower, upper)
+```
+
+### Z-score 방법
+
+```python
+from scipy import stats
+
+z_scores = np.abs(stats.zscore(df['score']))
+outliers = df[z_scores > 3]  # |z| > 3 이면 이상값
+```
+
+---
+
+## 3. 데이터 타입 변환
+
+```python
+# 문자열 → 숫자 (오류 포함 시 coerce로 NaN 변환)
+df['amount'] = pd.to_numeric(df['amount'], errors='coerce')
+
+# 날짜 변환
+df['date'] = pd.to_datetime(df['date'], format='%Y-%m-%d')
+
+# 날짜 컬럼에서 정보 추출
+df['year'] = df['date'].dt.year
+df['month'] = df['date'].dt.month
+df['dayofweek'] = df['date'].dt.dayofweek  # 0=월, 6=일
+
+# 메모리 절약: int64 → int32
+df['count'] = df['count'].astype('int32')
+# object → category (반복 값 많을 때 메모리 절약)
+df['dept'] = df['dept'].astype('category')
+```
+
+---
+
+## 4. 범주형 인코딩
+
+머신러닝 모델은 숫자만 이해합니다. 문자열 범주형 데이터를 숫자로 바꾸는 것이 인코딩입니다.
+
+### One-Hot Encoding
+
+```python
+# pandas get_dummies — 간단
+df_encoded = pd.get_dummies(df, columns=['dept'], drop_first=True)
+
+# sklearn OneHotEncoder — 파이프라인 통합 시
+from sklearn.preprocessing import OneHotEncoder
+enc = OneHotEncoder(sparse_output=False, drop='first')
+encoded = enc.fit_transform(df[['dept']])
+```
+
+### Label Encoding
+
+```python
+from sklearn.preprocessing import LabelEncoder
+le = LabelEncoder()
+df['dept_label'] = le.fit_transform(df['dept'])
+```
+
+### Ordinal Encoding
+
+순서가 있는 범주형(예: 저→중→고)에 사용합니다.
+
+```python
+from sklearn.preprocessing import OrdinalEncoder
+oe = OrdinalEncoder(categories=[['low', 'medium', 'high']])
+df['level_encoded'] = oe.fit_transform(df[['level']])
+```
+
+---
+
+## 5. 스케일링 (Scaling)
+
+수치형 변수의 범위를 통일하면 모델 성능이 향상됩니다.
+
+```python
+from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
+
+# StandardScaler: 평균 0, 표준편차 1 (이상값 민감)
+scaler = StandardScaler()
+df_scaled = scaler.fit_transform(df[['age', 'income']])
+
+# MinMaxScaler: 0~1 범위 (이상값에 민감)
+minmax = MinMaxScaler()
+
+# RobustScaler: 중앙값·IQR 기반 (이상값 강건)
+robust = RobustScaler()
+```
+
+<Callout type="tip">
+스케일러를 fit할 때는 **훈련 데이터만** 사용하세요. 테스트 데이터에는 같은 fit된 스케일러로 transform만 적용합니다. 데이터 누수(Data Leakage)를 방지하는 핵심 원칙입니다.
+</Callout>
+
+---
+
+## 자주 묻는 질문
+
+**Q: One-Hot Encoding과 Label Encoding 중 무엇을 써야 하나요?**
+A: 범주 간 순서가 없다면 One-Hot Encoding, 트리 계열 모델(RandomForest, XGBoost 등)이라면 Label Encoding도 OK입니다. 트리 모델은 숫자 크기에 의미를 부여하지 않기 때문입니다.
+
+**Q: 이상값을 항상 제거해야 하나요?**
+A: 아닙니다. 이상값이 오류인지 실제 현상인지를 먼저 확인하세요. 사기 탐지처럼 이상값 자체가 목적인 경우도 있습니다.
+
+<Callout type="tip">**시리즈 이어보기**: [1강: pandas 완전 정복](/ko/academy-python-data-analysis-ch1) · [3강: 시각화](/ko/academy-python-data-analysis-ch3) · [4강: EDA 완전 가이드](/ko/academy-python-data-analysis-ch4)</Callout>
