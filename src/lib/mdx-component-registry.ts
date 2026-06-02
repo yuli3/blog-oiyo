@@ -168,6 +168,20 @@ import MindRestTest from "../components/tests/MindRestTest";
 import MeetingStyleTest from "../components/tests/MeetingStyleTest";
 import PersonaScopeTest from "../components/tests/PersonaScopeTest";
 
+// Batch-4 psych/health tests (2026-06-02)
+import BigFivePersonalityTest from "../components/tests/BigFivePersonalityTest";
+import BurnoutTest from "../components/tests/BurnoutTest";
+import IQTest from "../components/tests/IQTest";
+import PersonalColorTest from "../components/tests/PersonalColorTest";
+import AdhdScreeningTest from "../components/tests/AdhdScreeningTest";
+import SelfEsteemTest from "../components/tests/SelfEsteemTest";
+import DepressionScreeningTest from "../components/tests/DepressionScreeningTest";
+import AnxietyScreeningTest from "../components/tests/AnxietyScreeningTest";
+
+// Games batch-2 (2026-06-02)
+import WordleGame from "../components/games/WordleGame";
+import MemoryCardGame from "../components/games/MemoryCardGame";
+
 // Batch-3 psych tests (2026-05-17)
 import SoulMirrorTest from "../components/tests/SoulMirrorTest";
 import ToneAnalysisTest from "../components/tests/ToneAnalysisTest";
@@ -198,6 +212,9 @@ import LifePlanningCalculator from "../components/calculators/LifePlanningCalcul
 import WeddingPlanningCalculator from "../components/calculators/WeddingPlanningCalculator";
 import JeonseVsRentCalculator from "../components/calculators/JeonseVsRentCalculator";
 import IncorporationCalculator from "../components/calculators/IncorporationCalculator";
+import SeparateVsComprehensiveTaxCalc from "../components/tools/SeparateVsComprehensiveTaxCalc";
+import RealEstateCapitalGainsTaxCalc from "../components/tools/RealEstateCapitalGainsTaxCalc";
+import ComprehensiveIncomeTaxCalc from "../components/tools/ComprehensiveIncomeTaxCalc";
 
 // Batch-2 finance calculators (2026-05-16)
 import MortgageCalculator from "../components/calculators/MortgageCalculator";
@@ -391,6 +408,18 @@ const islandComponents = {
   MindRestTest,
   MeetingStyleTest,
   PersonaScopeTest,
+  // Batch-4 psych/health tests (2026-06-02)
+  BigFivePersonalityTest,
+  BurnoutTest,
+  IQTest,
+  PersonalColorTest,
+  AdhdScreeningTest,
+  SelfEsteemTest,
+  DepressionScreeningTest,
+  AnxietyScreeningTest,
+  // Games batch-2 (2026-06-02)
+  WordleGame,
+  MemoryCardGame,
   // Batch-3 psych tests
   SoulMirrorTest,
   ToneAnalysisTest,
@@ -430,6 +459,10 @@ const islandComponents = {
   WeddingPlanningCalculator,
   JeonseVsRentCalculator,
   IncorporationCalculator,
+  // Tax tools batch (2026-06-01)
+  SeparateVsComprehensiveTaxCalc,
+  RealEstateCapitalGainsTaxCalc,
+  ComprehensiveIncomeTaxCalc,
 };
 
 // Keep a narrow bridge for older magazine essays that still embed a few
