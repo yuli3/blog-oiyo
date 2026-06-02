@@ -79,6 +79,9 @@ export default defineConfig({
   },
   vite: {
     plugins: [/** @type {any} */ (tailwindcss())],
+    build: {
+      minify: false,
+    },
   },
   markdown: {
     // Disable built-in GFM so we can re-apply it with singleTilde: false.
