@@ -23,7 +23,7 @@ export const siteConfig = {
   },
   seo: {
     twitterHandle: "@oiyo_net",
-    ogImage: "/og-image.png",
+    ogImage: null,
     organization: {
       name: "Oiyo Tech",
       logo: "/logo.svg",

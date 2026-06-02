@@ -7,8 +7,8 @@ on:
     branches: [main]
 
 jobs:
-  build:
-    name: Build & Validate
+  validate:
+    name: Validate
     runs-on: ubuntu-latest
 
     steps:
@@ -36,19 +36,10 @@ jobs:
       - name: Type check
         run: npm run type-check
 
-      - name: Build
-        run: npm run build
-        env:
-          # Suppress interactive prompts
-          CI: true
-          # GitHub Actions ubuntu-latest has 7 GB RAM; cap Node heap at 6 GB
-          # (package.json also sets --max-old-space-size=6144 as a fallback)
-          NODE_OPTIONS: --max-old-space-size=6144
-
   sitemap-submit:
     name: Submit Sitemap (GSC + Bing + IndexNow)
     runs-on: ubuntu-latest
-    needs: build
+    needs: validate
     # Only run on pushes to main, not on PRs
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
