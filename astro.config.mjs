@@ -75,6 +75,7 @@ export default defineConfig({
   },
   build: {
     format: "directory",
+    concurrency: 1,
   },
   vite: {
     plugins: [/** @type {any} */ (tailwindcss())],
