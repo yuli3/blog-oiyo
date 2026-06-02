@@ -9,9 +9,6 @@ import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import robotsTxt from "astro-robots-txt";
-import wikiLinkPlugin from "remark-wiki-link";
-import rehypeSlug from "rehype-slug";
-import rehypeAutolinkHeadings from "rehype-autolink-headings";
 
 // https://astro.build/config
 export default defineConfig({
@@ -64,10 +61,6 @@ export default defineConfig({
       entrypoint: "astro/assets/services/sharp",
     },
   },
-  prefetch: {
-    prefetchAll: true,
-    defaultStrategy: "viewport",
-  },
   i18n: {
     defaultLocale: "en",
     locales: ["en", "ko", "ja", "fr", "es", "zh", "cn"],
@@ -80,7 +73,17 @@ export default defineConfig({
   vite: {
     plugins: [/** @type {any} */ (tailwindcss())],
     build: {
-      minify: false,
+      minify: "esbuild",
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes("node_modules/recharts")) return "recharts";
+            if (id.includes("node_modules/react-dom")) return "react-dom";
+            if (id.includes("node_modules/react")) return "react-vendor";
+            if (id.includes("node_modules/lucide-react")) return "lucide";
+          },
+        },
+      },
     },
   },
   markdown: {
@@ -92,19 +95,33 @@ export default defineConfig({
     shikiConfig: {
       theme: "github-dark",
       wrap: true,
+      langs: [
+        "javascript",
+        "typescript",
+        "python",
+        "bash",
+        "shell",
+        "css",
+        "html",
+        "json",
+        "yaml",
+        "sql",
+        "markdown",
+        "java",
+        "c",
+        "cpp",
+        "r",
+        "go",
+        "rust",
+        "plaintext",
+      ],
     },
     remarkPlugins: [
       [remarkGfm, { singleTilde: false }],
       remarkMath,
-      [
-        wikiLinkPlugin,
-        { hrefTemplate: (/** @type {string} */ permalink) => `/${permalink}` },
-      ],
     ],
     rehypePlugins: [
       [rehypeKatex, { strict: "ignore" }],
-      rehypeSlug,
-      [rehypeAutolinkHeadings, { behavior: "wrap" }],
     ],
   },
 });
