@@ -70,8 +70,8 @@ const MbtiSalaryExpert: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' })
     const data = t.types[selectedType] || t.types.ENTJ;
 
     return (
-        <div className="not-prose my-12 p-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-xl max-w-3xl mx-auto">
-            <h3 className="text-2xl font-black text-center text-slate-900 dark:text-white mb-8">{t.title}</h3>
+        <div className="not-prose my-12 p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-3xl mx-auto">
+            <h3 className="text-2xl font-black text-center text-slate-900 mb-8">{t.title}</h3>
             
             <div className="flex flex-wrap justify-center gap-2 mb-10">
                 {Object.keys(t.types).map(type => (
@@ -81,7 +81,7 @@ const MbtiSalaryExpert: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' })
                         className={`px-4 py-2 rounded-xl border font-bold transition-all ${
                             selectedType === type
                                 ? 'bg-indigo-600 border-indigo-600 text-white shadow-lg scale-110'
-                                : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-indigo-400'
+                                : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-indigo-400'
                         }`}
                     >
                         {type}
@@ -91,18 +91,18 @@ const MbtiSalaryExpert: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' })
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-6">
-                    <div className="p-5 rounded-2xl bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-900/30">
+                    <div className="p-5 rounded-2xl bg-indigo-50 border border-indigo-100">
                         <h4 className="text-xs font-bold text-indigo-500 uppercase tracking-widest mb-2">💰 {t.salaryInsight}</h4>
-                        <p className="text-slate-800 dark:text-slate-200 text-base leading-relaxed">{data.insight}</p>
+                        <p className="text-slate-800 text-base leading-relaxed">{data.insight}</p>
                     </div>
-                    <div className="p-5 rounded-2xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-900/30">
+                    <div className="p-5 rounded-2xl bg-emerald-50 border border-emerald-100">
                         <h4 className="text-xs font-bold text-emerald-500 uppercase tracking-widest mb-2">🎯 {t.negotiationStrategy}</h4>
-                        <p className="text-slate-800 dark:text-slate-200 text-base leading-relaxed">{data.strategy}</p>
+                        <p className="text-slate-800 text-base leading-relaxed">{data.strategy}</p>
                     </div>
                 </div>
 
-                <div className="p-6 rounded-2xl bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 flex flex-col">
-                    <h4 className="text-xs font-bold text-indigo-400 dark:text-indigo-600 uppercase tracking-widest mb-4">💬 {t.script}</h4>
+                <div className="p-6 rounded-2xl bg-slate-900 text-white flex flex-col">
+                    <h4 className="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-4">💬 {t.script}</h4>
                     <div className="flex-1 italic text-lg leading-relaxed mb-4">
                         <span className="text-4xl text-indigo-500 font-serif">"</span>
                         {data.script}

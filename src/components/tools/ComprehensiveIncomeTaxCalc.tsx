@@ -167,7 +167,7 @@ const ComprehensiveIncomeTaxCalc: React.FC<{ locale?: Locale }> = ({ locale = 'k
 
       {/* Summary cards */}
       <div className="grid grid-cols-3 gap-3 mb-6">
-        <div className="col-span-3 sm:col-span-1 p-5 rounded-2xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 text-center">
+        <div className="col-span-3 sm:col-span-1 p-5 rounded-2xl bg-red-50 border border-red-200 text-center">
           <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">{t.totalTax}</p>
           <p className="text-2xl font-black text-red-600 tabular-nums">{fmt(result.totalTax)}</p>
           <p className="text-[10px] text-muted-foreground">{t.won}</p>

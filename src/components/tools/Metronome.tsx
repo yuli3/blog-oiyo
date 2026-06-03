@@ -255,15 +255,15 @@ export default function Metronome({ locale }: Props) {
             <div
               key={i}
               className={`rounded-full transition-all duration-75 ${
-                isAccent ? "border-2 border-orange-400" : "border-2 border-gray-300 dark:border-gray-600"
+                isAccent ? "border-2 border-orange-400" : "border-2 border-gray-300"
               } ${
                 isActive && flash
                   ? isAccent
                     ? "bg-orange-400 scale-125 shadow-lg shadow-orange-300"
-                    : "bg-gray-500 dark:bg-gray-300 scale-110 shadow-md"
+                    : "bg-gray-500 scale-110 shadow-md"
                   : isAccent
-                  ? "bg-orange-100 dark:bg-orange-900/30"
-                  : "bg-gray-100 dark:bg-gray-800"
+                  ? "bg-orange-100"
+                  : "bg-gray-100"
               }`}
               style={{ width: 28, height: 28 }}
             />
@@ -282,7 +282,7 @@ export default function Metronome({ locale }: Props) {
             max={240}
             onChange={handleBpmInput}
             onBlur={handleBpmInputBlur}
-            className="w-20 text-center text-3xl font-bold border-b-2 border-gray-300 dark:border-gray-600 bg-transparent focus:outline-none focus:border-primary"
+            className="w-20 text-center text-3xl font-bold border-b-2 border-gray-300 bg-transparent focus:outline-none focus:border-primary"
           />
         </div>
         <input
@@ -291,7 +291,7 @@ export default function Metronome({ locale }: Props) {
           max={240}
           value={bpm}
           onChange={handleBpmSlider}
-          className="w-full accent-gray-800 dark:accent-gray-200 cursor-pointer"
+          className="w-full accent-gray-800 cursor-pointer"
         />
         <div className="flex justify-between w-full text-xs text-muted-foreground">
           <span>40</span>
@@ -309,8 +309,8 @@ export default function Metronome({ locale }: Props) {
               onClick={() => setTimeSig(sig)}
               className={`px-4 py-2 rounded-full text-sm font-semibold border-2 transition-all ${
                 timeSig === sig
-                  ? "bg-gray-800 text-white border-gray-800 dark:bg-gray-200 dark:text-gray-800 dark:border-gray-200"
-                  : "border-gray-300 dark:border-gray-600 text-muted-foreground hover:bg-muted"
+                  ? "bg-gray-800 text-white border-gray-800"
+                  : "border-gray-300 text-muted-foreground hover:bg-muted"
               }`}
             >
               {sig}
@@ -325,7 +325,7 @@ export default function Metronome({ locale }: Props) {
         className={`px-12 py-4 rounded-full font-bold text-xl shadow-lg transition-all active:scale-95 ${
           running
             ? "bg-red-500 hover:bg-red-600 text-white"
-            : "bg-gray-800 hover:bg-gray-700 text-white dark:bg-gray-200 dark:text-gray-800 dark:hover:bg-gray-100"
+            : "bg-gray-800 hover:bg-gray-700 text-white"
         }`}
       >
         {running ? t.stop : t.start}
@@ -334,7 +334,7 @@ export default function Metronome({ locale }: Props) {
       {/* Tap Tempo */}
       <button
         onClick={handleTapTempo}
-        className="px-8 py-3 rounded-full font-semibold border-2 border-gray-300 dark:border-gray-600 text-muted-foreground hover:bg-muted hover:text-foreground transition-all active:scale-95 select-none"
+        className="px-8 py-3 rounded-full font-semibold border-2 border-gray-300 text-muted-foreground hover:bg-muted hover:text-foreground transition-all active:scale-95 select-none"
       >
         🥁 {t.tapTempo}
       </button>
@@ -352,8 +352,8 @@ export default function Metronome({ locale }: Props) {
               }}
               className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
                 bpm === presetBpm
-                  ? "bg-gray-800 text-white border-gray-800 dark:bg-gray-200 dark:text-gray-800"
-                  : "border-gray-300 dark:border-gray-600 text-muted-foreground hover:bg-muted"
+                  ? "bg-gray-800 text-white border-gray-800"
+                  : "border-gray-300 text-muted-foreground hover:bg-muted"
               }`}
             >
               {name} <span className="opacity-70">{presetBpm}</span>

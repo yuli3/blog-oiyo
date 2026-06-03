@@ -70,48 +70,48 @@ export default function DividendCalculator() {
   const initialValue = parseFloat(initialInvestment.replace(/,/g, '')) || 0;
 
   return (
-    <div className="my-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-      <h3 className="mb-6 text-xl font-bold text-gray-900 dark:text-white">배당 투자 수익 계산기</h3>
+    <div className="my-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+      <h3 className="mb-6 text-xl font-bold text-gray-900">배당 투자 수익 계산기</h3>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label className="mb-1 block text-sm font-medium text-gray-700">
             초기 투자금 (원)
           </label>
           <input
             type="number"
             value={initialInvestment}
             onChange={(e) => setInitialInvestment(e.target.value)}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm"
           />
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label className="mb-1 block text-sm font-medium text-gray-700">
             현재 주가 (원/주)
           </label>
           <input
             type="number"
             value={stockPrice}
             onChange={(e) => setStockPrice(e.target.value)}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm"
           />
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label className="mb-1 block text-sm font-medium text-gray-700">
             연간 주당 배당금 (원)
           </label>
           <input
             type="number"
             value={annualDividendPerShare}
             onChange={(e) => setAnnualDividendPerShare(e.target.value)}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm"
           />
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label className="mb-1 block text-sm font-medium text-gray-700">
             배당 성장률 (%/년)
           </label>
           <input
@@ -119,12 +119,12 @@ export default function DividendCalculator() {
             value={dividendGrowthRate}
             onChange={(e) => setDividendGrowthRate(e.target.value)}
             step="0.5"
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm"
           />
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label className="mb-1 block text-sm font-medium text-gray-700">
             주가 성장률 (%/년)
           </label>
           <input
@@ -132,19 +132,19 @@ export default function DividendCalculator() {
             value={stockGrowthRate}
             onChange={(e) => setStockGrowthRate(e.target.value)}
             step="0.5"
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm"
           />
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label className="mb-1 block text-sm font-medium text-gray-700">
             투자 기간 (년)
           </label>
           <input
             type="number"
             value={years}
             onChange={(e) => setYears(e.target.value)}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm"
           />
         </div>
       </div>
@@ -157,7 +157,7 @@ export default function DividendCalculator() {
           onChange={(e) => setReinvest(e.target.checked)}
           className="h-4 w-4 rounded border-gray-300"
         />
-        <label htmlFor="reinvest" className="text-sm text-gray-700 dark:text-gray-300">
+        <label htmlFor="reinvest" className="text-sm text-gray-700">
           배당금 자동 재투자 (DRIP)
         </label>
       </div>
@@ -172,44 +172,44 @@ export default function DividendCalculator() {
       {result && last && first && (
         <div className="mt-6 space-y-4">
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <div className="rounded-xl bg-emerald-50 p-4 text-center dark:bg-emerald-900/20">
+            <div className="rounded-xl bg-emerald-50 p-4 text-center">
               <p className="text-xs text-gray-500">최종 포트폴리오 가치</p>
-              <p className="text-base font-bold text-emerald-600 dark:text-emerald-400">{formatKRW(last.portfolioValue)}원</p>
+              <p className="text-base font-bold text-emerald-600">{formatKRW(last.portfolioValue)}원</p>
             </div>
-            <div className="rounded-xl bg-blue-50 p-4 text-center dark:bg-blue-900/20">
+            <div className="rounded-xl bg-blue-50 p-4 text-center">
               <p className="text-xs text-gray-500">연간 배당 ({years}년차)</p>
-              <p className="text-base font-bold text-blue-600 dark:text-blue-400">{formatKRW(last.netDividend)}원</p>
+              <p className="text-base font-bold text-blue-600">{formatKRW(last.netDividend)}원</p>
             </div>
-            <div className="rounded-xl bg-purple-50 p-4 text-center dark:bg-purple-900/20">
+            <div className="rounded-xl bg-purple-50 p-4 text-center">
               <p className="text-xs text-gray-500">누적 세후 배당</p>
-              <p className="text-base font-bold text-purple-600 dark:text-purple-400">{formatKRW(totalDividends)}원</p>
+              <p className="text-base font-bold text-purple-600">{formatKRW(totalDividends)}원</p>
             </div>
-            <div className="rounded-xl bg-orange-50 p-4 text-center dark:bg-orange-900/20">
+            <div className="rounded-xl bg-orange-50 p-4 text-center">
               <p className="text-xs text-gray-500">총 수익률</p>
-              <p className="text-base font-bold text-orange-600 dark:text-orange-400">
+              <p className="text-base font-bold text-orange-600">
                 {(((last.portfolioValue + (reinvest ? 0 : totalDividends)) / initialValue - 1) * 100).toFixed(1)}%
               </p>
             </div>
           </div>
 
-          <div className="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-600">
+          <div className="overflow-x-auto rounded-xl border border-gray-200">
             <table className="w-full text-xs">
-              <thead className="bg-gray-50 dark:bg-gray-700">
+              <thead className="bg-gray-50">
                 <tr>
                   {['년차', '보유주수', '연 배당(세전)', '세금(15.4%)', '세후 배당', '포트폴리오 가치'].map((h) => (
-                    <th key={h} className="px-3 py-2 text-left font-semibold text-gray-700 dark:text-gray-300">{h}</th>
+                    <th key={h} className="px-3 py-2 text-left font-semibold text-gray-700">{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {result.filter((_, i) => i % Math.max(1, Math.floor(result.length / 10)) === 0 || i === result.length - 1).map((row) => (
-                  <tr key={row.year} className="border-t border-gray-100 dark:border-gray-700">
-                    <td className="px-3 py-2 font-medium text-gray-700 dark:text-gray-300">{row.year}년</td>
-                    <td className="px-3 py-2 text-gray-600 dark:text-gray-400">{row.shares.toFixed(1)}주</td>
-                    <td className="px-3 py-2 text-gray-600 dark:text-gray-400">{formatKRW(row.annualDividend)}</td>
+                  <tr key={row.year} className="border-t border-gray-100">
+                    <td className="px-3 py-2 font-medium text-gray-700">{row.year}년</td>
+                    <td className="px-3 py-2 text-gray-600">{row.shares.toFixed(1)}주</td>
+                    <td className="px-3 py-2 text-gray-600">{formatKRW(row.annualDividend)}</td>
                     <td className="px-3 py-2 text-red-500">{formatKRW(row.tax)}</td>
-                    <td className="px-3 py-2 text-emerald-600 dark:text-emerald-400">{formatKRW(row.netDividend)}</td>
-                    <td className="px-3 py-2 font-semibold text-blue-600 dark:text-blue-400">{formatKRW(row.portfolioValue)}</td>
+                    <td className="px-3 py-2 text-emerald-600">{formatKRW(row.netDividend)}</td>
+                    <td className="px-3 py-2 font-semibold text-blue-600">{formatKRW(row.portfolioValue)}</td>
                   </tr>
                 ))}
               </tbody>

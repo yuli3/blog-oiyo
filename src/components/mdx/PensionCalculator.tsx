@@ -142,8 +142,8 @@ export default function PensionCalculator() {
         {/* Results */}
         {result && (
           <div className="space-y-3">
-            <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 dark:bg-emerald-950/20 dark:border-emerald-900 overflow-hidden">
-              <div className="divide-y divide-emerald-100 dark:divide-emerald-900">
+            <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 overflow-hidden">
+              <div className="divide-y divide-emerald-100">
                 <div className="flex justify-between items-center px-5 py-3.5">
                   <span className="text-sm text-muted-foreground font-medium">월 납부 보험료 (근로자 부담 4.5%)</span>
                   <span className="font-mono font-bold text-foreground">{fmt(result.monthlyContribution)} 원</span>
@@ -152,9 +152,9 @@ export default function PensionCalculator() {
                   <span className="text-sm text-muted-foreground font-medium">총 납부 보험료 ({result.yearsNum}년 근로자분)</span>
                   <span className="font-mono font-bold text-foreground">{fmt(result.totalContribution)} 원</span>
                 </div>
-                <div className="flex justify-between items-center px-5 py-3.5 bg-emerald-100/50 dark:bg-emerald-900/30">
-                  <span className="text-sm font-bold text-emerald-800 dark:text-emerald-300">예상 월 연금액 (65세부터)</span>
-                  <span className="font-mono font-extrabold text-emerald-700 dark:text-emerald-300 text-xl">{fmt(result.monthlyPension)} 원</span>
+                <div className="flex justify-between items-center px-5 py-3.5 bg-emerald-100/50">
+                  <span className="text-sm font-bold text-emerald-800">예상 월 연금액 (65세부터)</span>
+                  <span className="font-mono font-extrabold text-emerald-700 text-xl">{fmt(result.monthlyPension)} 원</span>
                 </div>
                 <div className="flex justify-between items-center px-5 py-3.5">
                   <span className="text-sm text-muted-foreground font-medium">예상 총 수령액 (기대수명 83세 기준)</span>
@@ -183,7 +183,7 @@ export default function PensionCalculator() {
         {/* Disclaimer */}
         <p className="text-xs text-muted-foreground text-center leading-relaxed">
           ※ 이 계산기는 <strong>2024년 기준 국민연금 공식</strong>을 간략화하여 계산합니다.{' '}
-          <span className="text-emerald-600 dark:text-emerald-400">실제 수령액은 국민연금공단 홈페이지의 내 연금 알아보기를 이용하세요.</span>
+          <span className="text-emerald-600">실제 수령액은 국민연금공단 홈페이지의 내 연금 알아보기를 이용하세요.</span>
         </p>
       </div>
     </div>

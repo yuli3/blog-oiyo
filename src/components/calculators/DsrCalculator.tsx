@@ -40,18 +40,18 @@ const DsrCalculator: React.FC = () => {
     };
 
     return (
-        <div className="not-prose my-12 p-8 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl shadow-xl">
+        <div className="not-prose my-12 p-8 bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200 rounded-3xl shadow-xl">
             <div className="flex flex-col md:flex-row gap-8">
                 {/* Inputs */}
                 <div className="flex-1 space-y-6">
-                    <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-4">대출 정보 입력</h3>
+                    <h3 className="text-xl font-bold text-slate-900 mb-4">대출 정보 입력</h3>
                     
                     <div className="space-y-2">
-                        <label className="text-sm font-medium text-slate-600 dark:text-slate-400">연간 총소득 (백만원)</label>
+                        <label className="text-sm font-medium text-slate-600">연간 총소득 (백만원)</label>
                         <input 
                             type="range" min="10000000" max="200000000" step="1000000"
                             value={income} onChange={(e) => setIncome(Number(e.target.value))}
-                            className="w-full h-2 bg-blue-200 dark:bg-blue-900 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                            className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
                         />
                         <div className="flex justify-between text-lg font-bold text-blue-600">
                             <span>{income / 10000}만원</span>
@@ -59,38 +59,38 @@ const DsrCalculator: React.FC = () => {
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-sm font-medium text-slate-600 dark:text-slate-400">기존 대출 연간 원리금 상환액 (만원)</label>
+                        <label className="text-sm font-medium text-slate-600">기존 대출 연간 원리금 상환액 (만원)</label>
                         <input 
                             type="number" value={existingDebt / 10000} 
                             onChange={(e) => setExistingDebt(Number(e.target.value) * 10000)}
-                            className="w-full p-3 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                            className="w-full p-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                         />
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-sm font-medium text-slate-600 dark:text-slate-400">신규 대출 희망 금액 (백만원)</label>
+                        <label className="text-sm font-medium text-slate-600">신규 대출 희망 금액 (백만원)</label>
                         <input 
                             type="range" min="10000000" max="1000000000" step="10000000"
                             value={newLoan} onChange={(e) => setNewLoan(Number(e.target.value))}
-                            className="w-full h-2 bg-blue-200 dark:bg-blue-900 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                            className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
                         />
                         <div className="text-lg font-bold text-blue-600">{newLoan / 10000}만원</div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-slate-600 dark:text-slate-400">금리 (%)</label>
+                            <label className="text-sm font-medium text-slate-600">금리 (%)</label>
                             <input 
                                 type="number" step="0.1" value={interestRate} 
                                 onChange={(e) => setInterestRate(Number(e.target.value))}
-                                className="w-full p-3 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                                className="w-full p-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                             />
                         </div>
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-slate-600 dark:text-slate-400">기간 (년)</label>
+                            <label className="text-sm font-medium text-slate-600">기간 (년)</label>
                             <select 
                                 value={loanTerm} onChange={(e) => setLoanTerm(Number(e.target.value))}
-                                className="w-full p-3 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                                className="w-full p-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                             >
                                 <option value={10}>10년</option>
                                 <option value={20}>20년</option>
@@ -103,7 +103,7 @@ const DsrCalculator: React.FC = () => {
                 </div>
 
                 {/* Results */}
-                <div className="flex-1 p-6 bg-white dark:bg-slate-950 rounded-2xl border border-blue-100 dark:border-blue-900 shadow-sm flex flex-col justify-center items-center text-center">
+                <div className="flex-1 p-6 bg-white rounded-2xl border border-blue-100 shadow-sm flex flex-col justify-center items-center text-center">
                     <div className="mb-6">
                         <span className="text-sm font-medium text-slate-500 uppercase tracking-widest">나의 DSR 지수</span>
                         <div className={`text-6xl font-black mt-2 ${dsr > 40 ? 'text-rose-500' : 'text-emerald-500'}`}>
@@ -111,16 +111,16 @@ const DsrCalculator: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="w-full h-4 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden mb-8 relative">
+                    <div className="w-full h-4 bg-slate-100 rounded-full overflow-hidden mb-8 relative">
                         <div 
                             className={`h-full transition-all duration-500 ${dsr > 40 ? 'bg-rose-500' : 'bg-emerald-500'}`} 
                             style={{ width: `${Math.min(dsr, 100)}%` }}
                         />
-                        <div className="absolute left-[40%] top-0 w-1 h-full bg-slate-900/50 dark:bg-white/50 z-10" />
+                        <div className="absolute left-[40%] top-0 w-1 h-full bg-slate-900/50 z-10" />
                     </div>
 
                     <div className="grid grid-cols-1 gap-4 w-full">
-                        <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800">
+                        <div className="p-4 rounded-xl bg-slate-50 border border-slate-100">
                             <span className="text-xs text-slate-500 block mb-1">DSR 40% 기준 대출 가능 최대 금액</span>
                             <span className="text-xl font-bold text-blue-600">
                                 {maxLoan > 0 ? formatCurrency(Math.floor(maxLoan / 10000) * 10000) : '0원'}
@@ -128,11 +128,11 @@ const DsrCalculator: React.FC = () => {
                         </div>
                         
                         {dsr > 40 ? (
-                            <div className="p-4 rounded-xl bg-rose-50 dark:bg-rose-900/20 border border-rose-100 dark:border-rose-900/30 text-rose-600 dark:text-rose-400 text-sm font-medium">
+                            <div className="p-4 rounded-xl bg-rose-50 border border-rose-100 text-rose-600 text-sm font-medium">
                                 ⚠️ 현재 규제 한도(40%)를 초과하였습니다. 대출 기간을 늘리거나 기존 대출을 상환하는 전략이 필요합니다.
                             </div>
                         ) : (
-                            <div className="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-sm font-medium">
+                            <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-600 text-sm font-medium">
                                 ✅ 규제 한도 내에 있습니다. 안정적인 대출 실행이 가능합니다.
                             </div>
                         )}

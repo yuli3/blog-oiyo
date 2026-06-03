@@ -283,7 +283,7 @@ const AimTrainer: React.FC<Props> = ({ locale }) => {
 
       {phase === "intro" && (
         <div className="flex flex-col items-center justify-center gap-6 py-12">
-          <div className="w-16 h-16 bg-violet-100 dark:bg-violet-900/30 rounded-2xl flex items-center justify-center">
+          <div className="w-16 h-16 bg-violet-100 rounded-2xl flex items-center justify-center">
             <span className="text-3xl">🎯</span>
           </div>
           <p className="text-muted-foreground text-center leading-relaxed px-4 max-w-sm">

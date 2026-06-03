@@ -90,12 +90,12 @@ export default function HormonesTest({ locale: localeProp }: Props) {
   if (phase === "result") {
     const r = t.results[topType];
     return (
-      <div className="not-prose my-10 p-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-xl max-w-2xl mx-auto text-center space-y-6">
+      <div className="not-prose my-10 p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto text-center space-y-6">
         <p className="text-xs font-bold text-purple-500 uppercase tracking-widest">{t.resultLabel}</p>
         <div className="text-6xl">{r.emoji}</div>
-        <h3 className="text-3xl font-black text-slate-900 dark:text-white">{r.title}</h3>
-        <div className="p-6 bg-purple-50 dark:bg-purple-950/30 rounded-2xl border border-purple-100 dark:border-purple-900/30">
-          <p className="text-slate-700 dark:text-slate-300 text-base leading-relaxed">{r.desc}</p>
+        <h3 className="text-3xl font-black text-slate-900">{r.title}</h3>
+        <div className="p-6 bg-purple-50 rounded-2xl border border-purple-100">
+          <p className="text-slate-700 text-base leading-relaxed">{r.desc}</p>
         </div>
         <button onClick={() => { setAnswers({}); setPhase("quiz"); }} className="text-slate-400 text-sm hover:underline">{t.retake}</button>
       </div>
@@ -103,24 +103,24 @@ export default function HormonesTest({ locale: localeProp }: Props) {
   }
 
   return (
-    <div className="not-prose my-10 p-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-xl max-w-2xl mx-auto space-y-8">
+    <div className="not-prose my-10 p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto space-y-8">
       <div className="text-center">
-        <h3 className="text-2xl font-black text-slate-900 dark:text-white">{t.title}</h3>
+        <h3 className="text-2xl font-black text-slate-900">{t.title}</h3>
         <p className="text-sm text-slate-500 mt-2">{t.description}</p>
-        <div className="mt-3 h-2 bg-slate-100 dark:bg-slate-800 rounded-full">
+        <div className="mt-3 h-2 bg-slate-100 rounded-full">
           <div className="h-2 bg-purple-500 rounded-full transition-all" style={{ width: `${(Object.keys(answers).length / t.questions.length) * 100}%` }} />
         </div>
       </div>
       <div className="space-y-8">
         {t.questions.map((q, i) => (
           <div key={q.id} className="space-y-3">
-            <p className="font-semibold text-slate-800 dark:text-white leading-snug">{i + 1}. {q.text}</p>
+            <p className="font-semibold text-slate-800 leading-snug">{i + 1}. {q.text}</p>
             <div className="grid grid-cols-5 gap-1">
               {t.options.map((opt, v) => (
                 <button
                   key={v}
                   onClick={() => setAnswers((prev) => ({ ...prev, [q.id]: v + 1 }))}
-                  className={`py-2 px-1 text-[10px] rounded-lg border transition-all ${answers[q.id] === v + 1 ? "bg-purple-600 border-purple-600 text-white font-bold shadow-md" : "bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500 hover:bg-slate-100"}`}
+                  className={`py-2 px-1 text-[10px] rounded-lg border transition-all ${answers[q.id] === v + 1 ? "bg-purple-600 border-purple-600 text-white font-bold shadow-md" : "bg-slate-50 border-slate-200 text-slate-500 hover:bg-slate-100"}`}
                 >
                   {opt}
                 </button>
@@ -133,7 +133,7 @@ export default function HormonesTest({ locale: localeProp }: Props) {
         <button
           disabled={!isComplete}
           onClick={() => setPhase("result")}
-          className={`px-10 py-3 rounded-2xl font-bold text-base transition-all ${isComplete ? "bg-purple-600 text-white hover:bg-purple-700 shadow-lg" : "bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed"}`}
+          className={`px-10 py-3 rounded-2xl font-bold text-base transition-all ${isComplete ? "bg-purple-600 text-white hover:bg-purple-700 shadow-lg" : "bg-slate-200 text-slate-400 cursor-not-allowed"}`}
         >
           {lang === "ko" ? "결과 보기" : "See Results"}
         </button>

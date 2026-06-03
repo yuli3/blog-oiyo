@@ -19,12 +19,12 @@ interface LevelData {
 }
 
 const LEVEL_DATA: LevelData[] = [
-  { cefr: "A1", toeicMin: 0,   toeicMax: 119,  ielts: "1.0–2.0", toefl: "0–31",   color: "text-gray-600",  bgColor: "bg-gray-100 dark:bg-gray-700" },
-  { cefr: "A2", toeicMin: 120, toeicMax: 224,  ielts: "2.0–3.0", toefl: "32–45",  color: "text-blue-600",  bgColor: "bg-blue-50 dark:bg-blue-900/30" },
-  { cefr: "B1", toeicMin: 225, toeicMax: 549,  ielts: "3.5–4.5", toefl: "46–71",  color: "text-green-600", bgColor: "bg-green-50 dark:bg-green-900/30" },
-  { cefr: "B2", toeicMin: 550, toeicMax: 784,  ielts: "5.0–6.0", toefl: "72–94",  color: "text-yellow-600",bgColor: "bg-yellow-50 dark:bg-yellow-900/30" },
-  { cefr: "C1", toeicMin: 785, toeicMax: 899,  ielts: "6.5–7.5", toefl: "95–113", color: "text-orange-600",bgColor: "bg-orange-50 dark:bg-orange-900/30" },
-  { cefr: "C2", toeicMin: 900, toeicMax: 990,  ielts: "8.0–9.0", toefl: "114–120",color: "text-red-600",   bgColor: "bg-red-50 dark:bg-red-900/30" },
+  { cefr: "A1", toeicMin: 0,   toeicMax: 119,  ielts: "1.0–2.0", toefl: "0–31",   color: "text-gray-600",  bgColor: "bg-gray-100" },
+  { cefr: "A2", toeicMin: 120, toeicMax: 224,  ielts: "2.0–3.0", toefl: "32–45",  color: "text-blue-600",  bgColor: "bg-blue-50" },
+  { cefr: "B1", toeicMin: 225, toeicMax: 549,  ielts: "3.5–4.5", toefl: "46–71",  color: "text-green-600", bgColor: "bg-green-50" },
+  { cefr: "B2", toeicMin: 550, toeicMax: 784,  ielts: "5.0–6.0", toefl: "72–94",  color: "text-yellow-600",bgColor: "bg-yellow-50" },
+  { cefr: "C1", toeicMin: 785, toeicMax: 899,  ielts: "6.5–7.5", toefl: "95–113", color: "text-orange-600",bgColor: "bg-orange-50" },
+  { cefr: "C2", toeicMin: 900, toeicMax: 990,  ielts: "8.0–9.0", toefl: "114–120",color: "text-red-600",   bgColor: "bg-red-50" },
 ];
 
 function getLevelByScore(score: number): LevelData {
@@ -337,12 +337,12 @@ export default function ToeicScoreConverter({ locale }: Props) {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{t.title}</h1>
-        <p className="mt-1 text-gray-500 dark:text-gray-400">{t.subtitle}</p>
+        <h1 className="text-2xl font-bold text-gray-900">{t.title}</h1>
+        <p className="mt-1 text-gray-500">{t.subtitle}</p>
       </div>
 
       {/* Mode tabs */}
-      <div className="flex rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
+      <div className="flex rounded-xl overflow-hidden border border-gray-200">
         {(["toeic", "cefr"] as Mode[]).map((m) => (
           <button
             key={m}
@@ -350,7 +350,7 @@ export default function ToeicScoreConverter({ locale }: Props) {
             className={`flex-1 py-2.5 text-sm font-medium transition-colors ${
               mode === m
                 ? "bg-blue-600 text-white"
-                : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700"
+                : "bg-white text-gray-600 hover:bg-blue-50"
             }`}
           >
             {m === "toeic" ? t.modeScore : t.modeCefr}
@@ -359,10 +359,10 @@ export default function ToeicScoreConverter({ locale }: Props) {
       </div>
 
       {/* Input */}
-      <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-5 space-y-4">
+      <div className="rounded-2xl border border-gray-200 bg-white p-5 space-y-4">
         {mode === "toeic" ? (
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               {t.inputLabel}
             </label>
             <input
@@ -372,18 +372,18 @@ export default function ToeicScoreConverter({ locale }: Props) {
               value={scoreInput}
               onChange={(e) => { setScoreInput(e.target.value); setResult(null); }}
               placeholder={t.inputPlaceholder}
-              className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-2.5 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
         ) : (
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               {t.cefrSelectLabel}
             </label>
             <select
               value={selectedCefr}
               onChange={(e) => { setSelectedCefr(e.target.value as CEFRLevel); setResult(null); }}
-              className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-2.5 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400"
             >
               <option value="">—</option>
               {CEFR_LEVELS.map((lvl) => (
@@ -404,39 +404,39 @@ export default function ToeicScoreConverter({ locale }: Props) {
 
       {/* Result */}
       {result && (
-        <div className={`rounded-2xl border border-gray-200 dark:border-gray-700 ${result.bgColor} p-6 space-y-5`}>
-          <p className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+        <div className={`rounded-2xl border border-gray-200 ${result.bgColor} p-6 space-y-5`}>
+          <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider">
             {t.resultTitle}
           </p>
 
           {/* Score cards */}
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <div className="rounded-xl bg-white dark:bg-gray-800 p-3 text-center shadow-sm">
-              <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">{t.cefrLabel}</p>
+            <div className="rounded-xl bg-white p-3 text-center shadow-sm">
+              <p className="text-xs text-gray-500 mb-1">{t.cefrLabel}</p>
               <p className={`text-2xl font-extrabold ${result.color}`}>{result.cefr}</p>
             </div>
-            <div className="rounded-xl bg-white dark:bg-gray-800 p-3 text-center shadow-sm">
-              <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">{t.toeicRangeLabel}</p>
-              <p className="text-lg font-bold text-gray-800 dark:text-gray-200">
+            <div className="rounded-xl bg-white p-3 text-center shadow-sm">
+              <p className="text-xs text-gray-500 mb-1">{t.toeicRangeLabel}</p>
+              <p className="text-lg font-bold text-gray-800">
                 {result.toeicMin}–{result.toeicMax}
               </p>
             </div>
-            <div className="rounded-xl bg-white dark:bg-gray-800 p-3 text-center shadow-sm">
-              <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">{t.ieltsLabel}</p>
-              <p className="text-xl font-bold text-gray-800 dark:text-gray-200">{result.ielts}</p>
+            <div className="rounded-xl bg-white p-3 text-center shadow-sm">
+              <p className="text-xs text-gray-500 mb-1">{t.ieltsLabel}</p>
+              <p className="text-xl font-bold text-gray-800">{result.ielts}</p>
             </div>
-            <div className="rounded-xl bg-white dark:bg-gray-800 p-3 text-center shadow-sm">
-              <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">{t.toeflLabel}</p>
-              <p className="text-lg font-bold text-gray-800 dark:text-gray-200">{result.toefl}</p>
+            <div className="rounded-xl bg-white p-3 text-center shadow-sm">
+              <p className="text-xs text-gray-500 mb-1">{t.toeflLabel}</p>
+              <p className="text-lg font-bold text-gray-800">{result.toefl}</p>
             </div>
           </div>
 
           {/* Job utility */}
-          <div className="rounded-xl bg-white dark:bg-gray-800 p-4 space-y-2">
-            <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">{t.jobUtilLabel}</p>
+          <div className="rounded-xl bg-white p-4 space-y-2">
+            <p className="text-sm font-semibold text-gray-700">{t.jobUtilLabel}</p>
             <ul className="space-y-1">
               {t.jobUtil[result.cefr].map((item, i) => (
-                <li key={i} className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-400">
+                <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
                   <span className="mt-0.5 shrink-0 text-blue-500">•</span>
                   {item}
                 </li>
@@ -445,11 +445,11 @@ export default function ToeicScoreConverter({ locale }: Props) {
           </div>
 
           {/* Study tips */}
-          <div className="rounded-xl bg-white dark:bg-gray-800 p-4 space-y-2">
-            <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">{t.studyTipsLabel}</p>
+          <div className="rounded-xl bg-white p-4 space-y-2">
+            <p className="text-sm font-semibold text-gray-700">{t.studyTipsLabel}</p>
             <ol className="space-y-1 list-decimal list-inside">
               {t.studyTips[result.cefr].map((tip, i) => (
-                <li key={i} className="text-sm text-gray-600 dark:text-gray-400">{tip}</li>
+                <li key={i} className="text-sm text-gray-600">{tip}</li>
               ))}
             </ol>
           </div>
@@ -458,7 +458,7 @@ export default function ToeicScoreConverter({ locale }: Props) {
             <p className="text-xs text-gray-400">{t.disclaimer}</p>
             <button
               onClick={handleReset}
-              className="rounded-lg border border-blue-300 dark:border-blue-700 px-4 py-1.5 text-sm font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors"
+              className="rounded-lg border border-blue-300 px-4 py-1.5 text-sm font-medium text-blue-600 hover:bg-blue-50 transition-colors"
             >
               {t.resetBtn}
             </button>

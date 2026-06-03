@@ -319,7 +319,7 @@ export default function MenuGenerator() {
                   onClick={toggleFavorite}
                   variant="outline"
                   size="lg"
-                  className={`flex-1 ${isFav ? 'border-red-400 bg-red-50 text-red-600 dark:bg-red-950' : ''}`}
+                  className={`flex-1 ${isFav ? 'border-red-400 bg-red-50 text-red-600' : ''}`}
                 >
                   <Heart className={`mr-2 size-4 ${isFav ? 'fill-current' : ''}`} />
                   {isFav ? '즐겨찾기 해제' : '즐겨찾기'}

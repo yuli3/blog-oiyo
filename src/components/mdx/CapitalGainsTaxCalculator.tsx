@@ -168,7 +168,7 @@ export default function CapitalGainsTaxCalculator() {
               <button key={t.key} onClick={() => setAssetType(t.key)}
                 className={`rounded-xl py-2.5 text-sm font-semibold border transition-all ${
                   assetType === t.key
-                    ? 'border-rose-500 bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300'
+                    ? 'border-rose-500 bg-rose-50 text-rose-700'
                     : 'border-border text-muted-foreground hover:border-rose-300'
                 }`}>{t.label}
               </button>
@@ -225,9 +225,9 @@ export default function CapitalGainsTaxCalculator() {
         {/* Results */}
         {result && (
           result.exempt ? (
-            <div className="rounded-xl bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900 px-5 py-4 text-center">
-              <div className="text-2xl font-extrabold text-emerald-700 dark:text-emerald-300">비과세</div>
-              <div className="text-sm text-emerald-600 dark:text-emerald-400 mt-1">1세대 1주택 비과세 요건 충족 (실거래가 12억 이하, 보유 2년 이상)</div>
+            <div className="rounded-xl bg-emerald-50 border border-emerald-200 px-5 py-4 text-center">
+              <div className="text-2xl font-extrabold text-emerald-700">비과세</div>
+              <div className="text-sm text-emerald-600 mt-1">1세대 1주택 비과세 요건 충족 (실거래가 12억 이하, 보유 2년 이상)</div>
             </div>
           ) : (
             <div className="rounded-xl border border-border overflow-hidden">
@@ -241,7 +241,7 @@ export default function CapitalGainsTaxCalculator() {
                     <span className="text-sm text-muted-foreground">
                       장기보유특별공제 ({((result.longTermRate ?? 0) * 100).toFixed(0)}%)
                     </span>
-                    <span className="font-mono text-emerald-600 dark:text-emerald-400">- {fmt(result.longTermDeduction ?? 0)} 원</span>
+                    <span className="font-mono text-emerald-600">- {fmt(result.longTermDeduction ?? 0)} 원</span>
                   </div>
                 )}
                 <div className="flex justify-between items-center px-5 py-3">
@@ -250,22 +250,22 @@ export default function CapitalGainsTaxCalculator() {
                 </div>
                 <div className="flex justify-between items-center px-5 py-3">
                   <span className="text-sm text-muted-foreground">기본공제 (250만 원)</span>
-                  <span className="font-mono text-emerald-600 dark:text-emerald-400">- {result.isStock ? '0' : '2,500,000'} 원</span>
+                  <span className="font-mono text-emerald-600">- {result.isStock ? '0' : '2,500,000'} 원</span>
                 </div>
                 <div className="flex justify-between items-center px-5 py-3 bg-muted/20">
                   <span className="text-sm font-semibold">과세표준</span>
                   <span className="font-mono font-bold">{fmt(result.taxBase ?? 0)} 원</span>
                 </div>
                 {result.isHeavyTax && (
-                  <div className="px-5 py-2 bg-red-50/50 dark:bg-red-950/20">
-                    <span className="text-xs text-red-600 dark:text-red-400 font-semibold">⚠️ 보유기간 {parseInt(holdYears)}년 미만 — 단기 중과세율 적용</span>
+                  <div className="px-5 py-2 bg-red-50/50">
+                    <span className="text-xs text-red-600 font-semibold">⚠️ 보유기간 {parseInt(holdYears)}년 미만 — 단기 중과세율 적용</span>
                   </div>
                 )}
-                <div className="flex justify-between items-center px-5 py-3.5 bg-red-50/50 dark:bg-red-950/20">
-                  <span className="text-sm font-bold text-red-800 dark:text-red-300">
+                <div className="flex justify-between items-center px-5 py-3.5 bg-red-50/50">
+                  <span className="text-sm font-bold text-red-800">
                     납부할 양도소득세+지방세 (실효세율 {result.effectiveRate}%)
                   </span>
-                  <span className="font-mono font-extrabold text-rose-700 dark:text-rose-300 text-xl">{fmt(result.totalTax ?? 0)} 원</span>
+                  <span className="font-mono font-extrabold text-rose-700 text-xl">{fmt(result.totalTax ?? 0)} 원</span>
                 </div>
               </div>
             </div>
@@ -274,7 +274,7 @@ export default function CapitalGainsTaxCalculator() {
 
         <p className="text-xs text-muted-foreground text-center leading-relaxed">
           ※ 다주택자 중과, 조정대상지역 여부는 반영되지 않습니다.{' '}
-          <span className="text-rose-600 dark:text-rose-400">실제 세액은 세무사 상담 또는 국세청 양도소득세 신고 시스템을 이용하세요.</span>
+          <span className="text-rose-600">실제 세액은 세무사 상담 또는 국세청 양도소득세 신고 시스템을 이용하세요.</span>
         </p>
       </div>
     </div>

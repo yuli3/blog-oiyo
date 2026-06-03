@@ -43,8 +43,8 @@ export default function ISLMSimulator() {
       <div className="grid gap-8 md:grid-cols-3">
         {/* 컨트롤 패널 */}
         <div className="flex flex-col gap-6 md:col-span-1">
-          <div className="flex flex-col gap-2 p-4 rounded-lg bg-red-50/50 dark:bg-red-950/20 border border-red-100 dark:border-red-900/30">
-            <label className="text-sm font-bold text-red-700 dark:text-red-400 flex justify-between">
+          <div className="flex flex-col gap-2 p-4 rounded-lg bg-red-50/50 border border-red-100">
+            <label className="text-sm font-bold text-red-700 flex justify-between">
               <span>재정 정책 (IS 곡선)</span>
               <span>{fiscalPolicy > 0 ? '팽창' : fiscalPolicy < 0 ? '긴축' : '중립'}</span>
             </label>
@@ -58,8 +58,8 @@ export default function ISLMSimulator() {
             <span className="text-xs text-muted-foreground">정부지출(G) 증감 및 감세/증세</span>
           </div>
 
-          <div className="flex flex-col gap-2 p-4 rounded-lg bg-blue-50/50 dark:bg-blue-950/20 border border-blue-100 dark:border-blue-900/30">
-            <label className="text-sm font-bold text-blue-700 dark:text-blue-400 flex justify-between">
+          <div className="flex flex-col gap-2 p-4 rounded-lg bg-blue-50/50 border border-blue-100">
+            <label className="text-sm font-bold text-blue-700 flex justify-between">
               <span>통화 정책 (LM 곡선)</span>
               <span>{monetaryPolicy > 0 ? '팽창' : monetaryPolicy < 0 ? '긴축' : '중립'}</span>
             </label>

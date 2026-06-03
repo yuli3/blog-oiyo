@@ -349,7 +349,7 @@ const JeonseGuaranteeCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'ko
           </div>
 
           {/* Tip */}
-          <div className="p-4 rounded-2xl bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800">
+          <div className="p-4 rounded-2xl bg-blue-50 border border-blue-200">
             <p className="text-xs font-black mb-1">{t.tip}</p>
             <p className="text-xs text-muted-foreground leading-relaxed">{t.tipText}</p>
           </div>

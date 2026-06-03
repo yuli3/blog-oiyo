@@ -70,27 +70,27 @@ const HomeBuyingCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko
     };
 
     return (
-        <div className="not-prose my-12 p-8 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-xl max-w-2xl mx-auto">
+        <div className="not-prose my-12 p-8 bg-slate-50 border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto">
             {!showResults ? (
                 <div className="space-y-6">
-                    <h3 className="text-2xl font-black text-center text-slate-900 dark:text-white mb-8">{t.title}</h3>
+                    <h3 className="text-2xl font-black text-center text-slate-900 mb-8">{t.title}</h3>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                             <label className="text-sm font-bold text-slate-500">{t.labels.price}</label>
-                            <input type="number" value={price} onChange={(e)=>setPrice(Number(e.target.value))} className="w-full p-3 bg-white dark:bg-slate-800 border rounded-xl" />
+                            <input type="number" value={price} onChange={(e)=>setPrice(Number(e.target.value))} className="w-full p-3 bg-white border rounded-xl" />
                         </div>
                         <div className="space-y-2">
                             <label className="text-sm font-bold text-slate-500">{t.labels.deposit}</label>
-                            <input type="number" value={deposit} onChange={(e)=>setDeposit(Number(e.target.value))} className="w-full p-3 bg-white dark:bg-slate-800 border rounded-xl" />
+                            <input type="number" value={deposit} onChange={(e)=>setDeposit(Number(e.target.value))} className="w-full p-3 bg-white border rounded-xl" />
                         </div>
                         <div className="space-y-2">
                             <label className="text-sm font-bold text-slate-500">{t.labels.period}</label>
-                            <input type="number" value={period} onChange={(e)=>setPeriod(Number(e.target.value))} className="w-full p-3 bg-white dark:bg-slate-800 border rounded-xl" />
+                            <input type="number" value={period} onChange={(e)=>setPeriod(Number(e.target.value))} className="w-full p-3 bg-white border rounded-xl" />
                         </div>
                         <div className="space-y-2">
                             <label className="text-sm font-bold text-slate-500">{t.labels.rate}</label>
-                            <input type="number" step="0.1" value={rate} onChange={(e)=>setRate(Number(e.target.value))} className="w-full p-3 bg-white dark:bg-slate-800 border rounded-xl" />
+                            <input type="number" step="0.1" value={rate} onChange={(e)=>setRate(Number(e.target.value))} className="w-full p-3 bg-white border rounded-xl" />
                         </div>
                     </div>
                     
@@ -110,22 +110,22 @@ const HomeBuyingCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko
             ) : (
                 <div className="space-y-8 animate-fade-in">
                     <div className="text-center">
-                        <h3 className="text-3xl font-black text-slate-900 dark:text-white">
+                        <h3 className="text-3xl font-black text-slate-900">
                             {calculations.buyNet > calculations.rentNet ? t.results.buyBetter : t.results.rentBetter}
                         </h3>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="p-6 bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700">
+                        <div className="p-6 bg-white rounded-2xl border border-slate-100">
                             <h4 className="text-xs font-bold text-blue-500 uppercase mb-2">{t.results.buyScenario}</h4>
-                            <div className="text-xl font-bold text-slate-900 dark:text-white mb-1">
+                            <div className="text-xl font-bold text-slate-900 mb-1">
                                 {formatWon(calculations.buyNet)}
                             </div>
                             <p className="text-[10px] text-slate-400">{t.results.buyDetails}</p>
                         </div>
-                        <div className="p-6 bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700">
+                        <div className="p-6 bg-white rounded-2xl border border-slate-100">
                             <h4 className="text-xs font-bold text-emerald-500 uppercase mb-2">{t.results.rentScenario}</h4>
-                            <div className="text-xl font-bold text-slate-900 dark:text-white mb-1">
+                            <div className="text-xl font-bold text-slate-900 mb-1">
                                 {formatWon(calculations.rentNet)}
                             </div>
                             <p className="text-[10px] text-slate-400">{t.results.rentDetails}</p>
@@ -134,7 +134,7 @@ const HomeBuyingCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko
 
                     <button 
                         onClick={() => setShowResults(false)}
-                        className="w-full py-3 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-500 font-bold hover:bg-slate-100 dark:hover:bg-slate-800"
+                        className="w-full py-3 border border-slate-200 rounded-xl text-slate-500 font-bold hover:bg-slate-100"
                     >
                         {locale === 'ko' ? '수치 수정하기' : 'Back to Edit'}
                     </button>

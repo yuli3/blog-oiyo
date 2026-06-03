@@ -162,7 +162,7 @@ export default function SeveranceCalculator() {
 
         {result && (
           result.tooShort ? (
-            <div className="rounded-xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 px-5 py-4 text-sm text-amber-800 dark:text-amber-300 font-medium">
+            <div className="rounded-xl bg-amber-50 border border-amber-200 px-5 py-4 text-sm text-amber-800 font-medium">
               ⚠️ 퇴직금은 계속근로기간 1년 이상인 경우에만 발생합니다. (근로기준법 제34조)
             </div>
           ) : (
@@ -177,13 +177,13 @@ export default function SeveranceCalculator() {
                     <span className="text-sm text-muted-foreground">1일 평균임금</span>
                     <span className="font-mono">{fmt(result.avgDailyWage ?? 0)} 원</span>
                   </div>
-                  <div className="flex justify-between items-center px-5 py-3.5 bg-cyan-50/50 dark:bg-cyan-950/20">
-                    <span className="text-sm font-bold text-cyan-800 dark:text-cyan-300">퇴직금 (세전)</span>
-                    <span className="font-mono font-extrabold text-cyan-700 dark:text-cyan-300 text-xl">{fmt(result.severance ?? 0)} 원</span>
+                  <div className="flex justify-between items-center px-5 py-3.5 bg-cyan-50/50">
+                    <span className="text-sm font-bold text-cyan-800">퇴직금 (세전)</span>
+                    <span className="font-mono font-extrabold text-cyan-700 text-xl">{fmt(result.severance ?? 0)} 원</span>
                   </div>
                   <div className="flex justify-between items-center px-5 py-3">
                     <span className="text-sm text-muted-foreground">퇴직소득세 + 지방소득세</span>
-                    <span className="font-mono text-red-600 dark:text-red-400">- {fmt(result.totalTax ?? 0)} 원</span>
+                    <span className="font-mono text-red-600">- {fmt(result.totalTax ?? 0)} 원</span>
                   </div>
                   <div className="flex justify-between items-center px-5 py-3.5 bg-foreground/5">
                     <span className="text-sm font-bold">세후 실수령 퇴직금</span>
@@ -192,7 +192,7 @@ export default function SeveranceCalculator() {
                 </div>
               </div>
               {result.mustIrp && (
-                <div className="rounded-lg bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900 px-4 py-3 text-xs text-blue-800 dark:text-blue-300">
+                <div className="rounded-lg bg-blue-50 border border-blue-200 px-4 py-3 text-xs text-blue-800">
                   💡 퇴직금 300만 원 초과 시 IRP(개인형 퇴직연금) 계좌로만 수령 가능합니다.
                 </div>
               )}

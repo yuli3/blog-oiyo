@@ -379,12 +379,12 @@ const FinancialInvestmentTaxCalculator: React.FC<{ locale?: Locale }> = ({ local
       <div className="space-y-4">
         {/* Tax amount hero */}
         {result.totalTax === 0 ? (
-          <div className="p-6 rounded-2xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 text-center">
+          <div className="p-6 rounded-2xl bg-emerald-50 border border-emerald-200 text-center">
             <p className="text-2xl font-black text-emerald-600">✓ {t.zeroTax}</p>
           </div>
         ) : (
           <div className="grid grid-cols-3 gap-3">
-            <div className="col-span-3 sm:col-span-1 p-5 rounded-2xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 text-center">
+            <div className="col-span-3 sm:col-span-1 p-5 rounded-2xl bg-red-50 border border-red-200 text-center">
               <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">{t.taxAmount}</p>
               <p className="text-3xl font-black text-red-600">{fmt(result.totalTax)}</p>
               <p className="text-[10px] text-muted-foreground">{t.wonUnit}</p>
@@ -442,7 +442,7 @@ const FinancialInvestmentTaxCalculator: React.FC<{ locale?: Locale }> = ({ local
         )}
 
         {/* Tip */}
-        <div className="p-4 rounded-2xl bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800">
+        <div className="p-4 rounded-2xl bg-blue-50 border border-blue-200">
           <p className="text-xs font-black mb-1">{t.tip}</p>
           <p className="text-xs text-muted-foreground leading-relaxed">{t.tipText}</p>
         </div>

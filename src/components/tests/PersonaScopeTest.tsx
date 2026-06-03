@@ -84,10 +84,10 @@ export default function PersonaScopeTest({ locale: localeProp }: Props) {
 
   if (phase === "result") {
     return (
-      <div className="not-prose my-10 p-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-xl max-w-2xl mx-auto space-y-6">
+      <div className="not-prose my-10 p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto space-y-6">
         <div className="text-center">
           <p className="text-xs font-bold text-lime-500 uppercase tracking-widest">{t.resultLabel}</p>
-          <h3 className="text-2xl font-black text-slate-900 dark:text-white mt-2">🔭</h3>
+          <h3 className="text-2xl font-black text-slate-900 mt-2">🔭</h3>
         </div>
         <div className="space-y-4">
           {FACTORS.map((f) => {
@@ -98,15 +98,15 @@ export default function PersonaScopeTest({ locale: localeProp }: Props) {
             return (
               <div key={f} className="space-y-1">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="font-semibold text-slate-800 dark:text-slate-200">{info.emoji} {info.name}</span>
-                  <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${isHigh ? "bg-lime-100 text-lime-700 dark:bg-lime-900/40 dark:text-lime-300" : "bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400"}`}>
+                  <span className="font-semibold text-slate-800">{info.emoji} {info.name}</span>
+                  <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${isHigh ? "bg-lime-100 text-lime-700" : "bg-slate-100 text-slate-500"}`}>
                     {isHigh ? t.highLabel : t.lowLabel} {pct}%
                   </span>
                 </div>
-                <div className="h-2.5 bg-slate-100 dark:bg-slate-800 rounded-full">
+                <div className="h-2.5 bg-slate-100 rounded-full">
                   <div className="h-2.5 bg-lime-500 rounded-full transition-all" style={{ width: `${pct}%` }} />
                 </div>
-                <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">{isHigh ? info.high : info.low}</p>
+                <p className="text-xs text-slate-500 leading-relaxed">{isHigh ? info.high : info.low}</p>
               </div>
             );
           })}
@@ -119,24 +119,24 @@ export default function PersonaScopeTest({ locale: localeProp }: Props) {
   }
 
   return (
-    <div className="not-prose my-10 p-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-xl max-w-2xl mx-auto space-y-8">
+    <div className="not-prose my-10 p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto space-y-8">
       <div className="text-center">
-        <h3 className="text-2xl font-black text-slate-900 dark:text-white">{t.title}</h3>
+        <h3 className="text-2xl font-black text-slate-900">{t.title}</h3>
         <p className="text-sm text-slate-500 mt-2">{t.description}</p>
-        <div className="mt-3 h-2 bg-slate-100 dark:bg-slate-800 rounded-full">
+        <div className="mt-3 h-2 bg-slate-100 rounded-full">
           <div className="h-2 bg-lime-500 rounded-full transition-all" style={{ width: `${(Object.keys(answers).length / t.questions.length) * 100}%` }} />
         </div>
       </div>
       <div className="space-y-8">
         {t.questions.map((q, i) => (
           <div key={q.id} className="space-y-3">
-            <p className="font-semibold text-slate-800 dark:text-white leading-snug">{i + 1}. {q.text}</p>
+            <p className="font-semibold text-slate-800 leading-snug">{i + 1}. {q.text}</p>
             <div className="grid grid-cols-5 gap-1">
               {t.options.map((opt, v) => (
                 <button
                   key={v}
                   onClick={() => setAnswers((prev) => ({ ...prev, [q.id]: v + 1 }))}
-                  className={`py-2 px-1 text-[10px] rounded-lg border transition-all ${answers[q.id] === v + 1 ? "bg-lime-600 border-lime-600 text-white font-bold shadow-md" : "bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500 hover:bg-slate-100"}`}
+                  className={`py-2 px-1 text-[10px] rounded-lg border transition-all ${answers[q.id] === v + 1 ? "bg-lime-600 border-lime-600 text-white font-bold shadow-md" : "bg-slate-50 border-slate-200 text-slate-500 hover:bg-slate-100"}`}
                 >
                   {opt}
                 </button>
@@ -149,7 +149,7 @@ export default function PersonaScopeTest({ locale: localeProp }: Props) {
         <button
           disabled={!isComplete}
           onClick={() => setPhase("result")}
-          className={`px-10 py-3 rounded-2xl font-bold text-base transition-all ${isComplete ? "bg-lime-600 text-white hover:bg-lime-700 shadow-lg" : "bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed"}`}
+          className={`px-10 py-3 rounded-2xl font-bold text-base transition-all ${isComplete ? "bg-lime-600 text-white hover:bg-lime-700 shadow-lg" : "bg-slate-200 text-slate-400 cursor-not-allowed"}`}
         >
           {lang === "ko" ? "결과 보기" : "See Results"}
         </button>

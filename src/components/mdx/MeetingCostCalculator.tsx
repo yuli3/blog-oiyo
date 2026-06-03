@@ -57,41 +57,41 @@ export default function MeetingCostCalculator() {
   };
 
   return (
-    <div className="my-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-      <h3 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">회의 비용 계산기</h3>
+    <div className="my-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+      <h3 className="mb-4 text-xl font-bold text-gray-900">회의 비용 계산기</h3>
 
       <div className="grid grid-cols-2 gap-4 mb-5">
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">회의 시간 (분)</label>
+          <label className="mb-1 block text-sm font-medium text-gray-700">회의 시간 (분)</label>
           <input
             type="number"
             value={durationMinutes}
             onChange={(e) => setDurationMinutes(e.target.value)}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm"
           />
         </div>
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">주당 회의 횟수</label>
+          <label className="mb-1 block text-sm font-medium text-gray-700">주당 회의 횟수</label>
           <input
             type="number"
             value={meetingsPerWeek}
             onChange={(e) => setMeetingsPerWeek(e.target.value)}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm"
           />
         </div>
       </div>
 
-      <p className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">참석자 구성</p>
+      <p className="mb-2 text-sm font-medium text-gray-700">참석자 구성</p>
       <div className="space-y-3 mb-4">
         {attendees.map((att) => (
-          <div key={att.id} className="flex gap-3 items-end rounded-xl border border-gray-200 p-3 dark:border-gray-600">
+          <div key={att.id} className="flex gap-3 items-end rounded-xl border border-gray-200 p-3">
             <div className="flex-1">
               <label className="mb-0.5 block text-xs text-gray-500">시간당 인건비 (원)</label>
               <input
                 type="number"
                 value={att.hourlyRate}
                 onChange={(e) => updateAttendee(att.id, 'hourlyRate', e.target.value)}
-                className="w-full rounded-lg border border-gray-300 px-2 py-1.5 text-xs dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                className="w-full rounded-lg border border-gray-300 px-2 py-1.5 text-xs"
               />
             </div>
             <div className="w-20">
@@ -100,7 +100,7 @@ export default function MeetingCostCalculator() {
                 type="number"
                 value={att.count}
                 onChange={(e) => updateAttendee(att.id, 'count', e.target.value)}
-                className="w-full rounded-lg border border-gray-300 px-2 py-1.5 text-xs dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                className="w-full rounded-lg border border-gray-300 px-2 py-1.5 text-xs"
               />
             </div>
             {attendees.length > 1 && (
@@ -112,7 +112,7 @@ export default function MeetingCostCalculator() {
 
       <button
         onClick={addAttendee}
-        className="mb-4 w-full rounded-lg border border-dashed border-gray-300 py-2 text-sm text-gray-500 hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700"
+        className="mb-4 w-full rounded-lg border border-dashed border-gray-300 py-2 text-sm text-gray-500 hover:bg-gray-50"
       >
         + 참석자 유형 추가
       </button>
@@ -128,12 +128,12 @@ export default function MeetingCostCalculator() {
         <div className="mt-6 space-y-3">
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             {[
-              { label: '회의 1회 비용', value: `${fmt(result.costPerMeeting)}원`, color: 'text-orange-600 dark:text-orange-400' },
+              { label: '회의 1회 비용', value: `${fmt(result.costPerMeeting)}원`, color: 'text-orange-600' },
               { label: '주간 비용 손실', value: `${fmt(result.weeklyLoss)}원`, color: 'text-red-500' },
-              { label: '월간 비용 손실', value: `${fmt(result.monthlyLoss)}원`, color: 'text-red-600 dark:text-red-400' },
-              { label: '연간 비용 손실', value: `${fmt(result.yearlyLoss)}원`, color: 'text-red-700 dark:text-red-300' },
+              { label: '월간 비용 손실', value: `${fmt(result.monthlyLoss)}원`, color: 'text-red-600' },
+              { label: '연간 비용 손실', value: `${fmt(result.yearlyLoss)}원`, color: 'text-red-700' },
             ].map(({ label, value, color }) => (
-              <div key={label} className="rounded-xl bg-gray-50 p-3 text-center dark:bg-gray-700">
+              <div key={label} className="rounded-xl bg-gray-50 p-3 text-center">
                 <p className="text-xs text-gray-500">{label}</p>
                 <p className={`text-sm font-bold ${color}`}>{value}</p>
               </div>

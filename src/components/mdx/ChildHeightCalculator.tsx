@@ -42,9 +42,9 @@ export default function ChildHeightCalculator() {
   };
 
   return (
-    <div className="my-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-      <h3 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">자녀 예상 키 계산기</h3>
-      <p className="mb-4 text-xs text-gray-500 dark:text-gray-400">
+    <div className="my-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+      <h3 className="mb-4 text-xl font-bold text-gray-900">자녀 예상 키 계산기</h3>
+      <p className="mb-4 text-xs text-gray-500">
         태너(Tanner) 중간 부모 신장 공식 기반 — 유전적 잠재 키를 추정합니다.
       </p>
 
@@ -56,7 +56,7 @@ export default function ChildHeightCalculator() {
             className={`rounded-lg px-5 py-2 text-sm font-medium transition ${
               childGender === g
                 ? 'bg-teal-600 text-white'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
             {g === 'male' ? '남아' : '여아'}
@@ -70,12 +70,12 @@ export default function ChildHeightCalculator() {
           { label: '어머니 키 (cm)', value: motherHeight, setter: setMotherHeight },
         ].map(({ label, value, setter }) => (
           <div key={label}>
-            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">{label}</label>
+            <label className="mb-1 block text-sm font-medium text-gray-700">{label}</label>
             <input
               type="number"
               value={value}
               onChange={(e) => setter(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm"
             />
           </div>
         ))}
@@ -89,11 +89,11 @@ export default function ChildHeightCalculator() {
       </button>
 
       {result && (
-        <div className="mt-6 rounded-xl bg-teal-50 p-5 dark:bg-teal-900/20">
-          <p className="mb-2 text-center text-3xl font-bold text-teal-700 dark:text-teal-300">
+        <div className="mt-6 rounded-xl bg-teal-50 p-5">
+          <p className="mb-2 text-center text-3xl font-bold text-teal-700">
             약 {fmt(result.predictedHeight)} cm
           </p>
-          <p className="text-center text-sm text-gray-600 dark:text-gray-400">
+          <p className="text-center text-sm text-gray-600">
             범위: {fmt(result.rangeMin)} ~ {fmt(result.rangeMax)} cm (95% 신뢰구간)
           </p>
           <p className="mt-3 text-xs text-gray-400 text-center">

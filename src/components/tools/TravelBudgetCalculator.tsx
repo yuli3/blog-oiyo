@@ -504,25 +504,25 @@ export default function TravelBudgetCalculator({ locale }: Props) {
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+        <h1 className="text-2xl font-bold text-gray-900">
           {t.title}
         </h1>
-        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+        <p className="mt-1 text-sm text-gray-500">
           {t.subtitle}
         </p>
       </div>
 
       {/* Form */}
-      <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-5 space-y-4">
+      <div className="rounded-2xl border border-gray-200 bg-white p-5 space-y-4">
         {/* Destination */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
             {t.destinationLabel}
           </label>
           <select
             value={destination}
             onChange={(e) => { setDestination(e.target.value as Destination); setResult(null); }}
-            className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-2.5 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+            className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-400"
           >
             {DESTINATIONS.map((d) => (
               <option key={d} value={d}>
@@ -535,46 +535,46 @@ export default function TravelBudgetCalculator({ locale }: Props) {
         {/* Nights & People */}
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               {t.nightsLabel}
             </label>
             <div className="flex items-center gap-2">
               <button
                 onClick={() => { setNights((n) => Math.max(1, n - 1)); setResult(null); }}
-                className="w-9 h-9 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+                className="w-9 h-9 rounded-lg border border-gray-300 bg-gray-50 font-semibold text-gray-700 hover:bg-gray-100 transition-colors"
               >
                 −
               </button>
-              <span className="flex-1 text-center text-lg font-bold text-gray-900 dark:text-gray-100">
+              <span className="flex-1 text-center text-lg font-bold text-gray-900">
                 {nights}
                 <span className="text-sm font-normal ml-1 text-gray-500">{t.nightsUnit}</span>
               </span>
               <button
                 onClick={() => { setNights((n) => Math.min(30, n + 1)); setResult(null); }}
-                className="w-9 h-9 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+                className="w-9 h-9 rounded-lg border border-gray-300 bg-gray-50 font-semibold text-gray-700 hover:bg-gray-100 transition-colors"
               >
                 +
               </button>
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               {t.peopleLabel}
             </label>
             <div className="flex items-center gap-2">
               <button
                 onClick={() => { setPeople((p) => Math.max(1, p - 1)); setResult(null); }}
-                className="w-9 h-9 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+                className="w-9 h-9 rounded-lg border border-gray-300 bg-gray-50 font-semibold text-gray-700 hover:bg-gray-100 transition-colors"
               >
                 −
               </button>
-              <span className="flex-1 text-center text-lg font-bold text-gray-900 dark:text-gray-100">
+              <span className="flex-1 text-center text-lg font-bold text-gray-900">
                 {people}
                 <span className="text-sm font-normal ml-1 text-gray-500">{t.peopleUnit}</span>
               </span>
               <button
                 onClick={() => { setPeople((p) => Math.min(8, p + 1)); setResult(null); }}
-                className="w-9 h-9 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+                className="w-9 h-9 rounded-lg border border-gray-300 bg-gray-50 font-semibold text-gray-700 hover:bg-gray-100 transition-colors"
               >
                 +
               </button>
@@ -585,13 +585,13 @@ export default function TravelBudgetCalculator({ locale }: Props) {
         {/* Accom & Flight */}
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               {t.accomLabel}
             </label>
             <select
               value={accom}
               onChange={(e) => { setAccom(e.target.value as AccomGrade); setResult(null); }}
-              className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-3 py-2.5 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+              className="w-full rounded-lg border border-gray-300 bg-gray-50 px-3 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-400"
             >
               {ACCOM_GRADES.map((g) => (
                 <option key={g} value={g}>
@@ -601,13 +601,13 @@ export default function TravelBudgetCalculator({ locale }: Props) {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               {t.flightLabel}
             </label>
             <select
               value={flightClass}
               onChange={(e) => { setFlightClass(e.target.value as FlightClass); setResult(null); }}
-              className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-3 py-2.5 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+              className="w-full rounded-lg border border-gray-300 bg-gray-50 px-3 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-400"
             >
               {FLIGHT_CLASSES.map((fc) => (
                 <option key={fc} value={fc}>
@@ -631,27 +631,27 @@ export default function TravelBudgetCalculator({ locale }: Props) {
         <div className="space-y-4">
           {/* Totals */}
           <div className="grid grid-cols-2 gap-3">
-            <div className="rounded-2xl border border-emerald-200 dark:border-emerald-800 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-gray-800 dark:to-gray-900 p-5 text-center">
-              <p className="text-xs font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+            <div className="rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-teal-50 p-5 text-center">
+              <p className="text-xs font-semibold uppercase tracking-wider text-emerald-600">
                 {t.totalTitle}
               </p>
-              <p className="mt-2 text-2xl font-extrabold text-emerald-700 dark:text-emerald-300">
+              <p className="mt-2 text-2xl font-extrabold text-emerald-700">
                 {fmtKRW(result.total)}
               </p>
             </div>
-            <div className="rounded-2xl border border-teal-200 dark:border-teal-800 bg-gradient-to-br from-teal-50 to-cyan-50 dark:from-gray-800 dark:to-gray-900 p-5 text-center">
-              <p className="text-xs font-semibold uppercase tracking-wider text-teal-600 dark:text-teal-400">
+            <div className="rounded-2xl border border-teal-200 bg-gradient-to-br from-teal-50 to-cyan-50 p-5 text-center">
+              <p className="text-xs font-semibold uppercase tracking-wider text-teal-600">
                 {t.perPersonTitle}
               </p>
-              <p className="mt-2 text-2xl font-extrabold text-teal-700 dark:text-teal-300">
+              <p className="mt-2 text-2xl font-extrabold text-teal-700">
                 {fmtKRW(result.perPerson)}
               </p>
             </div>
           </div>
 
           {/* Breakdown */}
-          <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-5">
-            <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+          <div className="rounded-2xl border border-gray-200 bg-white p-5">
+            <h3 className="text-sm font-semibold text-gray-700 mb-3">
               {t.breakdownTitle}
             </h3>
             <div className="space-y-2">
@@ -660,12 +660,12 @@ export default function TravelBudgetCalculator({ locale }: Props) {
                 return (
                   <div key={label}>
                     <div className="flex justify-between text-sm mb-1">
-                      <span className="text-gray-600 dark:text-gray-400">{label}</span>
-                      <span className="font-semibold text-gray-900 dark:text-gray-100">
+                      <span className="text-gray-600">{label}</span>
+                      <span className="font-semibold text-gray-900">
                         {fmtKRW(value)}
                       </span>
                     </div>
-                    <div className="h-2 rounded-full bg-gray-100 dark:bg-gray-700 overflow-hidden">
+                    <div className="h-2 rounded-full bg-gray-100 overflow-hidden">
                       <div
                         className="h-full rounded-full bg-gradient-to-r from-emerald-400 to-teal-400 transition-all duration-500"
                         style={{ width: `${pct}%` }}
@@ -679,13 +679,13 @@ export default function TravelBudgetCalculator({ locale }: Props) {
 
           {/* Tips */}
           {tips && (
-            <div className="rounded-2xl border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20 p-5">
-              <h3 className="text-sm font-semibold text-amber-700 dark:text-amber-400 mb-3">
+            <div className="rounded-2xl border border-amber-200 bg-amber-50 p-5">
+              <h3 className="text-sm font-semibold text-amber-700 mb-3">
                 {t.tipsTitle}
               </h3>
               <ul className="space-y-2">
                 {tips.map((tip, i) => (
-                  <li key={i} className="flex gap-2 text-sm text-amber-800 dark:text-amber-300">
+                  <li key={i} className="flex gap-2 text-sm text-amber-800">
                     <span className="mt-0.5 text-amber-500">•</span>
                     <span>{tip}</span>
                   </li>
@@ -694,13 +694,13 @@ export default function TravelBudgetCalculator({ locale }: Props) {
             </div>
           )}
 
-          <p className="text-xs text-center text-gray-400 dark:text-gray-500">
+          <p className="text-xs text-center text-gray-400">
             {t.estimateNote}
           </p>
 
           <button
             onClick={reset}
-            className="w-full rounded-xl border border-gray-300 dark:border-gray-600 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+            className="w-full rounded-xl border border-gray-300 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
           >
             {t.resetBtn}
           </button>

@@ -194,21 +194,21 @@ export default function CritiQuestTest({ locale: localeProp }: Props) {
   if (phase === "result") {
     const r = t.results[level];
     return (
-      <div className="not-prose my-10 p-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-xl max-w-2xl mx-auto text-center space-y-6">
+      <div className="not-prose my-10 p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto text-center space-y-6">
         <p className="text-xs font-bold text-rose-500 uppercase tracking-widest">{t.resultLabel}</p>
         <div className="text-6xl">{r.emoji}</div>
-        <h3 className="text-3xl font-black text-slate-900 dark:text-white">{r.title}</h3>
+        <h3 className="text-3xl font-black text-slate-900">{r.title}</h3>
         <div className="space-y-2">
           <div className="flex justify-between text-xs text-slate-500">
             <span>{lang === "ko" ? "정답률" : "Score"}</span>
             <span className="font-bold text-rose-600">{correctCount} / {t.questions.length}</span>
           </div>
-          <div className="h-3 bg-slate-100 dark:bg-slate-800 rounded-full">
+          <div className="h-3 bg-slate-100 rounded-full">
             <div className="h-3 bg-rose-500 rounded-full transition-all" style={{ width: `${Math.round(pct * 100)}%` }} />
           </div>
         </div>
-        <div className="p-6 bg-rose-50 dark:bg-rose-950/30 rounded-2xl border border-rose-100 dark:border-rose-900/30">
-          <p className="text-slate-700 dark:text-slate-300 text-base leading-relaxed">{r.desc}</p>
+        <div className="p-6 bg-rose-50 rounded-2xl border border-rose-100">
+          <p className="text-slate-700 text-base leading-relaxed">{r.desc}</p>
         </div>
         <button onClick={() => { setAnswers({}); setRevealed({}); setPhase("quiz"); }} className="text-slate-400 text-sm hover:underline">{t.retake}</button>
       </div>
@@ -216,11 +216,11 @@ export default function CritiQuestTest({ locale: localeProp }: Props) {
   }
 
   return (
-    <div className="not-prose my-10 p-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-xl max-w-2xl mx-auto space-y-8">
+    <div className="not-prose my-10 p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto space-y-8">
       <div className="text-center">
-        <h3 className="text-2xl font-black text-slate-900 dark:text-white">{t.title}</h3>
+        <h3 className="text-2xl font-black text-slate-900">{t.title}</h3>
         <p className="text-sm text-slate-500 mt-2">{t.description}</p>
-        <div className="mt-3 h-2 bg-slate-100 dark:bg-slate-800 rounded-full">
+        <div className="mt-3 h-2 bg-slate-100 rounded-full">
           <div className="h-2 bg-rose-500 rounded-full transition-all" style={{ width: `${(Object.keys(answers).length / t.questions.length) * 100}%` }} />
         </div>
       </div>
@@ -230,10 +230,10 @@ export default function CritiQuestTest({ locale: localeProp }: Props) {
           const isRevealed = revealed[q.id];
           return (
             <div key={q.id} className="space-y-3">
-              <p className="font-semibold text-slate-800 dark:text-white leading-snug whitespace-pre-line">{i + 1}. {q.text}</p>
+              <p className="font-semibold text-slate-800 leading-snug whitespace-pre-line">{i + 1}. {q.text}</p>
               <div className="grid grid-cols-1 gap-2">
                 {q.options.map((opt) => {
-                  let cls = "bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100";
+                  let cls = "bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100";
                   if (selected === opt.id) {
                     cls = isRevealed
                       ? opt.isCorrect
@@ -241,7 +241,7 @@ export default function CritiQuestTest({ locale: localeProp }: Props) {
                         : "bg-red-500 border-red-500 text-white font-bold"
                       : "bg-rose-500 border-rose-500 text-white font-bold shadow-md";
                   } else if (isRevealed && opt.isCorrect) {
-                    cls = "bg-green-100 border-green-400 text-green-800 dark:bg-green-900/20 dark:border-green-600 dark:text-green-300";
+                    cls = "bg-green-100 border-green-400 text-green-800";
                   }
                   return (
                     <button
@@ -259,7 +259,7 @@ export default function CritiQuestTest({ locale: localeProp }: Props) {
                 })}
               </div>
               {isRevealed && (
-                <div className="text-xs p-3 bg-slate-100 dark:bg-slate-800 rounded-lg text-slate-600 dark:text-slate-400">
+                <div className="text-xs p-3 bg-slate-100 rounded-lg text-slate-600">
                   {q.explanation}
                 </div>
               )}
@@ -271,7 +271,7 @@ export default function CritiQuestTest({ locale: localeProp }: Props) {
         <button
           disabled={!isComplete}
           onClick={() => setPhase("result")}
-          className={`px-10 py-3 rounded-2xl font-bold text-base transition-all ${isComplete ? "bg-rose-500 text-white hover:bg-rose-600 shadow-lg" : "bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed"}`}
+          className={`px-10 py-3 rounded-2xl font-bold text-base transition-all ${isComplete ? "bg-rose-500 text-white hover:bg-rose-600 shadow-lg" : "bg-slate-200 text-slate-400 cursor-not-allowed"}`}
         >
           {lang === "ko" ? "결과 보기" : "See Results"}
         </button>

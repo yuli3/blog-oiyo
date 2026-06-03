@@ -129,7 +129,7 @@ const TypingTest: React.FC<{ locale?: Locale }> = ({ locale = 'en' }) => {
     return passage.split('').map((char, i) => {
       let cls = 'text-muted-foreground/50';
       if (i < typed.length) {
-        cls = typed[i] === char ? 'text-foreground' : 'bg-red-200 dark:bg-red-900/40 text-red-600 dark:text-red-400 rounded';
+        cls = typed[i] === char ? 'text-foreground' : 'bg-red-200 text-red-600 rounded';
       } else if (i === typed.length) {
         cls = 'text-foreground border-b-2 border-primary animate-pulse';
       }

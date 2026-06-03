@@ -276,13 +276,13 @@ export default function YearEndTaxCalculator() {
               {/* 환급/추가납부 */}
               <div className={`flex justify-between items-center px-5 py-4 ${
                 result.refundOrPay >= 0
-                  ? 'bg-emerald-50 dark:bg-emerald-950/30'
-                  : 'bg-red-50 dark:bg-red-950/20'
+                  ? 'bg-emerald-50'
+                  : 'bg-red-50'
               }`}>
-                <span className={`font-bold text-base ${result.refundOrPay >= 0 ? 'text-emerald-700 dark:text-emerald-300' : 'text-red-700 dark:text-red-300'}`}>
+                <span className={`font-bold text-base ${result.refundOrPay >= 0 ? 'text-emerald-700' : 'text-red-700'}`}>
                   {result.refundOrPay >= 0 ? '예상 환급액' : '예상 추가 납부액'}
                 </span>
-                <span className={`font-mono font-extrabold text-xl ${result.refundOrPay >= 0 ? 'text-emerald-700 dark:text-emerald-300' : 'text-red-700 dark:text-red-300'}`}>
+                <span className={`font-mono font-extrabold text-xl ${result.refundOrPay >= 0 ? 'text-emerald-700' : 'text-red-700'}`}>
                   {result.refundOrPay >= 0 ? '+' : ''}{fmt(result.refundOrPay)} 원
                 </span>
               </div>

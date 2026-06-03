@@ -71,19 +71,19 @@ export default function SavingsCalculator() {
   };
 
   return (
-    <div className="my-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-      <h3 className="mb-6 text-xl font-bold text-gray-900 dark:text-white">저축 목표 계산기</h3>
+    <div className="my-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+      <h3 className="mb-6 text-xl font-bold text-gray-900">저축 목표 계산기</h3>
 
       <div className="mb-4 flex gap-3">
         <button
           onClick={() => setMode('target')}
-          className={`flex-1 rounded-lg py-2 text-sm font-medium transition ${mode === 'target' ? 'bg-green-600 text-white' : 'border border-gray-300 text-gray-600 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-400'}`}
+          className={`flex-1 rounded-lg py-2 text-sm font-medium transition ${mode === 'target' ? 'bg-green-600 text-white' : 'border border-gray-300 text-gray-600 hover:bg-gray-50'}`}
         >
           목표 금액 달성
         </button>
         <button
           onClick={() => setMode('monthly')}
-          className={`flex-1 rounded-lg py-2 text-sm font-medium transition ${mode === 'monthly' ? 'bg-green-600 text-white' : 'border border-gray-300 text-gray-600 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-400'}`}
+          className={`flex-1 rounded-lg py-2 text-sm font-medium transition ${mode === 'monthly' ? 'bg-green-600 text-white' : 'border border-gray-300 text-gray-600 hover:bg-gray-50'}`}
         >
           월 저축액 기반
         </button>
@@ -92,28 +92,28 @@ export default function SavingsCalculator() {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         {mode === 'target' ? (
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">목표 금액 (원)</label>
+            <label className="mb-1 block text-sm font-medium text-gray-700">목표 금액 (원)</label>
             <input type="number" value={targetAmount} onChange={(e) => setTargetAmount(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" />
           </div>
         ) : (
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">월 저축액 (원)</label>
+            <label className="mb-1 block text-sm font-medium text-gray-700">월 저축액 (원)</label>
             <input type="number" value={monthlyAmount} onChange={(e) => setMonthlyAmount(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" />
           </div>
         )}
 
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">연 이자율 (%)</label>
+          <label className="mb-1 block text-sm font-medium text-gray-700">연 이자율 (%)</label>
           <input type="number" value={annualRate} onChange={(e) => setAnnualRate(e.target.value)} step="0.1"
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" />
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">기간 (년)</label>
+          <label className="mb-1 block text-sm font-medium text-gray-700">기간 (년)</label>
           <input type="number" value={years} onChange={(e) => setYears(e.target.value)}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" />
         </div>
       </div>
 
@@ -125,36 +125,36 @@ export default function SavingsCalculator() {
       {result && (
         <div className="mt-6 space-y-4">
           <div className="grid grid-cols-3 gap-3 text-center">
-            <div className="rounded-xl bg-green-50 p-4 dark:bg-green-900/20">
+            <div className="rounded-xl bg-green-50 p-4">
               <p className="text-xs text-gray-500">{result.label}</p>
-              <p className="text-base font-bold text-green-600 dark:text-green-400">{formatKRW(result.main)}원</p>
+              <p className="text-base font-bold text-green-600">{formatKRW(result.main)}원</p>
             </div>
-            <div className="rounded-xl bg-blue-50 p-4 dark:bg-blue-900/20">
+            <div className="rounded-xl bg-blue-50 p-4">
               <p className="text-xs text-gray-500">총 납입 원금</p>
-              <p className="text-base font-bold text-blue-600 dark:text-blue-400">{formatKRW(result.totalPrincipal)}원</p>
+              <p className="text-base font-bold text-blue-600">{formatKRW(result.totalPrincipal)}원</p>
             </div>
-            <div className="rounded-xl bg-purple-50 p-4 dark:bg-purple-900/20">
+            <div className="rounded-xl bg-purple-50 p-4">
               <p className="text-xs text-gray-500">이자 수익</p>
-              <p className="text-base font-bold text-purple-600 dark:text-purple-400">{formatKRW(Math.abs(result.totalInterest))}원</p>
+              <p className="text-base font-bold text-purple-600">{formatKRW(Math.abs(result.totalInterest))}원</p>
             </div>
           </div>
 
-          <div className="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-600">
+          <div className="overflow-x-auto rounded-xl border border-gray-200">
             <table className="w-full text-xs">
-              <thead className="bg-gray-50 dark:bg-gray-700">
+              <thead className="bg-gray-50">
                 <tr>
                   {['년차', '누적 원금', '누적 이자', '잔액'].map((h) => (
-                    <th key={h} className="px-3 py-2 text-left font-semibold text-gray-700 dark:text-gray-300">{h}</th>
+                    <th key={h} className="px-3 py-2 text-left font-semibold text-gray-700">{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {result.rows.map((row) => (
-                  <tr key={row.year} className="border-t border-gray-100 dark:border-gray-700">
-                    <td className="px-3 py-2 font-medium text-gray-700 dark:text-gray-300">{row.year}년</td>
-                    <td className="px-3 py-2 text-blue-600 dark:text-blue-400">{formatKRW(row.principal)}</td>
-                    <td className="px-3 py-2 text-purple-600 dark:text-purple-400">{formatKRW(row.interest)}</td>
-                    <td className="px-3 py-2 font-semibold text-green-600 dark:text-green-400">{formatKRW(row.balance)}</td>
+                  <tr key={row.year} className="border-t border-gray-100">
+                    <td className="px-3 py-2 font-medium text-gray-700">{row.year}년</td>
+                    <td className="px-3 py-2 text-blue-600">{formatKRW(row.principal)}</td>
+                    <td className="px-3 py-2 text-purple-600">{formatKRW(row.interest)}</td>
+                    <td className="px-3 py-2 font-semibold text-green-600">{formatKRW(row.balance)}</td>
                   </tr>
                 ))}
               </tbody>

@@ -59,15 +59,15 @@ export default function AcquisitionTaxCalculator() {
   };
 
   return (
-    <div className="my-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-      <h3 className="mb-6 text-xl font-bold text-gray-900 dark:text-white">취득세 계산기</h3>
+    <div className="my-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+      <h3 className="mb-6 text-xl font-bold text-gray-900">취득세 계산기</h3>
 
       <div className="mb-4 flex gap-2">
         {(['house', 'land', 'commercial'] as PropertyKind[]).map((k) => {
           const label = k === 'house' ? '주택' : k === 'land' ? '토지' : '상가/오피스텔';
           return (
             <button key={k} onClick={() => setPropertyKind(k)}
-              className={`flex-1 rounded-lg py-2 text-sm font-medium transition ${propertyKind === k ? 'bg-indigo-600 text-white' : 'border border-gray-300 text-gray-600 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-400'}`}>
+              className={`flex-1 rounded-lg py-2 text-sm font-medium transition ${propertyKind === k ? 'bg-indigo-600 text-white' : 'border border-gray-300 text-gray-600 hover:bg-gray-50'}`}>
               {label}
             </button>
           );
@@ -76,11 +76,11 @@ export default function AcquisitionTaxCalculator() {
 
       {propertyKind === 'house' && (
         <div className="mb-4">
-          <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">취득 후 주택 수</label>
+          <label className="mb-1 block text-sm font-medium text-gray-700">취득 후 주택 수</label>
           <div className="flex gap-2">
             {(Object.keys(HOUSE_RATES) as HouseType[]).map((k) => (
               <button key={k} onClick={() => setHouseType(k)}
-                className={`flex-1 rounded-lg py-2 text-xs font-medium transition ${houseType === k ? 'bg-indigo-500 text-white' : 'border border-gray-300 text-gray-600 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-400'}`}>
+                className={`flex-1 rounded-lg py-2 text-xs font-medium transition ${houseType === k ? 'bg-indigo-500 text-white' : 'border border-gray-300 text-gray-600 hover:bg-gray-50'}`}>
                 {HOUSE_RATES[k].label}
               </button>
             ))}
@@ -89,9 +89,9 @@ export default function AcquisitionTaxCalculator() {
       )}
 
       <div>
-        <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">취득가액 (원)</label>
+        <label className="mb-1 block text-sm font-medium text-gray-700">취득가액 (원)</label>
         <input type="number" value={price} onChange={(e) => setPrice(e.target.value)}
-          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" />
       </div>
 
       <button onClick={calculate}
@@ -101,9 +101,9 @@ export default function AcquisitionTaxCalculator() {
 
       {result && (
         <div className="mt-6 space-y-3">
-          <div className="rounded-xl bg-indigo-50 p-4 dark:bg-indigo-900/20">
+          <div className="rounded-xl bg-indigo-50 p-4">
             <p className="text-xs text-gray-500">적용 세율</p>
-            <p className="text-2xl font-bold text-indigo-700 dark:text-indigo-300">{(result.rate * 100).toFixed(1)}%</p>
+            <p className="text-2xl font-bold text-indigo-700">{(result.rate * 100).toFixed(1)}%</p>
           </div>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             {[
@@ -112,9 +112,9 @@ export default function AcquisitionTaxCalculator() {
               { label: '농어촌특별세', value: result.specialTax },
               { label: '총 납부액', value: result.total },
             ].map(({ label, value }) => (
-              <div key={label} className="rounded-xl bg-gray-50 p-3 text-center dark:bg-gray-700">
+              <div key={label} className="rounded-xl bg-gray-50 p-3 text-center">
                 <p className="text-xs text-gray-500">{label}</p>
-                <p className="text-sm font-bold text-gray-800 dark:text-white">{formatKRW(value)}원</p>
+                <p className="text-sm font-bold text-gray-800">{formatKRW(value)}원</p>
               </div>
             ))}
           </div>

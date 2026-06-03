@@ -349,8 +349,8 @@ const SalaryNegotiationCalculator = ({ locale }: Props) => {
       </div>
 
       {/* Tips */}
-      <div className="p-5 rounded-2xl bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800">
-        <p className="text-xs font-black mb-3 text-blue-900 dark:text-blue-100">{t.tipsTitle}</p>
+      <div className="p-5 rounded-2xl bg-blue-50 border border-blue-200">
+        <p className="text-xs font-black mb-3 text-blue-900">{t.tipsTitle}</p>
         <ul className="space-y-2">
           {t.tips.map((tip, i) => (
             <li key={i} className="flex gap-2 text-xs text-muted-foreground leading-relaxed">

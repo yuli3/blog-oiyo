@@ -485,10 +485,10 @@ function ScoreBar({ score }: { score: number }) {
   return (
     <div className="space-y-1">
       <div className="flex justify-between text-sm font-medium">
-        <span className="text-gray-600 dark:text-gray-300"></span>
-        <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">{score}<span className="text-base font-normal text-gray-500"> / 100</span></span>
+        <span className="text-gray-600"></span>
+        <span className="text-2xl font-bold text-gray-900">{score}<span className="text-base font-normal text-gray-500"> / 100</span></span>
       </div>
-      <div className="relative h-4 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
+      <div className="relative h-4 rounded-full bg-gray-200 overflow-hidden">
         <div
           className={`absolute inset-y-0 left-0 rounded-full bg-gradient-to-r ${color} transition-all duration-700`}
           style={{ width: `${score}%` }}
@@ -533,15 +533,15 @@ export default function MarriageAgeCalculator({ locale }: Props) {
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{t.title}</h1>
-        <p className="mt-1 text-gray-500 dark:text-gray-400">{t.subtitle}</p>
+        <h1 className="text-2xl font-bold text-gray-900">{t.title}</h1>
+        <p className="mt-1 text-gray-500">{t.subtitle}</p>
       </div>
 
       {/* Input card */}
-      <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-5 space-y-4">
+      <div className="rounded-2xl border border-gray-200 bg-white p-5 space-y-4">
         {/* Gender */}
         <div>
-          <p className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">{t.genderLabel}</p>
+          <p className="mb-2 text-sm font-medium text-gray-700">{t.genderLabel}</p>
           <div className="flex gap-2">
             {(["male","female"] as Gender[]).map((g) => (
               <button
@@ -550,7 +550,7 @@ export default function MarriageAgeCalculator({ locale }: Props) {
                 className={`flex-1 rounded-xl border py-2.5 text-sm font-medium transition-colors ${
                   gender === g
                     ? "border-rose-500 bg-rose-500 text-white"
-                    : "border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:border-rose-300"
+                    : "border-gray-200 bg-white text-gray-700 hover:border-rose-300"
                 }`}
               >
                 {g === "male" ? t.male : t.female}
@@ -561,11 +561,11 @@ export default function MarriageAgeCalculator({ locale }: Props) {
 
         {/* MBTI */}
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">{t.mbtiLabel}</label>
+          <label className="mb-1 block text-sm font-medium text-gray-700">{t.mbtiLabel}</label>
           <select
             value={mbti}
             onChange={(e) => { setMbti(e.target.value as MBTIType); setResult(null); }}
-            className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-2.5 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-rose-400"
+            className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-rose-400"
           >
             <option value="">{t.mbtiPlaceholder}</option>
             {MBTI_TYPES.map((m) => (
@@ -576,11 +576,11 @@ export default function MarriageAgeCalculator({ locale }: Props) {
 
         {/* Occupation */}
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">{t.occupationLabel}</label>
+          <label className="mb-1 block text-sm font-medium text-gray-700">{t.occupationLabel}</label>
           <select
             value={occupation}
             onChange={(e) => { setOccupation(e.target.value as OccupationType); setResult(null); }}
-            className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-2.5 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-rose-400"
+            className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-rose-400"
           >
             <option value="">{t.occupationPlaceholder}</option>
             {OCCUPATION_TYPES.map((o) => (
@@ -591,7 +591,7 @@ export default function MarriageAgeCalculator({ locale }: Props) {
 
         {/* Age */}
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">{t.ageLabel}</label>
+          <label className="mb-1 block text-sm font-medium text-gray-700">{t.ageLabel}</label>
           <input
             type="number"
             min={18}
@@ -599,7 +599,7 @@ export default function MarriageAgeCalculator({ locale }: Props) {
             value={ageStr}
             onChange={(e) => { setAgeStr(e.target.value); setResult(null); }}
             placeholder={t.agePlaceholder}
-            className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-2.5 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-rose-400"
+            className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-rose-400"
           />
         </div>
 
@@ -614,13 +614,13 @@ export default function MarriageAgeCalculator({ locale }: Props) {
 
       {/* Result */}
       {result && (
-        <div className="rounded-2xl border border-rose-200 dark:border-rose-800 bg-gradient-to-br from-rose-50 to-pink-50 dark:from-gray-800 dark:to-gray-900 p-6 space-y-5">
-          <h2 className="text-center font-bold text-rose-600 dark:text-rose-400 text-lg">{t.resultTitle}</h2>
+        <div className="rounded-2xl border border-rose-200 bg-gradient-to-br from-rose-50 to-pink-50 p-6 space-y-5">
+          <h2 className="text-center font-bold text-rose-600 text-lg">{t.resultTitle}</h2>
 
           {/* Age range */}
           <div className="text-center">
             <p className="text-xs font-medium text-rose-400 uppercase tracking-wider mb-1">{t.marriageAgeRange}</p>
-            <p className="text-5xl font-extrabold text-rose-600 dark:text-rose-400">
+            <p className="text-5xl font-extrabold text-rose-600">
               {result.minAge}<span className="text-2xl font-semibold text-rose-400 mx-1">–</span>{result.maxAge}
               <span className="text-xl font-medium text-rose-400 ml-1">{locale === "ko" ? "세" : locale === "ja" ? "歳" : ""}</span>
             </p>
@@ -629,10 +629,10 @@ export default function MarriageAgeCalculator({ locale }: Props) {
           {/* Status badge */}
           <div className={`rounded-xl px-4 py-2.5 text-center text-sm font-medium ${
             result.isPastPeak
-              ? "bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300"
+              ? "bg-amber-100 text-amber-700"
               : result.yearsLeft === null
-              ? "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300"
-              : "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300"
+              ? "bg-emerald-100 text-emerald-700"
+              : "bg-blue-100 text-blue-700"
           }`}>
             {result.isPastPeak
               ? t.pastPeak
@@ -648,7 +648,7 @@ export default function MarriageAgeCalculator({ locale }: Props) {
           </div>
 
           {/* Description */}
-          <p className="text-sm leading-relaxed text-gray-700 dark:text-gray-300 bg-white/60 dark:bg-gray-800/60 rounded-xl p-4">
+          <p className="text-sm leading-relaxed text-gray-700 bg-white/60 rounded-xl p-4">
             {description}
           </p>
 
@@ -656,7 +656,7 @@ export default function MarriageAgeCalculator({ locale }: Props) {
             <p className="text-xs text-gray-400">{t.disclaimer}</p>
             <button
               onClick={handleReset}
-              className="rounded-lg border border-rose-300 dark:border-rose-700 px-4 py-1.5 text-sm font-medium text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-gray-700 transition-colors"
+              className="rounded-lg border border-rose-300 px-4 py-1.5 text-sm font-medium text-rose-600 hover:bg-rose-50 transition-colors"
             >
               {t.resetBtn}
             </button>

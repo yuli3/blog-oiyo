@@ -40,8 +40,8 @@ export default function ROICalculator() {
   };
 
   return (
-    <div className="my-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-      <h3 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">투자 수익률(ROI) 계산기</h3>
+    <div className="my-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+      <h3 className="mb-4 text-xl font-bold text-gray-900">투자 수익률(ROI) 계산기</h3>
 
       <div className="mb-5 flex gap-2">
         {(['simple', 'annualized'] as const).map((m) => (
@@ -51,7 +51,7 @@ export default function ROICalculator() {
             className={`rounded-lg px-4 py-2 text-sm font-medium transition ${
               mode === m
                 ? 'bg-indigo-600 text-white'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
             {m === 'simple' ? '단순 ROI' : '연환산 수익률(CAGR)'}
@@ -69,12 +69,12 @@ export default function ROICalculator() {
             : []),
         ].map(({ label, value, setter }) => (
           <div key={label}>
-            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">{label}</label>
+            <label className="mb-1 block text-sm font-medium text-gray-700">{label}</label>
             <input
               type="number"
               value={value}
               onChange={(e) => setter(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm"
             />
           </div>
         ))}
@@ -94,27 +94,27 @@ export default function ROICalculator() {
               {
                 label: '순손익',
                 value: `${result.gain >= 0 ? '+' : ''}${fmt(result.gain)}원`,
-                color: result.gain >= 0 ? 'text-blue-600 dark:text-blue-400' : 'text-red-600 dark:text-red-400',
+                color: result.gain >= 0 ? 'text-blue-600' : 'text-red-600',
               },
               {
                 label: 'ROI',
                 value: `${result.roi >= 0 ? '+' : ''}${fmtPct(result.roi)}%`,
-                color: result.roi >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400',
+                color: result.roi >= 0 ? 'text-green-600' : 'text-red-600',
               },
               {
                 label: '연환산 수익률 (CAGR)',
                 value: `${result.annualizedROI >= 0 ? '+' : ''}${fmtPct(result.annualizedROI)}%/년`,
                 color:
-                  result.annualizedROI >= 0 ? 'text-indigo-600 dark:text-indigo-400' : 'text-red-600 dark:text-red-400',
+                  result.annualizedROI >= 0 ? 'text-indigo-600' : 'text-red-600',
               },
               {
                 label: '총 수익금',
                 value: `${result.totalReturn >= 0 ? '+' : ''}${fmt(result.totalReturn)}원`,
                 color:
-                  result.totalReturn >= 0 ? 'text-purple-600 dark:text-purple-400' : 'text-red-600 dark:text-red-400',
+                  result.totalReturn >= 0 ? 'text-purple-600' : 'text-red-600',
               },
             ].map(({ label, value, color }) => (
-              <div key={label} className="rounded-xl bg-gray-50 p-3 text-center dark:bg-gray-700">
+              <div key={label} className="rounded-xl bg-gray-50 p-3 text-center">
                 <p className="text-xs text-gray-500">{label}</p>
                 <p className={`text-sm font-bold ${color}`}>{value}</p>
               </div>

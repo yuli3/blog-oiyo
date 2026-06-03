@@ -57,8 +57,8 @@ export default function StockYieldCalculator() {
   };
 
   return (
-    <div className="my-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-      <h3 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">주식 수익률 계산기</h3>
+    <div className="my-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+      <h3 className="mb-4 text-xl font-bold text-gray-900">주식 수익률 계산기</h3>
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
         {[
@@ -71,12 +71,12 @@ export default function StockYieldCalculator() {
           { label: '양도세율 (%, 0이면 비과세)', value: taxRate, setter: setTaxRate },
         ].map(({ label, value, setter }) => (
           <div key={label}>
-            <label className="mb-1 block text-xs text-gray-600 dark:text-gray-400">{label}</label>
+            <label className="mb-1 block text-xs text-gray-600">{label}</label>
             <input
               type="number"
               value={value}
               onChange={(e) => setter(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 px-2 py-1.5 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+              className="w-full rounded-lg border border-gray-300 px-2 py-1.5 text-sm"
             />
           </div>
         ))}
@@ -93,17 +93,17 @@ export default function StockYieldCalculator() {
         <div className="mt-6 space-y-3">
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
             {[
-              { label: '매수 총액', value: `${fmt(result.buyTotal)}원`, color: 'text-gray-700 dark:text-gray-300' },
-              { label: '매도 총액', value: `${fmt(result.sellTotal)}원`, color: 'text-gray-700 dark:text-gray-300' },
-              { label: '배당 수익', value: `${fmt(result.dividendTotal)}원`, color: 'text-blue-600 dark:text-blue-400' },
-              { label: '매매 차익', value: `${result.capitalGain >= 0 ? '+' : ''}${fmt(result.capitalGain)}원`, color: result.capitalGain >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' },
+              { label: '매수 총액', value: `${fmt(result.buyTotal)}원`, color: 'text-gray-700' },
+              { label: '매도 총액', value: `${fmt(result.sellTotal)}원`, color: 'text-gray-700' },
+              { label: '배당 수익', value: `${fmt(result.dividendTotal)}원`, color: 'text-blue-600' },
+              { label: '매매 차익', value: `${result.capitalGain >= 0 ? '+' : ''}${fmt(result.capitalGain)}원`, color: result.capitalGain >= 0 ? 'text-green-600' : 'text-red-600' },
               { label: '수수료 합계', value: `-${fmt(result.buyFee + result.sellFee)}원`, color: 'text-orange-500' },
               { label: '양도세', value: `-${fmt(result.tax)}원`, color: 'text-red-500' },
-              { label: '순 손익', value: `${result.netProfit >= 0 ? '+' : ''}${fmt(result.netProfit)}원`, color: result.netProfit >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400' },
-              { label: '순 수익률', value: `${result.netYield >= 0 ? '+' : ''}${fmtPct(result.netYield)}%`, color: result.netYield >= 0 ? 'text-emerald-700 dark:text-emerald-300' : 'text-red-700' },
-              { label: '총 수익률 (세전)', value: `${result.totalYield >= 0 ? '+' : ''}${fmtPct(result.totalYield)}%`, color: 'text-indigo-600 dark:text-indigo-400' },
+              { label: '순 손익', value: `${result.netProfit >= 0 ? '+' : ''}${fmt(result.netProfit)}원`, color: result.netProfit >= 0 ? 'text-emerald-600' : 'text-red-600' },
+              { label: '순 수익률', value: `${result.netYield >= 0 ? '+' : ''}${fmtPct(result.netYield)}%`, color: result.netYield >= 0 ? 'text-emerald-700' : 'text-red-700' },
+              { label: '총 수익률 (세전)', value: `${result.totalYield >= 0 ? '+' : ''}${fmtPct(result.totalYield)}%`, color: 'text-indigo-600' },
             ].map(({ label, value, color }) => (
-              <div key={label} className="rounded-xl bg-gray-50 p-3 text-center dark:bg-gray-700">
+              <div key={label} className="rounded-xl bg-gray-50 p-3 text-center">
                 <p className="text-xs text-gray-500">{label}</p>
                 <p className={`text-sm font-bold ${color}`}>{value}</p>
               </div>

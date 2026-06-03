@@ -880,7 +880,7 @@ function StarRating({ score }: { score: number }) {
       {[1, 2, 3, 4, 5].map((i) => (
         <span
           key={i}
-          className={`text-lg ${i <= score ? "text-yellow-400" : "text-gray-300 dark:text-gray-600"}`}
+          className={`text-lg ${i <= score ? "text-yellow-400" : "text-gray-300"}`}
         >
           ★
         </span>
@@ -904,19 +904,19 @@ function FortuneCard({
 }) {
   const color =
     score >= 4
-      ? "from-yellow-50 to-amber-50 border-amber-200 dark:from-yellow-900/20 dark:to-amber-900/20 dark:border-amber-700"
+      ? "from-yellow-50 to-amber-50 border-amber-200"
       : score >= 3
-      ? "from-blue-50 to-indigo-50 border-blue-200 dark:from-blue-900/20 dark:to-indigo-900/20 dark:border-blue-700"
-      : "from-gray-50 to-slate-50 border-gray-200 dark:from-gray-900/20 dark:to-slate-900/20 dark:border-gray-600";
+      ? "from-blue-50 to-indigo-50 border-blue-200"
+      : "from-gray-50 to-slate-50 border-gray-200";
 
   return (
     <div className={`rounded-2xl border bg-gradient-to-br p-4 ${color}`}>
       <div className="mb-2 flex items-center gap-2">
         <span className="text-xl">{emoji}</span>
-        <span className="font-semibold text-gray-800 dark:text-gray-100">{label}</span>
+        <span className="font-semibold text-gray-800">{label}</span>
       </div>
       <StarRating score={score} />
-      <p className="mt-2 text-sm leading-relaxed text-gray-600 dark:text-gray-300">{text}</p>
+      <p className="mt-2 text-sm leading-relaxed text-gray-600">{text}</p>
     </div>
   );
 }
@@ -986,14 +986,14 @@ export default function DailyFortune({ locale }: Props) {
     <div className="mx-auto max-w-2xl">
       {/* Header */}
       <div className="mb-8 text-center">
-        <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-gray-50">{ui.title}</h1>
-        <p className="text-gray-500 dark:text-gray-400">{ui.subtitle}</p>
+        <h1 className="mb-2 text-3xl font-bold text-gray-900">{ui.title}</h1>
+        <p className="text-gray-500">{ui.subtitle}</p>
       </div>
 
       {!result ? (
         /* Input */
-        <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-          <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+        <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
+          <label className="mb-2 block text-sm font-medium text-gray-700">
             {ui.birthLabel}
           </label>
           <input
@@ -1001,7 +1001,7 @@ export default function DailyFortune({ locale }: Props) {
             value={birth}
             onChange={(e) => setBirth(e.target.value)}
             max={getToday()}
-            className="mb-6 w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+            className="mb-6 w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
           />
           <button
             onClick={handleSubmit}
@@ -1015,7 +1015,7 @@ export default function DailyFortune({ locale }: Props) {
         /* Result */
         <div>
           {/* Date note */}
-          <p className="mb-4 text-center text-xs text-gray-400 dark:text-gray-500">
+          <p className="mb-4 text-center text-xs text-gray-400">
             {result.date} · {ui.cacheNote}
           </p>
 
@@ -1027,26 +1027,26 @@ export default function DailyFortune({ locale }: Props) {
           </div>
 
           {/* Lucky info */}
-          <div className="mb-6 rounded-2xl border border-purple-200 bg-gradient-to-br from-purple-50 to-violet-50 p-5 dark:border-purple-700 dark:from-purple-900/20 dark:to-violet-900/20">
-            <h3 className="mb-4 text-center font-bold text-purple-800 dark:text-purple-200">
+          <div className="mb-6 rounded-2xl border border-purple-200 bg-gradient-to-br from-purple-50 to-violet-50 p-5">
+            <h3 className="mb-4 text-center font-bold text-purple-800">
               ✨ {ui.lucky}
             </h3>
             <div className="grid grid-cols-3 gap-3 text-center">
               <div>
-                <p className="mb-1 text-xs text-purple-500 dark:text-purple-400">{ui.luckyNum}</p>
-                <p className="text-2xl font-bold text-purple-700 dark:text-purple-300">
+                <p className="mb-1 text-xs text-purple-500">{ui.luckyNum}</p>
+                <p className="text-2xl font-bold text-purple-700">
                   {result.luckyNumber}
                 </p>
               </div>
               <div>
-                <p className="mb-1 text-xs text-purple-500 dark:text-purple-400">{ui.luckyColor}</p>
-                <p className="text-lg font-semibold text-purple-700 dark:text-purple-300">
+                <p className="mb-1 text-xs text-purple-500">{ui.luckyColor}</p>
+                <p className="text-lg font-semibold text-purple-700">
                   {result.luckyColor}
                 </p>
               </div>
               <div>
-                <p className="mb-1 text-xs text-purple-500 dark:text-purple-400">{ui.luckyDir}</p>
-                <p className="text-lg font-semibold text-purple-700 dark:text-purple-300">
+                <p className="mb-1 text-xs text-purple-500">{ui.luckyDir}</p>
+                <p className="text-lg font-semibold text-purple-700">
                   {result.luckyDirection}
                 </p>
               </div>
@@ -1056,7 +1056,7 @@ export default function DailyFortune({ locale }: Props) {
           {/* Reset */}
           <button
             onClick={handleReset}
-            className="w-full rounded-xl border border-gray-300 bg-white py-3 font-medium text-gray-700 transition hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
+            className="w-full rounded-xl border border-gray-300 bg-white py-3 font-medium text-gray-700 transition hover:bg-gray-50"
           >
             🔄 {ui.tomorrow}
           </button>

@@ -312,13 +312,13 @@ export default function VaccinationSchedule({ locale }: Props) {
   };
 
   const statusStyle: Record<Status, string> = {
-    past: "border-l-4 border-l-gray-300 bg-gray-50 dark:bg-gray-800 opacity-60",
-    current: "border-l-4 border-l-red-500 bg-red-50 dark:bg-red-950 shadow-md",
-    upcoming: "border-l-4 border-l-yellow-400 bg-yellow-50 dark:bg-yellow-950",
+    past: "border-l-4 border-l-gray-300 bg-gray-50 opacity-60",
+    current: "border-l-4 border-l-red-500 bg-red-50 shadow-md",
+    upcoming: "border-l-4 border-l-yellow-400 bg-yellow-50",
   };
 
   const statusBadge: Record<Status, string> = {
-    past: "bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-400",
+    past: "bg-gray-200 text-gray-600",
     current: "bg-red-500 text-white animate-pulse",
     upcoming: "bg-yellow-400 text-yellow-900",
   };
@@ -344,19 +344,19 @@ export default function VaccinationSchedule({ locale }: Props) {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{t.title}</h1>
-        <p className="mt-1 text-gray-500 dark:text-gray-400">{t.subtitle}</p>
+        <h1 className="text-2xl font-bold text-gray-900">{t.title}</h1>
+        <p className="mt-1 text-gray-500">{t.subtitle}</p>
       </div>
 
-      <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-5 space-y-4">
+      <div className="rounded-2xl border border-gray-200 bg-white p-5 space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t.dobLabel}</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">{t.dobLabel}</label>
           <input
             type="date"
             value={dob}
             onChange={(e) => { setDob(e.target.value); setSubmitted(false); }}
             max={new Date().toISOString().split("T")[0]}
-            className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-2.5 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
         </div>
         <button
@@ -371,32 +371,32 @@ export default function VaccinationSchedule({ locale }: Props) {
       {/* Legend */}
       {submitted && (
         <div className="flex flex-wrap gap-3 text-xs">
-          <span className="font-medium text-gray-600 dark:text-gray-400">{t.legendTitle}:</span>
+          <span className="font-medium text-gray-600">{t.legendTitle}:</span>
           <span className="flex items-center gap-1">
             <span className="w-3 h-3 rounded-sm bg-red-500 inline-block"></span>
-            <span className="text-gray-600 dark:text-gray-400">{t.statusCurrent}</span>
+            <span className="text-gray-600">{t.statusCurrent}</span>
           </span>
           <span className="flex items-center gap-1">
             <span className="w-3 h-3 rounded-sm bg-yellow-400 inline-block"></span>
-            <span className="text-gray-600 dark:text-gray-400">{t.statusUpcoming}</span>
+            <span className="text-gray-600">{t.statusUpcoming}</span>
           </span>
           <span className="flex items-center gap-1">
             <span className="w-3 h-3 rounded-sm bg-gray-300 inline-block"></span>
-            <span className="text-gray-600 dark:text-gray-400">{t.statusPast}</span>
+            <span className="text-gray-600">{t.statusPast}</span>
           </span>
         </div>
       )}
 
       {submitted && scheduleRows.length > 0 && (
         <div className="space-y-6">
-          <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200">{t.resultTitle}</h2>
+          <h2 className="text-lg font-semibold text-gray-800">{t.resultTitle}</h2>
           {ageBands.map(([ageKey, rows]) => (
             <div key={ageKey} className="space-y-2">
               <div className="flex items-center gap-2">
-                <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-700 dark:text-blue-300 font-bold text-xs text-center leading-tight">
+                <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold text-xs text-center leading-tight">
                   {ageKey}
                 </div>
-                <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700"></div>
+                <div className="flex-1 h-px bg-gray-200"></div>
               </div>
               <div className="space-y-2 ml-2">
                 {rows.map((row, idx) => (
@@ -407,14 +407,14 @@ export default function VaccinationSchedule({ locale }: Props) {
                     <div className="flex items-start justify-between gap-2">
                       <div>
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-semibold text-gray-900 dark:text-gray-100 text-sm">
+                          <span className="font-semibold text-gray-900 text-sm">
                             {row.vaccine.fullName[locale] ?? row.vaccine.fullName.en}
                           </span>
-                          <span className="text-xs text-gray-500 dark:text-gray-400">
+                          <span className="text-xs text-gray-500">
                             {row.shot.doseLabel}
                           </span>
                         </div>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        <p className="text-xs text-gray-500 mt-1">
                           {formatDate(row.windowStart, locale)} ~ {formatDate(row.windowEnd, locale)}
                         </p>
                       </div>

@@ -146,21 +146,21 @@ const translations: Record<Locale, Record<string, string>> = {
 const MODE_COLORS: Record<Mode, { stroke: string; bg: string; text: string; badge: string }> = {
   focus: {
     stroke: "#ef4444",
-    bg: "bg-red-50 dark:bg-red-950/20",
-    text: "text-red-600 dark:text-red-400",
-    badge: "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300",
+    bg: "bg-red-50",
+    text: "text-red-600",
+    badge: "bg-red-100 text-red-700",
   },
   short: {
     stroke: "#22c55e",
-    bg: "bg-green-50 dark:bg-green-950/20",
-    text: "text-green-600 dark:text-green-400",
-    badge: "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300",
+    bg: "bg-green-50",
+    text: "text-green-600",
+    badge: "bg-green-100 text-green-700",
   },
   long: {
     stroke: "#3b82f6",
-    bg: "bg-blue-50 dark:bg-blue-950/20",
-    text: "text-blue-600 dark:text-blue-400",
-    badge: "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300",
+    bg: "bg-blue-50",
+    text: "text-blue-600",
+    badge: "bg-blue-100 text-blue-700",
   },
 };
 
@@ -328,7 +328,7 @@ export default function PomodoroTimer({ locale }: Props) {
               fill="none"
               stroke="currentColor"
               strokeWidth="10"
-              className="text-gray-200 dark:text-gray-700"
+              className="text-gray-200"
             />
             {/* Progress arc */}
             <circle
@@ -360,14 +360,14 @@ export default function PomodoroTimer({ locale }: Props) {
           className={`px-8 py-3 rounded-full font-bold text-white text-lg shadow transition-all active:scale-95 ${
             running
               ? "bg-yellow-500 hover:bg-yellow-600"
-              : "bg-gray-800 hover:bg-gray-700 dark:bg-gray-200 dark:text-gray-800 dark:hover:bg-gray-100"
+              : "bg-gray-800 hover:bg-gray-700"
           }`}
         >
           {running ? t.pause : t.start}
         </button>
         <button
           onClick={handleReset}
-          className="px-5 py-3 rounded-full font-semibold border border-gray-300 dark:border-gray-600 text-muted-foreground hover:bg-muted transition-all active:scale-95"
+          className="px-5 py-3 rounded-full font-semibold border border-gray-300 text-muted-foreground hover:bg-muted transition-all active:scale-95"
         >
           {t.reset}
         </button>

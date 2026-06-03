@@ -3,11 +3,8 @@ import SEO from "../components/SEO.astro";
 import { getLocaleFromPath, getTranslations } from "../lib/i18n";
 import { siteConfig } from "../config/site.config";
 import "../styles/global.css";
-import "@fontsource/inter/300.css";
-import "@fontsource/inter/400.css";
-import "@fontsource/inter/500.css";
-import "@fontsource/inter/600.css";
-import "@fontsource/inter/700.css";
+import "katex/dist/katex.min.css";
+import "@fontsource-variable/inter";
 
 // BCP-47 mapping: Astro locale → HTML lang attribute standard value
 const BCP47: Record<string, string> = {
@@ -81,38 +78,21 @@ const langItems = [
   <head>
     <SEO {title} {description} {image} {type} {pubDate} {updatedDate} {tags} {category} {author} {availableLocales} />
 
-    <!-- Inline dark-mode init: runs before first paint to prevent flash -->
-    <script is:inline>
-      (function () {
-        var stored = localStorage.getItem("oiyo-theme");
-        var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-        if (stored === "dark" || (!stored && prefersDark)) {
-          document.documentElement.classList.add("dark");
-        }
-      })();
-    </script>
-
-    <!-- KaTeX CSS: prevents duplicate math text (MathML + HTML both showing) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5" crossorigin="anonymous" />
-    <!-- Mermaid diagram rendering -->
+    <!-- Mermaid diagram rendering (only executes if mermaid code blocks are present) -->
     <script type="module" is:inline>
-      import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
-      const isDark = document.documentElement.classList.contains("dark");
-      mermaid.initialize({
-        startOnLoad: false,
-        theme: isDark ? "dark" : "neutral",
-        securityLevel: "strict",
-      });
-      // Convert fenced code blocks to mermaid diagrams
-      document.querySelectorAll("code.language-mermaid").forEach((el) => {
-        const pre = el.parentElement;
-        if (!pre) return;
-        const div = document.createElement("div");
-        div.className = "mermaid not-prose my-8";
-        div.textContent = el.textContent;
-        pre.replaceWith(div);
-      });
-      await mermaid.run();
+      if (document.querySelector("code.language-mermaid")) {
+        const { default: mermaid } = await import("https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs");
+        mermaid.initialize({ startOnLoad: false, theme: "neutral", securityLevel: "strict" });
+        document.querySelectorAll("code.language-mermaid").forEach((el) => {
+          const pre = el.parentElement;
+          if (!pre) return;
+          const div = document.createElement("div");
+          div.className = "mermaid not-prose my-8";
+          div.textContent = el.textContent;
+          pre.replaceWith(div);
+        });
+        await mermaid.run();
+      }
     </script>
   </head>
   <body
@@ -184,24 +164,8 @@ const langItems = [
           </div>
         </nav>
 
-        <!-- Right controls: dark mode + hamburger -->
+        <!-- Right controls: hamburger -->
         <div class="flex items-center gap-2">
-          <!-- Dark mode toggle -->
-          <button
-            id="dark-mode-toggle"
-            aria-label={t.common?.toggleDarkMode ?? "Toggle dark mode"}
-            class="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors"
-          >
-            <!-- Sun (shown in dark mode) -->
-            <svg id="icon-sun" class="hidden dark:block w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
-            </svg>
-            <!-- Moon (shown in light mode) -->
-            <svg id="icon-moon" class="block dark:hidden w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-            </svg>
-          </button>
-
           <!-- Mobile search -->
           <a
             href={`/${locale}/search`}
@@ -320,16 +284,6 @@ const langItems = [
         update();
       })();
 
-      // ── Dark mode toggle ──────────────────────────────────────────────────
-      (function () {
-        var btn = document.getElementById("dark-mode-toggle");
-        if (!btn) return;
-        btn.addEventListener("click", function () {
-          var isDark = document.documentElement.classList.toggle("dark");
-          localStorage.setItem("oiyo-theme", isDark ? "dark" : "light");
-        });
-      })();
-
       // ── Back to top ──────────────────────────────────────────────────────
       (function () {
         var btn = document.getElementById("back-to-top");
@@ -432,6 +386,15 @@ const langItems = [
           <a href="/en/tools/" class="hover:text-primary transition-colors">Tools</a>
           <a href="/ko/academy-economics-basics-ch1/" class="hover:text-primary transition-colors">경제학 강의</a>
           <a href="/ko/academy-accounting-basics-ch1/" class="hover:text-primary transition-colors">회계학 강의</a>
+        </div>
+        <div class="flex flex-wrap justify-center md:justify-start gap-6 text-xs text-muted-foreground/60 items-center border-t border-border/20 pt-4">
+          <span class="font-bold uppercase tracking-widest text-[10px]">Oiyo Family</span>
+          <a href={`https://oiyo.net/${locale}/?utm_source=blog&utm_medium=footer&utm_campaign=family_nav`}
+             target="_blank" rel="noopener noreferrer" class="hover:text-primary transition-colors">OIYO Tests →</a>
+          <a href={`https://wiki.oiyo.net/${locale}/?utm_source=blog&utm_medium=footer&utm_campaign=family_nav`}
+             target="_blank" rel="noopener noreferrer" class="hover:text-primary transition-colors">OIYO Wiki →</a>
+          <a href="https://ahoxy.com?utm_source=blog&utm_medium=footer&utm_campaign=family_nav"
+             target="_blank" rel="noopener noreferrer" class="hover:text-primary transition-colors">AHOXY →</a>
         </div>
       </div>
     </footer>

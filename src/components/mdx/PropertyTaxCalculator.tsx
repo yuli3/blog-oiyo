@@ -72,15 +72,15 @@ export default function PropertyTaxCalculator() {
   };
 
   return (
-    <div className="my-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-      <h3 className="mb-6 text-xl font-bold text-gray-900 dark:text-white">재산세 계산기</h3>
+    <div className="my-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+      <h3 className="mb-6 text-xl font-bold text-gray-900">재산세 계산기</h3>
 
       <div className="mb-4 flex gap-2">
         {(['house', 'land', 'building'] as PropertyType[]).map((t) => {
           const label = t === 'house' ? '주택' : t === 'land' ? '토지' : '건물';
           return (
             <button key={t} onClick={() => setPropertyType(t)}
-              className={`flex-1 rounded-lg py-2 text-sm font-medium transition ${propertyType === t ? 'bg-teal-600 text-white' : 'border border-gray-300 text-gray-600 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-400'}`}>
+              className={`flex-1 rounded-lg py-2 text-sm font-medium transition ${propertyType === t ? 'bg-teal-600 text-white' : 'border border-gray-300 text-gray-600 hover:bg-gray-50'}`}>
               {label}
             </button>
           );
@@ -89,18 +89,18 @@ export default function PropertyTaxCalculator() {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label className="mb-1 block text-sm font-medium text-gray-700">
             공시가격 (원)
           </label>
           <input type="number" value={publicPrice} onChange={(e) => setPublicPrice(e.target.value)}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" />
         </div>
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label className="mb-1 block text-sm font-medium text-gray-700">
             공정시장가액비율 (%) — 주택 60%, 토지 70%
           </label>
           <input type="number" value={fairValueRatio} onChange={(e) => setFairValueRatio(e.target.value)}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" />
         </div>
       </div>
 
@@ -111,9 +111,9 @@ export default function PropertyTaxCalculator() {
 
       {result && (
         <div className="mt-6 space-y-3">
-          <div className="rounded-xl bg-teal-50 p-4 dark:bg-teal-900/20">
+          <div className="rounded-xl bg-teal-50 p-4">
             <p className="text-xs text-gray-500">과세표준</p>
-            <p className="text-lg font-bold text-teal-700 dark:text-teal-300">{formatKRW(result.taxBase)}원</p>
+            <p className="text-lg font-bold text-teal-700">{formatKRW(result.taxBase)}원</p>
           </div>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             {[
@@ -122,9 +122,9 @@ export default function PropertyTaxCalculator() {
               { label: '지방교육세(20%)', value: result.educationTax },
               { label: '합계', value: result.total },
             ].map(({ label, value }) => (
-              <div key={label} className="rounded-xl bg-gray-50 p-3 text-center dark:bg-gray-700">
+              <div key={label} className="rounded-xl bg-gray-50 p-3 text-center">
                 <p className="text-xs text-gray-500">{label}</p>
-                <p className="text-sm font-bold text-gray-800 dark:text-white">{formatKRW(value)}원</p>
+                <p className="text-sm font-bold text-gray-800">{formatKRW(value)}원</p>
               </div>
             ))}
           </div>

@@ -858,7 +858,7 @@ function StarRow({ score }: { score: number }) {
   return (
     <div className="flex gap-0.5">
       {[1,2,3,4,5].map((i) => (
-        <span key={i} className={`text-base ${i <= score ? "text-yellow-400" : "text-gray-300 dark:text-gray-600"}`}>
+        <span key={i} className={`text-base ${i <= score ? "text-yellow-400" : "text-gray-300"}`}>
           ★
         </span>
       ))}
@@ -869,19 +869,19 @@ function StarRow({ score }: { score: number }) {
 function CategoryCard({ emoji, label, score, text }: { emoji: string; label: string; score: number; text: string }) {
   const bg =
     score >= 4
-      ? "from-amber-50 to-yellow-50 border-amber-200 dark:from-amber-900/20 dark:to-yellow-900/20 dark:border-amber-700"
+      ? "from-amber-50 to-yellow-50 border-amber-200"
       : score >= 3
-      ? "from-blue-50 to-sky-50 border-blue-200 dark:from-blue-900/20 dark:to-sky-900/20 dark:border-blue-700"
-      : "from-gray-50 to-slate-50 border-gray-200 dark:from-gray-800/50 dark:to-slate-800/50 dark:border-gray-600";
+      ? "from-blue-50 to-sky-50 border-blue-200"
+      : "from-gray-50 to-slate-50 border-gray-200";
 
   return (
     <div className={`rounded-2xl border bg-gradient-to-br p-4 ${bg}`}>
       <div className="mb-1.5 flex items-center gap-2">
         <span className="text-xl">{emoji}</span>
-        <span className="font-semibold text-gray-800 dark:text-gray-100">{label}</span>
+        <span className="font-semibold text-gray-800">{label}</span>
       </div>
       <StarRow score={score} />
-      <p className="mt-2 text-sm leading-relaxed text-gray-600 dark:text-gray-300">{text}</p>
+      <p className="mt-2 text-sm leading-relaxed text-gray-600">{text}</p>
     </div>
   );
 }
@@ -908,28 +908,28 @@ export default function DailyHoroscope({ locale }: Props) {
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{ui.title}</h1>
-        <p className="mt-1 text-gray-500 dark:text-gray-400">{ui.subtitle}</p>
+        <h1 className="text-2xl font-bold text-gray-900">{ui.title}</h1>
+        <p className="mt-1 text-gray-500">{ui.subtitle}</p>
       </div>
 
       {/* Sign selector */}
       {!result ? (
-        <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-5 space-y-4">
-          <p className="text-sm font-medium text-gray-700 dark:text-gray-300">{ui.selectLabel}</p>
+        <div className="rounded-2xl border border-gray-200 bg-white p-5 space-y-4">
+          <p className="text-sm font-medium text-gray-700">{ui.selectLabel}</p>
           <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
             {SIGNS.map((s) => (
               <button
                 key={s}
                 onClick={() => handleSelect(s)}
-                className={`flex flex-col items-center rounded-xl border py-3 px-2 transition-all hover:border-violet-400 hover:bg-violet-50 dark:hover:bg-violet-900/20 ${
+                className={`flex flex-col items-center rounded-xl border py-3 px-2 transition-all hover:border-violet-400 hover:bg-violet-50 ${
                   selected === s
-                    ? "border-violet-500 bg-violet-50 dark:bg-violet-900/20"
-                    : "border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700"
+                    ? "border-violet-500 bg-violet-50"
+                    : "border-gray-200 bg-white"
                 }`}
               >
                 <span className="text-2xl">{SIGN_EMOJI[s]}</span>
-                <span className="mt-1 text-xs text-gray-700 dark:text-gray-200 text-center leading-tight">{names[s]}</span>
-                <span className="text-xs text-gray-400 dark:text-gray-500">{SIGN_DATES[s]}</span>
+                <span className="mt-1 text-xs text-gray-700 text-center leading-tight">{names[s]}</span>
+                <span className="text-xs text-gray-400">{SIGN_DATES[s]}</span>
               </button>
             ))}
           </div>
@@ -941,13 +941,13 @@ export default function DailyHoroscope({ locale }: Props) {
             <div className="flex items-center gap-3">
               <span className="text-4xl">{SIGN_EMOJI[result.sign]}</span>
               <div>
-                <p className="text-lg font-bold text-gray-900 dark:text-gray-100">{names[result.sign]}</p>
+                <p className="text-lg font-bold text-gray-900">{names[result.sign]}</p>
                 <p className="text-xs text-gray-400">{result.date} · {ui.resultDate}</p>
               </div>
             </div>
             <button
               onClick={handleReset}
-              className="rounded-lg border border-gray-300 dark:border-gray-600 px-3 py-1.5 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50 transition-colors"
             >
               {ui.resetBtn}
             </button>
@@ -962,16 +962,16 @@ export default function DailyHoroscope({ locale }: Props) {
           </div>
 
           {/* Lucky section */}
-          <div className="rounded-2xl border border-violet-200 dark:border-violet-700 bg-gradient-to-br from-violet-50 to-purple-50 dark:from-violet-900/20 dark:to-purple-900/20 p-5">
-            <h3 className="mb-3 text-center font-bold text-violet-800 dark:text-violet-200">✨ {ui.luckySection}</h3>
+          <div className="rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-50 to-purple-50 p-5">
+            <h3 className="mb-3 text-center font-bold text-violet-800">✨ {ui.luckySection}</h3>
             <div className="flex justify-center gap-10">
               <div className="text-center">
-                <p className="text-xs text-violet-500 dark:text-violet-400 mb-1">{ui.luckyColor}</p>
-                <p className="text-lg font-semibold text-violet-700 dark:text-violet-300">{result.luckyColor}</p>
+                <p className="text-xs text-violet-500 mb-1">{ui.luckyColor}</p>
+                <p className="text-lg font-semibold text-violet-700">{result.luckyColor}</p>
               </div>
               <div className="text-center">
-                <p className="text-xs text-violet-500 dark:text-violet-400 mb-1">{ui.luckyNumber}</p>
-                <p className="text-2xl font-bold text-violet-700 dark:text-violet-300">{result.luckyNumber}</p>
+                <p className="text-xs text-violet-500 mb-1">{ui.luckyNumber}</p>
+                <p className="text-2xl font-bold text-violet-700">{result.luckyNumber}</p>
               </div>
             </div>
           </div>

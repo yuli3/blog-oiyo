@@ -235,9 +235,9 @@ const UI: Record<Locale, UIStrings> = {
 
 // ─── Badge color by type ──────────────────────────────────────────────────────
 const TYPE_COLOR: Record<StockType, string> = {
-  "kr-etf": "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300",
-  "us-etf": "bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300",
-  "us-stock": "bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300",
+  "kr-etf": "bg-blue-100 text-blue-700",
+  "us-etf": "bg-purple-100 text-purple-700",
+  "us-stock": "bg-orange-100 text-orange-700",
 };
 
 const MONTH_NAMES_EN = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -508,7 +508,7 @@ export default function DividendCalendar({ locale = "ko" }: { locale?: Locale })
                   <p className="text-xs text-muted-foreground truncate">{stock.name[locale]}</p>
                 </div>
                 <div className="text-right shrink-0">
-                  <p className="text-sm font-black text-green-600 dark:text-green-400">{stock.dividendYield}</p>
+                  <p className="text-sm font-black text-green-600">{stock.dividendYield}</p>
                   <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${TYPE_COLOR[stock.type]}`}>
                     {stock.currency}
                   </span>
@@ -534,7 +534,7 @@ function DetailCell({
   return (
     <div className={`p-3 rounded-xl bg-muted/40 border border-border ${wide ? "col-span-2" : ""}`}>
       <p className="text-[9px] font-black text-muted-foreground uppercase tracking-widest">{label}</p>
-      <p className={`text-sm font-bold mt-0.5 ${highlight ? "text-green-600 dark:text-green-400" : "text-foreground"}`}>
+      <p className={`text-sm font-bold mt-0.5 ${highlight ? "text-green-600" : "text-foreground"}`}>
         {value}
       </p>
     </div>

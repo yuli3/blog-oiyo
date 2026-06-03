@@ -76,18 +76,18 @@ const InvestmentPersonalityTest: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale 
     const isComplete = Object.keys(answers).length === t.questions.length;
 
     return (
-        <div className="not-prose my-12 p-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-xl max-w-2xl mx-auto">
+        <div className="not-prose my-12 p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto">
             {!showResults ? (
                 <div className="space-y-6">
                     <div className="text-center mb-10">
-                        <h3 className="text-2xl font-black text-slate-900 dark:text-white">{t.title}</h3>
+                        <h3 className="text-2xl font-black text-slate-900">{t.title}</h3>
                         <p className="text-sm text-slate-500 mt-2">{t.description}</p>
                     </div>
 
                     <div className="space-y-10">
                         {t.questions.map((q, idx) => (
                             <div key={q.id} className="space-y-4">
-                                <p className="text-lg font-bold text-slate-800 dark:text-white leading-tight">{idx + 1}. {q.text}</p>
+                                <p className="text-lg font-bold text-slate-800 leading-tight">{idx + 1}. {q.text}</p>
                                 <div className="grid grid-cols-5 gap-1">
                                     {t.options.map((opt, val) => (
                                         <button
@@ -96,7 +96,7 @@ const InvestmentPersonalityTest: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale 
                                             className={`py-2 px-1 text-[10px] rounded-lg border transition-all ${
                                                 answers[q.id] === val + 1
                                                     ? 'bg-indigo-600 border-indigo-600 text-white font-bold shadow-md'
-                                                    : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500 hover:bg-slate-100'
+                                                    : 'bg-slate-50 border-slate-200 text-slate-500 hover:bg-slate-100'
                                             }`}
                                         >
                                             {opt}
@@ -114,7 +114,7 @@ const InvestmentPersonalityTest: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale 
                             className={`px-12 py-4 rounded-2xl font-bold text-lg transition-all ${
                                 isComplete 
                                     ? 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-xl' 
-                                    : 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed'
+                                    : 'bg-slate-200 text-slate-400 cursor-not-allowed'
                             }`}
                         >
                             {locale === 'ko' ? '결과 보기' : 'Show Result'}
@@ -126,16 +126,16 @@ const InvestmentPersonalityTest: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale 
                     <div className="space-y-2">
                         <span className="text-xs font-bold text-indigo-500 uppercase tracking-widest">{locale === 'ko' ? '당신의 투자 DNA' : 'Your Investment DNA'}</span>
                         {/* @ts-ignore */}
-                        <h3 className="text-4xl font-black text-slate-900 dark:text-white">{t.results[resultType].title}</h3>
+                        <h3 className="text-4xl font-black text-slate-900">{t.results[resultType].title}</h3>
                     </div>
 
-                    <div className="p-8 bg-indigo-50 dark:bg-indigo-950/30 rounded-3xl border border-indigo-100 dark:border-indigo-900/30">
+                    <div className="p-8 bg-indigo-50 rounded-3xl border border-indigo-100">
                         {/* @ts-ignore */}
-                        <p className="text-slate-700 dark:text-slate-300 text-lg leading-relaxed">{t.results[resultType].desc}</p>
+                        <p className="text-slate-700 text-lg leading-relaxed">{t.results[resultType].desc}</p>
                     </div>
 
                     <div className="grid grid-cols-1 gap-3">
-                        <button className="w-full py-4 bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 rounded-2xl font-bold hover:scale-[1.02] transition-transform">
+                        <button className="w-full py-4 bg-slate-900 text-white rounded-2xl font-bold hover:scale-[1.02] transition-transform">
                            {locale === 'ko' ? '상세 레포트 다운로드' : 'Download Detailed Report'}
                         </button>
                         <button 

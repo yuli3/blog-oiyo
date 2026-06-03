@@ -368,7 +368,7 @@ const NutritionCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'en' }) =
             <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">{t.fiber}</p>
             <p className="text-2xl font-black">{result.fiberG}g</p>
           </div>
-          <div className="p-4 rounded-2xl bg-sky-50 dark:bg-sky-950/30 border border-sky-200 dark:border-sky-800 text-center">
+          <div className="p-4 rounded-2xl bg-sky-50 border border-sky-200 text-center">
             <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">{t.water}</p>
             <p className="text-2xl font-black text-sky-600">{result.waterL}L</p>
           </div>
@@ -394,7 +394,7 @@ const NutritionCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'en' }) =
         </div>
 
         {/* Tips */}
-        <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800">
+        <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200">
           <p className="text-xs font-black mb-2">{t.tip}</p>
           <ul className="space-y-1">
             {t.tips[goal].map((tip: string) => (

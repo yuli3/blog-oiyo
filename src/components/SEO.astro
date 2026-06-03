@@ -18,7 +18,7 @@ interface Props {
 const {
   title = siteConfig.title,
   description = siteConfig.description,
-  image = null,
+  image = `${siteConfig.url}/og-image.png`,
   canonicalURL = new URL(Astro.url.pathname, Astro.site),
   type = "website",
   pubDate,
@@ -148,7 +148,13 @@ const hreflangMap: Record<string, string> = {
 <meta property="og:site_name" content={siteConfig.name} />
 <meta property="og:title" content={siteTitle} />
 <meta property="og:description" content={description} />
-{/* og:image disabled */}
+{image && <meta property="og:image" content={image} />}
+{image && <meta property="og:image:width" content="1200" />}
+{image && <meta property="og:image:height" content="630" />}
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={siteTitle} />
+<meta name="twitter:description" content={description} />
+{image && <meta name="twitter:image" content={image} />}
 <!-- og:locale uses BCP-47 with underscore notation -->
 <meta property="og:locale" content={(hreflangMap[Astro.url.pathname.split("/")[1]] ?? "en").replace("-", "_")} />
 

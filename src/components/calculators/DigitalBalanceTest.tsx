@@ -32,18 +32,18 @@ const DigitalBalanceTest: React.FC = () => {
     const interpretation = getInterpretation(score);
 
     return (
-        <div className="not-prose my-12 p-8 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-lg max-w-2xl mx-auto">
+        <div className="not-prose my-12 p-8 bg-slate-50 border border-slate-200 rounded-3xl shadow-lg max-w-2xl mx-auto">
             {!showResults ? (
                 <div className="space-y-8">
                     <div className="text-center">
-                        <h3 className="text-2xl font-black text-slate-900 dark:text-white">나의 디지털 중독 지수 테스트</h3>
+                        <h3 className="text-2xl font-black text-slate-900">나의 디지털 중독 지수 테스트</h3>
                         <p className="text-sm text-slate-500 mt-2">간단한 체크를 통해 나의 디지털 웰빙 상태를 확인하세요.</p>
                     </div>
 
                     <div className="space-y-8">
                         {questions.map((q, idx) => (
                             <div key={q.id} className="space-y-4">
-                                <p className="text-lg font-bold text-slate-800 dark:text-slate-200">{idx + 1}. {q.text}</p>
+                                <p className="text-lg font-bold text-slate-800">{idx + 1}. {q.text}</p>
                                 <div className="flex flex-wrap gap-2 text-[10px] sm:text-xs">
                                     {q.options.map((opt, val) => (
                                         <button
@@ -51,8 +51,8 @@ const DigitalBalanceTest: React.FC = () => {
                                             onClick={() => handleSelect(q.id, val)}
                                             className={`flex-1 py-3 px-2 rounded-xl border transition-all ${
                                                 answers[q.id] === val
-                                                    ? 'bg-slate-900 border-slate-900 text-white dark:bg-white dark:border-white dark:text-black font-bold'
-                                                    : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-400'
+                                                    ? 'bg-slate-900 border-slate-900 text-white font-bold'
+                                                    : 'bg-white border-slate-200 text-slate-600 hover:border-slate-400'
                                             }`}
                                         >
                                             {opt}
@@ -69,8 +69,8 @@ const DigitalBalanceTest: React.FC = () => {
                             onClick={() => setShowResults(true)}
                             className={`px-10 py-4 rounded-full font-bold transition-all ${
                                 isComplete 
-                                    ? 'bg-black dark:bg-white text-white dark:text-black hover:scale-105 shadow-xl' 
-                                    : 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed'
+                                    ? 'bg-black text-white hover:scale-105 shadow-xl' 
+                                    : 'bg-slate-200 text-slate-400 cursor-not-allowed'
                             }`}
                         >
                             결과 분석하기
@@ -84,13 +84,13 @@ const DigitalBalanceTest: React.FC = () => {
                         <h3 className={`text-5xl font-black mt-2 ${interpretation.color}`}>{interpretation.title}</h3>
                     </div>
 
-                    <div className="p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-inner">
-                        <p className="text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
+                    <div className="p-6 bg-white rounded-2xl border border-slate-100 shadow-inner">
+                        <p className="text-slate-700 leading-relaxed font-medium">
                             {interpretation.desc}
                         </p>
                     </div>
 
-                    <div className="bg-slate-900 text-white dark:bg-slate-100 dark:text-black p-6 rounded-2xl text-left space-y-3">
+                    <div className="bg-slate-900 text-white p-6 rounded-2xl text-left space-y-3">
                         <p className="text-xs font-bold uppercase text-slate-400">오늘부터 실천할 액션 아이템:</p>
                         <ul className="text-sm space-y-2 font-medium">
                             <li>📅 침실에는 스마트폰 들고 들어가지 않기</li>
@@ -101,7 +101,7 @@ const DigitalBalanceTest: React.FC = () => {
 
                     <button
                         onClick={() => {setAnswers({}); setShowResults(false);}}
-                        className="text-slate-400 text-sm hover:text-slate-900 dark:hover:text-white transition-colors"
+                        className="text-slate-400 text-sm hover:text-slate-900 transition-colors"
                     >
                         다시 테스트하기
                     </button>

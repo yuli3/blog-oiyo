@@ -335,14 +335,14 @@ export default function LoveCalculator({ locale }: Props) {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+        <h1 className="text-2xl font-bold text-gray-900">
           {t.title}
         </h1>
-        <p className="mt-1 text-gray-500 dark:text-gray-400">{t.subtitle}</p>
+        <p className="mt-1 text-gray-500">{t.subtitle}</p>
       </div>
 
       {/* Mode tabs */}
-      <div className="flex rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
+      <div className="flex rounded-xl overflow-hidden border border-gray-200">
         {(["name", "mbti"] as Mode[]).map((m) => (
           <button
             key={m}
@@ -350,7 +350,7 @@ export default function LoveCalculator({ locale }: Props) {
             className={`flex-1 py-2.5 text-sm font-medium transition-colors ${
               mode === m
                 ? "bg-pink-500 text-white"
-                : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-pink-50 dark:hover:bg-gray-700"
+                : "bg-white text-gray-600 hover:bg-pink-50"
             }`}
           >
             {m === "name" ? t.modeNameTab : t.modeMbtiTab}
@@ -359,11 +359,11 @@ export default function LoveCalculator({ locale }: Props) {
       </div>
 
       {/* Inputs */}
-      <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-5 space-y-4">
+      <div className="rounded-2xl border border-gray-200 bg-white p-5 space-y-4">
         {mode === "name" ? (
           <>
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 {t.name1Label}
               </label>
               <input
@@ -371,12 +371,12 @@ export default function LoveCalculator({ locale }: Props) {
                 value={name1}
                 onChange={(e) => { setName1(e.target.value); setResult(null); }}
                 placeholder={t.name1Placeholder}
-                className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-2.5 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-pink-400"
+                className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-pink-400"
               />
             </div>
             <div className="flex justify-center text-2xl">❤️</div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 {t.name2Label}
               </label>
               <input
@@ -384,20 +384,20 @@ export default function LoveCalculator({ locale }: Props) {
                 value={name2}
                 onChange={(e) => { setName2(e.target.value); setResult(null); }}
                 placeholder={t.name2Placeholder}
-                className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-2.5 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-pink-400"
+                className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-pink-400"
               />
             </div>
           </>
         ) : (
           <>
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 {t.selectMbti1}
               </label>
               <select
                 value={mbti1}
                 onChange={(e) => { setMbti1(e.target.value as MBTIType); setResult(null); }}
-                className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-2.5 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-pink-400"
+                className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-pink-400"
               >
                 <option value="">—</option>
                 {MBTI_TYPES.map((t) => (
@@ -407,13 +407,13 @@ export default function LoveCalculator({ locale }: Props) {
             </div>
             <div className="flex justify-center text-2xl">❤️</div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 {t.selectMbti2}
               </label>
               <select
                 value={mbti2}
                 onChange={(e) => { setMbti2(e.target.value as MBTIType); setResult(null); }}
-                className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-2.5 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-pink-400"
+                className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-pink-400"
               >
                 <option value="">—</option>
                 {MBTI_TYPES.map((t) => (
@@ -439,19 +439,19 @@ export default function LoveCalculator({ locale }: Props) {
 
       {/* Result */}
       {result !== null && (
-        <div className="rounded-2xl border border-pink-200 dark:border-pink-800 bg-gradient-to-br from-pink-50 to-rose-50 dark:from-gray-800 dark:to-gray-900 p-6 text-center space-y-4">
+        <div className="rounded-2xl border border-pink-200 bg-gradient-to-br from-pink-50 to-rose-50 p-6 text-center space-y-4">
           <p className="text-sm font-medium text-pink-500 uppercase tracking-wider">
             {t.resultTitle}
           </p>
 
           {/* Big number */}
-          <div className="text-7xl font-extrabold text-pink-600 dark:text-pink-400">
+          <div className="text-7xl font-extrabold text-pink-600">
             {displayed}
             <span className="text-4xl">%</span>
           </div>
 
           {/* Gradient bar */}
-          <div className="relative h-4 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
+          <div className="relative h-4 rounded-full bg-gray-200 overflow-hidden">
             <div
               className={`absolute inset-y-0 left-0 rounded-full bg-gradient-to-r ${barColor} transition-all duration-700`}
               style={{ width: `${displayed}%` }}
@@ -461,14 +461,14 @@ export default function LoveCalculator({ locale }: Props) {
           {/* Message */}
           <div className="space-y-1">
             <div className="text-4xl">{emoji}</div>
-            <p className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+            <p className="text-lg font-semibold text-gray-800">
               {message}
             </p>
           </div>
 
           <button
             onClick={handleReset}
-            className="mt-2 rounded-lg border border-pink-300 dark:border-pink-700 px-6 py-2 text-sm font-medium text-pink-600 dark:text-pink-400 hover:bg-pink-50 dark:hover:bg-gray-700 transition-colors"
+            className="mt-2 rounded-lg border border-pink-300 px-6 py-2 text-sm font-medium text-pink-600 hover:bg-pink-50 transition-colors"
           >
             {t.resetBtn}
           </button>

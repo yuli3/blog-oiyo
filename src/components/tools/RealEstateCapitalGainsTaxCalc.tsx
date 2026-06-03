@@ -278,7 +278,7 @@ const RealEstateCapitalGainsTaxCalc: React.FC<{ locale?: Locale }> = ({ locale =
 
       {/* Non-taxable banner */}
       {result.isNonTaxable && (
-        <div className="p-5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 mb-6 text-center">
+        <div className="p-5 rounded-2xl bg-emerald-50 border border-emerald-200 mb-6 text-center">
           <p className="text-2xl font-black text-emerald-600">✓ {t.nonTaxable}</p>
           <p className="text-sm text-emerald-600/80 mt-1">납부 세액 없음</p>
         </div>
@@ -286,7 +286,7 @@ const RealEstateCapitalGainsTaxCalc: React.FC<{ locale?: Locale }> = ({ locale =
 
       {/* Short-term warning */}
       {result.shortTermRate !== null && (
-        <div className="p-3 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 mb-4 text-xs font-bold text-red-700 dark:text-red-300">
+        <div className="p-3 rounded-xl bg-red-50 border border-red-200 mb-4 text-xs font-bold text-red-700">
           ⚠ {t.forcedShortTerm} — {(result.shortTermRate * 100).toFixed(0)}%
         </div>
       )}
@@ -295,7 +295,7 @@ const RealEstateCapitalGainsTaxCalc: React.FC<{ locale?: Locale }> = ({ locale =
         <>
           {/* Summary cards */}
           <div className="grid grid-cols-3 gap-3 mb-6">
-            <div className="col-span-3 sm:col-span-1 p-5 rounded-2xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 text-center">
+            <div className="col-span-3 sm:col-span-1 p-5 rounded-2xl bg-red-50 border border-red-200 text-center">
               <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">{t.totalTax}</p>
               <p className="text-2xl font-black text-red-600 tabular-nums">{fmt(result.totalTax ?? 0)}</p>
               <p className="text-[10px] text-muted-foreground">{t.won}</p>

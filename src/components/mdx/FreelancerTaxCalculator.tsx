@@ -141,7 +141,7 @@ export default function FreelancerTaxCalculator() {
                 onClick={() => setExpenseMode(m)}
                 className={`rounded-lg px-3 py-2.5 text-sm font-semibold transition-all ${
                   expenseMode === m
-                    ? 'bg-white shadow text-orange-700 dark:bg-card dark:text-orange-400'
+                    ? 'bg-white shadow text-orange-700'
                     : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
@@ -204,11 +204,11 @@ export default function FreelancerTaxCalculator() {
               </div>
               <div className="flex justify-between items-center px-5 py-3">
                 <span className="text-sm text-muted-foreground">종합소득세 (산출세액)</span>
-                <span className="font-mono font-bold text-red-600 dark:text-red-400">{fmt(result.incomeTax)} 원</span>
+                <span className="font-mono font-bold text-red-600">{fmt(result.incomeTax)} 원</span>
               </div>
               <div className="flex justify-between items-center px-5 py-3">
                 <span className="text-sm text-muted-foreground">지방소득세 (소득세 × 10%)</span>
-                <span className="font-mono text-red-600 dark:text-red-400">{fmt(result.localTax)} 원</span>
+                <span className="font-mono text-red-600">{fmt(result.localTax)} 원</span>
               </div>
               <div className="flex justify-between items-center px-5 py-3 bg-muted/20">
                 <span className="text-sm font-semibold">결정세액 합계 (실효세율 {result.effectiveRate}%)</span>
@@ -220,13 +220,13 @@ export default function FreelancerTaxCalculator() {
               </div>
               <div className={`flex justify-between items-center px-5 py-4 ${
                 result.diff > 0
-                  ? 'bg-red-50/50 dark:bg-red-950/20'
-                  : 'bg-emerald-50/50 dark:bg-emerald-950/20'
+                  ? 'bg-red-50/50'
+                  : 'bg-emerald-50/50'
               }`}>
-                <span className={`text-sm font-bold ${result.diff > 0 ? 'text-red-700 dark:text-red-300' : 'text-emerald-700 dark:text-emerald-300'}`}>
+                <span className={`text-sm font-bold ${result.diff > 0 ? 'text-red-700' : 'text-emerald-700'}`}>
                   {result.diff > 0 ? '추가 납부액' : '환급 예상액'}
                 </span>
-                <span className={`font-mono font-extrabold text-xl ${result.diff > 0 ? 'text-red-700 dark:text-red-300' : 'text-emerald-700 dark:text-emerald-300'}`}>
+                <span className={`font-mono font-extrabold text-xl ${result.diff > 0 ? 'text-red-700' : 'text-emerald-700'}`}>
                   {result.diff > 0 ? '' : '+ '}{fmt(Math.abs(result.diff))} 원
                 </span>
               </div>
@@ -236,7 +236,7 @@ export default function FreelancerTaxCalculator() {
 
         <p className="text-xs text-muted-foreground text-center leading-relaxed">
           ※ 단순경비율은 업종에 따라 다릅니다. 이 계산기는 기타서비스업 기준(56.8%)을 적용합니다.{' '}
-          <span className="text-orange-600 dark:text-orange-400">정확한 세액은 국세청 홈택스에서 확인하세요.</span>
+          <span className="text-orange-600">정확한 세액은 국세청 홈택스에서 확인하세요.</span>
         </p>
       </div>
     </div>

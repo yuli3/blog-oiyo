@@ -572,21 +572,21 @@ export default function BreakupRecoveryTest({ locale }: Props) {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+        <h1 className="text-2xl font-bold text-gray-900">
           {t.title}
         </h1>
-        <p className="mt-1 text-gray-500 dark:text-gray-400">{t.subtitle}</p>
+        <p className="mt-1 text-gray-500">{t.subtitle}</p>
       </div>
 
       {!done ? (
         <div className="space-y-4">
           {/* Progress */}
           <div className="space-y-1.5">
-            <div className="flex justify-between text-sm text-gray-500 dark:text-gray-400">
+            <div className="flex justify-between text-sm text-gray-500">
               <span>{t.questionOf(current + 1, QUESTIONS.length)}</span>
               <span>{Math.round(((current) / QUESTIONS.length) * 100)}%</span>
             </div>
-            <div className="h-2 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
+            <div className="h-2 rounded-full bg-gray-200 overflow-hidden">
               <div
                 className="h-full rounded-full bg-gradient-to-r from-purple-400 to-pink-400 transition-all duration-500"
                 style={{ width: `${(current / QUESTIONS.length) * 100}%` }}
@@ -595,8 +595,8 @@ export default function BreakupRecoveryTest({ locale }: Props) {
           </div>
 
           {/* Question */}
-          <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6">
-            <p className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-5">
+          <div className="rounded-2xl border border-gray-200 bg-white p-6">
+            <p className="text-lg font-semibold text-gray-900 mb-5">
               {q.text[locale] ?? q.text.en}
             </p>
             <div className="space-y-3">
@@ -604,7 +604,7 @@ export default function BreakupRecoveryTest({ locale }: Props) {
                 <button
                   key={i}
                   onClick={() => handleAnswer(opt.type)}
-                  className="w-full rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-3.5 text-left text-gray-800 dark:text-gray-200 hover:border-purple-400 hover:bg-purple-50 dark:hover:bg-gray-600 transition-all"
+                  className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3.5 text-left text-gray-800 hover:border-purple-400 hover:bg-purple-50 transition-all"
                 >
                   {opt.text[locale] ?? opt.text.en}
                 </button>
@@ -616,27 +616,27 @@ export default function BreakupRecoveryTest({ locale }: Props) {
         result && (
           <div className="space-y-4">
             {/* Result header */}
-            <div className="rounded-2xl bg-gradient-to-br from-purple-50 to-pink-50 dark:from-gray-800 dark:to-gray-900 border border-purple-200 dark:border-purple-800 p-6 text-center">
+            <div className="rounded-2xl bg-gradient-to-br from-purple-50 to-pink-50 border border-purple-200 p-6 text-center">
               <p className="text-sm font-medium text-purple-500 uppercase tracking-wider mb-2">
                 {t.resultTitle}
               </p>
               <div className="text-5xl mb-3">{result.emoji}</div>
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+              <h2 className="text-2xl font-bold text-gray-900">
                 {result.name[locale] ?? result.name.en}
               </h2>
-              <p className="mt-3 text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+              <p className="mt-3 text-gray-600 text-sm leading-relaxed">
                 {result.description[locale] ?? result.description.en}
               </p>
             </div>
 
             {/* Tips */}
-            <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-5">
-              <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-3">
+            <div className="rounded-2xl border border-gray-200 bg-white p-5">
+              <h3 className="font-semibold text-gray-900 mb-3">
                 {t.tipsLabel}
               </h3>
               <ul className="space-y-2">
                 {(result.tips[locale] ?? result.tips.en).map((tip, i) => (
-                  <li key={i} className="flex gap-2 text-sm text-gray-700 dark:text-gray-300">
+                  <li key={i} className="flex gap-2 text-sm text-gray-700">
                     <span className="text-purple-400 font-bold">✓</span>
                     {tip}
                   </li>
@@ -646,19 +646,19 @@ export default function BreakupRecoveryTest({ locale }: Props) {
 
             {/* Best match + Caution */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div className="rounded-2xl border border-green-200 dark:border-green-800 bg-green-50 dark:bg-gray-800 p-4">
-                <h3 className="font-semibold text-green-700 dark:text-green-400 mb-2 text-sm">
+              <div className="rounded-2xl border border-green-200 bg-green-50 p-4">
+                <h3 className="font-semibold text-green-700 mb-2 text-sm">
                   {t.bestMatchLabel}
                 </h3>
-                <p className="text-sm text-gray-700 dark:text-gray-300">
+                <p className="text-sm text-gray-700">
                   {result.bestMatch[locale] ?? result.bestMatch.en}
                 </p>
               </div>
-              <div className="rounded-2xl border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-gray-800 p-4">
-                <h3 className="font-semibold text-amber-700 dark:text-amber-400 mb-2 text-sm">
+              <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4">
+                <h3 className="font-semibold text-amber-700 mb-2 text-sm">
                   {t.cautionLabel}
                 </h3>
-                <p className="text-sm text-gray-700 dark:text-gray-300">
+                <p className="text-sm text-gray-700">
                   {result.caution[locale] ?? result.caution.en}
                 </p>
               </div>
@@ -666,7 +666,7 @@ export default function BreakupRecoveryTest({ locale }: Props) {
 
             <button
               onClick={handleRestart}
-              className="w-full rounded-xl border border-purple-300 dark:border-purple-700 py-3 text-sm font-semibold text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-gray-700 transition-colors"
+              className="w-full rounded-xl border border-purple-300 py-3 text-sm font-semibold text-purple-600 hover:bg-purple-50 transition-colors"
             >
               {t.restartBtn}
             </button>

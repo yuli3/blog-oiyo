@@ -266,9 +266,9 @@ export default function BurnoutTest({ locale: lp = 'ko' }: Props) {
         <h3 className="font-semibold text-sm text-green-600">{lb.recovery}</h3>
         <ul className="space-y-1">{r.recovery.map(r => <li key={r} className="text-sm text-muted-foreground flex gap-2"><span className="text-green-500">→</span>{r}</li>)}</ul>
       </div>
-      <div className="rounded-xl border border-amber-200 bg-amber-50 dark:bg-amber-950/20 p-4 space-y-1">
-        <h3 className="font-semibold text-sm text-amber-700 dark:text-amber-400">{lb.warning}</h3>
-        <p className="text-sm text-amber-700 dark:text-amber-300">{r.warning}</p>
+      <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 space-y-1">
+        <h3 className="font-semibold text-sm text-amber-700">{lb.warning}</h3>
+        <p className="text-sm text-amber-700">{r.warning}</p>
       </div>
       <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 space-y-1">
         <h3 className="font-semibold text-sm text-primary">{lb.affirmation}</h3>

@@ -73,8 +73,8 @@ const CulturalGreetingGuide: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'k
     const data = t.countries[selectedCountry] || t.countries.korea;
 
     return (
-        <div className="not-prose my-12 p-8 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-slate-900 dark:to-orange-950/20 border border-orange-100 dark:border-orange-900/30 rounded-3xl shadow-xl">
-            <h3 className="text-2xl font-black text-center text-slate-900 dark:text-white mb-8">{t.ui.selectCountry}</h3>
+        <div className="not-prose my-12 p-8 bg-gradient-to-br from-amber-50 to-orange-50 border border-orange-100 rounded-3xl shadow-xl">
+            <h3 className="text-2xl font-black text-center text-slate-900 mb-8">{t.ui.selectCountry}</h3>
             
             <div className="flex justify-center gap-4 mb-10">
                 {Object.keys(t.countries).map(cid => (
@@ -83,39 +83,39 @@ const CulturalGreetingGuide: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'k
                         onClick={() => setSelectedCountry(cid)}
                         className={`group flex flex-col items-center gap-2 p-4 rounded-2xl transition-all ${
                             selectedCountry === cid
-                                ? 'bg-white dark:bg-slate-800 shadow-lg scale-110 ring-2 ring-orange-400'
-                                : 'hover:bg-white/50 dark:hover:bg-slate-800/50'
+                                ? 'bg-white shadow-lg scale-110 ring-2 ring-orange-400'
+                                : 'hover:bg-white/50'
                         }`}
                     >
                         <span className="text-4xl group-hover:scale-110 transition-transform">{t.countries[cid as keyof typeof t.countries].flag}</span>
-                        <span className="text-xs font-bold text-slate-600 dark:text-slate-400">{t.countries[cid as keyof typeof t.countries].name}</span>
+                        <span className="text-xs font-bold text-slate-600">{t.countries[cid as keyof typeof t.countries].name}</span>
                     </button>
                 ))}
             </div>
 
             <div className="space-y-4">
-                <div className="p-6 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-2xl border border-orange-100 dark:border-orange-900/20">
+                <div className="p-6 bg-white/80 backdrop-blur-sm rounded-2xl border border-orange-100">
                     <div className="flex items-center gap-2 mb-3">
-                        <span className="p-1.5 bg-orange-100 dark:bg-orange-900/40 rounded-lg text-orange-600">🏮</span>
-                        <h4 className="font-bold text-slate-900 dark:text-white">{t.ui.customs}</h4>
+                        <span className="p-1.5 bg-orange-100 rounded-lg text-orange-600">🏮</span>
+                        <h4 className="font-bold text-slate-900">{t.ui.customs}</h4>
                     </div>
-                    <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">{data.customs}</p>
+                    <p className="text-slate-700 text-sm leading-relaxed">{data.customs}</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="p-6 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-2xl border border-orange-100 dark:border-orange-900/20">
+                    <div className="p-6 bg-white/80 backdrop-blur-sm rounded-2xl border border-orange-100">
                         <div className="flex items-center gap-2 mb-3">
-                            <span className="p-1.5 bg-emerald-100 dark:bg-emerald-900/40 rounded-lg text-emerald-600">✅</span>
-                            <h4 className="font-bold text-slate-900 dark:text-white">{t.ui.etiquette}</h4>
+                            <span className="p-1.5 bg-emerald-100 rounded-lg text-emerald-600">✅</span>
+                            <h4 className="font-bold text-slate-900">{t.ui.etiquette}</h4>
                         </div>
-                        <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">{data.etiquette}</p>
+                        <p className="text-slate-700 text-sm leading-relaxed">{data.etiquette}</p>
                     </div>
-                    <div className="p-6 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-2xl border border-orange-100 dark:border-orange-900/20">
+                    <div className="p-6 bg-white/80 backdrop-blur-sm rounded-2xl border border-orange-100">
                         <div className="flex items-center gap-2 mb-3">
-                            <span className="p-1.5 bg-rose-100 dark:bg-rose-900/40 rounded-lg text-rose-600">❌</span>
-                            <h4 className="font-bold text-slate-900 dark:text-white">{t.ui.avoid}</h4>
+                            <span className="p-1.5 bg-rose-100 rounded-lg text-rose-600">❌</span>
+                            <h4 className="font-bold text-slate-900">{t.ui.avoid}</h4>
                         </div>
-                        <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed font-bold">{data.avoid}</p>
+                        <p className="text-slate-700 text-sm leading-relaxed font-bold">{data.avoid}</p>
                     </div>
                 </div>
             </div>

@@ -229,9 +229,9 @@ const EarlyRepaymentCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'ko'
                 <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">{t.remainingBalance}</p>
                 <p className="text-lg font-black">{curr}{fmtMoney(result.remaining, locale)}</p>
               </div>
-              <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800 text-center space-y-1">
+              <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-center space-y-1">
                 <p className="text-[9px] font-black uppercase tracking-widest text-emerald-600">{t.interestSaved}</p>
-                <p className="text-lg font-black text-emerald-700 dark:text-emerald-400">+{curr}{fmtMoney(result.interestSaved, locale)}</p>
+                <p className="text-lg font-black text-emerald-700">+{curr}{fmtMoney(result.interestSaved, locale)}</p>
               </div>
               <div className="p-4 rounded-2xl bg-muted/20 border border-border text-center space-y-1">
                 <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">{t.newTerm}</p>
@@ -239,9 +239,9 @@ const EarlyRepaymentCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'ko'
                 <p className="text-[10px] text-muted-foreground">≈ {(result.termReduction/12).toFixed(1)}{t.years}</p>
               </div>
             </div>
-            <div className={`p-6 rounded-3xl border-2 text-center space-y-1 ${result.netSaving > 0 ? 'bg-emerald-50 dark:bg-emerald-950/20 border-emerald-300' : 'bg-amber-50 border-amber-200'}`}>
+            <div className={`p-6 rounded-3xl border-2 text-center space-y-1 ${result.netSaving > 0 ? 'bg-emerald-50 border-emerald-300' : 'bg-amber-50 border-amber-200'}`}>
               <p className={`text-[10px] font-black uppercase tracking-widest ${result.netSaving > 0 ? 'text-emerald-600' : 'text-amber-600'}`}>{t.netSaving}</p>
-              <p className={`text-4xl font-black ${result.netSaving > 0 ? 'text-emerald-700 dark:text-emerald-400' : 'text-amber-700'}`}>{result.netSaving >= 0 ? '+' : ''}{curr}{fmtMoney(result.netSaving, locale)}</p>
+              <p className={`text-4xl font-black ${result.netSaving > 0 ? 'text-emerald-700' : 'text-amber-700'}`}>{result.netSaving >= 0 ? '+' : ''}{curr}{fmtMoney(result.netSaving, locale)}</p>
               {result.penalty > 0 && <p className="text-xs text-muted-foreground">{t.penalty}: {curr}{fmtMoney(result.penalty, locale)}</p>}
             </div>
           </div>

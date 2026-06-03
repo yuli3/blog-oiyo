@@ -630,13 +630,13 @@ export default function VocabFlashcard({ locale }: Props) {
   return (
     <div className="space-y-5">
       <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{t.title}</h1>
-        <p className="mt-1 text-gray-500 dark:text-gray-400">{t.subtitle}</p>
+        <h1 className="text-2xl font-bold text-gray-900">{t.title}</h1>
+        <p className="mt-1 text-gray-500">{t.subtitle}</p>
       </div>
 
       {/* Today count */}
       <div className="flex justify-center">
-        <div className="inline-flex items-center gap-2 rounded-full bg-green-100 dark:bg-green-900/30 px-4 py-1.5 text-sm text-green-700 dark:text-green-300">
+        <div className="inline-flex items-center gap-2 rounded-full bg-green-100 px-4 py-1.5 text-sm text-green-700">
           <span>📅</span>
           <span>{t.todayLabel}: <strong>{todayCount}</strong></span>
         </div>
@@ -651,7 +651,7 @@ export default function VocabFlashcard({ locale }: Props) {
             className={`rounded-xl border px-3 py-2.5 text-sm font-medium transition-colors ${
               selectedDeck === dk
                 ? "border-emerald-500 bg-emerald-500 text-white"
-                : "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:border-emerald-400"
+                : "border-gray-200 bg-white text-gray-600 hover:border-emerald-400"
             }`}
           >
             <div>{t.decks[dk]}</div>
@@ -662,14 +662,14 @@ export default function VocabFlashcard({ locale }: Props) {
 
       {/* Progress */}
       <div>
-        <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
+        <div className="flex justify-between text-xs text-gray-500 mb-1">
           <span>{t.cardCount} {Math.min(idx + 1, total)} / {total}</span>
           <span className="flex gap-3">
-            <span className="text-green-600 dark:text-green-400">{t.knownLabel}: {known.size}</span>
-            <span className="text-red-500 dark:text-red-400">{t.unknownLabel}: {unknown.size}</span>
+            <span className="text-green-600">{t.knownLabel}: {known.size}</span>
+            <span className="text-red-500">{t.unknownLabel}: {unknown.size}</span>
           </span>
         </div>
-        <div className="h-2 rounded-full bg-gray-200 dark:bg-gray-700">
+        <div className="h-2 rounded-full bg-gray-200">
           <div
             className="h-2 rounded-full bg-gradient-to-r from-emerald-400 to-teal-500 transition-all duration-300"
             style={{ width: `${progress}%` }}
@@ -695,23 +695,23 @@ export default function VocabFlashcard({ locale }: Props) {
             >
               {/* Front */}
               <div
-                className="absolute inset-0 flex flex-col items-center justify-center rounded-2xl border-2 border-emerald-300 dark:border-emerald-700 bg-white dark:bg-gray-800 shadow-lg p-6 text-center"
+                className="absolute inset-0 flex flex-col items-center justify-center rounded-2xl border-2 border-emerald-300 bg-white shadow-lg p-6 text-center"
                 style={{ backfaceVisibility: "hidden" }}
               >
-                <p className="text-3xl font-extrabold text-gray-900 dark:text-gray-100 mb-3">
+                <p className="text-3xl font-extrabold text-gray-900 mb-3">
                   {current.word}
                 </p>
-                <p className="text-sm text-gray-400 dark:text-gray-500">{t.frontHint}</p>
+                <p className="text-sm text-gray-400">{t.frontHint}</p>
               </div>
               {/* Back */}
               <div
-                className="absolute inset-0 flex flex-col items-start justify-center rounded-2xl border-2 border-teal-400 dark:border-teal-600 bg-teal-50 dark:bg-teal-900/20 shadow-lg p-6 space-y-3"
+                className="absolute inset-0 flex flex-col items-start justify-center rounded-2xl border-2 border-teal-400 bg-teal-50 shadow-lg p-6 space-y-3"
                 style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
               >
-                <p className="text-xs font-semibold text-teal-600 dark:text-teal-400 uppercase tracking-wider">{t.meaningLabel}</p>
-                <p className="text-base font-semibold text-gray-900 dark:text-gray-100">{current.meaning}</p>
-                <p className="text-xs font-semibold text-teal-600 dark:text-teal-400 uppercase tracking-wider">{t.exampleLabel}</p>
-                <p className="text-sm italic text-gray-600 dark:text-gray-300">"{current.example}"</p>
+                <p className="text-xs font-semibold text-teal-600 uppercase tracking-wider">{t.meaningLabel}</p>
+                <p className="text-base font-semibold text-gray-900">{current.meaning}</p>
+                <p className="text-xs font-semibold text-teal-600 uppercase tracking-wider">{t.exampleLabel}</p>
+                <p className="text-sm italic text-gray-600">"{current.example}"</p>
               </div>
             </div>
           </div>
@@ -724,13 +724,13 @@ export default function VocabFlashcard({ locale }: Props) {
             <div className="flex gap-3">
               <button
                 onClick={handleUnknown}
-                className="flex-1 rounded-xl border-2 border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/20 py-3 font-semibold text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors"
+                className="flex-1 rounded-xl border-2 border-red-300 bg-red-50 py-3 font-semibold text-red-600 hover:bg-red-100 transition-colors"
               >
                 {t.unknownBtn}
               </button>
               <button
                 onClick={handleKnow}
-                className="flex-1 rounded-xl border-2 border-green-400 dark:border-green-600 bg-green-50 dark:bg-green-900/20 py-3 font-semibold text-green-700 dark:text-green-300 hover:bg-green-100 dark:hover:bg-green-900/40 transition-colors"
+                className="flex-1 rounded-xl border-2 border-green-400 bg-green-50 py-3 font-semibold text-green-700 hover:bg-green-100 transition-colors"
               >
                 {t.knowBtn}
               </button>
@@ -739,15 +739,15 @@ export default function VocabFlashcard({ locale }: Props) {
         </>
       ) : (
         /* Completed */
-        <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-8 text-center space-y-4">
+        <div className="rounded-2xl border border-gray-200 bg-white p-8 text-center space-y-4">
           <p className="text-4xl">🎉</p>
-          <p className="text-xl font-bold text-gray-900 dark:text-gray-100">{t.completedTitle}</p>
-          <p className="text-gray-500 dark:text-gray-400">{t.completedMsg}</p>
+          <p className="text-xl font-bold text-gray-900">{t.completedTitle}</p>
+          <p className="text-gray-500">{t.completedMsg}</p>
           <div className="flex gap-2 justify-center text-sm">
-            <span className="rounded-full bg-green-100 dark:bg-green-900/30 px-3 py-1 text-green-700 dark:text-green-300">
+            <span className="rounded-full bg-green-100 px-3 py-1 text-green-700">
               {t.knownLabel}: {known.size}
             </span>
-            <span className="rounded-full bg-red-100 dark:bg-red-900/30 px-3 py-1 text-red-600 dark:text-red-400">
+            <span className="rounded-full bg-red-100 px-3 py-1 text-red-600">
               {t.unknownLabel}: {unknown.size}
             </span>
           </div>
@@ -760,13 +760,13 @@ export default function VocabFlashcard({ locale }: Props) {
                 {t.reviewUnknown} ({unknown.size})
               </button>
             ) : (
-              <div className="flex-1 rounded-xl bg-green-100 dark:bg-green-900/30 py-3 text-center font-semibold text-green-700 dark:text-green-300">
+              <div className="flex-1 rounded-xl bg-green-100 py-3 text-center font-semibold text-green-700">
                 {t.allKnown}
               </div>
             )}
             <button
               onClick={handleReset}
-              className="flex-1 rounded-xl border border-gray-300 dark:border-gray-600 py-3 font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              className="flex-1 rounded-xl border border-gray-300 py-3 font-semibold text-gray-600 hover:bg-gray-50 transition-colors"
             >
               {t.resetDeck}
             </button>

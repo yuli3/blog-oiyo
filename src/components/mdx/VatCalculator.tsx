@@ -83,7 +83,7 @@ export default function VatCalculator() {
               onClick={() => { setMode(m.key); setInput(''); setDisplayInput(''); }}
               className={`rounded-lg px-3 py-2.5 text-sm font-semibold transition-all ${
                 mode === m.key
-                  ? 'bg-white shadow text-blue-700 dark:bg-card dark:text-blue-400'
+                  ? 'bg-white shadow text-blue-700'
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >
@@ -101,7 +101,7 @@ export default function VatCalculator() {
               onClick={() => setRate(rt.value as Rate)}
               className={`flex-1 rounded-lg border px-3 py-2 text-sm font-medium transition-all ${
                 rate === rt.value
-                  ? 'border-blue-500 bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300'
+                  ? 'border-blue-500 bg-blue-50 text-blue-700'
                   : 'border-border text-muted-foreground hover:border-blue-300'
               }`}
             >
@@ -136,9 +136,9 @@ export default function VatCalculator() {
                 <span className="text-sm text-muted-foreground font-medium">공급가액</span>
                 <span className="font-mono font-bold text-foreground text-lg">{fmt(supplyPrice)} 원</span>
               </div>
-              <div className="flex justify-between items-center px-5 py-3.5 bg-blue-50/50 dark:bg-blue-950/20">
-                <span className="text-sm text-blue-700 dark:text-blue-300 font-semibold">부가가치세 ({rate}%)</span>
-                <span className="font-mono font-bold text-blue-700 dark:text-blue-300 text-lg">+ {fmt(vatAmount)} 원</span>
+              <div className="flex justify-between items-center px-5 py-3.5 bg-blue-50/50">
+                <span className="text-sm text-blue-700 font-semibold">부가가치세 ({rate}%)</span>
+                <span className="font-mono font-bold text-blue-700 text-lg">+ {fmt(vatAmount)} 원</span>
               </div>
               <div className="flex justify-between items-center px-5 py-4 bg-foreground/5">
                 <span className="text-sm font-bold text-foreground">합계 금액</span>
@@ -151,7 +151,7 @@ export default function VatCalculator() {
         {/* Tip */}
         <p className="text-xs text-muted-foreground text-center leading-relaxed">
           ※ 원 단위 미만은 절사 처리됩니다.{' '}
-          <span className="text-blue-600 dark:text-blue-400">세금계산서 발행 시 공급가액과 세액을 분리 기재해야 합니다.</span>
+          <span className="text-blue-600">세금계산서 발행 시 공급가액과 세액을 분리 기재해야 합니다.</span>
         </p>
       </div>
     </div>

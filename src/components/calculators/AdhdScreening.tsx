@@ -39,11 +39,11 @@ const AdhdScreening: React.FC = () => {
     const isComplete = Object.keys(answers).length === questions.length;
 
     return (
-        <div className="not-prose my-12 p-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-xl max-w-2xl mx-auto">
+        <div className="not-prose my-12 p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto">
             {!showResults ? (
                 <div className="space-y-8">
                     <div className="text-center mb-8">
-                        <h3 className="text-2xl font-bold text-slate-900 dark:text-white">성인 ADHD 자가진단 (ASRS v1.1)</h3>
+                        <h3 className="text-2xl font-bold text-slate-900">성인 ADHD 자가진단 (ASRS v1.1)</h3>
                         <p className="text-sm text-slate-500 mt-2">지난 6개월 동안의 자신의 상태를 가장 잘 나타내는 항목에 체크해 주세요.</p>
                     </div>
 
@@ -51,8 +51,8 @@ const AdhdScreening: React.FC = () => {
                         {questions.map((q, idx) => (
                             <div key={q.id} className="space-y-4">
                                 <div className="flex gap-4">
-                                    <span className="flex-shrink-0 w-8 h-8 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 rounded-full flex items-center justify-center font-bold">{idx + 1}</span>
-                                    <p className="text-lg font-medium text-slate-800 dark:text-slate-200 leading-tight">{q.text}</p>
+                                    <span className="flex-shrink-0 w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold">{idx + 1}</span>
+                                    <p className="text-lg font-medium text-slate-800 leading-tight">{q.text}</p>
                                 </div>
                                 <div className="grid grid-cols-1 sm:grid-cols-5 gap-2 ml-12">
                                     {options.map(opt => (
@@ -62,7 +62,7 @@ const AdhdScreening: React.FC = () => {
                                             className={`py-2 px-1 text-xs rounded-lg border transition-all ${
                                                 answers[q.id] === opt.value
                                                     ? 'bg-blue-600 border-blue-600 text-white shadow-md'
-                                                    : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-100'
+                                                    : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
                                             }`}
                                         >
                                             {opt.label}
@@ -73,14 +73,14 @@ const AdhdScreening: React.FC = () => {
                         ))}
                     </div>
 
-                    <div className="pt-8 border-t border-slate-100 dark:border-slate-800 flex justify-center">
+                    <div className="pt-8 border-t border-slate-100 flex justify-center">
                         <button
                             disabled={!isComplete}
                             onClick={() => setShowResults(true)}
                             className={`px-12 py-4 rounded-2xl font-bold text-lg transition-all ${
                                 isComplete 
                                     ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg' 
-                                    : 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed'
+                                    : 'bg-slate-200 text-slate-400 cursor-not-allowed'
                             }`}
                         >
                             결과 확인하기
@@ -89,25 +89,25 @@ const AdhdScreening: React.FC = () => {
                 </div>
             ) : (
                 <div className="text-center space-y-6 py-4 animate-fade-in">
-                    <div className="inline-flex p-4 bg-blue-50 dark:bg-blue-900/30 rounded-full mb-4">
+                    <div className="inline-flex p-4 bg-blue-50 rounded-full mb-4">
                         <svg className="w-12 h-12 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </div>
                     
-                    <h3 className="text-3xl font-black text-slate-900 dark:text-white">진단 결과</h3>
+                    <h3 className="text-3xl font-black text-slate-900">진단 결과</h3>
                     
-                    <div className="bg-slate-50 dark:bg-slate-800 p-6 rounded-2xl border border-slate-100 dark:border-slate-700">
+                    <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
                         <div className="text-sm text-slate-500 uppercase tracking-widest mb-1">주의 필요 지표 (Flags)</div>
                         <div className="text-5xl font-black text-blue-600 mb-2">{results.flags} / 6</div>
-                        <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+                        <p className="text-slate-600 text-sm leading-relaxed">
                             {results.flags >= 4 
                                 ? "진단 결과, 성인 ADHD일 가능성이 높습니다. 전문의와의 상담을 권장합니다." 
                                 : "정상 범위 내에 있습니다. 하지만 일상생활에 큰 불편을 느낀다면 전문가의 도움을 받는 것이 좋습니다."}
                         </p>
                     </div>
 
-                    <div className="text-xs text-slate-400 text-left bg-slate-100 dark:bg-slate-950 p-4 rounded-xl leading-relaxed">
+                    <div className="text-xs text-slate-400 text-left bg-slate-100 p-4 rounded-xl leading-relaxed">
                         * 본 테스트는 세계보건기구(WHO)의 ASRS v1.1 스크리닝 도구를 기반으로 합니다. 
                         * 6개 문항 중 4개 이상에서 기준치 이상의 점수가 나왔다면, 추가적인 전문적 평가가 필요함을 시사합니다.
                         * 본 진단은 의학적 소견을 대신할 수 없습니다.

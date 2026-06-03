@@ -154,42 +154,42 @@ export default function SalaryCalculator() {
                 </div>
                 <div className="flex justify-between items-center px-5 py-2.5">
                   <span className="text-sm text-muted-foreground">국민연금 (4.5%)</span>
-                  <span className="font-mono text-red-600 dark:text-red-400">- {fmt(result.nationalPension)} 원</span>
+                  <span className="font-mono text-red-600">- {fmt(result.nationalPension)} 원</span>
                 </div>
                 <div className="flex justify-between items-center px-5 py-2.5">
                   <span className="text-sm text-muted-foreground">건강보험 (3.545%)</span>
-                  <span className="font-mono text-red-600 dark:text-red-400">- {fmt(result.healthInsurance)} 원</span>
+                  <span className="font-mono text-red-600">- {fmt(result.healthInsurance)} 원</span>
                 </div>
                 <div className="flex justify-between items-center px-5 py-2.5">
                   <span className="text-sm text-muted-foreground">장기요양보험 (건강보험료 × 12.95%)</span>
-                  <span className="font-mono text-red-600 dark:text-red-400">- {fmt(result.longTermCare)} 원</span>
+                  <span className="font-mono text-red-600">- {fmt(result.longTermCare)} 원</span>
                 </div>
                 <div className="flex justify-between items-center px-5 py-2.5">
                   <span className="text-sm text-muted-foreground">고용보험 (0.9%)</span>
-                  <span className="font-mono text-red-600 dark:text-red-400">- {fmt(result.employmentInsurance)} 원</span>
+                  <span className="font-mono text-red-600">- {fmt(result.employmentInsurance)} 원</span>
                 </div>
                 <div className="flex justify-between items-center px-5 py-2.5">
                   <span className="text-sm text-muted-foreground">소득세 (간이세액)</span>
-                  <span className="font-mono text-red-600 dark:text-red-400">- {fmt(result.incomeTax)} 원</span>
+                  <span className="font-mono text-red-600">- {fmt(result.incomeTax)} 원</span>
                 </div>
                 <div className="flex justify-between items-center px-5 py-2.5">
                   <span className="text-sm text-muted-foreground">지방소득세 (소득세 × 10%)</span>
-                  <span className="font-mono text-red-600 dark:text-red-400">- {fmt(result.localTax)} 원</span>
+                  <span className="font-mono text-red-600">- {fmt(result.localTax)} 원</span>
                 </div>
-                <div className="flex justify-between items-center px-5 py-3 bg-red-50/50 dark:bg-red-950/20">
-                  <span className="text-sm font-semibold text-red-700 dark:text-red-300">총 공제액 (실효세율 {result.effectiveRate}%)</span>
-                  <span className="font-mono font-bold text-red-700 dark:text-red-300">- {fmt(result.totalDeductions)} 원</span>
+                <div className="flex justify-between items-center px-5 py-3 bg-red-50/50">
+                  <span className="text-sm font-semibold text-red-700">총 공제액 (실효세율 {result.effectiveRate}%)</span>
+                  <span className="font-mono font-bold text-red-700">- {fmt(result.totalDeductions)} 원</span>
                 </div>
-                <div className="flex justify-between items-center px-5 py-4 bg-violet-50/50 dark:bg-violet-950/20">
-                  <span className="text-sm font-bold text-violet-800 dark:text-violet-300">월 실수령액</span>
-                  <span className="font-mono font-extrabold text-violet-700 dark:text-violet-300 text-xl">{fmt(result.netMonthly)} 원</span>
+                <div className="flex justify-between items-center px-5 py-4 bg-violet-50/50">
+                  <span className="text-sm font-bold text-violet-800">월 실수령액</span>
+                  <span className="font-mono font-extrabold text-violet-700 text-xl">{fmt(result.netMonthly)} 원</span>
                 </div>
               </div>
             </div>
 
-            <div className="rounded-xl border border-violet-200 dark:border-violet-900 bg-violet-50/30 dark:bg-violet-950/10 px-5 py-3.5 flex justify-between items-center">
-              <span className="text-sm font-bold text-violet-800 dark:text-violet-300">연간 실수령액</span>
-              <span className="font-mono font-extrabold text-violet-700 dark:text-violet-300 text-lg">{fmt(result.netAnnual)} 원</span>
+            <div className="rounded-xl border border-violet-200 bg-violet-50/30 px-5 py-3.5 flex justify-between items-center">
+              <span className="text-sm font-bold text-violet-800">연간 실수령액</span>
+              <span className="font-mono font-extrabold text-violet-700 text-lg">{fmt(result.netAnnual)} 원</span>
             </div>
           </div>
         )}

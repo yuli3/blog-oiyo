@@ -470,12 +470,12 @@ const LEVEL_COLORS: Record<CEFRLevel, string> = {
 };
 
 const LEVEL_BG: Record<CEFRLevel, string> = {
-  A1: "bg-gray-50 dark:bg-gray-700/50",
-  A2: "bg-blue-50 dark:bg-blue-900/20",
-  B1: "bg-green-50 dark:bg-green-900/20",
-  B2: "bg-yellow-50 dark:bg-yellow-900/20",
-  C1: "bg-orange-50 dark:bg-orange-900/20",
-  C2: "bg-red-50 dark:bg-red-900/20",
+  A1: "bg-gray-50",
+  A2: "bg-blue-50",
+  B1: "bg-green-50",
+  B2: "bg-yellow-50",
+  C1: "bg-orange-50",
+  C2: "bg-red-50",
 };
 
 type Stage = "intro" | "test" | "result";
@@ -523,14 +523,14 @@ export default function EnglishLevelTest({ locale }: Props) {
     return (
       <div className="space-y-6 text-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{t.title}</h1>
-          <p className="mt-2 text-gray-500 dark:text-gray-400">{t.subtitle}</p>
+          <h1 className="text-2xl font-bold text-gray-900">{t.title}</h1>
+          <p className="mt-2 text-gray-500">{t.subtitle}</p>
         </div>
-        <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 text-left space-y-3">
+        <div className="rounded-2xl border border-gray-200 bg-white p-6 text-left space-y-3">
           {["A1", "A2", "B1", "B2", "C1", "C2"].map((lvl) => (
             <div key={lvl} className="flex items-center gap-3">
               <span className={`w-10 text-center rounded-lg py-0.5 text-sm font-bold ${LEVEL_COLORS[lvl as CEFRLevel]}`}>{lvl}</span>
-              <span className="text-sm text-gray-600 dark:text-gray-400">{t.cefrDesc[lvl as CEFRLevel].label}</span>
+              <span className="text-sm text-gray-600">{t.cefrDesc[lvl as CEFRLevel].label}</span>
             </div>
           ))}
         </div>
@@ -548,32 +548,32 @@ export default function EnglishLevelTest({ locale }: Props) {
     const progress = ((currentIdx) / totalQ) * 100;
     return (
       <div className="space-y-5">
-        <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
+        <div className="flex justify-between items-center text-sm text-gray-500">
           <span>{t.questionLabel} {currentIdx + 1} / {totalQ}</span>
-          <span className="capitalize text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700">
+          <span className="capitalize text-xs px-2 py-0.5 rounded-full bg-gray-100">
             {currentQ.difficulty} · {currentQ.category}
           </span>
         </div>
-        <div className="h-2 rounded-full bg-gray-200 dark:bg-gray-700">
+        <div className="h-2 rounded-full bg-gray-200">
           <div
             className="h-2 rounded-full bg-gradient-to-r from-indigo-500 to-violet-500 transition-all duration-300"
             style={{ width: `${progress}%` }}
           />
         </div>
 
-        <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-5 space-y-4">
-          <p className="text-base font-medium text-gray-900 dark:text-gray-100">{currentQ.question}</p>
+        <div className="rounded-2xl border border-gray-200 bg-white p-5 space-y-4">
+          <p className="text-base font-medium text-gray-900">{currentQ.question}</p>
           <div className="space-y-2">
             {currentQ.options.map((opt, i) => {
               let cls = "w-full text-left rounded-xl border px-4 py-3 text-sm transition-all ";
               if (selected === null) {
-                cls += "border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 hover:border-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 text-gray-800 dark:text-gray-200";
+                cls += "border-gray-200 bg-gray-50 hover:border-indigo-400 hover:bg-indigo-50 text-gray-800";
               } else if (i === currentQ.answer) {
-                cls += "border-green-500 bg-green-50 dark:bg-green-900/30 text-green-800 dark:text-green-200 font-medium";
+                cls += "border-green-500 bg-green-50 text-green-800 font-medium";
               } else if (i === selected) {
-                cls += "border-red-400 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300";
+                cls += "border-red-400 bg-red-50 text-red-700";
               } else {
-                cls += "border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400 opacity-60";
+                cls += "border-gray-200 bg-gray-50 text-gray-500 opacity-60";
               }
               return (
                 <button key={i} onClick={() => handleSelect(i)} className={cls} disabled={selected !== null}>
@@ -585,7 +585,7 @@ export default function EnglishLevelTest({ locale }: Props) {
           </div>
 
           {selected !== null && (
-            <div className="rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 p-3 text-sm text-blue-800 dark:text-blue-200">
+            <div className="rounded-xl bg-blue-50 border border-blue-200 p-3 text-sm text-blue-800">
               {currentQ.explanation}
             </div>
           )}
@@ -605,17 +605,17 @@ export default function EnglishLevelTest({ locale }: Props) {
   // Result stage
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-center text-gray-900 dark:text-gray-100">{t.resultTitle}</h1>
+      <h1 className="text-2xl font-bold text-center text-gray-900">{t.resultTitle}</h1>
 
-      <div className={`rounded-2xl border border-gray-200 dark:border-gray-700 ${LEVEL_BG[cefr]} p-6 text-center space-y-3`}>
-        <p className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{t.cefrLabel}</p>
+      <div className={`rounded-2xl border border-gray-200 ${LEVEL_BG[cefr]} p-6 text-center space-y-3`}>
+        <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider">{t.cefrLabel}</p>
         <p className={`text-6xl font-extrabold ${LEVEL_COLORS[cefr]}`}>{cefr}</p>
         <p className={`text-lg font-semibold ${LEVEL_COLORS[cefr]}`}>{t.cefrDesc[cefr].label}</p>
-        <p className="text-sm text-gray-600 dark:text-gray-400">{t.cefrDesc[cefr].desc}</p>
-        <p className="text-sm text-gray-500 dark:text-gray-400">
+        <p className="text-sm text-gray-600">{t.cefrDesc[cefr].desc}</p>
+        <p className="text-sm text-gray-500">
           {t.scoreLabel}: <strong>{score}</strong> / {totalQ}
         </p>
-        <div className="h-3 rounded-full bg-gray-200 dark:bg-gray-700 mx-4">
+        <div className="h-3 rounded-full bg-gray-200 mx-4">
           <div
             className="h-3 rounded-full bg-gradient-to-r from-indigo-500 to-violet-500 transition-all"
             style={{ width: `${(score / totalQ) * 100}%` }}
@@ -624,11 +624,11 @@ export default function EnglishLevelTest({ locale }: Props) {
       </div>
 
       {/* Study tips */}
-      <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-5 space-y-3">
-        <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">Study Tips</p>
+      <div className="rounded-2xl border border-gray-200 bg-white p-5 space-y-3">
+        <p className="text-sm font-semibold text-gray-700">Study Tips</p>
         <ol className="space-y-2 list-decimal list-inside">
           {t.cefrDesc[cefr].tips.map((tip, i) => (
-            <li key={i} className="text-sm text-gray-600 dark:text-gray-400">{tip}</li>
+            <li key={i} className="text-sm text-gray-600">{tip}</li>
           ))}
         </ol>
       </div>
@@ -636,21 +636,21 @@ export default function EnglishLevelTest({ locale }: Props) {
       {/* Wrong answers review */}
       {wrongQuestions.length > 0 && (
         <div className="space-y-3">
-          <p className="font-semibold text-gray-800 dark:text-gray-200">{t.wrongAnswersTitle}</p>
+          <p className="font-semibold text-gray-800">{t.wrongAnswersTitle}</p>
           {wrongQuestions.map((q) => {
             const userAns = answers[QUESTIONS.indexOf(q)];
             return (
-              <div key={q.id} className="rounded-xl border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 p-4 space-y-2">
-                <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{q.question}</p>
-                <p className="text-xs text-green-700 dark:text-green-400">
+              <div key={q.id} className="rounded-xl border border-red-200 bg-red-50 p-4 space-y-2">
+                <p className="text-sm font-medium text-gray-900">{q.question}</p>
+                <p className="text-xs text-green-700">
                   {t.correctAnswer}: {q.options[q.answer]}
                 </p>
                 {userAns !== null && (
-                  <p className="text-xs text-red-600 dark:text-red-400">
+                  <p className="text-xs text-red-600">
                     {t.yourAnswer}: {q.options[userAns]}
                   </p>
                 )}
-                <p className="text-xs text-gray-600 dark:text-gray-400">
+                <p className="text-xs text-gray-600">
                   {t.explanationLabel}: {q.explanation}
                 </p>
               </div>

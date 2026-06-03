@@ -573,10 +573,10 @@ const STAGE_COLORS: Record<Stage, string> = {
 };
 
 const STAGE_BORDER: Record<Stage, string> = {
-  early: "border-emerald-300 dark:border-emerald-700",
-  mid: "border-blue-300 dark:border-blue-700",
-  late: "border-amber-300 dark:border-amber-700",
-  finish: "border-purple-300 dark:border-purple-700",
+  early: "border-emerald-300",
+  mid: "border-blue-300",
+  late: "border-amber-300",
+  finish: "border-purple-300",
 };
 
 function getStage(months: number): FoodStage {
@@ -594,18 +594,18 @@ export default function BabyFoodScheduler({ locale }: Props) {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{t.title}</h1>
-        <p className="mt-1 text-gray-500 dark:text-gray-400">{t.subtitle}</p>
+        <h1 className="text-2xl font-bold text-gray-900">{t.title}</h1>
+        <p className="mt-1 text-gray-500">{t.subtitle}</p>
       </div>
 
       {/* Slider */}
-      <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-5 space-y-4">
+      <div className="rounded-2xl border border-gray-200 bg-white p-5 space-y-4">
         <div>
           <div className="flex justify-between items-center mb-2">
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.sliderLabel}</label>
-            <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+            <label className="text-sm font-medium text-gray-700">{t.sliderLabel}</label>
+            <span className="text-2xl font-bold text-gray-900">
               {months}
-              <span className="text-base font-normal text-gray-500 dark:text-gray-400 ml-1">{t.monthUnit}</span>
+              <span className="text-base font-normal text-gray-500 ml-1">{t.monthUnit}</span>
             </span>
           </div>
           <input
@@ -636,31 +636,31 @@ export default function BabyFoodScheduler({ locale }: Props) {
 
       {/* Quick stats */}
       <div className="grid grid-cols-2 gap-4">
-        <div className={`rounded-xl border ${borderClass} bg-white dark:bg-gray-800 p-4 text-center`}>
-          <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">{stage.timesPerDay}회</div>
-          <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">{t.timesPerDay}</div>
+        <div className={`rounded-xl border ${borderClass} bg-white p-4 text-center`}>
+          <div className="text-2xl font-bold text-gray-900">{stage.timesPerDay}회</div>
+          <div className="text-xs text-gray-500 mt-1">{t.timesPerDay}</div>
         </div>
-        <div className={`rounded-xl border ${borderClass} bg-white dark:bg-gray-800 p-4 text-center`}>
-          <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">{stage.amountPerMealMl}ml</div>
-          <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">{t.amountPerMeal}</div>
+        <div className={`rounded-xl border ${borderClass} bg-white p-4 text-center`}>
+          <div className="text-2xl font-bold text-gray-900">{stage.amountPerMealMl}ml</div>
+          <div className="text-xs text-gray-500 mt-1">{t.amountPerMeal}</div>
         </div>
       </div>
 
       {/* Texture */}
-      <div className={`rounded-xl border ${borderClass} bg-white dark:bg-gray-800 p-4`}>
-        <div className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">{t.texture}</div>
-        <p className="text-sm text-gray-600 dark:text-gray-400">{stage.texture[locale] ?? stage.texture.en}</p>
+      <div className={`rounded-xl border ${borderClass} bg-white p-4`}>
+        <div className="text-sm font-semibold text-gray-700 mb-1">{t.texture}</div>
+        <p className="text-sm text-gray-600">{stage.texture[locale] ?? stage.texture.en}</p>
       </div>
 
       {/* Ingredients */}
       <div className="grid grid-cols-1 gap-4">
         {[
-          { label: t.veggiesLabel, items: stage.veggies[locale] ?? stage.veggies.en, color: "bg-green-50 dark:bg-green-950 border-green-200 dark:border-green-800", badge: "bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300" },
-          { label: t.proteinsLabel, items: stage.proteins[locale] ?? stage.proteins.en, color: "bg-orange-50 dark:bg-orange-950 border-orange-200 dark:border-orange-800", badge: "bg-orange-100 dark:bg-orange-900 text-orange-700 dark:text-orange-300" },
-          { label: t.grainsLabel, items: stage.grains[locale] ?? stage.grains.en, color: "bg-yellow-50 dark:bg-yellow-950 border-yellow-200 dark:border-yellow-800", badge: "bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-300" },
+          { label: t.veggiesLabel, items: stage.veggies[locale] ?? stage.veggies.en, color: "bg-green-50 border-green-200", badge: "bg-green-100 text-green-700" },
+          { label: t.proteinsLabel, items: stage.proteins[locale] ?? stage.proteins.en, color: "bg-orange-50 border-orange-200", badge: "bg-orange-100 text-orange-700" },
+          { label: t.grainsLabel, items: stage.grains[locale] ?? stage.grains.en, color: "bg-yellow-50 border-yellow-200", badge: "bg-yellow-100 text-yellow-700" },
         ].map(({ label, items, color, badge }) => (
           <div key={label} className={`rounded-xl border ${color} p-4`}>
-            <div className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">{label}</div>
+            <div className="text-sm font-semibold text-gray-700 mb-2">{label}</div>
             <div className="flex flex-wrap gap-2">
               {items.map((item) => (
                 <span key={item} className={`text-xs px-2 py-1 rounded-full ${badge} font-medium`}>
@@ -673,11 +673,11 @@ export default function BabyFoodScheduler({ locale }: Props) {
       </div>
 
       {/* Cautions */}
-      <div className="rounded-xl border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950 p-4">
-        <div className="text-sm font-semibold text-blue-700 dark:text-blue-300 mb-2">{t.cautionsLabel}</div>
+      <div className="rounded-xl border border-blue-200 bg-blue-50 p-4">
+        <div className="text-sm font-semibold text-blue-700 mb-2">{t.cautionsLabel}</div>
         <ul className="space-y-1">
           {(stage.cautions[locale] ?? stage.cautions.en).map((c) => (
-            <li key={c} className="text-xs text-blue-600 dark:text-blue-400 flex gap-1.5">
+            <li key={c} className="text-xs text-blue-600 flex gap-1.5">
               <span className="mt-0.5">•</span>
               <span>{c}</span>
             </li>
@@ -686,11 +686,11 @@ export default function BabyFoodScheduler({ locale }: Props) {
       </div>
 
       {/* Avoid foods */}
-      <div className="rounded-xl border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950 p-4">
-        <div className="text-sm font-semibold text-red-700 dark:text-red-300 mb-2">{t.avoidLabel}</div>
+      <div className="rounded-xl border border-red-200 bg-red-50 p-4">
+        <div className="text-sm font-semibold text-red-700 mb-2">{t.avoidLabel}</div>
         <div className="flex flex-wrap gap-2">
           {(stage.avoidFoods[locale] ?? stage.avoidFoods.en).map((f) => (
-            <span key={f} className="text-xs px-2 py-1 rounded-full bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 font-medium">
+            <span key={f} className="text-xs px-2 py-1 rounded-full bg-red-100 text-red-700 font-medium">
               {f}
             </span>
           ))}

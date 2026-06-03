@@ -259,7 +259,7 @@ const InsurancePremiumCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'e
 
   const riskLevel = result.riskScore >= 60 ? 'high' : result.riskScore >= 30 ? 'medium' : 'low';
   const riskColor = riskLevel === 'high' ? 'text-red-500' : riskLevel === 'medium' ? 'text-amber-500' : 'text-emerald-500';
-  const riskBg = riskLevel === 'high' ? 'bg-red-50 border-red-200 dark:bg-red-950/30 dark:border-red-800' : riskLevel === 'medium' ? 'bg-amber-50 border-amber-200 dark:bg-amber-950/30 dark:border-amber-800' : 'bg-emerald-50 border-emerald-200 dark:bg-emerald-950/30 dark:border-emerald-800';
+  const riskBg = riskLevel === 'high' ? 'bg-red-50 border-red-200' : riskLevel === 'medium' ? 'bg-amber-50 border-amber-200' : 'bg-emerald-50 border-emerald-200';
 
   const fmtMoney = (n: number) => {
     if (Math.abs(n) >= 1000) return `${(n / 1000).toFixed(1)}K`;
@@ -402,7 +402,7 @@ const InsurancePremiumCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'e
         </div>
 
         {/* Tips */}
-        <div className="p-4 rounded-2xl bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800">
+        <div className="p-4 rounded-2xl bg-blue-50 border border-blue-200">
           <p className="text-xs font-black mb-2">{t.tip}</p>
           <ul className="space-y-1">
             {t.tips[insuranceType]?.map((tip: string) => (

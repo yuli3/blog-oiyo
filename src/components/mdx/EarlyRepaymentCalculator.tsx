@@ -44,8 +44,8 @@ export default function EarlyRepaymentCalculator() {
   };
 
   return (
-    <div className="my-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-      <h3 className="mb-6 text-xl font-bold text-gray-900 dark:text-white">중도상환수수료 계산기</h3>
+    <div className="my-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+      <h3 className="mb-6 text-xl font-bold text-gray-900">중도상환수수료 계산기</h3>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {[
@@ -57,9 +57,9 @@ export default function EarlyRepaymentCalculator() {
           { label: '대출 연이율 (%)', val: annualRate, set: setAnnualRate },
         ].map(({ label, val, set }) => (
           <div key={label}>
-            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">{label}</label>
+            <label className="mb-1 block text-sm font-medium text-gray-700">{label}</label>
             <input type="number" value={val} onChange={(e) => set(e.target.value)} step="0.1"
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" />
           </div>
         ))}
       </div>
@@ -71,26 +71,26 @@ export default function EarlyRepaymentCalculator() {
 
       {result && (
         <div className="mt-6 space-y-3">
-          <div className={`rounded-xl p-4 ${result.breakEven ? 'bg-green-50 dark:bg-green-900/20' : 'bg-red-50 dark:bg-red-900/20'}`}>
-            <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+          <div className={`rounded-xl p-4 ${result.breakEven ? 'bg-green-50' : 'bg-red-50'}`}>
+            <p className="text-sm font-semibold text-gray-700">
               {result.breakEven ? '✅ 조기상환이 유리합니다' : '⚠️ 수수료가 이자 절감보다 많습니다'}
             </p>
-            <p className="mt-1 text-2xl font-bold text-gray-900 dark:text-white">
+            <p className="mt-1 text-2xl font-bold text-gray-900">
               순이익: {result.netBenefit >= 0 ? '+' : ''}{formatKRW(result.netBenefit)}원
             </p>
           </div>
           <div className="grid grid-cols-3 gap-3 text-center">
-            <div className="rounded-xl bg-gray-50 p-3 dark:bg-gray-700">
+            <div className="rounded-xl bg-gray-50 p-3">
               <p className="text-xs text-gray-500">실효 수수료율</p>
-              <p className="text-sm font-bold text-gray-800 dark:text-white">{(result.feeRateApplied * 100).toFixed(3)}%</p>
+              <p className="text-sm font-bold text-gray-800">{(result.feeRateApplied * 100).toFixed(3)}%</p>
             </div>
-            <div className="rounded-xl bg-orange-50 p-3 dark:bg-orange-900/20">
+            <div className="rounded-xl bg-orange-50 p-3">
               <p className="text-xs text-gray-500">납부 수수료</p>
-              <p className="text-sm font-bold text-orange-600 dark:text-orange-400">{formatKRW(result.fee)}원</p>
+              <p className="text-sm font-bold text-orange-600">{formatKRW(result.fee)}원</p>
             </div>
-            <div className="rounded-xl bg-blue-50 p-3 dark:bg-blue-900/20">
+            <div className="rounded-xl bg-blue-50 p-3">
               <p className="text-xs text-gray-500">절감 이자 (추정)</p>
-              <p className="text-sm font-bold text-blue-600 dark:text-blue-400">{formatKRW(result.interestSaved)}원</p>
+              <p className="text-sm font-bold text-blue-600">{formatKRW(result.interestSaved)}원</p>
             </div>
           </div>
           <p className="text-xs text-gray-400">* 이자 절감은 원금균등 방식 단순 추정치입니다. 실제 조건은 은행 확인 필수.</p>

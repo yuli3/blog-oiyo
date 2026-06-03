@@ -208,10 +208,10 @@ const AnniversaryCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'en' })
           <>
             {result.type === 'anniversary' && (
               <>
-                <div className="p-8 rounded-[32px] bg-pink-50 dark:bg-pink-950/20 border-2 border-pink-200 dark:border-pink-800 text-center space-y-2">
+                <div className="p-8 rounded-[32px] bg-pink-50 border-2 border-pink-200 text-center space-y-2">
                   {eventName && <p className="text-sm font-bold text-pink-500">{eventName}</p>}
                   <p className="text-[10px] font-black uppercase tracking-widest text-pink-400">{t.today}</p>
-                  <p className="text-6xl font-black text-pink-600 dark:text-pink-400">D+{result.elapsed + 1}</p>
+                  <p className="text-6xl font-black text-pink-600">D+{result.elapsed + 1}</p>
                   <p className="text-sm font-medium text-pink-500">{result.elapsed + 1}{t.daysLabel}</p>
                   <p className="text-xs text-muted-foreground">{formatDate(result.start, locale)} → {formatDate(today, locale)}</p>
                 </div>
@@ -237,10 +237,10 @@ const AnniversaryCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'en' })
             )}
 
             {result.type === 'dday' && (
-              <div className={`p-8 rounded-[32px] border-2 text-center space-y-2 ${result.diff === 0 ? 'bg-emerald-50 dark:bg-emerald-950/20 border-emerald-300' : result.diff > 0 ? 'bg-blue-50 dark:bg-blue-950/20 border-blue-200' : 'bg-muted/30 border-border'}`}>
+              <div className={`p-8 rounded-[32px] border-2 text-center space-y-2 ${result.diff === 0 ? 'bg-emerald-50 border-emerald-300' : result.diff > 0 ? 'bg-blue-50 border-blue-200' : 'bg-muted/30 border-border'}`}>
                 {eventName && <p className={`text-sm font-bold ${result.diff >= 0 ? 'text-blue-500' : 'text-muted-foreground'}`}>{eventName}</p>}
                 <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{t.dDayLabel}</p>
-                <p className={`text-6xl font-black ${result.diff === 0 ? 'text-emerald-600' : result.diff > 0 ? 'text-blue-600 dark:text-blue-400' : 'text-muted-foreground'}`}>
+                <p className={`text-6xl font-black ${result.diff === 0 ? 'text-emerald-600' : result.diff > 0 ? 'text-blue-600' : 'text-muted-foreground'}`}>
                   {result.diff === 0 ? 'D-Day' : result.diff > 0 ? `D-${result.diff}` : `D+${Math.abs(result.diff)}`}
                 </p>
                 <p className="text-sm font-medium text-muted-foreground">

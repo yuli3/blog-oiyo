@@ -141,11 +141,11 @@ const ELEMENT_LABELS: Record<Element, string> = {
 };
 
 const ELEMENT_COLORS: Record<Element, string> = {
-  wood: "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300",
-  fire: "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300",
-  earth: "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300",
-  metal: "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-200",
-  water: "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300",
+  wood: "bg-green-100 text-green-700",
+  fire: "bg-red-100 text-red-700",
+  earth: "bg-yellow-100 text-yellow-700",
+  metal: "bg-gray-100 text-gray-700",
+  water: "bg-blue-100 text-blue-700",
 };
 
 const UI: Record<
@@ -330,14 +330,14 @@ export default function BabyNameGenerator({ locale }: Props) {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{t.title}</h1>
-        <p className="mt-1 text-gray-500 dark:text-gray-400">{t.subtitle}</p>
+        <h1 className="text-2xl font-bold text-gray-900">{t.title}</h1>
+        <p className="mt-1 text-gray-500">{t.subtitle}</p>
       </div>
 
-      <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-5 space-y-4">
+      <div className="rounded-2xl border border-gray-200 bg-white p-5 space-y-4">
         {/* Gender */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t.genderLabel}</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">{t.genderLabel}</label>
           <div className="flex gap-2">
             {(["boy", "girl", "neutral"] as Gender[]).map((g) => (
               <button
@@ -346,7 +346,7 @@ export default function BabyNameGenerator({ locale }: Props) {
                 className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors ${
                   gender === g
                     ? "bg-purple-500 text-white"
-                    : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-gray-600"
+                    : "bg-gray-100 text-gray-600 hover:bg-purple-50"
                 }`}
               >
                 {t.genders[g]}
@@ -357,7 +357,7 @@ export default function BabyNameGenerator({ locale }: Props) {
 
         {/* Style */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t.styleLabel}</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">{t.styleLabel}</label>
           <div className="grid grid-cols-2 gap-2">
             {(["korean-traditional", "modern", "english", "japanese"] as Style[]).map((s) => (
               <button
@@ -366,7 +366,7 @@ export default function BabyNameGenerator({ locale }: Props) {
                 className={`py-2 rounded-lg text-sm font-medium transition-colors ${
                   style === s
                     ? "bg-purple-500 text-white"
-                    : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-gray-600"
+                    : "bg-gray-100 text-gray-600 hover:bg-purple-50"
                 }`}
               >
                 {t.styles[s]}
@@ -377,11 +377,11 @@ export default function BabyNameGenerator({ locale }: Props) {
 
         {/* Meaning */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t.meaningLabel}</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">{t.meaningLabel}</label>
           <select
             value={meaning}
             onChange={(e) => setMeaning(e.target.value as Meaning)}
-            className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-2.5 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-400"
+            className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-400"
           >
             {(["light", "flower", "courage", "wisdom", "peace", "love"] as Meaning[]).map((m) => (
               <option key={m} value={m}>{t.meanings[m]}</option>
@@ -391,13 +391,13 @@ export default function BabyNameGenerator({ locale }: Props) {
 
         {/* Dollim */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t.dollimsLabel}</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">{t.dollimsLabel}</label>
           <input
             type="text"
             value={dollim}
             onChange={(e) => setDollim(e.target.value.slice(0, 2))}
             placeholder={t.dollimsPlaceholder}
-            className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-2.5 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-400"
+            className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-400"
           />
         </div>
 
@@ -412,40 +412,40 @@ export default function BabyNameGenerator({ locale }: Props) {
       {/* Results */}
       {generated && (
         <div className="space-y-3">
-          <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200">{t.resultTitle}</h2>
+          <h2 className="text-lg font-semibold text-gray-800">{t.resultTitle}</h2>
           {results.length === 0 ? (
-            <p className="text-center text-gray-500 dark:text-gray-400 py-6">{t.noResult}</p>
+            <p className="text-center text-gray-500 py-6">{t.noResult}</p>
           ) : (
             results.map((entry) => (
               <div
                 key={entry.name}
-                className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 overflow-hidden"
+                className="rounded-xl border border-gray-200 bg-white overflow-hidden"
               >
                 <button
                   onClick={() => setExpanded(expanded === entry.name ? null : entry.name)}
-                  className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                  className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-gray-50 transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="text-xl font-bold text-gray-900 dark:text-gray-100">{entry.name}</span>
+                    <span className="text-xl font-bold text-gray-900">{entry.name}</span>
                     <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${ELEMENT_COLORS[entry.element]}`}>
                       {ELEMENT_LABELS[entry.element]} {t.elementLabel}
                     </span>
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 font-medium">
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 font-medium">
                       {t.meanings[entry.meaning]}
                     </span>
                   </div>
                   <span className="text-gray-400 text-sm">{expanded === entry.name ? "▲" : "▼"}</span>
                 </button>
                 {expanded === entry.name && (
-                  <div className="px-5 pb-4 pt-1 border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-750">
-                    <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+                  <div className="px-5 pb-4 pt-1 border-t border-gray-100 bg-gray-50">
+                    <p className="text-sm text-gray-600 leading-relaxed">
                       {entry.description[locale] ?? entry.description.en}
                     </p>
                     <div className="mt-2 flex gap-2 flex-wrap">
-                      <span className="text-xs px-2 py-1 rounded bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+                      <span className="text-xs px-2 py-1 rounded bg-gray-200 text-gray-600">
                         {t.styles[entry.style]}
                       </span>
-                      <span className="text-xs px-2 py-1 rounded bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+                      <span className="text-xs px-2 py-1 rounded bg-gray-200 text-gray-600">
                         {t.genders[entry.gender as Gender] ?? entry.gender}
                       </span>
                     </div>

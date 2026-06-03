@@ -179,8 +179,8 @@ const SeparateVsComprehensiveTaxCalc: React.FC<{ locale?: Locale }> = ({ locale 
 
   const verdictColor = favorable === 'comprehensive' ? 'text-orange-600' : 'text-blue-600';
   const verdictBg = favorable === 'comprehensive'
-    ? 'bg-orange-50 dark:bg-orange-950/30 border-orange-200 dark:border-orange-800'
-    : 'bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800';
+    ? 'bg-orange-50 border-orange-200'
+    : 'bg-blue-50 border-blue-200';
 
   return (
     <div className="not-prose my-8 p-6 sm:p-10 bg-card border border-border rounded-4xl shadow-sm max-w-2xl mx-auto">
@@ -208,8 +208,8 @@ const SeparateVsComprehensiveTaxCalc: React.FC<{ locale?: Locale }> = ({ locale 
       {/* Threshold notice */}
       <div className={`p-3 rounded-xl mb-6 text-xs font-medium border ${
         financialIncome <= THRESHOLD
-          ? 'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300'
-          : 'bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-800 text-red-700 dark:text-red-300'
+          ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+          : 'bg-red-50 border-red-200 text-red-700'
       }`}>
         <span className="font-black">{t.threshold}:</span>{' '}
         {financialIncome <= THRESHOLD ? t.underThreshold : t.overThreshold}
@@ -243,12 +243,12 @@ const SeparateVsComprehensiveTaxCalc: React.FC<{ locale?: Locale }> = ({ locale 
 
       {/* Results grid */}
       <div className="grid grid-cols-2 gap-3 mb-6">
-        <div className="p-4 rounded-2xl bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800">
+        <div className="p-4 rounded-2xl bg-blue-50 border border-blue-200">
           <p className="text-[9px] font-black uppercase tracking-widest text-blue-500 mb-1">{t.separateTax}</p>
           <p className="text-2xl font-black text-blue-600 tabular-nums">{fmt(result.separateTax)}</p>
           <p className="text-[10px] text-blue-400">{t.separateRate} · {t.won}</p>
         </div>
-        <div className="p-4 rounded-2xl bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-800">
+        <div className="p-4 rounded-2xl bg-orange-50 border border-orange-200">
           <p className="text-[9px] font-black uppercase tracking-widest text-orange-500 mb-1">{t.comprehensiveTax}</p>
           <p className="text-2xl font-black text-orange-600 tabular-nums">{fmt(result.comprehensiveTaxOnFinancial)}</p>
           <p className="text-[10px] text-orange-400">{t.marginalRateLabel}: {result.margRate} · {t.won}</p>

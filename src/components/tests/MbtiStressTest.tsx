@@ -433,22 +433,22 @@ const STRESS_PROFILES: Record<MbtiType, StressProfile> = {
 };
 
 const COLOR_MAP: Record<string, { bg: string; border: string; text: string; badge: string; bar: string }> = {
-  indigo:  { bg: 'bg-indigo-50 dark:bg-indigo-950/30',  border: 'border-indigo-200 dark:border-indigo-800',  text: 'text-indigo-700 dark:text-indigo-300',  badge: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/50 dark:text-indigo-300',  bar: 'bg-indigo-500' },
-  cyan:    { bg: 'bg-cyan-50 dark:bg-cyan-950/30',      border: 'border-cyan-200 dark:border-cyan-800',      text: 'text-cyan-700 dark:text-cyan-300',      badge: 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900/50 dark:text-cyan-300',          bar: 'bg-cyan-500' },
-  orange:  { bg: 'bg-orange-50 dark:bg-orange-950/30',  border: 'border-orange-200 dark:border-orange-800',  text: 'text-orange-700 dark:text-orange-300',  badge: 'bg-orange-100 text-orange-800 dark:bg-orange-900/50 dark:text-orange-300',  bar: 'bg-orange-500' },
-  yellow:  { bg: 'bg-yellow-50 dark:bg-yellow-950/30',  border: 'border-yellow-200 dark:border-yellow-800',  text: 'text-yellow-700 dark:text-yellow-300',  badge: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-300',  bar: 'bg-yellow-500' },
-  violet:  { bg: 'bg-violet-50 dark:bg-violet-950/30',  border: 'border-violet-200 dark:border-violet-800',  text: 'text-violet-700 dark:text-violet-300',  badge: 'bg-violet-100 text-violet-800 dark:bg-violet-900/50 dark:text-violet-300',  bar: 'bg-violet-500' },
-  pink:    { bg: 'bg-pink-50 dark:bg-pink-950/30',      border: 'border-pink-200 dark:border-pink-800',      text: 'text-pink-700 dark:text-pink-300',      badge: 'bg-pink-100 text-pink-800 dark:bg-pink-900/50 dark:text-pink-300',          bar: 'bg-pink-500' },
-  emerald: { bg: 'bg-emerald-50 dark:bg-emerald-950/30',border: 'border-emerald-200 dark:border-emerald-800',text: 'text-emerald-700 dark:text-emerald-300',badge: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300',bar: 'bg-emerald-500' },
-  amber:   { bg: 'bg-amber-50 dark:bg-amber-950/30',    border: 'border-amber-200 dark:border-amber-800',    text: 'text-amber-700 dark:text-amber-300',    badge: 'bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-300',      bar: 'bg-amber-500' },
-  slate:   { bg: 'bg-slate-50 dark:bg-slate-950/30',    border: 'border-slate-200 dark:border-slate-800',    text: 'text-slate-700 dark:text-slate-300',    badge: 'bg-slate-100 text-slate-800 dark:bg-slate-900/50 dark:text-slate-300',      bar: 'bg-slate-500' },
-  teal:    { bg: 'bg-teal-50 dark:bg-teal-950/30',      border: 'border-teal-200 dark:border-teal-800',      text: 'text-teal-700 dark:text-teal-300',      badge: 'bg-teal-100 text-teal-800 dark:bg-teal-900/50 dark:text-teal-300',          bar: 'bg-teal-500' },
-  blue:    { bg: 'bg-blue-50 dark:bg-blue-950/30',      border: 'border-blue-200 dark:border-blue-800',      text: 'text-blue-700 dark:text-blue-300',      badge: 'bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300',          bar: 'bg-blue-500' },
-  rose:    { bg: 'bg-rose-50 dark:bg-rose-950/30',      border: 'border-rose-200 dark:border-rose-800',      text: 'text-rose-700 dark:text-rose-300',      badge: 'bg-rose-100 text-rose-800 dark:bg-rose-900/50 dark:text-rose-300',          bar: 'bg-rose-500' },
-  stone:   { bg: 'bg-stone-50 dark:bg-stone-950/30',    border: 'border-stone-200 dark:border-stone-800',    text: 'text-stone-700 dark:text-stone-300',    badge: 'bg-stone-100 text-stone-800 dark:bg-stone-900/50 dark:text-stone-300',      bar: 'bg-stone-500' },
-  lime:    { bg: 'bg-lime-50 dark:bg-lime-950/30',      border: 'border-lime-200 dark:border-lime-800',      text: 'text-lime-700 dark:text-lime-300',      badge: 'bg-lime-100 text-lime-800 dark:bg-lime-900/50 dark:text-lime-300',          bar: 'bg-lime-500' },
-  red:     { bg: 'bg-red-50 dark:bg-red-950/30',        border: 'border-red-200 dark:border-red-800',        text: 'text-red-700 dark:text-red-300',        badge: 'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300',              bar: 'bg-red-500' },
-  fuchsia: { bg: 'bg-fuchsia-50 dark:bg-fuchsia-950/30',border: 'border-fuchsia-200 dark:border-fuchsia-800',text: 'text-fuchsia-700 dark:text-fuchsia-300',badge: 'bg-fuchsia-100 text-fuchsia-800 dark:bg-fuchsia-900/50 dark:text-fuchsia-300',bar: 'bg-fuchsia-500' },
+  indigo:  { bg: 'bg-indigo-50',  border: 'border-indigo-200',  text: 'text-indigo-700',  badge: 'bg-indigo-100 text-indigo-800',  bar: 'bg-indigo-500' },
+  cyan:    { bg: 'bg-cyan-50',      border: 'border-cyan-200',      text: 'text-cyan-700',      badge: 'bg-cyan-100 text-cyan-800',          bar: 'bg-cyan-500' },
+  orange:  { bg: 'bg-orange-50',  border: 'border-orange-200',  text: 'text-orange-700',  badge: 'bg-orange-100 text-orange-800',  bar: 'bg-orange-500' },
+  yellow:  { bg: 'bg-yellow-50',  border: 'border-yellow-200',  text: 'text-yellow-700',  badge: 'bg-yellow-100 text-yellow-800',  bar: 'bg-yellow-500' },
+  violet:  { bg: 'bg-violet-50',  border: 'border-violet-200',  text: 'text-violet-700',  badge: 'bg-violet-100 text-violet-800',  bar: 'bg-violet-500' },
+  pink:    { bg: 'bg-pink-50',      border: 'border-pink-200',      text: 'text-pink-700',      badge: 'bg-pink-100 text-pink-800',          bar: 'bg-pink-500' },
+  emerald: { bg: 'bg-emerald-50',border: 'border-emerald-200',text: 'text-emerald-700',badge: 'bg-emerald-100 text-emerald-800',bar: 'bg-emerald-500' },
+  amber:   { bg: 'bg-amber-50',    border: 'border-amber-200',    text: 'text-amber-700',    badge: 'bg-amber-100 text-amber-800',      bar: 'bg-amber-500' },
+  slate:   { bg: 'bg-slate-50',    border: 'border-slate-200',    text: 'text-slate-700',    badge: 'bg-slate-100 text-slate-800',      bar: 'bg-slate-500' },
+  teal:    { bg: 'bg-teal-50',      border: 'border-teal-200',      text: 'text-teal-700',      badge: 'bg-teal-100 text-teal-800',          bar: 'bg-teal-500' },
+  blue:    { bg: 'bg-blue-50',      border: 'border-blue-200',      text: 'text-blue-700',      badge: 'bg-blue-100 text-blue-800',          bar: 'bg-blue-500' },
+  rose:    { bg: 'bg-rose-50',      border: 'border-rose-200',      text: 'text-rose-700',      badge: 'bg-rose-100 text-rose-800',          bar: 'bg-rose-500' },
+  stone:   { bg: 'bg-stone-50',    border: 'border-stone-200',    text: 'text-stone-700',    badge: 'bg-stone-100 text-stone-800',      bar: 'bg-stone-500' },
+  lime:    { bg: 'bg-lime-50',      border: 'border-lime-200',      text: 'text-lime-700',      badge: 'bg-lime-100 text-lime-800',          bar: 'bg-lime-500' },
+  red:     { bg: 'bg-red-50',        border: 'border-red-200',        text: 'text-red-700',        badge: 'bg-red-100 text-red-800',              bar: 'bg-red-500' },
+  fuchsia: { bg: 'bg-fuchsia-50',border: 'border-fuchsia-200',text: 'text-fuchsia-700',badge: 'bg-fuchsia-100 text-fuchsia-800',bar: 'bg-fuchsia-500' },
 };
 
 const MBTI_TYPES: MbtiType[] = ['INTJ','INTP','ENTJ','ENTP','INFJ','INFP','ENFJ','ENFP','ISTJ','ISFJ','ESTJ','ESFJ','ISTP','ISFP','ESTP','ESFP'];

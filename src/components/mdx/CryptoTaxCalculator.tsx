@@ -57,13 +57,13 @@ export default function CryptoTaxCalculator() {
   };
 
   return (
-    <div className="my-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-      <h3 className="mb-6 text-xl font-bold text-gray-900 dark:text-white">암호화폐 세금 계산기</h3>
+    <div className="my-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+      <h3 className="mb-6 text-xl font-bold text-gray-900">암호화폐 세금 계산기</h3>
       <p className="mb-4 text-xs text-gray-400">2025년부터 시행: 기본공제 250만 원, 세율 20% + 지방소득세 2%</p>
 
       <div className="mb-4 space-y-3">
         {rows.map((row) => (
-          <div key={row.id} className="rounded-xl border border-gray-200 p-3 dark:border-gray-600">
+          <div key={row.id} className="rounded-xl border border-gray-200 p-3">
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
               {[
                 { label: '매수가(원/개)', field: 'buyPrice' as const, val: row.buyPrice },
@@ -74,7 +74,7 @@ export default function CryptoTaxCalculator() {
                 <div key={field}>
                   <label className="mb-0.5 block text-xs text-gray-500">{label}</label>
                   <input type="number" value={val} onChange={(e) => updateRow(row.id, field, e.target.value)}
-                    className="w-full rounded-lg border border-gray-300 px-2 py-1.5 text-xs dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                    className="w-full rounded-lg border border-gray-300 px-2 py-1.5 text-xs" />
                 </div>
               ))}
             </div>
@@ -87,16 +87,16 @@ export default function CryptoTaxCalculator() {
       </div>
 
       <button onClick={addRow}
-        className="mb-4 w-full rounded-lg border border-dashed border-gray-300 py-2 text-sm text-gray-500 hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700">
+        className="mb-4 w-full rounded-lg border border-dashed border-gray-300 py-2 text-sm text-gray-500 hover:bg-gray-50">
         + 거래 추가
       </button>
 
       <div>
-        <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+        <label className="mb-1 block text-sm font-medium text-gray-700">
           기타 가상자산 이익 (원, 에어드랍·스테이킹 등)
         </label>
         <input type="number" value={otherIncome} onChange={(e) => setOtherIncome(e.target.value)}
-          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" />
       </div>
 
       <button onClick={calculate}
@@ -108,14 +108,14 @@ export default function CryptoTaxCalculator() {
         <div className="mt-6 space-y-3">
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
             {[
-              { label: '총 실현 이익', value: result.totalProfit, color: 'text-gray-800 dark:text-white' },
-              { label: '기본공제 (250만)', value: result.deductible, color: 'text-blue-600 dark:text-blue-400' },
-              { label: '과세표준', value: result.taxableIncome, color: 'text-orange-600 dark:text-orange-400' },
-              { label: '가상자산 양도세(20%)', value: result.tax, color: 'text-red-600 dark:text-red-400' },
-              { label: '지방소득세(2%)', value: result.localTax, color: 'text-red-500 dark:text-red-400' },
-              { label: '총 납부세액', value: result.total, color: 'text-red-700 dark:text-red-300' },
+              { label: '총 실현 이익', value: result.totalProfit, color: 'text-gray-800' },
+              { label: '기본공제 (250만)', value: result.deductible, color: 'text-blue-600' },
+              { label: '과세표준', value: result.taxableIncome, color: 'text-orange-600' },
+              { label: '가상자산 양도세(20%)', value: result.tax, color: 'text-red-600' },
+              { label: '지방소득세(2%)', value: result.localTax, color: 'text-red-500' },
+              { label: '총 납부세액', value: result.total, color: 'text-red-700' },
             ].map(({ label, value, color }) => (
-              <div key={label} className="rounded-xl bg-gray-50 p-3 text-center dark:bg-gray-700">
+              <div key={label} className="rounded-xl bg-gray-50 p-3 text-center">
                 <p className="text-xs text-gray-500">{label}</p>
                 <p className={`text-sm font-bold ${color}`}>{formatKRW(value)}원</p>
               </div>
