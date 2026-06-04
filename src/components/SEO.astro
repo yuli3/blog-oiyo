@@ -32,44 +32,30 @@ const {
 const siteTitle =
   title === siteConfig.title ? title : `${title} | ${siteConfig.title}`;
 
-// Multilingual Hreflang logic
-// availableLocales: restrict hreflang to locales that actually have content.
-// Falls back to all site locales (e.g. non-blog pages, homepage).
-const locales = availableLocales ?? siteConfig.locales;
 const currentPathname = Astro.url.pathname;
+const supportedLocales = siteConfig.locales;
+const currentLocale = supportedLocales.includes(currentPathname.split("/")[1])
+  ? currentPathname.split("/")[1]
+  : siteConfig.locale;
+// Multilingual hreflang logic.
+// Only article routes pass availableLocales from actual content siblings.
+// Other pages stay self-referential unless a layout explicitly opts in.
+const locales = availableLocales ?? [currentLocale];
+const xDefaultLocale = locales.includes(siteConfig.locale)
+  ? siteConfig.locale
+  : (locales.includes(currentLocale) ? currentLocale : locales[0]);
 
 // Helper to generate localized URLs
 const getLocalizedUrl = (locale: string) => {
-  const parts = currentPathname.split("/").filter(Boolean);
-  // If the first segment is a locale, replace it
-  if (locales.includes(parts[0])) {
-    parts[0] = locale;
-  } else {
-    // If it's the default locale (no prefix), add the prefix if not 'en'
-    if (locale !== "en") {
-      parts.unshift(locale);
-    }
-  }
-  // Special case: if it's 'en' (prefixDefaultLocale: false), remove the prefix if it was there
-  if (locale === "en" && locales.includes(currentPathname.split("/")[1])) {
-    // This logic depends on prefixDefaultLocale: false
-    // If current path starts with /ko/... and we want 'en', it should be /...
-  }
-
-  // Refined logic for prefixDefaultLocale: false
-  let localizedPath = currentPathname;
   const firstSegment = currentPathname.split("/")[1];
-
-  if (locales.includes(firstSegment)) {
-    // Current is prefixed (e.g., /ko/blog)
-    const restOfPath = currentPathname.replace(`/${firstSegment}`, "");
-    localizedPath =
-      locale === "en" ? restOfPath || "/" : `/${locale}${restOfPath}`;
-  } else {
-    // Current is NOT prefixed (e.g., /blog)
-    localizedPath =
-      locale === "en" ? currentPathname : `/${locale}${currentPathname}`;
+  if (!supportedLocales.includes(firstSegment) && locale === siteConfig.locale) {
+    return new URL(currentPathname, Astro.site);
   }
+
+  const restOfPath = supportedLocales.includes(firstSegment)
+    ? currentPathname.replace(`/${firstSegment}`, "") || "/"
+    : currentPathname;
+  const localizedPath = `/${locale}${restOfPath === "/" ? "/" : restOfPath}`;
 
   return new URL(localizedPath, Astro.site);
 };
@@ -133,7 +119,7 @@ const hreflangMap: Record<string, string> = {
     <link rel="alternate" hreflang={hreflangMap[locale] ?? locale} href={getLocalizedUrl(locale)} />
   ))
 }
-<link rel="alternate" hreflang="x-default" href={getLocalizedUrl("en")} />
+{xDefaultLocale && <link rel="alternate" hreflang="x-default" href={getLocalizedUrl(xDefaultLocale)} />}
 
 <!-- Primary Meta Tags -->
 <title>{siteTitle}</title>
@@ -156,7 +142,7 @@ const hreflangMap: Record<string, string> = {
 <meta name="twitter:description" content={description} />
 {image && <meta name="twitter:image" content={image} />}
 <!-- og:locale uses BCP-47 with underscore notation -->
-<meta property="og:locale" content={(hreflangMap[Astro.url.pathname.split("/")[1]] ?? "en").replace("-", "_")} />
+<meta property="og:locale" content={(hreflangMap[currentLocale] ?? "en").replace("-", "_")} />
 
 <!-- Article-specific Open Graph meta tags -->
 {type === "article" && pubDate && (

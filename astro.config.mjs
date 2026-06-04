@@ -18,6 +18,9 @@ export default defineConfig({
     react(),
     mdx(),
     sitemap({
+      // Keep sitemap shards predictable for search console inspection.
+      // With the current corpus this produces sitemap-0.xml through sitemap-2.xml.
+      entryLimit: 3000,
       // Exclude dev/utility paths and underscore-prefixed routes
       filter: (page) => {
         const url = new URL(page);
