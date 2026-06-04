@@ -39,7 +39,24 @@ Use these rules for every reinforcement batch:
 6. New categories require registry support before use.
 7. Hreflang must only point to real generated pages.
 
-## 4. Workstreams
+## 4. Cross-Project Ownership Gate
+
+Before adding or strengthening content, classify the item by project purpose. A good topic is not automatically a `blog-oiyo` topic.
+
+| Project | Primary role | Content belongs here when... | Do not add here when... |
+| --- | --- | --- | --- |
+| `blog-oiyo` | durable explanatory content, structured lectures, interactive reading pages | it is a vocational, qualification, AI-practical, life-calculator, or long-form SEO article with clear reading context | it is only a dictionary definition, short concept card, or personality/fortune test execution page |
+| `wiki-oiyo` | dictionary, encyclopedia, concept reference, structured type/term pages | it defines a concept, type, symbol, policy term, stock/finance term, or `meaning-of-*` style topic | it needs a tool island, calculator workflow, or long chapter-based lesson |
+| `oiyo-astro` | personality, fortune, self-understanding test hub | it is a test, result page, result interpretation, or short pre/post-test guide | it is a tax, salary, real estate, health calculator, or general academy article |
+
+Operating rule:
+
+1. Keep blog originals for existing `meaning-of-*`, `psychology-*`, and `tool-*` pages unless a migration plan explicitly says otherwise.
+2. Reuse blog components in `oiyo-astro` when the destination is a test or fortune product page.
+3. Summarize blog concept material into `wiki-oiyo` when the destination is a dictionary or encyclopedia page.
+4. Add new `blog-oiyo` content only when it strengthens a reading path that blog is responsible for.
+
+## 5. Workstreams
 
 ### A. Existing Content Reinforcement
 
@@ -63,14 +80,19 @@ First target sets:
 
 Purpose: turn partial lecture clusters into credible study paths.
 
-Priority series:
+Priority `blog-oiyo` series:
 
 1. `AI 리터러시` — expand from 4 chapters to 8 chapters.
-2. `게임이론 기초` — expand from 4 chapters to 8 chapters.
-3. `심리학 기초` — expand from 4 chapters to 8 chapters.
-4. `의학 기초` — expand from 2 chapters to 6 chapters.
-5. `세계사 기초` — expand from 1 chapter to 5 chapters.
-6. `협상 기초` — expand from 1 chapter to 5 chapters.
+2. `게임이론 기초` — expand from 4 chapters to 8 chapters when framed as reasoning or business decision education.
+3. `협상 기초` — expand from 1 chapter to 5 chapters.
+4. Qualification and vocational education series already present in the inventory.
+5. Practical calculator-backed finance or tax series only when the article is a study path, not a glossary page.
+
+Requires cross-project review before expansion:
+
+1. `심리학 기초` — blog can host long-form reading, but tests and result pages belong to `oiyo-astro`.
+2. `의학 기초` — blog can host reading content, but dictionary-style concepts should move to `wiki-oiyo`.
+3. `세계사 기초` — blog can keep existing academy material; short encyclopedia topics should be `wiki-oiyo`.
 
 Suggested chapter pattern:
 
@@ -100,13 +122,15 @@ Candidate themes:
 1. tax calculators as tax literacy essays
 2. finance calculators as decision guides
 3. board games as reasoning practice essays
-4. psychology tests as reflection prompts, not diagnosis pages
+4. psychology tests only as retained blog originals or long-form reflection prompts; new execution-first test pages belong to `oiyo-astro`
 
 ### D. New Content Bundles
 
-Purpose: add content in coherent bundles that improve discovery.
+Purpose: add content in coherent bundles that improve discovery without crossing project boundaries.
 
-Bundle 1 — Retirement Planning Academy:
+Blog-owned candidates:
+
+Bundle 1 — Retirement Planning Academy, conditional:
 
 1. Ch1. 은퇴설계의 기준점
 2. Ch2. 현금흐름과 생활비 추정
@@ -115,7 +139,9 @@ Bundle 1 — Retirement Planning Academy:
 5. Ch5. 의료비와 장수 리스크
 6. Ch6. 은퇴 전 점검표
 
-Bundle 2 — Dividend ETF Academy:
+This belongs in `blog-oiyo` only if it is written as a chaptered academy path with calculators, examples, and decision criteria. Short explanations of pension terms, account types, taxes, and finance vocabulary belong in `wiki-oiyo`.
+
+Bundle 2 — Dividend ETF Academy, conditional:
 
 1. Ch1. 배당 ETF의 구조
 2. Ch2. 분배금과 총수익률
@@ -124,22 +150,23 @@ Bundle 2 — Dividend ETF Academy:
 5. Ch5. 포트폴리오 편입 기준
 6. Ch6. 점검표와 리밸런싱
 
-Bundle 3 — Buddhism and Modern Life Academy:
+This belongs in `blog-oiyo` only if it becomes a practical investing education series. Individual terms such as dividend yield, distribution, covered call, tax account, and rebalancing belong in `wiki-oiyo`.
 
-1. Ch1. 고통과 집착
-2. Ch2. 무상과 변화
-3. Ch3. 마음챙김의 구조
-4. Ch4. 현대인의 불안과 불교적 관점
+Bundle 3 — Blog Utility Reading Pack:
 
-Bundle 4 — Magazine Support Pack:
+1. salary, tax, pension, housing, insurance, and personal-finance calculator articles
+2. Korean qualification and vocational education explainers
+3. AI practical academy chapters
+4. annual or monthly horoscope reading articles already assigned to blog
 
-1. anxiety and insomnia
-2. breathing and meditation
-3. world myths and superstitions
-4. Mac buying and resale timing
-5. investing mistakes for beginners
+Move or redirect to other projects:
 
-## 5. Commit Strategy
+1. Buddhism concepts, myths, symbols, and superstition references: `wiki-oiyo`, unless a retained blog magazine essay already has long-form narrative value.
+2. Anxiety, insomnia, breathing, meditation, and psychology self-reflection: `oiyo-astro` for tests and guided interactions; `wiki-oiyo` for definitions; blog only for retained long-form magazine essays.
+3. MBTI, enneagram, Big Five, saju, numerology, zodiac, blood type, and attachment execution pages: `oiyo-astro`.
+4. `meaning-of-*` style concepts: `wiki-oiyo`.
+
+## 6. Commit Strategy
 
 Keep commits small and auditable:
 
@@ -151,7 +178,7 @@ Keep commits small and auditable:
 
 Do not mix locale migration with editorial cleanup.
 
-## 6. Verification Gates
+## 7. Verification Gates
 
 Run after each batch:
 
@@ -176,18 +203,21 @@ For new content, also verify:
 4. interactive has `embeddedTools`
 5. hreflang points only to real pages
 
-## 7. Near-Term Execution Order
+## 8. Near-Term Execution Order
 
 1. Commit and push the completed quality and SEO hardening work.
-2. Review uncommitted `cn` deletion and `zh` addition as a standalone locale migration batch.
-3. Audit untracked academy and magazine drafts for frontmatter, inventory rows, and category fit.
-4. Complete one academy bundle first: retirement planning or dividend ETF.
-5. Upgrade 5 high-intent interactive pages with stronger explanatory prose and internal links.
-6. Re-run full build and sitemap audit.
+2. Classify the uncommitted `cn` deletion and `zh` addition as a standalone locale migration batch, then decide whether the affected topics remain blog content or become wiki source material later.
+3. Audit untracked academy and magazine drafts against the ownership gate before accepting them into blog.
+4. Keep blog-bound drafts only when they match academy, vocational, AI-practical, life-calculator, or retained long-form magazine purposes.
+5. Send dictionary, encyclopedia, type, symbol, and `meaning-of-*` topics to the `wiki-oiyo` backlog instead of adding new blog copies.
+6. Send test execution, result interpretation, and fortune/personality product pages to the `oiyo-astro` backlog.
+7. Upgrade 5 high-intent blog interactive pages with stronger explanatory prose and internal links.
+8. Re-run full build and sitemap audit.
 
-## 8. Open Questions
+## 9. Open Questions
 
 1. Should `cn` remain a supported locale, or should Chinese content consolidate under `zh`?
-2. Which academy bundle should become the first public series priority: retirement planning, dividend ETF, or Buddhism and modern life?
+2. Which blog-owned academy bundle should become the first public series priority: AI practical, qualification/vocational, retirement planning, or dividend ETF?
 3. Should legacy unregistered categories be mapped gradually, or should aliases be added to the registry first?
 4. Should draft content be committed in language bundles or topic bundles?
+5. Should the already-created Buddhism, psychology, myth, and superstition drafts be archived as blog magazine essays, converted into wiki entries, or held as migration source material?
