@@ -1,6 +1,5 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import ZodiacPersonality from "../../components/tools/ZodiacPersonality";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -9,43 +8,15 @@ export async function getStaticPaths() {
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "별자리 성격 분석 — 12별자리 성격·강점·약점·궁합",
-    description: "양자리부터 물고기자리까지 12별자리 성격 특성, 강점, 약점, 궁합을 분석합니다. 생년월일로 내 별자리를 찾고 오늘의 별자리 인사이트를 확인하세요.",
-  },
-  en: {
-    title: "Zodiac Personality — 12 Signs Traits, Strengths & Compatibility",
-    description: "Explore personality traits, strengths, weaknesses, and compatibility for all 12 zodiac signs — from Aries to Pisces. Find your sign by birthday.",
-  },
-  ja: {
-    title: "星座性格分析 — 12星座の性格・強み・弱み・相性",
-    description: "牡羊座から魚座まで12星座の性格特徴、強み、弱み、相性を分析。生年月日から自分の星座を探し、星座の洞察を確認しましょう。",
-  },
-  fr: {
-    title: "Personnalité Astrologique — 12 Signes Traits & Compatibilité",
-    description: "Explorez les traits de personnalité, forces, faiblesses et compatibilités des 12 signes du zodiaque — du Bélier aux Poissons. Trouvez votre signe par date de naissance.",
-  },
-  es: {
-    title: "Personalidad del Zodíaco — 12 Signos Rasgos y Compatibilidad",
-    description: "Explora rasgos de personalidad, fortalezas, debilidades y compatibilidad de los 12 signos zodiacales — de Aries a Piscis. Encuentra tu signo por fecha de nacimiento.",
-  },
-  zh: {
-    title: "星座性格分析 — 12星座性格特徵、優勢與相容性",
-    description: "探索12星座的性格特徵、優勢、弱點和相容性——從牡羊座到雙魚座。透過生日查找你的星座。",
-  },
-  cn: {
-    title: "星座性格分析 — 12星座性格特征、优势与相容性",
-    description: "探索12星座的性格特征、优势、弱点和相容性——从白羊座到双鱼座。通过生日查找你的星座。",
-  },
+const names: Record<Locale, string> = {
+  ko: "별자리 성격",
+  en: "Zodiac personality",
+  ja: "星座性格",
+  fr: "personnalité astrologique",
+  es: "personalidad zodiacal",
+  zh: "星座性格",
+  cn: "星座性格",
 };
-
-const m = meta[locale] ?? meta.en;
 ---
 
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <ZodiacPersonality client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName={names[locale] ?? names.en} targetPath="/zodiac/personality" kind="tool" />
