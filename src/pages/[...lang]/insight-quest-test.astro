@@ -1,4 +1,5 @@
 ---
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -7,33 +8,14 @@ export async function getStaticPaths() {
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const targetLocale = locale === "cn" ? "zh" : locale;
-const target = `https://oiyo.net/${targetLocale}/mbti/test`;
-const copy: Record<Locale, { title: string; body: string; link: string }> = {
-  ko: { title: "MBTI 테스트는 oiyo.net에서 진행합니다", body: "blog.oiyo.net은 MBTI 해설과 성장 가이드를 제공하고, 실제 테스트는 oiyo.net의 정본 페이지로 통합했습니다.", link: "MBTI 테스트로 이동" },
-  en: { title: "The MBTI test now lives on oiyo.net", body: "blog.oiyo.net keeps the MBTI guides and explanations. The actual test is unified on oiyo.net.", link: "Go to the MBTI test" },
-  ja: { title: "MBTIテストは oiyo.net に移動しました", body: "blog.oiyo.net はMBTIの解説とガイドを提供し、実際のテストは oiyo.net に統合しました。", link: "MBTIテストへ移動" },
-  fr: { title: "Le test MBTI est sur oiyo.net", body: "blog.oiyo.net conserve les guides MBTI. Le test lui-même est unifié sur oiyo.net.", link: "Aller au test MBTI" },
-  es: { title: "El test MBTI está en oiyo.net", body: "blog.oiyo.net conserva las guías de MBTI. El test real está unificado en oiyo.net.", link: "Ir al test MBTI" },
-  zh: { title: "MBTI 测试已移至 oiyo.net", body: "blog.oiyo.net 保留 MBTI 解说与指南，实际测试统一到 oiyo.net。", link: "前往 MBTI 测试" },
-  cn: { title: "MBTI 測試已移至 oiyo.net", body: "blog.oiyo.net 保留 MBTI 解說與指南，實際測試統一到 oiyo.net。", link: "前往 MBTI 測試" },
+const names: Record<Locale, string> = {
+  "ko": "MBTI",
+  "en": "MBTI",
+  "ja": "MBTI",
+  "fr": "MBTI",
+  "es": "MBTI",
+  "zh": "MBTI",
+  "cn": "MBTI"
 };
-
-const text = copy[locale] ?? copy.en;
 ---
-<html lang={locale}>
-  <head>
-    <title>{text.title}</title>
-    <link rel="canonical" href={target} />
-    <meta name="robots" content="noindex,follow" />
-    <meta http-equiv="refresh" content={`0;url=${target}`} />
-  </head>
-  <body>
-    <main style="font-family: system-ui, sans-serif; max-width: 42rem; margin: 4rem auto; padding: 0 1rem;">
-      <h1>{text.title}</h1>
-      <p>{text.body}</p>
-      <p><a href={target}>{text.link}</a></p>
-    </main>
-  </body>
-</html>
+<OiyoCanonicalRedirect locale={locale} itemName={names[locale] ?? names.en} targetPath="/mbti/test" kind="test" />

@@ -1,54 +1,21 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import SelfEsteemTestComp from "../../components/tests/SelfEsteemTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
 export async function getStaticPaths() {
-  return locales.map((lang) => ({
-    params: { lang },
-    props: { locale: lang },
-  }));
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "자존감 체크 테스트 — 나는 나 자신을 얼마나 사랑하나요?",
-    description: "로젠버그 자존감 척도 기반의 10문항 자존감 테스트. 나의 자존감 수준과 성장 방법을 알아보세요.",
-  },
-  en: {
-    title: "Self-Esteem Check — How Much Do You Love Yourself?",
-    description: "A 10-question self-esteem test based on the Rosenberg Self-Esteem Scale. Discover your self-esteem level and how to grow.",
-  },
-  ja: {
-    title: "自己肯定感チェックテスト — 自分をどれくらい好きですか？",
-    description: "ローゼンバーグ自己肯定感尺度に基づく10問テスト。自己肯定感レベルと成長方法を発見しましょう。",
-  },
-  fr: {
-    title: "Test d'Estime de Soi — Vous aimez-vous?",
-    description: "Un test d'estime de soi en 10 questions basé sur l'échelle de Rosenberg. Découvrez votre niveau d'estime de soi.",
-  },
-  es: {
-    title: "Test de Autoestima — ¿Cuánto te quieres a ti mismo?",
-    description: "Un test de autoestima de 10 preguntas basado en la escala de Rosenberg. Descubre tu nivel de autoestima.",
-  },
-  zh: {
-    title: "自我認同感測試 — 你有多愛自己？",
-    description: "基於羅森伯格自我認同感量表的10題測試。了解你的自我認同感水平和成長方法。",
-  },
-  cn: {
-    title: "自尊心测试 — 你有多爱自己？",
-    description: "基于罗森伯格自尊量表的10题测试。了解你的自尊水平和成长方法。",
-  },
+const names: Record<Locale, string> = {
+  "ko": "자존감",
+  "en": "Self-esteem",
+  "ja": "自尊感情",
+  "fr": "estime de soi",
+  "es": "autoestima",
+  "zh": "自尊感",
+  "cn": "自尊感"
 };
-
-const m = meta[locale] ?? meta.en;
 ---
-
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <SelfEsteemTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName={names[locale] ?? names.en} targetPath="/self-esteem/test" kind="test" />

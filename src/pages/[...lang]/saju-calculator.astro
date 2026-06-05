@@ -1,6 +1,5 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import SajuCalculator from "../../components/tools/SajuCalculator";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -9,43 +8,14 @@ export async function getStaticPaths() {
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "사주 계산기 — 사주팔자(四柱八字) 무료 계산",
-    description: "생년월일시를 입력하면 사주팔자(四柱八字)의 천간·지지·오행을 계산하고, 주요 오행에 따른 성격·강점·적합 직업·행운 정보를 알려줍니다.",
-  },
-  en: {
-    title: "Saju Calculator — Four Pillars of Destiny (사주팔자)",
-    description: "Enter your birth year, month, day, and hour to calculate your Four Pillars (사주팔자) with Heavenly Stems, Earthly Branches, and Five Elements analysis.",
-  },
-  ja: {
-    title: "四柱推命計算機 — 사주팔자（四柱八字）無料診断",
-    description: "生年月日時を入力して四柱八字の天干・地支・五行を計算し、主要五行に基づく性格・強み・適職・幸運情報を表示します。",
-  },
-  fr: {
-    title: "Calculateur Saju — Quatre Piliers du Destin (사주팔자)",
-    description: "Entrez votre date et heure de naissance pour calculer vos Quatre Piliers avec Tiges célestes, Branches terrestres et analyse des Cinq Éléments.",
-  },
-  es: {
-    title: "Calculadora Saju — Cuatro Pilares del Destino (사주팔자)",
-    description: "Ingresa tu fecha y hora de nacimiento para calcular tus Cuatro Pilares con Troncos celestiales, Ramas terrestres y análisis de los Cinco Elementos.",
-  },
-  zh: {
-    title: "四柱推命計算機 — 사주팔자（四柱八字）免費推算",
-    description: "輸入出生年月日時，計算四柱八字的天干、地支和五行，分析主要五行對應的性格、優勢、適合職業和幸運資訊。",
-  },
-  cn: {
-    title: "四柱推命计算器 — 사주팔자（四柱八字）免费推算",
-    description: "输入出生年月日时，计算四柱八字的天干、地支和五行，分析主要五行对应的性格、优势、适合职业和幸运信息。",
-  },
+const names: Record<Locale, string> = {
+  "ko": "사주",
+  "en": "Saju",
+  "ja": "四柱推命",
+  "fr": "saju",
+  "es": "saju",
+  "zh": "四柱八字",
+  "cn": "四柱八字"
 };
-
-const m = meta[locale] ?? meta.en;
 ---
-
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <SajuCalculator client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName={names[locale] ?? names.en} targetPath="/saju/calculator" kind="calculator" />
