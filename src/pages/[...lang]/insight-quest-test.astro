@@ -1,6 +1,4 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import InsightQuestTestComp from "../../components/tests/InsightQuestTest";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -10,20 +8,32 @@ export async function getStaticPaths() {
 
 const { locale } = Astro.props as { locale: Locale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: { title: "인사이트 퀘스트: 나의 MBTI 성격 유형은?", description: "8개의 이분법적 질문으로 16가지 MBTI 성격 유형 중 나의 유형을 알아보세요." },
-  en: { title: "Insight Quest: What's Your MBTI Personality Type?", description: "Discover your personality type among 16 MBTI types with 8 binary-choice questions." },
-  ja: { title: "インサイトクエスト：あなたのMBTI性格タイプは？", description: "8つの二択質問で16のMBTI性格タイプの中からあなたのタイプを診断します。" },
-  fr: { title: "Insight Quest : Quel est votre type de personnalité MBTI?", description: "Découvrez votre type de personnalité parmi 16 types MBTI avec 8 questions à choix binaire." },
-  es: { title: "Insight Quest: ¿Cuál es tu tipo de personalidad MBTI?", description: "Descubre tu tipo de personalidad entre 16 tipos MBTI con 8 preguntas de elección binaria." },
-  zh: { title: "洞察探索：你的MBTI性格類型是什麼？", description: "通過8個二元選擇題，在16種MBTI性格類型中找出你的類型。" },
-  cn: { title: "洞察探索：你的MBTI性格类型是什么？", description: "通过8个二元选择题，在16种MBTI性格类型中找出你的类型。" },
+const targetLocale = locale === "cn" ? "zh" : locale;
+const target = `https://oiyo.net/${targetLocale}/mbti/test`;
+const copy: Record<Locale, { title: string; body: string; link: string }> = {
+  ko: { title: "MBTI 테스트는 oiyo.net에서 진행합니다", body: "blog.oiyo.net은 MBTI 해설과 성장 가이드를 제공하고, 실제 테스트는 oiyo.net의 정본 페이지로 통합했습니다.", link: "MBTI 테스트로 이동" },
+  en: { title: "The MBTI test now lives on oiyo.net", body: "blog.oiyo.net keeps the MBTI guides and explanations. The actual test is unified on oiyo.net.", link: "Go to the MBTI test" },
+  ja: { title: "MBTIテストは oiyo.net に移動しました", body: "blog.oiyo.net はMBTIの解説とガイドを提供し、実際のテストは oiyo.net に統合しました。", link: "MBTIテストへ移動" },
+  fr: { title: "Le test MBTI est sur oiyo.net", body: "blog.oiyo.net conserve les guides MBTI. Le test lui-même est unifié sur oiyo.net.", link: "Aller au test MBTI" },
+  es: { title: "El test MBTI está en oiyo.net", body: "blog.oiyo.net conserva las guías de MBTI. El test real está unificado en oiyo.net.", link: "Ir al test MBTI" },
+  zh: { title: "MBTI 测试已移至 oiyo.net", body: "blog.oiyo.net 保留 MBTI 解说与指南，实际测试统一到 oiyo.net。", link: "前往 MBTI 测试" },
+  cn: { title: "MBTI 測試已移至 oiyo.net", body: "blog.oiyo.net 保留 MBTI 解說與指南，實際測試統一到 oiyo.net。", link: "前往 MBTI 測試" },
 };
 
-const m = meta[locale] ?? meta.en;
+const text = copy[locale] ?? copy.en;
 ---
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <InsightQuestTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<html lang={locale}>
+  <head>
+    <title>{text.title}</title>
+    <link rel="canonical" href={target} />
+    <meta name="robots" content="noindex,follow" />
+    <meta http-equiv="refresh" content={`0;url=${target}`} />
+  </head>
+  <body>
+    <main style="font-family: system-ui, sans-serif; max-width: 42rem; margin: 4rem auto; padding: 0 1rem;">
+      <h1>{text.title}</h1>
+      <p>{text.body}</p>
+      <p><a href={target}>{text.link}</a></p>
+    </main>
+  </body>
+</html>
