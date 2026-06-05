@@ -1,6 +1,5 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import InvestmentPersonalityTestComp from "../../components/calculators/InvestmentPersonalityTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -9,43 +8,14 @@ export async function getStaticPaths() {
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "투자 성향 테스트 — 나는 어떤 투자자 유형인가?",
-    description: "10가지 질문으로 나의 자산 관리 성향을 파악하세요. 저축가, 소비가, 투자자, 미니멀리스트 중 어떤 유형인지 알아봅니다.",
-  },
-  en: {
-    title: "Investment Personality Test",
-    description: "Discover your money personality with 10 questions. Find out if you're a saver, spender, investor, or minimalist.",
-  },
-  ja: {
-    title: "投資性向テスト — 私はどんな投資家タイプ？",
-    description: "10の質問で資産管理の傾向を把握。セーバー、スペンダー、インベスター、ミニマリストのどれか確認しましょう。",
-  },
-  fr: {
-    title: "Test de Personnalité Investisseur",
-    description: "Découvrez votre personnalité financière en 10 questions. Êtes-vous un épargnant, dépensier, investisseur ou minimaliste ?",
-  },
-  es: {
-    title: "Test de Personalidad Inversora",
-    description: "Descubre tu personalidad financiera con 10 preguntas. ¿Eres ahorrador, gastador, inversor o minimalista?",
-  },
-  zh: {
-    title: "投資性向測試 — 我是哪種投資者類型？",
-    description: "通過10個問題了解您的資產管理傾向。看看您是儲蓄者、消費者、投資者還是簡約主義者。",
-  },
-  cn: {
-    title: "投资性向测试 — 我是哪种投资者类型？",
-    description: "通过10个问题了解您的资产管理倾向。看看您是储蓄者、消费者、投资者还是简约主义者。",
-  },
+const names: Record<Locale, string> = {
+  ko: "투자 성향",
+  en: "investment personality",
+  ja: "投資性向",
+  fr: "personnalité investisseur",
+  es: "personalidad inversora",
+  zh: "投资性向",
+  cn: "投資性向",
 };
-
-const m = meta[locale] ?? meta.en;
 ---
-
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <InvestmentPersonalityTestComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName={names[locale] ?? names.en} targetPath="/investment-type/test" kind="test" />
