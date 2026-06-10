@@ -42,11 +42,11 @@ export default defineConfig({
           return { ...item, priority: 1.0 };
         }
         // Locale homepages (e.g. /ko/, /ja/, /fr/)
-        if (/^\/(ko|ja|fr|es|zh|cn)\/$/.test(path)) {
+        if (/^\/(ko|ja|fr|es|zh)\/$/.test(path)) {
           return { ...item, priority: 0.9 };
         }
         // Blog article pages
-        if (/^\/(en|ko|ja|fr|es|zh|cn)\/[^/]+\/$/.test(path)) {
+        if (/^\/(en|ko|ja|fr|es|zh)\/[^/]+\/$/.test(path)) {
           return { ...item, priority: 0.8 };
         }
         // Pagination pages (/2/, /3/, …)
@@ -66,7 +66,7 @@ export default defineConfig({
   },
   i18n: {
     defaultLocale: "en",
-    locales: ["en", "ko", "ja", "fr", "es", "zh", "cn"],
+    locales: ["en", "ko", "ja", "fr", "es", "zh"],
     routing: "manual",
   },
   build: {
