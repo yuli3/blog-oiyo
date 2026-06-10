@@ -1,7 +1,5 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import MysticTrinity from "../../components/MysticTrinity.astro";
-import TarotDailyCard from "../../components/tools/TarotDailyCard";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -10,44 +8,14 @@ export async function getStaticPaths() {
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "오늘의 타로 카드 — 하루 한 장 무료 타로 운세",
-    description: "오늘 날짜 기반으로 타로 78장 중 한 장을 뽑아보세요. 정방향/역방향 해석과 오늘의 메시지를 확인하세요.",
-  },
-  en: {
-    title: "Tarot Card of the Day — Free Daily Tarot Reading",
-    description: "Draw one card from 78 tarot cards based on today's date. Get upright/reversed interpretation and your daily message.",
-  },
-  ja: {
-    title: "今日のタロットカード — 毎日無料タロット占い",
-    description: "今日の日付をもとに78枚のタロットから1枚引きましょう。正位置・逆位置の解釈と今日のメッセージを確認できます。",
-  },
-  fr: {
-    title: "Carte de Tarot du Jour — Tirage Tarot Quotidien Gratuit",
-    description: "Tirez une carte parmi 78 cartes de tarot basée sur la date d'aujourd'hui. Obtenez une interprétation à l'endroit/renversée et votre message du jour.",
-  },
-  es: {
-    title: "Carta de Tarot del Día — Lectura de Tarot Diaria Gratis",
-    description: "Saca una carta de entre 78 cartas de tarot basada en la fecha de hoy. Obtén interpretación derecha/invertida y tu mensaje diario.",
-  },
-  zh: {
-    title: "每日塔罗牌 — 免费每日塔罗占卜",
-    description: "根据今天的日期从78张塔罗牌中抽一张。查看正位/逆位解读和今日信息。",
-  },
-  cn: {
-    title: "每日塔羅牌 — 免費每日塔羅占卜",
-    description: "根據今天的日期從78張塔羅牌中抽一張。查看正位/逆位解讀和今日信息。",
-  },
+const names: Record<Locale, string> = {
+  "ko": "오늘의 타로",
+  "en": "Daily Tarot",
+  "ja": "今日のタロット",
+  "fr": "tarot du jour",
+  "es": "tarot del día",
+  "zh": "今日塔罗",
+  "cn": "今日塔羅"
 };
-
-const m = meta[locale] ?? meta.en;
 ---
-
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <TarotDailyCard client:load locale={locale} />
-      <MysticTrinity topic="tarot" locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName={names[locale] ?? names.en} targetPath="/tarot/daily" kind="tool" />

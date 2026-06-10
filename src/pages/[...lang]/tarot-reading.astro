@@ -1,7 +1,5 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import MysticTrinity from "../../components/MysticTrinity.astro";
-import TarotReading from "../../components/tools/TarotReading";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -10,44 +8,14 @@ export async function getStaticPaths() {
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "타로 카드 리딩 — 오늘의 메시지 무료 타로점",
-    description: "메이저 아르카나 22장으로 1장·3장·5장 타로 스프레드를 뽑아보세요. 정방향·역방향 해석과 함께 오늘의 메시지, 과거·현재·미래를 읽어드립니다.",
-  },
-  en: {
-    title: "Tarot Card Reading — Free Daily Tarot",
-    description: "Draw from 22 Major Arcana cards in 1-card, 3-card, or 5-card spreads. Get upright and reversed interpretations for today's message, past-present-future, or Celtic Cross.",
-  },
-  ja: {
-    title: "タロット占い — 無料デイリータロット",
-    description: "メジャーアルカナ22枚から1枚・3枚・5枚のスプレッドを引いてみましょう。正位置・逆位置の解釈で今日のメッセージ、過去・現在・未来をお届けします。",
-  },
-  fr: {
-    title: "Tirage de Tarot — Tarot Gratuit du Jour",
-    description: "Tirez parmi les 22 cartes du Tarot Majeur en tirage 1, 3 ou 5 cartes. Interprétations droit et renversé pour le message du jour, passé-présent-futur ou croix celtique.",
-  },
-  es: {
-    title: "Lectura de Tarot — Tarot Gratuito del Día",
-    description: "Saca cartas del Arcano Mayor (22 cartas) en tirada de 1, 3 o 5 cartas. Interpretaciones en posición derecha e invertida para el mensaje del día y pasado-presente-futuro.",
-  },
-  zh: {
-    title: "塔羅牌占卜 — 免費每日塔羅",
-    description: "從22張大阿爾卡納牌中抽取1張、3張或5張牌陣。獲得正位和逆位解讀，了解今日訊息、過去現在未來或凱爾特十字牌陣。",
-  },
-  cn: {
-    title: "塔罗牌占卜 — 免费每日塔罗",
-    description: "从22张大阿卡纳牌中抽取1张、3张或5张牌阵。获得正位和逆位解读，了解今日信息、过去现在未来或凯尔特十字牌阵。",
-  },
+const names: Record<Locale, string> = {
+  "ko": "타로 리딩",
+  "en": "Tarot Reading",
+  "ja": "タロットリーディング",
+  "fr": "tirage de tarot",
+  "es": "lectura de tarot",
+  "zh": "塔罗占卜",
+  "cn": "塔羅占卜"
 };
-
-const m = meta[locale] ?? meta.en;
 ---
-
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <TarotReading client:load locale={locale} />
-      <MysticTrinity topic="tarot" locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName={names[locale] ?? names.en} targetPath="/tarot/reading" kind="tool" />
