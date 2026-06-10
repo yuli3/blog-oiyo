@@ -54,7 +54,13 @@ for (const file of listHtmlFiles(dist)) {
   const rel = path.relative(dist, file);
   const html = fs.readFileSync(file, "utf8");
 
-  if (!/<link rel="canonical" href="https:\/\/blog\.oiyo\.net\//.test(html)) {
+  // Bridge stubs are noindex and canonicalize cross-domain to the family
+  // canonical host (oiyo.net / blog.oiyo.net) — any family canonical is valid there.
+  const isNoindex = /<meta name="robots" content="noindex/.test(html);
+  const canonicalRe = isNoindex
+    ? /<link rel="canonical" href="https:\/\/(blog\.|wiki\.)?oiyo\.net\//
+    : /<link rel="canonical" href="https:\/\/blog\.oiyo\.net\//;
+  if (!canonicalRe.test(html)) {
     failures.push(`${rel}: missing canonical link`);
   }
 

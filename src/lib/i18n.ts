@@ -1,5 +1,7 @@
-export const locales = ['en', 'ko', 'ja', 'fr', 'es', 'zh', 'cn'] as const;
-export type Locale = typeof locales[number];
+export const locales = ['en', 'ko', 'ja', 'fr', 'es', 'zh'] as const;
+// 'cn' (zh-TW) is retired from the build — the edge 301s /cn/* to /zh/* — but it
+// stays in the Locale type so legacy per-page Record<Locale, …> maps remain valid.
+export type Locale = (typeof locales)[number] | 'cn';
 
 export const localeNames: Record<Locale, string> = {
   en: 'English',
@@ -38,7 +40,7 @@ export function getLocaleFromPath(pathname: string): Locale {
   const segments = pathname.split('/').filter(Boolean);
   const potentialLocale = segments[0] as Locale;
 
-  if (locales.includes(potentialLocale)) {
+  if ((locales as readonly string[]).includes(potentialLocale)) {
     return potentialLocale;
   }
 

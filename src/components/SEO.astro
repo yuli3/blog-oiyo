@@ -38,9 +38,25 @@ const currentLocale = supportedLocales.includes(currentPathname.split("/")[1])
   ? currentPathname.split("/")[1]
   : siteConfig.locale;
 // Multilingual hreflang logic.
-// Only article routes pass availableLocales from actual content siblings.
-// Other pages stay self-referential unless a layout explicitly opts in.
-const locales = availableLocales ?? [currentLocale];
+// Article routes pass availableLocales from actual content siblings.
+// Pages generated from the full locale list (home, static tool/listing slugs
+// at /{locale}/{slug}/) exist in every locale, so they fall back to the full
+// set — hreflang clusters must be reciprocal with a single x-default.
+// Pagination (/{locale}/119/) and deeper dynamic routes (category pages)
+// vary per locale, so they stay self-referential.
+const pathSegments = currentPathname.split("/").filter(Boolean);
+const isLocalePath = supportedLocales.includes(pathSegments[0]);
+// Legacy: the English about/privacy/terms pages live at the root
+// (/about/, not /en/about/), so their clusters cannot be completed.
+const rootEnglishSlugs = new Set(["about", "privacy", "terms"]);
+const isLocaleCompleteRoute =
+  isLocalePath &&
+  (pathSegments.length === 1 ||
+    (pathSegments.length === 2 &&
+      !/^\d+$/.test(pathSegments[1]) &&
+      !rootEnglishSlugs.has(pathSegments[1])));
+const locales =
+  availableLocales ?? (isLocaleCompleteRoute ? supportedLocales : [currentLocale]);
 const xDefaultLocale = locales.includes(siteConfig.locale)
   ? siteConfig.locale
   : (locales.includes(currentLocale) ? currentLocale : locales[0]);

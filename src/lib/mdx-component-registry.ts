@@ -96,6 +96,7 @@ import TentsAndTrees from "../components/games/TentsAndTrees";
 import WaterSort from "../components/games/WaterSort";
 import WheelSpinner from "../components/games/WheelSpinner";
 import AcquisitionTaxCalculator from "../components/tools/AcquisitionTaxCalculator";
+import CashFlowManager from "../components/tools/CashFlowManager";
 import CompoundInterestCalculator from "../components/tools/CompoundInterestCalculator";
 import SalaryCalculator from "../components/mdx/SalaryCalculator";
 import CapitalGainsTaxCalculator from "../components/mdx/CapitalGainsTaxCalculator";
@@ -341,6 +342,7 @@ const islandComponents = {
   Game2048,
   Sudoku,
   AcquisitionTaxCalculator,
+  CashFlowManager,
   CompoundInterestCalculator,
   SalaryCalculator,
   CapitalGainsTaxCalculator,

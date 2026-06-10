@@ -1,5 +1,6 @@
 // @ts-check
 
+import { readFileSync } from "node:fs";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
@@ -9,6 +10,12 @@ import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import robotsTxt from "astro-robots-txt";
+
+// Bridge pages are noindex stubs that canonicalize to oiyo.net —
+// they must never appear in the sitemap.
+const BRIDGE_SLUGS = new Set(
+  JSON.parse(readFileSync(new URL("./src/config/bridge-slugs.json", import.meta.url), "utf8")),
+);
 
 // https://astro.build/config
 export default defineConfig({
@@ -29,6 +36,9 @@ export default defineConfig({
         if (path.split("/").some((seg) => seg.startsWith("_"))) return false;
         // Exclude /index duplicate (trailing slash version is canonical)
         if (path.endsWith("/index/") || path === "/index") return false;
+        // Exclude noindex bridge stubs (canonical lives on oiyo.net)
+        const segs = path.split("/").filter(Boolean);
+        if (segs.length === 2 && BRIDGE_SLUGS.has(segs[1])) return false;
         return true;
       },
       // Set lastmod to today's build date

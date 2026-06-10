@@ -4,11 +4,11 @@ export const OIYO_URL = 'https://oiyo.net';
 export const siteConfig = {
   name: "Oiyo",
   title: "Oiyo Blog",
-  description: "Engineering the Future with Astro, MDX, and Cloudflare Pages. FAANG-level precision and performance.",
+  description: "Practical guides for Korean professional certifications, careers, taxes, and AI tools — with free interactive tests, calculators, and games.",
   url: "https://blog.oiyo.net",
   author: "Oiyo Team",
   locale: "en",
-  locales: ["en", "ko", "ja", "fr", "es", "zh", "cn"],
+  locales: ["en", "ko", "ja", "fr", "es", "zh"],
   themeColor: "#65a30d",
   features: {
     scrollSnap: false,
