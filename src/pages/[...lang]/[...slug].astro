@@ -10,6 +10,7 @@ import type { Locale } from "../../lib/i18n";
 import { getRegisteredMdxComponents } from "../../lib/mdx-component-registry";
 import { getTrackFromData } from "../../lib/taxonomy";
 import AuthorProfile from "../../components/AuthorProfile.astro";
+import MysticTrinity from "../../components/MysticTrinity.astro";
 
 export async function getStaticPaths() {
   const allPosts = await getCollection("blog", (p) => !p.data.draft);
@@ -350,6 +351,8 @@ const coursesHref = `/${locale}/courses`;
 
           <!-- Author Profile Component for E-E-A-T SEO -->
           <AuthorProfile authorName={post.data.author} />
+
+          <MysticTrinity slug={post.slug.split("/").slice(1).join("/")} locale={locale} />
 
           <BlogCTA category={post.data.category} locale={locale} />
 
