@@ -1,54 +1,21 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import MbtiCareerTestComp from "../../components/tests/MbtiCareerTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
 export async function getStaticPaths() {
-  return locales.map((lang) => ({
-    params: { lang },
-    props: { locale: lang },
-  }));
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "MBTI 직업 적성 테스트 — 나에게 맞는 직업은?",
-    description: "12가지 업무 상황 질문으로 나의 MBTI 직업 유형을 알아보세요. 추천 직업, 업무 스타일, 이상적인 환경까지 분석해드립니다.",
-  },
-  en: {
-    title: "MBTI Career Test — What Career Suits You?",
-    description: "Discover your MBTI career type through 12 work scenario questions. Find recommended careers, work style, and ideal environments.",
-  },
-  ja: {
-    title: "MBTI 職業適性テスト — あなたに合う職業は？",
-    description: "12の職場シナリオで自分のMBTI職業タイプを発見。おすすめ職業、仕事スタイル、理想的な環境を分析します。",
-  },
-  fr: {
-    title: "Test de Carrière MBTI — Quelle carrière vous convient?",
-    description: "Découvrez votre type de carrière MBTI à travers 12 scénarios de travail. Trouvez les carrières recommandées et votre style de travail.",
-  },
-  es: {
-    title: "Test de Carrera MBTI — ¿Qué carrera te conviene?",
-    description: "Descubre tu tipo de carrera MBTI con 12 preguntas sobre situaciones de trabajo. Encuentra carreras recomendadas y tu estilo de trabajo.",
-  },
-  zh: {
-    title: "MBTI 職業適性測試 — 什麼職業適合你？",
-    description: "透過12個工作情境問題發現你的MBTI職業類型。找到推薦職業、工作風格和理想環境。",
-  },
-  cn: {
-    title: "MBTI 职业适性测试 — 什么职业适合你？",
-    description: "通过12个工作情境问题发现你的MBTI职业类型。找到推荐职业、工作风格和理想环境。",
-  },
+const names: Record<Locale, string> = {
+  ko: "MBTI 직업 적성",
+  en: "MBTI career",
+  ja: "MBTI 職業適性",
+  fr: "carrière MBTI",
+  es: "carrera MBTI",
+  zh: "MBTI 職業適性",
+  cn: "MBTI 职业适性",
 };
-
-const m = meta[locale] ?? meta.en;
 ---
-
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <MbtiCareerTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName={names[locale] ?? names.en} targetPath="/mbti/career" kind="test" />

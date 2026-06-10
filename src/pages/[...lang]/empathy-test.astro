@@ -1,54 +1,21 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import EmpathyTestComp from "../../components/tests/EmpathyTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
 export async function getStaticPaths() {
-  return locales.map((lang) => ({
-    params: { lang },
-    props: { locale: lang },
-  }));
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "공감 능력 유형 테스트 — 나는 어떻게 공감하나요?",
-    description: "12가지 질문으로 나의 공감 방식을 알아보세요. 인지적 공감, 정서적 공감, 자비적 공감 중 어떤 유형인지 분석합니다.",
-  },
-  en: {
-    title: "Empathy Type Test — How Do You Empathize?",
-    description: "Discover your empathy style through 12 questions. Find out if you have cognitive, affective, or compassionate empathy as your primary type.",
-  },
-  ja: {
-    title: "共感能力タイプテスト — あなたはどのように共感しますか？",
-    description: "12の質問で自分の共感スタイルを発見。認知的共感、情動的共感、思いやり的共感のどのタイプかを分析します。",
-  },
-  fr: {
-    title: "Test de Type d'Empathie — Comment empathisez-vous?",
-    description: "Découvrez votre style d'empathie à travers 12 questions. Empathie cognitive, affective ou compassionnelle?",
-  },
-  es: {
-    title: "Test de Tipo de Empatía — ¿Cómo empatizas?",
-    description: "Descubre tu estilo de empatía con 12 preguntas. ¿Empatía cognitiva, afectiva o compasiva?",
-  },
-  zh: {
-    title: "共情能力類型測試 — 你如何共情？",
-    description: "通過12個問題了解你的共情風格。認知共情、情感共情還是慈悲共情？",
-  },
-  cn: {
-    title: "共情能力类型测试 — 你如何共情？",
-    description: "通过12个问题了解你的共情风格。认知共情、情感共情还是慈悲共情？",
-  },
+const names: Record<Locale, string> = {
+  "ko": "공감 능력",
+  "en": "Empathy",
+  "ja": "共感力",
+  "fr": "empathie",
+  "es": "empatía",
+  "zh": "共情能力",
+  "cn": "共情能力"
 };
-
-const m = meta[locale] ?? meta.en;
 ---
-
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <EmpathyTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName={names[locale] ?? names.en} targetPath="/empathy/test" kind="test" />

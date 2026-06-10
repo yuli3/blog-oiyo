@@ -16,7 +16,7 @@ const blog = defineCollection({
     series: z.string().optional(),
     chapter: z.coerce.number().int().positive().optional(),
     chapterTitleShort: z.string().max(80).optional(),
-    locale: z.enum(['en', 'ko', 'ja', 'fr', 'es', 'zh', 'cn']).optional(),
+    locale: z.enum(['en', 'ko', 'ja', 'fr', 'es', 'zh']).optional(),
     // TODO: make locale required after running migration script to add locale fields to all ~1970 posts
     draft: z.boolean().default(false),
     featured: z.boolean().default(false),

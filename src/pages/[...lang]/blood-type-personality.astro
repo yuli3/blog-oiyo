@@ -1,6 +1,5 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import BloodTypePersonality from "../../components/tools/BloodTypePersonality";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -9,43 +8,14 @@ export async function getStaticPaths() {
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "혈액형 성격 분석 — A·B·O·AB형 성격·강점·약점·궁합",
-    description: "혈액형별 성격 특성, 강점, 약점, 궁합을 분석합니다. A형(꼼꼼함), B형(자유분방), O형(리더십), AB형(이중성) — 재미로 즐기는 혈액형 성격 테스트.",
-  },
-  en: {
-    title: "Blood Type Personality — A, B, O, AB Traits & Compatibility",
-    description: "Explore personality traits, strengths, weaknesses, and compatibility by blood type. Type A (meticulous), B (free-spirited), O (leader), AB (dual-natured).",
-  },
-  ja: {
-    title: "血液型性格分析 — A・B・O・AB型の性格・強み・弱み・相性",
-    description: "血液型別の性格特徴、強み、弱み、相性を分析します。A型（几帳面）、B型（自由奔放）、O型（リーダーシップ）、AB型（二面性）。",
-  },
-  fr: {
-    title: "Personnalité par Groupe Sanguin — A, B, O, AB Traits et Compatibilité",
-    description: "Découvrez traits, forces, faiblesses et compatibilités par groupe sanguin. Groupe A (méticuleux), B (libre), O (leader), AB (double nature).",
-  },
-  es: {
-    title: "Personalidad por Tipo de Sangre — A, B, O, AB Rasgos y Compatibilidad",
-    description: "Explora rasgos, fortalezas, debilidades y compatibilidad por tipo de sangre. Tipo A (meticuloso), B (libre), O (líder), AB (doble naturaleza).",
-  },
-  zh: {
-    title: "血型性格分析 — A、B、O、AB型特徵與相容性",
-    description: "依血型分析性格特徵、優勢、弱點和相容性。A型(細心)、B型(自由)、O型(領導力)、AB型(雙重性格)。",
-  },
-  cn: {
-    title: "血型性格分析 — A、B、O、AB型特征与相容性",
-    description: "依血型分析性格特征、优势、弱点和相容性。A型(细心)、B型(自由)、O型(领导力)、AB型(双重性格)。",
-  },
+const names: Record<Locale, string> = {
+  ko: "혈액형 성격 분석",
+  en: "blood type personality",
+  ja: "血液型性格分析",
+  fr: "personnalité par groupe sanguin",
+  es: "personalidad por tipo de sangre",
+  zh: "血型性格分析",
+  cn: "血型性格分析",
 };
-
-const m = meta[locale] ?? meta.en;
 ---
-
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <BloodTypePersonality client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName={names[locale] ?? names.en} targetPath="/blood-type" kind="tool" />

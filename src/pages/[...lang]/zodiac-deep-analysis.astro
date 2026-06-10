@@ -1,18 +1,19 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import ZodiacDeepTestComp from "../../components/tests/ZodiacDeepTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 const { locale } = Astro.props as { locale: Locale };
-const titles: Record<string,string> = { ko:"별자리 심화 분석 — 12별자리 성격·궁합·직업", en:"Zodiac Deep Analysis — Personality, Compatibility & Career", ja:"星座深層分析 — 性格・相性・適職", fr:"Analyse Approfondie du Zodiaque", es:"Análisis Profundo del Zodíaco", zh:"星座深層分析 — 性格·相合·職業", cn:"星座深层分析 — 性格·相合·职业" };
-const descs: Record<string,string> = { ko:"생일로 나의 별자리를 찾고 강점·약점·궁합 좋은 별자리·어울리는 직업까지 심층 분석합니다. 12별자리 전체 프로필 제공.", en:"Find your zodiac sign by birthday and get deep analysis of strengths, weaknesses, compatibility, and suitable careers. Full profiles for all 12 signs.", ja:"誕生日で自分の星座を見つけ、強み・弱み・相性・適職まで深く分析します。12星座すべてのプロフィール付き。", fr:"Trouvez votre signe zodiacal par anniversaire et obtenez une analyse approfondie des forces, faiblesses, compatibilité et carrières.", es:"Encuentra tu signo zodiacal por fecha de nacimiento y obtén análisis profundo de fortalezas, debilidades, compatibilidad y carreras.", zh:"通過生日找到您的星座並深入分析優點、弱點、相合星座和適合職業。", cn:"通过生日找到您的星座并深入分析优点、弱点、相合星座和适合职业。" };
-const m = { title: titles[locale]??titles.en, description: descs[locale]??descs.en };
+const names: Record<Locale, string> = {
+  ko: "별자리 심화 분석",
+  en: "zodiac deep analysis",
+  ja: "星座深層分析",
+  fr: "analyse approfondie du zodiaque",
+  es: "análisis profundo del zodíaco",
+  zh: "星座深层分析",
+  cn: "星座深層分析",
+};
 ---
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-xl px-4 py-8">
-    <ZodiacDeepTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName={names[locale] ?? names.en} targetPath="/zodiac/personality" kind="tool" />

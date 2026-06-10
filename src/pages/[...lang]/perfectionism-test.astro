@@ -1,6 +1,4 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import PerfectionismTestComp from "../../components/tests/PerfectionismTest";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -45,10 +43,29 @@ const meta: Record<Locale, { title: string; description: string }> = {
 };
 
 const m = meta[locale] ?? meta.en;
+const target = `https://oiyo.net/${locale === "cn" ? "zh" : locale}/perfectionism/test/`;
 ---
 
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <PerfectionismTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{m.title} | OIYO Blog</title>
+    <meta name="description" content={m.description} />
+  <meta http-equiv="refresh" content={`0; url=${target}`} />
+  <link rel="canonical" href={target} />
+    <style>
+      body { margin: 0; font-family: system-ui, sans-serif; color: #111827; background: #f8fafc; }
+      main { max-width: 42rem; margin: 0 auto; padding: 4rem 1rem; text-align: center; }
+      a { display: inline-flex; margin-top: 1.5rem; border-radius: .5rem; background: #111827; color: white; padding: .75rem 1rem; font-weight: 700; text-decoration: none; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>{m.title}</h1>
+      <p>{m.description}</p>
+      <a href={target}>Continue on oiyo.net</a>
+    </main>
+  </body>
+</html>

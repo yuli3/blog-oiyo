@@ -1,6 +1,5 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import AngerStyleTestComp from "../../components/tests/AngerStyleTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -9,21 +8,14 @@ export async function getStaticPaths() {
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: { title: "분노 표현 스타일 테스트 — 나는 어떤 유형인가?", description: "5가지 시나리오 질문으로 나의 분노 표현 방식을 분석하세요. 폭발형·억압형·수동공격형·주장형·냉정형 중 어디에 해당하나요?" },
-  en: { title: "Anger Expression Style Test — How Do You Handle Anger?", description: "Discover your anger expression style through 5 scenario questions. Are you Explosive, Suppressor, Passive-Aggressive, Assertive, or Calm?" },
-  ja: { title: "怒りの表現スタイルテスト — あなたはどのタイプ？", description: "5つのシナリオ質問で怒りの表現スタイルを分析。爆発型・抑圧型・受動攻撃型・主張型・冷静型のどれですか？" },
-  fr: { title: "Test de Style de Colère — Comment exprimez-vous la colère?", description: "Découvrez votre style d'expression de la colère avec 5 questions de scénario." },
-  es: { title: "Test de Estilo de Ira — ¿Cómo manejas la ira?", description: "Descubre tu estilo de expresión de ira con 5 preguntas de escenario." },
-  zh: { title: "憤怒表達風格測試 — 你如何處理憤怒？", description: "通過5個情境問題分析你的憤怒表達方式。" },
-  cn: { title: "愤怒表达风格测试 — 你如何处理愤怒？", description: "通过5个情境问题分析你的愤怒表达方式。" },
+const names: Record<Locale, string> = {
+  "ko": "분노 표현 스타일",
+  "en": "Anger expression style",
+  "ja": "怒りの表現スタイル",
+  "fr": "style de colère",
+  "es": "estilo de ira",
+  "zh": "愤怒表达风格",
+  "cn": "憤怒表達風格"
 };
-
-const m = meta[locale] ?? meta.en;
 ---
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <AngerStyleTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName={names[locale] ?? names.en} targetPath="/anger-style/test" kind="test" />

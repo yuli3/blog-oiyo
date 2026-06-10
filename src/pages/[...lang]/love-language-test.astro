@@ -1,54 +1,21 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import LoveLanguageTestComp from "../../components/tests/LoveLanguageTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
 export async function getStaticPaths() {
-  return locales.map((lang) => ({
-    params: { lang },
-    props: { locale: lang },
-  }));
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "사랑의 언어 테스트 — 나는 어떻게 사랑을 주고받나요?",
-    description: "15가지 선택지 질문으로 나의 사랑의 언어를 알아보세요. 확언의 말, 봉사 행위, 선물, 함께하는 시간, 스킨십 중 어떤 유형인지 분석합니다.",
-  },
-  en: {
-    title: "Love Language Test — How Do You Give and Receive Love?",
-    description: "Discover your love language through 15 forced-choice questions. Find your primary love language among words of affirmation, acts of service, gifts, quality time, and physical touch.",
-  },
-  ja: {
-    title: "愛の言語テスト — どのように愛を与え受け取りますか？",
-    description: "15の選択問題で愛の言語を診断。肯定の言葉・サービス行為・プレゼント・充実した時間・身体的接触のどれかを分析します。",
-  },
-  fr: {
-    title: "Test de Langage d'Amour — Comment donnez-vous et recevez-vous l'amour?",
-    description: "Découvrez votre langage d'amour à travers 15 questions à choix forcé parmi les 5 langages de l'amour.",
-  },
-  es: {
-    title: "Test de Lenguaje del Amor — ¿Cómo das y recibes amor?",
-    description: "Descubre tu lenguaje del amor con 15 preguntas de elección forzada entre los 5 lenguajes del amor.",
-  },
-  zh: {
-    title: "愛的語言測試 — 你如何給予和接受愛？",
-    description: "透過15個強制選擇問題發現你的愛的語言。分析你的主要愛的語言類型。",
-  },
-  cn: {
-    title: "爱的语言测试 — 你如何给予和接受爱？",
-    description: "通过15个强制选择问题发现你的爱的语言。分析你的主要爱的语言类型。",
-  },
+const names: Record<Locale, string> = {
+  "ko": "사랑의 언어",
+  "en": "Love language",
+  "ja": "愛の言語",
+  "fr": "langage de l'amour",
+  "es": "lenguaje del amor",
+  "zh": "爱的语言",
+  "cn": "愛的語言"
 };
-
-const m = meta[locale] ?? meta.en;
 ---
-
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <LoveLanguageTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName={names[locale] ?? names.en} targetPath="/love-language/test" kind="test" />
