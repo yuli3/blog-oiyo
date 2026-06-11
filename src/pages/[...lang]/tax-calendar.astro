@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import TaxCalendarComp from "../../components/calculators/TaxCalendar";
+import TaxTimeline from "../../components/calculators/TaxTimeline";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -48,7 +49,8 @@ const m = meta[locale] ?? meta.en;
 ---
 
 <BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-3xl px-4 py-8">
+  <main class="mx-auto max-w-5xl px-4 py-8">
+    <TaxTimeline client:load locale={locale === 'ko' ? 'ko' : 'en'} />
     <TaxCalendarComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
   </main>
 </BaseLayout>
