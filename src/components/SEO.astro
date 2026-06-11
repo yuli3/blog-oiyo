@@ -246,23 +246,27 @@ const hreflangMap: Record<string, string> = {
   set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: siteConfig.url,
-      },
-      ...Astro.url.pathname
-        .split("/")
-        .filter(Boolean)
-        .map((segment, index, array) => ({
+    itemListElement: (() => {
+      // locale segments are routing noise, and the final crumb should carry
+      // the real page title, not a prettified raw slug (#16)
+      const localeSegs = new Set(["en", "ko", "ja", "zh", "cn", "fr", "es"]);
+      const all = Astro.url.pathname.split("/").filter(Boolean);
+      const crumbs = all
+        .map((segment, index) => ({ segment, path: "/" + all.slice(0, index + 1).join("/") }))
+        .filter(({ segment }, index) => !(index === 0 && localeSegs.has(segment)));
+      return [
+        { "@type": "ListItem", position: 1, name: "Home", item: siteConfig.url },
+        ...crumbs.map(({ segment, path }, i) => ({
           "@type": "ListItem",
-          position: index + 2,
-          name: segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, " "),
-          item: new URL("/" + array.slice(0, index + 1).join("/"), Astro.site),
+          position: i + 2,
+          name:
+            i === crumbs.length - 1 && title
+              ? title
+              : segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, " "),
+          item: new URL(path, Astro.site),
         })),
-    ],
+      ];
+    })(),
   })}
 />
 
