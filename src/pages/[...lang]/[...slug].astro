@@ -74,16 +74,47 @@ export async function getStaticPaths() {
       seriesPosts = null;
     }
 
+
+    // Related posts: same series scores highest, then tag overlap.
+    // Builds the internal link mesh that ties dictionary entries together.
+    const myTags = new Set<string>((post.data.tags ?? []) as string[]);
+    const mySeries = post.data.series ?? null;
+    const relatedPosts = (byLocale[lang] ?? [])
+      .filter((p) => p.slug !== post.slug)
+      .map((p) => {
+        let score = 0;
+        if (mySeries && p.data.series === mySeries) score += 3;
+        for (const t of (p.data.tags ?? []) as string[]) {
+          if (myTags.has(t)) score += 1;
+        }
+        return { p, score };
+      })
+      .filter((x) => x.score >= 2)
+      .sort(
+        (a, b) =>
+          b.score - a.score ||
+          (b.p.data.pubDate?.valueOf?.() ?? 0) - (a.p.data.pubDate?.valueOf?.() ?? 0),
+      )
+      .slice(0, 6)
+      .map(({ p }) => ({
+        slug: p.slug.split("/").slice(1).join("/"),
+        title: p.data.title,
+      }));
+
     const availableLocales = Array.from(localesByBaseSlug[slug] ?? [lang]);
 
     return {
       params: { lang, slug },
-      props: { post, locale: lang, prevPost, nextPost, seriesPosts, availableLocales },
+      props: { post, locale: lang, prevPost, nextPost, seriesPosts, availableLocales, relatedPosts },
     };
   });
 }
 
-const { post, locale, prevPost, nextPost, seriesPosts, availableLocales } = Astro.props;
+const RELATED_HEADING: Record<string, string> = {
+  ko: "관련 문서", en: "Related articles", ja: "関連記事",
+  zh: "相关文章", fr: "Articles liés", es: "Artículos relacionados",
+};
+const { post, locale, prevPost, nextPost, seriesPosts, availableLocales, relatedPosts } = Astro.props;
 const { Content } = await post.render();
 const tocEnabled = siteConfig.features.toc;
 const t = await getTranslations(locale as Locale);
@@ -353,6 +384,24 @@ const coursesHref = `/${locale}/courses`;
           <AuthorProfile authorName={post.data.author} />
 
           <MysticTrinity slug={post.slug.split("/").slice(1).join("/")} locale={locale} />
+
+          {relatedPosts && relatedPosts.length > 0 && (
+            <aside class="mt-10 not-prose" aria-label="Related articles">
+              <p class="mb-3 text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
+                {RELATED_HEADING[locale] ?? RELATED_HEADING.en}
+              </p>
+              <div class="grid gap-2 sm:grid-cols-2">
+                {relatedPosts.map((r) => (
+                  <a
+                    href={`/${locale}/${r.slug}/`}
+                    class="rounded-lg border border-border bg-card/60 px-4 py-3 text-sm font-medium leading-snug text-foreground transition-colors hover:border-primary/50 hover:text-primary"
+                  >
+                    {r.title}
+                  </a>
+                ))}
+              </div>
+            </aside>
+          )}
 
           <BlogCTA category={post.data.category} locale={locale} />
 
