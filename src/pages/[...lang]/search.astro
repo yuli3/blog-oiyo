@@ -31,6 +31,19 @@ const searchIndex = allPosts.map((post) => {
   };
 });
 
+
+// #17 cross-site search labels
+const crossLabels = ({
+  ko: { heading: "다른 사이트에서 더 찾기", target: "OIYO 위키에서 검색", oiyo: "OIYO 테스트 둘러보기" },
+  en: { heading: "Search more on our other sites", target: "Search OIYO Wiki", oiyo: "Browse OIYO tests" },
+  ja: { heading: "他のサイトでさらに探す", target: "OIYOウィキで検索", oiyo: "OIYOテストを見る" },
+  zh: { heading: "在其他站点继续查找", target: "在OIYO维基搜索", oiyo: "浏览OIYO测试" },
+  fr: { heading: "Chercher sur nos autres sites", target: "Chercher sur le wiki OIYO", oiyo: "Voir les tests OIYO" },
+  es: { heading: "Buscar en nuestros otros sitios", target: "Buscar en la wiki OIYO", oiyo: "Ver los tests de OIYO" },
+} as Record<string, { heading: string; target: string; oiyo: string }>)[locale] ?? {
+  heading: "Search more on our other sites", target: "Search OIYO Wiki", oiyo: "Browse OIYO tests" };
+const crossSearchBase = `https://wiki.oiyo.net/${locale}/search`;
+
 const searchLabels = {
   title: translations.search.title,
   placeholder: translations.search.placeholder,
@@ -54,6 +67,21 @@ const searchLabels = {
       />
       <div id="search-meta" class="text-sm text-muted-foreground mb-4 min-h-[1.25rem]"></div>
       <ul id="search-results" class="space-y-4" role="list" aria-live="polite" aria-atomic="true"></ul>
+
+      <!-- #17 cross-site search -->
+      <div id="cross-search" class="hidden mt-10 rounded-xl border border-border/60 bg-card p-4">
+        <p class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3">{crossLabels.heading}</p>
+        <div class="flex flex-wrap gap-2">
+          <a id="cross-search-link" href={crossSearchBase} rel="noopener"
+             class="rounded-lg border border-border bg-background px-3 py-1.5 text-sm font-medium hover:border-primary/50 hover:text-primary transition-colors">
+            {crossLabels.target} →
+          </a>
+          <a href={`https://oiyo.net/${locale}/tests`} rel="noopener"
+             class="rounded-lg border border-border bg-background px-3 py-1.5 text-sm font-medium hover:border-primary/50 hover:text-primary transition-colors">
+            {crossLabels.oiyo} →
+          </a>
+        </div>
+      </div>
     </div>
 
     <script>
@@ -150,6 +178,13 @@ const searchLabels = {
           }
           const results = fuse.search(query);
           renderResults(results, query);
+          const cross = document.getElementById("cross-search");
+          const crossLink = document.getElementById("cross-search-link") as HTMLAnchorElement | null;
+          if (cross && crossLink) {
+            cross.classList.toggle("hidden", !query.trim());
+            const base = crossLink.href.split("?")[0];
+            crossLink.href = `${base}?q=${encodeURIComponent(query.trim())}`;
+          }
           const url = new URL(window.location.href);
           url.searchParams.set("q", query);
           history.replaceState(null, "", url.toString());
