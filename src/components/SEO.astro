@@ -46,15 +46,10 @@ const currentLocale = supportedLocales.includes(currentPathname.split("/")[1])
 // vary per locale, so they stay self-referential.
 const pathSegments = currentPathname.split("/").filter(Boolean);
 const isLocalePath = supportedLocales.includes(pathSegments[0]);
-// Legacy: the English about/privacy/terms pages live at the root
-// (/about/, not /en/about/), so their clusters cannot be completed.
-const rootEnglishSlugs = new Set(["about", "privacy", "terms"]);
 const isLocaleCompleteRoute =
   isLocalePath &&
   (pathSegments.length === 1 ||
-    (pathSegments.length === 2 &&
-      !/^\d+$/.test(pathSegments[1]) &&
-      !rootEnglishSlugs.has(pathSegments[1])));
+    (pathSegments.length === 2 && !/^\d+$/.test(pathSegments[1])));
 const locales =
   availableLocales ?? (isLocaleCompleteRoute ? supportedLocales : [currentLocale]);
 const xDefaultLocale = locales.includes(siteConfig.locale)
