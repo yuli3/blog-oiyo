@@ -1,0 +1,29 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import MindEaseTestComp from "../../components/tests/MindEaseTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "건강 불안 테스트: 나의 건강 불안 수준은?", description: "10개의 질문으로 건강 불안 수준을 측정하세요. 매우 낮음부터 매우 높음까지 5단계로 진단합니다." },
+  en: { title: "Health Anxiety Test Test: What's Your Health Anxiety Level?", description: "Measure your health anxiety level with 10 questions. Rated across 5 levels from Very Low to Very High." },
+  ja: { title: "健康不安テストテスト：あなたの健康不安レベルは？", description: "10の質問で健康不安レベルを測定。非常に低いから非常に高いまで5段階で診断します。" },
+  fr: { title: "Test Health Anxiety Test : Quel est votre niveau d'anxiété de santé?", description: "Mesurez votre niveau d'anxiété de santé avec 10 questions. Évalué sur 5 niveaux de Très Bas à Très Élevé." },
+  es: { title: "Test Health Anxiety Test: ¿Cuál es tu nivel de ansiedad de salud?", description: "Mide tu nivel de ansiedad de salud con 10 preguntas. Evaluado en 5 niveles de Muy Bajo a Muy Alto." },
+  zh: { title: "健康焦慮測試：你的健康焦慮水平如何？", description: "通過10個問題測量你的健康焦慮水平。從非常低到非常高分5個等級診斷。" },
+  cn: { title: "健康焦虑测试：你的健康焦虑水平如何？", description: "通过10个问题测量你的健康焦虑水平。从非常低到非常高分5个等级诊断。" },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <MindEaseTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

@@ -95,7 +95,7 @@ const data = {
     correct: "정답!", wrong: "오답",
   },
   en: {
-    title: "CritiQuest: What's Your Critical Thinking Level?",
+    title: "Critical Thinking: What's Your Critical Thinking Level?",
     description: "Measure your critical thinking ability with 10 logic questions.",
     questions: [
       { id: "q1", text: "Premise 1: All cats are mammals.\nPremise 2: All mammals are vertebrates.\nWhich conclusion must be true?", options: [

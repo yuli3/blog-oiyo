@@ -1,0 +1,29 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CritiQuestTestComp from "../../components/tests/CritiQuestTest";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "비판적 사고 테스트: 나의 비판적 사고 수준은?", description: "10개의 논리 문제로 나의 비판적 사고와 논리 추론 능력을 테스트해보세요. 전문가부터 초보까지 4단계 평가." },
+  en: { title: "Critical Thinking Test: What's Your Critical Thinking Level?", description: "Test your critical thinking and logical reasoning with 10 logic problems. Rated from Expert to Beginner across 4 levels." },
+  ja: { title: "批判的思考テスト：あなたの批判的思考レベルは？", description: "10の論理問題で批判的思考と論理的推論能力をテスト。専門家から初心者まで4段階評価。" },
+  fr: { title: "Critical Thinking Test : Quel est votre niveau de pensée critique?", description: "Testez votre pensée critique et votre raisonnement logique avec 10 problèmes logiques. Évalué de Expert à Débutant sur 4 niveaux." },
+  es: { title: "Critical Thinking Test: ¿Cuál es tu nivel de pensamiento crítico?", description: "Pon a prueba tu pensamiento crítico y razonamiento lógico con 10 problemas. Evaluado del Experto al Principiante en 4 niveles." },
+  zh: { title: "批判思維測試：你的批判性思維水平如何？", description: "通過10道邏輯題測試你的批判性思維和邏輯推理能力。從專家到初學者分4個等級評估。" },
+  cn: { title: "批判思维测试：你的批判性思维水平如何？", description: "通过10道逻辑题测试你的批判性思维和逻辑推理能力。从专家到初学者分4个等级评估。" },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-8">
+    <CritiQuestTestComp client:load locale={locale} />
+  </main>
+</BaseLayout>

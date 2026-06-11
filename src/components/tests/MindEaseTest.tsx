@@ -33,7 +33,7 @@ const data = {
     retake: "다시하기", resultLabel: "나의 건강 불안 수준",
   },
   en: {
-    title: "MindEase Test: What's Your Health Anxiety Level?",
+    title: "Health Anxiety Test: What's Your Health Anxiety Level?",
     description: "Measure your health anxiety level with 10 questions.",
     questions: [
       { id: "q1", text: "How often do you worry about having a serious illness?", reverse: false },

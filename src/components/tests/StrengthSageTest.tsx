@@ -36,7 +36,7 @@ const data = {
     retake: "다시하기", resultLabel: "나의 핵심 강점",
   },
   en: {
-    title: "Strength Sage Test: What's Your Hidden Strength?",
+    title: "Strengths Discovery Test: What's Your Hidden Strength?",
     description: "Discover your core strength type through 12 situational questions.",
     questions: [
       { id: "q1", text: "I feel most energized when coming up with new ideas or approaches.", type: "creator" as Strength },
