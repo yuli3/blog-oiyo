@@ -380,21 +380,82 @@ const TOOL_META: Record<string, ToolMeta> = {
     description_en: "Calculate the real cost of your meetings",
     icon: "🤝",
   },
+  "empathy-test": {
+    name_ko: "공감 능력 테스트",
+    name_en: "Empathy Test",
+    description_ko: "나의 공감 유형을 확인해보세요",
+    description_en: "Find out your empathy style",
+    icon: "🤝",
+  },
+  "global-etf": {
+    name_ko: "글로벌 ETF 탐색기",
+    name_en: "Global ETF Explorer",
+    description_ko: "해외 ETF를 한눈에 비교해보세요",
+    description_en: "Compare global ETFs at a glance",
+    icon: "🌐",
+  },
+  chess: {
+    name_ko: "체스 게임",
+    name_en: "Chess",
+    description_ko: "브라우저에서 바로 체스를 둬보세요",
+    description_en: "Play chess right in your browser",
+    icon: "♟️",
+  },
+  gomoku: {
+    name_ko: "오목 게임",
+    name_en: "Gomoku",
+    description_ko: "전략 보드게임 오목에 도전해보세요",
+    description_en: "Try the strategy board game Gomoku",
+    icon: "⚫",
+  },
+  investment: {
+    name_ko: "투자 성향 테스트",
+    name_en: "Investor Type Test",
+    description_ko: "나의 투자자 유형을 알아보세요",
+    description_en: "Discover your investor type",
+    icon: "💹",
+  },
+  "learning-style": {
+    name_ko: "학습 스타일 테스트",
+    name_en: "Learning Style Test",
+    description_ko: "나에게 맞는 공부법을 찾아보세요",
+    description_en: "Find the study method that fits you",
+    icon: "📚",
+  },
+  "legal-interest": {
+    name_ko: "법정이자 계산기",
+    name_en: "Legal Interest Calculator",
+    description_ko: "법정이자를 간단히 계산해보세요",
+    description_en: "Calculate statutory interest easily",
+    icon: "⚖️",
+  },
+};
+
+// family-first targets: link the OIYO family page when one exists (#strategy)
+const HREF_OVERRIDES: Record<string, (l: string) => string> = {
+  "empathy-test": (l) => `https://oiyo.net/${l}/empathy/test?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta`,
+  investment: (l) => `https://oiyo.net/${l}/investment-type/test?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta`,
+  chess: (l) => `/${l}/chess/`,
+  gomoku: (l) => `/${l}/gomoku/`,
+  "learning-style": (l) => `/${l}/learning-style-test/`,
+  "legal-interest": (l) => `/${l}/legal-interest-calculator/`,
 };
 
 const { tool, locale = "ko" } = Astro.props;
 
 const meta = TOOL_META[tool];
-if (!meta) return Astro.response;
 
 const isKo = locale === "ko";
-const name = isKo ? meta.name_ko : meta.name_en;
-const description = isKo ? meta.description_ko : meta.description_en;
+const name = meta ? (isKo ? meta.name_ko : meta.name_en) : "";
+const description = meta ? (isKo ? meta.description_ko : meta.description_en) : "";
 const ctaLabel = isKo ? "계산해보기 →" : "Try it →";
 import { AHOXY_URL } from '@/config/site.config';
-const href = `${AHOXY_URL}/${locale}/${tool}?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta`;
+const href = HREF_OVERRIDES[tool]
+  ? HREF_OVERRIDES[tool](locale)
+  : `${AHOXY_URL}/${locale}/${tool}?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta`;
 ---
 
+{meta && (
 <aside class="not-prose my-8 rounded-2xl border border-sky-200 bg-sky-50/80 shadow-sm">
   <a
     href={href}
@@ -420,3 +481,4 @@ const href = `${AHOXY_URL}/${locale}/${tool}?utm_source=blog_oiyo&utm_medium=ref
     </span>
   </a>
 </aside>
+)}

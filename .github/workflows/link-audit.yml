@@ -29,3 +29,8 @@ jobs:
 
       - name: Link audit
         run: python3 scripts/link-audit.py dist >> "$GITHUB_STEP_SUMMARY"
+
+      - name: i18n residue audit
+        run: |
+          NS=$(python3 -c "import json; print(','.join(json.load(open('src/locales/ko.json')).keys()))")
+          python3 scripts/i18n-residue-audit.py dist "$NS" >> "$GITHUB_STEP_SUMMARY"
