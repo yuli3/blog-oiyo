@@ -13,6 +13,20 @@ export async function getStaticPaths() {
     ({ data }) => data.draft !== true,
   );
 
+  // per category-slug, per locale page counts — feeds the language switcher (#27)
+  const pagesByCatLocale: Record<string, Record<string, number>> = {};
+  for (const post of allPosts) {
+    if (!post.data.category || !post.data.locale) continue;
+    const cslug = slugifyCategory(post.data.category);
+    pagesByCatLocale[cslug] ??= {};
+    pagesByCatLocale[cslug][post.data.locale] = (pagesByCatLocale[cslug][post.data.locale] ?? 0) + 1;
+  }
+  for (const cslug of Object.keys(pagesByCatLocale)) {
+    for (const l of Object.keys(pagesByCatLocale[cslug])) {
+      pagesByCatLocale[cslug][l] = Math.ceil(pagesByCatLocale[cslug][l] / postsPerPage);
+    }
+  }
+
   for (const lang of locales) {
     const langPosts = allPosts.filter((post) => post.data.locale === lang);
     const categories = [
@@ -57,6 +71,9 @@ export async function getStaticPaths() {
             ),
             currentPage: p,
             totalPages,
+            availableLocales: locales.filter(
+              (l) => (pagesByCatLocale[normalizedCategorySlug]?.[l] ?? 0) >= p,
+            ),
           },
         });
       }
@@ -67,7 +84,7 @@ export async function getStaticPaths() {
 }
 
 const { category } = Astro.params;
-const { locale, originalCategory, pageData, currentPage, totalPages } =
+const { locale, originalCategory, pageData, currentPage, totalPages, availableLocales } =
   Astro.props;
 const t = await getTranslations(locale);
 
@@ -95,4 +112,5 @@ const displaySubtitle = track === "academy"
   title={displayName}
   subtitle={displaySubtitle}
   activeCategory={category}
+  availableLocales={availableLocales}
 />

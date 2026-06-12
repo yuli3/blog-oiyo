@@ -11,6 +11,8 @@ export async function getStaticPaths() {
 }
 
 const { locale } = Astro.props as { locale: Locale };
+// lab/academy articles exist in ko/en only (#27)
+const labLocale = locale === 'ko' ? 'ko' : 'en';
 
 const meta: Record<Locale, { title: string; description: string }> = {
   ko: {
@@ -60,31 +62,31 @@ const tools: ToolCard[] = [
   {
     title: "원가관리 인터랙티브 라보 (CVP)",
     description: "가격·변동원가·고정원가를 조정하며 손익분기점 구조를 시각적으로 학습합니다.",
-    href: `/${locale}/magazine-education-accounting-lab`,
+    href: `/${labLocale}/magazine-education-accounting-lab`,
     badge: "인기",
   },
   {
     title: "분산분석 시뮬레이터",
     description: "표준원가 대비 실제원가의 차이를 가격·수량·효율 차이로 분해하는 분산분석 도구입니다.",
-    href: `/${locale}/magazine-education-variance-lab`,
+    href: `/${labLocale}/magazine-education-variance-lab`,
     badge: "",
   },
   {
     title: "CAPM & WACC 계산기",
     description: "자기자본비용(CAPM)과 가중평균자본비용(WACC)을 계산하는 고급 재무 도구입니다.",
-    href: `/${locale}/magazine-education-finance-lab`,
+    href: `/${labLocale}/magazine-education-finance-lab`,
     badge: "",
   },
   {
     title: "채권·포트폴리오 도구",
     description: "채권 가격·YTM·듀레이션 계산과 포트폴리오 리스크-수익 분석을 제공합니다.",
-    href: `/${locale}/magazine-education-portfolio-lab`,
+    href: `/${labLocale}/magazine-education-portfolio-lab`,
     badge: "",
   },
   {
     title: "투자 분석 도구 (DCF·IRR·NPV)",
     description: "현금흐름 할인, 내부수익률, 순현재가치 계산 — 투자 의사결정 지원 도구입니다.",
-    href: `/${locale}/magazine-education-investment-lab`,
+    href: `/${labLocale}/magazine-education-investment-lab`,
     badge: "",
   },
 ];

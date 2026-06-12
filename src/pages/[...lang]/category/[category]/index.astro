@@ -27,13 +27,21 @@ export async function getStaticPaths() {
         lang,
         category: category ? slugifyCategory(category) : "unknown",
       },
-      props: { originalCategory: category, locale: lang },
+      props: {
+        originalCategory: category,
+        locale: lang,
+        // locales that actually have this category — feeds the language
+        // switcher so it never links to a nonexistent category page (#27)
+        availableLocales: locales.filter((l) =>
+          allPosts.some((post) => post.data.locale === l && post.data.category === category),
+        ),
+      },
     }));
   });
 }
 
 const { category } = Astro.params;
-const { originalCategory, locale } = Astro.props;
+const { originalCategory, locale, availableLocales } = Astro.props;
 const t = await getTranslations(locale);
 
 const posts = await getCollection("blog", ({ data }) => {
@@ -81,4 +89,5 @@ const displaySubtitle = track === "academy"
   title={displayName}
   subtitle={displaySubtitle}
   activeCategory={category}
+  availableLocales={availableLocales}
 />

@@ -11,6 +11,8 @@ export async function getStaticPaths() {
 }
 
 const { locale } = Astro.props as { locale: Locale };
+// lab/academy articles exist in ko/en only (#27)
+const labLocale = locale === 'ko' ? 'ko' : 'en';
 
 const meta: Record<Locale, { title: string; description: string }> = {
   ko: {
@@ -69,28 +71,28 @@ const tools: ToolCard[] = [
   {
     title: "IS-LM 모델 시뮬레이터",
     description: "재정정책(G 증가)과 통화정책(M 증가)이 IS-LM 균형에 미치는 영향을 실시간으로 확인합니다.",
-    href: `/${locale}/magazine-education-macro-lab`,
+    href: `/${labLocale}/magazine-education-macro-lab`,
     badge: "인기",
     category: "거시경제",
   },
   {
     title: "게임이론 인터랙티브",
     description: "죄수의 딜레마·내쉬균형·우월전략을 보수행렬로 직접 조작하며 학습합니다.",
-    href: `/${locale}/magazine-education-game-theory-lab`,
+    href: `/${labLocale}/magazine-education-game-theory-lab`,
     badge: "",
     category: "게임이론",
   },
   {
     title: "행동경제학 시리즈",
     description: "편향·휴리스틱·프레이밍 효과를 10개 챕터로 학습하는 행동경제학 아카데미입니다.",
-    href: `/${locale}/academy-behavioral-economics-ch1`,
+    href: `/${labLocale}/academy-behavioral-economics-ch1`,
     badge: "",
     category: "행동경제학",
   },
   {
     title: "무역·국제경제 시뮬레이터",
     description: "비교우위·관세·환율 효과를 시뮬레이션하는 국제무역 인터랙티브 도구입니다.",
-    href: `/${locale}/magazine-education-trade-lab`,
+    href: `/${labLocale}/magazine-education-trade-lab`,
     badge: "",
     category: "국제경제",
   },

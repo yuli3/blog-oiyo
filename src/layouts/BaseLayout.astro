@@ -43,11 +43,9 @@ const getLocalizedPath = (targetLocale: string) => {
   let localizedPath = currentPathname;
   if (locales.includes(firstSegment)) {
     const restOfPath = currentPathname.replace(`/${firstSegment}`, "");
-    localizedPath =
-      targetLocale === "en" ? restOfPath || "/" : `/${targetLocale}${restOfPath}`;
+    localizedPath = `/${targetLocale}${restOfPath}` || "/";
   } else {
-    localizedPath =
-      targetLocale === "en" ? currentPathname : `/${targetLocale}${currentPathname}`;
+    localizedPath = `/${targetLocale}${currentPathname}`;
   }
   return localizedPath.startsWith("/") ? localizedPath : `/${localizedPath}`;
 };
@@ -60,15 +58,19 @@ const navItems = [
   { href: `/${locale}/tools`, label: nav.tools ?? "Tools" },
 ];
 
-const langItems = [
+const allLangItems = [
   { code: "en", label: "EN" },
   { code: "ko", label: "KO" },
   { code: "ja", label: "JA" },
   { code: "fr", label: "FR" },
   { code: "es", label: "ES" },
   { code: "zh", label: "ZH" },
-  { code: "cn", label: "CN" },
 ];
+// Only offer locales the current page actually exists in (article pages pass
+// availableLocales); fall back to all. cn is removed from routing entirely.
+const langItems = availableLocales && availableLocales.length
+  ? allLangItems.filter((li) => availableLocales.includes(li.code) || li.code === locale)
+  : allLangItems;
 ---
 
 <html
@@ -370,8 +372,8 @@ const langItems = [
             <a href={`/${locale}/magazine`} class="hover:text-primary transition-colors">{nav.magazine ?? "Magazine"}</a>
             <a href="/rss.xml" class="hover:text-primary transition-colors">RSS</a>
             <a href="/sitemap-index.xml" class="hover:text-primary transition-colors">Sitemap</a>
-            <a href={`/${locale === "en" ? "" : locale + "/"}privacy`} class="hover:text-primary transition-colors">{t.legal.privacy.title}</a>
-            <a href={`/${locale === "en" ? "" : locale + "/"}terms`} class="hover:text-primary transition-colors">{t.legal.terms.title}</a>
+            <a href={`/${locale}/privacy`} class="hover:text-primary transition-colors">{t.legal.privacy.title}</a>
+            <a href={`/${locale}/terms`} class="hover:text-primary transition-colors">{t.legal.terms.title}</a>
             <a href="mailto:support@oiyo.net" class="hover:text-primary transition-colors">support@oiyo.net</a>
           </nav>
           <div

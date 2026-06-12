@@ -16,6 +16,7 @@ interface PageData {
 }
 
 interface Props {
+  availableLocales?: string[];
   page: PageData;
   locale: string;
   baseUrl: string;
@@ -32,7 +33,7 @@ const blogT = t.blog as Record<string, string>;
 const categoryNames = (t.category.names ?? {}) as unknown as { [key: string]: string };
 ---
 
-<BaseLayout title={title} description={subtitle}>
+<BaseLayout title={title} description={subtitle} availableLocales={Astro.props.availableLocales}>
   <section class="py-16 md:py-20">
     <div class="container px-4">
       <div class="mb-12 max-w-2xl">

@@ -7,6 +7,14 @@ export async function getStaticPaths() {
   const postsPerPage = 10;
   const paths = [];
 
+  // per-locale page counts, so the language switcher only offers locales
+  // that actually have the current page number (#27 link audit)
+  const totalPagesByLocale: Record<string, number> = {};
+  for (const lang of locales) {
+    const posts = await getCollection("blog", ({ data }) => data.draft !== true && data.locale === lang);
+    totalPagesByLocale[lang] = Math.ceil(posts.length / postsPerPage);
+  }
+
   for (const lang of locales) {
     const posts = await getCollection("blog", ({ data }) => {
       return data.draft !== true && data.locale === lang;
@@ -31,6 +39,7 @@ export async function getStaticPaths() {
           pageData: posts.slice((p - 1) * postsPerPage, p * postsPerPage),
           currentPage: p,
           totalPages,
+          availableLocales: locales.filter((l) => totalPagesByLocale[l] >= p),
         },
       });
     }
@@ -39,7 +48,7 @@ export async function getStaticPaths() {
   return paths;
 }
 
-const { locale, pageData, currentPage, totalPages } = Astro.props;
+const { locale, pageData, currentPage, totalPages, availableLocales } = Astro.props;
 const t = await getTranslations(locale);
 
 const page = {
@@ -55,4 +64,5 @@ const page = {
   baseUrl={`/${locale}`}
   title={t.nav.home}
   subtitle={t.home.tagline}
+  availableLocales={availableLocales}
 />

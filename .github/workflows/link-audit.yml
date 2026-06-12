@@ -1,0 +1,31 @@
+name: Weekly Link Audit
+
+on:
+  schedule:
+    # 매주 화요일 00:30 UTC = 09:30 KST
+    - cron: '30 0 * * 2'
+  workflow_dispatch:
+
+jobs:
+  audit:
+    name: Broken links & orphan pages
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Link audit
+        run: python3 scripts/link-audit.py dist >> "$GITHUB_STEP_SUMMARY"
