@@ -1,5 +1,6 @@
 ---
 import { siteConfig } from "../config/site.config";
+import { getAuthor } from "../lib/authors";
 
 interface Props {
   title?: string;
@@ -290,9 +291,9 @@ const hreflangMap: Record<string, string> = {
             ? pubDate.toISOString()
             : new Date().toISOString(),
         author: {
-          "@type": "Person",
-          name: siteConfig.author,
-          url: siteConfig.url,
+          "@type": getAuthor(author).schemaType,
+          name: author,
+          url: `${siteConfig.url}/about`,
         },
         publisher: {
           "@type": "Organization",

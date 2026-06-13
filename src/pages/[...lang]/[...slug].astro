@@ -268,6 +268,18 @@ const coursesHref = `/${locale}/courses`;
               )}
               <span class="text-muted-foreground/30">•</span>
               <span class="text-muted-foreground/60">{readingTimeLabel}</span>
+              {post.data.updatedDate && (
+                <>
+                  <span class="text-muted-foreground/30">•</span>
+                  <span class="text-muted-foreground/60">
+                    {(locale === "ko" ? "최종 수정 " : locale === "ja" ? "最終更新 " : "Updated ")}
+                    {post.data.updatedDate.toLocaleDateString(
+                      locale === "ko" ? "ko-KR" : locale === "ja" ? "ja-JP" : "en-US",
+                      { month: "long", day: "numeric", year: "numeric" },
+                    )}
+                  </span>
+                </>
+              )}
             </div>
 
             <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-10 leading-tight font-heading">
@@ -381,7 +393,7 @@ const coursesHref = `/${locale}/courses`;
           </div>
 
           <!-- Author Profile Component for E-E-A-T SEO -->
-          <AuthorProfile authorName={post.data.author} />
+          <AuthorProfile authorName={post.data.author} locale={locale} />
 
           <MysticTrinity slug={post.slug.split("/").slice(1).join("/")} locale={locale} />
 
