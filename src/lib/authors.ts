@@ -90,6 +90,15 @@ export function getAuthor(rawByline: string): AuthorEntity {
   return BYLINE_MAP[key] ?? DESKS.editorial;
 }
 
+/** The distinct editorial desks, for the /about transparency section. */
+export const EDITORIAL_DESKS: AuthorEntity[] = [
+  DESKS.editorial,
+  DESKS.research,
+  DESKS.psychology,
+  DESKS.science,
+  DESKS.culture,
+];
+
 /** Pick a locale string with en fallback. */
 export function pick(map: Record<string, string>, locale: string): string {
   return map[locale] ?? map.en ?? Object.values(map)[0] ?? "";
