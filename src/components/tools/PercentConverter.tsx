@@ -25,7 +25,7 @@ interface Labels {
   invalid: string;
 }
 
-const LABELS: Record<Locale, Labels> = {
+const LABELS: Record<Exclude<Locale, "cn">, Labels> = {
   en: {
     title: "Percentage Calculator",
     subtitle: "The three most-used percentage operations in one place.",
@@ -164,7 +164,7 @@ interface Props {
 }
 
 export default function PercentConverter({ locale }: Props) {
-  const t = LABELS[(locale as Locale) in LABELS ? (locale as Locale) : "en"] ?? LABELS.en;
+  const t = LABELS[locale as Exclude<Locale, "cn">] ?? LABELS.en;
 
   const [ofA, setOfA] = useState("");
   const [ofB, setOfB] = useState("");

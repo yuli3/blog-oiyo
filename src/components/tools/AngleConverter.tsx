@@ -15,7 +15,7 @@ interface Labels {
   outputTitle: string;
 }
 
-const LABELS: Record<Locale, Labels> = {
+const LABELS: Record<Exclude<Locale, "cn">, Labels> = {
   en: {
     title: "Angle Converter",
     subtitle: "Convert degrees, radians, and gradians instantly.",
@@ -97,7 +97,7 @@ function fmt(n: number): string {
 }
 
 export default function AngleConverter({ locale }: { locale: Locale }) {
-  const t = LABELS[(locale as Locale) in LABELS ? (locale as Locale) : "en"] ?? LABELS.en;
+  const t = LABELS[locale as Exclude<Locale, "cn">] ?? LABELS.en;
   const [value, setValue] = useState("");
   const [unit, setUnit] = useState<AngleUnit>("deg");
 

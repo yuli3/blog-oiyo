@@ -17,7 +17,7 @@ interface Labels {
   invalid: string;
 }
 
-const LABELS: Record<Locale, Labels> = {
+const LABELS: Record<Exclude<Locale, "cn">, Labels> = {
   en: {
     title: "Ratio Calculator",
     subtitle: "Simplify a:b ratios and solve a:b = c:x proportions.",
@@ -118,7 +118,7 @@ interface Props {
 }
 
 export default function RatioCalculator({ locale }: Props) {
-  const t = LABELS[(locale as Locale) in LABELS ? (locale as Locale) : "en"] ?? LABELS.en;
+  const t = LABELS[locale as Exclude<Locale, "cn">] ?? LABELS.en;
   const [simpleA, setSimpleA] = useState("");
   const [simpleB, setSimpleB] = useState("");
   const [propA, setPropA] = useState("");
