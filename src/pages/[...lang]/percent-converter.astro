@@ -1,0 +1,259 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PercentConverter from "../../components/tools/PercentConverter";
+import { locales } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: ActiveLocale };
+
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
+  ko: {
+    title: "퍼센트 계산기 — B의 A%, A는 B의 몇%, 증감률",
+    description: "가장 많이 쓰는 백분율 계산 3가지(어떤 값의 몇 퍼센트, 비율, 증감률)를 한 번에. 공식·예시·FAQ 포함.",
+  },
+  en: {
+    title: "Percentage Calculator — % of a number, ratio, and change",
+    description: "Do the three most common percentage calculations in one place: A% of B, A is what % of B, and percent change. With formulas, examples, and FAQ.",
+  },
+  ja: {
+    title: "パーセント計算機 — BのA%、AはBの何%、増減率",
+    description: "よく使う割合計算3種（ある値の何%、割合、増減率）をまとめて。公式・例・FAQ付き。",
+  },
+  zh: {
+    title: "百分比计算器 — B的A%、A是B的百分之几、变化率",
+    description: "把最常用的三种百分比计算放在一起：A%是多少、占比、变化率。附公式、示例与常见问题。",
+  },
+  fr: {
+    title: "Calculateur de Pourcentage — % d'un nombre, ratio et variation",
+    description: "Les trois calculs de pourcentage les plus courants au même endroit : A% de B, A représente quel % de B, et variation en %. Formules, exemples, FAQ.",
+  },
+  es: {
+    title: "Calculadora de Porcentaje — % de un número, proporción y cambio",
+    description: "Los tres cálculos de porcentaje más comunes en un lugar: A% de B, A es qué % de B y cambio porcentual. Con fórmulas, ejemplos y FAQ.",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "백분율은 '전체를 100으로 봤을 때의 비율'입니다",
+    intro: "퍼센트(%) 계산은 일상에서 가장 자주 쓰는 산수입니다. 이 계산기는 ① 어떤 값의 몇 퍼센트, ② 한 값이 다른 값의 몇 퍼센트인지, ③ 값이 얼마나 늘거나 줄었는지(증감률) 세 가지를 한 화면에서 즉시 계산합니다.",
+    formulaTitle: "계산 공식",
+    formulas: [
+      { title: "B의 A%", body: "결과 = (A ÷ 100) × B" },
+      { title: "A는 B의 몇 %", body: "결과 = (A ÷ B) × 100" },
+      { title: "증감률", body: "결과 = ((나중 − 처음) ÷ |처음|) × 100" },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "계산하려는 유형(몇 퍼센트 / 비율 / 증감률)을 고릅니다.",
+      "두 숫자를 입력하면 결과가 즉시 표시됩니다.",
+      "할인가, 시험 점수 비율, 가격 변동 등에 활용하세요.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "20%를 소수로 바꾸면?", answer: "퍼센트를 100으로 나누면 됩니다. 20% = 20 ÷ 100 = 0.2 입니다." },
+      { question: "증감률에서 처음 값이 0이면?", answer: "처음 값이 0이면 증감률은 정의되지 않습니다(0으로 나눌 수 없음). 절대 변화량으로 표현하세요." },
+      { question: "할인율 계산은 어떻게 하나요?", answer: "'증감률'에 원가와 할인가를 넣으면 감소율이 나옵니다. 또는 '몇 퍼센트'로 (원가의 할인%)를 빼서 할인가를 구할 수 있습니다." },
+    ],
+    disclaimer: "이 도구는 일반적인 산술 계산용입니다. 세금·금융 등 공식 수치는 해당 기관의 기준을 확인하세요.",
+  },
+  en: {
+    introTitle: "A percentage is simply a ratio out of 100",
+    intro: "Percentage math is one of the most common everyday calculations. This tool instantly handles three operations on one screen: (1) A% of a value, (2) what percent one value is of another, and (3) how much a value went up or down (percent change).",
+    formulaTitle: "Formulas",
+    formulas: [
+      { title: "A% of B", body: "result = (A ÷ 100) × B" },
+      { title: "A is what % of B", body: "result = (A ÷ B) × 100" },
+      { title: "Percent change", body: "result = ((To − From) ÷ |From|) × 100" },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Pick the type you need (percent of, ratio, or change).",
+      "Enter the two numbers and the result appears instantly.",
+      "Use it for discounts, test scores, price changes, and more.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "How do I convert 20% to a decimal?", answer: "Divide the percent by 100. 20% = 20 ÷ 100 = 0.2." },
+      { question: "What if the starting value is 0 for percent change?", answer: "Percent change is undefined when the starting value is 0 (you cannot divide by zero). Use the absolute change instead." },
+      { question: "How do I calculate a discount?", answer: "Use 'percent change' with the original and sale price to get the decrease, or use 'A% of B' to take the discount percent off the original." },
+    ],
+    disclaimer: "This tool is for general arithmetic. For official figures such as taxes or finance, confirm with the relevant authority.",
+  },
+  ja: {
+    introTitle: "パーセントは「全体を100としたときの割合」です",
+    intro: "割合計算は日常で最もよく使う計算の一つです。この計算機は、①ある値の何%、②ある値が別の値の何%か、③値がどれだけ増減したか（増減率）の3つを1画面で即座に計算します。",
+    formulaTitle: "計算式",
+    formulas: [
+      { title: "BのA%", body: "結果 = (A ÷ 100) × B" },
+      { title: "AはBの何%", body: "結果 = (A ÷ B) × 100" },
+      { title: "増減率", body: "結果 = ((後 − 最初) ÷ |最初|) × 100" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "計算したい種類（何% / 割合 / 増減率）を選びます。",
+      "2つの数値を入力すると結果がすぐ表示されます。",
+      "割引価格、テストの得点率、価格変動などに使えます。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "20%を小数にすると？", answer: "パーセントを100で割ります。20% = 20 ÷ 100 = 0.2 です。" },
+      { question: "増減率で最初の値が0のときは？", answer: "最初が0だと増減率は定義されません（0で割れない）。絶対的な変化量で表してください。" },
+      { question: "割引率はどう計算しますか？", answer: "『増減率』に元値と割引後価格を入れると減少率が出ます。または『何%』で割引額を引いて求めます。" },
+    ],
+    disclaimer: "このツールは一般的な計算用です。税金・金融などの公式数値は各機関の基準をご確認ください。",
+  },
+  zh: {
+    introTitle: "百分比就是「以100为整体时的比例」",
+    intro: "百分比计算是日常最常用的运算之一。本工具在一个页面即时处理三种运算：①某值的百分之几、②一个值占另一个值的百分之几、③数值上升或下降了多少（变化率）。",
+    formulaTitle: "计算公式",
+    formulas: [
+      { title: "B 的 A%", body: "结果 = (A ÷ 100) × B" },
+      { title: "A 是 B 的百分之几", body: "结果 = (A ÷ B) × 100" },
+      { title: "变化率", body: "结果 = ((结束 − 起始) ÷ |起始|) × 100" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "选择需要的类型（百分之几 / 占比 / 变化率）。",
+      "输入两个数字，结果会立即显示。",
+      "可用于折扣、考试得分率、价格变动等。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "20% 转成小数是多少？", answer: "把百分比除以100。20% = 20 ÷ 100 = 0.2。" },
+      { question: "变化率中起始值为0怎么办？", answer: "起始值为0时变化率无定义（不能除以0）。请改用绝对变化量。" },
+      { question: "如何计算折扣？", answer: "用「变化率」输入原价和折后价得到下降比例，或用「百分之几」从原价减去折扣额。" },
+    ],
+    disclaimer: "本工具用于一般运算。税务、金融等官方数字请以相关机构标准为准。",
+  },
+  fr: {
+    introTitle: "Un pourcentage est simplement un ratio sur 100",
+    intro: "Le calcul de pourcentage est l'un des plus courants au quotidien. Cet outil effectue instantanément trois opérations sur un seul écran : (1) A% d'une valeur, (2) quel pourcentage une valeur représente d'une autre, et (3) de combien une valeur a augmenté ou diminué (variation).",
+    formulaTitle: "Formules",
+    formulas: [
+      { title: "A% de B", body: "résultat = (A ÷ 100) × B" },
+      { title: "A représente quel % de B", body: "résultat = (A ÷ B) × 100" },
+      { title: "Variation en %", body: "résultat = ((Fin − Début) ÷ |Début|) × 100" },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Choisissez le type voulu (pourcentage de, ratio ou variation).",
+      "Saisissez les deux nombres et le résultat apparaît instantanément.",
+      "Pour les remises, notes d'examen, variations de prix, etc.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Comment convertir 20% en décimal ?", answer: "Divisez le pourcentage par 100. 20% = 20 ÷ 100 = 0,2." },
+      { question: "Et si la valeur de départ est 0 pour la variation ?", answer: "La variation est indéfinie quand le départ est 0 (division par zéro impossible). Utilisez la variation absolue." },
+      { question: "Comment calculer une remise ?", answer: "Utilisez « variation » avec le prix initial et le prix soldé, ou « A% de B » pour retirer le pourcentage de remise du prix initial." },
+    ],
+    disclaimer: "Cet outil sert au calcul général. Pour des chiffres officiels (impôts, finance), vérifiez auprès de l'autorité compétente.",
+  },
+  es: {
+    introTitle: "Un porcentaje es simplemente una proporción sobre 100",
+    intro: "El cálculo de porcentajes es uno de los más comunes a diario. Esta herramienta realiza al instante tres operaciones en una pantalla: (1) el A% de un valor, (2) qué porcentaje es un valor de otro, y (3) cuánto subió o bajó un valor (cambio porcentual).",
+    formulaTitle: "Fórmulas",
+    formulas: [
+      { title: "A% de B", body: "resultado = (A ÷ 100) × B" },
+      { title: "A es qué % de B", body: "resultado = (A ÷ B) × 100" },
+      { title: "Cambio porcentual", body: "resultado = ((Final − Inicial) ÷ |Inicial|) × 100" },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Elige el tipo que necesitas (porcentaje de, proporción o cambio).",
+      "Introduce los dos números y el resultado aparece al instante.",
+      "Úsalo para descuentos, notas de examen, cambios de precio y más.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Cómo convierto 20% a decimal?", answer: "Divide el porcentaje entre 100. 20% = 20 ÷ 100 = 0,2." },
+      { question: "¿Y si el valor inicial es 0 en el cambio porcentual?", answer: "El cambio porcentual no está definido cuando el inicial es 0 (no se puede dividir por cero). Usa el cambio absoluto." },
+      { question: "¿Cómo calculo un descuento?", answer: "Usa 'cambio porcentual' con el precio original y el rebajado, o 'A% de B' para restar el porcentaje de descuento del original." },
+    ],
+    disclaimer: "Esta herramienta es para cálculo general. Para cifras oficiales como impuestos o finanzas, confirma con la autoridad correspondiente.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
+---
+
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <main class="mx-auto max-w-3xl px-4 py-10">
+    <PercentConverter client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
+  </main>
+</BaseLayout>

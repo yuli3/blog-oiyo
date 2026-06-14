@@ -1,0 +1,259 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import FractionConverter from "../../components/tools/FractionConverter";
+import { locales } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: ActiveLocale };
+
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
+  ko: {
+    title: "분수 변환기 — 분수, 소수, 퍼센트",
+    description: "분수를 소수와 퍼센트로, 소수를 기약분수로 변환합니다. 공식·사용법·FAQ 포함.",
+  },
+  en: {
+    title: "Fraction Converter — fraction, decimal, and percent",
+    description: "Convert fractions to decimals and percentages, and decimals to reduced fractions. Includes formulas, steps, and FAQ.",
+  },
+  ja: {
+    title: "分数変換ツール — 分数、小数、パーセント",
+    description: "分数を小数・パーセントへ、小数を約分済み分数へ変換します。公式・使い方・FAQ付き。",
+  },
+  zh: {
+    title: "分数换算器 — 分数、小数、百分比",
+    description: "把分数换算为小数和百分比，也可把小数换算为最简分数。附公式、步骤与常见问题。",
+  },
+  fr: {
+    title: "Convertisseur de Fractions — fraction, décimal et pourcentage",
+    description: "Convertissez les fractions en décimaux et pourcentages, et les décimaux en fractions réduites. Avec formules, étapes et FAQ.",
+  },
+  es: {
+    title: "Convertidor de Fracciones — fracción, decimal y porcentaje",
+    description: "Convierte fracciones a decimales y porcentajes, y decimales a fracciones reducidas. Incluye fórmulas, pasos y FAQ.",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "분수, 소수, 퍼센트는 같은 비율을 다른 방식으로 씁니다",
+    intro: "3/4, 0.75, 75%는 모두 같은 값을 나타냅니다. 이 변환기는 분수를 입력하면 기약분수, 소수, 퍼센트를 함께 보여 주고, 소수를 입력하면 소수점 자리수를 기준으로 기약분수를 계산합니다.",
+    formulaTitle: "계산 공식",
+    formulas: [
+      { title: "분수 → 소수", body: "소수 = 분자 ÷ 분모" },
+      { title: "소수 → 퍼센트", body: "퍼센트 = 소수 × 100" },
+      { title: "기약분수", body: "분자와 분모를 최대공약수로 나눕니다" },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "분자와 분모를 입력하면 소수와 퍼센트가 즉시 표시됩니다.",
+      "분모에는 0을 입력할 수 없습니다.",
+      "소수를 입력하면 해당 소수점 자리수를 기준으로 기약분수를 확인합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "3/4는 소수와 퍼센트로 얼마인가요?", answer: "3 ÷ 4 = 0.75이고, 퍼센트로는 75%입니다." },
+      { question: "0.625는 어떤 분수인가요?", answer: "0.625는 625/1000으로 쓴 뒤 약분하면 5/8입니다." },
+      { question: "6/8은 왜 3/4가 되나요?", answer: "6과 8의 최대공약수는 2이므로 둘 다 2로 나누면 3/4가 됩니다." },
+    ],
+    disclaimer: "이 도구는 일반적인 산술 계산용입니다. 공식 수치는 해당 기관의 기준을 확인하세요.",
+  },
+  en: {
+    introTitle: "Fractions, decimals, and percents can describe the same ratio",
+    intro: "3/4, 0.75, and 75% all represent the same value. This converter shows the reduced fraction, decimal, and percent for a fraction, and converts a decimal to a reduced fraction based on its decimal places.",
+    formulaTitle: "Formulas",
+    formulas: [
+      { title: "Fraction to decimal", body: "decimal = numerator ÷ denominator" },
+      { title: "Decimal to percent", body: "percent = decimal × 100" },
+      { title: "Reduce a fraction", body: "divide numerator and denominator by their greatest common divisor" },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Enter a numerator and denominator to see the decimal and percent instantly.",
+      "Do not use 0 as the denominator.",
+      "Enter a decimal to get the reduced fraction based on its decimal places.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "What are 3/4 as a decimal and percent?", answer: "3 ÷ 4 = 0.75, which is 75%." },
+      { question: "What fraction is 0.625?", answer: "0.625 is 625/1000, which reduces to 5/8." },
+      { question: "Why does 6/8 reduce to 3/4?", answer: "The greatest common divisor of 6 and 8 is 2, so dividing both by 2 gives 3/4." },
+    ],
+    disclaimer: "This tool is for general arithmetic. For official figures, confirm with the relevant authority.",
+  },
+  ja: {
+    introTitle: "分数・小数・パーセントは同じ割合を別の形で表します",
+    intro: "3/4、0.75、75%はいずれも同じ値を表します。この変換ツールでは、分数から約分済み分数・小数・パーセントを確認でき、小数からは小数点以下の桁数を基準に約分済み分数を求めます。",
+    formulaTitle: "計算式",
+    formulas: [
+      { title: "分数 → 小数", body: "小数 = 分子 ÷ 分母" },
+      { title: "小数 → パーセント", body: "パーセント = 小数 × 100" },
+      { title: "約分", body: "分子と分母を最大公約数で割ります" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "分子と分母を入力すると小数とパーセントが表示されます。",
+      "分母に0は入力できません。",
+      "小数を入力すると、その桁数を基準に約分済み分数を確認できます。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "3/4は小数とパーセントでいくつですか？", answer: "3 ÷ 4 = 0.75、パーセントでは75%です。" },
+      { question: "0.625はどんな分数ですか？", answer: "0.625は625/1000と書け、約分すると5/8です。" },
+      { question: "6/8が3/4になるのはなぜですか？", answer: "6と8の最大公約数は2なので、両方を2で割ると3/4になります。" },
+    ],
+    disclaimer: "このツールは一般的な計算用です。公式数値は各機関の基準をご確認ください。",
+  },
+  zh: {
+    introTitle: "分数、小数和百分比可以表示同一个比例",
+    intro: "3/4、0.75 和 75% 表示的是同一个值。本工具输入分数后会显示最简分数、小数和百分比；输入小数后，会根据小数位数换算为最简分数。",
+    formulaTitle: "计算公式",
+    formulas: [
+      { title: "分数 → 小数", body: "小数 = 分子 ÷ 分母" },
+      { title: "小数 → 百分比", body: "百分比 = 小数 × 100" },
+      { title: "约分", body: "用最大公约数同时除分子和分母" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "输入分子和分母，即可看到小数和百分比。",
+      "分母不能为0。",
+      "输入小数，即可按小数位数得到最简分数。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "3/4 等于多少小数和百分比？", answer: "3 ÷ 4 = 0.75，也就是 75%。" },
+      { question: "0.625 是什么分数？", answer: "0.625 可写作 625/1000，约分后是 5/8。" },
+      { question: "为什么 6/8 会约成 3/4？", answer: "6 和 8 的最大公约数是 2，同时除以 2 后得到 3/4。" },
+    ],
+    disclaimer: "本工具用于一般运算。官方数字请以相关机构标准为准。",
+  },
+  fr: {
+    introTitle: "Fractions, décimaux et pourcentages peuvent décrire le même ratio",
+    intro: "3/4, 0,75 et 75% représentent la même valeur. Ce convertisseur affiche la fraction réduite, le décimal et le pourcentage d'une fraction, puis convertit un décimal en fraction réduite selon ses décimales.",
+    formulaTitle: "Formules",
+    formulas: [
+      { title: "Fraction vers décimal", body: "décimal = numérateur ÷ dénominateur" },
+      { title: "Décimal vers pourcentage", body: "pourcentage = décimal × 100" },
+      { title: "Réduire une fraction", body: "divisez numérateur et dénominateur par leur plus grand diviseur commun" },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Saisissez un numérateur et un dénominateur pour obtenir le décimal et le pourcentage.",
+      "N'utilisez pas 0 comme dénominateur.",
+      "Saisissez un décimal pour obtenir la fraction réduite correspondante.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Que valent 3/4 en décimal et en pourcentage ?", answer: "3 ÷ 4 = 0,75, soit 75%." },
+      { question: "Quelle fraction représente 0,625 ?", answer: "0,625 vaut 625/1000, ce qui se réduit à 5/8." },
+      { question: "Pourquoi 6/8 se réduit-il à 3/4 ?", answer: "Le plus grand diviseur commun de 6 et 8 est 2 ; en divisant les deux par 2, on obtient 3/4." },
+    ],
+    disclaimer: "Cet outil sert au calcul général. Pour des chiffres officiels, vérifiez auprès de l'autorité compétente.",
+  },
+  es: {
+    introTitle: "Fracciones, decimales y porcentajes pueden describir la misma proporción",
+    intro: "3/4, 0,75 y 75% representan el mismo valor. Este convertidor muestra la fracción reducida, el decimal y el porcentaje de una fracción, y convierte un decimal en fracción reducida según sus cifras decimales.",
+    formulaTitle: "Fórmulas",
+    formulas: [
+      { title: "Fracción a decimal", body: "decimal = numerador ÷ denominador" },
+      { title: "Decimal a porcentaje", body: "porcentaje = decimal × 100" },
+      { title: "Reducir una fracción", body: "divide numerador y denominador por su máximo común divisor" },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Introduce numerador y denominador para ver el decimal y el porcentaje.",
+      "No uses 0 como denominador.",
+      "Introduce un decimal para obtener la fracción reducida correspondiente.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Cuánto es 3/4 como decimal y porcentaje?", answer: "3 ÷ 4 = 0,75, que equivale a 75%." },
+      { question: "¿Qué fracción es 0,625?", answer: "0,625 es 625/1000, que se reduce a 5/8." },
+      { question: "¿Por qué 6/8 se reduce a 3/4?", answer: "El máximo común divisor de 6 y 8 es 2; al dividir ambos por 2 se obtiene 3/4." },
+    ],
+    disclaimer: "Esta herramienta es para cálculo general. Para cifras oficiales, confirma con la autoridad correspondiente.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
+---
+
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <main class="mx-auto max-w-3xl px-4 py-10">
+    <FractionConverter client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
+  </main>
+</BaseLayout>

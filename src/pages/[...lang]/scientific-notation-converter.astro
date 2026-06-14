@@ -1,0 +1,259 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ScientificNotationConverter from "../../components/tools/ScientificNotationConverter";
+import { locales } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: ActiveLocale };
+
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
+  ko: {
+    title: "과학적 표기법 변환기 — 숫자와 a × 10^n",
+    description: "일반 숫자를 과학적 표기법으로, 가수와 지수를 다시 일반 숫자로 변환합니다. 공식·사용법·FAQ 포함.",
+  },
+  en: {
+    title: "Scientific Notation Converter — number and a × 10^n",
+    description: "Convert regular numbers to scientific notation and convert coefficient plus exponent back to a regular number. Includes formulas, steps, and FAQ.",
+  },
+  ja: {
+    title: "科学的記数法変換ツール — 数値と a × 10^n",
+    description: "通常の数値を科学的記数法へ、仮数と指数を通常の数値へ変換します。公式・使い方・FAQ付き。",
+  },
+  zh: {
+    title: "科学记数法换算器 — 数字与 a × 10^n",
+    description: "把普通数字转换为科学记数法，也可把系数和指数转换回普通数字。附公式、步骤与常见问题。",
+  },
+  fr: {
+    title: "Convertisseur de Notation Scientifique — nombre et a × 10^n",
+    description: "Convertissez un nombre ordinaire en notation scientifique, puis un coefficient et un exposant en nombre ordinaire. Avec formules, étapes et FAQ.",
+  },
+  es: {
+    title: "Convertidor de Notación Científica — número y a × 10^n",
+    description: "Convierte números normales a notación científica y coeficiente más exponente a número normal. Incluye fórmulas, pasos y FAQ.",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "과학적 표기법은 아주 크거나 작은 수를 읽기 쉽게 만듭니다",
+    intro: "과학적 표기법은 수를 a × 10^n 꼴로 쓰는 방식입니다. 여기서 a는 보통 1 이상 10 미만의 크기를 갖고, n은 소수점을 몇 자리 옮겼는지를 나타냅니다. 이 도구는 일반 숫자와 과학적 표기를 양방향으로 즉시 변환합니다.",
+    formulaTitle: "계산 공식",
+    formulas: [
+      { title: "일반수 → 과학적 표기", body: "n = a × 10^e, 1 ≤ |a| < 10" },
+      { title: "지수", body: "e = floor(log10(|n|))" },
+      { title: "과학적 표기 → 일반수", body: "일반수 = a × 10^e" },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "일반 숫자를 입력하면 a × 10^n 형태가 즉시 표시됩니다.",
+      "반대로 가수 a와 지수 n을 입력하면 일반 숫자가 표시됩니다.",
+      "큰 수, 작은 수, 측정값, 과학 수업 예제에 활용하세요.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "12345는 과학적 표기로 어떻게 쓰나요?", answer: "12345 = 1.2345 × 10^4 입니다." },
+      { question: "0.00056은 어떻게 변환되나요?", answer: "0.00056 = 5.6 × 10^-4 입니다." },
+      { question: "가수 a는 꼭 1 이상 10 미만이어야 하나요?", answer: "표준 과학적 표기에서는 0이 아닌 수의 |a|가 1 이상 10 미만이 되도록 씁니다." },
+    ],
+    disclaimer: "이 도구는 일반적인 산술 계산용입니다. 공식 수치는 해당 기관의 기준을 확인하세요.",
+  },
+  en: {
+    introTitle: "Scientific notation makes very large or tiny numbers easier to read",
+    intro: "Scientific notation writes a number as a × 10^n. The coefficient a is usually scaled so its absolute value is at least 1 and less than 10, while n records how far the decimal point moved. This tool converts both directions instantly.",
+    formulaTitle: "Formulas",
+    formulas: [
+      { title: "Number to scientific notation", body: "n = a × 10^e, where 1 ≤ |a| < 10" },
+      { title: "Exponent", body: "e = floor(log10(|n|))" },
+      { title: "Scientific notation to number", body: "number = a × 10^e" },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Enter a regular number to see its a × 10^n form.",
+      "Enter a coefficient a and exponent n to convert back to a regular number.",
+      "Use it for large values, small measurements, and science class examples.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "How is 12345 written in scientific notation?", answer: "12345 = 1.2345 × 10^4." },
+      { question: "How does 0.00056 convert?", answer: "0.00056 = 5.6 × 10^-4." },
+      { question: "Does a have to be between 1 and 10?", answer: "In normalized scientific notation, a nonzero number is written so that 1 ≤ |a| < 10." },
+    ],
+    disclaimer: "This tool is for general arithmetic. For official figures, confirm with the relevant authority.",
+  },
+  ja: {
+    introTitle: "科学的記数法は大きな数や小さな数を読みやすくします",
+    intro: "科学的記数法は数を a × 10^n の形で表す方法です。通常、a の絶対値は1以上10未満にし、n は小数点を動かした桁数を示します。このツールは通常表記と科学的記数法を双方向に変換します。",
+    formulaTitle: "計算式",
+    formulas: [
+      { title: "通常の数値 → 科学的記数法", body: "n = a × 10^e、1 ≤ |a| < 10" },
+      { title: "指数", body: "e = floor(log10(|n|))" },
+      { title: "科学的記数法 → 通常の数値", body: "数値 = a × 10^e" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "通常の数値を入力すると a × 10^n の形が表示されます。",
+      "仮数 a と指数 n を入力すると通常の数値に戻せます。",
+      "大きな数、小さな測定値、理科や数学の例題に使えます。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "12345は科学的記数法でどう書きますか？", answer: "12345 = 1.2345 × 10^4 です。" },
+      { question: "0.00056はどう変換されますか？", answer: "0.00056 = 5.6 × 10^-4 です。" },
+      { question: "aは必ず1以上10未満ですか？", answer: "標準的な科学的記数法では、0以外の数は 1 ≤ |a| < 10 になるように書きます。" },
+    ],
+    disclaimer: "このツールは一般的な計算用です。公式数値は各機関の基準をご確認ください。",
+  },
+  zh: {
+    introTitle: "科学记数法让极大或极小的数更容易阅读",
+    intro: "科学记数法把数字写成 a × 10^n 的形式。通常 a 的绝对值不小于1且小于10，n 表示小数点移动的位数。本工具可在普通数字与科学记数法之间双向即时换算。",
+    formulaTitle: "计算公式",
+    formulas: [
+      { title: "普通数字 → 科学记数法", body: "n = a × 10^e，1 ≤ |a| < 10" },
+      { title: "指数", body: "e = floor(log10(|n|))" },
+      { title: "科学记数法 → 普通数字", body: "普通数字 = a × 10^e" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "输入普通数字，即可看到 a × 10^n 形式。",
+      "输入系数 a 和指数 n，即可转换回普通数字。",
+      "适用于大数、小测量值以及科学课程例题。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "12345 的科学记数法是什么？", answer: "12345 = 1.2345 × 10^4。" },
+      { question: "0.00056 如何转换？", answer: "0.00056 = 5.6 × 10^-4。" },
+      { question: "a 必须在 1 到 10 之间吗？", answer: "标准科学记数法中，非零数会写成 1 ≤ |a| < 10 的形式。" },
+    ],
+    disclaimer: "本工具用于一般运算。官方数字请以相关机构标准为准。",
+  },
+  fr: {
+    introTitle: "La notation scientifique rend lisibles les très grands et très petits nombres",
+    intro: "La notation scientifique écrit un nombre sous la forme a × 10^n. Le coefficient a est généralement choisi avec une valeur absolue au moins égale à 1 et inférieure à 10, tandis que n indique le déplacement de la virgule.",
+    formulaTitle: "Formules",
+    formulas: [
+      { title: "Nombre vers notation scientifique", body: "n = a × 10^e, avec 1 ≤ |a| < 10" },
+      { title: "Exposant", body: "e = floor(log10(|n|))" },
+      { title: "Notation scientifique vers nombre", body: "nombre = a × 10^e" },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Saisissez un nombre ordinaire pour obtenir sa forme a × 10^n.",
+      "Saisissez un coefficient a et un exposant n pour revenir au nombre ordinaire.",
+      "Utilisez-le pour les grands nombres, les petites mesures et les exercices scientifiques.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Comment écrire 12345 en notation scientifique ?", answer: "12345 = 1,2345 × 10^4." },
+      { question: "Comment convertir 0,00056 ?", answer: "0,00056 = 5,6 × 10^-4." },
+      { question: "a doit-il être entre 1 et 10 ?", answer: "En notation scientifique normalisée, un nombre non nul s'écrit avec 1 ≤ |a| < 10." },
+    ],
+    disclaimer: "Cet outil sert au calcul général. Pour des chiffres officiels, vérifiez auprès de l'autorité compétente.",
+  },
+  es: {
+    introTitle: "La notación científica facilita leer números muy grandes o muy pequeños",
+    intro: "La notación científica escribe un número como a × 10^n. El coeficiente a suele tener valor absoluto mayor o igual que 1 y menor que 10, y n indica cuántos lugares se movió el punto decimal.",
+    formulaTitle: "Fórmulas",
+    formulas: [
+      { title: "Número a notación científica", body: "n = a × 10^e, con 1 ≤ |a| < 10" },
+      { title: "Exponente", body: "e = floor(log10(|n|))" },
+      { title: "Notación científica a número", body: "número = a × 10^e" },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Introduce un número normal para ver su forma a × 10^n.",
+      "Introduce un coeficiente a y un exponente n para convertirlo de vuelta.",
+      "Úsalo con números grandes, medidas pequeñas y ejemplos de ciencias.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Cómo se escribe 12345 en notación científica?", answer: "12345 = 1,2345 × 10^4." },
+      { question: "¿Cómo se convierte 0,00056?", answer: "0,00056 = 5,6 × 10^-4." },
+      { question: "¿a debe estar entre 1 y 10?", answer: "En notación científica normalizada, un número distinto de cero se escribe con 1 ≤ |a| < 10." },
+    ],
+    disclaimer: "Esta herramienta es para cálculo general. Para cifras oficiales, confirma con la autoridad correspondiente.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
+---
+
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <main class="mx-auto max-w-3xl px-4 py-10">
+    <ScientificNotationConverter client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
+  </main>
+</BaseLayout>

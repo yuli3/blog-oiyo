@@ -1,0 +1,259 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import RatioCalculator from "../../components/tools/RatioCalculator";
+import { locales } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: ActiveLocale };
+
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
+  ko: {
+    title: "비율 계산기 — a:b 기약화와 a:b = c:x 풀이",
+    description: "두 수의 비율을 가장 간단한 a:b 형태로 줄이고, a:b = c:x 비례식에서 x를 즉시 계산합니다.",
+  },
+  en: {
+    title: "Ratio Calculator — Simplify a:b and solve a:b = c:x",
+    description: "Simplify a two-number ratio into its smallest a:b form and solve x in the proportion a:b = c:x instantly.",
+  },
+  ja: {
+    title: "比率計算機 — a:bの簡約と a:b = c:x の解",
+    description: "2つの数の比を最も簡単なa:bにし、比例式 a:b = c:x のxをすぐに計算します。",
+  },
+  zh: {
+    title: "比例计算器 — 化简 a:b 并求解 a:b = c:x",
+    description: "将两个数的比例化为最简 a:b，并即时求出比例式 a:b = c:x 中的 x。",
+  },
+  fr: {
+    title: "Calculateur de Ratio — Simplifier a:b et résoudre a:b = c:x",
+    description: "Simplifiez un ratio à deux nombres dans sa forme a:b minimale et résolvez x dans la proportion a:b = c:x.",
+  },
+  es: {
+    title: "Calculadora de Razones — Simplificar a:b y resolver a:b = c:x",
+    description: "Simplifica una razón de dos números a su forma mínima a:b y resuelve x en la proporción a:b = c:x al instante.",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "비율은 두 값의 상대적인 크기를 비교합니다",
+    intro: "비율은 화면 해상도, 레시피 배합, 지도 축척, 단가 비교처럼 서로 다른 두 값을 함께 볼 때 자주 쓰입니다. 이 계산기는 a:b를 가장 간단한 정수비로 줄이고, a:b = c:x 형태의 비례식에서 빠진 x 값을 바로 계산합니다.",
+    formulaTitle: "계산 공식",
+    formulas: [
+      { title: "a:b 기약화", body: "a와 b를 최대공약수로 나누어 가장 작은 정수비로 만듭니다." },
+      { title: "비례식", body: "a:b = c:x 이면 x = (b × c) ÷ a" },
+      { title: "예시", body: "1920:1080 → 16:9, 2:3 = 10:x → x = 15" },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "비율 기약화에는 a와 b 값을 입력합니다.",
+      "비례식 풀이에는 a, b, c 값을 입력하면 x가 즉시 표시됩니다.",
+      "단위가 있는 값은 먼저 같은 단위로 맞춘 뒤 계산합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "1920:1080은 왜 16:9인가요?", answer: "1920과 1080의 최대공약수는 120입니다. 둘 다 120으로 나누면 16과 9가 됩니다." },
+      { question: "소수 비율도 입력할 수 있나요?", answer: "입력은 숫자로 받을 수 있지만 기약화는 반올림한 정수 기준으로 처리됩니다. 정밀한 소수 비율은 단위를 조정해 정수로 바꾼 뒤 계산하는 편이 좋습니다." },
+      { question: "a:b = c:x에서 a가 0이면?", answer: "공식이 a로 나누기 때문에 a가 0이면 x를 정의할 수 없습니다." },
+    ],
+    disclaimer: "이 도구는 일반적인 산술 계산용입니다. 세금·금융 등 공식 수치는 해당 기관의 기준을 확인하세요.",
+  },
+  en: {
+    introTitle: "A ratio compares the relative size of two values",
+    intro: "Ratios show up in screen sizes, recipes, map scales, unit prices, and many everyday comparisons. This calculator reduces a:b to its simplest whole-number form and solves the missing x in a proportion written as a:b = c:x.",
+    formulaTitle: "Formulas",
+    formulas: [
+      { title: "Simplify a:b", body: "Divide a and b by their greatest common divisor." },
+      { title: "Proportion", body: "If a:b = c:x, then x = (b × c) ÷ a" },
+      { title: "Examples", body: "1920:1080 → 16:9, 2:3 = 10:x → x = 15" },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "For ratio simplification, enter the a and b values.",
+      "For proportion solving, enter a, b, and c; x appears instantly.",
+      "When values have units, convert them to the same unit before calculating.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Why does 1920:1080 become 16:9?", answer: "The greatest common divisor of 1920 and 1080 is 120. Dividing both by 120 gives 16 and 9." },
+      { question: "Can I enter decimal ratios?", answer: "You can enter numeric values, but simplification uses rounded whole numbers. For precise decimal ratios, scale the units first so the inputs become integers." },
+      { question: "What if a is 0 in a:b = c:x?", answer: "The formula divides by a, so x is not defined when a is 0." },
+    ],
+    disclaimer: "This tool is for general arithmetic. For official figures such as taxes or finance, confirm with the relevant authority.",
+  },
+  ja: {
+    introTitle: "比率は2つの値の相対的な大きさを比べます",
+    intro: "比率は画面サイズ、レシピ、地図の縮尺、単価比較などでよく使われます。この計算機は a:b を最も簡単な整数比にし、a:b = c:x の形で欠けている x をすぐに求めます。",
+    formulaTitle: "計算式",
+    formulas: [
+      { title: "a:bを簡約", body: "aとbを最大公約数で割り、最小の整数比にします。" },
+      { title: "比例式", body: "a:b = c:x なら、x = (b × c) ÷ a" },
+      { title: "例", body: "1920:1080 → 16:9、2:3 = 10:x → x = 15" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "比の簡約では a と b を入力します。",
+      "比例式では a、b、c を入力すると x がすぐ表示されます。",
+      "単位がある値は、先に同じ単位へそろえてから計算してください。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "1920:1080が16:9になるのはなぜ？", answer: "1920と1080の最大公約数は120です。両方を120で割ると16と9になります。" },
+      { question: "小数の比も入力できますか？", answer: "数値は入力できますが、簡約は丸めた整数を基準にします。正確な小数比では、先に単位を調整して整数にすると扱いやすくなります。" },
+      { question: "a:b = c:x で a が0なら？", answer: "式では a で割るため、a が0のとき x は定義できません。" },
+    ],
+    disclaimer: "このツールは一般的な計算用です。税金・金融などの公式数値は各機関の基準をご確認ください。",
+  },
+  zh: {
+    introTitle: "比例用于比较两个数值的相对大小",
+    intro: "比例常见于屏幕尺寸、配方、地图比例尺、单价比较等场景。这个计算器可以把 a:b 化为最简整数比，也可以在 a:b = c:x 的比例式中快速求出缺失的 x。",
+    formulaTitle: "计算公式",
+    formulas: [
+      { title: "化简 a:b", body: "用 a 和 b 的最大公约数同时相除，得到最小整数比。" },
+      { title: "比例式", body: "若 a:b = c:x，则 x = (b × c) ÷ a" },
+      { title: "示例", body: "1920:1080 → 16:9，2:3 = 10:x → x = 15" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "化简比例时，输入 a 和 b。",
+      "求解比例式时，输入 a、b、c，x 会即时显示。",
+      "如果数值带有单位，请先换算为同一单位再计算。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "为什么 1920:1080 会化为 16:9？", answer: "1920 和 1080 的最大公约数是 120。两者同时除以 120，就得到 16 和 9。" },
+      { question: "可以输入小数比例吗？", answer: "可以输入数字，但化简会按四舍五入后的整数处理。若需要精确小数比例，建议先调整单位，使输入变成整数。" },
+      { question: "a:b = c:x 中 a 为 0 怎么办？", answer: "公式需要除以 a，因此 a 为 0 时 x 没有定义。" },
+    ],
+    disclaimer: "本工具用于一般运算。税务、金融等官方数字请以相关机构标准为准。",
+  },
+  fr: {
+    introTitle: "Un ratio compare la taille relative de deux valeurs",
+    intro: "Les ratios apparaissent dans les tailles d'écran, les recettes, les échelles de carte, les prix unitaires et de nombreuses comparaisons. Ce calculateur réduit a:b à sa forme entière la plus simple et résout x dans a:b = c:x.",
+    formulaTitle: "Formules",
+    formulas: [
+      { title: "Simplifier a:b", body: "Divisez a et b par leur plus grand commun diviseur." },
+      { title: "Proportion", body: "Si a:b = c:x, alors x = (b × c) ÷ a" },
+      { title: "Exemples", body: "1920:1080 → 16:9, 2:3 = 10:x → x = 15" },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Pour simplifier un ratio, saisissez les valeurs a et b.",
+      "Pour résoudre une proportion, saisissez a, b et c ; x apparaît aussitôt.",
+      "Si les valeurs ont des unités, convertissez-les d'abord dans la même unité.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Pourquoi 1920:1080 devient-il 16:9 ?", answer: "Le plus grand commun diviseur de 1920 et 1080 est 120. En divisant les deux par 120, on obtient 16 et 9." },
+      { question: "Puis-je entrer des ratios décimaux ?", answer: "Vous pouvez saisir des nombres, mais la simplification utilise des entiers arrondis. Pour un ratio décimal précis, changez d'abord l'échelle des unités afin d'obtenir des entiers." },
+      { question: "Que se passe-t-il si a vaut 0 dans a:b = c:x ?", answer: "La formule divise par a ; x n'est donc pas défini lorsque a vaut 0." },
+    ],
+    disclaimer: "Cet outil sert au calcul général. Pour des chiffres officiels (impôts, finance), vérifiez auprès de l'autorité compétente.",
+  },
+  es: {
+    introTitle: "Una razón compara el tamaño relativo de dos valores",
+    intro: "Las razones aparecen en tamaños de pantalla, recetas, escalas de mapas, precios unitarios y muchas comparaciones cotidianas. Esta calculadora reduce a:b a su forma entera más simple y resuelve la x faltante en a:b = c:x.",
+    formulaTitle: "Fórmulas",
+    formulas: [
+      { title: "Simplificar a:b", body: "Divide a y b por su máximo común divisor." },
+      { title: "Proporción", body: "Si a:b = c:x, entonces x = (b × c) ÷ a" },
+      { title: "Ejemplos", body: "1920:1080 → 16:9, 2:3 = 10:x → x = 15" },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Para simplificar una razón, introduce los valores a y b.",
+      "Para resolver una proporción, introduce a, b y c; x aparece al instante.",
+      "Si los valores tienen unidades, conviértelos primero a la misma unidad.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Por qué 1920:1080 se convierte en 16:9?", answer: "El máximo común divisor de 1920 y 1080 es 120. Al dividir ambos por 120 se obtiene 16 y 9." },
+      { question: "¿Puedo introducir razones decimales?", answer: "Puedes introducir valores numéricos, pero la simplificación usa enteros redondeados. Para razones decimales precisas, escala primero las unidades para convertirlas en enteros." },
+      { question: "¿Qué pasa si a es 0 en a:b = c:x?", answer: "La fórmula divide por a, así que x no está definida cuando a es 0." },
+    ],
+    disclaimer: "Esta herramienta es para cálculo general. Para cifras oficiales como impuestos o finanzas, confirma con la autoridad correspondiente.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
+---
+
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <main class="mx-auto max-w-3xl px-4 py-10">
+    <RatioCalculator client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
+  </main>
+</BaseLayout>

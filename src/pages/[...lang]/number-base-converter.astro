@@ -1,0 +1,259 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import NumberBaseConverter from "../../components/tools/NumberBaseConverter";
+import { locales } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: ActiveLocale };
+
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
+  ko: {
+    title: "진법 변환기 — 2진수, 8진수, 10진수, 16진수",
+    description: "2진수·8진수·10진수·16진수를 한 번에 변환합니다. 입력 진법을 고르면 나머지 진법 결과가 즉시 표시됩니다.",
+  },
+  en: {
+    title: "Number Base Converter — Binary, Octal, Decimal, Hex",
+    description: "Convert between binary, octal, decimal, and hexadecimal values in one place. Choose the input base and see every result instantly.",
+  },
+  ja: {
+    title: "基数変換ツール — 2進数・8進数・10進数・16進数",
+    description: "2進数、8進数、10進数、16進数を一度に変換します。入力の基数を選ぶと、ほかの基数の結果がすぐ表示されます。",
+  },
+  zh: {
+    title: "进制转换器 — 二进制、八进制、十进制、十六进制",
+    description: "在一个页面转换二进制、八进制、十进制和十六进制。选择输入进制后，所有结果会即时显示。",
+  },
+  fr: {
+    title: "Convertisseur de Bases — Binaire, Octal, Décimal, Hexadécimal",
+    description: "Convertissez les valeurs binaires, octales, décimales et hexadécimales au même endroit. Choisissez la base d'entrée et voyez tous les résultats.",
+  },
+  es: {
+    title: "Convertidor de Bases — Binario, Octal, Decimal, Hexadecimal",
+    description: "Convierte entre binario, octal, decimal y hexadecimal en un solo lugar. Elige la base de entrada y ve todos los resultados al instante.",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "진법은 같은 수를 다른 자리 체계로 쓰는 방법입니다",
+    intro: "컴퓨터와 프로그래밍에서는 10진수뿐 아니라 2진수, 8진수, 16진수를 자주 함께 봅니다. 이 변환기는 입력값의 진법을 선택하면 네 가지 진법 결과를 한 화면에 표시해 코드 값, 비트 패턴, 색상 값 확인을 빠르게 도와줍니다.",
+    formulaTitle: "변환 기준",
+    formulas: [
+      { title: "2진수", body: "0과 1만 사용하며 각 자리는 2의 거듭제곱입니다." },
+      { title: "8진수", body: "0부터 7까지 사용하며 각 자리는 8의 거듭제곱입니다." },
+      { title: "16진수", body: "0-9와 A-F를 사용하며 각 자리는 16의 거듭제곱입니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "입력값이 어떤 진법인지 선택합니다.",
+      "값을 입력하면 2진수, 8진수, 10진수, 16진수 결과가 즉시 표시됩니다.",
+      "선택한 진법에 맞지 않는 문자가 있으면 값을 다시 확인합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "FF는 10진수로 얼마인가요?", answer: "16진수 FF는 10진수 255입니다. F는 15를 뜻하고, FF = 15×16 + 15 입니다." },
+      { question: "2진수에 2를 입력하면 왜 오류인가요?", answer: "2진수는 0과 1만 사용할 수 있습니다. 2 이상 숫자는 10진수나 다른 진법에서만 유효합니다." },
+      { question: "소수점이 있는 값도 변환하나요?", answer: "이 도구는 정수형 진법 변환에 맞춰져 있습니다. 소수점 이하 진법 변환은 별도 규칙이 필요합니다." },
+    ],
+    disclaimer: "이 도구는 일반적인 산술 계산용입니다. 세금·금융 등 공식 수치는 해당 기관의 기준을 확인하세요.",
+  },
+  en: {
+    introTitle: "A number base is a different way to write the same quantity",
+    intro: "Programming, debugging, and digital systems often move between decimal, binary, octal, and hexadecimal. This converter lets you choose the input base once and then shows all four representations together, which is useful for code values, bit patterns, and quick checks.",
+    formulaTitle: "Base rules",
+    formulas: [
+      { title: "Binary", body: "Uses only 0 and 1; each place is a power of 2." },
+      { title: "Octal", body: "Uses digits 0 through 7; each place is a power of 8." },
+      { title: "Hexadecimal", body: "Uses 0-9 and A-F; each place is a power of 16." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Choose the base that your input value is written in.",
+      "Enter the value and the binary, octal, decimal, and hexadecimal results appear instantly.",
+      "If a digit is not valid for the selected base, correct the input and try again.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "What is FF in decimal?", answer: "Hexadecimal FF is decimal 255. F represents 15, so FF = 15×16 + 15." },
+      { question: "Why is 2 invalid in binary?", answer: "Binary can only use 0 and 1. Digits 2 and above belong to decimal or other bases, not base 2." },
+      { question: "Does this convert fractional values?", answer: "This tool is designed for integer base conversion. Fractional base conversion follows additional rules." },
+    ],
+    disclaimer: "This tool is for general arithmetic. For official figures such as taxes or finance, confirm with the relevant authority.",
+  },
+  ja: {
+    introTitle: "基数は同じ数を別の桁体系で表す方法です",
+    intro: "プログラミングやデジタル処理では、10進数だけでなく2進数、8進数、16進数を行き来する場面がよくあります。このツールでは入力の基数を一度選ぶだけで、4つの表記を同時に確認できます。",
+    formulaTitle: "基数のルール",
+    formulas: [
+      { title: "2進数", body: "0と1だけを使い、各桁は2の累乗を表します。" },
+      { title: "8進数", body: "0から7までを使い、各桁は8の累乗を表します。" },
+      { title: "16進数", body: "0-9とA-Fを使い、各桁は16の累乗を表します。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "入力値がどの基数で書かれているかを選びます。",
+      "値を入力すると、2進数・8進数・10進数・16進数の結果がすぐ表示されます。",
+      "選んだ基数で使えない文字がある場合は、入力を直してください。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "FFは10進数でいくつですか？", answer: "16進数のFFは10進数で255です。Fは15を表し、FF = 15×16 + 15 です。" },
+      { question: "2進数で2が無効なのはなぜ？", answer: "2進数で使える数字は0と1だけです。2以上の数字は10進数など別の基数で使います。" },
+      { question: "小数も変換できますか？", answer: "このツールは整数の基数変換向けです。小数部分の変換には追加の規則が必要です。" },
+    ],
+    disclaimer: "このツールは一般的な計算用です。税金・金融などの公式数値は各機関の基準をご確認ください。",
+  },
+  zh: {
+    introTitle: "进制是用不同位值体系表示同一个数",
+    intro: "在编程、调试和数字系统中，经常需要在十进制、二进制、八进制和十六进制之间切换。这个转换器只需选择输入进制，就能同时显示四种写法，适合检查代码数值、位模式和常见整数转换。",
+    formulaTitle: "进制规则",
+    formulas: [
+      { title: "二进制", body: "只使用 0 和 1，每一位都是 2 的幂。" },
+      { title: "八进制", body: "使用 0 到 7，每一位都是 8 的幂。" },
+      { title: "十六进制", body: "使用 0-9 和 A-F，每一位都是 16 的幂。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "选择输入值所属的进制。",
+      "输入数值后，二进制、八进制、十进制和十六进制结果会即时显示。",
+      "如果字符不属于所选进制，请修正输入后再查看结果。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "FF 转成十进制是多少？", answer: "十六进制 FF 等于十进制 255。F 代表 15，所以 FF = 15×16 + 15。" },
+      { question: "为什么二进制里不能输入 2？", answer: "二进制只能使用 0 和 1。2 及以上的数字属于十进制或其他进制。" },
+      { question: "可以转换小数吗？", answer: "本工具面向整数进制转换。带小数的进制转换需要额外规则。" },
+    ],
+    disclaimer: "本工具用于一般运算。税务、金融等官方数字请以相关机构标准为准。",
+  },
+  fr: {
+    introTitle: "Une base numérique écrit la même quantité avec un autre système de positions",
+    intro: "En programmation, en débogage et dans les systèmes numériques, on passe souvent du décimal au binaire, à l'octal ou à l'hexadécimal. Ce convertisseur affiche les quatre représentations ensemble après le choix de la base d'entrée.",
+    formulaTitle: "Règles des bases",
+    formulas: [
+      { title: "Binaire", body: "Utilise seulement 0 et 1 ; chaque position est une puissance de 2." },
+      { title: "Octal", body: "Utilise les chiffres de 0 à 7 ; chaque position est une puissance de 8." },
+      { title: "Hexadécimal", body: "Utilise 0-9 et A-F ; chaque position est une puissance de 16." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Choisissez la base dans laquelle la valeur d'entrée est écrite.",
+      "Saisissez la valeur : les résultats binaire, octal, décimal et hexadécimal apparaissent aussitôt.",
+      "Si un chiffre n'est pas valide pour la base choisie, corrigez l'entrée.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Que vaut FF en décimal ?", answer: "L'hexadécimal FF vaut 255 en décimal. F représente 15, donc FF = 15×16 + 15." },
+      { question: "Pourquoi 2 est-il invalide en binaire ?", answer: "Le binaire n'utilise que 0 et 1. Les chiffres 2 et plus appartiennent au décimal ou à d'autres bases." },
+      { question: "L'outil convertit-il les valeurs fractionnaires ?", answer: "Cet outil est conçu pour la conversion d'entiers. Les fractions dans d'autres bases suivent des règles supplémentaires." },
+    ],
+    disclaimer: "Cet outil sert au calcul général. Pour des chiffres officiels (impôts, finance), vérifiez auprès de l'autorité compétente.",
+  },
+  es: {
+    introTitle: "Una base numérica escribe la misma cantidad con otro sistema posicional",
+    intro: "En programación, depuración y sistemas digitales es habitual alternar entre decimal, binario, octal y hexadecimal. Este convertidor permite elegir la base de entrada una vez y ver juntas las cuatro representaciones.",
+    formulaTitle: "Reglas de base",
+    formulas: [
+      { title: "Binario", body: "Usa solo 0 y 1; cada posición es una potencia de 2." },
+      { title: "Octal", body: "Usa los dígitos del 0 al 7; cada posición es una potencia de 8." },
+      { title: "Hexadecimal", body: "Usa 0-9 y A-F; cada posición es una potencia de 16." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Elige la base en la que está escrito el valor de entrada.",
+      "Introduce el valor y aparecen al instante los resultados binario, octal, decimal y hexadecimal.",
+      "Si un dígito no es válido para la base elegida, corrige la entrada.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Cuánto es FF en decimal?", answer: "El hexadecimal FF es 255 en decimal. F representa 15, así que FF = 15×16 + 15." },
+      { question: "¿Por qué 2 no es válido en binario?", answer: "El binario solo usa 0 y 1. Los dígitos 2 y superiores pertenecen al decimal u otras bases." },
+      { question: "¿Convierte valores con decimales?", answer: "Esta herramienta está pensada para conversión de enteros. Las fracciones en otras bases requieren reglas adicionales." },
+    ],
+    disclaimer: "Esta herramienta es para cálculo general. Para cifras oficiales como impuestos o finanzas, confirma con la autoridad correspondiente.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
+---
+
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <main class="mx-auto max-w-3xl px-4 py-10">
+    <NumberBaseConverter client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
+  </main>
+</BaseLayout>

@@ -2,6 +2,12 @@
 
 This file is the canonical agent harness for `blog-oiyo`.
 
+Before using this project-specific harness, read the cross-project harness:
+
+1. [/Users/seuncho/coding/AGENTS.md](/Users/seuncho/coding/AGENTS.md)
+2. [/Users/seuncho/coding/docs/AGENT_WORKLOG.md](/Users/seuncho/coding/docs/AGENT_WORKLOG.md)
+3. [/Users/seuncho/coding/docs/route-ownership.json](/Users/seuncho/coding/docs/route-ownership.json)
+
 All coding agents working in this repository should treat this file as the first operational document, then follow the linked control documents and verification commands.
 
 ## 1. Mission

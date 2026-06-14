@@ -1,0 +1,259 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import AngleConverter from "../../components/tools/AngleConverter";
+import { locales } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: ActiveLocale };
+
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
+  ko: {
+    title: "각도 변환기 — 도, 라디안, 그라드",
+    description: "도(deg), 라디안(rad), 그라드(grad)를 한 번에 변환합니다. 공식·사용법·FAQ 포함.",
+  },
+  en: {
+    title: "Angle Converter — degrees, radians, and gradians",
+    description: "Convert degrees (deg), radians (rad), and gradians (grad) in one place. Includes formulas, steps, and FAQ.",
+  },
+  ja: {
+    title: "角度変換ツール — 度、ラジアン、グラード",
+    description: "度(deg)、ラジアン(rad)、グラード(grad)を一度に変換します。公式・使い方・FAQ付き。",
+  },
+  zh: {
+    title: "角度换算器 — 度、弧度、百分度",
+    description: "在度(deg)、弧度(rad)和百分度(grad)之间换算。附公式、步骤与常见问题。",
+  },
+  fr: {
+    title: "Convertisseur d'Angles — degrés, radians et grades",
+    description: "Convertissez degrés (deg), radians (rad) et grades (grad) au même endroit. Avec formules, étapes et FAQ.",
+  },
+  es: {
+    title: "Convertidor de Ángulos — grados, radianes y gradianes",
+    description: "Convierte grados (deg), radianes (rad) y gradianes (grad) en un lugar. Incluye fórmulas, pasos y FAQ.",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "각도 단위는 회전을 서로 다른 기준으로 표현합니다",
+    intro: "도는 원 한 바퀴를 360으로, 라디안은 반지름과 호의 길이 관계로, 그라드는 한 바퀴를 400으로 나눠 표현합니다. 이 변환기는 하나의 값을 입력하면 세 단위를 동시에 보여 주므로 수학, 공학, 지도·측량 계산에서 빠르게 확인할 수 있습니다.",
+    formulaTitle: "계산 공식",
+    formulas: [
+      { title: "라디안 → 도", body: "도 = 라디안 × 180 ÷ π" },
+      { title: "그라드 → 도", body: "도 = 그라드 × 0.9" },
+      { title: "도 → 다른 단위", body: "라디안 = 도 × π ÷ 180, 그라드 = 도 ÷ 0.9" },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "각도 값을 입력합니다.",
+      "입력값의 단위(deg, rad, grad)를 선택합니다.",
+      "도, 라디안, 그라드 결과를 동시에 확인합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "180도는 몇 라디안인가요?", answer: "180도는 π 라디안입니다. 십진수로는 약 3.14159 rad 입니다." },
+      { question: "100그라드는 몇 도인가요?", answer: "400그라드가 360도이므로 100그라드는 90도입니다." },
+      { question: "라디안은 언제 쓰나요?", answer: "삼각함수, 미적분, 물리 계산처럼 원과 회전을 수식으로 다룰 때 라디안을 주로 씁니다." },
+    ],
+    disclaimer: "이 도구는 일반적인 산술 계산용입니다. 공식 수치는 해당 기관의 기준을 확인하세요.",
+  },
+  en: {
+    introTitle: "Angle units describe rotation with different reference scales",
+    intro: "Degrees divide a full turn into 360 parts, radians relate arc length to radius, and gradians divide a full turn into 400 parts. Enter one value and this converter shows all three units at once for math, engineering, mapping, or survey work.",
+    formulaTitle: "Formulas",
+    formulas: [
+      { title: "Radians to degrees", body: "degrees = radians × 180 ÷ π" },
+      { title: "Gradians to degrees", body: "degrees = gradians × 0.9" },
+      { title: "Degrees to other units", body: "radians = degrees × π ÷ 180, gradians = degrees ÷ 0.9" },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Enter the angle value.",
+      "Choose the input unit: deg, rad, or grad.",
+      "Read the degree, radian, and gradian results instantly.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "How many radians are in 180 degrees?", answer: "180 degrees equals π radians, or about 3.14159 rad." },
+      { question: "How many degrees are in 100 gradians?", answer: "Since 400 gradians equal 360 degrees, 100 gradians equal 90 degrees." },
+      { question: "When should I use radians?", answer: "Radians are standard in trigonometry, calculus, and physics because they connect rotation directly to arc length." },
+    ],
+    disclaimer: "This tool is for general arithmetic. For official figures, confirm with the relevant authority.",
+  },
+  ja: {
+    introTitle: "角度の単位は回転を異なる基準で表します",
+    intro: "度は1回転を360等分し、ラジアンは半径と弧の長さの関係で表し、グラードは1回転を400等分します。この変換ツールでは1つの値を入力するだけで3単位を同時に確認できます。",
+    formulaTitle: "計算式",
+    formulas: [
+      { title: "ラジアン → 度", body: "度 = ラジアン × 180 ÷ π" },
+      { title: "グラード → 度", body: "度 = グラード × 0.9" },
+      { title: "度 → 他の単位", body: "ラジアン = 度 × π ÷ 180、グラード = 度 ÷ 0.9" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "角度の値を入力します。",
+      "入力単位（deg、rad、grad）を選びます。",
+      "度、ラジアン、グラードの結果を確認します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "180度は何ラジアンですか？", answer: "180度はπラジアン、十進表記では約3.14159 radです。" },
+      { question: "100グラードは何度ですか？", answer: "400グラードが360度なので、100グラードは90度です。" },
+      { question: "ラジアンはいつ使いますか？", answer: "三角関数、微積分、物理のように回転を数式で扱う場面でよく使われます。" },
+    ],
+    disclaimer: "このツールは一般的な計算用です。公式数値は各機関の基準をご確認ください。",
+  },
+  zh: {
+    introTitle: "角度单位用不同基准描述旋转",
+    intro: "度把一整圈分成360份，弧度用弧长与半径的关系表示角度，百分度把一整圈分成400份。输入一个数值后，本工具会同时显示三种单位，适合数学、工程、地图和测量场景。",
+    formulaTitle: "计算公式",
+    formulas: [
+      { title: "弧度 → 度", body: "度 = 弧度 × 180 ÷ π" },
+      { title: "百分度 → 度", body: "度 = 百分度 × 0.9" },
+      { title: "度 → 其他单位", body: "弧度 = 度 × π ÷ 180，百分度 = 度 ÷ 0.9" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "输入角度数值。",
+      "选择输入单位：deg、rad 或 grad。",
+      "立即查看度、弧度和百分度结果。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "180度是多少弧度？", answer: "180度等于π弧度，约为3.14159 rad。" },
+      { question: "100百分度是多少度？", answer: "400百分度等于360度，所以100百分度等于90度。" },
+      { question: "什么时候使用弧度？", answer: "三角函数、微积分和物理计算通常使用弧度，因为它直接连接旋转与弧长。" },
+    ],
+    disclaimer: "本工具用于一般运算。官方数字请以相关机构标准为准。",
+  },
+  fr: {
+    introTitle: "Les unités d'angle décrivent une rotation avec des repères différents",
+    intro: "Les degrés divisent un tour complet en 360 parties, les radians relient la longueur d'arc au rayon, et les grades divisent un tour complet en 400 parties. Saisissez une valeur et l'outil affiche les trois unités en même temps.",
+    formulaTitle: "Formules",
+    formulas: [
+      { title: "Radians vers degrés", body: "degrés = radians × 180 ÷ π" },
+      { title: "Grades vers degrés", body: "degrés = grades × 0,9" },
+      { title: "Degrés vers autres unités", body: "radians = degrés × π ÷ 180, grades = degrés ÷ 0,9" },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Saisissez la valeur de l'angle.",
+      "Choisissez l'unité d'entrée : deg, rad ou grad.",
+      "Consultez les résultats en degrés, radians et grades.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Combien de radians font 180 degrés ?", answer: "180 degrés correspondent à π radians, soit environ 3,14159 rad." },
+      { question: "Combien de degrés font 100 grades ?", answer: "Comme 400 grades valent 360 degrés, 100 grades valent 90 degrés." },
+      { question: "Quand utiliser les radians ?", answer: "Les radians sont la norme en trigonométrie, calcul et physique, car ils relient directement la rotation à la longueur d'arc." },
+    ],
+    disclaimer: "Cet outil sert au calcul général. Pour des chiffres officiels, vérifiez auprès de l'autorité compétente.",
+  },
+  es: {
+    introTitle: "Las unidades de ángulo describen la rotación con escalas distintas",
+    intro: "Los grados dividen una vuelta completa en 360 partes, los radianes relacionan la longitud de arco con el radio y los gradianes dividen una vuelta en 400 partes. Introduce un valor y verás las tres unidades a la vez.",
+    formulaTitle: "Fórmulas",
+    formulas: [
+      { title: "Radianes a grados", body: "grados = radianes × 180 ÷ π" },
+      { title: "Gradianes a grados", body: "grados = gradianes × 0,9" },
+      { title: "Grados a otras unidades", body: "radianes = grados × π ÷ 180, gradianes = grados ÷ 0,9" },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Introduce el valor del ángulo.",
+      "Elige la unidad de entrada: deg, rad o grad.",
+      "Consulta los resultados en grados, radianes y gradianes.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Cuántos radianes son 180 grados?", answer: "180 grados equivalen a π radianes, aproximadamente 3,14159 rad." },
+      { question: "¿Cuántos grados son 100 gradianes?", answer: "Como 400 gradianes equivalen a 360 grados, 100 gradianes equivalen a 90 grados." },
+      { question: "¿Cuándo se usan radianes?", answer: "Los radianes se usan en trigonometría, cálculo y física porque conectan la rotación directamente con la longitud de arco." },
+    ],
+    disclaimer: "Esta herramienta es para cálculo general. Para cifras oficiales, confirma con la autoridad correspondiente.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
+---
+
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <main class="mx-auto max-w-3xl px-4 py-10">
+    <AngleConverter client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
+  </main>
+</BaseLayout>
