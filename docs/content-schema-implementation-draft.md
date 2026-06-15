@@ -8,7 +8,7 @@ It does not implement them yet. It defines exactly where the next implementation
 
 ## 2. Primary Files to Change
 
-### A. [src/content/config.ts](/Users/seuncho/coding/blog-oiyo/src/content/config.ts)
+### A. [src/content/config.ts](/Users/seuncho/coding/blog/src/content/config.ts)
 
 Current role:
 
@@ -30,7 +30,7 @@ Planned additions:
 12. `heroMode`
 13. `contentStage`
 
-### B. [src/lib/taxonomy.ts](/Users/seuncho/coding/blog-oiyo/src/lib/taxonomy.ts)
+### B. [src/lib/taxonomy.ts](/Users/seuncho/coding/blog/src/lib/taxonomy.ts)
 
 Current role:
 
@@ -43,7 +43,7 @@ Planned changes:
 3. add canonical category registry
 4. support qualification-linked domains
 
-### C. [src/pages/[...lang]/magazine.astro](/Users/seuncho/coding/blog-oiyo/src/pages/[...lang]/magazine.astro)
+### C. [src/pages/[...lang]/magazine.astro](/Users/seuncho/coding/blog/src/pages/[...lang]/magazine.astro)
 
 Planned changes:
 
@@ -51,7 +51,7 @@ Planned changes:
 2. stop relying only on category inclusion
 3. prepare for text-first cards
 
-### D. [src/pages/[...lang]/courses.astro](/Users/seuncho/coding/blog-oiyo/src/pages/[...lang]/courses.astro)
+### D. [src/pages/[...lang]/courses.astro](/Users/seuncho/coding/blog/src/pages/[...lang]/courses.astro)
 
 Planned changes:
 
@@ -65,7 +65,7 @@ Planned role:
 
 1. dedicated browse surface for reading-plus-island pages
 
-### F. [src/pages/[...lang]/[...slug].astro](/Users/seuncho/coding/blog-oiyo/src/pages/[...lang]/[...slug].astro)
+### F. [src/pages/[...lang]/[...slug].astro](/Users/seuncho/coding/blog/src/pages/[...lang]/[...slug].astro)
 
 Planned changes:
 

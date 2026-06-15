@@ -1,6 +1,6 @@
 # CURSOR.md
 
-Cursor should use [AGENTS.md](/Users/seuncho/coding/blog-oiyo/AGENTS.md) as the canonical harness for this repository.
+Cursor should use [AGENTS.md](/Users/seuncho/coding/blog/AGENTS.md) as the canonical harness for this repository.
 
 ## Cursor Adapter Notes
 

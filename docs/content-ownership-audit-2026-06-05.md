@@ -5,9 +5,9 @@ This audit classifies the current uncommitted content batches before any new art
 Source documents checked:
 
 1. `/Users/seuncho/coding/docs/MASTER_PLAN.md`
-2. `/Users/seuncho/coding/oiyo-astro/docs/oiyo-three-domain-content-architecture.md`
-3. `/Users/seuncho/coding/oiyo-astro/docs/oiyo-content-pipeline-report.md`
-4. `/Users/seuncho/coding/wiki-oiyo/docs/cross-project-standardization-manual.md`
+2. `/Users/seuncho/coding/oiyo/docs/oiyo-three-domain-content-architecture.md`
+3. `/Users/seuncho/coding/oiyo/docs/oiyo-content-pipeline-report.md`
+4. `/Users/seuncho/coding/wiki/docs/cross-project-standardization-manual.md`
 5. `docs/content-strengthening-project-2026-06.md`
 
 ## 1. Project Boundaries

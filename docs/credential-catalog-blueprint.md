@@ -153,8 +153,8 @@ Each record should track:
 
 Use:
 
-1. [data/catalog/professional-credentials.schema.json](/Users/seuncho/coding/blog-oiyo/data/catalog/professional-credentials.schema.json)
-2. [data/catalog/professional-credentials.template.yaml](/Users/seuncho/coding/blog-oiyo/data/catalog/professional-credentials.template.yaml)
-3. [data/catalog/professional-credentials.template.csv](/Users/seuncho/coding/blog-oiyo/data/catalog/professional-credentials.template.csv)
+1. [data/catalog/professional-credentials.schema.json](/Users/seuncho/coding/blog/data/catalog/professional-credentials.schema.json)
+2. [data/catalog/professional-credentials.template.yaml](/Users/seuncho/coding/blog/data/catalog/professional-credentials.template.yaml)
+3. [data/catalog/professional-credentials.template.csv](/Users/seuncho/coding/blog/data/catalog/professional-credentials.template.csv)
 
 These files are templates and structural seeds, not the final completed database.

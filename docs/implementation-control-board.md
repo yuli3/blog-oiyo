@@ -22,7 +22,7 @@ Use these files in this order:
 2. [Content Charter](./content-charter.md)
 3. [MDOC Authoring Spec](./mdoc-authoring-spec.md)
 4. [Category and Track Map](./category-and-track-map.md)
-5. [data/catalog/content-inventory.master.csv](/Users/seuncho/coding/blog-oiyo/data/catalog/content-inventory.master.csv)
+5. [data/catalog/content-inventory.master.csv](/Users/seuncho/coding/blog/data/catalog/content-inventory.master.csv)
 
 ## 3. Current Operational Status
 

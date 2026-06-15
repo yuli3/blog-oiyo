@@ -6,7 +6,7 @@ This document links the authoring allowlist to the actual implementation control
 
 The live registry file is:
 
-1. [src/lib/mdx-component-registry.ts](/Users/seuncho/coding/blog-oiyo/src/lib/mdx-component-registry.ts)
+1. [src/lib/mdx-component-registry.ts](/Users/seuncho/coding/blog/src/lib/mdx-component-registry.ts)
 
 ## 2. Current Stage
 
@@ -114,7 +114,7 @@ From this point forward:
 
 The live route now selects the registry by content track in:
 
-1. [src/pages/[...lang]/[...slug].astro](/Users/seuncho/coding/blog-oiyo/src/pages/[...lang]/[...slug].astro)
+1. [src/pages/[...lang]/[...slug].astro](/Users/seuncho/coding/blog/src/pages/[...lang]/[...slug].astro)
 
 That means:
 

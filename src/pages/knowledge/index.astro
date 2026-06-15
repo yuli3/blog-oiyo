@@ -1,0 +1,74 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { getCollection } from "astro:content";
+import { siteConfig } from "../../config/site.config";
+
+const posts = await getCollection("blog", ({ data }) => data.draft !== true);
+const guideCount = posts.length;
+const locales = siteConfig.locales;
+
+const resources = [
+  { name: "guides.json", href: "/knowledge/guides.json", desc: `${guideCount} guides/articles (schema.org ItemList) with summary, track, locale and a stable URL.` },
+  { name: "relations.json", href: "/knowledge/relations.json", desc: "Series clusters and cross-locale translation links." },
+  { name: "index.json", href: "/knowledge/index.json", desc: "Machine-readable discovery manifest for this site and the knowledge network." },
+];
+
+const network = [
+  { role: "Definition", name: "Oiyo Wiki", url: "https://wiki.oiyo.net" },
+  { role: "Explanation", name: "Oiyo Blog", url: "https://blog.oiyo.net" },
+  { role: "Execution", name: "Oiyo", url: "https://oiyo.net" },
+];
+---
+
+<BaseLayout
+  title="Knowledge Layer — Citable Guides Data"
+  description="A machine-citable catalog of long-form guides and explainers across astrology, saju, personality, finance and certifications — for people and AI to cite."
+>
+  <article class="py-24 max-w-3xl mx-auto px-6">
+    <p class="text-xs font-bold uppercase tracking-widest text-primary mb-4">Knowledge Layer · Explanation</p>
+    <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-6 leading-tight">
+      Guides built to be cited
+    </h1>
+    <p class="text-lg text-muted-foreground leading-relaxed mb-10">
+      Oiyo Blog is the <strong>explanation layer</strong> of the Oiyo knowledge network: long-form guides,
+      lectures and explainers, published as clean HTML <em>and</em> as machine-readable catalogs.
+    </p>
+
+    <h2 class="text-2xl font-bold tracking-tight mb-4">Open data catalogs</h2>
+    <ul class="space-y-4 mb-12">
+      {resources.map((r) => (
+        <li class="border border-border rounded-lg p-5">
+          <a href={r.href} class="text-primary font-bold font-mono">{r.name}</a>
+          <p class="text-sm text-muted-foreground mt-1">{r.desc}</p>
+        </li>
+      ))}
+    </ul>
+
+    <h2 class="text-2xl font-bold tracking-tight mb-4">The knowledge network</h2>
+    <ul class="space-y-3 mb-12">
+      {network.map((n) => (
+        <li class="flex items-baseline gap-3">
+          <span class="text-[10px] font-bold uppercase tracking-widest text-primary w-24 shrink-0">{n.role}</span>
+          <a href={n.url} class="font-medium hover:text-primary transition-colors">{n.name}</a>
+          <span class="text-xs text-muted-foreground">{n.url}</span>
+        </li>
+      ))}
+    </ul>
+
+    <h2 class="text-2xl font-bold tracking-tight mb-4">Citation</h2>
+    <p class="text-muted-foreground">
+      Cite individual guides by their stable URL (see <a href="/knowledge/guides.json" class="text-primary">guides.json</a>).
+      Coverage spans {locales.length} languages ({locales.join(", ")}). Attribution: <strong>Oiyo (blog.oiyo.net)</strong>.
+    </p>
+
+    <FaqAccordion
+      heading="FAQ"
+      items={[
+        { q: "Can I cite or reuse these guides?", a: "Yes. Each guide has a stable canonical URL (see <a href='/knowledge/guides.json'>guides.json</a>). Please attribute to Oiyo (blog.oiyo.net)." },
+        { q: "Is the catalog machine-readable?", a: "Yes — open JSON catalogs (guides.json, relations.json) plus structured data on each page." },
+        { q: "How current is it?", a: "Catalogs are regenerated on every build; each guide carries a published and updated date." },
+      ]}
+    />
+  </article>
+</BaseLayout>

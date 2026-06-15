@@ -4,15 +4,15 @@ Long-form content, lecture, and interactive reading platform for Oiyo, optimized
 
 ## Start Here
 
-The operational documentation now lives in [docs/README.md](/Users/seuncho/coding/blog-oiyo/docs/README.md).
+The operational documentation now lives in [docs/README.md](/Users/seuncho/coding/blog/docs/README.md).
 
 Read in this order:
 
-1. [Content Charter](/Users/seuncho/coding/blog-oiyo/docs/content-charter.md)
-2. [MDOC Authoring Spec](/Users/seuncho/coding/blog-oiyo/docs/mdoc-authoring-spec.md)
-3. [Lecture System Blueprint](/Users/seuncho/coding/blog-oiyo/docs/lecture-system-blueprint.md)
-4. [Credential Catalog Blueprint](/Users/seuncho/coding/blog-oiyo/docs/credential-catalog-blueprint.md)
-5. [Content Inventory Blueprint](/Users/seuncho/coding/blog-oiyo/docs/content-inventory-blueprint.md)
+1. [Content Charter](/Users/seuncho/coding/blog/docs/content-charter.md)
+2. [MDOC Authoring Spec](/Users/seuncho/coding/blog/docs/mdoc-authoring-spec.md)
+3. [Lecture System Blueprint](/Users/seuncho/coding/blog/docs/lecture-system-blueprint.md)
+4. [Credential Catalog Blueprint](/Users/seuncho/coding/blog/docs/credential-catalog-blueprint.md)
+5. [Content Inventory Blueprint](/Users/seuncho/coding/blog/docs/content-inventory-blueprint.md)
 
 ## Key Direction
 

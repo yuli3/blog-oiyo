@@ -299,8 +299,8 @@ const md = [
   "",
   "## Output Files",
   "",
-  "1. [data/catalog/magazine-compatibility-triage.csv](/Users/seuncho/coding/blog-oiyo/data/catalog/magazine-compatibility-triage.csv)",
-  "2. [reports/260509-magazine-compatibility-triage.md](/Users/seuncho/coding/blog-oiyo/reports/260509-magazine-compatibility-triage.md)",
+  "1. [data/catalog/magazine-compatibility-triage.csv](/Users/seuncho/coding/blog/data/catalog/magazine-compatibility-triage.csv)",
+  "2. [reports/260509-magazine-compatibility-triage.md](/Users/seuncho/coding/blog/reports/260509-magazine-compatibility-triage.md)",
 ];
 
 fs.writeFileSync(outputMd, `${md.join("\n")}\n`);

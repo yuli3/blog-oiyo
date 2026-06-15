@@ -32,16 +32,16 @@ The long-term goal is:
 
 Read these in order before making substantial changes:
 
-1. [docs/implementation-control-board.md](/Users/seuncho/coding/blog-oiyo/docs/implementation-control-board.md)
-2. [docs/content-charter.md](/Users/seuncho/coding/blog-oiyo/docs/content-charter.md)
-3. [docs/mdoc-authoring-spec.md](/Users/seuncho/coding/blog-oiyo/docs/mdoc-authoring-spec.md)
-4. [docs/component-allowlist.md](/Users/seuncho/coding/blog-oiyo/docs/component-allowlist.md)
-5. [docs/component-disallowlist.md](/Users/seuncho/coding/blog-oiyo/docs/component-disallowlist.md)
-6. [docs/component-registry-by-track.md](/Users/seuncho/coding/blog-oiyo/docs/component-registry-by-track.md)
-7. [docs/content-schema-implementation-draft.md](/Users/seuncho/coding/blog-oiyo/docs/content-schema-implementation-draft.md)
-8. [data/catalog/category-registry.yaml](/Users/seuncho/coding/blog-oiyo/data/catalog/category-registry.yaml)
-9. [data/catalog/content-inventory.master.csv](/Users/seuncho/coding/blog-oiyo/data/catalog/content-inventory.master.csv)
-10. [data/catalog/ahoxy-migration.revisit-later.csv](/Users/seuncho/coding/blog-oiyo/data/catalog/ahoxy-migration.revisit-later.csv)
+1. [docs/implementation-control-board.md](/Users/seuncho/coding/blog/docs/implementation-control-board.md)
+2. [docs/content-charter.md](/Users/seuncho/coding/blog/docs/content-charter.md)
+3. [docs/mdoc-authoring-spec.md](/Users/seuncho/coding/blog/docs/mdoc-authoring-spec.md)
+4. [docs/component-allowlist.md](/Users/seuncho/coding/blog/docs/component-allowlist.md)
+5. [docs/component-disallowlist.md](/Users/seuncho/coding/blog/docs/component-disallowlist.md)
+6. [docs/component-registry-by-track.md](/Users/seuncho/coding/blog/docs/component-registry-by-track.md)
+7. [docs/content-schema-implementation-draft.md](/Users/seuncho/coding/blog/docs/content-schema-implementation-draft.md)
+8. [data/catalog/category-registry.yaml](/Users/seuncho/coding/blog/data/catalog/category-registry.yaml)
+9. [data/catalog/content-inventory.master.csv](/Users/seuncho/coding/blog/data/catalog/content-inventory.master.csv)
+10. [data/catalog/ahoxy-migration.revisit-later.csv](/Users/seuncho/coding/blog/data/catalog/ahoxy-migration.revisit-later.csv)
 
 ## 3. Working Rules
 
@@ -67,7 +67,7 @@ Read these in order before making substantial changes:
 ### Rendering rules
 
 1. do not add MDX components directly to route files
-2. update [src/lib/mdx-component-registry.ts](/Users/seuncho/coding/blog-oiyo/src/lib/mdx-component-registry.ts) instead
+2. update [src/lib/mdx-component-registry.ts](/Users/seuncho/coding/blog/src/lib/mdx-component-registry.ts) instead
 3. keep `magazine` narrower than `academy` and `interactive`
 4. use the compatibility bridge only when needed to keep legacy content stable
 
@@ -122,10 +122,10 @@ Tool-specific instructions should stay thin.
 
 The following files are adapters and should point back here:
 
-1. [CLAUDE.md](/Users/seuncho/coding/blog-oiyo/CLAUDE.md)
-2. [GEMINI.md](/Users/seuncho/coding/blog-oiyo/GEMINI.md)
-3. [CURSOR.md](/Users/seuncho/coding/blog-oiyo/CURSOR.md)
-4. [.cursor/rules/project-harness.mdc](/Users/seuncho/coding/blog-oiyo/.cursor/rules/project-harness.mdc)
+1. [CLAUDE.md](/Users/seuncho/coding/blog/CLAUDE.md)
+2. [GEMINI.md](/Users/seuncho/coding/blog/GEMINI.md)
+3. [CURSOR.md](/Users/seuncho/coding/blog/CURSOR.md)
+4. [.cursor/rules/project-harness.mdc](/Users/seuncho/coding/blog/.cursor/rules/project-harness.mdc)
 
 ## 8. Current State
 
