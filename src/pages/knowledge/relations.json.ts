@@ -1,5 +1,8 @@
 import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
+import { readFileSync } from "node:fs";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { siteConfig } from "../../config/site.config";
 
 /**
@@ -7,10 +10,52 @@ import { siteConfig } from "../../config/site.config";
  * Output: /knowledge/relations.json
  *  - sets:    series cluster memberships (per locale)
  *  - sameAs:  cross-locale translation tuples (same concept, different language)
+ *  - hubs:    cross-site concept ownership graph (from the shared route-ownership
+ *             seed) + this site's explanation depth per topic (explanationCounts).
  */
+
+type SeedTopic = {
+  id: string;
+  name?: Record<string, string>;
+  primaryOwner?: string;
+  definitionOwner?: string;
+  explanationOwner?: string;
+  marketPolicy?: string;
+  aliases?: string[];
+  routeIds?: string[];
+  relatedTopicIds?: string[];
+};
+
+const SEED_TOPIC_PATH = resolve(
+  dirname(fileURLToPath(import.meta.url)),
+  "../../../../docs/knowledge/topics.json",
+);
+
+function readAllSeedTopics(): SeedTopic[] {
+  try {
+    const parsed = JSON.parse(readFileSync(SEED_TOPIC_PATH, "utf-8")) as { topics?: SeedTopic[] };
+    return parsed.topics ?? [];
+  } catch (error) {
+    console.warn(`[knowledge/relations] failed to read seed topics: ${String(error)}`);
+    return [];
+  }
+}
+
+const norm = (s: string) => s.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
 export const GET: APIRoute = async () => {
   const posts = await getCollection("blog", ({ data }) => data.draft !== true);
   const url = (slug: string) => new URL(`/${slug}/`, siteConfig.url).href;
+
+  const seedTopics = readAllSeedTopics();
+  const seedIds = new Set(seedTopics.map((t) => t.id));
+  // normalized tag/alias → topic id, for matching blog guides to hub topics
+  const tagToTopic = new Map<string, string>();
+  for (const t of seedTopics) {
+    for (const token of [t.id, ...(t.aliases ?? [])]) tagToTopic.set(norm(token), t.id);
+  }
+  // topic id → { locale → count } of guides that explain it
+  const explanationCounts = new Map<string, Record<string, number>>();
 
   const setMap = new Map<
     string,
@@ -35,6 +80,18 @@ export const GET: APIRoute = async () => {
     const tuple = sameAsMap.get(concept) ?? {};
     tuple[locale] = url(p.slug);
     sameAsMap.set(concept, tuple);
+
+    // count this guide toward any hub topic it is tagged with (once per topic)
+    const matched = new Set<string>();
+    for (const tag of p.data.tags ?? []) {
+      const topicId = tagToTopic.get(norm(tag));
+      if (topicId) matched.add(topicId);
+    }
+    for (const topicId of matched) {
+      const byLocale = explanationCounts.get(topicId) ?? {};
+      byLocale[locale] = (byLocale[locale] ?? 0) + 1;
+      explanationCounts.set(topicId, byLocale);
+    }
   }
 
   const sets = [...setMap.values()]
@@ -47,16 +104,46 @@ export const GET: APIRoute = async () => {
     .map(([concept, urls]) => ({ concept, urls }))
     .sort((a, b) => a.concept.localeCompare(b.concept));
 
+  const hubs = seedTopics
+    .map((t) => ({
+      concept: t.id,
+      names: t.name ?? {},
+      primaryOwner: t.primaryOwner ?? null,
+      definitionOwner: t.definitionOwner ?? null,
+      explanationOwner: t.explanationOwner ?? null,
+      marketPolicy: t.marketPolicy ?? null,
+      routeIds: t.routeIds ?? [],
+      related: (t.relatedTopicIds ?? []).filter((r) => seedIds.has(r)),
+      explanationCounts: explanationCounts.get(t.id) ?? {},
+    }))
+    .sort((a, b) => a.concept.localeCompare(b.concept));
+
+  const hubEdgeSet = new Set<string>();
+  const hubEdges: { from: string; to: string; type: "related" }[] = [];
+  for (const h of hubs) {
+    for (const r of h.related) {
+      const key = [h.concept, r].sort().join("::");
+      if (hubEdgeSet.has(key)) continue;
+      hubEdgeSet.add(key);
+      hubEdges.push({ from: h.concept, to: r, type: "related" });
+    }
+  }
+
   const body = {
     "@context": "https://schema.org",
     name: `${siteConfig.name} Blog — Concept Graph`,
     url: `${siteConfig.url}/knowledge/relations.json`,
-    description: "Series cluster memberships and cross-locale translation links for blog guides.",
+    description:
+      "Series clusters and cross-locale translation links for blog guides, plus the cross-site hub ownership graph (with this site's explanation depth per topic).",
     dateModified: new Date().toISOString(),
     setCount: sets.length,
     sameAsCount: sameAs.length,
+    hubCount: hubs.length,
+    hubEdgeCount: hubEdges.length,
     sets,
     sameAs,
+    hubs,
+    hubEdges: hubEdges.sort((a, b) => a.from.localeCompare(b.from) || a.to.localeCompare(b.to)),
   };
 
   return new Response(JSON.stringify(body, null, 2), {
