@@ -1,0 +1,257 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+
+// ── deterministic data (ported from ahoxy ageCalculator) ──────────────────────
+const ZODIAC = ["🐒 원숭이", "🐔 닭", "🐶 개", "🐷 돼지", "🐭 쥐", "🐂 소", "🐅 호랑이", "🐇 토끼", "🐉 용", "🐍 뱀", "🐎 말", "🐑 양"];
+const SIXTY = [
+  "갑자", "을축", "병인", "정묘", "무진", "기사", "경오", "신미", "임신", "계유",
+  "갑술", "을해", "병자", "정축", "무인", "기묘", "경진", "신사", "임오", "계미",
+  "갑신", "을유", "병술", "정해", "무자", "기축", "경인", "신묘", "임진", "계사",
+  "갑오", "을미", "병신", "정유", "무술", "기해", "경자", "신축", "임인", "계묘",
+  "갑진", "을사", "병오", "정미", "무신", "기유", "경술", "신해", "임자", "계축",
+  "갑인", "을묘", "병진", "정사", "무오", "기미", "경신", "신유", "임술", "계해",
+];
+const COMPAT_BEST: Record<string, string[]> = {
+  "🐭 쥐": ["🐂 소", "🐉 용", "🐒 원숭이"], "🐂 소": ["🐭 쥐", "🐍 뱀", "🐔 닭"],
+  "🐅 호랑이": ["🐎 말", "🐶 개", "🐷 돼지"], "🐇 토끼": ["🐑 양", "🐶 개", "🐷 돼지"],
+  "🐉 용": ["🐭 쥐", "🐒 원숭이", "🐔 닭"], "🐍 뱀": ["🐂 소", "🐔 닭"],
+  "🐎 말": ["🐅 호랑이", "🐶 개", "🐑 양"], "🐑 양": ["🐇 토끼", "🐎 말", "🐷 돼지"],
+  "🐒 원숭이": ["🐭 쥐", "🐉 용"], "🐔 닭": ["🐂 소", "🐍 뱀", "🐉 용"],
+  "🐶 개": ["🐅 호랑이", "🐇 토끼", "🐎 말"], "🐷 돼지": ["🐇 토끼", "🐑 양", "🐅 호랑이"],
+};
+const COMPAT_GOOD: Record<string, string[]> = {
+  "🐭 쥐": ["🐂 소", "🐅 호랑이", "🐍 뱀", "🐶 개", "🐷 돼지"], "🐂 소": ["🐭 쥐", "🐅 호랑이", "🐇 토끼", "🐒 원숭이", "🐷 돼지"],
+  "🐅 호랑이": ["🐭 쥐", "🐂 소", "🐇 토끼", "🐉 용", "🐑 양"], "🐇 토끼": ["🐂 소", "🐅 호랑이", "🐍 뱀"],
+  "🐉 용": ["🐅 호랑이", "🐍 뱀", "🐎 말", "🐑 양"], "🐍 뱀": ["🐭 쥐", "🐇 토끼", "🐉 용", "🐎 말", "🐑 양"],
+  "🐎 말": ["🐉 용", "🐍 뱀", "🐒 원숭이", "🐔 닭", "🐷 돼지"], "🐑 양": ["🐅 호랑이", "🐉 용", "🐍 뱀", "🐒 원숭이", "🐔 닭"],
+  "🐒 원숭이": ["🐂 소", "🐎 말", "🐑 양", "🐔 닭", "🐶 개"], "🐔 닭": ["🐎 말", "🐑 양", "🐒 원숭이", "🐷 돼지"],
+  "🐶 개": ["🐭 쥐", "🐒 원숭이", "🐷 돼지"], "🐷 돼지": ["🐭 쥐", "🐂 소", "🐎 말", "🐔 닭", "🐶 개"],
+};
+const COMPAT_UNEASY: Record<string, string[]> = {
+  "🐭 쥐": ["🐇 토끼", "🐔 닭", "🐑 양"], "🐂 소": ["🐉 용", "🐶 개"], "🐅 호랑이": ["🐍 뱀", "🐔 닭"],
+  "🐇 토끼": ["🐭 쥐", "🐉 용", "🐒 원숭이", "🐎 말"], "🐉 용": ["🐂 소", "🐇 토끼", "🐷 돼지"], "🐍 뱀": ["🐅 호랑이", "🐒 원숭이", "🐶 개"],
+  "🐎 말": ["🐂 소", "🐇 토끼"], "🐑 양": ["🐭 쥐", "🐶 개"], "🐒 원숭이": ["🐇 토끼", "🐍 뱀", "🐷 돼지"],
+  "🐔 닭": ["🐭 쥐", "🐅 호랑이", "🐶 개"], "🐶 개": ["🐂 소", "🐍 뱀", "🐑 양", "🐔 닭"], "🐷 돼지": ["🐉 용", "🐒 원숭이"],
+};
+const COMPAT_WORST: Record<string, string[]> = {
+  "🐭 쥐": ["🐎 말"], "🐂 소": ["🐑 양"], "🐅 호랑이": ["🐒 원숭이"], "🐇 토끼": ["🐔 닭"],
+  "🐉 용": ["🐶 개"], "🐍 뱀": ["🐷 돼지"], "🐎 말": ["🐭 쥐"], "🐑 양": ["🐂 소"],
+  "🐒 원숭이": ["🐅 호랑이"], "🐔 닭": ["🐇 토끼"], "🐶 개": ["🐉 용"], "🐷 돼지": ["🐍 뱀"],
+};
+
+function lifeStage(age: number): string {
+  if (age < 3) return "영아기";
+  if (age < 7) return "유아기";
+  if (age < 13) return "아동기";
+  if (age < 18) return "청소년기";
+  if (age < 30) return "청년기";
+  if (age < 60) return "중년기";
+  return "노년기";
+}
+function lifeEvent(koreanAge: number): { group: string; explanation: string } {
+  const m: Record<number, { group: string; explanation: string }> = {
+    7: { group: "초등학교 입학", explanation: "만 6세가 되는 해의 다음 해에 초등학교 1학년 입학" },
+    13: { group: "중학교 입학", explanation: "" },
+    16: { group: "고등학교 입학", explanation: "" },
+    19: { group: "성년 (약관)", explanation: "성년의 날(5월 셋째 주 월요일) 기준 성년" },
+    20: { group: "대학 신입생 무렵", explanation: "" },
+    29: { group: "이립(而立)", explanation: "서른 — 뜻을 세우는 나이" },
+    39: { group: "불혹(不惑)", explanation: "마흔 — 미혹되지 않는 나이" },
+    49: { group: "지천명(知天命)", explanation: "쉰 — 하늘의 뜻을 아는 나이" },
+    59: { group: "육순(六旬)", explanation: "" },
+    60: { group: "환갑(還甲)·회갑(回甲)", explanation: "태어난 해의 간지가 다시 돌아오는 해" },
+    69: { group: "칠순(七旬)", explanation: "" },
+    79: { group: "팔순(八旬)", explanation: "" },
+    89: { group: "구순(九旬)", explanation: "" },
+    99: { group: "백수(白壽)", explanation: "" },
+  };
+  return m[koreanAge] ?? { group: "", explanation: "" };
+}
+
+const CURRENT_YEAR = new Date().getFullYear();
+const START_YEAR = 1940;
+
+export function getStaticPaths() {
+  const now = new Date().getFullYear();
+  const years: { params: { year: string } }[] = [];
+  for (let y = 1940; y <= now; y++) years.push({ params: { year: String(y) } });
+  return years;
+}
+
+const { year: yearStr } = Astro.params as { year: string };
+const year = Number.parseInt(yearStr, 10);
+
+const ji = ZODIAC[((year % 12) + 12) % 12];        // 띠 (emoji + name)
+const jiName = ji.split(" ")[1];
+const jiEmoji = ji.split(" ")[0];
+const ganji = SIXTY[((year - 4) % 60 + 60) % 60];   // 60갑자
+const koreanAge = CURRENT_YEAR - year + 1;
+const manAge = Math.max(koreanAge - 1, 0);
+const stage = lifeStage(manAge);
+
+const best = COMPAT_BEST[ji] ?? [];
+const good = COMPAT_GOOD[ji] ?? [];
+const uneasy = COMPAT_UNEASY[ji] ?? [];
+const worst = COMPAT_WORST[ji] ?? [];
+
+// life-event timeline for this birth year
+const milestones: { age: number; calYear: number; group: string; explanation: string }[] = [];
+for (let a = 7; a <= 99; a++) {
+  const e = lifeEvent(a);
+  if (e.group) milestones.push({ age: a, calYear: year + a - 1, group: e.group, explanation: e.explanation });
+}
+
+const title = `${year}년생 정보 — ${ganji}년 ${jiName}띠, 나이·궁합·생애 연표`;
+const description = `${year}년생은 ${ganji}년 ${jiName}띠입니다. ${CURRENT_YEAR}년 기준 한국나이 ${koreanAge}세(만 ${manAge}세), 띠 궁합, 학령·환갑 등 생애 연표를 한 번에 확인하세요.`;
+
+const prevYear = year - 1 >= START_YEAR ? year - 1 : null;
+const nextYear = year + 1 <= CURRENT_YEAR ? year + 1 : null;
+
+const faqs = [
+  { question: `${year}년생은 무슨 띠인가요?`, answer: `${year}년생은 ${jiName}띠이며, 60갑자로는 ${ganji}년입니다.` },
+  { question: `${year}년생은 ${CURRENT_YEAR}년에 몇 살인가요?`, answer: `${CURRENT_YEAR}년 기준 한국나이로 ${koreanAge}세, 만 나이로는 생일 전 ${Math.max(koreanAge - 2, 0)}세 · 생일 후 ${manAge}세입니다.` },
+  { question: "한국나이와 만 나이는 어떻게 다른가요?", answer: "한국나이는 태어난 해를 1세로 보고 해가 바뀔 때마다 한 살을 더합니다. 만 나이는 생일을 기준으로 계산하며, 2023년 6월부터 법적·행정 기준은 만 나이로 통일되었습니다." },
+  { question: "띠는 어떻게 정해지나요?", answer: "띠는 태어난 해의 지지(地支)를 12지신 동물에 대응시킨 것으로, 12년마다 같은 띠가 돌아옵니다. 정확히는 음력 설(입춘 기준 학설도 있음)을 경계로 하므로, 1~2월 초 출생자는 앞 해의 띠일 수 있습니다." },
+];
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: title,
+    description,
+    mainEntity: { "@type": "Person", birthDate: String(year) },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.question,
+      acceptedAnswer: { "@type": "Answer", text: f.answer },
+    })),
+  },
+];
+
+const decadeStart = Math.floor(year / 10) * 10;
+const decadeYears: number[] = [];
+for (let y = Math.max(decadeStart, START_YEAR); y < decadeStart + 10 && y <= CURRENT_YEAR; y++) decadeYears.push(y);
+
+const compatRows = [
+  { label: "최고 궁합", icon: "🥰", signs: best, cls: "bg-green-50 text-green-800" },
+  { label: "원만한 궁합", icon: "🙂", signs: good, cls: "bg-indigo-50 text-indigo-800" },
+  { label: "불편한 궁합", icon: "😓", signs: uneasy, cls: "bg-orange-50 text-orange-800" },
+  { label: "상극 궁합", icon: "😱", signs: worst, cls: "bg-red-50 text-red-800" },
+];
+---
+
+<BaseLayout title={title} description={description} availableLocales={["ko"]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <main class="mx-auto max-w-3xl px-4 py-10">
+    <!-- Hero -->
+    <section class="rounded-3xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-8 text-white shadow-xl">
+      <p class="text-sm font-medium opacity-90">{ganji}년 · {jiName}띠</p>
+      <h1 class="mt-1 text-3xl font-black sm:text-4xl">{year}년생 정보 <span class="text-4xl">{jiEmoji}</span></h1>
+      <div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
+        <div class="rounded-xl bg-white/15 p-4 backdrop-blur">
+          <div class="text-xs opacity-80">한국나이</div>
+          <div class="text-2xl font-bold">{koreanAge}세</div>
+        </div>
+        <div class="rounded-xl bg-white/15 p-4 backdrop-blur">
+          <div class="text-xs opacity-80">만 나이</div>
+          <div class="text-2xl font-bold">{manAge}세</div>
+        </div>
+        <div class="rounded-xl bg-white/15 p-4 backdrop-blur">
+          <div class="text-xs opacity-80">띠</div>
+          <div class="text-2xl font-bold">{jiName}</div>
+        </div>
+        <div class="rounded-xl bg-white/15 p-4 backdrop-blur">
+          <div class="text-xs opacity-80">생애 단계</div>
+          <div class="text-2xl font-bold">{stage}</div>
+        </div>
+      </div>
+      <p class="mt-4 text-sm opacity-90">{CURRENT_YEAR}년 기준입니다. 만 나이는 생일이 지난 경우입니다.</p>
+    </section>
+
+    <!-- 띠 궁합 -->
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{jiName}띠 궁합</h2>
+      <div class="mt-4 space-y-3">
+        {compatRows.map((row) => (
+          <div class={`flex flex-wrap items-center gap-2 rounded-xl px-4 py-3 ${row.cls}`}>
+            <span class="font-semibold">{row.icon} {row.label}</span>
+            <span class="text-sm">{row.signs.length ? row.signs.join("  ") : "해당 없음"}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- 생애 연표 -->
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{year}년생 생애 연표</h2>
+      <p class="mt-2 text-sm text-slate-500">한국나이 기준 주요 시기와 해당 연도입니다.</p>
+      <div class="mt-4 overflow-hidden rounded-xl border border-slate-200">
+        <table class="w-full text-left text-sm">
+          <thead class="bg-slate-50 text-slate-500">
+            <tr><th class="px-4 py-2">시기</th><th class="px-4 py-2">한국나이</th><th class="px-4 py-2">연도</th></tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            {milestones.map((mi) => (
+              <tr>
+                <td class="px-4 py-2 font-medium text-slate-800">{mi.group}{mi.explanation ? <span class="block text-xs font-normal text-slate-500">{mi.explanation}</span> : null}</td>
+                <td class="px-4 py-2 text-slate-600">{mi.age}세</td>
+                <td class="px-4 py-2 text-slate-600">{mi.calYear}년</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 설명 -->
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{year}년생, {ganji}년 {jiName}띠란?</h2>
+      <p class="mt-4 leading-8 text-slate-700">
+        {year}년에 태어난 사람은 십이지(十二支)로 {jiName}띠에 해당하며, 천간(天干)과 지지(地支)를 결합한 60갑자로는 <strong>{ganji}년</strong>입니다.
+        60갑자는 10천간과 12지지가 맞물려 60년마다 한 번씩 같은 간지가 돌아오는 동아시아의 전통 역법으로, 태어난 해의 간지가 다시 돌아오는 해가 바로 <strong>환갑</strong>(만 60세 무렵)입니다.
+      </p>
+      <p class="mt-4 leading-8 text-slate-700">
+        {CURRENT_YEAR}년을 기준으로 {year}년생의 한국나이는 {koreanAge}세입니다. 2023년 6월부터 법적·행정 기준이 만 나이로 통일되었으므로, 공식 서류에서는 생일이 지났다면 만 {manAge}세로 표기합니다.
+      </p>
+    </section>
+
+    <!-- FAQ -->
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">자주 묻는 질문</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {faqs.map((f) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{f.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{f.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- 연도 내비게이션 -->
+    <nav class="mt-10 flex items-center justify-between">
+      {prevYear ? <a class="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50" href={`/ko/year/${prevYear}`}>← {prevYear}년생</a> : <span></span>}
+      {nextYear ? <a class="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50" href={`/ko/year/${nextYear}`}>{nextYear}년생 →</a> : <span></span>}
+    </nav>
+
+    <section class="mt-8">
+      <h2 class="text-sm font-semibold text-slate-500">{decadeStart}년대 출생연도</h2>
+      <div class="mt-3 flex flex-wrap gap-2">
+        {decadeYears.map((y) => (
+          y === year
+            ? <span class="rounded-lg bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white">{y}</span>
+            : <a class="rounded-lg border border-slate-200 px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-50" href={`/ko/year/${y}`}>{y}</a>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">
+      띠 궁합과 간지는 전통 문화·오락 목적의 정보입니다. 진로, 결혼, 투자 등 중요한 결정의 근거로 삼지 마세요.
+    </p>
+  </main>
+</BaseLayout>

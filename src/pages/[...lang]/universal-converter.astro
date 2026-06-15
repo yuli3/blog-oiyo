@@ -1,0 +1,265 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import UniversalConverter from "../../components/tools/UniversalConverter";
+import { locales } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: ActiveLocale };
+
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
+  ko: {
+    title: "통합 변환기 — 텍스트·진법·2진수·날짜 한 번에",
+    description: "텍스트를 2진수·16진수로, 숫자를 진법 간으로, 2진수를 10진수·텍스트로, 날짜를 로마 숫자로 변환합니다. 개발자용 통합 변환 도구.",
+  },
+  en: {
+    title: "Universal Converter — Text, Base, Binary & Date",
+    description: "Convert text to binary and hex, numbers between bases, binary to decimal and text, and dates to Roman numerals — a developer-friendly all-in-one converter.",
+  },
+  ja: {
+    title: "統合コンバーター — テキスト・基数・2進数・日付",
+    description: "テキストを2進数・16進数へ、数値を基数間で、2進数を10進数・テキストへ、日付をローマ数字へ変換する開発者向けオールインワン変換ツール。",
+  },
+  zh: {
+    title: "通用转换器 — 文本、进制、二进制和日期",
+    description: "把文本转成二进制和十六进制，把数字在进制间转换，把二进制转成十进制和文本，把日期转成罗马数字——面向开发者的多合一转换工具。",
+  },
+  fr: {
+    title: "Convertisseur Universel — Texte, Base, Binaire et Date",
+    description: "Convertissez du texte en binaire et hexadécimal, des nombres entre bases, du binaire en décimal et texte, et des dates en chiffres romains — un outil tout-en-un.",
+  },
+  es: {
+    title: "Convertidor Universal — Texto, Base, Binario y Fecha",
+    description: "Convierte texto a binario y hexadecimal, números entre bases, binario a decimal y texto, y fechas a números romanos: una herramienta todo en uno.",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  featuresTitle: string;
+  features: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "네 가지 변환을 한 화면에 모은 개발자 도구",
+    intro: "통합 변환기는 자주 쓰이지만 흩어져 있는 변환 작업을 한 곳에 모았습니다. 텍스트의 바이트 표현 확인, 진법 간 변환, 2진수 디코딩, 날짜의 로마 숫자 표기까지 탭 하나로 오갈 수 있어 코드 디버깅과 학습에 유용합니다.",
+    featuresTitle: "포함된 변환기",
+    features: [
+      { title: "텍스트 → 2진수·16진수", body: "각 문자를 ASCII 코드로 바꿔 8비트 2진수와 16진수로 표시합니다." },
+      { title: "진법 변환", body: "2·8·10·16진수 사이를 입력 진법과 출력 진법을 골라 변환합니다." },
+      { title: "2진수 디코더", body: "2진수를 10진수, 16진수, 그리고 ASCII 텍스트로 한 번에 복원합니다." },
+      { title: "날짜 → 로마 숫자", body: "연·월·일을 각각 로마 숫자로 표기해 줍니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "상단 탭에서 원하는 변환기를 선택합니다.",
+      "값을 입력하면 결과가 즉시 표시됩니다.",
+      "진법·2진수 변환은 입력 형식이 맞지 않으면 '잘못된 입력'이 표시됩니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "텍스트 변환은 어떤 인코딩을 쓰나요?", answer: "각 문자의 유니코드 코드포인트를 사용합니다. 기본 ASCII 문자는 8비트로, 그 밖의 문자는 코드포인트 값으로 표시됩니다." },
+      { question: "2진수를 텍스트로 되돌릴 수 있나요?", answer: "네. 2진수 디코더는 8비트 단위로 묶어 ASCII 텍스트로 복원합니다. 공백은 무시됩니다." },
+      { question: "로마 숫자에 0이나 음수도 되나요?", answer: "로마 숫자 체계에는 0과 음수 표기가 없습니다. 이 도구는 양의 정수(연·월·일)만 변환합니다." },
+    ],
+    disclaimer: "이 도구는 일반적인 변환·학습용입니다. 중요한 데이터 처리에는 결과를 별도로 검증하세요.",
+  },
+  en: {
+    introTitle: "Four everyday conversions in a single developer tool",
+    intro: "The Universal Converter gathers small but frequent conversion tasks into one place. Inspect the byte representation of text, switch between number bases, decode binary, and write dates as Roman numerals — all from one set of tabs, which is handy for debugging and learning.",
+    featuresTitle: "What's included",
+    features: [
+      { title: "Text → Binary & Hex", body: "Turns each character into its ASCII code and shows it as 8-bit binary and hexadecimal." },
+      { title: "Base converter", body: "Converts among binary, octal, decimal, and hex by choosing an input and output base." },
+      { title: "Binary decoder", body: "Restores binary to decimal, hexadecimal, and ASCII text at once." },
+      { title: "Date → Roman numerals", body: "Writes the year, month, and day each as Roman numerals." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Pick the converter you need from the tabs at the top.",
+      "Enter a value and the result appears instantly.",
+      "Base and binary converters show 'Invalid input' when the format does not match.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Which encoding does the text converter use?", answer: "It uses each character's Unicode code point. Basic ASCII characters fit in 8 bits; others are shown by their code point value." },
+      { question: "Can I turn binary back into text?", answer: "Yes. The binary decoder groups bits into bytes of 8 and restores them to ASCII text. Spaces are ignored." },
+      { question: "Do Roman numerals support zero or negatives?", answer: "The Roman numeral system has no symbol for zero or negative numbers. This tool converts positive integers (year, month, day) only." },
+    ],
+    disclaimer: "This tool is for general conversion and learning. Verify results independently for critical data processing.",
+  },
+  ja: {
+    introTitle: "4つの日常変換をひとつの開発者ツールに",
+    intro: "統合コンバーターは、よく使うけれど散らばりがちな変換作業をひとつにまとめました。テキストのバイト表現の確認、基数変換、2進数のデコード、日付のローマ数字表記までタブで切り替えられ、デバッグや学習に便利です。",
+    featuresTitle: "含まれる変換",
+    features: [
+      { title: "テキスト → 2進数・16進数", body: "各文字をASCIIコードに変換し、8ビット2進数と16進数で表示します。" },
+      { title: "基数変換", body: "入力と出力の基数を選んで、2・8・10・16進数の間を変換します。" },
+      { title: "2進数デコーダー", body: "2進数を10進数・16進数・ASCIIテキストへ一度に復元します。" },
+      { title: "日付 → ローマ数字", body: "年・月・日をそれぞれローマ数字で表記します。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "上部のタブから使いたい変換を選びます。",
+      "値を入力すると結果がすぐ表示されます。",
+      "基数・2進数変換は形式が合わないと「無効な入力」と表示されます。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "テキスト変換のエンコードは？", answer: "各文字のUnicodeコードポイントを使います。基本的なASCII文字は8ビット、その他はコードポイント値で表示されます。" },
+      { question: "2進数をテキストに戻せますか？", answer: "はい。2進数デコーダーは8ビット単位でまとめてASCIIテキストに復元します。空白は無視されます。" },
+      { question: "ローマ数字に0や負数は使えますか？", answer: "ローマ数字には0や負数の表記がありません。このツールは正の整数（年・月・日）のみを変換します。" },
+    ],
+    disclaimer: "このツールは一般的な変換・学習用です。重要なデータ処理では結果を別途ご確認ください。",
+  },
+  zh: {
+    introTitle: "把四种日常转换装进一个开发者工具",
+    intro: "通用转换器把零散却常用的转换任务集中到一处：查看文本的字节表示、在进制间切换、解码二进制、把日期写成罗马数字——通过标签即可切换，方便调试与学习。",
+    featuresTitle: "包含的转换",
+    features: [
+      { title: "文本 → 二进制和十六进制", body: "把每个字符转成 ASCII 码，并以 8 位二进制和十六进制显示。" },
+      { title: "进制转换", body: "选择输入和输出进制，在二、八、十、十六进制之间转换。" },
+      { title: "二进制解码", body: "把二进制一次性还原为十进制、十六进制和 ASCII 文本。" },
+      { title: "日期 → 罗马数字", body: "把年、月、日分别写成罗马数字。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "在顶部标签中选择需要的转换器。",
+      "输入数值后立即显示结果。",
+      "进制和二进制转换在格式不符时会显示“输入无效”。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "文本转换用哪种编码？", answer: "使用每个字符的 Unicode 码点。基本 ASCII 字符占 8 位，其他字符按码点值显示。" },
+      { question: "能把二进制还原成文本吗？", answer: "可以。二进制解码器按 8 位一组还原为 ASCII 文本，空格会被忽略。" },
+      { question: "罗马数字支持 0 或负数吗？", answer: "罗马数字系统没有 0 或负数的符号。本工具只转换正整数（年、月、日）。" },
+    ],
+    disclaimer: "本工具用于一般转换和学习。处理重要数据时请另行核验结果。",
+  },
+  fr: {
+    introTitle: "Quatre conversions quotidiennes dans un seul outil",
+    intro: "Le Convertisseur Universel rassemble des tâches de conversion fréquentes mais dispersées : inspecter la représentation en octets d'un texte, changer de base, décoder du binaire et écrire des dates en chiffres romains — le tout depuis des onglets, pratique pour le débogage et l'apprentissage.",
+    featuresTitle: "Ce qui est inclus",
+    features: [
+      { title: "Texte → Binaire et Hex", body: "Transforme chaque caractère en code ASCII affiché en binaire 8 bits et en hexadécimal." },
+      { title: "Convertisseur de bases", body: "Convertit entre binaire, octal, décimal et hexadécimal selon les bases choisies." },
+      { title: "Décodeur binaire", body: "Restitue le binaire en décimal, hexadécimal et texte ASCII en une fois." },
+      { title: "Date → Chiffres romains", body: "Écrit l'année, le mois et le jour en chiffres romains." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Choisissez le convertisseur voulu dans les onglets en haut.",
+      "Saisissez une valeur : le résultat apparaît aussitôt.",
+      "Les convertisseurs de base et binaire affichent « Entrée invalide » si le format ne correspond pas.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Quel encodage le convertisseur de texte utilise-t-il ?", answer: "Il utilise le point de code Unicode de chaque caractère. Les caractères ASCII de base tiennent sur 8 bits ; les autres sont affichés par leur point de code." },
+      { question: "Puis-je reconvertir du binaire en texte ?", answer: "Oui. Le décodeur binaire regroupe les bits par octets de 8 et les restitue en texte ASCII. Les espaces sont ignorés." },
+      { question: "Les chiffres romains gèrent-ils le zéro ou les négatifs ?", answer: "Le système romain n'a pas de symbole pour zéro ni pour les négatifs. Cet outil convertit uniquement des entiers positifs (année, mois, jour)." },
+    ],
+    disclaimer: "Cet outil sert à la conversion générale et à l'apprentissage. Vérifiez les résultats séparément pour les traitements critiques.",
+  },
+  es: {
+    introTitle: "Cuatro conversiones cotidianas en una sola herramienta",
+    intro: "El Convertidor Universal reúne tareas de conversión frecuentes pero dispersas: inspeccionar la representación en bytes de un texto, cambiar de base, decodificar binario y escribir fechas como números romanos, todo desde pestañas, útil para depurar y aprender.",
+    featuresTitle: "Qué incluye",
+    features: [
+      { title: "Texto → Binario y Hex", body: "Convierte cada carácter en su código ASCII y lo muestra en binario de 8 bits y hexadecimal." },
+      { title: "Convertidor de bases", body: "Convierte entre binario, octal, decimal y hexadecimal según las bases elegidas." },
+      { title: "Decodificador binario", body: "Restaura el binario a decimal, hexadecimal y texto ASCII a la vez." },
+      { title: "Fecha → Números romanos", body: "Escribe el año, el mes y el día como números romanos." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Elige el convertidor que necesitas en las pestañas superiores.",
+      "Introduce un valor y el resultado aparece al instante.",
+      "Los convertidores de base y binario muestran «Entrada no válida» si el formato no coincide.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Qué codificación usa el convertidor de texto?", answer: "Usa el punto de código Unicode de cada carácter. Los caracteres ASCII básicos caben en 8 bits; los demás se muestran por su punto de código." },
+      { question: "¿Puedo volver a convertir binario en texto?", answer: "Sí. El decodificador binario agrupa los bits en bytes de 8 y los restaura a texto ASCII. Los espacios se ignoran." },
+      { question: "¿Los números romanos admiten cero o negativos?", answer: "El sistema romano no tiene símbolo para el cero ni para negativos. Esta herramienta convierte solo enteros positivos (año, mes, día)." },
+    ],
+    disclaimer: "Esta herramienta es para conversión general y aprendizaje. Verifica los resultados por separado para procesamientos críticos.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
+---
+
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <main class="mx-auto max-w-3xl px-4 py-10">
+    <UniversalConverter client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.featuresTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-2">
+        {c.features.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
+  </main>
+</BaseLayout>
