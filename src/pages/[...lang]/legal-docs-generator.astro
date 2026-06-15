@@ -1,0 +1,259 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import LegalDocsGenerator from "../../components/tools/LegalDocsGenerator";
+import { locales } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: ActiveLocale };
+
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
+  ko: {
+    title: "법률 문서 생성기 — 개인정보 처리방침, 이용약관, 회사 소개",
+    description: "회사 정보를 입력해 개인정보 처리방침, 이용약관, 회사 소개 초안을 생성합니다. 브라우저에서만 작동하며 복사와 다운로드를 지원합니다.",
+  },
+  en: {
+    title: "Legal Docs Generator — Privacy Policy, Terms, About Page",
+    description: "Generate starter drafts for a privacy policy, terms of service, and about page from company details. Copy or download the client-side result.",
+  },
+  ja: {
+    title: "法務ドキュメント生成ツール — プライバシー・規約・会社紹介",
+    description: "会社情報からプライバシーポリシー、利用規約、会社紹介の下書きを生成します。ブラウザ内で動作し、コピーと保存に対応します。",
+  },
+  zh: {
+    title: "法律文档生成器 — 隐私政策、服务条款、关于我们",
+    description: "输入公司信息后生成隐私政策、服务条款和关于我们草稿。工具仅在浏览器中运行，并支持复制和下载。",
+  },
+  fr: {
+    title: "Generateur de Documents Juridiques — Confidentialite, Conditions, A Propos",
+    description: "Generez des brouillons de politique de confidentialite, conditions d'utilisation et page A propos a partir des informations de l'entreprise.",
+  },
+  es: {
+    title: "Generador de Documentos Legales — Privacidad, Terminos, Acerca de",
+    description: "Genera borradores de politica de privacidad, terminos de servicio y pagina Acerca de con datos de empresa. Copia o descarga el resultado.",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "템플릿 문서는 출시 전 체크리스트의 시작점입니다",
+    intro: "개인정보 처리방침이나 이용약관은 빈 문서에서 시작하면 빠뜨리기 쉽습니다. 이 생성기는 Ahoxy의 About, Privacy, Terms 템플릿과 조건부 입력 필드를 포팅해 회사명, 연락처, 사업 유형, 데이터 처리 수준, 유료 상품 여부에 따라 초안을 조립합니다.",
+    formulaTitle: "지원 문서와 입력",
+    formulas: [
+      { title: "회사 소개", body: "설립 연도, 팀 규모, 서비스 국가, 창업자, 성과를 소개 문단에 반영합니다." },
+      { title: "개인정보 처리방침", body: "수집 수준, 쿠키, 국외 이전, 보관 기간을 데이터 처리 문단에 넣습니다." },
+      { title: "이용약관", body: "최소 연령, 유료 상품, 가격, 환불 정책을 조건에 따라 포함합니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "회사명, 이메일, 연락처와 사업 유형을 입력합니다.",
+      "생성할 문서 유형을 고른 뒤 해당 유형에 필요한 추가 필드를 확인합니다.",
+      "문서를 생성하고 초안을 검토한 뒤 Markdown, TXT, HTML 형식으로 복사하거나 다운로드합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "생성된 문서를 바로 게시해도 되나요?", answer: "아니요. 이 도구는 초안 작성용입니다. 국가, 업종, 서비스 구조에 따라 필요한 조항이 다르므로 법률 전문가 검토가 필요합니다." },
+      { question: "입력한 회사 정보가 저장되나요?", answer: "아닙니다. 이 도구는 클라이언트 브라우저에서만 동작하며 서버 저장 기능을 사용하지 않습니다." },
+      { question: "어떤 문서를 만들 수 있나요?", answer: "회사 소개, 개인정보 처리방침, 이용약관 세 가지 초안을 만들 수 있습니다." },
+    ],
+    disclaimer: "법률 문서 초안은 법률 자문이 아닙니다. 실제 게시 전 관할 법령과 서비스 구조에 맞는 전문가 검토를 받으세요.",
+  },
+  en: {
+    introTitle: "Template documents are a starting checklist before launch",
+    intro: "Privacy policies and terms are easy to under-specify when you start from a blank page. This generator ports Ahoxy's About, Privacy, and Terms templates with conditional fields for company details, contact information, business type, data processing level, and paid product settings.",
+    formulaTitle: "Documents and inputs",
+    formulas: [
+      { title: "About page", body: "Uses founding year, team size, countries served, founders, and achievements." },
+      { title: "Privacy policy", body: "Adds data processing level, cookies, international transfers, and retention period." },
+      { title: "Terms of service", body: "Includes minimum age, paid products, pricing, and refund policy when relevant." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Enter your company name, email, optional contact, and business type.",
+      "Choose the document type and complete the fields that appear for that template.",
+      "Generate the draft, review it, then copy or download it as Markdown, TXT, or HTML.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Can I publish the generated document as-is?", answer: "No. The output is a drafting aid. Legal requirements vary by jurisdiction, industry, and service model, so qualified review is required before publication." },
+      { question: "Is my company information stored?", answer: "No. The tool runs client-side in your browser and does not include server storage." },
+      { question: "Which documents are supported?", answer: "It can generate starter drafts for About, Privacy Policy, and Terms of Service pages." },
+    ],
+    disclaimer: "Generated legal drafts are not legal advice. Before publishing, review them against your jurisdiction and service model with qualified counsel.",
+  },
+  ja: {
+    introTitle: "テンプレート文書は公開前チェックリストの出発点です",
+    intro: "プライバシーポリシーや利用規約は白紙から作ると抜け漏れが起きやすい文書です。このツールはAhoxyのAbout、Privacy、Termsテンプレートと条件付き入力を移植し、会社情報、連絡先、事業種別、データ処理、課金有無を反映します。",
+    formulaTitle: "対応文書と入力",
+    formulas: [
+      { title: "会社紹介", body: "設立年、チーム規模、提供国、創業者、実績を反映します。" },
+      { title: "プライバシー", body: "データ処理レベル、Cookie、国際移転、保存期間を含めます。" },
+      { title: "利用規約", body: "最低年齢、有料商品、料金、返金ポリシーを条件に応じて含めます。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "会社名、メール、連絡先、事業種別を入力します。",
+      "文書種別を選び、表示される追加項目を入力します。",
+      "下書きを生成して確認し、Markdown、TXT、HTMLでコピーまたは保存します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "生成文書をそのまま公開できますか？", answer: "いいえ。出力は下書き支援です。国、業種、サービス形態で必要事項が異なるため、公開前に専門家の確認が必要です。" },
+      { question: "会社情報は保存されますか？", answer: "いいえ。ツールはブラウザ内で動作し、サーバー保存は行いません。" },
+      { question: "どの文書に対応していますか？", answer: "会社紹介、プライバシーポリシー、利用規約の下書きを生成できます。" },
+    ],
+    disclaimer: "生成された法務文書の下書きは法的助言ではありません。公開前に法域とサービス内容に合わせて専門家へ確認してください。",
+  },
+  zh: {
+    introTitle: "模板文档是上线前检查清单的起点",
+    intro: "隐私政策和服务条款从空白开始容易遗漏重点。这个工具移植 Ahoxy 的 About、Privacy、Terms 模板，并根据公司信息、联系方式、业务类型、数据处理级别和付费产品设置组装草稿。",
+    formulaTitle: "支持的文档和输入",
+    formulas: [
+      { title: "关于我们", body: "使用成立年份、团队规模、服务国家、创始人和成就。" },
+      { title: "隐私政策", body: "加入数据处理级别、Cookie、跨境传输和数据保留期限。" },
+      { title: "服务条款", body: "按条件包含最低年龄、付费产品、价格和退款政策。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "输入公司名称、邮箱、可选联系方式和业务类型。",
+      "选择文档类型，并填写该模板显示的附加字段。",
+      "生成草稿并检查后，复制或下载为 Markdown、TXT、HTML。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "生成的文档可以直接发布吗？", answer: "不建议。输出只是起草辅助。不同司法辖区、行业和服务模式要求不同，发布前需要合格专业人士审核。" },
+      { question: "公司信息会被保存吗？", answer: "不会。工具在浏览器客户端运行，不包含服务器存储。" },
+      { question: "支持哪些文档？", answer: "可以生成关于我们、隐私政策和服务条款三类草稿。" },
+    ],
+    disclaimer: "生成的法律文档草稿不构成法律建议。发布前请结合所在地法规和服务模式进行专业审核。",
+  },
+  fr: {
+    introTitle: "Un modele est une premiere checklist avant publication",
+    intro: "Les politiques de confidentialite et conditions sont faciles a oublier si l'on part d'une page blanche. Cet outil reprend les modeles Ahoxy About, Privacy et Terms avec champs conditionnels pour l'entreprise, le contact, l'activite, les donnees et les offres payantes.",
+    formulaTitle: "Documents et champs",
+    formulas: [
+      { title: "Page A propos", body: "Utilise annee de creation, taille d'equipe, pays servis, fondateurs et realisations." },
+      { title: "Confidentialite", body: "Ajoute niveau de traitement, cookies, transferts internationaux et retention." },
+      { title: "Conditions", body: "Inclut age minimum, offres payantes, prix et remboursement si necessaire." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Saisissez le nom, l'e-mail, le contact optionnel et le type d'activite.",
+      "Choisissez le document et completez les champs propres au modele.",
+      "Generez le brouillon, relisez-le, puis copiez ou telechargez en Markdown, TXT ou HTML.",
+    ],
+    faqTitle: "Questions frequentes",
+    faqs: [
+      { question: "Puis-je publier le document tel quel ?", answer: "Non. C'est une aide a la redaction. Les exigences changent selon pays, secteur et service; une revue qualifiee est necessaire." },
+      { question: "Mes informations sont-elles stockees ?", answer: "Non. L'outil fonctionne cote navigateur et ne stocke rien sur serveur." },
+      { question: "Quels documents sont pris en charge ?", answer: "A propos, Politique de confidentialite et Conditions d'utilisation." },
+    ],
+    disclaimer: "Ces brouillons ne constituent pas un conseil juridique. Faites-les verifier selon votre juridiction et votre service avant publication.",
+  },
+  es: {
+    introTitle: "Una plantilla es una lista inicial antes de publicar",
+    intro: "Las politicas de privacidad y terminos suelen quedar incompletos si se empiezan desde cero. Esta herramienta porta las plantillas Ahoxy About, Privacy y Terms con campos condicionales para empresa, contacto, negocio, datos y productos de pago.",
+    formulaTitle: "Documentos y campos",
+    formulas: [
+      { title: "Acerca de", body: "Usa ano de fundacion, tamano del equipo, paises atendidos, fundadores y logros." },
+      { title: "Privacidad", body: "Agrega nivel de tratamiento, cookies, transferencias internacionales y retencion." },
+      { title: "Terminos", body: "Incluye edad minima, productos de pago, precios y reembolsos cuando aplica." },
+    ],
+    howToTitle: "Como usarlo",
+    steps: [
+      "Introduce nombre de empresa, correo, contacto opcional y tipo de negocio.",
+      "Elige el documento y completa los campos de esa plantilla.",
+      "Genera el borrador, revisalo y copia o descarga en Markdown, TXT o HTML.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "Puedo publicar el documento tal cual?", answer: "No. Es una ayuda de redaccion. Los requisitos varian por jurisdiccion, sector y modelo de servicio; se requiere revision cualificada." },
+      { question: "Se guardan mis datos de empresa?", answer: "No. La herramienta corre en el navegador y no usa almacenamiento de servidor." },
+      { question: "Que documentos admite?", answer: "Borradores de Acerca de, Politica de privacidad y Terminos de servicio." },
+    ],
+    disclaimer: "Los borradores legales generados no son asesoramiento legal. Revisalos con profesionales segun tu jurisdiccion y servicio antes de publicarlos.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
+---
+
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <main class="mx-auto max-w-3xl px-4 py-10">
+    <LegalDocsGenerator client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
+  </main>
+</BaseLayout>

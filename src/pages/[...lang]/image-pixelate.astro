@@ -1,0 +1,259 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ImagePixelator from "../../components/tools/ImagePixelator";
+import { locales } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: ActiveLocale };
+
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
+  ko: {
+    title: "이미지 픽셀화 — 로컬 모자이크 PNG 만들기",
+    description: "이미지를 브라우저에서 픽셀 블록으로 변환합니다. 원본 파일은 업로드되지 않고 캔버스에서 로컬 처리됩니다.",
+  },
+  en: {
+    title: "Image Pixelator — Local Pixelated PNG Export",
+    description: "Pixelate an image in your browser with adjustable block size. The file stays local and is processed on canvas.",
+  },
+  ja: {
+    title: "画像ピクセル化 — ローカルPNG出力",
+    description: "画像をブラウザ内でピクセルブロックに変換します。元ファイルはアップロードされず、canvasで処理されます。",
+  },
+  zh: {
+    title: "图片像素化 — 本地导出马赛克 PNG",
+    description: "在浏览器中用可调色块把图片像素化。原图不会上传，而是在 canvas 中本地处理。",
+  },
+  fr: {
+    title: "Pixeliseur d'Image — Export PNG Local",
+    description: "Pixellisez une image dans le navigateur avec une taille de bloc réglable. Le fichier reste local et traité sur canvas.",
+  },
+  es: {
+    title: "Pixelador de Imágenes — Exportación PNG Local",
+    description: "Pixela una imagen en el navegador con tamaño de bloque ajustable. El archivo permanece local y se procesa en canvas.",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "픽셀화는 세부 정보를 색상 블록으로 요약합니다",
+    intro: "픽셀화는 단순히 이미지를 흐리게 만드는 효과가 아니라, 지정한 블록 안의 색을 평균내어 하나의 큰 픽셀처럼 다시 그리는 방식입니다. 얼굴, 번호판, 배경 정보를 약하게 만들거나 레트로 픽셀아트 분위기를 만들 때 사용할 수 있습니다.",
+    formulaTitle: "픽셀화 기준",
+    formulas: [
+      { title: "블록 평균", body: "각 블록 안의 R, G, B, A 값을 평균내고 같은 색으로 채웁니다." },
+      { title: "픽셀 크기", body: "값이 클수록 세부 정보가 더 줄고, 값이 작을수록 원본 형태가 더 남습니다." },
+      { title: "로컬 처리", body: "FileReader와 canvas만 사용하므로 일반 사용 중 이미지가 서버로 전송되지 않습니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "픽셀화할 이미지 파일을 선택합니다.",
+      "픽셀 크기 슬라이더를 조절해 블록감을 비교합니다.",
+      "원하는 강도가 되면 PNG 파일로 다운로드합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "개인정보 보호용으로 충분한가요?", answer: "강한 픽셀화는 세부 식별을 줄이는 데 도움이 되지만, 민감 정보는 원본을 공개하기 전에 별도 검토가 필요합니다." },
+      { question: "이미지가 업로드되나요?", answer: "아니요. 브라우저가 파일을 읽고 캔버스에서 바로 다시 그립니다." },
+      { question: "왜 평균 색상 방식을 쓰나요?", answer: "블록 안의 색을 대표값으로 바꾸면 모자이크 느낌이 안정적이고 가장자리도 자연스럽게 단순화됩니다." },
+    ],
+    disclaimer: "픽셀화는 되돌릴 수 없는 편집 결과를 만듭니다. 원본 파일은 따로 보관하고 결과물만 공유하세요.",
+  },
+  en: {
+    introTitle: "Pixelation summarizes detail into color blocks",
+    intro: "Pixelation is more than blur. It averages the color values inside each chosen block, then redraws that area as one large pixel. Use it to soften faces, license plates, background details, or to create a retro pixel-art style.",
+    formulaTitle: "Pixelation rules",
+    formulas: [
+      { title: "Block average", body: "The R, G, B, and A values inside each block are averaged and filled back as one color." },
+      { title: "Pixel size", body: "Larger values remove more detail; smaller values keep more of the original shape." },
+      { title: "Local processing", body: "Only FileReader and canvas are used, so the image is not sent to a server in normal use." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Choose the image file you want to pixelate.",
+      "Adjust the pixel-size slider and compare the block strength.",
+      "Download the result as PNG when the effect is right.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Is this enough for privacy protection?", answer: "Strong pixelation can reduce visible identifiers, but sensitive information should still be reviewed before sharing." },
+      { question: "Is my image uploaded?", answer: "No. The browser reads the file and redraws it directly on canvas." },
+      { question: "Why use average-color blocks?", answer: "Averaging each block creates a stable mosaic effect and simplifies edges naturally." },
+    ],
+    disclaimer: "Pixelation creates an edited result that should be treated as irreversible. Keep the original separately and share only the output.",
+  },
+  ja: {
+    introTitle: "ピクセル化は細部を色ブロックに要約します",
+    intro: "ピクセル化は単なるぼかしではありません。指定したブロック内の色を平均し、その領域を大きな1つのピクセルとして描き直します。顔、ナンバー、背景情報を弱めたり、レトロな表現を作ったりできます。",
+    formulaTitle: "ピクセル化の基準",
+    formulas: [
+      { title: "ブロック平均", body: "各ブロック内のR、G、B、A値を平均し、同じ色で塗ります。" },
+      { title: "ピクセルサイズ", body: "大きいほど細部が減り、小さいほど元の形が残ります。" },
+      { title: "ローカル処理", body: "FileReaderとcanvasだけを使うため、通常の利用で画像はサーバーへ送られません。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "ピクセル化したい画像ファイルを選びます。",
+      "スライダーでピクセルサイズを調整します。",
+      "好みの強さになったらPNGとして保存します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "プライバシー保護に十分ですか？", answer: "強いピクセル化は識別情報を減らせますが、機密情報は共有前に必ず確認してください。" },
+      { question: "画像はアップロードされますか？", answer: "いいえ。ブラウザがファイルを読み、canvas上で直接描き直します。" },
+      { question: "なぜ平均色のブロックを使うのですか？", answer: "ブロックごとの平均色は安定したモザイク効果を作り、輪郭も自然に単純化します。" },
+    ],
+    disclaimer: "ピクセル化は元に戻せない編集結果として扱ってください。元画像は別に保管し、出力だけを共有してください。",
+  },
+  zh: {
+    introTitle: "像素化会把细节概括成色块",
+    intro: "像素化不只是模糊图片。它会计算指定色块内的颜色平均值，再把该区域重新绘制成一个大像素。你可以用它弱化人脸、车牌、背景细节，或制作复古像素艺术效果。",
+    formulaTitle: "像素化规则",
+    formulas: [
+      { title: "色块平均", body: "每个色块内的 R、G、B、A 数值会被平均，并用同一种颜色填充。" },
+      { title: "像素大小", body: "数值越大，细节越少；数值越小，原图形状保留越多。" },
+      { title: "本地处理", body: "只使用 FileReader 和 canvas，正常使用时图片不会发送到服务器。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "选择要像素化的图片文件。",
+      "调整像素大小滑块，比较色块强度。",
+      "效果合适后下载 PNG 结果。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "这足够保护隐私吗？", answer: "强像素化可以降低可识别细节，但敏感信息在分享前仍应单独检查。" },
+      { question: "图片会上传吗？", answer: "不会。浏览器读取文件并直接在 canvas 中重绘。" },
+      { question: "为什么使用平均色块？", answer: "平均色块能形成稳定的马赛克效果，并自然简化边缘。" },
+    ],
+    disclaimer: "像素化结果应视为不可逆编辑。请保留原图，只分享输出结果。",
+  },
+  fr: {
+    introTitle: "La pixellisation résume les détails en blocs de couleur",
+    intro: "La pixellisation n'est pas un simple flou. Elle calcule la couleur moyenne de chaque bloc choisi, puis redessine cette zone comme un grand pixel. Elle peut atténuer visages, plaques, arrière-plans ou créer un style rétro.",
+    formulaTitle: "Règles de pixellisation",
+    formulas: [
+      { title: "Moyenne par bloc", body: "Les valeurs R, G, B et A de chaque bloc sont moyennées puis remplies avec une seule couleur." },
+      { title: "Taille des pixels", body: "Une valeur plus grande retire plus de détails ; une valeur plus petite conserve davantage la forme." },
+      { title: "Traitement local", body: "Seuls FileReader et canvas sont utilisés : l'image n'est pas envoyée à un serveur." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Choisissez l'image à pixelliser.",
+      "Réglez le curseur de taille des pixels et comparez l'effet.",
+      "Téléchargez le PNG lorsque le rendu convient.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Est-ce suffisant pour la confidentialité ?", answer: "Une forte pixellisation réduit les identifiants visibles, mais les informations sensibles doivent être vérifiées avant partage." },
+      { question: "Mon image est-elle téléversée ?", answer: "Non. Le navigateur lit le fichier et le redessine directement sur canvas." },
+      { question: "Pourquoi moyenner les couleurs ?", answer: "La moyenne par bloc produit un effet mosaïque stable et simplifie les bords naturellement." },
+    ],
+    disclaimer: "La pixellisation produit une version modifiée à traiter comme irréversible. Gardez l'original séparément.",
+  },
+  es: {
+    introTitle: "La pixelación resume el detalle en bloques de color",
+    intro: "Pixelar no es solo desenfocar. La herramienta promedia los colores dentro de cada bloque elegido y redibuja esa zona como un píxel grande. Sirve para suavizar caras, matrículas, detalles de fondo o crear estilo retro.",
+    formulaTitle: "Reglas de pixelación",
+    formulas: [
+      { title: "Promedio por bloque", body: "Los valores R, G, B y A dentro de cada bloque se promedian y se rellenan con un solo color." },
+      { title: "Tamaño del píxel", body: "Valores grandes eliminan más detalle; valores pequeños conservan más forma original." },
+      { title: "Procesamiento local", body: "Solo se usan FileReader y canvas, así que la imagen no se envía a un servidor." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Elige la imagen que quieres pixelar.",
+      "Ajusta el control de tamaño de píxel y compara la intensidad.",
+      "Descarga el PNG cuando el efecto sea el adecuado.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Es suficiente para proteger privacidad?", answer: "Una pixelación fuerte reduce identificadores visibles, pero la información sensible debe revisarse antes de compartir." },
+      { question: "¿Se sube mi imagen?", answer: "No. El navegador lee el archivo y lo redibuja directamente en canvas." },
+      { question: "¿Por qué usar promedio de color?", answer: "Promediar cada bloque crea un efecto mosaico estable y simplifica bordes de forma natural." },
+    ],
+    disclaimer: "La pixelación crea un resultado editado que debe tratarse como irreversible. Conserva el original por separado.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
+---
+
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <main class="mx-auto max-w-3xl px-4 py-10">
+    <ImagePixelator client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
+  </main>
+</BaseLayout>

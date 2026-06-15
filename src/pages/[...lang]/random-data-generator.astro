@@ -1,0 +1,259 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import RandomDataGenerator from "../../components/tools/RandomDataGenerator";
+import { locales } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: ActiveLocale };
+
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
+  ko: {
+    title: "랜덤 데이터 생성기 — 이름, 이메일, 숫자, UUID, 날짜",
+    description: "테스트와 샘플 입력에 사용할 랜덤 이름, 이메일, 숫자, UUID, 날짜, IP 주소를 목록·CSV·JSON 형식으로 생성합니다.",
+  },
+  en: {
+    title: "Random Data Generator — Names, Emails, Numbers, UUIDs, Dates",
+    description: "Generate random names, emails, numbers, UUIDs, dates, IP addresses, and strings for testing. Export as list, CSV, or JSON.",
+  },
+  ja: {
+    title: "ランダムデータ生成ツール — 名前・メール・数値・UUID・日付",
+    description: "テスト用の名前、メール、数値、UUID、日付、IPアドレス、文字列を生成し、リスト・CSV・JSONで出力します。",
+  },
+  zh: {
+    title: "随机数据生成器 — 姓名、邮箱、数字、UUID、日期",
+    description: "生成用于测试的随机姓名、邮箱、数字、UUID、日期、IP 地址和字符串，并导出为列表、CSV 或 JSON。",
+  },
+  fr: {
+    title: "Generateur de Donnees Aleatoires — Noms, E-mails, UUID, Dates",
+    description: "Generez des noms, e-mails, nombres, UUID, dates, adresses IP et chaines pour les tests. Exportez en liste, CSV ou JSON.",
+  },
+  es: {
+    title: "Generador de Datos Aleatorios — Nombres, Correos, UUID, Fechas",
+    description: "Genera nombres, correos, numeros, UUID, fechas, direcciones IP y cadenas para pruebas. Exporta como lista, CSV o JSON.",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "테스트 데이터는 실제 개인정보 없이 흐름을 검증하게 해줍니다",
+    intro: "회원가입 폼, CSV 업로드, API 응답, 날짜 필터, 네트워크 입력값을 만들 때 실제 사람의 정보를 복사하면 위험합니다. 이 생성기는 Ahoxy의 숫자·문자열·날짜 생성 로직을 기반으로 테스트용 값만 브라우저에서 만들어 목록, CSV, JSON 형식으로 확인할 수 있게 합니다.",
+    formulaTitle: "생성 가능한 데이터",
+    formulas: [
+      { title: "숫자와 문자열", body: "정수, 소수, 소수(Prime), UUID, 16진 문자열, 영숫자 문자열을 생성합니다." },
+      { title: "네트워크 값", body: "MAC 주소와 IPv4 주소처럼 형식 검증이 필요한 샘플 값을 빠르게 만듭니다." },
+      { title: "프로필과 날짜", body: "이름·이메일 조합, ISO 날짜, 시각을 만들어 폼과 테이블을 채울 수 있습니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "생성할 데이터 유형과 행 수를 선택합니다.",
+      "숫자 범위, 문자열 길이, 날짜 범위처럼 필요한 옵션을 조정합니다.",
+      "출력 형식을 목록, CSV, JSON 중에서 고른 뒤 생성하고 복사하거나 다운로드합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "생성된 이름과 이메일은 실제 사람인가요?", answer: "아닙니다. 테스트용 합성 데이터이며 실제 신원이나 계정과 연결하지 않아야 합니다." },
+      { question: "CSV로 바로 저장할 수 있나요?", answer: "네. 출력 형식을 CSV로 선택한 뒤 다운로드하면 스프레드시트나 테스트 스크립트에 넣기 쉬운 파일을 받을 수 있습니다." },
+      { question: "브라우저 밖으로 데이터가 전송되나요?", answer: "아닙니다. 생성과 복사는 클라이언트 브라우저 안에서 처리됩니다." },
+    ],
+    disclaimer: "이 도구는 테스트용 합성 데이터를 만듭니다. 보안 토큰, 실제 개인정보, 공식 난수 생성이 필요한 암호학 용도에는 사용하지 마세요.",
+  },
+  en: {
+    introTitle: "Synthetic test data lets you validate flows without real personal data",
+    intro: "Forms, CSV imports, API fixtures, date filters, and network fields need varied input during testing. This generator ports Ahoxy's number, string, and date logic into a browser-only tool, then adds practical profile rows and list, CSV, or JSON output.",
+    formulaTitle: "What it can generate",
+    formulas: [
+      { title: "Numbers and strings", body: "Generate integers, decimals, primes, UUIDs, hex strings, and alphanumeric strings." },
+      { title: "Network values", body: "Create formatted MAC addresses and IPv4 addresses for validation and mock data." },
+      { title: "Profiles and dates", body: "Produce name/email pairs, ISO dates, and times for forms and table rows." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Choose the data type and number of rows.",
+      "Adjust options such as number range, string length, or date range.",
+      "Select list, CSV, or JSON output, then generate, copy, or download the result.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Are generated names and emails real people?", answer: "No. They are synthetic test values and should not be treated as real identities or accounts." },
+      { question: "Can I save the output as CSV?", answer: "Yes. Select CSV as the output format and download the result for spreadsheets or test scripts." },
+      { question: "Does the data leave my browser?", answer: "No. Generation, copying, and downloads are handled client-side in the browser." },
+    ],
+    disclaimer: "This tool creates synthetic data for testing. Do not use it for security tokens, real personal data, or cryptographic randomness.",
+  },
+  ja: {
+    introTitle: "合成テストデータは実データを使わずに動作確認できます",
+    intro: "フォーム、CSV取り込み、APIモック、日付フィルター、ネットワーク入力には多様な値が必要です。このツールはAhoxyの数値・文字列・日付生成ロジックをブラウザだけで動かし、プロフィール行とリスト・CSV・JSON出力を追加しています。",
+    formulaTitle: "生成できるデータ",
+    formulas: [
+      { title: "数値と文字列", body: "整数、小数、素数、UUID、16進文字列、英数字文字列を生成します。" },
+      { title: "ネットワーク値", body: "MACアドレスとIPv4アドレスの形式サンプルを作れます。" },
+      { title: "プロフィールと日付", body: "名前・メールの組み合わせ、ISO日付、時刻をフォームや表に使えます。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "データ種別と行数を選びます。",
+      "数値範囲、文字列の長さ、日付範囲などを調整します。",
+      "リスト、CSV、JSONを選んで生成し、コピーまたはダウンロードします。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "生成された名前やメールは実在しますか？", answer: "いいえ。テスト用の合成値であり、実在の個人やアカウントとして扱わないでください。" },
+      { question: "CSVで保存できますか？", answer: "はい。出力形式をCSVにしてダウンロードできます。" },
+      { question: "データはブラウザ外へ送信されますか？", answer: "いいえ。生成、コピー、ダウンロードはブラウザ内で処理されます。" },
+    ],
+    disclaimer: "このツールはテスト用の合成データを生成します。セキュリティトークン、実個人情報、暗号用途の乱数には使わないでください。",
+  },
+  zh: {
+    introTitle: "合成测试数据可以避免使用真实个人信息",
+    intro: "表单、CSV 导入、API Mock、日期筛选和网络字段都需要多样输入。这个工具将 Ahoxy 的数字、字符串和日期生成逻辑移植为纯浏览器工具，并加入资料行以及列表、CSV、JSON 输出。",
+    formulaTitle: "可生成的数据",
+    formulas: [
+      { title: "数字和字符串", body: "生成整数、小数、质数、UUID、十六进制字符串和字母数字字符串。" },
+      { title: "网络值", body: "生成符合格式的 MAC 地址和 IPv4 地址，方便做校验或样本数据。" },
+      { title: "资料和日期", body: "生成姓名/邮箱组合、ISO 日期和时间，可用于表单和表格。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "选择数据类型和行数。",
+      "调整数字范围、字符串长度或日期范围等选项。",
+      "选择列表、CSV 或 JSON 输出，然后生成、复制或下载。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "生成的姓名和邮箱是真实用户吗？", answer: "不是。它们是测试用合成数据，不应当作真实身份或账户使用。" },
+      { question: "可以保存为 CSV 吗？", answer: "可以。选择 CSV 输出后下载即可用于表格或测试脚本。" },
+      { question: "数据会离开浏览器吗？", answer: "不会。生成、复制和下载都在浏览器端完成。" },
+    ],
+    disclaimer: "此工具用于生成测试合成数据。请勿用于安全令牌、真实个人信息或需要密码学随机性的场景。",
+  },
+  fr: {
+    introTitle: "Les donnees synthetiques testent les flux sans donnees personnelles reelles",
+    intro: "Formulaires, imports CSV, maquettes d'API, filtres de date et champs reseau ont besoin d'entrees variees. Cet outil reprend la logique Ahoxy pour nombres, chaines et dates dans le navigateur, avec des profils et sorties liste, CSV ou JSON.",
+    formulaTitle: "Donnees disponibles",
+    formulas: [
+      { title: "Nombres et chaines", body: "Generez entiers, decimaux, nombres premiers, UUID, chaines hex et alphanumeriques." },
+      { title: "Valeurs reseau", body: "Creez des adresses MAC et IPv4 formatees pour validation et donnees mock." },
+      { title: "Profils et dates", body: "Produisez noms/e-mails, dates ISO et heures pour formulaires et tableaux." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Choisissez le type de donnee et le nombre de lignes.",
+      "Ajustez la plage numerique, la longueur ou la plage de dates.",
+      "Selectionnez liste, CSV ou JSON, puis genereez, copiez ou telechargez.",
+    ],
+    faqTitle: "Questions frequentes",
+    faqs: [
+      { question: "Les noms et e-mails sont-ils reels ?", answer: "Non. Ce sont des valeurs synthetiques de test, pas des identites ou comptes reels." },
+      { question: "Puis-je enregistrer en CSV ?", answer: "Oui. Selectionnez CSV puis telechargez le resultat." },
+      { question: "Les donnees quittent-elles mon navigateur ?", answer: "Non. La generation, la copie et le telechargement sont faits cote client." },
+    ],
+    disclaimer: "Cet outil cree des donnees synthetiques de test. Ne l'utilisez pas pour des jetons de securite, des donnees personnelles reelles ou de l'alea cryptographique.",
+  },
+  es: {
+    introTitle: "Los datos sinteticos validan flujos sin datos personales reales",
+    intro: "Formularios, importaciones CSV, fixtures de API, filtros de fecha y campos de red necesitan entradas variadas. Esta herramienta porta la logica de Ahoxy para numeros, cadenas y fechas al navegador, con perfiles y salida en lista, CSV o JSON.",
+    formulaTitle: "Que puede generar",
+    formulas: [
+      { title: "Numeros y cadenas", body: "Genera enteros, decimales, primos, UUID, cadenas hex y alfanumericas." },
+      { title: "Valores de red", body: "Crea direcciones MAC e IPv4 con formato para validacion y datos simulados." },
+      { title: "Perfiles y fechas", body: "Produce pares nombre/correo, fechas ISO y horas para formularios y tablas." },
+    ],
+    howToTitle: "Como usarlo",
+    steps: [
+      "Elige el tipo de dato y numero de filas.",
+      "Ajusta rango numerico, longitud de cadena o rango de fechas.",
+      "Selecciona lista, CSV o JSON, luego genera, copia o descarga.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "Los nombres y correos son reales?", answer: "No. Son valores sinteticos de prueba y no deben tratarse como identidades o cuentas reales." },
+      { question: "Puedo guardar como CSV?", answer: "Si. Selecciona CSV y descarga el resultado." },
+      { question: "Los datos salen del navegador?", answer: "No. La generacion, copia y descarga ocurren en el navegador." },
+    ],
+    disclaimer: "Esta herramienta crea datos sinteticos para pruebas. No la uses para tokens de seguridad, datos personales reales ni aleatoriedad criptografica.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
+---
+
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <main class="mx-auto max-w-3xl px-4 py-10">
+    <RandomDataGenerator client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
+  </main>
+</BaseLayout>

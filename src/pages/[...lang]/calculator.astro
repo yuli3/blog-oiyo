@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import LifePlanningCalculator from "../../components/tools/LifePlanningCalculator";
+import BasicCalculator from "../../components/tools/BasicCalculator";
 import { locales } from "../../lib/i18n";
 
 type ActiveLocale = (typeof locales)[number];
@@ -13,28 +13,28 @@ const { locale } = Astro.props as { locale: ActiveLocale };
 
 const meta: Record<ActiveLocale, { title: string; description: string }> = {
   "ko": {
-    "title": "생애 설계 계산기 — 결혼·교육·전세",
-    "description": "결혼 후 시작 순자산, 자녀 교육비 미래가치, 전세 보증금 위험 노출 비율을 한 곳에서 계산합니다."
+    "title": "계산기 — 기본 사칙연산과 퍼센트",
+    "description": "덧셈, 뺄셈, 곱셈, 나눗셈, 퍼센트, 소수 입력을 지원하는 간단한 웹 계산기입니다."
   },
   "en": {
-    "title": "Life Planning Calculator — Wedding, Education and Jeonse",
-    "description": "Calculate wedding net start, future education funding needs, and jeonse deposit exposure ratio in one planning tool."
+    "title": "Calculator — Basic Arithmetic and Percent",
+    "description": "A simple web calculator for addition, subtraction, multiplication, division, percent, decimals, clear, and delete."
   },
   "ja": {
-    "title": "ライフプランニング計算機 — 結婚・教育・チョンセ",
-    "description": "結婚後の開始純資産、教育費の将来価値、チョンセ保証金リスク比率を一か所で計算します。"
+    "title": "計算機 — 基本四則演算とパーセント",
+    "description": "足し算、引き算、掛け算、割り算、パーセント、小数入力に対応するシンプルな計算機です。"
   },
   "zh": {
-    "title": "人生规划计算器 — 婚礼、教育、全租",
-    "description": "一站式计算婚后起步净资产、未来教育资金需求和全租保证金风险敞口比例。"
+    "title": "计算器 — 基础四则运算和百分号",
+    "description": "支持加、减、乘、除、百分号、小数、清除和删除的简洁网页计算器。"
   },
   "fr": {
-    "title": "Calculateur de Planification de Vie — Mariage, Études et Jeonse",
-    "description": "Calculez départ net après mariage, besoin futur d’études et ratio d’exposition du dépôt jeonse."
+    "title": "Calculatrice — Arithmétique de Base et Pourcentage",
+    "description": "Calculatrice simple pour addition, soustraction, multiplication, division, pourcentage, décimales et effacement."
   },
   "es": {
-    "title": "Calculadora de Planificación Vital — Boda, Educación y Jeonse",
-    "description": "Calcula inicio neto tras boda, fondos educativos futuros y ratio de exposición del depósito jeonse."
+    "title": "Calculadora — Aritmética Básica y Porcentaje",
+    "description": "Calculadora web sencilla para suma, resta, multiplicación, división, porcentaje, decimales y borrado."
   }
 };
 
@@ -52,21 +52,21 @@ const content: Record<ActiveLocale, {
   disclaimer: string;
 }> = {
   "ko": {
-    "introTitle": "생애 설계는 큰 현금흐름을 나누어 보는 작업입니다",
-    "intro": "ahoxy의 결혼, 교육, 전세 보호 계산을 한 섬 안에 옮겼습니다. 결혼은 시작 순자산, 교육은 미래가치와 월 저축액, 전세는 보증금과 선순위채권의 주택가격 대비 비율을 계산합니다.",
+    "introTitle": "기본 계산기는 빠른 산술 확인용입니다",
+    "intro": "ahoxy 계산기에서 표준 계산기 부분의 표시 연산자 처리와 결과 포맷 방식을 가져오고, 요청 범위에 맞춰 사칙연산, 퍼센트, 소수, 지우기 기능만 남겼습니다.",
     "formulaTitle": "계산식",
     "formulas": [
       {
-        "title": "Wedding",
-        "body": "assets - wedding cost - housing cost"
+        "title": "Operators",
+        "body": "+ - × ÷ %"
       },
       {
-        "title": "Education",
-        "body": "PV x (1 + inflation)^year"
+        "title": "Evaluation",
+        "body": "visual × ÷ -> * /"
       },
       {
-        "title": "Jeonse",
-        "body": "(deposit + senior debt) / house price x 100"
+        "title": "Precision",
+        "body": "integer or toFixed(8)"
       }
     ],
     "howToTitle": "사용 방법",
@@ -79,7 +79,7 @@ const content: Record<ActiveLocale, {
     "faqs": [
       {
         "question": "이 계산기는 무엇을 계산하나요?",
-        "answer": "ahoxy의 결혼, 교육, 전세 보호 계산을 한 섬 안에 옮겼습니다. 결혼은 시작 순자산, 교육은 미래가치와 월 저축액, 전세는 보증금과 선순위채권의 주택가격 대비 비율을 계산합니다."
+        "answer": "ahoxy 계산기에서 표준 계산기 부분의 표시 연산자 처리와 결과 포맷 방식을 가져오고, 요청 범위에 맞춰 사칙연산, 퍼센트, 소수, 지우기 기능만 남겼습니다."
       },
       {
         "question": "결과가 공식 확정액인가요?",
@@ -87,27 +87,27 @@ const content: Record<ActiveLocale, {
       },
       {
         "question": "어떤 로직을 사용했나요?",
-        "answer": "ahoxy의 결혼, 교육, 전세 보호 계산을 한 섬 안에 옮겼습니다. 결혼은 시작 순자산, 교육은 미래가치와 월 저축액, 전세는 보증금과 선순위채권의 주택가격 대비 비율을 계산합니다."
+        "answer": "ahoxy 계산기에서 표준 계산기 부분의 표시 연산자 처리와 결과 포맷 방식을 가져오고, 요청 범위에 맞춰 사칙연산, 퍼센트, 소수, 지우기 기능만 남겼습니다."
       }
     ],
     "disclaimer": "이 계산기는 일반적인 추정과 학습용입니다. 법률·세금·금융 등 공식 수치는 관련 기관과 전문가의 최신 기준을 확인하세요."
   },
   "en": {
-    "introTitle": "Life planning breaks large cash flows into separate checks",
-    "intro": "This ports ahoxy’s wedding, education, and jeonse calculators into one island: net start, future education cost and monthly savings, and deposit exposure ratio.",
+    "introTitle": "A basic calculator is for quick arithmetic checks",
+    "intro": "This ports the ahoxy standard calculator expression handling and result formatting, scoped to arithmetic operators, percent, decimals, clear, and delete.",
     "formulaTitle": "Formula",
     "formulas": [
       {
-        "title": "Wedding",
-        "body": "assets - wedding cost - housing cost"
+        "title": "Operators",
+        "body": "+ - × ÷ %"
       },
       {
-        "title": "Education",
-        "body": "PV x (1 + inflation)^year"
+        "title": "Evaluation",
+        "body": "visual × ÷ -> * /"
       },
       {
-        "title": "Jeonse",
-        "body": "(deposit + senior debt) / house price x 100"
+        "title": "Precision",
+        "body": "integer or toFixed(8)"
       }
     ],
     "howToTitle": "How to use",
@@ -120,7 +120,7 @@ const content: Record<ActiveLocale, {
     "faqs": [
       {
         "question": "What does this calculator estimate?",
-        "answer": "This ports ahoxy’s wedding, education, and jeonse calculators into one island: net start, future education cost and monthly savings, and deposit exposure ratio."
+        "answer": "This ports the ahoxy standard calculator expression handling and result formatting, scoped to arithmetic operators, percent, decimals, clear, and delete."
       },
       {
         "question": "Is the result official?",
@@ -128,27 +128,27 @@ const content: Record<ActiveLocale, {
       },
       {
         "question": "What logic is used?",
-        "answer": "This ports ahoxy’s wedding, education, and jeonse calculators into one island: net start, future education cost and monthly savings, and deposit exposure ratio."
+        "answer": "This ports the ahoxy standard calculator expression handling and result formatting, scoped to arithmetic operators, percent, decimals, clear, and delete."
       }
     ],
     "disclaimer": "This calculator is a general estimate for learning and planning. Confirm official legal, tax, finance, or institutional figures before acting."
   },
   "ja": {
-    "introTitle": "ライフプランニングは大きな資金を分けて確認します",
-    "intro": "ahoxy の結婚・教育・チョンセ計算を1つにまとめ、開始純資産、教育費将来価値、保証金リスク比率を計算します。",
+    "introTitle": "基本計算機は素早い計算確認用です",
+    "intro": "ahoxy の標準計算機の式処理と結果形式を使い、四則演算、パーセント、小数、消去に絞っています。",
     "formulaTitle": "計算式",
     "formulas": [
       {
-        "title": "Wedding",
-        "body": "assets - wedding cost - housing cost"
+        "title": "Operators",
+        "body": "+ - × ÷ %"
       },
       {
-        "title": "Education",
-        "body": "PV x (1 + inflation)^year"
+        "title": "Evaluation",
+        "body": "visual × ÷ -> * /"
       },
       {
-        "title": "Jeonse",
-        "body": "(deposit + senior debt) / house price x 100"
+        "title": "Precision",
+        "body": "integer or toFixed(8)"
       }
     ],
     "howToTitle": "使い方",
@@ -161,7 +161,7 @@ const content: Record<ActiveLocale, {
     "faqs": [
       {
         "question": "この計算機は何を計算しますか？",
-        "answer": "ahoxy の結婚・教育・チョンセ計算を1つにまとめ、開始純資産、教育費将来価値、保証金リスク比率を計算します。"
+        "answer": "ahoxy の標準計算機の式処理と結果形式を使い、四則演算、パーセント、小数、消去に絞っています。"
       },
       {
         "question": "結果は公式確定額ですか？",
@@ -169,27 +169,27 @@ const content: Record<ActiveLocale, {
       },
       {
         "question": "どのロジックですか？",
-        "answer": "ahoxy の結婚・教育・チョンセ計算を1つにまとめ、開始純資産、教育費将来価値、保証金リスク比率を計算します。"
+        "answer": "ahoxy の標準計算機の式処理と結果形式を使い、四則演算、パーセント、小数、消去に絞っています。"
       }
     ],
     "disclaimer": "この計算機は一般的な推定と学習用です。法律・税務・金融などの公式数値は最新の機関情報で確認してください。"
   },
   "zh": {
-    "introTitle": "人生规划需要拆分大型现金流",
-    "intro": "本工具把 ahoxy 的婚礼、教育和全租保护计算合并到一个组件中：起步净资产、教育未来费用和月储蓄、保证金风险比例。",
+    "introTitle": "基础计算器用于快速算术检查",
+    "intro": "本工具移植 ahoxy 标准计算器的表达式处理和结果格式，并限定为四则运算、百分号、小数、清除和删除。",
     "formulaTitle": "计算公式",
     "formulas": [
       {
-        "title": "Wedding",
-        "body": "assets - wedding cost - housing cost"
+        "title": "Operators",
+        "body": "+ - × ÷ %"
       },
       {
-        "title": "Education",
-        "body": "PV x (1 + inflation)^year"
+        "title": "Evaluation",
+        "body": "visual × ÷ -> * /"
       },
       {
-        "title": "Jeonse",
-        "body": "(deposit + senior debt) / house price x 100"
+        "title": "Precision",
+        "body": "integer or toFixed(8)"
       }
     ],
     "howToTitle": "使用方法",
@@ -202,7 +202,7 @@ const content: Record<ActiveLocale, {
     "faqs": [
       {
         "question": "这个计算器估算什么？",
-        "answer": "本工具把 ahoxy 的婚礼、教育和全租保护计算合并到一个组件中：起步净资产、教育未来费用和月储蓄、保证金风险比例。"
+        "answer": "本工具移植 ahoxy 标准计算器的表达式处理和结果格式，并限定为四则运算、百分号、小数、清除和删除。"
       },
       {
         "question": "结果是官方确定金额吗？",
@@ -210,27 +210,27 @@ const content: Record<ActiveLocale, {
       },
       {
         "question": "使用什么逻辑？",
-        "answer": "本工具把 ahoxy 的婚礼、教育和全租保护计算合并到一个组件中：起步净资产、教育未来费用和月储蓄、保证金风险比例。"
+        "answer": "本工具移植 ahoxy 标准计算器的表达式处理和结果格式，并限定为四则运算、百分号、小数、清除和删除。"
       }
     ],
     "disclaimer": "本计算器用于一般估算和学习规划。涉及法律、税务、金融或官方数字时，请确认相关机构的最新标准。"
   },
   "fr": {
-    "introTitle": "La planification de vie sépare les grands flux financiers",
-    "intro": "Il regroupe les calculs ahoxy mariage, études et jeonse : départ net, coût futur/épargne mensuelle, ratio d’exposition.",
+    "introTitle": "Une calculatrice basique sert aux vérifications rapides",
+    "intro": "Il reprend le traitement d’expression et le formatage du calculateur ahoxy, limités aux opérations de base, pourcentage, décimales et effacement.",
     "formulaTitle": "Formule",
     "formulas": [
       {
-        "title": "Wedding",
-        "body": "assets - wedding cost - housing cost"
+        "title": "Operators",
+        "body": "+ - × ÷ %"
       },
       {
-        "title": "Education",
-        "body": "PV x (1 + inflation)^year"
+        "title": "Evaluation",
+        "body": "visual × ÷ -> * /"
       },
       {
-        "title": "Jeonse",
-        "body": "(deposit + senior debt) / house price x 100"
+        "title": "Precision",
+        "body": "integer or toFixed(8)"
       }
     ],
     "howToTitle": "Comment l’utiliser",
@@ -243,7 +243,7 @@ const content: Record<ActiveLocale, {
     "faqs": [
       {
         "question": "Que calcule cet outil ?",
-        "answer": "Il regroupe les calculs ahoxy mariage, études et jeonse : départ net, coût futur/épargne mensuelle, ratio d’exposition."
+        "answer": "Il reprend le traitement d’expression et le formatage du calculateur ahoxy, limités aux opérations de base, pourcentage, décimales et effacement."
       },
       {
         "question": "Le résultat est-il officiel ?",
@@ -251,27 +251,27 @@ const content: Record<ActiveLocale, {
       },
       {
         "question": "Quelle logique est utilisée ?",
-        "answer": "Il regroupe les calculs ahoxy mariage, études et jeonse : départ net, coût futur/épargne mensuelle, ratio d’exposition."
+        "answer": "Il reprend le traitement d’expression et le formatage du calculateur ahoxy, limités aux opérations de base, pourcentage, décimales et effacement."
       }
     ],
     "disclaimer": "Ce calculateur fournit une estimation générale pour apprendre et planifier. Vérifiez les chiffres officiels juridiques, fiscaux ou financiers avant décision."
   },
   "es": {
-    "introTitle": "La planificación vital separa grandes flujos de dinero",
-    "intro": "Agrupa cálculos ahoxy de boda, educación y jeonse: inicio neto, coste futuro/ahorro mensual y ratio de exposición.",
+    "introTitle": "Una calculadora básica sirve para comprobaciones rápidas",
+    "intro": "Porta el manejo de expresiones y formato de ahoxy, limitado a operaciones básicas, porcentaje, decimales y borrado.",
     "formulaTitle": "Fórmula",
     "formulas": [
       {
-        "title": "Wedding",
-        "body": "assets - wedding cost - housing cost"
+        "title": "Operators",
+        "body": "+ - × ÷ %"
       },
       {
-        "title": "Education",
-        "body": "PV x (1 + inflation)^year"
+        "title": "Evaluation",
+        "body": "visual × ÷ -> * /"
       },
       {
-        "title": "Jeonse",
-        "body": "(deposit + senior debt) / house price x 100"
+        "title": "Precision",
+        "body": "integer or toFixed(8)"
       }
     ],
     "howToTitle": "Cómo usarlo",
@@ -284,7 +284,7 @@ const content: Record<ActiveLocale, {
     "faqs": [
       {
         "question": "¿Qué estima esta calculadora?",
-        "answer": "Agrupa cálculos ahoxy de boda, educación y jeonse: inicio neto, coste futuro/ahorro mensual y ratio de exposición."
+        "answer": "Porta el manejo de expresiones y formato de ahoxy, limitado a operaciones básicas, porcentaje, decimales y borrado."
       },
       {
         "question": "¿El resultado es oficial?",
@@ -292,7 +292,7 @@ const content: Record<ActiveLocale, {
       },
       {
         "question": "¿Qué lógica se usa?",
-        "answer": "Agrupa cálculos ahoxy de boda, educación y jeonse: inicio neto, coste futuro/ahorro mensual y ratio de exposición."
+        "answer": "Porta el manejo de expresiones y formato de ahoxy, limitado a operaciones básicas, porcentaje, decimales y borrado."
       }
     ],
     "disclaimer": "Esta calculadora ofrece una estimación general para aprender y planificar. Confirma cifras oficiales legales, fiscales o financieras antes de actuar."
@@ -310,7 +310,7 @@ const structuredData = [
 <BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-3xl px-4 py-10">
-    <LifePlanningCalculator client:load locale={locale} />
+    <BasicCalculator client:load locale={locale} />
 
     <section class="mt-10 border-t border-slate-200 pt-8">
       <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>

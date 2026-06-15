@@ -1,0 +1,259 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import FaviconGenerator from "../../components/tools/FaviconGenerator";
+import { locales } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: ActiveLocale };
+
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
+  ko: {
+    title: "파비콘 생성기 — 로컬 PNG 아이콘 크기 만들기",
+    description: "이미지 하나로 16, 32, 48, 180, 192, 512px PNG 파비콘을 브라우저에서 생성합니다. 파일은 업로드되지 않습니다.",
+  },
+  en: {
+    title: "Favicon Generator — Local PNG Icon Sizes",
+    description: "Create 16, 32, 48, 180, 192, and 512px PNG favicon files from one image in your browser. No upload required.",
+  },
+  ja: {
+    title: "ファビコン生成ツール — ローカルPNGアイコン作成",
+    description: "1つの画像から16、32、48、180、192、512pxのPNGファビコンをブラウザ内で生成します。アップロード不要です。",
+  },
+  zh: {
+    title: "Favicon 生成器 — 本地 PNG 图标尺寸",
+    description: "在浏览器中从一张图片生成 16、32、48、180、192、512px PNG favicon 文件，无需上传。",
+  },
+  fr: {
+    title: "Générateur de Favicon — Tailles PNG Locales",
+    description: "Créez des favicons PNG 16, 32, 48, 180, 192 et 512px depuis une image dans le navigateur, sans téléversement.",
+  },
+  es: {
+    title: "Generador de Favicon — Tamaños PNG Locales",
+    description: "Crea favicons PNG de 16, 32, 48, 180, 192 y 512px desde una imagen en el navegador, sin subir archivos.",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "파비콘은 브라우저 탭과 홈 화면에서 보이는 작은 브랜드 신호입니다",
+    intro: "좋은 파비콘은 작은 크기에서도 형태가 분명해야 합니다. 이 도구는 업로드한 이미지를 캔버스에 렌더링해 16, 32, 48, 180, 192, 512px PNG 파일을 각각 만들고, 필요한 크기만 다운로드할 수 있게 합니다.",
+    formulaTitle: "생성 기준",
+    formulas: [
+      { title: "6개 크기", body: "브라우저 탭, 기본 아이콘, Apple touch icon, PWA 아이콘에 자주 쓰이는 PNG 크기를 제공합니다." },
+      { title: "정사각 렌더링", body: "원본 이미지를 각 정사각 캔버스 크기에 맞춰 그립니다. 로고는 여백이 있는 정사각형이 가장 안정적입니다." },
+      { title: "로컬 처리", body: "createImageBitmap과 canvas를 사용해 브라우저에서만 결과를 생성합니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "파비콘으로 사용할 이미지나 로고 파일을 선택합니다.",
+      "생성된 16, 32, 48, 180, 192, 512px 미리보기를 확인합니다.",
+      "필요한 PNG 크기를 각각 다운로드합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "ICO 파일도 생성하나요?", answer: "아니요. 이 의존성 없는 포트는 요청된 PNG 크기만 생성합니다. ICO가 필요하면 별도 패키징 도구가 필요합니다." },
+      { question: "이미지가 업로드되나요?", answer: "아니요. 선택한 이미지는 브라우저 캔버스에서만 렌더링됩니다." },
+      { question: "어떤 원본 이미지가 좋나요?", answer: "단순한 형태, 충분한 여백, 높은 대비가 있는 정사각형 로고가 작은 크기에서도 잘 보입니다." },
+    ],
+    disclaimer: "파비콘은 작은 크기에서 보이는지가 중요합니다. 생성 후 실제 브라우저 탭과 모바일 홈 화면에서 확인하세요.",
+  },
+  en: {
+    introTitle: "A favicon is a small brand signal in browser tabs and home screens",
+    intro: "A good favicon must stay recognizable at very small sizes. This tool renders your uploaded image onto canvas and exports separate 16, 32, 48, 180, 192, and 512px PNG files so you can download only the sizes you need.",
+    formulaTitle: "Generation rules",
+    formulas: [
+      { title: "Six sizes", body: "The tool covers common PNG sizes for browser tabs, default icons, Apple touch icons, and PWA icons." },
+      { title: "Square rendering", body: "The source image is drawn into each square canvas. A square logo with padding usually works best." },
+      { title: "Local processing", body: "createImageBitmap and canvas generate the files in your browser only." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Choose the image or logo file you want to use as a favicon.",
+      "Review the generated 16, 32, 48, 180, 192, and 512px previews.",
+      "Download each PNG size you need.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Does this create ICO files?", answer: "No. This dependency-free port creates the requested PNG sizes only. ICO packaging requires a separate tool." },
+      { question: "Is my image uploaded?", answer: "No. The selected image is rendered only on browser canvas." },
+      { question: "What source image works best?", answer: "A simple, high-contrast square logo with padding stays clearer at small sizes." },
+    ],
+    disclaimer: "Favicon quality depends on how it reads at tiny sizes. Check the generated icons in real browser tabs and mobile home screens.",
+  },
+  ja: {
+    introTitle: "ファビコンはタブやホーム画面に表示される小さなブランド表示です",
+    intro: "良いファビコンは非常に小さいサイズでも判別できる必要があります。このツールは画像をcanvasに描画し、16、32、48、180、192、512pxのPNGを個別に出力します。",
+    formulaTitle: "生成の基準",
+    formulas: [
+      { title: "6つのサイズ", body: "ブラウザタブ、標準アイコン、Apple touch icon、PWAでよく使うPNGサイズを用意します。" },
+      { title: "正方形レンダリング", body: "元画像を各正方形canvasに描画します。余白のある正方形ロゴが安定します。" },
+      { title: "ローカル処理", body: "createImageBitmapとcanvasを使い、ブラウザ内だけで生成します。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "ファビコンに使う画像またはロゴを選びます。",
+      "16、32、48、180、192、512pxのプレビューを確認します。",
+      "必要なPNGサイズを保存します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "ICOファイルも作れますか？", answer: "いいえ。この依存関係なしのポートは指定されたPNGサイズのみ生成します。ICO化には別のツールが必要です。" },
+      { question: "画像はアップロードされますか？", answer: "いいえ。選択した画像はブラウザのcanvas上だけで処理されます。" },
+      { question: "どんな元画像が向いていますか？", answer: "単純な形、高いコントラスト、十分な余白がある正方形ロゴが小さくても見やすいです。" },
+    ],
+    disclaimer: "ファビコンは小さな表示での読みやすさが重要です。生成後は実際のタブやモバイルホーム画面で確認してください。",
+  },
+  zh: {
+    introTitle: "Favicon 是浏览器标签和主屏幕中的小型品牌标识",
+    intro: "好的 favicon 在很小的尺寸下也要能被识别。本工具会把上传的图片绘制到 canvas，并分别导出 16、32、48、180、192、512px PNG 文件，你可以只下载需要的尺寸。",
+    formulaTitle: "生成规则",
+    formulas: [
+      { title: "六种尺寸", body: "覆盖浏览器标签、默认图标、Apple touch icon 和 PWA 图标常用的 PNG 尺寸。" },
+      { title: "正方形渲染", body: "源图片会绘制到每个正方形 canvas 中。带留白的正方形标志通常效果最好。" },
+      { title: "本地处理", body: "使用 createImageBitmap 和 canvas，只在浏览器中生成文件。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "选择要作为 favicon 的图片或标志文件。",
+      "查看生成的 16、32、48、180、192、512px 预览。",
+      "分别下载需要的 PNG 尺寸。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "会生成 ICO 文件吗？", answer: "不会。这个无新增依赖的移植版本只生成要求的 PNG 尺寸。ICO 打包需要单独工具。" },
+      { question: "图片会上传吗？", answer: "不会。选中的图片只会在浏览器 canvas 中渲染。" },
+      { question: "什么原图最适合？", answer: "形状简单、对比度高、带留白的正方形标志在小尺寸下更清晰。" },
+    ],
+    disclaimer: "favicon 的关键是小尺寸可读性。生成后请在真实浏览器标签和移动主屏幕中检查。",
+  },
+  fr: {
+    introTitle: "Un favicon est un petit signal de marque dans les onglets et écrans d'accueil",
+    intro: "Un bon favicon doit rester reconnaissable à très petite taille. Cet outil dessine votre image sur canvas et exporte des PNG séparés en 16, 32, 48, 180, 192 et 512px.",
+    formulaTitle: "Règles de génération",
+    formulas: [
+      { title: "Six tailles", body: "Les tailles couvrent les onglets, icônes par défaut, Apple touch icons et icônes PWA courantes." },
+      { title: "Rendu carré", body: "L'image source est dessinée dans chaque canvas carré. Un logo carré avec marge fonctionne mieux." },
+      { title: "Traitement local", body: "createImageBitmap et canvas génèrent les fichiers uniquement dans le navigateur." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Choisissez l'image ou le logo à utiliser comme favicon.",
+      "Vérifiez les aperçus 16, 32, 48, 180, 192 et 512px.",
+      "Téléchargez chaque taille PNG nécessaire.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "L'outil crée-t-il des fichiers ICO ?", answer: "Non. Ce port sans dépendance crée seulement les tailles PNG demandées. L'ICO nécessite un outil séparé." },
+      { question: "Mon image est-elle téléversée ?", answer: "Non. L'image choisie est rendue uniquement sur le canvas du navigateur." },
+      { question: "Quelle image source choisir ?", answer: "Un logo carré simple, contrasté et avec de la marge reste plus lisible en petite taille." },
+    ],
+    disclaimer: "La qualité d'un favicon dépend de sa lisibilité en très petit. Vérifiez-le dans de vrais onglets et écrans d'accueil.",
+  },
+  es: {
+    introTitle: "Un favicon es una pequeña señal de marca en pestañas y pantallas de inicio",
+    intro: "Un buen favicon debe reconocerse en tamaños muy pequeños. Esta herramienta dibuja tu imagen en canvas y exporta PNG separados de 16, 32, 48, 180, 192 y 512px.",
+    formulaTitle: "Reglas de generación",
+    formulas: [
+      { title: "Seis tamaños", body: "Cubre tamaños PNG comunes para pestañas, iconos predeterminados, Apple touch icons e iconos PWA." },
+      { title: "Render cuadrado", body: "La imagen fuente se dibuja en cada canvas cuadrado. Un logo cuadrado con margen suele funcionar mejor." },
+      { title: "Procesamiento local", body: "createImageBitmap y canvas generan los archivos solo en el navegador." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Elige la imagen o logo que quieres usar como favicon.",
+      "Revisa las vistas de 16, 32, 48, 180, 192 y 512px.",
+      "Descarga cada tamaño PNG que necesites.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Crea archivos ICO?", answer: "No. Este port sin dependencias crea solo los tamaños PNG solicitados. Para ICO hace falta otra herramienta." },
+      { question: "¿Se sube mi imagen?", answer: "No. La imagen elegida se renderiza solo en el canvas del navegador." },
+      { question: "¿Qué imagen fuente funciona mejor?", answer: "Un logo cuadrado, simple, con alto contraste y margen se mantiene más claro en tamaños pequeños." },
+    ],
+    disclaimer: "La calidad de un favicon depende de cómo se lee en tamaño pequeño. Revísalo en pestañas reales y pantallas de inicio móviles.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
+---
+
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <main class="mx-auto max-w-3xl px-4 py-10">
+    <FaviconGenerator client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
+  </main>
+</BaseLayout>

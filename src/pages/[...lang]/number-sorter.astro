@@ -1,0 +1,367 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import NumberSorter from "../../components/tools/NumberSorter";
+import { locales } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: ActiveLocale };
+
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
+  "ko": {
+    "title": "숫자 정렬기 — 오름차순·내림차순·중복 제거",
+    "description": "쉼표, 공백, 줄바꿈으로 입력한 숫자를 정렬하고 합계, 개수, 최솟값, 최댓값, 평균을 확인합니다."
+  },
+  "en": {
+    "title": "Number Sorter — Ascending, Descending, Dedupe",
+    "description": "Paste numbers separated by commas, spaces, or line breaks, then sort them and see count, sum, min, max, and average."
+  },
+  "ja": {
+    "title": "数値ソーター — 昇順・降順・重複削除",
+    "description": "カンマ、空白、改行で入力した数値を並べ替え、個数、合計、最小、最大、平均を確認します。"
+  },
+  "zh": {
+    "title": "数字排序器 — 升序、降序、去重",
+    "description": "粘贴用逗号、空格或换行分隔的数字，排序后查看数量、总和、最小值、最大值和平均值。"
+  },
+  "fr": {
+    "title": "Trieur de Nombres — Croissant, Décroissant, Doublons",
+    "description": "Collez des nombres séparés par virgules, espaces ou retours à la ligne, puis consultez nombre, somme, min, max et moyenne."
+  },
+  "es": {
+    "title": "Ordenador de Números — Ascendente, Descendente y Duplicados",
+    "description": "Pega números separados por comas, espacios o saltos de línea, ordénalos y consulta cantidad, suma, mínimo, máximo y promedio."
+  }
+};
+
+const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  "ko": {
+    "introTitle": "목록 정렬은 데이터 확인의 첫 단계입니다",
+    "intro": "숫자가 섞여 있을 때 먼저 오름차순 또는 내림차순으로 정렬하면 범위, 이상값, 중복값을 빠르게 볼 수 있습니다. 이 도구는 ahoxy의 숫자 정렬 기능에서 애니메이션을 제외하고 정렬과 기본 통계에 집중한 버전입니다.",
+    "formulaTitle": "계산 기준",
+    "formulas": [
+      {
+        "title": "파싱",
+        "body": "쉼표, 세미콜론, 공백, 줄바꿈으로 분리"
+      },
+      {
+        "title": "정렬",
+        "body": "asc: a-b / desc: b-a"
+      },
+      {
+        "title": "평균",
+        "body": "sum / count"
+      }
+    ],
+    "howToTitle": "사용 방법",
+    "steps": [
+      "숫자를 쉼표, 공백 또는 줄바꿈으로 입력합니다.",
+      "오름차순 또는 내림차순을 선택하고 필요한 경우 중복 제거를 켭니다.",
+      "정렬 결과와 합계, 개수, 최솟값, 최댓값, 평균을 확인합니다."
+    ],
+    "faqTitle": "자주 묻는 질문",
+    "faqs": [
+      {
+        "question": "음수와 소수도 되나요?",
+        "answer": "네. JavaScript 숫자로 해석 가능한 음수와 소수는 정렬과 통계에 포함됩니다."
+      },
+      {
+        "question": "숫자가 아닌 값은 어떻게 처리하나요?",
+        "answer": "숫자로 변환되지 않는 토큰은 통계에서 제외됩니다."
+      },
+      {
+        "question": "중복 제거는 언제 유용한가요?",
+        "answer": "같은 값이 여러 번 들어온 목록에서 고유 값만 비교하거나 순위를 볼 때 유용합니다."
+      }
+    ],
+    "disclaimer": "이 계산기는 일반적인 추정과 학습용입니다. 법률·세금·금융 등 공식 수치는 관련 기관과 전문가의 최신 기준을 확인하세요."
+  },
+  "en": {
+    "introTitle": "Sorting is the first pass of list inspection",
+    "intro": "When a list is messy, sorting reveals range, outliers, and duplicates quickly. This version ports the ahoxy number-sorter utility without animation and focuses on the sorted result plus basic statistics.",
+    "formulaTitle": "Calculation rules",
+    "formulas": [
+      {
+        "title": "Parsing",
+        "body": "Split by comma, semicolon, space, or line break"
+      },
+      {
+        "title": "Sorting",
+        "body": "asc: a-b / desc: b-a"
+      },
+      {
+        "title": "Average",
+        "body": "sum / count"
+      }
+    ],
+    "howToTitle": "How to use",
+    "steps": [
+      "Enter numbers separated by commas, spaces, or line breaks.",
+      "Choose ascending or descending order and enable dedupe if needed.",
+      "Review the sorted list plus sum, count, min, max, and average."
+    ],
+    "faqTitle": "Frequently asked questions",
+    "faqs": [
+      {
+        "question": "Can it sort negatives and decimals?",
+        "answer": "Yes. Any token that JavaScript can parse as a finite number is included."
+      },
+      {
+        "question": "What happens to non-number text?",
+        "answer": "Tokens that cannot be converted to numbers are ignored."
+      },
+      {
+        "question": "When should I remove duplicates?",
+        "answer": "Use dedupe when you need unique values only, such as checking distinct scores or thresholds."
+      }
+    ],
+    "disclaimer": "This calculator is a general estimate for learning and planning. Confirm official legal, tax, finance, or institutional figures before acting."
+  },
+  "ja": {
+    "introTitle": "並べ替えはリスト確認の第一歩です",
+    "intro": "数値が混在しているとき、昇順や降順に並べるだけで範囲、外れ値、重複が見えやすくなります。ahoxy の数値ソーターからアニメーションを省き、結果と基本統計に集中しています。",
+    "formulaTitle": "計算基準",
+    "formulas": [
+      {
+        "title": "解析",
+        "body": "カンマ、セミコロン、空白、改行で分割"
+      },
+      {
+        "title": "並べ替え",
+        "body": "昇順: a-b / 降順: b-a"
+      },
+      {
+        "title": "平均",
+        "body": "合計 / 個数"
+      }
+    ],
+    "howToTitle": "使い方",
+    "steps": [
+      "数値をカンマ、空白、改行で入力します。",
+      "昇順または降順を選び、必要なら重複削除を有効にします。",
+      "並べ替え結果と合計、個数、最小、最大、平均を確認します。"
+    ],
+    "faqTitle": "よくある質問",
+    "faqs": [
+      {
+        "question": "負の数や小数も使えますか？",
+        "answer": "はい。有限の数値として解釈できる値は含まれます。"
+      },
+      {
+        "question": "数値ではない文字はどうなりますか？",
+        "answer": "数値に変換できないトークンは除外されます。"
+      },
+      {
+        "question": "重複削除はいつ使いますか？",
+        "answer": "固有値だけで比較したいときに便利です。"
+      }
+    ],
+    "disclaimer": "この計算機は一般的な推定と学習用です。法律・税務・金融などの公式数値は最新の機関情報で確認してください。"
+  },
+  "zh": {
+    "introTitle": "排序是检查数字列表的第一步",
+    "intro": "当数字列表杂乱时，先按升序或降序排列，可以快速看出范围、异常值和重复值。本工具移植 ahoxy 数字排序功能，去掉动画，专注排序结果和基础统计。",
+    "formulaTitle": "计算规则",
+    "formulas": [
+      {
+        "title": "解析",
+        "body": "按逗号、分号、空格或换行分割"
+      },
+      {
+        "title": "排序",
+        "body": "升序: a-b / 降序: b-a"
+      },
+      {
+        "title": "平均值",
+        "body": "总和 / 数量"
+      }
+    ],
+    "howToTitle": "使用方法",
+    "steps": [
+      "输入用逗号、空格或换行分隔的数字。",
+      "选择升序或降序，必要时开启去重。",
+      "查看排序结果以及总和、数量、最小值、最大值和平均值。"
+    ],
+    "faqTitle": "常见问题",
+    "faqs": [
+      {
+        "question": "支持负数和小数吗？",
+        "answer": "支持。能解析为有限数字的值都会纳入计算。"
+      },
+      {
+        "question": "非数字文本会怎样处理？",
+        "answer": "不能转换为数字的片段会被忽略。"
+      },
+      {
+        "question": "什么时候使用去重？",
+        "answer": "当你只想比较唯一数值或检查不同阈值时很有用。"
+      }
+    ],
+    "disclaimer": "本计算器用于一般估算和学习规划。涉及法律、税务、金融或官方数字时，请确认相关机构的最新标准。"
+  },
+  "fr": {
+    "introTitle": "Le tri est le premier contrôle d’une liste",
+    "intro": "Trier une liste révèle rapidement l’amplitude, les valeurs extrêmes et les doublons. Cette version reprend l’outil ahoxy sans animation et se concentre sur le résultat et les statistiques.",
+    "formulaTitle": "Règles",
+    "formulas": [
+      {
+        "title": "Analyse",
+        "body": "Séparation par virgule, point-virgule, espace ou ligne"
+      },
+      {
+        "title": "Tri",
+        "body": "croissant: a-b / décroissant: b-a"
+      },
+      {
+        "title": "Moyenne",
+        "body": "somme / nombre"
+      }
+    ],
+    "howToTitle": "Comment l’utiliser",
+    "steps": [
+      "Entrez des nombres séparés par virgules, espaces ou retours.",
+      "Choisissez l’ordre et activez la suppression des doublons si nécessaire.",
+      "Consultez la liste triée, la somme, le nombre, le min, le max et la moyenne."
+    ],
+    "faqTitle": "Questions fréquentes",
+    "faqs": [
+      {
+        "question": "Les négatifs et décimales sont-ils acceptés ?",
+        "answer": "Oui, les valeurs finies lisibles comme nombres sont incluses."
+      },
+      {
+        "question": "Que deviennent les textes non numériques ?",
+        "answer": "Ils sont ignorés dans les statistiques."
+      },
+      {
+        "question": "Pourquoi supprimer les doublons ?",
+        "answer": "Pour comparer uniquement les valeurs distinctes."
+      }
+    ],
+    "disclaimer": "Ce calculateur fournit une estimation générale pour apprendre et planifier. Vérifiez les chiffres officiels juridiques, fiscaux ou financiers avant décision."
+  },
+  "es": {
+    "introTitle": "Ordenar es la primera revisión de una lista",
+    "intro": "Ordenar una lista permite ver rango, valores atípicos y duplicados. Esta versión porta la utilidad de ahoxy sin animación y se centra en resultado y estadísticas básicas.",
+    "formulaTitle": "Reglas",
+    "formulas": [
+      {
+        "title": "Lectura",
+        "body": "Separación por coma, punto y coma, espacio o línea"
+      },
+      {
+        "title": "Orden",
+        "body": "asc: a-b / desc: b-a"
+      },
+      {
+        "title": "Promedio",
+        "body": "suma / cantidad"
+      }
+    ],
+    "howToTitle": "Cómo usarlo",
+    "steps": [
+      "Introduce números separados por comas, espacios o saltos de línea.",
+      "Elige ascendente o descendente y activa deduplicar si hace falta.",
+      "Revisa lista ordenada, suma, cantidad, mínimo, máximo y promedio."
+    ],
+    "faqTitle": "Preguntas frecuentes",
+    "faqs": [
+      {
+        "question": "¿Acepta negativos y decimales?",
+        "answer": "Sí, toda cifra finita que pueda leerse como número se incluye."
+      },
+      {
+        "question": "¿Qué pasa con texto no numérico?",
+        "answer": "Se ignora para el cálculo."
+      },
+      {
+        "question": "¿Cuándo conviene quitar duplicados?",
+        "answer": "Cuando quieres comparar solo valores únicos."
+      }
+    ],
+    "disclaimer": "Esta calculadora ofrece una estimación general para aprender y planificar. Confirma cifras oficiales legales, fiscales o financieras antes de actuar."
+  }
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
+---
+
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <main class="mx-auto max-w-3xl px-4 py-10">
+    <NumberSorter client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
+  </main>
+</BaseLayout>

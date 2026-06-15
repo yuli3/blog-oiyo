@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import LifePlanningCalculator from "../../components/tools/LifePlanningCalculator";
+import LitigationCostCalculator from "../../components/tools/LitigationCostCalculator";
 import { locales } from "../../lib/i18n";
 
 type ActiveLocale = (typeof locales)[number];
@@ -13,28 +13,28 @@ const { locale } = Astro.props as { locale: ActiveLocale };
 
 const meta: Record<ActiveLocale, { title: string; description: string }> = {
   "ko": {
-    "title": "생애 설계 계산기 — 결혼·교육·전세",
-    "description": "결혼 후 시작 순자산, 자녀 교육비 미래가치, 전세 보증금 위험 노출 비율을 한 곳에서 계산합니다."
+    "title": "소송비용 계산기 — 인지대·송달료·변호사보수",
+    "description": "대한민국 민사소송 소가를 기준으로 인지대, 송달료, 소송비용 산입 변호사보수 한도를 추정합니다."
   },
   "en": {
-    "title": "Life Planning Calculator — Wedding, Education and Jeonse",
-    "description": "Calculate wedding net start, future education funding needs, and jeonse deposit exposure ratio in one planning tool."
+    "title": "Korean Litigation Cost Calculator — Court Stamp, Service and Attorney Fee Cap",
+    "description": "Estimate Korean civil litigation filing stamp, service fee, and recoverable attorney-fee cap from the claim amount."
   },
   "ja": {
-    "title": "ライフプランニング計算機 — 結婚・教育・チョンセ",
-    "description": "結婚後の開始純資産、教育費の将来価値、チョンセ保証金リスク比率を一か所で計算します。"
+    "title": "韓国訴訟費用計算機 — 印紙代・送達料・弁護士費用上限",
+    "description": "韓国民事訴訟の請求額から印紙代、送達料、回収可能な弁護士費用上限を概算します。"
   },
   "zh": {
-    "title": "人生规划计算器 — 婚礼、教育、全租",
-    "description": "一站式计算婚后起步净资产、未来教育资金需求和全租保证金风险敞口比例。"
+    "title": "韩国诉讼费用计算器 — 印花费、送达费、律师费上限",
+    "description": "根据韩国民事诉讼标的金额估算法院印花费、送达费和可请求律师费上限。"
   },
   "fr": {
-    "title": "Calculateur de Planification de Vie — Mariage, Études et Jeonse",
-    "description": "Calculez départ net après mariage, besoin futur d’études et ratio d’exposition du dépôt jeonse."
+    "title": "Calculateur de Frais de Procès Coréens — Timbre, Signification, Honoraires",
+    "description": "Estimez les frais de procédure civile coréenne: timbre, signification et plafond d’honoraires récupérables."
   },
   "es": {
-    "title": "Calculadora de Planificación Vital — Boda, Educación y Jeonse",
-    "description": "Calcula inicio neto tras boda, fondos educativos futuros y ratio de exposición del depósito jeonse."
+    "title": "Calculadora de Costas Judiciales de Corea — Tasas, Notificación y Honorarios",
+    "description": "Estima tasa judicial, notificaciones y límite de honorarios recuperables en litigios civiles coreanos."
   }
 };
 
@@ -52,21 +52,21 @@ const content: Record<ActiveLocale, {
   disclaimer: string;
 }> = {
   "ko": {
-    "introTitle": "생애 설계는 큰 현금흐름을 나누어 보는 작업입니다",
-    "intro": "ahoxy의 결혼, 교육, 전세 보호 계산을 한 섬 안에 옮겼습니다. 결혼은 시작 순자산, 교육은 미래가치와 월 저축액, 전세는 보증금과 선순위채권의 주택가격 대비 비율을 계산합니다.",
+    "introTitle": "대한민국 민사소송 비용은 소가와 당사자 수에 따라 달라집니다",
+    "intro": "ahoxy 원본 공식대로 인지대 구간식, 전자소송 10% 감액, 송달료 5,200원 단위, 변호사보수 소송비용 산입 한도를 함께 계산합니다.",
     "formulaTitle": "계산식",
     "formulas": [
       {
-        "title": "Wedding",
-        "body": "assets - wedding cost - housing cost"
+        "title": "Stamp",
+        "body": "<10M: x0.005; <100M: x0.0045+5000"
       },
       {
-        "title": "Education",
-        "body": "PV x (1 + inflation)^year"
+        "title": "Service",
+        "body": "5200 x parties x 10 or 15"
       },
       {
-        "title": "Jeonse",
-        "body": "(deposit + senior debt) / house price x 100"
+        "title": "Attorney",
+        "body": "bracket cap by claim amount"
       }
     ],
     "howToTitle": "사용 방법",
@@ -79,7 +79,7 @@ const content: Record<ActiveLocale, {
     "faqs": [
       {
         "question": "이 계산기는 무엇을 계산하나요?",
-        "answer": "ahoxy의 결혼, 교육, 전세 보호 계산을 한 섬 안에 옮겼습니다. 결혼은 시작 순자산, 교육은 미래가치와 월 저축액, 전세는 보증금과 선순위채권의 주택가격 대비 비율을 계산합니다."
+        "answer": "ahoxy 원본 공식대로 인지대 구간식, 전자소송 10% 감액, 송달료 5,200원 단위, 변호사보수 소송비용 산입 한도를 함께 계산합니다."
       },
       {
         "question": "결과가 공식 확정액인가요?",
@@ -87,27 +87,27 @@ const content: Record<ActiveLocale, {
       },
       {
         "question": "어떤 로직을 사용했나요?",
-        "answer": "ahoxy의 결혼, 교육, 전세 보호 계산을 한 섬 안에 옮겼습니다. 결혼은 시작 순자산, 교육은 미래가치와 월 저축액, 전세는 보증금과 선순위채권의 주택가격 대비 비율을 계산합니다."
+        "answer": "ahoxy 원본 공식대로 인지대 구간식, 전자소송 10% 감액, 송달료 5,200원 단위, 변호사보수 소송비용 산입 한도를 함께 계산합니다."
       }
     ],
     "disclaimer": "이 계산기는 일반적인 추정과 학습용입니다. 법률·세금·금융 등 공식 수치는 관련 기관과 전문가의 최신 기준을 확인하세요."
   },
   "en": {
-    "introTitle": "Life planning breaks large cash flows into separate checks",
-    "intro": "This ports ahoxy’s wedding, education, and jeonse calculators into one island: net start, future education cost and monthly savings, and deposit exposure ratio.",
+    "introTitle": "Korean civil litigation costs depend on claim amount and parties",
+    "intro": "Using the ahoxy formula, it combines bracketed stamp duty, 10% electronic filing reduction, 5,200 KRW service units, and recoverable attorney-fee caps.",
     "formulaTitle": "Formula",
     "formulas": [
       {
-        "title": "Wedding",
-        "body": "assets - wedding cost - housing cost"
+        "title": "Stamp",
+        "body": "<10M: x0.005; <100M: x0.0045+5000"
       },
       {
-        "title": "Education",
-        "body": "PV x (1 + inflation)^year"
+        "title": "Service",
+        "body": "5200 x parties x 10 or 15"
       },
       {
-        "title": "Jeonse",
-        "body": "(deposit + senior debt) / house price x 100"
+        "title": "Attorney",
+        "body": "bracket cap by claim amount"
       }
     ],
     "howToTitle": "How to use",
@@ -120,7 +120,7 @@ const content: Record<ActiveLocale, {
     "faqs": [
       {
         "question": "What does this calculator estimate?",
-        "answer": "This ports ahoxy’s wedding, education, and jeonse calculators into one island: net start, future education cost and monthly savings, and deposit exposure ratio."
+        "answer": "Using the ahoxy formula, it combines bracketed stamp duty, 10% electronic filing reduction, 5,200 KRW service units, and recoverable attorney-fee caps."
       },
       {
         "question": "Is the result official?",
@@ -128,27 +128,27 @@ const content: Record<ActiveLocale, {
       },
       {
         "question": "What logic is used?",
-        "answer": "This ports ahoxy’s wedding, education, and jeonse calculators into one island: net start, future education cost and monthly savings, and deposit exposure ratio."
+        "answer": "Using the ahoxy formula, it combines bracketed stamp duty, 10% electronic filing reduction, 5,200 KRW service units, and recoverable attorney-fee caps."
       }
     ],
     "disclaimer": "This calculator is a general estimate for learning and planning. Confirm official legal, tax, finance, or institutional figures before acting."
   },
   "ja": {
-    "introTitle": "ライフプランニングは大きな資金を分けて確認します",
-    "intro": "ahoxy の結婚・教育・チョンセ計算を1つにまとめ、開始純資産、教育費将来価値、保証金リスク比率を計算します。",
+    "introTitle": "韓国民事訴訟費用は請求額と当事者数で変わります",
+    "intro": "ahoxy の式に基づき、印紙代区分、電子訴訟10%減額、5,200KRW送達単位、弁護士費用上限を計算します。",
     "formulaTitle": "計算式",
     "formulas": [
       {
-        "title": "Wedding",
-        "body": "assets - wedding cost - housing cost"
+        "title": "Stamp",
+        "body": "<10M: x0.005; <100M: x0.0045+5000"
       },
       {
-        "title": "Education",
-        "body": "PV x (1 + inflation)^year"
+        "title": "Service",
+        "body": "5200 x parties x 10 or 15"
       },
       {
-        "title": "Jeonse",
-        "body": "(deposit + senior debt) / house price x 100"
+        "title": "Attorney",
+        "body": "bracket cap by claim amount"
       }
     ],
     "howToTitle": "使い方",
@@ -161,7 +161,7 @@ const content: Record<ActiveLocale, {
     "faqs": [
       {
         "question": "この計算機は何を計算しますか？",
-        "answer": "ahoxy の結婚・教育・チョンセ計算を1つにまとめ、開始純資産、教育費将来価値、保証金リスク比率を計算します。"
+        "answer": "ahoxy の式に基づき、印紙代区分、電子訴訟10%減額、5,200KRW送達単位、弁護士費用上限を計算します。"
       },
       {
         "question": "結果は公式確定額ですか？",
@@ -169,27 +169,27 @@ const content: Record<ActiveLocale, {
       },
       {
         "question": "どのロジックですか？",
-        "answer": "ahoxy の結婚・教育・チョンセ計算を1つにまとめ、開始純資産、教育費将来価値、保証金リスク比率を計算します。"
+        "answer": "ahoxy の式に基づき、印紙代区分、電子訴訟10%減額、5,200KRW送達単位、弁護士費用上限を計算します。"
       }
     ],
     "disclaimer": "この計算機は一般的な推定と学習用です。法律・税務・金融などの公式数値は最新の機関情報で確認してください。"
   },
   "zh": {
-    "introTitle": "人生规划需要拆分大型现金流",
-    "intro": "本工具把 ahoxy 的婚礼、教育和全租保护计算合并到一个组件中：起步净资产、教育未来费用和月储蓄、保证金风险比例。",
+    "introTitle": "韩国民事诉讼费用取决于标的金额和当事人人数",
+    "intro": "按照 ahoxy 原公式，合并计算分段印花费、电子诉讼 10% 减免、5,200 韩元送达单位和律师费上限。",
     "formulaTitle": "计算公式",
     "formulas": [
       {
-        "title": "Wedding",
-        "body": "assets - wedding cost - housing cost"
+        "title": "Stamp",
+        "body": "<10M: x0.005; <100M: x0.0045+5000"
       },
       {
-        "title": "Education",
-        "body": "PV x (1 + inflation)^year"
+        "title": "Service",
+        "body": "5200 x parties x 10 or 15"
       },
       {
-        "title": "Jeonse",
-        "body": "(deposit + senior debt) / house price x 100"
+        "title": "Attorney",
+        "body": "bracket cap by claim amount"
       }
     ],
     "howToTitle": "使用方法",
@@ -202,7 +202,7 @@ const content: Record<ActiveLocale, {
     "faqs": [
       {
         "question": "这个计算器估算什么？",
-        "answer": "本工具把 ahoxy 的婚礼、教育和全租保护计算合并到一个组件中：起步净资产、教育未来费用和月储蓄、保证金风险比例。"
+        "answer": "按照 ahoxy 原公式，合并计算分段印花费、电子诉讼 10% 减免、5,200 韩元送达单位和律师费上限。"
       },
       {
         "question": "结果是官方确定金额吗？",
@@ -210,27 +210,27 @@ const content: Record<ActiveLocale, {
       },
       {
         "question": "使用什么逻辑？",
-        "answer": "本工具把 ahoxy 的婚礼、教育和全租保护计算合并到一个组件中：起步净资产、教育未来费用和月储蓄、保证金风险比例。"
+        "answer": "按照 ahoxy 原公式，合并计算分段印花费、电子诉讼 10% 减免、5,200 韩元送达单位和律师费上限。"
       }
     ],
     "disclaimer": "本计算器用于一般估算和学习规划。涉及法律、税务、金融或官方数字时，请确认相关机构的最新标准。"
   },
   "fr": {
-    "introTitle": "La planification de vie sépare les grands flux financiers",
-    "intro": "Il regroupe les calculs ahoxy mariage, études et jeonse : départ net, coût futur/épargne mensuelle, ratio d’exposition.",
+    "introTitle": "Les frais civils coréens dépendent du montant et des parties",
+    "intro": "Selon la formule ahoxy : timbre par tranches, réduction électronique 10%, unités de 5 200 KRW et plafond d’honoraires.",
     "formulaTitle": "Formule",
     "formulas": [
       {
-        "title": "Wedding",
-        "body": "assets - wedding cost - housing cost"
+        "title": "Stamp",
+        "body": "<10M: x0.005; <100M: x0.0045+5000"
       },
       {
-        "title": "Education",
-        "body": "PV x (1 + inflation)^year"
+        "title": "Service",
+        "body": "5200 x parties x 10 or 15"
       },
       {
-        "title": "Jeonse",
-        "body": "(deposit + senior debt) / house price x 100"
+        "title": "Attorney",
+        "body": "bracket cap by claim amount"
       }
     ],
     "howToTitle": "Comment l’utiliser",
@@ -243,7 +243,7 @@ const content: Record<ActiveLocale, {
     "faqs": [
       {
         "question": "Que calcule cet outil ?",
-        "answer": "Il regroupe les calculs ahoxy mariage, études et jeonse : départ net, coût futur/épargne mensuelle, ratio d’exposition."
+        "answer": "Selon la formule ahoxy : timbre par tranches, réduction électronique 10%, unités de 5 200 KRW et plafond d’honoraires."
       },
       {
         "question": "Le résultat est-il officiel ?",
@@ -251,27 +251,27 @@ const content: Record<ActiveLocale, {
       },
       {
         "question": "Quelle logique est utilisée ?",
-        "answer": "Il regroupe les calculs ahoxy mariage, études et jeonse : départ net, coût futur/épargne mensuelle, ratio d’exposition."
+        "answer": "Selon la formule ahoxy : timbre par tranches, réduction électronique 10%, unités de 5 200 KRW et plafond d’honoraires."
       }
     ],
     "disclaimer": "Ce calculateur fournit une estimation générale pour apprendre et planifier. Vérifiez les chiffres officiels juridiques, fiscaux ou financiers avant décision."
   },
   "es": {
-    "introTitle": "La planificación vital separa grandes flujos de dinero",
-    "intro": "Agrupa cálculos ahoxy de boda, educación y jeonse: inicio neto, coste futuro/ahorro mensual y ratio de exposición.",
+    "introTitle": "Las costas civiles coreanas dependen de cuantía y partes",
+    "intro": "Según ahoxy: tasa por tramos, 10% de descuento electrónico, unidades de 5.200 KRW y límite de honorarios.",
     "formulaTitle": "Fórmula",
     "formulas": [
       {
-        "title": "Wedding",
-        "body": "assets - wedding cost - housing cost"
+        "title": "Stamp",
+        "body": "<10M: x0.005; <100M: x0.0045+5000"
       },
       {
-        "title": "Education",
-        "body": "PV x (1 + inflation)^year"
+        "title": "Service",
+        "body": "5200 x parties x 10 or 15"
       },
       {
-        "title": "Jeonse",
-        "body": "(deposit + senior debt) / house price x 100"
+        "title": "Attorney",
+        "body": "bracket cap by claim amount"
       }
     ],
     "howToTitle": "Cómo usarlo",
@@ -284,7 +284,7 @@ const content: Record<ActiveLocale, {
     "faqs": [
       {
         "question": "¿Qué estima esta calculadora?",
-        "answer": "Agrupa cálculos ahoxy de boda, educación y jeonse: inicio neto, coste futuro/ahorro mensual y ratio de exposición."
+        "answer": "Según ahoxy: tasa por tramos, 10% de descuento electrónico, unidades de 5.200 KRW y límite de honorarios."
       },
       {
         "question": "¿El resultado es oficial?",
@@ -292,7 +292,7 @@ const content: Record<ActiveLocale, {
       },
       {
         "question": "¿Qué lógica se usa?",
-        "answer": "Agrupa cálculos ahoxy de boda, educación y jeonse: inicio neto, coste futuro/ahorro mensual y ratio de exposición."
+        "answer": "Según ahoxy: tasa por tramos, 10% de descuento electrónico, unidades de 5.200 KRW y límite de honorarios."
       }
     ],
     "disclaimer": "Esta calculadora ofrece una estimación general para aprender y planificar. Confirma cifras oficiales legales, fiscales o financieras antes de actuar."
@@ -310,7 +310,7 @@ const structuredData = [
 <BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-3xl px-4 py-10">
-    <LifePlanningCalculator client:load locale={locale} />
+    <LitigationCostCalculator client:load locale={locale} />
 
     <section class="mt-10 border-t border-slate-200 pt-8">
       <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>

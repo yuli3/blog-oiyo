@@ -1,0 +1,353 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ChildHeightCalculator from "../../components/tools/ChildHeightCalculator";
+import { locales } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: ActiveLocale };
+
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
+  "ko": {
+    "title": "자녀 키 계산기 — 중간부모키 공식",
+    "description": "아버지 키, 어머니 키, 자녀 성별을 입력해 중간부모키 기반 예상 평균과 일반 범위를 계산합니다."
+  },
+  "en": {
+    "title": "Child Height Calculator — Mid-Parental Height Formula",
+    "description": "Enter father height, mother height, and child gender to estimate average adult height and a typical range."
+  },
+  "ja": {
+    "title": "子どもの身長予測 — 中間親身長公式",
+    "description": "父母の身長と子どもの性別から、推定平均身長と一般的な範囲を計算します。"
+  },
+  "zh": {
+    "title": "儿童身高计算器 — 父母身高中值公式",
+    "description": "输入父亲身高、母亲身高和孩子性别，估算成年平均身高及常见范围。"
+  },
+  "fr": {
+    "title": "Calculateur de Taille d’Enfant — Formule Parentale Moyenne",
+    "description": "Saisissez la taille des parents et le sexe de l’enfant pour estimer la taille adulte moyenne et une fourchette typique."
+  },
+  "es": {
+    "title": "Calculadora de Estatura Infantil — Fórmula Parental Media",
+    "description": "Introduce la estatura de los padres y el sexo del niño para estimar promedio adulto y rango típico."
+  }
+};
+
+const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  "ko": {
+    "introTitle": "중간부모키 공식은 부모 키를 단순화한 예측 기준입니다",
+    "intro": "ahoxy와 동일하게 아버지 키, 어머니 키, 자녀 성별 보정값을 더한 뒤 2로 나눕니다. 결과는 평균값과 평균에서 ±7.5cm를 반영한 일반 범위로 표시됩니다.",
+    "formulaTitle": "계산식",
+    "formulas": [
+      {
+        "title": "Boy",
+        "body": "(father + mother + 13) / 2"
+      },
+      {
+        "title": "Girl",
+        "body": "(father + mother - 13) / 2"
+      },
+      {
+        "title": "Range",
+        "body": "round(avg - 7.5) to round(avg + 7.5)"
+      }
+    ],
+    "howToTitle": "사용 방법",
+    "steps": [
+      "입력값을 현재 상황에 맞게 수정합니다.",
+      "결과와 공식 카드를 함께 확인합니다.",
+      "공식 수치가 필요한 경우 관련 기관 기준으로 다시 확인합니다."
+    ],
+    "faqTitle": "자주 묻는 질문",
+    "faqs": [
+      {
+        "question": "이 계산기는 무엇을 계산하나요?",
+        "answer": "ahoxy와 동일하게 아버지 키, 어머니 키, 자녀 성별 보정값을 더한 뒤 2로 나눕니다. 결과는 평균값과 평균에서 ±7.5cm를 반영한 일반 범위로 표시됩니다."
+      },
+      {
+        "question": "결과가 공식 확정액인가요?",
+        "answer": "건강·성장 상담을 대체하지 않습니다. 성장 지연이나 의학적 우려가 있으면 전문의에게 상담하세요."
+      },
+      {
+        "question": "어떤 로직을 사용했나요?",
+        "answer": "ahoxy와 동일하게 아버지 키, 어머니 키, 자녀 성별 보정값을 더한 뒤 2로 나눕니다. 결과는 평균값과 평균에서 ±7.5cm를 반영한 일반 범위로 표시됩니다."
+      }
+    ],
+    "disclaimer": "건강·성장 상담을 대체하지 않습니다. 성장 지연이나 의학적 우려가 있으면 전문의에게 상담하세요."
+  },
+  "en": {
+    "introTitle": "Mid-parental height is a simple parent-height estimate",
+    "intro": "This follows the ahoxy logic: add father height, mother height, and a gender factor, then divide by two. It shows the rounded average and a typical range using ±7.5 cm.",
+    "formulaTitle": "Formula",
+    "formulas": [
+      {
+        "title": "Boy",
+        "body": "(father + mother + 13) / 2"
+      },
+      {
+        "title": "Girl",
+        "body": "(father + mother - 13) / 2"
+      },
+      {
+        "title": "Range",
+        "body": "round(avg - 7.5) to round(avg + 7.5)"
+      }
+    ],
+    "howToTitle": "How to use",
+    "steps": [
+      "Adjust the inputs to match your situation.",
+      "Read the result together with the formula cards.",
+      "Confirm official figures with the relevant authority before acting."
+    ],
+    "faqTitle": "Frequently asked questions",
+    "faqs": [
+      {
+        "question": "What does this calculator estimate?",
+        "answer": "This follows the ahoxy logic: add father height, mother height, and a gender factor, then divide by two. It shows the rounded average and a typical range using ±7.5 cm."
+      },
+      {
+        "question": "Is the result official?",
+        "answer": "This is not medical advice. Ask a pediatric or growth specialist about medical growth concerns."
+      },
+      {
+        "question": "What logic is used?",
+        "answer": "This follows the ahoxy logic: add father height, mother height, and a gender factor, then divide by two. It shows the rounded average and a typical range using ±7.5 cm."
+      }
+    ],
+    "disclaimer": "This is not medical advice. Ask a pediatric or growth specialist about medical growth concerns."
+  },
+  "ja": {
+    "introTitle": "中間親身長は親の身長による簡易推定です",
+    "intro": "ahoxy と同じロジックで、父母の身長に性別補正を加えて2で割ります。平均値と±7.5cmの一般範囲を丸めて表示します。",
+    "formulaTitle": "計算式",
+    "formulas": [
+      {
+        "title": "Boy",
+        "body": "(father + mother + 13) / 2"
+      },
+      {
+        "title": "Girl",
+        "body": "(father + mother - 13) / 2"
+      },
+      {
+        "title": "Range",
+        "body": "round(avg - 7.5) to round(avg + 7.5)"
+      }
+    ],
+    "howToTitle": "使い方",
+    "steps": [
+      "入力値を状況に合わせて修正します。",
+      "結果と公式カードを合わせて確認します。",
+      "公式数値が必要な場合は関係機関で確認します。"
+    ],
+    "faqTitle": "よくある質問",
+    "faqs": [
+      {
+        "question": "この計算機は何を計算しますか？",
+        "answer": "ahoxy と同じロジックで、父母の身長に性別補正を加えて2で割ります。平均値と±7.5cmの一般範囲を丸めて表示します。"
+      },
+      {
+        "question": "結果は公式確定額ですか？",
+        "answer": "医療アドバイスではありません。成長に心配がある場合は専門医に相談してください。"
+      },
+      {
+        "question": "どのロジックですか？",
+        "answer": "ahoxy と同じロジックで、父母の身長に性別補正を加えて2で割ります。平均値と±7.5cmの一般範囲を丸めて表示します。"
+      }
+    ],
+    "disclaimer": "医療アドバイスではありません。成長に心配がある場合は専門医に相談してください。"
+  },
+  "zh": {
+    "introTitle": "父母身高中值公式是一种简化估算",
+    "intro": "本工具使用与 ahoxy 相同的逻辑：父亲身高、母亲身高和性别系数相加后除以 2，并显示四舍五入后的平均值与 ±7.5cm 常见范围。",
+    "formulaTitle": "计算公式",
+    "formulas": [
+      {
+        "title": "Boy",
+        "body": "(father + mother + 13) / 2"
+      },
+      {
+        "title": "Girl",
+        "body": "(father + mother - 13) / 2"
+      },
+      {
+        "title": "Range",
+        "body": "round(avg - 7.5) to round(avg + 7.5)"
+      }
+    ],
+    "howToTitle": "使用方法",
+    "steps": [
+      "根据自己的情况修改输入值。",
+      "结合结果和公式卡片一起查看。",
+      "如需官方数字，请向相关机构确认。"
+    ],
+    "faqTitle": "常见问题",
+    "faqs": [
+      {
+        "question": "这个计算器估算什么？",
+        "answer": "本工具使用与 ahoxy 相同的逻辑：父亲身高、母亲身高和性别系数相加后除以 2，并显示四舍五入后的平均值与 ±7.5cm 常见范围。"
+      },
+      {
+        "question": "结果是官方确定金额吗？",
+        "answer": "本工具不构成医疗建议。如有生长发育疑虑，请咨询专业医生。"
+      },
+      {
+        "question": "使用什么逻辑？",
+        "answer": "本工具使用与 ahoxy 相同的逻辑：父亲身高、母亲身高和性别系数相加后除以 2，并显示四舍五入后的平均值与 ±7.5cm 常见范围。"
+      }
+    ],
+    "disclaimer": "本工具不构成医疗建议。如有生长发育疑虑，请咨询专业医生。"
+  },
+  "fr": {
+    "introTitle": "La taille parentale moyenne est une estimation simple",
+    "intro": "L’outil suit la logique ahoxy : taille du père + taille de la mère + facteur de sexe, puis division par deux. Il affiche la moyenne arrondie et une fourchette de ±7,5 cm.",
+    "formulaTitle": "Formule",
+    "formulas": [
+      {
+        "title": "Boy",
+        "body": "(father + mother + 13) / 2"
+      },
+      {
+        "title": "Girl",
+        "body": "(father + mother - 13) / 2"
+      },
+      {
+        "title": "Range",
+        "body": "round(avg - 7.5) to round(avg + 7.5)"
+      }
+    ],
+    "howToTitle": "Comment l’utiliser",
+    "steps": [
+      "Adaptez les entrées à votre situation.",
+      "Lisez le résultat avec les cartes de formule.",
+      "Vérifiez les chiffres officiels auprès de l’autorité compétente."
+    ],
+    "faqTitle": "Questions fréquentes",
+    "faqs": [
+      {
+        "question": "Que calcule cet outil ?",
+        "answer": "L’outil suit la logique ahoxy : taille du père + taille de la mère + facteur de sexe, puis division par deux. Il affiche la moyenne arrondie et une fourchette de ±7,5 cm."
+      },
+      {
+        "question": "Le résultat est-il officiel ?",
+        "answer": "Ce n’est pas un avis médical. Consultez un spécialiste pour toute inquiétude de croissance."
+      },
+      {
+        "question": "Quelle logique est utilisée ?",
+        "answer": "L’outil suit la logique ahoxy : taille du père + taille de la mère + facteur de sexe, puis division par deux. Il affiche la moyenne arrondie et une fourchette de ±7,5 cm."
+      }
+    ],
+    "disclaimer": "Ce n’est pas un avis médical. Consultez un spécialiste pour toute inquiétude de croissance."
+  },
+  "es": {
+    "introTitle": "La talla parental media es una estimación sencilla",
+    "intro": "La herramienta sigue la lógica de ahoxy: altura del padre, altura de la madre y factor de sexo, dividido entre dos. Muestra promedio redondeado y rango de ±7,5 cm.",
+    "formulaTitle": "Fórmula",
+    "formulas": [
+      {
+        "title": "Boy",
+        "body": "(father + mother + 13) / 2"
+      },
+      {
+        "title": "Girl",
+        "body": "(father + mother - 13) / 2"
+      },
+      {
+        "title": "Range",
+        "body": "round(avg - 7.5) to round(avg + 7.5)"
+      }
+    ],
+    "howToTitle": "Cómo usarlo",
+    "steps": [
+      "Ajusta los datos a tu situación.",
+      "Lee el resultado junto con las tarjetas de fórmula.",
+      "Confirma cifras oficiales con la autoridad correspondiente."
+    ],
+    "faqTitle": "Preguntas frecuentes",
+    "faqs": [
+      {
+        "question": "¿Qué estima esta calculadora?",
+        "answer": "La herramienta sigue la lógica de ahoxy: altura del padre, altura de la madre y factor de sexo, dividido entre dos. Muestra promedio redondeado y rango de ±7,5 cm."
+      },
+      {
+        "question": "¿El resultado es oficial?",
+        "answer": "No es asesoramiento médico. Consulta a un especialista ante dudas de crecimiento."
+      },
+      {
+        "question": "¿Qué lógica se usa?",
+        "answer": "La herramienta sigue la lógica de ahoxy: altura del padre, altura de la madre y factor de sexo, dividido entre dos. Muestra promedio redondeado y rango de ±7,5 cm."
+      }
+    ],
+    "disclaimer": "No es asesoramiento médico. Consulta a un especialista ante dudas de crecimiento."
+  }
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  { "@context": "https://schema.org", "@type": "HowTo", name: m.title, description: m.description, step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })) },
+  { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: c.faqs.map((faq) => ({ "@type": "Question", name: faq.question, acceptedAnswer: { "@type": "Answer", text: faq.answer } })) },
+];
+---
+
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <main class="mx-auto max-w-3xl px-4 py-10">
+    <ChildHeightCalculator client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
+  </main>
+</BaseLayout>

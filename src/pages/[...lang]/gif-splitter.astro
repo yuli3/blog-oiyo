@@ -1,0 +1,259 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import GifSplitter from "../../components/tools/GifSplitter";
+import { locales } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: ActiveLocale };
+
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
+  ko: {
+    title: "GIF 프레임 분리기 — 로컬 PNG 프레임 추출",
+    description: "브라우저 ImageDecoder API로 GIF 프레임을 PNG로 추출합니다. 파일은 서버로 업로드되지 않습니다.",
+  },
+  en: {
+    title: "GIF Splitter — Local PNG Frame Extractor",
+    description: "Extract GIF frames as PNG files with the browser ImageDecoder API. The file stays local and is not uploaded.",
+  },
+  ja: {
+    title: "GIFフレーム分割 — ローカルPNG抽出",
+    description: "ブラウザのImageDecoder APIでGIFフレームをPNGとして抽出します。ファイルはアップロードされません。",
+  },
+  zh: {
+    title: "GIF 帧拆分器 — 本地 PNG 帧提取",
+    description: "使用浏览器 ImageDecoder API 将 GIF 帧提取为 PNG。文件保留在本地，不会上传。",
+  },
+  fr: {
+    title: "Séparateur de GIF — Extraction Locale en PNG",
+    description: "Extrayez les images d'un GIF en PNG avec l'API ImageDecoder du navigateur. Le fichier reste local.",
+  },
+  es: {
+    title: "Separador de GIF — Extracción Local de PNG",
+    description: "Extrae fotogramas GIF como PNG con la API ImageDecoder del navegador. El archivo permanece local.",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "GIF는 여러 프레임을 시간 순서대로 보여주는 이미지입니다",
+    intro: "GIF를 분리하면 애니메이션의 각 장면을 PNG 이미지로 확인할 수 있습니다. 이 포트는 새 패키지를 추가하지 않기 위해 gifuct-js나 gifenc 대신 브라우저의 ImageDecoder API를 사용하며, 지원 브라우저에서만 프레임 추출이 가능합니다.",
+    formulaTitle: "추출 기준",
+    formulas: [
+      { title: "프레임 단위", body: "각 GIF 프레임을 canvas에 그린 뒤 PNG 데이터 URL로 저장합니다." },
+      { title: "지연 시간", body: "브라우저가 제공하는 duration 값이 있으면 밀리초 단위로 함께 표시합니다." },
+      { title: "의존성 없음", body: "새 npm 패키지를 추가하지 않아 재조합 GIF 생성은 포함하지 않고 PNG 프레임 추출에 집중합니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "GIF 파일을 선택합니다.",
+      "브라우저가 ImageDecoder를 지원하면 프레임 목록을 확인합니다.",
+      "필요한 프레임을 PNG로 다운로드합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "모든 브라우저에서 작동하나요?", answer: "아니요. 이 버전은 브라우저 ImageDecoder API가 필요합니다. 지원하지 않는 브라우저에서는 안내 메시지를 표시합니다." },
+      { question: "원본 GIF가 업로드되나요?", answer: "아니요. 선택한 파일은 브라우저에서 로컬로 디코딩됩니다." },
+      { question: "새 GIF로 다시 만들 수 있나요?", answer: "아니요. ahoxy 원본은 gifenc를 사용했지만 이 포트는 새 의존성을 추가하지 않아 PNG 프레임 다운로드만 제공합니다." },
+    ],
+    disclaimer: "ImageDecoder 지원 여부와 GIF 내부 구조에 따라 일부 파일은 추출되지 않을 수 있습니다.",
+  },
+  en: {
+    introTitle: "A GIF is a sequence of image frames shown over time",
+    intro: "Splitting a GIF lets you inspect each animated moment as a PNG image. This dependency-free port uses the browser ImageDecoder API instead of gifuct-js or gifenc, so extraction works only in browsers that expose native GIF decoding.",
+    formulaTitle: "Extraction rules",
+    formulas: [
+      { title: "Frame by frame", body: "Each decoded GIF frame is drawn to canvas and saved as a PNG data URL." },
+      { title: "Frame delay", body: "When the browser exposes duration, the delay is shown in milliseconds." },
+      { title: "No new dependencies", body: "The tool focuses on PNG frame extraction and does not recreate animated GIF files." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Choose a local GIF file.",
+      "If your browser supports ImageDecoder, review the extracted frame list.",
+      "Download the frames you need as PNG files.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Does this work in every browser?", answer: "No. This version requires the browser ImageDecoder API and shows a support message when it is unavailable." },
+      { question: "Is my GIF uploaded?", answer: "No. The selected file is decoded locally in your browser." },
+      { question: "Can it create a new GIF?", answer: "No. The ahoxy source used gifenc, but this port avoids new dependencies and only exports PNG frames." },
+    ],
+    disclaimer: "Some files may not extract depending on ImageDecoder support and the internal structure of the GIF.",
+  },
+  ja: {
+    introTitle: "GIFは複数のフレームを時間順に表示する画像です",
+    intro: "GIFを分割すると、アニメーションの各場面をPNG画像として確認できます。この依存関係なしのポートはgifuct-jsやgifencではなくブラウザのImageDecoder APIを使うため、対応ブラウザでのみ動作します。",
+    formulaTitle: "抽出の基準",
+    formulas: [
+      { title: "フレーム単位", body: "各GIFフレームをcanvasに描画し、PNGデータURLとして保存します。" },
+      { title: "遅延時間", body: "ブラウザがdurationを提供する場合、ミリ秒で表示します。" },
+      { title: "新規依存なし", body: "PNGフレーム抽出に集中し、アニメーションGIFの再作成は含みません。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "ローカルGIFファイルを選びます。",
+      "ImageDecoder対応ブラウザなら抽出されたフレームを確認します。",
+      "必要なフレームをPNGとして保存します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "すべてのブラウザで使えますか？", answer: "いいえ。このバージョンはImageDecoder APIが必要で、未対応の場合は案内を表示します。" },
+      { question: "GIFはアップロードされますか？", answer: "いいえ。選択したファイルはブラウザ内でローカルにデコードされます。" },
+      { question: "新しいGIFを作れますか？", answer: "いいえ。ahoxy元実装はgifencを使っていましたが、このポートは新規依存を避け、PNGフレームのみ出力します。" },
+    ],
+    disclaimer: "ImageDecoder対応状況やGIF内部構造により、一部ファイルは抽出できない場合があります。",
+  },
+  zh: {
+    introTitle: "GIF 是按时间顺序播放多帧图像的格式",
+    intro: "拆分 GIF 可以把动画中的每个瞬间作为 PNG 图片查看。这个无新增依赖的移植版本使用浏览器 ImageDecoder API，而不是 gifuct-js 或 gifenc，因此只在支持原生 GIF 解码的浏览器中工作。",
+    formulaTitle: "提取规则",
+    formulas: [
+      { title: "逐帧处理", body: "每个解码后的 GIF 帧都会绘制到 canvas，并保存为 PNG data URL。" },
+      { title: "帧延迟", body: "如果浏览器提供 duration，会以毫秒显示延迟时间。" },
+      { title: "无新增依赖", body: "本工具专注 PNG 帧提取，不重新生成动画 GIF 文件。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "选择本地 GIF 文件。",
+      "如果浏览器支持 ImageDecoder，查看提取出的帧列表。",
+      "把需要的帧下载为 PNG 文件。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "所有浏览器都能用吗？", answer: "不能。此版本需要浏览器 ImageDecoder API，不支持时会显示提示信息。" },
+      { question: "GIF 会上传吗？", answer: "不会。选中的文件会在你的浏览器中本地解码。" },
+      { question: "可以重新生成新的 GIF 吗？", answer: "不可以。ahoxy 原版使用 gifenc，但此移植不添加新依赖，只导出 PNG 帧。" },
+    ],
+    disclaimer: "是否能提取取决于 ImageDecoder 支持情况和 GIF 内部结构，部分文件可能无法处理。",
+  },
+  fr: {
+    introTitle: "Un GIF est une suite d'images affichées dans le temps",
+    intro: "Séparer un GIF permet d'inspecter chaque moment animé comme une image PNG. Ce port sans dépendance utilise l'API ImageDecoder du navigateur au lieu de gifuct-js ou gifenc, donc il fonctionne seulement dans les navigateurs compatibles.",
+    formulaTitle: "Règles d'extraction",
+    formulas: [
+      { title: "Image par image", body: "Chaque image GIF décodée est dessinée sur canvas puis enregistrée en PNG." },
+      { title: "Délai", body: "Si le navigateur expose la durée, elle est affichée en millisecondes." },
+      { title: "Aucune dépendance", body: "L'outil extrait des PNG et ne recrée pas de GIF animé." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Choisissez un fichier GIF local.",
+      "Si ImageDecoder est disponible, consultez les images extraites.",
+      "Téléchargez les images nécessaires en PNG.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Cela fonctionne-t-il dans tous les navigateurs ?", answer: "Non. Cette version exige l'API ImageDecoder et affiche un message si elle n'est pas disponible." },
+      { question: "Mon GIF est-il téléversé ?", answer: "Non. Le fichier choisi est décodé localement dans votre navigateur." },
+      { question: "Peut-il créer un nouveau GIF ?", answer: "Non. La source ahoxy utilisait gifenc, mais ce port évite les nouvelles dépendances et exporte seulement des PNG." },
+    ],
+    disclaimer: "Certains fichiers peuvent échouer selon la prise en charge d'ImageDecoder et la structure interne du GIF.",
+  },
+  es: {
+    introTitle: "Un GIF es una secuencia de fotogramas mostrados en el tiempo",
+    intro: "Separar un GIF permite revisar cada momento animado como imagen PNG. Este port sin dependencias usa la API ImageDecoder del navegador en lugar de gifuct-js o gifenc, así que solo funciona en navegadores compatibles.",
+    formulaTitle: "Reglas de extracción",
+    formulas: [
+      { title: "Fotograma por fotograma", body: "Cada fotograma decodificado se dibuja en canvas y se guarda como PNG." },
+      { title: "Retraso", body: "Si el navegador expone duration, el retraso se muestra en milisegundos." },
+      { title: "Sin dependencias nuevas", body: "La herramienta extrae PNG y no recrea GIF animados." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Elige un archivo GIF local.",
+      "Si el navegador soporta ImageDecoder, revisa la lista de fotogramas.",
+      "Descarga como PNG los fotogramas que necesites.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Funciona en todos los navegadores?", answer: "No. Esta versión requiere la API ImageDecoder y muestra un mensaje cuando no está disponible." },
+      { question: "¿Se sube mi GIF?", answer: "No. El archivo elegido se decodifica localmente en tu navegador." },
+      { question: "¿Puede crear un GIF nuevo?", answer: "No. El origen de ahoxy usaba gifenc, pero este port evita dependencias nuevas y solo exporta PNG." },
+    ],
+    disclaimer: "Algunos archivos pueden no extraerse según el soporte de ImageDecoder y la estructura interna del GIF.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
+---
+
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <main class="mx-auto max-w-3xl px-4 py-10">
+    <GifSplitter client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
+  </main>
+</BaseLayout>

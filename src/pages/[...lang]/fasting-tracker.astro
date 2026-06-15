@@ -1,0 +1,259 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import FastingTracker from "../../components/tools/FastingTracker";
+import { locales } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: ActiveLocale };
+
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
+  ko: {
+    title: "간헐적 단식 트래커 — 16:8, 18:6, 20:4 타이머",
+    description: "마지막 식사 시간을 기준으로 16:8, 18:6, 20:4 단식 진행률과 식사 가능 시간을 계산하는 브라우저용 타이머입니다.",
+  },
+  en: {
+    title: "Intermittent Fasting Tracker — 16:8, 18:6, 20:4 Timer",
+    description: "Track fasting progress from your last meal time with 16:8, 18:6, and 20:4 presets. See elapsed time, remaining time, and eating window.",
+  },
+  ja: {
+    title: "断続的断食トラッカー — 16:8・18:6・20:4タイマー",
+    description: "最後の食事時刻を基準に、16:8、18:6、20:4の断食進捗、残り時間、食事ウィンドウを確認できます。",
+  },
+  zh: {
+    title: "间歇性断食追踪器 — 16:8、18:6、20:4 计时器",
+    description: "根据上一餐时间追踪 16:8、18:6、20:4 断食进度，查看已过时间、剩余时间和进食窗口。",
+  },
+  fr: {
+    title: "Suivi de Jeune Intermittent — Minuteur 16:8, 18:6, 20:4",
+    description: "Suivez votre progression depuis le dernier repas avec les presets 16:8, 18:6 et 20:4 : temps ecoule, restant et fenetre de repas.",
+  },
+  es: {
+    title: "Rastreador de Ayuno Intermitente — Temporizador 16:8, 18:6, 20:4",
+    description: "Sigue el progreso desde la ultima comida con presets 16:8, 18:6 y 20:4: tiempo transcurrido, restante y ventana de comida.",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "단식 타이머는 마지막 식사 이후의 하루 사이클을 보여줍니다",
+    intro: "간헐적 단식은 정해진 시간 동안 먹지 않고 이후 식사 가능 창을 두는 방식입니다. 이 트래커는 Ahoxy의 계산 로직처럼 마지막 식사 시간이 오늘보다 미래이면 어제로 간주하고, 단식 종료 시각과 24시간 사이클 종료 시각을 기준으로 현재 상태를 표시합니다.",
+    formulaTitle: "계산 기준",
+    formulas: [
+      { title: "16:8", body: "16시간 단식 후 8시간 식사 창을 둡니다. 가장 널리 쓰이는 기본 프리셋입니다." },
+      { title: "18:6", body: "18시간 단식 후 6시간 식사 창을 둡니다. 조금 더 긴 단식 리듬입니다." },
+      { title: "20:4", body: "20시간 단식 후 4시간 식사 창을 둡니다. Warrior 방식에 가까운 고강도 프리셋입니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "16:8, 18:6, 20:4 중 단식 방식을 선택합니다.",
+      "마지막 식사 시간을 입력하면 현재 단식 중인지 식사 가능 시간인지 표시됩니다.",
+      "남은 시간, 목표 시각, 진행률을 참고하되 몸 상태에 맞게 조정합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "마지막 식사 시간이 현재보다 늦으면 어떻게 계산하나요?", answer: "Ahoxy 원본 로직과 같이 해당 시간을 어제의 마지막 식사 시간으로 간주해 현재 사이클을 계산합니다." },
+      { question: "식사 가능 시간이 끝나면 어떻게 되나요?", answer: "24시간 사이클이 끝난 것으로 표시됩니다. 다음 단식은 마지막 식사 시간을 다시 설정해 추적하세요." },
+      { question: "단식이 누구에게나 안전한가요?", answer: "아닙니다. 임신, 성장기, 질환, 약물 복용, 섭식 문제 등이 있으면 전문가 상담이 필요합니다." },
+    ],
+    disclaimer: "이 도구는 일반적인 생활 기록용이며 의학적 조언이 아닙니다. 건강 상태에 따라 전문가와 상의하세요.",
+  },
+  en: {
+    introTitle: "A fasting timer maps the daily cycle after your last meal",
+    intro: "Intermittent fasting usually alternates a no-calorie fasting window with an eating window. This tracker ports Ahoxy's calculation logic: if the selected last meal time is still ahead of the current time, it treats that start as yesterday, then calculates the fasting end and the 24-hour cycle end.",
+    formulaTitle: "Preset logic",
+    formulas: [
+      { title: "16:8", body: "Fast for 16 hours, then use an 8-hour eating window. This is the most common starter preset." },
+      { title: "18:6", body: "Fast for 18 hours, then use a 6-hour eating window. It is a stricter daily rhythm." },
+      { title: "20:4", body: "Fast for 20 hours, then use a 4-hour eating window. This is close to a Warrior-style preset." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Choose a 16:8, 18:6, or 20:4 fasting method.",
+      "Enter your last meal time to see whether you are fasting or inside the eating window.",
+      "Use the remaining time, target time, and progress bar as a planning aid, then adjust for your body and schedule.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "What happens if the last meal time is later than now?", answer: "As in the original Ahoxy logic, the tool treats that start time as yesterday and calculates the current cycle from there." },
+      { question: "What happens after the eating window ends?", answer: "The tool marks the 24-hour cycle as complete. Set the next last meal time to track the next cycle." },
+      { question: "Is fasting safe for everyone?", answer: "No. Pregnancy, adolescence, medical conditions, medication, and disordered eating history require qualified guidance." },
+    ],
+    disclaimer: "This tool is for general wellness tracking and is not medical advice. Consult a qualified professional for health-specific decisions.",
+  },
+  ja: {
+    introTitle: "断食タイマーは最後の食事後の1日サイクルを表示します",
+    intro: "断続的断食は、食べない時間と食事できる時間を分ける方法です。このトラッカーはAhoxyの計算ロジックを移植し、最後の食事時刻が現在より未来なら昨日として扱い、断食終了と24時間サイクル終了を計算します。",
+    formulaTitle: "プリセットの基準",
+    formulas: [
+      { title: "16:8", body: "16時間断食し、8時間の食事ウィンドウを使います。一般的な基本プリセットです。" },
+      { title: "18:6", body: "18時間断食し、6時間の食事ウィンドウを使います。少し長めのリズムです。" },
+      { title: "20:4", body: "20時間断食し、4時間の食事ウィンドウを使います。Warrior方式に近い設定です。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "16:8、18:6、20:4から方法を選びます。",
+      "最後の食事時刻を入力すると、断食中か食事時間かが表示されます。",
+      "残り時間、目標時刻、進捗を参考にしつつ、体調に合わせて調整します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "最後の食事時刻が現在より後なら？", answer: "Ahoxyの元ロジックと同じく、その時刻を昨日の開始時刻として現在サイクルを計算します。" },
+      { question: "食事ウィンドウが終わった後は？", answer: "24時間サイクル完了として表示します。次のサイクルは最後の食事時刻を再設定してください。" },
+      { question: "断食は誰にでも安全ですか？", answer: "いいえ。妊娠、成長期、疾患、薬の服用、摂食問題がある場合は専門家の助言が必要です。" },
+    ],
+    disclaimer: "このツールは一般的な健康記録用であり、医学的助言ではありません。健康上の判断は専門家に相談してください。",
+  },
+  zh: {
+    introTitle: "断食计时器显示上一餐后的每日周期",
+    intro: "间歇性断食通常把不进食窗口和进食窗口分开。这个追踪器移植 Ahoxy 的计算逻辑：如果所选上一餐时间仍晚于当前时间，就视为昨天开始，然后计算断食结束和 24 小时周期结束时间。",
+    formulaTitle: "预设逻辑",
+    formulas: [
+      { title: "16:8", body: "断食 16 小时，然后进入 8 小时进食窗口。最常见的入门预设。" },
+      { title: "18:6", body: "断食 18 小时，然后进入 6 小时进食窗口。节奏更严格。" },
+      { title: "20:4", body: "断食 20 小时，然后进入 4 小时进食窗口。接近 Warrior 风格预设。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "选择 16:8、18:6 或 20:4 断食方式。",
+      "输入上一餐时间，查看当前是断食中还是进食窗口。",
+      "参考剩余时间、目标时间和进度条，并根据身体状况调整。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "如果上一餐时间晚于当前时间怎么办？", answer: "与 Ahoxy 原始逻辑一致，工具会把该时间视为昨天的开始时间来计算当前周期。" },
+      { question: "进食窗口结束后会怎样？", answer: "工具会显示 24 小时周期已完成。下一轮需要重新设置上一餐时间。" },
+      { question: "断食适合所有人吗？", answer: "不适合。怀孕、青少年、疾病、用药或饮食障碍史等情况需要专业指导。" },
+    ],
+    disclaimer: "此工具仅用于一般健康记录，不构成医疗建议。与健康相关的决定请咨询合格专业人士。",
+  },
+  fr: {
+    introTitle: "Un minuteur de jeune suit le cycle quotidien apres le dernier repas",
+    intro: "Le jeune intermittent alterne une fenetre sans apport calorique et une fenetre de repas. Ce suivi reprend la logique Ahoxy : si l'heure du dernier repas est encore dans le futur, elle est consideree comme hier, puis l'outil calcule la fin du jeune et la fin du cycle de 24 h.",
+    formulaTitle: "Logique des presets",
+    formulas: [
+      { title: "16:8", body: "16 h de jeune puis 8 h de repas. C'est le preset de depart le plus courant." },
+      { title: "18:6", body: "18 h de jeune puis 6 h de repas. Le rythme quotidien est plus strict." },
+      { title: "20:4", body: "20 h de jeune puis 4 h de repas. Preset proche du style Warrior." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Choisissez une methode 16:8, 18:6 ou 20:4.",
+      "Saisissez l'heure du dernier repas pour voir si vous jeunez ou si vous etes dans la fenetre de repas.",
+      "Utilisez le temps restant, l'heure cible et la progression comme aide, puis adaptez selon votre corps.",
+    ],
+    faqTitle: "Questions frequentes",
+    faqs: [
+      { question: "Et si le dernier repas est plus tard que maintenant ?", answer: "Comme dans la logique Ahoxy, l'outil considere cette heure comme celle d'hier et calcule le cycle actuel." },
+      { question: "Que se passe-t-il apres la fenetre de repas ?", answer: "Le cycle de 24 h est marque comme termine. Reglez le prochain dernier repas pour suivre le cycle suivant." },
+      { question: "Le jeune est-il sur pour tout le monde ?", answer: "Non. Grossesse, adolescence, pathologies, medicaments ou troubles alimentaires exigent un avis qualifie." },
+    ],
+    disclaimer: "Cet outil sert au suivi bien-etre general et ne remplace pas un avis medical. Consultez un professionnel pour les decisions de sante.",
+  },
+  es: {
+    introTitle: "Un temporizador de ayuno muestra el ciclo diario tras la ultima comida",
+    intro: "El ayuno intermitente alterna una ventana sin calorias con una ventana de comida. Este rastreador porta la logica de Ahoxy: si la hora de la ultima comida esta en el futuro, se interpreta como ayer y calcula el fin del ayuno y del ciclo de 24 h.",
+    formulaTitle: "Logica de presets",
+    formulas: [
+      { title: "16:8", body: "Ayuno de 16 h y ventana de comida de 8 h. Es el preset inicial mas comun." },
+      { title: "18:6", body: "Ayuno de 18 h y ventana de comida de 6 h. Es un ritmo diario mas estricto." },
+      { title: "20:4", body: "Ayuno de 20 h y ventana de comida de 4 h. Se acerca al estilo Warrior." },
+    ],
+    howToTitle: "Como usarlo",
+    steps: [
+      "Elige un metodo 16:8, 18:6 o 20:4.",
+      "Introduce la hora de la ultima comida para ver si estas ayunando o en ventana de comida.",
+      "Usa el tiempo restante, hora objetivo y progreso como guia, ajustando segun tu cuerpo.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "Que pasa si la ultima comida es mas tarde que ahora?", answer: "Como en la logica original de Ahoxy, la herramienta toma esa hora como ayer y calcula el ciclo actual." },
+      { question: "Que ocurre al terminar la ventana de comida?", answer: "Se marca el ciclo de 24 h como completo. Define la siguiente ultima comida para rastrear otro ciclo." },
+      { question: "El ayuno es seguro para todos?", answer: "No. Embarazo, adolescencia, enfermedades, medicacion o antecedentes de trastornos alimentarios requieren orientacion cualificada." },
+    ],
+    disclaimer: "Esta herramienta es para seguimiento general de bienestar y no sustituye consejo medico. Consulta a profesionales para decisiones de salud.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
+---
+
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <main class="mx-auto max-w-3xl px-4 py-10">
+    <FastingTracker client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
+  </main>
+</BaseLayout>

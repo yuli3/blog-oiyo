@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import LifePlanningCalculator from "../../components/tools/LifePlanningCalculator";
+import LossOfIncomeCalculator from "../../components/tools/LossOfIncomeCalculator";
 import { locales } from "../../lib/i18n";
 
 type ActiveLocale = (typeof locales)[number];
@@ -13,28 +13,28 @@ const { locale } = Astro.props as { locale: ActiveLocale };
 
 const meta: Record<ActiveLocale, { title: string; description: string }> = {
   "ko": {
-    "title": "생애 설계 계산기 — 결혼·교육·전세",
-    "description": "결혼 후 시작 순자산, 자녀 교육비 미래가치, 전세 보증금 위험 노출 비율을 한 곳에서 계산합니다."
+    "title": "일실수입 계산기 — 라이프니츠식·호프만식",
+    "description": "월 소득, 나이, 가동연한, 노동능력상실률을 입력해 라이프니츠식 또는 호프만식 일실수입을 추정합니다."
   },
   "en": {
-    "title": "Life Planning Calculator — Wedding, Education and Jeonse",
-    "description": "Calculate wedding net start, future education funding needs, and jeonse deposit exposure ratio in one planning tool."
+    "title": "Lost Income Calculator — Leibniz and Hoffman Methods",
+    "description": "Estimate lost future income from monthly income, age, working end age, disability rate, and present-value coefficient method."
   },
   "ja": {
-    "title": "ライフプランニング計算機 — 結婚・教育・チョンセ",
-    "description": "結婚後の開始純資産、教育費の将来価値、チョンセ保証金リスク比率を一か所で計算します。"
+    "title": "逸失収入計算機 — ライプニッツ式・ホフマン式",
+    "description": "月収、年齢、就労終了年齢、労働能力喪失率から逸失収入を概算します。"
   },
   "zh": {
-    "title": "人生规划计算器 — 婚礼、教育、全租",
-    "description": "一站式计算婚后起步净资产、未来教育资金需求和全租保证金风险敞口比例。"
+    "title": "收入损失计算器 — 莱布尼茨与霍夫曼方法",
+    "description": "根据月收入、年龄、工作结束年龄和劳动能力丧失率估算未来收入损失现值。"
   },
   "fr": {
-    "title": "Calculateur de Planification de Vie — Mariage, Études et Jeonse",
-    "description": "Calculez départ net après mariage, besoin futur d’études et ratio d’exposition du dépôt jeonse."
+    "title": "Calculateur de Perte de Revenus — Méthodes Leibniz et Hoffman",
+    "description": "Estimez la perte de revenus futurs avec revenu mensuel, âge, fin d’activité, taux de perte et méthode de coefficient."
   },
   "es": {
-    "title": "Calculadora de Planificación Vital — Boda, Educación y Jeonse",
-    "description": "Calcula inicio neto tras boda, fondos educativos futuros y ratio de exposición del depósito jeonse."
+    "title": "Calculadora de Pérdida de Ingresos — Métodos Leibniz y Hoffman",
+    "description": "Estima pérdida futura de ingresos con ingreso mensual, edad, fin laboral, tasa de incapacidad y método de coeficiente."
   }
 };
 
@@ -52,21 +52,21 @@ const content: Record<ActiveLocale, {
   disclaimer: string;
 }> = {
   "ko": {
-    "introTitle": "생애 설계는 큰 현금흐름을 나누어 보는 작업입니다",
-    "intro": "ahoxy의 결혼, 교육, 전세 보호 계산을 한 섬 안에 옮겼습니다. 결혼은 시작 순자산, 교육은 미래가치와 월 저축액, 전세는 보증금과 선순위채권의 주택가격 대비 비율을 계산합니다.",
+    "introTitle": "일실수입은 장래 월 손실을 현재가치 계수로 환산합니다",
+    "intro": "ahoxy 원본과 같이 연 5%를 월 이율로 나눈 뒤 라이프니츠식 또는 호프만식 계수를 누적합니다. 월 손실은 월 소득에 노동능력상실률을 곱합니다.",
     "formulaTitle": "계산식",
     "formulas": [
       {
-        "title": "Wedding",
-        "body": "assets - wedding cost - housing cost"
+        "title": "Months",
+        "body": "(retirement age - age) x 12"
       },
       {
-        "title": "Education",
-        "body": "PV x (1 + inflation)^year"
+        "title": "Leibniz",
+        "body": "sum 1 / (1 + r)^k"
       },
       {
-        "title": "Jeonse",
-        "body": "(deposit + senior debt) / house price x 100"
+        "title": "Hoffman",
+        "body": "sum 1 / (1 + k*r), cap 240"
       }
     ],
     "howToTitle": "사용 방법",
@@ -79,7 +79,7 @@ const content: Record<ActiveLocale, {
     "faqs": [
       {
         "question": "이 계산기는 무엇을 계산하나요?",
-        "answer": "ahoxy의 결혼, 교육, 전세 보호 계산을 한 섬 안에 옮겼습니다. 결혼은 시작 순자산, 교육은 미래가치와 월 저축액, 전세는 보증금과 선순위채권의 주택가격 대비 비율을 계산합니다."
+        "answer": "ahoxy 원본과 같이 연 5%를 월 이율로 나눈 뒤 라이프니츠식 또는 호프만식 계수를 누적합니다. 월 손실은 월 소득에 노동능력상실률을 곱합니다."
       },
       {
         "question": "결과가 공식 확정액인가요?",
@@ -87,27 +87,27 @@ const content: Record<ActiveLocale, {
       },
       {
         "question": "어떤 로직을 사용했나요?",
-        "answer": "ahoxy의 결혼, 교육, 전세 보호 계산을 한 섬 안에 옮겼습니다. 결혼은 시작 순자산, 교육은 미래가치와 월 저축액, 전세는 보증금과 선순위채권의 주택가격 대비 비율을 계산합니다."
+        "answer": "ahoxy 원본과 같이 연 5%를 월 이율로 나눈 뒤 라이프니츠식 또는 호프만식 계수를 누적합니다. 월 손실은 월 소득에 노동능력상실률을 곱합니다."
       }
     ],
     "disclaimer": "이 계산기는 일반적인 추정과 학습용입니다. 법률·세금·금융 등 공식 수치는 관련 기관과 전문가의 최신 기준을 확인하세요."
   },
   "en": {
-    "introTitle": "Life planning breaks large cash flows into separate checks",
-    "intro": "This ports ahoxy’s wedding, education, and jeonse calculators into one island: net start, future education cost and monthly savings, and deposit exposure ratio.",
+    "introTitle": "Lost income converts future monthly loss to present value",
+    "intro": "As in ahoxy, the tool uses a 5% annual rate divided monthly and accumulates Leibniz or Hoffman coefficients. Monthly loss equals income times loss rate.",
     "formulaTitle": "Formula",
     "formulas": [
       {
-        "title": "Wedding",
-        "body": "assets - wedding cost - housing cost"
+        "title": "Months",
+        "body": "(retirement age - age) x 12"
       },
       {
-        "title": "Education",
-        "body": "PV x (1 + inflation)^year"
+        "title": "Leibniz",
+        "body": "sum 1 / (1 + r)^k"
       },
       {
-        "title": "Jeonse",
-        "body": "(deposit + senior debt) / house price x 100"
+        "title": "Hoffman",
+        "body": "sum 1 / (1 + k*r), cap 240"
       }
     ],
     "howToTitle": "How to use",
@@ -120,7 +120,7 @@ const content: Record<ActiveLocale, {
     "faqs": [
       {
         "question": "What does this calculator estimate?",
-        "answer": "This ports ahoxy’s wedding, education, and jeonse calculators into one island: net start, future education cost and monthly savings, and deposit exposure ratio."
+        "answer": "As in ahoxy, the tool uses a 5% annual rate divided monthly and accumulates Leibniz or Hoffman coefficients. Monthly loss equals income times loss rate."
       },
       {
         "question": "Is the result official?",
@@ -128,27 +128,27 @@ const content: Record<ActiveLocale, {
       },
       {
         "question": "What logic is used?",
-        "answer": "This ports ahoxy’s wedding, education, and jeonse calculators into one island: net start, future education cost and monthly savings, and deposit exposure ratio."
+        "answer": "As in ahoxy, the tool uses a 5% annual rate divided monthly and accumulates Leibniz or Hoffman coefficients. Monthly loss equals income times loss rate."
       }
     ],
     "disclaimer": "This calculator is a general estimate for learning and planning. Confirm official legal, tax, finance, or institutional figures before acting."
   },
   "ja": {
-    "introTitle": "ライフプランニングは大きな資金を分けて確認します",
-    "intro": "ahoxy の結婚・教育・チョンセ計算を1つにまとめ、開始純資産、教育費将来価値、保証金リスク比率を計算します。",
+    "introTitle": "逸失収入は将来の月損失を現在価値に直します",
+    "intro": "ahoxy と同じく年5%を月利にし、ライプニッツ式またはホフマン式係数を累積します。月損失は月収×喪失率です。",
     "formulaTitle": "計算式",
     "formulas": [
       {
-        "title": "Wedding",
-        "body": "assets - wedding cost - housing cost"
+        "title": "Months",
+        "body": "(retirement age - age) x 12"
       },
       {
-        "title": "Education",
-        "body": "PV x (1 + inflation)^year"
+        "title": "Leibniz",
+        "body": "sum 1 / (1 + r)^k"
       },
       {
-        "title": "Jeonse",
-        "body": "(deposit + senior debt) / house price x 100"
+        "title": "Hoffman",
+        "body": "sum 1 / (1 + k*r), cap 240"
       }
     ],
     "howToTitle": "使い方",
@@ -161,7 +161,7 @@ const content: Record<ActiveLocale, {
     "faqs": [
       {
         "question": "この計算機は何を計算しますか？",
-        "answer": "ahoxy の結婚・教育・チョンセ計算を1つにまとめ、開始純資産、教育費将来価値、保証金リスク比率を計算します。"
+        "answer": "ahoxy と同じく年5%を月利にし、ライプニッツ式またはホフマン式係数を累積します。月損失は月収×喪失率です。"
       },
       {
         "question": "結果は公式確定額ですか？",
@@ -169,27 +169,27 @@ const content: Record<ActiveLocale, {
       },
       {
         "question": "どのロジックですか？",
-        "answer": "ahoxy の結婚・教育・チョンセ計算を1つにまとめ、開始純資産、教育費将来価値、保証金リスク比率を計算します。"
+        "answer": "ahoxy と同じく年5%を月利にし、ライプニッツ式またはホフマン式係数を累積します。月損失は月収×喪失率です。"
       }
     ],
     "disclaimer": "この計算機は一般的な推定と学習用です。法律・税務・金融などの公式数値は最新の機関情報で確認してください。"
   },
   "zh": {
-    "introTitle": "人生规划需要拆分大型现金流",
-    "intro": "本工具把 ahoxy 的婚礼、教育和全租保护计算合并到一个组件中：起步净资产、教育未来费用和月储蓄、保证金风险比例。",
+    "introTitle": "收入损失把未来月损失折算为现值",
+    "intro": "与 ahoxy 相同，年 5% 折为月利率并累积莱布尼茨或霍夫曼系数。每月损失等于月收入乘以丧失率。",
     "formulaTitle": "计算公式",
     "formulas": [
       {
-        "title": "Wedding",
-        "body": "assets - wedding cost - housing cost"
+        "title": "Months",
+        "body": "(retirement age - age) x 12"
       },
       {
-        "title": "Education",
-        "body": "PV x (1 + inflation)^year"
+        "title": "Leibniz",
+        "body": "sum 1 / (1 + r)^k"
       },
       {
-        "title": "Jeonse",
-        "body": "(deposit + senior debt) / house price x 100"
+        "title": "Hoffman",
+        "body": "sum 1 / (1 + k*r), cap 240"
       }
     ],
     "howToTitle": "使用方法",
@@ -202,7 +202,7 @@ const content: Record<ActiveLocale, {
     "faqs": [
       {
         "question": "这个计算器估算什么？",
-        "answer": "本工具把 ahoxy 的婚礼、教育和全租保护计算合并到一个组件中：起步净资产、教育未来费用和月储蓄、保证金风险比例。"
+        "answer": "与 ahoxy 相同，年 5% 折为月利率并累积莱布尼茨或霍夫曼系数。每月损失等于月收入乘以丧失率。"
       },
       {
         "question": "结果是官方确定金额吗？",
@@ -210,27 +210,27 @@ const content: Record<ActiveLocale, {
       },
       {
         "question": "使用什么逻辑？",
-        "answer": "本工具把 ahoxy 的婚礼、教育和全租保护计算合并到一个组件中：起步净资产、教育未来费用和月储蓄、保证金风险比例。"
+        "answer": "与 ahoxy 相同，年 5% 折为月利率并累积莱布尼茨或霍夫曼系数。每月损失等于月收入乘以丧失率。"
       }
     ],
     "disclaimer": "本计算器用于一般估算和学习规划。涉及法律、税务、金融或官方数字时，请确认相关机构的最新标准。"
   },
   "fr": {
-    "introTitle": "La planification de vie sépare les grands flux financiers",
-    "intro": "Il regroupe les calculs ahoxy mariage, études et jeonse : départ net, coût futur/épargne mensuelle, ratio d’exposition.",
+    "introTitle": "La perte de revenus actualise les pertes mensuelles futures",
+    "intro": "Comme ahoxy, le taux annuel de 5% est mensualisé puis les coefficients Leibniz ou Hoffman sont cumulés. La perte mensuelle est revenu x taux.",
     "formulaTitle": "Formule",
     "formulas": [
       {
-        "title": "Wedding",
-        "body": "assets - wedding cost - housing cost"
+        "title": "Months",
+        "body": "(retirement age - age) x 12"
       },
       {
-        "title": "Education",
-        "body": "PV x (1 + inflation)^year"
+        "title": "Leibniz",
+        "body": "sum 1 / (1 + r)^k"
       },
       {
-        "title": "Jeonse",
-        "body": "(deposit + senior debt) / house price x 100"
+        "title": "Hoffman",
+        "body": "sum 1 / (1 + k*r), cap 240"
       }
     ],
     "howToTitle": "Comment l’utiliser",
@@ -243,7 +243,7 @@ const content: Record<ActiveLocale, {
     "faqs": [
       {
         "question": "Que calcule cet outil ?",
-        "answer": "Il regroupe les calculs ahoxy mariage, études et jeonse : départ net, coût futur/épargne mensuelle, ratio d’exposition."
+        "answer": "Comme ahoxy, le taux annuel de 5% est mensualisé puis les coefficients Leibniz ou Hoffman sont cumulés. La perte mensuelle est revenu x taux."
       },
       {
         "question": "Le résultat est-il officiel ?",
@@ -251,27 +251,27 @@ const content: Record<ActiveLocale, {
       },
       {
         "question": "Quelle logique est utilisée ?",
-        "answer": "Il regroupe les calculs ahoxy mariage, études et jeonse : départ net, coût futur/épargne mensuelle, ratio d’exposition."
+        "answer": "Comme ahoxy, le taux annuel de 5% est mensualisé puis les coefficients Leibniz ou Hoffman sont cumulés. La perte mensuelle est revenu x taux."
       }
     ],
     "disclaimer": "Ce calculateur fournit une estimation générale pour apprendre et planifier. Vérifiez les chiffres officiels juridiques, fiscaux ou financiers avant décision."
   },
   "es": {
-    "introTitle": "La planificación vital separa grandes flujos de dinero",
-    "intro": "Agrupa cálculos ahoxy de boda, educación y jeonse: inicio neto, coste futuro/ahorro mensual y ratio de exposición.",
+    "introTitle": "La pérdida de ingresos trae pérdidas futuras a valor presente",
+    "intro": "Como ahoxy, usa 5% anual mensualizado y acumula coeficientes Leibniz u Hoffman. La pérdida mensual es ingreso por tasa.",
     "formulaTitle": "Fórmula",
     "formulas": [
       {
-        "title": "Wedding",
-        "body": "assets - wedding cost - housing cost"
+        "title": "Months",
+        "body": "(retirement age - age) x 12"
       },
       {
-        "title": "Education",
-        "body": "PV x (1 + inflation)^year"
+        "title": "Leibniz",
+        "body": "sum 1 / (1 + r)^k"
       },
       {
-        "title": "Jeonse",
-        "body": "(deposit + senior debt) / house price x 100"
+        "title": "Hoffman",
+        "body": "sum 1 / (1 + k*r), cap 240"
       }
     ],
     "howToTitle": "Cómo usarlo",
@@ -284,7 +284,7 @@ const content: Record<ActiveLocale, {
     "faqs": [
       {
         "question": "¿Qué estima esta calculadora?",
-        "answer": "Agrupa cálculos ahoxy de boda, educación y jeonse: inicio neto, coste futuro/ahorro mensual y ratio de exposición."
+        "answer": "Como ahoxy, usa 5% anual mensualizado y acumula coeficientes Leibniz u Hoffman. La pérdida mensual es ingreso por tasa."
       },
       {
         "question": "¿El resultado es oficial?",
@@ -292,7 +292,7 @@ const content: Record<ActiveLocale, {
       },
       {
         "question": "¿Qué lógica se usa?",
-        "answer": "Agrupa cálculos ahoxy de boda, educación y jeonse: inicio neto, coste futuro/ahorro mensual y ratio de exposición."
+        "answer": "Como ahoxy, usa 5% anual mensualizado y acumula coeficientes Leibniz u Hoffman. La pérdida mensual es ingreso por tasa."
       }
     ],
     "disclaimer": "Esta calculadora ofrece una estimación general para aprender y planificar. Confirma cifras oficiales legales, fiscales o financieras antes de actuar."
@@ -310,7 +310,7 @@ const structuredData = [
 <BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-3xl px-4 py-10">
-    <LifePlanningCalculator client:load locale={locale} />
+    <LossOfIncomeCalculator client:load locale={locale} />
 
     <section class="mt-10 border-t border-slate-200 pt-8">
       <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>

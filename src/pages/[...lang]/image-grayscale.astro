@@ -1,0 +1,259 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ImageGrayscale from "../../components/tools/ImageGrayscale";
+import { locales } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: ActiveLocale };
+
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
+  ko: {
+    title: "이미지 흑백 변환기 — 로컬 그레이스케일 PNG 만들기",
+    description: "이미지를 브라우저에서 흑백 PNG로 변환합니다. 파일은 서버로 업로드되지 않고 캔버스에서 로컬 처리됩니다.",
+  },
+  en: {
+    title: "Image Grayscale Converter — Local PNG Export",
+    description: "Convert an image to grayscale PNG in your browser. The file stays local and is processed on canvas without server upload.",
+  },
+  ja: {
+    title: "画像グレースケール変換 — ローカルPNG出力",
+    description: "画像をブラウザ内で白黒PNGに変換します。ファイルはサーバーへ送信されず、キャンバスでローカル処理されます。",
+  },
+  zh: {
+    title: "图片灰度转换器 — 本地导出 PNG",
+    description: "在浏览器中把图片转换为灰度 PNG。文件不会上传到服务器，而是在画布中本地处理。",
+  },
+  fr: {
+    title: "Convertisseur d'Image en Gris — Export PNG Local",
+    description: "Convertissez une image en PNG niveaux de gris dans le navigateur. Le fichier reste local et est traité sur canvas.",
+  },
+  es: {
+    title: "Convertidor de Imagen a Gris — Exportación PNG Local",
+    description: "Convierte una imagen a PNG en escala de grises en el navegador. El archivo permanece local y se procesa en canvas.",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "그레이스케일은 색을 제거하고 밝기 구조만 남깁니다",
+    intro: "사진을 흑백으로 바꾸면 색상 정보보다 명암, 윤곽, 질감이 먼저 보입니다. 이 도구는 RGB 값을 단순 평균하지 않고 0.299R + 0.587G + 0.114B 명도 공식을 적용해 사람이 느끼는 밝기에 가까운 흑백 PNG를 만듭니다.",
+    formulaTitle: "처리 기준",
+    formulas: [
+      { title: "명도 가중치", body: "초록색 채널을 가장 크게 반영하고 파란색 채널은 작게 반영합니다." },
+      { title: "PNG 출력", body: "변환 결과는 투명도와 픽셀 정보를 보존하기 쉬운 PNG로 저장합니다." },
+      { title: "로컬 처리", body: "FileReader와 canvas만 사용하므로 일반 사용 중 원본 파일이 서버로 전송되지 않습니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "흑백으로 변환할 이미지 파일을 선택합니다.",
+      "원본과 그레이스케일 결과를 비교합니다.",
+      "결과가 적절하면 PNG 파일로 다운로드합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "왜 단순 평균이 아니라 명도 공식을 쓰나요?", answer: "사람 눈은 초록 계열 밝기에 더 민감합니다. 명도 가중치를 쓰면 자연스러운 대비가 더 잘 유지됩니다." },
+      { question: "이미지가 업로드되나요?", answer: "아니요. 브라우저가 로컬 파일을 읽고 캔버스에서 처리합니다." },
+      { question: "원본 파일이 바뀌나요?", answer: "아니요. 원본은 그대로 두고 새 PNG 결과만 다운로드합니다." },
+    ],
+    disclaimer: "브라우저 캔버스가 처리할 수 없을 만큼 큰 이미지는 메모리 사용량이 높을 수 있습니다. 중요한 원본은 별도로 보관하세요.",
+  },
+  en: {
+    introTitle: "Grayscale removes color and keeps the brightness structure",
+    intro: "A grayscale image shifts attention from hue to contrast, edges, and texture. This tool uses the luminance formula 0.299R + 0.587G + 0.114B instead of a simple RGB average, which keeps the result closer to perceived brightness.",
+    formulaTitle: "Processing rules",
+    formulas: [
+      { title: "Luminance weights", body: "Green contributes the most, blue the least, matching common perceived-brightness conversion." },
+      { title: "PNG output", body: "The result is saved as PNG so pixel detail and transparency are easy to preserve." },
+      { title: "Local processing", body: "Only FileReader and canvas are used, so the original image is not sent to a server in normal use." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Choose the image file you want to convert.",
+      "Compare the original with the grayscale canvas result.",
+      "Download the converted PNG when it looks right.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Why use a luminance formula instead of averaging RGB?", answer: "Human vision is more sensitive to green brightness. Weighted luminance usually preserves natural contrast better." },
+      { question: "Is my image uploaded?", answer: "No. The browser reads the local file and processes it on canvas." },
+      { question: "Does this change my original file?", answer: "No. Your original remains unchanged, and you download a new PNG result." },
+    ],
+    disclaimer: "Very large images can use significant browser memory. Keep your original file separately.",
+  },
+  ja: {
+    introTitle: "グレースケールは色を除き、明るさの構造を残します",
+    intro: "画像を白黒にすると、色相よりもコントラスト、輪郭、質感が見えやすくなります。このツールは単純平均ではなく 0.299R + 0.587G + 0.114B の輝度式を使い、知覚上の明るさに近い結果を作ります。",
+    formulaTitle: "処理の基準",
+    formulas: [
+      { title: "輝度の重み", body: "緑を大きく、青を小さく扱う一般的な明るさ変換です。" },
+      { title: "PNG出力", body: "ピクセル情報や透明度を扱いやすいPNGとして保存します。" },
+      { title: "ローカル処理", body: "FileReaderとcanvasだけを使い、通常の利用で元画像をサーバーへ送りません。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "白黒に変換したい画像ファイルを選びます。",
+      "元画像と変換結果を比較します。",
+      "問題なければPNGとして保存します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "なぜRGB平均ではなく輝度式を使うのですか？", answer: "人の目は緑の明るさに比較的敏感です。重み付き輝度の方が自然なコントラストを保ちやすくなります。" },
+      { question: "画像はアップロードされますか？", answer: "いいえ。ブラウザがローカルファイルを読み、canvas上で処理します。" },
+      { question: "元ファイルは変更されますか？", answer: "いいえ。元画像はそのままで、新しいPNG結果だけを保存します。" },
+    ],
+    disclaimer: "非常に大きな画像はブラウザのメモリを多く使う場合があります。重要な元画像は別に保管してください。",
+  },
+  zh: {
+    introTitle: "灰度转换会去掉颜色，只保留亮度结构",
+    intro: "把图片转成灰度后，观感会更集中在明暗、边缘和纹理上。本工具不使用简单 RGB 平均，而是采用 0.299R + 0.587G + 0.114B 的亮度公式，让结果更接近人眼感知的明度。",
+    formulaTitle: "处理规则",
+    formulas: [
+      { title: "亮度权重", body: "绿色通道权重最高，蓝色通道权重最低，符合常见的感知亮度转换。" },
+      { title: "PNG 输出", body: "结果保存为 PNG，便于保留像素细节和透明度。" },
+      { title: "本地处理", body: "只使用 FileReader 和 canvas，正常使用时原图不会发送到服务器。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "选择要转换为灰度的图片文件。",
+      "对比原图和灰度画布结果。",
+      "结果合适后下载 PNG 文件。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "为什么不用 RGB 简单平均？", answer: "人眼对绿色亮度更敏感。加权亮度通常能更好保留自然对比。" },
+      { question: "图片会上传吗？", answer: "不会。浏览器读取本地文件并在 canvas 中处理。" },
+      { question: "会修改原始文件吗？", answer: "不会。原图保持不变，你只会下载新的 PNG 结果。" },
+    ],
+    disclaimer: "超大图片可能占用较多浏览器内存。重要原图请单独保存。",
+  },
+  fr: {
+    introTitle: "Le gris retire la couleur et garde la structure de luminosité",
+    intro: "Une image en niveaux de gris met l'accent sur le contraste, les contours et la texture plutôt que sur la teinte. Cet outil utilise la formule de luminance 0.299R + 0.587G + 0.114B, plus fidèle à la luminosité perçue qu'une simple moyenne RGB.",
+    formulaTitle: "Règles de traitement",
+    formulas: [
+      { title: "Poids de luminance", body: "Le vert compte le plus et le bleu le moins, comme dans les conversions de luminosité perçue." },
+      { title: "Sortie PNG", body: "Le résultat est enregistré en PNG pour conserver facilement détails et transparence." },
+      { title: "Traitement local", body: "Seuls FileReader et canvas sont utilisés : l'image originale n'est pas envoyée à un serveur." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Choisissez l'image à convertir.",
+      "Comparez l'original avec le résultat en niveaux de gris.",
+      "Téléchargez le PNG converti lorsque le rendu convient.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Pourquoi utiliser une formule de luminance ?", answer: "La vision humaine est plus sensible au vert. La luminance pondérée préserve souvent mieux le contraste naturel." },
+      { question: "Mon image est-elle téléversée ?", answer: "Non. Le navigateur lit le fichier local et le traite sur canvas." },
+      { question: "Le fichier original est-il modifié ?", answer: "Non. L'original reste intact et vous téléchargez un nouveau PNG." },
+    ],
+    disclaimer: "Les très grandes images peuvent consommer beaucoup de mémoire navigateur. Conservez toujours l'original.",
+  },
+  es: {
+    introTitle: "La escala de grises elimina color y conserva la estructura de brillo",
+    intro: "Una imagen en gris dirige la atención al contraste, los bordes y la textura. Esta herramienta usa la fórmula de luminancia 0.299R + 0.587G + 0.114B en lugar de un promedio RGB simple, para acercarse mejor al brillo percibido.",
+    formulaTitle: "Reglas de procesamiento",
+    formulas: [
+      { title: "Pesos de luminancia", body: "El verde aporta más y el azul menos, siguiendo la conversión habitual de brillo percibido." },
+      { title: "Salida PNG", body: "El resultado se guarda como PNG para conservar detalle y transparencia." },
+      { title: "Procesamiento local", body: "Solo se usan FileReader y canvas, así que la imagen original no se envía a un servidor." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Elige el archivo de imagen que quieres convertir.",
+      "Compara el original con el resultado en gris.",
+      "Descarga el PNG convertido cuando te guste.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Por qué usar luminancia en vez de promedio RGB?", answer: "La visión humana es más sensible al brillo verde. La luminancia ponderada suele conservar mejor el contraste natural." },
+      { question: "¿Se sube mi imagen?", answer: "No. El navegador lee el archivo local y lo procesa en canvas." },
+      { question: "¿Cambia mi archivo original?", answer: "No. El original queda intacto y descargas un nuevo PNG." },
+    ],
+    disclaimer: "Las imágenes muy grandes pueden consumir mucha memoria del navegador. Conserva el archivo original por separado.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
+---
+
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <main class="mx-auto max-w-3xl px-4 py-10">
+    <ImageGrayscale client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
+  </main>
+</BaseLayout>
