@@ -2,15 +2,16 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import MenuGenerator from "../../components/tools/MenuGenerator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "랜덤 메뉴 고르기 — 오늘 뭐 먹지? 한식·일식·중식·양식 랜덤 추천",
     description: "메뉴 고민 끝! 버튼 하나로 한식, 일식, 중식, 양식 등 300가지 이상 메뉴 중 랜덤 추천. 즐겨찾기·메뉴배틀·맛집 검색 지원.",
@@ -32,19 +33,190 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "¿No puedes decidir qué comer? Elige un menú aleatorio entre más de 300 platos coreanos, japoneses, chinos y occidentales.",
   },
   zh: {
-    title: "隨機菜單 — 今天吃什麼？",
-    description: "從300多種韓食、日食、中食、西食中隨機推薦。支援收藏、菜單對決和餐廳搜索。",
-  },
-  cn: {
     title: "随机菜单 — 今天吃什么？",
-    description: "从300多种韩食、日食、中食、西食中随机推荐。支持收藏、菜单对决和餐厅搜索。",
+    description: "从300多种韩食、日食、中食、西食中随机推荐。支援收藏、菜单对决和餐厅搜索。",
   },
 };
 
-const m = meta[locale] ?? meta.ko;
+const m = meta[locale] ?? meta.en;
+
+type PageContent = {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+};
+
+const content: Record<ActiveLocale, PageContent> = {
+  ko: {
+    introTitle: "메뉴 선택은 취향보다 피로도가 문제일 때가 많습니다",
+    intro: "점심, 저녁, 모임 메뉴를 정할 때 선택지가 많을수록 결정은 느려집니다. 랜덤 메뉴 도구는 한식·일식·중식·양식 등 여러 후보를 무작위로 제안하고, 즐겨찾기·기록·메뉴 배틀·맛집 검색 흐름으로 가벼운 결정을 빠르게 끝내도록 돕습니다.",
+    formulaTitle: "랜덤 추천 개념",
+    formulas: [
+      { title: "후보 풀", body: "선택한 음식 종류 안에서 메뉴 후보를 모아 오늘의 선택 범위를 먼저 좁힙니다." },
+      { title: "무작위 선택", body: "비슷한 후보 사이에서 고민이 길어질 때 무작위 결과가 결정을 시작하게 해줍니다." },
+      { title: "기록과 즐겨찾기", body: "최근 선택과 선호 메뉴를 남겨 다음 결정에서 반복 고민을 줄입니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "음식 종류를 선택하거나 전체 메뉴에서 시작합니다.",
+      "랜덤 추천 또는 메뉴 배틀로 오늘의 후보를 정합니다.",
+      "마음에 들면 즐겨찾기에 저장하거나 맛집 검색으로 이어갑니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "정말 완전한 추천 알고리즘인가요?", answer: "아닙니다. 이 도구는 취향 예측보다 결정 피로를 줄이는 무작위 선택과 기록 기능에 초점을 둡니다." },
+      { question: "즐겨찾기와 기록은 어디에 저장되나요?", answer: "브라우저의 localStorage에 저장됩니다. 브라우저나 기기를 바꾸면 목록이 공유되지 않을 수 있습니다." },
+      { question: "맛집 검색은 어떻게 작동하나요?", answer: "선택된 메뉴 이름을 기반으로 새 검색 창을 열어 주변 음식점이나 관련 결과를 찾을 수 있게 합니다." },
+    ],
+    disclaimer: "추천 결과는 참고용이며 알레르기, 식단 제한, 영업시간, 실제 메뉴 가격은 직접 확인하세요.",
+  },
+  en: {
+    introTitle: "Choosing food is often about decision fatigue, not taste",
+    intro: "Lunch, dinner, and group meals can slow down when there are too many acceptable options. This random food picker narrows the pool by cuisine, suggests a menu at random, and supports favorites, history, battle mode, and restaurant search for a faster low-stakes decision.",
+    formulaTitle: "Random choice concepts",
+    formulas: [
+      { title: "Candidate pool", body: "A cuisine filter limits the set of possible dishes before the random choice happens." },
+      { title: "Random draw", body: "When several options are fine, randomness helps move the decision from debate to action." },
+      { title: "History and favorites", body: "Recent picks and saved dishes reduce repeated hesitation next time." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Choose a cuisine category or start from the full menu list.",
+      "Use random pick or battle mode to settle on a dish.",
+      "Save a favorite or continue into restaurant search if the result works.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Is this a personalized recommendation engine?", answer: "No. It is designed to reduce decision fatigue with random selection, history, and favorites rather than predict taste." },
+      { question: "Where are favorites and history stored?", answer: "They are stored in your browser's localStorage. They may not carry over to another browser or device." },
+      { question: "How does restaurant search work?", answer: "The tool uses the selected menu name to open a search, helping you continue from choice to nearby or relevant options." },
+    ],
+    disclaimer: "Use results as suggestions only; check allergies, dietary rules, opening hours, and actual prices yourself.",
+  },
+  ja: {
+    introTitle: "食事選びは好みより決定疲れの問題になることがあります",
+    intro: "昼食、夕食、集まりのメニューは、選択肢が多いほど決まりにくくなります。このランダムメニューは料理ジャンルで候補を絞り、無作為に提案し、履歴、気に入り、メニューバトル、検索につなげて軽い決定を早くします。",
+    formulaTitle: "ランダム選択の考え方",
+    formulas: [
+      { title: "候補リスト", body: "料理ジャンルを選ぶことで、無作為抽選の前に選択範囲を狭めます。" },
+      { title: "ランダム抽選", body: "どれでもよい候補が並ぶ時、無作為の結果が決定のきっかけになります。" },
+      { title: "履歴とお気に入り", body: "最近の選択や好みを残しておくと、次回の迷いを減らせます。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "料理ジャンルを選ぶか、全メニューから始めます。",
+      "ランダム推薦またはメニューバトルで候補を決めます。",
+      "気に入ったらお気に入りに保存し、必要なら検索へ進みます。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "個人向けの本格推薦ですか？", answer: "いいえ。好み予測ではなく、ランダム選択、履歴、お気に入りで決定疲れを減らすための道具です。" },
+      { question: "お気に入りや履歴はどこに保存されますか？", answer: "ブラウザのlocalStorageに保存されます。別のブラウザや端末には引き継がれない場合があります。" },
+      { question: "店の検索はどう動きますか？", answer: "選ばれたメニュー名をもとに検索を開き、近くの店や関連情報を探しやすくします。" },
+    ],
+    disclaimer: "結果は参考です。アレルギー、食事制限、営業時間、実際の価格は自分で確認してください。",
+  },
+  zh: {
+    introTitle: "选菜单时，难点常常不是口味，而是决策疲劳",
+    intro: "午餐、晚餐和聚餐菜单在选项太多时很容易拖延。这个随机菜单工具按菜系缩小范围，再随机给出结果，并提供收藏、历史、菜单对决和餐厅搜索，让低风险选择更快结束。",
+    formulaTitle: "随机选择概念",
+    formulas: [
+      { title: "候选池", body: "先按料理类型缩小菜单范围，再进行随机选择。" },
+      { title: "随机抽取", body: "当多个选项都可以时，随机结果能帮助你从讨论进入行动。" },
+      { title: "历史与收藏", body: "保存最近选择和偏好菜单，下次就能减少重复犹豫。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "选择料理类型，或从全部菜单开始。",
+      "使用随机推荐或菜单对决决定今天的候选。",
+      "满意后加入收藏，或继续搜索附近餐厅。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "这是个性化推荐算法吗？", answer: "不是。它重点在于用随机选择、历史和收藏降低决策疲劳，而不是预测个人口味。" },
+      { question: "收藏和历史保存在哪里？", answer: "它们保存在浏览器 localStorage 中。换浏览器或设备后可能不会同步。" },
+      { question: "餐厅搜索如何工作？", answer: "工具会根据所选菜单名打开搜索，帮助你从菜单决定继续找到相关餐厅结果。" },
+    ],
+    disclaimer: "推荐仅供参考；过敏、饮食限制、营业时间和实际价格请自行确认。",
+  },
+  fr: {
+    introTitle: "Choisir quoi manger relève souvent de la fatigue décisionnelle",
+    intro: "Déjeuner, dîner ou repas de groupe peuvent traîner lorsque trop d'options conviennent. Ce générateur limite d'abord les choix par cuisine, propose un plat au hasard, puis ajoute favoris, historique, duel de menus et recherche de restaurants.",
+    formulaTitle: "Notions de choix aléatoire",
+    formulas: [
+      { title: "Liste candidate", body: "Le filtre de cuisine réduit l'ensemble de plats possibles avant le tirage." },
+      { title: "Tirage aléatoire", body: "Quand plusieurs options sont acceptables, le hasard aide à passer de la discussion à l'action." },
+      { title: "Historique et favoris", body: "Les choix récents et plats sauvegardés réduisent l'hésitation lors des prochains repas." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Choisissez une catégorie de cuisine ou partez de la liste complète.",
+      "Utilisez le tirage aléatoire ou le duel pour retenir un plat.",
+      "Ajoutez-le aux favoris ou lancez une recherche de restaurant si le résultat convient.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Est-ce un moteur de recommandation personnalisé ?", answer: "Non. L'outil réduit surtout la fatigue décisionnelle avec tirage aléatoire, historique et favoris." },
+      { question: "Où sont stockés favoris et historique ?", answer: "Ils sont enregistrés dans le localStorage du navigateur et peuvent ne pas suivre sur un autre appareil." },
+      { question: "Comment fonctionne la recherche de restaurant ?", answer: "Elle part du nom du plat sélectionné pour ouvrir une recherche et continuer vers des options proches ou pertinentes." },
+    ],
+    disclaimer: "Ces résultats sont indicatifs ; vérifiez allergies, règles alimentaires, horaires et prix réels vous-même.",
+  },
+  es: {
+    introTitle: "Elegir comida suele ser más fatiga de decisión que falta de gusto",
+    intro: "El almuerzo, la cena o una comida en grupo se vuelven lentos cuando hay demasiadas opciones aceptables. Este selector reduce el conjunto por tipo de cocina, propone un plato al azar y añade favoritos, historial, modo batalla y búsqueda de restaurantes.",
+    formulaTitle: "Conceptos de elección aleatoria",
+    formulas: [
+      { title: "Conjunto candidato", body: "El filtro de cocina limita las opciones posibles antes de hacer la selección aleatoria." },
+      { title: "Sorteo aleatorio", body: "Cuando varias opciones sirven, el azar ayuda a pasar de debatir a decidir." },
+      { title: "Historial y favoritos", body: "Las elecciones recientes y platos guardados reducen la duda en la próxima ocasión." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Elige una categoría de cocina o empieza desde toda la lista.",
+      "Usa selección aleatoria o modo batalla para decidir un plato.",
+      "Guárdalo como favorito o continúa con una búsqueda de restaurantes si encaja.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Es un motor de recomendación personalizado?", answer: "No. Está pensado para reducir la fatiga de decisión con azar, historial y favoritos, no para predecir gustos." },
+      { question: "¿Dónde se guardan favoritos e historial?", answer: "Se guardan en localStorage del navegador. Puede que no se compartan con otro navegador o dispositivo." },
+      { question: "¿Cómo funciona la búsqueda de restaurantes?", answer: "Usa el nombre del menú seleccionado para abrir una búsqueda y pasar de la elección a opciones cercanas o relevantes." },
+    ],
+    disclaimer: "Usa los resultados como sugerencias; verifica alergias, restricciones dietéticas, horarios y precios reales por tu cuenta.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <div class="mb-8 text-center">
       <div class="text-5xl mb-3">🍽️</div>
@@ -52,5 +224,43 @@ const m = meta[locale] ?? meta.ko;
       <p class="text-muted-foreground">오늘 뭐 먹지? 버튼 하나로 메뉴 결정!</p>
     </div>
     <MenuGenerator client:load />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

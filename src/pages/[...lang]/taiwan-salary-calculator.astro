@@ -2,7 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import TaiwanSalaryCalculatorComp from "../../components/tools/TaiwanSalaryCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -11,13 +12,9 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
-  cn: {
-    title: "台灣薪資試算表 2024 — 勞保、健保與所得稅",
-    description: "輸入月薪，自動計算勞保費（2.508%）、健保費（1.551%）與綜合所得稅後的實際到手金額。依2024年費率試算。",
-  },
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   zh: {
     title: "台湾薪资试算表 2024 — 劳保、健保与所得税",
     description: "输入月薪，自动计算劳保费（2.508%）、健保费（1.551%）与综合所得税后的实际到手金额。依2024年费率试算。",
@@ -45,11 +42,224 @@ const meta: Record<Locale, { title: string; description: string }> = {
 };
 
 const m = meta[locale] ?? meta.en;
-const calcLocale = locale === 'cn' ? 'cn' : locale === 'zh' ? 'zh' : 'en';
+const calcLocale = locale === 'zh' ? 'zh' : 'en';
+
+type SeoContent = {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+};
+
+const content: Record<ActiveLocale, SeoContent> = {
+  ko: {
+    introTitle: "대만 월급은 보험료와 종합소득세를 함께 봐야 합니다",
+    intro: "대만에서 제시받은 월급이 실제 생활비로 얼마나 남는지 보려면 노동보험, 국민건강보험, 그리고 연간 종합소득세를 분리해서 계산해야 합니다. 이 계산기는 2024년 가정치로 월 급여와 부양 인원 수를 넣어 월 실수령액과 연간 순수입을 빠르게 점검하도록 돕습니다.",
+    formulaTitle: "계산 기준",
+    formulas: [
+      { title: "노동보험", body: "직원 부담분 2.508%를 적용하되 월 보험 기준액은 NT$45,800을 상한으로 둡니다." },
+      { title: "건강보험", body: "국민건강보험 직원 부담분 1.551%를 적용하고 월 기준액은 NT$219,500까지 반영합니다." },
+      { title: "소득세", body: "연 소득에서 표준공제, 급여 특별공제, 인적공제를 차감한 뒤 누진세율을 월 단위로 환산합니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "월 세전 급여를 대만달러 기준으로 입력합니다.",
+      "본인을 포함한 부양 인원 수를 넣어 인적공제 효과를 반영합니다.",
+      "월 보험료, 월 추정 소득세, 월·연 실수령액을 함께 비교합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "이 계산기는 어느 연도 기준인가요?", answer: "화면의 요율과 공제 금액은 2024년 기준 가정입니다. 대만 보험료율과 세법은 바뀔 수 있으므로 실제 신고나 급여 검토 전 최신 고시를 확인해야 합니다." },
+      { question: "부양 인원 수에는 본인도 포함하나요?", answer: "이 도구는 본인을 포함한 인원 수를 입력하도록 설계되어 있습니다. 가족 상황과 신고 방식에 따라 실제 공제 가능 인원은 달라질 수 있습니다." },
+      { question: "보너스나 주식 보상도 반영되나요?", answer: "아니요. 월급을 12개월로 단순 환산합니다. 상여금, 성과급, 해외소득, 원천징수 방식은 별도로 검토해야 합니다." },
+    ],
+    disclaimer: "이 도구는 일반적인 추정용입니다. 실제 급여, 세금, 보험료는 관련 기관이나 세무 전문가에게 확인하세요.",
+  },
+  en: {
+    introTitle: "Taiwan take-home pay depends on insurance caps and annual income tax",
+    intro: "A Taiwan salary offer is easier to compare when labor insurance, National Health Insurance, and annual comprehensive income tax are separated. This calculator uses 2024 assumptions to turn monthly gross salary and dependents into an estimated monthly and annual net amount.",
+    formulaTitle: "Calculation basis",
+    formulas: [
+      { title: "Labor Insurance", body: "Applies the employee share of 2.508%, capped at a monthly insured salary of NT$45,800." },
+      { title: "National Health Insurance", body: "Applies the employee share of 1.551%, with an insured salary cap of NT$219,500." },
+      { title: "Income tax", body: "Estimates annual taxable income after standard, salary, and personal exemptions, then allocates tax monthly." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Enter your monthly gross salary in New Taiwan dollars.",
+      "Set the number of dependents, including yourself, to estimate exemption effects.",
+      "Compare monthly insurance, estimated monthly tax, monthly net pay, and annual net pay.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Which year are the rates based on?", answer: "The rates and deduction assumptions shown here are for 2024. Taiwan insurance and tax rules can change, so confirm the latest official figures before payroll or tax filing decisions." },
+      { question: "Should I include myself as a dependent?", answer: "Yes. This tool expects the count to include yourself. Actual exemption eligibility can vary by household and filing situation." },
+      { question: "Does it include bonuses or equity compensation?", answer: "No. It annualizes monthly salary only. Bonuses, stock compensation, foreign income, and withholding choices need separate review." },
+    ],
+    disclaimer: "This tool is a general estimate. Confirm actual payroll, tax, and insurance figures with the relevant institution or professional.",
+  },
+  ja: {
+    introTitle: "台湾の手取りは保険料上限と年間所得税を分けて見る必要があります",
+    intro: "台湾の給与条件を比較するときは、労工保険、全民健康保険、総合所得税を分けて確認すると実際の手取りが見えやすくなります。この計算機は2024年の前提で、月額給与と扶養人数から月間・年間の手取りを概算します。",
+    formulaTitle: "計算の前提",
+    formulas: [
+      { title: "労工保険", body: "従業員負担分2.508%を適用し、月額投保薪資はNT$45,800を上限とします。" },
+      { title: "全民健康保険", body: "従業員負担分1.551%を適用し、月額基準はNT$219,500まで反映します。" },
+      { title: "所得税", body: "標準控除、給与特別控除、人的控除を差し引いた年間課税所得から月額税額を概算します。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "月額の税前給与を台湾ドルで入力します。",
+      "本人を含む扶養人数を入力して、人的控除の影響を反映します。",
+      "月額保険料、推定所得税、月間・年間手取りを確認します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "何年の制度を前提にしていますか？", answer: "画面上の料率と控除額は2024年の前提です。台湾の保険料率や税制は変更されるため、実務では最新の公式情報を確認してください。" },
+      { question: "扶養人数に本人を含めますか？", answer: "はい。このツールでは本人を含めた人数を入力します。実際に控除できる人数は世帯や申告状況によって変わります。" },
+      { question: "賞与や株式報酬は含まれますか？", answer: "含まれません。月給を12か月で単純に年換算します。賞与、株式報酬、国外所得、源泉徴収は別途確認が必要です。" },
+    ],
+    disclaimer: "このツールは一般的な概算です。実際の給与・税金・保険料は関係機関または専門家に確認してください。",
+  },
+  zh: {
+    introTitle: "台湾到手薪资要同时看保险费上限和年度所得税",
+    intro: "比较台湾薪资时，最好把劳保、健保和综合所得税分开看。这个工具以2024年规则假设为基础，输入月薪和扶养人数后，估算每月到手金额和年度净收入。",
+    formulaTitle: "计算依据",
+    formulas: [
+      { title: "劳保", body: "采用员工自付 2.508%，投保薪资月上限为 NT$45,800。" },
+      { title: "健保", body: "采用员工自付 1.551%，投保金额月上限按 NT$219,500 处理。" },
+      { title: "所得税", body: "先扣除标准扣除额、薪资特别扣除额和免税额，再用累进税率估算月税额。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "输入新台币月薪税前金额。",
+      "填写包含本人以内的扶养人数，反映免税额影响。",
+      "查看劳保、健保、预估所得税，以及月度和年度到手金额。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "这个工具采用哪一年的费率？", answer: "页面中的费率和扣除额以2024年假设为准。台湾保险费率和税法可能变动，正式发薪或申报前应确认最新官方资料。" },
+      { question: "扶养人数要包含自己吗？", answer: "要。本工具按包含本人在内的人数估算。实际可适用的免税人数仍取决于家庭和申报情况。" },
+      { question: "奖金或股票收入也会计算吗？", answer: "不会。本工具只把月薪乘以12估算。奖金、股权收入、海外收入和扣缴方式需要另外确认。" },
+    ],
+    disclaimer: "本工具仅作一般估算。实际薪资、税务和保险费请向相关机构或专业人士确认。",
+  },
+  fr: {
+    introTitle: "Le salaire net à Taïwan dépend des plafonds d'assurance et de l'impôt annuel",
+    intro: "Pour comparer une offre à Taïwan, il faut distinguer l'assurance travail, l'assurance santé nationale et l'impôt annuel sur le revenu. Ce calculateur utilise des hypothèses 2024 pour transformer le salaire mensuel brut et le nombre de personnes à charge en estimation nette mensuelle et annuelle.",
+    formulaTitle: "Bases de calcul",
+    formulas: [
+      { title: "Assurance travail", body: "Part salarié de 2,508%, avec un salaire assuré mensuel plafonné à 45 800 NT$." },
+      { title: "Assurance santé", body: "Part salarié de 1,551%, avec une assiette mensuelle plafonnée à 219 500 NT$." },
+      { title: "Impôt sur le revenu", body: "Estime le revenu imposable annuel après déductions, puis répartit l'impôt sur douze mois." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Saisissez le salaire mensuel brut en nouveaux dollars taïwanais.",
+      "Indiquez le nombre de personnes prises en compte, vous compris.",
+      "Comparez les assurances mensuelles, l'impôt estimé, le net mensuel et le net annuel.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Sur quelle année les taux reposent-ils ?", answer: "Les taux et déductions affichés reposent sur des hypothèses 2024. Les règles taïwanaises peuvent changer ; vérifiez les chiffres officiels avant toute décision de paie ou de déclaration." },
+      { question: "Dois-je m'inclure dans le nombre de personnes ?", answer: "Oui. L'outil attend un total qui vous inclut. L'éligibilité réelle aux exemptions dépend toutefois de votre situation de foyer et de déclaration." },
+      { question: "Les bonus ou actions sont-ils inclus ?", answer: "Non. L'outil annualise seulement le salaire mensuel. Bonus, actions, revenus étrangers et retenues demandent un examen séparé." },
+    ],
+    disclaimer: "Cet outil fournit une estimation générale. Confirmez les montants réels avec l'institution compétente ou un professionnel.",
+  },
+  es: {
+    introTitle: "El sueldo neto en Taiwán depende de seguros, topes e impuesto anual",
+    intro: "Para comparar una oferta en Taiwán conviene separar seguro laboral, seguro nacional de salud e impuesto anual sobre la renta. Esta calculadora usa supuestos de 2024 para estimar el sueldo neto mensual y anual a partir del salario bruto mensual y las personas a cargo.",
+    formulaTitle: "Bases de cálculo",
+    formulas: [
+      { title: "Seguro laboral", body: "Aplica la parte del empleado, 2,508%, con salario asegurado mensual limitado a NT$45.800." },
+      { title: "Seguro de salud", body: "Aplica la parte del empleado, 1,551%, con base mensual limitada a NT$219.500." },
+      { title: "Impuesto sobre la renta", body: "Estima la renta imponible anual tras deducciones y reparte el impuesto entre doce meses." },
+    ],
+    howToTitle: "Cómo usarla",
+    steps: [
+      "Introduce el salario bruto mensual en nuevos dólares taiwaneses.",
+      "Indica el número de personas consideradas, incluyéndote a ti.",
+      "Compara seguros mensuales, impuesto estimado, neto mensual y neto anual.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿De qué año son las tasas?", answer: "Las tasas y deducciones mostradas usan supuestos de 2024. Las reglas de Taiwán pueden cambiar; confirma las cifras oficiales antes de decisiones de nómina o declaración." },
+      { question: "¿Debo incluirme en las personas a cargo?", answer: "Sí. La herramienta espera un conteo que te incluya. La elegibilidad real de exenciones depende del hogar y de la declaración." },
+      { question: "¿Incluye bonos o acciones?", answer: "No. Solo anualiza el salario mensual. Bonos, acciones, ingresos extranjeros y retenciones requieren revisión aparte." },
+    ],
+    disclaimer: "Esta herramienta ofrece una estimación general. Confirma los importes reales con la institución correspondiente o un profesional.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <TaiwanSalaryCalculatorComp client:load locale={calcLocale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

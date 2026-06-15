@@ -2,15 +2,28 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import GlobalIncomeTaxCalculator from "../../components/tools/GlobalIncomeTaxCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
+
+type SeoContent = {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+};
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "글로벌 소득세 계산기 — 7개국 소득세 비교",
     description: "한국·미국·일본·프랑스·스페인·중국·대만 7개국의 소득세와 사회보험료를 계산하고 비교해보세요.",
@@ -32,20 +45,254 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Calcula y compara el IRPF y las cotizaciones sociales de Corea, EE.UU., Japón, Francia, España, China y Taiwán.",
   },
   zh: {
-    title: "全球所得稅計算機 — 7國稅率比較",
-    description: "計算並比較韓國、美國、日本、法國、西班牙、中國和台灣的所得稅及社會保險費用。",
-  },
-  cn: {
-    title: "全球所得税计算器 — 7国税率比较",
+    title: "全球所得税计算机 — 7国税率比较",
     description: "计算并比较韩国、美国、日本、法国、西班牙、中国和台湾的所得税及社会保险费用。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, SeoContent> = {
+  ko: {
+    introTitle: "글로벌 소득세 비교 계산은 적용 국가의 제도를 먼저 확인해야 합니다",
+    intro: "이 페이지는 7개국 기준의 글로벌 소득세 비교을 설명과 함께 계산합니다. 세율과 공제는 국가별로 다르고 매년 바뀔 수 있으므로, 결과는 신고 전 검토를 위한 출발점으로 보는 것이 안전합니다.",
+    formulaTitle: "핵심 계산 기준",
+    formulas: [{
+      title: "기준 1",
+      body: "총소득에서 국가별 표준공제 또는 기본공제를 뺍니다."
+    }, {
+      title: "기준 2",
+      body: "근로자 사회보험 부담률을 국가별 단순 비율로 추정합니다."
+    }, {
+      title: "기준 3",
+      body: "각국 세율 구간을 순차 적용해 소득세를 계산합니다."
+    }],
+    howToTitle: "사용 방법",
+    steps: ["계산에 필요한 금액과 조건을 입력합니다.", "결과 카드의 세금·공제·부담액 항목을 나누어 확인합니다.", "신고·납부 또는 의사결정 전에 최신 공식 기준과 비교합니다."],
+    faqTitle: "자주 묻는 질문",
+    faqs: [{
+      question: "이 계산기는 어느 나라 기준인가요?",
+      answer: "7개국 기준입니다. 다른 나라의 세율, 공제, 사회보험 구조에는 그대로 적용할 수 없습니다."
+    }, {
+      question: "실제 금액과 왜 다를 수 있나요?",
+      answer: "거주자 판정, 주·지방세, 가족공제, 세액공제, 사회보험 상한이 실제와 다를 수 있습니다."
+    }, {
+      question: "규칙은 매년 바뀌나요?",
+      answer: "예. 세율, 공제 한도, 사회보험 요율은 매년 바뀔 수 있습니다. 신고나 납부 전에는 해당 연도의 공식 기준을 확인하세요."
+    }],
+    disclaimer: "이 계산기는 일반 추정용입니다. 실제 세액은 과세관청 안내 또는 세무 전문가를 통해 확인하세요."
+  },
+  en: {
+    introTitle: "Global income tax comparison is country-specific",
+    intro: "This page estimates global income tax comparison under seven countries rules. Because brackets, deductions, and social contributions are country-specific and can change yearly, use the result as a planning estimate before filing.",
+    formulaTitle: "Core calculation rules",
+    formulas: [{
+      title: "Rule 1",
+      body: "Gross income is reduced by each country’s standard or basic deduction."
+    }, {
+      title: "Rule 2",
+      body: "Employee social contributions are estimated as a country-specific percentage."
+    }, {
+      title: "Rule 3",
+      body: "Each country’s progressive bands are applied sequentially."
+    }],
+    howToTitle: "How to use",
+    steps: ["Enter the required amounts and conditions.", "Review the tax, deduction, and contribution lines separately.", "Compare with current official rules before filing, paying, or making a decision."],
+    faqTitle: "Frequently asked questions",
+    faqs: [{
+      question: "Which country does this calculator use?",
+      answer: "It uses seven countries rules. Do not apply it directly to another country’s tax, deduction, or social insurance system."
+    }, {
+      question: "Why can the final amount differ?",
+      answer: "Residency, state/local tax, family deductions, credits, and contribution caps can differ from this model."
+    }, {
+      question: "Do the rules change every year?",
+      answer: "Yes. Tax rates, deduction limits, and social contribution rates can change each year. Confirm the current-year rules before filing or paying."
+    }],
+    disclaimer: "This is a general estimate. Confirm the final amount with the tax authority or a tax professional."
+  },
+  ja: {
+    introTitle: "グローバル所得税比較は国ごとの制度確認が必要です",
+    intro: "このページは7カ国基準のグローバル所得税比較を説明付きで試算します。税率や控除は国ごとに異なり毎年変わるため、申告前の参考値として扱ってください。",
+    formulaTitle: "主な計算基準",
+    formulas: [{
+      title: "基準 1",
+      body: "総収入から国別控除を差し引きます。"
+    }, {
+      title: "基準 2",
+      body: "従業員社会保険を国別比率で推定します。"
+    }, {
+      title: "基準 3",
+      body: "各国の税率区間を順番に適用します。"
+    }],
+    howToTitle: "使い方",
+    steps: ["必要な金額と条件を入力します。", "税金・控除・社会保険の内訳を確認します。", "申告・納付・判断前に最新の公式基準と照合します。"],
+    faqTitle: "よくある質問",
+    faqs: [{
+      question: "どの国の制度を基準にしていますか？",
+      answer: "7カ国の制度です。他国の税率、控除、社会保険にはそのまま使えません。"
+    }, {
+      question: "実際の金額と異なる理由は？",
+      answer: "居住者判定、地方税、家族控除、税額控除、上限で変わります。"
+    }, {
+      question: "制度は毎年変わりますか？",
+      answer: "はい。税率、控除限度、社会保険料率は毎年変わる可能性があります。申告や納付前に最新年度の基準を確認してください。"
+    }],
+    disclaimer: "この計算は一般的な概算です。実際の税額は税務当局または税理士に確認してください。"
+  },
+  zh: {
+    introTitle: "全球所得税比较必须先确认适用国家的制度",
+    intro: "本页依7国规则估算全球所得税比较。税率、扣除与社会保险具有国别差异且可能逐年变动，结果应作为申报前的初步参考。",
+    formulaTitle: "主要计算基准",
+    formulas: [{
+      title: "规则 1",
+      body: "从总收入扣除各国标准或基本扣除。"
+    }, {
+      title: "规则 2",
+      body: "以各国员工社保负担率估算。"
+    }, {
+      title: "规则 3",
+      body: "依各国累进级距逐段计算。"
+    }],
+    howToTitle: "使用方法",
+    steps: ["输入所需金额与条件。", "分别查看税金、扣除与社会保险明细。", "申报、缴纳或决策前请核对最新官方规定。"],
+    faqTitle: "常见问题",
+    faqs: [{
+      question: "这个计算机采用哪个国家的规则？",
+      answer: "采用7国规则，不能直接套用其他国家的税率、扣除或社会保险制度。"
+    }, {
+      question: "为什么可能和实际金额不同？",
+      answer: "税务居民、地方税、家庭扣除、抵免与社保上限可能不同。"
+    }, {
+      question: "规则每年都会变吗？",
+      answer: "会。税率、扣除上限与社会保险费率都可能按年度调整。申报或缴纳前请确认当年度官方规定。"
+    }],
+    disclaimer: "本工具仅为一般估算。实际税额请向税务机关或税务专业人士确认。"
+  },
+  fr: {
+    introTitle: "Comparaison mondiale de l’impôt dépend du pays concerné",
+    intro: "Cette page estime comparaison mondiale de l’impôt selon les règles de sept pays. Les tranches, déductions et cotisations sont propres au pays et peuvent changer chaque année; utilisez le résultat comme point de départ.",
+    formulaTitle: "Bases de calcul",
+    formulas: [{
+      title: "Règle 1",
+      body: "Revenu brut moins déduction standard ou de base."
+    }, {
+      title: "Règle 2",
+      body: "Cotisations salarié estimées par taux propre au pays."
+    }, {
+      title: "Règle 3",
+      body: "Les tranches progressives sont appliquées successivement."
+    }],
+    howToTitle: "Comment l'utiliser",
+    steps: ["Saisissez les montants et conditions nécessaires.", "Vérifiez séparément impôts, déductions et cotisations.", "Comparez avec les règles officielles avant déclaration, paiement ou décision."],
+    faqTitle: "Questions fréquentes",
+    faqs: [{
+      question: "Quel pays sert de référence ?",
+      answer: "Il utilise les règles de sept pays. Ne l’appliquez pas directement à un autre système fiscal ou social."
+    }, {
+      question: "Pourquoi le montant réel peut-il différer ?",
+      answer: "Résidence, impôts locaux, famille, crédits et plafonds peuvent différer."
+    }, {
+      question: "Les règles changent-elles chaque année ?",
+      answer: "Oui. Les taux, plafonds de déduction et cotisations peuvent changer chaque année. Vérifiez l'année en vigueur avant de déclarer ou payer."
+    }],
+    disclaimer: "Ce calcul est une estimation générale. Confirmez le montant auprès de l'administration fiscale ou d'un fiscaliste."
+  },
+  es: {
+    introTitle: "Comparación global de renta depende del país aplicado",
+    intro: "Esta página estima la comparación global de renta con reglas de siete países. Los tramos, deducciones y cotizaciones son propios de cada país y pueden cambiar cada año; úsalo como estimación inicial.",
+    formulaTitle: "Bases de cálculo",
+    formulas: [{
+      title: "Regla 1",
+      body: "Renta bruta menos deducción estándar o básica."
+    }, {
+      title: "Regla 2",
+      body: "Cotizaciones del empleado estimadas por país."
+    }, {
+      title: "Regla 3",
+      body: "Los tramos progresivos se aplican secuencialmente."
+    }],
+    howToTitle: "Cómo usarla",
+    steps: ["Introduce los importes y condiciones necesarios.", "Revisa por separado impuestos, deducciones y cotizaciones.", "Compáralo con reglas oficiales antes de declarar, pagar o tomar una decisión."],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [{
+      question: "¿Qué país usa esta calculadora?",
+      answer: "Usa reglas de siete países. No lo apliques directamente a otro sistema fiscal o social."
+    }, {
+      question: "¿Por qué puede cambiar el importe final?",
+      answer: "Residencia, impuestos locales, familia, créditos y topes pueden diferir."
+    }, {
+      question: "¿Las reglas cambian cada año?",
+      answer: "Sí. Los tipos, límites de deducción y cotizaciones pueden cambiar cada año. Comprueba la norma vigente antes de declarar o pagar."
+    }],
+    disclaimer: "Este cálculo es una estimación general. Confirma el importe con la autoridad fiscal o un profesional tributario."
+  }
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((step, i) => ({ "@type": "HowToStep", position: i + 1, text: step })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <GlobalIncomeTaxCalculator client:load locale={locale} />
+  
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

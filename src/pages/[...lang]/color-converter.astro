@@ -2,50 +2,160 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ColorConverter from "../../components/tools/ColorConverter";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "색상 변환기 — HEX · RGB · HSL · HSV · CMYK",
-    description: "HEX, RGB, HSL, HSV, CMYK 색상 코드를 자유롭게 변환하세요. RGB 슬라이더, 최근 색상 기록, CSS 색상 이름 표시 기능 포함.",
-  },
-  en: {
-    title: "Color Converter — HEX · RGB · HSL · HSV · CMYK",
-    description: "Convert between HEX, RGB, HSL, HSV, and CMYK color formats instantly. Includes RGB sliders, recent color history, and nearest CSS color name.",
-  },
-  ja: {
-    title: "カラーコード変換器 — HEX · RGB · HSL · HSV · CMYK",
-    description: "HEX、RGB、HSL、HSV、CMYKを相互変換。RGBスライダー、最近の色履歴、CSS色名表示機能つき。",
-  },
-  fr: {
-    title: "Convertisseur de couleurs — HEX · RGB · HSL · HSV · CMYK",
-    description: "Convertissez entre les formats HEX, RGB, HSL, HSV et CMYK. Inclut des curseurs RGB, l'historique des couleurs récentes et le nom CSS le plus proche.",
-  },
-  es: {
-    title: "Convertidor de colores — HEX · RGB · HSL · HSV · CMYK",
-    description: "Convierte entre formatos HEX, RGB, HSL, HSV y CMYK al instante. Incluye controles RGB, historial de colores recientes y nombre CSS más cercano.",
-  },
-  zh: {
-    title: "顏色轉換器 — HEX · RGB · HSL · HSV · CMYK",
-    description: "即時轉換HEX、RGB、HSL、HSV和CMYK顏色格式。包含RGB滑桿、最近顏色記錄和最近CSS顏色名稱。",
-  },
-  cn: {
-    title: "颜色转换器 — HEX · RGB · HSL · HSV · CMYK",
-    description: "即时转换HEX、RGB、HSL、HSV和CMYK颜色格式。包含RGB滑块、最近颜色记录和最近CSS颜色名称。",
-  },
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
+  ko: { title: "색상 변환기 — HEX · RGB · HSL · HSV · CMYK", description: "HEX, RGB, HSL, HSV, CMYK 색상 코드를 자유롭게 변환하세요. RGB 슬라이더, 최근 색상 기록, CSS 색상 이름 표시 기능 포함." },
+  en: { title: "Color Converter — HEX · RGB · HSL · HSV · CMYK", description: "Convert between HEX, RGB, HSL, HSV, and CMYK color formats instantly. Includes RGB sliders, recent color history, and nearest CSS color name." },
+  ja: { title: "カラーコード変換器 — HEX · RGB · HSL · HSV · CMYK", description: "HEX、RGB、HSL、HSV、CMYKを相互変換。RGBスライダー、最近の色履歴、CSS色名表示機能つき。" },
+  fr: { title: "Convertisseur de couleurs — HEX · RGB · HSL · HSV · CMYK", description: "Convertissez entre les formats HEX, RGB, HSL, HSV et CMYK. Inclut des curseurs RGB, l'historique des couleurs récentes et le nom CSS le plus proche." },
+  es: { title: "Convertidor de colores — HEX · RGB · HSL · HSV · CMYK", description: "Convierte entre formatos HEX, RGB, HSL, HSV y CMYK al instante. Incluye controles RGB, historial de colores recientes y nombre CSS más cercano." },
+  zh: { title: "颜色转换器 — HEX · RGB · HSL · HSV · CMYK", description: "即时转换 HEX、RGB、HSL、HSV 和 CMYK 颜色格式。包含 RGB 滑块、最近颜色记录和最近 CSS 颜色名称。" },
 };
 
 const m = meta[locale] ?? meta.en;
+
+type SeoContent = { introTitle: string; intro: string; formulaTitle: string; formulas: { title: string; body: string }[]; howToTitle: string; steps: string[]; faqTitle: string; faqs: { question: string; answer: string }[]; disclaimer: string; };
+
+const content: Record<ActiveLocale, SeoContent> = {
+  ko: {
+    introTitle: "색상 코드는 같은 색을 다른 좌표계로 표현합니다",
+    intro: "웹 디자인, UI 구현, 인쇄 준비에서는 같은 색이라도 HEX, RGB, HSL, HSV, CMYK처럼 서로 다른 표기가 필요합니다. 이 변환기는 RGB 값을 중심으로 주요 색상 형식을 동기화하고, 최근 색상과 가까운 CSS 이름까지 함께 보여줘 디자인 핸드오프를 빠르게 합니다.",
+    formulaTitle: "색상 모델 이해",
+    formulas: [
+      { title: "HEX / RGB", body: "화면 색의 빨강·초록·파랑 채널을 숫자 또는 16진수로 표현합니다." },
+      { title: "HSL / HSV", body: "색상, 채도, 밝기 계열로 표현해 색조 조정과 팔레트 탐색에 편합니다." },
+      { title: "CMYK", body: "인쇄 공정의 잉크 비율에 가까운 모델이지만 실제 출력은 장비와 프로파일 영향을 받습니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: ["HEX, RGB, HSL, HSV, CMYK 중 알고 있는 값을 입력합니다.", "RGB 슬라이더로 미세 조정하거나 최근 색상 기록에서 이전 값을 다시 선택합니다.", "필요한 형식의 값을 복사해 CSS, 디자인 도구, 문서에 붙여 넣습니다."],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "HEX와 RGB는 같은 색을 표현하나요?", answer: "예. `#6366f1` 같은 HEX 값은 RGB 채널을 16진수로 쓴 것입니다." },
+      { question: "HSL은 언제 유용한가요?", answer: "밝기나 채도만 조정해 같은 계열의 색을 만들 때 RGB보다 직관적입니다." },
+      { question: "CMYK 값으로 바로 인쇄해도 되나요?", answer: "간단한 참고값으로는 좋지만, 실제 인쇄물은 색상 프로파일과 인쇄소 기준으로 확인해야 합니다." },
+    ],
+    disclaimer: "화면 색과 인쇄 색은 기기·프로파일·조명에 따라 달라질 수 있습니다.",
+  },
+  en: {
+    introTitle: "Color codes describe the same color in different coordinate systems",
+    intro: "Web design, UI implementation, and print preparation often require the same color in HEX, RGB, HSL, HSV, or CMYK. This converter keeps the main formats in sync around RGB values and adds recent colors plus the nearest CSS color name for faster handoff.",
+    formulaTitle: "Color model basics",
+    formulas: [
+      { title: "HEX / RGB", body: "Represent red, green, and blue screen channels as numbers or hexadecimal pairs." },
+      { title: "HSL / HSV", body: "Use hue, saturation, and lightness/value for intuitive palette and shade adjustments." },
+      { title: "CMYK", body: "Approximates ink percentages for print workflows, but output still depends on profiles and devices." },
+    ],
+    howToTitle: "How to use",
+    steps: ["Enter any known HEX, RGB, HSL, HSV, or CMYK value.", "Fine-tune with the RGB sliders or reopen a color from recent history.", "Copy the format you need for CSS, design tools, documentation, or handoff notes."],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Are HEX and RGB the same color model?", answer: "They describe the same screen channels. HEX writes the RGB channel values in hexadecimal." },
+      { question: "When should I use HSL?", answer: "HSL is helpful when you want to adjust lightness or saturation while keeping the same hue family." },
+      { question: "Can I use CMYK values directly for print?", answer: "Use them as a reference. Final print color should be checked with the printer’s color profile and proofing process." },
+    ],
+    disclaimer: "Displayed and printed colors vary by device, profile, paper, ink, and lighting.",
+  },
+  ja: {
+    introTitle: "カラーコードは同じ色を別の座標系で表します",
+    intro: "Webデザイン、UI実装、印刷準備では、同じ色でもHEX、RGB、HSL、HSV、CMYKの表記が必要になります。この変換器はRGBを中心に各形式を同期し、最近の色と近いCSS色名も表示します。",
+    formulaTitle: "色モデルの基本",
+    formulas: [
+      { title: "HEX / RGB", body: "画面の赤・緑・青チャンネルを数値または16進数で表します。" },
+      { title: "HSL / HSV", body: "色相、彩度、明るさ系の値で、色調整やパレット作成に向いています。" },
+      { title: "CMYK", body: "印刷インク比率に近い考え方ですが、実際の出力はプロファイルや機器に左右されます。" },
+    ],
+    howToTitle: "使い方",
+    steps: ["HEX、RGB、HSL、HSV、CMYKのいずれか分かる値を入力します。", "RGBスライダーや最近の色履歴で微調整します。", "必要な形式をコピーしてCSS、デザインツール、仕様書に使います。"],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "HEXとRGBは同じ色ですか？", answer: "はい。HEXはRGBの各チャンネル値を16進数で書いた表現です。" },
+      { question: "HSLはどんな時に便利ですか？", answer: "同じ色相のまま明るさや彩度を調整したい時に直感的です。" },
+      { question: "CMYK値をそのまま印刷に使えますか？", answer: "参考値として使えますが、最終色は印刷プロファイルや校正で確認してください。" },
+    ],
+    disclaimer: "画面色と印刷色はデバイス、プロファイル、紙、インク、照明で変わります。",
+  },
+  fr: {
+    introTitle: "Les codes couleur décrivent une même couleur dans plusieurs systèmes",
+    intro: "Design web, intégration UI et préparation print demandent souvent une couleur en HEX, RGB, HSL, HSV ou CMYK. Ce convertisseur synchronise les formats autour des valeurs RGB et ajoute l'historique récent ainsi que le nom CSS le plus proche.",
+    formulaTitle: "Repères de modèles couleur",
+    formulas: [
+      { title: "HEX / RGB", body: "Expriment les canaux rouge, vert et bleu d'un écran en nombres ou en hexadécimal." },
+      { title: "HSL / HSV", body: "Séparent teinte, saturation et luminosité/valeur pour ajuster une palette plus facilement." },
+      { title: "CMYK", body: "Approche les pourcentages d'encre pour l'impression, avec une dépendance aux profils et machines." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: ["Saisissez une valeur HEX, RGB, HSL, HSV ou CMYK connue.", "Ajustez avec les curseurs RGB ou reprenez une couleur récente.", "Copiez le format voulu pour CSS, un outil de design ou une note de livraison."],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "HEX et RGB décrivent-ils la même chose ?", answer: "Oui. HEX écrit les valeurs des canaux RGB en notation hexadécimale." },
+      { question: "Quand HSL est-il utile ?", answer: "Pour modifier la luminosité ou la saturation tout en gardant la même famille de teinte." },
+      { question: "Les valeurs CMYK suffisent-elles pour l'impression ?", answer: "Elles servent de repère. La couleur finale doit être vérifiée avec le profil et l'épreuve de l'imprimeur." },
+    ],
+    disclaimer: "La couleur perçue varie selon l'écran, le profil, le papier, l'encre et l'éclairage.",
+  },
+  es: {
+    introTitle: "Los códigos de color describen el mismo color en sistemas distintos",
+    intro: "Diseño web, implementación de UI y preparación de impresión suelen exigir HEX, RGB, HSL, HSV o CMYK. Este convertidor sincroniza los formatos alrededor de RGB y añade historial reciente y nombre CSS cercano.",
+    formulaTitle: "Modelos de color básicos",
+    formulas: [
+      { title: "HEX / RGB", body: "Representan los canales rojo, verde y azul de pantalla como números o pares hexadecimales." },
+      { title: "HSL / HSV", body: "Usan tono, saturación y luminosidad/valor para ajustar paletas con más intuición." },
+      { title: "CMYK", body: "Aproxima porcentajes de tinta para impresión, aunque depende de perfiles y dispositivos." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: ["Introduce un valor HEX, RGB, HSL, HSV o CMYK conocido.", "Ajusta con los controles RGB o recupera un color del historial reciente.", "Copia el formato que necesites para CSS, herramientas de diseño o documentación."],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿HEX y RGB expresan el mismo color?", answer: "Sí. HEX escribe los valores RGB en notación hexadecimal." },
+      { question: "¿Cuándo conviene usar HSL?", answer: "Cuando quieres cambiar luminosidad o saturación sin perder la familia de tono." },
+      { question: "¿Puedo imprimir directamente con CMYK?", answer: "Úsalo como referencia. La salida final debe revisarse con perfil de color y prueba de impresión." },
+    ],
+    disclaimer: "El color en pantalla e impresión cambia según dispositivo, perfil, papel, tinta e iluminación.",
+  },
+  zh: {
+    introTitle: "颜色代码用不同坐标体系描述同一种颜色",
+    intro: "网页设计、界面实现和印刷准备常常需要 HEX、RGB、HSL、HSV 或 CMYK。这个转换器围绕 RGB 同步主要格式，并提供最近颜色和接近的 CSS 颜色名，方便交付和复用。",
+    formulaTitle: "颜色模型基础",
+    formulas: [
+      { title: "HEX / RGB", body: "用数字或十六进制表示屏幕的红、绿、蓝通道。" },
+      { title: "HSL / HSV", body: "用色相、饱和度、亮度/明度来描述，适合调整色板。" },
+      { title: "CMYK", body: "接近印刷油墨比例，但实际输出仍受色彩配置和设备影响。" },
+    ],
+    howToTitle: "使用方法",
+    steps: ["输入已知的 HEX、RGB、HSL、HSV 或 CMYK 值。", "使用 RGB 滑块微调，或从最近颜色记录中重新选择。", "复制所需格式，用于 CSS、设计工具或交付文档。"],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "HEX 和 RGB 表示同一种颜色吗？", answer: "是的。HEX 只是把 RGB 通道值写成十六进制。" },
+      { question: "HSL 什么时候更好用？", answer: "当你想保持色相，只调整亮度或饱和度时，HSL 更直观。" },
+      { question: "CMYK 值可以直接用于印刷吗？", answer: "可作为参考，最终印刷颜色应按印刷厂的色彩配置和打样确认。" },
+    ],
+    disclaimer: "屏幕和印刷颜色会因设备、色彩配置、纸张、油墨和光线而变化。",
+  },
+};
+
+const c = content[locale] ?? content.en;
+const structuredData = [
+  { "@context": "https://schema.org", "@type": "HowTo", name: m.title, description: m.description, step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })) },
+  { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: c.faqs.map((faq) => ({ "@type": "Question", name: faq.question, acceptedAnswer: { "@type": "Answer", text: faq.answer } })) },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <ColorConverter client:load locale={locale} />
+    <section class="mt-10 border-t border-slate-200 pt-8"><h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2><p class="mt-4 leading-8 text-slate-700">{c.intro}</p></section>
+    <section class="mt-10"><h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2><div class="mt-4 grid gap-4 md:grid-cols-3">{c.formulas.map((item) => (<article class="rounded-xl border border-slate-200 bg-white p-4"><h3 class="font-semibold text-slate-900">{item.title}</h3><p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p></article>))}</div></section>
+    <section class="mt-10"><h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2><ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">{c.steps.map((s) => (<li class="leading-7">{s}</li>))}</ol></section>
+    <section class="mt-10"><h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2><div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">{c.faqs.map((faq) => (<details class="group p-4"><summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary><p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p></details>))}</div></section>
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

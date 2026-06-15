@@ -2,7 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PetAgeCalculatorComp from "../../components/tools/PetAgeCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -11,9 +12,9 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "반려동물 나이 계산기 — 강아지·고양이 인간 나이로 환산",
     description: "강아지와 고양이의 나이를 인간 나이로 환산합니다. 견종 크기(소형·중형·대형)별 환산 공식을 적용합니다.",
@@ -35,20 +36,203 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Convierte la edad de tu perro o gato a años humanos.",
   },
   zh: {
-    title: "寵物年齡計算機",
-    description: "將狗或貓的年齡換算為人類年齡。根據小型、中型和大型犬的體型使用不同換算公式。",
-  },
-  cn: {
-    title: "宠物年龄计算器",
+    title: "宠物年龄计算机",
     description: "将狗或猫的年龄换算为人类年龄。根据小型、中型和大型犬的体型使用不同换算公式。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "반려동물 나이는 첫 2년이 빠르게 지나가고 이후 종과 체구에 따라 달라집니다",
+    intro: "이 계산기는 강아지와 고양이의 나이를 사람 나이로 환산해 생애 단계의 감을 잡도록 돕습니다. 고양이는 1세 15년, 2세 24년 이후 매년 4년을 더하고, 강아지는 2세 이후 체구에 따라 연간 4·5·6년을 더합니다.",
+    formulaTitle: "환산 기준",
+    formulas: [
+      { title: "첫해", body: "강아지와 고양이 모두 1세를 사람 나이 약 15세로 봅니다." },
+      { title: "둘째 해", body: "2세는 사람 나이 약 24세로 환산합니다." },
+      { title: "이후", body: "고양이 +4년, 소형견 +4년, 중형견 +5년, 대형견 +6년/년" },
+    ],
+    howToTitle: "사용 방법",
+    steps: ["강아지 또는 고양이를 선택합니다.", "반려동물의 실제 나이를 입력합니다.", "강아지라면 소형·중형·대형 중 체구를 골라 환산 나이를 확인합니다."],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "강아지 1년은 사람 7년이라는 말이 맞나요?", answer: "너무 단순한 규칙입니다. 첫 2년은 훨씬 빠르게 성숙하고 이후에는 체구별 차이가 큽니다." },
+      { question: "대형견은 왜 더 빨리 나이 드나요?", answer: "일반적으로 대형견은 성견 이후 노화 속도가 빠르고 평균 수명이 짧은 경향이 있어 더 큰 환산계수를 씁니다." },
+      { question: "이 결과로 건강검진 시기를 정해도 되나요?", answer: "대략적인 생애 단계 참고는 가능하지만 품종, 체중, 질병 이력에 따라 수의사와 일정을 정하는 것이 좋습니다." },
+    ],
+    disclaimer: "결과는 일반적인 환산 추정치이며 수의사의 전문적인 진료나 건강 조언을 대신하지 않습니다.",
+  },
+  en: {
+    introTitle: "Pet aging is fastest in the first two years, then varies by species and size",
+    intro: "This calculator converts dog or cat age into a human-age equivalent to make life stage easier to understand. Cats use 15 human years for year one, 24 by year two, then 4 per year; dogs add 4, 5, or 6 human years per year after age two depending on size.",
+    formulaTitle: "Conversion rules",
+    formulas: [
+      { title: "First year", body: "Dogs and cats are treated as about 15 human years at age 1." },
+      { title: "Second year", body: "Age 2 converts to about 24 human years." },
+      { title: "After that", body: "Cats +4/year; small dogs +4, medium +5, large +6/year." },
+    ],
+    howToTitle: "How to use",
+    steps: ["Choose dog or cat.", "Enter your pet's actual age.", "For dogs, select small, medium, or large size to see the human-age equivalent."],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Is one dog year really seven human years?", answer: "That rule is too simple. The first two years mature faster, and later aging differs by body size." },
+      { question: "Why do large dogs age faster?", answer: "Large dogs often have faster adult aging and shorter average lifespans, so the calculator uses a larger yearly factor." },
+      { question: "Can this set my pet's checkup schedule?", answer: "It can suggest a rough life stage, but breed, weight, and medical history should guide veterinary care." },
+    ],
+    disclaimer: "Results are general conversion estimates and are not a substitute for professional veterinary advice or care.",
+  },
+  ja: {
+    introTitle: "ペットの年齢は最初の2年で大きく進み、その後は種類と体格で変わります",
+    intro: "この計算機は犬や猫の年齢を人間年齢に換算し、ライフステージを理解しやすくします。猫は1歳を15歳、2歳を24歳、その後は毎年4歳分、犬は2歳以降に体格別で4・5・6歳分を加えます。",
+    formulaTitle: "換算の基準",
+    formulas: [
+      { title: "1年目", body: "犬と猫の1歳は人間の約15歳として扱います。" },
+      { title: "2年目", body: "2歳は人間の約24歳に換算します。" },
+      { title: "その後", body: "猫 +4年、小型犬 +4年、中型犬 +5年、大型犬 +6年/年" },
+    ],
+    howToTitle: "使い方",
+    steps: ["犬または猫を選びます。", "実年齢を入力します。", "犬の場合は体格を選び、人間年齢の目安を確認します。"],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "犬の1年は人間の7年ですか？", answer: "単純すぎる目安です。最初の2年は速く成熟し、その後は体格差が大きくなります。" },
+      { question: "大型犬はなぜ早く年を取るのですか？", answer: "一般に大型犬は成犬後の老化が速く、平均寿命も短い傾向があるためです。" },
+      { question: "健康診断の時期を決められますか？", answer: "大まかな段階の参考にはなりますが、品種、体重、病歴に応じて獣医師に相談してください。" },
+    ],
+    disclaimer: "結果は一般的な換算推定であり、獣医師による診療や健康助言の代わりにはなりません。",
+  },
+  zh: {
+    introTitle: "宠物前两年成长最快，之后会因物种与体型而不同",
+    intro: "这个计算器把狗或猫的年龄换算成人类年龄，帮助理解生命阶段。猫以 1 岁约 15 岁、2 岁约 24 岁计算，之后每年加 4；狗则在 2 岁后依体型每年加 4、5 或 6。",
+    formulaTitle: "换算规则",
+    formulas: [
+      { title: "第一年", body: "狗与猫 1 岁约等于人类 15 岁。" },
+      { title: "第二年", body: "2 岁约等于人类 24 岁。" },
+      { title: "之后", body: "猫 +4/年；小型犬 +4，中型犬 +5，大型犬 +6/年。" },
+    ],
+    howToTitle: "使用方法",
+    steps: ["选择狗或猫。", "输入宠物实际年龄。", "若是狗，选择体型后查看人类年龄换算。" ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "狗一年等于人类七年吗？", answer: "这个说法太简化。前两年成熟速度更快，成年后又会因体型不同而改变。" },
+      { question: "大型犬为什么换算年龄较高？", answer: "大型犬通常成年后老化较快、平均寿命较短，因此使用较高年增量。" },
+      { question: "可以用结果安排健检吗？", answer: "可作为生命阶段参考，但品种、体重与病史仍应由兽医评估。" },
+    ],
+    disclaimer: "结果仅为一般换算估计，不能替代专业兽医建议或照护。",
+  },
+  fr: {
+    introTitle: "L'âge des animaux avance vite les deux premières années, puis varie selon l'espèce et la taille",
+    intro: "Ce calculateur convertit l'âge d'un chien ou d'un chat en équivalent humain pour mieux situer son stade de vie. Les chats passent à 15 ans humains la première année, 24 la deuxième, puis +4 par an ; les chiens ajoutent ensuite +4, +5 ou +6 selon la taille.",
+    formulaTitle: "Règles de conversion",
+    formulas: [
+      { title: "Première année", body: "Chien et chat : environ 15 ans humains à 1 an." },
+      { title: "Deuxième année", body: "2 ans correspondent à environ 24 ans humains." },
+      { title: "Après", body: "Chat +4/an ; petit chien +4, moyen +5, grand +6/an." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: ["Choisissez chien ou chat.", "Saisissez l'âge réel de l'animal.", "Pour un chien, choisissez la taille puis lisez l'équivalent humain."],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Un an de chien vaut-il sept ans humains ?", answer: "C'est trop simplifié. Les deux premières années vont plus vite, puis la taille change le rythme." },
+      { question: "Pourquoi les grands chiens vieillissent-ils plus vite ?", answer: "Ils ont souvent un vieillissement adulte plus rapide et une espérance de vie moyenne plus courte." },
+      { question: "Puis-je fixer les visites vétérinaires avec ce résultat ?", answer: "Il indique un stade approximatif, mais race, poids et antécédents doivent guider les soins." },
+    ],
+    disclaimer: "Les résultats sont des estimations générales et ne remplacent pas les conseils ou soins d'un vétérinaire.",
+  },
+  es: {
+    introTitle: "La edad de las mascotas avanza rápido al principio y luego depende de especie y tamaño",
+    intro: "Esta calculadora convierte la edad de perros o gatos a una equivalencia humana para entender mejor su etapa de vida. Los gatos usan 15 años humanos al primer año, 24 al segundo y luego +4 por año; los perros suman +4, +5 o +6 según tamaño.",
+    formulaTitle: "Reglas de conversión",
+    formulas: [
+      { title: "Primer año", body: "Perros y gatos: alrededor de 15 años humanos al cumplir 1." },
+      { title: "Segundo año", body: "Los 2 años equivalen a unos 24 años humanos." },
+      { title: "Después", body: "Gatos +4/año; perros pequeños +4, medianos +5, grandes +6/año." },
+    ],
+    howToTitle: "Cómo usarla",
+    steps: ["Elige perro o gato.", "Introduce la edad real de tu mascota.", "Si es perro, selecciona tamaño para ver la edad humana equivalente."],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Un año de perro son siete humanos?", answer: "Es una regla demasiado simple. Los primeros dos años maduran más rápido y luego influye el tamaño." },
+      { question: "¿Por qué los perros grandes envejecen más rápido?", answer: "Suelen tener envejecimiento adulto más rápido y menor esperanza de vida promedio." },
+      { question: "¿Puedo programar revisiones con este resultado?", answer: "Sirve como referencia general, pero raza, peso e historial médico deben guiar la atención veterinaria." },
+    ],
+    disclaimer: "Los resultados son estimaciones generales y no sustituyen el consejo o cuidado veterinario profesional.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <PetAgeCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

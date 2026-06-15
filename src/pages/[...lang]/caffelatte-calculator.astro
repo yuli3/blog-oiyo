@@ -2,7 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import CaffelatteCalculatorComp from "../../components/tools/CaffelatteCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -11,9 +12,9 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "카페라떼 칼로리 계산기 — 내 커피 한 잔의 칼로리는?",
     description: "우유 종류·시럽·샷 수에 따른 카페라떼 칼로리를 계산하세요. 아메리카노·카푸치노 등 다양한 음료도 지원합니다.",
@@ -35,20 +36,227 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Calcula las calorías de tu café latte según el tipo de leche, jarabes y shots de espresso.",
   },
   zh: {
-    title: "咖啡拿鐵熱量計算機",
-    description: "根據牛奶種類、糖漿和濃縮咖啡份數計算咖啡拿鐵的熱量。",
-  },
-  cn: {
-    title: "咖啡拿铁热量计算器",
+    title: "咖啡拿铁热量计算机",
     description: "根据牛奶种类、糖浆和浓缩咖啡份数计算咖啡拿铁的热量。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "라떼 칼로리는 우유, 시럽, 샷보다 컵 크기에서 먼저 달라집니다",
+    intro: "카페라떼는 단순한 커피처럼 보여도 우유량과 당류 토핑에 따라 열량 차이가 큽니다. 이 계산기는 음료 종류, 우유 선택, 시럽, 샷 수를 조합해 한 잔의 대략적인 칼로리를 빠르게 비교하도록 돕습니다.",
+    formulaTitle: "계산 요소",
+    formulas: [
+      { title: "우유", body: "일반 우유, 저지방, 식물성 음료는 100ml당 열량이 다릅니다." },
+      { title: "시럽", body: "당 시럽 한 펌프는 보통 음료 열량을 눈에 띄게 올립니다." },
+      { title: "에스프레소", body: "샷 자체 열량은 낮지만 음료 크기와 우유량 선택에 영향을 줍니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "음료와 컵 크기 또는 기본 구성을 선택합니다.",
+      "우유 종류, 시럽 수, 샷 수를 실제 주문에 맞게 조정합니다.",
+      "계산 결과를 비교해 더 가벼운 옵션이나 당류 조절 여부를 결정합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "아메리카노와 라떼 칼로리 차이가 큰 이유는 무엇인가요?", answer: "아메리카노는 대부분 물과 에스프레소지만 라떼는 우유 비중이 높아 우유 열량이 크게 반영됩니다." },
+      { question: "식물성 우유가 항상 더 낮은 칼로리인가요?", answer: "항상 그렇지는 않습니다. 오트 음료처럼 당이나 탄수화물이 높은 제품은 일반 우유와 비슷하거나 더 높을 수 있습니다." },
+      { question: "카페별 결과와 다를 수 있나요?", answer: "네. 컵 용량, 레시피, 우유 제품, 시럽 펌프 용량이 브랜드마다 달라 실제 영양성분과 차이가 날 수 있습니다." },
+    ],
+    disclaimer: "이 계산기는 일반적인 영양 추정용입니다. 알레르기, 당뇨, 체중 관리, 식이 제한이 있다면 제품 영양성분표와 전문가 조언을 함께 확인하세요.",
+  },
+  en: {
+    introTitle: "Latte calories are driven by milk volume, sweeteners, and drink size",
+    intro: "A café latte can vary widely depending on the milk, syrup, cup size, and number of espresso shots. This calculator helps you estimate one drink and compare lighter ordering choices.",
+    formulaTitle: "Calorie drivers",
+    formulas: [
+      { title: "Milk", body: "Whole, low-fat, and plant-based milks have different calories per 100 ml." },
+      { title: "Syrup", body: "Each sweet syrup pump can add a noticeable amount of sugar and energy." },
+      { title: "Espresso", body: "Shots are low in calories, but they often change the drink size and milk ratio." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Choose the drink style and serving size closest to your order.",
+      "Adjust milk type, syrup pumps, and espresso shots to match the actual drink.",
+      "Use the estimate to compare lighter milk, fewer syrup pumps, or a smaller cup.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Why is a latte higher in calories than an Americano?", answer: "An Americano is mostly water and espresso. A latte contains much more milk, so the milk contributes most of the energy." },
+      { question: "Is plant-based milk always lower calorie?", answer: "No. Some oat or sweetened plant drinks can be similar to, or higher than, dairy milk depending on the product." },
+      { question: "Will this match a cafe's nutrition label exactly?", answer: "Not always. Cup volume, recipes, milk brand, and syrup pump size differ by cafe." },
+    ],
+    disclaimer: "This calculator is a general nutrition estimate. For allergies, diabetes, weight management, or dietary restrictions, check the product label and consult a qualified professional.",
+  },
+  ja: {
+    introTitle: "ラテのカロリーはミルク量、甘味、サイズで大きく変わります",
+    intro: "カフェラテはシンプルな飲み物に見えても、ミルクの種類、シロップ、カップサイズ、ショット数で熱量が大きく変わります。この計算機は一杯分の目安を出し、軽めの注文を比較するためのものです。",
+    formulaTitle: "カロリーの要素",
+    formulas: [
+      { title: "ミルク", body: "全乳、低脂肪、植物性ミルクは100mlあたりの熱量が異なります。" },
+      { title: "シロップ", body: "甘いシロップ1ポンプで糖分と熱量が増えます。" },
+      { title: "エスプレッソ", body: "ショット自体は低カロリーですが、サイズやミルク比率に影響します。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "注文に近い飲み物の種類とサイズを選びます。",
+      "ミルク、シロップ、ショット数を実際の内容に合わせます。",
+      "結果を見てミルク変更、シロップ減量、サイズ変更を比較します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "アメリカーノよりラテが高カロリーなのはなぜ？", answer: "アメリカーノは主に水とエスプレッソですが、ラテはミルク量が多いため、その分の熱量が反映されます。" },
+      { question: "植物性ミルクは必ず低カロリーですか？", answer: "必ずしもそうではありません。オーツミルクや加糖タイプは通常の牛乳と同等か高い場合があります。" },
+      { question: "カフェの栄養表示と完全に一致しますか？", answer: "カップ容量、レシピ、ミルク銘柄、シロップ量が店舗ごとに違うため差が出ることがあります。" },
+    ],
+    disclaimer: "この計算機は一般的な栄養目安です。アレルギー、糖尿病、体重管理、食事制限がある場合は表示成分と専門家の助言をご確認ください。",
+  },
+  fr: {
+    introTitle: "Les calories d'un latte viennent surtout du lait, des sirops et de la taille",
+    intro: "Un café latte peut varier fortement selon le lait, le sirop, le format et le nombre de shots. Ce calculateur donne une estimation par boisson et aide à comparer des choix plus légers.",
+    formulaTitle: "Facteurs de calories",
+    formulas: [
+      { title: "Lait", body: "Lait entier, allégé et boissons végétales ont des calories différentes par 100 ml." },
+      { title: "Sirop", body: "Chaque pompe de sirop sucré ajoute du sucre et de l'énergie." },
+      { title: "Espresso", body: "Le shot est peu calorique, mais il peut influencer la taille et le ratio de lait." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Choisissez le type de boisson et le format les plus proches de votre commande.",
+      "Ajustez le lait, les pompes de sirop et les shots d'espresso.",
+      "Comparez l'estimation avec une option moins sucrée, un autre lait ou un format plus petit.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Pourquoi un latte est-il plus calorique qu'un Americano ?", answer: "L'Americano contient surtout de l'eau et de l'espresso. Le latte contient beaucoup plus de lait, qui apporte l'essentiel des calories." },
+      { question: "Un lait végétal est-il toujours plus léger ?", answer: "Non. Certaines boissons à l'avoine ou sucrées peuvent être proches du lait de vache, voire plus caloriques." },
+      { question: "Le résultat correspond-il exactement à l'étiquette du café ?", answer: "Pas toujours. Volume, recette, marque de lait et taille des pompes de sirop varient selon les cafés." },
+    ],
+    disclaimer: "Ce calculateur fournit une estimation nutritionnelle générale. En cas d'allergie, diabète, contrôle du poids ou restriction alimentaire, vérifiez l'étiquette et demandez un avis qualifié.",
+  },
+  es: {
+    introTitle: "Las calorías de un latte dependen sobre todo de la leche, los siropes y el tamaño",
+    intro: "Un café latte puede variar mucho según la leche, el sirope, el tamaño del vaso y los shots. Esta calculadora estima una bebida y permite comparar opciones más ligeras.",
+    formulaTitle: "Factores de calorías",
+    formulas: [
+      { title: "Leche", body: "Leche entera, baja en grasa y bebidas vegetales tienen calorías distintas por 100 ml." },
+      { title: "Sirope", body: "Cada bomba de sirope dulce añade azúcar y energía de forma apreciable." },
+      { title: "Espresso", body: "El shot tiene pocas calorías, pero puede cambiar tamaño y proporción de leche." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Elige el estilo de bebida y tamaño más parecido a tu pedido.",
+      "Ajusta tipo de leche, bombas de sirope y shots de espresso.",
+      "Compara la estimación con menos sirope, otra leche o un vaso más pequeño.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Por qué un latte tiene más calorías que un americano?", answer: "El americano es principalmente agua y espresso. El latte contiene mucha leche, que aporta la mayor parte de la energía." },
+      { question: "¿La leche vegetal siempre tiene menos calorías?", answer: "No. Algunas bebidas de avena o versiones azucaradas pueden ser parecidas o superiores a la leche de vaca." },
+      { question: "¿Coincide exactamente con la etiqueta de una cafetería?", answer: "No siempre. Volumen, receta, marca de leche y tamaño de la bomba de sirope cambian entre cafeterías." },
+    ],
+    disclaimer: "Esta calculadora es una estimación nutricional general. Para alergias, diabetes, control de peso o restricciones dietéticas, revisa la etiqueta y consulta a un profesional.",
+  },
+  zh: {
+    introTitle: "拿铁热量主要受牛奶量、糖浆和杯型影响",
+    intro: "咖啡拿铁看起来简单，但牛奶种类、糖浆、杯量和浓缩咖啡份数都会让热量差异很大。这个计算器用于估算一杯饮品的热量，并帮助比较更清淡的点单选择。",
+    formulaTitle: "热量因素",
+    formulas: [
+      { title: "牛奶", body: "全脂、低脂和植物基饮品每100ml热量不同。" },
+      { title: "糖浆", body: "每一泵甜味糖浆都会明显增加糖和能量。" },
+      { title: "浓缩咖啡", body: "浓缩本身热量较低，但会影响杯型和牛奶比例。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "选择最接近实际订单的饮品类型和杯型。",
+      "按实际情况调整牛奶种类、糖浆泵数和浓缩份数。",
+      "用结果比较少糖、换奶或换小杯后的热量差异。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "为什么拿铁比美式热量高？", answer: "美式主要是水和浓缩咖啡，而拿铁含有较多牛奶，因此牛奶贡献了大部分热量。" },
+      { question: "植物基牛奶一定更低热量吗？", answer: "不一定。燕麦饮品或加糖植物基饮品可能与牛奶接近，甚至更高。" },
+      { question: "结果会和咖啡店营养表完全一致吗？", answer: "不一定。杯量、配方、牛奶品牌和糖浆每泵容量都会因店而异。" },
+    ],
+    disclaimer: "本计算器仅为一般营养估算。若有过敏、糖尿病、体重管理或饮食限制，请查看产品营养标签并咨询专业人士。",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <CaffelatteCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

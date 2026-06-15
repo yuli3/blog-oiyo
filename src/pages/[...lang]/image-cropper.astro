@@ -4,6 +4,8 @@ import ImageCropperComp from "../../components/tools/ImageCropper";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
+type ActiveLocale = (typeof locales)[number];
+
 export async function getStaticPaths() {
   return locales.map((lang) => ({
     params: { lang },
@@ -11,9 +13,9 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale & Locale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "이미지 비율 크롭 — 원하는 비율로 사진 자르기",
     description: "1:1, 4:3, 16:9 등 원하는 비율로 이미지를 자르세요. 브라우저에서 바로 처리하며 서버에 업로드되지 않습니다.",
@@ -35,20 +37,227 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Recorta imágenes a cualquier relación de aspecto. Procesado completamente en tu navegador.",
   },
   zh: {
-    title: "圖片比例裁剪工具",
-    description: "按1:1、4:3、16:9等任意比例裁剪圖片。完全在瀏覽器中處理，無需上傳至伺服器。",
-  },
-  cn: {
     title: "图片比例裁剪工具",
     description: "按1:1、4:3、16:9等任意比例裁剪图片。完全在浏览器中处理，无需上传至服务器。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "비율을 먼저 정하면 이미지가 더 안정적으로 보입니다",
+    intro: "프로필 사진, 썸네일, 배너처럼 쓰임이 정해진 이미지는 가로세로 비율을 맞추는 것만으로도 훨씬 정돈되어 보입니다. 이 크롭 도구는 이미지를 서버로 업로드하지 않고 브라우저 안에서 처리하므로, 개인 사진이나 작업 초안도 부담 없이 자를 수 있습니다.",
+    formulaTitle: "크롭 전에 확인할 기준",
+    formulas: [
+      { title: "용도별 비율", body: "정사각형은 프로필과 카드, 16:9는 영상 썸네일과 배너, 4:3은 문서용 이미지에 잘 맞습니다." },
+      { title: "주 피사체 위치", body: "얼굴, 제품, 텍스트가 잘리지 않도록 크롭 박스 안쪽 여백을 먼저 확인하세요." },
+      { title: "브라우저 처리", body: "이미지 파일은 사용자의 기기에서 처리되며 서버로 업로드되지 않습니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "이미지를 불러온 뒤 원하는 가로세로 비율을 선택합니다.",
+      "크롭 영역을 움직여 핵심 피사체가 안전하게 들어오도록 맞춥니다.",
+      "미리보기를 확인한 뒤 결과 이미지를 내려받아 사용합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "사진이 서버에 업로드되나요?", answer: "아니요. 이 도구는 브라우저에서 이미지를 처리하므로 일반적인 사용 과정에서 파일이 서버로 전송되지 않습니다." },
+      { question: "어떤 비율을 선택해야 하나요?", answer: "프로필은 1:1, 영상 썸네일은 16:9, 블로그 본문 이미지는 4:3이나 원본 비율을 권장합니다." },
+      { question: "화질이 떨어질 수 있나요?", answer: "크롭 자체는 필요한 영역만 잘라내는 작업입니다. 다만 너무 작은 영역을 크게 확대하면 결과가 흐릿해질 수 있습니다." },
+    ],
+    disclaimer: "브라우저·기기 성능에 따라 큰 이미지 처리 속도와 저장 결과가 달라질 수 있습니다. 중요한 원본 파일은 별도로 보관하세요.",
+  },
+  en: {
+    introTitle: "Cropping works best when the final ratio is clear",
+    intro: "Profile images, thumbnails, banners, and article visuals each need a stable frame. This cropper helps you choose the aspect ratio first, position the subject carefully, and export a cleaner image. Processing happens in your browser, so your file is not uploaded during normal use.",
+    formulaTitle: "Cropping checks",
+    formulas: [
+      { title: "Match the destination", body: "Use 1:1 for avatars and cards, 16:9 for video-style thumbnails, and 4:3 for many document images." },
+      { title: "Protect the subject", body: "Keep faces, products, labels, and important text away from the crop edge." },
+      { title: "Local processing", body: "The image is handled on your device in the browser, not sent to a server." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Load an image and choose the aspect ratio you need.",
+      "Move or resize the crop area until the important subject is framed safely.",
+      "Review the preview, then download the cropped result.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Is my photo uploaded?", answer: "No. The cropper processes the image in your browser, so the file is not sent to the server in the normal workflow." },
+      { question: "Which ratio should I use?", answer: "Use 1:1 for avatars, 16:9 for thumbnails or banners, and 4:3 or the original ratio for many article images." },
+      { question: "Can cropping reduce quality?", answer: "Cropping only keeps a selected area, but enlarging a very small crop can make the final image look soft." },
+    ],
+    disclaimer: "Large files may behave differently depending on browser and device memory. Keep a copy of important originals before editing.",
+  },
+  ja: {
+    introTitle: "仕上がりの比率を決めると、画像は整って見えます",
+    intro: "プロフィール画像、サムネイル、バナー、記事内の画像は、それぞれ適したフレームがあります。このクロップツールでは比率を先に選び、被写体を確認しながら切り抜けます。処理はブラウザ内で行われるため、通常の操作で画像がサーバーへ送信されることはありません。",
+    formulaTitle: "切り抜き前の確認ポイント",
+    formulas: [
+      { title: "用途に合う比率", body: "1:1はプロフィール、16:9は動画サムネイルやバナー、4:3は文書用画像に向いています。" },
+      { title: "被写体の余白", body: "顔、商品名、文字が端で切れないように、少し余白を残して調整します。" },
+      { title: "ブラウザ内処理", body: "画像は利用中の端末で処理され、サーバーへアップロードされません。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "画像を読み込み、必要なアスペクト比を選びます。",
+      "重要な被写体が安全に入るよう、切り抜き範囲を調整します。",
+      "プレビューを確認してから、切り抜いた画像を保存します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "写真はアップロードされますか？", answer: "いいえ。通常の操作ではブラウザ内で処理され、画像ファイルはサーバーに送信されません。" },
+      { question: "どの比率を選べばよいですか？", answer: "プロフィールは1:1、サムネイルやバナーは16:9、記事用画像は4:3または元の比率が使いやすいです。" },
+      { question: "画質は落ちますか？", answer: "切り抜き自体は範囲を選ぶ処理ですが、小さく切り抜いた部分を大きく使うと粗く見えることがあります。" },
+    ],
+    disclaimer: "大きな画像ではブラウザや端末性能により処理速度が変わります。重要な元画像は別に保存しておいてください。",
+  },
+  fr: {
+    introTitle: "Un recadrage est plus propre quand le format final est défini",
+    intro: "Photo de profil, miniature, bannière ou visuel d'article : chaque usage impose un cadre différent. Cet outil permet de choisir le ratio, de placer le sujet avec précision et d'exporter une image plus nette visuellement. Le traitement se fait dans le navigateur, sans téléversement du fichier dans l'usage normal.",
+    formulaTitle: "Points à vérifier",
+    formulas: [
+      { title: "Format de destination", body: "Le 1:1 convient aux avatars, le 16:9 aux miniatures et bannières, le 4:3 à de nombreux visuels de documents." },
+      { title: "Sujet protégé", body: "Gardez les visages, produits, libellés et textes importants loin des bords du recadrage." },
+      { title: "Traitement local", body: "L'image est traitée sur votre appareil, directement dans le navigateur." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Chargez une image et choisissez le ratio nécessaire.",
+      "Déplacez ou ajustez la zone de recadrage pour préserver le sujet principal.",
+      "Vérifiez l'aperçu, puis téléchargez le résultat recadré.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Ma photo est-elle envoyée au serveur ?", answer: "Non. L'image est traitée dans le navigateur et n'est pas téléversée dans le flux normal de l'outil." },
+      { question: "Quel ratio choisir ?", answer: "Choisissez 1:1 pour un avatar, 16:9 pour une miniature ou bannière, et 4:3 ou le format d'origine pour beaucoup d'articles." },
+      { question: "Le recadrage réduit-il la qualité ?", answer: "Le recadrage garde une zone de l'image. Si cette zone est très petite puis agrandie, le résultat peut paraître moins net." },
+    ],
+    disclaimer: "Les très grands fichiers peuvent dépendre de la mémoire du navigateur et de l'appareil. Conservez toujours l'original important.",
+  },
+  es: {
+    introTitle: "Un recorte funciona mejor cuando el formato final está claro",
+    intro: "Una foto de perfil, una miniatura, un banner o una imagen para un artículo no necesitan el mismo encuadre. Este recortador te ayuda a elegir la proporción, ubicar el sujeto y exportar una imagen más limpia. El procesamiento ocurre en el navegador, sin subir el archivo en el uso normal.",
+    formulaTitle: "Puntos de recorte",
+    formulas: [
+      { title: "Uso final", body: "1:1 sirve para avatares, 16:9 para miniaturas y banners, y 4:3 para muchas imágenes de documentos." },
+      { title: "Sujeto principal", body: "Mantén caras, productos, etiquetas y texto importante lejos del borde del recorte." },
+      { title: "Procesamiento local", body: "La imagen se procesa en tu dispositivo dentro del navegador." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Carga una imagen y elige la relación de aspecto que necesitas.",
+      "Ajusta el área de recorte hasta encuadrar bien el sujeto principal.",
+      "Revisa la vista previa y descarga el resultado recortado.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Mi foto se sube al servidor?", answer: "No. El recorte se procesa en el navegador, por lo que el archivo no se envía al servidor en el flujo normal." },
+      { question: "¿Qué proporción debería usar?", answer: "Usa 1:1 para avatares, 16:9 para miniaturas o banners, y 4:3 o la proporción original para muchas imágenes de artículos." },
+      { question: "¿Puede bajar la calidad?", answer: "Recortar conserva una zona de la imagen; si eliges una zona muy pequeña y la agrandas, puede verse menos nítida." },
+    ],
+    disclaimer: "Los archivos grandes pueden depender de la memoria del navegador y del dispositivo. Conserva una copia del original importante.",
+  },
+  zh: {
+    introTitle: "先确定比例，裁剪后的图片会更稳定",
+    intro: "头像、缩略图、横幅和文章配图需要不同的画面比例。这个裁剪工具可以先选择目标比例，再调整主体位置，导出更整洁的图片。处理过程在浏览器中完成，正常使用时图片不会上传到服务器。",
+    formulaTitle: "裁剪前的检查点",
+    formulas: [
+      { title: "匹配用途", body: "1:1 适合头像和卡片，16:9 适合视频缩略图和横幅，4:3 常用于文档配图。" },
+      { title: "保留主体", body: "避免把人物脸部、商品、标签或重要文字放在裁剪边缘。" },
+      { title: "本地处理", body: "图片在你的设备浏览器中处理，不会发送到服务器。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "加载图片并选择需要的宽高比例。",
+      "移动或调整裁剪区域，让重要主体完整进入画面。",
+      "确认预览效果后，下载裁剪后的图片。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "照片会上传吗？", answer: "不会。此工具在浏览器中处理图片，正常流程下文件不会发送到服务器。" },
+      { question: "应该选择哪个比例？", answer: "头像常用 1:1，缩略图或横幅常用 16:9，文章配图可用 4:3 或原始比例。" },
+      { question: "裁剪会影响清晰度吗？", answer: "裁剪只是保留选定区域。如果选区太小再放大，结果可能显得模糊。" },
+    ],
+    disclaimer: "大图片的处理速度和保存结果可能受浏览器与设备性能影响。重要原图请先备份。",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <ImageCropperComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

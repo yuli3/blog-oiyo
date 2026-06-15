@@ -2,15 +2,16 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import DividendCalendar from "../../components/tools/DividendCalendar";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "배당 캘린더 — 배당주·ETF 배당락일 일정",
     description: "KODEX·TIGER·SCHD·VYM·JEPI 등 국내외 배당주와 ETF의 배당락일을 달력으로 확인하세요. 월별 배당 일정, 수익률, 배당 주기 정보 제공.",
@@ -32,20 +33,229 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Sigue las fechas ex-dividendo de acciones y ETFs populares: SCHD, VYM, JEPI, QYLD, Realty Income y más. Vista de calendario mensual con rendimientos.",
   },
   zh: {
-    title: "股息日曆 — 除息日時間表",
-    description: "追蹤熱門股息股票和ETF的除息日，包括SCHD、VYM、JEPI、QYLD、房地產收入公司等。月曆檢視，含股息收益率資訊。",
-  },
-  cn: {
     title: "股息日历 — 除息日时间表",
-    description: "追踪热门股息股票和ETF的除息日，包括SCHD、VYM、JEPI、QYLD、房地产收入公司等。月历视图，含股息收益率信息。",
+    description: "追踪热门股息股票和ETF的除息日，包括SCHD、VYM、JEPI、QYLD、房地产收入公司等。月历检视，含股息收益率资讯。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+type SeoContent = {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+};
+
+const content: Record<ActiveLocale, SeoContent> = {
+  ko: {
+    introTitle: "배당 투자는 배당락일과 지급 주기를 먼저 확인해야 합니다",
+    intro: "배당주는 수익률만 보고 매수하면 권리 기준일을 놓치거나 예상 현금흐름을 잘못 볼 수 있습니다. 이 캘린더는 한국 ETF, 미국 ETF, 미국 배당주를 월별 배당락일과 배당 주기로 나누어 보여 주어 배당 일정 점검의 출발점으로 사용할 수 있습니다.",
+    formulaTitle: "확인 기준",
+    formulas: [
+      { title: "배당락일", body: "배당을 받을 권리가 없어지는 기준일입니다. 실제 매수 가능 기한은 시장 결제일 규칙을 함께 봐야 합니다." },
+      { title: "배당 주기", body: "월배당, 분기배당, 연배당에 따라 현금흐름의 빈도와 재투자 타이밍이 달라집니다." },
+      { title: "배당수익률", body: "연간 예상 배당금을 현재 가격으로 나눈 비율이지만, 가격과 배당금 변동에 따라 계속 바뀝니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "월을 이동하며 확인하려는 기간을 선택합니다.",
+      "전체, 한국 ETF, 미국 ETF, 미국 주식 필터를 골라 관심 종목만 봅니다.",
+      "배당락일, 배당 주기, 표시된 수익률을 확인한 뒤 공식 공시와 브로커 자료를 대조합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "캘린더의 날짜가 확정 공시인가요?", answer: "아닙니다. 이 페이지는 정적 예시 데이터를 기반으로 한 일정 도구입니다. 실제 배당락일과 지급일은 운용사, 거래소, 브로커 공시를 확인해야 합니다." },
+      { question: "배당락일에 사도 배당을 받을 수 있나요?", answer: "일반적으로 배당락일에는 이미 배당 권리가 분리됩니다. 시장별 결제일과 기준일 규칙이 다르므로 매수 전 확인이 필요합니다." },
+      { question: "높은 배당수익률이면 좋은 투자인가요?", answer: "항상 그렇지 않습니다. 주가 하락 때문에 수익률이 높아 보일 수 있고, 배당 삭감 위험, 세금, 환율, 총수익률을 함께 봐야 합니다." },
+    ],
+    disclaimer: "이 도구는 일반적인 추정용입니다. 실제 배당 일정, 세금, 투자 판단은 관련 기관이나 전문가에게 확인하세요.",
+  },
+  en: {
+    introTitle: "Dividend investing starts with ex-dividend dates and payment frequency",
+    intro: "A dividend yield is not enough to plan cash flow. You also need to know when the stock goes ex-dividend, how often it pays, and whether the dates are confirmed. This calendar groups selected Korean ETFs, U.S. ETFs, and U.S. dividend stocks by month for quick schedule review.",
+    formulaTitle: "What to check",
+    formulas: [
+      { title: "Ex-dividend date", body: "The date when the share no longer trades with the right to the next dividend. Settlement rules still matter." },
+      { title: "Payment frequency", body: "Monthly, quarterly, and annual payers create different cash-flow and reinvestment patterns." },
+      { title: "Dividend yield", body: "Usually annual dividend divided by current price, but it changes as price and dividends change." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Move between months to choose the period you want to review.",
+      "Filter by all, Korean ETF, U.S. ETF, or U.S. stock.",
+      "Check the ex-dividend date, frequency, and displayed yield, then verify against official filings or broker data.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Are these dates official announcements?", answer: "No. The page uses static schedule data for reference. Actual ex-dividend and payment dates should be confirmed with the fund sponsor, exchange, issuer, or broker." },
+      { question: "Can I buy on the ex-dividend date and receive the dividend?", answer: "Generally no, because the right to the dividend has already separated by the ex-dividend date. Settlement rules vary by market." },
+      { question: "Is a high dividend yield always better?", answer: "No. A yield can look high because the price fell. Dividend sustainability, taxes, currency, and total return all matter." },
+    ],
+    disclaimer: "This tool is a general estimate. Confirm actual dividend schedules, tax treatment, and investment decisions with the relevant institution or professional.",
+  },
+  ja: {
+    introTitle: "配当投資は権利落ち日と支払い頻度の確認から始まります",
+    intro: "配当利回りだけではキャッシュフローは計画できません。権利落ち日、支払い頻度、日程の確定状況を確認する必要があります。このカレンダーは韓国ETF、米国ETF、米国配当株の予定を月別に整理します。",
+    formulaTitle: "確認するポイント",
+    formulas: [
+      { title: "権利落ち日", body: "次回配当を受ける権利が分離される日です。市場の決済ルールも確認が必要です。" },
+      { title: "配当頻度", body: "毎月、四半期、年次でキャッシュフローと再投資のタイミングが変わります。" },
+      { title: "配当利回り", body: "通常は年間配当を現在価格で割りますが、価格と配当の変化で変動します。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "月を移動して確認したい期間を選びます。",
+      "全体、韓国ETF、米国ETF、米国株で絞り込みます。",
+      "権利落ち日、頻度、利回りを見た後、公式資料や証券会社データで確認します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "表示日は公式発表ですか？", answer: "いいえ。静的な参考データです。実際の権利落ち日と支払日は運用会社、取引所、発行体、証券会社で確認してください。" },
+      { question: "権利落ち日に買えば配当を受けられますか？", answer: "一般的には受けられません。権利落ち日には配当権利がすでに分離されています。市場ごとの決済ルールを確認してください。" },
+      { question: "高配当利回りは常に良いですか？", answer: "いいえ。株価下落で利回りが高く見えることがあります。配当の持続性、税金、為替、総リターンも重要です。" },
+    ],
+    disclaimer: "このツールは一般的な概算です。実際の配当日程、税金、投資判断は関係機関または専門家に確認してください。",
+  },
+  zh: {
+    introTitle: "股息投资要先确认除息日和派息频率",
+    intro: "只看股息收益率不足以规划现金流。还需要知道何时除息、多久派息一次，以及日期是否已经正式确认。本日历把部分韩国ETF、美国ETF和美国股息股票按月份整理，方便快速查看。",
+    formulaTitle: "查看重点",
+    formulas: [
+      { title: "除息日", body: "股票不再附带下一次股息权利的日期，仍需结合市场交割规则。" },
+      { title: "派息频率", body: "每月、每季或每年派息会影响现金流和再投资节奏。" },
+      { title: "股息收益率", body: "通常为年度股息除以当前价格，但会随价格和股息变化而变动。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "切换月份，选择要查看的期间。",
+      "按全部、韩国ETF、美国ETF或美国股票筛选。",
+      "查看除息日、派息频率和收益率后，再用官方公告或券商资料确认。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "这些日期是正式公告吗？", answer: "不是。本页面使用静态参考数据。实际除息日和支付日应以基金公司、交易所、发行人或券商信息为准。" },
+      { question: "除息日买入还能拿到股息吗？", answer: "一般不能。除息日时股息权利通常已经分离。不同市场还有交割规则差异。" },
+      { question: "高股息收益率一定更好吗？", answer: "不一定。股价下跌也会让收益率看起来很高。还要看股息可持续性、税务、汇率和总回报。" },
+    ],
+    disclaimer: "本工具仅作一般估算。实际股息日程、税务处理和投资判断请向相关机构或专业人士确认。",
+  },
+  fr: {
+    introTitle: "Un calendrier de dividendes commence par la date ex-dividende",
+    intro: "Le rendement ne suffit pas pour prévoir les flux de trésorerie. Il faut connaître la date ex-dividende, la fréquence de paiement et le caractère confirmé ou non des dates. Ce calendrier regroupe quelques ETF coréens, ETF américains et actions américaines à dividendes.",
+    formulaTitle: "Points à vérifier",
+    formulas: [
+      { title: "Date ex-dividende", body: "Date à partir de laquelle le titre se négocie sans droit au prochain dividende. Les règles de règlement restent importantes." },
+      { title: "Fréquence", body: "Mensuelle, trimestrielle ou annuelle, elle change le rythme de trésorerie et de réinvestissement." },
+      { title: "Rendement", body: "Souvent dividende annuel divisé par le prix courant, mais variable avec le prix et le dividende." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Changez de mois pour choisir la période à examiner.",
+      "Filtrez par tout, ETF coréen, ETF US ou action US.",
+      "Vérifiez date ex-dividende, fréquence et rendement, puis confirmez avec les sources officielles ou le courtier.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Ces dates sont-elles officielles ?", answer: "Non. La page utilise des données statiques de référence. Les dates réelles doivent être confirmées auprès de l'émetteur, de la bourse, du gestionnaire ou du courtier." },
+      { question: "Puis-je acheter le jour ex-dividende et recevoir le dividende ?", answer: "En général non, car le droit au dividende est déjà séparé. Les règles de règlement varient selon le marché." },
+      { question: "Un rendement élevé est-il toujours préférable ?", answer: "Non. Il peut être élevé parce que le prix a chuté. Durabilité, fiscalité, change et rendement total comptent aussi." },
+    ],
+    disclaimer: "Cet outil fournit une estimation générale. Confirmez calendriers, fiscalité et décisions d'investissement avec l'institution compétente ou un professionnel.",
+  },
+  es: {
+    introTitle: "El calendario de dividendos empieza por la fecha ex-dividendo",
+    intro: "El rendimiento no basta para planificar flujo de caja. Hay que saber la fecha ex-dividendo, la frecuencia de pago y si las fechas están confirmadas. Este calendario agrupa algunos ETF coreanos, ETF de EE. UU. y acciones estadounidenses con dividendos.",
+    formulaTitle: "Qué revisar",
+    formulas: [
+      { title: "Fecha ex-dividendo", body: "Fecha desde la que la acción cotiza sin derecho al próximo dividendo. Las reglas de liquidación importan." },
+      { title: "Frecuencia", body: "Mensual, trimestral o anual cambia el ritmo de caja y reinversión." },
+      { title: "Rendimiento", body: "Normalmente dividendo anual dividido por precio actual, pero cambia con precio y dividendo." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Cambia de mes para elegir el periodo a revisar.",
+      "Filtra por todo, ETF coreano, ETF de EE. UU. o acción de EE. UU.",
+      "Revisa fecha ex-dividendo, frecuencia y rendimiento, y confirma con fuentes oficiales o bróker.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Estas fechas son oficiales?", answer: "No. La página usa datos estáticos de referencia. Las fechas reales deben confirmarse con emisor, bolsa, gestor o bróker." },
+      { question: "¿Puedo comprar en la fecha ex-dividendo y recibir el dividendo?", answer: "Generalmente no, porque el derecho ya se separó. Las reglas de liquidación varían por mercado." },
+      { question: "¿Un rendimiento alto siempre es mejor?", answer: "No. Puede verse alto porque cayó el precio. También importan sostenibilidad, impuestos, divisa y retorno total." },
+    ],
+    disclaimer: "Esta herramienta ofrece una estimación general. Confirma calendarios, impuestos y decisiones de inversión con la institución correspondiente o un profesional.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-4xl px-4 py-8">
     <DividendCalendar client:load locale={locale} />
+
+    <section class="mx-auto mt-10 max-w-2xl border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mx-auto mt-10 max-w-2xl">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mx-auto mt-10 max-w-2xl">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mx-auto mt-10 max-w-2xl">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mx-auto mt-8 max-w-2xl rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

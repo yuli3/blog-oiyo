@@ -2,7 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PregnancyCalculatorComp from "../../components/tools/PregnancyCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -11,9 +12,9 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "임신 주수 계산기 — 출산 예정일 및 임신 주수 계산",
     description: "마지막 생리일 또는 수정일을 입력해 현재 임신 주수와 출산 예정일을 계산합니다. 임신 3분기 단계도 함께 확인하세요.",
@@ -35,20 +36,203 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Calcula tu semana de embarazo actual y la fecha estimada de parto.",
   },
   zh: {
-    title: "妊娠週數計算機",
-    description: "輸入最後一次月經日期或受孕日期，計算當前懷孕週數和預產期。",
-  },
-  cn: {
-    title: "妊娠周数计算器",
+    title: "妊娠周数计算机",
     description: "输入最后一次月经日期或受孕日期，计算当前怀孕周数和预产期。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "임신 주수와 예정일은 마지막 생리 시작일을 기준으로 추정하는 경우가 많습니다",
+    intro: "이 계산기는 마지막 생리 시작일(LMP)과 평균 생리 주기를 입력해 예상 배란일, 가임기, 출산 예정일을 계산합니다. 출산 예정일은 LMP에서 280일을 더하는 표준 추정 방식을 사용하며, 실제 임신 주수와 예정일은 초음파와 진료 정보로 조정될 수 있습니다.",
+    formulaTitle: "계산 기준",
+    formulas: [
+      { title: "배란일", body: "예상 배란일 = 마지막 생리 시작일 + (평균 주기 - 14일)" },
+      { title: "가임기", body: "가임기 = 예상 배란일 3일 전부터 1일 후까지" },
+      { title: "출산 예정일", body: "예정일 = 마지막 생리 시작일 + 280일" },
+    ],
+    howToTitle: "사용 방법",
+    steps: ["마지막 생리 시작일을 입력합니다.", "평균 생리 주기 길이를 일 단위로 입력합니다.", "예상 배란일, 가임기, 출산 예정일을 참고용 일정으로 확인합니다."],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "출산 예정일은 정확한 날짜인가요?", answer: "아닙니다. 예정일은 통계적 기준일이며 실제 출산일은 전후로 달라질 수 있습니다." },
+      { question: "주기가 불규칙하면 어떻게 되나요?", answer: "LMP 기반 계산의 오차가 커질 수 있습니다. 불규칙 주기에서는 초음파 기준 산정이 더 중요합니다." },
+      { question: "이 도구를 피임이나 임신 시도 판단에 써도 되나요?", answer: "단독으로 사용하면 안 됩니다. 배란은 스트레스, 질병, 수면, 약물 등으로 달라질 수 있습니다." },
+    ],
+    disclaimer: "결과는 일반적인 추정치이며 산부인과 전문의의 의학적 조언, 진단 또는 진료를 대신하지 않습니다.",
+  },
+  en: {
+    introTitle: "Pregnancy dating often starts from the first day of the last menstrual period",
+    intro: "This calculator uses last menstrual period (LMP) and average cycle length to estimate ovulation, fertile window, and due date. The due date is calculated by adding 280 days to LMP, a common clinical convention, but ultrasound and clinical history may adjust dating.",
+    formulaTitle: "Calculation basics",
+    formulas: [
+      { title: "Ovulation", body: "estimated ovulation = LMP + (cycle length - 14 days)" },
+      { title: "Fertile window", body: "from 3 days before ovulation through 1 day after" },
+      { title: "Due date", body: "estimated due date = LMP + 280 days" },
+    ],
+    howToTitle: "How to use",
+    steps: ["Enter the first day of the last menstrual period.", "Enter average cycle length in days.", "Review ovulation, fertile window, and estimated due date as planning references."],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Is the due date exact?", answer: "No. It is a statistical estimate; actual delivery commonly occurs before or after the date." },
+      { question: "What if cycles are irregular?", answer: "LMP-based dating can be less reliable. Ultrasound dating and clinician review become more important." },
+      { question: "Can this be used for contraception or fertility decisions?", answer: "Not by itself. Ovulation can shift with stress, illness, sleep, medication, and individual variation." },
+    ],
+    disclaimer: "Results are general estimates and are not a substitute for professional obstetric medical advice, diagnosis, or care.",
+  },
+  ja: {
+    introTitle: "妊娠週数と予定日は最終月経開始日を基準に推定することがよくあります",
+    intro: "この計算機は最終月経開始日(LMP)と平均周期から、排卵日、妊娠可能期間、出産予定日を推定します。予定日はLMPに280日を加える一般的な方法ですが、実際の週数や予定日は超音波検査や診療情報で調整されることがあります。",
+    formulaTitle: "計算の基準",
+    formulas: [
+      { title: "排卵日", body: "推定排卵日 = LMP + (周期 - 14日)" },
+      { title: "妊娠可能期間", body: "排卵日の3日前から1日後まで" },
+      { title: "出産予定日", body: "予定日 = LMP + 280日" },
+    ],
+    howToTitle: "使い方",
+    steps: ["最終月経開始日を入力します。", "平均周期を日数で入力します。", "排卵日、妊娠可能期間、予定日を参考日程として確認します。"],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "出産予定日は正確ですか？", answer: "いいえ。統計的な目安で、実際の出産日は前後することが一般的です。" },
+      { question: "周期が不規則な場合は？", answer: "LMPだけの推定は誤差が大きくなります。超音波や医師の判断が重要です。" },
+      { question: "避妊や妊活の判断に使えますか？", answer: "単独では使わないでください。排卵はストレス、病気、睡眠、薬などで変動します。" },
+    ],
+    disclaimer: "結果は一般的な推定値であり、産婦人科専門家の医学的助言、診断、診療の代わりにはなりません。",
+  },
+  zh: {
+    introTitle: "妊娠周数与预产期通常会先从最后一次月经开始日估算",
+    intro: "这个计算器使用最后一次月经开始日(LMP)与平均周期，推估排卵日、受孕窗口期与预产期。预产期采用 LMP 加 280 天的常见估算法，但实际孕周与日期可能会依超音波与医疗资讯调整。",
+    formulaTitle: "计算基准",
+    formulas: [
+      { title: "排卵日", body: "推估排卵日 = LMP + (周期长度 - 14天)" },
+      { title: "受孕窗口", body: "排卵日前 3 天到排卵后 1 天" },
+      { title: "预产期", body: "预产期 = LMP + 280 天" },
+    ],
+    howToTitle: "使用方法",
+    steps: ["输入最后一次月经开始日。", "输入平均月经周期天数。", "把排卵日、受孕窗口与预产期作为参考行程查看。"],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "预产期是精确日期吗？", answer: "不是。它是统计估计，实际生产日期常会提前或延后。" },
+      { question: "周期不规律怎么办？", answer: "LMP 估算误差可能较大，超音波与医师评估会更重要。" },
+      { question: "可以用于避孕或备孕决策吗？", answer: "不能单独使用。排卵会受压力、疾病、睡眠、药物与个体差异影响。" },
+    ],
+    disclaimer: "结果仅为一般估算，不能替代产科专业医疗建议、诊断或照护。",
+  },
+  fr: {
+    introTitle: "La datation de grossesse part souvent du premier jour des dernières règles",
+    intro: "Ce calculateur utilise la date des dernières règles et la durée moyenne du cycle pour estimer ovulation, fenêtre fertile et date prévue d'accouchement. La date prévue ajoute 280 jours aux dernières règles, mais l'échographie et l'histoire clinique peuvent corriger l'estimation.",
+    formulaTitle: "Bases de calcul",
+    formulas: [
+      { title: "Ovulation", body: "ovulation estimée = dernières règles + (cycle - 14 jours)" },
+      { title: "Fenêtre fertile", body: "de 3 jours avant l'ovulation à 1 jour après" },
+      { title: "Terme estimé", body: "date prévue = dernières règles + 280 jours" },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: ["Saisissez le premier jour des dernières règles.", "Entrez la durée moyenne du cycle.", "Consultez ovulation, fenêtre fertile et date prévue comme repères."],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "La date prévue est-elle exacte ?", answer: "Non. C'est une estimation statistique ; l'accouchement arrive souvent avant ou après." },
+      { question: "Et si les cycles sont irréguliers ?", answer: "Le calcul basé sur les règles devient moins fiable. L'échographie et l'avis clinique comptent davantage." },
+      { question: "Puis-je l'utiliser pour contraception ou fertilité ?", answer: "Pas seul. L'ovulation peut changer avec stress, maladie, sommeil, médicaments et variations individuelles." },
+    ],
+    disclaimer: "Les résultats sont des estimations générales et ne remplacent pas un avis, diagnostic ou suivi obstétrical professionnel.",
+  },
+  es: {
+    introTitle: "El cálculo de embarazo suele comenzar con el primer día de la última menstruación",
+    intro: "Esta calculadora usa la última menstruación y la duración promedio del ciclo para estimar ovulación, ventana fértil y fecha probable de parto. La fecha probable suma 280 días a la última menstruación, pero ecografía e historia clínica pueden ajustar la datación.",
+    formulaTitle: "Bases del cálculo",
+    formulas: [
+      { title: "Ovulación", body: "ovulación estimada = última regla + (ciclo - 14 días)" },
+      { title: "Ventana fértil", body: "desde 3 días antes de la ovulación hasta 1 día después" },
+      { title: "Fecha probable", body: "fecha probable de parto = última regla + 280 días" },
+    ],
+    howToTitle: "Cómo usarla",
+    steps: ["Introduce el primer día de la última menstruación.", "Introduce la duración media del ciclo.", "Revisa ovulación, ventana fértil y fecha probable como referencias."],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿La fecha probable es exacta?", answer: "No. Es una estimación estadística; el parto suele ocurrir antes o después." },
+      { question: "¿Y si mis ciclos son irregulares?", answer: "El cálculo por última regla puede ser menos fiable. La ecografía y revisión clínica pesan más." },
+      { question: "¿Sirve para anticoncepción o fertilidad?", answer: "No por sí sola. La ovulación puede cambiar por estrés, enfermedad, sueño, medicación y variación individual." },
+    ],
+    disclaimer: "Los resultados son estimaciones generales y no sustituyen el consejo, diagnóstico o atención obstétrica profesional.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <PregnancyCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

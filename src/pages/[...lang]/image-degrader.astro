@@ -4,6 +4,8 @@ import ImageDegraderComp from "../../components/tools/ImageDegrader";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
+type ActiveLocale = (typeof locales)[number];
+
 export async function getStaticPaths() {
   return locales.map((lang) => ({
     params: { lang },
@@ -11,9 +13,9 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale & Locale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "이미지 품질 저하 도구 — 이미지 압축·품질 조정",
     description: "이미지 품질과 압축률을 조절하세요. JPEG 품질 설정, 해상도 축소, 파일 크기 최적화 기능을 제공합니다.",
@@ -35,20 +37,227 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Ajusta la calidad y compresión de imágenes. Configuración de calidad JPEG, reducción de resolución.",
   },
   zh: {
-    title: "圖片品質調整工具",
-    description: "調整圖片品質和壓縮率。提供JPEG品質設定、解析度縮小和文件大小優化功能。",
-  },
-  cn: {
     title: "图片质量调整工具",
     description: "调整图片质量和压缩率。提供JPEG质量设置、分辨率缩小和文件大小优化功能。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "이미지 품질 조정은 용량과 선명도의 균형입니다",
+    intro: "웹에 올릴 이미지는 원본 화질을 그대로 유지하는 것보다 목적에 맞는 용량과 크기로 줄이는 편이 더 실용적일 때가 많습니다. 이 도구는 JPEG 품질, 해상도, 파일 크기 변화를 브라우저에서 바로 확인하게 해주며, 이미지가 서버로 업로드되지 않는 방식으로 처리됩니다.",
+    formulaTitle: "품질을 낮출 때 보는 기준",
+    formulas: [
+      { title: "압축률", body: "품질 값을 낮추면 대체로 파일 크기가 줄지만, 세부 묘사와 색 경계가 손상될 수 있습니다." },
+      { title: "해상도", body: "표시 크기보다 큰 이미지는 리사이즈만으로도 용량을 크게 줄일 수 있습니다." },
+      { title: "프라이버시", body: "변환은 브라우저 안에서 실행되므로 작업 파일을 서버에 맡길 필요가 없습니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "이미지를 불러오고 현재 파일 크기와 미리보기를 확인합니다.",
+      "품질 또는 해상도 옵션을 조절해 원하는 용량을 찾습니다.",
+      "화면에서 선명도를 확인한 뒤 최종 이미지를 저장합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "이미지를 왜 일부러 저하시켜야 하나요?", answer: "웹페이지, 이메일, 메신저에 사용할 때는 작은 파일이 더 빠르게 열리고 전송됩니다. 품질을 적절히 낮추면 체감 차이는 적고 용량은 크게 줄어듭니다." },
+      { question: "PNG도 압축되나요?", answer: "도구 설정과 브라우저 지원에 따라 결과 포맷이 달라질 수 있습니다. 사진은 JPEG/WebP 압축 효과가 크고, 로고나 선화는 PNG가 더 적합할 수 있습니다." },
+      { question: "사진이 업로드되나요?", answer: "아니요. 일반적인 사용 과정에서 이미지는 브라우저에서 처리되며 서버로 업로드되지 않습니다." },
+    ],
+    disclaimer: "압축은 되돌릴 수 없는 손실을 만들 수 있습니다. 원본 이미지는 보관한 뒤 별도 사본으로 작업하세요.",
+  },
+  en: {
+    introTitle: "Image degradation is a balance between size and clarity",
+    intro: "For websites, email, and messaging, a lighter image is often more useful than a perfect original. This tool lets you compare quality, resolution, and file-size changes directly in the browser. Your image is processed locally, so it is not uploaded during normal use.",
+    formulaTitle: "What to check",
+    formulas: [
+      { title: "Compression", body: "Lower quality usually means a smaller file, but fine details and color edges may become less clean." },
+      { title: "Resolution", body: "If an image is larger than its display size, resizing can reduce file size before heavy compression is needed." },
+      { title: "Privacy", body: "Processing runs in the browser, so you do not need to hand the file to a server." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Load an image and review the current size and preview.",
+      "Adjust quality or resolution until the file size fits your target.",
+      "Check the preview for visible artifacts, then save the final image.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Why would I lower image quality?", answer: "Smaller images load and share faster. A moderate quality reduction can save a lot of space while keeping the image acceptable on screen." },
+      { question: "Does this work for PNG?", answer: "Results depend on browser support and selected output. Photos often compress best as JPEG or WebP, while logos and line art may be better kept as PNG." },
+      { question: "Is my image uploaded?", answer: "No. The image is processed in your browser in the normal workflow." },
+    ],
+    disclaimer: "Lossy compression can permanently remove detail. Keep your original file and edit a separate copy.",
+  },
+  ja: {
+    introTitle: "画像品質の調整は、容量と見やすさのバランスです",
+    intro: "Web、メール、メッセージで使う画像は、元の品質を完全に保つよりも軽くする方が実用的なことがあります。このツールでは品質、解像度、ファイルサイズの変化をブラウザ内で確認できます。通常の操作で画像がサーバーへアップロードされることはありません。",
+    formulaTitle: "調整時の確認ポイント",
+    formulas: [
+      { title: "圧縮率", body: "品質を下げると容量は小さくなりますが、細部や色の境界が崩れる場合があります。" },
+      { title: "解像度", body: "表示サイズより大きい画像は、強い圧縮の前にリサイズするだけでも軽くできます。" },
+      { title: "プライバシー", body: "処理はブラウザ内で行われるため、作業ファイルをサーバーへ渡す必要がありません。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "画像を読み込み、現在の容量とプレビューを確認します。",
+      "品質または解像度を調整し、目的に合う容量を探します。",
+      "画面で劣化の見え方を確認してから保存します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "なぜ画質を下げるのですか？", answer: "小さい画像は読み込みや共有が速くなります。適度な圧縮なら見た目の差を抑えつつ容量を減らせます。" },
+      { question: "PNGにも使えますか？", answer: "結果はブラウザ対応や出力形式によります。写真はJPEGやWebP、ロゴや線画はPNGが向くことがあります。" },
+      { question: "画像はアップロードされますか？", answer: "いいえ。通常の操作ではブラウザ内で処理されます。" },
+    ],
+    disclaimer: "非可逆圧縮では細部が失われることがあります。重要な元画像は保存し、コピーで作業してください。",
+  },
+  fr: {
+    introTitle: "La compression équilibre poids du fichier et lisibilité",
+    intro: "Pour le web, l'e-mail ou la messagerie, une image plus légère est souvent plus utile qu'un original parfait. Cet outil permet de comparer qualité, résolution et taille du fichier dans le navigateur. L'image est traitée localement dans l'usage normal.",
+    formulaTitle: "Critères à surveiller",
+    formulas: [
+      { title: "Compression", body: "Une qualité plus basse réduit souvent le poids, mais les détails fins et les bords de couleur peuvent se dégrader." },
+      { title: "Résolution", body: "Si l'image dépasse sa taille d'affichage, le redimensionnement peut réduire le poids avant une forte compression." },
+      { title: "Confidentialité", body: "Le traitement se fait dans le navigateur, sans envoyer le fichier à un serveur." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Chargez une image et observez sa taille actuelle et l'aperçu.",
+      "Ajustez la qualité ou la résolution jusqu'à atteindre le poids voulu.",
+      "Vérifiez les artefacts visibles, puis enregistrez l'image finale.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Pourquoi réduire volontairement la qualité ?", answer: "Un fichier plus petit se charge et se partage plus vite. Une réduction modérée garde souvent un rendu suffisant à l'écran." },
+      { question: "L'outil convient-il au PNG ?", answer: "Cela dépend du navigateur et du format de sortie. Les photos se compressent bien en JPEG ou WebP ; les logos peuvent rester meilleurs en PNG." },
+      { question: "Mon image est-elle téléversée ?", answer: "Non. Dans le flux normal, l'image est traitée dans votre navigateur." },
+    ],
+    disclaimer: "La compression avec perte peut supprimer des détails. Gardez l'original et travaillez sur une copie.",
+  },
+  es: {
+    introTitle: "La compresión equilibra peso y nitidez",
+    intro: "Para una web, correo o mensajería, una imagen ligera suele ser más útil que un original perfecto. Esta herramienta permite comparar calidad, resolución y tamaño del archivo directamente en el navegador. La imagen se procesa de forma local en el uso normal.",
+    formulaTitle: "Qué revisar",
+    formulas: [
+      { title: "Compresión", body: "Bajar la calidad suele reducir el archivo, pero puede afectar detalles finos y bordes de color." },
+      { title: "Resolución", body: "Si la imagen es mayor que su tamaño de visualización, redimensionar puede ahorrar mucho peso." },
+      { title: "Privacidad", body: "El procesamiento ocurre en el navegador, sin entregar el archivo a un servidor." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Carga una imagen y revisa el tamaño actual y la vista previa.",
+      "Ajusta calidad o resolución hasta llegar al tamaño deseado.",
+      "Comprueba si hay artefactos visibles y guarda la imagen final.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Por qué reducir la calidad?", answer: "Los archivos pequeños cargan y se comparten más rápido. Una reducción moderada puede mantener una apariencia aceptable en pantalla." },
+      { question: "¿Funciona con PNG?", answer: "Depende del navegador y del formato de salida. Las fotos suelen comprimirse mejor en JPEG o WebP; logotipos y líneas pueden ir mejor en PNG." },
+      { question: "¿La imagen se sube?", answer: "No. En el flujo normal, la imagen se procesa en tu navegador." },
+    ],
+    disclaimer: "La compresión con pérdida puede eliminar detalles. Conserva el original y trabaja con una copia.",
+  },
+  zh: {
+    introTitle: "降低图片质量，本质是在体积和清晰度之间取平衡",
+    intro: "用于网页、邮件或聊天的图片，很多时候不需要保留完整原始质量。这个工具可以在浏览器中对比质量、分辨率和文件大小变化。正常使用时图片在本地处理，不会上传到服务器。",
+    formulaTitle: "调整时关注的指标",
+    formulas: [
+      { title: "压缩程度", body: "质量值越低，文件通常越小，但细节和颜色边缘可能变差。" },
+      { title: "分辨率", body: "如果图片远大于实际显示尺寸，先缩小尺寸往往比强压缩更自然。" },
+      { title: "隐私", body: "处理在浏览器中完成，不需要把图片交给服务器。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "加载图片，查看当前文件大小和预览效果。",
+      "调整质量或分辨率，找到合适的目标体积。",
+      "确认画面没有明显瑕疵后，保存最终图片。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "为什么要降低图片质量？", answer: "小文件加载和分享更快。适度降低质量通常能明显减小体积，同时保持屏幕观看效果。" },
+      { question: "PNG 可以压缩吗？", answer: "取决于浏览器支持和输出格式。照片通常适合 JPEG 或 WebP，标志和线条图有时更适合 PNG。" },
+      { question: "图片会上传吗？", answer: "不会。正常流程下图片在浏览器中处理。" },
+    ],
+    disclaimer: "有损压缩可能永久丢失细节。请保留原图，并使用副本进行处理。",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <ImageDegraderComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

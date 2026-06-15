@@ -2,7 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import BodyFatCalculatorComp from "../../components/tools/BodyFatCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -11,9 +12,9 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "체지방률 계산기 (해군 공식) — 정확한 체지방 측정",
     description: "목둘레·허리둘레·엉덩이둘레를 이용한 미국 해군 공식으로 체지방률을 정확하게 계산합니다. 체지방량·제지방량·이상 체중 범위도 함께 확인하세요.",
@@ -35,20 +36,227 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Calcula tu porcentaje de grasa corporal con el método Navy usando medidas de cuello, cintura y cadera.",
   },
   zh: {
-    title: "體脂率計算機（海軍公式）— 精確體脂測量",
-    description: "使用美國海軍公式，根據頸圍、腰圍和臀圍精確計算體脂率。同時顯示脂肪量、瘦體重和理想體重範圍。",
-  },
-  cn: {
-    title: "体脂率计算器（海军公式）— 精确体脂测量",
+    title: "体脂率计算机（海军公式）— 精确体脂测量",
     description: "使用美国海军公式，根据颈围、腰围和臀围精确计算体脂率。同时显示脂肪量、瘦体重和理想体重范围。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "해군 공식은 둘레 측정으로 체지방률을 추정하는 실용적인 방법입니다",
+    intro: "이 계산기는 키, 몸무게, 목둘레, 허리둘레와 여성의 경우 엉덩이둘레를 사용해 미국 해군식 체지방률을 계산합니다. 결과는 체지방량, 제지방량, BMI 기준의 이상 체중 범위까지 함께 보여주므로 단순 체중보다 몸 구성을 더 입체적으로 볼 수 있습니다.",
+    formulaTitle: "핵심 개념",
+    formulas: [
+      { title: "남성 공식", body: "86.010×log10(허리-목) - 70.041×log10(키) + 36.76" },
+      { title: "여성 공식", body: "163.205×log10(허리+엉덩이-목) - 97.684×log10(키) - 78.387" },
+      { title: "체성분", body: "체지방량 = 체중×체지방률, 제지방량 = 체중-체지방량" },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "성별을 선택하고 키, 몸무게, 목둘레, 허리둘레를 입력합니다.",
+      "여성으로 선택한 경우 엉덩이둘레도 입력합니다.",
+      "체지방률과 체지방량·제지방량을 확인하되 측정 위치와 줄자 압박 정도를 일정하게 유지합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "해군 공식은 정확한가요?", answer: "일관된 둘레 측정에서는 유용한 추정치지만 DEXA 같은 전문 체성분 검사와 같은 직접 측정은 아닙니다." },
+      { question: "왜 목둘레를 입력하나요?", answer: "해군 공식은 허리와 목, 여성의 경우 엉덩이 차이를 이용해 지방 분포를 추정합니다." },
+      { question: "아침과 저녁 결과가 달라질 수 있나요?", answer: "가능합니다. 식사, 수분, 운동, 자세에 따라 둘레가 달라질 수 있으니 같은 시간대와 조건에서 재는 것이 좋습니다." },
+    ],
+    disclaimer: "결과는 일반적인 추정치이며 전문적인 의학적 조언, 진단 또는 치료를 대신하지 않습니다.",
+  },
+  en: {
+    introTitle: "The Navy method estimates body fat from circumference measurements",
+    intro: "This calculator uses height, weight, neck, waist, and for women hip circumference to estimate body fat percentage with the U.S. Navy method. It also converts the percentage into fat mass, lean mass, and an ideal-weight range based on BMI, giving more context than scale weight alone.",
+    formulaTitle: "Core concepts",
+    formulas: [
+      { title: "Male formula", body: "86.010×log10(waist-neck) - 70.041×log10(height) + 36.76" },
+      { title: "Female formula", body: "163.205×log10(waist+hip-neck) - 97.684×log10(height) - 78.387" },
+      { title: "Body composition", body: "Fat mass = weight×body-fat %, lean mass = weight-fat mass" },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Select sex and enter height, weight, neck, and waist measurements.",
+      "If female is selected, enter hip circumference as well.",
+      "Review body fat, fat mass, and lean mass while keeping measurement placement consistent.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Is the Navy method accurate?", answer: "It can be a useful estimate when measurements are consistent, but it is not a direct body-composition test such as DEXA." },
+      { question: "Why does the formula use neck circumference?", answer: "The Navy method compares neck and waist, and hip for women, to estimate body-fat distribution from body shape." },
+      { question: "Can results change during the day?", answer: "Yes. Meals, hydration, exercise, posture, and tape tension can affect circumference measurements." },
+    ],
+    disclaimer: "Results are general estimates and are not a substitute for professional medical advice, diagnosis, or treatment.",
+  },
+  ja: {
+    introTitle: "海軍式は体の周径から体脂肪率を推定する実用的な方法です",
+    intro: "この計算機は身長、体重、首周り、ウエスト、女性の場合はヒップを使い、米海軍式の体脂肪率を算出します。体脂肪量、除脂肪量、BMI基準の理想体重範囲も表示し、体重だけより体の構成を把握しやすくします。",
+    formulaTitle: "基本概念",
+    formulas: [
+      { title: "男性式", body: "86.010×log10(ウエスト-首) - 70.041×log10(身長) + 36.76" },
+      { title: "女性式", body: "163.205×log10(ウエスト+ヒップ-首) - 97.684×log10(身長) - 78.387" },
+      { title: "体組成", body: "体脂肪量 = 体重×体脂肪率、除脂肪量 = 体重-体脂肪量" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "性別を選び、身長・体重・首周り・ウエストを入力します。",
+      "女性を選んだ場合はヒップ周りも入力します。",
+      "体脂肪率、体脂肪量、除脂肪量を確認し、測定位置は毎回そろえます。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "海軍式は正確ですか？", answer: "一定条件で測れば参考になる推定値ですが、DEXAなどの直接的な体組成検査ではありません。" },
+      { question: "なぜ首周りを使うのですか？", answer: "海軍式は首、ウエスト、女性ではヒップとの差から体脂肪の分布を推定します。" },
+      { question: "時間帯で結果は変わりますか？", answer: "食事、水分、運動、姿勢、メジャーの締め具合で周径が変わるため、同じ条件で測るのが望ましいです。" },
+    ],
+    disclaimer: "結果は一般的な推定値であり、医療専門家による助言、診断、治療の代わりにはなりません。",
+  },
+  zh: {
+    introTitle: "海军公式用身体围度推估体脂率，适合日常追踪",
+    intro: "这个计算器使用身高、体重、颈围、腰围，以及女性的臀围，依美国海军公式推估体脂率。它同时换算脂肪量、瘦体重与 BMI 参考体重范围，比单看体重更能理解身体组成。",
+    formulaTitle: "核心概念",
+    formulas: [
+      { title: "男性公式", body: "86.010×log10(腰围-颈围) - 70.041×log10(身高) + 36.76" },
+      { title: "女性公式", body: "163.205×log10(腰围+臀围-颈围) - 97.684×log10(身高) - 78.387" },
+      { title: "身体组成", body: "脂肪量 = 体重×体脂率，瘦体重 = 体重-脂肪量" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "选择性别，输入身高、体重、颈围与腰围。",
+      "若选择女性，请再输入臀围。",
+      "查看体脂率、脂肪量与瘦体重，并尽量保持测量位置与力道一致。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "海军公式准确吗？", answer: "在测量一致时是实用估算，但不是 DEXA 等专业体组成检查。" },
+      { question: "为什么需要颈围？", answer: "海军公式利用颈围、腰围与女性臀围的差异，推估身体脂肪分布。" },
+      { question: "早晚结果会不同吗？", answer: "可能会。饮食、水分、运动、姿势与皮尺松紧都会影响围度。" },
+    ],
+    disclaimer: "结果仅为一般估算，不能替代专业医疗建议、诊断或治疗。",
+  },
+  fr: {
+    introTitle: "La méthode Navy estime la masse grasse à partir des circonférences",
+    intro: "Ce calculateur utilise la taille, le poids, le tour de cou, le tour de taille et, pour les femmes, le tour de hanches afin d'estimer le pourcentage de graisse corporelle. Il affiche aussi la masse grasse, la masse maigre et une plage de poids issue de l'IMC.",
+    formulaTitle: "Concepts clés",
+    formulas: [
+      { title: "Formule homme", body: "86,010×log10(taille-cou) - 70,041×log10(stature) + 36,76" },
+      { title: "Formule femme", body: "163,205×log10(taille+hanches-cou) - 97,684×log10(stature) - 78,387" },
+      { title: "Composition", body: "Masse grasse = poids×% graisse, masse maigre = poids-masse grasse" },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Sélectionnez le sexe puis saisissez taille, poids, cou et tour de taille.",
+      "Si femme est sélectionné, ajoutez le tour de hanches.",
+      "Lisez le pourcentage, la masse grasse et la masse maigre en gardant une méthode de mesure constante.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "La méthode Navy est-elle précise ?", answer: "Elle donne une estimation utile avec des mesures régulières, mais ce n'est pas un examen direct comme une DEXA." },
+      { question: "Pourquoi mesurer le cou ?", answer: "La formule compare le cou, la taille et les hanches chez les femmes pour estimer la distribution des graisses." },
+      { question: "Le résultat peut-il varier dans la journée ?", answer: "Oui. Repas, hydratation, exercice, posture et tension du mètre ruban peuvent changer les mesures." },
+    ],
+    disclaimer: "Les résultats sont des estimations générales et ne remplacent pas un avis médical professionnel, un diagnostic ou un traitement.",
+  },
+  es: {
+    introTitle: "El método Navy estima la grasa corporal a partir de perímetros",
+    intro: "Esta calculadora usa estatura, peso, cuello, cintura y, en mujeres, cadera para estimar el porcentaje de grasa corporal con la fórmula de la Marina de EE. UU. También muestra masa grasa, masa magra y un rango de peso ideal basado en IMC.",
+    formulaTitle: "Conceptos clave",
+    formulas: [
+      { title: "Fórmula hombre", body: "86.010×log10(cintura-cuello) - 70.041×log10(estatura) + 36.76" },
+      { title: "Fórmula mujer", body: "163.205×log10(cintura+cadera-cuello) - 97.684×log10(estatura) - 78.387" },
+      { title: "Composición", body: "Masa grasa = peso×% grasa, masa magra = peso-masa grasa" },
+    ],
+    howToTitle: "Cómo usarla",
+    steps: [
+      "Selecciona sexo e introduce estatura, peso, cuello y cintura.",
+      "Si seleccionas mujer, introduce también la cadera.",
+      "Revisa grasa corporal, masa grasa y masa magra manteniendo una medición consistente.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿El método Navy es preciso?", answer: "Puede ser una estimación útil si las medidas son consistentes, pero no es una prueba directa como DEXA." },
+      { question: "¿Por qué se usa el cuello?", answer: "La fórmula compara cuello, cintura y cadera en mujeres para estimar la distribución de grasa." },
+      { question: "¿Puede variar durante el día?", answer: "Sí. Comidas, hidratación, ejercicio, postura y tensión de la cinta pueden cambiar los perímetros." },
+    ],
+    disclaimer: "Los resultados son estimaciones generales y no sustituyen el consejo, diagnóstico o tratamiento médico profesional.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <BodyFatCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

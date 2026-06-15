@@ -4,6 +4,8 @@ import ImagePixelatorComp from "../../components/tools/ImagePixelator";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
+type ActiveLocale = (typeof locales)[number];
+
 export async function getStaticPaths() {
   return locales.map((lang) => ({
     params: { lang },
@@ -11,9 +13,9 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale & Locale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "이미지 픽셀화 — 사진을 픽셀아트로 변환",
     description: "사진을 픽셀아트 스타일로 변환하세요. 픽셀 크기를 조절해 레트로 감성의 픽셀 이미지를 만들 수 있습니다.",
@@ -35,20 +37,227 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Transforma tus fotos en pixel art. Ajusta el tamaño del píxel para crear imágenes pixeladas retro.",
   },
   zh: {
-    title: "圖片像素化工具",
-    description: "將照片轉換為像素藝術風格。調整像素大小，在瀏覽器中創建復古風格的像素圖像。",
-  },
-  cn: {
     title: "图片像素化工具",
     description: "将照片转换为像素艺术风格。调整像素大小，在浏览器中创建复古风格的像素图像。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "픽셀화는 사진을 단순한 색 블록으로 다시 해석합니다",
+    intro: "픽셀아트 느낌은 단순히 해상도를 낮추는 것이 아니라, 어느 정도의 블록 크기로 정보를 남길지 정하는 작업입니다. 이 도구는 브라우저에서 사진을 처리해 픽셀 크기를 실험할 수 있게 하며, 파일을 서버로 업로드하지 않는 방식으로 사용할 수 있습니다.",
+    formulaTitle: "픽셀화 설정 기준",
+    formulas: [
+      { title: "픽셀 크기", body: "값이 클수록 더 추상적이고 레트로한 결과가 나오며, 작은 값은 원본 세부를 더 많이 남깁니다." },
+      { title: "원본 대비", body: "윤곽과 색 대비가 뚜렷한 사진일수록 픽셀화 후에도 주제가 잘 보입니다." },
+      { title: "로컬 처리", body: "효과 적용은 사용자의 브라우저에서 실행되어 원본 파일을 서버로 보낼 필요가 없습니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "픽셀화할 이미지를 선택합니다.",
+      "픽셀 크기를 조절하며 미리보기의 디테일과 분위기를 비교합니다.",
+      "원하는 스타일이 나오면 결과 이미지를 저장합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "픽셀 크기는 어떻게 고르나요?", answer: "인물이나 제품처럼 주제가 중요한 사진은 작게, 배경 분위기나 레트로 효과가 중요하면 크게 설정해 보세요." },
+      { question: "작은 사진도 픽셀아트처럼 보이나요?", answer: "가능하지만 원본이 너무 작으면 조절 범위가 좁습니다. 적당히 큰 이미지를 사용하면 결과를 비교하기 쉽습니다." },
+      { question: "이미지가 업로드되나요?", answer: "아니요. 일반적인 사용에서는 브라우저가 이미지를 처리하고 서버로 보내지 않습니다." },
+    ],
+    disclaimer: "픽셀화는 원본의 세부 정보를 의도적으로 줄이는 효과입니다. 원본을 보관하고 복사본으로 작업하세요.",
+  },
+  en: {
+    introTitle: "Pixelation turns a photo into simpler color blocks",
+    intro: "A pixel-art look is not just lower resolution; it is a choice about how much visual information each block should keep. This tool lets you test pixel size in the browser and export a stylized result without uploading the original image in the normal workflow.",
+    formulaTitle: "Pixelation choices",
+    formulas: [
+      { title: "Pixel size", body: "Larger blocks feel more abstract and retro; smaller blocks preserve more detail from the source image." },
+      { title: "Source contrast", body: "Images with clear outlines and strong color contrast usually remain more readable after pixelation." },
+      { title: "Local processing", body: "The effect runs in your browser, so the original file does not need to leave your device." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Choose the image you want to pixelate.",
+      "Adjust pixel size while comparing detail and style in the preview.",
+      "Download the result once the image matches the look you want.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "How should I choose pixel size?", answer: "Use smaller blocks when the subject must stay recognizable, and larger blocks when you want a stronger retro effect." },
+      { question: "Can small images be pixelated?", answer: "Yes, but very small originals leave less room for adjustment. A moderately large image gives better control." },
+      { question: "Is my image uploaded?", answer: "No. In the normal workflow, the browser processes the image locally." },
+    ],
+    disclaimer: "Pixelation intentionally removes detail. Keep the original file and edit a separate copy.",
+  },
+  ja: {
+    introTitle: "ピクセル化は写真を色のブロックとして再構成します",
+    intro: "ピクセルアート風の表現は、単に解像度を下げるだけではありません。どの大きさのブロックで情報を残すかを選ぶ作業です。このツールはブラウザ内で画像を処理し、通常の操作で元画像をサーバーへアップロードしません。",
+    formulaTitle: "設定の考え方",
+    formulas: [
+      { title: "ピクセルサイズ", body: "大きいほど抽象的でレトロになり、小さいほど元画像の細部が残ります。" },
+      { title: "元画像のコントラスト", body: "輪郭や色の差がはっきりした写真ほど、ピクセル化後も内容が分かりやすくなります。" },
+      { title: "ローカル処理", body: "効果の適用はブラウザ内で行われ、元ファイルをサーバーへ送る必要がありません。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "ピクセル化したい画像を選びます。",
+      "プレビューを見ながらピクセルサイズを調整します。",
+      "好みの雰囲気になったら結果を保存します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "ピクセルサイズはどう決めますか？", answer: "被写体を分かりやすく残したい場合は小さめ、レトロ感を強めたい場合は大きめにします。" },
+      { question: "小さい画像でも使えますか？", answer: "使えますが、元画像が小さすぎると調整幅が限られます。少し大きめの画像の方が比較しやすいです。" },
+      { question: "画像はアップロードされますか？", answer: "いいえ。通常の操作ではブラウザ内で処理されます。" },
+    ],
+    disclaimer: "ピクセル化は意図的に細部を減らす効果です。元画像を保存し、コピーで作業してください。",
+  },
+  fr: {
+    introTitle: "La pixellisation transforme la photo en blocs de couleur",
+    intro: "Un style pixel art ne consiste pas seulement à baisser la résolution : il faut choisir la quantité d'information visuelle conservée par chaque bloc. Cet outil permet de tester la taille des pixels dans le navigateur, sans téléverser l'image dans l'usage normal.",
+    formulaTitle: "Choix importants",
+    formulas: [
+      { title: "Taille des pixels", body: "De grands blocs donnent un rendu plus abstrait et rétro ; de petits blocs gardent davantage de détails." },
+      { title: "Contraste source", body: "Les images aux contours nets et couleurs contrastées restent plus lisibles après pixellisation." },
+      { title: "Traitement local", body: "L'effet s'applique dans le navigateur, sans envoyer le fichier original." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Choisissez l'image à pixelliser.",
+      "Ajustez la taille des pixels en comparant l'aperçu.",
+      "Téléchargez le résultat lorsque le style vous convient.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Comment choisir la taille des pixels ?", answer: "Choisissez de petits blocs pour garder le sujet lisible, et de grands blocs pour un effet rétro plus marqué." },
+      { question: "Une petite image fonctionne-t-elle ?", answer: "Oui, mais un original trop petit offre moins de marge de réglage. Une image moyenne ou grande donne plus de contrôle." },
+      { question: "Mon image est-elle envoyée ?", answer: "Non. Dans le flux normal, elle est traitée localement dans votre navigateur." },
+    ],
+    disclaimer: "La pixellisation supprime volontairement des détails. Conservez l'original et travaillez sur une copie.",
+  },
+  es: {
+    introTitle: "La pixelación convierte una foto en bloques de color",
+    intro: "El estilo pixel art no es solo bajar resolución; consiste en decidir cuánta información conserva cada bloque. Esta herramienta permite probar tamaños de píxel en el navegador y exportar un resultado estilizado sin subir la imagen en el uso normal.",
+    formulaTitle: "Decisiones de pixelación",
+    formulas: [
+      { title: "Tamaño del píxel", body: "Bloques grandes dan un efecto más abstracto y retro; bloques pequeños conservan más detalle." },
+      { title: "Contraste del original", body: "Las imágenes con contornos claros y buen contraste suelen seguir siendo legibles." },
+      { title: "Procesamiento local", body: "El efecto se aplica en el navegador, sin que el archivo original salga del dispositivo." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Elige la imagen que quieres pixelar.",
+      "Ajusta el tamaño del píxel comparando detalle y estilo en la vista previa.",
+      "Descarga el resultado cuando tenga el aspecto deseado.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Cómo elijo el tamaño del píxel?", answer: "Usa bloques pequeños si el sujeto debe reconocerse, y bloques grandes si buscas un efecto retro más fuerte." },
+      { question: "¿Sirve con imágenes pequeñas?", answer: "Sí, pero un original muy pequeño ofrece menos margen. Una imagen mediana o grande da más control." },
+      { question: "¿La imagen se sube?", answer: "No. En el flujo normal, el navegador procesa la imagen localmente." },
+    ],
+    disclaimer: "La pixelación elimina detalle de forma intencional. Conserva el original y edita una copia.",
+  },
+  zh: {
+    introTitle: "像素化会把照片重新表达为色块",
+    intro: "像素艺术效果不只是降低分辨率，而是决定每个色块保留多少视觉信息。这个工具可以在浏览器中调整像素大小并导出结果，正常使用时原图不会上传到服务器。",
+    formulaTitle: "像素化设置",
+    formulas: [
+      { title: "像素大小", body: "色块越大，效果越抽象、复古；色块越小，原图细节保留越多。" },
+      { title: "原图对比", body: "轮廓清楚、颜色对比强的图片，像素化后更容易看清主体。" },
+      { title: "本地处理", body: "效果在浏览器中应用，原始文件不需要离开你的设备。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "选择要像素化的图片。",
+      "调整像素大小，在预览中比较细节和风格。",
+      "达到想要的效果后下载结果图片。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "像素大小怎么选？", answer: "需要保留主体识别度时用较小色块，想要更强复古效果时用较大色块。" },
+      { question: "小图片也能像素化吗？", answer: "可以，但原图太小会限制调整空间。中等或较大的图片更容易比较效果。" },
+      { question: "图片会上传吗？", answer: "不会。正常流程中浏览器会在本地处理图片。" },
+    ],
+    disclaimer: "像素化会有意减少细节。请保留原图，并用副本进行编辑。",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <ImagePixelatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

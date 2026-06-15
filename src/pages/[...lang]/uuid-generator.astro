@@ -2,50 +2,51 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import UuidGeneratorComp from "../../components/tools/UuidGenerator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "UUID 생성기 — UUID v4 즉시 생성 & 복사",
-    description: "UUID v4를 1개부터 50개까지 즉시 생성하세요. 대문자/소문자 토글, 하이픈 포함/제외, 전체 복사 기능 제공.",
-  },
-  en: {
-    title: "UUID Generator — Generate & Copy UUID v4 Instantly",
-    description: "Generate 1 to 50 UUID v4s instantly. Supports uppercase toggle, hyphen toggle, and copy-all functionality.",
-  },
-  ja: {
-    title: "UUID生成器 — UUID v4を即時生成&コピー",
-    description: "UUID v4を1個から50個まで即座に生成。大文字/小文字切替、ハイフン有無、一括コピー機能を提供。",
-  },
-  fr: {
-    title: "Générateur UUID — Générer et Copier des UUID v4",
-    description: "Générez de 1 à 50 UUID v4 instantanément. Supporte la bascule majuscule, la bascule tirets et la copie globale.",
-  },
-  es: {
-    title: "Generador UUID — Genera y Copia UUID v4 al Instante",
-    description: "Genera de 1 a 50 UUID v4 al instante. Soporta alternancia de mayúsculas, guiones y copia de todos los resultados.",
-  },
-  zh: {
-    title: "UUID生成器 — 即時生成並複製UUID v4",
-    description: "即時生成1至50個UUID v4。支持大小寫切換、連字符切換和全部複製功能。",
-  },
-  cn: {
-    title: "UUID生成器 — 即时生成并复制UUID v4",
-    description: "即时生成1至50个UUID v4。支持大小写切换、连字符切换和全部复制功能。",
-  },
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
+  ko: { title: "UUID 생성기 — UUID v4 즉시 생성 & 복사", description: "UUID v4를 1개부터 50개까지 즉시 생성하세요. 대문자/소문자 토글, 하이픈 포함/제외, 전체 복사 기능 제공." },
+  en: { title: "UUID Generator — Generate & Copy UUID v4 Instantly", description: "Generate 1 to 50 UUID v4s instantly. Supports uppercase toggle, hyphen toggle, and copy-all functionality." },
+  ja: { title: "UUID生成器 — UUID v4を即時生成&コピー", description: "UUID v4を1個から50個まで即座に生成。大文字/小文字切替、ハイフン有無、一括コピー機能を提供。" },
+  fr: { title: "Générateur UUID — Générer et Copier des UUID v4", description: "Générez de 1 à 50 UUID v4 instantanément. Supporte la bascule majuscule, la bascule tirets et la copie globale." },
+  es: { title: "Generador UUID — Genera y Copia UUID v4 al Instante", description: "Genera de 1 a 50 UUID v4 al instante. Soporta alternancia de mayúsculas, guiones y copia de todos los resultados." },
+  zh: { title: "UUID 生成器 — 即时生成并复制 UUID v4", description: "即时生成 1 至 50 个 UUID v4。支持大小写切换、连字符切换和全部复制功能。" },
 };
 
 const m = meta[locale] ?? meta.en;
+type SeoContent = { introTitle: string; intro: string; formulaTitle: string; formulas: { title: string; body: string }[]; howToTitle: string; steps: string[]; faqTitle: string; faqs: { question: string; answer: string }[]; disclaimer: string; };
+
+const content: Record<ActiveLocale, SeoContent> = {
+  ko: { introTitle: "UUID v4는 충돌 가능성이 매우 낮은 랜덤 식별자입니다", intro: "UUID는 데이터베이스 레코드, 테스트 객체, 이벤트 ID처럼 중앙 발급 서버 없이 고유한 값을 붙이고 싶을 때 사용합니다. 이 도구는 브라우저의 암호학적 난수로 v4 UUID를 만들고, 하이픈과 대소문자 형식을 필요에 맞게 바꿀 수 있습니다.", formulaTitle: "핵심 개념", formulas: [{ title: "UUID v4", body: "랜덤 기반 128비트 식별자이며 버전과 변형 비트가 정해진 형식으로 들어갑니다." }, { title: "형식 옵션", body: "하이픈 포함 여부와 대소문자는 표시 형식일 뿐 식별 의미는 같습니다." }, { title: "일괄 생성", body: "테스트 데이터나 샘플 문서용으로 1, 5, 10, 50개를 한 번에 만들 수 있습니다." }], howToTitle: "사용 방법", steps: ["생성할 개수를 선택합니다.", "필요에 따라 대문자 또는 하이픈 제외 옵션을 켭니다.", "생성 후 개별 UUID나 전체 목록을 복사합니다."], faqTitle: "자주 묻는 질문", faqs: [{ question: "UUID v4는 정말 고유한가요?", answer: "수학적으로 절대 고유를 보장하진 않지만 충분한 난수를 쓰면 충돌 가능성이 매우 낮습니다." }, { question: "하이픈을 빼도 같은 UUID인가요?", answer: "대부분의 시스템에서는 같은 16바이트 값을 다른 표기로 쓴 것입니다. 단, API가 요구하는 형식은 확인해야 합니다." }, { question: "보안 토큰으로 써도 되나요?", answer: "식별자에는 적합하지만 인증 토큰은 만료, 권한, 저장 방식까지 별도 설계해야 합니다." }], disclaimer: "보안 토큰이나 개인정보 식별에는 UUID만으로 충분하지 않으며 별도 보안 설계가 필요합니다." },
+  en: { introTitle: "UUID v4 is a random identifier with very low collision risk", intro: "UUIDs are useful for database records, test objects, event IDs, and other values that should be unique without a central issuing service. This tool generates v4 UUIDs with cryptographic browser randomness and lets you adjust hyphens and letter case for the target system.", formulaTitle: "Key concepts", formulas: [{ title: "UUID v4", body: "A random 128-bit identifier with fixed version and variant bits in a standard format." }, { title: "Format options", body: "Hyphens and uppercase change representation, not the underlying identifier value." }, { title: "Bulk generation", body: "Create 1, 5, 10, or 50 IDs at once for fixtures, demos, and sample documents." }], howToTitle: "How to use", steps: ["Choose how many UUIDs to generate.", "Toggle uppercase or hyphen removal if your system expects that format.", "Generate, then copy one ID or the full list."], faqTitle: "Frequently asked questions", faqs: [{ question: "Is UUID v4 guaranteed unique?", answer: "Not mathematically guaranteed, but with good randomness the collision probability is extremely low." }, { question: "Is a UUID without hyphens the same value?", answer: "Usually yes; it is the same bytes in a different string format. Check what your API expects." }, { question: "Can I use UUIDs as security tokens?", answer: "They are identifiers. Security tokens need separate design for entropy, expiry, storage, and authorization." }], disclaimer: "UUIDs alone are not a complete security-token or personal-identity design." },
+  ja: { introTitle: "UUID v4は衝突可能性が非常に低いランダム識別子です", intro: "UUIDはデータベース行、テストオブジェクト、イベントIDなど、中央発行なしで一意に近い値が必要な場面で使います。このツールはブラウザの暗号学的乱数でv4 UUIDを生成します。", formulaTitle: "基本概念", formulas: [{ title: "UUID v4", body: "標準形式の中にバージョンと変種ビットを持つランダム128ビット識別子です。" }, { title: "形式オプション", body: "ハイフンや大文字は表示形式で、識別子の意味は変わりません。" }, { title: "一括生成", body: "テストデータやサンプル用に1、5、10、50個をまとめて作れます。" }], howToTitle: "使い方", steps: ["生成数を選びます。", "必要に応じて大文字やハイフンなしを選択します。", "生成後、個別または全体をコピーします。"], faqTitle: "よくある質問", faqs: [{ question: "UUID v4は必ず一意ですか？", answer: "絶対保証ではありませんが、十分な乱数なら衝突確率は非常に低いです。" }, { question: "ハイフンなしでも同じUUIDですか？", answer: "多くの場合は同じ値の別表記です。ただしAPIの要求形式を確認してください。" }, { question: "セキュリティトークンに使えますか？", answer: "識別子には使えますが、トークンには期限、権限、保存方法など別設計が必要です。" }], disclaimer: "UUIDだけで安全なトークンや個人識別の設計が完成するわけではありません。" },
+  fr: { introTitle: "UUID v4 est un identifiant aléatoire au risque de collision très faible", intro: "Les UUID servent pour enregistrements, objets de test ou événements sans service central d'attribution. L'outil génère des UUID v4 avec l'aléa cryptographique du navigateur et permet d'ajuster tirets et casse.", formulaTitle: "Concepts clés", formulas: [{ title: "UUID v4", body: "Identifiant aléatoire de 128 bits avec bits de version et variante au format standard." }, { title: "Options de format", body: "Tirets et majuscules changent l'affichage, pas la valeur sous-jacente." }, { title: "Génération en lot", body: "Créez 1, 5, 10 ou 50 identifiants pour tests, démos ou documents." }], howToTitle: "Comment l'utiliser", steps: ["Choisissez le nombre d'UUID.", "Activez majuscules ou suppression des tirets selon le format attendu.", "Générez puis copiez un identifiant ou toute la liste."], faqTitle: "Questions fréquentes", faqs: [{ question: "UUID v4 est-il garanti unique ?", answer: "Non au sens mathématique, mais le risque de collision est extrêmement faible avec un bon aléa." }, { question: "Sans tirets, est-ce la même valeur ?", answer: "En général oui, c'est la même valeur sous une autre forme de chaîne." }, { question: "Puis-je l'utiliser comme jeton de sécurité ?", answer: "C'est un identifiant. Un jeton demande expiration, stockage et autorisation conçus séparément." }], disclaimer: "Un UUID seul ne suffit pas pour concevoir un jeton sécurisé ou une identité personnelle." },
+  es: { introTitle: "UUID v4 es un identificador aleatorio con riesgo de colisión muy bajo", intro: "Los UUID se usan para registros, objetos de prueba o eventos sin un servicio central de emisión. La herramienta genera UUID v4 con aleatoriedad criptográfica del navegador y permite ajustar guiones y mayúsculas.", formulaTitle: "Conceptos clave", formulas: [{ title: "UUID v4", body: "Identificador aleatorio de 128 bits con versión y variante en formato estándar." }, { title: "Opciones de formato", body: "Guiones y mayúsculas cambian la representación, no el valor subyacente." }, { title: "Generación por lotes", body: "Crea 1, 5, 10 o 50 identificadores para pruebas, demos o documentos." }], howToTitle: "Cómo usarlo", steps: ["Elige cuántos UUID generar.", "Activa mayúsculas o quitar guiones si tu sistema lo requiere.", "Genera y copia un identificador o toda la lista."], faqTitle: "Preguntas frecuentes", faqs: [{ question: "¿UUID v4 garantiza unicidad?", answer: "No matemáticamente, pero con buena aleatoriedad la probabilidad de colisión es extremadamente baja." }, { question: "¿Sin guiones es el mismo UUID?", answer: "Normalmente sí; son los mismos bytes con otro formato de cadena." }, { question: "¿Sirve como token de seguridad?", answer: "Es un identificador. Un token necesita diseño de expiración, almacenamiento y autorización." }], disclaimer: "Un UUID por sí solo no es un diseño completo de token seguro ni de identidad personal." },
+  zh: { introTitle: "UUID v4 是碰撞概率极低的随机标识符", intro: "UUID 常用于数据库记录、测试对象、事件 ID 等不依赖中心发号服务的场景。本工具使用浏览器加密随机数生成 v4 UUID，并可按系统要求调整连字符和大小写。", formulaTitle: "核心概念", formulas: [{ title: "UUID v4", body: "基于随机数的 128 位标识符，包含标准版本位和变体位。" }, { title: "格式选项", body: "连字符和大小写只是显示格式，不改变底层标识值。" }, { title: "批量生成", body: "可一次生成 1、5、10 或 50 个，用于测试数据、演示和文档。" }], howToTitle: "使用方法", steps: ["选择要生成的数量。", "按需要开启大写或去除连字符。", "生成后复制单个 UUID 或整个列表。"], faqTitle: "常见问题", faqs: [{ question: "UUID v4 绝对唯一吗？", answer: "不是数学绝对保证，但在良好随机性下碰撞概率极低。" }, { question: "去掉连字符还是同一个 UUID 吗？", answer: "通常是同一字节值的不同字符串格式，但要确认 API 要求。" }, { question: "可以当安全令牌使用吗？", answer: "UUID 适合做标识符，安全令牌还需要过期、权限和存储设计。" }], disclaimer: "UUID 本身不足以构成完整的安全令牌或个人身份方案。" },
+};
+
+const c = content[locale] ?? content.en;
+const structuredData = [
+  { "@context": "https://schema.org", "@type": "HowTo", name: m.title, description: m.description, step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })) },
+  { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: c.faqs.map((faq) => ({ "@type": "Question", name: faq.question, acceptedAnswer: { "@type": "Answer", text: faq.answer } })) },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <UuidGeneratorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+    <section class="mt-10 border-t border-slate-200 pt-8"><h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2><p class="mt-4 leading-8 text-slate-700">{c.intro}</p></section>
+    <section class="mt-10"><h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2><div class="mt-4 grid gap-4 md:grid-cols-3">{c.formulas.map((item) => (<article class="rounded-xl border border-slate-200 bg-white p-4"><h3 class="font-semibold text-slate-900">{item.title}</h3><p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p></article>))}</div></section>
+    <section class="mt-10"><h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2><ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">{c.steps.map((s) => (<li class="leading-7">{s}</li>))}</ol></section>
+    <section class="mt-10"><h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2><div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">{c.faqs.map((faq) => (<details class="group p-4"><summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary><p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p></details>))}</div></section>
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

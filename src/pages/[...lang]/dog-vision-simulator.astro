@@ -4,6 +4,8 @@ import DogVisionSimulatorComp from "../../components/tools/DogVisionSimulator";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
+type ActiveLocale = (typeof locales)[number];
+
 export async function getStaticPaths() {
   return locales.map((lang) => ({
     params: { lang },
@@ -11,9 +13,9 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale & Locale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "강아지 시각 시뮬레이터 — 개가 보는 세상은 어떤 모습?",
     description: "강아지의 시각으로 세상을 경험해보세요. 개는 파란색과 노란색만 구분하며 색각이 제한적입니다. 사진으로 직접 확인해보세요.",
@@ -35,20 +37,227 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Ve el mundo a través de los ojos de un perro. Los perros tienen visión dicromática.",
   },
   zh: {
-    title: "狗狗視覺模擬器",
-    description: "透過狗狗的眼睛看世界。狗狗具有二色視覺，上傳照片模擬狗狗看到的樣子。",
-  },
-  cn: {
     title: "狗狗视觉模拟器",
-    description: "透过狗狗的眼睛看世界。狗狗具有二色视觉，上传照片模拟狗狗看到的样子。",
+    description: "通过狗狗的眼睛看世界。狗狗具有二色视觉，上传照片模拟狗狗看到的样子。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "강아지는 사람과 같은 방식으로 색을 보지 않습니다",
+    intro: "개는 사람의 적록 구분과 다르게 파란색과 노란색 계열을 중심으로 세상을 봅니다. 이 시뮬레이터는 사진의 색을 단순화해 반려견의 시각을 이해하는 데 도움을 주며, 이미지는 브라우저에서 처리되어 일반적인 사용 과정에서 서버로 업로드되지 않습니다.",
+    formulaTitle: "시뮬레이션을 이해하는 기준",
+    formulas: [
+      { title: "이색형 색각", body: "강아지는 빨강과 초록을 사람처럼 뚜렷하게 구분하지 못하고 노랑·파랑 계열 차이에 더 의존합니다." },
+      { title: "밝기와 움직임", body: "색만이 전부는 아닙니다. 명암, 대비, 움직임도 반려견이 대상을 알아보는 데 중요합니다." },
+      { title: "브라우저 처리", body: "업로드한 사진은 기기 안에서 변환되며 서버 저장을 전제로 하지 않습니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "비교하고 싶은 사진을 선택합니다.",
+      "변환된 미리보기를 원본과 비교해 색 차이를 확인합니다.",
+      "장난감, 간식, 배경처럼 반려견이 보는 대상의 대비를 살펴봅니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "강아지는 흑백으로만 보나요?", answer: "아닙니다. 완전한 흑백은 아니며, 사람보다 제한된 색 범위 안에서 파랑과 노랑 계열을 구분합니다." },
+      { question: "이 결과가 실제 시야와 완전히 같나요?", answer: "아니요. 색각을 단순화한 시각적 참고입니다. 실제 인지는 밝기, 움직임, 냄새, 경험까지 함께 작용합니다." },
+      { question: "사진은 서버에 저장되나요?", answer: "아니요. 일반적인 사용에서는 브라우저에서 변환되며 서버 업로드가 필요하지 않습니다." },
+    ],
+    disclaimer: "이 시뮬레이터는 교육용 근사치입니다. 반려견의 시력 이상이나 행동 문제는 수의사에게 상담하세요.",
+  },
+  en: {
+    introTitle: "Dogs do not see color the same way humans do",
+    intro: "Dogs rely more on blue and yellow differences and do not separate red and green the way many humans do. This simulator simplifies a photo's colors to make dog vision easier to understand, while processing the image in your browser during normal use.",
+    formulaTitle: "How to read the simulation",
+    formulas: [
+      { title: "Dichromatic vision", body: "Dogs have a limited color range and tend to distinguish blue-yellow contrasts better than red-green differences." },
+      { title: "Brightness matters", body: "Color is only one cue. Contrast, brightness, movement, and experience also affect recognition." },
+      { title: "Local processing", body: "Uploaded photos are transformed on your device and are not meant to be stored on a server." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Choose a photo you want to compare.",
+      "Review the simulated view next to the original colors.",
+      "Look at toys, treats, and backgrounds to see which contrasts remain visible.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Do dogs see only in black and white?", answer: "No. Dogs do see color, but within a more limited range than humans, especially around blue and yellow." },
+      { question: "Is the simulation exact?", answer: "No. It is an educational approximation of color perception, not a full model of canine vision or behavior." },
+      { question: "Is the photo stored?", answer: "No. In the normal workflow, the browser transforms the image locally." },
+    ],
+    disclaimer: "This simulator is an educational approximation. For concerns about a pet's vision or behavior, consult a veterinarian.",
+  },
+  ja: {
+    introTitle: "犬は人と同じ色の見え方をしていません",
+    intro: "犬は赤と緑を人のようには区別せず、青と黄の違いにより依存して見ています。このシミュレーターは写真の色を簡略化し、犬の視覚を理解する手がかりを提供します。通常の操作では画像はブラウザ内で処理されます。",
+    formulaTitle: "シミュレーションの見方",
+    formulas: [
+      { title: "2色型色覚", body: "犬は色の範囲が限られ、赤緑の違いより青黄の差を見分けやすいとされます。" },
+      { title: "明るさと動き", body: "色だけでなく、明暗、コントラスト、動き、経験も認識に関わります。" },
+      { title: "ローカル処理", body: "写真は利用中の端末で変換され、サーバー保存を前提にしていません。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "比較したい写真を選びます。",
+      "変換後の見え方を元画像と比べます。",
+      "おもちゃ、フード、背景のコントラストが残っているか確認します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "犬は白黒で見ていますか？", answer: "いいえ。白黒だけではなく、人より限られた範囲で青や黄色系を区別します。" },
+      { question: "結果は実際の視界と完全に同じですか？", answer: "いいえ。色覚を理解するための教育的な近似であり、犬の視覚全体を再現するものではありません。" },
+      { question: "写真は保存されますか？", answer: "いいえ。通常の操作ではブラウザ内で変換されます。" },
+    ],
+    disclaimer: "このシミュレーターは教育用の近似です。視力や行動の心配がある場合は獣医師に相談してください。",
+  },
+  fr: {
+    introTitle: "Les chiens ne perçoivent pas les couleurs comme les humains",
+    intro: "Les chiens distinguent surtout les contrastes bleu-jaune et ne séparent pas le rouge et le vert comme beaucoup d'humains. Ce simulateur simplifie les couleurs d'une photo pour aider à comprendre cette perception, avec un traitement dans le navigateur.",
+    formulaTitle: "Repères de lecture",
+    formulas: [
+      { title: "Vision dichromatique", body: "La gamme de couleurs est plus limitée, avec une meilleure distinction des différences bleu-jaune." },
+      { title: "Luminosité", body: "La couleur n'est qu'un indice : contraste, mouvement, luminosité et expérience comptent aussi." },
+      { title: "Traitement local", body: "Les photos sont transformées sur votre appareil, sans stockage serveur dans l'usage normal." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Choisissez une photo à comparer.",
+      "Comparez la vue simulée avec l'image originale.",
+      "Observez jouets, friandises et arrière-plans pour voir quels contrastes restent visibles.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Les chiens voient-ils en noir et blanc ?", answer: "Non. Ils voient des couleurs, mais dans une gamme plus limitée que l'humain, surtout autour du bleu et du jaune." },
+      { question: "La simulation est-elle exacte ?", answer: "Non. C'est une approximation éducative de la perception des couleurs, pas un modèle complet de la vision canine." },
+      { question: "La photo est-elle stockée ?", answer: "Non. Dans le flux normal, l'image est transformée localement dans le navigateur." },
+    ],
+    disclaimer: "Ce simulateur est une approximation pédagogique. Pour une inquiétude sur la vision ou le comportement d'un animal, consultez un vétérinaire.",
+  },
+  es: {
+    introTitle: "Los perros no ven el color igual que los humanos",
+    intro: "Los perros distinguen mejor diferencias entre azul y amarillo, y no separan rojo y verde como muchas personas. Este simulador simplifica los colores de una foto para entender mejor esa visión, procesando la imagen en el navegador durante el uso normal.",
+    formulaTitle: "Cómo interpretar la simulación",
+    formulas: [
+      { title: "Visión dicromática", body: "Los perros tienen un rango de color limitado y dependen más de contrastes azul-amarillo." },
+      { title: "Brillo y movimiento", body: "El color no lo es todo: contraste, brillo, movimiento y experiencia también influyen." },
+      { title: "Procesamiento local", body: "Las fotos se transforman en tu dispositivo y no están pensadas para almacenarse en un servidor." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Elige una foto que quieras comparar.",
+      "Revisa la vista simulada junto a los colores originales.",
+      "Observa juguetes, premios y fondos para ver qué contrastes siguen visibles.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Los perros ven solo en blanco y negro?", answer: "No. Ven color, pero en un rango más limitado que las personas, especialmente azul y amarillo." },
+      { question: "¿La simulación es exacta?", answer: "No. Es una aproximación educativa de la percepción del color, no un modelo completo de la visión canina." },
+      { question: "¿La foto se guarda?", answer: "No. En el flujo normal, el navegador transforma la imagen localmente." },
+    ],
+    disclaimer: "Este simulador es una aproximación educativa. Si te preocupa la visión o conducta de tu mascota, consulta a un veterinario.",
+  },
+  zh: {
+    introTitle: "狗狗看颜色的方式和人类不同",
+    intro: "狗狗更依赖蓝色和黄色的差异，不像很多人类那样区分红色和绿色。这个模拟器会简化照片颜色，帮助理解狗狗的视觉；正常使用时图片在浏览器中处理。",
+    formulaTitle: "理解模拟结果",
+    formulas: [
+      { title: "二色视觉", body: "狗狗的颜色范围较有限，通常比红绿差异更容易分辨蓝黄对比。" },
+      { title: "亮度与运动", body: "颜色不是全部。明暗、对比、运动和经验也会影响识别。" },
+      { title: "本地处理", body: "上传的照片在你的设备上转换，正常流程下不会保存到服务器。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "选择一张想比较的照片。",
+      "把模拟视图与原图颜色进行对比。",
+      "观察玩具、零食和背景，看看哪些对比仍然明显。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "狗狗只看黑白吗？", answer: "不是。狗狗能看到颜色，但范围比人类有限，尤其偏向蓝色和黄色。" },
+      { question: "模拟结果完全准确吗？", answer: "不完全。这是用于理解颜色感知的教育近似，不是完整的犬类视觉模型。" },
+      { question: "照片会被保存吗？", answer: "不会。正常流程下浏览器会在本地转换图片。" },
+    ],
+    disclaimer: "此模拟器是教育用途的近似结果。如担心宠物视力或行为问题，请咨询兽医。",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <DogVisionSimulatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

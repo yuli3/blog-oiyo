@@ -2,15 +2,16 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import WordCounterToolComp from "../../components/tools/WordCounterTool";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "글자수·단어수 계산기 — 텍스트 통계 즉시 확인",
     description: "텍스트를 붙여넣으면 단어 수, 글자 수, 문장 수, 단락 수, 읽기 시간, 자주 쓴 단어 TOP 5를 즉시 확인합니다.",
@@ -32,20 +33,229 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Pega tu texto para ver al instante el recuento de palabras, caracteres, oraciones, párrafos, tiempo de lectura y las 5 palabras más frecuentes.",
   },
   zh: {
-    title: "字數·單詞計數器 — 即時確認文字統計",
-    description: "貼上文字後可立即查看單詞數、字符數、句子數、段落數、閱讀時間和使用頻率最高的5個詞。",
-  },
-  cn: {
     title: "字数·单词计数器 — 即时确认文字统计",
-    description: "粘贴文字后可立即查看单词数、字符数、句子数、段落数、阅读时间和使用频率最高的5个词。",
+    description: "贴上文字后可立即查看单词数、字符数、句子数、段落数、阅读时间和使用频率最高的5个词。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+type PageContent = {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+};
+
+const content: Record<ActiveLocale, PageContent> = {
+  ko: {
+    introTitle: "글자수와 단어수는 문장의 밀도와 분량을 점검하는 기본 지표입니다",
+    intro: "자기소개서, 이메일, 블로그 초안, 과제 문서는 분량 제한과 읽기 부담을 함께 관리해야 합니다. 이 도구는 붙여넣은 텍스트의 단어 수, 글자 수, 문장·단락 수, 예상 읽기 시간, 자주 쓰는 단어를 즉시 보여주어 초안을 다듬는 기준을 제공합니다.",
+    formulaTitle: "텍스트 통계 개념",
+    formulas: [
+      { title: "단어 수", body: "공백으로 나뉜 토큰을 기준으로 글의 분량과 읽기 부담을 대략 파악합니다." },
+      { title: "공백 제외 글자수", body: "지원서, 제목, 광고 문구처럼 글자 제한이 있는 입력칸을 확인할 때 유용합니다." },
+      { title: "읽기 시간", body: "분당 약 200단어 기준으로 읽는 데 걸리는 시간을 추정해 문서 길이를 조절하게 돕습니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "검토할 텍스트를 입력창에 붙여넣거나 직접 작성합니다.",
+      "단어, 글자, 문장, 단락, 읽기 시간 통계를 확인합니다.",
+      "자주 쓰는 단어 목록을 보고 반복 표현이나 핵심어 비중을 조정합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "한국어 단어 수는 정확한가요?", answer: "공백 기준으로 세기 때문에 형태소 분석과는 다릅니다. 빠른 분량 확인에는 유용하지만 공식 제출 기준은 해당 플랫폼의 카운터를 확인하세요." },
+      { question: "텍스트가 서버로 전송되나요?", answer: "이 컴포넌트는 브라우저 상태에서 입력 텍스트를 계산합니다. 민감한 원문은 사용 환경과 브라우저 보안을 함께 고려하세요." },
+      { question: "읽기 시간은 어떤 기준인가요?", answer: "분당 200단어의 일반적인 읽기 속도를 기준으로 추정합니다. 전문 문서나 외국어 텍스트는 실제 시간이 달라질 수 있습니다." },
+    ],
+    disclaimer: "이 도구의 통계는 빠른 편집 참고용이며, 입사지원·시험·플랫폼 제출 기준과 다를 수 있습니다.",
+  },
+  en: {
+    introTitle: "Word and character counts help control length and density",
+    intro: "Applications, emails, article drafts, and school assignments often need both a length check and a readability check. This counter shows words, characters, sentences, paragraphs, estimated reading time, and frequent terms so you can revise with concrete signals instead of guessing.",
+    formulaTitle: "Text statistic concepts",
+    formulas: [
+      { title: "Word count", body: "A whitespace-based estimate that helps judge length, scope, and reading effort." },
+      { title: "Characters without spaces", body: "Useful for forms, titles, ads, and platforms that enforce strict character limits." },
+      { title: "Reading time", body: "Estimated from about 200 words per minute, giving a quick sense of audience effort." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Paste or type the text you want to review.",
+      "Check the word, character, sentence, paragraph, and reading-time statistics.",
+      "Use the frequent-word list to spot repetition or adjust keyword focus.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Is the word count exact for every language?", answer: "No. It uses a practical whitespace-based method, so languages and platforms with different token rules may count differently." },
+      { question: "Is my text sent to a server?", answer: "The component calculates the statistics in browser state. Still, treat sensitive text carefully according to your device and browser environment." },
+      { question: "How is reading time estimated?", answer: "It uses a general pace of about 200 words per minute. Technical documents or non-native reading can take longer." },
+    ],
+    disclaimer: "These statistics are editing aids and may differ from official application, exam, or platform counters.",
+  },
+  ja: {
+    introTitle: "文字数と単語数は文章の量と密度を確認する基本指標です",
+    intro: "応募文、メール、記事の下書き、課題文では、分量制限と読みやすさの両方を管理する必要があります。このツールは単語数、文字数、文、段落、推定読了時間、頻出語をすぐに表示し、推測ではなく数値で推敲できます。",
+    formulaTitle: "テキスト統計の考え方",
+    formulas: [
+      { title: "単語数", body: "空白で区切られた単位をもとに、文章の長さや読む負担を大まかに見ます。" },
+      { title: "空白を除く文字数", body: "フォーム、タイトル、広告文など、文字数制限がある場面で役立ちます。" },
+      { title: "読了時間", body: "分あたり約200語を基準に、読者が必要とする時間を概算します。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "確認したいテキストを貼り付けるか入力します。",
+      "単語数、文字数、文数、段落数、読了時間を確認します。",
+      "頻出語を見て、繰り返し表現やキーワードの偏りを調整します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "日本語の単語数は正確ですか？", answer: "空白を基準にするため、形態素解析とは異なります。公式提出では提出先のカウンターも確認してください。" },
+      { question: "入力した文章はサーバーに送られますか？", answer: "このコンポーネントはブラウザ上の状態で統計を計算します。機密文書は利用環境にも注意してください。" },
+      { question: "読了時間の基準は何ですか？", answer: "分あたり約200語の一般的な速度を使った推定です。専門文書や外国語では実際の時間が変わります。" },
+    ],
+    disclaimer: "この統計は編集の参考用であり、応募、試験、各プラットフォームの公式カウントとは異なる場合があります。",
+  },
+  zh: {
+    introTitle: "字数和词数是检查篇幅与信息密度的基础指标",
+    intro: "求职材料、邮件、文章草稿和作业常常既有篇幅限制，也需要控制阅读负担。这个工具会即时显示词数、字符数、句子数、段落数、预计阅读时间和高频词，帮助你用具体数据修改文本。",
+    formulaTitle: "文本统计概念",
+    formulas: [
+      { title: "词数", body: "按空白分隔估算文本长度和阅读负担，适合快速判断篇幅。" },
+      { title: "不含空格字符数", body: "适用于表单、标题、广告文案等有严格字数限制的场景。" },
+      { title: "阅读时间", body: "按每分钟约 200 个词估算，帮助判断读者需要投入多少时间。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "粘贴或输入需要检查的文本。",
+      "查看词数、字符数、句子、段落和阅读时间统计。",
+      "根据高频词列表检查重复表达或关键词比例。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "中文词数一定准确吗？", answer: "不一定。工具采用实用的空白分隔方式，不等同于中文分词算法。正式提交请再核对平台计数。" },
+      { question: "文本会发送到服务器吗？", answer: "组件在浏览器状态中计算统计值。处理敏感文本时，仍需考虑设备和浏览器环境。" },
+      { question: "阅读时间如何估算？", answer: "按每分钟约 200 个词的通用速度估算。专业文本或外语阅读的实际时间可能更长。" },
+    ],
+    disclaimer: "这些统计用于编辑参考，可能与求职、考试或平台的官方计数不同。",
+  },
+  fr: {
+    introTitle: "Le nombre de mots et de caractères aide à maîtriser longueur et densité",
+    intro: "Candidatures, e-mails, brouillons d'articles et devoirs exigent souvent un contrôle de longueur et de lisibilité. Ce compteur affiche mots, caractères, phrases, paragraphes, temps de lecture estimé et termes fréquents pour réviser avec des repères concrets.",
+    formulaTitle: "Notions de statistiques textuelles",
+    formulas: [
+      { title: "Nombre de mots", body: "Estimation basée sur les espaces, utile pour juger longueur, portée et effort de lecture." },
+      { title: "Caractères sans espaces", body: "Pratique pour formulaires, titres, annonces et plateformes avec limites strictes." },
+      { title: "Temps de lecture", body: "Estimation à partir d'environ 200 mots par minute pour mesurer l'effort du lecteur." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Collez ou saisissez le texte à examiner.",
+      "Consultez mots, caractères, phrases, paragraphes et temps de lecture.",
+      "Utilisez les mots fréquents pour repérer répétitions ou accentuer les bons termes.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Le comptage est-il exact dans toutes les langues ?", answer: "Non. Il utilise une méthode pratique basée sur les espaces ; certaines langues ou plateformes appliquent d'autres règles." },
+      { question: "Mon texte est-il envoyé à un serveur ?", answer: "Le composant calcule les statistiques dans l'état du navigateur. Traitez toutefois les textes sensibles avec prudence." },
+      { question: "Comment le temps de lecture est-il estimé ?", answer: "Il repose sur une vitesse générale d'environ 200 mots par minute. Les textes techniques ou en langue étrangère peuvent prendre plus de temps." },
+    ],
+    disclaimer: "Ces statistiques servent d'aide à l'édition et peuvent différer des compteurs officiels de candidature, d'examen ou de plateforme.",
+  },
+  es: {
+    introTitle: "Los recuentos de palabras y caracteres ayudan a controlar longitud y densidad",
+    intro: "Solicitudes, correos, borradores y trabajos suelen requerir control de extensión y legibilidad. Este contador muestra palabras, caracteres, oraciones, párrafos, tiempo de lectura estimado y términos frecuentes para revisar con señales concretas.",
+    formulaTitle: "Conceptos de estadística textual",
+    formulas: [
+      { title: "Palabras", body: "Estimación basada en espacios para juzgar extensión, alcance y esfuerzo de lectura." },
+      { title: "Caracteres sin espacios", body: "Útil para formularios, títulos, anuncios y plataformas con límites estrictos." },
+      { title: "Tiempo de lectura", body: "Estimado con unas 200 palabras por minuto para medir rápidamente el esfuerzo del lector." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Pega o escribe el texto que quieres revisar.",
+      "Comprueba palabras, caracteres, oraciones, párrafos y tiempo de lectura.",
+      "Usa la lista de palabras frecuentes para detectar repeticiones o ajustar el foco.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿El conteo es exacto en todos los idiomas?", answer: "No. Usa un método práctico basado en espacios; algunas lenguas y plataformas aplican reglas diferentes." },
+      { question: "¿Mi texto se envía a un servidor?", answer: "El componente calcula las estadísticas en el estado del navegador. Aun así, trata los textos sensibles con cuidado." },
+      { question: "¿Cómo se estima el tiempo de lectura?", answer: "Usa una velocidad general de unas 200 palabras por minuto. Documentos técnicos o en otro idioma pueden tardar más." },
+    ],
+    disclaimer: "Estas estadísticas son ayudas de edición y pueden diferir de contadores oficiales de solicitudes, exámenes o plataformas.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-3xl px-4 py-8">
     <WordCounterToolComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

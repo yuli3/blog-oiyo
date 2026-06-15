@@ -2,7 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import FastingTimerComp from "../../components/tools/FastingTimer";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -11,9 +12,9 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "간헐적 단식 타이머 — 16:8 단식 시간 계산기",
     description: "16:8, 18:6, 20:4 등 다양한 간헐적 단식 방법의 시작·종료 시간을 계산하고 타이머로 관리하세요.",
@@ -35,20 +36,229 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Calcula las horas de inicio y fin para los protocolos de ayuno 16:8, 18:6 y 20:4.",
   },
   zh: {
-    title: "間歇性斷食計時器",
-    description: "計算16:8、18:6、20:4等各種間歇性斷食方案的開始和結束時間。",
-  },
-  cn: {
     title: "间歇性断食计时器",
     description: "计算16:8、18:6、20:4等各种间歇性断食方案的开始和结束时间。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+type PageContent = {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+};
+
+const content: Record<ActiveLocale, PageContent> = {
+  ko: {
+    introTitle: "간헐적 단식 타이머는 단식 창을 기록하는 생활 관리 도구입니다",
+    intro: "16:8, 18:6, 20:4 같은 방식은 하루 중 먹는 시간과 먹지 않는 시간을 나누어 관리합니다. 이 타이머는 12·16·18·20시간 목표를 선택하고 시작 시점부터 경과 시간을 보여주어, 단식 창을 눈으로 확인하고 종료 시점을 놓치지 않게 돕습니다.",
+    formulaTitle: "단식 시간 개념",
+    formulas: [
+      { title: "단식 창", body: "칼로리 섭취를 하지 않기로 정한 시간 구간입니다. 도구는 경과 시간과 목표 대비 진행률을 보여줍니다." },
+      { title: "식사 창", body: "식사를 계획하는 시간대입니다. 단식 종료 후 무엇을 먹을지는 개인 상태와 일정에 맞춰야 합니다." },
+      { title: "목표 시간", body: "12H, 16H, 18H, 20H 중 하나를 선택해 오늘 관리할 기준을 세웁니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "오늘의 목표 단식 시간을 12H, 16H, 18H, 20H 중에서 선택합니다.",
+      "단식 시작 버튼을 눌러 경과 시간과 진행률을 확인합니다.",
+      "목표에 도달하거나 중단해야 할 때 단식 종료 버튼으로 기록을 멈춥니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "16:8은 무엇을 뜻하나요?", answer: "보통 16시간 단식하고 8시간 안에 식사를 계획하는 방식을 말합니다. 개인 일정에 맞게 시작 시각을 조정할 수 있습니다." },
+      { question: "타이머가 식단을 추천하나요?", answer: "아니요. 이 페이지는 시간 추적만 돕습니다. 식단, 영양, 질환 관련 판단은 전문가와 상의해야 합니다." },
+      { question: "중간에 컨디션이 나쁘면 어떻게 하나요?", answer: "어지러움, 저혈당 의심, 탈수, 통증 같은 증상이 있으면 무리하지 말고 단식을 중단한 뒤 적절한 도움을 받으세요." },
+    ],
+    disclaimer: "간헐적 단식은 모든 사람에게 적합하지 않습니다. 임신, 성장기, 질환, 약 복용, 섭식 문제 병력이 있으면 의료 전문가와 먼저 상담하세요.",
+  },
+  en: {
+    introTitle: "A fasting timer tracks the window, not your health outcome",
+    intro: "Intermittent fasting plans such as 16:8, 18:6, and 20:4 divide the day into fasting and eating windows. This timer lets you choose a 12, 16, 18, or 20-hour target, then shows elapsed time and progress so the window is easier to monitor.",
+    formulaTitle: "Fasting-window concepts",
+    formulas: [
+      { title: "Fasting window", body: "The period you intend to avoid calorie intake. The tool shows elapsed time and progress toward the target." },
+      { title: "Eating window", body: "The period when meals may be planned. Food choices still depend on personal needs and context." },
+      { title: "Target hours", body: "Choose 12H, 16H, 18H, or 20H as the tracking goal for the current session." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Select today's target fasting duration: 12H, 16H, 18H, or 20H.",
+      "Press start fasting to track elapsed time and progress.",
+      "End the fast when you reach your target or when you need to stop early.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "What does 16:8 mean?", answer: "It usually means a 16-hour fasting window and an 8-hour eating window, with start times adjusted to your schedule." },
+      { question: "Does the timer recommend a diet?", answer: "No. It only tracks time. Nutrition, medical conditions, and meal planning should be discussed with a qualified professional when relevant." },
+      { question: "What if I feel unwell during a fast?", answer: "If you feel dizzy, suspect low blood sugar, become dehydrated, or have concerning symptoms, stop and seek appropriate help." },
+    ],
+    disclaimer: "Intermittent fasting is not appropriate for everyone; consult a medical professional first if pregnant, growing, ill, taking medication, or with a history of disordered eating.",
+  },
+  ja: {
+    introTitle: "断食タイマーは時間枠を記録するための生活管理ツールです",
+    intro: "16:8、18:6、20:4などの方法は、食べる時間と食べない時間を分けて管理します。このタイマーでは12、16、18、20時間の目標を選び、開始からの経過時間と進捗を確認できます。",
+    formulaTitle: "断食時間の考え方",
+    formulas: [
+      { title: "断食ウィンドウ", body: "カロリー摂取を避けると決めた時間帯です。経過時間と目標までの進捗を表示します。" },
+      { title: "食事ウィンドウ", body: "食事を計画する時間帯です。何を食べるかは体調や予定に合わせて判断します。" },
+      { title: "目標時間", body: "12H、16H、18H、20Hから、今回追跡する基準を選びます。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "今日の目標断食時間を12H、16H、18H、20Hから選びます。",
+      "断食開始ボタンを押し、経過時間と進捗を確認します。",
+      "目標に達した時、または途中で止める必要がある時に終了します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "16:8とは何ですか？", answer: "一般的には16時間の断食時間と8時間の食事時間を組み合わせる方法です。開始時刻は生活に合わせて調整します。" },
+      { question: "食事内容も提案しますか？", answer: "いいえ。このページは時間管理のみを助けます。栄養、疾患、食事計画は必要に応じて専門家に相談してください。" },
+      { question: "途中で体調が悪くなったら？", answer: "めまい、低血糖の疑い、脱水、痛みなどがあれば無理せず中止し、適切な助けを受けてください。" },
+    ],
+    disclaimer: "間欠的断食はすべての人に適するわけではありません。妊娠中、成長期、疾患、服薬中、摂食問題の既往がある場合は医療専門家に相談してください。",
+  },
+  zh: {
+    introTitle: "间歇性断食计时器用于记录时间窗口，而不是判断健康结果",
+    intro: "16:8、18:6、20:4 等方式把一天分成断食窗口和进食窗口。这个计时器可选择 12、16、18、20 小时目标，并显示已过去时间和进度，方便观察当前窗口。",
+    formulaTitle: "断食窗口概念",
+    formulas: [
+      { title: "断食窗口", body: "计划不摄入热量的时间段。工具显示已用时间和目标进度。" },
+      { title: "进食窗口", body: "计划进餐的时间段。具体吃什么仍应根据个人状态和安排决定。" },
+      { title: "目标小时", body: "从 12H、16H、18H、20H 中选择当前追踪目标。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "选择今天的目标断食时长：12H、16H、18H 或 20H。",
+      "点击开始断食，查看已过时间和进度。",
+      "达到目标或需要提前停止时，点击结束断食。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "16:8 是什么意思？", answer: "通常指 16 小时断食和 8 小时进食窗口，开始时间可按个人作息调整。" },
+      { question: "计时器会推荐饮食吗？", answer: "不会。本页面只追踪时间。营养、疾病和饮食计划相关问题应咨询合格专业人士。" },
+      { question: "断食期间不舒服怎么办？", answer: "如果出现头晕、疑似低血糖、脱水、疼痛或其他令人担心的症状，应停止并寻求适当帮助。" },
+    ],
+    disclaimer: "间歇性断食并不适合所有人；孕期、成长期、患病、服药或有进食障碍史者应先咨询医疗专业人士。",
+  },
+  fr: {
+    introTitle: "Un minuteur de jeûne suit une fenêtre, pas un résultat de santé",
+    intro: "Les méthodes 16:8, 18:6 ou 20:4 divisent la journée entre fenêtre de jeûne et fenêtre alimentaire. Ce minuteur permet de choisir 12, 16, 18 ou 20 heures, puis affiche temps écoulé et progression pour suivre la fenêtre plus facilement.",
+    formulaTitle: "Notions de fenêtre de jeûne",
+    formulas: [
+      { title: "Fenêtre de jeûne", body: "Période pendant laquelle vous prévoyez d'éviter les apports caloriques. L'outil montre temps écoulé et progression." },
+      { title: "Fenêtre alimentaire", body: "Période où les repas peuvent être planifiés. Les choix alimentaires restent personnels et contextuels." },
+      { title: "Heures cibles", body: "Choisissez 12H, 16H, 18H ou 20H comme objectif de suivi pour la session." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Sélectionnez la durée cible du jour : 12H, 16H, 18H ou 20H.",
+      "Démarrez le jeûne pour suivre temps écoulé et progression.",
+      "Terminez lorsque l'objectif est atteint ou si vous devez arrêter plus tôt.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Que signifie 16:8 ?", answer: "Cela désigne généralement 16 heures de jeûne et 8 heures de fenêtre alimentaire, avec des horaires adaptés à votre journée." },
+      { question: "Le minuteur recommande-t-il un régime ?", answer: "Non. Il suit seulement le temps. Nutrition, conditions médicales et repas relèvent d'un professionnel qualifié si nécessaire." },
+      { question: "Que faire si je me sens mal ?", answer: "En cas d'étourdissement, suspicion d'hypoglycémie, déshydratation ou symptômes inquiétants, arrêtez et cherchez une aide appropriée." },
+    ],
+    disclaimer: "Le jeûne intermittent ne convient pas à tout le monde ; consultez un professionnel en cas de grossesse, croissance, maladie, traitement ou antécédents de troubles alimentaires.",
+  },
+  es: {
+    introTitle: "Un temporizador de ayuno registra la ventana, no el resultado de salud",
+    intro: "Métodos como 16:8, 18:6 y 20:4 dividen el día entre ventana de ayuno y ventana de comida. Este temporizador permite elegir 12, 16, 18 o 20 horas y muestra tiempo transcurrido y progreso para seguir la ventana con claridad.",
+    formulaTitle: "Conceptos de ventana de ayuno",
+    formulas: [
+      { title: "Ventana de ayuno", body: "Periodo en el que planeas evitar calorías. La herramienta muestra tiempo transcurrido y progreso hacia el objetivo." },
+      { title: "Ventana de comida", body: "Periodo para planificar comidas. Qué comer depende de necesidades personales y contexto." },
+      { title: "Horas objetivo", body: "Elige 12H, 16H, 18H o 20H como meta de seguimiento para la sesión actual." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Selecciona la duración objetivo de hoy: 12H, 16H, 18H o 20H.",
+      "Pulsa iniciar ayuno para seguir tiempo transcurrido y progreso.",
+      "Termina el ayuno al llegar al objetivo o si necesitas detenerte antes.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Qué significa 16:8?", answer: "Normalmente significa una ventana de ayuno de 16 horas y una ventana de comida de 8 horas, ajustadas a tu horario." },
+      { question: "¿El temporizador recomienda una dieta?", answer: "No. Solo registra tiempo. Nutrición, condiciones médicas y planificación de comidas deben tratarse con un profesional cuando corresponda." },
+      { question: "¿Qué hago si me siento mal durante el ayuno?", answer: "Si notas mareo, posible hipoglucemia, deshidratación, dolor o síntomas preocupantes, detente y busca ayuda adecuada." },
+    ],
+    disclaimer: "El ayuno intermitente no es adecuado para todo el mundo; consulta a un profesional si estás embarazada, en crecimiento, enfermo, medicado o con historial de trastornos alimentarios.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <FastingTimerComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

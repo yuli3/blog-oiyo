@@ -2,7 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import AspectRatioCalculatorComp from "../../components/tools/AspectRatioCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -11,9 +12,9 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "화면 비율 계산기 — 종횡비 계산 및 화면 크기 변환",
     description: "가로×세로 픽셀로 종횡비를 계산하거나, 비율과 한 값으로 다른 값을 구하세요. 16:9, 4:3, 1:1 등 일반 프리셋 지원.",
@@ -35,20 +36,227 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Calcule relaciones de aspecto a partir de píxeles de ancho × alto, o encuentre una dimensión faltante a partir de una relación conocida.",
   },
   zh: {
-    title: "畫面比例計算器 — 計算和轉換縱橫比及螢幕尺寸",
-    description: "通過寬×高像素計算縱橫比，或從已知比例和一個值求另一個值。支援16:9、4:3、1:1等常用預設。",
-  },
-  cn: {
     title: "画面比例计算器 — 计算和转换纵横比及屏幕尺寸",
     description: "通过宽×高像素计算纵横比，或从已知比例和一个值求另一个值。支持16:9、4:3、1:1等常用预设。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "종횡비는 화면이 얼마나 넓고 높은지를 나타내는 비율입니다",
+    intro: "이미지, 영상, 썸네일, 모니터 화면을 만들 때는 픽셀 수보다 비율을 먼저 맞춰야 깨짐이나 잘림을 줄일 수 있습니다. 이 계산기는 가로와 세로를 입력해 비율을 구하거나, 알려진 비율에서 빠진 한쪽 길이를 계산하도록 돕습니다.",
+    formulaTitle: "핵심 공식",
+    formulas: [
+      { title: "비율 단순화", body: "width:height를 최대공약수로 나누어 가장 작은 정수비로 만듭니다." },
+      { title: "세로 계산", body: "height = width × ratioHeight / ratioWidth" },
+      { title: "가로 계산", body: "width = height × ratioWidth / ratioHeight" },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "원본 가로와 세로 픽셀을 입력해 현재 비율을 확인합니다.",
+      "16:9, 4:3, 1:1 같은 목표 비율을 선택하거나 직접 입력합니다.",
+      "한쪽 크기를 고정하고 계산된 다른 쪽 크기로 디자인이나 영상을 조정합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "16:9는 어떤 화면에 많이 쓰이나요?", answer: "유튜브 영상, 일반 모니터, 프레젠테이션 화면에서 가장 흔하게 쓰이는 와이드 비율입니다." },
+      { question: "소수점 결과는 어떻게 처리하나요?", answer: "픽셀은 정수이므로 보통 가장 가까운 정수로 반올림합니다. 엄격한 제작 규격이 있으면 해당 플랫폼 권장값을 따르세요." },
+      { question: "비율을 바꾸면 이미지가 왜 늘어나나요?", answer: "가로와 세로를 독립적으로 바꾸면 원본 비율이 깨집니다. 한쪽 기준으로 다른 쪽을 계산해야 왜곡을 줄일 수 있습니다." },
+    ],
+    disclaimer: "이 도구는 일반적인 화면 크기 계산용입니다. 광고, 인쇄, 방송 납품처럼 고정 규격이 있는 작업은 해당 플랫폼의 최신 가이드를 확인하세요.",
+  },
+  en: {
+    introTitle: "Aspect ratio describes how wide a frame is compared with its height",
+    intro: "Images, videos, thumbnails, and screens look right when the ratio is preserved. This calculator finds the simplified ratio from width and height, or calculates a missing dimension from a target ratio.",
+    formulaTitle: "Core formulas",
+    formulas: [
+      { title: "Simplify ratio", body: "Divide width:height by the greatest common divisor." },
+      { title: "Find height", body: "height = width × ratioHeight / ratioWidth" },
+      { title: "Find width", body: "width = height × ratioWidth / ratioHeight" },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Enter the original width and height in pixels to identify the current ratio.",
+      "Choose a preset such as 16:9, 4:3, or 1:1, or enter a custom ratio.",
+      "Lock one dimension and use the calculated other dimension for your design or export.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Where is 16:9 commonly used?", answer: "It is the standard wide format for YouTube videos, many monitors, slides, and streaming layouts." },
+      { question: "What should I do with decimal pixel results?", answer: "Pixels must be whole numbers, so round to the nearest integer unless a platform gives an exact recommended size." },
+      { question: "Why does changing the ratio stretch my image?", answer: "Changing width and height independently breaks the original ratio. Calculate the dependent dimension to avoid distortion." },
+    ],
+    disclaimer: "This tool is for general screen and media sizing. For ads, print, broadcast, or platform delivery, confirm the latest required specifications.",
+  },
+  ja: {
+    introTitle: "アスペクト比は画面の横幅と高さの関係を表します",
+    intro: "画像、動画、サムネイル、ディスプレイは比率を保つことで、引き伸ばしや切り抜きの違和感を減らせます。この計算機では幅と高さから比率を求めたり、指定した比率から不足する寸法を計算できます。",
+    formulaTitle: "基本公式",
+    formulas: [
+      { title: "比率の簡約", body: "width:heightを最大公約数で割り、最小の整数比にします。" },
+      { title: "高さを求める", body: "height = width × ratioHeight / ratioWidth" },
+      { title: "幅を求める", body: "width = height × ratioWidth / ratioHeight" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "元の幅と高さのピクセル値を入力して現在の比率を確認します。",
+      "16:9、4:3、1:1などのプリセット、または任意の比率を選びます。",
+      "片方の寸法を固定し、計算されたもう片方の寸法で制作物を調整します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "16:9はどこでよく使われますか？", answer: "YouTube動画、一般的なモニター、スライド、配信用レイアウトでよく使われるワイド比率です。" },
+      { question: "小数のピクセル結果はどうしますか？", answer: "ピクセルは整数なので、通常は最も近い整数に丸めます。媒体指定がある場合はその推奨値を優先してください。" },
+      { question: "比率を変えると画像が伸びるのはなぜですか？", answer: "幅と高さを別々に変えると元の比率が崩れます。片方に合わせてもう片方を計算すると歪みを抑えられます。" },
+    ],
+    disclaimer: "このツールは一般的な画面サイズ計算用です。広告、印刷、放送納品など固定仕様のある作業では各媒体の最新規定をご確認ください。",
+  },
+  fr: {
+    introTitle: "Le rapport d'aspect décrit la largeur d'un cadre par rapport à sa hauteur",
+    intro: "Images, vidéos, vignettes et écrans restent nets lorsque leur ratio est respecté. Ce calculateur simplifie un ratio à partir de la largeur et de la hauteur, ou calcule la dimension manquante pour un ratio cible.",
+    formulaTitle: "Formules clés",
+    formulas: [
+      { title: "Simplifier le ratio", body: "Diviser width:height par le plus grand diviseur commun." },
+      { title: "Trouver la hauteur", body: "height = width × ratioHeight / ratioWidth" },
+      { title: "Trouver la largeur", body: "width = height × ratioWidth / ratioHeight" },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Saisissez la largeur et la hauteur d'origine en pixels.",
+      "Choisissez un ratio courant comme 16:9, 4:3 ou 1:1, ou entrez un ratio personnalisé.",
+      "Bloquez une dimension et utilisez l'autre dimension calculée pour l'export ou la maquette.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Où utilise-t-on souvent le 16:9 ?", answer: "C'est le format large courant pour YouTube, de nombreux écrans, les présentations et les mises en page vidéo." },
+      { question: "Que faire si le résultat contient des décimales ?", answer: "Un pixel est entier : arrondissez généralement au nombre le plus proche, sauf si la plateforme impose une taille précise." },
+      { question: "Pourquoi une image s'étire-t-elle quand je change le ratio ?", answer: "Modifier largeur et hauteur séparément casse le ratio d'origine. Calculez la dimension dépendante pour limiter la déformation." },
+    ],
+    disclaimer: "Cet outil sert au dimensionnement général. Pour la publicité, l'impression, la diffusion ou une plateforme donnée, vérifiez les spécifications officielles récentes.",
+  },
+  es: {
+    introTitle: "La relación de aspecto describe la anchura de un marco frente a su altura",
+    intro: "Imágenes, vídeos, miniaturas y pantallas se ven correctos cuando conservan su proporción. Esta calculadora simplifica una relación a partir del ancho y alto, o calcula la dimensión que falta desde una proporción objetivo.",
+    formulaTitle: "Fórmulas clave",
+    formulas: [
+      { title: "Simplificar proporción", body: "Divide width:height por el máximo común divisor." },
+      { title: "Calcular alto", body: "height = width × ratioHeight / ratioWidth" },
+      { title: "Calcular ancho", body: "width = height × ratioWidth / ratioHeight" },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Introduce el ancho y alto originales en píxeles para ver la proporción actual.",
+      "Elige un ajuste como 16:9, 4:3 o 1:1, o escribe una proporción personalizada.",
+      "Fija una dimensión y usa la otra calculada para tu diseño o exportación.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Dónde se usa mucho 16:9?", answer: "Es el formato panorámico estándar para YouTube, muchos monitores, presentaciones y diseños de vídeo." },
+      { question: "¿Qué hago con resultados decimales?", answer: "Los píxeles son enteros, así que normalmente se redondea al entero más cercano salvo que la plataforma pida un tamaño exacto." },
+      { question: "¿Por qué se estira una imagen al cambiar la proporción?", answer: "Cambiar ancho y alto por separado rompe la proporción original. Calcula la dimensión dependiente para evitar distorsión." },
+    ],
+    disclaimer: "Esta herramienta es para tamaños generales de pantalla y medios. En anuncios, impresión, emisión o plataformas específicas, confirma las especificaciones vigentes.",
+  },
+  zh: {
+    introTitle: "纵横比表示画面宽度与高度之间的关系",
+    intro: "图片、视频、缩略图和屏幕尺寸只要保持比例，就能减少拉伸、裁切和显示变形。这个计算器可以根据宽高像素求出简化比例，也可以根据目标比例计算缺少的一边。",
+    formulaTitle: "核心公式",
+    formulas: [
+      { title: "比例化简", body: "用最大公约数同时除以 width:height，得到最小整数比。" },
+      { title: "计算高度", body: "height = width × ratioHeight / ratioWidth" },
+      { title: "计算宽度", body: "width = height × ratioWidth / ratioHeight" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "输入原始宽度和高度像素，查看当前比例。",
+      "选择16:9、4:3、1:1等预设，或输入自定义比例。",
+      "固定一边尺寸，用计算出的另一边尺寸调整设计或导出文件。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "16:9常用于哪些场景？", answer: "它常用于YouTube视频、普通显示器、演示文稿和流媒体画面。" },
+      { question: "结果出现小数像素怎么办？", answer: "像素必须是整数，通常四舍五入到最接近的整数。若平台有明确规格，请以平台要求为准。" },
+      { question: "为什么改变比例会让图片变形？", answer: "如果独立改变宽高，原始比例会被破坏。应固定一边并计算另一边，减少拉伸变形。" },
+    ],
+    disclaimer: "本工具用于一般屏幕和媒体尺寸计算。广告、印刷、广播或平台交付请确认对应平台的最新规格。",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <AspectRatioCalculatorComp client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

@@ -4,13 +4,15 @@ import DreamInterpreter from "../../components/tools/DreamInterpreter";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
+type ActiveLocale = (typeof locales)[number];
+
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale & Locale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "꿈 해몽 인터프리터 — 꿈 키워드로 무의식 탐구",
     description: "물·불·뱀·이빨·추락·비행 등 꿈에 등장한 상징을 선택해 심리적 의미와 무의식의 메시지를 무료로 해석합니다.",
@@ -32,20 +34,227 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Selecciona símbolos de tu sueño — agua, fuego, serpiente, dientes, caída, volar y más — para revelar su significado psicológico.",
   },
   zh: {
-    title: "夢境解析器 — 解讀你的夢境符號",
-    description: "選擇夢中出現的符號——水、火、蛇、牙齒、墜落、飛翔等——揭示其心理含義和潛意識信息，完全免費。",
-  },
-  cn: {
     title: "梦境解析器 — 解读你的梦境符号",
     description: "选择梦中出现的符号——水、火、蛇、牙齿、坠落、飞翔等——揭示其心理含义和潜意识信息，完全免费。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "꿈 해석은 상징을 통해 감정의 맥락을 돌아보는 일입니다",
+    intro: "꿈에 나온 물, 불, 뱀, 이빨, 추락 같은 이미지는 사람마다 다른 기억과 감정에 연결됩니다. 이 도구는 흔한 꿈 상징을 바탕으로 가능한 해석을 제안하지만, 정답을 맞히는 방식이 아니라 최근의 스트레스, 기대, 관계를 돌아보는 출발점으로 쓰는 것이 좋습니다.",
+    formulaTitle: "해석할 때 보는 요소",
+    formulas: [
+      { title: "상징", body: "같은 상징도 문화, 경험, 최근 사건에 따라 의미가 달라질 수 있습니다." },
+      { title: "감정", body: "꿈에서 느낀 두려움, 안도감, 설렘은 이미지보다 더 중요한 단서가 될 때가 많습니다." },
+      { title: "현실 맥락", body: "최근의 고민, 관계 변화, 수면 상태를 함께 떠올리면 해석이 더 현실적입니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "꿈에서 가장 선명했던 상징이나 장면을 선택합니다.",
+      "제안된 해석을 읽고 최근 감정이나 상황과 연결해 봅니다.",
+      "반복되는 꿈이라면 날짜와 느낌을 간단히 기록해 패턴을 봅니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "꿈 해석이 실제 미래를 알려주나요?", answer: "아니요. 이 도구는 미래 예언이 아니라 상징과 감정을 정리하는 엔터테인먼트·자기성찰 콘텐츠입니다." },
+      { question: "나쁜 꿈은 나쁜 일이 생긴다는 뜻인가요?", answer: "대부분 그렇지 않습니다. 악몽은 스트레스, 피로, 불안, 수면 환경과 관련될 수 있습니다." },
+      { question: "반복되는 악몽은 어떻게 해야 하나요?", answer: "생활에 지장을 줄 정도로 반복된다면 수면 습관을 점검하고 필요하면 전문가 상담을 고려하세요." },
+    ],
+    disclaimer: "이 꿈 해석은 엔터테인먼트와 자기성찰용입니다. 정신건강 평가나 치료를 대신하지 않습니다.",
+  },
+  en: {
+    introTitle: "Dream interpretation is a way to reflect on symbols and emotion",
+    intro: "Images such as water, fire, snakes, teeth, falling, or flying connect to different memories and feelings for each person. This tool offers possible meanings for common dream symbols, but it works best as a starting point for reflection, not as a fixed answer.",
+    formulaTitle: "What shapes an interpretation",
+    formulas: [
+      { title: "Symbol", body: "The same image can mean different things depending on culture, experience, and recent events." },
+      { title: "Emotion", body: "Fear, relief, excitement, or confusion in the dream may matter more than the image itself." },
+      { title: "Life context", body: "Recent stress, relationship changes, and sleep quality can make the interpretation more grounded." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Choose the symbol or scene that stood out most in your dream.",
+      "Read the suggested meaning and compare it with recent feelings or events.",
+      "If a dream repeats, note the date and emotion to look for patterns.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Can dreams predict the future?", answer: "This tool does not predict the future. It is entertainment and reflection content based on common symbolic associations." },
+      { question: "Does a bad dream mean something bad will happen?", answer: "Usually no. Nightmares may relate to stress, fatigue, anxiety, or sleep conditions." },
+      { question: "What if I keep having the same nightmare?", answer: "If recurring nightmares affect daily life, review sleep habits and consider speaking with a qualified professional." },
+    ],
+    disclaimer: "This dream interpretation is for entertainment and self-reflection. It is not a mental health assessment or treatment.",
+  },
+  ja: {
+    introTitle: "夢占いは、象徴と感情を振り返るための手がかりです",
+    intro: "水、火、蛇、歯、落下、飛ぶといった夢のイメージは、人によって記憶や感情との結びつきが異なります。このツールは一般的な夢の象徴から考えられる解釈を提示しますが、正解ではなく自己理解の出発点として使うのが自然です。",
+    formulaTitle: "解釈のポイント",
+    formulas: [
+      { title: "象徴", body: "同じイメージでも、文化、経験、最近の出来事によって意味は変わります。" },
+      { title: "感情", body: "夢の中の恐怖、安心、期待、混乱は、画像そのもの以上に重要な手がかりになります。" },
+      { title: "現実の文脈", body: "最近のストレス、人間関係、睡眠状態を合わせて考えると、解釈が現実的になります。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "夢で最も印象に残った象徴や場面を選びます。",
+      "提示された解釈を読み、最近の感情や出来事と照らし合わせます。",
+      "同じ夢が続く場合は、日付と感情を簡単に記録します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "夢は未来を予知しますか？", answer: "このツールは未来予測ではありません。一般的な象徴にもとづくエンタメと振り返りのコンテンツです。" },
+      { question: "悪い夢は悪い出来事の前兆ですか？", answer: "多くの場合そうではありません。悪夢はストレス、疲労、不安、睡眠環境と関係することがあります。" },
+      { question: "同じ悪夢が続く場合は？", answer: "生活に影響するほど続く場合は、睡眠習慣を見直し、必要に応じて専門家へ相談してください。" },
+    ],
+    disclaimer: "この夢解釈は娯楽と自己理解のためのものです。精神健康の評価や治療の代わりにはなりません。",
+  },
+  fr: {
+    introTitle: "Interpréter un rêve aide à relier symboles et émotions",
+    intro: "Eau, feu, serpent, dents, chute ou vol peuvent renvoyer à des souvenirs et émotions différents selon la personne. Cet outil propose des pistes à partir de symboles courants, mais il doit servir de point de départ, non de vérité définitive.",
+    formulaTitle: "Ce qui influence l'interprétation",
+    formulas: [
+      { title: "Symbole", body: "Une même image change de sens selon culture, expérience et événements récents." },
+      { title: "Émotion", body: "Peur, soulagement, excitation ou confusion dans le rêve peuvent être plus importants que l'image." },
+      { title: "Contexte réel", body: "Stress récent, relations et qualité du sommeil rendent la lecture plus concrète." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Choisissez le symbole ou la scène la plus marquante du rêve.",
+      "Lisez la piste proposée et comparez-la à vos émotions ou événements récents.",
+      "Si le rêve se répète, notez la date et l'émotion pour repérer un motif.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Les rêves prédisent-ils l'avenir ?", answer: "Cet outil ne prédit pas l'avenir. Il s'agit de divertissement et de réflexion autour de symboles courants." },
+      { question: "Un mauvais rêve annonce-t-il un mauvais événement ?", answer: "Généralement non. Les cauchemars peuvent être liés au stress, à la fatigue, à l'anxiété ou au sommeil." },
+      { question: "Que faire si le même cauchemar revient ?", answer: "S'il perturbe la vie quotidienne, vérifiez vos habitudes de sommeil et envisagez un avis professionnel." },
+    ],
+    disclaimer: "Cette interprétation est destinée au divertissement et à l'introspection. Elle ne remplace pas une évaluation ou un soin en santé mentale.",
+  },
+  es: {
+    introTitle: "Interpretar sueños ayuda a conectar símbolos y emociones",
+    intro: "Agua, fuego, serpientes, dientes, caída o vuelo pueden relacionarse con recuerdos y emociones distintas en cada persona. Esta herramienta ofrece posibles lecturas de símbolos comunes, pero conviene usarla como punto de partida, no como respuesta definitiva.",
+    formulaTitle: "Qué influye en la interpretación",
+    formulas: [
+      { title: "Símbolo", body: "La misma imagen puede cambiar de significado según cultura, experiencia y eventos recientes." },
+      { title: "Emoción", body: "Miedo, alivio, entusiasmo o confusión en el sueño pueden importar más que la imagen." },
+      { title: "Contexto real", body: "Estrés reciente, relaciones y calidad del sueño hacen que la lectura sea más concreta." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Elige el símbolo o escena que más recuerdes del sueño.",
+      "Lee la interpretación sugerida y compárala con emociones o eventos recientes.",
+      "Si el sueño se repite, anota fecha y emoción para detectar patrones.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Los sueños predicen el futuro?", answer: "Esta herramienta no predice el futuro. Es contenido de entretenimiento y reflexión basado en asociaciones simbólicas comunes." },
+      { question: "¿Un mal sueño significa que pasará algo malo?", answer: "Normalmente no. Las pesadillas pueden relacionarse con estrés, cansancio, ansiedad o condiciones de sueño." },
+      { question: "¿Qué hago si una pesadilla se repite?", answer: "Si afecta tu vida diaria, revisa hábitos de sueño y considera hablar con un profesional cualificado." },
+    ],
+    disclaimer: "Esta interpretación es para entretenimiento y autorreflexión. No sustituye evaluación ni tratamiento de salud mental.",
+  },
+  zh: {
+    introTitle: "梦境解析可以帮助你通过符号回看情绪",
+    intro: "水、火、蛇、牙齿、坠落、飞翔等梦中画面，会因个人经历和近期情绪而有不同含义。这个工具根据常见梦境符号提供可能的解释，更适合作为自我反思的起点，而不是固定答案。",
+    formulaTitle: "影响解读的因素",
+    formulas: [
+      { title: "符号", body: "同一个画面会因文化、经历和近期事件而产生不同联想。" },
+      { title: "情绪", body: "梦里的恐惧、安心、兴奋或困惑，往往比画面本身更重要。" },
+      { title: "现实背景", body: "结合近期压力、人际变化和睡眠状态，解读会更贴近现实。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "选择梦里最清晰的符号或场景。",
+      "阅读建议解释，并与近期情绪或事件进行对照。",
+      "如果梦境反复出现，可以记录日期和感受，观察是否有规律。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "梦能预测未来吗？", answer: "本工具不预测未来。它是基于常见象征联想的娱乐和自我反思内容。" },
+      { question: "噩梦意味着坏事会发生吗？", answer: "通常不是。噩梦可能与压力、疲劳、焦虑或睡眠环境有关。" },
+      { question: "反复做同一个噩梦怎么办？", answer: "如果已经影响日常生活，请检查睡眠习惯，并考虑寻求合格专业人士的帮助。" },
+    ],
+    disclaimer: "本梦境解析仅用于娱乐和自我反思，不替代心理健康评估或治疗。",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <DreamInterpreter client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

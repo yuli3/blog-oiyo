@@ -2,7 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import MeetingCostCalculatorComp from "../../components/tools/MeetingCostCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -11,9 +12,9 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "회의 비용 계산기 — 이 회의의 진짜 비용은?",
     description: "참석자 수, 평균 연봉, 회의 시간을 입력해 회의의 실제 인건비 비용을 계산합니다. 효율적인 회의 문화를 만드세요.",
@@ -35,20 +36,189 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Calcula el costo real de una reunión por número de participantes, salario promedio y duración.",
   },
   zh: {
-    title: "會議成本計算機",
-    description: "輸入參與人數、平均薪資和會議時間，計算會議的實際人力成本，推動高效會議文化。",
-  },
-  cn: {
-    title: "会议成本计算器",
+    title: "会议成本计算机",
     description: "输入参与人数、平均薪资和会议时间，计算会议的实际人力成本，推动高效会议文化。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "회의 비용은 참석자의 시간 비용을 합산한 값입니다",
+    intro: "회의는 무료가 아니라 참석자들의 근무 시간이 동시에 쓰이는 활동입니다. 이 계산기는 참석 인원, 평균 시급, 경과 시간을 바탕으로 실시간 회의 인건비와 초당 비용을 보여주어 회의 규모와 길이를 더 의식적으로 조정하게 돕습니다.",
+    formulaTitle: "계산식",
+    formulas: [
+      { title: "초당 비용", body: "초당 비용 = 참석자 수 × 평균 시급 / 3600" },
+      { title: "누적 비용", body: "누적 비용 = 초당 비용 × 경과 초" },
+      { title: "시간당 비용", body: "시간당 비용 = 참석자 수 × 평균 시급" },
+    ],
+    howToTitle: "사용 방법",
+    steps: ["참석 인원과 평균 시급을 입력합니다.", "회의 시작 버튼을 눌러 타이머를 실행합니다.", "누적 비용과 초당 비용을 보며 회의 지속 여부를 판단합니다."],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "연봉이 아니라 시급을 입력하나요?", answer: "현재 컴포넌트는 평균 시급을 입력받습니다. 연봉 기준으로 쓰려면 연 근무시간으로 나누어 시급을 추정하세요." },
+      { question: "회의 비용에 준비 시간도 포함되나요?", answer: "아닙니다. 타이머가 도는 시간만 계산합니다. 자료 준비, 후속 정리, 전환 비용은 별도로 고려해야 합니다." },
+      { question: "비용이 높으면 회의를 없애야 하나요?", answer: "반드시 그렇지는 않습니다. 의사결정 품질, 합의 필요성, 대체 수단을 함께 비교해야 합니다." },
+    ],
+    disclaimer: "이 도구는 일반적인 계산용입니다. 공식 인건비와 조직 비용 기준은 해당 회사 또는 기관 기준을 확인하세요.",
+  },
+  en: {
+    introTitle: "Meeting cost is the combined time cost of attendees",
+    intro: "A meeting is not free: it uses several people's working time at once. This calculator uses participants, average hourly rate, and elapsed time to show real-time labor cost and cost per second, helping teams be more deliberate about meeting size and duration.",
+    formulaTitle: "Formulas",
+    formulas: [
+      { title: "Cost per second", body: "Cost/sec = participants × average hourly rate / 3600" },
+      { title: "Running cost", body: "Running cost = cost/sec × elapsed seconds" },
+      { title: "Hourly meeting cost", body: "Hourly cost = participants × average hourly rate" },
+    ],
+    howToTitle: "How to use",
+    steps: ["Enter the number of participants and average hourly rate.", "Start the meeting timer.", "Watch running cost and cost per second while deciding whether to continue."],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Do I enter salary or hourly rate?", answer: "The current component uses average hourly rate. If you have annual salary, divide by estimated annual working hours first." },
+      { question: "Does it include preparation time?", answer: "No. It only counts timer duration. Preparation, follow-up, and context-switching costs should be considered separately." },
+      { question: "Does a high cost mean the meeting is bad?", answer: "Not necessarily. Decision quality, alignment needs, and alternatives matter alongside the cost." },
+    ],
+    disclaimer: "This tool is for general calculation. Confirm official labor-cost and organization-cost assumptions with the relevant company or authority.",
+  },
+  ja: {
+    introTitle: "会議コストは参加者の時間コストの合計です",
+    intro: "会議は無料ではなく、複数人の勤務時間を同時に使います。この計算機は参加者数、平均時給、経過時間からリアルタイムの人件費と秒あたりコストを表示し、会議の人数や長さを見直すきっかけになります。",
+    formulaTitle: "計算式",
+    formulas: [
+      { title: "秒あたりコスト", body: "秒コスト = 参加者数 × 平均時給 / 3600" },
+      { title: "累積コスト", body: "累積 = 秒コスト × 経過秒" },
+      { title: "1時間コスト", body: "時間コスト = 参加者数 × 平均時給" },
+    ],
+    howToTitle: "使い方",
+    steps: ["参加者数と平均時給を入力します。", "会議開始ボタンでタイマーを動かします。", "累積コストと秒あたりコストを見ながら継続を判断します。"],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "年収ではなく時給ですか？", answer: "現在のコンポーネントは平均時給を入力します。年収から使う場合は年間労働時間で割って概算してください。" },
+      { question: "準備時間も含まれますか？", answer: "含まれません。タイマー時間だけです。準備、後処理、切替コストは別途考えます。" },
+      { question: "費用が高ければ悪い会議ですか？", answer: "必ずしもそうではありません。意思決定の質、合意形成、代替手段も重要です。" },
+    ],
+    disclaimer: "このツールは一般的な計算用です。公式な人件費や組織コストの基準は所属会社・機関でご確認ください。",
+  },
+  zh: {
+    introTitle: "会议成本是所有参会者时间成本的合计",
+    intro: "会议并不是免费的，它会同时占用多个人的工作时间。这个计算器根据参会人数、平均时薪和经过时间，显示实时人力成本与每秒成本，帮助团队更有意识地控制会议人数和时长。",
+    formulaTitle: "计算公式",
+    formulas: [
+      { title: "每秒成本", body: "每秒成本 = 参会人数 × 平均时薪 / 3600" },
+      { title: "累计成本", body: "累计成本 = 每秒成本 × 经过秒数" },
+      { title: "每小时会议成本", body: "每小时成本 = 参会人数 × 平均时薪" },
+    ],
+    howToTitle: "使用方法",
+    steps: ["输入参会人数和平均时薪。", "点击开始会议启动计时器。", "观察累计成本和每秒成本，判断会议是否继续。"],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "输入年薪还是时薪？", answer: "当前组件使用平均时薪。如果只有年薪，请先除以估算年度工作小时数。" },
+      { question: "包含准备时间吗？", answer: "不包含。它只计算计时器运行时间，准备、会后整理和切换成本需另行考虑。" },
+      { question: "成本高就代表会议不好吗？", answer: "不一定。还要看决策质量、协同必要性和替代方式。" },
+    ],
+    disclaimer: "本工具用于一般计算。正式人工成本和组织成本假设请以公司或机构标准为准。",
+  },
+  fr: {
+    introTitle: "Le coût d'une réunion additionne le temps de tous les participants",
+    intro: "Une réunion n'est pas gratuite : elle mobilise plusieurs personnes en même temps. Ce calculateur utilise le nombre de participants, le taux horaire moyen et le temps écoulé pour afficher le coût en temps réel et le coût par seconde.",
+    formulaTitle: "Formules",
+    formulas: [
+      { title: "Coût par seconde", body: "Coût/s = participants × taux horaire / 3600" },
+      { title: "Coût cumulé", body: "Coût cumulé = coût/s × secondes écoulées" },
+      { title: "Coût horaire", body: "Coût horaire = participants × taux horaire" },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: ["Saisissez le nombre de participants et le taux horaire moyen.", "Lancez le minuteur de réunion.", "Suivez le coût cumulé et le coût par seconde pour décider de continuer ou non."],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Faut-il saisir un salaire annuel ou horaire ?", answer: "Le composant utilise un taux horaire moyen. Convertissez le salaire annuel avec les heures travaillées estimées." },
+      { question: "La préparation est-elle incluse ?", answer: "Non. Seul le temps du minuteur est compté ; préparation et suivi sont à ajouter." },
+      { question: "Un coût élevé signifie-t-il une mauvaise réunion ?", answer: "Pas forcément. La qualité de décision, l'alignement et les alternatives comptent aussi." },
+    ],
+    disclaimer: "Cet outil sert au calcul général. Pour les hypothèses officielles de coût du travail, vérifiez auprès de l'entreprise ou autorité compétente.",
+  },
+  es: {
+    introTitle: "El costo de una reunión suma el tiempo de todos los asistentes",
+    intro: "Una reunión no es gratis: usa el tiempo laboral de varias personas a la vez. Esta calculadora usa participantes, tarifa horaria promedio y tiempo transcurrido para mostrar costo en tiempo real y costo por segundo.",
+    formulaTitle: "Fórmulas",
+    formulas: [
+      { title: "Costo por segundo", body: "Costo/s = participantes × tarifa horaria / 3600" },
+      { title: "Costo acumulado", body: "Costo acumulado = costo/s × segundos transcurridos" },
+      { title: "Costo por hora", body: "Costo por hora = participantes × tarifa horaria" },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: ["Introduce número de participantes y tarifa horaria promedio.", "Inicia el temporizador de la reunión.", "Observa costo acumulado y costo por segundo para decidir si continuar."],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Ingreso salario anual o tarifa horaria?", answer: "El componente usa tarifa horaria promedio. Convierte salario anual dividiéndolo por horas laborales estimadas." },
+      { question: "¿Incluye tiempo de preparación?", answer: "No. Solo cuenta el tiempo del temporizador; preparación y seguimiento deben considerarse aparte." },
+      { question: "¿Un costo alto significa mala reunión?", answer: "No necesariamente. También importan calidad de decisión, alineación y alternativas." },
+    ],
+    disclaimer: "Esta herramienta es para cálculo general. Confirma supuestos oficiales de costo laboral con la empresa o autoridad correspondiente.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  { "@context": "https://schema.org", "@type": "HowTo", name: m.title, description: m.description, step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })) },
+  { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: c.faqs.map((faq) => ({ "@type": "Question", name: faq.question, acceptedAnswer: { "@type": "Answer", text: faq.answer } })) },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <main class="mx-auto max-w-3xl px-4 py-10">
     <MeetingCostCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

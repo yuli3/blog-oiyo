@@ -2,50 +2,51 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import LoremIpsumGeneratorComp from "../../components/tools/LoremIpsumGenerator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "로렘 입숨 생성기 — 더미 텍스트 즉시 생성",
-    description: "라틴어 Lorem Ipsum 또는 한국어 더미 텍스트를 단락 수 또는 단어 수 기준으로 즉시 생성하세요.",
-  },
-  en: {
-    title: "Lorem Ipsum Generator — Generate Placeholder Text Instantly",
-    description: "Generate Latin Lorem Ipsum or Korean placeholder text instantly by paragraph count or word count.",
-  },
-  ja: {
-    title: "ロレムイプサム生成器 — ダミーテキストを即時生成",
-    description: "ラテン語のLorem IpsumまたはKorean韓国語のダミーテキストを段落数または単語数で即座に生成します。",
-  },
-  fr: {
-    title: "Générateur Lorem Ipsum — Texte de Remplissage Instantané",
-    description: "Générez du Lorem Ipsum latin ou du texte de remplacement coréen instantanément par nombre de paragraphes ou de mots.",
-  },
-  es: {
-    title: "Generador Lorem Ipsum — Texto de Relleno al Instante",
-    description: "Genera texto Lorem Ipsum en latín o texto de marcador de posición en coreano al instante por número de párrafos o palabras.",
-  },
-  zh: {
-    title: "Lorem Ipsum生成器 — 即時生成佔位文字",
-    description: "按段落數或單詞數即時生成拉丁語Lorem Ipsum或韓語佔位文字。",
-  },
-  cn: {
-    title: "Lorem Ipsum生成器 — 即时生成占位文字",
-    description: "按段落数或单词数即时生成拉丁语Lorem Ipsum或韩语占位文字。",
-  },
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
+  ko: { title: "로렘 입숨 생성기 — 더미 텍스트 즉시 생성", description: "라틴어 Lorem Ipsum 또는 한국어 더미 텍스트를 단락 수 또는 단어 수 기준으로 즉시 생성하세요." },
+  en: { title: "Lorem Ipsum Generator — Generate Placeholder Text Instantly", description: "Generate Latin Lorem Ipsum or Korean placeholder text instantly by paragraph count or word count." },
+  ja: { title: "ロレムイプサム生成器 — ダミーテキストを即時生成", description: "ラテン語のLorem Ipsumまたは韓国語のダミーテキストを段落数または単語数で即座に生成します。" },
+  fr: { title: "Générateur Lorem Ipsum — Texte de Remplissage Instantané", description: "Générez du Lorem Ipsum latin ou du texte de remplacement coréen instantanément par nombre de paragraphes ou de mots." },
+  es: { title: "Generador Lorem Ipsum — Texto de Relleno al Instante", description: "Genera texto Lorem Ipsum en latín o texto de marcador de posición en coreano al instante por número de párrafos o palabras." },
+  zh: { title: "Lorem Ipsum 生成器 — 即时生成占位文字", description: "按段落数或单词数即时生成拉丁语 Lorem Ipsum 或韩语占位文字。" },
 };
 
 const m = meta[locale] ?? meta.en;
+type SeoContent = { introTitle: string; intro: string; formulaTitle: string; formulas: { title: string; body: string }[]; howToTitle: string; steps: string[]; faqTitle: string; faqs: { question: string; answer: string }[]; disclaimer: string; };
+
+const content: Record<ActiveLocale, SeoContent> = {
+  ko: { introTitle: "더미 텍스트는 디자인을 실제 콘텐츠와 분리해 검토하게 해줍니다", intro: "레이아웃, 줄 길이, 카드 높이, 편집 리듬을 확인할 때 실제 문장 대신 의미 부담이 낮은 텍스트가 필요합니다. 이 도구는 라틴어 Lorem Ipsum과 한국어 더미 텍스트를 단락 수 또는 단어 수 기준으로 만들어 와이어프레임과 시안 검토에 바로 쓸 수 있게 합니다.", formulaTitle: "핵심 개념", formulas: [{ title: "Placeholder text", body: "최종 원고가 없을 때 레이아웃 밀도와 줄바꿈을 확인하는 임시 텍스트입니다." }, { title: "단락 모드", body: "여러 문단의 카드, 본문, 랜딩 페이지 흐름을 빠르게 채웁니다." }, { title: "단어 모드", body: "버튼 주변, 목록, 짧은 영역의 길이 테스트에 적합합니다." }], howToTitle: "사용 방법", steps: ["단락 수 또는 단어 수 모드를 선택합니다.", "라틴어 또는 한국어 더미 텍스트를 고릅니다.", "생성한 텍스트를 복사해 시안, 프로토타입, 테스트 데이터에 넣습니다."], faqTitle: "자주 묻는 질문", faqs: [{ question: "왜 실제 문장이 아니라 더미 텍스트를 쓰나요?", answer: "문장 의미에 시선이 빼앗기지 않고 레이아웃과 리듬을 먼저 볼 수 있기 때문입니다." }, { question: "한국어 더미 텍스트는 언제 유용한가요?", answer: "한글 줄바꿈, 글자 폭, 버튼 높이처럼 라틴어와 다른 표시 문제를 확인할 때 좋습니다." }, { question: "최종 원고 대신 써도 되나요?", answer: "아니요. 공개 전에는 실제 콘텐츠와 접근성 문구로 반드시 교체해야 합니다." }], disclaimer: "더미 텍스트는 디자인 검토용 임시 자료이며 공개 콘텐츠나 법적 문구를 대체하지 않습니다." },
+  en: { introTitle: "Placeholder text lets you review layout separately from final copy", intro: "When checking layout, line length, card height, and editorial rhythm, you often need low-meaning text before the final content exists. This generator creates Latin Lorem Ipsum or Korean dummy text by paragraph or word count for wireframes, prototypes, and content tests.", formulaTitle: "Key concepts", formulas: [{ title: "Placeholder text", body: "Temporary copy used to test density and wrapping before final writing is ready." }, { title: "Paragraph mode", body: "Fills article bodies, cards, and page sections with multi-paragraph rhythm." }, { title: "Word mode", body: "Useful for shorter areas such as lists, labels, and tight layout checks." }], howToTitle: "How to use", steps: ["Choose paragraph count or word count mode.", "Select Latin Lorem Ipsum or Korean dummy text.", "Generate and copy the output into mockups, prototypes, or test fixtures."], faqTitle: "Frequently asked questions", faqs: [{ question: "Why use dummy text instead of real writing?", answer: "It keeps reviewers focused on layout and hierarchy before copy meaning takes over." }, { question: "When is Korean dummy text useful?", answer: "It helps test Hangul wrapping, glyph width, and vertical rhythm that Latin text may not expose." }, { question: "Can I publish placeholder text?", answer: "No. Replace it with real copy, accessibility text, and reviewed legal wording before launch." }], disclaimer: "Placeholder text is temporary design material and does not replace published copy or legal text." },
+  ja: { introTitle: "ダミーテキストは最終原稿とレイアウト確認を分けるためのものです", intro: "レイアウト、行長、カード高さ、本文リズムを確認する時、意味に引っ張られにくい仮テキストが役立ちます。このツールはラテン語Lorem Ipsumと韓国語ダミーテキストを段落数または単語数で生成します。", formulaTitle: "基本概念", formulas: [{ title: "プレースホルダー", body: "最終原稿前に密度や改行を確認するための仮テキストです。" }, { title: "段落モード", body: "本文、カード、ページセクションの流れを複数段落で確認できます。" }, { title: "単語モード", body: "リスト、ラベル、短い領域の長さ確認に向いています。" }], howToTitle: "使い方", steps: ["段落数または単語数モードを選びます。", "ラテン語または韓国語のダミーテキストを選びます。", "生成結果をコピーしてモックやテストに使います。"], faqTitle: "よくある質問", faqs: [{ question: "なぜ実文ではなくダミーテキストを使いますか？", answer: "意味より先にレイアウトや階層を確認しやすいからです。" }, { question: "韓国語テキストはいつ便利ですか？", answer: "ハングルの改行や字幅など、ラテン語では見えにくい問題を確認できます。" }, { question: "公開ページに使えますか？", answer: "いいえ。公開前に実際の原稿と確認済み文言へ置き換えてください。" }], disclaimer: "ダミーテキストは一時的なデザイン確認用で、公開原稿や法的文言の代替ではありません。" },
+  fr: { introTitle: "Le faux texte permet de valider la mise en page avant la copie finale", intro: "Pour vérifier longueur de ligne, hauteur de carte et rythme éditorial, un texte peu signifiant évite de juger le contenu trop tôt. L'outil génère du Lorem Ipsum latin ou du texte coréen par paragraphes ou mots.", formulaTitle: "Concepts clés", formulas: [{ title: "Texte de remplacement", body: "Copie temporaire pour tester densité et retours à la ligne." }, { title: "Mode paragraphes", body: "Remplit articles, cartes et sections avec un rythme multi-paragraphe." }, { title: "Mode mots", body: "Pratique pour listes, libellés et zones courtes." }], howToTitle: "Comment l'utiliser", steps: ["Choisissez paragraphes ou mots.", "Sélectionnez le latin Lorem Ipsum ou le texte coréen.", "Générez puis copiez dans une maquette, un prototype ou un test."], faqTitle: "Questions fréquentes", faqs: [{ question: "Pourquoi ne pas utiliser le vrai texte ?", answer: "Pour concentrer la revue sur la structure avant le sens du contenu." }, { question: "Pourquoi du coréen ?", answer: "Pour tester les retours, largeurs de glyphes et rythmes absents du latin." }, { question: "Peut-on publier ce texte ?", answer: "Non. Remplacez-le par une copie finale relue avant publication." }], disclaimer: "Le faux texte est temporaire et ne remplace ni contenu publié ni mentions légales." },
+  es: { introTitle: "El texto de relleno permite revisar diseño antes del contenido final", intro: "Para comprobar longitud de línea, altura de tarjetas y ritmo editorial, un texto de bajo significado evita juzgar el contenido antes de tiempo. La herramienta genera Lorem Ipsum latino o texto coreano por párrafos o palabras.", formulaTitle: "Conceptos clave", formulas: [{ title: "Texto de relleno", body: "Copia temporal para probar densidad y saltos de línea antes del texto final." }, { title: "Modo párrafos", body: "Rellena cuerpos, tarjetas y secciones con ritmo de varios párrafos." }, { title: "Modo palabras", body: "Útil para listas, etiquetas y zonas cortas." }], howToTitle: "Cómo usarlo", steps: ["Elige modo por párrafos o por palabras.", "Selecciona Lorem Ipsum latino o texto coreano.", "Genera y copia en maquetas, prototipos o pruebas."], faqTitle: "Preguntas frecuentes", faqs: [{ question: "¿Por qué usar texto falso?", answer: "Ayuda a revisar jerarquía y layout sin que el significado distraiga." }, { question: "¿Para qué sirve el texto coreano?", answer: "Permite probar saltos de línea y ancho de caracteres que el latín no muestra." }, { question: "¿Puede publicarse?", answer: "No. Debe reemplazarse por contenido real y revisado antes de lanzar." }], disclaimer: "El texto de relleno es material temporal y no sustituye contenido publicado ni textos legales." },
+  zh: { introTitle: "占位文字能把版式检查和正式文案分开", intro: "检查布局、行长、卡片高度和编辑节奏时，低语义负担的临时文本很有用。本工具可按段落数或单词数生成拉丁 Lorem Ipsum 或韩语占位文字，适合线框、原型和测试数据。", formulaTitle: "核心概念", formulas: [{ title: "占位文字", body: "正式文案完成前，用来测试密度和换行的临时文本。" }, { title: "段落模式", body: "适合填充正文、卡片和页面区块，观察多段节奏。" }, { title: "单词模式", body: "适合列表、标签和短区域的长度测试。" }], howToTitle: "使用方法", steps: ["选择按段落数或单词数生成。", "选择拉丁 Lorem Ipsum 或韩语占位文字。", "生成后复制到设计稿、原型或测试数据中。"], faqTitle: "常见问题", faqs: [{ question: "为什么不用真实文案？", answer: "占位文字能让评审先关注版式和层级，而不是内容含义。" }, { question: "韩语占位文字有什么用？", answer: "可测试韩文换行、字形宽度和行高等拉丁文字不容易暴露的问题。" }, { question: "可以直接发布吗？", answer: "不可以。上线前必须替换为真实文案、无障碍文本和审查过的法律文字。" }], disclaimer: "占位文字只是临时设计材料，不能替代公开内容或法律文本。" },
+};
+
+const c = content[locale] ?? content.en;
+const structuredData = [
+  { "@context": "https://schema.org", "@type": "HowTo", name: m.title, description: m.description, step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })) },
+  { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: c.faqs.map((faq) => ({ "@type": "Question", name: faq.question, acceptedAnswer: { "@type": "Answer", text: faq.answer } })) },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <LoremIpsumGeneratorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+    <section class="mt-10 border-t border-slate-200 pt-8"><h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2><p class="mt-4 leading-8 text-slate-700">{c.intro}</p></section>
+    <section class="mt-10"><h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2><div class="mt-4 grid gap-4 md:grid-cols-3">{c.formulas.map((item) => (<article class="rounded-xl border border-slate-200 bg-white p-4"><h3 class="font-semibold text-slate-900">{item.title}</h3><p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p></article>))}</div></section>
+    <section class="mt-10"><h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2><ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">{c.steps.map((s) => (<li class="leading-7">{s}</li>))}</ol></section>
+    <section class="mt-10"><h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2><div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">{c.faqs.map((faq) => (<details class="group p-4"><summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary><p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p></details>))}</div></section>
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

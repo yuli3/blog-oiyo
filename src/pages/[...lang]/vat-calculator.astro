@@ -2,7 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import VatCalculatorComp from "../../components/tools/VatCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -11,9 +12,9 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "부가가치세 계산기 — VAT 포함·제외 금액 즉시 계산",
     description: "VAT 포함/제외 금액을 즉시 계산하고, 사업자의 분기별 부가가치세 납부 예상액도 추정합니다. 프리랜서·소상공인 필수 도구.",
@@ -35,20 +36,189 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Calcula instantáneamente montos con y sin IVA. Estima también el IVA trimestral para freelancers y pequeñas empresas.",
   },
   zh: {
-    title: "增值稅計算機 — 含稅/不含稅金額即時計算",
-    description: "即時計算含稅和不含稅金額，並可估算自由職業者和小企業主的每季VAT應繳金額。",
-  },
-  cn: {
-    title: "增值税计算器 — 含税/不含税金额即时计算",
+    title: "增值税计算机 — 含税/不含税金额即时计算",
     description: "即时计算含税和不含税金额，并可估算自由职业者和小企业主的每季VAT应缴金额。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "VAT는 공급가액에 붙는 소비 단계의 세금입니다",
+    intro: "이 계산기는 VAT 포함 금액과 제외 금액을 서로 변환하고, 분기 매출액과 매입세액을 바탕으로 납부 또는 환급 예상액을 추정합니다. 한국 표준세율 10%를 기본으로 하되, 영세율·면세·간이과세처럼 별도 규칙이 있는 거래는 별도 확인이 필요합니다.",
+    formulaTitle: "VAT 계산식",
+    formulas: [
+      { title: "세액", body: "VAT = 공급가액 × 세율" },
+      { title: "포함가", body: "VAT 포함 금액 = 공급가액 + VAT" },
+      { title: "납부세액", body: "납부세액 = 매출세액 - 매입세액" },
+    ],
+    howToTitle: "사용 방법",
+    steps: ["VAT 포함 또는 제외 계산 모드를 선택합니다.", "금액과 세율 또는 분기 매출·매입세액을 입력합니다.", "공급가액, VAT 금액, 납부 또는 환급 예상액을 확인합니다."],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "한국의 일반 VAT 세율은 얼마인가요?", answer: "일반적인 표준세율은 10%입니다. 다만 영세율, 면세, 간이과세 등은 별도 규칙이 적용됩니다." },
+      { question: "VAT 포함 금액에서 공급가액은 어떻게 구하나요?", answer: "세율이 10%라면 VAT 포함 금액을 1.1로 나누면 공급가액을 구할 수 있습니다." },
+      { question: "분기 VAT 예상액이 신고세액과 같나요?", answer: "아닙니다. 실제 신고에는 공제 가능 여부, 세금계산서, 업종별 규정이 반영됩니다." },
+    ],
+    disclaimer: "이 도구는 일반적인 계산용입니다. 공식 VAT 신고와 납부세액은 국세청 또는 세무전문가 기준을 확인하세요.",
+  },
+  en: {
+    introTitle: "VAT is a consumption tax added to the supply value",
+    intro: "This calculator converts between VAT-inclusive and VAT-exclusive amounts and estimates quarterly payable or refundable VAT from revenue and input tax credit. It follows Korea's standard 10% rate by default, while zero-rated, exempt, and simplified-tax cases require separate review.",
+    formulaTitle: "VAT formulas",
+    formulas: [
+      { title: "VAT amount", body: "VAT = supply value × VAT rate" },
+      { title: "Tax-inclusive amount", body: "Gross amount = supply value + VAT" },
+      { title: "Payable VAT", body: "Payable VAT = output tax - input tax credit" },
+    ],
+    howToTitle: "How to use",
+    steps: ["Choose VAT-inclusive/exclusive mode or quarterly estimate mode.", "Enter the amount and rate, or revenue and input tax credit.", "Review supply value, VAT amount, payable VAT, or expected refund."],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "What is Korea's standard VAT rate?", answer: "The standard rate is generally 10%, but zero-rated, exempt, and simplified-tax transactions follow separate rules." },
+      { question: "How do I remove VAT from a tax-inclusive price?", answer: "At a 10% rate, divide the VAT-inclusive price by 1.1 to estimate the supply value." },
+      { question: "Is the quarterly estimate the final filing amount?", answer: "No. Actual filing depends on invoices, deductible input tax, business type, and current tax rules." },
+    ],
+    disclaimer: "This tool is for general calculation. Confirm official VAT filing and payment figures with the relevant tax authority.",
+  },
+  ja: {
+    introTitle: "VATは供給価額に加算される消費段階の税金です",
+    intro: "この計算機は、税込・税抜金額の変換と、四半期売上・仕入税額に基づく納付または還付の概算を行います。韓国の標準税率10%を基本にしていますが、免税やゼロ税率などは別途確認が必要です。",
+    formulaTitle: "VATの計算式",
+    formulas: [
+      { title: "税額", body: "VAT = 供給価額 × 税率" },
+      { title: "税込額", body: "税込額 = 供給価額 + VAT" },
+      { title: "納付税額", body: "納付税額 = 売上税額 - 仕入税額" },
+    ],
+    howToTitle: "使い方",
+    steps: ["税込・税抜計算または四半期見積りを選びます。", "金額と税率、または売上額と仕入税額を入力します。", "供給価額、VAT額、納付・還付見込みを確認します。"],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "韓国の標準VAT税率はいくらですか？", answer: "一般的には10%です。ただし免税、ゼロ税率、簡易課税などは別ルールです。" },
+      { question: "税込額から税抜額を出すには？", answer: "税率10%なら税込額を1.1で割ると供給価額の概算になります。" },
+      { question: "四半期見積りは申告額ですか？", answer: "いいえ。実際の申告では証憑、控除可否、業種別規定が反映されます。" },
+    ],
+    disclaimer: "このツールは一般的な計算用です。公式なVAT申告・納付額は税務当局や専門家の基準をご確認ください。",
+  },
+  zh: {
+    introTitle: "VAT 是加在供给价值上的消费阶段税",
+    intro: "这个计算器可在含税与不含税金额之间转换，也可根据季度销售额和进项税额估算应缴或可退 VAT。默认按韩国标准 10% 税率说明，零税率、免税和简易课税情形需要另行确认。",
+    formulaTitle: "VAT 公式",
+    formulas: [
+      { title: "税额", body: "VAT = 供给价值 × 税率" },
+      { title: "含税金额", body: "含税金额 = 供给价值 + VAT" },
+      { title: "应缴税额", body: "应缴税额 = 销项税额 - 进项税额" },
+    ],
+    howToTitle: "使用方法",
+    steps: ["选择含税/不含税计算或季度估算模式。", "输入金额和税率，或季度销售额与进项税额。", "查看供给价值、VAT 金额、应缴或可退金额。"],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "韩国一般 VAT 税率是多少？", answer: "通常标准税率为 10%，但零税率、免税和简易课税适用不同规则。" },
+      { question: "如何从含税价算不含税价？", answer: "若税率为 10%，用含税金额除以 1.1 可估算供给价值。" },
+      { question: "季度估算就是最终申报金额吗？", answer: "不是。实际申报会受发票、可抵扣进项税和行业规则影响。" },
+    ],
+    disclaimer: "本工具用于一般计算。正式 VAT 申报和缴纳金额请以税务机关或专业意见为准。",
+  },
+  fr: {
+    introTitle: "La TVA est une taxe ajoutée à la valeur hors taxe",
+    intro: "Ce calculateur convertit les montants TTC et HT et estime la TVA trimestrielle à payer ou à récupérer à partir du chiffre d'affaires et de la TVA déductible. Il suit par défaut le taux coréen standard de 10%, avec des exceptions à vérifier.",
+    formulaTitle: "Formules TVA",
+    formulas: [
+      { title: "Montant TVA", body: "TVA = valeur HT × taux de TVA" },
+      { title: "Montant TTC", body: "TTC = valeur HT + TVA" },
+      { title: "TVA due", body: "TVA due = TVA collectée - TVA déductible" },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: ["Choisissez le mode TTC/HT ou l'estimation trimestrielle.", "Saisissez le montant et le taux, ou le chiffre d'affaires et la TVA déductible.", "Lisez la valeur HT, la TVA et le montant à payer ou à récupérer."],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Quel taux utilise l'outil ?", answer: "Il utilise le taux standard coréen de 10% par défaut. Certaines opérations suivent d'autres règles." },
+      { question: "Comment enlever la TVA d'un prix TTC ?", answer: "Avec un taux de 10%, divisez le prix TTC par 1,1 pour estimer le HT." },
+      { question: "L'estimation trimestrielle suffit-elle pour déclarer ?", answer: "Non. La déclaration réelle dépend des factures, déductions et règles fiscales en vigueur." },
+    ],
+    disclaimer: "Cet outil sert au calcul général. Pour les montants officiels de TVA, vérifiez auprès de l'autorité fiscale compétente.",
+  },
+  es: {
+    introTitle: "El IVA se suma al valor antes de impuesto",
+    intro: "Esta calculadora convierte importes con y sin IVA y estima el IVA trimestral a pagar o recuperar con ventas e impuesto soportado. Usa como referencia la tasa estándar coreana del 10%, aunque exenciones y reglas especiales deben revisarse aparte.",
+    formulaTitle: "Fórmulas de IVA",
+    formulas: [
+      { title: "IVA", body: "IVA = base imponible × tasa de IVA" },
+      { title: "Importe con IVA", body: "Total = base imponible + IVA" },
+      { title: "IVA a pagar", body: "IVA a pagar = IVA repercutido - IVA soportado" },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: ["Elige cálculo con/sin IVA o estimación trimestral.", "Introduce importe y tasa, o ventas e IVA soportado.", "Revisa base, IVA y monto estimado a pagar o recuperar."],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Qué tasa usa la herramienta?", answer: "Usa por defecto la tasa estándar coreana del 10%; exenciones y regímenes especiales siguen otras reglas." },
+      { question: "¿Cómo saco el IVA de un precio total?", answer: "Con una tasa del 10%, divide el total entre 1,1 para estimar la base." },
+      { question: "¿La estimación trimestral es una declaración?", answer: "No. La declaración real depende de facturas, deducciones y normas fiscales vigentes." },
+    ],
+    disclaimer: "Esta herramienta es para cálculo general. Confirma importes oficiales de IVA con la autoridad fiscal correspondiente.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  { "@context": "https://schema.org", "@type": "HowTo", name: m.title, description: m.description, step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })) },
+  { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: c.faqs.map((faq) => ({ "@type": "Question", name: faq.question, acceptedAnswer: { "@type": "Answer", text: faq.answer } })) },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <main class="mx-auto max-w-3xl px-4 py-10">
     <VatCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

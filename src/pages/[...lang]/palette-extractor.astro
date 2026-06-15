@@ -2,7 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PaletteExtractorComp from "../../components/tools/PaletteExtractor";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -11,9 +12,9 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "이미지 색상 팔레트 추출기 — 사진에서 색상 코드 추출",
     description: "이미지에서 주요 색상을 추출하고 HEX, RGB, HSL 코드를 확인하세요. 디자인 작업에 바로 활용할 수 있습니다.",
@@ -35,20 +36,229 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Extrae los colores dominantes de cualquier imagen y obtén códigos HEX, RGB y HSL.",
   },
   zh: {
-    title: "圖片顏色調色板提取器",
-    description: "從任何圖片中提取主要顏色，獲取HEX、RGB和HSL色彩代碼。",
-  },
-  cn: {
     title: "图片颜色调色板提取器",
     description: "从任何图片中提取主要颜色，获取HEX、RGB和HSL色彩代码。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+type PageContent = {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+};
+
+const content: Record<ActiveLocale, PageContent> = {
+  ko: {
+    introTitle: "사진 속 색은 실제 디자인 팔레트의 좋은 출발점입니다",
+    intro: "제품 사진, 스크린샷, 무드보드에서 많이 쓰인 색을 추출하면 새 디자인의 기준색을 빠르게 잡을 수 있습니다. 이 도구는 업로드한 이미지를 브라우저에서 축소 분석해 자주 등장하는 색을 HEX 코드로 보여주며, 별도 서버 전송 없이 참고 팔레트를 만들 수 있습니다.",
+    formulaTitle: "팔레트 추출 개념",
+    formulas: [
+      { title: "대표색", body: "이미지 안에서 자주 등장하는 색을 뽑아 전체 분위기를 설명하는 후보로 사용합니다." },
+      { title: "양자화", body: "비슷한 색을 가까운 값으로 묶어 너무 많은 미세한 차이가 팔레트를 흐리지 않게 합니다." },
+      { title: "HEX 코드", body: "추출한 색을 CSS와 디자인 툴에서 바로 재사용할 수 있는 웹 색상 값으로 표시합니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "이미지를 업로드하면 브라우저 안에서 작은 캔버스로 분석합니다.",
+      "추출된 6개 색상 후보를 확인하고 시각적 균형을 비교합니다.",
+      "필요한 HEX 값을 클릭해 복사한 뒤 디자인 시안이나 CSS에 적용합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "이미지는 서버로 업로드되나요?", answer: "이 컴포넌트는 브라우저의 FileReader와 canvas를 사용해 로컬에서 이미지를 읽고 색을 계산합니다." },
+      { question: "정확한 브랜드 색을 찾을 수 있나요?", answer: "대표색 추출은 빠른 참고용입니다. 로고나 브랜드 색처럼 정확도가 중요한 값은 원본 가이드나 스포이드 도구로 다시 확인하세요." },
+      { question: "왜 비슷한 색이 여러 개 나오나요?", answer: "사진의 조명, 그림자, 압축 때문에 같은 물체도 여러 색으로 잡힐 수 있습니다. 최종 팔레트는 사람이 한 번 정리하는 편이 좋습니다." },
+    ],
+    disclaimer: "이 도구는 디자인 참고용 색상 추출기이며, 브랜드·인쇄·접근성 기준을 대신하지 않습니다.",
+  },
+  en: {
+    introTitle: "Colors inside an image can become a practical design palette",
+    intro: "Product photos, screenshots, and mood boards often contain the color direction you need for a new layout. This extractor analyzes an uploaded image in the browser, groups frequent colors, and returns reusable HEX values without requiring a server upload.",
+    formulaTitle: "Palette extraction concepts",
+    formulas: [
+      { title: "Dominant color", body: "A frequent color in the image that can act as a starting point for the overall visual mood." },
+      { title: "Quantization", body: "Nearby colors are grouped so tiny pixel differences do not overwhelm the palette." },
+      { title: "HEX output", body: "Extracted colors are shown as web-ready codes that can be reused in CSS or design tools." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Upload an image and let the browser read it through a small canvas.",
+      "Review the six extracted color candidates and compare their balance.",
+      "Click a HEX value to copy it into your design file or stylesheet.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Is my image uploaded to a server?", answer: "The component reads the file locally with FileReader and canvas, then calculates colors in the browser." },
+      { question: "Can this identify an exact brand color?", answer: "It is best for fast reference palettes. For exact logo or brand colors, confirm against the original guide or a precise eyedropper sample." },
+      { question: "Why do I see several similar colors?", answer: "Lighting, shadows, compression, and gradients can make one area produce several nearby colors. Curate the final palette manually." },
+    ],
+    disclaimer: "This tool provides design reference colors and does not replace brand, print, or accessibility review.",
+  },
+  ja: {
+    introTitle: "画像の中の色は実用的なデザインパレットになります",
+    intro: "商品写真、スクリーンショット、ムードボードには、新しいデザインの方向性になる色が含まれていることがあります。このツールは画像をブラウザ上で小さく分析し、よく現れる色をHEXコードとして表示します。",
+    formulaTitle: "パレット抽出の考え方",
+    formulas: [
+      { title: "代表色", body: "画像内で頻繁に現れる色を、全体の雰囲気を表す候補として使います。" },
+      { title: "量子化", body: "近い色をまとめ、細かすぎるピクセル差で候補が散らばらないようにします。" },
+      { title: "HEX出力", body: "抽出した色をCSSやデザインツールで再利用しやすいWebカラー値として表示します。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "画像をアップロードすると、ブラウザ内の小さなcanvasで解析します。",
+      "抽出された6つの色候補を確認し、全体のバランスを見ます。",
+      "必要なHEX値をクリックしてコピーし、デザインやCSSに使います。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "画像はサーバーに送信されますか？", answer: "このコンポーネントはFileReaderとcanvasを使い、ブラウザ内で画像を読み取って色を計算します。" },
+      { question: "正確なブランドカラーを特定できますか？", answer: "短時間で参考パレットを作る用途に向いています。ロゴやブランド色は公式ガイドや精密なスポイトで確認してください。" },
+      { question: "似た色が複数出るのはなぜですか？", answer: "照明、影、圧縮、グラデーションにより、同じ領域でも近い色が複数検出されるためです。" },
+    ],
+    disclaimer: "このツールはデザイン参考用であり、ブランド、印刷、アクセシビリティの確認を代替するものではありません。",
+  },
+  zh: {
+    introTitle: "图片中的颜色可以成为实用的设计调色板",
+    intro: "产品照片、截图和情绪板常常已经包含新设计需要的色彩方向。这个工具在浏览器中分析上传图片，提取常见颜色，并以 HEX 代码显示，方便快速建立参考调色板。",
+    formulaTitle: "调色板提取概念",
+    formulas: [
+      { title: "主色", body: "图片中频繁出现的颜色，可作为整体视觉气质的起点。" },
+      { title: "量化", body: "把相近颜色合并，避免细微像素差异让调色板变得过于分散。" },
+      { title: "HEX 输出", body: "将提取结果显示为网页可用的颜色代码，便于在 CSS 或设计工具中复用。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "上传图片，浏览器会用小画布读取并分析颜色。",
+      "查看提取出的 6 个颜色候选，比较整体平衡。",
+      "点击需要的 HEX 值并复制到设计稿或样式表中。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "图片会上传到服务器吗？", answer: "这个组件使用 FileReader 和 canvas 在浏览器本地读取图片并计算颜色。" },
+      { question: "能识别精确品牌色吗？", answer: "它更适合快速参考。标志或品牌规范中的精确颜色，应以原始品牌指南或精确取色结果为准。" },
+      { question: "为什么会出现多个相似颜色？", answer: "光线、阴影、压缩和渐变会让同一区域产生多个接近颜色，最终调色板最好人工筛选。" },
+    ],
+    disclaimer: "本工具提供设计参考色，不能替代品牌、印刷或无障碍标准检查。",
+  },
+  fr: {
+    introTitle: "Les couleurs d'une image peuvent devenir une palette exploitable",
+    intro: "Photos produit, captures d'écran et moodboards contiennent souvent la direction colorée d'une future interface. Cet extracteur analyse l'image dans le navigateur, regroupe les couleurs fréquentes et renvoie des valeurs HEX réutilisables.",
+    formulaTitle: "Notions d'extraction",
+    formulas: [
+      { title: "Couleur dominante", body: "Une couleur fréquente dans l'image qui sert de point de départ à l'ambiance visuelle." },
+      { title: "Quantification", body: "Les couleurs proches sont regroupées pour éviter que de minuscules écarts de pixels dominent la palette." },
+      { title: "Sortie HEX", body: "Les couleurs extraites sont affichées en codes web prêts pour le CSS ou les outils de design." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Téléversez une image et laissez le navigateur l'analyser via un petit canvas.",
+      "Examinez les six couleurs proposées et leur équilibre visuel.",
+      "Cliquez sur une valeur HEX pour la copier dans votre maquette ou feuille de style.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Mon image est-elle envoyée à un serveur ?", answer: "Le composant lit le fichier localement avec FileReader et canvas, puis calcule les couleurs dans le navigateur." },
+      { question: "Puis-je obtenir une couleur de marque exacte ?", answer: "L'outil sert surtout à créer une palette de référence. Pour un logo ou une charte, vérifiez avec la source officielle ou une pipette précise." },
+      { question: "Pourquoi plusieurs couleurs se ressemblent-elles ?", answer: "Lumière, ombres, compression et dégradés peuvent produire plusieurs teintes proches. La palette finale gagne à être triée manuellement." },
+    ],
+    disclaimer: "Cet outil fournit des couleurs de référence et ne remplace pas une vérification de marque, d'impression ou d'accessibilité.",
+  },
+  es: {
+    introTitle: "Los colores de una imagen pueden convertirse en una paleta útil",
+    intro: "Fotos de producto, capturas y moodboards suelen contener la dirección cromática de un nuevo diseño. Este extractor analiza la imagen en el navegador, agrupa colores frecuentes y devuelve valores HEX reutilizables.",
+    formulaTitle: "Conceptos de extracción",
+    formulas: [
+      { title: "Color dominante", body: "Un color frecuente en la imagen que puede servir como punto de partida del ambiente visual." },
+      { title: "Cuantización", body: "Agrupa colores cercanos para que diferencias mínimas entre píxeles no saturen la paleta." },
+      { title: "Salida HEX", body: "Muestra los colores como códigos web listos para CSS o herramientas de diseño." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Sube una imagen y deja que el navegador la lea con un canvas pequeño.",
+      "Revisa los seis colores extraídos y compara su equilibrio.",
+      "Haz clic en un valor HEX para copiarlo en tu diseño o hoja de estilos.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿La imagen se sube a un servidor?", answer: "El componente lee el archivo localmente con FileReader y canvas, y calcula los colores en el navegador." },
+      { question: "¿Sirve para identificar un color de marca exacto?", answer: "Es mejor como referencia rápida. Para logotipos o colores oficiales, confirma con la guía original o una muestra precisa." },
+      { question: "¿Por qué aparecen colores parecidos?", answer: "La luz, sombras, compresión y degradados pueden generar varios tonos cercanos. Conviene curar la paleta final manualmente." },
+    ],
+    disclaimer: "Esta herramienta ofrece colores de referencia para diseño y no sustituye revisiones de marca, impresión o accesibilidad.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <PaletteExtractorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

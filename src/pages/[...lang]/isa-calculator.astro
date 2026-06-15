@@ -2,7 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import IsaCalculatorComp from "../../components/tools/IsaCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -11,9 +12,9 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "ISA 계산기 — 개인종합자산관리계좌 절세 효과 계산",
     description: "ISA 계좌의 비과세·분리과세 혜택을 계산합니다. 일반형·서민형 유형별 절세 효과를 미리 확인하세요.",
@@ -35,20 +36,189 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Calcula los beneficios fiscales de la cuenta ISA de Corea.",
   },
   zh: {
-    title: "ISA 節稅計算機",
-    description: "計算韓國ISA個人綜合資產管理帳戶的免稅和分離課稅優惠效果。",
-  },
-  cn: {
-    title: "ISA 节税计算器",
-    description: "计算韩国ISA个人综合资产管理账户的免税和分离课税优惠效果。",
+    title: "ISA 节税计算机",
+    description: "计算韩国ISA个人综合资产管理帐户的免税和分离课税优惠效果。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "ISA는 금융수익의 세후 결과를 바꾸는 한국 절세계좌입니다",
+    intro: "이 계산기는 투자 수익을 입력하면 일반 계좌의 15.4% 과세와 한국 ISA의 비과세 한도 및 9.9% 분리과세를 비교해 예상 세금과 절세액을 보여줍니다. 일반형과 서민·농어민형 한도 차이를 빠르게 비교할 수 있습니다.",
+    formulaTitle: "계산 기준",
+    formulas: [
+      { title: "일반 계좌", body: "일반 세금 = 투자수익 × 15.4%" },
+      { title: "ISA 세금", body: "ISA 세금 = max(0, 수익 - 비과세한도) × 9.9%" },
+      { title: "절세액", body: "절세액 = 일반 계좌 세금 - ISA 세금" },
+    ],
+    howToTitle: "사용 방법",
+    steps: ["예상 투자 수익을 입력합니다.", "일반형 또는 서민·농어민형 ISA 유형을 선택합니다.", "일반 계좌 세금, ISA 세금, 절세액을 비교합니다."],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "이 ISA는 어느 나라 제도인가요?", answer: "이 페이지의 ISA는 한국 개인종합자산관리계좌 기준입니다. 영국 ISA 등 다른 국가 제도와 다릅니다." },
+      { question: "비과세 한도는 어떻게 반영되나요?", answer: "일반형은 200만 원, 서민·농어민형은 400만 원까지 수익을 비과세로 보고 초과분에 9.9%를 적용합니다." },
+      { question: "실제 ISA 혜택과 완전히 같나요?", answer: "아닙니다. 가입 자격, 납입 한도, 의무 보유 기간, 상품별 과세 방식은 최신 법령과 금융회사 안내를 확인해야 합니다." },
+    ],
+    disclaimer: "이 도구는 일반적인 계산용입니다. 공식 ISA 세제 혜택과 가입 요건은 국세청·금융기관 기준을 확인하세요.",
+  },
+  en: {
+    introTitle: "Korea's ISA can change the after-tax result of investment income",
+    intro: "This calculator compares ordinary account taxation at 15.4% with Korea ISA tax-free limits and 9.9% separate taxation on excess profit. It shows estimated tax and savings for general and lower-income/farmer categories.",
+    formulaTitle: "Calculation rules",
+    formulas: [
+      { title: "Ordinary account", body: "Ordinary tax = investment profit × 15.4%" },
+      { title: "ISA tax", body: "ISA tax = max(0, profit - tax-free limit) × 9.9%" },
+      { title: "Tax saving", body: "Saving = ordinary account tax - ISA tax" },
+    ],
+    howToTitle: "How to use",
+    steps: ["Enter your expected investment profit.", "Choose the general or lower-income/farmer ISA category.", "Compare ordinary tax, ISA tax, and estimated tax saving."],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Which country's ISA is this?", answer: "This page is about Korea's Individual Savings Account. It is not the same as the UK ISA or other national schemes." },
+      { question: "How are tax-free limits applied?", answer: "The tool treats ₩2 million as tax-free for the general type and ₩4 million for the lower-income/farmer type, then applies 9.9% to the excess." },
+      { question: "Does this match every real ISA case?", answer: "No. Eligibility, contribution limits, mandatory holding period, and product tax rules must be checked against current Korean guidance." },
+    ],
+    disclaimer: "This tool is for general calculation. Confirm official ISA tax benefits and eligibility with the relevant tax authority or financial institution.",
+  },
+  ja: {
+    introTitle: "韓国ISAは投資収益の税引後結果を変える制度です",
+    intro: "この計算機は、一般口座の15.4%課税と韓国ISAの非課税枠・超過分9.9%分離課税を比較します。一般型と低所得者・農漁民型の違いを簡単に確認できます。",
+    formulaTitle: "計算基準",
+    formulas: [
+      { title: "一般口座", body: "一般税額 = 投資収益 × 15.4%" },
+      { title: "ISA税額", body: "ISA税額 = max(0, 収益 - 非課税枠) × 9.9%" },
+      { title: "節税額", body: "節税額 = 一般口座税額 - ISA税額" },
+    ],
+    howToTitle: "使い方",
+    steps: ["予想投資収益を入力します。", "一般型または低所得者・農漁民型を選びます。", "一般口座税額、ISA税額、節税額を比較します。"],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "どの国のISAですか？", answer: "韓国の個人総合資産管理口座を前提にしています。英国ISAなどとは異なります。" },
+      { question: "非課税枠はどう反映されますか？", answer: "一般型は200万ウォン、低所得者・農漁民型は400万ウォンを非課税とし、超過分に9.9%を適用します。" },
+      { question: "実際の制度と完全に一致しますか？", answer: "いいえ。加入条件、拠出限度、保有期間、商品別課税は最新案内を確認してください。" },
+    ],
+    disclaimer: "このツールは一般的な計算用です。公式なISA税制優遇と加入条件は税務当局・金融機関でご確認ください。",
+  },
+  zh: {
+    introTitle: "韩国 ISA 会改变投资收益的税后结果",
+    intro: "这个计算器比较一般账户 15.4% 课税与韩国 ISA 的免税额度、超额部分 9.9% 单独课税，估算税额和节税金额。也能比较一般型与低收入/农渔民型的额度差异。",
+    formulaTitle: "计算规则",
+    formulas: [
+      { title: "一般账户", body: "一般税额 = 投资收益 × 15.4%" },
+      { title: "ISA 税额", body: "ISA 税额 = max(0, 收益 - 免税额度) × 9.9%" },
+      { title: "节税额", body: "节税额 = 一般账户税额 - ISA 税额" },
+    ],
+    howToTitle: "使用方法",
+    steps: ["输入预计投资收益。", "选择一般型或低收入/农渔民型 ISA。", "比较一般账户税额、ISA 税额和预计节税额。"],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "这里的 ISA 是哪个国家的？", answer: "本页指韩国个人综合资产管理账户，不同于英国 ISA 或其他国家制度。" },
+      { question: "免税额度如何计算？", answer: "一般型按 200 万韩元免税，低收入/农渔民型按 400 万韩元免税，超额部分适用 9.9%。" },
+      { question: "结果等同于实际税务吗？", answer: "不完全。资格、缴费限额、持有期间和产品课税方式需要查看韩国最新规定。" },
+    ],
+    disclaimer: "本工具用于一般计算。正式 ISA 税收优惠和资格条件请以税务机关或金融机构标准为准。",
+  },
+  fr: {
+    introTitle: "L'ISA coréen peut modifier le résultat après impôt",
+    intro: "Ce calculateur compare la taxation ordinaire de 15,4% avec les plafonds exonérés de l'ISA coréen et le taux séparé de 9,9% sur l'excédent. Il estime l'impôt et l'économie pour les principaux types de compte.",
+    formulaTitle: "Règles de calcul",
+    formulas: [
+      { title: "Compte ordinaire", body: "Impôt ordinaire = profit × 15,4%" },
+      { title: "Impôt ISA", body: "Impôt ISA = max(0, profit - plafond exonéré) × 9,9%" },
+      { title: "Économie", body: "Économie = impôt ordinaire - impôt ISA" },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: ["Saisissez le profit d'investissement attendu.", "Choisissez le type ISA applicable.", "Comparez impôt ordinaire, impôt ISA et économie estimée."],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "De quel ISA s'agit-il ?", answer: "Il s'agit de l'Individual Savings Account coréen, différent des dispositifs d'autres pays." },
+      { question: "Comment les plafonds sont-ils appliqués ?", answer: "L'outil utilise ₩2M exonérés pour le type général et ₩4M pour le type éligible renforcé, puis 9,9% sur l'excédent." },
+      { question: "Le calcul couvre-t-il tous les cas ?", answer: "Non. Éligibilité, plafonds de versement et durée obligatoire doivent être vérifiés avec les règles coréennes actuelles." },
+    ],
+    disclaimer: "Cet outil sert au calcul général. Pour les avantages ISA officiels et l'éligibilité, vérifiez auprès de l'autorité ou institution compétente.",
+  },
+  es: {
+    introTitle: "La ISA coreana puede cambiar el resultado después de impuestos",
+    intro: "Esta calculadora compara la tributación ordinaria del 15,4% con los límites exentos de la ISA coreana y el 9,9% sobre el exceso. Estima impuesto y ahorro para tipos generales y especiales.",
+    formulaTitle: "Reglas de cálculo",
+    formulas: [
+      { title: "Cuenta ordinaria", body: "Impuesto ordinario = ganancia × 15,4%" },
+      { title: "Impuesto ISA", body: "Impuesto ISA = max(0, ganancia - límite exento) × 9,9%" },
+      { title: "Ahorro", body: "Ahorro = impuesto ordinario - impuesto ISA" },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: ["Introduce la ganancia esperada de inversión.", "Elige el tipo de ISA aplicable.", "Compara impuesto ordinario, impuesto ISA y ahorro estimado."],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿De qué país es esta ISA?", answer: "Se refiere a la Individual Savings Account de Corea, distinta de esquemas de otros países." },
+      { question: "¿Cómo se aplican los límites exentos?", answer: "Usa ₩2M exentos para tipo general y ₩4M para el tipo especial, luego 9,9% sobre el exceso." },
+      { question: "¿Cubre todos los casos reales?", answer: "No. Requisitos, límites de aporte, plazo obligatorio y productos deben revisarse con reglas coreanas vigentes." },
+    ],
+    disclaimer: "Esta herramienta es para cálculo general. Confirma beneficios fiscales ISA y elegibilidad con la autoridad o institución correspondiente.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  { "@context": "https://schema.org", "@type": "HowTo", name: m.title, description: m.description, step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })) },
+  { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: c.faqs.map((faq) => ({ "@type": "Question", name: faq.question, acceptedAnswer: { "@type": "Answer", text: faq.answer } })) },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <main class="mx-auto max-w-3xl px-4 py-10">
     <IsaCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

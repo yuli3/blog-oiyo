@@ -2,7 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import SeveranceCalculatorComp from "../../components/tools/SeveranceCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -11,9 +12,9 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "퇴직금 계산기 — 예상 퇴직금 미리 계산하기",
     description: "입사일, 퇴직일, 평균 임금을 입력해 예상 퇴직금을 계산합니다. 근로기준법 기준의 정확한 퇴직금 산출.",
@@ -35,20 +36,189 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Calcula la indemnización por despido esperada ingresando fechas de empleo y salario promedio.",
   },
   zh: {
-    title: "退職金計算機",
-    description: "輸入入職日、離職日和平均工資計算預估退職金，依據勞動基準法精確計算。",
-  },
-  cn: {
-    title: "退职金计算器",
+    title: "退职金计算机",
     description: "输入入职日、离职日和平均工资计算预估退职金，依据劳动基准法精确计算。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "퇴직금은 평균임금과 계속근로기간을 기준으로 추정합니다",
+    intro: "이 계산기는 입사일, 퇴직일, 월 평균 급여, 연간 상여금을 입력해 예상 퇴직금을 계산합니다. 한국 퇴직금 산식의 기본 구조를 이해하는 데 도움을 주지만, 실제 평균임금 산정에는 수당, 상여, 미사용 연차, 퇴직소득세 등 세부 항목이 반영될 수 있습니다.",
+    formulaTitle: "계산 기준",
+    formulas: [
+      { title: "평균일임금", body: "평균일임금 ≈ (월급 + 연상여/12) / 30" },
+      { title: "계속근로일수", body: "근로일수 = 퇴직일 - 입사일" },
+      { title: "퇴직금", body: "퇴직금 = 평균일임금 × 30 × 근로일수 / 365" },
+    ],
+    howToTitle: "사용 방법",
+    steps: ["입사일과 퇴직 예정일을 입력합니다.", "월 평균 급여와 연간 상여금을 입력합니다.", "예상 퇴직금, 평균일임금, 재직일수를 확인합니다."],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "한국 퇴직금 기준인가요?", answer: "네. 이 페이지는 한국 근로기준법상 퇴직금 구조를 단순화해 설명합니다. 다른 국가의 severance 제도와 다릅니다." },
+      { question: "1년 미만 근무도 계산되나요?", answer: "도구는 날짜 기준으로 계산하지만, 한국 법정 퇴직금은 일반적으로 계속근로기간 1년 이상 등 요건을 확인해야 합니다." },
+      { question: "세후 실수령액인가요?", answer: "아닙니다. 퇴직소득세와 실제 평균임금 산입 항목에 따라 수령액은 달라질 수 있습니다." },
+    ],
+    disclaimer: "이 도구는 일반적인 계산용입니다. 공식 퇴직금과 세액은 고용노동부·국세청 또는 노무전문가 기준을 확인하세요.",
+  },
+  en: {
+    introTitle: "Korean severance pay is estimated from average wage and tenure",
+    intro: "This calculator estimates severance pay from employment dates, average monthly pay, and annual bonus. It explains the basic Korean severance-pay structure, but actual payroll treatment may include allowances, unused leave, bonus rules, and retirement income tax.",
+    formulaTitle: "Calculation rules",
+    formulas: [
+      { title: "Average daily wage", body: "Daily wage ≈ (monthly pay + annual bonus/12) / 30" },
+      { title: "Tenure days", body: "Tenure days = exit date - start date" },
+      { title: "Severance pay", body: "Severance = daily wage × 30 × tenure days / 365" },
+    ],
+    howToTitle: "How to use",
+    steps: ["Enter the start date and expected exit date.", "Enter average monthly pay and annual bonus.", "Review estimated severance, daily wage, and tenure days."],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Is this based on Korean rules?", answer: "Yes. It simplifies the Korean Labor Standards Act structure and is not the same as severance systems in other countries." },
+      { question: "Does it apply below one year of service?", answer: "The tool calculates by dates, but statutory Korean severance generally requires eligibility such as at least one year of continuous service." },
+      { question: "Is this after tax?", answer: "No. Retirement income tax and detailed wage-inclusion rules can change the actual payout." },
+    ],
+    disclaimer: "This tool is for general calculation. Confirm official severance pay and tax figures with the relevant labor or tax authority.",
+  },
+  ja: {
+    introTitle: "韓国の退職金は平均賃金と勤続期間から概算します",
+    intro: "この計算機は、入社日、退職日、月平均給与、年間賞与から退職金を概算します。韓国の退職金制度の基本構造を理解するためのもので、実際には手当、未使用休暇、税金などが影響します。",
+    formulaTitle: "計算基準",
+    formulas: [
+      { title: "平均日給", body: "平均日給 ≈ (月給 + 年間賞与/12) / 30" },
+      { title: "勤続日数", body: "勤続日数 = 退職日 - 入社日" },
+      { title: "退職金", body: "退職金 = 平均日給 × 30 × 勤続日数 / 365" },
+    ],
+    howToTitle: "使い方",
+    steps: ["入社日と退職予定日を入力します。", "月平均給与と年間賞与を入力します。", "予想退職金、平均日給、勤続日数を確認します。"],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "韓国の制度ですか？", answer: "はい。韓国の勤労基準法上の退職金構造を簡略化しています。他国の制度とは異なります。" },
+      { question: "1年未満でも対象ですか？", answer: "ツールは日数で計算しますが、法定退職金には通常1年以上の継続勤務などの要件があります。" },
+      { question: "税引後ですか？", answer: "いいえ。退職所得税や平均賃金に含める項目で実際の受取額は変わります。" },
+    ],
+    disclaimer: "このツールは一般的な計算用です。公式な退職金と税額は労働・税務当局または専門家にご確認ください。",
+  },
+  zh: {
+    introTitle: "韩国退职金通常按平均工资和连续工作期间估算",
+    intro: "这个计算器根据入职日、离职日、月平均工资和年度奖金估算退职金。它用于理解韩国退职金的基本结构，实际计算可能还要考虑津贴、未休年假、奖金规则和退职所得税。",
+    formulaTitle: "计算规则",
+    formulas: [
+      { title: "平均日工资", body: "平均日工资 ≈ (月薪 + 年奖金/12) / 30" },
+      { title: "工作天数", body: "工作天数 = 离职日 - 入职日" },
+      { title: "退职金", body: "退职金 = 平均日工资 × 30 × 工作天数 / 365" },
+    ],
+    howToTitle: "使用方法",
+    steps: ["输入入职日和预计离职日。", "输入月平均工资和年度奖金。", "查看预计退职金、平均日工资和工作天数。"],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "这是韩国规则吗？", answer: "是。本页简化说明韩国劳动基准法下的退职金结构，不同于其他国家的遣散费制度。" },
+      { question: "工作未满一年也适用吗？", answer: "工具按日期计算，但韩国法定退职金通常需要连续工作满一年等条件。" },
+      { question: "这是税后金额吗？", answer: "不是。退职所得税和平均工资包含项目会影响实际领取金额。" },
+    ],
+    disclaimer: "本工具用于一般计算。正式退职金和税额请以劳动、税务机关或专业人士标准为准。",
+  },
+  fr: {
+    introTitle: "L'indemnité coréenne se calcule à partir du salaire moyen et de l'ancienneté",
+    intro: "Ce calculateur estime l'indemnité de départ à partir des dates d'emploi, du salaire mensuel moyen et du bonus annuel. Il présente une version simplifiée du système coréen ; les règles réelles peuvent inclure primes, congés et impôt.",
+    formulaTitle: "Règles de calcul",
+    formulas: [
+      { title: "Salaire journalier", body: "Salaire/jour ≈ (salaire mensuel + bonus annuel/12) / 30" },
+      { title: "Ancienneté", body: "Jours = date de sortie - date d'entrée" },
+      { title: "Indemnité", body: "Indemnité = salaire/jour × 30 × jours / 365" },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: ["Saisissez les dates d'entrée et de sortie.", "Indiquez salaire mensuel moyen et bonus annuel.", "Consultez l'indemnité estimée, le salaire journalier et l'ancienneté."],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Est-ce une règle coréenne ?", answer: "Oui. C'est une simplification du système coréen, différent des régimes d'autres pays." },
+      { question: "Moins d'un an est-il éligible ?", answer: "L'outil calcule les dates, mais l'éligibilité légale coréenne exige généralement une durée minimale." },
+      { question: "Le montant est-il net d'impôt ?", answer: "Non. L'impôt et les éléments de salaire inclus peuvent changer le paiement réel." },
+    ],
+    disclaimer: "Cet outil sert au calcul général. Pour les montants officiels, vérifiez auprès de l'autorité du travail ou fiscale compétente.",
+  },
+  es: {
+    introTitle: "La indemnización coreana se estima con salario promedio y antigüedad",
+    intro: "Esta calculadora estima la indemnización con fechas de empleo, salario mensual promedio y bono anual. Resume la estructura coreana de forma simplificada; el cálculo real puede incluir prestaciones, vacaciones no usadas e impuestos.",
+    formulaTitle: "Reglas de cálculo",
+    formulas: [
+      { title: "Salario diario", body: "Salario diario ≈ (salario mensual + bono anual/12) / 30" },
+      { title: "Días de servicio", body: "Días = fecha de salida - fecha de ingreso" },
+      { title: "Indemnización", body: "Indemnización = salario diario × 30 × días / 365" },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: ["Introduce fecha de ingreso y salida.", "Indica salario mensual promedio y bono anual.", "Revisa indemnización estimada, salario diario y días de servicio."],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Está basado en reglas coreanas?", answer: "Sí. Simplifica el sistema coreano y no equivale a indemnizaciones de otros países." },
+      { question: "¿Aplica con menos de un año?", answer: "La herramienta calcula fechas, pero la elegibilidad legal coreana suele requerir una duración mínima." },
+      { question: "¿Es un importe neto?", answer: "No. El impuesto y los conceptos incluidos en salario promedio pueden cambiar el pago real." },
+    ],
+    disclaimer: "Esta herramienta es para cálculo general. Confirma montos oficiales con la autoridad laboral o fiscal correspondiente.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  { "@context": "https://schema.org", "@type": "HowTo", name: m.title, description: m.description, step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })) },
+  { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: c.faqs.map((faq) => ({ "@type": "Question", name: faq.question, acceptedAnswer: { "@type": "Answer", text: faq.answer } })) },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <main class="mx-auto max-w-3xl px-4 py-10">
     <SeveranceCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

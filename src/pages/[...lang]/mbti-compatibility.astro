@@ -4,13 +4,15 @@ import MBTICompatibility from "../../components/tools/MBTICompatibility";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
+type ActiveLocale = (typeof locales)[number];
+
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale & Locale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "MBTI 궁합 매트릭스 — 16유형 전체 궁합 무료 분석",
     description: "두 MBTI 유형을 선택해 소울메이트부터 도전적 궁합까지 관계 궁합, 소통 방식, 구체적인 관계 팁을 무료로 분석합니다.",
@@ -32,20 +34,227 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Selecciona dos tipos MBTI para analizar la compatibilidad — de alma gemela a combinación difícil — con estilo de comunicación y consejos prácticos.",
   },
   zh: {
-    title: "MBTI相容性矩陣 — 16種類型免費分析",
-    description: "選擇兩種MBTI類型，分析從靈魂伴侶到具挑戰性的匹配——包括溝通方式和實用關係技巧，完全免費。",
-  },
-  cn: {
-    title: "MBTI相容性矩阵 — 16种类型免费分析",
-    description: "选择两种MBTI类型，分析从灵魂伴侣到具挑战性的匹配——包括沟通方式和实用关系技巧，完全免费。",
+    title: "MBTI兼容性矩阵 — 16种类型免费分析",
+    description: "选择两种MBTI类型，查看沟通方式、相处难点和实用关系提示。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "MBTI 궁합은 관계를 단정하기보다 대화 방식을 보는 도구입니다",
+    intro: "MBTI 유형 조합은 서로의 에너지 방향, 정보 처리 방식, 의사결정 습관, 생활 리듬 차이를 이야기하기 쉽게 만들어 줍니다. 다만 실제 관계는 성격 유형만으로 결정되지 않습니다. 이 매트릭스는 재미와 자기이해를 위한 참고로 보고, 사람을 16가지 틀에 가두는 방식으로 쓰지 않는 것이 좋습니다.",
+    formulaTitle: "궁합을 읽는 세 가지 축",
+    formulas: [
+      { title: "소통 방식", body: "직접적인 표현을 선호하는지, 맥락과 여지를 중시하는지에 따라 오해가 생길 수 있습니다." },
+      { title: "갈등 처리", body: "논리, 감정, 시간, 거리두기 중 어떤 방식으로 갈등을 푸는지 살펴봅니다." },
+      { title: "생활 리듬", body: "계획성, 즉흥성, 사회적 에너지 차이는 일상 만족도에 영향을 줄 수 있습니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "두 사람의 MBTI 유형을 선택합니다.",
+      "궁합 점수보다 소통 팁과 주의할 패턴을 먼저 읽습니다.",
+      "결과를 상대를 판단하는 근거가 아니라 대화 질문으로 활용합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "MBTI 궁합이 실제 관계를 결정하나요?", answer: "아니요. 관계는 가치관, 상황, 노력, 안전감, 의사소통의 영향을 크게 받습니다." },
+      { question: "낮은 궁합이면 만나면 안 되나요?", answer: "아닙니다. 낮은 점수는 차이를 설명하는 힌트일 뿐이며, 서로 이해하고 조율할 여지가 있습니다." },
+      { question: "MBTI 유형은 고정되나요?", answer: "검사 방식, 시기, 자기인식에 따라 달라질 수 있습니다. 결과를 절대적인 정체성으로 보지 마세요." },
+    ],
+    disclaimer: "이 페이지는 엔터테인먼트와 자기성찰용입니다. MBTI 결과는 과학적 진단이나 관계 상담을 대체하지 않습니다.",
+  },
+  en: {
+    introTitle: "MBTI compatibility is a conversation tool, not a verdict",
+    intro: "Type pairings can make it easier to discuss energy, information style, decision habits, and daily rhythm. Real relationships are not determined by a four-letter type. Use this matrix for reflection and fun, not to reduce people to 16 boxes.",
+    formulaTitle: "Three ways to read compatibility",
+    formulas: [
+      { title: "Communication", body: "Some types prefer direct wording; others rely more on context, nuance, or time to process." },
+      { title: "Conflict", body: "Notice whether each person tends toward logic, emotion, space, speed, or compromise." },
+      { title: "Daily rhythm", body: "Planning, spontaneity, and social energy can affect everyday comfort together." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Select the two MBTI types you want to compare.",
+      "Read communication tips and friction points before focusing on the score.",
+      "Use the result as a prompt for discussion, not as proof about the relationship.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Does MBTI compatibility decide relationship success?", answer: "No. Values, context, effort, safety, and communication matter far more than a type pairing." },
+      { question: "Does a low score mean we are a bad match?", answer: "No. It points to possible differences, not a fixed outcome. Differences can be understood and managed." },
+      { question: "Are MBTI types fixed?", answer: "Not necessarily. Results can vary by test, timing, mood, and self-understanding." },
+    ],
+    disclaimer: "This page is for entertainment and self-reflection. MBTI results do not replace scientific assessment or relationship counseling.",
+  },
+  ja: {
+    introTitle: "MBTI相性は結論ではなく会話のきっかけです",
+    intro: "タイプの組み合わせは、エネルギーの向き、情報の扱い方、意思決定、生活リズムの違いを話しやすくします。ただし実際の関係は4文字だけで決まりません。このマトリックスは楽しみと自己理解の参考として使い、人を16タイプに閉じ込めないことが大切です。",
+    formulaTitle: "相性を見る三つの軸",
+    formulas: [
+      { title: "コミュニケーション", body: "直接的な表現を好むか、文脈や余白を重視するかで誤解が生じることがあります。" },
+      { title: "葛藤処理", body: "論理、感情、距離、速さ、妥協のどれに寄りやすいかを見ます。" },
+      { title: "生活リズム", body: "計画性、即興性、社交エネルギーの違いは日常の快適さに影響します。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "比較したい二つのMBTIタイプを選びます。",
+      "点数より先に、会話のヒントや摩擦が起きやすい点を読みます。",
+      "関係の証明ではなく、話し合いの材料として使います。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "MBTI相性で関係は決まりますか？", answer: "いいえ。価値観、状況、努力、安心感、コミュニケーションの影響が大きいです。" },
+      { question: "低い点数なら相性が悪いですか？", answer: "いいえ。違いのヒントであり、結果を固定するものではありません。" },
+      { question: "MBTIタイプは固定ですか？", answer: "必ずしも固定ではありません。検査、時期、気分、自己理解によって変わることがあります。" },
+    ],
+    disclaimer: "このページは娯楽と自己理解のためのものです。MBTI結果は科学的評価や関係相談の代わりにはなりません。",
+  },
+  fr: {
+    introTitle: "La compatibilité MBTI est un support de discussion",
+    intro: "Les paires de types aident à parler d'énergie, de traitement de l'information, de décisions et de rythme quotidien. Une relation réelle ne se résume pas à quatre lettres. Utilisez cette matrice pour réfléchir et vous amuser, pas pour enfermer les personnes dans 16 cases.",
+    formulaTitle: "Trois axes de lecture",
+    formulas: [
+      { title: "Communication", body: "Certains préfèrent la franchise directe, d'autres le contexte, les nuances ou le temps de réflexion." },
+      { title: "Conflit", body: "Observez la place de la logique, de l'émotion, de l'espace, de la vitesse ou du compromis." },
+      { title: "Rythme quotidien", body: "Planification, spontanéité et énergie sociale influencent le confort au quotidien." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Sélectionnez les deux types MBTI à comparer.",
+      "Lisez d'abord les conseils de communication et les points de friction.",
+      "Utilisez le résultat comme question de discussion, pas comme preuve.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Le MBTI décide-t-il du succès d'une relation ?", answer: "Non. Valeurs, contexte, effort, sécurité et communication comptent davantage." },
+      { question: "Un score bas signifie-t-il une mauvaise relation ?", answer: "Non. Il signale des différences possibles, pas un résultat fixe." },
+      { question: "Les types MBTI sont-ils fixes ?", answer: "Pas forcément. Ils peuvent varier selon le test, le moment et la perception de soi." },
+    ],
+    disclaimer: "Cette page sert au divertissement et à l'introspection. Le MBTI ne remplace pas une évaluation scientifique ni un conseil relationnel.",
+  },
+  es: {
+    introTitle: "La compatibilidad MBTI es una herramienta de conversación",
+    intro: "Las combinaciones de tipos facilitan hablar de energía, información, decisiones y ritmo diario. Una relación real no se decide por cuatro letras. Usa esta matriz para reflexionar y divertirte, no para reducir a las personas a 16 cajas.",
+    formulaTitle: "Tres ejes de lectura",
+    formulas: [
+      { title: "Comunicación", body: "Algunos prefieren mensajes directos; otros necesitan más contexto, matices o tiempo para procesar." },
+      { title: "Conflicto", body: "Observa si predomina lógica, emoción, espacio, rapidez o compromiso." },
+      { title: "Ritmo diario", body: "Planificación, espontaneidad y energía social pueden afectar la comodidad cotidiana." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Selecciona los dos tipos MBTI que quieres comparar.",
+      "Lee consejos de comunicación y puntos de fricción antes de mirar la puntuación.",
+      "Usa el resultado como tema de conversación, no como prueba sobre la relación.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿El MBTI decide el éxito de una relación?", answer: "No. Valores, contexto, esfuerzo, seguridad y comunicación importan mucho más." },
+      { question: "¿Una puntuación baja significa mala pareja?", answer: "No. Indica posibles diferencias, no un resultado fijo." },
+      { question: "¿Los tipos MBTI son fijos?", answer: "No necesariamente. Pueden variar por prueba, momento, ánimo y autoconocimiento." },
+    ],
+    disclaimer: "Esta página es para entretenimiento y autorreflexión. El MBTI no sustituye evaluación científica ni orientación de pareja.",
+  },
+  zh: {
+    introTitle: "MBTI 兼容性更适合作为对话工具，而不是结论",
+    intro: "类型组合可以帮助讨论能量来源、信息处理、决策习惯和日常节奏差异。但真实关系并不由四个字母决定。这个矩阵适合用于娱乐和自我理解，不应把人限制在 16 种标签里。",
+    formulaTitle: "阅读兼容性的三个角度",
+    formulas: [
+      { title: "沟通方式", body: "有些人喜欢直接表达，有些人更重视语境、细节或思考时间。" },
+      { title: "冲突处理", body: "观察双方更常依赖逻辑、情绪、空间、速度还是妥协。" },
+      { title: "生活节奏", body: "计划性、即兴性和社交能量差异，可能影响日常相处舒适度。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "选择要比较的两个 MBTI 类型。",
+      "先阅读沟通建议和可能摩擦点，再看分数。",
+      "把结果当作讨论提示，而不是关系证明。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "MBTI 兼容性会决定关系成功吗？", answer: "不会。价值观、现实情境、努力、安全感和沟通更重要。" },
+      { question: "分数低就说明不适合吗？", answer: "不是。低分只是提示可能存在差异，并不代表固定结果。" },
+      { question: "MBTI 类型是固定的吗？", answer: "不一定。结果会受测试方式、时间、心情和自我理解影响。" },
+    ],
+    disclaimer: "本页面仅用于娱乐和自我反思。MBTI 结果不能替代科学评估或关系咨询。",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-3xl px-4 py-8">
     <MBTICompatibility client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

@@ -2,15 +2,16 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ReconstructionProfitCalculator from "../../components/tools/ReconstructionProfitCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "재건축 수익성 계산기 — ROI·연평균 수익률 무료 계산",
     description: "재건축 아파트의 총 투자금, 순이익, ROI, 연평균 수익률을 한눈에 계산해보세요. 추가 분담금·보유 기간도 반영합니다.",
@@ -32,20 +33,229 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Calcula la inversión total, el beneficio neto, el ROI y la rentabilidad anual media de proyectos de reconstrucción de apartamentos.",
   },
   zh: {
-    title: "重建獲利計算器 — ROI 與年均報酬率免費計算",
-    description: "計算公寓重建項目的總投資金額、淨利潤、投資報酬率及年均報酬率，包含額外分擔金與持有期間。",
-  },
-  cn: {
-    title: "重建盈利计算器 — ROI 和年均回报率免费计算",
-    description: "计算公寓重建项目的总投资金额、净利润、投资回报率及年均回报率，包含额外分担金和持有期间。",
+    title: "重建获利计算器 — ROI 与年均报酬率免费计算",
+    description: "计算公寓重建项目的总投资金额、净利润、投资报酬率及年均报酬率，包含额外分担金与持有期间。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+type SeoContent = {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+};
+
+const content: Record<ActiveLocale, SeoContent> = {
+  ko: {
+    introTitle: "재건축 수익성은 추가 분담금과 시간까지 포함해 봐야 합니다",
+    intro: "재건축 아파트는 미래 가격만 보면 수익성이 과대평가되기 쉽습니다. 현재 매입가에 추가 분담금을 더한 총 투자금, 준공까지 걸리는 기간, 보유 기간 동안의 기회비용을 함께 봐야 합니다. 이 계산기는 순이익, ROI, 연평균 수익률을 단순 모델로 비교합니다.",
+    formulaTitle: "계산 기준",
+    formulas: [
+      { title: "총 투자금", body: "현재 아파트 가격 + 추가 분담금으로 계산합니다." },
+      { title: "순이익과 ROI", body: "재건축 후 예상 가격 - 총 투자금, 그리고 순이익 ÷ 총 투자금 × 100입니다." },
+      { title: "연평균 수익률", body: "예상 가격 ÷ 총 투자금을 보유 기간과 완료 기간 중 긴 기간으로 연환산합니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "현재 가격, 재건축 후 예상 가격, 추가 분담금을 입력합니다.",
+      "보유 기간과 준공까지 예상 기간을 입력합니다.",
+      "ROI와 연평균 수익률을 본 뒤 세금, 이주비, 사업 지연 위험을 따로 보정합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "세금과 거래비용이 포함되나요?", answer: "아닙니다. 취득세, 양도소득세, 종합부동산세, 중개보수, 이주비, 금융비용은 별도로 계산해야 합니다." },
+      { question: "재건축 후 가격은 어떻게 정해야 하나요?", answer: "인근 신축 실거래가, 동일 생활권 공급, 조합 사업성 자료를 함께 참고하되, 미래 가격은 불확실하다는 점을 반드시 반영해야 합니다." },
+      { question: "연평균 수익률은 왜 기간에 민감한가요?", answer: "재건축은 인허가, 조합, 이주, 착공, 준공까지 지연될 수 있습니다. 같은 순이익이라도 기간이 길어지면 연환산 수익률은 낮아집니다." },
+    ],
+    disclaimer: "이 도구는 일반적인 추정용입니다. 실제 재건축 사업성, 세금, 투자 판단은 관련 기관이나 전문가에게 확인하세요.",
+  },
+  en: {
+    introTitle: "Redevelopment profit depends on contributions and time, not only future price",
+    intro: "Apartment reconstruction can look attractive if you focus only on the expected post-completion price. A better first check adds the current price, additional contribution, and the time until completion. This calculator estimates net profit, ROI, and annualized return in a simplified model.",
+    formulaTitle: "Calculation basis",
+    formulas: [
+      { title: "Total investment", body: "Current apartment price + additional contribution." },
+      { title: "Net profit and ROI", body: "Expected post-reconstruction price - total investment; ROI = net profit ÷ total investment × 100." },
+      { title: "Annual return", body: "Annualizes expected price over total investment using the longer of holding period and completion period." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Enter current price, expected post-reconstruction price, and additional contribution.",
+      "Enter holding period and expected years until completion.",
+      "Review ROI and annualized return, then adjust separately for taxes, relocation, financing, and delay risk.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Are taxes and transaction costs included?", answer: "No. Acquisition tax, capital gains tax, property taxes, broker fees, relocation costs, and financing costs need separate review." },
+      { question: "How should I estimate the future price?", answer: "Use nearby new-build transactions, same-neighborhood supply, and association materials, while treating future price as uncertain." },
+      { question: "Why is annual return sensitive to timing?", answer: "Redevelopment can be delayed by approvals, association decisions, relocation, construction, or market cycles. Longer time lowers annualized return for the same profit." },
+    ],
+    disclaimer: "This tool is a general estimate. Confirm actual redevelopment feasibility, taxes, and investment decisions with the relevant institution or professional.",
+  },
+  ja: {
+    introTitle: "再建築の収益性は追加負担金と時間を含めて見る必要があります",
+    intro: "再建築マンションは完成後の価格だけを見ると魅力的に見えます。現在価格に追加負担金を加え、完成までの期間も含めることで、より現実的にROIと年平均収益率を確認できます。",
+    formulaTitle: "計算の前提",
+    formulas: [
+      { title: "総投資額", body: "現在価格 + 追加負担金。" },
+      { title: "純利益とROI", body: "完成後予想価格 - 総投資額、ROI = 純利益 ÷ 総投資額 × 100。" },
+      { title: "年平均収益率", body: "保有期間と完成までの期間の長い方で年率換算します。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "現在価格、完成後予想価格、追加負担金を入力します。",
+      "保有期間と完成までの年数を入力します。",
+      "ROIと年平均収益率を確認し、税金、移転費、金融費用、遅延リスクを別途見ます。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "税金や取引費用は含まれますか？", answer: "含まれません。取得税、譲渡税、保有税、仲介手数料、移転費、金融費用は別途計算が必要です。" },
+      { question: "完成後価格はどう見積もりますか？", answer: "近隣新築の実取引、同一生活圏の供給、組合資料を参考にしつつ、将来価格の不確実性を反映してください。" },
+      { question: "なぜ期間で年平均収益率が変わりますか？", answer: "認可、組合、移転、着工、竣工が遅れると、同じ利益でも年率換算の収益率は低くなります。" },
+    ],
+    disclaimer: "このツールは一般的な概算です。実際の事業性、税金、投資判断は関係機関または専門家に確認してください。",
+  },
+  zh: {
+    introTitle: "重建收益要把额外分担金和时间一起算",
+    intro: "只看重建后预估价格，容易高估公寓重建收益。应把当前价格、额外分担金和到完工所需时间一起纳入。这个工具用简化模型估算净利润、ROI和年化收益率。",
+    formulaTitle: "计算依据",
+    formulas: [
+      { title: "总投资金额", body: "当前公寓价格 + 额外分担金。" },
+      { title: "净利润与ROI", body: "重建后预估价格 - 总投资金额；ROI = 净利润 ÷ 总投资金额 × 100。" },
+      { title: "年均收益率", body: "用持有期间和完工期间中较长者进行年化计算。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "输入当前价格、重建后预估价格和额外分担金。",
+      "输入持有期间和预计完工年数。",
+      "查看ROI和年化收益率，并另外考虑税费、搬迁、融资和延迟风险。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "包含税费和交易成本吗？", answer: "不包含。购置税、资本利得税、持有税、中介费、搬迁费和融资成本需要另外计算。" },
+      { question: "重建后价格如何估算？", answer: "可参考附近新房成交价、同生活圈供应和组合资料，但未来价格具有不确定性。" },
+      { question: "为什么年化收益率对期间敏感？", answer: "审批、组合决议、搬迁、施工和市场周期都可能延迟。时间越长，同样利润的年化收益率越低。" },
+    ],
+    disclaimer: "本工具仅作一般估算。实际重建可行性、税务和投资判断请向相关机构或专业人士确认。",
+  },
+  fr: {
+    introTitle: "La rentabilité d'une reconstruction dépend aussi du temps et des contributions",
+    intro: "Un projet de reconstruction peut sembler rentable si l'on regarde seulement le prix futur. Il faut ajouter contribution supplémentaire et durée jusqu'à l'achèvement. Ce calculateur estime bénéfice net, ROI et rendement annualisé.",
+    formulaTitle: "Bases de calcul",
+    formulas: [
+      { title: "Investissement total", body: "Prix actuel + contribution supplémentaire." },
+      { title: "Bénéfice et ROI", body: "Prix après reconstruction - investissement total ; ROI = bénéfice ÷ investissement × 100." },
+      { title: "Rendement annuel", body: "Annualise le rapport prix futur/investissement sur la plus longue durée retenue." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Saisissez prix actuel, prix attendu après reconstruction et contribution.",
+      "Saisissez durée de détention et années jusqu'à l'achèvement.",
+      "Analysez ROI et rendement annuel, puis ajustez taxes, relogement, financement et retard.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Taxes et frais sont-ils inclus ?", answer: "Non. Taxes d'acquisition, plus-values, propriété, courtage, relogement et financement doivent être calculés séparément." },
+      { question: "Comment estimer le prix futur ?", answer: "Utilisez transactions de biens neufs proches, offre locale et documents d'association, avec une marge d'incertitude." },
+      { question: "Pourquoi le rendement annuel dépend-il du délai ?", answer: "Autorisations, association, relogement et travaux peuvent retarder le projet. Plus le délai est long, plus le rendement annualisé baisse." },
+    ],
+    disclaimer: "Cet outil fournit une estimation générale. Confirmez faisabilité, fiscalité et décision d'investissement avec l'institution compétente ou un professionnel.",
+  },
+  es: {
+    introTitle: "La rentabilidad de reconstrucción depende de aportes y tiempo",
+    intro: "Un proyecto puede parecer atractivo si solo miras el precio futuro. Conviene sumar aportación adicional y años hasta la finalización. Esta calculadora estima beneficio neto, ROI y rendimiento anualizado con un modelo simple.",
+    formulaTitle: "Bases de cálculo",
+    formulas: [
+      { title: "Inversión total", body: "Precio actual + aportación adicional." },
+      { title: "Beneficio y ROI", body: "Precio tras reconstrucción - inversión total; ROI = beneficio ÷ inversión × 100." },
+      { title: "Rentabilidad anual", body: "Annualiza la relación precio futuro/inversión usando el plazo más largo." },
+    ],
+    howToTitle: "Cómo usarla",
+    steps: [
+      "Introduce precio actual, precio esperado tras reconstrucción y aportación.",
+      "Introduce periodo de tenencia y años hasta finalizar.",
+      "Revisa ROI y rendimiento anual, y ajusta impuestos, reubicación, financiación y retrasos.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Incluye impuestos y costes de transacción?", answer: "No. Impuestos de compra, plusvalía, propiedad, corretaje, reubicación y financiación se calculan aparte." },
+      { question: "¿Cómo estimar el precio futuro?", answer: "Usa ventas de obra nueva cercana, oferta local y documentos de la asociación, con margen por incertidumbre." },
+      { question: "¿Por qué importa tanto el plazo?", answer: "Permisos, asociación, mudanza y construcción pueden retrasarse. Cuanto más largo el plazo, menor el rendimiento anualizado." },
+    ],
+    disclaimer: "Esta herramienta ofrece una estimación general. Confirma viabilidad, impuestos y decisiones de inversión con la institución correspondiente o un profesional.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <ReconstructionProfitCalculator client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

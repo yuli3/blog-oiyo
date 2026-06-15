@@ -2,15 +2,16 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import JeonseGuaranteeCalculator from "../../components/tools/JeonseGuaranteeCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "전세보증금 안전성 계산기 — 내 전세금은 안전할까?",
     description: "전세보증금 + 선순위 채권이 주택 시세의 몇 %인지 계산해 회수 가능성을 확인하세요. 경매 시 보증금 회수율 자동 계산.",
@@ -32,20 +33,229 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Calcule el riesgo de su depósito Jeonse coreano. Verifique el ratio LTV y estime la recuperación en caso de ejecución hipotecaria.",
   },
   zh: {
-    title: "全租保證金安全性計算機 — 你的保證金安全嗎？",
-    description: "計算韓國全租保證金的風險。確認（保證金+先順位債權）佔房屋市值的比率，估算拍賣時的回收率。",
-  },
-  cn: {
-    title: "全租保证金安全性计算器 — 你的保证金安全吗？",
+    title: "全租保证金安全性计算机 — 你的保证金安全吗？",
     description: "计算韩国全租保证金的风险。确认（保证金+先顺位债权）占房屋市值的比率，估算拍卖时的回收率。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+type SeoContent = {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+};
+
+const content: Record<ActiveLocale, SeoContent> = {
+  ko: {
+    introTitle: "전세보증금 안전성은 집값보다 선순위 채권을 함께 봐야 합니다",
+    intro: "전세 계약의 핵심 위험은 집이 경매로 넘어갔을 때 내 보증금보다 먼저 회수되는 채권이 얼마나 있는지입니다. 이 계산기는 주택 시세, 전세보증금, 선순위 대출과 기타 선순위 권리를 합쳐 보증금 비율과 회수 가능성을 단순 점검합니다.",
+    formulaTitle: "계산 기준",
+    formulas: [
+      { title: "선순위 채권 합계", body: "선순위 대출·담보와 기타 선순위 권리를 합산합니다." },
+      { title: "보증금 비율", body: "(전세보증금 + 선순위 채권) ÷ 주택 시세 × 100으로 계산합니다." },
+      { title: "회수율", body: "주택 시세에서 선순위 채권을 뺀 잔여 담보 여력으로 보증금 회수 가능액을 추정합니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "최근 실거래가와 감정가를 참고해 주택 시세를 입력합니다.",
+      "전세보증금, 선순위 대출, 기타 선순위 권리 금액을 입력합니다.",
+      "보증금 비율과 예상 회수율을 보고 등기부, 보증보험, 계약 조건을 추가 확인합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "70~80% 기준이면 항상 안전한가요?", answer: "아닙니다. 일반적인 참고선일 뿐입니다. 경매 낙찰가율, 임차인 대항력, 확정일자, 전입신고, 보증보험 가능 여부가 함께 중요합니다." },
+      { question: "선순위 채권은 어디서 확인하나요?", answer: "등기부등본의 근저당권, 압류, 가압류 등 권리관계를 확인하고, 기존 임차권이나 보증금도 중개사와 임대인 서류로 대조해야 합니다." },
+      { question: "전세보증보험에 가입하면 위험이 없어지나요?", answer: "보증보험도 가입 요건, 한도, 보증 제외 사유가 있습니다. 가입 가능 여부와 보증금 전액 보장 여부를 기관에서 직접 확인해야 합니다." },
+    ],
+    disclaimer: "이 도구는 일반적인 추정용입니다. 실제 권리관계, 보증보험, 계약 판단은 관련 기관이나 전문가에게 확인하세요.",
+  },
+  en: {
+    introTitle: "Jeonse safety depends on senior claims, not only the home price",
+    intro: "The main risk in a Korean jeonse lease is whether the deposit can be recovered after senior mortgages and claims are paid in foreclosure. This calculator combines property value, jeonse deposit, prior loans, and other senior claims to estimate deposit LTV and recovery capacity.",
+    formulaTitle: "Calculation basis",
+    formulas: [
+      { title: "Total senior claims", body: "Prior mortgages, liens, and other senior claims are added together." },
+      { title: "Deposit LTV", body: "(Jeonse deposit + senior claims) ÷ property market value × 100." },
+      { title: "Recovery rate", body: "Estimated recoverable deposit is limited by property value after senior claims." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Enter a realistic property market value using recent transactions or appraisals.",
+      "Enter the jeonse deposit, prior loans, and other senior claims.",
+      "Use the deposit LTV and recovery rate as a prompt to verify registry records, insurance eligibility, and contract terms.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Is 70-80% always safe?", answer: "No. It is only a rule-of-thumb. Foreclosure sale price, tenant priority, move-in report, fixed-date stamp, and guarantee insurance eligibility all matter." },
+      { question: "Where do I check senior claims?", answer: "Review the Korean property registry for mortgages, attachments, and provisional claims, then cross-check existing lease deposits and tenant rights through documents." },
+      { question: "Does jeonse guarantee insurance remove all risk?", answer: "No. Insurance has eligibility rules, coverage limits, and exclusions. Confirm directly with HUG, SGI, or the relevant provider." },
+    ],
+    disclaimer: "This tool is a general estimate. Confirm legal priority, guarantee insurance, and contract decisions with the relevant institution or professional.",
+  },
+  ja: {
+    introTitle: "チョンセ保証金の安全性は物件価格だけでなく先順位債権で決まります",
+    intro: "韓国のチョンセ契約で重要なのは、競売時に自分の保証金より先に回収される債権がどれだけあるかです。この計算機は時価、保証金、先順位ローン、その他権利を合算して保証金LTVと回収可能性を概算します。",
+    formulaTitle: "計算の前提",
+    formulas: [
+      { title: "先順位債権合計", body: "先順位ローン、担保、その他の権利を合算します。" },
+      { title: "保証金LTV", body: "（保証金 + 先順位債権）÷ 物件時価 × 100で計算します。" },
+      { title: "回収率", body: "物件時価から先順位債権を除いた余力で保証金の回収可能額を見ます。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "最近の取引価格や鑑定を参考に物件時価を入力します。",
+      "チョンセ保証金、先順位ローン、その他先順位権利を入力します。",
+      "LTVと回収率を見て、登記、保証保険、契約条件を追加確認します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "70〜80%なら必ず安全ですか？", answer: "いいえ。目安にすぎません。競売落札率、対抗力、確定日付、転入申告、保証保険の可否が重要です。" },
+      { question: "先順位債権はどこで確認しますか？", answer: "登記簿で抵当権、差押え、仮差押えなどを確認し、既存賃借権や保証金も書類で照合します。" },
+      { question: "保証保険に入ればリスクはなくなりますか？", answer: "いいえ。加入要件、限度、免責があります。HUG、SGIなどで直接確認してください。" },
+    ],
+    disclaimer: "このツールは一般的な概算です。実際の権利関係、保証保険、契約判断は関係機関または専門家に確認してください。",
+  },
+  zh: {
+    introTitle: "全租保证金安全性不只看房价，还要看先顺位债权",
+    intro: "韩国全租合约的核心风险，是房屋进入拍卖时，哪些债权会先于租客保证金受偿。本工具把房屋市值、全租保证金、先顺位贷款和其他优先权合并，估算保证金LTV和回收可能性。",
+    formulaTitle: "计算依据",
+    formulas: [
+      { title: "先顺位债权合计", body: "合计先顺位贷款、抵押和其他优先权利。" },
+      { title: "保证金LTV", body: "（全租保证金 + 先顺位债权）÷ 房屋市值 × 100。" },
+      { title: "回收率", body: "用房屋市值扣除先顺位债权后的剩余担保能力估算可回收保证金。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "参考近期成交价或评估价输入房屋市值。",
+      "输入全租保证金、先顺位贷款和其他优先债权。",
+      "查看保证金LTV和回收率后，再确认登记簿、保证保险和合约条款。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "70~80%就一定安全吗？", answer: "不一定。这只是参考线。拍卖成交率、租客优先权、迁入申报、确定日期和保证保险资格都很重要。" },
+      { question: "先顺位债权在哪里确认？", answer: "需要查看韩国不动产登记簿中的抵押、查封、假扣押等，并用文件核对既有租赁权和保证金。" },
+      { question: "加入全租保证保险就没有风险吗？", answer: "不是。保证保险有加入条件、限额和除外事项，应直接向HUG、SGI或相关机构确认。" },
+    ],
+    disclaimer: "本工具仅作一般估算。实际权利顺位、保证保险和合约判断请向相关机构或专业人士确认。",
+  },
+  fr: {
+    introTitle: "La sécurité du jeonse dépend des créances prioritaires",
+    intro: "Dans un bail jeonse coréen, le risque principal est la récupération du dépôt après paiement des hypothèques et créances prioritaires en cas de saisie. Ce calculateur combine valeur du bien, dépôt, prêts prioritaires et autres créances pour estimer LTV et récupération.",
+    formulaTitle: "Bases de calcul",
+    formulas: [
+      { title: "Créances prioritaires", body: "Hypothèques, privilèges et autres créances prioritaires sont additionnés." },
+      { title: "LTV du dépôt", body: "(Dépôt jeonse + créances prioritaires) ÷ valeur de marché × 100." },
+      { title: "Taux de récupération", body: "Le dépôt récupérable est limité par la valeur restante après créances prioritaires." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Saisissez une valeur de marché réaliste issue de transactions ou d'une expertise.",
+      "Saisissez dépôt jeonse, prêts prioritaires et autres créances.",
+      "Utilisez LTV et récupération pour vérifier registre, assurance garantie et contrat.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "70-80% est-il toujours sûr ?", answer: "Non. C'est un repère. Prix de saisie, priorité du locataire, déclaration d'emménagement, date certaine et assurance comptent aussi." },
+      { question: "Où vérifier les créances prioritaires ?", answer: "Dans le registre immobilier coréen : hypothèques, saisies, créances provisoires, puis documents sur baux existants." },
+      { question: "L'assurance jeonse supprime-t-elle le risque ?", answer: "Non. Il existe conditions, plafonds et exclusions. Confirmez auprès de HUG, SGI ou du fournisseur concerné." },
+    ],
+    disclaimer: "Cet outil fournit une estimation générale. Confirmez priorité juridique, assurance et contrat avec l'institution compétente ou un professionnel.",
+  },
+  es: {
+    introTitle: "La seguridad del jeonse depende de las cargas prioritarias",
+    intro: "En un contrato jeonse coreano, el riesgo principal es recuperar el depósito después de hipotecas y cargas prioritarias en una ejecución. Esta calculadora combina valor del inmueble, depósito, préstamos previos y otras cargas para estimar LTV y recuperación.",
+    formulaTitle: "Bases de cálculo",
+    formulas: [
+      { title: "Cargas prioritarias", body: "Se suman hipotecas, gravámenes y otras reclamaciones con prioridad." },
+      { title: "LTV del depósito", body: "(Depósito jeonse + cargas prioritarias) ÷ valor de mercado × 100." },
+      { title: "Tasa de recuperación", body: "El depósito recuperable se limita por el valor restante después de cargas prioritarias." },
+    ],
+    howToTitle: "Cómo usarla",
+    steps: [
+      "Introduce un valor de mercado realista usando transacciones o tasación.",
+      "Introduce depósito jeonse, préstamos previos y otras cargas.",
+      "Usa LTV y recuperación para revisar registro, seguro de garantía y contrato.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿70-80% siempre es seguro?", answer: "No. Es solo una referencia. Precio de ejecución, prioridad del inquilino, registro de mudanza, fecha cierta y seguro también importan." },
+      { question: "¿Dónde se verifican las cargas prioritarias?", answer: "En el registro inmobiliario coreano: hipotecas, embargos y reclamaciones provisionales, además de documentos sobre alquileres existentes." },
+      { question: "¿El seguro de jeonse elimina el riesgo?", answer: "No. Tiene requisitos, límites y exclusiones. Confirma con HUG, SGI o el proveedor correspondiente." },
+    ],
+    disclaimer: "Esta herramienta ofrece una estimación general. Confirma prioridad legal, seguro y contrato con la institución correspondiente o un profesional.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <JeonseGuaranteeCalculator client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

@@ -2,15 +2,16 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import VaccinationSchedule from "../../components/tools/VaccinationSchedule";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "예방접종 스케줄러 — 아이 생년월일로 접종 일정 확인",
     description: "아이 생년월일을 입력하면 BCG·B형간염·DTaP 등 16종 예방접종 일정을 자동으로 계산해 드립니다.",
@@ -35,17 +36,224 @@ const meta: Record<Locale, { title: string; description: string }> = {
     title: "疫苗接种时间表 — 宝宝免疫接种日程",
     description: "输入宝宝出生日期，自动生成包含BCG、乙肝、DTaP等16种疫苗的个性化接种时间表。",
   },
-  cn: {
-    title: "疫苗接種時間表 — 寶寶免疫接種日程",
-    description: "輸入寶寶出生日期，自動生成包含BCG、乙肝、DTaP等16種疫苗的個性化接種時間表。",
-  },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "예방접종 일정은 생년월일을 기준으로 하지만 아이의 상태와 국가 지침도 함께 봐야 합니다",
+    intro: "영유아 예방접종은 접종 가능한 월령과 최소 간격이 정해져 있어 생년월일을 기준으로 일정을 잡습니다. 다만 조산, 기저질환, 이전 접종 기록, 거주 국가의 국가예방접종 기준에 따라 실제 일정은 달라질 수 있습니다.",
+    formulaTitle: "일정 개념",
+    formulas: [
+      { title: "출생일 기준", body: "권장 접종 월령을 아이의 생년월일에 더해 예상 날짜를 계산합니다." },
+      { title: "접종 간격", body: "다회 접종 백신은 차수 사이 최소 간격을 지키는 것이 중요합니다." },
+      { title: "개별 조정", body: "조산, 질환, 지연 접종은 의료진이 따라잡기 일정을 조정할 수 있습니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "아이의 생년월일을 입력해 예상 접종 일정을 확인합니다.",
+      "이미 맞은 백신과 예정된 백신을 예방접종 기록과 대조합니다.",
+      "일정이 늦었거나 건강 상태가 특수하면 소아청소년과 또는 보건소에 문의합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "국가마다 일정이 다른가요?", answer: "네. 백신 종류, 권장 월령, 지원 여부가 국가와 지역별로 다를 수 있습니다." },
+      { question: "접종이 늦어졌다면 처음부터 다시 맞아야 하나요?", answer: "대부분은 처음부터 다시 시작하지 않고 따라잡기 일정으로 조정합니다. 정확한 계획은 의료진에게 확인하세요." },
+      { question: "아이가 감기일 때 접종해도 되나요?", answer: "가벼운 증상은 가능할 때도 있지만 발열, 컨디션 저하, 특정 질환이 있으면 접종 전 의사 확인이 필요합니다." },
+    ],
+    disclaimer: "이 페이지는 일반 정보이며 의학적 조언이 아닙니다. 예방접종 여부, 지연 접종, 이상반응, 기저질환은 반드시 소아청소년과 의사나 보건당국과 상담하세요.",
+  },
+  en: {
+    introTitle: "Vaccination timing starts from birth date, but health status and local guidance matter",
+    intro: "Infant immunization schedules are based on recommended ages and minimum intervals. Prematurity, medical conditions, prior doses, and the national schedule where the child lives can change the actual plan.",
+    formulaTitle: "Schedule concepts",
+    formulas: [
+      { title: "Birth-date anchor", body: "Recommended vaccine ages are added to the child's birth date." },
+      { title: "Dose intervals", body: "Multi-dose vaccines need minimum spacing between doses." },
+      { title: "Individual adjustment", body: "Prematurity, illness, and delayed doses may require a clinician-led catch-up plan." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Enter the child's birth date to see the estimated vaccine timeline.",
+      "Compare the output with the child's official immunization record.",
+      "Ask a pediatrician or public health clinic if doses are late or the child has special health circumstances.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Do schedules differ by country?", answer: "Yes. Vaccine names, recommended ages, funding, and availability vary by country and region." },
+      { question: "If a dose is late, do we restart the series?", answer: "Usually not. Many delayed schedules use catch-up spacing, but a clinician should confirm the plan." },
+      { question: "Can a child be vaccinated with a cold?", answer: "Sometimes mild illness is not a problem, but fever, poor condition, or specific medical issues should be checked before vaccination." },
+    ],
+    disclaimer: "This page is general information, not medical advice. For vaccine decisions, delayed doses, side effects, or underlying conditions, consult a pediatrician, doctor, or public health authority.",
+  },
+  ja: {
+    introTitle: "予防接種の時期は生年月日が基準ですが、健康状態と地域の指針も重要です",
+    intro: "乳幼児の予防接種は推奨月齢と接種間隔をもとに予定を立てます。ただし早産、基礎疾患、過去の接種歴、居住国の制度によって実際の予定は変わります。",
+    formulaTitle: "スケジュールの考え方",
+    formulas: [
+      { title: "生年月日基準", body: "推奨される接種月齢を生年月日に加えて予定日を出します。" },
+      { title: "接種間隔", body: "複数回接種のワクチンでは、回数間の最小間隔が重要です。" },
+      { title: "個別調整", body: "早産、病気、接種遅れでは医療者がキャッチアップを調整します。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "子どもの生年月日を入力して予防接種の目安を確認します。",
+      "結果を母子手帳や正式な接種記録と照合します。",
+      "遅れや持病がある場合は小児科または保健機関に相談します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "国によって予定は違いますか？", answer: "はい。ワクチンの種類、推奨月齢、公費対象、利用可能性は国や地域で異なります。" },
+      { question: "遅れた場合は最初からやり直しますか？", answer: "多くの場合、最初からではなくキャッチアップ間隔で調整します。具体的には医療者に確認してください。" },
+      { question: "風邪の時に接種できますか？", answer: "軽い症状なら可能な場合もありますが、発熱や体調不良、持病がある場合は接種前に医師へ確認してください。" },
+    ],
+    disclaimer: "このページは一般情報であり、医療上の助言ではありません。接種判断、遅延接種、副反応、基礎疾患については小児科医または保健当局に相談してください。",
+  },
+  fr: {
+    introTitle: "Le calendrier vaccinal part de la date de naissance, mais l'état de santé et les règles locales comptent",
+    intro: "Les vaccins du nourrisson suivent des âges recommandés et des intervalles minimaux. Prématurité, maladies, doses déjà reçues et calendrier national peuvent modifier le plan réel.",
+    formulaTitle: "Repères de calendrier",
+    formulas: [
+      { title: "Date de naissance", body: "Les âges recommandés sont ajoutés à la date de naissance." },
+      { title: "Intervalles", body: "Les vaccins en plusieurs doses exigent un espacement minimal." },
+      { title: "Ajustement individuel", body: "Prématurité, maladie ou retard peuvent nécessiter un rattrapage validé par un médecin." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Saisissez la date de naissance pour voir le calendrier estimé.",
+      "Comparez le résultat avec le carnet de vaccination officiel.",
+      "Consultez un pédiatre ou un centre de santé si des doses sont en retard ou si l'enfant a une situation médicale particulière.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Les calendriers varient-ils selon les pays ?", answer: "Oui. Vaccins, âges recommandés, prise en charge et disponibilité varient selon les pays et régions." },
+      { question: "Faut-il recommencer si une dose est en retard ?", answer: "Souvent non. Un calendrier de rattrapage est utilisé, mais il doit être confirmé par un professionnel." },
+      { question: "Peut-on vacciner un enfant enrhumé ?", answer: "Parfois une maladie légère n'empêche pas la vaccination, mais fièvre, mauvais état général ou antécédents doivent être évalués." },
+    ],
+    disclaimer: "Cette page fournit une information générale, pas un avis médical. Pour décisions vaccinales, retards, effets indésirables ou maladies, consultez un pédiatre, un médecin ou l'autorité sanitaire.",
+  },
+  es: {
+    introTitle: "El calendario de vacunación parte de la fecha de nacimiento, pero importan salud y guías locales",
+    intro: "Las vacunas infantiles se programan por edades recomendadas e intervalos mínimos. Prematuridad, enfermedades, dosis previas y calendario nacional pueden cambiar el plan real.",
+    formulaTitle: "Conceptos de calendario",
+    formulas: [
+      { title: "Fecha de nacimiento", body: "Las edades recomendadas se suman a la fecha de nacimiento." },
+      { title: "Intervalos", body: "Las vacunas de varias dosis necesitan separación mínima entre dosis." },
+      { title: "Ajuste individual", body: "Prematuridad, enfermedad o retrasos pueden requerir un plan de rescate indicado por un profesional." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Introduce la fecha de nacimiento para ver la línea de tiempo estimada.",
+      "Compara el resultado con el registro oficial de vacunación.",
+      "Consulta con pediatría o salud pública si hay retrasos o circunstancias médicas especiales.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Los calendarios cambian según el país?", answer: "Sí. Vacunas, edades, financiación y disponibilidad varían por país y región." },
+      { question: "Si una dosis se retrasa, ¿hay que reiniciar?", answer: "Normalmente no. Se usa un calendario de recuperación, pero debe confirmarlo un profesional." },
+      { question: "¿Se puede vacunar con resfriado?", answer: "A veces una enfermedad leve no lo impide, pero fiebre, mal estado general o condiciones médicas requieren valoración previa." },
+    ],
+    disclaimer: "Esta página ofrece información general, no consejo médico. Para decisiones de vacunación, retrasos, efectos adversos o enfermedades de base, consulta a pediatría, un médico o la autoridad sanitaria.",
+  },
+  zh: {
+    introTitle: "疫苗时间表以出生日期为起点，但也要看健康状况和当地指南",
+    intro: "婴幼儿疫苗通常按推荐月龄和最小间隔安排。早产、基础疾病、既往接种记录以及居住地的国家免疫规划，都可能改变实际接种计划。",
+    formulaTitle: "时间表概念",
+    formulas: [
+      { title: "出生日期基准", body: "把推荐接种月龄加到孩子出生日期上，得到预计日期。" },
+      { title: "剂次间隔", body: "多剂次疫苗需要满足每针之间的最小间隔。" },
+      { title: "个体调整", body: "早产、疾病或延迟接种可能需要医生制定补种计划。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "输入孩子出生日期，查看预计疫苗接种时间线。",
+      "将结果与孩子的正式接种记录核对。",
+      "如果接种延迟或孩子有特殊健康情况，请咨询儿科医生或公共卫生机构。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "不同国家时间表会不同吗？", answer: "会。疫苗种类、推荐月龄、费用支持和可及性都会因国家和地区不同而变化。" },
+      { question: "如果某针延迟了，需要从头开始吗？", answer: "通常不需要。多数情况会按补种间隔调整，但具体计划应由医生确认。" },
+      { question: "宝宝感冒时可以接种吗？", answer: "轻微不适有时不影响接种，但发热、精神状态差或有特定疾病时，应先请医生评估。" },
+    ],
+    disclaimer: "本页为一般信息，不构成医疗建议。疫苗接种决定、延迟接种、不良反应或基础疾病，请咨询儿科医生、医生或公共卫生机构。",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <VaccinationSchedule client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

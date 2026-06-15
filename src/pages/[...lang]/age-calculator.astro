@@ -2,7 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import AgeCalculatorComp from "../../components/tools/AgeCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -11,9 +12,9 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "나이 계산기 — 만 나이·한국 나이·개월 수 계산",
     description: "생년월일을 입력해 만 나이, 한국식 나이, 개월 수, 일수를 한 번에 계산합니다. 2023년 만 나이 통일 기준 적용.",
@@ -35,20 +36,203 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Calcula tu edad exacta en años, meses y días. Compatible con los sistemas de edad internacional y coreano.",
   },
   zh: {
-    title: "年齡計算機 — 實際年齡·韓國年齡·月齡計算",
-    description: "輸入生日，一次計算實際年齡、韓國式年齡、月齡和天數。",
-  },
-  cn: {
-    title: "年龄计算器 — 实际年龄·韩国年龄·月龄计算",
+    title: "年龄计算机 — 实际年龄·韩国年龄·月龄计算",
     description: "输入生日，一次计算实际年龄、韩国式年龄、月龄和天数。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "나이는 기준일과 계산 방식에 따라 다르게 보일 수 있습니다",
+    intro: "이 계산기는 생년월일을 기준으로 오늘의 만 나이, 연 나이, 띠, 주요 생애 마일스톤을 보여줍니다. 한국에서는 2023년부터 행정·법령상 만 나이 사용이 원칙이지만, 일상 대화나 일부 관습에서는 연 나이 표현이 함께 쓰일 수 있습니다.",
+    formulaTitle: "계산 기준",
+    formulas: [
+      { title: "만 나이", body: "올해 연도-출생연도에서 생일이 지나지 않았으면 1을 뺍니다." },
+      { title: "연 나이", body: "올해 연도 - 출생연도" },
+      { title: "띠", body: "출생연도를 12로 나눈 나머지로 십이지를 매칭합니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: ["생년월일을 선택합니다.", "만 나이와 연 나이를 비교합니다.", "환갑, 100세 등 생애 마일스톤 연도를 참고합니다."],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "만 나이와 연 나이는 무엇이 다른가요?", answer: "만 나이는 생일이 지나야 한 살이 늘고, 연 나이는 새해가 되면 출생연도 기준으로 계산합니다." },
+      { question: "한국식 세는 나이도 계산하나요?", answer: "이 컴포넌트는 만 나이와 연 나이를 중심으로 보여주며, 법적 기준은 만 나이를 우선 확인해야 합니다." },
+      { question: "띠는 음력 기준인가요?", answer: "간단한 출생연도 기준입니다. 입춘이나 음력 기준이 필요한 전통 해석과는 다를 수 있습니다." },
+    ],
+    disclaimer: "결과는 일반적인 달력 계산이며 법적·행정상 연령 판단은 해당 기관의 기준을 확인하세요.",
+  },
+  en: {
+    introTitle: "Age can differ depending on the reference date and age system",
+    intro: "This calculator uses date of birth to show international age, year age, zodiac animal, and milestone years. Korea now uses international age as the legal and administrative default, but year-age wording may still appear in everyday contexts.",
+    formulaTitle: "Calculation basics",
+    formulas: [
+      { title: "International age", body: "current year - birth year, minus 1 if this year's birthday has not passed" },
+      { title: "Year age", body: "current year - birth year" },
+      { title: "Zodiac animal", body: "matched from birth year modulo 12" },
+    ],
+    howToTitle: "How to use",
+    steps: ["Select the date of birth.", "Compare international age with year age.", "Use milestone years such as 60th-cycle or 100th birthday as calendar references."],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "What is international age?", answer: "It increases on your birthday, not on January 1." },
+      { question: "What is year age?", answer: "It simply subtracts birth year from current year, so it changes when the calendar year changes." },
+      { question: "Is the zodiac animal lunar-calendar accurate?", answer: "This is a simple birth-year match. Traditional systems using lunar dates or solar terms may differ." },
+    ],
+    disclaimer: "Results are general calendar calculations. For legal or administrative age rules, confirm with the relevant authority.",
+  },
+  ja: {
+    introTitle: "年齢は基準日と計算方式によって違って見えることがあります",
+    intro: "この計算機は生年月日から満年齢、年齢式の年数、干支、主な節目の年を表示します。韓国では行政・法令上は満年齢が基本ですが、日常表現では別の数え方が残ることがあります。",
+    formulaTitle: "計算の基準",
+    formulas: [
+      { title: "満年齢", body: "今年の年-出生年。誕生日がまだなら1を引きます。" },
+      { title: "年齢式", body: "今年の年 - 出生年" },
+      { title: "干支", body: "出生年を12で割った余りで十二支を対応させます。" },
+    ],
+    howToTitle: "使い方",
+    steps: ["生年月日を選びます。", "満年齢と年齢式の数値を比較します。", "還暦や100歳などの節目の年を確認します。"],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "満年齢とは何ですか？", answer: "誕生日が来るたびに1歳増える、国際的によく使われる数え方です。" },
+      { question: "年齢式は何ですか？", answer: "現在の年から出生年を引く単純な計算で、年が変わると増えます。" },
+      { question: "干支は旧暦基準ですか？", answer: "ここでは単純に出生年で対応させます。旧暦や節気を使う伝統解釈とは異なる場合があります。" },
+    ],
+    disclaimer: "結果は一般的な暦計算です。法的・行政上の年齢判断は該当機関の基準をご確認ください。",
+  },
+  zh: {
+    introTitle: "年龄会因基准日与计算制度而不同",
+    intro: "这个计算器依出生日期显示实际年龄、年龄式计算、生肖与人生里程碑年份。韩国行政与法律已以实际年龄为原则，但日常语境中仍可能看到其他年龄说法。",
+    formulaTitle: "计算基准",
+    formulas: [
+      { title: "实际年龄", body: "今年年份-出生年份，若今年生日未到再减 1" },
+      { title: "年龄式", body: "今年年份 - 出生年份" },
+      { title: "生肖", body: "以出生年份除以 12 的余数对应十二生肖" },
+    ],
+    howToTitle: "使用方法",
+    steps: ["选择出生日期。", "比较实际年龄与年龄式数值。", "查看 60 岁、100 岁等里程碑年份。" ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "实际年龄是什么？", answer: "生日到来才增加一岁，是国际上常见的计算方式。" },
+      { question: "年龄式计算是什么？", answer: "只用今年年份减出生年份，因此每到新年就会变化。" },
+      { question: "生肖是农历基准吗？", answer: "本工具是简单出生年对应；若使用农历或节气，结果可能不同。" },
+    ],
+    disclaimer: "结果为一般日历计算；法律或行政年龄判定请以相关机关标准为准。",
+  },
+  fr: {
+    introTitle: "L'âge peut changer selon la date de référence et le système utilisé",
+    intro: "Ce calculateur utilise la date de naissance pour afficher l'âge international, l'âge par année, le signe zodiacal et quelques jalons. En Corée, l'âge international est désormais le principe légal et administratif, même si d'autres expressions restent courantes.",
+    formulaTitle: "Bases de calcul",
+    formulas: [
+      { title: "Âge international", body: "année actuelle - année de naissance, moins 1 si l'anniversaire n'est pas passé" },
+      { title: "Âge par année", body: "année actuelle - année de naissance" },
+      { title: "Zodiaque", body: "correspondance par année de naissance modulo 12" },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: ["Sélectionnez la date de naissance.", "Comparez âge international et âge par année.", "Consultez les années de jalon comme 60 ou 100 ans."],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Qu'est-ce que l'âge international ?", answer: "Il augmente le jour de l'anniversaire, pas au 1er janvier." },
+      { question: "Qu'est-ce que l'âge par année ?", answer: "Il soustrait simplement l'année de naissance de l'année actuelle." },
+      { question: "Le zodiaque suit-il le calendrier lunaire ?", answer: "Ici, il s'agit d'une correspondance simple par année ; les systèmes traditionnels peuvent différer." },
+    ],
+    disclaimer: "Les résultats sont des calculs calendaires généraux. Pour un usage légal ou administratif, vérifiez auprès de l'autorité compétente.",
+  },
+  es: {
+    introTitle: "La edad puede cambiar según la fecha de referencia y el sistema usado",
+    intro: "Esta calculadora usa la fecha de nacimiento para mostrar edad internacional, edad por año, signo zodiacal y años de hitos. En Corea la edad internacional es el estándar legal y administrativo, aunque algunas expresiones cotidianas siguen usando otros sistemas.",
+    formulaTitle: "Bases del cálculo",
+    formulas: [
+      { title: "Edad internacional", body: "año actual - año de nacimiento, menos 1 si aún no pasó el cumpleaños" },
+      { title: "Edad por año", body: "año actual - año de nacimiento" },
+      { title: "Zodiaco", body: "correspondencia por año de nacimiento módulo 12" },
+    ],
+    howToTitle: "Cómo usarla",
+    steps: ["Selecciona la fecha de nacimiento.", "Compara edad internacional y edad por año.", "Consulta hitos como 60 o 100 años."],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Qué es la edad internacional?", answer: "Aumenta en tu cumpleaños, no el 1 de enero." },
+      { question: "¿Qué es la edad por año?", answer: "Resta el año de nacimiento al año actual, por eso cambia al empezar el año." },
+      { question: "¿El zodiaco usa calendario lunar?", answer: "Aquí es una correspondencia simple por año; sistemas tradicionales con lunar o términos solares pueden diferir." },
+    ],
+    disclaimer: "Los resultados son cálculos generales de calendario. Para edad legal o administrativa, confirma con la autoridad correspondiente.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <AgeCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

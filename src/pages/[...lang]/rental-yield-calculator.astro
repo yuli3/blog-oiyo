@@ -2,7 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import RentalYieldCalculatorComp from "../../components/tools/RentalYieldCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -11,12 +12,12 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "임대 수익률 계산기 — 부동산 투자 수익성 분석",
-    description: "매입가, 임대료, 관리비를 입력해 임대 수익률을 계산합니다. 실질 수익률과 세후 수익률을 비교하세요.",
+    description: "매입가, 임대 보증금, 월세, 대출금과 금리를 입력해 실질 임대수익률과 월 순현금흐름을 계산합니다.",
   },
   en: {
     title: "Rental Yield Calculator",
@@ -24,7 +25,7 @@ const meta: Record<Locale, { title: string; description: string }> = {
   },
   ja: {
     title: "賃貸利回り計算機",
-    description: "購入価格、賃料、管理費を入力して賃貸利回りを計算します。実質利回りと税引後利回りを比較しましょう。",
+    description: "購入価格、賃貸保証金、家賃、借入金と金利を入力して、実質利回りと月間キャッシュフローを計算します。",
   },
   fr: {
     title: "Calculateur de rendement locatif",
@@ -35,20 +36,229 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Analiza la rentabilidad de inversión inmobiliaria. Calcula el rendimiento bruto y neto del alquiler.",
   },
   zh: {
-    title: "租金收益率計算機",
-    description: "輸入購買價格、租金和管理費計算租金收益率，比較毛收益率和稅後淨收益率。",
-  },
-  cn: {
-    title: "租金收益率计算器",
-    description: "输入购买价格、租金和管理费计算租金收益率，比较毛收益率和税后净收益率。",
+    title: "租金收益率计算机",
+    description: "输入购买价格、租赁保证金、月租、贷款金额和利率，计算实质租金收益率与月现金流。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+type SeoContent = {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+};
+
+const content: Record<ActiveLocale, SeoContent> = {
+  ko: {
+    introTitle: "임대수익률은 매입가보다 실제 투입자본과 이자비용을 봐야 합니다",
+    intro: "부동산 임대투자는 월세만 보면 과대평가되기 쉽습니다. 임차인 보증금과 대출을 제외하고 실제로 묶이는 자기자본이 얼마인지, 대출이자가 월세를 얼마나 줄이는지가 중요합니다. 이 계산기는 순연간 임대수익을 실제 투입자본으로 나누어 수익률과 월 현금흐름을 보여 줍니다.",
+    formulaTitle: "계산 기준",
+    formulas: [
+      { title: "실제 투입자본", body: "매입가 - 임대보증금 - 대출금으로 계산합니다." },
+      { title: "순연간 임대수익", body: "월 임대료 × 12 - 대출금 × 대출금리로 추정합니다." },
+      { title: "실질 수익률", body: "순연간 임대수익 ÷ 실제 투입자본 × 100입니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "매입가, 임대 보증금, 월 임대료를 입력합니다.",
+      "대출금과 대출금리를 입력해 이자비용을 반영합니다.",
+      "실질 수익률과 월 순현금흐름을 보고 공실, 세금, 수선비를 별도로 보정합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "세후 수익률인가요?", answer: "아닙니다. 이 컴포넌트는 대출이자를 반영한 단순 순수익률입니다. 취득세, 재산세, 종합부동산세, 임대소득세는 별도로 계산해야 합니다." },
+      { question: "수익률이 매우 높게 나오는 경우는 왜인가요?", answer: "보증금과 대출을 뺀 자기자본이 작으면 레버리지 때문에 수익률이 크게 보일 수 있습니다. 동시에 금리 상승과 공실 위험도 커집니다." },
+      { question: "공실률과 관리비는 포함되나요?", answer: "포함되지 않습니다. 실제 투자 판단에는 공실, 수선비, 중개수수료, 관리비 부담, 임대료 인상 가능성을 반영해야 합니다." },
+    ],
+    disclaimer: "이 도구는 일반적인 추정용입니다. 실제 투자수익, 세금, 대출 조건은 관련 기관이나 전문가에게 확인하세요.",
+  },
+  en: {
+    introTitle: "Rental yield should be measured against actual equity and financing cost",
+    intro: "Rental property returns can look better than they are if you only look at rent. The key question is how much equity is actually tied up after tenant deposit and loan, and how much loan interest reduces income. This calculator divides net annual rent after loan interest by actual invested equity.",
+    formulaTitle: "Calculation basis",
+    formulas: [
+      { title: "Actual equity", body: "Purchase price - tenant deposit - loan amount." },
+      { title: "Net annual income", body: "Monthly rent × 12 - loan amount × loan rate." },
+      { title: "Net yield", body: "Net annual income ÷ actual equity × 100." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Enter purchase price, tenant deposit, and monthly rent.",
+      "Enter loan amount and loan interest rate.",
+      "Review net yield and monthly cash flow, then adjust separately for vacancy, taxes, repairs, and fees.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Is this after tax?", answer: "No. It reflects rent and loan interest only. Acquisition tax, property tax, rental income tax, and other local rules need separate calculation." },
+      { question: "Why can the yield look extremely high?", answer: "When equity is small after deposit and debt, leverage can inflate the yield. It also increases interest-rate and vacancy risk." },
+      { question: "Does it include vacancy or maintenance?", answer: "No. For an investment decision, add vacancy, repairs, agent fees, management costs, and rent growth assumptions." },
+    ],
+    disclaimer: "This tool is a general estimate. Confirm actual investment returns, taxes, and loan terms with the relevant institution or professional.",
+  },
+  ja: {
+    introTitle: "賃貸利回りは実際の自己資本と借入コストで見る必要があります",
+    intro: "月家賃だけを見ると不動産投資の収益性は過大に見えます。賃借人の保証金と借入を差し引いた実際の自己資本、そして借入利息が家賃収入をどれだけ減らすかが重要です。",
+    formulaTitle: "計算の前提",
+    formulas: [
+      { title: "実際の投資元本", body: "購入価格 - 賃貸保証金 - 借入金。" },
+      { title: "純年間収益", body: "月家賃 × 12 - 借入金 × 借入金利。" },
+      { title: "実質利回り", body: "純年間収益 ÷ 実際の投資元本 × 100。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "購入価格、賃貸保証金、月家賃を入力します。",
+      "借入金と借入金利を入力します。",
+      "利回りと月間キャッシュフローを確認し、空室、税金、修繕費を別途調整します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "税引後利回りですか？", answer: "いいえ。家賃と借入利息だけを反映した簡易利回りです。取得税、固定資産税、賃貸所得税などは別計算です。" },
+      { question: "利回りが高すぎるのはなぜですか？", answer: "保証金と借入を除いた自己資本が小さいと、レバレッジで利回りが高く見えます。同時にリスクも高まります。" },
+      { question: "空室や修繕費は含まれますか？", answer: "含まれません。実際の判断では空室、修繕、仲介手数料、管理費、家賃変動を考慮してください。" },
+    ],
+    disclaimer: "このツールは一般的な概算です。実際の投資収益、税金、融資条件は関係機関または専門家に確認してください。",
+  },
+  zh: {
+    introTitle: "租金收益率应按实际投入资本和融资成本来看",
+    intro: "只看月租容易高估房地产投资收益。关键是扣除租客保证金和贷款后，实际占用多少自有资金，以及贷款利息会减少多少租金收入。本工具用扣除利息后的年租金收入除以实际投入资本。",
+    formulaTitle: "计算依据",
+    formulas: [
+      { title: "实际投入资本", body: "购买价格 - 租赁保证金 - 贷款金额。" },
+      { title: "年净租金收入", body: "月租 × 12 - 贷款金额 × 贷款利率。" },
+      { title: "净收益率", body: "年净租金收入 ÷ 实际投入资本 × 100。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "输入购买价格、租赁保证金和月租。",
+      "输入贷款金额和贷款利率。",
+      "查看净收益率和月现金流，并另外调整空置、税费、维修和手续费。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "这是税后收益率吗？", answer: "不是。它只反映租金和贷款利息。购置税、房产税、租赁所得税等需要另行计算。" },
+      { question: "为什么收益率可能特别高？", answer: "当扣除保证金和贷款后的自有资金很小，杠杆会放大收益率，同时也放大利率和空置风险。" },
+      { question: "包含空置率和维护费吗？", answer: "不包含。投资判断还应考虑空置、维修、经纪费、管理费和租金增长假设。" },
+    ],
+    disclaimer: "本工具仅作一般估算。实际投资收益、税务和贷款条件请向相关机构或专业人士确认。",
+  },
+  fr: {
+    introTitle: "Le rendement locatif doit être rapporté aux fonds propres réels",
+    intro: "Le loyer seul peut surestimer la rentabilité. Il faut mesurer les fonds propres réellement immobilisés après dépôt du locataire et emprunt, puis retirer les intérêts de prêt du revenu locatif.",
+    formulaTitle: "Bases de calcul",
+    formulas: [
+      { title: "Fonds propres réels", body: "Prix d'achat - dépôt du locataire - emprunt." },
+      { title: "Revenu annuel net", body: "Loyer mensuel × 12 - emprunt × taux." },
+      { title: "Rendement net", body: "Revenu annuel net ÷ fonds propres réels × 100." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Saisissez prix d'achat, dépôt du locataire et loyer mensuel.",
+      "Saisissez montant de prêt et taux d'intérêt.",
+      "Analysez rendement et cash-flow, puis ajustez vacance, impôts, travaux et frais séparément.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Est-ce après impôt ?", answer: "Non. Le calcul inclut loyer et intérêts seulement. Taxes d'acquisition, foncières et revenus locatifs demandent un calcul séparé." },
+      { question: "Pourquoi le rendement peut-il paraître très élevé ?", answer: "Un faible apport réel après dépôt et dette amplifie le rendement par effet de levier, mais aussi le risque." },
+      { question: "Vacance et entretien sont-ils inclus ?", answer: "Non. Ajoutez vacance, réparations, frais d'agence, gestion et hypothèses de hausse des loyers." },
+    ],
+    disclaimer: "Cet outil fournit une estimation générale. Confirmez rendement, fiscalité et prêt avec l'institution compétente ou un professionnel.",
+  },
+  es: {
+    introTitle: "El rendimiento de alquiler debe medirse sobre capital real y coste financiero",
+    intro: "Mirar solo la renta puede sobreestimar la inversión. Importa cuánto capital queda realmente invertido tras depósito del inquilino y préstamo, y cuánto interés reduce el ingreso anual.",
+    formulaTitle: "Bases de cálculo",
+    formulas: [
+      { title: "Capital real", body: "Precio de compra - depósito del inquilino - préstamo." },
+      { title: "Ingreso anual neto", body: "Renta mensual × 12 - préstamo × tasa." },
+      { title: "Rendimiento neto", body: "Ingreso anual neto ÷ capital real × 100." },
+    ],
+    howToTitle: "Cómo usarla",
+    steps: [
+      "Introduce precio, depósito del inquilino y renta mensual.",
+      "Introduce préstamo y tasa de interés.",
+      "Revisa rendimiento y flujo mensual, luego ajusta vacancia, impuestos, reparaciones y comisiones.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Es después de impuestos?", answer: "No. Incluye renta e interés del préstamo. Impuesto de adquisición, propiedad y renta inmobiliaria se calculan aparte." },
+      { question: "¿Por qué el rendimiento puede verse muy alto?", answer: "Un capital bajo después de depósito y deuda amplifica el rendimiento por apalancamiento, pero también el riesgo." },
+      { question: "¿Incluye vacancia y mantenimiento?", answer: "No. Añade vacancia, reparaciones, comisiones, gestión y supuestos de crecimiento de renta." },
+    ],
+    disclaimer: "Esta herramienta ofrece una estimación general. Confirma rendimiento, impuestos y préstamo con la institución correspondiente o un profesional.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <RentalYieldCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

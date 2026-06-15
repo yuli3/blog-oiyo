@@ -2,15 +2,16 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import JeonseMonthlyConverter from "../../components/tools/JeonseMonthlyConverter";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "전월세 전환 계산기 — 전세↔월세 전환율 계산",
     description: "전세금을 월세로, 또는 월세를 전세금으로 전환하는 계산기. 전환율 조정 및 시세 유불리 판단 기능 제공.",
@@ -32,20 +33,229 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Convierte el jeonse coreano (depósito a tanto alzado) en alquiler mensual o viceversa. Ajusta la tasa de conversión y compara con el mercado.",
   },
   zh: {
-    title: "全租↔月租轉換計算機 — 韓國租賃轉換率計算",
-    description: "將全租金換算為月租，或將月租換算為全租金。可調整轉換率並判斷目前租金的市場優劣。",
-  },
-  cn: {
-    title: "全租↔月租转换计算器 — 韩国租赁转换率计算",
+    title: "全租↔月租转换计算机 — 韩国租赁转换率计算",
     description: "将全租金换算为月租，或将月租换算为全租金。可调整转换率并判断目前租金的市场优劣。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+type SeoContent = {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+};
+
+const content: Record<ActiveLocale, SeoContent> = {
+  ko: {
+    introTitle: "전세와 월세는 보증금 차이를 연 이율로 환산해 비교합니다",
+    intro: "전세에서 보증금을 낮추고 월세를 더 내거나, 월세를 전세금으로 환산하려면 전월세 전환율을 사용합니다. 이 계산기는 전세금, 보증금, 월세, 전환율을 넣어 월세 환산액 또는 등가 전세금을 빠르게 계산합니다.",
+    formulaTitle: "계산 기준",
+    formulas: [
+      { title: "전세에서 월세", body: "월세 = (전세금 - 보증금) × 전환율 ÷ 12 입니다." },
+      { title: "월세에서 전세", body: "환산 전세금 = 보증금 + 월세 × 12 ÷ 전환율 입니다." },
+      { title: "유불리 비교", body: "입력 월세가 전환율 기준 월세보다 낮으면 세입자에게 상대적으로 유리합니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "전세를 월세로 볼지, 월세를 전세로 볼지 모드를 선택합니다.",
+      "전세금, 보증금, 월세, 전환율을 만원 단위로 입력합니다.",
+      "환산 월세나 환산 전세금을 확인하고 지역 시세와 법정 전환율을 함께 비교합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "법정 전월세 전환율은 고정인가요?", answer: "아닙니다. 법정 상한은 기준금리와 관련되어 바뀔 수 있고, 실제 시장 전환율은 지역, 물건, 금리 환경에 따라 다릅니다." },
+      { question: "전환율이 높으면 누구에게 유리한가요?", answer: "같은 보증금 차이라면 전환율이 높을수록 환산 월세가 커져 임대인에게 유리하고 세입자 부담은 커집니다." },
+      { question: "관리비도 포함해야 하나요?", answer: "이 계산기는 순수 보증금과 월세만 봅니다. 실질 주거비 비교에는 관리비, 대출이자, 보증보험료, 이사비도 별도로 봐야 합니다." },
+    ],
+    disclaimer: "이 도구는 일반적인 추정용입니다. 실제 전환율, 임대차 법령, 계약 조건은 관련 기관이나 전문가에게 확인하세요.",
+  },
+  en: {
+    introTitle: "Jeonse and monthly rent are compared by converting deposit differences into an annual rate",
+    intro: "Korean lease negotiations often trade a lower deposit for higher monthly rent. This converter uses a jeonse-to-monthly conversion rate to estimate equivalent monthly rent or equivalent jeonse deposit from the same cash-flow logic.",
+    formulaTitle: "Calculation basis",
+    formulas: [
+      { title: "Jeonse to monthly", body: "Monthly rent = (Jeonse amount - deposit) × conversion rate ÷ 12." },
+      { title: "Monthly to jeonse", body: "Equivalent jeonse = deposit + monthly rent × 12 ÷ conversion rate." },
+      { title: "Favorable check", body: "If actual monthly rent is below the benchmark, it is relatively favorable for the tenant." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Choose whether to convert jeonse to monthly rent or monthly rent to jeonse.",
+      "Enter jeonse amount, deposit, rent, and conversion rate in KRW 10,000 units.",
+      "Compare the converted amount with local market rent and the legal conversion-rate limit.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Is the legal conversion rate fixed?", answer: "No. The legal ceiling is linked to interest-rate rules and can change. Market rates also vary by region, property, and financing conditions." },
+      { question: "Who benefits from a higher conversion rate?", answer: "For the same deposit difference, a higher rate produces higher converted monthly rent, which is usually better for the landlord and costlier for the tenant." },
+      { question: "Does this include maintenance fees?", answer: "No. It compares deposit and rent only. For real housing cost, also consider maintenance, loan interest, guarantee insurance, and moving costs." },
+    ],
+    disclaimer: "This tool is a general estimate. Confirm actual conversion rates, lease law, and contract terms with the relevant institution or professional.",
+  },
+  ja: {
+    introTitle: "チョンセと月家賃は保証金差額を年率で換算して比較します",
+    intro: "韓国の賃貸では、保証金を下げて月家賃を増やす条件交渉がよくあります。この計算機は転換率を使い、チョンセを月家賃に、または月家賃を等価チョンセに換算します。",
+    formulaTitle: "計算の前提",
+    formulas: [
+      { title: "チョンセから月家賃", body: "月家賃 = (チョンセ金額 - 保証金) × 転換率 ÷ 12。" },
+      { title: "月家賃からチョンセ", body: "換算チョンセ = 保証金 + 月家賃 × 12 ÷ 転換率。" },
+      { title: "有利不利", body: "実際の月家賃が基準より低い場合、入居者に相対的に有利です。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "チョンセから月家賃、または月家賃からチョンセのモードを選びます。",
+      "チョンセ金額、保証金、月家賃、転換率を万ウォン単位で入力します。",
+      "換算額を地域相場と法定転換率の上限と比べます。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "法定転換率は固定ですか？", answer: "固定ではありません。金利ルールに連動して変わる可能性があり、市場転換率も地域や物件で異なります。" },
+      { question: "転換率が高いと誰に有利ですか？", answer: "同じ保証金差額なら、転換率が高いほど月家賃換算額が大きくなり、一般に貸主に有利で借主負担は増えます。" },
+      { question: "管理費も含まれますか？", answer: "含まれません。実質住居費は管理費、ローン利息、保証保険料、引っ越し費用も別途確認してください。" },
+    ],
+    disclaimer: "このツールは一般的な概算です。実際の転換率、賃貸借法、契約条件は関係機関または専門家に確認してください。",
+  },
+  zh: {
+    introTitle: "全租和月租可用保证金差额的年化利率来比较",
+    intro: "韩国租赁中常见把较低保证金换成较高月租，或反向换算。这个工具用全租月租转换率，估算等价月租或等价全租金额。",
+    formulaTitle: "计算依据",
+    formulas: [
+      { title: "全租转月租", body: "月租 =（全租金额 - 保证金）× 转换率 ÷ 12。" },
+      { title: "月租转全租", body: "等价全租 = 保证金 + 月租 × 12 ÷ 转换率。" },
+      { title: "优劣判断", body: "实际月租低于转换率基准时，通常对租客相对有利。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "选择全租转月租或月租转全租模式。",
+      "以万韩元输入全租金额、保证金、月租和转换率。",
+      "把换算结果与当地市场租金和法定转换率上限一起比较。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "法定转换率固定吗？", answer: "不是。法定上限会随利率规则变化，市场转换率也会因地区、房源和融资环境不同。" },
+      { question: "转换率越高对谁有利？", answer: "同样保证金差额下，转换率越高，换算月租越高，通常对房东更有利、租客负担更重。" },
+      { question: "包括管理费吗？", answer: "不包括。本工具只比较保证金和月租，实际居住成本还应考虑管理费、贷款利息、保证保险和搬家费用。" },
+    ],
+    disclaimer: "本工具仅作一般估算。实际转换率、租赁法规和合约条件请向相关机构或专业人士确认。",
+  },
+  fr: {
+    introTitle: "Jeonse et loyer mensuel se comparent via un taux annuel",
+    intro: "Dans les baux coréens, une baisse du dépôt peut être échangée contre un loyer mensuel plus élevé. Ce convertisseur utilise le taux de conversion jeonse-loyer pour estimer le loyer équivalent ou le dépôt jeonse équivalent.",
+    formulaTitle: "Bases de calcul",
+    formulas: [
+      { title: "Jeonse vers loyer", body: "Loyer = (montant jeonse - caution) × taux ÷ 12." },
+      { title: "Loyer vers jeonse", body: "Jeonse équivalent = caution + loyer × 12 ÷ taux." },
+      { title: "Comparaison", body: "Si le loyer réel est sous le repère, il est relativement favorable au locataire." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Choisissez conversion jeonse vers loyer ou loyer vers jeonse.",
+      "Saisissez montant jeonse, caution, loyer et taux en unités de 10 000 KRW.",
+      "Comparez le résultat aux loyers locaux et au plafond légal du taux.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Le taux légal est-il fixe ?", answer: "Non. Le plafond légal dépend des règles de taux d'intérêt et peut changer. Les taux du marché varient aussi par région et bien." },
+      { question: "À qui profite un taux plus élevé ?", answer: "À écart de dépôt identique, un taux plus élevé donne un loyer converti plus élevé, donc plutôt favorable au bailleur." },
+      { question: "Les charges sont-elles incluses ?", answer: "Non. L'outil compare dépôt et loyer. Ajoutez charges, intérêts, assurance garantie et déménagement pour le coût réel." },
+    ],
+    disclaimer: "Cet outil fournit une estimation générale. Confirmez taux, droit du bail et contrat avec l'institution compétente ou un professionnel.",
+  },
+  es: {
+    introTitle: "Jeonse y alquiler mensual se comparan con una tasa anual",
+    intro: "En alquileres coreanos, reducir el depósito suele compensarse con mayor renta mensual. Este convertidor usa la tasa de conversión jeonse-alquiler para estimar renta mensual equivalente o depósito jeonse equivalente.",
+    formulaTitle: "Bases de cálculo",
+    formulas: [
+      { title: "Jeonse a mensual", body: "Alquiler = (monto jeonse - fianza) × tasa ÷ 12." },
+      { title: "Mensual a jeonse", body: "Jeonse equivalente = fianza + alquiler × 12 ÷ tasa." },
+      { title: "Comparación", body: "Si el alquiler real está por debajo del punto de referencia, es relativamente favorable al inquilino." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Elige convertir jeonse a alquiler o alquiler a jeonse.",
+      "Introduce monto jeonse, fianza, alquiler y tasa en unidades de 10.000 KRW.",
+      "Compara el resultado con el mercado local y el límite legal de conversión.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿La tasa legal es fija?", answer: "No. El techo legal depende de reglas de tipos de interés y puede cambiar. Las tasas de mercado varían por región e inmueble." },
+      { question: "¿A quién beneficia una tasa alta?", answer: "Con la misma diferencia de depósito, una tasa mayor produce alquiler convertido más alto, normalmente favorable al arrendador." },
+      { question: "¿Incluye gastos de comunidad?", answer: "No. Solo compara depósito y alquiler. Añade gastos, intereses, seguro de garantía y mudanza para el coste real." },
+    ],
+    disclaimer: "Esta herramienta ofrece una estimación general. Confirma tasas, legislación de alquiler y contrato con la institución correspondiente o un profesional.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <JeonseMonthlyConverter client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

@@ -2,7 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import InflationCalculatorComp from "../../components/tools/InflationCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -11,9 +12,9 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "물가상승률 계산기 — 과거 돈의 현재 가치는?",
     description: "인플레이션을 고려한 돈의 실질 가치를 계산합니다. 과거 금액이 현재 얼마의 가치인지 확인하세요.",
@@ -35,20 +36,227 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Calcula el valor real del dinero ajustado por inflación.",
   },
   zh: {
-    title: "通貨膨脹計算機",
-    description: "計算考慮通膨後的金錢實際價值，了解過去的金額在今日的購買力。",
-  },
-  cn: {
-    title: "通货膨胀计算器",
+    title: "通货膨胀计算机",
     description: "计算考虑通膨后的金钱实际价值，了解过去的金额在今日的购买力。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "인플레이션은 같은 금액의 구매력을 낮춥니다",
+    intro: "물가상승률 계산기는 현재 금액, 예상 물가상승률, 기간을 바탕으로 미래의 실질 구매력과 같은 가치를 유지하는 데 필요한 명목 금액을 계산합니다. 장기 저축 목표, 연봉 인상, 생활비 계획을 볼 때 명목 금액과 실질 가치를 구분하는 데 도움이 됩니다.",
+    formulaTitle: "계산 기준",
+    formulas: [
+      { title: "미래 실질가치", body: "실질가치 = 현재금액 / (1 + 물가상승률)^기간" },
+      { title: "필요 명목금액", body: "필요금액 = 현재금액 × (1 + 물가상승률)^기간" },
+      { title: "구매력 하락", body: "하락률 = 1 - 실질가치 / 현재금액" },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "기준이 되는 현재 금액을 입력합니다.",
+      "예상 연 물가상승률과 기간을 입력합니다.",
+      "미래 실질가치와 현재 가치를 유지하려면 필요한 금액을 함께 확인합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "물가상승률은 어떤 값을 넣어야 하나요?", answer: "과거 평균, 중앙은행 목표, 개인이 예상하는 생활비 상승률 중 목적에 맞는 값을 넣으면 됩니다." },
+      { question: "결과가 실제 미래 가격을 보장하나요?", answer: "아닙니다. 일정한 물가상승률이 계속된다는 가정의 추정치입니다." },
+      { question: "투자 수익률과 같이 볼 수 있나요?", answer: "네. 명목 수익률에서 물가상승률을 빼면 실질 수익률을 더 보수적으로 볼 수 있습니다." },
+    ],
+    disclaimer: "이 도구는 일반적인 계산용입니다. 공식 물가·임금·금융 수치는 관련 기관 자료를 확인하세요.",
+  },
+  en: {
+    introTitle: "Inflation reduces the purchasing power of the same amount",
+    intro: "This calculator estimates future purchasing power and the nominal amount needed to preserve today's value using an amount, annual inflation rate, and time period. It is useful for savings goals, salary planning, and separating nominal money from real value.",
+    formulaTitle: "Calculation rules",
+    formulas: [
+      { title: "Future real value", body: "Real value = amount / (1 + inflation rate)^years" },
+      { title: "Needed nominal amount", body: "Needed amount = amount × (1 + inflation rate)^years" },
+      { title: "Purchasing power loss", body: "Loss = 1 - real value / current amount" },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Enter the current amount you want to evaluate.",
+      "Enter an expected annual inflation rate and number of years.",
+      "Compare future real value with the amount needed to keep today's purchasing power.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "What inflation rate should I use?", answer: "Use a historical average, a central-bank target, or your own expected cost-of-living increase depending on the purpose." },
+      { question: "Does this predict actual future prices?", answer: "No. It is an estimate that assumes the same inflation rate continues for the whole period." },
+      { question: "Can I compare it with investment returns?", answer: "Yes. Comparing nominal return with inflation helps you estimate real return more conservatively." },
+    ],
+    disclaimer: "This tool is for general calculation. Confirm official inflation, wage, and financial figures with the relevant authority.",
+  },
+  ja: {
+    introTitle: "インフレは同じ金額の購買力を下げます",
+    intro: "この計算機は、現在の金額、想定インフレ率、期間から将来の実質価値と、同じ購買力を保つために必要な金額を計算します。貯蓄目標、給与、生活費の計画で名目額と実質価値を分けて考えられます。",
+    formulaTitle: "計算基準",
+    formulas: [
+      { title: "将来の実質価値", body: "実質価値 = 現在額 / (1 + インフレ率)^年数" },
+      { title: "必要な名目額", body: "必要額 = 現在額 × (1 + インフレ率)^年数" },
+      { title: "購買力低下", body: "低下率 = 1 - 実質価値 / 現在額" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "基準にする現在の金額を入力します。",
+      "想定する年インフレ率と期間を入力します。",
+      "将来の実質価値と、現在価値を保つための必要額を確認します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "どのインフレ率を使えばよいですか？", answer: "過去平均、中央銀行の目標、生活費の実感など、目的に合う前提を使います。" },
+      { question: "将来価格を予測できますか？", answer: "いいえ。一定のインフレ率が続くという仮定に基づく概算です。" },
+      { question: "投資利回りと比べられますか？", answer: "はい。名目利回りとインフレ率を比べると実質利回りを見やすくなります。" },
+    ],
+    disclaimer: "このツールは一般的な計算用です。公式な物価・賃金・金融数値は関係機関の資料をご確認ください。",
+  },
+  zh: {
+    introTitle: "通胀会降低同一金额的购买力",
+    intro: "这个计算器用当前金额、预计年通胀率和年数，估算未来实际购买力，以及维持今天价值所需的名义金额。规划储蓄、薪资和生活费时，它能帮助区分名义金额与实际价值。",
+    formulaTitle: "计算规则",
+    formulas: [
+      { title: "未来实际价值", body: "实际价值 = 当前金额 / (1 + 通胀率)^年数" },
+      { title: "所需名义金额", body: "所需金额 = 当前金额 × (1 + 通胀率)^年数" },
+      { title: "购买力下降", body: "下降率 = 1 - 实际价值 / 当前金额" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "输入要评估的当前金额。",
+      "输入预计年通胀率和期间。",
+      "同时查看未来实际价值和维持当前购买力所需金额。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "通胀率应该填多少？", answer: "可按历史平均、央行目标或个人生活成本预期选择，取决于你的用途。" },
+      { question: "结果能预测真实未来价格吗？", answer: "不能。它是假设通胀率在整个期间保持不变的估算。" },
+      { question: "可以和投资收益率一起看吗？", answer: "可以。名义收益率扣除通胀后，能更保守地看实际收益。" },
+    ],
+    disclaimer: "本工具用于一般计算。官方物价、薪资和金融数字请以相关机构资料为准。",
+  },
+  fr: {
+    introTitle: "L'inflation réduit le pouvoir d'achat d'un même montant",
+    intro: "Ce calculateur estime la valeur réelle future et le montant nominal nécessaire pour garder la valeur actuelle, à partir d'un montant, d'un taux d'inflation annuel et d'une durée. Il aide à raisonner sur l'épargne, les salaires et le coût de la vie.",
+    formulaTitle: "Règles de calcul",
+    formulas: [
+      { title: "Valeur réelle future", body: "Valeur réelle = montant / (1 + inflation)^années" },
+      { title: "Montant nécessaire", body: "Montant nécessaire = montant × (1 + inflation)^années" },
+      { title: "Perte de pouvoir d'achat", body: "Perte = 1 - valeur réelle / montant actuel" },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Saisissez le montant actuel à évaluer.",
+      "Indiquez un taux d'inflation annuel attendu et une durée.",
+      "Comparez la valeur réelle future avec le montant nécessaire pour garder le même pouvoir d'achat.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Quel taux d'inflation utiliser ?", answer: "Utilisez une moyenne historique, une cible de banque centrale ou votre propre hypothèse de coût de la vie." },
+      { question: "Est-ce une prévision de prix ?", answer: "Non. C'est une estimation sous l'hypothèse d'un taux constant." },
+      { question: "Puis-je le comparer à un rendement ?", answer: "Oui. Comparer rendement nominal et inflation aide à estimer le rendement réel." },
+    ],
+    disclaimer: "Cet outil sert au calcul général. Pour les chiffres officiels d'inflation, salaires ou finance, vérifiez auprès de l'autorité compétente.",
+  },
+  es: {
+    introTitle: "La inflación reduce el poder de compra del mismo importe",
+    intro: "Esta calculadora estima el valor real futuro y el monto nominal necesario para conservar el valor actual usando importe, inflación anual y plazo. Sirve para planificar ahorro, salarios y gastos de vida con una mirada más realista.",
+    formulaTitle: "Reglas de cálculo",
+    formulas: [
+      { title: "Valor real futuro", body: "Valor real = importe / (1 + inflación)^años" },
+      { title: "Importe necesario", body: "Importe necesario = importe × (1 + inflación)^años" },
+      { title: "Pérdida de poder adquisitivo", body: "Pérdida = 1 - valor real / importe actual" },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Introduce el importe actual que quieres evaluar.",
+      "Indica una inflación anual esperada y el número de años.",
+      "Compara el valor real futuro con el importe necesario para mantener el poder de compra.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Qué inflación debo usar?", answer: "Puedes usar una media histórica, una meta del banco central o tu expectativa de costo de vida." },
+      { question: "¿Predice precios futuros reales?", answer: "No. Es una estimación que supone una inflación constante durante todo el periodo." },
+      { question: "¿Se puede comparar con rendimientos?", answer: "Sí. Comparar rendimiento nominal e inflación ayuda a estimar el rendimiento real." },
+    ],
+    disclaimer: "Esta herramienta es para cálculo general. Confirma cifras oficiales de inflación, salarios y finanzas con la autoridad correspondiente.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <main class="mx-auto max-w-3xl px-4 py-10">
     <InflationCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

@@ -2,7 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import RoiCalculatorComp from "../../components/tools/RoiCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -11,9 +12,9 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "ROI 계산기 — 투자 수익률 간편 계산",
     description: "투자 비용과 수익을 입력해 ROI(투자수익률)를 간편하게 계산합니다. 다양한 투자 대안을 비교하세요.",
@@ -35,20 +36,227 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Calcula el ROI rápidamente ingresando costo y ganancia. Compara diferentes opciones de inversión.",
   },
   zh: {
-    title: "ROI 投資報酬率計算機",
-    description: "輸入投資成本和收益快速計算ROI投資報酬率，比較不同投資選項。",
-  },
-  cn: {
-    title: "ROI 投资回报率计算器",
-    description: "输入投资成本和收益快速计算ROI投资回报率，比较不同投资选项。",
+    title: "ROI 投资报酬率计算机",
+    description: "输入投资成本和收益快速计算ROI投资报酬率，比较不同投资选项。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "ROI는 투자금이 얼마나 효율적으로 회수됐는지 보여줍니다",
+    intro: "ROI(Return on Investment)는 투입 비용 대비 얼마나 많은 순수익이 발생했는지 백분율로 보여주는 기본 투자 지표입니다. 광고비, 교육비, 장비 구입, 주식 투자처럼 비용과 회수 금액을 비교해야 하는 상황에서 서로 다른 대안을 같은 기준으로 볼 수 있습니다.",
+    formulaTitle: "핵심 공식",
+    formulas: [
+      { title: "ROI", body: "ROI = (총 회수 금액 - 투자 비용) / 투자 비용 × 100" },
+      { title: "순수익", body: "순수익 = 총 회수 금액 - 투자 비용" },
+      { title: "회수 배수", body: "회수 배수 = 총 회수 금액 / 투자 비용" },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "투자 비용에 처음 지출한 금액을 입력합니다.",
+      "총 회수 금액에 투자로 다시 받은 금액을 입력합니다.",
+      "ROI, 순수익, 회수 배수를 함께 보며 투자 대안을 비교합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "ROI가 0%이면 어떤 뜻인가요?", answer: "회수 금액과 투자 비용이 같아 손익분기점에 있다는 뜻입니다. 0%보다 높으면 이익, 낮으면 손실입니다." },
+      { question: "ROI와 연 수익률은 같은가요?", answer: "다릅니다. ROI는 전체 기간의 수익률이고, 연 수익률은 기간을 1년 단위로 환산한 값입니다." },
+      { question: "세금과 수수료도 넣어야 하나요?", answer: "실제 판단에는 넣는 것이 좋습니다. 거래 비용과 세금을 빼지 않으면 ROI가 실제보다 높게 보일 수 있습니다." },
+    ],
+    disclaimer: "이 도구는 일반적인 계산용입니다. 공식 세금·수수료·투자 판단은 관련 기관과 전문가 기준을 확인하세요.",
+  },
+  en: {
+    introTitle: "ROI shows how efficiently an investment returned value",
+    intro: "Return on investment expresses net gain as a percentage of the cost. It is useful when comparing projects, campaigns, equipment purchases, or investments where both the upfront cost and the amount recovered are known.",
+    formulaTitle: "Core formulas",
+    formulas: [
+      { title: "ROI", body: "ROI = (total return - investment cost) / investment cost × 100" },
+      { title: "Net profit", body: "Net profit = total return - investment cost" },
+      { title: "Return multiple", body: "Return multiple = total return / investment cost" },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Enter the original amount spent as the investment cost.",
+      "Enter the total amount recovered or received from the investment.",
+      "Read ROI, net profit, and return multiple together before comparing options.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "What does 0% ROI mean?", answer: "It means the return equals the cost, so the investment is at break-even before any other fees or taxes." },
+      { question: "Is ROI the same as annual return?", answer: "No. ROI covers the whole holding period. Annual return adjusts the result to a one-year basis." },
+      { question: "Should fees and taxes be included?", answer: "For real decisions, yes. Excluding fees, taxes, and timing can make ROI look better than the actual outcome." },
+    ],
+    disclaimer: "This tool is for general calculation. Confirm official tax, fee, and investment figures with the relevant authority or adviser.",
+  },
+  ja: {
+    introTitle: "ROIは投資額に対する回収効率を見る指標です",
+    intro: "ROIは、投じた費用に対してどれだけの利益や回収額があったかを割合で示します。広告費、設備投資、学習費用、株式投資など、支出と回収額を同じ基準で比べたいときに役立ちます。",
+    formulaTitle: "基本式",
+    formulas: [
+      { title: "ROI", body: "ROI = (総回収額 - 投資コスト) / 投資コスト × 100" },
+      { title: "純利益", body: "純利益 = 総回収額 - 投資コスト" },
+      { title: "回収倍率", body: "回収倍率 = 総回収額 / 投資コスト" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "投資コストに最初に支払った金額を入力します。",
+      "総回収額に投資から戻ってきた金額を入力します。",
+      "ROI、純利益、回収倍率をあわせて比較します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "ROIが0%とは何ですか？", answer: "回収額と投資コストが同じで、損益がほぼゼロという意味です。" },
+      { question: "ROIと年利回りは同じですか？", answer: "同じではありません。ROIは対象期間全体の結果で、年利回りは1年あたりに換算した値です。" },
+      { question: "手数料や税金も入れるべきですか？", answer: "実際の判断では含めるべきです。除外すると実際より良い結果に見えることがあります。" },
+    ],
+    disclaimer: "このツールは一般的な計算用です。公式な税金・手数料・投資判断は関係機関や専門家の基準をご確認ください。",
+  },
+  zh: {
+    introTitle: "ROI 用来衡量投入资金的回收效率",
+    intro: "ROI（投资报酬率）把投入成本与回收金额转成一个百分比，方便比较不同方案。广告投放、设备采购、课程投入、股票投资等，只要能估算成本和回收金额，都可以用它做第一层判断。",
+    formulaTitle: "核心公式",
+    formulas: [
+      { title: "ROI", body: "ROI = (总回收金额 - 投资成本) / 投资成本 × 100" },
+      { title: "净收益", body: "净收益 = 总回收金额 - 投资成本" },
+      { title: "回收倍数", body: "回收倍数 = 总回收金额 / 投资成本" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "在投资成本中输入最初投入的金额。",
+      "在总回收金额中输入投资带回的金额。",
+      "同时查看 ROI、净收益和回收倍数，再比较不同选择。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "ROI 为 0% 代表什么？", answer: "表示回收金额等于投资成本，尚未产生净赚或净亏。" },
+      { question: "ROI 和年化收益率一样吗？", answer: "不一样。ROI 是整个期间的结果，年化收益率会把期间换算成一年口径。" },
+      { question: "要把税费和手续费算进去吗？", answer: "实际判断时建议纳入。若忽略税费、手续费和现金流时间，结果可能过于乐观。" },
+    ],
+    disclaimer: "本工具用于一般计算。税费、手续费和投资相关正式数字请以相关机构或专业意见为准。",
+  },
+  fr: {
+    introTitle: "Le ROI mesure l'efficacité d'un investissement",
+    intro: "Le retour sur investissement compare le gain net au coût engagé, sous forme de pourcentage. Il aide à comparer une campagne, un achat d'équipement, une formation ou un placement lorsque le coût et le retour estimé sont connus.",
+    formulaTitle: "Formules clés",
+    formulas: [
+      { title: "ROI", body: "ROI = (retour total - coût d'investissement) / coût × 100" },
+      { title: "Gain net", body: "Gain net = retour total - coût d'investissement" },
+      { title: "Multiple", body: "Multiple de retour = retour total / coût d'investissement" },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Saisissez le coût initial de l'investissement.",
+      "Saisissez le montant total récupéré ou reçu.",
+      "Comparez le ROI avec le gain net et le multiple de retour.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Que signifie un ROI de 0 % ?", answer: "Le retour couvre exactement le coût : l'opération est au point mort avant frais ou impôts supplémentaires." },
+      { question: "Le ROI est-il un rendement annualisé ?", answer: "Non. Le ROI couvre toute la période. Un rendement annualisé ramène le résultat à une base d'un an." },
+      { question: "Faut-il inclure frais et impôts ?", answer: "Oui pour une décision réelle. Les exclure peut surestimer la performance obtenue." },
+    ],
+    disclaimer: "Cet outil sert au calcul général. Pour les chiffres officiels de taxe, frais ou investissement, vérifiez auprès de l'autorité ou du conseiller compétent.",
+  },
+  es: {
+    introTitle: "El ROI mide qué tan eficiente fue una inversión",
+    intro: "El retorno de inversión expresa la ganancia neta como porcentaje del costo. Sirve para comparar campañas, equipos, formación o inversiones cuando se conocen el desembolso inicial y el importe recuperado.",
+    formulaTitle: "Fórmulas clave",
+    formulas: [
+      { title: "ROI", body: "ROI = (retorno total - costo de inversión) / costo × 100" },
+      { title: "Ganancia neta", body: "Ganancia neta = retorno total - costo de inversión" },
+      { title: "Múltiplo", body: "Múltiplo de retorno = retorno total / costo de inversión" },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Introduce el monto pagado originalmente como costo de inversión.",
+      "Introduce el importe total recuperado o recibido.",
+      "Lee ROI, ganancia neta y múltiplo antes de comparar opciones.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Qué significa un ROI de 0 %?", answer: "Significa que el retorno iguala al costo; la inversión está en punto de equilibrio antes de otros gastos." },
+      { question: "¿ROI es lo mismo que rendimiento anual?", answer: "No. El ROI cubre todo el periodo; el rendimiento anual ajusta el resultado a un año." },
+      { question: "¿Debo incluir impuestos y comisiones?", answer: "Para decisiones reales, sí. Excluirlos puede hacer que el resultado parezca mejor de lo que fue." },
+    ],
+    disclaimer: "Esta herramienta es para cálculo general. Confirma cifras oficiales de impuestos, comisiones e inversión con la autoridad o asesor correspondiente.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <main class="mx-auto max-w-3xl px-4 py-10">
     <RoiCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

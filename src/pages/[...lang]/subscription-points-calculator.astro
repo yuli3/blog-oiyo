@@ -2,15 +2,16 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import SubscriptionPointsCalculator from "../../components/tools/SubscriptionPointsCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "청약가점 계산기 — 부양가족·통장기간·무주택 가점 자동 계산",
     description: "부양가족 수(최대 35점), 청약통장 가입 기간(최대 17점), 무주택 기간(최대 32점)을 입력하면 청약가점 만점 84점 중 내 점수를 자동으로 계산합니다.",
@@ -32,20 +33,229 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Calcula tu puntuación de lotería de vivienda coreana (청약가점): dependientes (máx. 35 pts), años de cuenta ahorro (máx. 17 pts), años sin propiedad (máx. 32 pts). Máx. 84 pts.",
   },
   zh: {
-    title: "청약加分計算機 — 韓國公寓抽籤積分",
-    description: "計算韓國公寓抽籤積分（청약가점）：扶養家屬數（最多35分）、청약帳戶年數（最多17分）、無住宅年數（最多32分），滿分84分。",
-  },
-  cn: {
-    title: "청약加分计算器 — 韩国公寓抽签积分",
-    description: "计算韩国公寓抽签积分（청약가점）：扶养家属数（最多35分）、청약账户年数（最多17分）、无住宅年数（最多32分），满分84分。",
+    title: "청약加分计算机 — 韩国公寓抽签积分",
+    description: "计算韩国公寓抽签积分（청약가점）：扶养家属数（最多35分）、청약帐户年数（最多17分）、无住宅年数（最多32分），满分84分。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+type SeoContent = {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+};
+
+const content: Record<ActiveLocale, SeoContent> = {
+  ko: {
+    introTitle: "청약가점은 부양가족, 통장기간, 무주택 기간을 합산합니다",
+    intro: "이 계산기는 한국 아파트 청약 가점제의 세 핵심 항목을 빠르게 입력해 총점 84점 중 현재 점수를 보여 줍니다. 현재 주택 보유 여부를 체크하면 무주택 기간 점수가 0점으로 처리되어, 가점 구조를 더 보수적으로 확인할 수 있습니다.",
+    formulaTitle: "점수 기준",
+    formulas: [
+      { title: "부양가족", body: "본인을 제외한 부양가족 수에 따라 5점 단위로 올라가며 최대 35점입니다." },
+      { title: "청약통장", body: "가입 기간이 길수록 점수가 오르며 15년 이상이면 최대 17점입니다." },
+      { title: "무주택 기간", body: "만 30세 이후 또는 혼인 후 무주택 기간을 기준으로 최대 32점입니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "부양가족 수를 입력합니다.",
+      "청약통장 가입 기간과 무주택 기간을 조정합니다.",
+      "현재 주택 보유 여부를 반영한 총점과 항목별 점수를 확인합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "현재 집을 보유하면 무주택 점수는 어떻게 되나요?", answer: "이 계산기에서는 현재 주택 보유 중을 체크하면 무주택 기간 점수를 0점으로 처리합니다. 실제 판정은 세대원 보유 이력과 모집공고 기준을 따라야 합니다." },
+      { question: "부양가족 0명도 점수가 있나요?", answer: "이 계산 로직은 0명일 때 5점부터 시작하는 청약가점 표를 사용합니다. 다만 실제 인정 여부는 가족관계와 주민등록 요건을 확인해야 합니다." },
+      { question: "당첨 커트라인도 알려주나요?", answer: "아닙니다. 커트라인은 지역, 주택형, 공급 물량, 경쟁률에 따라 매번 달라지므로 청약홈과 모집공고를 확인해야 합니다." },
+    ],
+    disclaimer: "이 도구는 일반적인 추정용입니다. 실제 청약 자격, 가점, 당첨 가능성은 모집공고와 관련 기관 또는 전문가에게 확인하세요.",
+  },
+  en: {
+    introTitle: "The Korean subscription score combines dependents, account years, and no-property years",
+    intro: "This calculator estimates your Korean apartment lottery score out of 84 points from the three core categories. If you mark that you currently own property, the no-property score is set to zero for a conservative first pass.",
+    formulaTitle: "Score basis",
+    formulas: [
+      { title: "Dependents", body: "Dependents excluding yourself increase the score in 5-point steps, up to 35." },
+      { title: "Account years", body: "Longer subscription savings account duration increases the score, up to 17 after 15 years." },
+      { title: "No-property years", body: "Years without property after age 30 or marriage contribute up to 32 points." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Enter the number of dependents.",
+      "Adjust subscription account years and no-property years.",
+      "Review total and category scores after applying current property ownership status.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "What if I currently own a home?", answer: "In this calculator, checking current ownership sets the no-property score to zero. Actual eligibility follows household ownership history and the official announcement." },
+      { question: "Do zero dependents still receive points?", answer: "This scoring logic starts at 5 points for zero dependents, matching the common subscription score table. Actual recognition still depends on family and residence rules." },
+      { question: "Does this show winning cutoff scores?", answer: "No. Cutoffs change by location, unit type, supply volume, and competition rate. Check the official notice and 청약홈 data." },
+    ],
+    disclaimer: "This tool is a general estimate. Confirm actual subscription eligibility, score, and winning probability with the official announcement or a qualified professional.",
+  },
+  ja: {
+    introTitle: "청약加点は扶養家族、通帳期間、無住宅期間の合計です",
+    intro: "この計算機は韓国マンション청약の3項目を入力し、84点満点中の現在点を概算します。現在住宅を保有している場合は無住宅期間を0点として保守的に確認できます。",
+    formulaTitle: "点数の基準",
+    formulas: [
+      { title: "扶養家族", body: "本人を除く扶養家族数に応じて5点ずつ増え、最大35点です。" },
+      { title: "通帳期間", body: "加入期間が長いほど点数が上がり、15年以上で最大17点です。" },
+      { title: "無住宅期間", body: "30歳以降または婚姻後の無住宅期間で最大32点です。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "扶養家族数を入力します。",
+      "通帳加入期間と無住宅期間を調整します。",
+      "現在住宅保有を反映した総点と項目別点数を確認します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "現在住宅を持っている場合は？", answer: "この計算機では無住宅点数を0点にします。実際は世帯の保有履歴と募集公告に従います。" },
+      { question: "扶養家族0名でも点数がありますか？", answer: "このロジックは0名を5点とする一般的な表を使います。実際の認定は家族関係と住民登録要件を確認してください。" },
+      { question: "当選ラインも分かりますか？", answer: "いいえ。地域、住宅型、供給量、競争率で毎回変わります。公式公告と청약홈を確認してください。" },
+    ],
+    disclaimer: "このツールは一般的な概算です。実際の資格、加点、当選可能性は募集公告または専門家に確認してください。",
+  },
+  zh: {
+    introTitle: "청약加分由扶养家属、账户年数和无房年数合计",
+    intro: "本工具用韩国公寓抽签积分的三项核心项目估算84分满分中的当前分数。若勾选当前持有住宅，则无住宅年数分数按0分处理，便于保守查看。",
+    formulaTitle: "分数依据",
+    formulas: [
+      { title: "扶养家属", body: "不含本人，按人数以5分为单位增加，最高35分。" },
+      { title: "认购账户年数", body: "账户期间越长分数越高，15年以上最高17分。" },
+      { title: "无住宅年数", body: "满30岁后或结婚后的无住宅期间，最高32分。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "输入扶养家属人数。",
+      "调整认购账户年数和无住宅年数。",
+      "查看反映当前房屋持有状态后的总分和分项分数。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "现在持有住宅怎么办？", answer: "本计算器会把无住宅分数设为0。实际资格应按家庭成员持有历史和募集公告判断。" },
+      { question: "扶养家属0人也有分数吗？", answer: "本逻辑采用0人5分起算的常见表格。实际认定仍需确认亲属关系和住民登记条件。" },
+      { question: "会显示中签分数线吗？", answer: "不会。分数线会随地区、户型、供应量和竞争率变化，应查看官方公告和청약홈数据。" },
+    ],
+    disclaimer: "本工具仅作一般估算。实际认购资格、积分和中签可能性请以募集公告、相关机构或专业人士意见为准。",
+  },
+  fr: {
+    introTitle: "Le score 청약 additionne personnes à charge, compte et années sans propriété",
+    intro: "Ce calculateur estime le score coréen de loterie logement sur 84 points. Si vous indiquez posséder un bien, le score sans propriété est mis à zéro pour une lecture prudente.",
+    formulaTitle: "Bases du score",
+    formulas: [
+      { title: "Personnes à charge", body: "Hors vous-même, le score augmente par paliers de 5 points, jusqu'à 35." },
+      { title: "Compte de souscription", body: "Plus la durée est longue, plus le score augmente, jusqu'à 17 après 15 ans." },
+      { title: "Années sans propriété", body: "Depuis 30 ans ou le mariage, jusqu'à 32 points." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Saisissez le nombre de personnes à charge.",
+      "Réglez années de compte et années sans propriété.",
+      "Vérifiez total et détail après statut de propriété actuel.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Et si je possède un logement ?", answer: "L'outil met alors la catégorie sans propriété à zéro. L'éligibilité réelle dépend de l'historique du foyer et de l'annonce officielle." },
+      { question: "Zéro personne à charge donne-t-il des points ?", answer: "Cette logique démarre à 5 points pour zéro, selon le tableau courant. La reconnaissance dépend toutefois des règles de résidence et famille." },
+      { question: "L'outil montre-t-il les scores gagnants ?", answer: "Non. Ils varient selon région, type, volume et concurrence. Consultez l'annonce officielle et 청약홈." },
+    ],
+    disclaimer: "Cet outil fournit une estimation générale. Confirmez éligibilité, score et chances avec l'annonce officielle ou un professionnel.",
+  },
+  es: {
+    introTitle: "El puntaje 청약 suma dependientes, cuenta y años sin propiedad",
+    intro: "Esta calculadora estima el puntaje coreano de lotería de vivienda sobre 84 puntos. Si marcas que tienes vivienda, la categoría sin propiedad queda en cero para una lectura conservadora.",
+    formulaTitle: "Bases de puntuación",
+    formulas: [
+      { title: "Dependientes", body: "Excluyéndote, sube en pasos de 5 puntos hasta 35." },
+      { title: "Cuenta de suscripción", body: "Más años de cuenta elevan el puntaje, hasta 17 tras 15 años." },
+      { title: "Años sin propiedad", body: "Desde los 30 años o matrimonio, hasta 32 puntos." },
+    ],
+    howToTitle: "Cómo usarla",
+    steps: [
+      "Introduce número de dependientes.",
+      "Ajusta años de cuenta y años sin propiedad.",
+      "Revisa total y desglose tras aplicar estado actual de propiedad.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Qué pasa si tengo vivienda?", answer: "La herramienta pone la puntuación sin propiedad en cero. La elegibilidad real depende del historial del hogar y del anuncio oficial." },
+      { question: "¿Cero dependientes da puntos?", answer: "Esta lógica empieza en 5 puntos para cero, según la tabla común. El reconocimiento depende de reglas de familia y residencia." },
+      { question: "¿Muestra cortes de adjudicación?", answer: "No. Cambian por región, tipo, volumen y competencia. Consulta el anuncio oficial y 청약홈." },
+    ],
+    disclaimer: "Esta herramienta ofrece una estimación general. Confirma elegibilidad, puntuación y probabilidad con el anuncio oficial o un profesional.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <SubscriptionPointsCalculator client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

@@ -2,15 +2,16 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PomodoroTimer from "../../components/tools/PomodoroTimer";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "뽀모도로 타이머 — 집중력 향상 시간 관리 도구",
     description: "25분 집중 + 5분 휴식 사이클로 생산성을 높이는 뽀모도로 타이머. SVG 원형 프로그레스, 소리 알림, 오늘 통계 지원.",
@@ -35,17 +36,226 @@ const meta: Record<Locale, { title: string; description: string }> = {
     title: "番茄钟计时器 — 专注力与生产力工具",
     description: "用番茄工作法提升生产力。25分钟专注+5分钟休息循环，带可视化进度环、声音提醒和今日统计。",
   },
-  cn: {
-    title: "番茄鐘計時器 — 專注力與生產力工具",
-    description: "用番茄工作法提升生產力。25分鐘專注+5分鐘休息循環，帶可視化進度環、聲音提醒和今日統計。",
-  },
 };
 
 const m = meta[locale] ?? meta.en;
+
+type PageContent = {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+};
+
+const content: Record<ActiveLocale, PageContent> = {
+  ko: {
+    introTitle: "뽀모도로는 집중과 회복을 한 세트로 다루는 시간 관리법입니다",
+    intro: "긴 업무를 계속 밀어붙이면 집중력이 떨어지고 시작 장벽도 커집니다. 이 타이머는 기본 25분 집중, 5분 짧은 휴식, 4회 후 긴 휴식 흐름을 시각적 진행 링과 알림음, 오늘의 집중 통계로 관리해 학습과 작업을 작은 단위로 나누게 돕습니다.",
+    formulaTitle: "뽀모도로 개념",
+    formulas: [
+      { title: "집중 세션", body: "방해를 줄이고 하나의 작업에 몰입하는 시간입니다. 기본값은 25분입니다." },
+      { title: "짧은 휴식", body: "세션 사이의 회복 시간입니다. 기본 5분으로, 다음 집중을 준비하는 역할을 합니다." },
+      { title: "긴 휴식", body: "여러 집중 세션 후 누적 피로를 낮추기 위한 긴 회복 구간입니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "집중, 짧은 휴식, 긴 휴식 시간을 필요에 맞게 조정합니다.",
+      "집중 모드에서 시작하고 한 세션 동안 한 가지 작업만 진행합니다.",
+      "알림이 울리면 휴식하고, 완료 세션과 오늘 집중 시간을 확인합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "꼭 25분을 써야 하나요?", answer: "아닙니다. 25분은 기본값일 뿐입니다. 깊은 작업은 더 길게, 시작이 어려운 작업은 더 짧게 조정할 수 있습니다." },
+      { question: "긴 휴식은 언제 나오나요?", answer: "컴포넌트는 집중 세션 4회 후 긴 휴식으로 전환되는 사이클을 기준으로 설계되어 있습니다." },
+      { question: "오늘 통계는 무엇을 의미하나요?", answer: "완료한 집중 세션 수와 누적 집중 시간을 보여주어 하루 작업량을 대략 확인하게 돕습니다." },
+    ],
+    disclaimer: "이 도구는 생산성 보조용이며 수면, 번아웃, ADHD 등 건강·의학적 문제를 진단하거나 치료하지 않습니다.",
+  },
+  en: {
+    introTitle: "Pomodoro treats focus and recovery as one work cycle",
+    intro: "Pushing through long work sessions can reduce attention and make starting harder. This timer organizes work into focus sessions, short breaks, and longer recovery after repeated sessions, with a visual progress ring, sound alerts, and daily focus stats.",
+    formulaTitle: "Pomodoro concepts",
+    formulas: [
+      { title: "Focus session", body: "A protected block for one task. The default is 25 minutes, but it can be adjusted." },
+      { title: "Short break", body: "A brief recovery period between sessions, usually enough to reset attention without losing momentum." },
+      { title: "Long break", body: "A longer recovery block after several focus sessions to reduce accumulated fatigue." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Adjust focus, short-break, and long-break durations if the defaults do not fit.",
+      "Start in focus mode and work on one task until the alert.",
+      "Take the prompted break, then review completed sessions and today's focus time.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Do I have to use 25 minutes?", answer: "No. It is only the default. Deep work may need longer blocks, while difficult starts may benefit from shorter blocks." },
+      { question: "When does the long break happen?", answer: "The component is designed around a cycle where four focus sessions lead into a long break." },
+      { question: "What do the daily stats mean?", answer: "They show completed focus sessions and accumulated focus minutes as a lightweight view of today's effort." },
+    ],
+    disclaimer: "This tool supports productivity habits and does not diagnose or treat sleep, burnout, ADHD, or other health conditions.",
+  },
+  ja: {
+    introTitle: "ポモドーロは集中と回復を一つのサイクルで扱います",
+    intro: "長時間の作業を続けると集中力が下がり、始める負担も大きくなります。このタイマーは集中、短い休憩、数回後の長い休憩を、進捗リング、通知音、今日の集中統計で管理します。",
+    formulaTitle: "ポモドーロの考え方",
+    formulas: [
+      { title: "集中セッション", body: "一つの作業に取り組む時間です。初期値は25分ですが調整できます。" },
+      { title: "短い休憩", body: "セッション間の回復時間です。勢いを保ちながら注意を戻すための短い区切りです。" },
+      { title: "長い休憩", body: "複数の集中後に疲労を下げるための長めの回復時間です。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "集中、短い休憩、長い休憩の時間を必要に応じて調整します。",
+      "集中モードで開始し、通知まで一つの作業に絞ります。",
+      "通知後は休憩し、完了セッション数と今日の集中時間を確認します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "必ず25分にする必要がありますか？", answer: "いいえ。25分は初期値です。深い作業は長めに、始めにくい作業は短めにしても構いません。" },
+      { question: "長い休憩はいつ入りますか？", answer: "コンポーネントは集中4回の後に長い休憩へ進むサイクルを基準にしています。" },
+      { question: "今日の統計は何を示しますか？", answer: "完了した集中セッションと累計集中時間を表示し、その日の作業量を大まかに把握できます。" },
+    ],
+    disclaimer: "このツールは生産性習慣の補助であり、睡眠、燃え尽き、ADHDなどの健康問題を診断・治療するものではありません。",
+  },
+  zh: {
+    introTitle: "番茄工作法把专注和恢复放在同一个循环中",
+    intro: "长时间硬撑容易降低注意力，也会增加开始任务的阻力。这个计时器用专注、短休息和多轮后的长休息组织工作，并提供进度环、声音提醒和今日专注统计。",
+    formulaTitle: "番茄钟概念",
+    formulas: [
+      { title: "专注时段", body: "为一个任务保留的工作时间。默认 25 分钟，也可以调整。" },
+      { title: "短休息", body: "两个专注时段之间的短恢复，用来重置注意力但不打断节奏。" },
+      { title: "长休息", body: "多次专注后进行较长恢复，帮助降低累积疲劳。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "根据需要调整专注、短休息和长休息时长。",
+      "从专注模式开始，在提醒前只处理一个任务。",
+      "提醒后休息，并查看完成次数和今日专注时间。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "必须使用 25 分钟吗？", answer: "不必。25 分钟只是默认值。深度工作可更长，难以开始的任务可更短。" },
+      { question: "什么时候进入长休息？", answer: "组件按完成 4 次专注后进入长休息的循环设计。" },
+      { question: "今日统计表示什么？", answer: "它显示已完成的专注次数和累计专注分钟数，帮助快速了解当天投入。" },
+    ],
+    disclaimer: "本工具用于辅助生产力习惯，不能诊断或治疗睡眠、倦怠、ADHD 等健康问题。",
+  },
+  fr: {
+    introTitle: "Pomodoro associe concentration et récupération dans un même cycle",
+    intro: "Travailler trop longtemps sans pause peut réduire l'attention et rendre le démarrage plus difficile. Ce minuteur organise concentration, pauses courtes et pause longue après plusieurs sessions, avec anneau de progression, alertes sonores et statistiques du jour.",
+    formulaTitle: "Notions Pomodoro",
+    formulas: [
+      { title: "Session de concentration", body: "Bloc protégé pour une seule tâche. La valeur par défaut est 25 minutes, ajustable." },
+      { title: "Pause courte", body: "Court temps de récupération entre deux sessions pour retrouver l'attention sans perdre l'élan." },
+      { title: "Pause longue", body: "Récupération plus longue après plusieurs sessions afin de limiter la fatigue cumulée." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Ajustez les durées de concentration, pause courte et pause longue si besoin.",
+      "Démarrez en mode concentration et gardez une seule tâche jusqu'à l'alerte.",
+      "Prenez la pause indiquée, puis consultez les sessions terminées et le temps du jour.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Dois-je utiliser 25 minutes ?", answer: "Non. C'est seulement la valeur par défaut. Un travail profond peut demander plus long, un démarrage difficile plus court." },
+      { question: "Quand arrive la pause longue ?", answer: "Le composant suit un cycle où quatre sessions de concentration mènent à une pause longue." },
+      { question: "Que signifient les statistiques du jour ?", answer: "Elles indiquent les sessions terminées et les minutes de concentration cumulées pour la journée." },
+    ],
+    disclaimer: "Cet outil soutient les habitudes de productivité et ne diagnostique ni ne traite sommeil, épuisement, TDAH ou autre condition de santé.",
+  },
+  es: {
+    introTitle: "Pomodoro trata enfoque y recuperación como un mismo ciclo",
+    intro: "Trabajar durante demasiado tiempo seguido puede reducir la atención y hacer más difícil empezar. Este temporizador organiza sesiones de enfoque, pausas cortas y una pausa larga tras varias rondas, con anillo de progreso, alertas sonoras y estadísticas diarias.",
+    formulaTitle: "Conceptos Pomodoro",
+    formulas: [
+      { title: "Sesión de enfoque", body: "Bloque protegido para una sola tarea. El valor predeterminado es 25 minutos, pero puede ajustarse." },
+      { title: "Pausa corta", body: "Recuperación breve entre sesiones para resetear la atención sin perder impulso." },
+      { title: "Pausa larga", body: "Descanso más largo después de varias sesiones para reducir la fatiga acumulada." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Ajusta duración de enfoque, pausa corta y pausa larga si lo necesitas.",
+      "Empieza en modo enfoque y trabaja en una sola tarea hasta la alerta.",
+      "Toma la pausa indicada y revisa sesiones completadas y tiempo de enfoque del día.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Tengo que usar 25 minutos?", answer: "No. Es solo el valor predeterminado. El trabajo profundo puede requerir más tiempo y empezar una tarea difícil puede requerir menos." },
+      { question: "¿Cuándo aparece la pausa larga?", answer: "El componente sigue un ciclo en el que cuatro sesiones de enfoque llevan a una pausa larga." },
+      { question: "¿Qué significan las estadísticas diarias?", answer: "Muestran sesiones completadas y minutos acumulados de enfoque como vista ligera del esfuerzo del día." },
+    ],
+    disclaimer: "Esta herramienta apoya hábitos de productividad y no diagnostica ni trata sueño, agotamiento, TDAH u otras condiciones de salud.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <PomodoroTimer client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

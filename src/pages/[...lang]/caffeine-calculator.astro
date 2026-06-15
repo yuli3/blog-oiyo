@@ -2,7 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import CaffeineCalculatorComp from "../../components/tools/CaffeineCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -11,9 +12,9 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "카페인 계산기 — 오늘 마신 카페인 안전한가요?",
     description: "커피·에너지드링크·차 등 음료별 카페인 함량을 계산하고 하루 권장 섭취량과 비교해보세요.",
@@ -35,20 +36,203 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Calcula tu ingesta diaria de cafeína del café, bebidas energéticas, té y más.",
   },
   zh: {
-    title: "咖啡因攝取量計算機",
-    description: "計算咖啡、能量飲料、茶等飲品的咖啡因含量，並與每日建議攝取量比較。",
-  },
-  cn: {
-    title: "咖啡因摄入量计算器",
-    description: "计算咖啡、能量饮料、茶等饮品的咖啡因含量，并与每日建议摄入量比较。",
+    title: "咖啡因摄取量计算机",
+    description: "计算咖啡、能量饮料、茶等饮品的咖啡因含量，并与每日建议摄取量比较。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "카페인은 섭취량보다 취침 시 남아 있는 양이 수면에 더 중요할 수 있습니다",
+    intro: "이 계산기는 섭취한 카페인 양, 마신 시각, 목표 취침 시각을 바탕으로 취침 때 남아 있을 카페인을 추정합니다. 평균 반감기 5.7시간을 사용하며, 50mg 이상이 남으면 숙면을 방해할 수 있는 상태로 표시합니다.",
+    formulaTitle: "계산 기준",
+    formulas: [
+      { title: "반감기", body: "평균 카페인 반감기 5.7시간을 사용합니다." },
+      { title: "잔류량", body: "잔류 카페인 = 섭취량×0.5^(경과시간/5.7)" },
+      { title: "취침 기준", body: "취침 시 약 50mg 초과 잔류를 각성 가능 상태로 봅니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: ["마신 카페인 양을 mg 단위로 입력합니다.", "섭취 시각과 목표 취침 시각을 선택합니다.", "취침 시 잔류 카페인을 보고 오후 카페인 마감 시간을 조정합니다."],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "카페인 반감기는 모두 같나요?", answer: "아닙니다. 유전, 간 대사, 임신, 약물, 흡연 여부에 따라 크게 달라질 수 있습니다." },
+      { question: "50mg 미만이면 무조건 숙면할 수 있나요?", answer: "보장되지는 않습니다. 카페인 민감도, 스트레스, 빛 노출, 수면 습관도 영향을 줍니다." },
+      { question: "에너지드링크도 같은 방식으로 보나요?", answer: "카페인 mg만 알면 같은 방식으로 계산할 수 있지만, 당분과 다른 성분도 각성감에 영향을 줄 수 있습니다." },
+    ],
+    disclaimer: "결과는 일반적인 추정치이며 수면 문제나 카페인 민감성에 대한 전문적인 의학적 조언을 대신하지 않습니다.",
+  },
+  en: {
+    introTitle: "For sleep, the caffeine left at bedtime can matter more than the cup count",
+    intro: "This calculator estimates how much caffeine may remain at your target bedtime based on intake amount and time. It uses an average 5.7-hour caffeine half-life and flags bedtime residue above about 50 mg as more likely to interfere with sleep.",
+    formulaTitle: "Calculation basics",
+    formulas: [
+      { title: "Half-life", body: "Uses an average caffeine half-life of 5.7 hours." },
+      { title: "Remaining amount", body: "remaining = dose×0.5^(elapsed hours/5.7)" },
+      { title: "Bedtime threshold", body: "About 50 mg remaining is treated as a possible alertness level." },
+    ],
+    howToTitle: "How to use",
+    steps: ["Enter the caffeine amount in milligrams.", "Choose intake time and target bedtime.", "Use the bedtime residue to adjust your personal caffeine cutoff."],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Is caffeine half-life the same for everyone?", answer: "No. Genetics, liver metabolism, pregnancy, medications, and smoking status can change caffeine clearance." },
+      { question: "Does under 50 mg guarantee good sleep?", answer: "No. Sensitivity, stress, light exposure, and sleep habits also affect sleep quality." },
+      { question: "Can I use this for energy drinks?", answer: "Yes if you know the caffeine amount in mg, though sugar and other ingredients may also affect alertness." },
+    ],
+    disclaimer: "Results are general estimates and are not a substitute for professional medical advice about sleep problems or caffeine sensitivity.",
+  },
+  ja: {
+    introTitle: "睡眠では杯数より、就寝時に残っているカフェイン量が重要なことがあります",
+    intro: "この計算機はカフェイン量、摂取時刻、目標就寝時刻から、就寝時に体内に残る量を推定します。平均半減期5.7時間を使い、約50mgを超える残留を睡眠を妨げる可能性がある状態として表示します。",
+    formulaTitle: "計算の基準",
+    formulas: [
+      { title: "半減期", body: "平均カフェイン半減期5.7時間を使用します。" },
+      { title: "残留量", body: "残留量 = 摂取量×0.5^(経過時間/5.7)" },
+      { title: "就寝目安", body: "就寝時に約50mgを超えると覚醒が残る可能性があります。" },
+    ],
+    howToTitle: "使い方",
+    steps: ["摂取したカフェイン量をmgで入力します。", "摂取時刻と目標就寝時刻を選びます。", "就寝時の残留量を見て、午後のカフェイン終了時刻を調整します。"],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "半減期は誰でも同じですか？", answer: "いいえ。遺伝、肝代謝、妊娠、薬、喫煙状況で大きく変わります。" },
+      { question: "50mg未満なら必ず眠れますか？", answer: "保証はありません。敏感さ、ストレス、光、睡眠習慣も睡眠に影響します。" },
+      { question: "エナジードリンクにも使えますか？", answer: "カフェイン量が分かれば計算できますが、糖分や他成分も覚醒感に影響します。" },
+    ],
+    disclaimer: "結果は一般的な推定値であり、睡眠問題やカフェイン感受性に関する医療専門家の助言の代わりにはなりません。",
+  },
+  zh: {
+    introTitle: "影响睡眠的可能不是喝了几杯，而是睡前还剩多少咖啡因",
+    intro: "这个计算器根据摄取量、饮用时间与目标就寝时间，推估睡前体内可能残留的咖啡因。它使用平均 5.7 小时半衰期，并把睡前残留约 50mg 以上视为较可能干扰睡眠的状态。",
+    formulaTitle: "计算基准",
+    formulas: [
+      { title: "半衰期", body: "使用平均咖啡因半衰期 5.7 小时。" },
+      { title: "残留量", body: "残留 = 摄取量×0.5^(经过小时/5.7)" },
+      { title: "睡前门槛", body: "睡前约 50mg 以上残留视为可能仍有清醒感。" },
+    ],
+    howToTitle: "使用方法",
+    steps: ["输入咖啡因毫克数。", "选择摄取时间与目标就寝时间。", "根据睡前残留量调整自己的咖啡因截止时间。"],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "每个人的咖啡因半衰期都一样吗？", answer: "不是。基因、肝脏代谢、怀孕、药物与吸烟状态都可能改变代谢速度。" },
+      { question: "低于 50mg 就一定睡得好吗？", answer: "不保证。敏感度、压力、光线与睡眠习惯也会影响睡眠品质。" },
+      { question: "能用在能量饮料吗？", answer: "可以，只要知道咖啡因 mg 数；但糖分与其他成分也可能影响清醒感。" },
+    ],
+    disclaimer: "结果仅为一般估算，不能替代针对睡眠问题或咖啡因敏感性的专业医疗建议。",
+  },
+  fr: {
+    introTitle: "Pour le sommeil, la caféine restante au coucher compte souvent plus que le nombre de tasses",
+    intro: "Ce calculateur estime la caféine restante à l'heure du coucher selon la dose et l'heure de prise. Il utilise une demi-vie moyenne de 5,7 heures et signale un résidu supérieur à environ 50 mg comme pouvant gêner le sommeil.",
+    formulaTitle: "Bases de calcul",
+    formulas: [
+      { title: "Demi-vie", body: "Demi-vie moyenne de la caféine : 5,7 heures." },
+      { title: "Quantité restante", body: "reste = dose×0,5^(heures écoulées/5,7)" },
+      { title: "Seuil coucher", body: "Environ 50 mg restants peuvent maintenir un état d'alerte." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: ["Saisissez la dose de caféine en mg.", "Choisissez l'heure de prise et l'heure de coucher cible.", "Ajustez votre heure limite de caféine selon le résidu au coucher."],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "La demi-vie est-elle la même pour tous ?", answer: "Non. Génétique, métabolisme hépatique, grossesse, médicaments et tabac peuvent la modifier." },
+      { question: "Moins de 50 mg garantit-il un bon sommeil ?", answer: "Non. Sensibilité, stress, lumière et habitudes de sommeil comptent aussi." },
+      { question: "Puis-je l'utiliser pour les boissons énergisantes ?", answer: "Oui si la quantité de caféine en mg est connue, même si sucre et autres ingrédients jouent aussi." },
+    ],
+    disclaimer: "Les résultats sont des estimations générales et ne remplacent pas un avis médical sur le sommeil ou la sensibilité à la caféine.",
+  },
+  es: {
+    introTitle: "Para dormir, importa más la cafeína restante que el número de tazas",
+    intro: "Esta calculadora estima cuánta cafeína puede quedar a la hora de dormir según cantidad y horario. Usa una vida media promedio de 5.7 horas y marca más de unos 50 mg restantes como posible nivel de alerta.",
+    formulaTitle: "Bases del cálculo",
+    formulas: [
+      { title: "Vida media", body: "Usa una vida media promedio de cafeína de 5.7 horas." },
+      { title: "Cantidad restante", body: "restante = dosis×0.5^(horas transcurridas/5.7)" },
+      { title: "Umbral nocturno", body: "Unos 50 mg restantes pueden mantener alerta." },
+    ],
+    howToTitle: "Cómo usarla",
+    steps: ["Introduce la cantidad de cafeína en mg.", "Elige hora de consumo y hora objetivo de dormir.", "Usa la cafeína restante para ajustar tu hora límite personal."],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿La vida media es igual para todos?", answer: "No. Genética, metabolismo hepático, embarazo, medicamentos y tabaquismo pueden cambiarla." },
+      { question: "¿Menos de 50 mg garantiza dormir bien?", answer: "No. Sensibilidad, estrés, luz y hábitos de sueño también influyen." },
+      { question: "¿Sirve para bebidas energéticas?", answer: "Sí si conoces la cafeína en mg, aunque azúcar y otros ingredientes también pueden estimular." },
+    ],
+    disclaimer: "Los resultados son estimaciones generales y no sustituyen el consejo médico sobre problemas de sueño o sensibilidad a la cafeína.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <CaffeineCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

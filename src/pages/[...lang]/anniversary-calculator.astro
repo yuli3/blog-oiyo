@@ -2,15 +2,16 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import AnniversaryCalculator from "../../components/tools/AnniversaryCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "기념일·디데이 계산기 — 100일·1주년·D-Day 카운트",
     description: "연인·결혼·입사 등 중요한 날부터 지난 일수(D+N)를 계산하고, 100일·200일·1000일 등 주요 기념일 날짜를 한눈에 확인합니다.",
@@ -32,20 +33,227 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Calcula los días transcurridos desde una fecha especial o los días restantes hasta un objetivo. Muestra hitos clave como 100, 365 y 1000 días.",
   },
   zh: {
-    title: "紀念日・倒數計算機 — 天數與重要里程碑",
-    description: "計算特別日期起的經過天數（D+N），或距離目標日期的倒數天數，並自動顯示100天、週年、1000天等重要里程碑。",
-  },
-  cn: {
-    title: "纪念日·倒计时计算器 — 天数与重要纪念日",
-    description: "计算特别日期起的经过天数（D+N），或距离目标日期的倒计时天数，自动显示100天、周年、1000天等重要纪念日。",
+    title: "纪念日・倒数计算机 — 天数与重要里程碑",
+    description: "计算特别日期起的经过天数（D+N），或距离目标日期的倒数天数，并自动显示100天、周年、1000天等重要里程碑。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "기념일 계산은 기준일과 포함 방식이 핵심입니다",
+    intro: "100일, 1주년, D-Day처럼 같은 날짜 계산도 기준일을 포함하는지에 따라 결과가 달라질 수 있습니다. 이 계산기는 시작일 또는 목표일을 기준으로 지난 일수와 남은 일수, 자주 찾는 기념일 날짜를 한 번에 확인하도록 돕습니다.",
+    formulaTitle: "계산 기준",
+    formulas: [
+      { title: "D+N", body: "기준일 이후 얼마나 많은 날이 지났는지 계산합니다." },
+      { title: "D-Day", body: "오늘부터 목표일까지 남은 일수를 계산합니다." },
+      { title: "기념일", body: "100일, 200일, 1주년처럼 기준일에 일정 일수를 더합니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "연애, 결혼, 입사 등 기준이 되는 날짜를 입력합니다.",
+      "지난 일수 또는 목표일까지 남은 일수를 확인합니다.",
+      "100일, 365일, 1000일 같은 주요 기념일 날짜를 일정에 옮겨 둡니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "시작일을 1일째로 보나요?", answer: "일반적인 기념일 문화에서는 만난 날을 1일째로 세는 경우가 많습니다. 공식 일정이나 계약일 계산은 별도 기준을 확인하세요." },
+      { question: "윤년은 반영되나요?", answer: "날짜 객체를 기준으로 계산하므로 2월 29일이 포함된 기간도 실제 달력 일수에 맞춰 처리됩니다." },
+      { question: "1주년은 365일과 항상 같나요?", answer: "기념일로서의 1주년은 다음 해 같은 월일입니다. 기간 중 윤년이 있으면 단순 365일째와 다를 수 있습니다." },
+    ],
+    disclaimer: "이 도구는 개인 일정 관리를 위한 참고 계산기입니다. 법적 기한, 계약 기간, 공식 제출일은 해당 기관의 기준을 확인하세요.",
+  },
+  en: {
+    introTitle: "Anniversary counting depends on the start date and counting rule",
+    intro: "A 100-day celebration, first anniversary, and D-Day countdown can use different counting conventions. This calculator helps you check elapsed days, remaining days, and common milestone dates from one chosen event date.",
+    formulaTitle: "Counting concepts",
+    formulas: [
+      { title: "D+ count", body: "Shows how many days have passed since the base date." },
+      { title: "D-Day", body: "Shows how many days remain until a target date." },
+      { title: "Milestones", body: "Adds fixed day counts such as 100, 200, 365, or 1000 days to the base date." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Enter the date that marks the event or relationship start.",
+      "Check the elapsed-day count or countdown to a future target.",
+      "Save key milestone dates such as 100 days, one year, or 1000 days to your calendar.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Is the start date counted as day one?", answer: "For personal anniversaries, many people count the first day as day one. Legal and administrative deadlines may use a different convention." },
+      { question: "Does the calculator handle leap years?", answer: "Yes. It works from real calendar dates, so periods that include February 29 follow the actual calendar day count." },
+      { question: "Is a first anniversary always the same as 365 days?", answer: "A first anniversary is usually the same month and day in the next year. If a leap day is involved, it may not match a simple 365-day milestone." },
+    ],
+    disclaimer: "This calculator is for personal planning. Confirm legal deadlines, contract periods, and official due dates with the relevant authority.",
+  },
+  ja: {
+    introTitle: "記念日の計算は基準日と数え方で変わります",
+    intro: "100日記念、1周年、Dデイのカウントは、基準日を含めるかどうかで結果が変わることがあります。この計算機では、指定した日からの経過日数、目標日までの日数、よく使う節目の日付をまとめて確認できます。",
+    formulaTitle: "計算の考え方",
+    formulas: [
+      { title: "D+カウント", body: "基準日から何日経過したかを表示します。" },
+      { title: "Dデイ", body: "今日から目標日まで残り何日かを表示します。" },
+      { title: "節目の日", body: "100日、200日、365日、1000日などを基準日に加算します。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "記念日や開始日となる日付を入力します。",
+      "経過日数または目標日までの残り日数を確認します。",
+      "100日、1周年、1000日などの節目をカレンダーに控えます。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "開始日は1日目として数えますか？", answer: "個人的な記念日では開始日を1日目とすることがよくあります。法的期限や公的な期間計算では別の基準を確認してください。" },
+      { question: "うるう年は反映されますか？", answer: "実際のカレンダー日付をもとに計算するため、2月29日を含む期間も実日数に沿って扱います。" },
+      { question: "1周年は必ず365日目ですか？", answer: "1周年は通常、翌年の同じ月日です。うるう日が関係する場合、単純な365日目とずれることがあります。" },
+    ],
+    disclaimer: "この計算機は個人の予定管理向けです。法的期限、契約期間、公的な提出日は該当機関の基準をご確認ください。",
+  },
+  fr: {
+    introTitle: "Le calcul d'un anniversaire dépend de la date de départ et de la convention",
+    intro: "Une célébration des 100 jours, un premier anniversaire et un compte à rebours ne suivent pas toujours la même convention. Cet outil aide à vérifier les jours écoulés, les jours restants et les jalons courants depuis une date choisie.",
+    formulaTitle: "Repères de calcul",
+    formulas: [
+      { title: "D+N", body: "Indique le nombre de jours écoulés depuis la date de départ." },
+      { title: "Compte à rebours", body: "Indique le nombre de jours restants avant une date cible." },
+      { title: "Jalons", body: "Ajoute 100, 200, 365 ou 1000 jours à la date de départ." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Saisissez la date de l'événement ou du début de la relation.",
+      "Consultez le nombre de jours écoulés ou le compte à rebours vers une date cible.",
+      "Notez les jalons importants comme 100 jours, un an ou 1000 jours.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "La date de départ compte-t-elle comme premier jour ?", answer: "Pour les anniversaires personnels, c'est souvent le cas. Les délais légaux ou administratifs peuvent utiliser une autre règle." },
+      { question: "Les années bissextiles sont-elles prises en compte ?", answer: "Oui. Le calcul utilise les dates réelles du calendrier, y compris les périodes contenant le 29 février." },
+      { question: "Un premier anniversaire équivaut-il toujours à 365 jours ?", answer: "Un anniversaire correspond généralement au même jour et mois l'année suivante. Avec une année bissextile, cela peut différer d'un simple jalon de 365 jours." },
+    ],
+    disclaimer: "Cet outil sert à l'organisation personnelle. Vérifiez les délais légaux, contractuels ou officiels auprès de l'autorité compétente.",
+  },
+  es: {
+    introTitle: "El cálculo de aniversarios depende de la fecha base y la convención",
+    intro: "Una celebración de 100 días, un primer aniversario y una cuenta atrás pueden usar reglas distintas. Esta calculadora permite revisar días transcurridos, días restantes e hitos habituales desde una fecha elegida.",
+    formulaTitle: "Conceptos de cálculo",
+    formulas: [
+      { title: "D+N", body: "Muestra cuántos días han pasado desde la fecha base." },
+      { title: "D-Day", body: "Muestra cuántos días faltan para una fecha objetivo." },
+      { title: "Hitos", body: "Suma 100, 200, 365 o 1000 días a la fecha base." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Introduce la fecha del evento o del inicio de la relación.",
+      "Consulta los días transcurridos o los días restantes hasta un objetivo.",
+      "Guarda en tu calendario hitos como 100 días, un año o 1000 días.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿La fecha inicial cuenta como día uno?", answer: "En aniversarios personales suele contarse así. Los plazos legales o administrativos pueden seguir otra convención." },
+      { question: "¿Tiene en cuenta años bisiestos?", answer: "Sí. El cálculo usa fechas reales del calendario, por lo que incluye correctamente el 29 de febrero." },
+      { question: "¿Un primer aniversario siempre son 365 días?", answer: "Normalmente es el mismo día y mes del año siguiente. Si interviene un año bisiesto, puede no coincidir con el día 365 exacto." },
+    ],
+    disclaimer: "Esta calculadora es para planificación personal. Confirma plazos legales, contratos y fechas oficiales con la autoridad correspondiente.",
+  },
+  zh: {
+    introTitle: "纪念日计算取决于起始日期和计数规则",
+    intro: "100天纪念日、一周年和倒数日可能采用不同的计数方式，尤其是起始日是否算作第一天。这个计算器可以根据一个基准日期查看已过去天数、剩余天数和常见里程碑日期。",
+    formulaTitle: "计算概念",
+    formulas: [
+      { title: "D+天数", body: "显示从基准日期开始已经过去多少天。" },
+      { title: "倒数日", body: "显示从今天到目标日期还剩多少天。" },
+      { title: "里程碑", body: "把100天、200天、365天或1000天加到基准日期上。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "输入事件、恋爱、结婚或入职的基准日期。",
+      "查看已过去天数，或查看到目标日期的剩余天数。",
+      "把100天、一周年、1000天等重要日期记录到日历中。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "起始日算第一天吗？", answer: "个人纪念日通常会把开始当天算作第一天。法律、合同或行政期限可能采用不同规则。" },
+      { question: "会处理闰年吗？", answer: "会。计算基于真实日历日期，因此包含2月29日的期间也会按实际天数处理。" },
+      { question: "一周年一定等于365天吗？", answer: "一周年通常是下一年的同月同日。如果期间涉及闰日，可能和单纯的第365天不同。" },
+    ],
+    disclaimer: "本工具用于个人日程参考。法律期限、合同期间和正式提交日期请以相关机构标准为准。",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <AnniversaryCalculator client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

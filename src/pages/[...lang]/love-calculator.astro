@@ -2,15 +2,16 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import LoveCalculator from "../../components/tools/LoveCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "러브 계산기 — 이름/MBTI 궁합 무료 테스트",
     description: "이름 또는 MBTI로 두 사람의 연애 궁합을 계산해보세요. 재미로 보는 사랑 지수 계산기.",
@@ -35,17 +36,224 @@ const meta: Record<Locale, { title: string; description: string }> = {
     title: "爱情计算器 — 名字和MBTI契合度测试",
     description: "通过名字或MBTI类型计算你们的爱情契合度。有趣的爱情指数计算工具！",
   },
-  cn: {
-    title: "愛情計算器 — 名字和MBTI契合度測試",
-    description: "通過名字或MBTI類型計算你們的愛情契合度。有趣的愛情指數計算工具！",
-  },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "러브 계산기는 대화를 여는 가벼운 궁합 테스트입니다",
+    intro: "이름이나 MBTI로 보는 궁합 점수는 과학적 판단보다 재미와 대화 소재에 가깝습니다. 결과를 진지한 관계 평가로 쓰기보다 서로의 성향, 기대, 소통 방식을 이야기하는 계기로 활용해 보세요.",
+    formulaTitle: "콘셉트",
+    formulas: [
+      { title: "이름 모드", body: "입력한 이름 조합을 일관된 규칙으로 점수화합니다." },
+      { title: "MBTI 모드", body: "성향 차이와 조합을 가벼운 호환성 문구로 보여줍니다." },
+      { title: "대화 포인트", body: "점수보다 왜 그런 결과가 나왔는지 이야기하는 과정이 더 중요합니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "두 사람의 이름 또는 MBTI 유형을 입력합니다.",
+      "계산된 점수와 짧은 해석을 확인합니다.",
+      "결과를 장난스럽게 공유하고 실제 관계에서는 대화와 배려를 기준으로 삼습니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "결과가 실제 궁합을 뜻하나요?", answer: "아닙니다. 재미용 점수이며 실제 관계의 안정성이나 감정을 예측하지 않습니다." },
+      { question: "MBTI 궁합은 믿을 만한가요?", answer: "MBTI는 자기 이해와 대화에는 도움이 될 수 있지만, 관계를 결정하는 절대 기준은 아닙니다." },
+      { question: "이름을 바꾸면 점수가 달라지나요?", answer: "네. 이름 기반 테스트는 입력값을 기준으로 계산하므로 표기와 순서에 따라 달라질 수 있습니다." },
+    ],
+    disclaimer: "이 도구는 엔터테인먼트용입니다. 연애, 결혼, 이별 같은 중요한 결정은 점수가 아니라 실제 소통과 상호 존중을 기준으로 하세요.",
+  },
+  en: {
+    introTitle: "The love calculator is a light compatibility game",
+    intro: "Name and MBTI compatibility scores are better treated as conversation starters than serious relationship analysis. Use the result to talk about personality, expectations, and communication rather than to judge a relationship.",
+    formulaTitle: "Concept cards",
+    formulas: [
+      { title: "Name mode", body: "Turns the entered name pair into a consistent playful score." },
+      { title: "MBTI mode", body: "Summarizes personality pairings with light compatibility text." },
+      { title: "Conversation value", body: "The discussion after the score matters more than the number itself." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Enter two names or choose two MBTI types.",
+      "Review the score and short interpretation.",
+      "Share it for fun, then rely on real communication and care in real relationships.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Does the result show real compatibility?", answer: "No. It is an entertainment score and does not predict feelings, trust, or relationship stability." },
+      { question: "Is MBTI compatibility reliable?", answer: "MBTI can support self-reflection and conversation, but it should not decide a relationship." },
+      { question: "Can spelling change the score?", answer: "Yes. Name-based games calculate from the entered text, so spelling and order can change the result." },
+    ],
+    disclaimer: "This tool is for entertainment. Make important dating, marriage, or breakup decisions through real communication, consent, and mutual respect.",
+  },
+  ja: {
+    introTitle: "ラブ計算機は会話を楽しむための軽い相性テストです",
+    intro: "名前やMBTIの相性スコアは、真剣な関係診断ではなく会話のきっかけとして楽しむものです。結果を判断材料にするより、性格や期待、コミュニケーションについて話すきっかけにしてください。",
+    formulaTitle: "コンセプト",
+    formulas: [
+      { title: "名前モード", body: "入力した二人の名前を一定のルールで楽しい点数にします。" },
+      { title: "MBTIモード", body: "性格タイプの組み合わせを軽い相性コメントで表示します。" },
+      { title: "会話のきっかけ", body: "数字そのものより、結果を見て話す内容が大切です。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "二人の名前またはMBTIタイプを入力します。",
+      "スコアと短い解釈を確認します。",
+      "遊びとして共有し、実際の関係では対話と思いやりを大切にします。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "結果は本当の相性ですか？", answer: "いいえ。娯楽用のスコアであり、感情や信頼、関係の安定性を予測するものではありません。" },
+      { question: "MBTI相性は信頼できますか？", answer: "自己理解や会話には役立ちますが、関係を決める絶対的な基準ではありません。" },
+      { question: "名前の表記で点数は変わりますか？", answer: "はい。入力文字をもとに計算するため、表記や順番で変わることがあります。" },
+    ],
+    disclaimer: "このツールは娯楽用です。恋愛、結婚、別れなど重要な判断は、実際の対話、同意、相互尊重を基準にしてください。",
+  },
+  fr: {
+    introTitle: "Le calculateur d'amour est un jeu léger de compatibilité",
+    intro: "Les scores par prénom ou MBTI doivent être vus comme un prétexte à discuter, pas comme une analyse sérieuse. Utilisez le résultat pour parler de personnalité, d'attentes et de communication.",
+    formulaTitle: "Concepts",
+    formulas: [
+      { title: "Mode prénom", body: "Transforme la paire de prénoms en score ludique et cohérent." },
+      { title: "Mode MBTI", body: "Résume des combinaisons de personnalités avec un texte léger." },
+      { title: "Discussion", body: "La conversation après le score compte plus que le nombre." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Entrez deux prénoms ou choisissez deux types MBTI.",
+      "Lisez le score et la courte interprétation.",
+      "Partagez-le pour rire, puis fiez-vous à la communication réelle dans la relation.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Le résultat indique-t-il une vraie compatibilité ?", answer: "Non. C'est un score de divertissement qui ne prédit ni sentiments, ni confiance, ni stabilité." },
+      { question: "La compatibilité MBTI est-elle fiable ?", answer: "Le MBTI peut aider à discuter de soi, mais ne doit pas décider d'une relation." },
+      { question: "L'orthographe change-t-elle le score ?", answer: "Oui. Le mode prénom dépend du texte saisi, donc l'orthographe et l'ordre peuvent changer le résultat." },
+    ],
+    disclaimer: "Cet outil est destiné au divertissement. Les décisions importantes de couple doivent reposer sur la communication, le consentement et le respect mutuel.",
+  },
+  es: {
+    introTitle: "La calculadora de amor es un juego ligero de compatibilidad",
+    intro: "Las puntuaciones por nombre o MBTI funcionan mejor como tema de conversación que como análisis serio. Usa el resultado para hablar de personalidad, expectativas y comunicación.",
+    formulaTitle: "Conceptos",
+    formulas: [
+      { title: "Modo nombre", body: "Convierte la pareja de nombres en una puntuación lúdica y consistente." },
+      { title: "Modo MBTI", body: "Resume combinaciones de personalidad con texto ligero de compatibilidad." },
+      { title: "Valor de conversación", body: "La charla después del resultado importa más que el número." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Introduce dos nombres o elige dos tipos MBTI.",
+      "Revisa la puntuación y la interpretación breve.",
+      "Compártelo por diversión y basa las relaciones reales en comunicación y cuidado.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿El resultado muestra compatibilidad real?", answer: "No. Es una puntuación de entretenimiento y no predice sentimientos, confianza ni estabilidad." },
+      { question: "¿La compatibilidad MBTI es fiable?", answer: "Puede ayudar a conversar sobre uno mismo, pero no debería decidir una relación." },
+      { question: "¿La ortografía cambia la puntuación?", answer: "Sí. El modo por nombre calcula desde el texto introducido, así que ortografía y orden pueden cambiar el resultado." },
+    ],
+    disclaimer: "Esta herramienta es de entretenimiento. Las decisiones importantes de pareja deben basarse en comunicación real, consentimiento y respeto mutuo.",
+  },
+  zh: {
+    introTitle: "爱情计算器是轻松的契合度小游戏",
+    intro: "名字或MBTI契合度分数更适合作为聊天开场，而不是严肃的关系判断。可以用结果聊聊性格、期待和沟通方式，但不要把它当作关系结论。",
+    formulaTitle: "概念卡片",
+    formulas: [
+      { title: "名字模式", body: "把输入的两个人名字按固定规则转换成娱乐分数。" },
+      { title: "MBTI模式", body: "用轻松文字展示性格组合的契合感。" },
+      { title: "聊天价值", body: "分数之后的交流，比数字本身更有意义。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "输入两个人的名字，或选择两个MBTI类型。",
+      "查看分数和简短解读。",
+      "把结果当作玩笑分享，现实关系仍以沟通和尊重为准。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "结果代表真实契合度吗？", answer: "不代表。它是娱乐分数，不能预测感情、信任或关系稳定性。" },
+      { question: "MBTI契合度可靠吗？", answer: "MBTI可以帮助自我理解和聊天，但不应作为决定关系的唯一依据。" },
+      { question: "名字写法会改变分数吗？", answer: "会。名字模式按输入文字计算，所以拼写、顺序或写法变化都可能改变结果。" },
+    ],
+    disclaimer: "本工具仅供娱乐。恋爱、结婚或分手等重要决定，请基于真实沟通、同意和相互尊重。",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <LoveCalculator client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

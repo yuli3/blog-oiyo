@@ -2,7 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PensionCalculatorComp from "../../components/tools/PensionCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -11,44 +12,253 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
-    title: "국민연금 예상 수령액 계산기 — 내 노후 준비 점검",
-    description: "납부 기간과 평균 소득을 기반으로 국민연금 예상 수령액을 계산합니다. 은퇴 후 생활비를 미리 계획하세요.",
+    title: "연금저축·IRP 세액공제 계산기 — 연말정산 환급액 추정",
+    description: "총급여와 연금저축·IRP 납입액을 입력해 세액공제율 13.2% 또는 16.5% 기준의 예상 환급액을 계산합니다.",
   },
   en: {
-    title: "National Pension Benefit Calculator",
-    description: "Estimate your National Pension (NPS) benefit based on contribution period and average income. Plan for retirement.",
+    title: "Pension Savings & IRP Tax Credit Calculator",
+    description: "Estimate the Korean year-end tax credit from pension savings and IRP contributions using the 13.2% or 16.5% credit rate.",
   },
   ja: {
-    title: "国民年金受給額計算機",
-    description: "納付期間と平均所得を基に国民年金の予想受給額を計算します。老後の生活費を事前に計画しましょう。",
+    title: "年金貯蓄・IRP税額控除計算機",
+    description: "総給与と年金貯蓄・IRPの年間拠出額から、13.2%または16.5%の税額控除額を概算します。",
   },
   fr: {
-    title: "Calculateur de pension nationale",
-    description: "Estimez vos prestations de pension nationale en fonction de la durée de cotisation et du revenu moyen.",
+    title: "Calculateur de crédit fiscal pension & IRP",
+    description: "Estimez le crédit fiscal coréen lié aux versements pension et IRP avec les taux de 13,2% ou 16,5%.",
   },
   es: {
-    title: "Calculadora de pensión nacional",
-    description: "Estima tu beneficio de pensión nacional basado en el período de cotización y el ingreso promedio.",
+    title: "Calculadora de crédito fiscal pensión e IRP",
+    description: "Estima el crédito fiscal coreano por aportes a pensión e IRP usando tasas de 13,2% o 16,5%.",
   },
   zh: {
-    title: "國民年金預估計算機",
-    description: "根據繳費期間和平均收入計算國民年金預估受領金額，提前規劃退休後生活費。",
-  },
-  cn: {
-    title: "国民年金预估计算器",
-    description: "根据缴费期间和平均收入计算国民年金预估受领金额，提前规划退休后生活费。",
+    title: "年金储蓄·IRP税额抵免计算机",
+    description: "根据总薪资与年金储蓄、IRP年缴金额，估算13.2%或16.5%税额抵免。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+type SeoContent = {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+};
+
+const content: Record<ActiveLocale, SeoContent> = {
+  ko: {
+    introTitle: "이 계산기는 국민연금 수령액이 아니라 연금계좌 세액공제를 추정합니다",
+    intro: "연금저축과 IRP는 노후 준비 수단이면서 연말정산 세액공제 효과가 있는 계좌입니다. 총급여와 연간 납입액을 입력하면 2024년 기준 통합 한도 900만 원 안에서 13.2% 또는 16.5% 공제율이 적용될 때 돌려받을 수 있는 세액공제액을 확인할 수 있습니다.",
+    formulaTitle: "계산 기준",
+    formulas: [
+      { title: "공제 대상 납입액", body: "입력한 연간 납입액과 통합 한도 900만 원 중 작은 금액을 기준으로 합니다." },
+      { title: "공제율", body: "총급여 5,500만 원 이하는 16.5%, 초과는 13.2%를 적용합니다." },
+      { title: "예상 환급액", body: "공제 대상 납입액에 세액공제율을 곱해 연말정산 환급 효과를 추정합니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "연간 총급여를 원 단위로 입력합니다.",
+      "연금저축과 IRP에 납입할 연간 금액을 입력합니다.",
+      "적용 공제율과 한도, 예상 세액공제액을 확인합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "국민연금 예상 수령액도 계산하나요?", answer: "아니요. 이 페이지의 컴포넌트는 연금저축·IRP 세액공제 계산기입니다. 국민연금 노령연금 수령액은 가입 기간, 기준소득월액, 제도 산식이 별도로 필요합니다." },
+      { question: "900만 원 한도는 항상 적용되나요?", answer: "이 도구는 연금저축과 IRP를 합산한 세액공제 한도 900만 원을 단순 적용합니다. 계좌 종류별 세부 한도와 세법은 해마다 바뀔 수 있습니다." },
+      { question: "계산된 금액이 그대로 환급되나요?", answer: "세액공제는 산출세액이 충분할 때 효과가 납니다. 이미 낼 세금이 적거나 다른 공제가 많으면 실제 환급액은 줄어들 수 있습니다." },
+    ],
+    disclaimer: "이 도구는 일반적인 추정용입니다. 실제 세액공제와 연말정산 결과는 국세청 또는 세무 전문가에게 확인하세요.",
+  },
+  en: {
+    introTitle: "This estimates pension account tax credits, not public pension benefits",
+    intro: "Korean pension savings and IRP accounts can support retirement planning while creating a year-end tax credit. Enter annual salary and annual contributions to estimate the credit under the 2024-style combined KRW 9 million limit and the 13.2% or 16.5% credit rate.",
+    formulaTitle: "Calculation basis",
+    formulas: [
+      { title: "Eligible contribution", body: "Uses the smaller of your annual contribution and the combined KRW 9 million limit." },
+      { title: "Credit rate", body: "Uses 16.5% for salary up to KRW 55 million and 13.2% above that threshold." },
+      { title: "Estimated refund effect", body: "Eligible contribution multiplied by the credit rate gives the estimated tax credit." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Enter annual gross salary in KRW.",
+      "Enter the annual amount you plan to contribute to pension savings and IRP.",
+      "Review the applied credit rate, contribution cap, and estimated tax credit.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Does this calculate Korean National Pension benefits?", answer: "No. The mounted tool calculates pension savings and IRP tax credits. Public pension benefit estimates require contribution history, insured income, and the NPS benefit formula." },
+      { question: "Is the KRW 9 million limit always correct?", answer: "This tool applies a simplified combined tax-credit cap. Account-specific limits and Korean tax rules can change by year." },
+      { question: "Will I receive the full amount as a refund?", answer: "Only if you have enough tax liability. If your calculated tax is low or other credits already reduce it, the actual refund can be smaller." },
+    ],
+    disclaimer: "This tool is a general estimate. Confirm actual tax credits and year-end settlement results with the relevant institution or tax professional.",
+  },
+  ja: {
+    introTitle: "これは公的年金の受給額ではなく、年金口座の税額控除を概算します",
+    intro: "韓国の年金貯蓄とIRPは老後資金づくりと年末調整の税額控除を兼ねる制度です。総給与と年間拠出額を入力すると、合算900万ウォン限度と13.2%または16.5%の控除率で概算できます。",
+    formulaTitle: "計算の前提",
+    formulas: [
+      { title: "控除対象拠出額", body: "年間拠出額と合算限度900万ウォンの小さい方を使います。" },
+      { title: "控除率", body: "総給与5,500万ウォン以下は16.5%、超過は13.2%を適用します。" },
+      { title: "予想還付効果", body: "控除対象拠出額に税額控除率を掛けます。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "年間総給与をウォンで入力します。",
+      "年金貯蓄とIRPへの年間拠出予定額を入力します。",
+      "適用控除率、限度、予想税額控除額を確認します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "韓国の国民年金受給額も計算しますか？", answer: "いいえ。このツールは年金貯蓄・IRPの税額控除を計算します。公的年金の受給額には加入期間、所得、制度算式が別途必要です。" },
+      { question: "900万ウォン限度は常に同じですか？", answer: "このツールは合算限度を簡略的に適用します。口座別限度や税法は年度により変更されることがあります。" },
+      { question: "表示額がそのまま還付されますか？", answer: "十分な税額がある場合に効果があります。納税額が少ない場合や他の控除が多い場合、実際の還付は小さくなります。" },
+    ],
+    disclaimer: "このツールは一般的な概算です。実際の税額控除と年末調整結果は関係機関または税務専門家に確認してください。",
+  },
+  zh: {
+    introTitle: "本工具估算年金账户税额抵免，不是国民年金领取额",
+    intro: "韩国年金储蓄和IRP既是退休准备工具，也可能产生年终结算税额抵免。输入年总薪资和年度缴纳金额后，可按合计900万韩元上限和13.2%或16.5%抵免率估算。",
+    formulaTitle: "计算依据",
+    formulas: [
+      { title: "可抵免缴费", body: "取年度缴纳金额与合计900万韩元上限中的较小值。" },
+      { title: "抵免率", body: "总薪资5500万韩元以下按16.5%，超过部分情形按13.2%。" },
+      { title: "预计抵免", body: "可抵免缴费乘以税额抵免率，得到预计抵免效果。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "以韩元输入年度总薪资。",
+      "输入年金储蓄和IRP的年度缴纳金额。",
+      "查看适用抵免率、上限和预计税额抵免。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "会计算韩国国民年金领取额吗？", answer: "不会。这里计算的是年金储蓄和IRP税额抵免。公共年金领取额需要缴费历史、收入基准和年金公式。" },
+      { question: "900万韩元上限一定适用吗？", answer: "本工具采用简化的合计抵免上限。账户类别细节和韩国税法可能每年调整。" },
+      { question: "预计金额会全部退税吗？", answer: "只有在应纳税额足够时才会完全体现。若税额较低或已有其他抵免，实际退税可能更少。" },
+    ],
+    disclaimer: "本工具仅作一般估算。实际税额抵免和年终结算结果请向相关机构或税务专业人士确认。",
+  },
+  fr: {
+    introTitle: "Ce calcul vise le crédit fiscal pension, pas la pension publique",
+    intro: "Les comptes coréens de pension et IRP peuvent préparer la retraite tout en ouvrant droit à un crédit fiscal. Entrez salaire annuel et versements pour estimer l'effet avec un plafond combiné de 9 M KRW et un taux de 13,2% ou 16,5%.",
+    formulaTitle: "Bases de calcul",
+    formulas: [
+      { title: "Versement éligible", body: "Retient le plus petit montant entre votre versement annuel et le plafond combiné de 9 M KRW." },
+      { title: "Taux de crédit", body: "16,5% jusqu'à 55 M KRW de salaire, 13,2% au-delà." },
+      { title: "Effet estimé", body: "Le versement éligible multiplié par le taux donne le crédit fiscal estimé." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Saisissez le salaire annuel brut en KRW.",
+      "Saisissez les versements annuels prévus sur pension et IRP.",
+      "Vérifiez taux, plafond et crédit fiscal estimé.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Cela calcule-t-il la pension nationale coréenne ?", answer: "Non. L'outil calcule les crédits fiscaux pension/IRP. La pension publique exige historique de cotisation, revenu assuré et formule NPS." },
+      { question: "Le plafond de 9 M KRW est-il toujours exact ?", answer: "L'outil applique un plafond combiné simplifié. Les limites par compte et les règles fiscales peuvent changer chaque année." },
+      { question: "Le montant sera-t-il entièrement remboursé ?", answer: "Seulement si l'impôt dû est suffisant. Si votre impôt est faible ou déjà réduit par d'autres crédits, le remboursement réel peut être inférieur." },
+    ],
+    disclaimer: "Cet outil fournit une estimation générale. Confirmez crédits fiscaux et régularisation avec l'institution compétente ou un fiscaliste.",
+  },
+  es: {
+    introTitle: "Calcula créditos fiscales de pensión, no la pensión pública",
+    intro: "Las cuentas coreanas de pensión e IRP ayudan a preparar la jubilación y pueden generar crédito fiscal. Introduce salario anual y aportes para estimar el efecto con límite combinado de 9 M KRW y tasa de 13,2% o 16,5%.",
+    formulaTitle: "Bases de cálculo",
+    formulas: [
+      { title: "Aporte elegible", body: "Usa el menor entre tu aporte anual y el límite combinado de 9 M KRW." },
+      { title: "Tasa de crédito", body: "16,5% hasta 55 M KRW de salario y 13,2% por encima." },
+      { title: "Efecto estimado", body: "El aporte elegible multiplicado por la tasa da el crédito fiscal estimado." },
+    ],
+    howToTitle: "Cómo usarla",
+    steps: [
+      "Introduce el salario bruto anual en KRW.",
+      "Introduce el aporte anual previsto a pensión e IRP.",
+      "Revisa tasa aplicada, límite y crédito fiscal estimado.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Calcula la pensión nacional coreana?", answer: "No. Calcula créditos fiscales de pensión/IRP. La pensión pública requiere historial de cotización, ingreso asegurado y fórmula NPS." },
+      { question: "¿El límite de 9 M KRW siempre aplica?", answer: "La herramienta aplica un límite combinado simplificado. Los límites por cuenta y reglas fiscales pueden cambiar cada año." },
+      { question: "¿Recibiré todo como devolución?", answer: "Solo si tienes suficiente impuesto a pagar. Si tu impuesto es bajo o ya tienes otros créditos, la devolución real puede ser menor." },
+    ],
+    disclaimer: "Esta herramienta ofrece una estimación general. Confirma créditos fiscales y liquidación anual con la institución correspondiente o un profesional fiscal.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <PensionCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

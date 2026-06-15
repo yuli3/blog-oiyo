@@ -2,15 +2,16 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import AnnualLeaveCalculator from "../../components/tools/AnnualLeaveCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "연차 계산기 — 발생·잔여 연차 자동 계산 (근로기준법)",
     description: "입사일을 입력하면 근로기준법에 따른 연차 발생일수(최대 25일), 사용 연차, 잔여 연차를 자동으로 계산합니다. 1년 미만 월 단위 산정도 지원.",
@@ -32,20 +33,227 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Introduce tu fecha de inicio para calcular los días de vacaciones acumulados (ley laboral coreana, máx. 25 días), usados y el saldo restante.",
   },
   zh: {
-    title: "年假計算機 — 自動計算累積與剩餘天數",
-    description: "輸入入職日期，依韓國勞動基準法自動計算累積年假天數（最多25天）、已使用天數及剩餘天數。",
-  },
-  cn: {
-    title: "年假计算器 — 自动计算累积与剩余天数",
+    title: "年假计算机 — 自动计算累积与剩余天数",
     description: "输入入职日期，依韩国劳动基准法自动计算累积年假天数（最多25天）、已使用天数及剩余天数。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "연차는 입사일, 근속 기간, 사용 일수에 따라 달라집니다",
+    intro: "연차 계산은 단순히 달력 연도만 보는 것이 아니라 입사일과 계속 근로 기간, 이미 사용한 휴가를 함께 봐야 합니다. 이 계산기는 한국 근로기준법의 일반적인 발생 구조를 바탕으로 예상 발생일수와 잔여일수를 빠르게 확인하도록 구성했습니다.",
+    formulaTitle: "계산 기준",
+    formulas: [
+      { title: "1년 미만", body: "개근한 1개월마다 1일씩 발생하는 구조를 참고합니다." },
+      { title: "1년 이상", body: "기본 15일에서 근속 기간에 따라 가산일을 더합니다." },
+      { title: "잔여 연차", body: "발생 연차에서 이미 사용한 일수를 뺀 값입니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "입사일과 기준일을 입력해 근속 기간을 정합니다.",
+      "이미 사용한 연차 일수가 있다면 함께 입력합니다.",
+      "예상 발생일수와 남은 일수를 확인하고 회사 규정과 대조합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "회사 회계연도 기준과 다를 수 있나요?", answer: "네. 회사가 회계연도 기준으로 연차를 관리하면 입사일 기준 계산과 정산 방식이 달라질 수 있습니다." },
+      { question: "최대 연차는 몇 일인가요?", answer: "일반적으로 근속 가산을 포함해 연 25일을 상한으로 봅니다. 단, 적용 조건은 근로 형태와 회사 규정에 따라 확인해야 합니다." },
+      { question: "반차나 시간 단위 휴가는 어떻게 넣나요?", answer: "반차는 0.5일처럼 일 단위로 환산해 입력하면 잔여일수 추정에 활용할 수 있습니다." },
+    ],
+    disclaimer: "이 계산기는 일반 정보 제공용입니다. 실제 연차 산정, 수당, 분쟁 사안은 회사 취업규칙, 근로계약, 고용노동부 또는 노무 전문가의 확인이 필요합니다.",
+  },
+  en: {
+    introTitle: "Annual leave depends on start date, service length, and days already used",
+    intro: "PTO balances are not just a calendar-year number. For Korean annual leave, the hire date, continuous service period, accrual rules, and used days all matter. This calculator gives a practical estimate of accrued and remaining leave.",
+    formulaTitle: "Calculation concepts",
+    formulas: [
+      { title: "Under one year", body: "Uses the common one-day-per-full-month accrual concept." },
+      { title: "One year or more", body: "Starts from 15 days and adds service-based extra days where applicable." },
+      { title: "Remaining balance", body: "Estimated accrued leave minus days already used." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Enter your start date and the reference date for the calculation.",
+      "Add any leave days you have already used.",
+      "Compare the estimated accrued and remaining days with your employer's records.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Can this differ from my company's fiscal-year system?", answer: "Yes. Employers may manage annual leave by fiscal year, which can require separate settlement from hire-date accrual." },
+      { question: "What is the usual maximum annual leave?", answer: "Under the common Korean rule, annual leave is capped at 25 days after service-based additions, but eligibility should be checked for your employment situation." },
+      { question: "How should I enter half-day leave?", answer: "Convert it to a day value, such as 0.5, so the remaining balance estimate reflects partial usage." },
+    ],
+    disclaimer: "This calculator provides general information. For official leave, allowance, or dispute questions, check your contract, company rules, the Korean labor authority, or a labor professional.",
+  },
+  ja: {
+    introTitle: "年休は入社日、勤続期間、取得済み日数で変わります",
+    intro: "年次有給休暇は暦年だけで決まるものではありません。韓国の一般的な年休計算では、入社日、継続勤務期間、付与ルール、取得済み日数を合わせて確認します。この計算機は付与見込みと残日数の目安を把握するためのものです。",
+    formulaTitle: "計算の考え方",
+    formulas: [
+      { title: "1年未満", body: "満勤した1か月ごとに1日付与される考え方を参考にします。" },
+      { title: "1年以上", body: "基本15日に勤続年数による加算を反映します。" },
+      { title: "残日数", body: "見込み付与日数から取得済み日数を差し引きます。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "入社日と計算基準日を入力します。",
+      "すでに取得した年休日数があれば入力します。",
+      "見込み付与日数と残日数を会社の記録と照合します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "会社の会計年度基準と違うことはありますか？", answer: "あります。会社が会計年度で管理している場合、入社日基準とは精算方法が異なることがあります。" },
+      { question: "年休の上限は何日ですか？", answer: "一般的には勤続加算を含めて年25日が上限とされますが、雇用形態や社内規程を確認してください。" },
+      { question: "半休はどう入力しますか？", answer: "0.5日のように日数へ換算して入力すると、残日数の目安に反映できます。" },
+    ],
+    disclaimer: "この計算機は一般情報です。正式な年休、手当、労務上の争いは就業規則、雇用契約、労働当局または専門家に確認してください。",
+  },
+  fr: {
+    introTitle: "Les congés annuels dépendent de la date d'embauche, de l'ancienneté et des jours utilisés",
+    intro: "Le solde de congés ne se résume pas à une année civile. Pour les congés annuels coréens, la date d'embauche, la durée de service continu, les règles d'acquisition et les jours déjà pris doivent être considérés ensemble.",
+    formulaTitle: "Repères de calcul",
+    formulas: [
+      { title: "Moins d'un an", body: "Suit l'idée courante d'un jour acquis par mois complet travaillé." },
+      { title: "Un an ou plus", body: "Part de 15 jours et ajoute les jours liés à l'ancienneté lorsque c'est applicable." },
+      { title: "Solde restant", body: "Congés acquis estimés moins les jours déjà utilisés." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Saisissez votre date d'embauche et la date de référence.",
+      "Ajoutez les congés déjà pris, y compris les fractions converties en jours.",
+      "Comparez l'estimation avec les règles et le relevé de votre employeur.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Le résultat peut-il différer du système de mon entreprise ?", answer: "Oui. Une entreprise peut gérer les congés par année fiscale, avec une régularisation différente du calcul par date d'embauche." },
+      { question: "Quel est le plafond habituel ?", answer: "La règle coréenne courante plafonne les congés annuels à 25 jours après les ajouts liés à l'ancienneté, sous réserve des conditions applicables." },
+      { question: "Comment saisir une demi-journée ?", answer: "Convertissez-la en valeur de jour, par exemple 0,5, afin qu'elle soit soustraite du solde estimé." },
+    ],
+    disclaimer: "Cet outil fournit une information générale. Pour un solde officiel, une indemnité ou un litige, vérifiez le contrat, le règlement interne, l'autorité du travail ou un spécialiste.",
+  },
+  es: {
+    introTitle: "Las vacaciones anuales dependen de la fecha de inicio, la antigüedad y los días usados",
+    intro: "El saldo de vacaciones no es solo un número del año natural. En el sistema coreano importan la fecha de ingreso, el tiempo de servicio continuo, las reglas de acumulación y los días ya tomados.",
+    formulaTitle: "Conceptos de cálculo",
+    formulas: [
+      { title: "Menos de un año", body: "Usa la idea habitual de un día por cada mes completo trabajado." },
+      { title: "Un año o más", body: "Parte de 15 días y suma días adicionales por antigüedad cuando corresponde." },
+      { title: "Saldo restante", body: "Días acumulados estimados menos días ya utilizados." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Introduce tu fecha de inicio y la fecha de referencia.",
+      "Añade los días de vacaciones que ya has utilizado.",
+      "Compara la estimación con el registro y las reglas de tu empresa.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Puede diferir del sistema fiscal de mi empresa?", answer: "Sí. Algunas empresas gestionan vacaciones por año fiscal y luego ajustan el saldo frente al cálculo por fecha de ingreso." },
+      { question: "¿Cuál es el máximo habitual?", answer: "La regla coreana común limita las vacaciones anuales a 25 días tras los incrementos por antigüedad, pero conviene revisar las condiciones aplicables." },
+      { question: "¿Cómo ingreso medio día?", answer: "Conviértelo a días, por ejemplo 0,5, para que el saldo restante lo descuente correctamente." },
+    ],
+    disclaimer: "Esta herramienta ofrece información general. Para saldos oficiales, pagos o disputas, consulta tu contrato, reglamento interno, autoridad laboral o un profesional.",
+  },
+  zh: {
+    introTitle: "年假取决于入职日期、连续工作时间和已使用天数",
+    intro: "年假余额不是简单的自然年数字。按韩国年假规则估算时，需要同时考虑入职日期、连续工作期间、发生规则以及已经使用的天数。这个计算器用于快速查看预计发生天数和剩余天数。",
+    formulaTitle: "计算概念",
+    formulas: [
+      { title: "未满一年", body: "参考每连续出勤满一个月发生一天的常见规则。" },
+      { title: "满一年以上", body: "从基本15天开始，并按服务年限加入可适用的加算天数。" },
+      { title: "剩余年假", body: "预计发生年假减去已经使用的天数。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "输入入职日期和计算基准日期。",
+      "如果已经使用年假，请输入已使用天数。",
+      "查看预计发生天数和剩余天数，并与公司记录核对。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "会和公司会计年度规则不同吗？", answer: "会。公司若按会计年度管理年假，可能需要与入职日基准的发生天数另行结算。" },
+      { question: "年假通常最多是多少天？", answer: "韩国常见规则下，含服务年限加算后通常以每年25天为上限，但适用条件需结合用工情况确认。" },
+      { question: "半天假怎么输入？", answer: "可以换算成0.5天输入，这样剩余天数估算会反映部分使用情况。" },
+    ],
+    disclaimer: "本工具仅提供一般信息。正式年假、补偿和劳动争议请确认劳动合同、公司规章、韩国劳动主管机关或劳务专业人士意见。",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <AnnualLeaveCalculator client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

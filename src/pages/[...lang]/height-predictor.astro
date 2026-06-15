@@ -2,7 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import HeightPredictorComp from "../../components/tools/HeightPredictor";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -11,9 +12,9 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "자녀 키 예측 계산기 — 부모 키로 예측하는 아이 최종 키",
     description: "아버지와 어머니의 키를 입력하면 자녀의 예상 최종 신장을 계산합니다. 중간 부모 키 공식 기반 예측 도구입니다.",
@@ -35,20 +36,227 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Predice la estatura adulta de tu hijo basándose en las estaturas de los padres.",
   },
   zh: {
-    title: "子女身高預測計算機",
-    description: "輸入父母身高，使用中間親本身高公式預測子女的最終成人身高。",
-  },
-  cn: {
-    title: "子女身高预测计算器",
+    title: "子女身高预测计算机",
     description: "输入父母身高，使用中间亲本身高公式预测子女的最终成人身高。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "예상 키는 부모 키에서 출발하지만 성장 전체를 설명하지는 않습니다",
+    intro: "중간 부모 키 공식은 부모의 키를 바탕으로 자녀의 성인 키 범위를 대략 추정하는 간단한 방법입니다. 다만 성장 속도, 사춘기 시기, 영양, 수면, 질환, 골연령 같은 요인이 실제 성장에 영향을 줄 수 있습니다.",
+    formulaTitle: "예측 개념",
+    formulas: [
+      { title: "남아 공식", body: "(father + mother + 13cm) / 2" },
+      { title: "여아 공식", body: "(father + mother - 13cm) / 2" },
+      { title: "예상 범위", body: "개별 성장 차이를 고려해 결과는 범위로 이해하는 것이 좋습니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "아버지와 어머니의 키를 같은 단위로 입력합니다.",
+      "자녀의 성별을 선택해 중간 부모 키 추정값을 확인합니다.",
+      "현재 성장곡선, 성장 속도, 진료 기록과 함께 참고합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "결과가 실제 최종 키인가요?", answer: "아닙니다. 유전적 평균을 이용한 추정치이며 실제 키는 성장 환경과 건강 상태에 따라 달라집니다." },
+      { question: "언제 병원 상담이 필요할까요?", answer: "성장곡선이 급격히 떨어지거나, 또래보다 매우 작거나 크거나, 사춘기 시기가 너무 빠르거나 늦다면 소아청소년과 상담이 좋습니다." },
+      { question: "골연령 검사가 더 정확한가요?", answer: "골연령, 성장곡선, 진찰 소견을 함께 보면 단순 공식보다 더 구체적인 평가가 가능합니다." },
+    ],
+    disclaimer: "이 페이지는 일반 정보이며 의학적 조언이 아닙니다. 성장 지연, 성조숙, 영양 문제, 키 치료 여부는 소아청소년과 의사와 상담하세요.",
+  },
+  en: {
+    introTitle: "Predicted height starts with parents' heights, but growth is more complex",
+    intro: "The mid-parent height formula is a simple way to estimate a child's adult height range from parental heights. Growth tempo, puberty timing, nutrition, sleep, illness, and bone age can all affect the real outcome.",
+    formulaTitle: "Prediction concepts",
+    formulas: [
+      { title: "Boy estimate", body: "(father + mother + 13cm) / 2" },
+      { title: "Girl estimate", body: "(father + mother - 13cm) / 2" },
+      { title: "Expected range", body: "Treat the result as a range because individual growth varies." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Enter both parents' heights in the same unit.",
+      "Select the child's sex to calculate the mid-parent height estimate.",
+      "Interpret the result with growth charts, growth speed, and clinical history.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Is the result the child's final adult height?", answer: "No. It is a genetic estimate, and actual adult height can change with health, puberty, nutrition, and environment." },
+      { question: "When should I ask a doctor?", answer: "Consult a pediatrician if growth percentile drops sharply, height is far from peers, or puberty seems unusually early or late." },
+      { question: "Is bone age more useful?", answer: "Bone age, growth charts, and a clinical exam can provide a more individualized assessment than a simple formula." },
+    ],
+    disclaimer: "This page is general information, not medical advice. For delayed growth, early puberty, nutrition concerns, or height treatment, consult a pediatrician or doctor.",
+  },
+  ja: {
+    introTitle: "予測身長は親の身長が出発点ですが、成長はそれだけでは決まりません",
+    intro: "中間親身長の公式は、両親の身長から子どもの成人身長の目安を出す簡単な方法です。ただし成長速度、思春期の時期、栄養、睡眠、病気、骨年齢なども実際の成長に影響します。",
+    formulaTitle: "予測の考え方",
+    formulas: [
+      { title: "男児の目安", body: "(father + mother + 13cm) / 2" },
+      { title: "女児の目安", body: "(father + mother - 13cm) / 2" },
+      { title: "予測範囲", body: "個人差があるため、結果は幅を持った目安として見ます。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "父親と母親の身長を同じ単位で入力します。",
+      "子どもの性別を選び、中間親身長の推定値を確認します。",
+      "成長曲線、成長速度、受診歴と合わせて参考にします。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "結果は最終身長そのものですか？", answer: "いいえ。遺伝的な目安であり、健康状態、栄養、思春期、環境により実際の身長は変わります。" },
+      { question: "どんな時に医師へ相談しますか？", answer: "成長曲線が急に下がる、同年代と大きく違う、思春期が極端に早いまたは遅い場合は小児科に相談してください。" },
+      { question: "骨年齢検査の方が役立ちますか？", answer: "骨年齢、成長曲線、診察所見を組み合わせると、単純な公式より個別性の高い評価ができます。" },
+    ],
+    disclaimer: "このページは一般情報であり、医療上の助言ではありません。成長遅延、早発思春期、栄養、身長治療は小児科医に相談してください。",
+  },
+  fr: {
+    introTitle: "La taille prédite part de celle des parents, mais la croissance est plus complexe",
+    intro: "La formule de taille parentale moyenne donne une estimation simple de la taille adulte d'un enfant. Le rythme de croissance, la puberté, la nutrition, le sommeil, les maladies et l'âge osseux peuvent modifier le résultat.",
+    formulaTitle: "Concepts de prédiction",
+    formulas: [
+      { title: "Garçon", body: "(father + mother + 13cm) / 2" },
+      { title: "Fille", body: "(father + mother - 13cm) / 2" },
+      { title: "Plage attendue", body: "Le résultat doit être lu comme une plage, car la croissance individuelle varie." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Saisissez les tailles des deux parents dans la même unité.",
+      "Choisissez le sexe de l'enfant pour calculer l'estimation.",
+      "Interprétez avec les courbes de croissance, la vitesse de croissance et l'histoire médicale.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Le résultat est-il la taille adulte finale ?", answer: "Non. C'est une estimation génétique ; santé, puberté, nutrition et environnement peuvent changer la taille réelle." },
+      { question: "Quand consulter un médecin ?", answer: "Consultez un pédiatre si le percentile chute, si la taille diffère beaucoup des pairs, ou si la puberté semble très précoce ou tardive." },
+      { question: "L'âge osseux est-il plus utile ?", answer: "L'âge osseux, les courbes et l'examen clinique donnent une évaluation plus personnalisée qu'une formule seule." },
+    ],
+    disclaimer: "Cette page fournit une information générale, pas un avis médical. Pour retard de croissance, puberté précoce, nutrition ou traitement de taille, consultez un pédiatre ou un médecin.",
+  },
+  es: {
+    introTitle: "La estatura prevista empieza con la de los padres, pero el crecimiento es más complejo",
+    intro: "La fórmula de talla media parental estima de forma simple la estatura adulta a partir de las estaturas de los padres. Ritmo de crecimiento, pubertad, nutrición, sueño, enfermedad y edad ósea también influyen.",
+    formulaTitle: "Conceptos de predicción",
+    formulas: [
+      { title: "Niño", body: "(father + mother + 13cm) / 2" },
+      { title: "Niña", body: "(father + mother - 13cm) / 2" },
+      { title: "Rango esperado", body: "Conviene leer el resultado como un rango, porque el crecimiento individual varía." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Introduce las estaturas de ambos padres en la misma unidad.",
+      "Selecciona el sexo del niño para calcular la estimación.",
+      "Interpreta el resultado junto con curvas de crecimiento, velocidad de crecimiento e historia clínica.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿El resultado es la estatura adulta final?", answer: "No. Es una estimación genética; salud, pubertad, nutrición y ambiente pueden modificar la estatura real." },
+      { question: "¿Cuándo debo consultar a un médico?", answer: "Consulta con pediatría si el percentil cae, la estatura se aleja mucho de sus pares o la pubertad parece muy temprana o tardía." },
+      { question: "¿La edad ósea ayuda más?", answer: "Edad ósea, curvas de crecimiento y examen clínico permiten una evaluación más individual que una fórmula simple." },
+    ],
+    disclaimer: "Esta página ofrece información general, no consejo médico. Para retraso de crecimiento, pubertad precoz, nutrición o tratamiento de talla, consulta a un pediatra o médico.",
+  },
+  zh: {
+    introTitle: "身高预测从父母身高出发，但儿童成长更复杂",
+    intro: "中间亲本身高公式是一种用父母身高估算孩子成人身高范围的简单方法。但成长速度、青春期时间、营养、睡眠、疾病和骨龄都会影响真实结果。",
+    formulaTitle: "预测概念",
+    formulas: [
+      { title: "男孩估算", body: "(father + mother + 13cm) / 2" },
+      { title: "女孩估算", body: "(father + mother - 13cm) / 2" },
+      { title: "预期范围", body: "由于个体成长差异，结果应理解为一个参考范围。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "用同一单位输入父亲和母亲身高。",
+      "选择孩子性别，查看中间亲本身高估算值。",
+      "结合生长曲线、成长速度和就诊记录一起参考。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "结果就是最终成人身高吗？", answer: "不是。它是遗传估算值，真实身高还会受健康、青春期、营养和环境影响。" },
+      { question: "什么时候需要看医生？", answer: "如果生长百分位明显下降、与同龄人差距很大，或青春期过早/过晚，建议咨询儿科医生。" },
+      { question: "骨龄检查更准确吗？", answer: "骨龄、生长曲线和临床检查结合起来，通常比单一公式更能反映个体情况。" },
+    ],
+    disclaimer: "本页为一般信息，不构成医疗建议。生长迟缓、性早熟、营养问题或身高治疗请咨询儿科医生或医生。",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <HeightPredictorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

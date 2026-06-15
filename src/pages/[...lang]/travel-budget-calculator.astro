@@ -2,15 +2,16 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import TravelBudgetCalculator from "../../components/tools/TravelBudgetCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "여행 예산 계산기 — 목적지별 여행 비용 계산",
     description: "일본, 태국, 유럽 등 10개 여행지의 항공, 숙박, 식비, 교통비를 한번에 계산하세요. 예산 절약 팁도 제공.",
@@ -35,17 +36,224 @@ const meta: Record<Locale, { title: string; description: string }> = {
     title: "旅行预算计算器 — 按目的地估算旅行费用",
     description: "一键计算日本、泰国、欧洲等10个目的地的机票、住宿、餐饮和交通费用，并获取省钱攻略。",
   },
-  cn: {
-    title: "旅遊預算計算機 — 依目的地估算旅遊費用",
-    description: "一鍵計算日本、泰國、歐洲等10個目的地的機票、住宿、餐飲和交通費用，並獲取省錢攻略。",
-  },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "여행 예산은 항공권보다 숙박, 식비, 이동비의 누적이 더 중요할 때가 많습니다",
+    intro: "여행 비용은 목적지와 기간, 여행 스타일에 따라 크게 달라집니다. 이 계산기는 항공, 숙박, 식비, 교통비를 나누어 입력하게 해 총예산과 1일 평균을 빠르게 확인하고 과소 예산을 줄이도록 돕습니다.",
+    formulaTitle: "예산 구성",
+    formulas: [
+      { title: "고정비", body: "항공권, 보험, 비자처럼 인원이나 일정 전에 확정되는 비용입니다." },
+      { title: "일별 비용", body: "lodging + food + transport + activities를 여행 일수만큼 누적합니다." },
+      { title: "예비비", body: "환율, 수하물, 팁, 현지 변수에 대비해 여유 금액을 더합니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "목적지와 여행 일수를 선택하고 항공권 또는 이동 고정비를 입력합니다.",
+      "숙박, 식비, 현지 교통, 관광 비용을 하루 기준으로 입력합니다.",
+      "총액과 1일 평균을 확인한 뒤 환율과 예비비를 더해 최종 예산을 정합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "항공권 가격은 실시간인가요?", answer: "아닙니다. 항공권과 숙박 가격은 시기와 예약 채널에 따라 변하므로 실제 예약 화면을 확인해야 합니다." },
+      { question: "예비비는 얼마나 잡는 것이 좋나요?", answer: "여행 성격에 따라 다르지만 환율 변동과 돌발 비용을 위해 총액의 10-20% 정도를 별도로 보는 경우가 많습니다." },
+      { question: "여러 명이 갈 때는 어떻게 보나요?", answer: "공유 가능한 숙박이나 렌터카는 인원수로 나누고, 식비와 입장료처럼 개인별 비용은 각자 계산하는 것이 정확합니다." },
+    ],
+    disclaimer: "이 계산기는 여행 계획용 추정 도구입니다. 실제 가격, 환율, 수수료, 성수기 요금, 현지 세금은 예약 전 반드시 확인하세요.",
+  },
+  en: {
+    introTitle: "Travel budgets often depend as much on daily costs as on flights",
+    intro: "Trip cost changes with destination, length, season, and travel style. This calculator separates flights, lodging, food, transport, and activities so you can estimate the total and daily average before booking.",
+    formulaTitle: "Budget concepts",
+    formulas: [
+      { title: "Fixed costs", body: "Flights, insurance, visas, and other costs known before daily spending." },
+      { title: "Daily costs", body: "lodging + food + transport + activities multiplied by trip days." },
+      { title: "Buffer", body: "Extra money for exchange rates, baggage, tips, delays, and local surprises." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Choose a destination and trip length, then enter flight or long-distance transport costs.",
+      "Add daily lodging, food, local transport, and activity estimates.",
+      "Review total and daily average, then add an exchange-rate and emergency buffer.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Are flight prices live?", answer: "No. Flight and hotel prices change by date and booking channel, so confirm on the actual booking page." },
+      { question: "How much buffer should I add?", answer: "It depends on the trip, but many travelers add 10-20% for exchange-rate changes and unexpected costs." },
+      { question: "How do I budget for a group?", answer: "Split shared costs like lodging or rental cars, and calculate individual costs like meals and tickets per person." },
+    ],
+    disclaimer: "This calculator is an estimate for travel planning. Confirm real prices, exchange rates, fees, peak-season charges, and local taxes before booking.",
+  },
+  ja: {
+    introTitle: "旅行予算は航空券だけでなく日々の支出の積み上げが重要です",
+    intro: "旅行費用は目的地、日数、時期、旅のスタイルで大きく変わります。この計算機では航空券、宿泊、食事、交通、観光費を分けて入力し、総額と1日平均を確認できます。",
+    formulaTitle: "予算の考え方",
+    formulas: [
+      { title: "固定費", body: "航空券、保険、ビザなど、日々の支出とは別に発生する費用です。" },
+      { title: "日別費用", body: "lodging + food + transport + activitiesを旅行日数分だけ合計します。" },
+      { title: "予備費", body: "為替、荷物、チップ、遅延、現地での予定外支出に備えます。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "目的地と日数を選び、航空券や長距離移動費を入力します。",
+      "宿泊、食費、現地交通、観光費を1日単位で入力します。",
+      "総額と1日平均を見て、為替や予備費を加えた最終予算を考えます。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "航空券価格はリアルタイムですか？", answer: "いいえ。航空券や宿泊費は日程と予約サイトで変わるため、実際の予約画面で確認してください。" },
+      { question: "予備費はいくら必要ですか？", answer: "旅行内容によりますが、為替変動や突発費用に備えて総額の10-20%を見込むことがあります。" },
+      { question: "複数人旅行ではどう計算しますか？", answer: "宿泊やレンタカーなど共有費は人数で割り、食費や入場料など個人費は一人ずつ計算すると正確です。" },
+    ],
+    disclaimer: "この計算機は旅行計画の目安です。実際の価格、為替、手数料、繁忙期料金、現地税は予約前に確認してください。",
+  },
+  fr: {
+    introTitle: "Un budget voyage dépend autant des dépenses quotidiennes que du vol",
+    intro: "Le coût varie selon la destination, la durée, la saison et le style de voyage. Ce calculateur sépare vols, hébergement, repas, transport et activités pour estimer le total et la moyenne par jour.",
+    formulaTitle: "Repères de budget",
+    formulas: [
+      { title: "Coûts fixes", body: "Vols, assurance, visa et frais connus avant les dépenses quotidiennes." },
+      { title: "Coûts par jour", body: "lodging + food + transport + activities multipliés par le nombre de jours." },
+      { title: "Marge", body: "Somme en plus pour change, bagages, pourboires, retards et imprévus locaux." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Choisissez la destination et la durée, puis saisissez les vols ou transports longue distance.",
+      "Ajoutez hébergement, repas, transport local et activités par jour.",
+      "Vérifiez le total et la moyenne quotidienne, puis ajoutez une marge de change et d'urgence.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Les prix des vols sont-ils en direct ?", answer: "Non. Vols et hôtels changent selon les dates et les plateformes ; vérifiez la page de réservation." },
+      { question: "Quelle marge prévoir ?", answer: "Cela dépend du voyage, mais 10-20% est souvent utile pour le change et les imprévus." },
+      { question: "Comment calculer pour un groupe ?", answer: "Divisez les coûts partagés comme hébergement ou voiture, et comptez repas et billets par personne." },
+    ],
+    disclaimer: "Ce calculateur fournit une estimation. Vérifiez prix réels, taux de change, frais, tarifs de haute saison et taxes locales avant de réserver.",
+  },
+  es: {
+    introTitle: "El presupuesto de viaje depende tanto de gastos diarios como de vuelos",
+    intro: "El coste cambia según destino, duración, temporada y estilo de viaje. Esta calculadora separa vuelos, alojamiento, comida, transporte y actividades para estimar total y media diaria.",
+    formulaTitle: "Conceptos de presupuesto",
+    formulas: [
+      { title: "Costes fijos", body: "Vuelos, seguro, visado y otros costes conocidos antes del gasto diario." },
+      { title: "Costes diarios", body: "lodging + food + transport + activities multiplicado por días de viaje." },
+      { title: "Margen", body: "Dinero extra para cambio, equipaje, propinas, retrasos e imprevistos locales." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Elige destino y duración, e introduce vuelos o transporte de larga distancia.",
+      "Añade alojamiento, comida, transporte local y actividades por día.",
+      "Revisa total y media diaria, y suma margen por cambio y emergencias.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Los precios de vuelos son en tiempo real?", answer: "No. Vuelos y hoteles cambian por fecha y canal de reserva; confirma en la página real de compra." },
+      { question: "¿Cuánto margen conviene añadir?", answer: "Depende del viaje, pero muchas personas añaden 10-20% para tipo de cambio e imprevistos." },
+      { question: "¿Cómo calculo para un grupo?", answer: "Divide costes compartidos como alojamiento o coche, y calcula por persona comidas, entradas y otros gastos individuales." },
+    ],
+    disclaimer: "Esta calculadora es una estimación para planificar. Confirma precios reales, cambio, comisiones, temporada alta e impuestos locales antes de reservar.",
+  },
+  zh: {
+    introTitle: "旅行预算不只看机票，日常支出的累积同样重要",
+    intro: "旅行费用会随目的地、天数、季节和旅行方式大幅变化。这个计算器把机票、住宿、餐饮、交通和活动费用分开输入，帮助在预订前估算总额和每日平均费用。",
+    formulaTitle: "预算概念",
+    formulas: [
+      { title: "固定费用", body: "机票、保险、签证等在日常消费前就能确认的费用。" },
+      { title: "每日费用", body: "lodging + food + transport + activities 再乘以旅行天数。" },
+      { title: "预备金", body: "为汇率、行李、服务费、延误和当地意外支出预留金额。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "选择目的地和旅行天数，输入机票或长途交通费用。",
+      "按天输入住宿、餐饮、当地交通和活动费用。",
+      "查看总额和每日平均，再加入汇率和应急预备金。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "机票价格是实时的吗？", answer: "不是。机票和住宿价格会随日期和预订渠道变化，请以实际预订页面为准。" },
+      { question: "预备金应留多少？", answer: "视旅行情况而定，很多人会额外预留总额的10-20%，用于汇率变化和突发费用。" },
+      { question: "多人旅行怎么计算？", answer: "住宿或租车等共享费用可按人数分摊，餐饮和门票等个人费用则按个人分别计算。" },
+    ],
+    disclaimer: "本计算器用于旅行计划估算。实际价格、汇率、手续费、旺季价格和当地税费，请在预订前确认。",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <TravelBudgetCalculator client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

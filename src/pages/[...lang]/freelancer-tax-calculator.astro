@@ -2,7 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import FreelancerTaxCalculatorComp from "../../components/tools/FreelancerTaxCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -11,9 +12,9 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "프리랜서 세금 계산기 — 종합소득세·건강보험료 예상 계산",
     description: "프리랜서 연 수입에 따른 종합소득세와 건강보험료를 미리 계산하세요. 절세 전략 수립에 활용하세요.",
@@ -35,20 +36,189 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Estima el impuesto sobre la renta y las primas de seguro médico para freelancers en Corea.",
   },
   zh: {
-    title: "自由職業者稅務計算機",
-    description: "計算自由職業者的年收入對應的綜合所得稅和健康保險費，制定節稅策略。",
-  },
-  cn: {
-    title: "自由职业者税务计算器",
+    title: "自由职业者税务计算机",
     description: "计算自由职业者的年收入对应的综合所得税和健康保险费，制定节税策略。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "프리랜서 세금은 원천징수와 종합소득세 정산을 나누어 봐야 합니다",
+    intro: "이 계산기는 월 세전 소득에서 3.3% 원천징수를 뺀 실수령액과, 단순 경비율을 가정한 연간 종합소득세 정산 방향을 추정합니다. 실제 신고에서는 업종 코드, 필요경비, 공제, 건강보험료, 기납부세액이 모두 달라질 수 있습니다.",
+    formulaTitle: "계산 기준",
+    formulas: [
+      { title: "원천징수", body: "원천징수 = 월 소득 × 3.3%" },
+      { title: "월 실수령", body: "실수령액 = 월 소득 - 원천징수" },
+      { title: "정산 예상", body: "정산 = 추정 종합소득세 - 연간 원천징수액" },
+    ],
+    howToTitle: "사용 방법",
+    steps: ["월 세전 프리랜서 소득을 입력합니다.", "3.3% 원천징수 후 월 실수령액을 확인합니다.", "연간 정산 예상액을 참고해 세금 준비금을 따로 관리합니다."],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "3.3%를 떼면 세금이 끝난 건가요?", answer: "아닙니다. 3.3%는 원천징수된 선납 세금 성격이며, 다음 해 종합소득세 신고 때 정산합니다." },
+      { question: "건강보험료도 정확히 계산하나요?", answer: "이 페이지의 컴포넌트는 주로 3.3% 원천징수와 간이 종합소득세 정산을 보여줍니다. 건강보험료는 지역가입자 요건과 재산·소득에 따라 달라집니다." },
+      { question: "한국 프리랜서 기준인가요?", answer: "네. 3.3% 원천징수와 5월 종합소득세 신고라는 한국 세무 맥락을 전제로 합니다." },
+    ],
+    disclaimer: "이 도구는 일반적인 계산용입니다. 공식 프리랜서 세액과 보험료는 국세청·건강보험공단 또는 세무전문가 기준을 확인하세요.",
+  },
+  en: {
+    introTitle: "Korean freelancer tax separates 3.3% withholding from annual settlement",
+    intro: "This calculator estimates monthly take-home pay after 3.3% withholding and a simplified annual comprehensive income tax settlement. Real filing can change with business code, deductible expenses, credits, health insurance, and tax already withheld.",
+    formulaTitle: "Calculation rules",
+    formulas: [
+      { title: "Withholding", body: "Withholding = monthly gross income × 3.3%" },
+      { title: "Monthly net", body: "Net pay = monthly gross income - withholding" },
+      { title: "Settlement", body: "Settlement = estimated annual income tax - annual withholding" },
+    ],
+    howToTitle: "How to use",
+    steps: ["Enter your monthly pre-tax freelance income.", "Check take-home pay after 3.3% withholding.", "Use the annual settlement estimate to plan a tax reserve."],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Does 3.3% withholding finish the tax obligation?", answer: "No. It is prepaid withholding. The final amount is settled during Korea's comprehensive income tax filing." },
+      { question: "Does this precisely calculate health insurance?", answer: "No. The component focuses on 3.3% withholding and simplified income tax; health insurance depends on separate eligibility and assessment rules." },
+      { question: "Is this Korea-specific?", answer: "Yes. It assumes the Korean freelance withholding and May income-tax filing context." },
+    ],
+    disclaimer: "This tool is for general calculation. Confirm official freelancer tax and insurance figures with the relevant Korean authority or tax professional.",
+  },
+  ja: {
+    introTitle: "韓国フリーランス税務は3.3%源泉徴収と年次精算を分けて見ます",
+    intro: "この計算機は、月収から3.3%源泉徴収を差し引いた手取りと、簡易な総合所得税精算を概算します。実際の申告では業種、必要経費、控除、健康保険料などで変わります。",
+    formulaTitle: "計算基準",
+    formulas: [
+      { title: "源泉徴収", body: "源泉徴収 = 月収 × 3.3%" },
+      { title: "月手取り", body: "手取り = 月収 - 源泉徴収" },
+      { title: "精算", body: "精算 = 推定年税額 - 年間源泉徴収額" },
+    ],
+    howToTitle: "使い方",
+    steps: ["月の税引前収入を入力します。", "3.3%源泉徴収後の手取りを確認します。", "年次精算の概算をもとに納税資金を準備します。"],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "3.3%を引かれれば終わりですか？", answer: "いいえ。源泉徴収は前払いで、韓国の総合所得税申告時に精算します。" },
+      { question: "健康保険料も正確ですか？", answer: "いいえ。このツールは主に源泉徴収と簡易所得税の概算です。保険料は別ルールです。" },
+      { question: "韓国向けですか？", answer: "はい。韓国のフリーランス源泉徴収と5月申告を前提にしています。" },
+    ],
+    disclaimer: "このツールは一般的な計算用です。公式な税額と保険料は税務当局・健康保険機関または専門家にご確認ください。",
+  },
+  zh: {
+    introTitle: "韩国自由职业者税务要区分 3.3% 预扣和年度结算",
+    intro: "这个计算器估算月税前收入扣除 3.3% 预扣后的实收金额，并用简化假设估算年度综合所得税结算方向。实际申报会受行业代码、必要经费、扣除、健康保险和已缴税额影响。",
+    formulaTitle: "计算规则",
+    formulas: [
+      { title: "预扣税", body: "预扣 = 月收入 × 3.3%" },
+      { title: "月实收", body: "实收 = 月收入 - 预扣" },
+      { title: "结算", body: "结算 = 预计年度所得税 - 年度预扣税" },
+    ],
+    howToTitle: "使用方法",
+    steps: ["输入月税前自由职业收入。", "查看扣除 3.3% 后的月实收金额。", "参考年度结算估算，预留纳税资金。"],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "扣 3.3% 后税就结束了吗？", answer: "不是。3.3% 是预扣性质，次年综合所得税申报时还要结算。" },
+      { question: "健康保险也精确计算吗？", answer: "不是。此组件主要显示 3.3% 预扣和简化所得税，健康保险另有资格和评估规则。" },
+      { question: "这是韩国规则吗？", answer: "是。它以韩国自由职业者预扣和 5 月综合所得税申报为前提。" },
+    ],
+    disclaimer: "本工具用于一般计算。正式自由职业税额和保险费请以韩国相关机关或税务专业人士标准为准。",
+  },
+  fr: {
+    introTitle: "La fiscalité freelance coréenne sépare retenue de 3,3% et régularisation",
+    intro: "Ce calculateur estime le revenu net mensuel après retenue de 3,3% et une régularisation annuelle simplifiée. La déclaration réelle dépend du code d'activité, des charges, déductions, assurances et montants déjà prélevés.",
+    formulaTitle: "Règles de calcul",
+    formulas: [
+      { title: "Retenue", body: "Retenue = revenu mensuel brut × 3,3%" },
+      { title: "Net mensuel", body: "Net = revenu brut - retenue" },
+      { title: "Régularisation", body: "Régularisation = impôt annuel estimé - retenues annuelles" },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: ["Saisissez le revenu freelance mensuel brut.", "Consultez le net après retenue de 3,3%.", "Utilisez l'estimation annuelle pour prévoir une réserve fiscale."],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "La retenue de 3,3% suffit-elle ?", answer: "Non. C'est un acompte, régularisé lors de la déclaration coréenne de revenu global." },
+      { question: "L'assurance maladie est-elle calculée exactement ?", answer: "Non. Elle dépend de règles distinctes d'éligibilité et d'assiette." },
+      { question: "Est-ce spécifique à la Corée ?", answer: "Oui. Le calcul suppose le contexte fiscal coréen des freelances." },
+    ],
+    disclaimer: "Cet outil sert au calcul général. Pour impôts et assurances officiels, vérifiez auprès de l'autorité coréenne compétente ou d'un fiscaliste.",
+  },
+  es: {
+    introTitle: "El impuesto freelance coreano separa retención del 3,3% y liquidación anual",
+    intro: "Esta calculadora estima ingreso neto mensual tras la retención del 3,3% y una liquidación anual simplificada. La declaración real depende de actividad, gastos deducibles, créditos, seguro médico e impuestos ya retenidos.",
+    formulaTitle: "Reglas de cálculo",
+    formulas: [
+      { title: "Retención", body: "Retención = ingreso mensual bruto × 3,3%" },
+      { title: "Neto mensual", body: "Neto = ingreso bruto - retención" },
+      { title: "Liquidación", body: "Liquidación = impuesto anual estimado - retenciones anuales" },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: ["Introduce tu ingreso freelance mensual antes de impuestos.", "Revisa el neto tras retención del 3,3%.", "Usa la estimación anual para reservar efectivo fiscal."],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿La retención del 3,3% termina el impuesto?", answer: "No. Es un pago anticipado que se liquida en la declaración coreana de renta global." },
+      { question: "¿Calcula exactamente seguro médico?", answer: "No. El seguro médico depende de reglas separadas de elegibilidad y base." },
+      { question: "¿Es específico de Corea?", answer: "Sí. Supone el contexto coreano de retención freelance y declaración de mayo." },
+    ],
+    disclaimer: "Esta herramienta es para cálculo general. Confirma impuestos y seguros oficiales con la autoridad coreana correspondiente o un profesional fiscal.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  { "@context": "https://schema.org", "@type": "HowTo", name: m.title, description: m.description, step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })) },
+  { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: c.faqs.map((faq) => ({ "@type": "Question", name: faq.question, acceptedAnswer: { "@type": "Answer", text: faq.answer } })) },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <main class="mx-auto max-w-3xl px-4 py-10">
     <FreelancerTaxCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

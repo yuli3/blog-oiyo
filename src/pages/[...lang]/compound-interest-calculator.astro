@@ -2,7 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import CompoundInterestCalculatorComp from "../../components/tools/CompoundInterestCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -11,9 +12,9 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "복리 계산기 — 시간이 돈이 되는 복리의 마법",
     description: "원금, 이율, 기간을 입력해 복리 수익을 계산하세요. 시간이 지날수록 불어나는 복리의 힘을 확인합니다.",
@@ -35,20 +36,227 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Calcula rendimientos de interés compuesto con capital, tasa y tiempo.",
   },
   zh: {
-    title: "複利計算機",
-    description: "輸入本金、利率和期限計算複利收益，感受時間複利的強大力量。",
-  },
-  cn: {
-    title: "复利计算器",
+    title: "复利计算机",
     description: "输入本金、利率和期限计算复利收益，感受时间复利的强大力量。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "복리는 이자에도 다시 이자가 붙는 성장 방식입니다",
+    intro: "복리 계산기는 초기 투자금, 매월 적립액, 연 수익률, 투자 기간을 입력해 미래 평가액과 총 투자 원금, 예상 수익을 보여줍니다. 장기 저축이나 투자 계획에서는 수익률뿐 아니라 시간이 결과를 얼마나 크게 바꾸는지 확인하는 데 유용합니다.",
+    formulaTitle: "복리 계산 기준",
+    formulas: [
+      { title: "일시납 복리", body: "A = P(1 + r/n)^(nt)" },
+      { title: "월 적립", body: "FV = PMT × ((1 + r)^n - 1) / r" },
+      { title: "총 수익", body: "총 수익 = 미래가치 - 총 납입 원금" },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "초기 투자금과 매월 추가 적립액을 입력합니다.",
+      "연 수익률과 투자 기간을 보수적으로 설정합니다.",
+      "최종 금액, 총 원금, 이자 수익을 함께 비교합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "월 적립도 복리로 계산되나요?", answer: "이 도구는 월 단위 수익률을 적용해 매월 적립금이 이후 기간 동안 함께 불어나는 방식으로 계산합니다." },
+      { question: "수익률은 세전인가요?", answer: "입력한 수익률 그대로 계산합니다. 세금, 수수료, 물가상승률을 반영하려면 별도로 차감해 보수적으로 입력하세요." },
+      { question: "높은 수익률을 넣어도 되나요?", answer: "가능하지만 장기 계획에서는 현실적인 평균 수익률과 하락 구간을 함께 고려해야 합니다." },
+    ],
+    disclaimer: "이 도구는 일반적인 계산용입니다. 공식 금융 수치와 상품 조건은 관련 기관 또는 금융회사 자료를 확인하세요.",
+  },
+  en: {
+    introTitle: "Compound interest lets returns earn more returns",
+    intro: "This calculator estimates future balance, total contributions, and expected interest from an initial deposit, monthly contributions, annual return, and time horizon. It is most useful for seeing how time and recurring deposits change long-term outcomes.",
+    formulaTitle: "Compound interest rules",
+    formulas: [
+      { title: "Lump sum", body: "A = P(1 + r/n)^(nt)" },
+      { title: "Monthly deposits", body: "FV = PMT × ((1 + r)^n - 1) / r" },
+      { title: "Interest earned", body: "Interest = future value - total principal" },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Enter your initial deposit and planned monthly contribution.",
+      "Set an annual return and investment period using realistic assumptions.",
+      "Compare final balance, total principal, and estimated interest earned.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Are monthly contributions compounded?", answer: "Yes. The tool applies a monthly rate, so each contribution compounds for the remaining months." },
+      { question: "Is the return before tax?", answer: "Yes. It uses the rate you enter. Reduce the rate or final result separately for taxes, fees, and inflation." },
+      { question: "Can I use a high expected return?", answer: "You can, but long-term plans should use realistic averages and allow for market downturns." },
+    ],
+    disclaimer: "This tool is for general calculation. Confirm official financial figures and product terms with the relevant institution.",
+  },
+  ja: {
+    introTitle: "複利は利息がさらに利息を生む仕組みです",
+    intro: "この計算機は、初期投資額、毎月の積立額、年利、期間から将来の評価額、元本合計、予想収益を計算します。長期の貯蓄や投資では、時間が結果に与える影響を確認できます。",
+    formulaTitle: "複利の基準",
+    formulas: [
+      { title: "一括投資", body: "A = P(1 + r/n)^(nt)" },
+      { title: "毎月積立", body: "FV = PMT × ((1 + r)^n - 1) / r" },
+      { title: "収益", body: "収益 = 将来価値 - 投入元本" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "初期投資額と毎月の積立額を入力します。",
+      "年利と投資期間を現実的に設定します。",
+      "最終金額、元本、利息収益を比較します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "毎月の積立も複利になりますか？", answer: "はい。月利で計算し、各積立額が残り期間に応じて増える形です。" },
+      { question: "税引き前の利回りですか？", answer: "入力した利回りをそのまま使います。税金、手数料、インフレは別途調整してください。" },
+      { question: "高い利回りを入れてもよいですか？", answer: "入力は可能ですが、長期計画では現実的な平均値と下落リスクを考える必要があります。" },
+    ],
+    disclaimer: "このツールは一般的な計算用です。公式な金融数値や商品条件は関係機関・金融機関でご確認ください。",
+  },
+  zh: {
+    introTitle: "复利是收益继续产生收益的增长方式",
+    intro: "这个计算器根据初始本金、每月投入、年收益率和投资年限，估算未来金额、累计投入本金和预计收益。做长期储蓄或投资计划时，它能帮助你看到时间和持续投入的影响。",
+    formulaTitle: "复利计算规则",
+    formulas: [
+      { title: "一次投入", body: "A = P(1 + r/n)^(nt)" },
+      { title: "每月投入", body: "FV = PMT × ((1 + r)^n - 1) / r" },
+      { title: "总收益", body: "总收益 = 未来价值 - 累计投入本金" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "输入初始本金和计划每月追加金额。",
+      "用现实的假设设置年收益率和投资年限。",
+      "一起查看最终金额、总本金和预计利息收益。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "每月投入也会参与复利吗？", answer: "会。本工具按月收益率估算，每笔投入会在剩余月份继续累积。" },
+      { question: "收益率是税前吗？", answer: "是，工具直接使用你输入的收益率。税费、手续费和通胀需要另行调整。" },
+      { question: "可以输入很高的收益率吗？", answer: "可以，但长期规划更适合使用稳健假设，并考虑市场波动。" },
+    ],
+    disclaimer: "本工具用于一般计算。正式金融数字和产品条款请以相关机构或金融公司资料为准。",
+  },
+  fr: {
+    introTitle: "Les intérêts composés font travailler les gains déjà obtenus",
+    intro: "Ce calculateur estime le capital futur, les versements cumulés et les intérêts attendus à partir d'un capital initial, de versements mensuels, d'un rendement annuel et d'une durée. Il montre surtout l'effet du temps dans un plan d'épargne ou d'investissement.",
+    formulaTitle: "Règles de calcul",
+    formulas: [
+      { title: "Capital initial", body: "A = P(1 + r/n)^(nt)" },
+      { title: "Versements mensuels", body: "FV = PMT × ((1 + r)^n - 1) / r" },
+      { title: "Intérêts", body: "Intérêts = valeur future - capital versé" },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Saisissez le capital initial et le versement mensuel prévu.",
+      "Choisissez un rendement annuel et une durée réalistes.",
+      "Comparez la valeur finale, le capital versé et les intérêts estimés.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Les versements mensuels sont-ils composés ?", answer: "Oui. Chaque versement produit un rendement pendant les mois qui restent." },
+      { question: "Le rendement est-il avant impôts ?", answer: "Oui. Le calcul utilise le taux saisi ; ajustez séparément impôts, frais et inflation." },
+      { question: "Puis-je utiliser un rendement élevé ?", answer: "Oui, mais une planification longue doit rester réaliste et intégrer les baisses possibles." },
+    ],
+    disclaimer: "Cet outil sert au calcul général. Pour les chiffres officiels et conditions produit, vérifiez auprès de l'institution compétente.",
+  },
+  es: {
+    introTitle: "El interés compuesto permite que las ganancias generen más ganancias",
+    intro: "Esta calculadora estima el saldo futuro, el capital aportado y los intereses esperados con un depósito inicial, aportes mensuales, rendimiento anual y plazo. Es útil para entender cómo el tiempo cambia un plan de ahorro o inversión.",
+    formulaTitle: "Reglas de cálculo",
+    formulas: [
+      { title: "Capital inicial", body: "A = P(1 + r/n)^(nt)" },
+      { title: "Aportes mensuales", body: "FV = PMT × ((1 + r)^n - 1) / r" },
+      { title: "Interés ganado", body: "Interés = valor futuro - capital aportado" },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Introduce el depósito inicial y el aporte mensual previsto.",
+      "Elige una tasa anual y un plazo con supuestos realistas.",
+      "Compara saldo final, capital aportado e interés estimado.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Los aportes mensuales también se capitalizan?", answer: "Sí. Cada aporte se capitaliza durante los meses restantes del periodo." },
+      { question: "¿La tasa es antes de impuestos?", answer: "Sí. Usa la tasa indicada; impuestos, comisiones e inflación deben ajustarse aparte." },
+      { question: "¿Puedo usar una tasa muy alta?", answer: "Puedes, pero un plan de largo plazo debe usar supuestos prudentes y considerar caídas." },
+    ],
+    disclaimer: "Esta herramienta es para cálculo general. Confirma cifras oficiales y condiciones del producto con la institución correspondiente.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <main class="mx-auto max-w-3xl px-4 py-10">
     <CompoundInterestCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

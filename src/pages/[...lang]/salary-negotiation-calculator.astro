@@ -2,15 +2,16 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import SalaryNegotiationCalculator from "../../components/tools/SalaryNegotiationCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "연봉 협상 시뮬레이터 — 시나리오별 인상 결과 계산",
     description: "현재 연봉과 희망 인상률을 입력하면 낙관·중간·보수 시나리오별 협상 결과와 세후 월급을 계산합니다. 협상 팁도 함께 제공.",
@@ -32,20 +33,229 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Introduce tu salario actual y la tasa de aumento deseada para ver los resultados según tres escenarios de negociación.",
   },
   zh: {
-    title: "薪資談判模擬器 — 情境別加薪結果計算",
-    description: "輸入目前年薪與期望加薪率，即可查看樂觀、中間、保守三種談判情境下的結果與稅後月薪。",
-  },
-  cn: {
     title: "薪资谈判模拟器 — 情境别加薪结果计算",
-    description: "输入当前年薪与期望加薪率，即可查看乐观、中间、保守三种谈判情境下的结果与税后月薪。",
+    description: "输入目前年薪与期望加薪率，即可查看乐观、中间、保守三种谈判情境下的结果与税后月薪。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+type SeoContent = {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+};
+
+const content: Record<ActiveLocale, SeoContent> = {
+  ko: {
+    introTitle: "연봉 협상은 목표액 하나가 아니라 가능한 결과 범위로 준비해야 합니다",
+    intro: "희망 인상률만 정하면 협상장에서 조정 여지가 보이지 않습니다. 이 시뮬레이터는 현재 연봉과 목표 인상률을 기준으로 낙관, 중간, 보수 시나리오를 나누고, 한국식 간이 세후 월급까지 함께 보여 주어 실제 생활비 변화까지 점검하게 합니다.",
+    formulaTitle: "계산 기준",
+    formulas: [
+      { title: "시나리오 인상률", body: "낙관은 목표 인상률 100%, 중간은 70%, 보수는 40% 달성을 가정합니다." },
+      { title: "월 세전 급여", body: "협상 후 연봉을 12개월로 나누어 월 세전 급여를 계산합니다." },
+      { title: "간이 세후 월급", body: "국민연금, 건강보험, 장기요양, 고용보험과 근로소득세를 단순화해 월 실수령액을 추정합니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "현재 연봉을 만원 단위로 입력합니다.",
+      "협상에서 목표로 삼는 인상률을 입력합니다.",
+      "세 가지 시나리오의 연봉, 인상액, 월급 차이를 비교해 협상 범위를 정합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "세후 월급이 실제 급여명세서와 같나요?", answer: "아닙니다. 4대보험과 근로소득세를 단순화한 추정치입니다. 비과세 수당, 부양가족, 회사별 공제 방식에 따라 실제 금액은 달라집니다." },
+      { question: "왜 세 가지 시나리오로 나누나요?", answer: "협상은 목표액 그대로 끝나지 않는 경우가 많습니다. 상한, 현실적 기대치, 최소 수용선을 함께 보면 제안과 양보 전략을 세우기 쉽습니다." },
+      { question: "연봉 협상 자료로 무엇을 준비해야 하나요?", answer: "시장 연봉 범위, 최근 성과, 비용 절감이나 매출 기여처럼 숫자로 설명 가능한 근거가 가장 강합니다." },
+    ],
+    disclaimer: "이 도구는 일반적인 추정용입니다. 실제 보상, 세금, 노무 판단은 관련 기관이나 전문가에게 확인하세요.",
+  },
+  en: {
+    introTitle: "Salary negotiation works better as a range, not a single number",
+    intro: "A target raise is only the starting point. This simulator turns your current salary and desired raise into optimistic, moderate, and conservative outcomes, then estimates Korean-style monthly net pay so you can judge the practical difference in cash flow.",
+    formulaTitle: "Calculation basis",
+    formulas: [
+      { title: "Scenario raise", body: "Optimistic uses 100% of your target raise, moderate 70%, and conservative 40%." },
+      { title: "Monthly gross", body: "The negotiated annual salary is divided by twelve to estimate monthly gross pay." },
+      { title: "Simplified net pay", body: "Korean pension, health insurance, long-term care, employment insurance, and income tax are simplified for a monthly estimate." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Enter your current annual salary in units of KRW 10,000.",
+      "Enter the raise percentage you want to negotiate for.",
+      "Compare salary, raise amount, and monthly net pay across the three scenarios.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Will the net pay match my payslip?", answer: "No. It is a simplified estimate. Tax-free allowances, dependents, benefit plans, and employer deductions can change the actual result." },
+      { question: "Why use three scenarios?", answer: "Negotiations rarely end exactly at the opening target. A range helps you define an ask, a realistic middle, and a minimum acceptable outcome." },
+      { question: "What evidence should support a raise request?", answer: "Market salary ranges, recent performance, and quantified business impact such as revenue, savings, or delivery improvements are the strongest inputs." },
+    ],
+    disclaimer: "This tool is a general estimate. Confirm actual compensation, tax, and labor matters with the relevant institution or professional.",
+  },
+  ja: {
+    introTitle: "給与交渉は一つの希望額ではなく、結果の幅で準備します",
+    intro: "希望昇給率だけでは、交渉でどこまで受け入れるかが見えにくくなります。このシミュレーターは現在の年俸と希望昇給率から楽観・中間・保守の3シナリオを作り、韓国式の簡易手取り月給も確認できます。",
+    formulaTitle: "計算の前提",
+    formulas: [
+      { title: "シナリオ昇給率", body: "楽観は目標の100%、中間は70%、保守は40%の達成を想定します。" },
+      { title: "月額税前給与", body: "交渉後の年俸を12で割って月額給与を算出します。" },
+      { title: "簡易手取り", body: "韓国の年金、健康保険、長期療養、雇用保険、所得税を簡略化して推定します。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "現在の年俸を万ウォン単位で入力します。",
+      "交渉で目指す昇給率を入力します。",
+      "3つのシナリオで年俸、昇給額、手取り月給の差を比較します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "手取り額は実際の給与明細と一致しますか？", answer: "一致するとは限りません。非課税手当、扶養家族、会社の控除方式により実際の金額は変わります。" },
+      { question: "なぜ3シナリオが必要ですか？", answer: "交渉は希望額どおりに終わるとは限りません。上限、現実的な中間値、最低ラインを分けると判断しやすくなります。" },
+      { question: "昇給交渉には何を準備すべきですか？", answer: "市場給与、最近の成果、売上・コスト削減・納期改善など数値で示せる根拠が有効です。" },
+    ],
+    disclaimer: "このツールは一般的な概算です。実際の報酬・税金・労務判断は関係機関または専門家に確認してください。",
+  },
+  zh: {
+    introTitle: "薪资谈判应准备一个区间，而不是一个数字",
+    intro: "只设定期望加薪率，很难判断谈判时的让步空间。这个模拟器会把当前年薪和目标加薪率拆成乐观、中间、保守三种情境，并用韩国简化税费估算月到手金额，方便判断现金流变化。",
+    formulaTitle: "计算依据",
+    formulas: [
+      { title: "情境加薪率", body: "乐观情境按目标加薪率100%，中间按70%，保守按40%计算。" },
+      { title: "月税前薪资", body: "把谈判后的年薪除以12，得到月税前薪资。" },
+      { title: "简化税后薪资", body: "简化计算韩国国民年金、健康保险、长期照护、雇佣保险和所得税。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "以万韩元为单位输入当前年薪。",
+      "输入谈判目标加薪率。",
+      "比较三种情境下的年薪、加薪金额和月到手薪资。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "税后月薪会和工资单一致吗？", answer: "不会完全一致。这是简化估算，免税津贴、扶养人数、公司扣除方式都会影响实际金额。" },
+      { question: "为什么要分三种情境？", answer: "谈判很少刚好达成开场目标。用区间思考能同时准备理想值、现实值和最低接受线。" },
+      { question: "谈判前应准备什么资料？", answer: "市场薪资范围、近期成果，以及可量化的营收、节省成本或交付改善证据最有说服力。" },
+    ],
+    disclaimer: "本工具仅作一般估算。实际薪酬、税务和劳动事项请向相关机构或专业人士确认。",
+  },
+  fr: {
+    introTitle: "Une négociation salariale se prépare avec une fourchette",
+    intro: "Un seul objectif de hausse ne suffit pas à piloter la discussion. Ce simulateur transforme votre salaire actuel et la hausse souhaitée en scénarios optimiste, médian et prudent, puis estime le net mensuel selon une méthode coréenne simplifiée.",
+    formulaTitle: "Bases de calcul",
+    formulas: [
+      { title: "Hausse par scénario", body: "Optimiste retient 100% de la hausse cible, médian 70%, prudent 40%." },
+      { title: "Brut mensuel", body: "Le nouveau salaire annuel est divisé par douze." },
+      { title: "Net simplifié", body: "Pension, santé, soins longue durée, assurance emploi et impôt coréens sont simplifiés pour une estimation mensuelle." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Saisissez votre salaire annuel actuel en unités de 10 000 KRW.",
+      "Indiquez le pourcentage d'augmentation visé.",
+      "Comparez salaire, augmentation et net mensuel dans les trois scénarios.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Le net correspondra-t-il à ma fiche de paie ?", answer: "Non. C'est une estimation simplifiée. Avantages non imposables, personnes à charge et règles de l'employeur peuvent modifier le résultat." },
+      { question: "Pourquoi trois scénarios ?", answer: "Une négociation aboutit rarement exactement à l'objectif initial. La fourchette aide à définir l'ambition, le milieu réaliste et le minimum acceptable." },
+      { question: "Quels éléments préparer ?", answer: "Fourchettes de marché, résultats récents et impact chiffré sur revenus, coûts ou livraison donnent les meilleurs arguments." },
+    ],
+    disclaimer: "Cet outil fournit une estimation générale. Confirmez rémunération, fiscalité et droit du travail avec l'institution compétente ou un professionnel.",
+  },
+  es: {
+    introTitle: "La negociación salarial se prepara con un rango",
+    intro: "Un único objetivo de aumento no basta para dirigir la conversación. Este simulador convierte tu salario actual y el aumento deseado en escenarios optimista, medio y conservador, y estima el neto mensual con una metodología coreana simplificada.",
+    formulaTitle: "Bases de cálculo",
+    formulas: [
+      { title: "Aumento por escenario", body: "Optimista usa 100% del objetivo, medio 70% y conservador 40%." },
+      { title: "Bruto mensual", body: "El nuevo salario anual se divide entre doce." },
+      { title: "Neto simplificado", body: "Pensión, salud, cuidado de largo plazo, seguro de empleo e impuesto coreanos se simplifican para una estimación mensual." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Introduce tu salario anual actual en unidades de 10.000 KRW.",
+      "Indica el porcentaje de aumento que quieres negociar.",
+      "Compara salario, incremento y neto mensual en los tres escenarios.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿El neto coincidirá con mi nómina?", answer: "No. Es una estimación simplificada. Asignaciones no imponibles, dependientes y reglas de la empresa pueden cambiar el resultado." },
+      { question: "¿Por qué tres escenarios?", answer: "Una negociación rara vez termina exactamente en el objetivo inicial. El rango ayuda a definir aspiración, punto realista y mínimo aceptable." },
+      { question: "¿Qué evidencia debo preparar?", answer: "Rangos salariales de mercado, resultados recientes e impacto cuantificado en ingresos, costes o entregas son los argumentos más fuertes." },
+    ],
+    disclaimer: "Esta herramienta ofrece una estimación general. Confirma compensación, impuestos y asuntos laborales con la institución correspondiente o un profesional.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <SalaryNegotiationCalculator client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

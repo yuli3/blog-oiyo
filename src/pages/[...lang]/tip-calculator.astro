@@ -2,15 +2,16 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import TipCalculator from "../../components/tools/TipCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "팁 계산기 — 총액·1인당·비율 계산",
     description: "청구 금액에 팁 비율을 적용하고 인원수로 나누어 1인당 부담액을 계산합니다. 10~25% 프리셋 제공.",
@@ -32,20 +33,189 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Ingresa el importe, el porcentaje de propina y el número de personas para calcular el total y la parte de cada uno al instante.",
   },
   zh: {
-    title: "小費計算機 — 輕鬆分攤帳單",
-    description: "輸入消費金額、小費比例與人數，立即計算每人應付金額，支援10%至25%常見比例。",
-  },
-  cn: {
-    title: "小费计算器 — 轻松分摊账单",
-    description: "输入消费金额、小费比例与人数，立即计算每人应付金额，支持10%至25%常见比例。",
+    title: "小费计算机 — 轻松分摊帐单",
+    description: "输入消费金额、小费比例与人数，立即计算每人应付金额，支援10%至25%常见比例。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "팁 계산은 총액과 1인당 부담을 분명하게 나눕니다",
+    intro: "팁 문화가 있는 지역에서 식사나 택시, 서비스 비용을 나눌 때는 원래 청구 금액, 팁 비율, 인원수를 함께 봐야 합니다. 이 계산기는 팁 총액, 팁 포함 총액, 1인당 부담액을 한 번에 계산해 계산 실수를 줄입니다.",
+    formulaTitle: "계산식",
+    formulas: [
+      { title: "팁 금액", body: "팁 = 청구 금액 × 팁 비율" },
+      { title: "총 결제액", body: "총액 = 청구 금액 + 팁" },
+      { title: "1인당 부담", body: "1인당 = 총액 / 인원수" },
+    ],
+    howToTitle: "사용 방법",
+    steps: ["청구 금액을 입력합니다.", "팁 비율을 프리셋 또는 슬라이더로 정합니다.", "나누어 낼 인원수를 조정하고 1인당 금액을 확인합니다."],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "세전 금액과 세후 금액 중 무엇을 넣나요?", answer: "지역 관행에 따라 다릅니다. 미국처럼 세전 금액 기준으로 팁을 계산하는 경우가 많지만, 현장 관행을 확인하세요." },
+      { question: "팁 비율은 몇 %가 적당한가요?", answer: "국가와 서비스 종류에 따라 다릅니다. 도구는 10~25% 프리셋을 제공하지만 의무 기준은 아닙니다." },
+      { question: "각자 주문 금액이 다르면 어떻게 하나요?", answer: "이 도구는 균등 분할용입니다. 각자 주문 금액이 크게 다르면 개별 계산이 더 공정합니다." },
+    ],
+    disclaimer: "이 도구는 일반적인 계산용입니다. 공식 청구액과 현지 서비스 관행은 결제처 기준을 확인하세요.",
+  },
+  en: {
+    introTitle: "A tip calculation makes the total and each person's share clear",
+    intro: "When splitting a meal, ride, or service bill, the bill amount, tip percentage, and number of people all matter. This calculator shows the tip, total with tip, tip per person, and final amount owed by each person.",
+    formulaTitle: "Formulas",
+    formulas: [
+      { title: "Tip amount", body: "Tip = bill amount × tip percentage" },
+      { title: "Total", body: "Total = bill amount + tip" },
+      { title: "Per person", body: "Per person = total / number of people" },
+    ],
+    howToTitle: "How to use",
+    steps: ["Enter the bill amount.", "Choose a tip percentage with a preset or the slider.", "Set the number of people and read each person's share."],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Should I tip on the pre-tax or after-tax amount?", answer: "It depends on local custom. In many U.S. contexts people tip on the pre-tax subtotal, but the receipt and setting matter." },
+      { question: "What tip percentage is appropriate?", answer: "It varies by country and service. The presets are common ranges, not a legal or universal requirement." },
+      { question: "What if everyone ordered different amounts?", answer: "This tool assumes an equal split. If orders differ a lot, calculate each person's share separately." },
+    ],
+    disclaimer: "This tool is for general calculation. Confirm official bill totals and local service customs with the relevant venue.",
+  },
+  ja: {
+    introTitle: "チップ計算は合計額と1人分を明確にします",
+    intro: "チップ文化のある地域で食事やサービス代を分けるときは、請求額、チップ率、人数を同時に見る必要があります。このツールはチップ額、チップ込み合計、1人あたりの負担額をまとめて計算します。",
+    formulaTitle: "計算式",
+    formulas: [
+      { title: "チップ額", body: "チップ = 請求額 × チップ率" },
+      { title: "合計", body: "合計 = 請求額 + チップ" },
+      { title: "1人分", body: "1人分 = 合計 / 人数" },
+    ],
+    howToTitle: "使い方",
+    steps: ["請求額を入力します。", "プリセットまたはスライダーでチップ率を選びます。", "人数を調整し、1人あたりの金額を確認します。"],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "税抜と税込のどちらで計算しますか？", answer: "地域の慣習によります。米国では税抜小計を基準にすることが多いですが、現地の慣習を確認してください。" },
+      { question: "何%が適切ですか？", answer: "国やサービスによって異なります。プリセットは一般的な目安で、必須ルールではありません。" },
+      { question: "注文額が人によって違う場合は？", answer: "このツールは均等割り向けです。差が大きい場合は個別計算が公平です。" },
+    ],
+    disclaimer: "このツールは一般的な計算用です。正式な請求額と現地の慣習は店舗・サービス提供者にご確認ください。",
+  },
+  zh: {
+    introTitle: "小费计算能清楚分出总额和每人应付",
+    intro: "在有小费文化的地区分摊餐费、车费或服务费时，需要同时考虑账单金额、小费比例和人数。这个工具会计算小费、含小费总额、每人小费和每人最终应付金额。",
+    formulaTitle: "计算公式",
+    formulas: [
+      { title: "小费金额", body: "小费 = 账单金额 × 小费比例" },
+      { title: "总额", body: "总额 = 账单金额 + 小费" },
+      { title: "每人应付", body: "每人 = 总额 / 人数" },
+    ],
+    howToTitle: "使用方法",
+    steps: ["输入账单金额。", "用预设或滑杆选择小费比例。", "调整人数并查看每人应付金额。"],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "按税前还是税后金额给小费？", answer: "取决于当地习惯。美国很多场景按税前小计计算，但应以具体账单和当地习惯为准。" },
+      { question: "小费比例多少合适？", answer: "不同国家和服务类型差异很大。预设只是常见范围，不是强制标准。" },
+      { question: "每个人点的不一样怎么办？", answer: "本工具适合平均分摊。若消费差异较大，建议分别计算更公平。" },
+    ],
+    disclaimer: "本工具用于一般计算。正式账单金额和当地服务惯例请以商家或服务方为准。",
+  },
+  fr: {
+    introTitle: "Le calcul du pourboire clarifie le total et la part de chacun",
+    intro: "Pour partager une addition avec pourboire, il faut combiner le montant, le pourcentage et le nombre de personnes. Ce calculateur affiche le pourboire, le total avec pourboire et la part finale de chacun.",
+    formulaTitle: "Formules",
+    formulas: [
+      { title: "Pourboire", body: "Pourboire = montant × pourcentage" },
+      { title: "Total", body: "Total = montant + pourboire" },
+      { title: "Par personne", body: "Part = total / nombre de personnes" },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: ["Saisissez le montant de l'addition.", "Choisissez un pourcentage de pourboire.", "Indiquez le nombre de personnes et lisez la part de chacun."],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Faut-il calculer sur le montant HT ou TTC ?", answer: "Cela dépend des usages locaux. Dans certains pays on utilise le sous-total avant taxe." },
+      { question: "Quel pourcentage choisir ?", answer: "Il varie selon le pays et le service. Les préréglages sont des repères, pas une règle universelle." },
+      { question: "Et si chacun a consommé différemment ?", answer: "L'outil suppose un partage égal. Si les montants varient, un calcul individuel est préférable." },
+    ],
+    disclaimer: "Cet outil sert au calcul général. Pour le total officiel et les usages locaux, vérifiez auprès de l'établissement.",
+  },
+  es: {
+    introTitle: "Calcular la propina aclara el total y la parte de cada persona",
+    intro: "Al dividir una comida o servicio con propina, importan el importe, el porcentaje y el número de personas. Esta calculadora muestra propina, total con propina y pago final por persona.",
+    formulaTitle: "Fórmulas",
+    formulas: [
+      { title: "Propina", body: "Propina = importe × porcentaje" },
+      { title: "Total", body: "Total = importe + propina" },
+      { title: "Por persona", body: "Por persona = total / número de personas" },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: ["Introduce el importe de la cuenta.", "Elige el porcentaje de propina.", "Ajusta el número de personas y revisa cuánto paga cada una."],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Se calcula antes o después de impuestos?", answer: "Depende de la costumbre local. En muchos casos de EE. UU. se usa el subtotal antes de impuestos." },
+      { question: "¿Qué porcentaje es adecuado?", answer: "Varía según país y servicio. Los preajustes son rangos comunes, no una obligación universal." },
+      { question: "¿Y si cada persona pidió algo distinto?", answer: "La herramienta asume reparto igual. Si los consumos difieren mucho, conviene calcular por separado." },
+    ],
+    disclaimer: "Esta herramienta es para cálculo general. Confirma el total oficial y las costumbres locales con el establecimiento correspondiente.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  { "@context": "https://schema.org", "@type": "HowTo", name: m.title, description: m.description, step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })) },
+  { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: c.faqs.map((faq) => ({ "@type": "Question", name: faq.question, acceptedAnswer: { "@type": "Answer", text: faq.answer } })) },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <main class="mx-auto max-w-3xl px-4 py-10">
     <TipCalculator client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

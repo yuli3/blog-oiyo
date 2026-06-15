@@ -4,6 +4,8 @@ import ImageProcessorComp from "../../components/tools/ImageProcessor";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
+type ActiveLocale = (typeof locales)[number];
+
 export async function getStaticPaths() {
   return locales.map((lang) => ({
     params: { lang },
@@ -11,9 +13,9 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale & Locale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "이미지 처리 도구 — 리사이즈·필터·변환",
     description: "이미지 크기 조정, 다양한 필터 적용, 포맷 변환을 브라우저에서 바로 처리하세요. PNG, JPEG, WebP 변환을 지원합니다.",
@@ -35,20 +37,227 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Redimensiona, aplica filtros y convierte formatos de imagen directamente en tu navegador.",
   },
   zh: {
-    title: "圖片處理工具",
-    description: "直接在瀏覽器中調整圖片大小、應用濾鏡和轉換格式。支持PNG、JPEG和WebP轉換。",
-  },
-  cn: {
     title: "图片处理工具",
     description: "直接在浏览器中调整图片大小、应用滤镜和转换格式。支持PNG、JPEG和WebP转换。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "간단한 이미지 편집은 브라우저에서도 충분합니다",
+    intro: "크기 조정, 필터 적용, 포맷 변환처럼 자주 쓰는 작업은 무거운 편집 프로그램을 열지 않아도 처리할 수 있습니다. 이 이미지 처리 도구는 작업 파일을 서버에 업로드하지 않고 브라우저에서 변환을 실행해, 블로그용 이미지나 공유용 사본을 빠르게 만들 수 있게 돕습니다.",
+    formulaTitle: "처리 전 결정할 것",
+    formulas: [
+      { title: "출력 크기", body: "사용할 화면 크기보다 지나치게 큰 이미지는 로딩 속도를 늦추므로 적절히 줄이는 편이 좋습니다." },
+      { title: "파일 형식", body: "사진은 JPEG/WebP, 투명 배경이나 선명한 그래픽은 PNG가 더 적합할 수 있습니다." },
+      { title: "작업 위치", body: "리사이즈와 변환은 브라우저에서 실행되어 원본 이미지를 서버로 보낼 필요가 없습니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "편집할 이미지를 선택하고 현재 크기와 형식을 확인합니다.",
+      "필요한 리사이즈, 필터, 출력 형식 옵션을 적용합니다.",
+      "미리보기를 확인한 뒤 결과 이미지를 다운로드합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "어떤 포맷으로 저장하는 것이 좋나요?", answer: "일반 사진은 JPEG 또는 WebP가 용량에 유리하고, 투명 배경이나 로고는 PNG가 적합한 경우가 많습니다." },
+      { question: "원본 파일은 유지되나요?", answer: "도구는 결과 파일을 새로 생성합니다. 그래도 중요한 원본은 편집 전 별도로 보관하는 것이 안전합니다." },
+      { question: "이미지가 서버로 전송되나요?", answer: "아니요. 일반적인 사용에서는 브라우저가 파일을 처리하므로 서버 업로드가 필요하지 않습니다." },
+    ],
+    disclaimer: "브라우저 기반 편집은 빠른 사본 제작에 적합합니다. 인쇄·납품용 파일은 전문 편집 환경에서 색상과 해상도를 다시 확인하세요.",
+  },
+  en: {
+    introTitle: "Simple image edits can happen directly in the browser",
+    intro: "Common tasks such as resizing, applying filters, and converting formats do not always require a full editor. This image processor runs in your browser, helping you create article images or sharing copies quickly without uploading the working file in the normal workflow.",
+    formulaTitle: "Decisions before processing",
+    formulas: [
+      { title: "Output size", body: "Images much larger than their display size slow pages down, so resizing is often the first useful edit." },
+      { title: "File format", body: "Photos often suit JPEG or WebP; transparent graphics, logos, and crisp line art may suit PNG." },
+      { title: "Where it runs", body: "Resize and conversion work happens in the browser, so the original file does not need to be sent to a server." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Choose the image and check its current size and format.",
+      "Apply the resize, filter, or output format settings you need.",
+      "Review the preview, then download the processed image.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Which format should I export?", answer: "JPEG or WebP is usually efficient for photos. PNG is often better for transparency, logos, and sharp graphics." },
+      { question: "Does the original file change?", answer: "The tool creates a new result file. Still, keep important originals stored separately before editing." },
+      { question: "Is the image sent to a server?", answer: "No. In the normal workflow, the browser processes the file locally." },
+    ],
+    disclaimer: "Browser editing is best for quick working copies. For print or delivery assets, verify color, size, and resolution in a professional workflow.",
+  },
+  ja: {
+    introTitle: "簡単な画像編集はブラウザだけでもできます",
+    intro: "リサイズ、フィルター、形式変換のような日常的な作業は、重い編集ソフトを開かなくても処理できます。この画像処理ツールはブラウザ内で変換を行い、通常の操作では作業ファイルをサーバーへアップロードしません。",
+    formulaTitle: "処理前に決めること",
+    formulas: [
+      { title: "出力サイズ", body: "表示サイズより大きすぎる画像は読み込みを遅くするため、先にリサイズすると扱いやすくなります。" },
+      { title: "ファイル形式", body: "写真はJPEG/WebP、透明背景やロゴ、線画はPNGが向くことがあります。" },
+      { title: "処理場所", body: "リサイズや変換はブラウザで行われ、元画像をサーバーへ送る必要がありません。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "編集する画像を選び、現在のサイズと形式を確認します。",
+      "必要なリサイズ、フィルター、出力形式を設定します。",
+      "プレビューを確認してから処理後の画像を保存します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "どの形式で保存すべきですか？", answer: "写真はJPEGまたはWebP、透明背景やロゴはPNGが適していることが多いです。" },
+      { question: "元ファイルは変更されますか？", answer: "結果ファイルを新しく作成します。ただし重要な元画像は編集前に保存しておくと安全です。" },
+      { question: "画像はサーバーに送信されますか？", answer: "いいえ。通常の操作ではブラウザ内で処理されます。" },
+    ],
+    disclaimer: "ブラウザ編集は素早い作業用コピーに向いています。印刷や納品用は専門環境で色、サイズ、解像度を確認してください。",
+  },
+  fr: {
+    introTitle: "Les retouches simples peuvent se faire dans le navigateur",
+    intro: "Redimensionner, appliquer un filtre ou convertir un format ne demande pas toujours un logiciel complet. Ce processeur d'image fonctionne dans le navigateur pour créer rapidement des copies destinées au web, sans téléversement dans l'usage normal.",
+    formulaTitle: "Décisions avant traitement",
+    formulas: [
+      { title: "Taille de sortie", body: "Une image beaucoup plus grande que son affichage ralentit la page ; le redimensionnement est souvent le premier bon choix." },
+      { title: "Format", body: "Les photos conviennent souvent au JPEG ou WebP ; transparence, logos et traits nets conviennent souvent au PNG." },
+      { title: "Traitement local", body: "Le redimensionnement et la conversion se font dans le navigateur, sans envoyer l'original." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Choisissez l'image et vérifiez sa taille et son format actuels.",
+      "Appliquez les options de redimensionnement, filtre ou format de sortie.",
+      "Contrôlez l'aperçu, puis téléchargez l'image traitée.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Quel format exporter ?", answer: "JPEG ou WebP est souvent efficace pour les photos. PNG est préférable pour transparence, logos et graphismes nets." },
+      { question: "Le fichier original est-il modifié ?", answer: "L'outil crée un nouveau fichier résultat. Gardez tout de même les originaux importants à part." },
+      { question: "L'image est-elle envoyée au serveur ?", answer: "Non. Dans le flux normal, le navigateur traite le fichier localement." },
+    ],
+    disclaimer: "L'édition dans le navigateur convient aux copies rapides. Pour l'impression ou la livraison, vérifiez couleur, taille et résolution dans un flux professionnel.",
+  },
+  es: {
+    introTitle: "Las ediciones simples pueden hacerse en el navegador",
+    intro: "Redimensionar, aplicar filtros o convertir formatos no siempre exige un editor completo. Este procesador de imágenes funciona en el navegador para crear copias web o de uso compartido sin subir el archivo en el flujo normal.",
+    formulaTitle: "Decisiones antes de procesar",
+    formulas: [
+      { title: "Tamaño final", body: "Una imagen mucho mayor que su tamaño de visualización ralentiza la página; redimensionar suele ser el primer paso." },
+      { title: "Formato", body: "Las fotos suelen ir bien en JPEG o WebP; transparencias, logotipos y gráficos nítidos pueden ir mejor en PNG." },
+      { title: "Procesamiento local", body: "El cambio de tamaño y la conversión ocurren en el navegador, sin enviar el original." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Elige la imagen y revisa su tamaño y formato actuales.",
+      "Aplica el redimensionado, filtro o formato de salida que necesites.",
+      "Revisa la vista previa y descarga la imagen procesada.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Qué formato conviene exportar?", answer: "JPEG o WebP suele ser eficiente para fotos. PNG es mejor para transparencia, logotipos y gráficos de bordes nítidos." },
+      { question: "¿Cambia el archivo original?", answer: "La herramienta crea un nuevo resultado. Aun así, conserva aparte los originales importantes." },
+      { question: "¿La imagen se envía al servidor?", answer: "No. En el flujo normal, el navegador procesa el archivo localmente." },
+    ],
+    disclaimer: "La edición en navegador sirve para copias rápidas. Para impresión o entrega profesional, verifica color, tamaño y resolución en un flujo adecuado.",
+  },
+  zh: {
+    introTitle: "简单图片编辑可以直接在浏览器中完成",
+    intro: "调整大小、应用滤镜、转换格式等常见操作，不一定需要打开大型编辑软件。这个图片处理工具在浏览器中运行，方便快速制作文章配图或分享副本，正常使用时不会上传工作文件。",
+    formulaTitle: "处理前需要决定",
+    formulas: [
+      { title: "输出尺寸", body: "图片远大于实际显示尺寸会拖慢加载，先调整大小通常最有效。" },
+      { title: "文件格式", body: "照片通常适合 JPEG 或 WebP；透明背景、标志和清晰线条图可能更适合 PNG。" },
+      { title: "运行位置", body: "调整大小和格式转换在浏览器中完成，原图不需要发送到服务器。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "选择要编辑的图片，并查看当前尺寸和格式。",
+      "应用需要的调整大小、滤镜或输出格式设置。",
+      "确认预览效果后下载处理后的图片。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "应该导出什么格式？", answer: "照片通常用 JPEG 或 WebP 更省空间；透明背景、标志和锐利图形常用 PNG。" },
+      { question: "原始文件会被修改吗？", answer: "工具会生成新的结果文件。不过重要原图仍建议单独保存。" },
+      { question: "图片会发送到服务器吗？", answer: "不会。正常流程下浏览器会在本地处理文件。" },
+    ],
+    disclaimer: "浏览器编辑适合快速生成工作副本。用于印刷或正式交付时，请在专业流程中再次检查颜色、尺寸和分辨率。",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <ImageProcessorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

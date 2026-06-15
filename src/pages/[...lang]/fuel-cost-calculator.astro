@@ -2,15 +2,16 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import FuelCostCalculator from "../../components/tools/FuelCostCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "주유비 계산기 — 구간별 연료비·1인당 비용 무료 계산",
     description: "서울↔부산 등 자주 찾는 구간 프리셋과 휘발유·경유·LPG 유종 선택으로 총 연료비와 1인당 주유비를 빠르게 계산하세요.",
@@ -32,20 +33,227 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Calcula rápidamente el coste total de combustible y el coste por persona para rutas habituales. Incluye rutas y tipos de combustible predefinidos.",
   },
   zh: {
-    title: "油費計算器 — 路線油費與每人費用免費計算",
-    description: "透過首爾↔釜山等常用路線預設和汽油、柴油、LPG燃料類型快速計算總油費及每人費用。",
-  },
-  cn: {
     title: "油费计算器 — 路线油费与每人费用免费计算",
-    description: "通过首尔↔釜山等常用路线预设和汽油、柴油、LPG燃料类型快速计算总油费及每人费用。",
+    description: "通过首尔↔釜山等常用路线预设和汽油、柴油、LPG燃料类型，快速计算总油费及每人费用。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "주유비는 거리, 연비, 유가, 동승자 수의 조합입니다",
+    intro: "장거리 이동이나 함께 타는 여행에서는 총 주유비뿐 아니라 1인당 부담액을 미리 보는 것이 중요합니다. 이 계산기는 이동 거리와 차량 연비, 유종별 가격, 인원수를 바탕으로 예상 연료비를 빠르게 계산합니다.",
+    formulaTitle: "핵심 공식",
+    formulas: [
+      { title: "사용 연료", body: "fuel = distance / efficiency" },
+      { title: "총 주유비", body: "cost = fuel × pricePerLiter" },
+      { title: "1인당 비용", body: "perPerson = totalCost / people" },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "주행 거리 또는 노선 프리셋을 선택합니다.",
+      "차량 연비와 휘발유, 경유, LPG 등 유종 가격을 입력합니다.",
+      "동승자 수를 넣어 총액과 1인당 예상 부담액을 확인합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "고속도로 통행료도 포함되나요?", answer: "이 페이지는 연료비 중심 계산입니다. 통행료, 주차비, 렌터카 비용은 별도로 더해야 합니다." },
+      { question: "실제 주유비와 차이가 나는 이유는 무엇인가요?", answer: "정체, 공회전, 적재량, 에어컨 사용, 운전 습관, 실제 유가가 연비와 비용을 바꿀 수 있습니다." },
+      { question: "왕복 비용은 어떻게 계산하나요?", answer: "편도 거리를 두 배로 입력하거나 왕복 거리 프리셋이 있으면 해당 값을 선택하면 됩니다." },
+    ],
+    disclaimer: "이 계산기는 여행 예산을 위한 추정 도구입니다. 실제 유가, 통행료, 차량 상태, 교통 상황에 따라 비용은 달라질 수 있습니다.",
+  },
+  en: {
+    introTitle: "Fuel cost combines distance, economy, fuel price, and passengers",
+    intro: "For road trips and shared rides, it helps to estimate both the total fuel cost and the per-person split before leaving. This calculator uses trip distance, vehicle efficiency, fuel price, and passenger count to give a practical estimate.",
+    formulaTitle: "Core formulas",
+    formulas: [
+      { title: "Fuel used", body: "fuel = distance / efficiency" },
+      { title: "Total cost", body: "cost = fuel × pricePerLiter" },
+      { title: "Per person", body: "perPerson = totalCost / people" },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Enter the driving distance or choose a route preset.",
+      "Enter vehicle fuel efficiency and the gasoline, diesel, or LPG price.",
+      "Add passenger count to see total fuel cost and an estimated split.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Are tolls included?", answer: "No. This page focuses on fuel. Add tolls, parking, rental, and other trip costs separately." },
+      { question: "Why can actual fuel cost differ?", answer: "Traffic, idling, cargo weight, air conditioning, driving style, and live fuel prices can all change the result." },
+      { question: "How do I calculate a round trip?", answer: "Enter double the one-way distance, or choose a round-trip preset if one is available." },
+    ],
+    disclaimer: "This calculator is an estimate for trip budgeting. Actual prices, tolls, vehicle condition, and traffic can change the final cost.",
+  },
+  ja: {
+    introTitle: "ガソリン代は距離、燃費、単価、人数で決まります",
+    intro: "長距離移動や相乗りでは、総額だけでなく1人あたりの負担額も事前に見ておくと便利です。この計算機は走行距離、車の燃費、燃料単価、人数から燃料費の目安を計算します。",
+    formulaTitle: "基本公式",
+    formulas: [
+      { title: "使用燃料", body: "fuel = distance / efficiency" },
+      { title: "総燃料費", body: "cost = fuel × pricePerLiter" },
+      { title: "1人あたり", body: "perPerson = totalCost / people" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "走行距離を入力するか、ルートのプリセットを選びます。",
+      "車の燃費とガソリン、軽油、LPGなどの単価を入力します。",
+      "人数を入れて総額と1人あたりの目安を確認します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "高速料金も含まれますか？", answer: "いいえ。このページは燃料費の計算が中心です。通行料、駐車場、レンタカー代は別途加算してください。" },
+      { question: "実際の費用と違うのはなぜ？", answer: "渋滞、アイドリング、荷物、エアコン、運転方法、実際の燃料価格で結果は変わります。" },
+      { question: "往復はどう計算しますか？", answer: "片道距離を2倍して入力するか、往復プリセットがあればそれを選びます。" },
+    ],
+    disclaimer: "この計算機は旅行予算の目安です。実際の燃料価格、通行料、車両状態、交通状況により費用は変わります。",
+  },
+  fr: {
+    introTitle: "Le coût carburant dépend de la distance, de la consommation, du prix et des passagers",
+    intro: "Pour un trajet ou un covoiturage, estimer le total et la part par personne évite les surprises. Ce calculateur combine distance, consommation du véhicule, prix du carburant et nombre de passagers.",
+    formulaTitle: "Formules clés",
+    formulas: [
+      { title: "Carburant utilisé", body: "fuel = distance / efficiency" },
+      { title: "Coût total", body: "cost = fuel × pricePerLiter" },
+      { title: "Par personne", body: "perPerson = totalCost / people" },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Saisissez la distance ou choisissez un itinéraire prédéfini.",
+      "Indiquez la consommation et le prix de l'essence, du diesel ou du LPG.",
+      "Ajoutez le nombre de passagers pour obtenir le total et la part estimée.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Les péages sont-ils inclus ?", answer: "Non. L'outil calcule surtout le carburant. Ajoutez péages, parking, location et autres frais séparément." },
+      { question: "Pourquoi le coût réel peut-il varier ?", answer: "Trafic, ralenti, charge, climatisation, conduite et prix du jour peuvent modifier la consommation." },
+      { question: "Comment calculer un aller-retour ?", answer: "Doublez la distance aller ou choisissez un préréglage aller-retour s'il existe." },
+    ],
+    disclaimer: "Ce calculateur fournit une estimation de budget. Prix réels, péages, état du véhicule et trafic peuvent changer le coût final.",
+  },
+  es: {
+    introTitle: "El coste de combustible combina distancia, consumo, precio y pasajeros",
+    intro: "En viajes por carretera o coche compartido conviene estimar el total y la parte por persona antes de salir. Esta calculadora usa distancia, eficiencia del vehículo, precio del combustible y número de pasajeros.",
+    formulaTitle: "Fórmulas clave",
+    formulas: [
+      { title: "Combustible usado", body: "fuel = distance / efficiency" },
+      { title: "Coste total", body: "cost = fuel × pricePerLiter" },
+      { title: "Por persona", body: "perPerson = totalCost / people" },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Introduce la distancia o elige una ruta predefinida.",
+      "Indica eficiencia del coche y precio de gasolina, diésel o LPG.",
+      "Añade pasajeros para ver coste total y reparto estimado.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Incluye peajes?", answer: "No. Esta página se centra en combustible. Añade peajes, aparcamiento, alquiler y otros costes por separado." },
+      { question: "¿Por qué puede variar el coste real?", answer: "Tráfico, ralentí, carga, aire acondicionado, forma de conducir y precios reales cambian el consumo." },
+      { question: "¿Cómo calculo ida y vuelta?", answer: "Introduce el doble de la distancia de ida o elige un preajuste de ida y vuelta si existe." },
+    ],
+    disclaimer: "Esta calculadora es una estimación para presupuesto de viaje. Precios reales, peajes, estado del vehículo y tráfico pueden cambiar el coste final.",
+  },
+  zh: {
+    introTitle: "油费由距离、油耗、油价和乘车人数共同决定",
+    intro: "长途出行或拼车时，提前估算总油费和每人分摊金额会更方便。这个计算器根据行驶距离、车辆油耗、燃料价格和人数，快速给出预算参考。",
+    formulaTitle: "核心公式",
+    formulas: [
+      { title: "使用燃料", body: "fuel = distance / efficiency" },
+      { title: "总油费", body: "cost = fuel × pricePerLiter" },
+      { title: "每人费用", body: "perPerson = totalCost / people" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "输入行驶距离，或选择路线预设。",
+      "输入车辆油耗，以及汽油、柴油或LPG价格。",
+      "输入乘车人数，查看总油费和每人预计分摊金额。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "包含高速通行费吗？", answer: "不包含。本页主要计算燃料费，通行费、停车费、租车费等需要另外加入。" },
+      { question: "为什么实际油费会不同？", answer: "拥堵、怠速、载重、空调、驾驶习惯和实时油价都会影响结果。" },
+      { question: "往返怎么计算？", answer: "可以输入单程距离的两倍，或选择可用的往返路线预设。" },
+    ],
+    disclaimer: "本计算器用于旅行预算估算。实际油价、通行费、车辆状态和交通状况都可能改变最终费用。",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <FuelCostCalculator client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

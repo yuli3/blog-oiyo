@@ -2,15 +2,16 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Metronome from "../../components/tools/Metronome";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "메트로놈 — 온라인 무료 메트로놈",
     description: "Web Audio API 기반 정확한 타이밍의 온라인 메트로놈. BPM 40~240, 탭 템포, 박자표(2/4·3/4·4/4·6/8), 프리셋 지원.",
@@ -35,17 +36,226 @@ const meta: Record<Locale, { title: string; description: string }> = {
     title: "节拍器 — 免费在线节拍器",
     description: "基于 Web Audio API 的精准在线节拍器。支持 BPM 40–240、点击速度、拍号(2/4·3/4·4/4·6/8)和预设。",
   },
-  cn: {
-    title: "節拍器 — 免費在線節拍器",
-    description: "基於 Web Audio API 的精準在線節拍器。支持 BPM 40–240、點擊速度、拍號(2/4·3/4·4/4·6/8)和預設。",
-  },
 };
 
 const m = meta[locale] ?? meta.en;
+
+type PageContent = {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+};
+
+const content: Record<ActiveLocale, PageContent> = {
+  ko: {
+    introTitle: "메트로놈은 박자를 일정하게 유지하는 연습 기준입니다",
+    intro: "악기 연습, 보컬 리듬, 낭독 속도, 반복 동작 훈련에서는 일정한 박자가 필요합니다. 이 온라인 메트로놈은 BPM 40-240, 탭 템포, 2/4·3/4·4/4·6/8 박자표, 기본 프리셋을 제공해 브라우저에서 바로 연습 기준을 만들 수 있습니다.",
+    formulaTitle: "리듬 개념",
+    formulas: [
+      { title: "BPM", body: "분당 박자 수입니다. 숫자가 높을수록 클릭 간격이 짧아져 더 빠른 템포가 됩니다." },
+      { title: "박자표", body: "한 마디에 몇 박이 들어가는지 정합니다. 첫 박은 강조되어 구조를 느끼기 쉽습니다." },
+      { title: "탭 템포", body: "직접 두드린 간격으로 현재 머릿속 템포를 숫자로 추정할 때 유용합니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "BPM 슬라이더, 입력칸, 프리셋, 탭 템포 중 하나로 속도를 정합니다.",
+      "연습할 박자표를 선택하고 시작 버튼을 누릅니다.",
+      "클릭과 시각 표시를 기준으로 연주, 낭독, 반복 동작을 맞춥니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "BPM은 어느 범위까지 지원하나요?", answer: "페이지 메타와 컴포넌트 기준으로 40부터 240까지 조정할 수 있습니다." },
+      { question: "첫 박이 다르게 들리나요?", answer: "예. 각 마디의 첫 박은 더 높은 음으로 스케줄되어 박자 구조를 파악하기 쉽습니다." },
+      { question: "전문 연주 녹음에 써도 되나요?", answer: "연습용으로 적합합니다. 녹음 세션이나 무대에서는 지연이 검증된 전용 장비나 DAW 클릭을 쓰는 편이 안전합니다." },
+    ],
+    disclaimer: "브라우저 오디오 타이밍은 기기 성능, 블루투스 지연, 절전 상태, 백그라운드 탭의 영향을 받을 수 있습니다.",
+  },
+  en: {
+    introTitle: "A metronome gives practice a steady rhythmic reference",
+    intro: "Instrument practice, vocal rhythm, reading pace, and repeated movement drills all benefit from a stable beat. This online metronome offers BPM 40-240, tap tempo, 2/4, 3/4, 4/4, and 6/8 time signatures, plus tempo presets directly in the browser.",
+    formulaTitle: "Rhythm concepts",
+    formulas: [
+      { title: "BPM", body: "Beats per minute. A higher number means shorter time between clicks and a faster tempo." },
+      { title: "Time signature", body: "Defines how many beats belong in each measure. The first beat is accented for orientation." },
+      { title: "Tap tempo", body: "Estimates the tempo you are feeling by measuring the spacing between your taps." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Set the tempo with the slider, input field, preset, or tap tempo.",
+      "Choose the time signature for the pattern you want to practice.",
+      "Start the metronome and align playing, speaking, or movement to the clicks.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "What BPM range is supported?", answer: "The tool supports adjustment from 40 to 240 BPM." },
+      { question: "Is the first beat accented?", answer: "Yes. The first beat of each measure is scheduled with a higher tone to make the meter easier to follow." },
+      { question: "Can I use this for professional recording?", answer: "It is best for practice. For recording sessions or live performance, use a DAW click or dedicated hardware with verified latency." },
+    ],
+    disclaimer: "Browser audio timing can be affected by device performance, Bluetooth latency, power saving, and background tab behavior.",
+  },
+  ja: {
+    introTitle: "メトロノームは練習に一定のリズム基準を与えます",
+    intro: "楽器練習、歌のリズム、朗読速度、反復動作の練習では安定した拍が役立ちます。このオンラインメトロノームはBPM 40〜240、タップテンポ、2/4・3/4・4/4・6/8、テンポプリセットをブラウザで使えます。",
+    formulaTitle: "リズムの基本概念",
+    formulas: [
+      { title: "BPM", body: "1分あたりの拍数です。数値が高いほどクリック間隔が短く、速いテンポになります。" },
+      { title: "拍子記号", body: "1小節に何拍入るかを決めます。最初の拍は強調され、構造をつかみやすくなります。" },
+      { title: "タップテンポ", body: "自分で叩いた間隔から、感じているテンポを数値として推定します。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "スライダー、入力欄、プリセット、タップテンポでBPMを設定します。",
+      "練習したい拍子記号を選びます。",
+      "開始して、演奏、発声、動作をクリックに合わせます。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "BPMはいくつまで設定できますか？", answer: "このツールは40〜240 BPMの範囲で調整できます。" },
+      { question: "1拍目は強調されますか？", answer: "はい。各小節の1拍目は高めの音で鳴り、拍子を追いやすくしています。" },
+      { question: "プロの録音に使えますか？", answer: "練習用に適しています。録音や本番では、遅延を確認したDAWクリックや専用機材を使う方が安全です。" },
+    ],
+    disclaimer: "ブラウザ音声のタイミングは端末性能、Bluetooth遅延、省電力、バックグラウンドタブの影響を受ける場合があります。",
+  },
+  zh: {
+    introTitle: "节拍器为练习提供稳定的节奏参照",
+    intro: "乐器练习、声乐节奏、朗读速度和重复动作训练都需要稳定拍点。这个在线节拍器支持 BPM 40-240、点击速度、2/4、3/4、4/4、6/8 拍号和常用速度预设，可直接在浏览器中使用。",
+    formulaTitle: "节奏概念",
+    formulas: [
+      { title: "BPM", body: "每分钟拍数。数值越高，点击间隔越短，速度越快。" },
+      { title: "拍号", body: "定义每小节有几拍。每小节第一拍会被强调，便于感受结构。" },
+      { title: "点击速度", body: "根据你连续点击的间隔估算当前心中的节奏速度。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "用滑块、输入框、预设或点击速度设置 BPM。",
+      "选择练习所需的拍号。",
+      "启动节拍器，并让演奏、朗读或动作跟随点击声。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "支持什么 BPM 范围？", answer: "工具支持从 40 到 240 BPM 调整。" },
+      { question: "第一拍会强调吗？", answer: "会。每小节第一拍使用更高音调，帮助你跟随拍号结构。" },
+      { question: "可以用于专业录音吗？", answer: "它适合练习。录音或现场演出建议使用经过延迟验证的 DAW 点击或专用设备。" },
+    ],
+    disclaimer: "浏览器音频计时可能受设备性能、蓝牙延迟、省电模式和后台标签页影响。",
+  },
+  fr: {
+    introTitle: "Un métronome donne un repère rythmique stable à la pratique",
+    intro: "Instrument, chant, lecture à voix haute et exercices répétitifs gagnent à suivre un battement régulier. Ce métronome en ligne propose BPM 40-240, tap tempo, signatures 2/4, 3/4, 4/4 et 6/8, ainsi que des préréglages.",
+    formulaTitle: "Notions de rythme",
+    formulas: [
+      { title: "BPM", body: "Battements par minute. Plus le nombre est élevé, plus l'intervalle entre les clics est court." },
+      { title: "Signature", body: "Définit le nombre de battements par mesure. Le premier temps est accentué pour se repérer." },
+      { title: "Tap tempo", body: "Estime le tempo ressenti en mesurant l'intervalle entre vos frappes." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Réglez le tempo avec le curseur, le champ, un préréglage ou le tap tempo.",
+      "Choisissez la signature rythmique à pratiquer.",
+      "Démarrez le métronome et alignez jeu, parole ou mouvement sur les clics.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Quelle plage BPM est prise en charge ?", answer: "L'outil permet un réglage de 40 à 240 BPM." },
+      { question: "Le premier temps est-il accentué ?", answer: "Oui. Le premier temps de chaque mesure utilise un son plus aigu pour suivre plus facilement la métrique." },
+      { question: "Puis-je l'utiliser en enregistrement professionnel ?", answer: "Il convient surtout à la pratique. En session ou sur scène, préférez un clic DAW ou du matériel à latence vérifiée." },
+    ],
+    disclaimer: "Le timing audio du navigateur peut être affecté par performance, latence Bluetooth, économie d'énergie et onglets en arrière-plan.",
+  },
+  es: {
+    introTitle: "Un metrónomo da una referencia rítmica estable para practicar",
+    intro: "La práctica instrumental, el ritmo vocal, la lectura en voz alta y los ejercicios repetitivos mejoran con un pulso estable. Este metrónomo en línea ofrece BPM 40-240, tap tempo, compases 2/4, 3/4, 4/4 y 6/8, además de preajustes.",
+    formulaTitle: "Conceptos de ritmo",
+    formulas: [
+      { title: "BPM", body: "Pulsos por minuto. Un número más alto significa menos tiempo entre clics y tempo más rápido." },
+      { title: "Compás", body: "Define cuántos pulsos hay en cada medida. El primer pulso se acentúa para orientarte." },
+      { title: "Tap tempo", body: "Estima el tempo que sientes midiendo el intervalo entre tus pulsaciones." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Ajusta el tempo con el deslizador, campo, preajuste o tap tempo.",
+      "Elige el compás que quieres practicar.",
+      "Inicia el metrónomo y alinea interpretación, habla o movimiento con los clics.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Qué rango de BPM admite?", answer: "La herramienta permite ajustar de 40 a 240 BPM." },
+      { question: "¿El primer pulso está acentuado?", answer: "Sí. El primer pulso de cada compás usa un tono más alto para seguir mejor la métrica." },
+      { question: "¿Sirve para grabación profesional?", answer: "Es mejor para práctica. En grabaciones o directo, usa un clic de DAW o hardware con latencia verificada." },
+    ],
+    disclaimer: "La temporización de audio del navegador puede verse afectada por rendimiento, latencia Bluetooth, ahorro de energía y pestañas en segundo plano.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <Metronome client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

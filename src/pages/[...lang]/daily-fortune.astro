@@ -5,13 +5,15 @@ import DailyFortune from "../../components/tools/DailyFortune";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
+type ActiveLocale = (typeof locales)[number];
+
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale & Locale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "오늘의 운세 — 생년월일로 보는 무료 운세",
     description: "생년월일을 입력하면 오늘의 종합운·애정운·금전운·건강운·직업운·학업운을 무료로 확인하세요.",
@@ -36,18 +38,225 @@ const meta: Record<Locale, { title: string; description: string }> = {
     title: "每日运势 — 免费生日运势查询",
     description: "输入生日即可免费查看今日综合运、爱情运、财运、健康运、事业运和学业运。",
   },
-  cn: {
-    title: "每日運勢 — 免費生日運勢查詢",
-    description: "輸入生日即可免費查看今日綜合運、愛情運、財運、健康運、事業運和學業運。",
-  },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "오늘의 운세는 하루를 가볍게 정리하는 질문 도구입니다",
+    intro: "운세는 미래를 확정하는 답이 아니라, 오늘의 기분과 선택을 다른 각도에서 바라보게 해주는 짧은 콘텐츠로 쓰는 편이 좋습니다. 생년월일 기반 결과를 읽으며 애정, 일, 돈, 건강, 공부 같은 영역에서 오늘 신경 쓸 포인트를 가볍게 점검해 보세요.",
+    formulaTitle: "읽을 때의 관점",
+    formulas: [
+      { title: "하루 단위", body: "결과는 장기 예측보다 오늘의 태도와 우선순위를 점검하는 데 맞춰 읽는 것이 자연스럽습니다." },
+      { title: "분야별 힌트", body: "애정운, 금전운, 건강운처럼 나뉜 항목은 실제 행동을 돌아보는 질문으로 활용하세요." },
+      { title: "가벼운 재미", body: "중요한 결정은 운세가 아니라 정보, 상황, 전문가 조언을 바탕으로 판단해야 합니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "생년월일을 입력해 오늘의 운세 결과를 확인합니다.",
+      "종합운과 분야별 운세를 읽고 오늘 조심할 점을 하나 고릅니다.",
+      "결과를 절대적 예언이 아니라 하루를 정리하는 메모처럼 활용합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "운세 결과는 매일 달라지나요?", answer: "페이지의 계산 방식과 날짜 기준에 따라 달라질 수 있습니다. 같은 입력이라도 날짜가 바뀌면 다른 문구가 나올 수 있습니다." },
+      { question: "결과가 실제로 맞나요?", answer: "운세는 검증된 예측 도구가 아니라 엔터테인먼트 콘텐츠입니다. 맞고 틀림보다 오늘의 생각을 정리하는 용도로 보세요." },
+      { question: "개인정보를 많이 입력해야 하나요?", answer: "이 페이지는 생년월일 중심으로 작동합니다. 불필요한 민감정보를 입력하지 않는 것이 좋습니다." },
+    ],
+    disclaimer: "이 운세는 엔터테인먼트용입니다. 건강, 투자, 법률, 진로 등 중요한 결정은 신뢰할 수 있는 정보와 전문가 조언을 기준으로 하세요.",
+  },
+  en: {
+    introTitle: "A daily fortune is a light way to reflect on the day",
+    intro: "Fortune content works best as a prompt, not a fixed prediction. Use the birth-date based result to think about mood, priorities, and small choices across love, work, money, health, and study without treating it as a decision-making authority.",
+    formulaTitle: "How to read it",
+    formulas: [
+      { title: "Daily frame", body: "Read the result as a short reflection for today rather than a long-term forecast." },
+      { title: "Area prompts", body: "Love, money, health, career, and study sections can become questions about real behavior." },
+      { title: "Light entertainment", body: "Important choices should rely on evidence, context, and qualified advice, not a fortune result." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Enter your birth date and generate today's result.",
+      "Read the overall score and choose one area to pay attention to today.",
+      "Use the result as a reflection note, not as a binding prediction.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Does the result change every day?", answer: "It can change depending on the page's date-based logic. The same birth date may show different wording on another day." },
+      { question: "Is the result accurate?", answer: "This is entertainment content, not a validated forecasting method. Use it for reflection rather than certainty." },
+      { question: "Do I need to enter sensitive information?", answer: "No. The tool is centered on birth date. Avoid entering unnecessary personal or sensitive details." },
+    ],
+    disclaimer: "This fortune is for entertainment. For health, finance, legal, career, or other serious decisions, use reliable information and qualified advice.",
+  },
+  ja: {
+    introTitle: "今日の運勢は、一日を軽く振り返るためのきっかけです",
+    intro: "運勢は未来を確定する答えではなく、気分や選択を別の角度から見るための短いコンテンツとして使うのが自然です。生年月日にもとづく結果を読み、恋愛、仕事、お金、健康、学習で今日気にしたい点を整理してみましょう。",
+    formulaTitle: "読み方のポイント",
+    formulas: [
+      { title: "一日単位", body: "長期予測ではなく、今日の姿勢や優先順位を見直す材料として読むと使いやすいです。" },
+      { title: "分野別のヒント", body: "恋愛運や金運などの項目は、実際の行動を振り返る質問として活用できます。" },
+      { title: "軽い楽しみ", body: "大事な判断は運勢ではなく、情報、状況、専門家の助言をもとに行ってください。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "生年月日を入力して今日の結果を表示します。",
+      "総合運と分野別の内容を読み、今日意識する点を一つ選びます。",
+      "絶対的な予言ではなく、短い振り返りメモとして使います。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "結果は毎日変わりますか？", answer: "日付にもとづく仕組みにより変わることがあります。同じ生年月日でも別の日には違う文面になる場合があります。" },
+      { question: "結果は当たりますか？", answer: "これは検証済みの予測ではなく、エンタメコンテンツです。確実性よりも振り返りとしてお楽しみください。" },
+      { question: "個人情報は必要ですか？", answer: "中心となる入力は生年月日です。不要な個人情報や機密情報は入力しないでください。" },
+    ],
+    disclaimer: "この運勢は娯楽目的です。健康、投資、法律、進路など重要な判断は信頼できる情報や専門家の助言を基準にしてください。",
+  },
+  fr: {
+    introTitle: "L'horoscope du jour peut servir de courte réflexion",
+    intro: "Une fortune quotidienne est plus utile comme invitation à réfléchir que comme prédiction certaine. Utilisez le résultat lié à la date de naissance pour observer humeur, priorités et petites décisions dans l'amour, le travail, l'argent, la santé ou les études.",
+    formulaTitle: "Mode de lecture",
+    formulas: [
+      { title: "Cadre quotidien", body: "Lisez le résultat comme une réflexion pour aujourd'hui, pas comme une prévision longue durée." },
+      { title: "Pistes par domaine", body: "Les rubriques amour, argent, santé ou travail peuvent devenir des questions sur vos actions réelles." },
+      { title: "Divertissement léger", body: "Les décisions importantes doivent reposer sur des informations fiables et des conseils qualifiés." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Entrez votre date de naissance et générez le résultat du jour.",
+      "Lisez la tendance générale et choisissez un domaine à surveiller.",
+      "Utilisez le texte comme note de réflexion, non comme prédiction obligatoire.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Le résultat change-t-il chaque jour ?", answer: "Il peut changer selon la logique liée à la date. Une même date de naissance peut donner un autre texte un autre jour." },
+      { question: "Le résultat est-il exact ?", answer: "C'est un contenu de divertissement, pas une méthode de prévision validée. Utilisez-le pour réfléchir." },
+      { question: "Faut-il saisir des informations sensibles ?", answer: "Non. L'outil se limite à la date de naissance. Évitez toute information personnelle inutile." },
+    ],
+    disclaimer: "Cette fortune est destinée au divertissement. Pour la santé, la finance, le droit, la carrière ou toute décision sérieuse, utilisez des sources fiables et des conseils qualifiés.",
+  },
+  es: {
+    introTitle: "La fortuna diaria puede ser una reflexión ligera",
+    intro: "Una lectura de fortuna funciona mejor como una pregunta, no como una predicción fija. Usa el resultado basado en fecha de nacimiento para pensar en ánimo, prioridades y pequeñas decisiones sobre amor, trabajo, dinero, salud o estudio.",
+    formulaTitle: "Cómo leerla",
+    formulas: [
+      { title: "Marco diario", body: "Lee el resultado como una reflexión para hoy, no como pronóstico a largo plazo." },
+      { title: "Pistas por área", body: "Amor, dinero, salud, carrera y estudio pueden convertirse en preguntas sobre tu conducta real." },
+      { title: "Entretenimiento ligero", body: "Las decisiones importantes deben basarse en información, contexto y asesoría cualificada." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Ingresa tu fecha de nacimiento y genera el resultado del día.",
+      "Lee la tendencia general y elige un área a cuidar hoy.",
+      "Usa el resultado como nota de reflexión, no como predicción obligatoria.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿El resultado cambia cada día?", answer: "Puede cambiar según la lógica basada en fecha. La misma fecha de nacimiento puede mostrar otro texto otro día." },
+      { question: "¿El resultado es exacto?", answer: "Es contenido de entretenimiento, no un método validado de predicción. Úsalo para reflexionar." },
+      { question: "¿Debo ingresar datos sensibles?", answer: "No. La herramienta se centra en la fecha de nacimiento. Evita datos personales innecesarios." },
+    ],
+    disclaimer: "Esta fortuna es para entretenimiento. Para salud, finanzas, asuntos legales, carrera u otras decisiones serias, usa información fiable y asesoría cualificada.",
+  },
+  zh: {
+    introTitle: "每日运势更适合作为轻松的自我提醒",
+    intro: "运势内容不应被当成确定未来的答案，而更像一个帮助你换个角度看待当天情绪和选择的小提示。你可以根据生日结果，轻松查看爱情、工作、金钱、健康和学习等方面今天值得留意的点。",
+    formulaTitle: "阅读角度",
+    formulas: [
+      { title: "按天参考", body: "把结果当作今天的短暂提醒，而不是长期预测。" },
+      { title: "分项提示", body: "爱情、财运、健康、事业和学习等栏目可以用来反思现实行为。" },
+      { title: "轻松娱乐", body: "重要决定应依据可靠信息、现实情况和专业建议，而不是运势结果。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "输入生日，生成今天的运势结果。",
+      "阅读综合运和分项内容，选择今天想特别注意的一点。",
+      "把结果当成反思小记，而不是必须遵守的预言。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "结果每天都会变吗？", answer: "可能会。页面会根据日期逻辑生成内容，同一个生日在不同日期可能看到不同文字。" },
+      { question: "结果准确吗？", answer: "这是娱乐内容，不是经过验证的预测方法。更适合用来轻松反思。" },
+      { question: "需要输入敏感信息吗？", answer: "不需要。工具主要使用生日。请避免输入不必要的个人或敏感信息。" },
+    ],
+    disclaimer: "本运势仅供娱乐。健康、投资、法律、职业等重要决定，请依据可靠信息和专业建议。",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <DailyFortune client:load locale={locale} />
       <MysticTrinity topic="fortune" locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

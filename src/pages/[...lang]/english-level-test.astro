@@ -4,13 +4,15 @@ import EnglishLevelTest from "../../components/tools/EnglishLevelTest";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
+type ActiveLocale = (typeof locales)[number];
+
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale & Locale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "영어 레벨 테스트 — CEFR 수준 무료 측정 (20문항)",
     description: "20문항 선택형 테스트로 나의 영어 레벨을 CEFR A1~C2로 진단하세요. 문법·어휘·독해 혼합, 틀린 문제 해설 제공.",
@@ -35,17 +37,224 @@ const meta: Record<Locale, { title: string; description: string }> = {
     title: "英语水平测试 — 免费CEFR评估（20道题）",
     description: "通过20道选择题测试你的英语水平（CEFR A1–C2）。语法、词汇、阅读混合题型，附错题解析。",
   },
-  cn: {
-    title: "英語水平測試 — 免費CEFR評估（20道題）",
-    description: "通過20道選擇題測試你的英語水平（CEFR A1–C2）。語法、詞彙、閱讀混合題型，附錯題解析。",
-  },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "CEFR 레벨은 공부 방향을 정하는 출발점입니다",
+    intro: "영어 실력은 문법, 어휘, 독해, 실제 사용 경험이 함께 만든 결과입니다. 이 20문항 테스트는 짧은 시간 안에 현재 감각을 점검하고 A1부터 C2까지의 CEFR 범위에서 대략적인 위치를 이해하도록 돕습니다. 공식 시험은 아니지만 다음 학습 계획을 세우는 데 유용한 기준점이 될 수 있습니다.",
+    formulaTitle: "평가를 읽는 기준",
+    formulas: [
+      { title: "문항 범위", body: "문법, 어휘, 독해가 섞여 있어 한 영역만이 아니라 전반적인 언어 감각을 확인합니다." },
+      { title: "CEFR 단계", body: "A1/A2는 기초, B1/B2는 독립적 사용, C1/C2는 고급 운용 능력에 가깝습니다." },
+      { title: "학습 계획", body: "결과보다 틀린 유형과 해설을 보고 다음 학습 우선순위를 정하는 것이 중요합니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "방해받지 않는 환경에서 20문항을 순서대로 풉니다.",
+      "결과 레벨과 틀린 문항 해설을 함께 확인합니다.",
+      "약한 영역을 문법, 어휘, 독해로 나누어 다음 공부 계획에 반영합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "공식 CEFR 성적표로 사용할 수 있나요?", answer: "아니요. 이 테스트는 학습 참고용이며 IELTS, TOEFL, Cambridge, 공인 CEFR 평가를 대체하지 않습니다." },
+      { question: "20문항만으로 정확한가요?", answer: "짧은 테스트는 대략적인 위치를 보여줄 뿐입니다. 말하기, 쓰기, 듣기 능력은 별도 평가가 필요합니다." },
+      { question: "결과가 낮게 나왔습니다. 어떻게 해야 하나요?", answer: "점수보다 틀린 유형을 보세요. 반복해서 틀린 문법이나 어휘 영역부터 공부하면 효율적입니다." },
+    ],
+    disclaimer: "이 테스트는 자기진단과 학습 계획용입니다. 입학, 취업, 비자 등 공식 증빙에는 공인 시험 결과를 사용하세요.",
+  },
+  en: {
+    introTitle: "A CEFR estimate is a starting point for study planning",
+    intro: "English ability combines grammar, vocabulary, reading, and real use. This 20-question test gives a quick sense of your current level across the CEFR range from A1 to C2. It is not an official exam, but it can help you choose what to study next.",
+    formulaTitle: "How to read the score",
+    formulas: [
+      { title: "Question mix", body: "Grammar, vocabulary, and reading items are mixed to sample more than one skill area." },
+      { title: "CEFR bands", body: "A1/A2 are beginner levels, B1/B2 are independent use, and C1/C2 suggest advanced control." },
+      { title: "Study signal", body: "The most useful insight is often the type of question you missed, not only the final label." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Take the 20 questions in order without looking up answers.",
+      "Review the estimated level and the explanations for missed items.",
+      "Turn weak areas into a grammar, vocabulary, or reading study plan.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Can I use this as an official CEFR certificate?", answer: "No. This is a learning reference and does not replace IELTS, TOEFL, Cambridge, or other recognized assessments." },
+      { question: "Can 20 questions be precise?", answer: "A short quiz can only estimate. Speaking, writing, and listening require separate assessment." },
+      { question: "What should I do if the level feels low?", answer: "Focus on missed question types. Repeated grammar or vocabulary gaps are useful study priorities." },
+    ],
+    disclaimer: "This test is for self-checking and study planning. Use recognized exams for admission, employment, visa, or official proof.",
+  },
+  ja: {
+    introTitle: "CEFRの目安は学習計画の出発点です",
+    intro: "英語力は文法、語彙、読解、実際の使用経験が合わさって形成されます。この20問テストは、A1からC2までのCEFR範囲で現在の感覚を短時間で確認するためのものです。公式試験ではありませんが、次に学ぶ内容を決める参考になります。",
+    formulaTitle: "結果の読み方",
+    formulas: [
+      { title: "問題範囲", body: "文法、語彙、読解が混ざっており、複数の力を簡単に確認します。" },
+      { title: "CEFR段階", body: "A1/A2は基礎、B1/B2は自立した使用、C1/C2は高度な運用力に近い段階です。" },
+      { title: "学習の手がかり", body: "最終レベルだけでなく、間違えた問題の種類を見ることが大切です。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "答えを調べず、20問を順番に解きます。",
+      "推定レベルと間違えた問題の解説を確認します。",
+      "弱い分野を文法、語彙、読解に分けて学習計画へ反映します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "公式CEFR証明として使えますか？", answer: "いいえ。学習参考用であり、IELTS、TOEFL、Cambridgeなどの公認評価を代替しません。" },
+      { question: "20問で正確に分かりますか？", answer: "短いテストは目安です。スピーキング、ライティング、リスニングは別の評価が必要です。" },
+      { question: "結果が低く出たら？", answer: "点数よりも間違えた型を確認しましょう。繰り返し弱い文法や語彙から学ぶと効率的です。" },
+    ],
+    disclaimer: "このテストは自己確認と学習計画用です。入学、就職、ビザなどの証明には公認試験を使用してください。",
+  },
+  fr: {
+    introTitle: "Une estimation CECRL sert à orienter l'apprentissage",
+    intro: "Le niveau d'anglais combine grammaire, vocabulaire, lecture et usage réel. Ce test de 20 questions donne une indication rapide entre A1 et C2. Il ne s'agit pas d'un examen officiel, mais d'un repère pour choisir les prochaines priorités.",
+    formulaTitle: "Lire le résultat",
+    formulas: [
+      { title: "Mélange de questions", body: "Grammaire, vocabulaire et compréhension écrite sont combinés pour sonder plusieurs domaines." },
+      { title: "Niveaux CECRL", body: "A1/A2 correspondent aux bases, B1/B2 à l'autonomie, C1/C2 à une maîtrise avancée." },
+      { title: "Signal d'étude", body: "Les types d'erreurs donnent souvent plus d'informations que l'étiquette finale." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Répondez aux 20 questions sans chercher les réponses.",
+      "Consultez le niveau estimé et les explications des erreurs.",
+      "Transformez les points faibles en plan de grammaire, vocabulaire ou lecture.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Puis-je l'utiliser comme certificat officiel ?", answer: "Non. C'est une référence d'apprentissage, pas un substitut à IELTS, TOEFL, Cambridge ou autre évaluation reconnue." },
+      { question: "20 questions suffisent-elles ?", answer: "Un court test donne seulement une estimation. Oral, écrit et écoute demandent des évaluations séparées." },
+      { question: "Que faire si le niveau paraît bas ?", answer: "Regardez les types d'erreurs. Les lacunes répétées en grammaire ou vocabulaire indiquent les priorités." },
+    ],
+    disclaimer: "Ce test sert à l'autoévaluation et à la planification. Utilisez un examen reconnu pour admission, emploi, visa ou preuve officielle.",
+  },
+  es: {
+    introTitle: "Una estimación MCER ayuda a planificar el estudio",
+    intro: "El nivel de inglés combina gramática, vocabulario, lectura y uso real. Este test de 20 preguntas ofrece una referencia rápida entre A1 y C2. No es un examen oficial, pero ayuda a elegir qué estudiar después.",
+    formulaTitle: "Cómo leer el resultado",
+    formulas: [
+      { title: "Mezcla de preguntas", body: "Combina gramática, vocabulario y lectura para revisar más de una habilidad." },
+      { title: "Bandas MCER", body: "A1/A2 son niveles básicos, B1/B2 indican uso independiente y C1/C2 dominio avanzado." },
+      { title: "Señal de estudio", body: "El tipo de error suele ser más útil que la etiqueta final." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Responde las 20 preguntas en orden sin buscar respuestas.",
+      "Revisa el nivel estimado y las explicaciones de los errores.",
+      "Convierte las áreas débiles en un plan de gramática, vocabulario o lectura.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Sirve como certificado oficial?", answer: "No. Es una referencia de aprendizaje y no sustituye IELTS, TOEFL, Cambridge u otras evaluaciones reconocidas." },
+      { question: "¿20 preguntas son suficientes?", answer: "Un test corto solo estima. Habla, escritura y escucha requieren evaluaciones separadas." },
+      { question: "¿Qué hago si el nivel parece bajo?", answer: "Observa los tipos de error. Las lagunas repetidas de gramática o vocabulario marcan prioridades." },
+    ],
+    disclaimer: "Este test es para autoevaluación y planificación. Usa exámenes reconocidos para admisión, empleo, visa o prueba oficial.",
+  },
+  zh: {
+    introTitle: "CEFR 估算适合作为学习计划的起点",
+    intro: "英语水平由语法、词汇、阅读和真实使用经验共同组成。这个 20 题测试可以快速了解你在 A1 到 C2 范围内的大致位置。它不是官方考试，但能帮助你决定下一步学习重点。",
+    formulaTitle: "如何阅读结果",
+    formulas: [
+      { title: "题型范围", body: "测试混合语法、词汇和阅读题，不只看单一能力。" },
+      { title: "CEFR 阶段", body: "A1/A2 偏基础，B1/B2 表示较独立使用，C1/C2 接近高级掌握。" },
+      { title: "学习信号", body: "比最终等级更有用的，往往是你反复出错的题型。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "在不查答案的情况下按顺序完成 20 道题。",
+      "查看估算等级和错题解析。",
+      "把薄弱项拆成语法、词汇或阅读，安排下一步学习。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "可以当作官方 CEFR 证明吗？", answer: "不可以。这只是学习参考，不能替代 IELTS、TOEFL、Cambridge 或其他认可考试。" },
+      { question: "20 道题准确吗？", answer: "短测试只能给出估算。口语、写作和听力需要单独评估。" },
+      { question: "结果偏低怎么办？", answer: "先看错题类型。反复出错的语法或词汇点，就是优先学习内容。" },
+    ],
+    disclaimer: "本测试用于自我检查和学习计划。入学、就业、签证或官方证明请使用认可考试成绩。",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <EnglishLevelTest client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

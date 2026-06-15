@@ -2,50 +2,159 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ToeicScoreConverter from "../../components/tools/ToeicScoreConverter";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "TOEIC 점수 환산기 — CEFR / IELTS / TOEFL 환산 무료",
-    description: "TOEIC 점수를 CEFR 등급, IELTS, TOEFL iBT로 환산하세요. 취업·진학 활용도와 맞춤 학습법도 확인하세요.",
-  },
-  en: {
-    title: "TOEIC Score Converter — CEFR / IELTS / TOEFL Equivalent",
-    description: "Convert your TOEIC score to CEFR level, IELTS, and TOEFL iBT. See career utility and personalized study tips.",
-  },
-  ja: {
-    title: "TOEICスコア換算器 — CEFR / IELTS / TOEFL換算",
-    description: "TOEICスコアをCEFRレベル、IELTS、TOEFL iBTに換算。就職・進学の活用度と学習アドバイスも確認できます。",
-  },
-  fr: {
-    title: "Convertisseur Score TOEIC — Équivalent CECRL / IELTS / TOEFL",
-    description: "Convertissez votre score TOEIC en niveau CECRL, IELTS et TOEFL iBT. Découvrez les débouchés professionnels et conseils d'étude.",
-  },
-  es: {
-    title: "Convertidor de Puntuación TOEIC — Equivalente MCERL / IELTS / TOEFL",
-    description: "Convierte tu puntuación TOEIC al nivel MCERL, IELTS y TOEFL iBT. Descubre usos profesionales y recomendaciones de estudio.",
-  },
-  zh: {
-    title: "TOEIC分数换算器 — CEFR / 雅思 / 托福换算",
-    description: "将TOEIC分数换算为CEFR等级、雅思和托福iBT。查看求职升学用途和个性化学习建议。",
-  },
-  cn: {
-    title: "TOEIC分數換算器 — CEFR / 雅思 / 托福換算",
-    description: "將TOEIC分數換算為CEFR等級、雅思和托福iBT。查看求職升學用途和個性化學習建議。",
-  },
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
+  ko: { title: "TOEIC 점수 환산기 — CEFR / IELTS / TOEFL 환산 무료", description: "TOEIC 점수를 CEFR 등급, IELTS, TOEFL iBT로 환산하세요. 취업·진학 활용도와 맞춤 학습법도 확인하세요." },
+  en: { title: "TOEIC Score Converter — CEFR / IELTS / TOEFL Equivalent", description: "Convert your TOEIC score to CEFR level, IELTS, and TOEFL iBT. See career utility and personalized study tips." },
+  ja: { title: "TOEICスコア換算器 — CEFR / IELTS / TOEFL換算", description: "TOEICスコアをCEFRレベル、IELTS、TOEFL iBTに換算。就職・進学の活用度と学習アドバイスも確認できます。" },
+  fr: { title: "Convertisseur Score TOEIC — Équivalent CECRL / IELTS / TOEFL", description: "Convertissez votre score TOEIC en niveau CECRL, IELTS et TOEFL iBT. Découvrez les débouchés professionnels et conseils d'étude." },
+  es: { title: "Convertidor de Puntuación TOEIC — Equivalente MCER / IELTS / TOEFL", description: "Convierte tu puntuación TOEIC al nivel MCER, IELTS y TOEFL iBT. Descubre usos profesionales y recomendaciones de estudio." },
+  zh: { title: "TOEIC 分数换算器 — CEFR / 雅思 / 托福换算", description: "将 TOEIC 分数换算为 CEFR 等级、雅思和托福 iBT。查看求职升学用途和个性化学习建议。" },
 };
 
 const m = meta[locale] ?? meta.en;
+type SeoContent = { introTitle: string; intro: string; formulaTitle: string; formulas: { title: string; body: string }[]; howToTitle: string; steps: string[]; faqTitle: string; faqs: { question: string; answer: string }[]; disclaimer: string; };
+
+const content: Record<ActiveLocale, SeoContent> = {
+  ko: {
+    introTitle: "TOEIC 점수 환산은 시험 목적이 다른 점수를 대략 비교하는 일입니다",
+    intro: "TOEIC, CEFR, IELTS, TOEFL iBT는 평가 목적과 문항 구성이 서로 다릅니다. 이 도구는 TOEIC 점수 또는 CEFR 등급을 넣어 대략적인 대응 범위, 학업·취업 활용도, 다음 학습 방향을 한 화면에서 정리합니다.",
+    formulaTitle: "비교 기준",
+    formulas: [
+      { title: "TOEIC 범위", body: "0-990점 점수를 구간으로 나누어 CEFR 등급에 대응시킵니다." },
+      { title: "CEFR", body: "A1부터 C2까지 언어 사용 능력을 넓은 단계로 설명하는 공통 기준입니다." },
+      { title: "타 시험 환산", body: "IELTS와 TOEFL iBT 값은 직접 동등 점수가 아니라 참고 범위입니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: ["TOEIC 점수를 입력하거나 CEFR 등급을 선택합니다.", "CEFR, IELTS, TOEFL iBT 참고 범위와 TOEIC 범위를 확인합니다.", "목표 기관이 요구하는 공식 기준표와 유효기간을 별도로 확인합니다."],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "환산 점수로 공식 제출이 가능한가요?", answer: "대부분의 기관은 원시험 성적표나 자체 인정 기준을 요구합니다. 환산값은 사전 판단용입니다." },
+      { question: "CEFR B2면 TOEIC 몇 점인가요?", answer: "이 도구의 기준으로는 대략 550-784점 범위입니다. 기관별 요구 점수는 다를 수 있습니다." },
+      { question: "TOEIC과 IELTS는 같은 능력을 보나요?", answer: "완전히 같지 않습니다. TOEIC은 주로 비즈니스 영어 듣기·읽기 중심이고 IELTS는 말하기·쓰기까지 포함합니다." },
+    ],
+    disclaimer: "환산은 참고용이며 입학·채용·비자 제출에는 해당 기관의 최신 공식 기준이 우선합니다.",
+  },
+  en: {
+    introTitle: "TOEIC conversion is an approximate comparison across different tests",
+    intro: "TOEIC, CEFR, IELTS, and TOEFL iBT measure language ability with different designs and use cases. This tool turns a TOEIC score or CEFR level into a practical reference range, including likely equivalents, career/academic context, and study direction.",
+    formulaTitle: "Comparison basis",
+    formulas: [
+      { title: "TOEIC range", body: "A 0-990 TOEIC score is grouped into broad bands and mapped to CEFR levels." },
+      { title: "CEFR", body: "A1 through C2 describe language proficiency as broad functional levels." },
+      { title: "Other tests", body: "IELTS and TOEFL iBT values are reference ranges, not official one-to-one replacements." },
+    ],
+    howToTitle: "How to use",
+    steps: ["Enter a TOEIC score or select a CEFR level.", "Review the CEFR, IELTS, TOEFL iBT, and TOEIC range estimates.", "Check the target school, employer, or visa authority’s official score policy separately."],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Can I submit a converted score officially?", answer: "Usually no. Institutions normally require the original test score report or their own accepted conversion table." },
+      { question: "What TOEIC score is CEFR B2?", answer: "In this tool, B2 corresponds roughly to 550-784. Individual requirements may be stricter." },
+      { question: "Do TOEIC and IELTS measure the same skills?", answer: "Not exactly. TOEIC often focuses on business listening and reading, while IELTS includes speaking and writing." },
+    ],
+    disclaimer: "Conversions are for reference only; official admissions, hiring, and visa decisions follow the target institution’s latest rules.",
+  },
+  ja: {
+    introTitle: "TOEIC換算は目的の違う試験をおおまかに比べるものです",
+    intro: "TOEIC、CEFR、IELTS、TOEFL iBTは設計や用途が異なります。このツールではTOEICスコアまたはCEFRレベルから、参考範囲、就職・進学での見方、学習の方向を確認できます。",
+    formulaTitle: "比較の基準",
+    formulas: [
+      { title: "TOEIC範囲", body: "0-990点を大まかな帯に分け、CEFRレベルへ対応させます。" },
+      { title: "CEFR", body: "A1からC2まで、言語運用能力を広い段階で示す基準です。" },
+      { title: "他試験", body: "IELTSとTOEFL iBTは参考範囲であり、公式な同一点数ではありません。" },
+    ],
+    howToTitle: "使い方",
+    steps: ["TOEICスコアを入力するかCEFRレベルを選択します。", "CEFR、IELTS、TOEFL iBT、TOEIC範囲の目安を確認します。", "志望先や提出先の公式基準と有効期限を別途確認します。"],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "換算点を公式提出できますか？", answer: "通常はできません。多くの機関は原試験の成績表または独自の基準を求めます。" },
+      { question: "CEFR B2はTOEIC何点ですか？", answer: "このツールではおよそ550-784点です。ただし提出先により基準は異なります。" },
+      { question: "TOEICとIELTSは同じ力を測りますか？", answer: "完全には同じではありません。TOEICは聞く・読む中心、IELTSは話す・書くも含みます。" },
+    ],
+    disclaimer: "換算は参考用です。入学、採用、ビザでは提出先の最新公式基準を確認してください。",
+  },
+  fr: {
+    introTitle: "La conversion TOEIC reste une comparaison approximative entre tests",
+    intro: "TOEIC, CECRL, IELTS et TOEFL iBT n'ont pas le même format ni le même usage. Cet outil donne une plage indicative à partir d'un score TOEIC ou d'un niveau CECRL, avec contexte professionnel et pistes d'étude.",
+    formulaTitle: "Base de comparaison",
+    formulas: [
+      { title: "Plage TOEIC", body: "Le score 0-990 est regroupé en bandes larges associées aux niveaux CECRL." },
+      { title: "CECRL", body: "A1 à C2 décrivent des niveaux fonctionnels de maîtrise linguistique." },
+      { title: "Autres tests", body: "IELTS et TOEFL iBT sont des plages indicatives, pas des équivalences officielles exactes." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: ["Entrez un score TOEIC ou choisissez un niveau CECRL.", "Consultez les estimations CECRL, IELTS, TOEFL iBT et TOEIC.", "Vérifiez séparément la politique officielle de l'école, employeur ou autorité visée."],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Puis-je soumettre un score converti ?", answer: "En général non. Les organismes demandent le relevé officiel ou leur propre table d'équivalence." },
+      { question: "Quel TOEIC correspond au B2 ?", answer: "Dans cet outil, B2 correspond environ à 550-784, mais les exigences peuvent varier." },
+      { question: "TOEIC et IELTS mesurent-ils les mêmes compétences ?", answer: "Pas exactement. TOEIC cible souvent écoute/lecture professionnelles; IELTS inclut aussi expression orale et écrite." },
+    ],
+    disclaimer: "Conversion indicative; admissions, embauches et visas suivent les règles officielles les plus récentes.",
+  },
+  es: {
+    introTitle: "La conversión TOEIC es una comparación aproximada entre pruebas",
+    intro: "TOEIC, MCER, IELTS y TOEFL iBT tienen formatos y usos distintos. Esta herramienta convierte una puntuación TOEIC o nivel MCER en un rango orientativo, con contexto académico/profesional y sugerencias de estudio.",
+    formulaTitle: "Base de comparación",
+    formulas: [
+      { title: "Rango TOEIC", body: "La escala 0-990 se agrupa en bandas amplias asociadas a niveles MCER." },
+      { title: "MCER", body: "A1 a C2 describen niveles funcionales de dominio lingüístico." },
+      { title: "Otras pruebas", body: "IELTS y TOEFL iBT son rangos de referencia, no equivalencias oficiales exactas." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: ["Introduce una puntuación TOEIC o selecciona un nivel MCER.", "Revisa las estimaciones de MCER, IELTS, TOEFL iBT y rango TOEIC.", "Comprueba por separado la política oficial de la escuela, empresa o autoridad."],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Puedo presentar una puntuación convertida?", answer: "Normalmente no. Las instituciones suelen exigir el informe original o su propia tabla aceptada." },
+      { question: "¿Qué TOEIC equivale a B2?", answer: "En esta herramienta, B2 corresponde aproximadamente a 550-784, pero los requisitos pueden variar." },
+      { question: "¿TOEIC e IELTS miden lo mismo?", answer: "No exactamente. TOEIC suele centrarse en comprensión oral y lectora profesional; IELTS incluye expresión oral y escrita." },
+    ],
+    disclaimer: "Conversión orientativa; admisiones, empleo y visados siguen las reglas oficiales vigentes de cada institución.",
+  },
+  zh: {
+    introTitle: "TOEIC 换算是在不同考试之间做近似比较",
+    intro: "TOEIC、CEFR、雅思和托福 iBT 的考试设计和用途并不相同。本工具可根据 TOEIC 分数或 CEFR 等级，给出参考范围、求职升学语境和下一步学习方向。",
+    formulaTitle: "比较基础",
+    formulas: [
+      { title: "TOEIC 区间", body: "把 0-990 分划分为较宽的区间，并对应到 CEFR 等级。" },
+      { title: "CEFR", body: "A1 到 C2 用宽泛等级描述语言实际使用能力。" },
+      { title: "其他考试", body: "雅思和托福 iBT 是参考范围，不是官方一对一等值分数。" },
+    ],
+    howToTitle: "使用方法",
+    steps: ["输入 TOEIC 分数，或选择 CEFR 等级。", "查看 CEFR、雅思、托福 iBT 和 TOEIC 范围估算。", "另行确认目标学校、雇主或签证机构的官方分数规则。" ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "换算分数可以正式提交吗？", answer: "通常不可以。机构一般要求原考试成绩单或其认可的官方换算表。" },
+      { question: "CEFR B2 大约对应 TOEIC 多少？", answer: "本工具中 B2 大约对应 550-784 分，但具体要求可能更高。" },
+      { question: "TOEIC 和雅思考察同样能力吗？", answer: "不完全相同。TOEIC 常偏商务听读，雅思还包括口语和写作。" },
+    ],
+    disclaimer: "换算仅供参考，入学、招聘和签证提交以相关机构最新官方规则为准。",
+  },
+};
+
+const c = content[locale] ?? content.en;
+const structuredData = [
+  { "@context": "https://schema.org", "@type": "HowTo", name: m.title, description: m.description, step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })) },
+  { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: c.faqs.map((faq) => ({ "@type": "Question", name: faq.question, acceptedAnswer: { "@type": "Answer", text: faq.answer } })) },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <ToeicScoreConverter client:load locale={locale} />
+    <section class="mt-10 border-t border-slate-200 pt-8"><h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2><p class="mt-4 leading-8 text-slate-700">{c.intro}</p></section>
+    <section class="mt-10"><h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2><div class="mt-4 grid gap-4 md:grid-cols-3">{c.formulas.map((item) => (<article class="rounded-xl border border-slate-200 bg-white p-4"><h3 class="font-semibold text-slate-900">{item.title}</h3><p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p></article>))}</div></section>
+    <section class="mt-10"><h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2><ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">{c.steps.map((s) => (<li class="leading-7">{s}</li>))}</ol></section>
+    <section class="mt-10"><h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2><div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">{c.faqs.map((faq) => (<details class="group p-4"><summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary><p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p></details>))}</div></section>
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

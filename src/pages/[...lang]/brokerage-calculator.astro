@@ -2,7 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import BrokerageCalculatorComp from "../../components/tools/BrokerageCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -11,9 +12,9 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "주식 수수료 계산기 — 매수·매도 수수료 총비용 계산",
     description: "주식 매수·매도 시 발생하는 증권사 수수료와 거래세를 계산합니다. 실제 투자 비용을 미리 파악하세요.",
@@ -35,20 +36,189 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Calcula comisiones de corretaje e impuestos de transacción para compra/venta de acciones.",
   },
   zh: {
-    title: "股票手續費計算機",
-    description: "計算股票買賣時的券商手續費和交易稅，提前了解實際投資成本。",
-  },
-  cn: {
-    title: "股票手续费计算器",
+    title: "股票手续费计算机",
     description: "计算股票买卖时的券商手续费和交易税，提前了解实际投资成本。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "이 계산기는 한국 주택 거래의 중개보수 상한을 추정합니다",
+    intro: "현재 페이지 제목은 주식 수수료처럼 보이지만, 실제 탑재된 계산기는 주택 매매·전월세 거래 금액에 따른 한국 부동산 중개보수 상한요율과 최대 수수료를 계산합니다. 계약 전 예상 현금 지출을 확인하고, 부가세 별도 여부까지 함께 보는 데 유용합니다.",
+    formulaTitle: "계산 기준",
+    formulas: [
+      { title: "기본 수수료", body: "중개보수 = 거래금액 × 상한요율" },
+      { title: "한도 적용", body: "최대 보수 = min(거래금액×요율, 정액한도)" },
+      { title: "부가세", body: "표시 수수료는 부가세 별도일 수 있음" },
+    ],
+    howToTitle: "사용 방법",
+    steps: ["거래 종류를 매매·교환 또는 전월세로 선택합니다.", "거래 금액을 입력합니다.", "상한요율과 최대 중개보수를 확인하고 계약서의 실제 청구액과 비교합니다."],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "주식 수수료 계산기인가요?", answer: "아닙니다. 현재 컴포넌트는 한국 부동산 중개수수료 계산기입니다. 페이지 메타와 컴포넌트 주제가 불일치합니다." },
+      { question: "계산 결과가 반드시 내야 하는 금액인가요?", answer: "상한액 추정입니다. 실제 보수는 상한 범위 안에서 중개사와 협의되며 지역·거래 조건에 따라 확인이 필요합니다." },
+      { question: "부가세가 포함되어 있나요?", answer: "컴포넌트는 부가세 별도라고 안내합니다. 사업자 여부와 청구 방식에 따라 최종 결제액이 달라질 수 있습니다." },
+    ],
+    disclaimer: "이 도구는 일반적인 계산용입니다. 공식 부동산 중개보수 기준과 실제 청구액은 관할 지자체·중개사무소 기준을 확인하세요.",
+  },
+  en: {
+    introTitle: "This calculator estimates Korean residential real-estate brokerage caps",
+    intro: "Although the page meta currently refers to stock brokerage, the mounted component calculates Korean real-estate brokerage fees for purchase/sale and lease/rent transactions. Use it to estimate the maximum fee before signing and to remember that VAT may be charged separately.",
+    formulaTitle: "Calculation rules",
+    formulas: [
+      { title: "Base fee", body: "Brokerage fee = transaction amount × cap rate" },
+      { title: "Fixed cap", body: "Maximum fee = min(amount×rate, fixed cap)" },
+      { title: "VAT", body: "The displayed fee may exclude VAT" },
+    ],
+    howToTitle: "How to use",
+    steps: ["Choose buy/sell or lease/rent.", "Enter the transaction amount.", "Review the cap rate and maximum brokerage fee, then compare with the contract quote."],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Is this a stock brokerage calculator?", answer: "No. The current component calculates Korean real-estate brokerage fee caps. The page meta and component topic are inconsistent." },
+      { question: "Is the result the exact fee I must pay?", answer: "It is an estimated maximum. The actual fee can be negotiated within legal limits and should be checked for the transaction location and terms." },
+      { question: "Is VAT included?", answer: "The component states VAT excluded. Final payment can differ depending on the broker's tax status and billing." },
+    ],
+    disclaimer: "This tool is for general calculation. Confirm official brokerage limits and actual charges with the relevant local authority or brokerage office.",
+  },
+  ja: {
+    introTitle: "この計算機は韓国住宅取引の仲介手数料上限を概算します",
+    intro: "ページのメタ情報は株式手数料に見えますが、実際のコンポーネントは韓国の不動産売買・賃貸取引における仲介報酬上限を計算します。契約前の支出見込みと付加価値税の有無を確認できます。",
+    formulaTitle: "計算基準",
+    formulas: [
+      { title: "基本報酬", body: "仲介報酬 = 取引金額 × 上限料率" },
+      { title: "定額上限", body: "最大報酬 = min(金額×料率, 定額上限)" },
+      { title: "VAT", body: "表示額は付加価値税別の場合があります" },
+    ],
+    howToTitle: "使い方",
+    steps: ["売買・交換または賃貸を選びます。", "取引金額を入力します。", "上限料率と最大報酬を確認し、契約書の請求額と比べます。"],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "株式手数料の計算ですか？", answer: "いいえ。現在のコンポーネントは韓国の不動産仲介手数料向けです。メタ情報と内容に不一致があります。" },
+      { question: "結果は必ず支払う金額ですか？", answer: "上限額の概算です。実際の報酬は法定範囲内で確認・協議されます。" },
+      { question: "VAT込みですか？", answer: "コンポーネントはVAT別と示しています。最終額は請求方法で変わります。" },
+    ],
+    disclaimer: "このツールは一般的な計算用です。公式な仲介報酬基準と請求額は自治体・仲介業者にご確認ください。",
+  },
+  zh: {
+    introTitle: "这个计算器估算韩国住宅交易中介费上限",
+    intro: "虽然页面 meta 看起来像股票手续费，但实际加载的组件计算韩国房地产买卖、租赁交易的中介报酬上限。签约前可用它估算现金支出，并注意 VAT 可能另计。",
+    formulaTitle: "计算规则",
+    formulas: [
+      { title: "基础费用", body: "中介费 = 交易金额 × 上限费率" },
+      { title: "固定上限", body: "最高费用 = min(金额×费率, 固定上限)" },
+      { title: "VAT", body: "显示费用可能不含 VAT" },
+    ],
+    howToTitle: "使用方法",
+    steps: ["选择买卖/交换或租赁。", "输入交易金额。", "查看上限费率和最高中介费，并与合同报价比较。"],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "这是股票手续费计算器吗？", answer: "不是。当前组件计算韩国房地产中介费上限，页面 meta 与组件主题不一致。" },
+      { question: "结果就是必须支付的金额吗？", answer: "它是最高额估算。实际费用需在法定范围内结合地区和交易条件确认。" },
+      { question: "包含 VAT 吗？", answer: "组件提示 VAT 另计。最终支付金额可能因中介机构开票方式不同而变化。" },
+    ],
+    disclaimer: "本工具用于一般计算。正式房地产中介费标准和实际收费请以当地主管机关或中介机构为准。",
+  },
+  fr: {
+    introTitle: "Ce calculateur estime les plafonds de courtage immobilier résidentiel en Corée",
+    intro: "Même si les métadonnées parlent de courtage boursier, le composant calcule les frais maximaux d'agence immobilière coréenne pour achat/vente et location. Il sert à anticiper les coûts avant signature, hors TVA éventuelle.",
+    formulaTitle: "Règles de calcul",
+    formulas: [
+      { title: "Frais de base", body: "Frais = montant de transaction × taux plafond" },
+      { title: "Plafond fixe", body: "Frais max = min(montant×taux, plafond fixe)" },
+      { title: "TVA", body: "Le montant affiché peut exclure la TVA" },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: ["Choisissez achat/vente ou location.", "Saisissez le montant de transaction.", "Comparez taux plafond et frais maximum avec le devis ou contrat."],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Est-ce un calculateur boursier ?", answer: "Non. Le composant actuel concerne les frais de courtage immobilier coréens ; la méta est incohérente." },
+      { question: "Le résultat est-il le montant exact ?", answer: "C'est un plafond estimé. Le montant réel doit être vérifié selon lieu et conditions." },
+      { question: "La TVA est-elle incluse ?", answer: "Le composant indique TVA exclue. Le paiement final peut varier." },
+    ],
+    disclaimer: "Cet outil sert au calcul général. Pour les plafonds officiels et frais réels, vérifiez auprès de l'autorité locale ou de l'agence.",
+  },
+  es: {
+    introTitle: "Esta calculadora estima topes de corretaje inmobiliario residencial en Corea",
+    intro: "Aunque los metadatos mencionan corretaje bursátil, el componente calcula comisiones máximas inmobiliarias coreanas para compraventa y alquiler. Ayuda a prever el costo antes de firmar y recordar que el IVA puede ir aparte.",
+    formulaTitle: "Reglas de cálculo",
+    formulas: [
+      { title: "Comisión base", body: "Comisión = monto de transacción × tasa máxima" },
+      { title: "Tope fijo", body: "Máximo = min(monto×tasa, tope fijo)" },
+      { title: "IVA", body: "La comisión mostrada puede excluir IVA" },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: ["Elige compra/venta o alquiler.", "Introduce el monto de la transacción.", "Compara tasa máxima y comisión con la cotización o contrato."],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Es una calculadora bursátil?", answer: "No. El componente actual calcula topes de comisión inmobiliaria coreana; la meta de la página es inconsistente." },
+      { question: "¿El resultado es la comisión exacta?", answer: "Es un máximo estimado. El importe real debe verificarse según ubicación y condiciones." },
+      { question: "¿Incluye IVA?", answer: "El componente indica IVA excluido. El pago final puede variar según facturación." },
+    ],
+    disclaimer: "Esta herramienta es para cálculo general. Confirma límites oficiales y cargos reales con la autoridad local o agencia correspondiente.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  { "@context": "https://schema.org", "@type": "HowTo", name: m.title, description: m.description, step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })) },
+  { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: c.faqs.map((faq) => ({ "@type": "Question", name: faq.question, acceptedAnswer: { "@type": "Answer", text: faq.answer } })) },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <main class="mx-auto max-w-3xl px-4 py-10">
     <BrokerageCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

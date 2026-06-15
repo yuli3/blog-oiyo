@@ -2,15 +2,16 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import EmojiPicker from "../../components/tools/EmojiPicker";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "이모지 픽커 — 이모지 검색 & 클립보드 복사",
     description: "카테고리 탭으로 이모지를 탐색하거나 한국어/영어로 검색하세요. 클릭 한 번으로 클립보드에 복사하고 최근 사용 이모지도 확인할 수 있습니다.",
@@ -32,20 +33,229 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Explora emoji por categoría o busca por nombre. Haz clic para copiar al portapapeles al instante.",
   },
   zh: {
-    title: "表情符號選擇器 — 搜尋並複製表情符號",
-    description: "按類別瀏覽表情符號或按名稱搜尋。點擊即可立即複製到剪貼板。",
-  },
-  cn: {
-    title: "表情符号选择器 — 搜索并复制表情符号",
-    description: "按类别浏览表情符号或按名称搜索。点击即可立即复制到剪贴板。",
+    title: "表情符号选择器 — 搜寻并复制表情符号",
+    description: "按类别浏览表情符号或按名称搜寻。点击即可立即复制到剪贴板。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+type PageContent = {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+};
+
+const content: Record<ActiveLocale, PageContent> = {
+  ko: {
+    introTitle: "이모지는 짧은 메시지의 톤을 빠르게 보완합니다",
+    intro: "이모지는 채팅, 문서 제목, 소셜 게시물, 프로덕트 마이크로카피에서 감정과 맥락을 압축해 전달합니다. 이 도구는 카테고리 탐색, 이름 검색, 최근 사용 기록, 클릭 복사를 한 화면에 모아 반복 입력 시간을 줄입니다.",
+    formulaTitle: "이모지 선택 기준",
+    formulas: [
+      { title: "카테고리", body: "표정, 음식, 활동, 사물처럼 의미 묶음으로 훑으면 원하는 분위기를 빠르게 좁힐 수 있습니다." },
+      { title: "검색어", body: "정확한 이름을 몰라도 핵심 단어로 찾으면 문맥에 맞는 후보를 줄일 수 있습니다." },
+      { title: "최근 사용", body: "자주 쓰는 이모지를 다시 찾는 비용을 줄여 같은 브랜드 톤이나 개인 습관을 유지합니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "카테고리 탭을 훑거나 검색창에 한국어 또는 영어 키워드를 입력합니다.",
+      "원하는 이모지를 클릭해 클립보드에 복사합니다.",
+      "최근 사용 목록에서 반복적으로 쓰는 이모지를 빠르게 다시 선택합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "복사한 이모지는 어디에 붙여넣을 수 있나요?", answer: "브라우저, 메신저, 문서 편집기, 소셜 앱처럼 유니코드 이모지를 지원하는 대부분의 입력칸에 붙여넣을 수 있습니다." },
+      { question: "플랫폼마다 모양이 다른 이유는 무엇인가요?", answer: "이모지의 의미는 유니코드로 표준화되지만 실제 그림은 운영체제와 앱이 각자 렌더링합니다." },
+      { question: "검색은 어떤 언어를 기준으로 하나요?", answer: "도구 데이터에 포함된 이름과 한국어 라벨을 기준으로 찾습니다. 너무 긴 문장보다 짧은 핵심 단어가 좋습니다." },
+    ],
+    disclaimer: "이모지는 플랫폼과 문화권에 따라 다르게 해석될 수 있으므로 공식·민감한 메시지에서는 문장 설명을 함께 사용하세요.",
+  },
+  en: {
+    introTitle: "Emoji add tone to short messages without extra wording",
+    intro: "Emoji are useful in chat, headings, social posts, and product microcopy when a message needs a clear emotional cue. This picker combines category browsing, name search, recent history, and one-click copying so you can choose consistently without hunting through an operating-system panel.",
+    formulaTitle: "Emoji selection concepts",
+    formulas: [
+      { title: "Category", body: "Browsing by meaning group helps narrow the tone before you choose a specific symbol." },
+      { title: "Search term", body: "A short keyword is usually better than a full sentence when you want close matches." },
+      { title: "Recent use", body: "History keeps recurring choices nearby, which is useful for consistent brand or personal voice." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Browse a category or type a Korean or English keyword into the search box.",
+      "Click an emoji to copy it to your clipboard.",
+      "Use the recent list when you want to reuse the same tone quickly.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Where can I paste copied emoji?", answer: "Most text fields that support Unicode emoji will accept them, including browsers, chat apps, documents, and social tools." },
+      { question: "Why do emoji look different on different devices?", answer: "Unicode standardizes the meaning, but each operating system or app renders its own artwork." },
+      { question: "How should I search?", answer: "Use a short keyword such as a mood, object, activity, or common name. Very long phrases are less reliable." },
+    ],
+    disclaimer: "Emoji can be interpreted differently across platforms and cultures; use clear wording for formal or sensitive communication.",
+  },
+  ja: {
+    introTitle: "絵文字は短いメッセージにニュアンスを加えます",
+    intro: "絵文字はチャット、見出し、SNS投稿、プロダクト内の短い文言で、感情や文脈を素早く補うために役立ちます。このピッカーはカテゴリ、名前検索、最近使った項目、クリックコピーをまとめ、必要な絵文字を探す手間を減らします。",
+    formulaTitle: "絵文字選びの考え方",
+    formulas: [
+      { title: "カテゴリ", body: "意味のまとまりから探すと、出したい雰囲気をすばやく絞れます。" },
+      { title: "検索語", body: "長い文章より、気分・物・行動を表す短いキーワードの方が探しやすくなります。" },
+      { title: "最近使用", body: "よく使う絵文字を残しておくと、同じトーンを繰り返し使いやすくなります。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "カテゴリを選ぶか、検索欄に日本語ではなく英語名または登録済みのキーワードを入力します。",
+      "使いたい絵文字をクリックしてクリップボードにコピーします。",
+      "繰り返し使うものは最近使用リストから選びます。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "コピーした絵文字はどこに貼り付けられますか？", answer: "Unicode絵文字に対応したブラウザ、チャット、文書エディタ、SNSの入力欄などで使えます。" },
+      { question: "端末によって見た目が違うのはなぜですか？", answer: "意味はUnicodeで標準化されていますが、実際の絵はOSやアプリごとに描画されます。" },
+      { question: "検索のコツはありますか？", answer: "感情、物、行動、一般的な名前など短いキーワードで探すと候補を見つけやすくなります。" },
+    ],
+    disclaimer: "絵文字の受け取られ方は環境や文化で変わるため、正式な連絡や慎重な内容では文章でも補足してください。",
+  },
+  zh: {
+    introTitle: "表情符号能为短消息补足语气",
+    intro: "在聊天、标题、社交内容和产品短文案中，表情符号可以快速传达情绪与语境。这个选择器把分类浏览、名称搜索、最近使用和点击复制集中在一起，减少反复寻找的时间。",
+    formulaTitle: "选择表情符号的概念",
+    formulas: [
+      { title: "分类", body: "按含义分组浏览，可以先确定整体语气，再选择具体符号。" },
+      { title: "关键词", body: "用简短的情绪、物品或动作词搜索，通常比输入长句更有效。" },
+      { title: "最近使用", body: "保留常用符号，方便维持一致的品牌语气或个人表达习惯。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "浏览分类，或在搜索框输入中文、韩文或英文关键词。",
+      "点击想用的表情符号，将其复制到剪贴板。",
+      "需要重复使用时，从最近使用列表中快速选择。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "复制后的表情符号可以粘贴到哪里？", answer: "大多数支持 Unicode 表情符号的输入框都可以使用，包括浏览器、聊天工具、文档和社交平台。" },
+      { question: "为什么不同设备上看起来不一样？", answer: "Unicode 规范统一的是含义，具体图形由操作系统或应用自行绘制。" },
+      { question: "怎样搜索更准确？", answer: "使用短关键词，例如情绪、物品、活动或常见名称，通常比长句更容易匹配。" },
+    ],
+    disclaimer: "表情符号在不同平台和文化语境中可能被不同理解；正式或敏感沟通请搭配明确文字。",
+  },
+  fr: {
+    introTitle: "Les emoji ajoutent du ton aux messages courts",
+    intro: "Dans les discussions, titres, publications sociales et microtextes d'interface, les emoji donnent rapidement un indice émotionnel. Ce sélecteur réunit navigation par catégorie, recherche par nom, historique récent et copie en un clic pour éviter de chercher le même symbole à chaque fois.",
+    formulaTitle: "Repères de sélection",
+    formulas: [
+      { title: "Catégorie", body: "Parcourir par groupe de sens permet de cadrer l'intention avant de choisir un symbole précis." },
+      { title: "Mot-clé", body: "Un mot court lié à une émotion, un objet ou une action donne souvent de meilleurs résultats qu'une phrase." },
+      { title: "Historique", body: "Les emoji récents gardent les choix fréquents à portée de main et aident à conserver un ton cohérent." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Parcourez une catégorie ou saisissez un mot-clé dans le champ de recherche.",
+      "Cliquez sur l'emoji voulu pour le copier dans le presse-papiers.",
+      "Reprenez les symboles fréquents depuis la liste récente.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Où puis-je coller un emoji copié ?", answer: "Dans la plupart des champs compatibles Unicode : navigateur, messagerie, document, outil social ou éditeur de texte." },
+      { question: "Pourquoi l'apparence change-t-elle selon l'appareil ?", answer: "Unicode standardise le sens, mais chaque système ou application fournit son propre dessin." },
+      { question: "Comment mieux chercher ?", answer: "Utilisez un mot court : humeur, objet, activité ou nom courant. Les phrases longues sont moins efficaces." },
+    ],
+    disclaimer: "Les emoji peuvent être interprétés différemment selon les plateformes et les cultures ; ajoutez des mots clairs pour les messages formels ou sensibles.",
+  },
+  es: {
+    introTitle: "Los emoji añaden tono a mensajes breves",
+    intro: "En chats, títulos, publicaciones sociales y microcopias de producto, los emoji ayudan a transmitir emoción y contexto en poco espacio. Este selector reúne categorías, búsqueda por nombre, historial reciente y copia con un clic para elegir con menos fricción.",
+    formulaTitle: "Conceptos para elegir emoji",
+    formulas: [
+      { title: "Categoría", body: "Explorar por grupos de significado ayuda a acotar primero el tono y después elegir el símbolo concreto." },
+      { title: "Palabra clave", body: "Una palabra corta sobre emoción, objeto o acción suele funcionar mejor que una frase completa." },
+      { title: "Uso reciente", body: "El historial mantiene cerca las elecciones frecuentes y ayuda a conservar una voz consistente." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Explora una categoría o escribe una palabra clave en el buscador.",
+      "Haz clic en un emoji para copiarlo al portapapeles.",
+      "Usa la lista reciente cuando quieras repetir el mismo tono rápidamente.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Dónde puedo pegar los emoji copiados?", answer: "En la mayoría de campos compatibles con Unicode: navegador, chat, documentos, redes sociales y editores de texto." },
+      { question: "¿Por qué se ven diferentes según el dispositivo?", answer: "Unicode estandariza el significado, pero cada sistema operativo o aplicación dibuja su propia versión." },
+      { question: "¿Cómo conviene buscar?", answer: "Usa una palabra corta, como emoción, objeto, actividad o nombre común. Las frases largas suelen ser menos precisas." },
+    ],
+    disclaimer: "Los emoji pueden interpretarse de forma distinta según la plataforma y la cultura; acompáñalos con texto claro en comunicaciones formales o sensibles.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <EmojiPicker client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

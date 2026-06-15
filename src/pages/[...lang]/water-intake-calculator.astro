@@ -2,7 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import WaterIntakeCalculatorComp from "../../components/tools/WaterIntakeCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -11,9 +12,9 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "하루 물 섭취량 계산기 — 내 적정 수분 섭취량은?",
     description: "체중·활동량·기온을 고려해 오늘 마셔야 할 적정 수분량을 계산합니다. 커피·알코올 이뇨 효과도 반영합니다.",
@@ -35,20 +36,203 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Calcula tu ingesta óptima de agua según tu peso, nivel de actividad y temperatura.",
   },
   zh: {
-    title: "每日飲水量計算機 — 我應該喝多少水？",
-    description: "根據體重、活動量和氣溫計算最佳每日飲水量，還考慮咖啡因和酒精的脫水效果。",
-  },
-  cn: {
-    title: "每日饮水量计算器 — 我应该喝多少水？",
+    title: "每日饮水量计算机 — 我应该喝多少水？",
     description: "根据体重、活动量和气温计算最佳每日饮水量，还考虑咖啡因和酒精的脱水效果。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "수분 필요량은 체중뿐 아니라 활동량, 기온, 음료 습관에 따라 달라집니다",
+    intro: "이 계산기는 체중을 기준으로 기본 수분량을 잡고, 활동량과 더운 날씨, 커피와 알코올 섭취에 따른 보충량을 더합니다. 결과는 ml와 250ml 컵 수로 보여주어 하루 동안 나누어 마시기 쉽게 설계되어 있습니다.",
+    formulaTitle: "계산 기준",
+    formulas: [
+      { title: "기본량", body: "체중(kg) × 30ml" },
+      { title: "환경 보정", body: "활동량 +0/+350/+700ml, 기온 +0/+150/+350ml" },
+      { title: "이뇨 보충", body: "커피 1잔 +150ml, 알코올 1잔 +200ml" },
+    ],
+    howToTitle: "사용 방법",
+    steps: ["체중을 입력합니다.", "오늘의 활동량과 기온 범위를 선택합니다.", "커피와 알코올 섭취량을 넣고 총 ml와 컵 수를 하루에 나누어 마십니다."],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "물은 많이 마실수록 좋은가요?", answer: "아닙니다. 신장 질환, 심부전, 저나트륨혈증 위험이 있는 경우 과도한 수분 섭취가 문제가 될 수 있습니다." },
+      { question: "커피는 모두 탈수로 계산해야 하나요?", answer: "일상적인 커피는 수분도 제공하지만, 이 도구는 보수적으로 추가 수분이 필요할 수 있다는 관점에서 보정합니다." },
+      { question: "운동하는 날은 어떻게 입력하나요?", answer: "땀을 많이 흘린 날은 활동 수준을 높게 선택하고, 장시간 운동은 전해질 보충도 함께 고려하세요." },
+    ],
+    disclaimer: "결과는 일반적인 추정치이며 전문적인 의학적 조언을 대신하지 않습니다.",
+  },
+  en: {
+    introTitle: "Hydration needs change with body weight, activity, heat, and drink habits",
+    intro: "This calculator starts with body weight, then adds water for activity, warmer temperatures, coffee, and alcohol. The result is shown in milliliters and 250 ml cups so it is easier to spread intake across the day.",
+    formulaTitle: "Calculation basics",
+    formulas: [
+      { title: "Base amount", body: "body weight (kg) × 30 ml" },
+      { title: "Environment", body: "activity +0/+350/+700 ml; temperature +0/+150/+350 ml" },
+      { title: "Diuretic offset", body: "coffee +150 ml per cup; alcohol +200 ml per drink" },
+    ],
+    howToTitle: "How to use",
+    steps: ["Enter your body weight.", "Select today's activity level and temperature range.", "Add coffee and alcohol intake, then spread the recommended ml or cup count through the day."],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Is more water always better?", answer: "No. Kidney disease, heart failure, and low sodium risk can make excess fluid unsafe." },
+      { question: "Does coffee always dehydrate you?", answer: "Regular coffee also contributes fluid, but this tool uses a conservative offset because caffeine can increase urine output for some people." },
+      { question: "How should I handle exercise days?", answer: "Choose a higher activity level on sweaty days and consider electrolytes for long or intense sessions." },
+    ],
+    disclaimer: "Results are general estimates and are not a substitute for professional medical advice.",
+  },
+  ja: {
+    introTitle: "必要な水分量は体重だけでなく、活動量・気温・飲み物の習慣で変わります",
+    intro: "この計算機は体重を基準にし、活動量、暑さ、コーヒー、アルコールによる補正を加えます。結果はmlと250mlカップ数で表示されるため、1日の中で分けて飲む目安にできます。",
+    formulaTitle: "計算の基準",
+    formulas: [
+      { title: "基本量", body: "体重(kg) × 30ml" },
+      { title: "環境補正", body: "活動量 +0/+350/+700ml、気温 +0/+150/+350ml" },
+      { title: "利尿補正", body: "コーヒー1杯 +150ml、アルコール1杯 +200ml" },
+    ],
+    howToTitle: "使い方",
+    steps: ["体重を入力します。", "今日の活動量と気温を選びます。", "コーヒーとアルコールの量を入れ、総量を1日に分けて飲みます。"],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "水は多いほど良いですか？", answer: "いいえ。腎疾患、心不全、低ナトリウム血症のリスクがある場合、過剰な水分は危険です。" },
+      { question: "コーヒーは必ず脱水になりますか？", answer: "コーヒー自体にも水分はありますが、カフェインの利尿作用を考え保守的に補正しています。" },
+      { question: "運動した日はどう入力しますか？", answer: "汗を多くかいた日は活動量を高めに選び、長時間運動では電解質も考慮してください。" },
+    ],
+    disclaimer: "結果は一般的な推定値であり、医療専門家による助言の代わりにはなりません。",
+  },
+  zh: {
+    introTitle: "水分需求会随体重、活动量、气温与饮品习惯改变",
+    intro: "这个计算器先以体重估算基本水分，再加入活动量、炎热天气、咖啡与酒精的补充量。结果以毫升与 250ml 杯数呈现，方便把饮水分散到一天之中。",
+    formulaTitle: "计算基准",
+    formulas: [
+      { title: "基本量", body: "体重(kg) × 30ml" },
+      { title: "环境修正", body: "活动 +0/+350/+700ml，气温 +0/+150/+350ml" },
+      { title: "利尿补充", body: "咖啡每杯 +150ml，酒精每杯 +200ml" },
+    ],
+    howToTitle: "使用方法",
+    steps: ["输入体重。", "选择今天的活动量与气温范围。", "加入咖啡与酒精数量，依总毫升或杯数分段补水。"],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "水喝越多越好吗？", answer: "不是。肾脏病、心衰竭或低血钠风险者，过量饮水可能有害。" },
+      { question: "咖啡一定会造成脱水吗？", answer: "咖啡本身也提供水分，但本工具保守地考虑咖啡因可能增加排尿量。" },
+      { question: "运动日怎么设定？", answer: "大量流汗时选择较高活动量，长时间或高强度运动也可考虑电解质补充。" },
+    ],
+    disclaimer: "结果仅为一般估算，不能替代专业医疗建议。",
+  },
+  fr: {
+    introTitle: "Les besoins en eau varient avec le poids, l'activité, la chaleur et les boissons",
+    intro: "Ce calculateur part du poids corporel, puis ajoute une marge pour l'activité, la température, le café et l'alcool. Le résultat est donné en millilitres et en verres de 250 ml pour répartir l'apport dans la journée.",
+    formulaTitle: "Bases de calcul",
+    formulas: [
+      { title: "Base", body: "poids (kg) × 30 ml" },
+      { title: "Environnement", body: "activité +0/+350/+700 ml ; température +0/+150/+350 ml" },
+      { title: "Compensation", body: "café +150 ml par tasse ; alcool +200 ml par verre" },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: ["Saisissez votre poids.", "Choisissez l'activité et la température du jour.", "Ajoutez café et alcool, puis répartissez le volume recommandé dans la journée."],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Boire plus est-il toujours mieux ?", answer: "Non. Certaines maladies rénales, cardiaques ou risques d'hyponatrémie rendent l'excès de liquide dangereux." },
+      { question: "Le café déshydrate-t-il toujours ?", answer: "Le café apporte aussi de l'eau, mais l'outil garde une marge prudente liée à la caféine." },
+      { question: "Que faire les jours de sport ?", answer: "Choisissez une activité plus élevée si vous transpirez beaucoup et pensez aux électrolytes lors de longues séances." },
+    ],
+    disclaimer: "Les résultats sont des estimations générales et ne remplacent pas un avis médical professionnel.",
+  },
+  es: {
+    introTitle: "La hidratación depende del peso, actividad, calor y bebidas",
+    intro: "Esta calculadora empieza con el peso corporal y añade agua por actividad, temperatura, café y alcohol. El resultado aparece en mililitros y vasos de 250 ml para repartir la ingesta durante el día.",
+    formulaTitle: "Bases del cálculo",
+    formulas: [
+      { title: "Base", body: "peso (kg) × 30 ml" },
+      { title: "Entorno", body: "actividad +0/+350/+700 ml; temperatura +0/+150/+350 ml" },
+      { title: "Compensación", body: "café +150 ml por taza; alcohol +200 ml por bebida" },
+    ],
+    howToTitle: "Cómo usarla",
+    steps: ["Introduce tu peso.", "Selecciona actividad y temperatura del día.", "Añade café y alcohol, y reparte los ml o vasos recomendados durante el día."],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Más agua siempre es mejor?", answer: "No. Enfermedad renal, insuficiencia cardíaca o riesgo de sodio bajo pueden hacer peligroso el exceso de líquidos." },
+      { question: "¿El café siempre deshidrata?", answer: "El café también aporta líquido, pero la herramienta usa un margen prudente por el posible efecto diurético de la cafeína." },
+      { question: "¿Qué hago en días de ejercicio?", answer: "Elige actividad alta si sudas mucho y considera electrolitos en sesiones largas o intensas." },
+    ],
+    disclaimer: "Los resultados son estimaciones generales y no sustituyen el consejo médico profesional.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <WaterIntakeCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

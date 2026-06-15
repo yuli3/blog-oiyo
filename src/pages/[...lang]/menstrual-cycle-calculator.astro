@@ -2,15 +2,16 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import MenstrualCycleCalculator from "../../components/tools/MenstrualCycleCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "생리 주기 계산기 — 다음 생리일·배란일·가임기 계산",
     description: "마지막 생리일과 평균 주기를 입력하면 다음 생리 예정일, 배란일, 가임기, 황체기를 자동으로 계산합니다. 향후 3주기 예측 포함.",
@@ -32,20 +33,203 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Ingresa tu última fecha de menstruación y duración del ciclo para predecir el próximo período, día de ovulación, ventana fértil y fase lútea.",
   },
   zh: {
-    title: "月經週期計算機 — 月經、排卵日與受孕窗口期",
-    description: "輸入最後一次月經日期和平均週期長度，自動計算下次月經日期、排卵日、受孕窗口期和黃體期，包含未來3個週期預測。",
-  },
-  cn: {
-    title: "月经周期计算器 — 月经、排卵日与受孕窗口期",
+    title: "月经周期计算机 — 月经、排卵日与受孕窗口期",
     description: "输入最后一次月经日期和平均周期长度，自动计算下次月经日期、排卵日、受孕窗口期和黄体期，包含未来3个周期预测。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "생리 주기 예측은 마지막 생리일, 평균 주기, 생리 기간을 기준으로 합니다",
+    intro: "이 계산기는 마지막 생리 시작일과 평균 주기, 생리 기간을 입력해 다음 생리 예정일, 배란 예정일, 가임기, 황체기, 향후 3주기 예측을 보여줍니다. 규칙적인 주기에서는 일정 관리에 유용하지만 스트레스, 질병, 수면, 체중 변화, 약물에 따라 실제 주기는 달라질 수 있습니다.",
+    formulaTitle: "계산 기준",
+    formulas: [
+      { title: "다음 생리", body: "다음 생리 시작일 = 마지막 생리 시작일 + 평균 주기" },
+      { title: "배란일", body: "배란 예정일 = 다음 생리 시작일 - 14일" },
+      { title: "가임기", body: "가임기 = 배란 예정일 5일 전부터 배란일까지" },
+    ],
+    howToTitle: "사용 방법",
+    steps: ["마지막 생리 시작일을 입력합니다.", "평균 주기와 생리 기간을 선택합니다.", "다음 생리, 배란일, 가임기, 3주기 예측을 일정 참고용으로 확인합니다."],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "생리 주기의 정상 범위는 어느 정도인가요?", answer: "성인의 주기는 보통 21-35일 범위가 흔하지만 개인별 기준선이 더 중요합니다." },
+      { question: "가임기 예측으로 피임해도 되나요?", answer: "권장하지 않습니다. 배란은 쉽게 변동하며 주기 예측만으로 피임 효과를 보장할 수 없습니다." },
+      { question: "주기가 불규칙하거나 통증이 심하면 어떻게 하나요?", answer: "반복적인 불규칙, 과다출혈, 심한 통증은 산부인과 상담이 필요할 수 있습니다." },
+    ],
+    disclaimer: "결과는 일반적인 추정치이며 산부인과 전문의의 의학적 조언, 진단 또는 진료를 대신하지 않습니다.",
+  },
+  en: {
+    introTitle: "Cycle prediction starts with last period date, average cycle length, and period duration",
+    intro: "This calculator estimates the next period, ovulation day, fertile window, luteal phase, and the next three cycles from the last period start date, average cycle length, and period duration. It is useful for planning when cycles are regular, but stress, illness, sleep, weight change, and medication can shift timing.",
+    formulaTitle: "Calculation basics",
+    formulas: [
+      { title: "Next period", body: "next period start = last period start + average cycle length" },
+      { title: "Ovulation", body: "estimated ovulation = next period start - 14 days" },
+      { title: "Fertile window", body: "from 5 days before ovulation through ovulation day" },
+    ],
+    howToTitle: "How to use",
+    steps: ["Enter the first day of the last period.", "Set average cycle length and period duration.", "Use the next period, ovulation, fertile window, and three-cycle forecast as planning references."],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "What is a typical cycle range?", answer: "Adult cycles often fall around 21-35 days, but your own usual pattern matters most." },
+      { question: "Can this be used as birth control?", answer: "No. Ovulation can shift, and calendar prediction alone cannot reliably prevent pregnancy." },
+      { question: "What if cycles are irregular or painful?", answer: "Repeated irregularity, heavy bleeding, or severe pain may need evaluation by a healthcare professional." },
+    ],
+    disclaimer: "Results are general estimates and are not a substitute for professional gynecologic medical advice, diagnosis, or care.",
+  },
+  ja: {
+    introTitle: "月経周期の予測は最終月経日、平均周期、生理期間を基準にします",
+    intro: "この計算機は最終月経開始日、平均周期、生理期間から、次回生理、排卵日、妊娠可能期間、黄体期、今後3周期を推定します。周期が安定している場合の予定管理に役立ちますが、ストレス、病気、睡眠、体重変化、薬でずれることがあります。",
+    formulaTitle: "計算の基準",
+    formulas: [
+      { title: "次回生理", body: "次回開始日 = 最終生理開始日 + 平均周期" },
+      { title: "排卵日", body: "推定排卵日 = 次回生理開始日 - 14日" },
+      { title: "妊娠可能期間", body: "排卵日の5日前から排卵日まで" },
+    ],
+    howToTitle: "使い方",
+    steps: ["最終月経開始日を入力します。", "平均周期と生理期間を設定します。", "次回生理、排卵日、妊娠可能期間、3周期予測を予定の参考にします。"],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "一般的な周期は何日ですか？", answer: "成人では21〜35日程度が多いですが、自分の普段のパターンが重要です。" },
+      { question: "避妊に使えますか？", answer: "推奨しません。排卵は変動し、カレンダー予測だけで妊娠を防ぐことはできません。" },
+      { question: "不規則や痛みが強い場合は？", answer: "不規則、過多出血、強い痛みが続く場合は医療専門家に相談してください。" },
+    ],
+    disclaimer: "結果は一般的な推定値であり、産婦人科専門家の医学的助言、診断、診療の代わりにはなりません。",
+  },
+  zh: {
+    introTitle: "月经周期预测以最后一次月经日、平均周期与经期天数为基准",
+    intro: "这个计算器根据最后一次月经开始日、平均周期与经期长度，推估下次月经、排卵日、受孕窗口、黄体期与未来三个周期。规律周期时适合行程管理，但压力、疾病、睡眠、体重变化与药物都可能改变时间。",
+    formulaTitle: "计算基准",
+    formulas: [
+      { title: "下次月经", body: "下次开始日 = 最后一次月经开始日 + 平均周期" },
+      { title: "排卵日", body: "推估排卵日 = 下次月经开始日 - 14天" },
+      { title: "受孕窗口", body: "排卵日前 5 天到排卵日当天" },
+    ],
+    howToTitle: "使用方法",
+    steps: ["输入最后一次月经开始日。", "设定平均周期与经期天数。", "把下次月经、排卵日、受孕窗口与三周期预测作为行程参考。"],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "常见周期范围是多少？", answer: "成人常见约 21-35 天，但自己的固定模式更重要。" },
+      { question: "可以用来避孕吗？", answer: "不建议。排卵可能变动，单靠日历预测无法可靠避孕。" },
+      { question: "周期不规律或疼痛严重怎么办？", answer: "反复不规律、经血过多或剧痛时，可能需要妇产科评估。" },
+    ],
+    disclaimer: "结果仅为一般估算，不能替代妇产科专业医疗建议、诊断或照护。",
+  },
+  fr: {
+    introTitle: "La prévision du cycle part de la dernière règle, de la durée moyenne et de la durée des règles",
+    intro: "Ce calculateur estime prochaines règles, ovulation, fenêtre fertile, phase lutéale et trois cycles à venir à partir du début des dernières règles, de la durée du cycle et des règles. Il aide à planifier si le cycle est régulier, mais stress, maladie, sommeil, poids et médicaments peuvent le décaler.",
+    formulaTitle: "Bases de calcul",
+    formulas: [
+      { title: "Prochaines règles", body: "début suivant = dernières règles + durée moyenne du cycle" },
+      { title: "Ovulation", body: "ovulation estimée = prochaines règles - 14 jours" },
+      { title: "Fenêtre fertile", body: "des 5 jours avant l'ovulation jusqu'au jour d'ovulation" },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: ["Saisissez le premier jour des dernières règles.", "Réglez durée moyenne du cycle et durée des règles.", "Utilisez règles, ovulation, fenêtre fertile et prévision sur 3 cycles comme repères."],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Quelle est la durée habituelle d'un cycle ?", answer: "Chez l'adulte, 21-35 jours est fréquent, mais votre tendance personnelle compte davantage." },
+      { question: "Puis-je l'utiliser comme contraception ?", answer: "Non. L'ovulation peut se déplacer et le calendrier seul ne prévient pas sûrement une grossesse." },
+      { question: "Et en cas de cycles irréguliers ou douloureux ?", answer: "Irrégularités répétées, saignements abondants ou fortes douleurs peuvent nécessiter un avis médical." },
+    ],
+    disclaimer: "Les résultats sont des estimations générales et ne remplacent pas un avis, diagnostic ou suivi gynécologique professionnel.",
+  },
+  es: {
+    introTitle: "La predicción del ciclo parte de última menstruación, duración media y días de sangrado",
+    intro: "Esta calculadora estima próxima menstruación, ovulación, ventana fértil, fase lútea y tres ciclos futuros usando la fecha de última regla, duración del ciclo y duración del período. Es útil para planificar si el ciclo es regular, pero estrés, enfermedad, sueño, peso y medicación pueden moverlo.",
+    formulaTitle: "Bases del cálculo",
+    formulas: [
+      { title: "Próximo período", body: "inicio siguiente = última regla + duración media del ciclo" },
+      { title: "Ovulación", body: "ovulación estimada = próximo período - 14 días" },
+      { title: "Ventana fértil", body: "desde 5 días antes de ovulación hasta el día de ovulación" },
+    ],
+    howToTitle: "Cómo usarla",
+    steps: ["Introduce el primer día de la última menstruación.", "Ajusta duración del ciclo y duración del período.", "Usa período, ovulación, ventana fértil y previsión de 3 ciclos como referencias."],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Cuál es un rango típico de ciclo?", answer: "En adultos suele estar entre 21 y 35 días, pero tu patrón habitual importa más." },
+      { question: "¿Sirve como anticonceptivo?", answer: "No. La ovulación puede desplazarse y el calendario solo no evita embarazo de forma fiable." },
+      { question: "¿Y si es irregular o doloroso?", answer: "Irregularidad repetida, sangrado abundante o dolor fuerte pueden requerir evaluación médica." },
+    ],
+    disclaimer: "Los resultados son estimaciones generales y no sustituyen el consejo, diagnóstico o atención ginecológica profesional.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <MenstrualCycleCalculator client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

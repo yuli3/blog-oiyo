@@ -2,15 +2,16 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import VocabFlashcard from "../../components/tools/VocabFlashcard";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "영단어 플래시카드 — TOEIC·비즈니스·수능 단어 무료 학습",
     description: "플래시카드로 TOEIC 필수 100단어, 비즈니스 80단어, 일상회화 60단어, 수능 80단어를 학습하세요. 모르는 단어만 반복 학습 지원.",
@@ -35,17 +36,226 @@ const meta: Record<Locale, { title: string; description: string }> = {
     title: "词汇闪卡 — TOEIC必备·商务·日常对话免费学习",
     description: "用闪卡学习TOEIC必备100词、商务80词、日常对话60词、高考80词。支持仅复习未知单词。",
   },
-  cn: {
-    title: "詞彙閃卡 — TOEIC必備·商務·日常對話免費學習",
-    description: "用閃卡學習TOEIC必備100詞、商務80詞、日常對話60詞、學測80詞。支援僅複習未知單字。",
-  },
 };
 
 const m = meta[locale] ?? meta.en;
+
+type PageContent = {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+};
+
+const content: Record<ActiveLocale, PageContent> = {
+  ko: {
+    introTitle: "플래시카드는 기억 여부를 직접 판단하게 만드는 능동 학습 도구입니다",
+    intro: "영단어를 오래 기억하려면 단순히 목록을 읽는 것보다 뜻을 떠올리고 확인하는 과정이 필요합니다. 이 플래시카드는 TOEIC, 비즈니스, 일상회화, 수능 덱을 제공하고, 카드를 뒤집어 뜻과 예문을 확인한 뒤 아는 단어와 모르는 단어를 나눠 복습할 수 있게 합니다.",
+    formulaTitle: "학습 개념",
+    formulas: [
+      { title: "능동 회상", body: "뜻을 보기 전에 단어의 의미를 먼저 떠올리는 방식입니다. 기억을 더 강하게 점검할 수 있습니다." },
+      { title: "예문 맥락", body: "단어 뜻만 외우는 대신 실제 문장 속 쓰임을 함께 확인해 활용 가능성을 높입니다." },
+      { title: "오답 복습", body: "모르는 단어만 다시 모아 학습 시간을 취약한 항목에 집중합니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "TOEIC, 비즈니스, 일상회화, 수능 중 학습할 덱을 선택합니다.",
+      "카드 앞면의 단어를 보고 뜻을 떠올린 뒤 카드를 클릭해 확인합니다.",
+      "알아요 또는 모르겠어요를 선택하고, 마지막에 모르는 단어만 복습합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "단어 수는 덱마다 어떻게 다른가요?", answer: "메타 기준으로 TOEIC 100개, 비즈니스 80개, 일상회화 60개, 수능 80개 덱을 제공합니다." },
+      { question: "간격 반복 알고리즘이 있나요?", answer: "이 도구는 완전한 장기 스케줄러라기보다, 현재 세션에서 모르는 단어를 분리해 다시 보는 방식에 가깝습니다." },
+      { question: "예문도 함께 봐야 하나요?", answer: "네. 시험이나 회화에서는 뜻만 아는 것보다 문장 속 쓰임을 아는 편이 더 안정적입니다." },
+    ],
+    disclaimer: "이 플래시카드는 학습 보조 도구이며 시험 점수나 언어 실력을 보장하지 않습니다.",
+  },
+  en: {
+    introTitle: "Flashcards turn vocabulary review into active recall",
+    intro: "Vocabulary sticks better when you try to retrieve the meaning before seeing the answer. These flashcards include TOEIC, business, daily conversation, and CSAT-style decks, letting you flip each card, check meaning and example, then separate known and unknown words for review.",
+    formulaTitle: "Study concepts",
+    formulas: [
+      { title: "Active recall", body: "Try to remember the meaning before revealing the back of the card." },
+      { title: "Example context", body: "Seeing a word in a sentence helps connect definition, usage, and tone." },
+      { title: "Unknown review", body: "Marking difficult words lets the session focus on the items that still need work." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Choose a deck: TOEIC, business, daily conversation, or CSAT.",
+      "Look at the front of the card, recall the meaning, then click to reveal it.",
+      "Mark the card as known or unknown, then review unknown cards at the end.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "How many words are included?", answer: "The page metadata describes TOEIC 100, business 80, daily conversation 60, and CSAT 80 vocabulary items." },
+      { question: "Is this a full spaced-repetition system?", answer: "No. It is closer to a session-based flashcard tool that separates unknown cards for immediate review." },
+      { question: "Should I read the examples?", answer: "Yes. Examples help you understand how the word behaves in real sentences, which is useful for tests and communication." },
+    ],
+    disclaimer: "These flashcards support study practice but do not guarantee test scores or language proficiency.",
+  },
+  ja: {
+    introTitle: "フラッシュカードは単語学習を能動的な思い出しに変えます",
+    intro: "単語は、答えを見る前に意味を思い出すことで記憶に残りやすくなります。このツールはTOEIC、ビジネス、日常会話、受験向けのデッキを用意し、カードをめくって意味と例文を確認し、わかる単語と苦手な単語を分けて復習できます。",
+    formulaTitle: "学習の考え方",
+    formulas: [
+      { title: "能動的想起", body: "カードをめくる前に意味を思い出し、記憶を自分で確認します。" },
+      { title: "例文の文脈", body: "定義だけでなく文中での使い方を見ることで、実際の運用に近づきます。" },
+      { title: "苦手語の復習", body: "わからない単語だけを集めることで、学習時間を弱点に集中できます。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "TOEIC、ビジネス、日常会話、受験向けからデッキを選びます。",
+      "表面の単語を見て意味を思い出し、クリックして確認します。",
+      "知っているかどうかを選び、最後に苦手な単語だけ復習します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "単語数はどのくらいですか？", answer: "メタ情報ではTOEIC 100語、ビジネス80語、日常会話60語、受験向け80語のデッキを案内しています。" },
+      { question: "本格的な間隔反復ですか？", answer: "いいえ。長期スケジュール型ではなく、現在のセッションで苦手語を分けてすぐ復習する道具です。" },
+      { question: "例文も読むべきですか？", answer: "はい。試験や会話では意味だけでなく、文中での使い方を知ることが重要です。" },
+    ],
+    disclaimer: "このフラッシュカードは学習補助であり、試験スコアや語学力を保証するものではありません。",
+  },
+  zh: {
+    introTitle: "闪卡把词汇复习变成主动回忆",
+    intro: "学习词汇时，先尝试想起含义再看答案，通常比只读列表更有效。这个工具提供 TOEIC、商务、日常对话和高考词汇卡组，可翻卡查看含义和例句，并把已知与未知单词分开复习。",
+    formulaTitle: "学习概念",
+    formulas: [
+      { title: "主动回忆", body: "在查看答案前先回想单词含义，用输出检查记忆。" },
+      { title: "例句语境", body: "通过句子理解单词用法，而不只停留在中文释义。" },
+      { title: "未知复习", body: "把不认识的词集中起来，让本次学习更聚焦弱项。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "选择 TOEIC、商务、日常对话或高考词汇卡组。",
+      "看正面的单词，先回想含义，再点击翻开确认。",
+      "标记认识或不认识，结束后只复习未知单词。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "包含多少词？", answer: "页面元信息说明包含 TOEIC 100 词、商务 80 词、日常对话 60 词和高考 80 词。" },
+      { question: "这是完整的间隔重复系统吗？", answer: "不是。它更像是单次学习会话工具，会把未知单词分离出来方便立即复习。" },
+      { question: "例句需要看吗？", answer: "建议看。考试和沟通中，知道词在句子里的用法往往比只记释义更稳定。" },
+    ],
+    disclaimer: "这些闪卡用于辅助学习，不保证考试成绩或语言能力提升。",
+  },
+  fr: {
+    introTitle: "Les cartes mémoire transforment le vocabulaire en rappel actif",
+    intro: "Le vocabulaire se retient mieux lorsque vous tentez de retrouver le sens avant de voir la réponse. Ces cartes proposent des lots TOEIC, affaires, conversation quotidienne et scolaire, avec signification, exemple, mots connus et mots inconnus à réviser.",
+    formulaTitle: "Notions d'étude",
+    formulas: [
+      { title: "Rappel actif", body: "Essayez de retrouver le sens avant de retourner la carte." },
+      { title: "Contexte d'exemple", body: "Une phrase aide à relier définition, usage et registre." },
+      { title: "Révision ciblée", body: "Marquer les mots inconnus concentre la session sur les éléments à renforcer." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Choisissez un lot : TOEIC, affaires, conversation quotidienne ou scolaire.",
+      "Lisez le recto, cherchez le sens, puis cliquez pour révéler la réponse.",
+      "Marquez connu ou inconnu, puis révisez les mots inconnus à la fin.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Combien de mots sont inclus ?", answer: "Les métadonnées indiquent 100 mots TOEIC, 80 affaires, 60 conversation quotidienne et 80 mots scolaires." },
+      { question: "Est-ce une vraie répétition espacée ?", answer: "Non. C'est plutôt un outil de session qui isole les mots inconnus pour une révision immédiate." },
+      { question: "Faut-il lire les exemples ?", answer: "Oui. Les exemples montrent comment le mot fonctionne dans une phrase, utile pour examens et communication." },
+    ],
+    disclaimer: "Ces cartes soutiennent la pratique, mais ne garantissent ni score d'examen ni niveau linguistique.",
+  },
+  es: {
+    introTitle: "Las tarjetas convierten el vocabulario en recuerdo activo",
+    intro: "El vocabulario se fija mejor cuando intentas recordar el significado antes de ver la respuesta. Estas tarjetas incluyen mazos TOEIC, negocios, conversación diaria y examen, con significado, ejemplo y separación entre palabras conocidas y desconocidas.",
+    formulaTitle: "Conceptos de estudio",
+    formulas: [
+      { title: "Recuerdo activo", body: "Intenta recordar el significado antes de revelar el reverso de la tarjeta." },
+      { title: "Contexto de ejemplo", body: "Una frase conecta definición, uso y tono de forma más práctica." },
+      { title: "Repaso de desconocidas", body: "Marcar palabras difíciles concentra la sesión en lo que aún necesita trabajo." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Elige un mazo: TOEIC, negocios, conversación diaria o examen.",
+      "Mira la palabra, recuerda el significado y haz clic para revelarlo.",
+      "Marca conocida o desconocida y repasa las desconocidas al final.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Cuántas palabras incluye?", answer: "La página describe TOEIC 100, negocios 80, conversación diaria 60 y examen 80." },
+      { question: "¿Es un sistema completo de repetición espaciada?", answer: "No. Es más bien una herramienta de sesión que separa palabras desconocidas para repasarlas de inmediato." },
+      { question: "¿Conviene leer los ejemplos?", answer: "Sí. Los ejemplos muestran cómo se usa la palabra en frases reales, útil para pruebas y comunicación." },
+    ],
+    disclaimer: "Estas tarjetas apoyan la práctica de estudio, pero no garantizan notas de examen ni dominio del idioma.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <VocabFlashcard client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

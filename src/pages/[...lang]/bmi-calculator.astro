@@ -2,7 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import BmiCalculatorComp from "../../components/tools/BmiCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -11,9 +12,9 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "BMI & 체지방률 계산기 — 내 건강 지표 확인하기",
     description: "키·몸무게·나이·성별을 입력하면 BMI와 체지방률을 즉시 계산합니다. 정상 범위와 건강 조언도 함께 확인하세요.",
@@ -35,20 +36,227 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Calcula instantáneamente tu IMC y porcentaje de grasa corporal estimado.",
   },
   zh: {
-    title: "BMI與體脂率計算機",
-    description: "輸入身高、體重、年齡和性別，立即計算BMI和體脂率。",
-  },
-  cn: {
-    title: "BMI与体脂率计算器",
+    title: "BMI与体脂率计算机",
     description: "输入身高、体重、年龄和性别，立即计算BMI和体脂率。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "BMI와 추정 체지방률을 함께 보면 체중 숫자만 볼 때보다 맥락이 선명해집니다",
+    intro: "이 계산기는 키와 몸무게로 BMI를 계산하고, 나이와 성별을 더해 Deurenberg 공식 기반의 추정 체지방률을 보여줍니다. BMI는 선별 지표로 빠르게 쓰기 좋지만 근육량, 부종, 임신, 성장기 같은 개인 조건을 모두 설명하지는 못합니다.",
+    formulaTitle: "계산 기준",
+    formulas: [
+      { title: "BMI", body: "BMI = 체중(kg) / 키(m)^2" },
+      { title: "체지방률 추정", body: "1.20×BMI + 0.23×나이 - 10.8×성별값 - 5.4" },
+      { title: "구간 해석", body: "이 페이지는 BMI 18.5, 23, 25를 기준으로 저체중·정상·과체중·비만을 나눕니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "성별을 선택하고 키, 몸무게, 나이를 입력합니다.",
+      "BMI 값과 예상 체지방률을 함께 확인합니다.",
+      "운동량, 허리둘레, 최근 체중 변화처럼 숫자에 반영되지 않은 조건을 함께 판단합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "BMI만으로 건강 상태를 판단해도 되나요?", answer: "아니요. BMI는 체중과 키만 보는 선별 지표라 근육량이나 체지방 분포를 구분하지 못합니다." },
+      { question: "체지방률은 실제 측정값인가요?", answer: "아닙니다. 이 도구의 체지방률은 BMI, 나이, 성별을 이용한 통계적 추정치입니다." },
+      { question: "운동선수에게도 같은 기준을 적용하나요?", answer: "근육량이 많은 사람은 BMI가 높아도 체지방이 높지 않을 수 있으므로 허리둘레, 혈액검사, 전문 측정을 함께 보는 편이 좋습니다." },
+    ],
+    disclaimer: "결과는 일반적인 추정치이며 전문적인 의학적 조언, 진단 또는 치료를 대신하지 않습니다.",
+  },
+  en: {
+    introTitle: "BMI and estimated body fat give more context than body weight alone",
+    intro: "This calculator uses height and weight to calculate BMI, then estimates body fat percentage with the Deurenberg equation using age and sex. BMI is a quick screening measure, but it does not capture muscle mass, fluid retention, pregnancy, growth stage, or body-fat distribution.",
+    formulaTitle: "Calculation basics",
+    formulas: [
+      { title: "BMI", body: "BMI = weight (kg) / height (m)^2" },
+      { title: "Body fat estimate", body: "1.20×BMI + 0.23×age - 10.8×sex value - 5.4" },
+      { title: "Categories", body: "This page groups BMI by 18.5, 23, and 25 cutoffs for underweight, normal, overweight, and obesity." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Select sex, then enter height, weight, and age.",
+      "Read the BMI value together with the estimated body fat percentage.",
+      "Interpret the result alongside waist size, activity level, recent weight change, and personal context.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Can BMI alone define health status?", answer: "No. BMI is a screening number based only on height and weight, so it cannot distinguish muscle mass from fat mass." },
+      { question: "Is the body fat percentage a measured value?", answer: "No. It is a statistical estimate based on BMI, age, and sex, not a direct body-composition test." },
+      { question: "Does the same BMI rule apply to athletes?", answer: "People with higher muscle mass may have a high BMI without high body fat, so waist measurement and professional assessment can be more informative." },
+    ],
+    disclaimer: "Results are general estimates and are not a substitute for professional medical advice, diagnosis, or treatment.",
+  },
+  ja: {
+    introTitle: "BMIと推定体脂肪率を並べると、体重だけでは見えない文脈が分かります",
+    intro: "この計算機は身長と体重からBMIを求め、年齢と性別を加えてDeurenberg式による推定体脂肪率を表示します。BMIは手早い目安ですが、筋肉量、むくみ、妊娠、成長段階、脂肪の分布までは反映しません。",
+    formulaTitle: "計算の基準",
+    formulas: [
+      { title: "BMI", body: "BMI = 体重(kg) / 身長(m)^2" },
+      { title: "体脂肪率の推定", body: "1.20×BMI + 0.23×年齢 - 10.8×性別値 - 5.4" },
+      { title: "区分", body: "このページではBMI 18.5、23、25を目安に低体重・正常・過体重・肥満を分けます。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "性別を選び、身長・体重・年齢を入力します。",
+      "BMIと推定体脂肪率を合わせて確認します。",
+      "運動量、腹囲、最近の体重変化など、数値に出にくい条件も一緒に見ます。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "BMIだけで健康状態を判断できますか？", answer: "できません。BMIは身長と体重だけの指標で、筋肉量と脂肪量を区別できません。" },
+      { question: "体脂肪率は実測値ですか？", answer: "いいえ。BMI、年齢、性別を使った統計的な推定値で、直接測定ではありません。" },
+      { question: "運動量が多い人にも同じ基準ですか？", answer: "筋肉量が多い人はBMIが高くても体脂肪が高いとは限らないため、腹囲や専門的な測定も参考になります。" },
+    ],
+    disclaimer: "結果は一般的な推定値であり、医療専門家による助言、診断、治療の代わりにはなりません。",
+  },
+  zh: {
+    introTitle: "BMI 与推估体脂率一起看，比单看体重更有脉络",
+    intro: "这个计算器先用身高与体重算出 BMI，再加入年龄与性别，以 Deurenberg 公式推估体脂率。BMI 适合快速筛检，但无法完整反映肌肉量、水肿、怀孕、成长阶段或脂肪分布。",
+    formulaTitle: "计算基准",
+    formulas: [
+      { title: "BMI", body: "BMI = 体重(kg) / 身高(m)^2" },
+      { title: "体脂率推估", body: "1.20×BMI + 0.23×年龄 - 10.8×性别值 - 5.4" },
+      { title: "区间解读", body: "本页以 BMI 18.5、23、25 作为过轻、正常、过重与肥胖的参考切点。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "选择性别，输入身高、体重与年龄。",
+      "同时查看 BMI 与推估体脂率。",
+      "把腰围、活动量、近期体重变化与个人状况一并纳入判断。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "只靠 BMI 可以判断健康吗？", answer: "不建议。BMI 只使用身高与体重，无法分辨肌肉量与脂肪量。" },
+      { question: "体脂率是实际测量值吗？", answer: "不是。这里的体脂率是根据 BMI、年龄与性别得到的统计推估。" },
+      { question: "运动员也适用同一标准吗？", answer: "肌肉量较高的人可能 BMI 偏高但体脂不高，因此腰围与专业评估会更有参考价值。" },
+    ],
+    disclaimer: "结果仅为一般估算，不能替代专业医疗建议、诊断或治疗。",
+  },
+  fr: {
+    introTitle: "L'IMC et l'estimation de masse grasse donnent plus de contexte que le poids seul",
+    intro: "Ce calculateur utilise la taille et le poids pour obtenir l'IMC, puis estime le taux de graisse corporelle avec l'équation de Deurenberg selon l'âge et le sexe. L'IMC est un repère rapide, mais il ne décrit pas la masse musculaire, la rétention d'eau, la grossesse, la croissance ou la répartition des graisses.",
+    formulaTitle: "Bases de calcul",
+    formulas: [
+      { title: "IMC", body: "IMC = poids (kg) / taille (m)^2" },
+      { title: "Graisse estimée", body: "1,20×IMC + 0,23×âge - 10,8×valeur sexe - 5,4" },
+      { title: "Catégories", body: "Cette page utilise les seuils 18,5, 23 et 25 pour classer insuffisance, normal, surpoids et obésité." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Choisissez le sexe, puis saisissez la taille, le poids et l'âge.",
+      "Lisez l'IMC avec le pourcentage de graisse estimé.",
+      "Interprétez le résultat avec le tour de taille, l'activité physique et les changements récents de poids.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "L'IMC suffit-il à définir l'état de santé ?", answer: "Non. L'IMC ne repose que sur la taille et le poids, il ne distingue pas le muscle de la graisse." },
+      { question: "Le taux de graisse est-il mesuré ?", answer: "Non. C'est une estimation statistique basée sur l'IMC, l'âge et le sexe." },
+      { question: "Les sportifs doivent-ils utiliser les mêmes seuils ?", answer: "Une masse musculaire élevée peut augmenter l'IMC sans excès de graisse. Le tour de taille et une évaluation professionnelle sont alors utiles." },
+    ],
+    disclaimer: "Les résultats sont des estimations générales et ne remplacent pas un avis médical professionnel, un diagnostic ou un traitement.",
+  },
+  es: {
+    introTitle: "El IMC y la grasa estimada dan más contexto que el peso por sí solo",
+    intro: "Esta calculadora usa la estatura y el peso para calcular el IMC, y luego estima el porcentaje de grasa corporal con la ecuación de Deurenberg usando edad y sexo. El IMC es una medida rápida de cribado, pero no refleja masa muscular, retención de líquidos, embarazo, etapa de crecimiento ni distribución de grasa.",
+    formulaTitle: "Bases del cálculo",
+    formulas: [
+      { title: "IMC", body: "IMC = peso (kg) / estatura (m)^2" },
+      { title: "Grasa estimada", body: "1.20×IMC + 0.23×edad - 10.8×valor sexo - 5.4" },
+      { title: "Categorías", body: "Esta página usa los cortes 18.5, 23 y 25 para bajo peso, normal, sobrepeso y obesidad." },
+    ],
+    howToTitle: "Cómo usarla",
+    steps: [
+      "Selecciona el sexo e introduce estatura, peso y edad.",
+      "Revisa el IMC junto con el porcentaje estimado de grasa corporal.",
+      "Interpreta el resultado con cintura, actividad física, cambios recientes de peso y contexto personal.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿El IMC por sí solo define la salud?", answer: "No. El IMC solo usa peso y estatura, por lo que no diferencia masa muscular de masa grasa." },
+      { question: "¿El porcentaje de grasa es una medición directa?", answer: "No. Es una estimación estadística basada en IMC, edad y sexo." },
+      { question: "¿Aplica igual para deportistas?", answer: "Las personas con mucha masa muscular pueden tener IMC alto sin exceso de grasa, así que conviene mirar cintura y evaluación profesional." },
+    ],
+    disclaimer: "Los resultados son estimaciones generales y no sustituyen el consejo, diagnóstico o tratamiento médico profesional.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <BmiCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

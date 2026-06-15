@@ -2,15 +2,16 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import EarlyRepaymentCalculator from "../../components/tools/EarlyRepaymentCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "중도상환 계산기 — 이자 절감·기간 단축 효과 계산",
     description: "대출 원금·이자율·경과 기간을 입력하고 중도상환 금액을 설정하면 이자 절감액, 기간 단축, 수수료 차감 후 순 절감액을 자동으로 계산합니다.",
@@ -32,20 +33,189 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Introduce el capital, la tasa, los meses transcurridos y el monto a amortizar para ver los intereses ahorrados, la reducción del plazo y el ahorro neto tras comisiones.",
   },
   zh: {
-    title: "提前還款計算機 — 節省利息與縮短期限計算",
-    description: "輸入貸款本金、利率、已還月數及提前還款金額，立即計算節省利息、縮短期限及扣除手續費後的實際節省金額。",
-  },
-  cn: {
-    title: "提前还款计算器 — 节省利息与缩短期限计算",
+    title: "提前还款计算机 — 节省利息与缩短期限计算",
     description: "输入贷款本金、利率、已还月数及提前还款金额，立即计算节省利息、缩短期限及扣除手续费后的实际节省金额。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "중도상환은 남은 원금을 줄여 미래 이자를 낮춥니다",
+    intro: "이 계산기는 대출 원금, 금리, 전체 기간, 경과 개월 수, 추가 상환액과 중도상환 수수료율을 바탕으로 잔여 원금, 이자 절감액, 단축 기간, 순 절감액을 추정합니다. 여유 자금으로 대출을 줄일지, 다른 투자나 비상금으로 둘지 비교할 때 기준점이 됩니다.",
+    formulaTitle: "계산 기준",
+    formulas: [
+      { title: "월 상환액", body: "월상환액 = 원금×월이율×(1+월이율)^n / ((1+월이율)^n-1)" },
+      { title: "이자 절감", body: "절감액 = 기존 잔여이자 - 상환 후 잔여이자" },
+      { title: "순 절감", body: "순 절감액 = 이자 절감액 - 중도상환 수수료" },
+    ],
+    howToTitle: "사용 방법",
+    steps: ["대출 원금, 금리, 만기와 이미 지난 개월 수를 입력합니다.", "중도상환할 금액과 수수료율을 설정합니다.", "이자 절감액, 단축 기간, 수수료 차감 후 순 절감액을 확인합니다."],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "순 절감액이 음수면 상환하지 않는 게 낫나요?", answer: "수수료가 이자 절감액보다 크다는 뜻입니다. 다만 부채 축소 안정감, 금리 변동, 현금흐름도 함께 봐야 합니다." },
+      { question: "기간 단축과 월 납입액 감소 중 무엇을 가정하나요?", answer: "이 도구는 같은 월 상환액을 유지해 기간이 줄어드는 방식으로 효과를 추정합니다." },
+      { question: "중도상환 수수료율은 어디서 확인하나요?", answer: "대출 약정서, 금융회사 앱, 고객센터에서 확인해야 합니다. 상품과 경과 기간에 따라 달라집니다." },
+    ],
+    disclaimer: "이 도구는 일반적인 계산용입니다. 공식 대출 잔액·수수료·상환 조건은 해당 금융기관 기준을 확인하세요.",
+  },
+  en: {
+    introTitle: "Early repayment lowers future interest by reducing principal",
+    intro: "This calculator estimates remaining balance, interest saved, term reduction, and net savings after a prepayment penalty. It helps compare whether spare cash should reduce debt, stay liquid, or be invested elsewhere.",
+    formulaTitle: "Calculation rules",
+    formulas: [
+      { title: "Monthly payment", body: "Payment = P×r×(1+r)^n / ((1+r)^n-1)" },
+      { title: "Interest saved", body: "Saved = original remaining interest - new remaining interest" },
+      { title: "Net saving", body: "Net saving = interest saved - prepayment penalty" },
+    ],
+    howToTitle: "How to use",
+    steps: ["Enter principal, annual rate, loan term, and months already elapsed.", "Set the extra repayment amount and prepayment penalty rate.", "Review interest saved, term reduction, and net savings after penalty."],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "What if net saving is negative?", answer: "The penalty is larger than the estimated interest saved. Still consider risk, liquidity, and peace of mind." },
+      { question: "Does this assume lower payment or shorter term?", answer: "It assumes the same monthly payment continues, so the term becomes shorter." },
+      { question: "Where do I find the penalty rate?", answer: "Check the loan agreement, lender app, or customer service. It varies by product and time elapsed." },
+    ],
+    disclaimer: "This tool is for general calculation. Confirm official loan balance, fees, and repayment terms with the relevant lender.",
+  },
+  ja: {
+    introTitle: "繰上返済は元金を減らし将来の利息を抑えます",
+    intro: "この計算機は、借入額、金利、期間、経過月数、繰上返済額、手数料率から、残高、利息節約額、短縮期間、実質節約額を概算します。余裕資金を返済に使うか、手元資金や投資に回すかを比較できます。",
+    formulaTitle: "計算基準",
+    formulas: [
+      { title: "月返済額", body: "返済額 = P×r×(1+r)^n / ((1+r)^n-1)" },
+      { title: "利息節約", body: "節約額 = 元の残利息 - 返済後の残利息" },
+      { title: "実質節約", body: "実質節約 = 利息節約 - 繰上返済手数料" },
+    ],
+    howToTitle: "使い方",
+    steps: ["借入元金、金利、期間、経過月数を入力します。", "繰上返済額と手数料率を設定します。", "利息節約額、短縮期間、手数料後の実質節約額を確認します。"],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "実質節約額がマイナスなら返済しない方がよいですか？", answer: "手数料が利息節約より大きい状態です。ただし安心感や流動性も考慮します。" },
+      { question: "月返済額を下げる計算ですか？", answer: "いいえ。同じ月返済額を続け、期間が短くなる前提です。" },
+      { question: "手数料率はどこで確認しますか？", answer: "契約書、金融機関のアプリ、窓口で確認してください。商品と経過期間で変わります。" },
+    ],
+    disclaimer: "このツールは一般的な計算用です。公式な残高・手数料・返済条件は金融機関の基準をご確認ください。",
+  },
+  zh: {
+    introTitle: "提前还款通过减少本金来降低未来利息",
+    intro: "这个计算器根据贷款本金、利率、总期数、已还月份、提前还款金额和手续费率，估算剩余本金、节省利息、缩短期限和扣费后的净节省。它适合比较闲置资金用于还贷、保留现金还是另做投资。",
+    formulaTitle: "计算规则",
+    formulas: [
+      { title: "月供", body: "月供 = 本金×月利率×(1+月利率)^n / ((1+月利率)^n-1)" },
+      { title: "节省利息", body: "节省 = 原剩余利息 - 还款后剩余利息" },
+      { title: "净节省", body: "净节省 = 节省利息 - 提前还款手续费" },
+    ],
+    howToTitle: "使用方法",
+    steps: ["输入本金、年利率、贷款期限和已还月份。", "设置提前还款金额和手续费率。", "查看节省利息、缩短期限和扣费后的净节省。"],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "净节省为负代表不该提前还吗？", answer: "表示手续费高于估算节省利息，但还要考虑负债压力、流动性和利率风险。" },
+      { question: "工具假设降低月供还是缩短期限？", answer: "它假设月供不变，因此提前还款主要缩短还款期限。" },
+      { question: "手续费率从哪里查？", answer: "请查看贷款合同、银行 App 或咨询贷款机构，具体比例会随产品和已还时间改变。" },
+    ],
+    disclaimer: "本工具用于一般计算。正式贷款余额、手续费和还款条件请以贷款机构为准。",
+  },
+  fr: {
+    introTitle: "Un remboursement anticipé réduit le capital et les intérêts futurs",
+    intro: "Ce calculateur estime le capital restant, les intérêts économisés, la durée réduite et l'économie nette après pénalité. Il aide à comparer remboursement, liquidité disponible et autres usages de l'épargne.",
+    formulaTitle: "Règles de calcul",
+    formulas: [
+      { title: "Mensualité", body: "Mensualité = P×r×(1+r)^n / ((1+r)^n-1)" },
+      { title: "Intérêts économisés", body: "Économie = intérêts restants initiaux - intérêts restants après remboursement" },
+      { title: "Économie nette", body: "Économie nette = intérêts économisés - pénalité" },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: ["Saisissez capital, taux annuel, durée et mois écoulés.", "Indiquez le remboursement anticipé et le taux de pénalité.", "Comparez intérêts économisés, durée réduite et économie nette."],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Que signifie une économie nette négative ?", answer: "La pénalité dépasse les intérêts économisés. La liquidité et le risque restent à considérer." },
+      { question: "Le calcul baisse-t-il la mensualité ?", answer: "Non. Il suppose une mensualité inchangée et donc une durée raccourcie." },
+      { question: "Où trouver le taux de pénalité ?", answer: "Dans le contrat, l'application bancaire ou auprès du prêteur. Il varie selon le prêt." },
+    ],
+    disclaimer: "Cet outil sert au calcul général. Pour solde, frais et conditions officiels, vérifiez auprès du prêteur compétent.",
+  },
+  es: {
+    introTitle: "La amortización anticipada reduce capital e intereses futuros",
+    intro: "Esta calculadora estima saldo pendiente, intereses ahorrados, reducción del plazo y ahorro neto después de comisiones. Ayuda a comparar si usar liquidez para deuda, reserva o inversión.",
+    formulaTitle: "Reglas de cálculo",
+    formulas: [
+      { title: "Cuota mensual", body: "Cuota = P×r×(1+r)^n / ((1+r)^n-1)" },
+      { title: "Interés ahorrado", body: "Ahorro = interés restante original - interés restante nuevo" },
+      { title: "Ahorro neto", body: "Ahorro neto = interés ahorrado - comisión" },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: ["Introduce capital, tasa anual, plazo y meses transcurridos.", "Indica el monto a amortizar y la comisión.", "Revisa intereses ahorrados, plazo reducido y ahorro neto."],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Qué pasa si el ahorro neto es negativo?", answer: "La comisión supera los intereses estimados ahorrados. También conviene valorar liquidez y riesgo." },
+      { question: "¿Baja la cuota o se acorta el plazo?", answer: "El cálculo supone la misma cuota mensual, por lo que se acorta el plazo." },
+      { question: "¿Dónde encuentro la comisión?", answer: "En el contrato, app del banco o prestamista. Cambia según producto y tiempo transcurrido." },
+    ],
+    disclaimer: "Esta herramienta es para cálculo general. Confirma saldo, comisiones y condiciones oficiales con el prestamista correspondiente.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  { "@context": "https://schema.org", "@type": "HowTo", name: m.title, description: m.description, step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })) },
+  { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: c.faqs.map((faq) => ({ "@type": "Question", name: faq.question, acceptedAnswer: { "@type": "Answer", text: faq.answer } })) },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <main class="mx-auto max-w-3xl px-4 py-10">
     <EarlyRepaymentCalculator client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

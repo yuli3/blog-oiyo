@@ -2,7 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import GpaCalculatorComp from "../../components/tools/GpaCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -11,9 +12,9 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "학점 계산기 — GPA 및 평균 학점 계산",
     description: "과목별 성적과 학점을 입력해 평균 학점(GPA)을 계산하세요. 4.5점 만점과 4.3점 만점 방식 모두 지원합니다.",
@@ -35,20 +36,227 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Calcula tu GPA ingresando calificaciones y créditos para cada materia.",
   },
   zh: {
-    title: "GPA計算機",
-    description: "輸入各科成績和學分計算平均績點(GPA)。支援4.5分制和4.3分制。",
-  },
-  cn: {
-    title: "GPA计算器",
+    title: "GPA计算机",
     description: "输入各科成绩和学分计算平均绩点(GPA)。支持4.5分制和4.3分制。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "GPA는 과목 성적에 학점 가중치를 반영한 평균입니다",
+    intro: "같은 A학점이라도 1학점 과목과 3학점 과목은 평균에 미치는 영향이 다릅니다. 이 계산기는 과목별 성적과 이수 학점을 함께 입력해 4.5 또는 4.3 만점 기준의 가중 평균을 빠르게 계산합니다.",
+    formulaTitle: "계산 공식",
+    formulas: [
+      { title: "가중 점수", body: "weightedPoints = gradePoint × credits" },
+      { title: "평균 GPA", body: "GPA = totalWeightedPoints / totalCredits" },
+      { title: "만점 기준", body: "4.5와 4.3 체계는 같은 문자 성적의 환산점이 다를 수 있습니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "각 과목의 성적과 학점을 입력합니다.",
+      "학교에서 사용하는 4.5 또는 4.3 만점 체계를 선택합니다.",
+      "총 이수 학점과 평균 GPA를 확인하고 성적표 기준과 비교합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "P/F 과목은 어떻게 처리하나요?", answer: "Pass/Fail 과목은 학교 규정에 따라 평점 계산에서 제외되는 경우가 많습니다. 성적표 기준을 확인하세요." },
+      { question: "재수강 과목은 어떻게 반영하나요?", answer: "학교마다 최초 성적 삭제, 평균 반영, 최고 성적 반영 방식이 다릅니다. 공식 산정은 학사 규정을 따라야 합니다." },
+      { question: "4.5 만점과 4.3 만점은 직접 비교해도 되나요?", answer: "직접 비교하면 왜곡될 수 있습니다. 장학금, 교환학생, 지원서 제출에는 해당 기관의 환산표를 사용하세요." },
+    ],
+    disclaimer: "이 계산기는 학업 계획을 위한 참고용입니다. 공식 GPA, 졸업 요건, 장학금 심사는 학교 학사 시스템과 규정을 확인하세요.",
+  },
+  en: {
+    introTitle: "GPA is a credit-weighted average of course grade points",
+    intro: "A grade in a three-credit course affects your average more than the same grade in a one-credit course. This calculator combines grade points and credit hours to estimate GPA on 4.5 or 4.3 scales.",
+    formulaTitle: "Calculation formulas",
+    formulas: [
+      { title: "Weighted points", body: "weightedPoints = gradePoint × credits" },
+      { title: "Average GPA", body: "GPA = totalWeightedPoints / totalCredits" },
+      { title: "Scale choice", body: "The same letter grade can map to different points on 4.5 and 4.3 systems." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Enter each course grade and credit value.",
+      "Select the 4.5 or 4.3 scale used by your school.",
+      "Review total credits and estimated GPA, then compare with your official transcript rules.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "How should I handle Pass/Fail courses?", answer: "Many schools exclude Pass/Fail courses from GPA, but the exact rule depends on the institution." },
+      { question: "How are repeated courses counted?", answer: "Schools differ: some replace the old grade, some average attempts, and some keep both. Check your academic regulations." },
+      { question: "Can I directly compare 4.5 and 4.3 GPAs?", answer: "Not reliably. Use the conversion table required by the scholarship, exchange program, or application office." },
+    ],
+    disclaimer: "This calculator is for academic planning. Official GPA, graduation requirements, and scholarship review depend on your school's records and policies.",
+  },
+  ja: {
+    introTitle: "GPAは科目の評価点に単位数を反映した加重平均です",
+    intro: "同じ成績でも、1単位科目と3単位科目では平均への影響が異なります。この計算機は科目ごとの成績と単位数から、4.5点満点または4.3点満点のGPA目安を計算します。",
+    formulaTitle: "計算公式",
+    formulas: [
+      { title: "加重点", body: "weightedPoints = gradePoint × credits" },
+      { title: "平均GPA", body: "GPA = totalWeightedPoints / totalCredits" },
+      { title: "満点方式", body: "4.5方式と4.3方式では同じ文字成績でも換算点が異なる場合があります。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "各科目の成績と単位数を入力します。",
+      "学校で使う4.5または4.3の満点方式を選びます。",
+      "総単位数とGPA目安を確認し、正式な成績表の規則と照合します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "P/F科目はどう扱いますか？", answer: "多くの学校ではGPA計算から除外されますが、扱いは大学の規程によって異なります。" },
+      { question: "再履修科目はどう反映されますか？", answer: "旧成績を置き換える、平均する、両方残すなど学校ごとに異なります。学則を確認してください。" },
+      { question: "4.5満点と4.3満点は直接比較できますか？", answer: "単純比較は正確ではありません。奨学金や出願先が指定する換算表を使ってください。" },
+    ],
+    disclaimer: "この計算機は学習計画の参考用です。正式なGPA、卒業要件、奨学金審査は学校のシステムと規程をご確認ください。",
+  },
+  fr: {
+    introTitle: "Le GPA est une moyenne pondérée par les crédits de chaque cours",
+    intro: "Une même note n'a pas le même poids dans un cours d'un crédit et dans un cours de trois crédits. Ce calculateur combine notes et crédits pour estimer un GPA sur une échelle 4,5 ou 4,3.",
+    formulaTitle: "Formules de calcul",
+    formulas: [
+      { title: "Points pondérés", body: "weightedPoints = gradePoint × credits" },
+      { title: "GPA moyen", body: "GPA = totalWeightedPoints / totalCredits" },
+      { title: "Choix d'échelle", body: "Une même lettre peut valoir des points différents selon l'échelle 4,5 ou 4,3." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Saisissez la note et les crédits de chaque cours.",
+      "Choisissez l'échelle 4,5 ou 4,3 utilisée par votre établissement.",
+      "Vérifiez le total de crédits et le GPA estimé avec les règles officielles de votre relevé.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Comment traiter les cours Pass/Fail ?", answer: "Beaucoup d'établissements les excluent du GPA, mais la règle exacte dépend de l'université." },
+      { question: "Comment compter un cours repris ?", answer: "Certaines écoles remplacent l'ancienne note, d'autres gardent les deux ou les moyennent. Consultez le règlement." },
+      { question: "Peut-on comparer directement 4,5 et 4,3 ?", answer: "Pas toujours. Utilisez le tableau de conversion demandé par la bourse, l'échange ou le dossier concerné." },
+    ],
+    disclaimer: "Ce calculateur sert à la planification académique. Le GPA officiel, les conditions de diplôme et les bourses dépendent des règles de votre établissement.",
+  },
+  es: {
+    introTitle: "El GPA es una media ponderada por los créditos de cada materia",
+    intro: "La misma calificación pesa más en una materia de tres créditos que en una de un crédito. Esta calculadora combina nota y créditos para estimar el GPA en escalas de 4,5 o 4,3.",
+    formulaTitle: "Fórmulas de cálculo",
+    formulas: [
+      { title: "Puntos ponderados", body: "weightedPoints = gradePoint × credits" },
+      { title: "GPA medio", body: "GPA = totalWeightedPoints / totalCredits" },
+      { title: "Escala", body: "La misma letra puede convertirse a puntos distintos en sistemas 4,5 y 4,3." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Introduce la calificación y créditos de cada materia.",
+      "Selecciona la escala 4,5 o 4,3 usada por tu institución.",
+      "Revisa créditos totales y GPA estimado, y compáralo con las reglas oficiales.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Cómo trato materias Pass/Fail?", answer: "Muchas instituciones las excluyen del GPA, pero la regla exacta depende de la universidad." },
+      { question: "¿Cómo se cuentan materias repetidas?", answer: "Algunas sustituyen la nota anterior, otras promedian intentos y otras conservan ambas. Revisa el reglamento académico." },
+      { question: "¿Puedo comparar directamente GPA de 4,5 y 4,3?", answer: "No de forma fiable. Usa la tabla de conversión que pida la beca, intercambio o solicitud." },
+    ],
+    disclaimer: "Esta calculadora es para planificación académica. El GPA oficial, graduación y becas dependen de los registros y normas de tu institución.",
+  },
+  zh: {
+    introTitle: "GPA是按课程学分加权后的平均绩点",
+    intro: "同样的成绩，在1学分课程和3学分课程中对平均值的影响不同。这个计算器把每门课的绩点和学分一起计算，估算4.5或4.3分制下的平均GPA。",
+    formulaTitle: "计算公式",
+    formulas: [
+      { title: "加权绩点", body: "weightedPoints = gradePoint × credits" },
+      { title: "平均GPA", body: "GPA = totalWeightedPoints / totalCredits" },
+      { title: "分制选择", body: "同一个字母成绩在4.5和4.3分制下可能对应不同绩点。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "输入每门课程的成绩和学分。",
+      "选择学校采用的4.5或4.3分制。",
+      "查看总学分和估算GPA，并与学校正式成绩规则核对。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "P/F课程怎么处理？", answer: "很多学校会把Pass/Fail课程排除在GPA之外，但具体规则取决于学校。" },
+      { question: "重修课程怎么计算？", answer: "学校可能替换旧成绩、平均多次成绩，或保留全部成绩。请查看学籍规定。" },
+      { question: "4.5和4.3分制能直接比较吗？", answer: "不建议直接比较。奖学金、交换项目或申请材料应使用对方要求的换算表。" },
+    ],
+    disclaimer: "本计算器用于学习规划参考。正式GPA、毕业要求和奖学金审核请以学校系统和规定为准。",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <GpaCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

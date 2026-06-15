@@ -2,15 +2,16 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import DepositCalculatorComp from "../../components/calculators/DepositCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "예금·적금 계산기 — 세후 이자·만기 수령액 계산",
     description: "정기예금과 적금의 세후 이자와 만기 수령액을 단리·복리, 과세 유형별로 계산합니다.",
@@ -32,20 +33,229 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Calcula los intereses netos y el importe al vencimiento para depósitos y ahorro mensual.",
   },
   zh: {
-    title: "定存·儲蓄計算機 — 稅後利息計算",
-    description: "計算定期存款和每月儲蓄的稅後利息和到期金額，支援單利和複利。",
-  },
-  cn: {
-    title: "定存·储蓄计算器 — 税后利息计算",
-    description: "计算定期存款和每月储蓄的税后利息和到期金额，支持单利和复利。",
+    title: "定存·储蓄计算机 — 税后利息计算",
+    description: "计算定期存款和每月储蓄的税后利息和到期金额，支援单利和复利。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+type SeoContent = {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+};
+
+const content: Record<ActiveLocale, SeoContent> = {
+  ko: {
+    introTitle: "예금과 적금은 같은 금리라도 이자 계산 방식이 다릅니다",
+    intro: "정기예금은 목돈을 한 번 넣고 기간 동안 이자를 받는 구조이고, 적금은 매달 납입한 금액마다 이자가 붙는 기간이 다릅니다. 이 계산기는 단리와 복리, 일반과세·세금우대·비과세를 나누어 세후 이자와 만기 수령액을 비교하게 해 줍니다.",
+    formulaTitle: "계산 기준",
+    formulas: [
+      { title: "정기예금", body: "원금 × 연이율 × 기간/12로 단리 이자를 계산하고, 복리는 월 복리로 환산합니다." },
+      { title: "적금", body: "월 납입액마다 남은 개월 수가 다르므로 단리는 납입월 가중치를 반영합니다." },
+      { title: "세후 이자", body: "세전 이자에서 일반 15.4%, 세금우대 9.9%, 비과세 0% 중 선택한 세율을 차감합니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "정기예금 또는 적금 방식을 선택합니다.",
+      "금액, 연 이율, 기간, 단리·복리와 과세 유형을 입력합니다.",
+      "원금, 세전 이자, 세금, 세후 이자, 만기 수령액을 확인합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "적금 이자가 예금보다 작게 보이는 이유는 무엇인가요?", answer: "적금은 첫 달 납입금만 전체 기간 동안 이자가 붙고, 뒤에 납입한 돈은 짧은 기간만 운용됩니다. 그래서 같은 금리라도 목돈 예금과 이자가 다릅니다." },
+      { question: "15.4% 세율은 어떤 의미인가요?", answer: "국내 일반 이자소득에 흔히 적용되는 이자소득세와 지방소득세 합산 예시입니다. 상품과 가입자 조건에 따라 우대나 비과세가 달라질 수 있습니다." },
+      { question: "복리는 모든 은행 상품에 적용되나요?", answer: "아닙니다. 실제 상품은 단리, 월복리, 만기이자 지급 등 구조가 다릅니다. 약관의 이자 계산 방식을 확인해야 합니다." },
+    ],
+    disclaimer: "이 도구는 일반적인 추정용입니다. 실제 금리, 세금, 만기 수령액은 해당 금융기관이나 전문가에게 확인하세요.",
+  },
+  en: {
+    introTitle: "Deposits and monthly savings earn interest on different cash-flow patterns",
+    intro: "A lump-sum deposit earns interest on the full principal for the selected term, while monthly savings contributions earn interest for different lengths of time. This calculator separates simple versus compound interest and normal, preferential, or tax-free treatment to estimate after-tax maturity value.",
+    formulaTitle: "Calculation basis",
+    formulas: [
+      { title: "Lump-sum deposit", body: "Simple interest uses principal × annual rate × months/12; compound interest is converted monthly." },
+      { title: "Monthly savings", body: "Each monthly contribution has a different remaining term, so simple interest applies a month-weighted schedule." },
+      { title: "After-tax interest", body: "Gross interest is reduced by the selected tax rate: 15.4%, 9.9%, or 0%." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Choose lump-sum deposit or monthly savings.",
+      "Enter amount, annual rate, period, interest method, and tax type.",
+      "Review principal, gross interest, tax, after-tax interest, and maturity amount.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Why does monthly savings interest look lower than a deposit?", answer: "Only the first contribution is invested for the full term. Later contributions earn interest for shorter periods, so interest differs even at the same annual rate." },
+      { question: "What does the 15.4% tax rate mean?", answer: "It is a common Korean example for tax on interest income including local tax. Preferential or tax-free treatment depends on the product and account holder eligibility." },
+      { question: "Do all bank products compound monthly?", answer: "No. Actual products may use simple interest, monthly compounding, or maturity interest. Check the product terms." },
+    ],
+    disclaimer: "This tool is a general estimate. Confirm actual rates, tax treatment, and maturity amount with the relevant financial institution or professional.",
+  },
+  ja: {
+    introTitle: "定期預金と積立は同じ金利でも利息の付き方が違います",
+    intro: "定期預金は元金全体を一定期間預ける一方、積立は毎月の拠出ごとに運用期間が異なります。この計算機では単利・複利、通常課税・優遇・非課税を分けて、税引後利息と満期受取額を概算できます。",
+    formulaTitle: "計算の前提",
+    formulas: [
+      { title: "定期預金", body: "単利は元金×年利×月数/12、複利は月複利として換算します。" },
+      { title: "積立", body: "毎月の拠出額ごとに残り期間が違うため、単利では月数の重みを反映します。" },
+      { title: "税引後利息", body: "税前利息から15.4%、9.9%、0%の選択税率を差し引きます。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "定期預金または積立を選びます。",
+      "金額、年利、期間、利息方式、課税タイプを入力します。",
+      "元金、税前利息、税金、税引後利息、満期受取額を確認します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "積立の利息が定期預金より少なく見えるのはなぜですか？", answer: "積立では最初の拠出だけが全期間運用され、後から入れる金額は運用期間が短いためです。" },
+      { question: "15.4%の税率は何ですか？", answer: "韓国の一般的な利子所得課税例です。優遇や非課税は商品と加入条件で変わります。" },
+      { question: "すべての商品が複利ですか？", answer: "いいえ。実際の商品は単利、月複利、満期利払いなど異なります。約款を確認してください。" },
+    ],
+    disclaimer: "このツールは一般的な概算です。実際の金利、税制、満期受取額は金融機関または専門家に確認してください。",
+  },
+  zh: {
+    introTitle: "定存和每月储蓄即使利率相同，利息也不同",
+    intro: "定存是一次投入本金，整段期间都计息；每月储蓄则每笔缴款的计息时间不同。本工具区分单利、复利以及一般课税、优惠、免税，估算税后利息和到期金额。",
+    formulaTitle: "计算依据",
+    formulas: [
+      { title: "定期存款", body: "单利按本金 × 年利率 × 月数/12 计算，复利按月复利换算。" },
+      { title: "每月储蓄", body: "每月缴款剩余期间不同，单利会反映缴款月份权重。" },
+      { title: "税后利息", body: "从税前利息扣除选择的税率：15.4%、9.9%或0%。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "选择定期存款或每月储蓄。",
+      "输入金额、年利率、期间、利息方式和课税类型。",
+      "查看本金、税前利息、税金、税后利息和到期金额。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "为什么储蓄利息看起来比定存少？", answer: "只有第一期缴款能运用完整期间，后续缴款计息时间较短，所以同样利率下利息会不同。" },
+      { question: "15.4%税率代表什么？", answer: "这是韩国利息所得常见税率示例，包含地方税。优惠或免税取决于商品和个人资格。" },
+      { question: "所有银行商品都是复利吗？", answer: "不是。实际商品可能是单利、月复利或到期付息，应查看商品条款。" },
+    ],
+    disclaimer: "本工具仅作一般估算。实际利率、税务处理和到期金额请向相关金融机构或专业人士确认。",
+  },
+  fr: {
+    introTitle: "Dépôt et épargne mensuelle ne produisent pas le même intérêt",
+    intro: "Un dépôt place tout le capital pendant la durée choisie, alors qu'une épargne mensuelle ajoute des versements dont la durée de placement varie. Ce calculateur distingue intérêt simple ou composé et fiscalité normale, préférentielle ou nulle.",
+    formulaTitle: "Bases de calcul",
+    formulas: [
+      { title: "Dépôt unique", body: "L'intérêt simple utilise capital × taux annuel × mois/12 ; le composé est converti mensuellement." },
+      { title: "Épargne mensuelle", body: "Chaque versement mensuel a une durée restante différente, d'où une pondération par mois." },
+      { title: "Intérêt net", body: "L'intérêt brut est réduit par le taux choisi : 15,4%, 9,9% ou 0%." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Choisissez dépôt unique ou épargne mensuelle.",
+      "Saisissez montant, taux annuel, durée, méthode d'intérêt et fiscalité.",
+      "Vérifiez capital, intérêt brut, impôt, intérêt net et montant final.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Pourquoi l'épargne mensuelle rapporte-t-elle moins ?", answer: "Seul le premier versement travaille pendant toute la durée. Les versements suivants produisent des intérêts moins longtemps." },
+      { question: "Que signifie le taux de 15,4% ?", answer: "C'est un exemple courant de taxation coréenne des intérêts, incluant taxe locale. Les régimes préférentiels dépendent du produit et du titulaire." },
+      { question: "Tous les produits composent-ils les intérêts ?", answer: "Non. Les contrats peuvent prévoir intérêt simple, composé mensuel ou paiement à échéance. Vérifiez les conditions." },
+    ],
+    disclaimer: "Cet outil fournit une estimation générale. Confirmez taux, fiscalité et montant à l'échéance avec l'établissement financier ou un professionnel.",
+  },
+  es: {
+    introTitle: "Depósito y ahorro mensual no generan el mismo interés",
+    intro: "Un depósito invierte todo el capital durante el plazo, mientras que el ahorro mensual añade aportes con distintos periodos de devengo. Esta calculadora separa interés simple o compuesto y fiscalidad normal, preferente o exenta.",
+    formulaTitle: "Bases de cálculo",
+    formulas: [
+      { title: "Depósito único", body: "Interés simple: capital × tasa anual × meses/12; el compuesto se convierte mensualmente." },
+      { title: "Ahorro mensual", body: "Cada aporte mensual tiene un plazo restante distinto, por eso se pondera por mes." },
+      { title: "Interés neto", body: "El interés bruto se reduce por la tasa elegida: 15,4%, 9,9% o 0%." },
+    ],
+    howToTitle: "Cómo usarla",
+    steps: [
+      "Elige depósito único o ahorro mensual.",
+      "Introduce importe, tasa anual, plazo, método de interés y tipo fiscal.",
+      "Revisa capital, interés bruto, impuesto, interés neto y monto final.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Por qué el ahorro mensual genera menos interés?", answer: "Solo el primer aporte trabaja durante todo el plazo. Los aportes posteriores ganan interés durante menos tiempo." },
+      { question: "¿Qué significa la tasa de 15,4%?", answer: "Es un ejemplo común de impuesto coreano sobre intereses, incluyendo impuesto local. Los beneficios dependen del producto y del titular." },
+      { question: "¿Todos los productos capitalizan mensualmente?", answer: "No. Pueden usar interés simple, capitalización mensual o pago al vencimiento. Revisa las condiciones." },
+    ],
+    disclaimer: "Esta herramienta ofrece una estimación general. Confirma tasas, impuestos y monto al vencimiento con la entidad financiera o un profesional.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <DepositCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

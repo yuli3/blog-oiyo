@@ -2,15 +2,16 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import CountdownTimer from "../../components/tools/CountdownTimer";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "타이머 — 스톱워치 & 카운트다운",
     description: "랩 기능이 있는 스톱워치와 알람 카운트다운 타이머. 스페이스바로 시작/정지, 원형 프로그레스바, Web Audio 알람음 제공.",
@@ -32,20 +33,229 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Cronómetro con seguimiento de vueltas y temporizador con alarma. Inicia/detén con la barra espaciadora, progreso circular y alarma Web Audio.",
   },
   zh: {
-    title: "計時器 — 碼錶與倒數計時",
-    description: "帶分段記錄的碼錶和倒數計時鬧鐘。空白鍵開始/暫停，圓形進度條，Web Audio API鬧鐘提示音。",
-  },
-  cn: {
-    title: "计时器 — 秒表与倒计时",
-    description: "带计次功能的秒表和倒计时闹钟。空格键开始/暂停，圆形进度条，Web Audio API闹钟提示音。",
+    title: "计时器 — 码表与倒数计时",
+    description: "带分段记录的码表和倒数计时闹钟。空白键开始/暂停，圆形进度条，Web Audio API闹钟提示音。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+type PageContent = {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+};
+
+const content: Record<ActiveLocale, PageContent> = {
+  ko: {
+    introTitle: "스톱워치와 카운트다운은 시간을 서로 다른 방향에서 관리합니다",
+    intro: "운동, 발표 연습, 요리, 업무 블록처럼 시간의 흐름을 재거나 제한해야 하는 상황이 있습니다. 이 타이머는 랩 기록이 있는 스톱워치와 알람이 있는 카운트다운을 함께 제공해 시작, 일시정지, 리셋, 스페이스바 조작을 빠르게 처리합니다.",
+    formulaTitle: "시간 관리 개념",
+    formulas: [
+      { title: "스톱워치", body: "시작 시점부터 얼마나 지났는지 측정합니다. 랩 기록으로 구간별 시간을 비교할 수 있습니다." },
+      { title: "카운트다운", body: "정한 시간에서 0까지 줄어드는 방식입니다. 제한 시간, 휴식, 조리 시간에 적합합니다." },
+      { title: "알림음", body: "브라우저의 Web Audio 기능으로 시간이 끝났음을 알려주지만 기기 음량과 권한 상태의 영향을 받습니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "스톱워치 또는 카운트다운 탭을 선택합니다.",
+      "필요한 시간을 설정하고 시작 버튼이나 스페이스바로 실행합니다.",
+      "랩, 일시정지, 리셋을 사용해 구간 기록이나 제한 시간을 관리합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "스페이스바로 조작할 수 있나요?", answer: "예. 도구가 포커스된 상태에서 스페이스바로 시작과 일시정지를 빠르게 전환할 수 있습니다." },
+      { question: "알람 소리가 항상 나나요?", answer: "브라우저, 기기 음량, 자동재생 정책, 음소거 상태에 따라 알림음이 제한될 수 있습니다." },
+      { question: "정밀 측정용으로 써도 되나요?", answer: "일상 작업에는 충분하지만 경기 판정, 실험, 법적 기록처럼 고정밀 시간이 필요한 용도에는 전용 장비를 사용하세요." },
+    ],
+    disclaimer: "브라우저 타이머는 탭 비활성화, 절전 모드, 기기 성능의 영향을 받을 수 있습니다.",
+  },
+  en: {
+    introTitle: "Stopwatch and countdown timers manage time from opposite directions",
+    intro: "Work blocks, workouts, presentations, cooking, and breaks all need either elapsed time or remaining time. This timer combines a lap-enabled stopwatch with an alarm countdown, plus start, pause, reset, and spacebar control for quick everyday timing.",
+    formulaTitle: "Timing concepts",
+    formulas: [
+      { title: "Stopwatch", body: "Measures elapsed time from a start point and records laps for comparing intervals." },
+      { title: "Countdown", body: "Counts down from a chosen duration to zero, useful for limits, breaks, cooking, and practice blocks." },
+      { title: "Audio alert", body: "Uses browser Web Audio, so volume, permissions, mute state, and browser policy can affect playback." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Choose the stopwatch or countdown tab.",
+      "Set the duration if needed, then start with the button or spacebar.",
+      "Use lap, pause, and reset to manage intervals or fixed time limits.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Can I control it with the keyboard?", answer: "Yes. When the tool is focused, the spacebar toggles start and pause." },
+      { question: "Will the alarm always play?", answer: "Not always. Browser autoplay rules, device volume, mute mode, and permissions can limit sound." },
+      { question: "Is it suitable for precision timing?", answer: "It is fine for everyday tasks, but use dedicated equipment for official sports, experiments, or legal records." },
+    ],
+    disclaimer: "Browser timers can be affected by inactive tabs, power saving, system load, and device performance.",
+  },
+  ja: {
+    introTitle: "ストップウォッチとカウントダウンは時間を逆方向から管理します",
+    intro: "運動、発表練習、料理、作業ブロック、休憩では、経過時間または残り時間をすばやく確認したい場面があります。このタイマーはラップ付きストップウォッチとアラーム付きカウントダウンを一つにまとめています。",
+    formulaTitle: "時間管理の考え方",
+    formulas: [
+      { title: "ストップウォッチ", body: "開始時点からの経過時間を測り、ラップで区間ごとの時間を比較できます。" },
+      { title: "カウントダウン", body: "設定した時間から0まで減らします。制限時間、休憩、調理、練習に向いています。" },
+      { title: "通知音", body: "ブラウザのWeb Audioを使うため、音量、権限、ミュート、ブラウザ設定の影響を受けます。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "ストップウォッチまたはカウントダウンのタブを選びます。",
+      "必要な時間を設定し、ボタンまたはスペースキーで開始します。",
+      "ラップ、一時停止、リセットで区間や制限時間を管理します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "キーボードで操作できますか？", answer: "はい。ツールにフォーカスがある状態では、スペースキーで開始と一時停止を切り替えられます。" },
+      { question: "アラーム音は必ず鳴りますか？", answer: "ブラウザの自動再生ルール、端末音量、ミュート、権限設定により鳴らない場合があります。" },
+      { question: "精密な計測に使えますか？", answer: "日常用途には十分ですが、公式競技、実験、法的記録には専用機器を使ってください。" },
+    ],
+    disclaimer: "ブラウザのタイマーは非アクティブタブ、省電力、システム負荷、端末性能の影響を受けることがあります。",
+  },
+  zh: {
+    introTitle: "秒表和倒计时从两个方向管理时间",
+    intro: "运动、演讲练习、烹饪、工作块和休息都可能需要查看已用时间或剩余时间。这个计时器把带分段记录的秒表和带提醒的倒计时放在一起，并支持开始、暂停、重置和空格键操作。",
+    formulaTitle: "计时概念",
+    formulas: [
+      { title: "秒表", body: "从开始时刻起测量已过去的时间，并可用分段记录比较不同区间。" },
+      { title: "倒计时", body: "从设定时长递减到 0，适合时间限制、休息、烹饪和练习。" },
+      { title: "声音提醒", body: "使用浏览器 Web Audio，播放会受到音量、权限、静音和浏览器策略影响。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "选择秒表或倒计时标签。",
+      "按需设置时间，然后用按钮或空格键开始。",
+      "使用分段、暂停和重置管理区间记录或固定时限。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "可以用键盘控制吗？", answer: "可以。工具获得焦点时，空格键可切换开始和暂停。" },
+      { question: "提醒声音一定会播放吗？", answer: "不一定。浏览器自动播放规则、设备音量、静音状态和权限都可能影响声音。" },
+      { question: "适合精密计时吗？", answer: "日常任务可以使用；正式比赛、实验或法律记录应使用专用设备。" },
+    ],
+    disclaimer: "浏览器计时器可能受后台标签页、省电模式、系统负载和设备性能影响。",
+  },
+  fr: {
+    introTitle: "Chronomètre et compte à rebours gèrent le temps dans deux sens",
+    intro: "Travail, entraînement, présentation, cuisine ou pause peuvent demander de suivre le temps écoulé ou le temps restant. Ce minuteur combine chronomètre avec tours, compte à rebours avec alarme, commandes démarrer, pause, réinitialiser et raccourci clavier.",
+    formulaTitle: "Notions de minutage",
+    formulas: [
+      { title: "Chronomètre", body: "Mesure le temps écoulé depuis le départ et enregistre des tours pour comparer les intervalles." },
+      { title: "Compte à rebours", body: "Part d'une durée choisie et descend à zéro, pratique pour limites, pauses, cuisson et exercices." },
+      { title: "Alerte audio", body: "Utilise Web Audio ; volume, permissions, mode muet et règles du navigateur peuvent l'affecter." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Choisissez l'onglet chronomètre ou compte à rebours.",
+      "Réglez la durée si nécessaire, puis démarrez avec le bouton ou la barre d'espace.",
+      "Utilisez tour, pause et réinitialisation pour gérer intervalles ou limites fixes.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Puis-je le contrôler au clavier ?", answer: "Oui. Lorsque l'outil a le focus, la barre d'espace lance ou met en pause." },
+      { question: "L'alarme sonne-t-elle toujours ?", answer: "Pas toujours. Les règles d'autoplay, le volume, le mode muet et les permissions peuvent limiter le son." },
+      { question: "Convient-il à une mesure précise ?", answer: "Il convient aux tâches quotidiennes, mais utilisez un équipement dédié pour sport officiel, expérience ou preuve légale." },
+    ],
+    disclaimer: "Les minuteurs de navigateur peuvent être affectés par onglets inactifs, économie d'énergie, charge système et performance de l'appareil.",
+  },
+  es: {
+    introTitle: "Cronómetro y cuenta regresiva gestionan el tiempo desde lados opuestos",
+    intro: "Bloques de trabajo, ejercicio, presentaciones, cocina y descansos necesitan medir tiempo transcurrido o restante. Este temporizador combina cronómetro con vueltas y cuenta regresiva con alarma, además de iniciar, pausar, restablecer y controlar con la barra espaciadora.",
+    formulaTitle: "Conceptos de temporización",
+    formulas: [
+      { title: "Cronómetro", body: "Mide el tiempo transcurrido desde el inicio y registra vueltas para comparar intervalos." },
+      { title: "Cuenta regresiva", body: "Desciende desde una duración elegida hasta cero, útil para límites, pausas, cocina y práctica." },
+      { title: "Alerta sonora", body: "Usa Web Audio del navegador, por lo que volumen, permisos, silencio y políticas pueden afectar el sonido." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Elige la pestaña de cronómetro o cuenta regresiva.",
+      "Configura la duración si hace falta y comienza con el botón o la barra espaciadora.",
+      "Usa vuelta, pausa y reinicio para gestionar intervalos o límites fijos.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Puedo controlarlo con el teclado?", answer: "Sí. Cuando la herramienta tiene foco, la barra espaciadora alterna iniciar y pausar." },
+      { question: "¿La alarma siempre suena?", answer: "No siempre. Las reglas del navegador, volumen, modo silencio y permisos pueden limitar el sonido." },
+      { question: "¿Sirve para medición precisa?", answer: "Es adecuado para tareas cotidianas, pero usa equipo dedicado para deporte oficial, experimentos o registros legales." },
+    ],
+    disclaimer: "Los temporizadores del navegador pueden verse afectados por pestañas inactivas, ahorro de energía, carga del sistema y rendimiento del dispositivo.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <CountdownTimer client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

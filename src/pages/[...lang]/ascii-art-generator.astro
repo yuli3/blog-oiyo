@@ -2,53 +2,51 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import AsciiArtGeneratorComp from "../../components/tools/AsciiArtGenerator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
-  return locales.map((lang) => ({
-    params: { lang },
-    props: { locale: lang },
-  }));
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "ASCII 아트 생성기 — 텍스트로 만드는 아스키 아트",
-    description: "텍스트나 이미지를 ASCII 문자 아트로 변환하세요. 다양한 폰트와 스타일을 선택할 수 있습니다.",
-  },
-  en: {
-    title: "ASCII Art Generator",
-    description: "Convert text or images into ASCII art. Choose from multiple fonts and character styles.",
-  },
-  ja: {
-    title: "ASCIIアートジェネレーター",
-    description: "テキストや画像をASCII文字アートに変換します。さまざまなフォントとスタイルから選べます。",
-  },
-  fr: {
-    title: "Générateur d'Art ASCII",
-    description: "Convertissez du texte ou des images en art ASCII. Choisissez parmi plusieurs polices et styles.",
-  },
-  es: {
-    title: "Generador de Arte ASCII",
-    description: "Convierte texto o imágenes en arte ASCII. Elige entre múltiples fuentes y estilos de caracteres.",
-  },
-  zh: {
-    title: "ASCII藝術生成器",
-    description: "將文字或圖片轉換為ASCII字符藝術。可從多種字體和風格中選擇。",
-  },
-  cn: {
-    title: "ASCII艺术生成器",
-    description: "将文字或图片转换为ASCII字符艺术。可从多种字体和风格中选择。",
-  },
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
+  ko: { title: "ASCII 아트 생성기 — 텍스트로 만드는 아스키 아트", description: "텍스트나 이미지를 ASCII 문자 아트로 변환하세요. 다양한 폰트와 스타일을 선택할 수 있습니다." },
+  en: { title: "ASCII Art Generator", description: "Convert text or images into ASCII art. Choose from multiple fonts and character styles." },
+  ja: { title: "ASCIIアートジェネレーター", description: "テキストや画像をASCII文字アートに変換します。さまざまなフォントとスタイルから選べます。" },
+  fr: { title: "Générateur d'Art ASCII", description: "Convertissez du texte ou des images en art ASCII. Choisissez parmi plusieurs polices et styles." },
+  es: { title: "Generador de Arte ASCII", description: "Convierte texto o imágenes en arte ASCII. Elige entre múltiples fuentes y estilos de caracteres." },
+  zh: { title: "ASCII 艺术生成器", description: "将文字或图片转换为 ASCII 字符艺术。可调整字符显示大小并复制结果。" },
 };
 
 const m = meta[locale] ?? meta.en;
+type SeoContent = { introTitle: string; intro: string; formulaTitle: string; formulas: { title: string; body: string }[]; howToTitle: string; steps: string[]; faqTitle: string; faqs: { question: string; answer: string }[]; disclaimer: string; };
+
+const content: Record<ActiveLocale, SeoContent> = {
+  ko: { introTitle: "ASCII 아트는 이미지의 밝기를 문자 밀도로 바꿔 표현합니다", intro: "아스키 아트는 픽셀의 색을 그대로 보존하기보다 밝고 어두운 영역을 문자 조합으로 근사합니다. 이 도구는 이미지를 작은 캔버스로 줄인 뒤 밝기에 따라 `@%#*+=-:. ` 같은 문자를 배치하고, 글자 크기를 조정해 텍스트 아트로 복사할 수 있게 합니다.", formulaTitle: "핵심 개념", formulas: [{ title: "밝기 매핑", body: "어두운 픽셀에는 밀도 높은 문자, 밝은 픽셀에는 공백에 가까운 문자를 배치합니다." }, { title: "해상도 축소", body: "이미지를 폭 80자 기준으로 줄여 텍스트로 다루기 쉬운 크기로 만듭니다." }, { title: "고정폭 글꼴", body: "결과는 고정폭 글꼴에서 가장 안정적으로 보이며 줄바꿈과 공백 보존이 중요합니다." }], howToTitle: "사용 방법", steps: ["대비가 뚜렷한 이미지를 업로드합니다.", "생성된 ASCII 결과를 확인하고 크기 슬라이더로 보기 편하게 조정합니다.", "텍스트를 복사해 고정폭 환경에 붙여 넣습니다."], faqTitle: "자주 묻는 질문", faqs: [{ question: "어떤 이미지가 잘 변환되나요?", answer: "배경이 단순하고 피사체 대비가 큰 이미지가 가장 알아보기 쉽습니다." }, { question: "색상은 유지되나요?", answer: "아니요. 현재 도구는 밝기 기반 문자 아트로 변환하며 색상 정보는 표현하지 않습니다." }, { question: "붙여 넣으면 모양이 깨지는 이유는?", answer: "비고정폭 글꼴, 공백 압축, 줄바꿈 변경이 있으면 정렬이 달라집니다." }], disclaimer: "ASCII 결과는 미리보기와 붙여 넣는 환경의 글꼴·공백 처리에 따라 달라질 수 있습니다." },
+  en: { introTitle: "ASCII art turns image brightness into character density", intro: "ASCII art approximates light and dark areas with text instead of preserving pixels as color. This tool downsamples an image, maps brightness to characters such as `@%#*+=-:. `, and lets you adjust the display size before copying the text result.", formulaTitle: "Key concepts", formulas: [{ title: "Brightness mapping", body: "Darker pixels use denser characters; brighter pixels move toward lighter marks and spaces." }, { title: "Downsampling", body: "The image is reduced to about 80 characters wide so the result stays usable as text." }, { title: "Monospace display", body: "ASCII art holds its shape best in a monospace font with preserved spaces and line breaks." }], howToTitle: "How to use", steps: ["Upload a high-contrast image.", "Review the generated ASCII and adjust the size slider for readability.", "Copy the text into a monospace environment that preserves whitespace."], faqTitle: "Frequently asked questions", faqs: [{ question: "What images work best?", answer: "Simple backgrounds and strong subject contrast usually produce the clearest ASCII art." }, { question: "Does it keep color?", answer: "No. The current tool converts brightness into characters and does not preserve color." }, { question: "Why does it break after pasting?", answer: "Proportional fonts, collapsed spaces, or changed line breaks can distort the alignment." }], disclaimer: "ASCII output can change with the font, spacing, and whitespace rules of the destination app." },
+  ja: { introTitle: "ASCIIアートは画像の明るさを文字密度に変えます", intro: "ASCIIアートは色をそのまま残すのではなく、明暗を文字の濃さで近似します。このツールは画像を小さなキャンバスに縮小し、明るさに応じて文字を配置してコピー可能なテキストにします。", formulaTitle: "基本概念", formulas: [{ title: "明るさマッピング", body: "暗い部分には密度の高い文字、明るい部分には軽い文字や空白を使います。" }, { title: "解像度縮小", body: "画像を幅約80文字に縮小し、テキストとして扱いやすくします。" }, { title: "等幅表示", body: "等幅フォントで空白と改行を保つと形が安定します。" }], howToTitle: "使い方", steps: ["コントラストの高い画像をアップロードします。", "生成結果を確認し、サイズを調整します。", "空白を保持する等幅環境へコピーします。"], faqTitle: "よくある質問", faqs: [{ question: "どんな画像が向いていますか？", answer: "背景が単純で被写体のコントラストが強い画像が見やすくなります。" }, { question: "色は残りますか？", answer: "いいえ。現在は明るさを文字に変換する白黒の表現です。" }, { question: "貼り付けると崩れるのはなぜ？", answer: "等幅でないフォント、空白の圧縮、改行変更で整列が崩れます。" }], disclaimer: "ASCII結果は貼り付け先のフォント、空白、改行処理により変わることがあります。" },
+  fr: { introTitle: "L'art ASCII transforme la luminosité en densité de caractères", intro: "L'art ASCII représente les zones claires et sombres avec du texte plutôt qu'avec des pixels colorés. L'outil réduit l'image, associe la luminosité à des caractères et permet d'ajuster la taille avant copie.", formulaTitle: "Concepts clés", formulas: [{ title: "Correspondance lumineuse", body: "Les pixels sombres reçoivent des caractères denses; les zones claires des signes plus légers." }, { title: "Réduction", body: "L'image est ramenée à environ 80 caractères de large pour rester lisible." }, { title: "Police monospace", body: "Le rendu tient mieux avec une police à chasse fixe et des espaces conservés." }], howToTitle: "Comment l'utiliser", steps: ["Importez une image contrastée.", "Vérifiez le résultat et ajustez la taille.", "Copiez dans un environnement monospace qui conserve les espaces."], faqTitle: "Questions fréquentes", faqs: [{ question: "Quelles images fonctionnent le mieux ?", answer: "Un fond simple et un sujet très contrasté donnent les résultats les plus lisibles." }, { question: "La couleur est-elle gardée ?", answer: "Non. L'outil convertit la luminosité en caractères." }, { question: "Pourquoi le collage se déforme ?", answer: "Les polices proportionnelles, espaces supprimés ou retours modifiés changent l'alignement." }], disclaimer: "Le rendu ASCII varie selon la police, l'espacement et les règles de l'application cible." },
+  es: { introTitle: "El arte ASCII convierte brillo en densidad de caracteres", intro: "El arte ASCII aproxima zonas claras y oscuras con texto en lugar de conservar píxeles de color. La herramienta reduce la imagen, asigna brillo a caracteres y permite ajustar el tamaño antes de copiar.", formulaTitle: "Conceptos clave", formulas: [{ title: "Mapeo de brillo", body: "Los píxeles oscuros usan caracteres densos; los claros, signos ligeros o espacios." }, { title: "Reducción", body: "La imagen se reduce a unas 80 columnas para que sea manejable como texto." }, { title: "Monoespaciado", body: "La forma se conserva mejor con fuente monoespaciada y espacios preservados." }], howToTitle: "Cómo usarlo", steps: ["Sube una imagen con buen contraste.", "Revisa el ASCII generado y ajusta el tamaño.", "Copia en un entorno monoespaciado que preserve espacios."], faqTitle: "Preguntas frecuentes", faqs: [{ question: "¿Qué imágenes funcionan mejor?", answer: "Fondos simples y sujetos con alto contraste suelen verse más claros." }, { question: "¿Conserva el color?", answer: "No. Convierte brillo en caracteres, sin color." }, { question: "¿Por qué se deforma al pegar?", answer: "Fuentes proporcionales, espacios colapsados o saltos alterados rompen la alineación." }], disclaimer: "El resultado ASCII depende de la fuente, espacios y reglas del lugar donde se pegue." },
+  zh: { introTitle: "ASCII 艺术把图像亮度转换成字符密度", intro: "ASCII 艺术不是保留彩色像素，而是用字符组合近似明暗区域。本工具会缩小图片，根据亮度映射到 `@%#*+=-:. ` 等字符，并可调整显示大小后复制文本结果。", formulaTitle: "核心概念", formulas: [{ title: "亮度映射", body: "深色像素使用密度高的字符，亮色像素使用更轻的字符或空格。" }, { title: "降采样", body: "图片会缩小到约 80 个字符宽，便于作为文本使用。" }, { title: "等宽显示", body: "在等宽字体且保留空格和换行的环境中，形状最稳定。" }], howToTitle: "使用方法", steps: ["上传对比度较高的图片。", "查看生成的 ASCII，并用大小滑块调整可读性。", "复制文本到保留空白的等宽环境中。"], faqTitle: "常见问题", faqs: [{ question: "什么图片效果最好？", answer: "背景简单、主体对比强的图片通常最清晰。" }, { question: "会保留颜色吗？", answer: "不会。当前工具根据亮度生成字符，不保留色彩。" }, { question: "为什么粘贴后变形？", answer: "非等宽字体、空格折叠或换行改变都会破坏对齐。" }], disclaimer: "ASCII 结果会随目标应用的字体、空格和换行规则而变化。" },
+};
+
+const c = content[locale] ?? content.en;
+const structuredData = [
+  { "@context": "https://schema.org", "@type": "HowTo", name: m.title, description: m.description, step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })) },
+  { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: c.faqs.map((faq) => ({ "@type": "Question", name: faq.question, acceptedAnswer: { "@type": "Answer", text: faq.answer } })) },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <AsciiArtGeneratorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+    <section class="mt-10 border-t border-slate-200 pt-8"><h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2><p class="mt-4 leading-8 text-slate-700">{c.intro}</p></section>
+    <section class="mt-10"><h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2><div class="mt-4 grid gap-4 md:grid-cols-3">{c.formulas.map((item) => (<article class="rounded-xl border border-slate-200 bg-white p-4"><h3 class="font-semibold text-slate-900">{item.title}</h3><p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p></article>))}</div></section>
+    <section class="mt-10"><h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2><ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">{c.steps.map((s) => (<li class="leading-7">{s}</li>))}</ol></section>
+    <section class="mt-10"><h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2><div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">{c.faqs.map((faq) => (<details class="group p-4"><summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary><p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p></details>))}</div></section>
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

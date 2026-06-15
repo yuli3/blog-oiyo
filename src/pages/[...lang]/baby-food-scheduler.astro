@@ -2,15 +2,16 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import BabyFoodScheduler from "../../components/tools/BabyFoodScheduler";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "이유식 스케줄러 — 월령별 이유식 가이드",
     description: "아이 개월 수에 따른 이유식 단계(초기/중기/후기/완료기)와 추천 식재료, 주의사항을 확인하세요.",
@@ -32,20 +33,227 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Obtén información específica por etapa de alimentación complementaria (temprana/intermedia/avanzada/final) con ingredientes recomendados.",
   },
   zh: {
-    title: "辅食调度器 — 月龄辅食指南",
+    title: "辅食计划器 — 月龄辅食指南",
     description: "获取各月龄辅食阶段（初期/中期/后期/完成期）的推荐食材和注意事项。",
-  },
-  cn: {
-    title: "副食調度器 — 月齡副食指南",
-    description: "獲取各月齡副食階段（初期/中期/後期/完成期）的推薦食材和注意事項。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "이유식은 월령뿐 아니라 아이의 준비 신호를 함께 봐야 합니다",
+    intro: "이유식 시작과 단계 전환은 생후 개월 수가 중요한 기준이지만, 머리 가누기, 삼키는 능력, 알레르기 반응, 성장 상태도 함께 살펴야 합니다. 이 스케줄러는 월령별 일반 가이드를 정리해 보호자가 소아과 상담 전후에 계획을 점검할 수 있게 돕습니다.",
+    formulaTitle: "단계별 개념",
+    formulas: [
+      { title: "초기", body: "묽은 질감과 단일 식재료로 반응을 천천히 확인합니다." },
+      { title: "중기", body: "질감을 조금 올리고 단백질과 채소 구성을 넓혀 갑니다." },
+      { title: "후기·완료기", body: "손으로 먹기, 가족 식사 적응, 염분 관리가 중요해집니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "아이의 생후 개월 수를 입력해 현재 단계의 일반 범위를 확인합니다.",
+      "추천 식재료와 주의할 식품을 확인한 뒤 한 번에 하나씩 시도합니다.",
+      "발진, 구토, 설사, 호흡 이상 등 반응이 있으면 중단하고 소아과에 상담합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "이유식은 꼭 6개월에 시작해야 하나요?", answer: "많은 지침에서 생후 6개월 전후를 권하지만, 조산, 성장 상태, 질환 여부에 따라 달라질 수 있어 소아과 확인이 좋습니다." },
+      { question: "새 식재료는 얼마나 간격을 두나요?", answer: "보통 며칠 간격으로 하나씩 시도해 반응을 관찰합니다. 알레르기 가족력이 있으면 더 신중하게 접근하세요." },
+      { question: "간을 해도 되나요?", answer: "영아기에는 소금과 설탕을 최소화하는 것이 일반적입니다. 제품식도 나트륨과 당류 표시를 확인하세요." },
+    ],
+    disclaimer: "이 페이지는 일반적인 육아 정보이며 의학적 조언이 아닙니다. 이유식 시작 시기, 알레르기, 성장 문제는 반드시 소아청소년과 의사와 상담하세요.",
+  },
+  en: {
+    introTitle: "Weaning depends on age and your baby's readiness cues",
+    intro: "Age is a useful starting point for baby food planning, but readiness signs, swallowing ability, allergy history, and growth matter too. This scheduler summarizes general stage-by-stage guidance so caregivers can prepare better questions for a pediatric visit.",
+    formulaTitle: "Stage concepts",
+    formulas: [
+      { title: "Early stage", body: "Thin textures and single ingredients help you observe tolerance." },
+      { title: "Middle stage", body: "Texture gradually increases while vegetables and proteins broaden." },
+      { title: "Late and finishing stage", body: "Finger foods, family meals, and salt control become more important." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Enter your baby's age in months to see the general stage range.",
+      "Review suggested foods and cautions, then introduce new foods one at a time.",
+      "Stop and contact a pediatrician if rash, vomiting, diarrhea, breathing symptoms, or unusual reactions appear.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Does every baby start solids at exactly six months?", answer: "Many guidelines point to around six months, but prematurity, growth, medical history, and readiness cues can change timing." },
+      { question: "How often should I introduce a new food?", answer: "A common approach is one new ingredient every few days so reactions are easier to identify, especially with allergy risk." },
+      { question: "Can I add salt or sugar?", answer: "For babies, added salt and sugar are generally minimized. Check sodium and sugar labels on packaged baby foods." },
+    ],
+    disclaimer: "This page is general parenting information, not medical advice. For starting solids, allergies, feeding issues, or growth concerns, consult a pediatrician.",
+  },
+  ja: {
+    introTitle: "離乳食は月齢だけでなく赤ちゃんの準備サインも大切です",
+    intro: "離乳食の開始や段階移行では月齢が目安になりますが、首すわり、飲み込み、アレルギー歴、成長状態も合わせて見ます。このスケジューラーは一般的な段階別情報を整理し、小児科で相談する前後の確認に役立てるためのものです。",
+    formulaTitle: "段階の考え方",
+    formulas: [
+      { title: "初期", body: "なめらかな形状と単一食材で反応をゆっくり確認します。" },
+      { title: "中期", body: "形状を少し進め、野菜やたんぱく質の種類を広げます。" },
+      { title: "後期・完了期", body: "手づかみ食べ、家族食への移行、塩分管理が重要になります。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "赤ちゃんの月齢を入力して一般的な段階を確認します。",
+      "推奨食材と注意点を見ながら、新しい食材は一つずつ試します。",
+      "発疹、嘔吐、下痢、呼吸症状などがあれば中止し、小児科に相談します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "離乳食は必ず6か月で始めますか？", answer: "多くの指針では6か月前後が目安ですが、早産、成長、病歴、準備サインによって異なります。" },
+      { question: "新しい食材はどのくらい間隔を空けますか？", answer: "反応を見分けやすくするため、数日おきに一種類ずつ試す方法がよく使われます。" },
+      { question: "味付けしてもよいですか？", answer: "乳児期は塩分と糖分を控えるのが一般的です。市販品はナトリウムや糖類の表示も確認してください。" },
+    ],
+    disclaimer: "このページは一般的な育児情報であり、医療上の助言ではありません。離乳食開始、アレルギー、摂食、成長の相談は小児科医に確認してください。",
+  },
+  fr: {
+    introTitle: "La diversification dépend de l'âge et des signes de préparation du bébé",
+    intro: "L'âge donne un repère utile, mais la tenue de la tête, la capacité à avaler, les antécédents d'allergie et la croissance doivent aussi être pris en compte. Ce planificateur résume des repères généraux pour préparer une discussion avec le pédiatre.",
+    formulaTitle: "Repères par étape",
+    formulas: [
+      { title: "Début", body: "Textures lisses et ingrédients uniques pour observer la tolérance." },
+      { title: "Étape intermédiaire", body: "Texture un peu plus épaisse et variété accrue de légumes et protéines." },
+      { title: "Étape avancée", body: "Morceaux adaptés, repas familiaux progressifs et contrôle du sel." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Indiquez l'âge du bébé en mois pour voir l'étape générale.",
+      "Lisez les aliments proposés et les précautions, puis introduisez les nouveautés une par une.",
+      "Arrêtez et contactez un pédiatre en cas d'éruption, vomissements, diarrhée, gêne respiratoire ou réaction inhabituelle.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Tous les bébés commencent-ils exactement à six mois ?", answer: "De nombreuses recommandations évoquent environ six mois, mais prématurité, croissance, antécédents et signes de préparation peuvent modifier le calendrier." },
+      { question: "À quel rythme introduire un nouvel aliment ?", answer: "On introduit souvent un ingrédient à la fois, avec quelques jours d'observation, surtout en cas de risque allergique." },
+      { question: "Peut-on ajouter du sel ou du sucre ?", answer: "Chez le bébé, le sel et le sucre ajoutés sont généralement limités. Vérifiez aussi les étiquettes des produits préparés." },
+    ],
+    disclaimer: "Cette page fournit une information générale de puériculture, pas un avis médical. Pour la diversification, les allergies, l'alimentation ou la croissance, consultez un pédiatre.",
+  },
+  es: {
+    introTitle: "La alimentación complementaria depende de la edad y de las señales de preparación",
+    intro: "La edad orienta, pero también importan el control de la cabeza, la capacidad de tragar, los antecedentes de alergia y el crecimiento. Este planificador resume pautas generales por etapa para preparar mejor una consulta con pediatría.",
+    formulaTitle: "Conceptos por etapa",
+    formulas: [
+      { title: "Etapa inicial", body: "Texturas suaves e ingredientes únicos para observar tolerancia." },
+      { title: "Etapa intermedia", body: "Aumenta poco a poco la textura y la variedad de verduras y proteínas." },
+      { title: "Etapa avanzada", body: "Cobran importancia los alimentos para tomar con la mano, la comida familiar y limitar la sal." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Introduce la edad del bebé en meses para ver la etapa general.",
+      "Revisa alimentos sugeridos y precauciones, e introduce novedades una por una.",
+      "Suspende y consulta con pediatría ante sarpullido, vómitos, diarrea, síntomas respiratorios o reacciones inusuales.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Todos los bebés empiezan exactamente a los seis meses?", answer: "Muchas guías hablan de alrededor de seis meses, pero prematuridad, crecimiento, antecedentes y señales de preparación pueden cambiar el momento." },
+      { question: "¿Cada cuánto introduzco un alimento nuevo?", answer: "Suele probarse un ingrediente nuevo cada pocos días para identificar mejor reacciones, especialmente si hay riesgo de alergia." },
+      { question: "¿Puedo añadir sal o azúcar?", answer: "En bebés se suele minimizar la sal y el azúcar añadidos. También conviene revisar etiquetas de productos preparados." },
+    ],
+    disclaimer: "Esta página ofrece información general de crianza, no consejo médico. Para inicio de sólidos, alergias, alimentación o crecimiento, consulta con un pediatra.",
+  },
+  zh: {
+    introTitle: "辅食安排要同时看月龄和宝宝的准备信号",
+    intro: "月龄是辅食计划的重要参考，但还要观察抬头能力、吞咽能力、过敏史和生长情况。这个计划器整理了各阶段的一般信息，帮助照护者在咨询儿科医生前后更有条理地检查安排。",
+    formulaTitle: "阶段概念",
+    formulas: [
+      { title: "初期", body: "用较稀的质地和单一食材，慢慢观察耐受情况。" },
+      { title: "中期", body: "逐步增加质地，并扩大蔬菜和蛋白质食材范围。" },
+      { title: "后期与完成期", body: "手指食物、适应家庭餐和控制盐分变得更重要。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "输入宝宝的月龄，查看对应的一般阶段范围。",
+      "阅读推荐食材和注意事项，新食材一次只尝试一种。",
+      "如果出现皮疹、呕吐、腹泻、呼吸异常或其他反应，请停止并咨询儿科医生。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "宝宝一定要满6个月才开始辅食吗？", answer: "很多指南建议6个月左右开始，但早产、生长情况、病史和准备信号都可能影响时间。" },
+      { question: "新食材要间隔多久？", answer: "常见做法是每隔几天尝试一种新食材，便于观察反应。有过敏风险时更应谨慎。" },
+      { question: "可以加盐或糖吗？", answer: "婴儿期通常应尽量减少额外盐和糖。购买成品辅食时也要查看钠和糖含量。" },
+    ],
+    disclaimer: "本页为一般育儿信息，不构成医疗建议。辅食开始时间、过敏、喂养困难或生长问题请咨询儿科医生。",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <BabyFoodScheduler client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

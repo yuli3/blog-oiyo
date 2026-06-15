@@ -2,7 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import RentComparisonCalculatorComp from "../../components/tools/RentComparisonCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -11,9 +12,9 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "전세 vs 월세 비교 계산기 — 어떤 선택이 유리할까?",
     description: "전세와 월세의 실질 비용을 비교 계산합니다. 이자율과 주거비를 고려해 최적의 주거 형태를 선택하세요.",
@@ -35,20 +36,229 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Compara el costo real del Jeonse (depósito global) vs renta mensual en Corea.",
   },
   zh: {
-    title: "全稅 vs 月租比較計算機",
-    description: "比較計算全稅和月租的實際成本，考慮利率因素選擇最優居住方式。",
-  },
-  cn: {
-    title: "全税 vs 月租比较计算器",
-    description: "比较计算全税和月租的实际成本，考虑利率因素选择最优居住方式。",
+    title: "全租 vs 月租比较计算机",
+    description: "比较计算全租和月租的实际成本，考虑利率因素选择最优居住方式。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+type SeoContent = {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+};
+
+const content: Record<ActiveLocale, SeoContent> = {
+  ko: {
+    introTitle: "전세와 월세 비교의 핵심은 보증금의 기회비용입니다",
+    intro: "전세는 월세가 없다고 해서 비용이 0인 선택이 아닙니다. 큰 보증금을 묶어 두거나 대출로 조달하는 데 따른 이자 비용이 있습니다. 이 계산기는 전세 보증금의 월 기회비용과 월세 보증금의 기회비용에 월세를 더한 금액을 비교해 어느 쪽 월 부담이 작은지 보여 줍니다.",
+    formulaTitle: "계산 기준",
+    formulas: [
+      { title: "전세 월 비용", body: "전세보증금 × 연 이율 ÷ 12로 월 기회비용을 추정합니다." },
+      { title: "월세 월 비용", body: "월세보증금 × 연 이율 ÷ 12 + 월세로 월 총비용을 계산합니다." },
+      { title: "차이", body: "두 월 비용의 차이가 매달 어느 선택이 더 유리한지 보여 줍니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "전세 보증금과 비교할 금리를 입력합니다.",
+      "월세 보증금과 월세 금액을 입력합니다.",
+      "월 비용 차이를 확인하고 대출 조건, 관리비, 계약 안정성까지 함께 검토합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "어떤 금리를 넣어야 하나요?", answer: "전세금을 대출로 마련한다면 대출금리, 현금으로 보유했다면 예금이나 다른 투자에서 포기하는 기대수익률을 넣는 것이 보통입니다." },
+      { question: "월세가 더 싸게 나오면 무조건 월세가 좋은가요?", answer: "아닙니다. 계약 기간, 보증금 위험, 대출 규제, 관리비, 이사 비용, 주거 안정성까지 함께 봐야 합니다." },
+      { question: "세금이나 보증보험료도 포함되나요?", answer: "아니요. 이 계산기는 보증금 기회비용과 월세만 비교합니다. 실제 비용에는 각종 수수료와 보험료가 추가될 수 있습니다." },
+    ],
+    disclaimer: "이 도구는 일반적인 추정용입니다. 실제 주거비, 대출 조건, 임대차 판단은 관련 기관이나 전문가에게 확인하세요.",
+  },
+  en: {
+    introTitle: "The key to comparing jeonse and monthly rent is deposit opportunity cost",
+    intro: "Jeonse is not cost-free just because there is no monthly rent. A large deposit has financing cost or foregone return. This calculator compares the monthly opportunity cost of a jeonse deposit with the monthly-rent option: deposit opportunity cost plus rent.",
+    formulaTitle: "Calculation basis",
+    formulas: [
+      { title: "Jeonse monthly cost", body: "Jeonse deposit × annual interest rate ÷ 12." },
+      { title: "Monthly-rent cost", body: "Rent deposit × annual interest rate ÷ 12 + monthly rent." },
+      { title: "Difference", body: "The gap shows which option has the lower monthly cost under the selected rate." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Enter the jeonse deposit and the interest or opportunity-cost rate.",
+      "Enter the monthly-rent deposit and monthly rent.",
+      "Compare the monthly cost difference, then review financing terms, maintenance fees, and lease risk.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "What interest rate should I use?", answer: "If you borrow the deposit, use your loan rate. If you use cash, use the return you give up, such as deposit interest or expected low-risk return." },
+      { question: "If monthly rent is cheaper, is it always better?", answer: "No. Lease stability, deposit safety, loan rules, maintenance fees, and moving costs can change the decision." },
+      { question: "Does it include taxes or guarantee insurance?", answer: "No. It compares deposit opportunity cost and rent only. Real costs can include fees, insurance, and other charges." },
+    ],
+    disclaimer: "This tool is a general estimate. Confirm actual housing cost, financing terms, and lease decisions with the relevant institution or professional.",
+  },
+  ja: {
+    introTitle: "チョンセと月家賃の比較は保証金の機会費用が中心です",
+    intro: "チョンセは月家賃がないから無料というわけではありません。大きな保証金には借入コストまたは失われる運用収益があります。この計算機はチョンセ保証金の月間機会費用と、月家賃の保証金機会費用に家賃を加えた金額を比較します。",
+    formulaTitle: "計算の前提",
+    formulas: [
+      { title: "チョンセ月費用", body: "チョンセ保証金 × 年利率 ÷ 12。" },
+      { title: "月家賃費用", body: "月家賃保証金 × 年利率 ÷ 12 + 月家賃。" },
+      { title: "差額", body: "選択した利率のもとでどちらの月費用が低いかを示します。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "チョンセ保証金と比較に使う金利を入力します。",
+      "月家賃の保証金と月家賃を入力します。",
+      "月費用差を確認し、ローン条件、管理費、契約リスクも検討します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "どの金利を使えばよいですか？", answer: "借入で保証金を用意するならローン金利、現金なら預金利息や低リスク運用で失う収益率を使うのが一般的です。" },
+      { question: "月家賃が安く出れば必ず有利ですか？", answer: "いいえ。住居安定性、保証金の安全性、ローン規制、管理費、引っ越し費用も判断に影響します。" },
+      { question: "税金や保証保険料は含まれますか？", answer: "含まれません。保証金の機会費用と月家賃のみを比較します。" },
+    ],
+    disclaimer: "このツールは一般的な概算です。実際の住居費、融資条件、賃貸判断は関係機関または専門家に確認してください。",
+  },
+  zh: {
+    introTitle: "比较全租和月租，关键是保证金的机会成本",
+    intro: "全租没有月租，并不代表成本为零。大额保证金会产生贷款成本，或放弃其他收益。本工具比较全租保证金的月机会成本，以及月租方案的保证金机会成本加月租。",
+    formulaTitle: "计算依据",
+    formulas: [
+      { title: "全租月成本", body: "全租保证金 × 年利率 ÷ 12。" },
+      { title: "月租月成本", body: "月租保证金 × 年利率 ÷ 12 + 月租。" },
+      { title: "差额", body: "两者月成本差额显示在所选利率下哪个方案较低。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "输入全租保证金和比较用利率。",
+      "输入月租保证金和月租金额。",
+      "查看月成本差额，并结合贷款条件、管理费和租赁风险判断。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "应该输入什么利率？", answer: "如果保证金来自贷款，通常用贷款利率；如果用现金，则可用存款利率或放弃的低风险收益率。" },
+      { question: "月租更便宜就一定更好吗？", answer: "不一定。居住稳定性、保证金安全、贷款规则、管理费和搬家成本都会影响选择。" },
+      { question: "包含税费或保证保险吗？", answer: "不包含。本工具只比较保证金机会成本和月租，实际成本还可能包含手续费和保险费。" },
+    ],
+    disclaimer: "本工具仅作一般估算。实际居住成本、融资条件和租赁判断请向相关机构或专业人士确认。",
+  },
+  fr: {
+    introTitle: "Comparer jeonse et loyer mensuel revient à valoriser le coût d'opportunité du dépôt",
+    intro: "Le jeonse n'est pas gratuit parce qu'il n'y a pas de loyer mensuel. Le dépôt immobilisé a un coût de financement ou un rendement abandonné. Ce calculateur compare ce coût mensuel au coût dépôt plus loyer.",
+    formulaTitle: "Bases de calcul",
+    formulas: [
+      { title: "Coût jeonse", body: "Dépôt jeonse × taux annuel ÷ 12." },
+      { title: "Coût mensuel", body: "Dépôt du loyer × taux annuel ÷ 12 + loyer mensuel." },
+      { title: "Écart", body: "L'écart indique l'option au coût mensuel le plus bas au taux choisi." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Saisissez le dépôt jeonse et le taux d'intérêt ou d'opportunité.",
+      "Saisissez le dépôt du loyer mensuel et le loyer.",
+      "Comparez l'écart puis examinez financement, charges et risque de bail.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Quel taux utiliser ?", answer: "Si vous empruntez le dépôt, utilisez le taux du prêt. Si vous utilisez du cash, utilisez le rendement abandonné." },
+      { question: "Si le loyer mensuel est moins cher, est-ce toujours mieux ?", answer: "Non. Stabilité du bail, sécurité du dépôt, règles de prêt, charges et déménagement peuvent changer la décision." },
+      { question: "Les taxes ou assurances sont-elles incluses ?", answer: "Non. L'outil compare seulement coût d'opportunité et loyer. Des frais et assurances peuvent s'ajouter." },
+    ],
+    disclaimer: "Cet outil fournit une estimation générale. Confirmez coût du logement, financement et bail avec l'institution compétente ou un professionnel.",
+  },
+  es: {
+    introTitle: "Comparar jeonse y alquiler mensual exige valorar el coste de oportunidad del depósito",
+    intro: "Jeonse no es gratis solo porque no haya renta mensual. El depósito grande tiene coste financiero o retorno perdido. Esta calculadora compara ese coste mensual con el coste del depósito del alquiler más la renta.",
+    formulaTitle: "Bases de cálculo",
+    formulas: [
+      { title: "Coste jeonse", body: "Depósito jeonse × tasa anual ÷ 12." },
+      { title: "Coste mensual", body: "Depósito del alquiler × tasa anual ÷ 12 + renta mensual." },
+      { title: "Diferencia", body: "La brecha muestra qué opción tiene menor coste mensual con la tasa elegida." },
+    ],
+    howToTitle: "Cómo usarla",
+    steps: [
+      "Introduce depósito jeonse y tasa de interés u oportunidad.",
+      "Introduce depósito de alquiler mensual y renta.",
+      "Compara la diferencia y revisa financiación, gastos y riesgo del contrato.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Qué tasa debo usar?", answer: "Si pides préstamo, usa la tasa del préstamo. Si usas efectivo, usa el rendimiento que dejas de obtener." },
+      { question: "Si el alquiler mensual es más barato, ¿siempre conviene?", answer: "No. Estabilidad, seguridad del depósito, reglas de préstamo, gastos y mudanza pueden cambiar la decisión." },
+      { question: "¿Incluye impuestos o seguros?", answer: "No. Solo compara coste de oportunidad y renta. Pueden añadirse comisiones y seguros." },
+    ],
+    disclaimer: "Esta herramienta ofrece una estimación general. Confirma coste de vivienda, financiación y contrato con la institución correspondiente o un profesional.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <RentComparisonCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

@@ -2,50 +2,51 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import HashGeneratorComp from "../../components/tools/HashGenerator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "해시 생성기 — SHA-256 / SHA-384 / SHA-512 변환",
-    description: "텍스트를 SHA-256, SHA-384, SHA-512 해시로 즉시 변환하세요. Web Crypto API 기반의 안전한 브라우저 내 해시 생성.",
-  },
-  en: {
-    title: "Hash Generator — SHA-256 / SHA-384 / SHA-512",
-    description: "Instantly convert text to SHA-256, SHA-384, and SHA-512 hashes. Secure, browser-side hashing powered by the Web Crypto API.",
-  },
-  ja: {
-    title: "ハッシュ生成器 — SHA-256 / SHA-384 / SHA-512変換",
-    description: "テキストをSHA-256、SHA-384、SHA-512ハッシュに即座に変換。Web Crypto APIによる安全なブラウザ内ハッシュ生成。",
-  },
-  fr: {
-    title: "Générateur de Hachage — SHA-256 / SHA-384 / SHA-512",
-    description: "Convertissez instantanément du texte en hachages SHA-256, SHA-384 et SHA-512. Hachage sécurisé côté navigateur via l'API Web Crypto.",
-  },
-  es: {
-    title: "Generador de Hash — SHA-256 / SHA-384 / SHA-512",
-    description: "Convierte texto a hashes SHA-256, SHA-384 y SHA-512 al instante. Hash seguro en el navegador con la API Web Crypto.",
-  },
-  zh: {
-    title: "雜湊生成器 — SHA-256 / SHA-384 / SHA-512轉換",
-    description: "即時將文字轉換為SHA-256、SHA-384和SHA-512雜湊值。基於Web Crypto API的安全瀏覽器端雜湊生成。",
-  },
-  cn: {
-    title: "哈希生成器 — SHA-256 / SHA-384 / SHA-512转换",
-    description: "即时将文字转换为SHA-256、SHA-384和SHA-512哈希值。基于Web Crypto API的安全浏览器端哈希生成。",
-  },
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
+  ko: { title: "해시 생성기 — SHA-256 / SHA-384 / SHA-512 변환", description: "텍스트를 SHA-256, SHA-384, SHA-512 해시로 즉시 변환하세요. Web Crypto API 기반의 안전한 브라우저 내 해시 생성." },
+  en: { title: "Hash Generator — SHA-256 / SHA-384 / SHA-512", description: "Instantly convert text to SHA-256, SHA-384, and SHA-512 hashes. Secure, browser-side hashing powered by the Web Crypto API." },
+  ja: { title: "ハッシュ生成器 — SHA-256 / SHA-384 / SHA-512変換", description: "テキストをSHA-256、SHA-384、SHA-512ハッシュに即座に変換。Web Crypto APIによる安全なブラウザ内ハッシュ生成。" },
+  fr: { title: "Générateur de Hachage — SHA-256 / SHA-384 / SHA-512", description: "Convertissez instantanément du texte en hachages SHA-256, SHA-384 et SHA-512. Hachage sécurisé côté navigateur via l'API Web Crypto." },
+  es: { title: "Generador de Hash — SHA-256 / SHA-384 / SHA-512", description: "Convierte texto a hashes SHA-256, SHA-384 y SHA-512 al instante. Hash seguro en el navegador con la API Web Crypto." },
+  zh: { title: "哈希生成器 — SHA-256 / SHA-384 / SHA-512 转换", description: "即时将文字转换为 SHA-256、SHA-384 和 SHA-512 哈希值。基于 Web Crypto API 在浏览器端生成。" },
 };
 
 const m = meta[locale] ?? meta.en;
+type SeoContent = { introTitle: string; intro: string; formulaTitle: string; formulas: { title: string; body: string }[]; howToTitle: string; steps: string[]; faqTitle: string; faqs: { question: string; answer: string }[]; disclaimer: string; };
+
+const content: Record<ActiveLocale, SeoContent> = {
+  ko: { introTitle: "해시는 입력 텍스트의 고정 길이 지문입니다", intro: "SHA 계열 해시는 같은 입력이면 항상 같은 결과를 만들고, 작은 입력 변화도 전혀 다른 문자열로 바꿉니다. 이 도구는 Web Crypto API로 SHA-256, SHA-384, SHA-512 값을 브라우저에서 생성해 무결성 확인, 테스트 데이터, 개발 문서 작성에 쓸 수 있게 합니다.", formulaTitle: "핵심 개념", formulas: [{ title: "일방향성", body: "해시는 원문을 복원하기 위한 암호화가 아니라 비교용 지문입니다." }, { title: "충돌 저항", body: "SHA-2 계열은 서로 다른 입력이 같은 해시가 되기 어렵도록 설계되었습니다." }, { title: "브라우저 처리", body: "입력 텍스트를 Web Crypto API로 처리하며 결과는 16진수 문자열로 표시됩니다." }], howToTitle: "사용 방법", steps: ["해시로 만들 텍스트를 입력합니다.", "해시 생성 버튼을 눌러 SHA-256, SHA-384, SHA-512 결과를 만듭니다.", "필요한 알고리즘의 결과를 복사해 비교값이나 테스트 데이터로 사용합니다."], faqTitle: "자주 묻는 질문", faqs: [{ question: "해시로 원문을 복원할 수 있나요?", answer: "아니요. 해시는 원문 복호화가 아니라 같은 입력인지 비교하기 위한 일방향 함수입니다." }, { question: "비밀번호 저장에 바로 써도 되나요?", answer: "그대로 쓰면 부족합니다. 비밀번호 저장에는 salt와 느린 전용 KDF 또는 password hashing 알고리즘이 필요합니다." }, { question: "SHA-256과 SHA-512 중 무엇을 쓰나요?", answer: "호환성과 요구사항에 맞추면 됩니다. 많은 무결성 확인에는 SHA-256이 널리 쓰입니다." }], disclaimer: "보안 설계나 비밀번호 저장에는 단순 해시가 아니라 검토된 인증·키 관리 방식을 사용하세요." },
+  en: { introTitle: "A hash is a fixed-length fingerprint of input text", intro: "SHA hashes produce the same output for the same input and a very different output after even a small change. This tool uses the Web Crypto API to generate SHA-256, SHA-384, and SHA-512 in the browser for integrity checks, test data, and developer documentation.", formulaTitle: "Key concepts", formulas: [{ title: "One-way function", body: "A hash is a comparison fingerprint, not encryption that can be decrypted back to the original." }, { title: "Collision resistance", body: "SHA-2 algorithms are designed to make matching hashes for different inputs impractical." }, { title: "Browser-side output", body: "The input is processed with Web Crypto and displayed as hexadecimal strings." }], howToTitle: "How to use", steps: ["Enter the text you want to hash.", "Click generate to create SHA-256, SHA-384, and SHA-512 outputs.", "Copy the algorithm result you need for checksums, fixtures, or notes."], faqTitle: "Frequently asked questions", faqs: [{ question: "Can a hash be decoded back to text?", answer: "No. A cryptographic hash is one-way and is used for comparison, not recovery." }, { question: "Can I store passwords with this directly?", answer: "No. Password storage needs salts and a dedicated slow password-hashing or KDF scheme." }, { question: "Should I use SHA-256 or SHA-512?", answer: "Match your system requirement. SHA-256 is widely used for many integrity checks." }], disclaimer: "For authentication, password storage, or key management, use reviewed security designs instead of a plain hash alone." },
+  ja: { introTitle: "ハッシュは入力テキストの固定長の指紋です", intro: "SHAハッシュは同じ入力なら同じ結果を返し、少しの変更でも大きく異なる文字列になります。このツールはWeb Crypto APIでSHA-256、SHA-384、SHA-512をブラウザ内生成します。", formulaTitle: "基本概念", formulas: [{ title: "一方向性", body: "ハッシュは復号する暗号ではなく、比較用の指紋です。" }, { title: "衝突耐性", body: "SHA-2系は異なる入力が同じ値になりにくいよう設計されています。" }, { title: "ブラウザ処理", body: "入力をWeb Cryptoで処理し、16進数文字列として表示します。" }], howToTitle: "使い方", steps: ["ハッシュ化したいテキストを入力します。", "生成ボタンでSHA-256、SHA-384、SHA-512を作ります。", "必要な結果をコピーして照合値やテストデータに使います。"], faqTitle: "よくある質問", faqs: [{ question: "ハッシュから元文を戻せますか？", answer: "いいえ。ハッシュは一方向で、復元ではなく比較に使います。" }, { question: "パスワード保存にそのまま使えますか？", answer: "不十分です。saltと専用の低速なパスワードハッシュ/KDFが必要です。" }, { question: "SHA-256とSHA-512はどちらを使いますか？", answer: "要件に合わせます。多くの整合性確認ではSHA-256が広く使われます。" }], disclaimer: "認証やパスワード保存では、単純なハッシュだけでなく検証済みの方式を使ってください。" },
+  fr: { introTitle: "Un hachage est une empreinte fixe du texte d'entrée", intro: "Les hachages SHA donnent toujours le même résultat pour la même entrée et changent fortement après une petite modification. L'outil génère SHA-256, SHA-384 et SHA-512 côté navigateur avec Web Crypto.", formulaTitle: "Concepts clés", formulas: [{ title: "Fonction à sens unique", body: "Un hachage sert à comparer, pas à déchiffrer le texte original." }, { title: "Résistance aux collisions", body: "SHA-2 rend très difficile l'obtention du même hachage avec deux entrées différentes." }, { title: "Sortie navigateur", body: "Le texte est traité avec Web Crypto et affiché en hexadécimal." }], howToTitle: "Comment l'utiliser", steps: ["Saisissez le texte à hacher.", "Générez les sorties SHA-256, SHA-384 et SHA-512.", "Copiez la valeur nécessaire pour un contrôle, un test ou une note technique."], faqTitle: "Questions fréquentes", faqs: [{ question: "Peut-on décoder un hachage ?", answer: "Non. Un hachage cryptographique est à sens unique." }, { question: "Puis-je stocker des mots de passe ainsi ?", answer: "Non. Il faut un sel et un algorithme dédié de hachage de mot de passe ou KDF." }, { question: "SHA-256 ou SHA-512 ?", answer: "Suivez l'exigence du système. SHA-256 suffit à beaucoup de contrôles d'intégrité." }], disclaimer: "Pour l'authentification et les mots de passe, utilisez une conception de sécurité validée plutôt qu'un simple hachage." },
+  es: { introTitle: "Un hash es una huella fija del texto de entrada", intro: "Los hashes SHA producen el mismo resultado para la misma entrada y cambian mucho ante una modificación mínima. Esta herramienta genera SHA-256, SHA-384 y SHA-512 en el navegador con Web Crypto.", formulaTitle: "Conceptos clave", formulas: [{ title: "Función unidireccional", body: "Un hash sirve para comparar, no para descifrar el texto original." }, { title: "Resistencia a colisiones", body: "SHA-2 está diseñado para que dos entradas distintas compartan hash de forma impracticable." }, { title: "Salida del navegador", body: "La entrada se procesa con Web Crypto y se muestra en hexadecimal." }], howToTitle: "Cómo usarlo", steps: ["Introduce el texto que quieres convertir en hash.", "Genera las salidas SHA-256, SHA-384 y SHA-512.", "Copia el resultado que necesites para verificaciones, pruebas o documentación."], faqTitle: "Preguntas frecuentes", faqs: [{ question: "¿Se puede decodificar un hash?", answer: "No. Un hash criptográfico es unidireccional y sirve para comparación." }, { question: "¿Sirve directamente para guardar contraseñas?", answer: "No. Se necesitan sales y un algoritmo dedicado de password hashing o KDF." }, { question: "¿SHA-256 o SHA-512?", answer: "Depende del requisito. SHA-256 es muy común para comprobaciones de integridad." }], disclaimer: "Para autenticación y contraseñas, usa diseños de seguridad revisados en lugar de un hash simple." },
+  zh: { introTitle: "哈希是输入文本的固定长度指纹", intro: "SHA 哈希对同一输入总是生成同一结果，哪怕输入只改一点，输出也会明显不同。本工具使用 Web Crypto API 在浏览器中生成 SHA-256、SHA-384 和 SHA-512。", formulaTitle: "核心概念", formulas: [{ title: "单向函数", body: "哈希用于比较指纹，不是可以还原原文的加密。" }, { title: "抗碰撞", body: "SHA-2 系列设计目标是让不同输入得到同一哈希变得极难。" }, { title: "浏览器输出", body: "输入通过 Web Crypto 处理，并以十六进制字符串显示。" }], howToTitle: "使用方法", steps: ["输入要生成哈希的文本。", "点击生成，得到 SHA-256、SHA-384 和 SHA-512。", "复制所需算法结果，用于校验、测试数据或开发说明。"], faqTitle: "常见问题", faqs: [{ question: "哈希能还原成原文吗？", answer: "不能。密码学哈希是单向的，用于比较而不是恢复。" }, { question: "可以直接用于保存密码吗？", answer: "不建议。密码保存需要 salt 和专用的慢速密码哈希或 KDF。" }, { question: "该用 SHA-256 还是 SHA-512？", answer: "按系统要求选择。SHA-256 在完整性校验中非常常见。" }], disclaimer: "认证、密码保存和密钥管理应使用经过审查的安全方案，而不是单独依赖普通哈希。" },
+};
+
+const c = content[locale] ?? content.en;
+const structuredData = [
+  { "@context": "https://schema.org", "@type": "HowTo", name: m.title, description: m.description, step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })) },
+  { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: c.faqs.map((faq) => ({ "@type": "Question", name: faq.question, acceptedAnswer: { "@type": "Answer", text: faq.answer } })) },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <HashGeneratorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+    <section class="mt-10 border-t border-slate-200 pt-8"><h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2><p class="mt-4 leading-8 text-slate-700">{c.intro}</p></section>
+    <section class="mt-10"><h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2><div class="mt-4 grid gap-4 md:grid-cols-3">{c.formulas.map((item) => (<article class="rounded-xl border border-slate-200 bg-white p-4"><h3 class="font-semibold text-slate-900">{item.title}</h3><p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p></article>))}</div></section>
+    <section class="mt-10"><h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2><ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">{c.steps.map((s) => (<li class="leading-7">{s}</li>))}</ol></section>
+    <section class="mt-10"><h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2><div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">{c.faqs.map((faq) => (<details class="group p-4"><summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary><p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p></details>))}</div></section>
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

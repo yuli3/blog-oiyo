@@ -2,50 +2,159 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import MorseCodeConverter from "../../components/tools/MorseCodeConverter";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "모스 부호 변환기 — 텍스트↔모스 부호 변환",
-    description: "텍스트를 모스 부호로, 모스 부호를 텍스트로 즉시 변환합니다. A–Z, 0–9, 특수문자 지원. 알파벳 대조표 내장.",
-  },
-  en: {
-    title: "Morse Code Converter — Encode & Decode Instantly",
-    description: "Convert text to Morse code and Morse code back to text instantly. Supports A–Z, 0–9, punctuation. Built-in alphabet reference table.",
-  },
-  ja: {
-    title: "モールス信号変換機 — テキスト↔モールス変換",
-    description: "テキストをモールス信号に、モールス信号をテキストに即座に変換します。A-Z、0-9、記号に対応。アルファベット対応表内蔵。",
-  },
-  fr: {
-    title: "Convertisseur Code Morse — Encoder et Décoder",
-    description: "Convertissez du texte en code Morse et du code Morse en texte instantanément. Supporte A–Z, 0–9 et la ponctuation. Table de référence intégrée.",
-  },
-  es: {
-    title: "Conversor de Código Morse — Codificar y Decodificar",
-    description: "Convierte texto a código Morse y código Morse a texto de forma instantánea. Soporte A–Z, 0–9, puntuación. Tabla de referencia incluida.",
-  },
-  zh: {
-    title: "摩斯電碼轉換器 — 文字與電碼互換",
-    description: "即時將文字轉換為摩斯電碼，或將摩斯電碼還原為文字。支援A–Z、0–9及標點符號，內建字母對照表。",
-  },
-  cn: {
-    title: "摩斯电码转换器 — 文字与电码互换",
-    description: "即时将文字转换为摩斯电码，或将摩斯电码还原为文字。支持A–Z、0–9及标点符号，内置字母对照表。",
-  },
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
+  ko: { title: "모스 부호 변환기 — 텍스트↔모스 부호 변환", description: "텍스트를 모스 부호로, 모스 부호를 텍스트로 즉시 변환합니다. A–Z, 0–9, 특수문자 지원. 알파벳 대조표 내장." },
+  en: { title: "Morse Code Converter — Encode & Decode Instantly", description: "Convert text to Morse code and Morse code back to text instantly. Supports A–Z, 0–9, punctuation. Built-in alphabet reference table." },
+  ja: { title: "モールス信号変換機 — テキスト↔モールス変換", description: "テキストをモールス信号に、モールス信号をテキストに即座に変換します。A-Z、0-9、記号に対応。アルファベット対応表内蔵。" },
+  fr: { title: "Convertisseur Code Morse — Encoder et Décoder", description: "Convertissez du texte en code Morse et du code Morse en texte instantanément. Supporte A–Z, 0–9 et la ponctuation. Table de référence intégrée." },
+  es: { title: "Conversor de Código Morse — Codificar y Decodificar", description: "Convierte texto a código Morse y código Morse a texto de forma instantánea. Soporte A–Z, 0–9, puntuación. Tabla de referencia incluida." },
+  zh: { title: "摩斯电码转换器 — 文字与电码互换", description: "即时将文字转换为摩斯电码，或将摩斯电码还原为文字。支持 A–Z、0–9 及标点符号，内置字母对照表。" },
 };
 
 const m = meta[locale] ?? meta.en;
+type SeoContent = { introTitle: string; intro: string; formulaTitle: string; formulas: { title: string; body: string }[]; howToTitle: string; steps: string[]; faqTitle: string; faqs: { question: string; answer: string }[]; disclaimer: string; };
+
+const content: Record<ActiveLocale, SeoContent> = {
+  ko: {
+    introTitle: "모스 부호는 짧은 신호와 긴 신호로 문자를 표현합니다",
+    intro: "모스 부호는 문자와 숫자를 점, 선, 간격의 조합으로 바꾸는 통신 표기입니다. 이 변환기는 영문 텍스트를 모스 부호로 인코딩하고, 공백으로 구분된 모스 입력을 다시 텍스트로 디코딩하며, A-Z와 숫자 대조표를 함께 제공합니다.",
+    formulaTitle: "해석 기준",
+    formulas: [
+      { title: "점과 선", body: "점(.)은 짧은 신호, 선(-)은 긴 신호를 뜻합니다." },
+      { title: "문자 간격", body: "문자는 공백으로 구분하고, 단어는 슬래시 또는 이중 슬래시로 구분합니다." },
+      { title: "지원 범위", body: "A-Z, 0-9, 일부 문장부호를 지원하며 알 수 없는 문자는 물음표로 표시됩니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: ["문자→모스 또는 모스→문자 모드를 선택합니다.", "텍스트나 모스 부호를 입력합니다.", "결과를 확인하고 필요하면 복사 버튼으로 저장합니다."],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "한글도 모스 부호로 바뀌나요?", answer: "현재 변환기는 영문 A-Z, 숫자, 일부 문장부호 중심입니다. 한글 전용 모스 체계는 별도 매핑이 필요합니다." },
+      { question: "단어 구분은 어떻게 하나요?", answer: "이 도구에서는 단어 사이에 `/` 또는 `//`를 사용하고, 문자 사이는 공백으로 구분합니다." },
+      { question: "SOS는 어떻게 쓰나요?", answer: "SOS는 `... --- ...`로 씁니다." },
+    ],
+    disclaimer: "이 도구는 학습과 변환 확인용이며 긴급 통신이나 공식 무선 운용을 대체하지 않습니다.",
+  },
+  en: {
+    introTitle: "Morse code represents characters with short and long signals",
+    intro: "Morse code maps letters and numbers to dots, dashes, and spacing. This converter encodes English text into Morse, decodes spaced Morse back to text, and includes a quick reference table for letters and digits.",
+    formulaTitle: "Reading rules",
+    formulas: [
+      { title: "Dots and dashes", body: "A dot (.) is a short signal and a dash (-) is a long signal." },
+      { title: "Spacing", body: "Letters are separated by spaces; words can be separated by `/` or `//`." },
+      { title: "Supported input", body: "A-Z, 0-9, and common punctuation are supported; unknown characters become question marks." },
+    ],
+    howToTitle: "How to use",
+    steps: ["Choose Text to Morse or Morse to Text mode.", "Enter text or spaced Morse code.", "Check the output and copy it if needed."],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Does it support non-Latin scripts?", answer: "The current converter focuses on A-Z, digits, and common punctuation. Other scripts require separate mappings." },
+      { question: "How do I separate words?", answer: "Use `/` or `//` between words, and spaces between letters." },
+      { question: "What is SOS in Morse code?", answer: "SOS is written as `... --- ...`." },
+    ],
+    disclaimer: "This tool is for learning and conversion checks, not for emergency communication or regulated radio operation.",
+  },
+  ja: {
+    introTitle: "モールス信号は短い信号と長い信号で文字を表します",
+    intro: "モールス信号は文字や数字を点、線、間隔の組み合わせに変換する表記です。この変換器は英字テキストをモールスにし、区切られたモールスをテキストへ戻し、英数字の対応表も表示します。",
+    formulaTitle: "読み方の基準",
+    formulas: [
+      { title: "点と線", body: "点(.)は短い信号、線(-)は長い信号を表します。" },
+      { title: "間隔", body: "文字は空白で区切り、単語は`/`または`//`で区切ります。" },
+      { title: "対応範囲", body: "A-Z、0-9、一部記号に対応し、不明な文字は疑問符になります。" },
+    ],
+    howToTitle: "使い方",
+    steps: ["テキスト→モールス、またはモールス→テキストを選びます。", "テキストまたは区切ったモールス信号を入力します。", "結果を確認し、必要ならコピーします。"],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "日本語は変換できますか？", answer: "現在は英字A-Z、数字、一部記号が中心です。和文モールスには別の対応表が必要です。" },
+      { question: "単語はどう区切りますか？", answer: "単語間には`/`または`//`、文字間には空白を使います。" },
+      { question: "SOSはどう書きますか？", answer: "SOSは`... --- ...`です。" },
+    ],
+    disclaimer: "このツールは学習と確認用であり、緊急通信や公式の無線運用を代替しません。",
+  },
+  fr: {
+    introTitle: "Le Morse représente les caractères avec des signaux courts et longs",
+    intro: "Le code Morse associe lettres et chiffres à des points, tirets et espacements. Ce convertisseur encode le texte anglais en Morse, décode le Morse espacé en texte et fournit une table de référence.",
+    formulaTitle: "Règles de lecture",
+    formulas: [
+      { title: "Points et traits", body: "Un point (.) est un signal court; un trait (-) est un signal long." },
+      { title: "Espacement", body: "Les lettres sont séparées par des espaces; les mots par `/` ou `//`." },
+      { title: "Entrées prises en charge", body: "A-Z, 0-9 et ponctuation courante; les caractères inconnus deviennent des points d'interrogation." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: ["Choisissez le mode texte vers Morse ou Morse vers texte.", "Saisissez le texte ou le code Morse espacé.", "Vérifiez le résultat et copiez-le si nécessaire."],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Les autres alphabets sont-ils pris en charge ?", answer: "Le convertisseur actuel cible A-Z, les chiffres et quelques signes. Les autres écritures demandent une table séparée." },
+      { question: "Comment séparer les mots ?", answer: "Utilisez `/` ou `//` entre les mots, et des espaces entre les lettres." },
+      { question: "Comment écrire SOS ?", answer: "SOS s'écrit `... --- ...`." },
+    ],
+    disclaimer: "Outil d'apprentissage et de vérification, non destiné aux communications d'urgence ou radio réglementées.",
+  },
+  es: {
+    introTitle: "El código Morse representa caracteres con señales cortas y largas",
+    intro: "El código Morse asigna letras y números a puntos, rayas y espacios. Este conversor codifica texto inglés a Morse, decodifica Morse separado por espacios y muestra una tabla de referencia.",
+    formulaTitle: "Reglas de lectura",
+    formulas: [
+      { title: "Puntos y rayas", body: "Un punto (.) es una señal corta; una raya (-) es una señal larga." },
+      { title: "Espaciado", body: "Las letras se separan con espacios; las palabras con `/` o `//`." },
+      { title: "Entrada admitida", body: "A-Z, 0-9 y puntuación común; los caracteres desconocidos se muestran como interrogación." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: ["Elige texto a Morse o Morse a texto.", "Introduce texto o código Morse separado por espacios.", "Revisa el resultado y cópialo si lo necesitas."],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Admite otros alfabetos?", answer: "El conversor actual se centra en A-Z, números y puntuación común. Otros alfabetos requieren tablas separadas." },
+      { question: "¿Cómo separo palabras?", answer: "Usa `/` o `//` entre palabras y espacios entre letras." },
+      { question: "¿Cómo se escribe SOS?", answer: "SOS se escribe `... --- ...`." },
+    ],
+    disclaimer: "Herramienta para aprendizaje y comprobación, no para comunicaciones de emergencia ni operación de radio regulada.",
+  },
+  zh: {
+    introTitle: "摩斯电码用短信号和长信号表示字符",
+    intro: "摩斯电码把字母和数字映射为点、划和间隔。本转换器可把英文文本编码为摩斯电码，也可把用空格分隔的摩斯电码解码为文本，并附带英文字母和数字对照表。",
+    formulaTitle: "读取规则",
+    formulas: [
+      { title: "点与划", body: "点 (.) 表示短信号，划 (-) 表示长信号。" },
+      { title: "间隔", body: "字母之间用空格，单词之间可用 `/` 或 `//`。" },
+      { title: "支持范围", body: "支持 A-Z、0-9 和常见标点，未知字符会显示为问号。" },
+    ],
+    howToTitle: "使用方法",
+    steps: ["选择文字转摩斯或摩斯转文字模式。", "输入文本或用空格分隔的摩斯电码。", "查看结果，需要时点击复制。"],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "支持中文吗？", answer: "当前转换器主要支持英文字母、数字和常见标点。中文摩斯需要单独的映射表。" },
+      { question: "单词之间怎么分隔？", answer: "单词之间使用 `/` 或 `//`，字母之间使用空格。" },
+      { question: "SOS 怎么写？", answer: "SOS 写作 `... --- ...`。" },
+    ],
+    disclaimer: "本工具用于学习和转换检查，不替代紧急通信或受监管的无线电操作。",
+  },
+};
+
+const c = content[locale] ?? content.en;
+const structuredData = [
+  { "@context": "https://schema.org", "@type": "HowTo", name: m.title, description: m.description, step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })) },
+  { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: c.faqs.map((faq) => ({ "@type": "Question", name: faq.question, acceptedAnswer: { "@type": "Answer", text: faq.answer } })) },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <MorseCodeConverter client:load locale={locale} />
+    <section class="mt-10 border-t border-slate-200 pt-8"><h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2><p class="mt-4 leading-8 text-slate-700">{c.intro}</p></section>
+    <section class="mt-10"><h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2><div class="mt-4 grid gap-4 md:grid-cols-3">{c.formulas.map((item) => (<article class="rounded-xl border border-slate-200 bg-white p-4"><h3 class="font-semibold text-slate-900">{item.title}</h3><p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p></article>))}</div></section>
+    <section class="mt-10"><h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2><ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">{c.steps.map((s) => (<li class="leading-7">{s}</li>))}</ol></section>
+    <section class="mt-10"><h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2><div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">{c.faqs.map((faq) => (<details class="group p-4"><summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary><p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p></details>))}</div></section>
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

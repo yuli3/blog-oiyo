@@ -2,15 +2,16 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import FuelEfficiencyCalculator from "../../components/tools/FuelEfficiencyCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "연비 계산기 — km/L · L/100km · MPG 단위 변환",
     description: "연비를 km/L, L/100km, MPG 세 단위로 자유롭게 변환하세요. 자동차 연비 비교 무료 계산기.",
@@ -35,17 +36,224 @@ const meta: Record<Locale, { title: string; description: string }> = {
     title: "油耗计算器 — km/L · L/100km · MPG 单位换算",
     description: "即时换算km/L、L/100km和MPG之间的油耗。免费汽车油耗比较计算器。",
   },
-  cn: {
-    title: "油耗計算器 — km/L · L/100km · MPG 單位換算",
-    description: "即時換算km/L、L/100km和MPG之間的油耗。免費汽車油耗比較計算器。",
-  },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "연비 단위는 높을수록 좋은 단위와 낮을수록 좋은 단위가 섞여 있습니다",
+    intro: "km/L와 MPG는 숫자가 클수록 효율이 좋고, L/100km는 숫자가 작을수록 효율이 좋습니다. 이 계산기는 서로 다른 국가와 차량 자료에서 쓰는 단위를 한 화면에서 변환해 비교 실수를 줄입니다.",
+    formulaTitle: "변환 공식",
+    formulas: [
+      { title: "km/L → L/100km", body: "L/100km = 100 / kmPerLiter" },
+      { title: "L/100km → km/L", body: "kmPerLiter = 100 / litersPer100km" },
+      { title: "MPG 변환", body: "US MPG ≈ km/L × 2.352" },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "가지고 있는 연비 값의 단위를 선택합니다.",
+      "숫자를 입력하면 다른 단위로 즉시 변환됩니다.",
+      "차량 비교 시 같은 단위와 같은 측정 조건인지 확인합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "L/100km는 왜 낮을수록 좋은가요?", answer: "100km를 가는 데 필요한 연료량을 뜻하므로 숫자가 낮을수록 같은 거리를 더 적은 연료로 이동합니다." },
+      { question: "미국 MPG와 영국 MPG는 같나요?", answer: "아닙니다. 갤런 크기가 달라 값이 다릅니다. 이 페이지의 MPG 기준은 일반적으로 쓰이는 US MPG입니다." },
+      { question: "공인 연비와 실제 연비가 다른 이유는 무엇인가요?", answer: "주행 속도, 도로, 기온, 타이어, 정비 상태, 운전 습관이 실제 연비에 영향을 줍니다." },
+    ],
+    disclaimer: "이 도구는 단위 변환과 비교 참고용입니다. 공인 연비, 구매 판단, 비용 계산은 제조사·정부 자료와 실제 운행 조건을 함께 확인하세요.",
+  },
+  en: {
+    introTitle: "Fuel economy units mix higher-is-better and lower-is-better values",
+    intro: "km/L and MPG increase as efficiency improves, while L/100km gets smaller as efficiency improves. This converter keeps the units side by side so vehicle comparisons are less confusing.",
+    formulaTitle: "Conversion formulas",
+    formulas: [
+      { title: "km/L to L/100km", body: "L/100km = 100 / kmPerLiter" },
+      { title: "L/100km to km/L", body: "kmPerLiter = 100 / litersPer100km" },
+      { title: "MPG conversion", body: "US MPG ≈ km/L × 2.352" },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Choose the unit your fuel economy value is currently in.",
+      "Enter the number and review the converted values instantly.",
+      "When comparing vehicles, make sure the unit and test conditions match.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Why is lower better for L/100km?", answer: "It measures fuel used to drive 100 km, so a lower number means less fuel for the same distance." },
+      { question: "Are US MPG and UK MPG the same?", answer: "No. The gallon size differs. This page treats MPG as US MPG unless otherwise stated." },
+      { question: "Why does real fuel economy differ from official figures?", answer: "Speed, roads, weather, tires, maintenance, load, and driving style can all change real-world results." },
+    ],
+    disclaimer: "This tool is for unit conversion and comparison. For official economy, purchase decisions, or cost planning, check manufacturer and government data plus real driving conditions.",
+  },
+  ja: {
+    introTitle: "燃費単位には大きいほど良いものと小さいほど良いものがあります",
+    intro: "km/LとMPGは数値が大きいほど効率が良く、L/100kmは数値が小さいほど効率が良い単位です。この計算機は各単位を並べて変換し、車両比較の混乱を減らします。",
+    formulaTitle: "変換公式",
+    formulas: [
+      { title: "km/L → L/100km", body: "L/100km = 100 / kmPerLiter" },
+      { title: "L/100km → km/L", body: "kmPerLiter = 100 / litersPer100km" },
+      { title: "MPG変換", body: "US MPG ≈ km/L × 2.352" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "手元の燃費値の単位を選びます。",
+      "数値を入力すると他の単位にすぐ変換されます。",
+      "車を比較するときは単位と測定条件が同じか確認します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "L/100kmはなぜ小さいほど良いのですか？", answer: "100km走るために使う燃料量なので、数値が小さいほど同じ距離を少ない燃料で走れます。" },
+      { question: "米国MPGと英国MPGは同じですか？", answer: "違います。ガロンの大きさが異なります。このページでは通常のUS MPGを基準にしています。" },
+      { question: "公称燃費と実燃費が違うのはなぜ？", answer: "速度、道路、気温、タイヤ、整備状態、積載量、運転方法が実燃費に影響します。" },
+    ],
+    disclaimer: "このツールは単位変換と比較の目安です。公称燃費、購入判断、費用計算ではメーカーや政府資料、実走行条件も確認してください。",
+  },
+  fr: {
+    introTitle: "Les unités de consommation mélangent valeurs hautes et basses favorables",
+    intro: "km/L et MPG augmentent avec l'efficacité, tandis que L/100km diminue quand la voiture consomme moins. Ce convertisseur affiche les unités ensemble pour comparer plus clairement.",
+    formulaTitle: "Formules de conversion",
+    formulas: [
+      { title: "km/L vers L/100km", body: "L/100km = 100 / kmPerLiter" },
+      { title: "L/100km vers km/L", body: "kmPerLiter = 100 / litersPer100km" },
+      { title: "Conversion MPG", body: "US MPG ≈ km/L × 2.352" },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Choisissez l'unité de la valeur que vous possédez.",
+      "Saisissez le nombre pour voir les conversions instantanément.",
+      "Pour comparer des voitures, vérifiez que l'unité et les conditions d'essai sont comparables.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Pourquoi un L/100km plus bas est-il meilleur ?", answer: "Il indique le carburant nécessaire pour 100 km. Plus le chiffre est bas, moins la voiture consomme." },
+      { question: "US MPG et UK MPG sont-ils identiques ?", answer: "Non. Le gallon n'a pas la même taille. Cette page utilise le US MPG sauf mention contraire." },
+      { question: "Pourquoi la consommation réelle diffère-t-elle des chiffres officiels ?", answer: "Vitesse, route, météo, pneus, entretien, charge et conduite modifient la consommation réelle." },
+    ],
+    disclaimer: "Cet outil sert à convertir et comparer. Pour les chiffres officiels, l'achat ou le budget, vérifiez les données constructeur, publiques et vos conditions de conduite.",
+  },
+  es: {
+    introTitle: "Las unidades de consumo mezclan valores donde más o menos es mejor",
+    intro: "km/L y MPG suben cuando mejora la eficiencia, mientras que L/100km baja cuando el coche consume menos. Este conversor muestra las unidades juntas para evitar confusiones al comparar.",
+    formulaTitle: "Fórmulas de conversión",
+    formulas: [
+      { title: "km/L a L/100km", body: "L/100km = 100 / kmPerLiter" },
+      { title: "L/100km a km/L", body: "kmPerLiter = 100 / litersPer100km" },
+      { title: "Conversión MPG", body: "US MPG ≈ km/L × 2.352" },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Elige la unidad en la que está tu dato de consumo.",
+      "Introduce el número y revisa las conversiones al instante.",
+      "Al comparar vehículos, confirma que la unidad y las condiciones de prueba sean equivalentes.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Por qué en L/100km es mejor un número bajo?", answer: "Mide el combustible necesario para recorrer 100 km. Cuanto más bajo, menos combustible se usa." },
+      { question: "¿US MPG y UK MPG son iguales?", answer: "No. El galón tiene distinto tamaño. Esta página usa US MPG salvo que se indique otra cosa." },
+      { question: "¿Por qué el consumo real difiere del oficial?", answer: "Velocidad, ruta, clima, neumáticos, mantenimiento, carga y conducción pueden cambiar el resultado real." },
+    ],
+    disclaimer: "Esta herramienta sirve para convertir y comparar. Para cifras oficiales, compra o presupuesto, revisa datos del fabricante, organismos públicos y condiciones reales.",
+  },
+  zh: {
+    introTitle: "油耗单位中既有越高越好，也有越低越好的指标",
+    intro: "km/L和MPG数值越高表示效率越好，而L/100km数值越低表示越省油。这个转换器把常用单位放在一起，帮助减少跨国家或跨车型比较时的误解。",
+    formulaTitle: "换算公式",
+    formulas: [
+      { title: "km/L转L/100km", body: "L/100km = 100 / kmPerLiter" },
+      { title: "L/100km转km/L", body: "kmPerLiter = 100 / litersPer100km" },
+      { title: "MPG换算", body: "US MPG ≈ km/L × 2.352" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "选择当前油耗数值使用的单位。",
+      "输入数字后，其他单位会即时显示。",
+      "比较车辆时，请确认单位和测试条件是否一致。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "为什么L/100km越低越好？", answer: "它表示行驶100公里需要的燃料量，数字越低说明同样距离消耗更少。" },
+      { question: "美国MPG和英国MPG一样吗？", answer: "不一样。两者使用的加仑大小不同。本页默认按US MPG处理。" },
+      { question: "为什么实际油耗和官方数据不同？", answer: "速度、道路、天气、轮胎、保养、载重和驾驶习惯都会影响真实油耗。" },
+    ],
+    disclaimer: "本工具用于单位换算和比较参考。官方油耗、购车判断或费用预算，请结合厂家、政府资料和实际驾驶条件确认。",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <FuelEfficiencyCalculator client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

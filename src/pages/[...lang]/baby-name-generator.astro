@@ -2,50 +2,51 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import BabyNameGenerator from "../../components/tools/BabyNameGenerator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "아기 이름 생성기 — 성별·의미·오행으로 추천",
-    description: "성별, 어감 스타일, 의미 키워드로 아기 이름을 추천받으세요. 오행 정보와 이름 의미 설명을 함께 제공합니다.",
-  },
-  en: {
-    title: "Baby Name Generator — Name by Meaning & Style",
-    description: "Find the perfect baby name by gender, style, and meaning. Includes Five Elements and detailed name meanings.",
-  },
-  ja: {
-    title: "赤ちゃんの名前ジェネレーター — 意味・スタイル別に提案",
-    description: "性別・スタイル・意味キーワードで赤ちゃんの名前を提案します。五行情報と名前の意味を解説します。",
-  },
-  fr: {
-    title: "Générateur de Prénoms Bébé — Par Signification et Style",
-    description: "Trouvez le prénom parfait pour votre bébé selon le genre, le style et la signification. Inclut les cinq éléments.",
-  },
-  es: {
-    title: "Generador de Nombres de Bebé — Por Significado y Estilo",
-    description: "Encuentra el nombre perfecto para tu bebé según el género, el estilo y el significado. Incluye los cinco elementos.",
-  },
-  zh: {
-    title: "婴儿名字生成器 — 按含义和风格推荐",
-    description: "按性别、风格和含义关键词为您的宝宝推荐名字。包含五行信息和名字含义说明。",
-  },
-  cn: {
-    title: "嬰兒名字生成器 — 按含義和風格推薦",
-    description: "按性別、風格和含義關鍵詞為您的寶寶推薦名字。包含五行信息和名字含義說明。",
-  },
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
+  ko: { title: "아기 이름 생성기 — 성별·의미·오행으로 추천", description: "성별, 어감 스타일, 의미 키워드로 아기 이름을 추천받으세요. 오행 정보와 이름 의미 설명을 함께 제공합니다." },
+  en: { title: "Baby Name Generator — Name by Meaning & Style", description: "Find the perfect baby name by gender, style, and meaning. Includes Five Elements and detailed name meanings." },
+  ja: { title: "赤ちゃんの名前ジェネレーター — 意味・スタイル別に提案", description: "性別・スタイル・意味キーワードで赤ちゃんの名前を提案します。五行情報と名前の意味を解説します。" },
+  fr: { title: "Générateur de Prénoms Bébé — Par Signification et Style", description: "Trouvez le prénom parfait pour votre bébé selon le genre, le style et la signification. Inclut les cinq éléments." },
+  es: { title: "Generador de Nombres de Bebé — Por Significado y Estilo", description: "Encuentra el nombre perfecto para tu bebé según el género, el estilo y el significado. Incluye los cinco elementos." },
+  zh: { title: "婴儿名字生成器 — 按含义和风格推荐", description: "按性别、风格和含义关键词为宝宝推荐名字。包含五行信息和名字含义说明。" },
 };
 
 const m = meta[locale] ?? meta.en;
+type SeoContent = { introTitle: string; intro: string; formulaTitle: string; formulas: { title: string; body: string }[]; howToTitle: string; steps: string[]; faqTitle: string; faqs: { question: string; answer: string }[]; disclaimer: string; };
+
+const content: Record<ActiveLocale, SeoContent> = {
+  ko: { introTitle: "좋은 이름 후보는 의미, 발음, 문화적 맥락을 함께 봐야 합니다", intro: "아기 이름은 가족이 오래 부를 말이기 때문에 어감, 의미, 성별 인상, 문화권, 한글·영문 표기까지 함께 살펴보는 편이 좋습니다. 이 도구는 성별, 스타일, 의미 키워드, 선택적 돌림자를 바탕으로 이름 후보와 간단한 의미, 오행 정보를 제안합니다.", formulaTitle: "핵심 개념", formulas: [{ title: "의미 키워드", body: "빛, 꽃, 용기, 지혜, 평화, 사랑처럼 이름에 담고 싶은 이미지를 좁힙니다." }, { title: "스타일", body: "한국 전통, 현대적 어감, 영어풍, 일본풍 등 원하는 분위기를 먼저 정리합니다." }, { title: "오행 정보", body: "목·화·토·금·수 표기는 문화적 참고 요소이며 결정 기준은 가정마다 다릅니다." }], howToTitle: "사용 방법", steps: ["성별, 스타일, 의미 키워드를 선택합니다.", "가족 돌림자나 넣고 싶은 음절이 있으면 한 글자를 입력합니다.", "추천 이름의 의미와 어감을 가족 성, 발음, 실제 표기와 함께 검토합니다."], faqTitle: "자주 묻는 질문", faqs: [{ question: "추천 이름이 법적으로 사용 가능한가요?", answer: "이 도구는 후보를 제안할 뿐입니다. 실제 출생신고 가능 여부는 국가와 등록 규정을 확인해야 합니다." }, { question: "오행이 이름을 결정하나요?", answer: "오행은 전통적 참고 요소 중 하나입니다. 가족의 가치, 발음, 의미, 사용 환경도 함께 보세요." }, { question: "영문 이름처럼 쓸 수 있나요?", answer: "일부 이름은 국제적으로 부르기 쉽지만, 여권 표기와 현지 발음은 별도로 확인하는 것이 좋습니다." }], disclaimer: "이름 추천은 참고용이며 법적 등록, 작명 철학, 가족 합의는 별도로 확인하세요." },
+  en: { introTitle: "A good baby-name shortlist balances meaning, sound, and cultural context", intro: "A baby name will be spoken for years, so it helps to review sound, meaning, gender impression, cultural context, Hangul or Latin spelling, and family preferences together. This tool suggests names from gender, style, meaning, and an optional shared syllable, with short meanings and Five Elements notes.", formulaTitle: "Key concepts", formulas: [{ title: "Meaning keyword", body: "Narrow the desired image: light, flower, courage, wisdom, peace, or love." }, { title: "Style", body: "Compare Korean traditional, modern, English-inspired, and Japanese-inspired naming moods." }, { title: "Five Elements", body: "Wood, fire, earth, metal, and water are cultural reference notes, not universal rules." }], howToTitle: "How to use", steps: ["Choose gender, style, and meaning keyword.", "Add an optional shared syllable if your family naming pattern needs one.", "Review pronunciation, spelling, surname fit, and cultural context before deciding."], faqTitle: "Frequently asked questions", faqs: [{ question: "Are these names legally usable?", answer: "The tool suggests candidates only. Legal registration depends on the country and local naming rules." }, { question: "Do Five Elements decide the name?", answer: "They are one traditional reference point. Meaning, sound, family preference, and daily usability also matter." }, { question: "Can the names work internationally?", answer: "Some are easier to pronounce internationally, but passport spelling and local pronunciation should be checked separately." }], disclaimer: "Name suggestions are for reference; verify legal registration, naming philosophy, and family agreement separately." },
+  ja: { introTitle: "よい名前候補は意味、響き、文化的文脈を合わせて考えます", intro: "赤ちゃんの名前は長く呼ばれるものなので、響き、意味、性別印象、文化圏、表記、家族の希望を一緒に見ることが大切です。このツールは性別、スタイル、意味、任意の共通音節から候補と簡単な意味、五行情報を示します。", formulaTitle: "基本概念", formulas: [{ title: "意味キーワード", body: "光、花、勇気、知恵、平和、愛など込めたい印象を絞ります。" }, { title: "スタイル", body: "韓国伝統、現代的、英語風、日本風などの雰囲気を比べます。" }, { title: "五行情報", body: "木・火・土・金・水は文化的な参考であり、絶対的な規則ではありません。" }], howToTitle: "使い方", steps: ["性別、スタイル、意味キーワードを選びます。", "家族の共通音節があれば1文字入力します。", "名字との相性、発音、表記、文化的文脈を確認します。"], faqTitle: "よくある質問", faqs: [{ question: "法的に使える名前ですか？", answer: "候補提案にすぎません。出生届で使えるかは国や自治体の規定を確認してください。" }, { question: "五行で名前が決まりますか？", answer: "五行は伝統的参考の一つです。意味、響き、家族の価値観も大切です。" }, { question: "海外でも使いやすいですか？", answer: "発音しやすい候補もありますが、パスポート表記や現地発音は別途確認してください。" }], disclaimer: "名前提案は参考用です。法的登録、命名観、家族の合意は別途確認してください。" },
+  fr: { introTitle: "Une bonne liste de prénoms équilibre sens, sonorité et contexte culturel", intro: "Un prénom sera prononcé pendant des années; il faut donc considérer sonorité, sens, impression de genre, contexte culturel, orthographe et préférences familiales. L'outil propose des candidats selon genre, style, signification et syllabe partagée facultative.", formulaTitle: "Concepts clés", formulas: [{ title: "Mot-clé de sens", body: "Réduit l'image recherchée: lumière, fleur, courage, sagesse, paix ou amour." }, { title: "Style", body: "Compare des ambiances coréenne traditionnelle, moderne, anglophone ou japonaise." }, { title: "Cinq éléments", body: "Bois, feu, terre, métal et eau sont des repères culturels, pas des règles universelles." }], howToTitle: "Comment l'utiliser", steps: ["Choisissez genre, style et signification.", "Ajoutez une syllabe partagée si la famille suit ce modèle.", "Vérifiez prononciation, orthographe, nom de famille et contexte culturel."], faqTitle: "Questions fréquentes", faqs: [{ question: "Ces prénoms sont-ils légalement utilisables ?", answer: "L'outil suggère seulement des candidats; l'enregistrement dépend du pays et des règles locales." }, { question: "Les cinq éléments décident-ils du prénom ?", answer: "Non. Ce sont des repères traditionnels parmi d'autres critères." }, { question: "Les prénoms fonctionnent-ils à l'international ?", answer: "Certains sont plus faciles à prononcer, mais l'orthographe officielle doit être vérifiée." }], disclaimer: "Suggestions indicatives; vérifiez séparément l'enregistrement légal, la philosophie de nommage et l'accord familial." },
+  es: { introTitle: "Una buena lista de nombres equilibra significado, sonido y contexto cultural", intro: "Un nombre se usará durante años, así que conviene revisar sonido, significado, impresión de género, contexto cultural, escritura y preferencias familiares. La herramienta sugiere candidatos según género, estilo, significado y una sílaba compartida opcional.", formulaTitle: "Conceptos clave", formulas: [{ title: "Palabra de significado", body: "Acota la imagen deseada: luz, flor, valentía, sabiduría, paz o amor." }, { title: "Estilo", body: "Compara estilos coreano tradicional, moderno, inspirado en inglés o japonés." }, { title: "Cinco elementos", body: "Madera, fuego, tierra, metal y agua son referencias culturales, no reglas universales." }], howToTitle: "Cómo usarlo", steps: ["Elige género, estilo y significado.", "Añade una sílaba compartida si tu familia la usa.", "Revisa pronunciación, escritura, apellido y contexto cultural antes de decidir."], faqTitle: "Preguntas frecuentes", faqs: [{ question: "¿Son nombres legalmente utilizables?", answer: "La herramienta solo sugiere candidatos; el registro legal depende del país y sus normas." }, { question: "¿Los cinco elementos deciden el nombre?", answer: "No. Son una referencia tradicional junto con significado, sonido y preferencias familiares." }, { question: "¿Funcionan internacionalmente?", answer: "Algunos son más fáciles de pronunciar, pero la escritura oficial y pronunciación local deben revisarse." }], disclaimer: "Las sugerencias son orientativas; verifica registro legal, criterio de nombramiento y acuerdo familiar por separado." },
+  zh: { introTitle: "好的名字候选应同时考虑含义、读音和文化语境", intro: "名字会被长期使用，因此最好一起查看读音、含义、性别印象、文化背景、韩文或拉丁拼写以及家庭偏好。本工具根据性别、风格、含义和可选共用音节推荐候选，并附简短含义和五行信息。", formulaTitle: "核心概念", formulas: [{ title: "含义关键词", body: "从光、花、勇气、智慧、和平、爱等方向缩小名字意象。" }, { title: "风格", body: "比较韩国传统、现代、英文风和日文风等不同氛围。" }, { title: "五行信息", body: "木、火、土、金、水是文化参考，并非通用规则。" }], howToTitle: "使用方法", steps: ["选择性别、风格和含义关键词。", "如家庭有固定字或音节，可输入一个字。", "结合姓氏、读音、写法和文化语境再做决定。"], faqTitle: "常见问题", faqs: [{ question: "推荐名字一定可以登记吗？", answer: "本工具只提供候选，实际登记需遵守所在国家或地区的姓名规定。" }, { question: "五行会决定名字吗？", answer: "五行只是传统参考之一，含义、读音、家庭偏好和日常使用同样重要。" }, { question: "这些名字适合国际使用吗？", answer: "部分名字较容易被国际读者发音，但护照拼写和当地发音仍需单独确认。" }], disclaimer: "名字推荐仅供参考，法律登记、命名理念和家庭共识需另行确认。" },
+};
+
+const c = content[locale] ?? content.en;
+const structuredData = [
+  { "@context": "https://schema.org", "@type": "HowTo", name: m.title, description: m.description, step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })) },
+  { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: c.faqs.map((faq) => ({ "@type": "Question", name: faq.question, acceptedAnswer: { "@type": "Answer", text: faq.answer } })) },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <BabyNameGenerator client:load locale={locale} />
+    <section class="mt-10 border-t border-slate-200 pt-8"><h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2><p class="mt-4 leading-8 text-slate-700">{c.intro}</p></section>
+    <section class="mt-10"><h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2><div class="mt-4 grid gap-4 md:grid-cols-3">{c.formulas.map((item) => (<article class="rounded-xl border border-slate-200 bg-white p-4"><h3 class="font-semibold text-slate-900">{item.title}</h3><p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p></article>))}</div></section>
+    <section class="mt-10"><h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2><ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">{c.steps.map((s) => (<li class="leading-7">{s}</li>))}</ol></section>
+    <section class="mt-10"><h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2><div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">{c.faqs.map((faq) => (<details class="group p-4"><summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary><p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p></details>))}</div></section>
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

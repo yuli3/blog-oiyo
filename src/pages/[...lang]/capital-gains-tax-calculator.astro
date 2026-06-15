@@ -2,7 +2,20 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import CapitalGainsTaxCalculatorComp from "../../components/tools/CapitalGainsTaxCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
+
+type SeoContent = {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+};
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -11,9 +24,9 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "양도소득세 계산기 — 부동산·주식 양도세 미리 계산하기",
     description: "부동산·국내주식·해외주식 매도 시 예상 양도소득세를 계산합니다. 보유 기간, 주택 수, 조정대상지역 여부를 반영한 정확한 세금 예측.",
@@ -35,20 +48,254 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Calcula el impuesto sobre ganancias de capital en inmuebles y acciones en Corea.",
   },
   zh: {
-    title: "資本利得稅計算機 — 不動產與股票",
-    description: "計算韓國不動產、國內股票和海外股票賣出時的預估資本利得稅，考慮持有期間和房產數量。",
-  },
-  cn: {
-    title: "资本利得税计算器 — 不动产与股票",
+    title: "资本利得税计算机 — 不动产与股票",
     description: "计算韩国不动产、国内股票和海外股票卖出时的预估资本利得税，考虑持有期间和房产数量。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, SeoContent> = {
+  ko: {
+    introTitle: "양도소득세 계산은 적용 국가의 제도를 먼저 확인해야 합니다",
+    intro: "이 페이지는 한국 기준의 양도소득세를 설명과 함께 계산합니다. 세율과 공제는 국가별로 다르고 매년 바뀔 수 있으므로, 결과는 신고 전 검토를 위한 출발점으로 보는 것이 안전합니다.",
+    formulaTitle: "핵심 계산 기준",
+    formulas: [{
+      title: "기준 1",
+      body: "양도가액에서 취득가액을 뺀 양도차익을 출발점으로 삼습니다."
+    }, {
+      title: "기준 2",
+      body: "부동산과 해외주식은 250만원 기본공제를 반영합니다."
+    }, {
+      title: "기준 3",
+      body: "국내 상장주식 소액주주는 비과세, 해외주식은 국세 20%와 지방세 10%를 구분합니다."
+    }],
+    howToTitle: "사용 방법",
+    steps: ["계산에 필요한 금액과 조건을 입력합니다.", "결과 카드의 세금·공제·부담액 항목을 나누어 확인합니다.", "신고·납부 또는 의사결정 전에 최신 공식 기준과 비교합니다."],
+    faqTitle: "자주 묻는 질문",
+    faqs: [{
+      question: "이 계산기는 어느 나라 기준인가요?",
+      answer: "한국 기준입니다. 다른 나라의 세율, 공제, 사회보험 구조에는 그대로 적용할 수 없습니다."
+    }, {
+      question: "실제 금액과 왜 다를 수 있나요?",
+      answer: "비과세 여부, 장기보유공제, 필요경비, 대주주 여부가 빠지면 실제 세액이 달라집니다."
+    }, {
+      question: "규칙은 매년 바뀌나요?",
+      answer: "예. 세율, 공제 한도, 사회보험 요율은 매년 바뀔 수 있습니다. 신고나 납부 전에는 해당 연도의 공식 기준을 확인하세요."
+    }],
+    disclaimer: "이 계산기는 일반 추정용입니다. 실제 세액은 과세관청 안내 또는 세무 전문가를 통해 확인하세요."
+  },
+  en: {
+    introTitle: "Capital gains tax is country-specific",
+    intro: "This page estimates capital gains tax under Korea rules. Because brackets, deductions, and social contributions are country-specific and can change yearly, use the result as a planning estimate before filing.",
+    formulaTitle: "Core calculation rules",
+    formulas: [{
+      title: "Rule 1",
+      body: "Starts from transfer price minus acquisition price."
+    }, {
+      title: "Rule 2",
+      body: "Reflects a KRW 2.5M basic deduction for real estate and foreign stocks."
+    }, {
+      title: "Rule 3",
+      body: "Domestic listed minority holdings are treated as exempt; foreign stocks separate 20% national tax and 10% local tax."
+    }],
+    howToTitle: "How to use",
+    steps: ["Enter the required amounts and conditions.", "Review the tax, deduction, and contribution lines separately.", "Compare with current official rules before filing, paying, or making a decision."],
+    faqTitle: "Frequently asked questions",
+    faqs: [{
+      question: "Which country does this calculator use?",
+      answer: "It uses Korea rules. Do not apply it directly to another country’s tax, deduction, or social insurance system."
+    }, {
+      question: "Why can the final amount differ?",
+      answer: "Exemptions, long-term deductions, necessary expenses, or major-shareholder rules can change the result."
+    }, {
+      question: "Do the rules change every year?",
+      answer: "Yes. Tax rates, deduction limits, and social contribution rates can change each year. Confirm the current-year rules before filing or paying."
+    }],
+    disclaimer: "This is a general estimate. Confirm the final amount with the tax authority or a tax professional."
+  },
+  ja: {
+    introTitle: "譲渡所得税は国ごとの制度確認が必要です",
+    intro: "このページは韓国基準の譲渡所得税を説明付きで試算します。税率や控除は国ごとに異なり毎年変わるため、申告前の参考値として扱ってください。",
+    formulaTitle: "主な計算基準",
+    formulas: [{
+      title: "基準 1",
+      body: "譲渡価額から取得価額を差し引きます。"
+    }, {
+      title: "基準 2",
+      body: "不動産と海外株式は250万ウォン控除です。"
+    }, {
+      title: "基準 3",
+      body: "国内上場株式の少額株主は非課税扱い、海外株式は国税20%と地方税10%。"
+    }],
+    howToTitle: "使い方",
+    steps: ["必要な金額と条件を入力します。", "税金・控除・社会保険の内訳を確認します。", "申告・納付・判断前に最新の公式基準と照合します。"],
+    faqTitle: "よくある質問",
+    faqs: [{
+      question: "どの国の制度を基準にしていますか？",
+      answer: "韓国の制度です。他国の税率、控除、社会保険にはそのまま使えません。"
+    }, {
+      question: "実際の金額と異なる理由は？",
+      answer: "非課税、長期控除、必要経費、大株主要件で変わります。"
+    }, {
+      question: "制度は毎年変わりますか？",
+      answer: "はい。税率、控除限度、社会保険料率は毎年変わる可能性があります。申告や納付前に最新年度の基準を確認してください。"
+    }],
+    disclaimer: "この計算は一般的な概算です。実際の税額は税務当局または税理士に確認してください。"
+  },
+  zh: {
+    introTitle: "资本利得税必须先确认适用国家的制度",
+    intro: "本页依韩国规则估算资本利得税。税率、扣除与社会保险具有国别差异且可能逐年变动，结果应作为申报前的初步参考。",
+    formulaTitle: "主要计算基准",
+    formulas: [{
+      title: "规则 1",
+      body: "以出售价格减取得价格为起点。"
+    }, {
+      title: "规则 2",
+      body: "不动产与海外股票反映250万韩元扣除。"
+    }, {
+      title: "规则 3",
+      body: "国内上市股票小股东按免税处理；海外股票区分20%国税与10%地方税。"
+    }],
+    howToTitle: "使用方法",
+    steps: ["输入所需金额与条件。", "分别查看税金、扣除与社会保险明细。", "申报、缴纳或决策前请核对最新官方规定。"],
+    faqTitle: "常见问题",
+    faqs: [{
+      question: "这个计算机采用哪个国家的规则？",
+      answer: "采用韩国规则，不能直接套用其他国家的税率、扣除或社会保险制度。"
+    }, {
+      question: "为什么可能和实际金额不同？",
+      answer: "非课税、长期扣除、必要费用或大股东规则会改变结果。"
+    }, {
+      question: "规则每年都会变吗？",
+      answer: "会。税率、扣除上限与社会保险费率都可能按年度调整。申报或缴纳前请确认当年度官方规定。"
+    }],
+    disclaimer: "本工具仅为一般估算。实际税额请向税务机关或税务专业人士确认。"
+  },
+  fr: {
+    introTitle: "Impôt sur les plus-values dépend du pays concerné",
+    intro: "Cette page estime l'impôt sur les plus-values selon les règles de la Corée. Les tranches, déductions et cotisations sont propres au pays et peuvent changer chaque année; utilisez le résultat comme point de départ.",
+    formulaTitle: "Bases de calcul",
+    formulas: [{
+      title: "Règle 1",
+      body: "Prix de cession moins coût d'acquisition."
+    }, {
+      title: "Règle 2",
+      body: "Déduction de 2,5 M KRW pour immobilier et actions étrangères."
+    }, {
+      title: "Règle 3",
+      body: "Petits actionnaires domestiques exonérés; actions étrangères: 20% national et 10% local."
+    }],
+    howToTitle: "Comment l'utiliser",
+    steps: ["Saisissez les montants et conditions nécessaires.", "Vérifiez séparément impôts, déductions et cotisations.", "Comparez avec les règles officielles avant déclaration, paiement ou décision."],
+    faqTitle: "Questions fréquentes",
+    faqs: [{
+      question: "Quel pays sert de référence ?",
+      answer: "Il utilise les règles de la Corée. Ne l’appliquez pas directement à un autre système fiscal ou social."
+    }, {
+      question: "Pourquoi le montant réel peut-il différer ?",
+      answer: "Exonérations, déductions, frais et statut de gros actionnaire peuvent changer le montant."
+    }, {
+      question: "Les règles changent-elles chaque année ?",
+      answer: "Oui. Les taux, plafonds de déduction et cotisations peuvent changer chaque année. Vérifiez l'année en vigueur avant de déclarer ou payer."
+    }],
+    disclaimer: "Ce calcul est une estimation générale. Confirmez le montant auprès de l'administration fiscale ou d'un fiscaliste."
+  },
+  es: {
+    introTitle: "Impuesto sobre ganancias de capital depende del país aplicado",
+    intro: "Esta página estima el impuesto sobre ganancias de capital con reglas de Corea. Los tramos, deducciones y cotizaciones son propios de cada país y pueden cambiar cada año; úsalo como estimación inicial.",
+    formulaTitle: "Bases de cálculo",
+    formulas: [{
+      title: "Regla 1",
+      body: "Precio de venta menos adquisición."
+    }, {
+      title: "Regla 2",
+      body: "Deducción de 2,5 M KRW para inmuebles y acciones extranjeras."
+    }, {
+      title: "Regla 3",
+      body: "Pequeños accionistas nacionales exentos; extranjeras: 20% nacional y 10% local."
+    }],
+    howToTitle: "Cómo usarla",
+    steps: ["Introduce los importes y condiciones necesarios.", "Revisa por separado impuestos, deducciones y cotizaciones.", "Compáralo con reglas oficiales antes de declarar, pagar o tomar una decisión."],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [{
+      question: "¿Qué país usa esta calculadora?",
+      answer: "Usa reglas de Corea. No lo apliques directamente a otro sistema fiscal o social."
+    }, {
+      question: "¿Por qué puede cambiar el importe final?",
+      answer: "Exenciones, deducciones, gastos y reglas de grandes accionistas pueden cambiar el resultado."
+    }, {
+      question: "¿Las reglas cambian cada año?",
+      answer: "Sí. Los tipos, límites de deducción y cotizaciones pueden cambiar cada año. Comprueba la norma vigente antes de declarar o pagar."
+    }],
+    disclaimer: "Este cálculo es una estimación general. Confirma el importe con la autoridad fiscal o un profesional tributario."
+  }
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((step, i) => ({ "@type": "HowToStep", position: i + 1, text: step })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <CapitalGainsTaxCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+  
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

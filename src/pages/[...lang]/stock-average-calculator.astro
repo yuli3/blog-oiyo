@@ -2,7 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import StockAverageCalculatorComp from "../../components/tools/StockAverageCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -11,9 +12,9 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "주식 평균단가 계산기 — 물타기·불타기 단가 계산",
     description: "여러 번의 주식 매수 후 평균 단가를 계산합니다. 물타기·불타기 전략의 단가 변화를 즉시 확인하세요.",
@@ -35,20 +36,189 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Calcula el precio de costo promedio después de múltiples compras de acciones.",
   },
   zh: {
-    title: "股票平均成本計算機",
-    description: "計算多次買入股票後的平均成本價，即時查看攤平或加倉策略的成本變化。",
-  },
-  cn: {
-    title: "股票平均成本计算器",
+    title: "股票平均成本计算机",
     description: "计算多次买入股票后的平均成本价，即时查看摊平或加仓策略的成本变化。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "평균단가는 여러 번 산 주식의 실제 매입 기준입니다",
+    intro: "주식을 추가 매수하면 보유 수량과 총 매수금액이 바뀌면서 평균단가도 달라집니다. 이 계산기는 현재 보유분과 추가 매수분의 가격·수량을 합산해 새 평균단가, 총 보유 수량, 총 매수 금액을 보여줍니다.",
+    formulaTitle: "계산식",
+    formulas: [
+      { title: "총 매수금액", body: "총액 = 기존 단가×수량 + 추가 단가×수량" },
+      { title: "총 수량", body: "총 수량 = 기존 수량 + 추가 수량" },
+      { title: "평균단가", body: "평균단가 = 총 매수금액 / 총 수량" },
+    ],
+    howToTitle: "사용 방법",
+    steps: ["현재 보유 주식의 단가와 수량을 입력합니다.", "추가 매수할 단가와 수량을 입력합니다.", "새 평균단가와 총 투자금액을 확인해 손익분기 가격을 점검합니다."],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "수수료와 세금도 반영되나요?", answer: "이 도구는 단가와 수량 기준의 단순 평균입니다. 실제 손익분기점은 매매 수수료와 세금을 더해 계산해야 합니다." },
+      { question: "물타기 판단에 그대로 써도 되나요?", answer: "평균단가는 참고 지표일 뿐입니다. 기업 가치, 리스크, 포트폴리오 비중을 함께 봐야 합니다." },
+      { question: "일부 매도 후 평균단가는 어떻게 되나요?", answer: "이 계산기는 추가 매수 기준입니다. 일부 매도 후 세무상 취득가 계산은 국가와 증권사 방식에 따라 달라질 수 있습니다." },
+    ],
+    disclaimer: "이 도구는 일반적인 계산용입니다. 공식 투자 수익과 세무상 취득가액은 증권사와 세무 기준을 확인하세요.",
+  },
+  en: {
+    introTitle: "Average cost is the blended purchase price of your shares",
+    intro: "When you buy more shares, both total quantity and total invested amount change. This calculator combines current and additional purchases to show the new average price, total shares, and total cost basis.",
+    formulaTitle: "Formulas",
+    formulas: [
+      { title: "Total cost", body: "Total cost = old price×qty + new price×qty" },
+      { title: "Total shares", body: "Total shares = old quantity + new quantity" },
+      { title: "Average price", body: "Average price = total cost / total shares" },
+    ],
+    howToTitle: "How to use",
+    steps: ["Enter the price and quantity of your current position.", "Enter the price and quantity of the planned additional purchase.", "Review the new average cost and total investment before deciding."],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Are fees and taxes included?", answer: "No. This is a price-and-share average. Add brokerage fees and taxes to find a real break-even level." },
+      { question: "Does averaging down make a trade safer?", answer: "Not automatically. Average cost is only one number; business quality, risk, and position size still matter." },
+      { question: "What about partial sales?", answer: "This tool focuses on added purchases. Tax cost basis after sales can depend on local rules and broker accounting." },
+    ],
+    disclaimer: "This tool is for general calculation. Confirm official investment returns and taxable cost basis with your broker or tax authority.",
+  },
+  ja: {
+    introTitle: "平均単価は複数回購入した株式の実質的な取得基準です",
+    intro: "追加購入をすると、保有株数と投資額が変わり、平均単価も変化します。この計算機は現在保有分と追加購入分を合算し、新しい平均単価、総株数、総投資額を表示します。",
+    formulaTitle: "計算式",
+    formulas: [
+      { title: "総投資額", body: "総額 = 既存単価×数量 + 追加単価×数量" },
+      { title: "総数量", body: "総数量 = 既存数量 + 追加数量" },
+      { title: "平均単価", body: "平均単価 = 総投資額 / 総数量" },
+    ],
+    howToTitle: "使い方",
+    steps: ["現在保有分の単価と数量を入力します。", "追加購入分の単価と数量を入力します。", "新しい平均単価と総投資額を確認します。"],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "手数料や税金は含まれますか？", answer: "含まれません。実際の損益分岐点には売買手数料や税金を加える必要があります。" },
+      { question: "ナンピン判断に使えますか？", answer: "参考にはなりますが、企業価値、リスク、保有比率も確認してください。" },
+      { question: "一部売却後はどうなりますか？", answer: "このツールは追加購入向けです。売却後の税務上の取得価額は国や証券会社の方式で変わります。" },
+    ],
+    disclaimer: "このツールは一般的な計算用です。公式な投資損益や税務上の取得価額は証券会社・税務当局でご確認ください。",
+  },
+  zh: {
+    introTitle: "平均成本是多次买入后的综合买入价格",
+    intro: "追加买入股票后，持股数量和总投入都会改变，平均成本也会随之变化。这个计算器合并当前持仓和追加买入，显示新的平均成本、总股数和总投入金额。",
+    formulaTitle: "计算公式",
+    formulas: [
+      { title: "总买入金额", body: "总额 = 原单价×数量 + 新单价×数量" },
+      { title: "总股数", body: "总股数 = 原数量 + 新数量" },
+      { title: "平均成本", body: "平均成本 = 总买入金额 / 总股数" },
+    ],
+    howToTitle: "使用方法",
+    steps: ["输入当前持仓的单价和数量。", "输入计划追加买入的单价和数量。", "查看新的平均成本和总投入，再判断是否行动。"],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "包含手续费和税吗？", answer: "不包含。本工具只按价格和数量平均，真实盈亏平衡点应加入交易成本和税费。" },
+      { question: "摊低成本一定更安全吗？", answer: "不一定。平均成本只是参考，还要看公司基本面、风险和仓位。" },
+      { question: "部分卖出后怎么算？", answer: "本工具面向追加买入。卖出后的税务成本可能依国家规则和券商记账方式不同。" },
+    ],
+    disclaimer: "本工具用于一般计算。正式投资收益和税务成本请以券商或税务机关标准为准。",
+  },
+  fr: {
+    introTitle: "Le prix moyen reflète le coût combiné de plusieurs achats",
+    intro: "Lorsque vous rachetez des actions, la quantité totale et le montant investi changent. Ce calculateur combine position actuelle et achat supplémentaire pour afficher le nouveau prix moyen, le nombre total d'actions et le coût total.",
+    formulaTitle: "Formules",
+    formulas: [
+      { title: "Coût total", body: "Coût = ancien prix×quantité + nouveau prix×quantité" },
+      { title: "Actions totales", body: "Total = ancienne quantité + nouvelle quantité" },
+      { title: "Prix moyen", body: "Prix moyen = coût total / actions totales" },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: ["Saisissez prix et quantité de la position actuelle.", "Saisissez prix et quantité de l'achat envisagé.", "Lisez le nouveau prix moyen et le coût total avant de décider."],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Les frais et taxes sont-ils inclus ?", answer: "Non. Ajoutez courtage et taxes pour obtenir un vrai seuil de rentabilité." },
+      { question: "Moyenner à la baisse réduit-il le risque ?", answer: "Pas forcément. La qualité de l'actif, le risque et la taille de position restent essentiels." },
+      { question: "Et après une vente partielle ?", answer: "L'outil cible les achats supplémentaires. Le coût fiscal après vente dépend des règles locales." },
+    ],
+    disclaimer: "Cet outil sert au calcul général. Pour rendement officiel et prix de revient fiscal, vérifiez auprès du courtier ou de l'autorité fiscale.",
+  },
+  es: {
+    introTitle: "El precio promedio combina el costo de varias compras",
+    intro: "Al comprar más acciones cambian la cantidad total y el monto invertido. Esta calculadora combina la posición actual y la compra adicional para mostrar nuevo precio promedio, acciones totales y costo total.",
+    formulaTitle: "Fórmulas",
+    formulas: [
+      { title: "Costo total", body: "Costo = precio anterior×cantidad + precio nuevo×cantidad" },
+      { title: "Acciones totales", body: "Total = cantidad anterior + cantidad nueva" },
+      { title: "Precio promedio", body: "Precio promedio = costo total / acciones totales" },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: ["Introduce precio y cantidad de tu posición actual.", "Introduce precio y cantidad de la compra adicional.", "Revisa nuevo promedio y costo total antes de decidir."],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Incluye comisiones e impuestos?", answer: "No. Añade comisiones e impuestos para calcular un punto de equilibrio real." },
+      { question: "¿Promediar a la baja reduce el riesgo?", answer: "No necesariamente. También importan calidad del activo, riesgo y tamaño de posición." },
+      { question: "¿Qué pasa después de ventas parciales?", answer: "La herramienta se enfoca en compras adicionales. El costo fiscal tras ventas depende de normas locales." },
+    ],
+    disclaimer: "Esta herramienta es para cálculo general. Confirma retornos oficiales y costo fiscal con tu broker o autoridad tributaria.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  { "@context": "https://schema.org", "@type": "HowTo", name: m.title, description: m.description, step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })) },
+  { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: c.faqs.map((faq) => ({ "@type": "Question", name: faq.question, acceptedAnswer: { "@type": "Answer", text: faq.answer } })) },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <main class="mx-auto max-w-3xl px-4 py-10">
     <StockAverageCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

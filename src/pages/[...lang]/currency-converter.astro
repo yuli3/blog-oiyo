@@ -2,50 +2,159 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import CurrencyConverter from "../../components/tools/CurrencyConverter";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "환율 계산기 — 20개 통화 실시간 변환",
-    description: "원화, 달러, 엔화, 유로 등 20개 주요 통화 간 환율을 쉽게 계산하세요. 여행 전 필수 환율 변환 도구.",
-  },
-  en: {
-    title: "Currency Converter — 20 Major Currencies",
-    description: "Convert between 20 major currencies including KRW, USD, EUR, JPY and more. Essential tool for travelers.",
-  },
-  ja: {
-    title: "通貨換算機 — 主要20通貨対応",
-    description: "円、ドル、ウォン、ユーロなど主要20通貨を簡単に換算。旅行前の必須ツール。",
-  },
-  fr: {
-    title: "Convertisseur de devises — 20 devises majeures",
-    description: "Convertissez entre 20 devises majeures incluant EUR, USD, KRW, JPY. Outil indispensable pour les voyageurs.",
-  },
-  es: {
-    title: "Conversor de divisas — 20 divisas principales",
-    description: "Convierte entre 20 divisas principales incluyendo EUR, USD, KRW, JPY. Herramienta esencial para viajeros.",
-  },
-  zh: {
-    title: "汇率换算器 — 20种主要货币",
-    description: "轻松换算韩元、美元、欧元、日元等20种主要货币。旅行必备汇率工具。",
-  },
-  cn: {
-    title: "匯率換算器 — 20種主要貨幣",
-    description: "輕鬆換算韓元、美元、歐元、日元等20種主要貨幣。旅遊必備匯率工具。",
-  },
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
+  ko: { title: "환율 계산기 — 20개 통화 실시간 변환", description: "원화, 달러, 엔화, 유로 등 20개 주요 통화 간 환율을 쉽게 계산하세요. 여행 전 필수 환율 변환 도구." },
+  en: { title: "Currency Converter — 20 Major Currencies", description: "Convert between 20 major currencies including KRW, USD, EUR, JPY and more. Essential tool for travelers." },
+  ja: { title: "通貨換算機 — 主要20通貨対応", description: "円、ドル、ウォン、ユーロなど主要20通貨を簡単に換算。旅行前の必須ツール。" },
+  fr: { title: "Convertisseur de devises — 20 devises majeures", description: "Convertissez entre 20 devises majeures incluant EUR, USD, KRW, JPY. Outil indispensable pour les voyageurs." },
+  es: { title: "Conversor de divisas — 20 divisas principales", description: "Convierte entre 20 divisas principales incluyendo EUR, USD, KRW, JPY. Herramienta esencial para viajeros." },
+  zh: { title: "汇率换算器 — 20种主要货币", description: "轻松换算韩元、美元、欧元、日元等20种主要货币。旅行必备汇率工具。" },
 };
 
 const m = meta[locale] ?? meta.en;
+type SeoContent = { introTitle: string; intro: string; formulaTitle: string; formulas: { title: string; body: string }[]; howToTitle: string; steps: string[]; faqTitle: string; faqs: { question: string; answer: string }[]; disclaimer: string; };
+
+const content: Record<ActiveLocale, SeoContent> = {
+  ko: {
+    introTitle: "환율 변환은 기준 통화를 거쳐 상대 가치를 비교합니다",
+    intro: "여행 예산, 해외 결제, 송금 전 대략적인 금액을 확인할 때 환율 계산기가 유용합니다. 이 페이지의 도구는 주요 20개 통화를 원화 기준 정적 환율표로 변환하고, 자주 쓰는 USD/KRW, JPY/KRW, EUR/KRW 조합을 빠르게 열 수 있게 구성되어 있습니다.",
+    formulaTitle: "계산 기준",
+    formulas: [
+      { title: "기준 통화", body: "각 통화를 KRW 기준 값으로 환산한 뒤 목표 통화로 다시 나눕니다." },
+      { title: "정적 환율", body: "컴포넌트에 명시된 2025년 1월 기준 참고 환율을 사용합니다." },
+      { title: "실제 결제액", body: "카드사, 은행, 환전소 수수료와 적용 시점에 따라 달라질 수 있습니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: ["금액과 출발 통화를 선택합니다.", "도착 통화를 선택하거나 자주 찾는 환율 버튼을 누릅니다.", "결과와 1단위 기준 환율을 확인하되 실제 결제 전 최신 고시 환율을 다시 확인합니다."],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "실시간 환율인가요?", answer: "아니요. 현재 컴포넌트는 2025년 1월 기준의 정적 참고 데이터를 사용합니다." },
+      { question: "왜 은행 앱과 금액이 다른가요?", answer: "은행 고시 시각, 매매 기준율, 현찰/송금 구분, 카드 수수료가 반영되기 때문입니다." },
+      { question: "여행 예산 계산에 써도 되나요?", answer: "대략적인 비교에는 좋지만, 환전이나 결제 직전에는 실제 제공기관의 환율을 확인해야 합니다." },
+    ],
+    disclaimer: "이 도구는 참고 계산용이며 실제 환전·결제·송금에는 최신 고시 환율과 수수료가 우선합니다.",
+  },
+  en: {
+    introTitle: "Currency conversion compares value through a reference currency",
+    intro: "A converter is useful for travel budgets, overseas purchases, and quick transfer estimates. This tool converts 20 major currencies through static KRW-based reference rates and provides quick presets for USD/KRW, JPY/KRW, and EUR/KRW.",
+    formulaTitle: "Calculation basis",
+    formulas: [
+      { title: "Reference currency", body: "The amount is converted to a KRW reference value, then divided by the target currency rate." },
+      { title: "Static rates", body: "The component uses reference rates labeled as January 2025 data." },
+      { title: "Real payment", body: "Banks, cards, cash exchange, spreads, fees, and timing can all change the final amount." },
+    ],
+    howToTitle: "How to use",
+    steps: ["Enter the amount and choose the source currency.", "Choose the target currency or use a popular pair preset.", "Read the result and the 1-unit rate, then verify the current provider rate before paying or exchanging."],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Are the rates live?", answer: "No. The current component uses static reference data marked as January 2025." },
+      { question: "Why is it different from my bank app?", answer: "Banks apply their own quote time, spread, cash/remittance rules, and fees." },
+      { question: "Can I use it for travel planning?", answer: "Yes for rough budgeting, but confirm current rates and fees before exchanging or paying." },
+    ],
+    disclaimer: "This is a reference calculator; current provider rates and fees control actual exchange, payment, and transfer amounts.",
+  },
+  ja: {
+    introTitle: "通貨換算は基準通貨を通して相対価値を比べます",
+    intro: "旅行予算、海外決済、送金前の概算確認に通貨換算は便利です。このツールは主要20通貨をKRW基準の静的レートで換算し、USD/KRW、JPY/KRW、EUR/KRWをすぐ確認できます。",
+    formulaTitle: "計算の前提",
+    formulas: [
+      { title: "基準通貨", body: "金額をKRW基準値に直し、目標通貨のレートで割ります。" },
+      { title: "静的レート", body: "コンポーネント内の2025年1月基準の参考レートを使います。" },
+      { title: "実際の支払額", body: "銀行、カード、両替手数料、適用時点により変わります。" },
+    ],
+    howToTitle: "使い方",
+    steps: ["金額と元の通貨を選びます。", "変換先通貨を選ぶか、よく使うペアを選択します。", "結果と1単位レートを確認し、支払い前に最新レートを確認します。"],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "リアルタイムレートですか？", answer: "いいえ。現在は2025年1月基準の静的参考データです。" },
+      { question: "銀行アプリと違うのはなぜですか？", answer: "提示時刻、スプレッド、現金/送金区分、手数料が異なるためです。" },
+      { question: "旅行予算に使えますか？", answer: "概算には使えますが、両替や決済直前には提供元の最新レートを確認してください。" },
+    ],
+    disclaimer: "このツールは参考用です。実際の両替・決済・送金では最新レートと手数料を確認してください。",
+  },
+  fr: {
+    introTitle: "La conversion compare les devises via une monnaie de référence",
+    intro: "Pour un budget voyage, un achat étranger ou une estimation de transfert, ce convertisseur donne un ordre de grandeur. Il utilise 20 devises avec des taux statiques basés sur le KRW et des raccourcis USD/KRW, JPY/KRW et EUR/KRW.",
+    formulaTitle: "Base de calcul",
+    formulas: [
+      { title: "Devise de référence", body: "Le montant passe par une valeur en KRW puis est divisé par le taux de la devise cible." },
+      { title: "Taux statiques", body: "Les taux intégrés sont indiqués comme données de janvier 2025." },
+      { title: "Montant réel", body: "Banques, cartes, change en espèces, marges et frais modifient le résultat final." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: ["Entrez le montant et choisissez la devise de départ.", "Sélectionnez la devise cible ou une paire populaire.", "Consultez le résultat puis vérifiez le taux actuel du prestataire avant l'opération."],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Les taux sont-ils en direct ?", answer: "Non. Le composant utilise des données statiques de référence datées de janvier 2025." },
+      { question: "Pourquoi ma banque affiche-t-elle autre chose ?", answer: "Elle applique son horaire de cotation, sa marge, ses règles cash/virement et ses frais." },
+      { question: "Est-ce utile pour voyager ?", answer: "Oui pour estimer un budget, mais pas pour valider un paiement ou un change réel sans taux à jour." },
+    ],
+    disclaimer: "Calcul indicatif uniquement; les taux et frais du prestataire déterminent le montant réel.",
+  },
+  es: {
+    introTitle: "La conversión compara divisas mediante una moneda de referencia",
+    intro: "Sirve para presupuestos de viaje, compras internacionales o estimaciones de transferencias. La herramienta convierte 20 divisas con tasas estáticas basadas en KRW y accesos rápidos para USD/KRW, JPY/KRW y EUR/KRW.",
+    formulaTitle: "Base de cálculo",
+    formulas: [
+      { title: "Moneda de referencia", body: "El importe se convierte a una referencia KRW y luego se divide por la tasa de la divisa destino." },
+      { title: "Tasas estáticas", body: "El componente usa datos de referencia indicados como enero de 2025." },
+      { title: "Importe real", body: "Banco, tarjeta, cambio en efectivo, margen, comisiones y momento de aplicación cambian el resultado." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: ["Introduce la cantidad y elige la divisa de origen.", "Selecciona la divisa destino o un par popular.", "Consulta el resultado y verifica la tasa actual del proveedor antes de pagar o cambiar."],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Las tasas son en tiempo real?", answer: "No. El componente usa datos estáticos de referencia marcados como enero de 2025." },
+      { question: "¿Por qué difiere de mi banco?", answer: "El banco aplica su hora de cotización, margen, reglas de efectivo/remesa y comisiones." },
+      { question: "¿Sirve para planear un viaje?", answer: "Sí para un presupuesto aproximado, pero confirma tasas y comisiones antes de operar." },
+    ],
+    disclaimer: "Calculadora de referencia; las tasas y comisiones vigentes del proveedor determinan el importe real.",
+  },
+  zh: {
+    introTitle: "汇率换算通过基准货币比较相对价值",
+    intro: "旅行预算、海外支付和汇款估算都需要快速查看大致金额。本工具用以 KRW 为基准的静态参考汇率换算 20 种主要货币，并提供 USD/KRW、JPY/KRW、EUR/KRW 快捷组合。",
+    formulaTitle: "计算基础",
+    formulas: [
+      { title: "基准货币", body: "先把金额换算为 KRW 参考值，再除以目标货币汇率。" },
+      { title: "静态汇率", body: "组件使用标注为 2025 年 1 月的参考数据。" },
+      { title: "实际支付", body: "银行、卡组织、现金兑换、点差、手续费和结算时点都会影响最终金额。" },
+    ],
+    howToTitle: "使用方法",
+    steps: ["输入金额并选择原始货币。", "选择目标货币，或使用常用货币对快捷按钮。", "查看结果和 1 单位汇率，实际支付或兑换前再确认最新报价。"],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "这是实时汇率吗？", answer: "不是。当前组件使用 2025 年 1 月的静态参考数据。" },
+      { question: "为什么和银行 App 不一样？", answer: "银行会使用自己的报价时间、点差、现钞/汇款规则和手续费。" },
+      { question: "可以用于旅行预算吗？", answer: "可以做粗略估算，但兑换或付款前应确认实际提供方的最新汇率和费用。" },
+    ],
+    disclaimer: "本工具仅供参考，实际兑换、支付和汇款金额以提供方最新汇率和费用为准。",
+  },
+};
+
+const c = content[locale] ?? content.en;
+const structuredData = [
+  { "@context": "https://schema.org", "@type": "HowTo", name: m.title, description: m.description, step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })) },
+  { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: c.faqs.map((faq) => ({ "@type": "Question", name: faq.question, acceptedAnswer: { "@type": "Answer", text: faq.answer } })) },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <CurrencyConverter client:load locale={locale} />
+    <section class="mt-10 border-t border-slate-200 pt-8"><h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2><p class="mt-4 leading-8 text-slate-700">{c.intro}</p></section>
+    <section class="mt-10"><h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2><div class="mt-4 grid gap-4 md:grid-cols-3">{c.formulas.map((item) => (<article class="rounded-xl border border-slate-200 bg-white p-4"><h3 class="font-semibold text-slate-900">{item.title}</h3><p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p></article>))}</div></section>
+    <section class="mt-10"><h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2><ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">{c.steps.map((s) => (<li class="leading-7">{s}</li>))}</ol></section>
+    <section class="mt-10"><h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2><div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">{c.faqs.map((faq) => (<details class="group p-4"><summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary><p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p></details>))}</div></section>
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

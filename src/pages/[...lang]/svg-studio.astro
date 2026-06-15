@@ -2,7 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import SvgStudioComp from "../../components/tools/SvgStudio";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -11,9 +12,9 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "SVG 스튜디오 — SVG 편집·뷰어",
     description: "SVG 파일을 브라우저에서 편집하고 미리봅니다. 코드 직접 편집, 크기 조정, PNG 변환 등의 기능을 제공합니다.",
@@ -35,20 +36,229 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Edita y previsualiza archivos SVG directamente en tu navegador.",
   },
   zh: {
-    title: "SVG工作室編輯器",
-    description: "直接在瀏覽器中編輯和預覽SVG文件。提供代碼編輯、調整大小和PNG導出功能。",
-  },
-  cn: {
     title: "SVG工作室编辑器",
     description: "直接在浏览器中编辑和预览SVG文件。提供代码编辑、调整大小和PNG导出功能。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+type PageContent = {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+};
+
+const content: Record<ActiveLocale, PageContent> = {
+  ko: {
+    introTitle: "SVG는 선명한 벡터 그래픽을 코드로 다루는 형식입니다",
+    intro: "아이콘, 간단한 로고, 다이어그램, UI 장식은 SVG로 만들면 작은 용량으로 확대해도 선명하게 유지됩니다. SVG Studio는 코드를 직접 편집하고 즉시 미리보며, 복사와 파일 저장까지 한 자리에서 처리할 수 있는 브라우저용 작업 공간입니다.",
+    formulaTitle: "SVG 작업 개념",
+    formulas: [
+      { title: "벡터", body: "픽셀 배열이 아니라 선, 도형, 좌표로 이미지를 설명하므로 크기를 키워도 흐려지지 않습니다." },
+      { title: "viewBox", body: "그래픽이 그려지는 좌표계입니다. 실제 표시 크기와 내부 좌표를 분리해 반응형 SVG를 만들 수 있습니다." },
+      { title: "안전한 미리보기", body: "컴포넌트는 DOMPurify로 SVG 프로필을 적용해 편집 코드를 정화한 뒤 미리보기에 넣습니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "왼쪽 코드 에디터에 SVG 마크업을 붙여넣거나 기본 예제를 수정합니다.",
+      "오른쪽 실시간 미리보기에서 도형, 색상, 크기 변화를 확인합니다.",
+      "완성한 코드를 복사하거나 SVG 파일로 저장해 프로젝트에 사용합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "SVG 코드를 직접 붙여넣어도 되나요?", answer: "네. 다만 외부에서 받은 SVG는 불필요한 스크립트나 추적 코드가 없는지 확인한 뒤 사용하는 것이 좋습니다." },
+      { question: "PNG로 변환하는 도구인가요?", answer: "현재 페이지의 핵심은 SVG 코드 편집, 미리보기, 코드 복사, SVG 파일 저장입니다. 래스터 변환은 별도 검수 과정이 필요할 수 있습니다." },
+      { question: "왜 미리보기가 실제 사이트와 다르게 보이나요?", answer: "사이트 CSS, 부모 컨테이너, 상속 색상, 폰트 조건이 다르면 같은 SVG도 다르게 보일 수 있습니다." },
+    ],
+    disclaimer: "SVG를 실제 서비스에 넣기 전에는 보안, 접근성, 라이선스, 렌더링 결과를 프로젝트 환경에서 다시 확인하세요.",
+  },
+  en: {
+    introTitle: "SVG turns crisp vector graphics into editable code",
+    intro: "Icons, simple logos, diagrams, and UI details often work best as SVG because they stay sharp at any size and remain text-editable. SVG Studio gives you a browser workspace for editing markup, previewing changes, copying code, and saving an SVG file.",
+    formulaTitle: "SVG concepts",
+    formulas: [
+      { title: "Vector", body: "The image is described with shapes, paths, and coordinates instead of fixed pixels, so scaling stays crisp." },
+      { title: "viewBox", body: "The internal coordinate system controls how the artwork fits different rendered sizes." },
+      { title: "Sanitized preview", body: "The component uses DOMPurify with an SVG profile before inserting edited markup into the live preview." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Paste SVG markup into the editor or modify the starter example.",
+      "Check the live preview as you change shapes, colors, and dimensions.",
+      "Copy the final code or save it as an SVG file for your project.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Can I paste SVG from another source?", answer: "Yes, but inspect third-party SVG before production use and remove anything unnecessary or suspicious." },
+      { question: "Is this mainly a PNG converter?", answer: "The current page focuses on SVG code editing, previewing, copying, and saving. Raster conversion may require a separate review step." },
+      { question: "Why can the preview differ from my site?", answer: "Parent CSS, inherited colors, fonts, and layout constraints can change how the same SVG appears in a real page." },
+    ],
+    disclaimer: "Before shipping SVG in production, verify security, accessibility, licensing, and rendering in the target project.",
+  },
+  ja: {
+    introTitle: "SVGはシャープなベクター画像を編集可能なコードにします",
+    intro: "アイコン、シンプルなロゴ、図解、UI装飾は、拡大してもぼやけにくいSVGと相性が良いです。SVG Studioではマークアップを編集し、すぐにプレビューし、コードコピーやSVGファイル保存まで行えます。",
+    formulaTitle: "SVGの基本概念",
+    formulas: [
+      { title: "ベクター", body: "固定ピクセルではなく図形、パス、座標で表すため、拡大しても鮮明さを保ちます。" },
+      { title: "viewBox", body: "内部の座標系です。表示サイズが変わってもアートワークの収まり方を制御できます。" },
+      { title: "安全なプレビュー", body: "コンポーネントはDOMPurifyのSVGプロファイルでコードを整えてからプレビューに挿入します。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "SVGマークアップをエディタに貼り付けるか、初期サンプルを編集します。",
+      "図形、色、サイズの変更をライブプレビューで確認します。",
+      "完成したコードをコピーするか、SVGファイルとして保存します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "外部のSVGを貼り付けてもよいですか？", answer: "可能です。ただし本番利用前に不要なコードや不審な記述がないか確認してください。" },
+      { question: "PNG変換ツールですか？", answer: "このページの中心はSVGコードの編集、プレビュー、コピー、SVG保存です。ラスタ変換は別途確認が必要な場合があります。" },
+      { question: "サイト上の表示と違うことがあるのはなぜですか？", answer: "親要素のCSS、継承色、フォント、レイアウト制約によって、同じSVGでも表示が変わることがあります。" },
+    ],
+    disclaimer: "SVGを公開環境で使う前に、セキュリティ、アクセシビリティ、ライセンス、実際の表示を確認してください。",
+  },
+  zh: {
+    introTitle: "SVG 把清晰的矢量图形变成可编辑代码",
+    intro: "图标、简单标志、图解和界面装饰常适合使用 SVG，因为它们在不同尺寸下依然清晰，也便于直接编辑。SVG Studio 提供浏览器内的代码编辑、即时预览、复制与保存流程。",
+    formulaTitle: "SVG 工作概念",
+    formulas: [
+      { title: "矢量", body: "图像由形状、路径和坐标描述，而不是固定像素，因此放大后依然清晰。" },
+      { title: "viewBox", body: "它定义内部坐标系统，决定图形如何适配不同显示尺寸。" },
+      { title: "净化预览", body: "组件使用 DOMPurify 的 SVG 配置处理编辑后的代码，再放入实时预览。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "把 SVG 代码粘贴到编辑器，或修改默认示例。",
+      "在实时预览中检查形状、颜色和尺寸变化。",
+      "复制最终代码，或保存为 SVG 文件用于项目。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "可以粘贴外部 SVG 吗？", answer: "可以，但上线前应检查第三方 SVG，移除不必要或可疑的内容。" },
+      { question: "这是 PNG 转换工具吗？", answer: "当前页面主要用于 SVG 代码编辑、预览、复制和保存。栅格化转换可能需要额外流程。" },
+      { question: "为什么预览和实际网站显示不同？", answer: "父级 CSS、继承颜色、字体和布局限制都可能影响同一个 SVG 的实际显示。" },
+    ],
+    disclaimer: "将 SVG 用于生产环境前，请再次确认安全性、无障碍、授权和目标项目中的渲染效果。",
+  },
+  fr: {
+    introTitle: "SVG transforme des graphismes vectoriels nets en code éditable",
+    intro: "Icônes, logos simples, schémas et détails d'interface sont souvent plus adaptés au SVG, car ils restent nets à toutes les tailles. SVG Studio permet de modifier le balisage, de voir le rendu en direct, de copier le code et d'enregistrer un fichier SVG.",
+    formulaTitle: "Notions SVG",
+    formulas: [
+      { title: "Vecteur", body: "L'image est décrite par des formes, chemins et coordonnées plutôt que par des pixels fixes." },
+      { title: "viewBox", body: "Ce système de coordonnées interne contrôle l'adaptation du dessin aux différentes tailles d'affichage." },
+      { title: "Aperçu nettoyé", body: "Le composant utilise DOMPurify avec un profil SVG avant d'insérer le code modifié dans l'aperçu." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Collez un balisage SVG dans l'éditeur ou modifiez l'exemple de départ.",
+      "Vérifiez l'aperçu en direct lorsque vous changez formes, couleurs et dimensions.",
+      "Copiez le code final ou enregistrez-le comme fichier SVG.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Puis-je coller un SVG externe ?", answer: "Oui, mais inspectez tout SVG tiers avant production et retirez les éléments inutiles ou suspects." },
+      { question: "Est-ce surtout un convertisseur PNG ?", answer: "Cette page se concentre sur l'édition, l'aperçu, la copie et l'enregistrement du SVG. La conversion raster peut demander une étape séparée." },
+      { question: "Pourquoi l'aperçu peut-il différer de mon site ?", answer: "CSS parent, couleurs héritées, polices et contraintes de mise en page peuvent modifier l'apparence du même SVG." },
+    ],
+    disclaimer: "Avant d'utiliser un SVG en production, vérifiez sécurité, accessibilité, licence et rendu dans le projet cible.",
+  },
+  es: {
+    introTitle: "SVG convierte gráficos vectoriales nítidos en código editable",
+    intro: "Iconos, logotipos simples, diagramas y detalles de interfaz suelen funcionar bien como SVG porque se mantienen nítidos a cualquier tamaño. SVG Studio permite editar el marcado, previsualizar cambios, copiar código y guardar un archivo SVG desde el navegador.",
+    formulaTitle: "Conceptos de SVG",
+    formulas: [
+      { title: "Vector", body: "La imagen se describe con formas, rutas y coordenadas en lugar de píxeles fijos, por eso escala con nitidez." },
+      { title: "viewBox", body: "Define el sistema de coordenadas interno y controla cómo encaja el arte en distintos tamaños." },
+      { title: "Vista previa saneada", body: "El componente usa DOMPurify con perfil SVG antes de insertar el marcado editado en la vista previa." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Pega marcado SVG en el editor o modifica el ejemplo inicial.",
+      "Comprueba la vista previa en vivo al cambiar formas, colores y dimensiones.",
+      "Copia el código final o guárdalo como archivo SVG para tu proyecto.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Puedo pegar SVG de otra fuente?", answer: "Sí, pero revisa cualquier SVG de terceros antes de usarlo en producción y elimina contenido innecesario o sospechoso." },
+      { question: "¿Es principalmente un conversor a PNG?", answer: "La página se centra en editar, previsualizar, copiar y guardar SVG. La conversión raster puede requerir otro paso." },
+      { question: "¿Por qué la vista previa puede diferir de mi sitio?", answer: "El CSS del contenedor, colores heredados, fuentes y restricciones de diseño pueden cambiar cómo se ve el mismo SVG." },
+    ],
+    disclaimer: "Antes de publicar SVG en producción, verifica seguridad, accesibilidad, licencia y renderizado en el proyecto final.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <SvgStudioComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

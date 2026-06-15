@@ -2,15 +2,16 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import NutritionCalculator from "../../components/tools/NutritionCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "영양소 & 칼로리 계산기 — 하루 필요 영양소 자동 계산",
     description: "나이, 성별, 체중, 신장, 활동량, 목표별로 하루 칼로리·단백질·탄수화물·지방·수분 권장량을 자동 계산합니다.",
@@ -32,20 +33,203 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Calcula tus necesidades calóricas diarias, macros (proteínas, carbohidratos, grasas), fibra y agua según edad, sexo, peso, talla, actividad y objetivo.",
   },
   zh: {
-    title: "營養素與熱量計算機 — 每日營養規劃器",
-    description: "根據年齡、性別、體重、身高、活動量和目標，計算每日所需熱量、蛋白質、碳水化合物、脂肪、纖維和水分。",
-  },
-  cn: {
-    title: "营养素与热量计算器 — 每日营养规划器",
+    title: "营养素与热量计算机 — 每日营养规划器",
     description: "根据年龄、性别、体重、身高、活动量和目标，计算每日所需热量、蛋白质、碳水化合物、脂肪、纤维和水分。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "영양 계획은 칼로리, 매크로, 섬유질, 수분을 함께 볼 때 실천하기 쉽습니다",
+    intro: "이 도구는 나이, 성별, 체중, 신장, 활동량, 목표를 바탕으로 BMR과 TDEE를 계산한 뒤 목표 칼로리와 단백질·탄수화물·지방·식이섬유·수분 권장량을 한 번에 보여줍니다. 목표에 따라 단백질 비율을 높이거나 유지하면서 하루 식단의 큰 틀을 잡는 데 맞춰져 있습니다.",
+    formulaTitle: "계산 기준",
+    formulas: [
+      { title: "에너지", body: "BMR은 Mifflin-St Jeor, TDEE는 BMR×활동계수로 계산합니다." },
+      { title: "목표 조정", body: "감량 -500kcal, 유지 0kcal, 증량 +300kcal를 목표 칼로리에 반영합니다." },
+      { title: "섬유질·수분", body: "식이섬유는 1,000kcal당 14g, 수분은 체중×0.033L로 추정합니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: ["나이, 성별, 체중, 신장 값을 입력합니다.", "활동량과 체중 목표를 선택합니다.", "칼로리와 매크로를 하루 또는 끼니 기준으로 나누어 식단 초안을 만듭니다."],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "칼로리 계산기와 무엇이 다른가요?", answer: "이 페이지는 목표 칼로리뿐 아니라 단백질, 탄수화물, 지방, 식이섬유, 수분까지 함께 보여줍니다." },
+      { question: "감량 목표에서 단백질 비율이 높은 이유는 무엇인가요?", answer: "칼로리를 줄일 때 근손실을 줄이고 포만감을 유지하는 데 단백질이 중요하기 때문입니다." },
+      { question: "권장량을 매일 정확히 맞춰야 하나요?", answer: "아닙니다. 며칠 평균이 더 중요하며, 질환이나 식이 제한이 있다면 전문가 상담이 필요합니다." },
+    ],
+    disclaimer: "결과는 일반적인 추정치이며 전문적인 의학적 또는 영양 상담을 대신하지 않습니다.",
+  },
+  en: {
+    introTitle: "Nutrition planning is easier when calories, macros, fiber, and water are shown together",
+    intro: "This tool uses age, sex, weight, height, activity, and goal to estimate BMR and TDEE, then shows target calories plus protein, carbohydrates, fat, fiber, and water. It adjusts the macro split by goal, making it useful for building a first draft of a daily meal plan.",
+    formulaTitle: "Calculation basics",
+    formulas: [
+      { title: "Energy", body: "BMR uses Mifflin-St Jeor; TDEE = BMR×activity factor." },
+      { title: "Goal adjustment", body: "Loss -500 kcal, maintenance 0 kcal, gain +300 kcal." },
+      { title: "Fiber and water", body: "Fiber uses 14g per 1,000 kcal; water uses body weight×0.033L." },
+    ],
+    howToTitle: "How to use",
+    steps: ["Enter age, sex, weight, and height.", "Choose activity level and weight goal.", "Use calories and macros per day or per meal to sketch a practical meal plan."],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "How is this different from the calorie calculator?", answer: "It includes calories plus protein, carbs, fat, fiber, and water, not just energy targets." },
+      { question: "Why is protein higher for weight loss?", answer: "Higher protein can help preserve lean mass and manage hunger during a calorie deficit." },
+      { question: "Do I need to hit every number exactly each day?", answer: "No. Weekly averages are often more useful, and medical conditions or dietary restrictions need professional guidance." },
+    ],
+    disclaimer: "Results are general estimates and are not a substitute for professional medical or nutrition advice.",
+  },
+  ja: {
+    introTitle: "カロリー、マクロ、食物繊維、水分を一緒に見ると食事計画が立てやすくなります",
+    intro: "このツールは年齢、性別、体重、身長、活動量、目標からBMRとTDEEを推定し、目標カロリーとたんぱく質・炭水化物・脂質・食物繊維・水分を表示します。目的に応じたマクロ比率で、1日の食事案を作る出発点になります。",
+    formulaTitle: "計算の基準",
+    formulas: [
+      { title: "エネルギー", body: "BMRはMifflin-St Jeor式、TDEEはBMR×活動係数です。" },
+      { title: "目標補正", body: "減量 -500kcal、維持 0kcal、増量 +300kcal。" },
+      { title: "食物繊維・水分", body: "食物繊維は1,000kcalあたり14g、水分は体重×0.033Lで推定します。" },
+    ],
+    howToTitle: "使い方",
+    steps: ["年齢、性別、体重、身長を入力します。", "活動量と体重目標を選びます。", "カロリーとマクロを1日または1食単位で見て、食事の下書きを作ります。"],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "カロリー計算機との違いは？", answer: "目標カロリーだけでなく、たんぱく質、炭水化物、脂質、食物繊維、水分も表示します。" },
+      { question: "減量でたんぱく質が多いのはなぜ？", answer: "カロリー制限中の筋量維持と満腹感に役立つためです。" },
+      { question: "毎日ぴったり合わせる必要がありますか？", answer: "いいえ。数日単位の平均が大切です。疾患や食事制限がある場合は専門家に相談してください。" },
+    ],
+    disclaimer: "結果は一般的な推定値であり、医療または栄養の専門的助言の代わりにはなりません。",
+  },
+  zh: {
+    introTitle: "把热量、三大营养素、纤维与水分放在一起看，更容易规划饮食",
+    intro: "这个工具会依年龄、性别、体重、身高、活动量与目标估算 BMR 和 TDEE，再显示目标热量、蛋白质、碳水化合物、脂肪、膳食纤维与水分。它会依目标调整营养素比例，适合作为每日餐单草稿。",
+    formulaTitle: "计算基准",
+    formulas: [
+      { title: "能量", body: "BMR 使用 Mifflin-St Jeor；TDEE = BMR×活动系数。" },
+      { title: "目标调整", body: "减重 -500 kcal、维持 0 kcal、增重 +300 kcal。" },
+      { title: "纤维与水分", body: "纤维以每 1,000 kcal 14g，水分以体重×0.033L 推估。" },
+    ],
+    howToTitle: "使用方法",
+    steps: ["输入年龄、性别、体重与身高。", "选择活动量与体重目标。", "用每日或每餐数字规划可执行的饮食草稿。"],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "和热量计算器有什么不同？", answer: "这里不只显示热量，也包含蛋白质、碳水、脂肪、纤维与水分。" },
+      { question: "为什么减重时蛋白质比例较高？", answer: "热量赤字时，较高蛋白质有助于维持瘦体重并增加饱足感。" },
+      { question: "每天都要完全达标吗？", answer: "不需要。几天平均更有意义；若有疾病或饮食限制，应咨询专业人士。" },
+    ],
+    disclaimer: "结果仅为一般估算，不能替代专业医疗或营养建议。",
+  },
+  fr: {
+    introTitle: "Le plan nutritionnel devient plus simple avec calories, macros, fibres et eau au même endroit",
+    intro: "Cet outil estime le BMR et le TDEE à partir de l'âge, du sexe, du poids, de la taille, de l'activité et de l'objectif. Il affiche ensuite calories cible, protéines, glucides, lipides, fibres et eau, avec une répartition adaptée à l'objectif.",
+    formulaTitle: "Bases de calcul",
+    formulas: [
+      { title: "Énergie", body: "BMR par Mifflin-St Jeor ; TDEE = BMR×facteur d'activité." },
+      { title: "Objectif", body: "Perte -500 kcal, maintien 0 kcal, prise +300 kcal." },
+      { title: "Fibres et eau", body: "Fibres : 14g/1 000 kcal ; eau : poids×0,033L." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: ["Saisissez âge, sexe, poids et taille.", "Choisissez le niveau d'activité et l'objectif.", "Utilisez les calories et macros par jour ou repas pour préparer un plan réaliste."],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Différence avec le calculateur de calories ?", answer: "Il ajoute protéines, glucides, lipides, fibres et eau aux objectifs caloriques." },
+      { question: "Pourquoi plus de protéines en perte de poids ?", answer: "Les protéines aident à préserver la masse maigre et à gérer la faim en déficit calorique." },
+      { question: "Faut-il atteindre chaque chiffre exactement ?", answer: "Non. Les moyennes sur plusieurs jours comptent souvent plus ; maladies ou restrictions nécessitent un avis professionnel." },
+    ],
+    disclaimer: "Les résultats sont des estimations générales et ne remplacent pas un avis médical ou nutritionnel professionnel.",
+  },
+  es: {
+    introTitle: "Planificar nutrición es más fácil con calorías, macros, fibra y agua juntos",
+    intro: "Esta herramienta estima BMR y TDEE con edad, sexo, peso, estatura, actividad y objetivo. Después muestra calorías objetivo, proteína, carbohidratos, grasa, fibra y agua, con un reparto de macros ajustado al objetivo.",
+    formulaTitle: "Bases del cálculo",
+    formulas: [
+      { title: "Energía", body: "BMR con Mifflin-St Jeor; TDEE = BMR×factor de actividad." },
+      { title: "Objetivo", body: "Pérdida -500 kcal, mantenimiento 0 kcal, ganancia +300 kcal." },
+      { title: "Fibra y agua", body: "Fibra: 14g/1,000 kcal; agua: peso×0.033L." },
+    ],
+    howToTitle: "Cómo usarla",
+    steps: ["Introduce edad, sexo, peso y estatura.", "Elige nivel de actividad y objetivo.", "Usa calorías y macros por día o comida para crear un plan realista."],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿En qué difiere de la calculadora de calorías?", answer: "Añade proteína, carbohidratos, grasa, fibra y agua a los objetivos calóricos." },
+      { question: "¿Por qué sube la proteína al perder peso?", answer: "Puede ayudar a conservar masa magra y controlar hambre durante un déficit calórico." },
+      { question: "¿Debo alcanzar cada número exactamente?", answer: "No. Los promedios de varios días suelen ser más útiles; condiciones médicas requieren guía profesional." },
+    ],
+    disclaimer: "Los resultados son estimaciones generales y no sustituyen el consejo médico o nutricional profesional.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <NutritionCalculator client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

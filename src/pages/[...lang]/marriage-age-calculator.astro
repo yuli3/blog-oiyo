@@ -2,15 +2,16 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import MarriageAgeCalculator from "../../components/tools/MarriageAgeCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "결혼 적령기 계산기 — MBTI·직업·성별로 예측",
     description: "MBTI 유형과 직업군, 성별을 바탕으로 나의 결혼 적령기와 결혼 준비 점수를 계산해 보세요.",
@@ -35,17 +36,224 @@ const meta: Record<Locale, { title: string; description: string }> = {
     title: "结婚适龄期计算器 — 通过MBTI、职业和性别预测",
     description: "根据MBTI类型、职业和性别计算你的理想结婚年龄范围和结婚准备分数。",
   },
-  cn: {
-    title: "結婚適齡期計算器 — 通過MBTI、職業和性別預測",
-    description: "根據MBTI類型、職業和性別計算你的理想結婚年齡範圍和結婚準備分數。",
-  },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "결혼 적령기는 정답보다 준비 상태를 돌아보는 질문에 가깝습니다",
+    intro: "MBTI, 직업, 성별을 바탕으로 만든 점수는 실제 인생 계획을 결정하는 기준이 아니라 가볍게 보는 자기 점검 도구입니다. 결과를 통해 경제, 관계 가치관, 커리어, 가족 계획처럼 실제로 논의해야 할 주제를 떠올려 보세요.",
+    formulaTitle: "콘셉트",
+    formulas: [
+      { title: "성향", body: "MBTI 입력을 바탕으로 관계 접근 방식을 가볍게 분류합니다." },
+      { title: "생활 조건", body: "직업군과 생활 리듬이 결혼 준비 대화에 영향을 줄 수 있음을 반영합니다." },
+      { title: "준비 점수", body: "정답이 아니라 대화가 필요한 영역을 보여주는 엔터테인먼트 점수입니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "MBTI, 직업군, 성별 등 요청된 항목을 입력합니다.",
+      "예상 연령 범위와 준비 점수를 가볍게 확인합니다.",
+      "결과를 실제 파트너와의 가치관, 재정, 커리어 대화 소재로만 활용합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "이 나이에 결혼해야 한다는 뜻인가요?", answer: "아닙니다. 결과는 재미용 추정이며 개인의 관계, 상황, 선택을 대신할 수 없습니다." },
+      { question: "MBTI나 직업으로 결혼 준비를 판단할 수 있나요?", answer: "그럴 수 없습니다. 성향과 생활 패턴을 이야기하는 참고 자료로만 보세요." },
+      { question: "점수가 낮으면 결혼을 미뤄야 하나요?", answer: "점수보다 실제 준비 상태, 파트너와의 합의, 경제 상황, 삶의 목표가 훨씬 중요합니다." },
+    ],
+    disclaimer: "이 도구는 엔터테인먼트용입니다. 결혼, 가족 계획, 재정, 법적 결정은 당사자 간 충분한 대화와 필요한 전문가 상담을 바탕으로 하세요.",
+  },
+  en: {
+    introTitle: "Marriage age is better treated as a reflection prompt than a fixed answer",
+    intro: "A score based on MBTI, occupation, and gender should not decide a life plan. Use the result as a light prompt to think about finances, values, career plans, family expectations, and relationship communication.",
+    formulaTitle: "Concept cards",
+    formulas: [
+      { title: "Personality", body: "MBTI input is used as a playful lens on relationship style." },
+      { title: "Lifestyle", body: "Occupation and rhythm can shape practical readiness conversations." },
+      { title: "Readiness score", body: "The score is entertainment, highlighting topics to discuss rather than an answer." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Enter the requested MBTI, occupation, and gender fields.",
+      "Review the age range and readiness score lightly.",
+      "Use the result only as a prompt for real conversations about values, money, and plans.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Does this mean I should marry at that age?", answer: "No. It is an entertainment estimate and cannot replace personal choice or relationship context." },
+      { question: "Can MBTI or occupation measure marriage readiness?", answer: "No. They can start a conversation, but readiness depends on communication, commitment, circumstances, and goals." },
+      { question: "Should a low score delay marriage?", answer: "Not by itself. Real readiness, mutual agreement, finances, timing, and shared expectations matter far more." },
+    ],
+    disclaimer: "This tool is for entertainment. Marriage, family planning, finances, and legal decisions should be based on careful discussion and qualified advice where needed.",
+  },
+  ja: {
+    introTitle: "結婚適齢期は固定の答えではなく、自分を振り返るきっかけです",
+    intro: "MBTI、職業、性別から出る点数は人生計画を決めるものではありません。結果をきっかけに、価値観、家計、キャリア、家族観、パートナーとの対話について考えてみてください。",
+    formulaTitle: "コンセプト",
+    formulas: [
+      { title: "性格傾向", body: "MBTIを関係スタイルを見る軽い視点として使います。" },
+      { title: "生活条件", body: "職業や生活リズムが準備の話し合いに影響することがあります。" },
+      { title: "準備スコア", body: "答えではなく、話し合うテーマを示す娯楽用スコアです。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "MBTI、職業、性別などの項目を入力します。",
+      "年齢範囲と準備スコアを軽く確認します。",
+      "結果は価値観、家計、キャリアについて話すきっかけとして使います。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "この年齢で結婚すべきという意味ですか？", answer: "いいえ。娯楽用の推定であり、個人の選択や関係の状況を代替するものではありません。" },
+      { question: "MBTIや職業で結婚準備は判断できますか？", answer: "できません。会話のきっかけにはなりますが、準備は対話、合意、状況、目標に左右されます。" },
+      { question: "点数が低ければ結婚を延期すべきですか？", answer: "点数だけで判断しないでください。現実の準備、合意、経済状況、将来像の共有が重要です。" },
+    ],
+    disclaimer: "このツールは娯楽用です。結婚、家族計画、財務、法的判断は十分な対話と必要に応じた専門家相談に基づいてください。",
+  },
+  fr: {
+    introTitle: "L'âge idéal du mariage est une invitation à réfléchir, pas une réponse fixe",
+    intro: "Un score basé sur MBTI, profession et genre ne doit pas décider d'un projet de vie. Utilisez-le comme point de départ pour parler de finances, valeurs, carrière, famille et communication.",
+    formulaTitle: "Concepts",
+    formulas: [
+      { title: "Personnalité", body: "Le MBTI sert de regard ludique sur le style relationnel." },
+      { title: "Mode de vie", body: "Profession et rythme de vie peuvent influencer les discussions pratiques." },
+      { title: "Score", body: "Le score est divertissant et signale des sujets à discuter, pas une réponse." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Renseignez les champs MBTI, profession et genre.",
+      "Lisez la tranche d'âge et le score avec recul.",
+      "Servez-vous du résultat pour ouvrir de vraies conversations sur valeurs, argent et projets.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Cela signifie-t-il que je dois me marier à cet âge ?", answer: "Non. C'est une estimation de divertissement qui ne remplace ni choix personnel ni contexte relationnel." },
+      { question: "MBTI ou profession mesurent-ils la préparation au mariage ?", answer: "Non. Ils peuvent lancer une discussion, mais la préparation dépend de la communication, de l'engagement et des circonstances." },
+      { question: "Un score bas doit-il retarder un mariage ?", answer: "Pas seul. Préparation réelle, accord mutuel, finances, timing et attentes partagées comptent davantage." },
+    ],
+    disclaimer: "Cet outil est destiné au divertissement. Mariage, projet familial, finances et décisions juridiques doivent reposer sur une discussion sérieuse et des conseils qualifiés si nécessaire.",
+  },
+  es: {
+    introTitle: "La edad ideal para casarse es más una reflexión que una respuesta fija",
+    intro: "Una puntuación basada en MBTI, ocupación y género no debe decidir un plan de vida. Úsala como punto de partida para hablar de finanzas, valores, carrera, familia y comunicación.",
+    formulaTitle: "Conceptos",
+    formulas: [
+      { title: "Personalidad", body: "El MBTI se usa como lente lúdica sobre el estilo de relación." },
+      { title: "Estilo de vida", body: "Ocupación y ritmo pueden influir en conversaciones prácticas de preparación." },
+      { title: "Puntuación", body: "Es entretenimiento: sugiere temas para hablar, no una respuesta." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Introduce MBTI, ocupación y género según los campos solicitados.",
+      "Revisa el rango de edad y la puntuación con distancia.",
+      "Usa el resultado solo para abrir conversaciones reales sobre valores, dinero y planes.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Significa que debo casarme a esa edad?", answer: "No. Es una estimación de entretenimiento y no sustituye elección personal ni contexto de pareja." },
+      { question: "¿MBTI u ocupación miden la preparación para casarse?", answer: "No. Pueden iniciar una charla, pero la preparación depende de comunicación, compromiso, circunstancias y metas." },
+      { question: "¿Una puntuación baja debe retrasar el matrimonio?", answer: "No por sí sola. Preparación real, acuerdo mutuo, finanzas, momento y expectativas compartidas importan más." },
+    ],
+    disclaimer: "Esta herramienta es de entretenimiento. Matrimonio, planificación familiar, finanzas y decisiones legales deben basarse en conversación cuidadosa y asesoría cualificada si hace falta.",
+  },
+  zh: {
+    introTitle: "结婚适龄更像自我思考题，而不是固定答案",
+    intro: "基于MBTI、职业和性别得到的分数不应决定人生计划。可以把结果当作轻松提示，用来思考财务、价值观、职业安排、家庭期待和关系沟通。",
+    formulaTitle: "概念卡片",
+    formulas: [
+      { title: "性格倾向", body: "用MBTI作为观察关系风格的娱乐视角。" },
+      { title: "生活条件", body: "职业和生活节奏可能影响现实准备话题。" },
+      { title: "准备分数", body: "分数是娱乐参考，用来提示需要讨论的主题，而不是答案。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "输入MBTI、职业和性别等页面要求的项目。",
+      "轻松查看年龄范围和准备分数。",
+      "只把结果用于开启关于价值观、金钱和未来计划的真实对话。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "这表示我应该在这个年龄结婚吗？", answer: "不是。它是娱乐估算，不能代替个人选择或真实关系背景。" },
+      { question: "MBTI或职业能判断结婚准备度吗？", answer: "不能。它们可以作为聊天开端，但准备度取决于沟通、承诺、环境和共同目标。" },
+      { question: "分数低就该推迟结婚吗？", answer: "不能只看分数。真实准备、双方共识、财务情况、时机和共同期待更重要。" },
+    ],
+    disclaimer: "本工具仅供娱乐。结婚、家庭计划、财务和法律决定应基于充分沟通，并在需要时咨询合格专业人士。",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <MarriageAgeCalculator client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

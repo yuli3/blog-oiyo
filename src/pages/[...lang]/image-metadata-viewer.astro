@@ -4,6 +4,8 @@ import MetadataViewer from "../../components/tools/MetadataViewer";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
+type ActiveLocale = (typeof locales)[number];
+
 export async function getStaticPaths() {
   return locales.map((lang) => ({
     params: { lang },
@@ -11,9 +13,9 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale & Locale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "이미지 메타데이터 뷰어 — 사진 EXIF 정보 확인",
     description: "사진의 EXIF 메타데이터(촬영 날짜, 카메라 기종, GPS 위치 등)를 확인하세요. 개인정보 보호를 위한 메타데이터 삭제 방법도 안내합니다.",
@@ -35,20 +37,227 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Ve los metadatos EXIF de tus fotos incluyendo fecha de captura, modelo de cámara y ubicación GPS.",
   },
   zh: {
-    title: "圖片元數據查看器",
-    description: "查看照片的EXIF元數據，包括拍攝日期、相機型號、GPS位置等信息。",
-  },
-  cn: {
     title: "图片元数据查看器",
     description: "查看照片的EXIF元数据，包括拍摄日期、相机型号、GPS位置等信息。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "사진 파일에는 보이지 않는 촬영 정보가 남아 있을 수 있습니다",
+    intro: "EXIF 메타데이터에는 촬영 날짜, 카메라 모델, 렌즈 정보, 때로는 GPS 위치까지 포함될 수 있습니다. 이 뷰어는 사진을 브라우저에서 분석해 공유 전 확인해야 할 정보를 보여주며, 일반적인 사용 과정에서 파일을 서버로 업로드하지 않습니다.",
+    formulaTitle: "확인할 메타데이터",
+    formulas: [
+      { title: "촬영 정보", body: "날짜, 시간, 카메라 모델, 노출값은 촬영 맥락을 파악하는 데 도움이 됩니다." },
+      { title: "위치 정보", body: "GPS 태그가 남아 있으면 집, 학교, 직장처럼 민감한 장소가 드러날 수 있습니다." },
+      { title: "로컬 분석", body: "파일은 브라우저에서 읽히며 개인정보 확인용으로 서버 전송을 요구하지 않습니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "확인할 사진 파일을 선택합니다.",
+      "표시되는 EXIF 항목에서 날짜, 장비, 위치 정보를 확인합니다.",
+      "공유 전 민감한 정보가 있다면 별도 도구로 메타데이터를 제거합니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "모든 사진에 EXIF가 있나요?", answer: "아닙니다. 앱이나 편집 과정에서 메타데이터가 제거된 사진은 표시할 정보가 적거나 없을 수 있습니다." },
+      { question: "GPS 위치가 항상 들어 있나요?", answer: "아니요. 촬영 기기의 위치 저장 설정, 앱 권한, 편집 과정에 따라 GPS 정보가 없을 수 있습니다." },
+      { question: "이 페이지가 메타데이터를 삭제하나요?", answer: "이 페이지는 확인용 뷰어입니다. 삭제가 필요하면 내보내기 설정이나 전용 제거 도구를 사용하세요." },
+    ],
+    disclaimer: "표시되는 메타데이터는 파일 안에 남아 있는 정보에 한정됩니다. 개인정보가 중요한 사진은 공유 전 별도로 검토하세요.",
+  },
+  en: {
+    introTitle: "Photos can contain hidden capture details",
+    intro: "EXIF metadata may include the capture date, camera model, lens settings, and sometimes GPS location. This viewer reads the file in your browser so you can inspect privacy-sensitive details before sharing, without uploading the image in the normal workflow.",
+    formulaTitle: "Metadata to review",
+    formulas: [
+      { title: "Capture details", body: "Date, time, camera model, and exposure values can explain how and when the photo was made." },
+      { title: "Location tags", body: "GPS metadata can reveal sensitive places such as home, school, or workplace." },
+      { title: "Local reading", body: "The file is read in the browser and does not need to be sent to a server for inspection." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Select the photo you want to inspect.",
+      "Review the displayed EXIF fields for date, device, and location data.",
+      "If sensitive data remains, remove metadata before sharing the image.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Do all photos have EXIF data?", answer: "No. Some apps, editors, and websites remove metadata, so a file may show only a few fields or none at all." },
+      { question: "Is GPS always included?", answer: "No. GPS depends on device settings, app permissions, and whether metadata survived editing or export." },
+      { question: "Does this page remove metadata?", answer: "No. This page is a viewer. Use export settings or a dedicated metadata remover if you need to strip data." },
+    ],
+    disclaimer: "Displayed metadata is limited to what remains inside the file. Review sensitive photos separately before publishing or sending them.",
+  },
+  ja: {
+    introTitle: "写真ファイルには見えない撮影情報が残ることがあります",
+    intro: "EXIFメタデータには撮影日時、カメラ機種、レンズ設定、場合によってはGPS位置情報が含まれます。このビューアーはブラウザ内で写真を読み取り、共有前に確認すべき情報を表示します。通常の操作で画像をサーバーへアップロードする必要はありません。",
+    formulaTitle: "確認したい項目",
+    formulas: [
+      { title: "撮影情報", body: "日時、カメラ機種、露出値は、写真の撮影状況を知る手がかりになります。" },
+      { title: "位置情報", body: "GPSタグが残っていると、自宅や学校、職場などの場所が分かる場合があります。" },
+      { title: "ローカル読み取り", body: "ファイルはブラウザで読み取られ、確認のためにサーバーへ送信する必要はありません。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "確認したい写真ファイルを選択します。",
+      "表示されたEXIF項目から日時、機材、位置情報を確認します。",
+      "共有前に気になる情報があれば、別の方法でメタデータを削除します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "すべての写真にEXIFがありますか？", answer: "いいえ。アプリや編集、書き出し時に削除され、表示できる情報が少ない場合があります。" },
+      { question: "GPSは必ず入っていますか？", answer: "いいえ。端末設定、アプリ権限、編集履歴によってGPS情報がないこともあります。" },
+      { question: "このページでメタデータを削除できますか？", answer: "このページは確認用です。削除したい場合は書き出し設定や専用ツールを使ってください。" },
+    ],
+    disclaimer: "表示内容はファイル内に残っている情報に限られます。個人情報が気になる写真は共有前に別途確認してください。",
+  },
+  fr: {
+    introTitle: "Une photo peut contenir des détails invisibles",
+    intro: "Les métadonnées EXIF peuvent inclure date de prise, modèle d'appareil, réglages et parfois localisation GPS. Ce visualiseur lit l'image dans le navigateur afin de repérer les informations sensibles avant partage, sans téléversement dans l'usage normal.",
+    formulaTitle: "Données à vérifier",
+    formulas: [
+      { title: "Prise de vue", body: "Date, heure, appareil et exposition aident à comprendre le contexte de la photo." },
+      { title: "Localisation", body: "Un tag GPS peut révéler un domicile, une école ou un lieu de travail." },
+      { title: "Lecture locale", body: "Le fichier est lu dans votre navigateur, sans envoi requis vers un serveur." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Sélectionnez la photo à inspecter.",
+      "Consultez les champs EXIF liés à la date, à l'appareil et à la localisation.",
+      "Si des données sensibles restent présentes, supprimez les métadonnées avant partage.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Toutes les photos ont-elles des EXIF ?", answer: "Non. Des applications, éditeurs ou plateformes peuvent supprimer les métadonnées." },
+      { question: "La position GPS est-elle toujours présente ?", answer: "Non. Elle dépend des réglages, des permissions et de la façon dont le fichier a été exporté." },
+      { question: "Cette page supprime-t-elle les métadonnées ?", answer: "Non. Elle les affiche seulement. Utilisez un export sans métadonnées ou un outil dédié pour les supprimer." },
+    ],
+    disclaimer: "Les informations affichées dépendent de ce qui reste dans le fichier. Vérifiez séparément les photos sensibles avant publication.",
+  },
+  es: {
+    introTitle: "Una foto puede guardar datos invisibles de captura",
+    intro: "Los metadatos EXIF pueden incluir fecha, modelo de cámara, ajustes de lente e incluso ubicación GPS. Este visor lee la imagen en el navegador para revisar datos sensibles antes de compartirla, sin subir el archivo en el uso normal.",
+    formulaTitle: "Datos a revisar",
+    formulas: [
+      { title: "Captura", body: "Fecha, hora, cámara y exposición ayudan a entender cómo se tomó la foto." },
+      { title: "Ubicación", body: "Una etiqueta GPS puede revelar lugares sensibles como casa, escuela o trabajo." },
+      { title: "Lectura local", body: "El archivo se lee en tu navegador y no necesita enviarse a un servidor." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Selecciona la foto que quieres inspeccionar.",
+      "Revisa los campos EXIF de fecha, dispositivo y ubicación.",
+      "Si quedan datos sensibles, elimina los metadatos antes de compartir.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Todas las fotos tienen EXIF?", answer: "No. Algunas apps, editores y plataformas eliminan metadatos, por lo que puede haber pocos campos o ninguno." },
+      { question: "¿Siempre hay GPS?", answer: "No. Depende de ajustes del dispositivo, permisos de la app y exportación del archivo." },
+      { question: "¿Esta página elimina metadatos?", answer: "No. Solo los muestra. Usa ajustes de exportación o una herramienta dedicada para eliminarlos." },
+    ],
+    disclaimer: "Los datos mostrados se limitan a lo que queda en el archivo. Revisa aparte las fotos sensibles antes de publicarlas.",
+  },
+  zh: {
+    introTitle: "照片文件里可能保留看不见的拍摄信息",
+    intro: "EXIF 元数据可能包含拍摄日期、相机型号、镜头参数，有时还包括 GPS 位置。这个查看器在浏览器中读取照片，帮助你在分享前检查敏感信息，正常使用时不会上传图片。",
+    formulaTitle: "需要检查的元数据",
+    formulas: [
+      { title: "拍摄信息", body: "日期、时间、相机型号和曝光参数可以帮助判断照片来源和拍摄环境。" },
+      { title: "位置信息", body: "如果保留 GPS 标签，可能暴露住址、学校或工作地点等敏感位置。" },
+      { title: "本地读取", body: "文件在浏览器中读取，不需要发送到服务器进行检查。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "选择要检查的照片文件。",
+      "查看显示的 EXIF 字段，重点关注日期、设备和位置。",
+      "如果发现敏感信息，请在分享前用其他工具删除元数据。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "所有照片都有 EXIF 吗？", answer: "不是。应用、编辑器或平台可能会删除元数据，因此有些文件信息很少或没有信息。" },
+      { question: "GPS 一定会出现吗？", answer: "不会。是否包含 GPS 取决于设备设置、应用权限以及导出过程。" },
+      { question: "这个页面会删除元数据吗？", answer: "不会。它只用于查看。如果需要删除，请使用导出设置或专门的元数据清理工具。" },
+    ],
+    disclaimer: "显示内容仅限文件中仍然保留的信息。涉及隐私的照片在发布或发送前请单独检查。",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <MetadataViewer client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

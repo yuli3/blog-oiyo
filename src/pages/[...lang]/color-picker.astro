@@ -2,7 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ColorPickerToolComp from "../../components/tools/ColorPickerTool";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -11,9 +12,9 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "색상 선택기 — HEX·RGB·HSL 색상 코드 변환기",
     description: "HEX, RGB, HSL 색상 코드를 자유롭게 변환하고 보색·유사색을 확인하세요. 클릭 한 번으로 색상 코드를 복사할 수 있습니다.",
@@ -35,20 +36,229 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Convierte libremente entre códigos de color HEX, RGB y HSL y explora colores complementarios y análogos.",
   },
   zh: {
-    title: "顏色選擇器 — HEX·RGB·HSL 顏色代碼轉換器",
-    description: "自由轉換HEX、RGB、HSL顏色代碼，查看補色和類似色。一鍵複製顏色代碼。",
-  },
-  cn: {
     title: "颜色选择器 — HEX·RGB·HSL 颜色代码转换器",
     description: "自由转换HEX、RGB、HSL颜色代码，查看补色和类似色。一键复制颜色代码。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+type PageContent = {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+};
+
+const content: Record<ActiveLocale, PageContent> = {
+  ko: {
+    introTitle: "색상 코드는 화면 색을 재현 가능한 값으로 기록하는 방법입니다",
+    intro: "디자인 시안, CSS, 프레젠테이션, 브랜드 가이드에서는 같은 색을 정확히 다시 써야 합니다. 이 색상 선택기는 HEX, RGB, HSL 값을 함께 보여주고 보색·유사색을 확인하게 해 색을 고르는 감각적인 작업을 코드로 옮기기 쉽게 만듭니다.",
+    formulaTitle: "색상 개념",
+    formulas: [
+      { title: "HEX", body: "#3b82f6처럼 빨강, 초록, 파랑 값을 16진수 두 자리씩 묶어 표현합니다." },
+      { title: "RGB", body: "화면의 빛을 R, G, B 0-255 값으로 다룹니다. 개발자와 디자이너가 가장 직접적으로 공유하기 좋습니다." },
+      { title: "HSL", body: "색상, 채도, 밝기로 색을 조절합니다. 더 밝게, 덜 선명하게 같은 변형을 만들 때 유용합니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "색상 피커나 HEX 입력칸에서 기준 색을 선택합니다.",
+      "HEX, RGB, HSL 값과 보색·유사색 제안을 함께 확인합니다.",
+      "필요한 색상 코드를 복사해 CSS, 디자인 툴, 문서에 붙여넣습니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "HEX와 RGB 중 무엇을 써야 하나요?", answer: "웹 CSS에서는 둘 다 널리 쓰입니다. 고정 색상은 HEX가 간결하고, 투명도나 동적 계산이 필요하면 RGB 계열이 편합니다." },
+      { question: "HSL은 언제 유용한가요?", answer: "같은 색상에서 채도나 밝기만 조절해 hover, disabled, 배경색 같은 상태별 색을 만들 때 HSL이 이해하기 쉽습니다." },
+      { question: "보색과 유사색은 어떻게 활용하나요?", answer: "보색은 강조 버튼이나 대비가 필요한 요소에, 유사색은 배경·테두리·상태색처럼 조화가 필요한 곳에 적합합니다." },
+    ],
+    disclaimer: "화면 색상은 디스플레이, 브라우저, 색상 프로파일에 따라 다르게 보일 수 있으므로 인쇄·브랜드 납품 전에는 별도 검수하세요.",
+  },
+  en: {
+    introTitle: "Color codes make a visual choice repeatable",
+    intro: "Design files, CSS, slide decks, and brand guides all need color values that can be reused exactly. This color picker keeps HEX, RGB, and HSL together, then adds complementary and analogous suggestions so a visual choice can move cleanly into code or documentation.",
+    formulaTitle: "Color concepts",
+    formulas: [
+      { title: "HEX", body: "A compact web format such as #3b82f6 that stores red, green, and blue as hexadecimal pairs." },
+      { title: "RGB", body: "Represents screen light with red, green, and blue values from 0 to 255, useful for precise handoff." },
+      { title: "HSL", body: "Controls hue, saturation, and lightness, which makes lighter, darker, or softer variants easier to reason about." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Choose a base color with the picker or by typing a HEX value.",
+      "Review the HEX, RGB, HSL, complementary, and analogous results.",
+      "Copy the code you need into CSS, a design tool, or a project note.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Should I use HEX or RGB?", answer: "Both are standard on the web. HEX is concise for fixed colors, while RGB is convenient when opacity or programmatic color handling is involved." },
+      { question: "When is HSL better?", answer: "HSL is easier when you want state variations, such as a lighter hover color or a muted background, because saturation and lightness are explicit." },
+      { question: "How should I use complementary and analogous colors?", answer: "Complementary colors help with contrast and emphasis. Analogous colors are better for quiet supporting surfaces, borders, and related UI states." },
+    ],
+    disclaimer: "Color appearance can vary by display, browser, and color profile; verify critical brand or print colors in the final medium.",
+  },
+  ja: {
+    introTitle: "カラーコードは見た目の選択を再利用できる値にします",
+    intro: "デザインデータ、CSS、資料、ブランドガイドでは、同じ色を正確に使い回す必要があります。このカラーピッカーはHEX、RGB、HSLをまとめて確認でき、補色と類似色も見られるため、感覚的に選んだ色を実装や資料に移しやすくします。",
+    formulaTitle: "色の基本概念",
+    formulas: [
+      { title: "HEX", body: "#3b82f6 のように、赤・緑・青を16進数の組み合わせで表すWeb向けの形式です。" },
+      { title: "RGB", body: "画面上の光をR、G、Bの0〜255の値で表します。正確な受け渡しに向いています。" },
+      { title: "HSL", body: "色相、彩度、明度で調整します。明るくする、少し淡くする、といった調整が考えやすくなります。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "カラーピッカーまたはHEX入力欄で基準色を選びます。",
+      "HEX、RGB、HSL、補色、類似色の結果を確認します。",
+      "必要なコードをコピーしてCSS、デザインツール、資料に貼り付けます。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "HEXとRGBはどちらを使えばよいですか？", answer: "どちらもWebで一般的です。固定色はHEXが簡潔で、透明度やプログラム上の処理を考えるならRGB系が便利です。" },
+      { question: "HSLはどんな時に便利ですか？", answer: "hover色、無効状態、背景色など、同じ色味で明るさや鮮やかさだけを調整したい時に便利です。" },
+      { question: "補色と類似色はどう使い分けますか？", answer: "補色は強調やコントラストに、類似色は背景、枠線、状態色のようにまとまりを出したい場面に向いています。" },
+    ],
+    disclaimer: "色の見え方はディスプレイ、ブラウザ、カラープロファイルで変わるため、印刷物やブランド用途では最終媒体で確認してください。",
+  },
+  zh: {
+    introTitle: "颜色代码把视觉选择变成可复用的数值",
+    intro: "设计稿、CSS、演示文稿和品牌规范都需要能被准确复用的颜色。这个颜色选择器把 HEX、RGB、HSL 放在一起，并提供补色与类似色参考，方便把视觉判断转成代码或设计记录。",
+    formulaTitle: "颜色概念",
+    formulas: [
+      { title: "HEX", body: "像 #3b82f6 这样，用十六进制成对表示红、绿、蓝三种通道。" },
+      { title: "RGB", body: "用 0 到 255 的红、绿、蓝数值表示屏幕光色，适合精确交接。" },
+      { title: "HSL", body: "用色相、饱和度、亮度描述颜色，适合调整更亮、更暗或更柔和的变体。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "用取色器或 HEX 输入框选择基准色。",
+      "查看 HEX、RGB、HSL 以及补色、类似色结果。",
+      "复制需要的颜色代码，粘贴到 CSS、设计工具或项目文档中。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "应该使用 HEX 还是 RGB？", answer: "两者都是网页常用格式。固定颜色用 HEX 更简洁；需要透明度或程序处理时，RGB 系列更方便。" },
+      { question: "HSL 适合什么场景？", answer: "当你想为同一色相制作悬停、禁用、背景等状态色时，HSL 的饱和度和亮度更直观。" },
+      { question: "补色和类似色怎么用？", answer: "补色适合强调和对比，类似色适合背景、边框和相关状态，让界面更协调。" },
+    ],
+    disclaimer: "颜色显示会受到屏幕、浏览器和色彩配置影响；用于印刷或品牌交付前请在最终媒介中确认。",
+  },
+  fr: {
+    introTitle: "Un code couleur rend un choix visuel réutilisable",
+    intro: "Maquettes, CSS, présentations et chartes graphiques ont besoin de couleurs que l'on peut reprendre avec précision. Ce sélecteur regroupe HEX, RGB et HSL, puis ajoute des couleurs complémentaires et analogues pour passer plus facilement du choix visuel au code.",
+    formulaTitle: "Notions de couleur",
+    formulas: [
+      { title: "HEX", body: "Format web compact comme #3b82f6, qui encode le rouge, le vert et le bleu en paires hexadécimales." },
+      { title: "RGB", body: "Décrit la lumière de l'écran avec trois valeurs de 0 à 255, pratique pour une transmission précise." },
+      { title: "HSL", body: "Sépare teinte, saturation et luminosité, ce qui facilite les variantes plus claires, plus sombres ou plus douces." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Choisissez une couleur de base avec le sélecteur ou en saisissant un code HEX.",
+      "Consultez les valeurs HEX, RGB, HSL ainsi que les couleurs complémentaires et analogues.",
+      "Copiez le code utile dans votre CSS, votre outil de design ou votre note de projet.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Faut-il utiliser HEX ou RGB ?", answer: "Les deux sont standards sur le web. HEX est concis pour une couleur fixe, tandis que RGB est pratique pour l'opacité ou les traitements dynamiques." },
+      { question: "Quand HSL est-il préférable ?", answer: "HSL est plus lisible pour créer des états, par exemple une couleur de survol plus claire ou un arrière-plan moins saturé." },
+      { question: "Comment utiliser les couleurs complémentaires et analogues ?", answer: "Les complémentaires servent au contraste et à l'accent. Les analogues conviennent mieux aux surfaces discrètes, bordures et états proches." },
+    ],
+    disclaimer: "Le rendu d'une couleur varie selon l'écran, le navigateur et le profil colorimétrique ; vérifiez les couleurs critiques sur le support final.",
+  },
+  es: {
+    introTitle: "Un código de color vuelve repetible una decisión visual",
+    intro: "Los diseños, CSS, presentaciones y guías de marca necesitan colores que puedan reutilizarse con precisión. Este selector reúne HEX, RGB y HSL, y añade colores complementarios y análogos para llevar una elección visual al código con menos fricción.",
+    formulaTitle: "Conceptos de color",
+    formulas: [
+      { title: "HEX", body: "Formato web compacto como #3b82f6 que guarda rojo, verde y azul en pares hexadecimales." },
+      { title: "RGB", body: "Representa la luz de pantalla con valores rojo, verde y azul de 0 a 255, útil para entregas precisas." },
+      { title: "HSL", body: "Controla tono, saturación y luminosidad, lo que facilita crear variantes más claras, oscuras o suaves." },
+    ],
+    howToTitle: "Cómo usarlo",
+    steps: [
+      "Elige un color base con el selector o escribiendo un valor HEX.",
+      "Revisa los resultados HEX, RGB, HSL, complementarios y análogos.",
+      "Copia el código que necesitas en CSS, una herramienta de diseño o una nota del proyecto.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Conviene usar HEX o RGB?", answer: "Ambos son habituales en la web. HEX es compacto para colores fijos; RGB resulta cómodo cuando hay opacidad o tratamiento dinámico." },
+      { question: "¿Cuándo es mejor HSL?", answer: "HSL es más claro para crear estados, como un color hover más luminoso o un fondo con menos saturación." },
+      { question: "¿Cómo uso colores complementarios y análogos?", answer: "Los complementarios ayudan a generar contraste y énfasis. Los análogos funcionan mejor en fondos, bordes y estados relacionados." },
+    ],
+    disclaimer: "El color puede variar según pantalla, navegador y perfil de color; valida los colores críticos en el medio final.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <ColorPickerToolComp client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

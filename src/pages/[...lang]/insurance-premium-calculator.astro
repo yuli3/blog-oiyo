@@ -2,15 +2,16 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import InsurancePremiumCalculator from "../../components/tools/InsurancePremiumCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "보험료 계산기 — 나이·건강·흡연으로 예상 보험료 계산",
     description: "종신보험·정기보험·건강보험·자동차보험 월 보험료를 나이, 성별, 흡연 여부, 건강 상태로 빠르게 예상해보세요.",
@@ -32,20 +33,229 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Estima rápidamente las primas de seguro de vida, temporal, salud y auto según edad, género, tabaquismo y estado de salud.",
   },
   zh: {
-    title: "保險費計算機 — 依年齡、健康、吸菸估算",
-    description: "快速估算終身壽險、定期壽險、健康險、汽車險的每月保費，依年齡、性別、吸菸狀況和健康狀況計算。",
-  },
-  cn: {
-    title: "保险费计算器 — 依年龄、健康、吸烟估算",
+    title: "保险费计算机 — 依年龄、健康、吸烟估算",
     description: "快速估算终身寿险、定期寿险、健康险、汽车险的每月保费，依年龄、性别、吸烟状况和健康状况计算。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+type SeoContent = {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+};
+
+const content: Record<ActiveLocale, SeoContent> = {
+  ko: {
+    introTitle: "보험료는 보장금액보다 위험요인과 상품 구조가 더 크게 흔들 수 있습니다",
+    intro: "같은 보장금액이라도 나이, 흡연 여부, 건강 상태, 보험 종류에 따라 월 보험료가 크게 달라집니다. 이 계산기는 정기보험, 종신보험, 건강보험, 자동차보험을 단순 모델로 비교해 가입 전 대략적인 부담 수준과 민감한 변수를 파악하도록 돕습니다.",
+    formulaTitle: "계산 기준",
+    formulas: [
+      { title: "기본 보험료", body: "보험 종류별 기준요율에 보장금액을 곱해 출발 보험료를 만듭니다." },
+      { title: "위험 조정", body: "나이, 성별, 흡연 여부, 건강 등급에 따른 배수를 더해 월 보험료를 조정합니다." },
+      { title: "총 납입액", body: "월 보험료를 연 단위와 가입 기간 전체 납입액으로 환산합니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: [
+      "보험 종류와 보장금액, 가입 기간을 선택합니다.",
+      "나이, 성별, 흡연 여부, 건강 상태를 입력합니다.",
+      "월 보험료, 연 보험료, 위험도 점수를 비교해 실제 견적을 받을 상품을 좁힙니다.",
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "실제 보험사 견적과 같나요?", answer: "아닙니다. 이 도구는 교육용 단순 모델입니다. 보험사는 직업, 병력, 운전 이력, 특약, 인수 기준을 더 세밀하게 반영합니다." },
+      { question: "흡연 여부가 왜 크게 반영되나요?", answer: "생명보험과 건강보험에서는 흡연이 장기 위험률에 영향을 주기 때문에 보험료나 인수 조건에 반영되는 경우가 많습니다." },
+      { question: "정기보험과 종신보험은 어떻게 비교해야 하나요?", answer: "정기보험은 특정 기간의 보장비용을 낮추는 데 유리하고, 종신보험은 평생 보장과 저축성 구조가 섞일 수 있어 목적과 비용을 분리해 봐야 합니다." },
+    ],
+    disclaimer: "이 도구는 일반적인 추정용입니다. 실제 보험료와 보장 조건은 해당 보험사 또는 전문가에게 확인하세요.",
+  },
+  en: {
+    introTitle: "Insurance premiums are shaped by risk factors and policy design",
+    intro: "The same coverage amount can produce very different premiums depending on age, smoking status, health, gender, and the type of policy. This calculator uses a simplified model for term life, whole life, health, and auto insurance so you can identify the variables that most affect cost before requesting quotes.",
+    formulaTitle: "Calculation basis",
+    formulas: [
+      { title: "Base premium", body: "A policy-type base rate is multiplied by the coverage amount." },
+      { title: "Risk adjustments", body: "Age, gender, smoking status, and health rating adjust the monthly premium through multipliers." },
+      { title: "Total cost", body: "Monthly premium is converted into annual premium and total estimated policy cost over the term." },
+    ],
+    howToTitle: "How to use",
+    steps: [
+      "Select the insurance type, coverage amount, and policy term.",
+      "Enter age, gender, smoking status, and health rating.",
+      "Compare monthly premium, annual premium, total cost, and risk score before requesting insurer quotes.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Will this match an insurer's quote?", answer: "No. It is an educational model. Real underwriting can include occupation, medical history, driving record, riders, exclusions, and insurer-specific pricing." },
+      { question: "Why does smoking matter so much?", answer: "For life and health coverage, smoking can affect long-term claim risk, so it often changes pricing or underwriting conditions." },
+      { question: "How should I compare term and whole life?", answer: "Term insurance is usually cheaper for a fixed protection period. Whole life can combine lifelong coverage with savings features, so the protection need and investment-like cost should be reviewed separately." },
+    ],
+    disclaimer: "This tool is a general estimate. Confirm actual premiums and coverage terms with the relevant insurer or professional.",
+  },
+  ja: {
+    introTitle: "保険料は保障額だけでなくリスク要因と商品設計で変わります",
+    intro: "同じ保障額でも、年齢、喫煙、健康状態、性別、保険種類によって月額保険料は大きく変わります。この計算機は定期保険、終身保険、医療保険、自動車保険を簡易モデルで比較し、見積もり前に重要な変数を把握するためのものです。",
+    formulaTitle: "計算の前提",
+    formulas: [
+      { title: "基本保険料", body: "保険種類ごとの基準料率に保障額を掛けます。" },
+      { title: "リスク調整", body: "年齢、性別、喫煙状況、健康評価の倍率で月額保険料を調整します。" },
+      { title: "総支払額", body: "月額保険料を年額と契約期間全体の概算費用に換算します。" },
+    ],
+    howToTitle: "使い方",
+    steps: [
+      "保険種類、保障額、契約期間を選びます。",
+      "年齢、性別、喫煙状況、健康状態を入力します。",
+      "月額保険料、年額保険料、総費用、リスクスコアを確認します。",
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "実際の保険会社の見積もりと同じですか？", answer: "同じではありません。実際の引受では職業、既往歴、運転履歴、特約、免責、会社ごとの基準が反映されます。" },
+      { question: "喫煙が大きく影響するのはなぜですか？", answer: "生命保険や医療保険では喫煙が長期的な保険金支払いリスクに関係するため、保険料や引受条件に反映されやすいです。" },
+      { question: "定期保険と終身保険はどう比べますか？", answer: "定期保険は一定期間の保障を低コストで持ちやすく、終身保険は一生涯の保障と貯蓄性が混ざることがあります。目的を分けて比較してください。" },
+    ],
+    disclaimer: "このツールは一般的な概算です。実際の保険料と保障内容は保険会社または専門家に確認してください。",
+  },
+  zh: {
+    introTitle: "保险费不只看保额，还受风险因素和商品结构影响",
+    intro: "相同保额下，年龄、吸烟、健康状况、性别和保险类型都可能让月保费差距很大。本工具用简化模型估算定期寿险、终身寿险、健康险和车险，帮助你在询价前看清主要影响因素。",
+    formulaTitle: "计算依据",
+    formulas: [
+      { title: "基础保费", body: "用保险类型的基础费率乘以保障金额。" },
+      { title: "风险调整", body: "根据年龄、性别、吸烟状态和健康等级调整月保费。" },
+      { title: "总成本", body: "把月保费换算成年保费和整个期间的预计总缴费。" },
+    ],
+    howToTitle: "使用方法",
+    steps: [
+      "选择保险类型、保额和保障期间。",
+      "输入年龄、性别、吸烟状态和健康状况。",
+      "比较月保费、年保费、总缴费和风险评分，再向保险公司询价。",
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "会和保险公司的正式报价一样吗？", answer: "不会。这是教育用简化模型。正式核保还会考虑职业、病史、驾驶记录、附加险、除外责任和保险公司定价规则。" },
+      { question: "为什么吸烟影响这么大？", answer: "寿险和健康险会关注长期理赔风险，吸烟通常会影响费率或核保条件。" },
+      { question: "定期寿险和终身寿险怎么比较？", answer: "定期寿险适合低成本覆盖一段期间，终身寿险可能结合终身保障和储蓄性质，需要把保障需求和投资性成本分开看。" },
+    ],
+    disclaimer: "本工具仅作一般估算。实际保费和保障条件请向相关保险公司或专业人士确认。",
+  },
+  fr: {
+    introTitle: "La prime dépend du risque et de la structure du contrat",
+    intro: "À couverture identique, l'âge, le tabac, la santé, le genre et le type d'assurance peuvent modifier fortement la prime mensuelle. Ce calculateur applique un modèle simplifié pour vie temporaire, vie entière, santé et auto afin d'identifier les variables importantes avant de demander des devis.",
+    formulaTitle: "Bases de calcul",
+    formulas: [
+      { title: "Prime de base", body: "Un taux de base par type de contrat est multiplié par le montant couvert." },
+      { title: "Ajustements de risque", body: "Âge, genre, tabagisme et état de santé modifient la prime mensuelle avec des multiplicateurs." },
+      { title: "Coût total", body: "La prime mensuelle est convertie en prime annuelle et coût total estimé sur la durée." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: [
+      "Choisissez le type d'assurance, le montant couvert et la durée.",
+      "Saisissez âge, genre, tabagisme et état de santé.",
+      "Comparez prime mensuelle, prime annuelle, coût total et score de risque avant de demander un devis.",
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Le résultat correspond-il à un devis ?", answer: "Non. C'est un modèle pédagogique. La tarification réelle peut inclure profession, antécédents médicaux, conduite, options et règles propres à l'assureur." },
+      { question: "Pourquoi le tabac pèse-t-il autant ?", answer: "En assurance vie et santé, le tabac peut affecter le risque de sinistre à long terme et donc le prix ou les conditions d'acceptation." },
+      { question: "Comment comparer temporaire et vie entière ?", answer: "La temporaire couvre une période à coût souvent plus bas. La vie entière peut mêler protection à vie et épargne ; il faut séparer besoin de protection et coût financier." },
+    ],
+    disclaimer: "Cet outil fournit une estimation générale. Confirmez les primes et garanties réelles avec l'assureur ou un professionnel.",
+  },
+  es: {
+    introTitle: "La prima depende del riesgo y del diseño de la póliza",
+    intro: "Con la misma cobertura, edad, tabaco, salud, género y tipo de seguro pueden cambiar mucho la prima mensual. Esta calculadora usa un modelo simplificado para vida temporal, vida entera, salud y auto, útil antes de pedir cotizaciones.",
+    formulaTitle: "Bases de cálculo",
+    formulas: [
+      { title: "Prima base", body: "Una tasa base por tipo de póliza se multiplica por el monto cubierto." },
+      { title: "Ajustes de riesgo", body: "Edad, género, tabaquismo y salud ajustan la prima mensual mediante multiplicadores." },
+      { title: "Coste total", body: "La prima mensual se convierte en prima anual y coste total estimado durante el plazo." },
+    ],
+    howToTitle: "Cómo usarla",
+    steps: [
+      "Elige tipo de seguro, cobertura y plazo.",
+      "Introduce edad, género, tabaquismo y estado de salud.",
+      "Compara prima mensual, prima anual, coste total y puntuación de riesgo antes de solicitar cotizaciones.",
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Coincide con una cotización real?", answer: "No. Es un modelo educativo. La suscripción real puede incluir ocupación, historial médico, conducción, coberturas extra y reglas del asegurador." },
+      { question: "¿Por qué pesa tanto fumar?", answer: "En vida y salud, fumar puede afectar el riesgo de reclamaciones a largo plazo y por eso cambia precio o condiciones." },
+      { question: "¿Cómo comparar temporal y vida entera?", answer: "La temporal cubre un periodo con coste menor. La vida entera puede mezclar protección permanente y ahorro; conviene separar necesidad de cobertura y coste financiero." },
+    ],
+    disclaimer: "Esta herramienta ofrece una estimación general. Confirma primas y coberturas reales con la aseguradora o un profesional.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <InsurancePremiumCalculator client:load locale={locale} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>

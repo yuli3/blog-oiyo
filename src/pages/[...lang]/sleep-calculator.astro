@@ -2,7 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import SleepCalculatorComp from "../../components/tools/SleepCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -11,9 +12,9 @@ export async function getStaticPaths() {
   }));
 }
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "수면 계산기 — 최적 기상 시간·취침 시간 계산하기",
     description: "90분 수면 주기를 기반으로 최적의 기상 시간 또는 취침 시간을 계산합니다. 크로노타입 기반 추천과 수면 부채 계산기도 제공합니다.",
@@ -35,20 +36,203 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Calcula la mejor hora para despertar o dormir basada en ciclos de sueño de 90 minutos.",
   },
   zh: {
-    title: "睡眠計算機 — 計算最佳起床時間和就寢時間",
-    description: "根據90分鐘睡眠週期計算最佳起床時間或就寢時間，包含晝夜節律類型建議和睡眠債務追蹤器。",
-  },
-  cn: {
-    title: "睡眠计算器 — 计算最佳起床时间和就寝时间",
+    title: "睡眠计算机 — 计算最佳起床时间和就寝时间",
     description: "根据90分钟睡眠周期计算最佳起床时间或就寝时间，包含昼夜节律类型建议和睡眠债务追踪器。",
   },
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+}> = {
+  ko: {
+    introTitle: "수면 시간은 총량뿐 아니라 주기와 잠드는 시간까지 함께 봐야 합니다",
+    intro: "이 계산기는 90분 수면 주기와 평균 입면 시간 14분을 반영해 취침 시각에서 기상 시각을, 또는 기상 시각에서 취침 시각을 역산합니다. 아침형·중간형·저녁형 크로노타입 조언과 전날 수면 부채도 함께 확인할 수 있습니다.",
+    formulaTitle: "계산 기준",
+    formulas: [
+      { title: "수면 주기", body: "1주기 = 90분, 결과는 5·6·7주기 기준으로 제시합니다." },
+      { title: "입면 시간", body: "잠드는 데 걸리는 시간 약 14분을 더하거나 뺍니다." },
+      { title: "수면 부채", body: "권장 8시간에서 실제 수면 시간을 뺀 값을 표시합니다." },
+    ],
+    howToTitle: "사용 방법",
+    steps: ["취침→기상 또는 기상→취침 방향을 선택합니다.", "기준 시각을 입력하고 추천 시각 3개를 비교합니다.", "크로노타입과 전날 실제 수면 시간을 함께 입력해 현실적인 목표를 정합니다."],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "90분 주기가 모두에게 정확한가요?", answer: "아닙니다. 90분은 평균적인 모델이며 개인별 수면 단계 길이는 달라질 수 있습니다." },
+      { question: "추천 시각에 맞추면 반드시 개운한가요?", answer: "보장되지는 않습니다. 수면의 질, 빛 노출, 카페인, 스트레스, 수면 부족 누적도 영향을 줍니다." },
+      { question: "수면 부채는 주말에 몰아서 갚을 수 있나요?", answer: "일부 회복은 가능하지만 규칙적인 수면 시간이 더 안정적입니다. 심한 졸림이 지속되면 상담이 필요합니다." },
+    ],
+    disclaimer: "결과는 일반적인 추정치이며 수면장애나 건강 문제에 대한 전문적인 의학적 조언을 대신하지 않습니다.",
+  },
+  en: {
+    introTitle: "Sleep planning works best when duration, cycles, and time to fall asleep are considered together",
+    intro: "This calculator uses 90-minute sleep cycles and an average 14-minute time to fall asleep to work forward from bedtime or backward from wake-up time. It also includes chronotype guidance and a simple sleep-debt estimate from last night's sleep.",
+    formulaTitle: "Calculation basics",
+    formulas: [
+      { title: "Sleep cycle", body: "1 cycle = 90 minutes; results use 5, 6, and 7 cycles." },
+      { title: "Sleep onset", body: "About 14 minutes is added or subtracted for falling asleep." },
+      { title: "Sleep debt", body: "Shows the difference between an 8-hour target and actual sleep." },
+    ],
+    howToTitle: "How to use",
+    steps: ["Choose bedtime-to-wake or wake-to-bed mode.", "Enter the reference time and compare the three suggested times.", "Add chronotype and last night's actual sleep to set a realistic target."],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Is a 90-minute sleep cycle exact for everyone?", answer: "No. It is a practical average; individual sleep-stage timing can vary." },
+      { question: "Will waking at a suggested time guarantee feeling refreshed?", answer: "No. Sleep quality, light exposure, caffeine, stress, and accumulated sleep loss also matter." },
+      { question: "Can weekend sleep erase sleep debt?", answer: "Some recovery is possible, but a regular schedule is more reliable. Persistent sleepiness deserves medical attention." },
+    ],
+    disclaimer: "Results are general estimates and are not a substitute for professional medical advice about sleep disorders or health concerns.",
+  },
+  ja: {
+    introTitle: "睡眠計画では、時間の長さだけでなく周期と入眠時間も合わせて見る必要があります",
+    intro: "この計算機は90分の睡眠サイクルと平均14分の入眠時間を使い、就寝時刻から起床時刻、または起床時刻から就寝時刻を逆算します。クロノタイプの助言と昨夜の睡眠不足も確認できます。",
+    formulaTitle: "計算の基準",
+    formulas: [
+      { title: "睡眠サイクル", body: "1サイクル = 90分、5・6・7サイクルで表示します。" },
+      { title: "入眠時間", body: "眠りにつくまで約14分を加減します。" },
+      { title: "睡眠負債", body: "目安8時間から実際の睡眠時間を引いて表示します。" },
+    ],
+    howToTitle: "使い方",
+    steps: ["就寝→起床または起床→就寝を選びます。", "基準時刻を入力し、3つの推奨時刻を比較します。", "クロノタイプと昨夜の睡眠時間も入れて現実的な目標を決めます。"],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "90分周期は誰にでも正確ですか？", answer: "いいえ。平均的なモデルであり、睡眠段階の長さは個人差があります。" },
+      { question: "推奨時刻なら必ずすっきり起きられますか？", answer: "保証はありません。睡眠の質、光、カフェイン、ストレス、睡眠不足の蓄積も影響します。" },
+      { question: "週末の寝だめで睡眠負債は消えますか？", answer: "一部回復は可能ですが、規則的な睡眠の方が安定します。強い眠気が続く場合は相談してください。" },
+    ],
+    disclaimer: "結果は一般的な推定値であり、睡眠障害や健康問題に関する医療専門家の助言の代わりにはなりません。",
+  },
+  zh: {
+    introTitle: "规划睡眠时，除了总时数，也要考虑周期与入睡时间",
+    intro: "这个计算器使用 90 分钟睡眠周期与平均 14 分钟入睡时间，从就寝时间推算起床时间，或从起床时间反推就寝时间。它也提供昼夜节律类型建议与简单的睡眠债估算。",
+    formulaTitle: "计算基准",
+    formulas: [
+      { title: "睡眠周期", body: "1 个周期 = 90 分钟，结果以 5、6、7 个周期呈现。" },
+      { title: "入睡时间", body: "预设约 14 分钟入睡时间，计算时会加上或扣除。" },
+      { title: "睡眠债", body: "以 8 小时目标减去实际睡眠时间。" },
+    ],
+    howToTitle: "使用方法",
+    steps: ["选择就寝到起床，或起床反推就寝模式。", "输入基准时间，比较三个建议时刻。", "加入昼夜节律类型与昨晚睡眠时数，设定较实际的目标。"],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "90 分钟周期对每个人都准确吗？", answer: "不是。这是实用平均值，个人睡眠阶段长度可能不同。" },
+      { question: "照建议时间醒来一定会清醒吗？", answer: "不保证。睡眠品质、光线、咖啡因、压力与累积睡眠不足也会影响。" },
+      { question: "周末补眠能还清睡眠债吗？", answer: "可以部分恢复，但规律睡眠更可靠。持续嗜睡时应寻求医疗建议。" },
+    ],
+    disclaimer: "结果仅为一般估算，不能替代针对睡眠障碍或健康问题的专业医疗建议。",
+  },
+  fr: {
+    introTitle: "Planifier le sommeil demande de regarder durée, cycles et temps d'endormissement",
+    intro: "Ce calculateur utilise des cycles de 90 minutes et environ 14 minutes d'endormissement pour calculer une heure de réveil depuis le coucher ou l'inverse. Il ajoute aussi une indication de chronotype et une estimation simple de dette de sommeil.",
+    formulaTitle: "Bases de calcul",
+    formulas: [
+      { title: "Cycle", body: "1 cycle = 90 minutes ; résultats sur 5, 6 et 7 cycles." },
+      { title: "Endormissement", body: "Environ 14 minutes sont ajoutées ou soustraites." },
+      { title: "Dette", body: "Différence entre une cible de 8 heures et le sommeil réel." },
+    ],
+    howToTitle: "Comment l'utiliser",
+    steps: ["Choisissez coucher→réveil ou réveil→coucher.", "Saisissez l'heure de référence et comparez trois horaires.", "Ajoutez chronotype et sommeil réel pour fixer un objectif réaliste."],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Le cycle de 90 minutes vaut-il pour tous ?", answer: "Non. C'est une moyenne pratique ; les phases de sommeil varient selon les personnes." },
+      { question: "Un horaire conseillé garantit-il un réveil facile ?", answer: "Non. Qualité du sommeil, lumière, caféine, stress et dette de sommeil comptent aussi." },
+      { question: "Peut-on rattraper la dette le week-end ?", answer: "Un peu, mais une heure régulière reste plus stable. Une somnolence persistante doit être évaluée." },
+    ],
+    disclaimer: "Les résultats sont des estimations générales et ne remplacent pas un avis médical sur les troubles du sommeil ou la santé.",
+  },
+  es: {
+    introTitle: "Planificar el sueño requiere mirar duración, ciclos y tiempo para dormir",
+    intro: "Esta calculadora usa ciclos de 90 minutos y unos 14 minutos para conciliar el sueño, calculando hacia adelante desde la hora de dormir o hacia atrás desde la hora de despertar. También incluye cronotipo y deuda de sueño simple.",
+    formulaTitle: "Bases del cálculo",
+    formulas: [
+      { title: "Ciclo", body: "1 ciclo = 90 minutos; resultados con 5, 6 y 7 ciclos." },
+      { title: "Conciliar sueño", body: "Se añaden o restan unos 14 minutos." },
+      { title: "Deuda", body: "Diferencia entre objetivo de 8 horas y sueño real." },
+    ],
+    howToTitle: "Cómo usarla",
+    steps: ["Elige dormir→despertar o despertar→dormir.", "Introduce la hora base y compara tres horarios sugeridos.", "Añade cronotipo y sueño real para fijar una meta realista."],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿El ciclo de 90 minutos es exacto para todos?", answer: "No. Es un promedio práctico; las fases de sueño varían por persona." },
+      { question: "¿Un horario sugerido garantiza despertar bien?", answer: "No. Calidad del sueño, luz, cafeína, estrés y deuda acumulada también influyen." },
+      { question: "¿Se puede recuperar deuda el fin de semana?", answer: "Algo sí, pero un horario regular es más estable. Somnolencia persistente merece consulta médica." },
+    ],
+    disclaimer: "Los resultados son estimaciones generales y no sustituyen el consejo médico sobre trastornos del sueño o salud.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-2xl px-4 py-8">
     <SleepCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+
+    <section class="mt-10 border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-indigo-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">{c.disclaimer}</p>
   </main>
 </BaseLayout>
