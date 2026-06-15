@@ -2,6 +2,7 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import UniversalConverter from "../../components/tools/UniversalConverter";
 import { locales } from "../../lib/i18n";
+import { toolStructuredData } from "../../lib/seo/structured-data";
 
 type ActiveLocale = (typeof locales)[number];
 
@@ -199,24 +200,12 @@ const content: Record<ActiveLocale, {
 
 const c = content[locale] ?? content.en;
 
-const structuredData = [
-  {
-    "@context": "https://schema.org",
-    "@type": "HowTo",
-    name: m.title,
-    description: m.description,
-    step: c.steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, text: s })),
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: c.faqs.map((faq) => ({
-      "@type": "Question",
-      name: faq.question,
-      acceptedAnswer: { "@type": "Answer", text: faq.answer },
-    })),
-  },
-];
+const structuredData = toolStructuredData({
+  name: m.title,
+  description: m.description,
+  steps: c.steps,
+  faqs: c.faqs,
+});
 ---
 
 <BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
