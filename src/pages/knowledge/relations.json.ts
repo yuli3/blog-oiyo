@@ -1,9 +1,10 @@
 import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
-import { readFileSync } from "node:fs";
-import { dirname, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
 import { siteConfig } from "../../config/site.config";
+// In-repo copy of the route-ownership seed (SSOT: docs/knowledge/topics.json,
+// synced via docs/knowledge/sync-seed.sh). Imported so it bundles at build —
+// Cloudflare builds each repo independently and cannot read outside files.
+import seedData from "../../data/knowledge-seed.json";
 
 /**
  * Concept graph for blog guides.
@@ -26,19 +27,8 @@ type SeedTopic = {
   relatedTopicIds?: string[];
 };
 
-const SEED_TOPIC_PATH = resolve(
-  dirname(fileURLToPath(import.meta.url)),
-  "../../../../docs/knowledge/topics.json",
-);
-
 function readAllSeedTopics(): SeedTopic[] {
-  try {
-    const parsed = JSON.parse(readFileSync(SEED_TOPIC_PATH, "utf-8")) as { topics?: SeedTopic[] };
-    return parsed.topics ?? [];
-  } catch (error) {
-    console.warn(`[knowledge/relations] failed to read seed topics: ${String(error)}`);
-    return [];
-  }
+  return (seedData as { topics?: SeedTopic[] }).topics ?? [];
 }
 
 const norm = (s: string) => s.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
