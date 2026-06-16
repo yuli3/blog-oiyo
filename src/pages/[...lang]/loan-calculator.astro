@@ -1,6 +1,9 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import LoanCalculatorComp from "../../components/calculators/LoanCalculator";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { siteConfig } from "../../config/site.config";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -45,10 +48,108 @@ const meta: Record<Locale, { title: string; description: string }> = {
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content = {
+  ko: {
+    eyebrow: "금융 계산 도구",
+    introTitle: "대출 계산기란?",
+    intro: "대출금액·연금리·상환기간을 입력하면 원리금균등상환 기준으로 월 상환액과 총 이자를 계산하고 초기 상환 스케줄을 보여주는 도구입니다.",
+    howToTitle: "사용 방법",
+    steps: ["대출 원금을 입력합니다.", "연이자율(%)을 입력합니다.", "상환 기간(개월 또는 년)을 설정합니다.", "월 상환액·총 이자·상환 스케줄을 확인합니다."],
+    highlightsTitle: "주요 특징",
+    highlights: [
+      { title: "원리금균등상환", body: "매월 동일액 상환 기준으로 계산합니다." },
+      { title: "상환 스케줄", body: "초기 개월별 원금·이자 분해를 제공합니다." },
+      { title: "즉시 계산", body: "값을 입력하면 즉시 결과가 갱신됩니다." },
+    ],
+    relatedTitle: "관련 계산기",
+    related: [
+      { href: "/ko/mortgage-calculator/", label: "주택담보대출 계산기", desc: "주택담보대출 월 상환금을 계산합니다." },
+      { href: "/ko/dsr-calculator/", label: "DSR 계산기", desc: "총부채원리금상환비율을 계산합니다." },
+      { href: "/ko/present-value-calculator/", label: "현재가치 계산기", desc: "미래 금액의 현재가치를 계산합니다." },
+    ],
+    disclaimer: "본 계산기는 참고용이며, 실제 대출 조건·수수료·변동금리에 따라 결과가 달라질 수 있습니다. 정확한 조건은 금융기관에 확인하세요.",
+  },
+  en: {
+    eyebrow: "Finance Tool",
+    introTitle: "What is the loan calculator?",
+    intro: "Enter the loan amount, annual rate, and term to compute the monthly payment and total interest with the annuity method, plus an early repayment schedule.",
+    howToTitle: "How to use",
+    steps: ["Enter the loan principal.", "Enter the annual interest rate (%).", "Set the term (months or years).", "Review the monthly payment, total interest, and schedule."],
+    highlightsTitle: "Highlights",
+    highlights: [
+      { title: "Annuity repayment", body: "Computes the equal-monthly-payment schedule." },
+      { title: "Repayment schedule", body: "Shows the early monthly principal/interest split." },
+      { title: "Instant result", body: "Results update as soon as you enter values." },
+    ],
+    relatedTitle: "Related calculators",
+    related: [
+      { href: "/en/mortgage-calculator/", label: "Mortgage Calculator", desc: "Monthly payment for a home loan." },
+      { href: "/en/dsr-calculator/", label: "DSR Calculator", desc: "Debt service ratio calculator." },
+      { href: "/en/present-value-calculator/", label: "Present Value Calculator", desc: "Present value of a future amount." },
+    ],
+    disclaimer: "This calculator is for reference only. Actual results vary with loan terms, fees, and variable rates. Confirm exact terms with your lender.",
+  },
+  ja: {
+    eyebrow: "金融計算ツール",
+    introTitle: "ローン計算機とは？",
+    intro: "ローン金額・年利・返済期間を入力すると、元利均等返済方式で月額返済額と総利息を計算し、初期の返済スケジュールを表示するツールです。",
+    howToTitle: "使い方",
+    steps: ["ローン元金を入力します。", "年利（％）を入力します。", "返済期間（月または年）を設定します。", "月額返済額・総利息・返済スケジュールを確認します。"],
+    highlightsTitle: "主な特徴",
+    highlights: [
+      { title: "元利均等返済", body: "毎月同額返済を基準に計算します。" },
+      { title: "返済スケジュール", body: "初期の月別の元金・利息内訳を表示します。" },
+      { title: "即時計算", body: "値を入力するとすぐに結果が更新されます。" },
+    ],
+    relatedTitle: "関連計算機",
+    related: [
+      { href: "/ja/mortgage-calculator/", label: "住宅ローン計算機", desc: "住宅ローンの月返済額を計算します。" },
+      { href: "/ja/dsr-calculator/", label: "DSR計算機", desc: "総負債元利金返済比率を計算します。" },
+      { href: "/ja/present-value-calculator/", label: "現在価値計算機", desc: "将来の金額の現在価値を計算します。" },
+    ],
+    disclaimer: "本計算機は参考用です。実際の結果はローン条件・手数料・変動金利により異なります。正確な条件は金融機関にご確認ください。",
+  },
+};
+
+const faqs = {
+  ko: [
+    { q: "원리금균등상환이란?", a: "매월 원금과 이자를 합쳐 동일한 금액을 상환하는 방식입니다." },
+    { q: "총 이자를 줄이려면?", a: "기간을 줄이거나 금리를 낮추고, 가능하면 중도상환을 활용하세요." },
+    { q: "주택담보대출과 다른가요?", a: "계산 원리는 같습니다. 주택담보대출은 담보가 있어 금리·한도 조건이 다를 수 있습니다." },
+  ],
+  en: [
+    { q: "What is annuity repayment?", a: "You pay the same total amount each month, combining principal and interest." },
+    { q: "How do I reduce total interest?", a: "Shorten the term, lower the rate, or make prepayments where possible." },
+    { q: "Is this different from a mortgage?", a: "The math is the same; a mortgage is secured by collateral, which can change rate and limit terms." },
+  ],
+  ja: [
+    { q: "元利均等返済とは？", a: "毎月、元金と利息を合わせて同額を返済する方式です。" },
+    { q: "総利息を減らすには？", a: "期間を短くするか金利を下げ、可能なら繰上返済を活用します。" },
+    { q: "住宅ローンと違いますか？", a: "計算原理は同じです。住宅ローンは担保があるため金利・限度条件が異なる場合があります。" },
+  ],
+};
+
+type Loc = keyof typeof content;
+const baseContent = content[(locale as Loc)] ?? content.en;
+const c = { ...baseContent, related: baseContent.related.map((r) => ({ ...r, href: r.href.replace(/^\/[a-z]{2}\//, `/${locale}/`) })) };
+const faqHeading = locale === "ko" ? "자주 묻는 질문" : locale === "ja" ? "よくある質問" : "FAQ";
+const faqItems = (faqs[(locale as keyof typeof faqs)] ?? faqs.en).map((x) => ({ q: x.q, a: x.a }));
 ---
 
 <BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <LoanCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
-  </main>
+  <ToolShell
+    title={m.title}
+    description={m.description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="loan-calculator"
+    content={c}
+    applicationCategory="FinanceApplication"
+  >
+    <div class="mx-auto max-w-2xl">
+      <LoanCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
 </BaseLayout>
