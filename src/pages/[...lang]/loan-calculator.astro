@@ -3,6 +3,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import LoanCalculatorComp from "../../components/calculators/LoanCalculator";
 import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
 import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
 import { siteConfig } from "../../config/site.config";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
@@ -130,11 +131,7 @@ const faqs = {
   ],
 };
 
-type Loc = keyof typeof content;
-const baseContent = content[(locale as Loc)] ?? content.en;
-const c = { ...baseContent, related: baseContent.related.map((r) => ({ ...r, href: r.href.replace(/^\/[a-z]{2}\//, `/${locale}/`) })) };
-const faqHeading = locale === "ko" ? "자주 묻는 질문" : locale === "ja" ? "よくある質問" : "FAQ";
-const faqItems = (faqs[(locale as keyof typeof faqs)] ?? faqs.en).map((x) => ({ q: x.q, a: x.a }));
+const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
 ---
 
 <BaseLayout title={m.title} description={m.description}>

@@ -1,6 +1,10 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import DsrCalculatorComp from "../../components/calculators/DsrCalculator";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -45,10 +49,104 @@ const meta: Record<Locale, { title: string; description: string }> = {
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content = {
+  ko: {
+    eyebrow: "금융 계산 도구",
+    introTitle: "DSR 계산기란?",
+    intro: "총부채원리금상환비율(DSR)은 연소득 대비 모든 대출의 연간 원리금 상환액 비율입니다. 이 도구로 대출 가능 한도를 미리 가늠할 수 있습니다.",
+    howToTitle: "사용 방법",
+    steps: ["연소득을 입력합니다.", "기존 대출의 연간 원리금 상환액을 입력합니다.", "신규 대출 조건을 입력합니다.", "DSR 비율과 규제 한도(40%/50%) 대비 여유를 확인합니다."],
+    highlightsTitle: "주요 특징",
+    highlights: [
+      { title: "DSR 자동 계산", body: "모든 대출의 연 원리금을 합산해 연소득 대비 비율을 계산합니다." },
+      { title: "규제 한도 비교", body: "은행권 40%, 비은행권 50% 기준과 비교합니다." },
+      { title: "한도 가늠", body: "신규 대출 가능 여부를 사전에 파악할 수 있습니다." },
+    ],
+    relatedTitle: "관련 계산기",
+    related: [
+      { href: "/ko/mortgage-calculator/", label: "주택담보대출 계산기", desc: "월 상환금과 총 이자를 계산합니다." },
+      { href: "/ko/loan-calculator/", label: "대출 계산기", desc: "일반 대출의 월 상환금을 계산합니다." },
+      { href: "/ko/jeonse-vs-buy-calculator/", label: "전세 vs 매매", desc: "전세와 매매 비용을 비교합니다." },
+    ],
+    disclaimer: "본 계산기는 참고용이며, 실제 DSR 산정은 금융기관의 기준·우대·만기에 따라 달라질 수 있습니다. 정확한 한도는 금융기관에 확인하세요.",
+  },
+  en: {
+    eyebrow: "Finance Tool",
+    introTitle: "What is the DSR calculator?",
+    intro: "Debt Service Ratio (DSR) is the share of your annual income spent on the yearly principal-and-interest of all loans. This tool helps you estimate your borrowing capacity.",
+    howToTitle: "How to use",
+    steps: ["Enter your annual income.", "Enter the annual principal-and-interest of existing loans.", "Enter the new loan terms.", "Review your DSR and the headroom against the 40%/50% caps."],
+    highlightsTitle: "Highlights",
+    highlights: [
+      { title: "Automatic DSR", body: "Sums the yearly repayment of all loans against annual income." },
+      { title: "Regulatory caps", body: "Compares against the 40% (banks) and 50% (non-banks) limits." },
+      { title: "Capacity estimate", body: "See whether a new loan is likely to be approved." },
+    ],
+    relatedTitle: "Related calculators",
+    related: [
+      { href: "/en/mortgage-calculator/", label: "Mortgage Calculator", desc: "Monthly payment and total interest." },
+      { href: "/en/loan-calculator/", label: "Loan Calculator", desc: "Monthly payment for a general loan." },
+      { href: "/en/jeonse-vs-buy-calculator/", label: "Jeonse vs Buy", desc: "Compare jeonse vs buying costs." },
+    ],
+    disclaimer: "This calculator is for reference only. Actual DSR depends on each lender's rules, preferential terms, and maturity. Confirm your limit with the lender.",
+  },
+  ja: {
+    eyebrow: "金融計算ツール",
+    introTitle: "DSR計算機とは？",
+    intro: "総負債元利金返済比率（DSR）は、年収に対する全ローンの年間元利返済額の割合です。このツールで借入可能額を事前に把握できます。",
+    howToTitle: "使い方",
+    steps: ["年収を入力します。", "既存ローンの年間元利返済額を入力します。", "新規ローンの条件を入力します。", "DSR比率と規制上限（40%/50%）に対する余裕を確認します。"],
+    highlightsTitle: "主な特徴",
+    highlights: [
+      { title: "DSR自動計算", body: "全ローンの年間返済額を合算し年収比を計算します。" },
+      { title: "規制上限比較", body: "銀行40%、非銀行50%の基準と比較します。" },
+      { title: "限度の目安", body: "新規ローンの可否を事前に把握できます。" },
+    ],
+    relatedTitle: "関連計算機",
+    related: [
+      { href: "/ja/mortgage-calculator/", label: "住宅ローン計算機", desc: "月返済額と総利息を計算します。" },
+      { href: "/ja/loan-calculator/", label: "ローン計算機", desc: "一般ローンの月返済額を計算します。" },
+      { href: "/ja/jeonse-vs-buy-calculator/", label: "チョンセ vs 購入", desc: "チョンセと購入の費用を比較します。" },
+    ],
+    disclaimer: "本計算機は参考用です。実際のDSRは金融機関の基準・優遇・満期により異なります。正確な限度は金融機関にご確認ください。",
+  },
+};
+
+const faqs = {
+  ko: [
+    { q: "DSR이 무엇인가요?", a: "연소득 대비 모든 대출의 연간 원리금 상환액 비율입니다. 대출 심사에서 한도를 결정하는 핵심 지표입니다." },
+    { q: "DSR 한도는 얼마인가요?", a: "일반적으로 은행권 40%, 비은행권 50%가 적용됩니다. 대출 종류·규제에 따라 달라질 수 있습니다." },
+    { q: "DSR을 낮추려면?", a: "기존 대출을 상환하거나, 만기를 늘려 연 상환액을 줄이거나, 소득을 늘리면 DSR이 낮아집니다." },
+  ],
+  en: [
+    { q: "What is DSR?", a: "It is the ratio of all loans' annual principal-and-interest to your annual income — a key metric lenders use to set limits." },
+    { q: "What is the DSR cap?", a: "Typically 40% for banks and 50% for non-banks, varying by loan type and regulation." },
+    { q: "How do I lower my DSR?", a: "Repay existing loans, extend maturity to reduce yearly payments, or increase income." },
+  ],
+  ja: [
+    { q: "DSRとは？", a: "年収に対する全ローンの年間元利返済額の割合で、審査で限度を決める重要指標です。" },
+    { q: "DSRの上限は？", a: "一般に銀行40%、非銀行50%が適用され、ローン種類・規制により異なります。" },
+    { q: "DSRを下げるには？", a: "既存ローンの返済、満期延長による年返済額の圧縮、収入増などが有効です。" },
+  ],
+};
+
+const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
 ---
 
 <BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <DsrCalculatorComp client:load />
-  </main>
+  <ToolShell
+    title={m.title}
+    description={m.description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="dsr-calculator"
+    content={c}
+    applicationCategory="FinanceApplication"
+  >
+    <div class="mx-auto max-w-2xl">
+      <DsrCalculatorComp client:load />
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
 </BaseLayout>
