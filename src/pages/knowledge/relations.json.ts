@@ -31,7 +31,9 @@ function readAllSeedTopics(): SeedTopic[] {
   return (seedData as { topics?: SeedTopic[] }).topics ?? [];
 }
 
-const norm = (s: string) => s.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+// Unicode-aware: keep letters/numbers of any script (CJK, Hangul) so non-latin
+// tags/aliases (e.g. 해몽, 태몽) don't all collapse to the same token.
+const norm = (s: string) => s.toLowerCase().trim().replace(/[^\p{L}\p{N}]+/gu, "-").replace(/^-|-$/g, "");
 
 export const GET: APIRoute = async () => {
   const posts = await getCollection("blog", ({ data }) => data.draft !== true);

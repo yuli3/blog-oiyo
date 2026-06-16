@@ -12,7 +12,9 @@ const locales = siteConfig.locales;
 // Topic map: hub concepts from the shared seed. Blog is the explanation layer,
 // so each concept links to its canonical definition on wiki and shows how many
 // English blog guides explain it (tag match) — the cross-site path made visible.
-const norm = (s: string) => s.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+// Unicode-aware: keep letters/numbers of any script (CJK, Hangul) so non-latin
+// tags/aliases (e.g. 해몽, 태몽) don't all collapse to the same token.
+const norm = (s: string) => s.toLowerCase().trim().replace(/[^\p{L}\p{N}]+/gu, "-").replace(/^-|-$/g, "");
 const enGuideTagCount = new Map<string, number>();
 for (const p of posts) {
   if ((p.data.locale ?? p.slug.split("/")[0]) !== "en") continue;
