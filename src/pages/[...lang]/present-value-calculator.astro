@@ -1,6 +1,10 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PresentValueCalculatorComp from "../../components/calculators/PresentValueCalculator";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -42,10 +46,104 @@ const meta: Record<Locale, { title: string; description: string }> = {
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content = {
+  ko: {
+    eyebrow: "금융 계산 도구",
+    introTitle: "연금 현재가치 계산기란?",
+    intro: "미래에 정기적으로 받을 금액(연금·배상금 등)을 현재 시점의 가치로 환산하는 도구입니다. 라이프니츠(복리) 또는 호프만(단리) 할인 방식을 선택할 수 있습니다.",
+    howToTitle: "사용 방법",
+    steps: ["월 또는 연 수령액을 입력합니다.", "수령 기간을 설정합니다.", "할인율과 방식(라이프니츠/호프만)을 선택합니다.", "현재가치 합계를 확인합니다."],
+    highlightsTitle: "주요 특징",
+    highlights: [
+      { title: "두 가지 방식", body: "복리 할인(라이프니츠)과 단리 할인(호프만)을 모두 지원합니다." },
+      { title: "배상·연금 평가", body: "손해배상 일실수입, 퇴직연금 등 미래 현금흐름 평가에 활용됩니다." },
+      { title: "즉시 계산", body: "값을 입력하면 즉시 현재가치가 계산됩니다." },
+    ],
+    relatedTitle: "관련 계산기",
+    related: [
+      { href: "/ko/compound2-calculator/", label: "복리 계산기", desc: "복리로 불어나는 미래가치를 계산합니다." },
+      { href: "/ko/savings-comparison-calculator/", label: "예적금 비교", desc: "예금·적금 수익을 비교합니다." },
+      { href: "/ko/loan-calculator/", label: "대출 계산기", desc: "대출 월 상환금을 계산합니다." },
+    ],
+    disclaimer: "본 계산기는 참고용이며, 실제 평가는 적용 할인율·법원 기준·세제에 따라 달라질 수 있습니다. 정확한 산정은 전문가 상담을 권장합니다.",
+  },
+  en: {
+    eyebrow: "Finance Tool",
+    introTitle: "What is the present value (annuity) calculator?",
+    intro: "It converts future periodic payments (annuities, compensation, etc.) into their value today. Choose compound-interest (Leibniz) or simple-interest (Hoffman) discounting.",
+    howToTitle: "How to use",
+    steps: ["Enter the monthly or annual payment.", "Set the payment period.", "Choose the discount rate and method (Leibniz/Hoffman).", "Review the total present value."],
+    highlightsTitle: "Highlights",
+    highlights: [
+      { title: "Two methods", body: "Supports both compound (Leibniz) and simple (Hoffman) discounting." },
+      { title: "Compensation & pensions", body: "Useful for valuing lost income, retirement annuities, and other future cash flows." },
+      { title: "Instant result", body: "Present value is computed as soon as you enter values." },
+    ],
+    relatedTitle: "Related calculators",
+    related: [
+      { href: "/en/compound2-calculator/", label: "Compound Interest Calculator", desc: "Future value under compounding." },
+      { href: "/en/savings-comparison-calculator/", label: "Savings Comparison", desc: "Compare deposit and installment savings." },
+      { href: "/en/loan-calculator/", label: "Loan Calculator", desc: "Monthly payment for a loan." },
+    ],
+    disclaimer: "This calculator is for reference only. Actual valuation depends on the discount rate, court standards, and taxes. Consult a professional for accuracy.",
+  },
+  ja: {
+    eyebrow: "金融計算ツール",
+    introTitle: "年金現在価値計算機とは？",
+    intro: "将来定期的に受け取る金額（年金・賠償金など）を現在の価値に換算するツールです。ライプニッツ（複利）またはホフマン（単利）の割引方式を選べます。",
+    howToTitle: "使い方",
+    steps: ["月額または年額の受取額を入力します。", "受取期間を設定します。", "割引率と方式（ライプニッツ/ホフマン）を選択します。", "現在価値の合計を確認します。"],
+    highlightsTitle: "主な特徴",
+    highlights: [
+      { title: "2つの方式", body: "複利割引（ライプニッツ）と単利割引（ホフマン）に対応します。" },
+      { title: "賠償・年金評価", body: "逸失利益や退職年金など将来キャッシュフローの評価に役立ちます。" },
+      { title: "即時計算", body: "値を入力するとすぐに現在価値が計算されます。" },
+    ],
+    relatedTitle: "関連計算機",
+    related: [
+      { href: "/ja/compound2-calculator/", label: "複利計算機", desc: "複利で増える将来価値を計算します。" },
+      { href: "/ja/savings-comparison-calculator/", label: "預金比較", desc: "預金・積立の収益を比較します。" },
+      { href: "/ja/loan-calculator/", label: "ローン計算機", desc: "ローンの月返済額を計算します。" },
+    ],
+    disclaimer: "本計算機は参考用です。実際の評価は割引率・裁判基準・税制により異なります。正確な算定は専門家にご相談ください。",
+  },
+};
+
+const faqs = {
+  ko: [
+    { q: "현재가치란 무엇인가요?", a: "미래에 받을 돈을 할인율로 환산해 현재 시점의 가치로 나타낸 금액입니다. 돈의 시간가치를 반영합니다." },
+    { q: "라이프니츠와 호프만의 차이는?", a: "라이프니츠는 복리로, 호프만은 단리로 할인합니다. 손해배상 실무에서 둘 다 사용됩니다." },
+    { q: "할인율은 어떻게 정하나요?", a: "법정이율, 시장금리 등 목적에 따라 다릅니다. 적용 기준에 맞는 할인율을 선택하세요." },
+  ],
+  en: [
+    { q: "What is present value?", a: "It is the value today of money to be received in the future, discounted by a rate — reflecting the time value of money." },
+    { q: "Leibniz vs Hoffman?", a: "Leibniz discounts with compound interest; Hoffman with simple interest. Both are used in compensation practice." },
+    { q: "How do I choose the discount rate?", a: "It depends on the purpose (statutory rate, market rate, etc.). Pick the rate appropriate to your standard." },
+  ],
+  ja: [
+    { q: "現在価値とは？", a: "将来受け取るお金を割引率で換算した、現在の価値です。お金の時間価値を反映します。" },
+    { q: "ライプニッツとホフマンの違いは？", a: "ライプニッツは複利、ホフマンは単利で割引します。賠償実務では両方が使われます。" },
+    { q: "割引率はどう決めますか？", a: "法定利率や市場金利など目的により異なります。基準に合う割引率を選びます。" },
+  ],
+};
+
+const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
 ---
 
 <BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <PresentValueCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
-  </main>
+  <ToolShell
+    title={m.title}
+    description={m.description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="present-value-calculator"
+    content={c}
+    applicationCategory="FinanceApplication"
+  >
+    <div class="mx-auto max-w-2xl">
+      <PresentValueCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
 </BaseLayout>

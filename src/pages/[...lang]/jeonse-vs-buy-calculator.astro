@@ -1,6 +1,10 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import JeonsevsBuyCalculator from "../../components/calculators/JeonsevsBuyCalculator";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -45,10 +49,104 @@ const meta: Record<Locale, { title: string; description: string }> = {
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content = {
+  ko: {
+    eyebrow: "부동산 계산 도구",
+    introTitle: "전세 vs 매매 비교 계산기란?",
+    intro: "매매가·전세가·대출 금리·예상 거주 기간을 입력해, 같은 집에 살 때 전세와 매매 중 어느 쪽의 총비용이 더 적은지 비교하는 도구입니다.",
+    howToTitle: "사용 방법",
+    steps: ["매매가와 전세가를 입력합니다.", "대출 금리와 자기자본을 입력합니다.", "예상 거주 기간과 집값 상승률을 설정합니다.", "전세·매매 총비용과 손익 차이를 확인합니다."],
+    highlightsTitle: "주요 특징",
+    highlights: [
+      { title: "총비용 비교", body: "전세 기회비용과 매매의 이자·세금·집값 변동을 함께 반영합니다." },
+      { title: "기간 가정", body: "거주 기간과 집값 상승률 가정에 따른 손익을 보여줍니다." },
+      { title: "의사결정 보조", body: "전세 유지와 매매 전환의 손익분기를 가늠합니다." },
+    ],
+    relatedTitle: "관련 계산기",
+    related: [
+      { href: "/ko/mortgage-calculator/", label: "주택담보대출 계산기", desc: "매매 시 월 상환금을 계산합니다." },
+      { href: "/ko/dsr-calculator/", label: "DSR 계산기", desc: "대출 가능 한도를 확인합니다." },
+      { href: "/ko/home-buying-calculator/", label: "내 집 마련 계산기", desc: "주택 구입 자금 계획을 세웁니다." },
+    ],
+    disclaimer: "본 계산기는 참고용이며, 실제 결과는 세금·거래비용·금리 변동·집값 변동에 따라 크게 달라질 수 있습니다. 중요한 결정은 전문가 상담을 권장합니다.",
+  },
+  en: {
+    eyebrow: "Real Estate Tool",
+    introTitle: "What is the jeonse vs buy calculator?",
+    intro: "Enter the purchase price, jeonse deposit, loan rate, and expected holding period to compare which is cheaper overall for living in the same home: jeonse (Korean lease) or buying.",
+    howToTitle: "How to use",
+    steps: ["Enter the purchase price and jeonse deposit.", "Enter the loan rate and your equity.", "Set the expected holding period and home-price growth.", "Compare total costs and the difference between jeonse and buying."],
+    highlightsTitle: "Highlights",
+    highlights: [
+      { title: "Total-cost comparison", body: "Reflects the opportunity cost of jeonse and the interest, taxes, and price change of buying." },
+      { title: "Scenario-based", body: "Shows the outcome under your holding period and price-growth assumptions." },
+      { title: "Decision aid", body: "Estimates the break-even between keeping jeonse and buying." },
+    ],
+    relatedTitle: "Related calculators",
+    related: [
+      { href: "/en/mortgage-calculator/", label: "Mortgage Calculator", desc: "Monthly payment if you buy." },
+      { href: "/en/dsr-calculator/", label: "DSR Calculator", desc: "Check your borrowing capacity." },
+      { href: "/en/home-buying-calculator/", label: "Home Buying Calculator", desc: "Plan your home-purchase funds." },
+    ],
+    disclaimer: "This calculator is for reference only. Actual results vary greatly with taxes, transaction costs, and rate/price movements. Consult a professional for major decisions.",
+  },
+  ja: {
+    eyebrow: "不動産計算ツール",
+    introTitle: "チョンセ vs 購入比較計算機とは？",
+    intro: "売買価格・チョンセ保証金・ローン金利・予想居住期間を入力し、同じ家に住む場合にチョンセと購入のどちらが総費用で有利かを比較するツールです。",
+    howToTitle: "使い方",
+    steps: ["売買価格とチョンセ保証金を入力します。", "ローン金利と自己資金を入力します。", "予想居住期間と住宅価格上昇率を設定します。", "チョンセ・購入の総費用と損益差を確認します。"],
+    highlightsTitle: "主な特徴",
+    highlights: [
+      { title: "総費用比較", body: "チョンセの機会費用と購入の利息・税金・価格変動を反映します。" },
+      { title: "シナリオ前提", body: "居住期間と価格上昇率の前提による損益を表示します。" },
+      { title: "意思決定支援", body: "チョンセ維持と購入転換の損益分岐を見積もります。" },
+    ],
+    relatedTitle: "関連計算機",
+    related: [
+      { href: "/ja/mortgage-calculator/", label: "住宅ローン計算機", desc: "購入時の月返済額を計算します。" },
+      { href: "/ja/dsr-calculator/", label: "DSR計算機", desc: "借入可能額を確認します。" },
+      { href: "/ja/home-buying-calculator/", label: "住宅購入計算機", desc: "住宅購入資金を計画します。" },
+    ],
+    disclaimer: "本計算機は参考用です。実際の結果は税金・取引費用・金利や価格変動により大きく異なります。重要な決定は専門家にご相談ください。",
+  },
+};
+
+const faqs = {
+  ko: [
+    { q: "전세와 매매, 무엇이 유리한가요?", a: "거주 기간이 길고 집값이 오를 것으로 보면 매매가, 짧거나 집값 정체가 예상되면 전세가 유리한 경향이 있습니다. 가정에 따라 달라집니다." },
+    { q: "전세의 기회비용이란?", a: "전세보증금을 다른 곳에 투자했을 때 얻을 수 있는 수익입니다. 이를 비용으로 반영해 비교합니다." },
+    { q: "집값 상승률은 어떻게 정하나요?", a: "지역·시장 전망에 따라 다릅니다. 보수적·낙관적 시나리오를 각각 넣어 보는 것이 좋습니다." },
+  ],
+  en: [
+    { q: "Which is better, jeonse or buying?", a: "Buying tends to win with a long stay and rising prices; jeonse with a short stay or flat prices. It depends on your assumptions." },
+    { q: "What is the opportunity cost of jeonse?", a: "The return you could earn by investing the jeonse deposit elsewhere, counted as a cost in the comparison." },
+    { q: "How do I set home-price growth?", a: "It depends on the area and outlook; try both conservative and optimistic scenarios." },
+  ],
+  ja: [
+    { q: "チョンセと購入、どちらが有利？", a: "居住が長く価格上昇が見込めるなら購入、短期や価格停滞ならチョンセが有利な傾向です。前提により異なります。" },
+    { q: "チョンセの機会費用とは？", a: "保証金を他に投資した場合に得られる収益で、これを費用として比較に反映します。" },
+    { q: "価格上昇率はどう決める？", a: "地域・市場見通しにより異なります。保守的・楽観的シナリオの両方を試すとよいです。" },
+  ],
+};
+
+const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
 ---
 
 <BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <JeonsevsBuyCalculator client:load locale={locale === 'ko' ? 'ko' : 'en'} />
-  </main>
+  <ToolShell
+    title={m.title}
+    description={m.description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="jeonse-vs-buy-calculator"
+    content={c}
+    applicationCategory="FinanceApplication"
+  >
+    <div class="mx-auto max-w-2xl">
+      <JeonsevsBuyCalculator client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
 </BaseLayout>
