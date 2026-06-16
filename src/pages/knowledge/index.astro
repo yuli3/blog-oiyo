@@ -3,10 +3,39 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
 import { getCollection } from "astro:content";
 import { siteConfig } from "../../config/site.config";
+import seedData from "../../data/knowledge-seed.json";
 
 const posts = await getCollection("blog", ({ data }) => data.draft !== true);
 const guideCount = posts.length;
 const locales = siteConfig.locales;
+
+// Topic map: hub concepts from the shared seed. Blog is the explanation layer,
+// so each concept links to its canonical definition on wiki and shows how many
+// English blog guides explain it (tag match) — the cross-site path made visible.
+const norm = (s: string) => s.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+const enGuideTagCount = new Map<string, number>();
+for (const p of posts) {
+  if ((p.data.locale ?? p.slug.split("/")[0]) !== "en") continue;
+  for (const tag of p.data.tags ?? []) {
+    enGuideTagCount.set(norm(tag), (enGuideTagCount.get(norm(tag)) ?? 0) + 1);
+  }
+}
+type Seed = { id: string; name?: Record<string, string>; aliases?: string[]; relatedTopicIds?: string[] };
+const topicMap = ((seedData as { topics?: Seed[] }).topics ?? [])
+  .map((t) => {
+    const name = t.name?.en ?? t.id;
+    let guides = enGuideTagCount.get(norm(t.id)) ?? 0;
+    for (const a of t.aliases ?? []) guides = Math.max(guides, enGuideTagCount.get(norm(a)) ?? 0);
+    return {
+      id: t.id,
+      name,
+      // Same-site search for this concept (reliable; surfaces blog's guides).
+      href: `/en/search?q=${encodeURIComponent(name)}`,
+      guides,
+      related: t.relatedTopicIds ?? [],
+    };
+  })
+  .sort((a, b) => a.name.localeCompare(b.name));
 
 const resources = [
   { name: "guides.json", href: "/knowledge/guides.json", desc: `${guideCount} guides/articles (schema.org ItemList) with summary, track, locale and a stable URL.` },
@@ -44,6 +73,24 @@ const network = [
         </li>
       ))}
     </ul>
+
+    {topicMap.length > 0 && (
+      <>
+        <h2 class="text-2xl font-bold tracking-tight mb-4">Topic map</h2>
+        <p class="text-muted-foreground mb-4">Top-level concepts and how they connect. Each links to related guides.</p>
+        <div class="grid sm:grid-cols-2 gap-3 mb-12">
+          {topicMap.map((t) => (
+            <a href={t.href} class="border border-border rounded-lg p-4 block hover:border-primary transition-colors">
+              <span class="font-bold">{t.name}</span>
+              {t.guides > 0 && <span class="text-xs text-muted-foreground"> · {t.guides} guides</span>}
+              {t.related.length > 0 && (
+                <p class="text-xs text-muted-foreground mt-1">related: {t.related.join(", ")}</p>
+              )}
+            </a>
+          ))}
+        </div>
+      </>
+    )}
 
     <h2 class="text-2xl font-bold tracking-tight mb-4">The knowledge network</h2>
     <ul class="space-y-3 mb-12">
