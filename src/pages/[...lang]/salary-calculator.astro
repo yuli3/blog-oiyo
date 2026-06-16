@@ -1,14 +1,14 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import SalaryCalculatorComp from "../../components/tests/SalaryCalculator";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { siteConfig } from "../../config/site.config";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
 export async function getStaticPaths() {
-  return locales.map((lang) => ({
-    params: { lang },
-    props: { locale: lang },
-  }));
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
 const { locale } = Astro.props as { locale: Locale };
@@ -31,12 +31,111 @@ const meta: Record<Locale, { title: string; description: string }> = {
   zh: { title: "韩国薪资税后计算器", description: "按2024年标准自动计算四大保险扣除后的实收薪资。" },
   cn: { title: "韩国薪资税后计算器", description: "按2024年标准自动计算四大保险扣除后的实收薪资。" },
 };
-
 const m = meta[locale] ?? meta.en;
+
+// ToolShell SEO content — ko/en/ja authored, others fall back to en.
+const content = {
+  ko: {
+    eyebrow: "급여 계산 도구",
+    introTitle: "월급 실수령액 계산기란?",
+    intro: "세전 월급에서 국민연금·건강보험·장기요양보험·고용보험과 근로소득세·지방소득세를 공제한 실제 수령액을 계산하는 도구입니다. 2024년 요율 기준으로 동작합니다.",
+    howToTitle: "사용 방법",
+    steps: ["세전 월급 또는 연봉을 입력합니다.", "부양가족 수 등 공제 조건을 설정합니다.", "계산을 실행하면 4대 보험과 세금이 자동 공제됩니다.", "실수령액과 항목별 공제 내역을 확인합니다."],
+    highlightsTitle: "주요 특징",
+    highlights: [
+      { title: "4대 보험 자동 계산", body: "국민연금 4.5%, 건강보험 3.545%, 장기요양, 고용보험을 자동 반영합니다." },
+      { title: "2024년 기준", body: "최신 요율과 과세표준을 적용합니다." },
+      { title: "즉시 계산", body: "입력 즉시 실수령액이 계산됩니다." },
+    ],
+    relatedTitle: "관련 계산기",
+    related: [
+      { href: "/ko/annual-leave-calculator/", label: "연차 계산기", desc: "입사일 기준 연차 일수를 계산합니다." },
+      { href: "/ko/auto-tax-calculator/", label: "자동차세 계산기", desc: "배기량별 자동차세를 계산합니다." },
+      { href: "/ko/acquisition-tax-calculator/", label: "취득세 계산기", desc: "부동산 취득세를 계산합니다." },
+    ],
+    disclaimer: "본 계산기는 참고용이며, 실제 공제액은 회사 정책·비과세 항목·연말정산에 따라 달라질 수 있습니다. 정확한 세무는 전문가 상담을 권장합니다.",
+  },
+  en: {
+    eyebrow: "Salary Tool",
+    introTitle: "What is the Korean salary after-tax calculator?",
+    intro: "It estimates your Korean take-home pay by deducting the four social insurances (national pension, health, long-term care, employment) and income/local taxes from gross salary, using 2024 rates.",
+    howToTitle: "How to use",
+    steps: ["Enter your gross monthly or annual salary.", "Set deduction conditions such as number of dependents.", "Run the calculation to apply the four insurances and taxes automatically.", "Review your take-home pay and the itemized deductions."],
+    highlightsTitle: "Highlights",
+    highlights: [
+      { title: "Four insurances auto-applied", body: "National pension 4.5%, health 3.545%, long-term care, and employment insurance are applied automatically." },
+      { title: "2024 rates", body: "Uses the latest contribution rates and tax brackets." },
+      { title: "Instant result", body: "Take-home pay is computed as soon as you enter your salary." },
+    ],
+    relatedTitle: "Related calculators",
+    related: [
+      { href: "/en/annual-leave-calculator/", label: "Annual Leave Calculator", desc: "Compute leave days from your start date." },
+      { href: "/en/auto-tax-calculator/", label: "Auto Tax Calculator", desc: "Estimate vehicle tax by engine displacement." },
+      { href: "/en/acquisition-tax-calculator/", label: "Acquisition Tax Calculator", desc: "Estimate real-estate acquisition tax." },
+    ],
+    disclaimer: "This calculator is for reference only. Actual deductions vary with company policy, non-taxable allowances, and year-end settlement. Consult a tax professional for accuracy.",
+  },
+  ja: {
+    eyebrow: "給与計算ツール",
+    introTitle: "韓国給与手取り額計算機とは？",
+    intro: "税引前給与から4大保険（国民年金・健康保険・介護保険・雇用保険）と所得税・地方所得税を控除し、実際の手取り額を2024年基準で計算するツールです。",
+    howToTitle: "使い方",
+    steps: ["税引前の月給または年収を入力します。", "扶養家族数などの控除条件を設定します。", "計算を実行すると4大保険と税金が自動控除されます。", "手取り額と項目別の控除内訳を確認します。"],
+    highlightsTitle: "主な特徴",
+    highlights: [
+      { title: "4大保険を自動計算", body: "国民年金4.5%、健康保険3.545%、介護保険、雇用保険を自動反映します。" },
+      { title: "2024年基準", body: "最新の料率と課税標準を適用します。" },
+      { title: "即時計算", body: "入力するとすぐに手取り額が計算されます。" },
+    ],
+    relatedTitle: "関連計算機",
+    related: [
+      { href: "/ja/annual-leave-calculator/", label: "年次有給計算機", desc: "入社日基準の年休日数を計算します。" },
+      { href: "/ja/auto-tax-calculator/", label: "自動車税計算機", desc: "排気量別の自動車税を計算します。" },
+      { href: "/ja/acquisition-tax-calculator/", label: "取得税計算機", desc: "不動産取得税を計算します。" },
+    ],
+    disclaimer: "本計算機は参考用です。実際の控除額は会社の方針・非課税項目・年末調整により異なります。正確な税務は専門家にご相談ください。",
+  },
+};
+
+const faqs = {
+  ko: [
+    { q: "4대 보험은 무엇인가요?", a: "국민연금, 건강보험, 장기요양보험, 고용보험을 말합니다. 산재보험은 전액 사업주 부담이라 실수령액 계산에서 제외됩니다." },
+    { q: "실수령액은 어떻게 계산되나요?", a: "세전 급여에서 4대 보험 근로자 부담분과 근로소득세·지방소득세를 공제한 금액이 실수령액입니다." },
+    { q: "계산 결과가 실제와 같나요?", a: "비과세 수당, 부양가족, 연말정산 등에 따라 실제와 차이가 날 수 있으므로 참고용으로 사용하세요." },
+  ],
+  en: [
+    { q: "What are the four social insurances?", a: "National pension, health insurance, long-term care insurance, and employment insurance. Industrial-accident insurance is fully employer-paid and excluded from take-home pay." },
+    { q: "How is take-home pay calculated?", a: "It is gross salary minus the employee share of the four insurances and income/local taxes." },
+    { q: "Does the result match my real paycheck?", a: "It can differ due to non-taxable allowances, dependents, and year-end settlement, so use it as a reference." },
+  ],
+  ja: [
+    { q: "4大保険とは何ですか？", a: "国民年金・健康保険・介護保険・雇用保険を指します。労災保険は全額事業主負担のため手取り計算からは除外されます。" },
+    { q: "手取り額はどう計算しますか？", a: "税引前給与から4大保険の被用者負担分と所得税・地方所得税を控除した金額です。" },
+    { q: "計算結果は実際と同じですか？", a: "非課税手当・扶養家族・年末調整などにより実際と差が出ることがあるため、参考としてご利用ください。" },
+  ],
+};
+
+type Loc = keyof typeof content;
+const baseContent = content[(locale as Loc)] ?? content.en;
+// Re-prefix related links to the current locale (fallback content uses /en/).
+const c = { ...baseContent, related: baseContent.related.map((r) => ({ ...r, href: r.href.replace(/^\/[a-z]{2}\//, `/${locale}/`) })) };
+const faqHeading = locale === "ko" ? "자주 묻는 질문" : locale === "ja" ? "よくある質問" : "FAQ";
+const faqItems = (faqs[(locale as keyof typeof faqs)] ?? faqs.en).map((x) => ({ q: x.q, a: x.a }));
 ---
 
 <BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-xl px-4 py-8">
-    <SalaryCalculatorComp client:load locale={locale} />
-  </main>
+  <ToolShell
+    title={m.title}
+    description={m.description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="salary-calculator"
+    content={c}
+    applicationCategory="FinanceApplication"
+  >
+    <div class="mx-auto max-w-xl">
+      <SalaryCalculatorComp client:load locale={locale} />
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
 </BaseLayout>

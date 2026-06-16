@@ -37,7 +37,8 @@ const topicMap = ((seedData as { topics?: Seed[] }).topics ?? [])
       related: t.relatedTopicIds ?? [],
     };
   })
-  .sort((a, b) => a.name.localeCompare(b.name));
+  // Surface the most-covered topics first (by blog guide depth), then alphabetical.
+  .sort((a, b) => b.guides - a.guides || a.name.localeCompare(b.name));
 
 const resources = [
   { name: "guides.json", href: "/knowledge/guides.json", desc: `${guideCount} guides/articles (schema.org ItemList) with summary, track, locale and a stable URL.` },
