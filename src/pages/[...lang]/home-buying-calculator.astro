@@ -1,6 +1,10 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import HomeBuyingCalculatorComp from "../../components/calculators/HomeBuyingCalculator";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -42,10 +46,104 @@ const meta: Record<Locale, { title: string; description: string }> = {
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content = {
+  ko: {
+    eyebrow: "부동산 계산 도구",
+    introTitle: "내집마련 비용 계산기란?",
+    intro: "주택 매수에 드는 총비용(자기자본·대출·취득세·중개수수료 등)을 한눈에 정리해, 실제로 필요한 현금과 매달 부담을 가늠하는 도구입니다.",
+    howToTitle: "사용 방법",
+    steps: ["매매가를 입력합니다.", "보유 자기자본과 대출 조건(금리·기간)을 입력합니다.", "취득세·중개수수료 등 부대비용을 설정합니다.", "필요 현금 총액과 예상 월 상환금을 확인합니다."],
+    highlightsTitle: "주요 특징",
+    highlights: [
+      { title: "총비용 정리", body: "취득세·중개수수료·이사 등 부대비용까지 합산합니다." },
+      { title: "현금·대출 분해", body: "필요한 자기자본과 대출 규모를 구분해 보여줍니다." },
+      { title: "월 부담 추정", body: "대출 상환에 따른 매달 부담을 미리 가늠합니다." },
+    ],
+    relatedTitle: "관련 계산기",
+    related: [
+      { href: "/ko/mortgage-calculator/", label: "주택담보대출 계산기", desc: "월 상환금과 총 이자를 계산합니다." },
+      { href: "/ko/dsr-calculator/", label: "DSR 계산기", desc: "대출 가능 한도를 확인합니다." },
+      { href: "/ko/jeonse-vs-buy-calculator/", label: "전세 vs 매매", desc: "전세와 매매 비용을 비교합니다." },
+    ],
+    disclaimer: "본 계산기는 참고용이며, 실제 비용은 지역·취득세율·대출 조건·정책에 따라 달라질 수 있습니다. 정확한 산정은 전문가 상담을 권장합니다.",
+  },
+  en: {
+    eyebrow: "Real Estate Tool",
+    introTitle: "What is the home-buying cost calculator?",
+    intro: "It summarizes the total cost of buying a home — equity, loan, acquisition tax, brokerage fees, and more — so you can gauge the cash you actually need and your monthly burden.",
+    howToTitle: "How to use",
+    steps: ["Enter the purchase price.", "Enter your equity and loan terms (rate, term).", "Set extra costs such as acquisition tax and brokerage fees.", "Review the total cash needed and the estimated monthly payment."],
+    highlightsTitle: "Highlights",
+    highlights: [
+      { title: "Total cost", body: "Adds up extras like acquisition tax, brokerage fees, and moving." },
+      { title: "Cash vs loan", body: "Separates the equity required from the loan amount." },
+      { title: "Monthly estimate", body: "Previews the monthly burden from loan repayment." },
+    ],
+    relatedTitle: "Related calculators",
+    related: [
+      { href: "/en/mortgage-calculator/", label: "Mortgage Calculator", desc: "Monthly payment and total interest." },
+      { href: "/en/dsr-calculator/", label: "DSR Calculator", desc: "Check your borrowing capacity." },
+      { href: "/en/jeonse-vs-buy-calculator/", label: "Jeonse vs Buy", desc: "Compare jeonse vs buying costs." },
+    ],
+    disclaimer: "This calculator is for reference only. Actual costs vary with region, tax rates, loan terms, and policy. Consult a professional for accuracy.",
+  },
+  ja: {
+    eyebrow: "不動産計算ツール",
+    introTitle: "住宅購入費用計算機とは？",
+    intro: "住宅購入にかかる総費用（自己資金・ローン・取得税・仲介手数料など）を一覧で整理し、実際に必要な現金と毎月の負担を把握するツールです。",
+    howToTitle: "使い方",
+    steps: ["売買価格を入力します。", "自己資金とローン条件（金利・期間）を入力します。", "取得税・仲介手数料などの諸費用を設定します。", "必要現金総額と予想月返済額を確認します。"],
+    highlightsTitle: "主な特徴",
+    highlights: [
+      { title: "総費用の整理", body: "取得税・仲介手数料・引越などの諸費用も合算します。" },
+      { title: "現金・ローン分解", body: "必要な自己資金とローン規模を分けて表示します。" },
+      { title: "月負担の推定", body: "ローン返済による毎月の負担を事前に把握します。" },
+    ],
+    relatedTitle: "関連計算機",
+    related: [
+      { href: "/ja/mortgage-calculator/", label: "住宅ローン計算機", desc: "月返済額と総利息を計算します。" },
+      { href: "/ja/dsr-calculator/", label: "DSR計算機", desc: "借入可能額を確認します。" },
+      { href: "/ja/jeonse-vs-buy-calculator/", label: "チョンセ vs 購入", desc: "チョンセと購入の費用を比較します。" },
+    ],
+    disclaimer: "本計算機は参考用です。実際の費用は地域・取得税率・ローン条件・政策により異なります。正確な算定は専門家にご相談ください。",
+  },
+};
+
+const faqs = {
+  ko: [
+    { q: "내집마련에 현금이 얼마나 필요한가요?", a: "매매가에서 대출금을 뺀 자기자본에, 취득세·중개수수료·이사비 등 부대비용을 더한 금액이 필요합니다." },
+    { q: "취득세는 얼마인가요?", a: "주택 가격과 보유 주택 수에 따라 1~12%로 달라집니다. 생애최초 등 감면 제도도 있습니다." },
+    { q: "대출은 얼마까지 되나요?", a: "LTV·DSR 규제에 따라 한도가 정해집니다. DSR 계산기로 상환 부담을 먼저 확인하세요." },
+  ],
+  en: [
+    { q: "How much cash do I need to buy a home?", a: "Equity (price minus loan) plus extras such as acquisition tax, brokerage fees, and moving costs." },
+    { q: "How much is acquisition tax?", a: "It ranges roughly 1–12% depending on price and number of homes owned; first-time buyers may get relief." },
+    { q: "How large a loan can I get?", a: "It is capped by LTV and DSR rules. Check repayment burden first with the DSR calculator." },
+  ],
+  ja: [
+    { q: "住宅購入に現金はいくら必要？", a: "自己資金（価格−ローン）に、取得税・仲介手数料・引越費用などの諸費用を加えた額が必要です。" },
+    { q: "取得税はいくら？", a: "価格と保有戸数により概ね1〜12%です。初回購入などの軽減制度もあります。" },
+    { q: "ローンはいくらまで？", a: "LTV・DSR規制で上限が決まります。まずDSR計算機で返済負担を確認しましょう。" },
+  ],
+};
+
+const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
 ---
 
 <BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-3xl px-4 py-8">
-    <HomeBuyingCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
-  </main>
+  <ToolShell
+    title={m.title}
+    description={m.description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="home-buying-calculator"
+    content={c}
+    applicationCategory="FinanceApplication"
+  >
+    <div class="mx-auto max-w-3xl">
+      <HomeBuyingCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
 </BaseLayout>

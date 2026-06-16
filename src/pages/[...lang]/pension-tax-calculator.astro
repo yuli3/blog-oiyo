@@ -1,6 +1,10 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PensionTaxCalculatorComp from "../../components/calculators/PensionTaxCalculator";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -42,10 +46,104 @@ const meta: Record<Locale, { title: string; description: string }> = {
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content = {
+  ko: {
+    eyebrow: "세금 계산 도구",
+    introTitle: "연금저축 세액공제 계산기란?",
+    intro: "연금저축·IRP 납입액에 대한 세액공제 환급액을 계산하는 도구입니다. 총급여에 따른 공제율(13.2% 또는 16.5%)과 한도를 반영합니다.",
+    howToTitle: "사용 방법",
+    steps: ["연간 총급여(또는 종합소득)를 입력합니다.", "연금저축·IRP 납입액을 입력합니다.", "공제 한도와 적용 공제율이 자동 반영됩니다.", "예상 세액공제 환급액을 확인합니다."],
+    highlightsTitle: "주요 특징",
+    highlights: [
+      { title: "공제율 자동 적용", body: "총급여 5,500만원(종합소득 4,500만원) 기준 16.5%/13.2%를 자동 적용합니다." },
+      { title: "한도 반영", body: "연금저축·IRP 합산 납입 한도를 반영해 계산합니다." },
+      { title: "환급액 추정", body: "연말정산에서 돌려받을 예상 금액을 가늠합니다." },
+    ],
+    relatedTitle: "관련 계산기",
+    related: [
+      { href: "/ko/pension-optimizer-calculator/", label: "연금 최적화 계산기", desc: "연금저축·IRP 납입 배분을 최적화합니다." },
+      { href: "/ko/fire-retirement-calculator/", label: "조기은퇴 계산기", desc: "은퇴 목표 자금을 계산합니다." },
+      { href: "/ko/savings-comparison-calculator/", label: "예적금 비교", desc: "예금·적금 수익을 비교합니다." },
+    ],
+    disclaimer: "본 계산기는 참고용이며, 실제 공제·환급액은 소득 구성·다른 공제 항목·세법 개정에 따라 달라질 수 있습니다. 정확한 산정은 전문가 상담을 권장합니다.",
+  },
+  en: {
+    eyebrow: "Tax Tool",
+    introTitle: "What is the pension savings tax-credit calculator?",
+    intro: "It estimates the tax-credit refund for pension savings and IRP contributions, applying the credit rate (13.2% or 16.5%) and limit based on your gross salary.",
+    howToTitle: "How to use",
+    steps: ["Enter your annual gross salary (or total income).", "Enter your pension savings / IRP contributions.", "The credit limit and applicable rate are applied automatically.", "Review your estimated tax-credit refund."],
+    highlightsTitle: "Highlights",
+    highlights: [
+      { title: "Automatic credit rate", body: "Applies 16.5% / 13.2% based on the 55M KRW salary (45M income) threshold." },
+      { title: "Limit applied", body: "Reflects the combined pension-savings/IRP contribution limit." },
+      { title: "Refund estimate", body: "Gauges the amount you may get back at year-end settlement." },
+    ],
+    relatedTitle: "Related calculators",
+    related: [
+      { href: "/en/pension-optimizer-calculator/", label: "Pension Optimizer", desc: "Optimize pension/IRP contribution split." },
+      { href: "/en/fire-retirement-calculator/", label: "FIRE Calculator", desc: "Compute your retirement target." },
+      { href: "/en/savings-comparison-calculator/", label: "Savings Comparison", desc: "Compare deposit and installment savings." },
+    ],
+    disclaimer: "This calculator is for reference only. Actual credit/refund varies with income composition, other deductions, and tax-law changes. Consult a professional for accuracy.",
+  },
+  ja: {
+    eyebrow: "税金計算ツール",
+    introTitle: "年金貯蓄の税額控除計算機とは？",
+    intro: "年金貯蓄・IRPの拠出額に対する税額控除の還付額を計算するツールです。総給与に応じた控除率（13.2%または16.5%）と限度を反映します。",
+    howToTitle: "使い方",
+    steps: ["年間総給与（または総合所得）を入力します。", "年金貯蓄・IRPの拠出額を入力します。", "控除限度と適用控除率が自動反映されます。", "予想される税額控除の還付額を確認します。"],
+    highlightsTitle: "主な特徴",
+    highlights: [
+      { title: "控除率の自動適用", body: "総給与5,500万ウォン（総合所得4,500万）基準で16.5%/13.2%を自動適用します。" },
+      { title: "限度の反映", body: "年金貯蓄・IRP合算の拠出限度を反映します。" },
+      { title: "還付額の推定", body: "年末調整で戻る見込み額を把握します。" },
+    ],
+    relatedTitle: "関連計算機",
+    related: [
+      { href: "/ja/pension-optimizer-calculator/", label: "年金最適化計算機", desc: "年金貯蓄・IRPの拠出配分を最適化します。" },
+      { href: "/ja/fire-retirement-calculator/", label: "早期リタイア計算機", desc: "リタイア目標資金を計算します。" },
+      { href: "/ja/savings-comparison-calculator/", label: "預金比較", desc: "預金・積立の収益を比較します。" },
+    ],
+    disclaimer: "本計算機は参考用です。実際の控除・還付額は所得構成・他の控除・税法改正により異なります。正確な算定は専門家にご相談ください。",
+  },
+};
+
+const faqs = {
+  ko: [
+    { q: "연금저축 세액공제율은 얼마인가요?", a: "총급여 5,500만원(종합소득 4,500만원) 이하는 16.5%, 초과는 13.2%가 적용됩니다." },
+    { q: "공제 한도는 얼마인가요?", a: "연금저축과 IRP를 합산해 연 900만원까지 세액공제 대상이 됩니다(연금저축 단독은 600만원)." },
+    { q: "환급은 언제 받나요?", a: "연말정산 또는 종합소득세 신고를 통해 환급되며, 산출세액 한도 내에서 공제됩니다." },
+  ],
+  en: [
+    { q: "What is the credit rate?", a: "16.5% if gross salary is 55M KRW or less (45M total income), otherwise 13.2%." },
+    { q: "What is the limit?", a: "Up to 9M KRW/year combining pension savings and IRP is eligible (pension savings alone: 6M)." },
+    { q: "When do I get the refund?", a: "Through year-end settlement or income-tax filing, credited within your computed tax." },
+  ],
+  ja: [
+    { q: "控除率は？", a: "総給与5,500万ウォン以下（総合所得4,500万）は16.5%、超過は13.2%です。" },
+    { q: "限度額は？", a: "年金貯蓄とIRP合算で年900万ウォンまで対象です（年金貯蓄単独は600万）。" },
+    { q: "還付はいつ？", a: "年末調整または総合所得税申告で、算出税額の範囲内で控除・還付されます。" },
+  ],
+};
+
+const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
 ---
 
 <BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <PensionTaxCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
-  </main>
+  <ToolShell
+    title={m.title}
+    description={m.description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="pension-tax-calculator"
+    content={c}
+    applicationCategory="FinanceApplication"
+  >
+    <div class="mx-auto max-w-2xl">
+      <PensionTaxCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
 </BaseLayout>
