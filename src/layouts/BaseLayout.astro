@@ -40,13 +40,13 @@ const currentPathname = Astro.url.pathname;
 const getLocalizedPath = (targetLocale: string) => {
   const firstSegment = currentPathname.split("/")[1];
 
-  let localizedPath = currentPathname;
-  if (locales.includes(firstSegment)) {
-    const restOfPath = currentPathname.replace(`/${firstSegment}`, "");
-    localizedPath = `/${targetLocale}${restOfPath}` || "/";
-  } else {
-    localizedPath = `/${targetLocale}${currentPathname}`;
+  // Locale-less pages (e.g. /knowledge) have no per-locale variants; keep them
+  // self-referential so the switcher never points to a non-existent /xx/ copy.
+  if (!locales.includes(firstSegment)) {
+    return currentPathname;
   }
+  const restOfPath = currentPathname.replace(`/${firstSegment}`, "");
+  const localizedPath = `/${targetLocale}${restOfPath}` || "/";
   return localizedPath.startsWith("/") ? localizedPath : `/${localizedPath}`;
 };
 
