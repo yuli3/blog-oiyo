@@ -1,0 +1,126 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PaceCalculator from "../../components/tools/PaceCalculator";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "러닝 페이스 계산기 — 페이스·속도·완주시간 (5K·10K·하프·풀)", description: "km당 페이스를 입력하면 속도(km/h·mph), 마일 페이스, 5K·10K·하프·풀코스 완주 예상 시간을 계산합니다." },
+  en: { title: "Running Pace Calculator — Pace, Speed & Finish Time (5K, 10K, Half, Full)", description: "Enter your per-km pace to get speed (km/h, mph), per-mile pace, and predicted finish times for 5K, 10K, half, and full marathon." },
+  ja: { title: "ランニングペース計算機 — ペース・速度・完走時間 (5K·10K·ハーフ·フル)", description: "1kmあたりのペースを入力すると、速度(km/h·mph)、マイルペース、5K·10K·ハーフ·フルの完走予想時間を計算します。" },
+  fr: { title: "Calculateur d'Allure de Course — allure, vitesse, temps", description: "Saisissez votre allure au km pour obtenir vitesse, allure au mile et temps estimés (5K, 10K, semi, marathon)." },
+  es: { title: "Calculadora de Ritmo de Carrera — ritmo, velocidad, tiempo", description: "Introduce tu ritmo por km para obtener velocidad, ritmo por milla y tiempos estimados (5K, 10K, media, maratón)." },
+  zh: { title: "跑步配速计算器 — 配速、速度与完成时间 (5K·10K·半马·全马)", description: "输入每公里配速，计算速度(km/h·mph)、每英里配速，以及5K·10K·半马·全马的预计完成时间。" },
+  cn: { title: "跑步配速计算器 — 配速、速度与完成时间 (5K·10K·半马·全马)", description: "输入每公里配速，计算速度(km/h·mph)、每英里配速，以及5K·10K·半马·全马的预计完成时间。" },
+};
+const m = meta[locale] ?? meta.en;
+
+const content = {
+  ko: {
+    eyebrow: "러닝 도구",
+    introTitle: "러닝 페이스 계산기란?",
+    intro: "1km당 페이스(분:초)를 입력하면 속도(km/h·mph), 마일당 페이스, 그리고 5K·10K·하프마라톤·풀마라톤 완주 예상 시간을 계산하는 도구입니다.",
+    howToTitle: "사용 방법",
+    steps: ["km당 목표 페이스를 분과 초로 입력합니다.", "속도(km/h·mph)와 마일 페이스를 확인합니다.", "대표 거리별 완주 예상 시간을 확인합니다."],
+    highlightsTitle: "주요 특징",
+    highlights: [
+      { title: "페이스↔속도", body: "페이스를 km/h·mph 속도로 즉시 환산합니다." },
+      { title: "완주시간 예측", body: "현재 페이스로 5K·10K·하프·풀 완주 시간을 추정합니다." },
+      { title: "마일 페이스", body: "마일당 페이스도 함께 표시합니다." },
+    ],
+    relatedTitle: "관련 도구",
+    related: [
+      { href: "/ko/speed-converter/", label: "속도 변환기", desc: "km/h·mph·m/s를 변환합니다." },
+      { href: "/ko/temperature-converter/", label: "온도 변환기", desc: "°C·°F·K를 변환합니다." },
+      { href: "/ko/bmi-calculator/", label: "BMI 계산기", desc: "체질량지수를 계산합니다." },
+    ],
+    disclaimer: "완주 시간 예측은 일정한 페이스를 가정한 추정치이며, 실제 기록은 코스·컨디션·페이스 변화에 따라 달라집니다.",
+  },
+  en: {
+    eyebrow: "Running Tool",
+    introTitle: "What is the running pace calculator?",
+    intro: "Enter your pace per kilometer (min:sec) to get speed (km/h, mph), pace per mile, and predicted finish times for 5K, 10K, half marathon, and full marathon.",
+    howToTitle: "How to use",
+    steps: ["Enter your target pace per km in minutes and seconds.", "Read the speed (km/h, mph) and per-mile pace.", "Check predicted finish times for each distance."],
+    highlightsTitle: "Highlights",
+    highlights: [
+      { title: "Pace ↔ speed", body: "Instantly turns pace into km/h and mph." },
+      { title: "Finish prediction", body: "Estimates 5K, 10K, half, and full times at your pace." },
+      { title: "Mile pace", body: "Shows per-mile pace alongside per-km." },
+    ],
+    relatedTitle: "Related tools",
+    related: [
+      { href: "/en/speed-converter/", label: "Speed Converter", desc: "Convert km/h, mph, m/s." },
+      { href: "/en/temperature-converter/", label: "Temperature Converter", desc: "Convert °C, °F, K." },
+      { href: "/en/bmi-calculator/", label: "BMI Calculator", desc: "Compute body mass index." },
+    ],
+    disclaimer: "Finish-time predictions assume a constant pace; real times vary with course, conditions, and pace changes.",
+  },
+  ja: {
+    eyebrow: "ランニングツール",
+    introTitle: "ランニングペース計算機とは？",
+    intro: "1kmあたりのペース(分:秒)を入力すると、速度(km/h·mph)、1マイルあたりのペース、5K·10K·ハーフ·フルマラソンの完走予想時間を計算するツールです。",
+    howToTitle: "使い方",
+    steps: ["1kmあたりの目標ペースを分と秒で入力します。", "速度(km/h·mph)とマイルペースを確認します。", "距離別の完走予想時間を確認します。"],
+    highlightsTitle: "主な特徴",
+    highlights: [
+      { title: "ペース↔速度", body: "ペースをkm/h·mphに即時換算します。" },
+      { title: "完走予測", body: "現ペースで5K·10K·ハーフ·フルの時間を推定します。" },
+      { title: "マイルペース", body: "1マイルあたりのペースも表示します。" },
+    ],
+    relatedTitle: "関連ツール",
+    related: [
+      { href: "/ja/speed-converter/", label: "速度変換", desc: "km/h·mph·m/sを変換します。" },
+      { href: "/ja/temperature-converter/", label: "温度変換", desc: "°C·°F·Kを変換します。" },
+      { href: "/ja/bmi-calculator/", label: "BMI計算機", desc: "体格指数を計算します。" },
+    ],
+    disclaimer: "完走時間の予測は一定ペースを仮定した推定値で、実際の記録はコース・コンディション・ペース変化により異なります。",
+  },
+};
+
+const faqs = {
+  ko: [
+    { q: "페이스와 속도의 차이는?", a: "페이스는 단위 거리당 걸리는 시간(분/km), 속도는 단위 시간당 거리(km/h)입니다. 서로 역수 관계입니다." },
+    { q: "5분/km는 시속 몇 km인가요?", a: "5:00/km = 12km/h 입니다." },
+    { q: "완주 시간은 정확한가요?", a: "입력한 페이스를 끝까지 유지한다는 가정의 추정치입니다. 실제로는 후반 페이스 저하 등으로 달라질 수 있습니다." },
+  ],
+  en: [
+    { q: "Pace vs speed?", a: "Pace is time per distance (min/km); speed is distance per time (km/h). They are reciprocals." },
+    { q: "What speed is 5 min/km?", a: "5:00/km equals 12 km/h." },
+    { q: "Are finish times accurate?", a: "They assume you hold the entered pace the whole way; real results vary with late-race slowdown." },
+  ],
+  ja: [
+    { q: "ペースと速度の違いは？", a: "ペースは距離あたりの時間(分/km)、速度は時間あたりの距離(km/h)で、互いに逆数の関係です。" },
+    { q: "5分/kmは時速何km？", a: "5:00/km = 12km/h です。" },
+    { q: "完走時間は正確？", a: "入力ペースを最後まで維持する前提の推定値です。実際は後半の失速などで変わります。" },
+  ],
+};
+
+const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <ToolShell
+    title={m.title}
+    description={m.description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="pace-calculator"
+    content={c}
+    applicationCategory="HealthApplication"
+  >
+    <div class="mx-auto max-w-2xl">
+      <PaceCalculator client:load locale={locale} />
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
+</BaseLayout>
