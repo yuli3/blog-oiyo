@@ -1,0 +1,126 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import UnitPriceCalculator from "../../components/tools/UnitPriceCalculator";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "단위가격 계산기 — 어느 게 더 쌀까? 가성비 비교", description: "가격과 용량을 입력하면 단위당 가격(g·mL·개당)을 계산해 어느 상품이 더 저렴한지 비교합니다. 대용량 vs 소용량 가성비 판단에 유용합니다." },
+  en: { title: "Unit Price Calculator — Compare Which Is Cheaper", description: "Enter price and amount to get the price per unit (per g, mL, item) and see which product is the better value. Great for bulk vs small comparisons." },
+  ja: { title: "単価計算機 — どちらが安い？コスパ比較", description: "価格と容量を入力すると単位あたりの価格(g・mL・個あたり)を計算し、どちらが安いか比較します。" },
+  fr: { title: "Calculateur de Prix Unitaire — comparer le meilleur prix", description: "Saisissez le prix et la quantité pour obtenir le prix par unité et voir quel produit est le plus avantageux." },
+  es: { title: "Calculadora de Precio Unitario — comparar cuál es más barato", description: "Introduce precio y cantidad para obtener el precio por unidad y ver qué producto conviene más." },
+  zh: { title: "单价计算器 — 比较哪个更划算", description: "输入价格和容量，计算每单位价格(每g·mL·个)，比较哪个商品更便宜。" },
+  cn: { title: "单价计算器 — 比较哪个更划算", description: "输入价格和容量，计算每单位价格(每g·mL·个)，比较哪个商品更便宜。" },
+};
+const m = meta[locale] ?? meta.en;
+
+const content = {
+  ko: {
+    eyebrow: "일상 계산 도구",
+    introTitle: "단위가격 계산기란?",
+    intro: "상품별 가격과 용량을 입력하면 단위당 가격(예: 1g당, 1mL당, 1개당)을 계산해 어느 쪽이 더 저렴한지 비교하는 도구입니다. 마트에서 대용량과 소용량 중 가성비를 따질 때 유용합니다.",
+    howToTitle: "사용 방법",
+    steps: ["상품의 가격과 용량(수량), 단위를 입력합니다.", "상품을 원하는 만큼 추가합니다.", "단위가격이 가장 낮은 '최저가' 상품을 확인합니다."],
+    highlightsTitle: "주요 특징",
+    highlights: [
+      { title: "가성비 비교", body: "단위당 가격으로 진짜 더 싼 상품을 가립니다." },
+      { title: "최저가 강조", body: "여러 상품 중 가장 저렴한 항목을 표시합니다." },
+      { title: "즉시 계산", body: "값을 바꾸면 바로 갱신됩니다." },
+    ],
+    relatedTitle: "관련 도구",
+    related: [
+      { href: "/ko/percentage-calculator/", label: "퍼센트 계산기", desc: "할인가·증감률을 계산합니다." },
+      { href: "/ko/dutch-pay-calculator/", label: "더치페이 계산기", desc: "모임 비용을 나눕니다." },
+      { href: "/ko/volume-converter/", label: "부피 변환기", desc: "mL·L·온스를 변환합니다." },
+    ],
+    disclaimer: "단위가격은 가격÷용량으로 계산합니다. 단위가 다른 상품은 같은 단위로 맞춰 입력하세요.",
+  },
+  en: {
+    eyebrow: "Everyday Calculator",
+    introTitle: "What is the unit price calculator?",
+    intro: "Enter each product's price and amount to get the price per unit (per g, mL, item) and compare which is cheaper. Great for deciding bulk vs small sizes at the store.",
+    howToTitle: "How to use",
+    steps: ["Enter each product's price, amount, and unit.", "Add as many products as you like.", "See the 'best value' product with the lowest unit price."],
+    highlightsTitle: "Highlights",
+    highlights: [
+      { title: "True value", body: "Unit price reveals which is actually cheaper." },
+      { title: "Best highlighted", body: "Marks the cheapest item among several." },
+      { title: "Instant", body: "Results update as you type." },
+    ],
+    relatedTitle: "Related tools",
+    related: [
+      { href: "/en/percentage-calculator/", label: "Percentage Calculator", desc: "Discounts and change." },
+      { href: "/en/dutch-pay-calculator/", label: "Dutch Pay Calculator", desc: "Split group expenses." },
+      { href: "/en/volume-converter/", label: "Volume Converter", desc: "Convert mL, L, fl oz." },
+    ],
+    disclaimer: "Unit price = price ÷ amount. Enter products in the same unit to compare fairly.",
+  },
+  ja: {
+    eyebrow: "日常計算ツール",
+    introTitle: "単価計算機とは？",
+    intro: "商品ごとの価格と容量を入力すると、単位あたりの価格(例: 1gあたり、1mLあたり、1個あたり)を計算し、どちらが安いか比較するツールです。大容量と小容量のコスパ判断に便利です。",
+    howToTitle: "使い方",
+    steps: ["商品の価格・容量(数量)・単位を入力します。", "商品を必要なだけ追加します。", "単価が最も低い「最安」商品を確認します。"],
+    highlightsTitle: "主な特徴",
+    highlights: [
+      { title: "コスパ比較", body: "単価で本当に安い商品を見極めます。" },
+      { title: "最安を強調", body: "複数商品から最も安い項目を表示します。" },
+      { title: "即時計算", body: "入力するとすぐに更新されます。" },
+    ],
+    relatedTitle: "関連ツール",
+    related: [
+      { href: "/ja/percentage-calculator/", label: "パーセント計算機", desc: "割引・変化率を計算します。" },
+      { href: "/ja/dutch-pay-calculator/", label: "割り勘計算機", desc: "集まりの費用を分けます。" },
+      { href: "/ja/volume-converter/", label: "体積変換", desc: "mL・L・ozを変換します。" },
+    ],
+    disclaimer: "単価は価格÷容量で計算します。単位が異なる商品は同じ単位に揃えて入力してください。",
+  },
+};
+
+const faqs = {
+  ko: [
+    { q: "단위가격은 어떻게 계산하나요?", a: "가격 ÷ 용량 입니다. 예: 3,000원 500g = 6원/g." },
+    { q: "대용량이 항상 싼가요?", a: "아닙니다. 단위가격으로 비교해야 정확합니다. 가끔 소용량이 1g당 더 쌀 때도 있습니다." },
+    { q: "단위가 다르면?", a: "g과 kg처럼 단위가 다르면 같은 단위로 맞춰 입력해야 비교가 정확합니다(부피 변환기 참고)." },
+  ],
+  en: [
+    { q: "How is unit price calculated?", a: "Price ÷ amount. E.g. $3.00 for 500 g = $0.006/g." },
+    { q: "Is bulk always cheaper?", a: "No. Compare by unit price; sometimes the smaller size is cheaper per gram." },
+    { q: "What if units differ?", a: "Convert to the same unit first (see the volume converter) for a fair comparison." },
+  ],
+  ja: [
+    { q: "単価はどう計算しますか？", a: "価格 ÷ 容量 です。例: 3,000円 500g = 6円/g。" },
+    { q: "大容量は常に安い？", a: "いいえ。単価で比較すべきです。小容量の方が1gあたり安いこともあります。" },
+    { q: "単位が異なる場合は？", a: "g と kg のように単位が違う場合は同じ単位に揃えて入力してください(体積変換を参照)。" },
+  ],
+};
+
+const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <ToolShell
+    title={m.title}
+    description={m.description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="unit-price-calculator"
+    content={c}
+    applicationCategory="UtilityApplication"
+  >
+    <div class="mx-auto max-w-2xl">
+      <UnitPriceCalculator client:load locale={locale} />
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
+</BaseLayout>
