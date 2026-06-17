@@ -1,0 +1,126 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import FinalGradeCalculator from "../../components/tools/FinalGradeCalculator";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "기말고사 성적 계산기 — 목표 점수에 필요한 기말 점수", description: "현재 성적, 기말고사 비중, 목표 최종 성적을 입력하면 목표 달성에 필요한 기말고사 점수를 계산합니다. 도달 불가/이미 확보 여부도 안내." },
+  en: { title: "Final Grade Calculator — What You Need on the Final", description: "Enter your current grade, the final exam weight, and your target grade to see exactly what score you need on the final. Flags impossible or already-secured targets." },
+  ja: { title: "期末成績計算機 — 目標達成に必要な期末点", description: "現在の成績・期末試験の比重・目標の最終成績を入力すると、目標達成に必要な期末点を計算します。到達不可・確保済みも判定。" },
+  fr: { title: "Calculateur de note finale — Ce qu'il faut à l'examen", description: "Saisissez votre note actuelle, le poids de l'examen final et votre objectif pour connaître la note nécessaire à l'examen. Indique les cas impossibles ou déjà acquis." },
+  es: { title: "Calculadora de nota final — Lo que necesitas en el examen", description: "Introduce tu nota actual, el peso del examen final y tu meta para saber qué nota necesitas en el final. Señala metas imposibles o ya aseguradas." },
+  zh: { title: "期末成绩计算器 — 期末需要多少分", description: "输入当前成绩、期末考试占比和目标总成绩，计算达到目标所需的期末分数。提示无法达到或已锁定的情况。" },
+  cn: { title: "期末成绩计算器 — 期末需要多少分", description: "输入当前成绩、期末考试占比和目标总成绩，计算达到目标所需的期末分数。提示无法达到或已锁定的情况。" },
+};
+const m = meta[locale] ?? meta.en;
+
+const content = {
+  ko: {
+    eyebrow: "학습 계산 도구",
+    introTitle: "기말고사 성적 계산기란?",
+    intro: "지금까지의 성적과 기말고사가 차지하는 비중을 알면, 목표한 최종 성적을 받기 위해 기말에서 몇 점을 받아야 하는지 역산할 수 있습니다. 최종 성적 = 현재 성적 × (1 − 비중) + 기말 점수 × 비중 공식을 풉니다.",
+    howToTitle: "사용 방법",
+    steps: ["현재까지의 성적(%)을 입력합니다.", "기말고사가 차지하는 비중(%)을 입력합니다.", "목표 최종 성적(%)을 입력하고 필요한 기말 점수를 확인합니다."],
+    highlightsTitle: "주요 특징",
+    highlights: [
+      { title: "정확한 역산", body: "가중 평균 공식으로 필요한 기말 점수를 계산합니다." },
+      { title: "현실성 안내", body: "100% 초과로 불가능하거나 이미 목표를 확보한 경우를 알려줍니다." },
+      { title: "즉시 계산", body: "값을 바꾸면 바로 갱신됩니다." },
+    ],
+    relatedTitle: "관련 도구",
+    related: [
+      { href: "/ko/gpa-calculator/", label: "GPA 계산기", desc: "학점 평균을 계산합니다." },
+      { href: "/ko/percentage-calculator/", label: "퍼센트 계산기", desc: "비율을 계산합니다." },
+      { href: "/ko/toeic-score-converter/", label: "토익 점수 변환", desc: "점수를 환산합니다." },
+    ],
+    disclaimer: "성적 산정 방식(가중치·반올림·가산점)은 학교·강의마다 다릅니다. 실제 기준은 강의계획서를 확인하세요.",
+  },
+  en: {
+    eyebrow: "Study Calculator",
+    introTitle: "What is the final grade calculator?",
+    intro: "If you know your grade so far and how much the final exam is worth, you can work backward to the score you need on the final to hit your target. It solves: final grade = current × (1 − weight) + final score × weight.",
+    howToTitle: "How to use",
+    steps: ["Enter your current grade (%).", "Enter the final exam's weight (%).", "Enter your target overall grade and read the score you need."],
+    highlightsTitle: "Highlights",
+    highlights: [
+      { title: "Accurate reverse math", body: "Uses the weighted-average formula to find the needed score." },
+      { title: "Reality check", body: "Tells you if the target needs over 100% or is already secured." },
+      { title: "Instant", body: "Results update as you type." },
+    ],
+    relatedTitle: "Related tools",
+    related: [
+      { href: "/en/gpa-calculator/", label: "GPA Calculator", desc: "Grade point average." },
+      { href: "/en/percentage-calculator/", label: "Percentage Calculator", desc: "Work out percentages." },
+      { href: "/en/toeic-score-converter/", label: "TOEIC Converter", desc: "Convert scores." },
+    ],
+    disclaimer: "Grading schemes (weights, rounding, extra credit) vary by school and course. Confirm the actual rules in your syllabus.",
+  },
+  ja: {
+    eyebrow: "学習計算ツール",
+    introTitle: "期末成績計算機とは？",
+    intro: "これまでの成績と期末試験の比重が分かれば、目標の最終成績を取るために期末で何点必要かを逆算できます。最終成績 = 現在 ×(1 − 比重) + 期末点 × 比重 を解きます。",
+    howToTitle: "使い方",
+    steps: ["現在までの成績(%)を入力します。", "期末試験の比重(%)を入力します。", "目標の最終成績(%)を入力し必要な期末点を確認します。"],
+    highlightsTitle: "主な特徴",
+    highlights: [
+      { title: "正確な逆算", body: "加重平均の式で必要な期末点を計算します。" },
+      { title: "現実性の判定", body: "100%超で不可能か、すでに確保済みかを示します。" },
+      { title: "即時計算", body: "入力するとすぐ更新されます。" },
+    ],
+    relatedTitle: "関連ツール",
+    related: [
+      { href: "/ja/gpa-calculator/", label: "GPA計算機", desc: "成績平均を計算します。" },
+      { href: "/ja/percentage-calculator/", label: "パーセント計算機", desc: "比率を計算します。" },
+      { href: "/ja/toeic-score-converter/", label: "TOEIC換算", desc: "点数を換算します。" },
+    ],
+    disclaimer: "成績算定方式(加重・四捨五入・加点)は学校・講義で異なります。実際の基準はシラバスでご確認ください。",
+  },
+};
+
+const faqs = {
+  ko: [
+    { q: "필요 점수가 100%를 넘으면요?", a: "기말 만점으로도 목표에 못 미친다는 뜻입니다. 가산점이 없다면 목표를 조정해야 합니다." },
+    { q: "필요 점수가 음수로 나오면요?", a: "이미 목표를 확보했다는 뜻으로, 기말 0점이어도 목표 성적을 유지합니다." },
+    { q: "비중은 어떻게 넣나요?", a: "기말고사가 최종 성적에서 차지하는 퍼센트(예: 30%)를 넣으면 나머지(70%)는 현재 성적으로 계산됩니다." },
+  ],
+  en: [
+    { q: "What if the needed score is over 100%?", a: "Even a perfect final won't reach your target. Without extra credit, adjust the goal." },
+    { q: "What if it's negative?", a: "You've already secured the target — even a 0% final keeps your grade at or above it." },
+    { q: "How do I enter the weight?", a: "Enter the percentage the final counts toward your grade (e.g. 30%); the rest (70%) uses your current grade." },
+  ],
+  ja: [
+    { q: "必要点が100%を超えたら？", a: "期末満点でも目標に届きません。加点がなければ目標を調整しましょう。" },
+    { q: "マイナスになったら？", a: "すでに目標を確保しており、期末0点でも目標を維持できます。" },
+    { q: "比重はどう入れますか？", a: "期末が最終成績に占める割合(例:30%)を入れると、残り(70%)が現在の成績で計算されます。" },
+  ],
+};
+
+const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <ToolShell
+    title={m.title}
+    description={m.description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="final-grade-calculator"
+    content={c}
+    applicationCategory="EducationalApplication"
+  >
+    <div class="mx-auto max-w-2xl">
+      <FinalGradeCalculator client:load locale={locale} />
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
+</BaseLayout>
