@@ -1,0 +1,126 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import DiscountCalculator from "../../components/tools/DiscountCalculator";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "할인가 계산기 — 세일 가격·절약 금액", description: "정가와 할인율을 입력하면 최종 할인가와 절약 금액을 계산합니다. 쿠폰 추가 할인(중복 할인)과 실질 할인율도 함께 보여줍니다." },
+  en: { title: "Discount Calculator — Sale Price & Savings", description: "Enter the original price and discount % to get the final sale price and how much you save. Supports stacked coupon discounts and effective discount rate." },
+  ja: { title: "割引計算機 — セール価格・割引額", description: "定価と割引率を入力すると最終価格と割引額を計算します。クーポンの追加割引（重ね掛け）と実質割引率も表示します。" },
+  fr: { title: "Calculateur de remise — Prix soldé & économies", description: "Saisissez le prix initial et la remise % pour obtenir le prix final et l'économie. Gère les remises cumulées (coupon) et la remise effective." },
+  es: { title: "Calculadora de descuento — Precio rebajado y ahorro", description: "Introduce el precio original y el descuento % para obtener el precio final y el ahorro. Admite descuentos acumulados (cupón) y descuento efectivo." },
+  zh: { title: "折扣计算器 — 折后价与节省金额", description: "输入原价和折扣率，计算折后价和节省金额。支持优惠券叠加折扣和实际折扣率。" },
+  cn: { title: "折扣计算器 — 折后价与节省金额", description: "输入原价和折扣率，计算折后价和节省金额。支持优惠券叠加折扣和实际折扣率。" },
+};
+const m = meta[locale] ?? meta.en;
+
+const content = {
+  ko: {
+    eyebrow: "쇼핑 계산 도구",
+    introTitle: "할인가 계산기란?",
+    intro: "정가에 할인율을 적용해 실제로 내는 최종 가격과 절약 금액을 계산합니다. 쿠폰을 더 적용하는 중복 할인은 단순히 두 비율을 더하는 것이 아니라 차례로 곱해야 정확합니다(예: 20% + 추가 10%는 28% 할인).",
+    howToTitle: "사용 방법",
+    steps: ["정가를 입력합니다.", "할인율(%)을 입력합니다.", "쿠폰 등 추가 할인이 있으면 입력하고 최종 가격을 확인합니다."],
+    highlightsTitle: "주요 특징",
+    highlights: [
+      { title: "중복 할인 정확 계산", body: "1차 할인가에 추가 할인을 곱해 실질 할인율까지 보여줍니다." },
+      { title: "절약 금액 표시", body: "최종 가격과 함께 얼마를 아끼는지 바로 확인합니다." },
+      { title: "통화 자동 표기", body: "언어에 맞춰 통화 기호와 자릿수를 적용합니다." },
+    ],
+    relatedTitle: "관련 도구",
+    related: [
+      { href: "/ko/percentage-calculator/", label: "퍼센트 계산기", desc: "비율을 계산합니다." },
+      { href: "/ko/unit-price-calculator/", label: "단위가격 계산기", desc: "가성비를 비교합니다." },
+      { href: "/ko/vat-calculator/", label: "부가세 계산기", desc: "세금을 계산합니다." },
+    ],
+    disclaimer: "표시 가격은 추정치입니다. 실제 결제 금액·세금·배송비는 판매처 기준을 확인하세요.",
+  },
+  en: {
+    eyebrow: "Shopping Calculator",
+    introTitle: "What is the discount calculator?",
+    intro: "It applies a discount to the original price to show the final price you pay and how much you save. Stacking a coupon is not simply adding the percentages — they multiply in sequence (e.g. 20% then an extra 10% equals 28% off, not 30%).",
+    howToTitle: "How to use",
+    steps: ["Enter the original price.", "Enter the discount percentage.", "Add any extra coupon discount and read the final price."],
+    highlightsTitle: "Highlights",
+    highlights: [
+      { title: "Accurate stacked discounts", body: "Multiplies the extra discount onto the sale price and shows the effective rate." },
+      { title: "Shows savings", body: "See the final price and exactly how much you save." },
+      { title: "Locale currency", body: "Applies the right currency symbol and decimals per language." },
+    ],
+    relatedTitle: "Related tools",
+    related: [
+      { href: "/en/percentage-calculator/", label: "Percentage Calculator", desc: "Work out percentages." },
+      { href: "/en/unit-price-calculator/", label: "Unit Price Calculator", desc: "Compare value." },
+      { href: "/en/vat-calculator/", label: "VAT Calculator", desc: "Add or remove tax." },
+    ],
+    disclaimer: "Prices shown are estimates. Confirm the actual total, tax, and shipping with the seller.",
+  },
+  ja: {
+    eyebrow: "ショッピング計算ツール",
+    introTitle: "割引計算機とは？",
+    intro: "定価に割引率を適用して、実際に支払う最終価格と割引額を計算します。クーポンの重ね掛けは割引率を単純に足すのではなく、順番に掛け合わせます（例：20%＋追加10%は28%引き）。",
+    howToTitle: "使い方",
+    steps: ["定価を入力します。", "割引率(%)を入力します。", "クーポンなど追加割引があれば入力し最終価格を確認します。"],
+    highlightsTitle: "主な特徴",
+    highlights: [
+      { title: "重ね割引も正確", body: "1次割引価格に追加割引を掛け、実質割引率まで表示します。" },
+      { title: "割引額を表示", body: "最終価格といくら得かを同時に確認できます。" },
+      { title: "通貨を自動表記", body: "言語に合わせて通貨記号と桁数を適用します。" },
+    ],
+    relatedTitle: "関連ツール",
+    related: [
+      { href: "/ja/percentage-calculator/", label: "パーセント計算機", desc: "比率を計算します。" },
+      { href: "/ja/unit-price-calculator/", label: "単価計算機", desc: "コスパを比較します。" },
+      { href: "/ja/vat-calculator/", label: "消費税計算機", desc: "税を計算します。" },
+    ],
+    disclaimer: "表示価格は推定値です。実際の支払額・税・送料は販売者にご確認ください。",
+  },
+};
+
+const faqs = {
+  ko: [
+    { q: "20% 할인에 추가 10% 쿠폰이면 30% 할인인가요?", a: "아닙니다. 차례로 곱하므로 0.8 × 0.9 = 0.72, 즉 실질 28% 할인입니다." },
+    { q: "할인율을 모를 때 거꾸로 계산할 수 있나요?", a: "정가와 할인가를 알면 절약 금액 ÷ 정가 × 100으로 할인율을 구합니다." },
+    { q: "세금과 배송비는 포함되나요?", a: "이 도구는 상품 가격만 계산합니다. 세금·배송비는 결제 단계에서 별도로 확인하세요." },
+  ],
+  en: [
+    { q: "Is 20% off plus a 10% coupon 30% off?", a: "No. They multiply: 0.8 × 0.9 = 0.72, an effective 28% off." },
+    { q: "Can I find the discount rate in reverse?", a: "If you know the original and sale price, divide the savings by the original price and multiply by 100." },
+    { q: "Are tax and shipping included?", a: "This tool prices the item only. Confirm tax and shipping at checkout." },
+  ],
+  ja: [
+    { q: "20%引きに10%クーポンで30%引き？", a: "いいえ。順に掛けるので 0.8 × 0.9 = 0.72、実質28%引きです。" },
+    { q: "割引率を逆算できますか？", a: "定価と割引価格が分かれば、割引額 ÷ 定価 × 100 で求められます。" },
+    { q: "税や送料は含まれますか？", a: "本ツールは商品価格のみです。税・送料は決済時にご確認ください。" },
+  ],
+};
+
+const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <ToolShell
+    title={m.title}
+    description={m.description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="discount-calculator"
+    content={c}
+    applicationCategory="FinanceApplication"
+  >
+    <div class="mx-auto max-w-2xl">
+      <DiscountCalculator client:load locale={locale} />
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
+</BaseLayout>
