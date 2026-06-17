@@ -1,0 +1,126 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import DateCalculator from "../../components/tools/DateCalculator";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "날짜 계산기 — 날짜 간격·며칠 후/전 계산", description: "두 날짜 사이의 일수를 구하거나, 기준 날짜에서 일·주·개월·년을 더하고 빼서 결과 날짜와 요일을 계산합니다." },
+  en: { title: "Date Calculator — Days Between & Add/Subtract Dates", description: "Find the number of days between two dates, or add and subtract days, weeks, months, or years from a date to get the resulting date and weekday." },
+  ja: { title: "日付計算機 — 日数の差・◯日後/前を計算", description: "2つの日付の間の日数を求めたり、基準日に日・週・月・年を加減して結果の日付と曜日を計算します。" },
+  fr: { title: "Calculateur de dates — Jours entre & ajouter/soustraire", description: "Trouvez le nombre de jours entre deux dates, ou ajoutez et soustrayez des jours, semaines, mois ou années à une date." },
+  es: { title: "Calculadora de fechas — Días entre y sumar/restar", description: "Calcula los días entre dos fechas, o suma y resta días, semanas, meses o años a una fecha para obtener la fecha resultante." },
+  zh: { title: "日期计算器 — 日期间隔与加减日期", description: "计算两个日期之间的天数，或在某日期上加减天、周、月、年，得出结果日期和星期。" },
+  cn: { title: "日期计算器 — 日期间隔与加减日期", description: "计算两个日期之间的天数，或在某日期上加减天、周、月、年，得出结果日期和星期。" },
+};
+const m = meta[locale] ?? meta.en;
+
+const content = {
+  ko: {
+    eyebrow: "날짜 계산 도구",
+    introTitle: "날짜 계산기란?",
+    intro: "두 날짜 사이가 며칠인지 세거나, 어떤 날짜로부터 며칠·몇 주·몇 개월·몇 년 후(또는 전)가 언제인지 계산합니다. 마감일, D-day 환산, 90일 후 날짜 같은 계산을 빠르게 처리합니다.",
+    howToTitle: "사용 방법",
+    steps: ["'날짜 간격' 또는 '더하기/빼기' 모드를 고릅니다.", "간격은 시작·종료 날짜를, 더하기/빼기는 기준 날짜와 수량·단위를 입력합니다.", "결과 일수 또는 결과 날짜(요일 포함)를 확인합니다."],
+    highlightsTitle: "주요 특징",
+    highlights: [
+      { title: "두 가지 모드", body: "날짜 간격 계산과 날짜 더하기/빼기를 한 도구에서." },
+      { title: "요일 표시", body: "결과 날짜의 요일을 함께 보여줍니다." },
+      { title: "월·년 단위 지원", body: "일·주뿐 아니라 개월·년 단위 가감도 정확히 처리합니다." },
+    ],
+    relatedTitle: "관련 도구",
+    related: [
+      { href: "/ko/age-calculator/", label: "나이 계산기", desc: "만 나이를 계산합니다." },
+      { href: "/ko/anniversary-calculator/", label: "기념일 계산기", desc: "기념일을 계산합니다." },
+      { href: "/ko/hours-calculator/", label: "근무시간 계산기", desc: "근무 시간을 계산합니다." },
+    ],
+    disclaimer: "결과는 그레고리력 기준 계산값입니다. 윤년·월말 등 경계는 일반 달력 규칙을 따릅니다.",
+  },
+  en: {
+    eyebrow: "Date Calculator",
+    introTitle: "What is the date calculator?",
+    intro: "Count the days between two dates, or find what date falls a number of days, weeks, months, or years after (or before) a starting date. Handy for deadlines, '90 days from today', and D-day style counting.",
+    howToTitle: "How to use",
+    steps: ["Pick 'Days between' or 'Add / subtract' mode.", "For days between, enter start and end dates; for add/subtract, enter a base date plus amount and unit.", "Read the total days or the resulting date with its weekday."],
+    highlightsTitle: "Highlights",
+    highlights: [
+      { title: "Two modes", body: "Days-between and date add/subtract in one tool." },
+      { title: "Shows weekday", body: "Displays the weekday of the resulting date." },
+      { title: "Months & years", body: "Adds or subtracts months and years, not just days and weeks." },
+    ],
+    relatedTitle: "Related tools",
+    related: [
+      { href: "/en/age-calculator/", label: "Age Calculator", desc: "Calculate your age." },
+      { href: "/en/anniversary-calculator/", label: "Anniversary Calculator", desc: "Track milestones." },
+      { href: "/en/hours-calculator/", label: "Hours Calculator", desc: "Work hours." },
+    ],
+    disclaimer: "Results use the Gregorian calendar. Leap years and month ends follow standard calendar rules.",
+  },
+  ja: {
+    eyebrow: "日付計算ツール",
+    introTitle: "日付計算機とは？",
+    intro: "2つの日付の間の日数を数えたり、ある日付から日・週・月・年だけ後(または前)がいつかを計算します。締切や「90日後」、D-day換算などに便利です。",
+    howToTitle: "使い方",
+    steps: ["「日数の差」または「加算/減算」モードを選びます。", "差は開始・終了日を、加減は基準日と数量・単位を入力します。", "合計日数または結果の日付(曜日付き)を確認します。"],
+    highlightsTitle: "主な特徴",
+    highlights: [
+      { title: "2つのモード", body: "日数の差と日付の加減を1つのツールで。" },
+      { title: "曜日を表示", body: "結果の日付の曜日も表示します。" },
+      { title: "月・年に対応", body: "日・週だけでなく月・年の加減も正確に処理します。" },
+    ],
+    relatedTitle: "関連ツール",
+    related: [
+      { href: "/ja/age-calculator/", label: "年齢計算機", desc: "年齢を計算します。" },
+      { href: "/ja/anniversary-calculator/", label: "記念日計算機", desc: "記念日を計算します。" },
+      { href: "/ja/hours-calculator/", label: "勤務時間計算機", desc: "勤務時間を計算します。" },
+    ],
+    disclaimer: "結果はグレゴリオ暦に基づく計算値です。閏年・月末などの境界は一般的な暦の規則に従います。",
+  },
+};
+
+const faqs = {
+  ko: [
+    { q: "종료일이 시작일보다 빠르면요?", a: "간격은 절대값(일수)으로 표시되므로 순서가 바뀌어도 같은 일수가 나옵니다." },
+    { q: "개월을 더하면 말일 처리는 어떻게 되나요?", a: "달력 규칙을 따릅니다. 예를 들어 1월 31일에 1개월을 더하면 2월 말일로 보정됩니다(브라우저 표준 동작)." },
+    { q: "'90일 후' 같은 계산도 되나요?", a: "네. 더하기/빼기 모드에서 기준 날짜에 90일을 더하면 결과 날짜와 요일이 나옵니다." },
+  ],
+  en: [
+    { q: "What if the end date is before the start?", a: "The difference is shown as an absolute number of days, so the order doesn't change the result." },
+    { q: "How are month-ends handled when adding months?", a: "It follows calendar rules. Adding one month to Jan 31 lands on the end of February (standard browser behavior)." },
+    { q: "Can it do '90 days from today'?", a: "Yes. In add/subtract mode, add 90 days to your base date to get the resulting date and weekday." },
+  ],
+  ja: [
+    { q: "終了日が開始日より前なら？", a: "差は絶対値(日数)で表示されるため、順序が逆でも同じ日数になります。" },
+    { q: "月を加えると月末はどう処理されますか？", a: "暦の規則に従います。1月31日に1ヶ月加えると2月末日に補正されます(ブラウザ標準動作)。" },
+    { q: "「90日後」のような計算もできますか？", a: "はい。加算/減算モードで基準日に90日を加えると結果の日付と曜日が出ます。" },
+  ],
+};
+
+const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <ToolShell
+    title={m.title}
+    description={m.description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="date-calculator"
+    content={c}
+    applicationCategory="UtilitiesApplication"
+  >
+    <div class="mx-auto max-w-2xl">
+      <DateCalculator client:load locale={locale} />
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
+</BaseLayout>
