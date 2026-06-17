@@ -1,0 +1,126 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import UnitConverter from "../../components/tools/UnitConverter";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "온도 변환기 — 섭씨·화씨·켈빈 변환 (°C °F K)", description: "섭씨(°C), 화씨(°F), 켈빈(K)을 즉시 상호 변환합니다. 값을 입력하면 모든 단위로 동시에 환산됩니다." },
+  en: { title: "Temperature Converter — Celsius, Fahrenheit, Kelvin (°C °F K)", description: "Instantly convert between Celsius (°C), Fahrenheit (°F), and Kelvin (K). Enter a value and see all units at once." },
+  ja: { title: "温度変換 — 摂氏・華氏・ケルビン (°C °F K)", description: "摂氏(°C)、華氏(°F)、ケルビン(K)を即時に相互変換します。値を入力すると全単位に同時換算します。" },
+  fr: { title: "Convertisseur de Température — Celsius, Fahrenheit, Kelvin", description: "Convertissez instantanément Celsius (°C), Fahrenheit (°F) et Kelvin (K)." },
+  es: { title: "Conversor de Temperatura — Celsius, Fahrenheit, Kelvin", description: "Convierte al instante entre Celsius (°C), Fahrenheit (°F) y Kelvin (K)." },
+  zh: { title: "温度转换器 — 摄氏、华氏、开尔文 (°C °F K)", description: "在摄氏(°C)、华氏(°F)和开尔文(K)之间即时换算。" },
+  cn: { title: "温度转换器 — 摄氏、华氏、开尔文 (°C °F K)", description: "在摄氏(°C)、华氏(°F)和开尔文(K)之间即时换算。" },
+};
+const m = meta[locale] ?? meta.en;
+
+const content = {
+  ko: {
+    eyebrow: "단위 변환 도구",
+    introTitle: "온도 변환기란?",
+    intro: "섭씨(°C), 화씨(°F), 켈빈(K) 사이를 변환하는 도구입니다. 한 단위에 값을 입력하면 나머지 단위로 즉시 환산됩니다.",
+    howToTitle: "사용 방법",
+    steps: ["변환할 값을 입력합니다.", "기준 단위를 선택합니다(°C/°F/K).", "모든 단위의 변환 결과를 확인합니다."],
+    highlightsTitle: "주요 특징",
+    highlights: [
+      { title: "정확한 공식", body: "°F=°C×9/5+32, K=°C+273.15를 정확히 적용합니다." },
+      { title: "동시 변환", body: "한 번 입력으로 세 단위를 동시에 보여줍니다." },
+      { title: "즉시 계산", body: "값을 바꾸면 바로 갱신됩니다." },
+    ],
+    relatedTitle: "관련 변환기",
+    related: [
+      { href: "/ko/weight-converter/", label: "무게 변환기", desc: "kg·lb·oz를 변환합니다." },
+      { href: "/ko/volume-converter/", label: "부피 변환기", desc: "L·mL·컵·온스를 변환합니다." },
+      { href: "/ko/height-converter/", label: "키 변환기", desc: "cm·피트·인치를 변환합니다." },
+    ],
+    disclaimer: "본 변환기는 표준 정의에 따른 계산이며, 일반적인 참고용입니다.",
+  },
+  en: {
+    eyebrow: "Unit Converter",
+    introTitle: "What is the temperature converter?",
+    intro: "It converts between Celsius (°C), Fahrenheit (°F), and Kelvin (K). Enter a value in one unit and the others update instantly.",
+    howToTitle: "How to use",
+    steps: ["Enter the value to convert.", "Choose the source unit (°C/°F/K).", "Read the converted results in every unit."],
+    highlightsTitle: "Highlights",
+    highlights: [
+      { title: "Exact formulas", body: "Applies °F=°C×9/5+32 and K=°C+273.15 precisely." },
+      { title: "All at once", body: "One input shows all three units simultaneously." },
+      { title: "Instant", body: "Results update as you type." },
+    ],
+    relatedTitle: "Related converters",
+    related: [
+      { href: "/en/weight-converter/", label: "Weight Converter", desc: "Convert kg, lb, oz." },
+      { href: "/en/volume-converter/", label: "Volume Converter", desc: "Convert L, mL, cups, fl oz." },
+      { href: "/en/height-converter/", label: "Height Converter", desc: "Convert cm, feet, inches." },
+    ],
+    disclaimer: "This converter uses standard definitions and is for general reference.",
+  },
+  ja: {
+    eyebrow: "単位変換ツール",
+    introTitle: "温度変換とは？",
+    intro: "摂氏(°C)、華氏(°F)、ケルビン(K)を相互変換するツールです。1つの単位に値を入力すると他の単位が即時更新されます。",
+    howToTitle: "使い方",
+    steps: ["変換する値を入力します。", "基準単位を選びます(°C/°F/K)。", "全単位の変換結果を確認します。"],
+    highlightsTitle: "主な特徴",
+    highlights: [
+      { title: "正確な式", body: "°F=°C×9/5+32、K=°C+273.15を正確に適用します。" },
+      { title: "同時変換", body: "1回の入力で3単位を同時に表示します。" },
+      { title: "即時計算", body: "入力するとすぐに更新されます。" },
+    ],
+    relatedTitle: "関連変換ツール",
+    related: [
+      { href: "/ja/weight-converter/", label: "重さ変換", desc: "kg・lb・ozを変換します。" },
+      { href: "/ja/volume-converter/", label: "体積変換", desc: "L・mL・カップ・ozを変換します。" },
+      { href: "/ja/height-converter/", label: "身長変換", desc: "cm・フィート・インチを変換します。" },
+    ],
+    disclaimer: "本変換ツールは標準定義に基づく計算で、一般的な参考用です。",
+  },
+};
+
+const faqs = {
+  ko: [
+    { q: "섭씨를 화씨로 바꾸는 공식은?", a: "°F = °C × 9/5 + 32 입니다. 예: 100°C = 212°F." },
+    { q: "절대영도는 몇 도인가요?", a: "0K = -273.15°C = -459.67°F 입니다." },
+    { q: "사람 체온은?", a: "약 36.5°C = 97.7°F = 309.65K 입니다." },
+  ],
+  en: [
+    { q: "How do I convert Celsius to Fahrenheit?", a: "°F = °C × 9/5 + 32. For example, 100°C = 212°F." },
+    { q: "What is absolute zero?", a: "0K = -273.15°C = -459.67°F." },
+    { q: "What is normal body temperature?", a: "About 36.5°C = 97.7°F = 309.65K." },
+  ],
+  ja: [
+    { q: "摂氏を華氏に変換する式は？", a: "°F = °C × 9/5 + 32 です。例: 100°C = 212°F。" },
+    { q: "絶対零度は？", a: "0K = -273.15°C = -459.67°F です。" },
+    { q: "平熱は？", a: "約36.5°C = 97.7°F = 309.65K です。" },
+  ],
+};
+
+const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <ToolShell
+    title={m.title}
+    description={m.description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="temperature-converter"
+    content={c}
+    applicationCategory="UtilityApplication"
+  >
+    <div class="mx-auto max-w-2xl">
+      <UnitConverter client:load locale={locale} category="temperature" />
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
+</BaseLayout>

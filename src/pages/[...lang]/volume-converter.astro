@@ -1,0 +1,126 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import UnitConverter from "../../components/tools/UnitConverter";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "부피 변환기 — 리터·mL·컵·온스·갤런 변환", description: "리터(L), 밀리리터(mL), 컵, 테이블스푼, 액량온스(fl oz), 갤런을 즉시 상호 변환합니다. 요리·레시피 계량에 유용합니다." },
+  en: { title: "Volume Converter — Liters, mL, Cups, fl oz, Gallons", description: "Instantly convert liters (L), milliliters (mL), cups, tablespoons, fluid ounces (fl oz), and gallons. Great for cooking and recipes." },
+  ja: { title: "体積変換 — リットル・mL・カップ・オンス・ガロン", description: "リットル(L)、ミリリットル(mL)、カップ、大さじ、液量オンス(fl oz)、ガロンを即時に相互変換します。" },
+  fr: { title: "Convertisseur de Volume — litres, mL, tasses, oz, gallons", description: "Convertissez litres (L), millilitres (mL), tasses, cuillères, onces liquides et gallons." },
+  es: { title: "Conversor de Volumen — litros, mL, tazas, oz, galones", description: "Convierte litros (L), mililitros (mL), tazas, cucharadas, onzas líquidas y galones." },
+  zh: { title: "体积转换器 — 升、毫升、杯、盎司、加仑", description: "在升(L)、毫升(mL)、杯、汤匙、液量盎司、加仑之间即时换算。适合烹饪与食谱。" },
+  cn: { title: "体积转换器 — 升、毫升、杯、盎司、加仑", description: "在升(L)、毫升(mL)、杯、汤匙、液量盎司、加仑之间即时换算。适合烹饪与食谱。" },
+};
+const m = meta[locale] ?? meta.en;
+
+const content = {
+  ko: {
+    eyebrow: "단위 변환 도구",
+    introTitle: "부피 변환기란?",
+    intro: "리터(L), 밀리리터(mL), 컵, 티스푼·테이블스푼, 액량온스(fl oz), 파인트·쿼트·갤런 사이를 변환하는 도구입니다. 요리 레시피 계량에 특히 유용합니다.",
+    howToTitle: "사용 방법",
+    steps: ["변환할 값을 입력합니다.", "기준 단위를 선택합니다.", "모든 단위의 변환 결과를 확인합니다."],
+    highlightsTitle: "주요 특징",
+    highlights: [
+      { title: "미국식 계량", body: "1컵=236.6mL, 1테이블스푼=14.8mL 등 미국 표준을 사용합니다." },
+      { title: "레시피에 유용", body: "해외 레시피의 컵·온스를 mL로 빠르게 환산합니다." },
+      { title: "즉시 계산", body: "값을 바꾸면 바로 갱신됩니다." },
+    ],
+    relatedTitle: "관련 변환기",
+    related: [
+      { href: "/ko/weight-converter/", label: "무게 변환기", desc: "kg·lb·oz를 변환합니다." },
+      { href: "/ko/temperature-converter/", label: "온도 변환기", desc: "°C·°F·K를 변환합니다." },
+      { href: "/ko/height-converter/", label: "키 변환기", desc: "cm·피트·인치를 변환합니다." },
+    ],
+    disclaimer: "컵·스푼·온스는 미국 관습 단위 기준입니다. 영국식 등 다른 정의와는 값이 다를 수 있습니다.",
+  },
+  en: {
+    eyebrow: "Unit Converter",
+    introTitle: "What is the volume converter?",
+    intro: "It converts between liters (L), milliliters (mL), cups, teaspoons/tablespoons, fluid ounces (fl oz), pints, quarts, and gallons. Especially handy for cooking recipes.",
+    howToTitle: "How to use",
+    steps: ["Enter the value to convert.", "Choose the source unit.", "Read the converted results in every unit."],
+    highlightsTitle: "Highlights",
+    highlights: [
+      { title: "US customary", body: "Uses US standards such as 1 cup=236.6mL and 1 tbsp=14.8mL." },
+      { title: "Recipe-friendly", body: "Quickly turn cups/oz from foreign recipes into mL." },
+      { title: "Instant", body: "Results update as you type." },
+    ],
+    relatedTitle: "Related converters",
+    related: [
+      { href: "/en/weight-converter/", label: "Weight Converter", desc: "Convert kg, lb, oz." },
+      { href: "/en/temperature-converter/", label: "Temperature Converter", desc: "Convert °C, °F, K." },
+      { href: "/en/height-converter/", label: "Height Converter", desc: "Convert cm, feet, inches." },
+    ],
+    disclaimer: "Cups, spoons, and ounces use US customary units. UK and other definitions may differ.",
+  },
+  ja: {
+    eyebrow: "単位変換ツール",
+    introTitle: "体積変換とは？",
+    intro: "リットル(L)、ミリリットル(mL)、カップ、小さじ・大さじ、液量オンス(fl oz)、パイント・クォート・ガロンを相互変換するツールです。料理レシピの計量に便利です。",
+    howToTitle: "使い方",
+    steps: ["変換する値を入力します。", "基準単位を選びます。", "全単位の変換結果を確認します。"],
+    highlightsTitle: "主な特徴",
+    highlights: [
+      { title: "米国式計量", body: "1カップ=236.6mL、1大さじ=14.8mLなど米国標準を使用します。" },
+      { title: "レシピに便利", body: "海外レシピのカップ・ozをmLに素早く換算します。" },
+      { title: "即時計算", body: "入力するとすぐに更新されます。" },
+    ],
+    relatedTitle: "関連変換ツール",
+    related: [
+      { href: "/ja/weight-converter/", label: "重さ変換", desc: "kg・lb・ozを変換します。" },
+      { href: "/ja/temperature-converter/", label: "温度変換", desc: "°C・°F・Kを変換します。" },
+      { href: "/ja/height-converter/", label: "身長変換", desc: "cm・フィート・インチを変換します。" },
+    ],
+    disclaimer: "カップ・スプーン・オンスは米国慣用単位基準です。英国式など他の定義とは値が異なる場合があります。",
+  },
+};
+
+const faqs = {
+  ko: [
+    { q: "1컵은 몇 mL인가요?", a: "미국 기준 1컵 = 약 236.6mL 입니다." },
+    { q: "1리터는 몇 액량온스인가요?", a: "1L = 약 33.814 fl oz(미국) 입니다." },
+    { q: "테이블스푼과 티스푼 차이는?", a: "1테이블스푼 = 3티스푼 ≈ 14.8mL, 1티스푼 ≈ 4.93mL 입니다." },
+  ],
+  en: [
+    { q: "How many mL in a cup?", a: "1 US cup is about 236.6 mL." },
+    { q: "How many fluid ounces in a liter?", a: "1 L is about 33.814 US fl oz." },
+    { q: "Tablespoon vs teaspoon?", a: "1 tbsp = 3 tsp ≈ 14.8 mL; 1 tsp ≈ 4.93 mL." },
+  ],
+  ja: [
+    { q: "1カップは何mL？", a: "米国基準で1カップ = 約236.6mL です。" },
+    { q: "1リットルは何液量オンス？", a: "1L = 約33.814 fl oz（米国）です。" },
+    { q: "大さじと小さじの違いは？", a: "1大さじ = 3小さじ ≈ 14.8mL、1小さじ ≈ 4.93mL です。" },
+  ],
+};
+
+const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <ToolShell
+    title={m.title}
+    description={m.description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="volume-converter"
+    content={c}
+    applicationCategory="UtilityApplication"
+  >
+    <div class="mx-auto max-w-2xl">
+      <UnitConverter client:load locale={locale} category="volume" />
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
+</BaseLayout>

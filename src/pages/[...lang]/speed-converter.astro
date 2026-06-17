@@ -1,0 +1,126 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import UnitConverter from "../../components/tools/UnitConverter";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "속도 변환기 — km/h·mph·m/s·노트 변환", description: "시속(km/h), 마일/시(mph), 초속(m/s), 노트(knot), ft/s를 즉시 상호 변환합니다." },
+  en: { title: "Speed Converter — km/h, mph, m/s, knots", description: "Instantly convert km/h, mph, m/s, knots, and ft/s. Enter a value and see all units at once." },
+  ja: { title: "速度変換 — km/h・mph・m/s・ノット", description: "時速(km/h)、マイル毎時(mph)、秒速(m/s)、ノット(knot)、ft/sを即時に相互変換します。" },
+  fr: { title: "Convertisseur de Vitesse — km/h, mph, m/s, nœuds", description: "Convertissez km/h, mph, m/s, nœuds et ft/s instantanément." },
+  es: { title: "Conversor de Velocidad — km/h, mph, m/s, nudos", description: "Convierte km/h, mph, m/s, nudos y ft/s al instante." },
+  zh: { title: "速度转换器 — km/h、mph、m/s、节", description: "在公里/时(km/h)、英里/时(mph)、米/秒(m/s)、节(knot)之间即时换算。" },
+  cn: { title: "速度转换器 — km/h、mph、m/s、节", description: "在公里/时(km/h)、英里/时(mph)、米/秒(m/s)、节(knot)之间即时换算。" },
+};
+const m = meta[locale] ?? meta.en;
+
+const content = {
+  ko: {
+    eyebrow: "단위 변환 도구",
+    introTitle: "속도 변환기란?",
+    intro: "시속(km/h), 마일/시(mph), 초속(m/s), 노트(knot), ft/s 사이를 변환하는 도구입니다. 한 단위에 입력하면 나머지로 즉시 환산됩니다.",
+    howToTitle: "사용 방법",
+    steps: ["변환할 값을 입력합니다.", "기준 단위를 선택합니다.", "모든 단위의 변환 결과를 확인합니다."],
+    highlightsTitle: "주요 특징",
+    highlights: [
+      { title: "표준 계수", body: "1mph=1.60934km/h, 1노트=1.852km/h 등 정확한 계수를 사용합니다." },
+      { title: "동시 변환", body: "한 번 입력으로 모든 단위를 보여줍니다." },
+      { title: "즉시 계산", body: "값을 바꾸면 바로 갱신됩니다." },
+    ],
+    relatedTitle: "관련 변환기",
+    related: [
+      { href: "/ko/weight-converter/", label: "무게 변환기", desc: "kg·lb·oz를 변환합니다." },
+      { href: "/ko/temperature-converter/", label: "온도 변환기", desc: "°C·°F·K를 변환합니다." },
+      { href: "/ko/height-converter/", label: "키 변환기", desc: "cm·피트·인치를 변환합니다." },
+    ],
+    disclaimer: "본 변환기는 국제 표준 단위 정의에 따른 계산이며, 일반적인 참고용입니다.",
+  },
+  en: {
+    eyebrow: "Unit Converter",
+    introTitle: "What is the speed converter?",
+    intro: "It converts between km/h, mph, m/s, knots, and ft/s. Enter a value in one unit and the rest update instantly.",
+    howToTitle: "How to use",
+    steps: ["Enter the value to convert.", "Choose the source unit.", "Read the converted results in every unit."],
+    highlightsTitle: "Highlights",
+    highlights: [
+      { title: "Standard factors", body: "Uses exact factors such as 1mph=1.60934km/h and 1knot=1.852km/h." },
+      { title: "All at once", body: "One input shows every unit simultaneously." },
+      { title: "Instant", body: "Results update as you type." },
+    ],
+    relatedTitle: "Related converters",
+    related: [
+      { href: "/en/weight-converter/", label: "Weight Converter", desc: "Convert kg, lb, oz." },
+      { href: "/en/temperature-converter/", label: "Temperature Converter", desc: "Convert °C, °F, K." },
+      { href: "/en/height-converter/", label: "Height Converter", desc: "Convert cm, feet, inches." },
+    ],
+    disclaimer: "This converter uses international standard unit definitions and is for general reference.",
+  },
+  ja: {
+    eyebrow: "単位変換ツール",
+    introTitle: "速度変換とは？",
+    intro: "時速(km/h)、マイル毎時(mph)、秒速(m/s)、ノット(knot)、ft/sを相互変換するツールです。1つの単位に入力すると他が即時更新されます。",
+    howToTitle: "使い方",
+    steps: ["変換する値を入力します。", "基準単位を選びます。", "全単位の変換結果を確認します。"],
+    highlightsTitle: "主な特徴",
+    highlights: [
+      { title: "標準係数", body: "1mph=1.60934km/h、1ノット=1.852km/hなど正確な係数を使用します。" },
+      { title: "同時変換", body: "1回の入力で全単位を表示します。" },
+      { title: "即時計算", body: "入力するとすぐに更新されます。" },
+    ],
+    relatedTitle: "関連変換ツール",
+    related: [
+      { href: "/ja/weight-converter/", label: "重さ変換", desc: "kg・lb・ozを変換します。" },
+      { href: "/ja/temperature-converter/", label: "温度変換", desc: "°C・°F・Kを変換します。" },
+      { href: "/ja/height-converter/", label: "身長変換", desc: "cm・フィート・インチを変換します。" },
+    ],
+    disclaimer: "本変換ツールは国際標準の単位定義に基づく計算で、一般的な参考用です。",
+  },
+};
+
+const faqs = {
+  ko: [
+    { q: "100km/h는 몇 mph인가요?", a: "100km/h = 약 62.137mph 입니다." },
+    { q: "노트(knot)는 무엇인가요?", a: "항해·항공에서 쓰는 속도 단위로 1노트 = 1.852km/h 입니다." },
+    { q: "m/s를 km/h로 바꾸려면?", a: "m/s 값에 3.6을 곱하면 km/h가 됩니다. 예: 10m/s = 36km/h." },
+  ],
+  en: [
+    { q: "What is 100 km/h in mph?", a: "100 km/h is about 62.137 mph." },
+    { q: "What is a knot?", a: "A speed unit used in sailing and aviation: 1 knot = 1.852 km/h." },
+    { q: "How to convert m/s to km/h?", a: "Multiply m/s by 3.6. For example, 10 m/s = 36 km/h." },
+  ],
+  ja: [
+    { q: "100km/hは何mph？", a: "100km/h = 約62.137mph です。" },
+    { q: "ノットとは？", a: "航海・航空で使う速度単位で、1ノット = 1.852km/h です。" },
+    { q: "m/sをkm/hにするには？", a: "m/sに3.6を掛けます。例: 10m/s = 36km/h。" },
+  ],
+};
+
+const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <ToolShell
+    title={m.title}
+    description={m.description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="speed-converter"
+    content={c}
+    applicationCategory="UtilityApplication"
+  >
+    <div class="mx-auto max-w-2xl">
+      <UnitConverter client:load locale={locale} category="speed" />
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
+</BaseLayout>
