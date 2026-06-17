@@ -1,0 +1,126 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import TdeeCalculator from "../../components/tools/TdeeCalculator";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "TDEE 계산기 — 기초대사량·하루 권장 칼로리", description: "성별·나이·키·체중·활동량을 입력하면 기초대사량(BMR)과 하루 총 소비 칼로리(TDEE), 감량·유지·증량 칼로리를 계산합니다." },
+  en: { title: "TDEE Calculator — BMR & Daily Calorie Needs", description: "Enter sex, age, height, weight, and activity to get your BMR and TDEE (daily calorie needs), plus cut/maintain/bulk targets." },
+  ja: { title: "TDEE計算機 — 基礎代謝・1日の必要カロリー", description: "性別・年齢・身長・体重・活動量から基礎代謝(BMR)と1日の総消費カロリー(TDEE)、減量・維持・増量カロリーを計算します。" },
+  fr: { title: "Calculateur TDEE — MB & besoins caloriques", description: "Obtenez votre métabolisme de base et votre dépense énergétique journalière, avec objectifs perte/maintien/prise." },
+  es: { title: "Calculadora TDEE — TMB y calorías diarias", description: "Obtén tu metabolismo basal y tu gasto energético diario, con objetivos de bajar/mantener/subir." },
+  zh: { title: "TDEE 计算器 — 基础代谢与每日热量需求", description: "输入性别、年龄、身高、体重和活动量，计算基础代谢(BMR)和每日总消耗热量(TDEE)，以及减脂/维持/增肌热量。" },
+  cn: { title: "TDEE 计算器 — 基础代谢与每日热量需求", description: "输入性别、年龄、身高、体重和活动量，计算基础代谢(BMR)和每日总消耗热量(TDEE)，以及减脂/维持/增肌热量。" },
+};
+const m = meta[locale] ?? meta.en;
+
+const content = {
+  ko: {
+    eyebrow: "건강 계산 도구",
+    introTitle: "TDEE 계산기란?",
+    intro: "TDEE(하루 총 에너지 소비량)는 기초대사량(BMR)에 활동량을 곱한 값으로, 하루에 필요한 칼로리입니다. 미플린-세인트 지어 공식으로 BMR을 구하고 활동계수를 적용합니다.",
+    howToTitle: "사용 방법",
+    steps: ["성별·나이·키·체중을 입력합니다.", "활동 수준을 선택합니다.", "BMR과 TDEE, 감량·유지·증량 칼로리를 확인합니다."],
+    highlightsTitle: "주요 특징",
+    highlights: [
+      { title: "검증된 공식", body: "미플린-세인트 지어 BMR + 활동계수(1.2~1.9)를 적용합니다." },
+      { title: "목표별 칼로리", body: "감량(−500)·유지·증량(+500) 칼로리를 함께 제시합니다." },
+      { title: "즉시 계산", body: "값을 바꾸면 바로 갱신됩니다." },
+    ],
+    relatedTitle: "관련 도구",
+    related: [
+      { href: "/ko/bmi-calculator/", label: "BMI 계산기", desc: "체질량지수를 계산합니다." },
+      { href: "/ko/calorie-calculator/", label: "칼로리 계산기", desc: "일일 칼로리를 계산합니다." },
+      { href: "/ko/energy-converter/", label: "에너지 변환기", desc: "kcal·kJ를 변환합니다." },
+    ],
+    disclaimer: "본 계산은 추정치이며 개인차가 있습니다. 체중 관리·식이는 전문가(의사·영양사) 상담을 권장합니다.",
+  },
+  en: {
+    eyebrow: "Health Calculator",
+    introTitle: "What is the TDEE calculator?",
+    intro: "TDEE (Total Daily Energy Expenditure) is your BMR multiplied by an activity factor — the calories you burn per day. It computes BMR with the Mifflin–St Jeor formula and applies an activity multiplier.",
+    howToTitle: "How to use",
+    steps: ["Enter sex, age, height, and weight.", "Choose your activity level.", "Read BMR, TDEE, and cut/maintain/bulk targets."],
+    highlightsTitle: "Highlights",
+    highlights: [
+      { title: "Validated formula", body: "Mifflin–St Jeor BMR with activity factors (1.2–1.9)." },
+      { title: "Goal targets", body: "Shows cut (−500), maintain, and bulk (+500) calories." },
+      { title: "Instant", body: "Results update as you type." },
+    ],
+    relatedTitle: "Related tools",
+    related: [
+      { href: "/en/bmi-calculator/", label: "BMI Calculator", desc: "Body mass index." },
+      { href: "/en/calorie-calculator/", label: "Calorie Calculator", desc: "Daily calories." },
+      { href: "/en/energy-converter/", label: "Energy Converter", desc: "Convert kcal, kJ." },
+    ],
+    disclaimer: "Estimates only and vary by individual. Consult a doctor or dietitian for weight and diet decisions.",
+  },
+  ja: {
+    eyebrow: "健康計算ツール",
+    introTitle: "TDEE計算機とは？",
+    intro: "TDEE(1日の総消費エネルギー)は基礎代謝(BMR)に活動係数を掛けた値で、1日に必要なカロリーです。ミフリン・セントジョール式でBMRを求め活動係数を適用します。",
+    howToTitle: "使い方",
+    steps: ["性別・年齢・身長・体重を入力します。", "活動レベルを選びます。", "BMRとTDEE、減量・維持・増量カロリーを確認します。"],
+    highlightsTitle: "主な特徴",
+    highlights: [
+      { title: "検証された式", body: "ミフリン・セントジョールBMR+活動係数(1.2〜1.9)。" },
+      { title: "目標別カロリー", body: "減量(−500)・維持・増量(+500)を提示します。" },
+      { title: "即時計算", body: "入力するとすぐに更新されます。" },
+    ],
+    relatedTitle: "関連ツール",
+    related: [
+      { href: "/ja/bmi-calculator/", label: "BMI計算機", desc: "体格指数を計算します。" },
+      { href: "/ja/calorie-calculator/", label: "カロリー計算機", desc: "1日のカロリーを計算します。" },
+      { href: "/ja/energy-converter/", label: "エネルギー変換", desc: "kcal・kJを変換します。" },
+    ],
+    disclaimer: "本計算は推定値で個人差があります。体重管理・食事は専門家(医師・栄養士)にご相談ください。",
+  },
+};
+
+const faqs = {
+  ko: [
+    { q: "BMR과 TDEE 차이는?", a: "BMR은 가만히 있어도 소비하는 기초대사량, TDEE는 활동까지 포함한 하루 총 소비 칼로리입니다." },
+    { q: "감량하려면 얼마나 먹나요?", a: "일반적으로 TDEE보다 하루 약 500kcal 적게 먹으면 주당 약 0.5kg 감량이 목표가 됩니다." },
+    { q: "활동계수는 어떻게 고르나요?", a: "운동 빈도에 맞춰 1.2(거의 없음)~1.9(매우 활동적) 중 선택합니다." },
+  ],
+  en: [
+    { q: "BMR vs TDEE?", a: "BMR is what you burn at rest; TDEE adds activity for your total daily burn." },
+    { q: "How much to eat to lose weight?", a: "Eating ~500 kcal/day below TDEE targets roughly 0.5 kg per week." },
+    { q: "How do I pick an activity factor?", a: "Choose 1.2 (sedentary) to 1.9 (very active) based on exercise frequency." },
+  ],
+  ja: [
+    { q: "BMRとTDEEの違いは？", a: "BMRは安静時の消費、TDEEは活動を含む1日の総消費カロリーです。" },
+    { q: "減量にはどれくらい食べる？", a: "TDEEより1日約500kcal少なくすると週約0.5kgの減量が目安です。" },
+    { q: "活動係数の選び方は？", a: "運動頻度に応じて1.2(ほぼなし)〜1.9(非常に活発)から選びます。" },
+  ],
+};
+
+const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <ToolShell
+    title={m.title}
+    description={m.description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="tdee-calculator"
+    content={c}
+    applicationCategory="HealthApplication"
+  >
+    <div class="mx-auto max-w-2xl">
+      <TdeeCalculator client:load locale={locale} />
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
+</BaseLayout>
