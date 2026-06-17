@@ -1,0 +1,126 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import UnitConverter from "../../components/tools/UnitConverter";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "에너지 변환기 — J·kcal·kWh·cal 변환", description: "줄(J), 킬로줄(kJ), 칼로리(cal·kcal), 와트시(Wh·kWh)를 즉시 상호 변환합니다. 식품 칼로리와 전력량 환산에 유용합니다." },
+  en: { title: "Energy Converter — J, kcal, kWh, cal", description: "Instantly convert joules (J), kJ, calories (cal, kcal), and watt-hours (Wh, kWh). Handy for food calories and electricity." },
+  ja: { title: "エネルギー変換 — J・kcal・kWh・cal", description: "ジュール(J)、kJ、カロリー(cal・kcal)、ワット時(Wh・kWh)を即時に相互変換します。" },
+  fr: { title: "Convertisseur d'Énergie — J, kcal, kWh, cal", description: "Convertissez joules, kJ, calories et wattheures instantanément." },
+  es: { title: "Conversor de Energía — J, kcal, kWh, cal", description: "Convierte julios, kJ, calorías y vatios-hora al instante." },
+  zh: { title: "能量转换器 — 焦耳、千卡、千瓦时、卡", description: "在焦耳(J)、kJ、卡路里(cal·kcal)、瓦时(Wh·kWh)之间即时换算。" },
+  cn: { title: "能量转换器 — 焦耳、千卡、千瓦时、卡", description: "在焦耳(J)、kJ、卡路里(cal·kcal)、瓦时(Wh·kWh)之间即时换算。" },
+};
+const m = meta[locale] ?? meta.en;
+
+const content = {
+  ko: {
+    eyebrow: "단위 변환 도구",
+    introTitle: "에너지 변환기란?",
+    intro: "줄(J)·킬로줄(kJ)·칼로리(cal·kcal)·와트시(Wh·kWh) 사이를 변환하는 도구입니다. 식품 영양성분의 kcal↔kJ, 전력 사용량(kWh) 환산에 유용합니다.",
+    howToTitle: "사용 방법",
+    steps: ["변환할 값을 입력합니다.", "기준 단위를 선택합니다(예: kcal).", "모든 단위의 변환 결과를 확인합니다."],
+    highlightsTitle: "주요 특징",
+    highlights: [
+      { title: "식품 칼로리", body: "영양성분표의 kcal↔kJ를 정확히 환산합니다(1kcal=4.184kJ)." },
+      { title: "전력량", body: "Wh·kWh로 전기 사용량을 환산합니다." },
+      { title: "즉시 계산", body: "값을 바꾸면 바로 갱신됩니다." },
+    ],
+    relatedTitle: "관련 변환기",
+    related: [
+      { href: "/ko/pressure-converter/", label: "압력 변환기", desc: "bar·psi·atm을 변환합니다." },
+      { href: "/ko/calorie-calculator/", label: "칼로리 계산기", desc: "일일 칼로리를 계산합니다." },
+      { href: "/ko/temperature-converter/", label: "온도 변환기", desc: "°C·°F·K를 변환합니다." },
+    ],
+    disclaimer: "식품 칼로리는 통상 kcal(=1000cal)을 의미합니다. 일반적인 참고용입니다.",
+  },
+  en: {
+    eyebrow: "Unit Converter",
+    introTitle: "What is the energy converter?",
+    intro: "It converts between joules (J), kJ, calories (cal, kcal), and watt-hours (Wh, kWh). Useful for food labels (kcal↔kJ) and electricity use (kWh).",
+    howToTitle: "How to use",
+    steps: ["Enter the value to convert.", "Choose the source unit (e.g. kcal).", "Read the converted results in every unit."],
+    highlightsTitle: "Highlights",
+    highlights: [
+      { title: "Food calories", body: "Converts kcal↔kJ on nutrition labels (1 kcal=4.184 kJ)." },
+      { title: "Electricity", body: "Convert Wh/kWh for energy usage." },
+      { title: "Instant", body: "Results update as you type." },
+    ],
+    relatedTitle: "Related converters",
+    related: [
+      { href: "/en/pressure-converter/", label: "Pressure Converter", desc: "Convert bar, psi, atm." },
+      { href: "/en/calorie-calculator/", label: "Calorie Calculator", desc: "Compute daily calories." },
+      { href: "/en/temperature-converter/", label: "Temperature Converter", desc: "Convert °C, °F, K." },
+    ],
+    disclaimer: "Food 'calories' usually mean kcal (=1000 cal). For general reference.",
+  },
+  ja: {
+    eyebrow: "単位変換ツール",
+    introTitle: "エネルギー変換とは？",
+    intro: "ジュール(J)・kJ・カロリー(cal・kcal)・ワット時(Wh・kWh)を相互変換するツールです。食品のkcal↔kJ、電力使用量(kWh)の換算に便利です。",
+    howToTitle: "使い方",
+    steps: ["変換する値を入力します。", "基準単位を選びます(例: kcal)。", "全単位の変換結果を確認します。"],
+    highlightsTitle: "主な特徴",
+    highlights: [
+      { title: "食品カロリー", body: "栄養表示のkcal↔kJを正確に換算します(1kcal=4.184kJ)。" },
+      { title: "電力量", body: "Wh・kWhで電気使用量を換算します。" },
+      { title: "即時計算", body: "入力するとすぐに更新されます。" },
+    ],
+    relatedTitle: "関連変換ツール",
+    related: [
+      { href: "/ja/pressure-converter/", label: "圧力変換", desc: "bar・psi・atmを変換します。" },
+      { href: "/ja/calorie-calculator/", label: "カロリー計算機", desc: "1日のカロリーを計算します。" },
+      { href: "/ja/temperature-converter/", label: "温度変換", desc: "°C・°F・Kを変換します。" },
+    ],
+    disclaimer: "食品の「カロリー」は通常kcal(=1000cal)を指します。一般的な参考用です。",
+  },
+};
+
+const faqs = {
+  ko: [
+    { q: "1kcal은 몇 kJ인가요?", a: "1kcal = 4.184kJ 입니다. 영양성분표에서 자주 함께 표기됩니다." },
+    { q: "1kWh는 몇 kJ인가요?", a: "1kWh = 3600kJ = 3,600,000J 입니다." },
+    { q: "식품 칼로리와 cal 차이는?", a: "식품에서 말하는 1칼로리는 보통 1kcal(=1000cal)을 뜻합니다." },
+  ],
+  en: [
+    { q: "How many kJ in a kcal?", a: "1 kcal = 4.184 kJ, often shown together on nutrition labels." },
+    { q: "How many kJ in a kWh?", a: "1 kWh = 3600 kJ = 3,600,000 J." },
+    { q: "Food calorie vs cal?", a: "A food 'calorie' usually means 1 kcal (=1000 cal)." },
+  ],
+  ja: [
+    { q: "1kcalは何kJ？", a: "1kcal = 4.184kJ です。栄養表示でよく併記されます。" },
+    { q: "1kWhは何kJ？", a: "1kWh = 3600kJ = 3,600,000J です。" },
+    { q: "食品カロリーとcalの違いは？", a: "食品でいう1カロリーは通常1kcal(=1000cal)を指します。" },
+  ],
+};
+
+const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <ToolShell
+    title={m.title}
+    description={m.description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="energy-converter"
+    content={c}
+    applicationCategory="UtilityApplication"
+  >
+    <div class="mx-auto max-w-2xl">
+      <UnitConverter client:load locale={locale} category="energy" />
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
+</BaseLayout>

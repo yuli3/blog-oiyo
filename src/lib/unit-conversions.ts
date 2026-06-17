@@ -134,6 +134,51 @@ export const UNIT_CATEGORIES: Record<string, UnitCategory> = {
       lin("pb", "PB", 1024 ** 5),
     ],
   },
+  // base unit: second
+  time: {
+    id: "time",
+    defaultFrom: "hour",
+    defaultTo: "min",
+    defaultValue: 1,
+    units: [
+      lin("ms", "ms", 0.001),
+      lin("s", "s", 1),
+      lin("min", "min", 60),
+      lin("hour", "h", 3600),
+      lin("day", "day", 86400),
+      lin("week", "wk", 604800),
+    ],
+  },
+  // base unit: pascal
+  pressure: {
+    id: "pressure",
+    defaultFrom: "bar",
+    defaultTo: "psi",
+    defaultValue: 1,
+    units: [
+      lin("pa", "Pa", 1),
+      lin("kpa", "kPa", 1000),
+      lin("bar", "bar", 100000),
+      lin("atm", "atm", 101325),
+      lin("psi", "psi", 6894.757293168),
+      lin("mmhg", "mmHg", 133.322387415),
+    ],
+  },
+  // base unit: joule
+  energy: {
+    id: "energy",
+    defaultFrom: "kcal",
+    defaultTo: "kj",
+    defaultValue: 1,
+    units: [
+      lin("j", "J", 1),
+      lin("kj", "kJ", 1000),
+      lin("cal", "cal", 4.184),
+      lin("kcal", "kcal", 4184),
+      lin("wh", "Wh", 3600),
+      lin("kwh", "kWh", 3_600_000),
+    ],
+  },
 };
 
 /** Convert a value from one unit to another within a category. */

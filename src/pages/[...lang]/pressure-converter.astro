@@ -1,0 +1,126 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import UnitConverter from "../../components/tools/UnitConverter";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "압력 변환기 — bar·psi·atm·kPa·mmHg 변환", description: "파스칼(Pa), 킬로파스칼(kPa), bar, 기압(atm), psi, mmHg를 즉시 상호 변환합니다. 타이어 공기압(psi↔bar)에 유용합니다." },
+  en: { title: "Pressure Converter — bar, psi, atm, kPa, mmHg", description: "Instantly convert pascal (Pa), kPa, bar, atmospheres (atm), psi, and mmHg. Handy for tire pressure (psi↔bar)." },
+  ja: { title: "圧力変換 — bar・psi・atm・kPa・mmHg", description: "パスカル(Pa)、kPa、bar、気圧(atm)、psi、mmHgを即時に相互変換します。" },
+  fr: { title: "Convertisseur de Pression — bar, psi, atm, kPa, mmHg", description: "Convertissez pascal, kPa, bar, atmosphères, psi et mmHg instantanément." },
+  es: { title: "Conversor de Presión — bar, psi, atm, kPa, mmHg", description: "Convierte pascal, kPa, bar, atmósferas, psi y mmHg al instante." },
+  zh: { title: "压力转换器 — bar、psi、atm、kPa、mmHg", description: "在帕斯卡(Pa)、kPa、bar、大气压(atm)、psi、mmHg之间即时换算。" },
+  cn: { title: "压力转换器 — bar、psi、atm、kPa、mmHg", description: "在帕斯卡(Pa)、kPa、bar、大气压(atm)、psi、mmHg之间即时换算。" },
+};
+const m = meta[locale] ?? meta.en;
+
+const content = {
+  ko: {
+    eyebrow: "단위 변환 도구",
+    introTitle: "압력 변환기란?",
+    intro: "파스칼(Pa)·kPa·bar·기압(atm)·psi·mmHg 사이를 변환하는 도구입니다. 타이어 공기압이나 기상·공학 단위 환산에 유용합니다.",
+    howToTitle: "사용 방법",
+    steps: ["변환할 값을 입력합니다.", "기준 단위를 선택합니다(예: psi 또는 bar).", "모든 단위의 변환 결과를 확인합니다."],
+    highlightsTitle: "주요 특징",
+    highlights: [
+      { title: "타이어 공기압", body: "psi↔bar 환산으로 타이어 적정 공기압을 맞출 수 있습니다." },
+      { title: "표준 계수", body: "1atm=101325Pa, 1psi=6894.76Pa를 정확히 적용합니다." },
+      { title: "즉시 계산", body: "값을 바꾸면 바로 갱신됩니다." },
+    ],
+    relatedTitle: "관련 변환기",
+    related: [
+      { href: "/ko/energy-converter/", label: "에너지 변환기", desc: "J·kcal·kWh를 변환합니다." },
+      { href: "/ko/temperature-converter/", label: "온도 변환기", desc: "°C·°F·K를 변환합니다." },
+      { href: "/ko/length-converter/", label: "길이 변환기", desc: "m·인치·피트를 변환합니다." },
+    ],
+    disclaimer: "본 변환기는 국제 표준 단위 정의에 따른 계산이며, 일반적인 참고용입니다.",
+  },
+  en: {
+    eyebrow: "Unit Converter",
+    introTitle: "What is the pressure converter?",
+    intro: "It converts between pascal (Pa), kPa, bar, atmospheres (atm), psi, and mmHg. Useful for tire pressure and weather/engineering units.",
+    howToTitle: "How to use",
+    steps: ["Enter the value to convert.", "Choose the source unit (e.g. psi or bar).", "Read the converted results in every unit."],
+    highlightsTitle: "Highlights",
+    highlights: [
+      { title: "Tire pressure", body: "Convert psi↔bar to set correct tire pressure." },
+      { title: "Standard factors", body: "Uses 1 atm=101325 Pa and 1 psi=6894.76 Pa precisely." },
+      { title: "Instant", body: "Results update as you type." },
+    ],
+    relatedTitle: "Related converters",
+    related: [
+      { href: "/en/energy-converter/", label: "Energy Converter", desc: "Convert J, kcal, kWh." },
+      { href: "/en/temperature-converter/", label: "Temperature Converter", desc: "Convert °C, °F, K." },
+      { href: "/en/length-converter/", label: "Length Converter", desc: "Convert m, inch, feet." },
+    ],
+    disclaimer: "This converter uses international standard unit definitions and is for general reference.",
+  },
+  ja: {
+    eyebrow: "単位変換ツール",
+    introTitle: "圧力変換とは？",
+    intro: "パスカル(Pa)・kPa・bar・気圧(atm)・psi・mmHgを相互変換するツールです。タイヤ空気圧や気象・工学単位の換算に便利です。",
+    howToTitle: "使い方",
+    steps: ["変換する値を入力します。", "基準単位を選びます(例: psi または bar)。", "全単位の変換結果を確認します。"],
+    highlightsTitle: "主な特徴",
+    highlights: [
+      { title: "タイヤ空気圧", body: "psi↔barの換算で適正空気圧に調整できます。" },
+      { title: "標準係数", body: "1atm=101325Pa、1psi=6894.76Paを正確に適用します。" },
+      { title: "即時計算", body: "入力するとすぐに更新されます。" },
+    ],
+    relatedTitle: "関連変換ツール",
+    related: [
+      { href: "/ja/energy-converter/", label: "エネルギー変換", desc: "J・kcal・kWhを変換します。" },
+      { href: "/ja/temperature-converter/", label: "温度変換", desc: "°C・°F・Kを変換します。" },
+      { href: "/ja/length-converter/", label: "長さ変換", desc: "m・インチ・フィートを変換します。" },
+    ],
+    disclaimer: "本変換ツールは国際標準の単位定義に基づく計算で、一般的な参考用です。",
+  },
+};
+
+const faqs = {
+  ko: [
+    { q: "타이어 공기압 32psi는 몇 bar인가요?", a: "32psi = 약 2.21bar 입니다." },
+    { q: "1기압(atm)은?", a: "1atm = 101325Pa = 1.01325bar = 14.696psi = 760mmHg 입니다." },
+    { q: "bar와 psi 관계는?", a: "1bar = 약 14.504psi 입니다." },
+  ],
+  en: [
+    { q: "What is 32 psi in bar?", a: "32 psi is about 2.21 bar." },
+    { q: "What is 1 atmosphere?", a: "1 atm = 101325 Pa = 1.01325 bar = 14.696 psi = 760 mmHg." },
+    { q: "bar vs psi?", a: "1 bar ≈ 14.504 psi." },
+  ],
+  ja: [
+    { q: "タイヤ空気圧32psiは何bar？", a: "32psi = 約2.21bar です。" },
+    { q: "1気圧(atm)は？", a: "1atm = 101325Pa = 1.01325bar = 14.696psi = 760mmHg です。" },
+    { q: "barとpsiの関係は？", a: "1bar ≈ 14.504psi です。" },
+  ],
+};
+
+const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <ToolShell
+    title={m.title}
+    description={m.description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="pressure-converter"
+    content={c}
+    applicationCategory="UtilityApplication"
+  >
+    <div class="mx-auto max-w-2xl">
+      <UnitConverter client:load locale={locale} category="pressure" />
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
+</BaseLayout>

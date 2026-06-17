@@ -1,0 +1,126 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import UnitConverter from "../../components/tools/UnitConverter";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "시간 변환기 — 초·분·시간·일·주 변환", description: "밀리초, 초, 분, 시간, 일, 주를 즉시 상호 변환합니다. 예: 2시간은 몇 분, 90분은 몇 시간." },
+  en: { title: "Time Converter — seconds, minutes, hours, days, weeks", description: "Instantly convert milliseconds, seconds, minutes, hours, days, and weeks. E.g. how many minutes in 2 hours." },
+  ja: { title: "時間変換 — 秒・分・時間・日・週", description: "ミリ秒、秒、分、時間、日、週を即時に相互変換します。" },
+  fr: { title: "Convertisseur de Temps — secondes, minutes, heures, jours", description: "Convertissez millisecondes, secondes, minutes, heures, jours et semaines." },
+  es: { title: "Conversor de Tiempo — segundos, minutos, horas, días", description: "Convierte milisegundos, segundos, minutos, horas, días y semanas." },
+  zh: { title: "时间转换器 — 秒、分、小时、天、周", description: "在毫秒、秒、分、小时、天、周之间即时换算。" },
+  cn: { title: "时间转换器 — 秒、分、小时、天、周", description: "在毫秒、秒、分、小时、天、周之间即时换算。" },
+};
+const m = meta[locale] ?? meta.en;
+
+const content = {
+  ko: {
+    eyebrow: "단위 변환 도구",
+    introTitle: "시간 변환기란?",
+    intro: "밀리초·초·분·시간·일·주 사이를 변환하는 도구입니다. 한 단위에 입력하면 나머지로 즉시 환산됩니다.",
+    howToTitle: "사용 방법",
+    steps: ["변환할 값을 입력합니다.", "기준 단위를 선택합니다.", "모든 단위의 변환 결과를 확인합니다."],
+    highlightsTitle: "주요 특징",
+    highlights: [
+      { title: "동시 변환", body: "한 번 입력으로 초~주를 동시에 보여줍니다." },
+      { title: "정확한 환산", body: "1시간=3600초, 1일=86400초를 정확히 적용합니다." },
+      { title: "즉시 계산", body: "값을 바꾸면 바로 갱신됩니다." },
+    ],
+    relatedTitle: "관련 도구",
+    related: [
+      { href: "/ko/length-converter/", label: "길이 변환기", desc: "m·인치·피트를 변환합니다." },
+      { href: "/ko/speed-converter/", label: "속도 변환기", desc: "km/h·mph를 변환합니다." },
+      { href: "/ko/percentage-calculator/", label: "퍼센트 계산기", desc: "퍼센트·할인가를 계산합니다." },
+    ],
+    disclaimer: "월·년은 길이가 일정하지 않아 포함하지 않았습니다. 일반적인 참고용입니다.",
+  },
+  en: {
+    eyebrow: "Unit Converter",
+    introTitle: "What is the time converter?",
+    intro: "It converts between milliseconds, seconds, minutes, hours, days, and weeks. Enter a value in one unit and the rest update instantly.",
+    howToTitle: "How to use",
+    steps: ["Enter the value to convert.", "Choose the source unit.", "Read the converted results in every unit."],
+    highlightsTitle: "Highlights",
+    highlights: [
+      { title: "All at once", body: "One input shows seconds through weeks simultaneously." },
+      { title: "Exact", body: "Uses 1 hour=3600s and 1 day=86400s precisely." },
+      { title: "Instant", body: "Results update as you type." },
+    ],
+    relatedTitle: "Related tools",
+    related: [
+      { href: "/en/length-converter/", label: "Length Converter", desc: "Convert m, inch, feet." },
+      { href: "/en/speed-converter/", label: "Speed Converter", desc: "Convert km/h, mph." },
+      { href: "/en/percentage-calculator/", label: "Percentage Calculator", desc: "Percent and discounts." },
+    ],
+    disclaimer: "Months and years are not included as their lengths vary. For general reference.",
+  },
+  ja: {
+    eyebrow: "単位変換ツール",
+    introTitle: "時間変換とは？",
+    intro: "ミリ秒・秒・分・時間・日・週を相互変換するツールです。1つの単位に入力すると他が即時更新されます。",
+    howToTitle: "使い方",
+    steps: ["変換する値を入力します。", "基準単位を選びます。", "全単位の変換結果を確認します。"],
+    highlightsTitle: "主な特徴",
+    highlights: [
+      { title: "同時変換", body: "1回の入力で秒〜週を同時に表示します。" },
+      { title: "正確な換算", body: "1時間=3600秒、1日=86400秒を正確に適用します。" },
+      { title: "即時計算", body: "入力するとすぐに更新されます。" },
+    ],
+    relatedTitle: "関連ツール",
+    related: [
+      { href: "/ja/length-converter/", label: "長さ変換", desc: "m・インチ・フィートを変換します。" },
+      { href: "/ja/speed-converter/", label: "速度変換", desc: "km/h・mphを変換します。" },
+      { href: "/ja/percentage-calculator/", label: "パーセント計算機", desc: "パーセント・割引を計算します。" },
+    ],
+    disclaimer: "月・年は長さが一定でないため含めていません。一般的な参考用です。",
+  },
+};
+
+const faqs = {
+  ko: [
+    { q: "2시간은 몇 분인가요?", a: "2시간 = 120분 = 7200초 입니다." },
+    { q: "90분은 몇 시간인가요?", a: "90분 = 1.5시간 입니다." },
+    { q: "1주는 몇 시간인가요?", a: "1주 = 168시간 = 10080분 입니다." },
+  ],
+  en: [
+    { q: "How many minutes in 2 hours?", a: "2 hours = 120 minutes = 7200 seconds." },
+    { q: "How many hours is 90 minutes?", a: "90 minutes = 1.5 hours." },
+    { q: "How many hours in a week?", a: "1 week = 168 hours = 10080 minutes." },
+  ],
+  ja: [
+    { q: "2時間は何分？", a: "2時間 = 120分 = 7200秒 です。" },
+    { q: "90分は何時間？", a: "90分 = 1.5時間 です。" },
+    { q: "1週間は何時間？", a: "1週間 = 168時間 = 10080分 です。" },
+  ],
+};
+
+const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <ToolShell
+    title={m.title}
+    description={m.description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="time-converter"
+    content={c}
+    applicationCategory="UtilityApplication"
+  >
+    <div class="mx-auto max-w-2xl">
+      <UnitConverter client:load locale={locale} category="time" />
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
+</BaseLayout>
