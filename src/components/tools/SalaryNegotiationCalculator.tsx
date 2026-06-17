@@ -239,9 +239,9 @@ const SCENARIO_MULTIPLIERS: Record<ScenarioKey, number> = {
 };
 
 const SCENARIO_COLORS: Record<ScenarioKey, { card: string; badge: string; text: string }> = {
-  optimistic: { card: "bg-emerald-50 border-emerald-200", badge: "bg-emerald-100 text-emerald-800", text: "text-emerald-700" },
-  moderate: { card: "bg-blue-50 border-blue-200", badge: "bg-blue-100 text-blue-800", text: "text-blue-700" },
-  conservative: { card: "bg-amber-50 border-amber-200", badge: "bg-amber-100 text-amber-800", text: "text-amber-700" },
+  optimistic: { card: "bg-success/10 border-success/30", badge: "bg-success/15 text-success", text: "text-success" },
+  moderate: { card: "bg-info/10 border-info/30", badge: "bg-info/15 text-info", text: "text-info" },
+  conservative: { card: "bg-warning/10 border-warning/30", badge: "bg-warning/15 text-warning", text: "text-warning" },
 };
 
 const SalaryNegotiationCalculator = ({ locale }: Props) => {
@@ -349,12 +349,12 @@ const SalaryNegotiationCalculator = ({ locale }: Props) => {
       </div>
 
       {/* Tips */}
-      <div className="p-5 rounded-2xl bg-blue-50 border border-blue-200">
-        <p className="text-xs font-black mb-3 text-blue-900">{t.tipsTitle}</p>
+      <div className="p-5 rounded-2xl bg-info/10 border border-info/30">
+        <p className="text-xs font-black mb-3 text-info">{t.tipsTitle}</p>
         <ul className="space-y-2">
           {t.tips.map((tip, i) => (
             <li key={i} className="flex gap-2 text-xs text-muted-foreground leading-relaxed">
-              <span className="font-black text-blue-500 shrink-0">{i + 1}.</span>
+              <span className="font-black text-info shrink-0">{i + 1}.</span>
               <span>{tip}</span>
             </li>
           ))}

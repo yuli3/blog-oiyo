@@ -258,9 +258,9 @@ const JeonseMonthlyConverter = ({ locale }: Props) => {
   }
 
   const comparisonColors = {
-    favorable: { card: "bg-emerald-50 border-emerald-200", badge: "bg-emerald-100 text-emerald-800", text: "text-emerald-700" },
-    unfavorable: { card: "bg-red-50 border-red-200", badge: "bg-red-100 text-red-800", text: "text-red-700" },
-    neutral: { card: "bg-blue-50 border-blue-200", badge: "bg-blue-100 text-blue-800", text: "text-blue-700" },
+    favorable: { card: "bg-success/10 border-success/30", badge: "bg-success/15 text-success", text: "text-success" },
+    unfavorable: { card: "bg-destructive/10 border-destructive/30", badge: "bg-destructive/15 text-destructive", text: "text-destructive" },
+    neutral: { card: "bg-info/10 border-info/30", badge: "bg-info/15 text-info", text: "text-info" },
   };
   const cc = comparisonColors[comparisonType];
 

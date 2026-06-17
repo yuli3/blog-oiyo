@@ -180,7 +180,7 @@ const SleepCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) 
                     </div>
                     <div className="flex justify-between items-center">
                         <span className="text-sm font-black text-muted-foreground">{t.debtResult}</span>
-                        <span className={`text-xl font-black ${debtHours > 0 ? 'text-rose-500' : 'text-emerald-500'}`}>
+                        <span className={`text-xl font-black ${debtHours > 0 ? 'text-destructive' : 'text-success'}`}>
                             {debtHours > 0 ? `-${debtHours.toFixed(1)}h` : t.none}
                         </span>
                     </div>

@@ -98,7 +98,7 @@ const PasswordGenerator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
   const entropy = calcEntropy(charsetSize, length);
 
   const strengthIndex = entropy < 28 ? 0 : entropy < 36 ? 1 : entropy < 60 ? 2 : entropy < 128 ? 3 : 4;
-  const strengthColors = ['bg-red-400', 'bg-orange-400', 'bg-yellow-400', 'bg-emerald-400', 'bg-emerald-600'];
+  const strengthColors = ['bg-destructive/40', 'bg-warning/40', 'bg-warning/40', 'bg-success/40', 'bg-success'];
 
   const handleGenerate = useCallback(() => {
     if (!useUpper && !useLower && !useNumbers && !useSymbols) {
@@ -128,26 +128,26 @@ const PasswordGenerator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
         role="switch"
         aria-checked={checked}
         onClick={onChange}
-        className={`relative w-10 h-6 rounded-full transition-colors ${checked ? 'bg-emerald-500' : 'bg-gray-200'}`}
+        className={`relative w-10 h-6 rounded-full transition-colors ${checked ? 'bg-success' : 'bg-muted'}`}
       >
         <span
           className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white shadow transition-transform ${checked ? 'translate-x-4' : ''}`}
         />
       </button>
-      <span className="text-sm text-gray-700">{label}</span>
+      <span className="text-sm text-muted-foreground">{label}</span>
     </label>
   );
 
   return (
     <div className="w-full max-w-2xl mx-auto space-y-6 font-sans">
-      <h1 className="text-2xl font-bold text-center text-emerald-800">{t.title}</h1>
+      <h1 className="text-2xl font-bold text-center text-success">{t.title}</h1>
 
-      <div className="rounded-2xl border border-emerald-100 bg-white/80 p-5 space-y-5 shadow-sm">
+      <div className="rounded-2xl border border-success/20 bg-white/80 p-5 space-y-5 shadow-sm">
         {/* Length slider */}
         <div className="space-y-2">
-          <label className="flex justify-between text-sm font-bold text-gray-700">
+          <label className="flex justify-between text-sm font-bold text-muted-foreground">
             <span>{t.length}</span>
-            <span className="text-emerald-600">{length}</span>
+            <span className="text-success">{length}</span>
           </label>
           <input
             type="range"
@@ -155,10 +155,10 @@ const PasswordGenerator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
             max={64}
             value={length}
             onChange={(e) => setLength(Number(e.target.value))}
-            className="w-full accent-emerald-500"
+            className="w-full accent-success"
             aria-label={t.length}
           />
-          <div className="flex justify-between text-xs text-gray-400">
+          <div className="flex justify-between text-xs text-muted-foreground">
             <span>8</span><span>64</span>
           </div>
         </div>
@@ -174,13 +174,13 @@ const PasswordGenerator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
 
         {/* Count */}
         <div className="flex items-center gap-4">
-          <label className="text-sm font-bold text-gray-700 whitespace-nowrap">{t.count}</label>
+          <label className="text-sm font-bold text-muted-foreground whitespace-nowrap">{t.count}</label>
           {[1, 3, 5, 10].map((n) => (
             <button
               key={n}
               type="button"
               onClick={() => setCount(n)}
-              className={`px-3 py-1.5 rounded-xl text-sm font-bold transition-colors ${count === n ? 'bg-emerald-500 text-white' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'}`}
+              className={`px-3 py-1.5 rounded-xl text-sm font-bold transition-colors ${count === n ? 'bg-success text-white' : 'bg-success/10 text-success hover:bg-success/15'}`}
               aria-pressed={count === n}
             >
               {n}
@@ -190,24 +190,24 @@ const PasswordGenerator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
 
         {/* Entropy / strength */}
         <div className="flex items-center gap-3">
-          <div className="flex-1 h-2 rounded-full bg-gray-100 overflow-hidden">
+          <div className="flex-1 h-2 rounded-full bg-muted overflow-hidden">
             <div
               className={`h-full rounded-full transition-all ${strengthColors[strengthIndex]}`}
               style={{ width: `${Math.min((entropy / 128) * 100, 100)}%` }}
               role="presentation"
             />
           </div>
-          <span className="text-xs font-bold text-gray-600 whitespace-nowrap">
+          <span className="text-xs font-bold text-muted-foreground whitespace-nowrap">
             {t.strengthLabels[strengthIndex]} — {entropy} {t.bits}
           </span>
         </div>
 
-        {error && <p className="text-sm text-red-500">{error}</p>}
+        {error && <p className="text-sm text-destructive">{error}</p>}
 
         <button
           type="button"
           onClick={handleGenerate}
-          className="w-full py-3 rounded-2xl bg-emerald-500 text-white font-bold text-sm hover:bg-emerald-600 active:scale-95 transition-all shadow"
+          className="w-full py-3 rounded-2xl bg-success text-white font-bold text-sm hover:bg-success active:scale-95 transition-all shadow"
           aria-label={t.generate}
         >
           {t.generate}
@@ -217,12 +217,12 @@ const PasswordGenerator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
       {passwords.length > 0 && (
         <div className="space-y-3">
           {passwords.map((pw, i) => (
-            <div key={i} className="flex items-center gap-3 rounded-2xl border border-emerald-100 bg-white/80 px-4 py-3 shadow-sm">
-              <code className="flex-1 text-sm font-mono text-gray-800 break-all select-all">{pw}</code>
+            <div key={i} className="flex items-center gap-3 rounded-2xl border border-success/20 bg-white/80 px-4 py-3 shadow-sm">
+              <code className="flex-1 text-sm font-mono text-foreground break-all select-all">{pw}</code>
               <button
                 type="button"
                 onClick={() => handleCopy(pw, i)}
-                className="px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 text-xs font-bold hover:bg-emerald-100 transition-colors whitespace-nowrap"
+                className="px-3 py-1.5 rounded-xl bg-success/10 text-success text-xs font-bold hover:bg-success/15 transition-colors whitespace-nowrap"
                 aria-label={`${t.copy} ${i + 1}`}
               >
                 {copiedIdx === i ? t.copied : t.copy}

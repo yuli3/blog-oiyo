@@ -40,9 +40,9 @@ const FreelancerTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 
                         <h2 className="text-3xl font-black text-primary">₩{Math.round(netPay).toLocaleString()}</h2>
                         <p className="text-[10px] text-stone-500">-{t.tax33}: ₩{Math.round(tax33).toLocaleString()}</p>
                     </div>
-                    <div className="p-8 bg-emerald-50 border border-emerald-100 rounded-[40px] space-y-2 text-center">
-                        <p className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">{locale === 'ko' ? '5월 정산 예상' : 'May Settlement'}</p>
-                        <h2 className={`text-3xl font-black ${settlement > 0 ? 'text-rose-600' : 'text-emerald-700'}`}>
+                    <div className="p-8 bg-success/10 border border-success/20 rounded-[40px] space-y-2 text-center">
+                        <p className="text-[10px] font-black text-success uppercase tracking-widest">{locale === 'ko' ? '5월 정산 예상' : 'May Settlement'}</p>
+                        <h2 className={`text-3xl font-black ${settlement > 0 ? 'text-destructive' : 'text-success'}`}>
                             {settlement > 0 ? `+₩${Math.round(settlement).toLocaleString()}` : `환급 ₩${Math.round(Math.abs(settlement)).toLocaleString()}`}
                         </h2>
                         <p className="text-[10px] text-muted-foreground">{settlement > 0 ? '추가 납부 필요' : '환급 예상'}</p>

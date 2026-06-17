@@ -52,7 +52,7 @@ const MeetingCostCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'k
                             </div>
                             <div>
                                 <p className="text-[10px] text-stone-500 uppercase mb-1">{t.perSec}</p>
-                                <p className="text-lg font-bold text-rose-400">₩{costPerSec.toFixed(0)}</p>
+                                <p className="text-lg font-bold text-destructive">₩{costPerSec.toFixed(0)}</p>
                             </div>
                         </div>
                     </div>
@@ -64,7 +64,7 @@ const MeetingCostCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'k
 
                 <button 
                     onClick={() => setIsRunning(!isRunning)}
-                    className={`w-full py-5 rounded-[32px] font-black text-xl shadow-lg transition-all active:scale-95 ${isRunning ? 'bg-rose-500 text-white' : 'bg-primary text-primary-foreground'}`}
+                    className={`w-full py-5 rounded-[32px] font-black text-xl shadow-lg transition-all active:scale-95 ${isRunning ? 'bg-destructive text-white' : 'bg-primary text-primary-foreground'}`}
                 >
                     {isRunning ? t.stop : t.start}
                 </button>

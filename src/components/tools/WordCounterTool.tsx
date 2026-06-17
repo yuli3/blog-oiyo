@@ -64,21 +64,21 @@ const WordCounterTool: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) 
 
   return (
     <div className="w-full max-w-3xl mx-auto space-y-6 font-sans">
-      <h1 className="text-2xl font-bold text-center text-emerald-800">{t.title}</h1>
+      <h1 className="text-2xl font-bold text-center text-success">{t.title}</h1>
 
       <div className="relative">
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder={t.placeholder}
-          className="w-full min-h-[220px] rounded-2xl border border-emerald-200 bg-white/80 p-4 text-sm leading-relaxed text-gray-800 shadow-sm outline-none focus:ring-2 focus:ring-emerald-400 resize-y"
+          className="w-full min-h-[220px] rounded-2xl border border-success/30 bg-white/80 p-4 text-sm leading-relaxed text-foreground shadow-sm outline-none focus:ring-2 focus:ring-success/30 resize-y"
           aria-label={t.placeholder}
         />
         {text && (
           <button
             type="button"
             onClick={() => setText('')}
-            className="absolute top-3 right-3 rounded-xl bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-700 hover:bg-emerald-200 transition-colors"
+            className="absolute top-3 right-3 rounded-xl bg-success/15 px-3 py-1 text-xs font-bold text-success hover:bg-success/20 transition-colors"
             aria-label={t.clear}
           >
             {t.clear}
@@ -87,7 +87,7 @@ const WordCounterTool: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) 
       </div>
 
       {!stats && (
-        <p className="text-center text-sm text-gray-400">{t.noText}</p>
+        <p className="text-center text-sm text-muted-foreground">{t.noText}</p>
       )}
 
       {stats && (
@@ -108,27 +108,27 @@ const WordCounterTool: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) 
             ].map(({ label, value }) => (
               <div
                 key={label}
-                className="rounded-2xl bg-emerald-50 border border-emerald-100 px-4 py-3 text-center shadow-sm"
+                className="rounded-2xl bg-success/10 border border-success/20 px-4 py-3 text-center shadow-sm"
               >
-                <div className="text-xl font-bold text-emerald-700">{value}</div>
-                <div className="text-xs text-gray-500 mt-1">{label}</div>
+                <div className="text-xl font-bold text-success">{value}</div>
+                <div className="text-xs text-muted-foreground mt-1">{label}</div>
               </div>
             ))}
           </div>
 
           {stats.topWords.length > 0 && (
-            <div className="rounded-2xl border border-emerald-100 bg-white/70 p-4 shadow-sm">
-              <h2 className="text-sm font-bold text-emerald-800 mb-3">{t.topWords}</h2>
+            <div className="rounded-2xl border border-success/20 bg-white/70 p-4 shadow-sm">
+              <h2 className="text-sm font-bold text-success mb-3">{t.topWords}</h2>
               <ol className="space-y-2">
                 {stats.topWords.map(([word, count], i) => (
                   <li key={word} className="flex items-center gap-3">
-                    <span className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold flex items-center justify-center flex-shrink-0">
+                    <span className="w-6 h-6 rounded-full bg-success/15 text-success text-xs font-bold flex items-center justify-center flex-shrink-0">
                       {i + 1}
                     </span>
-                    <span className="flex-1 text-sm font-bold text-gray-700">{word}</span>
-                    <span className="text-xs text-gray-400">{count} {t.times}</span>
+                    <span className="flex-1 text-sm font-bold text-muted-foreground">{word}</span>
+                    <span className="text-xs text-muted-foreground">{count} {t.times}</span>
                     <div
-                      className="h-2 rounded-full bg-emerald-300"
+                      className="h-2 rounded-full bg-success/40"
                       style={{ width: `${Math.min((count / (stats.topWords[0]?.[1] ?? 1)) * 80, 80)}px` }}
                       role="presentation"
                     />

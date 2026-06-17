@@ -48,7 +48,7 @@ const FastingTimer: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => 
                         <circle cx="128" cy="128" r="110" className="stroke-muted fill-none stroke-[12]" />
                         <circle 
                             cx="128" cy="128" r="110" 
-                            className={`fill-none stroke-[12] transition-all duration-1000 ${isFasting ? 'stroke-primary' : 'stroke-emerald-400'}`}
+                            className={`fill-none stroke-[12] transition-all duration-1000 ${isFasting ? 'stroke-primary' : 'stroke-success'}`}
                             strokeDasharray={2 * Math.PI * 110}
                             strokeDashoffset={2 * Math.PI * 110 * (1 - progress / 100)}
                             strokeLinecap="round"

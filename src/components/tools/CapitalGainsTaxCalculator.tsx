@@ -176,7 +176,7 @@ const CapitalGainsTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale 
                             <button
                                 key={val}
                                 onClick={() => setAssetType(val)}
-                                className={`rounded-xl py-2 text-sm font-bold border transition-all ${assetType === val ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-background text-foreground border-border hover:border-emerald-400'}`}
+                                className={`rounded-xl py-2 text-sm font-bold border transition-all ${assetType === val ? 'bg-success text-white border-success' : 'bg-background text-foreground border-border hover:border-success'}`}
                                 aria-pressed={assetType === val}
                                 aria-label={label}
                             >
@@ -195,7 +195,7 @@ const CapitalGainsTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale 
                             onChange={(e) => setAcquisitionPrice(Math.max(0, Number(e.target.value)))}
                             step={10000000}
                             min={0}
-                            className="rounded-xl border border-border bg-background px-4 py-3 text-base font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            className="rounded-xl border border-border bg-background px-4 py-3 text-base font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-success/30"
                             aria-label={t.acquisitionPrice}
                         />
                     </div>
@@ -207,7 +207,7 @@ const CapitalGainsTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale 
                             onChange={(e) => setTransferPrice(Math.max(0, Number(e.target.value)))}
                             step={10000000}
                             min={0}
-                            className="rounded-xl border border-border bg-background px-4 py-3 text-base font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            className="rounded-xl border border-border bg-background px-4 py-3 text-base font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-success/30"
                             aria-label={t.transferPrice}
                         />
                     </div>
@@ -223,7 +223,7 @@ const CapitalGainsTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale 
                             step={1}
                             min={0}
                             max={30}
-                            className="w-full rounded-xl border border-border bg-background px-4 py-3 text-base font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            className="w-full rounded-xl border border-border bg-background px-4 py-3 text-base font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-success/30"
                             aria-label={t.holdingYears}
                         />
                     </div>
@@ -238,7 +238,7 @@ const CapitalGainsTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale 
                                     <button
                                         key={n}
                                         onClick={() => setHouseCount(n)}
-                                        className={`rounded-xl py-2 text-sm font-bold border transition-all ${houseCount === n ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-background text-foreground border-border hover:border-emerald-400'}`}
+                                        className={`rounded-xl py-2 text-sm font-bold border transition-all ${houseCount === n ? 'bg-success text-white border-success' : 'bg-background text-foreground border-border hover:border-success'}`}
                                         aria-pressed={houseCount === n}
                                         aria-label={n === 1 ? t.house1 : n === 2 ? t.house2 : t.house3plus}
                                     >
@@ -251,7 +251,7 @@ const CapitalGainsTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale 
                             <label className="text-sm font-bold text-foreground">{t.isAdjustedArea}</label>
                             <button
                                 onClick={() => setIsAdjustedArea((v) => !v)}
-                                className={`rounded-xl py-3 text-sm font-bold border transition-all ${isAdjustedArea ? 'bg-amber-500 text-white border-amber-500' : 'bg-background text-foreground border-border hover:border-emerald-400'}`}
+                                className={`rounded-xl py-3 text-sm font-bold border transition-all ${isAdjustedArea ? 'bg-warning text-white border-warning' : 'bg-background text-foreground border-border hover:border-success'}`}
                                 aria-pressed={isAdjustedArea}
                                 aria-label={t.isAdjustedArea}
                             >
@@ -262,8 +262,8 @@ const CapitalGainsTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale 
                 )}
 
                 {isExempt ? (
-                    <div className="rounded-2xl bg-emerald-50 border border-emerald-200 p-6 text-center">
-                        <p className="text-emerald-800 font-bold text-base">{t[noteKey]}</p>
+                    <div className="rounded-2xl bg-success/10 border border-success/30 p-6 text-center">
+                        <p className="text-success font-bold text-base">{t[noteKey]}</p>
                     </div>
                 ) : (
                     <div className="rounded-2xl border border-border bg-muted/30 p-6 flex flex-col gap-3">
@@ -283,12 +283,12 @@ const CapitalGainsTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale 
                         ))}
                         <div className="border-t border-border mt-2 pt-3 flex flex-col gap-2">
                             <div className="flex justify-between items-center">
-                                <span className="text-sm font-bold text-red-600">{t.totalTax}</span>
-                                <span className="text-base font-bold text-red-600">₩{fmt(totalTax)}</span>
+                                <span className="text-sm font-bold text-destructive">{t.totalTax}</span>
+                                <span className="text-base font-bold text-destructive">₩{fmt(totalTax)}</span>
                             </div>
                             <div className="flex justify-between items-center">
-                                <span className="text-sm font-bold text-emerald-700">{t.profitAfterTax}</span>
-                                <span className="text-base font-bold text-emerald-700">₩{fmt(profitAfterTax)}</span>
+                                <span className="text-sm font-bold text-success">{t.profitAfterTax}</span>
+                                <span className="text-base font-bold text-success">₩{fmt(profitAfterTax)}</span>
                             </div>
                         </div>
                     </div>

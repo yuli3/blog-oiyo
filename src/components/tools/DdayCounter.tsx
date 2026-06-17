@@ -168,10 +168,10 @@ const DdayCard: React.FC<CardProps> = ({ event, locale, onDelete }) => {
 
   if (diff === 0) {
     badge = "D-Day! 🎉";
-    badgeColor = "text-emerald-600";
+    badgeColor = "text-success";
   } else if (diff > 0) {
     badge = `D-${diff}`;
-    badgeColor = diff <= 7 ? "text-rose-500" : "text-blue-600";
+    badgeColor = diff <= 7 ? "text-destructive" : "text-info";
   } else {
     badge = `D+${Math.abs(diff)}`;
     badgeColor = "text-muted-foreground";
@@ -179,11 +179,11 @@ const DdayCard: React.FC<CardProps> = ({ event, locale, onDelete }) => {
 
   const cardBg =
     diff === 0
-      ? "bg-emerald-50 border-emerald-300"
+      ? "bg-success/10 border-success/40"
       : diff > 0 && diff <= 7
-      ? "bg-rose-50 border-rose-200"
+      ? "bg-destructive/10 border-destructive/30"
       : diff > 0
-      ? "bg-blue-50 border-blue-200"
+      ? "bg-info/10 border-info/30"
       : "bg-muted/30 border-border";
 
   return (
@@ -192,12 +192,12 @@ const DdayCard: React.FC<CardProps> = ({ event, locale, onDelete }) => {
         <p className="text-sm font-bold truncate">{event.name}</p>
         <p className="text-xs text-muted-foreground">{event.date}</p>
         {isWithin7 && liveMs !== null && liveMs > 0 && (
-          <p className="text-[11px] font-mono font-bold text-rose-500">
+          <p className="text-[11px] font-mono font-bold text-destructive">
             {formatCountdown(liveMs)}
           </p>
         )}
         {diff === 0 && (
-          <p className="text-[11px] font-bold text-emerald-600">{t.today}</p>
+          <p className="text-[11px] font-bold text-success">{t.today}</p>
         )}
       </div>
       <div className="flex items-center gap-3 shrink-0">

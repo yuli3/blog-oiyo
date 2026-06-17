@@ -284,7 +284,7 @@ const Stopwatch: React.FC<{ t: Labels }> = ({ t }) => {
           aria-pressed={running}
           className={`py-3 rounded-2xl text-sm font-black uppercase tracking-widest transition-colors ${
             running
-              ? "bg-amber-500 text-white hover:bg-amber-600"
+              ? "bg-warning text-white hover:bg-warning"
               : "bg-primary text-primary-foreground hover:opacity-90"
           }`}
         >
@@ -460,15 +460,15 @@ const Countdown: React.FC<{ t: Labels }> = ({ t }) => {
               strokeWidth="8"
               strokeDasharray={`${strokeDash} ${circumference}`}
               strokeLinecap="round"
-              className={finished ? "text-rose-500" : "text-primary"}
+              className={finished ? "text-destructive" : "text-primary"}
               style={{ transition: running ? "none" : "stroke-dasharray 0.3s ease" }}
             />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center select-none">
-            <p className={`font-mono text-3xl font-black ${finished ? "text-rose-500 animate-pulse" : ""}`}>
+            <p className={`font-mono text-3xl font-black ${finished ? "text-destructive animate-pulse" : ""}`}>
               {fmtCountdown(displayMs)}
             </p>
-            {finished && <p className="text-xs font-black text-rose-500 mt-1">🔔</p>}
+            {finished && <p className="text-xs font-black text-destructive mt-1">🔔</p>}
           </div>
         </div>
         <p className="text-[10px] font-medium text-muted-foreground">{t.spaceHint}</p>
@@ -481,7 +481,7 @@ const Countdown: React.FC<{ t: Labels }> = ({ t }) => {
           disabled={configuredMs === 0 && !started}
           className={`py-3 rounded-2xl text-sm font-black uppercase tracking-widest transition-colors ${
             running
-              ? "bg-amber-500 text-white hover:bg-amber-600"
+              ? "bg-warning text-white hover:bg-warning"
               : finished
               ? "bg-muted/40 border border-border opacity-40 cursor-not-allowed"
               : "bg-primary text-primary-foreground hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"

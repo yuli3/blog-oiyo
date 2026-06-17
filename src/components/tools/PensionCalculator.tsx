@@ -41,7 +41,7 @@ const PensionCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
                         <div className="space-y-3 border-t border-stone-800 pt-6">
                             <div className="flex justify-between">
                                 <span className="text-[10px] text-stone-500 uppercase">{t.rate}</span>
-                                <span className="text-xs font-bold text-emerald-400">{(creditRate * 100).toFixed(1)}%</span>
+                                <span className="text-xs font-bold text-success">{(creditRate * 100).toFixed(1)}%</span>
                             </div>
                             <div className="flex justify-between">
                                 <span className="text-[10px] text-stone-500 uppercase">{t.limit}</span>

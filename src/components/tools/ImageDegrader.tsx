@@ -69,13 +69,13 @@ const ImageDegrader: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
             <div className="flex flex-col items-center gap-8">
                 <p className="text-sm font-medium text-muted-foreground text-center max-w-md">{t.desc}</p>
                 
-                <div className="w-full aspect-video bg-amber-50/20 rounded-3xl border-4 border-dashed border-amber-200/50 flex flex-col items-center justify-center overflow-hidden relative shadow-inner">
+                <div className="w-full aspect-video bg-warning/10 rounded-3xl border-4 border-dashed border-warning/30 flex flex-col items-center justify-center overflow-hidden relative shadow-inner">
                     {image ? (
                         <canvas ref={canvasRef} className="max-w-full max-h-full object-contain pixelated" style={{ imageRendering: 'pixelated' }} />
                     ) : (
                         <label className="cursor-pointer flex flex-col items-center gap-4 group">
                             <div className="text-6xl group-hover:rotate-12 transition-transform">💾</div>
-                            <span className="text-xs font-black text-amber-600/60 uppercase tracking-widest">{t.upload}</span>
+                            <span className="text-xs font-black text-warning/60 uppercase tracking-widest">{t.upload}</span>
                             <input type="file" className="hidden" accept="image/*" onChange={handleUpload} />
                         </label>
                     )}

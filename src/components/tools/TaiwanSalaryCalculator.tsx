@@ -141,7 +141,7 @@ const TaiwanSalaryCalculator: React.FC<Props> = ({ locale = 'cn' }) => {
                             onChange={(e) => setMonthlyGross(Math.max(0, Number(e.target.value)))}
                             step={5_000}
                             min={0}
-                            className="w-full rounded-xl border border-border bg-background px-4 py-3 text-base font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full rounded-xl border border-border bg-background px-4 py-3 text-base font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-info/30"
                             aria-label={t.monthlyGross}
                         />
                     </div>
@@ -155,24 +155,24 @@ const TaiwanSalaryCalculator: React.FC<Props> = ({ locale = 'cn' }) => {
                             step={1}
                             min={1}
                             max={10}
-                            className="w-full rounded-xl border border-border bg-background px-4 py-3 text-base font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full rounded-xl border border-border bg-background px-4 py-3 text-base font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-info/30"
                             aria-label={t.dependents}
                         />
                     </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="rounded-2xl bg-blue-50 border border-blue-200 p-5 flex flex-col gap-1">
-                        <span className="text-xs font-bold text-blue-700 uppercase tracking-wide">{t.cardGross}</span>
-                        <span className="text-2xl font-bold text-blue-900">{fmt(monthlyGross)}</span>
+                    <div className="rounded-2xl bg-info/10 border border-info/30 p-5 flex flex-col gap-1">
+                        <span className="text-xs font-bold text-info uppercase tracking-wide">{t.cardGross}</span>
+                        <span className="text-2xl font-bold text-info">{fmt(monthlyGross)}</span>
                     </div>
-                    <div className="rounded-2xl bg-blue-600 p-5 flex flex-col gap-1">
-                        <span className="text-xs font-bold text-blue-100 uppercase tracking-wide">{t.cardNet}</span>
+                    <div className="rounded-2xl bg-info p-5 flex flex-col gap-1">
+                        <span className="text-xs font-bold text-info uppercase tracking-wide">{t.cardNet}</span>
                         <span className="text-2xl font-bold text-white">{fmt(monthlyNet)}</span>
                     </div>
-                    <div className="rounded-2xl bg-blue-50 border border-blue-200 p-5 flex flex-col gap-1">
-                        <span className="text-xs font-bold text-blue-700 uppercase tracking-wide">{t.cardAnnual}</span>
-                        <span className="text-2xl font-bold text-blue-900">{fmt(annualNet)}</span>
+                    <div className="rounded-2xl bg-info/10 border border-info/30 p-5 flex flex-col gap-1">
+                        <span className="text-xs font-bold text-info uppercase tracking-wide">{t.cardAnnual}</span>
+                        <span className="text-2xl font-bold text-info">{fmt(annualNet)}</span>
                     </div>
                 </div>
 
@@ -190,7 +190,7 @@ const TaiwanSalaryCalculator: React.FC<Props> = ({ locale = 'cn' }) => {
                         ))}
                         <div className="border-t border-border mt-2 pt-2 flex justify-between items-center">
                             <span className="text-sm font-bold text-foreground">{t.totalIns}</span>
-                            <span className="text-sm font-bold text-red-600">{fmt(totalIns)}</span>
+                            <span className="text-sm font-bold text-destructive">{fmt(totalIns)}</span>
                         </div>
                     </div>
                 </div>
@@ -198,7 +198,7 @@ const TaiwanSalaryCalculator: React.FC<Props> = ({ locale = 'cn' }) => {
                 <div className="rounded-2xl border border-border bg-muted/30 p-6 flex flex-col gap-3">
                     <div className="flex justify-between items-center text-sm border-t border-border pt-2">
                         <span className="font-bold text-foreground">{t.incomeTax}</span>
-                        <span className="font-bold text-red-600">{fmt(monthlyTax)}</span>
+                        <span className="font-bold text-destructive">{fmt(monthlyTax)}</span>
                     </div>
                 </div>
 

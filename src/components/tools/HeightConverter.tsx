@@ -559,7 +559,7 @@ export default function HeightConverter({ locale }: Props) {
               <p className="text-[10px] font-black text-stone-400 uppercase tracking-widest">
                 {myGender === "male" ? t.male : t.female} · KR
               </p>
-              <p className="text-3xl font-black text-amber-400">{pctDisplay}</p>
+              <p className="text-3xl font-black text-warning">{pctDisplay}</p>
             </div>
           </div>
         </section>

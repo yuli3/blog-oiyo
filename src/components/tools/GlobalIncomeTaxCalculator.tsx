@@ -261,14 +261,14 @@ const GlobalIncomeTaxCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'en
         <div className="space-y-4">
           {/* Key numbers */}
           <div className="grid grid-cols-2 gap-3">
-            <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 col-span-2">
+            <div className="p-4 rounded-2xl bg-success/10 border border-success/30 col-span-2">
               <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">{t.netIncome}</p>
-              <p className="text-4xl font-black text-emerald-600">{fmtNum(result.netIncome, config.currencySymbol)}</p>
+              <p className="text-4xl font-black text-success">{fmtNum(result.netIncome, config.currencySymbol)}</p>
               <p className="text-xs text-muted-foreground mt-1">{t.monthly}: {fmtNum(result.netIncome / 12, config.currencySymbol)}</p>
             </div>
             <div className="p-4 rounded-2xl bg-muted/20 border border-border">
               <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">{t.effectiveRate}</p>
-              <p className="text-2xl font-black text-red-500">{(result.effectiveRate * 100).toFixed(1)}%</p>
+              <p className="text-2xl font-black text-destructive">{(result.effectiveRate * 100).toFixed(1)}%</p>
             </div>
             <div className="p-4 rounded-2xl bg-muted/20 border border-border">
               <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">{t.marginalRate}</p>
@@ -286,7 +286,7 @@ const GlobalIncomeTaxCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'en
             ].map(({ label, value, sub }) => (
               <div key={label} className={`flex justify-between text-sm py-1.5 ${sub ? 'border-b border-border/40' : 'font-black'}`}>
                 <span className={sub ? 'text-muted-foreground' : ''}>{label}</span>
-                <span className={`tabular-nums ${!sub ? 'text-red-500' : ''}`}>{value}</span>
+                <span className={`tabular-nums ${!sub ? 'text-destructive' : ''}`}>{value}</span>
               </div>
             ))}
           </div>
@@ -297,9 +297,9 @@ const GlobalIncomeTaxCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'en
               <span>Tax {(result.effectiveRate * 100).toFixed(1)}%</span>
               <span>Net {((1 - result.effectiveRate) * 100).toFixed(1)}%</span>
             </div>
-            <div className="w-full h-4 rounded-full bg-emerald-100 overflow-hidden">
+            <div className="w-full h-4 rounded-full bg-success/15 overflow-hidden">
               <div
-                className="h-full bg-red-400 rounded-full transition-all duration-700"
+                className="h-full bg-destructive/40 rounded-full transition-all duration-700"
                 style={{ width: `${result.effectiveRate * 100}%` }}
               />
             </div>
@@ -328,7 +328,7 @@ const GlobalIncomeTaxCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'en
                     <tr key={i} className="border-t border-border/50">
                       <td className="p-3 tabular-nums text-muted-foreground">{b.range}</td>
                       <td className="p-3 text-right font-bold">{(b.rate * 100).toFixed(0)}%</td>
-                      <td className="p-3 text-right tabular-nums font-bold text-red-500">{fmtNum(b.tax, config.currencySymbol)}</td>
+                      <td className="p-3 text-right tabular-nums font-bold text-destructive">{fmtNum(b.tax, config.currencySymbol)}</td>
                     </tr>
                   ))}
                 </tbody>

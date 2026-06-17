@@ -167,14 +167,14 @@ const ComprehensiveIncomeTaxCalc: React.FC<{ locale?: Locale }> = ({ locale = 'k
 
       {/* Summary cards */}
       <div className="grid grid-cols-3 gap-3 mb-6">
-        <div className="col-span-3 sm:col-span-1 p-5 rounded-2xl bg-red-50 border border-red-200 text-center">
+        <div className="col-span-3 sm:col-span-1 p-5 rounded-2xl bg-destructive/10 border border-destructive/30 text-center">
           <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">{t.totalTax}</p>
-          <p className="text-2xl font-black text-red-600 tabular-nums">{fmt(result.totalTax)}</p>
+          <p className="text-2xl font-black text-destructive tabular-nums">{fmt(result.totalTax)}</p>
           <p className="text-[10px] text-muted-foreground">{t.won}</p>
         </div>
         <div className="p-4 rounded-2xl bg-muted/20 border border-border text-center">
           <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">{t.effectiveRate}</p>
-          <p className="text-xl font-black text-red-500">{(result.effectiveRate * 100).toFixed(1)}%</p>
+          <p className="text-xl font-black text-destructive">{(result.effectiveRate * 100).toFixed(1)}%</p>
         </div>
         <div className="p-4 rounded-2xl bg-muted/20 border border-border text-center">
           <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">{t.marginalRate}</p>
@@ -214,7 +214,7 @@ const ComprehensiveIncomeTaxCalc: React.FC<{ locale?: Locale }> = ({ locale = 'k
         ].filter(r => !r.skip).map(({ label, value }) => (
           <div key={label} className="flex justify-between text-sm py-0.5 border-b border-border/30 last:border-0">
             <span className="text-muted-foreground text-xs">{label}</span>
-            <span className={`tabular-nums text-xs font-bold ${value < 0 ? 'text-emerald-600' : ''}`}>
+            <span className={`tabular-nums text-xs font-bold ${value < 0 ? 'text-success' : ''}`}>
               {value < 0 ? '−' : ''}{fmt(Math.abs(value))} {t.won}
             </span>
           </div>

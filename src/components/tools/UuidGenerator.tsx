@@ -79,31 +79,31 @@ const UuidGenerator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
         role="switch"
         aria-checked={checked}
         onClick={onChange}
-        className={`relative w-10 h-6 rounded-full transition-colors ${checked ? 'bg-emerald-500' : 'bg-gray-200'}`}
+        className={`relative w-10 h-6 rounded-full transition-colors ${checked ? 'bg-success' : 'bg-muted'}`}
       >
         <span className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white shadow transition-transform ${checked ? 'translate-x-4' : ''}`} />
       </button>
-      <span className="text-sm text-gray-700">{label}</span>
+      <span className="text-sm text-muted-foreground">{label}</span>
     </label>
   );
 
   return (
     <div className="w-full max-w-2xl mx-auto space-y-6 font-sans">
-      <h1 className="text-2xl font-bold text-center text-emerald-800">{t.title}</h1>
+      <h1 className="text-2xl font-bold text-center text-success">{t.title}</h1>
 
-      <div className="rounded-2xl border border-emerald-100 bg-white/80 p-5 space-y-5 shadow-sm">
-        <p className="text-xs font-bold text-emerald-600 uppercase tracking-widest">{t.version}</p>
+      <div className="rounded-2xl border border-success/20 bg-white/80 p-5 space-y-5 shadow-sm">
+        <p className="text-xs font-bold text-success uppercase tracking-widest">{t.version}</p>
 
         {/* Count */}
         <div className="space-y-2">
-          <p className="text-sm font-bold text-gray-700">{t.count}</p>
+          <p className="text-sm font-bold text-muted-foreground">{t.count}</p>
           <div className="flex gap-2 flex-wrap">
             {BULK_OPTIONS.map((n) => (
               <button
                 key={n}
                 type="button"
                 onClick={() => setCount(n)}
-                className={`px-4 py-2 rounded-xl text-sm font-bold transition-colors ${count === n ? 'bg-emerald-500 text-white' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'}`}
+                className={`px-4 py-2 rounded-xl text-sm font-bold transition-colors ${count === n ? 'bg-success text-white' : 'bg-success/10 text-success hover:bg-success/15'}`}
                 aria-pressed={count === n}
               >
                 {n}
@@ -121,7 +121,7 @@ const UuidGenerator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
         <button
           type="button"
           onClick={handleGenerate}
-          className="w-full py-3 rounded-2xl bg-emerald-500 text-white font-bold text-sm hover:bg-emerald-600 active:scale-95 transition-all shadow"
+          className="w-full py-3 rounded-2xl bg-success text-white font-bold text-sm hover:bg-success active:scale-95 transition-all shadow"
         >
           {t.generate}
         </button>
@@ -134,19 +134,19 @@ const UuidGenerator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
               <button
                 type="button"
                 onClick={handleCopyAll}
-                className="px-4 py-2 rounded-xl bg-emerald-100 text-emerald-700 text-sm font-bold hover:bg-emerald-200 transition-colors"
+                className="px-4 py-2 rounded-xl bg-success/15 text-success text-sm font-bold hover:bg-success/20 transition-colors"
               >
                 {allCopied ? t.allCopied : t.copyAll}
               </button>
             </div>
           )}
           {uuids.map((uuid, i) => (
-            <div key={i} className="flex items-center gap-3 rounded-2xl border border-emerald-100 bg-white/80 px-4 py-3 shadow-sm">
-              <code className="flex-1 text-sm font-mono text-gray-800 break-all select-all">{uuid}</code>
+            <div key={i} className="flex items-center gap-3 rounded-2xl border border-success/20 bg-white/80 px-4 py-3 shadow-sm">
+              <code className="flex-1 text-sm font-mono text-foreground break-all select-all">{uuid}</code>
               <button
                 type="button"
                 onClick={() => handleCopy(uuid, i)}
-                className="px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 text-xs font-bold hover:bg-emerald-100 transition-colors whitespace-nowrap"
+                className="px-3 py-1.5 rounded-xl bg-success/10 text-success text-xs font-bold hover:bg-success/15 transition-colors whitespace-nowrap"
                 aria-label={`${t.copy} ${i + 1}`}
               >
                 {copiedIdx === i ? t.copied : t.copy}

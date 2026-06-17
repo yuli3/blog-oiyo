@@ -44,9 +44,9 @@ const IsaCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
                         <p className="text-[10px] font-black text-muted-foreground uppercase">{t.baseRate}</p>
                         <h4 className="text-2xl font-black">₩{Math.round(generalTax).toLocaleString()}</h4>
                     </div>
-                    <div className="p-8 bg-emerald-50 border border-emerald-100 rounded-[32px] space-y-2 animate-in slide-in-from-bottom-4">
-                        <p className="text-[10px] font-black text-emerald-400 uppercase">ISA {t.tax}</p>
-                        <h4 className="text-2xl font-black text-emerald-700">₩{Math.round(isaTax).toLocaleString()}</h4>
+                    <div className="p-8 bg-success/10 border border-success/20 rounded-[32px] space-y-2 animate-in slide-in-from-bottom-4">
+                        <p className="text-[10px] font-black text-success uppercase">ISA {t.tax}</p>
+                        <h4 className="text-2xl font-black text-success">₩{Math.round(isaTax).toLocaleString()}</h4>
                     </div>
                 </div>
 

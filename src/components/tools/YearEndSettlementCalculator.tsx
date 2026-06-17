@@ -146,7 +146,7 @@ const YearEndSettlementCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
         setAlreadyWithheld(2000000);
     };
 
-    const inputClass = "w-full rounded-xl border border-border bg-background px-4 py-3 text-base font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-emerald-500";
+    const inputClass = "w-full rounded-xl border border-border bg-background px-4 py-3 text-base font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-success/30";
 
     return (
         <GameContainer title={t.title} subtitle="Year-End Tax Settlement" onReset={handleReset}>
@@ -189,11 +189,11 @@ const YearEndSettlementCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
                 </div>
 
                 {/* Result summary */}
-                <div className={`rounded-2xl p-6 border-2 text-center ${isRefund ? 'bg-emerald-50 border-emerald-400' : 'bg-amber-50 border-amber-400'}`}>
-                    <p className="text-sm font-bold uppercase tracking-wide mb-2 ${isRefund ? 'text-emerald-700' : 'text-amber-700'}">
+                <div className={`rounded-2xl p-6 border-2 text-center ${isRefund ? 'bg-success/10 border-success' : 'bg-warning/10 border-warning'}`}>
+                    <p className="text-sm font-bold uppercase tracking-wide mb-2 ${isRefund ? 'text-success' : 'text-warning'}">
                         {isRefund ? t.refund : t.additionalTax}
                     </p>
-                    <p className={`text-4xl font-bold ${isRefund ? 'text-emerald-800' : 'text-amber-800'}`}>
+                    <p className={`text-4xl font-bold ${isRefund ? 'text-success' : 'text-warning'}`}>
                         {isRefund ? '+' : '-'}₩{fmt(Math.abs(diff))}
                     </p>
                 </div>

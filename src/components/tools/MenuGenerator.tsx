@@ -319,7 +319,7 @@ export default function MenuGenerator() {
                   onClick={toggleFavorite}
                   variant="outline"
                   size="lg"
-                  className={`flex-1 ${isFav ? 'border-red-400 bg-red-50 text-red-600' : ''}`}
+                  className={`flex-1 ${isFav ? 'border-destructive bg-destructive/10 text-destructive' : ''}`}
                 >
                   <Heart className={`mr-2 size-4 ${isFav ? 'fill-current' : ''}`} />
                   {isFav ? '즐겨찾기 해제' : '즐겨찾기'}
@@ -372,7 +372,7 @@ export default function MenuGenerator() {
       {favorites.length > 0 && (
         <div>
           <h3 className="mb-3 flex items-center gap-2 text-lg font-semibold">
-            <Heart className="size-5 text-red-500" />
+            <Heart className="size-5 text-destructive" />
             즐겨찾기
           </h3>
           <Card>

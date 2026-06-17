@@ -152,17 +152,17 @@ const CalorieCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
                     <div className="grid grid-cols-3 gap-3 border-t border-stone-800 pt-5">
                         <div className="text-center p-3 bg-stone-800/50 rounded-2xl">
                             <p className="text-[9px] font-black text-stone-500 uppercase tracking-widest mb-1">{t.loss}</p>
-                            <p className="text-xl font-black text-rose-400">{Math.round(lossKcal)}</p>
+                            <p className="text-xl font-black text-destructive">{Math.round(lossKcal)}</p>
                             <p className="text-[9px] text-stone-500">{t.kcal}</p>
                         </div>
-                        <div className="text-center p-3 bg-emerald-900/40 rounded-2xl ring-1 ring-emerald-700/50">
+                        <div className="text-center p-3 bg-success/40 rounded-2xl ring-1 ring-success/30">
                             <p className="text-[9px] font-black text-stone-500 uppercase tracking-widest mb-1">{t.maintenance}</p>
-                            <p className="text-xl font-black text-emerald-400">{Math.round(tdee)}</p>
+                            <p className="text-xl font-black text-success">{Math.round(tdee)}</p>
                             <p className="text-[9px] text-stone-500">{t.kcal}</p>
                         </div>
                         <div className="text-center p-3 bg-stone-800/50 rounded-2xl">
                             <p className="text-[9px] font-black text-stone-500 uppercase tracking-widest mb-1">{t.gain}</p>
-                            <p className="text-xl font-black text-amber-400">{Math.round(gainKcal)}</p>
+                            <p className="text-xl font-black text-warning">{Math.round(gainKcal)}</p>
                             <p className="text-[9px] text-stone-500">{t.kcal}</p>
                         </div>
                     </div>
@@ -170,15 +170,15 @@ const CalorieCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
                         <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest mb-3 text-center">{t.macros}</p>
                         <div className="grid grid-cols-3 gap-3 text-center">
                             <div>
-                                <p className="text-xs font-black text-blue-400">{t.protein}</p>
+                                <p className="text-xs font-black text-info">{t.protein}</p>
                                 <p className="text-lg font-black text-stone-200">{proteinG}{t.g}</p>
                             </div>
                             <div>
-                                <p className="text-xs font-black text-amber-400">{t.carbs}</p>
+                                <p className="text-xs font-black text-warning">{t.carbs}</p>
                                 <p className="text-lg font-black text-stone-200">{carbsG}{t.g}</p>
                             </div>
                             <div>
-                                <p className="text-xs font-black text-rose-400">{t.fat}</p>
+                                <p className="text-xs font-black text-destructive">{t.fat}</p>
                                 <p className="text-lg font-black text-stone-200">{fatG}{t.g}</p>
                             </div>
                         </div>

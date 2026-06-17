@@ -240,9 +240,9 @@ const JeonseGuaranteeCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'ko
   }, [calculated, propertyValue, jeonseDeposit, priorLoan, priorLien]);
 
   const riskConfig = result ? {
-    safe: { label: t.safe, desc: t.safeDesc, color: 'text-emerald-600', bg: 'bg-emerald-50 border-emerald-200', bar: 'bg-emerald-500', badge: 'bg-emerald-100 text-emerald-800' },
-    caution: { label: t.caution, desc: t.cautionDesc, color: 'text-amber-600', bg: 'bg-amber-50 border-amber-200', bar: 'bg-amber-500', badge: 'bg-amber-100 text-amber-800' },
-    danger: { label: t.danger, desc: t.dangerDesc, color: 'text-red-600', bg: 'bg-red-50 border-red-200', bar: 'bg-red-500', badge: 'bg-red-100 text-red-800' },
+    safe: { label: t.safe, desc: t.safeDesc, color: 'text-success', bg: 'bg-success/10 border-success/30', bar: 'bg-success', badge: 'bg-success/15 text-success' },
+    caution: { label: t.caution, desc: t.cautionDesc, color: 'text-warning', bg: 'bg-warning/10 border-warning/30', bar: 'bg-warning', badge: 'bg-warning/15 text-warning' },
+    danger: { label: t.danger, desc: t.dangerDesc, color: 'text-destructive', bg: 'bg-destructive/10 border-destructive/30', bar: 'bg-destructive', badge: 'bg-destructive/15 text-destructive' },
   }[result.risk] : null;
 
   return (
@@ -349,7 +349,7 @@ const JeonseGuaranteeCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'ko
           </div>
 
           {/* Tip */}
-          <div className="p-4 rounded-2xl bg-blue-50 border border-blue-200">
+          <div className="p-4 rounded-2xl bg-info/10 border border-info/30">
             <p className="text-xs font-black mb-1">{t.tip}</p>
             <p className="text-xs text-muted-foreground leading-relaxed">{t.tipText}</p>
           </div>

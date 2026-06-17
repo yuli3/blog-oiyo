@@ -100,19 +100,19 @@ const LoremIpsumGenerator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
 
   return (
     <div className="w-full max-w-2xl mx-auto space-y-6 font-sans">
-      <h1 className="text-2xl font-bold text-center text-emerald-800">{t.title}</h1>
+      <h1 className="text-2xl font-bold text-center text-success">{t.title}</h1>
 
-      <div className="rounded-2xl border border-emerald-100 bg-white/80 p-5 space-y-5 shadow-sm">
+      <div className="rounded-2xl border border-success/20 bg-white/80 p-5 space-y-5 shadow-sm">
         {/* Mode */}
         <div className="space-y-2">
-          <p className="text-sm font-bold text-gray-700">{t.mode}</p>
+          <p className="text-sm font-bold text-muted-foreground">{t.mode}</p>
           <div className="flex gap-2">
             {(['paragraphs', 'words'] as GenMode[]).map((m) => (
               <button
                 key={m}
                 type="button"
                 onClick={() => { setMode(m); setCount(m === 'paragraphs' ? 3 : 100); }}
-                className={`flex-1 py-2 rounded-xl text-sm font-bold transition-colors ${mode === m ? 'bg-emerald-500 text-white' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'}`}
+                className={`flex-1 py-2 rounded-xl text-sm font-bold transition-colors ${mode === m ? 'bg-success text-white' : 'bg-success/10 text-success hover:bg-success/15'}`}
                 aria-pressed={mode === m}
               >
                 {m === 'paragraphs' ? t.byParagraph : t.byWords}
@@ -123,14 +123,14 @@ const LoremIpsumGenerator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
 
         {/* Count */}
         <div className="space-y-2">
-          <p className="text-sm font-bold text-gray-700">{t.count}</p>
+          <p className="text-sm font-bold text-muted-foreground">{t.count}</p>
           <div className="flex gap-2 flex-wrap">
             {countOptions.map((n) => (
               <button
                 key={n}
                 type="button"
                 onClick={() => setCount(n)}
-                className={`px-4 py-2 rounded-xl text-sm font-bold transition-colors ${count === n ? 'bg-emerald-500 text-white' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'}`}
+                className={`px-4 py-2 rounded-xl text-sm font-bold transition-colors ${count === n ? 'bg-success text-white' : 'bg-success/10 text-success hover:bg-success/15'}`}
                 aria-pressed={count === n}
               >
                 {n}
@@ -141,14 +141,14 @@ const LoremIpsumGenerator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
 
         {/* Language */}
         <div className="space-y-2">
-          <p className="text-sm font-bold text-gray-700">{t.language}</p>
+          <p className="text-sm font-bold text-muted-foreground">{t.language}</p>
           <div className="flex gap-2">
             {(['latin', 'ko'] as Lang[]).map((lang) => (
               <button
                 key={lang}
                 type="button"
                 onClick={() => setGenLang(lang)}
-                className={`flex-1 py-2 rounded-xl text-sm font-bold transition-colors ${genLang === lang ? 'bg-emerald-500 text-white' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'}`}
+                className={`flex-1 py-2 rounded-xl text-sm font-bold transition-colors ${genLang === lang ? 'bg-success text-white' : 'bg-success/10 text-success hover:bg-success/15'}`}
                 aria-pressed={genLang === lang}
               >
                 {lang === 'latin' ? t.latin : t.korean}
@@ -160,26 +160,26 @@ const LoremIpsumGenerator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
         <button
           type="button"
           onClick={handleGenerate}
-          className="w-full py-3 rounded-2xl bg-emerald-500 text-white font-bold text-sm hover:bg-emerald-600 active:scale-95 transition-all shadow"
+          className="w-full py-3 rounded-2xl bg-success text-white font-bold text-sm hover:bg-success active:scale-95 transition-all shadow"
         >
           {t.generate}
         </button>
       </div>
 
-      <div className="relative rounded-2xl border border-emerald-100 bg-white/80 p-4 shadow-sm min-h-[160px]">
+      <div className="relative rounded-2xl border border-success/20 bg-white/80 p-4 shadow-sm min-h-[160px]">
         {output ? (
           <>
-            <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">{output}</p>
+            <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">{output}</p>
             <button
               type="button"
               onClick={handleCopy}
-              className="absolute top-3 right-3 px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 text-xs font-bold hover:bg-emerald-100 transition-colors"
+              className="absolute top-3 right-3 px-3 py-1.5 rounded-xl bg-success/10 text-success text-xs font-bold hover:bg-success/15 transition-colors"
             >
               {copied ? t.copied : t.copy}
             </button>
           </>
         ) : (
-          <p className="text-sm text-gray-400 text-center mt-8">{t.placeholder}</p>
+          <p className="text-sm text-muted-foreground text-center mt-8">{t.placeholder}</p>
         )}
       </div>
     </div>

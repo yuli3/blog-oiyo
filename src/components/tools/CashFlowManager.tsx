@@ -302,10 +302,10 @@ export default function CashFlowManager({ locale = 'ko' }: { locale?: string }) 
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
           {[
-            { label: '월 수입', value: totalIncome, color: 'text-emerald-400' },
-            { label: '생활 지출', value: totalExpenses, color: 'text-red-400' },
-            { label: '저축·투자', value: totalInvestment, color: 'text-blue-400' },
-            { label: '잉여금', value: surplus, color: surplus >= 0 ? 'text-white' : 'text-red-400' },
+            { label: '월 수입', value: totalIncome, color: 'text-success' },
+            { label: '생활 지출', value: totalExpenses, color: 'text-destructive' },
+            { label: '저축·투자', value: totalInvestment, color: 'text-info' },
+            { label: '잉여금', value: surplus, color: surplus >= 0 ? 'text-white' : 'text-destructive' },
           ].map(({ label, value, color }) => (
             <div key={label}>
               <p className="text-[10px] text-stone-400 uppercase mb-1">{label}</p>
@@ -318,8 +318,8 @@ export default function CashFlowManager({ locale = 'ko' }: { locale?: string }) 
         {totalIncome > 0 && (
           <div className="space-y-1.5">
             {[
-              { label: '지출', value: totalExpenses, bar: 'bg-red-500' },
-              { label: '저축·투자', value: totalInvestment, bar: 'bg-blue-500' },
+              { label: '지출', value: totalExpenses, bar: 'bg-destructive' },
+              { label: '저축·투자', value: totalInvestment, bar: 'bg-info' },
               { label: '잉여', value: Math.max(surplus, 0), bar: 'bg-stone-600' },
             ].map(({ label, value, bar }) => (
               <div key={label} className="flex items-center gap-2">
@@ -341,13 +341,13 @@ export default function CashFlowManager({ locale = 'ko' }: { locale?: string }) 
           <div className="mt-4 pt-4 border-t border-stone-800 flex items-center justify-between">
             <div>
               <p className="text-[10px] text-stone-400 uppercase">배당 수입 (월·세후)</p>
-              <p className="text-lg font-black text-yellow-400">{fmt(monthlyDividend)}</p>
+              <p className="text-lg font-black text-warning">{fmt(monthlyDividend)}</p>
             </div>
             <div className="text-right">
               <p className="text-[10px] text-stone-400 uppercase">목표 달성률</p>
               <p className="text-lg font-black">
                 {monthlyDividend >= goal
-                  ? <span className="text-yellow-400">🎉 달성!</span>
+                  ? <span className="text-warning">🎉 달성!</span>
                   : <span className="text-stone-300">{Math.round((monthlyDividend / goal) * 100)}%</span>}
               </p>
             </div>
@@ -369,13 +369,13 @@ export default function CashFlowManager({ locale = 'ko' }: { locale?: string }) 
           />
         ))}
         {totalIncome > 0 && (
-          <div className="flex items-center gap-3 px-3 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+          <div className="flex items-center gap-3 px-3 py-2 rounded-xl bg-success/10 border border-success/20">
             <span className="text-base shrink-0">🏛️</span>
             <div className="flex-1 min-w-0">
               <p className="text-xs font-bold text-foreground">국민연금 (자동계산)</p>
               <p className="text-[10px] text-muted-foreground">소득의 4.5%, 월 최대 265,500원</p>
             </div>
-            <span className="text-sm font-black text-emerald-600 shrink-0">{fmt(nationalPension)}</span>
+            <span className="text-sm font-black text-success shrink-0">{fmt(nationalPension)}</span>
           </div>
         )}
       </Section>
@@ -483,7 +483,7 @@ export default function CashFlowManager({ locale = 'ko' }: { locale?: string }) 
                   disabled={added}
                   className={`px-2.5 py-1 rounded-full text-[10px] font-bold border transition ${
                     added
-                      ? 'bg-blue-500/10 border-blue-500/20 text-blue-600 cursor-default'
+                      ? 'bg-info/10 border-info/20 text-info cursor-default'
                       : 'bg-muted/30 border-border hover:bg-muted cursor-pointer'
                   }`}
                 >
@@ -512,7 +512,7 @@ export default function CashFlowManager({ locale = 'ko' }: { locale?: string }) 
                     <div>
                       <p className="text-xs font-black text-foreground">{h.ticker}</p>
                       <p className="text-[10px] text-muted-foreground">{stock.name}</p>
-                      <p className="text-[10px] text-blue-500 mt-0.5">
+                      <p className="text-[10px] text-info mt-0.5">
                         배당률 {(stock.annualYield * 100).toFixed(1)}% · 세율 {(stock.taxRate * 100).toFixed(0)}% · {stock.currency}
                       </p>
                     </div>
@@ -541,7 +541,7 @@ export default function CashFlowManager({ locale = 'ko' }: { locale?: string }) 
                     </div>
                     <div>
                       <p className="text-[9px] text-muted-foreground mb-0.5">월 배당 (세후)</p>
-                      <p className="text-xs font-black text-yellow-600 py-1 text-center">{fmt(monthlyKRW)}</p>
+                      <p className="text-xs font-black text-warning py-1 text-center">{fmt(monthlyKRW)}</p>
                     </div>
                   </div>
                   <p className="text-[10px] text-muted-foreground">
@@ -554,11 +554,11 @@ export default function CashFlowManager({ locale = 'ko' }: { locale?: string }) 
             <div className="p-4 rounded-2xl bg-stone-900 text-white">
               <div className="flex justify-between items-center mb-3">
                 <p className="text-xs text-stone-400">총 월 배당 (세후)</p>
-                <p className="text-xl font-black text-yellow-400">{fmt(monthlyDividend)}</p>
+                <p className="text-xl font-black text-warning">{fmt(monthlyDividend)}</p>
               </div>
               <div className="h-2 bg-stone-800 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-yellow-400 rounded-full transition-all duration-500"
+                  className="h-full bg-warning/40 rounded-full transition-all duration-500"
                   style={{ width: `${Math.min(100, (monthlyDividend / goal) * 100)}%` }}
                 />
               </div>

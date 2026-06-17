@@ -186,10 +186,10 @@ function getGrade(
   roi: number,
   t: Labels
 ): { label: string; color: string } {
-  if (roi >= 50) return { label: t.gradeExcellent, color: "text-emerald-400" };
+  if (roi >= 50) return { label: t.gradeExcellent, color: "text-success" };
   if (roi >= 20) return { label: t.gradeGood, color: "text-primary" };
-  if (roi >= 0) return { label: t.gradeFair, color: "text-yellow-400" };
-  return { label: t.gradePoor, color: "text-rose-400" };
+  if (roi >= 0) return { label: t.gradeFair, color: "text-warning" };
+  return { label: t.gradePoor, color: "text-destructive" };
 }
 
 const ReconstructionProfitCalculator = ({ locale }: Props) => {
@@ -305,7 +305,7 @@ const ReconstructionProfitCalculator = ({ locale }: Props) => {
               <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest mb-1">
                 {t.roi}
               </p>
-              <p className={`text-3xl font-black ${roi >= 0 ? "text-primary" : "text-rose-400"}`}>
+              <p className={`text-3xl font-black ${roi >= 0 ? "text-primary" : "text-destructive"}`}>
                 {roi.toFixed(1)}%
               </p>
             </div>
@@ -313,7 +313,7 @@ const ReconstructionProfitCalculator = ({ locale }: Props) => {
               <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest mb-1">
                 {t.annualReturn}
               </p>
-              <p className={`text-3xl font-black ${annualReturn >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
+              <p className={`text-3xl font-black ${annualReturn >= 0 ? "text-success" : "text-destructive"}`}>
                 {annualReturn.toFixed(2)}%
               </p>
             </div>
@@ -334,7 +334,7 @@ const ReconstructionProfitCalculator = ({ locale }: Props) => {
               <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest mb-1">
                 {t.netProfit}
               </p>
-              <p className={`text-lg font-black ${netProfit >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
+              <p className={`text-lg font-black ${netProfit >= 0 ? "text-success" : "text-destructive"}`}>
                 {netProfit >= 0 ? "+" : ""}
                 {fmtMan(netProfit)}
                 <span className="text-xs font-medium text-stone-400 ml-1">{t.unit}</span>

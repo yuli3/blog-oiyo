@@ -129,7 +129,7 @@ const TypingTest: React.FC<{ locale?: Locale }> = ({ locale = 'en' }) => {
     return passage.split('').map((char, i) => {
       let cls = 'text-muted-foreground/50';
       if (i < typed.length) {
-        cls = typed[i] === char ? 'text-foreground' : 'bg-red-200 text-red-600 rounded';
+        cls = typed[i] === char ? 'text-foreground' : 'bg-destructive/20 text-destructive rounded';
       } else if (i === typed.length) {
         cls = 'text-foreground border-b-2 border-primary animate-pulse';
       }
@@ -137,7 +137,7 @@ const TypingTest: React.FC<{ locale?: Locale }> = ({ locale = 'en' }) => {
     });
   };
 
-  const wpmColor = finalWPM >= 80 ? 'text-emerald-600' : finalWPM >= 50 ? 'text-blue-600' : 'text-amber-600';
+  const wpmColor = finalWPM >= 80 ? 'text-success' : finalWPM >= 50 ? 'text-info' : 'text-warning';
   const wpmMsg = finalWPM >= 80 ? t.excellent : finalWPM >= 50 ? t.great : finalWPM >= 30 ? t.good : t.keep;
 
   return (
@@ -235,7 +235,7 @@ const TypingTest: React.FC<{ locale?: Locale }> = ({ locale = 'en' }) => {
             </div>
             <div className="p-4 rounded-2xl bg-muted/20 border border-border text-center">
               <p className="text-[9px] font-black uppercase text-muted-foreground">{t.errors}</p>
-              <p className="text-2xl font-black text-red-500">{errors}</p>
+              <p className="text-2xl font-black text-destructive">{errors}</p>
             </div>
           </div>
           <button onClick={reset} className="w-full py-3 rounded-2xl bg-primary text-primary-foreground font-black hover:bg-primary/90 transition-colors">

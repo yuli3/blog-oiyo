@@ -91,7 +91,7 @@ const VatCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
                         <button
                             key={m}
                             onClick={() => setMode(m)}
-                            className={`rounded-xl py-2 text-sm font-bold border transition-all ${mode === m ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-background text-foreground border-border hover:border-emerald-400'}`}
+                            className={`rounded-xl py-2 text-sm font-bold border transition-all ${mode === m ? 'bg-success text-white border-success' : 'bg-background text-foreground border-border hover:border-success'}`}
                             aria-pressed={mode === m}
                             aria-label={m === 'simple' ? t.modeSimple : t.modeQuarterly}
                         >
@@ -108,7 +108,7 @@ const VatCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
                                 <button
                                     key={d}
                                     onClick={() => setDirection(d)}
-                                    className={`rounded-xl py-2 text-sm font-bold border transition-all ${direction === d ? 'bg-emerald-100 text-emerald-800 border-emerald-400' : 'bg-background text-muted-foreground border-border hover:border-emerald-300'}`}
+                                    className={`rounded-xl py-2 text-sm font-bold border transition-all ${direction === d ? 'bg-success/15 text-success border-success' : 'bg-background text-muted-foreground border-border hover:border-success/40'}`}
                                     aria-pressed={direction === d}
                                     aria-label={d === 'inclusive' ? t.dirInclusive : t.dirExclusive}
                                 >
@@ -125,7 +125,7 @@ const VatCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
                                 onChange={(e) => setAmount(Math.max(0, Number(e.target.value)))}
                                 step={1000}
                                 min={0}
-                                className="w-full rounded-xl border border-border bg-background px-4 py-3 text-base font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                className="w-full rounded-xl border border-border bg-background px-4 py-3 text-base font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-success/30"
                                 aria-label={t.amount}
                             />
                         </div>
@@ -138,7 +138,7 @@ const VatCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
                             ].map(({ label, value, em }) => (
                                 <div key={label} className={`flex justify-between items-center ${em ? 'border-t border-border pt-3 mt-1' : ''}`}>
                                     <span className={`text-sm font-${em ? 'bold' : 'medium'} ${em ? 'text-foreground' : 'text-muted-foreground'}`}>{label}</span>
-                                    <span className={`font-bold ${em ? 'text-lg text-emerald-700' : 'text-foreground'}`}>{value}</span>
+                                    <span className={`font-bold ${em ? 'text-lg text-success' : 'text-foreground'}`}>{value}</span>
                                 </div>
                             ))}
                         </div>
@@ -158,7 +158,7 @@ const VatCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
                                     onChange={(e) => setQuarterlyRevenue(Math.max(0, Number(e.target.value)))}
                                     step={1000000}
                                     min={0}
-                                    className="rounded-xl border border-border bg-background px-4 py-3 text-base font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                    className="rounded-xl border border-border bg-background px-4 py-3 text-base font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-success/30"
                                     aria-label={t.quarterlyRevenue}
                                 />
                             </div>
@@ -170,20 +170,20 @@ const VatCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
                                     onChange={(e) => setInputTaxCredit(Math.max(0, Number(e.target.value)))}
                                     step={100000}
                                     min={0}
-                                    className="rounded-xl border border-border bg-background px-4 py-3 text-base font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                    className="rounded-xl border border-border bg-background px-4 py-3 text-base font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-success/30"
                                     aria-label={t.inputTaxCredit}
                                 />
                             </div>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className={`rounded-2xl p-5 flex flex-col gap-1 ${vatPayable > 0 ? 'bg-amber-50 border border-amber-200' : 'bg-muted/30 border border-border'}`}>
-                                <span className="text-xs font-bold uppercase tracking-wide text-amber-700">{t.vatPayable}</span>
-                                <span className="text-2xl font-bold text-amber-900">₩{fmt(vatPayable)}</span>
+                            <div className={`rounded-2xl p-5 flex flex-col gap-1 ${vatPayable > 0 ? 'bg-warning/10 border border-warning/30' : 'bg-muted/30 border border-border'}`}>
+                                <span className="text-xs font-bold uppercase tracking-wide text-warning">{t.vatPayable}</span>
+                                <span className="text-2xl font-bold text-warning">₩{fmt(vatPayable)}</span>
                             </div>
-                            <div className={`rounded-2xl p-5 flex flex-col gap-1 ${vatRefund > 0 ? 'bg-emerald-50 border border-emerald-200' : 'bg-muted/30 border border-border'}`}>
-                                <span className="text-xs font-bold uppercase tracking-wide text-emerald-700">{t.vatRefund}</span>
-                                <span className="text-2xl font-bold text-emerald-900">₩{fmt(vatRefund)}</span>
+                            <div className={`rounded-2xl p-5 flex flex-col gap-1 ${vatRefund > 0 ? 'bg-success/10 border border-success/30' : 'bg-muted/30 border border-border'}`}>
+                                <span className="text-xs font-bold uppercase tracking-wide text-success">{t.vatRefund}</span>
+                                <span className="text-2xl font-bold text-success">₩{fmt(vatRefund)}</span>
                             </div>
                         </div>
 

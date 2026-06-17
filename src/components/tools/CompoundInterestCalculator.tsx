@@ -53,7 +53,7 @@ const CompoundInterestCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale
                                 <p className="text-[10px] text-stone-500 uppercase mb-1">{t.invest}</p>
                                 <p className="text-lg font-bold">₩{Math.round(totalInvested).toLocaleString()}</p>
                             </div>
-                            <div className="text-center text-emerald-400">
+                            <div className="text-center text-success">
                                 <p className="text-[10px] uppercase mb-1">{t.profit}</p>
                                 <p className="text-lg font-bold">+₩{Math.round(futureValue - totalInvested).toLocaleString()}</p>
                             </div>

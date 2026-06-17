@@ -25,7 +25,7 @@ const StockAverageCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
                     {/* Current Block */}
                     <div className="p-6 bg-muted/40 rounded-3xl border border-border space-y-4">
                         <div className="flex items-center gap-2 mb-2">
-                            <span className="w-2 h-2 rounded-full bg-rose-400" />
+                            <span className="w-2 h-2 rounded-full bg-destructive/40" />
                             <h5 className="text-xs font-black text-muted-foreground uppercase">{t.current}</h5>
                         </div>
                         <div className="space-y-3">

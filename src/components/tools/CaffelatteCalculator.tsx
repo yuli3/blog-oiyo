@@ -47,7 +47,7 @@ const CaffelatteCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko
                             <p className="text-[10px] text-muted-foreground uppercase">{t.invest}</p>
                             <p className="text-sm font-bold">{Math.round(totalInvestment).toLocaleString()}원</p>
                         </div>
-                        <div className="text-emerald-600">
+                        <div className="text-success">
                             <p className="text-[10px] uppercase">{t.profit}</p>
                             <p className="text-sm font-bold">+{Math.round(futureValue - totalInvestment).toLocaleString()}원</p>
                         </div>

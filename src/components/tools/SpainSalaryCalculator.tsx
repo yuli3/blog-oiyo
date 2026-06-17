@@ -182,7 +182,7 @@ const SpainSalaryCalculator: React.FC<Props> = ({ locale = 'es' }) => {
                             onChange={(e) => setAnnualGross(Math.max(0, Number(e.target.value)))}
                             step={1_000}
                             min={0}
-                            className="w-full rounded-xl border border-border bg-background px-4 py-3 text-base font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-red-500"
+                            className="w-full rounded-xl border border-border bg-background px-4 py-3 text-base font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-destructive/30"
                             aria-label={t.annualGross}
                         />
                     </div>
@@ -192,7 +192,7 @@ const SpainSalaryCalculator: React.FC<Props> = ({ locale = 'es' }) => {
                         <select
                             value={familyIdx}
                             onChange={(e) => setFamilyIdx(Number(e.target.value))}
-                            className="w-full rounded-xl border border-border bg-background px-4 py-3 text-base font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-red-500"
+                            className="w-full rounded-xl border border-border bg-background px-4 py-3 text-base font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-destructive/30"
                             aria-label={t.situation}
                         >
                             {FAMILY_OPTIONS.map((opt, i) => (
@@ -205,17 +205,17 @@ const SpainSalaryCalculator: React.FC<Props> = ({ locale = 'es' }) => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="rounded-2xl bg-red-50 border border-red-200 p-5 flex flex-col gap-1">
-                        <span className="text-xs font-bold text-red-700 uppercase tracking-wide">{t.monthlyGross}</span>
-                        <span className="text-2xl font-bold text-red-900">{fmtEuro(monthlyGross)}</span>
+                    <div className="rounded-2xl bg-destructive/10 border border-destructive/30 p-5 flex flex-col gap-1">
+                        <span className="text-xs font-bold text-destructive uppercase tracking-wide">{t.monthlyGross}</span>
+                        <span className="text-2xl font-bold text-destructive">{fmtEuro(monthlyGross)}</span>
                     </div>
-                    <div className="rounded-2xl bg-red-600 p-5 flex flex-col gap-1">
-                        <span className="text-xs font-bold text-red-100 uppercase tracking-wide">{t.monthlyNet}</span>
+                    <div className="rounded-2xl bg-destructive p-5 flex flex-col gap-1">
+                        <span className="text-xs font-bold text-destructive uppercase tracking-wide">{t.monthlyNet}</span>
                         <span className="text-2xl font-bold text-white">{fmtEuro(monthlyNet)}</span>
                     </div>
-                    <div className="rounded-2xl bg-red-50 border border-red-200 p-5 flex flex-col gap-1">
-                        <span className="text-xs font-bold text-red-700 uppercase tracking-wide">{t.annualNet}</span>
-                        <span className="text-2xl font-bold text-red-900">{fmtEuro(annualNet)}</span>
+                    <div className="rounded-2xl bg-destructive/10 border border-destructive/30 p-5 flex flex-col gap-1">
+                        <span className="text-xs font-bold text-destructive uppercase tracking-wide">{t.annualNet}</span>
+                        <span className="text-2xl font-bold text-destructive">{fmtEuro(annualNet)}</span>
                     </div>
                 </div>
 
@@ -230,7 +230,7 @@ const SpainSalaryCalculator: React.FC<Props> = ({ locale = 'es' }) => {
                         ))}
                         <div className="border-t border-border mt-2 pt-2 flex justify-between items-center">
                             <span className="text-sm font-bold text-foreground">{t.totalCotizaciones}</span>
-                            <span className="text-sm font-bold text-red-600">{fmtEuro(Math.round(ss.total / 12))}</span>
+                            <span className="text-sm font-bold text-destructive">{fmtEuro(Math.round(ss.total / 12))}</span>
                         </div>
                     </div>
                 </div>
@@ -242,11 +242,11 @@ const SpainSalaryCalculator: React.FC<Props> = ({ locale = 'es' }) => {
                     </div>
                     <div className="flex justify-between items-center text-sm">
                         <span className="font-medium text-muted-foreground">{t.irAnnual}</span>
-                        <span className="font-bold text-red-600">{fmtEuro(irAnnual)}</span>
+                        <span className="font-bold text-destructive">{fmtEuro(irAnnual)}</span>
                     </div>
                     <div className="flex justify-between items-center text-sm border-t border-border pt-2 mt-1">
                         <span className="font-bold text-foreground">{t.irMonthly}</span>
-                        <span className="font-bold text-red-600">{fmtEuro(irMonthly)}</span>
+                        <span className="font-bold text-destructive">{fmtEuro(irMonthly)}</span>
                     </div>
                 </div>
 

@@ -68,7 +68,7 @@ const MetadataViewer: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =
                             ))
                         )}
                         {metadata && (
-                             <div className="mt-8 p-4 bg-amber-50 border border-amber-200 rounded-2xl text-[10px] text-amber-700 font-medium leading-relaxed">
+                             <div className="mt-8 p-4 bg-warning/10 border border-warning/30 rounded-2xl text-[10px] text-warning font-medium leading-relaxed">
                                 <span className="font-black">💡 TIP:</span> 개인정보 보호를 위해 SNS 업로드 전 EXIF 데이터를 삭제하는 습관이 중요합니다. 이 도구는 파일의 기본 속성을 분석합니다.
                              </div>
                         )}

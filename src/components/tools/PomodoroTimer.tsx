@@ -146,21 +146,21 @@ const translations: Record<Locale, Record<string, string>> = {
 const MODE_COLORS: Record<Mode, { stroke: string; bg: string; text: string; badge: string }> = {
   focus: {
     stroke: "#ef4444",
-    bg: "bg-red-50",
-    text: "text-red-600",
-    badge: "bg-red-100 text-red-700",
+    bg: "bg-destructive/10",
+    text: "text-destructive",
+    badge: "bg-destructive/15 text-destructive",
   },
   short: {
     stroke: "#22c55e",
-    bg: "bg-green-50",
-    text: "text-green-600",
-    badge: "bg-green-100 text-green-700",
+    bg: "bg-success/10",
+    text: "text-success",
+    badge: "bg-success/15 text-success",
   },
   long: {
     stroke: "#3b82f6",
-    bg: "bg-blue-50",
-    text: "text-blue-600",
-    badge: "bg-blue-100 text-blue-700",
+    bg: "bg-info/10",
+    text: "text-info",
+    badge: "bg-info/15 text-info",
   },
 };
 
@@ -328,7 +328,7 @@ export default function PomodoroTimer({ locale }: Props) {
               fill="none"
               stroke="currentColor"
               strokeWidth="10"
-              className="text-gray-200"
+              className="text-background"
             />
             {/* Progress arc */}
             <circle
@@ -359,15 +359,15 @@ export default function PomodoroTimer({ locale }: Props) {
           onClick={() => setRunning((r) => !r)}
           className={`px-8 py-3 rounded-full font-bold text-white text-lg shadow transition-all active:scale-95 ${
             running
-              ? "bg-yellow-500 hover:bg-yellow-600"
-              : "bg-gray-800 hover:bg-gray-700"
+              ? "bg-warning hover:bg-warning"
+              : "bg-foreground hover:bg-foreground/90"
           }`}
         >
           {running ? t.pause : t.start}
         </button>
         <button
           onClick={handleReset}
-          className="px-5 py-3 rounded-full font-semibold border border-gray-300 text-muted-foreground hover:bg-muted transition-all active:scale-95"
+          className="px-5 py-3 rounded-full font-semibold border border-border text-muted-foreground hover:bg-muted transition-all active:scale-95"
         >
           {t.reset}
         </button>

@@ -475,7 +475,7 @@ function FormatRow({
         onClick={() => onCopy(copyValue, copyKey)}
         className={`shrink-0 px-3 py-2 rounded-xl text-xs font-bold transition-all ${
           isCopied
-            ? "bg-green-500 text-white"
+            ? "bg-success text-white"
             : "bg-muted hover:bg-muted/80 text-muted-foreground"
         }`}
       >

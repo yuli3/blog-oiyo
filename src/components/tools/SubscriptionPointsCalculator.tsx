@@ -106,7 +106,7 @@ const SubscriptionPointsCalculator: React.FC<{ locale?: Locale }> = ({ locale = 
   const total = depsScore + bankScore + noPropScore;
 
   const pct = Math.round((total / 84) * 100);
-  const barColor = pct >= 75 ? 'bg-emerald-500' : pct >= 50 ? 'bg-blue-500' : pct >= 25 ? 'bg-amber-500' : 'bg-muted-foreground/30';
+  const barColor = pct >= 75 ? 'bg-success' : pct >= 50 ? 'bg-info' : pct >= 25 ? 'bg-warning' : 'bg-muted-foreground/30';
 
   return (
     <GameContainer

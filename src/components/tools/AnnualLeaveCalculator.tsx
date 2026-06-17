@@ -199,9 +199,9 @@ const AnnualLeaveCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'ko' })
                 <p className="text-4xl font-black">{calc.totalDays}</p>
                 <p className="text-xs text-muted-foreground">{t.daysLabel}</p>
               </div>
-              <div className={`p-6 rounded-3xl border-2 text-center space-y-1 ${calc.remaining > 0 ? 'bg-emerald-50 border-emerald-300' : 'bg-muted/30 border-border'}`}>
-                <p className={`text-[10px] font-black uppercase tracking-widest ${calc.remaining > 0 ? 'text-emerald-600' : 'text-muted-foreground'}`}>{t.remaining}</p>
-                <p className={`text-4xl font-black ${calc.remaining > 0 ? 'text-emerald-700' : 'text-muted-foreground'}`}>{calc.remaining}</p>
+              <div className={`p-6 rounded-3xl border-2 text-center space-y-1 ${calc.remaining > 0 ? 'bg-success/10 border-success/40' : 'bg-muted/30 border-border'}`}>
+                <p className={`text-[10px] font-black uppercase tracking-widest ${calc.remaining > 0 ? 'text-success' : 'text-muted-foreground'}`}>{t.remaining}</p>
+                <p className={`text-4xl font-black ${calc.remaining > 0 ? 'text-success' : 'text-muted-foreground'}`}>{calc.remaining}</p>
                 <p className="text-xs text-muted-foreground">{t.daysLabel}</p>
               </div>
             </div>

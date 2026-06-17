@@ -61,7 +61,7 @@ const AutoTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
                             <p className="text-[10px] text-stone-500 uppercase">{t.edu}</p>
                             <p className="text-sm font-bold">₩{Math.round(eduTax).toLocaleString()}</p>
                         </div>
-                        <div className="text-center text-emerald-400">
+                        <div className="text-center text-success">
                             <p className="text-[10px] uppercase font-black">{t.discount}</p>
                             <p className="text-sm font-bold">-₩{Math.round(janDiscount).toLocaleString()}</p>
                         </div>

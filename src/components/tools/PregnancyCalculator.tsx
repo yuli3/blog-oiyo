@@ -45,13 +45,13 @@ const PregnancyCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="p-6 bg-rose-50 border border-rose-100 rounded-3xl text-center space-y-2">
-                        <p className="text-[10px] font-black text-rose-400 uppercase">{t.ovulation}</p>
-                        <p className="font-black text-rose-800">{formatDate(ovulationDate)}</p>
+                    <div className="p-6 bg-destructive/10 border border-destructive/20 rounded-3xl text-center space-y-2">
+                        <p className="text-[10px] font-black text-destructive uppercase">{t.ovulation}</p>
+                        <p className="font-black text-destructive">{formatDate(ovulationDate)}</p>
                     </div>
-                    <div className="p-6 bg-emerald-50 border border-emerald-100 rounded-3xl text-center space-y-2">
-                        <p className="text-[10px] font-black text-emerald-400 uppercase">{t.fertility}</p>
-                        <p className="font-black text-emerald-800 text-xs">{formatDate(fertStart)} ~ {formatDate(fertEnd)}</p>
+                    <div className="p-6 bg-success/10 border border-success/20 rounded-3xl text-center space-y-2">
+                        <p className="text-[10px] font-black text-success uppercase">{t.fertility}</p>
+                        <p className="font-black text-success text-xs">{formatDate(fertStart)} ~ {formatDate(fertEnd)}</p>
                     </div>
                     <div className="p-6 bg-stone-900 border border-stone-800 rounded-3xl text-center space-y-2">
                         <p className="text-[10px] font-black text-primary uppercase">{t.dueDate}</p>

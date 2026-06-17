@@ -18,10 +18,10 @@ const BmiCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
     const bodyFat = (1.20 * bmi) + (0.23 * age) - (10.8 * (gender === 'm' ? 1 : 0)) - 5.4;
 
     const getBmiStatus = (v: number) => {
-        if (v < 18.5) return { label: locale === 'ko' ? '저체중' : 'Underweight', color: 'text-blue-500' };
-        if (v < 23) return { label: locale === 'ko' ? '정상' : 'Normal', color: 'text-emerald-500' };
-        if (v < 25) return { label: locale === 'ko' ? '과체중' : 'Overweight', color: 'text-amber-500' };
-        return { label: locale === 'ko' ? '비만' : 'Obese', color: 'text-rose-500' };
+        if (v < 18.5) return { label: locale === 'ko' ? '저체중' : 'Underweight', color: 'text-info' };
+        if (v < 23) return { label: locale === 'ko' ? '정상' : 'Normal', color: 'text-success' };
+        if (v < 25) return { label: locale === 'ko' ? '과체중' : 'Overweight', color: 'text-warning' };
+        return { label: locale === 'ko' ? '비만' : 'Obese', color: 'text-destructive' };
     };
 
     const status = getBmiStatus(bmi);
@@ -63,7 +63,7 @@ const BmiCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
                     <div className="w-px h-24 bg-stone-800 hidden md:block" />
                     <div className="text-center space-y-2">
                         <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest">{t.fat}</p>
-                        <h2 className="text-6xl font-black text-emerald-400">{bodyFat.toFixed(1)}%</h2>
+                        <h2 className="text-6xl font-black text-success">{bodyFat.toFixed(1)}%</h2>
                         <p className="text-xs text-stone-400 font-medium">성인 남녀 평균 공식 기준</p>
                     </div>
                 </div>

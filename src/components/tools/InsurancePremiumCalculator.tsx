@@ -258,8 +258,8 @@ const InsurancePremiumCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'e
   }, [insuranceType, age, gender, smoking, health, coverage, term]);
 
   const riskLevel = result.riskScore >= 60 ? 'high' : result.riskScore >= 30 ? 'medium' : 'low';
-  const riskColor = riskLevel === 'high' ? 'text-red-500' : riskLevel === 'medium' ? 'text-amber-500' : 'text-emerald-500';
-  const riskBg = riskLevel === 'high' ? 'bg-red-50 border-red-200' : riskLevel === 'medium' ? 'bg-amber-50 border-amber-200' : 'bg-emerald-50 border-emerald-200';
+  const riskColor = riskLevel === 'high' ? 'text-destructive' : riskLevel === 'medium' ? 'text-warning' : 'text-success';
+  const riskBg = riskLevel === 'high' ? 'bg-destructive/10 border-destructive/30' : riskLevel === 'medium' ? 'bg-warning/10 border-warning/30' : 'bg-success/10 border-success/30';
 
   const fmtMoney = (n: number) => {
     if (Math.abs(n) >= 1000) return `${(n / 1000).toFixed(1)}K`;
@@ -377,7 +377,7 @@ const InsurancePremiumCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'e
             <span className={`text-sm font-black ${riskColor}`}>{t[riskLevel]} ({result.riskScore}/100)</span>
           </div>
           <div className="w-full h-2 rounded-full bg-muted overflow-hidden">
-            <div className={`h-full rounded-full transition-all duration-700 ${riskLevel === 'high' ? 'bg-red-500' : riskLevel === 'medium' ? 'bg-amber-500' : 'bg-emerald-500'}`}
+            <div className={`h-full rounded-full transition-all duration-700 ${riskLevel === 'high' ? 'bg-destructive' : riskLevel === 'medium' ? 'bg-warning' : 'bg-success'}`}
               style={{ width: `${result.riskScore}%` }} />
           </div>
         </div>
@@ -394,7 +394,7 @@ const InsurancePremiumCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'e
           ].map(({ label, value }) => (
             <div key={label} className="flex justify-between text-xs py-1.5 border-b border-border/40 last:border-0">
               <span className="text-muted-foreground">{label}</span>
-              <span className={`font-bold tabular-nums ${value > 0 ? 'text-red-500' : value < 0 ? 'text-emerald-600' : ''}`}>
+              <span className={`font-bold tabular-nums ${value > 0 ? 'text-destructive' : value < 0 ? 'text-success' : ''}`}>
                 {value >= 0 ? '+' : ''}{fmtMoney(value)}
               </span>
             </div>
@@ -402,12 +402,12 @@ const InsurancePremiumCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'e
         </div>
 
         {/* Tips */}
-        <div className="p-4 rounded-2xl bg-blue-50 border border-blue-200">
+        <div className="p-4 rounded-2xl bg-info/10 border border-info/30">
           <p className="text-xs font-black mb-2">{t.tip}</p>
           <ul className="space-y-1">
             {t.tips[insuranceType]?.map((tip: string) => (
               <li key={tip} className="text-xs text-muted-foreground flex gap-2">
-                <span className="text-blue-500 shrink-0">•</span>{tip}
+                <span className="text-info shrink-0">•</span>{tip}
               </li>
             ))}
           </ul>

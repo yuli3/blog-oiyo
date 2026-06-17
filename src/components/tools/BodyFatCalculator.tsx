@@ -71,17 +71,17 @@ const BodyFatCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
 
     const getCategory = (bf: number) => {
         if (gender === 'm') {
-            if (bf < 6) return { label: t.essential, color: 'text-blue-400' };
-            if (bf < 14) return { label: t.athlete, color: 'text-emerald-400' };
-            if (bf < 18) return { label: t.fitness, color: 'text-green-400' };
-            if (bf < 25) return { label: t.acceptable, color: 'text-amber-400' };
-            return { label: t.obese, color: 'text-rose-400' };
+            if (bf < 6) return { label: t.essential, color: 'text-info' };
+            if (bf < 14) return { label: t.athlete, color: 'text-success' };
+            if (bf < 18) return { label: t.fitness, color: 'text-success' };
+            if (bf < 25) return { label: t.acceptable, color: 'text-warning' };
+            return { label: t.obese, color: 'text-destructive' };
         } else {
-            if (bf < 14) return { label: t.essential, color: 'text-blue-400' };
-            if (bf < 21) return { label: t.athlete, color: 'text-emerald-400' };
-            if (bf < 25) return { label: t.fitness, color: 'text-green-400' };
-            if (bf < 32) return { label: t.acceptable, color: 'text-amber-400' };
-            return { label: t.obese, color: 'text-rose-400' };
+            if (bf < 14) return { label: t.essential, color: 'text-info' };
+            if (bf < 21) return { label: t.athlete, color: 'text-success' };
+            if (bf < 25) return { label: t.fitness, color: 'text-success' };
+            if (bf < 32) return { label: t.acceptable, color: 'text-warning' };
+            return { label: t.obese, color: 'text-destructive' };
         }
     };
 
@@ -143,11 +143,11 @@ const BodyFatCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
                         <div className="grid grid-cols-2 gap-4 text-center">
                             <div>
                                 <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest">{t.fatMass}</p>
-                                <p className="text-2xl font-black text-amber-300">{fatMass.toFixed(1)} kg</p>
+                                <p className="text-2xl font-black text-warning">{fatMass.toFixed(1)} kg</p>
                             </div>
                             <div>
                                 <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest">{t.leanMass}</p>
-                                <p className="text-2xl font-black text-emerald-400">{leanMass.toFixed(1)} kg</p>
+                                <p className="text-2xl font-black text-success">{leanMass.toFixed(1)} kg</p>
                             </div>
                         </div>
                     </div>

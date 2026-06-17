@@ -278,15 +278,15 @@ const RealEstateCapitalGainsTaxCalc: React.FC<{ locale?: Locale }> = ({ locale =
 
       {/* Non-taxable banner */}
       {result.isNonTaxable && (
-        <div className="p-5 rounded-2xl bg-emerald-50 border border-emerald-200 mb-6 text-center">
-          <p className="text-2xl font-black text-emerald-600">✓ {t.nonTaxable}</p>
-          <p className="text-sm text-emerald-600/80 mt-1">납부 세액 없음</p>
+        <div className="p-5 rounded-2xl bg-success/10 border border-success/30 mb-6 text-center">
+          <p className="text-2xl font-black text-success">✓ {t.nonTaxable}</p>
+          <p className="text-sm text-success/80 mt-1">납부 세액 없음</p>
         </div>
       )}
 
       {/* Short-term warning */}
       {result.shortTermRate !== null && (
-        <div className="p-3 rounded-xl bg-red-50 border border-red-200 mb-4 text-xs font-bold text-red-700">
+        <div className="p-3 rounded-xl bg-destructive/10 border border-destructive/30 mb-4 text-xs font-bold text-destructive">
           ⚠ {t.forcedShortTerm} — {(result.shortTermRate * 100).toFixed(0)}%
         </div>
       )}
@@ -295,18 +295,18 @@ const RealEstateCapitalGainsTaxCalc: React.FC<{ locale?: Locale }> = ({ locale =
         <>
           {/* Summary cards */}
           <div className="grid grid-cols-3 gap-3 mb-6">
-            <div className="col-span-3 sm:col-span-1 p-5 rounded-2xl bg-red-50 border border-red-200 text-center">
+            <div className="col-span-3 sm:col-span-1 p-5 rounded-2xl bg-destructive/10 border border-destructive/30 text-center">
               <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">{t.totalTax}</p>
-              <p className="text-2xl font-black text-red-600 tabular-nums">{fmt(result.totalTax ?? 0)}</p>
+              <p className="text-2xl font-black text-destructive tabular-nums">{fmt(result.totalTax ?? 0)}</p>
               <p className="text-[10px] text-muted-foreground">{t.won}</p>
             </div>
             <div className="p-4 rounded-2xl bg-muted/20 border border-border text-center">
               <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">{t.effectiveRate}</p>
-              <p className="text-xl font-black text-red-500">{((result.effectiveRate ?? 0) * 100).toFixed(1)}%</p>
+              <p className="text-xl font-black text-destructive">{((result.effectiveRate ?? 0) * 100).toFixed(1)}%</p>
             </div>
             <div className="p-4 rounded-2xl bg-muted/20 border border-border text-center">
               <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">{t.afterTaxProfit}</p>
-              <p className="text-xl font-black text-emerald-600 tabular-nums">{fmt(result.afterTaxProfit ?? 0)}</p>
+              <p className="text-xl font-black text-success tabular-nums">{fmt(result.afterTaxProfit ?? 0)}</p>
             </div>
           </div>
 
@@ -344,14 +344,14 @@ const RealEstateCapitalGainsTaxCalc: React.FC<{ locale?: Locale }> = ({ locale =
             ].filter(r => !r.skip).map(({ label, value, bold }) => (
               <div key={label} className={`flex justify-between text-sm py-1 border-b border-border/40 last:border-0 ${bold ? 'font-black' : ''}`}>
                 <span className="text-muted-foreground text-xs">{label}</span>
-                <span className={`tabular-nums text-xs font-bold ${value < 0 ? 'text-emerald-600' : ''}`}>
+                <span className={`tabular-nums text-xs font-bold ${value < 0 ? 'text-success' : ''}`}>
                   {value < 0 ? '−' : ''}{fmt(Math.abs(value))} {t.won}
                 </span>
               </div>
             ))}
             <div className="flex justify-between font-black text-sm pt-1 border-t border-border">
               <span>{t.totalTax}</span>
-              <span className="tabular-nums text-red-600">{fmt(result.totalTax ?? 0)} {t.won}</span>
+              <span className="tabular-nums text-destructive">{fmt(result.totalTax ?? 0)} {t.won}</span>
             </div>
           </div>
         </>

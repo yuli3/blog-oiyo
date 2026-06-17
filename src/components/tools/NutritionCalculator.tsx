@@ -243,13 +243,13 @@ const NutritionCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'en' }) =
   }, [age, gender, weight, height, activity, goal]);
 
   const bmiCategory = result.bmi < 18.5 ? t.underweight : result.bmi < 25 ? t.normal : result.bmi < 30 ? t.overweight : t.obese;
-  const bmiColor = result.bmi < 18.5 ? 'text-blue-500' : result.bmi < 25 ? 'text-emerald-600' : result.bmi < 30 ? 'text-amber-500' : 'text-red-500';
-  const goalColor = goal === 'lose' ? 'text-blue-600' : goal === 'gain' ? 'text-emerald-600' : 'text-primary';
+  const bmiColor = result.bmi < 18.5 ? 'text-info' : result.bmi < 25 ? 'text-success' : result.bmi < 30 ? 'text-warning' : 'text-destructive';
+  const goalColor = goal === 'lose' ? 'text-info' : goal === 'gain' ? 'text-success' : 'text-primary';
 
   const macros = [
-    { label: t.protein, value: result.proteinG, unit: 'g', color: 'bg-blue-500', pct: 0 },
-    { label: t.carbs, value: result.carbsG, unit: 'g', color: 'bg-amber-500', pct: 0 },
-    { label: t.fat, value: result.fatG, unit: 'g', color: 'bg-red-400', pct: 0 },
+    { label: t.protein, value: result.proteinG, unit: 'g', color: 'bg-info', pct: 0 },
+    { label: t.carbs, value: result.carbsG, unit: 'g', color: 'bg-warning', pct: 0 },
+    { label: t.fat, value: result.fatG, unit: 'g', color: 'bg-destructive/40', pct: 0 },
   ];
   const totalMacroG = result.proteinG + result.carbsG + result.fatG;
   macros.forEach(m => { m.pct = Math.round((m.value / totalMacroG) * 100); });
@@ -368,9 +368,9 @@ const NutritionCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'en' }) =
             <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">{t.fiber}</p>
             <p className="text-2xl font-black">{result.fiberG}g</p>
           </div>
-          <div className="p-4 rounded-2xl bg-sky-50 border border-sky-200 text-center">
+          <div className="p-4 rounded-2xl bg-info/10 border border-info/30 text-center">
             <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">{t.water}</p>
-            <p className="text-2xl font-black text-sky-600">{result.waterL}L</p>
+            <p className="text-2xl font-black text-info">{result.waterL}L</p>
           </div>
         </div>
 
@@ -394,12 +394,12 @@ const NutritionCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'en' }) =
         </div>
 
         {/* Tips */}
-        <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200">
+        <div className="p-4 rounded-2xl bg-success/10 border border-success/30">
           <p className="text-xs font-black mb-2">{t.tip}</p>
           <ul className="space-y-1">
             {t.tips[goal].map((tip: string) => (
               <li key={tip} className="text-xs text-muted-foreground flex gap-2">
-                <span className="text-emerald-500 shrink-0">•</span>{tip}
+                <span className="text-success shrink-0">•</span>{tip}
               </li>
             ))}
           </ul>

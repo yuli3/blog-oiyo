@@ -354,7 +354,7 @@ const FinancialInvestmentTaxCalculator: React.FC<{ locale?: Locale }> = ({ local
       <div className="space-y-3 mb-6">
         {inputFields.map(({ label, value, setter, positive }) => (
           <div key={label} className="grid grid-cols-2 gap-3 items-center">
-            <label className={`text-xs font-bold ${positive ? 'text-foreground' : 'text-red-500/80'}`}>{label}</label>
+            <label className={`text-xs font-bold ${positive ? 'text-foreground' : 'text-destructive/80'}`}>{label}</label>
             <input
               type="number"
               min={0}
@@ -379,19 +379,19 @@ const FinancialInvestmentTaxCalculator: React.FC<{ locale?: Locale }> = ({ local
       <div className="space-y-4">
         {/* Tax amount hero */}
         {result.totalTax === 0 ? (
-          <div className="p-6 rounded-2xl bg-emerald-50 border border-emerald-200 text-center">
-            <p className="text-2xl font-black text-emerald-600">✓ {t.zeroTax}</p>
+          <div className="p-6 rounded-2xl bg-success/10 border border-success/30 text-center">
+            <p className="text-2xl font-black text-success">✓ {t.zeroTax}</p>
           </div>
         ) : (
           <div className="grid grid-cols-3 gap-3">
-            <div className="col-span-3 sm:col-span-1 p-5 rounded-2xl bg-red-50 border border-red-200 text-center">
+            <div className="col-span-3 sm:col-span-1 p-5 rounded-2xl bg-destructive/10 border border-destructive/30 text-center">
               <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">{t.taxAmount}</p>
-              <p className="text-3xl font-black text-red-600">{fmt(result.totalTax)}</p>
+              <p className="text-3xl font-black text-destructive">{fmt(result.totalTax)}</p>
               <p className="text-[10px] text-muted-foreground">{t.wonUnit}</p>
             </div>
             <div className="p-4 rounded-2xl bg-muted/20 border border-border text-center">
               <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">{t.effectiveRate}</p>
-              <p className="text-xl font-black text-red-500">{(result.effectiveRate * 100).toFixed(1)}%</p>
+              <p className="text-xl font-black text-destructive">{(result.effectiveRate * 100).toFixed(1)}%</p>
             </div>
             <div className="p-4 rounded-2xl bg-muted/20 border border-border text-center">
               <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">{t.taxableIncome}</p>
@@ -404,10 +404,10 @@ const FinancialInvestmentTaxCalculator: React.FC<{ locale?: Locale }> = ({ local
         <div className="p-4 rounded-2xl bg-muted/20 border border-border space-y-2">
           {[
             { label: t.totalGain, value: result.totalGain, color: 'text-foreground' },
-            { label: t.totalLoss, value: -result.totalLoss, color: 'text-red-500' },
-            { label: `${t.deduction} (${t.domesticLabel})`, value: -result.domesticDeduction, color: 'text-emerald-600' },
-            { label: `${t.deduction} (${t.otherLabel})`, value: -result.otherDeduction, color: 'text-emerald-600' },
-            { label: carryForward > 0 ? t.carryForward : '', value: -carryForward, color: 'text-emerald-600', skip: carryForward === 0 },
+            { label: t.totalLoss, value: -result.totalLoss, color: 'text-destructive' },
+            { label: `${t.deduction} (${t.domesticLabel})`, value: -result.domesticDeduction, color: 'text-success' },
+            { label: `${t.deduction} (${t.otherLabel})`, value: -result.otherDeduction, color: 'text-success' },
+            { label: carryForward > 0 ? t.carryForward : '', value: -carryForward, color: 'text-success', skip: carryForward === 0 },
           ].filter(r => !r.skip).map(({ label, value, color }) => (
             <div key={label} className="flex justify-between text-sm py-1 border-b border-border/40 last:border-0">
               <span className="text-muted-foreground">{label}</span>
@@ -435,14 +435,14 @@ const FinancialInvestmentTaxCalculator: React.FC<{ locale?: Locale }> = ({ local
                   <span className="font-bold">{label}</span>
                   <span className="text-muted-foreground ml-2">{fmt(amount)} × {(rate * 100).toFixed(0)}%</span>
                 </div>
-                <span className="font-black text-red-500 tabular-nums">{fmt(tax)} {t.wonUnit}</span>
+                <span className="font-black text-destructive tabular-nums">{fmt(tax)} {t.wonUnit}</span>
               </div>
             ))}
           </div>
         )}
 
         {/* Tip */}
-        <div className="p-4 rounded-2xl bg-blue-50 border border-blue-200">
+        <div className="p-4 rounded-2xl bg-info/10 border border-info/30">
           <p className="text-xs font-black mb-1">{t.tip}</p>
           <p className="text-xs text-muted-foreground leading-relaxed">{t.tipText}</p>
         </div>
