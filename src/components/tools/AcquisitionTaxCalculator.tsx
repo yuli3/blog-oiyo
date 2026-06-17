@@ -36,22 +36,22 @@ const AcquisitionTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
                     </div>
                 </div>
 
-                <div className="bg-stone-900 rounded-[32px] p-8 text-white animate-in zoom-in-95">
+                <div className="bg-foreground rounded-[32px] p-8 text-background animate-in zoom-in-95">
                     <div className="flex justify-between items-center mb-6">
-                        <span className="text-[10px] font-black text-stone-500 uppercase">{t.result}</span>
+                        <span className="text-[10px] font-black text-background/60 uppercase">{t.result}</span>
                         <h4 className="text-2xl font-black text-primary">₩{Math.round(total).toLocaleString()}</h4>
                     </div>
-                    <div className="grid grid-cols-3 gap-4 border-t border-stone-800 pt-6">
+                    <div className="grid grid-cols-3 gap-4 border-t border-background/15 pt-6">
                         <div className="text-center">
-                            <p className="text-[10px] text-stone-500 uppercase">{t.tax}</p>
+                            <p className="text-[10px] text-background/60 uppercase">{t.tax}</p>
                             <p className="text-xs font-bold">₩{Math.round(acquisitionTax).toLocaleString()}</p>
                         </div>
                         <div className="text-center">
-                            <p className="text-[10px] text-stone-500 uppercase">{t.edu}</p>
+                            <p className="text-[10px] text-background/60 uppercase">{t.edu}</p>
                             <p className="text-xs font-bold">₩{Math.round(eduTax).toLocaleString()}</p>
                         </div>
                         <div className="text-center">
-                            <p className="text-[10px] text-stone-500 uppercase">{t.rural}</p>
+                            <p className="text-[10px] text-background/60 uppercase">{t.rural}</p>
                             <p className="text-xs font-bold">₩{Math.round(ruralTax).toLocaleString()}</p>
                         </div>
                     </div>

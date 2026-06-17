@@ -37,10 +37,10 @@ const AgeCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="p-8 bg-stone-900 rounded-[40px] text-white text-center shadow-xl flex flex-col justify-center">
+                    <div className="p-8 bg-foreground rounded-[40px] text-background text-center shadow-xl flex flex-col justify-center">
                         <p className="text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-2">{t.intlAge}</p>
                         <h2 className="text-6xl font-black">{age}</h2>
-                        <p className="text-xs text-stone-500 mt-2">표준 법적 나이</p>
+                        <p className="text-xs text-background/60 mt-2">표준 법적 나이</p>
                     </div>
                     
                     <div className="p-8 bg-muted/30 rounded-[40px] flex flex-col justify-center gap-6">

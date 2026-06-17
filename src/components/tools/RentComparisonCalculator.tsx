@@ -63,11 +63,11 @@ const RentComparisonCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
                     </div>
                 </div>
 
-                <div className="p-10 bg-stone-900 rounded-[40px] text-white text-center animate-in fade-in zoom-in shadow-2xl">
+                <div className="p-10 bg-foreground rounded-[40px] text-background text-center animate-in fade-in zoom-in shadow-2xl">
                     <h4 className="text-3xl font-black text-primary mb-2 uppercase">{winner}</h4>
-                    <p className="text-xs text-stone-400">{t.resultDesc}</p>
-                    <div className="mt-6 text-4xl font-black text-white">₩{Math.round(diff).toLocaleString()}</div>
-                    <p className="mt-2 text-[10px] text-stone-500 uppercase">Per Month</p>
+                    <p className="text-xs text-background/50">{t.resultDesc}</p>
+                    <div className="mt-6 text-4xl font-black text-background">₩{Math.round(diff).toLocaleString()}</div>
+                    <p className="mt-2 text-[10px] text-background/60 uppercase">Per Month</p>
                 </div>
             </div>
         </GameContainer>

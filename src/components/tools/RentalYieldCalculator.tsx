@@ -56,24 +56,24 @@ const RentalYieldCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'k
                     </div>
                 </div>
 
-                <div className="p-10 bg-stone-900 rounded-[40px] text-white animate-in zoom-in-95 shadow-2xl relative overflow-hidden">
-                    <h4 className="text-center text-[10px] font-black text-stone-500 uppercase tracking-[0.2em] mb-8">{t.result}</h4>
+                <div className="p-10 bg-foreground rounded-[40px] text-background animate-in zoom-in-95 shadow-2xl relative overflow-hidden">
+                    <h4 className="text-center text-[10px] font-black text-background/60 uppercase tracking-[0.2em] mb-8">{t.result}</h4>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center relative z-10">
                         <div className="text-center md:text-left space-y-2">
-                            <p className="text-xs text-stone-400 font-medium uppercase">{t.netYield}</p>
+                            <p className="text-xs text-background/50 font-medium uppercase">{t.netYield}</p>
                             <h2 className="text-5xl font-black text-primary">{yieldRate.toFixed(2)}%</h2>
-                            <p className="text-[10px] text-stone-500">실제 적립 자본 대비 연 수익률</p>
+                            <p className="text-[10px] text-background/60">실제 적립 자본 대비 연 수익률</p>
                         </div>
                         
                         <div className="space-y-6">
-                            <div className="flex justify-between items-end border-b border-stone-800 pb-2">
-                                <span className="text-[10px] text-stone-500 uppercase">{t.cashFlow}</span>
-                                <span className="text-xl font-bold text-white">₩{Math.round(monthlyCashFlow).toLocaleString()}</span>
+                            <div className="flex justify-between items-end border-b border-background/15 pb-2">
+                                <span className="text-[10px] text-background/60 uppercase">{t.cashFlow}</span>
+                                <span className="text-xl font-bold text-background">₩{Math.round(monthlyCashFlow).toLocaleString()}</span>
                             </div>
-                            <div className="flex justify-between items-end border-b border-stone-800 pb-2">
-                                <span className="text-[10px] text-stone-500 uppercase">{locale === 'ko' ? '투자 원금' : 'Equity'}</span>
-                                <span className="text-xl font-bold text-white">₩{actualInvestment.toLocaleString()}</span>
+                            <div className="flex justify-between items-end border-b border-background/15 pb-2">
+                                <span className="text-[10px] text-background/60 uppercase">{locale === 'ko' ? '투자 원금' : 'Equity'}</span>
+                                <span className="text-xl font-bold text-background">₩{actualInvestment.toLocaleString()}</span>
                             </div>
                         </div>
                     </div>

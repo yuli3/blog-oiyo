@@ -50,7 +50,7 @@ const HeightPredictor: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) 
                     {/* Visual ruler-like element */}
                     <div className="mt-8 h-4 w-full bg-muted/30 rounded-full relative overflow-hidden">
                         <div className="absolute top-0 left-0 h-full bg-primary/40" style={{ width: `${(predictedHeight / 210) * 100}%` }} />
-                        <div className="absolute top-0 right-0 h-full w-px bg-stone-400" style={{ left: '80%' }} /> {/* 170cm mark approx */}
+                        <div className="absolute top-0 right-0 h-full w-px bg-muted-foreground" style={{ left: '80%' }} /> {/* 170cm mark approx */}
                     </div>
                 </div>
 

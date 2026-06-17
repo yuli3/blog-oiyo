@@ -473,11 +473,11 @@ const AptSubscriptionScore: React.FC<Props> = ({ locale = "ko" }) => {
         </div>
 
         {/* Total Score */}
-        <div className="bg-stone-900 rounded-[32px] p-8 text-white text-center animate-in zoom-in-95">
-          <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest mb-1">{t.totalScore}</p>
+        <div className="bg-foreground rounded-[32px] p-8 text-background text-center animate-in zoom-in-95">
+          <p className="text-[10px] font-black text-background/60 uppercase tracking-widest mb-1">{t.totalScore}</p>
           <h2 className="text-7xl font-black text-primary leading-none">{totalScore}</h2>
-          <p className="text-xs text-stone-500 mt-1">{t.maxScore}</p>
-          <div className="mt-6 border-t border-stone-800 pt-6">
+          <p className="text-xs text-background/60 mt-1">{t.maxScore}</p>
+          <div className="mt-6 border-t border-background/15 pt-6">
             <p className="text-sm font-bold">{getGrade(totalScore)}</p>
           </div>
         </div>

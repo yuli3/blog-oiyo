@@ -665,7 +665,7 @@ export default function EmojiPicker({ locale }: Props) {
                   </button>
                   {/* Tooltip */}
                   {tooltip?.emoji === item.emoji && (
-                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 px-2 py-1 bg-stone-900 text-white text-[10px] rounded-lg whitespace-nowrap z-10 pointer-events-none shadow-lg">
+                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 px-2 py-1 bg-foreground text-background text-[10px] rounded-lg whitespace-nowrap z-10 pointer-events-none shadow-lg">
                       {tooltip.name}
                     </div>
                   )}
@@ -677,7 +677,7 @@ export default function EmojiPicker({ locale }: Props) {
 
         {/* Toast */}
         {toast && (
-          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-stone-900 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-2 text-sm font-black z-50 animate-in fade-in slide-in-from-bottom-4">
+          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-foreground text-background px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-2 text-sm font-black z-50 animate-in fade-in slide-in-from-bottom-4">
             <span className="text-xl">{toast}</span>
             <span>{t.copied}</span>
           </div>

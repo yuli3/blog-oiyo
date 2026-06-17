@@ -50,17 +50,17 @@ const SeveranceCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
                     </div>
                 </div>
 
-                <div className="p-10 bg-stone-900 rounded-[40px] text-white animate-in slide-in-from-bottom-6 shadow-2xl relative overflow-hidden">
-                    <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest text-center mb-4">{t.result}</p>
+                <div className="p-10 bg-foreground rounded-[40px] text-background animate-in slide-in-from-bottom-6 shadow-2xl relative overflow-hidden">
+                    <p className="text-[10px] font-black text-background/60 uppercase tracking-widest text-center mb-4">{t.result}</p>
                     <h2 className="text-5xl font-black text-center text-primary mb-10">₩{Math.round(severance).toLocaleString()}</h2>
                     
-                    <div className="grid grid-cols-2 gap-8 border-t border-stone-800 pt-8">
+                    <div className="grid grid-cols-2 gap-8 border-t border-background/15 pt-8">
                         <div className="text-center">
-                            <p className="text-[10px] text-stone-500 uppercase mb-1">{t.days}</p>
+                            <p className="text-[10px] text-background/60 uppercase mb-1">{t.days}</p>
                             <p className="text-xl font-bold">{diffDays}일</p>
                         </div>
                         <div className="text-center">
-                            <p className="text-[10px] text-stone-500 uppercase mb-1">{t.base}</p>
+                            <p className="text-[10px] text-background/60 uppercase mb-1">{t.base}</p>
                             <p className="text-xl font-bold">₩{Math.round(avgDailyWage).toLocaleString()}</p>
                         </div>
                     </div>

@@ -395,9 +395,9 @@ const FuelEfficiencyCalculator: React.FC<{ locale?: Locale }> = ({ locale = "ko"
               />
             </div>
           </div>
-          <div className="p-6 bg-stone-900 rounded-3xl text-white text-center shadow-lg">
-            <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest mb-2">{t.calcResult}</p>
-            <p className="text-5xl font-black text-primary">{sec1Result > 0 ? sec1Result.toFixed(2) : "—"} <span className="text-xl font-bold text-stone-400">km/L</span></p>
+          <div className="p-6 bg-foreground rounded-3xl text-background text-center shadow-lg">
+            <p className="text-[10px] font-black text-background/60 uppercase tracking-widest mb-2">{t.calcResult}</p>
+            <p className="text-5xl font-black text-primary">{sec1Result > 0 ? sec1Result.toFixed(2) : "—"} <span className="text-xl font-bold text-background/50">km/L</span></p>
           </div>
         </section>
 
@@ -482,8 +482,8 @@ const FuelEfficiencyCalculator: React.FC<{ locale?: Locale }> = ({ locale = "ko"
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <div className="p-6 bg-stone-900 rounded-3xl text-white text-center shadow-lg">
-              <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest mb-2">{t.annualCost}</p>
+            <div className="p-6 bg-foreground rounded-3xl text-background text-center shadow-lg">
+              <p className="text-[10px] font-black text-background/60 uppercase tracking-widest mb-2">{t.annualCost}</p>
               <p className="text-3xl font-black text-primary">₩{fmtKRW(annualCost)}</p>
             </div>
             <div className="p-6 bg-muted/40 border border-border rounded-3xl text-center">

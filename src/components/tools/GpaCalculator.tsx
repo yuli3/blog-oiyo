@@ -66,16 +66,16 @@ const GpaCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
 
                 <button onClick={addCourse} className="w-full py-4 border-2 border-dashed border-muted text-muted-foreground rounded-2xl font-black text-xs hover:bg-muted/10 transition-all">+ {t.add}</button>
 
-                <div className="p-8 bg-stone-900 rounded-[40px] text-white flex justify-around items-center shadow-xl">
+                <div className="p-8 bg-foreground rounded-[40px] text-background flex justify-around items-center shadow-xl">
                     <div className="text-center">
-                        <p className="text-[10px] text-stone-500 uppercase">{t.totalCredit}</p>
+                        <p className="text-[10px] text-background/60 uppercase">{t.totalCredit}</p>
                         <p className="text-2xl font-black">{totalCredits}</p>
                     </div>
-                    <div className="w-px h-12 bg-stone-800" />
+                    <div className="w-px h-12 bg-foreground" />
                     <div className="text-center">
                         <p className="text-[10px] text-primary uppercase font-black tracking-widest">{t.gpa}</p>
                         <h2 className="text-5xl font-black text-primary">{finalGpa.toFixed(2)}</h2>
-                        <p className="text-[10px] text-stone-500">/ {scale.toFixed(1)} SCALE</p>
+                        <p className="text-[10px] text-background/60">/ {scale.toFixed(1)} SCALE</p>
                     </div>
                 </div>
             </div>

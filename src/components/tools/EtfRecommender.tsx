@@ -49,7 +49,7 @@ const EtfRecommender: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =
                                     <button 
                                         key={i} 
                                         onClick={() => { setScore(score + o.s); setStep(step + 1); }}
-                                        className="w-full p-4 bg-background border border-border rounded-2xl text-sm font-bold hover:bg-primary hover:text-white transition-all text-left flex justify-between group"
+                                        className="w-full p-4 bg-background border border-border rounded-2xl text-sm font-bold hover:bg-primary hover:text-background transition-all text-left flex justify-between group"
                                     >
                                         {o.l}
                                         <span className="opacity-0 group-hover:opacity-100">→</span>
@@ -61,10 +61,10 @@ const EtfRecommender: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =
                     </div>
                 ) : (
                     <div className="w-full max-w-xl animate-in zoom-in-95">
-                        <div className="p-10 bg-stone-900 rounded-[40px] text-white text-center shadow-2xl relative overflow-hidden">
+                        <div className="p-10 bg-foreground rounded-[40px] text-background text-center shadow-2xl relative overflow-hidden">
                             <p className="text-[10px] font-black text-primary uppercase tracking-widest mb-2">{t.result}</p>
                             <h4 className="text-4xl font-black mb-4">{rec.type}</h4>
-                            <p className="text-sm text-stone-400 mb-10">{rec.desc}</p>
+                            <p className="text-sm text-background/50 mb-10">{rec.desc}</p>
                             
                             <div className="grid grid-cols-3 gap-4">
                                 {rec.etfs.map((e, i) => (
@@ -73,7 +73,7 @@ const EtfRecommender: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =
                                             <div style={{ height: `${e.w}%` }} className="w-12 bg-primary rounded-t-lg transition-all duration-1000" />
                                         </div>
                                         <p className="text-lg font-black">{e.n}</p>
-                                        <p className="text-[10px] text-stone-500">{e.w}%</p>
+                                        <p className="text-[10px] text-background/60">{e.w}%</p>
                                     </div>
                                 ))}
                             </div>

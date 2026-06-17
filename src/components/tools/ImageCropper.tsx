@@ -57,7 +57,7 @@ const ImageCropper: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => 
                     {/* Preview Area */}
                     <div className="flex-1 aspect-square bg-muted/30 rounded-3xl border-4 border-dashed border-muted flex flex-col items-center justify-center overflow-hidden relative shadow-inner group">
                         {image ? (
-                            <div className="relative w-full h-full flex items-center justify-center bg-stone-100">
+                            <div className="relative w-full h-full flex items-center justify-center bg-muted">
                                 <img ref={imgRef} src={image} alt="Original" className="max-w-full max-h-full transition-opacity opacity-40" />
                                 {/* Dynamic Crop Box Overlay */}
                                 <div 

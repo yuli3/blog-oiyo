@@ -321,8 +321,8 @@ const FuelCostCalculator = ({ locale }: Props) => {
 
         {/* Results */}
         <div className="grid grid-cols-2 gap-4">
-          <div className="p-6 bg-stone-900 rounded-3xl text-white shadow-lg text-center">
-            <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest mb-2">
+          <div className="p-6 bg-foreground rounded-3xl text-background shadow-lg text-center">
+            <p className="text-[10px] font-black text-background/60 uppercase tracking-widest mb-2">
               {t.totalCost}
             </p>
             <p className="text-3xl font-black text-primary">

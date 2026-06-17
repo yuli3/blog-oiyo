@@ -61,18 +61,18 @@ const AsciiArtGenerator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
             <div className="flex flex-col items-center gap-8">
                 <p className="text-sm font-medium text-muted-foreground text-center max-w-md">{t.desc}</p>
                 
-                <div className="w-full bg-stone-900 rounded-3xl p-6 shadow-2xl overflow-hidden relative group border-4 border-stone-800">
+                <div className="w-full bg-foreground rounded-3xl p-6 shadow-2xl overflow-hidden relative group border-4 border-background/15">
                     {ascii ? (
                         <pre 
                             style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize}px` }} 
-                            className="text-stone-100 font-mono whitespace-pre overflow-x-auto leading-none tracking-tighter"
+                            className="text-background font-mono whitespace-pre overflow-x-auto leading-none tracking-tighter"
                         >
                             {ascii}
                         </pre>
                     ) : (
                         <label className="cursor-pointer flex flex-col items-center justify-center h-64 gap-4">
-                            <div className="text-stone-500 text-6xl">#</div>
-                            <span className="text-xs font-black text-stone-500 uppercase tracking-widest">{t.upload}</span>
+                            <div className="text-background/60 text-6xl">#</div>
+                            <span className="text-xs font-black text-background/60 uppercase tracking-widest">{t.upload}</span>
                             <input type="file" className="hidden" accept="image/*" onChange={handleUpload} />
                         </label>
                     )}
