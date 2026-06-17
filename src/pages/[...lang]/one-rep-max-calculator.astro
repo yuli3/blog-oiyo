@@ -1,0 +1,126 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import OneRepMaxCalculator from "../../components/tools/OneRepMaxCalculator";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "1RM 계산기 — 원렙맥스(1회 최대 중량) 추정", description: "들어 올린 무게와 반복 횟수를 입력하면 Epley·Brzycki 공식으로 1RM(1회 최대 중량)을 추정하고 훈련 강도(%) 표를 보여줍니다." },
+  en: { title: "1RM Calculator — Estimate Your One-Rep Max", description: "Enter the weight lifted and reps to estimate your one-rep max with the Epley and Brzycki formulas, plus a training-percentage table." },
+  ja: { title: "1RM計算機 — 最大挙上重量を推定", description: "挙上重量と回数を入力すると、Epley・Brzycki式で1RM(最大挙上重量)を推定し、トレーニング強度(%)表を表示します。" },
+  fr: { title: "Calculateur 1RM — Estimez votre max sur une rép", description: "Saisissez la charge soulevée et les répétitions pour estimer votre 1RM avec les formules Epley et Brzycki, avec un tableau de pourcentages." },
+  es: { title: "Calculadora 1RM — Estima tu máximo de una repetición", description: "Introduce el peso levantado y las repeticiones para estimar tu 1RM con las fórmulas Epley y Brzycki, con tabla de porcentajes." },
+  zh: { title: "1RM 计算器 — 估算单次最大重量", description: "输入举起的重量和次数，用 Epley、Brzycki 公式估算 1RM（单次最大重量），并显示训练强度（%）表。" },
+  cn: { title: "1RM 计算器 — 估算单次最大重量", description: "输入举起的重量和次数，用 Epley、Brzycki 公式估算 1RM（单次最大重量），并显示训练强度（%）表。" },
+};
+const m = meta[locale] ?? meta.en;
+
+const content = {
+  ko: {
+    eyebrow: "피트니스 계산 도구",
+    introTitle: "1RM 계산기란?",
+    intro: "1RM(One-Rep Max)은 한 번에 들 수 있는 최대 중량입니다. 실제로 1회 최대치를 시도하면 부상 위험이 크므로, 가벼운 무게로 여러 번 든 기록(무게×횟수)으로 추정하는 것이 안전합니다. 가장 널리 쓰이는 Epley와 Brzycki 공식을 함께 계산하고 평균과 훈련 강도표를 제공합니다.",
+    howToTitle: "사용 방법",
+    steps: ["방금 들어 올린 무게를 입력합니다.", "그 무게로 수행한 반복 횟수를 입력합니다(1~20).", "추정 1RM과 강도(%)별 목표 무게를 확인합니다."],
+    highlightsTitle: "주요 특징",
+    highlights: [
+      { title: "두 공식 평균", body: "Epley와 Brzycki를 함께 계산해 평균을 제시합니다." },
+      { title: "강도표 제공", body: "60~100% 강도별 무게와 대략적 반복 수를 보여줍니다." },
+      { title: "단위 무관", body: "kg·lb 무엇이든 같은 단위로 결과가 나옵니다." },
+    ],
+    relatedTitle: "관련 도구",
+    related: [
+      { href: "/ko/tdee-calculator/", label: "TDEE 계산기", desc: "권장 칼로리를 계산합니다." },
+      { href: "/ko/macro-calculator/", label: "매크로 계산기", desc: "영양소 그램을 계산합니다." },
+      { href: "/ko/body-fat-calculator/", label: "체지방 계산기", desc: "체지방률을 추정합니다." },
+    ],
+    disclaimer: "추정치이며 실제 1RM은 컨디션·종목·기술에 따라 다릅니다. 최대 중량 시도는 보조자·안전장치와 함께, 무리하지 마세요.",
+  },
+  en: {
+    eyebrow: "Fitness Calculator",
+    introTitle: "What is the 1RM calculator?",
+    intro: "Your one-rep max (1RM) is the most weight you can lift for a single rep. Testing a true max is risky, so it's safer to estimate it from a lighter set (weight × reps). This tool uses the two most common formulas — Epley and Brzycki — and shows the average plus a training-percentage table.",
+    howToTitle: "How to use",
+    steps: ["Enter the weight you just lifted.", "Enter the reps you completed (1–20).", "Read your estimated 1RM and target weights by percentage."],
+    highlightsTitle: "Highlights",
+    highlights: [
+      { title: "Two-formula average", body: "Computes Epley and Brzycki and shows the average." },
+      { title: "Percentage table", body: "Weights and approximate reps from 60% to 100%." },
+      { title: "Unit-agnostic", body: "Works in kg or lb — results match your input unit." },
+    ],
+    relatedTitle: "Related tools",
+    related: [
+      { href: "/en/tdee-calculator/", label: "TDEE Calculator", desc: "Daily calories." },
+      { href: "/en/macro-calculator/", label: "Macro Calculator", desc: "Macro grams." },
+      { href: "/en/body-fat-calculator/", label: "Body Fat Calculator", desc: "Estimate body fat." },
+    ],
+    disclaimer: "Estimates only; your true 1RM varies with condition, lift, and technique. Attempt maxes with a spotter and safeties, and don't push through pain.",
+  },
+  ja: {
+    eyebrow: "フィットネス計算ツール",
+    introTitle: "1RM計算機とは？",
+    intro: "1RM(One-Rep Max)は1回で挙げられる最大重量です。実際に最大を試すと負傷リスクが高いため、軽めの重量で複数回挙げた記録(重量×回数)から推定するのが安全です。最も使われるEpleyとBrzyckiの式を計算し、平均とトレーニング強度表を提供します。",
+    howToTitle: "使い方",
+    steps: ["挙げた重量を入力します。", "その重量での回数を入力します(1〜20)。", "推定1RMと強度(%)別の目標重量を確認します。"],
+    highlightsTitle: "主な特徴",
+    highlights: [
+      { title: "2式の平均", body: "EpleyとBrzyckiを計算して平均を表示します。" },
+      { title: "強度表", body: "60〜100%の重量とおおよその回数を表示します。" },
+      { title: "単位非依存", body: "kg・lbどちらでも入力単位で結果が出ます。" },
+    ],
+    relatedTitle: "関連ツール",
+    related: [
+      { href: "/ja/tdee-calculator/", label: "TDEE計算機", desc: "必要カロリーを計算します。" },
+      { href: "/ja/macro-calculator/", label: "マクロ計算機", desc: "栄養素のグラムを計算します。" },
+      { href: "/ja/body-fat-calculator/", label: "体脂肪計算機", desc: "体脂肪率を推定します。" },
+    ],
+    disclaimer: "推定値であり、実際の1RMはコンディション・種目・技術で異なります。最大重量はスポッターと安全装置を使い、無理をしないでください。",
+  },
+};
+
+const faqs = {
+  ko: [
+    { q: "Epley와 Brzycki 중 무엇이 맞나요?", a: "둘 다 널리 쓰입니다. 저반복(≤5회)에서는 값이 비슷하고 고반복일수록 차이가 커져 평균을 보는 것이 무난합니다." },
+    { q: "몇 회까지 정확한가요?", a: "보통 1~10회 범위에서 가장 정확합니다. 반복이 많아질수록 오차가 커집니다." },
+    { q: "1RM을 꼭 직접 시도해야 하나요?", a: "아니요. 부상 위험 때문에 추정 공식이 권장됩니다. 직접 시도 시 반드시 보조자와 안전장치를 사용하세요." },
+  ],
+  en: [
+    { q: "Epley or Brzycki — which is right?", a: "Both are widely used. They agree at low reps (≤5) and diverge as reps rise, so the average is a sensible default." },
+    { q: "How many reps stay accurate?", a: "Accuracy is best in the 1–10 rep range; error grows as reps increase." },
+    { q: "Should I test a true 1RM?", a: "Not necessarily — estimation is recommended to avoid injury. If you do test, always use a spotter and safeties." },
+  ],
+  ja: [
+    { q: "EpleyとBrzyckiどちらが正しい？", a: "どちらも一般的です。低回数(≤5)では近く、回数が増えると差が出るため平均が無難です。" },
+    { q: "何回まで正確ですか？", a: "通常1〜10回で最も正確です。回数が増えると誤差が大きくなります。" },
+    { q: "実際に1RMを試すべき？", a: "いいえ。負傷リスクのため推定が推奨されます。試す場合は必ずスポッターと安全装置を。" },
+  ],
+};
+
+const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <ToolShell
+    title={m.title}
+    description={m.description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="one-rep-max-calculator"
+    content={c}
+    applicationCategory="HealthApplication"
+  >
+    <div class="mx-auto max-w-2xl">
+      <OneRepMaxCalculator client:load locale={locale} />
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
+</BaseLayout>

@@ -1,0 +1,126 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import HeartRateCalculator from "../../components/tools/HeartRateCalculator";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "목표 심박수 계산기 — 최대 심박수·운동 심박존", description: "나이를 입력하면 최대 심박수(220−나이)와 5단계 운동 심박존을 계산합니다. 안정시 심박수를 넣으면 카르보넨(여유심박) 방식으로 더 정확히 계산합니다." },
+  en: { title: "Heart Rate Zone Calculator — Max HR & Target Zones", description: "Enter your age to get your max heart rate (220 − age) and five training zones. Add resting heart rate for more accurate Karvonen (reserve) zones." },
+  ja: { title: "目標心拍数計算機 — 最大心拍数・運動ゾーン", description: "年齢を入力すると最大心拍数(220−年齢)と5段階の運動心拍ゾーンを計算します。安静時心拍を入れるとカルボーネン(予備心拍)でより正確に。" },
+  fr: { title: "Calculateur de zones de FC — FC max & zones cibles", description: "Saisissez votre âge pour obtenir votre FC max (220 − âge) et cinq zones d'entraînement. Ajoutez la FC de repos pour des zones Karvonen plus précises." },
+  es: { title: "Calculadora de zonas de FC — FC máx y zonas objetivo", description: "Introduce tu edad para obtener tu FC máxima (220 − edad) y cinco zonas de entrenamiento. Añade la FC en reposo para zonas Karvonen más precisas." },
+  zh: { title: "目标心率计算器 — 最大心率与训练区间", description: "输入年龄即可得到最大心率（220 − 年龄）和五个训练心率区间。输入静息心率可用卡氏（储备心率）法更精确计算。" },
+  cn: { title: "目标心率计算器 — 最大心率与训练区间", description: "输入年龄即可得到最大心率（220 − 年龄）和五个训练心率区间。输入静息心率可用卡氏（储备心率）法更精确计算。" },
+};
+const m = meta[locale] ?? meta.en;
+
+const content = {
+  ko: {
+    eyebrow: "피트니스 계산 도구",
+    introTitle: "목표 심박수 계산기란?",
+    intro: "운동 강도를 심박수로 관리하면 더 효율적으로 운동할 수 있습니다. 최대 심박수(가장 흔한 추정식 220−나이)를 기준으로 회복·지구력·유산소·역치·최대 5개 존을 계산합니다. 안정시 심박수를 입력하면 카르보넨(심박 여유) 공식으로 개인 맞춤 존을 제공합니다.",
+    howToTitle: "사용 방법",
+    steps: ["나이를 입력합니다.", "(선택) 아침 안정시 심박수를 입력하면 더 정확합니다.", "최대 심박수와 5개 목표 심박존을 확인합니다."],
+    highlightsTitle: "주요 특징",
+    highlights: [
+      { title: "5단계 존", body: "회복부터 최대까지 5개 존의 bpm 범위를 보여줍니다." },
+      { title: "카르보넨 지원", body: "안정시 심박수 입력 시 여유심박 기반으로 계산합니다." },
+      { title: "즉시 계산", body: "값을 바꾸면 바로 갱신됩니다." },
+    ],
+    relatedTitle: "관련 도구",
+    related: [
+      { href: "/ko/pace-calculator/", label: "페이스 계산기", desc: "러닝 페이스를 계산합니다." },
+      { href: "/ko/calorie-calculator/", label: "칼로리 계산기", desc: "소비 칼로리를 계산합니다." },
+      { href: "/ko/tdee-calculator/", label: "TDEE 계산기", desc: "권장 칼로리를 계산합니다." },
+    ],
+    disclaimer: "220−나이는 일반 추정식으로 ±10~12bpm 오차가 있습니다. 심장질환·복용약이 있으면 운동 강도는 의사와 상담하세요.",
+  },
+  en: {
+    eyebrow: "Fitness Calculator",
+    introTitle: "What is the heart rate zone calculator?",
+    intro: "Training by heart rate makes workouts more effective. From your max heart rate (the common 220 − age estimate), it computes five zones — recovery, endurance, aerobic, threshold, and maximum. Add your resting heart rate to get personalized zones via the Karvonen (heart-rate reserve) method.",
+    howToTitle: "How to use",
+    steps: ["Enter your age.", "Optionally enter your morning resting heart rate for more accuracy.", "Read your max heart rate and five target zones."],
+    highlightsTitle: "Highlights",
+    highlights: [
+      { title: "Five zones", body: "Shows the bpm range for each zone from recovery to max." },
+      { title: "Karvonen support", body: "Uses heart-rate reserve when you enter resting HR." },
+      { title: "Instant", body: "Results update as you type." },
+    ],
+    relatedTitle: "Related tools",
+    related: [
+      { href: "/en/pace-calculator/", label: "Pace Calculator", desc: "Running pace." },
+      { href: "/en/calorie-calculator/", label: "Calorie Calculator", desc: "Calories burned." },
+      { href: "/en/tdee-calculator/", label: "TDEE Calculator", desc: "Daily calories." },
+    ],
+    disclaimer: "220 − age is a general estimate with ±10–12 bpm error. If you have heart conditions or take medication, discuss exercise intensity with a doctor.",
+  },
+  ja: {
+    eyebrow: "フィットネス計算ツール",
+    introTitle: "目標心拍数計算機とは？",
+    intro: "心拍数で運動強度を管理すると効率よく運動できます。最大心拍数(一般的な220−年齢の推定)を基準に、回復・持久力・有酸素・閾値・最大の5ゾーンを計算します。安静時心拍を入れるとカルボーネン(心拍予備)式で個別ゾーンを提供します。",
+    howToTitle: "使い方",
+    steps: ["年齢を入力します。", "(任意)朝の安静時心拍を入れるとより正確です。", "最大心拍数と5つの目標ゾーンを確認します。"],
+    highlightsTitle: "主な特徴",
+    highlights: [
+      { title: "5ゾーン", body: "回復から最大まで5ゾーンのbpm範囲を表示します。" },
+      { title: "カルボーネン対応", body: "安静時心拍入力時は予備心拍で計算します。" },
+      { title: "即時計算", body: "入力するとすぐ更新されます。" },
+    ],
+    relatedTitle: "関連ツール",
+    related: [
+      { href: "/ja/pace-calculator/", label: "ペース計算機", desc: "ランニングペースを計算します。" },
+      { href: "/ja/calorie-calculator/", label: "カロリー計算機", desc: "消費カロリーを計算します。" },
+      { href: "/ja/tdee-calculator/", label: "TDEE計算機", desc: "必要カロリーを計算します。" },
+    ],
+    disclaimer: "220−年齢は一般的な推定式で±10〜12bpmの誤差があります。心疾患・服薬がある場合は運動強度を医師にご相談ください。",
+  },
+};
+
+const faqs = {
+  ko: [
+    { q: "최대 심박수 공식이 정확한가요?", a: "220−나이는 간편하지만 ±10~12bpm 오차가 있습니다. 더 정밀하려면 실측이나 Tanaka(208−0.7×나이) 같은 식을 참고하세요." },
+    { q: "어느 존에서 운동해야 하나요?", a: "목표에 따라 다릅니다. 지방 연소·기초 체력은 Z2~Z3, 심폐 향상은 Z4~Z5가 흔히 쓰입니다." },
+    { q: "안정시 심박수는 어떻게 재나요?", a: "아침에 일어나 안정된 상태에서 1분간 측정하거나 웨어러블 기록을 사용하세요." },
+  ],
+  en: [
+    { q: "Is the max HR formula accurate?", a: "220 − age is convenient but has ±10–12 bpm error. For more precision, use a measured max or a formula like Tanaka (208 − 0.7 × age)." },
+    { q: "Which zone should I train in?", a: "It depends on your goal. Z2–Z3 are common for base fitness and fat use; Z4–Z5 build cardiovascular capacity." },
+    { q: "How do I measure resting HR?", a: "Measure for one minute right after waking while calm, or use a wearable's recorded value." },
+  ],
+  ja: [
+    { q: "最大心拍数の式は正確？", a: "220−年齢は手軽ですが±10〜12bpmの誤差があります。精度を上げるなら実測やTanaka(208−0.7×年齢)を参考に。" },
+    { q: "どのゾーンで運動すべき？", a: "目標によります。基礎体力・脂肪利用はZ2〜Z3、心肺向上はZ4〜Z5がよく使われます。" },
+    { q: "安静時心拍はどう測る？", a: "起床直後の落ち着いた状態で1分間測るか、ウェアラブルの記録を使います。" },
+  ],
+};
+
+const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <ToolShell
+    title={m.title}
+    description={m.description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="heart-rate-calculator"
+    content={c}
+    applicationCategory="HealthApplication"
+  >
+    <div class="mx-auto max-w-2xl">
+      <HeartRateCalculator client:load locale={locale} />
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
+</BaseLayout>
