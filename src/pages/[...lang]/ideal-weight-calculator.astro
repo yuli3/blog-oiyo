@@ -1,0 +1,126 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import IdealWeightCalculator from "../../components/tools/IdealWeightCalculator";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "이상체중 계산기 — 키·성별 기준 적정 체중", description: "키와 성별을 입력하면 건강 BMI 기준 적정 체중 범위와 Devine·Robinson·Miller·Hamwi 공식별 이상체중을 함께 계산합니다." },
+  en: { title: "Ideal Weight Calculator — Healthy Weight by Height", description: "Enter height and sex to see your healthy weight range (by BMI) plus ideal body weight from the Devine, Robinson, Miller, and Hamwi formulas." },
+  ja: { title: "理想体重計算機 — 身長・性別から適正体重", description: "身長と性別を入力すると、健康BMI基準の適正体重範囲と、Devine・Robinson・Miller・Hamwi式の理想体重を計算します。" },
+  fr: { title: "Calculateur de poids idéal — Poids santé selon la taille", description: "Saisissez taille et sexe pour voir votre plage de poids santé (IMC) et le poids idéal selon les formules Devine, Robinson, Miller et Hamwi." },
+  es: { title: "Calculadora de peso ideal — Peso saludable por altura", description: "Introduce altura y sexo para ver tu rango de peso saludable (IMC) y el peso ideal según las fórmulas Devine, Robinson, Miller y Hamwi." },
+  zh: { title: "理想体重计算器 — 按身高性别的适宜体重", description: "输入身高和性别，查看健康 BMI 体重范围，以及 Devine、Robinson、Miller、Hamwi 公式的理想体重。" },
+  cn: { title: "理想体重计算器 — 按身高性别的适宜体重", description: "输入身高和性别，查看健康 BMI 体重范围，以及 Devine、Robinson、Miller、Hamwi 公式的理想体重。" },
+};
+const m = meta[locale] ?? meta.en;
+
+const content = {
+  ko: {
+    eyebrow: "건강 계산 도구",
+    introTitle: "이상체중 계산기란?",
+    intro: "키와 성별을 기준으로 적정 체중을 추정합니다. 가장 신뢰받는 기준인 건강 BMI(18.5~24.9) 범위와, 임상에서 쓰이는 네 가지 공식(Devine·Robinson·Miller·Hamwi)의 이상체중을 함께 보여줍니다. 공식마다 값이 조금씩 다르므로 단일 숫자가 아닌 범위로 보는 것이 좋습니다.",
+    howToTitle: "사용 방법",
+    steps: ["성별을 선택합니다.", "키(cm)를 입력합니다.", "건강 체중 범위와 공식별 이상체중을 확인합니다."],
+    highlightsTitle: "주요 특징",
+    highlights: [
+      { title: "BMI 건강 범위", body: "키에 맞는 18.5~24.9 BMI 체중 범위를 계산합니다." },
+      { title: "4가지 공식 비교", body: "Devine·Robinson·Miller·Hamwi를 한눈에 비교합니다." },
+      { title: "성별 반영", body: "공식의 남녀 계수를 정확히 적용합니다." },
+    ],
+    relatedTitle: "관련 도구",
+    related: [
+      { href: "/ko/bmi-calculator/", label: "BMI 계산기", desc: "체질량지수를 계산합니다." },
+      { href: "/ko/body-fat-calculator/", label: "체지방 계산기", desc: "체지방률을 추정합니다." },
+      { href: "/ko/tdee-calculator/", label: "TDEE 계산기", desc: "권장 칼로리를 계산합니다." },
+    ],
+    disclaimer: "이상체중 공식은 일반 추정치이며 근육량·체형·연령을 반영하지 않습니다. 건강·체중 목표는 의사·영양사 등 전문가와 상담하세요.",
+  },
+  en: {
+    eyebrow: "Health Calculator",
+    introTitle: "What is the ideal weight calculator?",
+    intro: "It estimates a target weight from your height and sex. It shows the most widely trusted reference — the healthy BMI range (18.5–24.9) — alongside four clinical formulas (Devine, Robinson, Miller, Hamwi). Because each formula differs, it's best read as a range rather than a single number.",
+    howToTitle: "How to use",
+    steps: ["Select your sex.", "Enter your height in cm.", "Read the healthy weight range and each formula's ideal weight."],
+    highlightsTitle: "Highlights",
+    highlights: [
+      { title: "BMI healthy range", body: "Computes the 18.5–24.9 BMI weight range for your height." },
+      { title: "Four formulas", body: "Compare Devine, Robinson, Miller, and Hamwi at a glance." },
+      { title: "Sex-specific", body: "Applies the correct male/female coefficients." },
+    ],
+    relatedTitle: "Related tools",
+    related: [
+      { href: "/en/bmi-calculator/", label: "BMI Calculator", desc: "Body mass index." },
+      { href: "/en/body-fat-calculator/", label: "Body Fat Calculator", desc: "Estimate body fat." },
+      { href: "/en/tdee-calculator/", label: "TDEE Calculator", desc: "Daily calories." },
+    ],
+    disclaimer: "Ideal weight formulas are general estimates and ignore muscle mass, build, and age. Consult a doctor or dietitian for health and weight goals.",
+  },
+  ja: {
+    eyebrow: "健康計算ツール",
+    introTitle: "理想体重計算機とは？",
+    intro: "身長と性別から目標体重を推定します。最も信頼される基準である健康BMI(18.5〜24.9)の範囲と、臨床で使われる4つの式(Devine・Robinson・Miller・Hamwi)を併せて表示します。式ごとに値が異なるため、単一の数値ではなく範囲として見るのが適切です。",
+    howToTitle: "使い方",
+    steps: ["性別を選びます。", "身長(cm)を入力します。", "健康体重の範囲と式別の理想体重を確認します。"],
+    highlightsTitle: "主な特徴",
+    highlights: [
+      { title: "BMI健康範囲", body: "身長に対する18.5〜24.9のBMI体重範囲を計算します。" },
+      { title: "4つの式を比較", body: "Devine・Robinson・Miller・Hamwiを一覧で比較します。" },
+      { title: "性別を反映", body: "式の男女係数を正確に適用します。" },
+    ],
+    relatedTitle: "関連ツール",
+    related: [
+      { href: "/ja/bmi-calculator/", label: "BMI計算機", desc: "体格指数を計算します。" },
+      { href: "/ja/body-fat-calculator/", label: "体脂肪計算機", desc: "体脂肪率を推定します。" },
+      { href: "/ja/tdee-calculator/", label: "TDEE計算機", desc: "必要カロリーを計算します。" },
+    ],
+    disclaimer: "理想体重の式は一般的な推定値で、筋肉量・体型・年齢を反映しません。健康・体重目標は医師・栄養士にご相談ください。",
+  },
+};
+
+const faqs = {
+  ko: [
+    { q: "어떤 공식이 가장 정확한가요?", a: "단일 정답은 없습니다. 건강 BMI 범위가 가장 널리 쓰이며, 네 공식은 참고용 비교값입니다." },
+    { q: "근육이 많으면 어떻게 보나요?", a: "이 공식들은 키만 반영하므로 근육량이 많으면 실제 건강 체중이 더 높을 수 있습니다. 체지방률을 함께 참고하세요." },
+    { q: "왜 공식마다 값이 다른가요?", a: "각 공식이 다른 시기·집단 데이터로 만들어졌기 때문입니다. 그래서 범위로 해석하는 것이 좋습니다." },
+  ],
+  en: [
+    { q: "Which formula is most accurate?", a: "There's no single right answer. The healthy BMI range is the most widely used; the four formulas are reference comparisons." },
+    { q: "What if I'm very muscular?", a: "These formulas use height only, so a muscular build may have a higher healthy weight. Consider body fat percentage too." },
+    { q: "Why do the formulas differ?", a: "Each was derived from different eras and populations, which is why a range is the better interpretation." },
+  ],
+  ja: [
+    { q: "どの式が最も正確ですか？", a: "唯一の正解はありません。健康BMI範囲が最も広く使われ、4つの式は参考用の比較値です。" },
+    { q: "筋肉が多い場合は？", a: "これらの式は身長のみを使うため、筋肉質だと実際の健康体重は高めになることがあります。体脂肪率も参考に。" },
+    { q: "なぜ式ごとに値が違うのですか？", a: "それぞれ異なる時代・集団のデータから作られたためです。範囲として解釈するのが適切です。" },
+  ],
+};
+
+const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <ToolShell
+    title={m.title}
+    description={m.description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="ideal-weight-calculator"
+    content={c}
+    applicationCategory="HealthApplication"
+  >
+    <div class="mx-auto max-w-2xl">
+      <IdealWeightCalculator client:load locale={locale} />
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
+</BaseLayout>

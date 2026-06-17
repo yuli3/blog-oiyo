@@ -1,0 +1,126 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import MacroCalculator from "../../components/tools/MacroCalculator";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "매크로 계산기 — 단백질·탄수화물·지방 그램", description: "하루 칼로리와 매크로 비율을 선택하면 단백질·탄수화물·지방의 하루 섭취 그램과 칼로리를 계산합니다. 균형·고단백·저탄수·키토 프리셋 제공." },
+  en: { title: "Macro Calculator — Protein, Carbs & Fat Grams", description: "Enter daily calories and pick a macro split to get grams and calories of protein, carbs, and fat per day. Balanced, high-protein, low-carb, and keto presets." },
+  ja: { title: "マクロ計算機 — タンパク質・炭水化物・脂質のグラム", description: "1日のカロリーとマクロ比率を選ぶと、タンパク質・炭水化物・脂質の1日のグラムとカロリーを計算します。バランス・高タンパク・低炭水化物・ケトのプリセット。" },
+  fr: { title: "Calculateur de macros — Protéines, glucides & lipides", description: "Saisissez vos calories quotidiennes et choisissez une répartition pour obtenir les grammes et calories de protéines, glucides et lipides par jour." },
+  es: { title: "Calculadora de macros — Proteína, carbohidratos y grasa", description: "Introduce las calorías diarias y elige una distribución para obtener los gramos y calorías de proteína, carbohidratos y grasa al día." },
+  zh: { title: "宏量营养素计算器 — 蛋白质·碳水·脂肪克数", description: "输入每日热量并选择宏量比例，计算每天蛋白质、碳水和脂肪的克数与热量。提供均衡、高蛋白、低碳水、生酮预设。" },
+  cn: { title: "宏量营养素计算器 — 蛋白质·碳水·脂肪克数", description: "输入每日热量并选择宏量比例，计算每天蛋白质、碳水和脂肪的克数与热量。提供均衡、高蛋白、低碳水、生酮预设。" },
+};
+const m = meta[locale] ?? meta.en;
+
+const content = {
+  ko: {
+    eyebrow: "건강 계산 도구",
+    introTitle: "매크로 계산기란?",
+    intro: "하루에 섭취할 칼로리를 단백질·탄수화물·지방(3대 영양소)으로 나눠 그램 단위로 알려줍니다. 단백질과 탄수화물은 1g당 4kcal, 지방은 9kcal로 환산합니다. TDEE 계산기로 하루 칼로리를 먼저 구한 뒤 목표에 맞는 비율을 고르면 식단 계획이 쉬워집니다.",
+    howToTitle: "사용 방법",
+    steps: ["하루 칼로리를 입력합니다(TDEE 계산기 결과 사용 권장).", "목표에 맞는 매크로 비율을 선택합니다.", "단백질·탄수화물·지방의 그램과 칼로리를 확인합니다."],
+    highlightsTitle: "주요 특징",
+    highlights: [
+      { title: "4가지 프리셋", body: "균형·고단백·저탄수·키토 비율을 제공합니다." },
+      { title: "그램+칼로리", body: "각 영양소의 그램과 칼로리를 함께 보여줍니다." },
+      { title: "정확한 환산", body: "단백질·탄수 4kcal/g, 지방 9kcal/g을 적용합니다." },
+    ],
+    relatedTitle: "관련 도구",
+    related: [
+      { href: "/ko/tdee-calculator/", label: "TDEE 계산기", desc: "하루 칼로리를 계산합니다." },
+      { href: "/ko/calorie-calculator/", label: "칼로리 계산기", desc: "필요 칼로리를 계산합니다." },
+      { href: "/ko/nutrition-calculator/", label: "영양 계산기", desc: "영양소를 계산합니다." },
+    ],
+    disclaimer: "매크로 비율은 일반 가이드이며 개인의 건강 상태·활동·목표에 따라 달라집니다. 식단·체중 관리는 전문가와 상담하세요.",
+  },
+  en: {
+    eyebrow: "Health Calculator",
+    introTitle: "What is the macro calculator?",
+    intro: "It splits your daily calories into the three macronutrients — protein, carbs, and fat — in grams. Protein and carbs are 4 kcal per gram and fat is 9 kcal per gram. Get your daily calories from the TDEE calculator first, then pick a split that fits your goal to make meal planning easy.",
+    howToTitle: "How to use",
+    steps: ["Enter your daily calories (use the TDEE calculator's result).", "Choose a macro split for your goal.", "Read the grams and calories of protein, carbs, and fat."],
+    highlightsTitle: "Highlights",
+    highlights: [
+      { title: "Four presets", body: "Balanced, high-protein, low-carb, and keto ratios." },
+      { title: "Grams + calories", body: "Shows both grams and calories per macro." },
+      { title: "Accurate conversion", body: "Uses 4 kcal/g for protein and carbs, 9 kcal/g for fat." },
+    ],
+    relatedTitle: "Related tools",
+    related: [
+      { href: "/en/tdee-calculator/", label: "TDEE Calculator", desc: "Daily calories." },
+      { href: "/en/calorie-calculator/", label: "Calorie Calculator", desc: "Calorie needs." },
+      { href: "/en/nutrition-calculator/", label: "Nutrition Calculator", desc: "Nutrients." },
+    ],
+    disclaimer: "Macro splits are general guidance and depend on your health, activity, and goals. Consult a professional for diet and weight decisions.",
+  },
+  ja: {
+    eyebrow: "健康計算ツール",
+    introTitle: "マクロ計算機とは？",
+    intro: "1日に摂取するカロリーを三大栄養素(タンパク質・炭水化物・脂質)にグラム単位で振り分けます。タンパク質と炭水化物は1gあたり4kcal、脂質は9kcalで換算します。まずTDEE計算機で1日のカロリーを求め、目標に合う比率を選ぶと食事計画が容易になります。",
+    howToTitle: "使い方",
+    steps: ["1日のカロリーを入力します(TDEE計算機の結果を推奨)。", "目標に合うマクロ比率を選びます。", "タンパク質・炭水化物・脂質のグラムとカロリーを確認します。"],
+    highlightsTitle: "主な特徴",
+    highlights: [
+      { title: "4つのプリセット", body: "バランス・高タンパク・低炭水化物・ケトの比率。" },
+      { title: "グラム＋カロリー", body: "各栄養素のグラムとカロリーを表示します。" },
+      { title: "正確な換算", body: "タンパク質・炭水4kcal/g、脂質9kcal/gを適用。" },
+    ],
+    relatedTitle: "関連ツール",
+    related: [
+      { href: "/ja/tdee-calculator/", label: "TDEE計算機", desc: "1日のカロリーを計算します。" },
+      { href: "/ja/calorie-calculator/", label: "カロリー計算機", desc: "必要カロリーを計算します。" },
+      { href: "/ja/nutrition-calculator/", label: "栄養計算機", desc: "栄養素を計算します。" },
+    ],
+    disclaimer: "マクロ比率は一般的な目安で、健康状態・活動・目標により異なります。食事・体重管理は専門家にご相談ください。",
+  },
+};
+
+const faqs = {
+  ko: [
+    { q: "하루 칼로리는 어떻게 정하나요?", a: "TDEE 계산기로 유지 칼로리를 구한 뒤, 감량은 약 −500, 증량은 +500을 적용하세요." },
+    { q: "단백질은 얼마가 적당한가요?", a: "목표에 따라 다르지만 근육 유지·증가에는 고단백 비율이 흔히 권장됩니다. 개인차가 있으니 전문가 상담을 권합니다." },
+    { q: "왜 지방은 1g당 9kcal인가요?", a: "지방은 단백질·탄수화물(4kcal/g)보다 에너지 밀도가 높아 1g당 약 9kcal입니다." },
+  ],
+  en: [
+    { q: "How do I set daily calories?", a: "Find maintenance with the TDEE calculator, then apply about −500 to cut or +500 to bulk." },
+    { q: "How much protein is right?", a: "It depends on your goal, but higher protein is commonly advised for maintaining or building muscle. Individual needs vary — consult a professional." },
+    { q: "Why is fat 9 kcal per gram?", a: "Fat is more energy-dense than protein and carbs (4 kcal/g), at about 9 kcal per gram." },
+  ],
+  ja: [
+    { q: "1日のカロリーはどう決めますか？", a: "TDEE計算機で維持カロリーを求め、減量は約−500、増量は+500を適用します。" },
+    { q: "タンパク質はどれくらい？", a: "目標によりますが、筋肉の維持・増加には高タンパクがよく推奨されます。個人差があるため専門家にご相談を。" },
+    { q: "なぜ脂質は1gあたり9kcal？", a: "脂質はタンパク質・炭水化物(4kcal/g)よりエネルギー密度が高く、1gあたり約9kcalです。" },
+  ],
+};
+
+const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <ToolShell
+    title={m.title}
+    description={m.description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="macro-calculator"
+    content={c}
+    applicationCategory="HealthApplication"
+  >
+    <div class="mx-auto max-w-2xl">
+      <MacroCalculator client:load locale={locale} />
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
+</BaseLayout>
