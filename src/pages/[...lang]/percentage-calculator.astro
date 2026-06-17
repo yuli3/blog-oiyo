@@ -1,0 +1,126 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PercentageCalculator from "../../components/tools/PercentageCalculator";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "퍼센트 계산기 — %, 변화율, 할인가 한 번에", description: "X의 Y%, X는 Y의 몇%, A→B 증감률, 할인가와 절약액을 한 화면에서 즉시 계산합니다." },
+  en: { title: "Percentage Calculator — Percent, Change, Discount", description: "Compute Y% of X, what percent X is of Y, A→B percent change, and discounted price with savings — all on one screen." },
+  ja: { title: "パーセント計算機 — %、変化率、割引価格を一度に", description: "Xの Y%、X は Y の何%、A→B の増減率、割引価格と節約額を一画面で即時計算します。" },
+  fr: { title: "Calculateur de Pourcentage — %, variation, remise", description: "Calculez Y% de X, le % de X par rapport à Y, la variation A→B et le prix remisé." },
+  es: { title: "Calculadora de Porcentaje — %, variación, descuento", description: "Calcula Y% de X, qué % es X de Y, la variación A→B y el precio con descuento." },
+  zh: { title: "百分比计算器 — 百分比、变化率、折扣价", description: "一屏即时计算 X 的 Y%、X 是 Y 的百分之几、A→B 变化率，以及折扣价与节省额。" },
+  cn: { title: "百分比计算器 — 百分比、变化率、折扣价", description: "一屏即时计算 X 的 Y%、X 是 Y 的百分之几、A→B 变化率，以及折扣价与节省额。" },
+};
+const m = meta[locale] ?? meta.en;
+
+const content = {
+  ko: {
+    eyebrow: "일상 계산 도구",
+    introTitle: "퍼센트 계산기란?",
+    intro: "자주 쓰는 네 가지 퍼센트 계산을 한 화면에 모았습니다: ① X의 Y%는? ② X는 Y의 몇%? ③ A에서 B로 몇 % 증감? ④ 할인가와 절약액.",
+    howToTitle: "사용 방법",
+    steps: ["원하는 계산 항목의 값을 입력합니다.", "입력 즉시 결과가 계산됩니다.", "변화율은 증가/감소 방향까지 표시됩니다."],
+    highlightsTitle: "주요 특징",
+    highlights: [
+      { title: "4가지 모드", body: "퍼센트·비율·증감률·할인가를 한 번에 다룹니다." },
+      { title: "할인가+절약액", body: "정가와 할인율로 실제 결제 금액과 절약액을 보여줍니다." },
+      { title: "즉시 계산", body: "값을 바꾸면 바로 갱신됩니다." },
+    ],
+    relatedTitle: "관련 도구",
+    related: [
+      { href: "/ko/dutch-pay-calculator/", label: "더치페이 계산기", desc: "모임 비용을 나눕니다." },
+      { href: "/ko/percent-converter/", label: "퍼센트 변환기", desc: "분수·소수·퍼센트를 변환합니다." },
+      { href: "/ko/salary-calculator/", label: "실수령액 계산기", desc: "월급 실수령액을 계산합니다." },
+    ],
+    disclaimer: "일반적인 산술 계산이며 참고용입니다.",
+  },
+  en: {
+    eyebrow: "Everyday Calculator",
+    introTitle: "What is the percentage calculator?",
+    intro: "Four common percentage calculations on one screen: ① Y% of X, ② X is what percent of Y, ③ percent change from A to B, ④ discounted price and savings.",
+    howToTitle: "How to use",
+    steps: ["Enter the values for the calculation you need.", "Results compute instantly as you type.", "Percent change also shows the increase/decrease direction."],
+    highlightsTitle: "Highlights",
+    highlights: [
+      { title: "Four modes", body: "Handles percent, ratio, change, and discount at once." },
+      { title: "Discount + savings", body: "Shows the final price and how much you save." },
+      { title: "Instant", body: "Results update as you type." },
+    ],
+    relatedTitle: "Related tools",
+    related: [
+      { href: "/en/dutch-pay-calculator/", label: "Dutch Pay Calculator", desc: "Split group expenses." },
+      { href: "/en/percent-converter/", label: "Percent Converter", desc: "Convert fractions, decimals, percent." },
+      { href: "/en/salary-calculator/", label: "Salary Calculator", desc: "Compute take-home pay." },
+    ],
+    disclaimer: "General arithmetic, for reference only.",
+  },
+  ja: {
+    eyebrow: "日常計算ツール",
+    introTitle: "パーセント計算機とは？",
+    intro: "よく使う4つのパーセント計算を一画面に集約しました: ① Xの Y%、② X は Y の何%、③ A から B への増減率、④ 割引価格と節約額。",
+    howToTitle: "使い方",
+    steps: ["必要な計算項目の値を入力します。", "入力すると即時に結果が計算されます。", "変化率は増減の方向も表示します。"],
+    highlightsTitle: "主な特徴",
+    highlights: [
+      { title: "4モード", body: "パーセント・比率・増減率・割引を一度に扱います。" },
+      { title: "割引+節約額", body: "定価と割引率から支払額と節約額を表示します。" },
+      { title: "即時計算", body: "入力するとすぐに更新されます。" },
+    ],
+    relatedTitle: "関連ツール",
+    related: [
+      { href: "/ja/dutch-pay-calculator/", label: "割り勘計算機", desc: "集まりの費用を分けます。" },
+      { href: "/ja/percent-converter/", label: "パーセント変換", desc: "分数・小数・%を変換します。" },
+      { href: "/ja/salary-calculator/", label: "手取り計算機", desc: "給与の手取りを計算します。" },
+    ],
+    disclaimer: "一般的な算術計算で、参考用です。",
+  },
+};
+
+const faqs = {
+  ko: [
+    { q: "X의 Y%를 구하는 식은?", a: "X × Y ÷ 100 입니다. 예: 200의 15% = 30." },
+    { q: "증감률은 어떻게 계산하나요?", a: "(이후 − 이전) ÷ 이전 × 100 입니다. 예: 100→125 = +25%." },
+    { q: "할인가는?", a: "정가 × (1 − 할인%/100) 입니다. 예: 50,000원 −20% = 40,000원." },
+  ],
+  en: [
+    { q: "How do I find Y% of X?", a: "X × Y ÷ 100. For example, 15% of 200 = 30." },
+    { q: "How is percent change computed?", a: "(new − old) ÷ old × 100. For example, 100→125 = +25%." },
+    { q: "How is the discount price found?", a: "Price × (1 − discount%/100). For example, 50,000 −20% = 40,000." },
+  ],
+  ja: [
+    { q: "Xの Y%の求め方は？", a: "X × Y ÷ 100 です。例: 200の15% = 30。" },
+    { q: "変化率の計算は？", a: "(後 − 前) ÷ 前 × 100 です。例: 100→125 = +25%。" },
+    { q: "割引価格は？", a: "定価 × (1 − 割引%/100) です。例: 50,000円 −20% = 40,000円。" },
+  ],
+};
+
+const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <ToolShell
+    title={m.title}
+    description={m.description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="percentage-calculator"
+    content={c}
+    applicationCategory="UtilityApplication"
+  >
+    <div class="mx-auto max-w-2xl">
+      <PercentageCalculator client:load locale={locale} />
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
+</BaseLayout>
