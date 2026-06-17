@@ -1,0 +1,126 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import KoreanAgeCalculator from "../../components/tools/KoreanAgeCalculator";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "만나이 계산기 — 만 나이·세는 나이·연 나이 한 번에", description: "생년월일을 입력하면 만 나이, 세는 나이, 연 나이를 즉시 계산합니다. 2023년 6월 만 나이 통일 기준." },
+  en: { title: "Korean Age Calculator — International, Counting & Year Age", description: "Enter your birth date to get Korean international age (만나이), counting age (세는나이), and year age. Based on the June 2023 unified standard." },
+  ja: { title: "韓国年齢計算機 — 満年齢・数え年・年年齢", description: "生年月日を入力すると、満年齢(만나이)、数え年(세는나이)、年年齢を即時計算します。2023年6月の満年齢統一基準。" },
+  fr: { title: "Calculateur d'Âge Coréen — international, coréen, par année", description: "Saisissez votre date de naissance pour obtenir l'âge international, coréen et par année." },
+  es: { title: "Calculadora de Edad Coreana — internacional, coreana, por año", description: "Introduce tu fecha de nacimiento para obtener la edad internacional, coreana y por año." },
+  zh: { title: "韩国年龄计算器 — 周岁·虚岁·年龄", description: "输入出生日期，即时计算周岁(만나이)、虚岁(세는나이)和年龄。基于2023年6月统一标准。" },
+  cn: { title: "韩国年龄计算器 — 周岁·虚岁·年龄", description: "输入出生日期，即时计算周岁(만나이)、虚岁(세는나이)和年龄。基于2023年6月统一标准。" },
+};
+const m = meta[locale] ?? meta.en;
+
+const content = {
+  ko: {
+    eyebrow: "날짜 계산 도구",
+    introTitle: "만나이 계산기란?",
+    intro: "생년월일을 입력하면 만 나이·세는 나이·연 나이를 한 번에 계산하는 도구입니다. 2023년 6월 28일부터 행정·법률상 나이는 만 나이로 통일되었습니다.",
+    howToTitle: "사용 방법",
+    steps: ["생년월일(년·월·일)을 입력합니다.", "만 나이가 강조되어 표시됩니다.", "세는 나이·연 나이도 함께 확인합니다."],
+    highlightsTitle: "주요 특징",
+    highlights: [
+      { title: "만 나이 통일 기준", body: "2023년 6월 시행된 만 나이 기준으로 계산합니다." },
+      { title: "세 가지 나이", body: "만 나이·세는 나이·연 나이를 한눈에 비교합니다." },
+      { title: "생일 반영", body: "올해 생일이 지났는지에 따라 만 나이를 정확히 계산합니다." },
+    ],
+    relatedTitle: "관련 도구",
+    related: [
+      { href: "/ko/age-calculator/", label: "나이 계산기", desc: "정확한 만 나이와 일수를 계산합니다." },
+      { href: "/ko/dday-counter/", label: "D-day 계산기", desc: "기념일·디데이를 계산합니다." },
+      { href: "/ko/anniversary-calculator/", label: "기념일 계산기", desc: "사귄 날·100일 등을 계산합니다." },
+    ],
+    disclaimer: "만 나이는 생일을 기준으로 자동 계산됩니다. 행정·금융 등 공식 절차의 나이 기준은 만 나이입니다.",
+  },
+  en: {
+    eyebrow: "Date Calculator",
+    introTitle: "What is the Korean age calculator?",
+    intro: "Enter your birth date to compute three ages used in Korea: international age (만나이), counting age (세는나이), and year age. Since June 28, 2023, official ages in Korea use the international (만) age.",
+    howToTitle: "How to use",
+    steps: ["Enter your birth year, month, and day.", "The international age (만나이) is highlighted.", "Counting age and year age are shown too."],
+    highlightsTitle: "Highlights",
+    highlights: [
+      { title: "June 2023 standard", body: "Calculates with the unified international (만) age in effect since 2023." },
+      { title: "Three ages", body: "Compare international, counting, and year age at a glance." },
+      { title: "Birthday-aware", body: "Adjusts the international age based on whether this year's birthday passed." },
+    ],
+    relatedTitle: "Related tools",
+    related: [
+      { href: "/en/age-calculator/", label: "Age Calculator", desc: "Exact age and days lived." },
+      { href: "/en/dday-counter/", label: "D-day Counter", desc: "Count down to a date." },
+      { href: "/en/anniversary-calculator/", label: "Anniversary Calculator", desc: "Dating days, 100-day, etc." },
+    ],
+    disclaimer: "International age is computed from your birthday. Official Korean procedures use the international (만) age.",
+  },
+  ja: {
+    eyebrow: "日付計算ツール",
+    introTitle: "韓国年齢計算機とは？",
+    intro: "生年月日を入力すると、韓国で使われる満年齢(만나이)・数え年(세는나이)・年年齢の3つを計算するツールです。2023年6月28日から韓国の公式年齢は満年齢に統一されました。",
+    howToTitle: "使い方",
+    steps: ["生年月日(年・月・日)を入力します。", "満年齢(만나이)が強調表示されます。", "数え年・年年齢も確認できます。"],
+    highlightsTitle: "主な特徴",
+    highlights: [
+      { title: "2023年6月基準", body: "2023年施行の満年齢統一基準で計算します。" },
+      { title: "3つの年齢", body: "満年齢・数え年・年年齢を一目で比較します。" },
+      { title: "誕生日反映", body: "今年の誕生日が過ぎたかで満年齢を正確に計算します。" },
+    ],
+    relatedTitle: "関連ツール",
+    related: [
+      { href: "/ja/age-calculator/", label: "年齢計算機", desc: "正確な満年齢と日数を計算します。" },
+      { href: "/ja/dday-counter/", label: "D-day計算機", desc: "記念日・ディーデイを計算します。" },
+      { href: "/ja/anniversary-calculator/", label: "記念日計算機", desc: "交際日・100日などを計算します。" },
+    ],
+    disclaimer: "満年齢は誕生日を基準に自動計算されます。韓国の公式手続きは満年齢を使用します。",
+  },
+};
+
+const faqs = {
+  ko: [
+    { q: "만 나이와 세는 나이 차이는?", a: "만 나이는 태어난 날을 0세로 시작해 생일마다 1살 더하는 국제 기준입니다. 세는 나이는 태어나면 1세, 매년 1월 1일에 1살 더하는 한국 전통 방식입니다." },
+    { q: "2023년 만 나이 통일이란?", a: "2023년 6월 28일부터 행정·법률상 나이를 만 나이로 통일했습니다. 별도 표기가 없으면 만 나이를 뜻합니다." },
+    { q: "연 나이는 무엇인가요?", a: "현재 연도에서 출생 연도를 뺀 값으로, 일부 법령(병역·청소년보호 등)에서 사용됩니다." },
+  ],
+  en: [
+    { q: "International vs counting age?", a: "International age starts at 0 at birth and adds a year each birthday. Counting age starts at 1 at birth and adds a year every January 1 (Korean tradition)." },
+    { q: "What is the 2023 unification?", a: "Since June 28, 2023, Korea's official ages use the international (만) age; absent a note, age means international age." },
+    { q: "What is year age?", a: "Current year minus birth year; used in some laws (military service, youth protection)." },
+  ],
+  ja: [
+    { q: "満年齢と数え年の違いは？", a: "満年齢は生まれた時を0歳とし誕生日ごとに1歳加える国際基準です。数え年は生まれた時1歳で毎年1月1日に1歳加える韓国の伝統方式です。" },
+    { q: "2023年の満年齢統一とは？", a: "2023年6月28日から行政・法律上の年齢を満年齢に統一しました。表記がなければ満年齢を意味します。" },
+    { q: "年年齢とは？", a: "現在の年から出生年を引いた値で、一部の法令(兵役・青少年保護など)で使われます。" },
+  ],
+};
+
+const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <ToolShell
+    title={m.title}
+    description={m.description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="korean-age-calculator"
+    content={c}
+    applicationCategory="UtilityApplication"
+  >
+    <div class="mx-auto max-w-2xl">
+      <KoreanAgeCalculator client:load locale={locale} />
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
+</BaseLayout>
