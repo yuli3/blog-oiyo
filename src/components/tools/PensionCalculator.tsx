@@ -34,17 +34,17 @@ const PensionCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
                         </div>
                     </div>
 
-                    <div className="bg-stone-900 rounded-[32px] p-8 text-white flex flex-col justify-center animate-in slide-in-from-right">
-                        <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest mb-2">{t.result}</p>
+                    <div className="bg-foreground rounded-[32px] p-8 text-background flex flex-col justify-center animate-in slide-in-from-right">
+                        <p className="text-[10px] font-black text-background/60 uppercase tracking-widest mb-2">{t.result}</p>
                         <h2 className="text-4xl font-black text-primary mb-6">₩{Math.round(refund).toLocaleString()}</h2>
                         
-                        <div className="space-y-3 border-t border-stone-800 pt-6">
+                        <div className="space-y-3 border-t border-background/15 pt-6">
                             <div className="flex justify-between">
-                                <span className="text-[10px] text-stone-500 uppercase">{t.rate}</span>
+                                <span className="text-[10px] text-background/60 uppercase">{t.rate}</span>
                                 <span className="text-xs font-bold text-success">{(creditRate * 100).toFixed(1)}%</span>
                             </div>
                             <div className="flex justify-between">
-                                <span className="text-[10px] text-stone-500 uppercase">{t.limit}</span>
+                                <span className="text-[10px] text-background/60 uppercase">{t.limit}</span>
                                 <span className="text-xs font-bold">₩{limit.toLocaleString()}</span>
                             </div>
                         </div>

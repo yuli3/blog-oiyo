@@ -137,49 +137,49 @@ const CalorieCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
                     </select>
                 </div>
 
-                <div className="p-8 bg-stone-900 rounded-[32px] text-white flex flex-col gap-6 shadow-2xl">
+                <div className="p-8 bg-foreground rounded-[32px] text-background flex flex-col gap-6 shadow-2xl">
                     <div className="flex flex-col sm:flex-row gap-4 items-center justify-around">
                         <div className="text-center">
-                            <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest">{t.bmr}</p>
-                            <p className="text-3xl font-black text-stone-200">{Math.round(bmr)} <span className="text-base text-stone-400">{t.kcal}</span></p>
+                            <p className="text-[10px] font-black text-background/60 uppercase tracking-widest">{t.bmr}</p>
+                            <p className="text-3xl font-black text-background">{Math.round(bmr)} <span className="text-base text-background/50">{t.kcal}</span></p>
                         </div>
-                        <div className="w-px h-12 bg-stone-800 hidden sm:block" />
+                        <div className="w-px h-12 bg-foreground hidden sm:block" />
                         <div className="text-center">
-                            <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest">{t.tdee}</p>
-                            <p className="text-4xl font-black text-primary">{Math.round(tdee)} <span className="text-base text-stone-400">{t.kcal}</span></p>
+                            <p className="text-[10px] font-black text-background/60 uppercase tracking-widest">{t.tdee}</p>
+                            <p className="text-4xl font-black text-primary">{Math.round(tdee)} <span className="text-base text-background/50">{t.kcal}</span></p>
                         </div>
                     </div>
-                    <div className="grid grid-cols-3 gap-3 border-t border-stone-800 pt-5">
-                        <div className="text-center p-3 bg-stone-800/50 rounded-2xl">
-                            <p className="text-[9px] font-black text-stone-500 uppercase tracking-widest mb-1">{t.loss}</p>
+                    <div className="grid grid-cols-3 gap-3 border-t border-background/15 pt-5">
+                        <div className="text-center p-3 bg-foreground/50 rounded-2xl">
+                            <p className="text-[9px] font-black text-background/60 uppercase tracking-widest mb-1">{t.loss}</p>
                             <p className="text-xl font-black text-destructive">{Math.round(lossKcal)}</p>
-                            <p className="text-[9px] text-stone-500">{t.kcal}</p>
+                            <p className="text-[9px] text-background/60">{t.kcal}</p>
                         </div>
                         <div className="text-center p-3 bg-success/40 rounded-2xl ring-1 ring-success/30">
-                            <p className="text-[9px] font-black text-stone-500 uppercase tracking-widest mb-1">{t.maintenance}</p>
+                            <p className="text-[9px] font-black text-background/60 uppercase tracking-widest mb-1">{t.maintenance}</p>
                             <p className="text-xl font-black text-success">{Math.round(tdee)}</p>
-                            <p className="text-[9px] text-stone-500">{t.kcal}</p>
+                            <p className="text-[9px] text-background/60">{t.kcal}</p>
                         </div>
-                        <div className="text-center p-3 bg-stone-800/50 rounded-2xl">
-                            <p className="text-[9px] font-black text-stone-500 uppercase tracking-widest mb-1">{t.gain}</p>
+                        <div className="text-center p-3 bg-foreground/50 rounded-2xl">
+                            <p className="text-[9px] font-black text-background/60 uppercase tracking-widest mb-1">{t.gain}</p>
                             <p className="text-xl font-black text-warning">{Math.round(gainKcal)}</p>
-                            <p className="text-[9px] text-stone-500">{t.kcal}</p>
+                            <p className="text-[9px] text-background/60">{t.kcal}</p>
                         </div>
                     </div>
-                    <div className="border-t border-stone-800 pt-4">
-                        <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest mb-3 text-center">{t.macros}</p>
+                    <div className="border-t border-background/15 pt-4">
+                        <p className="text-[10px] font-black text-background/60 uppercase tracking-widest mb-3 text-center">{t.macros}</p>
                         <div className="grid grid-cols-3 gap-3 text-center">
                             <div>
                                 <p className="text-xs font-black text-info">{t.protein}</p>
-                                <p className="text-lg font-black text-stone-200">{proteinG}{t.g}</p>
+                                <p className="text-lg font-black text-background">{proteinG}{t.g}</p>
                             </div>
                             <div>
                                 <p className="text-xs font-black text-warning">{t.carbs}</p>
-                                <p className="text-lg font-black text-stone-200">{carbsG}{t.g}</p>
+                                <p className="text-lg font-black text-background">{carbsG}{t.g}</p>
                             </div>
                             <div>
                                 <p className="text-xs font-black text-destructive">{t.fat}</p>
-                                <p className="text-lg font-black text-stone-200">{fatG}{t.g}</p>
+                                <p className="text-lg font-black text-background">{fatG}{t.g}</p>
                             </div>
                         </div>
                     </div>

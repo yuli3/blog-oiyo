@@ -132,28 +132,28 @@ const BodyFatCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
                     ))}
                 </div>
 
-                <div className="p-8 bg-stone-900 rounded-[32px] text-white flex flex-col gap-6 shadow-2xl">
+                <div className="p-8 bg-foreground rounded-[32px] text-background flex flex-col gap-6 shadow-2xl">
                     <div className="flex flex-col sm:flex-row gap-6 items-center justify-around">
                         <div className="text-center space-y-1">
-                            <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest">{t.bodyFat}</p>
+                            <p className="text-[10px] font-black text-background/60 uppercase tracking-widest">{t.bodyFat}</p>
                             <p className={`text-5xl font-black ${cat.color}`}>{clamped.toFixed(1)}%</p>
                             <p className={`text-sm font-bold ${cat.color}`}>{cat.label}</p>
                         </div>
-                        <div className="w-px h-16 bg-stone-800 hidden sm:block" />
+                        <div className="w-px h-16 bg-foreground hidden sm:block" />
                         <div className="grid grid-cols-2 gap-4 text-center">
                             <div>
-                                <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest">{t.fatMass}</p>
+                                <p className="text-[10px] font-black text-background/60 uppercase tracking-widest">{t.fatMass}</p>
                                 <p className="text-2xl font-black text-warning">{fatMass.toFixed(1)} kg</p>
                             </div>
                             <div>
-                                <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest">{t.leanMass}</p>
+                                <p className="text-[10px] font-black text-background/60 uppercase tracking-widest">{t.leanMass}</p>
                                 <p className="text-2xl font-black text-success">{leanMass.toFixed(1)} kg</p>
                             </div>
                         </div>
                     </div>
-                    <div className="border-t border-stone-800 pt-4 text-center">
-                        <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest mb-1">{t.idealWeight}</p>
-                        <p className="text-lg font-black text-stone-200">{idealMin} — {idealMax} kg</p>
+                    <div className="border-t border-background/15 pt-4 text-center">
+                        <p className="text-[10px] font-black text-background/60 uppercase tracking-widest mb-1">{t.idealWeight}</p>
+                        <p className="text-lg font-black text-background">{idealMin} — {idealMax} kg</p>
                     </div>
                 </div>
             </div>

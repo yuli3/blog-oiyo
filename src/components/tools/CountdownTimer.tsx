@@ -261,11 +261,11 @@ const Stopwatch: React.FC<{ t: Labels }> = ({ t }) => {
   return (
     <div className="flex flex-col gap-6">
       {/* Display */}
-      <div className="rounded-3xl bg-stone-900 p-8 text-center select-none">
-        <p className="font-mono text-5xl sm:text-6xl font-black text-white tracking-tight">
+      <div className="rounded-3xl bg-foreground p-8 text-center select-none">
+        <p className="font-mono text-5xl sm:text-6xl font-black text-background tracking-tight">
           {fmtStopwatch(elapsed)}
         </p>
-        <p className="text-[10px] font-medium text-stone-500 mt-2">{t.spaceHint}</p>
+        <p className="text-[10px] font-medium text-background/60 mt-2">{t.spaceHint}</p>
       </div>
 
       {/* Controls */}
@@ -284,7 +284,7 @@ const Stopwatch: React.FC<{ t: Labels }> = ({ t }) => {
           aria-pressed={running}
           className={`py-3 rounded-2xl text-sm font-black uppercase tracking-widest transition-colors ${
             running
-              ? "bg-warning text-white hover:bg-warning"
+              ? "bg-warning text-background hover:bg-warning"
               : "bg-primary text-primary-foreground hover:opacity-90"
           }`}
         >
@@ -481,7 +481,7 @@ const Countdown: React.FC<{ t: Labels }> = ({ t }) => {
           disabled={configuredMs === 0 && !started}
           className={`py-3 rounded-2xl text-sm font-black uppercase tracking-widest transition-colors ${
             running
-              ? "bg-warning text-white hover:bg-warning"
+              ? "bg-warning text-background hover:bg-warning"
               : finished
               ? "bg-muted/40 border border-border opacity-40 cursor-not-allowed"
               : "bg-primary text-primary-foreground hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"

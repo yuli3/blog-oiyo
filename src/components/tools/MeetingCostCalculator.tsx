@@ -41,17 +41,17 @@ const MeetingCostCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'k
                     </div>
                 </div>
 
-                <div className="p-10 bg-stone-900 rounded-[40px] text-white text-center shadow-2xl relative overflow-hidden group">
+                <div className="p-10 bg-foreground rounded-[40px] text-background text-center shadow-2xl relative overflow-hidden group">
                     <div className="relative z-10">
                         <p className="text-[10px] font-black text-primary uppercase tracking-[0.3em] mb-4">{t.status}</p>
                         <h2 className="text-5xl md:text-6xl font-black tabular-nums">₩{Math.round(totalCost).toLocaleString()}</h2>
-                        <div className="mt-8 flex justify-center gap-12 border-t border-stone-800 pt-8">
+                        <div className="mt-8 flex justify-center gap-12 border-t border-background/15 pt-8">
                             <div>
-                                <p className="text-[10px] text-stone-500 uppercase mb-1">Time</p>
+                                <p className="text-[10px] text-background/60 uppercase mb-1">Time</p>
                                 <p className="text-lg font-bold tabular-nums">{Math.floor(elapsedSec / 60)}분 {elapsedSec % 60}초</p>
                             </div>
                             <div>
-                                <p className="text-[10px] text-stone-500 uppercase mb-1">{t.perSec}</p>
+                                <p className="text-[10px] text-background/60 uppercase mb-1">{t.perSec}</p>
                                 <p className="text-lg font-bold text-destructive">₩{costPerSec.toFixed(0)}</p>
                             </div>
                         </div>
@@ -64,7 +64,7 @@ const MeetingCostCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'k
 
                 <button 
                     onClick={() => setIsRunning(!isRunning)}
-                    className={`w-full py-5 rounded-[32px] font-black text-xl shadow-lg transition-all active:scale-95 ${isRunning ? 'bg-destructive text-white' : 'bg-primary text-primary-foreground'}`}
+                    className={`w-full py-5 rounded-[32px] font-black text-xl shadow-lg transition-all active:scale-95 ${isRunning ? 'bg-destructive text-background' : 'bg-primary text-primary-foreground'}`}
                 >
                     {isRunning ? t.stop : t.start}
                 </button>

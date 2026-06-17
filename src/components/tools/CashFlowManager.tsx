@@ -287,12 +287,12 @@ export default function CashFlowManager({ locale = 'ko' }: { locale?: string }) 
     <div className="not-prose my-12 space-y-3 max-w-3xl mx-auto">
 
       {/* Summary */}
-      <div className="p-6 bg-stone-900 text-white rounded-3xl">
+      <div className="p-6 bg-foreground text-background rounded-3xl">
         <div className="flex items-center justify-between mb-4">
-          <p className="text-[10px] font-black text-stone-400 uppercase tracking-widest">월간 현금흐름 요약</p>
+          <p className="text-[10px] font-black text-background/50 uppercase tracking-widest">월간 현금흐름 요약</p>
           <button
             onClick={() => window.print()}
-            className="text-[10px] font-bold text-stone-400 hover:text-white border border-stone-700 rounded-lg px-2 py-1 transition flex items-center gap-1"
+            className="text-[10px] font-bold text-background/50 hover:text-background border border-background/15 rounded-lg px-2 py-1 transition flex items-center gap-1"
           >
             <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
@@ -305,10 +305,10 @@ export default function CashFlowManager({ locale = 'ko' }: { locale?: string }) 
             { label: '월 수입', value: totalIncome, color: 'text-success' },
             { label: '생활 지출', value: totalExpenses, color: 'text-destructive' },
             { label: '저축·투자', value: totalInvestment, color: 'text-info' },
-            { label: '잉여금', value: surplus, color: surplus >= 0 ? 'text-white' : 'text-destructive' },
+            { label: '잉여금', value: surplus, color: surplus >= 0 ? 'text-background' : 'text-destructive' },
           ].map(({ label, value, color }) => (
             <div key={label}>
-              <p className="text-[10px] text-stone-400 uppercase mb-1">{label}</p>
+              <p className="text-[10px] text-background/50 uppercase mb-1">{label}</p>
               <p className={`text-lg font-black ${color}`}>
                 {value >= 0 && label === '잉여금' && value > 0 ? '+' : ''}{fmt(value)}
               </p>
@@ -320,17 +320,17 @@ export default function CashFlowManager({ locale = 'ko' }: { locale?: string }) 
             {[
               { label: '지출', value: totalExpenses, bar: 'bg-destructive' },
               { label: '저축·투자', value: totalInvestment, bar: 'bg-info' },
-              { label: '잉여', value: Math.max(surplus, 0), bar: 'bg-stone-600' },
+              { label: '잉여', value: Math.max(surplus, 0), bar: 'bg-muted-foreground' },
             ].map(({ label, value, bar }) => (
               <div key={label} className="flex items-center gap-2">
-                <span className="text-[10px] text-stone-500 w-14 shrink-0">{label}</span>
-                <div className="flex-1 h-1.5 bg-stone-800 rounded-full overflow-hidden">
+                <span className="text-[10px] text-background/60 w-14 shrink-0">{label}</span>
+                <div className="flex-1 h-1.5 bg-foreground rounded-full overflow-hidden">
                   <div
                     className={`h-full rounded-full transition-all duration-500 ${bar}`}
                     style={{ width: `${Math.min(100, Math.round((value / totalIncome) * 100))}%` }}
                   />
                 </div>
-                <span className="text-[10px] text-stone-500 w-8 text-right shrink-0">
+                <span className="text-[10px] text-background/60 w-8 text-right shrink-0">
                   {Math.round((value / totalIncome) * 100)}%
                 </span>
               </div>
@@ -338,17 +338,17 @@ export default function CashFlowManager({ locale = 'ko' }: { locale?: string }) 
           </div>
         )}
         {monthlyDividend > 0 && (
-          <div className="mt-4 pt-4 border-t border-stone-800 flex items-center justify-between">
+          <div className="mt-4 pt-4 border-t border-background/15 flex items-center justify-between">
             <div>
-              <p className="text-[10px] text-stone-400 uppercase">배당 수입 (월·세후)</p>
+              <p className="text-[10px] text-background/50 uppercase">배당 수입 (월·세후)</p>
               <p className="text-lg font-black text-warning">{fmt(monthlyDividend)}</p>
             </div>
             <div className="text-right">
-              <p className="text-[10px] text-stone-400 uppercase">목표 달성률</p>
+              <p className="text-[10px] text-background/50 uppercase">목표 달성률</p>
               <p className="text-lg font-black">
                 {monthlyDividend >= goal
                   ? <span className="text-warning">🎉 달성!</span>
-                  : <span className="text-stone-300">{Math.round((monthlyDividend / goal) * 100)}%</span>}
+                  : <span className="text-background/70">{Math.round((monthlyDividend / goal) * 100)}%</span>}
               </p>
             </div>
           </div>
@@ -551,27 +551,27 @@ export default function CashFlowManager({ locale = 'ko' }: { locale?: string }) 
               );
             })}
 
-            <div className="p-4 rounded-2xl bg-stone-900 text-white">
+            <div className="p-4 rounded-2xl bg-foreground text-background">
               <div className="flex justify-between items-center mb-3">
-                <p className="text-xs text-stone-400">총 월 배당 (세후)</p>
+                <p className="text-xs text-background/50">총 월 배당 (세후)</p>
                 <p className="text-xl font-black text-warning">{fmt(monthlyDividend)}</p>
               </div>
-              <div className="h-2 bg-stone-800 rounded-full overflow-hidden">
+              <div className="h-2 bg-foreground rounded-full overflow-hidden">
                 <div
                   className="h-full bg-warning/40 rounded-full transition-all duration-500"
                   style={{ width: `${Math.min(100, (monthlyDividend / goal) * 100)}%` }}
                 />
               </div>
               <div className="flex justify-between mt-1.5">
-                <p className="text-[10px] text-stone-500">목표 {fmt(goal)}</p>
-                <p className="text-[10px] text-stone-400">
+                <p className="text-[10px] text-background/60">목표 {fmt(goal)}</p>
+                <p className="text-[10px] text-background/50">
                   {monthlyDividend >= goal
                     ? '🎉 목표 달성!'
                     : `${fmt(goal - monthlyDividend)} 더 필요`}
                 </p>
               </div>
               {monthlyDividend < goal && additionalNeeded > 0 && (
-                <p className="text-[10px] text-stone-500 mt-2">
+                <p className="text-[10px] text-background/60 mt-2">
                   현재 수익률 기준, 목표 달성에 약 {fmt(additionalNeeded)} 추가 투자가 필요합니다.
                 </p>
               )}

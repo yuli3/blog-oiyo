@@ -60,20 +60,20 @@ const StockAverageCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
                 </div>
 
                 {/* Result Area */}
-                <div className="p-8 bg-stone-900 rounded-[40px] text-white animate-in zoom-in-95">
-                    <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest text-center mb-2">{t.result}</p>
+                <div className="p-8 bg-foreground rounded-[40px] text-background animate-in zoom-in-95">
+                    <p className="text-[10px] font-black text-background/60 uppercase tracking-widest text-center mb-2">{t.result}</p>
                     <div className="text-center mb-8">
-                        <p className="text-[10px] text-stone-400 uppercase mb-1">{t.avg}</p>
+                        <p className="text-[10px] text-background/50 uppercase mb-1">{t.avg}</p>
                         <h4 className="text-4xl font-black text-primary">₩{Math.round(newAverage).toLocaleString()}</h4>
                     </div>
                     
-                    <div className="grid grid-cols-2 gap-4 border-t border-stone-800 pt-6">
+                    <div className="grid grid-cols-2 gap-4 border-t border-background/15 pt-6">
                         <div className="text-center">
-                            <p className="text-[10px] text-stone-500 uppercase">{t.totalQty}</p>
+                            <p className="text-[10px] text-background/60 uppercase">{t.totalQty}</p>
                             <p className="text-sm font-bold">{totalQuantity}주</p>
                         </div>
                         <div className="text-center">
-                            <p className="text-[10px] text-stone-500 uppercase">{t.totalAmt}</p>
+                            <p className="text-[10px] text-background/60 uppercase">{t.totalAmt}</p>
                             <p className="text-sm font-bold">₩{totalCost.toLocaleString()}</p>
                         </div>
                     </div>

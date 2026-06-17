@@ -54,17 +54,17 @@ const BmiCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
                     </div>
                 </div>
 
-                <div className="p-10 bg-stone-900 rounded-[40px] text-white flex flex-col md:flex-row gap-12 items-center justify-around shadow-2xl animate-in zoom-in-95">
+                <div className="p-10 bg-foreground rounded-[40px] text-background flex flex-col md:flex-row gap-12 items-center justify-around shadow-2xl animate-in zoom-in-95">
                     <div className="text-center space-y-2">
-                        <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest">BMI</p>
+                        <p className="text-[10px] font-black text-background/60 uppercase tracking-widest">BMI</p>
                         <h2 className="text-6xl font-black text-primary">{bmi.toFixed(1)}</h2>
                         <p className={`text-lg font-bold ${status.color}`}>{status.label}</p>
                     </div>
-                    <div className="w-px h-24 bg-stone-800 hidden md:block" />
+                    <div className="w-px h-24 bg-foreground hidden md:block" />
                     <div className="text-center space-y-2">
-                        <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest">{t.fat}</p>
+                        <p className="text-[10px] font-black text-background/60 uppercase tracking-widest">{t.fat}</p>
                         <h2 className="text-6xl font-black text-success">{bodyFat.toFixed(1)}%</h2>
-                        <p className="text-xs text-stone-400 font-medium">성인 남녀 평균 공식 기준</p>
+                        <p className="text-xs text-background/50 font-medium">성인 남녀 평균 공식 기준</p>
                     </div>
                 </div>
             </div>

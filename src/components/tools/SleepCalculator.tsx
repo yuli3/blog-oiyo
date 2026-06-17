@@ -129,18 +129,18 @@ const SleepCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) 
                     />
                 </div>
 
-                <div className="p-6 bg-stone-900 rounded-[32px] text-white flex flex-col gap-4 shadow-2xl">
-                    <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest text-center">{t.results}</p>
+                <div className="p-6 bg-foreground rounded-[32px] text-background flex flex-col gap-4 shadow-2xl">
+                    <p className="text-[10px] font-black text-background/60 uppercase tracking-widest text-center">{t.results}</p>
                     <div className="grid grid-cols-3 gap-3">
                         {results.map(r => (
-                            <div key={r.cycles} className="text-center p-3 bg-stone-800/60 rounded-2xl">
-                                <p className="text-[9px] font-black text-stone-500 uppercase">{r.cycles} {t.cycles}</p>
+                            <div key={r.cycles} className="text-center p-3 bg-foreground/60 rounded-2xl">
+                                <p className="text-[9px] font-black text-background/60 uppercase">{r.cycles} {t.cycles}</p>
                                 <p className="text-2xl font-black text-primary mt-1">{r.time}</p>
-                                <p className="text-[10px] text-stone-400 font-bold">{r.hours}{t.hours}</p>
+                                <p className="text-[10px] text-background/50 font-bold">{r.hours}{t.hours}</p>
                             </div>
                         ))}
                     </div>
-                    <p className="text-[10px] text-stone-600 text-center">{t.fallAsleep}</p>
+                    <p className="text-[10px] text-background/50 text-center">{t.fallAsleep}</p>
                 </div>
 
                 <div className="space-y-3">

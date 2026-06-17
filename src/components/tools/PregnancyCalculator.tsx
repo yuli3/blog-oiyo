@@ -53,9 +53,9 @@ const PregnancyCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
                         <p className="text-[10px] font-black text-success uppercase">{t.fertility}</p>
                         <p className="font-black text-success text-xs">{formatDate(fertStart)} ~ {formatDate(fertEnd)}</p>
                     </div>
-                    <div className="p-6 bg-stone-900 border border-stone-800 rounded-3xl text-center space-y-2">
+                    <div className="p-6 bg-foreground border border-background/15 rounded-3xl text-center space-y-2">
                         <p className="text-[10px] font-black text-primary uppercase">{t.dueDate}</p>
-                        <p className="font-black text-white">{formatDate(dueDate)}</p>
+                        <p className="font-black text-background">{formatDate(dueDate)}</p>
                     </div>
                 </div>
 

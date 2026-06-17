@@ -35,10 +35,10 @@ const FreelancerTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="p-8 bg-stone-900 rounded-[40px] text-white space-y-2 text-center shadow-xl">
-                        <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest">{t.net}</p>
+                    <div className="p-8 bg-foreground rounded-[40px] text-background space-y-2 text-center shadow-xl">
+                        <p className="text-[10px] font-black text-background/60 uppercase tracking-widest">{t.net}</p>
                         <h2 className="text-3xl font-black text-primary">₩{Math.round(netPay).toLocaleString()}</h2>
-                        <p className="text-[10px] text-stone-500">-{t.tax33}: ₩{Math.round(tax33).toLocaleString()}</p>
+                        <p className="text-[10px] text-background/60">-{t.tax33}: ₩{Math.round(tax33).toLocaleString()}</p>
                     </div>
                     <div className="p-8 bg-success/10 border border-success/20 rounded-[40px] space-y-2 text-center">
                         <p className="text-[10px] font-black text-success uppercase tracking-widest">{locale === 'ko' ? '5월 정산 예상' : 'May Settlement'}</p>

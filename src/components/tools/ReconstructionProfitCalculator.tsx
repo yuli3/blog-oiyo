@@ -290,19 +290,19 @@ const ReconstructionProfitCalculator = ({ locale }: Props) => {
         </div>
 
         {/* Results */}
-        <div className="p-8 bg-stone-900 rounded-[32px] text-white shadow-2xl space-y-6">
+        <div className="p-8 bg-foreground rounded-[32px] text-background shadow-2xl space-y-6">
           {/* Grade */}
-          <div className="text-center pb-4 border-b border-stone-800">
-            <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest mb-2">
+          <div className="text-center pb-4 border-b border-background/15">
+            <p className="text-[10px] font-black text-background/60 uppercase tracking-widest mb-2">
               {t.grade}
             </p>
             <p className={`text-4xl font-black ${grade.color}`}>{grade.label}</p>
           </div>
 
           {/* ROI + Annual */}
-          <div className="grid grid-cols-2 gap-4 pb-4 border-b border-stone-800">
+          <div className="grid grid-cols-2 gap-4 pb-4 border-b border-background/15">
             <div className="text-center">
-              <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest mb-1">
+              <p className="text-[10px] font-black text-background/60 uppercase tracking-widest mb-1">
                 {t.roi}
               </p>
               <p className={`text-3xl font-black ${roi >= 0 ? "text-primary" : "text-destructive"}`}>
@@ -310,7 +310,7 @@ const ReconstructionProfitCalculator = ({ locale }: Props) => {
               </p>
             </div>
             <div className="text-center">
-              <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest mb-1">
+              <p className="text-[10px] font-black text-background/60 uppercase tracking-widest mb-1">
                 {t.annualReturn}
               </p>
               <p className={`text-3xl font-black ${annualReturn >= 0 ? "text-success" : "text-destructive"}`}>
@@ -322,22 +322,22 @@ const ReconstructionProfitCalculator = ({ locale }: Props) => {
           {/* Total Investment + Net Profit */}
           <div className="grid grid-cols-2 gap-4">
             <div className="text-center">
-              <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest mb-1">
+              <p className="text-[10px] font-black text-background/60 uppercase tracking-widest mb-1">
                 {t.totalInvestment}
               </p>
-              <p className="text-lg font-black text-white">
+              <p className="text-lg font-black text-background">
                 {fmtMan(totalInvestment)}
-                <span className="text-xs font-medium text-stone-400 ml-1">{t.unit}</span>
+                <span className="text-xs font-medium text-background/50 ml-1">{t.unit}</span>
               </p>
             </div>
             <div className="text-center">
-              <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest mb-1">
+              <p className="text-[10px] font-black text-background/60 uppercase tracking-widest mb-1">
                 {t.netProfit}
               </p>
               <p className={`text-lg font-black ${netProfit >= 0 ? "text-success" : "text-destructive"}`}>
                 {netProfit >= 0 ? "+" : ""}
                 {fmtMan(netProfit)}
-                <span className="text-xs font-medium text-stone-400 ml-1">{t.unit}</span>
+                <span className="text-xs font-medium text-background/50 ml-1">{t.unit}</span>
               </p>
             </div>
           </div>

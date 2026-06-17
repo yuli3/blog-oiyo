@@ -542,9 +542,9 @@ export default function HeightConverter({ locale }: Props) {
           </div>
 
           {/* Result card */}
-          <div className="p-8 bg-stone-900 rounded-[32px] text-white flex flex-col sm:flex-row gap-8 items-center justify-around shadow-2xl">
+          <div className="p-8 bg-foreground rounded-[32px] text-background flex flex-col sm:flex-row gap-8 items-center justify-around shadow-2xl">
             <div className="text-center space-y-1">
-              <p className="text-[10px] font-black text-stone-400 uppercase tracking-widest">
+              <p className="text-[10px] font-black text-background/50 uppercase tracking-widest">
                 {t.equivalentIn}
               </p>
               <p className="text-5xl font-black text-primary">
@@ -553,10 +553,10 @@ export default function HeightConverter({ locale }: Props) {
                   : "—"}{" "}
                 <span className="text-xl">{t.cmLabel}</span>
               </p>
-              <p className="text-[10px] text-stone-400">{t.equivalentDesc}</p>
+              <p className="text-[10px] text-background/50">{t.equivalentDesc}</p>
             </div>
             <div className="text-center space-y-1">
-              <p className="text-[10px] font-black text-stone-400 uppercase tracking-widest">
+              <p className="text-[10px] font-black text-background/50 uppercase tracking-widest">
                 {myGender === "male" ? t.male : t.female} · KR
               </p>
               <p className="text-3xl font-black text-warning">{pctDisplay}</p>

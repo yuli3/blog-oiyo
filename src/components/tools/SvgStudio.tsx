@@ -46,7 +46,7 @@ const SvgStudio: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
                             value={code} 
                             onChange={(e) => setCode(e.target.value)}
                             spellCheck={false}
-                            className="w-full h-80 bg-stone-900 text-success font-mono text-xs p-6 rounded-3xl border-4 border-stone-800 focus:ring-4 focus:ring-success/30 outline-none shadow-inner"
+                            className="w-full h-80 bg-foreground text-success font-mono text-xs p-6 rounded-3xl border-4 border-background/15 focus:ring-4 focus:ring-success/30 outline-none shadow-inner"
                         />
                     </div>
 

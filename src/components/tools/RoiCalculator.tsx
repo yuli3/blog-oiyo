@@ -30,20 +30,20 @@ const RoiCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
                     </div>
                 </div>
 
-                <div className="p-10 bg-stone-900 rounded-[40px] text-white shadow-2xl relative overflow-hidden text-center">
-                    <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest mb-4">{t.roi}</p>
+                <div className="p-10 bg-foreground rounded-[40px] text-background shadow-2xl relative overflow-hidden text-center">
+                    <p className="text-[10px] font-black text-background/60 uppercase tracking-widest mb-4">{t.roi}</p>
                     <h2 className={`text-6xl font-black mb-8 ${roi >=0 ? 'text-primary' : 'text-destructive'}`}>
                         {roi.toFixed(1)}%
                     </h2>
                     
-                    <div className="grid grid-cols-2 gap-8 border-t border-stone-800 pt-8">
+                    <div className="grid grid-cols-2 gap-8 border-t border-background/15 pt-8">
                         <div>
-                            <p className="text-[10px] text-stone-500 uppercase mb-1">{t.profit}</p>
-                            <p className={`text-xl font-bold ${profit >=0 ? 'text-white' : 'text-destructive'}`}>₩{Math.round(profit).toLocaleString()}</p>
+                            <p className="text-[10px] text-background/60 uppercase mb-1">{t.profit}</p>
+                            <p className={`text-xl font-bold ${profit >=0 ? 'text-background' : 'text-destructive'}`}>₩{Math.round(profit).toLocaleString()}</p>
                         </div>
                         <div>
-                            <p className="text-[10px] text-stone-500 uppercase mb-1">{t.payperiod}</p>
-                            <p className="text-xl font-bold text-white">{multiplier.toFixed(2)}x</p>
+                            <p className="text-[10px] text-background/60 uppercase mb-1">{t.payperiod}</p>
+                            <p className="text-xl font-bold text-background">{multiplier.toFixed(2)}x</p>
                         </div>
                     </div>
                 </div>

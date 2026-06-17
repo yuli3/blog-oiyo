@@ -46,19 +46,19 @@ const AutoTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
                     </div>
                 </div>
 
-                <div className="p-10 bg-stone-900 rounded-[40px] text-white shadow-2xl animate-in zoom-in-95">
+                <div className="p-10 bg-foreground rounded-[40px] text-background shadow-2xl animate-in zoom-in-95">
                     <div className="text-center mb-8">
-                        <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest mb-2">{t.result}</p>
+                        <p className="text-[10px] font-black text-background/60 uppercase tracking-widest mb-2">{t.result}</p>
                         <h2 className="text-5xl font-black text-primary">₩{Math.round(total).toLocaleString()}</h2>
                     </div>
                     
-                    <div className="grid grid-cols-3 gap-4 border-t border-stone-800 pt-8">
+                    <div className="grid grid-cols-3 gap-4 border-t border-background/15 pt-8">
                         <div className="text-center">
-                            <p className="text-[10px] text-stone-500 uppercase">{t.base}</p>
+                            <p className="text-[10px] text-background/60 uppercase">{t.base}</p>
                             <p className="text-sm font-bold">₩{Math.round(baseTax).toLocaleString()}</p>
                         </div>
                         <div className="text-center">
-                            <p className="text-[10px] text-stone-500 uppercase">{t.edu}</p>
+                            <p className="text-[10px] text-background/60 uppercase">{t.edu}</p>
                             <p className="text-sm font-bold">₩{Math.round(eduTax).toLocaleString()}</p>
                         </div>
                         <div className="text-center text-success">

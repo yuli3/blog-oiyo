@@ -43,14 +43,14 @@ const CompoundInterestCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale
                     </div>
                 </div>
 
-                <div className="p-8 bg-stone-900 rounded-[40px] text-white shadow-2xl relative overflow-hidden">
+                <div className="p-8 bg-foreground rounded-[40px] text-background shadow-2xl relative overflow-hidden">
                     <div className="relative z-10">
-                        <p className="text-[10px] font-black text-stone-400 uppercase tracking-widest text-center mb-2">{years}년 뒤 예상 자산</p>
+                        <p className="text-[10px] font-black text-background/50 uppercase tracking-widest text-center mb-2">{years}년 뒤 예상 자산</p>
                         <h4 className="text-3xl md:text-5xl font-black text-primary text-center leading-tight">₩{Math.round(futureValue).toLocaleString()}</h4>
                         
-                        <div className="grid grid-cols-2 gap-8 mt-8 border-t border-stone-800 pt-8">
+                        <div className="grid grid-cols-2 gap-8 mt-8 border-t border-background/15 pt-8">
                             <div className="text-center">
-                                <p className="text-[10px] text-stone-500 uppercase mb-1">{t.invest}</p>
+                                <p className="text-[10px] text-background/60 uppercase mb-1">{t.invest}</p>
                                 <p className="text-lg font-bold">₩{Math.round(totalInvested).toLocaleString()}</p>
                             </div>
                             <div className="text-center text-success">
