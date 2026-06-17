@@ -1,0 +1,126 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import HoursCalculator from "../../components/tools/HoursCalculator";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "근무시간 계산기 — 시작·종료 시각으로 시간 계산", description: "출근·퇴근 시각과 휴게 시간을 입력하면 총 근무 시간과 십진 시간을 계산합니다. 시급을 넣으면 급여도 추정합니다. 야간 근무(익일 종료) 지원." },
+  en: { title: "Hours Calculator — Time Card & Work Hours", description: "Enter start and end time plus break minutes to get total hours worked and decimal hours. Add an hourly rate to estimate pay. Handles overnight shifts." },
+  ja: { title: "勤務時間計算機 — 出退勤から時間を計算", description: "出勤・退勤時刻と休憩時間を入力すると総勤務時間と10進時間を計算します。時給を入れると給与も試算。夜勤(翌日終了)に対応。" },
+  fr: { title: "Calculateur d'heures — Pointeuse & heures travaillées", description: "Saisissez l'heure de début, de fin et la pause pour obtenir les heures travaillées et les heures décimales. Ajoutez un taux horaire pour estimer la paie." },
+  es: { title: "Calculadora de horas — Horas trabajadas y fichaje", description: "Introduce la hora de inicio, de fin y el descanso para obtener las horas trabajadas y las horas decimales. Añade una tarifa por hora para estimar el pago." },
+  zh: { title: "工时计算器 — 上下班时间计算", description: "输入上班、下班时间和休息分钟，计算总工时和十进制小时。输入时薪即可估算薪资。支持跨夜班次。" },
+  cn: { title: "工时计算器 — 上下班时间计算", description: "输入上班、下班时间和休息分钟，计算总工时和十进制小时。输入时薪即可估算薪资。支持跨夜班次。" },
+};
+const m = meta[locale] ?? meta.en;
+
+const content = {
+  ko: {
+    eyebrow: "시간 계산 도구",
+    introTitle: "근무시간 계산기란?",
+    intro: "출근 시각과 퇴근 시각, 휴게 시간을 입력하면 실제 근무 시간을 시:분과 십진 시간(예: 8.5시간)으로 계산합니다. 급여 계산에 쓰이는 십진 시간을 자동으로 변환하고, 시급을 넣으면 급여까지 추정합니다.",
+    howToTitle: "사용 방법",
+    steps: ["출근·퇴근 시각을 입력합니다.", "휴게 시간(분)을 입력합니다.", "필요하면 시급을 넣어 급여를 확인합니다."],
+    highlightsTitle: "주요 특징",
+    highlights: [
+      { title: "십진 시간 자동 변환", body: "8시간 30분을 급여 계산용 8.5로 바꿔줍니다." },
+      { title: "야간 근무 지원", body: "퇴근이 다음 날이면 24시간을 넘겨 정확히 계산합니다." },
+      { title: "급여 추정", body: "시급을 입력하면 근무 급여를 바로 보여줍니다." },
+    ],
+    relatedTitle: "관련 도구",
+    related: [
+      { href: "/ko/time-converter/", label: "시간 변환기", desc: "시·분·초를 변환합니다." },
+      { href: "/ko/salary-calculator/", label: "연봉 계산기", desc: "실수령액을 계산합니다." },
+      { href: "/ko/meeting-cost-calculator/", label: "회의 비용 계산기", desc: "회의 인건비를 계산합니다." },
+    ],
+    disclaimer: "추정치이며 실제 급여는 세금·수당·연장근로 규정에 따라 다릅니다. 근로 조건은 근로계약과 관련 법규를 확인하세요.",
+  },
+  en: {
+    eyebrow: "Time Calculator",
+    introTitle: "What is the hours calculator?",
+    intro: "Enter your clock-in and clock-out times plus any break, and it computes hours worked in both h:m and decimal hours (e.g. 8.5 hours). Decimal hours are what payroll uses, and adding an hourly rate estimates your pay.",
+    howToTitle: "How to use",
+    steps: ["Enter start and end times.", "Enter break minutes.", "Optionally add an hourly rate to see pay."],
+    highlightsTitle: "Highlights",
+    highlights: [
+      { title: "Decimal hours", body: "Converts 8 h 30 m to 8.5 for payroll." },
+      { title: "Overnight shifts", body: "If the end is next day, it rolls past midnight correctly." },
+      { title: "Pay estimate", body: "Add an hourly rate to see estimated earnings." },
+    ],
+    relatedTitle: "Related tools",
+    related: [
+      { href: "/en/time-converter/", label: "Time Converter", desc: "Convert h, min, sec." },
+      { href: "/en/salary-calculator/", label: "Salary Calculator", desc: "Take-home pay." },
+      { href: "/en/meeting-cost-calculator/", label: "Meeting Cost", desc: "Cost of meetings." },
+    ],
+    disclaimer: "Estimates only; actual pay depends on tax, allowances, and overtime rules. Confirm terms with your employment contract and local law.",
+  },
+  ja: {
+    eyebrow: "時間計算ツール",
+    introTitle: "勤務時間計算機とは？",
+    intro: "出勤・退勤時刻と休憩を入力すると、勤務時間を時:分と10進時間(例:8.5時間)で計算します。給与計算に使う10進時間に自動変換し、時給を入れると給与も試算します。",
+    howToTitle: "使い方",
+    steps: ["出勤・退勤時刻を入力します。", "休憩時間(分)を入力します。", "必要なら時給を入れて給与を確認します。"],
+    highlightsTitle: "主な特徴",
+    highlights: [
+      { title: "10進時間に変換", body: "8時間30分を給与計算用の8.5に変換します。" },
+      { title: "夜勤に対応", body: "退勤が翌日でも24時間を超えて正しく計算します。" },
+      { title: "給与試算", body: "時給を入れると勤務給与を表示します。" },
+    ],
+    relatedTitle: "関連ツール",
+    related: [
+      { href: "/ja/time-converter/", label: "時間変換", desc: "時・分・秒を変換します。" },
+      { href: "/ja/salary-calculator/", label: "給与計算機", desc: "手取りを計算します。" },
+      { href: "/ja/meeting-cost-calculator/", label: "会議コスト計算機", desc: "会議の人件費を計算します。" },
+    ],
+    disclaimer: "試算であり、実際の給与は税・手当・残業規定で異なります。労働条件は雇用契約と関連法規をご確認ください。",
+  },
+};
+
+const faqs = {
+  ko: [
+    { q: "십진 시간이 뭔가요?", a: "분을 60으로 나눠 시간 단위로 표현한 값입니다. 30분=0.5시간이라 8시간 30분은 8.5로 표시됩니다." },
+    { q: "밤샘 근무도 계산되나요?", a: "네. 퇴근 시각이 출근보다 이르면 다음 날로 보고 24시간을 더해 계산합니다." },
+    { q: "휴게 시간은 어떻게 반영되나요?", a: "총 근무 시간에서 입력한 휴게 분을 빼고 계산합니다." },
+  ],
+  en: [
+    { q: "What are decimal hours?", a: "Minutes divided by 60. 30 minutes = 0.5, so 8 h 30 m shows as 8.5." },
+    { q: "Does it handle overnight shifts?", a: "Yes. If the end time is earlier than the start, it treats it as the next day and adds 24 hours." },
+    { q: "How is the break applied?", a: "The break minutes you enter are subtracted from the total worked time." },
+  ],
+  ja: [
+    { q: "10進時間とは？", a: "分を60で割って時間で表した値です。30分=0.5なので8時間30分は8.5になります。" },
+    { q: "夜勤も計算できますか？", a: "はい。退勤が出勤より早ければ翌日とみなし24時間を加えて計算します。" },
+    { q: "休憩はどう反映されますか？", a: "総勤務時間から入力した休憩分を差し引いて計算します。" },
+  ],
+};
+
+const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <ToolShell
+    title={m.title}
+    description={m.description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="hours-calculator"
+    content={c}
+    applicationCategory="BusinessApplication"
+  >
+    <div class="mx-auto max-w-2xl">
+      <HoursCalculator client:load locale={locale} />
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
+</BaseLayout>
