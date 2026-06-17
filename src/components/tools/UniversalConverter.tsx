@@ -258,10 +258,10 @@ export default function UniversalConverter({ locale }: Props) {
   const romanResult = dateStr ? dateToRoman(dateStr) : "";
 
   const inputCls =
-    "w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100";
-  const readCls = "w-full break-all rounded-lg bg-slate-50 px-3 py-2 font-mono text-sm text-slate-800 min-h-[2.5rem]";
-  const labelCls = "mt-3 block text-xs text-slate-500";
-  const selectCls = "rounded-lg border border-slate-300 px-3 py-2 text-slate-900";
+    "w-full rounded-lg border border-border px-3 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20";
+  const readCls = "w-full break-all rounded-lg bg-background px-3 py-2 font-mono text-sm text-foreground min-h-[2.5rem]";
+  const labelCls = "mt-3 block text-xs text-muted-foreground";
+  const selectCls = "rounded-lg border border-border px-3 py-2 text-foreground";
 
   const tabBtn = (key: typeof tab, label: string) => (
     <button
@@ -269,7 +269,7 @@ export default function UniversalConverter({ locale }: Props) {
       onClick={() => setTab(key)}
       className={
         "rounded-lg px-3 py-1.5 text-sm font-medium transition-colors " +
-        (tab === key ? "bg-indigo-600 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200")
+        (tab === key ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted")
       }
     >
       {label}
@@ -285,10 +285,10 @@ export default function UniversalConverter({ locale }: Props) {
         {tabBtn("roman", t.tabs.roman)}
       </div>
 
-      <div className="mt-5 rounded-xl border border-slate-200 bg-white p-4">
+      <div className="mt-5 rounded-xl border border-border bg-white p-4">
         {tab === "ascii" && (
           <div>
-            <h3 className="font-semibold text-slate-900">{t.asciiTitle}</h3>
+            <h3 className="font-semibold text-foreground">{t.asciiTitle}</h3>
             <label className={labelCls}>{t.asciiInput}</label>
             <input className={inputCls} value={text} placeholder={t.asciiPlaceholder} onChange={(e) => setText(e.target.value)} />
             <label className={labelCls}>{t.asciiBinary}</label>
@@ -300,16 +300,16 @@ export default function UniversalConverter({ locale }: Props) {
 
         {tab === "base" && (
           <div>
-            <h3 className="font-semibold text-slate-900">{t.baseTitle}</h3>
+            <h3 className="font-semibold text-foreground">{t.baseTitle}</h3>
             <div className="mt-3 flex flex-wrap gap-3">
               <div>
-                <label className="block text-xs text-slate-500">{t.fromBase}</label>
+                <label className="block text-xs text-muted-foreground">{t.fromBase}</label>
                 <select className={selectCls} value={fromBase} onChange={(e) => setFromBase(Number(e.target.value))}>
                   {BASE_OPTIONS.map((b) => <option key={b} value={b}>{b}</option>)}
                 </select>
               </div>
               <div>
-                <label className="block text-xs text-slate-500">{t.toBase}</label>
+                <label className="block text-xs text-muted-foreground">{t.toBase}</label>
                 <select className={selectCls} value={toBase} onChange={(e) => setToBase(Number(e.target.value))}>
                   {BASE_OPTIONS.map((b) => <option key={b} value={b}>{b}</option>)}
                 </select>
@@ -317,7 +317,7 @@ export default function UniversalConverter({ locale }: Props) {
             </div>
             <label className={labelCls}>{t.baseInput}</label>
             <input className={inputCls} value={baseVal} placeholder={t.basePlaceholder} onChange={(e) => setBaseVal(e.target.value)} />
-            <div className="mt-3 rounded-lg bg-indigo-50 px-3 py-2 font-mono text-sm font-semibold text-indigo-900 min-h-[2.5rem]">
+            <div className="mt-3 rounded-lg bg-accent px-3 py-2 font-mono text-sm font-semibold text-primary min-h-[2.5rem]">
               {baseVal === "" ? "—" : baseResult === null ? t.invalid : baseResult}
             </div>
           </div>
@@ -325,7 +325,7 @@ export default function UniversalConverter({ locale }: Props) {
 
         {tab === "binary" && (
           <div>
-            <h3 className="font-semibold text-slate-900">{t.binaryTitle}</h3>
+            <h3 className="font-semibold text-foreground">{t.binaryTitle}</h3>
             <label className={labelCls}>{t.binaryInput}</label>
             <input className={inputCls} value={binary} placeholder={t.binaryPlaceholder} onChange={(e) => setBinary(e.target.value)} />
             <label className={labelCls}>{t.binaryDecimal}</label>
@@ -339,11 +339,11 @@ export default function UniversalConverter({ locale }: Props) {
 
         {tab === "roman" && (
           <div>
-            <h3 className="font-semibold text-slate-900">{t.romanTitle}</h3>
+            <h3 className="font-semibold text-foreground">{t.romanTitle}</h3>
             <label className={labelCls}>{t.romanInput}</label>
             <input type="date" className={inputCls} value={dateStr} onChange={(e) => setDateStr(e.target.value)} />
             <label className={labelCls}>{t.romanResult}</label>
-            <div className="mt-1 rounded-lg bg-indigo-50 px-3 py-2 font-mono text-sm font-semibold text-indigo-900 min-h-[2.5rem]">
+            <div className="mt-1 rounded-lg bg-accent px-3 py-2 font-mono text-sm font-semibold text-primary min-h-[2.5rem]">
               {dateStr ? (romanResult ?? t.invalid) : "—"}
             </div>
           </div>

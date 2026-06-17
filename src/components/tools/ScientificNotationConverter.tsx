@@ -119,25 +119,25 @@ export default function ScientificNotationConverter({ locale }: { locale: Locale
   const regular = isNaN(mantissaNumber) || isNaN(exponentNumber) ? null : fromSci(mantissaNumber, exponentNumber);
 
   const inputCls =
-    "w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100";
-  const card = "rounded-xl border border-slate-200 bg-white p-4";
-  const resultCls = "mt-3 rounded-lg bg-indigo-50 px-3 py-2 text-sm font-semibold text-indigo-900";
+    "w-full rounded-lg border border-border px-3 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20";
+  const card = "rounded-xl border border-border bg-white p-4";
+  const resultCls = "mt-3 rounded-lg bg-accent px-3 py-2 text-sm font-semibold text-primary";
 
   return (
     <GameContainer title={t.title} subtitle={t.subtitle}>
       <div className="grid gap-4 md:grid-cols-2">
         <div className={card}>
-          <h3 className="font-semibold text-slate-900">{t.normalTitle}</h3>
-          <label className="mt-3 block text-xs text-slate-500">{t.normalLabel}</label>
+          <h3 className="font-semibold text-foreground">{t.normalTitle}</h3>
+          <label className="mt-3 block text-xs text-muted-foreground">{t.normalLabel}</label>
           <input className={inputCls} inputMode="decimal" placeholder={t.placeholder} value={normal} onChange={(e) => setNormal(e.target.value)} />
           <div className={resultCls}>{sci === null ? t.invalid : `${t.result}: ${sci}`}</div>
         </div>
 
         <div className={card}>
-          <h3 className="font-semibold text-slate-900">{t.sciTitle}</h3>
-          <label className="mt-3 block text-xs text-slate-500">{t.mantissaLabel}</label>
+          <h3 className="font-semibold text-foreground">{t.sciTitle}</h3>
+          <label className="mt-3 block text-xs text-muted-foreground">{t.mantissaLabel}</label>
           <input className={inputCls} inputMode="decimal" placeholder={t.placeholder} value={mantissa} onChange={(e) => setMantissa(e.target.value)} />
-          <label className="mt-2 block text-xs text-slate-500">{t.exponentLabel}</label>
+          <label className="mt-2 block text-xs text-muted-foreground">{t.exponentLabel}</label>
           <input className={inputCls} inputMode="numeric" placeholder={t.placeholder} value={exponent} onChange={(e) => setExponent(e.target.value)} />
           <div className={resultCls}>{regular === null ? t.invalid : `${t.result}: ${fmt(regular)}`}</div>
         </div>

@@ -146,23 +146,23 @@ export default function FractionConverter({ locale }: { locale: Locale }) {
   const decimalResult = isNaN(decimalNumber) ? null : decimalToFraction(decimalNumber);
 
   const inputCls =
-    "w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100";
-  const card = "rounded-xl border border-slate-200 bg-white p-4";
-  const resultCls = "mt-3 rounded-lg bg-indigo-50 px-3 py-2 text-sm font-semibold text-indigo-900";
+    "w-full rounded-lg border border-border px-3 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20";
+  const card = "rounded-xl border border-border bg-white p-4";
+  const resultCls = "mt-3 rounded-lg bg-accent px-3 py-2 text-sm font-semibold text-primary";
 
   return (
     <GameContainer title={t.title} subtitle={t.subtitle}>
       <div className="grid gap-4 md:grid-cols-2">
         <div className={card}>
-          <h3 className="font-semibold text-slate-900">{t.fractionTitle}</h3>
-          <label className="mt-3 block text-xs text-slate-500">{t.numeratorLabel}</label>
+          <h3 className="font-semibold text-foreground">{t.fractionTitle}</h3>
+          <label className="mt-3 block text-xs text-muted-foreground">{t.numeratorLabel}</label>
           <input className={inputCls} inputMode="decimal" placeholder={t.placeholder} value={numerator} onChange={(e) => setNumerator(e.target.value)} />
-          <label className="mt-2 block text-xs text-slate-500">{t.denominatorLabel}</label>
+          <label className="mt-2 block text-xs text-muted-foreground">{t.denominatorLabel}</label>
           <input className={inputCls} inputMode="decimal" placeholder={t.placeholder} value={denominator} onChange={(e) => setDenominator(e.target.value)} />
           {fractionResult === null ? (
             <div className={resultCls}>{t.invalid}</div>
           ) : (
-            <div className="mt-3 space-y-2 rounded-lg bg-indigo-50 px-3 py-2 text-sm font-semibold text-indigo-900">
+            <div className="mt-3 space-y-2 rounded-lg bg-accent px-3 py-2 text-sm font-semibold text-primary">
               <p>{t.simplified}: {fractionResult.sn}/{fractionResult.sd}</p>
               <p>{t.decimal}: {fmt(fractionResult.dec)}</p>
               <p>{t.percent}: {fmt(fractionResult.pct)}%</p>
@@ -171,8 +171,8 @@ export default function FractionConverter({ locale }: { locale: Locale }) {
         </div>
 
         <div className={card}>
-          <h3 className="font-semibold text-slate-900">{t.decimalTitle}</h3>
-          <label className="mt-3 block text-xs text-slate-500">{t.decimalLabel}</label>
+          <h3 className="font-semibold text-foreground">{t.decimalTitle}</h3>
+          <label className="mt-3 block text-xs text-muted-foreground">{t.decimalLabel}</label>
           <input className={inputCls} inputMode="decimal" placeholder={t.placeholder} value={decimalInput} onChange={(e) => setDecimalInput(e.target.value)} />
           <div className={resultCls}>
             {decimalResult === null ? t.invalid : `${t.fraction}: ${decimalResult[0]}/${decimalResult[1]}`}

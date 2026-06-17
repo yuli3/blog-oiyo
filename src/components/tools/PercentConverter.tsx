@@ -192,39 +192,39 @@ export default function PercentConverter({ locale }: Props) {
   })();
 
   const inputCls =
-    "w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100";
-  const card = "rounded-xl border border-slate-200 bg-white p-4";
-  const resultCls = "mt-3 rounded-lg bg-indigo-50 px-3 py-2 text-sm font-semibold text-indigo-900";
+    "w-full rounded-lg border border-border px-3 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20";
+  const card = "rounded-xl border border-border bg-white p-4";
+  const resultCls = "mt-3 rounded-lg bg-accent px-3 py-2 text-sm font-semibold text-primary";
 
   return (
     <GameContainer title={t.title} subtitle={t.subtitle}>
       <div className="grid gap-4 md:grid-cols-3">
         {/* A% of B */}
         <div className={card}>
-          <h3 className="font-semibold text-slate-900">{t.ofTitle}</h3>
-          <label className="mt-3 block text-xs text-slate-500">{t.ofA}</label>
+          <h3 className="font-semibold text-foreground">{t.ofTitle}</h3>
+          <label className="mt-3 block text-xs text-muted-foreground">{t.ofA}</label>
           <input className={inputCls} inputMode="decimal" placeholder={t.placeholder} value={ofA} onChange={(e) => setOfA(e.target.value)} />
-          <label className="mt-2 block text-xs text-slate-500">{t.ofB}</label>
+          <label className="mt-2 block text-xs text-muted-foreground">{t.ofB}</label>
           <input className={inputCls} inputMode="decimal" placeholder={t.placeholder} value={ofB} onChange={(e) => setOfB(e.target.value)} />
           {ofVal !== null && <div className={resultCls}>{t.ofResult(ofA, ofB, fmt(ofVal))}</div>}
         </div>
 
         {/* A is what % of B */}
         <div className={card}>
-          <h3 className="font-semibold text-slate-900">{t.isTitle}</h3>
-          <label className="mt-3 block text-xs text-slate-500">{t.isA}</label>
+          <h3 className="font-semibold text-foreground">{t.isTitle}</h3>
+          <label className="mt-3 block text-xs text-muted-foreground">{t.isA}</label>
           <input className={inputCls} inputMode="decimal" placeholder={t.placeholder} value={isA} onChange={(e) => setIsA(e.target.value)} />
-          <label className="mt-2 block text-xs text-slate-500">{t.isB}</label>
+          <label className="mt-2 block text-xs text-muted-foreground">{t.isB}</label>
           <input className={inputCls} inputMode="decimal" placeholder={t.placeholder} value={isB} onChange={(e) => setIsB(e.target.value)} />
           {isVal !== null && <div className={resultCls}>{t.isResult(isA, isB, fmt(isVal))}</div>}
         </div>
 
         {/* % change */}
         <div className={card}>
-          <h3 className="font-semibold text-slate-900">{t.changeTitle}</h3>
-          <label className="mt-3 block text-xs text-slate-500">{t.changeA}</label>
+          <h3 className="font-semibold text-foreground">{t.changeTitle}</h3>
+          <label className="mt-3 block text-xs text-muted-foreground">{t.changeA}</label>
           <input className={inputCls} inputMode="decimal" placeholder={t.placeholder} value={chA} onChange={(e) => setChA(e.target.value)} />
-          <label className="mt-2 block text-xs text-slate-500">{t.changeB}</label>
+          <label className="mt-2 block text-xs text-muted-foreground">{t.changeB}</label>
           <input className={inputCls} inputMode="decimal" placeholder={t.placeholder} value={chB} onChange={(e) => setChB(e.target.value)} />
           {chVal !== null && (
             <div className={resultCls}>

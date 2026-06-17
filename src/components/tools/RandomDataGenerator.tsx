@@ -398,9 +398,9 @@ export default function RandomDataGenerator({ locale }: { locale: Locale }) {
     return rows.map((row) => `${row.index}. ${row.value}`).join("\n");
   }, [format, rows]);
 
-  const inputCls = "w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100";
-  const buttonCls = "rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-700 disabled:opacity-50";
-  const secondaryButtonCls = "rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50";
+  const inputCls = "w-full rounded-lg border border-border px-3 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20";
+  const buttonCls = "rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90 disabled:opacity-50";
+  const secondaryButtonCls = "rounded-lg border border-border bg-white px-4 py-2 text-sm font-semibold text-muted-foreground transition hover:bg-background";
 
   const handleGenerate = () => {
     const safeCount = Math.max(1, Math.min(200, count));
@@ -424,8 +424,8 @@ export default function RandomDataGenerator({ locale }: { locale: Locale }) {
   return (
     <GameContainer title={t.title} subtitle={t.subtitle}>
       <div className="grid gap-5">
-        <div className="grid gap-4 rounded-xl border border-slate-200 bg-white p-4 md:grid-cols-2">
-          <label className="text-sm font-medium text-slate-700">
+        <div className="grid gap-4 rounded-xl border border-border bg-white p-4 md:grid-cols-2">
+          <label className="text-sm font-medium text-muted-foreground">
             {t.typeLabel}
             <select className={`${inputCls} mt-1`} value={dataType} onChange={(e) => setDataType(e.target.value as DataType)}>
               {(Object.keys(t.dataTypes) as DataType[]).map((type) => (
@@ -435,7 +435,7 @@ export default function RandomDataGenerator({ locale }: { locale: Locale }) {
               ))}
             </select>
           </label>
-          <label className="text-sm font-medium text-slate-700">
+          <label className="text-sm font-medium text-muted-foreground">
             {t.formatLabel}
             <select className={`${inputCls} mt-1`} value={format} onChange={(e) => setFormat(e.target.value as OutputFormat)}>
               {(Object.keys(t.formats) as OutputFormat[]).map((item) => (
@@ -445,41 +445,41 @@ export default function RandomDataGenerator({ locale }: { locale: Locale }) {
               ))}
             </select>
           </label>
-          <label className="text-sm font-medium text-slate-700">
+          <label className="text-sm font-medium text-muted-foreground">
             {t.countLabel}
             <input className={`${inputCls} mt-1`} type="number" min="1" max="200" value={count} onChange={(e) => setCount(Number(e.target.value))} />
           </label>
           {(dataType === "number" || dataType === "integer" || dataType === "prime") && (
             <>
-              <label className="text-sm font-medium text-slate-700">
+              <label className="text-sm font-medium text-muted-foreground">
                 {t.minLabel}
                 <input className={`${inputCls} mt-1`} type="number" value={min} onChange={(e) => setMin(Number(e.target.value))} disabled={dataType === "prime"} />
               </label>
-              <label className="text-sm font-medium text-slate-700">
+              <label className="text-sm font-medium text-muted-foreground">
                 {t.maxLabel}
                 <input className={`${inputCls} mt-1`} type="number" value={max} onChange={(e) => setMax(Number(e.target.value))} />
               </label>
             </>
           )}
           {dataType === "number" && (
-            <label className="text-sm font-medium text-slate-700">
+            <label className="text-sm font-medium text-muted-foreground">
               {t.decimalsLabel}
               <input className={`${inputCls} mt-1`} type="number" min="0" max="10" value={decimals} onChange={(e) => setDecimals(Number(e.target.value))} />
             </label>
           )}
           {(dataType === "hex" || dataType === "alphanumeric") && (
-            <label className="text-sm font-medium text-slate-700">
+            <label className="text-sm font-medium text-muted-foreground">
               {t.lengthLabel}
               <input className={`${inputCls} mt-1`} type="number" min="1" max="128" value={length} onChange={(e) => setLength(Number(e.target.value))} />
             </label>
           )}
           {dataType === "date" && (
             <>
-              <label className="text-sm font-medium text-slate-700">
+              <label className="text-sm font-medium text-muted-foreground">
                 {t.startDateLabel}
                 <input className={`${inputCls} mt-1`} type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
               </label>
-              <label className="text-sm font-medium text-slate-700">
+              <label className="text-sm font-medium text-muted-foreground">
                 {t.endDateLabel}
                 <input className={`${inputCls} mt-1`} type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
               </label>
@@ -499,9 +499,9 @@ export default function RandomDataGenerator({ locale }: { locale: Locale }) {
           </button>
         </div>
 
-        <div className="rounded-xl border border-slate-200 bg-slate-950 p-4">
-          <div className="mb-3 text-sm font-semibold text-slate-200">{t.outputTitle}</div>
-          <pre className="max-h-96 overflow-auto whitespace-pre-wrap break-words text-sm leading-6 text-slate-100">{output || t.empty}</pre>
+        <div className="rounded-xl border border-border bg-foreground p-4">
+          <div className="mb-3 text-sm font-semibold text-background">{t.outputTitle}</div>
+          <pre className="max-h-96 overflow-auto whitespace-pre-wrap break-words text-sm leading-6 text-background">{output || t.empty}</pre>
         </div>
       </div>
     </GameContainer>

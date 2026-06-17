@@ -58,26 +58,26 @@ export default function NumberSorter({ locale }: { locale: Locale }) {
     <GameContainer title={t.title} subtitle={t.subtitle}>
       <div className="grid gap-4">
         <label className="block">
-          <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">{t.inputLabel}</span>
-          <textarea className="mt-2 min-h-32 w-full rounded-lg border border-slate-300 px-3 py-2 font-mono text-sm text-slate-900 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100" value={input} placeholder={t.placeholder} onChange={(event) => setInput(event.target.value)} />
+          <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t.inputLabel}</span>
+          <textarea className="mt-2 min-h-32 w-full rounded-lg border border-border px-3 py-2 font-mono text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20" value={input} placeholder={t.placeholder} onChange={(event) => setInput(event.target.value)} />
         </label>
-        <div className="grid gap-3 rounded-xl border border-slate-200 bg-white p-4 sm:grid-cols-2">
+        <div className="grid gap-3 rounded-xl border border-border bg-white p-4 sm:grid-cols-2">
           <label className="block">
-            <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">{t.direction}</span>
-            <select className="mt-2 w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100" value={direction} onChange={(event) => setDirection(event.target.value as "asc" | "desc")}>
+            <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t.direction}</span>
+            <select className="mt-2 w-full rounded-lg border border-border px-3 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20" value={direction} onChange={(event) => setDirection(event.target.value as "asc" | "desc")}>
               <option value="asc">{t.asc}</option>
               <option value="desc">{t.desc}</option>
             </select>
           </label>
-          <label className="flex items-center gap-3 rounded-lg bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-700"><input type="checkbox" checked={dedupe} onChange={(event) => setDedupe(event.target.checked)} />{t.dedupe}</label>
+          <label className="flex items-center gap-3 rounded-lg bg-background px-3 py-2 text-sm font-semibold text-muted-foreground"><input type="checkbox" checked={dedupe} onChange={(event) => setDedupe(event.target.checked)} />{t.dedupe}</label>
         </div>
-        <div className="rounded-xl border border-slate-200 bg-white p-4">
-          <h3 className="font-semibold text-slate-900">{t.result}</h3>
-          <p className="mt-3 min-h-12 break-words rounded-lg bg-indigo-50 px-3 py-2 font-mono text-sm font-semibold text-indigo-900">{data.sorted.length ? data.sorted.map(formatNumber).join(", ") : t.empty}</p>
+        <div className="rounded-xl border border-border bg-white p-4">
+          <h3 className="font-semibold text-foreground">{t.result}</h3>
+          <p className="mt-3 min-h-12 break-words rounded-lg bg-accent px-3 py-2 font-mono text-sm font-semibold text-primary">{data.sorted.length ? data.sorted.map(formatNumber).join(", ") : t.empty}</p>
         </div>
-        <div className="rounded-xl border border-slate-200 bg-white p-4">
-          <h3 className="font-semibold text-slate-900">{t.stats}</h3>
-          <dl className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-5">{statItems.map(([label, value]) => <div key={label} className="rounded-lg bg-slate-50 p-3"><dt className="text-xs text-slate-500">{label}</dt><dd className="mt-1 break-all font-mono text-sm font-bold text-slate-900">{value}</dd></div>)}</dl>
+        <div className="rounded-xl border border-border bg-white p-4">
+          <h3 className="font-semibold text-foreground">{t.stats}</h3>
+          <dl className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-5">{statItems.map(([label, value]) => <div key={label} className="rounded-lg bg-background p-3"><dt className="text-xs text-muted-foreground">{label}</dt><dd className="mt-1 break-all font-mono text-sm font-bold text-foreground">{value}</dd></div>)}</dl>
         </div>
       </div>
     </GameContainer>

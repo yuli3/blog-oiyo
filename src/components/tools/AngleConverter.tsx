@@ -106,16 +106,16 @@ export default function AngleConverter({ locale }: { locale: Locale }) {
   const rows: AngleUnit[] = ["deg", "rad", "grad"];
 
   const inputCls =
-    "w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100";
-  const card = "rounded-xl border border-slate-200 bg-white p-4";
+    "w-full rounded-lg border border-border px-3 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20";
+  const card = "rounded-xl border border-border bg-white p-4";
 
   return (
     <GameContainer title={t.title} subtitle={t.subtitle}>
       <div className="grid gap-4 md:grid-cols-2">
         <div className={card}>
-          <label className="block text-xs text-slate-500">{t.valueLabel}</label>
+          <label className="block text-xs text-muted-foreground">{t.valueLabel}</label>
           <input className={inputCls} inputMode="decimal" placeholder={t.placeholder} value={value} onChange={(e) => setValue(e.target.value)} />
-          <label className="mt-3 block text-xs text-slate-500">{t.unitLabel}</label>
+          <label className="mt-3 block text-xs text-muted-foreground">{t.unitLabel}</label>
           <select className={inputCls} value={unit} onChange={(e) => setUnit(e.target.value as AngleUnit)}>
             {rows.map((u) => (
               <option key={u} value={u}>{t.units[u]}</option>
@@ -124,15 +124,15 @@ export default function AngleConverter({ locale }: { locale: Locale }) {
         </div>
 
         <div className={card}>
-          <h3 className="font-semibold text-slate-900">{t.outputTitle}</h3>
+          <h3 className="font-semibold text-foreground">{t.outputTitle}</h3>
           {deg === null ? (
-            <p className="mt-4 rounded-lg bg-indigo-50 px-3 py-2 text-sm font-semibold text-indigo-900">{t.invalid}</p>
+            <p className="mt-4 rounded-lg bg-accent px-3 py-2 text-sm font-semibold text-primary">{t.invalid}</p>
           ) : (
             <div className="mt-4 space-y-3">
               {rows.map((u) => (
-                <div key={u} className="flex items-center justify-between gap-3 rounded-lg bg-slate-50 px-3 py-2">
-                  <span className="text-sm text-slate-600">{t.units[u]}</span>
-                  <span className="font-mono text-sm font-semibold text-indigo-700">{fmt(fromDeg(deg, u))}</span>
+                <div key={u} className="flex items-center justify-between gap-3 rounded-lg bg-background px-3 py-2">
+                  <span className="text-sm text-muted-foreground">{t.units[u]}</span>
+                  <span className="font-mono text-sm font-semibold text-primary">{fmt(fromDeg(deg, u))}</span>
                 </div>
               ))}
             </div>
