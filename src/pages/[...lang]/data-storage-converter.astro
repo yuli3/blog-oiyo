@@ -1,0 +1,126 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import UnitConverter from "../../components/tools/UnitConverter";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "데이터 용량 변환기 — KB·MB·GB·TB 변환", description: "바이트(B), 킬로바이트(KB), 메가바이트(MB), 기가바이트(GB), 테라바이트(TB)를 1024 기준으로 즉시 변환합니다." },
+  en: { title: "Data Storage Converter — KB, MB, GB, TB", description: "Instantly convert bytes (B), kilobytes (KB), megabytes (MB), gigabytes (GB), and terabytes (TB) using the 1024 base." },
+  ja: { title: "データ容量変換 — KB・MB・GB・TB", description: "バイト(B)、キロバイト(KB)、メガバイト(MB)、ギガバイト(GB)、テラバイト(TB)を1024基準で即時変換します。" },
+  fr: { title: "Convertisseur de Stockage — Ko, Mo, Go, To", description: "Convertissez octets, Ko, Mo, Go et To en base 1024 instantanément." },
+  es: { title: "Conversor de Almacenamiento — KB, MB, GB, TB", description: "Convierte bytes, KB, MB, GB y TB en base 1024 al instante." },
+  zh: { title: "数据容量转换器 — KB、MB、GB、TB", description: "以1024为基准即时换算字节(B)、KB、MB、GB、TB。" },
+  cn: { title: "数据容量转换器 — KB、MB、GB、TB", description: "以1024为基准即时换算字节(B)、KB、MB、GB、TB。" },
+};
+const m = meta[locale] ?? meta.en;
+
+const content = {
+  ko: {
+    eyebrow: "단위 변환 도구",
+    introTitle: "데이터 용량 변환기란?",
+    intro: "바이트(B)부터 페타바이트(PB)까지 디지털 저장 용량 단위를 변환하는 도구입니다. 1KB=1024B의 이진(binary) 기준을 사용합니다.",
+    howToTitle: "사용 방법",
+    steps: ["변환할 값을 입력합니다.", "기준 단위를 선택합니다(예: GB).", "모든 단위의 변환 결과를 확인합니다."],
+    highlightsTitle: "주요 특징",
+    highlights: [
+      { title: "1024 기준", body: "파일 시스템 관례인 1KB=1024B(이진)를 사용합니다." },
+      { title: "B~PB", body: "바이트부터 페타바이트까지 한눈에 변환합니다." },
+      { title: "즉시 계산", body: "값을 바꾸면 바로 갱신됩니다." },
+    ],
+    relatedTitle: "관련 변환기",
+    related: [
+      { href: "/ko/length-converter/", label: "길이 변환기", desc: "m·인치·피트를 변환합니다." },
+      { href: "/ko/percentage-calculator/", label: "퍼센트 계산기", desc: "퍼센트·할인가를 계산합니다." },
+      { href: "/ko/base64-converter/", label: "Base64 변환기", desc: "텍스트↔Base64를 변환합니다." },
+    ],
+    disclaimer: "1KB=1024B(이진) 기준입니다. 저장장치 제조사는 1KB=1000B(십진)로 표기하기도 해 실제 용량 표시와 차이가 날 수 있습니다.",
+  },
+  en: {
+    eyebrow: "Unit Converter",
+    introTitle: "What is the data storage converter?",
+    intro: "It converts digital storage units from bytes (B) to petabytes (PB), using the binary base where 1 KB = 1024 B.",
+    howToTitle: "How to use",
+    steps: ["Enter the value to convert.", "Choose the source unit (e.g. GB).", "Read the converted results in every unit."],
+    highlightsTitle: "Highlights",
+    highlights: [
+      { title: "1024 base", body: "Uses the file-system convention 1 KB = 1024 B (binary)." },
+      { title: "B to PB", body: "Converts from bytes up to petabytes at a glance." },
+      { title: "Instant", body: "Results update as you type." },
+    ],
+    relatedTitle: "Related converters",
+    related: [
+      { href: "/en/length-converter/", label: "Length Converter", desc: "Convert m, inch, feet." },
+      { href: "/en/percentage-calculator/", label: "Percentage Calculator", desc: "Percent and discounts." },
+      { href: "/en/base64-converter/", label: "Base64 Converter", desc: "Convert text ↔ Base64." },
+    ],
+    disclaimer: "Uses 1 KB = 1024 B (binary). Storage makers sometimes use 1 KB = 1000 B (decimal), so labeled capacity can differ.",
+  },
+  ja: {
+    eyebrow: "単位変換ツール",
+    introTitle: "データ容量変換とは？",
+    intro: "バイト(B)からペタバイト(PB)までのデジタル容量単位を変換するツールです。1KB=1024Bの二進基準を使用します。",
+    howToTitle: "使い方",
+    steps: ["変換する値を入力します。", "基準単位を選びます(例: GB)。", "全単位の変換結果を確認します。"],
+    highlightsTitle: "主な特徴",
+    highlights: [
+      { title: "1024基準", body: "ファイルシステム慣例の1KB=1024B(二進)を使用します。" },
+      { title: "B〜PB", body: "バイトからペタバイトまで一目で変換します。" },
+      { title: "即時計算", body: "入力するとすぐに更新されます。" },
+    ],
+    relatedTitle: "関連変換ツール",
+    related: [
+      { href: "/ja/length-converter/", label: "長さ変換", desc: "m・インチ・フィートを変換します。" },
+      { href: "/ja/percentage-calculator/", label: "パーセント計算機", desc: "パーセント・割引を計算します。" },
+      { href: "/ja/base64-converter/", label: "Base64変換", desc: "テキスト↔Base64を変換します。" },
+    ],
+    disclaimer: "1KB=1024B(二進)基準です。記憶装置メーカーは1KB=1000B(十進)で表記する場合があり、表示容量と差が出ることがあります。",
+  },
+};
+
+const faqs = {
+  ko: [
+    { q: "1GB는 몇 MB인가요?", a: "이진 기준 1GB = 1024MB 입니다." },
+    { q: "왜 1TB 디스크가 약 931GB로 보이나요?", a: "제조사는 1TB=1000⁴B(십진)로 표기하지만 OS는 1024⁴B(이진)로 계산하기 때문입니다." },
+    { q: "KB와 KiB 차이는?", a: "엄밀히 KiB=1024B(이진), KB=1000B(십진)지만, 실무에서는 KB를 1024로 쓰는 경우가 많습니다." },
+  ],
+  en: [
+    { q: "How many MB in a GB?", a: "Binary: 1 GB = 1024 MB." },
+    { q: "Why does a 1TB disk show ~931GB?", a: "Makers label 1TB=1000⁴B (decimal) but the OS counts 1024⁴B (binary)." },
+    { q: "KB vs KiB?", a: "Strictly KiB=1024B (binary), KB=1000B (decimal); in practice KB often means 1024." },
+  ],
+  ja: [
+    { q: "1GBは何MB？", a: "二進基準で1GB = 1024MB です。" },
+    { q: "なぜ1TBディスクが約931GB？", a: "メーカーは1TB=1000⁴B(十進)で表記し、OSは1024⁴B(二進)で計算するためです。" },
+    { q: "KBとKiBの違いは？", a: "厳密にはKiB=1024B(二進)、KB=1000B(十進)ですが、実務ではKBを1024とすることが多いです。" },
+  ],
+};
+
+const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <ToolShell
+    title={m.title}
+    description={m.description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="data-storage-converter"
+    content={c}
+    applicationCategory="UtilityApplication"
+  >
+    <div class="mx-auto max-w-2xl">
+      <UnitConverter client:load locale={locale} category="data" />
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
+</BaseLayout>

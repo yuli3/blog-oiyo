@@ -85,6 +85,55 @@ export const UNIT_CATEGORIES: Record<string, UnitCategory> = {
       lin("fts", "ft/s", 0.3048),
     ],
   },
+  // base unit: meter
+  length: {
+    id: "length",
+    defaultFrom: "m",
+    defaultTo: "ft",
+    defaultValue: 1,
+    units: [
+      lin("mm", "mm", 0.001),
+      lin("cm", "cm", 0.01),
+      lin("m", "m", 1),
+      lin("km", "km", 1000),
+      lin("in", "in", 0.0254),
+      lin("ft", "ft", 0.3048),
+      lin("yd", "yd", 0.9144),
+      lin("mile", "mi", 1609.344),
+    ],
+  },
+  // base unit: square meter
+  area: {
+    id: "area",
+    defaultFrom: "m2",
+    defaultTo: "ft2",
+    defaultValue: 1,
+    units: [
+      lin("cm2", "cm²", 0.0001),
+      lin("m2", "m²", 1),
+      lin("km2", "km²", 1_000_000),
+      lin("ft2", "ft²", 0.09290304),
+      lin("yd2", "yd²", 0.83612736),
+      lin("acre", "acre", 4046.8564224),
+      lin("hectare", "ha", 10000),
+      lin("pyeong", "평", 3.305785),
+    ],
+  },
+  // base unit: byte (binary, 1 KB = 1024 B)
+  data: {
+    id: "data",
+    defaultFrom: "mb",
+    defaultTo: "gb",
+    defaultValue: 1024,
+    units: [
+      lin("b", "B", 1),
+      lin("kb", "KB", 1024),
+      lin("mb", "MB", 1024 ** 2),
+      lin("gb", "GB", 1024 ** 3),
+      lin("tb", "TB", 1024 ** 4),
+      lin("pb", "PB", 1024 ** 5),
+    ],
+  },
 };
 
 /** Convert a value from one unit to another within a category. */

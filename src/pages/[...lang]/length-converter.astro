@@ -1,0 +1,126 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import UnitConverter from "../../components/tools/UnitConverter";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "길이 변환기 — m·cm·인치·피트·마일 변환", description: "미터(m), 센티미터(cm), 밀리미터, 킬로미터, 인치, 피트, 야드, 마일을 즉시 상호 변환합니다." },
+  en: { title: "Length Converter — m, cm, inch, feet, miles", description: "Instantly convert meters (m), centimeters (cm), millimeters, kilometers, inches, feet, yards, and miles." },
+  ja: { title: "長さ変換 — m・cm・インチ・フィート・マイル", description: "メートル(m)、センチ(cm)、ミリ、キロ、インチ、フィート、ヤード、マイルを即時に相互変換します。" },
+  fr: { title: "Convertisseur de Longueur — m, cm, pouce, pied, miles", description: "Convertissez mètres, centimètres, pouces, pieds, yards et miles instantanément." },
+  es: { title: "Conversor de Longitud — m, cm, pulgada, pie, millas", description: "Convierte metros, centímetros, pulgadas, pies, yardas y millas al instante." },
+  zh: { title: "长度转换器 — 米、厘米、英寸、英尺、英里", description: "在米(m)、厘米(cm)、毫米、千米、英寸、英尺、码、英里之间即时换算。" },
+  cn: { title: "长度转换器 — 米、厘米、英寸、英尺、英里", description: "在米(m)、厘米(cm)、毫米、千米、英寸、英尺、码、英里之间即时换算。" },
+};
+const m = meta[locale] ?? meta.en;
+
+const content = {
+  ko: {
+    eyebrow: "단위 변환 도구",
+    introTitle: "길이 변환기란?",
+    intro: "미터법(mm·cm·m·km)과 야드파운드법(인치·피트·야드·마일) 사이를 변환하는 도구입니다. 한 단위에 입력하면 나머지로 즉시 환산됩니다.",
+    howToTitle: "사용 방법",
+    steps: ["변환할 값을 입력합니다.", "기준 단위를 선택합니다.", "모든 단위의 변환 결과를 확인합니다."],
+    highlightsTitle: "주요 특징",
+    highlights: [
+      { title: "표준 계수", body: "1인치=2.54cm, 1마일=1609.344m 등 정확한 계수를 사용합니다." },
+      { title: "동시 변환", body: "한 번 입력으로 모든 단위를 보여줍니다." },
+      { title: "즉시 계산", body: "값을 바꾸면 바로 갱신됩니다." },
+    ],
+    relatedTitle: "관련 변환기",
+    related: [
+      { href: "/ko/area-converter/", label: "면적 변환기", desc: "m²·평·에이커를 변환합니다." },
+      { href: "/ko/weight-converter/", label: "무게 변환기", desc: "kg·lb·oz를 변환합니다." },
+      { href: "/ko/height-converter/", label: "키 변환기", desc: "cm·피트·인치를 변환합니다." },
+    ],
+    disclaimer: "본 변환기는 국제 표준 단위 정의에 따른 계산이며, 일반적인 참고용입니다.",
+  },
+  en: {
+    eyebrow: "Unit Converter",
+    introTitle: "What is the length converter?",
+    intro: "It converts between metric (mm, cm, m, km) and imperial (inch, foot, yard, mile) units. Enter a value in one unit and the rest update instantly.",
+    howToTitle: "How to use",
+    steps: ["Enter the value to convert.", "Choose the source unit.", "Read the converted results in every unit."],
+    highlightsTitle: "Highlights",
+    highlights: [
+      { title: "Standard factors", body: "Uses exact factors such as 1 inch=2.54cm and 1 mile=1609.344m." },
+      { title: "All at once", body: "One input shows every unit simultaneously." },
+      { title: "Instant", body: "Results update as you type." },
+    ],
+    relatedTitle: "Related converters",
+    related: [
+      { href: "/en/area-converter/", label: "Area Converter", desc: "Convert m², acre, hectare." },
+      { href: "/en/weight-converter/", label: "Weight Converter", desc: "Convert kg, lb, oz." },
+      { href: "/en/height-converter/", label: "Height Converter", desc: "Convert cm, feet, inches." },
+    ],
+    disclaimer: "This converter uses international standard unit definitions and is for general reference.",
+  },
+  ja: {
+    eyebrow: "単位変換ツール",
+    introTitle: "長さ変換とは？",
+    intro: "メートル法(mm・cm・m・km)とヤードポンド法(インチ・フィート・ヤード・マイル)を相互変換するツールです。",
+    howToTitle: "使い方",
+    steps: ["変換する値を入力します。", "基準単位を選びます。", "全単位の変換結果を確認します。"],
+    highlightsTitle: "主な特徴",
+    highlights: [
+      { title: "標準係数", body: "1インチ=2.54cm、1マイル=1609.344mなど正確な係数を使用します。" },
+      { title: "同時変換", body: "1回の入力で全単位を表示します。" },
+      { title: "即時計算", body: "入力するとすぐに更新されます。" },
+    ],
+    relatedTitle: "関連変換ツール",
+    related: [
+      { href: "/ja/area-converter/", label: "面積変換", desc: "m²・エーカーを変換します。" },
+      { href: "/ja/weight-converter/", label: "重さ変換", desc: "kg・lb・ozを変換します。" },
+      { href: "/ja/height-converter/", label: "身長変換", desc: "cm・フィート・インチを変換します。" },
+    ],
+    disclaimer: "本変換ツールは国際標準の単位定義に基づく計算で、一般的な参考用です。",
+  },
+};
+
+const faqs = {
+  ko: [
+    { q: "1인치는 몇 cm인가요?", a: "1인치 = 2.54cm 입니다." },
+    { q: "1마일은 몇 km인가요?", a: "1마일 = 약 1.609km 입니다." },
+    { q: "1피트는 몇 cm인가요?", a: "1피트 = 30.48cm = 12인치 입니다." },
+  ],
+  en: [
+    { q: "How many cm in an inch?", a: "1 inch = 2.54 cm." },
+    { q: "How many km in a mile?", a: "1 mile ≈ 1.609 km." },
+    { q: "How many cm in a foot?", a: "1 foot = 30.48 cm = 12 inches." },
+  ],
+  ja: [
+    { q: "1インチは何cm？", a: "1インチ = 2.54cm です。" },
+    { q: "1マイルは何km？", a: "1マイル ≈ 1.609km です。" },
+    { q: "1フィートは何cm？", a: "1フィート = 30.48cm = 12インチ です。" },
+  ],
+};
+
+const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <ToolShell
+    title={m.title}
+    description={m.description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="length-converter"
+    content={c}
+    applicationCategory="UtilityApplication"
+  >
+    <div class="mx-auto max-w-2xl">
+      <UnitConverter client:load locale={locale} category="length" />
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
+</BaseLayout>

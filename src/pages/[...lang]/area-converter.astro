@@ -1,0 +1,126 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import UnitConverter from "../../components/tools/UnitConverter";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "면적 변환기 — 제곱미터·평·에이커·헥타르 변환", description: "제곱미터(m²), 평, 제곱피트, 에이커, 헥타르를 즉시 상호 변환합니다. 부동산 평수 환산에 유용합니다." },
+  en: { title: "Area Converter — m², ft², acre, hectare, pyeong", description: "Instantly convert square meters (m²), square feet, acres, hectares, and Korean pyeong. Handy for real-estate areas." },
+  ja: { title: "面積変換 — 平方メートル・坪・エーカー・ヘクタール", description: "平方メートル(m²)、坪、平方フィート、エーカー、ヘクタールを即時に相互変換します。" },
+  fr: { title: "Convertisseur de Surface — m², ft², acre, hectare", description: "Convertissez mètres carrés, pieds carrés, acres et hectares instantanément." },
+  es: { title: "Conversor de Área — m², ft², acre, hectárea", description: "Convierte metros cuadrados, pies cuadrados, acres y hectáreas al instante." },
+  zh: { title: "面积转换器 — 平方米、坪、英亩、公顷", description: "在平方米(m²)、坪、平方英尺、英亩、公顷之间即时换算。适合房产面积换算。" },
+  cn: { title: "面积转换器 — 平方米、坪、英亩、公顷", description: "在平方米(m²)、坪、平方英尺、英亩、公顷之间即时换算。适合房产面积换算。" },
+};
+const m = meta[locale] ?? meta.en;
+
+const content = {
+  ko: {
+    eyebrow: "단위 변환 도구",
+    introTitle: "면적 변환기란?",
+    intro: "제곱미터(m²), 평, 제곱센티미터, 제곱킬로미터, 제곱피트, 에이커, 헥타르 사이를 변환하는 도구입니다. 특히 한국 부동산의 평수(㎡↔평) 환산에 유용합니다.",
+    howToTitle: "사용 방법",
+    steps: ["변환할 값을 입력합니다.", "기준 단위를 선택합니다(예: 평 또는 m²).", "모든 단위의 변환 결과를 확인합니다."],
+    highlightsTitle: "주요 특징",
+    highlights: [
+      { title: "평수 환산", body: "1평=3.305785m² 기준으로 ㎡↔평을 정확히 환산합니다." },
+      { title: "동시 변환", body: "한 번 입력으로 모든 단위를 보여줍니다." },
+      { title: "즉시 계산", body: "값을 바꾸면 바로 갱신됩니다." },
+    ],
+    relatedTitle: "관련 변환기",
+    related: [
+      { href: "/ko/length-converter/", label: "길이 변환기", desc: "m·인치·피트·마일을 변환합니다." },
+      { href: "/ko/volume-converter/", label: "부피 변환기", desc: "L·mL·컵을 변환합니다." },
+      { href: "/ko/jeonse-vs-buy-calculator/", label: "전세 vs 매매", desc: "주거 비용을 비교합니다." },
+    ],
+    disclaimer: "평 환산은 1평=3.305785m²(약 3.3058) 기준입니다. 일반적인 참고용입니다.",
+  },
+  en: {
+    eyebrow: "Unit Converter",
+    introTitle: "What is the area converter?",
+    intro: "It converts between square meters (m²), pyeong, square centimeters, square kilometers, square feet, acres, and hectares. Especially useful for Korean real-estate pyeong (㎡↔pyeong).",
+    howToTitle: "How to use",
+    steps: ["Enter the value to convert.", "Choose the source unit (e.g. pyeong or m²).", "Read the converted results in every unit."],
+    highlightsTitle: "Highlights",
+    highlights: [
+      { title: "Pyeong conversion", body: "Converts ㎡↔pyeong precisely with 1 pyeong=3.305785 m²." },
+      { title: "All at once", body: "One input shows every unit simultaneously." },
+      { title: "Instant", body: "Results update as you type." },
+    ],
+    relatedTitle: "Related converters",
+    related: [
+      { href: "/en/length-converter/", label: "Length Converter", desc: "Convert m, inch, feet, miles." },
+      { href: "/en/volume-converter/", label: "Volume Converter", desc: "Convert L, mL, cups." },
+      { href: "/en/jeonse-vs-buy-calculator/", label: "Jeonse vs Buy", desc: "Compare housing costs." },
+    ],
+    disclaimer: "Pyeong uses 1 pyeong=3.305785 m². For general reference.",
+  },
+  ja: {
+    eyebrow: "単位変換ツール",
+    introTitle: "面積変換とは？",
+    intro: "平方メートル(m²)、坪、平方センチ、平方キロ、平方フィート、エーカー、ヘクタールを相互変換するツールです。韓国不動産の坪(㎡↔坪)換算に便利です。",
+    howToTitle: "使い方",
+    steps: ["変換する値を入力します。", "基準単位を選びます(例: 坪 または m²)。", "全単位の変換結果を確認します。"],
+    highlightsTitle: "主な特徴",
+    highlights: [
+      { title: "坪換算", body: "1坪=3.305785m²を基準に㎡↔坪を正確に換算します。" },
+      { title: "同時変換", body: "1回の入力で全単位を表示します。" },
+      { title: "即時計算", body: "入力するとすぐに更新されます。" },
+    ],
+    relatedTitle: "関連変換ツール",
+    related: [
+      { href: "/ja/length-converter/", label: "長さ変換", desc: "m・インチ・フィートを変換します。" },
+      { href: "/ja/volume-converter/", label: "体積変換", desc: "L・mL・カップを変換します。" },
+      { href: "/ja/jeonse-vs-buy-calculator/", label: "チョンセ vs 購入", desc: "住居費用を比較します。" },
+    ],
+    disclaimer: "坪は1坪=3.305785m²基準です。一般的な参考用です。",
+  },
+};
+
+const faqs = {
+  ko: [
+    { q: "1평은 몇 m²인가요?", a: "1평 = 약 3.3058m² 입니다. 반대로 1m² ≈ 0.3025평." },
+    { q: "33평은 몇 m²인가요?", a: "33평 = 약 109.1m² 입니다(전용/공급 기준에 따라 표기 차이 있음)." },
+    { q: "1에이커는 얼마인가요?", a: "1에이커 = 4046.86m² ≈ 1224평 입니다." },
+  ],
+  en: [
+    { q: "How many m² in a pyeong?", a: "1 pyeong ≈ 3.3058 m²; conversely 1 m² ≈ 0.3025 pyeong." },
+    { q: "What is 33 pyeong in m²?", a: "33 pyeong ≈ 109.1 m² (exact figures vary by net/gross area)." },
+    { q: "How big is an acre?", a: "1 acre = 4046.86 m² ≈ 1224 pyeong." },
+  ],
+  ja: [
+    { q: "1坪は何m²？", a: "1坪 ≈ 3.3058m²、逆に1m² ≈ 0.3025坪 です。" },
+    { q: "33坪は何m²？", a: "33坪 ≈ 109.1m² です（専有/供給で表記差あり）。" },
+    { q: "1エーカーは？", a: "1エーカー = 4046.86m² ≈ 1224坪 です。" },
+  ],
+};
+
+const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <ToolShell
+    title={m.title}
+    description={m.description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="area-converter"
+    content={c}
+    applicationCategory="UtilityApplication"
+  >
+    <div class="mx-auto max-w-2xl">
+      <UnitConverter client:load locale={locale} category="area" />
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
+</BaseLayout>
