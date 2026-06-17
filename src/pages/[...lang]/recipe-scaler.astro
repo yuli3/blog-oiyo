@@ -1,0 +1,126 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import RecipeScaler from "../../components/tools/RecipeScaler";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "레시피 배수 계산기 — 인분 조절·재료량 자동 환산", description: "원래 인분과 목표 인분을 입력하면 모든 재료의 양을 비율에 맞게 자동으로 환산합니다. 2인분 레시피를 4인분으로 손쉽게 늘리세요." },
+  en: { title: "Recipe Scaler — Adjust Servings & Scale Ingredients", description: "Enter the original and target servings to automatically scale every ingredient amount. Easily turn a 2-serving recipe into 4." },
+  ja: { title: "レシピ倍率計算機 — 人数分の調整・材料量を自動換算", description: "元の人数分と目標の人数分を入力すると、全材料の量を比率に合わせて自動換算します。" },
+  fr: { title: "Calculateur de Recette — Ajuster les portions et les ingrédients", description: "Saisissez les portions d'origine et cibles pour ajuster automatiquement chaque ingrédient." },
+  es: { title: "Calculadora de Recetas — Ajustar porciones e ingredientes", description: "Introduce las porciones originales y objetivo para escalar automáticamente cada ingrediente." },
+  zh: { title: "食谱倍数计算器 — 调整份数·自动换算食材用量", description: "输入原份数和目标份数，自动按比例换算所有食材用量。" },
+  cn: { title: "食谱倍数计算器 — 调整份数·自动换算食材用量", description: "输入原份数和目标份数，自动按比例换算所有食材用量。" },
+};
+const m = meta[locale] ?? meta.en;
+
+const content = {
+  ko: {
+    eyebrow: "요리 도구",
+    introTitle: "레시피 배수 계산기란?",
+    intro: "원래 인분과 목표 인분을 입력하면 배율이 계산되고, 입력한 모든 재료의 양이 비율에 맞춰 자동 환산됩니다. 인원에 맞게 레시피를 늘리거나 줄일 때 유용합니다.",
+    howToTitle: "사용 방법",
+    steps: ["원래 인분과 목표 인분을 입력합니다.", "재료 이름·양·단위를 입력합니다(행 추가 가능).", "비율로 환산된 재료량을 확인합니다."],
+    highlightsTitle: "주요 특징",
+    highlights: [
+      { title: "자동 배율", body: "목표/원래 인분으로 배율을 계산해 모든 재료에 적용합니다." },
+      { title: "재료 자유 입력", body: "원하는 만큼 재료 행을 추가·삭제할 수 있습니다." },
+      { title: "즉시 환산", body: "값을 바꾸면 바로 환산됩니다." },
+    ],
+    relatedTitle: "관련 도구",
+    related: [
+      { href: "/ko/volume-converter/", label: "부피 변환기", desc: "컵·mL·스푼 등을 변환합니다." },
+      { href: "/ko/calorie-calculator/", label: "칼로리 계산기", desc: "일일 칼로리를 계산합니다." },
+      { href: "/ko/nutrition-calculator/", label: "영양 계산기", desc: "영양소를 계산합니다." },
+    ],
+    disclaimer: "단순 비율 환산입니다. 베이킹 등 일부 레시피는 양을 비례로만 늘리면 결과가 달라질 수 있어 조정이 필요할 수 있습니다.",
+  },
+  en: {
+    eyebrow: "Cooking Tool",
+    introTitle: "What is the recipe scaler?",
+    intro: "Enter the original and target servings to get a scale factor, and every ingredient you add is scaled proportionally. Handy for resizing a recipe up or down for any number of people.",
+    howToTitle: "How to use",
+    steps: ["Enter the original and target servings.", "Add each ingredient's name, amount, and unit.", "Read the proportionally scaled amounts."],
+    highlightsTitle: "Highlights",
+    highlights: [
+      { title: "Automatic factor", body: "Computes target/original and applies it to every ingredient." },
+      { title: "Free ingredient list", body: "Add or remove as many ingredient rows as you like." },
+      { title: "Instant", body: "Amounts update as you type." },
+    ],
+    relatedTitle: "Related tools",
+    related: [
+      { href: "/en/volume-converter/", label: "Volume Converter", desc: "Convert cups, mL, spoons." },
+      { href: "/en/calorie-calculator/", label: "Calorie Calculator", desc: "Compute daily calories." },
+      { href: "/en/nutrition-calculator/", label: "Nutrition Calculator", desc: "Compute nutrients." },
+    ],
+    disclaimer: "This is a simple proportional scale. Some recipes (especially baking) may not scale linearly and can need adjustment.",
+  },
+  ja: {
+    eyebrow: "料理ツール",
+    introTitle: "レシピ倍率計算機とは？",
+    intro: "元の人数分と目標の人数分を入力すると倍率が計算され、追加した全材料の量が比率に合わせて自動換算されます。人数に合わせてレシピを増減する際に便利です。",
+    howToTitle: "使い方",
+    steps: ["元の人数分と目標の人数分を入力します。", "材料の名前・量・単位を入力します（行追加可）。", "比率で換算された材料量を確認します。"],
+    highlightsTitle: "主な特徴",
+    highlights: [
+      { title: "自動倍率", body: "目標/元の人数分で倍率を計算し全材料に適用します。" },
+      { title: "材料自由入力", body: "材料行を自由に追加・削除できます。" },
+      { title: "即時換算", body: "入力するとすぐに換算されます。" },
+    ],
+    relatedTitle: "関連ツール",
+    related: [
+      { href: "/ja/volume-converter/", label: "体積変換", desc: "カップ・mL・スプーンを変換します。" },
+      { href: "/ja/calorie-calculator/", label: "カロリー計算機", desc: "1日のカロリーを計算します。" },
+      { href: "/ja/nutrition-calculator/", label: "栄養計算機", desc: "栄養素を計算します。" },
+    ],
+    disclaimer: "単純な比率換算です。ベーキングなど一部のレシピは比例だけでは結果が変わることがあり、調整が必要な場合があります。",
+  },
+};
+
+const faqs = {
+  ko: [
+    { q: "배율은 어떻게 계산되나요?", a: "목표 인분 ÷ 원래 인분 입니다. 예: 2인분→4인분이면 ×2." },
+    { q: "베이킹 레시피도 그대로 되나요?", a: "기본 재료는 비례하지만, 베이킹 팬 크기·굽는 시간 등은 단순 비례가 아닐 수 있어 조정이 필요합니다." },
+    { q: "단위는 자동 변환되나요?", a: "양만 비례 환산되고 단위는 그대로 표시됩니다. 컵↔mL 변환은 부피 변환기를 이용하세요." },
+  ],
+  en: [
+    { q: "How is the factor computed?", a: "Target servings ÷ original servings. E.g., 2→4 servings is ×2." },
+    { q: "Does it work for baking?", a: "Base ingredients scale proportionally, but pan size and bake time may not — adjust as needed." },
+    { q: "Are units converted?", a: "Only amounts are scaled; units stay as entered. Use the volume converter for cups↔mL." },
+  ],
+  ja: [
+    { q: "倍率はどう計算しますか？", a: "目標の人数分 ÷ 元の人数分 です。例: 2人分→4人分なら×2。" },
+    { q: "ベーキングでも使えますか？", a: "基本材料は比例しますが、型のサイズや焼き時間は比例しない場合があり調整が必要です。" },
+    { q: "単位は変換されますか？", a: "量のみ比例換算され、単位はそのまま表示します。カップ↔mLは体積変換をご利用ください。" },
+  ],
+};
+
+const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <ToolShell
+    title={m.title}
+    description={m.description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="recipe-scaler"
+    content={c}
+    applicationCategory="UtilityApplication"
+  >
+    <div class="mx-auto max-w-2xl">
+      <RecipeScaler client:load locale={locale} />
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
+</BaseLayout>
