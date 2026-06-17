@@ -222,17 +222,17 @@ export default function CurrencyConverter({ locale }: Props) {
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900">
+        <h1 className="text-2xl font-bold text-foreground">
           {t.title}
         </h1>
-        <p className="mt-1 text-sm text-gray-500">
+        <p className="mt-1 text-sm text-muted-foreground">
           {t.subtitle}
         </p>
       </div>
 
       {/* Preset buttons */}
       <div>
-        <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-gray-500">
+        <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
           {t.presetsLabel}
         </p>
         <div className="flex flex-wrap gap-2">
@@ -242,8 +242,8 @@ export default function CurrencyConverter({ locale }: Props) {
               onClick={() => handlePreset(from, to)}
               className={`rounded-full border px-3 py-1 text-xs font-medium transition-colors ${
                 fromCurrency === from && toCurrency === to
-                  ? "border-blue-500 bg-blue-500 text-white"
-                  : "border-gray-300 bg-white text-gray-700 hover:border-blue-400"
+                  ? "border-primary bg-primary text-primary-foreground"
+                  : "border-border bg-card text-muted-foreground hover:border-primary"
               }`}
             >
               {CURRENCY_SYMBOLS[from]}{from} → {CURRENCY_SYMBOLS[to]}{to}
@@ -253,17 +253,17 @@ export default function CurrencyConverter({ locale }: Props) {
       </div>
 
       {/* Converter card */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-5 space-y-4">
+      <div className="rounded-2xl border border-border bg-card p-5 space-y-4">
         {/* From */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-muted-foreground mb-1">
             {t.fromLabel}
           </label>
           <div className="flex gap-2">
             <select
               value={fromCurrency}
               onChange={(e) => setFromCurrency(e.target.value as Currency)}
-              className="w-28 rounded-lg border border-gray-300 bg-gray-50 px-3 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-28 rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
             >
               {CURRENCIES.map((c) => (
                 <option key={c} value={c}>
@@ -277,7 +277,7 @@ export default function CurrencyConverter({ locale }: Props) {
               onChange={handleFromChange}
               min="0"
               step="any"
-              className="flex-1 rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-right text-lg font-semibold text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="flex-1 rounded-lg border border-border bg-background px-4 py-2.5 text-right text-lg font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
         </div>
@@ -286,7 +286,7 @@ export default function CurrencyConverter({ locale }: Props) {
         <div className="flex justify-center">
           <button
             onClick={handleSwap}
-            className="rounded-xl border border-gray-300 bg-gray-50 px-4 py-2 text-sm font-medium text-gray-600 hover:bg-blue-50 transition-colors"
+            className="rounded-xl border border-border bg-background px-4 py-2 text-sm font-medium text-muted-foreground hover:bg-accent transition-colors"
           >
             {t.swapBtn}
           </button>
@@ -294,14 +294,14 @@ export default function CurrencyConverter({ locale }: Props) {
 
         {/* To */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-muted-foreground mb-1">
             {t.toLabel}
           </label>
           <div className="flex gap-2">
             <select
               value={toCurrency}
               onChange={(e) => setToCurrency(e.target.value as Currency)}
-              className="w-28 rounded-lg border border-gray-300 bg-gray-50 px-3 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-28 rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
             >
               {CURRENCIES.map((c) => (
                 <option key={c} value={c}>
@@ -309,7 +309,7 @@ export default function CurrencyConverter({ locale }: Props) {
                 </option>
               ))}
             </select>
-            <div className="flex-1 rounded-lg border border-blue-200 bg-blue-50 px-4 py-2.5 text-right text-lg font-semibold text-blue-700">
+            <div className="flex-1 rounded-lg border border-primary bg-accent px-4 py-2.5 text-right text-lg font-semibold text-primary">
               {formatAmount(toAmount)}
             </div>
           </div>
@@ -317,16 +317,16 @@ export default function CurrencyConverter({ locale }: Props) {
       </div>
 
       {/* Rate info */}
-      <div className="rounded-xl border border-gray-100 bg-gray-50 px-4 py-3 flex items-center justify-between">
+      <div className="rounded-xl border border-border bg-background px-4 py-3 flex items-center justify-between">
         <div>
-          <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
+          <p className="text-xs text-muted-foreground uppercase tracking-wider font-medium">
             {t.rate}
           </p>
-          <p className="text-sm font-semibold text-gray-800 mt-0.5">
+          <p className="text-sm font-semibold text-foreground mt-0.5">
             {rateText}
           </p>
         </div>
-        <span className="text-xs text-gray-400 italic">
+        <span className="text-xs text-muted-foreground italic">
           {t.dataSource}
         </span>
       </div>
