@@ -9,6 +9,7 @@ import { getTranslations } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 import { getRegisteredMdxComponents } from "../../lib/mdx-component-registry";
 import { getTrackFromData } from "../../lib/taxonomy";
+import { courseJsonLd } from "../../lib/seo/structured-data";
 import AuthorProfile from "../../components/AuthorProfile.astro";
 import MysticTrinity from "../../components/MysticTrinity.astro";
 
@@ -164,6 +165,31 @@ if (isSeriesPost && chapter !== null) {
   });
 }
 
+// Full Course JSON-LD on the series landing (chapter 1) for Google's Course
+// rich result. Aggregates workload + syllabus across all chapters.
+let courseLandingJsonLd: string | null = null;
+if (isSeriesPost && chapter === 1 && seriesName && track === "academy") {
+  const chapterUrl = (p: (typeof seriesPosts)[number]) =>
+    `${siteConfig.url}/${locale}/${p.slug.split("/").slice(1).join("/")}/`;
+  const totalWords = seriesPosts!.reduce(
+    (sum, p) => sum + (p.body ?? "").split(/\s+/).filter(Boolean).length,
+    0,
+  );
+  courseLandingJsonLd = JSON.stringify(
+    courseJsonLd({
+      name: seriesName,
+      description: post.data.description,
+      url: chapterUrl(post),
+      providerName: siteConfig.name,
+      providerUrl: siteConfig.url,
+      inLanguage: locale,
+      workloadMinutes: Math.max(1, Math.ceil(totalWords / 200)),
+      chapterTitles: seriesPosts!.map((p) => p.data.title),
+      chapterUrls: seriesPosts!.map(chapterUrl),
+    }),
+  );
+}
+
 // Reading time
 const wordCount = (post.body ?? "").split(/\s+/).filter(Boolean).length;
 const readingMinutes = Math.max(1, Math.ceil(wordCount / 200));
@@ -204,6 +230,7 @@ const coursesHref = `/${locale}/courses`;
   availableLocales={availableLocales}
 >
   {seriesJsonLd && <script is:inline type="application/ld+json" set:html={seriesJsonLd} />}
+  {courseLandingJsonLd && <script is:inline type="application/ld+json" set:html={courseLandingJsonLd} />}
 
   <article
     class:list={[

@@ -84,6 +84,63 @@ export function breadcrumbJsonLd(items: BreadcrumbItem[]) {
 }
 
 /**
+ * Course JSON-LD for academy / lecture-series chapter clusters.
+ *
+ * Emitted on the course landing (chapter 1) so the whole series is eligible
+ * for Google's Course rich result. Required fields per Google: name,
+ * description, provider, plus hasCourseInstance (with courseMode + workload)
+ * and a free offer to qualify as a structured, free online course.
+ */
+export function courseJsonLd(opts: {
+  name: string;
+  description: string;
+  url: string;
+  providerName: string;
+  providerUrl: string;
+  inLanguage?: string;
+  /** Total reading time across all chapters, in minutes. */
+  workloadMinutes?: number;
+  /** Ordered chapter titles for the syllabus (hasPart). */
+  chapterTitles?: string[];
+  chapterUrls?: string[];
+}) {
+  const workload =
+    opts.workloadMinutes && opts.workloadMinutes > 0
+      ? `PT${opts.workloadMinutes}M`
+      : undefined;
+
+  const hasPart =
+    opts.chapterTitles && opts.chapterTitles.length
+      ? opts.chapterTitles.map((title, i) => ({
+          "@type": "Course",
+          name: title,
+          ...(opts.chapterUrls?.[i] ? { url: opts.chapterUrls[i] } : {}),
+        }))
+      : undefined;
+
+  return {
+    "@context": CTX,
+    "@type": "Course",
+    name: opts.name,
+    description: opts.description,
+    url: opts.url,
+    provider: {
+      "@type": "Organization",
+      name: opts.providerName,
+      url: opts.providerUrl,
+    },
+    ...(opts.inLanguage ? { inLanguage: opts.inLanguage } : {}),
+    hasCourseInstance: {
+      "@type": "CourseInstance",
+      courseMode: "online",
+      ...(workload ? { courseWorkload: workload } : {}),
+    },
+    offers: { "@type": "Offer", price: "0", priceCurrency: "USD", category: "Free" },
+    ...(hasPart ? { hasPart } : {}),
+  };
+}
+
+/**
  * Build the standard array a tool page emits: HowTo (if steps) + FAQPage
  * (if faqs), plus optional WebApplication / BreadcrumbList.
  */
