@@ -4,6 +4,8 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getTranslations, locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 import { getTrackFromData } from "../../lib/taxonomy";
+import { collectionPageJsonLd } from "../../lib/seo/structured-data";
+import { siteConfig } from "../../config/site.config";
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -135,9 +137,23 @@ function estimateReadingTime(words: number): string {
   if (mins < 60) return `${mins}min`;
   return `${Math.ceil(mins / 60)}h`;
 }
+
+const catalogJsonLd = JSON.stringify(
+  collectionPageJsonLd({
+    name: pageTitle,
+    description: pageSubtitle,
+    url: `${siteConfig.url}/${locale}/courses/`,
+    inLanguage: locale,
+    items: courseList.map((s) => ({
+      name: s.firstPost.data.series ?? s.seriesKey,
+      url: `${siteConfig.url}/${locale}/${s.firstPost.slug.split("/").slice(1).join("/")}/`,
+    })),
+  }),
+);
 ---
 
 <BaseLayout title={pageTitle} description={pageSubtitle}>
+  <script is:inline type="application/ld+json" set:html={catalogJsonLd} />
   <section class="py-16 md:py-24">
     <div class="container px-4">
 

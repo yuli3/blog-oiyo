@@ -141,6 +141,38 @@ export function courseJsonLd(opts: {
 }
 
 /**
+ * CollectionPage + ItemList for hub/index pages (course catalog, magazine,
+ * tools, category listings). Turns a human-facing hub into a machine-readable
+ * catalog so search engines and AI agents can enumerate the collection.
+ */
+export function collectionPageJsonLd(opts: {
+  name: string;
+  description: string;
+  url: string;
+  items: { name: string; url: string }[];
+  inLanguage?: string;
+}) {
+  return {
+    "@context": CTX,
+    "@type": "CollectionPage",
+    name: opts.name,
+    description: opts.description,
+    url: opts.url,
+    ...(opts.inLanguage ? { inLanguage: opts.inLanguage } : {}),
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: opts.items.length,
+      itemListElement: opts.items.map((it, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        name: it.name,
+        url: it.url,
+      })),
+    },
+  };
+}
+
+/**
  * Build the standard array a tool page emits: HowTo (if steps) + FAQPage
  * (if faqs), plus optional WebApplication / BreadcrumbList.
  */

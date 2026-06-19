@@ -4,6 +4,7 @@ import BlogList from "../../../../components/BlogList.astro";
 import { getTranslations, locales } from "../../../../lib/i18n";
 import { siteConfig } from "../../../../config/site.config";
 import { getTrack, getTrackFromData, slugifyCategory } from "../../../../lib/taxonomy";
+import { collectionPageJsonLd } from "../../../../lib/seo/structured-data";
 
 export async function getStaticPaths() {
   const allPosts = await getCollection(
@@ -80,6 +81,19 @@ const displaySubtitle = track === "academy"
   : track === "interactive"
     ? (((t as Record<string, unknown>).interactive as Record<string, string> | undefined)?.categorySubtitle ?? "Interactive reading and embedded tools related to {category}.").replace("{category}", displayName)
     : t.category.magazineSubtitle.replace("{category}", displayName);
+
+const catalogJsonLd = JSON.stringify(
+  collectionPageJsonLd({
+    name: `${displayName} — ${siteConfig.name}`,
+    description: displaySubtitle,
+    url: `${siteConfig.url}${localePrefix}/category/${category}/`,
+    inLanguage: locale,
+    items: page.data.map((p) => ({
+      name: p.data.title,
+      url: `${siteConfig.url}/${locale}/${p.slug.split("/").slice(1).join("/")}/`,
+    })),
+  }),
+);
 ---
 
 <BlogList
@@ -90,4 +104,5 @@ const displaySubtitle = track === "academy"
   subtitle={displaySubtitle}
   activeCategory={category}
   availableLocales={availableLocales}
+  jsonLd={catalogJsonLd}
 />

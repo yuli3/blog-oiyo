@@ -24,9 +24,10 @@ interface Props {
   subtitle: string;
   activeCategory?: string;
   showIntentBundles?: boolean;
+  jsonLd?: string;
 }
 
-const { page, locale, baseUrl, title, subtitle, activeCategory, showIntentBundles = false } = Astro.props;
+const { page, locale, baseUrl, title, subtitle, activeCategory, showIntentBundles = false, jsonLd } = Astro.props;
 const paginationEnabled = siteConfig.features.pagination;
 const t = await getTranslations(locale as Locale);
 const blogT = t.blog as Record<string, string>;
@@ -34,6 +35,7 @@ const categoryNames = (t.category.names ?? {}) as unknown as { [key: string]: st
 ---
 
 <BaseLayout title={title} description={subtitle} availableLocales={Astro.props.availableLocales}>
+  {jsonLd && <script is:inline type="application/ld+json" set:html={jsonLd} />}
   <section class="py-16 md:py-20">
     <div class="container px-4">
       <div class="mb-12 max-w-2xl">

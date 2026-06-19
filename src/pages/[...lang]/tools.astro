@@ -2,6 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
+import { collectionPageJsonLd } from "../../lib/seo/structured-data";
+import { siteConfig } from "../../config/site.config";
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -1204,6 +1206,21 @@ const categories: Category[] = [
 const totalCount = categories.reduce((sum, c) => sum + c.tools.length, 0);
 const m = meta[locale] ?? meta.en;
 
+const catalogJsonLd = JSON.stringify(
+  collectionPageJsonLd({
+    name: m.title,
+    description: m.description,
+    url: `${siteConfig.url}/${locale}/tools/`,
+    inLanguage: locale,
+    items: categories.flatMap((c) =>
+      c.tools.map((tool) => ({
+        name: tool.title[locale] ?? tool.title.en,
+        url: `${siteConfig.url}/${locale}/${tool.slug}/`,
+      })),
+    ),
+  }),
+);
+
 // ─── "More" label ─────────────────────────────────────────────────────────────
 const moreLabel: Record<Locale, string> = {
   ko: "더보기",
@@ -1217,6 +1234,7 @@ const moreLabel: Record<Locale, string> = {
 ---
 
 <BaseLayout title={m.title} description={m.description}>
+  <script is:inline type="application/ld+json" set:html={catalogJsonLd} />
   <section class="py-16 md:py-24">
     <div class="container px-4">
 
