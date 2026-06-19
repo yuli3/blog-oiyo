@@ -1,13 +1,13 @@
 # Category Fragmentation Report (WW19, auto-generated)
 
-> Generated 2026-06-19T21:03:42.198Z. Canonical registry: `data/catalog/category-registry.yaml` (14 categories, status active-draft).
+> Generated 2026-06-19T21:24:48.113Z. Canonical registry: `data/catalog/category-registry.yaml` (24 categories, status active-draft).
 
 ## Summary
 
 - Distinct raw categories in content: **25**
-- Canonical categories in registry: **14**
+- Canonical categories in registry: **24**
 - ⚠️ Track-name used as category: **1** (Magazine 178)
-- ❌ Categories NOT in registry (drift): **24**
+- ❌ Categories NOT in registry (drift): **0**
 
 ## ⚠️ Track-as-category (fix: these are tracks, not categories)
 
@@ -41,30 +41,6 @@
 
 | Category | Count |
 |---|--:|
-| Mind & Psychology | 990 |
-| Finance | 641 |
-| Mysticism | 538 |
-| Myth & Culture | 315 |
-| Lifestyle | 314 |
-| Philosophy & Spirit | 299 |
-| Law & Exam | 242 |
-| Computer Science | 215 |
-| Tax | 181 |
-| Exam | 131 |
-| Education | 123 |
-| Health | 123 |
-| Real Estate | 113 |
-| Science & Nature | 94 |
-| Business | 91 |
-| Humanities | 45 |
-| Insights | 43 |
-| Public Admin | 31 |
-| Career | 29 |
-| Beauty | 26 |
-| Strategy | 18 |
-| Design | 18 |
-| Games | 15 |
-| Society & Wealth | 5 |
 
 ## Note
 
