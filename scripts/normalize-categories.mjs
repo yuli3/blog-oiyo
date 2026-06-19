@@ -48,8 +48,24 @@ const MAP = {
   // Health
   "Health & Wellness": "Health",
   "Wellness": "Health",
-  // Culture
+  // Culture / Humanities
   "Arts & Culture": "Culture",
+  // ── second-order consolidation (WW19-3) ──
+  "Lifestyle & Growth": "Lifestyle",
+  "Life": "Lifestyle",
+  "Lifestyle & How-to": "Lifestyle",
+  "Self-Improvement": "Lifestyle",
+  "Productivity": "Lifestyle",
+  "Culture": "Humanities",
+  "Liberal Arts": "Humanities",
+  "Social Science": "Humanities",
+  "Education & Language": "Education",
+  "Language": "Education",
+  "Game": "Games",
+  "AI 실무": "Computer Science",
+  "Tools": "Computer Science",
+  "Science & Health": "Science & Nature",
+  "Legal & Tax": "Law & Exam",
 };
 
 function listMdx(dir) {
@@ -100,11 +116,13 @@ console.log(`\nCategory-hub URL changes (301 redirects): ${redirects.length} loc
 if (APPLY) {
   const redirectsFile = path.join(root, "public/_redirects");
   const current = fs.readFileSync(redirectsFile, "utf8");
-  const MARKER = "# ── category normalization 301 (WW19) ──";
-  if (!current.includes(MARKER)) {
-    fs.appendFileSync(redirectsFile, `\n${MARKER}\n${redirects.join("\n")}\n`);
-    console.log(`✓ appended ${redirects.length} redirects to public/_redirects`);
+  // Append only redirect lines not already present (idempotent across re-runs).
+  const existing = new Set(current.split("\n").map((l) => l.trim()));
+  const fresh = redirects.filter((r) => !existing.has(r.trim()));
+  if (fresh.length) {
+    fs.appendFileSync(redirectsFile, `\n# ── category normalization 301 (WW19, ${new Date().toISOString().slice(0, 10)}) ──\n${fresh.join("\n")}\n`);
+    console.log(`✓ appended ${fresh.length} new redirects to public/_redirects`);
   } else {
-    console.log("• _redirects already has the WW19 block — skipped append");
+    console.log("• no new redirects to append");
   }
 }
