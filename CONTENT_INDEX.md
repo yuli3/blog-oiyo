@@ -1,13 +1,13 @@
 # Content Index (auto-generated)
 
-> Generated 2026-06-19T21:24:48.113Z from MDX frontmatter. Do not edit by hand — run `npm run content:manifest`.
+> Generated 2026-06-19T21:50:14.253Z from MDX frontmatter. Do not edit by hand — run `npm run content:manifest`.
 
-Total: **4824** entries · ko 2213 · en 1410 · ja 649 · zh 232 · es 160 · fr 160
+Total: **4829** entries · ko 2218 · en 1410 · ja 649 · zh 232 · es 160 · fr 160
 
 ## By track
 
 - **(none)**: 1946
-- **magazine**: 1322
+- **magazine**: 1327
 - **academy**: 1051
 - **interactive**: 505
 
@@ -16,7 +16,7 @@ Total: **4824** entries · ko 2213 · en 1410 · ja 649 · zh 232 · es 160 · f
 | Category | Count | In registry? |
 |---|--:|:--:|
 | Mind & Psychology | 990 | ✅ |
-| Finance | 641 | ✅ |
+| Finance | 642 | ✅ |
 | Mysticism | 538 | ✅ |
 | Myth & Culture | 315 | ✅ |
 | Lifestyle | 314 | ✅ |
@@ -34,9 +34,9 @@ Total: **4824** entries · ko 2213 · en 1410 · ja 649 · zh 232 · es 160 · f
 | Humanities | 45 | ✅ |
 | Insights | 43 | ✅ |
 | Public Admin | 31 | ✅ |
-| Career | 29 | ✅ |
+| Career | 30 | ✅ |
 | Beauty | 26 | ✅ |
+| Games | 18 | ✅ |
 | Strategy | 18 | ✅ |
 | Design | 18 | ✅ |
-| Games | 15 | ✅ |
 | Society & Wealth | 5 | ✅ |
