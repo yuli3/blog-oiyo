@@ -1,6 +1,6 @@
 # Category Fragmentation Report (WW19, auto-generated)
 
-> Generated 2026-06-20T11:53:44.126Z. Canonical registry: `data/catalog/category-registry.yaml` (24 categories, status active-draft).
+> Generated 2026-06-20T21:36:10.502Z. Canonical registry: `data/catalog/category-registry.yaml` (24 categories, status active-draft).
 
 ## Summary
 

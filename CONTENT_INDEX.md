@@ -1,12 +1,12 @@
 # Content Index (auto-generated)
 
-> Generated 2026-06-20T11:53:44.126Z from MDX frontmatter. Do not edit by hand — run `npm run content:manifest`.
+> Generated 2026-06-20T21:36:10.502Z from MDX frontmatter. Do not edit by hand — run `npm run content:manifest`.
 
-Total: **4859** entries · ko 2244 · en 1412 · ja 651 · zh 232 · es 160 · fr 160
+Total: **4861** entries · ko 2246 · en 1412 · ja 651 · zh 232 · es 160 · fr 160
 
 ## By track
 
-- **magazine**: 3157
+- **magazine**: 3159
 - **academy**: 1183
 - **interactive**: 519
 
@@ -17,7 +17,7 @@ Total: **4859** entries · ko 2244 · en 1412 · ja 651 · zh 232 · es 160 · f
 | Mind & Psychology | 1005 | ✅ |
 | Finance | 670 | ✅ |
 | Mysticism | 544 | ✅ |
-| Lifestyle | 375 | ✅ |
+| Lifestyle | 377 | ✅ |
 | Myth & Culture | 317 | ✅ |
 | Philosophy & Spirit | 299 | ✅ |
 | Law & Exam | 242 | ✅ |
