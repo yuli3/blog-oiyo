@@ -76,11 +76,16 @@ export async function getStaticPaths() {
     }
 
 
-    // Related posts: same series scores highest, then tag overlap.
-    // Builds the internal link mesh that ties dictionary entries together.
+    // Related posts: same series > tag overlap > same category (backfill).
+    // Builds the internal link mesh that ties entries together; the category
+    // backfill guarantees coverage (no orphan with empty related). (#18)
     const myTags = new Set<string>((post.data.tags ?? []) as string[]);
     const mySeries = post.data.series ?? null;
-    const relatedPosts = (byLocale[lang] ?? [])
+    const myCategory = post.data.category ?? null;
+    const pubVal = (p: (typeof allPosts)[0]) => p.data.pubDate?.valueOf?.() ?? 0;
+    const RELATED_MAX = 6;
+
+    const scored = (byLocale[lang] ?? [])
       .filter((p) => p.slug !== post.slug)
       .map((p) => {
         let score = 0;
@@ -88,19 +93,35 @@ export async function getStaticPaths() {
         for (const t of (p.data.tags ?? []) as string[]) {
           if (myTags.has(t)) score += 1;
         }
+        if (myCategory && p.data.category === myCategory) score += 1;
         return { p, score };
       })
       .filter((x) => x.score >= 2)
-      .sort(
-        (a, b) =>
-          b.score - a.score ||
-          (b.p.data.pubDate?.valueOf?.() ?? 0) - (a.p.data.pubDate?.valueOf?.() ?? 0),
-      )
-      .slice(0, 6)
-      .map(({ p }) => ({
-        slug: p.slug.split("/").slice(1).join("/"),
-        title: p.data.title,
-      }));
+      .sort((a, b) => b.score - a.score || pubVal(b.p) - pubVal(a.p));
+
+    const picked = scored.slice(0, RELATED_MAX).map((x) => x.p);
+
+    // Backfill from the same category (recent first) so every page links out.
+    if (picked.length < RELATED_MAX && myCategory) {
+      const chosen = new Set(picked.map((p) => p.slug));
+      const backfill = (byLocale[lang] ?? [])
+        .filter(
+          (p) =>
+            p.slug !== post.slug &&
+            !chosen.has(p.slug) &&
+            p.data.category === myCategory,
+        )
+        .sort((a, b) => pubVal(b) - pubVal(a));
+      for (const p of backfill) {
+        if (picked.length >= RELATED_MAX) break;
+        picked.push(p);
+      }
+    }
+
+    const relatedPosts = picked.map((p) => ({
+      slug: p.slug.split("/").slice(1).join("/"),
+      title: p.data.title,
+    }));
 
     const availableLocales = Array.from(localesByBaseSlug[slug] ?? [lang]);
 
