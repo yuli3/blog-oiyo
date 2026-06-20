@@ -43,7 +43,22 @@ const RULES = [
   [/philosophy|stoic|buddhism|taoism|spirit|철학|불교|명상/, "Philosophy & Spirit"],
   [/mythology|myth|history|legend|cold-war|exploration|dynasty|empire|\bwar\b|revolution|civilization|ancient|medieval|roman|greek|신화|역사|전설|중세|고대|전쟁|혁명|문명|왕조|제국/, "Myth & Culture"],
   [/recipe|baking|cooking|\bfood\b|coffee|travel|dday|anniversary|countdown|biorhythm|hobby|wedding|funeral|etiquette|여행|레시피|베이킹|요리|취미|예절|결혼|장례/, "Lifestyle"],
-  [/beauty|skincare|makeup|perfume|뷰티|화장품|향수/, "Beauty"],
+  [/beauty|makeup|perfume|뷰티|화장품|향수/, "Beauty"],
+  // ── Magazine catch-all reclassification (review fix ②) ──
+  [/lostark|raid-splitter|auction-calc|chess|체스|board-game|보드게임/, "Games"],
+  [/renaissance|medici|르네상스/, "Myth & Culture"],
+  [/climate-change|기후변화|탄소중립|온실가스/, "Science & Nature"],
+  [/apartment-subscription|lease-contract|youth-housing|reconstruction-profit|청약|임대차|youth-welfare|재건축/, "Real Estate"],
+  [/college-entrance|대학입시|수능/, "Education"],
+  [/mac-buying|macbook|laptop|tech-news|typing-agility|password-generator|uuid|lorem-ipsum|word-counter|애플/, "Computer Science"],
+  [/small-business-closure|폐업|소상공인/, "Business"],
+  [/commute-productivity|parental-leave|remote-work|work-from-home|annual-leave|출퇴근|육아휴직|재택근무|원격근무|연차/, "Career"],
+  [/credit-card|신용카드|bankruptcy|개인회생|개인파산|채무조정|side-hustle|부업|overseas-shopping|해외직구|retirement-abroad|은퇴이민|currency-converter|fuel-cost|tip-calculator|legal-interest/, "Finance"],
+  [/love-calculator|blood-type|혈액형/, "Mysticism"],
+  [/skin-care|skincare|hair-care|피부관리|모발|헤어/, "Beauty"],
+  [/cancer-prevention|chronic-pain|dental|diabetes|gut-health|menopause|migraine|headache|두통|편두통|pilates|posture|pregnancy|quitting-smoking|금연|senior-health|stretching|스트레칭|yoga|요가|exercise-habit|menstrual|만성통증|당뇨|폐경|자세교정|건강/, "Health"],
+  [/communication-skill|소통기술|focus-concentration|집중력|game-addiction|게임중독|habit-formation|습관형성|reading-habit|독서습관|speed-reading|속독|smartphone-addiction|스마트폰중독|digital-minimal|디지털미니멀|인터넷중독/, "Mind & Psychology"],
+  [/camping|캠핑|hiking|등산|트레킹|cycling|자전거|running|달리기|마라톤|houseplant|반려식물|\btea\b|녹차|홍차|wine|와인|decluttering|정리정돈|minimalism|미니멀|moving-guide|이사|house-cleaning|청소|electric-vehicle|전기차|divorce|이혼|elderly|parents-elder|부모돌봄|노인돌봄|emergency-prepared|재난|volunteer|봉사|zero-waste|제로웨이스트|seasonal-events|pet-age|marriage-age|pomodoro|height-converter|life-utilities|life-guide|hobby|취미/, "Lifestyle"],
 ];
 
 function classify(item) {

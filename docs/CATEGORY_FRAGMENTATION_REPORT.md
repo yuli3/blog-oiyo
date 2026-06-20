@@ -1,41 +1,41 @@
 # Category Fragmentation Report (WW19, auto-generated)
 
-> Generated 2026-06-20T02:44:44.541Z. Canonical registry: `data/catalog/category-registry.yaml` (24 categories, status active-draft).
+> Generated 2026-06-20T02:51:56.167Z. Canonical registry: `data/catalog/category-registry.yaml` (24 categories, status active-draft).
 
 ## Summary
 
-- Distinct raw categories in content: **25**
+- Distinct raw categories in content: **24**
 - Canonical categories in registry: **24**
-- ⚠️ Track-name used as category: **1** (Magazine 178)
+- ⚠️ Track-name used as category: **0** (none)
 - ❌ Categories NOT in registry (drift): **0**
 
 ## ⚠️ Track-as-category (fix: these are tracks, not categories)
 
-- **Magazine** (178) → set a real category; `track` already carries this.
+_none_
 
 ## Proposed consolidation (fragmented → canonical)
 
-### → `psychology-self-discovery` (991 entries)
-- Mind & Psychology (991)
+### → `psychology-self-discovery` (1005 entries)
+- Mind & Psychology (1005)
 
 ### → `philosophy-spirit` (299 entries)
 - Philosophy & Spirit (299)
 
-### → `myth-culture` (315 entries)
-- Myth & Culture (315)
+### → `myth-culture` (317 entries)
+- Myth & Culture (317)
 
-### → `mysticism` (538 entries)
-- Mysticism (538)
+### → `mysticism` (544 entries)
+- Mysticism (544)
 
-### → `science-health` (126 entries)
-- Health (126)
+### → `science-health` (151 entries)
+- Health (151)
 
-### → `finance-tax` (823 entries)
-- Finance (642)
+### → `finance-tax` (846 entries)
+- Finance (665)
 - Tax (181)
 
-### → `computer-it` (215 entries)
-- Computer Science (215)
+### → `computer-it` (235 entries)
+- Computer Science (235)
 
 ## All drift categories (not in registry, not a track)
 

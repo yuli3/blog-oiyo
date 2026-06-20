@@ -1,6 +1,6 @@
 # Content Index (auto-generated)
 
-> Generated 2026-06-20T02:44:44.541Z from MDX frontmatter. Do not edit by hand — run `npm run content:manifest`.
+> Generated 2026-06-20T02:51:56.167Z from MDX frontmatter. Do not edit by hand — run `npm run content:manifest`.
 
 Total: **4838** entries · ko 2227 · en 1410 · ja 649 · zh 232 · es 160 · fr 160
 
@@ -14,28 +14,27 @@ Total: **4838** entries · ko 2227 · en 1410 · ja 649 · zh 232 · es 160 · f
 
 | Category | Count | In registry? |
 |---|--:|:--:|
-| Mind & Psychology | 991 | ✅ |
-| Finance | 642 | ✅ |
-| Mysticism | 538 | ✅ |
-| Lifestyle | 317 | ✅ |
-| Myth & Culture | 315 | ✅ |
+| Mind & Psychology | 1005 | ✅ |
+| Finance | 665 | ✅ |
+| Mysticism | 544 | ✅ |
+| Lifestyle | 373 | ✅ |
+| Myth & Culture | 317 | ✅ |
 | Philosophy & Spirit | 299 | ✅ |
 | Law & Exam | 242 | ✅ |
-| Computer Science | 215 | ✅ |
+| Computer Science | 235 | ✅ |
 | Tax | 181 | ✅ |
-| Magazine | 178 | ⚠️ track |
+| Health | 151 | ✅ |
 | Exam | 131 | ✅ |
-| Health | 126 | ✅ |
-| Education | 123 | ✅ |
-| Real Estate | 113 | ✅ |
-| Science & Nature | 100 | ✅ |
-| Business | 91 | ✅ |
+| Education | 124 | ✅ |
+| Real Estate | 118 | ✅ |
+| Science & Nature | 102 | ✅ |
+| Business | 93 | ✅ |
 | Humanities | 45 | ✅ |
 | Insights | 43 | ✅ |
+| Career | 42 | ✅ |
 | Public Admin | 31 | ✅ |
-| Career | 30 | ✅ |
-| Beauty | 26 | ✅ |
-| Games | 20 | ✅ |
+| Games | 28 | ✅ |
+| Beauty | 28 | ✅ |
 | Strategy | 18 | ✅ |
 | Design | 18 | ✅ |
 | Society & Wealth | 5 | ✅ |
