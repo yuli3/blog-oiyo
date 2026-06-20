@@ -1,6 +1,6 @@
 # Category Fragmentation Report (WW19, auto-generated)
 
-> Generated 2026-06-20T03:33:15.841Z. Canonical registry: `data/catalog/category-registry.yaml` (24 categories, status active-draft).
+> Generated 2026-06-20T07:16:03.626Z. Canonical registry: `data/catalog/category-registry.yaml` (24 categories, status active-draft).
 
 ## Summary
 
@@ -27,8 +27,8 @@ _none_
 ### → `mysticism` (544 entries)
 - Mysticism (544)
 
-### → `science-health` (151 entries)
-- Health (151)
+### → `science-health` (153 entries)
+- Health (153)
 
 ### → `finance-tax` (846 entries)
 - Finance (665)
