@@ -39,11 +39,59 @@ const pageSubtitle = interactiveT?.subtitle ?? "Reading-first pages that embed s
 const featuredLabel = interactiveT?.featured ?? "Interactive Pick";
 const launchLabel = interactiveT?.launch ?? "Explore";
 const latestLabel = interactiveT?.latest ?? "Latest Interactive";
+
+// Tools & calculators now live under the Interactive umbrella (IA consolidation).
+const toolsSection: Record<string, { heading: string; sub: string; cta: string; groups: { label: string; href: string }[] }> = {
+  ko: {
+    heading: "도구 · 계산기 · 게임",
+    sub: "변환기·계산기·심리테스트·게임을 한곳에서.",
+    cta: "전체 도구 보기",
+    groups: [
+      { label: "🧮 계산기·변환기", href: `/${locale}/tools` },
+      { label: "🧠 심리 테스트", href: `/${locale}/tools` },
+      { label: "🎮 게임", href: `/${locale}/tools` },
+      { label: "🛠️ 유틸리티", href: `/${locale}/tools` },
+    ],
+  },
+  en: {
+    heading: "Tools · Calculators · Games",
+    sub: "Converters, calculators, psychology tests, and games in one place.",
+    cta: "Browse all tools",
+    groups: [
+      { label: "🧮 Calculators & Converters", href: `/${locale}/tools` },
+      { label: "🧠 Psychology Tests", href: `/${locale}/tools` },
+      { label: "🎮 Games", href: `/${locale}/tools` },
+      { label: "🛠️ Utilities", href: `/${locale}/tools` },
+    ],
+  },
+};
+const ts = toolsSection[locale] ?? toolsSection.en;
 ---
 
 <BaseLayout title={pageTitle} description={pageSubtitle}>
   <section class="py-16 md:py-24">
     <div class="container px-4">
+
+      {/* Tools & calculators (consolidated under Interactive) */}
+      <div class="mb-14 rounded-2xl border border-primary/20 bg-primary/5 p-6 md:p-8">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h2 class="text-2xl font-extrabold tracking-tight text-foreground">{ts.heading}</h2>
+            <p class="mt-1 text-sm text-muted-foreground">{ts.sub}</p>
+          </div>
+          <a href={`/${locale}/tools`} class="shrink-0 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 transition-opacity">
+            {ts.cta} →
+          </a>
+        </div>
+        <div class="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {ts.groups.map((g) => (
+            <a href={g.href} class="rounded-xl border border-border bg-card px-4 py-3 text-sm font-semibold text-foreground hover:border-primary/40 transition-colors">
+              {g.label}
+            </a>
+          ))}
+        </div>
+      </div>
+
       <div class="mb-16 max-w-3xl">
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/10 border border-secondary/20 text-secondary text-[10px] font-black uppercase tracking-[0.2em] mb-6">
           Interactive
