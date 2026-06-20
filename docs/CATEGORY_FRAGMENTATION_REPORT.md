@@ -1,6 +1,6 @@
 # Category Fragmentation Report (WW19, auto-generated)
 
-> Generated 2026-06-19T21:50:14.253Z. Canonical registry: `data/catalog/category-registry.yaml` (24 categories, status active-draft).
+> Generated 2026-06-19T22:02:43.521Z. Canonical registry: `data/catalog/category-registry.yaml` (24 categories, status active-draft).
 
 ## Summary
 
@@ -15,8 +15,8 @@
 
 ## Proposed consolidation (fragmented → canonical)
 
-### → `psychology-self-discovery` (990 entries)
-- Mind & Psychology (990)
+### → `psychology-self-discovery` (991 entries)
+- Mind & Psychology (991)
 
 ### → `philosophy-spirit` (299 entries)
 - Philosophy & Spirit (299)
@@ -27,8 +27,8 @@
 ### → `mysticism` (538 entries)
 - Mysticism (538)
 
-### → `science-health` (123 entries)
-- Health (123)
+### → `science-health` (124 entries)
+- Health (124)
 
 ### → `finance-tax` (823 entries)
 - Finance (642)
