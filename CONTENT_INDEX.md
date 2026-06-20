@@ -1,13 +1,13 @@
 # Content Index (auto-generated)
 
-> Generated 2026-06-20T08:23:58.022Z from MDX frontmatter. Do not edit by hand — run `npm run content:manifest`.
+> Generated 2026-06-20T11:53:44.126Z from MDX frontmatter. Do not edit by hand — run `npm run content:manifest`.
 
-Total: **4854** entries · ko 2239 · en 1412 · ja 651 · zh 232 · es 160 · fr 160
+Total: **4859** entries · ko 2244 · en 1412 · ja 651 · zh 232 · es 160 · fr 160
 
 ## By track
 
 - **magazine**: 3157
-- **academy**: 1178
+- **academy**: 1183
 - **interactive**: 519
 
 ## By category (raw)
@@ -21,7 +21,7 @@ Total: **4854** entries · ko 2239 · en 1412 · ja 651 · zh 232 · es 160 · f
 | Myth & Culture | 317 | ✅ |
 | Philosophy & Spirit | 299 | ✅ |
 | Law & Exam | 242 | ✅ |
-| Computer Science | 235 | ✅ |
+| Computer Science | 240 | ✅ |
 | Tax | 181 | ✅ |
 | Health | 153 | ✅ |
 | Exam | 131 | ✅ |

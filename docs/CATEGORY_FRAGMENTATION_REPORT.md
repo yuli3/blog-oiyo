@@ -1,6 +1,6 @@
 # Category Fragmentation Report (WW19, auto-generated)
 
-> Generated 2026-06-20T08:23:58.022Z. Canonical registry: `data/catalog/category-registry.yaml` (24 categories, status active-draft).
+> Generated 2026-06-20T11:53:44.126Z. Canonical registry: `data/catalog/category-registry.yaml` (24 categories, status active-draft).
 
 ## Summary
 
@@ -34,8 +34,8 @@ _none_
 - Finance (670)
 - Tax (181)
 
-### → `computer-it` (235 entries)
-- Computer Science (235)
+### → `computer-it` (240 entries)
+- Computer Science (240)
 
 ## All drift categories (not in registry, not a track)
 
