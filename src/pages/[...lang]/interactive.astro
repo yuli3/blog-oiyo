@@ -66,6 +66,21 @@ const toolsSection: Record<string, { heading: string; sub: string; cta: string; 
   },
 };
 const ts = toolsSection[locale] ?? toolsSection.en;
+
+// Flagship tools surfaced directly on /interactive so tools are visible, not just linked.
+const flagshipTools: { slug: string; emoji: string; label: Record<string, string> }[] = [
+  { slug: "height-converter", emoji: "📐", label: { ko: "키 변환기", en: "Height Converter", ja: "身長変換" } },
+  { slug: "currency-converter", emoji: "💱", label: { ko: "환율 변환기", en: "Currency Converter", ja: "為替換算" } },
+  { slug: "bmi-calculator", emoji: "⚖️", label: { ko: "BMI 계산기", en: "BMI Calculator", ja: "BMI計算" } },
+  { slug: "discount-calculator", emoji: "🏷️", label: { ko: "할인가 계산기", en: "Discount Calculator", ja: "割引計算" } },
+  { slug: "percentage-calculator", emoji: "％", label: { ko: "퍼센트 계산기", en: "Percentage Calculator", ja: "パーセント計算" } },
+  { slug: "calorie-calculator", emoji: "🔥", label: { ko: "칼로리 계산기", en: "Calorie Calculator", ja: "カロリー計算" } },
+  { slug: "temperature-converter", emoji: "🌡️", label: { ko: "온도 변환기", en: "Temperature Converter", ja: "温度変換" } },
+  { slug: "dday-counter", emoji: "📅", label: { ko: "디데이 계산기", en: "D-Day Counter", ja: "Dデイ計算" } },
+  { slug: "world-clock", emoji: "🕐", label: { ko: "세계 시계", en: "World Clock", ja: "世界時計" } },
+  { slug: "sudoku", emoji: "🔢", label: { ko: "스도쿠", en: "Sudoku", ja: "数独" } },
+];
+const tlabel = (l: Record<string, string>) => l[locale] ?? l.en;
 ---
 
 <BaseLayout title={pageTitle} description={pageSubtitle}>
@@ -87,6 +102,14 @@ const ts = toolsSection[locale] ?? toolsSection.en;
           {ts.groups.map((g) => (
             <a href={g.href} class="rounded-xl border border-border bg-card px-4 py-3 text-sm font-semibold text-foreground hover:border-primary/40 transition-colors">
               {g.label}
+            </a>
+          ))}
+        </div>
+        <div class="mt-3 grid grid-cols-2 sm:grid-cols-5 gap-2">
+          {flagshipTools.map((tool) => (
+            <a href={`/${locale}/${tool.slug}`} class="flex items-center gap-2 rounded-lg border border-border/60 bg-background px-3 py-2 text-xs font-medium text-muted-foreground hover:border-primary/40 hover:text-foreground transition-colors">
+              <span aria-hidden="true">{tool.emoji}</span>
+              <span class="truncate">{tlabel(tool.label)}</span>
             </a>
           ))}
         </div>
