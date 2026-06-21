@@ -1,54 +1,12 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import GritScaleTestComp from "../../components/tests/GritScaleTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
 export async function getStaticPaths() {
-  return locales.map((lang) => ({
-    params: { lang },
-    props: { locale: lang },
-  }));
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "그릿 척도 테스트 — 나의 열정과 인내는 몇 점?",
-    description: "앤절라 덕워스의 그릿 이론 기반 — 12가지 문항으로 나의 장기적 열정과 끈기를 측정하세요.",
-  },
-  en: {
-    title: "Grit Scale Test — How Persistent and Passionate Are You?",
-    description: "Based on Angela Duckworth's Grit theory — measure your long-term passion and perseverance with 12 questions.",
-  },
-  ja: {
-    title: "グリットスケールテスト — あなたの情熱と忍耐は何点？",
-    description: "アンジェラ・ダックワースのグリット理論に基づく — 12の設問で長期的な情熱と粘り強さを測定しましょう。",
-  },
-  fr: {
-    title: "Test d'Échelle de Grit — Quelle est votre persévérance ?",
-    description: "Basé sur la théorie du Grit d'Angela Duckworth — mesurez votre passion et votre persévérance à long terme en 12 questions.",
-  },
-  es: {
-    title: "Test de Escala de Grit — ¿Cuán persistente y apasionado eres?",
-    description: "Basado en la teoría del Grit de Angela Duckworth — mide tu pasión y perseverancia a largo plazo con 12 preguntas.",
-  },
-  zh: {
-    title: "毅力量表测试 — 你的热情与坚持有多强？",
-    description: "基于安吉拉·达克沃斯的毅力理论 — 用12个问题测量你的长期热情与韧性。",
-  },
-  cn: {
-    title: "坚毅量表测试 — 你的热情与坚持有多强？",
-    description: "基于安吉拉·达克沃斯的坚毅理论 — 用12个问题测量你的长期热情与韧性。",
-  },
-};
-
-const m = meta[locale] ?? meta.en;
 ---
-
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <GritScaleTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Grit Scale Test" targetPath="/grit-scale-test" kind="test" />

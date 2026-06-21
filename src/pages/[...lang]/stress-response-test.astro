@@ -1,54 +1,12 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import StressResponseTestComp from "../../components/tests/StressResponseTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
 export async function getStaticPaths() {
-  return locales.map((lang) => ({
-    params: { lang },
-    props: { locale: lang },
-  }));
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "스트레스 반응 유형 — 나는 싸우나, 도망치나, 얼어붙나, 순응하나?",
-    description: "16가지 시나리오로 나의 스트레스 반응 유형을 알아보세요. 투쟁, 도피, 경직, 순응 — 4가지 반응 패턴 중 나는 어떤 유형인가?",
-  },
-  en: {
-    title: "Stress Response Type — Do I Fight, Flee, Freeze, or Fawn?",
-    description: "Discover your stress response type through 16 scenarios. Fight, Flight, Freeze, or Fawn — which of the 4 response patterns is yours?",
-  },
-  ja: {
-    title: "ストレス反応タイプ — 私は戦う？逃げる？固まる？従う？",
-    description: "16のシナリオで自分のストレス反応タイプを調べましょう。闘争、逃走、凍結、服従 — 4つの反応パターンのうち私はどのタイプ？",
-  },
-  fr: {
-    title: "Type de réponse au stress — Est-ce que je combats, fuis, me fige ou m'assujettis ?",
-    description: "Découvrez votre type de réponse au stress à travers 16 scénarios. Combat, Fuite, Gel ou Soumission — quel est votre modèle ?",
-  },
-  es: {
-    title: "Tipo de respuesta al estrés — ¿Lucho, huyo, me paralizo o me someto?",
-    description: "Descubra su tipo de respuesta al estrés a través de 16 escenarios. Lucha, Huida, Congelamiento o Sumisión — ¿cuál es su patrón?",
-  },
-  zh: {
-    title: "压力反应类型 — 我是战斗、逃跑、冻结还是讨好？",
-    description: "通过16个情境了解您的压力反应类型。战斗、逃跑、冻结、讨好 — 4种反应模式中您属于哪种？",
-  },
-  cn: {
-    title: "压力反应类型 — 我是战斗、逃跑、冻结还是讨好？",
-    description: "通过16个情境了解您的压力反应类型。战斗、逃跑、冻结、讨好 — 4种反应模式中您属于哪种？",
-  },
-};
-
-const m = meta[locale] ?? meta.en;
 ---
-
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <StressResponseTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Stress Response Test" targetPath="/stress-response-test" kind="test" />

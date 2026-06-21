@@ -1,61 +1,12 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import MoneyPersonalityTestComp from "../../components/tests/MoneyPersonalityTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
 export async function getStaticPaths() {
-  return locales.map((lang) => ({
-    params: { lang },
-    props: { locale: lang },
-  }));
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "머니 성격 테스트 — 나의 돈 관리 유형은?",
-    description:
-      "절약형, 소비형, 투자형, 미니멀리스트 — 10가지 질문으로 나만의 재정 스타일을 알아보세요.",
-  },
-  en: {
-    title: "Money Personality Test — What's Your Financial Type?",
-    description:
-      "Saver, Spender, Investor, or Minimalist? Discover your money personality with 10 questions.",
-  },
-  ja: {
-    title: "マネー性格テスト — 私のお金の管理タイプは？",
-    description:
-      "節約型、消費型、投資型、ミニマリスト。10の質問で自分の財政スタイルを発見しましょう。",
-  },
-  fr: {
-    title: "Test de personnalité financière — Quel est votre type ?",
-    description:
-      "Épargnant, dépensier, investisseur ou minimaliste ? Découvrez votre personnalité financière en 10 questions.",
-  },
-  es: {
-    title: "Test de personalidad financiera — ¿Cuál es tu tipo?",
-    description:
-      "Ahorrador, gastador, inversor o minimalista. Descubre tu personalidad financiera con 10 preguntas.",
-  },
-  zh: {
-    title: "理财性格测验 — 你的财务类型是什么？",
-    description:
-      "节俭型、消费型、投资型还是极简主义者？透过10个问题发现你的理财性格。",
-  },
-  cn: {
-    title: "理财性格测试 — 你的财务类型是什么？",
-    description:
-      "节俭型、消费型、投资型还是极简主义者？通过10个问题发现你的理财性格。",
-  },
-};
-
-const m = meta[locale] ?? meta.en;
 ---
-
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <MoneyPersonalityTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Money Personality Test" targetPath="/money-personality-test" kind="test" />

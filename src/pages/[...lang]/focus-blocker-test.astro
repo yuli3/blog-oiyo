@@ -1,6 +1,5 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import FocusBlockerTestComp from "../../components/tests/FocusBlockerTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -9,21 +8,5 @@ export async function getStaticPaths() {
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: { title: "집중력 방해 요인 테스트 — 무엇이 나의 포커스를 막는가?", description: "환경·감정·기술·습관·사회적 요인 중 집중력을 가장 많이 방해하는 원인을 진단하고 해결책을 찾아보세요." },
-  en: { title: "Focus Blocker Test — What's Sabotaging Your Focus?", description: "Identify your primary focus blockers — environment, emotions, technology, habits, or social factors — and find targeted solutions." },
-  ja: { title: "集中力ブロッカーテスト — 何があなたの集中を妨げていますか？", description: "環境・感情・テクノロジー・習慣・社会的要因の中から集中力を最も妨げる原因を診断します。" },
-  fr: { title: "Test de Blocage de Concentration — Qu'est-ce qui sabote votre concentration?", description: "Identifiez vos principaux bloqueurs de concentration — environnement, émotions, technologie, habitudes ou facteurs sociaux." },
-  es: { title: "Test de Bloqueadores de Enfoque — ¿Qué sabotea tu concentración?", description: "Identifica tus principales bloqueadores de enfoque — entorno, emociones, tecnología, hábitos o factores sociales." },
-  zh: { title: "专注力阻碍测试 — 什么在破坏你的专注力？", description: "识别你的主要专注力阻碍：环境、情绪、技术、习惯或社会因素。" },
-  cn: { title: "专注力阻碍测试 — 什么在破坏你的专注力？", description: "识别你的主要专注力阻碍：环境、情绪、技术、习惯或社会因素。" },
-};
-
-const m = meta[locale] ?? meta.en;
 ---
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <FocusBlockerTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Focus Blocker Test" targetPath="/focus-blocker-test" kind="test" />

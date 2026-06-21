@@ -1,18 +1,12 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import ColorMemoryTestComp from "../../components/tests/ColorMemoryTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
+
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
+
 const { locale } = Astro.props as { locale: Locale };
-const titles: Record<string, string> = { ko: "색깔 기억력 테스트 — 잠깐 본 색상 맞히기", en: "Color Memory Test — Remember the Briefly Shown Colors", ja: "カラーメモリーテスト — 一瞬見せた色を覚える", fr: "Test de Mémoire des Couleurs", es: "Prueba de Memoria de Colores", zh: "顏色記憶測試", cn: "颜色记忆测试" };
-const descs: Record<string, string> = { ko: "짧게 보여주는 색상을 기억하고 8라운드 동안 정확히 맞혀보세요. 라운드가 진행될수록 노출 시간이 짧아집니다.", en: "Remember briefly shown colors and match them correctly across 8 rounds. Exposure time decreases as rounds progress.", ja: "一瞬見せた色を記憶して8ラウンド正確に答えてください。ラウンドが進むほど表示時間が短くなります。", fr: "Mémorisez les couleurs affichées brièvement en 8 rounds.", es: "Recuerda los colores mostrados brevemente en 8 rondas.", zh: "記住短暫顯示的顏色並在8輪中準確答對。", cn: "记住短暂显示的颜色并在8轮中准确答对。" };
-const m = { title: titles[locale] ?? titles.en, description: descs[locale] ?? descs.en };
 ---
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-xl px-4 py-8">
-    <ColorMemoryTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Color Memory Test" targetPath="/color-memory-test" kind="test" />

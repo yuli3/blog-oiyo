@@ -1,6 +1,5 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import ProcrastinationTypeTestComp from "../../components/tests/ProcrastinationTypeTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -9,21 +8,5 @@ export async function getStaticPaths() {
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: { title: "미루기 유형 테스트 — 나는 왜 미루는가?", description: "Ferrari & Tice의 미루기 연구 기반 7가지 질문으로 완벽주의형·회피형·압도형·스릴추구형·결정불능형 중 나의 미루기 패턴을 발견하세요." },
-  en: { title: "Procrastination Type Test — Why Do You Procrastinate?", description: "Discover your procrastination pattern — Perfectionist, Avoider, Overwhelmed, Thrill-Seeker, or Indecisive — through 7 questions based on procrastination research." },
-  ja: { title: "先延ばし類型テスト — なぜ先延ばしにするのか？", description: "7つの質問で完璧主義型・回避型・圧倒型・スリル追求型・決断困難型のどれかを発見しましょう。" },
-  fr: { title: "Test de Procrastination — Pourquoi procrastinez-vous?", description: "Découvrez votre type de procrastination à travers 7 questions." },
-  es: { title: "Test de Procrastinación — ¿Por qué pospones las cosas?", description: "Descubre tu tipo de procrastinación a través de 7 preguntas." },
-  zh: { title: "拖延类型测试 — 你为何拖延？", description: "通过7个问题发现你的拖延模式。" },
-  cn: { title: "拖延类型测试 — 你为何拖延？", description: "通过7个问题发现你的拖延模式。" },
-};
-
-const m = meta[locale] ?? meta.en;
 ---
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <ProcrastinationTypeTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Procrastination Type Test" targetPath="/procrastination-type-test" kind="test" />

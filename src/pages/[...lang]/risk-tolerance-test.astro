@@ -1,54 +1,12 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import RiskToleranceTestComp from "../../components/tests/RiskToleranceTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
 export async function getStaticPaths() {
-  return locales.map((lang) => ({
-    params: { lang },
-    props: { locale: lang },
-  }));
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "위험 선호도 테스트 — 나는 안정형인가 모험형인가?",
-    description: "금융 리스크와 인생 리스크 두 영역에서 나의 위험 감수 성향을 14가지 문항으로 측정하세요.",
-  },
-  en: {
-    title: "Risk Tolerance Test — Are You Conservative or Adventurous?",
-    description: "Measure your risk appetite across financial and life decisions with 14 questions.",
-  },
-  ja: {
-    title: "リスク許容度テスト — あなたは安定志向？冒険志向？",
-    description: "金融リスクとライフリスクの2領域で、14の質問からリスク許容度を測定します。",
-  },
-  fr: {
-    title: "Test de Tolérance au Risque — Conservateur ou Aventurier ?",
-    description: "Mesurez votre appétit pour le risque dans les domaines financier et de vie avec 14 questions.",
-  },
-  es: {
-    title: "Test de Tolerancia al Riesgo — ¿Conservador o Aventurero?",
-    description: "Mide tu apetito por el riesgo en decisiones financieras y de vida con 14 preguntas.",
-  },
-  zh: {
-    title: "风险承受能力测试 — 你是保守型还是冒险型？",
-    description: "通过14个问题，测量您在金融和人生决策两个领域的风险偏好。",
-  },
-  cn: {
-    title: "风险承受能力测试 — 你是保守型还是冒险型？",
-    description: "通过14个问题，测量您在金融和人生决策两个领域的风险偏好。",
-  },
-};
-
-const m = meta[locale] ?? meta.en;
 ---
-
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <RiskToleranceTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Risk Tolerance Test" targetPath="/risk-tolerance-test" kind="test" />

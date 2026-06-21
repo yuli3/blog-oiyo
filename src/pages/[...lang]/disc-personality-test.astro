@@ -1,54 +1,12 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import DiscPersonalityTestComp from "../../components/tests/DiscPersonalityTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
 export async function getStaticPaths() {
-  return locales.map((lang) => ({
-    params: { lang },
-    props: { locale: lang },
-  }));
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "DISC 성격 유형 테스트 — 나의 행동 스타일은?",
-    description: "12가지 직장·일상 상황 질문으로 DISC 성격 유형을 알아보세요. 주도형(D), 사교형(I), 안정형(S), 신중형(C) 중 어떤 유형인지 분석합니다.",
-  },
-  en: {
-    title: "DISC Personality Test — What's Your Behavioral Style?",
-    description: "Discover your DISC personality type through 12 workplace and daily situation questions. Find out if you're Dominant, Influential, Steady, or Conscientious.",
-  },
-  ja: {
-    title: "DISCパーソナリティテスト — あなたの行動スタイルは？",
-    description: "12の職場・日常シナリオでDISCタイプを診断。主導型(D)・社交型(I)・安定型(S)・慎重型(C)のどれかを分析します。",
-  },
-  fr: {
-    title: "Test de Personnalité DISC — Quel est votre style comportemental?",
-    description: "Découvrez votre type de personnalité DISC à travers 12 questions situationnelles. Dominant, Influent, Stable ou Consciencieux?",
-  },
-  es: {
-    title: "Test de Personalidad DISC — ¿Cuál es tu estilo de comportamiento?",
-    description: "Descubre tu tipo de personalidad DISC con 12 preguntas situacionales. ¿Dominante, Influyente, Estable o Concienzudo?",
-  },
-  zh: {
-    title: "DISC人格测试 — 你的行为风格是什么？",
-    description: "透过12个情境问题了解你的DISC人格类型。主导型、影响型、稳定型还是谨慎型？",
-  },
-  cn: {
-    title: "DISC人格测试 — 你的行为风格是什么？",
-    description: "通过12个情境问题了解你的DISC人格类型。主导型、影响型、稳定型还是谨慎型？",
-  },
-};
-
-const m = meta[locale] ?? meta.en;
 ---
-
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <DiscPersonalityTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Disc Personality Test" targetPath="/disc-personality-test" kind="test" />

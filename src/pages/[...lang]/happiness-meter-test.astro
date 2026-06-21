@@ -1,6 +1,5 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import HappinessMeterTestComp from "../../components/tests/HappinessMeterTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -9,21 +8,5 @@ export async function getStaticPaths() {
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: { title: "행복 지수 테스트 — 지금 나의 행복 온도는?", description: "긍정적 감정·삶의 만족·의미·관계·성취 5가지 차원으로 현재 행복 지수를 측정합니다." },
-  en: { title: "Happiness Meter Test — What's Your Happiness Score?", description: "Measure your happiness across positive emotions, life satisfaction, meaning, relationships, and achievement." },
-  ja: { title: "幸福度テスト — あなたの幸福温度は？", description: "ポジティブ感情・生活満足度・意味・関係・達成感の5次元で現在の幸福度を測定します。" },
-  fr: { title: "Test de Bonheur — Quelle est votre température du bonheur?", description: "Mesurez votre bonheur sur les émotions positives, la satisfaction, le sens, les relations et la réussite." },
-  es: { title: "Test de Felicidad — ¿Cuál es tu temperatura de felicidad?", description: "Mide tu felicidad en emociones positivas, satisfacción con la vida, significado, relaciones y logros." },
-  zh: { title: "幸福指数测试 — 你的幸福温度是多少？", description: "从正面情绪、生活满意度、意义、关系和成就5个维度测量你的幸福指数。" },
-  cn: { title: "幸福指数测试 — 你的幸福温度是多少？", description: "从正面情绪、生活满意度、意义、关系和成就5个维度测量你的幸福指数。" },
-};
-
-const m = meta[locale] ?? meta.en;
 ---
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <HappinessMeterTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Happiness Meter Test" targetPath="/happiness-meter-test" kind="test" />

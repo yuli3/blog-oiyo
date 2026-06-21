@@ -1,54 +1,12 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import EmotionalEatingTestComp from "../../components/tests/EmotionalEatingTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
 export async function getStaticPaths() {
-  return locales.map((lang) => ({
-    params: { lang },
-    props: { locale: lang },
-  }));
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "감정적 식사 테스트 — 나는 감정 때문에 먹나?",
-    description: "15가지 문항으로 나의 감정적 식사 경향을 파악하고 음식과 감정의 관계를 이해하세요.",
-  },
-  en: {
-    title: "Emotional Eating Test — Do You Eat Your Feelings?",
-    description: "15 questions to understand your emotional eating patterns and discover healthier coping strategies.",
-  },
-  ja: {
-    title: "感情的食事テスト — 感情で食べていますか？",
-    description: "15の質問で感情的な食事パターンを把握し、より健康的な対処法を見つけましょう。",
-  },
-  fr: {
-    title: "Test de Manger Émotionnel — Mangez-vous vos émotions ?",
-    description: "15 questions pour comprendre vos habitudes alimentaires émotionnelles et découvrir des stratégies d'adaptation plus saines.",
-  },
-  es: {
-    title: "Test de Alimentación Emocional — ¿Comes tus emociones?",
-    description: "15 preguntas para entender tus patrones de alimentación emocional y descubrir estrategias más saludables.",
-  },
-  zh: {
-    title: "情绪性饮食测试 — 你是因为情绪而进食吗？",
-    description: "通过15个问题了解您的情绪性饮食模式，并发现更健康的应对策略。",
-  },
-  cn: {
-    title: "情绪性饮食测试 — 你是因为情绪而进食吗？",
-    description: "通过15个问题了解您的情绪性饮食模式，并发现更健康的应对策略。",
-  },
-};
-
-const m = meta[locale] ?? meta.en;
 ---
-
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <EmotionalEatingTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Emotional Eating Test" targetPath="/emotional-eating-test" kind="test" />

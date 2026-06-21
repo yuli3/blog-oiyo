@@ -1,6 +1,5 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import CommunicationStyleTestComp from "../../components/tests/CommunicationStyleTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -9,21 +8,5 @@ export async function getStaticPaths() {
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: { title: "소통 스타일 테스트 — 나는 어떻게 대화하는가?", description: "7가지 상황 질문으로 주장형·공격형·수동형·수동공격형·분석형 중 나의 소통 스타일을 진단하세요." },
-  en: { title: "Communication Style Test — How Do You Communicate?", description: "Identify your communication style — Assertive, Aggressive, Passive, Passive-Aggressive, or Analytical — through 7 scenario questions." },
-  ja: { title: "コミュニケーションスタイルテスト — あなたはどう話しますか？", description: "7つの状況質問で主張型・攻撃型・受動型・受動攻撃型・分析型のどれかを診断しましょう。" },
-  fr: { title: "Test de Style de Communication — Comment communiquez-vous?", description: "Identifiez votre style de communication à travers 7 questions de scénario." },
-  es: { title: "Test de Estilo de Comunicación — ¿Cómo te comunicas?", description: "Identifica tu estilo de comunicación a través de 7 preguntas de escenario." },
-  zh: { title: "沟通风格测试 — 你如何沟通？", description: "通过7个情境问题识别你的沟通风格。" },
-  cn: { title: "沟通风格测试 — 你如何沟通？", description: "通过7个情境问题识别你的沟通风格。" },
-};
-
-const m = meta[locale] ?? meta.en;
 ---
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <CommunicationStyleTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Communication Style Test" targetPath="/communication-style-test" kind="test" />

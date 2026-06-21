@@ -1,54 +1,12 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import ConflictStyleTestComp from "../../components/tests/ConflictStyleTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
 export async function getStaticPaths() {
-  return locales.map((lang) => ({
-    params: { lang },
-    props: { locale: lang },
-  }));
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "갈등 해결 스타일 테스트 — 나는 어떻게 갈등을 다루나요?",
-    description: "10가지 상황 선택 질문으로 나의 갈등 해결 방식을 알아보세요. 경쟁형, 협력형, 타협형, 회피형, 양보형 중 어떤 유형인지 분석합니다.",
-  },
-  en: {
-    title: "Conflict Style Test — How Do You Handle Conflict?",
-    description: "Discover your conflict resolution style through 10 situational questions. Find out if you're a Competitor, Collaborator, Compromiser, Avoider, or Accommodator.",
-  },
-  ja: {
-    title: "葛藤解決スタイルテスト — あなたはどう葛藤を解決しますか？",
-    description: "10の状況質問で葛藤解決スタイルを診断。競争型・協力型・妥協型・回避型・従順型のどれかを分析します。",
-  },
-  fr: {
-    title: "Test de Style de Gestion des Conflits — Comment gérez-vous les conflits?",
-    description: "Découvrez votre style de résolution de conflits à travers 10 questions situationnelles.",
-  },
-  es: {
-    title: "Test de Estilo de Resolución de Conflictos — ¿Cómo manejas los conflictos?",
-    description: "Descubre tu estilo de resolución de conflictos con 10 preguntas situacionales.",
-  },
-  zh: {
-    title: "冲突解决风格测试 — 你如何处理冲突？",
-    description: "通过10个情境问题了解您的冲突解决风格。竞争型、合作型、妥协型、回避型还是顺从型？",
-  },
-  cn: {
-    title: "冲突解决风格测试 — 你如何处理冲突？",
-    description: "通过10个情境问题了解您的冲突解决风格。竞争型、合作型、妥协型、回避型还是顺从型？",
-  },
-};
-
-const m = meta[locale] ?? meta.en;
 ---
-
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <ConflictStyleTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Conflict Style Test" targetPath="/conflict-style-test" kind="test" />

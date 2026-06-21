@@ -1,6 +1,5 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import LifeValuesTestComp from "../../components/tests/LifeValuesTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -9,21 +8,5 @@ export async function getStaticPaths() {
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: { title: "삶의 가치관 테스트 — 나에게 가장 중요한 것은?", description: "10가지 강제 선택 질문으로 나의 핵심 가치관 상위 3가지를 알아보세요. 안정, 모험, 창의성, 가족, 성취, 자유, 기여, 성장, 영성, 부 중 무엇인가요?" },
-  en: { title: "Life Values Test — What Matters Most to You?", description: "Discover your top 3 core values through 10 forced-choice questions. Security, Adventure, Creativity, Family, Achievement, Freedom, Contribution, Growth, Spirituality, or Wealth?" },
-  ja: { title: "人生の価値観テスト — あなたにとって最も重要なことは？", description: "10の強制選択質問で核心的な価値観トップ3を発見。安定、冒険、創造性、家族、達成、自由、貢献、成長、霊性、富のどれですか？" },
-  fr: { title: "Test de Valeurs de Vie — Qu'est-ce qui compte le plus?", description: "Découvrez vos 3 valeurs fondamentales avec 10 questions à choix forcé." },
-  es: { title: "Test de Valores de Vida — ¿Qué es lo más importante para ti?", description: "Descubre tus 3 valores fundamentales con 10 preguntas de elección forzada." },
-  zh: { title: "人生价值观测试 — 对你最重要的是什么？", description: "通过10个强制选择问题发现你的前3个核心价值观。" },
-  cn: { title: "人生价值观测试 — 对你最重要的是什么？", description: "通过10个强制选择问题发现你的前3个核心价值观。" },
-};
-
-const m = meta[locale] ?? meta.en;
 ---
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <LifeValuesTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Life Values Test" targetPath="/life-values-test" kind="test" />

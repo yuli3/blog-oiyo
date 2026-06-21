@@ -1,6 +1,5 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import WorkStyleTestComp from "../../components/tests/WorkStyleTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -9,21 +8,5 @@ export async function getStaticPaths() {
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: { title: "업무 스타일 테스트 — 나는 어떻게 일하는가?", description: "6가지 상황 질문으로 체계적 계획가·유연한 적응가·협력형·독립형·완벽 추구형 중 나의 업무 스타일을 발견하세요." },
-  en: { title: "Work Style Test — How Do You Work?", description: "Discover your work style — Planner, Adapter, Collaborator, Independent, or Perfectionist — through 6 scenario questions." },
-  ja: { title: "仕事スタイルテスト — あなたはどう働く？", description: "6つの状況質問で計画型・適応型・協力型・独立型・完璧型のどれかを発見しましょう。" },
-  fr: { title: "Test de Style de Travail — Comment travaillez-vous?", description: "Découvrez votre style de travail à travers 6 questions de scénario." },
-  es: { title: "Test de Estilo de Trabajo — ¿Cómo trabajas?", description: "Descubre tu estilo de trabajo a través de 6 preguntas de escenario." },
-  zh: { title: "工作风格测试 — 你如何工作？", description: "通过6个情境问题发现你的工作风格。" },
-  cn: { title: "工作风格测试 — 你如何工作？", description: "通过6个情境问题发现你的工作风格。" },
-};
-
-const m = meta[locale] ?? meta.en;
 ---
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <WorkStyleTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Work Style Test" targetPath="/work-style-test" kind="test" />

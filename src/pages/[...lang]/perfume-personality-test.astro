@@ -1,6 +1,5 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import PerfumePersonalityTestComp from "../../components/tests/PerfumePersonalityTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -9,21 +8,5 @@ export async function getStaticPaths() {
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: { title: "향수 퍼스낼리티 테스트: 나의 향수 성격은?", description: "12개의 질문으로 나의 향기 취향과 감각 성격을 발견하세요. 플로럴 로맨티스트·우디 어스 소울·프레시 프리 스피릿·오리엔탈 미스틱 중 나의 향수 성격은?" },
-  en: { title: "Perfume Personality Test: What's Your Fragrance Personality?", description: "Discover your scent preference and sensory personality through 12 questions. Floral Romanticist, Woody Earth Soul, Fresh Free Spirit, or Oriental Mystic?" },
-  ja: { title: "パフューム性格テスト：あなたの香水パーソナリティは？", description: "12の質問で香りの好みと感覚的な個性を発見しましょう。フローラルロマンティスト・ウッディアースソウル・フレッシュフリースピリット・オリエンタルミスティックのどれ？" },
-  fr: { title: "Test de personnalité parfumée : Quelle est votre personnalité olfactive ?", description: "Découvrez vos préférences olfactives et votre personnalité sensorielle à travers 12 questions. Romantique Floral, Âme Terrienne Boisée, Esprit Libre Frais ou Mystique Oriental ?" },
-  es: { title: "Test de Personalidad del Perfume: ¿Cuál es tu personalidad olfativa?", description: "Descubre tus preferencias aromáticas y personalidad sensorial a través de 12 preguntas. ¿Romanticista Floral, Alma Terrosa Amaderada, Espíritu Libre Fresco u Místico Oriental?" },
-  zh: { title: "香水个性测试：你的香水性格是什么？", description: "透过12个问题发现你的香气偏好和感官个性。花香浪漫主义者、木质大地灵魂、清新自由精神还是东方神秘者？" },
-  cn: { title: "香水个性测试：你的香水性格是什么？", description: "通过12个问题发现你的香气偏好和感官个性。花香浪漫主义者、木质大地灵魂、清新自由精神还是东方神秘者？" },
-};
-
-const m = meta[locale] ?? meta.en;
 ---
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <PerfumePersonalityTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Perfume Personality Test" targetPath="/perfume-personality-test" kind="test" />

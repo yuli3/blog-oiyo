@@ -1,6 +1,5 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import MotivationTypeTestComp from "../../components/tests/MotivationTypeTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -9,21 +8,5 @@ export async function getStaticPaths() {
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: { title: "동기 유형 테스트 — 나를 움직이는 것은?", description: "12가지 질문으로 나의 핵심 동기 유형을 알아보세요. 성취, 친화, 권력/영향력, 자율 중 무엇이 나를 가장 강하게 이끄는지 분석합니다." },
-  en: { title: "Motivation Type Test — What Drives You?", description: "Discover your core motivation type with 12 questions. Analyze whether Achievement, Affiliation, Power/Influence, or Autonomy drives you most." },
-  ja: { title: "動機タイプテスト — あなたを動かすものは？", description: "12の質問で核心的な動機タイプを発見。達成、親和、権力/影響力、自律のどれが最も強く自分を導くかを分析します。" },
-  fr: { title: "Test de Type de Motivation — Qu'est-ce qui vous motive?", description: "Découvrez votre type de motivation principal avec 12 questions." },
-  es: { title: "Test de Tipo de Motivación — ¿Qué te motiva?", description: "Descubre tu tipo de motivación principal con 12 preguntas." },
-  zh: { title: "动机类型测试 — 是什么驱动你？", description: "通过12个问题了解你的核心动机类型。成就、亲和、权力/影响力还是自律？" },
-  cn: { title: "动机类型测试 — 是什么驱动你？", description: "通过12个问题了解你的核心动机类型。成就、亲和、权力/影响力还是自律？" },
-};
-
-const m = meta[locale] ?? meta.en;
 ---
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <MotivationTypeTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Motivation Type Test" targetPath="/motivation-type-test" kind="test" />

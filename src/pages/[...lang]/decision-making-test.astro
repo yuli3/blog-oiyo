@@ -1,6 +1,5 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import DecisionMakingTestComp from "../../components/tests/DecisionMakingTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -9,21 +8,5 @@ export async function getStaticPaths() {
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: { title: "의사결정 스타일 테스트 — 나는 어떻게 결정하는가?", description: "6가지 상황 질문으로 이성형·직관형·협의형·회피형·즉흥형 중 나의 의사결정 스타일을 알아보세요." },
-  en: { title: "Decision-Making Style Test — How Do You Decide?", description: "Discover your decision-making style — Rational, Intuitive, Collaborative, Avoidant, or Spontaneous — through 6 scenario questions." },
-  ja: { title: "意思決定スタイルテスト — あなたはどう決断しますか？", description: "6つの状況質問で合理型・直感型・相談型・回避型・即興型のどれかを発見しましょう。" },
-  fr: { title: "Test de Style de Prise de Décision — Comment décidez-vous?", description: "Découvrez votre style de prise de décision à travers 6 questions de scénario." },
-  es: { title: "Test de Estilo de Toma de Decisiones — ¿Cómo decides?", description: "Descubre tu estilo de toma de decisiones a través de 6 preguntas de escenario." },
-  zh: { title: "决策风格测试 — 你如何做决定？", description: "通过6个情境问题发现你的决策风格。" },
-  cn: { title: "决策风格测试 — 你如何做决定？", description: "通过6个情境问题发现你的决策风格。" },
-};
-
-const m = meta[locale] ?? meta.en;
 ---
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <DecisionMakingTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Decision Making Test" targetPath="/decision-making-test" kind="test" />

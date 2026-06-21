@@ -1,6 +1,5 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import ChimpTestComp from "../../components/games/ChimpTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -9,43 +8,5 @@ export async function getStaticPaths() {
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "침팬지 테스트 — 당신은 침팬지보다 기억력이 좋은가?",
-    description: "숫자를 순서대로 기억하고 클릭하는 기억력 테스트. 침팬지의 순간 기억력에 도전해보세요.",
-  },
-  en: {
-    title: "Chimp Memory Test",
-    description: "A memory test where you remember and click numbers in order. Challenge the legendary short-term memory of chimpanzees.",
-  },
-  ja: {
-    title: "チンパンジーテスト — あなたはチンパンジーより記憶力がいい？",
-    description: "数字を順番に記憶してクリックする記憶力テスト。チンパンジーの瞬間記憶力に挑戦しましょう。",
-  },
-  fr: {
-    title: "Test de Mémoire Chimpanzé",
-    description: "Un test de mémoire où vous mémorisez et cliquez des chiffres dans l'ordre. Défiez la légendaire mémoire à court terme des chimpanzés.",
-  },
-  es: {
-    title: "Test de Memoria del Chimpancé",
-    description: "Un test de memoria donde recuerdas y haces clic en números en orden. Desafía la legendaria memoria a corto plazo de los chimpancés.",
-  },
-  zh: {
-    title: "黑猩猩记忆测试 — 你的记忆力比黑猩猩好吗？",
-    description: "记住数字并按顺序点击的记忆力测试。挑战黑猩猩的瞬间记忆力。",
-  },
-  cn: {
-    title: "黑猩猩记忆测试 — 你的记忆力比黑猩猩好吗？",
-    description: "记住数字并按顺序点击的记忆力测试。挑战黑猩猩的瞬间记忆力。",
-  },
-};
-
-const m = meta[locale] ?? meta.en;
 ---
-
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <ChimpTestComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Chimp Test" targetPath="/chimp-test" kind="test" />

@@ -1,6 +1,5 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import ColorRecognitionTestComp from "../../components/tests/ColorRecognitionTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -9,21 +8,5 @@ export async function getStaticPaths() {
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: { title: "컬러 인식 테스트: 나의 색채 감각 유형은?", description: "12개의 색채 관련 질문으로 나의 컬러 인식 유형을 알아보세요. 비주얼 아티스트형·컬러 하모나이저형·콘트라스트 시커형·인튜이티브 컬러리스트형 중 나는?" },
-  en: { title: "Color Recognition Test: What's Your Color Sensitivity Type?", description: "Find out your color perception type through 12 color-related questions. Visual Artist, Color Harmonizer, Contrast Seeker, or Intuitive Colorist?" },
-  ja: { title: "カラー認識テスト：あなたの色彩感覚タイプは？", description: "12の色彩関連質問であなたのカラー認識タイプを見つけましょう。ビジュアルアーティスト型・カラーハーモナイザー型・コントラストシーカー型・直感的カラリスト型のどれ？" },
-  fr: { title: "Test de reconnaissance des couleurs : Quel est votre type de sensibilité chromatique ?", description: "Découvrez votre type de perception des couleurs à travers 12 questions. Artiste Visuel, Harmonisateur de Couleurs, Chercheur de Contrastes ou Coloriste Intuitif ?" },
-  es: { title: "Test de Reconocimiento de Color: ¿Cuál es tu tipo de sensibilidad cromática?", description: "Descubre tu tipo de percepción del color a través de 12 preguntas. ¿Artista Visual, Armonizador de Colores, Buscador de Contraste o Colorista Intuitivo?" },
-  zh: { title: "色彩认知测试：你的色彩感知类型是什么？", description: "透过12个色彩相关问题了解你的色彩认知类型。视觉艺术家型、色彩调和师型、对比探索者型还是直觉色彩家型？" },
-  cn: { title: "色彩认知测试：你的色彩感知类型是什么？", description: "通过12个色彩相关问题了解你的色彩认知类型。视觉艺术家型、色彩调和师型、对比探索者型还是直觉色彩家型？" },
-};
-
-const m = meta[locale] ?? meta.en;
 ---
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <ColorRecognitionTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Color Recognition Test" targetPath="/color-recognition-test" kind="test" />

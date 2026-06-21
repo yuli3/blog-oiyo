@@ -1,6 +1,5 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import IQTest from "../../components/tests/IQTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -9,43 +8,5 @@ export async function getStaticPaths() {
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "IQ 추정 테스트 — 패턴·논리·공간·수열 15문항 무료",
-    description: "수열·패턴·논리·공간 추론 15문항으로 나의 인지 능력을 추정합니다. 각 문제 해설과 함께 IQ 점수대(70~135+)를 즉시 확인하세요.",
-  },
-  en: {
-    title: "IQ Estimation Test — 15 Pattern, Logic & Spatial Questions",
-    description: "15 sequence, pattern, logic, and spatial reasoning questions to estimate your cognitive ability. Get an instant IQ estimate (70–135+) with detailed explanations.",
-  },
-  ja: {
-    title: "IQ推定テスト — パターン·論理·空間·数列15問 無料",
-    description: "数列・パターン・論理・空間推論15問で認知能力を推定します。各問題の解説付きでIQスコア帯（70〜135+）を即座に確認。",
-  },
-  fr: {
-    title: "Test d'Estimation du QI — 15 Questions Logique & Motifs",
-    description: "15 questions de séquences, motifs, logique et raisonnement spatial pour estimer vos capacités cognitives. Obtenez une estimation de QI (70–135+) instantanée.",
-  },
-  es: {
-    title: "Test de Estimación de CI — 15 Preguntas Lógica y Patrones",
-    description: "15 preguntas de secuencias, patrones, lógica y razonamiento espacial para estimar tu capacidad cognitiva. Obtén una estimación de CI (70–135+) instantánea.",
-  },
-  zh: {
-    title: "IQ推测测验 — 15道图形规律、逻辑、空间题目",
-    description: "15道数列、图形规律、逻辑推理和空间思维题目，即时推估你的认知能力IQ分段（70~135+），附详细解析。",
-  },
-  cn: {
-    title: "IQ推测测验 — 15道图形规律、逻辑、空间题目",
-    description: "15道数列、图形规律、逻辑推理和空间思维题目，即时推估你的认知能力IQ分段（70~135+），附详细解析。",
-  },
-};
-
-const m = meta[locale] ?? meta.en;
 ---
-
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <IQTest client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Iq Test" targetPath="/iq-test" kind="test" />

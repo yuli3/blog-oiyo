@@ -1,6 +1,5 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import BreakupRecoveryTest from "../../components/tests/BreakupRecoveryTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -9,43 +8,5 @@ export async function getStaticPaths() {
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "이별 회복 유형 테스트 — 나는 어떤 실연 회복 유형?",
-    description: "12문항으로 알아보는 나의 이별 회복 유형. 격류형·성장형·고독형·전환형 중 어떤 스타일인지 무료 테스트.",
-  },
-  en: {
-    title: "Breakup Recovery Test — What's Your Healing Style?",
-    description: "Find out your breakup recovery type in 12 questions. Are you a Torrent, Growth, Solitude, or Transition type? Free personality test.",
-  },
-  ja: {
-    title: "失恋回復タイプテスト — あなたの癒やしスタイルは？",
-    description: "12問でわかる失恋回復タイプ。激流型・成長型・孤独型・転換型のどれか無料で診断します。",
-  },
-  fr: {
-    title: "Test de Récupération de Rupture — Quel Est Votre Style de Guérison ?",
-    description: "Découvrez votre type de récupération après une rupture en 12 questions. Êtes-vous du type Torrent, Croissance, Solitude ou Transition ?",
-  },
-  es: {
-    title: "Test de Recuperación de Ruptura — ¿Cuál Es Tu Estilo de Sanación?",
-    description: "Descubre tu tipo de recuperación tras una ruptura en 12 preguntas. ¿Eres del tipo Torrente, Crecimiento, Soledad o Transición? Test gratuito.",
-  },
-  zh: {
-    title: "分手恢复类型测试 — 你的疗愈风格是什么？",
-    description: "通过12道题了解你的分手恢复类型：激流型、成长型、孤独型或转型型？免费性格测试。",
-  },
-  cn: {
-    title: "分手恢復類型測試 — 你的療癒風格是什麼？",
-    description: "通過12道題了解你的分手恢復類型：激流型、成長型、孤獨型或轉型型？免費性格測試。",
-  },
-};
-
-const m = meta[locale] ?? meta.en;
 ---
-
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <BreakupRecoveryTest client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Breakup Recovery Test" targetPath="/breakup-recovery-test" kind="test" />

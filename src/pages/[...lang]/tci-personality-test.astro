@@ -1,6 +1,5 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import TciPersonalityTest from "../../components/tests/TciPersonalityTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -9,43 +8,5 @@ export async function getStaticPaths() {
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "TCI 기질 및 성격 검사 — 클로닌저 7차원 성격 분석",
-    description: "위험 회피·자극 추구·보상 의존성·인내력(기질)과 자기 주도성·협동심·자기 초월(성격) 등 7개 차원으로 성격을 분석합니다.",
-  },
-  en: {
-    title: "TCI Temperament & Character Test — Cloninger's 7-Dimension Analysis",
-    description: "Discover your personality across 7 dimensions: Harm Avoidance, Novelty Seeking, Reward Dependence, Persistence (temperament) and Self-Directedness, Cooperativeness, Self-Transcendence (character).",
-  },
-  ja: {
-    title: "TCI気質・性格検査 — クロニンジャー7次元性格分析",
-    description: "危険回避・刺激追求・報酬依存・忍耐力（気質）と自己主導性・協調性・自己超越（性格）の7次元で性格を分析します。",
-  },
-  fr: {
-    title: "Test TCI Tempérament & Caractère — Analyse 7 Dimensions de Cloninger",
-    description: "Découvrez votre personnalité en 7 dimensions : Évitement du danger, Recherche de nouveauté, Dépendance à la récompense, Persistance (tempérament) et Autonomie, Coopérativité, Transcendance (caractère).",
-  },
-  es: {
-    title: "Test TCI Temperamento y Carácter — Análisis de 7 Dimensiones de Cloninger",
-    description: "Descubre tu personalidad en 7 dimensiones: Evitación del daño, Búsqueda de novedad, Dependencia de recompensa, Persistencia (temperamento) y Autodirección, Cooperatividad, Autotrascendencia (carácter).",
-  },
-  zh: {
-    title: "TCI气质与性格测验 — Cloninger 7维度人格分析",
-    description: "透过7个维度分析您的性格：避害性、新奇寻求、奖赏依赖、坚持性（气质）以及自我主导性、合作性、自我超越（性格）。",
-  },
-  cn: {
-    title: "TCI气质与性格测验 — Cloninger 7维度人格分析",
-    description: "通过7个维度分析您的性格：避害性、新奇寻求、奖赏依赖、坚持性（气质）以及自我主导性、合作性、自我超越（性格）。",
-  },
-};
-
-const m = meta[locale] ?? meta.en;
 ---
-
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <TciPersonalityTest client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Tci Personality Test" targetPath="/tci-personality-test" kind="test" />

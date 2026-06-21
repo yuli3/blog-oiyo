@@ -1,6 +1,5 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import ValueCompassTestComp from "../../components/tests/ValueCompassTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -9,21 +8,5 @@ export async function getStaticPaths() {
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: { title: "가치관 나침반 테스트 — 나를 이끄는 핵심 가치는?", description: "성취·관계·자유·안정·성장·기여 중 나의 삶을 움직이는 핵심 가치관을 발견하세요." },
-  en: { title: "Value Compass Test — What Core Values Guide You?", description: "Discover the core values driving your life — Achievement, Relationships, Freedom, Security, Growth, or Contribution." },
-  ja: { title: "価値観コンパステスト — あなたを導く核心的価値観は？", description: "達成・関係・自由・安定・成長・貢献の中から、あなたの人生を動かす核心的価値観を発見しましょう。" },
-  fr: { title: "Test de la Boussole des Valeurs — Quelles valeurs fondamentales vous guident?", description: "Découvrez les valeurs fondamentales qui guident votre vie : Réalisation, Relations, Liberté, Sécurité, Croissance ou Contribution." },
-  es: { title: "Test de la Brújula de Valores — ¿Qué valores fundamentales te guían?", description: "Descubre los valores fundamentales que impulsan tu vida: Logro, Relaciones, Libertad, Seguridad, Crecimiento o Contribución." },
-  zh: { title: "价值观罗盘测试 — 什么核心价值观引导你？", description: "发现驱动你生活的核心价值观：成就、关系、自由、安全感、成长还是贡献。" },
-  cn: { title: "价值观罗盘测试 — 什么核心价值观引导你？", description: "发现驱动你生活的核心价值观：成就、关系、自由、安全感、成长还是贡献。" },
-};
-
-const m = meta[locale] ?? meta.en;
 ---
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <ValueCompassTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Value Compass Test" targetPath="/value-compass-test" kind="test" />

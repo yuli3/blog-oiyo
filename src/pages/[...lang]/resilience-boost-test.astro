@@ -1,6 +1,5 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import ResilienceBoostTestComp from "../../components/tests/ResilienceBoostTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -9,21 +8,5 @@ export async function getStaticPaths() {
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: { title: "회복탄력성 테스트 — 나의 회복 근육은 얼마나 강한가?", description: "역경·스트레스·실패를 극복하는 회복탄력성의 4가지 요소(감정조절·낙관성·자기효능감·사회적지지)를 측정합니다." },
-  en: { title: "Resilience Boost Test — How Strong Is Your Recovery Muscle?", description: "Measure your resilience across emotion regulation, optimism, self-efficacy, and social support." },
-  ja: { title: "レジリエンスブーストテスト — あなたの回復力はどれくらい強いですか？", description: "感情調節・楽観主義・自己効力感・社会的サポートの4要素で回復力を測定します。" },
-  fr: { title: "Test de Résilience — Quelle est la force de votre muscle de récupération?", description: "Mesurez votre résilience en régulation émotionnelle, optimisme, auto-efficacité et soutien social." },
-  es: { title: "Test de Resiliencia — ¿Qué tan fuerte es tu músculo de recuperación?", description: "Mide tu resiliencia en regulación emocional, optimismo, autoeficacia y apoyo social." },
-  zh: { title: "韧性测试 — 你的恢复能力有多强？", description: "测量你在情绪调节、乐观主义、自我效能感和社会支持方面的韧性。" },
-  cn: { title: "韧性测试 — 你的恢复能力有多强？", description: "测量你在情绪调节、乐观主义、自我效能感和社会支持方面的韧性。" },
-};
-
-const m = meta[locale] ?? meta.en;
 ---
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <ResilienceBoostTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Resilience Boost Test" targetPath="/resilience-boost-test" kind="test" />

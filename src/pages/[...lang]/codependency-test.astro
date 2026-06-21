@@ -1,54 +1,12 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import CodependencyTestComp from "../../components/tests/CodependencyTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
 export async function getStaticPaths() {
-  return locales.map((lang) => ({
-    params: { lang },
-    props: { locale: lang },
-  }));
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "공동의존 성향 테스트 — 나는 관계에서 나를 잃고 있나요?",
-    description: "15가지 Likert 문항으로 나의 공동의존 성향을 진단해보세요. 독립형부터 강한 공동의존까지 4단계 분석과 회복 가이드를 제공합니다.",
-  },
-  en: {
-    title: "Codependency Test — Are You Losing Yourself in Relationships?",
-    description: "Assess your codependency tendencies with 15 Likert questions. Get a 4-level analysis from independent to strong codependency, with recovery guidance.",
-  },
-  ja: {
-    title: "共依存傾向テスト — 関係の中で自分を失っていますか？",
-    description: "15のリカート問題で共依存傾向を診断しましょう。自立型から強い共依存まで4段階の分析と回復ガイドを提供します。",
-  },
-  fr: {
-    title: "Test de codépendance — Vous perdez-vous dans vos relations?",
-    description: "Évaluez vos tendances codépendantes avec 15 questions. Analyse en 4 niveaux avec des conseils de rétablissement.",
-  },
-  es: {
-    title: "Test de codependencia — ¿Te pierdes en las relaciones?",
-    description: "Evalúa tus tendencias de codependencia con 15 preguntas. Análisis de 4 niveles con guía de recuperación.",
-  },
-  zh: {
-    title: "共依存倾向测试 — 你在关系中迷失自己了吗？",
-    description: "通过15道李克特量表题诊断你的共依存倾向，从独立型到强共依存，4段分析及恢复指南。",
-  },
-  cn: {
-    title: "共依存倾向测试 — 你在关系中迷失自己了吗？",
-    description: "通过15道李克特量表题诊断你的共依存倾向，从独立型到强共依存，4段分析及恢复指南。",
-  },
-};
-
-const m = meta[locale] ?? meta.en;
 ---
-
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <CodependencyTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Codependency Test" targetPath="/codependency-test" kind="test" />

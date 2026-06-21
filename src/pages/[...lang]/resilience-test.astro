@@ -1,54 +1,12 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import ResilienceTestComp from "../../components/tests/ResilienceTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
 export async function getStaticPaths() {
-  return locales.map((lang) => ({
-    params: { lang },
-    props: { locale: lang },
-  }));
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "회복탄력성 자가 진단 — 나는 역경에서 얼마나 잘 회복하나요?",
-    description: "10가지 질문으로 나의 회복탄력성 수준을 진단해보세요. 역경 후 회복 능력과 강화 전략을 알아봅니다.",
-  },
-  en: {
-    title: "Resilience Self-Assessment — How Well Do You Bounce Back?",
-    description: "Assess your resilience level with 10 questions. Discover your recovery ability and strategies to strengthen it.",
-  },
-  ja: {
-    title: "回復力自己診断 — 逆境からどれくらいうまく立ち直れますか？",
-    description: "10の質問で自分の回復力レベルを診断。逆境からの回復能力と強化戦略を発見しましょう。",
-  },
-  fr: {
-    title: "Auto-évaluation de la Résilience — Comment rebondissez-vous?",
-    description: "Évaluez votre niveau de résilience avec 10 questions.",
-  },
-  es: {
-    title: "Autoevaluación de Resiliencia — ¿Qué tan bien te recuperas?",
-    description: "Evalúa tu nivel de resiliencia con 10 preguntas.",
-  },
-  zh: {
-    title: "心理韧性自我评估 — 你从逆境中恢复得多好？",
-    description: "通过10个问题评估你的心理韧性水平。",
-  },
-  cn: {
-    title: "心理韧性自我评估 — 你从逆境中恢复得多好？",
-    description: "通过10个问题评估你的心理韧性水平。",
-  },
-};
-
-const m = meta[locale] ?? meta.en;
 ---
-
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <ResilienceTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Resilience Test" targetPath="/resilience-test" kind="test" />

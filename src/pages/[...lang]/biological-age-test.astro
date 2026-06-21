@@ -1,18 +1,12 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import BiologicalAgeTestComp from "../../components/tests/BiologicalAgeTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
+
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
+
 const { locale } = Astro.props as { locale: Locale };
-const titles: Record<string,string> = { ko:"생체 나이 계산기 — 생활 습관으로 측정하는 실제 건강 나이", en:"Biological Age Calculator — Measure Your Real Health Age", ja:"生物学的年齢計算機 — 生活習慣から測る本当の健康年齢", fr:"Calculateur d'Âge Biologique — Mesurez votre Âge de Santé Réel", es:"Calculadora de Edad Biológica — Mide tu Edad de Salud Real", zh:"生物年齡計算器 — 通過生活習慣測量真實健康年齡", cn:"生物年龄计算器 — 通过生活习惯测量真实健康年龄" };
-const descs: Record<string,string> = { ko:"수면·운동·식습관·스트레스·흡연·음주·BMI·사회적 연결 8가지 요인으로 생체 나이를 계산합니다. 실제 나이와 비교해보세요.", en:"Calculate your biological age based on 8 factors: sleep, exercise, diet, stress, smoking, alcohol, BMI, and social connection.", ja:"睡眠・運動・食習慣・ストレス・喫煙・飲酒・BMI・社会的つながり8つの要因で生物学的年齢を計算。", fr:"Calculez votre âge biologique basé sur 8 facteurs: sommeil, exercice, alimentation, stress, tabac, alcool, IMC et connexion sociale.", es:"Calcula tu edad biológica basada en 8 factores: sueño, ejercicio, dieta, estrés, tabaco, alcohol, IMC y conexión social.", zh:"根據睡眠、運動、飲食、壓力、吸菸、飲酒、BMI和社交連結8個因素計算生物年齡。", cn:"根据睡眠、运动、饮食、压力、吸烟、饮酒、BMI和社交连结8个因素计算生物年龄。" };
-const m = { title: titles[locale]??titles.en, description: descs[locale]??descs.en };
 ---
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-xl px-4 py-8">
-    <BiologicalAgeTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Biological Age Test" targetPath="/biological-age-test" kind="test" />

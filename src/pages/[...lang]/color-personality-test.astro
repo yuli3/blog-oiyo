@@ -1,54 +1,12 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import ColorPersonalityTestComp from "../../components/tests/ColorPersonalityTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
 export async function getStaticPaths() {
-  return locales.map((lang) => ({
-    params: { lang },
-    props: { locale: lang },
-  }));
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "컬러 성격 테스트 — 나를 대표하는 색깔은?",
-    description: "15가지 질문으로 당신의 성격을 5가지 색깔(레드·블루·옐로우·그린·퍼플) 중 하나로 알아보세요. 강점, 성장 포인트, 잘 맞는 색깔 유형도 함께 확인합니다.",
-  },
-  en: {
-    title: "Color Personality Test — What Color Are You?",
-    description: "Discover which of 5 color personalities (Red, Blue, Yellow, Green, Purple) represents you through 15 questions. Includes strengths, growth areas, and compatible color types.",
-  },
-  ja: {
-    title: "カラー性格テスト — 私を表す色は何？",
-    description: "15の質問で5つのカラー性格（レッド・ブルー・イエロー・グリーン・パープル）のどれがあなたを表すか発見しましょう。強み、成長ポイント、相性の良いカラータイプも確認できます。",
-  },
-  fr: {
-    title: "Test de Personnalité par Couleur — Quelle est votre couleur?",
-    description: "Découvrez laquelle des 5 personnalités colorées vous représente à travers 15 questions. Inclut forces, axes de croissance et types compatibles.",
-  },
-  es: {
-    title: "Test de Personalidad por Color — ¿Qué Color Eres?",
-    description: "Descubre cuál de las 5 personalidades de color te representa con 15 preguntas. Incluye fortalezas, áreas de crecimiento y tipos compatibles.",
-  },
-  zh: {
-    title: "颜色性格测试 — 哪种颜色代表您？",
-    description: "通过15个问题发现5种颜色性格（红、蓝、黄、绿、紫）中哪种代表您。包括优势、成长领域和相容的颜色类型。",
-  },
-  cn: {
-    title: "颜色性格测试 — 哪种颜色代表您？",
-    description: "通过15个问题发现5种颜色性格（红、蓝、黄、绿、紫）中哪种代表您。包括优势、成长领域和相容的颜色类型。",
-  },
-};
-
-const m = meta[locale] ?? meta.en;
 ---
-
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <ColorPersonalityTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Color Personality Test" targetPath="/color-personality-test" kind="test" />

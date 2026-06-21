@@ -1,61 +1,12 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import CoffeePersonalityTestComp from "../../components/tests/CoffeePersonalityTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
 export async function getStaticPaths() {
-  return locales.map((lang) => ({
-    params: { lang },
-    props: { locale: lang },
-  }));
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "커피 성격 테스트 — 나는 어떤 커피 타입?",
-    description:
-      "에스프레소, 라떼, 콜드브루, 카푸치노, 아메리카노 — 8가지 질문으로 나의 커피 성격을 발견하세요!",
-  },
-  en: {
-    title: "Coffee Personality Test — Which Coffee Are You?",
-    description:
-      "Espresso, Latte, Cold Brew, Cappuccino, or Americano? Find your coffee personality with 8 fun questions.",
-  },
-  ja: {
-    title: "コーヒー性格テスト — あなたはどのコーヒータイプ？",
-    description:
-      "エスプレッソ、ラテ、コールドブリュー、カプチーノ、アメリカーノ。8つの質問であなたのコーヒー性格を発見。",
-  },
-  fr: {
-    title: "Test de personnalité café — Quel café êtes-vous ?",
-    description:
-      "Espresso, Latte, Cold Brew, Cappuccino ou Americano ? Découvrez votre personnalité café en 8 questions.",
-  },
-  es: {
-    title: "Test de personalidad del café — ¿Qué café eres tú?",
-    description:
-      "Espresso, Latte, Cold Brew, Cappuccino o Americano. Descubre tu personalidad cafetera con 8 preguntas.",
-  },
-  zh: {
-    title: "咖啡性格测验 — 你是哪种咖啡类型？",
-    description:
-      "义式浓缩、拿铁、冷萃、卡布奇诺还是美式咖啡？透过8个问题发现你的咖啡性格。",
-  },
-  cn: {
-    title: "咖啡性格测试 — 你是哪种咖啡类型？",
-    description:
-      "意式浓缩、拿铁、冷萃、卡布奇诺还是美式咖啡？通过8个问题发现你的咖啡性格。",
-  },
-};
-
-const m = meta[locale] ?? meta.en;
 ---
-
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <CoffeePersonalityTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Coffee Personality Test" targetPath="/coffee-personality-test" kind="test" />

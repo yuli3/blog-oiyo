@@ -1,6 +1,5 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import HspTest from "../../components/tests/HspTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -9,43 +8,5 @@ export async function getStaticPaths() {
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "HSP 민감성 테스트 — 나는 고감각자(HSP)일까?",
-    description: "Elaine Aron 박사의 DOES 모델 기반 20문항 HSP 자가 진단. 깊은 처리·과잉 자극·감정 반응·미묘한 감지 4가지 차원에서 당신의 민감성 수준을 분석합니다.",
-  },
-  en: {
-    title: "HSP Sensitivity Test — Am I a Highly Sensitive Person?",
-    description: "20-question HSP self-assessment based on Dr. Elaine Aron's DOES model. Measures Depth of Processing, Overstimulation, Emotional Reactivity, and Sensing Subtleties.",
-  },
-  ja: {
-    title: "HSP感受性テスト — 私はHSP（高感受性者）ですか？",
-    description: "エレイン・アーロン博士のDOESモデルに基づく20問のHSP自己診断。深い処理・過刺激・感情反応・繊細な感知の4次元で感受性レベルを分析します。",
-  },
-  fr: {
-    title: "Test de sensibilité HSP — Suis-je une Personne Hautement Sensible?",
-    description: "Auto-évaluation HSP de 20 questions basée sur le modèle DOES du Dr Elaine Aron. Mesure le traitement en profondeur, la surstimulation, la réactivité émotionnelle et la détection des subtilités.",
-  },
-  es: {
-    title: "Test de sensibilidad HSP — ¿Soy una Persona Altamente Sensible?",
-    description: "Autoevaluación HSP de 20 preguntas basada en el modelo DOES de la Dra. Elaine Aron. Mide procesamiento profundo, sobreestimulación, reactividad emocional y detección de sutilezas.",
-  },
-  zh: {
-    title: "HSP高敏感人格测验 — 我是高敏感人格者吗？",
-    description: "基于Elaine Aron博士DOES模型的20题HSP自我评估。从深度处理、过度刺激、情绪反应和微妙感知四个维度分析你的敏感度水准。",
-  },
-  cn: {
-    title: "HSP高敏感人格测验 — 我是高敏感人格者吗？",
-    description: "基于Elaine Aron博士DOES模型的20题HSP自我评估。从深度处理、过度刺激、情绪反应和微妙感知四个维度分析你的敏感度水平。",
-  },
-};
-
-const m = meta[locale] ?? meta.en;
 ---
-
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <HspTest client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Hsp Test" targetPath="/hsp-test" kind="test" />

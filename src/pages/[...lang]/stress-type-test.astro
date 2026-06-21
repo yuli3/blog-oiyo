@@ -1,61 +1,12 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import StressTypeTestComp from "../../components/tests/StressTypeTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
 export async function getStaticPaths() {
-  return locales.map((lang) => ({
-    params: { lang },
-    props: { locale: lang },
-  }));
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "스트레스 유형 테스트 — 나는 어떻게 스트레스를 받나?",
-    description:
-      "전투형, 동결형, 회피형, 해결형 — 12가지 상황으로 나만의 스트레스 반응 패턴을 발견하세요.",
-  },
-  en: {
-    title: "Stress Response Type Test — How Do You Handle Stress?",
-    description:
-      "Fighter, Freezer, Fleer, or Fixer? Discover your stress response pattern with 12 scenarios.",
-  },
-  ja: {
-    title: "ストレスタイプテスト — あなたのストレス反応パターンは？",
-    description:
-      "戦闘型、凍結型、回避型、解決型。12のシナリオでストレス対処スタイルを発見。",
-  },
-  fr: {
-    title: "Test de type de stress — Comment gérez-vous le stress?",
-    description:
-      "Combattant, Gelé, Fuyant ou Réparateur? Découvrez votre mode de réponse au stress en 12 scénarios.",
-  },
-  es: {
-    title: "Test de tipo de estrés — ¿Cómo manejas el estrés?",
-    description:
-      "¿Luchador, Congelado, Evasivo o Solucionador? Descubre tu patrón de respuesta al estrés con 12 escenarios.",
-  },
-  zh: {
-    title: "压力类型测试 — 你如何应对压力？",
-    description:
-      "战斗型、冻结型、逃避型或解决型？透过12个情境发现你的压力反应模式。",
-  },
-  cn: {
-    title: "压力类型测试 — 你如何应对压力？",
-    description:
-      "战斗型、冻结型、逃避型或解决型？通过12个情境发现你的压力反应模式。",
-  },
-};
-
-const m = meta[locale] ?? meta.en;
 ---
-
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <StressTypeTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Stress Type Test" targetPath="/stress-type-test" kind="test" />

@@ -1,61 +1,12 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import SocialMediaPersonalityTestComp from "../../components/tests/SocialMediaPersonalityTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
 export async function getStaticPaths() {
-  return locales.map((lang) => ({
-    params: { lang },
-    props: { locale: lang },
-  }));
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "소셜 미디어 성격 테스트 — 나는 어떤 SNS 유형?",
-    description:
-      "창작자, 퍼포머, 관찰자, 연결자 — 10가지 질문으로 나만의 SNS 사용 패턴을 파악하세요.",
-  },
-  en: {
-    title: "Social Media Personality Test — What's Your SNS Type?",
-    description:
-      "Creator, Performer, Lurker, or Connector? Discover your social media style with 10 questions.",
-  },
-  ja: {
-    title: "SNS性格テスト — あなたのSNSタイプは？",
-    description:
-      "クリエイター、パフォーマー、観察者、コネクター。10の質問でSNSスタイルを発見。",
-  },
-  fr: {
-    title: "Test de personnalité sur les réseaux sociaux — Quel est votre type?",
-    description:
-      "Créateur, Performeur, Observateur ou Connecteur? Découvrez votre style sur les réseaux sociaux en 10 questions.",
-  },
-  es: {
-    title: "Test de personalidad en redes sociales — ¿Cuál es tu tipo?",
-    description:
-      "¿Creador, Performer, Observador o Conector? Descubre tu estilo en redes sociales con 10 preguntas.",
-  },
-  zh: {
-    title: "社群媒体人格测试 — 你是哪种SNS类型？",
-    description:
-      "创作者、表演者、观察者或连结者？透过10个问题发现你的社群媒体风格。",
-  },
-  cn: {
-    title: "社交媒体人格测试 — 你是哪种SNS类型？",
-    description:
-      "创作者、表演者、观察者或连接者？通过10个问题发现你的社交媒体风格。",
-  },
-};
-
-const m = meta[locale] ?? meta.en;
 ---
-
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <SocialMediaPersonalityTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Social Media Personality Test" targetPath="/social-media-personality-test" kind="test" />

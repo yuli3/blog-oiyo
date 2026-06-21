@@ -1,6 +1,5 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import ProductivityStyleTestComp from "../../components/tests/ProductivityStyleTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -9,21 +8,5 @@ export async function getStaticPaths() {
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: { title: "생산성 유형 테스트 — 나는 언제 가장 효율적인가?", description: "계획형·즉흥형·집중형·협력형 중 나의 생산성 스타일을 발견하고 최적의 업무 환경을 찾아보세요." },
-  en: { title: "Productivity Style Test — When Are You Most Efficient?", description: "Discover your productivity style — Planner, Improviser, Deep Worker, or Collaborator — and find your optimal work environment." },
-  ja: { title: "生産性スタイルテスト — いつ最も効率的ですか？", description: "計画型・即興型・集中型・協力型の中から自分の生産性スタイルを発見しましょう。" },
-  fr: { title: "Test de Style de Productivité — Quand êtes-vous le plus efficace?", description: "Découvrez votre style de productivité entre Planificateur, Improvisateur, Travailleur en profondeur ou Collaborateur." },
-  es: { title: "Test de Estilo de Productividad — ¿Cuándo eres más eficiente?", description: "Descubre tu estilo de productividad entre Planificador, Improvisador, Trabajador Profundo o Colaborador." },
-  zh: { title: "生产力风格测试 — 你何时最有效率？", description: "发现你是计划型、即兴型、深度工作型还是协作型，找到最佳工作环境。" },
-  cn: { title: "生产力风格测试 — 你何时最有效率？", description: "发现你是计划型、即兴型、深度工作型还是协作型，找到最佳工作环境。" },
-};
-
-const m = meta[locale] ?? meta.en;
 ---
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <ProductivityStyleTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Productivity Style Test" targetPath="/productivity-style-test" kind="test" />

@@ -1,18 +1,12 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import SpatialIQTestComp from "../../components/tests/SpatialIQTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
+
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
+
 const { locale } = Astro.props as { locale: Locale };
-const titles: Record<string, string> = { ko: "공간지각 IQ 게임 — 패턴 규칙 찾기", en: "Spatial IQ Game — Find the Pattern Rule", ja: "空間IQゲーム — パターンのルールを見つける", fr: "Jeu d'IQ Spatial — Trouvez la Règle du Motif", es: "Juego de IQ Espacial — Encuentra la Regla del Patrón", zh: "空間IQ遊戲 — 找出圖案規律", cn: "空间IQ游戏 — 找出图案规律" };
-const descs: Record<string, string> = { ko: "3×3 격자에서 패턴의 규칙을 파악하고 빠진 마지막 조각을 맞히는 공간지각 퀴즈입니다. 총 10문제, 15개 문항 풀에서 출제.", en: "Find the pattern rule in a 3×3 grid and choose the missing piece. 10 questions from a pool of 15.", ja: "3×3グリッドでパターンのルールを見つけて欠けているピースを選ぶ空間認識クイズ。15問から10問ランダム出題。", fr: "Trouvez la règle du motif dans une grille 3×3 et choisissez la pièce manquante.", es: "Encuentra la regla del patrón en una cuadrícula 3×3 y elige la pieza que falta.", zh: "在3×3格中找出規律並選擇缺失的部分。", cn: "在3×3格中找出规律并选择缺失的部分。" };
-const m = { title: titles[locale] ?? titles.en, description: descs[locale] ?? descs.en };
 ---
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-xl px-4 py-8">
-    <SpatialIQTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Spatial Iq Game" targetPath="/spatial-iq-game" kind="tool" />

@@ -1,6 +1,5 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import OptimismTestComp from "../../components/tests/OptimismTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -9,21 +8,5 @@ export async function getStaticPaths() {
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: { title: "낙관주의-비관주의 테스트 — 나는 미래를 어떻게 보는가?", description: "Scheier & Carver의 LOT-R 기반 10가지 질문으로 낙관·현실·비관 성향을 측정하세요." },
-  en: { title: "Optimism-Pessimism Test — How Do You See the Future?", description: "Measure your optimism-realism-pessimism disposition with 10 questions based on Scheier & Carver's LOT-R." },
-  ja: { title: "楽観主義-悲観主義テスト — あなたは将来をどう見る？", description: "Scheier & CarverのLOT-Rに基づく10の質問で楽観・現実・悲観傾向を測定しましょう。" },
-  fr: { title: "Test Optimisme-Pessimisme — Comment voyez-vous le futur?", description: "Mesurez votre disposition à l'optimisme ou au pessimisme avec 10 questions." },
-  es: { title: "Test Optimismo-Pesimismo — ¿Cómo ves el futuro?", description: "Mide tu disposición al optimismo o pesimismo con 10 preguntas." },
-  zh: { title: "乐观-悲观测试 — 你如何看待未来？", description: "用10个问题测量你的乐观、现实或悲观倾向。" },
-  cn: { title: "乐观-悲观测试 — 你如何看待未来？", description: "用10个问题测量你的乐观、现实或悲观倾向。" },
-};
-
-const m = meta[locale] ?? meta.en;
 ---
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <OptimismTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Optimism Test" targetPath="/optimism-test" kind="test" />

@@ -1,6 +1,5 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import ToneAnalysisTestComp from "../../components/tests/ToneAnalysisTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -9,21 +8,5 @@ export async function getStaticPaths() {
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: { title: "말투 분석 테스트: 나의 커뮤니케이션 스타일은?", description: "10개의 직장 내 상황 질문으로 나의 말투 유형을 분석하세요. 날카로운 직설형·회피형 완충형·친화적 관계형·중립적 분석형 중 나의 유형은?" },
-  en: { title: "Tone Analysis Test: What's Your Communication Style?", description: "Analyze your communication tone through 10 workplace scenario questions. Sharp Communicator, Conflict Avoider, Warm Connector, or Neutral Analyst?" },
-  ja: { title: "トーン分析テスト：あなたのコミュニケーションスタイルは？", description: "10の職場シナリオ質問でコミュニケーションのトーンタイプを分析しましょう。鋭い直球型・回避型・親和的関係型・中立的分析型のどれ？" },
-  fr: { title: "Test d'analyse de ton : Quel est votre style de communication ?", description: "Analysez votre style de communication à travers 10 scénarios professionnels. Communicateur Direct, Éviteur de Conflits, Connecteur Chaleureux ou Analyste Neutre ?" },
-  es: { title: "Test de Análisis de Tono: ¿Cuál es tu estilo de comunicación?", description: "Analiza tu estilo de comunicación a través de 10 escenarios laborales. ¿Comunicador Directo, Evitador de Conflictos, Conector Cálido o Analista Neutral?" },
-  zh: { title: "语气分析测试：你的沟通风格是什么？", description: "透过10个职场情境问题分析你的沟通语气类型。锐利直接型、回避缓冲型、亲和关系型还是中立分析型？" },
-  cn: { title: "语气分析测试：你的沟通风格是什么？", description: "通过10个职场情境问题分析你的沟通语气类型。犀利直接型、回避缓冲型、亲和关系型还是中立分析型？" },
-};
-
-const m = meta[locale] ?? meta.en;
 ---
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <ToneAnalysisTestComp client:load locale={locale} />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Tone Analysis Test" targetPath="/tone-analysis-test" kind="test" />

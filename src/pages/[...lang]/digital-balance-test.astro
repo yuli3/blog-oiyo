@@ -1,6 +1,5 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import DigitalBalanceTestComp from "../../components/calculators/DigitalBalanceTest";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -9,43 +8,5 @@ export async function getStaticPaths() {
 }
 
 const { locale } = Astro.props as { locale: Locale };
-
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: {
-    title: "디지털 균형 테스트 — 스마트폰 사용 습관 점검",
-    description: "스마트폰과 디지털 기기 사용 습관을 점검하고, 건강한 디지털 라이프를 위한 맞춤형 조언을 받아보세요.",
-  },
-  en: {
-    title: "Digital Balance Test",
-    description: "Assess your smartphone and digital device habits, and get personalized advice for a healthier digital lifestyle.",
-  },
-  ja: {
-    title: "デジタルバランステスト — スマートフォン使用習慣チェック",
-    description: "スマートフォンとデジタルデバイスの使用習慣をチェックし、健康的なデジタルライフのためのアドバイスを受けましょう。",
-  },
-  fr: {
-    title: "Test d'Équilibre Numérique",
-    description: "Évaluez vos habitudes d'utilisation des smartphones et appareils numériques, et obtenez des conseils personnalisés.",
-  },
-  es: {
-    title: "Test de Equilibrio Digital",
-    description: "Evalúa tus hábitos de uso del smartphone y dispositivos digitales, y obtén consejos personalizados para un estilo de vida digital más saludable.",
-  },
-  zh: {
-    title: "数位均衡测试 — 智慧型手机使用习惯检测",
-    description: "检测您的智慧型手机和数位设备使用习惯，获得健康数位生活的个性化建议。",
-  },
-  cn: {
-    title: "数字均衡测试 — 智能手机使用习惯检测",
-    description: "检测您的智能手机和数字设备使用习惯，获得健康数字生活的个性化建议。",
-  },
-};
-
-const m = meta[locale] ?? meta.en;
 ---
-
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <DigitalBalanceTestComp client:load />
-  </main>
-</BaseLayout>
+<OiyoCanonicalRedirect locale={locale} itemName="Digital Balance Test" targetPath="/digital-balance-test" kind="test" />
