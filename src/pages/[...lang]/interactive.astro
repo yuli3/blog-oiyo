@@ -81,6 +81,34 @@ const flagshipTools: { slug: string; emoji: string; label: Record<string, string
   { slug: "sudoku", emoji: "🔢", label: { ko: "스도쿠", en: "Sudoku", ja: "数独" } },
 ];
 const tlabel = (l: Record<string, string>) => l[locale] ?? l.en;
+
+// IA consolidation: this page is now the unified "Tools" hub, so every
+// interactive item is shown as an icon card like the standalone tools.
+// Icon derived from the post's category (with a sensible fallback).
+const navObj = (t as Record<string, unknown>).nav as Record<string, string> | undefined;
+const toolsLabel = navObj?.tools ?? pageTitle;
+const ICON_BY_CATEGORY: Record<string, string> = {
+  Finance: "💰",
+  "Mind & Psychology": "🧠",
+  Health: "💪",
+  Tax: "🧾",
+  "Computer Science": "💻",
+  Education: "📚",
+  Lifestyle: "🌿",
+  Mysticism: "🔮",
+  Strategy: "♟️",
+  Games: "🎮",
+  "Real Estate": "🏠",
+  "Science & Nature": "🔬",
+  Exam: "📝",
+  "Philosophy & Spirit": "🕊️",
+  Humanities: "📜",
+  Design: "🎨",
+  Career: "💼",
+  Business: "📈",
+  Beauty: "💄",
+};
+const iconFor = (cat?: string | null) => ICON_BY_CATEGORY[cat ?? ""] ?? "✨";
 ---
 
 <BaseLayout title={pageTitle} description={pageSubtitle}>
@@ -117,9 +145,9 @@ const tlabel = (l: Record<string, string>) => l[locale] ?? l.en;
 
       <div class="mb-16 max-w-3xl">
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/10 border border-secondary/20 text-secondary text-[10px] font-black uppercase tracking-[0.2em] mb-6">
-          Interactive
+          {toolsLabel}
         </div>
-        <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight mb-6">{pageTitle}</h1>
+        <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight mb-6">{toolsLabel}</h1>
         <p class="text-lg text-muted-foreground leading-relaxed max-w-2xl">{pageSubtitle}</p>
         <p class="mt-2 text-sm text-muted-foreground/50">{allPosts.length} interactive stories</p>
       </div>
@@ -131,6 +159,7 @@ const tlabel = (l: Record<string, string>) => l[locale] ?? l.en;
             <div class="grid lg:grid-cols-2 gap-8 items-center p-8 md:p-12 rounded-3xl border border-secondary/20 bg-secondary/5 hover:border-secondary/40 transition-all">
               <div class="space-y-6">
                 <div class="flex items-center gap-3">
+                  <span class="text-3xl" aria-hidden="true">{iconFor(featured.data.category)}</span>
                   <span class="text-[10px] font-black uppercase tracking-[0.2em] bg-secondary text-secondary-foreground px-2.5 py-1 rounded-md">
                     {featuredLabel}
                   </span>
@@ -179,10 +208,13 @@ const tlabel = (l: Record<string, string>) => l[locale] ?? l.en;
               const href = `/${locale}/${post.slug.split("/").slice(1).join("/")}/`;
               return (
                 <a href={href} class="group flex flex-col gap-4 p-6 rounded-2xl border border-secondary/20 hover:border-secondary/40 hover:bg-secondary/5 transition-all">
-                  <div class="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-widest">
-                    <span class="bg-secondary text-secondary-foreground px-2 py-0.5 rounded-md">Interactive</span>
-                    <span class="text-muted-foreground/40">/</span>
-                    <span class="text-muted-foreground">{categoryNames[post.data.category ?? ""] ?? post.data.category}</span>
+                  <div class="flex items-center gap-3">
+                    <span class="text-3xl shrink-0" aria-hidden="true">{iconFor(post.data.category)}</span>
+                    <div class="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-widest">
+                      <span class="bg-secondary text-secondary-foreground px-2 py-0.5 rounded-md">{toolsLabel}</span>
+                      <span class="text-muted-foreground/40">/</span>
+                      <span class="text-muted-foreground">{categoryNames[post.data.category ?? ""] ?? post.data.category}</span>
+                    </div>
                   </div>
                   <h3 class="font-bold text-lg leading-snug group-hover:text-secondary transition-colors">{post.data.title}</h3>
                   <p class="text-sm text-muted-foreground line-clamp-3 leading-relaxed">{post.data.description}</p>
@@ -217,7 +249,10 @@ const tlabel = (l: Record<string, string>) => l[locale] ?? l.en;
                   const href = `/${locale}/${post.slug.split("/").slice(1).join("/")}/`;
                   return (
                     <a href={href} class="group flex flex-col gap-2 p-4 rounded-xl border border-secondary/20 hover:border-secondary/40 hover:bg-secondary/5 transition-all">
-                      <h3 class="font-semibold text-sm leading-snug group-hover:text-secondary transition-colors line-clamp-3">{post.data.title}</h3>
+                      <div class="flex items-start gap-2">
+                        <span class="text-xl shrink-0" aria-hidden="true">{iconFor(post.data.category)}</span>
+                        <h3 class="font-semibold text-sm leading-snug group-hover:text-secondary transition-colors line-clamp-3">{post.data.title}</h3>
+                      </div>
                       <p class="text-xs text-muted-foreground line-clamp-2 leading-relaxed">{post.data.description}</p>
                     </a>
                   );
