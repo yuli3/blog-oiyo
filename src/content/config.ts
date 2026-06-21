@@ -11,6 +11,7 @@ const blog = defineCollection({
     heroImage: z.string().optional(),
     tags: z.array(z.string()).default([]),
     keywords: z.array(z.string()).optional(), // Additional SEO keywords beyond tags
+    canonicalUrl: z.string().optional(), // cross-domain canonical override (e.g. wiki owns the definition)
     category: z.string().optional(),
     track: z.enum(["academy", "magazine", "interactive", "education"]).optional(),
     series: z.string().optional(),
