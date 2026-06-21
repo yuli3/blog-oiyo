@@ -1,9 +1,11 @@
 ---
+import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 import { collectionPageJsonLd } from "../../lib/seo/structured-data";
 import { siteConfig } from "../../config/site.config";
+import { getTrackFromData } from "../../lib/taxonomy";
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -117,6 +119,33 @@ const categoryLabels: Record<string, Record<Locale, string>> = {
     es: "Juegos",
     zh: "遊戲",
     cn: "游戏",
+  },
+  mystic: {
+    ko: "운세·사주·타로",
+    en: "Fortune & Divination",
+    ja: "運勢・占い",
+    fr: "Horoscope & Divination",
+    es: "Fortuna y Adivinación",
+    zh: "运势·占卜",
+    cn: "运势·占卜",
+  },
+  learning: {
+    ko: "학습·교양",
+    en: "Learning & Knowledge",
+    ja: "学習・教養",
+    fr: "Apprentissage & Savoir",
+    es: "Aprendizaje y Conocimiento",
+    zh: "学习·知识",
+    cn: "学习·知识",
+  },
+  lifestyle: {
+    ko: "라이프스타일",
+    en: "Lifestyle",
+    ja: "ライフスタイル",
+    fr: "Style de vie",
+    es: "Estilo de vida",
+    zh: "生活方式",
+    cn: "生活方式",
   },
 };
 
@@ -1213,7 +1242,55 @@ const categories: Category[] = [
   { id: "image",      emoji: "🖼️", tools: imageTools,      color: "text-amber-700",   bgColor: "bg-amber-50 border-amber-200" },
   { id: "utilities",  emoji: "🔧", tools: utilityTools,    color: "text-rose-700",    bgColor: "bg-rose-50 border-rose-200" },
   { id: "games",      emoji: "🎮", tools: gameTools,       color: "text-indigo-700",  bgColor: "bg-indigo-50 border-indigo-200" },
+  { id: "mystic",     emoji: "🔮", tools: [],              color: "text-fuchsia-700", bgColor: "bg-fuchsia-50 border-fuchsia-200" },
+  { id: "learning",   emoji: "📚", tools: [],              color: "text-teal-700",    bgColor: "bg-teal-50 border-teal-200" },
+  { id: "lifestyle",  emoji: "🌿", tools: [],              color: "text-lime-700",    bgColor: "bg-lime-50 border-lime-200" },
 ];
+
+// ─── IA unification: merge interactive (tool-embedding articles) into the catalog ──
+// /interactive and /tools were two views of the same thing (every interactive post
+// embeds a tool). We fold the interactive collection into the curated category
+// buckets so "도구들" is one coherent directory. Deduped against curated slugs.
+const CAT_TO_BUCKET: Record<string, string> = {
+  "Mind & Psychology": "psychology",
+  "Finance": "finance", "Tax": "finance", "Real Estate": "finance", "Business": "finance", "Career": "finance",
+  "Health": "health",
+  "Games": "games", "Strategy": "games",
+  "Computer Science": "utilities",
+  "Design": "image",
+  "Mysticism": "mystic",
+  "Education": "learning", "Exam": "learning", "Science & Nature": "learning", "Humanities": "learning", "Philosophy & Spirit": "learning",
+  "Lifestyle": "lifestyle", "Beauty": "lifestyle",
+};
+const BUCKET_EMOJI: Record<string, string> = {
+  converters: "🧮", psychology: "🧠", finance: "💰", health: "💪", image: "🎨",
+  utilities: "💻", games: "🎮", mystic: "🔮", learning: "📚", lifestyle: "🌿",
+};
+const interactivePosts = await getCollection("blog", ({ data }) =>
+  data.draft !== true && data.locale === locale && getTrackFromData(data) === "interactive");
+const curatedSlugs = new Set(categories.flatMap((c) => c.tools.map((t) => t.slug)));
+const interactiveByBucket = new Map<string, Tool[]>();
+for (const post of interactivePosts) {
+  const slug = post.slug.split("/").slice(1).join("/");
+  if (!slug || curatedSlugs.has(slug)) continue;
+  const bucket = CAT_TO_BUCKET[post.data.category ?? ""] ?? "learning";
+  const emoji = BUCKET_EMOJI[bucket] ?? "✨";
+  const title = post.data.title;
+  const desc = post.data.description ?? "";
+  const entry: Tool = {
+    slug,
+    emoji,
+    title: { ko: title, en: title, ja: title, fr: title, es: title, zh: title, cn: title },
+    description: { ko: desc, en: desc, ja: desc, fr: desc, es: desc, zh: desc, cn: desc },
+  };
+  const arr = interactiveByBucket.get(bucket) ?? [];
+  arr.push(entry);
+  interactiveByBucket.set(bucket, arr);
+}
+for (const cat of categories) {
+  const extra = interactiveByBucket.get(cat.id);
+  if (extra && extra.length) cat.tools = [...cat.tools, ...extra];
+}
 
 const totalCount = categories.reduce((sum, c) => sum + c.tools.length, 0);
 const m = meta[locale] ?? meta.en;
