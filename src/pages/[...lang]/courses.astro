@@ -108,6 +108,14 @@ const noChaptersLabel = courseT?.noChapters ?? "Read article";
 const searchPlaceholder = courseT?.searchPlaceholder ?? "Search category...";
 const clearLabel = courseT?.clearLabel ?? "Clear";
 const clearAriaLabel = courseT?.clearAriaLabel ?? "Clear category search";
+const allLabel = courseT?.filterAll ?? "All";
+const lessonsLabel = courseT?.lessonsCount ?? "lessons";
+const subjectsLabel = courseT?.subjectsCount ?? "subjects";
+const totalContentLabel = courseT?.totalContent ?? "total content";
+const coursesCountLabel = courseT?.coursesCount ?? "courses";
+const moreChaptersLabel = courseT?.moreChapters ?? "more chapters";
+const totalSuffix = courseT?.totalSuffix ?? "total";
+const emptyLabel = courseT?.empty ?? "No courses available yet.";
 
 // Category icon mapping
 const categoryIcons: Record<string, string> = {
@@ -145,7 +153,10 @@ const catalogJsonLd = JSON.stringify(
     url: `${siteConfig.url}/${locale}/courses/`,
     inLanguage: locale,
     items: courseList.map((s) => ({
-      name: s.firstPost.data.series ?? s.seriesKey,
+      name: (s.firstPost.data.chapterTitleShort ?? s.firstPost.data.title)
+        .replace(/^(Chapter|챕터|第\d+章|Chapitre|Capítulo)\s*\d+[：:·\-–—\s]*/i, "")
+        .replace(/^第\d+講[：:·\-–—\s]*/u, "")
+        .trim(),
       url: `${siteConfig.url}/${locale}/${s.firstPost.slug.split("/").slice(1).join("/")}/`,
     })),
   }),
@@ -169,10 +180,10 @@ const catalogJsonLd = JSON.stringify(
         <!-- Stats bar -->
         <div class="mt-6 flex items-center gap-1 flex-wrap">
           {[
-            { value: courseList.length, label: "courses" },
-            { value: allPosts.length, label: "lessons" },
-            { value: categoryGroups.length, label: "subjects" },
-            { value: estimateReadingTime(courseList.reduce((acc, c) => acc + c.totalWords, 0)), label: "total content" },
+            { value: courseList.length, label: coursesCountLabel },
+            { value: allPosts.length, label: lessonsLabel },
+            { value: categoryGroups.length, label: subjectsLabel },
+            { value: estimateReadingTime(courseList.reduce((acc, c) => acc + c.totalWords, 0)), label: totalContentLabel },
           ].map((stat, i) => (
             <>
               {i > 0 && <span class="text-muted-foreground/30 text-xs">·</span>}
@@ -194,7 +205,7 @@ const catalogJsonLd = JSON.stringify(
             aria-selected="true"
             class="filter-tab active px-4 py-2 rounded-full text-[11px] font-black uppercase tracking-[0.2em] border transition-colors bg-primary text-primary-foreground border-primary"
           >
-            All
+            {allLabel}
           </button>
           {categoryGroups.map(([cat]) => (
             <button
@@ -247,7 +258,7 @@ const catalogJsonLd = JSON.stringify(
               </h2>
             </div>
             <div class="h-px flex-1 bg-border/40" />
-            <span class="text-xs text-muted-foreground/50 font-medium">{series.length} courses</span>
+            <span class="text-xs text-muted-foreground/50 font-medium">{series.length} {coursesCountLabel}</span>
           </div>
 
           <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -264,9 +275,9 @@ const catalogJsonLd = JSON.stringify(
                 .replace(/^第\d+講[：:·\-–—\s]*/u, "")
                 .trim();
 
-              const seriesDisplayName = isMultiChapter
-                ? (s.firstPost.data.series ?? s.seriesKey.replace(/^education-/, "").replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()))
-                : cleanTitle;
+              // Always show the localized chapter title — never the raw English series slug,
+              // which would surface English text inside non-English catalogs.
+              const seriesDisplayName = cleanTitle;
 
               const readingEst = estimateReadingTime(s.totalWords);
 
@@ -285,7 +296,7 @@ const catalogJsonLd = JSON.stringify(
                         <span class="text-[10px] font-black uppercase tracking-widest text-primary bg-primary/10 px-2.5 py-0.5 rounded-full">
                           {s.chapterCount} {chaptersLabel}
                         </span>
-                        <span class="text-[9px] text-muted-foreground/50 font-medium">{readingEst} total</span>
+                        <span class="text-[9px] text-muted-foreground/50 font-medium">{readingEst} {totalSuffix}</span>
                       </div>
                     ) : (
                       <span class="text-[10px] text-muted-foreground/40">{readingEst}</span>
@@ -319,7 +330,7 @@ const catalogJsonLd = JSON.stringify(
                         );
                       })}
                       {s.chapters.length > 3 && (
-                        <div class="text-[10px] text-muted-foreground/40 pl-6">+ {s.chapters.length - 3} more chapters</div>
+                        <div class="text-[10px] text-muted-foreground/40 pl-6">+ {s.chapters.length - 3} {moreChaptersLabel}</div>
                       )}
                     </div>
                   )}
@@ -343,7 +354,7 @@ const catalogJsonLd = JSON.stringify(
 
       {courseList.length === 0 && (
         <div class="text-center py-32 text-muted-foreground">
-          <p>No courses available yet.</p>
+          <p>{emptyLabel}</p>
         </div>
       )}
     </div>

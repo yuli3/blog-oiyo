@@ -6,6 +6,7 @@ import type { Locale } from "../../lib/i18n";
 import { collectionPageJsonLd } from "../../lib/seo/structured-data";
 import { siteConfig } from "../../config/site.config";
 import { getTrackFromData } from "../../lib/taxonomy";
+import oiyoCanonicalMap from "../../data/oiyo-canonical-map.json";
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -176,6 +177,7 @@ interface Tool {
   emoji: string;
   title: Record<Locale, string>;
   description: Record<Locale, string>;
+  href?: string; // absolute override → oiyo.net canonical (tests live there)
 }
 
 const converterTools: Tool[] = [
@@ -1266,6 +1268,50 @@ const BUCKET_EMOJI: Record<string, string> = {
   converters: "🧮", psychology: "🧠", finance: "💰", health: "💪", image: "🎨",
   utilities: "💻", games: "🎮", mystic: "🔮", learning: "📚", lifestyle: "🌿",
 };
+
+// Folded-in interactive posts previously all inherited their bucket's single emoji,
+// so a whole section rendered identical icons (e.g. 30× 🧠). Derive a distinct icon
+// per post: first a keyword match on slug/title, else a deterministic pick from the
+// bucket's palette so no two neighbours collapse to the same glyph.
+const KEYWORD_EMOJI: [RegExp, string][] = [
+  [/mbti/, "🧩"], [/enneagram/, "🔢"], [/big.?five|ocean/, "🧬"], [/\bdisc\b/, "📊"],
+  [/hexaco|\btci\b/, "🧬"], [/\biq\b|cognit|chimp|memory/, "🧠"], [/\beq\b|emotion/, "💛"],
+  [/love|romance|attachment|couple|compatib/, "💑"], [/language/, "💬"], [/anger|rage/, "💢"],
+  [/narciss/, "🪞"], [/empath/, "🤝"], [/burnout/, "🔥"], [/stress/, "😤"], [/anxiet/, "😰"],
+  [/depress/, "🌧️"], [/self.?esteem|confidence/, "🌟"], [/resilien/, "🌱"], [/grit|persever/, "💪"],
+  [/perfection/, "✨"], [/procrastin/, "⏰"], [/chrono/, "🦉"], [/mindful|meditat|monkey/, "🧘"],
+  [/leadership/, "🧭"], [/career|vocation|riasec/, "💼"], [/motivat/, "⚡"], [/growth.?mindset/, "📈"],
+  [/personal.?color/, "🎨"], [/blood/, "🩸"], [/zodiac|astro|\bstar\b/, "⭐"], [/tarot/, "🃏"],
+  [/numerolog/, "🔢"], [/dream/, "🌙"], [/saju|four.?pillar/, "☯️"], [/hsp|sensitiv/, "🌿"],
+  [/social/, "👥"], [/happi/, "😊"], [/gratitude/, "🙏"], [/animal/, "🐾"], [/disc|leadership/, "📊"],
+  [/tax|vat|irpf|income/, "🧾"], [/salary|wage|payroll/, "💵"], [/loan|mortgage/, "🏦"],
+  [/invest|stock|etf|portfolio/, "📈"], [/pension|retire/, "👴"], [/budget|saving/, "🐷"],
+  [/crypto|bitcoin|blockchain/, "🪙"], [/real.?estate|rent|property/, "🏠"], [/interest|bond/, "💹"],
+  [/bmi|weight|body/, "⚖️"], [/calorie|tdee|diet|eat/, "🍎"], [/sleep/, "😴"], [/water|hydrat/, "💧"],
+  [/pregnan|ovula/, "🤰"], [/vaccin/, "💉"], [/caffeine/, "☕"], [/\bfast/, "⏳"], [/run|pace|step/, "🏃"],
+  [/maze/, "🌀"], [/puzzle|sudoku|kurodoko/, "🧩"], [/typing/, "⌨️"], [/quiz/, "❓"],
+  [/spinner|random|dice/, "🎲"], [/color/, "🎨"], [/music|metronome/, "🎵"],
+];
+const BUCKET_PALETTE: Record<string, string[]> = {
+  psychology: ["🧠", "💭", "🪞", "🧩", "💡", "🫀", "🌈", "🔍"],
+  finance: ["💰", "💵", "📊", "🏦", "💹", "🪙", "📈", "🧾"],
+  health: ["💪", "🩺", "🍎", "🏃", "😴", "💧", "🧘", "❤️"],
+  image: ["🎨", "🖼️", "📷", "✂️", "🌈", "🎭"],
+  utilities: ["💻", "🔧", "⌨️", "📋", "🔢", "📐"],
+  games: ["🎮", "🎲", "🧩", "🏆", "🕹️", "♟️"],
+  mystic: ["🔮", "🃏", "⭐", "🌙", "☯️", "✨"],
+  learning: ["📚", "🎓", "✏️", "🧪", "🌍", "🔬"],
+  lifestyle: ["🌿", "☕", "🌸", "🧺", "🕯️", "🛋️"],
+  converters: ["🧮", "📏", "⚖️", "🌡️", "⏱️", "💱"],
+};
+function pickEmoji(slug: string, title: string, bucket: string): string {
+  const hay = `${slug} ${title}`.toLowerCase();
+  for (const [re, e] of KEYWORD_EMOJI) if (re.test(hay)) return e;
+  const pal = BUCKET_PALETTE[bucket] ?? [BUCKET_EMOJI[bucket] ?? "✨"];
+  let h = 0;
+  for (let i = 0; i < slug.length; i++) h = (h * 31 + slug.charCodeAt(i)) >>> 0;
+  return pal[h % pal.length];
+}
 const interactivePosts = await getCollection("blog", ({ data }) =>
   data.draft !== true && data.locale === locale && getTrackFromData(data) === "interactive");
 const curatedSlugs = new Set(categories.flatMap((c) => c.tools.map((t) => t.slug)));
@@ -1274,7 +1320,7 @@ for (const post of interactivePosts) {
   const slug = post.slug.split("/").slice(1).join("/");
   if (!slug || curatedSlugs.has(slug)) continue;
   const bucket = CAT_TO_BUCKET[post.data.category ?? ""] ?? "learning";
-  const emoji = BUCKET_EMOJI[bucket] ?? "✨";
+  const emoji = pickEmoji(slug, post.data.title ?? "", bucket);
   const title = post.data.title;
   const desc = post.data.description ?? "";
   const entry: Tool = {
@@ -1283,6 +1329,9 @@ for (const post of interactivePosts) {
     title: { ko: title, en: title, ja: title, fr: title, es: title, zh: title, cn: title },
     description: { ko: desc, en: desc, ja: desc, fr: desc, es: desc, zh: desc, cn: desc },
   };
+  // Folded post is a consolidated duplicate → link straight to its oiyo canonical.
+  const rt = (post.data as { redirectTo?: string }).redirectTo;
+  if (rt) entry.href = `https://oiyo.net/${locale === "cn" ? "zh" : locale}${rt}`;
   const arr = interactiveByBucket.get(bucket) ?? [];
   arr.push(entry);
   interactiveByBucket.set(bucket, arr);
@@ -1290,6 +1339,17 @@ for (const post of interactivePosts) {
 for (const cat of categories) {
   const extra = interactiveByBucket.get(cat.id);
   if (extra && extra.length) cat.tools = [...cat.tools, ...extra];
+}
+
+// Direct-link any test/tool whose canonical lives on oiyo.net, so the catalog points
+// straight at the real interactive page instead of bouncing through a blog redirect stub.
+const oiyoLocale = locale === "cn" ? "zh" : locale;
+const canonicalMap = oiyoCanonicalMap as Record<string, string>;
+for (const cat of categories) {
+  for (const tool of cat.tools) {
+    const path = canonicalMap[tool.slug];
+    if (path) tool.href = `https://oiyo.net/${oiyoLocale}${path}`;
+  }
 }
 
 const totalCount = categories.reduce((sum, c) => sum + c.tools.length, 0);
@@ -1304,7 +1364,7 @@ const catalogJsonLd = JSON.stringify(
     items: categories.flatMap((c) =>
       c.tools.map((tool) => ({
         name: tool.title[locale] ?? tool.title.en,
-        url: `${siteConfig.url}/${locale}/${tool.slug}/`,
+        url: tool.href ?? `${siteConfig.url}/${locale}/${tool.slug}/`,
       })),
     ),
   }),
@@ -1556,7 +1616,7 @@ const moreLabel: Record<Locale, string> = {
           {/* Tool grid */}
           <div class="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {cat.tools.map((tool) => {
-              const href = `/${locale}/${tool.slug}/`;
+              const href = tool.href ?? `/${locale}/${tool.slug}/`;
               const title = tool.title[locale] ?? tool.title.en;
               const desc  = tool.description[locale] ?? tool.description.en;
               return (
