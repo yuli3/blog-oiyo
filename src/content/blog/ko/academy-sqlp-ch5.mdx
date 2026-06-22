@@ -1,0 +1,43 @@
+---
+track: academy
+locale: ko
+market: KR
+contentScope: local
+localizationMode: original
+title: "Ch5. SQLP 전문가 준비 — 인덱스·조인 튜닝"
+category: "Computer Science"
+series: "SQLP 전문가 준비"
+chapter: 5
+chapterTitleShort: '인덱스·조인'
+author: OIYO 편집부
+tags:
+  - SQLP
+  - 인덱스
+  - 조인튜닝
+  - 실행계획
+  - 성능개선
+description: "인덱스 선택 기준과 조인 방식별 튜닝 포인트를 시험 관점으로 정리합니다."
+pubDate: '2026-06-22'
+layoutVariant: lecture-series
+---
+
+## 인덱스는 만능 가속기가 아닙니다
+
+인덱스는 필요한 행을 빨리 찾도록 돕지만 항상 빠른 것은 아닙니다. 많은 행을 읽거나 조건 컬럼 순서가 맞지 않으면 효과가 줄어듭니다. SQLP는 “언제 유리한가”를 묻습니다.
+
+### 튜닝 포인트
+
+| 대상 | 확인할 점 | 대표 판단 |
+|------|-----------|-----------|
+| 인덱스 | 선두 컬럼, 선택도 | 조건 순서 |
+| Nested Loop | 소량 반복 조회 | 인덱스 중요 |
+| Hash Join | 대량 결합 | 메모리와 해시 |
+| Sort Merge | 정렬 후 결합 | 정렬 비용 |
+
+조인 튜닝은 작은 테이블부터 읽는다는 규칙만으로 풀리지 않습니다. 조건 후 건수, 인덱스 접근, 반환 행 수를 함께 봅니다.
+
+## 핵심 요약
+
+인덱스와 조인 튜닝은 데이터량, 선택도, 접근 경로, 조인 방식의 조합 문제입니다.
+
+다음 장에서는 실제 SQL 튜닝 절차를 사례형으로 정리합니다.
