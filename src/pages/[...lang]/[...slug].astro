@@ -13,6 +13,7 @@ import { courseJsonLd } from "../../lib/seo/structured-data";
 import AuthorProfile from "../../components/AuthorProfile.astro";
 import MysticTrinity from "../../components/MysticTrinity.astro";
 import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
+import BlogRedirect from "../../components/BlogRedirect.astro";
 
 export async function getStaticPaths() {
   const allPosts = await getCollection("blog", (p) => !p.data.draft);
@@ -241,9 +242,12 @@ const coursesHref = `/${locale}/courses`;
 // Pure-duplicate test pages are consolidated onto their oiyo.net canonical: render a
 // redirect stub (noindex,follow + canonical + meta-refresh) instead of the article.
 const redirectTo = post.data.redirectTo;
+const redirectToBlog = post.data.redirectToBlog;
 ---
 
-{redirectTo ? (
+{redirectToBlog ? (
+  <BlogRedirect locale={locale as Locale} targetPath={redirectToBlog} />
+) : redirectTo ? (
   <OiyoCanonicalRedirect
     locale={locale as Locale}
     itemName={post.data.title}

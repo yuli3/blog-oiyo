@@ -13,6 +13,7 @@ const blog = defineCollection({
     keywords: z.array(z.string()).optional(), // Additional SEO keywords beyond tags
     canonicalUrl: z.string().optional(), // cross-domain canonical override (e.g. wiki owns the definition)
     redirectTo: z.string().optional(), // oiyo canonical path (locale-less, e.g. "/mbti/test"); page becomes a redirect stub
+    redirectToBlog: z.string().optional(), // same-site blog path (locale-less); page becomes a blog→blog redirect stub (dedup)
     category: z.string().optional(),
     track: z.enum(["academy", "magazine", "interactive", "education"]).optional(),
     series: z.string().optional(),

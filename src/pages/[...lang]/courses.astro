@@ -22,6 +22,7 @@ const allPosts = await getCollection("blog", ({ data }) => {
   return (
     data.draft !== true &&
     data.locale === locale &&
+    !data.redirectToBlog && // exclude consolidated/duplicate series (redirect stubs)
     getTrackFromData(data) === "academy"
   );
 });
