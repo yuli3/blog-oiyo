@@ -14,11 +14,14 @@ export interface AuthorEntity {
   role: Record<string, string>;
   /** 1–2 sentence bio describing remit + method, per locale. */
   bio: Record<string, string>;
+  /** E-E-A-T: declared areas of expertise (schema.org knowsAbout). */
+  knowsAbout?: string[];
 }
 
 const DESKS = {
   editorial: {
     schemaType: "Organization",
+    knowsAbout: ["개인 재무","소비자 법률","생활 정보","자기이해","personal finance","consumer protection"],
     role: { ko: "편집부", en: "Editorial Desk", ja: "編集部" },
     bio: {
       ko: "OIYO 편집부는 경제·법률·생활·자기이해 주제를 1차 자료와 공개 통계로 검증해 정리합니다. 모든 글은 출처 표기와 정기 점검을 거쳐 실용성과 정확성을 함께 유지합니다.",
@@ -28,6 +31,7 @@ const DESKS = {
   },
   research: {
     schemaType: "Organization",
+    knowsAbout: ["심리검사","통계 리터러시","행동과학","psychometrics","behavioral science"],
     role: { ko: "리서치팀", en: "Research Team", ja: "リサーチチーム" },
     bio: {
       ko: "OIYO 리서치팀은 심리 검사, 통계, 학술 문헌을 토대로 자료를 구조화합니다. 대중적 분류 언어와 학술적 한계를 함께 밝혀, 단정보다 self-reflection의 도구로 쓰이도록 설계합니다.",
@@ -37,6 +41,7 @@ const DESKS = {
   },
   psychology: {
     schemaType: "Organization",
+    knowsAbout: ["MBTI","Big Five","애착이론","성격심리학","personality psychology","attachment theory"],
     role: { ko: "심리 리서치", en: "Psychology Research", ja: "心理リサーチ" },
     bio: {
       ko: "성격·심리 콘텐츠는 MBTI, Big5, 애착이론 등 널리 쓰이는 모델을 검사 척도와 함께 정리합니다. 유형을 고정된 정체성이 아니라 상황별 자기관찰의 언어로 다룹니다.",
@@ -46,6 +51,7 @@ const DESKS = {
   },
   science: {
     schemaType: "Organization",
+    knowsAbout: ["천문학","물리학","생활과학","astronomy","physics","everyday science"],
     role: { ko: "과학부", en: "Science Desk", ja: "サイエンス編集" },
     bio: {
       ko: "OIYO 과학부는 천문·물리·생활과학을 암기보다 구조 이해 중심으로 풉니다. 교과 개념과 최신 합의를 쉬운 비유로 옮기되, 단순화로 사실이 왜곡되지 않도록 검토합니다.",
@@ -55,6 +61,7 @@ const DESKS = {
   },
   culture: {
     schemaType: "Organization",
+    knowsAbout: ["신화","고전","역사","전통사상","mythology","classics","history"],
     role: { ko: "역사·문화부", en: "History & Culture Desk", ja: "歴史・文化編集" },
     bio: {
       ko: "역사·문화 콘텐츠는 신화, 고전, 전통 사상을 1차 텍스트와 정설을 바탕으로 소개합니다. 해석의 폭이 넓은 주제일수록 출처와 이설을 함께 밝힙니다.",

@@ -302,6 +302,9 @@ const hreflangMap: Record<string, string> = {
           "@type": getAuthor(author).schemaType,
           name: author,
           url: `${siteConfig.url}/about`,
+          ...(getAuthor(author).knowsAbout?.length
+            ? { knowsAbout: getAuthor(author).knowsAbout }
+            : {}),
         },
         publisher: {
           "@type": "Organization",
