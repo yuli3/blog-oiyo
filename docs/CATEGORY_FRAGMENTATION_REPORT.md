@@ -1,13 +1,13 @@
 # Category Fragmentation Report (WW19, auto-generated)
 
-> Generated 2026-06-21T04:18:19.491Z. Canonical registry: `data/catalog/category-registry.yaml` (24 categories, status active-draft).
+> Generated 2026-06-28T22:58:52.931Z. Canonical registry: `data/catalog/category-registry.yaml` (26 categories, status active-draft).
 
 ## Summary
 
-- Distinct raw categories in content: **24**
-- Canonical categories in registry: **24**
+- Distinct raw categories in content: **32**
+- Canonical categories in registry: **26**
 - ⚠️ Track-name used as category: **0** (none)
-- ❌ Categories NOT in registry (drift): **0**
+- ❌ Categories NOT in registry (drift): **6**
 
 ## ⚠️ Track-as-category (fix: these are tracks, not categories)
 
@@ -15,32 +15,39 @@ _none_
 
 ## Proposed consolidation (fragmented → canonical)
 
-### → `psychology-self-discovery` (1005 entries)
-- Mind & Psychology (1005)
+### → `psychology-self-discovery` (1245 entries)
+- Psychology (8)
+- Mind & Psychology (1237)
 
-### → `philosophy-spirit` (299 entries)
-- Philosophy & Spirit (299)
+### → `philosophy-spirit` (305 entries)
+- Philosophy & Spirit (305)
 
 ### → `myth-culture` (317 entries)
 - Myth & Culture (317)
 
-### → `mysticism` (544 entries)
-- Mysticism (544)
+### → `mysticism` (545 entries)
+- Mysticism (545)
 
-### → `science-health` (153 entries)
-- Health (153)
+### → `science-health` (156 entries)
+- Health (156)
 
-### → `finance-tax` (860 entries)
-- Finance (679)
-- Tax (181)
+### → `finance-tax` (891 entries)
+- Finance (705)
+- Tax (186)
 
-### → `computer-it` (240 entries)
-- Computer Science (240)
+### → `computer-it` (360 entries)
+- Computer Science (360)
 
 ## All drift categories (not in registry, not a track)
 
 | Category | Count |
 |---|--:|
+| AI Literacy | 8 |
+| Psychology | 8 |
+| Economics | 8 |
+| 神秘学 | 4 |
+| 心と心理学 | 1 |
+| 心理与人格 | 1 |
 
 ## Note
 
