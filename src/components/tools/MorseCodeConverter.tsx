@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { GameContainer } from '../ui/game/GamePrimitives';
 
-type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh' | 'cn';
+type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh';
 type Mode = 'encode' | 'decode';
 
 const L: Record<Locale, { title: string; subtitle: string; encode: string; decode: string; input: string; output: string; copy: string; copied: string; clear: string; inputPlaceholder: string; decodePlaceholder: string; }> = {
@@ -10,8 +10,7 @@ const L: Record<Locale, { title: string; subtitle: string; encode: string; decod
   ja: { title: 'モールス信号変換機', subtitle: 'Morse Code Converter', encode: 'テキスト→モールス', decode: 'モールス→テキスト', input: '入力', output: '出力', copy: 'コピー', copied: 'コピー済', clear: 'クリア', inputPlaceholder: 'テキストを入力…', decodePlaceholder: 'モールス信号を入力 (例: ... --- ...)' },
   fr: { title: 'Convertisseur Code Morse', subtitle: 'Morse Code Converter', encode: 'Texte → Morse', decode: 'Morse → Texte', input: 'Entrée', output: 'Sortie', copy: 'Copier', copied: 'Copié !', clear: 'Effacer', inputPlaceholder: 'Tapez votre texte…', decodePlaceholder: 'Entrez le code Morse (ex: ... --- ...)' },
   es: { title: 'Conversor Código Morse', subtitle: 'Morse Code Converter', encode: 'Texto → Morse', decode: 'Morse → Texto', input: 'Entrada', output: 'Salida', copy: 'Copiar', copied: '¡Copiado!', clear: 'Borrar', inputPlaceholder: 'Escribe tu texto…', decodePlaceholder: 'Introduce código Morse (ej: ... --- ...)' },
-  zh: { title: '摩斯電碼轉換器', subtitle: 'Morse Code Converter', encode: '文字→摩斯碼', decode: '摩斯碼→文字', input: '輸入', output: '輸出', copy: '複製', copied: '已複製', clear: '清除', inputPlaceholder: '在此輸入文字…', decodePlaceholder: '輸入摩斯電碼（例：... --- ...）' },
-  cn: { title: '摩斯电码转换器', subtitle: 'Morse Code Converter', encode: '文字→摩斯码', decode: '摩斯码→文字', input: '输入', output: '输出', copy: '复制', copied: '已复制', clear: '清除', inputPlaceholder: '在此输入文字…', decodePlaceholder: '输入摩斯电码（例：... --- ...）' },
+  zh: { title: '摩斯电码转换器', subtitle: 'Morse Code Converter', encode: '文字→摩斯码', decode: '摩斯码→文字', input: '输入', output: '输出', copy: '复制', copied: '已复制', clear: '清除', inputPlaceholder: '在此输入文字…', decodePlaceholder: '输入摩斯电码（例：... --- ...）' },
 };
 
 const MORSE: Record<string, string> = {

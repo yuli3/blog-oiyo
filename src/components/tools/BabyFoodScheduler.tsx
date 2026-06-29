@@ -34,7 +34,6 @@ const STAGES: FoodStage[] = [
       fr: "Diversification précoce",
       es: "Alimentación complementaria temprana",
       zh: "辅食初期",
-      cn: "副食初期",
     },
     texture: {
       ko: "완전 퓨레 (10배죽 수준, 매끄럽게 갈기)",
@@ -43,7 +42,6 @@ const STAGES: FoodStage[] = [
       fr: "Purée lisse (bouillie 10 volumes d'eau)",
       es: "Puré liso (papilla proporción 10:1 agua)",
       zh: "全泥状（10倍粥水平，打磨光滑）",
-      cn: "全泥狀（10倍粥水準，打磨光滑）",
     },
     veggies: {
       ko: ["애호박", "당근", "감자", "브로콜리", "완두콩"],
@@ -52,7 +50,6 @@ const STAGES: FoodStage[] = [
       fr: ["Courgette", "Carotte", "Pomme de terre", "Brocoli", "Petits pois"],
       es: ["Calabacín", "Zanahoria", "Papa", "Brócoli", "Arvejas"],
       zh: ["西葫芦", "胡萝卜", "土豆", "西兰花", "豌豆"],
-      cn: ["西葫蘆", "胡蘿蔔", "土豆", "西蘭花", "豌豆"],
     },
     proteins: {
       ko: ["소고기 (처음엔 소량)", "닭가슴살", "두부"],
@@ -61,7 +58,6 @@ const STAGES: FoodStage[] = [
       fr: ["Bœuf (petite quantité d'abord)", "Blanc de poulet", "Tofu"],
       es: ["Carne de res (pequeña cantidad al inicio)", "Pechuga de pollo", "Tofu"],
       zh: ["牛肉（初期少量）", "鸡胸肉", "豆腐"],
-      cn: ["牛肉（初期少量）", "雞胸肉", "豆腐"],
     },
     grains: {
       ko: ["쌀 미음", "오트밀 미음", "보리 미음"],
@@ -70,7 +66,6 @@ const STAGES: FoodStage[] = [
       fr: ["Bouillie de riz", "Bouillie d'avoine", "Bouillie d'orge"],
       es: ["Papilla de arroz", "Papilla de avena", "Papilla de cebada"],
       zh: ["米糊", "燕麦糊", "大麦糊"],
-      cn: ["米糊", "燕麥糊", "大麥糊"],
     },
     cautions: {
       ko: [
@@ -109,12 +104,6 @@ const STAGES: FoodStage[] = [
         "严禁盐、糖、蜂蜜",
         "继续母乳或配方奶喂养",
       ],
-      cn: [
-        "每次引入一種食材，間隔3-5天",
-        "確認無過敏反應後再引入下一種食材",
-        "嚴禁鹽、糖、蜂蜜",
-        "繼續母乳或配方奶哺育",
-      ],
     },
     avoidFoods: {
       ko: ["꿀", "생우유", "달걀흰자", "견과류", "생선회", "짠 음식", "가공식품", "카페인"],
@@ -123,7 +112,6 @@ const STAGES: FoodStage[] = [
       fr: ["Miel", "Lait de vache (entier)", "Blancs d'œufs", "Noix", "Poisson cru", "Aliments salés", "Aliments transformés", "Caféine"],
       es: ["Miel", "Leche de vaca (entera)", "Claras de huevo", "Nueces", "Pescado crudo", "Alimentos salados", "Alimentos procesados", "Cafeína"],
       zh: ["蜂蜜", "全脂牛奶", "蛋清", "坚果", "生鱼片", "含盐食品", "加工食品", "咖啡因"],
-      cn: ["蜂蜜", "全脂牛奶", "蛋清", "堅果", "生魚片", "含鹽食品", "加工食品", "咖啡因"],
     },
   },
   {
@@ -138,7 +126,6 @@ const STAGES: FoodStage[] = [
       fr: "Diversification intermédiaire",
       es: "Alimentación complementaria intermedia",
       zh: "辅食中期",
-      cn: "副食中期",
     },
     texture: {
       ko: "부드러운 으깨기 (7배죽, 혀로 으깰 수 있는 정도)",
@@ -147,7 +134,6 @@ const STAGES: FoodStage[] = [
       fr: "Purée molle (bouillie 7:1, écrasable avec la langue)",
       es: "Puré suave (papilla 7:1, triturada con lengua)",
       zh: "软烂泥状（7倍粥，可用舌头压碎）",
-      cn: "軟爛泥狀（7倍粥，可用舌頭壓碎）",
     },
     veggies: {
       ko: ["시금치", "단호박", "아욱", "청경채", "파프리카"],
@@ -156,7 +142,6 @@ const STAGES: FoodStage[] = [
       fr: ["Épinards", "Courge butternut", "Mauve", "Bok choy", "Poivron"],
       es: ["Espinaca", "Calabaza mantequilla", "Malva", "Col china", "Pimiento"],
       zh: ["菠菜", "南瓜", "苋菜", "青菜", "彩椒"],
-      cn: ["菠菜", "南瓜", "莧菜", "青菜", "彩椒"],
     },
     proteins: {
       ko: ["소고기 다짐육", "닭고기 다짐육", "연두부"],
@@ -165,7 +150,6 @@ const STAGES: FoodStage[] = [
       fr: ["Bœuf haché", "Poulet haché", "Tofu soyeux"],
       es: ["Carne de res molida", "Pollo molido", "Tofu sedoso"],
       zh: ["牛肉末", "鸡肉末", "嫩豆腐"],
-      cn: ["牛肉末", "雞肉末", "嫩豆腐"],
     },
     grains: {
       ko: ["쌀죽 (7배죽)", "찹쌀죽", "현미죽"],
@@ -174,7 +158,6 @@ const STAGES: FoodStage[] = [
       fr: ["Bouillie de riz 7:1", "Bouillie de riz gluant", "Bouillie de riz brun"],
       es: ["Papilla de arroz 7:1", "Papilla de arroz glutinoso", "Papilla de arroz integral"],
       zh: ["7倍粥", "糯米粥", "糙米粥"],
-      cn: ["7倍粥", "糯米粥", "糙米粥"],
     },
     cautions: {
       ko: [
@@ -213,12 +196,6 @@ const STAGES: FoodStage[] = [
         "可用水或大麦茶补充水分",
         "多种蔬菜注意铁质摄入",
       ],
-      cn: [
-        "可引入蛋黃（蛋清暫不可）",
-        "可引入白肉魚（油性魚類要注意）",
-        "可用水或大麥茶補充水分",
-        "多種蔬菜注意鐵質攝入",
-      ],
     },
     avoidFoods: {
       ko: ["꿀", "생우유", "달걀흰자", "견과류 (분태 제외)", "날것의 음식", "짠 음식", "가공식품"],
@@ -227,7 +204,6 @@ const STAGES: FoodStage[] = [
       fr: ["Miel", "Lait de vache", "Blancs d'œufs", "Noix entières", "Aliments crus", "Aliments salés", "Aliments transformés"],
       es: ["Miel", "Leche de vaca", "Claras de huevo", "Nueces enteras", "Alimentos crudos", "Alimentos salados", "Alimentos procesados"],
       zh: ["蜂蜜", "牛奶", "蛋清", "整粒坚果", "生食", "含盐食品", "加工食品"],
-      cn: ["蜂蜜", "牛奶", "蛋清", "整粒堅果", "生食", "含鹽食品", "加工食品"],
     },
   },
   {
@@ -242,7 +218,6 @@ const STAGES: FoodStage[] = [
       fr: "Diversification avancée",
       es: "Alimentación complementaria avanzada",
       zh: "辅食后期",
-      cn: "副食後期",
     },
     texture: {
       ko: "작은 덩어리 (5배죽, 잇몸으로 으깰 수 있는 정도)",
@@ -251,7 +226,6 @@ const STAGES: FoodStage[] = [
       fr: "Petits morceaux (bouillie 5:1, écrasable avec les gencives)",
       es: "Pequeños trozos (papilla 5:1, aplastable con encías)",
       zh: "小块状（5倍粥，牙龈可压碎）",
-      cn: "小塊狀（5倍粥，牙齦可壓碎）",
     },
     veggies: {
       ko: ["무", "우엉", "연근", "양배추", "버섯"],
@@ -260,7 +234,6 @@ const STAGES: FoodStage[] = [
       fr: ["Radis", "Bardane", "Racine de lotus", "Chou", "Champignon"],
       es: ["Rábano", "Bardana", "Raíz de loto", "Repollo", "Champiñón"],
       zh: ["白萝卜", "牛蒡", "莲藕", "卷心菜", "蘑菇"],
-      cn: ["白蘿蔔", "牛蒡", "蓮藕", "捲心菜", "蘑菇"],
     },
     proteins: {
       ko: ["소고기 잘게 다진 것", "흰살 생선", "달걀 (노른자+흰자)"],
@@ -269,7 +242,6 @@ const STAGES: FoodStage[] = [
       fr: ["Bœuf finement haché", "Poisson blanc", "Œuf entier (jaune + blanc)"],
       es: ["Carne de res finamente picada", "Pescado blanco", "Huevo entero (yema + clara)"],
       zh: ["牛肉细末", "白肉鱼", "全蛋（蛋黄+蛋清）"],
-      cn: ["牛肉細末", "白肉魚", "全蛋（蛋黃+蛋清）"],
     },
     grains: {
       ko: ["진밥 (5배죽)", "수제비", "부드러운 빵"],
@@ -278,7 +250,6 @@ const STAGES: FoodStage[] = [
       fr: ["Riz mou (5:1)", "Pâtes molles", "Pain mou"],
       es: ["Arroz suave (5:1)", "Masa blanda", "Pan suave"],
       zh: ["软饭（5倍粥）", "面疙瘩", "软面包"],
-      cn: ["軟飯（5倍粥）", "麵疙瘩", "軟麵包"],
     },
     cautions: {
       ko: [
@@ -317,12 +288,6 @@ const STAGES: FoodStage[] = [
         "考虑引入手抓食物",
         "继续母乳/配方奶但减少比例",
       ],
-      cn: [
-        "可引入全蛋（必須檢查過敏）",
-        "可開始練習慢慢咀嚼",
-        "考慮引入手抓食物",
-        "繼續母乳/配方奶但減少比例",
-      ],
     },
     avoidFoods: {
       ko: ["꿀 (만 1세 전)", "생우유 (주 음료로)", "딱딱한 견과류", "짠 음식", "가공식품", "자극적 양념"],
@@ -331,7 +296,6 @@ const STAGES: FoodStage[] = [
       fr: ["Miel (avant 1 an)", "Lait de vache comme boisson principale", "Noix dures entières", "Aliments salés", "Aliments transformés", "Assaisonnements épicés"],
       es: ["Miel (antes del año)", "Leche de vaca como bebida principal", "Nueces duras enteras", "Alimentos salados", "Alimentos procesados", "Condimentos picantes"],
       zh: ["蜂蜜（1岁前）", "牛奶（作为主要饮料）", "整粒硬坚果", "含盐食品", "加工食品", "刺激性调味料"],
-      cn: ["蜂蜜（1歲前）", "牛奶（作為主要飲料）", "整粒硬堅果", "含鹽食品", "加工食品", "刺激性調味料"],
     },
   },
   {
@@ -346,7 +310,6 @@ const STAGES: FoodStage[] = [
       fr: "Alimentation de transition finale",
       es: "Etapa final de alimentación complementaria",
       zh: "辅食完成期",
-      cn: "副食完成期",
     },
     texture: {
       ko: "부드러운 어른 음식 수준 (잘게 썬 음식, 부드럽게 조리)",
@@ -355,7 +318,6 @@ const STAGES: FoodStage[] = [
       fr: "Texture d'aliments adultes mous (finement coupés, cuits doucement)",
       es: "Textura de comida adulta suave (finamente cortada, cocida suavemente)",
       zh: "软烂成人食物水平（细切，软煮）",
-      cn: "軟爛成人食物水準（細切，軟煮）",
     },
     veggies: {
       ko: ["다양한 채소 (잘게 썰기)", "브로콜리", "당근", "시금치", "콩나물"],
@@ -364,7 +326,6 @@ const STAGES: FoodStage[] = [
       fr: ["Légumes variés (finement coupés)", "Brocoli", "Carotte", "Épinards", "Pousses de soja"],
       es: ["Verduras variadas (finamente cortadas)", "Brócoli", "Zanahoria", "Espinaca", "Brotes de soja"],
       zh: ["各种蔬菜（细切）", "西兰花", "胡萝卜", "菠菜", "豆芽"],
-      cn: ["各種蔬菜（細切）", "西蘭花", "胡蘿蔔", "菠菜", "豆芽"],
     },
     proteins: {
       ko: ["소고기·돼지고기 잘게 썬 것", "닭고기 잘게 찢은 것", "달걀 요리"],
@@ -373,7 +334,6 @@ const STAGES: FoodStage[] = [
       fr: ["Bœuf/porc finement coupé", "Poulet effiloché", "Œufs cuits"],
       es: ["Carne de res/cerdo finamente cortada", "Pollo desmenuzado", "Huevos cocidos"],
       zh: ["细切牛猪肉", "细丝鸡肉", "熟蛋料理"],
-      cn: ["細切牛豬肉", "細絲雞肉", "熟蛋料理"],
     },
     grains: {
       ko: ["진밥 → 보통 밥으로 이행", "부드러운 국수", "식빵"],
@@ -382,7 +342,6 @@ const STAGES: FoodStage[] = [
       fr: ["Riz mou → transition vers riz normal", "Nouilles molles", "Pain de mie"],
       es: ["Arroz suave → transición a arroz normal", "Fideos suaves", "Pan blanco"],
       zh: ["软饭→过渡到普通饭", "软面条", "白面包"],
-      cn: ["軟飯→過渡到普通飯", "軟麵條", "白麵包"],
     },
     cautions: {
       ko: [
@@ -421,12 +380,6 @@ const STAGES: FoodStage[] = [
         "鼓励自己用勺子吃饭",
         "用多样食材预防挑食",
       ],
-      cn: [
-        "1歲後可每天喝400-500ml牛奶",
-        "開始與家人共享餐食（少調味）",
-        "鼓勵自己用湯匙吃飯",
-        "用多樣食材預防挑食",
-      ],
     },
     avoidFoods: {
       ko: ["꿀 (영아 보툴리즘 주의, 만 1세 이후 소량 가능)", "딱딱한 견과류 (통째)", "매운 음식", "카페인", "고염분 가공식품"],
@@ -435,7 +388,6 @@ const STAGES: FoodStage[] = [
       fr: ["Miel (botulisme infantile, petites quantités ok après 1 an)", "Noix entières dures", "Nourriture épicée", "Caféine", "Aliments transformés salés"],
       es: ["Miel (botulismo infantil, pequeñas cantidades ok después del año)", "Nueces enteras duras", "Comida picante", "Cafeína", "Alimentos procesados con alto contenido en sal"],
       zh: ["蜂蜜（婴儿肉毒杆菌注意，1岁后少量可）", "整粒硬坚果", "辣食", "咖啡因", "高盐加工食品"],
-      cn: ["蜂蜜（嬰兒肉毒桿菌注意，1歲後少量可）", "整粒硬堅果", "辣食", "咖啡因", "高鹽加工食品"],
     },
   },
 ];
@@ -547,21 +499,6 @@ const UI: Record<
     cautionsLabel: "注意事项",
     avoidLabel: "避免食物",
     disclaimer: "* 所有信息仅供参考。请咨询儿科医生。",
-  },
-  cn: {
-    title: "副食調度器",
-    subtitle: "獲取適合寶寶月齡的副食資訊",
-    sliderLabel: "寶寶月齡",
-    monthUnit: "個月",
-    timesPerDay: "每日次數",
-    amountPerMeal: "每餐用量",
-    texture: "食物質地",
-    veggiesLabel: "推薦蔬菜",
-    proteinsLabel: "推薦蛋白質",
-    grainsLabel: "推薦穀物",
-    cautionsLabel: "注意事項",
-    avoidLabel: "避免食物",
-    disclaimer: "* 所有資訊僅供參考。請諮詢兒科醫生。",
   },
 };
 

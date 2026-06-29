@@ -16,7 +16,7 @@ interface Labels {
   privacy: string;
 }
 
-const LABELS: Record<Exclude<Locale, "cn">, Labels> = {
+const LABELS: Record<Locale, Labels> = {
   en: {
     title: "Image Pixelator",
     subtitle: "Average color blocks for privacy or pixel-art style.",
@@ -92,7 +92,7 @@ const LABELS: Record<Exclude<Locale, "cn">, Labels> = {
 };
 
 export default function ImagePixelator({ locale }: { locale: Locale }) {
-  const t = LABELS[locale as Exclude<Locale, "cn">] ?? LABELS.en;
+  const t = LABELS[locale] ?? LABELS.en;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);

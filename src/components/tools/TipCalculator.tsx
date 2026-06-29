@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { GameContainer } from '../ui/game/GamePrimitives';
 
-type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh' | 'cn';
+type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh';
 
 const LABELS: Record<Locale, {
   title: string; subtitle: string; bill: string; tip: string; split: string;
@@ -12,13 +12,12 @@ const LABELS: Record<Locale, {
   ja: { title: 'チップ計算機', subtitle: 'Tip Calculator', bill: '金額', tip: 'チップ率', split: '人数', tipPer: '1人チップ', splitPer: '1人負担', total: '合計（チップ込）', each: '1人' },
   fr: { title: 'Calculateur de pourboire', subtitle: 'Tip Calculator', bill: 'Montant', tip: 'Pourboire %', split: 'Personnes', tipPer: 'Pourboire / pers.', splitPer: 'Par personne', total: 'Total (avec pourboire)', each: 'Chacun' },
   es: { title: 'Calculadora de propina', subtitle: 'Tip Calculator', bill: 'Importe', tip: 'Propina %', split: 'Personas', tipPer: 'Propina / persona', splitPer: 'Por persona', total: 'Total (con propina)', each: 'Cada uno' },
-  zh: { title: '小費計算機', subtitle: 'Tip Calculator', bill: '消費金額', tip: '小費比例', split: '人數', tipPer: '每人小費', splitPer: '每人應付', total: '含小費總額', each: '每人' },
-  cn: { title: '小费计算器', subtitle: 'Tip Calculator', bill: '消费金额', tip: '小费比例', split: '人数', tipPer: '每人小费', splitPer: '每人应付', total: '含小费总额', each: '每人' },
+  zh: { title: '小费计算器', subtitle: 'Tip Calculator', bill: '消费金额', tip: '小费比例', split: '人数', tipPer: '每人小费', splitPer: '每人应付', total: '含小费总额', each: '每人' },
 };
 
 const PRESET_TIPS = [10, 15, 18, 20, 25];
-const CURRENCY: Record<Locale, string> = { ko: '₩', en: '$', ja: '¥', fr: '€', es: '€', zh: 'NT$', cn: '¥' };
-const LOCALE_NUM: Record<Locale, string> = { ko: 'ko-KR', en: 'en-US', ja: 'ja-JP', fr: 'fr-FR', es: 'es-ES', zh: 'zh-TW', cn: 'zh-CN' };
+const CURRENCY: Record<Locale, string> = { ko: '₩', en: '$', ja: '¥', fr: '€', es: '€', zh: '¥', };
+const LOCALE_NUM: Record<Locale, string> = { ko: 'ko-KR', en: 'en-US', ja: 'ja-JP', fr: 'fr-FR', es: 'es-ES', zh: 'zh-CN', };
 
 function fmt(amount: number, locale: Locale) {
   return new Intl.NumberFormat(LOCALE_NUM[locale], {

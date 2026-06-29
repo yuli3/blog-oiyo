@@ -121,22 +121,6 @@ const UI: Record<Locale, {
     bestMatchLabel: "最佳配对",
     types: { A: "A型", B: "B型", O: "O型", AB: "AB型" },
   },
-  cn: {
-    title: "血型配對",
-    subtitle: "透過血型了解兩個人的相容性",
-    person1: "你的血型",
-    person2: "對方的血型",
-    selectBlood: "選擇血型",
-    calcBtn: "查看配對",
-    resetBtn: "重新測試",
-    scoreLabel: "配對分數",
-    gradeLabel: "配對等級",
-    descLabel: "關係特徵",
-    strengthsLabel: "優勢",
-    cautionsLabel: "注意事項",
-    bestMatchLabel: "最佳配對",
-    types: { A: "A型", B: "B型", O: "O型", AB: "AB型" },
-  },
 };
 
 // ─── Compatibility Grades ─────────────────────────────────────────────────────
@@ -150,7 +134,6 @@ const GRADE_LABELS: Record<Locale, Record<GradeKey, string>> = {
   fr: { soulmate: "Âmes Sœurs💕", good: "Bons Amis👫", normal: "Compatibilité Moyenne🤝", challenge: "Défi⚡" },
   es: { soulmate: "Almas Gemelas💕", good: "Buenos Amigos👫", normal: "Compatibilidad Media🤝", challenge: "Desafiante⚡" },
   zh: { soulmate: "灵魂伴侣💕", good: "好朋友👫", normal: "普通配对🤝", challenge: "挑战型⚡" },
-  cn: { soulmate: "靈魂伴侶💕", good: "好朋友👫", normal: "普通配對🤝", challenge: "挑戰型⚡" },
 };
 
 const GRADE_COLORS: Record<GradeKey, string> = {
@@ -185,7 +168,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["Tous deux méticuleux et planifiés, ils se comprennent bien.", "Une expression émotionnelle similaire crée une forte empathie.", "Un perfectionnisme excessif peut parfois créer des frictions."],
       es: ["Ambos son meticulosos y planificadores, fomentando la comprensión mutua.", "Una expresión emocional similar crea empatía fuerte.", "El perfeccionismo excesivo puede a veces causar fricciones."],
       zh: ["两人都细心周到，善于计划，相互理解深入。", "相似的情感表达方式带来强烈共鸣。", "过度完美主义有时可能产生摩擦。"],
-      cn: ["兩人都細心周到，善於計劃，相互理解深入。", "相似的情感表達方式帶來強烈共鳴。", "過度完美主義有時可能產生摩擦。"],
     },
     strengths: {
       ko: ["높은 신뢰감과 안정감", "세심한 배려와 책임감"],
@@ -194,7 +176,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["Haute confiance et stabilité", "Attention méticuleuse et responsabilité"],
       es: ["Alta confianza y estabilidad", "Consideración cuidadosa y responsabilidad"],
       zh: ["高度信任与稳定感", "细心体贴与责任感"],
-      cn: ["高度信任與穩定感", "細心體貼與責任感"],
     },
     cautions: {
       ko: ["서로의 고집이 부딪힐 수 있음", "감정을 직접 표현하는 연습 필요"],
@@ -203,7 +184,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["L'entêtement peut créer des conflits", "Pratiquer l'expression directe des émotions"],
       es: ["La terquedad puede chocar", "Practicar la expresión directa de emociones"],
       zh: ["固执容易产生冲突", "需要练习直接表达情感"],
-      cn: ["固執容易產生衝突", "需要練習直接表達情感"],
     },
   },
   "A_B": {
@@ -217,7 +197,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["La méticulosité de A s'oppose souvent au naturel libre de B.", "Des styles de vie différents peuvent être stimulants mais difficiles.", "Compréhension et patience sont essentielles."],
       es: ["La meticulosidad de A choca con la naturaleza libre de B.", "Diferentes estilos de vida pueden ser estimulantes pero desafiantes.", "Comprensión y paciencia son clave."],
       zh: ["A型的细致与B型的自由奔放容易产生冲突。", "不同的生活方式既有刺激感也有挑战性。", "理解与耐心是关键。"],
-      cn: ["A型的細緻與B型的自由奔放容易產生衝突。", "不同的生活方式既有刺激感也有挑戰性。", "理解與耐心是關鍵。"],
     },
     strengths: {
       ko: ["서로 부족한 면을 보완할 수 있음", "새로운 시각과 자극 제공"],
@@ -226,7 +205,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["Peuvent compléter les faiblesses de l'autre", "Apportent de nouvelles perspectives"],
       es: ["Pueden complementar las debilidades del otro", "Aportan nuevas perspectivas"],
       zh: ["能够互补各自的不足", "提供新的视角和刺激"],
-      cn: ["能夠互補各自的不足", "提供新的視角和刺激"],
     },
     cautions: {
       ko: ["생활 방식 차이로 인한 갈등 주의", "서로의 다름을 존중하는 자세 필요"],
@@ -235,7 +213,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["Attention aux conflits dus aux différences de style de vie", "Respecter les approches différentes"],
       es: ["Cuidado con conflictos por diferencias de estilo de vida", "Respetar los enfoques diferentes"],
       zh: ["注意生活方式差异引发的冲突", "需要尊重彼此的不同方式"],
-      cn: ["注意生活方式差異引發的衝突", "需要尊重彼此的不同方式"],
     },
   },
   "A_O": {
@@ -249,7 +226,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["La sensibilité de A et l'inclusivité de O créent un équilibre parfait.", "Une relation idéale qui révèle le meilleur de chacun.", "Le leadership de O calme l'anxiété de A."],
       es: ["La sensibilidad de A y la inclusividad de O crean un equilibrio perfecto.", "Una relación ideal que saca lo mejor de cada uno.", "El liderazgo de O calma la ansiedad de A."],
       zh: ["A型的细腻与O型的包容力形成完美平衡。", "这是一段能够发挥彼此优势的理想关系。", "O型的领导力能安抚A型的不安情绪。"],
-      cn: ["A型的細膩與O型的包容力形成完美平衡。", "這是一段能夠發揮彼此優勢的理想關係。", "O型的領導力能安撫A型的不安情緒。"],
     },
     strengths: {
       ko: ["서로에 대한 깊은 신뢰와 안정감", "A형의 꼼꼼함 + O형의 추진력"],
@@ -258,7 +234,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["Confiance mutuelle profonde et stabilité", "La minutie de A + l'élan de O"],
       es: ["Profunda confianza mutua y estabilidad", "La meticulosidad de A + el impulso de O"],
       zh: ["深度相互信任与稳定感", "A型的细心 + O型的行动力"],
-      cn: ["深度相互信任與穩定感", "A型的細心 + O型的行動力"],
     },
     cautions: {
       ko: ["O형의 강한 자기 주장에 A형이 상처받을 수 있음", "감정 표현 방식의 차이 조율 필요"],
@@ -267,7 +242,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["L'affirmation de O peut blesser les sentiments de A", "Coordonner les différents styles d'expression émotionnelle"],
       es: ["La asertividad de O puede herir los sentimientos de A", "Coordinar diferentes estilos de expresión emocional"],
       zh: ["O型的强烈主张可能会伤害A型的感情", "需要调整情感表达方式的差异"],
-      cn: ["O型的強烈主張可能會傷害A型的感情", "需要調整情感表達方式的差異"],
     },
   },
   "A_AB": {
@@ -281,7 +255,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["La rationalité de AB comprend bien les émotions de A.", "Excellente connexion intellectuelle.", "L'imprévisibilité de AB peut troubler A."],
       es: ["La racionalidad de AB comprende bien las emociones de A.", "Gran conexión intelectual.", "La imprevisibilidad de AB puede inquietar a A."],
       zh: ["AB型的理性能很好地理解A型的情感。", "两人之间有良好的智识交流。", "AB型的善变可能让A型感到不安。"],
-      cn: ["AB型的理性能很好地理解A型的情感。", "兩人之間有良好的智識交流。", "AB型的善變可能讓A型感到不安。"],
     },
     strengths: {
       ko: ["이성과 감성의 조화", "서로를 성장시키는 자극"],
@@ -290,7 +263,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["Harmonie de la raison et de l'émotion", "Croissance mutuelle par stimulation"],
       es: ["Armonía de razón y emoción", "Crecimiento mutuo a través de la estimulación"],
       zh: ["理性与感性的和谐统一", "相互促进成长"],
-      cn: ["理性與感性的和諧統一", "相互促進成長"],
     },
     cautions: {
       ko: ["AB형의 이중적 면이 A형을 혼란스럽게 함", "감정적 안정을 위한 소통 중요"],
@@ -299,7 +271,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["La double nature de AB peut perturber A", "La communication pour la stabilité émotionnelle est vitale"],
       es: ["La naturaleza dual de AB puede confundir a A", "La comunicación para la estabilidad emocional es vital"],
       zh: ["AB型的双重性格会让A型感到困惑", "沟通对情感稳定至关重要"],
-      cn: ["AB型的雙重性格會讓A型感到困惑", "溝通對情感穩定至關重要"],
     },
   },
   "B_A": {
@@ -313,7 +284,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["Le naturel libre de B s'oppose souvent à la méticulosité de A.", "Les différences peuvent être attrayantes mais difficiles.", "Le respect mutuel et la compréhension sont essentiels."],
       es: ["El espíritu libre de B a menudo choca con la meticulosidad de A.", "Las diferencias pueden ser atractivas pero desafiantes.", "El respeto mutuo y la comprensión son clave."],
       zh: ["B型的自由奔放常与A型的细致发生冲突。", "差异有时也会产生吸引力。", "相互尊重与理解是关键。"],
-      cn: ["B型的自由奔放常與A型的細緻發生衝突。", "差異有時也會產生吸引力。", "相互尊重與理解是關鍵。"],
     },
     strengths: {
       ko: ["서로 다른 관점이 시야를 넓혀 줌", "새로운 경험과 도전 공유"],
@@ -322,7 +292,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["Des perspectives différentes élargissent les horizons de chacun", "Partager de nouvelles expériences et défis"],
       es: ["Diferentes perspectivas amplían los horizontes de cada uno", "Compartir nuevas experiencias y desafíos"],
       zh: ["不同视角拓展各自的视野", "分享新体验和挑战"],
-      cn: ["不同視角拓展各自的視野", "分享新體驗和挑戰"],
     },
     cautions: {
       ko: ["규칙 vs 자유의 갈등 조율 필요", "서로의 생활 방식 간섭 자제"],
@@ -331,7 +300,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["Naviguer les conflits entre règles et liberté", "Éviter d'interférer dans le style de vie de l'autre"],
       es: ["Navegar conflictos entre reglas y libertad", "Evitar interferir en el estilo de vida del otro"],
       zh: ["需要调和规则与自由之间的冲突", "避免干涉对方的生活方式"],
-      cn: ["需要調和規則與自由之間的衝突", "避免干涉對方的生活方式"],
     },
   },
   "B_B": {
@@ -345,7 +313,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["Tous deux libres et vifs, ils créent une énergie explosive ensemble.", "Des personnalités auto-dirigées similaires créent une forte empathie.", "Leur entêtement peut rendre les compromis difficiles."],
       es: ["Ambos son libres y vivaces, creando una energía explosiva juntos.", "Personalidades auto-dirigidas similares crean fuerte empatía.", "El ser ambos tercos puede dificultar los compromisos."],
       zh: ["两人都自由活泼，在一起充满活力。", "相似的自主个性让双方容易产生共鸣。", "两人都固执，可能难以妥协。"],
-      cn: ["兩人都自由活潑，在一起充滿活力。", "相似的自主個性讓雙方容易產生共鳴。", "兩人都固執，可能難以妥協。"],
     },
     strengths: {
       ko: ["즉흥적이고 활기찬 관계", "서로의 개성을 존중"],
@@ -354,7 +321,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["Relation spontanée et vibrante", "Respect de l'individualité de l'autre"],
       es: ["Relación espontánea y vibrante", "Respeto por la individualidad del otro"],
       zh: ["即兴而充满活力的关系", "尊重彼此的个性"],
-      cn: ["即興而充滿活力的關係", "尊重彼此的個性"],
     },
     cautions: {
       ko: ["결정이 어렵고 우유부단해질 수 있음", "책임 분담을 명확히 할 것"],
@@ -363,7 +329,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["Les décisions peuvent être difficiles et indécises", "Diviser clairement les responsabilités"],
       es: ["Las decisiones pueden ser difíciles e indecisas", "Dividir claramente las responsabilidades"],
       zh: ["做决定困难，可能优柔寡断", "明确分担责任"],
-      cn: ["做決定困難，可能優柔寡斷", "明確分擔責任"],
     },
   },
   "B_O": {
@@ -377,7 +342,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["L'inclusivité de O embrasse l'esprit libre de B.", "Un couple actif et énergique.", "Ils s'inspirent mutuellement de vitalité."],
       es: ["La inclusividad de O abraza el espíritu libre de B.", "Una pareja activa y enérgica.", "Se inspiran mutuamente con vitalidad."],
       zh: ["O型的包容力接纳了B型的自由灵魂。", "这是一对活跃而充满活力的伴侣。", "两人相互激励，充满活力。"],
-      cn: ["O型的包容力接納了B型的自由靈魂。", "這是一對活躍而充滿活力的伴侶。", "兩人相互激勵，充滿活力。"],
     },
     strengths: {
       ko: ["서로의 에너지가 시너지를 냄", "O형의 안정감 + B형의 창의성"],
@@ -386,7 +350,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["Leurs énergies créent de la synergie", "La stabilité de O + la créativité de B"],
       es: ["Sus energías crean sinergia", "La estabilidad de O + la creatividad de B"],
       zh: ["两人的能量产生协同效应", "O型的稳定感 + B型的创造力"],
-      cn: ["兩人的能量產生協同效應", "O型的穩定感 + B型的創造力"],
     },
     cautions: {
       ko: ["B형의 변덕에 O형이 지칠 수 있음", "장기적 계획에 대한 합의 필요"],
@@ -395,7 +358,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["O peut se lasser des sautes d'humeur de B", "Besoin de s'accorder sur les plans à long terme"],
       es: ["O puede cansarse de los cambios de humor de B", "Necesitan acordar planes a largo plazo"],
       zh: ["O型可能会因B型的善变而感到疲惫", "需要就长期计划达成共识"],
-      cn: ["O型可能會因B型的善變而感到疲憊", "需要就長期計劃達成共識"],
     },
   },
   "B_AB": {
@@ -409,7 +371,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["La polyvalence de AB correspond à la nature colorée de B.", "Ils partagent une curiosité intellectuelle.", "Les fortes individualités peuvent causer des frictions."],
       es: ["La versatilidad de AB coincide con la naturaleza colorida de B.", "Comparten curiosidad intelectual.", "Las fuertes individualidades pueden causar fricciones."],
       zh: ["AB型的多变与B型的多彩个性相得益彰。", "两人共享智识上的好奇心。", "强烈的个性有时会产生摩擦。"],
-      cn: ["AB型的多變與B型的多彩個性相得益彰。", "兩人共享智識上的好奇心。", "強烈的個性有時會產生摩擦。"],
     },
     strengths: {
       ko: ["다양한 취미와 관심사 공유", "자유롭고 창의적인 분위기"],
@@ -418,7 +379,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["Partage de passe-temps et d'intérêts divers", "Atmosphère libre et créative"],
       es: ["Comparten hobbies e intereses diversos", "Atmósfera libre y creativa"],
       zh: ["共享多样的爱好和兴趣", "自由而富有创造力的氛围"],
-      cn: ["共享多樣的愛好和興趣", "自由而富有創造力的氛圍"],
     },
     cautions: {
       ko: ["안정적인 일상 구축이 어려울 수 있음", "서로의 독립성 존중이 필수"],
@@ -427,7 +387,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["Construire des routines stables peut être difficile", "Respecter l'indépendance de l'autre est essentiel"],
       es: ["Construir rutinas estables puede ser difícil", "Respetar la independencia del otro es esencial"],
       zh: ["可能难以建立稳定的日常生活", "尊重彼此的独立性至关重要"],
-      cn: ["可能難以建立穩定的日常生活", "尊重彼此的獨立性至關重要"],
     },
   },
   "O_A": {
@@ -441,7 +400,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["L'inclusivité de O enveloppe la sensibilité délicate de A.", "Ils se complètent mutuellement.", "Un partenariat stable et mature."],
       es: ["La inclusividad de O envuelve la delicada sensibilidad de A.", "Se complementan mutuamente.", "Una asociación estable y madura."],
       zh: ["O型的包容力包裹着A型的细腻感性。", "两人互补各自所缺的优点。", "这是一段稳定而成熟的伙伴关系。"],
-      cn: ["O型的包容力包裹著A型的細膩感性。", "兩人互補各自所缺的優點。", "這是一段穩定而成熟的夥伴關係。"],
     },
     strengths: {
       ko: ["깊은 신뢰와 헌신", "감정적 안정과 성숙함"],
@@ -450,7 +408,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["Confiance profonde et engagement", "Stabilité émotionnelle et maturité"],
       es: ["Profunda confianza y compromiso", "Estabilidad emocional y madurez"],
       zh: ["深度信任与承诺", "情感稳定与成熟"],
-      cn: ["深度信任與承諾", "情感穩定與成熟"],
     },
     cautions: {
       ko: ["O형의 직설적 표현이 A형에게 상처를 줄 수 있음", "A형의 내면 감정을 적극 표현하도록 격려"],
@@ -459,7 +416,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["La franchise de O peut blesser A", "Encourager A à exprimer ses émotions intérieures"],
       es: ["La franqueza de O puede herir a A", "Animar a A a expresar sus emociones internas"],
       zh: ["O型的直接表达可能伤害A型", "鼓励A型积极表达内心情感"],
-      cn: ["O型的直接表達可能傷害A型", "鼓勵A型積極表達內心情感"],
     },
   },
   "O_B": {
@@ -473,7 +429,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["La générosité de O comprend la nature libre de B.", "Une relation dynamique et agréable ensemble.", "O ancre l'énergie que B apporte."],
       es: ["La generosidad de O comprende la naturaleza libre de B.", "Una relación dinámica y agradable juntos.", "O ancla la energía que B aporta."],
       zh: ["O型的慷慨理解B型的自由本性。", "两人在一起充满活力和乐趣。", "O型起到稳定核心的作用，善用B型的能量。"],
-      cn: ["O型的慷慨理解B型的自由本性。", "兩人在一起充滿活力和樂趣。", "O型起到穩定核心的作用，善用B型的能量。"],
     },
     strengths: {
       ko: ["역동적이고 즐거운 커플", "서로의 에너지가 긍정적 시너지"],
@@ -482,7 +437,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["Couple dynamique et amusant", "L'énergie de l'autre crée une synergie positive"],
       es: ["Pareja dinámica y divertida", "La energía del otro crea sinergia positiva"],
       zh: ["充满活力和乐趣的伴侣", "彼此的能量产生积极的协同效应"],
-      cn: ["充滿活力和樂趣的伴侶", "彼此的能量產生積極的協同效應"],
     },
     cautions: {
       ko: ["B형의 변덕에 O형도 지칠 수 있음", "서로 책임지는 영역을 나눌 것"],
@@ -491,7 +445,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["O peut aussi se lasser des sautes d'humeur de B", "Diviser clairement les domaines de responsabilité"],
       es: ["O también puede cansarse de los cambios de humor de B", "Dividir claramente las áreas de responsabilidad"],
       zh: ["O型也可能会因B型的善变而感到疲倦", "明确划分各自负责的领域"],
-      cn: ["O型也可能會因B型的善變而感到疲倦", "明確劃分各自負責的領域"],
     },
   },
   "O_O": {
@@ -505,7 +458,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["Tous deux ont un fort leadership et se comprennent bien.", "Un couple affirmé et actif.", "Des luttes de pouvoir peuvent survenir; la répartition des rôles est clé."],
       es: ["Ambos tienen fuerte liderazgo y se entienden bien.", "Una pareja asertiva y activa.", "Pueden surgir luchas de poder; la división de roles es clave."],
       zh: ["两人都有很强的领导力，相互理解深入。", "这是一对积极主动的伴侣。", "可能出现权力争夺，角色分工很重要。"],
-      cn: ["兩人都有很強的領導力，相互理解深入。", "這是一對積極主動的伴侶。", "可能出現權力爭奪，角色分工很重要。"],
     },
     strengths: {
       ko: ["공통된 목표를 향한 강력한 추진력", "서로의 야망을 응원하는 관계"],
@@ -514,7 +466,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["Fort dynamisme vers des objectifs communs", "Une relation qui encourage les ambitions de chacun"],
       es: ["Fuerte impulso hacia objetivos compartidos", "Una relación que alienta las ambiciones del otro"],
       zh: ["朝着共同目标的强大推动力", "相互支持各自抱负的关系"],
-      cn: ["朝著共同目標的強大推動力", "相互支持各自抱負的關係"],
     },
     cautions: {
       ko: ["지배욕 충돌 조심", "서로 양보하고 협력하는 자세 필요"],
@@ -523,7 +474,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["Attention aux conflits de domination", "Pratiquer la cession mutuelle et la coopération"],
       es: ["Cuidado con los conflictos de dominación", "Practicar la cesión mutua y la cooperación"],
       zh: ["注意控制欲冲突", "需要相互退让和合作的态度"],
-      cn: ["注意控制欲衝突", "需要相互退讓和合作的態度"],
     },
   },
   "O_AB": {
@@ -537,7 +487,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["L'inclusivité de O embrasse le monde intérieur complexe de AB.", "Les différences créent une relation intéressante.", "O doit faire des efforts pour comprendre la dualité de AB."],
       es: ["La inclusividad de O abraza el mundo interior complejo de AB.", "Las diferencias crean una relación interesante.", "O necesita esforzarse para entender la dualidad de AB."],
       zh: ["O型的包容力包裹着AB型复杂的内心世界。", "差异让两人的关系充满趣味。", "O型需要努力理解AB型的双重性。"],
-      cn: ["O型的包容力包裹著AB型複雜的內心世界。", "差異讓兩人的關係充滿趣味。", "O型需要努力理解AB型的雙重性。"],
     },
     strengths: {
       ko: ["O형의 안정감 + AB형의 창의성 조화", "서로에게 배울 점이 많은 관계"],
@@ -546,7 +495,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["Stabilité de O + créativité de AB en harmonie", "Une relation avec beaucoup à apprendre l'un de l'autre"],
       es: ["Estabilidad de O + creatividad de AB en armonía", "Una relación con mucho que aprender el uno del otro"],
       zh: ["O型的稳定感 + AB型的创造力的和谐", "彼此有很多值得学习的地方"],
-      cn: ["O型的穩定感 + AB型的創造力的和諧", "彼此有很多值得學習的地方"],
     },
     cautions: {
       ko: ["AB형의 감정 기복에 O형이 당황할 수 있음", "명확한 소통으로 오해 방지"],
@@ -555,7 +503,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["O peut être déconcerté par les sautes d'humeur de AB", "Communication claire pour prévenir les malentendus"],
       es: ["O puede desconcertarse por los cambios emocionales de AB", "Comunicación clara para prevenir malentendidos"],
       zh: ["O型可能会对AB型的情绪波动感到困惑", "通过清晰沟通防止误解"],
-      cn: ["O型可能會對AB型的情緒波動感到困惑", "通過清晰溝通防止誤解"],
     },
   },
   "AB_A": {
@@ -569,7 +516,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["La pensée rationnelle de AB complète le côté émotionnel de A.", "Une relation riche en échanges intellectuels.", "AB doit accorder plus d'attention à la communication émotionnelle."],
       es: ["El pensamiento racional de AB complementa el lado emocional de A.", "Una relación rica en intercambio intelectual.", "AB necesita prestar más atención a la comunicación emocional."],
       zh: ["AB型的理性思维很好地补充了A型的感性一面。", "这是一段充满智识交流的关系。", "AB型需要更注重情感沟通。"],
-      cn: ["AB型的理性思維很好地補充了A型的感性一面。", "這是一段充滿智識交流的關係。", "AB型需要更注重情感溝通。"],
     },
     strengths: {
       ko: ["이성과 감성의 균형", "서로에게 자극이 되는 지적 토론"],
@@ -578,7 +524,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["Équilibre de raison et d'émotion", "Discussions intellectuellement stimulantes"],
       es: ["Equilibrio de razón y emoción", "Discusiones intelectualmente estimulantes"],
       zh: ["理性与感性的平衡", "相互激励的智识讨论"],
-      cn: ["理性與感性的平衡", "相互激勵的智識討論"],
     },
     cautions: {
       ko: ["AB형의 냉정함이 A형에게 상처를 줄 수 있음", "감정적 따뜻함 표현을 의식적으로 늘릴 것"],
@@ -587,7 +532,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["Le calme de AB peut blesser A", "Augmenter consciemment les expressions de chaleur émotionnelle"],
       es: ["La frialdad de AB puede herir a A", "Aumentar conscientemente las expresiones de calidez emocional"],
       zh: ["AB型的冷静可能伤害A型", "有意识地增加情感温暖的表达"],
-      cn: ["AB型的冷靜可能傷害A型", "有意識地增加情感溫暖的表達"],
     },
   },
   "AB_B": {
@@ -601,7 +545,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["Tous deux ont des personnalités uniques et se trouvent intéressants.", "Crée une atmosphère créative et libre.", "Des mondes individuels forts nécessitent des efforts pour durer."],
       es: ["Ambos tienen personalidades únicas y se encuentran interesantes.", "Crea una atmósfera creativa y libre.", "Los mundos individuales fuertes requieren esfuerzo para mantenerse."],
       zh: ["两人都有独特个性，彼此觉得有趣。", "形成创意自由的氛围。", "各自的独立世界强烈，长期维系需要努力。"],
-      cn: ["兩人都有獨特個性，彼此覺得有趣。", "形成創意自由的氛圍。", "各自的獨立世界強烈，長期維繫需要努力。"],
     },
     strengths: {
       ko: ["창의적 에너지와 독창적인 아이디어 공유", "서로의 자유로운 면을 존중"],
@@ -610,7 +553,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["Partager énergie créative et idées originales", "Respecter le côté libre de l'autre"],
       es: ["Compartir energía creativa e ideas originales", "Respetar el lado libre del otro"],
       zh: ["共享创意能量和独特想法", "尊重彼此自由的一面"],
-      cn: ["共享創意能量和獨特想法", "尊重彼此自由的一面"],
     },
     cautions: {
       ko: ["안정적 기반 구축이 어려울 수 있음", "공통 목표와 루틴 만들기 필요"],
@@ -619,7 +561,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["Construire une base stable peut être difficile", "Besoin de créer des objectifs communs et des routines"],
       es: ["Construir una base estable puede ser difícil", "Necesitan crear objetivos y rutinas compartidos"],
       zh: ["可能难以建立稳定的基础", "需要建立共同目标和常规"],
-      cn: ["可能難以建立穩定的基礎", "需要建立共同目標和常規"],
     },
   },
   "AB_O": {
@@ -633,7 +574,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["L'inclusivité de O accepte la nature complexe de AB.", "Tous deux ont beaucoup à apprendre l'un de l'autre.", "AB devrait être plus ouvert émotionnellement."],
       es: ["La inclusividad de O acepta la naturaleza compleja de AB.", "Ambos tienen mucho que aprender el uno del otro.", "AB debería ser más emocionalmente abierto."],
       zh: ["O型的包容力接受AB型复杂的性格。", "两人都有很多值得互相学习的地方。", "AB型应该在情感上更开放。"],
-      cn: ["O型的包容力接受AB型複雜的性格。", "兩人都有很多值得互相學習的地方。", "AB型應該在情感上更開放。"],
     },
     strengths: {
       ko: ["서로 다른 강점이 시너지를 이룸", "O형의 활동성 + AB형의 분석력"],
@@ -642,7 +582,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["Des forces différentes créent de la synergie", "L'activité de O + l'esprit analytique de AB"],
       es: ["Diferentes fortalezas crean sinergia", "La actividad de O + la mente analítica de AB"],
       zh: ["不同的优势产生协同效应", "O型的活动力 + AB型的分析能力"],
-      cn: ["不同的優勢產生協同效應", "O型的活動力 + AB型的分析能力"],
     },
     cautions: {
       ko: ["AB형의 냉정함이 O형을 서운하게 만들 수 있음", "감정적 연결을 의식적으로 강화할 것"],
@@ -651,7 +590,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["Le calme de AB peut blesser les sentiments de O", "Renforcer consciemment la connexion émotionnelle"],
       es: ["La frialdad de AB puede herir los sentimientos de O", "Fortalecer conscientemente la conexión emocional"],
       zh: ["AB型的冷静可能伤害O型的感情", "有意识地加强情感联系"],
-      cn: ["AB型的冷靜可能傷害O型的感情", "有意識地加強情感聯繫"],
     },
   },
   "AB_AB": {
@@ -665,7 +603,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["Deux AB créent une relation très intellectuelle et unique.", "Ils se comprennent pleinement mais peuvent manquer d'échanges émotionnels.", "Risque de devenir une relation froide dominée par la logique."],
       es: ["Dos AB crean una relación muy intelectual y única.", "Se comprenden completamente pero pueden carecer de intercambio emocional.", "Riesgo de convertirse en una relación fría dominada por la lógica."],
       zh: ["两个AB型相遇会形成极具智识性和独特性的关系。", "彼此理解深入，但可能缺乏情感交流。", "有变成由理性主导的冷漠关系的风险。"],
-      cn: ["兩個AB型相遇會形成極具智識性和獨特性的關係。", "彼此理解深入，但可能缺乏情感交流。", "有變成由理性主導的冷漠關係的風險。"],
     },
     strengths: {
       ko: ["서로를 완전히 이해하는 지적 동반자", "독립성을 존중하는 성숙한 관계"],
@@ -674,7 +611,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["Partenaires intellectuels qui se comprennent pleinement", "Relation mature respectant l'indépendance"],
       es: ["Socios intelectuales que se entienden plenamente", "Relación madura que respeta la independencia"],
       zh: ["完全相互理解的智识伙伴", "尊重独立性的成熟关系"],
-      cn: ["完全相互理解的智識夥伴", "尊重獨立性的成熟關係"],
     },
     cautions: {
       ko: ["감정적 따뜻함이 부족해질 수 있음", "의도적으로 로맨틱한 순간을 만들 노력 필요"],
@@ -683,7 +619,6 @@ const COMPAT: Record<PairKey, CompatData> = {
       fr: ["Peut manquer de chaleur émotionnelle", "Besoin de créer intentionnellement des moments romantiques"],
       es: ["Puede faltar calidez emocional", "Necesitan crear intencionalmente momentos románticos"],
       zh: ["可能缺乏情感温暖", "需要有意识地创造浪漫时刻"],
-      cn: ["可能缺乏情感溫暖", "需要有意識地創造浪漫時刻"],
     },
   },
 };

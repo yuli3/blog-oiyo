@@ -423,51 +423,6 @@ const UI: Record<Locale, {
       }
     },
   },
-  cn: {
-    title: "結婚適齡期計算器",
-    subtitle: "通過MBTI、職業和性別了解你的理想結婚年齡",
-    genderLabel: "性別",
-    male: "男性",
-    female: "女性",
-    mbtiLabel: "MBTI類型",
-    mbtiPlaceholder: "選擇MBTI",
-    occupationLabel: "職業",
-    occupationPlaceholder: "選擇職業",
-    ageLabel: "當前年齡",
-    agePlaceholder: "輸入年齡 (18–60)",
-    calculateBtn: "計算",
-    resetBtn: "重置",
-    resultTitle: "你的結婚年齡預測",
-    marriageAgeRange: "理想結婚年齡範圍",
-    marriageScore: "結婚準備分數",
-    yearsLeft: (n) => `距離最佳結婚期約 ${n} 年`,
-    inRange: "你現在正處於最佳結婚年齡！🎉",
-    pastPeak: "統計上已過最佳窗口期——但結婚永遠不嫌晚 😊",
-    disclaimer: "* 基於統計趨勢的娛樂計算器",
-    occupationNames: {
-      employee: "上班族",
-      selfEmployed: "自營業主",
-      freelancer: "自由職業",
-      publicServant: "公務員",
-      professional: "專業人士",
-      student: "學生",
-      homemaker: "家庭主婦/夫",
-      agriculture: "農業",
-      medical: "醫療",
-      it: "IT行業",
-    },
-    descriptionFn: (gender, mbti, occupation, minAge, maxAge, score) => {
-      const occ = UI.cn.occupationNames[occupation];
-      const g = gender === "male" ? "男性" : "女性";
-      if (score >= 75) {
-        return `作為${g}${mbti}從事${occ}，你的結婚準備非常充分。預測${minAge}–${maxAge}歲為最佳結婚窗口，穩定的性格和職業基礎為良好的婚姻創造了條件。`;
-      } else if (score >= 50) {
-        return `${g}${mbti}從事${occ}的結婚準備分數處於平均水平。考慮在${minAge}–${maxAge}歲之間結婚。適當調整生活方式可以提高你的準備分數。`;
-      } else {
-        return `${mbti}性格特徵和${occ}職業特點表明你傾向於獨立生活。預測結婚窗口為${minAge}–${maxAge}歲，但按照自己的節奏準備婚姻才是最重要的。`;
-      }
-    },
-  },
 };
 
 // ─── Score Bar ────────────────────────────────────────────────────────────────

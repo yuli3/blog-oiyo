@@ -172,18 +172,6 @@ const UI: Record<
     result: "结果",
     rate: "汇率",
   },
-  cn: {
-    title: "匯率換算器",
-    subtitle: "20種主要貨幣換算",
-    fromLabel: "金額",
-    toLabel: "換算結果",
-    swapBtn: "↕ 交換貨幣",
-    presetsLabel: "常用匯率",
-    rateInfo: "1 {from} = {rate} {to}",
-    dataSource: "2026年6月靜態資料",
-    result: "結果",
-    rate: "匯率",
-  },
 };
 
 export default function CurrencyConverter({ locale }: Props) {

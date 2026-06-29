@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 
-type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh' | 'cn';
+type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh';
 
 const L: Record<Locale, {
   title: string; subtitle: string;
@@ -139,31 +139,6 @@ const L: Record<Locale, {
     won: 'unidades 10K₩',
   },
   zh: {
-    title: '全租保證金安全性計算機',
-    subtitle: '韓國全租合約風險評估',
-    propertyValue: '房屋市值（萬韓元）',
-    jeonseDeposit: '全租保證金（萬韓元）',
-    priorLoan: '先順位貸款/抵押（萬韓元）',
-    priorLien: '其他先順位債權（萬韓元）',
-    calc: '確認安全性',
-    reset: '重置',
-    safeRatio: '保證金比率',
-    netEquity: '淨擔保餘力',
-    riskLevel: '風險等級',
-    safe: '安全',
-    caution: '注意',
-    danger: '危險',
-    safeDesc: '拍賣時全額收回保證金的可能性較高。',
-    cautionDesc: '拍賣時可能無法全額收回保證金。',
-    dangerDesc: '拍賣時可能損失大部分保證金。建議簽約前諮詢法律專業人士。',
-    coverage: '回收率',
-    ltvLabel: '保證金LTV比率',
-    priorityLabel: '先順位債權合計',
-    tip: '💡 安全全租合約提示',
-    tipText: '一般而言，（保證金+先順位債權）÷房屋市值≤70~80%較為安全。也可考慮投保全租保險。',
-    won: '萬韓元',
-  },
-  cn: {
     title: '全租保证金安全性计算器',
     subtitle: '韩国全租合约风险评估',
     propertyValue: '房屋市值（万韩元）',
@@ -198,7 +173,6 @@ const DEFAULTS: Record<Locale, { propertyValue: number; jeonseDeposit: number; p
   fr: { propertyValue: 50000, jeonseDeposit: 30000, priorLoan: 5000, priorLien: 0 },
   es: { propertyValue: 50000, jeonseDeposit: 30000, priorLoan: 5000, priorLien: 0 },
   zh: { propertyValue: 50000, jeonseDeposit: 30000, priorLoan: 5000, priorLien: 0 },
-  cn: { propertyValue: 50000, jeonseDeposit: 30000, priorLoan: 5000, priorLien: 0 },
 };
 
 function fmt(n: number): string {

@@ -14,7 +14,6 @@ const LABELS: Record<string, UiLabels> = {
   ko: { value: "값", from: "기준 단위", results: "변환 결과", invalid: "숫자를 입력하세요" },
   ja: { value: "値", from: "基準単位", results: "変換結果", invalid: "数値を入力してください" },
   zh: { value: "数值", from: "原单位", results: "换算结果", invalid: "请输入数字" },
-  cn: { value: "数值", from: "原单位", results: "换算结果", invalid: "请输入数字" },
   fr: { value: "Valeur", from: "Unité de départ", results: "Converti en", invalid: "Saisissez un nombre" },
   es: { value: "Valor", from: "Unidad de origen", results: "Convertido a", invalid: "Introduce un número" },
 };

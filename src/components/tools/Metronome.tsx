@@ -79,15 +79,6 @@ const translations: Record<Locale, Record<string, string>> = {
     bpmLabel: "BPM",
     presets: "预设",
   },
-  cn: {
-    title: "節拍器",
-    start: "開始",
-    stop: "停止",
-    tapTempo: "點擊速度",
-    timeSig: "拍號",
-    bpmLabel: "BPM",
-    presets: "預設",
-  },
 };
 
 export default function Metronome({ locale }: Props) {

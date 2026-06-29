@@ -4,7 +4,7 @@ import type { Locale } from "../../lib/i18n";
 
 type CoefficientMethod = "leibniz" | "hoffman";
 interface Labels { title: string; subtitle: string; method: string; leibniz: string; hoffman: string; income: string; age: string; retirement: string; rate: string; result: string; months: string; coeff: string; monthlyLoss: string; won: string; warning: string; }
-const LABELS: Record<Exclude<Locale, "cn">, Labels> = {
+const LABELS: Record<Locale, Labels> = {
   en: { title: "Lost Income Calculator", subtitle: "Present-value estimate using Leibniz or Hoffman coefficients.", method: "Discount method", leibniz: "Leibniz", hoffman: "Hoffman", income: "Monthly income", age: "Current age", retirement: "Working end age", rate: "Labor capacity loss", result: "Estimated lost income", months: "Working months", coeff: "Coefficient", monthlyLoss: "Monthly loss", won: "KRW", warning: "Korean legal-damage estimate only. Disability rate, working period, and court practice can change the result." },
   ko: { title: "일실수입 계산기", subtitle: "라이프니츠식 또는 호프만식 계수로 현재가치를 추정합니다.", method: "계산 방식", leibniz: "라이프니츠", hoffman: "호프만", income: "월 소득", age: "현재 나이", retirement: "가동 종료 나이", rate: "노동능력상실률", result: "일실수입 추정액", months: "가동 개월", coeff: "적용 계수", monthlyLoss: "월 손실", won: "원", warning: "대한민국 손해배상 실무를 단순화한 추정치입니다. 장해율, 가동연한, 법원 판단에 따라 달라질 수 있습니다." },
   ja: { title: "逸失収入計算機", subtitle: "ライプニッツ式またはホフマン式係数で現在価値を推定します。", method: "割引方式", leibniz: "ライプニッツ", hoffman: "ホフマン", income: "月収", age: "現在年齢", retirement: "就労終了年齢", rate: "労働能力喪失率", result: "逸失収入概算", months: "就労月数", coeff: "係数", monthlyLoss: "月間損失", won: "KRW", warning: "韓国法実務向けの簡易推定です。障害率、就労期間、裁判所判断により変わります。" },
@@ -15,7 +15,7 @@ const LABELS: Record<Exclude<Locale, "cn">, Labels> = {
 function calculateCoefficient(months: number, method: CoefficientMethod): number { const rate = 0.05 / 12; let sum = 0; for (let k = 1; k <= months; k++) sum += method === "leibniz" ? 1 / Math.pow(1 + rate, k) : 1 / (1 + k * rate); if (method === "hoffman" && sum > 240) sum = 240; return sum; }
 function formatWon(value: number) { return new Intl.NumberFormat("ko-KR").format(Math.floor(value)); }
 export default function LossOfIncomeCalculator({ locale }: { locale: Locale }) {
-  const t = LABELS[locale as Exclude<Locale, "cn">] ?? LABELS.en;
+  const t = LABELS[locale] ?? LABELS.en;
   const [method, setMethod] = useState<CoefficientMethod>("leibniz");
   const [monthlyIncome, setMonthlyIncome] = useState(3000000);
   const [age, setAge] = useState(35);

@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 
-type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh' | 'cn';
+type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh';
 
 // Biorhythm cycles in days
 const CYCLES = {
@@ -111,22 +111,6 @@ const L: Record<Locale, {
     },
   },
   zh: {
-    title: '生理節律計算機', subtitle: '追蹤您的體力、情感、智力和直覺週期',
-    birthDateLabel: '出生日期', targetDateLabel: '查看日期',
-    calcBtn: '計算', todayBtn: '今天',
-    physical: '體力', emotional: '情感', intellectual: '智力', intuitive: '直覺',
-    high: '高峰', low: '低谷', critical: '臨界',
-    forecastTitle: '未來7天預測', forecastDays: '天',
-    dayLabel: 'D',
-    disclaimer: '生理節律是未經科學驗證的假說，請僅作參考使用。',
-    tip: {
-      physical:     { high: '最適合體力活動，是運動和鍛煉的好日子', low: '需要休息的一天，不要過度勞累', critical: '注意意外事故，駕駛和作業時尤其謹慎' },
-      emotional:    { high: '情緒穩定，適合社交活動和團隊合作', low: '情緒可能有起伏，給自己一些照顧時間', critical: '今天避免情緒化的決定' },
-      intellectual: { high: '最適合學習、分析和創意工作的日子', low: '可能難以集中注意力，以日常工作為主', critical: '如果可能，推遲重要考試或決定' },
-      intuitive:    { high: '直覺敏銳的一天，善用創意靈感', low: '依靠邏輯分析而非直覺', critical: '在相信預感之前先驗證事實' },
-    },
-  },
-  cn: {
     title: '生物节律计算器', subtitle: '追踪您的体力、情感、智力和直觉周期',
     birthDateLabel: '出生日期', targetDateLabel: '查看日期',
     calcBtn: '计算', todayBtn: '今天',
@@ -171,7 +155,7 @@ function addDays(d: Date, n: number): Date {
 }
 
 function shortDate(d: Date, locale: Locale): string {
-  const locMap: Record<Locale, string> = { ko: 'ko-KR', en: 'en-US', ja: 'ja-JP', fr: 'fr-FR', es: 'es-ES', zh: 'zh-TW', cn: 'zh-CN' };
+  const locMap: Record<Locale, string> = { ko: 'ko-KR', en: 'en-US', ja: 'ja-JP', fr: 'fr-FR', es: 'es-ES', zh: 'zh-CN', };
   return d.toLocaleDateString(locMap[locale], { month: 'short', day: 'numeric' });
 }
 

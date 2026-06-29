@@ -25,7 +25,7 @@ interface Labels {
   methods: Record<Method, string>;
 }
 
-const LABELS: Record<Exclude<Locale, "cn">, Labels> = {
+const LABELS: Record<Locale, Labels> = {
   en: {
     title: "Intermittent Fasting Tracker",
     subtitle: "Track your fasting window with 16:8, 18:6, and 20:4 presets.",
@@ -209,7 +209,7 @@ function calculateState(method: Method, startTime: string, t: Labels): TrackerSt
 }
 
 export default function FastingTracker({ locale }: { locale: Locale }) {
-  const t = LABELS[locale as Exclude<Locale, "cn">] ?? LABELS.en;
+  const t = LABELS[locale] ?? LABELS.en;
   const [method, setMethod] = useState<Method>("16");
   const [startTime, setStartTime] = useState("20:00");
   const [state, setState] = useState<TrackerState>({

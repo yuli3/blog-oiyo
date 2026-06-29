@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh' | 'cn'
+type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh'
 
 interface SpellingQuestion {
   correct: string
@@ -45,8 +45,7 @@ const LABELS: Record<Locale, {
   ja: { title: '韓国語スペルクイズ', subtitle: '間違いやすい韓国語の綴りをテスト', start: '開始', restart: 'もう一度', correct: '正解！✓', wrong: '不正解 ✗', explanation: '解説', category: 'カテゴリー', score: 'スペルスコア', outOf: '/ 10', next: '次へ', correctIs: '正解は', results: { perfect: '完璧！🏆', great: 'ほぼ完璧！🌟', good: '半分以上！📚', low: '練習を続けましょう 💪' }, progress: (c, t) => `${c} / ${t}` },
   fr: { title: 'Quiz d\'Orthographe Coréenne', subtitle: 'Testez votre orthographe coréenne', start: 'Commencer', restart: 'Recommencer', correct: 'Correct ! ✓', wrong: 'Faux ✗', explanation: 'Explication', category: 'Catégorie', score: 'Score', outOf: '/ 10', next: 'Suivant', correctIs: 'Bonne réponse:', results: { perfect: 'Parfait ! 🏆', great: 'Presque parfait ! 🌟', good: 'Plus de la moitié ! 📚', low: 'Continuez à pratiquer 💪' }, progress: (c, t) => `${c} / ${t}` },
   es: { title: 'Quiz de Ortografía Coreana', subtitle: 'Pon a prueba tu ortografía coreana', start: 'Comenzar', restart: 'Reintentar', correct: '¡Correcto! ✓', wrong: 'Incorrecto ✗', explanation: 'Explicación', category: 'Categoría', score: 'Puntuación', outOf: '/ 10', next: 'Siguiente', correctIs: 'Respuesta correcta:', results: { perfect: '¡Perfecto! 🏆', great: '¡Casi perfecto! 🌟', good: '¡Más de la mitad! 📚', low: 'Sigue practicando 💪' }, progress: (c, t) => `${c} / ${t}` },
-  zh: { title: '韓語拼寫測驗', subtitle: '測試容易混淆的韓語拼寫', start: '開始', restart: '重新測試', correct: '正確！✓', wrong: '錯誤 ✗', explanation: '解說', category: '類型', score: '拼寫分數', outOf: '/ 10', next: '下一題', correctIs: '正確答案：', results: { perfect: '完美！🏆', great: '幾乎完美！🌟', good: '超過一半！📚', low: '繼續練習 💪' }, progress: (c, t) => `${c} / ${t}` },
-  cn: { title: '韩语拼写测验', subtitle: '测试容易混淆的韩语拼写', start: '开始', restart: '重新测试', correct: '正确！✓', wrong: '错误 ✗', explanation: '解说', category: '类型', score: '拼写分数', outOf: '/ 10', next: '下一题', correctIs: '正确答案：', results: { perfect: '完美！🏆', great: '几乎完美！🌟', good: '超过一半！📚', low: '继续练习 💪' }, progress: (c, t) => `${c} / ${t}` },
+  zh: { title: '韩语拼写测验', subtitle: '测试容易混淆的韩语拼写', start: '开始', restart: '重新测试', correct: '正确！✓', wrong: '错误 ✗', explanation: '解说', category: '类型', score: '拼写分数', outOf: '/ 10', next: '下一题', correctIs: '正确答案：', results: { perfect: '完美！🏆', great: '几乎完美！🌟', good: '超过一半！📚', low: '继续练习 💪' }, progress: (c, t) => `${c} / ${t}` },
 }
 
 const ALL_QUESTIONS: SpellingQuestion[] = [

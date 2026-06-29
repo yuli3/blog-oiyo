@@ -54,7 +54,7 @@ type ImageDecoderInstance = {
 
 type ImageDecoderConstructor = new (options: { data: Blob; type: string }) => ImageDecoderInstance;
 
-const LABELS: Record<Exclude<Locale, "cn">, Labels> = {
+const LABELS: Record<Locale, Labels> = {
   en: {
     title: "GIF Splitter",
     subtitle: "Extract animated GIF frames with the browser ImageDecoder API.",
@@ -165,7 +165,7 @@ function downloadUrl(url: string, name: string) {
 }
 
 export default function GifSplitter({ locale }: { locale: Locale }) {
-  const t = LABELS[locale as Exclude<Locale, "cn">] ?? LABELS.en;
+  const t = LABELS[locale] ?? LABELS.en;
   const [frames, setFrames] = useState<GifFrame[]>([]);
   const [status, setStatus] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);

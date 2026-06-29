@@ -500,28 +500,6 @@ const UI: Record<Locale, UIData> = {
     completedMsg: "你已学完所有单词卡。",
     allKnown: "全都认识了！",
   },
-  cn: {
-    title: "詞彙閃卡",
-    subtitle: "翻轉卡片學習詞彙",
-    decks: { toeic: "TOEIC必備", business: "商務英語", daily: "日常對話", csat: "學測詞彙" },
-    deckSize: "單字數",
-    cardCount: "張",
-    tapToFlip: "點擊卡片翻轉",
-    knowBtn: "認識",
-    unknownBtn: "不認識",
-    knownLabel: "已知",
-    unknownLabel: "未知",
-    remainLabel: "剩餘",
-    reviewUnknown: "複習未知單字",
-    resetDeck: "重新開始",
-    todayLabel: "今日學習",
-    frontHint: "點擊查看含義",
-    meaningLabel: "含義",
-    exampleLabel: "例句",
-    completedTitle: "完成！",
-    completedMsg: "你已學完所有單字卡。",
-    allKnown: "全都認識了！",
-  },
 };
 
 const TODAY_KEY = new Date().toISOString().slice(0, 10);

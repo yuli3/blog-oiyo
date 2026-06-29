@@ -21,7 +21,7 @@ export interface ToolShellFaq {
 export function faqHeadingFor(locale: string): string {
   if (locale === "ko") return "자주 묻는 질문";
   if (locale === "ja") return "よくある質問";
-  if (locale === "zh" || locale === "cn") return "常见问题";
+  if (locale === "zh") return "常见问题";
   if (locale === "fr") return "Questions fréquentes";
   if (locale === "es") return "Preguntas frecuentes";
   return "FAQ";

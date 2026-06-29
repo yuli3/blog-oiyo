@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { FinanceGuardrail } from "./FinanceGuardrail";
 
 // 배당 기록 MVP — 기록·교육 전용(투자 조언 아님). 전부 브라우저 로컬(localStorage), 서버 전송 없음.
 type Holding = { id: string; ticker: string; shares: string; perShare: string; freq: string; exDate: string; taxPct: string };
@@ -12,14 +13,12 @@ const T: Record<Lang, Record<string, string>> = {
     ticker: "종목", shares: "수량", perShare: "1주 배당", freq: "주기", exDate: "배당기준일", tax: "세율%", add: "+ 종목 추가",
     annualGross: "연 배당(세전)", annualNet: "연 배당(세후)", total: "합계", csv: "CSV 내보내기", empty: "종목을 추가하세요.",
     monthly: "월", quarterly: "분기", semiannual: "반기", annual: "연", local: "🔒 로컬 저장 · 서버 전송 없음",
-    disc: "※ 기록·교육용 도구입니다. 세율·배당은 직접 입력값 기준 추정이며 투자 권유가 아닙니다.",
   },
   en: {
     title: "Dividend Tracker", desc: "Record holdings and estimate annual / after-tax dividends. Not investment advice. All data stays in your browser.",
     ticker: "Ticker", shares: "Shares", perShare: "Div/share", freq: "Freq", exDate: "Ex-date", tax: "Tax%", add: "+ Add holding",
     annualGross: "Annual (gross)", annualNet: "Annual (net)", total: "Total", csv: "Export CSV", empty: "Add a holding.",
     monthly: "Monthly", quarterly: "Quarterly", semiannual: "Semiannual", annual: "Annual", local: "🔒 stored locally · never uploaded",
-    disc: "※ Record-keeping/educational tool. Estimates from your inputs; not a solicitation to invest.",
   },
 };
 
@@ -97,7 +96,7 @@ export function DividendTracker({ locale }: { locale: string }) {
         </div>
       </div>
       <p className="mt-2 text-[11px] text-slate-400">{t.local}</p>
-      <p className="mt-1 text-xs text-slate-500">{t.disc}</p>
+      <FinanceGuardrail locale={locale} />
     </section>
   );
 }

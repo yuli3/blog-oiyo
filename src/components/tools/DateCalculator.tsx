@@ -27,12 +27,11 @@ const L: Record<string, UiLabels> = {
   ko: { modeDiff: "날짜 간격", modeAdd: "더하기 / 빼기", from: "시작 날짜", to: "종료 날짜", base: "기준 날짜", op: "연산", add: "더하기", sub: "빼기", days: "일", weeks: "주", months: "개월", years: "년", amount: "수량", unit: "단위", resultDate: "결과 날짜", totalDays: "총 일수", between: "간격", weekday: "요일" },
   ja: { modeDiff: "日数の差", modeAdd: "加算 / 減算", from: "開始日", to: "終了日", base: "基準日", op: "演算", add: "加算", sub: "減算", days: "日", weeks: "週", months: "ヶ月", years: "年", amount: "数量", unit: "単位", resultDate: "結果の日付", totalDays: "合計日数", between: "差", weekday: "曜日" },
   zh: { modeDiff: "日期间隔", modeAdd: "加 / 减", from: "开始日期", to: "结束日期", base: "基准日期", op: "运算", add: "加", sub: "减", days: "天", weeks: "周", months: "个月", years: "年", amount: "数量", unit: "单位", resultDate: "结果日期", totalDays: "总天数", between: "间隔", weekday: "星期" },
-  cn: { modeDiff: "日期间隔", modeAdd: "加 / 减", from: "开始日期", to: "结束日期", base: "基准日期", op: "运算", add: "加", sub: "减", days: "天", weeks: "周", months: "个月", years: "年", amount: "数量", unit: "单位", resultDate: "结果日期", totalDays: "总天数", between: "间隔", weekday: "星期" },
   fr: { modeDiff: "Jours entre", modeAdd: "Ajouter / soustraire", from: "Date de début", to: "Date de fin", base: "Date de référence", op: "Opération", add: "Ajouter", sub: "Soustraire", days: "Jours", weeks: "Semaines", months: "Mois", years: "Années", amount: "Quantité", unit: "Unité", resultDate: "Date résultante", totalDays: "Total de jours", between: "Écart", weekday: "Jour" },
   es: { modeDiff: "Días entre", modeAdd: "Sumar / restar", from: "Fecha inicial", to: "Fecha final", base: "Fecha base", op: "Operación", add: "Sumar", sub: "Restar", days: "Días", weeks: "Semanas", months: "Meses", years: "Años", amount: "Cantidad", unit: "Unidad", resultDate: "Fecha resultante", totalDays: "Días totales", between: "Diferencia", weekday: "Día" },
 };
 
-const LOCALE_TAG: Record<string, string> = { ko: "ko-KR", en: "en-US", ja: "ja-JP", fr: "fr-FR", es: "es-ES", zh: "zh-TW", cn: "zh-CN" };
+const LOCALE_TAG: Record<string, string> = { ko: "ko-KR", en: "en-US", ja: "ja-JP", fr: "fr-FR", es: "es-ES", zh: "zh-CN", };
 
 interface Props {
   locale: Locale;

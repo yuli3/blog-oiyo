@@ -332,7 +332,6 @@ const JOB_LABELS: Record<Locale, Record<JobCategory, string>> = {
   fr: { developer: "Développeur", designer: "Designer", marketer: "Marketeur", sales: "Commercial", finance: "Finance/Comptabilité", hr: "RH", manager: "Manager/Leader", teacher: "Enseignant", nurse: "Infirmier(e)", public: "Fonctionnaire" },
   es: { developer: "Desarrollador", designer: "Diseñador", marketer: "Marketero", sales: "Ventas", finance: "Finanzas/Contabilidad", hr: "RRHH", manager: "Gerente/Líder", teacher: "Docente", nurse: "Enfermero(a)", public: "Funcionario" },
   zh: { developer: "开发工程师", designer: "设计师", marketer: "市场营销", sales: "销售", finance: "财务/会计", hr: "人力资源", manager: "管理者/领导", teacher: "教师", nurse: "护士", public: "公务员" },
-  cn: { developer: "開發工程師", designer: "設計師", marketer: "行銷人員", sales: "業務", finance: "財務/會計", hr: "人力資源", manager: "管理者/領導", teacher: "教師", nurse: "護理師", public: "公務員" },
 };
 
 const DIFFICULTY_LABELS: Record<Locale, Record<Difficulty | "all", string>> = {
@@ -342,7 +341,6 @@ const DIFFICULTY_LABELS: Record<Locale, Record<Difficulty | "all", string>> = {
   fr: { all: "Tout", easy: "Facile", medium: "Moyen", hard: "Difficile" },
   es: { all: "Todos", easy: "Fácil", medium: "Medio", hard: "Difícil" },
   zh: { all: "全部", easy: "简单", medium: "中等", hard: "困难" },
-  cn: { all: "全部", easy: "簡單", medium: "中等", hard: "困難" },
 };
 
 const UI_TEXT: Record<Locale, {
@@ -449,21 +447,6 @@ const UI_TEXT: Record<Locale, {
     copiedBtn: "已复制",
     noQuestions: "没有符合条件的问题。",
     questionsTitle: "面试问题列表",
-  },
-  cn: {
-    title: "面試問題產生器",
-    subtitle: "Interview Question Generator",
-    jobLabel: "職位選擇",
-    countLabel: "問題數量",
-    difficultyLabel: "難度",
-    dataLangLabel: "問題語言",
-    generateBtn: "產生問題",
-    regenerateBtn: "重新產生",
-    tipLabel: "💡 提示",
-    copyBtn: "複製",
-    copiedBtn: "已複製",
-    noQuestions: "沒有符合條件的問題。",
-    questionsTitle: "面試問題列表",
   },
 };
 

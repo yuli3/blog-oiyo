@@ -81,7 +81,7 @@ interface Labels {
   dataProcessingTypes: Record<DataProcessingType, string>;
 }
 
-const LABELS: Record<Exclude<Locale, "cn">, Labels> = {
+const LABELS: Record<Locale, Labels> = {
   en: {
     title: "Legal Docs Generator",
     subtitle: "Create starter About, Privacy Policy, and Terms drafts from templates.",
@@ -452,7 +452,7 @@ function downloadAsFile(filename: string, content: string, mimeType: string) {
 }
 
 export default function LegalDocsGenerator({ locale }: { locale: Locale }) {
-  const t = LABELS[locale as Exclude<Locale, "cn">] ?? LABELS.en;
+  const t = LABELS[locale] ?? LABELS.en;
   const [companyInfo, setCompanyInfo] = useState<CompanyInfo>(defaultCompanyInfo);
   const [selectedDocType, setSelectedDocType] = useState<DocumentType>("about");
   const [preview, setPreview] = useState("");

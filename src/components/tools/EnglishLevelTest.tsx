@@ -434,30 +434,6 @@ const UI: Record<Locale, UIData> = {
       C2: { label: "精通 (Mastery)", desc: "具备接近母语者的流利度和准确性。", tips: ["在专业领域创作英语内容", "磨练翻译和口译技能", "参与英语学术写作"] },
     },
   },
-  cn: {
-    title: "英語水平測試",
-    subtitle: "用20道題檢驗你的英語水平（CEFR A1–C2）",
-    startBtn: "開始測試",
-    nextBtn: "下一題",
-    submitBtn: "查看結果",
-    questionLabel: "問題",
-    resultTitle: "測試結果",
-    scoreLabel: "得分",
-    cefrLabel: "CEFR等級",
-    wrongAnswersTitle: "錯題解析",
-    correctAnswer: "正確答案",
-    yourAnswer: "你的答案",
-    explanationLabel: "解析",
-    retakeBtn: "重新測試",
-    cefrDesc: {
-      A1: { label: "入門 (Beginner)", desc: "能理解和使用基本表達和簡單句子。", tips: ["學習字母和基礎發音", "記憶500個日常詞彙", "使用英語圖畫書和簡單故事"] },
-      A2: { label: "基礎 (Elementary)", desc: "能理解常用表達，進行簡單交流。", tips: ["複習基礎語法", "嘗試寫英語日記", "每天觀看初級英語YouTube視頻"] },
-      B1: { label: "中級 (Intermediate)", desc: "能就熟悉話題清晰交流。", tips: ["目標TOEIC 600分以上", "堅持閱讀英文新聞", "用英語播客提高聽力"] },
-      B2: { label: "中高級 (Upper-Intermediate)", desc: "能理解複雜內容，與母語者自然交流。", tips: ["目標TOEIC 800分以上", "練習寫英語作文", "透過母語內容擴大詞彙量"] },
-      C1: { label: "高級 (Advanced)", desc: "能流利理解長篇複雜文本。", tips: ["閱讀英文學術論文", "學習高級習語和搭配", "加入母語者討論小組"] },
-      C2: { label: "精通 (Mastery)", desc: "具備接近母語者的流利度和準確性。", tips: ["在專業領域創作英語內容", "磨練翻譯和口譯技能", "參與英語學術寫作"] },
-    },
-  },
 };
 
 const LEVEL_COLORS: Record<CEFRLevel, string> = {

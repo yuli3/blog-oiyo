@@ -81,11 +81,6 @@ const SIGN_NAMES: Record<Locale, Record<SignKey, string>> = {
     leo:"狮子座",virgo:"处女座",libra:"天秤座",scorpio:"天蝎座",
     sagittarius:"射手座",capricorn:"摩羯座",aquarius:"水瓶座",pisces:"双鱼座",
   },
-  cn: {
-    aries:"白羊座",taurus:"金牛座",gemini:"雙子座",cancer:"巨蟹座",
-    leo:"獅子座",virgo:"處女座",libra:"天秤座",scorpio:"天蠍座",
-    sagittarius:"射手座",capricorn:"摩羯座",aquarius:"水瓶座",pisces:"雙魚座",
-  },
 };
 
 // ─── Fortune Texts ────────────────────────────────────────────────────────────
@@ -606,42 +601,6 @@ const SIGN_TEXTS: Record<Locale, CategoryTexts> = (() => {
     return makePool((s, tier) => (zhTpl[cat] as Record<Tier, (n: string) => string[]>)[tier](SIGN_NAMES.zh[s]));
   }
 
-  // Chinese Traditional (cn) — reuse zh with name substitution
-  const cnTpl: Record<string, Record<Tier, (n: string) => string[]>> = {
-    overall: {
-      great: (n) => [`${n}，今天是你的高光時刻！積極行動，收穫豐碩成果。`,`超凡能量環繞你，你最好的狀態今天閃耀。`,`星辰完美排列為${n}，重大勝利觸手可及。`,`這是${n}的巔峰時刻，相信直覺，勇往直前。`,`宇宙力量與你同在，全力投入最重要的事情。`],
-      good: (n) => [`${n}今天振動良好，自信前行。`,`積極動力伴隨你一天，充分利用它。`,`追求目標的絕佳日子，以新的決心前進。`,`${n}的天賦今天得到彰顯，讓它閃耀。`,`支持輕鬆而來，團隊合作帶來豐碩成果。`],
-      mid: (n) => [`${n}今天平穩均衡，保持方向。`,`平淡無奇，但紮實的進步觸手可及。`,`${n}，放輕鬆，專注於持續努力。`,`安靜的一天，完美適合反思和規劃。`,`能量適中，優先處理重要事項，放下其餘。`],
-      low: (n) => [`${n}，今天謹慎行事，大膽行動留到更好的日子。`,`能量感覺分散，只專注於最重要的事。`,`小挫折可能出現，保持冷靜，靈活應對。`,`今天不是大決策的好日子，觀察並收集信息。`,`耐心是你今天的盟友，${n}，這個階段會過去。`],
-      poor: (n) => [`${n}，今天宇宙氣流洶湧，穩健行事。`,`避免冒險，保護你已建立的一切。`,`挑戰來臨，但這也會過去，保持韌性。`,`今天適合安靜反思，而非大膽行動，充電蓄能。`,`今日運勢低，休息、規劃、準備迎接更好的日子。`],
-    },
-    love: {
-      great: (n) => [`${n}的戀愛運今天一片光明！完美時機告白或計劃約會。`,`浪漫氣息瀰漫，毫不猶豫地分享你的真實感受。`,`一段新的緣分今天可能改變一切，保持開放。`,`深厚的情感連接對${n}來說今天毫不費力地形成。`,`你的魅力此刻不可抗拒，享受這份關注吧。`],
-      good: (n) => [`愛情為${n}今天溫暖流淌，向伴侶表達感謝。`,`真誠的對話今天加深你的關係。`,`與愛人共度美好時光帶來歡樂和親密感。`,`你的情商閃耀，用它建立深度連接。`,`今天小小的愛意表達對${n}影響巨大。`],
-      mid: (n) => [`${n}的愛情能量平穩，簡單的關懷大有裨益。`,`沒有戲劇性時刻，只是舒適溫暖的連接。`,`你的關係穩定，專注享受當下。`,`浪漫而寧靜的一天，珍惜你所擁有的。`,`平均戀愛運，今天自我關愛同樣重要。`],
-      low: (n) => [`可能出現誤解，今天多聽少說。`,`${n}的情緒今天比較敏感，避免衝突。`,`愛情能量微弱，花些時間為自己充電。`,`降低期望，今天專注於內心平靜。`,`等到能量改善再進行重要的感情談話。`],
-      poor: (n) => [`${n}的戀愛運今天非常低，避免冒險的浪漫舉動。`,`溝通不暢風險高，說話前先思考。`,`今天需要獨處和內心反思，而非浪漫。`,`今天不要強求連接，讓事情自然發展。`,`遠離感情壓力，專注自我照顧。`],
-    },
-    money: {
-      great: (n) => [`${n}的財運今天達到頂峰！抓住投資機會。`,`意外收入或極好的機會今天可能到來。`,`金錢向你流動，戰略性且大膽地行動。`,`${n}今天的財務談判進展順利。`,`今天是簽合同或達成交易的理想時機。`],
-      good: (n) => [`${n}的財務能量良好，明智消費帶來收益。`,`一個令人愉快的財務驚喜可能在等你。`,`收支平衡良好，財務穩定的一天。`,`你的財務直覺敏銳，相信自己的判斷。`,`${n}今天可能獲得小額財務收益。`],
-      mid: (n) => [`財運一般，避免不必要的支出。`,`${n}的財務能量今天中性，維持預算。`,`沒有重大得失，財務平穩的一天。`,`今天專注儲蓄而非消費。`,`冷靜審視財務，為未來規劃。`],
-      low: (n) => [`今天${n}要謹慎消費，衝動購物會有影響。`,`財務能量弱，推遲大額購買或投資。`,`今天仔細核查所有交易，錯誤更容易發生。`,`避免借錢或做新的財務承諾。`,`等到能量改善再做重大財務決定。`],
-      poor: (n) => [`${n}今天財運非常低，採取防守姿態。`,`財務損失風險升高，避免賭博或投機。`,`今天保持錢包關閉，不必要的支出會累積。`,`可能出現財務壓力，採取冷靜有條理的方法。`,`將所有重大財務決定推遲到更有利的日子。`],
-    },
-    health: {
-      great: (n) => [`${n}的健康能量今天卓越！今天開始新的健身常規。`,`活力達到頂峰，享受戶外運動和新鮮空氣。`,`${n}今天身心完美和諧。`,`今天是體檢或嘗試新健康實踐的好日子。`,`你的體力非凡，積極地推動自己。`],
-      good: (n) => [`${n}的健康狀況良好，保持健康習慣。`,`今天輕盈而充滿活力，充分利用這種感覺。`,`你的免疫系統強壯，健康飲食進一步增強它。`,`適合適度運動和自我護理的好日子。`,`保持水分，繼續運動，你的身體會感謝你。`],
-      mid: (n) => [`${n}的健康處於平均水平，堅持你的日常。`,`沒有重大健康問題，但感到疲倦時要休息。`,`適度活動是理想的，今天不要過度施壓。`,`均衡飲食和充足睡眠會讓你保持穩定。`,`今天溫和關注身體信號。`],
-      low: (n) => [`${n}，今天避免過度勞累，你的能量儲備很低。`,`可能出現消化敏感，少量飲食並保持水分。`,`壓力可能會有影響，優先放鬆和平靜。`,`今晚早點入睡，你的身體需要休息。`,`健康能量低，跳過高強度訓練，選擇休息。`],
-      poor: (n) => [`${n}今天的健康運很低，休息和恢復。`,`免疫防禦可能下降，穿暖和些，避免擁擠的地方。`,`仔細聆聽你的身體，今天它要求休息。`,`避免劇烈運動，輕度伸展可以。`,`首先照顧好自己，今天健康勝過生產力。`],
-    },
-  };
-
-  function makeCnPool(cat: string): SignPool {
-    return makePool((s, tier) => (cnTpl[cat] as Record<Tier, (n: string) => string[]>)[tier](SIGN_NAMES.cn[s]));
-  }
-
   return {
     ko: { overall: koOverall, love: koLove, money: koMoney, health: koHealth },
     en: { overall: enOverall, love: enLove, money: enMoney, health: enHealth },
@@ -649,7 +608,6 @@ const SIGN_TEXTS: Record<Locale, CategoryTexts> = (() => {
     fr: { overall: makeFrPool("overall"), love: makeFrPool("love"), money: makeFrPool("money"), health: makeFrPool("health") },
     es: { overall: makeEsPool("overall"), love: makeEsPool("love"), money: makeEsPool("money"), health: makeEsPool("health") },
     zh: { overall: makeZhPool("overall"), love: makeZhPool("love"), money: makeZhPool("money"), health: makeZhPool("health") },
-    cn: { overall: makeCnPool("overall"), love: makeCnPool("love"), money: makeCnPool("money"), health: makeCnPool("health") },
   };
 })();
 
@@ -662,7 +620,6 @@ const LUCKY_COLORS: Record<Locale, string[]> = {
   fr: ["Rouge","Orange","Jaune","Vert","Bleu","Indigo","Violet","Blanc","Noir","Rose"],
   es: ["Rojo","Naranja","Amarillo","Verde","Azul","Índigo","Morado","Blanco","Negro","Rosa"],
   zh: ["红色","橙色","黄色","绿色","蓝色","靛蓝","紫色","白色","黑色","粉红"],
-  cn: ["紅色","橙色","黃色","綠色","藍色","靛藍","紫色","白色","黑色","粉紅"],
 };
 
 // ─── UI i18n ──────────────────────────────────────────────────────────────────
@@ -778,22 +735,6 @@ const UI: Record<Locale, {
     luckyNumber: "幸运数字",
     disclaimer: "* 仅供娱乐参考",
     resetBtn: "重新选择",
-  },
-  cn: {
-    title: "今日星座運勢",
-    subtitle: "選擇你的星座查看今天的運勢",
-    selectLabel: "我的星座",
-    selectPlaceholder: "選擇星座",
-    resultDate: "今日運勢",
-    overall: "綜合運勢",
-    love: "愛情運",
-    money: "財運",
-    health: "健康運",
-    luckySection: "今日幸運",
-    luckyColor: "幸運顏色",
-    luckyNumber: "幸運數字",
-    disclaimer: "* 僅供娛樂參考",
-    resetBtn: "重新選擇",
   },
 };
 

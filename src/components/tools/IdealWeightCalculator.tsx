@@ -21,7 +21,6 @@ const L: Record<string, UiLabels> = {
   ko: { sex: "성별", male: "남성", female: "여성", height: "키 (cm)", healthyRange: "건강 체중 범위", formulas: "공식별 결과", devine: "Devine", robinson: "Robinson", miller: "Miller", hamwi: "Hamwi", kg: "kg", rangeHint: "건강 BMI 18.5~24.9 기준입니다." },
   ja: { sex: "性別", male: "男性", female: "女性", height: "身長 (cm)", healthyRange: "健康体重の範囲", formulas: "計算式別", devine: "Devine", robinson: "Robinson", miller: "Miller", hamwi: "Hamwi", kg: "kg", rangeHint: "健康なBMI 18.5〜24.9に基づきます。" },
   zh: { sex: "性别", male: "男", female: "女", height: "身高 (cm)", healthyRange: "健康体重范围", formulas: "按公式", devine: "Devine", robinson: "Robinson", miller: "Miller", hamwi: "Hamwi", kg: "kg", rangeHint: "基于健康 BMI 18.5–24.9。" },
-  cn: { sex: "性别", male: "男", female: "女", height: "身高 (cm)", healthyRange: "健康体重范围", formulas: "按公式", devine: "Devine", robinson: "Robinson", miller: "Miller", hamwi: "Hamwi", kg: "kg", rangeHint: "基于健康 BMI 18.5–24.9。" },
   fr: { sex: "Sexe", male: "Homme", female: "Femme", height: "Taille (cm)", healthyRange: "Plage de poids santé", formulas: "Par formule", devine: "Devine", robinson: "Robinson", miller: "Miller", hamwi: "Hamwi", kg: "kg", rangeHint: "Basé sur un IMC sain de 18,5 à 24,9." },
   es: { sex: "Sexo", male: "Hombre", female: "Mujer", height: "Altura (cm)", healthyRange: "Rango de peso saludable", formulas: "Por fórmula", devine: "Devine", robinson: "Robinson", miller: "Miller", hamwi: "Hamwi", kg: "kg", rangeHint: "Basado en un IMC saludable de 18,5 a 24,9." },
 };

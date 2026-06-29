@@ -129,26 +129,6 @@ const LABELS: Record<Locale, Labels> = {
     personsUnit: "pax",
   },
   zh: {
-    title: "油費計算器",
-    subtitle: "Fuel Cost Calculator",
-    distance: "總行駛距離 (km)",
-    efficiency: "油耗 (km/L)",
-    fuelPrice: "油價（韓圜/L）",
-    passengers: "乘車人數（人）",
-    totalCost: "總燃油費",
-    perPerson: "每人費用",
-    routePresets: "常用路線",
-    fuelPresets: "燃料類型",
-    gasoline: "汽油",
-    diesel: "柴油",
-    lpg: "液化石油氣",
-    reset: "重置",
-    unit: "韓圜",
-    kmUnit: "km",
-    lUnit: "km/L",
-    personsUnit: "人",
-  },
-  cn: {
     title: "油费计算器",
     subtitle: "Fuel Cost Calculator",
     distance: "总行驶距离 (km)",
@@ -171,10 +151,10 @@ const LABELS: Record<Locale, Labels> = {
 };
 
 const ROUTE_PRESETS = [
-  { ko: "서울↔부산", en: "Seoul↔Busan", ja: "ソウル↔釜山", fr: "Séoul↔Busan", es: "Seúl↔Busan", zh: "首爾↔釜山", cn: "首尔↔釜山", km: 325 },
-  { ko: "서울↔강릉", en: "Seoul↔Gangneung", ja: "ソウル↔江陵", fr: "Séoul↔Gangneung", es: "Seúl↔Gangneung", zh: "首爾↔江陵", cn: "首尔↔江陵", km: 230 },
-  { ko: "서울↔여수", en: "Seoul↔Yeosu", ja: "ソウル↔麗水", fr: "Séoul↔Yeosu", es: "Seúl↔Yeosu", zh: "首爾↔麗水", cn: "首尔↔丽水", km: 410 },
-  { ko: "서울↔목포항", en: "Seoul↔Mokpo Port", ja: "ソウル↔木浦港", fr: "Séoul↔Port Mokpo", es: "Seúl↔Puerto Mokpo", zh: "首爾↔木浦港", cn: "首尔↔木浦港", km: 460 },
+  { ko: "서울↔부산", en: "Seoul↔Busan", ja: "ソウル↔釜山", fr: "Séoul↔Busan", es: "Seúl↔Busan", zh: "首爾↔釜山", km: 325 },
+  { ko: "서울↔강릉", en: "Seoul↔Gangneung", ja: "ソウル↔江陵", fr: "Séoul↔Gangneung", es: "Seúl↔Gangneung", zh: "首爾↔江陵", km: 230 },
+  { ko: "서울↔여수", en: "Seoul↔Yeosu", ja: "ソウル↔麗水", fr: "Séoul↔Yeosu", es: "Seúl↔Yeosu", zh: "首爾↔麗水", km: 410 },
+  { ko: "서울↔목포항", en: "Seoul↔Mokpo Port", ja: "ソウル↔木浦港", fr: "Séoul↔Port Mokpo", es: "Seúl↔Puerto Mokpo", zh: "首爾↔木浦港", km: 460 },
 ] as const;
 
 const FUEL_PRESETS = [

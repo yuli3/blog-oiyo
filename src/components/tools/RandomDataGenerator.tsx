@@ -28,7 +28,7 @@ interface Labels {
   formats: Record<OutputFormat, string>;
 }
 
-const LABELS: Record<Exclude<Locale, "cn">, Labels> = {
+const LABELS: Record<Locale, Labels> = {
   en: {
     title: "Random Data Generator",
     subtitle: "Generate synthetic names, emails, numbers, UUIDs, dates, and network values.",
@@ -350,7 +350,7 @@ interface Row {
 }
 
 export default function RandomDataGenerator({ locale }: { locale: Locale }) {
-  const t = LABELS[locale as Exclude<Locale, "cn">] ?? LABELS.en;
+  const t = LABELS[locale] ?? LABELS.en;
   const [dataType, setDataType] = useState<DataType>("profile");
   const [format, setFormat] = useState<OutputFormat>("list");
   const [count, setCount] = useState(10);

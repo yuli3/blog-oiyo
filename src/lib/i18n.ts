@@ -10,7 +10,6 @@ export const localeNames: Record<Locale, string> = {
   fr: 'Français',
   es: 'Español',
   zh: '简体中文',
-  cn: '繁體中文'
 };
 
 export const localePaths: Record<Locale, string> = {
@@ -20,7 +19,6 @@ export const localePaths: Record<Locale, string> = {
   fr: '/fr',
   es: '/es',
   zh: '/zh',
-  cn: '/cn'
 };
 
 // 번역 함수

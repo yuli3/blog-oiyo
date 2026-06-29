@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { GameContainer } from '../ui/game/GamePrimitives';
 
-type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh' | 'cn';
+type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh';
 
 interface Labels {
   title: string; subtitle: string;
@@ -60,15 +60,6 @@ const L: Record<Locale, Labels> = {
     monthsWorked: 'Meses trabajados', yearsWorked: 'Años trabajados', daysLabel: 'días',
   },
   zh: {
-    title: '年假計算機', subtitle: 'Annual Leave Calculator',
-    joinDate: '入職日期', refDate: '計算基準日',
-    annualDays: '年假天數', used: '已使用天數',
-    remaining: '剩餘天數', total: '總累積天數',
-    accrued: '累積天數', note: '計算依據',
-    noteText: '依韓國勞動基準法：未滿1年每月1天（最多11天），滿1年15天，滿3年起每2年增加1天（最多25天）',
-    monthsWorked: '服務月數', yearsWorked: '服務年數', daysLabel: '天',
-  },
-  cn: {
     title: '年假计算器', subtitle: 'Annual Leave Calculator',
     joinDate: '入职日期', refDate: '计算基准日',
     annualDays: '年假天数', used: '已使用天数',

@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 
-type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh' | 'cn'
+type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh'
 
 const LABELS: Record<Locale, {
   title: string; subtitle: string; calculate: string; reset: string
@@ -58,8 +58,7 @@ const LABELS: Record<Locale, {
   },
   fr: { title: 'Simulateur de Patrimoine 10 ans', subtitle: 'Calculez votre richesse future avec épargne mensuelle et rendement', calculate: 'Calculer', reset: 'Réinitialiser', monthlyIncome: 'Revenus mensuels', monthlyExpense: 'Dépenses mensuelles', currentSavings: 'Épargne actuelle', investReturn: 'Rendement annuel (%)', years: 'Période cible (ans)', inflationRate: 'Inflation annuelle (%)', nominalWealth: 'Patrimoine nominal', realWealth: 'Patrimoine réel', totalSaved: 'Total épargné', investmentGain: 'Gains d\'investissement', currency: '', monthly: '/mois', annual: '/an', milestones: 'Jalons patrimoniaux', scenario: 'Scénario', conservative: 'Conservateur (3%/an)', moderate: 'Modéré (6%/an)', aggressive: 'Agressif (9%/an)', note: 'Ce simulateur est à titre indicatif uniquement.', yearLabel: 'ans', finalLabel: 'Patrimoine final prévu' },
   es: { title: 'Simulador de Patrimonio a 10 años', subtitle: 'Calcula tu riqueza futura con ahorro mensual y rendimiento de inversión', calculate: 'Calcular', reset: 'Reiniciar', monthlyIncome: 'Ingresos mensuales', monthlyExpense: 'Gastos mensuales', currentSavings: 'Ahorros actuales', investReturn: 'Rendimiento anual (%)', years: 'Período objetivo (años)', inflationRate: 'Inflación anual (%)', nominalWealth: 'Patrimonio nominal', realWealth: 'Patrimonio real', totalSaved: 'Total ahorrado', investmentGain: 'Ganancias de inversión', currency: '', monthly: '/mes', annual: '/año', milestones: 'Hitos patrimoniales', scenario: 'Escenario', conservative: 'Conservador (3%/año)', moderate: 'Moderado (6%/año)', aggressive: 'Agresivo (9%/año)', note: 'Este simulador es solo de referencia.', yearLabel: 'años', finalLabel: 'Patrimonio final proyectado' },
-  zh: { title: '10年財富模擬器', subtitle: '用月儲蓄和投資回報率計算未來資產', calculate: '計算', reset: '重置', monthlyIncome: '月收入（萬元）', monthlyExpense: '月支出（萬元）', currentSavings: '當前資產（萬元）', investReturn: '年投資回報率（%）', years: '目標期限（年）', inflationRate: '年通脹率（%）', nominalWealth: '名義財富', realWealth: '實際財富（現值）', totalSaved: '總儲蓄', investmentGain: '投資收益', currency: '萬元', monthly: '/月', annual: '/年', milestones: '財富里程碑', scenario: '情景', conservative: '保守型（年3%）', moderate: '中等型（年6%）', aggressive: '積極型（年9%）', note: '此模擬器僅供參考。實際投資回報不保證。', yearLabel: '年後', finalLabel: '最終預計財富' },
-  cn: { title: '10年财富模拟器', subtitle: '用月储蓄和投资回报率计算未来资产', calculate: '计算', reset: '重置', monthlyIncome: '月收入（万元）', monthlyExpense: '月支出（万元）', currentSavings: '当前资产（万元）', investReturn: '年投资回报率（%）', years: '目标期限（年）', inflationRate: '年通胀率（%）', nominalWealth: '名义财富', realWealth: '实际财富（现值）', totalSaved: '总储蓄', investmentGain: '投资收益', currency: '万元', monthly: '/月', annual: '/年', milestones: '财富里程碑', scenario: '情景', conservative: '保守型（年3%）', moderate: '中等型（年6%）', aggressive: '积极型（年9%）', note: '此模拟器仅供参考。实际投资回报不保证。', yearLabel: '年后', finalLabel: '最终预计财富' },
+  zh: { title: '10年财富模拟器', subtitle: '用月储蓄和投资回报率计算未来资产', calculate: '计算', reset: '重置', monthlyIncome: '月收入（万元）', monthlyExpense: '月支出（万元）', currentSavings: '当前资产（万元）', investReturn: '年投资回报率（%）', years: '目标期限（年）', inflationRate: '年通胀率（%）', nominalWealth: '名义财富', realWealth: '实际财富（现值）', totalSaved: '总储蓄', investmentGain: '投资收益', currency: '万元', monthly: '/月', annual: '/年', milestones: '财富里程碑', scenario: '情景', conservative: '保守型（年3%）', moderate: '中等型（年6%）', aggressive: '积极型（年9%）', note: '此模拟器仅供参考。实际投资回报不保证。', yearLabel: '年后', finalLabel: '最终预计财富' },
 }
 
 function fmt(n: number, locale: Locale): string {
@@ -78,7 +77,7 @@ interface Props { locale: Locale }
 
 export default function WealthSimulator({ locale }: Props) {
   const l = LABELS[locale] ?? LABELS.en
-  const isKo = locale === 'ko' || locale === 'ja' || locale === 'zh' || locale === 'cn'
+  const isKo = locale === 'ko' || locale === 'ja' || locale === 'zh'
   const defaultUnit = isKo ? 300 : 3000
 
   const [income, setIncome] = useState(defaultUnit)

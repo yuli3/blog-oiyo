@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 
-type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh' | 'cn'
+type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh'
 
 const LABELS: Record<Locale, {
   title: string; subtitle: string; start: string; restart: string; stop: string
@@ -34,8 +34,7 @@ const LABELS: Record<Locale, {
   },
   fr: { title: 'Test de Vitesse de Frappe', subtitle: 'Combien pouvez-vous taper en 1 minute ?', start: 'Commencer', restart: 'Recommencer', stop: 'Arrêter', wpm: 'MPM', cpm: 'CPM', accuracy: 'Précision', time: 'Temps restant', errors: 'Erreurs', result: 'Résultat', typeHere: 'Tapez le texte ci-dessous', waiting: 'Appuyez sur Démarrer pour commencer', finished: 'Terminé !', level: (wpm) => wpm >= 80 ? 'Pro de la frappe ⚡' : wpm >= 50 ? 'Intermédiaire 👍' : wpm >= 30 ? 'Débutant 📝' : 'Continuez à pratiquer 💪' },
   es: { title: 'Prueba de Velocidad de Mecanografía', subtitle: '¿Qué tan rápido y preciso puedes escribir en 1 minuto?', start: 'Comenzar', restart: 'Reintentar', stop: 'Detener', wpm: 'PPM', cpm: 'CPM', accuracy: 'Precisión', time: 'Tiempo restante', errors: 'Errores', result: 'Resultado', typeHere: 'Escribe el texto a continuación', waiting: 'Presiona Inicio para empezar', finished: '¡Terminado!', level: (wpm) => wpm >= 80 ? 'Pro mecanógrafo ⚡' : wpm >= 50 ? 'Intermedio 👍' : wpm >= 30 ? 'Principiante 📝' : 'Sigue practicando 💪' },
-  zh: { title: '打字速度測試', subtitle: '您在1分鐘內能打多快多準確？', start: '開始', restart: '重新測試', stop: '停止', wpm: '每分鐘單詞數', cpm: '每分鐘字符數', accuracy: '準確率', time: '剩餘時間', errors: '錯誤', result: '結果', typeHere: '在下方輸入文字', waiting: '按開始啟動計時器', finished: '完成！', level: (wpm) => wpm >= 80 ? '打字高手 ⚡' : wpm >= 50 ? '中級 👍' : wpm >= 30 ? '初學者 📝' : '需要練習 💪' },
-  cn: { title: '打字速度测试', subtitle: '您在1分钟内能打多快多准确？', start: '开始', restart: '重新测试', stop: '停止', wpm: '每分钟单词数', cpm: '每分钟字符数', accuracy: '准确率', time: '剩余时间', errors: '错误', result: '结果', typeHere: '在下方输入文字', waiting: '按开始启动计时器', finished: '完成！', level: (wpm) => wpm >= 80 ? '打字高手 ⚡' : wpm >= 50 ? '中级 👍' : wpm >= 30 ? '初学者 📝' : '需要练习 💪' },
+  zh: { title: '打字速度测试', subtitle: '您在1分钟内能打多快多准确？', start: '开始', restart: '重新测试', stop: '停止', wpm: '每分钟单词数', cpm: '每分钟字符数', accuracy: '准确率', time: '剩余时间', errors: '错误', result: '结果', typeHere: '在下方输入文字', waiting: '按开始启动计时器', finished: '完成！', level: (wpm) => wpm >= 80 ? '打字高手 ⚡' : wpm >= 50 ? '中级 👍' : wpm >= 30 ? '初学者 📝' : '需要练习 💪' },
 }
 
 const TEXTS: Record<Locale, string[]> = {
@@ -65,11 +64,6 @@ const TEXTS: Record<Locale, string[]> = {
     'La constancia es la clave del progreso. Dedica quince minutos cada día a practicar mecanografía y verás crecer tu velocidad.',
   ],
   zh: [
-    '快速的棕色狐狸跳過懶惰的狗。每天練習打字可以顯著提高您的速度和準確性。',
-    '在數字時代，快速準確地打字是提高工作效率的寶貴技能。每天花一點時間練習，就能看到顯著進步。',
-    '堅持是進步的關鍵。每天花十五分鐘練習打字，您會看到速度明顯提升。',
-  ],
-  cn: [
     '快速的棕色狐狸跳过懒惰的狗。每天练习打字可以显著提高您的速度和准确性。',
     '在数字时代，快速准确地打字是提高工作效率的宝贵技能。每天花一点时间练习，就能看到显著进步。',
     '坚持是进步的关键。每天花十五分钟练习打字，您会看到速度明显提升。',

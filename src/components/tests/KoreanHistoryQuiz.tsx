@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh' | 'cn'
+type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh'
 
 interface HistoryQuestion {
   question: string
@@ -39,8 +39,7 @@ const LABELS: Record<Locale, {
   ja: { title: '韓国史クイズ', subtitle: '先史時代から現代まで韓国の歴史をテスト', start: '開始', restart: 'もう一度', correct: '正解！✓', wrong: '不正解 ✗', correctIs: '正解：', period: '時代', explanation: '解説', score: 'スコア', outOf: '/ 10', next: '次へ', results: { perfect: '韓国史マスター！🏆', great: '歴史の専門家！🌟', good: '基礎があります 📚', low: '韓国史を勉強しましょう 💪' }, progress: (c, t) => `${c} / ${t}` },
   fr: { title: 'Quiz d\'Histoire Coréenne', subtitle: 'Testez vos connaissances sur l\'histoire coréenne', start: 'Commencer', restart: 'Recommencer', correct: 'Correct ! ✓', wrong: 'Faux ✗', correctIs: 'Réponse :', period: 'Période', explanation: 'Explication', score: 'Score', outOf: '/ 10', next: 'Suivant', results: { perfect: 'Maître de l\'histoire coréenne ! 🏆', great: 'Expert en histoire ! 🌟', good: 'Bonnes bases ! 📚', low: 'Continuez à étudier 💪' }, progress: (c, t) => `${c} / ${t}` },
   es: { title: 'Quiz de Historia Coreana', subtitle: 'Pon a prueba tus conocimientos de historia coreana', start: 'Comenzar', restart: 'Reintentar', correct: '¡Correcto! ✓', wrong: 'Incorrecto ✗', correctIs: 'Respuesta:', period: 'Período', explanation: 'Explicación', score: 'Puntuación', outOf: '/ 10', next: 'Siguiente', results: { perfect: '¡Maestro de historia coreana! 🏆', great: '¡Experto en historia! 🌟', good: '¡Buenas bases! 📚', low: 'Sigue estudiando 💪' }, progress: (c, t) => `${c} / ${t}` },
-  zh: { title: '韓國歷史測驗', subtitle: '從史前到現代測試您的韓國歷史知識', start: '開始', restart: '重新測試', correct: '正確！✓', wrong: '錯誤 ✗', correctIs: '答案：', period: '時期', explanation: '解說', score: '分數', outOf: '/ 10', next: '下一題', results: { perfect: '韓國歷史大師！🏆', great: '歷史專家！🌟', good: '有基礎！📚', low: '繼續學習 💪' }, progress: (c, t) => `${c} / ${t}` },
-  cn: { title: '韩国历史测验', subtitle: '从史前到现代测试您的韩国历史知识', start: '开始', restart: '重新测试', correct: '正确！✓', wrong: '错误 ✗', correctIs: '答案：', period: '时期', explanation: '解说', score: '分数', outOf: '/ 10', next: '下一题', results: { perfect: '韩国历史大师！🏆', great: '历史专家！🌟', good: '有基础！📚', low: '继续学习 💪' }, progress: (c, t) => `${c} / ${t}` },
+  zh: { title: '韩国历史测验', subtitle: '从史前到现代测试您的韩国历史知识', start: '开始', restart: '重新测试', correct: '正确！✓', wrong: '错误 ✗', correctIs: '答案：', period: '时期', explanation: '解说', score: '分数', outOf: '/ 10', next: '下一题', results: { perfect: '韩国历史大师！🏆', great: '历史专家！🌟', good: '有基础！📚', low: '继续学习 💪' }, progress: (c, t) => `${c} / ${t}` },
 }
 
 const ALL_QUESTIONS: HistoryQuestion[] = [

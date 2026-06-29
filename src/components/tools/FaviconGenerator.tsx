@@ -23,7 +23,7 @@ interface FaviconPreview {
 
 const FAVICON_SIZES = [16, 32, 48, 180, 192, 512] as const;
 
-const LABELS: Record<Exclude<Locale, "cn">, Labels> = {
+const LABELS: Record<Locale, Labels> = {
   en: {
     title: "Favicon Generator",
     subtitle: "Create common PNG favicon sizes from one local image.",
@@ -125,7 +125,7 @@ async function renderFavicons(file: File): Promise<FaviconPreview[]> {
 }
 
 export default function FaviconGenerator({ locale }: { locale: Locale }) {
-  const t = LABELS[locale as Exclude<Locale, "cn">] ?? LABELS.en;
+  const t = LABELS[locale] ?? LABELS.en;
   const inputRef = useRef<HTMLInputElement>(null);
   const [sourceUrl, setSourceUrl] = useState<string | null>(null);
   const [previews, setPreviews] = useState<FaviconPreview[]>([]);

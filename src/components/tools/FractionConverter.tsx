@@ -18,7 +18,7 @@ interface Labels {
   fraction: string;
 }
 
-const LABELS: Record<Exclude<Locale, "cn">, Labels> = {
+const LABELS: Record<Locale, Labels> = {
   en: {
     title: "Fraction Converter",
     subtitle: "Convert fractions, decimals, and percentages with reduced fractions.",
@@ -127,7 +127,7 @@ function fmt(n: number): string {
 }
 
 export default function FractionConverter({ locale }: { locale: Locale }) {
-  const t = LABELS[locale as Exclude<Locale, "cn">] ?? LABELS.en;
+  const t = LABELS[locale] ?? LABELS.en;
   const [numerator, setNumerator] = useState("");
   const [denominator, setDenominator] = useState("");
   const [decimalInput, setDecimalInput] = useState("");

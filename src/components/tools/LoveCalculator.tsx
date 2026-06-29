@@ -227,29 +227,6 @@ const UI: Record<
       [0,  "💔", "有挑战，但爱能克服一切。"],
     ],
   },
-  cn: {
-    title: "愛情計算器",
-    subtitle: "計算兩個人的契合度 💑",
-    modeNameTab: "名字契合度",
-    modeMbtiTab: "MBTI契合度",
-    name1Label: "第一個名字",
-    name2Label: "第二個名字",
-    name1Placeholder: "輸入名字",
-    name2Placeholder: "輸入名字",
-    calculateBtn: "計算",
-    resetBtn: "重置",
-    resultTitle: "愛情分數",
-    selectMbti1: "第一個MBTI",
-    selectMbti2: "第二個MBTI",
-    disclaimer: "* 僅供娛樂，非科學測算",
-    messages: [
-      [90, "💍", "天生一對！命中注定的靈魂伴侶。"],
-      [70, "💕", "非常相配！你們很合得來。"],
-      [50, "🌸", "值得嘗試！有很大潛力。"],
-      [30, "🤔", "需要努力，但一切皆有可能！"],
-      [0,  "💔", "有挑戰，但愛能克服一切。"],
-    ],
-  },
 };
 
 function getMessageEntry(

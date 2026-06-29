@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh' | 'cn'
+type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh'
 type Sign = 'aries'|'taurus'|'gemini'|'cancer'|'leo'|'virgo'|'libra'|'scorpio'|'sagittarius'|'capricorn'|'aquarius'|'pisces'
 
 const SIGNS: Record<Sign, { emoji: string; ko: string; en: string; dateRange: string; element: string; ruling: string }> = {

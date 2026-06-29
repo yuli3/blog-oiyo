@@ -18,7 +18,6 @@ const L: Record<string, UiLabels> = {
   ko: { calories: "하루 칼로리", split: "매크로 비율", protein: "단백질", carbs: "탄수화물", fat: "지방", grams: "g", kcal: "kcal", perDay: "하루", splits: ["균형 (30/40/30)", "고단백 (40/40/20)", "저탄수 (40/20/40)", "키토 (25/5/70)"] },
   ja: { calories: "1日のカロリー", split: "マクロ比率", protein: "タンパク質", carbs: "炭水化物", fat: "脂質", grams: "g", kcal: "kcal", perDay: "1日", splits: ["バランス (30/40/30)", "高タンパク (40/40/20)", "低炭水化物 (40/20/40)", "ケト (25/5/70)"] },
   zh: { calories: "每日热量", split: "宏量比例", protein: "蛋白质", carbs: "碳水", fat: "脂肪", grams: "g", kcal: "kcal", perDay: "每天", splits: ["均衡 (30/40/30)", "高蛋白 (40/40/20)", "低碳水 (40/20/40)", "生酮 (25/5/70)"] },
-  cn: { calories: "每日热量", split: "宏量比例", protein: "蛋白质", carbs: "碳水", fat: "脂肪", grams: "g", kcal: "kcal", perDay: "每天", splits: ["均衡 (30/40/30)", "高蛋白 (40/40/20)", "低碳水 (40/20/40)", "生酮 (25/5/70)"] },
   fr: { calories: "Calories par jour", split: "Répartition des macros", protein: "Protéines", carbs: "Glucides", fat: "Lipides", grams: "g", kcal: "kcal", perDay: "par jour", splits: ["Équilibré (30/40/30)", "Riche en protéines (40/40/20)", "Pauvre en glucides (40/20/40)", "Kéto (25/5/70)"] },
   es: { calories: "Calorías diarias", split: "Distribución de macros", protein: "Proteína", carbs: "Carbohidratos", fat: "Grasa", grams: "g", kcal: "kcal", perDay: "al día", splits: ["Equilibrado (30/40/30)", "Alta proteína (40/40/20)", "Bajo en carbos (40/20/40)", "Keto (25/5/70)"] },
 };

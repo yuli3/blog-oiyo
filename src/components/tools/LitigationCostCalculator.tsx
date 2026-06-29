@@ -3,7 +3,7 @@ import { GameContainer } from "../ui/game/GamePrimitives";
 import type { Locale } from "../../lib/i18n";
 
 interface Labels { title: string; subtitle: string; amount: string; plaintiffs: string; defendants: string; electronic: string; stamp: string; service: string; lawyer: string; total: string; won: string; tips: string; }
-const LABELS: Record<Exclude<Locale, "cn">, Labels> = {
+const LABELS: Record<Locale, Labels> = {
   en: { title: "Korean Litigation Cost Calculator", subtitle: "Court stamp, service fee, and recoverable attorney-fee cap.", amount: "Claim amount", plaintiffs: "Plaintiffs", defendants: "Defendants", electronic: "Electronic filing discount", stamp: "Court stamp duty", service: "Service fee", lawyer: "Recoverable attorney fee cap", total: "Estimated total", won: "KRW", tips: "Korean civil litigation estimate. Actual court payment can differ by filing type and case handling." },
   ko: { title: "소송비용 계산기", subtitle: "인지대, 송달료, 소송비용 산입 변호사보수를 계산합니다.", amount: "소가", plaintiffs: "원고 수", defendants: "피고 수", electronic: "전자소송 10% 감액", stamp: "인지대", service: "송달료", lawyer: "상대방 청구 가능 변호사보수 한도", total: "예상 합계", won: "원", tips: "대한민국 민사소송 기준의 일반 추정치입니다. 실제 납부액은 사건 유형과 법원 안내를 확인하세요." },
   ja: { title: "韓国訴訟費用計算機", subtitle: "印紙代、送達料、回収可能な弁護士費用上限を計算します。", amount: "請求額", plaintiffs: "原告数", defendants: "被告数", electronic: "電子訴訟10%減額", stamp: "印紙代", service: "送達料", lawyer: "弁護士費用上限", total: "概算合計", won: "KRW", tips: "韓国民事訴訟向けの一般的な概算です。実際の金額は裁判所の案内を確認してください。" },
@@ -15,7 +15,7 @@ function formatWon(value: number) { return new Intl.NumberFormat("ko-KR").format
 function calcBaseStamp(amount: number) { if (amount < 10000000) return amount * 0.005; if (amount < 100000000) return amount * 0.0045 + 5000; if (amount < 1000000000) return amount * 0.004 + 55000; return amount * 0.0035 + 555000; }
 function calcLawyer(amount: number) { if (amount <= 3000000) return 300000; if (amount <= 20000000) return 300000 + (amount - 3000000) * 0.1; if (amount <= 50000000) return 2000000 + (amount - 20000000) * 0.08; if (amount <= 100000000) return 4400000 + (amount - 50000000) * 0.06; if (amount <= 200000000) return 7400000 + (amount - 100000000) * 0.04; if (amount <= 500000000) return 11400000 + (amount - 200000000) * 0.02; return 17400000 + (amount - 500000000) * 0.01; }
 export default function LitigationCostCalculator({ locale }: { locale: Locale }) {
-  const t = LABELS[locale as Exclude<Locale, "cn">] ?? LABELS.en;
+  const t = LABELS[locale] ?? LABELS.en;
   const [amount, setAmount] = useState(30000000);
   const [plaintiffs, setPlaintiffs] = useState(1);
   const [defendants, setDefendants] = useState(1);

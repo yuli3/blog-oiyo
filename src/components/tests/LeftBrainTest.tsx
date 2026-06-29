@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh' | 'cn';
+type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh';
 
 // Each question has two choices: A = left-brain tendency, B = right-brain tendency
 interface Question {
@@ -19,8 +19,7 @@ const QUESTIONS: Question[] = [
       ja: '新しいプロジェクトを始めるとき、私は…',
       fr: 'Lorsque je commence un nouveau projet, je…',
       es: 'Cuando empiezo un nuevo proyecto, tiendo a…',
-      zh: '開始新項目時，我傾向於…',
-      cn: '开始新项目时，我倾向于…',
+      zh: '开始新项目时，我倾向于…',
     },
     a: {
       ko: '먼저 계획을 세우고 단계별로 진행한다',
@@ -28,8 +27,7 @@ const QUESTIONS: Question[] = [
       ja: 'まず計画を立てて段階的に進める',
       fr: "D'abord établir un plan et avancer étape par étape",
       es: 'Hacer un plan primero y proceder paso a paso',
-      zh: '先制定計劃，然後逐步進行',
-      cn: '先制定计划，然后逐步进行',
+      zh: '先制定计划，然后逐步进行',
     },
     b: {
       ko: '아이디어가 떠오르는 대로 바로 시작한다',
@@ -37,8 +35,7 @@ const QUESTIONS: Question[] = [
       ja: 'アイデアが浮かんだらすぐに始める',
       fr: 'Me lancer directement au fil de mes idées',
       es: 'Lanzarme directamente según me surgen ideas',
-      zh: '想到什麼就立刻開始',
-      cn: '想到什么就立刻开始',
+      zh: '想到什么就立刻开始',
     },
   },
   {
@@ -49,8 +46,7 @@ const QUESTIONS: Question[] = [
       ja: '問題を解くとき、私は主に…',
       fr: 'Pour résoudre des problèmes, je…',
       es: 'Al resolver problemas, principalmente…',
-      zh: '解決問題時，我主要…',
-      cn: '解决问题时，我主要…',
+      zh: '解决问题时，我主要…',
     },
     a: {
       ko: '논리적 분석과 데이터에 의존한다',
@@ -58,8 +54,7 @@ const QUESTIONS: Question[] = [
       ja: '論理的な分析とデータに頼る',
       fr: "M'appuie sur l'analyse logique et les données",
       es: 'Me apoyo en el análisis lógico y los datos',
-      zh: '依賴邏輯分析和數據',
-      cn: '依赖逻辑分析和数据',
+      zh: '依赖逻辑分析和数据',
     },
     b: {
       ko: '직관과 느낌을 믿는다',
@@ -67,8 +62,7 @@ const QUESTIONS: Question[] = [
       ja: '直感と感覚を信じる',
       fr: 'Fais confiance à mon intuition et mes ressentis',
       es: 'Confío en mi intuición y mis sensaciones',
-      zh: '相信直覺和感覺',
-      cn: '相信直觉和感觉',
+      zh: '相信直觉和感觉',
     },
   },
   {
@@ -79,8 +73,7 @@ const QUESTIONS: Question[] = [
       ja: '友人に道を教えるとき、私は…',
       fr: 'Pour expliquer un chemin à un ami, je…',
       es: 'Al dar indicaciones a un amigo, yo…',
-      zh: '給朋友指路時，我…',
-      cn: '给朋友指路时，我…',
+      zh: '给朋友指路时，我…',
     },
     a: {
       ko: '좌회전·우회전 등 명확한 지시어로 설명한다',
@@ -88,8 +81,7 @@ const QUESTIONS: Question[] = [
       ja: '左折・右折などの明確な指示語で説明する',
       fr: 'Donne des instructions verbales claires (gauche/droite)',
       es: 'Doy instrucciones verbales claras (izquierda/derecha)',
-      zh: '用明確的語言方向說明（左轉/右轉）',
-      cn: '用明确的语言方向说明（左转/右转）',
+      zh: '用明确的语言方向说明（左转/右转）',
     },
     b: {
       ko: '지도를 그리거나 랜드마크를 이용해 설명한다',
@@ -97,8 +89,7 @@ const QUESTIONS: Question[] = [
       ja: '地図を描いたりランドマークを使って説明する',
       fr: 'Dessine une carte ou utilise des repères',
       es: 'Dibujo un mapa o uso puntos de referencia',
-      zh: '畫地圖或用地標說明',
-      cn: '画地图或用地标说明',
+      zh: '画地图或用地标说明',
     },
   },
   {
@@ -109,8 +100,7 @@ const QUESTIONS: Question[] = [
       ja: '本を読むとき、私は…',
       fr: 'Quand je lis un livre, je…',
       es: 'Cuando leo un libro, yo…',
-      zh: '閱讀書籍時，我…',
-      cn: '阅读书籍时，我…',
+      zh: '阅读书籍时，我…',
     },
     a: {
       ko: '순서대로 처음부터 끝까지 읽는다',
@@ -118,8 +108,7 @@ const QUESTIONS: Question[] = [
       ja: '最初から最後まで順番に読む',
       fr: "Lis du début à la fin dans l'ordre",
       es: 'Leo de principio a fin en orden',
-      zh: '按順序從頭讀到尾',
-      cn: '按顺序从头读到尾',
+      zh: '按顺序从头读到尾',
     },
     b: {
       ko: '흥미로운 부분을 먼저 골라 읽는다',
@@ -127,8 +116,7 @@ const QUESTIONS: Question[] = [
       ja: '興味のある部分を先に選んで読む',
       fr: "Choisis et lis d'abord les parties intéressantes",
       es: 'Elijo y leo primero las partes interesantes',
-      zh: '先挑選感興趣的部分閱讀',
-      cn: '先挑选感兴趣的部分阅读',
+      zh: '先挑选感兴趣的部分阅读',
     },
   },
   {
@@ -139,8 +127,7 @@ const QUESTIONS: Question[] = [
       ja: '音楽を聴くとき、私は…',
       fr: "Quand j'écoute de la musique, je…",
       es: 'Cuando escucho música, yo…',
-      zh: '聽音樂時，我…',
-      cn: '听音乐时，我…',
+      zh: '听音乐时，我…',
     },
     a: {
       ko: '가사와 곡의 구조를 분석하며 듣는다',
@@ -148,8 +135,7 @@ const QUESTIONS: Question[] = [
       ja: '歌詞と曲の構造を分析しながら聴く',
       fr: 'Analyse les paroles et la structure musicale',
       es: 'Analizo la letra y la estructura de la canción',
-      zh: '分析歌詞和曲子結構',
-      cn: '分析歌词和曲子结构',
+      zh: '分析歌词和曲子结构',
     },
     b: {
       ko: '분위기와 감정에 집중하며 듣는다',
@@ -157,8 +143,7 @@ const QUESTIONS: Question[] = [
       ja: '雰囲気と感情に集中しながら聴く',
       fr: "Me concentre sur l'ambiance et les émotions",
       es: 'Me concentro en el ambiente y las emociones',
-      zh: '專注於氛圍和情感',
-      cn: '专注于氛围和情感',
+      zh: '专注于氛围和情感',
     },
   },
   {
@@ -169,8 +154,7 @@ const QUESTIONS: Question[] = [
       ja: '重要な決断をするとき、私は…',
       fr: 'Lorsque je prends des décisions importantes, je…',
       es: 'Cuando tomo decisiones importantes, yo…',
-      zh: '做重要決定時，我…',
-      cn: '做重要决定时，我…',
+      zh: '做重要决定时，我…',
     },
     a: {
       ko: '장단점을 목록으로 작성해 비교한다',
@@ -178,8 +162,7 @@ const QUESTIONS: Question[] = [
       ja: 'メリット・デメリットをリストにして比較する',
       fr: 'Fais une liste des pour et contre',
       es: 'Hago una lista de pros y contras',
-      zh: '列出優缺點清單進行比較',
-      cn: '列出优缺点清单进行比较',
+      zh: '列出优缺点清单进行比较',
     },
     b: {
       ko: '마음이 이끄는 대로 직관적으로 결정한다',
@@ -187,8 +170,7 @@ const QUESTIONS: Question[] = [
       ja: '心の向くままに直感的に決断する',
       fr: 'Suis mon cœur et décide intuitivement',
       es: 'Sigo mi corazón y decido intuitivamente',
-      zh: '跟隨心靈直覺作決定',
-      cn: '跟随心灵直觉作决定',
+      zh: '跟随心灵直觉作决定',
     },
   },
   {
@@ -199,8 +181,7 @@ const QUESTIONS: Question[] = [
       ja: '授業や講義を受けるとき、私は…',
       fr: "Lors d'un cours ou d'une conférence, je…",
       es: 'En una clase o conferencia, yo…',
-      zh: '上課或聽講座時，我…',
-      cn: '上课或听讲座时，我…',
+      zh: '上课或听讲座时，我…',
     },
     a: {
       ko: '체계적으로 노트를 정리하며 듣는다',
@@ -208,8 +189,7 @@ const QUESTIONS: Question[] = [
       ja: '体系的にノートを整理しながら聴く',
       fr: 'Prends des notes organisées et structurées',
       es: 'Tomo notas organizadas y estructuradas',
-      zh: '系統地整理筆記',
-      cn: '系统地整理笔记',
+      zh: '系统地整理笔记',
     },
     b: {
       ko: '그림이나 다이어그램으로 내용을 시각화한다',
@@ -217,8 +197,7 @@ const QUESTIONS: Question[] = [
       ja: '絵やダイアグラムでビジュアル化する',
       fr: 'Visualise le contenu avec des dessins ou schémas',
       es: 'Visualizo el contenido con dibujos o diagramas',
-      zh: '用圖畫或圖表可視化內容',
-      cn: '用图画或图表可视化内容',
+      zh: '用图画或图表可视化内容',
     },
   },
   {
@@ -229,8 +208,7 @@ const QUESTIONS: Question[] = [
       ja: '私の作業スペースはたいてい…',
       fr: 'Mon espace de travail est généralement…',
       es: 'Mi espacio de trabajo es generalmente…',
-      zh: '我的工作空間通常…',
-      cn: '我的工作空间通常…',
+      zh: '我的工作空间通常…',
     },
     a: {
       ko: '정리정돈이 잘 되어 있고 깔끔하다',
@@ -239,7 +217,6 @@ const QUESTIONS: Question[] = [
       fr: 'Bien rangé et organisé',
       es: 'Ordenado y bien organizado',
       zh: '整潔有序',
-      cn: '整洁有序',
     },
     b: {
       ko: '창의적으로 물건이 여기저기 놓여 있다',
@@ -247,8 +224,7 @@ const QUESTIONS: Question[] = [
       ja: 'クリエイティブにものがあちこちに置かれている',
       fr: 'Créativement encombré, avec des choses partout',
       es: 'Creativamente desordenado con cosas aquí y allá',
-      zh: '創意性地四處散放物品',
-      cn: '创意性地四处散放物品',
+      zh: '创意性地四处散放物品',
     },
   },
   {
@@ -259,8 +235,7 @@ const QUESTIONS: Question[] = [
       ja: '時間を管理するとき、私は…',
       fr: 'Pour gérer mon temps, je…',
       es: 'Para gestionar mi tiempo, yo…',
-      zh: '管理時間時，我…',
-      cn: '管理时间时，我…',
+      zh: '管理时间时，我…',
     },
     a: {
       ko: '일정표나 캘린더를 꼼꼼히 활용한다',
@@ -268,8 +243,7 @@ const QUESTIONS: Question[] = [
       ja: 'スケジュール表やカレンダーをきちんと活用する',
       fr: 'Utilise soigneusement un agenda ou calendrier',
       es: 'Uso cuidadosamente un horario o calendario',
-      zh: '仔細使用日程表或日曆',
-      cn: '仔细使用日程表或日历',
+      zh: '仔细使用日程表或日历',
     },
     b: {
       ko: '느낌에 따라 유연하게 시간을 쓴다',
@@ -277,8 +251,7 @@ const QUESTIONS: Question[] = [
       ja: '感覚に応じて柔軟に時間を使う',
       fr: 'Utilise le temps de façon flexible selon mon humeur',
       es: 'Uso el tiempo flexiblemente según cómo me siento',
-      zh: '根據感覺靈活使用時間',
-      cn: '根据感觉灵活使用时间',
+      zh: '根据感觉灵活使用时间',
     },
   },
   {
@@ -289,8 +262,7 @@ const QUESTIONS: Question[] = [
       ja: '何かを覚えるとき、私は主に…',
       fr: 'Pour mémoriser, je…',
       es: 'Para memorizar cosas, principalmente…',
-      zh: '記憶東西時，我主要…',
-      cn: '记忆东西时，我主要…',
+      zh: '记忆东西时，我主要…',
     },
     a: {
       ko: '언어나 논리적 연결로 외운다',
@@ -298,8 +270,7 @@ const QUESTIONS: Question[] = [
       ja: '言語や論理的なつながりで覚える',
       fr: 'Utilise des associations verbales ou logiques',
       es: 'Uso asociaciones verbales o lógicas',
-      zh: '用語言或邏輯聯繫記憶',
-      cn: '用语言或逻辑联系记忆',
+      zh: '用语言或逻辑联系记忆',
     },
     b: {
       ko: '이미지나 색깔로 시각화해서 외운다',
@@ -307,8 +278,7 @@ const QUESTIONS: Question[] = [
       ja: '画像や色でビジュアル化して覚える',
       fr: 'Visualise avec des images ou des couleurs',
       es: 'Visualizo con imágenes o colores',
-      zh: '用圖像或顏色視覺化記憶',
-      cn: '用图像或颜色视觉化记忆',
+      zh: '用图像或颜色视觉化记忆',
     },
   },
   {
@@ -319,8 +289,7 @@ const QUESTIONS: Question[] = [
       ja: '新しい言語を学ぶとき、私は…',
       fr: 'Pour apprendre une nouvelle langue, je…',
       es: 'Al aprender un nuevo idioma, yo…',
-      zh: '學習新語言時，我…',
-      cn: '学习新语言时，我…',
+      zh: '学习新语言时，我…',
     },
     a: {
       ko: '문법 규칙을 먼저 체계적으로 익힌다',
@@ -328,8 +297,7 @@ const QUESTIONS: Question[] = [
       ja: '文法ルールをまず体系的に覚える',
       fr: "D'abord apprendre les règles de grammaire",
       es: 'Primero aprendo las reglas gramaticales',
-      zh: '先系統地學習語法規則',
-      cn: '先系统地学习语法规则',
+      zh: '先系统地学习语法规则',
     },
     b: {
       ko: '대화와 실전을 통해 감각으로 배운다',
@@ -337,8 +305,7 @@ const QUESTIONS: Question[] = [
       ja: '会話と実践を通して感覚で学ぶ',
       fr: "Apprends à travers la conversation et la pratique",
       es: 'Aprendo a través de la conversación y la práctica',
-      zh: '通過對話和實踐以感覺學習',
-      cn: '通过对话和实践以感觉学习',
+      zh: '通过对话和实践以感觉学习',
     },
   },
   {
@@ -349,8 +316,7 @@ const QUESTIONS: Question[] = [
       ja: 'クリエイティブな作業をするとき、私は…',
       fr: 'Pour un travail créatif, je…',
       es: 'En el trabajo creativo, yo…',
-      zh: '進行創意工作時，我…',
-      cn: '进行创意工作时，我…',
+      zh: '进行创意工作时，我…',
     },
     a: {
       ko: '명확한 구조와 틀 안에서 아이디어를 발전시킨다',
@@ -359,7 +325,6 @@ const QUESTIONS: Question[] = [
       fr: 'Développe des idées dans une structure claire',
       es: 'Desarrollo ideas dentro de una estructura clara',
       zh: '在清晰的框架內發展想法',
-      cn: '在清晰的框架内发展想法',
     },
     b: {
       ko: '자유롭게 상상하며 경계 없이 아이디어를 펼친다',
@@ -367,8 +332,7 @@ const QUESTIONS: Question[] = [
       ja: '自由に想像し、限界なくアイデアを広げる',
       fr: 'Imagine librement et développe sans limites',
       es: 'Imagino libremente y expando ideas sin límites',
-      zh: '自由想像，無限展開想法',
-      cn: '自由想象，无限展开想法',
+      zh: '自由想象，无限展开想法',
     },
   },
 ];
@@ -482,24 +446,6 @@ const L: Record<Locale, {
     chooseB: 'Opción B',
   },
   zh: {
-    title: '左腦 vs 右腦測驗',
-    subtitle: '發現你的主導思維風格',
-    progress: '題',
-    result: '結果',
-    retake: '重新測驗',
-    leftTitle: '左腦主導型',
-    rightTitle: '右腦主導型',
-    balancedTitle: '均衡型',
-    leftDesc: '你是左腦主導型——邏輯和分析思維強。擅長系統規劃和語言推理。',
-    rightDesc: '你是右腦主導型——直覺和創造思維強。具備出色的藝術感和空間意識。',
-    balancedDesc: '你均衡運用兩個腦半球。兼具邏輯與創意，思考全面多元。',
-    leftTraits: ['邏輯分析', '系統規劃', '語言能力', '數學思維', '注重細節'],
-    rightTraits: ['創意發想', '直覺與感性', '藝術感', '空間認知', '宏觀思考'],
-    balancedTraits: ['邏輯+創意', '多元方法', '靈活思考', '適應能力', '整體視野'],
-    chooseA: '選項A',
-    chooseB: '選項B',
-  },
-  cn: {
     title: '左脑 vs 右脑测验',
     subtitle: '发现你的主导思维风格',
     progress: '题',

@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 
-type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh' | 'cn'
+type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh'
 
 const LABELS: Record<Locale, {
   title: string; subtitle: string; note: string
@@ -62,8 +62,7 @@ const LABELS: Record<Locale, {
   },
   fr: { title: 'Calculateur de Salaire Net (Corée)', subtitle: 'Calcul automatique des cotisations sociales + impôt sur le revenu', note: 'Ce calculateur est à titre indicatif.', grossLabel: 'Salaire brut mensuel (10k₩)', dependentsLabel: 'Personnes à charge (incl. soi)', nonTaxableLabel: 'Allocations non imposables (10k₩)', calculate: 'Calculer', reset: 'Réinitialiser', grossIncome: 'Salaire brut', deductions: 'Déductions', netIncome: 'Salaire net', nationalPension: 'Retraite nationale (4.5%)', healthInsurance: 'Assurance maladie (3.545%)', ltcInsurance: 'Soins longue durée (12.81% AM)', employmentInsurance: 'Assurance chômage (0.9%)', incomeTax: 'Impôt sur le revenu', localTax: 'Impôt local (10% IR)', totalDeduction: 'Total déductions', takeHome: 'Salaire net', effectiveRate: 'Taux effectif', monthly: '/mois', annual: '/an', incomeUnit: '10k₩' },
   es: { title: 'Calculadora de Salario Neto (Corea)', subtitle: 'Cálculo automático de seguros sociales + IRPF', note: 'Esta calculadora es solo de referencia.', grossLabel: 'Salario bruto mensual (10k₩)', dependentsLabel: 'Dependientes (incl. uno mismo)', nonTaxableLabel: 'Asignaciones no gravables (10k₩)', calculate: 'Calcular', reset: 'Reiniciar', grossIncome: 'Salario bruto', deductions: 'Deducciones', netIncome: 'Salario neto', nationalPension: 'Pensión nacional (4.5%)', healthInsurance: 'Seguro médico (3.545%)', ltcInsurance: 'Cuidados a largo plazo (12.81% SM)', employmentInsurance: 'Seguro de desempleo (0.9%)', incomeTax: 'IRPF', localTax: 'Impuesto local (10% IRPF)', totalDeduction: 'Total deducciones', takeHome: 'Salario neto', effectiveRate: 'Tasa efectiva', monthly: '/mes', annual: '/año', incomeUnit: '10k₩' },
-  zh: { title: '韓國薪資稅後計算器', subtitle: '自動計算四大保險+所得稅（2024年標準）', note: '此計算器僅供參考。', grossLabel: '月薪稅前（萬韓元）', dependentsLabel: '贍養人口（含本人）', nonTaxableLabel: '免稅津貼（萬韓元）', calculate: '計算', reset: '重置', grossIncome: '稅前薪資', deductions: '扣除明細', netIncome: '稅後薪資', nationalPension: '國民年金（4.5%）', healthInsurance: '健康保險（3.545%）', ltcInsurance: '長期護理（健保12.81%）', employmentInsurance: '就業保險（0.9%）', incomeTax: '勞動所得稅', localTax: '地方所得稅（所得稅10%）', totalDeduction: '總扣除額', takeHome: '實收薪資', effectiveRate: '實效稅率', monthly: '/月', annual: '/年', incomeUnit: '萬元' },
-  cn: { title: '韩国薪资税后计算器', subtitle: '自动计算四大保险+所得税（2024年标准）', note: '此计算器仅供参考。', grossLabel: '月薪税前（万韩元）', dependentsLabel: '赡养人口（含本人）', nonTaxableLabel: '免税津贴（万韩元）', calculate: '计算', reset: '重置', grossIncome: '税前薪资', deductions: '扣除明细', netIncome: '税后薪资', nationalPension: '国民年金（4.5%）', healthInsurance: '健康保险（3.545%）', ltcInsurance: '长期护理（医保12.81%）', employmentInsurance: '就业保险（0.9%）', incomeTax: '劳动所得税', localTax: '地方所得税（所得税10%）', totalDeduction: '总扣除额', takeHome: '实收薪资', effectiveRate: '实效税率', monthly: '/月', annual: '/年', incomeUnit: '万元' },
+  zh: { title: '韩国薪资税后计算器', subtitle: '自动计算四大保险+所得税（2024年标准）', note: '此计算器仅供参考。', grossLabel: '月薪税前（万韩元）', dependentsLabel: '赡养人口（含本人）', nonTaxableLabel: '免税津贴（万韩元）', calculate: '计算', reset: '重置', grossIncome: '税前薪资', deductions: '扣除明细', netIncome: '税后薪资', nationalPension: '国民年金（4.5%）', healthInsurance: '健康保险（3.545%）', ltcInsurance: '长期护理（医保12.81%）', employmentInsurance: '就业保险（0.9%）', incomeTax: '劳动所得税', localTax: '地方所得税（所得税10%）', totalDeduction: '总扣除额', takeHome: '实收薪资', effectiveRate: '实效税率', monthly: '/月', annual: '/年', incomeUnit: '万元' },
 }
 
 // 2024 Korean income tax simplified brackets (monthly taxable, KRW)
@@ -92,7 +91,7 @@ interface Props { locale: Locale }
 
 export default function SalaryCalculator({ locale }: Props) {
   const l = LABELS[locale] ?? LABELS.en
-  const isKo = locale === 'ko' || locale === 'ja' || locale === 'zh' || locale === 'cn'
+  const isKo = locale === 'ko' || locale === 'ja' || locale === 'zh'
 
   const [gross, setGross] = useState(300)
   const [dependents, setDependents] = useState(1)

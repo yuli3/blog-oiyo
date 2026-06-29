@@ -21,7 +21,7 @@ interface Labels {
   empty: string;
 }
 
-const LABELS: Record<Exclude<Locale, "cn">, Labels> = {
+const LABELS: Record<Locale, Labels> = {
   en: { title: "Number Sorter", subtitle: "Sort pasted numbers and summarize the list.", inputLabel: "Numbers", placeholder: "12, 4, 9\n3 4 18", direction: "Direction", asc: "Ascending", desc: "Descending", dedupe: "Remove duplicates", result: "Sorted result", stats: "Summary", count: "Count", sum: "Sum", min: "Min", max: "Max", average: "Average", empty: "Enter numbers separated by commas, spaces, or line breaks." },
   ko: { title: "숫자 정렬기", subtitle: "붙여 넣은 숫자를 정렬하고 통계를 계산합니다.", inputLabel: "숫자 목록", placeholder: "12, 4, 9\n3 4 18", direction: "정렬 방향", asc: "오름차순", desc: "내림차순", dedupe: "중복 제거", result: "정렬 결과", stats: "요약", count: "개수", sum: "합계", min: "최솟값", max: "최댓값", average: "평균", empty: "쉼표, 공백, 줄바꿈으로 숫자를 구분해 입력하세요." },
   ja: { title: "数値ソーター", subtitle: "貼り付けた数値を並べ替え、要約します。", inputLabel: "数値リスト", placeholder: "12, 4, 9\n3 4 18", direction: "並び順", asc: "昇順", desc: "降順", dedupe: "重複を削除", result: "並べ替え結果", stats: "集計", count: "個数", sum: "合計", min: "最小", max: "最大", average: "平均", empty: "カンマ、空白、改行で数値を区切って入力してください。" },
@@ -39,7 +39,7 @@ function formatNumber(value: number): string {
 }
 
 export default function NumberSorter({ locale }: { locale: Locale }) {
-  const t = LABELS[locale as Exclude<Locale, "cn">] ?? LABELS.en;
+  const t = LABELS[locale] ?? LABELS.en;
   const [input, setInput] = useState("12, 4, 9\n3 4 18");
   const [direction, setDirection] = useState<"asc" | "desc">("asc");
   const [dedupe, setDedupe] = useState(false);

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh' | 'cn'
+type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh'
 type Level = 'low' | 'medium' | 'high' | 'critical'
 
 const LABELS: Record<Locale, {
@@ -45,8 +45,7 @@ const LABELS: Record<Locale, {
   },
   fr: { title: 'Auto-diagnostic de Dépendance à la Dopamine', subtitle: 'Vérifiez vos schémas de recherche de gratification instantanée', restart: 'Recommencer', result: 'Résultat', yourLevel: 'Niveau de Dépendance à la Dopamine', scoreLabel: 'Score de dépendance', outOf: '/ 50', symptoms: 'Schémas observés', tips: 'Stratégies de rééquilibrage', note: 'Ce test ne remplace pas un diagnostic médical.', scaleLabels: ['Jamais', 'Rarement', 'Parfois', 'Souvent', 'Toujours'], progress: (c, t) => `${c} / ${t}` },
   es: { title: 'Autodiagnóstico de Dependencia a la Dopamina', subtitle: 'Verifica tus patrones de búsqueda de gratificación instantánea', restart: 'Repetir', result: 'Resultado', yourLevel: 'Nivel de Dependencia a la Dopamina', scoreLabel: 'Puntuación de dependencia', outOf: '/ 50', symptoms: 'Patrones observados', tips: 'Estrategias de recuperación del equilibrio', note: 'Este test no reemplaza un diagnóstico médico.', scaleLabels: ['Nunca', 'Raramente', 'A veces', 'A menudo', 'Siempre'], progress: (c, t) => `${c} / ${t}` },
-  zh: { title: '多巴胺依賴自我診斷', subtitle: '檢查您的即時獎勵追求模式', restart: '重新測試', result: '診斷結果', yourLevel: '多巴胺依賴水平', scoreLabel: '依賴分數', outOf: '/ 50', symptoms: '觀察到的模式', tips: '平衡恢復策略', note: '此測試不能替代醫療診斷。', scaleLabels: ['從不', '幾乎不', '有時', '經常', '總是'], progress: (c, t) => `${c} / ${t}` },
-  cn: { title: '多巴胺依赖自我诊断', subtitle: '检查您的即时奖励追求模式', restart: '重新测试', result: '诊断结果', yourLevel: '多巴胺依赖水平', scoreLabel: '依赖分数', outOf: '/ 50', symptoms: '观察到的模式', tips: '平衡恢复策略', note: '此测试不能替代医疗诊断。', scaleLabels: ['从不', '几乎不', '有时', '经常', '总是'], progress: (c, t) => `${c} / ${t}` },
+  zh: { title: '多巴胺依赖自我诊断', subtitle: '检查您的即时奖励追求模式', restart: '重新测试', result: '诊断结果', yourLevel: '多巴胺依赖水平', scoreLabel: '依赖分数', outOf: '/ 50', symptoms: '观察到的模式', tips: '平衡恢复策略', note: '此测试不能替代医疗诊断。', scaleLabels: ['从不', '几乎不', '有时', '经常', '总是'], progress: (c, t) => `${c} / ${t}` },
 }
 
 const QUESTIONS: Record<Locale, string[]> = {
@@ -88,8 +87,7 @@ const QUESTIONS: Record<Locale, string[]> = {
   ],
   fr: ['Je me sens anxieux si je ne vérifie pas mon téléphone toutes les 5 minutes', 'Je vérifie immédiatement les notifications de likes/commentaires', 'Une fois que je commence YouTube/Reels/courts métrages, il est difficile d\'arrêter', 'Même sans faim, je mange quand je m\'ennuie ou suis stressé', 'J\'ai besoin d\'une récompense avant de commencer une tâche', 'Il est très difficile de tolérer l\'ennui plus de 5 minutes', 'Une fois que je commence des jeux/achats, je le fais beaucoup plus longtemps que prévu', 'Sans nouvelle stimulation, je ne peux pas me concentrer', 'Je vérifie mon téléphone pendant un travail important', 'J\'ai commencé quelque chose en pensant "juste une fois" et j\'ai fini par le faire longtemps'],
   es: ['Me siento ansioso si no reviso el teléfono cada 5 minutos', 'Reviso inmediatamente las notificaciones de likes/comentarios', 'Una vez que empiezo YouTube/Reels/vídeos cortos, es difícil parar', 'Incluso sin hambre, como cuando estoy aburrido o estresado', 'Necesito una recompensa antes de comenzar cualquier tarea', 'Es muy difícil tolerar el aburrimiento más de 5 minutos', 'Una vez que comienzo juegos/compras, lo hago mucho más de lo planeado', 'Sin nueva estimulación, no puedo concentrarme', 'Reviso el teléfono mientras hago trabajo importante', 'He empezado algo pensando "solo una vez" y terminé haciéndolo mucho tiempo'],
-  zh: ['如果不每5分鐘查一次手機就感到焦慮', '社交媒體通知來了就立即查看', '一旦開始看YouTube/短影片就很難停下來', '即使不餓，無聊或有壓力時也會吃東西', '開始任何任務前需要先有獎勵', '很難忍受超過5分鐘的無聊', '一旦開始遊戲/購物就比計劃做得更久', '沒有新刺激就無法集中注意力', '做重要工作時查看手機或看其他東西', '以為"就一次"開始後卻做了很長時間'],
-  cn: ['如果不每5分钟查一次手机就感到焦虑', '社交媒体通知来了就立即查看', '一旦开始看YouTube/短视频就很难停下来', '即使不饿，无聊或有压力时也会吃东西', '开始任何任务前需要先有奖励', '很难忍受超过5分钟的无聊', '一旦开始游戏/购物就比计划做得更久', '没有新刺激就无法集中注意力', '做重要工作时查看手机或看其他东西', '以为"就一次"开始后却做了很长时间'],
+  zh: ['如果不每5分钟查一次手机就感到焦虑', '社交媒体通知来了就立即查看', '一旦开始看YouTube/短视频就很难停下来', '即使不饿，无聊或有压力时也会吃东西', '开始任何任务前需要先有奖励', '很难忍受超过5分钟的无聊', '一旦开始游戏/购物就比计划做得更久', '没有新刺激就无法集中注意力', '做重要工作时查看手机或看其他东西', '以为"就一次"开始后却做了很长时间'],
 }
 
 const RESULTS: Record<Level, Record<Locale, { title: string; color: string; bg: string; symptoms: string[]; tips: string[] }>> = {
@@ -99,8 +97,7 @@ const RESULTS: Record<Level, Record<Locale, { title: string; color: string; bg: 
     ja: { title: 'バランス型 🌿', color: 'text-green-700', bg: 'bg-green-50 border-green-200', symptoms: ['自己調節能力良好', '即時刺激への依存が少ない', '退屈をよく耐える'], tips: ['現在のバランスを維持', 'デジタルウェルネス習慣を継続', 'オフライン活動を楽しむ'] },
     fr: { title: 'Équilibré 🌿', color: 'text-green-700', bg: 'bg-green-50 border-green-200', symptoms: ['Bonne autorégulation', 'Moins dépendant de la stimulation instantanée', 'Tolère bien l\'ennui'], tips: ['Maintenir l\'équilibre actuel', 'Continuer les habitudes de bien-être numérique', 'Profiter des activités hors ligne'] },
     es: { title: 'Equilibrado 🌿', color: 'text-green-700', bg: 'bg-green-50 border-green-200', symptoms: ['Buena autorregulación', 'Menos dependiente de la estimulación instantánea', 'Tolera bien el aburrimiento'], tips: ['Mantener el equilibrio actual', 'Continuar hábitos de bienestar digital', 'Disfrutar actividades sin pantallas'] },
-    zh: { title: '平衡型 🌿', color: 'text-green-700', bg: 'bg-green-50 border-green-200', symptoms: ['自我調節能力良好', '對即時刺激依賴較少', '能夠忍受無聊'], tips: ['維持現有平衡', '繼續數字健康習慣', '享受線下活動'] },
-    cn: { title: '平衡型 🌿', color: 'text-green-700', bg: 'bg-green-50 border-green-200', symptoms: ['自我调节能力良好', '对即时刺激依赖较少', '能够忍受无聊'], tips: ['维持现有平衡', '继续数字健康习慣', '享受线下活动'] },
+    zh: { title: '平衡型 🌿', color: 'text-green-700', bg: 'bg-green-50 border-green-200', symptoms: ['自我调节能力良好', '对即时刺激依赖较少', '能够忍受无聊'], tips: ['维持现有平衡', '继续数字健康习慣', '享受线下活动'] },
   },
   medium: {
     ko: { title: '주의 필요형 🟡', color: 'text-amber-700', bg: 'bg-amber-50 border-amber-200', symptoms: ['스마트폰을 습관적으로 확인', '지루할 때 즉각적 자극 찾기', '집중 시간이 점점 짧아짐'], tips: ['스마트폰 알림 30%만 켜두기', '하루 1시간 "지루함 시간" 갖기', '식사 중 스마트폰 내려놓기', '보상을 미루는 연습하기'] },
@@ -108,8 +105,7 @@ const RESULTS: Record<Level, Record<Locale, { title: string; color: string; bg: 
     ja: { title: '注意が必要 🟡', color: 'text-amber-700', bg: 'bg-amber-50 border-amber-200', symptoms: ['習慣的なスマホ確認', '退屈時に即時刺激を求める', '集中時間が短くなっている'], tips: ['スマホ通知の30%だけをオン', '毎日1時間「退屈タイム」を設ける', '食事中はスマホを置く', '報酬を遅らせる練習をする'] },
     fr: { title: 'Attention requise 🟡', color: 'text-amber-700', bg: 'bg-amber-50 border-amber-200', symptoms: ['Vérification habituelle du téléphone', 'Recherche de stimulation instantanée quand ennuyé', 'Durée d\'attention raccourcissant'], tips: ['Ne garder que 30% des notifications', 'Avoir 1h d\'ennui intentionnel par jour', 'Poser le téléphone pendant les repas', 'S\'entraîner à retarder les récompenses'] },
     es: { title: 'Precaución necesaria 🟡', color: 'text-amber-700', bg: 'bg-amber-50 border-amber-200', symptoms: ['Revisión habitual del teléfono', 'Busca estimulación instantánea cuando está aburrido', 'El tiempo de atención se acorta'], tips: ['Mantener solo el 30% de las notificaciones', 'Tener 1 hora de "tiempo de aburrimiento" diario', 'Dejar el teléfono durante las comidas', 'Practicar el retraso de recompensas'] },
-    zh: { title: '需注意 🟡', color: 'text-amber-700', bg: 'bg-amber-50 border-amber-200', symptoms: ['習慣性查看手機', '無聊時尋求即時刺激', '注意力持續時間越來越短'], tips: ['只保留30%的手機通知', '每天有1小時"無聊時間"', '吃飯時放下手機', '練習延遲獎勵'] },
-    cn: { title: '需注意 🟡', color: 'text-amber-700', bg: 'bg-amber-50 border-amber-200', symptoms: ['习惯性查看手机', '无聊时寻求即时刺激', '注意力持续时间越来越短'], tips: ['只保留30%的手机通知', '每天有1小时"无聊时间"', '吃饭时放下手机', '练习延迟奖励'] },
+    zh: { title: '需注意 🟡', color: 'text-amber-700', bg: 'bg-amber-50 border-amber-200', symptoms: ['习惯性查看手机', '无聊时寻求即时刺激', '注意力持续时间越来越短'], tips: ['只保留30%的手机通知', '每天有1小时"无聊时间"', '吃饭时放下手机', '练习延迟奖励'] },
   },
   high: {
     ko: { title: '의존도 높음 🔴', color: 'text-red-700', bg: 'bg-red-50 border-red-200', symptoms: ['디지털 자극 없이 집중 어려움', '즉각적 만족을 못 얻으면 불안', '깊은 사고나 독서가 어려워짐', '현실의 지루한 활동에 재미 없음'], tips: ['도파민 디톡스: 하루 2시간 스마트폰 끄기', '지루함을 의도적으로 경험하기 (산책·멍 때리기)', '긴 글 읽기·취미 활동 다시 시작하기', '운동으로 건강한 도파민 분비 유도'] },
@@ -117,8 +113,7 @@ const RESULTS: Record<Level, Record<Locale, { title: string; color: string; bg: 
     ja: { title: '依存度高い 🔴', color: 'text-red-700', bg: 'bg-red-50 border-red-200', symptoms: ['デジタル刺激なしに集中困難', '即時満足が得られないと不安', '深い思考や読書が難しくなった', '現実の退屈な活動に興味がない'], tips: ['ドーパミンデトックス：毎日2時間スマホを切る', '意図的に退屈を経験する（散歩・ぼーっとする）', '長い文章を読む・趣味を再開する', '運動で健康なドーパミン分泌を促す'] },
     fr: { title: 'Haute dépendance 🔴', color: 'text-red-700', bg: 'bg-red-50 border-red-200', symptoms: ['Difficulté à se concentrer sans stimulation numérique', 'Anxiété quand la gratification instantanée est indisponible', 'La pensée profonde ou la lecture est devenue difficile', 'Aucun intérêt pour les activités ennuyeuses du monde réel'], tips: ['Détox dopamine: éteindre le téléphone 2h par jour', 'Expérimenter intentionnellement l\'ennui', 'Reprendre la lecture de longs textes', 'Faire de l\'exercice pour déclencher une libération saine de dopamine'] },
     es: { title: 'Alta dependencia 🔴', color: 'text-red-700', bg: 'bg-red-50 border-red-200', symptoms: ['Dificultad para concentrarse sin estimulación digital', 'Ansiedad cuando la gratificación instantánea no está disponible', 'El pensamiento profundo o la lectura se ha vuelto difícil', 'Sin interés en actividades aburridas del mundo real'], tips: ['Desintoxicación de dopamina: apagar el teléfono 2 horas al día', 'Experimentar intencionalmente el aburrimiento', 'Retomar la lectura de textos largos', 'Ejercitarse para liberar dopamina saludable'] },
-    zh: { title: '高度依賴 🔴', color: 'text-red-700', bg: 'bg-red-50 border-red-200', symptoms: ['沒有數字刺激就難以集中注意力', '無法獲得即時滿足時感到焦慮', '深度思考或閱讀變得困難', '對現實中無聊的活動失去興趣'], tips: ['多巴胺排毒：每天關閉手機2小時', '有意識地體驗無聊（散步、發呆）', '重新開始閱讀長篇文章和愛好', '通過運動促進健康的多巴胺分泌'] },
-    cn: { title: '高度依赖 🔴', color: 'text-red-700', bg: 'bg-red-50 border-red-200', symptoms: ['没有数字刺激就难以集中注意力', '无法获得即时满足时感到焦虑', '深度思考或阅读变得困难', '对现实中无聊的活动失去兴趣'], tips: ['多巴胺排毒：每天关闭手机2小时', '有意识地体验无聊（散步、发呆）', '重新开始阅读长篇文章和爱好', '通过运动促进健康的多巴胺分泌'] },
+    zh: { title: '高度依赖 🔴', color: 'text-red-700', bg: 'bg-red-50 border-red-200', symptoms: ['没有数字刺激就难以集中注意力', '无法获得即时满足时感到焦虑', '深度思考或阅读变得困难', '对现实中无聊的活动失去兴趣'], tips: ['多巴胺排毒：每天关闭手机2小时', '有意识地体验无聊（散步、发呆）', '重新开始阅读长篇文章和爱好', '通过运动促进健康的多巴胺分泌'] },
   },
   critical: {
     ko: { title: '심각한 의존 ⚠️', color: 'text-purple-700', bg: 'bg-purple-50 border-purple-200', symptoms: ['즉각적 자극 없이 일상 기능 어려움', '디지털 제한 시 심한 금단 증상', '수면·식사 등 기본 생활 리듬 무너짐', '현실 관계보다 디지털 관계 우선시'], tips: ['전문가 상담(행동 중독 전문의) 권장', '1주일 완전한 디지털 디톡스 시도', '주변 사람들의 지지 적극 활용', '기저 불안·우울증 확인 필요'] },
@@ -126,8 +121,7 @@ const RESULTS: Record<Level, Record<Locale, { title: string; color: string; bg: 
     ja: { title: '深刻な依存 ⚠️', color: 'text-purple-700', bg: 'bg-purple-50 border-purple-200', symptoms: ['即時刺激なしに日常機能が困難', 'デジタル制限時に重篤な禁断症状', '睡眠・食事など基本生活リズムが崩れている', 'リアルな関係よりデジタル関係を優先'], tips: ['専門家相談（行動依存専門医）を推奨', '1週間完全デジタルデトックスを試みる', '周囲の人のサポートを積極的に活用', '基礎的な不安・うつ病の確認が必要'] },
     fr: { title: 'Dépendance critique ⚠️', color: 'text-purple-700', bg: 'bg-purple-50 border-purple-200', symptoms: ['Difficulté à fonctionner sans stimulation instantanée', 'Sevrage sévère quand l\'accès numérique est limité', 'Rythmes de vie de base perturbés', 'Prioriser les relations numériques sur les réelles'], tips: ['Consulter un spécialiste en addiction comportementale', 'Tenter une détox numérique complète d\'une semaine', 'Utiliser activement le soutien des proches', 'Vérifier si anxiété ou dépression sous-jacente'] },
     es: { title: 'Dependencia crítica ⚠️', color: 'text-purple-700', bg: 'bg-purple-50 border-purple-200', symptoms: ['Dificultad para funcionar sin estimulación instantánea', 'Síndrome de abstinencia severo cuando el acceso digital es limitado', 'Ritmos de vida básicos perturbados', 'Priorizar relaciones digitales sobre reales'], tips: ['Consultar a un especialista en adicciones conductuales', 'Intentar una desintoxicación digital completa de una semana', 'Utilizar activamente el apoyo de personas cercanas', 'Verificar si hay ansiedad o depresión subyacente'] },
-    zh: { title: '嚴重依賴 ⚠️', color: 'text-purple-700', bg: 'bg-purple-50 border-purple-200', symptoms: ['沒有即時刺激就難以正常運作', '限制數字使用時出現嚴重戒斷症狀', '基本生活節奏（睡眠、飲食）被打亂', '優先考慮數字關係而非現實關係'], tips: ['建議諮詢行為成癮專科醫生', '嘗試一週完全數字排毒', '積極利用身邊人的支持', '檢查潛在的焦慮或抑鬱症'] },
-    cn: { title: '严重依赖 ⚠️', color: 'text-purple-700', bg: 'bg-purple-50 border-purple-200', symptoms: ['没有即时刺激就难以正常运作', '限制数字使用时出现严重戒断症状', '基本生活节奏（睡眠、饮食）被打乱', '优先考虑数字关系而非现实关系'], tips: ['建议咨询行为成瘾专科医生', '尝试一周完全数字排毒', '积极利用身边人的支持', '检查潜在的焦虑或抑鬱症'] },
+    zh: { title: '严重依赖 ⚠️', color: 'text-purple-700', bg: 'bg-purple-50 border-purple-200', symptoms: ['没有即时刺激就难以正常运作', '限制数字使用时出现严重戒断症状', '基本生活节奏（睡眠、饮食）被打乱', '优先考虑数字关系而非现实关系'], tips: ['建议咨询行为成瘾专科医生', '尝试一周完全数字排毒', '积极利用身边人的支持', '检查潜在的焦虑或抑鬱症'] },
   },
 }
 

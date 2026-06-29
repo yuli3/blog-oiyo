@@ -45,7 +45,6 @@ const DESTINATION_DATA: Record<Destination, DestinationData> = {
       fr: ["Achetez le JR Pass pour économiser", "Mangez dans les konbini", "Envisagez les hôtels capsules"],
       es: ["Compra el JR Pass para transporte", "Come en konbini para ahorrar", "Considera hoteles cápsula"],
       zh: ["购买JR Pass节省交通费", "便利店饮食节省餐饮费", "考虑胶囊酒店或商务酒店"],
-      cn: ["購買JR Pass節省交通費", "便利商店飲食節省餐費", "考慮膠囊旅館或商務旅館"],
     },
   },
   thailand: {
@@ -62,7 +61,6 @@ const DESTINATION_DATA: Record<Destination, DestinationData> = {
       fr: ["Utilisez Grab pour les transports", "Mangez dans les marchés locaux", "Voyagez hors saison (mai-oct)"],
       es: ["Usa Grab para transporte", "Come en mercados locales", "Viaja en temporada baja (may-oct)"],
       zh: ["使用Grab节省交通费", "在当地市场用餐省钱", "淡季（5-10月）旅行省费用"],
-      cn: ["使用Grab節省交通費", "在當地市場用餐省錢", "淡季（5-10月）旅遊省費用"],
     },
   },
   europe: {
@@ -79,7 +77,6 @@ const DESTINATION_DATA: Record<Destination, DestinationData> = {
       fr: ["Achetez un Eurail Pass", "Utilisez Airbnb ou les auberges", "Faites vos courses au supermarché"],
       es: ["Compra un Eurail Pass", "Usa Airbnb o albergues", "Compra en supermercados"],
       zh: ["购买欧铁通票节省交通费", "使用Airbnb或青旅住宿", "在超市购物节省餐费"],
-      cn: ["購買歐鐵通票節省交通費", "使用Airbnb或青旅住宿", "在超市購物節省餐費"],
     },
   },
   usa: {
@@ -96,7 +93,6 @@ const DESTINATION_DATA: Record<Destination, DestinationData> = {
       fr: ["Utilisez CityPASS pour les réductions", "Uber/Lyft pour les transports", "Réservez tôt pour les billets d'avion"],
       es: ["Usa CityPASS para descuentos", "Uber/Lyft para transporte", "Reserva vuelos con antelación"],
       zh: ["使用CityPASS获得景点折扣", "Uber/Lyft节省交通费", "提前购买机票节省费用"],
-      cn: ["使用CityPASS獲得景點折扣", "Uber/Lyft節省交通費", "提前購買機票節省費用"],
     },
   },
   southeast_asia: {
@@ -113,7 +109,6 @@ const DESTINATION_DATA: Record<Destination, DestinationData> = {
       fr: ["Utilisez des low-cost (AirAsia)", "Grab pour les transports", "Rejoignez des tours locaux"],
       es: ["Usa aerolíneas low-cost como AirAsia", "Grab para transporte", "Únete a tours locales"],
       zh: ["使用廉价航空（亚航等）", "Grab节省交通费", "参加当地旅游团节省费用"],
-      cn: ["使用廉價航空（亞航等）", "Grab節省交通費", "參加當地旅遊團節省費用"],
     },
   },
   australia: {
@@ -130,7 +125,6 @@ const DESTINATION_DATA: Record<Destination, DestinationData> = {
       fr: ["Achetez un Opal card", "Cuisinez vous-même pour économiser", "Évitez la haute saison estivale"],
       es: ["Compra tarjeta Opal para transporte", "Cocina tus propias comidas", "Evita la temporada alta de verano"],
       zh: ["购买Opal卡享受交通折扣", "自炊节省餐饮费用", "避开夏季旺季以降低费用"],
-      cn: ["購買Opal卡享受交通折扣", "自炊節省餐飲費用", "避開夏季旺季以降低費用"],
     },
   },
   china: {
@@ -147,7 +141,6 @@ const DESTINATION_DATA: Record<Destination, DestinationData> = {
       fr: ["Installez un VPN avant d'arriver", "Configurez Alipay/WeChat Pay à l'avance", "Utilisez le TGV chinois"],
       es: ["Instala VPN antes de llegar", "Configura Alipay/WeChat Pay antes", "Usa el tren de alta velocidad"],
       zh: ["提前安装VPN", "提前注册支付宝/微信支付", "使用高铁节省交通费"],
-      cn: ["提前安裝VPN", "提前注冊支付寶/微信支付", "使用高鐵節省交通費"],
     },
   },
   taiwan: {
@@ -164,7 +157,6 @@ const DESTINATION_DATA: Record<Destination, DestinationData> = {
       fr: ["Utilisez l'EasyCard pour les transports", "Mangez dans les night markets", "Réservez le HSR en avance"],
       es: ["Usa EasyCard para transporte", "Come en los mercados nocturnos", "Reserva HSR con anticipación"],
       zh: ["使用悠游卡享受交通折扣", "在夜市吃饭便宜实惠", "提前预订高铁享受折扣"],
-      cn: ["使用悠遊卡享受交通折扣", "在夜市吃飯便宜實惠", "提前預訂高鐵享受折扣"],
     },
   },
   vietnam: {
@@ -181,7 +173,6 @@ const DESTINATION_DATA: Record<Destination, DestinationData> = {
       fr: ["Utilisez GrabBike pour vous déplacer", "Mangez du pho et du bánh mì", "Rejoignez des tours économiques"],
       es: ["Usa GrabBike para moverte", "Come pho y bánh mì locales", "Únete a tours económicos"],
       zh: ["使用Grab摩托车便宜出行", "吃当地河粉、法棍等省钱", "参加河内/胡志明市低价旅游团"],
-      cn: ["使用Grab摩托車便宜出行", "吃當地河粉、法棍等省錢", "參加河內/胡志明市低價旅遊團"],
     },
   },
   other: {
@@ -198,34 +189,33 @@ const DESTINATION_DATA: Record<Destination, DestinationData> = {
       fr: ["Réservez tôt pour les billets d'avion", "Choisissez des tarifs remboursables", "Comparez ATM et bureaux de change"],
       es: ["Reserva vuelos con antelación", "Elige tarifas reembolsables en hoteles", "Compara tarifas de ATM y casas de cambio"],
       zh: ["提前购买机票节省费用", "预订酒店时选择可取消价格", "比较ATM和换汇点汇率"],
-      cn: ["提前購買機票節省費用", "預訂酒店時選擇可取消價格", "比較ATM和換匯點匯率"],
     },
   },
 };
 
 const DESTINATION_NAMES: Record<Destination, Record<Locale, string>> = {
-  japan: { ko: "일본", en: "Japan", ja: "日本", fr: "Japon", es: "Japón", zh: "日本", cn: "日本" },
-  thailand: { ko: "태국", en: "Thailand", ja: "タイ", fr: "Thaïlande", es: "Tailandia", zh: "泰国", cn: "泰國" },
-  europe: { ko: "유럽", en: "Europe", ja: "ヨーロッパ", fr: "Europe", es: "Europa", zh: "欧洲", cn: "歐洲" },
-  usa: { ko: "미국", en: "USA", ja: "アメリカ", fr: "États-Unis", es: "EE.UU.", zh: "美国", cn: "美國" },
-  southeast_asia: { ko: "동남아", en: "SE Asia", ja: "東南アジア", fr: "Asie du Sud-Est", es: "SE Asia", zh: "东南亚", cn: "東南亞" },
-  australia: { ko: "호주", en: "Australia", ja: "オーストラリア", fr: "Australie", es: "Australia", zh: "澳大利亚", cn: "澳大利亞" },
-  china: { ko: "중국", en: "China", ja: "中国", fr: "Chine", es: "China", zh: "中国", cn: "中國" },
-  taiwan: { ko: "대만", en: "Taiwan", ja: "台湾", fr: "Taïwan", es: "Taiwán", zh: "台湾", cn: "台灣" },
-  vietnam: { ko: "베트남", en: "Vietnam", ja: "ベトナム", fr: "Vietnam", es: "Vietnam", zh: "越南", cn: "越南" },
-  other: { ko: "기타", en: "Other", ja: "その他", fr: "Autre", es: "Otro", zh: "其他", cn: "其他" },
+  japan: { ko: "일본", en: "Japan", ja: "日本", fr: "Japon", es: "Japón", zh: "日本", },
+  thailand: { ko: "태국", en: "Thailand", ja: "タイ", fr: "Thaïlande", es: "Tailandia", zh: "泰国", },
+  europe: { ko: "유럽", en: "Europe", ja: "ヨーロッパ", fr: "Europe", es: "Europa", zh: "欧洲", },
+  usa: { ko: "미국", en: "USA", ja: "アメリカ", fr: "États-Unis", es: "EE.UU.", zh: "美国", },
+  southeast_asia: { ko: "동남아", en: "SE Asia", ja: "東南アジア", fr: "Asie du Sud-Est", es: "SE Asia", zh: "东南亚", },
+  australia: { ko: "호주", en: "Australia", ja: "オーストラリア", fr: "Australie", es: "Australia", zh: "澳大利亚", },
+  china: { ko: "중국", en: "China", ja: "中国", fr: "Chine", es: "China", zh: "中国", },
+  taiwan: { ko: "대만", en: "Taiwan", ja: "台湾", fr: "Taïwan", es: "Taiwán", zh: "台湾", },
+  vietnam: { ko: "베트남", en: "Vietnam", ja: "ベトナム", fr: "Vietnam", es: "Vietnam", zh: "越南", },
+  other: { ko: "기타", en: "Other", ja: "その他", fr: "Autre", es: "Otro", zh: "其他", },
 };
 
 const ACCOM_NAMES: Record<AccomGrade, Record<Locale, string>> = {
-  hostel: { ko: "호스텔", en: "Hostel", ja: "ホステル", fr: "Auberge", es: "Albergue", zh: "青旅", cn: "青旅" },
-  "3star": { ko: "3성급", en: "3-Star", ja: "3つ星", fr: "3 étoiles", es: "3 estrellas", zh: "三星级", cn: "三星級" },
-  "4star": { ko: "4성급", en: "4-Star", ja: "4つ星", fr: "4 étoiles", es: "4 estrellas", zh: "四星级", cn: "四星級" },
-  "5star": { ko: "5성급", en: "5-Star", ja: "5つ星", fr: "5 étoiles", es: "5 estrellas", zh: "五星级", cn: "五星級" },
+  hostel: { ko: "호스텔", en: "Hostel", ja: "ホステル", fr: "Auberge", es: "Albergue", zh: "青旅", },
+  "3star": { ko: "3성급", en: "3-Star", ja: "3つ星", fr: "3 étoiles", es: "3 estrellas", zh: "三星级", },
+  "4star": { ko: "4성급", en: "4-Star", ja: "4つ星", fr: "4 étoiles", es: "4 estrellas", zh: "四星级", },
+  "5star": { ko: "5성급", en: "5-Star", ja: "5つ星", fr: "5 étoiles", es: "5 estrellas", zh: "五星级", },
 };
 
 const FLIGHT_NAMES: Record<FlightClass, Record<Locale, string>> = {
-  economy: { ko: "이코노미", en: "Economy", ja: "エコノミー", fr: "Économique", es: "Económica", zh: "经济舱", cn: "經濟艙" },
-  business: { ko: "비즈니스", en: "Business", ja: "ビジネス", fr: "Affaires", es: "Business", zh: "商务舱", cn: "商務艙" },
+  economy: { ko: "이코노미", en: "Economy", ja: "エコノミー", fr: "Économique", es: "Económica", zh: "经济舱", },
+  business: { ko: "비즈니스", en: "Business", ja: "ビジネス", fr: "Affaires", es: "Business", zh: "商务舱", },
 };
 
 const UI: Record<
@@ -391,29 +381,6 @@ const UI: Record<
     transportItem: "当地交通",
     tourismItem: "观光·购物",
     estimateNote: "* 估算费用，实际可能有所不同",
-  },
-  cn: {
-    title: "旅遊預算計算機",
-    subtitle: "依目的地估算旅遊費用",
-    destinationLabel: "目的地",
-    nightsLabel: "旅遊時長",
-    nightsUnit: "晚",
-    peopleLabel: "人數",
-    peopleUnit: "人",
-    accomLabel: "住宿等級",
-    flightLabel: "航班艙位",
-    calcBtn: "計算預算",
-    resetBtn: "重置",
-    breakdownTitle: "費用明細",
-    totalTitle: "總預算",
-    perPersonTitle: "人均費用",
-    tipsTitle: "省錢小貼士",
-    flightItem: "機票",
-    accomItem: "住宿",
-    foodItem: "餐飲",
-    transportItem: "當地交通",
-    tourismItem: "觀光·購物",
-    estimateNote: "* 估算費用，實際可能有所不同",
   },
 };
 

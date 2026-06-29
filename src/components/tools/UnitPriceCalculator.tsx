@@ -17,7 +17,6 @@ const L: Record<string, UiLabels> = {
   ko: { item: "상품", price: "가격", amount: "용량", unit: "단위", unitPrice: "단위가격", add: "+ 상품 추가", best: "최저가", perUnit: "당" },
   ja: { item: "商品", price: "価格", amount: "容量", unit: "単位", unitPrice: "単価", add: "+ 商品を追加", best: "最安", perUnit: "あたり" },
   zh: { item: "商品", price: "价格", amount: "容量", unit: "单位", unitPrice: "单价", add: "+ 添加商品", best: "最划算", perUnit: "每" },
-  cn: { item: "商品", price: "价格", amount: "容量", unit: "单位", unitPrice: "单价", add: "+ 添加商品", best: "最划算", perUnit: "每" },
   fr: { item: "Article", price: "Prix", amount: "Quantité", unit: "Unité", unitPrice: "Prix unitaire", add: "+ Ajouter", best: "Meilleur prix", perUnit: "par" },
   es: { item: "Artículo", price: "Precio", amount: "Cantidad", unit: "Unidad", unitPrice: "Precio unitario", add: "+ Añadir", best: "Mejor precio", perUnit: "por" },
 };

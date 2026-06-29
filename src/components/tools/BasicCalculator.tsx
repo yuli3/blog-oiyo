@@ -3,7 +3,7 @@ import { GameContainer } from "../ui/game/GamePrimitives";
 import type { Locale } from "../../lib/i18n";
 
 interface Labels { title: string; subtitle: string; clear: string; backspace: string; error: string; }
-const LABELS: Record<Exclude<Locale, "cn">, Labels> = {
+const LABELS: Record<Locale, Labels> = {
   en: { title: "Basic Calculator", subtitle: "Arithmetic with decimals, percent, and clear.", clear: "C", backspace: "DEL", error: "Error" },
   ko: { title: "기본 계산기", subtitle: "소수와 퍼센트를 포함한 사칙연산 계산기입니다.", clear: "C", backspace: "DEL", error: "오류" },
   ja: { title: "基本計算機", subtitle: "小数とパーセントを含む四則演算に対応します。", clear: "C", backspace: "DEL", error: "エラー" },
@@ -21,7 +21,7 @@ function evaluateExpression(expr: string): string {
   } catch { return "Error"; }
 }
 export default function BasicCalculator({ locale }: { locale: Locale }) {
-  const t = LABELS[locale as Exclude<Locale, "cn">] ?? LABELS.en;
+  const t = LABELS[locale] ?? LABELS.en;
   const [display, setDisplay] = useState("");
   const [isCalculated, setIsCalculated] = useState(false);
   const handleInput = (value: string) => {

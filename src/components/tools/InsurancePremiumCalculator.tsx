@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 
-type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh' | 'cn';
+type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh';
 
 type InsuranceType = 'life' | 'health' | 'auto' | 'term';
 type Gender = 'M' | 'F';
@@ -134,28 +134,6 @@ const L: Record<Locale, {
     currency: '€', unit: '€',
   },
   zh: {
-    title: '保險費計算機', subtitle: '估算每月保費',
-    insuranceType: '保險類型', age: '年齡', gender: '性別', smoking: '吸菸狀況', health: '健康狀況',
-    coverage: '保障金額（萬元）', term: '保險期限（年）',
-    male: '男性', female: '女性',
-    never: '從不吸菸', former: '已戒菸（1年以上）', current: '目前吸菸',
-    excellent: '非常好', good: '良好', average: '一般', poor: '欠佳',
-    life: '終身壽險', healthIns: '健康險', auto: '汽車險', termLife: '定期壽險',
-    calc: '計算保費', reset: '重置',
-    monthlyPremium: '每月保費', annualPremium: '年保費', totalCost: '總繳費',
-    riskScore: '風險評分', low: '低', medium: '中等', high: '高',
-    breakdown: '各因素調整', basePremium: '基本保費', ageAdjust: '年齡調整',
-    genderAdjust: '性別調整', smokingAdjust: '吸菸調整', healthAdjust: '健康調整',
-    tip: '💡 節省保費小技巧',
-    tips: {
-      life: ['戒菸可節省最多30%保費', '越年輕投保保費越低', '比較終身險與定期險'],
-      health: ['維持健康獲得續保折扣', '避免重複投保', '比較附加保障'],
-      auto: ['安裝行車記錄器享折扣', '使用里程計費方案', '維持良好駕駛記錄'],
-      termLife: ['純保障型保費更低', '按需要設定保障期', '比較直銷保險公司'],
-    },
-    currency: '萬元', unit: '元',
-  },
-  cn: {
     title: '保险费计算器', subtitle: '估算每月保费',
     insuranceType: '保险类型', age: '年龄', gender: '性别', smoking: '吸烟状况', health: '健康状况',
     coverage: '保障金额（万元）', term: '保险期限（年）',

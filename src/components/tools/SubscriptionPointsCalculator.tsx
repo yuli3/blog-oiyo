@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { GameContainer } from '../ui/game/GamePrimitives';
 
-type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh' | 'cn';
+type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh';
 
 const L: Record<Locale, {
   title: string; subtitle: string;
@@ -52,14 +52,6 @@ const L: Record<Locale, {
     breakdown: 'Desglose de puntos', score: 'pts',
   },
   zh: {
-    title: '청약加分計算機', subtitle: '韓國公寓抽籤積分',
-    dependents: '扶養家屬數', depsNote: '不含本人（0–6名）。最多35分',
-    bankYears: '청약存款帳戶年數', bankNote: '開戶後經過年數（0–15年）。最多17分',
-    noPropYears: '無住宅年數', noPropNote: '滿30歲或結婚後無住宅年數（0–15年）。最多32分',
-    totalScore: '總加分', maxScore: '滿分84分',
-    breakdown: '各項目分數', score: '分',
-  },
-  cn: {
     title: '청약加分计算器', subtitle: '韩国公寓抽签积分',
     dependents: '扶养家属数', depsNote: '不含本人（0–6名）。最多35分',
     bankYears: '청약存款账户年数', bankNote: '开户后经过年数（0–15年）。最多17分',

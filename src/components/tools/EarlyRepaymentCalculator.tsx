@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { GameContainer } from '../ui/game/GamePrimitives';
 
-type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh' | 'cn';
+type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh';
 
 const L: Record<Locale, {
   title: string; subtitle: string;
@@ -65,16 +65,6 @@ const L: Record<Locale, {
     months: 'meses', won: '€', years: 'año(s)', currencySymbol: '€',
   },
   zh: {
-    title: '提前還款計算機', subtitle: 'Early Repayment Calculator',
-    principal: '貸款本金', rate: '年利率', term: '貸款期限',
-    elapsed: '已還月數', overpay: '提前還款金額',
-    monthlyPayment: '月還款額', remainingBalance: '剩餘本金',
-    interestSaved: '節省利息', newTerm: '縮短期限',
-    penalty: '提前還款手續費率', penaltyNote: '通常0–2%。3年後通常免除',
-    netSaving: '實際節省（利息節省−手續費）', summary: '計算結果',
-    months: '個月', won: '元', years: '年', currencySymbol: 'NT$',
-  },
-  cn: {
     title: '提前还款计算器', subtitle: 'Early Repayment Calculator',
     principal: '贷款本金', rate: '年利率', term: '贷款期限',
     elapsed: '已还月数', overpay: '提前还款金额',
@@ -93,11 +83,10 @@ const DEFAULTS: Record<Locale, { principal: number; rate: number; term: number; 
   fr: { principal: 200000, rate: 3.5, term: 300, elapsed: 24, overpay: 20000 },
   es: { principal: 180000, rate: 3.5, term: 300, elapsed: 24, overpay: 20000 },
   zh: { principal: 5000000, rate: 3.5, term: 360, elapsed: 24, overpay: 500000 },
-  cn: { principal: 1000000, rate: 3.6, term: 360, elapsed: 24, overpay: 200000 },
 };
 
 function fmtMoney(n: number, locale: Locale) {
-  const localeStr: Record<Locale, string> = { ko: 'ko-KR', en: 'en-US', ja: 'ja-JP', fr: 'fr-FR', es: 'es-ES', zh: 'zh-TW', cn: 'zh-CN' };
+  const localeStr: Record<Locale, string> = { ko: 'ko-KR', en: 'en-US', ja: 'ja-JP', fr: 'fr-FR', es: 'es-ES', zh: 'zh-CN', };
   return new Intl.NumberFormat(localeStr[locale], { maximumFractionDigits: 0 }).format(Math.round(n));
 }
 

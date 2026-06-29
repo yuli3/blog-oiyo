@@ -87,19 +87,6 @@ const UI: Record<Locale, {
   },
   zh: {
     title: "血型性格分析",
-    subtitle: "透過血型了解你的性格特徵、優勢、弱點和相容性",
-    selectPrompt: "選擇你的血型",
-    typeLabel: "血型",
-    traitsLabel: "性格特徵",
-    strengthsLabel: "優勢",
-    weaknessesLabel: "弱點",
-    compatibilityLabel: "相容性",
-    famousLabel: "同血型名人",
-    resetBtn: "重新選擇",
-    types: { A: "A型", B: "B型", O: "O型", AB: "AB型" },
-  },
-  cn: {
-    title: "血型性格分析",
     subtitle: "通过血型了解你的性格特征、优势、弱点和相容性",
     selectPrompt: "选择你的血型",
     typeLabel: "血型",
@@ -138,8 +125,7 @@ const TYPE_DATA: Record<BloodType, TypeData> = {
       ja: "A型は几帳面で責任感の強い完璧主義者です。規則と秩序を大切にし、他人の感情に細やかに反応します。",
       fr: "Les personnes de groupe A sont des perfectionnistes méticuleux avec un fort sens des responsabilités. Ils valorisent les règles et l'ordre.",
       es: "Las personas de tipo A son perfeccionistas meticulosos con un fuerte sentido de responsabilidad. Valoran las reglas y el orden.",
-      zh: "A型人是一絲不苟的完美主義者，責任感強。重視規則和秩序，對他人情感反應敏銳。",
-      cn: "A型人是一丝不苟的完美主义者，责任感强。重视规则和秩序，对他人情感反应敏锐。",
+      zh: "A型人是一丝不苟的完美主义者，责任感强。重视规则和秩序，对他人情感反应敏锐。",
     },
     traits: {
       ko: ["꼼꼼함", "책임감", "완벽주의", "배려심", "예민함", "내향적", "규칙 중시"],
@@ -147,8 +133,7 @@ const TYPE_DATA: Record<BloodType, TypeData> = {
       ja: ["几帳面", "責任感", "完璧主義", "思いやり", "繊細", "内向的", "規則重視"],
       fr: ["Méticuleux", "Responsable", "Perfectionniste", "Attentionné", "Sensible", "Introverti", "Respectueux des règles"],
       es: ["Meticuloso", "Responsable", "Perfeccionista", "Considerado", "Sensible", "Introvertido", "Respeta reglas"],
-      zh: ["一絲不苟", "責任感強", "完美主義", "體貼", "敏感", "內向", "遵守規則"],
-      cn: ["一丝不苟", "责任感强", "完美主义", "体贴", "敏感", "内向", "遵守规则"],
+      zh: ["一丝不苟", "责任感强", "完美主义", "体贴", "敏感", "内向", "遵守规则"],
     },
     strengths: {
       ko: ["높은 집중력", "꾸준한 노력", "세심한 배려", "신뢰성", "계획적 실행"],
@@ -156,8 +141,7 @@ const TYPE_DATA: Record<BloodType, TypeData> = {
       ja: ["高い集中力", "コツコツ努力", "細やかな配慮", "信頼性", "計画的な実行"],
       fr: ["Grande concentration", "Effort constant", "Attention aux détails", "Fiabilité", "Exécution organisée"],
       es: ["Alta concentración", "Esfuerzo constante", "Atención", "Confiabilidad", "Ejecución organizada"],
-      zh: ["高度專注", "持續努力", "細心體貼", "可靠性", "有條理執行"],
-      cn: ["高度专注", "持续努力", "细心体贴", "可靠性", "有条理执行"],
+      zh: ["高度专注", "持续努力", "细心体贴", "可靠性", "有条理执行"],
     },
     weaknesses: {
       ko: ["지나친 걱정", "융통성 부족", "스트레스에 취약", "변화 거부감", "자기비판 과도"],
@@ -165,8 +149,7 @@ const TYPE_DATA: Record<BloodType, TypeData> = {
       ja: ["心配しすぎ", "融通が利かない", "ストレスに弱い", "変化への抵抗", "過度な自己批判"],
       fr: ["Trop d'inquiétude", "Manque de flexibilité", "Sensible au stress", "Résistance au changement", "Autocritique excessive"],
       es: ["Preocupación excesiva", "Inflexibilidad", "Propenso al estrés", "Resistencia al cambio", "Autocrítica excesiva"],
-      zh: ["過度擔憂", "缺乏靈活性", "容易有壓力", "抗拒改變", "過度自我批評"],
-      cn: ["过度担忧", "缺乏灵活性", "容易有压力", "抗拒改变", "过度自我批评"],
+      zh: ["过度担忧", "缺乏灵活性", "容易有压力", "抗拒改变", "过度自我批评"],
     },
     compatibility: {
       ko: { best: "A형 · AB형", good: "O형", challenging: "B형" },
@@ -175,7 +158,6 @@ const TYPE_DATA: Record<BloodType, TypeData> = {
       fr: { best: "Groupe A · Groupe AB", good: "Groupe O", challenging: "Groupe B" },
       es: { best: "Tipo A · Tipo AB", good: "Tipo O", challenging: "Tipo B" },
       zh: { best: "A型・AB型", good: "O型", challenging: "B型" },
-      cn: { best: "A型・AB型", good: "O型", challenging: "B型" },
     },
     famous: ["Adolf Hitler", "George H. W. Bush", "Ayumi Hamasaki", "Soseki Natsume"],
   },
@@ -191,7 +173,6 @@ const TYPE_DATA: Record<BloodType, TypeData> = {
       fr: "Les personnes de groupe B sont des individualistes créatifs et libres. Curieux et passionnés, ils suivent leur propre chemin.",
       es: "Las personas de tipo B son individualistas creativos y libres. Curiosos y apasionados, tienden a seguir su propio camino.",
       zh: "B型人是創意十足、自由奔放的個人主義者。好奇心強、充滿熱情，傾向於走自己的路。",
-      cn: "B型人是创意十足、自由奔放的个人主义者。好奇心强、充满热情，倾向于走自己的路。",
     },
     traits: {
       ko: ["창의적", "열정적", "자유분방", "호기심 많음", "낙관적", "외향적", "자기중심적"],
@@ -200,7 +181,6 @@ const TYPE_DATA: Record<BloodType, TypeData> = {
       fr: ["Créatif", "Passionné", "Libre", "Curieux", "Optimiste", "Extraverti", "Centré sur soi"],
       es: ["Creativo", "Apasionado", "Libre", "Curioso", "Optimista", "Extrovertido", "Enfocado en sí mismo"],
       zh: ["富有創意", "充滿熱情", "自由奔放", "好奇心強", "樂觀", "外向", "以自我為中心"],
-      cn: ["富有创意", "充满热情", "自由奔放", "好奇心强", "乐观", "外向", "以自我为中心"],
     },
     strengths: {
       ko: ["강한 창의력", "높은 집중력(관심 분야)", "낙천적 에너지", "솔직함", "적응력"],
@@ -208,8 +188,7 @@ const TYPE_DATA: Record<BloodType, TypeData> = {
       ja: ["強い創造力", "高い集中力（興味分野）", "楽観的なエネルギー", "率直さ", "適応力"],
       fr: ["Grande créativité", "Concentration intense (intérêt)", "Énergie optimiste", "Honnêteté", "Adaptabilité"],
       es: ["Gran creatividad", "Concentración intensa", "Energía optimista", "Honestidad", "Adaptabilidad"],
-      zh: ["創造力強", "強烈專注力(感興趣領域)", "樂觀能量", "坦誠", "適應能力"],
-      cn: ["创造力强", "强烈专注力(感兴趣领域)", "乐观能量", "坦诚", "适应能力"],
+      zh: ["创造力强", "强烈专注力(感兴趣领域)", "乐观能量", "坦诚", "适应能力"],
     },
     weaknesses: {
       ko: ["끈기 부족", "자기중심적 경향", "규칙 무시", "산만함", "마무리 부족"],
@@ -217,8 +196,7 @@ const TYPE_DATA: Record<BloodType, TypeData> = {
       ja: ["継続力不足", "自己中心的な傾向", "ルール無視", "注意散漫", "締めくくりが甘い"],
       fr: ["Manque de persistance", "Tendances égocentristes", "Mépris des règles", "Distraction", "Mauvais suivi"],
       es: ["Falta de persistencia", "Tendencias egocéntricas", "Descuido de reglas", "Distracción", "Poco seguimiento"],
-      zh: ["缺乏堅持", "以自我為中心的傾向", "無視規則", "注意力不集中", "缺乏後續跟進"],
-      cn: ["缺乏坚持", "以自我为中心的倾向", "无视规则", "注意力不集中", "缺乏后续跟进"],
+      zh: ["缺乏坚持", "以自我为中心的倾向", "无视规则", "注意力不集中", "缺乏后续跟进"],
     },
     compatibility: {
       ko: { best: "B형 · AB형", good: "O형", challenging: "A형" },
@@ -227,7 +205,6 @@ const TYPE_DATA: Record<BloodType, TypeData> = {
       fr: { best: "Groupe B · Groupe AB", good: "Groupe O", challenging: "Groupe A" },
       es: { best: "Tipo B · Tipo AB", good: "Tipo O", challenging: "Tipo A" },
       zh: { best: "B型・AB型", good: "O型", challenging: "A型" },
-      cn: { best: "B型・AB型", good: "O型", challenging: "A型" },
     },
     famous: ["Paul McCartney", "Leonardo DiCaprio", "Jack Nicholson", "Akira Kurosawa"],
   },
@@ -242,8 +219,7 @@ const TYPE_DATA: Record<BloodType, TypeData> = {
       ja: "O型は社交的でリーダーシップの強い行動派です。目標志向で競争心が強く、他者を引っ張るのが得意です。",
       fr: "Les personnes de groupe O sont des leaders sociables et orientés action. Ambitieux et compétitifs, ils excellent à guider les autres.",
       es: "Las personas de tipo O son líderes sociables y orientados a la acción. Orientados a metas y competitivos, excelentes guiando a otros.",
-      zh: "O型人是善於社交、行動力強的領導者。目標導向、競爭心強，擅長引領他人。",
-      cn: "O型人是善于社交、行动力强的领导者。目标导向、竞争心强，擅长引领他人。",
+      zh: "O型人是善于社交、行动力强的领导者。目标导向、竞争心强，擅长引领他人。",
     },
     traits: {
       ko: ["사교적", "리더십", "행동파", "경쟁심", "자신감", "직관적", "현실적"],
@@ -251,8 +227,7 @@ const TYPE_DATA: Record<BloodType, TypeData> = {
       ja: ["社交的", "リーダーシップ", "行動派", "競争心", "自信家", "直感的", "現実的"],
       fr: ["Sociable", "Leadership", "Orienté action", "Compétitif", "Confiant", "Intuitif", "Réaliste"],
       es: ["Sociable", "Liderazgo", "Orientado a la acción", "Competitivo", "Confiado", "Intuitivo", "Realista"],
-      zh: ["善於社交", "領導力強", "行動導向", "好勝心強", "自信", "直覺敏銳", "現實主義"],
-      cn: ["善于社交", "领导力强", "行动导向", "好胜心强", "自信", "直觉敏锐", "现实主义"],
+      zh: ["善于社交", "领导力强", "行动导向", "好胜心强", "自信", "直觉敏锐", "现实主义"],
     },
     strengths: {
       ko: ["강한 추진력", "리더십", "넓은 사교성", "위기 대응력", "열정"],
@@ -260,8 +235,7 @@ const TYPE_DATA: Record<BloodType, TypeData> = {
       ja: ["強い推進力", "リーダーシップ", "広い社交性", "危機対応力", "情熱"],
       fr: ["Forte motivation", "Leadership", "Compétences sociales", "Gestion de crise", "Passion"],
       es: ["Fuerte impulso", "Liderazgo", "Habilidades sociales", "Respuesta a crisis", "Pasión"],
-      zh: ["強大的驅動力", "領導能力", "廣泛社交性", "危機應對力", "熱情"],
-      cn: ["强大的驱动力", "领导能力", "广泛社交性", "危机应对力", "热情"],
+      zh: ["强大的驱动力", "领导能力", "广泛社交性", "危机应对力", "热情"],
     },
     weaknesses: {
       ko: ["고집스러움", "질투심", "충동적", "타인 의견 무시", "독선적"],
@@ -269,8 +243,7 @@ const TYPE_DATA: Record<BloodType, TypeData> = {
       ja: ["頑固", "嫉妬心", "衝動的", "他者の意見を無視", "独善的"],
       fr: ["Entêtement", "Jalousie", "Impulsivité", "Ignorer les opinions", "Autosatisfaction"],
       es: ["Terquedad", "Celos", "Impulsividad", "Ignorar opiniones", "Autosuficiencia"],
-      zh: ["固執", "嫉妒心", "衝動", "忽視他人意見", "獨斷獨行"],
-      cn: ["固执", "嫉妒心", "冲动", "忽视他人意见", "独断独行"],
+      zh: ["固执", "嫉妒心", "冲动", "忽视他人意见", "独断独行"],
     },
     compatibility: {
       ko: { best: "O형 · A형", good: "AB형", challenging: "B형" },
@@ -279,7 +252,6 @@ const TYPE_DATA: Record<BloodType, TypeData> = {
       fr: { best: "Groupe O · Groupe A", good: "Groupe AB", challenging: "Groupe B" },
       es: { best: "Tipo O · Tipo A", good: "Tipo AB", challenging: "Tipo B" },
       zh: { best: "O型・A型", good: "AB型", challenging: "B型" },
-      cn: { best: "O型・A型", good: "AB型", challenging: "B型" },
     },
     famous: ["Barack Obama", "Queen Elizabeth II", "Elvis Presley", "John Lennon"],
   },
@@ -294,8 +266,7 @@ const TYPE_DATA: Record<BloodType, TypeData> = {
       ja: "AB型は理性的で独創的な二面性の持ち主です。A型の几帳面さとB型の自由さを同時に持ち、複雑で神秘的な性格を持ちます。",
       fr: "Les personnes AB sont rationnelles, originales et à double nature. Elles mélangent le souci du détail A et la liberté B, créant une personnalité complexe.",
       es: "Las personas AB son racionales, originales y de doble naturaleza. Mezclan el detallismo A con la libertad B, creando una personalidad compleja.",
-      zh: "AB型人理性、獨特，具有雙重性格。融合了A型的細心和B型的自由，形成了複雜而神秘的性格。",
-      cn: "AB型人理性、独特，具有双重性格。融合了A型的细心和B型的自由，形成了复杂而神秘的性格。",
+      zh: "AB型人理性、独特，具有双重性格。融合了A型的细心和B型的自由，形成了复杂而神秘的性格。",
     },
     traits: {
       ko: ["이성적", "독창적", "양면성", "냉정함", "분석적", "예술적", "복잡함"],
@@ -303,8 +274,7 @@ const TYPE_DATA: Record<BloodType, TypeData> = {
       ja: ["理性的", "独創的", "二面性", "冷静", "分析的", "芸術的", "複雑"],
       fr: ["Rationnel", "Original", "Double nature", "Sang-froid", "Analytique", "Artistique", "Complexe"],
       es: ["Racional", "Original", "Doble naturaleza", "Cabeza fría", "Analítico", "Artístico", "Complejo"],
-      zh: ["理性", "獨創", "雙重性格", "冷靜", "分析型", "藝術氣質", "複雜"],
-      cn: ["理性", "独创", "双重性格", "冷静", "分析型", "艺术气质", "复杂"],
+      zh: ["理性", "独创", "双重性格", "冷静", "分析型", "艺术气质", "复杂"],
     },
     strengths: {
       ko: ["탁월한 분석력", "창의적 문제 해결", "다양한 관점 수용", "중재 능력", "예술적 감성"],
@@ -312,8 +282,7 @@ const TYPE_DATA: Record<BloodType, TypeData> = {
       ja: ["卓越した分析力", "創造的問題解決", "多様な視点受容", "仲裁能力", "芸術的感性"],
       fr: ["Excellente analyse", "Résolution créative", "Perspectives multiples", "Médiation", "Sensibilité artistique"],
       es: ["Excelente análisis", "Resolución creativa", "Múltiples perspectivas", "Mediación", "Sensibilidad artística"],
-      zh: ["卓越分析力", "創意問題解決", "多角度思考", "調解能力", "藝術感性"],
-      cn: ["卓越分析力", "创意问题解决", "多角度思考", "调解能力", "艺术感性"],
+      zh: ["卓越分析力", "创意问题解决", "多角度思考", "调解能力", "艺术感性"],
     },
     weaknesses: {
       ko: ["우유부단", "내면 갈등", "거리감", "기분 변덕", "과도한 분석"],
@@ -321,8 +290,7 @@ const TYPE_DATA: Record<BloodType, TypeData> = {
       ja: ["優柔不断", "内面の葛藤", "距離感", "気分の浮き沈み", "過度な分析"],
       fr: ["Indécision", "Conflit intérieur", "Distance émotionnelle", "Sautes d'humeur", "Suranalyse"],
       es: ["Indecisión", "Conflicto interior", "Distancia emocional", "Cambios de humor", "Sobreanálisis"],
-      zh: ["優柔寡斷", "內心衝突", "情感疏離", "情緒不穩", "過度分析"],
-      cn: ["优柔寡断", "内心冲突", "情感疏离", "情绪不稳", "过度分析"],
+      zh: ["优柔寡断", "内心冲突", "情感疏离", "情绪不稳", "过度分析"],
     },
     compatibility: {
       ko: { best: "AB형 · O형", good: "A형", challenging: "B형" },
@@ -331,7 +299,6 @@ const TYPE_DATA: Record<BloodType, TypeData> = {
       fr: { best: "Groupe AB · Groupe O", good: "Groupe A", challenging: "Groupe B" },
       es: { best: "Tipo AB · Tipo O", good: "Tipo A", challenging: "Tipo B" },
       zh: { best: "AB型・O型", good: "A型", challenging: "B型" },
-      cn: { best: "AB型・O型", good: "A型", challenging: "B型" },
     },
     famous: ["Barack Obama (claim varies)", "John F. Kennedy", "Marilyn Monroe", "Miyazaki Hayao"],
   },
@@ -344,7 +311,6 @@ const COMPAT_LABEL: Record<Locale, { best: string; good: string; challenging: st
   fr: { best: "Meilleure compatibilité 💕", good: "Bonne compatibilité 👍", challenging: "Difficile ⚡" },
   es: { best: "Mejor compatibilidad 💕", good: "Buena compatibilidad 👍", challenging: "Difícil ⚡" },
   zh: { best: "最佳配對 💕", good: "良好配對 👍", challenging: "有挑戰性 ⚡" },
-  cn: { best: "最佳配对 💕", good: "良好配对 👍", challenging: "有挑战性 ⚡" },
 };
 
 export default function BloodTypePersonality({ locale }: Props) {
@@ -387,8 +353,7 @@ export default function BloodTypePersonality({ locale }: Props) {
             {locale === "ja" && "血液型性格診断は科学的に検証されていない大衆文化です。楽しみとしてご参考ください。"}
             {locale === "fr" && "La théorie de personnalité par groupe sanguin n'est pas scientifiquement validée. À titre de divertissement."}
             {locale === "es" && "La teoría de personalidad por tipo de sangre no está validada científicamente. Solo para entretenimiento."}
-            {locale === "zh" && "血型性格理論是大眾文化，並非科學驗證。僅供娛樂參考。"}
-            {locale === "cn" && "血型性格理论是大众文化，并非科学验证。仅供娱乐参考。"}
+            {locale === "zh" && "血型性格理论是大众文化，并非科学验证。仅供娱乐参考。"}
           </p>
         </div>
       </div>

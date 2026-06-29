@@ -22,89 +22,89 @@ const DIVIDEND_DATA: DividendStock[] = [
   // 한국 ETF (월배당)
   {
     ticker: "KODEX 미국S&P500TR",
-    name: { ko: "KODEX 미국S&P500TR", en: "KODEX US S&P500TR", ja: "KODEX 米国S&P500TR", fr: "KODEX US S&P500TR", es: "KODEX US S&P500TR", zh: "KODEX 美國S&P500TR", cn: "KODEX 美国S&P500TR" },
+    name: { ko: "KODEX 미국S&P500TR", en: "KODEX US S&P500TR", ja: "KODEX 米国S&P500TR", fr: "KODEX US S&P500TR", es: "KODEX US S&P500TR", zh: "KODEX 美国S&P500TR", },
     type: "kr-etf", frequency: "monthly", exDivDays: [25], dividendYield: "1.2%", currency: "KRW",
   },
   {
     ticker: "TIGER 미국배당다우존스",
-    name: { ko: "TIGER 미국배당다우존스", en: "TIGER US Dividend Dow Jones", ja: "TIGER 米国配当ダウジョーンズ", fr: "TIGER US Dividende Dow Jones", es: "TIGER Dividendo US Dow Jones", zh: "TIGER 美國股息道瓊斯", cn: "TIGER 美国股息道琼斯" },
+    name: { ko: "TIGER 미국배당다우존스", en: "TIGER US Dividend Dow Jones", ja: "TIGER 米国配当ダウジョーンズ", fr: "TIGER US Dividende Dow Jones", es: "TIGER Dividendo US Dow Jones", zh: "TIGER 美国股息道琼斯", },
     type: "kr-etf", frequency: "monthly", exDivDays: [25], dividendYield: "3.8%", currency: "KRW",
   },
   {
     ticker: "SOL 미국S&P500",
-    name: { ko: "SOL 미국S&P500", en: "SOL US S&P500", ja: "SOL 米国S&P500", fr: "SOL US S&P500", es: "SOL US S&P500", zh: "SOL 美國S&P500", cn: "SOL 美国S&P500" },
+    name: { ko: "SOL 미국S&P500", en: "SOL US S&P500", ja: "SOL 米国S&P500", fr: "SOL US S&P500", es: "SOL US S&P500", zh: "SOL 美国S&P500", },
     type: "kr-etf", frequency: "monthly", exDivDays: [25], dividendYield: "1.5%", currency: "KRW",
   },
   {
     ticker: "KODEX 배당성장",
-    name: { ko: "KODEX 배당성장", en: "KODEX Dividend Growth", ja: "KODEX 配当成長", fr: "KODEX Croissance Dividendes", es: "KODEX Crecimiento Dividendos", zh: "KODEX 股息成長", cn: "KODEX 股息成长" },
+    name: { ko: "KODEX 배당성장", en: "KODEX Dividend Growth", ja: "KODEX 配当成長", fr: "KODEX Croissance Dividendes", es: "KODEX Crecimiento Dividendos", zh: "KODEX 股息成长", },
     type: "kr-etf", frequency: "quarterly", exDivDays: [25], exDivMonths: [3, 6, 9, 12], dividendYield: "2.2%", currency: "KRW",
   },
   {
     ticker: "TIGER 코스피고배당",
-    name: { ko: "TIGER 코스피고배당", en: "TIGER KOSPI High Dividend", ja: "TIGER KOSPIハイ配当", fr: "TIGER KOSPI Haut Dividende", es: "TIGER KOSPI Alto Dividendo", zh: "TIGER 韓國高股息", cn: "TIGER 韩国高股息" },
+    name: { ko: "TIGER 코스피고배당", en: "TIGER KOSPI High Dividend", ja: "TIGER KOSPIハイ配当", fr: "TIGER KOSPI Haut Dividende", es: "TIGER KOSPI Alto Dividendo", zh: "TIGER 韩国高股息", },
     type: "kr-etf", frequency: "quarterly", exDivDays: [25], exDivMonths: [3, 6, 9, 12], dividendYield: "3.5%", currency: "KRW",
   },
   // 미국 ETF
   {
     ticker: "SCHD",
-    name: { ko: "슈왑 배당주 ETF", en: "Schwab US Dividend Equity ETF", ja: "シュワブ米国配当株ETF", fr: "Schwab ETF Actions à Dividende US", es: "Schwab ETF Acciones Dividendo US", zh: "嘉信美國股息股票ETF", cn: "嘉信美国股息股票ETF" },
+    name: { ko: "슈왑 배당주 ETF", en: "Schwab US Dividend Equity ETF", ja: "シュワブ米国配当株ETF", fr: "Schwab ETF Actions à Dividende US", es: "Schwab ETF Acciones Dividendo US", zh: "嘉信美国股息股票ETF", },
     type: "us-etf", frequency: "quarterly", exDivDays: [15], exDivMonths: [3, 6, 9, 12], dividendYield: "3.7%", currency: "USD",
   },
   {
     ticker: "VYM",
-    name: { ko: "뱅가드 고배당수익", en: "Vanguard High Dividend Yield ETF", ja: "バンガード高配当利回りETF", fr: "Vanguard ETF Haut Rendement Dividende", es: "Vanguard ETF Alto Rendimiento Dividendo", zh: "先鋒高股息收益ETF", cn: "先锋高股息收益ETF" },
+    name: { ko: "뱅가드 고배당수익", en: "Vanguard High Dividend Yield ETF", ja: "バンガード高配当利回りETF", fr: "Vanguard ETF Haut Rendement Dividende", es: "Vanguard ETF Alto Rendimiento Dividendo", zh: "先鋒高股息收益ETF", },
     type: "us-etf", frequency: "quarterly", exDivDays: [15], exDivMonths: [3, 6, 9, 12], dividendYield: "3.1%", currency: "USD",
   },
   {
     ticker: "JEPI",
-    name: { ko: "JP모건 프리미엄인컴", en: "JPMorgan Equity Premium Income ETF", ja: "JPモルガン株式プレミアムインカムETF", fr: "JPMorgan ETF Revenu Premium Actions", es: "JPMorgan ETF Ingresos Premium Acciones", zh: "摩根大通股票溢價收入ETF", cn: "摩根大通股票溢价收入ETF" },
+    name: { ko: "JP모건 프리미엄인컴", en: "JPMorgan Equity Premium Income ETF", ja: "JPモルガン株式プレミアムインカムETF", fr: "JPMorgan ETF Revenu Premium Actions", es: "JPMorgan ETF Ingresos Premium Acciones", zh: "摩根大通股票溢价收入ETF", },
     type: "us-etf", frequency: "monthly", exDivDays: [1], dividendYield: "7.2%", currency: "USD",
   },
   {
     ticker: "JEPQ",
-    name: { ko: "JP모건 나스닥 프리미엄인컴", en: "JPMorgan Nasdaq Equity Premium Income ETF", ja: "JPモルガンナスダック株式プレミアムインカムETF", fr: "JPMorgan ETF Revenu Premium Nasdaq", es: "JPMorgan ETF Ingresos Premium Nasdaq", zh: "摩根大通納斯達克溢價收入ETF", cn: "摩根大通纳斯达克溢价收入ETF" },
+    name: { ko: "JP모건 나스닥 프리미엄인컴", en: "JPMorgan Nasdaq Equity Premium Income ETF", ja: "JPモルガンナスダック株式プレミアムインカムETF", fr: "JPMorgan ETF Revenu Premium Nasdaq", es: "JPMorgan ETF Ingresos Premium Nasdaq", zh: "摩根大通纳斯达克溢价收入ETF", },
     type: "us-etf", frequency: "monthly", exDivDays: [1], dividendYield: "9.5%", currency: "USD",
   },
   {
     ticker: "QYLD",
-    name: { ko: "글로벌X 나스닥100 커버드콜 ETF", en: "Global X Nasdaq 100 Covered Call ETF", ja: "グローバルXナスダック100カバードコールETF", fr: "Global X ETF Couvert Nasdaq 100", es: "Global X ETF Cobertura Nasdaq 100", zh: "Global X 納斯達克100備兌買權ETF", cn: "Global X 纳斯达克100备兑买权ETF" },
+    name: { ko: "글로벌X 나스닥100 커버드콜 ETF", en: "Global X Nasdaq 100 Covered Call ETF", ja: "グローバルXナスダック100カバードコールETF", fr: "Global X ETF Couvert Nasdaq 100", es: "Global X ETF Cobertura Nasdaq 100", zh: "Global X 纳斯达克100备兑买权ETF", },
     type: "us-etf", frequency: "monthly", exDivDays: [15], dividendYield: "11.2%", currency: "USD",
   },
   // 미국 배당주
   {
     ticker: "O",
-    name: { ko: "리얼티 인컴", en: "Realty Income Corp", ja: "リアルティ・インカム", fr: "Realty Income Corp", es: "Realty Income Corp", zh: "房地產收入公司", cn: "房地产收入公司" },
+    name: { ko: "리얼티 인컴", en: "Realty Income Corp", ja: "リアルティ・インカム", fr: "Realty Income Corp", es: "Realty Income Corp", zh: "房地产收入公司", },
     type: "us-stock", frequency: "monthly", exDivDays: [1], dividendYield: "5.8%", currency: "USD",
   },
   {
     ticker: "T",
-    name: { ko: "AT&T", en: "AT&T Inc.", ja: "AT&T Inc.", fr: "AT&T Inc.", es: "AT&T Inc.", zh: "AT&T公司", cn: "AT&T公司" },
+    name: { ko: "AT&T", en: "AT&T Inc.", ja: "AT&T Inc.", fr: "AT&T Inc.", es: "AT&T Inc.", zh: "AT&T公司", },
     type: "us-stock", frequency: "quarterly", exDivDays: [8], exDivMonths: [1, 4, 7, 10], dividendYield: "6.2%", currency: "USD",
   },
   {
     ticker: "KO",
-    name: { ko: "코카콜라", en: "The Coca-Cola Company", ja: "コカ・コーラ", fr: "The Coca-Cola Company", es: "The Coca-Cola Company", zh: "可口可樂公司", cn: "可口可乐公司" },
+    name: { ko: "코카콜라", en: "The Coca-Cola Company", ja: "コカ・コーラ", fr: "The Coca-Cola Company", es: "The Coca-Cola Company", zh: "可口可樂公司", },
     type: "us-stock", frequency: "quarterly", exDivDays: [13], exDivMonths: [3, 6, 9, 12], dividendYield: "3.1%", currency: "USD",
   },
   {
     ticker: "JNJ",
-    name: { ko: "존슨앤드존슨", en: "Johnson & Johnson", ja: "ジョンソン・エンド・ジョンソン", fr: "Johnson & Johnson", es: "Johnson & Johnson", zh: "嬌生公司", cn: "强生公司" },
+    name: { ko: "존슨앤드존슨", en: "Johnson & Johnson", ja: "ジョンソン・エンド・ジョンソン", fr: "Johnson & Johnson", es: "Johnson & Johnson", zh: "嬌生公司", },
     type: "us-stock", frequency: "quarterly", exDivDays: [22], exDivMonths: [2, 5, 8, 11], dividendYield: "3.0%", currency: "USD",
   },
   {
     ticker: "PFE",
-    name: { ko: "화이자", en: "Pfizer Inc.", ja: "ファイザー", fr: "Pfizer Inc.", es: "Pfizer Inc.", zh: "輝瑞公司", cn: "辉瑞公司" },
+    name: { ko: "화이자", en: "Pfizer Inc.", ja: "ファイザー", fr: "Pfizer Inc.", es: "Pfizer Inc.", zh: "輝瑞公司", },
     type: "us-stock", frequency: "quarterly", exDivDays: [26], exDivMonths: [1, 4, 7, 10], dividendYield: "5.9%", currency: "USD",
   },
   {
     ticker: "ABBV",
-    name: { ko: "애브비", en: "AbbVie Inc.", ja: "アッヴィ", fr: "AbbVie Inc.", es: "AbbVie Inc.", zh: "艾伯維公司", cn: "艾伯维公司" },
+    name: { ko: "애브비", en: "AbbVie Inc.", ja: "アッヴィ", fr: "AbbVie Inc.", es: "AbbVie Inc.", zh: "艾伯維公司", },
     type: "us-stock", frequency: "quarterly", exDivDays: [12], exDivMonths: [1, 4, 7, 10], dividendYield: "3.8%", currency: "USD",
   },
   {
     ticker: "MO",
-    name: { ko: "알트리아", en: "Altria Group", ja: "アルトリア・グループ", fr: "Altria Group", es: "Altria Group", zh: "奧馳亞集團", cn: "奥驰亚集团" },
+    name: { ko: "알트리아", en: "Altria Group", ja: "アルトリア・グループ", fr: "Altria Group", es: "Altria Group", zh: "奧馳亞集團", },
     type: "us-stock", frequency: "quarterly", exDivDays: [13], exDivMonths: [3, 6, 9, 12], dividendYield: "8.4%", currency: "USD",
   },
 ];
@@ -208,18 +208,6 @@ const UI: Record<Locale, UIStrings> = {
     day: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
   },
   zh: {
-    title: "股息日曆", subtitle: "股息股票與ETF時間表",
-    filterAll: "全部", filterKrEtf: "韓國ETF", filterUsEtf: "美國ETF", filterUsStock: "美國股票",
-    prev: "‹", next: "›",
-    upcomingTitle: "本月股息安排",
-    noEvents: "本月無股息安排",
-    frequency: "派息頻率", yield: "股息收益率",
-    freqMonthly: "每月", freqQuarterly: "每季", freqAnnual: "每年",
-    exDivDate: "除息日",
-    close: "關閉",
-    day: ["日", "一", "二", "三", "四", "五", "六"],
-  },
-  cn: {
     title: "股息日历", subtitle: "股息股票与ETF时间表",
     filterAll: "全部", filterKrEtf: "韩国ETF", filterUsEtf: "美国ETF", filterUsStock: "美国股票",
     prev: "‹", next: "›",
@@ -248,7 +236,6 @@ const MONTH_NAMES: Record<Locale, string[]> = {
   fr: ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Aoû", "Sep", "Oct", "Nov", "Déc"],
   es: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
   zh: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
-  cn: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
 };
 
 // ─── Component ────────────────────────────────────────────────────────────────

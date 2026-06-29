@@ -2,33 +2,11 @@ import React, { useState } from 'react';
 import { GameContainer } from '@/components/ui/game/GamePrimitives';
 
 interface Props {
-    locale?: 'zh' | 'cn' | 'en';
+    locale?: 'zh' | 'en';
 }
 
 const labels = {
     zh: {
-        title: '中國個人所得稅計算機 2024',
-        desc: '輸入月薪，即時計算五險一金及個人所得稅（以上海/北京一般費率為參考）。',
-        monthlyGross: '月薪稅前（元）',
-        cityNote: '城市',
-        cityShanghai: '上海 / 北京（通用）',
-        housingFund: '公積金費率',
-        hf7: '7%（最低基準）',
-        hf12: '12%（常見企業）',
-        cardGross: '稅前月薪',
-        cardNet: '稅後到手',
-        cardAnnual: '年度到手（估算）',
-        insurance: '五險一金月扣（員工部分）',
-        pension: '養老保險 (8%)',
-        medical: '醫療保險 (2%)',
-        unemployment: '失業保險 (0.5%)',
-        housing: '住房公積金',
-        totalInsurance: '五險一金合計',
-        taxableIncome: '應納稅所得額（月）',
-        itMonthly: '個人所得稅（月）',
-        note: '* 以北京/上海2024年社保費率為基準，基數上限約36,549元/月。個稅採用累進稅率，年度匯算清繳時可能有退補稅。',
-    },
-    cn: {
         title: '中国个人所得税计算器 2024',
         desc: '输入月薪，即时计算五险一金及个人所得税（以上海/北京一般费率为参考）。',
         monthlyGross: '月薪税前（元）',
@@ -105,8 +83,8 @@ function calcMonthlyIIT(annualTaxable: number): number {
     return 0;
 }
 
-const ChinaSalaryCalculator: React.FC<Props> = ({ locale = 'cn' }) => {
-    const t = labels[locale === 'zh' ? 'zh' : locale === 'en' ? 'en' : 'cn'];
+const ChinaSalaryCalculator: React.FC<Props> = ({ locale = 'zh' }) => {
+    const t = labels[locale === 'en' ? 'en' : 'zh'];
 
     const [monthlyGross, setMonthlyGross] = useState(15_000);
     const [hfRate, setHfRate] = useState<0.07 | 0.12>(0.12);

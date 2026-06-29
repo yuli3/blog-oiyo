@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { GameContainer } from '../ui/game/GamePrimitives';
 
-type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh' | 'cn';
+type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh';
 type Mode = 'dday' | 'anniversary';
 
 interface Labels {
@@ -56,14 +56,6 @@ const L: Record<Locale, Labels> = {
     past: 'días pasados', future: 'días restantes', dayOf: '¡Hoy!',
   },
   zh: {
-    title: '紀念日・倒數計算機', subtitle: 'D-Day & Anniversary',
-    modeAnn: '紀念日', modeDday: '倒數日',
-    startDate: '開始日期', targetDate: '目標日期',
-    eventName: '事件名稱', dDayLabel: '倒數', daysLabel: '天',
-    milestones: '重要紀念日', today: '今天',
-    past: '天前', future: '天後', dayOf: '就是今天！',
-  },
-  cn: {
     title: '纪念日·倒计时计算器', subtitle: 'D-Day & Anniversary',
     modeAnn: '纪念日', modeDday: '倒计时',
     startDate: '开始日期', targetDate: '目标日期',
@@ -75,14 +67,14 @@ const L: Record<Locale, Labels> = {
 
 const MILESTONE_DAYS = [100, 200, 365, 500, 1000, 2000, 3000, 5000];
 const MILESTONE_LABELS: Record<string, Partial<Record<Locale, string>>> = {
-  '100': { ko: '100일', en: '100 days', ja: '100日', fr: '100 jours', es: '100 días', zh: '100天', cn: '100天' },
-  '200': { ko: '200일', en: '200 days', ja: '200日', fr: '200 jours', es: '200 días', zh: '200天', cn: '200天' },
-  '365': { ko: '1주년', en: '1 Year', ja: '1周年', fr: '1 an', es: '1 año', zh: '1週年', cn: '1周年' },
-  '500': { ko: '500일', en: '500 days', ja: '500日', fr: '500 jours', es: '500 días', zh: '500天', cn: '500天' },
-  '1000': { ko: '1000일', en: '1,000 days', ja: '1000日', fr: '1 000 jours', es: '1 000 días', zh: '1000天', cn: '1000天' },
-  '2000': { ko: '2000일', en: '2,000 days', ja: '2000日', fr: '2 000 jours', es: '2 000 días', zh: '2000天', cn: '2000天' },
-  '3000': { ko: '3000일', en: '3,000 days', ja: '3000日', fr: '3 000 jours', es: '3 000 días', zh: '3000天', cn: '3000天' },
-  '5000': { ko: '5000일', en: '5,000 days', ja: '5000日', fr: '5 000 jours', es: '5 000 días', zh: '5000天', cn: '5000天' },
+  '100': { ko: '100일', en: '100 days', ja: '100日', fr: '100 jours', es: '100 días', zh: '100天', },
+  '200': { ko: '200일', en: '200 days', ja: '200日', fr: '200 jours', es: '200 días', zh: '200天', },
+  '365': { ko: '1주년', en: '1 Year', ja: '1周年', fr: '1 an', es: '1 año', zh: '1周年', },
+  '500': { ko: '500일', en: '500 days', ja: '500日', fr: '500 jours', es: '500 días', zh: '500天', },
+  '1000': { ko: '1000일', en: '1,000 days', ja: '1000日', fr: '1 000 jours', es: '1 000 días', zh: '1000天', },
+  '2000': { ko: '2000일', en: '2,000 days', ja: '2000日', fr: '2 000 jours', es: '2 000 días', zh: '2000天', },
+  '3000': { ko: '3000일', en: '3,000 days', ja: '3000日', fr: '3 000 jours', es: '3 000 días', zh: '3000天', },
+  '5000': { ko: '5000일', en: '5,000 days', ja: '5000日', fr: '5 000 jours', es: '5 000 días', zh: '5000天', },
 };
 
 function toLocalDateStr(d: Date) {
@@ -106,7 +98,7 @@ function addDays(d: Date, n: number) {
 
 function formatDate(d: Date, locale: Locale) {
   const opts: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-  const localeMap: Record<Locale, string> = { ko: 'ko-KR', en: 'en-US', ja: 'ja-JP', fr: 'fr-FR', es: 'es-ES', zh: 'zh-TW', cn: 'zh-CN' };
+  const localeMap: Record<Locale, string> = { ko: 'ko-KR', en: 'en-US', ja: 'ja-JP', fr: 'fr-FR', es: 'es-ES', zh: 'zh-CN', };
   return new Intl.DateTimeFormat(localeMap[locale], opts).format(d);
 }
 

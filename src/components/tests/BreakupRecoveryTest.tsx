@@ -28,13 +28,12 @@ const QUESTIONS: Question[] = [
       fr: "Que souhaitez-vous faire en premier après une rupture ?",
       es: "¿Qué es lo primero que quieres hacer después de una ruptura?",
       zh: "分手后你最想做的第一件事是什么？",
-      cn: "分手後你最想做的第一件事是什麼？",
     },
     options: [
-      { text: { ko: "실컷 울고 싶다", en: "Cry it all out", ja: "思いきり泣きたい", fr: "Pleurer à chaudes larmes", es: "Llorar todo lo que pueda", zh: "痛痛快快地哭一场", cn: "痛痛快快地哭一場" }, type: "stormy" },
-      { text: { ko: "일기를 쓰며 정리하고 싶다", en: "Write in my journal to process it", ja: "日記を書いて整理したい", fr: "Écrire dans mon journal pour y voir clair", es: "Escribir en mi diario para procesarlo", zh: "写日记整理思绪", cn: "寫日記整理思緒" }, type: "growth" },
-      { text: { ko: "혼자 있고 싶다", en: "Be alone for a while", ja: "一人でいたい", fr: "Rester seul(e) un moment", es: "Estar solo/a por un tiempo", zh: "想独处一段时间", cn: "想獨處一段時間" }, type: "solitary" },
-      { text: { ko: "여행을 떠나고 싶다", en: "Go on a trip", ja: "旅に出たい", fr: "Partir en voyage", es: "Irme de viaje", zh: "想去旅行", cn: "想去旅行" }, type: "transformer" },
+      { text: { ko: "실컷 울고 싶다", en: "Cry it all out", ja: "思いきり泣きたい", fr: "Pleurer à chaudes larmes", es: "Llorar todo lo que pueda", zh: "痛痛快快地哭一场", }, type: "stormy" },
+      { text: { ko: "일기를 쓰며 정리하고 싶다", en: "Write in my journal to process it", ja: "日記を書いて整理したい", fr: "Écrire dans mon journal pour y voir clair", es: "Escribir en mi diario para procesarlo", zh: "写日记整理思绪", }, type: "growth" },
+      { text: { ko: "혼자 있고 싶다", en: "Be alone for a while", ja: "一人でいたい", fr: "Rester seul(e) un moment", es: "Estar solo/a por un tiempo", zh: "想独处一段时间", }, type: "solitary" },
+      { text: { ko: "여행을 떠나고 싶다", en: "Go on a trip", ja: "旅に出たい", fr: "Partir en voyage", es: "Irme de viaje", zh: "想去旅行", }, type: "transformer" },
     ],
   },
   {
@@ -46,13 +45,12 @@ const QUESTIONS: Question[] = [
       fr: "Quel est le moment le plus difficile après une rupture ?",
       es: "¿Cuál es el momento más difícil después de una ruptura?",
       zh: "分手后最难熬的时刻是？",
-      cn: "分手後最難熬的時刻是？",
     },
     options: [
-      { text: { ko: "분노와 슬픔이 교차할 때", en: "When anger and sadness alternate", ja: "怒りと悲しみが交差するとき", fr: "Quand la colère et la tristesse alternent", es: "Cuando la ira y la tristeza se alternan", zh: "愤怒和悲伤交替出现时", cn: "憤怒和悲傷交替出現時" }, type: "stormy" },
-      { text: { ko: "왜 이렇게 됐는지 이해하려 할 때", en: "When I try to understand why it happened", ja: "なぜこうなったか理解しようとするとき", fr: "Quand j'essaie de comprendre pourquoi ça s'est passé", es: "Cuando intento entender por qué pasó", zh: "试图理解为什么会这样时", cn: "試圖理解為什麼會這樣時" }, type: "growth" },
-      { text: { ko: "아무도 이해 못할 것 같은 외로움", en: "Loneliness that no one seems to understand", ja: "誰も理解できないような孤独感", fr: "La solitude que personne ne semble comprendre", es: "La soledad que nadie parece entender", zh: "无人理解的孤独感", cn: "無人理解的孤獨感" }, type: "solitary" },
-      { text: { ko: "일상이 텅 빈 느낌이 들 때", en: "When my daily routine feels empty", ja: "日常が空虚に感じるとき", fr: "Quand ma routine quotidienne semble vide", es: "Cuando mi rutina diaria parece vacía", zh: "日常生活感到空洞时", cn: "日常生活感到空洞時" }, type: "transformer" },
+      { text: { ko: "분노와 슬픔이 교차할 때", en: "When anger and sadness alternate", ja: "怒りと悲しみが交差するとき", fr: "Quand la colère et la tristesse alternent", es: "Cuando la ira y la tristeza se alternan", zh: "愤怒和悲伤交替出现时", }, type: "stormy" },
+      { text: { ko: "왜 이렇게 됐는지 이해하려 할 때", en: "When I try to understand why it happened", ja: "なぜこうなったか理解しようとするとき", fr: "Quand j'essaie de comprendre pourquoi ça s'est passé", es: "Cuando intento entender por qué pasó", zh: "试图理解为什么会这样时", }, type: "growth" },
+      { text: { ko: "아무도 이해 못할 것 같은 외로움", en: "Loneliness that no one seems to understand", ja: "誰も理解できないような孤独感", fr: "La solitude que personne ne semble comprendre", es: "La soledad que nadie parece entender", zh: "无人理解的孤独感", }, type: "solitary" },
+      { text: { ko: "일상이 텅 빈 느낌이 들 때", en: "When my daily routine feels empty", ja: "日常が空虚に感じるとき", fr: "Quand ma routine quotidienne semble vide", es: "Cuando mi rutina diaria parece vacía", zh: "日常生活感到空洞时", }, type: "transformer" },
     ],
   },
   {
@@ -64,13 +62,12 @@ const QUESTIONS: Question[] = [
       fr: "Quand un ami vous contacte après votre rupture, vous :",
       es: "Cuando un amigo te contacta después de tu ruptura, tú:",
       zh: "当朋友听说你分手后联系你时，你会？",
-      cn: "當朋友聽說你分手後聯繫你時，你會？",
     },
     options: [
-      { text: { ko: "모든 걸 털어놓고 감정을 쏟아낸다", en: "Pour out all my feelings", ja: "すべてを打ち明けて感情を吐き出す", fr: "Tout déverser et exprimer mes émotions", es: "Desahogarme y expresar todos mis sentimientos", zh: "倾诉一切，宣泄情绪", cn: "傾訴一切，宣洩情緒" }, type: "stormy" },
-      { text: { ko: "무슨 일이 있었는지 차분하게 정리해서 말한다", en: "Calmly explain what happened", ja: "何があったか落ち着いて整理して話す", fr: "Expliquer calmement ce qui s'est passé", es: "Explicar tranquilamente lo que pasó", zh: "平静地梳理并讲述发生了什么", cn: "平靜地梳理並講述發生了什麼" }, type: "growth" },
-      { text: { ko: "\"괜찮아\"라고 하고 혼자 정리한다", en: "Say 'I'm fine' and process it alone", ja: "「大丈夫」と言って一人で整理する", fr: "Dire « ça va » et le traiter seul(e)", es: "Decir 'estoy bien' y procesarlo solo/a", zh: "说「我没事」然后独自消化", cn: "說「我沒事」然後獨自消化" }, type: "solitary" },
-      { text: { ko: "같이 뭔가 하자고 제안한다 (운동, 쇼핑 등)", en: "Suggest doing something together (gym, shopping, etc.)", ja: "一緒に何かしようと提案する（運動、ショッピングなど）", fr: "Proposer de faire quelque chose ensemble (sport, shopping…)", es: "Sugerir hacer algo juntos (gym, compras, etc.)", zh: "提议一起做些事（运动、购物等）", cn: "提議一起做些事（運動、購物等）" }, type: "transformer" },
+      { text: { ko: "모든 걸 털어놓고 감정을 쏟아낸다", en: "Pour out all my feelings", ja: "すべてを打ち明けて感情を吐き出す", fr: "Tout déverser et exprimer mes émotions", es: "Desahogarme y expresar todos mis sentimientos", zh: "倾诉一切，宣泄情绪", }, type: "stormy" },
+      { text: { ko: "무슨 일이 있었는지 차분하게 정리해서 말한다", en: "Calmly explain what happened", ja: "何があったか落ち着いて整理して話す", fr: "Expliquer calmement ce qui s'est passé", es: "Explicar tranquilamente lo que pasó", zh: "平静地梳理并讲述发生了什么", }, type: "growth" },
+      { text: { ko: "\"괜찮아\"라고 하고 혼자 정리한다", en: "Say 'I'm fine' and process it alone", ja: "「大丈夫」と言って一人で整理する", fr: "Dire « ça va » et le traiter seul(e)", es: "Decir 'estoy bien' y procesarlo solo/a", zh: "说「我没事」然后独自消化", }, type: "solitary" },
+      { text: { ko: "같이 뭔가 하자고 제안한다 (운동, 쇼핑 등)", en: "Suggest doing something together (gym, shopping, etc.)", ja: "一緒に何かしようと提案する（運動、ショッピングなど）", fr: "Proposer de faire quelque chose ensemble (sport, shopping…)", es: "Sugerir hacer algo juntos (gym, compras, etc.)", zh: "提议一起做些事（运动、购物等）", }, type: "transformer" },
     ],
   },
   {
@@ -82,13 +79,12 @@ const QUESTIONS: Question[] = [
       fr: "Qu'est-ce qui vous décrit le mieux après une rupture ?",
       es: "¿Qué te describe mejor después de una ruptura?",
       zh: "分手后哪个最能形容你？",
-      cn: "分手後哪個最能形容你？",
     },
     options: [
-      { text: { ko: "폭풍처럼 감정이 요동친다", en: "My emotions surge like a storm", ja: "嵐のように感情が揺れる", fr: "Mes émotions déferlent comme une tempête", es: "Mis emociones se agitan como una tormenta", zh: "情绪如暴风雨般汹涌", cn: "情緒如暴風雨般洶湧" }, type: "stormy" },
-      { text: { ko: "자신을 돌아보고 성찰한다", en: "I reflect and look inward", ja: "自分を振り返って内省する", fr: "Je réfléchis et me remets en question", es: "Reflexiono e introspecciono", zh: "反省自我，深刻内省", cn: "反省自我，深刻內省" }, type: "growth" },
-      { text: { ko: "혼자 조용히 시간을 보낸다", en: "I spend quiet time alone", ja: "一人で静かに時間を過ごす", fr: "Je passe du temps seul(e) et tranquille", es: "Paso tiempo tranquilo/a solo/a", zh: "独自安静地度过时光", cn: "獨自安靜地度過時光" }, type: "solitary" },
-      { text: { ko: "새로운 취미나 활동을 찾는다", en: "I search for new hobbies or activities", ja: "新しい趣味や活動を探す", fr: "Je cherche de nouveaux loisirs ou activités", es: "Busco nuevos pasatiempos o actividades", zh: "寻找新的爱好或活动", cn: "尋找新的愛好或活動" }, type: "transformer" },
+      { text: { ko: "폭풍처럼 감정이 요동친다", en: "My emotions surge like a storm", ja: "嵐のように感情が揺れる", fr: "Mes émotions déferlent comme une tempête", es: "Mis emociones se agitan como una tormenta", zh: "情绪如暴风雨般汹涌", }, type: "stormy" },
+      { text: { ko: "자신을 돌아보고 성찰한다", en: "I reflect and look inward", ja: "自分を振り返って内省する", fr: "Je réfléchis et me remets en question", es: "Reflexiono e introspecciono", zh: "反省自我，深刻内省", }, type: "growth" },
+      { text: { ko: "혼자 조용히 시간을 보낸다", en: "I spend quiet time alone", ja: "一人で静かに時間を過ごす", fr: "Je passe du temps seul(e) et tranquille", es: "Paso tiempo tranquilo/a solo/a", zh: "独自安静地度过时光", }, type: "solitary" },
+      { text: { ko: "새로운 취미나 활동을 찾는다", en: "I search for new hobbies or activities", ja: "新しい趣味や活動を探す", fr: "Je cherche de nouveaux loisirs ou activités", es: "Busco nuevos pasatiempos o actividades", zh: "寻找新的爱好或活动", }, type: "transformer" },
     ],
   },
   {
@@ -100,13 +96,12 @@ const QUESTIONS: Question[] = [
       fr: "Si vous voyez les réseaux sociaux de votre ex, vous :",
       es: "Si ves las redes sociales de tu ex, tú:",
       zh: "当你看到前任的社交媒体时，你会？",
-      cn: "當你看到前任的社交媒體時，你會？",
     },
     options: [
-      { text: { ko: "마음이 뒤흔들려 한동안 힘들다", en: "Get shaken up and struggle for a while", ja: "心が揺れてしばらく辛くなる", fr: "Être bouleversé(e) et avoir du mal pendant un moment", es: "Me sacudo y me cuesta por un tiempo", zh: "内心动荡，难受很久", cn: "內心動盪，難受很久" }, type: "stormy" },
-      { text: { ko: "보지 않는 게 낫다고 생각하며 차단한다", en: "Think it's better not to see it and block them", ja: "見ない方がいいと考えてブロックする", fr: "Décider qu'il vaut mieux ne pas le voir et les bloquer", es: "Pensar que es mejor no verlo y bloquearlos", zh: "认为最好不看并屏蔽对方", cn: "認為最好不看並封鎖對方" }, type: "growth" },
-      { text: { ko: "무감각하게 보고 그냥 덮는다", en: "Look at it numbly and close it", ja: "無感覚に見てそのまま閉じる", fr: "Le regarder sans émotion et fermer", es: "Mirarlo sin emoción y cerrarlo", zh: "麻木地看完然后关掉", cn: "麻木地看完然後關掉" }, type: "solitary" },
-      { text: { ko: "나도 뭔가 올리고 싶어진다 (나의 근황 업데이트)", en: "Feel like posting something about myself too", ja: "自分も何か投稿したくなる（自分の近況更新）", fr: "Avoir envie de poster quelque chose sur moi aussi", es: "Querer publicar algo sobre mí también", zh: "想发一条自己的动态", cn: "想發一條自己的動態" }, type: "transformer" },
+      { text: { ko: "마음이 뒤흔들려 한동안 힘들다", en: "Get shaken up and struggle for a while", ja: "心が揺れてしばらく辛くなる", fr: "Être bouleversé(e) et avoir du mal pendant un moment", es: "Me sacudo y me cuesta por un tiempo", zh: "内心动荡，难受很久", }, type: "stormy" },
+      { text: { ko: "보지 않는 게 낫다고 생각하며 차단한다", en: "Think it's better not to see it and block them", ja: "見ない方がいいと考えてブロックする", fr: "Décider qu'il vaut mieux ne pas le voir et les bloquer", es: "Pensar que es mejor no verlo y bloquearlos", zh: "认为最好不看并屏蔽对方", }, type: "growth" },
+      { text: { ko: "무감각하게 보고 그냥 덮는다", en: "Look at it numbly and close it", ja: "無感覚に見てそのまま閉じる", fr: "Le regarder sans émotion et fermer", es: "Mirarlo sin emoción y cerrarlo", zh: "麻木地看完然后关掉", }, type: "solitary" },
+      { text: { ko: "나도 뭔가 올리고 싶어진다 (나의 근황 업데이트)", en: "Feel like posting something about myself too", ja: "自分も何か投稿したくなる（自分の近況更新）", fr: "Avoir envie de poster quelque chose sur moi aussi", es: "Querer publicar algo sobre mí también", zh: "想发一条自己的动态", }, type: "transformer" },
     ],
   },
   {
@@ -118,13 +113,12 @@ const QUESTIONS: Question[] = [
       fr: "De quoi avez-vous le plus besoin après une rupture ?",
       es: "¿Qué necesitas más después de una ruptura?",
       zh: "分手后你最需要的是什么？",
-      cn: "分手後你最需要的是什麼？",
     },
     options: [
-      { text: { ko: "감정을 표현할 공간과 사람", en: "Space and people to express emotions", ja: "感情を表現できる場所と人", fr: "Un espace et des gens pour exprimer ses émotions", es: "Espacio y personas para expresar emociones", zh: "能表达情绪的空间和人", cn: "能表達情緒的空間和人" }, type: "stormy" },
-      { text: { ko: "이별의 의미를 깨닫는 성찰 시간", en: "Time to reflect on the meaning of the breakup", ja: "別れの意味を悟る内省の時間", fr: "Du temps pour réfléchir au sens de la rupture", es: "Tiempo para reflexionar sobre el significado de la ruptura", zh: "领悟分手意义的反思时间", cn: "領悟分手意義的反思時間" }, type: "growth" },
-      { text: { ko: "아무 방해 없는 고요한 시간", en: "Quiet time without any interruptions", ja: "邪魔のない静かな時間", fr: "Du calme sans aucune interruption", es: "Tiempo tranquilo sin interrupciones", zh: "不受打扰的安静时光", cn: "不受打擾的安靜時光" }, type: "solitary" },
-      { text: { ko: "새로운 도전과 자극", en: "New challenges and stimulation", ja: "新たな挑戦と刺激", fr: "De nouveaux défis et de la stimulation", es: "Nuevos desafíos y estimulación", zh: "新的挑战和刺激", cn: "新的挑戰和刺激" }, type: "transformer" },
+      { text: { ko: "감정을 표현할 공간과 사람", en: "Space and people to express emotions", ja: "感情を表現できる場所と人", fr: "Un espace et des gens pour exprimer ses émotions", es: "Espacio y personas para expresar emociones", zh: "能表达情绪的空间和人", }, type: "stormy" },
+      { text: { ko: "이별의 의미를 깨닫는 성찰 시간", en: "Time to reflect on the meaning of the breakup", ja: "別れの意味を悟る内省の時間", fr: "Du temps pour réfléchir au sens de la rupture", es: "Tiempo para reflexionar sobre el significado de la ruptura", zh: "领悟分手意义的反思时间", }, type: "growth" },
+      { text: { ko: "아무 방해 없는 고요한 시간", en: "Quiet time without any interruptions", ja: "邪魔のない静かな時間", fr: "Du calme sans aucune interruption", es: "Tiempo tranquilo sin interrupciones", zh: "不受打扰的安静时光", }, type: "solitary" },
+      { text: { ko: "새로운 도전과 자극", en: "New challenges and stimulation", ja: "新たな挑戦と刺激", fr: "De nouveaux défis et de la stimulation", es: "Nuevos desafíos y estimulación", zh: "新的挑战和刺激", }, type: "transformer" },
     ],
   },
   {
@@ -136,13 +130,12 @@ const QUESTIONS: Question[] = [
       fr: "Une semaine après la rupture, vous êtes :",
       es: "Una semana después de la ruptura, tú eres:",
       zh: "分手一周后，你是？",
-      cn: "分手一週後，你是？",
     },
     options: [
-      { text: { ko: "아직도 격렬한 감정의 파도 속에 있다", en: "Still in waves of intense emotion", ja: "まだ激しい感情の波の中にいる", fr: "Encore dans des vagues d'émotions intenses", es: "Todavía en olas de emociones intensas", zh: "仍在激烈的情绪波涛中", cn: "仍在激烈的情緒波濤中" }, type: "stormy" },
-      { text: { ko: "관계에서 배운 점을 정리하고 있다", en: "Organizing what I learned from the relationship", ja: "関係から学んだことを整理している", fr: "En train d'organiser ce que j'ai appris de la relation", es: "Organizando lo que aprendí de la relación", zh: "整理从这段关系中学到的东西", cn: "整理從這段關係中學到的東西" }, type: "growth" },
-      { text: { ko: "조용히 일상을 유지하고 있다", en: "Quietly maintaining my daily routine", ja: "静かに日常を維持している", fr: "En train de maintenir calmement ma routine quotidienne", es: "Manteniendo tranquilamente mi rutina diaria", zh: "安静地维持日常生活", cn: "安靜地維持日常生活" }, type: "solitary" },
-      { text: { ko: "이미 뭔가 새로운 걸 시작했다", en: "Already started something new", ja: "すでに何か新しいことを始めた", fr: "J'ai déjà commencé quelque chose de nouveau", es: "Ya empecé algo nuevo", zh: "已经开始了新的事情", cn: "已經開始了新的事情" }, type: "transformer" },
+      { text: { ko: "아직도 격렬한 감정의 파도 속에 있다", en: "Still in waves of intense emotion", ja: "まだ激しい感情の波の中にいる", fr: "Encore dans des vagues d'émotions intenses", es: "Todavía en olas de emociones intensas", zh: "仍在激烈的情绪波涛中", }, type: "stormy" },
+      { text: { ko: "관계에서 배운 점을 정리하고 있다", en: "Organizing what I learned from the relationship", ja: "関係から学んだことを整理している", fr: "En train d'organiser ce que j'ai appris de la relation", es: "Organizando lo que aprendí de la relación", zh: "整理从这段关系中学到的东西", }, type: "growth" },
+      { text: { ko: "조용히 일상을 유지하고 있다", en: "Quietly maintaining my daily routine", ja: "静かに日常を維持している", fr: "En train de maintenir calmement ma routine quotidienne", es: "Manteniendo tranquilamente mi rutina diaria", zh: "安静地维持日常生活", }, type: "solitary" },
+      { text: { ko: "이미 뭔가 새로운 걸 시작했다", en: "Already started something new", ja: "すでに何か新しいことを始めた", fr: "J'ai déjà commencé quelque chose de nouveau", es: "Ya empecé algo nuevo", zh: "已经开始了新的事情", }, type: "transformer" },
     ],
   },
   {
@@ -154,13 +147,12 @@ const QUESTIONS: Question[] = [
       fr: "Quelle est votre attitude fondamentale face aux ruptures ?",
       es: "¿Cuál es tu actitud básica hacia las rupturas?",
       zh: "你对分手的基本态度是？",
-      cn: "你對分手的基本態度是？",
     },
     options: [
-      { text: { ko: "이별은 언제나 아프고 격렬한 경험이다", en: "Breakups are always painful and intense", ja: "別れはいつも痛くて激しい経験だ", fr: "Les ruptures sont toujours douloureuses et intenses", es: "Las rupturas siempre son dolorosas e intensas", zh: "分手永远是痛苦而激烈的体验", cn: "分手永遠是痛苦而激烈的體驗" }, type: "stormy" },
-      { text: { ko: "이별은 성장의 기회다", en: "Breakups are opportunities for growth", ja: "別れは成長の機会だ", fr: "Les ruptures sont des opportunités de croissance", es: "Las rupturas son oportunidades de crecimiento", zh: "分手是成长的机会", cn: "分手是成長的機會" }, type: "growth" },
-      { text: { ko: "이별 후엔 혼자 시간이 필요하다", en: "I need alone time after a breakup", ja: "別れた後は一人の時間が必要だ", fr: "J'ai besoin de temps seul(e) après une rupture", es: "Necesito tiempo solo/a después de una ruptura", zh: "分手后需要独处时间", cn: "分手後需要獨處時間" }, type: "solitary" },
-      { text: { ko: "이별은 새로운 시작의 신호다", en: "A breakup is a signal for a new beginning", ja: "別れは新しい始まりのサインだ", fr: "Une rupture est un signal pour un nouveau départ", es: "Una ruptura es una señal para un nuevo comienzo", zh: "分手是新开始的信号", cn: "分手是新開始的信號" }, type: "transformer" },
+      { text: { ko: "이별은 언제나 아프고 격렬한 경험이다", en: "Breakups are always painful and intense", ja: "別れはいつも痛くて激しい経験だ", fr: "Les ruptures sont toujours douloureuses et intenses", es: "Las rupturas siempre son dolorosas e intensas", zh: "分手永远是痛苦而激烈的体验", }, type: "stormy" },
+      { text: { ko: "이별은 성장의 기회다", en: "Breakups are opportunities for growth", ja: "別れは成長の機会だ", fr: "Les ruptures sont des opportunités de croissance", es: "Las rupturas son oportunidades de crecimiento", zh: "分手是成长的机会", }, type: "growth" },
+      { text: { ko: "이별 후엔 혼자 시간이 필요하다", en: "I need alone time after a breakup", ja: "別れた後は一人の時間が必要だ", fr: "J'ai besoin de temps seul(e) après une rupture", es: "Necesito tiempo solo/a después de una ruptura", zh: "分手后需要独处时间", }, type: "solitary" },
+      { text: { ko: "이별은 새로운 시작의 신호다", en: "A breakup is a signal for a new beginning", ja: "別れは新しい始まりのサインだ", fr: "Une rupture est un signal pour un nouveau départ", es: "Una ruptura es una señal para un nuevo comienzo", zh: "分手是新开始的信号", }, type: "transformer" },
     ],
   },
   {
@@ -172,13 +164,12 @@ const QUESTIONS: Question[] = [
       fr: "Quand vous n'arrivez pas à dormir après une rupture, vous :",
       es: "Cuando no puedes dormir después de una ruptura, tú:",
       zh: "分手后失眠时，你会？",
-      cn: "分手後失眠時，你會？",
     },
     options: [
-      { text: { ko: "음악을 크게 틀거나 감정적인 영화를 본다", en: "Blast music or watch emotional movies", ja: "音楽を大きくかけたり感情的な映画を見る", fr: "Mettre de la musique fort ou regarder des films émouvants", es: "Poner música a todo volumen o ver películas emotivas", zh: "大声放音乐或看感人的电影", cn: "大聲放音樂或看感人的電影" }, type: "stormy" },
-      { text: { ko: "생각을 정리하며 메모를 한다", en: "Organize my thoughts and take notes", ja: "考えを整理しながらメモをとる", fr: "Organiser mes pensées et prendre des notes", es: "Organizar mis pensamientos y tomar notas", zh: "整理思绪并做笔记", cn: "整理思緒並做筆記" }, type: "growth" },
-      { text: { ko: "그냥 조용히 천장을 바라본다", en: "Just stare at the ceiling quietly", ja: "ただ静かに天井を見つめる", fr: "Fixer le plafond tranquillement", es: "Solo mirar el techo en silencio", zh: "静静地盯着天花板", cn: "靜靜地盯著天花板" }, type: "solitary" },
-      { text: { ko: "내일 할 계획이나 목표를 세운다", en: "Plan tomorrow's goals or activities", ja: "明日の計画や目標を立てる", fr: "Planifier les objectifs ou activités de demain", es: "Planificar las metas o actividades de mañana", zh: "制定明天的计划或目标", cn: "制定明天的計劃或目標" }, type: "transformer" },
+      { text: { ko: "음악을 크게 틀거나 감정적인 영화를 본다", en: "Blast music or watch emotional movies", ja: "音楽を大きくかけたり感情的な映画を見る", fr: "Mettre de la musique fort ou regarder des films émouvants", es: "Poner música a todo volumen o ver películas emotivas", zh: "大声放音乐或看感人的电影", }, type: "stormy" },
+      { text: { ko: "생각을 정리하며 메모를 한다", en: "Organize my thoughts and take notes", ja: "考えを整理しながらメモをとる", fr: "Organiser mes pensées et prendre des notes", es: "Organizar mis pensamientos y tomar notas", zh: "整理思绪并做笔记", }, type: "growth" },
+      { text: { ko: "그냥 조용히 천장을 바라본다", en: "Just stare at the ceiling quietly", ja: "ただ静かに天井を見つめる", fr: "Fixer le plafond tranquillement", es: "Solo mirar el techo en silencio", zh: "静静地盯着天花板", }, type: "solitary" },
+      { text: { ko: "내일 할 계획이나 목표를 세운다", en: "Plan tomorrow's goals or activities", ja: "明日の計画や目標を立てる", fr: "Planifier les objectifs ou activités de demain", es: "Planificar las metas o actividades de mañana", zh: "制定明天的计划或目标", }, type: "transformer" },
     ],
   },
   {
@@ -190,13 +181,12 @@ const QUESTIONS: Question[] = [
       fr: "Un mois après la rupture, dans quel état souhaitez-vous être ?",
       es: "Un mes después de la ruptura, ¿en qué estado esperas estar?",
       zh: "分手一个月后，你希望自己是什么状态？",
-      cn: "分手一個月後，你希望自己是什麼狀態？",
     },
     options: [
-      { text: { ko: "감정이 정화되어 가벼워진 상태", en: "Emotionally purged and lighter", ja: "感情が浄化されて軽くなった状態", fr: "Émotionnellement purgé(e) et plus léger(ère)", es: "Emocionalmente purificado/a y más ligero/a", zh: "情绪得到净化，轻松自在", cn: "情緒得到淨化，輕鬆自在" }, type: "stormy" },
-      { text: { ko: "더 나은 나로 성장해있는 상태", en: "Grown into a better version of myself", ja: "より良い自分に成長している状態", fr: "Évolué(e) vers une meilleure version de moi-même", es: "Habiendo crecido hacia una mejor versión de mí", zh: "成长为更好的自己", cn: "成長為更好的自己" }, type: "growth" },
-      { text: { ko: "평온하고 안정된 내면의 상태", en: "At peace with a stable inner state", ja: "穏やかで安定した内面の状態", fr: "Serein(e) avec un état intérieur stable", es: "En paz con un estado interior estable", zh: "内心平静安定", cn: "內心平靜安定" }, type: "solitary" },
-      { text: { ko: "새로운 삶의 방향이 잡힌 상태", en: "Having found a new direction in life", ja: "新しい人生の方向性が定まった状態", fr: "Avoir trouvé une nouvelle direction dans la vie", es: "Habiendo encontrado una nueva dirección en la vida", zh: "找到了人生新方向", cn: "找到了人生新方向" }, type: "transformer" },
+      { text: { ko: "감정이 정화되어 가벼워진 상태", en: "Emotionally purged and lighter", ja: "感情が浄化されて軽くなった状態", fr: "Émotionnellement purgé(e) et plus léger(ère)", es: "Emocionalmente purificado/a y más ligero/a", zh: "情绪得到净化，轻松自在", }, type: "stormy" },
+      { text: { ko: "더 나은 나로 성장해있는 상태", en: "Grown into a better version of myself", ja: "より良い自分に成長している状態", fr: "Évolué(e) vers une meilleure version de moi-même", es: "Habiendo crecido hacia una mejor versión de mí", zh: "成长为更好的自己", }, type: "growth" },
+      { text: { ko: "평온하고 안정된 내면의 상태", en: "At peace with a stable inner state", ja: "穏やかで安定した内面の状態", fr: "Serein(e) avec un état intérieur stable", es: "En paz con un estado interior estable", zh: "内心平静安定", }, type: "solitary" },
+      { text: { ko: "새로운 삶의 방향이 잡힌 상태", en: "Having found a new direction in life", ja: "新しい人生の方向性が定まった状態", fr: "Avoir trouvé une nouvelle direction dans la vie", es: "Habiendo encontrado una nueva dirección en la vida", zh: "找到了人生新方向", }, type: "transformer" },
     ],
   },
   {
@@ -208,13 +198,12 @@ const QUESTIONS: Question[] = [
       fr: "Qu'est-ce qui vous réconforte le plus dans les moments difficiles ?",
       es: "¿Qué te consuela más cuando estás pasándola mal?",
       zh: "在困难时期，最能安慰你的是什么？",
-      cn: "在困難時期，最能安慰你的是什麼？",
     },
     options: [
-      { text: { ko: "공감해주고 함께 울어주는 친구", en: "A friend who empathizes and cries with you", ja: "共感して一緒に泣いてくれる友人", fr: "Un ami qui compatit et pleure avec vous", es: "Un amigo que empatiza y llora contigo", zh: "能感同身受、一起哭泣的朋友", cn: "能感同身受、一起哭泣的朋友" }, type: "stormy" },
-      { text: { ko: "통찰력 있는 조언을 해주는 사람", en: "Someone who gives insightful advice", ja: "洞察力のあるアドバイスをしてくれる人", fr: "Quelqu'un qui donne des conseils avisés", es: "Alguien que da consejos perspicaces", zh: "给你深刻建议的人", cn: "給你深刻建議的人" }, type: "growth" },
-      { text: { ko: "조용히 곁에 있어주는 사람", en: "Someone who quietly stays by your side", ja: "静かにそばにいてくれる人", fr: "Quelqu'un qui reste tranquillement à vos côtés", es: "Alguien que se queda tranquilamente a tu lado", zh: "静静陪伴在你身边的人", cn: "靜靜陪伴在你身邊的人" }, type: "solitary" },
-      { text: { ko: "새로운 경험을 함께 해주는 사람", en: "Someone who shares new experiences with you", ja: "新しい経験を一緒にしてくれる人", fr: "Quelqu'un qui partage de nouvelles expériences avec vous", es: "Alguien que comparte nuevas experiencias contigo", zh: "与你共享新体验的人", cn: "與你共享新體驗的人" }, type: "transformer" },
+      { text: { ko: "공감해주고 함께 울어주는 친구", en: "A friend who empathizes and cries with you", ja: "共感して一緒に泣いてくれる友人", fr: "Un ami qui compatit et pleure avec vous", es: "Un amigo que empatiza y llora contigo", zh: "能感同身受、一起哭泣的朋友", }, type: "stormy" },
+      { text: { ko: "통찰력 있는 조언을 해주는 사람", en: "Someone who gives insightful advice", ja: "洞察力のあるアドバイスをしてくれる人", fr: "Quelqu'un qui donne des conseils avisés", es: "Alguien que da consejos perspicaces", zh: "给你深刻建议的人", }, type: "growth" },
+      { text: { ko: "조용히 곁에 있어주는 사람", en: "Someone who quietly stays by your side", ja: "静かにそばにいてくれる人", fr: "Quelqu'un qui reste tranquillement à vos côtés", es: "Alguien que se queda tranquilamente a tu lado", zh: "静静陪伴在你身边的人", }, type: "solitary" },
+      { text: { ko: "새로운 경험을 함께 해주는 사람", en: "Someone who shares new experiences with you", ja: "新しい経験を一緒にしてくれる人", fr: "Quelqu'un qui partage de nouvelles expériences avec vous", es: "Alguien que comparte nuevas experiencias contigo", zh: "与你共享新体验的人", }, type: "transformer" },
     ],
   },
   {
@@ -226,13 +215,12 @@ const QUESTIONS: Question[] = [
       fr: "Quel est votre mot-clé de rétablissement après une rupture ?",
       es: "¿Cuál es tu palabra clave de recuperación después de una ruptura?",
       zh: "分手后你的恢复关键词是什么？",
-      cn: "分手後你的恢復關鍵詞是什麼？",
     },
     options: [
-      { text: { ko: "감정 해소 & 빠른 회복", en: "Emotional release & fast recovery", ja: "感情解放 & 早期回復", fr: "Libération émotionnelle & rétablissement rapide", es: "Liberación emocional & recuperación rápida", zh: "情绪释放 & 快速恢复", cn: "情緒釋放 & 快速恢復" }, type: "stormy" },
-      { text: { ko: "성찰 & 자기 성장", en: "Reflection & self-growth", ja: "内省 & 自己成長", fr: "Réflexion & croissance personnelle", es: "Reflexión & crecimiento personal", zh: "反思 & 自我成长", cn: "反思 & 自我成長" }, type: "growth" },
-      { text: { ko: "고독 & 내면 치유", en: "Solitude & inner healing", ja: "孤独 & 内なる癒し", fr: "Solitude & guérison intérieure", es: "Soledad & sanación interior", zh: "独处 & 内在疗愈", cn: "獨處 & 內在療癒" }, type: "solitary" },
-      { text: { ko: "전환 & 새로운 시작", en: "Transformation & new beginnings", ja: "転換 & 新たな始まり", fr: "Transformation & nouveaux départs", es: "Transformación & nuevos comienzos", zh: "转变 & 新的开始", cn: "轉變 & 新的開始" }, type: "transformer" },
+      { text: { ko: "감정 해소 & 빠른 회복", en: "Emotional release & fast recovery", ja: "感情解放 & 早期回復", fr: "Libération émotionnelle & rétablissement rapide", es: "Liberación emocional & recuperación rápida", zh: "情绪释放 & 快速恢复", }, type: "stormy" },
+      { text: { ko: "성찰 & 자기 성장", en: "Reflection & self-growth", ja: "内省 & 自己成長", fr: "Réflexion & croissance personnelle", es: "Reflexión & crecimiento personal", zh: "反思 & 自我成长", }, type: "growth" },
+      { text: { ko: "고독 & 내면 치유", en: "Solitude & inner healing", ja: "孤独 & 内なる癒し", fr: "Solitude & guérison intérieure", es: "Soledad & sanación interior", zh: "独处 & 内在疗愈", }, type: "solitary" },
+      { text: { ko: "전환 & 새로운 시작", en: "Transformation & new beginnings", ja: "転換 & 新たな始まり", fr: "Transformation & nouveaux départs", es: "Transformación & nuevos comienzos", zh: "转变 & 新的开始", }, type: "transformer" },
     ],
   },
 ];
@@ -256,7 +244,6 @@ const RESULTS: Record<RecoveryType, TypeResult> = {
       fr: "Type Tempête",
       es: "Tipo Tormenta",
       zh: "激流型",
-      cn: "激流型",
     },
     description: {
       ko: "당신은 감정을 강렬하게 느끼고 표현하는 타입입니다. 이별 후 감정의 파도가 거세지만, 그만큼 감정을 충분히 처리하고 나면 빠르게 회복합니다. 감정을 억누르는 것보다 충분히 느끼고 표현하는 것이 당신의 치유 방식입니다. 주변 사람들의 공감과 지지가 큰 힘이 됩니다.",
@@ -265,7 +252,6 @@ const RESULTS: Record<RecoveryType, TypeResult> = {
       fr: "Vous ressentez et exprimez les émotions intensément. Après une rupture, les vagues émotionnelles sont fortes, mais une fois traitées, vous récupérez rapidement. Plutôt que de réprimer vos sentiments, les vivre et les exprimer pleinement est votre voie vers la guérison. L'empathie et le soutien de votre entourage sont une grande source de force.",
       es: "Sientes y expresas las emociones intensamente. Después de una ruptura, las olas emocionales son fuertes, pero una vez que las procesas completamente, te recuperas rápidamente. En lugar de suprimir los sentimientos, vivirlos y expresarlos plenamente es tu camino hacia la sanación. La empatía y el apoyo de quienes te rodean son una gran fuente de fuerza.",
       zh: "你是一个强烈感受和表达情绪的类型。分手后情绪波涛汹涌，但一旦充分处理，恢复也很快。与其压抑情绪，充分感受和表达才是你的治愈方式。身边人的共情和支持对你是巨大的力量。",
-      cn: "你是一個強烈感受和表達情緒的類型。分手後情緒波濤洶湧，但一旦充分處理，恢復也很快。與其壓抑情緒，充分感受和表達才是你的療癒方式。身邊人的共情和支持對你是巨大的力量。",
     },
     tips: {
       ko: ["감정 일기 쓰기 — 분노와 슬픔을 종이에 쏟아내세요", "믿을 수 있는 친구에게 마음껏 털어놓는 시간을 가지세요", "격렬한 운동으로 감정 에너지를 건강하게 발산해보세요"],
@@ -274,7 +260,6 @@ const RESULTS: Record<RecoveryType, TypeResult> = {
       fr: ["Tenez un journal émotionnel — évacuez votre colère et votre tristesse sur papier", "Prenez le temps de vous confier pleinement à un ami de confiance", "Canalisez l'énergie émotionnelle sainement grâce à l'exercice vigoureux"],
       es: ["Lleva un diario emocional — vierte tu ira y tristeza en papel", "Tómate tiempo para abrirte completamente con un amigo de confianza", "Canaliza la energía emocional saludablemente mediante ejercicio intenso"],
       zh: ["写情绪日记——把愤怒和悲伤倾泻在纸上", "找信任的朋友彻底倾诉", "通过激烈运动健康地释放情绪能量"],
-      cn: ["寫情緒日記——把憤怒和悲傷傾瀉在紙上", "找信任的朋友徹底傾訴", "通過激烈運動健康地釋放情緒能量"],
     },
     bestMatch: {
       ko: "성장형 — 당신의 감정에 공감하면서도 방향을 잡아줄 수 있어요",
@@ -283,7 +268,6 @@ const RESULTS: Record<RecoveryType, TypeResult> = {
       fr: "Type Croissance — ils comprennent vos émotions tout en vous aidant à trouver votre voie",
       es: "Tipo Crecimiento — empatizan con tus sentimientos y te ayudan a encontrar dirección",
       zh: "成长型——能共情你的感受，同时帮你找到方向",
-      cn: "成長型——能共情你的感受，同時幫你找到方向",
     },
     caution: {
       ko: "감정에 너무 오래 머물지 않도록 주의하세요. 충분히 느꼈다면 앞으로 나아가는 것도 용기입니다.",
@@ -292,7 +276,6 @@ const RESULTS: Record<RecoveryType, TypeResult> = {
       fr: "Veillez à ne pas vous attarder trop longtemps dans vos émotions. Une fois que vous avez assez ressenti, aller de l'avant demande aussi du courage.",
       es: "Ten cuidado de no quedarte demasiado tiempo en tus emociones. Una vez que hayas sentido suficiente, avanzar también requiere valentía.",
       zh: "注意不要在情绪中停留太久。感受够了之后，向前走也是一种勇气。",
-      cn: "注意不要在情緒中停留太久。感受夠了之後，向前走也是一種勇氣。",
     },
   },
   growth: {
@@ -304,7 +287,6 @@ const RESULTS: Record<RecoveryType, TypeResult> = {
       fr: "Type Croissance",
       es: "Tipo Crecimiento",
       zh: "成长型",
-      cn: "成長型",
     },
     description: {
       ko: "당신은 이별을 발판으로 삼아 더 나은 자신을 만들어가는 타입입니다. 관계를 통해 배운 점을 소중히 여기고, 아픔 속에서도 의미를 찾는 능력이 뛰어납니다. 이별 후 자기 성찰과 내면 탐구를 통해 단단한 자아를 만들어갑니다. 다음 관계에서는 더욱 성숙한 모습을 보여줄 가능성이 높습니다.",
@@ -313,7 +295,6 @@ const RESULTS: Record<RecoveryType, TypeResult> = {
       fr: "Vous êtes du type qui utilise les ruptures comme tremplin pour devenir une meilleure version de vous-même. Vous chérissez ce que vous avez appris de la relation et avez une remarquable capacité à trouver un sens même dans la douleur. Par la réflexion et l'exploration intérieure après une rupture, vous construisez un moi plus solide. Vous êtes susceptible de faire preuve d'une plus grande maturité dans vos futures relations.",
       es: "Eres del tipo que usa las rupturas como trampolín para convertirse en una mejor versión de ti mismo/a. Aprecias lo que aprendiste de la relación y tienes una notable capacidad para encontrar significado incluso en el dolor. A través de la autorreflexión y la exploración interior después de una ruptura, construyes un yo más fuerte. Es probable que muestres mayor madurez en futuras relaciones.",
       zh: "你是那种以分手为跳板、成就更好自己的类型。你珍视从关系中学到的东西，即使在痛苦中也有找到意义的卓越能力。通过分手后的自我反省和内心探索，你构建了更坚强的自我。在未来的关系中，你很可能展现出更成熟的一面。",
-      cn: "你是那種以分手為跳板、成就更好自己的類型。你珍視從關係中學到的東西，即使在痛苦中也有找到意義的卓越能力。通過分手後的自我反省和內心探索，你構建了更堅強的自我。在未來的關係中，你很可能展現出更成熟的一面。",
     },
     tips: {
       ko: ["관계에서 내가 배운 것들을 리스트로 정리해보세요", "심리 관련 책이나 팟캐스트로 자기 이해를 넓혀보세요", "상담이나 코칭을 통해 더 깊은 성찰을 해보세요"],
@@ -322,7 +303,6 @@ const RESULTS: Record<RecoveryType, TypeResult> = {
       fr: ["Listez ce que vous avez appris de la relation", "Élargissez la compréhension de soi via des livres ou podcasts de psychologie", "Approfondissez votre réflexion par le counseling ou le coaching"],
       es: ["Haz una lista de lo que aprendiste de la relación", "Amplía el autoconocimiento a través de libros o podcasts de psicología", "Profundiza tu reflexión mediante consejería o coaching"],
       zh: ["列出你从这段关系中学到的东西", "通过心理学书籍或播客拓展自我认知", "通过咨询或辅导进行更深刻的反思"],
-      cn: ["列出你從這段關係中學到的東西", "通過心理學書籍或播客拓展自我認知", "通過諮詢或輔導進行更深刻的反思"],
     },
     bestMatch: {
       ko: "격류형 — 당신의 차분함이 격류형의 감정을 안정시켜줄 수 있어요",
@@ -331,7 +311,6 @@ const RESULTS: Record<RecoveryType, TypeResult> = {
       fr: "Type Tempête — votre calme peut aider à stabiliser leurs émotions intenses",
       es: "Tipo Tormenta — tu calma puede ayudar a estabilizar sus emociones intensas",
       zh: "激流型——你的平静能帮助稳定他们激烈的情绪",
-      cn: "激流型——你的平靜能幫助穩定他們激烈的情緒",
     },
     caution: {
       ko: "지나치게 분석적이 되어 감정을 소홀히 하지 않도록 주의하세요. 가끔은 그냥 느끼는 것도 필요해요.",
@@ -340,7 +319,6 @@ const RESULTS: Record<RecoveryType, TypeResult> = {
       fr: "Veillez à ne pas devenir trop analytique et à ne pas négliger vos émotions. Parfois, il suffit de ressentir.",
       es: "Ten cuidado de no volverte demasiado analítico/a y descuidar tus emociones. A veces solo sentir es suficiente.",
       zh: "注意不要过于理性分析而忽视情绪。有时候，单纯地感受就已经足够了。",
-      cn: "注意不要過於理性分析而忽視情緒。有時候，單純地感受就已經足夠了。",
     },
   },
   solitary: {
@@ -352,7 +330,6 @@ const RESULTS: Record<RecoveryType, TypeResult> = {
       fr: "Type Solitaire",
       es: "Tipo Solitario",
       zh: "独处型",
-      cn: "獨處型",
     },
     description: {
       ko: "당신은 혼자만의 시간 속에서 조용히 자신을 치유하는 타입입니다. 외로움을 두려워하지 않고, 고독 속에서 자신만의 평화를 찾는 능력을 가지고 있습니다. 이별 후 조용히 일상을 유지하면서 내면의 안정을 되찾습니다. 다른 사람의 위로보다 혼자만의 공간이 더 회복에 도움이 될 수 있습니다.",
@@ -361,7 +338,6 @@ const RESULTS: Record<RecoveryType, TypeResult> = {
       fr: "Vous êtes du type qui guérit tranquillement dans la solitude. Vous ne craignez pas la solitude et avez la capacité d'y trouver votre propre paix. Après une rupture, vous maintenez calmement votre routine quotidienne et retrouvez la stabilité intérieure. Votre espace personnel peut vous aider à récupérer plus que le réconfort des autres.",
       es: "Eres del tipo que se cura tranquilamente en soledad. No temes la soledad y tienes la capacidad de encontrar tu propia paz en ella. Después de una ruptura, mantienes tranquilamente tu rutina diaria y restauras la estabilidad interior. Tu propio espacio personal puede ayudarte a recuperarte más que el consuelo de los demás.",
       zh: "你是那种在独处中静静疗愈自己的类型。你不畏惧孤独，能在寂静中找到属于自己的平和。分手后，你静静地维持日常生活，恢复内心的稳定。独处空间对你的恢复可能比他人的安慰更有帮助。",
-      cn: "你是那種在獨處中靜靜療癒自己的類型。你不畏懼孤獨，能在寂靜中找到屬於自己的平和。分手後，你靜靜地維持日常生活，恢復內心的穩定。獨處空間對你的恢復可能比他人的安慰更有幫助。",
     },
     tips: {
       ko: ["명상이나 마음챙김으로 내면의 평화를 키우세요", "자연 속 산책으로 마음을 가라앉혀보세요", "좋아하는 책이나 음악으로 혼자만의 힐링 루틴을 만들어보세요"],
@@ -370,7 +346,6 @@ const RESULTS: Record<RecoveryType, TypeResult> = {
       fr: ["Cultivez la paix intérieure grâce à la méditation ou à la pleine conscience", "Apaisez votre esprit avec des promenades dans la nature", "Créez une routine de guérison personnelle avec des livres ou de la musique que vous aimez"],
       es: ["Cultiva la paz interior mediante la meditación o la atención plena", "Calma tu mente con paseos por la naturaleza", "Crea una rutina de sanación personal con libros o música que ames"],
       zh: ["通过冥想或正念培养内心平静", "在大自然中散步让心平静下来", "用喜欢的书或音乐创建专属的疗愈日常"],
-      cn: ["通過冥想或正念培養內心平靜", "在大自然中散步讓心平靜下來", "用喜歡的書或音樂創建專屬的療愈日常"],
     },
     bestMatch: {
       ko: "전환형 — 조용히 당신 곁에 있으면서도 새로운 자극을 줄 수 있어요",
@@ -379,7 +354,6 @@ const RESULTS: Record<RecoveryType, TypeResult> = {
       fr: "Type Transformateur — ils peuvent rester tranquillement à vos côtés tout en offrant de nouvelles stimulations",
       es: "Tipo Transformador — pueden quedarse tranquilamente a tu lado mientras ofrecen nueva estimulación",
       zh: "转变型——能静静陪伴你，同时带来新的刺激",
-      cn: "轉變型——能靜靜陪伴你，同時帶來新的刺激",
     },
     caution: {
       ko: "고독 속으로 너무 깊이 들어가지 않도록 주의하세요. 가끔은 도움을 요청하는 것도 강함의 표시입니다.",
@@ -388,7 +362,6 @@ const RESULTS: Record<RecoveryType, TypeResult> = {
       fr: "Veillez à ne pas vous enfoncer trop profondément dans la solitude. Demander de l'aide parfois est aussi un signe de force.",
       es: "Ten cuidado de no hundirte demasiado en la soledad. Pedir ayuda a veces también es una señal de fortaleza.",
       zh: "注意不要太深地沉入孤独中。偶尔寻求帮助也是一种力量的表现。",
-      cn: "注意不要太深地沉入孤獨中。偶爾尋求幫助也是一種力量的表現。",
     },
   },
   transformer: {
@@ -400,7 +373,6 @@ const RESULTS: Record<RecoveryType, TypeResult> = {
       fr: "Type Transformateur",
       es: "Tipo Transformador",
       zh: "转变型",
-      cn: "轉變型",
     },
     description: {
       ko: "당신은 이별 후 새로운 활동과 경험으로 에너지를 전환하는 타입입니다. 변화를 두려워하지 않고 오히려 이별을 새로운 시작의 기회로 삼습니다. 행동을 통해 앞으로 나아가는 것이 당신에게 가장 효과적인 치유 방식입니다. 나비처럼 변화를 통해 더욱 아름다워지는 잠재력을 가지고 있습니다.",
@@ -409,7 +381,6 @@ const RESULTS: Record<RecoveryType, TypeResult> = {
       fr: "Vous êtes du type qui canalise l'énergie vers de nouvelles activités et expériences après une rupture. Vous ne craignez pas le changement ; au contraire, vous saisissez la rupture comme une opportunité pour un nouveau départ. Avancer par l'action est la méthode de guérison la plus efficace pour vous. Vous avez le potentiel de grandir et de vous épanouir grâce au changement, comme un papillon.",
       es: "Eres del tipo que canaliza la energía hacia nuevas actividades y experiencias después de una ruptura. No temes el cambio; al contrario, aprovechas la ruptura como una oportunidad para un nuevo comienzo. Avanzar a través de la acción es el método de sanación más efectivo para ti. Tienes el potencial de crecer y embellecerte a través del cambio, como una mariposa.",
       zh: "你是那种分手后将能量转化为新活动和体验的类型。你不惧怕变化，反而将分手视为新开始的机会。通过行动向前迈进是你最有效的疗愈方式。你像蝴蝶一样，拥有通过变化变得更美好的潜力。",
-      cn: "你是那種分手後將能量轉化為新活動和體驗的類型。你不懼怕變化，反而將分手視為新開始的機會。通過行動向前邁進是你最有效的療愈方式。你像蝴蝶一樣，擁有通過變化變得更美好的潛力。",
     },
     tips: {
       ko: ["오래 하고 싶었던 취미나 도전을 지금 시작해보세요", "여행이나 새로운 장소 방문으로 기분을 전환해보세요", "새로운 사람들과 교류할 수 있는 모임이나 커뮤니티에 참여해보세요"],
@@ -418,7 +389,6 @@ const RESULTS: Record<RecoveryType, TypeResult> = {
       fr: ["Commencez dès maintenant ce hobby ou défi que vous vouliez depuis longtemps", "Changez d'humeur en voyageant ou en visitant de nouveaux endroits", "Rejoignez un groupe ou une communauté où vous pouvez interagir avec de nouvelles personnes"],
       es: ["Empieza ahora ese pasatiempo o desafío que has querido intentar durante mucho tiempo", "Cambia tu estado de ánimo con viajes o visitando nuevos lugares", "Únete a un grupo o comunidad donde puedas interactuar con nuevas personas"],
       zh: ["现在就开始那个你一直想尝试的爱好或挑战", "通过旅行或拜访新地方转换心情", "加入可以结交新朋友的团体或社群"],
-      cn: ["現在就開始那個你一直想嘗試的愛好或挑戰", "通過旅行或拜訪新地方轉換心情", "加入可以結交新朋友的團體或社群"],
     },
     bestMatch: {
       ko: "고독형 — 당신의 활동적인 에너지가 고독형에게 새로운 자극이 될 수 있어요",
@@ -427,7 +397,6 @@ const RESULTS: Record<RecoveryType, TypeResult> = {
       fr: "Type Solitaire — votre énergie active peut être une nouvelle stimulation pour eux",
       es: "Tipo Solitario — tu energía activa puede ser un nuevo estímulo para ellos",
       zh: "独处型——你活跃的能量能为他们带来新的刺激",
-      cn: "獨處型——你活躍的能量能為他們帶來新的刺激",
     },
     caution: {
       ko: "너무 바쁘게 움직여서 감정을 회피하지 않도록 주의하세요. 잠시 멈추고 내면을 들여다보는 시간도 필요합니다.",
@@ -436,7 +405,6 @@ const RESULTS: Record<RecoveryType, TypeResult> = {
       fr: "Veillez à ne pas éviter les émotions en vous maintenant trop occupé(e). Vous avez aussi besoin de temps pour faire une pause et regarder à l'intérieur.",
       es: "Ten cuidado de no evitar las emociones manteniéndote demasiado ocupado/a. También necesitas tiempo para detenerte y mirar hacia adentro.",
       zh: "注意不要因为太忙而回避情绪。你也需要暂停下来，审视内心的时间。",
-      cn: "注意不要因為太忙而迴避情緒。你也需要暫停下來，審視內心的時間。",
     },
   },
 };
@@ -520,17 +488,6 @@ const UI_LABELS: Record<
     bestMatchLabel: "最佳匹配",
     cautionLabel: "需要注意",
     shareBtn: "分享结果",
-  },
-  cn: {
-    title: "分手恢復類型測試",
-    subtitle: "你如何走出分手？",
-    questionOf: (c, t) => `${c} / ${t}`,
-    resultTitle: "你的分手恢復類型",
-    restartBtn: "重新測試",
-    tipsLabel: "恢復建議",
-    bestMatchLabel: "最佳匹配",
-    cautionLabel: "需要注意",
-    shareBtn: "分享結果",
   },
 };
 

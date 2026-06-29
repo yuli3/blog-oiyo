@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 
-type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh' | 'cn';
+type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh';
 
 interface TaxBracket { min: number; max: number; rate: number }
 
@@ -18,7 +18,7 @@ interface CountryTaxConfig {
 // Approximate 2024 brackets (simplified for educational use)
 const COUNTRIES: Record<string, CountryTaxConfig> = {
   KR: {
-    name: { ko: '🇰🇷 한국', en: '🇰🇷 South Korea', ja: '🇰🇷 韓国', fr: '🇰🇷 Corée du Sud', es: '🇰🇷 Corea del Sur', zh: '🇰🇷 韓國', cn: '🇰🇷 韩国' },
+    name: { ko: '🇰🇷 한국', en: '🇰🇷 South Korea', ja: '🇰🇷 韓国', fr: '🇰🇷 Corée du Sud', es: '🇰🇷 Corea del Sur', zh: '🇰🇷 韩国', },
     flag: '🇰🇷', currency: 'KRW', currencySymbol: '₩',
     brackets: [
       { min: 0,          max: 14000000,  rate: 0.06 },
@@ -32,10 +32,10 @@ const COUNTRIES: Record<string, CountryTaxConfig> = {
     ],
     standardDeduction: 1500000,
     socialInsuranceRate: 0.0924, // approx national pension + health
-    notes: { ko: '근로소득공제 및 기본공제 적용 전 단순 추정치입니다', en: 'Simplified estimate before employment deductions', ja: '給与所得控除前の簡易試算です', fr: 'Estimation simplifiée avant déductions', es: 'Estimación simplificada antes de deducciones', zh: '扣除薪資所得扣除額前的簡單估算', cn: '扣除薪资所得扣除额前的简单估算' },
+    notes: { ko: '근로소득공제 및 기본공제 적용 전 단순 추정치입니다', en: 'Simplified estimate before employment deductions', ja: '給与所得控除前の簡易試算です', fr: 'Estimation simplifiée avant déductions', es: 'Estimación simplificada antes de deducciones', zh: '扣除薪资所得扣除额前的简单估算', },
   },
   US: {
-    name: { ko: '🇺🇸 미국', en: '🇺🇸 United States', ja: '🇺🇸 アメリカ', fr: '🇺🇸 États-Unis', es: '🇺🇸 Estados Unidos', zh: '🇺🇸 美國', cn: '🇺🇸 美国' },
+    name: { ko: '🇺🇸 미국', en: '🇺🇸 United States', ja: '🇺🇸 アメリカ', fr: '🇺🇸 États-Unis', es: '🇺🇸 Estados Unidos', zh: '🇺🇸 美国', },
     flag: '🇺🇸', currency: 'USD', currencySymbol: '$',
     brackets: [
       { min: 0,       max: 11600,  rate: 0.10 },
@@ -48,10 +48,10 @@ const COUNTRIES: Record<string, CountryTaxConfig> = {
     ],
     standardDeduction: 14600,
     socialInsuranceRate: 0.0765, // FICA (SS + Medicare)
-    notes: { ko: '2024년 단일 신고 기준, 주세 제외', en: '2024 single filer; excludes state tax', ja: '2024年シングル申告、州税除く', fr: '2024 déclarant unique, hors impôt d\'état', es: '2024 declarante único, sin impuesto estatal', zh: '2024年單身報稅，不含州稅', cn: '2024年单身报税，不含州税' },
+    notes: { ko: '2024년 단일 신고 기준, 주세 제외', en: '2024 single filer; excludes state tax', ja: '2024年シングル申告、州税除く', fr: '2024 déclarant unique, hors impôt d\'état', es: '2024 declarante único, sin impuesto estatal', zh: '2024年单身报税，不含州税', },
   },
   JP: {
-    name: { ko: '🇯🇵 일본', en: '🇯🇵 Japan', ja: '🇯🇵 日本', fr: '🇯🇵 Japon', es: '🇯🇵 Japón', zh: '🇯🇵 日本', cn: '🇯🇵 日本' },
+    name: { ko: '🇯🇵 일본', en: '🇯🇵 Japan', ja: '🇯🇵 日本', fr: '🇯🇵 Japon', es: '🇯🇵 Japón', zh: '🇯🇵 日本', },
     flag: '🇯🇵', currency: 'JPY', currencySymbol: '¥',
     brackets: [
       { min: 0,         max: 1950000,  rate: 0.05 },
@@ -64,10 +64,10 @@ const COUNTRIES: Record<string, CountryTaxConfig> = {
     ],
     standardDeduction: 480000,
     socialInsuranceRate: 0.1515, // approx pension + health + unemployment
-    notes: { ko: '2024년 기준, 주민세 별도', en: '2024 rates; local inhabitant tax separate', ja: '2024年基準、住民税別途', fr: '2024, taxe d\'habitation séparée', es: '2024, impuesto de residencia aparte', zh: '2024年，住民稅另計', cn: '2024年，住民税另计' },
+    notes: { ko: '2024년 기준, 주민세 별도', en: '2024 rates; local inhabitant tax separate', ja: '2024年基準、住民税別途', fr: '2024, taxe d\'habitation séparée', es: '2024, impuesto de residencia aparte', zh: '2024年，住民税另计', },
   },
   FR: {
-    name: { ko: '🇫🇷 프랑스', en: '🇫🇷 France', ja: '🇫🇷 フランス', fr: '🇫🇷 France', es: '🇫🇷 Francia', zh: '🇫🇷 法國', cn: '🇫🇷 法国' },
+    name: { ko: '🇫🇷 프랑스', en: '🇫🇷 France', ja: '🇫🇷 フランス', fr: '🇫🇷 France', es: '🇫🇷 Francia', zh: '🇫🇷 法国', },
     flag: '🇫🇷', currency: 'EUR', currencySymbol: '€',
     brackets: [
       { min: 0,      max: 11294, rate: 0.00 },
@@ -78,10 +78,10 @@ const COUNTRIES: Record<string, CountryTaxConfig> = {
     ],
     standardDeduction: 10000,
     socialInsuranceRate: 0.22, // approx salarié contributions
-    notes: { ko: '2024년 기준 단순화 추정치', en: '2024 simplified estimate; actual deductions vary', ja: '2024年単純化試算', fr: '2024, estimation simplifiée', es: '2024, estimación simplificada', zh: '2024年簡化估算', cn: '2024年简化估算' },
+    notes: { ko: '2024년 기준 단순화 추정치', en: '2024 simplified estimate; actual deductions vary', ja: '2024年単純化試算', fr: '2024, estimation simplifiée', es: '2024, estimación simplificada', zh: '2024年简化估算', },
   },
   ES: {
-    name: { ko: '🇪🇸 스페인', en: '🇪🇸 Spain', ja: '🇪🇸 スペイン', fr: '🇪🇸 Espagne', es: '🇪🇸 España', zh: '🇪🇸 西班牙', cn: '🇪🇸 西班牙' },
+    name: { ko: '🇪🇸 스페인', en: '🇪🇸 Spain', ja: '🇪🇸 スペイン', fr: '🇪🇸 Espagne', es: '🇪🇸 España', zh: '🇪🇸 西班牙', },
     flag: '🇪🇸', currency: 'EUR', currencySymbol: '€',
     brackets: [
       { min: 0,       max: 12450,  rate: 0.19 },
@@ -93,10 +93,10 @@ const COUNTRIES: Record<string, CountryTaxConfig> = {
     ],
     standardDeduction: 5550,
     socialInsuranceRate: 0.0635, // employee contribution approx
-    notes: { ko: '2024년 국세 기준', en: '2024 national rate; regional surcharges vary', ja: '2024年国税基準', fr: '2024, taux national; taux régionaux variables', es: '2024, tipo estatal; recargos autonómicos variables', zh: '2024年國稅基準，地方稅另計', cn: '2024年国税基准，地方税另计' },
+    notes: { ko: '2024년 국세 기준', en: '2024 national rate; regional surcharges vary', ja: '2024年国税基準', fr: '2024, taux national; taux régionaux variables', es: '2024, tipo estatal; recargos autonómicos variables', zh: '2024年国税基准，地方税另计', },
   },
   CN: {
-    name: { ko: '🇨🇳 중국', en: '🇨🇳 China', ja: '🇨🇳 中国', fr: '🇨🇳 Chine', es: '🇨🇳 China', zh: '🇨🇳 中國', cn: '🇨🇳 中国' },
+    name: { ko: '🇨🇳 중국', en: '🇨🇳 China', ja: '🇨🇳 中国', fr: '🇨🇳 Chine', es: '🇨🇳 China', zh: '🇨🇳 中国', },
     flag: '🇨🇳', currency: 'CNY', currencySymbol: '¥',
     brackets: [
       { min: 0,       max: 36000,  rate: 0.03 },
@@ -109,10 +109,10 @@ const COUNTRIES: Record<string, CountryTaxConfig> = {
     ],
     standardDeduction: 60000, // annual basic deduction
     socialInsuranceRate: 0.1025, // approx employee share
-    notes: { ko: '근로소득 기준, 전문항목 공제 전', en: 'Employment income; before special deductions', ja: '給与所得基準、専項控除前', fr: 'Revenus salariaux avant déductions spéciales', es: 'Ingresos laborales antes de deducciones especiales', zh: '薪資所得，扣除專項前', cn: '薪资所得，扣除专项前' },
+    notes: { ko: '근로소득 기준, 전문항목 공제 전', en: 'Employment income; before special deductions', ja: '給与所得基準、専項控除前', fr: 'Revenus salariaux avant déductions spéciales', es: 'Ingresos laborales antes de deducciones especiales', zh: '薪资所得，扣除专项前', },
   },
   TW: {
-    name: { ko: '🇹🇼 대만', en: '🇹🇼 Taiwan', ja: '🇹🇼 台湾', fr: '🇹🇼 Taïwan', es: '🇹🇼 Taiwán', zh: '🇹🇼 台灣', cn: '🇹🇼 台湾' },
+    name: { ko: '🇹🇼 대만', en: '🇹🇼 Taiwan', ja: '🇹🇼 台湾', fr: '🇹🇼 Taïwan', es: '🇹🇼 Taiwán', zh: '🇹🇼 台灣', },
     flag: '🇹🇼', currency: 'TWD', currencySymbol: 'NT$',
     brackets: [
       { min: 0,         max: 560000,   rate: 0.05 },
@@ -123,7 +123,7 @@ const COUNTRIES: Record<string, CountryTaxConfig> = {
     ],
     standardDeduction: 124000,
     socialInsuranceRate: 0.0566,
-    notes: { ko: '2024년 기준, 표준공제 적용 전 단순 추정치', en: '2024 rates, simplified before itemized deductions', ja: '2024年基準', fr: '2024, avant déductions détaillées', es: '2024, antes de deducciones detalladas', zh: '2024年，扣除明細前的簡易估算', cn: '2024年，扣除明细前的简易估算' },
+    notes: { ko: '2024년 기준, 표준공제 적용 전 단순 추정치', en: '2024 rates, simplified before itemized deductions', ja: '2024年基準', fr: '2024, avant déductions détaillées', es: '2024, antes de deducciones detalladas', zh: '2024年，扣除明细前的简易估算', },
   },
 };
 
@@ -179,8 +179,7 @@ const L: Record<Locale, {
   ja: { title: 'グローバル所得税計算機', subtitle: '7カ国の税金比較', country: '国', grossIncome: '年間総収入', calc: '計算する', incomeTax: '所得税', socialInsurance: '社会保険料（概算）', totalTax: '税金・社会保険合計', netIncome: '年間手取り', effectiveRate: '実効税率', marginalRate: '限界税率', taxableIncome: '課税所得', brackets: '税率ブラケット詳細', disclaimer: '実際の税金は個人控除・家族状況等により異なります。', monthly: '月手取り' },
   fr: { title: 'Calculateur Impôt Mondial', subtitle: 'Comparer la fiscalité dans 7 pays', country: 'Pays', grossIncome: 'Revenu Brut Annuel', calc: 'Calculer', incomeTax: 'Impôt sur le revenu', socialInsurance: 'Cotisations sociales (est.)', totalTax: 'Total impôts et cotisations', netIncome: 'Revenu Net Annuel', effectiveRate: 'Taux effectif', marginalRate: 'Taux marginal', taxableIncome: 'Revenu imposable', brackets: 'Détail des tranches', disclaimer: "L'impôt réel varie selon les déductions personnelles et la situation familiale.", monthly: 'Net mensuel' },
   es: { title: 'Calculadora Global de IRPF', subtitle: 'Compara impuestos en 7 países', country: 'País', grossIncome: 'Ingresos Brutos Anuales', calc: 'Calcular', incomeTax: 'IRPF', socialInsurance: 'Seguridad Social (est.)', totalTax: 'Total impuestos y SS', netIncome: 'Renta Neta Anual', effectiveRate: 'Tipo efectivo', marginalRate: 'Tipo marginal', taxableIncome: 'Base imponible', brackets: 'Desglose de tramos', disclaimer: 'El impuesto real varía según deducciones personales y situación familiar.', monthly: 'Neto mensual' },
-  zh: { title: '全球所得稅計算機', subtitle: '7個國家稅率比較', country: '國家', grossIncome: '年度稅前收入', calc: '計算', incomeTax: '所得稅', socialInsurance: '社會保險（估算）', totalTax: '稅金及保險合計', netIncome: '年度實得收入', effectiveRate: '實際稅率', marginalRate: '邊際稅率', taxableIncome: '應稅收入', brackets: '稅率級距明細', disclaimer: '實際稅金因個人扣除、家庭狀況等而異。', monthly: '月實得' },
-  cn: { title: '全球所得税计算器', subtitle: '7个国家税率比较', country: '国家', grossIncome: '年度税前收入', calc: '计算', incomeTax: '所得税', socialInsurance: '社会保险（估算）', totalTax: '税金及保险合计', netIncome: '年度实得收入', effectiveRate: '实际税率', marginalRate: '边际税率', taxableIncome: '应税收入', brackets: '税率级距明细', disclaimer: '实际税金因个人扣除、家庭状况等而异。', monthly: '月实得' },
+  zh: { title: '全球所得税计算器', subtitle: '7个国家税率比较', country: '国家', grossIncome: '年度税前收入', calc: '计算', incomeTax: '所得税', socialInsurance: '社会保险（估算）', totalTax: '税金及保险合计', netIncome: '年度实得收入', effectiveRate: '实际税率', marginalRate: '边际税率', taxableIncome: '应税收入', brackets: '税率级距明细', disclaimer: '实际税金因个人扣除、家庭状况等而异。', monthly: '月实得' },
 };
 
 // Default incomes per country to make the initial state useful

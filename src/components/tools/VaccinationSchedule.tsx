@@ -20,22 +20,22 @@ interface VaccineInfo {
 }
 
 const VACCINES: VaccineInfo[] = [
-  { id: "bcg", shortName: "BCG", fullName: { ko: "결핵", en: "Tuberculosis (BCG)", ja: "結核（BCG）", fr: "Tuberculose (BCG)", es: "Tuberculosis (BCG)", zh: "结核病（BCG）", cn: "結核病（BCG）" } },
-  { id: "hepb", shortName: "B형간염", fullName: { ko: "B형 간염", en: "Hepatitis B", ja: "B型肝炎", fr: "Hépatite B", es: "Hepatitis B", zh: "乙型肝炎", cn: "乙型肝炎" } },
-  { id: "dtap", shortName: "DTaP", fullName: { ko: "디프테리아·파상풍·백일해", en: "Diphtheria·Tetanus·Pertussis", ja: "ジフテリア・破傷風・百日咳", fr: "Diphtérie·Tétanos·Coqueluche", es: "Difteria·Tétano·Tosferina", zh: "白喉·破伤风·百日咳", cn: "白喉·破傷風·百日咳" } },
-  { id: "ipv", shortName: "폴리오", fullName: { ko: "폴리오 (IPV)", en: "Polio (IPV)", ja: "ポリオ（IPV）", fr: "Polio (IPV)", es: "Polio (IPV)", zh: "脊髓灰质炎（IPV）", cn: "脊髓灰質炎（IPV）" } },
-  { id: "hib", shortName: "Hib", fullName: { ko: "뇌수막염 (Hib)", en: "Haemophilus influenzae type b (Hib)", ja: "Hibインフルエンザ菌", fr: "Hib (méningite)", es: "Hib (meningitis)", zh: "B型流感嗜血杆菌（Hib）", cn: "B型流感嗜血桿菌（Hib）" } },
-  { id: "pcv", shortName: "폐렴구균", fullName: { ko: "폐렴구균 (PCV)", en: "Pneumococcal (PCV)", ja: "肺炎球菌（PCV）", fr: "Pneumocoque (PCV)", es: "Neumocócica (PCV)", zh: "肺炎球菌（PCV）", cn: "肺炎球菌（PCV）" } },
-  { id: "rota", shortName: "로타바이러스", fullName: { ko: "로타바이러스", en: "Rotavirus", ja: "ロタウイルス", fr: "Rotavirus", es: "Rotavirus", zh: "轮状病毒", cn: "輪狀病毒" } },
-  { id: "mmr", shortName: "MMR", fullName: { ko: "홍역·유행성이하선염·풍진 (MMR)", en: "Measles·Mumps·Rubella (MMR)", ja: "麻疹・おたふく風邪・風疹（MMR）", fr: "Rougeole·Oreillons·Rubéole (MMR)", es: "Sarampión·Paperas·Rubéola (MMR)", zh: "麻疹·腮腺炎·风疹（MMR）", cn: "麻疹·腮腺炎·風疹（MMR）" } },
-  { id: "var", shortName: "수두", fullName: { ko: "수두 (Varicella)", en: "Varicella (Chickenpox)", ja: "水痘（みずぼうそう）", fr: "Varicelle", es: "Varicela", zh: "水痘", cn: "水痘" } },
-  { id: "hepa", shortName: "A형간염", fullName: { ko: "A형 간염", en: "Hepatitis A", ja: "A型肝炎", fr: "Hépatite A", es: "Hepatitis A", zh: "甲型肝炎", cn: "甲型肝炎" } },
-  { id: "je_inactive", shortName: "일본뇌염(불활화)", fullName: { ko: "일본뇌염 (불활화)", en: "Japanese Encephalitis (inactivated)", ja: "日本脳炎（不活化）", fr: "Encéphalite japonaise (inactivé)", es: "Encefalitis japonesa (inactivada)", zh: "乙型脑炎（灭活）", cn: "乙型腦炎（滅活）" } },
-  { id: "je_live", shortName: "일본뇌염(생백신)", fullName: { ko: "일본뇌염 (약독화 생백신)", en: "Japanese Encephalitis (live attenuated)", ja: "日本脳炎（弱毒化生ワクチン）", fr: "Encéphalite japonaise (vivant atténué)", es: "Encefalitis japonesa (vivo atenuado)", zh: "乙型脑炎（减毒活疫苗）", cn: "乙型腦炎（減毒活疫苗）" } },
-  { id: "tdap", shortName: "Tdap/Td", fullName: { ko: "Tdap/Td (추가접종)", en: "Tdap/Td (booster)", ja: "Tdap/Td（追加接種）", fr: "Tdap/Td (rappel)", es: "Tdap/Td (refuerzo)", zh: "Tdap/Td（加强针）", cn: "Tdap/Td（加強針）" } },
-  { id: "hpv", shortName: "HPV", fullName: { ko: "사람유두종바이러스 (HPV)", en: "Human Papillomavirus (HPV)", ja: "ヒトパピローマウイルス（HPV）", fr: "Papillomavirus humain (HPV)", es: "Virus del papiloma humano (HPV)", zh: "人乳头状瘤病毒（HPV）", cn: "人乳頭狀瘤病毒（HPV）" } },
-  { id: "flu", shortName: "인플루엔자", fullName: { ko: "인플루엔자 (독감)", en: "Influenza (Flu)", ja: "インフルエンザ", fr: "Grippe (Influenza)", es: "Influenza (Gripe)", zh: "流行性感冒", cn: "流行性感冒" } },
-  { id: "menv", shortName: "수막구균", fullName: { ko: "수막구균", en: "Meningococcal", ja: "髄膜炎菌", fr: "Méningocoque", es: "Meningocócica", zh: "脑膜炎球菌", cn: "腦膜炎球菌" } },
+  { id: "bcg", shortName: "BCG", fullName: { ko: "결핵", en: "Tuberculosis (BCG)", ja: "結核（BCG）", fr: "Tuberculose (BCG)", es: "Tuberculosis (BCG)", zh: "结核病（BCG）", } },
+  { id: "hepb", shortName: "B형간염", fullName: { ko: "B형 간염", en: "Hepatitis B", ja: "B型肝炎", fr: "Hépatite B", es: "Hepatitis B", zh: "乙型肝炎", } },
+  { id: "dtap", shortName: "DTaP", fullName: { ko: "디프테리아·파상풍·백일해", en: "Diphtheria·Tetanus·Pertussis", ja: "ジフテリア・破傷風・百日咳", fr: "Diphtérie·Tétanos·Coqueluche", es: "Difteria·Tétano·Tosferina", zh: "白喉·破伤风·百日咳", } },
+  { id: "ipv", shortName: "폴리오", fullName: { ko: "폴리오 (IPV)", en: "Polio (IPV)", ja: "ポリオ（IPV）", fr: "Polio (IPV)", es: "Polio (IPV)", zh: "脊髓灰质炎（IPV）", } },
+  { id: "hib", shortName: "Hib", fullName: { ko: "뇌수막염 (Hib)", en: "Haemophilus influenzae type b (Hib)", ja: "Hibインフルエンザ菌", fr: "Hib (méningite)", es: "Hib (meningitis)", zh: "B型流感嗜血杆菌（Hib）", } },
+  { id: "pcv", shortName: "폐렴구균", fullName: { ko: "폐렴구균 (PCV)", en: "Pneumococcal (PCV)", ja: "肺炎球菌（PCV）", fr: "Pneumocoque (PCV)", es: "Neumocócica (PCV)", zh: "肺炎球菌（PCV）", } },
+  { id: "rota", shortName: "로타바이러스", fullName: { ko: "로타바이러스", en: "Rotavirus", ja: "ロタウイルス", fr: "Rotavirus", es: "Rotavirus", zh: "轮状病毒", } },
+  { id: "mmr", shortName: "MMR", fullName: { ko: "홍역·유행성이하선염·풍진 (MMR)", en: "Measles·Mumps·Rubella (MMR)", ja: "麻疹・おたふく風邪・風疹（MMR）", fr: "Rougeole·Oreillons·Rubéole (MMR)", es: "Sarampión·Paperas·Rubéola (MMR)", zh: "麻疹·腮腺炎·风疹（MMR）", } },
+  { id: "var", shortName: "수두", fullName: { ko: "수두 (Varicella)", en: "Varicella (Chickenpox)", ja: "水痘（みずぼうそう）", fr: "Varicelle", es: "Varicela", zh: "水痘", } },
+  { id: "hepa", shortName: "A형간염", fullName: { ko: "A형 간염", en: "Hepatitis A", ja: "A型肝炎", fr: "Hépatite A", es: "Hepatitis A", zh: "甲型肝炎", } },
+  { id: "je_inactive", shortName: "일본뇌염(불활화)", fullName: { ko: "일본뇌염 (불활화)", en: "Japanese Encephalitis (inactivated)", ja: "日本脳炎（不活化）", fr: "Encéphalite japonaise (inactivé)", es: "Encefalitis japonesa (inactivada)", zh: "乙型脑炎（灭活）", } },
+  { id: "je_live", shortName: "일본뇌염(생백신)", fullName: { ko: "일본뇌염 (약독화 생백신)", en: "Japanese Encephalitis (live attenuated)", ja: "日本脳炎（弱毒化生ワクチン）", fr: "Encéphalite japonaise (vivant atténué)", es: "Encefalitis japonesa (vivo atenuado)", zh: "乙型脑炎（减毒活疫苗）", } },
+  { id: "tdap", shortName: "Tdap/Td", fullName: { ko: "Tdap/Td (추가접종)", en: "Tdap/Td (booster)", ja: "Tdap/Td（追加接種）", fr: "Tdap/Td (rappel)", es: "Tdap/Td (refuerzo)", zh: "Tdap/Td（加强针）", } },
+  { id: "hpv", shortName: "HPV", fullName: { ko: "사람유두종바이러스 (HPV)", en: "Human Papillomavirus (HPV)", ja: "ヒトパピローマウイルス（HPV）", fr: "Papillomavirus humain (HPV)", es: "Virus del papiloma humano (HPV)", zh: "人乳头状瘤病毒（HPV）", } },
+  { id: "flu", shortName: "인플루엔자", fullName: { ko: "인플루엔자 (독감)", en: "Influenza (Flu)", ja: "インフルエンザ", fr: "Grippe (Influenza)", es: "Influenza (Gripe)", zh: "流行性感冒", } },
+  { id: "menv", shortName: "수막구균", fullName: { ko: "수막구균", en: "Meningococcal", ja: "髄膜炎菌", fr: "Méningocoque", es: "Meningocócica", zh: "脑膜炎球菌", } },
 ];
 
 // Each row: vaccineId, doseLabel(ko), minDays, maxDays, targetMonths
@@ -219,23 +219,6 @@ const UI: Record<
     doseLabel: "剂次",
     legendTitle: "图例",
   },
-  cn: {
-    title: "疫苗接種時間表",
-    subtitle: "輸入孩子的出生日期，查看疫苗接種時間表",
-    dobLabel: "孩子出生日期",
-    dobPlaceholder: "",
-    generateBtn: "查看時間表",
-    resultTitle: "疫苗接種時間表",
-    statusPast: "已完成",
-    statusCurrent: "現在該接種",
-    statusUpcoming: "待接種",
-    noDate: "請輸入出生日期。",
-    ageAtLabel: "推薦接種年齡",
-    monthUnit: "個月",
-    yearUnit: "歲",
-    doseLabel: "劑次",
-    legendTitle: "圖例",
-  },
 };
 
 type Status = "past" | "current" | "upcoming";
@@ -258,7 +241,7 @@ function addDays(date: Date, days: number): Date {
 
 function formatDate(date: Date, locale: Locale): string {
   return date.toLocaleDateString(
-    locale === "ko" ? "ko-KR" : locale === "ja" ? "ja-JP" : locale === "zh" || locale === "cn" ? "zh-CN" : "en-US",
+    locale === "ko" ? "ko-KR" : locale === "ja" ? "ja-JP" : locale === "zh" ? "zh-CN" : "en-US",
     { year: "numeric", month: "short", day: "numeric" }
   );
 }

@@ -19,7 +19,6 @@ const L: Record<string, UiLabels> = {
   ko: { birth: "생년월일", year: "년", month: "월", day: "일", intlAge: "만 나이", countingAge: "세는 나이", yearAge: "연 나이", yearsOld: "세", invalid: "올바른 날짜를 입력하세요", note: "2023년 6월부터 법적으로 만 나이로 통일되었습니다." },
   ja: { birth: "生年月日", year: "年", month: "月", day: "日", intlAge: "満年齢 (만나이)", countingAge: "数え年 (세는나이)", yearAge: "年年齢 (연나이)", yearsOld: "歳", invalid: "正しい日付を入力してください", note: "2023年6月から韓国は法的に満年齢に統一されました。" },
   zh: { birth: "出生日期", year: "年", month: "月", day: "日", intlAge: "周岁 (만나이)", countingAge: "虚岁 (세는나이)", yearAge: "年龄 (연나이)", yearsOld: "岁", invalid: "请输入有效日期", note: "自2023年6月起，韩国法律统一使用周岁。" },
-  cn: { birth: "出生日期", year: "年", month: "月", day: "日", intlAge: "周岁 (만나이)", countingAge: "虚岁 (세는나이)", yearAge: "年龄 (연나이)", yearsOld: "岁", invalid: "请输入有效日期", note: "自2023年6月起，韩国法律统一使用周岁。" },
   fr: { birth: "Date de naissance", year: "Année", month: "Mois", day: "Jour", intlAge: "Âge international (만나이)", countingAge: "Âge coréen (세는나이)", yearAge: "Âge par année (연나이)", yearsOld: "ans", invalid: "Saisissez une date valide", note: "Depuis juin 2023, la Corée utilise légalement l'âge international." },
   es: { birth: "Fecha de nacimiento", year: "Año", month: "Mes", day: "Día", intlAge: "Edad internacional (만나이)", countingAge: "Edad coreana (세는나이)", yearAge: "Edad por año (연나이)", yearsOld: "años", invalid: "Introduce una fecha válida", note: "Desde junio de 2023, Corea usa legalmente la edad internacional." },
 };

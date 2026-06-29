@@ -122,25 +122,6 @@ const translations: Record<Locale, Record<string, string>> = {
     settingsTitle: "设置",
     cycleInfo: "专注4次 → 长休息",
   },
-  cn: {
-    title: "番茄鐘計時器",
-    focus: "🍅 專注",
-    short: "☕ 短暫休息",
-    long: "🌙 長休息",
-    start: "開始",
-    pause: "暫停",
-    reset: "重置",
-    focusMin: "專注時間(分鐘)",
-    shortMin: "短休息(分鐘)",
-    longMin: "長休息(分鐘)",
-    session: "會話",
-    todayFocus: "今日專注時間",
-    todaySessions: "完成會話",
-    min: "分鐘",
-    count: "次",
-    settingsTitle: "設置",
-    cycleInfo: "專注4次 → 長休息",
-  },
 };
 
 const MODE_COLORS: Record<Mode, { stroke: string; bg: string; text: string; badge: string }> = {

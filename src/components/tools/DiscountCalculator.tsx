@@ -17,13 +17,12 @@ const L: Record<string, UiLabels> = {
   ko: { price: "정가", discount: "할인율 %", extra: "추가 할인 % (선택)", extraHint: "1차 할인된 가격에 추가로 적용됩니다(예: 쿠폰).", final: "최종 가격", saved: "절약 금액", effective: "실질 할인율", off: "할인" },
   ja: { price: "定価", discount: "割引率 %", extra: "追加割引 %（任意）", extraHint: "1次割引後の価格にさらに適用されます（クーポンなど）。", final: "最終価格", saved: "割引額", effective: "実質割引率", off: "OFF" },
   zh: { price: "原价", discount: "折扣 %", extra: "额外折扣 %（可选）", extraHint: "在已折扣价格上叠加（如优惠券）。", final: "最终价格", saved: "节省", effective: "实际折扣", off: "折" },
-  cn: { price: "原价", discount: "折扣 %", extra: "额外折扣 %（可选）", extraHint: "在已折扣价格上叠加（如优惠券）。", final: "最终价格", saved: "节省", effective: "实际折扣", off: "折" },
   fr: { price: "Prix initial", discount: "Remise %", extra: "Remise supplémentaire % (option)", extraHint: "Appliquée sur le prix déjà remisé (ex. coupon).", final: "Prix final", saved: "Économie", effective: "Remise effective", off: "de remise" },
   es: { price: "Precio original", discount: "Descuento %", extra: "Descuento extra % (opcional)", extraHint: "Se aplica sobre el precio ya rebajado (p. ej. cupón).", final: "Precio final", saved: "Ahorro", effective: "Descuento efectivo", off: "de descuento" },
 };
 
-const CURRENCY: Record<string, string> = { ko: "₩", en: "$", ja: "¥", fr: "€", es: "€", zh: "NT$", cn: "¥" };
-const LOCALE_NUM: Record<string, string> = { ko: "ko-KR", en: "en-US", ja: "ja-JP", fr: "fr-FR", es: "es-ES", zh: "zh-TW", cn: "zh-CN" };
+const CURRENCY: Record<string, string> = { ko: "₩", en: "$", ja: "¥", fr: "€", es: "€", zh: "¥", };
+const LOCALE_NUM: Record<string, string> = { ko: "ko-KR", en: "en-US", ja: "ja-JP", fr: "fr-FR", es: "es-ES", zh: "zh-CN", };
 
 interface Props {
   locale: Locale;

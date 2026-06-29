@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 
-type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh' | 'cn';
+type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh';
 type Gender = 'M' | 'F';
 type ActivityLevel = 'sedentary' | 'light' | 'moderate' | 'active' | 'veryActive';
 type Goal = 'lose' | 'maintain' | 'gain';
@@ -142,29 +142,6 @@ const L: Record<Locale, {
     underweight: 'Bajo peso', normal: 'Normal', overweight: 'Sobrepeso', obese: 'Obesidad',
   },
   zh: {
-    title: '營養素與卡路里計算機', subtitle: '每日巨量營養素規劃師',
-    age: '年齡', gender: '性別', weight: '體重（kg）', height: '身高（cm）',
-    activity: '活動量', goal: '目標',
-    male: '男性', female: '女性',
-    sedentary: '久坐不動', light: '輕度活動（每週1-3次）', moderate: '中度活動（每週3-5次）', active: '高度活動（每週6-7次）', veryActive: '非常活躍（每天2次以上）',
-    lose: '減重', maintain: '維持體重', gain: '增肌',
-    calc: '計算', reset: '重置',
-    calories: '卡路里', protein: '蛋白質', carbs: '碳水化合物', fat: '脂肪',
-    fiber: '膳食纖維', water: '每日飲水量',
-    bmr: '基礎代謝率（BMR）', tdee: '每日總能量消耗（TDEE）', goalCalories: '目標卡路里',
-    perDay: '每日', perMeal: '每餐（÷3）',
-    macroTitle: '三大營養素',
-    weightUnit: 'kg', heightUnit: 'cm',
-    tip: '💡 營養建議',
-    tips: {
-      lose: ['攝取足夠蛋白質防止肌肉流失', '每日熱量缺口不超過500kcal', '多喝水增加飽腹感'],
-      maintain: ['均衡攝取三大營養素', '建議每週運動3-5次', '限制糖分和加工食品'],
-      gain: ['運動後30分鐘內補充蛋白質', '優質碳水化合物補充能量', '逐步增加卡路里攝入'],
-    },
-    bmiLabel: 'BMI', bmiValue: '',
-    underweight: '體重過輕', normal: '正常', overweight: '過重', obese: '肥胖',
-  },
-  cn: {
     title: '营养素与卡路里计算器', subtitle: '每日宏量营养素规划师',
     age: '年龄', gender: '性别', weight: '体重（kg）', height: '身高（cm）',
     activity: '活动量', goal: '目标',

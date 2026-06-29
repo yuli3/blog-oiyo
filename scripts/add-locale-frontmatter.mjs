@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const BLOG_DIR = join(__dirname, '../src/content/blog');
 
-const locales = ['en', 'ko', 'ja', 'fr', 'es', 'zh', 'cn'];
+const locales = ['en', 'ko', 'ja', 'fr', 'es', 'zh'];
 
 const stats = {};
 

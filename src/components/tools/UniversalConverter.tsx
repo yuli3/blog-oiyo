@@ -29,7 +29,7 @@ interface Labels {
   invalid: string;
 }
 
-const LABELS: Record<Exclude<Locale, "cn">, Labels> = {
+const LABELS: Record<Locale, Labels> = {
   en: {
     title: "Universal Converter",
     subtitle: "Developer-friendly converters for text, number bases, binary, and dates.",
@@ -243,7 +243,7 @@ interface Props {
 }
 
 export default function UniversalConverter({ locale }: Props) {
-  const t = LABELS[locale as Exclude<Locale, "cn">] ?? LABELS.en;
+  const t = LABELS[locale] ?? LABELS.en;
   const [tab, setTab] = useState<"ascii" | "base" | "binary" | "roman">("ascii");
 
   const [text, setText] = useState("");

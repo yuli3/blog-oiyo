@@ -2,25 +2,10 @@ import React, { useState } from 'react';
 import { GameContainer } from '@/components/ui/game/GamePrimitives';
 
 interface Props {
-    locale?: 'cn' | 'zh' | 'en';
+    locale?: 'zh' | 'en';
 }
 
 const labels = {
-    cn: {
-        title: '台灣薪資試算表 2024',
-        desc: '輸入月薪，試算勞保、健保及所得稅後實際到手金額（2024年費率）。',
-        monthlyGross: '月薪稅前（新台幣）',
-        dependents: '扶養人數（含本人）',
-        cardGross: '月薪稅前',
-        cardNet: '月薪稅後到手',
-        cardAnnual: '年薪到手（估算）',
-        deductions: '月扣款明細',
-        laborIns: '勞保費（員工自付 2.508%）',
-        nhiIns: '健保費（員工自付 1.551%）',
-        totalIns: '保費合計',
-        incomeTax: '所得稅（月估算）',
-        note: '* 勞保投保薪資上限45,800元，健保上限219,500元。所得稅以年度綜合所得稅試算（含標準扣除額12.4萬、薪資特扣額20.7萬及免稅額9.2萬/人）。',
-    },
     zh: {
         title: '台湾薪资试算表 2024',
         desc: '输入月薪，试算劳保、健保及所得税后实际到手金额（2024年费率）。',
@@ -97,8 +82,8 @@ function calcAnnualTax(annualGross: number, dependents: number): number {
     return Math.round(Math.max(0, tax));
 }
 
-const TaiwanSalaryCalculator: React.FC<Props> = ({ locale = 'cn' }) => {
-    const t = labels[locale === 'cn' ? 'cn' : locale === 'zh' ? 'zh' : 'en'];
+const TaiwanSalaryCalculator: React.FC<Props> = ({ locale = 'zh' }) => {
+    const t = labels[locale === 'en' ? 'en' : 'zh'];
 
     const [monthlyGross, setMonthlyGross] = useState(50_000);
     const [dependents, setDependents] = useState(1);

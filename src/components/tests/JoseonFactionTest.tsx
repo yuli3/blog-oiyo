@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh' | 'cn'
+type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh'
 
 type FactionKey = 'dongin' | 'seoin' | 'namin' | 'bukin' | 'noron' | 'soron'
 
@@ -94,8 +94,7 @@ const LABELS: Record<Locale, {
     note: 'Este test es solo para interés histórico.',
     progress: (c, t) => `${c} / ${t}`,
   },
-  zh: { title: '朝鮮王朝派系測試', subtitle: '如果你是朝鮮官員，你會屬於哪個派系？', start: '開始測試', restart: '重新測試', result: '你的派系', share: '分享結果', yourFaction: '你是', traitLabel: '核心特質', descLabel: '描述', histLabel: '歷史背景', note: '此測試僅供歷史興趣之用。', progress: (c, t) => `${c} / ${t}` },
-  cn: { title: '朝鲜王朝派系测试', subtitle: '如果你是朝鲜官员，你会属于哪个派系？', start: '开始测试', restart: '重新测试', result: '你的派系', share: '分享结果', yourFaction: '你是', traitLabel: '核心特质', descLabel: '描述', histLabel: '历史背景', note: '此测试仅供历史兴趣之用。', progress: (c, t) => `${c} / ${t}` },
+  zh: { title: '朝鲜王朝派系测试', subtitle: '如果你是朝鲜官员，你会属于哪个派系？', start: '开始测试', restart: '重新测试', result: '你的派系', share: '分享结果', yourFaction: '你是', traitLabel: '核心特质', descLabel: '描述', histLabel: '历史背景', note: '此测试仅供历史兴趣之用。', progress: (c, t) => `${c} / ${t}` },
 }
 
 const FACTIONS: Record<FactionKey, {
@@ -180,16 +179,6 @@ const QUESTIONS: Record<Locale, Question[]> = {
     { id: 'q8', text: '¿Cambio o tradición, cuál es más importante?', options: [{ value: 'noron', label: 'La tradición probada es el fundamento de la sociedad.' }, { value: 'bukin', label: 'Sin cambio, no hay progreso.' }, { value: 'namin', label: 'Se necesita un equilibrio entre tradición y cambio.' }, { value: 'soron', label: 'Debe elegirse con flexibilidad según la situación.' }] },
   ],
   zh: [
-    { id: 'q1', text: '在團隊項目中出現意見衝突時，我？', options: [{ value: 'dongin', label: '堅守原則。妥協之後再說。' }, { value: 'seoin', label: '找到有效方案快速解決。' }, { value: 'namin', label: '理解雙方並找到中間立場。' }, { value: 'bukin', label: '大膽提出新方向。' }] },
-    { id: 'q2', text: '面臨重要決策時，我？', options: [{ value: 'noron', label: '遵循已驗證的方法。' }, { value: 'soron', label: '聽取各種意見靈活決策。' }, { value: 'dongin', label: '選擇與信念一致的方向。' }, { value: 'bukin', label: '看結果大膽選擇。' }] },
-    { id: 'q3', text: '我的學習/工作風格是？', options: [{ value: 'dongin', label: '喜歡深入鑽研一個領域。' }, { value: 'seoin', label: '建立系統高效推進。' }, { value: 'soron', label: '跨越各個領域探索新事物。' }, { value: 'namin', label: '以均衡視角看待全局。' }] },
-    { id: 'q4', text: '面對不公正情況時？', options: [{ value: 'dongin', label: '按規則提出問題。' }, { value: 'bukin', label: '立即行動創造變化。' }, { value: 'noron', label: '在現有制度內尋找解決方案。' }, { value: 'namin', label: '減少衝突漸進式推動變化。' }] },
-    { id: 'q5', text: '我理想中的社會/組織是？', options: [{ value: 'dongin', label: '道德與原則主導的地方。' }, { value: 'seoin', label: '有高效有序系統的地方。' }, { value: 'soron', label: '認可多元性並接受變化的地方。' }, { value: 'noron', label: '維護傳統與穩定值得信賴的地方。' }] },
-    { id: 'q6', text: '我對朋友和同事的態度是？', options: [{ value: 'namin', label: '努力與所有人相處融洽。' }, { value: 'dongin', label: '與價值觀相同的人深交。' }, { value: 'bukin', label: '重視能共同創造變化的夥伴。' }, { value: 'seoin', label: '偏好互利互惠的關係。' }] },
-    { id: 'q7', text: '歷史上更重要的是？', options: [{ value: 'dongin', label: '堅守道德原則的人。' }, { value: 'bukin', label: '改變時代的改革者。' }, { value: 'noron', label: '穩定引領社會的領導者。' }, { value: 'soron', label: '實踐新思想與包容的人。' }] },
-    { id: 'q8', text: '變革與傳統哪個更重要？', options: [{ value: 'noron', label: '經過驗證的傳統是社會基礎。' }, { value: 'bukin', label: '沒有變化就沒有進步。' }, { value: 'namin', label: '需要傳統與變革的均衡。' }, { value: 'soron', label: '應根據情況靈活選擇。' }] },
-  ],
-  cn: [
     { id: 'q1', text: '在团队项目中出现意见冲突时，我？', options: [{ value: 'dongin', label: '坚守原则。妥协之后再说。' }, { value: 'seoin', label: '找到有效方案快速解决。' }, { value: 'namin', label: '理解双方并找到中间立场。' }, { value: 'bukin', label: '大胆提出新方向。' }] },
     { id: 'q2', text: '面临重要决策时，我？', options: [{ value: 'noron', label: '遵循已验证的方法。' }, { value: 'soron', label: '听取各种意见灵活决策。' }, { value: 'dongin', label: '选择与信念一致的方向。' }, { value: 'bukin', label: '看结果大胆选择。' }] },
     { id: 'q3', text: '我的学习/工作风格是？', options: [{ value: 'dongin', label: '喜欢深入钻研一个领域。' }, { value: 'seoin', label: '建立系统高效推进。' }, { value: 'soron', label: '跨越各个领域探索新事物。' }, { value: 'namin', label: '以均衡视角看待全局。' }] },

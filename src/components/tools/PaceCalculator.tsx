@@ -16,7 +16,6 @@ const LABELS: Record<string, UiLabels> = {
   ko: { pace: "페이스 (km당)", min: "분", sec: "초", speed: "속도", paceMile: "페이스 (마일당)", finish: "완주 예상", invalid: "페이스를 입력하세요" },
   ja: { pace: "ペース (1kmあたり)", min: "分", sec: "秒", speed: "速度", paceMile: "ペース (1マイルあたり)", finish: "完走予想", invalid: "ペースを入力してください" },
   zh: { pace: "配速 (每公里)", min: "分", sec: "秒", speed: "速度", paceMile: "配速 (每英里)", finish: "完成时间", invalid: "请输入配速" },
-  cn: { pace: "配速 (每公里)", min: "分", sec: "秒", speed: "速度", paceMile: "配速 (每英里)", finish: "完成时间", invalid: "请输入配速" },
   fr: { pace: "Allure (par km)", min: "min", sec: "s", speed: "Vitesse", paceMile: "Allure (par mile)", finish: "Temps d'arrivée", invalid: "Saisissez une allure" },
   es: { pace: "Ritmo (por km)", min: "min", sec: "s", speed: "Velocidad", paceMile: "Ritmo (por milla)", finish: "Tiempo de meta", invalid: "Introduce un ritmo" },
 };

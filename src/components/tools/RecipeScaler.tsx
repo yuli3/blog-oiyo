@@ -19,7 +19,6 @@ const LABELS: Record<string, UiLabels> = {
   ko: { original: "원래 인분", target: "목표 인분", servings: "인분", factor: "배율", ingredient: "재료", amount: "양", unit: "단위", add: "+ 재료 추가", remove: "삭제", result: "환산된 양" },
   ja: { original: "元の人数分", target: "目標の人数分", servings: "人分", factor: "倍率", ingredient: "材料", amount: "量", unit: "単位", add: "+ 材料を追加", remove: "削除", result: "換算後の量" },
   zh: { original: "原份数", target: "目标份数", servings: "份", factor: "倍数", ingredient: "食材", amount: "用量", unit: "单位", add: "+ 添加食材", remove: "删除", result: "换算用量" },
-  cn: { original: "原份数", target: "目标份数", servings: "份", factor: "倍数", ingredient: "食材", amount: "用量", unit: "单位", add: "+ 添加食材", remove: "删除", result: "换算用量" },
   fr: { original: "Portions d'origine", target: "Portions cibles", servings: "portions", factor: "Facteur", ingredient: "Ingrédient", amount: "Quantité", unit: "Unité", add: "+ Ajouter", remove: "Retirer", result: "Quantité ajustée" },
   es: { original: "Porciones originales", target: "Porciones objetivo", servings: "porciones", factor: "Factor", ingredient: "Ingrediente", amount: "Cantidad", unit: "Unidad", add: "+ Añadir", remove: "Quitar", result: "Cantidad ajustada" },
 };

@@ -19,13 +19,12 @@ const L: Record<string, UiLabels> = {
   ko: { start: "시작 시각", end: "종료 시각", breakMin: "휴게 시간 (분)", rate: "시급 (선택)", rateHint: "시급을 입력하면 급여를 추정합니다.", duration: "근무 시간", decimal: "십진 시간", pay: "추정 급여", hours: "시간", overnight: "익일 종료" },
   ja: { start: "開始時刻", end: "終了時刻", breakMin: "休憩 (分)", rate: "時給 (任意)", rateHint: "時給を入力すると給与を試算します。", duration: "勤務時間", decimal: "10進時間", pay: "推定給与", hours: "時間", overnight: "翌日終了" },
   zh: { start: "开始时间", end: "结束时间", breakMin: "休息 (分钟)", rate: "时薪 (可选)", rateHint: "输入时薪可估算收入。", duration: "时长", decimal: "十进制小时", pay: "预估薪资", hours: "小时", overnight: "次日结束" },
-  cn: { start: "开始时间", end: "结束时间", breakMin: "休息 (分钟)", rate: "时薪 (可选)", rateHint: "输入时薪可估算收入。", duration: "时长", decimal: "十进制小时", pay: "预估薪资", hours: "小时", overnight: "次日结束" },
   fr: { start: "Heure de début", end: "Heure de fin", breakMin: "Pause (minutes)", rate: "Taux horaire (option)", rateHint: "Saisissez un taux pour estimer la paie.", duration: "Durée", decimal: "Heures décimales", pay: "Paie estimée", hours: "h", overnight: "Finit le lendemain" },
   es: { start: "Hora de inicio", end: "Hora de fin", breakMin: "Descanso (minutos)", rate: "Tarifa por hora (opcional)", rateHint: "Introduce una tarifa para estimar el pago.", duration: "Duración", decimal: "Horas decimales", pay: "Pago estimado", hours: "h", overnight: "Termina al día siguiente" },
 };
 
-const CURRENCY: Record<string, string> = { ko: "₩", en: "$", ja: "¥", fr: "€", es: "€", zh: "NT$", cn: "¥" };
-const LOCALE_NUM: Record<string, string> = { ko: "ko-KR", en: "en-US", ja: "ja-JP", fr: "fr-FR", es: "es-ES", zh: "zh-TW", cn: "zh-CN" };
+const CURRENCY: Record<string, string> = { ko: "₩", en: "$", ja: "¥", fr: "€", es: "€", zh: "¥", };
+const LOCALE_NUM: Record<string, string> = { ko: "ko-KR", en: "en-US", ja: "ja-JP", fr: "fr-FR", es: "es-ES", zh: "zh-CN", };
 
 interface Props {
   locale: Locale;

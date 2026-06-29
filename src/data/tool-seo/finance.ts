@@ -1,6 +1,6 @@
 import type { Locale } from "../../lib/i18n";
 
-export type ActiveLocale = Exclude<Locale, "cn">;
+export type ActiveLocale = Locale;
 
 export type FinanceToolSlug =
   | "roi-calculator"

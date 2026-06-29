@@ -24,7 +24,6 @@ const L: Record<string, UiLabels> = {
   ko: { m1: "X의 Y%는?", m2: "X는 Y의 몇 %?", m3: "변화율 A → B", m4: "할인가", of: "의", is: "은(는)", percentOf: "% (대비)", from: "이전", to: "이후", price: "정가", discount: "할인 %", result: "결과", saved: "절약액", increase: "증가", decrease: "감소" },
   ja: { m1: "Xの Y% は？", m2: "X は Y の何 %？", m3: "変化率 A → B", m4: "割引価格", of: "の", is: "は", percentOf: "% (対比)", from: "前", to: "後", price: "定価", discount: "割引 %", result: "結果", saved: "節約額", increase: "増加", decrease: "減少" },
   zh: { m1: "X 的 Y% 是？", m2: "X 是 Y 的百分之几？", m3: "变化率 A → B", m4: "折扣价", of: "的", is: "是", percentOf: "%", from: "原值", to: "新值", price: "原价", discount: "折扣 %", result: "结果", saved: "节省", increase: "增加", decrease: "减少" },
-  cn: { m1: "X 的 Y% 是？", m2: "X 是 Y 的百分之几？", m3: "变化率 A → B", m4: "折扣价", of: "的", is: "是", percentOf: "%", from: "原值", to: "新值", price: "原价", discount: "折扣 %", result: "结果", saved: "节省", increase: "增加", decrease: "减少" },
   fr: { m1: "Combien font Y% de X ?", m2: "X représente quel % de Y ?", m3: "Variation A → B", m4: "Prix remisé", of: "de", is: "est", percentOf: "% de", from: "De", to: "À", price: "Prix", discount: "Remise %", result: "Résultat", saved: "Économie", increase: "hausse", decrease: "baisse" },
   es: { m1: "¿Cuánto es Y% de X?", m2: "¿X es qué % de Y?", m3: "Variación A → B", m4: "Precio con descuento", of: "de", is: "es", percentOf: "% de", from: "De", to: "A", price: "Precio", discount: "Descuento %", result: "Resultado", saved: "Ahorras", increase: "aumento", decrease: "descenso" },
 };

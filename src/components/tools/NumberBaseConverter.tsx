@@ -15,7 +15,7 @@ interface Labels {
   baseLabels: Record<BaseValue, string>;
 }
 
-const LABELS: Record<Exclude<Locale, "cn">, Labels> = {
+const LABELS: Record<Locale, Labels> = {
   en: {
     title: "Number Base Converter",
     subtitle: "Convert decimal, binary, octal, and hexadecimal values instantly.",
@@ -96,7 +96,7 @@ interface Props {
 const bases: BaseValue[] = [2, 8, 10, 16];
 
 export default function NumberBaseConverter({ locale }: Props) {
-  const t = LABELS[locale as Exclude<Locale, "cn">] ?? LABELS.en;
+  const t = LABELS[locale] ?? LABELS.en;
   const [value, setValue] = useState("");
   const [fromBase, setFromBase] = useState<BaseValue>(10);
 

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 
-type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh' | 'cn'
+type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh'
 type Phase = 'intro' | 'show' | 'recall' | 'result'
 
 const LABELS: Record<Locale, {
@@ -16,8 +16,7 @@ const LABELS: Record<Locale, {
   ja: { title: 'カラーメモリーテスト', subtitle: '一瞬見せた色を記憶して答えてください', start: '開始', restart: 'もう一度', remember: '色を覚えてください！', nowPick: '今見た色を選んでください', correct: '正解！ ✓', wrong: '不正解 ✗', score: 'スコア', level: 'レベル', outOf: '/', results: (s, t) => s === t ? '完璧な記憶力！🧠' : s >= t * 0.8 ? '記憶力優秀 🌟' : s >= t * 0.5 ? '普通レベル 👍' : 'もっと練習しましょう 💪', roundLabel: r => `ラウンド${r}`, showingFor: '秒後に消えます' },
   fr: { title: 'Test de Mémoire des Couleurs', subtitle: 'Mémorisez les couleurs affichées brièvement', start: 'Commencer', restart: 'Rejouer', remember: 'Mémorisez les couleurs !', nowPick: 'Sélectionnez la couleur que vous venez de voir', correct: 'Correct ! ✓', wrong: 'Faux ✗', score: 'Score', level: 'Niveau', outOf: '/', results: (s, t) => s === t ? 'Mémoire parfaite ! 🧠' : s >= t * 0.8 ? 'Excellente mémoire 🌟' : s >= t * 0.5 ? 'Niveau moyen 👍' : 'Continuez à pratiquer 💪', roundLabel: r => `Tour ${r}`, showingFor: 'secondes restantes' },
   es: { title: 'Prueba de Memoria de Colores', subtitle: 'Recuerda los colores mostrados brevemente y selecciónalos', start: 'Comenzar', restart: 'Jugar de nuevo', remember: '¡Recuerda los colores!', nowPick: 'Selecciona el color que acabas de ver', correct: '¡Correcto! ✓', wrong: 'Incorrecto ✗', score: 'Puntuación', level: 'Nivel', outOf: '/', results: (s, t) => s === t ? '¡Memoria perfecta! 🧠' : s >= t * 0.8 ? 'Excelente memoria 🌟' : s >= t * 0.5 ? 'Nivel promedio 👍' : 'Sigue practicando 💪', roundLabel: r => `Ronda ${r}`, showingFor: 'segundos restantes' },
-  zh: { title: '顏色記憶測試', subtitle: '記住短暫顯示的顏色並選出正確答案', start: '開始', restart: '再玩一次', remember: '記住顏色！', nowPick: '選擇您剛才看到的顏色', correct: '正確！✓', wrong: '錯誤 ✗', score: '分數', level: '關卡', outOf: '/', results: (s, t) => s === t ? '完美記憶！🧠' : s >= t * 0.8 ? '記憶力優秀 🌟' : s >= t * 0.5 ? '中等水平 👍' : '繼續練習 💪', roundLabel: r => `第${r}輪`, showingFor: '秒後消失' },
-  cn: { title: '颜色记忆测试', subtitle: '记住短暂显示的颜色并选出正确答案', start: '开始', restart: '再玩一次', remember: '记住颜色！', nowPick: '选择您刚才看到的颜色', correct: '正确！✓', wrong: '错误 ✗', score: '分数', level: '关卡', outOf: '/', results: (s, t) => s === t ? '完美记忆！🧠' : s >= t * 0.8 ? '记忆力优秀 🌟' : s >= t * 0.5 ? '中等水平 👍' : '继续练习 💪', roundLabel: r => `第${r}轮`, showingFor: '秒后消失' },
+  zh: { title: '颜色记忆测试', subtitle: '记住短暂显示的颜色并选出正确答案', start: '开始', restart: '再玩一次', remember: '记住颜色！', nowPick: '选择您刚才看到的颜色', correct: '正确！✓', wrong: '错误 ✗', score: '分数', level: '关卡', outOf: '/', results: (s, t) => s === t ? '完美记忆！🧠' : s >= t * 0.8 ? '记忆力优秀 🌟' : s >= t * 0.5 ? '中等水平 👍' : '继续练习 💪', roundLabel: r => `第${r}轮`, showingFor: '秒后消失' },
 }
 
 const COLORS = [

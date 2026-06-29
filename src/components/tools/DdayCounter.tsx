@@ -82,18 +82,6 @@ const L: Record<Locale, Labels> = {
     namePlaceholder: "Ej: Cumpleaños, Examen, Viaje...",
   },
   zh: {
-    title: "倒數計時器",
-    addEvent: "新增事件",
-    eventName: "事件名稱",
-    eventDate: "目標日期",
-    addBtn: "新增",
-    empty: "目前沒有倒數事件",
-    deleteBtn: "刪除",
-    today: "就是今天！",
-    maxReached: "最多可新增10個事件。",
-    namePlaceholder: "例：生日、考試、旅遊...",
-  },
-  cn: {
     title: "倒计时计数器",
     addEvent: "添加事件",
     eventName: "事件名称",

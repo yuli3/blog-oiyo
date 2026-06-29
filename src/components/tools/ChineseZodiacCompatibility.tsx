@@ -240,38 +240,6 @@ const UI: Record<Locale, {
       neutral: "普通关系，理解和尊重彼此的差异可以形成良好关系。",
     },
   },
-  cn: {
-    title: "生肖配對",
-    subtitle: "通過出生年份的生肖了解兩人的配對",
-    person1Year: "第一個人的出生年份",
-    person2Year: "第二個人的出生年份",
-    yearPlaceholder: "選擇年份",
-    calcBtn: "查看配對",
-    resetBtn: "重新測試",
-    animalLabel: "生肖",
-    scoreLabel: "配對分數",
-    relationLabel: "關係類型",
-    descLabel: "配對說明",
-    animals: {
-      rat: "鼠", ox: "牛", tiger: "虎", rabbit: "兔",
-      dragon: "龍", snake: "蛇", horse: "馬", goat: "羊",
-      monkey: "猴", rooster: "雞", dog: "狗", pig: "豬",
-    },
-    relations: {
-      triad: "三合 ✨",
-      sixharmony: "六合 💞",
-      conflict: "相沖 ⚡",
-      harm: "刑沖破害 ⚠️",
-      neutral: "普通 🤝",
-    },
-    relationDesc: {
-      triad: "三合關係是最好的配對。彼此完美互補，形成強大的合作關係。",
-      sixharmony: "六合意味著自然和諧的配對，相處融洽，相互扶持。",
-      conflict: "相沖可能面臨直接對立，但努力後也能相互激勵。",
-      harm: "刑沖破害組合容易產生摩擦，相互理解和關懷可以克服困難。",
-      neutral: "普通關係，理解和尊重彼此的差異可以形成良好關係。",
-    },
-  },
 };
 
 // ─── Compatibility Matrix ─────────────────────────────────────────────────────
@@ -464,20 +432,6 @@ const ANIMAL_TRAITS: Record<Locale, Record<ZodiacAnimal, string>> = {
     dog: "忠实诚实",
     pig: "慷慨温暖",
   },
-  cn: {
-    rat: "聰明善交際",
-    ox: "勤勞可靠",
-    tiger: "勇敢有魅力",
-    rabbit: "親切細膩",
-    dragon: "有野心自信",
-    snake: "睿智直覺強",
-    horse: "自由熱情",
-    goat: "溫和有創意",
-    monkey: "機智聰穎",
-    rooster: "勤勞細心",
-    dog: "忠實誠實",
-    pig: "慷慨溫暖",
-  },
 };
 
 function buildDesc(a: ZodiacAnimal, b: ZodiacAnimal, locale: Locale): string[] {
@@ -650,33 +604,6 @@ function buildDesc(a: ZodiacAnimal, b: ZodiacAnimal, locale: Locale): string[] {
         `${ANIMAL_EMOJI[a]} ${aName}（${aTrait}）与${ANIMAL_EMOJI[b]} ${bName}（${bTrait}）是普通关系。`,
         "没有大的冲突，关系平稳、简单。",
         "欣赏彼此的不同，随着时间可以加深这段缘分。",
-      ],
-    },
-    cn: {
-      triad: [
-        `${ANIMAL_EMOJI[a]} ${aName}（${aTrait}）與${ANIMAL_EMOJI[b]} ${bName}（${bTrait}）是三合關係。`,
-        "彼此的優勢完美互補，形成強大而持久的聯繫。",
-        "這是中國占星術中最好的配對之一，在長期關係中尤為突出。",
-      ],
-      sixharmony: [
-        `${ANIMAL_EMOJI[a]} ${aName}（${aTrait}）與${ANIMAL_EMOJI[b]} ${bName}（${bTrait}）是六合關係。`,
-        "自然的和諧與深厚的相互理解讓兩人在一起感到舒適。",
-        "一段相互支持、共同成長的穩定夥伴關係。",
-      ],
-      conflict: [
-        `${ANIMAL_EMOJI[a]} ${aName}（${aTrait}）與${ANIMAL_EMOJI[b]} ${bName}（${bTrait}）是相沖關係。`,
-        "不同的性格有時會產生摩擦，但也能帶來令人興奮的能量。",
-        "通過耐心與尊重，這種挑戰也可以成為成長的契機。",
-      ],
-      harm: [
-        `${ANIMAL_EMOJI[a]} ${aName}（${aTrait}）與${ANIMAL_EMOJI[b]} ${bName}（${bTrait}）是刑沖破害關係。`,
-        "這種配對容易產生誤解或摩擦。",
-        "相互關懷、坦誠溝通和耐心是這段關係的關鍵。",
-      ],
-      neutral: [
-        `${ANIMAL_EMOJI[a]} ${aName}（${aTrait}）與${ANIMAL_EMOJI[b]} ${bName}（${bTrait}）是普通關係。`,
-        "沒有大的衝突，關係平穩、簡單。",
-        "欣賞彼此的不同，隨著時間可以加深這段緣分。",
       ],
     },
   };

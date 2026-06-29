@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 
-type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh' | 'cn';
+type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh';
 
 const L: Record<Locale, {
   title: string; subtitle: string;
@@ -16,8 +16,7 @@ const L: Record<Locale, {
   ja: { title: 'タイピング速度テスト', subtitle: 'WPM測定', wpm: 'WPM', accuracy: '正確率', time: '時間', start: 'スタート', restart: 'もう一度', result: '結果', typingPrompt: 'タイピングを開始するとテストが始まります', duration: '時間選択', chars: '文字数', errors: 'エラー', dur15: '15秒', dur30: '30秒', dur60: '1分', excellent: '素晴らしい！プロレベルです。', great: '上手！平均以上です。', good: '良いです！練習を続けましょう。', keep: '練習を続ければ上達します！' },
   fr: { title: 'Test de vitesse de frappe', subtitle: 'Mots par minute (WPM)', wpm: 'MPM', accuracy: 'Précision', time: 'Temps', start: 'Démarrer', restart: 'Recommencer', result: 'Résultat', typingPrompt: 'Commencez à taper pour lancer le test', duration: 'Durée', chars: 'Caractères', errors: 'Erreurs', dur15: '15 s', dur30: '30 s', dur60: '1 min', excellent: 'Excellent ! Niveau expert.', great: 'Très bien ! Au-dessus de la moyenne.', good: 'Bien ! Continuez à pratiquer.', keep: 'Continuez, vous progresserez vite !' },
   es: { title: 'Test de velocidad de escritura', subtitle: 'Palabras por minuto (PPM)', wpm: 'PPM', accuracy: 'Precisión', time: 'Tiempo', start: 'Empezar', restart: 'Reiniciar', result: 'Resultado', typingPrompt: 'Comienza a escribir para iniciar el test', duration: 'Duración', chars: 'Caracteres', errors: 'Errores', dur15: '15 s', dur30: '30 s', dur60: '1 min', excellent: '¡Excelente! Nivel profesional.', great: '¡Muy bien! Por encima de la media.', good: '¡Bien! Sigue practicando.', keep: '¡Sigue así, mejorarás rápido!' },
-  zh: { title: '打字速度測試', subtitle: 'WPM — 每分鐘字數', wpm: 'WPM', accuracy: '準確率', time: '時間', start: '開始', restart: '重新測試', result: '結果', typingPrompt: '開始打字即開始測試', duration: '選擇時長', chars: '字元數', errors: '錯誤', dur15: '15秒', dur30: '30秒', dur60: '1分鐘', excellent: '優秀！達到專業水準。', great: '很好！高於平均水準。', good: '不錯！繼續練習。', keep: '繼續練習，你會進步很快！' },
-  cn: { title: '打字速度测试', subtitle: 'WPM — 每分钟字数', wpm: 'WPM', accuracy: '准确率', time: '时间', start: '开始', restart: '重新测试', result: '结果', typingPrompt: '开始打字即开始测试', duration: '选择时长', chars: '字符数', errors: '错误', dur15: '15秒', dur30: '30秒', dur60: '1分钟', excellent: '优秀！达到专业水平。', great: '很好！高于平均水平。', good: '不错！继续练习。', keep: '继续练习，你会进步很快！' },
+  zh: { title: '打字速度测试', subtitle: 'WPM — 每分钟字数', wpm: 'WPM', accuracy: '准确率', time: '时间', start: '开始', restart: '重新测试', result: '结果', typingPrompt: '开始打字即开始测试', duration: '选择时长', chars: '字符数', errors: '错误', dur15: '15秒', dur30: '30秒', dur60: '1分钟', excellent: '优秀！达到专业水平。', great: '很好！高于平均水平。', good: '不错！继续练习。', keep: '继续练习，你会进步很快！' },
 };
 
 // Common English typing passages

@@ -18,7 +18,6 @@ const L: Record<string, UiLabels> = {
   ko: { weight: "들어 올린 무게", reps: "수행 횟수", estimated: "추정 1RM", epley: "Epley", brzycki: "Brzycki", average: "평균", percentages: "훈련 강도표", pct: "%", reps1: "≈ 회" },
   ja: { weight: "挙上重量", reps: "実施回数", estimated: "推定1RM", epley: "Epley", brzycki: "Brzycki", average: "平均", percentages: "トレーニング強度表", pct: "%", reps1: "≈ 回" },
   zh: { weight: "举起重量", reps: "完成次数", estimated: "估算 1RM", epley: "Epley", brzycki: "Brzycki", average: "平均", percentages: "训练强度表", pct: "%", reps1: "≈ 次" },
-  cn: { weight: "举起重量", reps: "完成次数", estimated: "估算 1RM", epley: "Epley", brzycki: "Brzycki", average: "平均", percentages: "训练强度表", pct: "%", reps1: "≈ 次" },
   fr: { weight: "Charge soulevée", reps: "Répétitions", estimated: "1RM estimé", epley: "Epley", brzycki: "Brzycki", average: "Moyenne", percentages: "Pourcentages d'entraînement", pct: "%", reps1: "≈ reps" },
   es: { weight: "Peso levantado", reps: "Repeticiones", estimated: "1RM estimado", epley: "Epley", brzycki: "Brzycki", average: "Promedio", percentages: "Porcentajes de entrenamiento", pct: "%", reps1: "≈ reps" },
 };

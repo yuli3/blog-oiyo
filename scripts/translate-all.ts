@@ -61,8 +61,9 @@ async function run() {
     if (lang === DEFAULT_LOCALE) continue;
     console.log(`\n======================================\nTranslating for Language: [${lang}]\n======================================`);
     
-    // Map zh/cn for Google Translate
-    const gLang = lang === 'cn' ? 'zh-CN' : lang === 'zh' ? 'zh-CN' : lang === 'zh-TW' ? 'zh-TW' : lang;
+    // Map zh for Google Translate; cn is retired and not part of active locale automation.
+    if (lang === 'cn') continue;
+    const gLang = lang === 'zh' ? 'zh-CN' : lang === 'zh-TW' ? 'zh-TW' : lang;
 
     const langFile = path.join(LOCALES_DIR, `${lang}.json`);
     let langObj = JSON.parse(fs.readFileSync(langFile, 'utf8'));

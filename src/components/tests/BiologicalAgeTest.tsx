@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 
-type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh' | 'cn'
+type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh'
 
 const LABELS: Record<Locale, {
   title: string; subtitle: string; calculate: string; reset: string; note: string
@@ -15,8 +15,7 @@ const LABELS: Record<Locale, {
     categories: { sleep: '睡眠', exercise: '運動', diet: '食習慣', stress: 'ストレス', smoking: '喫煙', alcohol: '飲酒', bmi: 'BMI', social: '社会的つながり' } },
   fr: { title: 'Calculateur d\'Âge Biologique', subtitle: 'Calculez votre âge de santé réel basé sur vos habitudes de vie', calculate: 'Calculer', reset: 'Réinitialiser', note: 'Ce calculateur est à titre scientifique indicatif.', chronoAge: 'Âge chronologique', bioAge: 'Âge biologique', diff: 'Différence', older: 'ans biologiquement plus vieux', younger: 'ans biologiquement plus jeune', categories: { sleep: 'Sommeil', exercise: 'Exercice', diet: 'Alimentation', stress: 'Stress', smoking: 'Tabagisme', alcohol: 'Alcool', bmi: 'IMC', social: 'Connexion sociale' } },
   es: { title: 'Calculadora de Edad Biológica', subtitle: 'Calcula tu edad de salud real basada en hábitos de vida', calculate: 'Calcular', reset: 'Reiniciar', note: 'Esta calculadora es de referencia científica.', chronoAge: 'Edad cronológica', bioAge: 'Edad biológica', diff: 'Diferencia', older: 'años biológicamente mayor', younger: 'años biológicamente más joven', categories: { sleep: 'Sueño', exercise: 'Ejercicio', diet: 'Dieta', stress: 'Estrés', smoking: 'Tabaco', alcohol: 'Alcohol', bmi: 'IMC', social: 'Conexión social' } },
-  zh: { title: '生物年齡計算器', subtitle: '根據生活習慣計算您的真實健康年齡', calculate: '計算', reset: '重置', note: '此計算器僅供科學參考。準確健康評估請諮詢醫生。', chronoAge: '實際年齡', bioAge: '生物年齡', diff: '差異', older: '歲生物老化', younger: '歲生物年輕', categories: { sleep: '睡眠', exercise: '運動', diet: '飲食習慣', stress: '壓力', smoking: '吸菸', alcohol: '飲酒', bmi: 'BMI', social: '社交連結' } },
-  cn: { title: '生物年龄计算器', subtitle: '根据生活习惯计算您的真实健康年龄', calculate: '计算', reset: '重置', note: '此计算器仅供科学参考。准确健康评估请咨询医生。', chronoAge: '实际年龄', bioAge: '生物年龄', diff: '差异', older: '岁生物老化', younger: '岁生物年轻', categories: { sleep: '睡眠', exercise: '运动', diet: '饮食习惯', stress: '压力', smoking: '吸烟', alcohol: '饮酒', bmi: 'BMI', social: '社交连结' } },
+  zh: { title: '生物年龄计算器', subtitle: '根据生活习惯计算您的真实健康年龄', calculate: '计算', reset: '重置', note: '此计算器仅供科学参考。准确健康评估请咨询医生。', chronoAge: '实际年龄', bioAge: '生物年龄', diff: '差异', older: '岁生物老化', younger: '岁生物年轻', categories: { sleep: '睡眠', exercise: '运动', diet: '饮食习惯', stress: '压力', smoking: '吸烟', alcohol: '饮酒', bmi: 'BMI', social: '社交连结' } },
 }
 
 interface Factor { key: string; question: { ko: string; en: string }; options: { label: { ko: string; en: string }; delta: number }[] }

@@ -17,7 +17,7 @@ import { fileURLToPath } from "url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const LOCALES_DIR = join(__dirname, "../src/locales");
 
-const LOCALES = ["ko", "ja", "es", "fr", "zh", "cn"];
+const LOCALES = ["ko", "ja", "es", "fr", "zh"];
 const SOURCE = "en";
 
 // ─── Helpers ────────────────────────────────────────────────────────────────

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh' | 'cn'
+type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh'
 
 interface Question {
   idiom: string
@@ -48,8 +48,7 @@ const LABELS: Record<Locale, {
   },
   fr: { title: 'Quiz d\'Idiomes Coréens en 4 Caractères', subtitle: 'Choisissez l\'idiome correct selon son sens', start: 'Commencer', restart: 'Recommencer', correct: 'Correct ! ✓', wrong: 'Faux ✗', explanation: 'Explication', score: 'Score', outOf: '/ 10', next: 'Suivant', finish: 'Voir les résultats', results: { perfect: 'Parfait ! 🏆', great: 'Super ! 🌟', good: 'Bien ! 📚', low: 'Continuez à étudier 💪' }, progress: (c, t) => `${c} / ${t}` },
   es: { title: 'Quiz de Modismos Coreanos de 4 Caracteres', subtitle: 'Elige el modismo correcto según su significado', start: 'Comenzar', restart: 'Reintentar', correct: '¡Correcto! ✓', wrong: 'Incorrecto ✗', explanation: 'Explicación', score: 'Puntuación', outOf: '/ 10', next: 'Siguiente', finish: 'Ver resultados', results: { perfect: '¡Perfecto! 🏆', great: '¡Excelente! 🌟', good: '¡Bien! 📚', low: 'Sigue estudiando 💪' }, progress: (c, t) => `${c} / ${t}` },
-  zh: { title: '韓語四字成語測驗', subtitle: '根據意思選擇正確的四字成語', start: '開始', restart: '重新測試', correct: '正確！✓', wrong: '錯誤 ✗', explanation: '解說', score: '分數', outOf: '/ 10', next: '下一題', finish: '查看結果', results: { perfect: '完美！🏆', great: '出色！🌟', good: '不錯！📚', low: '繼續學習 💪' }, progress: (c, t) => `${c} / ${t}` },
-  cn: { title: '韩语四字成语测验', subtitle: '根据意思选择正确的四字成语', start: '开始', restart: '重新测试', correct: '正确！✓', wrong: '错误 ✗', explanation: '解说', score: '分数', outOf: '/ 10', next: '下一题', finish: '查看结果', results: { perfect: '完美！🏆', great: '出色！🌟', good: '不错！📚', low: '继续学习 💪' }, progress: (c, t) => `${c} / ${t}` },
+  zh: { title: '韩语四字成语测验', subtitle: '根据意思选择正确的四字成语', start: '开始', restart: '重新测试', correct: '正确！✓', wrong: '错误 ✗', explanation: '解说', score: '分数', outOf: '/ 10', next: '下一题', finish: '查看结果', results: { perfect: '完美！🏆', great: '出色！🌟', good: '不错！📚', low: '继续学习 💪' }, progress: (c, t) => `${c} / ${t}` },
 }
 
 const ALL_QUESTIONS: Question[] = [

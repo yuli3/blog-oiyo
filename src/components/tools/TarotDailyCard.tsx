@@ -147,24 +147,6 @@ const UI: Record<Locale, {
     majorArcana: "大阿卡纳",
     minorArcana: "小阿卡纳",
   },
-  cn: {
-    title: "每日塔羅牌",
-    subtitle: "抽一張牌來指引你今天的方向",
-    drawBtn: "抽牌",
-    drawingText: "正在洗牌...",
-    cardOfDay: "今日牌卡",
-    upright: "正位",
-    reversed: "逆位",
-    keywords: "關鍵詞",
-    messageLabel: "今日信息",
-    affirmationLabel: "今日肯定語",
-    loveLabel: "愛情運勢",
-    shareLabel: "明天將有新的牌卡等待你",
-    dateLabel: "今天",
-    clickToReveal: "點擊牌卡查看",
-    majorArcana: "大阿卡納",
-    minorArcana: "小阿卡納",
-  },
 };
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -201,7 +183,7 @@ function getLocaleKeywords(
 function formatDate(locale: Locale): string {
   const d = new Date();
   try {
-    return d.toLocaleDateString(locale === "cn" ? "zh-TW" : locale, {
+    return d.toLocaleDateString(locale === "zh" ? "zh-CN" : locale, {
       year: "numeric",
       month: "long",
       day: "numeric",
