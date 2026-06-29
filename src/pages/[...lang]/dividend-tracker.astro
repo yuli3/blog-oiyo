@@ -1,0 +1,29 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { DividendTracker } from "../../features/finance/DividendTracker";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: { title: "배당 기록기 — 연 배당·세후 추정 계산 (로컬 저장)", description: "보유 종목의 배당을 기록하고 연 배당·세후 추정을 계산합니다. 투자 조언이 아니며 모든 데이터는 브라우저에만 저장됩니다." },
+  en: { title: "Dividend Tracker — annual & after-tax estimate (local-only)", description: "Record holdings and estimate annual / after-tax dividends. Not investment advice; all data stays in your browser." },
+  ja: { title: "配当トラッカー — 年間・税引後の概算（ローカル保存）", description: "保有銘柄の配当を記録し、年間・税引後の概算を計算します。投資助言ではなく、データはブラウザのみに保存されます。" },
+  zh: { title: "股息记录器 — 年度·税后估算（本地保存）", description: "记录持仓股息并估算年度·税后金额。非投资建议，所有数据仅保存在浏览器中。" },
+  fr: { title: "Suivi de dividendes — estimation annuelle / après impôt (local)", description: "Enregistrez vos positions et estimez les dividendes annuels / après impôt. Pas un conseil en investissement ; données locales uniquement." },
+  es: { title: "Registro de dividendos — estimación anual / después de impuestos (local)", description: "Registra tus posiciones y estima dividendos anuales / después de impuestos. No es asesoramiento; los datos quedan en tu navegador." },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-4xl px-4 py-8">
+    <DividendTracker client:load locale={locale} />
+  </main>
+</BaseLayout>

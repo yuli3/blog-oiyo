@@ -1,7 +1,7 @@
 export const locales = ['en', 'ko', 'ja', 'fr', 'es', 'zh'] as const;
-// 'cn' (zh-TW) is retired from the build — the edge 301s /cn/* to /zh/* — but it
-// stays in the Locale type so legacy per-page Record<Locale, …> maps remain valid.
-export type Locale = (typeof locales)[number] | 'cn';
+// zh = 표준 중국어(Simplified). 구 'cn'(zh-TW)은 전 프로젝트에서 폐지(2026-06-29).
+// locales/타입 모두 cn 제외. 남은 cn: 키는 무해한 죽은 데이터(렌더 안 됨).
+export type Locale = (typeof locales)[number];
 
 export const localeNames: Record<Locale, string> = {
   en: 'English',
