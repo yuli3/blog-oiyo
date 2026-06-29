@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import KnowledgeNetworkMap from "../../components/shared/_oiyo-shared/KnowledgeNetworkMap.astro";
 import { getCollection } from "astro:content";
 import { siteConfig } from "../../config/site.config";
 import seedData from "../../data/knowledge-seed.json";
@@ -47,9 +48,31 @@ const resources = [
 ];
 
 const network = [
-  { role: "Definition", name: "Oiyo Wiki", url: "https://wiki.oiyo.net" },
-  { role: "Explanation", name: "Oiyo Blog", url: "https://blog.oiyo.net" },
-  { role: "Execution", name: "Oiyo", url: "https://oiyo.net" },
+  {
+    role: "Definition",
+    title: "Oiyo Wiki",
+    href: "https://wiki.oiyo.net/knowledge/",
+    summary: "Source-backed definitions and concept graphs.",
+    details: "Use this layer when you need stable terms, cited references, and machine-readable DefinedTerm data.",
+    catalogs: [{ label: "topics.json", href: "https://wiki.oiyo.net/knowledge/topics.json" }],
+  },
+  {
+    role: "Explanation",
+    title: "Oiyo Blog",
+    href: "https://blog.oiyo.net/knowledge/",
+    summary: "Guides, lessons, comparisons, and long-form context.",
+    details: "Use this layer when a reader needs examples, study paths, or a practical explanation before using a tool.",
+    catalogs: [{ label: "guides.json", href: "/knowledge/guides.json" }],
+    current: true,
+  },
+  {
+    role: "Execution",
+    title: "OIYO",
+    href: "https://oiyo.net/knowledge/",
+    summary: "Tests, calculators, results, and repeatable workflows.",
+    details: "Use this layer when the user wants to calculate, test, save a result, or turn knowledge into action.",
+    catalogs: [{ label: "tools.json", href: "https://oiyo.net/knowledge/tools.json" }],
+  },
 ];
 ---
 
@@ -95,16 +118,12 @@ const network = [
       </>
     )}
 
-    <h2 class="text-2xl font-bold tracking-tight mb-4">The knowledge network</h2>
-    <ul class="space-y-3 mb-12">
-      {network.map((n) => (
-        <li class="flex items-baseline gap-3">
-          <span class="text-[10px] font-bold uppercase tracking-widest text-primary w-24 shrink-0">{n.role}</span>
-          <a href={n.url} class="font-medium hover:text-primary transition-colors">{n.name}</a>
-          <span class="text-xs text-muted-foreground">{n.url}</span>
-        </li>
-      ))}
-    </ul>
+    <KnowledgeNetworkMap
+      eyebrow="Three layers"
+      heading="The knowledge network"
+      intro="Start with the layer that matches the intent. Open the details only when you need the data contract behind it."
+      layers={network}
+    />
 
     <h2 class="text-2xl font-bold tracking-tight mb-4">Citation</h2>
     <p class="text-muted-foreground">
