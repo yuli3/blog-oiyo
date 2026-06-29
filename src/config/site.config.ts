@@ -16,21 +16,23 @@ export const siteConfig = {
     toc: false,
     pagination: true,
   },
+  // 실존하는 공식 계정이 생기면 채울 것 (가짜 링크 금지). 현재 미운영.
   socials: {
-    github: "https://github.com/oiyo-net",
-    twitter: "https://twitter.com/oiyo_net",
-    linkedin: "https://linkedin.com/company/oiyo",
+    github: null as string | null,
+    twitter: null as string | null,
+    linkedin: null as string | null,
   },
   seo: {
-    twitterHandle: "@oiyo_net",
+    twitterHandle: null as string | null, // 실존 계정 생기면 채울 것
     ogImage: null,
     organization: {
-      name: "Oiyo Tech",
-      logo: "/logo.svg",
-      sameAs: [
-        "https://github.com/oiyo-net",
-        "https://twitter.com/oiyo_net"
-      ]
+      // 3사(oiyo.net/blog/wiki) 공유 canonical 발행자 — 단일 @id로 권위 통합
+      id: "https://oiyo.net/#organization",
+      name: "Oiyo",
+      canonicalUrl: "https://oiyo.net",
+      logo: "https://oiyo.net/icon-512.png",
+      // sameAs: 실존하는 외부 공식 프로필이 생기면 추가(가짜 링크는 E-E-A-T에 해로움). 결속은 공유 @id가 담당.
+      sameAs: [] as string[]
     }
   },
   analytics: {
