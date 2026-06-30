@@ -1,6 +1,10 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import StockYieldCalculatorComp from "../../components/calculators/StockYieldCalculator";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -37,11 +41,163 @@ const meta: Record<Locale, { title: string; description: string }> = {
   },
 };
 
+const content = {
+  ko: {
+    eyebrow: "투자 계산 도구",
+    introTitle: "주식 수익률 계산기란?",
+    intro: "기존 보유 수량과 평균 매수가, 추가 매수 수량과 단가를 함께 넣어 새 평균단가와 총 투자금, 현재가 기준 미실현 손익을 빠르게 계산하는 도구입니다. 물타기 전후의 손익분기점이 얼마나 달라지는지 확인할 때 유용합니다.",
+    howToTitle: "사용 방법",
+    steps: ["현재 보유 주수와 평균 매수가를 입력합니다.", "추가로 매수할 주수와 매수 단가를 입력합니다.", "현재 주가를 넣으면 평가금액과 미실현 손익까지 함께 확인할 수 있습니다.", "거래 수수료, 세금, 환율, 배당금은 별도로 고려해 최종 판단합니다."],
+    highlightsTitle: "확인할 수 있는 값",
+    highlights: [
+      { title: "새 평균단가", body: "기존 보유분과 추가 매수분을 합산해 조정된 평균 취득단가를 보여줍니다." },
+      { title: "총 투자금", body: "추가 매수 후 전체 원금 규모를 확인해 포지션 과대화를 방지할 수 있습니다." },
+      { title: "미실현 손익", body: "현재가를 입력하면 평가금액과 손익률을 함께 계산합니다." },
+    ],
+    relatedTitle: "관련 계산기",
+    related: [
+      { href: "/ko/dividend-tracker/", label: "배당 추적기", desc: "예상 배당금과 지급 주기를 기록합니다." },
+      { href: "/ko/dividend-calendar/", label: "배당 캘린더", desc: "배당락·지급 일정을 확인합니다." },
+      { href: "/ko/savings-comparison-calculator/", label: "저축 상품 비교", desc: "예금·적금·ISA의 세후 수령액을 비교합니다." },
+    ],
+    disclaimer: "투자 자문이 아닙니다. 실제 수익률은 거래 수수료, 세금, 환율, 체결가, 배당금, 시장 변동성에 따라 달라질 수 있습니다.",
+  },
+  en: {
+    eyebrow: "Investment calculator",
+    introTitle: "What is the stock yield calculator?",
+    intro: "This tool combines your current shares, average cost, and a planned additional purchase to estimate the new average cost, total invested, market value, and unrealized P&L. Use it to understand how averaging down changes your break-even point before committing more capital.",
+    howToTitle: "How to use",
+    steps: ["Enter your current shares and average cost.", "Enter the shares and price for the additional purchase.", "Add the current price if you want market value and unrealized P&L.", "Review fees, taxes, FX, dividends, and portfolio risk separately before deciding."],
+    highlightsTitle: "What it shows",
+    highlights: [
+      { title: "New average cost", body: "Blends current holdings and the new purchase into a revised cost basis." },
+      { title: "Total invested", body: "Shows the enlarged position size after the additional purchase." },
+      { title: "Unrealized P&L", body: "Uses the current price to estimate market value and percentage gain or loss." },
+    ],
+    relatedTitle: "Related calculators",
+    related: [
+      { href: "/en/dividend-tracker/", label: "Dividend Tracker", desc: "Track expected dividends and payment cadence." },
+      { href: "/en/dividend-calendar/", label: "Dividend Calendar", desc: "Review ex-dividend and payment dates." },
+      { href: "/en/savings-comparison-calculator/", label: "Savings Comparison", desc: "Compare deposits, installment savings, and ISA after tax." },
+    ],
+    disclaimer: "This is not investment advice. Actual returns can change with fees, taxes, FX, execution price, dividends, and market volatility.",
+  },
+  ja: {
+    eyebrow: "投資計算ツール",
+    introTitle: "株式利回り計算機とは？",
+    intro: "現在の保有株数と平均取得単価、追加購入予定の株数と単価を入力し、新しい平均取得単価、総投資額、現在値での未実現損益を確認するツールです。ナンピン後の損益分岐点を確認する用途に適しています。",
+    howToTitle: "使い方",
+    steps: ["現在の保有株数と平均取得単価を入力します。", "追加購入する株数と購入単価を入力します。", "現在株価を入れると評価額と未実現損益も確認できます。", "手数料、税金、為替、配当、ポートフォリオリスクは別途確認します。"],
+    highlightsTitle: "確認できること",
+    highlights: [
+      { title: "新しい平均取得単価", body: "既存保有分と追加購入分を合算して調整後の取得単価を表示します。" },
+      { title: "総投資額", body: "追加購入後のポジション規模を把握できます。" },
+      { title: "未実現損益", body: "現在株価をもとに評価額と損益率を計算します。" },
+    ],
+    relatedTitle: "関連計算機",
+    related: [
+      { href: "/ja/dividend-tracker/", label: "配当トラッカー", desc: "予想配当と支払い周期を記録します。" },
+      { href: "/ja/dividend-calendar/", label: "配当カレンダー", desc: "配当落ち日と支払日を確認します。" },
+      { href: "/ja/savings-comparison-calculator/", label: "貯蓄商品比較", desc: "預金・積立・ISAの税引き後額を比較します。" },
+    ],
+    disclaimer: "投資助言ではありません。実際の収益率は手数料、税金、為替、約定価格、配当、市場変動により変わります。",
+  },
+  zh: {
+    eyebrow: "投资计算工具",
+    introTitle: "什么是股票收益率计算机？",
+    intro: "输入当前持股、平均成本以及计划追加买入的数量和价格，即可估算新的平均成本、总投入、当前市值和未实现盈亏。适合在补仓前查看盈亏平衡点如何变化。",
+    howToTitle: "使用方法",
+    steps: ["输入当前持股数量和平均成本。", "输入追加买入数量和买入价格。", "如果输入当前股价，可同时查看市值和未实现盈亏。", "最终决策前请另行考虑手续费、税费、汇率、分红和组合风险。"],
+    highlightsTitle: "可查看的结果",
+    highlights: [
+      { title: "新平均成本", body: "将现有持仓和追加买入合并计算调整后的成本。" },
+      { title: "总投入", body: "显示追加买入后的整体仓位规模。" },
+      { title: "未实现盈亏", body: "按当前价格估算市值和盈亏率。" },
+    ],
+    relatedTitle: "相关计算器",
+    related: [
+      { href: "/zh/dividend-tracker/", label: "股息追踪器", desc: "记录预期股息和支付周期。" },
+      { href: "/zh/dividend-calendar/", label: "股息日历", desc: "查看除息日和支付日。" },
+      { href: "/zh/savings-comparison-calculator/", label: "储蓄商品比较", desc: "比较定存、定期储蓄和 ISA 的税后收益。" },
+    ],
+    disclaimer: "这不是投资建议。实际收益会受手续费、税费、汇率、成交价、分红和市场波动影响。",
+  },
+  fr: {
+    eyebrow: "Calculateur d'investissement",
+    introTitle: "Qu'est-ce que ce calculateur boursier ?",
+    intro: "Il combine vos actions actuelles, votre prix de revient moyen et un achat supplémentaire pour estimer le nouveau prix moyen, le total investi, la valeur de marché et la P&L non réalisée.",
+    howToTitle: "Comment l'utiliser",
+    steps: ["Saisissez vos actions actuelles et le prix moyen.", "Ajoutez le nombre d'actions et le prix du nouvel achat.", "Indiquez le prix actuel pour voir valeur de marché et P&L.", "Vérifiez séparément frais, impôts, change, dividendes et risque de portefeuille."],
+    highlightsTitle: "Ce qu'il affiche",
+    highlights: [
+      { title: "Nouveau prix moyen", body: "Fusionne les positions existantes et le nouvel achat." },
+      { title: "Total investi", body: "Montre la taille de position après renforcement." },
+      { title: "P&L non réalisée", body: "Estime gain ou perte avec le prix actuel." },
+    ],
+    relatedTitle: "Calculateurs liés",
+    related: [
+      { href: "/fr/dividend-tracker/", label: "Suivi des dividendes", desc: "Suivre dividendes attendus et fréquence." },
+      { href: "/fr/dividend-calendar/", label: "Calendrier des dividendes", desc: "Voir dates ex-dividende et paiement." },
+      { href: "/fr/savings-comparison-calculator/", label: "Comparateur d'épargne", desc: "Comparer les rendements après impôt." },
+    ],
+    disclaimer: "Ceci n'est pas un conseil en investissement. Les rendements réels varient avec frais, impôts, change, prix d'exécution, dividendes et volatilité.",
+  },
+  es: {
+    eyebrow: "Calculadora de inversión",
+    introTitle: "¿Qué es la calculadora de rentabilidad?",
+    intro: "Combina tus acciones actuales, precio medio y una compra adicional para estimar el nuevo coste medio, inversión total, valor de mercado y ganancias o pérdidas no realizadas.",
+    howToTitle: "Cómo usarla",
+    steps: ["Ingresa las acciones actuales y el coste medio.", "Añade acciones y precio de la nueva compra.", "Introduce el precio actual para ver valor de mercado y P&L.", "Revisa aparte comisiones, impuestos, divisas, dividendos y riesgo de cartera."],
+    highlightsTitle: "Qué muestra",
+    highlights: [
+      { title: "Nuevo coste medio", body: "Combina la posición actual y la compra adicional." },
+      { title: "Inversión total", body: "Muestra el tamaño de la posición después de comprar más." },
+      { title: "P&L no realizada", body: "Estima ganancia o pérdida con el precio actual." },
+    ],
+    relatedTitle: "Calculadoras relacionadas",
+    related: [
+      { href: "/es/dividend-tracker/", label: "Rastreador de dividendos", desc: "Registra dividendos esperados y frecuencia." },
+      { href: "/es/dividend-calendar/", label: "Calendario de dividendos", desc: "Consulta fechas ex-dividendo y pagos." },
+      { href: "/es/savings-comparison-calculator/", label: "Comparador de ahorro", desc: "Compara rendimientos después de impuestos." },
+    ],
+    disclaimer: "No es asesoramiento de inversión. Los rendimientos reales cambian con comisiones, impuestos, divisas, precio de ejecución, dividendos y volatilidad.",
+  },
+};
+
+const faqs = {
+  ko: [
+    { q: "물타기하면 항상 손실이 줄어드나요?", a: "평균단가는 낮아질 수 있지만 총 투자금과 종목 집중도도 커집니다. 주가가 계속 하락하면 손실 규모가 더 커질 수 있습니다." },
+    { q: "수수료와 세금은 포함되나요?", a: "아니요. 이 계산기는 단순 평균단가와 평가손익 계산용이며, 거래 수수료·세금·환율은 별도로 반영해야 합니다." },
+    { q: "현재 주가를 입력하지 않아도 되나요?", a: "가능합니다. 현재 주가를 비워두면 평균단가 계산 중심으로 사용할 수 있고, 손익 계산은 제한됩니다." },
+  ],
+  en: [
+    { q: "Does averaging down always reduce my loss?", a: "It can lower the average cost, but it also increases total capital at risk. If the stock keeps falling, the loss can grow." },
+    { q: "Are fees and taxes included?", a: "No. The tool estimates cost basis and unrealized P&L only. Add brokerage fees, taxes, and FX separately." },
+    { q: "Do I need to enter the current price?", a: "No. Without a current price, the tool is mainly for the new average cost; P&L output is limited." },
+  ],
+  ja: [
+    { q: "ナンピンすれば必ず損失は減りますか？", a: "平均取得単価は下がる場合がありますが、総投資額と集中リスクも増えます。下落が続けば損失は拡大します。" },
+    { q: "手数料や税金は含まれますか？", a: "含まれません。取得単価と未実現損益の簡易計算であり、手数料・税金・為替は別途考慮してください。" },
+    { q: "現在株価は必須ですか？", a: "必須ではありません。空欄の場合は平均取得単価の確認が中心になります。" },
+  ],
+};
+
 const m = meta[locale] ?? meta.en;
+const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
+const componentLocale = locale === "ko" ? "ko" : "en";
 ---
 
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <StockYieldCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
-  </main>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <ToolShell
+    title={m.title}
+    description={m.description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="stock-yield-calculator"
+    content={c}
+    applicationCategory="FinanceApplication"
+  >
+    <StockYieldCalculatorComp client:visible locale={componentLocale} />
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
 </BaseLayout>

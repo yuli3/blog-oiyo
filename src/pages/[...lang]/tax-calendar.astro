@@ -14,39 +14,226 @@ export async function getStaticPaths() {
 
 const { locale } = Astro.props as { locale: Locale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
+type TaxCalendarContent = {
+  title: string;
+  description: string;
+  introTitle: string;
+  intro: string;
+  howToTitle: string;
+  steps: string[];
+  checklistTitle: string;
+  checklist: { title: string; body: string }[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+};
+
+const content: Record<Locale, TaxCalendarContent> = {
   ko: {
     title: "세금 납부 일정 캘린더 2025 — 직장인·자영업자·프리랜서별 정리",
     description: "2025년 주요 세금 납부 일정을 직종별(직장인·자영업자·프리랜서)로 한눈에 확인하세요. 종합소득세, 부가세, 재산세 등 월별 정리.",
+    introTitle: "세금 일정은 ‘대략적인 달력’과 ‘공식 고지’가 함께 필요합니다",
+    intro: "이 페이지는 한국의 주요 신고·납부 시기를 직장인, 자영업자, 프리랜서 관점에서 빠르게 훑어보는 일정 도구입니다. 실제 마감일은 과세 유형, 지방세 여부, 주말·공휴일, 전자신고 공지에 따라 달라질 수 있으므로 국세청, 홈택스, 위택스 공지를 반드시 다시 확인하세요.",
+    howToTitle: "사용 방법",
+    steps: ["상단 타임라인에서 월별 주요 세목을 훑어봅니다.", "직장인·자영업자·프리랜서 중 자신의 상황에 가까운 항목을 체크합니다.", "해당 월의 신고·납부 전에 국세청, 홈택스, 위택스의 최신 공지와 개인 고지서를 대조합니다.", "납부 금액과 적용 여부는 세무전문가 또는 관할 기관 기준으로 확정합니다."],
+    checklistTitle: "확인해야 할 공식 기준",
+    checklist: [
+      { title: "국세", body: "종합소득세, 부가가치세, 원천세 등은 국세청과 홈택스 공지를 우선 확인합니다." },
+      { title: "지방세", body: "재산세, 자동차세 등은 지방자치단체 및 위택스의 고지·납부 일정을 확인합니다." },
+      { title: "개인별 예외", body: "간이과세, 휴·폐업, 해외소득, 경정청구 등 예외 상황은 일반 달력과 다를 수 있습니다." },
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "이 캘린더만 보고 신고해도 되나요?", answer: "아니요. 이 페이지는 일정 점검용이며 공식 신고·납부 근거가 아닙니다. 국세청, 홈택스, 위택스, 개인 고지서를 확인해야 합니다." },
+      { question: "주말이나 공휴일이면 마감일이 바뀌나요?", answer: "일반적으로 다음 영업일로 조정되는 경우가 있지만 세목과 공지에 따라 다를 수 있어 최신 공지를 확인해야 합니다." },
+      { question: "프리랜서는 어떤 일정을 특히 봐야 하나요?", answer: "종합소득세, 원천징수 내역, 부가가치세 과세 여부, 지방세 고지를 함께 확인하는 것이 안전합니다." },
+    ],
+    disclaimer: "세무·투자·재무 자문이 아닙니다. 실제 신고·납부 의무와 마감일은 국세청(nts.go.kr), 홈택스(hometax.go.kr), 위택스(wetax.go.kr), 관할 기관 또는 세무전문가를 통해 확인하세요.",
   },
   en: {
     title: "Korea Tax Calendar 2025 — Payment Deadlines by Job Type",
     description: "View 2025 Korean tax payment deadlines organized by job type: employees, self-employed, and freelancers.",
+    introTitle: "A tax calendar is a reminder, not the official notice",
+    intro: "Use this page to review major Korean filing and payment seasons by month and by worker type. Actual deadlines can change by tax type, local-tax status, weekends, holidays, and official e-filing notices. Always verify with NTS, Hometax, Wetax, and your own tax notice.",
+    howToTitle: "How to use",
+    steps: ["Scan the monthly timeline for major tax seasons.", "Match employee, self-employed, or freelancer items to your situation.", "Before each month closes, compare the page with current NTS, Hometax, Wetax, and personal notices.", "Confirm final amounts and applicability with the relevant authority or a tax professional."],
+    checklistTitle: "Official sources to check",
+    checklist: [
+      { title: "National taxes", body: "For income tax, VAT, and withholding, prioritize NTS and Hometax notices." },
+      { title: "Local taxes", body: "For property tax, automobile tax, and local bills, check local government notices and Wetax." },
+      { title: "Personal exceptions", body: "Simplified VAT, business closure, foreign income, and corrections can differ from a general calendar." },
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Can I file based only on this calendar?", answer: "No. This is a planning aid, not an official filing or payment notice. Check NTS, Hometax, Wetax, and personal notices." },
+      { question: "Do deadlines move on weekends or holidays?", answer: "They often move to the next business day, but the rule depends on the tax and official notice. Verify the current notice." },
+      { question: "What should freelancers watch first?", answer: "Review comprehensive income tax, withholding records, VAT status, and local-tax notices together." },
+    ],
+    disclaimer: "This is not tax, investment, or financial advice. Confirm actual obligations and deadlines with NTS (nts.go.kr), Hometax (hometax.go.kr), Wetax (wetax.go.kr), the relevant authority, or a qualified tax professional.",
   },
   ja: {
     title: "韓国税金納付カレンダー2025 — 職種別スケジュール",
     description: "2025年の主要税金納付スケジュールを職種別（会社員・自営業者・フリーランス）に確認できます。",
-  },
-  fr: {
-    title: "Calendrier Fiscal Corée 2025 — Échéances par type d'emploi",
-    description: "Consultez les échéances de paiement des impôts coréens en 2025 organisées par type d'emploi.",
-  },
-  es: {
-    title: "Calendario Fiscal Corea 2025 — Plazos por tipo de empleo",
-    description: "Consulta los plazos de pago de impuestos coreanos en 2025 organizados por tipo de empleo.",
+    introTitle: "税務カレンダーは公式通知ではなく確認用メモです",
+    intro: "韓国の主な申告・納付時期を月別、職種別に確認するためのページです。実際の期限は税目、地方税、週末・祝日、電子申告の告知で変わる可能性があります。NTS、Hometax、Wetax、個別通知を必ず確認してください。",
+    howToTitle: "使い方",
+    steps: ["月別タイムラインで主な税目を確認します。", "会社員、自営業、フリーランスのうち自分に近い項目を見ます。", "各月の申告前にNTS、Hometax、Wetax、個別通知と照合します。", "最終的な金額と対象 여부は関係機関または専門家に確認します。"],
+    checklistTitle: "確認すべき公式基準",
+    checklist: [
+      { title: "国税", body: "所得税、VAT、源泉税はNTSとHometaxの告知を優先します。" },
+      { title: "地方税", body: "財産税や自動車税は自治体通知とWetaxを確認します。" },
+      { title: "個別例外", body: "簡易課税、休廃業、海外所得、修正申告などは一般的なカレンダーと異なる場合があります。" },
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "このカレンダーだけで申告できますか？", answer: "いいえ。計画用であり公式通知ではありません。NTS、Hometax、Wetax、個別通知を確認してください。" },
+      { question: "週末や祝日は期限が変わりますか？", answer: "翌営業日に調整されることがありますが、税目と公式告知によります。" },
+      { question: "フリーランスは何を見るべきですか？", answer: "総合所得税、源泉徴収、VAT該当 여부、地方税通知を一緒に確認してください。" },
+    ],
+    disclaimer: "税務・投資・財務助言ではありません。実際の義務と期限はNTS、Hometax、Wetax、関係機関または税務専門家に確認してください。",
   },
   zh: {
     title: "韩国税务日历2025 — 按职业类型的纳税期限",
     description: "查看2025年韩国按职业类型（员工、个体户、自由职业者）整理的主要税金纳付时程。",
+    introTitle: "税务日历是提醒，不是正式通知",
+    intro: "本页用于按月份和职业类型查看韩国主要申报、缴纳时段。实际期限可能因税种、地方税、周末节假日和电子申报公告而变化。请务必核对 NTS、Hometax、Wetax 和个人通知。",
+    howToTitle: "使用方法",
+    steps: ["在月度时间线中查看主要税种。", "按员工、个体户或自由职业者选择接近自己的项目。", "申报缴纳前核对 NTS、Hometax、Wetax 和个人通知。", "最终金额和适用 여부请以相关机构或税务专业人士为准。"],
+    checklistTitle: "需要确认的官方来源",
+    checklist: [
+      { title: "国税", body: "综合所得税、VAT、预扣税等优先查看 NTS 和 Hometax。" },
+      { title: "地方税", body: "财产税、汽车税等查看地方政府通知和 Wetax。" },
+      { title: "个人例外", body: "简易课税、停业、海外收入、更正申报等可能不同于一般日历。" },
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "只看这个日历就能申报吗？", answer: "不能。本页只是计划工具，不是正式申报或缴纳通知。请查看 NTS、Hometax、Wetax 和个人通知。" },
+      { question: "周末或节假日会顺延吗？", answer: "很多情况下会顺延到下一个工作日，但取决于税种和官方公告。" },
+      { question: "自由职业者应先看什么？", answer: "综合所得税、预扣税记录、VAT 适用 여부和地方税通知需要一起确认。" },
+    ],
+    disclaimer: "这不是税务、投资或财务建议。实际义务和期限请向 NTS、Hometax、Wetax、相关机构或税务专业人士确认。",
+  },
+  fr: {
+    title: "Calendrier Fiscal Corée 2025 — Échéances par type d'emploi",
+    description: "Consultez les échéances de paiement des impôts coréens en 2025 organisées par type d'emploi.",
+    introTitle: "Un calendrier fiscal est un rappel, pas un avis officiel",
+    intro: "Cette page aide à revoir les principales périodes coréennes de déclaration et de paiement par mois et par profil. Les échéances réelles peuvent varier selon l'impôt, la fiscalité locale, les week-ends, jours fériés et avis officiels. Vérifiez toujours NTS, Hometax, Wetax et vos avis personnels.",
+    howToTitle: "Comment l'utiliser",
+    steps: ["Parcourez la chronologie mensuelle des principaux impôts.", "Repérez les éléments liés à salarié, indépendant ou freelance.", "Avant chaque échéance, comparez avec NTS, Hometax, Wetax et vos avis personnels.", "Confirmez montants et applicabilité auprès de l'autorité compétente ou d'un professionnel."],
+    checklistTitle: "Sources officielles à vérifier",
+    checklist: [
+      { title: "Impôts nationaux", body: "Pour revenu, TVA et retenue à la source, privilégiez NTS et Hometax." },
+      { title: "Impôts locaux", body: "Pour taxe foncière, automobile et avis locaux, consultez Wetax et les collectivités." },
+      { title: "Exceptions personnelles", body: "Régime simplifié, cessation, revenus étrangers ou corrections peuvent différer du calendrier général." },
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Puis-je déclarer seulement avec ce calendrier ?", answer: "Non. C'est une aide de planification, pas un avis officiel. Vérifiez NTS, Hometax, Wetax et vos avis personnels." },
+      { question: "Les échéances changent-elles les week-ends ?", answer: "Souvent vers le jour ouvré suivant, mais cela dépend de l'impôt et de l'avis officiel." },
+      { question: "Que doivent surveiller les freelances ?", answer: "Impôt global sur le revenu, retenues, statut TVA et avis locaux doivent être vérifiés ensemble." },
+    ],
+    disclaimer: "Ceci n'est pas un conseil fiscal, financier ou d'investissement. Confirmez les obligations et dates avec NTS, Hometax, Wetax, l'autorité compétente ou un professionnel qualifié.",
+  },
+  es: {
+    title: "Calendario Fiscal Corea 2025 — Plazos por tipo de empleo",
+    description: "Consulta los plazos de pago de impuestos coreanos en 2025 organizados por tipo de empleo.",
+    introTitle: "Un calendario fiscal es un recordatorio, no un aviso oficial",
+    intro: "Esta página ayuda a revisar por mes las principales temporadas coreanas de declaración y pago. Los plazos reales pueden cambiar por tipo de impuesto, impuesto local, fines de semana, festivos y avisos oficiales. Verifica siempre NTS, Hometax, Wetax y tus avisos personales.",
+    howToTitle: "Cómo usarlo",
+    steps: ["Revisa la línea de tiempo mensual de impuestos principales.", "Relaciona empleados, autónomos o freelancers con tu situación.", "Antes de cada mes, compara con NTS, Hometax, Wetax y avisos personales.", "Confirma importes y aplicabilidad con la autoridad o un profesional fiscal."],
+    checklistTitle: "Fuentes oficiales a revisar",
+    checklist: [
+      { title: "Impuestos nacionales", body: "Para renta, IVA y retenciones, prioriza NTS y Hometax." },
+      { title: "Impuestos locales", body: "Para propiedad, automóvil y avisos locales, consulta Wetax y gobiernos locales." },
+      { title: "Excepciones personales", body: "Régimen simplificado, cierre de negocio, ingresos extranjeros o correcciones pueden diferir del calendario general." },
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Puedo declarar solo con este calendario?", answer: "No. Es una ayuda de planificación, no un aviso oficial. Revisa NTS, Hometax, Wetax y tus avisos personales." },
+      { question: "¿Cambian los plazos en fines de semana?", answer: "A menudo pasan al siguiente día hábil, pero depende del impuesto y del aviso oficial." },
+      { question: "¿Qué debe mirar un freelancer primero?", answer: "Impuesto global sobre la renta, retenciones, estado de IVA y avisos locales juntos." },
+    ],
+    disclaimer: "Esto no es asesoramiento fiscal, financiero ni de inversión. Confirma obligaciones y fechas con NTS, Hometax, Wetax, la autoridad correspondiente o un profesional cualificado.",
   },
 };
 
-const m = meta[locale] ?? meta.en;
+const c = content[locale] ?? content.en;
+const componentLocale = locale === "ko" ? "ko" : "en";
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: c.title,
+    description: c.description,
+    url: new URL(Astro.url.pathname, Astro.site).toString(),
+    applicationCategory: "FinanceApplication",
+    operatingSystem: "Any",
+    inLanguage: locale,
+    isAccessibleForFree: true,
+    publisher: { "@id": "https://oiyo.net/#organization" },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: c.howToTitle,
+    description: c.description,
+    step: c.steps.map((step, index) => ({ "@type": "HowToStep", position: index + 1, text: step })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={c.title} description={c.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-5xl px-4 py-8">
-    <TaxTimeline client:load locale={locale === 'ko' ? 'ko' : 'en'} />
-    <TaxCalendarComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+    <TaxTimeline client:load locale={componentLocale} />
+    <TaxCalendarComp client:visible locale={componentLocale} />
+
+    <section class="mx-auto mt-10 max-w-3xl border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mx-auto mt-10 max-w-3xl">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((step) => <li class="leading-7">{step}</li>)}
+      </ol>
+    </section>
+
+    <section class="mx-auto mt-10 max-w-3xl">
+      <h2 class="text-xl font-bold text-slate-900">{c.checklistTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.checklist.map((item) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mx-auto mt-10 max-w-3xl">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mx-auto mt-8 max-w-3xl rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-950">{c.disclaimer}</p>
   </main>
 </BaseLayout>

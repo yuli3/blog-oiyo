@@ -10,20 +10,184 @@ export async function getStaticPaths() {
 
 const { locale } = Astro.props as { locale: Locale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: { title: "배당 기록기 — 연 배당·세후 추정 계산 (로컬 저장)", description: "보유 종목의 배당을 기록하고 연 배당·세후 추정을 계산합니다. 투자 조언이 아니며 모든 데이터는 브라우저에만 저장됩니다." },
-  en: { title: "Dividend Tracker — annual & after-tax estimate (local-only)", description: "Record holdings and estimate annual / after-tax dividends. Not investment advice; all data stays in your browser." },
-  ja: { title: "配当トラッカー — 年間・税引後の概算（ローカル保存）", description: "保有銘柄の配当を記録し、年間・税引後の概算を計算します。投資助言ではなく、データはブラウザのみに保存されます。" },
-  zh: { title: "股息记录器 — 年度·税后估算（本地保存）", description: "记录持仓股息并估算年度·税后金额。非投资建议，所有数据仅保存在浏览器中。" },
-  fr: { title: "Suivi de dividendes — estimation annuelle / après impôt (local)", description: "Enregistrez vos positions et estimez les dividendes annuels / après impôt. Pas un conseil en investissement ; données locales uniquement." },
-  es: { title: "Registro de dividendos — estimación anual / después de impuestos (local)", description: "Registra tus posiciones y estima dividendos anuales / después de impuestos. No es asesoramiento; los datos quedan en tu navegador." },
+type TrackerContent = {
+  title: string;
+  description: string;
+  introTitle: string;
+  intro: string;
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  privacyTitle: string;
+  privacy: string;
 };
 
-const m = meta[locale] ?? meta.en;
+const content: Record<Locale, TrackerContent> = {
+  ko: {
+    title: "배당 기록기 — 연 배당·세후 추정 계산 (로컬 저장)",
+    description: "보유 종목의 배당을 기록하고 연 배당·세후 추정을 계산합니다. 투자 조언이 아니며 모든 데이터는 브라우저에만 저장됩니다.",
+    introTitle: "배당 기록은 추천이 아니라 현금흐름 메모입니다",
+    intro: "이 도구는 보유 종목, 수량, 1주당 배당, 배당 주기, 세율을 직접 입력해 연간 세전·세후 배당을 대략 계산합니다. 어떤 종목을 사라고 제안하지 않으며, 가족이나 개인이 배당 현금흐름을 교육용으로 정리하는 로컬 기록장에 가깝습니다.",
+    howToTitle: "사용 방법",
+    steps: ["종목명 또는 티커를 입력합니다.", "보유 수량, 1주당 배당, 배당 주기, 배당 기준일, 예상 세율을 적습니다.", "연 배당 세전·세후 합계를 확인하고 필요하면 CSV로 내보냅니다.", "실제 배당일·세금·환율은 공식 공시와 증권사 자료로 다시 확인합니다."],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "입력한 데이터가 서버로 전송되나요?", answer: "아니요. 이 기록기는 브라우저 localStorage에만 저장하며 별도 서버로 전송하지 않습니다." },
+      { question: "계산값이 실제 세금과 일치하나요?", answer: "아닙니다. 사용자가 입력한 세율로 단순 추정합니다. 국가, 계좌, 원천징수, 환율에 따라 실제 금액은 달라질 수 있습니다." },
+      { question: "투자 추천 도구인가요?", answer: "아닙니다. 배당 기록과 교육용 계산을 돕는 도구이며 매수·매도·보유 판단을 대신하지 않습니다." },
+    ],
+    privacyTitle: "로컬 저장 기준",
+    privacy: "브라우저를 바꾸거나 저장소를 지우면 기록이 사라질 수 있습니다. 중요한 기록은 CSV로 내려받아 별도로 보관하세요.",
+  },
+  en: {
+    title: "Dividend Tracker — annual & after-tax estimate (local-only)",
+    description: "Record holdings and estimate annual / after-tax dividends. Not investment advice; all data stays in your browser.",
+    introTitle: "Dividend tracking is cash-flow note-taking, not a recommendation",
+    intro: "Enter your ticker, shares, dividend per share, payment frequency, ex-date, and estimated tax rate to approximate annual gross and net dividends. The tool does not recommend securities; it is a local educational ledger for reviewing cash flow.",
+    howToTitle: "How to use",
+    steps: ["Enter the ticker or holding name.", "Fill in shares, dividend per share, frequency, ex-date, and estimated tax rate.", "Review annual gross and net totals, then export CSV if needed.", "Confirm real payment dates, taxes, and FX with official filings or broker data."],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Is my data uploaded?", answer: "No. The tracker stores entries in browser localStorage only and does not send them to a server." },
+      { question: "Will the tax estimate match my actual tax?", answer: "No. It is a simple estimate from the tax rate you enter. Country, account type, withholding, and FX can change the real amount." },
+      { question: "Is this investment advice?", answer: "No. It supports dividend record-keeping and educational calculation; it does not replace buy, sell, or hold decisions." },
+    ],
+    privacyTitle: "Local storage note",
+    privacy: "Records can disappear if you clear browser storage or switch devices. Export CSV for anything important.",
+  },
+  ja: {
+    title: "配当トラッカー — 年間・税引後の概算（ローカル保存）",
+    description: "保有銘柄の配当を記録し、年間・税引後の概算を計算します。投資助言ではなく、データはブラウザのみに保存されます。",
+    introTitle: "配当記録は推奨ではなくキャッシュフローのメモです",
+    intro: "銘柄、株数、1株配当、支払い頻度、権利落ち日、税率を入力して年間の税前・税後配当を概算します。銘柄を勧めるものではなく、教育用のローカル記録帳です。",
+    howToTitle: "使い方",
+    steps: ["銘柄名またはティッカーを入力します。", "株数、1株配当、頻度、権利落ち日、想定税率を入力します。", "年間の税前・税後合計を確認し、必要ならCSVを書き出します。", "実際の日程、税金、為替は公式情報や証券会社で確認します。"],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "入力データは送信されますか？", answer: "いいえ。ブラウザのlocalStorageにのみ保存され、サーバーには送信されません。" },
+      { question: "税額は実際と一致しますか？", answer: "いいえ。入力した税率による単純な概算です。国、口座、源泉徴収、為替で変わります。" },
+      { question: "投資助言ですか？", answer: "いいえ。配当記録と教育用計算のためのツールで、売買判断を代替しません。" },
+    ],
+    privacyTitle: "ローカル保存について",
+    privacy: "ブラウザの保存領域を消去したり端末を変えたりすると記録は失われます。重要な記録はCSVで保存してください。",
+  },
+  zh: {
+    title: "股息记录器 — 年度·税后估算（本地保存）",
+    description: "记录持仓股息并估算年度·税后金额。非投资建议，所有数据仅保存在浏览器中。",
+    introTitle: "股息记录是现金流备忘，不是投资推荐",
+    intro: "输入代码、股数、每股股息、派息频率、除息日和估计税率，即可粗略估算年度税前与税后股息。本工具不推荐任何证券，只是本地教育用途的现金流记录表。",
+    howToTitle: "使用方法",
+    steps: ["输入股票代码或持仓名称。", "填写股数、每股股息、频率、除息日和估计税率。", "查看年度税前与税后合计，需要时导出CSV。", "实际派息日期、税务和汇率请以官方公告或券商数据为准。"],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "数据会上传吗？", answer: "不会。记录只保存在浏览器 localStorage 中，不发送到服务器。" },
+      { question: "税后估算会等于实际税额吗？", answer: "不会。它只是根据你输入的税率进行简单估算，国家、账户、预扣税和汇率都会影响实际金额。" },
+      { question: "这是投资建议吗？", answer: "不是。本工具只用于股息记录和教育性计算，不替代买入、卖出或持有判断。" },
+    ],
+    privacyTitle: "本地保存说明",
+    privacy: "清除浏览器数据或更换设备时记录可能消失。重要记录请导出 CSV 另行保存。",
+  },
+  fr: {
+    title: "Suivi de dividendes — estimation annuelle / après impôt (local)",
+    description: "Enregistrez vos positions et estimez les dividendes annuels / après impôt. Pas un conseil en investissement ; données locales uniquement.",
+    introTitle: "Suivre les dividendes, c’est noter un flux de trésorerie, pas recevoir une recommandation",
+    intro: "Saisissez ticker, parts, dividende par part, fréquence, date ex-dividende et taux d’impôt estimé pour approximer les dividendes annuels bruts et nets. L’outil ne recommande aucun titre; c’est un registre local à visée éducative.",
+    howToTitle: "Comment l’utiliser",
+    steps: ["Saisissez le ticker ou le nom de la position.", "Renseignez parts, dividende par part, fréquence, date ex-dividende et taux estimé.", "Consultez les totaux annuels bruts et nets, puis exportez en CSV si besoin.", "Confirmez dates, fiscalité et change auprès des sources officielles ou du courtier."],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Mes données sont-elles envoyées ?", answer: "Non. Les entrées restent dans le localStorage du navigateur et ne sont pas envoyées à un serveur." },
+      { question: "L’estimation fiscale sera-t-elle exacte ?", answer: "Non. C’est une estimation simple basée sur le taux saisi. Pays, type de compte, retenue à la source et change peuvent modifier le montant réel." },
+      { question: "Est-ce un conseil en investissement ?", answer: "Non. L’outil aide à tenir un registre et à calculer à titre éducatif; il ne remplace pas une décision d’achat, de vente ou de conservation." },
+    ],
+    privacyTitle: "Note de stockage local",
+    privacy: "Les données peuvent disparaître si vous effacez le stockage du navigateur ou changez d’appareil. Exportez en CSV les éléments importants.",
+  },
+  es: {
+    title: "Registro de dividendos — estimación anual / después de impuestos (local)",
+    description: "Registra tus posiciones y estima dividendos anuales / después de impuestos. No es asesoramiento; los datos quedan en tu navegador.",
+    introTitle: "Registrar dividendos es anotar flujo de caja, no recibir una recomendación",
+    intro: "Introduce ticker, acciones, dividendo por acción, frecuencia, fecha ex-dividendo y tasa fiscal estimada para aproximar dividendos anuales brutos y netos. La herramienta no recomienda valores; es un registro local con fines educativos.",
+    howToTitle: "Cómo usarlo",
+    steps: ["Introduce el ticker o nombre de la posición.", "Completa acciones, dividendo por acción, frecuencia, fecha ex-dividendo y tasa fiscal estimada.", "Revisa los totales anuales brutos y netos, y exporta CSV si hace falta.", "Confirma fechas reales, impuestos y divisas con fuentes oficiales o tu bróker."],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Se suben mis datos?", answer: "No. El registro usa localStorage del navegador y no envía datos a un servidor." },
+      { question: "¿La estimación fiscal coincidirá con mi impuesto real?", answer: "No. Es una estimación simple según la tasa que introduces. País, tipo de cuenta, retención y divisa pueden cambiar el importe real." },
+      { question: "¿Es asesoramiento de inversión?", answer: "No. Ayuda a registrar dividendos y calcular con fines educativos; no sustituye decisiones de comprar, vender o mantener." },
+    ],
+    privacyTitle: "Nota de almacenamiento local",
+    privacy: "Los registros pueden desaparecer si borras el almacenamiento del navegador o cambias de dispositivo. Exporta CSV para datos importantes.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: c.title,
+    description: c.description,
+    url: new URL(Astro.url.pathname, Astro.site).toString(),
+    applicationCategory: "FinanceApplication",
+    operatingSystem: "Any",
+    inLanguage: locale,
+    isAccessibleForFree: true,
+    publisher: { "@id": "https://oiyo.net/#organization" },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: c.howToTitle,
+    description: c.description,
+    step: c.steps.map((step, index) => ({ "@type": "HowToStep", position: index + 1, text: step })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={m.title} description={m.description}>
+<BaseLayout title={c.title} description={c.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <main class="mx-auto max-w-4xl px-4 py-8">
     <DividendTracker client:load locale={locale} />
+
+    <section class="mx-auto mt-10 max-w-2xl border-t border-slate-200 pt-8">
+      <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
+
+    <section class="mx-auto mt-10 max-w-2xl">
+      <h2 class="text-xl font-bold text-slate-900">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-slate-700">
+        {c.steps.map((step) => <li class="leading-7">{step}</li>)}
+      </ol>
+    </section>
+
+    <section class="mx-auto mt-10 max-w-2xl rounded-xl border border-emerald-100 bg-emerald-50 p-5">
+      <h2 class="text-xl font-bold text-emerald-950">{c.privacyTitle}</h2>
+      <p class="mt-3 leading-7 text-emerald-900">{c.privacy}</p>
+    </section>
+
+    <section class="mx-auto mt-10 max-w-2xl">
+      <h2 class="text-xl font-bold text-slate-900">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-900">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
   </main>
 </BaseLayout>

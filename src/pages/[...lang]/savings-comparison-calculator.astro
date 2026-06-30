@@ -1,6 +1,10 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import SavingsComparisonCalculatorComp from "../../components/calculators/SavingsComparisonCalculator";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -40,11 +44,163 @@ const meta: Record<Locale, { title: string; description: string }> = {
   },
 };
 
+const content = {
+  ko: {
+    eyebrow: "저축 계산 도구",
+    introTitle: "저축 상품 비교 계산기란?",
+    intro: "같은 월 저축액과 기간을 기준으로 정기예금, 정기적금, ISA, 파킹통장의 세전 이자, 세금, 세후 수령액을 나란히 비교하는 도구입니다. 금리만 보지 않고 실제 손에 남는 금액과 상품 조건을 함께 검토하도록 돕습니다.",
+    howToTitle: "사용 방법",
+    steps: ["월 저축액과 저축 기간을 입력합니다.", "각 상품의 예상 금리를 현재 조건에 맞게 수정합니다.", "비교하기를 눌러 세전 이자, 이자소득세, 세후 수령액을 확인합니다.", "비과세 한도, 중도해지 조건, 예금자보호, 유동성은 실제 가입 전에 다시 확인합니다."],
+    highlightsTitle: "비교 기준",
+    highlights: [
+      { title: "세후 수령액", body: "일반 과세 상품은 이자소득세 15.4%를 반영해 비교합니다." },
+      { title: "상품별 방식", body: "정기예금은 일시예치, 적금·ISA·파킹통장은 월 적립 방식으로 가정합니다." },
+      { title: "금리 수정", body: "은행별 실제 금리를 직접 바꿔 더 현실적인 비교가 가능합니다." },
+    ],
+    relatedTitle: "관련 계산기",
+    related: [
+      { href: "/ko/stock-yield-calculator/", label: "주식 수익률 계산기", desc: "평균단가와 미실현 손익을 계산합니다." },
+      { href: "/ko/dividend-tracker/", label: "배당 추적기", desc: "예상 배당금과 지급 주기를 기록합니다." },
+      { href: "/ko/salary-calculator/", label: "월급 실수령액 계산기", desc: "4대 보험과 세금 공제 후 수령액을 추정합니다." },
+    ],
+    disclaimer: "금융 자문이 아닙니다. 실제 금리, 세금, 비과세 한도, 중도해지 이율, 우대조건, 예금자보호 여부는 금융회사와 공식 약관을 확인하세요.",
+  },
+  en: {
+    eyebrow: "Savings calculator",
+    introTitle: "What is the savings comparison calculator?",
+    intro: "Compare fixed deposits, installment savings, ISA-style accounts, and high-yield savings using the same monthly amount and term. The page shows gross interest, estimated tax, and after-tax total so you can evaluate the amount you actually keep, not only the headline rate.",
+    howToTitle: "How to use",
+    steps: ["Enter your monthly savings amount and term.", "Adjust each product's expected annual rate to match the offer you are reviewing.", "Run the comparison to see gross interest, tax, and after-tax total.", "Before signing up, check tax exemption limits, early-withdrawal rules, deposit protection, and liquidity."],
+    highlightsTitle: "Comparison basis",
+    highlights: [
+      { title: "After-tax total", body: "Taxable products apply an estimated 15.4% interest-income tax." },
+      { title: "Product assumptions", body: "Fixed deposits use a lump-sum principal; other products assume monthly contributions." },
+      { title: "Editable rates", body: "Change rates to match real offers from banks or brokerages." },
+    ],
+    relatedTitle: "Related calculators",
+    related: [
+      { href: "/en/stock-yield-calculator/", label: "Stock Yield Calculator", desc: "Estimate average cost and unrealized P&L." },
+      { href: "/en/dividend-tracker/", label: "Dividend Tracker", desc: "Track expected dividends and payment cadence." },
+      { href: "/en/salary-calculator/", label: "Salary Calculator", desc: "Estimate take-home pay after insurance and taxes." },
+    ],
+    disclaimer: "This is not financial advice. Confirm actual rates, taxes, tax-exempt limits, early-withdrawal rates, promotional conditions, and deposit protection with the provider's official terms.",
+  },
+  ja: {
+    eyebrow: "貯蓄計算ツール",
+    introTitle: "貯蓄商品比較計算機とは？",
+    intro: "同じ月額と期間で、定期預金、積立、ISA、パーキング口座の税引前利息、税金、税引き後受取額を比較するツールです。表示金利だけでなく実際に残る金額を確認できます。",
+    howToTitle: "使い方",
+    steps: ["月々の貯蓄額と期間を入力します。", "各商品の想定年利を実際の条件に合わせて変更します。", "比較を実行して税引前利息、税金、税引き後合計を確認します。", "非課税枠、中途解約条件、預金保護、流動性は加入前に確認します。"],
+    highlightsTitle: "比較基準",
+    highlights: [
+      { title: "税引き後受取額", body: "課税商品は利子所得税15.4%を想定して比較します。" },
+      { title: "商品別前提", body: "定期預金は一括預入、その他は月額積立として計算します。" },
+      { title: "金利変更", body: "実際の銀行・証券会社の提示金利に合わせて調整できます。" },
+    ],
+    relatedTitle: "関連計算機",
+    related: [
+      { href: "/ja/stock-yield-calculator/", label: "株式利回り計算機", desc: "平均取得単価と未実現損益を計算します。" },
+      { href: "/ja/dividend-tracker/", label: "配当トラッカー", desc: "予想配当と支払い周期を記録します。" },
+      { href: "/ja/salary-calculator/", label: "給与手取り計算機", desc: "保険・税金控除後の手取りを推定します。" },
+    ],
+    disclaimer: "金融助言ではありません。実際の金利、税金、非課税枠、中途解約利率、優遇条件、預金保護は公式条件を確認してください。",
+  },
+  zh: {
+    eyebrow: "储蓄计算工具",
+    introTitle: "什么是储蓄商品比较计算机？",
+    intro: "在相同月存金额和期限下，比较定存、定期储蓄、ISA 类账户和活期高息账户的税前利息、税额和税后总额。它帮助你看实际到手金额，而不只看标称利率。",
+    howToTitle: "使用方法",
+    steps: ["输入每月储蓄金额和期限。", "按当前产品条件修改各商品预期年利率。", "点击比较查看税前利息、税费和税后总额。", "开户前请确认免税额度、提前支取规则、存款保护和流动性。"],
+    highlightsTitle: "比较标准",
+    highlights: [
+      { title: "税后总额", body: "应税产品按 15.4% 利息所得税估算。" },
+      { title: "商品假设", body: "定存按一次性本金，其它商品按每月存入计算。" },
+      { title: "可编辑利率", body: "可按银行或券商实际利率调整。" },
+    ],
+    relatedTitle: "相关计算器",
+    related: [
+      { href: "/zh/stock-yield-calculator/", label: "股票收益率计算机", desc: "估算平均成本和未实现盈亏。" },
+      { href: "/zh/dividend-tracker/", label: "股息追踪器", desc: "记录预期股息和支付周期。" },
+      { href: "/zh/salary-calculator/", label: "薪资税后计算器", desc: "估算保险和税后到手工资。" },
+    ],
+    disclaimer: "这不是金融建议。实际利率、税费、免税额度、提前支取利率、优惠条件和存款保护请以官方条款为准。",
+  },
+  fr: {
+    eyebrow: "Calculateur d'épargne",
+    introTitle: "Qu'est-ce que ce comparateur d'épargne ?",
+    intro: "Comparez dépôts fixes, épargne mensuelle, comptes de type ISA et comptes à rendement élevé avec le même montant mensuel et la même durée. Le résultat affiche intérêts bruts, impôt estimé et total après impôt.",
+    howToTitle: "Comment l'utiliser",
+    steps: ["Saisissez le montant mensuel et la durée.", "Ajustez le taux annuel de chaque produit.", "Lancez la comparaison pour voir intérêts bruts, impôt et total net.", "Vérifiez plafonds fiscaux, retrait anticipé, protection des dépôts et liquidité avant souscription."],
+    highlightsTitle: "Base de comparaison",
+    highlights: [
+      { title: "Total après impôt", body: "Les produits imposables appliquent une estimation de 15,4% sur les intérêts." },
+      { title: "Hypothèses produit", body: "Le dépôt fixe est traité comme capital initial; les autres comme versements mensuels." },
+      { title: "Taux modifiables", body: "Adaptez les taux aux offres réelles." },
+    ],
+    relatedTitle: "Calculateurs liés",
+    related: [
+      { href: "/fr/stock-yield-calculator/", label: "Calculateur boursier", desc: "Estimer prix moyen et P&L non réalisée." },
+      { href: "/fr/dividend-tracker/", label: "Suivi des dividendes", desc: "Suivre dividendes attendus et fréquence." },
+      { href: "/fr/salary-calculator/", label: "Calculateur de salaire", desc: "Estimer le salaire net après charges." },
+    ],
+    disclaimer: "Ceci n'est pas un conseil financier. Vérifiez taux, impôts, plafonds, conditions de retrait, promotions et protection des dépôts dans les documents officiels.",
+  },
+  es: {
+    eyebrow: "Calculadora de ahorro",
+    introTitle: "¿Qué es el comparador de ahorro?",
+    intro: "Compara depósitos fijos, ahorro mensual, cuentas tipo ISA y cuentas de alto rendimiento con el mismo importe mensual y plazo. Muestra intereses brutos, impuesto estimado y total después de impuestos.",
+    howToTitle: "Cómo usarlo",
+    steps: ["Ingresa el ahorro mensual y el plazo.", "Ajusta la tasa anual de cada producto.", "Compara intereses brutos, impuestos y total neto.", "Antes de contratar, revisa límites fiscales, retiro anticipado, protección de depósitos y liquidez."],
+    highlightsTitle: "Base de comparación",
+    highlights: [
+      { title: "Total neto", body: "Los productos gravables aplican una estimación de 15,4% sobre intereses." },
+      { title: "Supuestos por producto", body: "El depósito fijo usa capital inicial; los otros aportes mensuales." },
+      { title: "Tasas editables", body: "Ajusta las tasas según ofertas reales." },
+    ],
+    relatedTitle: "Calculadoras relacionadas",
+    related: [
+      { href: "/es/stock-yield-calculator/", label: "Calculadora bursátil", desc: "Estima coste medio y P&L no realizada." },
+      { href: "/es/dividend-tracker/", label: "Rastreador de dividendos", desc: "Registra dividendos esperados y frecuencia." },
+      { href: "/es/salary-calculator/", label: "Calculadora salarial", desc: "Estima salario neto tras seguros e impuestos." },
+    ],
+    disclaimer: "No es asesoramiento financiero. Confirma tasas, impuestos, límites, condiciones de retiro, promociones y protección de depósitos en los términos oficiales.",
+  },
+};
+
+const faqs = {
+  ko: [
+    { q: "왜 세후 수령액으로 비교하나요?", a: "실제로 사용할 수 있는 금액은 세금과 조건을 반영한 뒤의 금액이기 때문입니다. 표시 금리가 높아도 세후 결과나 유동성이 다를 수 있습니다." },
+    { q: "ISA는 항상 비과세로 계산되나요?", a: "이 도구는 단순 비교를 위해 비과세 한도 내라고 가정합니다. 실제 비과세 한도와 적용 여부는 계좌 유형과 법령에 따라 다릅니다." },
+    { q: "정기예금과 적금 계산 방식이 왜 다른가요?", a: "정기예금은 원금을 한 번에 넣는 구조, 적금은 매월 납입하는 구조라 같은 금리라도 이자 계산 기준이 다릅니다." },
+  ],
+  en: [
+    { q: "Why compare after-tax totals?", a: "The useful amount is what remains after tax and product constraints. A higher headline rate may not mean a better net outcome." },
+    { q: "Is ISA always treated as tax-exempt?", a: "For simple comparison, this page assumes the amount is within the tax-exempt limit. Actual eligibility depends on account type and current rules." },
+    { q: "Why are deposits and installment savings calculated differently?", a: "A fixed deposit assumes a lump-sum principal, while installment savings are paid monthly, so interest accrual differs even at the same annual rate." },
+  ],
+  ja: [
+    { q: "なぜ税引き後で比較しますか？", a: "実際に残る金額は税金と商品条件を反映した後の金額だからです。表示金利だけでは比較できません。" },
+    { q: "ISAは常に非課税ですか？", a: "単純比較のため非課税枠内と仮定しています。実際の適用可否は口座種別と制度により異なります。" },
+    { q: "定期預金と積立の計算が違う理由は？", a: "定期預金は一括預入、積立は毎月入金のため、同じ年利でも利息の発生方法が異なります。" },
+  ],
+};
+
 const m = meta[locale] ?? meta.en;
+const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
+const componentLocale = locale === "ko" ? "ko" : "en";
 ---
 
-<BaseLayout title={m.title} description={m.description}>
-  <main class="mx-auto max-w-2xl px-4 py-8">
-    <SavingsComparisonCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
-  </main>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <ToolShell
+    title={m.title}
+    description={m.description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="savings-comparison-calculator"
+    content={c}
+    applicationCategory="FinanceApplication"
+  >
+    <SavingsComparisonCalculatorComp client:visible locale={componentLocale} />
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
 </BaseLayout>

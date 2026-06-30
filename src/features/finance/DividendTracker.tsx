@@ -3,7 +3,7 @@ import { FinanceGuardrail } from "./FinanceGuardrail";
 
 // 배당 기록 MVP — 기록·교육 전용(투자 조언 아님). 전부 브라우저 로컬(localStorage), 서버 전송 없음.
 type Holding = { id: string; ticker: string; shares: string; perShare: string; freq: string; exDate: string; taxPct: string };
-type Lang = "ko" | "en";
+type Lang = "ko" | "en" | "ja" | "zh" | "fr" | "es";
 const KEY = "oiyo:dividend-tracker:v1";
 const FREQ: Record<string, number> = { monthly: 12, quarterly: 4, semiannual: 2, annual: 1 };
 
@@ -12,20 +12,44 @@ const T: Record<Lang, Record<string, string>> = {
     title: "배당 기록기", desc: "보유 종목의 배당을 기록하고 연 배당·세후 추정을 계산합니다. 투자 조언이 아니며, 모든 데이터는 브라우저에만 저장됩니다.",
     ticker: "종목", shares: "수량", perShare: "1주 배당", freq: "주기", exDate: "배당기준일", tax: "세율%", add: "+ 종목 추가",
     annualGross: "연 배당(세전)", annualNet: "연 배당(세후)", total: "합계", csv: "CSV 내보내기", empty: "종목을 추가하세요.",
-    monthly: "월", quarterly: "분기", semiannual: "반기", annual: "연", local: "🔒 로컬 저장 · 서버 전송 없음",
+    monthly: "월", quarterly: "분기", semiannual: "반기", annual: "연", local: "🔒 로컬 저장 · 서버 전송 없음", remove: "종목 삭제",
   },
   en: {
     title: "Dividend Tracker", desc: "Record holdings and estimate annual / after-tax dividends. Not investment advice. All data stays in your browser.",
     ticker: "Ticker", shares: "Shares", perShare: "Div/share", freq: "Freq", exDate: "Ex-date", tax: "Tax%", add: "+ Add holding",
     annualGross: "Annual (gross)", annualNet: "Annual (net)", total: "Total", csv: "Export CSV", empty: "Add a holding.",
-    monthly: "Monthly", quarterly: "Quarterly", semiannual: "Semiannual", annual: "Annual", local: "🔒 stored locally · never uploaded",
+    monthly: "Monthly", quarterly: "Quarterly", semiannual: "Semiannual", annual: "Annual", local: "🔒 stored locally · never uploaded", remove: "Remove holding",
+  },
+  ja: {
+    title: "配当トラッカー", desc: "保有銘柄の配当を記録し、年間・税引後の概算を計算します。投資助言ではなく、データはブラウザ内だけに保存されます。",
+    ticker: "銘柄", shares: "株数", perShare: "1株配当", freq: "頻度", exDate: "権利落ち日", tax: "税率%", add: "+ 銘柄を追加",
+    annualGross: "年間配当（税前）", annualNet: "年間配当（税後）", total: "合計", csv: "CSVを書き出す", empty: "銘柄を追加してください。",
+    monthly: "毎月", quarterly: "四半期", semiannual: "半期", annual: "年次", local: "🔒 ローカル保存 · サーバー送信なし", remove: "銘柄を削除",
+  },
+  zh: {
+    title: "股息记录器", desc: "记录持仓股息并估算年度与税后股息。非投资建议，所有数据只保存在浏览器中。",
+    ticker: "代码", shares: "股数", perShare: "每股股息", freq: "频率", exDate: "除息日", tax: "税率%", add: "+ 添加持仓",
+    annualGross: "年度股息（税前）", annualNet: "年度股息（税后）", total: "合计", csv: "导出 CSV", empty: "请添加持仓。",
+    monthly: "每月", quarterly: "每季", semiannual: "半年", annual: "每年", local: "🔒 本地保存 · 不上传服务器", remove: "删除持仓",
+  },
+  fr: {
+    title: "Suivi de dividendes", desc: "Enregistrez vos positions et estimez les dividendes annuels / après impôt. Pas un conseil en investissement. Les données restent dans votre navigateur.",
+    ticker: "Ticker", shares: "Parts", perShare: "Div./part", freq: "Fréq.", exDate: "Date ex-div.", tax: "Impôt%", add: "+ Ajouter une ligne",
+    annualGross: "Annuel brut", annualNet: "Annuel net", total: "Total", csv: "Exporter CSV", empty: "Ajoutez une position.",
+    monthly: "Mensuel", quarterly: "Trimestriel", semiannual: "Semestriel", annual: "Annuel", local: "🔒 stockage local · aucun envoi serveur", remove: "Supprimer la position",
+  },
+  es: {
+    title: "Registro de dividendos", desc: "Registra posiciones y estima dividendos anuales / después de impuestos. No es asesoramiento de inversión. Los datos quedan en tu navegador.",
+    ticker: "Ticker", shares: "Acciones", perShare: "Div./acción", freq: "Frec.", exDate: "Fecha ex-div.", tax: "Impuesto%", add: "+ Añadir posición",
+    annualGross: "Anual bruto", annualNet: "Anual neto", total: "Total", csv: "Exportar CSV", empty: "Añade una posición.",
+    monthly: "Mensual", quarterly: "Trimestral", semiannual: "Semestral", annual: "Anual", local: "🔒 guardado local · no se sube al servidor", remove: "Eliminar posición",
   },
 };
 
 const blank = (): Holding => ({ id: Math.random().toString(36).slice(2, 8), ticker: "", shares: "", perShare: "", freq: "quarterly", exDate: "", taxPct: "15.4" });
 
 export function DividendTracker({ locale }: { locale: string }) {
-  const t = T[locale === "ko" ? "ko" : "en"];
+  const t = T[locale as Lang] ?? T.en;
   const [rows, setRows] = useState<Holding[]>([blank()]);
   const [hydrated, setHydrated] = useState(false);
 
@@ -61,7 +85,7 @@ export function DividendTracker({ locale }: { locale: string }) {
       <div className="mt-4 overflow-x-auto rounded-xl border border-green-100 bg-white p-4 shadow-sm">
         <table className="w-full min-w-[640px] text-sm">
           <thead><tr className="text-left text-xs text-slate-500">
-            <th className="pb-2">{t.ticker}</th><th>{t.shares}</th><th>{t.perShare}</th><th>{t.freq}</th><th>{t.exDate}</th><th>{t.tax}</th><th className="text-right">{t.annualNet}</th><th></th>
+            <th scope="col" className="pb-2">{t.ticker}</th><th scope="col">{t.shares}</th><th scope="col">{t.perShare}</th><th scope="col">{t.freq}</th><th scope="col">{t.exDate}</th><th scope="col">{t.tax}</th><th scope="col" className="text-right">{t.annualNet}</th><th scope="col"></th>
           </tr></thead>
           <tbody>
             {rows.map((h) => {
@@ -79,7 +103,7 @@ export function DividendTracker({ locale }: { locale: string }) {
                   <td className="pr-2"><input className={inp} type="date" value={h.exDate} onChange={(e) => set(h.id, "exDate", e.target.value)} /></td>
                   <td className="pr-2"><input className={inp} type="number" value={h.taxPct} onChange={(e) => set(h.id, "taxPct", e.target.value)} /></td>
                   <td className="pr-2 text-right font-semibold text-green-800">{fmt(c.net)}</td>
-                  <td><button onClick={() => del(h.id)} className="px-1 text-slate-400 hover:text-red-500">✕</button></td>
+                  <td><button type="button" aria-label={t.remove} onClick={() => del(h.id)} className="px-1 text-slate-400 hover:text-red-500">✕</button></td>
                 </tr>
               );
             })}
