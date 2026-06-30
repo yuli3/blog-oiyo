@@ -74,6 +74,12 @@ const getLocalizedUrl = (locale: string) => {
 
 const googleAnalyticsId = siteConfig.analytics.googleAnalyticsId;
 const googleAdsenseId = siteConfig.analytics.googleAdsenseId;
+const resolvedCanonicalUrl = new URL(String(canonicalURL), Astro.site);
+const canonicalHost = resolvedCanonicalUrl.hostname;
+const isCrossDomainCanonical = canonicalHost !== new URL(siteConfig.url).hostname;
+const robotsContent = isCrossDomainCanonical
+  ? "noindex, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+  : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1";
 
 // BCP-47 locale mapping for hreflang tags
 const hreflangMap: Record<string, string> = {
@@ -95,7 +101,7 @@ const hreflangMap: Record<string, string> = {
 <meta name="theme-color" content={siteConfig.themeColor} />
 
 <!-- Robots & Indexing -->
-<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+<meta name="robots" content={robotsContent} />
 <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
 <meta name="bingbot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
 
@@ -125,7 +131,7 @@ const hreflangMap: Record<string, string> = {
 )}
 
 <!-- Canonical URL -->
-<link rel="canonical" href={canonicalURL} />
+<link rel="canonical" href={resolvedCanonicalUrl} />
 
 <!-- Multilingual SEO (Hreflang) -->
 {
