@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useId, useState } from "react";
 import type { Locale } from "../../lib/i18n";
 import { UNIT_CATEGORIES, convertUnit, roundReadable } from "../../lib/unit-conversions";
 
@@ -26,6 +26,7 @@ interface Props {
 export default function UnitConverter({ locale, category }: Props) {
   const cat = UNIT_CATEGORIES[category];
   const t = LABELS[locale] ?? LABELS.en;
+  const id = useId();
   const [value, setValue] = useState(cat ? String(cat.defaultValue) : "0");
   const [from, setFrom] = useState(cat ? cat.defaultFrom : "");
 
@@ -33,23 +34,34 @@ export default function UnitConverter({ locale, category }: Props) {
 
   const n = parseFloat(value);
   const valid = value.trim() !== "" && !isNaN(n);
+  const valueId = `${id}-value`;
+  const fromId = `${id}-from`;
+  const statusId = `${id}-status`;
 
   return (
     <div className="rounded-lg border border-border bg-card p-5">
       <div className="grid gap-4 sm:grid-cols-2">
-        <label className="block">
-          <span className="text-sm font-medium text-muted-foreground">{t.value}</span>
+        <div className="block">
+          <label htmlFor={valueId} className="text-sm font-medium text-muted-foreground">
+            {t.value}
+          </label>
           <input
+            id={valueId}
             type="number"
             inputMode="decimal"
             value={value}
+            aria-describedby={statusId}
+            aria-invalid={!valid}
             onChange={(e) => setValue(e.target.value)}
             className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-foreground focus:outline-2 focus:outline-offset-2 focus:outline-primary"
           />
-        </label>
-        <label className="block">
-          <span className="text-sm font-medium text-muted-foreground">{t.from}</span>
+        </div>
+        <div className="block">
+          <label htmlFor={fromId} className="text-sm font-medium text-muted-foreground">
+            {t.from}
+          </label>
           <select
+            id={fromId}
             value={from}
             onChange={(e) => setFrom(e.target.value)}
             className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-foreground focus:outline-2 focus:outline-offset-2 focus:outline-primary"
@@ -60,27 +72,29 @@ export default function UnitConverter({ locale, category }: Props) {
               </option>
             ))}
           </select>
-        </label>
+        </div>
       </div>
 
       <h2 className="mt-6 text-sm font-bold uppercase tracking-widest text-primary">{t.results}</h2>
-      {!valid ? (
-        <p className="mt-2 text-sm text-muted-foreground">{t.invalid}</p>
-      ) : (
-        <div className="mt-2 grid gap-2 sm:grid-cols-2">
-          {cat.units.map((u) => (
-            <div
-              key={u.key}
-              className={`flex items-baseline justify-between rounded-md border border-border px-3 py-2 ${u.key === from ? "bg-accent" : "bg-background"}`}
-            >
-              <span className="text-sm text-muted-foreground">{u.symbol}</span>
-              <span className="font-mono font-semibold text-foreground">
-                {roundReadable(convertUnit(cat, n, from, u.key)).toLocaleString()}
-              </span>
-            </div>
-          ))}
-        </div>
-      )}
+      <div id={statusId} aria-live="polite" aria-atomic="true">
+        {!valid ? (
+          <p className="mt-2 text-sm text-muted-foreground">{t.invalid}</p>
+        ) : (
+          <div className="mt-2 grid gap-2 sm:grid-cols-2">
+            {cat.units.map((u) => (
+              <div
+                key={u.key}
+                className={`flex items-baseline justify-between rounded-md border border-border px-3 py-2 ${u.key === from ? "bg-accent" : "bg-background"}`}
+              >
+                <span className="text-sm text-muted-foreground">{u.symbol}</span>
+                <span className="font-mono font-semibold text-foreground">
+                  {roundReadable(convertUnit(cat, n, from, u.key)).toLocaleString()}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
