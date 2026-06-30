@@ -2,6 +2,7 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import UniversalConverter from "../../components/tools/UniversalConverter";
 import { locales } from "../../lib/i18n";
+import { siteConfig } from "../../config/site.config";
 import { toolStructuredData } from "../../lib/seo/structured-data";
 
 type ActiveLocale = (typeof locales)[number];
@@ -199,12 +200,19 @@ const content: Record<ActiveLocale, {
 };
 
 const c = content[locale] ?? content.en;
+const pageUrl = `${siteConfig.url}/${locale}/universal-converter/`;
 
 const structuredData = toolStructuredData({
   name: m.title,
   description: m.description,
   steps: c.steps,
   faqs: c.faqs,
+  url: pageUrl,
+  webApplication: true,
+  breadcrumbs: [
+    { name: "Tools", url: `${siteConfig.url}/${locale}/tools/` },
+    { name: m.title, url: pageUrl },
+  ],
 });
 ---
 
