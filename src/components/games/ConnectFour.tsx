@@ -1,5 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import type { Locale } from "../../lib/i18n";
+import { connectFourBestMove } from "../../lib/games/ai/connectfour";
+import type { AiLevel, GameMode } from "../../lib/games/ai/types";
+import { getRecord, recordResult, type GameRecord } from "../../lib/games/records";
 
 type Cell = 0 | 1 | 2; // 0=empty, 1=player1, 2=player2
 type Board = Cell[][];
@@ -11,6 +14,8 @@ interface Props {
 
 const ROWS = 6;
 const COLS = 7;
+const AI_PLAYER = 2; // AI plays yellow; human opens as red
+const AI_DELAY_MS = 500;
 
 const i18n: Record<Locale, {
   title: string;
@@ -20,6 +25,15 @@ const i18n: Record<Locale, {
   draw: string;
   restart: string;
   desc: string;
+  modeLocal: string;
+  modeAi: string;
+  level1: string;
+  level2: string;
+  level3: string;
+  thinking: string;
+  youWin: string;
+  aiWins: string;
+  record: string;
 }> = {
   ko: {
     title: "커넥트 포",
@@ -29,6 +43,8 @@ const i18n: Record<Locale, {
     draw: "무승부!",
     restart: "다시 시작",
     desc: "4개를 가로, 세로, 대각선으로 연결하면 승리합니다.",
+    modeLocal: "2인 대전", modeAi: "AI 대전", level1: "견습생", level2: "숙련가", level3: "명인",
+    thinking: "상대가 수를 읽고 있습니다…", youWin: "당신의 승리!", aiWins: "AI 승리", record: "전적",
   },
   en: {
     title: "Connect Four",
@@ -38,6 +54,8 @@ const i18n: Record<Locale, {
     draw: "It's a draw!",
     restart: "Play Again",
     desc: "Connect four discs horizontally, vertically, or diagonally to win.",
+    modeLocal: "2 Players", modeAi: "vs AI", level1: "Apprentice", level2: "Adept", level3: "Master",
+    thinking: "Your opponent is thinking…", youWin: "You win!", aiWins: "AI wins", record: "Record",
   },
   ja: {
     title: "コネクトフォー",
@@ -47,6 +65,8 @@ const i18n: Record<Locale, {
     draw: "引き分け！",
     restart: "もう一度",
     desc: "横・縦・斜めに4つ並べたほうが勝ちです。",
+    modeLocal: "2人対戦", modeAi: "AI対戦", level1: "見習い", level2: "熟練者", level3: "名人",
+    thinking: "相手が考えています…", youWin: "あなたの勝ち！", aiWins: "AIの勝ち", record: "戦績",
   },
   fr: {
     title: "Puissance 4",
@@ -56,6 +76,8 @@ const i18n: Record<Locale, {
     draw: "Match nul !",
     restart: "Rejouer",
     desc: "Alignez 4 jetons horizontalement, verticalement ou en diagonale.",
+    modeLocal: "2 joueurs", modeAi: "contre l'IA", level1: "Apprenti", level2: "Adepte", level3: "Maître",
+    thinking: "Votre adversaire réfléchit…", youWin: "Vous gagnez !", aiWins: "L'IA gagne", record: "Bilan",
   },
   es: {
     title: "Conecta Cuatro",
@@ -65,6 +87,8 @@ const i18n: Record<Locale, {
     draw: "¡Empate!",
     restart: "Reiniciar",
     desc: "Conecta cuatro fichas en línea horizontal, vertical o diagonal.",
+    modeLocal: "2 jugadores", modeAi: "contra la IA", level1: "Aprendiz", level2: "Experto", level3: "Maestro",
+    thinking: "Tu rival está pensando…", youWin: "¡Has ganado!", aiWins: "Gana la IA", record: "Historial",
   },
   zh: {
     title: "四子棋",
@@ -74,6 +98,8 @@ const i18n: Record<Locale, {
     draw: "平局！",
     restart: "再玩一次",
     desc: "在水平、垂直或对角线方向连接四个棋子即获胜。",
+    modeLocal: "双人对战", modeAi: "人机对战", level1: "学徒", level2: "行家", level3: "大师",
+    thinking: "对手正在思考…", youWin: "你赢了！", aiWins: "AI 获胜", record: "战绩",
   },
 };
 
@@ -141,10 +167,18 @@ const ConnectFour: React.FC<Props> = ({ locale }) => {
   const [hoveredCol, setHoveredCol] = useState<number | null>(null);
   const [fallingCell, setFallingCell] = useState<FallingCell | null>(null);
   const [animating, setAnimating] = useState(false);
+  const [mode, setMode] = useState<GameMode>("local");
+  const [level, setLevel] = useState<AiLevel>(2);
+  const [thinking, setThinking] = useState(false);
+  const [record, setRecord] = useState<GameRecord | null>(null);
   const animFrameRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const aiTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+  useEffect(() => { setRecord(getRecord("connectfour")); }, []);
 
   const resetGame = useCallback(() => {
     if (animFrameRef.current) clearTimeout(animFrameRef.current);
+    if (aiTimerRef.current) clearTimeout(aiTimerRef.current);
     setBoard(emptyBoard());
     setCurrentPlayer(1);
     setStatus("playing");
@@ -152,16 +186,18 @@ const ConnectFour: React.FC<Props> = ({ locale }) => {
     setHoveredCol(null);
     setFallingCell(null);
     setAnimating(false);
+    setThinking(false);
   }, []);
 
   // Cleanup on unmount
   useEffect(() => {
     return () => {
       if (animFrameRef.current) clearTimeout(animFrameRef.current);
+      if (aiTimerRef.current) clearTimeout(aiTimerRef.current);
     };
   }, []);
 
-  const handleColClick = useCallback(
+  const dropDisc = useCallback(
     (col: number) => {
       if (status !== "playing" || animating) return;
 
@@ -182,16 +218,45 @@ const ConnectFour: React.FC<Props> = ({ locale }) => {
         if (winning) {
           setWinCells(winning);
           setStatus("won");
+          if (mode === "ai") setRecord(recordResult("connectfour", currentPlayer === AI_PLAYER ? "l" : "w"));
         } else if (isBoardFull(newBoard)) {
           setStatus("draw");
+          if (mode === "ai") setRecord(recordResult("connectfour", "d"));
         } else {
           setCurrentPlayer(currentPlayer === 1 ? 2 : 1);
         }
         setAnimating(false);
       }, 320);
     },
-    [board, currentPlayer, status, animating]
+    [board, currentPlayer, status, animating, mode]
   );
+
+  const handleColClick = useCallback(
+    (col: number) => {
+      if (mode === "ai" && (currentPlayer === AI_PLAYER || thinking)) return; // AI's turn
+      dropDisc(col);
+    },
+    [mode, currentPlayer, thinking, dropDisc]
+  );
+
+  // AI turn: think briefly, then drop (reuses the same falling animation).
+  useEffect(() => {
+    if (mode !== "ai" || status !== "playing" || currentPlayer !== AI_PLAYER || animating) return;
+    setThinking(true);
+    aiTimerRef.current = setTimeout(() => {
+      const col = connectFourBestMove(board.map((r) => [...r]) as Board, AI_PLAYER, level);
+      setThinking(false);
+      if (col >= 0) dropDisc(col);
+    }, AI_DELAY_MS);
+    return () => { if (aiTimerRef.current) clearTimeout(aiTimerRef.current); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mode, status, currentPlayer, animating]);
+
+  const switchMode = (m: GameMode) => {
+    if (m === mode) return;
+    setMode(m);
+    resetGame();
+  };
 
   const isWinCell = (r: number, c: number): boolean => {
     if (!winCells) return false;
@@ -231,9 +296,41 @@ const ConnectFour: React.FC<Props> = ({ locale }) => {
         </button>
       </div>
 
+      {/* Mode + difficulty */}
+      <div className="mb-3 flex flex-wrap items-center gap-2">
+        <div className="inline-flex rounded-xl border border-border overflow-hidden" role="group" aria-label={`${t.modeLocal} / ${t.modeAi}`}>
+          {(["local", "ai"] as GameMode[]).map((m) => (
+            <button key={m} onClick={() => switchMode(m)}
+              aria-pressed={mode === m}
+              className={`px-3 py-1.5 text-xs font-bold transition-colors ${mode === m ? "bg-blue-600 text-white" : "bg-muted/50 text-muted-foreground hover:bg-muted"}`}>
+              {m === "local" ? t.modeLocal : t.modeAi}
+            </button>
+          ))}
+        </div>
+        {mode === "ai" && (
+          <div className="inline-flex gap-1">
+            {([1, 2, 3] as AiLevel[]).map((lv) => (
+              <button key={lv} onClick={() => { setLevel(lv); resetGame(); }}
+                aria-pressed={level === lv}
+                className={`px-2.5 py-1.5 rounded-lg text-[11px] font-bold border transition-colors ${level === lv ? "border-blue-600 text-blue-600 bg-blue-600/10" : "border-border text-muted-foreground hover:bg-muted"}`}>
+                {lv === 1 ? t.level1 : lv === 2 ? t.level2 : t.level3}
+              </button>
+            ))}
+          </div>
+        )}
+        {mode === "ai" && record && record.w + record.l + record.d > 0 && (
+          <span className="ml-auto text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
+            {t.record} {record.w}–{record.l}{record.d ? `–${record.d}` : ""}
+          </span>
+        )}
+      </div>
+
       {/* Status bar */}
-      <div className="mb-3 h-8 flex items-center justify-center">
-        {status === "playing" && (
+      <div className="mb-3 h-8 flex items-center justify-center" aria-live="polite">
+        {status === "playing" && thinking && (
+          <span className="text-sm font-semibold text-muted-foreground animate-pulse">{t.thinking}</span>
+        )}
+        {status === "playing" && !thinking && (
           <span className="text-sm font-semibold">
             <span className={playerTextColors[currentPlayer]}>
               {playerEmoji[currentPlayer]} {t.player} {currentPlayer}
@@ -243,8 +340,9 @@ const ConnectFour: React.FC<Props> = ({ locale }) => {
         )}
         {status === "won" && (
           <span className={`text-sm font-black ${playerTextColors[currentPlayer]}`}>
-            {playerEmoji[currentPlayer]} {t.player} {currentPlayer}
-            {t.wins}
+            {mode === "ai"
+              ? (currentPlayer === AI_PLAYER ? `${playerEmoji[currentPlayer]} ${t.aiWins}` : `${playerEmoji[currentPlayer]} ${t.youWin}`)
+              : <>{playerEmoji[currentPlayer]} {t.player} {currentPlayer}{t.wins}</>}
           </span>
         )}
         {status === "draw" && (
