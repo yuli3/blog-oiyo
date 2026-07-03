@@ -1,0 +1,31 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import QuartileCalculator from "../../components/tools/QuartileCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string; h1: string }> = {
+  ko: { title: "사분위수 계산기 — Q1·중앙값·Q3·IQR 한 번에", description: "숫자 목록을 붙여넣으면 제1사분위수(Q1), 중앙값, 제3사분위수(Q3), 사분위범위(IQR)와 1.5×IQR 기준 이상치까지 즉시 계산합니다.", h1: "사분위수(Q1·Q3) 계산기" },
+  en: { title: "Quartile Calculator — Q1, Median, Q3 & IQR", description: "Paste a list of numbers to instantly get the first quartile (Q1), median, third quartile (Q3), interquartile range (IQR) and 1.5×IQR outliers.", h1: "Quartile (Q1·Q3) Calculator" },
+  ja: { title: "四分位数計算機 — Q1・中央値・Q3・IQR", description: "数値リストを貼り付けるだけで第1四分位数(Q1)、中央値、第3四分位数(Q3)、四分位範囲(IQR)、1.5×IQR基準の外れ値まで即計算。", h1: "四分位数(Q1·Q3)計算機" },
+  zh: { title: "四分位数计算器 — Q1·中位数·Q3·IQR", description: "粘贴数字列表，立即计算第一四分位数(Q1)、中位数、第三四分位数(Q3)、四分位距(IQR)以及1.5×IQR规则的离群值。", h1: "四分位数(Q1·Q3)计算器" },
+  fr: { title: "Calculateur de quartiles — Q1, médiane, Q3 et IQR", description: "Collez une liste de nombres pour obtenir instantanément Q1, la médiane, Q3, l'écart interquartile (IQR) et les valeurs aberrantes (règle 1,5×IQR).", h1: "Calculateur de quartiles (Q1·Q3)" },
+  es: { title: "Calculadora de cuartiles — Q1, mediana, Q3 e IQR", description: "Pega una lista de números y obtén al instante Q1, la mediana, Q3, el rango intercuartílico (IQR) y los valores atípicos (regla 1,5×IQR).", h1: "Calculadora de cuartiles (Q1·Q3)" },
+};
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <main class="mx-auto max-w-2xl px-4 py-10">
+    <div class="mb-6 text-center">
+      <h1 class="text-2xl font-black">{m.h1}</h1>
+      <p class="mt-2 text-sm text-muted-foreground">{m.description}</p>
+    </div>
+    <QuartileCalculator client:load locale={locale} />
+  </main>
+</BaseLayout>
