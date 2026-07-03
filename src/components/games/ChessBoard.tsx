@@ -57,6 +57,7 @@ const ChessBoard: React.FC<{ locale?: Locale }> = ({ locale = 'ko' }) => {
 
   const reset = () => {
     if (aiTimer.current) clearTimeout(aiTimer.current);
+    reqIdRef.current++; // invalidate any in-flight worker search
     setBoard(makeInitialBoard());
     setSelected(null);
     setIsWhiteTurn(true);
@@ -106,15 +107,36 @@ const ChessBoard: React.FC<{ locale?: Locale }> = ({ locale = 'ko' }) => {
     }
   };
 
-  // AI turn
+  // AI turn — search runs in a Web Worker so deep Master positions never freeze
+  // the main thread (mobile). Falls back to synchronous search if Workers fail.
+  const workerRef = useRef<Worker | null>(null);
+  const reqIdRef = useRef(0);
+  useEffect(() => () => { workerRef.current?.terminate(); }, []);
+
   useEffect(() => {
     if (mode !== 'ai' || gameEnd || isWhiteTurn !== AI_IS_WHITE) return;
     setThinking(true);
-    aiTimer.current = setTimeout(() => {
-      const move = chessBestMove(board, AI_IS_WHITE, level);
+    const id = ++reqIdRef.current;
+    const commit = (move: ChessMove | null) => {
+      if (id !== reqIdRef.current) return; // stale (reset/mode switch)
       setThinking(false);
       if (move) applyMove(board, move, AI_IS_WHITE);
       // no legal move is already handled by applyMove's mate/stalemate detection
+    };
+    aiTimer.current = setTimeout(() => {
+      try {
+        if (!workerRef.current) {
+          workerRef.current = new Worker(new URL('../../lib/games/ai/chess.worker.ts', import.meta.url), { type: 'module' });
+        }
+        const w = workerRef.current;
+        w.onmessage = (e: MessageEvent<{ id: number; move: ChessMove | null }>) => {
+          if (e.data.id === id) commit(e.data.move);
+        };
+        w.onerror = () => commit(chessBestMove(board, AI_IS_WHITE, level));
+        w.postMessage({ id, board, white: AI_IS_WHITE, level });
+      } catch {
+        commit(chessBestMove(board, AI_IS_WHITE, level));
+      }
     }, AI_DELAY_MS);
     return () => { if (aiTimer.current) clearTimeout(aiTimer.current); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
