@@ -3,6 +3,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import SalaryCalculatorComp from "../../components/tests/SalaryCalculator";
 import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
 import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import RelatedToolLinks from "../../components/RelatedToolLinks.astro";
 import { buildToolShell } from "../../lib/tool-shell";
 import { siteConfig } from "../../config/site.config";
 import { locales } from "../../lib/i18n";
@@ -131,6 +132,11 @@ const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, local
     <div class="mx-auto max-w-xl">
       <SalaryCalculatorComp client:visible locale={locale} />
     </div>
+    <RelatedToolLinks
+      locale={locale}
+      current="salary-calculator"
+      slugs={["china-salary-calculator", "japan-salary-calculator", "taiwan-salary-calculator", "france-salary-calculator", "spain-salary-calculator", "salary-negotiation-calculator"]}
+    />
     <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
   </ToolShell>
 </BaseLayout>

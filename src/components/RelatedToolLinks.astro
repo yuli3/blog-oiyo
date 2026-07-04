@@ -1,0 +1,66 @@
+---
+// 도구/계산기 페이지용 관련 링크 (토픽 클러스터 내부링크 — SEO 링크에쿼티 + AIEO).
+// oiyo RelatedTools 패턴의 blog 판. slug 기반, 6로케일 라벨 curated.
+import { getLocalizedPath, type Locale } from "../lib/i18n";
+
+interface Props {
+  locale: Locale;
+  slugs: string[];
+  current?: string;
+}
+const { locale, slugs, current } = Astro.props as Props;
+
+type Loc = Record<Locale, string>;
+interface Tool { icon: string; label: Loc }
+
+const TOOLS: Record<string, Tool> = {
+  // 급여/세금 클러스터
+  "salary-calculator": { icon: "💰", label: { ko: "연봉 실수령액 계산기", en: "Salary Calculator", ja: "給与計算機", fr: "Calculateur de salaire", es: "Calculadora de salario", zh: "薪资计算器" } },
+  "china-salary-calculator": { icon: "🇨🇳", label: { ko: "중국 급여 계산기", en: "China Salary Calculator", ja: "中国給与計算機", fr: "Calculateur salaire Chine", es: "Calculadora salario China", zh: "中国薪资计算器" } },
+  "france-salary-calculator": { icon: "🇫🇷", label: { ko: "프랑스 급여 계산기", en: "France Salary Calculator", ja: "フランス給与計算機", fr: "Calculateur salaire France", es: "Calculadora salario Francia", zh: "法国薪资计算器" } },
+  "japan-salary-calculator": { icon: "🇯🇵", label: { ko: "일본 급여 계산기", en: "Japan Salary Calculator", ja: "日本給与計算機", fr: "Calculateur salaire Japon", es: "Calculadora salario Japón", zh: "日本薪资计算器" } },
+  "spain-salary-calculator": { icon: "🇪🇸", label: { ko: "스페인 급여 계산기", en: "Spain Salary Calculator", ja: "スペイン給与計算機", fr: "Calculateur salaire Espagne", es: "Calculadora salario España", zh: "西班牙薪资计算器" } },
+  "taiwan-salary-calculator": { icon: "🇹🇼", label: { ko: "대만 급여 계산기", en: "Taiwan Salary Calculator", ja: "台湾給与計算機", fr: "Calculateur salaire Taïwan", es: "Calculadora salario Taiwán", zh: "台湾薪资计算器" } },
+  "salary-negotiation-calculator": { icon: "🤝", label: { ko: "연봉 협상 계산기", en: "Salary Negotiation Calculator", ja: "給与交渉計算機", fr: "Calculateur de négociation salariale", es: "Calculadora de negociación salarial", zh: "薪资谈判计算器" } },
+  // 한국 급여·세금 클러스터
+  "annual-leave-calculator": { icon: "📆", label: { ko: "연차 계산기", en: "Annual Leave Calculator", ja: "年次休暇計算機", fr: "Calculateur de congés", es: "Calculadora de vacaciones", zh: "年假计算器" } },
+  "auto-tax-calculator": { icon: "🚗", label: { ko: "자동차세 계산기", en: "Auto Tax Calculator", ja: "自動車税計算機", fr: "Calculateur de taxe auto", es: "Calculadora de impuesto vehicular", zh: "车辆税计算器" } },
+  "acquisition-tax-calculator": { icon: "🏠", label: { ko: "취득세 계산기", en: "Acquisition Tax Calculator", ja: "不動産取得税計算機", fr: "Calculateur de taxe d'acquisition", es: "Calculadora de impuesto de adquisición", zh: "契税计算器" } },
+  "capital-gains-tax-calculator": { icon: "📊", label: { ko: "양도소득세 계산기", en: "Capital Gains Tax Calculator", ja: "譲渡所得税計算機", fr: "Calculateur de plus-values", es: "Calculadora de ganancias de capital", zh: "资本利得税计算器" } },
+  // 수면
+  "sleep-calculator": { icon: "🌙", label: { ko: "수면 시간 계산기", en: "Sleep Calculator", ja: "睡眠時間計算機", fr: "Calculateur de sommeil", es: "Calculadora de sueño", zh: "睡眠时间计算器" } },
+  "sleep-chronotype-test": { icon: "😴", label: { ko: "수면 크로노타입 테스트", en: "Sleep Chronotype Test", ja: "睡眠クロノタイプテスト", fr: "Test Chronotype Sommeil", es: "Test Cronotipo Sueño", zh: "睡眠时型测验" } },
+  // 인기 계산기/변환기
+  "height-converter": { icon: "📏", label: { ko: "키 변환기", en: "Height Converter", ja: "身長変換", fr: "Convertisseur de taille", es: "Conversor de altura", zh: "身高换算" } },
+  "korean-age-calculator": { icon: "🎂", label: { ko: "만나이 계산기", en: "Korean Age Calculator", ja: "韓国年齢計算機", fr: "Calculateur d'âge coréen", es: "Calculadora edad coreana", zh: "韩国年龄计算器" } },
+  "hours-calculator": { icon: "⏱️", label: { ko: "근무시간 계산기", en: "Hours Calculator", ja: "勤務時間計算機", fr: "Calculateur d'heures", es: "Calculadora de horas", zh: "工时计算器" } },
+  "percentage-calculator": { icon: "％", label: { ko: "퍼센트 계산기", en: "Percentage Calculator", ja: "パーセント計算", fr: "Calculateur de pourcentage", es: "Calculadora de porcentaje", zh: "百分比计算器" } },
+  "discount-calculator": { icon: "🏷️", label: { ko: "할인가 계산기", en: "Discount Calculator", ja: "割引計算機", fr: "Calculateur de remise", es: "Calculadora de descuento", zh: "折扣计算器" } },
+  "tdee-calculator": { icon: "🔥", label: { ko: "TDEE 계산기", en: "TDEE Calculator", ja: "TDEE計算機", fr: "Calculateur TDEE", es: "Calculadora TDEE", zh: "TDEE 计算器" } },
+};
+
+const HEADING: Record<Locale, string> = {
+  ko: "관련 도구", en: "Related tools", ja: "関連ツール", fr: "Outils associés", es: "Herramientas relacionadas", zh: "相关工具",
+};
+
+const items = slugs
+  .filter((s) => s !== current && TOOLS[s])
+  .map((s) => ({ slug: s, ...TOOLS[s] }));
+---
+
+{items.length > 0 && (
+  <nav class="mt-10" aria-label={HEADING[locale]}>
+    <h2 class="text-xl font-bold text-slate-900">{HEADING[locale]}</h2>
+    <div class="mt-4 flex flex-wrap gap-2">
+      {items.map((tool) => (
+        <a
+          href={getLocalizedPath(locale, `/${tool.slug}`)}
+          class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-indigo-300 hover:bg-indigo-50"
+        >
+          <span aria-hidden="true">{tool.icon}</span>
+          {tool.label[locale]}
+        </a>
+      ))}
+    </div>
+  </nav>
+)}
