@@ -88,6 +88,15 @@ def _detect_site_url() -> str:
 SITE_URL = _detect_site_url()
 SITEMAP_INDEX_URL = f"{SITE_URL}/sitemap-index.xml"
 
+# GSC site identifier — usually equals SITE_URL (a URL-prefix property), but
+# some Oiyo properties are registered in Search Console as *domain* properties
+# (siteUrl="sc-domain:example.com" instead of "https://example.com/"). Domain
+# and URL-prefix properties are distinct GSC resources with separate
+# permission grants, so submitting to the wrong form 403s even with a valid
+# service account (see AI-Sessions/wiki/errors/recurring-build-deploy-gotchas.md #9).
+# Set GSC_SITE_URL per-repo in CI when the registered property is a domain property.
+GSC_SITE_URL = os.environ.get("GSC_SITE_URL", SITE_URL).rstrip("/")
+
 # Additional sitemaps to submit (beyond the index)
 SITEMAPS = [
     SITEMAP_INDEX_URL,
@@ -116,7 +125,11 @@ def parse_sitemap(url: str, visited: set | None = None) -> list[str]:
 
     urls: list[str] = []
     try:
-        resp = requests.get(url, timeout=30, headers={"User-Agent": "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"})
+        # Use an honest UA, not a spoofed Googlebot string — impersonating a
+        # named bot (without passing Google's IP/reverse-DNS verification)
+        # trips Cloudflare's verified-bot enforcement and gets 403'd when this
+        # runs from a datacenter IP like GitHub Actions (see gotcha #9).
+        resp = requests.get(url, timeout=30, headers={"User-Agent": "OiyoSitemapSubmitter/1.0 (+https://oiyo.net; sitemap URL enumeration for IndexNow)"})
         resp.raise_for_status()
         root = ET.fromstring(resp.content)
     except Exception as exc:
@@ -336,7 +349,8 @@ def main() -> int:
     parser.add_argument("--bing", action="store_true", help="Submit to Bing Webmaster only")
     parser.add_argument("--indexnow", action="store_true", help="Submit via IndexNow only")
     parser.add_argument("--sitemap", default=SITEMAP_INDEX_URL, help="Sitemap URL to submit")
-    parser.add_argument("--site", default=SITE_URL, help="Site URL (e.g. https://example.com)")
+    parser.add_argument("--site", default=SITE_URL, help="Site URL for Bing/IndexNow (e.g. https://example.com)")
+    parser.add_argument("--gsc-site", default=GSC_SITE_URL, help="GSC siteUrl (e.g. https://example.com/ or sc-domain:example.com)")
     parser.add_argument("--dry-run", action="store_true", help="Show what would be submitted without making requests")
     parser.add_argument("--json", action="store_true", dest="json_out", help="Output results as JSON")
     args = parser.parse_args()
@@ -346,6 +360,8 @@ def main() -> int:
     print(f"\n{'='*60}")
     print(f"  Sitemap Submission — {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print(f"  Site    : {args.site}")
+    if args.gsc_site != args.site:
+        print(f"  GSC Site: {args.gsc_site}")
     print(f"  Sitemap : {args.sitemap}")
     if args.dry_run:
         print(f"  Mode    : DRY RUN (no requests will be made)")
@@ -356,7 +372,7 @@ def main() -> int:
     # ── Google Search Console ────────────────────────────────────────────────
     if run_all or args.google:
         log("Google Search Console...")
-        result = submit_google_gsc(args.site, args.sitemap, dry_run=args.dry_run)
+        result = submit_google_gsc(args.gsc_site, args.sitemap, dry_run=args.dry_run)
         all_results["google"] = result
         level = "OK" if result["status"] == "ok" else ("WARN" if result["status"] in ("skip", "dry-run") else "ERR")
         log(f"Google GSC: {result}", level)
