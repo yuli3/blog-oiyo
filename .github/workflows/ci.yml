@@ -47,6 +47,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        # Produces dist/sitemap-index.xml + dist/sitemap-*.xml so IndexNow URL
+        # collection can read them from disk instead of HTTP-fetching the live
+        # site from CI (Cloudflare 403s that self-fetch — see gotcha #10).
+        run: npm run build
+
       - name: Setup Python
         uses: actions/setup-python@v6
         with:
