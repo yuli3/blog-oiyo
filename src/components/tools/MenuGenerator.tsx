@@ -73,8 +73,23 @@ function useThrottle<T extends (...args: never[]) => void>(fn: T, ms: number): T
   );
 }
 
+// 상황·끼니·계절 필터 (menu-data 태그 어휘의 실용 부분집합)
+const FILTER_TAGS: { key: string; label: string }[] = [
+  { key: 'all', label: '전체' },
+  { key: '점심', label: '🥪 점심' },
+  { key: '저녁', label: '🍽️ 저녁' },
+  { key: '야식', label: '🌙 야식' },
+  { key: '해장', label: '🍲 해장' },
+  { key: '여름', label: '☀️ 여름' },
+  { key: '겨울', label: '❄️ 겨울' },
+  { key: '다이어트', label: '🥗 다이어트' },
+  { key: '혼밥', label: '🧑 혼밥' },
+  { key: '회식', label: '🍻 회식' },
+];
+
 export default function MenuGenerator() {
   const [selectedCountry, setSelectedCountry] = useState<CountryType>('all');
+  const [selectedTag, setSelectedTag] = useState<string>('all');
   const [selectedMenu, setSelectedMenu] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [history, setHistory] = useState<string[]>([]);
@@ -124,9 +139,11 @@ export default function MenuGenerator() {
 
   const generate = useThrottle(
     useCallback(() => {
-      const pool = menuData[selectedCountry];
-      spin(pool.length > 0 ? pool : menuData.all);
-    }, [selectedCountry, spin]),
+      const base = menuData[selectedCountry];
+      const pool = selectedTag === 'all' ? base : base.filter((m) => m.tags?.includes(selectedTag));
+      // 태그 교차 결과가 비면 국가 풀 → 전체 순으로 폴백
+      spin(pool.length > 0 ? pool : base.length > 0 ? base : menuData.all);
+    }, [selectedCountry, selectedTag, spin]),
     1000
   );
 
@@ -204,6 +221,26 @@ export default function MenuGenerator() {
               }`}
             >
               {countryLabels[c]}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Situation / meal-time / season selector */}
+      <div>
+        <p className="text-sm font-semibold mb-3 text-muted-foreground uppercase tracking-widest">상황 · 끼니 · 계절</p>
+        <div className="flex flex-wrap gap-2">
+          {FILTER_TAGS.map((tg) => (
+            <button
+              key={tg.key}
+              onClick={() => setSelectedTag(tg.key)}
+              className={`rounded-lg border-2 px-3 py-1.5 text-sm font-medium transition-colors ${
+                selectedTag === tg.key
+                  ? 'bg-primary text-primary-foreground border-primary'
+                  : 'border-border bg-card hover:bg-muted'
+              }`}
+            >
+              {tg.label}
             </button>
           ))}
         </div>
