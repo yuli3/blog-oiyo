@@ -6,11 +6,16 @@ interface Props {
   locale?: string;
 }
 
+import { resolveTestHref } from "@/lib/test-cta-targets";
+
 const { test, title, description, locale = "ko" } = Astro.props;
 const ctaLabel = locale === "ko" ? "테스트 해보기 →" : (locale === "ja" ? "テストを受ける →" : "Take the test →");
-const href = `/${locale}/${test}`;
+// 실존 타깃만 링크한다(로케일 → en → ko 폴백). 어디에도 없으면 CTA를 렌더하지 않아
+// 깨진 내부 링크를 만들지 않는다.
+const href = await resolveTestHref(test, locale);
 ---
 
+{href && (
 <aside class="not-prose my-8 rounded-2xl border border-indigo-200 bg-indigo-50/80 shadow-sm">
   <a
     href={href}
@@ -34,3 +39,4 @@ const href = `/${locale}/${test}`;
     </span>
   </a>
 </aside>
+)}
