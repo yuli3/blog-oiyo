@@ -52,8 +52,8 @@ export default defineConfig({
         if (segs.length > 0 && DEINDEXED_LOCALES.has(segs[0])) return false;
         return true;
       },
-      // Set lastmod to today's build date
-      lastmod: new Date(),
+      // Do not stamp every URL with the build time. A trustworthy per-article
+      // source date may be added later; an unknown date is omitted.
       // Use serialize for per-URL priority and changefreq
       serialize: (item) => {
         const url = new URL(item.url);
