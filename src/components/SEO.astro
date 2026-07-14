@@ -1,6 +1,11 @@
 ---
 import { siteConfig } from "../config/site.config";
 import { getAuthor } from "../lib/authors";
+import deindexedLocales from "../config/deindexed-locales.json";
+
+// Crawl-budget policy — see astro.config.mjs. These locales stay reachable for
+// users but are kept out of the index and out of the sitemap/hreflang cluster.
+const DEINDEXED_LOCALES = new Set<string>(deindexedLocales);
 
 interface Props {
   title?: string;
@@ -51,8 +56,12 @@ const isLocaleCompleteRoute =
   isLocalePath &&
   (pathSegments.length === 1 ||
     (pathSegments.length === 2 && !/^\d+$/.test(pathSegments[1])));
-const locales =
+const allLocales =
   availableLocales ?? (isLocaleCompleteRoute ? supportedLocales : [currentLocale]);
+// Deindexed locales are dropped from the hreflang cluster: Google discards
+// hreflang annotations pointing at noindex URLs, so advertising them only
+// muddies the cluster.
+const locales = allLocales.filter((l: string) => !DEINDEXED_LOCALES.has(l));
 const xDefaultLocale = locales.includes(siteConfig.locale)
   ? siteConfig.locale
   : (locales.includes(currentLocale) ? currentLocale : locales[0]);
@@ -77,7 +86,8 @@ const googleAdsenseId = siteConfig.analytics.googleAdsenseId;
 const resolvedCanonicalUrl = new URL(String(canonicalURL), Astro.site);
 const canonicalHost = resolvedCanonicalUrl.hostname;
 const isCrossDomainCanonical = canonicalHost !== new URL(siteConfig.url).hostname;
-const robotsContent = isCrossDomainCanonical
+const isDeindexedLocale = DEINDEXED_LOCALES.has(currentLocale);
+const robotsContent = isCrossDomainCanonical || isDeindexedLocale
   ? "noindex, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
   : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1";
 
