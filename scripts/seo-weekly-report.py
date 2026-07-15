@@ -36,6 +36,8 @@ SITES = [
 ]
 
 BING_BASE = "https://ssl.bing.com/webmaster/api.svc/json"
+APEX_PROP = "sc-domain:oiyo.net"
+APEX_PAGE_REGEX = r"^https://(www\.)?oiyo\.net/"
 
 
 def gsc_service():
@@ -49,11 +51,25 @@ def gsc_service():
     return google_build("webmasters", "v3", credentials=creds)
 
 
+def gsc_body(prop, start, end):
+    body = {"startDate": start, "endDate": end, "dimensions": ["date"], "rowLimit": 100}
+    if prop == APEX_PROP:
+        body["dimensionFilterGroups"] = [{
+            "groupType": "and",
+            "filters": [{
+                "dimension": "page",
+                "operator": "includingRegex",
+                "expression": APEX_PAGE_REGEX,
+            }],
+        }]
+    return body
+
+
 def gsc_window(svc, prop, start, end):
     try:
         rows = svc.searchanalytics().query(
             siteUrl=prop,
-            body={"startDate": start, "endDate": end, "dimensions": ["date"], "rowLimit": 100},
+            body=gsc_body(prop, start, end),
         ).execute().get("rows", [])
         return (
             int(sum(r.get("clicks", 0) for r in rows)),
@@ -91,10 +107,14 @@ def bing_crawl_stats(url):
 
 def main() -> int:
     today = datetime.now(timezone.utc).date()
-    end = (today - timedelta(days=2)).isoformat()        # GSC data lags ~2 days
-    start_7 = (today - timedelta(days=9)).isoformat()
-    prev_end = (today - timedelta(days=10)).isoformat()
-    prev_start = (today - timedelta(days=17)).isoformat()
+    end_date = today - timedelta(days=2)                 # GSC data lags ~2 days
+    start_date = end_date - timedelta(days=6)            # inclusive 7-day window
+    prev_end_date = start_date - timedelta(days=1)
+    prev_start_date = prev_end_date - timedelta(days=6)
+    end = end_date.isoformat()
+    start_7 = start_date.isoformat()
+    prev_end = prev_end_date.isoformat()
+    prev_start = prev_start_date.isoformat()
 
     svc = gsc_service()
 
