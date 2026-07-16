@@ -82,5 +82,7 @@
 
 # Embeddable widget routes — external sites iframe these (natural-backlink embeds).
 # Detach the global DENY; the pages are noindex and carry no auth/user data.
-/*/embed/*
+# NOTE: Cloudflare allows only ONE splat per rule — /*/embed/* silently never
+# matches. Use a :placeholder for the locale segment instead.
+/:lang/embed/*
   ! X-Frame-Options
