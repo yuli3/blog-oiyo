@@ -234,6 +234,20 @@ const m = meta[locale];
 const c = content[locale];
 const pageUrl = `https://blog.oiyo.net/${locale}/height-converter/`;
 
+// Embed-this-tool: copyable snippet pointing at the chrome-less /embed/ route.
+// The credit anchor under the iframe is what earns the natural backlink.
+const embedCopy: Record<ActiveLocale, { title: string; desc: string }> = {
+  ko: { title: "이 도구를 내 블로그에 넣기", desc: "아래 코드를 복사해 블로그나 사이트에 붙여넣으면 키 변환기가 그대로 작동합니다. 무료이며, 출처 링크만 함께 남겨 주세요." },
+  en: { title: "Embed this tool on your site", desc: "Copy the code below into your blog or site and the converter works as-is. Free to use — just keep the credit link." },
+  ja: { title: "このツールをブログに埋め込む", desc: "以下のコードをブログやサイトに貼り付けると、そのまま動作します。無料です。出典リンクは残してください。" },
+  zh: { title: "把这个工具嵌入你的网站", desc: "复制下方代码粘贴到你的博客或网站即可直接使用。免费使用，请保留来源链接。" },
+  fr: { title: "Intégrer cet outil sur votre site", desc: "Copiez le code ci-dessous dans votre blog ou site : le convertisseur fonctionne tel quel. Gratuit — conservez simplement le lien de crédit." },
+  es: { title: "Inserta esta herramienta en tu sitio", desc: "Copia el código de abajo en tu blog o sitio y el conversor funcionará tal cual. Gratis: solo conserva el enlace de crédito." },
+};
+const e = embedCopy[locale];
+const embedUrl = `https://blog.oiyo.net/${locale}/embed/height-converter/`;
+const embedSnippet = `<iframe src="${embedUrl}" width="100%" height="480" style="border:0;border-radius:12px" loading="lazy" title="${m.title}"></iframe>\n<p><a href="${pageUrl}">${m.title}</a></p>`;
+
 const structuredData = {
   "@context": "https://schema.org",
   "@graph": [
@@ -356,6 +370,12 @@ const structuredData = {
           </a>
         ))}
       </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-950">{e.title}</h2>
+      <p class="mt-2 text-sm leading-6 text-slate-700">{e.desc}</p>
+      <pre class="mt-4 overflow-x-auto rounded-xl border border-slate-200 bg-slate-50 p-4 text-xs leading-6 text-slate-800"><code>{embedSnippet}</code></pre>
     </section>
 
     <p class="mt-10 rounded-xl bg-slate-100 p-4 text-sm leading-6 text-slate-700">

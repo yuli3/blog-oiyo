@@ -1,0 +1,50 @@
+---
+// Embeddable height converter — a chrome-less page other sites can iframe.
+// Always noindex (the canonical tool page carries the SEO); framing is enabled
+// by the `! X-Frame-Options` exception for /*/embed/* in public/_headers.
+import "../../../styles/global.css";
+import HeightConverter from "../../../components/tools/HeightConverter";
+import { locales } from "../../../lib/i18n";
+import type { Locale } from "../../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: ActiveLocale };
+
+const meta: Record<ActiveLocale, { title: string; credit: string }> = {
+  ko: { title: "키 변환기 — OIYO", credit: "키 변환기 · 전체 버전 보기" },
+  en: { title: "Height Converter — OIYO", credit: "Height Converter · open the full tool" },
+  ja: { title: "身長変換ツール — OIYO", credit: "身長変換ツール · フル版を開く" },
+  zh: { title: "身高换算器 — OIYO", credit: "身高换算器 · 查看完整版" },
+  fr: { title: "Convertisseur de taille — OIYO", credit: "Convertisseur de taille · version complète" },
+  es: { title: "Conversor de estatura — OIYO", credit: "Conversor de estatura · versión completa" },
+};
+
+const m = meta[locale];
+const fullUrl = `https://blog.oiyo.net/${locale}/height-converter/`;
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="canonical" href={fullUrl} />
+    <title>{m.title}</title>
+  </head>
+  <body class="bg-white">
+    <div class="p-3">
+      <HeightConverter client:load locale={locale as Locale} />
+      <p class="mt-3 text-center text-xs text-slate-500">
+        <a href={fullUrl} target="_blank" rel="noopener" class="font-semibold text-indigo-600 hover:underline">
+          {m.credit} ↗
+        </a>
+      </p>
+    </div>
+  </body>
+</html>

@@ -48,6 +48,8 @@ export default defineConfig({
         // Exclude noindex bridge stubs (canonical lives on oiyo.net)
         const segs = path.split("/").filter(Boolean);
         if (segs.length === 2 && BRIDGE_SLUGS.has(segs[1])) return false;
+        // Exclude noindex embed widgets (canonical is the full tool page)
+        if (segs.includes("embed")) return false;
         // Exclude deindexed locales (crawl budget).
         if (segs.length > 0 && DEINDEXED_LOCALES.has(segs[0])) return false;
         return true;
