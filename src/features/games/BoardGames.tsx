@@ -16,6 +16,16 @@ import React, {
 } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import {
+  TIER_LIST_STORAGE_KEY,
+  createTierListShareCode,
+  createTierListSnapshot,
+  parseTierListShareCode,
+  parseTierListSnapshot,
+  serializeTierListSnapshot,
+  type TierListTierId,
+  type TierListSnapshot,
+} from '@/lib/tier-list-state';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Shared
@@ -582,6 +592,16 @@ const TL_COPY = {
     reset: '초기화',
     copyResults: '결과 복사',
     copied: '복사됨!',
+    exportJson: 'JSON 내보내기',
+    importJson: 'JSON 가져오기',
+    copyShareCode: '공유 코드 복사',
+    loadShareCode: '공유 코드 불러오기',
+    sharePlaceholder: 'tl1.로 시작하는 공유 코드',
+    savedLocally: '이 브라우저에 자동 저장됩니다.',
+    restored: '저장된 티어 리스트를 복원했습니다.',
+    imported: '티어 리스트를 불러왔습니다.',
+    invalidImport: '유효한 티어 리스트 파일 또는 공유 코드가 아닙니다.',
+    shareCopied: '30일 동안 유효한 공유 코드를 복사했습니다.',
     removeItem: '아이템 삭제',
     moveToTier: (tier: string) => `${tier} 등급으로 이동`,
     moveToUnranked: '미분류로 이동',
@@ -602,6 +622,16 @@ const TL_COPY = {
     reset: 'Reset',
     copyResults: 'Copy Results',
     copied: 'Copied!',
+    exportJson: 'Export JSON',
+    importJson: 'Import JSON',
+    copyShareCode: 'Copy Share Code',
+    loadShareCode: 'Load Share Code',
+    sharePlaceholder: 'Share code starting with tl1.',
+    savedLocally: 'Automatically saved in this browser.',
+    restored: 'Restored your saved tier list.',
+    imported: 'Tier list imported.',
+    invalidImport: 'This is not a valid tier list file or share code.',
+    shareCopied: 'Copied a share code valid for 30 days.',
     removeItem: 'Remove item',
     moveToTier: (tier: string) => `Move to ${tier} tier`,
     moveToUnranked: 'Move to Unranked',
@@ -622,6 +652,16 @@ const TL_COPY = {
     reset: 'リセット',
     copyResults: '結果をコピー',
     copied: 'コピー済み！',
+    exportJson: 'JSONを書き出す',
+    importJson: 'JSONを読み込む',
+    copyShareCode: '共有コードをコピー',
+    loadShareCode: '共有コードを読み込む',
+    sharePlaceholder: 'tl1.で始まる共有コード',
+    savedLocally: 'このブラウザに自動保存されます。',
+    restored: '保存済みのティアリストを復元しました。',
+    imported: 'ティアリストを読み込みました。',
+    invalidImport: '有効なティアリストファイルまたは共有コードではありません。',
+    shareCopied: '30日間有効な共有コードをコピーしました。',
     removeItem: 'アイテムを削除',
     moveToTier: (tier: string) => `${tier}ランクへ移動`,
     moveToUnranked: '未分類へ移動',
@@ -640,7 +680,7 @@ interface TLItem {
 }
 
 interface TLTier {
-  id: string;
+  id: TierListTierId;
   name: string;
   color: string;
   headerColor: string;
@@ -678,7 +718,7 @@ const TIER_DEFS = [
   { id: 'b', name: 'B', color: 'bg-yellow-100 border-yellow-200', headerColor: 'bg-yellow-400 text-slate-800' },
   { id: 'c', name: 'C', color: 'bg-emerald-100 border-emerald-200', headerColor: 'bg-emerald-500 text-white' },
   { id: 'd', name: 'D', color: 'bg-blue-100 border-blue-200', headerColor: 'bg-blue-400 text-white' },
-];
+] as const;
 
 function buildInitialTiers(): TLTier[] {
   return [
@@ -707,6 +747,7 @@ type TLAction =
   | { type: 'REMOVE_ITEM'; id: string }
   | { type: 'SET_NEW_LABEL'; label: string }
   | { type: 'ADD_ITEM' }
+  | { type: 'LOAD_TIERS'; tiers: TLTier[] }
   | { type: 'RESET' }
   | { type: 'SET_COPIED'; value: boolean }
   | { type: 'CLEAR_WARNING' };
@@ -752,6 +793,8 @@ function tlReducer(state: TLState, action: TLAction): TLState {
       );
       return { ...state, tiers: newTiers, newItemLabel: '', warning: null };
     }
+    case 'LOAD_TIERS':
+      return { ...state, tiers: action.tiers, selectedItemId: null, newItemLabel: '', warning: null };
     case 'RESET':
       return { ...state, tiers: buildInitialTiers(), selectedItemId: null, warning: null };
     case 'SET_COPIED':
@@ -773,6 +816,36 @@ export function TierListMaker({ locale = 'ko' }: { locale?: Locale }) {
     warning: null,
   }));
   const inputRef = useRef<HTMLInputElement>(null);
+  const importRef = useRef<HTMLInputElement>(null);
+  const [hydrated, setHydrated] = useState(false);
+  const [shareCode, setShareCode] = useState('');
+  const [persistenceMessage, setPersistenceMessage] = useState<string | null>(null);
+
+  const tiersFromSnapshot = useCallback((snapshot: TierListSnapshot): TLTier[] => {
+    const itemsById = new Map(snapshot.tiers.map((tier) => [tier.id, tier.items]));
+    return buildInitialTiers().map((tier) => ({ ...tier, items: [...(itemsById.get(tier.id) ?? [])] }));
+  }, []);
+
+  const loadSnapshot = useCallback((snapshot: TierListSnapshot, message: string) => {
+    dispatch({ type: 'LOAD_TIERS', tiers: tiersFromSnapshot(snapshot) });
+    setPersistenceMessage(message);
+  }, [tiersFromSnapshot]);
+
+  useEffect(() => {
+    try {
+      const stored = window.localStorage.getItem(TIER_LIST_STORAGE_KEY);
+      const snapshot = stored ? parseTierListSnapshot(stored) : null;
+      if (snapshot) loadSnapshot(snapshot, copy.restored);
+    } catch { /* localStorage가 차단되어도 도구는 계속 동작한다. */ }
+    setHydrated(true);
+  }, [copy.restored, loadSnapshot]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    try {
+      window.localStorage.setItem(TIER_LIST_STORAGE_KEY, serializeTierListSnapshot(createTierListSnapshot(state.tiers)));
+    } catch { /* quota/privacy mode에서는 메모리 상태만 유지한다. */ }
+  }, [hydrated, state.tiers]);
 
   // Auto-clear warning
   useEffect(() => {
@@ -803,6 +876,49 @@ export function TierListMaker({ locale = 'ko' }: { locale?: Locale }) {
       .then(() => dispatch({ type: 'SET_COPIED', value: true }))
       .catch(() => {});
   }, [state.tiers, copy]);
+
+  const handleExportJson = useCallback(() => {
+    const json = serializeTierListSnapshot(createTierListSnapshot(state.tiers));
+    const url = URL.createObjectURL(new Blob([json], { type: 'application/json' }));
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `oiyo-tier-list-${new Date().toISOString().slice(0, 10)}.json`;
+    anchor.click();
+    URL.revokeObjectURL(url);
+  }, [state.tiers]);
+
+  const handleImportJson = useCallback(async (file?: File) => {
+    if (!file || file.size > 24 * 1024) {
+      setPersistenceMessage(copy.invalidImport);
+      return;
+    }
+    try {
+      const snapshot = parseTierListSnapshot(await file.text());
+      if (!snapshot) throw new Error('invalid');
+      loadSnapshot(snapshot, copy.imported);
+    } catch {
+      setPersistenceMessage(copy.invalidImport);
+    } finally {
+      if (importRef.current) importRef.current.value = '';
+    }
+  }, [copy.imported, copy.invalidImport, loadSnapshot]);
+
+  const handleCopyShareCode = useCallback(() => {
+    const code = createTierListShareCode(createTierListSnapshot(state.tiers));
+    navigator.clipboard.writeText(code)
+      .then(() => setPersistenceMessage(copy.shareCopied))
+      .catch(() => setPersistenceMessage(copy.invalidImport));
+  }, [copy.invalidImport, copy.shareCopied, state.tiers]);
+
+  const handleLoadShareCode = useCallback(() => {
+    const snapshot = parseTierListShareCode(shareCode);
+    if (!snapshot) {
+      setPersistenceMessage(copy.invalidImport);
+      return;
+    }
+    loadSnapshot(snapshot, copy.imported);
+    setShareCode('');
+  }, [copy.imported, copy.invalidImport, loadSnapshot, shareCode]);
 
   const handleAddItem = useCallback(() => {
     dispatch({ type: 'ADD_ITEM' });
@@ -839,7 +955,7 @@ export function TierListMaker({ locale = 'ko' }: { locale?: Locale }) {
               onClick={handleCopyResults}
               variant="outline"
               size="sm"
-              className="rounded-full font-bold border-2 text-xs border-slate-200 text-slate-600 hover:bg-slate-50"
+              className="min-h-11 rounded-full font-bold border-2 text-xs border-slate-200 text-slate-600 hover:bg-slate-50"
               aria-label={state.copied ? copy.copied : copy.copyResults}
             >
               {state.copied ? copy.copied : copy.copyResults}
@@ -848,7 +964,7 @@ export function TierListMaker({ locale = 'ko' }: { locale?: Locale }) {
               onClick={() => dispatch({ type: 'RESET' })}
               variant="outline"
               size="sm"
-              className="rounded-full font-bold border-2 text-xs border-slate-200 text-slate-600 hover:bg-slate-50"
+              className="min-h-11 rounded-full font-bold border-2 text-xs border-slate-200 text-slate-600 hover:bg-slate-50"
               aria-label={copy.reset}
             >
               {copy.reset}
@@ -858,6 +974,7 @@ export function TierListMaker({ locale = 'ko' }: { locale?: Locale }) {
       </CardHeader>
 
       <CardContent className="pt-4 space-y-3">
+        <p className="text-xs font-bold text-slate-500">{copy.savedLocally}</p>
         {/* Hint bar */}
         <div className="rounded-xl bg-emerald-50 border border-emerald-100 px-3 py-2 text-xs text-emerald-700 font-bold">
           {copy.selectItemHint}
@@ -922,7 +1039,7 @@ export function TierListMaker({ locale = 'ko' }: { locale?: Locale }) {
         {/* Unranked bucket */}
         <div className={`rounded-xl border overflow-hidden ${unrankedBucket.color}`}>
           <button
-            className={`w-full text-left px-4 py-2 font-bold text-sm flex items-center justify-between cursor-pointer transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-slate-400 hover:brightness-105 ${unrankedBucket.headerColor}`}
+            className={`min-h-11 w-full text-left px-4 py-2 font-bold text-sm flex items-center justify-between cursor-pointer transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-slate-400 hover:brightness-105 ${unrankedBucket.headerColor}`}
             onClick={() => selectedItem && dispatch({ type: 'MOVE_TO_TIER', tierId: UNRANKED_ID })}
             aria-label={selectedItem ? copy.moveToUnranked : copy.unranked}
             aria-disabled={!selectedItem}
@@ -957,17 +1074,48 @@ export function TierListMaker({ locale = 'ko' }: { locale?: Locale }) {
             onKeyDown={handleKeyDown}
             placeholder={copy.addItemPlaceholder}
             maxLength={40}
-            className="flex-1 rounded-xl border-2 border-slate-200 bg-white px-3 py-2 text-sm font-bold text-slate-700 placeholder:text-slate-400 focus:outline-none focus:border-emerald-400 transition-colors"
+            className="min-h-11 flex-1 rounded-xl border-2 border-slate-200 bg-white px-3 py-2 text-sm font-bold text-slate-700 placeholder:text-slate-400 focus:outline-none focus:border-emerald-400 transition-colors"
             aria-label={copy.addItem}
           />
           <Button
             onClick={handleAddItem}
-            className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold shrink-0"
+            className="min-h-11 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold shrink-0"
             aria-label={copy.add}
           >
             {copy.add}
           </Button>
         </div>
+
+        <details className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+          <summary className="cursor-pointer text-sm font-bold text-slate-700">{copy.exportJson} · {copy.importJson} · {copy.copyShareCode}</summary>
+          <div className="mt-3 grid gap-2 sm:grid-cols-3">
+            <Button type="button" onClick={handleExportJson} variant="outline" className="min-h-11 rounded-xl text-xs font-bold">{copy.exportJson}</Button>
+            <Button type="button" onClick={() => importRef.current?.click()} variant="outline" className="min-h-11 rounded-xl text-xs font-bold">{copy.importJson}</Button>
+            <Button type="button" onClick={handleCopyShareCode} variant="outline" className="min-h-11 rounded-xl text-xs font-bold">{copy.copyShareCode}</Button>
+          </div>
+          <input
+            ref={importRef}
+            type="file"
+            accept="application/json,.json"
+            className="sr-only"
+            onChange={(event) => void handleImportJson(event.target.files?.[0])}
+            aria-hidden="true"
+            tabIndex={-1}
+          />
+          <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+            <input
+              type="text"
+              value={shareCode}
+              onChange={(event) => setShareCode(event.target.value)}
+              placeholder={copy.sharePlaceholder}
+              maxLength={49152}
+              className="min-h-11 min-w-0 flex-1 rounded-xl border-2 border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 focus:border-emerald-400 focus:outline-none"
+              aria-label={copy.sharePlaceholder}
+            />
+            <Button type="button" onClick={handleLoadShareCode} disabled={!shareCode.trim()} className="min-h-11 rounded-xl bg-slate-700 text-xs font-bold text-white hover:bg-slate-800">{copy.loadShareCode}</Button>
+          </div>
+          {persistenceMessage && <p className="mt-2 text-xs font-bold text-emerald-700" role="status" aria-live="polite">{persistenceMessage}</p>}
+        </details>
       </CardContent>
     </Card>
   );
@@ -986,26 +1134,29 @@ interface TLItemChipProps {
 function TLItemChip({ item, isSelected, onSelect, onRemove, removeLabel }: TLItemChipProps) {
   return (
     <div
-      className={`flex items-center gap-1 rounded-lg px-2 py-1 text-sm font-bold border-2 transition-all duration-150 cursor-pointer select-none ${
+      className={`flex min-h-11 items-stretch overflow-hidden rounded-lg text-sm font-bold border-2 transition-all duration-150 select-none ${
         isSelected
           ? 'bg-amber-400 border-amber-500 text-amber-900 scale-105 shadow-md'
           : 'bg-white border-slate-200 text-slate-700 hover:border-emerald-300 hover:bg-emerald-50'
       }`}
-      onClick={onSelect}
-      role="button"
-      tabIndex={0}
-      aria-pressed={isSelected}
+      role="group"
       aria-label={item.label}
-      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect(); } }}
     >
-      <span>{item.label}</span>
       <button
-        onClick={(e) => { e.stopPropagation(); onRemove(); }}
-        className="ml-0.5 w-4 h-4 rounded-full flex items-center justify-center text-xs hover:bg-red-100 hover:text-red-600 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-red-400"
-        aria-label={`${removeLabel}: ${item.label}`}
-        tabIndex={-1}
+        type="button"
+        onClick={onSelect}
+        className="min-h-11 px-2 py-1 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-emerald-500"
+        aria-pressed={isSelected}
       >
-        x
+        {item.label}
+      </button>
+      <button
+        type="button"
+        onClick={onRemove}
+        className="grid min-h-11 min-w-11 place-items-center border-l border-current/10 text-base hover:bg-red-100 hover:text-red-600 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-red-400"
+        aria-label={`${removeLabel}: ${item.label}`}
+      >
+        ×
       </button>
     </div>
   );
