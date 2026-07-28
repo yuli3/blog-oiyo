@@ -58,7 +58,18 @@ export const INTERACTIVE_CATEGORIES = [
 ] as const;
 
 export function slugifyCategory(category: string): string {
-  return category.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+  const slug = category
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+  if (!slug) {
+    throw new Error(
+      `Category "${category}" has no canonical ASCII slug. Use the label from data/catalog/category-registry.yaml.`,
+    );
+  }
+
+  return slug;
 }
 
 export function inferTrackFromCategory(category: string | undefined): ContentTrack {
