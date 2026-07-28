@@ -51,7 +51,7 @@ const AdhdScreening: React.FC = () => {
                         {questions.map((q, idx) => (
                             <div key={q.id} className="space-y-4">
                                 <div className="flex gap-4">
-                                    <span className="flex-shrink-0 w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold">{idx + 1}</span>
+                                    <span className="flex-shrink-0 w-8 h-8 bg-green-100 text-green-600 rounded-full flex items-center justify-center font-bold">{idx + 1}</span>
                                     <p className="text-lg font-medium text-slate-800 leading-tight">{q.text}</p>
                                 </div>
                                 <div className="grid grid-cols-1 sm:grid-cols-5 gap-2 ml-12">
@@ -61,7 +61,7 @@ const AdhdScreening: React.FC = () => {
                                             onClick={() => handleSelect(q.id, opt.value)}
                                             className={`py-2 px-1 text-xs rounded-lg border transition-all ${
                                                 answers[q.id] === opt.value
-                                                    ? 'bg-blue-600 border-blue-600 text-white shadow-md'
+                                                    ? 'bg-green-600 border-green-600 text-white shadow-md'
                                                     : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
                                             }`}
                                         >
@@ -79,7 +79,7 @@ const AdhdScreening: React.FC = () => {
                             onClick={() => setShowResults(true)}
                             className={`px-12 py-4 rounded-2xl font-bold text-lg transition-all ${
                                 isComplete 
-                                    ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg' 
+                                    ? 'bg-green-600 text-white hover:bg-green-700 shadow-lg' 
                                     : 'bg-slate-200 text-slate-400 cursor-not-allowed'
                             }`}
                         >
@@ -89,8 +89,8 @@ const AdhdScreening: React.FC = () => {
                 </div>
             ) : (
                 <div className="text-center space-y-6 py-4 animate-fade-in">
-                    <div className="inline-flex p-4 bg-blue-50 rounded-full mb-4">
-                        <svg className="w-12 h-12 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="inline-flex p-4 bg-green-50 rounded-full mb-4">
+                        <svg className="w-12 h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </div>
@@ -99,7 +99,7 @@ const AdhdScreening: React.FC = () => {
                     
                     <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
                         <div className="text-sm text-slate-500 uppercase tracking-widest mb-1">주의 필요 지표 (Flags)</div>
-                        <div className="text-5xl font-black text-blue-600 mb-2">{results.flags} / 6</div>
+                        <div className="text-5xl font-black text-green-600 mb-2">{results.flags} / 6</div>
                         <p className="text-slate-600 text-sm leading-relaxed">
                             {results.flags >= 4 
                                 ? "진단 결과, 성인 ADHD일 가능성이 높습니다. 전문의와의 상담을 권장합니다." 
@@ -115,7 +115,7 @@ const AdhdScreening: React.FC = () => {
 
                     <button
                         onClick={() => {setAnswers({}); setShowResults(false);}}
-                        className="text-blue-600 font-bold hover:underline"
+                        className="text-green-600 font-bold hover:underline"
                     >
                         다시 테스트하기
                     </button>

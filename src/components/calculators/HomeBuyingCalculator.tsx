@@ -96,13 +96,13 @@ const HomeBuyingCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko
                     
                     <div className="space-y-2">
                         <label className="text-sm font-bold text-slate-500">{t.labels.appreciation}</label>
-                        <input type="range" min="-10" max="20" value={appreciation} onChange={(e)=>setAppreciation(Number(e.target.value))} className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600" />
-                        <div className="text-right font-bold text-blue-600">{appreciation}%</div>
+                        <input type="range" min="-10" max="20" value={appreciation} onChange={(e)=>setAppreciation(Number(e.target.value))} className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-green-600" />
+                        <div className="text-right font-bold text-green-600">{appreciation}%</div>
                     </div>
 
                     <button 
                         onClick={() => setShowResults(true)}
-                        className="w-full py-4 bg-blue-600 text-white rounded-2xl font-bold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/20"
+                        className="w-full py-4 bg-green-600 text-white rounded-2xl font-bold hover:bg-green-700 transition-colors shadow-lg shadow-green-500/20"
                     >
                         {t.labels.calculate}
                     </button>
@@ -117,14 +117,14 @@ const HomeBuyingCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="p-6 bg-white rounded-2xl border border-slate-100">
-                            <h4 className="text-xs font-bold text-blue-500 uppercase mb-2">{t.results.buyScenario}</h4>
+                            <h4 className="text-xs font-bold text-green-500 uppercase mb-2">{t.results.buyScenario}</h4>
                             <div className="text-xl font-bold text-slate-900 mb-1">
                                 {formatWon(calculations.buyNet)}
                             </div>
                             <p className="text-[10px] text-slate-400">{t.results.buyDetails}</p>
                         </div>
                         <div className="p-6 bg-white rounded-2xl border border-slate-100">
-                            <h4 className="text-xs font-bold text-emerald-500 uppercase mb-2">{t.results.rentScenario}</h4>
+                            <h4 className="text-xs font-bold text-green-500 uppercase mb-2">{t.results.rentScenario}</h4>
                             <div className="text-xl font-bold text-slate-900 mb-1">
                                 {formatWon(calculations.rentNet)}
                             </div>

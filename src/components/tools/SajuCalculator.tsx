@@ -40,7 +40,7 @@ const ELEMENT_COLORS: Record<string, { bg: string; text: string; border: string 
   Fire: { bg: 'bg-red-50', text: 'text-red-700', border: 'border-red-200' },
   Earth: { bg: 'bg-yellow-50', text: 'text-yellow-700', border: 'border-yellow-200' },
   Metal: { bg: 'bg-gray-50', text: 'text-gray-700', border: 'border-gray-300' },
-  Water: { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200' },
+  Water: { bg: 'bg-green-50', text: 'text-green-700', border: 'border-green-200' },
 };
 const ELEMENT_EMOJIS: Record<string, string> = {
   Wood: '🌿', Fire: '🔥', Earth: '🌍', Metal: '⚙️', Water: '💧',
@@ -351,9 +351,9 @@ export default function SajuCalculator({ locale = 'ko' }: { locale?: Locale }) {
             <input
               type="range" min={1920} max={2024} step={1} value={year}
               onChange={e => { setYear(Number(e.target.value)); setDone(false); }}
-              className="flex-1 accent-indigo-600"
+              className="flex-1 accent-green-600"
             />
-            <span className="w-16 text-right font-bold text-indigo-700 text-sm">{year}</span>
+            <span className="w-16 text-right font-bold text-green-700 text-sm">{year}</span>
           </div>
         </div>
 
@@ -364,7 +364,7 @@ export default function SajuCalculator({ locale = 'ko' }: { locale?: Locale }) {
             <select
               value={month}
               onChange={e => { setMonth(Number(e.target.value)); setDone(false); }}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
             >
               {t.months.map((m, i) => <option key={i} value={i + 1}>{m}</option>)}
             </select>
@@ -374,7 +374,7 @@ export default function SajuCalculator({ locale = 'ko' }: { locale?: Locale }) {
             <select
               value={Math.min(day, daysInMonth)}
               onChange={e => { setDay(Number(e.target.value)); setDone(false); }}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
             >
               {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(d => (
                 <option key={d} value={d}>{d}</option>
@@ -389,7 +389,7 @@ export default function SajuCalculator({ locale = 'ko' }: { locale?: Locale }) {
           <select
             value={hour ?? ''}
             onChange={e => { setHour(e.target.value === '' ? null : Number(e.target.value)); setDone(false); }}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
           >
             <option value="">{t.unknownHour}</option>
             {HOURS.map(h => (
@@ -400,7 +400,7 @@ export default function SajuCalculator({ locale = 'ko' }: { locale?: Locale }) {
 
         <button
           onClick={handleCalc}
-          className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition-colors"
+          className="w-full py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl transition-colors"
         >
           {t.calcBtn}
         </button>
@@ -411,7 +411,7 @@ export default function SajuCalculator({ locale = 'ko' }: { locale?: Locale }) {
         <>
           {/* Four Pillars */}
           <div>
-            <h2 className="text-sm font-bold text-indigo-700 mb-3">{t.fourPillars}</h2>
+            <h2 className="text-sm font-bold text-green-700 mb-3">{t.fourPillars}</h2>
             <div className={`grid gap-3 ${result.pillars.length === 4 ? 'grid-cols-4' : 'grid-cols-3'}`}>
               {result.pillars.map(p => (
                 <PillarCard key={p.label} label={p.label} stemIdx={p.stem} branchIdx={p.branch} />

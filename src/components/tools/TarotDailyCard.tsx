@@ -306,7 +306,7 @@ export default function TarotDailyCard({ locale }: Props) {
               {[2, 1, 0].map((i) => (
                 <div
                   key={i}
-                  className="absolute inset-0 rounded-xl border-2 border-purple-200"
+                  className="absolute inset-0 rounded-xl border-2 border-green-200"
                   style={{
                     transform: `rotate(${(i - 1) * 3}deg)`,
                     background: `linear-gradient(135deg, #4c1d95 0%, #1e1b4b ${50 + i * 10}%, #312e81 100%)`,
@@ -314,7 +314,7 @@ export default function TarotDailyCard({ locale }: Props) {
                   }}
                 >
                   <div className="w-full h-full rounded-xl flex items-center justify-center">
-                    <span className="text-purple-300 text-3xl">✦</span>
+                    <span className="text-green-300 text-3xl">✦</span>
                   </div>
                 </div>
               ))}
@@ -322,7 +322,7 @@ export default function TarotDailyCard({ locale }: Props) {
           </div>
           <button
             onClick={drawCard}
-            className="px-8 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold text-base hover:opacity-90 transition-opacity shadow-md"
+            className="px-8 py-3 rounded-xl bg-gradient-to-r from-green-600 to-green-600 text-white font-bold text-base hover:opacity-90 transition-opacity shadow-md"
           >
             {ui.drawBtn}
           </button>
@@ -331,7 +331,7 @@ export default function TarotDailyCard({ locale }: Props) {
 
       {phase === "loading" && (
         <div className="text-center py-12">
-          <div className="inline-block w-12 h-12 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin mb-4" />
+          <div className="inline-block w-12 h-12 border-4 border-green-200 border-t-purple-600 rounded-full animate-spin mb-4" />
           <p className="text-gray-500">{ui.drawingText}</p>
         </div>
       )}
@@ -458,7 +458,7 @@ export default function TarotDailyCard({ locale }: Props) {
                       className={`inline-block mt-1 text-xs font-semibold px-2 py-0.5 rounded-full ${
                         isReversed
                           ? "bg-amber-100 text-amber-700"
-                          : "bg-purple-100 text-purple-700"
+                          : "bg-green-100 text-green-700"
                       }`}
                     >
                       {isReversed ? ui.reversed : ui.upright}
@@ -488,8 +488,8 @@ export default function TarotDailyCard({ locale }: Props) {
               </div>
 
               {/* Today's message */}
-              <div className={`rounded-2xl p-5 ${isReversed ? "bg-amber-50 border border-amber-100" : "bg-purple-50 border border-purple-100"}`}>
-                <h3 className={`font-bold text-sm mb-2 ${isReversed ? "text-amber-700" : "text-purple-700"}`}>
+              <div className={`rounded-2xl p-5 ${isReversed ? "bg-amber-50 border border-amber-100" : "bg-green-50 border border-green-100"}`}>
+                <h3 className={`font-bold text-sm mb-2 ${isReversed ? "text-amber-700" : "text-green-700"}`}>
                   {ui.messageLabel}
                 </h3>
                 <p className="text-sm text-gray-700 leading-relaxed">{message}</p>

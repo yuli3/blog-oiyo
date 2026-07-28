@@ -64,12 +64,12 @@ export default function VatCalculator() {
   return (
     <div className="not-prose my-8 rounded-2xl border border-border bg-card shadow-sm overflow-hidden">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-500 px-6 py-4">
+      <div className="bg-gradient-to-r from-green-600 to-green-500 px-6 py-4">
         <div className="flex items-center gap-2">
           <span className="text-2xl">🧾</span>
           <div>
             <h3 className="font-bold text-white text-lg leading-tight">부가가치세 계산기</h3>
-            <p className="text-blue-100 text-xs mt-0.5">공급가액·세액·합계를 즉시 계산</p>
+            <p className="text-green-100 text-xs mt-0.5">공급가액·세액·합계를 즉시 계산</p>
           </div>
         </div>
       </div>
@@ -83,7 +83,7 @@ export default function VatCalculator() {
               onClick={() => { setMode(m.key); setInput(''); setDisplayInput(''); }}
               className={`rounded-lg px-3 py-2.5 text-sm font-semibold transition-all ${
                 mode === m.key
-                  ? 'bg-white shadow text-blue-700'
+                  ? 'bg-white shadow text-green-700'
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >
@@ -101,8 +101,8 @@ export default function VatCalculator() {
               onClick={() => setRate(rt.value as Rate)}
               className={`flex-1 rounded-lg border px-3 py-2 text-sm font-medium transition-all ${
                 rate === rt.value
-                  ? 'border-blue-500 bg-blue-50 text-blue-700'
-                  : 'border-border text-muted-foreground hover:border-blue-300'
+                  ? 'border-green-500 bg-green-50 text-green-700'
+                  : 'border-border text-muted-foreground hover:border-green-300'
               }`}
             >
               {rt.label}
@@ -122,7 +122,7 @@ export default function VatCalculator() {
               value={displayInput}
               onChange={handleInput}
               placeholder="금액 입력 (예: 100,000)"
-              className="w-full rounded-xl border border-border bg-background px-4 py-3 text-right text-lg font-mono font-semibold focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 placeholder:text-muted-foreground/40"
+              className="w-full rounded-xl border border-border bg-background px-4 py-3 text-right text-lg font-mono font-semibold focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20 placeholder:text-muted-foreground/40"
             />
             <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-muted-foreground pointer-events-none ml-1">원</span>
           </div>
@@ -136,9 +136,9 @@ export default function VatCalculator() {
                 <span className="text-sm text-muted-foreground font-medium">공급가액</span>
                 <span className="font-mono font-bold text-foreground text-lg">{fmt(supplyPrice)} 원</span>
               </div>
-              <div className="flex justify-between items-center px-5 py-3.5 bg-blue-50/50">
-                <span className="text-sm text-blue-700 font-semibold">부가가치세 ({rate}%)</span>
-                <span className="font-mono font-bold text-blue-700 text-lg">+ {fmt(vatAmount)} 원</span>
+              <div className="flex justify-between items-center px-5 py-3.5 bg-green-50/50">
+                <span className="text-sm text-green-700 font-semibold">부가가치세 ({rate}%)</span>
+                <span className="font-mono font-bold text-green-700 text-lg">+ {fmt(vatAmount)} 원</span>
               </div>
               <div className="flex justify-between items-center px-5 py-4 bg-foreground/5">
                 <span className="text-sm font-bold text-foreground">합계 금액</span>
@@ -151,7 +151,7 @@ export default function VatCalculator() {
         {/* Tip */}
         <p className="text-xs text-muted-foreground text-center leading-relaxed">
           ※ 원 단위 미만은 절사 처리됩니다.{' '}
-          <span className="text-blue-600">세금계산서 발행 시 공급가액과 세액을 분리 기재해야 합니다.</span>
+          <span className="text-green-600">세금계산서 발행 시 공급가액과 세액을 분리 기재해야 합니다.</span>
         </p>
       </div>
     </div>

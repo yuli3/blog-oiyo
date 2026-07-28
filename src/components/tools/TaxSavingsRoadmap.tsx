@@ -293,7 +293,7 @@ const TIPS: TaxTip[] = [
 const PRIORITY_COLORS: Record<TaxTip['priority'], { bg: string; text: string; border: string; badge: string }> = {
   high: { bg: 'bg-red-50', text: 'text-red-700', border: 'border-red-200', badge: 'bg-red-100 text-red-700' },
   medium: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', badge: 'bg-amber-100 text-amber-700' },
-  low: { bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200', badge: 'bg-emerald-100 text-emerald-700' },
+  low: { bg: 'bg-green-50', text: 'text-green-700', border: 'border-green-200', badge: 'bg-green-100 text-green-700' },
 };
 
 const L: Record<Locale, {
@@ -425,8 +425,8 @@ export default function TaxSavingsRoadmap({ locale = 'ko' }: { locale?: Locale }
   const btn = (active: boolean) =>
     `px-4 py-2 rounded-lg text-sm font-medium border transition-colors ${
       active
-        ? 'bg-indigo-600 text-white border-indigo-600'
-        : 'bg-white text-gray-600 border-gray-300 hover:border-indigo-400'
+        ? 'bg-green-600 text-white border-green-600'
+        : 'bg-white text-gray-600 border-gray-300 hover:border-green-400'
     }`;
 
   const TipCard = ({ tip }: { tip: TaxTip }) => {
@@ -477,9 +477,9 @@ export default function TaxSavingsRoadmap({ locale = 'ko' }: { locale?: Locale }
               type="range" min={1000} max={50000} step={500}
               value={profile.annualIncome}
               onChange={e => setProfile(p => ({ ...p, annualIncome: Number(e.target.value) }))}
-              className="flex-1 accent-indigo-600"
+              className="flex-1 accent-green-600"
             />
-            <span className="w-24 text-right font-semibold text-indigo-700 text-sm">
+            <span className="w-24 text-right font-semibold text-green-700 text-sm">
               {profile.annualIncome.toLocaleString()} {t.wan}
             </span>
           </div>
@@ -558,7 +558,7 @@ export default function TaxSavingsRoadmap({ locale = 'ko' }: { locale?: Locale }
 
         <button
           onClick={() => setShowResults(true)}
-          className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition-colors"
+          className="w-full py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl transition-colors"
         >
           {t.showRoadmap}
         </button>
@@ -568,7 +568,7 @@ export default function TaxSavingsRoadmap({ locale = 'ko' }: { locale?: Locale }
       {showResults && (
         <div className="space-y-5">
           {/* Summary banner */}
-          <div className="bg-indigo-600 text-white rounded-2xl p-5 text-center">
+          <div className="bg-green-600 text-white rounded-2xl p-5 text-center">
             <p className="text-sm opacity-80 mb-1">{applicableTips.length} {t.tipsFound}</p>
             <p className="text-3xl font-bold">{totalMin.toLocaleString()} ~ {totalMax.toLocaleString()} {t.wan}</p>
             <p className="text-sm opacity-80 mt-1">{t.totalSavings}</p>

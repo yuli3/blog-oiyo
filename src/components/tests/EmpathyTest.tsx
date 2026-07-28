@@ -292,9 +292,9 @@ export default function EmpathyTest({ locale: localeProp }: Props) {
             </div>
           </div>
 
-          <div className="bg-blue-50 rounded-lg p-4">
-            <h3 className="font-semibold text-blue-800 mb-1">🌱 {t.growth}</h3>
-            <p className="text-sm text-blue-700">{info.growth[locale]}</p>
+          <div className="bg-green-50 rounded-lg p-4">
+            <h3 className="font-semibold text-green-800 mb-1">🌱 {t.growth}</h3>
+            <p className="text-sm text-green-700">{info.growth[locale]}</p>
           </div>
         </div>
 

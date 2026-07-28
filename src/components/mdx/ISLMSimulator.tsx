@@ -58,8 +58,8 @@ export default function ISLMSimulator() {
             <span className="text-xs text-muted-foreground">정부지출(G) 증감 및 감세/증세</span>
           </div>
 
-          <div className="flex flex-col gap-2 p-4 rounded-lg bg-blue-50/50 border border-blue-100">
-            <label className="text-sm font-bold text-blue-700 flex justify-between">
+          <div className="flex flex-col gap-2 p-4 rounded-lg bg-green-50/50 border border-green-100">
+            <label className="text-sm font-bold text-green-700 flex justify-between">
               <span>통화 정책 (LM 곡선)</span>
               <span>{monetaryPolicy > 0 ? '팽창' : monetaryPolicy < 0 ? '긴축' : '중립'}</span>
             </label>
@@ -68,7 +68,7 @@ export default function ISLMSimulator() {
               min="-30" max="30" step="5"
               value={monetaryPolicy}
               onChange={(e) => setMonetaryPolicy(Number(e.target.value))}
-              className="w-full accent-blue-500"
+              className="w-full accent-green-500"
             />
             <span className="text-xs text-muted-foreground">중앙은행 통화량(M) 증감</span>
           </div>

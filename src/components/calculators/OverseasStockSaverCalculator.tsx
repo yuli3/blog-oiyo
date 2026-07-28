@@ -63,14 +63,14 @@ const OverseasStockSaverCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ loca
       ? 'bg-red-50 border-red-300'
       : result.strategy === 'COST_UP'
       ? 'bg-green-50 border-green-300'
-      : 'bg-blue-50 border-blue-300';
+      : 'bg-green-50 border-green-300';
 
   const strategyText =
     result.strategy === 'HARVEST_LOSS'
       ? 'text-red-700'
       : result.strategy === 'COST_UP'
       ? 'text-green-700'
-      : 'text-blue-700';
+      : 'text-green-700';
 
   return (
     <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-slate-50 to-gray-100 border border-slate-200 rounded-3xl shadow-xl">
@@ -106,7 +106,7 @@ const OverseasStockSaverCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ loca
           </div>
           <div className="w-full h-4 bg-slate-200 rounded-full overflow-hidden">
             <div
-              className={`h-full rounded-full transition-all ${progressPct >= 100 ? 'bg-red-500' : 'bg-blue-500'}`}
+              className={`h-full rounded-full transition-all ${progressPct >= 100 ? 'bg-red-500' : 'bg-green-500'}`}
               style={{ width: `${progressPct}%` }}
             />
           </div>
@@ -160,7 +160,7 @@ const OverseasStockSaverCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ loca
               )}
 
               {result.strategy === 'NONE' && (
-                <p className="text-sm text-blue-700">
+                <p className="text-sm text-green-700">
                   {ko ? '현재 실현 수익이 기본공제 한도와 거의 일치합니다.' : 'Your realized gain is right at the deduction limit.'}
                 </p>
               )}
@@ -183,10 +183,10 @@ const OverseasStockSaverCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ loca
                   </div>
                   <div className="flex-1 space-y-1 text-center">
                     <div
-                      className="bg-blue-400 rounded-t-md mx-auto"
+                      className="bg-green-400 rounded-t-md mx-auto"
                       style={{ height: `${Math.max(4, 60 - (result.taxSaving / result.currentTax) * 60)}px`, width: '100%' }}
                     />
-                    <p className="text-xs text-blue-600 font-bold">{ko ? '후' : 'After'}</p>
+                    <p className="text-xs text-green-600 font-bold">{ko ? '후' : 'After'}</p>
                     <p className="text-xs font-semibold">{fmt(Math.max(0, result.currentTax - result.taxSaving))}</p>
                   </div>
                 </div>

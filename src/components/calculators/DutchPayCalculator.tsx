@@ -95,14 +95,14 @@ const DutchPayCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
   };
 
   return (
-    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-emerald-50 to-green-50 border border-emerald-200 rounded-3xl shadow-xl">
-      <h3 className="text-xl font-bold text-emerald-900 mb-6">
+    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
+      <h3 className="text-xl font-bold text-green-900 mb-6">
         {locale === 'ko' ? '더치페이 계산기' : 'Dutch Pay Calculator'}
       </h3>
 
       <div className="space-y-5">
         <div className="space-y-1">
-          <label className="text-sm font-bold text-emerald-800">
+          <label className="text-sm font-bold text-green-800">
             {locale === 'ko' ? '총 금액 (원)' : 'Total Amount (KRW)'}
           </label>
           <input
@@ -110,13 +110,13 @@ const DutchPayCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
             value={totalAmount}
             onChange={(e) => setTotalAmount(e.target.value)}
             min="0"
-            className="w-full p-3 bg-white border border-emerald-200 rounded-xl focus:ring-2 focus:ring-emerald-400 outline-none"
+            className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
             aria-label={locale === 'ko' ? '총 금액' : 'Total Amount'}
           />
         </div>
 
         <div className="space-y-1">
-          <label className="text-sm font-bold text-emerald-800">
+          <label className="text-sm font-bold text-green-800">
             {locale === 'ko' ? '분배 방식' : 'Split Mode'}
           </label>
           <div className="flex gap-2">
@@ -126,8 +126,8 @@ const DutchPayCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
                 onClick={() => setSplitMode(mode)}
                 className={`flex-1 py-2 rounded-xl text-sm font-bold transition-colors border ${
                   splitMode === mode
-                    ? 'bg-emerald-600 text-white border-emerald-600'
-                    : 'bg-white text-emerald-700 border-emerald-200 hover:bg-emerald-50'
+                    ? 'bg-green-600 text-white border-green-600'
+                    : 'bg-white text-green-700 border-green-200 hover:bg-green-50'
                 }`}
                 aria-pressed={splitMode === mode}
               >
@@ -141,12 +141,12 @@ const DutchPayCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
 
         <div className="space-y-3">
           <div className="flex justify-between items-center">
-            <label className="text-sm font-bold text-emerald-800">
+            <label className="text-sm font-bold text-green-800">
               {locale === 'ko' ? '참가자' : 'Participants'}
             </label>
             <button
               onClick={addPerson}
-              className="text-xs py-1 px-3 bg-emerald-100 hover:bg-emerald-200 text-emerald-700 font-bold rounded-lg transition-colors"
+              className="text-xs py-1 px-3 bg-green-100 hover:bg-green-200 text-green-700 font-bold rounded-lg transition-colors"
               aria-label={locale === 'ko' ? '참가자 추가' : 'Add person'}
             >
               + {locale === 'ko' ? '추가' : 'Add'}
@@ -160,7 +160,7 @@ const DutchPayCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
                   type="text"
                   value={person.name}
                   onChange={(e) => updatePerson(person.id, 'name', e.target.value)}
-                  className="flex-1 p-2 bg-white border border-emerald-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-400 outline-none"
+                  className="flex-1 p-2 bg-white border border-green-200 rounded-xl text-sm focus:ring-2 focus:ring-green-400 outline-none"
                   aria-label={locale === 'ko' ? '이름' : 'Name'}
                 />
                 {splitMode === 'ratio' && (
@@ -169,13 +169,13 @@ const DutchPayCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
                     value={person.ratio}
                     onChange={(e) => updatePerson(person.id, 'ratio', Number(e.target.value))}
                     min="1"
-                    className="w-16 p-2 bg-white border border-emerald-200 rounded-xl text-sm text-center focus:ring-2 focus:ring-emerald-400 outline-none"
+                    className="w-16 p-2 bg-white border border-green-200 rounded-xl text-sm text-center focus:ring-2 focus:ring-green-400 outline-none"
                     aria-label={locale === 'ko' ? '비율' : 'Ratio'}
                   />
                 )}
                 {splitMode === 'custom' && (
                   <>
-                    <label className="text-xs text-emerald-600 font-bold whitespace-nowrap">
+                    <label className="text-xs text-green-600 font-bold whitespace-nowrap">
                       <input
                         type="checkbox"
                         checked={person.useFixed}
@@ -191,7 +191,7 @@ const DutchPayCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
                         value={person.fixedAmount}
                         onChange={(e) => updatePerson(person.id, 'fixedAmount', Number(e.target.value))}
                         min="0"
-                        className="w-28 p-2 bg-white border border-emerald-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-400 outline-none"
+                        className="w-28 p-2 bg-white border border-green-200 rounded-xl text-sm focus:ring-2 focus:ring-green-400 outline-none"
                         aria-label={locale === 'ko' ? '고정금액' : 'Fixed amount'}
                       />
                     )}
@@ -219,14 +219,14 @@ const DutchPayCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
         <div className="flex gap-3">
           <button
             onClick={calculate}
-            className="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-colors"
+            className="flex-1 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl transition-colors"
             aria-label={locale === 'ko' ? '계산하기' : 'Calculate'}
           >
             {locale === 'ko' ? '계산하기' : 'Calculate'}
           </button>
           <button
             onClick={reset}
-            className="px-5 py-3 bg-white border border-emerald-300 hover:bg-emerald-50 text-emerald-700 font-bold rounded-xl transition-colors"
+            className="px-5 py-3 bg-white border border-green-300 hover:bg-green-50 text-green-700 font-bold rounded-xl transition-colors"
             aria-label={locale === 'ko' ? '초기화' : 'Reset'}
           >
             {locale === 'ko' ? '초기화' : 'Reset'}
@@ -237,27 +237,27 @@ const DutchPayCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
           <div className="mt-4">
             <table className="w-full text-sm border-collapse" aria-label={locale === 'ko' ? '더치페이 내역' : 'Dutch pay breakdown'}>
               <thead>
-                <tr className="bg-emerald-100">
-                  <th className="p-3 text-left font-bold text-emerald-800 rounded-tl-xl">
+                <tr className="bg-green-100">
+                  <th className="p-3 text-left font-bold text-green-800 rounded-tl-xl">
                     {locale === 'ko' ? '참가자' : 'Person'}
                   </th>
-                  <th className="p-3 text-right font-bold text-emerald-800 rounded-tr-xl">
+                  <th className="p-3 text-right font-bold text-green-800 rounded-tr-xl">
                     {locale === 'ko' ? '부담액' : 'Amount'}
                   </th>
                 </tr>
               </thead>
               <tbody>
                 {result.rows.map((row, i) => (
-                  <tr key={i} className="border-b border-emerald-100 hover:bg-emerald-50">
-                    <td className="p-3 font-bold text-emerald-700">{row.name}</td>
-                    <td className="p-3 text-right font-bold text-emerald-800">{fmt(row.amount)}원</td>
+                  <tr key={i} className="border-b border-green-100 hover:bg-green-50">
+                    <td className="p-3 font-bold text-green-700">{row.name}</td>
+                    <td className="p-3 text-right font-bold text-green-800">{fmt(row.amount)}원</td>
                   </tr>
                 ))}
-                <tr className="bg-emerald-50">
-                  <td className="p-3 font-bold text-emerald-900">
+                <tr className="bg-green-50">
+                  <td className="p-3 font-bold text-green-900">
                     {locale === 'ko' ? '합계' : 'Total'}
                   </td>
-                  <td className="p-3 text-right font-bold text-emerald-900">{fmt(result.total)}원</td>
+                  <td className="p-3 text-right font-bold text-green-900">{fmt(result.total)}원</td>
                 </tr>
               </tbody>
             </table>

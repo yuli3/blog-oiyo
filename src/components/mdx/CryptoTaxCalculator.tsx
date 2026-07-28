@@ -109,7 +109,7 @@ export default function CryptoTaxCalculator() {
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
             {[
               { label: '총 실현 이익', value: result.totalProfit, color: 'text-gray-800' },
-              { label: '기본공제 (250만)', value: result.deductible, color: 'text-blue-600' },
+              { label: '기본공제 (250만)', value: result.deductible, color: 'text-green-600' },
               { label: '과세표준', value: result.taxableIncome, color: 'text-orange-600' },
               { label: '가상자산 양도세(20%)', value: result.tax, color: 'text-red-600' },
               { label: '지방소득세(2%)', value: result.localTax, color: 'text-red-500' },

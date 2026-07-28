@@ -121,29 +121,29 @@ const JeonseVsRentCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
   };
 
   const fieldClass =
-    'w-full p-3 bg-white border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-400 outline-none text-sm';
+    'w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none text-sm';
 
   return (
-    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-blue-50 to-sky-50 border border-blue-200 rounded-3xl shadow-xl">
-      <h3 className="text-xl font-bold text-blue-900 mb-6">{t.title}</h3>
+    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
+      <h3 className="text-xl font-bold text-green-900 mb-6">{t.title}</h3>
 
       <div className="grid md:grid-cols-2 gap-6">
         {/* Inputs */}
         <div className="space-y-5">
           {/* Jeonse */}
-          <div className="p-4 bg-blue-50 border border-blue-200 rounded-2xl space-y-3">
-            <p className="text-xs font-bold uppercase tracking-widest text-blue-600">{t.optionA}</p>
+          <div className="p-4 bg-green-50 border border-green-200 rounded-2xl space-y-3">
+            <p className="text-xs font-bold uppercase tracking-widest text-green-600">{t.optionA}</p>
             <div className="space-y-1">
-              <label className="text-xs font-bold text-blue-800">{t.jeonseDeposit}</label>
+              <label className="text-xs font-bold text-green-800">{t.jeonseDeposit}</label>
               <input type="number" value={jeonseDeposit} onChange={(e) => setJeonseDeposit(e.target.value)} min="0" className={fieldClass} />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
-                <label className="text-xs font-bold text-blue-800">{t.loanAmount}</label>
+                <label className="text-xs font-bold text-green-800">{t.loanAmount}</label>
                 <input type="number" value={loanAmount} onChange={(e) => setLoanAmount(e.target.value)} min="0" className={fieldClass} />
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-bold text-blue-800">{t.loanRate}</label>
+                <label className="text-xs font-bold text-green-800">{t.loanRate}</label>
                 <input type="number" value={loanRate} onChange={(e) => setLoanRate(e.target.value)} step="0.1" min="0" className={fieldClass} />
               </div>
             </div>
@@ -165,15 +165,15 @@ const JeonseVsRentCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
           </div>
 
           <div className="space-y-1">
-            <label className="text-sm font-bold text-blue-800">{t.depositInterestRate}</label>
+            <label className="text-sm font-bold text-green-800">{t.depositInterestRate}</label>
             <input type="number" value={depositInterestRate} onChange={(e) => setDepositInterestRate(e.target.value)} step="0.1" min="0" className={fieldClass} />
           </div>
 
           <div className="flex gap-3">
-            <button onClick={calculate} className="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-colors">
+            <button onClick={calculate} className="flex-1 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl transition-colors">
               {t.calculate}
             </button>
-            <button onClick={reset} className="px-5 py-3 bg-white border border-blue-300 hover:bg-blue-50 text-blue-700 font-bold rounded-xl transition-colors">
+            <button onClick={reset} className="px-5 py-3 bg-white border border-green-300 hover:bg-green-50 text-green-700 font-bold rounded-xl transition-colors">
               {t.reset}
             </button>
           </div>
@@ -183,18 +183,18 @@ const JeonseVsRentCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
         <div className="flex flex-col justify-center space-y-4">
           {result ? (
             <>
-              <div className={`p-5 rounded-2xl text-white text-center ${result.cheaper === 'jeonse' ? 'bg-blue-600' : 'bg-orange-500'}`}>
+              <div className={`p-5 rounded-2xl text-white text-center ${result.cheaper === 'jeonse' ? 'bg-green-600' : 'bg-orange-500'}`}>
                 <p className="text-sm font-bold">
                   {result.cheaper === 'jeonse' ? t.jeonseCheaper(fmt(result.diff)) : t.rentCheaper(fmt(result.diff))}
                 </p>
               </div>
 
               {/* Jeonse breakdown */}
-              <div className="bg-white rounded-2xl border-2 border-blue-200 p-4 space-y-2">
-                <p className="text-xs font-bold uppercase tracking-widest text-blue-600">{t.optionA}</p>
+              <div className="bg-white rounded-2xl border-2 border-green-200 p-4 space-y-2">
+                <p className="text-xs font-bold uppercase tracking-widest text-green-600">{t.optionA}</p>
                 <div className="flex justify-between items-baseline">
                   <span className="text-sm text-slate-500">{t.jeonseCost}</span>
-                  <span className="text-xl font-black text-blue-700">{fmt(result.jeonseCost)} {t.perMonth}</span>
+                  <span className="text-xl font-black text-green-700">{fmt(result.jeonseCost)} {t.perMonth}</span>
                 </div>
                 <div className="text-xs text-slate-400 space-y-1 pl-2">
                   <div className="flex justify-between"><span>{t.loanInterest}</span><span>{fmt(result.loanInterest)}</span></div>
@@ -216,8 +216,8 @@ const JeonseVsRentCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
               </div>
             </>
           ) : (
-            <div className="flex flex-col items-center justify-center h-48 text-blue-200 border-2 border-dashed border-blue-200 rounded-2xl">
-              <p className="text-sm font-bold text-blue-400">
+            <div className="flex flex-col items-center justify-center h-48 text-green-200 border-2 border-dashed border-green-200 rounded-2xl">
+              <p className="text-sm font-bold text-green-400">
                 {locale === 'ko' ? '정보를 입력하고 비교하세요' : 'Enter info and compare'}
               </p>
             </div>
@@ -229,7 +229,7 @@ const JeonseVsRentCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
       <div className="mt-6 p-5 bg-slate-50 border border-slate-200 rounded-2xl space-y-3 text-sm">
         <p className="font-bold text-slate-700">{t.faqTitle}</p>
         <div>
-          <p className="text-xs font-bold text-blue-700 uppercase tracking-wide">{t.faqOppCost}</p>
+          <p className="text-xs font-bold text-green-700 uppercase tracking-wide">{t.faqOppCost}</p>
           <p className="text-xs text-slate-500 mt-1">{t.faqOppCostDesc}</p>
         </div>
       </div>

@@ -105,7 +105,7 @@ const CulturalGreetingGuide: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'k
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="p-6 bg-white/80 backdrop-blur-sm rounded-2xl border border-orange-100">
                         <div className="flex items-center gap-2 mb-3">
-                            <span className="p-1.5 bg-emerald-100 rounded-lg text-emerald-600">✅</span>
+                            <span className="p-1.5 bg-green-100 rounded-lg text-green-600">✅</span>
                             <h4 className="font-bold text-slate-900">{t.ui.etiquette}</h4>
                         </div>
                         <p className="text-slate-700 text-sm leading-relaxed">{data.etiquette}</p>

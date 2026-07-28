@@ -221,12 +221,12 @@ export default function FreelancerTaxCalculator() {
               <div className={`flex justify-between items-center px-5 py-4 ${
                 result.diff > 0
                   ? 'bg-red-50/50'
-                  : 'bg-emerald-50/50'
+                  : 'bg-green-50/50'
               }`}>
-                <span className={`text-sm font-bold ${result.diff > 0 ? 'text-red-700' : 'text-emerald-700'}`}>
+                <span className={`text-sm font-bold ${result.diff > 0 ? 'text-red-700' : 'text-green-700'}`}>
                   {result.diff > 0 ? '추가 납부액' : '환급 예상액'}
                 </span>
-                <span className={`font-mono font-extrabold text-xl ${result.diff > 0 ? 'text-red-700' : 'text-emerald-700'}`}>
+                <span className={`font-mono font-extrabold text-xl ${result.diff > 0 ? 'text-red-700' : 'text-green-700'}`}>
                   {result.diff > 0 ? '' : '+ '}{fmt(Math.abs(result.diff))} 원
                 </span>
               </div>

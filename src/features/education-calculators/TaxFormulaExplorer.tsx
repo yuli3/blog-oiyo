@@ -22,14 +22,14 @@ const InputRow: React.FC<InputRowProps> = ({
   label, sublabel, value, onChange, unit = '만원',
   readOnly = false, highlight = false, negative = false,
 }) => (
-  <div className={`flex items-center gap-2 py-2 border-b border-emerald-50 ${highlight ? 'bg-emerald-50 rounded-xl px-2 -mx-2' : ''}`}>
+  <div className={`flex items-center gap-2 py-2 border-b border-green-50 ${highlight ? 'bg-green-50 rounded-xl px-2 -mx-2' : ''}`}>
     <div className="flex-1 min-w-0">
       <span className="text-xs font-bold text-slate-700">{negative && <span className="text-rose-500 mr-1">−</span>}{label}</span>
       {sublabel && <p className="text-[10px] text-slate-400 mt-0.5">{sublabel}</p>}
     </div>
     <div className="flex items-center gap-1 shrink-0">
       {readOnly ? (
-        <span className={`w-28 text-right text-sm font-bold pr-1 ${highlight ? 'text-emerald-700' : 'text-slate-700'}`}>
+        <span className={`w-28 text-right text-sm font-bold pr-1 ${highlight ? 'text-green-700' : 'text-slate-700'}`}>
           {value.toLocaleString()}
         </span>
       ) : (
@@ -37,7 +37,7 @@ const InputRow: React.FC<InputRowProps> = ({
           type="number"
           value={value}
           onChange={e => onChange(Number(e.target.value))}
-          className="w-28 text-right text-sm bg-white border border-emerald-200 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+          className="w-28 text-right text-sm bg-white border border-green-200 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-green-400"
           aria-label={label}
         />
       )}
@@ -49,7 +49,7 @@ const InputRow: React.FC<InputRowProps> = ({
 // Arrow divider between formula steps
 const StepArrow: React.FC = () => (
   <div className="flex items-center justify-center my-1" aria-hidden="true">
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-emerald-400">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-green-400">
       <path d="M8 2v10M4 8l4 4 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   </div>
@@ -64,23 +64,23 @@ interface FormulaBoxProps {
 }
 
 const FormulaBox: React.FC<FormulaBoxProps> = ({ label, value, unit = '만원', isResult = false, note }) => (
-  <div className={`rounded-xl px-4 py-2 border ${isResult ? 'bg-emerald-600 border-emerald-700' : 'bg-slate-50 border-slate-200'}`}>
+  <div className={`rounded-xl px-4 py-2 border ${isResult ? 'bg-green-600 border-green-700' : 'bg-slate-50 border-slate-200'}`}>
     <div className="flex items-center justify-between">
-      <span className={`text-xs font-bold ${isResult ? 'text-emerald-100' : 'text-slate-500'}`}>{label}</span>
+      <span className={`text-xs font-bold ${isResult ? 'text-green-100' : 'text-slate-500'}`}>{label}</span>
       <span className={`text-sm font-bold tabular-nums ${isResult ? 'text-white' : 'text-slate-800'}`}>
         {value.toLocaleString()} {unit}
       </span>
     </div>
-    {note && <p className={`text-[10px] mt-0.5 ${isResult ? 'text-emerald-200' : 'text-slate-400'}`}>{note}</p>}
+    {note && <p className={`text-[10px] mt-0.5 ${isResult ? 'text-green-200' : 'text-slate-400'}`}>{note}</p>}
   </div>
 );
 
 // Tax rate table display
 interface TaxBracketRowProps { range: string; rate: string; deduction: string; active: boolean; }
 const TaxBracketRow: React.FC<TaxBracketRowProps> = ({ range, rate, deduction, active }) => (
-  <tr className={active ? 'bg-emerald-50 font-bold' : ''}>
+  <tr className={active ? 'bg-green-50 font-bold' : ''}>
     <td className="text-xs px-2 py-1.5 border-b border-slate-100">{range}</td>
-    <td className="text-xs px-2 py-1.5 border-b border-slate-100 text-center font-bold text-emerald-700">{rate}</td>
+    <td className="text-xs px-2 py-1.5 border-b border-slate-100 text-center font-bold text-green-700">{rate}</td>
     <td className="text-xs px-2 py-1.5 border-b border-slate-100 text-right">{deduction}</td>
   </tr>
 );
@@ -89,8 +89,8 @@ interface TabButtonProps { active: boolean; onClick: () => void; children: React
 const TabButton: React.FC<TabButtonProps> = ({ active, onClick, children }) => (
   <button
     onClick={onClick}
-    className={`px-3 py-1.5 text-xs font-bold rounded-xl transition-all duration-200 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 ${
-      active ? 'bg-emerald-600 text-white shadow-sm' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'
+    className={`px-3 py-1.5 text-xs font-bold rounded-xl transition-all duration-200 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 ${
+      active ? 'bg-green-600 text-white shadow-sm' : 'bg-green-50 text-green-700 hover:bg-green-100'
     }`}
     aria-selected={active}
     role="tab"
@@ -100,7 +100,7 @@ const TabButton: React.FC<TabButtonProps> = ({ active, onClick, children }) => (
 );
 
 const SectionLabel: React.FC<{ text: string }> = ({ text }) => (
-  <p className="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mt-4 mb-2">{text}</p>
+  <p className="text-[10px] font-bold text-green-700 uppercase tracking-wider mt-4 mb-2">{text}</p>
 );
 
 // ── Income Tax (소득세) ────────────────────────────────────────────────────────
@@ -247,9 +247,9 @@ const CorporateTaxTab: React.FC = () => {
               { range: '200억 ~ 3,000억', rate: '21%' },
               { range: '3,000억 초과', rate: '24%' },
             ].map((row, i) => (
-              <tr key={i} className={i === bracketIdx ? 'bg-emerald-50 font-bold' : ''}>
+              <tr key={i} className={i === bracketIdx ? 'bg-green-50 font-bold' : ''}>
                 <td className="text-xs px-2 py-1.5 border-b border-slate-100">{row.range}</td>
-                <td className="text-xs px-2 py-1.5 border-b border-slate-100 text-center font-bold text-emerald-700">{row.rate}</td>
+                <td className="text-xs px-2 py-1.5 border-b border-slate-100 text-center font-bold text-green-700">{row.rate}</td>
               </tr>
             ))}
           </tbody>
@@ -268,9 +268,9 @@ const CorporateTaxTab: React.FC = () => {
         <StepArrow />
         <FormulaBox label="결정세액" value={Math.round(finalTax)} isResult note={`세액공제·감면 ${taxCreditExemption.toLocaleString()}만원`} />
 
-        <div className="mt-4 rounded-xl bg-sky-50 border border-sky-200 p-3">
-          <p className="text-[10px] font-bold text-sky-700 mb-1">참고사항</p>
-          <ul className="text-[10px] text-sky-600 space-y-0.5 list-disc list-inside">
+        <div className="mt-4 rounded-xl bg-green-50 border border-green-200 p-3">
+          <p className="text-[10px] font-bold text-green-700 mb-1">참고사항</p>
+          <ul className="text-[10px] text-green-600 space-y-0.5 list-disc list-inside">
             <li>법인세 신고: 사업연도 종료 후 3개월 내</li>
             <li>중간예납: 사업연도 개시 후 6개월 내</li>
             <li>지방소득세 별도 (법인세의 10%)</li>
@@ -304,10 +304,10 @@ const VATTab: React.FC = () => {
             <button
               key={String(simplified)}
               onClick={() => setIsSimplified(simplified)}
-              className={`flex-1 py-2 text-xs font-bold rounded-xl border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 ${
+              className={`flex-1 py-2 text-xs font-bold rounded-xl border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 ${
                 isSimplified === simplified
-                  ? 'bg-emerald-600 text-white border-emerald-600'
-                  : 'bg-white text-slate-600 border-slate-200 hover:border-emerald-300'
+                  ? 'bg-green-600 text-white border-green-600'
+                  : 'bg-white text-slate-600 border-slate-200 hover:border-green-300'
               }`}
               aria-pressed={isSimplified === simplified}
             >
@@ -345,8 +345,8 @@ const VATTab: React.FC = () => {
               ].map(([item, gen, simp]) => (
                 <tr key={item}>
                   <td className="py-0.5 text-slate-500">{item}</td>
-                  <td className="py-0.5 text-center text-emerald-700">{gen}</td>
-                  <td className="py-0.5 text-center text-sky-700">{simp}</td>
+                  <td className="py-0.5 text-center text-green-700">{gen}</td>
+                  <td className="py-0.5 text-center text-green-700">{simp}</td>
                 </tr>
               ))}
             </tbody>
@@ -433,14 +433,14 @@ const CapitalGainsTaxTab: React.FC = () => {
         <div className="flex gap-2 mt-3">
           <button
             onClick={() => setIsAdjustedArea(false)}
-            className={`flex-1 py-1.5 text-xs font-bold rounded-xl border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 ${!isAdjustedArea ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-white text-slate-600 border-slate-200 hover:border-emerald-300'}`}
+            className={`flex-1 py-1.5 text-xs font-bold rounded-xl border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 ${!isAdjustedArea ? 'bg-green-600 text-white border-green-600' : 'bg-white text-slate-600 border-slate-200 hover:border-green-300'}`}
             aria-pressed={!isAdjustedArea}
           >
             비조정지역
           </button>
           <button
             onClick={() => setIsAdjustedArea(true)}
-            className={`flex-1 py-1.5 text-xs font-bold rounded-xl border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 ${isAdjustedArea ? 'bg-rose-500 text-white border-rose-500' : 'bg-white text-slate-600 border-slate-200 hover:border-rose-300'}`}
+            className={`flex-1 py-1.5 text-xs font-bold rounded-xl border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 ${isAdjustedArea ? 'bg-rose-500 text-white border-rose-500' : 'bg-white text-slate-600 border-slate-200 hover:border-rose-300'}`}
             aria-pressed={isAdjustedArea}
           >
             조정대상지역
@@ -450,7 +450,7 @@ const CapitalGainsTaxTab: React.FC = () => {
         <div className="mt-4 rounded-xl bg-slate-50 border border-slate-200 p-3">
           <p className="text-[10px] font-bold text-slate-500 mb-1">장기보유특별공제율 (비조정지역)</p>
           <p className="text-[10px] text-slate-500">3년 이상 보유 시 (보유연수−2) × 2%, 최대 30%</p>
-          <p className="text-[10px] text-emerald-700 font-bold mt-1">현재 공제율: {(longTermDeductionRate * 100).toFixed(0)}%</p>
+          <p className="text-[10px] text-green-700 font-bold mt-1">현재 공제율: {(longTermDeductionRate * 100).toFixed(0)}%</p>
         </div>
       </div>
 
@@ -519,11 +519,11 @@ const InheritanceTaxTab: React.FC = () => {
         <SectionLabel text="입력값" />
         <InputRow label="총 상속재산가액" value={totalEstate} onChange={setTotalEstate} />
         <InputRow label="비과세·채무·공과금" value={taxExemptLiabilities} onChange={setTaxExemptLiabilities} negative />
-        <div className="flex items-center gap-2 py-2 border-b border-emerald-50">
+        <div className="flex items-center gap-2 py-2 border-b border-green-50">
           <span className="flex-1 text-xs font-bold text-slate-700">배우자 공제 적용</span>
           <button
             onClick={() => setHasSpouse(!hasSpouse)}
-            className={`px-3 py-1 text-xs font-bold rounded-xl border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 ${hasSpouse ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-slate-100 text-slate-500 border-slate-200'}`}
+            className={`px-3 py-1 text-xs font-bold rounded-xl border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 ${hasSpouse ? 'bg-green-600 text-white border-green-600' : 'bg-slate-100 text-slate-500 border-slate-200'}`}
             aria-pressed={hasSpouse}
           >
             {hasSpouse ? '적용' : '미적용'}
@@ -555,7 +555,7 @@ const InheritanceTaxTab: React.FC = () => {
           ].map(([range, rate]) => (
             <div key={range} className="flex justify-between text-[10px] py-0.5">
               <span className="text-slate-500">{range}</span>
-              <span className="font-bold text-emerald-700">{rate}</span>
+              <span className="font-bold text-green-700">{rate}</span>
             </div>
           ))}
         </div>
@@ -602,10 +602,10 @@ const GiftTaxTab: React.FC = () => {
             <button
               key={opt.value}
               onClick={() => setRelationship(opt.value as typeof relationship)}
-              className={`py-1.5 text-xs font-bold rounded-xl border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 ${
+              className={`py-1.5 text-xs font-bold rounded-xl border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 ${
                 relationship === opt.value
-                  ? 'bg-emerald-600 text-white border-emerald-600'
-                  : 'bg-white text-slate-600 border-slate-200 hover:border-emerald-300'
+                  ? 'bg-green-600 text-white border-green-600'
+                  : 'bg-white text-slate-600 border-slate-200 hover:border-green-300'
               }`}
               aria-pressed={relationship === opt.value}
             >
@@ -616,10 +616,10 @@ const GiftTaxTab: React.FC = () => {
 
         <InputRow label="세액공제" value={taxCredit} onChange={setTaxCredit} negative />
 
-        <div className="mt-3 rounded-xl bg-emerald-50 border border-emerald-200 p-3">
-          <p className="text-[10px] font-bold text-emerald-700 mb-1">증여재산 공제 한도 (10년 통산)</p>
+        <div className="mt-3 rounded-xl bg-green-50 border border-green-200 p-3">
+          <p className="text-[10px] font-bold text-green-700 mb-1">증여재산 공제 한도 (10년 통산)</p>
           {Object.entries(deductionMap).map(([key, val]) => (
-            <div key={key} className={`flex justify-between text-[10px] py-0.5 ${relationship === key ? 'font-bold text-emerald-700' : 'text-slate-500'}`}>
+            <div key={key} className={`flex justify-between text-[10px] py-0.5 ${relationship === key ? 'font-bold text-green-700' : 'text-slate-500'}`}>
               <span>{val.label.split(' ')[0]}</span>
               <span>{val.label.split(' ')[1]}</span>
             </div>
@@ -667,10 +667,10 @@ export const TaxFormulaExplorer: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TaxTab>(0);
 
   return (
-    <Card className="bg-white border border-emerald-100 shadow-xl rounded-2xl overflow-hidden mt-8">
-      <div className="bg-emerald-700 px-6 py-5">
+    <Card className="bg-white border border-green-100 shadow-xl rounded-2xl overflow-hidden mt-8">
+      <div className="bg-green-700 px-6 py-5">
         <h3 className="text-lg font-bold text-white">세법 계산 산식 인터랙티브</h3>
-        <p className="text-xs text-emerald-200 mt-1">6대 세목 공식을 직접 입력하며 계산 구조를 확인하세요</p>
+        <p className="text-xs text-green-200 mt-1">6대 세목 공식을 직접 입력하며 계산 구조를 확인하세요</p>
       </div>
 
       <div className="flex gap-1.5 flex-wrap px-6 pt-4 pb-0" role="tablist" aria-label="세목 탭">

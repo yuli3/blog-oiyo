@@ -186,11 +186,11 @@ const WeddingPlanningCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale 
               {[
                 { label: t.totalAssets, value: fmt(result.totalAssets), color: 'text-pink-700' },
                 { label: t.totalCost, value: `-${fmt(result.totalCost)}`, color: 'text-red-600' },
-                { label: t.giftRevenue, value: `+${fmt(result.giftRevenue)}`, color: 'text-emerald-600' },
+                { label: t.giftRevenue, value: `+${fmt(result.giftRevenue)}`, color: 'text-green-600' },
                 {
                   label: t.balance,
                   value: `${result.weddingBalance >= 0 ? '+' : '-'}${fmt(result.weddingBalance)}`,
-                  color: result.weddingBalance >= 0 ? 'text-emerald-600' : 'text-red-600',
+                  color: result.weddingBalance >= 0 ? 'text-green-600' : 'text-red-600',
                 },
               ].map((item) => (
                 <div key={item.label} className="bg-white rounded-2xl border border-pink-100 p-4 text-center">

@@ -14,6 +14,7 @@ jobs:
   validate:
     name: Validate
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     steps:
       - name: Checkout
@@ -37,12 +38,26 @@ jobs:
       - name: Validate structured data
         run: npm run validate:personality
 
+      - name: Audit markdown emphasis (literal ** leakage)
+        run: npm run audit:emphasis
+
+      - name: Audit translations (locale vs body language)
+        # Ratchet against scripts/untranslated-baseline.json — fails on a NEW
+        # page that declares a locale but serves Korean, not on the known backlog.
+        run: npm run audit:translations
+
       - name: Type check
         run: npm run type-check
+
+      - name: Build production artifact
+        run: npm run build
 
   sitemap-submit:
     name: Submit Sitemap (GSC + Bing + IndexNow)
     runs-on: ubuntu-latest
+    # The exact-commit Cloudflare Pages gate may legitimately wait up to one
+    # hour; this job must outlive that gate plus the local build.
+    timeout-minutes: 80
     needs: validate
     # Only run on pushes to main, not on PRs
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -92,6 +107,7 @@ jobs:
   manifest-check:
     name: Data Manifest Integrity
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     steps:
       - name: Checkout

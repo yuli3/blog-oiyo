@@ -229,10 +229,10 @@ const AnniversaryCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'en' })
             )}
 
             {result.type === 'dday' && (
-              <div className={`p-8 rounded-[32px] border-2 text-center space-y-2 ${result.diff === 0 ? 'bg-emerald-50 border-emerald-300' : result.diff > 0 ? 'bg-blue-50 border-blue-200' : 'bg-muted/30 border-border'}`}>
-                {eventName && <p className={`text-sm font-bold ${result.diff >= 0 ? 'text-blue-500' : 'text-muted-foreground'}`}>{eventName}</p>}
+              <div className={`p-8 rounded-[32px] border-2 text-center space-y-2 ${result.diff === 0 ? 'bg-green-50 border-green-300' : result.diff > 0 ? 'bg-green-50 border-green-200' : 'bg-muted/30 border-border'}`}>
+                {eventName && <p className={`text-sm font-bold ${result.diff >= 0 ? 'text-green-500' : 'text-muted-foreground'}`}>{eventName}</p>}
                 <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{t.dDayLabel}</p>
-                <p className={`text-6xl font-black ${result.diff === 0 ? 'text-emerald-600' : result.diff > 0 ? 'text-blue-600' : 'text-muted-foreground'}`}>
+                <p className={`text-6xl font-black ${result.diff === 0 ? 'text-green-600' : result.diff > 0 ? 'text-green-600' : 'text-muted-foreground'}`}>
                   {result.diff === 0 ? 'D-Day' : result.diff > 0 ? `D-${result.diff}` : `D+${Math.abs(result.diff)}`}
                 </p>
                 <p className="text-sm font-medium text-muted-foreground">

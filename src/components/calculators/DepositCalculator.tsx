@@ -92,8 +92,8 @@ const DepositCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
   };
 
   return (
-    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-teal-50 to-cyan-50 border border-teal-200 rounded-3xl shadow-xl">
-      <h3 className="text-xl font-bold text-teal-900 mb-6">
+    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
+      <h3 className="text-xl font-bold text-green-900 mb-6">
         {ko ? '예금·적금 계산기' : 'Deposit & Savings Calculator'}
       </h3>
 
@@ -106,8 +106,8 @@ const DepositCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
               onClick={() => { setCalcType(t); setResult(null); }}
               className={`flex-1 py-2 rounded-xl text-sm font-bold border transition-colors ${
                 calcType === t
-                  ? 'bg-teal-600 text-white border-teal-600'
-                  : 'bg-white text-teal-700 border-teal-200 hover:bg-teal-50'
+                  ? 'bg-green-600 text-white border-green-600'
+                  : 'bg-white text-green-700 border-green-200 hover:bg-green-50'
               }`}
             >
               {t === 'deposit'
@@ -118,7 +118,7 @@ const DepositCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
         </div>
 
         <div className="space-y-1">
-          <label className="text-sm font-bold text-teal-800">
+          <label className="text-sm font-bold text-green-800">
             {calcType === 'deposit'
               ? (ko ? '예금액 (원)' : 'Deposit Amount (KRW)')
               : (ko ? '월 납입액 (원)' : 'Monthly Amount (KRW)')}
@@ -128,13 +128,13 @@ const DepositCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             min="0"
-            className="w-full p-3 bg-white border border-teal-200 rounded-xl focus:ring-2 focus:ring-teal-400 outline-none"
+            className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
           />
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-1">
-            <label className="text-sm font-bold text-teal-800">
+            <label className="text-sm font-bold text-green-800">
               {ko ? '연 이율 (%)' : 'Annual Rate (%)'}
             </label>
             <input
@@ -143,11 +143,11 @@ const DepositCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
               onChange={(e) => setRate(e.target.value)}
               min="0"
               step="0.1"
-              className="w-full p-3 bg-white border border-teal-200 rounded-xl focus:ring-2 focus:ring-teal-400 outline-none"
+              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
             />
           </div>
           <div className="space-y-1">
-            <label className="text-sm font-bold text-teal-800">
+            <label className="text-sm font-bold text-green-800">
               {ko ? '기간 (개월)' : 'Period (months)'}
             </label>
             <input
@@ -155,14 +155,14 @@ const DepositCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
               value={period}
               onChange={(e) => setPeriod(e.target.value)}
               min="1"
-              className="w-full p-3 bg-white border border-teal-200 rounded-xl focus:ring-2 focus:ring-teal-400 outline-none"
+              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
             />
           </div>
         </div>
 
         {/* Tax type */}
         <div className="space-y-1">
-          <label className="text-sm font-bold text-teal-800">
+          <label className="text-sm font-bold text-green-800">
             {ko ? '과세 유형' : 'Tax Type'}
           </label>
           <div className="flex gap-2 flex-wrap">
@@ -172,8 +172,8 @@ const DepositCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
                 onClick={() => setTaxType(t)}
                 className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold border transition-colors ${
                   taxType === t
-                    ? 'bg-teal-600 text-white border-teal-600'
-                    : 'bg-white text-teal-700 border-teal-200 hover:bg-teal-50'
+                    ? 'bg-green-600 text-white border-green-600'
+                    : 'bg-white text-green-700 border-green-200 hover:bg-green-50'
                 }`}
               >
                 {taxLabels[t]}
@@ -184,7 +184,7 @@ const DepositCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
 
         {/* Interest method */}
         <div className="flex items-center gap-3">
-          <label className="text-sm font-bold text-teal-800">
+          <label className="text-sm font-bold text-green-800">
             {ko ? '이자 방식' : 'Interest Method'}
           </label>
           <div className="flex gap-2">
@@ -194,8 +194,8 @@ const DepositCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
                 onClick={() => setIsCompound(v)}
                 className={`py-1.5 px-4 rounded-xl text-xs font-bold border transition-colors ${
                   isCompound === v
-                    ? 'bg-teal-600 text-white border-teal-600'
-                    : 'bg-white text-teal-700 border-teal-200 hover:bg-teal-50'
+                    ? 'bg-green-600 text-white border-green-600'
+                    : 'bg-white text-green-700 border-green-200 hover:bg-green-50'
                 }`}
               >
                 {v ? (ko ? '복리' : 'Compound') : (ko ? '단리' : 'Simple')}
@@ -213,13 +213,13 @@ const DepositCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
         <div className="flex gap-3">
           <button
             onClick={calculate}
-            className="flex-1 py-3 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-xl transition-colors"
+            className="flex-1 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl transition-colors"
           >
             {ko ? '계산하기' : 'Calculate'}
           </button>
           <button
             onClick={reset}
-            className="px-5 py-3 bg-white border border-teal-300 hover:bg-teal-50 text-teal-700 font-bold rounded-xl transition-colors"
+            className="px-5 py-3 bg-white border border-green-300 hover:bg-green-50 text-green-700 font-bold rounded-xl transition-colors"
           >
             {ko ? '초기화' : 'Reset'}
           </button>
@@ -227,7 +227,7 @@ const DepositCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
 
         {result && (
           <div className="mt-4 space-y-3" aria-live="polite">
-            <div className="bg-teal-600 text-white rounded-2xl p-5 text-center">
+            <div className="bg-green-600 text-white rounded-2xl p-5 text-center">
               <p className="text-sm font-semibold opacity-80 mb-1">
                 {ko ? '세후 수령액' : 'After-Tax Total'}
               </p>
@@ -236,13 +236,13 @@ const DepositCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
 
             <div className="grid grid-cols-2 gap-3">
               {[
-                { label: ko ? '원금' : 'Principal', value: fmt(result.principal), color: 'text-teal-900' },
-                { label: ko ? '세전 이자' : 'Interest (Gross)', value: fmt(result.interest), color: 'text-teal-700' },
+                { label: ko ? '원금' : 'Principal', value: fmt(result.principal), color: 'text-green-900' },
+                { label: ko ? '세전 이자' : 'Interest (Gross)', value: fmt(result.interest), color: 'text-green-700' },
                 { label: ko ? '세금' : 'Tax', value: '-' + fmt(result.tax), color: 'text-red-600' },
                 { label: ko ? '세후 이자' : 'After-Tax Interest', value: '+' + fmt(result.afterTaxInterest), color: 'text-green-700' },
               ].map((item) => (
-                <div key={item.label} className="bg-white rounded-xl p-3 border border-teal-100">
-                  <p className="text-xs text-teal-500 font-semibold mb-1">{item.label}</p>
+                <div key={item.label} className="bg-white rounded-xl p-3 border border-green-100">
+                  <p className="text-xs text-green-500 font-semibold mb-1">{item.label}</p>
                   <p className={`text-sm font-bold ${item.color}`}>{item.value}</p>
                 </div>
               ))}

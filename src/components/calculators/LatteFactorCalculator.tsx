@@ -166,7 +166,7 @@ const LatteFactorCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'k
                   <div key={r.years} className="p-4 bg-white rounded-2xl border border-amber-100 text-center">
                     <p className="text-xs text-amber-600 font-bold mb-1">{r.years}{locale === 'ko' ? '년 후' : 'yrs'}</p>
                     <p className="text-xl font-bold text-amber-800">{fmt(r.total)}원</p>
-                    <p className="text-xs text-emerald-500 mt-1">+{fmt(r.interest)}원 이자</p>
+                    <p className="text-xs text-green-500 mt-1">+{fmt(r.interest)}원 이자</p>
                   </div>
                 ))}
               </div>
@@ -181,7 +181,7 @@ const LatteFactorCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'k
                     const achievable = tenYearTotal >= goal.amount;
                     return (
                       <div key={goal.name} className="flex justify-between items-center text-sm">
-                        <span className={achievable ? 'text-emerald-700 font-bold' : 'text-slate-400'}>
+                        <span className={achievable ? 'text-green-700 font-bold' : 'text-slate-400'}>
                           {achievable ? '✓ ' : '○ '}{goal.name}
                         </span>
                         <span className="text-slate-500">{fmt(goal.amount)}원</span>

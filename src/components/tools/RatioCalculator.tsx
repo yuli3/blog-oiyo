@@ -140,9 +140,9 @@ export default function RatioCalculator({ locale }: Props) {
   })();
 
   const inputCls =
-    "w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100";
+    "w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-100";
   const card = "rounded-xl border border-slate-200 bg-white p-4";
-  const resultCls = "mt-3 rounded-lg bg-indigo-50 px-3 py-2 text-sm font-semibold text-indigo-900";
+  const resultCls = "mt-3 rounded-lg bg-green-50 px-3 py-2 text-sm font-semibold text-green-900";
 
   return (
     <GameContainer title={t.title} subtitle={t.subtitle}>

@@ -254,11 +254,11 @@ export default function EmotionalMindTest({ locale: localeProp }: Props) {
 
     return (
       <div className="space-y-6">
-        <div className="rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200 p-6 text-center">
-          <p className="text-sm font-medium text-emerald-600 mb-1">{tx.resultTitle}</p>
+        <div className="rounded-2xl bg-gradient-to-br from-green-50 to-green-50 border border-green-200 p-6 text-center">
+          <p className="text-sm font-medium text-green-600 mb-1">{tx.resultTitle}</p>
           <div className="text-5xl mb-2">🧠</div>
           <h2 className="text-2xl font-bold text-gray-900">{overallLevel.label}</h2>
-          <p className="text-3xl font-bold text-emerald-600 mt-1">{percentage}%</p>
+          <p className="text-3xl font-bold text-green-600 mt-1">{percentage}%</p>
           <p className="mt-3 text-sm text-gray-600">{overallLevel.description}</p>
         </div>
 
@@ -287,7 +287,7 @@ export default function EmotionalMindTest({ locale: localeProp }: Props) {
           <button onClick={restart} className="flex-1 rounded-xl border border-gray-200 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-50">
             {tx.restart}
           </button>
-          <button onClick={share} className="flex-1 rounded-xl py-3 text-sm font-medium text-white transition bg-emerald-600 hover:bg-emerald-700">
+          <button onClick={share} className="flex-1 rounded-xl py-3 text-sm font-medium text-white transition bg-green-600 hover:bg-green-700">
             {copied ? tx.copied : tx.share}
           </button>
         </div>
@@ -305,7 +305,7 @@ export default function EmotionalMindTest({ locale: localeProp }: Props) {
       </div>
       <div className="flex items-center gap-3">
         <div className="h-2 flex-1 overflow-hidden rounded-full bg-gray-100">
-          <div className="h-full rounded-full bg-emerald-500 transition-all duration-300" style={{ width: `${(idx / questions.length) * 100}%` }} />
+          <div className="h-full rounded-full bg-green-500 transition-all duration-300" style={{ width: `${(idx / questions.length) * 100}%` }} />
         </div>
         <span className="text-sm text-gray-500">{tx.progress(idx + 1, questions.length)}</span>
       </div>
@@ -313,7 +313,7 @@ export default function EmotionalMindTest({ locale: localeProp }: Props) {
         <p className="mb-5 text-center text-lg font-medium text-gray-800">{q[locale]}</p>
         <div className="space-y-3">
           {q.options.map((opt, i) => (
-            <button key={i} onClick={() => pick(opt.score)} className="w-full rounded-xl border border-gray-200 px-4 py-3 text-left text-sm text-gray-700 transition hover:border-emerald-300 hover:bg-emerald-50">
+            <button key={i} onClick={() => pick(opt.score)} className="w-full rounded-xl border border-gray-200 px-4 py-3 text-left text-sm text-gray-700 transition hover:border-green-300 hover:bg-green-50">
               {opt[locale]}
             </button>
           ))}

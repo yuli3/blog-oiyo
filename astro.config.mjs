@@ -7,6 +7,7 @@ import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import mdx from "@astrojs/mdx";
 import remarkGfm from "remark-gfm";
+import remarkCjkFriendly from "remark-cjk-friendly";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import robotsTxt from "astro-robots-txt";
@@ -124,6 +125,11 @@ export default defineConfig({
     },
     remarkPlugins: [
       [remarkGfm, { singleTilde: false }],
+      // CommonMark의 right-flanking 규칙 때문에 `**볼드(영문)**조사` 처럼
+      // 닫는 `**` 앞이 구두점이고 뒤가 CJK 문자면 강조가 닫히지 않아
+      // `**` 가 본문에 그대로 노출된다. wiki 는 2026-07-07 감사에서 이미
+      // 적용했고 blog 에는 전파되지 않아 1,498페이지가 깨져 있었다.
+      remarkCjkFriendly,
       remarkMath,
     ],
     rehypePlugins: [

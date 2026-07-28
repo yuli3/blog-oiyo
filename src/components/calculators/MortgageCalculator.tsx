@@ -67,14 +67,14 @@ const MortgageCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
   const interestPct = result ? 100 - principalPct : 0;
 
   return (
-    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-3xl shadow-xl">
-      <h3 className="text-xl font-bold text-blue-900 mb-6">
+    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
+      <h3 className="text-xl font-bold text-green-900 mb-6">
         {ko ? '주택담보대출 계산기' : 'Mortgage Calculator'}
       </h3>
 
       <div className="space-y-5">
         <div className="space-y-1">
-          <label className="text-sm font-bold text-blue-800">
+          <label className="text-sm font-bold text-green-800">
             {ko ? '주택 가격 (원)' : 'Home Price (KRW)'}
           </label>
           <input
@@ -82,12 +82,12 @@ const MortgageCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
             value={price}
             onChange={(e) => setPrice(e.target.value)}
             min="0"
-            className="w-full p-3 bg-white border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-400 outline-none"
+            className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
           />
         </div>
 
         <div className="space-y-1">
-          <label className="text-sm font-bold text-blue-800">
+          <label className="text-sm font-bold text-green-800">
             {ko ? '계약금 / 자기자본 (원)' : 'Down Payment (KRW)'}
           </label>
           <input
@@ -95,13 +95,13 @@ const MortgageCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
             value={downPayment}
             onChange={(e) => setDownPayment(e.target.value)}
             min="0"
-            className="w-full p-3 bg-white border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-400 outline-none"
+            className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
           />
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-1">
-            <label className="text-sm font-bold text-blue-800">
+            <label className="text-sm font-bold text-green-800">
               {ko ? '연 금리 (%)' : 'Annual Rate (%)'}
             </label>
             <input
@@ -110,11 +110,11 @@ const MortgageCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
               onChange={(e) => setInterestRate(e.target.value)}
               min="0"
               step="0.1"
-              className="w-full p-3 bg-white border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-400 outline-none"
+              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
             />
           </div>
           <div className="space-y-1">
-            <label className="text-sm font-bold text-blue-800">
+            <label className="text-sm font-bold text-green-800">
               {ko ? '대출 기간 (년)' : 'Loan Term (years)'}
             </label>
             <input
@@ -123,7 +123,7 @@ const MortgageCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
               onChange={(e) => setLoanTermYears(e.target.value)}
               min="1"
               max="50"
-              className="w-full p-3 bg-white border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-400 outline-none"
+              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
             />
           </div>
         </div>
@@ -137,13 +137,13 @@ const MortgageCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
         <div className="flex gap-3">
           <button
             onClick={calculate}
-            className="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-colors"
+            className="flex-1 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl transition-colors"
           >
             {ko ? '계산하기' : 'Calculate'}
           </button>
           <button
             onClick={reset}
-            className="px-5 py-3 bg-white border border-blue-300 hover:bg-blue-50 text-blue-700 font-bold rounded-xl transition-colors"
+            className="px-5 py-3 bg-white border border-green-300 hover:bg-green-50 text-green-700 font-bold rounded-xl transition-colors"
           >
             {ko ? '초기화' : 'Reset'}
           </button>
@@ -151,7 +151,7 @@ const MortgageCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
 
         {result && (
           <div className="mt-4 space-y-4">
-            <div className="bg-blue-600 text-white rounded-2xl p-5 text-center">
+            <div className="bg-green-600 text-white rounded-2xl p-5 text-center">
               <p className="text-sm font-semibold opacity-80 mb-1">
                 {ko ? '월 상환금' : 'Monthly Payment'}
               </p>
@@ -165,21 +165,21 @@ const MortgageCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
                 { label: ko ? '총 이자' : 'Total Interest', value: fmt(result.totalInterest) },
                 { label: ko ? '총 상환액' : 'Total Payment', value: fmt(result.totalPayment) },
               ].map((item) => (
-                <div key={item.label} className="bg-white rounded-xl p-4 border border-blue-100">
-                  <p className="text-xs text-blue-500 font-semibold mb-1">{item.label}</p>
-                  <p className="text-base font-bold text-blue-900">{item.value}</p>
+                <div key={item.label} className="bg-white rounded-xl p-4 border border-green-100">
+                  <p className="text-xs text-green-500 font-semibold mb-1">{item.label}</p>
+                  <p className="text-base font-bold text-green-900">{item.value}</p>
                 </div>
               ))}
             </div>
 
             {/* Simple bar breakdown */}
-            <div className="bg-white rounded-xl p-4 border border-blue-100">
-              <p className="text-xs font-bold text-blue-700 mb-3">
+            <div className="bg-white rounded-xl p-4 border border-green-100">
+              <p className="text-xs font-bold text-green-700 mb-3">
                 {ko ? '원금 vs 이자 비율' : 'Principal vs Interest Breakdown'}
               </p>
               <div className="flex rounded-full overflow-hidden h-6 text-xs font-bold">
                 <div
-                  className="bg-blue-500 flex items-center justify-center text-white transition-all"
+                  className="bg-green-500 flex items-center justify-center text-white transition-all"
                   style={{ width: `${principalPct}%` }}
                 >
                   {principalPct}%
@@ -191,9 +191,9 @@ const MortgageCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
                   {interestPct}%
                 </div>
               </div>
-              <div className="flex gap-4 mt-2 text-xs text-blue-600">
+              <div className="flex gap-4 mt-2 text-xs text-green-600">
                 <span className="flex items-center gap-1">
-                  <span className="inline-block w-3 h-3 rounded-sm bg-blue-500" />
+                  <span className="inline-block w-3 h-3 rounded-sm bg-green-500" />
                   {ko ? '원금' : 'Principal'}
                 </span>
                 <span className="flex items-center gap-1">

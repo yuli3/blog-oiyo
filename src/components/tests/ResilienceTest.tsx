@@ -48,8 +48,8 @@ const levelData: Record<ResLevel, LevelData> = {
   high: {
     label: { ko: "높은 회복탄력성", en: "High Resilience", ja: "高い回復力" },
     color: "#10b981",
-    bg: "bg-emerald-50",
-    border: "border-emerald-200",
+    bg: "bg-green-50",
+    border: "border-green-200",
     description: {
       ko: "당신은 삶의 역경 속에서도 회복하고 성장하는 능력이 뛰어납니다. 어려운 상황을 받아들이고, 지지 자원을 잘 활용하며, 긍정적인 시각을 유지합니다. 이 힘은 타고난 것이기도 하지만, 의식적인 노력과 경험을 통해 키워온 것이기도 합니다.",
       en: "You have strong ability to recover and grow amidst life's adversities. You accept difficult situations, make good use of support resources, and maintain a positive outlook. This strength may be partly innate, but it's also cultivated through conscious effort and experience.",
@@ -290,11 +290,11 @@ export default function ResilienceTest({ locale: localeProp }: Props) {
             </ul>
           </div>
 
-          <div className="bg-blue-50 rounded-lg p-4">
-            <h3 className="font-semibold text-blue-800 mb-2">🌱 {t.strategies}</h3>
+          <div className="bg-green-50 rounded-lg p-4">
+            <h3 className="font-semibold text-green-800 mb-2">🌱 {t.strategies}</h3>
             <ul className="space-y-1">
               {d.strategies[locale].map((s, i) => (
-                <li key={i} className="text-sm text-blue-700">• {s}</li>
+                <li key={i} className="text-sm text-green-700">• {s}</li>
               ))}
             </ul>
           </div>
@@ -340,7 +340,7 @@ export default function ResilienceTest({ locale: localeProp }: Props) {
       <div className="flex justify-between items-center text-sm text-gray-500">
         <span>{t.progress} {idx + 1} / {questions.length}</span>
         <div className="w-48 bg-gray-200 rounded-full h-1.5">
-          <div className="bg-emerald-500 h-1.5 rounded-full transition-all"
+          <div className="bg-green-500 h-1.5 rounded-full transition-all"
             style={{ width: `${((idx + 1) / questions.length) * 100}%` }} />
         </div>
       </div>
@@ -351,7 +351,7 @@ export default function ResilienceTest({ locale: localeProp }: Props) {
         <div className="space-y-2">
           {scaleLabels[locale].map((label, i) => (
             <button key={i} onClick={() => pick(i)}
-              className="w-full flex items-center gap-3 p-3 rounded-lg border border-gray-100 hover:border-emerald-300 hover:bg-emerald-50 transition-colors text-left">
+              className="w-full flex items-center gap-3 p-3 rounded-lg border border-gray-100 hover:border-green-300 hover:bg-green-50 transition-colors text-left">
               <div className="w-6 h-6 rounded-full border-2 border-gray-300 flex items-center justify-center text-xs font-bold text-gray-500">
                 {i}
               </div>

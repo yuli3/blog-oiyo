@@ -346,7 +346,7 @@ export default function GrowthMindsetTest({ locale: localeProp }: Props) {
       <div className="flex items-center gap-3">
         <div className="h-2 flex-1 overflow-hidden rounded-full bg-gray-100">
           <div
-            className="h-full rounded-full bg-emerald-500 transition-all duration-300"
+            className="h-full rounded-full bg-green-500 transition-all duration-300"
             style={{ width: `${(idx / questions.length) * 100}%` }}
           />
         </div>
@@ -360,7 +360,7 @@ export default function GrowthMindsetTest({ locale: localeProp }: Props) {
             <button
               key={opt.value}
               onClick={() => pick(opt.value)}
-              className="rounded-xl border border-gray-200 px-4 py-4 text-center text-sm font-medium text-gray-700 transition hover:border-emerald-300 hover:bg-emerald-50"
+              className="rounded-xl border border-gray-200 px-4 py-4 text-center text-sm font-medium text-gray-700 transition hover:border-green-300 hover:bg-green-50"
             >
               {opt.label}
             </button>

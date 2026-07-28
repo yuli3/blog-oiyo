@@ -108,9 +108,9 @@ export default function NumberBaseConverter({ locale }: Props) {
   const isInvalid = hasValue && converted.every((item) => item.value === null);
 
   const inputCls =
-    "w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100";
+    "w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-100";
   const card = "rounded-xl border border-slate-200 bg-white p-4";
-  const resultCls = "mt-2 break-all rounded-lg bg-indigo-50 px-3 py-2 font-mono text-sm font-semibold text-indigo-900";
+  const resultCls = "mt-2 break-all rounded-lg bg-green-50 px-3 py-2 font-mono text-sm font-semibold text-green-900";
 
   return (
     <GameContainer title={t.title} subtitle={t.subtitle}>

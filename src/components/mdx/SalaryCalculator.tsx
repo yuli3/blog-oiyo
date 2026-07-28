@@ -93,12 +93,12 @@ export default function SalaryCalculator() {
   return (
     <div className="not-prose my-8 rounded-2xl border border-border bg-card shadow-sm overflow-hidden">
       {/* Header */}
-      <div className="bg-gradient-to-r from-violet-600 to-violet-500 px-6 py-4">
+      <div className="bg-gradient-to-r from-green-600 to-green-500 px-6 py-4">
         <div className="flex items-center gap-2">
           <span className="text-2xl">💼</span>
           <div>
             <h3 className="font-bold text-white text-lg leading-tight">연봉 실수령액 계산기</h3>
-            <p className="text-violet-100 text-xs mt-0.5">4대보험·소득세·지방세 차감 후 월 실수령액</p>
+            <p className="text-green-100 text-xs mt-0.5">4대보험·소득세·지방세 차감 후 월 실수령액</p>
           </div>
         </div>
       </div>
@@ -117,7 +117,7 @@ export default function SalaryCalculator() {
                 value={annualSalaryDisplay}
                 onChange={handleSalary}
                 placeholder="예: 40,000,000"
-                className="w-full rounded-xl border border-border bg-background px-4 py-3 text-right font-mono font-semibold focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20 placeholder:text-muted-foreground/40 text-sm"
+                className="w-full rounded-xl border border-border bg-background px-4 py-3 text-right font-mono font-semibold focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20 placeholder:text-muted-foreground/40 text-sm"
               />
               <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground pointer-events-none">원</span>
             </div>
@@ -130,7 +130,7 @@ export default function SalaryCalculator() {
             <select
               value={dependents}
               onChange={(e) => setDependents(e.target.value)}
-              className="w-full rounded-xl border border-border bg-background px-4 py-3 font-semibold focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20 text-sm"
+              className="w-full rounded-xl border border-border bg-background px-4 py-3 font-semibold focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20 text-sm"
             >
               {[1, 2, 3, 4, 5].map((n) => (
                 <option key={n} value={n}>{n}명{n === 1 ? ' (본인만)' : ''}</option>
@@ -180,16 +180,16 @@ export default function SalaryCalculator() {
                   <span className="text-sm font-semibold text-red-700">총 공제액 (실효세율 {result.effectiveRate}%)</span>
                   <span className="font-mono font-bold text-red-700">- {fmt(result.totalDeductions)} 원</span>
                 </div>
-                <div className="flex justify-between items-center px-5 py-4 bg-violet-50/50">
-                  <span className="text-sm font-bold text-violet-800">월 실수령액</span>
-                  <span className="font-mono font-extrabold text-violet-700 text-xl">{fmt(result.netMonthly)} 원</span>
+                <div className="flex justify-between items-center px-5 py-4 bg-green-50/50">
+                  <span className="text-sm font-bold text-green-800">월 실수령액</span>
+                  <span className="font-mono font-extrabold text-green-700 text-xl">{fmt(result.netMonthly)} 원</span>
                 </div>
               </div>
             </div>
 
-            <div className="rounded-xl border border-violet-200 bg-violet-50/30 px-5 py-3.5 flex justify-between items-center">
-              <span className="text-sm font-bold text-violet-800">연간 실수령액</span>
-              <span className="font-mono font-extrabold text-violet-700 text-lg">{fmt(result.netAnnual)} 원</span>
+            <div className="rounded-xl border border-green-200 bg-green-50/30 px-5 py-3.5 flex justify-between items-center">
+              <span className="text-sm font-bold text-green-800">연간 실수령액</span>
+              <span className="font-mono font-extrabold text-green-700 text-lg">{fmt(result.netAnnual)} 원</span>
             </div>
           </div>
         )}

@@ -107,11 +107,11 @@ function getElementCounts(pillars: Pillar[]) {
 }
 
 const ELEMENT_COLOR: Record<string, string> = {
-  '목(木)': 'bg-emerald-100 text-emerald-700 border-emerald-200',
+  '목(木)': 'bg-green-100 text-green-700 border-green-200',
   '화(火)': 'bg-rose-100 text-rose-700 border-rose-200',
   '토(土)': 'bg-amber-100 text-amber-700 border-amber-200',
   '금(金)': 'bg-slate-100 text-slate-700 border-slate-200',
-  '수(水)': 'bg-sky-100 text-sky-700 border-sky-200',
+  '수(水)': 'bg-green-100 text-green-700 border-green-200',
 };
 
 const DAYMASTER_DESC: Partial<Record<Stem, { ko: string; strength: string }>> = {

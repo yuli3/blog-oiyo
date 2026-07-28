@@ -12,6 +12,7 @@ const requiredSitemaps = [
 ];
 
 const failures = [];
+const sitemapUrls = new Set();
 
 if (!fs.existsSync(dist)) {
   failures.push("dist directory is missing; run npm run build first");
@@ -29,6 +30,15 @@ if (!fs.existsSync(dist)) {
       if (!indexXml.includes(`${siteUrl}/${file}`)) {
         failures.push(`sitemap-index.xml does not reference ${file}`);
       }
+    }
+  }
+
+  for (const file of requiredSitemaps.filter((file) => file !== "sitemap-index.xml")) {
+    const sitemapPath = path.join(dist, file);
+    if (!fs.existsSync(sitemapPath)) continue;
+    const xml = fs.readFileSync(sitemapPath, "utf8");
+    for (const match of xml.matchAll(/<loc>([^<]+)<\/loc>/g)) {
+      sitemapUrls.add(match[1]);
     }
   }
 }
@@ -49,19 +59,36 @@ function urlToDistPath(url) {
 }
 
 let checkedHtml = 0;
+let intentionalGameStubs = 0;
 for (const file of listHtmlFiles(dist)) {
   checkedHtml += 1;
   const rel = path.relative(dist, file);
   const html = fs.readFileSync(file, "utf8");
 
   // Bridge stubs are noindex and canonicalize cross-domain to the family
-  // canonical host (oiyo.net / blog.oiyo.net) — any family canonical is valid there.
+  // canonical host — any OIYO family canonical is valid there.
   const isNoindex = /<meta name="robots" content="noindex/.test(html);
   const canonicalRe = isNoindex
-    ? /<link rel="canonical" href="https:\/\/(blog\.|wiki\.)?oiyo\.net\//
+    ? /<link rel="canonical" href="https:\/\/(blog\.|wiki\.|game\.)?oiyo\.net\//
     : /<link rel="canonical" href="https:\/\/blog\.oiyo\.net\//;
   if (!canonicalRe.test(html)) {
     failures.push(`${rel}: missing canonical link`);
+  }
+
+  const canonical = html.match(/<link rel="canonical" href="([^"]+)"/)?.[1];
+  if (isNoindex && canonical?.startsWith("https://game.oiyo.net/")) {
+    const refreshTarget = html.match(
+      /<meta http-equiv="refresh" content="0;\s*url=([^"]+)"/,
+    )?.[1];
+    if (refreshTarget !== canonical) {
+      failures.push(`${rel}: game redirect stub refresh target does not match canonical`);
+    } else {
+      intentionalGameStubs += 1;
+    }
+    const pageUrl = `${siteUrl}/${rel.replace(/index\.html$/, "")}`;
+    if (sitemapUrls.has(pageUrl)) {
+      failures.push(`${rel}: game redirect stub must not appear in sitemap`);
+    }
   }
 
   for (const match of html.matchAll(/<link rel="alternate" hreflang="[^"]+" href="([^"]+)"\/?>/g)) {
@@ -83,4 +110,6 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`SEO output audit passed (${checkedHtml} HTML file(s) checked)`);
+console.log(
+  `SEO output audit passed (${checkedHtml} HTML file(s) checked; ${intentionalGameStubs} intentional game redirect stub(s))`,
+);

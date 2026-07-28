@@ -225,9 +225,9 @@ export default function CapitalGainsTaxCalculator() {
         {/* Results */}
         {result && (
           result.exempt ? (
-            <div className="rounded-xl bg-emerald-50 border border-emerald-200 px-5 py-4 text-center">
-              <div className="text-2xl font-extrabold text-emerald-700">비과세</div>
-              <div className="text-sm text-emerald-600 mt-1">1세대 1주택 비과세 요건 충족 (실거래가 12억 이하, 보유 2년 이상)</div>
+            <div className="rounded-xl bg-green-50 border border-green-200 px-5 py-4 text-center">
+              <div className="text-2xl font-extrabold text-green-700">비과세</div>
+              <div className="text-sm text-green-600 mt-1">1세대 1주택 비과세 요건 충족 (실거래가 12억 이하, 보유 2년 이상)</div>
             </div>
           ) : (
             <div className="rounded-xl border border-border overflow-hidden">
@@ -241,7 +241,7 @@ export default function CapitalGainsTaxCalculator() {
                     <span className="text-sm text-muted-foreground">
                       장기보유특별공제 ({((result.longTermRate ?? 0) * 100).toFixed(0)}%)
                     </span>
-                    <span className="font-mono text-emerald-600">- {fmt(result.longTermDeduction ?? 0)} 원</span>
+                    <span className="font-mono text-green-600">- {fmt(result.longTermDeduction ?? 0)} 원</span>
                   </div>
                 )}
                 <div className="flex justify-between items-center px-5 py-3">
@@ -250,7 +250,7 @@ export default function CapitalGainsTaxCalculator() {
                 </div>
                 <div className="flex justify-between items-center px-5 py-3">
                   <span className="text-sm text-muted-foreground">기본공제 (250만 원)</span>
-                  <span className="font-mono text-emerald-600">- {result.isStock ? '0' : '2,500,000'} 원</span>
+                  <span className="font-mono text-green-600">- {result.isStock ? '0' : '2,500,000'} 원</span>
                 </div>
                 <div className="flex justify-between items-center px-5 py-3 bg-muted/20">
                   <span className="text-sm font-semibold">과세표준</span>

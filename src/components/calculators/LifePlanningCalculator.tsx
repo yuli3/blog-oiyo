@@ -243,7 +243,7 @@ const LifePlanningCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
                 </div>
                 <div className="bg-white rounded-2xl border border-rose-100 p-4 text-center">
                   <p className="text-xs text-slate-500 font-bold mb-1">{t.netStart}</p>
-                  <p className={`text-lg font-bold ${weddingResult.netStart < 0 ? 'text-red-600' : 'text-emerald-600'}`}>
+                  <p className={`text-lg font-bold ${weddingResult.netStart < 0 ? 'text-red-600' : 'text-green-600'}`}>
                     {fmt(weddingResult.netStart)}{locale === 'ko' ? '원' : ''}
                   </p>
                 </div>
@@ -304,7 +304,7 @@ const LifePlanningCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
                 </div>
                 <div className="bg-white rounded-2xl border border-rose-100 p-4 text-center">
                   <p className="text-xs text-slate-500 font-bold mb-1">{t.monthlySaveLabel}</p>
-                  <p className="text-sm font-bold text-emerald-600">{fmt(eduResult.monthlySave)}{locale === 'ko' ? '원' : ''}</p>
+                  <p className="text-sm font-bold text-green-600">{fmt(eduResult.monthlySave)}{locale === 'ko' ? '원' : ''}</p>
                 </div>
               </div>
               <p className="text-xs text-rose-600 bg-rose-50 border border-rose-100 rounded-xl p-3">{t.educationTip}</p>
@@ -357,7 +357,7 @@ const LifePlanningCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
             <div className="space-y-3">
               <div className="text-center p-5 bg-white rounded-2xl border border-rose-100">
                 <p className="text-xs text-slate-500 font-bold uppercase tracking-wide mb-1">{t.debtRatio}</p>
-                <p className={`text-4xl font-black ${jeonseResult.isSafe ? 'text-emerald-600' : 'text-red-600'}`}>
+                <p className={`text-4xl font-black ${jeonseResult.isSafe ? 'text-green-600' : 'text-red-600'}`}>
                   {jeonseResult.ratio}%
                 </p>
               </div>

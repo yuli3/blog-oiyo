@@ -270,9 +270,9 @@ export default function MenstrualCycleCalculator({ locale = 'ko' }: { locale?: L
     const ovDay = cycleLength - 14;
 
     if (effectiveDay < periodDuration) return { phase: 'menstrual', day: effectiveDay + 1, color: 'text-red-600', bg: 'bg-red-50', label: locale === 'ko' ? '생리 중' : locale === 'ja' ? '生理中' : locale === 'fr' ? 'Règles' : locale === 'es' ? 'Menstruación' : locale === 'zh' ? '月经中' : 'Menstrual' };
-    if (effectiveDay < ovDay - 5) return { phase: 'follicular', day: effectiveDay + 1, color: 'text-blue-600', bg: 'bg-blue-50', label: t.phaseFollicular };
+    if (effectiveDay < ovDay - 5) return { phase: 'follicular', day: effectiveDay + 1, color: 'text-green-600', bg: 'bg-green-50', label: t.phaseFollicular };
     if (effectiveDay >= ovDay - 5 && effectiveDay <= ovDay) return { phase: 'fertile', day: effectiveDay + 1, color: 'text-pink-600', bg: 'bg-pink-50', label: locale === 'ko' ? '가임기' : locale === 'ja' ? '妊娠可能期' : locale === 'fr' ? 'Période fertile' : locale === 'es' ? 'Período fértil' : locale === 'zh' ? '受孕期' : 'Fertile' };
-    return { phase: 'luteal', day: effectiveDay + 1, color: 'text-violet-600', bg: 'bg-violet-50', label: t.phaseLuteal };
+    return { phase: 'luteal', day: effectiveDay + 1, color: 'text-green-600', bg: 'bg-green-50', label: t.phaseLuteal };
   }, [result, lastPeriodStr, cycleLength, periodDuration, today, locale]);
 
   return (
@@ -377,7 +377,7 @@ export default function MenstrualCycleCalculator({ locale = 'ko' }: { locale?: L
               label={t.lutealPhase}
               date={result.lutealStart}
               subtext={`~ ${formatDate(result.nextPeriodStart, locale)}`}
-              colorClass="bg-violet-50 border-violet-200"
+              colorClass="bg-green-50 border-green-200"
               icon="🌙"
             />
           </div>
@@ -396,7 +396,7 @@ export default function MenstrualCycleCalculator({ locale = 'ko' }: { locale?: L
               />
               {/* follicular */}
               <div
-                className="bg-blue-300 flex items-center justify-center"
+                className="bg-green-300 flex items-center justify-center"
                 style={{ width: `${((cycleLength - 14 - 5 - periodDuration) / cycleLength) * 100}%` }}
                 title={t.phaseFollicular}
               />
@@ -408,15 +408,15 @@ export default function MenstrualCycleCalculator({ locale = 'ko' }: { locale?: L
               />
               {/* luteal */}
               <div
-                className="bg-violet-400 flex-1"
+                className="bg-green-400 flex-1"
                 title={t.phaseLuteal}
               />
             </div>
             <div className="flex justify-between text-xs text-gray-400 mt-1">
               <span>🩸</span>
-              <span className="text-blue-500">{t.phaseFollicular}</span>
+              <span className="text-green-500">{t.phaseFollicular}</span>
               <span className="text-pink-500">💕</span>
-              <span className="text-violet-500">{t.phaseLuteal}</span>
+              <span className="text-green-500">{t.phaseLuteal}</span>
             </div>
           </div>
 

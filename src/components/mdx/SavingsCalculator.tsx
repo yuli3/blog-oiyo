@@ -129,13 +129,13 @@ export default function SavingsCalculator() {
               <p className="text-xs text-gray-500">{result.label}</p>
               <p className="text-base font-bold text-green-600">{formatKRW(result.main)}원</p>
             </div>
-            <div className="rounded-xl bg-blue-50 p-4">
+            <div className="rounded-xl bg-green-50 p-4">
               <p className="text-xs text-gray-500">총 납입 원금</p>
-              <p className="text-base font-bold text-blue-600">{formatKRW(result.totalPrincipal)}원</p>
+              <p className="text-base font-bold text-green-600">{formatKRW(result.totalPrincipal)}원</p>
             </div>
-            <div className="rounded-xl bg-purple-50 p-4">
+            <div className="rounded-xl bg-green-50 p-4">
               <p className="text-xs text-gray-500">이자 수익</p>
-              <p className="text-base font-bold text-purple-600">{formatKRW(Math.abs(result.totalInterest))}원</p>
+              <p className="text-base font-bold text-green-600">{formatKRW(Math.abs(result.totalInterest))}원</p>
             </div>
           </div>
 
@@ -152,8 +152,8 @@ export default function SavingsCalculator() {
                 {result.rows.map((row) => (
                   <tr key={row.year} className="border-t border-gray-100">
                     <td className="px-3 py-2 font-medium text-gray-700">{row.year}년</td>
-                    <td className="px-3 py-2 text-blue-600">{formatKRW(row.principal)}</td>
-                    <td className="px-3 py-2 text-purple-600">{formatKRW(row.interest)}</td>
+                    <td className="px-3 py-2 text-green-600">{formatKRW(row.principal)}</td>
+                    <td className="px-3 py-2 text-green-600">{formatKRW(row.interest)}</td>
                     <td className="px-3 py-2 font-semibold text-green-600">{formatKRW(row.balance)}</td>
                   </tr>
                 ))}

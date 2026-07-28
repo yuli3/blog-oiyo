@@ -339,13 +339,13 @@ export default function VaccinationSchedule({ locale }: Props) {
             value={dob}
             onChange={(e) => { setDob(e.target.value); setSubmitted(false); }}
             max={new Date().toISOString().split("T")[0]}
-            className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-green-400"
           />
         </div>
         <button
           onClick={() => setSubmitted(true)}
           disabled={!dob}
-          className="w-full rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 py-3 font-semibold text-white shadow-md hover:from-blue-600 hover:to-cyan-600 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+          className="w-full rounded-xl bg-gradient-to-r from-green-500 to-green-500 py-3 font-semibold text-white shadow-md hover:from-green-600 hover:to-green-600 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
         >
           {t.generateBtn}
         </button>
@@ -376,7 +376,7 @@ export default function VaccinationSchedule({ locale }: Props) {
           {ageBands.map(([ageKey, rows]) => (
             <div key={ageKey} className="space-y-2">
               <div className="flex items-center gap-2">
-                <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold text-xs text-center leading-tight">
+                <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-700 font-bold text-xs text-center leading-tight">
                   {ageKey}
                 </div>
                 <div className="flex-1 h-px bg-gray-200"></div>

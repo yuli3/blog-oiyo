@@ -141,7 +141,7 @@ const ExpenseRatioCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
             {/* Verdict */}
             <div className={`rounded-2xl p-5 text-center border-2 ${
               result.betterOption === 'book'
-                ? 'bg-emerald-50 border-emerald-400'
+                ? 'bg-green-50 border-green-400'
                 : 'bg-amber-50 border-amber-400'
             }`}>
               <p className="text-xs font-bold uppercase tracking-widest opacity-60 mb-1">
@@ -173,12 +173,12 @@ const ExpenseRatioCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
                 <p className="text-xs text-gray-500 mb-1">{ko ? '과세소득' : 'Taxable Income'}</p>
                 <p className="text-lg font-black text-lime-900">{fmt(result.incomeByRate)}</p>
               </div>
-              <div className="bg-white rounded-xl border-2 border-teal-200 p-4 text-center">
-                <p className="text-xs font-bold text-teal-600 uppercase tracking-wide mb-2">
+              <div className="bg-white rounded-xl border-2 border-green-200 p-4 text-center">
+                <p className="text-xs font-bold text-green-600 uppercase tracking-wide mb-2">
                   {ko ? '기장 (실제경비)' : 'Bookkeeping'}
                 </p>
                 <p className="text-xs text-gray-500 mb-1">{ko ? '과세소득' : 'Taxable Income'}</p>
-                <p className="text-lg font-black text-teal-900">{fmt(result.incomeByBook)}</p>
+                <p className="text-lg font-black text-green-900">{fmt(result.incomeByBook)}</p>
               </div>
             </div>
           </div>

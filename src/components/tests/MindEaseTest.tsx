@@ -88,19 +88,19 @@ export default function MindEaseTest({ locale: localeProp }: Props) {
     const barPct = Math.round(pct * 100);
     return (
       <div className="not-prose my-10 p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto text-center space-y-6">
-        <p className="text-xs font-bold text-indigo-500 uppercase tracking-widest">{t.resultLabel}</p>
+        <p className="text-xs font-bold text-green-500 uppercase tracking-widest">{t.resultLabel}</p>
         <div className="text-6xl">{r.emoji}</div>
         <h3 className="text-3xl font-black text-slate-900">{r.title}</h3>
         <div className="space-y-2">
           <div className="flex justify-between text-xs text-slate-500">
             <span>{lang === "ko" ? "불안 지수" : "Anxiety Index"}</span>
-            <span className="font-bold text-indigo-600">{barPct}%</span>
+            <span className="font-bold text-green-600">{barPct}%</span>
           </div>
           <div className="h-3 bg-slate-100 rounded-full">
-            <div className="h-3 bg-indigo-500 rounded-full transition-all" style={{ width: `${barPct}%` }} />
+            <div className="h-3 bg-green-500 rounded-full transition-all" style={{ width: `${barPct}%` }} />
           </div>
         </div>
-        <div className="p-6 bg-indigo-50 rounded-2xl border border-indigo-100">
+        <div className="p-6 bg-green-50 rounded-2xl border border-green-100">
           <p className="text-slate-700 text-base leading-relaxed">{r.desc}</p>
         </div>
         <button onClick={() => { setAnswers({}); setPhase("quiz"); }} className="text-slate-400 text-sm hover:underline">{t.retake}</button>
@@ -114,7 +114,7 @@ export default function MindEaseTest({ locale: localeProp }: Props) {
         <h3 className="text-2xl font-black text-slate-900">{t.title}</h3>
         <p className="text-sm text-slate-500 mt-2">{t.description}</p>
         <div className="mt-3 h-2 bg-slate-100 rounded-full">
-          <div className="h-2 bg-indigo-500 rounded-full transition-all" style={{ width: `${(Object.keys(answers).length / t.questions.length) * 100}%` }} />
+          <div className="h-2 bg-green-500 rounded-full transition-all" style={{ width: `${(Object.keys(answers).length / t.questions.length) * 100}%` }} />
         </div>
       </div>
       <div className="space-y-8">
@@ -126,7 +126,7 @@ export default function MindEaseTest({ locale: localeProp }: Props) {
                 <button
                   key={v}
                   onClick={() => setAnswers((prev) => ({ ...prev, [q.id]: v + 1 }))}
-                  className={`py-2 px-1 text-[10px] rounded-lg border transition-all ${answers[q.id] === v + 1 ? "bg-indigo-600 border-indigo-600 text-white font-bold shadow-md" : "bg-slate-50 border-slate-200 text-slate-500 hover:bg-slate-100"}`}
+                  className={`py-2 px-1 text-[10px] rounded-lg border transition-all ${answers[q.id] === v + 1 ? "bg-green-600 border-green-600 text-white font-bold shadow-md" : "bg-slate-50 border-slate-200 text-slate-500 hover:bg-slate-100"}`}
                 >
                   {opt}
                 </button>
@@ -139,7 +139,7 @@ export default function MindEaseTest({ locale: localeProp }: Props) {
         <button
           disabled={!isComplete}
           onClick={() => setPhase("result")}
-          className={`px-10 py-3 rounded-2xl font-bold text-base transition-all ${isComplete ? "bg-indigo-600 text-white hover:bg-indigo-700 shadow-lg" : "bg-slate-200 text-slate-400 cursor-not-allowed"}`}
+          className={`px-10 py-3 rounded-2xl font-bold text-base transition-all ${isComplete ? "bg-green-600 text-white hover:bg-green-700 shadow-lg" : "bg-slate-200 text-slate-400 cursor-not-allowed"}`}
         >
           {lang === "ko" ? "결과 보기" : "See Results"}
         </button>

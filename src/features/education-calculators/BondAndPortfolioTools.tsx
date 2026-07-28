@@ -53,8 +53,8 @@ export const BondPricer: React.FC = () => {
                     </div>
                     <div>
                         <label className="text-xs font-bold text-slate-500 mb-1 block">시장요구수익률 (Yield, %)</label>
-                        <input type="range" min="0" max="15" step="0.5" value={yieldRate} onChange={e => setYieldRate(Number(e.target.value))} className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-500"/>
-                        <div className="text-right text-xs font-bold text-blue-600 mt-1">{yieldRate}%</div>
+                        <input type="range" min="0" max="15" step="0.5" value={yieldRate} onChange={e => setYieldRate(Number(e.target.value))} className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-green-500"/>
+                        <div className="text-right text-xs font-bold text-green-600 mt-1">{yieldRate}%</div>
                     </div>
                 </div>
 
@@ -64,7 +64,7 @@ export const BondPricer: React.FC = () => {
                         ₩{Math.round(price).toLocaleString()}
                     </div>
                     <div className="mt-4 flex gap-2">
-                        <span className={`px-2 py-1 rounded text-[10px] font-bold ${price > par ? 'bg-emerald-100 text-emerald-700' : price < par ? 'bg-rose-100 text-rose-700' : 'bg-slate-100'}`}>
+                        <span className={`px-2 py-1 rounded text-[10px] font-bold ${price > par ? 'bg-green-100 text-green-700' : price < par ? 'bg-rose-100 text-rose-700' : 'bg-slate-100'}`}>
                             {price > par ? '할증 발행 (Premium)' : price < par ? '할인 발행 (Discount)' : '평가 발행 (Par)'}
                         </span>
                     </div>
@@ -104,7 +104,7 @@ export const PortfolioVisualizer: React.FC = () => {
     return (
         <Card className="p-6 bg-white border-slate-200 shadow-xl mt-8">
             <div className="flex items-center gap-2 mb-6 border-b pb-4 text-slate-900">
-                <TrendingUp size={20} className="text-blue-600" />
+                <TrendingUp size={20} className="text-green-600" />
                 <h3 className="text-xl font-bold">포트폴리오 위험-수익 시각화</h3>
             </div>
 
@@ -121,9 +121,9 @@ export const PortfolioVisualizer: React.FC = () => {
                     </ScatterChart>
                 </ResponsiveContainer>
             </div>
-            <div className="mt-4 flex items-start gap-2 bg-blue-50 p-4 rounded-xl border border-blue-100">
-                <Info size={16} className="text-blue-500 mt-0.5 flex-shrink-0" />
-                <p className="text-xs text-blue-700 leading-relaxed">
+            <div className="mt-4 flex items-start gap-2 bg-green-50 p-4 rounded-xl border border-green-100">
+                <Info size={16} className="text-green-500 mt-0.5 flex-shrink-0" />
+                <p className="text-xs text-green-700 leading-relaxed">
                     <b>자산 배분의 마법</b>: 주식과 채권을 섞으면 단순 합계보다 위험(표준편차)이 줄어드는 구간이 발생합니다. 이것이 바로 마코위츠의 현대 포트폴리오 이론이며, 우리가 분산 투자를 해야 하는 수학적 근거입니다.
                 </p>
             </div>

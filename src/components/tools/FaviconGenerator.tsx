@@ -165,19 +165,19 @@ export default function FaviconGenerator({ locale }: { locale: Locale }) {
   return (
     <GameContainer title={t.title} subtitle={t.subtitle}>
       <div className="space-y-5">
-        <p className="rounded-lg border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm leading-6 text-emerald-900">
+        <p className="rounded-lg border border-green-100 bg-green-50 px-4 py-3 text-sm leading-6 text-green-900">
           {t.privacy}
         </p>
 
         <input ref={inputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
 
-        <button type="button" className="w-full rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 px-4 py-10 text-center transition hover:border-indigo-300 hover:bg-indigo-50" onClick={() => inputRef.current?.click()}>
+        <button type="button" className="w-full rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 px-4 py-10 text-center transition hover:border-green-300 hover:bg-green-50" onClick={() => inputRef.current?.click()}>
           <span className="block text-base font-semibold text-slate-900">{sourceUrl ? t.replace : t.upload}</span>
           <span className="mt-2 block text-sm text-slate-600">{t.empty}</span>
         </button>
 
         {error && <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm font-semibold text-rose-800">{error}</p>}
-        {isRendering && <p className="rounded-lg bg-indigo-50 px-3 py-2 text-sm font-semibold text-indigo-800">{t.generated}...</p>}
+        {isRendering && <p className="rounded-lg bg-green-50 px-3 py-2 text-sm font-semibold text-green-800">{t.generated}...</p>}
 
         {sourceUrl && (
           <figure className="rounded-xl border border-slate-200 bg-white p-4">

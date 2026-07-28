@@ -67,7 +67,7 @@ export default function AcquisitionTaxCalculator() {
           const label = k === 'house' ? '주택' : k === 'land' ? '토지' : '상가/오피스텔';
           return (
             <button key={k} onClick={() => setPropertyKind(k)}
-              className={`flex-1 rounded-lg py-2 text-sm font-medium transition ${propertyKind === k ? 'bg-indigo-600 text-white' : 'border border-gray-300 text-gray-600 hover:bg-gray-50'}`}>
+              className={`flex-1 rounded-lg py-2 text-sm font-medium transition ${propertyKind === k ? 'bg-green-600 text-white' : 'border border-gray-300 text-gray-600 hover:bg-gray-50'}`}>
               {label}
             </button>
           );
@@ -80,7 +80,7 @@ export default function AcquisitionTaxCalculator() {
           <div className="flex gap-2">
             {(Object.keys(HOUSE_RATES) as HouseType[]).map((k) => (
               <button key={k} onClick={() => setHouseType(k)}
-                className={`flex-1 rounded-lg py-2 text-xs font-medium transition ${houseType === k ? 'bg-indigo-500 text-white' : 'border border-gray-300 text-gray-600 hover:bg-gray-50'}`}>
+                className={`flex-1 rounded-lg py-2 text-xs font-medium transition ${houseType === k ? 'bg-green-500 text-white' : 'border border-gray-300 text-gray-600 hover:bg-gray-50'}`}>
                 {HOUSE_RATES[k].label}
               </button>
             ))}
@@ -95,15 +95,15 @@ export default function AcquisitionTaxCalculator() {
       </div>
 
       <button onClick={calculate}
-        className="mt-5 w-full rounded-xl bg-indigo-600 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700">
+        className="mt-5 w-full rounded-xl bg-green-600 py-3 text-sm font-semibold text-white transition hover:bg-green-700">
         계산하기
       </button>
 
       {result && (
         <div className="mt-6 space-y-3">
-          <div className="rounded-xl bg-indigo-50 p-4">
+          <div className="rounded-xl bg-green-50 p-4">
             <p className="text-xs text-gray-500">적용 세율</p>
-            <p className="text-2xl font-bold text-indigo-700">{(result.rate * 100).toFixed(1)}%</p>
+            <p className="text-2xl font-bold text-green-700">{(result.rate * 100).toFixed(1)}%</p>
           </div>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             {[

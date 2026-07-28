@@ -120,15 +120,15 @@ const LifeExpectancyCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
     onChange: (v: string) => void;
   }) => (
     <fieldset>
-      <legend className="text-sm font-bold text-emerald-800 mb-2">{label}</legend>
+      <legend className="text-sm font-bold text-green-800 mb-2">{label}</legend>
       <div className="flex flex-wrap gap-2">
         {options.map((opt) => (
           <label
             key={opt.value}
             className={`cursor-pointer px-3 py-1.5 rounded-xl text-sm font-bold border transition-colors ${
               value === opt.value
-                ? 'bg-emerald-600 text-white border-emerald-600'
-                : 'bg-white text-emerald-700 border-emerald-200 hover:bg-emerald-50'
+                ? 'bg-green-600 text-white border-green-600'
+                : 'bg-white text-green-700 border-green-200 hover:bg-green-50'
             }`}
           >
             <input
@@ -146,11 +146,11 @@ const LifeExpectancyCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
   );
 
   return (
-    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-emerald-50 to-green-50 border border-emerald-200 rounded-3xl shadow-xl">
-      <h3 className="text-xl font-bold text-emerald-900 mb-2">
+    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
+      <h3 className="text-xl font-bold text-green-900 mb-2">
         {locale === 'ko' ? '기대수명 계산기' : 'Life Expectancy Calculator'}
       </h3>
-      <p className="text-sm text-emerald-600 mb-6">
+      <p className="text-sm text-green-600 mb-6">
         {locale === 'ko' ? '통계청 2023 생명표 기준 (남 79.9세, 여 85.6세)' : 'Based on 2023 KOSTAT Life Tables (M: 79.9, F: 85.6)'}
       </p>
 
@@ -158,7 +158,7 @@ const LifeExpectancyCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
         {/* Inputs */}
         <div className="space-y-5">
           <div className="space-y-1">
-            <label className="text-sm font-bold text-emerald-800">
+            <label className="text-sm font-bold text-green-800">
               {locale === 'ko' ? '현재 나이' : 'Current Age'}
             </label>
             <input
@@ -167,7 +167,7 @@ const LifeExpectancyCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
               onChange={(e) => setCurrentAge(e.target.value)}
               min="0"
               max="90"
-              className="w-full p-3 bg-white border border-emerald-200 rounded-xl focus:ring-2 focus:ring-emerald-400 outline-none"
+              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
               aria-label={locale === 'ko' ? '현재 나이' : 'Current Age'}
             />
           </div>
@@ -242,7 +242,7 @@ const LifeExpectancyCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
         <div className="space-y-4">
           {result ? (
             <>
-              <div className="p-6 bg-emerald-600 text-white rounded-2xl text-center">
+              <div className="p-6 bg-green-600 text-white rounded-2xl text-center">
                 <p className="text-xs font-bold uppercase tracking-widest opacity-80 mb-1">
                   {locale === 'ko' ? '예상 기대수명' : 'Expected Lifespan'}
                 </p>
@@ -258,13 +258,13 @@ const LifeExpectancyCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
               </div>
 
               {/* Progress bar */}
-              <div className="p-4 bg-white rounded-2xl border border-emerald-100">
+              <div className="p-4 bg-white rounded-2xl border border-green-100">
                 <div className="flex justify-between text-xs text-slate-500 mb-2">
                   <span>{locale === 'ko' ? '현재' : 'Now'}: {currentAge}세</span>
                   <span>{locale === 'ko' ? '예상 수명' : 'Lifespan'}: {result.adjustedLifeExpectancy}세</span>
                 </div>
                 <div
-                  className="h-4 bg-emerald-100 rounded-full overflow-hidden"
+                  className="h-4 bg-green-100 rounded-full overflow-hidden"
                   role="progressbar"
                   aria-valuenow={lifeProgress}
                   aria-valuemin={0}
@@ -272,7 +272,7 @@ const LifeExpectancyCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
                   aria-label={locale === 'ko' ? '수명 진행도' : 'Life progress'}
                 >
                   <div
-                    className="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-full transition-all"
+                    className="h-full bg-gradient-to-r from-green-400 to-green-600 rounded-full transition-all"
                     style={{ width: `${lifeProgress}%` }}
                   />
                 </div>
@@ -282,21 +282,21 @@ const LifeExpectancyCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                <div className="p-4 bg-white rounded-2xl border border-emerald-100 text-center">
+                <div className="p-4 bg-white rounded-2xl border border-green-100 text-center">
                   <p className="text-xs text-slate-500 font-bold mb-1">
                     {locale === 'ko' ? '건강수명' : 'Healthy Lifespan'}
                   </p>
-                  <p className="text-2xl font-bold text-emerald-700">{result.healthyLifeExpectancy}세</p>
+                  <p className="text-2xl font-bold text-green-700">{result.healthyLifeExpectancy}세</p>
                 </div>
-                <div className="p-4 bg-white rounded-2xl border border-emerald-100 text-center">
+                <div className="p-4 bg-white rounded-2xl border border-green-100 text-center">
                   <p className="text-xs text-slate-500 font-bold mb-1">
                     {locale === 'ko' ? '65세 이후 노후 기간' : 'Post-65 Retirement Years'}
                   </p>
-                  <p className="text-2xl font-bold text-emerald-700">{result.retirementYears}년</p>
+                  <p className="text-2xl font-bold text-green-700">{result.retirementYears}년</p>
                 </div>
               </div>
 
-              <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-sm text-emerald-800">
+              <div className="p-4 bg-green-50 border border-green-200 rounded-2xl text-sm text-green-800">
                 <p className="font-bold mb-1">{locale === 'ko' ? '생활 개선 시 연장 가능 수명' : 'Potential Life Extension'}</p>
                 <div className="space-y-1 text-xs text-slate-600">
                   {smoking === 'yes' && <p>• {locale === 'ko' ? '금연 시 최대 +7년' : 'Quitting smoking: up to +7 years'}</p>}
@@ -307,9 +307,9 @@ const LifeExpectancyCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
               </div>
             </>
           ) : (
-            <div className="flex flex-col items-center justify-center h-48 text-emerald-200">
+            <div className="flex flex-col items-center justify-center h-48 text-green-200">
               <span className="text-4xl mb-2" aria-hidden="true">⏳</span>
-              <p className="text-sm font-bold text-emerald-300">
+              <p className="text-sm font-bold text-green-300">
                 {locale === 'ko' ? '나이와 건강 상태를 입력하세요' : 'Enter your age and health info'}
               </p>
             </div>

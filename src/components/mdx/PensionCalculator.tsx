@@ -79,12 +79,12 @@ export default function PensionCalculator() {
   return (
     <div className="not-prose my-8 rounded-2xl border border-border bg-card shadow-sm overflow-hidden">
       {/* Header */}
-      <div className="bg-gradient-to-r from-emerald-600 to-emerald-500 px-6 py-4">
+      <div className="bg-gradient-to-r from-green-600 to-green-500 px-6 py-4">
         <div className="flex items-center gap-2">
           <span className="text-2xl">🏦</span>
           <div>
             <h3 className="font-bold text-white text-lg leading-tight">국민연금 예상 수령액 계산기</h3>
-            <p className="text-emerald-100 text-xs mt-0.5">소득월액과 가입 기간으로 예상 연금액 계산</p>
+            <p className="text-green-100 text-xs mt-0.5">소득월액과 가입 기간으로 예상 연금액 계산</p>
           </div>
         </div>
       </div>
@@ -103,7 +103,7 @@ export default function PensionCalculator() {
                 value={salaryDisplay}
                 onChange={handleSalary}
                 placeholder="예: 3,500,000"
-                className="w-full rounded-xl border border-border bg-background px-4 py-3 text-right font-mono font-semibold focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 placeholder:text-muted-foreground/40 text-sm"
+                className="w-full rounded-xl border border-border bg-background px-4 py-3 text-right font-mono font-semibold focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20 placeholder:text-muted-foreground/40 text-sm"
               />
               <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground pointer-events-none">원</span>
             </div>
@@ -119,7 +119,7 @@ export default function PensionCalculator() {
               max={40}
               value={years}
               onChange={(e) => setYears(e.target.value)}
-              className="w-full rounded-xl border border-border bg-background px-4 py-3 font-mono font-semibold focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 text-sm"
+              className="w-full rounded-xl border border-border bg-background px-4 py-3 font-mono font-semibold focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20 text-sm"
             />
             <p className="text-xs text-muted-foreground mt-1">최소 10년 이상 가입해야 수령 가능</p>
           </div>
@@ -134,7 +134,7 @@ export default function PensionCalculator() {
               max={59}
               value={startAge}
               onChange={(e) => setStartAge(e.target.value)}
-              className="w-full rounded-xl border border-border bg-background px-4 py-3 font-mono font-semibold focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 text-sm"
+              className="w-full rounded-xl border border-border bg-background px-4 py-3 font-mono font-semibold focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20 text-sm"
             />
           </div>
         </div>
@@ -142,8 +142,8 @@ export default function PensionCalculator() {
         {/* Results */}
         {result && (
           <div className="space-y-3">
-            <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 overflow-hidden">
-              <div className="divide-y divide-emerald-100">
+            <div className="rounded-xl border border-green-200 bg-green-50/50 overflow-hidden">
+              <div className="divide-y divide-green-100">
                 <div className="flex justify-between items-center px-5 py-3.5">
                   <span className="text-sm text-muted-foreground font-medium">월 납부 보험료 (근로자 부담 4.5%)</span>
                   <span className="font-mono font-bold text-foreground">{fmt(result.monthlyContribution)} 원</span>
@@ -152,9 +152,9 @@ export default function PensionCalculator() {
                   <span className="text-sm text-muted-foreground font-medium">총 납부 보험료 ({result.yearsNum}년 근로자분)</span>
                   <span className="font-mono font-bold text-foreground">{fmt(result.totalContribution)} 원</span>
                 </div>
-                <div className="flex justify-between items-center px-5 py-3.5 bg-emerald-100/50">
-                  <span className="text-sm font-bold text-emerald-800">예상 월 연금액 (65세부터)</span>
-                  <span className="font-mono font-extrabold text-emerald-700 text-xl">{fmt(result.monthlyPension)} 원</span>
+                <div className="flex justify-between items-center px-5 py-3.5 bg-green-100/50">
+                  <span className="text-sm font-bold text-green-800">예상 월 연금액 (65세부터)</span>
+                  <span className="font-mono font-extrabold text-green-700 text-xl">{fmt(result.monthlyPension)} 원</span>
                 </div>
                 <div className="flex justify-between items-center px-5 py-3.5">
                   <span className="text-sm text-muted-foreground font-medium">예상 총 수령액 (기대수명 83세 기준)</span>
@@ -183,7 +183,7 @@ export default function PensionCalculator() {
         {/* Disclaimer */}
         <p className="text-xs text-muted-foreground text-center leading-relaxed">
           ※ 이 계산기는 <strong>2024년 기준 국민연금 공식</strong>을 간략화하여 계산합니다.{' '}
-          <span className="text-emerald-600">실제 수령액은 국민연금공단 홈페이지의 내 연금 알아보기를 이용하세요.</span>
+          <span className="text-green-600">실제 수령액은 국민연금공단 홈페이지의 내 연금 알아보기를 이용하세요.</span>
         </p>
       </div>
     </div>

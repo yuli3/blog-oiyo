@@ -80,7 +80,7 @@ export default function PropertyTaxCalculator() {
           const label = t === 'house' ? '주택' : t === 'land' ? '토지' : '건물';
           return (
             <button key={t} onClick={() => setPropertyType(t)}
-              className={`flex-1 rounded-lg py-2 text-sm font-medium transition ${propertyType === t ? 'bg-teal-600 text-white' : 'border border-gray-300 text-gray-600 hover:bg-gray-50'}`}>
+              className={`flex-1 rounded-lg py-2 text-sm font-medium transition ${propertyType === t ? 'bg-green-600 text-white' : 'border border-gray-300 text-gray-600 hover:bg-gray-50'}`}>
               {label}
             </button>
           );
@@ -105,15 +105,15 @@ export default function PropertyTaxCalculator() {
       </div>
 
       <button onClick={calculate}
-        className="mt-5 w-full rounded-xl bg-teal-600 py-3 text-sm font-semibold text-white transition hover:bg-teal-700">
+        className="mt-5 w-full rounded-xl bg-green-600 py-3 text-sm font-semibold text-white transition hover:bg-green-700">
         계산하기
       </button>
 
       {result && (
         <div className="mt-6 space-y-3">
-          <div className="rounded-xl bg-teal-50 p-4">
+          <div className="rounded-xl bg-green-50 p-4">
             <p className="text-xs text-gray-500">과세표준</p>
-            <p className="text-lg font-bold text-teal-700">{formatKRW(result.taxBase)}원</p>
+            <p className="text-lg font-bold text-green-700">{formatKRW(result.taxBase)}원</p>
           </div>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             {[

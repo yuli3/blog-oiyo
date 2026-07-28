@@ -206,7 +206,7 @@ export default function ValueCompassTest({ locale: localeProp }: Props) {
       </div>
       <div className="flex items-center gap-3">
         <div className="h-2 flex-1 overflow-hidden rounded-full bg-gray-100">
-          <div className="h-full rounded-full bg-teal-500 transition-all duration-300" style={{ width: `${(idx / questions.length) * 100}%` }} />
+          <div className="h-full rounded-full bg-green-500 transition-all duration-300" style={{ width: `${(idx / questions.length) * 100}%` }} />
         </div>
         <span className="text-sm text-gray-500">{tx.progress(idx + 1, questions.length)}</span>
       </div>
@@ -214,7 +214,7 @@ export default function ValueCompassTest({ locale: localeProp }: Props) {
         <p className="mb-5 text-center text-lg font-medium text-gray-800">{q[locale]}</p>
         <div className="space-y-3">
           {q.options.map((opt, i) => (
-            <button key={i} onClick={() => pick(opt.scores)} className="w-full rounded-xl border border-gray-200 px-4 py-3 text-left text-sm text-gray-700 transition hover:border-teal-300 hover:bg-teal-50">
+            <button key={i} onClick={() => pick(opt.scores)} className="w-full rounded-xl border border-gray-200 px-4 py-3 text-left text-sm text-gray-700 transition hover:border-green-300 hover:bg-green-50">
               {opt[locale]}
             </button>
           ))}

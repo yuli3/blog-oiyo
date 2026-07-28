@@ -230,9 +230,9 @@ export default function FastingTracker({ locale }: { locale: Locale }) {
     return () => window.clearInterval(interval);
   }, [method, startTime, t]);
 
-  const inputCls = "w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100";
-  const statusCls = state.status === "fasting" ? "border-indigo-200 bg-indigo-50 text-indigo-900" : "border-emerald-200 bg-emerald-50 text-emerald-900";
-  const barCls = state.status === "fasting" ? "bg-indigo-600" : "bg-emerald-600";
+  const inputCls = "w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-100";
+  const statusCls = state.status === "fasting" ? "border-green-200 bg-green-50 text-green-900" : "border-green-200 bg-green-50 text-green-900";
+  const barCls = state.status === "fasting" ? "bg-green-600" : "bg-green-600";
 
   return (
     <GameContainer title={t.title} subtitle={t.subtitle}>

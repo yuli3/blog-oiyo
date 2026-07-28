@@ -76,7 +76,7 @@ export const PersonalColorMiniTest: React.FC = () => {
     };
 
     return (
-        <Card className="p-8 bg-gradient-to-br from-rose-50 to-indigo-50 border-white shadow-2xl mt-8 min-h-[400px] flex flex-col justify-center">
+        <Card className="p-8 bg-gradient-to-br from-rose-50 to-green-50 border-white shadow-2xl mt-8 min-h-[400px] flex flex-col justify-center">
             {!result ? (
                 <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
                     <div className="flex items-center gap-2 mb-4 justify-center">
@@ -105,8 +105,8 @@ export const PersonalColorMiniTest: React.FC = () => {
             ) : (
                 <div className="text-center space-y-8 animate-in zoom-in duration-500">
                     <div className="flex justify-center">
-                        <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center">
-                            <CheckCircle2 className="text-emerald-500 w-10 h-10" />
+                        <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center">
+                            <CheckCircle2 className="text-green-500 w-10 h-10" />
                         </div>
                     </div>
                     <div className="space-y-2">

@@ -191,9 +191,9 @@ export default function MotivationTypeTest({ locale: localeProp }: Props) {
               <h3 className="font-semibold text-green-800 text-sm mb-1">✓ Strengths</h3>
               <ul>{d.strengths[locale].map((s, i) => <li key={i} className="text-sm text-green-700">• {s}</li>)}</ul>
             </div>
-            <div className="bg-blue-50 rounded-lg p-3">
-              <h3 className="font-semibold text-blue-800 text-sm mb-1">💼 {t.fit}</h3>
-              <p className="text-sm text-blue-700">{d.fit[locale]}</p>
+            <div className="bg-green-50 rounded-lg p-3">
+              <h3 className="font-semibold text-green-800 text-sm mb-1">💼 {t.fit}</h3>
+              <p className="text-sm text-green-700">{d.fit[locale]}</p>
             </div>
             <div className="bg-orange-50 rounded-lg p-3">
               <h3 className="font-semibold text-orange-800 text-sm mb-1">⚠ {t.watch}</h3>

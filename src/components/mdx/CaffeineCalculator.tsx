@@ -25,7 +25,7 @@ function getSensitivityInfo(weight: number, total: number) {
   const perKg = total / weight;
   // FDA safe limit: 400mg/day for healthy adults, ~6mg/kg
   if (perKg < 2) return { level: '낮음', color: 'text-green-600', bg: 'bg-green-50', desc: '안전 범위입니다. 카페인 부작용 위험이 낮습니다.' };
-  if (perKg < 4) return { level: '보통', color: 'text-blue-600', bg: 'bg-blue-50', desc: '일반 성인 적정 범위입니다.' };
+  if (perKg < 4) return { level: '보통', color: 'text-green-600', bg: 'bg-green-50', desc: '일반 성인 적정 범위입니다.' };
   if (perKg < 6) return { level: '주의', color: 'text-yellow-600', bg: 'bg-yellow-50', desc: 'FDA 권장 한도에 근접합니다. 불안·심박 증가에 주의하세요.' };
   return { level: '위험', color: 'text-red-600', bg: 'bg-red-50', desc: '권장 한도(6mg/kg)를 초과합니다. 두통·심계항진·불면 위험이 높습니다.' };
 }

@@ -136,7 +136,7 @@ export default function WorldGeographyQuiz({ locale }: Props) {
     <div className="space-y-5 py-4">
       <div className="flex items-center justify-between">
         <span className="text-sm text-muted-foreground">{l.progress(current + 1, questions.length)}</span>
-        <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full border border-blue-200">{q.category}</span>
+        <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full border border-green-200">{q.category}</span>
       </div>
       <div className="rounded-2xl bg-muted p-5 text-center">
         <p className="text-base font-semibold">{q.question}</p>

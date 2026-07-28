@@ -55,16 +55,16 @@ const MONTH_NAMES_KO = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', 
 const MONTH_NAMES_EN = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 const COLOR_CLASSES: Record<string, string> = {
-  emerald: 'bg-emerald-50 border-emerald-200 text-emerald-800',
+  emerald: 'bg-green-50 border-green-200 text-green-800',
   amber: 'bg-amber-50 border-amber-200 text-amber-800',
-  blue: 'bg-blue-50 border-blue-200 text-blue-800',
+  blue: 'bg-green-50 border-green-200 text-green-800',
   rose: 'bg-rose-50 border-rose-200 text-rose-800',
 };
 
 const COLOR_DOT: Record<string, string> = {
-  emerald: 'bg-emerald-500',
+  emerald: 'bg-green-500',
   amber: 'bg-amber-500',
-  blue: 'bg-blue-500',
+  blue: 'bg-green-500',
   rose: 'bg-rose-500',
 };
 
@@ -90,11 +90,11 @@ const TaxCalendar: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
   const filtered = TAX_EVENTS.filter((e) => e.relevantTo.includes(jobType));
 
   return (
-    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-emerald-50 to-green-50 border border-emerald-200 rounded-3xl shadow-xl">
-      <h3 className="text-xl font-bold text-emerald-900 mb-2">
+    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
+      <h3 className="text-xl font-bold text-green-900 mb-2">
         {locale === 'ko' ? '세금 납부 캘린더' : 'Tax Payment Calendar'}
       </h3>
-      <p className="text-sm text-emerald-600 mb-6">
+      <p className="text-sm text-green-600 mb-6">
         {locale === 'ko' ? '직종을 선택하면 해당하는 세금 일정을 확인할 수 있습니다.' : 'Select your job type to see your relevant tax deadlines.'}
       </p>
 
@@ -110,8 +110,8 @@ const TaxCalendar: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
             onClick={() => setJobType(type)}
             className={`py-3 rounded-xl text-sm font-bold transition-colors border ${
               jobType === type
-                ? 'bg-emerald-600 text-white border-emerald-600'
-                : 'bg-white text-emerald-700 border-emerald-200 hover:bg-emerald-50'
+                ? 'bg-green-600 text-white border-green-600'
+                : 'bg-white text-green-700 border-green-200 hover:bg-green-50'
             }`}
             aria-pressed={jobType === type}
           >
@@ -121,7 +121,7 @@ const TaxCalendar: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
       </div>
 
       {/* Description panel */}
-      <div className="mb-6 px-4 py-2.5 bg-white border border-emerald-100 rounded-xl text-sm text-emerald-700">
+      <div className="mb-6 px-4 py-2.5 bg-white border border-green-100 rounded-xl text-sm text-green-700">
         <span className="font-bold mr-2">{locale === 'ko' ? JOB_LABELS[jobType].ko : JOB_LABELS[jobType].en}:</span>
         <span>{locale === 'ko' ? JOB_DESCRIPTIONS[jobType].ko : JOB_DESCRIPTIONS[jobType].en}</span>
       </div>
@@ -137,17 +137,17 @@ const TaxCalendar: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
               key={month}
               className={`p-4 rounded-2xl border ${
                 isCurrentMonth
-                  ? 'border-emerald-400 bg-white shadow-md'
-                  : 'border-emerald-100 bg-white'
+                  ? 'border-green-400 bg-white shadow-md'
+                  : 'border-green-100 bg-white'
               }`}
               aria-label={`${locale === 'ko' ? MONTH_NAMES_KO[month - 1] : MONTH_NAMES_EN[month - 1]} ${locale === 'ko' ? '세금 일정' : 'tax events'}`}
             >
               <div className="flex items-center gap-2 mb-3">
-                <span className={`text-sm font-bold ${isCurrentMonth ? 'text-emerald-700' : 'text-slate-600'}`}>
+                <span className={`text-sm font-bold ${isCurrentMonth ? 'text-green-700' : 'text-slate-600'}`}>
                   {locale === 'ko' ? MONTH_NAMES_KO[month - 1] : MONTH_NAMES_EN[month - 1]}
                 </span>
                 {isCurrentMonth && (
-                  <span className="text-xs font-bold bg-emerald-600 text-white px-2 py-0.5 rounded-full">
+                  <span className="text-xs font-bold bg-green-600 text-white px-2 py-0.5 rounded-full">
                     {locale === 'ko' ? '이번 달' : 'This Month'}
                   </span>
                 )}

@@ -158,7 +158,7 @@ const GiftVsInheritanceCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
             <div className={`rounded-2xl p-5 text-center border-2 ${
               result.betterOption === 'gift'
                 ? 'bg-amber-100 border-amber-400'
-                : 'bg-emerald-50 border-emerald-400'
+                : 'bg-green-50 border-green-400'
             }`}>
               <p className="text-xs font-bold uppercase tracking-widest mb-1 opacity-60">
                 {ko ? '유리한 방법' : 'Better Option'}
@@ -196,9 +196,9 @@ const GiftVsInheritanceCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
 
               {/* Inheritance card */}
               <div className={`rounded-xl p-4 border-2 space-y-2 ${
-                result.betterOption === 'inherit' ? 'border-emerald-400 bg-emerald-50' : 'border-gray-200 bg-white'
+                result.betterOption === 'inherit' ? 'border-green-400 bg-green-50' : 'border-gray-200 bg-white'
               }`}>
-                <h4 className="text-sm font-black text-emerald-700 uppercase tracking-wide">
+                <h4 className="text-sm font-black text-green-700 uppercase tracking-wide">
                   {ko ? '나중에 상속' : 'Inherit Later'}
                 </h4>
                 <div className="text-xs text-gray-500 space-y-1">
@@ -208,7 +208,7 @@ const GiftVsInheritanceCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
                   </div>
                   <div className="flex justify-between border-t pt-1">
                     <span>{ko ? '세후 수령액' : 'Net Received'}</span>
-                    <span className="font-black text-emerald-800">{fmt(result.netInherited)}</span>
+                    <span className="font-black text-green-800">{fmt(result.netInherited)}</span>
                   </div>
                 </div>
               </div>

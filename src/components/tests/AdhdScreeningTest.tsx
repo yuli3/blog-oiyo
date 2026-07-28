@@ -436,11 +436,11 @@ export default function AdhdScreeningTest({ locale: lp = 'ko' }: Props) {
       </div>
 
       <div className="rounded-xl border bg-card p-4 space-y-2">
-        <h3 className="font-semibold text-sm text-emerald-600">{lb.guidanceLabel}</h3>
+        <h3 className="font-semibold text-sm text-green-600">{lb.guidanceLabel}</h3>
         <ul className="space-y-1">
           {r.guidance.map((g) => (
             <li key={g} className="text-sm text-muted-foreground flex gap-2">
-              <span className="text-emerald-500 flex-none">→</span>
+              <span className="text-green-500 flex-none">→</span>
               {g}
             </li>
           ))}

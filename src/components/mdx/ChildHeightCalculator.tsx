@@ -55,7 +55,7 @@ export default function ChildHeightCalculator() {
             onClick={() => setChildGender(g)}
             className={`rounded-lg px-5 py-2 text-sm font-medium transition ${
               childGender === g
-                ? 'bg-teal-600 text-white'
+                ? 'bg-green-600 text-white'
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
@@ -83,14 +83,14 @@ export default function ChildHeightCalculator() {
 
       <button
         onClick={calculate}
-        className="mt-5 w-full rounded-xl bg-teal-600 py-3 text-sm font-semibold text-white transition hover:bg-teal-700"
+        className="mt-5 w-full rounded-xl bg-green-600 py-3 text-sm font-semibold text-white transition hover:bg-green-700"
       >
         예상 키 계산하기
       </button>
 
       {result && (
-        <div className="mt-6 rounded-xl bg-teal-50 p-5">
-          <p className="mb-2 text-center text-3xl font-bold text-teal-700">
+        <div className="mt-6 rounded-xl bg-green-50 p-5">
+          <p className="mb-2 text-center text-3xl font-bold text-green-700">
             약 {fmt(result.predictedHeight)} cm
           </p>
           <p className="text-center text-sm text-gray-600">

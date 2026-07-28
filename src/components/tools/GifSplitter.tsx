@@ -251,17 +251,17 @@ export default function GifSplitter({ locale }: { locale: Locale }) {
   return (
     <GameContainer title={t.title} subtitle={t.subtitle}>
       <div className="space-y-5">
-        <p className="rounded-lg border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm leading-6 text-emerald-900">
+        <p className="rounded-lg border border-green-100 bg-green-50 px-4 py-3 text-sm leading-6 text-green-900">
           {t.privacy}
         </p>
 
-        <label className="block cursor-pointer rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 px-4 py-10 text-center transition hover:border-indigo-300 hover:bg-indigo-50">
+        <label className="block cursor-pointer rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 px-4 py-10 text-center transition hover:border-green-300 hover:bg-green-50">
           <span className="block text-base font-semibold text-slate-900">{frames.length ? t.replace : t.upload}</span>
           <span className="mt-2 block text-sm text-slate-600">{t.empty}</span>
           <input type="file" accept="image/gif,.gif" className="hidden" onChange={handleFileSelect} />
         </label>
 
-        {isDecoding && <p className="rounded-lg bg-indigo-50 px-3 py-2 text-sm font-semibold text-indigo-800">{t.decoding}</p>}
+        {isDecoding && <p className="rounded-lg bg-green-50 px-3 py-2 text-sm font-semibold text-green-800">{t.decoding}</p>}
         {status && !isDecoding && <p className="rounded-lg bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-800">{status}</p>}
         {error && <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm font-semibold text-rose-800">{error}</p>}
 
@@ -269,7 +269,7 @@ export default function GifSplitter({ locale }: { locale: Locale }) {
           <>
             <button
               type="button"
-              className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-700"
+              className="rounded-lg bg-green-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-green-700"
               onClick={() => frames.forEach((frame, order) => window.setTimeout(() => downloadUrl(frame.url, `gif-frame-${frame.index + 1}.png`), order * 120))}
             >
               {t.downloadAll}

@@ -73,8 +73,8 @@ const LoanCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =
   };
 
   return (
-    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-emerald-50 to-green-50 border border-emerald-200 rounded-3xl shadow-xl">
-      <h3 className="text-xl font-bold text-emerald-900 mb-6">
+    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
+      <h3 className="text-xl font-bold text-green-900 mb-6">
         {locale === 'ko' ? '대출 계산기 (원리금균등상환)' : 'Loan Repayment Calculator'}
       </h3>
 
@@ -82,7 +82,7 @@ const LoanCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =
         {/* Inputs */}
         <div className="space-y-4">
           <div className="space-y-1">
-            <label className="text-sm font-bold text-emerald-800">
+            <label className="text-sm font-bold text-green-800">
               {locale === 'ko' ? '대출금액 (원)' : 'Loan Amount (KRW)'}
             </label>
             <input
@@ -90,13 +90,13 @@ const LoanCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =
               value={loanAmount}
               onChange={(e) => setLoanAmount(e.target.value)}
               min="0"
-              className="w-full p-3 bg-white border border-emerald-200 rounded-xl focus:ring-2 focus:ring-emerald-400 outline-none"
+              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
               aria-label={locale === 'ko' ? '대출금액' : 'Loan Amount'}
             />
           </div>
 
           <div className="space-y-1">
-            <label className="text-sm font-bold text-emerald-800">
+            <label className="text-sm font-bold text-green-800">
               {locale === 'ko' ? '연이자율 (%)' : 'Annual Interest Rate (%)'}
             </label>
             <input
@@ -106,19 +106,19 @@ const LoanCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =
               step="0.1"
               min="0"
               max="30"
-              className="w-full p-3 bg-white border border-emerald-200 rounded-xl focus:ring-2 focus:ring-emerald-400 outline-none"
+              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
               aria-label={locale === 'ko' ? '연이자율' : 'Annual Interest Rate'}
             />
           </div>
 
           <div className="space-y-1">
-            <label className="text-sm font-bold text-emerald-800">
+            <label className="text-sm font-bold text-green-800">
               {locale === 'ko' ? '대출기간 (개월)' : 'Loan Term (months)'}
             </label>
             <select
               value={termMonths}
               onChange={(e) => setTermMonths(e.target.value)}
-              className="w-full p-3 bg-white border border-emerald-200 rounded-xl focus:ring-2 focus:ring-emerald-400 outline-none"
+              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
               aria-label={locale === 'ko' ? '대출기간' : 'Loan Term'}
             >
               <option value="120">{locale === 'ko' ? '10년 (120개월)' : '10 years (120m)'}</option>
@@ -139,14 +139,14 @@ const LoanCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =
           <div className="flex gap-3 pt-2">
             <button
               onClick={calculate}
-              className="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-colors"
+              className="flex-1 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl transition-colors"
               aria-label={locale === 'ko' ? '계산하기' : 'Calculate'}
             >
               {locale === 'ko' ? '계산하기' : 'Calculate'}
             </button>
             <button
               onClick={reset}
-              className="px-5 py-3 bg-white border border-emerald-300 hover:bg-emerald-50 text-emerald-700 font-bold rounded-xl transition-colors"
+              className="px-5 py-3 bg-white border border-green-300 hover:bg-green-50 text-green-700 font-bold rounded-xl transition-colors"
               aria-label={locale === 'ko' ? '초기화' : 'Reset'}
             >
               {locale === 'ko' ? '초기화' : 'Reset'}
@@ -158,27 +158,27 @@ const LoanCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =
         <div className="flex flex-col justify-center space-y-4">
           {result ? (
             <>
-              <div className="p-5 bg-emerald-600 text-white rounded-2xl text-center">
+              <div className="p-5 bg-green-600 text-white rounded-2xl text-center">
                 <p className="text-xs font-bold uppercase tracking-widest opacity-80 mb-1">
                   {locale === 'ko' ? '월 상환액' : 'Monthly Payment'}
                 </p>
                 <p className="text-4xl font-bold">{fmt(result.monthlyPayment)}원</p>
               </div>
               <div className="grid grid-cols-2 gap-4">
-                <div className="p-4 bg-white rounded-2xl border border-emerald-100 text-center">
+                <div className="p-4 bg-white rounded-2xl border border-green-100 text-center">
                   <p className="text-xs text-slate-500 font-bold mb-1">{locale === 'ko' ? '총 상환액' : 'Total Payment'}</p>
-                  <p className="text-lg font-bold text-emerald-700">{fmt(result.totalPayment)}원</p>
+                  <p className="text-lg font-bold text-green-700">{fmt(result.totalPayment)}원</p>
                 </div>
-                <div className="p-4 bg-white rounded-2xl border border-emerald-100 text-center">
+                <div className="p-4 bg-white rounded-2xl border border-green-100 text-center">
                   <p className="text-xs text-slate-500 font-bold mb-1">{locale === 'ko' ? '총 이자' : 'Total Interest'}</p>
                   <p className="text-lg font-bold text-amber-600">{fmt(result.totalInterest)}원</p>
                 </div>
               </div>
             </>
           ) : (
-            <div className="flex flex-col items-center justify-center h-40 text-emerald-300">
+            <div className="flex flex-col items-center justify-center h-40 text-green-300">
               <span className="text-4xl mb-2" aria-hidden="true">🏦</span>
-              <p className="text-sm font-bold text-emerald-400">
+              <p className="text-sm font-bold text-green-400">
                 {locale === 'ko' ? '정보를 입력하고 계산하세요' : 'Enter info and calculate'}
               </p>
             </div>
@@ -189,25 +189,25 @@ const LoanCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =
       {/* Schedule table */}
       {result && result.schedule.length > 0 && (
         <div className="mt-8 overflow-x-auto">
-          <h4 className="text-sm font-bold text-emerald-800 mb-3">
+          <h4 className="text-sm font-bold text-green-800 mb-3">
             {locale === 'ko' ? '상환 스케줄 (첫 12개월)' : 'Repayment Schedule (First 12 months)'}
           </h4>
           <table className="w-full text-sm border-collapse" aria-label={locale === 'ko' ? '상환 스케줄 표' : 'Repayment schedule table'}>
             <thead>
-              <tr className="bg-emerald-100">
-                <th className="p-2 text-left font-bold text-emerald-800 rounded-tl-xl">{locale === 'ko' ? '회차' : 'Month'}</th>
-                <th className="p-2 text-right font-bold text-emerald-800">{locale === 'ko' ? '월 납입액' : 'Payment'}</th>
-                <th className="p-2 text-right font-bold text-emerald-800">{locale === 'ko' ? '원금' : 'Principal'}</th>
-                <th className="p-2 text-right font-bold text-emerald-800">{locale === 'ko' ? '이자' : 'Interest'}</th>
-                <th className="p-2 text-right font-bold text-emerald-800 rounded-tr-xl">{locale === 'ko' ? '잔금' : 'Balance'}</th>
+              <tr className="bg-green-100">
+                <th className="p-2 text-left font-bold text-green-800 rounded-tl-xl">{locale === 'ko' ? '회차' : 'Month'}</th>
+                <th className="p-2 text-right font-bold text-green-800">{locale === 'ko' ? '월 납입액' : 'Payment'}</th>
+                <th className="p-2 text-right font-bold text-green-800">{locale === 'ko' ? '원금' : 'Principal'}</th>
+                <th className="p-2 text-right font-bold text-green-800">{locale === 'ko' ? '이자' : 'Interest'}</th>
+                <th className="p-2 text-right font-bold text-green-800 rounded-tr-xl">{locale === 'ko' ? '잔금' : 'Balance'}</th>
               </tr>
             </thead>
             <tbody>
               {result.schedule.map((row) => (
-                <tr key={row.month} className="border-b border-emerald-100 hover:bg-emerald-50">
-                  <td className="p-2 font-bold text-emerald-700">{row.month}</td>
+                <tr key={row.month} className="border-b border-green-100 hover:bg-green-50">
+                  <td className="p-2 font-bold text-green-700">{row.month}</td>
                   <td className="p-2 text-right">{fmt(row.payment)}</td>
-                  <td className="p-2 text-right text-emerald-600">{fmt(row.principal)}</td>
+                  <td className="p-2 text-right text-green-600">{fmt(row.principal)}</td>
                   <td className="p-2 text-right text-amber-600">{fmt(row.interest)}</td>
                   <td className="p-2 text-right">{fmt(row.balance)}</td>
                 </tr>

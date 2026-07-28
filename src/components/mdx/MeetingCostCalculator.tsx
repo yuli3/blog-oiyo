@@ -119,7 +119,7 @@ export default function MeetingCostCalculator() {
 
       <button
         onClick={calculate}
-        className="w-full rounded-xl bg-violet-600 py-3 text-sm font-semibold text-white transition hover:bg-violet-700"
+        className="w-full rounded-xl bg-green-600 py-3 text-sm font-semibold text-white transition hover:bg-green-700"
       >
         회의 비용 계산하기
       </button>

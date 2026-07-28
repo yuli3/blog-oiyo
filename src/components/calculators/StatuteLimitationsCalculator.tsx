@@ -165,7 +165,7 @@ const StatuteLimitationsCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ loca
     `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 
   return (
-    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-slate-50 to-indigo-50 border border-slate-200 rounded-3xl shadow-xl">
+    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-slate-50 to-green-50 border border-slate-200 rounded-3xl shadow-xl">
       <h3 className="text-xl font-bold text-slate-900 mb-6">{t.title}</h3>
 
       <div className="space-y-5">
@@ -174,7 +174,7 @@ const StatuteLimitationsCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ loca
           <select
             value={claimType}
             onChange={(e) => setClaimType(e.target.value as ClaimType | '')}
-            className="w-full p-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-400 outline-none text-sm"
+            className="w-full p-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none text-sm"
           >
             <option value="">{t.claimTypePlaceholder}</option>
             {CLAIM_OPTIONS.map((opt) => (
@@ -191,7 +191,7 @@ const StatuteLimitationsCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ loca
             type="date"
             value={baseDate}
             onChange={(e) => setBaseDate(e.target.value)}
-            className="w-full p-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-400 outline-none"
+            className="w-full p-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
           />
         </div>
 
@@ -204,7 +204,7 @@ const StatuteLimitationsCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ loca
         <div className="flex gap-3">
           <button
             onClick={calculate}
-            className="flex-1 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-colors"
+            className="flex-1 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl transition-colors"
           >
             {t.calculate}
           </button>
@@ -220,7 +220,7 @@ const StatuteLimitationsCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ loca
           <div className="mt-4 space-y-4">
             <div
               className={`p-5 rounded-2xl text-center ${
-                result.isExpired ? 'bg-red-600 text-white' : 'bg-indigo-600 text-white'
+                result.isExpired ? 'bg-red-600 text-white' : 'bg-green-600 text-white'
               }`}
             >
               <p className="text-xs font-bold uppercase tracking-widest opacity-80 mb-1">{t.resultTitle}</p>

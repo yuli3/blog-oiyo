@@ -88,8 +88,8 @@ const GiftTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
   };
 
   return (
-    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-emerald-50 to-green-50 border border-emerald-200 rounded-3xl shadow-xl">
-      <h3 className="text-xl font-bold text-emerald-900 mb-6">
+    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
+      <h3 className="text-xl font-bold text-green-900 mb-6">
         {locale === 'ko' ? '증여세 계산기 (2024년 기준)' : 'Gift Tax Calculator (2024 Korea)'}
       </h3>
 
@@ -97,7 +97,7 @@ const GiftTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
         {/* Inputs */}
         <div className="space-y-4">
           <div className="space-y-1">
-            <label className="text-sm font-bold text-emerald-800">
+            <label className="text-sm font-bold text-green-800">
               {locale === 'ko' ? '증여 금액 (원)' : 'Gift Amount (KRW)'}
             </label>
             <input
@@ -105,19 +105,19 @@ const GiftTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
               value={giftAmount}
               onChange={(e) => setGiftAmount(e.target.value)}
               min="0"
-              className="w-full p-3 bg-white border border-emerald-200 rounded-xl focus:ring-2 focus:ring-emerald-400 outline-none"
+              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
               aria-label={locale === 'ko' ? '증여 금액' : 'Gift Amount'}
             />
           </div>
 
           <div className="space-y-1">
-            <label className="text-sm font-bold text-emerald-800">
+            <label className="text-sm font-bold text-green-800">
               {locale === 'ko' ? '증여자-수증자 관계' : 'Relationship'}
             </label>
             <select
               value={relationship}
               onChange={(e) => setRelationship(e.target.value)}
-              className="w-full p-3 bg-white border border-emerald-200 rounded-xl focus:ring-2 focus:ring-emerald-400 outline-none"
+              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
               aria-label={locale === 'ko' ? '관계' : 'Relationship'}
             >
               {Object.entries(RELATIONSHIP_LABELS).map(([key, label]) => (
@@ -130,7 +130,7 @@ const GiftTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
           </div>
 
           <div className="space-y-1">
-            <label className="text-sm font-bold text-emerald-800">
+            <label className="text-sm font-bold text-green-800">
               {locale === 'ko' ? '최근 10년 내 이전 증여 합계 (원)' : 'Prior 10-year Gifts (KRW)'}
             </label>
             <input
@@ -138,10 +138,10 @@ const GiftTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
               value={pastGifts}
               onChange={(e) => setPastGifts(e.target.value)}
               min="0"
-              className="w-full p-3 bg-white border border-emerald-200 rounded-xl focus:ring-2 focus:ring-emerald-400 outline-none"
+              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
               aria-label={locale === 'ko' ? '이전 증여 합계' : 'Prior gifts'}
             />
-            <p className="text-xs text-emerald-500">
+            <p className="text-xs text-green-500">
               {locale === 'ko' ? '없으면 0 입력' : 'Enter 0 if none'}
             </p>
           </div>
@@ -155,14 +155,14 @@ const GiftTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
           <div className="flex gap-3 pt-2">
             <button
               onClick={calculate}
-              className="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-colors"
+              className="flex-1 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl transition-colors"
               aria-label={locale === 'ko' ? '계산하기' : 'Calculate'}
             >
               {locale === 'ko' ? '계산하기' : 'Calculate'}
             </button>
             <button
               onClick={reset}
-              className="px-5 py-3 bg-white border border-emerald-300 hover:bg-emerald-50 text-emerald-700 font-bold rounded-xl transition-colors"
+              className="px-5 py-3 bg-white border border-green-300 hover:bg-green-50 text-green-700 font-bold rounded-xl transition-colors"
               aria-label={locale === 'ko' ? '초기화' : 'Reset'}
             >
               {locale === 'ko' ? '초기화' : 'Reset'}
@@ -174,19 +174,19 @@ const GiftTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
         <div className="flex flex-col justify-center space-y-4">
           {result ? (
             <>
-              <div className="p-6 bg-emerald-600 text-white rounded-2xl text-center">
+              <div className="p-6 bg-green-600 text-white rounded-2xl text-center">
                 <p className="text-xs font-bold uppercase tracking-widest opacity-80 mb-1">
                   {locale === 'ko' ? '납부할 증여세 (지방세 포함)' : 'Gift Tax Due (incl. Local Tax)'}
                 </p>
                 <p className="text-4xl font-bold">{fmt(result.finalTax)}원</p>
               </div>
 
-              <div className="space-y-2 p-5 bg-white rounded-2xl border border-emerald-100 text-sm">
+              <div className="space-y-2 p-5 bg-white rounded-2xl border border-green-100 text-sm">
                 <div className="flex justify-between">
                   <span className="text-slate-500">{locale === 'ko' ? '증여 금액 합계' : 'Total Gift'}</span>
                   <span className="font-bold">{fmt(result.totalGiftAmount)}원</span>
                 </div>
-                <div className="flex justify-between text-emerald-600">
+                <div className="flex justify-between text-green-600">
                   <span>{locale === 'ko' ? '공제 한도' : 'Deduction'}</span>
                   <span className="font-bold">-{fmt(result.deduction)}원</span>
                 </div>
@@ -209,15 +209,15 @@ const GiftTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
               </div>
 
               {result.taxableBase === 0 && (
-                <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-emerald-700 text-sm font-bold text-center">
+                <div className="p-4 bg-green-50 border border-green-200 rounded-2xl text-green-700 text-sm font-bold text-center">
                   {locale === 'ko' ? '공제 한도 이내로 증여세가 없습니다.' : 'No gift tax due — within deduction limit.'}
                 </div>
               )}
             </>
           ) : (
-            <div className="flex flex-col items-center justify-center h-48 text-emerald-200">
+            <div className="flex flex-col items-center justify-center h-48 text-green-200">
               <span className="text-4xl mb-2" aria-hidden="true">🎁</span>
-              <p className="text-sm font-bold text-emerald-300">
+              <p className="text-sm font-bold text-green-300">
                 {locale === 'ko' ? '증여 정보를 입력해 주세요' : 'Enter gift details above'}
               </p>
             </div>
@@ -226,15 +226,15 @@ const GiftTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
       </div>
 
       {/* 공제 한도 안내 */}
-      <div className="mt-8 p-5 bg-white rounded-2xl border border-emerald-100">
-        <p className="text-sm font-bold text-emerald-800 mb-3">
+      <div className="mt-8 p-5 bg-white rounded-2xl border border-green-100">
+        <p className="text-sm font-bold text-green-800 mb-3">
           {locale === 'ko' ? '2024년 증여세 공제 한도 (10년 단위)' : '2024 Gift Tax Deduction Limits (per 10 years)'}
         </p>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-xs">
           {Object.entries(RELATIONSHIP_LABELS).map(([key, label]) => (
-            <div key={key} className="flex justify-between p-2 bg-emerald-50 rounded-lg">
+            <div key={key} className="flex justify-between p-2 bg-green-50 rounded-lg">
               <span className="text-slate-600">{locale === 'ko' ? label.ko : label.en}</span>
-              <span className="font-bold text-emerald-700">{(GIFT_DEDUCTIONS[key] / 10000).toLocaleString('ko-KR')}만원</span>
+              <span className="font-bold text-green-700">{(GIFT_DEDUCTIONS[key] / 10000).toLocaleString('ko-KR')}만원</span>
             </div>
           ))}
         </div>

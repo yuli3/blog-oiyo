@@ -64,7 +64,7 @@ const NumInput: React.FC<NumInputProps> = ({ label, value, onChange, unit = '만
   <div className="flex flex-col gap-1">
     <label className="text-xs text-slate-600">{label}</label>
     {helper && <p className="text-xs text-slate-400">{helper}</p>}
-    <div className="flex items-center border border-emerald-200 rounded-xl overflow-hidden">
+    <div className="flex items-center border border-green-200 rounded-xl overflow-hidden">
       <input
         type="number"
         value={value}
@@ -72,7 +72,7 @@ const NumInput: React.FC<NumInputProps> = ({ label, value, onChange, unit = '만
         className="flex-1 px-3 py-2 text-sm focus:outline-none"
         aria-label={label}
       />
-      <span className="px-2 text-xs text-slate-500 bg-slate-50 border-l border-emerald-100 py-2">{unit}</span>
+      <span className="px-2 text-xs text-slate-500 bg-slate-50 border-l border-green-100 py-2">{unit}</span>
     </div>
   </div>
 );
@@ -182,20 +182,20 @@ export const InheritanceTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ l
   }, [s]);
 
   const LabelValue: React.FC<{ label: string; value: number; highlight?: boolean; indent?: boolean }> = ({ label, value, highlight = false, indent = false }) => (
-    <div className={`flex justify-between items-center py-1.5 border-b border-emerald-100 ${highlight ? 'bg-emerald-50 rounded-lg px-2' : ''} ${indent ? 'pl-4' : ''}`}>
+    <div className={`flex justify-between items-center py-1.5 border-b border-green-100 ${highlight ? 'bg-green-50 rounded-lg px-2' : ''} ${indent ? 'pl-4' : ''}`}>
       <span className="text-sm text-slate-600">{label}</span>
-      <span className={`text-sm font-bold ${highlight ? 'text-emerald-700' : 'text-slate-800'}`}>
+      <span className={`text-sm font-bold ${highlight ? 'text-green-700' : 'text-slate-800'}`}>
         {fmt(value)}만원
       </span>
     </div>
   );
 
   return (
-    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-emerald-50 to-green-50 border border-emerald-200 rounded-3xl shadow-xl">
-      <h3 className="text-xl font-bold text-emerald-900 mb-2">
+    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
+      <h3 className="text-xl font-bold text-green-900 mb-2">
         {locale === 'ko' ? '상속세 계산기' : 'Inheritance Tax Calculator'}
       </h3>
-      <p className="text-sm text-emerald-600 mb-6">
+      <p className="text-sm text-green-600 mb-6">
         {locale === 'ko'
           ? '2024년 기준 상속세를 단계별로 계산합니다. (단위: 만원)'
           : 'Calculate Korean inheritance tax step by step. (Unit: 10,000 KRW)'}
@@ -204,8 +204,8 @@ export const InheritanceTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ l
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Input panel */}
         <div className="space-y-4">
-          <div className="bg-white border border-emerald-200 rounded-2xl p-4">
-            <p className="text-sm font-bold text-emerald-800 mb-3">
+          <div className="bg-white border border-green-200 rounded-2xl p-4">
+            <p className="text-sm font-bold text-green-800 mb-3">
               {locale === 'ko' ? '재산 현황 (만원)' : 'Estate Information (10K KRW)'}
             </p>
             <div className="space-y-3">
@@ -222,8 +222,8 @@ export const InheritanceTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ l
             </div>
           </div>
 
-          <div className="bg-white border border-emerald-200 rounded-2xl p-4">
-            <p className="text-sm font-bold text-emerald-800 mb-3">
+          <div className="bg-white border border-green-200 rounded-2xl p-4">
+            <p className="text-sm font-bold text-green-800 mb-3">
               {locale === 'ko' ? '상속인 구성' : 'Heirs Composition'}
             </p>
             <div className="space-y-3">
@@ -236,7 +236,7 @@ export const InheritanceTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ l
                   type="checkbox"
                   checked={s.hasSpouse}
                   onChange={(e) => setS((prev) => ({ ...prev, hasSpouse: e.target.checked }))}
-                  className="w-4 h-4 accent-emerald-600"
+                  className="w-4 h-4 accent-green-600"
                   aria-label={locale === 'ko' ? '배우자 있음' : 'Has spouse'}
                 />
               </div>
@@ -253,8 +253,8 @@ export const InheritanceTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ l
             </div>
           </div>
 
-          <div className="bg-white border border-emerald-200 rounded-2xl p-4">
-            <p className="text-sm font-bold text-emerald-800 mb-3">
+          <div className="bg-white border border-green-200 rounded-2xl p-4">
+            <p className="text-sm font-bold text-green-800 mb-3">
               {locale === 'ko' ? '세액공제 (만원)' : 'Tax Credits (10K KRW)'}
             </p>
             <div className="space-y-3">
@@ -267,8 +267,8 @@ export const InheritanceTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ l
 
         {/* Result panel */}
         <div className="space-y-4">
-          <div className="bg-white border border-emerald-200 rounded-2xl p-4">
-            <p className="text-sm font-bold text-emerald-800 mb-3">
+          <div className="bg-white border border-green-200 rounded-2xl p-4">
+            <p className="text-sm font-bold text-green-800 mb-3">
               {locale === 'ko' ? '단계별 계산' : 'Step-by-Step Calculation'}
             </p>
             <div className="space-y-0.5">
@@ -290,7 +290,7 @@ export const InheritanceTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ l
                   <LabelValue label={locale === 'ko' ? '   미성년자공제' : '   Minor Deduction'} value={calc.minorDeduction / 10000} indent />
                 )}
                 <LabelValue label={locale === 'ko' ? '   기초공제' : '   Basic Deduction'} value={calc.basicDeduction / 10000} indent />
-                <div className={`flex justify-between items-center py-1 px-2 rounded-lg text-xs ${calc.usesLumpSum ? 'bg-amber-50 text-amber-700' : 'bg-emerald-50 text-emerald-700'}`}>
+                <div className={`flex justify-between items-center py-1 px-2 rounded-lg text-xs ${calc.usesLumpSum ? 'bg-amber-50 text-amber-700' : 'bg-green-50 text-green-700'}`}>
                   <span>
                     {calc.usesLumpSum
                       ? locale === 'ko' ? '일괄공제 선택 (5억 > 개별공제)' : 'Lump-sum (500M > individual)'
@@ -306,8 +306,8 @@ export const InheritanceTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ l
           </div>
 
           {/* Progressive tax breakdown */}
-          <div className="bg-white border border-emerald-200 rounded-2xl p-4">
-            <p className="text-sm font-bold text-emerald-800 mb-3">
+          <div className="bg-white border border-green-200 rounded-2xl p-4">
+            <p className="text-sm font-bold text-green-800 mb-3">
               {locale === 'ko' ? '누진세율 적용' : 'Progressive Tax Rate Application'}
             </p>
             {calc.breakdown.length === 0 ? (
@@ -322,25 +322,25 @@ export const InheritanceTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ l
                 ))}
               </div>
             )}
-            <div className="mt-2 flex justify-between text-sm font-bold py-2 bg-emerald-50 rounded-xl px-3">
-              <span className="text-emerald-800">{locale === 'ko' ? '⑤ 산출세액' : '⑤ Gross Tax'}</span>
-              <span className="text-emerald-800">{fmt(calc.grossTax / 10000)}만원</span>
+            <div className="mt-2 flex justify-between text-sm font-bold py-2 bg-green-50 rounded-xl px-3">
+              <span className="text-green-800">{locale === 'ko' ? '⑤ 산출세액' : '⑤ Gross Tax'}</span>
+              <span className="text-green-800">{fmt(calc.grossTax / 10000)}만원</span>
             </div>
           </div>
 
           {/* Final tax */}
-          <div className="bg-emerald-100 border border-emerald-300 rounded-2xl p-4">
+          <div className="bg-green-100 border border-green-300 rounded-2xl p-4">
             <div className="flex justify-between items-center mb-2">
-              <span className="text-sm text-emerald-700">{locale === 'ko' ? '세액공제' : 'Tax Credits'}</span>
-              <span className="text-sm font-bold text-emerald-700">
+              <span className="text-sm text-green-700">{locale === 'ko' ? '세액공제' : 'Tax Credits'}</span>
+              <span className="text-sm font-bold text-green-700">
                 -{fmt((s.priorTaxPaid + s.shortTermReRedux + s.giftTaxPaid))}만원
               </span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-base font-bold text-emerald-900">
+              <span className="text-base font-bold text-green-900">
                 {locale === 'ko' ? '⑥ 최종 납부세액' : '⑥ Final Tax Payable'}
               </span>
-              <span className="text-2xl font-bold text-emerald-900">
+              <span className="text-2xl font-bold text-green-900">
                 {fmt(calc.finalTax / 10000)}만원
               </span>
             </div>

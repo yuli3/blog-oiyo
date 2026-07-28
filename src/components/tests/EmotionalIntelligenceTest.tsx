@@ -254,10 +254,10 @@ export default function EmotionalIntelligenceTest({ locale: localeProp }: Props)
 
         <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-4">
           <p className="text-gray-700 leading-relaxed">{ld.description[locale]}</p>
-          <div className="bg-blue-50 rounded-lg p-4">
-            <h3 className="font-semibold text-blue-800 mb-2">🌱 {t.growth}</h3>
+          <div className="bg-green-50 rounded-lg p-4">
+            <h3 className="font-semibold text-green-800 mb-2">🌱 {t.growth}</h3>
             <ul className="space-y-1">
-              {ld.growth[locale].map((s, i) => <li key={i} className="text-sm text-blue-700">• {s}</li>)}
+              {ld.growth[locale].map((s, i) => <li key={i} className="text-sm text-green-700">• {s}</li>)}
             </ul>
           </div>
           <div className="text-center py-3 rounded-lg" style={{ backgroundColor: ld.color + "15" }}>
@@ -285,7 +285,7 @@ export default function EmotionalIntelligenceTest({ locale: localeProp }: Props)
       <div className="flex justify-between items-center text-sm text-gray-500">
         <span>{t.progress} {idx + 1} / {questions.length}</span>
         <div className="w-48 bg-gray-200 rounded-full h-1.5">
-          <div className="bg-indigo-500 h-1.5 rounded-full" style={{ width: `${((idx + 1) / questions.length) * 100}%` }} />
+          <div className="bg-green-500 h-1.5 rounded-full" style={{ width: `${((idx + 1) / questions.length) * 100}%` }} />
         </div>
       </div>
       <div className="bg-white border border-gray-200 rounded-xl p-6 space-y-4 shadow-sm">
@@ -297,7 +297,7 @@ export default function EmotionalIntelligenceTest({ locale: localeProp }: Props)
         <div className="space-y-2">
           {scaleLabels[locale].map((label, i) => (
             <button key={i} onClick={() => pick(i)}
-              className="w-full flex items-center gap-3 p-3 rounded-lg border border-gray-100 hover:border-indigo-300 hover:bg-indigo-50 transition-colors text-left">
+              className="w-full flex items-center gap-3 p-3 rounded-lg border border-gray-100 hover:border-green-300 hover:bg-green-50 transition-colors text-left">
               <div className="w-6 h-6 rounded-full border-2 border-gray-300 flex items-center justify-center text-xs font-bold text-gray-500">{i}</div>
               <span className="text-sm text-gray-700">{label}</span>
             </button>

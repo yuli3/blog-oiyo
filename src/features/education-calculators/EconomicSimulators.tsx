@@ -83,9 +83,9 @@ export const ISLMSimulator: React.FC = () => {
                     <div>
                         <div className="flex justify-between items-center mb-4">
                             <label className="text-sm font-bold text-slate-700 flex items-center gap-2">
-                                <Sliders size={14} className="text-blue-500" /> 재정 지출 (G)
+                                <Sliders size={14} className="text-green-500" /> 재정 지출 (G)
                             </label>
-                            <span className={`text-xs font-bold px-2 py-0.5 rounded ${gShift > 0 ? 'bg-blue-100 text-blue-700' : 'bg-slate-200'}`}>
+                            <span className={`text-xs font-bold px-2 py-0.5 rounded ${gShift > 0 ? 'bg-green-100 text-green-700' : 'bg-slate-200'}`}>
                                 {gShift > 0 ? '확장적' : gShift < 0 ? '긴축적' : '기본'}
                             </span>
                         </div>
@@ -93,7 +93,7 @@ export const ISLMSimulator: React.FC = () => {
                             type="range" min="-20" max="20" step="1" 
                             value={gShift} 
                             onChange={(e) => setGShift(Number(e.target.value))}
-                            className="w-full accent-blue-600 cursor-pointer"
+                            className="w-full accent-green-600 cursor-pointer"
                         />
                     </div>
 

@@ -158,21 +158,21 @@ export default function ImageGrayscale({ locale }: { locale: Locale }) {
   };
 
   const buttonClass =
-    "rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-700";
+    "rounded-lg bg-green-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-green-700";
   const secondaryButtonClass =
     "cursor-pointer rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50";
 
   return (
     <GameContainer title={t.title} subtitle={t.subtitle}>
       <div className="space-y-5">
-        <p className="rounded-lg border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm leading-6 text-emerald-900">
+        <p className="rounded-lg border border-green-100 bg-green-50 px-4 py-3 text-sm leading-6 text-green-900">
           {t.privacy}
         </p>
 
         <input ref={inputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
 
         {!originalImage ? (
-          <button type="button" className="w-full rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 px-4 py-12 text-center transition hover:border-indigo-300 hover:bg-indigo-50" onClick={() => inputRef.current?.click()}>
+          <button type="button" className="w-full rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 px-4 py-12 text-center transition hover:border-green-300 hover:bg-green-50" onClick={() => inputRef.current?.click()}>
             <span className="block text-base font-semibold text-slate-900">{t.upload}</span>
             <span className="mt-2 block text-sm text-slate-600">{t.empty}</span>
           </button>

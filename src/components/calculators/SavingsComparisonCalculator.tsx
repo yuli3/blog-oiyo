@@ -114,8 +114,8 @@ const SavingsComparisonCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
   const bestResult = results.length > 0 ? [...results].sort((a, b) => b.netTotal - a.netTotal)[0] : null;
 
   return (
-    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-emerald-50 to-green-50 border border-emerald-200 rounded-3xl shadow-xl">
-      <h3 className="text-xl font-bold text-emerald-900 mb-6">
+    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
+      <h3 className="text-xl font-bold text-green-900 mb-6">
         {locale === 'ko' ? '저축 상품 비교 계산기' : 'Savings Product Comparison'}
       </h3>
 
@@ -124,7 +124,7 @@ const SavingsComparisonCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-sm font-bold text-emerald-800">
+              <label className="text-sm font-bold text-green-800">
                 {locale === 'ko' ? '월 저축액 (원)' : 'Monthly Savings (KRW)'}
               </label>
               <input
@@ -132,18 +132,18 @@ const SavingsComparisonCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
                 value={monthlySavings}
                 onChange={(e) => setMonthlySavings(e.target.value)}
                 min="0"
-                className="w-full p-3 bg-white border border-emerald-200 rounded-xl focus:ring-2 focus:ring-emerald-400 outline-none"
+                className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
                 aria-label={locale === 'ko' ? '월 저축액' : 'Monthly Savings'}
               />
             </div>
             <div className="space-y-1">
-              <label className="text-sm font-bold text-emerald-800">
+              <label className="text-sm font-bold text-green-800">
                 {locale === 'ko' ? '기간 (년)' : 'Term (years)'}
               </label>
               <select
                 value={termYears}
                 onChange={(e) => setTermYears(e.target.value)}
-                className="w-full p-3 bg-white border border-emerald-200 rounded-xl focus:ring-2 focus:ring-emerald-400 outline-none"
+                className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
                 aria-label={locale === 'ko' ? '기간' : 'Term'}
               >
                 {[1, 2, 3, 5, 7, 10].map((y) => (
@@ -154,7 +154,7 @@ const SavingsComparisonCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
           </div>
 
           <div className="space-y-3">
-            <p className="text-sm font-bold text-emerald-800">
+            <p className="text-sm font-bold text-green-800">
               {locale === 'ko' ? '상품별 금리 설정 (%)' : 'Product Rates (%)'}
             </p>
             {products.map((product) => (
@@ -171,10 +171,10 @@ const SavingsComparisonCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
                     step="0.1"
                     min="0"
                     max="20"
-                    className="w-20 p-2 bg-white border border-emerald-200 rounded-xl text-center text-sm focus:ring-2 focus:ring-emerald-400 outline-none"
+                    className="w-20 p-2 bg-white border border-green-200 rounded-xl text-center text-sm focus:ring-2 focus:ring-green-400 outline-none"
                     aria-label={`${locale === 'ko' ? product.name : product.nameEn} 금리`}
                   />
-                  <span className="text-sm text-emerald-600 font-bold">%</span>
+                  <span className="text-sm text-green-600 font-bold">%</span>
                 </div>
               </div>
             ))}
@@ -189,14 +189,14 @@ const SavingsComparisonCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
           <div className="flex gap-3 pt-2">
             <button
               onClick={calculate}
-              className="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-colors"
+              className="flex-1 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl transition-colors"
               aria-label={locale === 'ko' ? '비교하기' : 'Compare'}
             >
               {locale === 'ko' ? '비교하기' : 'Compare'}
             </button>
             <button
               onClick={reset}
-              className="px-5 py-3 bg-white border border-emerald-300 hover:bg-emerald-50 text-emerald-700 font-bold rounded-xl transition-colors"
+              className="px-5 py-3 bg-white border border-green-300 hover:bg-green-50 text-green-700 font-bold rounded-xl transition-colors"
               aria-label={locale === 'ko' ? '초기화' : 'Reset'}
             >
               {locale === 'ko' ? '초기화' : 'Reset'}
@@ -209,7 +209,7 @@ const SavingsComparisonCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
           {results.length > 0 ? (
             <>
               {bestResult && (
-                <div className="p-5 bg-emerald-600 text-white rounded-2xl text-center">
+                <div className="p-5 bg-green-600 text-white rounded-2xl text-center">
                   <p className="text-xs font-bold uppercase tracking-widest opacity-80 mb-1">
                     {locale === 'ko' ? '최우수 상품 추천' : 'Best Product'}
                   </p>
@@ -226,15 +226,15 @@ const SavingsComparisonCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
                       key={r.id}
                       className={`p-4 rounded-2xl border text-sm ${
                         r.rank === 1
-                          ? 'bg-white border-emerald-400 shadow-md'
-                          : 'bg-white border-emerald-100'
+                          ? 'bg-white border-green-400 shadow-md'
+                          : 'bg-white border-green-100'
                       }`}
                     >
                       <div className="flex justify-between items-center mb-2">
                         <div className="flex items-center gap-2">
                           <span
                             className={`text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center ${
-                              r.rank === 1 ? 'bg-emerald-600 text-white' : 'bg-emerald-100 text-emerald-600'
+                              r.rank === 1 ? 'bg-green-600 text-white' : 'bg-green-100 text-green-600'
                             }`}
                             aria-label={`순위 ${r.rank}`}
                           >
@@ -242,7 +242,7 @@ const SavingsComparisonCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
                           </span>
                           <span className="font-bold text-slate-800">{locale === 'ko' ? r.name : r.nameEn}</span>
                         </div>
-                        <span className="font-bold text-emerald-700">{fmt(r.netTotal)}원</span>
+                        <span className="font-bold text-green-700">{fmt(r.netTotal)}원</span>
                       </div>
                       <div className="flex gap-4 text-xs text-slate-400">
                         <span>{locale === 'ko' ? '세전이자' : 'Gross Interest'}: {fmt(r.grossInterest)}원</span>
@@ -254,9 +254,9 @@ const SavingsComparisonCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
               </div>
             </>
           ) : (
-            <div className="flex flex-col items-center justify-center h-48 text-emerald-200">
+            <div className="flex flex-col items-center justify-center h-48 text-green-200">
               <span className="text-4xl mb-2" aria-hidden="true">📊</span>
-              <p className="text-sm font-bold text-emerald-300">
+              <p className="text-sm font-bold text-green-300">
                 {locale === 'ko' ? '정보를 입력하고 비교해보세요' : 'Enter details and compare'}
               </p>
             </div>

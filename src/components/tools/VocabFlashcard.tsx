@@ -628,8 +628,8 @@ export default function VocabFlashcard({ locale }: Props) {
             onClick={() => changeDeck(dk)}
             className={`rounded-xl border px-3 py-2.5 text-sm font-medium transition-colors ${
               selectedDeck === dk
-                ? "border-emerald-500 bg-emerald-500 text-white"
-                : "border-gray-200 bg-white text-gray-600 hover:border-emerald-400"
+                ? "border-green-500 bg-green-500 text-white"
+                : "border-gray-200 bg-white text-gray-600 hover:border-green-400"
             }`}
           >
             <div>{t.decks[dk]}</div>
@@ -649,7 +649,7 @@ export default function VocabFlashcard({ locale }: Props) {
         </div>
         <div className="h-2 rounded-full bg-gray-200">
           <div
-            className="h-2 rounded-full bg-gradient-to-r from-emerald-400 to-teal-500 transition-all duration-300"
+            className="h-2 rounded-full bg-gradient-to-r from-green-400 to-green-500 transition-all duration-300"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -673,7 +673,7 @@ export default function VocabFlashcard({ locale }: Props) {
             >
               {/* Front */}
               <div
-                className="absolute inset-0 flex flex-col items-center justify-center rounded-2xl border-2 border-emerald-300 bg-white shadow-lg p-6 text-center"
+                className="absolute inset-0 flex flex-col items-center justify-center rounded-2xl border-2 border-green-300 bg-white shadow-lg p-6 text-center"
                 style={{ backfaceVisibility: "hidden" }}
               >
                 <p className="text-3xl font-extrabold text-gray-900 mb-3">
@@ -683,12 +683,12 @@ export default function VocabFlashcard({ locale }: Props) {
               </div>
               {/* Back */}
               <div
-                className="absolute inset-0 flex flex-col items-start justify-center rounded-2xl border-2 border-teal-400 bg-teal-50 shadow-lg p-6 space-y-3"
+                className="absolute inset-0 flex flex-col items-start justify-center rounded-2xl border-2 border-green-400 bg-green-50 shadow-lg p-6 space-y-3"
                 style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
               >
-                <p className="text-xs font-semibold text-teal-600 uppercase tracking-wider">{t.meaningLabel}</p>
+                <p className="text-xs font-semibold text-green-600 uppercase tracking-wider">{t.meaningLabel}</p>
                 <p className="text-base font-semibold text-gray-900">{current.meaning}</p>
-                <p className="text-xs font-semibold text-teal-600 uppercase tracking-wider">{t.exampleLabel}</p>
+                <p className="text-xs font-semibold text-green-600 uppercase tracking-wider">{t.exampleLabel}</p>
                 <p className="text-sm italic text-gray-600">"{current.example}"</p>
               </div>
             </div>

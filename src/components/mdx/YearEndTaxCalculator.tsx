@@ -164,12 +164,12 @@ export default function YearEndTaxCalculator() {
   return (
     <div className="not-prose my-8 rounded-2xl border border-border bg-card shadow-sm overflow-hidden">
       {/* Header */}
-      <div className="bg-gradient-to-r from-emerald-600 to-emerald-500 px-6 py-4">
+      <div className="bg-gradient-to-r from-green-600 to-green-500 px-6 py-4">
         <div className="flex items-center gap-2">
           <span className="text-2xl">💸</span>
           <div>
             <h3 className="font-bold text-white text-lg leading-tight">연말정산 간이 계산기</h3>
-            <p className="text-emerald-100 text-xs mt-0.5">
+            <p className="text-green-100 text-xs mt-0.5">
               예상 환급액·추가 납부액을 빠르게 추정 (실제와 차이 있을 수 있음)
             </p>
           </div>
@@ -187,7 +187,7 @@ export default function YearEndTaxCalculator() {
               value={salaryDisplay}
               onChange={handleSalary}
               placeholder="예: 50,000,000"
-              className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-right font-mono font-semibold focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+              className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-right font-mono font-semibold focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20"
             />
           </div>
           <div>
@@ -198,7 +198,7 @@ export default function YearEndTaxCalculator() {
               value={paidTaxDisplay}
               onChange={handlePaidTax}
               placeholder="이미 납부한 소득세+지방세"
-              className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-right font-mono font-semibold focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+              className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-right font-mono font-semibold focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20"
             />
           </div>
         </div>
@@ -213,8 +213,8 @@ export default function YearEndTaxCalculator() {
                 onClick={() => setDependents(n)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium border transition-all ${
                   dependents === n
-                    ? 'bg-emerald-600 text-white border-emerald-600'
-                    : 'border-border text-muted-foreground hover:border-emerald-400'
+                    ? 'bg-green-600 text-white border-green-600'
+                    : 'border-border text-muted-foreground hover:border-green-400'
                 }`}
               >
                 {n}명
@@ -240,7 +240,7 @@ export default function YearEndTaxCalculator() {
                   value={d.value ? parseInt(d.value).toLocaleString('ko-KR') : ''}
                   onChange={(e) => handleDeduction(d.id, e.target.value)}
                   placeholder="0"
-                  className="w-full rounded-lg border border-border bg-background px-3 py-2 text-right text-sm font-mono focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                  className="w-full rounded-lg border border-border bg-background px-3 py-2 text-right text-sm font-mono focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20"
                 />
               </div>
             ))}
@@ -276,13 +276,13 @@ export default function YearEndTaxCalculator() {
               {/* 환급/추가납부 */}
               <div className={`flex justify-between items-center px-5 py-4 ${
                 result.refundOrPay >= 0
-                  ? 'bg-emerald-50'
+                  ? 'bg-green-50'
                   : 'bg-red-50'
               }`}>
-                <span className={`font-bold text-base ${result.refundOrPay >= 0 ? 'text-emerald-700' : 'text-red-700'}`}>
+                <span className={`font-bold text-base ${result.refundOrPay >= 0 ? 'text-green-700' : 'text-red-700'}`}>
                   {result.refundOrPay >= 0 ? '예상 환급액' : '예상 추가 납부액'}
                 </span>
-                <span className={`font-mono font-extrabold text-xl ${result.refundOrPay >= 0 ? 'text-emerald-700' : 'text-red-700'}`}>
+                <span className={`font-mono font-extrabold text-xl ${result.refundOrPay >= 0 ? 'text-green-700' : 'text-red-700'}`}>
                   {result.refundOrPay >= 0 ? '+' : ''}{fmt(result.refundOrPay)} 원
                 </span>
               </div>
@@ -292,7 +292,7 @@ export default function YearEndTaxCalculator() {
 
         <p className="text-xs text-muted-foreground text-center">
           ※ 간이 계산 결과입니다. 실제 연말정산은 개인 상황에 따라 달라집니다.
-          정확한 계산은 <a href="https://www.hometax.go.kr" target="_blank" rel="noopener noreferrer" className="text-emerald-600 underline">국세청 홈택스</a>를 이용하세요.
+          정확한 계산은 <a href="https://www.hometax.go.kr" target="_blank" rel="noopener noreferrer" className="text-green-600 underline">국세청 홈택스</a>를 이용하세요.
         </p>
       </div>
     </div>

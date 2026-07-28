@@ -120,24 +120,24 @@ const LaborCostCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
   const monthlySalaryNum = Number(salary) || 0;
 
   return (
-    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-teal-50 to-cyan-50 border border-teal-200 rounded-3xl shadow-xl">
-      <h3 className="text-xl font-bold text-teal-900 mb-6">{t.title}</h3>
+    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
+      <h3 className="text-xl font-bold text-green-900 mb-6">{t.title}</h3>
 
       <div className="grid md:grid-cols-2 gap-8">
         <div className="space-y-4">
           <div className="space-y-1">
-            <label className="text-sm font-bold text-teal-800">{t.salaryLabel}</label>
+            <label className="text-sm font-bold text-green-800">{t.salaryLabel}</label>
             <input
               type="number"
               value={salary}
               onChange={(e) => setSalary(e.target.value)}
               min="0"
-              className="w-full p-3 bg-white border border-teal-200 rounded-xl focus:ring-2 focus:ring-teal-400 outline-none"
+              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
             />
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-bold text-teal-800">{t.foodLabel}</label>
+            <label className="text-sm font-bold text-green-800">{t.foodLabel}</label>
             <div className="flex gap-2">
               {[0, 200000].map((val) => (
                 <button
@@ -145,8 +145,8 @@ const LaborCostCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
                   onClick={() => setFoodAllowance(val)}
                   className={`flex-1 py-2 rounded-xl text-sm font-bold transition-colors border ${
                     foodAllowance === val
-                      ? 'bg-teal-600 text-white border-teal-600'
-                      : 'bg-white text-teal-700 border-teal-200 hover:bg-teal-50'
+                      ? 'bg-green-600 text-white border-green-600'
+                      : 'bg-white text-green-700 border-green-200 hover:bg-green-50'
                   }`}
                 >
                   {val === 0 ? t.foodNone : t.foodInclude}
@@ -155,15 +155,15 @@ const LaborCostCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
             </div>
           </div>
 
-          <div className="flex items-center justify-between p-4 bg-white border border-teal-200 rounded-xl">
+          <div className="flex items-center justify-between p-4 bg-white border border-green-200 rounded-xl">
             <div>
-              <p className="text-sm font-bold text-teal-800">{t.severanceLabel}</p>
+              <p className="text-sm font-bold text-green-800">{t.severanceLabel}</p>
               <p className="text-xs text-slate-500">{t.severanceDesc}</p>
             </div>
             <button
               onClick={() => setIncludeSeverance((v) => !v)}
               className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                includeSeverance ? 'bg-teal-600' : 'bg-slate-300'
+                includeSeverance ? 'bg-green-600' : 'bg-slate-300'
               }`}
               role="switch"
               aria-checked={includeSeverance}
@@ -179,13 +179,13 @@ const LaborCostCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
           <div className="flex gap-3">
             <button
               onClick={calculate}
-              className="flex-1 py-3 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-xl transition-colors"
+              className="flex-1 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl transition-colors"
             >
               {t.calculate}
             </button>
             <button
               onClick={reset}
-              className="px-5 py-3 bg-white border border-teal-300 hover:bg-teal-50 text-teal-700 font-bold rounded-xl transition-colors"
+              className="px-5 py-3 bg-white border border-green-300 hover:bg-green-50 text-green-700 font-bold rounded-xl transition-colors"
             >
               {t.reset}
             </button>
@@ -195,9 +195,9 @@ const LaborCostCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
         <div className="space-y-3">
           {result ? (
             <>
-              <p className="text-sm font-bold text-teal-800">{t.resultTitle}</p>
+              <p className="text-sm font-bold text-green-800">{t.resultTitle}</p>
 
-              <div className="flex justify-between items-center py-2 border-b border-teal-100">
+              <div className="flex justify-between items-center py-2 border-b border-green-100">
                 <span className="text-sm font-bold text-slate-700">{t.salaryPaid}</span>
                 <span className="font-bold">{fmt(monthlySalaryNum)}</span>
               </div>
@@ -205,9 +205,9 @@ const LaborCostCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
               <div className="space-y-1">
                 <div className="flex justify-between items-center text-sm">
                   <span className="font-semibold text-slate-700">{t.insurance4}</span>
-                  <span className="font-bold text-teal-700">{fmt(result.insuranceTotal)}</span>
+                  <span className="font-bold text-green-700">{fmt(result.insuranceTotal)}</span>
                 </div>
-                <div className="pl-4 space-y-1 bg-white rounded-xl p-3 border border-teal-100 text-xs">
+                <div className="pl-4 space-y-1 bg-white rounded-xl p-3 border border-green-100 text-xs">
                   {[
                     { label: t.pension, val: result.pension },
                     { label: t.health, val: result.health },
@@ -224,13 +224,13 @@ const LaborCostCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
               </div>
 
               {includeSeverance && (
-                <div className="flex justify-between items-center py-2 border-b border-teal-100 text-amber-700">
+                <div className="flex justify-between items-center py-2 border-b border-green-100 text-amber-700">
                   <span className="text-sm font-bold">{t.severance}</span>
                   <span className="font-bold">{fmt(result.severance)}</span>
                 </div>
               )}
 
-              <div className="p-5 bg-teal-600 text-white rounded-2xl text-center">
+              <div className="p-5 bg-green-600 text-white rounded-2xl text-center">
                 <p className="text-xs font-bold uppercase tracking-widest opacity-80 mb-1">{t.totalCost}</p>
                 <p className="text-3xl font-black">{fmt(result.totalCost)}</p>
                 <p className="mt-1 text-sm opacity-80">
@@ -239,8 +239,8 @@ const LaborCostCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
               </div>
             </>
           ) : (
-            <div className="flex flex-col items-center justify-center h-40 text-teal-300">
-              <p className="text-sm font-bold text-teal-400">
+            <div className="flex flex-col items-center justify-center h-40 text-green-300">
+              <p className="text-sm font-bold text-green-400">
                 {locale === 'ko' ? '급여를 입력하고 계산하세요' : 'Enter salary and calculate'}
               </p>
             </div>

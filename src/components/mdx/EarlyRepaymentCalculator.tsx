@@ -88,9 +88,9 @@ export default function EarlyRepaymentCalculator() {
               <p className="text-xs text-gray-500">납부 수수료</p>
               <p className="text-sm font-bold text-orange-600">{formatKRW(result.fee)}원</p>
             </div>
-            <div className="rounded-xl bg-blue-50 p-3">
+            <div className="rounded-xl bg-green-50 p-3">
               <p className="text-xs text-gray-500">절감 이자 (추정)</p>
-              <p className="text-sm font-bold text-blue-600">{formatKRW(result.interestSaved)}원</p>
+              <p className="text-sm font-bold text-green-600">{formatKRW(result.interestSaved)}원</p>
             </div>
           </div>
           <p className="text-xs text-gray-400">* 이자 절감은 원금균등 방식 단순 추정치입니다. 실제 조건은 은행 확인 필수.</p>

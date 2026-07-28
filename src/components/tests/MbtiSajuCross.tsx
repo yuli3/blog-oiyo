@@ -28,7 +28,7 @@ const ELEMENTS: Record<Element, {
   metal: { emoji:'⚡', bg:'bg-slate-50', border:'border-slate-300', text:'text-slate-800',
     ko:{name:'금(金)',symbol:'庚辛',color:'백색',traits:['분석력','원칙','결단력','완벽주의','독립심'],desc:'가을의 금속 기운은 날카롭고 예리합니다. 원칙과 기준을 중시하며 분석적이고 독립적으로 사고합니다.',season:'가을',direction:'서쪽'},
     en:{name:'Metal (金)',symbol:'庚辛',color:'White',traits:['Analysis','Principles','Decisiveness','Perfectionism','Independence'],desc:'Metal energy, like autumn, is sharp and precise. Values principles and standards, thinks analytically and independently.',season:'Autumn',direction:'West'} },
-  water: { emoji:'💧', bg:'bg-blue-50', border:'border-blue-300', text:'text-blue-800',
+  water: { emoji:'💧', bg:'bg-green-50', border:'border-green-300', text:'text-green-800',
     ko:{name:'수(水)',symbol:'壬癸',color:'흑색',traits:['직관','지혜','내성적','깊이','유연성'],desc:'겨울의 물 기운은 깊고 조용합니다. 심층적인 사고와 강한 직관력으로 본질을 통찰하며 흐르듯 적응합니다.',season:'겨울',direction:'북쪽'},
     en:{name:'Water (水)',symbol:'壬癸',color:'Black',traits:['Intuition','Wisdom','Introspective','Depth','Flexibility'],desc:'Water energy, like winter, is deep and quiet. Insightful with deep thinking and strong intuition, adapts like flowing water.',season:'Winter',direction:'North'} },
 }

@@ -20,7 +20,7 @@ interface LevelData {
 
 const LEVEL_DATA: LevelData[] = [
   { cefr: "A1", toeicMin: 0,   toeicMax: 119,  ielts: "1.0–2.0", toefl: "0–31",   color: "text-gray-600",  bgColor: "bg-gray-100" },
-  { cefr: "A2", toeicMin: 120, toeicMax: 224,  ielts: "2.0–3.0", toefl: "32–45",  color: "text-blue-600",  bgColor: "bg-blue-50" },
+  { cefr: "A2", toeicMin: 120, toeicMax: 224,  ielts: "2.0–3.0", toefl: "32–45",  color: "text-green-600",  bgColor: "bg-green-50" },
   { cefr: "B1", toeicMin: 225, toeicMax: 549,  ielts: "3.5–4.5", toefl: "46–71",  color: "text-green-600", bgColor: "bg-green-50" },
   { cefr: "B2", toeicMin: 550, toeicMax: 784,  ielts: "5.0–6.0", toefl: "72–94",  color: "text-yellow-600",bgColor: "bg-yellow-50" },
   { cefr: "C1", toeicMin: 785, toeicMax: 899,  ielts: "6.5–7.5", toefl: "95–113", color: "text-orange-600",bgColor: "bg-orange-50" },
@@ -314,8 +314,8 @@ export default function ToeicScoreConverter({ locale }: Props) {
             onClick={() => { setMode(m); setResult(null); }}
             className={`flex-1 py-2.5 text-sm font-medium transition-colors ${
               mode === m
-                ? "bg-blue-600 text-white"
-                : "bg-white text-gray-600 hover:bg-blue-50"
+                ? "bg-green-600 text-white"
+                : "bg-white text-gray-600 hover:bg-green-50"
             }`}
           >
             {m === "toeic" ? t.modeScore : t.modeCefr}
@@ -337,7 +337,7 @@ export default function ToeicScoreConverter({ locale }: Props) {
               value={scoreInput}
               onChange={(e) => { setScoreInput(e.target.value); setResult(null); }}
               placeholder={t.inputPlaceholder}
-              className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-green-400"
             />
           </div>
         ) : (
@@ -348,7 +348,7 @@ export default function ToeicScoreConverter({ locale }: Props) {
             <select
               value={selectedCefr}
               onChange={(e) => { setSelectedCefr(e.target.value as CEFRLevel); setResult(null); }}
-              className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-green-400"
             >
               <option value="">—</option>
               {CEFR_LEVELS.map((lvl) => (
@@ -361,7 +361,7 @@ export default function ToeicScoreConverter({ locale }: Props) {
         <button
           onClick={handleConvert}
           disabled={mode === "toeic" ? !scoreInput : !selectedCefr}
-          className="w-full rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 py-3 font-semibold text-white shadow-md hover:from-blue-700 hover:to-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+          className="w-full rounded-xl bg-gradient-to-r from-green-600 to-green-600 py-3 font-semibold text-white shadow-md hover:from-green-700 hover:to-green-700 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
         >
           {t.convertBtn}
         </button>
@@ -402,7 +402,7 @@ export default function ToeicScoreConverter({ locale }: Props) {
             <ul className="space-y-1">
               {t.jobUtil[result.cefr].map((item, i) => (
                 <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
-                  <span className="mt-0.5 shrink-0 text-blue-500">•</span>
+                  <span className="mt-0.5 shrink-0 text-green-500">•</span>
                   {item}
                 </li>
               ))}
@@ -423,7 +423,7 @@ export default function ToeicScoreConverter({ locale }: Props) {
             <p className="text-xs text-gray-400">{t.disclaimer}</p>
             <button
               onClick={handleReset}
-              className="rounded-lg border border-blue-300 px-4 py-1.5 text-sm font-medium text-blue-600 hover:bg-blue-50 transition-colors"
+              className="rounded-lg border border-green-300 px-4 py-1.5 text-sm font-medium text-green-600 hover:bg-green-50 transition-colors"
             >
               {t.resetBtn}
             </button>

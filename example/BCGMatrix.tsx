@@ -29,9 +29,9 @@ export default function BCGMatrix() {
             </div>
             
             {/* Question Mark (High, Low) */}
-            <div className="flex flex-col items-center justify-center rounded-tr-xl border-2 border-blue-200 bg-blue-50/50 p-4 transition-colors hover:bg-blue-100 dark:bg-blue-950/20">
+            <div className="flex flex-col items-center justify-center rounded-tr-xl border-2 border-green-200 bg-green-50/50 p-4 transition-colors hover:bg-green-100 dark:bg-green-950/20">
               <span className="text-4xl mb-2">❓</span>
-              <h4 className="font-bold text-blue-700 dark:text-blue-400">Question Mark</h4>
+              <h4 className="font-bold text-green-700 dark:text-green-400">Question Mark</h4>
               <p className="text-xs text-center text-muted-foreground mt-2">선택적 투자 (스타가 될지, 도태될지 결정)</p>
             </div>
 

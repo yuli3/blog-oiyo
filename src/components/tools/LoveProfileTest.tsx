@@ -204,11 +204,11 @@ export default function LoveProfileTest({ locale = "ko" }: Props) {
         <h2 className="text-xl font-bold text-center text-gray-800">{ui.resultTitle}</h2>
 
         {/* Attach */}
-        <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4">
-          <p className="text-xs font-semibold text-blue-600 mb-1">🔐 {ui.attachLabel}</p>
-          <p className="font-bold text-blue-800 text-lg">{ATTACH_EMOJI[result.attach]} {ad.name}</p>
-          <p className="text-sm text-blue-700 mt-1">{ad.desc}</p>
-          <p className="text-xs text-blue-600 mt-2 italic">💡 {ad.tip}</p>
+        <div className="bg-green-50 border border-green-100 rounded-2xl p-4">
+          <p className="text-xs font-semibold text-green-600 mb-1">🔐 {ui.attachLabel}</p>
+          <p className="font-bold text-green-800 text-lg">{ATTACH_EMOJI[result.attach]} {ad.name}</p>
+          <p className="text-sm text-green-700 mt-1">{ad.desc}</p>
+          <p className="text-xs text-green-600 mt-2 italic">💡 {ad.tip}</p>
         </div>
 
         {/* Love Language */}

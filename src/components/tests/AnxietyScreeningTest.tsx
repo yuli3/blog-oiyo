@@ -260,8 +260,8 @@ export default function AnxietyScreeningTest({ locale: lp = 'ko' }: Props) {
           <h1 className="text-2xl font-bold">{lb.title}</h1>
           <p className="text-muted-foreground text-sm">{lb.subtitle}</p>
         </div>
-        <div className="rounded-xl border border-blue-200 bg-blue-50 p-3">
-          <p className="text-xs text-blue-800 text-center leading-relaxed">{lb.compassion}</p>
+        <div className="rounded-xl border border-green-200 bg-green-50 p-3">
+          <p className="text-xs text-green-800 text-center leading-relaxed">{lb.compassion}</p>
         </div>
         <div className="space-y-1">
           <div className="flex justify-between text-xs text-muted-foreground">
@@ -337,11 +337,11 @@ export default function AnxietyScreeningTest({ locale: lp = 'ko' }: Props) {
         </div>
       </div>
       <div className="rounded-xl border bg-card p-4 space-y-2">
-        <h3 className="font-bold text-sm text-emerald-700">{lb.tips}</h3>
+        <h3 className="font-bold text-sm text-green-700">{lb.tips}</h3>
         <ul className="space-y-1">
           {r.tips.map(tip => (
             <li key={tip} className="text-sm text-muted-foreground flex gap-2">
-              <span className="text-emerald-500 flex-none">→</span>{tip}
+              <span className="text-green-500 flex-none">→</span>{tip}
             </li>
           ))}
         </ul>
@@ -359,11 +359,11 @@ export default function AnxietyScreeningTest({ locale: lp = 'ko' }: Props) {
         </div>
       )}
       {(result.level === 'minimal' || result.level === 'mild') && (
-        <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 space-y-2">
-          <h3 className="font-bold text-sm text-emerald-700">{lb.resources}</h3>
+        <div className="rounded-xl border border-green-200 bg-green-50 p-4 space-y-2">
+          <h3 className="font-bold text-sm text-green-700">{lb.resources}</h3>
           <ul className="space-y-1">
             {r.resources.map(res => (
-              <li key={res} className="text-sm text-emerald-700 flex gap-2">
+              <li key={res} className="text-sm text-green-700 flex gap-2">
                 <span className="flex-none">•</span>{res}
               </li>
             ))}

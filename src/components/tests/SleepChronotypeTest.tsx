@@ -783,11 +783,11 @@ export default function SleepChronotypeTest({ locale: lp = 'ko' }: Props) {
       </div>
 
       <div className="rounded-2xl border bg-card p-4 space-y-2">
-        <h3 className="font-bold text-sm text-emerald-600">{lb.tips}</h3>
+        <h3 className="font-bold text-sm text-green-600">{lb.tips}</h3>
         <ul className="space-y-1">
           {r.tips.map(tip => (
             <li key={tip} className="text-sm text-muted-foreground flex gap-2">
-              <span className="text-emerald-500">→</span>{tip}
+              <span className="text-green-500">→</span>{tip}
             </li>
           ))}
         </ul>

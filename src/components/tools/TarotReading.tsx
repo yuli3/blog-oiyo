@@ -291,8 +291,8 @@ export default function TarotReading({ locale = 'ko' }: { locale?: Locale }) {
   const spreadBtnClass = (s: Spread) =>
     `flex-1 py-2 text-sm font-medium rounded-lg border transition-colors ${
       spread === s
-        ? 'bg-indigo-600 text-white border-indigo-600'
-        : 'bg-white text-gray-600 border-gray-300 hover:border-indigo-400'
+        ? 'bg-green-600 text-white border-green-600'
+        : 'bg-white text-gray-600 border-gray-300 hover:border-green-400'
     }`;
 
   return (
@@ -318,7 +318,7 @@ export default function TarotReading({ locale = 'ko' }: { locale?: Locale }) {
       {/* Draw button */}
       <button
         onClick={handleDraw}
-        className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition-colors"
+        className="w-full py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl transition-colors"
       >
         {drawn ? t.redrawBtn : t.drawBtn}
       </button>
@@ -330,14 +330,14 @@ export default function TarotReading({ locale = 'ko' }: { locale?: Locale }) {
             const isFlipped = flipped.has(i);
             return (
               <div key={i} className="flex flex-col gap-2">
-                <p className="text-xs font-semibold text-center text-indigo-600">{dc.position}</p>
+                <p className="text-xs font-semibold text-center text-green-600">{dc.position}</p>
                 {/* Card face */}
                 <button
                   onClick={() => flipCard(i)}
                   className={`w-full aspect-[2/3] rounded-xl border-2 transition-all duration-300 flex flex-col items-center justify-center cursor-pointer ${
                     isFlipped
-                      ? 'bg-white border-indigo-300 shadow-md'
-                      : 'bg-indigo-700 border-indigo-800 hover:bg-indigo-600'
+                      ? 'bg-white border-green-300 shadow-md'
+                      : 'bg-green-700 border-green-800 hover:bg-green-600'
                   }`}
                 >
                   {isFlipped ? (

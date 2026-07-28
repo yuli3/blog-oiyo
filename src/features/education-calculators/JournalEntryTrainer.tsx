@@ -277,16 +277,16 @@ const TAccountDisplay: React.FC<TAccountDisplayProps> = ({ scenario, locale }) =
       </h4>
       <div className="grid grid-cols-2 gap-4">
         {/* Debit T-account */}
-        <div className="border-2 border-emerald-300 rounded-xl overflow-hidden">
-          <div className="bg-emerald-100 px-3 py-1.5 text-center text-xs font-bold text-emerald-800">
+        <div className="border-2 border-green-300 rounded-xl overflow-hidden">
+          <div className="bg-green-100 px-3 py-1.5 text-center text-xs font-bold text-green-800">
             {scenario.correctDebit}
           </div>
           <div className="flex min-h-[80px]">
-            <div className="flex-1 border-r border-emerald-200 p-2">
+            <div className="flex-1 border-r border-green-200 p-2">
               <p className="text-xs font-bold text-slate-500 mb-1">
                 {locale === 'ko' ? '차변 (Dr)' : 'Debit (Dr)'}
               </p>
-              <p className="text-sm font-bold text-emerald-700">
+              <p className="text-sm font-bold text-green-700">
                 {scenario.amount.toLocaleString()}
               </p>
             </div>
@@ -298,12 +298,12 @@ const TAccountDisplay: React.FC<TAccountDisplayProps> = ({ scenario, locale }) =
           </div>
         </div>
         {/* Credit T-account */}
-        <div className="border-2 border-blue-300 rounded-xl overflow-hidden">
-          <div className="bg-blue-100 px-3 py-1.5 text-center text-xs font-bold text-blue-800">
+        <div className="border-2 border-green-300 rounded-xl overflow-hidden">
+          <div className="bg-green-100 px-3 py-1.5 text-center text-xs font-bold text-green-800">
             {scenario.correctCredit}
           </div>
           <div className="flex min-h-[80px]">
-            <div className="flex-1 border-r border-blue-200 p-2">
+            <div className="flex-1 border-r border-green-200 p-2">
               <p className="text-xs font-bold text-slate-500 mb-1">
                 {locale === 'ko' ? '차변 (Dr)' : 'Debit (Dr)'}
               </p>
@@ -312,7 +312,7 @@ const TAccountDisplay: React.FC<TAccountDisplayProps> = ({ scenario, locale }) =
               <p className="text-xs font-bold text-slate-500 mb-1">
                 {locale === 'ko' ? '대변 (Cr)' : 'Credit (Cr)'}
               </p>
-              <p className="text-sm font-bold text-blue-700">
+              <p className="text-sm font-bold text-green-700">
                 {scenario.amount.toLocaleString()}
               </p>
             </div>
@@ -351,14 +351,14 @@ export const JournalEntryTrainer: React.FC<JournalEntryTrainerProps> = ({ locale
   if (state.showResults) {
     const pct = Math.round((state.score / SCENARIOS.length) * 100);
     return (
-      <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-emerald-50 to-green-50 border border-emerald-200 rounded-3xl shadow-xl">
-        <h3 className="text-xl font-bold text-emerald-900 mb-2">
+      <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
+        <h3 className="text-xl font-bold text-green-900 mb-2">
           {locale === 'ko' ? '결과 보기' : 'Quiz Results'}
         </h3>
         <div className="flex flex-col items-center py-8">
-          <div className="w-28 h-28 rounded-full bg-emerald-100 border-4 border-emerald-400 flex flex-col items-center justify-center mb-4">
-            <span className="text-3xl font-bold text-emerald-700">{state.score}</span>
-            <span className="text-sm text-emerald-500">/ {SCENARIOS.length}</span>
+          <div className="w-28 h-28 rounded-full bg-green-100 border-4 border-green-400 flex flex-col items-center justify-center mb-4">
+            <span className="text-3xl font-bold text-green-700">{state.score}</span>
+            <span className="text-sm text-green-500">/ {SCENARIOS.length}</span>
           </div>
           <p className="text-lg font-bold text-slate-700 mb-1">
             {locale === 'ko' ? `정답률 ${pct}%` : `${pct}% Correct`}
@@ -372,7 +372,7 @@ export const JournalEntryTrainer: React.FC<JournalEntryTrainerProps> = ({ locale
           </p>
           <button
             onClick={() => dispatch({ type: 'RESTART' })}
-            className="px-6 py-3 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 transition-colors"
+            className="px-6 py-3 bg-green-600 text-white font-bold rounded-xl hover:bg-green-700 transition-colors"
             aria-label={locale === 'ko' ? '다시 시작' : 'Restart quiz'}
           >
             {locale === 'ko' ? '다시 시작' : 'Restart Quiz'}
@@ -383,14 +383,14 @@ export const JournalEntryTrainer: React.FC<JournalEntryTrainerProps> = ({ locale
   }
 
   return (
-    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-emerald-50 to-green-50 border border-emerald-200 rounded-3xl shadow-xl">
+    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xl font-bold text-emerald-900">
+        <h3 className="text-xl font-bold text-green-900">
           {locale === 'ko' ? '회계 분개 연습기' : 'Journal Entry Trainer'}
         </h3>
         <div className="flex items-center gap-2">
-          <span className="text-sm font-bold text-emerald-700" aria-live="polite">
+          <span className="text-sm font-bold text-green-700" aria-live="polite">
             {locale === 'ko' ? `점수: ${state.score}/${SCENARIOS.length}` : `Score: ${state.score}/${SCENARIOS.length}`}
           </span>
           <span className="text-xs text-slate-500">
@@ -400,16 +400,16 @@ export const JournalEntryTrainer: React.FC<JournalEntryTrainerProps> = ({ locale
       </div>
 
       {/* Progress bar */}
-      <div className="w-full bg-emerald-100 rounded-full h-2 mb-6" role="progressbar" aria-valuenow={state.currentIdx + 1} aria-valuemin={1} aria-valuemax={SCENARIOS.length}>
+      <div className="w-full bg-green-100 rounded-full h-2 mb-6" role="progressbar" aria-valuenow={state.currentIdx + 1} aria-valuemin={1} aria-valuemax={SCENARIOS.length}>
         <div
-          className="bg-emerald-500 h-2 rounded-full transition-all duration-300"
+          className="bg-green-500 h-2 rounded-full transition-all duration-300"
           style={{ width: `${((state.currentIdx + 1) / SCENARIOS.length) * 100}%` }}
         />
       </div>
 
       {/* Scenario */}
-      <div className="bg-white border border-emerald-200 rounded-2xl p-5 mb-6">
-        <p className="text-xs font-bold text-emerald-600 mb-1">
+      <div className="bg-white border border-green-200 rounded-2xl p-5 mb-6">
+        <p className="text-xs font-bold text-green-600 mb-1">
           {locale === 'ko' ? `문제 ${state.currentIdx + 1}` : `Question ${state.currentIdx + 1}`}
         </p>
         <p className="text-base font-bold text-slate-800 mb-0.5">
@@ -426,8 +426,8 @@ export const JournalEntryTrainer: React.FC<JournalEntryTrainerProps> = ({ locale
       {/* Entry inputs */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         {/* Debit */}
-        <div className="bg-white border border-emerald-200 rounded-2xl p-4">
-          <label className="block text-xs font-bold text-emerald-700 mb-2" htmlFor="debit-account">
+        <div className="bg-white border border-green-200 rounded-2xl p-4">
+          <label className="block text-xs font-bold text-green-700 mb-2" htmlFor="debit-account">
             {locale === 'ko' ? '차변 계정 (Dr)' : 'Debit Account (Dr)'}
           </label>
           <select
@@ -435,7 +435,7 @@ export const JournalEntryTrainer: React.FC<JournalEntryTrainerProps> = ({ locale
             value={state.selectedDebit}
             onChange={(e) => dispatch({ type: 'SELECT_DEBIT', payload: e.target.value })}
             disabled={state.checked}
-            className="w-full border border-emerald-200 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-400 disabled:opacity-60"
+            className="w-full border border-green-200 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-400 disabled:opacity-60"
             aria-label={locale === 'ko' ? '차변 계정 선택' : 'Select debit account'}
           >
             <option value="">{locale === 'ko' ? '-- 계정 선택 --' : '-- Select Account --'}</option>
@@ -446,8 +446,8 @@ export const JournalEntryTrainer: React.FC<JournalEntryTrainerProps> = ({ locale
         </div>
 
         {/* Credit */}
-        <div className="bg-white border border-blue-200 rounded-2xl p-4">
-          <label className="block text-xs font-bold text-blue-700 mb-2" htmlFor="credit-account">
+        <div className="bg-white border border-green-200 rounded-2xl p-4">
+          <label className="block text-xs font-bold text-green-700 mb-2" htmlFor="credit-account">
             {locale === 'ko' ? '대변 계정 (Cr)' : 'Credit Account (Cr)'}
           </label>
           <select
@@ -455,7 +455,7 @@ export const JournalEntryTrainer: React.FC<JournalEntryTrainerProps> = ({ locale
             value={state.selectedCredit}
             onChange={(e) => dispatch({ type: 'SELECT_CREDIT', payload: e.target.value })}
             disabled={state.checked}
-            className="w-full border border-blue-200 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:opacity-60"
+            className="w-full border border-green-200 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-400 disabled:opacity-60"
             aria-label={locale === 'ko' ? '대변 계정 선택' : 'Select credit account'}
           >
             <option value="">{locale === 'ko' ? '-- 계정 선택 --' : '-- Select Account --'}</option>
@@ -471,7 +471,7 @@ export const JournalEntryTrainer: React.FC<JournalEntryTrainerProps> = ({ locale
         <button
           onClick={handleCheck}
           disabled={!canCheck}
-          className="w-full py-3 rounded-xl font-bold text-sm transition-colors bg-emerald-600 text-white hover:bg-emerald-700 disabled:opacity-40 disabled:cursor-not-allowed"
+          className="w-full py-3 rounded-xl font-bold text-sm transition-colors bg-green-600 text-white hover:bg-green-700 disabled:opacity-40 disabled:cursor-not-allowed"
           aria-label={locale === 'ko' ? '정답 확인' : 'Check answer'}
         >
           {locale === 'ko' ? '정답 확인' : 'Check Answer'}
@@ -481,11 +481,11 @@ export const JournalEntryTrainer: React.FC<JournalEntryTrainerProps> = ({ locale
       {/* Result panel */}
       {state.checked && (
         <div
-          className={`rounded-2xl p-4 border ${state.isCorrect ? 'bg-emerald-50 border-emerald-300' : 'bg-rose-50 border-rose-300'}`}
+          className={`rounded-2xl p-4 border ${state.isCorrect ? 'bg-green-50 border-green-300' : 'bg-rose-50 border-rose-300'}`}
           role="alert"
           aria-live="polite"
         >
-          <p className={`text-base font-bold mb-1 ${state.isCorrect ? 'text-emerald-700' : 'text-rose-700'}`}>
+          <p className={`text-base font-bold mb-1 ${state.isCorrect ? 'text-green-700' : 'text-rose-700'}`}>
             {state.isCorrect
               ? locale === 'ko' ? '정답입니다!' : 'Correct!'
               : locale === 'ko' ? '오답입니다.' : 'Incorrect.'}
@@ -508,7 +508,7 @@ export const JournalEntryTrainer: React.FC<JournalEntryTrainerProps> = ({ locale
           <div className="mt-4 flex gap-3">
             <button
               onClick={() => dispatch({ type: 'NEXT' })}
-              className="flex-1 py-2.5 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 transition-colors text-sm"
+              className="flex-1 py-2.5 bg-green-600 text-white font-bold rounded-xl hover:bg-green-700 transition-colors text-sm"
               aria-label={state.currentIdx >= SCENARIOS.length - 1
                 ? locale === 'ko' ? '결과 보기' : 'View results'
                 : locale === 'ko' ? '다음 문제' : 'Next question'}
@@ -520,7 +520,7 @@ export const JournalEntryTrainer: React.FC<JournalEntryTrainerProps> = ({ locale
             {state.currentIdx < SCENARIOS.length - 1 && (
               <button
                 onClick={() => dispatch({ type: 'SHOW_RESULTS' })}
-                className="px-4 py-2.5 border border-emerald-300 text-emerald-700 font-bold rounded-xl hover:bg-emerald-50 transition-colors text-sm"
+                className="px-4 py-2.5 border border-green-300 text-green-700 font-bold rounded-xl hover:bg-green-50 transition-colors text-sm"
                 aria-label={locale === 'ko' ? '결과 보기' : 'View results now'}
               >
                 {locale === 'ko' ? '결과 보기' : 'Results'}
@@ -531,8 +531,8 @@ export const JournalEntryTrainer: React.FC<JournalEntryTrainerProps> = ({ locale
       )}
 
       {/* Principle reminder */}
-      <div className="mt-6 p-3 bg-white border border-emerald-100 rounded-xl text-xs text-slate-500">
-        <span className="font-bold text-emerald-700">
+      <div className="mt-6 p-3 bg-white border border-green-100 rounded-xl text-xs text-slate-500">
+        <span className="font-bold text-green-700">
           {locale === 'ko' ? '분개 원칙: ' : 'Principle: '}
         </span>
         {locale === 'ko'

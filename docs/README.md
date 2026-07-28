@@ -19,8 +19,8 @@ This directory defines how `blog-oiyo` should grow from its current mixed-conten
 5. [Content Inventory Blueprint](./content-inventory-blueprint.md)
    How all articles, lectures, and interactive posts should be tracked in one master inventory.
 
-6. [Execution Roadmap](./execution-roadmap.md)
-   Phase-based rollout plan, conceptual flow, standards checklist, stack direction, and prioritized content list.
+6. [AI-Native OS Northstar](../../company-brain/AI-Native-OS-Northstar.md)
+   Cross-project long-term direction; current goals remain in `company-brain/goals.json`.
 
 7. [Component Allowlist](./component-allowlist.md)
    Approved authoring surface for prose, lecture, chart, reference, and interactive blocks.
@@ -58,8 +58,8 @@ This directory defines how `blog-oiyo` should grow from its current mixed-conten
 18. [GA4 Review Checklist](./ga4-review-checklist.md)
     Analytics review checklist for migration, traffic growth, and internal navigation measurement.
 
-19. [Inventory Survey Report](./inventory-survey-report.md)
-    Current real-data snapshot of `blog-oiyo` and Ahoxy inventories, plus manual review priorities.
+19. [Content Inventory Blueprint](./content-inventory-blueprint.md)
+    Canonical inventory structure and manual review policy.
 
 20. [Content Schema Implementation Draft](./content-schema-implementation-draft.md)
     File-by-file implementation draft for bringing the schema and taxonomy into the codebase.

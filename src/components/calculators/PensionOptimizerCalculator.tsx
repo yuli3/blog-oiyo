@@ -109,8 +109,8 @@ const PensionOptimizerCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale
   };
 
   return (
-    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-emerald-50 to-green-50 border border-emerald-200 rounded-3xl shadow-xl">
-      <h3 className="text-xl font-bold text-emerald-900 mb-6">
+    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
+      <h3 className="text-xl font-bold text-green-900 mb-6">
         {locale === 'ko' ? '연금 최적화 계산기' : 'Pension Optimizer'}
       </h3>
 
@@ -119,7 +119,7 @@ const PensionOptimizerCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-sm font-bold text-emerald-800">
+              <label className="text-sm font-bold text-green-800">
                 {locale === 'ko' ? '현재 나이' : 'Current Age'}
               </label>
               <input
@@ -128,12 +128,12 @@ const PensionOptimizerCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale
                 onChange={(e) => setCurrentAge(e.target.value)}
                 min="18"
                 max="64"
-                className="w-full p-3 bg-white border border-emerald-200 rounded-xl focus:ring-2 focus:ring-emerald-400 outline-none"
+                className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
                 aria-label={locale === 'ko' ? '현재 나이' : 'Current Age'}
               />
             </div>
             <div className="space-y-1">
-              <label className="text-sm font-bold text-emerald-800">
+              <label className="text-sm font-bold text-green-800">
                 {locale === 'ko' ? '기대수명' : 'Life Expectancy'}
               </label>
               <input
@@ -142,14 +142,14 @@ const PensionOptimizerCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale
                 onChange={(e) => setLifeExpectancy(e.target.value)}
                 min="65"
                 max="100"
-                className="w-full p-3 bg-white border border-emerald-200 rounded-xl focus:ring-2 focus:ring-emerald-400 outline-none"
+                className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
                 aria-label={locale === 'ko' ? '기대수명' : 'Life Expectancy'}
               />
             </div>
           </div>
 
           <div className="space-y-1">
-            <label className="text-sm font-bold text-emerald-800">
+            <label className="text-sm font-bold text-green-800">
               {locale === 'ko' ? '연간 총소득 (원)' : 'Annual Income (KRW)'}
             </label>
             <input
@@ -157,18 +157,18 @@ const PensionOptimizerCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale
               value={income}
               onChange={(e) => setIncome(e.target.value)}
               min="0"
-              className="w-full p-3 bg-white border border-emerald-200 rounded-xl focus:ring-2 focus:ring-emerald-400 outline-none"
+              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
               aria-label={locale === 'ko' ? '연간 총소득' : 'Annual Income'}
             />
             {result && (
-              <p className="text-xs text-emerald-600 font-bold">
+              <p className="text-xs text-green-600 font-bold">
                 {locale === 'ko' ? `적용 세액공제율: ${result.rate}%` : `Tax credit rate: ${result.rate}%`}
               </p>
             )}
           </div>
 
           <div className="space-y-1">
-            <label className="text-sm font-bold text-emerald-800">
+            <label className="text-sm font-bold text-green-800">
               {locale === 'ko' ? '국민연금 예상 수령액 (월, 원)' : 'Expected National Pension (monthly, KRW)'}
             </label>
             <input
@@ -176,13 +176,13 @@ const PensionOptimizerCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale
               value={nationalPension}
               onChange={(e) => setNationalPension(e.target.value)}
               min="0"
-              className="w-full p-3 bg-white border border-emerald-200 rounded-xl focus:ring-2 focus:ring-emerald-400 outline-none"
+              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
               aria-label={locale === 'ko' ? '국민연금 예상 수령액' : 'National Pension'}
             />
           </div>
 
           <div className="space-y-1">
-            <label className="text-sm font-bold text-emerald-800">
+            <label className="text-sm font-bold text-green-800">
               {locale === 'ko' ? 'IRP·퇴직연금 현재 잔액 (원)' : 'IRP/Retirement Fund Balance (KRW)'}
             </label>
             <input
@@ -190,14 +190,14 @@ const PensionOptimizerCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale
               value={irpBalance}
               onChange={(e) => setIrpBalance(e.target.value)}
               min="0"
-              className="w-full p-3 bg-white border border-emerald-200 rounded-xl focus:ring-2 focus:ring-emerald-400 outline-none"
+              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
               aria-label={locale === 'ko' ? 'IRP 잔액' : 'IRP Balance'}
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-sm font-bold text-emerald-800">
+              <label className="text-sm font-bold text-green-800">
                 {locale === 'ko' ? '연금저축 월납입 (원)' : 'Pension Savings/mo (KRW)'}
               </label>
               <input
@@ -205,15 +205,15 @@ const PensionOptimizerCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale
                 value={pensionMonthly}
                 onChange={(e) => setPensionMonthly(e.target.value)}
                 min="0"
-                className="w-full p-3 bg-white border border-emerald-200 rounded-xl focus:ring-2 focus:ring-emerald-400 outline-none"
+                className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
                 aria-label={locale === 'ko' ? '연금저축 월납입' : 'Pension Savings monthly'}
               />
-              <p className="text-xs text-emerald-500">
+              <p className="text-xs text-green-500">
                 {locale === 'ko' ? '연 한도 600만원' : 'Annual limit ₩6M'}
               </p>
             </div>
             <div className="space-y-1">
-              <label className="text-sm font-bold text-emerald-800">
+              <label className="text-sm font-bold text-green-800">
                 {locale === 'ko' ? 'IRP 월납입 (원)' : 'IRP monthly (KRW)'}
               </label>
               <input
@@ -221,10 +221,10 @@ const PensionOptimizerCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale
                 value={irpMonthly}
                 onChange={(e) => setIrpMonthly(e.target.value)}
                 min="0"
-                className="w-full p-3 bg-white border border-emerald-200 rounded-xl focus:ring-2 focus:ring-emerald-400 outline-none"
+                className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
                 aria-label={locale === 'ko' ? 'IRP 월납입' : 'IRP monthly'}
               />
-              <p className="text-xs text-emerald-500">
+              <p className="text-xs text-green-500">
                 {locale === 'ko' ? '합산 한도 900만원' : 'Combined limit ₩9M'}
               </p>
             </div>
@@ -232,7 +232,7 @@ const PensionOptimizerCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale
 
           <button
             onClick={reset}
-            className="w-full py-2 bg-white border border-emerald-300 hover:bg-emerald-50 text-emerald-700 font-bold rounded-xl transition-colors text-sm"
+            className="w-full py-2 bg-white border border-green-300 hover:bg-green-50 text-green-700 font-bold rounded-xl transition-colors text-sm"
             aria-label={locale === 'ko' ? '초기화' : 'Reset'}
           >
             {locale === 'ko' ? '다시 계산하기' : 'Reset'}
@@ -243,7 +243,7 @@ const PensionOptimizerCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale
         <div className="space-y-4">
           {result ? (
             <>
-              <div className="p-6 bg-emerald-600 text-white rounded-2xl text-center">
+              <div className="p-6 bg-green-600 text-white rounded-2xl text-center">
                 <p className="text-xs font-bold uppercase tracking-widest opacity-80 mb-1">
                   {locale === 'ko' ? '예상 연말정산 환급액' : 'Expected Tax Refund'}
                 </p>
@@ -270,28 +270,28 @@ const PensionOptimizerCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                <div className="p-4 bg-white rounded-2xl border border-emerald-100 text-center">
+                <div className="p-4 bg-white rounded-2xl border border-green-100 text-center">
                   <p className="text-xs text-slate-500 font-bold mb-1">
                     {locale === 'ko' ? '은퇴 후 월 예상 소득' : 'Monthly Income at Retire'}
                   </p>
-                  <p className="text-xl font-bold text-emerald-700">{fmt(result.monthlyRetirementIncome)}원</p>
+                  <p className="text-xl font-bold text-green-700">{fmt(result.monthlyRetirementIncome)}원</p>
                 </div>
-                <div className="p-4 bg-white rounded-2xl border border-emerald-100 text-center">
+                <div className="p-4 bg-white rounded-2xl border border-green-100 text-center">
                   <p className="text-xs text-slate-500 font-bold mb-1">
                     {locale === 'ko' ? '65세 시점 총 노후 자산' : 'Retirement Assets at 65'}
                   </p>
-                  <p className="text-xl font-bold text-emerald-700">{fmt(result.totalRetirementAsset)}원</p>
+                  <p className="text-xl font-bold text-green-700">{fmt(result.totalRetirementAsset)}원</p>
                 </div>
               </div>
 
-              <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-sm text-emerald-800 font-bold">
+              <div className="p-4 bg-green-50 border border-green-200 rounded-2xl text-sm text-green-800 font-bold">
                 {result.tip}
               </div>
             </>
           ) : (
-            <div className="flex flex-col items-center justify-center h-48 text-emerald-200">
+            <div className="flex flex-col items-center justify-center h-48 text-green-200">
               <span className="text-4xl mb-2" aria-hidden="true">💰</span>
-              <p className="text-sm font-bold text-emerald-300">
+              <p className="text-sm font-bold text-green-300">
                 {locale === 'ko' ? '정보를 입력하면 자동으로 계산됩니다' : 'Results update automatically'}
               </p>
             </div>

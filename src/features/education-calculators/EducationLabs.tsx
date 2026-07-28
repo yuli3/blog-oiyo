@@ -27,7 +27,7 @@ export const CVPLab: React.FC = () => {
   return (
     <Card className="p-6 bg-white border-slate-200 shadow-xl mt-8">
       <div className="flex items-center gap-2 mb-6 text-slate-900 border-b pb-4">
-        <Target className="text-emerald-500" />
+        <Target className="text-green-500" />
         <h3 className="text-xl font-bold">CVP 손익분기점 라보</h3>
       </div>
 
@@ -61,8 +61,8 @@ export const CVPLab: React.FC = () => {
             />
           </div>
 
-          <div className="p-4 rounded-xl border border-emerald-200 bg-emerald-50/50">
-            <div className="text-[10px] font-black uppercase tracking-widest text-emerald-500 mb-3">
+          <div className="p-4 rounded-xl border border-green-200 bg-green-50/50">
+            <div className="text-[10px] font-black uppercase tracking-widest text-green-500 mb-3">
               핵심 지표
             </div>
             <div className="space-y-3 text-sm">
@@ -80,7 +80,7 @@ export const CVPLab: React.FC = () => {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-slate-500">손익분기 판매량</span>
-                <span className="font-mono font-bold text-emerald-600">
+                <span className="font-mono font-bold text-green-600">
                   {breakEvenPoint.toLocaleString()} units
                 </span>
               </div>
@@ -90,7 +90,7 @@ export const CVPLab: React.FC = () => {
 
         <div className="lg:col-span-2">
           <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">
-            <TrendingUp className="text-emerald-500" size={14} /> 손익분기점 시각화
+            <TrendingUp className="text-green-500" size={14} /> 손익분기점 시각화
           </div>
           <CVPChart
             sellingPrice={sellingPrice}
@@ -141,7 +141,7 @@ export const SamplingErrorLab: React.FC = () => {
   return (
     <Card className="p-6 bg-white border-slate-200 shadow-xl mt-8">
       <div className="flex items-center gap-2 mb-6 text-slate-900 border-b pb-4">
-        <Target className="text-indigo-500" />
+        <Target className="text-green-500" />
         <h3 className="text-xl font-bold">표본오차 실험실</h3>
       </div>
 
@@ -174,8 +174,8 @@ export const SamplingErrorLab: React.FC = () => {
               className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-900"
             />
           </div>
-          <div className="p-4 rounded-xl border border-indigo-200 bg-indigo-50/50">
-            <div className="text-[10px] font-black uppercase tracking-widest text-indigo-500 mb-3">
+          <div className="p-4 rounded-xl border border-green-200 bg-green-50/50">
+            <div className="text-[10px] font-black uppercase tracking-widest text-green-500 mb-3">
               결과 요약
             </div>
             <div className="space-y-3 text-sm">
@@ -187,7 +187,7 @@ export const SamplingErrorLab: React.FC = () => {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-slate-500">변동성 (표준편차)</span>
-                <span className="font-mono font-bold text-indigo-600">
+                <span className="font-mono font-bold text-green-600">
                   {spread.toFixed(1)}
                 </span>
               </div>

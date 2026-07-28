@@ -159,7 +159,7 @@ export default function LoanCalculator() {
 
       <button
         onClick={calculate}
-        className="mt-5 w-full rounded-xl bg-blue-600 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
+        className="mt-5 w-full rounded-xl bg-green-600 py-3 text-sm font-semibold text-white transition hover:bg-green-700"
       >
         계산하기
       </button>
@@ -167,9 +167,9 @@ export default function LoanCalculator() {
       {result && (
         <div className="mt-6 space-y-4">
           <div className="grid grid-cols-3 gap-3 text-center">
-            <div className="rounded-xl bg-blue-50 p-4">
+            <div className="rounded-xl bg-green-50 p-4">
               <p className="text-xs text-gray-500">첫 달 납입액</p>
-              <p className="text-lg font-bold text-blue-600">{formatKRW(firstPayment)}원</p>
+              <p className="text-lg font-bold text-green-600">{formatKRW(firstPayment)}원</p>
             </div>
             <div className="rounded-xl bg-orange-50 p-4">
               <p className="text-xs text-gray-500">총 이자</p>
@@ -197,7 +197,7 @@ export default function LoanCalculator() {
                   <tr key={row.month} className="border-t border-gray-100">
                     <td className="px-3 py-2 text-gray-600">{row.month}</td>
                     <td className="px-3 py-2 font-medium text-gray-900">{formatKRW(row.payment)}</td>
-                    <td className="px-3 py-2 text-blue-600">{formatKRW(row.principal)}</td>
+                    <td className="px-3 py-2 text-green-600">{formatKRW(row.principal)}</td>
                     <td className="px-3 py-2 text-orange-600">{formatKRW(row.interest)}</td>
                     <td className="px-3 py-2 text-gray-600">{formatKRW(row.balance)}</td>
                   </tr>

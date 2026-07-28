@@ -21,7 +21,7 @@ const SliderRow: React.FC<SliderRowProps> = ({ label, value, min, max, step, onC
   <div className="flex flex-col gap-1">
     <div className="flex justify-between text-xs">
       <span className="text-slate-600">{label}</span>
-      <span className="font-bold text-emerald-700">{fmt(value)} {unit}</span>
+      <span className="font-bold text-green-700">{fmt(value)} {unit}</span>
     </div>
     <input
       type="range"
@@ -30,7 +30,7 @@ const SliderRow: React.FC<SliderRowProps> = ({ label, value, min, max, step, onC
       step={step}
       value={value}
       onChange={(e) => onChange(parseFloat(e.target.value))}
-      className="w-full accent-emerald-600"
+      className="w-full accent-green-600"
       aria-label={label}
     />
     <div className="flex justify-between text-xs text-slate-400">
@@ -125,8 +125,8 @@ export const GDPCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko
   const currentItems = s.approach === 'expenditure' ? expenditureItems : s.approach === 'income' ? incomeItems : productionItems;
 
   return (
-    <div className="bg-white border border-emerald-200 rounded-2xl p-5">
-      <h4 className="text-base font-bold text-emerald-900 mb-4">
+    <div className="bg-white border border-green-200 rounded-2xl p-5">
+      <h4 className="text-base font-bold text-green-900 mb-4">
         {locale === 'ko' ? 'GDP 계산기' : 'GDP Calculator'}
       </h4>
 
@@ -139,8 +139,8 @@ export const GDPCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko
             aria-pressed={s.approach === t.key}
             className={`flex-1 py-2 rounded-xl text-xs font-bold border transition-colors ${
               s.approach === t.key
-                ? 'bg-emerald-600 text-white border-emerald-600'
-                : 'bg-white text-emerald-700 border-emerald-200 hover:bg-emerald-50'
+                ? 'bg-green-600 text-white border-green-600'
+                : 'bg-white text-green-700 border-green-200 hover:bg-green-50'
             }`}
           >
             {locale === 'ko' ? t.ko : t.en}
@@ -164,15 +164,15 @@ export const GDPCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko
       </div>
 
       {/* Formula display */}
-      <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3 mb-4">
-        <p className="text-xs font-bold text-emerald-700 mb-1">
+      <div className="bg-green-50 border border-green-200 rounded-xl p-3 mb-4">
+        <p className="text-xs font-bold text-green-700 mb-1">
           {s.approach === 'expenditure'
             ? 'GDP = C + I + G + (X - M)'
             : s.approach === 'income'
             ? locale === 'ko' ? 'GDP = 임금 + 이자 + 지대 + 이윤' : 'GDP = Wages + Interest + Rent + Profit'
             : locale === 'ko' ? 'GDP = 1차 + 2차 + 3차 부가가치' : 'GDP = Primary + Secondary + Tertiary VA'}
         </p>
-        <p className="text-2xl font-bold text-emerald-800">
+        <p className="text-2xl font-bold text-green-800">
           {fmt(gdp)} {locale === 'ko' ? '조원' : 'T KRW'}
         </p>
       </div>
@@ -181,8 +181,8 @@ export const GDPCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko
       {s.approach === 'expenditure' && gdp > 0 && (
         <div className="space-y-1.5 mb-5">
           {[
-            { label: 'C', value: s.consumption, color: 'bg-emerald-400' },
-            { label: 'I', value: s.investment, color: 'bg-blue-400' },
+            { label: 'C', value: s.consumption, color: 'bg-green-400' },
+            { label: 'I', value: s.investment, color: 'bg-green-400' },
             { label: 'G', value: s.government, color: 'bg-amber-400' },
             { label: 'X-M', value: s.exports - s.imports, color: 'bg-rose-400' },
           ].map((bar) => (
@@ -204,13 +204,13 @@ export const GDPCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko
       )}
 
       {/* Real vs Nominal toggle */}
-      <div className="border-t border-emerald-100 pt-4">
+      <div className="border-t border-green-100 pt-4">
         <div className="flex items-center gap-2 mb-3">
           <button
             onClick={() => setS((prev) => ({ ...prev, showReal: !prev.showReal }))}
             aria-pressed={s.showReal}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors ${
-              s.showReal ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-white text-emerald-700 border-emerald-200'
+              s.showReal ? 'bg-green-600 text-white border-green-600' : 'bg-white text-green-700 border-green-200'
             }`}
           >
             {locale === 'ko' ? '실질GDP 계산기' : 'Real GDP Calculator'}
@@ -236,11 +236,11 @@ export const GDPCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko
               onChange={set('deflator')}
               unit=""
             />
-            <div className="bg-blue-50 border border-blue-200 rounded-xl p-3">
-              <p className="text-xs font-bold text-blue-700 mb-1">
+            <div className="bg-green-50 border border-green-200 rounded-xl p-3">
+              <p className="text-xs font-bold text-green-700 mb-1">
                 {locale === 'ko' ? '실질GDP = 명목GDP / 디플레이터 × 100' : 'Real GDP = Nominal GDP / Deflator × 100'}
               </p>
-              <p className="text-xl font-bold text-blue-800">
+              <p className="text-xl font-bold text-green-800">
                 {fmt(realGDP)} {locale === 'ko' ? '조원' : 'T KRW'}
               </p>
             </div>
@@ -272,8 +272,8 @@ export const MultiplierCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
   }, [deltaG, mpc]);
 
   return (
-    <div className="bg-white border border-emerald-200 rounded-2xl p-5">
-      <h4 className="text-base font-bold text-emerald-900 mb-4">
+    <div className="bg-white border border-green-200 rounded-2xl p-5">
+      <h4 className="text-base font-bold text-green-900 mb-4">
         {locale === 'ko' ? '케인즈 승수 계산기' : 'Keynesian Multiplier Calculator'}
       </h4>
 
@@ -299,17 +299,17 @@ export const MultiplierCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
 
       {/* Results */}
       <div className="grid grid-cols-2 gap-3 mb-5">
-        <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-center">
-          <p className="text-xs text-emerald-600 mb-1">
+        <div className="bg-green-50 border border-green-200 rounded-xl p-3 text-center">
+          <p className="text-xs text-green-600 mb-1">
             {locale === 'ko' ? '승수 k = 1/(1-MPC)' : 'Multiplier k = 1/(1-MPC)'}
           </p>
-          <p className="text-2xl font-bold text-emerald-800">{fmt(multiplier)}</p>
+          <p className="text-2xl font-bold text-green-800">{fmt(multiplier)}</p>
         </div>
-        <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 text-center">
-          <p className="text-xs text-blue-600 mb-1">
+        <div className="bg-green-50 border border-green-200 rounded-xl p-3 text-center">
+          <p className="text-xs text-green-600 mb-1">
             {locale === 'ko' ? 'GDP 변화 ΔY = k × ΔG' : 'GDP Change ΔY = k × ΔG'}
           </p>
-          <p className="text-2xl font-bold text-blue-800">{fmt(deltaY)} {locale === 'ko' ? '조원' : 'T KRW'}</p>
+          <p className="text-2xl font-bold text-green-800">{fmt(deltaY)} {locale === 'ko' ? '조원' : 'T KRW'}</p>
         </div>
       </div>
 
@@ -334,7 +334,7 @@ export const MultiplierCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
               </span>
               <div className="flex-1 bg-slate-100 rounded-full h-4 overflow-hidden">
                 <div
-                  className="h-4 rounded-full bg-emerald-400 transition-all"
+                  className="h-4 rounded-full bg-green-400 transition-all"
                   style={{ width: `${(val / deltaG) * 100}%` }}
                   role="meter"
                   aria-valuenow={val}
@@ -382,8 +382,8 @@ export const InflationCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale
   );
 
   return (
-    <div className="bg-white border border-emerald-200 rounded-2xl p-5">
-      <h4 className="text-base font-bold text-emerald-900 mb-4">
+    <div className="bg-white border border-green-200 rounded-2xl p-5">
+      <h4 className="text-base font-bold text-green-900 mb-4">
         {locale === 'ko' ? '인플레이션 계산기' : 'Inflation Calculator'}
       </h4>
 
@@ -403,7 +403,7 @@ export const InflationCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale
               min={min}
               max={max}
               step={step}
-              className="w-full border border-emerald-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+              className="w-full border border-green-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
               aria-label={label}
             />
           </div>
@@ -422,19 +422,19 @@ export const InflationCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale
 
       {/* Results */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 my-5">
-        <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-center">
-          <p className="text-xs text-emerald-600 mb-1">
+        <div className="bg-green-50 border border-green-200 rounded-xl p-3 text-center">
+          <p className="text-xs text-green-600 mb-1">
             {locale === 'ko' ? '인플레이션율' : 'Inflation Rate'}
           </p>
-          <p className={`text-xl font-bold ${inflationRate > 0 ? 'text-rose-600' : 'text-blue-600'}`}>
+          <p className={`text-xl font-bold ${inflationRate > 0 ? 'text-rose-600' : 'text-green-600'}`}>
             {fmt(inflationRate)}%
           </p>
         </div>
-        <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 text-center">
-          <p className="text-xs text-blue-600 mb-1">
+        <div className="bg-green-50 border border-green-200 rounded-xl p-3 text-center">
+          <p className="text-xs text-green-600 mb-1">
             {locale === 'ko' ? '실질소득' : 'Real Income'}
           </p>
-          <p className="text-xl font-bold text-blue-800">
+          <p className="text-xl font-bold text-green-800">
             {fmt(realIncome)} {locale === 'ko' ? '만원' : '10K'}
           </p>
         </div>
@@ -442,15 +442,15 @@ export const InflationCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale
           <p className="text-xs text-amber-600 mb-1">
             {locale === 'ko' ? '구매력 변화' : 'Purchasing Power Change'}
           </p>
-          <p className={`text-xl font-bold ${purchasingPowerChange < 0 ? 'text-rose-600' : 'text-emerald-600'}`}>
+          <p className={`text-xl font-bold ${purchasingPowerChange < 0 ? 'text-rose-600' : 'text-green-600'}`}>
             {fmt(purchasingPowerChange)}%
           </p>
         </div>
       </div>
 
       {/* Fisher equation */}
-      <div className="border-t border-emerald-100 pt-4">
-        <p className="text-xs font-bold text-emerald-700 mb-3">
+      <div className="border-t border-green-100 pt-4">
+        <p className="text-xs font-bold text-green-700 mb-3">
           {locale === 'ko' ? '피셔 방정식 (Fisher Equation)' : 'Fisher Equation'}
         </p>
         <div className="space-y-3">
@@ -472,11 +472,11 @@ export const InflationCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale
             onChange={setExpectedInflation}
             unit="%"
           />
-          <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3">
-            <p className="text-xs font-bold text-emerald-700 mb-1">
+          <div className="bg-green-50 border border-green-200 rounded-xl p-3">
+            <p className="text-xs font-bold text-green-700 mb-1">
               {locale === 'ko' ? '실질이자율 = 명목이자율 − 기대인플레이션율' : 'Real Rate = Nominal Rate − Expected Inflation'}
             </p>
-            <p className={`text-2xl font-bold ${realRate < 0 ? 'text-rose-600' : 'text-emerald-800'}`}>
+            <p className={`text-2xl font-bold ${realRate < 0 ? 'text-rose-600' : 'text-green-800'}`}>
               {fmt(realRate)}%
             </p>
             {realRate < 0 && (
@@ -505,11 +505,11 @@ export const MacroCalculators: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 
   ];
 
   return (
-    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-emerald-50 to-green-50 border border-emerald-200 rounded-3xl shadow-xl">
-      <h3 className="text-xl font-bold text-emerald-900 mb-2">
+    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
+      <h3 className="text-xl font-bold text-green-900 mb-2">
         {locale === 'ko' ? '거시경제 계산기' : 'Macroeconomics Calculator'}
       </h3>
-      <p className="text-sm text-emerald-600 mb-6">
+      <p className="text-sm text-green-600 mb-6">
         {locale === 'ko'
           ? 'GDP 접근법별 계산, 케인즈 승수, 인플레이션·피셔 방정식을 대화형으로 탐구하세요.'
           : 'Explore GDP approaches, the Keynesian multiplier, and inflation/Fisher equation interactively.'}
@@ -525,8 +525,8 @@ export const MacroCalculators: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 
             onClick={() => setActiveTab(t.key)}
             className={`flex-1 py-2.5 rounded-xl text-sm font-bold border transition-colors ${
               activeTab === t.key
-                ? 'bg-emerald-600 text-white border-emerald-600'
-                : 'bg-white text-emerald-700 border-emerald-200 hover:bg-emerald-50'
+                ? 'bg-green-600 text-white border-green-600'
+                : 'bg-white text-green-700 border-green-200 hover:bg-green-50'
             }`}
           >
             {locale === 'ko' ? t.ko : t.en}

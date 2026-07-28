@@ -204,7 +204,7 @@ export default function ResilienceBoostTest({ locale: localeProp }: Props) {
       </div>
       <div className="flex items-center gap-3">
         <div className="h-2 flex-1 overflow-hidden rounded-full bg-gray-100">
-          <div className="h-full rounded-full bg-emerald-500 transition-all duration-300" style={{ width: `${(idx / questions.length) * 100}%` }} />
+          <div className="h-full rounded-full bg-green-500 transition-all duration-300" style={{ width: `${(idx / questions.length) * 100}%` }} />
         </div>
         <span className="text-sm text-gray-500">{tx.progress(idx + 1, questions.length)}</span>
       </div>
@@ -212,8 +212,8 @@ export default function ResilienceBoostTest({ locale: localeProp }: Props) {
         <p className="mb-5 text-center text-lg font-medium text-gray-800">{q[locale]}</p>
         <div className="space-y-2">
           {opts.map((opt, i) => (
-            <button key={i} onClick={() => pick(i + 1)} className="w-full rounded-xl border border-gray-200 px-4 py-3 text-left text-sm text-gray-700 transition hover:border-emerald-300 hover:bg-emerald-50">
-              <span className="font-medium text-emerald-600 mr-2">{i + 1}.</span>{opt}
+            <button key={i} onClick={() => pick(i + 1)} className="w-full rounded-xl border border-gray-200 px-4 py-3 text-left text-sm text-gray-700 transition hover:border-green-300 hover:bg-green-50">
+              <span className="font-medium text-green-600 mr-2">{i + 1}.</span>{opt}
             </button>
           ))}
         </div>

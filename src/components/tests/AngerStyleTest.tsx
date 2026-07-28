@@ -257,9 +257,9 @@ export default function AngerStyleTest({ locale: localeProp }: Props) {
             <h3 className="font-semibold text-orange-800 text-sm mb-1">⚡ {t.impact}</h3>
             <p className="text-sm text-orange-700">{d.impact[locale]}</p>
           </div>
-          <div className="bg-blue-50 rounded-lg p-3">
-            <h3 className="font-semibold text-blue-800 text-sm mb-1">🌱 {t.growth}</h3>
-            <p className="text-sm text-blue-700">{d.growth[locale]}</p>
+          <div className="bg-green-50 rounded-lg p-3">
+            <h3 className="font-semibold text-green-800 text-sm mb-1">🌱 {t.growth}</h3>
+            <p className="text-sm text-green-700">{d.growth[locale]}</p>
           </div>
           <div className="text-center py-3 rounded-lg" style={{ backgroundColor: d.color + "18" }}>
             <p className="text-sm italic" style={{ color: d.color }}>"{d.affirmation[locale]}"</p>

@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import { computeSalaryBreakdown } from '../../lib/finance/salary-calculator'
 
 type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh'
 
@@ -65,24 +66,6 @@ const LABELS: Record<Locale, {
   zh: { title: '韩国薪资税后计算器', subtitle: '自动计算四大保险+所得税（2024年标准）', note: '此计算器仅供参考。', grossLabel: '月薪税前（万韩元）', dependentsLabel: '赡养人口（含本人）', nonTaxableLabel: '免税津贴（万韩元）', calculate: '计算', reset: '重置', grossIncome: '税前薪资', deductions: '扣除明细', netIncome: '税后薪资', nationalPension: '国民年金（4.5%）', healthInsurance: '健康保险（3.545%）', ltcInsurance: '长期护理（医保12.81%）', employmentInsurance: '就业保险（0.9%）', incomeTax: '劳动所得税', localTax: '地方所得税（所得税10%）', totalDeduction: '总扣除额', takeHome: '实收薪资', effectiveRate: '实效税率', monthly: '/月', annual: '/年', incomeUnit: '万元' },
 }
 
-// 2024 Korean income tax simplified brackets (monthly taxable, KRW)
-function calcIncomeTax(monthlyTaxable: number, dependents: number): number {
-  // Simplified earned income tax withholding (근로소득 간이세액표 근사)
-  const annual = monthlyTaxable * 12
-  let tax = 0
-  if (annual <= 14000000) tax = annual * 0.06
-  else if (annual <= 50000000) tax = 840000 + (annual - 14000000) * 0.15
-  else if (annual <= 88000000) tax = 6240000 + (annual - 50000000) * 0.24
-  else if (annual <= 150000000) tax = 15360000 + (annual - 88000000) * 0.35
-  else if (annual <= 300000000) tax = 37060000 + (annual - 150000000) * 0.38
-  else tax = 94060000 + (annual - 300000000) * 0.40
-
-  // Basic deduction: 1.5M per person per year
-  const deduction = dependents * 1500000
-  tax = Math.max(0, tax - deduction * 0.15)
-  return Math.max(0, Math.round(tax / 12))
-}
-
 function f(n: number): string {
   return Math.round(n).toLocaleString()
 }
@@ -97,24 +80,10 @@ export default function SalaryCalculator({ locale }: Props) {
   const [dependents, setDependents] = useState(1)
   const [nonTaxable, setNonTaxable] = useState(10)
 
-  const result = useMemo(() => {
-    const grossKRW = gross * 10000
-    const nonTaxableKRW = nonTaxable * 10000
-    const taxableBase = grossKRW - nonTaxableKRW
-
-    const pension = Math.round(grossKRW * 0.045)
-    const health = Math.round(grossKRW * 0.03545)
-    const ltc = Math.round(health * 0.1281)
-    const employment = Math.round(grossKRW * 0.009)
-    const incomeTaxAmt = calcIncomeTax(taxableBase, dependents)
-    const localTaxAmt = Math.round(incomeTaxAmt * 0.1)
-
-    const totalDed = pension + health + ltc + employment + incomeTaxAmt + localTaxAmt
-    const net = grossKRW - totalDed
-    const effectiveRate = ((totalDed / grossKRW) * 100).toFixed(1)
-
-    return { gross: grossKRW, pension, health, ltc, employment, incomeTax: incomeTaxAmt, localTax: localTaxAmt, totalDed, net, effectiveRate }
-  }, [gross, dependents, nonTaxable])
+  const result = useMemo(
+    () => computeSalaryBreakdown(gross, dependents, nonTaxable),
+    [gross, dependents, nonTaxable]
+  )
 
   const unit = isKo ? '원' : '₩'
 

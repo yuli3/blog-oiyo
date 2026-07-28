@@ -16,7 +16,7 @@ interface NumFieldProps {
 const NumField: React.FC<NumFieldProps> = ({ label, value, onChange, unit = '원' }) => (
   <div className="flex flex-col gap-1">
     <label className="text-xs text-slate-600">{label}</label>
-    <div className="flex items-center border border-emerald-200 rounded-xl overflow-hidden">
+    <div className="flex items-center border border-green-200 rounded-xl overflow-hidden">
       <input
         type="number"
         value={value}
@@ -24,7 +24,7 @@ const NumField: React.FC<NumFieldProps> = ({ label, value, onChange, unit = '원
         className="flex-1 px-3 py-2 text-sm focus:outline-none"
         aria-label={label}
       />
-      {unit && <span className="px-2 text-xs text-slate-500 bg-slate-50 border-l border-emerald-100 py-2">{unit}</span>}
+      {unit && <span className="px-2 text-xs text-slate-500 bg-slate-50 border-l border-green-100 py-2">{unit}</span>}
     </div>
   </div>
 );
@@ -37,9 +37,9 @@ interface ResultRowProps {
 }
 
 const ResultRow: React.FC<ResultRowProps> = ({ label, value, highlight = false, unit = '원' }) => (
-  <div className={`flex justify-between items-center py-2 border-b border-emerald-100 ${highlight ? 'bg-emerald-50 rounded-lg px-2' : ''}`}>
+  <div className={`flex justify-between items-center py-2 border-b border-green-100 ${highlight ? 'bg-green-50 rounded-lg px-2' : ''}`}>
     <span className="text-sm text-slate-600">{label}</span>
-    <span className={`text-sm font-bold ${highlight ? 'text-emerald-700' : 'text-slate-800'}`}>
+    <span className={`text-sm font-bold ${highlight ? 'text-green-700' : 'text-slate-800'}`}>
       {fmt(value)} {unit}
     </span>
   </div>
@@ -76,17 +76,17 @@ const TraditionalCosting: React.FC<{ locale: 'ko' | 'en' }> = ({ locale }) => {
               step={10}
               value={ohRate}
               onChange={(e) => setOhRate(parseInt(e.target.value))}
-              className="flex-1 accent-emerald-600"
+              className="flex-1 accent-green-600"
               aria-label={locale === 'ko' ? '제조간접비율' : 'Overhead rate'}
             />
-            <span className="text-sm font-bold text-emerald-700 w-16 text-right">{ohRate}%</span>
+            <span className="text-sm font-bold text-green-700 w-16 text-right">{ohRate}%</span>
           </div>
         </div>
         <NumField label={locale === 'ko' ? '생산량 (단위)' : 'Units Produced'} value={units} onChange={setUnits} unit={locale === 'ko' ? '개' : 'units'} />
       </div>
 
-      <div className="bg-white border border-emerald-200 rounded-2xl p-4">
-        <p className="text-sm font-bold text-emerald-800 mb-3">
+      <div className="bg-white border border-green-200 rounded-2xl p-4">
+        <p className="text-sm font-bold text-green-800 mb-3">
           {locale === 'ko' ? '원가 계산 결과' : 'Cost Calculation Results'}
         </p>
         <div className="space-y-0.5">
@@ -150,7 +150,7 @@ const ABCCosting: React.FC<{ locale: 'ko' | 'en' }> = ({ locale }) => {
     <div className="space-y-6">
       {/* Cost pools */}
       <div>
-        <p className="text-sm font-bold text-emerald-800 mb-3">
+        <p className="text-sm font-bold text-green-800 mb-3">
           {locale === 'ko' ? '원가 집합 (Cost Pools)' : 'Cost Pools'}
         </p>
         <div className="grid grid-cols-2 gap-4">
@@ -182,8 +182,8 @@ const ABCCosting: React.FC<{ locale: 'ko' | 'en' }> = ({ locale }) => {
           oh_trad: bOH_Trad, unitCost_trad: bUnitCost_Trad,
         },
       ].map((p) => (
-        <div key={p.name} className="bg-white border border-emerald-200 rounded-2xl p-4">
-          <p className="text-sm font-bold text-emerald-800 mb-3">{p.name}</p>
+        <div key={p.name} className="bg-white border border-green-200 rounded-2xl p-4">
+          <p className="text-sm font-bold text-green-800 mb-3">{p.name}</p>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
             <NumField label={locale === 'ko' ? '생산량' : 'Units'} value={p.units} onChange={p.setUnits} unit={locale === 'ko' ? '개' : 'units'} />
             <NumField label={locale === 'ko' ? '셋업 횟수' : '# Setups'} value={p.setups} onChange={p.setSetups} unit={locale === 'ko' ? '회' : 'setups'} />
@@ -192,21 +192,21 @@ const ABCCosting: React.FC<{ locale: 'ko' | 'en' }> = ({ locale }) => {
             <NumField label={locale === 'ko' ? '직접노무비' : 'Direct Labor'} value={p.dl} onChange={p.setDL} />
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3">
-              <p className="text-xs font-bold text-emerald-700 mb-1">
+            <div className="bg-green-50 border border-green-200 rounded-xl p-3">
+              <p className="text-xs font-bold text-green-700 mb-1">
                 {locale === 'ko' ? 'ABC 배부액' : 'ABC OH'}
               </p>
-              <p className="text-base font-bold text-emerald-800">{fmt(p.oh_abc)}</p>
-              <p className="text-xs text-emerald-600">
+              <p className="text-base font-bold text-green-800">{fmt(p.oh_abc)}</p>
+              <p className="text-xs text-green-600">
                 {locale === 'ko' ? `단위원가: ${fmt(p.unitCost_abc)}원` : `Unit: ₩${fmt(p.unitCost_abc)}`}
               </p>
             </div>
-            <div className="bg-blue-50 border border-blue-200 rounded-xl p-3">
-              <p className="text-xs font-bold text-blue-700 mb-1">
+            <div className="bg-green-50 border border-green-200 rounded-xl p-3">
+              <p className="text-xs font-bold text-green-700 mb-1">
                 {locale === 'ko' ? '전통방식 배부액' : 'Trad OH'}
               </p>
-              <p className="text-base font-bold text-blue-800">{fmt(p.oh_trad)}</p>
-              <p className="text-xs text-blue-600">
+              <p className="text-base font-bold text-green-800">{fmt(p.oh_trad)}</p>
+              <p className="text-xs text-green-600">
                 {locale === 'ko' ? `단위원가: ${fmt(p.unitCost_trad)}원` : `Unit: ₩${fmt(p.unitCost_trad)}`}
               </p>
             </div>
@@ -297,13 +297,13 @@ const BEPAnalysis: React.FC<{ locale: 'ko' | 'en' }> = ({ locale }) => {
 
       {/* Visual BEP */}
       {bepUnits > 0 && currentSales > 0 && (
-        <div className="bg-white border border-emerald-200 rounded-2xl p-4">
+        <div className="bg-white border border-green-200 rounded-2xl p-4">
           <p className="text-xs font-bold text-slate-600 mb-3">
             {locale === 'ko' ? '손익분기 구간 시각화' : 'Break-Even Visualization'}
           </p>
           <div className="relative h-8 bg-rose-100 rounded-full overflow-hidden">
             <div
-              className="absolute top-0 left-0 h-full bg-emerald-400 rounded-full transition-all"
+              className="absolute top-0 left-0 h-full bg-green-400 rounded-full transition-all"
               style={{ width: `${Math.min(100, (currentSales / Math.max(currentSales, bepUnits * 1.5)) * 100)}%` }}
             />
             <div
@@ -339,11 +339,11 @@ export const CostAccountingSimulator: React.FC<{ locale?: 'ko' | 'en' }> = ({ lo
   ];
 
   return (
-    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-emerald-50 to-green-50 border border-emerald-200 rounded-3xl shadow-xl">
-      <h3 className="text-xl font-bold text-emerald-900 mb-2">
+    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
+      <h3 className="text-xl font-bold text-green-900 mb-2">
         {locale === 'ko' ? '원가계산 시스템' : 'Cost Accounting Simulator'}
       </h3>
-      <p className="text-sm text-emerald-600 mb-6">
+      <p className="text-sm text-green-600 mb-6">
         {locale === 'ko'
           ? '전통적 원가계산, 활동기준원가계산(ABC), 손익분기점 분석을 직접 실습하세요.'
           : 'Practice traditional costing, ABC costing, and break-even analysis interactively.'}
@@ -358,8 +358,8 @@ export const CostAccountingSimulator: React.FC<{ locale?: 'ko' | 'en' }> = ({ lo
             onClick={() => setActiveTab(t.key)}
             className={`flex-1 py-2.5 rounded-xl text-xs font-bold border transition-colors ${
               activeTab === t.key
-                ? 'bg-emerald-600 text-white border-emerald-600'
-                : 'bg-white text-emerald-700 border-emerald-200 hover:bg-emerald-50'
+                ? 'bg-green-600 text-white border-green-600'
+                : 'bg-white text-green-700 border-green-200 hover:bg-green-50'
             }`}
           >
             {locale === 'ko' ? t.ko : t.en}

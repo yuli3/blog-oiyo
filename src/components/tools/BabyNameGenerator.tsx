@@ -145,7 +145,7 @@ const ELEMENT_COLORS: Record<Element, string> = {
   fire: "bg-red-100 text-red-700",
   earth: "bg-yellow-100 text-yellow-700",
   metal: "bg-gray-100 text-gray-700",
-  water: "bg-blue-100 text-blue-700",
+  water: "bg-green-100 text-green-700",
 };
 
 const UI: Record<
@@ -328,8 +328,8 @@ export default function BabyNameGenerator({ locale }: Props) {
                 onClick={() => setGender(g)}
                 className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors ${
                   gender === g
-                    ? "bg-purple-500 text-white"
-                    : "bg-gray-100 text-gray-600 hover:bg-purple-50"
+                    ? "bg-green-500 text-white"
+                    : "bg-gray-100 text-gray-600 hover:bg-green-50"
                 }`}
               >
                 {t.genders[g]}
@@ -348,8 +348,8 @@ export default function BabyNameGenerator({ locale }: Props) {
                 onClick={() => setStyle(s)}
                 className={`py-2 rounded-lg text-sm font-medium transition-colors ${
                   style === s
-                    ? "bg-purple-500 text-white"
-                    : "bg-gray-100 text-gray-600 hover:bg-purple-50"
+                    ? "bg-green-500 text-white"
+                    : "bg-gray-100 text-gray-600 hover:bg-green-50"
                 }`}
               >
                 {t.styles[s]}
@@ -364,7 +364,7 @@ export default function BabyNameGenerator({ locale }: Props) {
           <select
             value={meaning}
             onChange={(e) => setMeaning(e.target.value as Meaning)}
-            className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-400"
+            className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-green-400"
           >
             {(["light", "flower", "courage", "wisdom", "peace", "love"] as Meaning[]).map((m) => (
               <option key={m} value={m}>{t.meanings[m]}</option>
@@ -380,13 +380,13 @@ export default function BabyNameGenerator({ locale }: Props) {
             value={dollim}
             onChange={(e) => setDollim(e.target.value.slice(0, 2))}
             placeholder={t.dollimsPlaceholder}
-            className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-400"
+            className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-green-400"
           />
         </div>
 
         <button
           onClick={handleGenerate}
-          className="w-full rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 py-3 font-semibold text-white shadow-md hover:from-purple-600 hover:to-pink-600 transition-all"
+          className="w-full rounded-xl bg-gradient-to-r from-green-500 to-pink-500 py-3 font-semibold text-white shadow-md hover:from-green-600 hover:to-pink-600 transition-all"
         >
           {t.generateBtn}
         </button>
@@ -413,7 +413,7 @@ export default function BabyNameGenerator({ locale }: Props) {
                     <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${ELEMENT_COLORS[entry.element]}`}>
                       {ELEMENT_LABELS[entry.element]} {t.elementLabel}
                     </span>
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 font-medium">
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-green-100 text-green-700 font-medium">
                       {t.meanings[entry.meaning]}
                     </span>
                   </div>

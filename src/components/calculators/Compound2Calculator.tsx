@@ -75,15 +75,15 @@ const Compound2Calculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
   };
 
   return (
-    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-violet-50 to-purple-50 border border-violet-200 rounded-3xl shadow-xl">
-      <h3 className="text-xl font-bold text-violet-900 mb-6">
+    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
+      <h3 className="text-xl font-bold text-green-900 mb-6">
         {ko ? '복리 수익 시뮬레이터' : 'Compound Interest Simulator'}
       </h3>
 
       <div className="space-y-5">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-1">
-            <label className="text-sm font-bold text-violet-800">
+            <label className="text-sm font-bold text-green-800">
               {ko ? '초기 투자금 (원)' : 'Initial Investment (KRW)'}
             </label>
             <input
@@ -91,11 +91,11 @@ const Compound2Calculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
               value={initialInvestment}
               onChange={(e) => setInitialInvestment(e.target.value)}
               min="0"
-              className="w-full p-3 bg-white border border-violet-200 rounded-xl focus:ring-2 focus:ring-violet-400 outline-none"
+              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
             />
           </div>
           <div className="space-y-1">
-            <label className="text-sm font-bold text-violet-800">
+            <label className="text-sm font-bold text-green-800">
               {ko ? '월 추가 납입 (원)' : 'Monthly Contribution (KRW)'}
             </label>
             <input
@@ -103,11 +103,11 @@ const Compound2Calculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
               value={monthlyContribution}
               onChange={(e) => setMonthlyContribution(e.target.value)}
               min="0"
-              className="w-full p-3 bg-white border border-violet-200 rounded-xl focus:ring-2 focus:ring-violet-400 outline-none"
+              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
             />
           </div>
           <div className="space-y-1">
-            <label className="text-sm font-bold text-violet-800">
+            <label className="text-sm font-bold text-green-800">
               {ko ? '투자 기간 (년)' : 'Investment Period (years)'}
             </label>
             <input
@@ -116,11 +116,11 @@ const Compound2Calculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
               onChange={(e) => setInvestmentPeriod(e.target.value)}
               min="1"
               max="50"
-              className="w-full p-3 bg-white border border-violet-200 rounded-xl focus:ring-2 focus:ring-violet-400 outline-none"
+              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
             />
           </div>
           <div className="space-y-1">
-            <label className="text-sm font-bold text-violet-800">
+            <label className="text-sm font-bold text-green-800">
               {ko ? '연 수익률 (%)' : 'Annual Return (%)'}
             </label>
             <input
@@ -129,11 +129,11 @@ const Compound2Calculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
               onChange={(e) => setInterestRate(e.target.value)}
               min="0"
               step="0.1"
-              className="w-full p-3 bg-white border border-violet-200 rounded-xl focus:ring-2 focus:ring-violet-400 outline-none"
+              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
             />
           </div>
           <div className="space-y-1 md:col-span-2">
-            <label className="text-sm font-bold text-violet-800">
+            <label className="text-sm font-bold text-green-800">
               {ko ? '시나리오 범위 ± (%)' : 'Scenario Range ± (%)'}
             </label>
             <input
@@ -142,7 +142,7 @@ const Compound2Calculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
               onChange={(e) => setRateRange(e.target.value)}
               min="0"
               step="0.5"
-              className="w-full p-3 bg-white border border-violet-200 rounded-xl focus:ring-2 focus:ring-violet-400 outline-none"
+              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
             />
           </div>
         </div>
@@ -156,13 +156,13 @@ const Compound2Calculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
         <div className="flex gap-3">
           <button
             onClick={calculate}
-            className="flex-1 py-3 bg-violet-600 hover:bg-violet-700 text-white font-bold rounded-xl transition-colors"
+            className="flex-1 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl transition-colors"
           >
             {ko ? '계산하기' : 'Calculate'}
           </button>
           <button
             onClick={reset}
-            className="px-5 py-3 bg-white border border-violet-300 hover:bg-violet-50 text-violet-700 font-bold rounded-xl transition-colors"
+            className="px-5 py-3 bg-white border border-green-300 hover:bg-green-50 text-green-700 font-bold rounded-xl transition-colors"
           >
             {ko ? '초기화' : 'Reset'}
           </button>
@@ -178,11 +178,11 @@ const Compound2Calculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
                 </p>
                 <p className="text-sm font-black text-red-700">{fmt(result.worstCase)}</p>
               </div>
-              <div className="bg-violet-100 border border-violet-300 rounded-xl p-4 text-center">
-                <p className="text-xs font-bold text-violet-700 mb-1">
+              <div className="bg-green-100 border border-green-300 rounded-xl p-4 text-center">
+                <p className="text-xs font-bold text-green-700 mb-1">
                   {ko ? `평균 (${interestRate}%)` : `Avg (${interestRate}%)`}
                 </p>
-                <p className="text-base font-black text-violet-900">{fmt(result.averageCase)}</p>
+                <p className="text-base font-black text-green-900">{fmt(result.averageCase)}</p>
               </div>
               <div className="bg-green-50 border border-green-200 rounded-xl p-4 text-center">
                 <p className="text-xs font-bold text-green-600 mb-1">
@@ -193,18 +193,18 @@ const Compound2Calculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
             </div>
 
             {/* Summary row */}
-            <div className="bg-white rounded-xl border border-violet-100 p-4 space-y-2">
+            <div className="bg-white rounded-xl border border-green-100 p-4 space-y-2">
               <div className="flex justify-between text-sm">
-                <span className="text-violet-600 font-semibold">{ko ? '총 납입액' : 'Total Contributed'}</span>
+                <span className="text-green-600 font-semibold">{ko ? '총 납입액' : 'Total Contributed'}</span>
                 <span className="font-bold">{fmt(result.totalContributed)}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-violet-600 font-semibold">{ko ? '평균 수익 증가분' : 'Avg Growth'}</span>
-                <span className="font-bold text-violet-800">+{fmt(result.totalGrowth)}</span>
+                <span className="text-green-600 font-semibold">{ko ? '평균 수익 증가분' : 'Avg Growth'}</span>
+                <span className="font-bold text-green-800">+{fmt(result.totalGrowth)}</span>
               </div>
-              <div className="flex justify-between text-sm border-t border-violet-100 pt-2">
-                <span className="text-violet-600 font-bold">{ko ? '수익 배수 (평균)' : 'Return Multiplier (avg)'}</span>
-                <span className="font-black text-violet-900">{result.multiplier}×</span>
+              <div className="flex justify-between text-sm border-t border-green-100 pt-2">
+                <span className="text-green-600 font-bold">{ko ? '수익 배수 (평균)' : 'Return Multiplier (avg)'}</span>
+                <span className="font-black text-green-900">{result.multiplier}×</span>
               </div>
             </div>
           </div>

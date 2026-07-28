@@ -253,10 +253,10 @@ export default function MeetingStyleTest({ locale: localeProp }: Props) {
     const r = t.results[styleType];
     return (
       <div className="not-prose my-10 p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto text-center space-y-6">
-        <p className="text-xs font-bold text-violet-500 uppercase tracking-widest">{t.resultLabel}</p>
+        <p className="text-xs font-bold text-green-500 uppercase tracking-widest">{t.resultLabel}</p>
         <div className="text-6xl">{r.emoji}</div>
         <h3 className="text-3xl font-black text-slate-900">{r.title}</h3>
-        <div className="p-6 bg-violet-50 rounded-2xl border border-violet-100">
+        <div className="p-6 bg-green-50 rounded-2xl border border-green-100">
           <p className="text-slate-700 text-base leading-relaxed">{r.desc}</p>
         </div>
         <button onClick={() => { setAnswers({}); setPhase("quiz"); }} className="text-slate-400 text-sm hover:underline">{t.retake}</button>
@@ -270,7 +270,7 @@ export default function MeetingStyleTest({ locale: localeProp }: Props) {
         <h3 className="text-2xl font-black text-slate-900">{t.title}</h3>
         <p className="text-sm text-slate-500 mt-2">{t.description}</p>
         <div className="mt-3 h-2 bg-slate-100 rounded-full">
-          <div className="h-2 bg-violet-500 rounded-full transition-all" style={{ width: `${(Object.keys(answers).length / t.questions.length) * 100}%` }} />
+          <div className="h-2 bg-green-500 rounded-full transition-all" style={{ width: `${(Object.keys(answers).length / t.questions.length) * 100}%` }} />
         </div>
       </div>
       <div className="space-y-8">
@@ -284,7 +284,7 @@ export default function MeetingStyleTest({ locale: localeProp }: Props) {
                   <button
                     key={v}
                     onClick={() => setAnswers((prev) => ({ ...prev, [q.id]: opt.scores }))}
-                    className={`w-full text-left py-2 px-4 text-sm rounded-xl border transition-all ${isSelected ? "bg-violet-600 border-violet-600 text-white font-semibold shadow-md" : "bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100"}`}
+                    className={`w-full text-left py-2 px-4 text-sm rounded-xl border transition-all ${isSelected ? "bg-green-600 border-green-600 text-white font-semibold shadow-md" : "bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100"}`}
                   >
                     {opt.text}
                   </button>
@@ -298,7 +298,7 @@ export default function MeetingStyleTest({ locale: localeProp }: Props) {
         <button
           disabled={!isComplete}
           onClick={() => setPhase("result")}
-          className={`px-10 py-3 rounded-2xl font-bold text-base transition-all ${isComplete ? "bg-violet-600 text-white hover:bg-violet-700 shadow-lg" : "bg-slate-200 text-slate-400 cursor-not-allowed"}`}
+          className={`px-10 py-3 rounded-2xl font-bold text-base transition-all ${isComplete ? "bg-green-600 text-white hover:bg-green-700 shadow-lg" : "bg-slate-200 text-slate-400 cursor-not-allowed"}`}
         >
           {lang === "ko" ? "결과 보기" : "See Results"}
         </button>
