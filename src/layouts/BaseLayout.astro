@@ -25,9 +25,16 @@ interface Props {
   author?: string;
   availableLocales?: string[];
   canonicalUrl?: string;
+  // Search-result pages must stay out of the index (Google quality guidelines).
+  noindex?: boolean;
+  // Opt-in server-rendered lead. Tool pages mount a client:load island, so
+  // without this the crawler sees a page with no h1 and no body text at all.
+  // Opt-in because pages whose island renders its own h1 would end up with two.
+  heading?: string;
+  intro?: string;
 }
 
-const { title, description, image, type, pubDate, updatedDate, tags, category, author, availableLocales, canonicalUrl } = Astro.props;
+const { title, description, image, type, pubDate, updatedDate, tags, category, author, availableLocales, canonicalUrl, noindex, heading, intro } = Astro.props;
 const locale = getLocaleFromPath(Astro.url.pathname);
 const t = await getTranslations(locale);
 const nav = t.nav as Record<string, string>;
@@ -95,7 +102,7 @@ const langItems = availableLocales && availableLocales.length
   class:list={["scroll-smooth", { "snap-y snap-mandatory": scrollSnapEnabled }]}
 >
   <head>
-    <SEO {title} {description} {image} {type} {pubDate} {updatedDate} {tags} {category} {author} {availableLocales} canonicalURL={canonicalUrl} />
+    <SEO {title} {description} {image} {type} {pubDate} {updatedDate} {tags} {category} {author} {availableLocales} canonicalURL={canonicalUrl} {noindex} />
 
     <!-- Mermaid diagram rendering (only executes if mermaid code blocks are present) -->
     <script type="module" is:inline>
@@ -376,6 +383,12 @@ const langItems = availableLocales && availableLocales.length
     </script>
 
     <main id="main-content" role="main" class="flex-1">
+      {heading && (
+        <div class="mx-auto max-w-3xl px-4 pt-8">
+          <h1 class="text-2xl font-black tracking-tight text-foreground">{heading}</h1>
+          {intro && <p class="mt-2 text-sm leading-relaxed text-muted-foreground">{intro}</p>}
+        </div>
+      )}
       <slot />
     </main>
 

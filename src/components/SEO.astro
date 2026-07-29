@@ -19,6 +19,8 @@ interface Props {
   category?: string;
   author?: string;
   availableLocales?: string[];
+  // Search-result pages must stay out of the index (Google quality guidelines).
+  noindex?: boolean;
 }
 
 const {
@@ -33,6 +35,7 @@ const {
   category,
   author = siteConfig.author,
   availableLocales,
+  noindex = false,
 } = Astro.props;
 
 const siteTitle =
@@ -87,7 +90,7 @@ const resolvedCanonicalUrl = new URL(String(canonicalURL), Astro.site);
 const canonicalHost = resolvedCanonicalUrl.hostname;
 const isCrossDomainCanonical = canonicalHost !== new URL(siteConfig.url).hostname;
 const isDeindexedLocale = DEINDEXED_LOCALES.has(currentLocale);
-const robotsContent = isCrossDomainCanonical || isDeindexedLocale
+const robotsContent = noindex || isCrossDomainCanonical || isDeindexedLocale
   ? "noindex, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
   : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1";
 
