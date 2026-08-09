@@ -85,6 +85,7 @@ The quick win sequence is:
 6. `FrontierChart`
 7. `NPVChart`
 8. `SMLChart`
+9. `CAPMChart`
 9. `GameTheoryPlayground`
 
 ### Islands

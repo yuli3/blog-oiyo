@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
+import { Field, FieldLabel } from '@/components/ui/field';
+import { InputGroup, InputGroupInput } from '@/components/ui/input-group';
 import ArrowLeftRight from 'lucide-react/dist/esm/icons/arrow-left-right'
 import TrendingDown from 'lucide-react/dist/esm/icons/trending-down'
 import TrendingUp from 'lucide-react/dist/esm/icons/trending-up'
@@ -44,28 +46,16 @@ export const VarianceAnalysis: React.FC = () => {
                 <div className="space-y-4 p-4 bg-blue-50/30 rounded-xl border border-blue-100">
                     <span className="text-xs font-bold text-blue-600 uppercase">실제 데이터 (Actual)</span>
                     <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <label className="text-[10px] text-slate-500 block mb-1">실제 투입량 (AQ)</label>
-                            <input type="number" value={aq} onChange={e => setAq(Number(e.target.value))} className="w-full p-2 border border-slate-200 rounded text-sm"/>
-                        </div>
-                        <div>
-                            <label className="text-[10px] text-slate-500 block mb-1">실제 가격 (AP)</label>
-                            <input type="number" value={ap} onChange={e => setAp(Number(e.target.value))} className="w-full p-2 border border-slate-200 rounded text-sm"/>
-                        </div>
+                        <Field><FieldLabel htmlFor="variance-aq" className="text-slate-600">실제 투입량 (AQ)</FieldLabel><InputGroup className="border-slate-300 bg-white"><InputGroupInput id="variance-aq" type="number" value={aq} onChange={e => setAq(Number(e.target.value))} className="text-slate-900"/></InputGroup></Field>
+                        <Field><FieldLabel htmlFor="variance-ap" className="text-slate-600">실제 가격 (AP)</FieldLabel><InputGroup className="border-slate-300 bg-white"><InputGroupInput id="variance-ap" type="number" value={ap} onChange={e => setAp(Number(e.target.value))} className="text-slate-900"/></InputGroup></Field>
                     </div>
                 </div>
 
                 <div className="space-y-4 p-4 bg-emerald-50/30 rounded-xl border border-emerald-100">
                     <span className="text-xs font-bold text-emerald-600 uppercase">표준 데이터 (Standard)</span>
                     <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <label className="text-[10px] text-slate-500 block mb-1">표준 허용량 (SQ)</label>
-                            <input type="number" value={sq} onChange={e => setSq(Number(e.target.value))} className="w-full p-2 border border-slate-200 rounded text-sm"/>
-                        </div>
-                        <div>
-                            <label className="text-[10px] text-slate-500 block mb-1">표준 가격 (SP)</label>
-                            <input type="number" value={sp} onChange={e => setSp(Number(e.target.value))} className="w-full p-2 border border-slate-200 rounded text-sm"/>
-                        </div>
+                        <Field><FieldLabel htmlFor="variance-sq" className="text-slate-600">표준 허용량 (SQ)</FieldLabel><InputGroup className="border-slate-300 bg-white"><InputGroupInput id="variance-sq" type="number" value={sq} onChange={e => setSq(Number(e.target.value))} className="text-slate-900"/></InputGroup></Field>
+                        <Field><FieldLabel htmlFor="variance-sp" className="text-slate-600">표준 가격 (SP)</FieldLabel><InputGroup className="border-slate-300 bg-white"><InputGroupInput id="variance-sp" type="number" value={sp} onChange={e => setSp(Number(e.target.value))} className="text-slate-900"/></InputGroup></Field>
                     </div>
                 </div>
             </div>

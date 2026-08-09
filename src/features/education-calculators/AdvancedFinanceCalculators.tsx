@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
+import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
+import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group';
 import TrendingUp from 'lucide-react/dist/esm/icons/trending-up'
 import Landmark from 'lucide-react/dist/esm/icons/landmark';
 
@@ -22,20 +24,11 @@ export const CAPMCalculator: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="space-y-4">
-                    <div>
-                        <label className="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1 block">무위험수익률 (Rf, %)</label>
-                        <input type="number" value={rf} onChange={e => setRf(Number(e.target.value))} className="w-full bg-slate-800 border-slate-700 p-2 rounded text-white font-mono"/>
-                    </div>
-                    <div>
-                        <label className="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1 block">베타 (Beta, β)</label>
-                        <input type="number" value={beta} onChange={e => setBeta(Number(e.target.value))} className="w-full bg-slate-800 border-slate-700 p-2 rounded text-white font-mono"/>
-                    </div>
-                    <div>
-                        <label className="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1 block">시장기대수익률 (Rm, %)</label>
-                        <input type="number" value={rm} onChange={e => setRm(Number(e.target.value))} className="w-full bg-slate-800 border-slate-700 p-2 rounded text-white font-mono"/>
-                    </div>
-                </div>
+                <FieldGroup>
+                    <Field><FieldLabel htmlFor="capm-rf">무위험수익률 (Rf)</FieldLabel><InputGroup><InputGroupInput id="capm-rf" type="number" value={rf} onChange={e => setRf(Number(e.target.value))}/><InputGroupAddon>%</InputGroupAddon></InputGroup></Field>
+                    <Field><FieldLabel htmlFor="capm-beta">베타 (Beta, β)</FieldLabel><InputGroup><InputGroupInput id="capm-beta" type="number" value={beta} onChange={e => setBeta(Number(e.target.value))}/></InputGroup></Field>
+                    <Field><FieldLabel htmlFor="capm-rm">시장기대수익률 (Rm)</FieldLabel><InputGroup><InputGroupInput id="capm-rm" type="number" value={rm} onChange={e => setRm(Number(e.target.value))}/><InputGroupAddon>%</InputGroupAddon></InputGroup></Field>
+                </FieldGroup>
 
                 <div className="flex flex-col justify-center items-center bg-blue-500/5 rounded-2xl border border-blue-500/20 p-6">
                     <span className="text-xs font-bold text-blue-400 uppercase tracking-widest mb-2">자기자본비용 (Ke)</span>
@@ -72,30 +65,15 @@ export const WACCCalculator: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="space-y-3">
+                <FieldGroup className="gap-3">
                     <div className="grid grid-cols-2 gap-2">
-                        <div>
-                            <label className="text-[10px] text-slate-500 font-black">자기자본 (E)</label>
-                            <input type="number" value={equity} onChange={e => setEquity(Number(e.target.value))} className="w-full bg-slate-800 border-slate-700 p-2 rounded text-sm"/>
-                        </div>
-                        <div>
-                            <label className="text-[10px] text-slate-500 font-black">타인자본 (D)</label>
-                            <input type="number" value={debt} onChange={e => setDebt(Number(e.target.value))} className="w-full bg-slate-800 border-slate-700 p-2 rounded text-sm"/>
-                        </div>
+                        <Field><FieldLabel htmlFor="wacc-equity">자기자본 (E)</FieldLabel><InputGroup><InputGroupInput id="wacc-equity" type="number" value={equity} onChange={e => setEquity(Number(e.target.value))}/></InputGroup></Field>
+                        <Field><FieldLabel htmlFor="wacc-debt">타인자본 (D)</FieldLabel><InputGroup><InputGroupInput id="wacc-debt" type="number" value={debt} onChange={e => setDebt(Number(e.target.value))}/></InputGroup></Field>
                     </div>
-                    <div>
-                        <label className="text-[10px] text-slate-500 font-black">자기자본비용 (Ke, %)</label>
-                        <input type="number" value={ke} onChange={e => setKe(Number(e.target.value))} className="w-full bg-slate-800 border-slate-700 p-2 rounded text-sm"/>
-                    </div>
-                    <div>
-                        <label className="text-[10px] text-slate-500 font-black">세전 부채비용 (Kd, %)</label>
-                        <input type="number" value={kd} onChange={e => setKd(Number(e.target.value))} className="w-full bg-slate-800 border-slate-700 p-2 rounded text-sm"/>
-                    </div>
-                    <div>
-                        <label className="text-[10px] text-slate-500 font-black">법인세율 (Tax, %)</label>
-                        <input type="number" value={tax} onChange={e => setTax(Number(e.target.value))} className="w-full bg-slate-800 border-slate-700 p-2 rounded text-sm"/>
-                    </div>
-                </div>
+                    <Field><FieldLabel htmlFor="wacc-ke">자기자본비용 (Ke)</FieldLabel><InputGroup><InputGroupInput id="wacc-ke" type="number" value={ke} onChange={e => setKe(Number(e.target.value))}/><InputGroupAddon>%</InputGroupAddon></InputGroup></Field>
+                    <Field><FieldLabel htmlFor="wacc-kd">세전 부채비용 (Kd)</FieldLabel><InputGroup><InputGroupInput id="wacc-kd" type="number" value={kd} onChange={e => setKd(Number(e.target.value))}/><InputGroupAddon>%</InputGroupAddon></InputGroup></Field>
+                    <Field><FieldLabel htmlFor="wacc-tax">법인세율 (Tax)</FieldLabel><InputGroup><InputGroupInput id="wacc-tax" type="number" value={tax} onChange={e => setTax(Number(e.target.value))}/><InputGroupAddon>%</InputGroupAddon></InputGroup></Field>
+                </FieldGroup>
 
                 <div className="flex flex-col justify-center items-center bg-emerald-500/5 rounded-2xl border border-emerald-500/20 p-6">
                     <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest mb-2">가중평균자본비용 (WACC)</span>

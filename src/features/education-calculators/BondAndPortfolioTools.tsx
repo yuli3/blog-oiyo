@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
+import { Field, FieldLabel } from '@/components/ui/field';
+import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group';
 import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LabelList } from 'recharts';
 import Landmark from 'lucide-react/dist/esm/icons/landmark'
 import TrendingUp from 'lucide-react/dist/esm/icons/trending-up'
@@ -37,14 +39,8 @@ export const BondPricer: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <label className="text-xs font-bold text-slate-500 mb-1 block">액면가 (Par Value)</label>
-                            <input type="number" value={par} onChange={e => setPar(Number(e.target.value))} className="w-full p-2 border rounded"/>
-                        </div>
-                        <div>
-                            <label className="text-xs font-bold text-slate-500 mb-1 block">만기 (Years)</label>
-                            <input type="number" value={years} onChange={e => setYears(Number(e.target.value))} className="w-full p-2 border rounded"/>
-                        </div>
+                        <Field><FieldLabel htmlFor="bond-par" className="text-slate-600">액면가 (Par Value)</FieldLabel><InputGroup className="border-slate-300 bg-white"><InputGroupInput id="bond-par" type="number" value={par} onChange={e => setPar(Number(e.target.value))} className="text-slate-900"/><InputGroupAddon className="border-slate-300 text-slate-500">₩</InputGroupAddon></InputGroup></Field>
+                        <Field><FieldLabel htmlFor="bond-years" className="text-slate-600">만기 (Years)</FieldLabel><InputGroup className="border-slate-300 bg-white"><InputGroupInput id="bond-years" type="number" value={years} onChange={e => setYears(Number(e.target.value))} className="text-slate-900"/><InputGroupAddon className="border-slate-300 text-slate-500">년</InputGroupAddon></InputGroup></Field>
                     </div>
                     <div>
                         <label className="text-xs font-bold text-slate-500 mb-1 block">표면금리 (Coupon Rate, %)</label>

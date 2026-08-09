@@ -77,6 +77,8 @@ Allowed when the chapter topic explicitly requires quantitative or visual explan
 14. `KeynesianCross`
 15. `BusinessCycle`
 16. `ProductLifeCycle`
+17. `CAPMChart`
+18. `SMLChart`
 
 Use cases:
 

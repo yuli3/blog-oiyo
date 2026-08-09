@@ -50,6 +50,7 @@ import {
   OptionPayoffChart,
   FrontierChart,
   NPVChart,
+  CAPMChart,
   SMLChart,
 } from "@/features/education-finance/FinanceCharts";
 import { GameTheoryPlayground } from "@/features/education-game-theory";
@@ -303,6 +304,7 @@ const lectureComponents = {
   OptionPayoffChart,
   FrontierChart,
   NPVChart,
+  CAPMChart,
   SMLChart,
   GameTheoryPlayground,
 };

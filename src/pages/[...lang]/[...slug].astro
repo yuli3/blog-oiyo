@@ -229,14 +229,17 @@ const readingTimeLabel = readingTimeLabels[locale] ?? readingTimeLabels.en;
 const chapterLabel: Record<string, string> = { en: "Chapter", ko: "챕터", ja: "第", fr: "Chapitre", es: "Capítulo", zh: "章节", };
 const prevLabel: Record<string, string> = { en: "Previous", ko: "이전", ja: "前へ", fr: "Précédent", es: "Anterior", zh: "上一页", };
 const nextLabel: Record<string, string> = { en: "Next", ko: "다음", ja: "次へ", fr: "Suivant", es: "Siguiente", zh: "下一页", };
-const backLabel: Record<string, string> = { en: "Back to Home", ko: "홈으로", ja: "ホームへ戻る", fr: "Retour à l'accueil", es: "Volver al inicio", zh: "回到首页", };
 const contributorLabel: Record<string, string> = { en: "Contributor", ko: "기여자", ja: "寄稿者", fr: "Contributeur", es: "Colaborador", zh: "贡献者", };
 const coursesLabel: Record<string, string> = { en: "All Courses", ko: "전체 강의", ja: "コース一覧", fr: "Tous les cours", es: "Todos los cursos", zh: "全部课程", };
+const homeLabel: Record<string, string> = { en: "Home", ko: "홈", ja: "ホーム", fr: "Accueil", es: "Inicio", zh: "首页" };
+const displayTitle = post.data.title.replace(/^Ch\.?\s*\d+[.:]?\s*/i, "");
 
 const chapterStr = (n: number) =>
   locale === "ja" ? `第${n}章` : `${chapterLabel[locale] ?? "Chapter"} ${n}`;
 
 const coursesHref = `/${locale}/courses`;
+const sectionHref = track === "magazine" ? `/${locale}/magazine` : track === "interactive" ? `/${locale}/tools` : coursesHref;
+const sectionLabel = track === "magazine" ? (t.nav.magazine ?? "Magazine") : track === "interactive" ? (t.nav.tools ?? "Tools") : (coursesLabel[locale] ?? coursesLabel.en);
 
 // Pure-duplicate test pages are consolidated onto their oiyo.net canonical: render a
 // redirect stub (noindex,follow + canonical + meta-refresh) instead of the article.
@@ -255,7 +258,7 @@ const redirectToBlog = post.data.redirectToBlog;
   />
 ) : (
 <BaseLayout
-  title={post.data.title}
+  title={displayTitle}
   description={post.data.description}
   image={post.data.heroImage}
   type="article"
@@ -311,6 +314,15 @@ const redirectToBlog = post.data.redirectToBlog;
 
           <!-- Article header -->
           <header class="mb-16">
+            <nav aria-label="Breadcrumb" class="mb-5 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+              <a href={`/${locale}/`} class="hover:text-primary hover:underline">{homeLabel[locale] ?? homeLabel.en}</a>
+              <span aria-hidden="true">/</span>
+              <a href={sectionHref} class="hover:text-primary hover:underline">{sectionLabel}</a>
+              <span aria-hidden="true">/</span>
+              <a href={`/${locale}/category/${rawCategory.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`} class="hover:text-primary hover:underline">{displayCategory}</a>
+              {chapter !== null && <><span aria-hidden="true">/</span><span aria-current="page">{chapterStr(chapter)}</span></>}
+            </nav>
+
             <div class="flex items-center gap-3 text-xs font-bold text-primary uppercase tracking-widest mb-6 flex-wrap">
               <a
                 href={`/${locale}/category/${rawCategory.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
@@ -348,7 +360,7 @@ const redirectToBlog = post.data.redirectToBlog;
             </div>
 
             <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-10 leading-tight font-heading">
-              {post.data.title}
+              {displayTitle}
             </h1>
 
             <!-- Author row -->
@@ -528,28 +540,6 @@ const redirectToBlog = post.data.redirectToBlog;
             </nav>
           )}
 
-          <!-- Footer -->
-          <footer class="mt-24 pt-12 border-t border-border/40 flex items-center gap-4 flex-wrap">
-            <a
-              href={`/${locale}/`}
-              class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-              {backLabel[locale] ?? backLabel.en}
-            </a>
-            {isSeriesPost && (
-              <>
-                <span class="text-muted-foreground/30">·</span>
-                <a
-                  href={coursesHref}
-                  class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
-                  {coursesLabel[locale] ?? coursesLabel.en}
-                </a>
-              </>
-            )}
-          </footer>
         </div>
 
         <!-- Right: TOC sidebar (disabled by request) -->

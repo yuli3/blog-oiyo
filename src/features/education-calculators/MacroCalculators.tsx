@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
+import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
+import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group';
 
 // ── Shared helpers ────────────────────────────────────────────────────────────
 
@@ -387,28 +389,31 @@ export const InflationCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale
         {locale === 'ko' ? '인플레이션 계산기' : 'Inflation Calculator'}
       </h4>
 
-      <div className="grid grid-cols-2 gap-3 mb-4">
+      <FieldGroup className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
         {[
-          { label: locale === 'ko' ? '기준년도' : 'Base Year', value: baseYear, set: setBaseYear, min: 2000, max: 2030, step: 1 },
-          { label: locale === 'ko' ? '비교년도' : 'Compare Year', value: compareYear, set: setCompareYear, min: 2000, max: 2030, step: 1 },
-          { label: locale === 'ko' ? '기준년 CPI' : 'Base CPI', value: baseCPI, set: setBaseCPI, min: 50, max: 200, step: 1 },
-          { label: locale === 'ko' ? '비교년 CPI' : 'Compare CPI', value: compareCPI, set: setCompareCPI, min: 50, max: 200, step: 1 },
-        ].map(({ label, value, set, min, max, step }) => (
-          <div key={label}>
-            <label className="block text-xs text-slate-500 mb-1">{label}</label>
-            <input
-              type="number"
-              value={value}
-              onChange={(e) => set(parseFloat(e.target.value) || 0)}
-              min={min}
-              max={max}
-              step={step}
-              className="w-full border border-green-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
-              aria-label={label}
-            />
-          </div>
+          { id: 'base-year', label: locale === 'ko' ? '기준년도' : 'Base Year', value: baseYear, set: setBaseYear, min: 2000, max: 2030, step: 1, unit: locale === 'ko' ? '년' : 'year' },
+          { id: 'compare-year', label: locale === 'ko' ? '비교년도' : 'Compare Year', value: compareYear, set: setCompareYear, min: 2000, max: 2030, step: 1, unit: locale === 'ko' ? '년' : 'year' },
+          { id: 'base-cpi', label: locale === 'ko' ? '기준년 CPI' : 'Base CPI', value: baseCPI, set: setBaseCPI, min: 50, max: 200, step: 1, unit: 'index' },
+          { id: 'compare-cpi', label: locale === 'ko' ? '비교년 CPI' : 'Compare CPI', value: compareCPI, set: setCompareCPI, min: 50, max: 200, step: 1, unit: 'index' },
+        ].map(({ id, label, value, set, min, max, step, unit }) => (
+          <Field key={id}>
+            <FieldLabel htmlFor={`inflation-${id}`} className="text-xs text-slate-600">{label}</FieldLabel>
+            <InputGroup className="min-h-10 border-green-200 bg-white focus-within:border-green-500 focus-within:ring-green-500/20">
+              <InputGroupInput
+                id={`inflation-${id}`}
+                type="number"
+                value={value}
+                onChange={(e) => set(parseFloat(e.target.value) || 0)}
+                min={min}
+                max={max}
+                step={step}
+                className="font-sans text-sm text-slate-900"
+              />
+              <InputGroupAddon className="border-green-100 text-xs text-slate-500">{unit}</InputGroupAddon>
+            </InputGroup>
+          </Field>
         ))}
-      </div>
+      </FieldGroup>
 
       <SliderRow
         label={locale === 'ko' ? `명목소득 (${baseYear}년 기준, 만원)` : `Nominal Income (base ${baseYear}, 10K KRW)`}
