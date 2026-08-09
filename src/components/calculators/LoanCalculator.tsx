@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
+import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
+import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group';
 
 interface ScheduleRow {
   month: number;
@@ -72,6 +74,10 @@ const LoanCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =
     setError('');
   };
 
+  const invalidLoanAmount = Boolean(error) && Number(loanAmount) <= 0;
+  const invalidAnnualRate = Boolean(error) && Number(annualRate) <= 0;
+  const invalidTerm = Boolean(error) && Number(termMonths) <= 0;
+
   return (
     <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
       <h3 className="text-xl font-bold text-green-900 mb-6">
@@ -81,45 +87,58 @@ const LoanCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =
       <div className="grid md:grid-cols-2 gap-8">
         {/* Inputs */}
         <div className="space-y-4">
-          <div className="space-y-1">
-            <label className="text-sm font-bold text-green-800">
-              {locale === 'ko' ? '대출금액 (원)' : 'Loan Amount (KRW)'}
-            </label>
-            <input
-              type="number"
-              value={loanAmount}
-              onChange={(e) => setLoanAmount(e.target.value)}
-              min="0"
-              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
-              aria-label={locale === 'ko' ? '대출금액' : 'Loan Amount'}
-            />
-          </div>
+          <FieldGroup className="gap-4">
+            <Field>
+              <FieldLabel htmlFor="loan-amount" className="text-sm font-bold text-green-800">
+                {locale === 'ko' ? '대출금액' : 'Loan Amount'}
+              </FieldLabel>
+              <InputGroup className="min-h-12 border-green-200 bg-white focus-within:border-green-500 focus-within:ring-green-500/20">
+                <InputGroupInput
+                  id="loan-amount"
+                  type="number"
+                  value={loanAmount}
+                  onChange={(e) => setLoanAmount(e.target.value)}
+                  min="0"
+                  aria-invalid={invalidLoanAmount}
+                  aria-describedby={invalidLoanAmount ? 'loan-input-error' : undefined}
+                />
+                <InputGroupAddon className="border-green-100 text-xs text-green-700">
+                  {locale === 'ko' ? '원' : 'KRW'}
+                </InputGroupAddon>
+              </InputGroup>
+            </Field>
 
-          <div className="space-y-1">
-            <label className="text-sm font-bold text-green-800">
-              {locale === 'ko' ? '연이자율 (%)' : 'Annual Interest Rate (%)'}
-            </label>
-            <input
-              type="number"
-              value={annualRate}
-              onChange={(e) => setAnnualRate(e.target.value)}
-              step="0.1"
-              min="0"
-              max="30"
-              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
-              aria-label={locale === 'ko' ? '연이자율' : 'Annual Interest Rate'}
-            />
-          </div>
+            <Field>
+              <FieldLabel htmlFor="loan-annual-rate" className="text-sm font-bold text-green-800">
+                {locale === 'ko' ? '연이자율' : 'Annual Interest Rate'}
+              </FieldLabel>
+              <InputGroup className="min-h-12 border-green-200 bg-white focus-within:border-green-500 focus-within:ring-green-500/20">
+                <InputGroupInput
+                  id="loan-annual-rate"
+                  type="number"
+                  value={annualRate}
+                  onChange={(e) => setAnnualRate(e.target.value)}
+                  step="0.1"
+                  min="0"
+                  max="30"
+                  aria-invalid={invalidAnnualRate}
+                  aria-describedby={invalidAnnualRate ? 'loan-input-error' : undefined}
+                />
+                <InputGroupAddon className="border-green-100 text-xs text-green-700">%</InputGroupAddon>
+              </InputGroup>
+            </Field>
 
-          <div className="space-y-1">
-            <label className="text-sm font-bold text-green-800">
-              {locale === 'ko' ? '대출기간 (개월)' : 'Loan Term (months)'}
-            </label>
+            <Field>
+              <FieldLabel htmlFor="loan-term" className="text-sm font-bold text-green-800">
+                {locale === 'ko' ? '대출기간' : 'Loan Term'}
+              </FieldLabel>
             <select
+              id="loan-term"
               value={termMonths}
               onChange={(e) => setTermMonths(e.target.value)}
               className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
-              aria-label={locale === 'ko' ? '대출기간' : 'Loan Term'}
+              aria-invalid={invalidTerm}
+              aria-describedby={invalidTerm ? 'loan-input-error' : undefined}
             >
               <option value="120">{locale === 'ko' ? '10년 (120개월)' : '10 years (120m)'}</option>
               <option value="180">{locale === 'ko' ? '15년 (180개월)' : '15 years (180m)'}</option>
@@ -128,13 +147,10 @@ const LoanCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =
               <option value="360">{locale === 'ko' ? '30년 (360개월)' : '30 years (360m)'}</option>
               <option value="480">{locale === 'ko' ? '40년 (480개월)' : '40 years (480m)'}</option>
             </select>
-          </div>
+            </Field>
+          </FieldGroup>
 
-          {error && (
-            <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl p-3" role="alert">
-              {error}
-            </p>
-          )}
+          {error && <FieldError id="loan-input-error" className="rounded-xl border border-destructive/20 bg-destructive/5 p-3">{error}</FieldError>}
 
           <div className="flex gap-3 pt-2">
             <button

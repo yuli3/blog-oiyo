@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
+import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
+import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group';
 
 type CalcType = 'deposit' | 'savings';
 type TaxType = 'normal' | 'preferential' | 'none';
@@ -91,6 +93,10 @@ const DepositCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
     none: ko ? '비과세' : 'Tax-Free',
   };
 
+  const invalidAmount = Boolean(error) && Number(amount) <= 0;
+  const invalidRate = Boolean(error) && Number(rate) < 0;
+  const invalidPeriod = Boolean(error) && Number(period) <= 0;
+
   return (
     <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
       <h3 className="text-xl font-bold text-green-900 mb-6">
@@ -117,48 +123,67 @@ const DepositCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
           ))}
         </div>
 
-        <div className="space-y-1">
-          <label className="text-sm font-bold text-green-800">
+        <Field>
+          <FieldLabel htmlFor="deposit-amount" className="text-sm font-bold text-green-800">
             {calcType === 'deposit'
-              ? (ko ? '예금액 (원)' : 'Deposit Amount (KRW)')
-              : (ko ? '월 납입액 (원)' : 'Monthly Amount (KRW)')}
-          </label>
-          <input
-            type="number"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            min="0"
-            className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
-          />
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-1">
-            <label className="text-sm font-bold text-green-800">
-              {ko ? '연 이율 (%)' : 'Annual Rate (%)'}
-            </label>
-            <input
+              ? (ko ? '예금액' : 'Deposit Amount')
+              : (ko ? '월 납입액' : 'Monthly Amount')}
+          </FieldLabel>
+          <InputGroup className="min-h-12 border-green-200 bg-white focus-within:border-green-500 focus-within:ring-green-500/20">
+            <InputGroupInput
+              id="deposit-amount"
               type="number"
-              value={rate}
-              onChange={(e) => setRate(e.target.value)}
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
               min="0"
-              step="0.1"
-              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+              aria-invalid={invalidAmount}
+              aria-describedby={invalidAmount ? 'deposit-input-error' : undefined}
             />
-          </div>
-          <div className="space-y-1">
-            <label className="text-sm font-bold text-green-800">
-              {ko ? '기간 (개월)' : 'Period (months)'}
-            </label>
-            <input
-              type="number"
-              value={period}
-              onChange={(e) => setPeriod(e.target.value)}
-              min="1"
-              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
-            />
-          </div>
-        </div>
+            <InputGroupAddon className="border-green-100 text-xs text-green-700">
+              {ko ? '원' : 'KRW'}
+            </InputGroupAddon>
+          </InputGroup>
+        </Field>
+
+        <FieldGroup className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <Field>
+            <FieldLabel htmlFor="deposit-rate" className="text-sm font-bold text-green-800">
+              {ko ? '연 이율' : 'Annual Rate'}
+            </FieldLabel>
+            <InputGroup className="min-h-12 border-green-200 bg-white focus-within:border-green-500 focus-within:ring-green-500/20">
+              <InputGroupInput
+                id="deposit-rate"
+                type="number"
+                value={rate}
+                onChange={(e) => setRate(e.target.value)}
+                min="0"
+                step="0.1"
+                aria-invalid={invalidRate}
+                aria-describedby={invalidRate ? 'deposit-input-error' : undefined}
+              />
+              <InputGroupAddon className="border-green-100 text-xs text-green-700">%</InputGroupAddon>
+            </InputGroup>
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="deposit-period" className="text-sm font-bold text-green-800">
+              {ko ? '기간' : 'Period'}
+            </FieldLabel>
+            <InputGroup className="min-h-12 border-green-200 bg-white focus-within:border-green-500 focus-within:ring-green-500/20">
+              <InputGroupInput
+                id="deposit-period"
+                type="number"
+                value={period}
+                onChange={(e) => setPeriod(e.target.value)}
+                min="1"
+                aria-invalid={invalidPeriod}
+                aria-describedby={invalidPeriod ? 'deposit-input-error' : undefined}
+              />
+              <InputGroupAddon className="border-green-100 text-xs text-green-700">
+                {ko ? '개월' : 'months'}
+              </InputGroupAddon>
+            </InputGroup>
+          </Field>
+        </FieldGroup>
 
         {/* Tax type */}
         <div className="space-y-1">
@@ -204,11 +229,7 @@ const DepositCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
           </div>
         </div>
 
-        {error && (
-          <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl p-3" role="alert">
-            {error}
-          </p>
-        )}
+        {error && <FieldError id="deposit-input-error" className="rounded-xl border border-destructive/20 bg-destructive/5 p-3">{error}</FieldError>}
 
         <div className="flex gap-3">
           <button
