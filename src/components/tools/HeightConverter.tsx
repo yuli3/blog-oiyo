@@ -1,5 +1,34 @@
 import { useState, useCallback } from "react";
-import { GameContainer } from "../ui/game/GamePrimitives";
+import { RotateCcw } from "lucide-react";
+import AnimatedNumber from "../ui/AnimatedNumber";
+import { Button } from "../ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import {
+  Field,
+  FieldDescription,
+  FieldGroup,
+  FieldLabel,
+} from "../ui/field";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "../ui/input-group";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
+import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
 import type { Locale } from "../../lib/i18n";
 
 // ── Korean height distributions ──────────────────────────────────────────────
@@ -20,8 +49,7 @@ function normalCDF(z: number): number {
   const x = Math.abs(z) / Math.SQRT2;
   const t = 1 / (1 + p * x);
   const y =
-    1 -
-    ((((a5 * t + a4) * t + a3) * t + a2) * t + a1) * t * Math.exp(-x * x);
+    1 - ((((a5 * t + a4) * t + a3) * t + a2) * t + a1) * t * Math.exp(-x * x);
   return 0.5 * (1 + sign * y);
 }
 
@@ -36,7 +64,9 @@ type L = Locale;
 interface Labels {
   title: string;
   subtitle: string;
+  reset: string;
   sec1: string;
+  sec1Desc: string;
   sec2: string;
   sec3: string;
   sec4: string;
@@ -68,7 +98,9 @@ const LABELS: Record<L, Labels> = {
   ko: {
     title: "키 변환 & 비교기",
     subtitle: "Height Converter & Comparison",
+    reset: "초기화",
     sec1: "단위 변환 (cm ↔ ft + in)",
+    sec1Desc: "한쪽에 입력하면 다른 쪽이 함께 바뀝니다.",
     sec2: "성별 키 비교",
     sec3: "키 참고표",
     sec4: "국가별 평균 신장",
@@ -80,7 +112,8 @@ const LABELS: Record<L, Labels> = {
     male: "남성",
     female: "여성",
     equivalentIn: "상대 성별 기준 동등 키",
-    equivalentDesc: "이 페이지의 한국 남녀 평균 차이 12.6cm를 가감한 참고값입니다",
+    equivalentDesc:
+      "이 페이지의 한국 남녀 평균 차이 12.6cm를 가감한 참고값입니다",
     topPct: "상위",
     bottomPct: "하위",
     category: "범주",
@@ -98,7 +131,9 @@ const LABELS: Record<L, Labels> = {
   en: {
     title: "Height Converter & Comparison",
     subtitle: "cm ↔ ft/in · Gender Height Comparison",
+    reset: "Reset",
     sec1: "Unit Conversion (cm ↔ ft + in)",
+    sec1Desc: "Type in either field and the other updates with it.",
     sec2: "Gender Height Comparison",
     sec3: "Height Reference Table",
     sec4: "Average Height by Country",
@@ -129,7 +164,9 @@ const LABELS: Record<L, Labels> = {
   ja: {
     title: "身長変換・比較ツール",
     subtitle: "cm ↔ フィート/インチ · 性別身長比較",
+    reset: "リセット",
     sec1: "単位変換 (cm ↔ ft + in)",
+    sec1Desc: "どちらかに入力すると、もう一方も一緒に変わります。",
     sec2: "性別身長比較",
     sec3: "身長参考表",
     sec4: "国別平均身長",
@@ -141,7 +178,8 @@ const LABELS: Record<L, Labels> = {
     male: "男性",
     female: "女性",
     equivalentIn: "相手の性別での同等身長",
-    equivalentDesc: "このページで使用する韓国男女平均の差12.6cmを加減した参考値です",
+    equivalentDesc:
+      "このページで使用する韓国男女平均の差12.6cmを加減した参考値です",
     topPct: "上位",
     bottomPct: "下位",
     category: "カテゴリ",
@@ -159,7 +197,9 @@ const LABELS: Record<L, Labels> = {
   fr: {
     title: "Convertisseur & Comparateur de Taille",
     subtitle: "cm ↔ pieds/pouces · Comparaison par sexe",
+    reset: "Réinitialiser",
     sec1: "Conversion d'unités (cm ↔ ft + in)",
+    sec1Desc: "Saisissez dans l'un des champs, l'autre se met à jour.",
     sec2: "Comparaison de taille par sexe",
     sec3: "Tableau de référence",
     sec4: "Taille moyenne par pays",
@@ -171,7 +211,8 @@ const LABELS: Record<L, Labels> = {
     male: "Homme",
     female: "Femme",
     equivalentIn: "Taille équivalente pour le sexe opposé",
-    equivalentDesc: "Repère obtenu avec l'écart de 12,6 cm entre les moyennes coréennes utilisées ici",
+    equivalentDesc:
+      "Repère obtenu avec l'écart de 12,6 cm entre les moyennes coréennes utilisées ici",
     topPct: "Top",
     bottomPct: "Bas",
     category: "Catégorie",
@@ -189,7 +230,9 @@ const LABELS: Record<L, Labels> = {
   es: {
     title: "Conversor y Comparador de Estatura",
     subtitle: "cm ↔ pies/pulgadas · Comparación por género",
+    reset: "Restablecer",
     sec1: "Conversión de unidades (cm ↔ ft + in)",
+    sec1Desc: "Escribe en cualquiera de los campos y el otro se actualiza.",
     sec2: "Comparación de estatura por género",
     sec3: "Tabla de referencia de estatura",
     sec4: "Estatura promedio por país",
@@ -201,7 +244,8 @@ const LABELS: Record<L, Labels> = {
     male: "Hombre",
     female: "Mujer",
     equivalentIn: "Estatura equivalente en el género opuesto",
-    equivalentDesc: "Referencia tras aplicar la diferencia de 12,6 cm entre los promedios coreanos usados aquí",
+    equivalentDesc:
+      "Referencia tras aplicar la diferencia de 12,6 cm entre los promedios coreanos usados aquí",
     topPct: "Top",
     bottomPct: "Inferior",
     category: "Categoría",
@@ -219,7 +263,9 @@ const LABELS: Record<L, Labels> = {
   zh: {
     title: "身高换算与比较工具",
     subtitle: "厘米 ↔ 英尺/英寸 · 性别身高比较",
+    reset: "重置",
     sec1: "单位换算（厘米 ↔ 英尺 + 英寸）",
+    sec1Desc: "在任一栏输入，另一栏会同步更新。",
     sec2: "性别身高比较",
     sec3: "身高参考表",
     sec4: "各国平均身高",
@@ -274,27 +320,62 @@ interface CountryRow {
 
 const COUNTRY_DATA: CountryRow[] = [
   {
-    name: { ko: "한국", en: "South Korea", ja: "韓国", fr: "Corée du Sud", es: "Corea del Sur", zh: "韩国", },
+    name: {
+      ko: "한국",
+      en: "South Korea",
+      ja: "韓国",
+      fr: "Corée du Sud",
+      es: "Corea del Sur",
+      zh: "韩国",
+    },
     male: 173.5,
     female: 160.9,
   },
   {
-    name: { ko: "미국", en: "USA", ja: "アメリカ", fr: "États-Unis", es: "EE.UU.", zh: "美国", },
+    name: {
+      ko: "미국",
+      en: "USA",
+      ja: "アメリカ",
+      fr: "États-Unis",
+      es: "EE.UU.",
+      zh: "美国",
+    },
     male: 175.4,
     female: 162.1,
   },
   {
-    name: { ko: "일본", en: "Japan", ja: "日本", fr: "Japon", es: "Japón", zh: "日本", },
+    name: {
+      ko: "일본",
+      en: "Japan",
+      ja: "日本",
+      fr: "Japon",
+      es: "Japón",
+      zh: "日本",
+    },
     male: 171.2,
     female: 158.0,
   },
   {
-    name: { ko: "네덜란드", en: "Netherlands", ja: "オランダ", fr: "Pays-Bas", es: "Países Bajos", zh: "荷兰", },
+    name: {
+      ko: "네덜란드",
+      en: "Netherlands",
+      ja: "オランダ",
+      fr: "Pays-Bas",
+      es: "Países Bajos",
+      zh: "荷兰",
+    },
     male: 182.5,
     female: 170.4,
   },
   {
-    name: { ko: "중국", en: "China", ja: "中国", fr: "Chine", es: "China", zh: "中国", },
+    name: {
+      ko: "중국",
+      en: "China",
+      ja: "中国",
+      fr: "Chine",
+      es: "China",
+      zh: "中国",
+    },
     male: 171.8,
     female: 159.7,
   },
@@ -309,7 +390,7 @@ function cmToFtIn(cm: number): { ft: number; inch: number } {
 }
 
 function ftInToCm(ft: number, inch: number): number {
-  return Math.round(((ft * 12 + inch) * 2.54) * 10) / 10;
+  return Math.round((ft * 12 + inch) * 2.54 * 10) / 10;
 }
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -339,18 +420,15 @@ export default function HeightConverter({ locale }: Props) {
     }
   }, []);
 
-  const handleFtInChange = useCallback(
-    (newFt: string, newIn: string) => {
-      setFtVal(newFt);
-      setInVal(newIn);
-      const ft = parseFloat(newFt);
-      const inch = parseFloat(newIn);
-      if (!isNaN(ft) && !isNaN(inch)) {
-        setCmVal(String(ftInToCm(ft, inch)));
-      }
-    },
-    []
-  );
+  const handleFtInChange = useCallback((newFt: string, newIn: string) => {
+    setFtVal(newFt);
+    setInVal(newIn);
+    const ft = parseFloat(newFt);
+    const inch = parseFloat(newIn);
+    if (!isNaN(ft) && !isNaN(inch)) {
+      setCmVal(String(ftInToCm(ft, inch)));
+    }
+  }, []);
 
   // Section 2 calculations
   const myHeightNum = parseFloat(myHeight);
@@ -377,245 +455,307 @@ export default function HeightConverter({ locale }: Props) {
         ? `${t.topPct} ${(100 - percentile).toFixed(1)}%`
         : `${t.bottomPct} ${percentile.toFixed(1)}%`
       : "—";
+  const percentileDistance =
+    percentile !== null ? (isTop ? 100 - percentile : percentile) : null;
+
+  const reset = useCallback(() => {
+    setCmVal("170");
+    setFtVal("5");
+    setInVal("7.0");
+    setMyHeight("170");
+    setMyGender("male");
+  }, []);
+
+  // 결과 수치는 세 곳에서 같은 모양이어야 한다. 크기·색을 각자 정하면 "값이 세 종류로
+  // 보이는" 화면이 된다 — 강조는 자리와 여백이 하고, 글꼴은 한 단계만 올린다.
+  const readout = "text-3xl font-semibold tabular-nums";
 
   return (
-    <GameContainer
-      title={t.title}
-      subtitle={t.subtitle}
-      onReset={() => {
-        setCmVal("170");
-        setFtVal("5");
-        setInVal("7.0");
-        setMyHeight("170");
-        setMyGender("male");
-      }}
-    >
-      <div className="flex flex-col gap-10">
-        {/* ── Section 1: Unit Conversion ──────────────────────────────────── */}
-        <section className="space-y-4">
-          <h2 className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">
-            {t.sec1}
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {/* cm input */}
-            <div className="space-y-2">
-              <label className="text-[10px] font-black text-muted-foreground uppercase">
-                {t.cmLabel}
-              </label>
-              <input
-                type="number"
-                value={cmVal}
-                onChange={(e) => handleCmChange(e.target.value)}
-                aria-label={t.cmLabel}
-                className="w-full p-4 bg-muted/30 rounded-2xl border border-border font-black text-lg"
-                placeholder="170"
-              />
-            </div>
-            {/* ft + in inputs */}
-            <div className="space-y-2">
-              <label className="text-[10px] font-black text-muted-foreground uppercase">
-                {t.ftLabel} + {t.inLabel}
-              </label>
-              <div className="flex gap-2">
-                <input
-                  type="number"
-                  value={ftVal}
-                  onChange={(e) => handleFtInChange(e.target.value, inVal)}
-                  aria-label={t.ftLabel}
-                  className="w-1/2 p-4 bg-muted/30 rounded-2xl border border-border font-black text-lg"
-                  placeholder="5"
-                />
-                <input
-                  type="number"
-                  value={inVal}
-                  onChange={(e) => handleFtInChange(ftVal, e.target.value)}
-                  aria-label={t.inLabel}
-                  className="w-1/2 p-4 bg-muted/30 rounded-2xl border border-border font-black text-lg"
-                  placeholder="7"
-                  step="0.1"
-                />
-              </div>
-            </div>
-          </div>
-          {/* Visual result */}
-          <div className="p-6 bg-muted/20 rounded-3xl flex flex-col sm:flex-row gap-4 items-center justify-around text-center">
-            <div>
-              <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">
-                {t.cmLabel}
-              </p>
-              <p className="text-4xl font-black text-primary">
-                {parseFloat(cmVal) > 0 ? parseFloat(cmVal).toFixed(1) : "—"}
-              </p>
-            </div>
-            <div className="text-2xl text-muted-foreground">↔</div>
-            <div>
-              <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">
-                {t.ftLabel} / {t.inLabel}
-              </p>
-              <p className="text-4xl font-black text-primary">
-                {ftVal}′ {inVal}″
-              </p>
-            </div>
-          </div>
-        </section>
+    // not-prose: MDX 본문 안에 들어가므로 typography 플러그인 스타일을 차단해야 한다.
+    <div className="not-prose my-10 flex max-w-2xl flex-col gap-6 mx-auto">
+      {/* shadcn 기본 컨트롤 높이는 데스크톱 기준 32px 이라 모바일 탭 타깃(44px)에
+          못 미친다. 이전 파일럿들이 390px 44px 을 기준으로 삼았으므로 **모바일에서만**
+          올리고, sm: 이상에서는 기본값으로 되돌린다 — 기본값을 통째로 덮지 않는다. */}
 
-        {/* ── Section 2: Gender Comparison ───────────────────────────────── */}
-        <section className="space-y-4">
-          <h2 className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">
-            {t.sec2}
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <label className="text-[10px] font-black text-muted-foreground uppercase">
-                {t.myHeight}
-              </label>
-              <input
-                type="number"
-                value={myHeight}
-                onChange={(e) => setMyHeight(e.target.value)}
-                aria-label={t.myHeight}
-                className="w-full p-4 bg-muted/30 rounded-2xl border border-border font-black text-lg"
-                placeholder="170"
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-[10px] font-black text-muted-foreground uppercase">
-                {t.myGender}
-              </label>
-              <div className="flex gap-2 p-1 bg-muted rounded-xl h-[60px] items-center">
-                <button
-                  onClick={() => setMyGender("male")}
-                  aria-pressed={myGender === "male"}
-                  aria-label={t.male}
-                  className={`flex-1 py-2 rounded-lg font-black text-xs transition-colors ${
-                    myGender === "male"
-                      ? "bg-background shadow-sm text-primary"
-                      : "text-muted-foreground"
-                  }`}
-                >
-                  {t.male}
-                </button>
-                <button
-                  onClick={() => setMyGender("female")}
-                  aria-pressed={myGender === "female"}
-                  aria-label={t.female}
-                  className={`flex-1 py-2 rounded-lg font-black text-xs transition-colors ${
-                    myGender === "female"
-                      ? "bg-background shadow-sm text-primary"
-                      : "text-muted-foreground"
-                  }`}
-                >
-                  {t.female}
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Result card */}
-          <div className="p-8 bg-foreground rounded-[32px] text-background flex flex-col sm:flex-row gap-8 items-center justify-around shadow-2xl">
-            <div className="text-center space-y-1">
-              <p className="text-[10px] font-black text-background/50 uppercase tracking-widest">
-                {t.equivalentIn}
-              </p>
-              <p className="text-5xl font-black text-primary">
-                {equivalentHeight !== null
-                  ? equivalentHeight.toFixed(1)
-                  : "—"}{" "}
-                <span className="text-xl">{t.cmLabel}</span>
-              </p>
-              <p className="text-[10px] text-background/50">{t.equivalentDesc}</p>
-            </div>
-            <div className="text-center space-y-1">
-              <p className="text-[10px] font-black text-background/50 uppercase tracking-widest">
-                {myGender === "male" ? t.male : t.female} · KR
-              </p>
-              <p className="text-3xl font-black text-warning">{pctDisplay}</p>
-            </div>
-          </div>
-        </section>
-
-        {/* ── Section 3: Reference Table ──────────────────────────────────── */}
-        <section className="space-y-3">
-          <h2 className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">
-            {t.sec3}
-          </h2>
-          <div className="overflow-hidden rounded-2xl border border-border">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="bg-muted/50">
-                  <th className="px-4 py-3 text-left font-black text-[10px] uppercase text-muted-foreground">
-                    {t.category}
-                  </th>
-                  <th className="px-4 py-3 text-center font-black text-[10px] uppercase text-muted-foreground">
-                    {t.maleCm}
-                  </th>
-                  <th className="px-4 py-3 text-center font-black text-[10px] uppercase text-muted-foreground">
-                    {t.femaleCm}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {HEIGHT_CATEGORIES.map((row, i) => (
-                  <tr
-                    key={row.label}
-                    className={i % 2 === 0 ? "bg-background" : "bg-muted/20"}
-                  >
-                    <td className="px-4 py-3 font-semibold">{t[row.label]}</td>
-                    <td className="px-4 py-3 text-center text-muted-foreground">
-                      {row.male}
-                    </td>
-                    <td className="px-4 py-3 text-center text-muted-foreground">
-                      {row.female}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        {/* ── Section 4: Country Average ──────────────────────────────────── */}
-        <section className="space-y-3">
-          <h2 className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">
-            {t.sec4}
-          </h2>
-          <div className="overflow-hidden rounded-2xl border border-border">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="bg-muted/50">
-                  <th className="px-4 py-3 text-left font-black text-[10px] uppercase text-muted-foreground">
-                    {t.country}
-                  </th>
-                  <th className="px-4 py-3 text-center font-black text-[10px] uppercase text-muted-foreground">
-                    {t.avgMale}
-                  </th>
-                  <th className="px-4 py-3 text-center font-black text-[10px] uppercase text-muted-foreground">
-                    {t.avgFemale}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {COUNTRY_DATA.map((row, i) => (
-                  <tr
-                    key={row.name.en}
-                    className={i % 2 === 0 ? "bg-background" : "bg-muted/20"}
-                  >
-                    <td className="px-4 py-3 font-semibold">
-                      {row.name[locale] ?? row.name.en}
-                    </td>
-                    <td className="px-4 py-3 text-center text-muted-foreground">
-                      {row.male}
-                    </td>
-                    <td className="px-4 py-3 text-center text-muted-foreground">
-                      {row.female}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
+      <div className="flex items-start justify-between gap-4">
+        <div className="space-y-1">
+          <h3 className="text-xl font-semibold tracking-tight">{t.title}</h3>
+          <p className="text-sm text-muted-foreground">{t.subtitle}</p>
+        </div>
+        <Button variant="ghost" size="sm" onClick={reset} className="h-11 sm:h-8">
+          <RotateCcw />
+          {t.reset}
+        </Button>
       </div>
-    </GameContainer>
+
+      {/* ── Section 1: Unit Conversion ────────────────────────────────────── */}
+      <Card>
+        <CardHeader>
+          <CardTitle id="height-conversion-title">{t.sec1}</CardTitle>
+          <CardDescription>{t.sec1Desc}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <FieldGroup>
+            <div className="grid gap-6 sm:grid-cols-2">
+              <Field>
+                <FieldLabel htmlFor="height-centimeters">
+                  {t.cmLabel}
+                </FieldLabel>
+                <InputGroup className="h-11 sm:h-8">
+                  <InputGroupInput
+                    id="height-centimeters"
+                    type="number"
+                    inputMode="decimal"
+                    value={cmVal}
+                    onChange={(e) => handleCmChange(e.target.value)}
+                    placeholder="170"
+                  />
+                  <InputGroupAddon align="inline-end">
+                    {t.cmLabel}
+                  </InputGroupAddon>
+                </InputGroup>
+              </Field>
+
+              <Field>
+                <FieldLabel htmlFor="height-feet">
+                  {t.ftLabel} + {t.inLabel}
+                </FieldLabel>
+                <div className="flex gap-2">
+                  <InputGroup className="h-11 sm:h-8">
+                    <InputGroupInput
+                      id="height-feet"
+                      type="number"
+                      inputMode="decimal"
+                      value={ftVal}
+                      onChange={(e) => handleFtInChange(e.target.value, inVal)}
+                      aria-label={t.ftLabel}
+                      placeholder="5"
+                    />
+                    <InputGroupAddon align="inline-end">
+                      {t.ftLabel}
+                    </InputGroupAddon>
+                  </InputGroup>
+                  <InputGroup className="h-11 sm:h-8">
+                    <InputGroupInput
+                      id="height-inches"
+                      type="number"
+                      inputMode="decimal"
+                      step="0.1"
+                      value={inVal}
+                      onChange={(e) => handleFtInChange(ftVal, e.target.value)}
+                      aria-label={t.inLabel}
+                      placeholder="7"
+                    />
+                    <InputGroupAddon align="inline-end">
+                      {t.inLabel}
+                    </InputGroupAddon>
+                  </InputGroup>
+                </div>
+              </Field>
+            </div>
+
+            <div className="grid gap-4 rounded-lg border bg-muted/50 p-4 sm:grid-cols-2">
+              <div className="space-y-1">
+                <p className="text-sm text-muted-foreground">{t.cmLabel}</p>
+                <p className={readout}>
+                  {parseFloat(cmVal) > 0 ? (
+                    <AnimatedNumber
+                      value={parseFloat(cmVal)}
+                      locales={locale}
+                      format={{
+                        minimumFractionDigits: 1,
+                        maximumFractionDigits: 1,
+                      }}
+                    />
+                  ) : (
+                    "—"
+                  )}
+                </p>
+              </div>
+              <div className="space-y-1 sm:border-l sm:pl-4">
+                <p className="text-sm text-muted-foreground">
+                  {t.ftLabel} / {t.inLabel}
+                </p>
+                <p className={readout}>
+                  <AnimatedNumber value={parseFloat(ftVal) || 0} locales={locale} />
+                  ′{" "}
+                  <AnimatedNumber
+                    value={parseFloat(inVal) || 0}
+                    locales={locale}
+                    format={{ maximumFractionDigits: 1 }}
+                  />
+                  ″
+                </p>
+              </div>
+            </div>
+          </FieldGroup>
+        </CardContent>
+      </Card>
+
+      {/* ── Section 2: Gender Comparison ──────────────────────────────────── */}
+      <Card>
+        <CardHeader>
+          <CardTitle id="height-comparison-title">{t.sec2}</CardTitle>
+          <CardDescription>{t.equivalentDesc}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <FieldGroup>
+            <div className="grid gap-6 sm:grid-cols-2">
+              <Field>
+                <FieldLabel htmlFor="height-comparison">
+                  {t.myHeight}
+                </FieldLabel>
+                <InputGroup className="h-11 sm:h-8">
+                  <InputGroupInput
+                    id="height-comparison"
+                    type="number"
+                    inputMode="decimal"
+                    value={myHeight}
+                    onChange={(e) => setMyHeight(e.target.value)}
+                    placeholder="170"
+                  />
+                  <InputGroupAddon align="inline-end">
+                    {t.cmLabel}
+                  </InputGroupAddon>
+                </InputGroup>
+              </Field>
+
+              <Field>
+                <FieldLabel htmlFor="height-gender">{t.myGender}</FieldLabel>
+                {/* 손으로 만든 aria-pressed 버튼 쌍 대신 ToggleGroup — 라디오 의미론과
+                    키보드 이동(←/→)이 공짜로 따라온다 */}
+                <ToggleGroup
+                  id="height-gender"
+                  type="single"
+                  variant="outline"
+                  value={myGender}
+                  onValueChange={(v) => v && setMyGender(v as "male" | "female")}
+                  className="w-full"
+                >
+                  <ToggleGroupItem value="male" className="h-11 flex-1 sm:h-8">
+                    {t.male}
+                  </ToggleGroupItem>
+                  <ToggleGroupItem value="female" className="h-11 flex-1 sm:h-8">
+                    {t.female}
+                  </ToggleGroupItem>
+                </ToggleGroup>
+              </Field>
+            </div>
+
+            <div className="grid gap-4 rounded-lg border bg-muted/50 p-4 sm:grid-cols-2">
+              <div className="space-y-1">
+                <p className="text-sm text-muted-foreground">
+                  {t.equivalentIn}
+                </p>
+                <p className={readout}>
+                  {equivalentHeight !== null ? (
+                    <AnimatedNumber
+                      value={equivalentHeight}
+                      locales={locale}
+                      format={{
+                        minimumFractionDigits: 1,
+                        maximumFractionDigits: 1,
+                      }}
+                      suffix={` ${t.cmLabel}`}
+                    />
+                  ) : (
+                    "—"
+                  )}
+                </p>
+              </div>
+              <div className="space-y-1 sm:border-l sm:pl-4">
+                <p className="text-sm text-muted-foreground">
+                  {myGender === "male" ? t.male : t.female} · KR
+                </p>
+                <p className={readout}>
+                  {percentileDistance !== null ? (
+                    <>
+                      {isTop ? t.topPct : t.bottomPct}{" "}
+                      <AnimatedNumber
+                        value={percentileDistance}
+                        locales={locale}
+                        format={{
+                          minimumFractionDigits: 1,
+                          maximumFractionDigits: 1,
+                        }}
+                        suffix="%"
+                      />
+                    </>
+                  ) : (
+                    pctDisplay
+                  )}
+                </p>
+              </div>
+            </div>
+
+            <FieldDescription>{t.equivalentDesc}</FieldDescription>
+          </FieldGroup>
+        </CardContent>
+      </Card>
+
+      {/* ── Section 3: Reference Table ────────────────────────────────────── */}
+      <Card>
+        <CardHeader>
+          <CardTitle>{t.sec3}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>{t.category}</TableHead>
+                <TableHead className="text-right">{t.maleCm}</TableHead>
+                <TableHead className="text-right">{t.femaleCm}</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {HEIGHT_CATEGORIES.map((row) => (
+                <TableRow key={row.label}>
+                  <TableCell className="font-medium">{t[row.label]}</TableCell>
+                  <TableCell className="text-right tabular-nums">
+                    {row.male}
+                  </TableCell>
+                  <TableCell className="text-right tabular-nums">
+                    {row.female}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+
+      {/* ── Section 4: Country Average ────────────────────────────────────── */}
+      <Card>
+        <CardHeader>
+          <CardTitle>{t.sec4}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>{t.country}</TableHead>
+                <TableHead className="text-right">{t.avgMale}</TableHead>
+                <TableHead className="text-right">{t.avgFemale}</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {COUNTRY_DATA.map((row) => (
+                <TableRow key={row.name.en}>
+                  <TableCell className="font-medium">
+                    {row.name[locale] ?? row.name.en}
+                  </TableCell>
+                  <TableCell className="text-right tabular-nums">
+                    {row.male}
+                  </TableCell>
+                  <TableCell className="text-right tabular-nums">
+                    {row.female}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
