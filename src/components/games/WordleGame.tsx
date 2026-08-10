@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { Spinner } from '../ui/spinner';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type TileState = 'empty' | 'tbd' | 'correct' | 'present' | 'absent';
@@ -221,7 +222,7 @@ const WordleGame: React.FC = () => {
   if (status === 'loading') {
     return (
       <div className="not-prose flex flex-col items-center justify-center py-24 gap-4">
-        <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+        <Spinner className="size-8 text-primary motion-reduce:animate-none" />
         <p className="text-sm text-muted-foreground font-bold">Loading words…</p>
       </div>
     );
