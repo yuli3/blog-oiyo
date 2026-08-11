@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import AnimatedNumber from '@/components/ui/AnimatedNumber';
 
 // 이자소득세 15.4% (소득세 14% + 지방세 1.4%)
 const INTEREST_TAX_RATE = 0.154;
@@ -214,7 +215,12 @@ const SavingsComparisonCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
                     {locale === 'ko' ? '최우수 상품 추천' : 'Best Product'}
                   </p>
                   <p className="text-2xl font-bold">{locale === 'ko' ? bestResult.name : bestResult.nameEn}</p>
-                  <p className="text-3xl font-bold mt-1">{fmt(bestResult.netTotal)}원</p>
+                  <AnimatedNumber
+                    value={bestResult.netTotal}
+                    locales="ko-KR"
+                    suffix="원"
+                    className="text-3xl font-bold mt-1"
+                  />
                 </div>
               )}
 
@@ -242,7 +248,12 @@ const SavingsComparisonCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
                           </span>
                           <span className="font-bold text-slate-800">{locale === 'ko' ? r.name : r.nameEn}</span>
                         </div>
-                        <span className="font-bold text-green-700">{fmt(r.netTotal)}원</span>
+                        <AnimatedNumber
+                          value={r.netTotal}
+                          locales="ko-KR"
+                          suffix="원"
+                          className="font-bold text-green-700"
+                        />
                       </div>
                       <div className="flex gap-4 text-xs text-slate-400">
                         <span>{locale === 'ko' ? '세전이자' : 'Gross Interest'}: {fmt(r.grossInterest)}원</span>

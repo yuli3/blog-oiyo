@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import AnimatedNumber from '@/components/ui/AnimatedNumber';
 
 interface MortgageResult {
   loanAmount: number;
@@ -20,10 +21,9 @@ const MortgageCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
   const [result, setResult] = useState<MortgageResult | null>(null);
   const [error, setError] = useState<string>('');
 
-  const fmt = (n: number) =>
-    ko
-      ? Math.round(n).toLocaleString('ko-KR') + '원'
-      : '$' + Math.round(n).toLocaleString('en-US');
+  const moneyProps = ko
+    ? { locales: 'ko-KR', prefix: '', suffix: '원' }
+    : { locales: 'en-US', prefix: '$', suffix: '' };
 
   const calculate = () => {
     setError('');
@@ -155,19 +155,29 @@ const MortgageCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
               <p className="text-sm font-semibold opacity-80 mb-1">
                 {ko ? '월 상환금' : 'Monthly Payment'}
               </p>
-              <p className="text-3xl font-black">{fmt(result.monthlyPayment)}</p>
+              <AnimatedNumber value={result.monthlyPayment} {...moneyProps} className="text-3xl font-black" />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               {[
-                { label: ko ? '대출 원금' : 'Loan Amount', value: fmt(result.loanAmount) },
-                { label: ko ? 'LTV 비율' : 'Loan-to-Value', value: result.loanToValue.toFixed(1) + '%' },
-                { label: ko ? '총 이자' : 'Total Interest', value: fmt(result.totalInterest) },
-                { label: ko ? '총 상환액' : 'Total Payment', value: fmt(result.totalPayment) },
+                { label: ko ? '대출 원금' : 'Loan Amount', value: result.loanAmount, kind: 'money' as const },
+                { label: ko ? 'LTV 비율' : 'Loan-to-Value', value: result.loanToValue, kind: 'percent' as const },
+                { label: ko ? '총 이자' : 'Total Interest', value: result.totalInterest, kind: 'money' as const },
+                { label: ko ? '총 상환액' : 'Total Payment', value: result.totalPayment, kind: 'money' as const },
               ].map((item) => (
                 <div key={item.label} className="bg-white rounded-xl p-4 border border-green-100">
                   <p className="text-xs text-green-500 font-semibold mb-1">{item.label}</p>
-                  <p className="text-base font-bold text-green-900">{item.value}</p>
+                  <AnimatedNumber
+                    value={item.value}
+                    {...(item.kind === 'money'
+                      ? moneyProps
+                      : {
+                          locales: locale,
+                          suffix: '%',
+                          format: { minimumFractionDigits: 1, maximumFractionDigits: 1 },
+                        })}
+                    className="text-base font-bold text-green-900"
+                  />
                 </div>
               ))}
             </div>

@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group';
+import AnimatedNumber from '@/components/ui/AnimatedNumber';
 
 type CalcType = 'deposit' | 'savings';
 type TaxType = 'normal' | 'preferential' | 'none';
@@ -26,8 +27,6 @@ const DepositCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
   const [isCompound, setIsCompound] = useState<boolean>(false);
   const [result, setResult] = useState<DepositResult | null>(null);
   const [error, setError] = useState<string>('');
-
-  const fmt = (n: number) => Math.round(n).toLocaleString('ko-KR') + '원';
 
   const calculate = () => {
     setError('');
@@ -252,19 +251,30 @@ const DepositCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
               <p className="text-sm font-semibold opacity-80 mb-1">
                 {ko ? '세후 수령액' : 'After-Tax Total'}
               </p>
-              <p className="text-3xl font-black">{fmt(result.total)}</p>
+              <AnimatedNumber
+                value={result.total}
+                locales="ko-KR"
+                suffix="원"
+                className="text-3xl font-black"
+              />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               {[
-                { label: ko ? '원금' : 'Principal', value: fmt(result.principal), color: 'text-green-900' },
-                { label: ko ? '세전 이자' : 'Interest (Gross)', value: fmt(result.interest), color: 'text-green-700' },
-                { label: ko ? '세금' : 'Tax', value: '-' + fmt(result.tax), color: 'text-red-600' },
-                { label: ko ? '세후 이자' : 'After-Tax Interest', value: '+' + fmt(result.afterTaxInterest), color: 'text-green-700' },
+                { label: ko ? '원금' : 'Principal', value: result.principal, prefix: '', color: 'text-green-900' },
+                { label: ko ? '세전 이자' : 'Interest (Gross)', value: result.interest, prefix: '', color: 'text-green-700' },
+                { label: ko ? '세금' : 'Tax', value: result.tax, prefix: '-', color: 'text-red-600' },
+                { label: ko ? '세후 이자' : 'After-Tax Interest', value: result.afterTaxInterest, prefix: '+', color: 'text-green-700' },
               ].map((item) => (
                 <div key={item.label} className="bg-white rounded-xl p-3 border border-green-100">
                   <p className="text-xs text-green-500 font-semibold mb-1">{item.label}</p>
-                  <p className={`text-sm font-bold ${item.color}`}>{item.value}</p>
+                  <AnimatedNumber
+                    value={item.value}
+                    locales="ko-KR"
+                    prefix={item.prefix}
+                    suffix="원"
+                    className={`text-sm font-bold ${item.color}`}
+                  />
                 </div>
               ))}
             </div>

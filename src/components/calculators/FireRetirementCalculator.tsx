@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import AnimatedNumber from '@/components/ui/AnimatedNumber';
 
 interface FireResult {
   fireNumber: number;
@@ -212,14 +213,22 @@ const FireRetirementCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
                     <span className="text-xs text-green-600 font-bold uppercase tracking-wide block mb-1">
                       {locale === 'ko' ? 'FIRE까지 기간' : 'Years to FIRE'}
                     </span>
-                    <span className="text-4xl font-bold text-green-700">{result.yearsToFire}</span>
+                    <AnimatedNumber
+                      value={result.yearsToFire}
+                      locales={locale}
+                      className="text-4xl font-bold text-green-700"
+                    />
                     <span className="text-sm text-green-500 ml-1">{locale === 'ko' ? '년' : 'yrs'}</span>
                   </div>
                   <div className="p-4 bg-white rounded-2xl border border-green-100 text-center">
                     <span className="text-xs text-green-600 font-bold uppercase tracking-wide block mb-1">
                       {locale === 'ko' ? '은퇴 예상 나이' : 'FIRE Age'}
                     </span>
-                    <span className="text-4xl font-bold text-green-700">{result.fireAge}</span>
+                    <AnimatedNumber
+                      value={result.fireAge}
+                      locales={locale}
+                      className="text-4xl font-bold text-green-700"
+                    />
                     <span className="text-sm text-green-500 ml-1">{locale === 'ko' ? '세' : 'yrs old'}</span>
                   </div>
                 </div>
@@ -229,7 +238,12 @@ const FireRetirementCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
                 <div className="flex justify-between items-center mb-1">
                   <span className="text-sm text-slate-500">{locale === 'ko' ? 'FIRE 필요 자산 (4% 룰)' : 'FIRE Number (4% Rule)'}</span>
                 </div>
-                <div className="text-2xl font-bold text-green-700">{fmt(result.fireNumber)}원</div>
+                <AnimatedNumber
+                  value={result.fireNumber}
+                  locales="ko-KR"
+                  suffix="원"
+                  className="text-2xl font-bold text-green-700"
+                />
                 <p className="text-xs text-slate-400 mt-1">
                   {locale === 'ko' ? `연 지출 × 25배 = ${fmt(Number(annualSpending))}원 × 25` : `Annual spending × 25`}
                 </p>
@@ -240,7 +254,12 @@ const FireRetirementCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
                   <span className="text-xs text-amber-600 font-bold uppercase tracking-wide block mb-1">
                     {locale === 'ko' ? '목표 나이 기준 부족액' : 'Shortfall at Target Age'}
                   </span>
-                  <span className="text-lg font-bold text-amber-700">{fmt(Math.round(result.shortfall))}원</span>
+                  <AnimatedNumber
+                    value={Math.round(result.shortfall)}
+                    locales="ko-KR"
+                    suffix="원"
+                    className="text-lg font-bold text-amber-700"
+                  />
                 </div>
               )}
 

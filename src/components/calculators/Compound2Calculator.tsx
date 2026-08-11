@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import AnimatedNumber from '@/components/ui/AnimatedNumber';
 
 interface CompoundResult {
   averageCase: number;
@@ -8,7 +9,7 @@ interface CompoundResult {
   bestCase: number;
   totalContributed: number;
   totalGrowth: number;
-  multiplier: string;
+  multiplier: number;
 }
 
 const Compound2Calculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
@@ -22,10 +23,9 @@ const Compound2Calculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
   const [result, setResult] = useState<CompoundResult | null>(null);
   const [error, setError] = useState<string>('');
 
-  const fmt = (n: number) =>
-    ko
-      ? Math.round(n).toLocaleString('ko-KR') + '원'
-      : '$' + Math.round(n).toLocaleString('en-US');
+  const moneyProps = ko
+    ? { locales: 'ko-KR', prefix: '', suffix: '원' }
+    : { locales: 'en-US', prefix: '$', suffix: '' };
 
   const calcFV = (initInv: number, monthly: number, years: number, annualRate: number): number => {
     const r = annualRate / 100;
@@ -52,7 +52,7 @@ const Compound2Calculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
     const worstCase = calcFV(init, monthly, years, Math.max(0, rate - range));
     const bestCase = calcFV(init, monthly, years, rate + range);
     const totalContributed = init + monthly * 12 * years;
-    const multiplier = totalContributed > 0 ? (avgCase / totalContributed).toFixed(1) : '0';
+    const multiplier = totalContributed > 0 ? Number((avgCase / totalContributed).toFixed(1)) : 0;
 
     setResult({
       averageCase: Math.round(avgCase),
@@ -176,19 +176,19 @@ const Compound2Calculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
                 <p className="text-xs font-bold text-red-600 mb-1">
                   {ko ? `최저 (${Number(interestRate) - Number(rateRange)}%)` : `Min (${Number(interestRate) - Number(rateRange)}%)`}
                 </p>
-                <p className="text-sm font-black text-red-700">{fmt(result.worstCase)}</p>
+                <AnimatedNumber value={result.worstCase} {...moneyProps} className="text-sm font-black text-red-700" />
               </div>
               <div className="bg-green-100 border border-green-300 rounded-xl p-4 text-center">
                 <p className="text-xs font-bold text-green-700 mb-1">
                   {ko ? `평균 (${interestRate}%)` : `Avg (${interestRate}%)`}
                 </p>
-                <p className="text-base font-black text-green-900">{fmt(result.averageCase)}</p>
+                <AnimatedNumber value={result.averageCase} {...moneyProps} className="text-base font-black text-green-900" />
               </div>
               <div className="bg-green-50 border border-green-200 rounded-xl p-4 text-center">
                 <p className="text-xs font-bold text-green-600 mb-1">
                   {ko ? `최고 (${Number(interestRate) + Number(rateRange)}%)` : `Max (${Number(interestRate) + Number(rateRange)}%)`}
                 </p>
-                <p className="text-sm font-black text-green-700">{fmt(result.bestCase)}</p>
+                <AnimatedNumber value={result.bestCase} {...moneyProps} className="text-sm font-black text-green-700" />
               </div>
             </div>
 
@@ -196,15 +196,21 @@ const Compound2Calculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
             <div className="bg-white rounded-xl border border-green-100 p-4 space-y-2">
               <div className="flex justify-between text-sm">
                 <span className="text-green-600 font-semibold">{ko ? '총 납입액' : 'Total Contributed'}</span>
-                <span className="font-bold">{fmt(result.totalContributed)}</span>
+                <AnimatedNumber value={result.totalContributed} {...moneyProps} className="font-bold" />
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-green-600 font-semibold">{ko ? '평균 수익 증가분' : 'Avg Growth'}</span>
-                <span className="font-bold text-green-800">+{fmt(result.totalGrowth)}</span>
+                <AnimatedNumber value={result.totalGrowth} {...moneyProps} prefix={`+${moneyProps.prefix}`} className="font-bold text-green-800" />
               </div>
               <div className="flex justify-between text-sm border-t border-green-100 pt-2">
                 <span className="text-green-600 font-bold">{ko ? '수익 배수 (평균)' : 'Return Multiplier (avg)'}</span>
-                <span className="font-black text-green-900">{result.multiplier}×</span>
+                <AnimatedNumber
+                  value={result.multiplier}
+                  locales={moneyProps.locales}
+                  format={{ minimumFractionDigits: 1, maximumFractionDigits: 1 }}
+                  suffix="×"
+                  className="font-black text-green-900"
+                />
               </div>
             </div>
           </div>

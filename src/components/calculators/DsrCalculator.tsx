@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import AnimatedNumber from '@/components/ui/AnimatedNumber';
 
 const DsrCalculator: React.FC = () => {
     const [income, setIncome] = useState<number>(60000000);
@@ -34,10 +35,6 @@ const DsrCalculator: React.FC = () => {
     useEffect(() => {
         calculateDsr();
     }, [income, existingDebt, newLoan, interestRate, loanTerm]);
-
-    const formatCurrency = (value: number) => {
-        return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(value);
-    };
 
     return (
         <div className="not-prose my-12 p-8 bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200 rounded-3xl shadow-xl">
@@ -107,7 +104,12 @@ const DsrCalculator: React.FC = () => {
                     <div className="mb-6">
                         <span className="text-sm font-medium text-slate-500 uppercase tracking-widest">나의 DSR 지수</span>
                         <div className={`text-6xl font-black mt-2 ${dsr > 40 ? 'text-rose-500' : 'text-emerald-500'}`}>
-                            {dsr.toFixed(1)}%
+                            <AnimatedNumber
+                                value={dsr}
+                                locales="ko-KR"
+                                format={{ minimumFractionDigits: 1, maximumFractionDigits: 1 }}
+                                suffix="%"
+                            />
                         </div>
                     </div>
 
@@ -123,7 +125,13 @@ const DsrCalculator: React.FC = () => {
                         <div className="p-4 rounded-xl bg-slate-50 border border-slate-100">
                             <span className="text-xs text-slate-500 block mb-1">DSR 40% 기준 대출 가능 최대 금액</span>
                             <span className="text-xl font-bold text-blue-600">
-                                {maxLoan > 0 ? formatCurrency(Math.floor(maxLoan / 10000) * 10000) : '0원'}
+                                {maxLoan > 0 ? (
+                                    <AnimatedNumber
+                                        value={Math.floor(maxLoan / 10000) * 10000}
+                                        locales="ko-KR"
+                                        prefix="₩"
+                                    />
+                                ) : '0원'}
                             </span>
                         </div>
                         
