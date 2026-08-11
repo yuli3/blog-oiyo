@@ -1,0 +1,21 @@
+---
+// game.oiyo.net으로 이관됨 (2026-07-04) — 로케일 보존 스텁 (0초 refresh + canonical)
+import { locales } from "../../lib/i18n";
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+const { locale } = Astro.props as { locale: string };
+const target = `https://game.oiyo.net/${locale}/light-up/`;
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="refresh" content={`0; url=${target}`} />
+    <link rel="canonical" href={target} />
+    <meta name="robots" content="noindex, follow" />
+    <title>Moved to game.oiyo.net</title>
+  </head>
+  <body><a href={target}>{target}</a></body>
+</html>

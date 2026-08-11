@@ -1,0 +1,12 @@
+---
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+---
+<OiyoCanonicalRedirect locale={locale} itemName="Grit Scale Test" targetPath="/grit-scale-test" kind="test" />

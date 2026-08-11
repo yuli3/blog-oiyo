@@ -12,12 +12,11 @@ import { getTrackFromData } from "../../lib/taxonomy";
 import { courseJsonLd } from "../../lib/seo/structured-data";
 import AuthorProfile from "../../components/AuthorProfile.astro";
 import MysticTrinity from "../../components/MysticTrinity.astro";
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
+import BlogRedirect from "../../components/BlogRedirect.astro";
 
 export async function getStaticPaths() {
-  const allPosts = await getCollection(
-    "blog",
-    (p) => !p.data.draft && !p.data.redirectTo && !p.data.redirectToBlog,
-  );
+  const allPosts = await getCollection("blog", (p) => !p.data.draft);
 
   // Group by locale for non-series navigation
   const byLocale: Record<string, typeof allPosts> = {};
@@ -244,8 +243,20 @@ const sectionLabel = track === "magazine" ? (t.nav.magazine ?? "Magazine") : tra
 
 // Pure-duplicate test pages are consolidated onto their oiyo.net canonical: render a
 // redirect stub (noindex,follow + canonical + meta-refresh) instead of the article.
+const redirectTo = post.data.redirectTo;
+const redirectToBlog = post.data.redirectToBlog;
 ---
 
+{redirectToBlog ? (
+  <BlogRedirect locale={locale as Locale} targetPath={redirectToBlog} />
+) : redirectTo ? (
+  <OiyoCanonicalRedirect
+    locale={locale as Locale}
+    itemName={post.data.title}
+    targetPath={redirectTo}
+    kind="test"
+  />
+) : (
 <BaseLayout
   title={displayTitle}
   description={post.data.description}
@@ -258,7 +269,6 @@ const sectionLabel = track === "magazine" ? (t.nav.magazine ?? "Magazine") : tra
   author={post.data.author}
   availableLocales={availableLocales}
   canonicalUrl={post.data.canonicalUrl}
-  noindex={post.data.noindex}
 >
   {seriesJsonLd && <script is:inline type="application/ld+json" set:html={seriesJsonLd} />}
   {courseLandingJsonLd && <script is:inline type="application/ld+json" set:html={courseLandingJsonLd} />}
@@ -540,3 +550,4 @@ const sectionLabel = track === "magazine" ? (t.nav.magazine ?? "Magazine") : tra
     </div>
   </article>
 </BaseLayout>
+)}

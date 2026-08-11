@@ -1,0 +1,26 @@
+---
+// /interactive was merged into the unified /tools hub (IA consolidation).
+// Static meta-refresh + canonical redirect to /tools (same domain).
+import { locales } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params;
+const target = `/${lang}/tools/`;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content={`0; url=${target}`} />
+    <link rel="canonical" href={`https://blog.oiyo.net${target}`} />
+    <meta name="robots" content="noindex, follow" />
+    <title>Redirecting to Tools…</title>
+  </head>
+  <body>
+    <p>This page has moved. <a href={target}>Go to Tools →</a></p>
+  </body>
+</html>

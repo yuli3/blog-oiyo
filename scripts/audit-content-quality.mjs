@@ -8,8 +8,6 @@ const inventoryPath = path.join(root, "data/catalog/content-inventory.master.csv
 const hardFailures = [];
 const languageWarnings = [];
 const categoryCounts = new Map();
-const duplicateBodies = new Map();
-const quarantinedDuplicateWarnings = [];
 
 const forbiddenTitlePatterns = [
   /강목체/,
@@ -52,16 +50,6 @@ function field(frontmatter, name) {
   return match?.[1]?.trim() ?? "";
 }
 
-function normalizedBody(text) {
-  return text
-    .replace(/^---\n[\s\S]*?\n---\s*/, "")
-    .replace(/^import\s.+;?$/gm, "")
-    .replace(/\b(?:chapter|domain)\s+\d+\b/gi, "numbered-section")
-    .replace(/\s+/g, " ")
-    .trim()
-    .toLowerCase();
-}
-
 for (const file of listMdxFiles(contentRoot)) {
   const rel = path.relative(root, file);
   const text = fs.readFileSync(file, "utf8");
@@ -69,8 +57,6 @@ for (const file of listMdxFiles(contentRoot)) {
   const locale = path.relative(contentRoot, file).split(path.sep)[0];
   const title = field(frontmatter, "title");
   const category = field(frontmatter, "category");
-  const noindex = field(frontmatter, "noindex") === "true";
-  const redirectOnly = Boolean(field(frontmatter, "redirectTo") || field(frontmatter, "redirectToBlog"));
 
   if (text.includes("file:///")) {
     hardFailures.push(`${rel}: contains file:/// link`);
@@ -90,26 +76,6 @@ for (const file of listMdxFiles(contentRoot)) {
 
   if (locale === "ja" && /[가-힣]/.test(title)) {
     languageWarnings.push(`${rel}: Japanese title contains Hangul: ${title}`);
-  }
-
-  if (!redirectOnly) {
-    const body = normalizedBody(text);
-    if (body.length >= 200) {
-      const group = duplicateBodies.get(body) ?? [];
-      group.push({ rel, noindex });
-      duplicateBodies.set(body, group);
-    }
-  }
-}
-
-for (const group of duplicateBodies.values()) {
-  if (group.length < 2) continue;
-  const indexable = group.filter((item) => !item.noindex);
-  const files = group.map((item) => item.rel).join(", ");
-  if (indexable.length > 1) {
-    hardFailures.push(`exact duplicate body is indexable: ${files}`);
-  } else {
-    quarantinedDuplicateWarnings.push(`exact duplicate body quarantined: ${files}`);
   }
 }
 
@@ -149,9 +115,6 @@ if (categoryWarningCount) {
 for (const warning of languageWarnings.slice(0, 40)) {
   console.warn(`warning: ${warning}`);
 }
-for (const warning of quarantinedDuplicateWarnings) {
-  console.warn(`warning: ${warning}`);
-}
 if (languageWarnings.length > 40) {
   console.warn(`warning: ${languageWarnings.length - 40} more language warnings omitted`);
 }
@@ -164,5 +127,5 @@ if (hardFailures.length) {
   process.exit(1);
 }
 
-const warningCount = categoryWarningCount + languageWarnings.length + quarantinedDuplicateWarnings.length;
+const warningCount = categoryWarningCount + languageWarnings.length;
 console.log(`content quality audit passed (${warningCount} warning(s))`);

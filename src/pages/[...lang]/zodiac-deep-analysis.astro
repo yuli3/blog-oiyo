@@ -1,0 +1,18 @@
+---
+import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+const { locale } = Astro.props as { locale: Locale };
+const names: Record<Locale, string> = {
+  ko: "별자리 심화 분석",
+  en: "zodiac deep analysis",
+  ja: "星座深層分析",
+  fr: "analyse approfondie du zodiaque",
+  es: "análisis profundo del zodíaco",
+  zh: "星座深层分析",
+};
+---
+<OiyoCanonicalRedirect locale={locale} itemName={names[locale] ?? names.en} targetPath="/zodiac/personality" kind="tool" />
