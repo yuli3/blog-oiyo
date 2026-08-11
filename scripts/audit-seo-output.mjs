@@ -13,6 +13,25 @@ const requiredSitemaps = [
 
 const failures = [];
 const sitemapUrls = new Set();
+const explicitNoindexUrls = new Set();
+
+function listMdxFiles(dir) {
+  if (!fs.existsSync(dir)) return [];
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) return listMdxFiles(full);
+    return entry.isFile() && entry.name.endsWith(".mdx") ? [full] : [];
+  });
+}
+
+const contentRoot = path.join(root, "src/content/blog");
+for (const file of listMdxFiles(contentRoot)) {
+  const source = fs.readFileSync(file, "utf8");
+  const frontmatter = source.match(/^---\n[\s\S]*?\n---/)?.[0] ?? "";
+  if (!/^noindex:\s*true\s*$/m.test(frontmatter)) continue;
+  const route = path.relative(contentRoot, file).split(path.sep).join("/").replace(/\.mdx$/, "");
+  explicitNoindexUrls.add(`${siteUrl}/${route}/`);
+}
 
 if (!fs.existsSync(dist)) {
   failures.push("dist directory is missing; run npm run build first");
@@ -76,6 +95,10 @@ for (const file of listHtmlFiles(dist)) {
   }
 
   const canonical = html.match(/<link rel="canonical" href="([^"]+)"/)?.[1];
+  const pageUrl = `${siteUrl}/${rel.replace(/index\.html$/, "")}`;
+  if (explicitNoindexUrls.has(pageUrl) && sitemapUrls.has(pageUrl)) {
+    failures.push(`${rel}: explicit frontmatter noindex page must not appear in sitemap`);
+  }
   if (isNoindex && canonical?.startsWith("https://game.oiyo.net/")) {
     const refreshTarget = html.match(
       /<meta http-equiv="refresh" content="0;\s*url=([^"]+)"/,
@@ -84,10 +107,6 @@ for (const file of listHtmlFiles(dist)) {
       failures.push(`${rel}: game redirect stub refresh target does not match canonical`);
     } else {
       intentionalGameStubs += 1;
-    }
-    const pageUrl = `${siteUrl}/${rel.replace(/index\.html$/, "")}`;
-    if (sitemapUrls.has(pageUrl)) {
-      failures.push(`${rel}: game redirect stub must not appear in sitemap`);
     }
   }
 

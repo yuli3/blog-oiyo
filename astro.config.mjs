@@ -1,6 +1,6 @@
 // @ts-check
 
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
@@ -25,6 +25,37 @@ const BRIDGE_SLUGS = new Set(
 // sitemap but noindex is a contradictory signal.
 const DEINDEXED_LOCALES = new Set(
   JSON.parse(readFileSync(new URL("./src/config/deindexed-locales.json", import.meta.url), "utf8")),
+);
+
+/** @param {URL} directory @param {string} prefix @returns {string[]} */
+function collectExcludedContentRoutes(directory, prefix = "") {
+  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const relative = prefix ? `${prefix}/${entry.name}` : entry.name;
+    const url = new URL(`./src/content/blog/${relative}`, import.meta.url);
+    if (entry.isDirectory()) return collectExcludedContentRoutes(url, relative);
+    if (!entry.isFile() || !entry.name.endsWith(".mdx")) return [];
+    const source = readFileSync(url, "utf8");
+    const frontmatter = source.match(/^---\n[\s\S]*?\n---/)?.[0] ?? "";
+    if (!/^(?:noindex:\s*true|redirectTo(?:Blog)?:\s*.+)\s*$/m.test(frontmatter)) return [];
+    return [`/${relative.replace(/\.mdx$/, "")}`];
+  });
+}
+
+/** @param {URL} directory @returns {string[]} */
+function collectExcludedPageSlugs(directory) {
+  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    if (!entry.isFile() || !entry.name.endsWith(".astro")) return [];
+    const source = readFileSync(new URL(entry.name, directory), "utf8");
+    if (!/(?:OiyoCanonicalRedirect|BlogRedirect|<meta\s+name=["']robots["'][^>]*noindex|\bnoindex\b)/i.test(source)) return [];
+    return [entry.name.replace(/\.astro$/, "")];
+  });
+}
+
+const EXCLUDED_CONTENT_ROUTES = new Set(
+  collectExcludedContentRoutes(new URL("./src/content/blog/", import.meta.url)),
+);
+const EXCLUDED_PAGE_SLUGS = new Set(
+  collectExcludedPageSlugs(new URL("./src/pages/[...lang]/", import.meta.url)),
 );
 
 // https://astro.build/config
@@ -53,6 +84,9 @@ export default defineConfig({
         if (segs.includes("embed")) return false;
         // Exclude deindexed locales (crawl budget).
         if (segs.length > 0 && DEINDEXED_LOCALES.has(segs[0])) return false;
+        // Exclude content explicitly quarantined through frontmatter.
+        if (EXCLUDED_CONTENT_ROUTES.has(path.replace(/\/$/, ""))) return false;
+        if (segs.length === 2 && EXCLUDED_PAGE_SLUGS.has(segs[1])) return false;
         return true;
       },
       // Do not stamp every URL with the build time. A trustworthy per-article
