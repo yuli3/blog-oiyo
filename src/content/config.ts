@@ -26,6 +26,7 @@ const blog = defineCollection({
     localizationMode: z.enum(["original", "localized", "translated", "redirect-only"]).optional(),
     // TODO: make locale required after running migration script to add locale fields to all ~1970 posts
     draft: z.boolean().default(false),
+    noindex: z.boolean().default(false), // temporary search quarantine; URL remains accessible
     featured: z.boolean().default(false),
     author: z.string().default("Oiyo"),
     sourceProject: z.enum(["blog-oiyo", "ahoxy-nextjs", "oiyo", "external-research"]).optional(),
