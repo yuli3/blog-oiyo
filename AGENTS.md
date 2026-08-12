@@ -32,13 +32,13 @@ The long-term goal is:
 
 Read these in order before making substantial changes:
 
-1. [docs/implementation-control-board.md](/Users/seuncho/coding/blog/docs/implementation-control-board.md)
-2. [docs/content-charter.md](/Users/seuncho/coding/blog/docs/content-charter.md)
-3. [docs/mdoc-authoring-spec.md](/Users/seuncho/coding/blog/docs/mdoc-authoring-spec.md)
-4. [docs/component-allowlist.md](/Users/seuncho/coding/blog/docs/component-allowlist.md)
-5. [docs/component-disallowlist.md](/Users/seuncho/coding/blog/docs/component-disallowlist.md)
-6. [docs/component-registry-by-track.md](/Users/seuncho/coding/blog/docs/component-registry-by-track.md)
-7. [docs/content-schema-implementation-draft.md](/Users/seuncho/coding/blog/docs/content-schema-implementation-draft.md)
+1. [docs/implementation-control-board.md](/Users/seuncho/coding/company-brain/AI-Sessions/raw/project-docs/blog/docs/implementation-control-board.md)
+2. [docs/content-charter.md](/Users/seuncho/coding/company-brain/AI-Sessions/raw/project-docs/blog/docs/content-charter.md)
+3. [docs/mdoc-authoring-spec.md](/Users/seuncho/coding/company-brain/AI-Sessions/raw/project-docs/blog/docs/mdoc-authoring-spec.md)
+4. [docs/component-allowlist.md](/Users/seuncho/coding/company-brain/AI-Sessions/raw/project-docs/blog/docs/component-allowlist.md)
+5. [docs/component-disallowlist.md](/Users/seuncho/coding/company-brain/AI-Sessions/raw/project-docs/blog/docs/component-disallowlist.md)
+6. [docs/component-registry-by-track.md](/Users/seuncho/coding/company-brain/AI-Sessions/raw/project-docs/blog/docs/component-registry-by-track.md)
+7. [docs/content-schema-implementation-draft.md](/Users/seuncho/coding/company-brain/AI-Sessions/raw/project-docs/blog/docs/content-schema-implementation-draft.md)
 8. [data/catalog/category-registry.yaml](/Users/seuncho/coding/blog/data/catalog/category-registry.yaml)
 9. [data/catalog/content-inventory.master.csv](/Users/seuncho/coding/blog/data/catalog/content-inventory.master.csv)
 10. [data/catalog/ahoxy-migration.revisit-later.csv](/Users/seuncho/coding/blog/data/catalog/ahoxy-migration.revisit-later.csv)

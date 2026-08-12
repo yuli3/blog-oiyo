@@ -162,6 +162,14 @@ for (const [c, n] of driftCats.sort((a, b) => b[1] - a[1])) rep += `| ${c} | ${n
 
 rep += `\n## Note\n\nThe canonical registry (May, active-draft) only covers ahoxy-migration domains (management, economics, ncs, tax/finance, etc.) and omits large live domains (Mysticism, Mythology, Philosophy, Health). Two fixes are needed: (1) expand the registry to cover all live domains, (2) migrate content categories to the consolidated canonical set. This report is advisory — it does not rewrite content.\n`;
 
-fs.mkdirSync(path.join(root, "docs"), { recursive: true });
-fs.writeFileSync(path.join(root, "docs/CATEGORY_FRAGMENTATION_REPORT.md"), rep);
-console.log("✓ docs/CATEGORY_FRAGMENTATION_REPORT.md");
+// This drift report is internal analysis, so it lands in company-brain rather
+// than in this repo, which is public. company-brain is not checked out in CI —
+// skip rather than fail there, since nothing downstream reads this file.
+const driftReportDir = path.join(root, "..", "company-brain/AI-Sessions/raw/project-docs/blog/docs");
+if (fs.existsSync(path.join(root, "..", "company-brain"))) {
+  fs.mkdirSync(driftReportDir, { recursive: true });
+  fs.writeFileSync(path.join(driftReportDir, "CATEGORY_FRAGMENTATION_REPORT.md"), rep);
+  console.log("✓ company-brain/AI-Sessions/raw/project-docs/blog/docs/CATEGORY_FRAGMENTATION_REPORT.md");
+} else {
+  console.log("· skipped category drift report (company-brain not present)");
+}
