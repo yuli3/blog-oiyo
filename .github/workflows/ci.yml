@@ -80,8 +80,9 @@ jobs:
   sitemap-submit:
     name: Submit Sitemap (GSC + Bing + IndexNow)
     runs-on: ubuntu-latest
-    # No build and no hour-long wait any more, so this is now a short job.
-    timeout-minutes: 20
+    # The Cloudflare gate can legitimately take an hour; this job must outlive
+    # it. Free on public repos, so waiting costs nothing.
+    timeout-minutes: 80
     needs: validate
     # Only run on pushes to main, not on PRs
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -108,16 +109,16 @@ jobs:
         run: pip install requests python-dotenv google-api-python-client google-auth
 
       - name: Wait for Cloudflare Pages deployment
-        # Submitting after this exact commit is live is preferable, but waiting
-        # up to an hour for it was 59% of the whole Actions bill. Wait five
-        # minutes, which covers a normal deploy, then submit regardless: the
-        # engines fetch the sitemap URL on their own schedule long after any
-        # deploy lands. A slow deploy now shows as a warning, not a failure.
-        continue-on-error: true
+        # Submission must follow the deployment for this exact commit. Five
+        # minutes was tried on 2026-08-12 to cut the Actions bill, and it timed
+        # out on four of five repos — every run burned the full five minutes and
+        # then submitted before the deploy was live, which is the worst of both.
+        # These repos are public now, so the minutes are free and precision is
+        # back. The duplicate build stays gone; that was waste either way.
         run: python scripts/wait-cloudflare-check.py
         env:
           GITHUB_TOKEN: ${{ github.token }}
-          CLOUDFLARE_CHECK_TIMEOUT: "300"
+          CLOUDFLARE_CHECK_TIMEOUT: "3600"
 
       - name: Submit sitemap to all engines
         run: python scripts/sitemap-submit.py
