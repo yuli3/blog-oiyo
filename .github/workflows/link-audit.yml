@@ -10,7 +10,10 @@ jobs:
   audit:
     name: Broken links & orphan pages
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # This job builds the whole site before auditing it, so it needs the same
+    # budget ci.yml got on 2026-08-05. At 15 the weekly run was cancelled
+    # mid-build (08-04, 08-11) and never audited anything.
+    timeout-minutes: 40
 
     steps:
       - name: Checkout

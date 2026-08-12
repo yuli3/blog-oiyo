@@ -32,6 +32,8 @@ SITES = [
     {"name": "oiyo.net",      "gsc": "sc-domain:oiyo.net",      "url": "https://oiyo.net"},
     {"name": "blog.oiyo.net", "gsc": "https://blog.oiyo.net/",  "url": "https://blog.oiyo.net"},
     {"name": "wiki.oiyo.net", "gsc": "sc-domain:wiki.oiyo.net", "url": "https://wiki.oiyo.net"},
+    {"name": "game.oiyo.net", "gsc": "sc-domain:game.oiyo.net", "url": "https://game.oiyo.net"},
+    {"name": "news.oiyo.net", "gsc": "sc-domain:news.oiyo.net", "url": "https://news.oiyo.net"},
     {"name": "ahoxy.com",     "gsc": "sc-domain:ahoxy.com",     "url": "https://ahoxy.com"},
 ]
 
