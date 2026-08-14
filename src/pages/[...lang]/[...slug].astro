@@ -232,7 +232,12 @@ const nextLabel: Record<string, string> = { en: "Next", ko: "다음", ja: "次�
 const contributorLabel: Record<string, string> = { en: "Contributor", ko: "기여자", ja: "寄稿者", fr: "Contributeur", es: "Colaborador", zh: "贡献者", };
 const coursesLabel: Record<string, string> = { en: "All Courses", ko: "전체 강의", ja: "コース一覧", fr: "Tous les cours", es: "Todos los cursos", zh: "全部课程", };
 const homeLabel: Record<string, string> = { en: "Home", ko: "홈", ja: "ホーム", fr: "Accueil", es: "Inicio", zh: "首页" };
-const displayTitle = post.data.title.replace(/^Ch\.?\s*\d+[.:]?\s*/i, "");
+// Titles no longer carry the chapter number — scripts/strip-chapter-from-titles.mjs
+// took it out of the content on 2026-08-14, since the chapter already arrives as
+// frontmatter and as the slug's -chN suffix. This used to strip a leading "Ch2."
+// here, which fixed the article page and left the sidebar and the course list
+// showing it, so the page said "chapter 2" three times.
+const displayTitle = post.data.title;
 
 const chapterStr = (n: number) =>
   locale === "ja" ? `第${n}章` : `${chapterLabel[locale] ?? "Chapter"} ${n}`;
