@@ -1,14 +1,14 @@
 # Content Index (auto-generated)
 
-> Generated 2026-08-17T21:52:33.644Z from MDX frontmatter. Do not edit by hand — run `npm run content:manifest`.
+> Generated 2026-08-17T23:13:55.959Z from MDX frontmatter. Do not edit by hand — run `npm run content:manifest`.
 
-Total: **5381** entries · ko 2685 · en 1376 · ja 614 · zh 286 · es 210 · fr 210
+Total: **5372** entries · ko 2676 · en 1376 · ja 614 · zh 286 · es 210 · fr 210
 
 ## By track
 
 - **magazine**: 3446
-- **academy**: 1649
-- **interactive**: 286
+- **academy**: 1641
+- **interactive**: 285
 
 ## By category (raw)
 
@@ -17,7 +17,7 @@ Total: **5381** entries · ko 2685 · en 1376 · ja 614 · zh 286 · es 210 · f
 | Mind & Psychology | 1269 | ✅ |
 | Finance | 674 | ✅ |
 | Mysticism | 495 | ✅ |
-| Lifestyle | 337 | ✅ |
+| Lifestyle | 336 | ✅ |
 | Computer Science | 320 | ✅ |
 | Myth & Culture | 317 | ✅ |
 | Philosophy & Spirit | 303 | ✅ |
@@ -39,7 +39,6 @@ Total: **5381** entries · ko 2685 · en 1376 · ja 614 · zh 286 · es 210 · f
 | Public Admin | 31 | ✅ |
 | Design | 21 | ✅ |
 | Strategy | 18 | ✅ |
-| AI Literacy | 8 | ❌ drift |
 | Psychology | 8 | ❌ drift |
 | Economics | 8 | ❌ drift |
 | Society & Wealth | 5 | ✅ |
