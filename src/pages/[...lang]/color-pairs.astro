@@ -1,0 +1,47 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ColorPairs from "../../components/tools/ColorPairs";
+import { locales } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: ActiveLocale };
+
+const meta: Record<string, { title: string; description: string }> = {
+  ko: { title: "컬러 짝 — Grey+White, Lime+Navy처럼 만져 보기", description: "두 색을 골라 패션과 UI에서 같이 쓰는 느낌을 봅니다. 한 페이지. 격자 URL 없음." },
+  en: { title: "Color pairs — Grey+White, Lime+Navy, and why they sit together", description: "Pick two colors and feel them in fashion or UI. One page. No pair-grid URLs." },
+};
+const m = meta[locale] ?? meta.en;
+const ko = locale === "ko";
+---
+
+<BaseLayout title={m.title} description={m.description} locale={locale}>
+  <article class="mx-auto max-w-3xl px-4 py-10">
+    <h1 class="text-3xl font-black tracking-tight">{m.title}</h1>
+    <p class="mt-3 text-sm leading-6 text-slate-600">
+      {ko
+        ? "유행 순위가 아닙니다. 짝의 말입니다. 퍼스널 컬러 테스트도 아닙니다."
+        : "Not a trend list. Words for a pair. Not a personal-color test."}
+    </p>
+    <div class="mt-8">
+      <ColorPairs client:load locale={locale} />
+    </div>
+    <section class="mt-10 text-sm leading-7 text-slate-600">
+      <h2 class="text-lg font-black text-slate-900">{ko ? "이 숫자는 무엇인가" : "What the number is"}</h2>
+      <p class="mt-2">{ko ? "패션 모드는 취향입니다. UI 모드의 대비율만 측정값입니다. WCAG AA 본문은 4.5, 큰 글자는 3입니다." : "Fashion mode is taste. Only the UI contrast ratio is a measurement. WCAG AA is 4.5 for body, 3 for large type."}</p>
+    </section>
+    <p class="mt-8 text-xs text-slate-500">{ko ? "의견·참고. 인쇄용 CMYK가 아닙니다." : "Opinion and reference. Not print CMYK."}</p>
+    <p class="mt-4 text-sm">
+      <a class="font-bold underline" href={`/${locale}/palette-extractor/`}>{ko ? "사진에서 색 뽑기" : "Extract from a photo"}</a>
+      {" · "}
+      <a class="font-bold underline" href="https://oiyo.net/ko/personal-color/test/">{ko ? "퍼스널 컬러 테스트" : "Personal color test"}</a>
+    </p>
+  </article>
+</BaseLayout>
