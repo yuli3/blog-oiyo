@@ -1,0 +1,322 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ShoeSizeConverter from "../../components/tools/ShoeSizeConverter";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: ActiveLocale };
+const pageUrl = `https://blog.oiyo.net/${locale}/shoe-size-converter/`;
+
+const meta: Record<ActiveLocale, { title: string; description: string; eyebrow: string }> = {
+  en: {
+    title: "Men's to Women's Shoe Size Converter — and Back",
+    description:
+      "Convert US men's to women's shoe size and back, through foot length rather than a rule of thumb. Shows both the Brannock +1.5 and the retail +2 answer, plus UK, EU and cm.",
+    eyebrow: "Shoe size converter",
+  },
+  ko: {
+    title: "남성 여성 신발 사이즈 변환 — 양방향",
+    description:
+      "US 남성 사이즈를 여성 사이즈로, 여성을 남성으로 변환합니다. 어림수가 아니라 발 길이를 거쳐 계산하고, 브래녹 +1.5와 소매점 +2를 함께 보여줍니다. UK·EU·cm 포함.",
+    eyebrow: "신발 사이즈 변환",
+  },
+  ja: {
+    title: "メンズ・レディース 靴サイズ変換 — 双方向",
+    description:
+      "US メンズをレディースへ、レディースをメンズへ変換します。目安ではなく足長を経由して計算し、ブラノック +1.5 と小売の +2 を併記。UK・EU・cm も表示。",
+    eyebrow: "靴サイズ変換",
+  },
+  zh: {
+    title: "男码女码鞋码换算 — 双向",
+    description:
+      "US 男码转女码、女码转男码。不用经验法则，而是通过脚长计算，并同时给出 Brannock +1.5 与零售 +2 两种答案，附 UK、EU 与厘米。",
+    eyebrow: "鞋码换算",
+  },
+  fr: {
+    title: "Pointure homme ↔ femme — convertisseur",
+    description:
+      "Convertissez une pointure US homme en femme et inversement, en passant par la longueur du pied plutôt qu'une règle approximative. Affiche le +1,5 Brannock et le +2 commercial, avec UK, EU et cm.",
+    eyebrow: "Convertisseur de pointure",
+  },
+  es: {
+    title: "Conversor de talla de calzado hombre ↔ mujer",
+    description:
+      "Convierte tallas US de hombre a mujer y al revés, pasando por el largo del pie en vez de una regla aproximada. Muestra el +1,5 de Brannock y el +2 comercial, con UK, EU y cm.",
+    eyebrow: "Conversor de talla",
+  },
+};
+
+type Content = {
+  lead: string;
+  formulaTitle: string;
+  formulas: { label: string; value: string }[];
+  useTitle: string;
+  useCases: { title: string; body: string }[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  sourceTitle: string;
+  sources: string;
+  disclaimer: string;
+};
+
+const content: Record<ActiveLocale, Content> = {
+  en: {
+    lead: "There is no standard that says a men's 9 equals a women's 10.5. US shoe shops measure on a Brannock device, and its two scales differ by exactly 1.5 sizes for the same foot; a lot of retailer charts round that to 2. This tool converts through foot length so you can see which answer you are getting and why.",
+    formulaTitle: "The arithmetic",
+    formulas: [
+      { label: "Men's US", value: "3 × inches − 24" },
+      { label: "Women's US", value: "3 × inches − 22.5" },
+      { label: "Difference", value: "1.5 sizes" },
+    ],
+    useTitle: "How to use it",
+    useCases: [
+      { title: "Pick what you know", body: "Enter a men's size, a women's size, or your foot length in centimetres. Foot length is the most reliable input if you have a tape measure." },
+      { title: "Choose the convention", body: "Brannock +1.5 is what a US shoe shop measures. Retail +2 is what many size charts publish. The tool shows both so you can compare." },
+      { title: "Read across systems", body: "The table gives men's, women's, UK, EU and foot length together, all derived from the same measurement." },
+    ],
+    faqTitle: "Questions people actually ask",
+    faqs: [
+      { question: "Is it 1.5 or 2 sizes?", answer: "Both are in use. The Brannock device — the metal plate US stores measure on — puts the men's and women's scales exactly 1.5 apart. Many retailer charts simplify to 2. Individual brands land anywhere from 1 to 2, so if a brand publishes its own chart, that chart wins." },
+      { question: "What is a men's 9 in women's?", answer: "10.5 on the Brannock scale, 11 on the common retail chart. Both correspond to a foot about 27.9 cm long." },
+      { question: "Why does the converted size sometimes not fit?", answer: "Length is only half of fit. Women's lasts are cut narrower at the same length, so a correctly converted size can still feel tight across the foot. Look for a wide fitting, or size on foot length and try the shoe." },
+      { question: "Do UK and EU sizes convert the same way?", answer: "UK sizes run about one below US men's. EU sizes are Paris points — two thirds of a centimetre each — so they scale with foot length rather than with the US scales, which is why the tool derives them from length." },
+      { question: "Are kids' sizes the same?", answer: "No. Children's US sizing uses its own scale and restarts, so adult conversions do not carry over. This tool covers adult US, UK and EU only." },
+    ],
+    sourceTitle: "Where the numbers come from",
+    sources: "The two formulas are the Brannock device's published men's and women's scales, which US shoe retailers have measured on since the 1920s. EU sizes use the Paris point (1 point = 2/3 cm). UK sizes are taken as one below US men's, the convention used across British retail.",
+    disclaimer: "Fit varies by brand, last and width. Treat the output as a starting point, then check the maker's own size chart.",
+  },
+  ko: {
+    lead: "남성 9가 여성 10.5라는 표준은 없습니다. 미국 신발가게는 브래녹이라는 기구로 발을 재는데, 같은 발에 대해 남성 눈금과 여성 눈금이 정확히 1.5 차이입니다. 소매점 표는 그걸 2로 반올림한 곳이 많습니다. 이 도구는 발 길이를 거쳐 변환하므로 지금 보는 숫자가 어느 쪽인지 알 수 있습니다.",
+    formulaTitle: "계산식",
+    formulas: [
+      { label: "남성 US", value: "3 × 인치 − 24" },
+      { label: "여성 US", value: "3 × 인치 − 22.5" },
+      { label: "차이", value: "1.5 사이즈" },
+    ],
+    useTitle: "쓰는 법",
+    useCases: [
+      { title: "아는 값으로 넣기", body: "남성 사이즈, 여성 사이즈, 발 길이(cm) 중 아는 것을 넣습니다. 줄자가 있다면 발 길이가 가장 믿을 만합니다." },
+      { title: "관례 고르기", body: "브래녹 +1.5는 미국 신발가게가 재는 기준이고, 소매점 +2는 사이즈 표에 많이 적히는 값입니다. 둘 다 보여주니 비교하면 됩니다." },
+      { title: "규격별로 읽기", body: "남성·여성·UK·EU·발 길이가 한 표에 나옵니다. 전부 같은 측정값에서 나온 숫자입니다." },
+    ],
+    faqTitle: "실제로 많이 묻는 것",
+    faqs: [
+      { question: "1.5인가요 2인가요?", answer: "둘 다 쓰입니다. 미국 매장이 쓰는 브래녹 기구는 남성·여성 눈금이 정확히 1.5 차이입니다. 소매점 표는 2로 단순화한 곳이 많고, 브랜드별로는 1에서 2 사이입니다. 브랜드가 자체 표를 내놓았다면 그 표가 우선입니다." },
+      { question: "남성 9는 여성으로 몇인가요?", answer: "브래녹 기준 10.5, 흔한 소매점 표 기준 11입니다. 둘 다 발 길이 약 27.9cm에 해당합니다." },
+      { question: "변환한 사이즈가 안 맞는 이유는?", answer: "길이는 착화감의 절반일 뿐입니다. 같은 길이라도 여성화는 발볼이 좁게 나와서 제대로 변환해도 조일 수 있습니다. 와이드 라스트를 찾거나, 발 길이로 고르고 신어보세요." },
+      { question: "UK·EU도 같은 방식인가요?", answer: "UK는 US 남성보다 약 1 작습니다. EU는 파리 포인트(1포인트 = 2/3cm)라 US 눈금이 아니라 발 길이에 비례합니다. 그래서 이 도구는 EU를 길이에서 직접 계산합니다." },
+      { question: "아동 사이즈도 같나요?", answer: "아닙니다. 미국 아동 사이즈는 별도 눈금으로 다시 시작해서 성인 변환이 통하지 않습니다. 이 도구는 성인 US·UK·EU만 다룹니다." },
+    ],
+    sourceTitle: "숫자의 출처",
+    sources: "두 계산식은 1920년대부터 미국 신발 소매가 써 온 브래녹 기구의 남성·여성 눈금입니다. EU는 파리 포인트(1포인트 = 2/3cm)를 씁니다. UK는 영국 소매 관례대로 US 남성보다 1 작은 값으로 계산합니다.",
+    disclaimer: "착화감은 브랜드·라스트·발볼에 따라 다릅니다. 출력값은 출발점으로 쓰고 제조사 사이즈 표를 확인하세요.",
+  },
+  ja: {
+    lead: "メンズ9がレディース10.5だという標準はありません。米国の靴店はブラノックという器具で足を測り、同じ足に対してメンズ目盛とレディース目盛はちょうど1.5違います。小売の表はそれを2に丸めていることが多いです。この道具は足長を経由して変換するので、いま見ている数字がどちらなのか分かります。",
+    formulaTitle: "計算式",
+    formulas: [
+      { label: "メンズ US", value: "3 × インチ − 24" },
+      { label: "レディース US", value: "3 × インチ − 22.5" },
+      { label: "差", value: "1.5 サイズ" },
+    ],
+    useTitle: "使い方",
+    useCases: [
+      { title: "分かる値を入れる", body: "メンズサイズ、レディースサイズ、足長(cm)のうち分かるものを入力します。メジャーがあれば足長が最も確実です。" },
+      { title: "慣例を選ぶ", body: "ブラノック +1.5 は米国の靴店が測る基準、小売 +2 はサイズ表によく載る値です。両方表示するので比べられます。" },
+      { title: "規格を横断して読む", body: "メンズ・レディース・UK・EU・足長が一つの表に出ます。すべて同じ測定値から導かれています。" },
+    ],
+    faqTitle: "よく聞かれること",
+    faqs: [
+      { question: "1.5ですか、2ですか？", answer: "どちらも使われています。米国の店が使うブラノック器具はメンズとレディースの目盛がちょうど1.5違いです。小売の表は2に単純化したものが多く、ブランドごとには1〜2の幅があります。ブランドが自社の表を出しているなら、その表が優先です。" },
+      { question: "メンズ9はレディースで何ですか？", answer: "ブラノック基準で10.5、一般的な小売表では11です。どちらも足長およそ27.9cmに相当します。" },
+      { question: "換算したサイズが合わないのはなぜ？", answer: "長さはフィットの半分にすぎません。同じ長さでもレディースの木型は細く、正しく換算しても窮屈に感じることがあります。ワイド木型を探すか、足長で選んで試着してください。" },
+      { question: "UK・EUも同じ方式ですか？", answer: "UKはUSメンズより約1小さくなります。EUはパリポイント(1ポイント = 2/3cm)で、USの目盛ではなく足長に比例します。そのためこの道具はEUを長さから直接計算します。" },
+      { question: "子ども用も同じですか？", answer: "いいえ。米国の子ども用サイズは独自の目盛で振り直されるため、大人の換算は通用しません。この道具は大人のUS・UK・EUのみを扱います。" },
+    ],
+    sourceTitle: "数字の出どころ",
+    sources: "二つの式は1920年代から米国の靴小売が使ってきたブラノック器具のメンズ・レディース目盛です。EUはパリポイント(1ポイント = 2/3cm)を使います。UKは英国小売の慣例どおりUSメンズより1小さい値としています。",
+    disclaimer: "フィットはブランド・木型・幅で変わります。出力は出発点として使い、メーカー自身のサイズ表を確認してください。",
+  },
+  zh: {
+    lead: "并没有哪个标准规定男码9等于女码10.5。美国鞋店用 Brannock 器具量脚，对同一只脚，男码刻度与女码刻度正好相差1.5；很多零售对照表把它取整成2。这个工具通过脚长换算，所以你能看出当前给的是哪一种答案、为什么。",
+    formulaTitle: "计算式",
+    formulas: [
+      { label: "男码 US", value: "3 × 英寸 − 24" },
+      { label: "女码 US", value: "3 × 英寸 − 22.5" },
+      { label: "差值", value: "1.5 码" },
+    ],
+    useTitle: "怎么用",
+    useCases: [
+      { title: "填你知道的那个", body: "输入男码、女码或脚长(厘米)中你已知的一项。若手边有软尺，脚长最可靠。" },
+      { title: "选择惯例", body: "Brannock +1.5 是美国鞋店量脚的基准，零售 +2 是尺码表上常见的写法。工具同时给出两者以便对照。" },
+      { title: "跨规格阅读", body: "表格同时列出男码、女码、UK、EU 和脚长，全部由同一测量值推导。" },
+    ],
+    faqTitle: "大家真正会问的",
+    faqs: [
+      { question: "到底是1.5还是2？", answer: "两种都在用。美国门店使用的 Brannock 器具，男女刻度正好相差1.5；许多零售对照表简化为2；具体品牌在1到2之间不等。如果品牌给出了自己的尺码表，以该表为准。" },
+      { question: "男码9是女码多少？", answer: "按 Brannock 为10.5，按常见零售表为11。两者都对应约27.9厘米的脚长。" },
+      { question: "为什么换算后的尺码有时不合脚？", answer: "长度只是合脚的一半。同样长度下女鞋楦型更窄，即便换算正确也可能偏紧。可以找宽楦版本，或按脚长选择后试穿。" },
+      { question: "UK 和 EU 也是同样换算吗？", answer: "UK 比 US 男码约小1。EU 用巴黎点(1点 = 2/3厘米)，与脚长成比例而非跟随 US 刻度，所以本工具直接由脚长推导 EU。" },
+      { question: "童鞋尺码一样吗？", answer: "不一样。美国童鞋使用自成一套并重新起算的刻度，成人换算不适用。本工具只涵盖成人 US、UK 与 EU。" },
+    ],
+    sourceTitle: "数字来自哪里",
+    sources: "两条公式来自 Brannock 器具公布的男女刻度，美国鞋类零售自1920年代起以此测量。EU 使用巴黎点(1点 = 2/3厘米)。UK 按英国零售惯例取 US 男码减1。",
+    disclaimer: "合脚程度因品牌、楦型与宽度而异。请把结果当作起点，并核对厂商自己的尺码表。",
+  },
+  fr: {
+    lead: "Aucune norme ne dit qu'un 9 homme vaut un 10,5 femme. Les magasins américains mesurent sur un appareil Brannock, dont les deux échelles diffèrent exactement de 1,5 pour le même pied ; beaucoup de tableaux commerciaux arrondissent à 2. Cet outil convertit via la longueur du pied, pour que vous voyiez quelle réponse vous obtenez et pourquoi.",
+    formulaTitle: "Le calcul",
+    formulas: [
+      { label: "US homme", value: "3 × pouces − 24" },
+      { label: "US femme", value: "3 × pouces − 22,5" },
+      { label: "Écart", value: "1,5 pointure" },
+    ],
+    useTitle: "Comment l'utiliser",
+    useCases: [
+      { title: "Partez de ce que vous savez", body: "Saisissez une pointure homme, une pointure femme ou la longueur de votre pied en centimètres. Avec un mètre ruban, la longueur reste l'entrée la plus fiable." },
+      { title: "Choisissez la convention", body: "Brannock +1,5 correspond à la mesure en magasin américain ; +2 est ce que publient beaucoup de tableaux. L'outil affiche les deux." },
+      { title: "Lisez d'un système à l'autre", body: "Le tableau donne homme, femme, UK, EU et longueur du pied, tous dérivés de la même mesure." },
+    ],
+    faqTitle: "Les questions réellement posées",
+    faqs: [
+      { question: "1,5 ou 2 ?", answer: "Les deux circulent. L'appareil Brannock, la plaque sur laquelle mesurent les magasins américains, sépare les échelles homme et femme d'exactement 1,5. Beaucoup de tableaux simplifient à 2, et selon les marques l'écart va de 1 à 2. Si une marque publie son tableau, c'est lui qui fait foi." },
+      { question: "Un 9 homme, c'est quoi en femme ?", answer: "10,5 sur l'échelle Brannock, 11 sur le tableau commercial courant. Les deux correspondent à un pied d'environ 27,9 cm." },
+      { question: "Pourquoi la pointure convertie ne va-t-elle pas toujours ?", answer: "La longueur ne fait que la moitié du chaussant. À longueur égale, les formes femme sont plus étroites : une conversion correcte peut serrer. Cherchez une largeur confort, ou partez de la longueur du pied et essayez." },
+      { question: "UK et EU suivent-elles la même logique ?", answer: "Le UK se situe environ une pointure sous le US homme. L'EU utilise le point de Paris (deux tiers de centimètre), donc il suit la longueur du pied et non les échelles américaines : l'outil le calcule directement depuis la longueur." },
+      { question: "Et les pointures enfant ?", answer: "Non. Le système enfant américain a sa propre échelle qui repart de zéro ; les conversions adulte ne s'y appliquent pas. Cet outil couvre l'adulte US, UK et EU." },
+    ],
+    sourceTitle: "D'où viennent les chiffres",
+    sources: "Les deux formules sont les échelles homme et femme publiées de l'appareil Brannock, utilisé par la distribution américaine depuis les années 1920. Les pointures EU emploient le point de Paris (1 point = 2/3 cm). Le UK est pris à une pointure sous le US homme, convention de la distribution britannique.",
+    disclaimer: "Le chaussant varie selon la marque, la forme et la largeur. Prenez le résultat comme point de départ et vérifiez le tableau du fabricant.",
+  },
+  es: {
+    lead: "No hay ninguna norma que diga que un 9 de hombre equivale a un 10,5 de mujer. Las zapaterías estadounidenses miden con un aparato Brannock, cuyas dos escalas se separan exactamente 1,5 tallas para el mismo pie; muchas tablas comerciales lo redondean a 2. Esta herramienta convierte pasando por el largo del pie, para que veas qué respuesta estás obteniendo y por qué.",
+    formulaTitle: "El cálculo",
+    formulas: [
+      { label: "US hombre", value: "3 × pulgadas − 24" },
+      { label: "US mujer", value: "3 × pulgadas − 22,5" },
+      { label: "Diferencia", value: "1,5 tallas" },
+    ],
+    useTitle: "Cómo usarla",
+    useCases: [
+      { title: "Empieza por lo que sabes", body: "Introduce una talla de hombre, una de mujer o el largo de tu pie en centímetros. Si tienes cinta métrica, el largo es la entrada más fiable." },
+      { title: "Elige la convención", body: "Brannock +1,5 es lo que se mide en una zapatería de EE. UU.; +2 es lo que publican muchas tablas. La herramienta muestra ambas." },
+      { title: "Lee entre sistemas", body: "La tabla da hombre, mujer, UK, EU y largo del pie, todo derivado de la misma medida." },
+    ],
+    faqTitle: "Lo que de verdad se pregunta",
+    faqs: [
+      { question: "¿Son 1,5 o 2 tallas?", answer: "Ambas se usan. El aparato Brannock, la placa con la que miden las tiendas estadounidenses, separa las escalas de hombre y mujer exactamente 1,5. Muchas tablas lo simplifican a 2 y, según la marca, la diferencia va de 1 a 2. Si la marca publica su propia tabla, manda esa." },
+      { question: "¿Cuánto es un 9 de hombre en mujer?", answer: "10,5 en la escala Brannock y 11 en la tabla comercial habitual. Ambas corresponden a un pie de unos 27,9 cm." },
+      { question: "¿Por qué a veces no calza la talla convertida?", answer: "El largo es solo la mitad del calce. A igual largo, las hormas de mujer son más estrechas, así que una conversión correcta puede apretar. Busca una horma ancha o elige por largo del pie y pruébatelo." },
+      { question: "¿UK y EU se convierten igual?", answer: "El UK queda una talla por debajo del US de hombre. El EU usa el punto de París (dos tercios de centímetro), de modo que sigue el largo del pie y no las escalas estadounidenses; por eso la herramienta lo calcula desde el largo." },
+      { question: "¿Sirve para tallas infantiles?", answer: "No. El sistema infantil de EE. UU. tiene su propia escala y vuelve a empezar, así que las conversiones de adulto no aplican. Esta herramienta cubre adulto US, UK y EU." },
+    ],
+    sourceTitle: "De dónde salen los números",
+    sources: "Las dos fórmulas son las escalas de hombre y mujer publicadas del aparato Brannock, con el que mide el comercio estadounidense desde los años veinte. Las tallas EU usan el punto de París (1 punto = 2/3 cm). El UK se toma una talla por debajo del US de hombre, la convención del comercio británico.",
+    disclaimer: "El calce varía según marca, horma y ancho. Usa el resultado como punto de partida y consulta la tabla del fabricante.",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+const c = content[locale] ?? content.en;
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "@id": `${pageUrl}#app`,
+      name: m.title,
+      url: pageUrl,
+      applicationCategory: "UtilitiesApplication",
+      operatingSystem: "Web",
+      description: m.description,
+      isAccessibleForFree: true,
+    },
+    {
+      "@type": "HowTo",
+      "@id": `${pageUrl}#howto`,
+      name: c.useTitle,
+      step: c.useCases.map((item, index) => ({
+        "@type": "HowToStep",
+        position: index + 1,
+        name: item.title,
+        text: item.body,
+      })),
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${pageUrl}#faq`,
+      mainEntity: c.faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: { "@type": "Answer", text: faq.answer },
+      })),
+    },
+  ],
+};
+---
+
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <div class="mx-auto max-w-3xl px-4 py-8">
+    <section class="mb-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <p class="text-sm font-semibold uppercase tracking-wide text-green-600">{m.eyebrow}</p>
+      <h1 class="mt-2 text-3xl font-black tracking-tight text-slate-950">{m.title}</h1>
+      <p class="mt-4 leading-8 text-slate-700">{c.lead}</p>
+    </section>
+
+    <ShoeSizeConverter client:load locale={locale as Locale} />
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-950">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-3 sm:grid-cols-3">
+        {c.formulas.map((formula) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="text-sm font-semibold text-slate-500">{formula.label}</h3>
+            <p class="mt-2 text-lg font-black text-slate-950">{formula.value}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-950">{c.useTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.useCases.map((item) => (
+          <article class="rounded-xl bg-green-50 p-4">
+            <h3 class="font-semibold text-slate-950">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-950">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-950">
+              {faq.question}
+            </summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10 rounded-xl border border-slate-200 bg-slate-50 p-5">
+      <h2 class="text-base font-bold text-slate-950">{c.sourceTitle}</h2>
+      <p class="mt-3 text-sm leading-6 text-slate-700">{c.sources}</p>
+      <p class="mt-3 text-sm leading-6 text-slate-500">{c.disclaimer}</p>
+    </section>
+  </div>
+</BaseLayout>
