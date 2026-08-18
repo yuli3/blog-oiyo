@@ -7,7 +7,7 @@ interface Props {
 
 const labels = {
     zh: {
-        title: '中国个人所得税计算器 2024',
+        title: '中国个人所得税计算器 2026',
         desc: '输入月薪，即时计算五险一金及个人所得税（以上海/北京一般费率为参考）。',
         monthlyGross: '月薪税前（元）',
         cityNote: '城市',
@@ -26,10 +26,10 @@ const labels = {
         totalInsurance: '五险一金合计',
         taxableIncome: '应纳税所得额（月）',
         itMonthly: '个人所得税（月）',
-        note: '* 以北京/上海2024年社保费率为基准，基数上限约36,549元/月。个税采用累进税率，年度汇算清缴时可能有退补税。',
+        note: '* 以上海2026年度社保缴费基数为准：上限37,731元/月、下限7,546元/月（2026年7月1日起施行，依据2025年度全口径城镇单位就业人员平均工资12,577元/月）。个税基本减除费用5,000元/月，采用3%–45%七级累进税率。专项附加扣除未计入。年度汇算清缴时可能有退补税。数据确认日：2026-08-19。',
     },
     en: {
-        title: 'China Income Tax Calculator 2024',
+        title: 'China Income Tax Calculator 2026',
         desc: 'Enter monthly salary to instantly calculate 五险一金 (social insurance) and personal income tax (using Shanghai/Beijing general rates).',
         monthlyGross: 'Monthly Gross Salary (CNY)',
         cityNote: 'City',
@@ -48,13 +48,17 @@ const labels = {
         totalInsurance: 'Total insurance',
         taxableIncome: 'Taxable income (monthly)',
         itMonthly: 'Income tax (monthly)',
-        note: '* Based on Beijing/Shanghai 2024 social insurance rates with base cap ~36,549 CNY/month. IIT uses progressive rates; annual reconciliation may result in refund or additional payment.',
+        note: '* Shanghai 2026 program year contribution base: cap 37,731 CNY/month, floor 7,546 CNY/month, in force from 1 July 2026 and derived from the 2025 city-wide average wage of 12,577 CNY/month. IIT applies the 5,000 CNY monthly basic deduction and seven progressive brackets from 3% to 45%. Special additional deductions are not included. Annual reconciliation may result in a refund or further payment. Figures checked 2026-08-19.',
     },
 } as const;
 
-// Social insurance base cap (Shanghai/Beijing 2024 approx)
-const SI_BASE_CAP = 36_549;
-const SI_BASE_MIN = 5_975; // minimum base (approx 60% of average wage)
+// Shanghai social insurance contribution base, 2026 program year (in force from
+// 2026-07-01). Derived from the 2025 city-wide average wage of 12,577 CNY/month:
+// cap = average x 300%, floor = average x 60%. Beijing is no longer named here --
+// its 2026 figure could not be verified against a consistent source.
+// Checked 2026-08-19.
+const SI_BASE_CAP = 37_731;
+const SI_BASE_MIN = 7_546;
 
 // Basic deduction: 5,000 CNY/month
 const BASIC_DEDUCTION = 5_000;
@@ -115,7 +119,7 @@ const ChinaSalaryCalculator: React.FC<Props> = ({ locale = 'zh' }) => {
     };
 
     return (
-        <GameContainer title={t.title} subtitle="Net Pay Estimator — China 2024" onReset={handleReset}>
+        <GameContainer title={t.title} subtitle="Net Pay Estimator — Shanghai 2026" onReset={handleReset}>
             <div className="flex flex-col gap-8">
                 <p className="text-sm font-medium text-muted-foreground text-center">{t.desc}</p>
 
