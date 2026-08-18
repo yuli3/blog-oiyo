@@ -1,0 +1,41 @@
+---
+// Same-domain 301-equivalent stub (0s meta-refresh + canonical + noindex,follow).
+// Used for tool-<slug> MDX articles archived in favor of an existing, richer
+// <slug>.astro page on this same site -- unlike OiyoCanonicalRedirect, which
+// points across domains to oiyo.net, this stays on blog.oiyo.net (2026-08-18).
+import type { Locale } from "../lib/i18n";
+
+interface Props {
+  locale: Locale;
+  targetPath: string; // e.g. "/height-converter"
+}
+
+const { locale, targetPath } = Astro.props;
+const target = `/${locale}${targetPath}/`;
+
+const copy: Record<Locale, { title: string; body: string; link: string }> = {
+  ko: { title: "페이지가 이동했습니다", body: "이 글은 더 자세한 페이지로 통합되었습니다.", link: "이동한 페이지 열기" },
+  en: { title: "This page has moved", body: "This article was merged into a more complete page.", link: "Open the merged page" },
+  ja: { title: "ページが移動しました", body: "この記事はより詳しいページに統合されました。", link: "移動先ページを開く" },
+  fr: { title: "Cette page a déménagé", body: "Cet article a été fusionné dans une page plus complète.", link: "Ouvrir la page fusionnée" },
+  es: { title: "Esta página se ha movido", body: "Este artículo se fusionó en una página más completa.", link: "Abrir la página fusionada" },
+  zh: { title: "此页面已迁移", body: "本文已合并到内容更完整的页面。", link: "打开合并后的页面" },
+};
+const text = copy[locale] ?? copy.en;
+---
+<html lang={locale}>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{text.title}</title>
+    <link rel="canonical" href={target} />
+    <meta name="robots" content="noindex,follow" />
+    <meta http-equiv="refresh" content={`0;url=${target}`} />
+  </head>
+  <body>
+    <main style="font-family: system-ui, sans-serif; max-width: 42rem; margin: 4rem auto; padding: 0 1rem;">
+      <h1>{text.title}</h1>
+      <p>{text.body}</p>
+      <p><a href={target}>{text.link}</a></p>
+    </main>
+  </body>
+</html>
