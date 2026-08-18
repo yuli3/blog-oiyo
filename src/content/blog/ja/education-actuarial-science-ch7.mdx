@@ -1,0 +1,80 @@
+---
+track: academy
+series: actuarial-science-basics
+chapter: 7
+title: 損害保険数理：事故の頻度と深度を測定する
+description: 自動車、火災、賠償責任など、損害保険の核心である事故発生回数（頻度）と事故1件あたりの損害額（深度）を確率モデルで設計する方法を学びます。
+pubDate: 2026-03-01T00:00:00.000Z
+category: Actuarial Science
+tags:
+  - Education
+  - actuarial-science
+locale: ja
+author: Oiyo
+---
+
+
+import {
+  LectureTable,
+  LectureProcess,
+  LecturePieChart,
+  LectureBarChart,
+} from "@/features/education-common/components/LectureVisuals";
+
+# 損害保険数理：不確実な損害の計量化
+
+生命保険が「いつ」起きるかが焦点であるのに対し、損害保険は**「どのくらいの頻度(Frequency)」**で起き、起きたときに**「どのくらいの規模(Severity)」**になるのかが核心です。これら2つの変数を掛け合わせることで、予測すべき「総損害額」が導き出されます。
+
+## 1. 事故頻度 (Frequency) のモデリング
+
+事故が何回起きるかは、主に**ポアソン分布 (Poisson Distribution)** を使用してモデル化します。これは、単位時間あたりに発生する事象の回数を表すのに最適化されています。
+
+## 2. 事故深度 (Severity) のモデリング
+
+1件の事故でいくらの支払いが発生するかは、**対数正規分布**や**パレート分布**を使用します。特に、大規模な損失が稀に発生するという損害保険の特性上、裾の長い (Heavy-tailed) 分布を扱うことが非常に重要です。
+
+## 3. 保険料算出プロセス：純保険料
+
+損害保険会社が受け取るべき最小限の保険料は、以下のロジックで算出されます。
+
+<LectureProcess
+  steps={[
+    {
+      label: "データ収集",
+      description: "過去数年間の事故統計と露出単位（保有車両台数など）を把握します。",
+    },
+    { label: "頻度分析", description: "単位あたりの平均事故発生件数を推定します。" },
+    { label: "深度分析", description: "1事故あたりの平均支払保険金を推定します。" },
+    {
+      label: "純保険料の導出",
+      description: "頻度と深度を掛け合わせて危険保険料 (Pure Premium) を決定します。",
+    },
+  ]}
+  client:load
+/>
+
+## 4. 実際のデータ例：事故規模別の構成比
+
+以下は、小規模な事故は多く、大規模な事故は少ないという、一般的な損害保険の損害額分布を示しています。
+
+<LecturePieChart
+  title="事故規模別の総支払額構成比"
+  description="事故件数は小口が圧倒的ですが、総支払額は中大型事故がかなりの部分を占めています。"
+  data={[
+    { name: "小口事故 (&lt;10万円)", value: 40, color: "#94a3b8" },
+    { name: "中規模事故 (10~100万円)", value: 35, color: "#60a5fa" },
+    { name: "大規模事故 (>100万円)", value: 25, color: "#1d4ed8" },
+  ]}
+  donut={true}
+  client:load
+/>
+
+---
+
+### 💡 教授からのヒント
+
+> 損害保険アクチュアリーは「ブラック・スワン (Black Swan)」を常に警戒しなければなりません。普段は小口の事故ばかりでも、気候変動や巨大災害によって統計外の超大型事故が発生する可能性があるからです。そのために、**再保険 (Reinsurance)** という安全装置を設計することが不可欠です。
+
+### 🔗 次의ステップ
+
+- [**第8章：リスク理論 (Ruin Theory)**](/ja/education-actuarial-science-ch8/)

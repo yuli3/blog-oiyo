@@ -1,0 +1,70 @@
+---
+track: academy
+series: actuarial-science-basics
+chapter: 6
+title: 死亡率モデリング：人類の寿命を予測する数式
+description: >-
+  単なる統計を超え、時間に伴う死亡率の変化トレンドを分析し、高齢化リスクを測定するためのリー・カーター (Lee-Carter)
+  モデルと確率論的なアプローチを学習します。
+pubDate: 2026-03-01T00:00:00.000Z
+category: Actuarial Science
+tags:
+  - Education
+  - actuarial-science
+locale: ja
+author: Oiyo
+---
+
+
+import {
+  LectureTable,
+  LectureProcess,
+  LecturePieChart,
+  LectureBarChart,
+} from "@/features/education-common/components/LectureVisuals";
+
+# 死亡率モデリング：静的な数字から動的な予測へ
+
+かつての保険数理は、現在の死亡統計（静的な生命表）をそのまま将来に適用していました。しかし、人類の寿命は医療の進歩とともに伸び続けています。現代の計量学は、この**死亡率の改善トレンド**をモデリングすることに注力しています。
+
+## 1. 静的モデル vs 動的モデル
+
+- **静적モデル (Static Model)**: 「今年60歳の人が死亡する確率は2%である。」（現在の観測値を固定）
+- **動的モデル (Dynamic Model)**: 「今年60歳の人が死亡する確率は2%だが、毎年1%ずつ減少する傾向にある。」（時間による変化を反映）
+
+## 2. リー・カーター (Lee-Carter) モデルの構造
+
+1992年に発表された Lee-Carter モデルは、死亡率予測のデファクトスタンダードとなっています。
+
+$$\ln(m_{x,t}) = \alpha_x + \beta_x \kappa_t + \epsilon_{x,t}$$
+
+- **$\alpha_x$**: 年齢別の平均的な死亡率水準。
+- **$\kappa_t$**: 時間の経過に伴う全体的な死亡率の変化（トレンド）。
+- **$\beta_x$**: 時間の変化（$\kappa_t$）に対して特定の年齢層が反応する感度。
+
+## 3. 高齢化と長寿リスク (Longevity Risk)
+
+人々が予想よりも長く生きることは、個人にとっては祝福ですが、年金を支払う義務がある保険会社や年金基金にとっては巨大なリスクとなります。
+
+<LectureBarChart
+  title="期待寿命の変化と予測誤差（イメージ）"
+  description="過去の予測値よりも実際の期待寿命が速く増加することで発生するリスクを示しています。"
+  data={[
+    { name: "1990年", value: 71.3, color: "#94a3b8" },
+    { name: "2000년", value: 75.9, color: "#94a3b8" },
+    { name: "2010년", value: 80.2, color: "#60a5fa" },
+    { name: "2020년", value: 83.5, color: "#3b82f6" },
+    { name: "2030년(予想)", value: 86.8, color: "#2563eb" },
+  ]}
+  client:load
+/>
+
+---
+
+### 💡 教授からのヒント
+
+> 死亡率モデリングは、単なる数学を超えて社会構造を診断するツールです。最近では、気候変動やパンデミックなどの特殊なイベントが将来の死亡率トレンドにどのような「ショック」を与えるかについての確率論的な研究（Stochastic Modeling）が活発に行われています。
+
+### 🔗 次のステップ
+
+- [**第7章：損害保険数理の基礎**](/ja/education-actuarial-science-ch7/)

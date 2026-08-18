@@ -1,0 +1,82 @@
+---
+track: academy
+series: financial-engineering-basics
+chapter: 3
+title: "파생상품의 기초: 가격의 그림자를 매매하다"
+description: "금융공학의 꽃이라 불리는 파생상품의 기본 개념과, 가장 단순한 형태인 선도 계약(Forward)의 원리를 이해합니다."
+pubDate: 2026-03-01T00:00:00.000Z
+category: Financial Engineering
+tags:
+  - Education
+  - financial-engineering
+locale: ko
+author: Oiyo
+---
+
+
+import {
+  LectureTable,
+  LectureProcess,
+  LecturePieChart,
+  LectureBarChart,
+} from "@/features/education-common/components/LectureVisuals";
+import {
+  NPVChart,
+  FrontierChart,
+  SMLChart,
+  OptionPayoffChart,
+} from "@/features/education-finance/FinanceCharts";
+
+# 파생상품 입문: 자산의 가치를 복제하다
+
+파생상품(Derivatives)은 그 가치가 주식, 채권, 원자재 등 **기초자산(Underlying Asset)**의 가치 변동에 의해 결정되는 금융 상품입니다. 마치 그림자가 물체의 움직임에 따라 변하듯, 파생상품은 기초자산의 가치를 따라갑니다.
+
+## 1. 왜 파생상품을 거래하는가?
+
+많은 사람들이 파생상품을 '위험한 투기'라고 생각하지만, 금융공학적 관점에서 파생상품의 본질은 **리스크의 전이(Risk Transfer)**에 있습니다.
+
+- **헤징 (Hedging)**: 가격 변동 위험을 제거하거나 줄이는 활동 (보험의 성격)
+- **레버리지 (Leverage)**: 적은 돈으로 큰 자산을 통제하여 수익률을 극대화
+- **차익거래 (Arbitrage)**: 시장의 가격 불균형을 이용해 무위험 수익을 추구
+
+## 2. 가장 단순한 파생상품: 선도 계약 (Forward)
+
+선도 계약은 "미래의 특정 시점에 미리 정한 가격으로 자산을 사고팔기로 하는 약속"입니다.
+
+<LectureProcess
+  steps={[
+    {
+      label: "계약 체결",
+      description: "오늘 시점에서 3개월 후 금 1온스를 2,000달러에 사기로 약속합니다.",
+    },
+    {
+      label: "중간 기간",
+      description: "금 가격이 오르거나 내리지만, 계약 가격은 변하지 않습니다.",
+    },
+    {
+      label: "만기 및 결제",
+      description:
+        "실제 금 가격이 2,500달러가 되어도 약속대로 2,000달러에 인수합니다. (500달러 이익)",
+    },
+  ]}
+  client:load
+/>
+
+## 3. 선도 가격의 결정 원리
+
+선도 가격이 단순히 '미래에 예상되는 가격'일까요? 아닙니다. 금융공학에서는 현물 가격에 **보유 비용(Cost of Carry)**을 더해 계산합니다.
+
+$$F = S_0 \times e^((r-d)T)$$
+
+(여기서 $F$는 선도 가격, $S_0$는 현물 가격, $r$은 이자율, $d$는 배당 수익률입니다.)
+
+---
+
+### 💡 교수님의 팁
+
+> 파생상품은 '보유하지 않은 것에 대한 약속'입니다. 실물이 오가지 않아도 계약만으로 거대한 가치가 움직이기 때문에, 정교한 수학적 모델링이 없으면 시장 전체가 흔들릴 수 있습니다.
+
+### 🔗 다음 단계
+
+- [**보험수리 입문: 연금 수리**](/ko/education-actuarial-science-ch3/)
+- [**통계학 마스터: 가설 검정**](/ko/education-statistics-ch3/)

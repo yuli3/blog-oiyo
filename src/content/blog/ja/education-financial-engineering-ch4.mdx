@@ -1,0 +1,65 @@
+---
+track: academy
+series: financial-engineering-basics
+chapter: 4
+title: オプション取引と収益構造：非対称なリターンの魔術
+description: オプションの基本概念であるコール・オプションとプット・オプションを理解し、価格変動に伴う買い手と売り手の非対称な収益構造を視覚化して確認します。
+pubDate: 2026-03-01T00:00:00.000Z
+category: Financial Engineering
+tags:
+  - Education
+  - financial-engineering
+locale: ja
+author: Oiyo
+---
+
+
+import {
+  LectureTable,
+  LectureProcess,
+  LecturePieChart,
+  LectureBarChart,
+} from "@/features/education-common/components/LectureVisuals";
+import {
+  NPVChart,
+  FrontierChart,
+  SMLChart,
+  OptionPayoffChart,
+} from "@/features/education-finance/FinanceCharts";
+
+# オプション取引：「選択権」に価格をつける
+
+オプション（Options）とは、「特定の原資産を、あらかじめ決めた価格で売買できる**権利**」のことです。権利であって義務ではないという点が、先ほど学んだ先渡契約（フォワード）との決定的な違いです。
+
+## 1. コール・オプションとプット・オプション
+
+- **コール・オプション**: 資産を買う権利（価格上昇時に有利）
+- **プット・オプション**: 資産を売る権利（価格下落時に有利）
+
+オプションを購入するためには、権利の対価である**プレミアム（Premium）**を支払う必要があります。
+
+## 2. コール・オプションの収益構造
+
+コール・オプションの買い手は、株価が権利行使価格（Strike Price）を上回ったときに権利を行使して利益を得ます。逆に、株価が権利行使価格を下回った場合は、権利を放棄します。このとき、損失は支払ったプレミアムの範囲内に限定されます。
+
+<OptionPayoffChart
+  title="コール・オプション買い手の収益曲線（行使価格 100, プレミアム 10）"
+  type="call"
+  strike={100}
+  premium={10}
+  client:load
+/>
+
+## 3. オプションが持つ非対称性の価値
+
+上のチャートで見られるように、オプションは損失が限定的である一方、利益は無限大（コール・オプションの場合）に開かれている**非対称的（Asymmetric）**な構造を持っています。金融工学者はこの非対称性を活用して、複雑なリスクヘッジ戦略を設計します。
+
+---
+
+### 💡 教授からのヒント
+
+> オプションは「保険」と性質が非常によく似ています。保険料（プレミアム）を支払い、事故（価格変動）が起きたときに補償を受ける仕組みだからです。私たちが日常で加入する自動車保険も、一種のプット・オプションと考えることができます。
+
+### 🔗 次のステップ
+
+- [**第5章：ブラック・ショールズ・モデル**](/ja/education-financial-engineering-ch5/)

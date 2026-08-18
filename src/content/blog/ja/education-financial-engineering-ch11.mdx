@@ -1,0 +1,102 @@
+---
+track: academy
+series: financial-engineering-basics
+chapter: 11
+title: 金融機械学習の基礎：データが資本を動かす
+description: >-
+  伝統的な量子戦略を超えて、膨大なデータを介して非線形パターンを学習する機械学習の基本概念と、アルゴリズムトレーディングと信用評価などの実用的な活用事例を学びます。
+pubDate: 2026-03-01T00:00:00.000Z
+category: Financial Engineering
+tags:
+  - Education
+  - financial-engineering
+locale: ja
+author: Oiyo
+---
+import {
+  LectureTable,
+  LectureProcess,
+  LecturePieChart,
+  LectureBarChart,
+} from "@/features/education-common/components/LectureVisuals";
+import {
+  NPVChart,
+  FrontierChart,
+  SMLChart,
+  OptionPayoffChart,
+} from "@/features/education-finance/FinanceCharts";
+
+# 金融機械学習：クオンツの新しい武器
+
+ブラック・ショールズやMPT（現代ポートフォリオ理論）が数学的な仮定を立てて答えを導き出す**演習的モデリング**であるならば、機械学習は膨大な市場データから自らルールを見つけ出す**帰納的モデリング**です。最近の金融工学は、この2つの世界の融合へと進んでいます。
+
+## 1. 金融分野における機械学習の活用
+
+金融データはノイズ（Noise）が非常に多くボラティリティが激しいため、一般的な機械学習よりもさらに洗練されたアプローチが必要です。
+
+<LectureTable
+  title="金融分野別の主な機械学習活用事例"
+  headers={["分野", "活用目的", "主要アルゴリズム"]}
+  rows={[
+    ["トレーディング", "価格の方向性予測およびアルファ発掘", "Random Forest, LSTM, XGBoost"],
+    ["リスク管理", "不正取引検知（FDS）およびデフォルト予測", "SVM, Isolation Forest"],
+    ["ポートフォリオ", "資産間の複雑な非線形関係の把握", "Clustering (HRP), 強化学習"],
+    ["顧客分析", "信用スコア算出および離反確率予測", "Logistic Regression, Gradient Boosting"],
+  ]}
+  highlightColumns={[0]}
+  client:load
+/>
+
+## 2. アルゴリズムトレーディングのワークフロー
+
+機械学習ベースの投資戦略が策定され、実行されるプロセスは以下の通りです。
+
+<LectureProcess
+  steps={[
+    {
+      label: "データ前処理",
+      description: "金融時系列データの欠損値を処理し、定常性（Stationarity）を確保します。",
+    },
+    {
+      label: "特徴量抽出 (Feature Engineering)",
+      description: "移動平均、RSIなどのテクニカル指標や代替データ（ニュースなど）を生成します。",
+    },
+    {
+      label: "モデル学習およびバックテスト",
+      description: "過去データを通じてモデルを訓練し、仮想リターンを検証します。",
+    },
+    {
+      label: "実行およびモニタリング",
+      description: "実際の市場で発注を行い、過剰適合（オーバーフィッティング）の有無を監視します。",
+    },
+  ]}
+  client:load
+/>
+
+## 3. 伝統的統計 vs 機械学習
+
+両方式は競合関係ではなく、補完関係にあります。
+
+<LecturePieChart
+  title="現代アセットマネジメント会社のファクター比重の変化（例）"
+  description="伝統的バリュー/グロースファクターと機械学習ベースの非構造化ファクターが共存している様子です。"
+  data={[
+    { name: "伝統的ファンダメンタルズ", value: 45, color: "#94a3b8" },
+    { name: "マクロ経済指標", value: 25, color: "#60a5fa" },
+    { name: "MLベースの代替データ", value: 20, color: "#3b82f6" },
+    { name: "テクニカル指標", value: 10, color: "#2563eb" },
+  ]}
+  donut={true}
+  client:load
+/>
+
+---
+
+### 💡 教授のヒント
+
+> 機械学習の最大の敵は「過剰適合（Overfitting）」です。過去データにあまりにも完璧に当てはめたモデルは、未来の市場で惨敗することがあります。そのため金融エンジニアは「性能」よりも「説明可能性」や「頑健性（Robustness）」をより重視します。
+
+### 🔗 次のステップ
+
+- [**金融工学の大団円：限界と未来**](/ja/education-financial-engineering-ch12/)
+- [**統計学マスター：ノンパラメトリック統計とPCA**](/ja/education-statistics-ch10/)
