@@ -1,0 +1,72 @@
+---
+track: academy
+series: statistics-basics
+chapter: 7
+title: "로지스틱 회귀 분석: '예' 또는 '아니오'의 통계학"
+description: >-
+  속값이 수치가 아닌 '합격/불합격', '사기/정상' 같은 범주형 데이터일 때 사용하는 로지스틱 회귀의 원리와 오즈비(Odds Ratio)의
+  개념을 학습합니다.
+pubDate: 2026-03-01T00:00:00.000Z
+category: Statistics
+tags:
+  - Education
+  - statistics
+locale: ko
+author: Oiyo
+---
+
+
+import { LectureTable, LectureProcess, LecturePieChart, LectureBarChart } from "@/features/education-common/components/LectureVisuals";
+
+
+# 로지스틱 회귀: 분류를 위한 수학적 지도
+
+우리는 지금까지 점수나 가격 같은 숫자를 예측하는 법을 배웠습니다. 하지만 현실에서는 "이 대출 신청자가 파산할 것인가?", "이 이메일이 스팸인가?"처럼 **이진 분류(Binary Classification)**가 필요한 경우가 많습니다. 이때 사용하는 것이 **로지스틱 회귀(Logistic Regression)**입니다.
+
+## 1. 선형 회귀의 한계와 시그모이드(Sigmoid)
+
+선형 회귀는 결과값이 무한히 커지거나 작아질 수 있습니다. 하지만 분류 문제에서는 '확률'이 0과 1 사이로 제한되어야 합니다. 로지스틱 회귀는 선형 결합의 결과를 S자 모양의 **시그모이드 함수**에 통과시켜 0과 1 사이의 확률값으로 변환합니다.
+
+## 2. 오즈비(Odds Ratio): 성공과 실패의 대결
+
+로지스틱 회귀를 이해하는 핵심 키워드는 '오즈(Odds)'입니다. 
+
+**오즈(Odds)** = 성공 확률 / 실패 확률
+
+예를 들어 성공 확률이 0.8이라면 오즈는 $0.8 / 0.2 = 4$가 됩니다. 로지스틱 회귀 모델은 이 오즈에 로그를 취한 값을 예측합니다.
+
+<LectureTable 
+  title="로지스틱 회귀의 예측 결과 예시 (부도 예측)"
+  headers={["신용 점수", "로그 오즈", "예측 확률 (P)", "판정 (임계값 0.5)"]}
+  rows={[
+    ["300점", "-3.5", "0.03 (3%)", "정상"],
+    ["550점", "-0.8", "0.31 (31%)", "정상"],
+    ["700점", "1.2", "0.77 (77%)", "부도 주의"],
+    ["900점", "4.5", "0.99 (99%)", "부도 위험"]
+  ]}
+  highlightColumns={[2, 3]}
+  client:load
+/>
+
+## 3. 모델 평가: 혼동 행렬 (Confusion Matrix)
+
+분류 모델이 얼마나 잘 작동하는지는 단순히 $R^2$로 보지 않고, 맞춘 것과 틀린 것을 정리한 표를 통해 확인합니다.
+
+<LectureTable 
+  title="진단 모델의 혼동 행렬 (Confusion Matrix)"
+  headers={["실제 \ 예측", "양성 예측 (Positive)", "음성 예측 (Negative)"]}
+  rows={[
+    ["실제 양성 (P)", "진양성 (TP) - 성공", "위음성 (FN) - 놓침"],
+    ["실제 음성 (N)", "위양성 (FP) - 오탐", "진음성 (TN) - 성공"]
+  ]}
+  client:load
+/>
+
+---
+
+### 💡 교수님의 팁
+> 로지스틱 회귀는 머신러닝의 '딥러닝'으로 가는 첫 번째 관문입니다. 인공 신경망의 기본 단위인 퍼셉트론(Perceptron)이 비선형 활성화 함수를 통해 출력을 내보내는 과정이 바로 이 로지스틱 회귀의 원리와 맞닿아 있기 때문입니다.
+
+### 🔗 다음 단계
+- [**통계학 심화: 시계열 분석 기초**](/ko/education-statistics-ch8/)
+- [**금융공학 심화: 리스크 측정(VaR)**](/ko/education-financial-engineering-ch8/)

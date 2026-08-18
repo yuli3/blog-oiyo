@@ -1,0 +1,84 @@
+---
+track: academy
+series: statistics-basics
+chapter: 10
+title: "비모수 통계와 PCA: 상식을 넘어서는 데이터 분석"
+description: "정규분포 가정을 할 수 없는 상황에서의 분석법인 비모수 통계와, 수많은 변수를 핵심 위주로 압축하는 주성분 분석(PCA)의 원리를 배웁니다."
+pubDate: 2026-03-01T00:00:00.000Z
+category: Statistics
+tags:
+  - Education
+  - statistics
+locale: ko
+author: Oiyo
+---
+
+
+import { LectureTable, LectureProcess, LecturePieChart, LectureBarChart } from "@/features/education-common/components/LectureVisuals";
+
+
+# 비모수 통계와 PCA: 데이터의 본질에 다가가기
+
+우리는 지금까지 데이터가 예쁜 종 모양(정규분포)을 따른다고 가정하고 분석해왔습니다. 하지만 현실에는 정규성을 전혀 따르지 않거나, 변수가 너무 많아 무엇이 중요한지 알기 어려운 데이터가 가득합니다.
+
+## 1. 비모수 통계: 가정을 버리면 자유로워진다
+
+데이터의 양이 너무 적거나 분포가 극단적으로 치우쳐 있을 때, 우리는 데이터의 '값' 대신 '순위'를 사용합니다.
+
+<LectureTable
+  title="모수 통계 vs 비모수 통계 비교"
+  headers={["구분", "모수 통계 (Parametric)", "비모수 통계 (Non-parametric)"]}
+  rows={[
+    ["가정", "정규분포를 따름", "분포에 대한 가정이 없음"],
+    ["데이터 형태", "연속형 수치 데이터", "서열, 순위, 명목 데이터"],
+    ["대표 분석", "t-test, ANOVA", "Wilcoxon, Kruskal-Wallis"],
+    ["장단점", "정확도가 높으나 가정이 깨지면 무의미함", "정확도는 소폭 낮으나 어디든 적용 가능"],
+  ]}
+  highlightColumns={[2]}
+  client:load
+/>
+
+## 2. 주성분 분석 (PCA): 정보의 압축과 요약
+
+변수가 100개인 데이터를 분석하기란 불가능에 가깝습니다. **PCA(Principal Component Analysis)**는 데이터의 정보를 최대한 유지하면서, 변수의 개수를 2~3개로 대폭 줄여주는 마법 같은 기술입니다.
+
+<LectureProcess
+  steps={[
+    { label: "데이터 표준화", description: "각 변수의 단위가 다르므로 평균 0, 분산 1로 맞춥니다." },
+    { label: "공분산 행렬 계산", description: "변수들끼리 어떻게 함께 변하는지 지도를 그립니다." },
+    {
+      label: "고유값 및 고유벡터 도출",
+      description: "데이터가 가장 많이 흩어져 있는 '주성분 방향'을 찾습니다.",
+    },
+    { label: "차원 축소", description: "가장 중요한 1, 2주성분만 남기고 나머지는 버립니다." },
+  ]}
+  client:load
+/>
+
+## 3. PCA의 효과: 설명된 분산의 양
+
+아래는 PCA를 통해 10개의 변수를 5개로 줄였을 때, 각 주성분이 전체 데이터를 얼마나 설명해주는지를 보여줍니다.
+
+<LectureBarChart
+  title="주성분별 설명된 분산 비율 (Scree Plot)"
+  description="제1, 제2 주성분만으로 전체 정보의 약 75%를 설명할 수 있음을 보여줍니다."
+  data={[
+    { name: "제1주성분", value: 50, color: "#3b82f6" },
+    { name: "제2주성분", value: 25, color: "#60a5fa" },
+    { name: "제3주성분", value: 12, color: "#94a3b8" },
+    { name: "제4주성분", value: 8, color: "#cbd5e1" },
+    { name: "제5주성분", value: 5, color: "#e2e8f0" },
+  ]}
+  client:load
+/>
+
+---
+
+### 💡 교수님의 팁
+
+> PCA는 단순히 '데이터를 줄이는 것'이 아니라 '데이터의 뼈대를 찾는 것'입니다. 수많은 소음(Noise) 사이에서 진짜 의미 있는 신호(Signal)가 어느 방향으로 뻗어있는지 찾아내는 통찰력을 제공합니다.
+
+### 🔗 다음 단계
+
+- [**통계학 심화: 베이즈 통계학 입문**](/ko/education-statistics-ch9/)
+- **금융공학 심화: 금융 머신러닝 기초**

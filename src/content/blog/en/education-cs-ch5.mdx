@@ -1,0 +1,152 @@
+---
+locale: en
+track: academy
+title: "Networking Fundamentals — How Data Travels"
+category: Computer Science
+author: OIYO Editorial
+tags:
+  - Networking
+  - TCPIP
+  - HTTP
+  - DNS
+  - OSI7Layers
+description: >-
+  From the OSI 7-layer model to the TCP/IP stack, HTTP/HTTPS protocols, and beyond — understand step by step how the internet works. A clear summary of DNS, routing, and socket communication essentials.
+pubDate: '2026-05-16'
+---
+
+## What Is a Network?
+
+A system that connects computers so they can exchange data.
+
+```
+Classification by scale:
+LAN (Local Area Network): within a building or campus
+WAN (Wide Area Network):  across cities, countries, or continents
+Internet:                 the global network of networks
+```
+
+---
+
+## The OSI 7-Layer Model
+
+A standard model that divides network communication into 7 abstract layers:
+
+```
+7. Application Layer:     HTTP, FTP, DNS
+6. Presentation Layer:    Encryption, encoding
+5. Session Layer:         Connection management
+4. Transport Layer:       TCP, UDP — port numbers
+3. Network Layer:         IP — routing, IP addresses
+2. Data Link Layer:       MAC addresses, Ethernet
+1. Physical Layer:        Electrical signals, fiber optics
+```
+
+---
+
+## TCP vs. UDP
+
+```
+TCP (Transmission Control Protocol):
+→ Connection-oriented: 3-way handshake (SYN → SYN-ACK → ACK)
+→ Reliable: guarantees packet order, retransmits on loss
+→ Flow control, congestion control
+→ Slower but stable
+Used for: web (HTTP), email, file transfer
+
+UDP (User Datagram Protocol):
+→ Connectionless: sends immediately
+→ Unreliable: no guarantee of order or delivery
+→ Fast, low overhead
+Used for: streaming, gaming, DNS, VoIP
+```
+
+---
+
+## IP Addresses and Routing
+
+```
+IPv4: 32-bit (e.g., 192.168.1.1) — ~4.3 billion addresses
+IPv6: 128-bit (e.g., 2001:db8::1) — effectively unlimited
+
+Private IP addresses:
+→ 192.168.x.x / 10.x.x.x / 172.16–31.x.x
+→ Cannot communicate directly on the internet → NAT required
+
+Routing:
+→ Routers inspect the destination IP in each packet and decide the next hop
+→ Based on a routing table
+→ BGP: the protocol routers use to exchange paths across the internet
+```
+
+---
+
+## DNS (Domain Name System)
+
+```
+Role: translates domain names into IP addresses
+Example: google.com → 142.250.80.46
+
+DNS lookup process:
+1. Check browser cache
+2. Check OS cache → /etc/hosts file
+3. Query local DNS server (provided by ISP)
+4. Root DNS → TLD DNS (.com) → Authoritative DNS
+5. IP address returned → cached for future use
+
+Common DNS record types:
+A:     domain → IPv4 address
+AAAA:  domain → IPv6 address
+CNAME: domain alias
+MX:    mail server
+```
+
+---
+
+## HTTP / HTTPS
+
+```
+HTTP (HyperText Transfer Protocol):
+→ The foundation of web communication
+→ Stateless: each request is independent
+→ Default port 80
+
+HTTP methods:
+GET:         Retrieve a resource
+POST:        Create a resource
+PUT/PATCH:   Modify a resource
+DELETE:      Delete a resource
+
+HTTP status codes:
+200 OK:                  Success
+301/302:                 Redirect
+400 Bad Request:         Client error
+401 Unauthorized:        Authentication required
+403 Forbidden:           Access denied
+404 Not Found:           Resource doesn't exist
+500 Internal Server Error: Server error
+
+HTTPS:
+→ HTTP + TLS/SSL encryption
+→ Server identity verified via certificate
+→ Default port 443
+```
+
+---
+
+## HTTP/1.1 vs. HTTP/2 vs. HTTP/3
+
+```
+HTTP/1.1: One TCP connection per request (head-of-line blocking)
+HTTP/2:   Multiplexing over a single connection (parallel requests)
+HTTP/3:   QUIC protocol over UDP (lower latency)
+```
+
+---
+
+## Key Takeaways
+
+*TCP: reliable, ordered delivery, slower / UDP: fast, unreliable*
+*OSI 7 layers (bottom to top): Physical, Data Link, Network, Transport, Session, Presentation, Application*
+*DNS: translates domain names to IP addresses (the internet's phone book)*
+*HTTP status codes: 2xx success, 3xx redirect, 4xx client error, 5xx server error*

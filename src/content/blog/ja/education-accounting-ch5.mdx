@@ -1,0 +1,84 @@
+---
+track: academy
+series: accounting-basics
+chapter: 5
+title: 中級会計 II：負債と引当金
+description: 社債をはじめとする金融負債の現在価値評価と、将来の不確実な義務である「引当金」について学習します。
+pubDate: 2026-03-01T00:00:00.000Z
+category: Accounting
+tags:
+  - Education
+  - accounting
+locale: ja
+author: Oiyo
+---
+
+
+import { LectureTable, LectureProcess, LecturePieChart, LectureBarChart } from "@/features/education-common/components/LectureVisuals";
+
+
+import Callout from "@/components/mdx/Callout.astro";
+
+# 中級会計 II：負債と引当金
+
+負債は単なる返済すべきお金を超え、企業の財務戦略を映し出す鏡です。今日は、時間の価値を反映した **金融負債** の精緻な計算方法を学びます。
+
+---
+
+## 1. 社債 (Bonds Payable) と有効利子率法
+
+社債は、企業が大規模な資金を調達するために発行する債務証券です。発行時の市場利子率によって発行価額が決定されます。
+
+<LectureTable
+  title="社債の発行類型の比較"
+  headers={["類型", "条件 (市場 vs 額面)", "特徴", "帳簿価額の変化"]}
+  rows={[
+    ["割引発行", "市場金利 > 額面金利", "額面より安く発行", "満期まで漸次増加 ↑"],
+    ["額面発行", "市場金利 = 額面金利", "額面通りに発行", "変動なし -"],
+    ["打歩発行 (割増)", "市場金利 < 額面金利", "額面より高く売却", "満期まで漸次減少 ↓"],
+  ]}
+  highlightColumns={[0]}
+/>
+
+### 📈 社債の帳簿価額の収束プロセス
+
+<style>{`
+  .amortization-flow { margin: 2rem 0; }
+`}</style>
+
+<LectureProcess
+  steps={[
+    { label: "現在価値評価", description: "将来キャッシュフロー（元本+利息）を市場金利で割引" },
+    { label: "利息費用の認識", description: "期首帳簿価額 × 有効利子率分を費用処理" },
+    { label: "額面利息の支払", description: "額面金額 × 表面利率分を現金流出" },
+    { label: "償却 (Amortization)", description: "利息費用と支払額の差額分、負債価額を調整" },
+  ]}
+/>
+
+---
+
+## 2. 引当金 vs 偶発負債
+
+負債の認識は、 **「義務の存在」** と **「資源流出の可能性」** にかかっています。
+
+<LectureTable
+  title="義務の確実性による分類"
+  headers={["項目", "認識の可否", "金額の推定", "会計処理"]}
+  rows={[
+    ["引当金 (Provisions)", "認識する (B/S反映)", "信頼性のある推定が可能", "負債計上 ＆ 費用処理"],
+    [
+      "偶発負債 (Contingent)",
+      "認められない (B/S除外)",
+      "推定困難または可能性が低い",
+      "注記 (Notes) に開示",
+    ],
+    ["偶発資産", "決して認められない", "-", "確実性が非常に高い場合のみ注記"],
+  ]}
+/>
+
+<Callout type="note">
+  **減価償却** と同様に、 **引当金**
+  もまた発生主義会計の精髄です。退職給付引당金、製品保証引当金などが代表的です。
+</Callout>
+
+お疲れ様でした。次回は、株主の持ち分である **資本** と、企業の成績を一つの数字で要約する **一株当たり利益 (EPS)** について扱います。

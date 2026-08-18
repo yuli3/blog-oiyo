@@ -1,0 +1,77 @@
+---
+track: academy
+series: statistics-basics
+chapter: 7
+title: "Logistic Regression: The Statistics of 'Yes' or 'No'"
+description: >-
+  Learn the principles of Logistic Regression and the concept of the Odds Ratio,
+  used when the outcome is categorical data like 'Pass/Fail' or 'Fraud/Normal'
+  rather than a numerical value.
+pubDate: 2026-03-01T00:00:00.000Z
+category: Statistics
+tags:
+  - Education
+  - statistics
+locale: en
+market: US
+contentScope: local
+localizationMode: original
+author: Oiyo
+---
+
+
+import { LectureTable, LectureProcess, LecturePieChart, LectureBarChart } from "@/features/education-common/components/LectureVisuals";
+
+
+# Logistic Regression: A Mathematical Map for Classification
+
+Up until now, we have learned how to predict numbers like scores or prices. However, in reality, we often need **Binary Classification**, such as "Will this loan applicant go bankrupt?" or "Is this email spam?" In such cases, we use **Logistic Regression**.
+
+## 1. Limitations of Linear Regression and the Sigmoid
+
+Linear regression can produce outcome values that are infinitely large or small. However, in classification problems, 'probabilities' must be limited between 0 and 1. Logistic regression passes the result of a linear combination through an S-shaped **Sigmoid Function** to convert it into a probability value between 0 and 1.
+
+## 2. Odds Ratio: Success vs. Failure
+
+The key keyword to understanding logistic regression is 'Odds.'
+
+**Odds** = Probability of Success / Probability of Failure
+
+For example, if the success probability is 0.8, the odds are $0.8 / 0.2 = 4$. The logistic regression model predicts the value of the log of these odds.
+
+<LectureTable
+  title="Example Logistic Regression Prediction Results (Default Prediction)"
+  headers={["Credit Score", "Log Odds", "Predicted Probability (P)", "Judgment (Threshold 0.5)"]}
+  rows={[
+    ["300", "-3.5", "0.03 (3%)", "Normal"],
+    ["550", "-0.8", "0.31 (31%)", "Normal"],
+    ["700", "1.2", "0.77 (77%)", "Watch"],
+    ["900", "4.5", "0.99 (99%)", "At Risk"],
+  ]}
+  highlightColumns={[2, 3]}
+  client:load
+/>
+
+## 3. Model Evaluation: Confusion Matrix
+
+The performance of a classification model isn't simply measured by $R^2$; instead, it's evaluated through a table that summarizes correct and incorrect predictions.
+
+<LectureTable
+  title="Confusion Matrix for a Diagnostic Model"
+  headers={["Actual \\ Predicted", "Predicted Positive", "Predicted Negative"]}
+  rows={[
+    ["Actual Positive (P)", "True Positive (TP) - Success", "False Negative (FN) - Miss"],
+    ["Actual Negative (N)", "False Positive (FP) - False Alarm", "True Negative (TN) - Success"],
+  ]}
+  client:load
+/>
+
+---
+
+### 💡 Professor's Tip
+
+> Logistic regression is the first gateway to 'Deep Learning' in machine learning. This is because the process of a Perceptron—the basic unit of artificial neural networks—sending an output through a non-linear activation function is intrinsically linked to the principles of logistic regression.
+
+### 🔗 Next Step
+
+- [**Ch8: Time Series Analysis Basics**](/en/education-statistics-ch8/)

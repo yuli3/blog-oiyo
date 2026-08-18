@@ -1,0 +1,169 @@
+---
+locale: en
+track: academy
+title: "Data Structures Fundamentals — The Containers That Hold Your Data"
+category: Computer Science
+author: OIYO Editorial
+tags:
+  - DataStructures
+  - Arrays
+  - StackQueue
+  - HashTable
+  - Trees
+description: >-
+  From arrays and linked lists to stacks, queues, hash tables, and trees — understand the properties and time complexities of core data structures, and learn how to choose the right one for each situation.
+pubDate: '2026-05-16'
+---
+
+## What Are Data Structures?
+
+A data structure is a method for efficiently storing and managing data. The performance of an algorithm is largely determined by the choice of data structure.
+
+```
+Big-O Notation (time complexity):
+O(1):      Constant time — instant, regardless of size
+O(log n):  Logarithmic time — binary search
+O(n):      Linear time — one full traversal
+O(n²):     Quadratic time — bubble sort
+
+→ When data grows from 1,000 to 1,000,000 items:
+O(1):   Still instant
+O(n):   1,000× slower
+O(n²):  1,000,000× slower
+```
+
+---
+
+## Array
+
+```
+Properties:
+→ Stores data in contiguous memory locations
+→ O(1) random access via index
+→ Fixed size (static array) or variable size (dynamic array)
+
+Time complexity:
+Access:          O(1)
+Search:          O(n)
+Insert (at end): O(1) amortized
+Insert (middle): O(n) — all elements after must shift
+Delete:          O(n) — shifting required
+
+Best for: ordered data, frequent index-based access
+```
+
+---
+
+## Linked List
+
+```
+Properties:
+→ Node = data + pointer to next node
+→ Non-contiguous memory (dynamic allocation)
+
+Time complexity:
+Access:                        O(n) — must traverse from head
+Insert/Delete (known position): O(1)
+Search:                        O(n)
+
+Singly Linked List:  one-directional connection
+Doubly Linked List:  connected in both directions
+
+Best for: frequent insertions/deletions, unpredictable size
+```
+
+---
+
+## Stack & Queue
+
+```
+Stack (LIFO — Last In First Out):
+→ The last item added is the first one removed
+Operations: push (add), pop (remove), peek (look at top)
+Time complexity: O(1) for all operations
+
+Use cases:
+→ Browser back button (history stack)
+→ Function call stack (recursion)
+→ Parenthesis / bracket validation
+
+Queue (FIFO — First In First Out):
+→ The first item added is the first one removed
+Operations: enqueue (add), dequeue (remove)
+Time complexity: O(1)
+
+Use cases:
+→ Printer job queue
+→ Breadth-First Search (BFS)
+→ CPU process scheduling
+```
+
+---
+
+## Hash Table
+
+```
+How it works:
+Key → hash function → index → store Value
+
+Time complexity:
+Insert, delete, search: O(1) average ← biggest advantage
+Worst case (many collisions): O(n)
+
+Collision resolution:
+Chaining:       attach a linked list at the same index
+Open Addressing: find an empty slot by probing
+
+Use cases:
+→ Dictionaries / maps in most languages (Python: dict, JS: Object/Map)
+→ Caching (browser cache, Redis)
+→ Database indexes
+```
+
+---
+
+## Tree
+
+```
+Structure:
+Root → parent-child hierarchical relationships
+Node: data + child pointers
+Leaf: a terminal node with no children
+
+Binary Tree: each node has at most 2 children
+Binary Search Tree (BST):
+→ Left child < Parent < Right child
+→ Search, insert, delete: O(log n) average
+
+Balanced Trees (AVL, Red-Black):
+→ Guarantee O(log n)
+→ Used in database indexes
+
+Heap:
+→ Complete binary tree
+→ Max-Heap: parent ≥ children (root = maximum value)
+→ Used for priority queues and heap sort
+```
+
+---
+
+## Data Structure Selection Guide
+
+| Situation | Best Data Structure |
+|-----------|---------------------|
+| Fast index access | Array |
+| Frequent insertions/deletions | Linked List |
+| Last-In-First-Out (undo) | Stack |
+| First-In-First-Out (queue) | Queue |
+| Fast key-value lookup | Hash Table |
+| Searching sorted data | BST / Balanced Tree |
+| Fast access to min/max value | Heap |
+
+---
+
+## Key Takeaways
+
+*Array: O(1) access, O(n) insert/delete / Linked List: O(n) access, O(1) insert/delete*
+*Stack = LIFO (back button) / Queue = FIFO (job queue)*
+*Hash Table: O(1) average search — the core of caches and dictionaries*
+*BST: left < parent < right → O(log n) search*
