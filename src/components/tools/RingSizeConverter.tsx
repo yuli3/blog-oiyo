@@ -53,12 +53,25 @@ const half = (n: number) => Math.round(n * 2) / 2;
 const fmt = (n: number, d = 2) =>
   Number.isFinite(n) ? n.toFixed(d).replace(/\.?0+$/, "") : "—";
 
-/** Renders a UK half-step index as its letter, e.g. 19.5 -> "T½". */
+/** Renders a UK index snapped to a sold size, e.g. 19.5 -> "T½". */
 const ukLabel = (index: number) => {
   const snapped = half(index);
   const letter = Math.floor(snapped);
   if (letter < 0 || letter > 25) return "—";
   return LETTERS[letter] + (snapped - letter >= 0.5 ? "½" : "");
+};
+
+/**
+ * Renders an unrounded UK index readably. The scale is letters, so the bare
+ * index ("13.28") means nothing to a reader -- show which letter it sits on
+ * and how far past it, e.g. "N +0.28".
+ */
+const ukExactLabel = (index: number) => {
+  const letter = Math.floor(index);
+  if (letter < 0 || letter > 25) return "—";
+  const past = index - letter;
+  if (past < 0.02) return LETTERS[letter];
+  return `${LETTERS[letter]} +${past.toFixed(2)}`;
 };
 
 /** UK letter options, A through Z with the half sizes between them. */
@@ -388,7 +401,7 @@ export default function RingSizeConverter({ locale = "en" }: { locale?: Locale }
     if (Math.abs(jpGap) >= 0.2)
       out.push({ label: t.rowJp, text: `${fmt(rows.jpExact)} → ${rows.jpRound} (${jpGap > 0 ? "−" : "+"}${fmt(Math.abs(jpGap))})` });
     if (Math.abs(ukGap) >= 0.2)
-      out.push({ label: t.rowUk, text: `${ukLabel(rows.ukExact)} · ${fmt(rows.ukExact)} → ${ukLabel(rows.ukRound)} (${ukGap > 0 ? "−" : "+"}${fmt(Math.abs(ukGap))})` });
+      out.push({ label: t.rowUk, text: `${ukExactLabel(rows.ukExact)} → ${ukLabel(rows.ukRound)} (${ukGap > 0 ? "−" : "+"}${fmt(Math.abs(ukGap))})` });
     return out;
   }, [rows, t]);
 
@@ -528,7 +541,7 @@ export default function RingSizeConverter({ locale = "en" }: { locale?: Locale }
                 </TableRow>
                 <TableRow>
                   <TableCell>{t.rowUk}</TableCell>
-                  <TableCell className="text-right tabular-nums">{fmt(rows.ukExact)}</TableCell>
+                  <TableCell className="text-right tabular-nums">{ukExactLabel(rows.ukExact)}</TableCell>
                   <TableCell className="text-right font-semibold tabular-nums">{ukLabel(rows.ukRound)}</TableCell>
                 </TableRow>
                 <TableRow>
