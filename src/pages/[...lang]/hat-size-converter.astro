@@ -1,0 +1,317 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import HatSizeConverter from "../../components/tools/HatSizeConverter";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: ActiveLocale };
+const pageUrl = `https://blog.oiyo.net/${locale}/hat-size-converter/`;
+
+const meta: Record<ActiveLocale, { title: string; description: string; eyebrow: string }> = {
+  en: {
+    title: "Hat Size Chart & Converter — US, UK, EU, S/M/L",
+    description:
+      "Convert head circumference to US, UK and European hat sizes, and see why the S/M/L letter is the least reliable number on the label. Includes how to measure your head.",
+    eyebrow: "One measurement, four labels",
+  },
+  ko: {
+    title: "모자 사이즈 변환표 — US · UK · EU · S/M/L",
+    description:
+      "머리둘레를 US·UK·유럽 모자 사이즈로 변환하고, 라벨에 적힌 S/M/L이 왜 가장 못 믿을 숫자인지 보여줍니다. 머리 재는 법 포함.",
+    eyebrow: "치수 하나, 라벨 넷",
+  },
+  ja: {
+    title: "帽子サイズ換算表 — US・UK・EU・S/M/L",
+    description:
+      "頭囲をUS・UK・ヨーロッパの帽子サイズに換算し、ラベルのS/M/Lがなぜ最も当てにならない数字なのかを示します。頭の測り方つき。",
+    eyebrow: "実測ひとつ、ラベル四つ",
+  },
+  zh: {
+    title: "帽子尺寸换算表 — US · UK · EU · S/M/L",
+    description:
+      "把头围换算成 US、UK 与欧洲帽子尺寸，并说明标签上的 S/M/L 为何是最不可靠的数字。含量头方法。",
+    eyebrow: "一个测量，四种标签",
+  },
+  fr: {
+    title: "Tableau et convertisseur de taille de chapeau — US, UK, EU, S/M/L",
+    description:
+      "Convertissez votre tour de tête en tailles de chapeau US, UK et européennes, et voyez pourquoi la lettre S/M/L est le chiffre le moins fiable de l'étiquette. Méthode de mesure incluse.",
+    eyebrow: "Une mesure, quatre étiquettes",
+  },
+  es: {
+    title: "Tabla y conversor de talla de sombrero — US, UK, EU, S/M/L",
+    description:
+      "Convierte tu perímetro craneal a tallas de sombrero US, UK y europeas, y descubre por qué la letra S/M/L es el número menos fiable de la etiqueta. Incluye cómo medir la cabeza.",
+    eyebrow: "Una medida, cuatro etiquetas",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+
+type Content = {
+  lead: string;
+  formulaTitle: string;
+  formulas: { label: string; value: string }[];
+  useTitle: string;
+  useCases: { title: string; body: string }[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  sourceTitle: string;
+  sources: string;
+  disclaimer: string;
+};
+
+const content: Record<ActiveLocale, Content> = {
+  en: {
+    lead: "A hat size is not an arbitrary code. The US number is your head's diameter — circumference in inches divided by π — which is why it comes out as 7 1/4 rather than a round number. The UK runs one eighth lower, and Europe just prints the circumference in centimetres. Those three are arithmetic on a single measurement, so they never disagree. The letter on the label is a different animal: S/M/L is a two-centimetre bucket with no standard behind it, which is how the same head is a medium at one brand and a large at the next. This converter works from the measurement and tells you when you are sitting on a bucket's edge.",
+    formulaTitle: "The three definitions",
+    formulas: [
+      { label: "US fitted", value: "circumference (in) ÷ π, to the nearest ⅛" },
+      { label: "UK", value: "US − ⅛" },
+      { label: "Europe", value: "circumference in cm" },
+    ],
+    useTitle: "What this is good for",
+    useCases: [
+      { title: "Buying a fitted cap online", body: "Fitted caps are sold in US eighths with no give. Measure once and you can order any of them without guessing which letter the brand means." },
+      { title: "Ordering from a European maker", body: "European hats are labelled in centimetres, which is the measurement itself. No conversion is needed once you know your number." },
+      { title: "Deciding whether to trust S/M/L", body: "If your circumference sits within a centimetre of a bucket edge, the letter is a coin flip between brands. That is exactly when you should buy on the number instead." },
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Why is my hat size a fraction like 7 1/4?", answer: "Because it is a diameter in inches, not a code. Your head circumference in inches divided by π gives roughly 7-ish for most adults, and the trade rounds it to the nearest eighth." },
+      { question: "Is a European hat size the same as head circumference?", answer: "Yes. A European 58 is a 58 cm head. That is the whole conversion." },
+      { question: "Why do UK sizes run smaller than US?", answer: "The two trades adopted the same diameter idea but different reference points, leaving a fixed one-eighth offset. It applies across the whole range, so it is easy to correct for." },
+      { question: "Can I trust the S/M/L on the label?", answer: "Less than the number. There is no standard defining where medium ends and large begins, so brands set their own boundaries. Use the letter as a hint and the circumference as the decision." },
+    ],
+    sourceTitle: "Sources and method",
+    sources: "US fitted sizing is head circumference in inches divided by π, rounded to the nearest eighth; UK sits one eighth below; European sizing is the circumference in centimetres. Checked against a published fifteen-row conversion chart running from 50 cm to 64 cm — every row matched, including the UK offset. The alpha bands shown here follow the same chart's two-centimetre steps, which is a common convention rather than a standard.",
+    disclaimer: "Circumference is only half of fit. Crown shape — long oval against round — changes how a hat sits at identical measurements, so treat this as a starting size rather than a guarantee.",
+  },
+  ko: {
+    lead: "모자 사이즈는 임의의 코드가 아닙니다. US 숫자는 머리의 지름 — 둘레를 인치로 바꿔 π로 나눈 값 — 이라서 7 1/4 같은 분수로 나옵니다. UK는 정확히 1/8 낮고, 유럽은 둘레 센티미터를 그대로 적습니다. 이 셋은 하나의 측정값에 대한 산수라 서로 어긋날 일이 없습니다. 라벨의 알파벳은 종류가 다릅니다 — S/M/L은 표준 없이 2cm씩 끊은 양동이라, 같은 머리가 어떤 브랜드에선 M이고 다음 브랜드에선 L이 됩니다. 이 변환기는 측정값에서 출발하고, 지금 양동이 가장자리에 서 있는지도 알려줍니다.",
+    formulaTitle: "세 가지 정의",
+    formulas: [
+      { label: "US 피티드", value: "둘레(인치) ÷ π, 1/8 단위 반올림" },
+      { label: "UK", value: "US − 1/8" },
+      { label: "유럽", value: "둘레 cm 그대로" },
+    ],
+    useTitle: "이럴 때 씁니다",
+    useCases: [
+      { title: "피티드 캡을 온라인으로 살 때", body: "피티드는 US 1/8 단위로 팔리고 여유가 없습니다. 한 번 재두면 브랜드가 말하는 알파벳을 추측할 필요가 없습니다." },
+      { title: "유럽 브랜드에 주문할 때", body: "유럽 모자는 센티미터로 표기되는데, 그게 측정값 자체입니다. 자기 숫자만 알면 변환할 게 없습니다." },
+      { title: "S/M/L을 믿어도 되는지 판단할 때", body: "둘레가 양동이 경계에서 1cm 안쪽이면 알파벳은 브랜드마다 동전 던지기입니다. 바로 그때 숫자로 사야 합니다." },
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "왜 모자 사이즈가 7 1/4 같은 분수인가요?", answer: "코드가 아니라 인치 단위 지름이기 때문입니다. 머리둘레를 인치로 바꿔 π로 나누면 성인 대부분이 7 언저리가 되고, 업계는 이를 1/8 단위로 반올림합니다." },
+      { question: "유럽 사이즈가 머리둘레와 같나요?", answer: "같습니다. 유럽 58은 머리둘레 58cm입니다. 변환이랄 게 없습니다." },
+      { question: "왜 UK가 US보다 작게 나오나요?", answer: "두 업계가 같은 지름 개념을 쓰면서 기준점을 다르게 잡아 1/8 차이가 고정으로 남았습니다. 전 구간에 일정하게 적용되므로 보정이 쉽습니다." },
+      { question: "라벨의 S/M/L을 믿어도 되나요?", answer: "숫자보다 덜 믿어야 합니다. M이 어디서 끝나고 L이 어디서 시작하는지 정한 표준이 없어 브랜드가 각자 경계를 긋습니다. 알파벳은 힌트로, 둘레는 결정으로 쓰세요." },
+    ],
+    sourceTitle: "출처와 계산 방식",
+    sources: "US 피티드는 머리둘레(인치)를 π로 나눠 1/8 단위로 반올림한 값이고, UK는 그보다 1/8 아래이며, 유럽은 둘레 센티미터입니다. 50cm부터 64cm까지 15행짜리 공개 변환표와 대조해 UK 오프셋을 포함해 전 행이 일치했습니다. 여기 쓰인 알파 구간은 같은 표의 2cm 간격을 따른 것으로, 표준이 아니라 흔한 관례입니다.",
+    disclaimer: "둘레는 착용감의 절반일 뿐입니다. 두상 모양 — 장두형이냐 원형이냐 — 에 따라 같은 치수에서도 앉는 자리가 달라지므로, 보장이 아니라 출발점으로 쓰세요.",
+  },
+  ja: {
+    lead: "帽子のサイズは恣意的な記号ではありません。USの数字は頭の直径 — 頭囲をインチにして π で割った値 — なので 7 1/4 のような分数になります。UKはちょうど 1/8 低く、ヨーロッパは頭囲のセンチをそのまま書きます。この三つは一つの実測値に対する算術なので、食い違いようがありません。ラベルのアルファベットは別物です — S/M/L は標準なしに2cmで区切ったバケツなので、同じ頭があるブランドではM、次のブランドではLになります。この換算機は実測値から出発し、いまバケツの縁に立っているかどうかも教えます。",
+    formulaTitle: "三つの定義",
+    formulas: [
+      { label: "US フィッテッド", value: "頭囲(インチ) ÷ π、1/8 単位で四捨五入" },
+      { label: "UK", value: "US − 1/8" },
+      { label: "ヨーロッパ", value: "頭囲 cm そのまま" },
+    ],
+    useTitle: "こんなときに",
+    useCases: [
+      { title: "フィッテッドキャップをオンラインで買うとき", body: "フィッテッドは US の 1/8 刻みで売られ、遊びがありません。一度測れば、ブランドの言うアルファベットを推測せずに済みます。" },
+      { title: "ヨーロッパのメーカーに注文するとき", body: "ヨーロッパの帽子はセンチ表記で、それが実測値そのものです。自分の数字さえ分かれば換算は不要です。" },
+      { title: "S/M/L を信じてよいか判断するとき", body: "頭囲がバケツの境界から1cm以内なら、アルファベットはブランド次第のコイン投げです。まさにそのときこそ数字で買うべきです。" },
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "なぜ帽子のサイズは 7 1/4 のような分数なのですか？", answer: "記号ではなくインチ単位の直径だからです。頭囲をインチにして π で割ると成人の多くが7前後になり、業界はそれを 1/8 単位に丸めます。" },
+      { question: "ヨーロッパサイズは頭囲と同じですか？", answer: "同じです。ヨーロッパの58は頭囲58cmです。換算する余地がありません。" },
+      { question: "なぜUKはUSより小さく出るのですか？", answer: "両業界が同じ直径の考え方を採りながら基準点を違えたため、1/8 の差が固定で残りました。全域に一定なので補正は簡単です。" },
+      { question: "ラベルの S/M/L は信用できますか？", answer: "数字ほどには信用できません。MがどこまででLがどこからかを定めた標準がなく、ブランドが各自で線を引きます。アルファベットはヒント、頭囲は判断材料です。" },
+    ],
+    sourceTitle: "出典と計算方法",
+    sources: "USフィッテッドは頭囲(インチ)を π で割って 1/8 単位に丸めた値、UKはその 1/8 下、ヨーロッパは頭囲のセンチです。50cmから64cmまでの15行の公開換算表と照合し、UKのオフセットを含め全行が一致しました。ここで用いたアルファ区分は同じ表の2cm刻みに従ったもので、標準ではなく一般的な慣行です。",
+    disclaimer: "頭囲はフィットの半分にすぎません。頭の形 — 長頭型か丸型か — によって同じ寸法でも収まり方が変わるため、保証ではなく出発点として使ってください。",
+  },
+  zh: {
+    lead: "帽子尺寸不是随意的代号。US 的数字是头的直径 —— 头围换成英寸再除以 π —— 所以会出现 7 1/4 这样的分数。UK 正好低 1/8，欧洲则直接写头围的厘米数。这三者是对同一测量值做算术，因此不可能彼此矛盾。标签上的字母是另一回事：S/M/L 是没有标准的 2cm 分桶，于是同一个头在这个品牌是 M，在下一个品牌就是 L。这个换算器从测量值出发，并会告诉你此刻是否正站在桶的边缘上。",
+    formulaTitle: "三种定义",
+    formulas: [
+      { label: "US 平顶帽", value: "头围(英寸) ÷ π，四舍五入到 1/8" },
+      { label: "UK", value: "US − 1/8" },
+      { label: "欧洲", value: "头围厘米数" },
+    ],
+    useTitle: "适合这些情况",
+    useCases: [
+      { title: "在线买平顶帽时", body: "平顶帽按 US 的 1/8 刻度出售，没有余量。量一次，就不必猜品牌所说的字母是什么意思。" },
+      { title: "向欧洲品牌下单时", body: "欧洲帽子以厘米标注，那就是测量值本身。知道自己的数字就无需换算。" },
+      { title: "判断能否相信 S/M/L 时", body: "如果头围离分桶边界不到 1cm，字母在不同品牌间就是掷硬币。那正是应该按数字买的时候。" },
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "为什么帽子尺寸是 7 1/4 这样的分数？", answer: "因为它是以英寸为单位的直径，不是代号。头围换成英寸除以 π，多数成人落在 7 上下，业界再四舍五入到 1/8。" },
+      { question: "欧洲尺寸等于头围吗？", answer: "是的。欧洲的 58 就是头围 58cm，没有换算的余地。" },
+      { question: "为什么 UK 比 US 小？", answer: "两地采用了同样的直径概念却选了不同基准点，留下固定的 1/8 差值。它在整个区间恒定，所以很好修正。" },
+      { question: "标签上的 S/M/L 可信吗？", answer: "不如数字可信。没有标准规定 M 到哪里结束、L 从哪里开始，各品牌自行划线。把字母当提示，把头围当依据。" },
+    ],
+    sourceTitle: "来源与算法",
+    sources: "US 平顶帽尺寸是头围(英寸)除以 π 后四舍五入到 1/8，UK 低 1/8，欧洲为头围厘米数。已与 50cm 至 64cm 共十五行的公开换算表比对，含 UK 偏移在内全部吻合。此处的字母区间沿用同一张表的 2cm 步长，属常见惯例而非标准。",
+    disclaimer: "头围只是合适与否的一半。头型 —— 长头还是圆头 —— 会让相同尺寸的帽子坐落方式不同，请把这里的结果当作起点而非保证。",
+  },
+  fr: {
+    lead: "Une taille de chapeau n'est pas un code arbitraire. Le nombre américain est le diamètre de votre tête — le tour de tête en pouces divisé par π — d'où ces 7 1/4 plutôt qu'un chiffre rond. Le Royaume-Uni descend d'un huitième, et l'Europe inscrit simplement le tour de tête en centimètres. Ces trois-là sont de l'arithmétique sur une seule mesure : ils ne peuvent pas se contredire. La lettre sur l'étiquette est d'une autre nature : S/M/L est un seau de deux centimètres sans norme derrière, et c'est ainsi que la même tête est medium chez une marque et large chez la suivante. Ce convertisseur part de la mesure et vous dit quand vous vous tenez sur le bord d'un seau.",
+    formulaTitle: "Les trois définitions",
+    formulas: [
+      { label: "US fitted", value: "tour de tête (po) ÷ π, au huitième près" },
+      { label: "UK", value: "US − 1/8" },
+      { label: "Europe", value: "tour de tête en cm" },
+    ],
+    useTitle: "À quoi cela sert",
+    useCases: [
+      { title: "Acheter une casquette fitted en ligne", body: "Les fitted se vendent au huitième américain, sans marge. Une seule mesure suffit pour commander sans deviner ce que la marque entend par sa lettre." },
+      { title: "Commander chez un chapelier européen", body: "Les chapeaux européens sont étiquetés en centimètres, c'est-à-dire la mesure elle-même. Une fois votre nombre connu, il n'y a rien à convertir." },
+      { title: "Décider si S/M/L est fiable", body: "Si votre tour de tête est à moins d'un centimètre d'une limite, la lettre devient un pile ou face selon la marque. C'est précisément là qu'il faut acheter au nombre." },
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Pourquoi ma taille de chapeau est-elle une fraction comme 7 1/4 ?", answer: "Parce que c'est un diamètre en pouces, pas un code. Le tour de tête en pouces divisé par π donne environ 7 pour la plupart des adultes, et le métier arrondit au huitième." },
+      { question: "La taille européenne est-elle le tour de tête ?", answer: "Oui. Un 58 européen correspond à une tête de 58 cm. Toute la conversion tient là." },
+      { question: "Pourquoi les tailles UK sont-elles plus petites ?", answer: "Les deux métiers ont retenu la même idée de diamètre mais des points de référence différents, laissant un décalage fixe d'un huitième. Il est constant, donc facile à corriger." },
+      { question: "Peut-on se fier au S/M/L de l'étiquette ?", answer: "Moins qu'au nombre. Aucune norme ne dit où finit le medium et où commence le large : chaque marque fixe ses limites. Prenez la lettre comme indice et le tour de tête comme décision." },
+    ],
+    sourceTitle: "Sources et méthode",
+    sources: "La taille US fitted est le tour de tête en pouces divisé par π, arrondi au huitième ; le Royaume-Uni se situe un huitième plus bas ; l'Europe indique le tour de tête en centimètres. Vérifié sur un tableau publié de quinze lignes allant de 50 à 64 cm : toutes les lignes concordent, décalage britannique compris. Les tranches par lettre reprennent les pas de deux centimètres du même tableau, une convention courante et non une norme.",
+    disclaimer: "Le tour de tête ne fait que la moitié du confort. La forme du crâne — ovale allongé contre rond — change la façon dont un chapeau se pose à mesure égale : voyez ceci comme une taille de départ, pas comme une garantie.",
+  },
+  es: {
+    lead: "Una talla de sombrero no es un código arbitrario. El número estadounidense es el diámetro de tu cabeza — el perímetro en pulgadas dividido entre π —, y por eso sale como 7 1/4 en vez de un número redondo. El Reino Unido baja un octavo, y Europa simplemente escribe el perímetro en centímetros. Esos tres son aritmética sobre una sola medida: no pueden contradecirse. La letra de la etiqueta es otra cosa: S/M/L es un cubo de dos centímetros sin norma detrás, y así la misma cabeza es mediana en una marca y grande en la siguiente. Este conversor parte de la medida y te avisa cuando estás justo en el borde de un cubo.",
+    formulaTitle: "Las tres definiciones",
+    formulas: [
+      { label: "US fitted", value: "perímetro (pulg) ÷ π, al octavo más cercano" },
+      { label: "UK", value: "US − 1/8" },
+      { label: "Europa", value: "perímetro en cm" },
+    ],
+    useTitle: "Para qué sirve",
+    useCases: [
+      { title: "Comprar una gorra fitted por internet", body: "Las fitted se venden en octavos estadounidenses y no dan de sí. Con una sola medición puedes pedir cualquiera sin adivinar qué entiende la marca por su letra." },
+      { title: "Encargar a un sombrerero europeo", body: "Los sombreros europeos se etiquetan en centímetros, que es la medida misma. Sabiendo tu número no hay nada que convertir." },
+      { title: "Decidir si fiarte de S/M/L", body: "Si tu perímetro está a menos de un centímetro de un límite, la letra es cara o cruz según la marca. Justo entonces conviene comprar por el número." },
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Por qué mi talla es una fracción como 7 1/4?", answer: "Porque es un diámetro en pulgadas, no un código. El perímetro en pulgadas dividido entre π da alrededor de 7 en la mayoría de los adultos, y el oficio lo redondea al octavo." },
+      { question: "¿La talla europea es el perímetro craneal?", answer: "Sí. Un 58 europeo es una cabeza de 58 cm. Ahí acaba la conversión." },
+      { question: "¿Por qué las tallas UK salen más pequeñas?", answer: "Ambos oficios adoptaron la misma idea de diámetro pero con puntos de referencia distintos, y quedó un desfase fijo de un octavo. Es constante, así que se corrige fácil." },
+      { question: "¿Me puedo fiar del S/M/L de la etiqueta?", answer: "Menos que del número. No hay norma que fije dónde acaba la mediana y empieza la grande, así que cada marca traza su línea. Usa la letra como pista y el perímetro como decisión." },
+    ],
+    sourceTitle: "Fuentes y método",
+    sources: "La talla US fitted es el perímetro en pulgadas dividido entre π y redondeado al octavo; el Reino Unido queda un octavo por debajo; Europa indica el perímetro en centímetros. Comprobado contra una tabla publicada de quince filas, de 50 a 64 cm: todas las filas coinciden, incluido el desfase británico. Las bandas por letra siguen los pasos de dos centímetros de esa misma tabla, una convención habitual y no una norma.",
+    disclaimer: "El perímetro es solo la mitad del ajuste. La forma del cráneo — ovalada frente a redonda — cambia cómo se asienta un sombrero con la misma medida, así que tómalo como talla de partida, no como garantía.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "@id": `${pageUrl}#app`,
+      name: m.title,
+      url: pageUrl,
+      applicationCategory: "UtilitiesApplication",
+      operatingSystem: "Web",
+      description: m.description,
+      isAccessibleForFree: true,
+    },
+    {
+      "@type": "HowTo",
+      "@id": `${pageUrl}#howto`,
+      name: c.useTitle,
+      step: c.useCases.map((item, index) => ({
+        "@type": "HowToStep",
+        position: index + 1,
+        name: item.title,
+        text: item.body,
+      })),
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${pageUrl}#faq`,
+      mainEntity: c.faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: { "@type": "Answer", text: faq.answer },
+      })),
+    },
+  ],
+};
+---
+
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <div class="mx-auto max-w-3xl px-4 py-8">
+    <section class="mb-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <p class="text-sm font-semibold uppercase tracking-wide text-green-600">{m.eyebrow}</p>
+      <h1 class="mt-2 text-3xl font-black tracking-tight text-slate-950">{m.title}</h1>
+      <p class="mt-4 leading-8 text-slate-700">{c.lead}</p>
+    </section>
+
+    <HatSizeConverter client:load locale={locale as Locale} />
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-950">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-3 sm:grid-cols-3">
+        {c.formulas.map((formula) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="text-sm font-semibold text-slate-500">{formula.label}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-green-700">{formula.value}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-950">{c.useTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.useCases.map((item) => (
+          <article class="rounded-xl bg-green-50 p-4">
+            <h3 class="font-semibold text-slate-950">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-950">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-950">
+              {faq.question}
+            </summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10 rounded-xl border border-slate-200 bg-slate-50 p-5">
+      <h2 class="text-base font-bold text-slate-950">{c.sourceTitle}</h2>
+      <p class="mt-3 text-sm leading-6 text-slate-700">{c.sources}</p>
+      <p class="mt-3 text-sm leading-6 text-slate-500">{c.disclaimer}</p>
+    </section>
+  </div>
+</BaseLayout>
