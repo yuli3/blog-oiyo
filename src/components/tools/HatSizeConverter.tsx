@@ -46,6 +46,8 @@ const ALPHA: { label: string; minCm: number; maxCm: number }[] = [
   { label: "XXL", minCm: 63, maxCm: 65 },
 ];
 
+const EDGE_CM = 0.5;
+
 const eighth = (n: number) => Math.round(n * 8) / 8;
 const usFromCm = (cm: number) => cm / INCH / Math.PI;
 const cmFromUs = (size: number) => size * Math.PI * INCH;
@@ -343,15 +345,15 @@ const COPY: Record<Locale, Copy> = {
 export default function HatSizeConverter({ locale = "en" }: { locale?: Locale }) {
   const t = COPY[locale] ?? COPY.en;
   const [from, setFrom] = useState<From>("cm");
-  const [cm, setCm] = useState("57");
-  const [inch, setInch] = useState("22.4");
-  const [us, setUs] = useState("7.125");
+  const [cm, setCm] = useState("58");
+  const [inch, setInch] = useState("22.8");
+  const [us, setUs] = useState("7.25");
 
   const reset = useCallback(() => {
     setFrom("cm");
-    setCm("57");
-    setInch("22.4");
-    setUs("7.125");
+    setCm("58");
+    setInch("22.8");
+    setUs("7.25");
   }, []);
 
   const circCm = useMemo(() => {
@@ -376,16 +378,19 @@ export default function HatSizeConverter({ locale = "en" }: { locale?: Locale })
     };
   }, [circCm]);
 
-  // How close the measurement sits to the edge of its alpha bucket. Within
-  // 1 cm the letter is a coin flip between brands, which is the whole point.
+  // How close the measurement sits to the edge of its alpha bucket. The buckets
+  // are 2 cm wide, so the threshold has to be under half that -- at 1 cm every
+  // value in a bucket is "near an edge" and the warning stops carrying
+  // information. At 0.5 cm the middle centimetre reads as safe and only the
+  // genuinely ambiguous edges are flagged.
   const alphaEdge = useMemo(() => {
     if (!result?.band) return null;
     const i = ALPHA.indexOf(result.band);
     const toLow = result.circCm - result.band.minCm;
     const toHigh = result.band.maxCm + 1 - result.circCm;
-    if (toLow <= 1 && i > 0)
+    if (toLow <= EDGE_CM && i > 0)
       return { other: ALPHA[i - 1].label, gap: fmt(toLow) };
-    if (toHigh <= 1 && i < ALPHA.length - 1)
+    if (toHigh <= EDGE_CM && i < ALPHA.length - 1)
       return { other: ALPHA[i + 1].label, gap: fmt(toHigh) };
     return null;
   }, [result]);
