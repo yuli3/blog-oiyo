@@ -1,69 +1,92 @@
 ---
 /**
  * CompareTable — 두 개념의 비교/대조 표
- * 사용 예: 효율성 vs 효과성, 과학적 관리법 vs 인간관계론
+ * 또는 headers + 행 배열을 넘긴 일반 표.
  *
- * Props:
- *   leftTitle   - 왼쪽 열 제목
- *   rightTitle  - 오른쪽 열 제목
- *   title       - 전체 제목 (optional)
- *   rows        - [{ label, left, right }]
- *   leftColor   - 왼쪽 강조 색 (optional, default blue)
- *   rightColor  - 오른쪽 강조 색 (optional, default orange)
+ * Props (비교):
+ *   leftTitle, rightTitle, rows: [{ label, left, right }]
+ * Props (격자):
+ *   headers: string[]
+ *   rows: string[][]
  */
-interface Row {
-  label: string;
-  left: string;
-  right: string;
-}
+import { inlineMd } from "../../lib/utils";
+import { isGridCompareTable, type CompareObjectRow } from "./compare-table-mode";
 
 interface Props {
   title?: string;
-  leftTitle: string;
-  rightTitle: string;
-  rows: Row[];
+  leftTitle?: string;
+  rightTitle?: string;
+  headers?: string[];
+  rows: CompareObjectRow[] | string[][];
   leftColor?: string;
   rightColor?: string;
 }
 
-import { inlineMd } from "../../lib/utils";
 const {
   title,
   leftTitle,
   rightTitle,
+  headers,
   rows,
   leftColor = "#3b82f6",
   rightColor = "#f59e0b",
 } = Astro.props;
+
+const grid = isGridCompareTable(headers, rows);
+const compareRows = grid ? [] : (rows as CompareObjectRow[]);
 ---
 
-<div class="edu-compare-table">
-  {title && <div class="edu-compare-table__title" set:html={inlineMd(title)} />}
-  <table>
-    <thead>
-      <tr>
-        <th class="edu-compare-table__label-header">구분</th>
-        <th style={`border-top: 3px solid ${leftColor}; color: ${leftColor};`}
-          set:html={inlineMd(leftTitle)}
-        ></th>
-        <th style={`border-top: 3px solid ${rightColor}; color: ${rightColor};`}
-          set:html={inlineMd(rightTitle)}
-        ></th>
-      </tr>
-    </thead>
-    <tbody>
-      {
-        rows.map((row, i) => (
+{grid ? (
+  <div class="edu-compare-table">
+    {title && <div class="edu-compare-table__title" set:html={inlineMd(title)} />}
+    <table>
+      <thead>
+        <tr>
+          {headers!.map((h) => (
+            <th set:html={inlineMd(h)} />
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((row, i) => (
           <tr class={i % 2 === 0 ? "even" : "odd"}>
-            <td class="edu-compare-table__label" set:html={inlineMd(row.label)} />
-            <td class="edu-compare-table__left" set:html={inlineMd(row.left)} />
-            <td class="edu-compare-table__right" set:html={inlineMd(row.right)} />
+            {row.map((cell, j) => (
+              <td class={j === 0 ? "edu-compare-table__label" : undefined} set:html={inlineMd(cell)} />
+            ))}
           </tr>
-        ))
-      }
-    </tbody>
-  </table>
-</div>
+        ))}
+      </tbody>
+    </table>
+  </div>
+) : (
+  <div class="edu-compare-table">
+    {title && <div class="edu-compare-table__title" set:html={inlineMd(title)} />}
+    <table>
+      <thead>
+        <tr>
+          <th class="edu-compare-table__label-header">구분</th>
+          <th style={`border-top: 3px solid ${leftColor}; color: ${leftColor};`}
+            set:html={inlineMd(leftTitle ?? "")}
+          ></th>
+          <th style={`border-top: 3px solid ${rightColor}; color: ${rightColor};`}
+            set:html={inlineMd(rightTitle ?? "")}
+          ></th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          compareRows.map((row, i) => (
+            <tr class={i % 2 === 0 ? "even" : "odd"}>
+              <td class="edu-compare-table__label" set:html={inlineMd(row.label)} />
+              <td class="edu-compare-table__left" set:html={inlineMd(row.left)} />
+              <td class="edu-compare-table__right" set:html={inlineMd(row.right)} />
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+)}
 
 <style>
   .edu-compare-table {
