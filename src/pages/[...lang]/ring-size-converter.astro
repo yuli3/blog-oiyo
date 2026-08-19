@@ -1,0 +1,317 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import RingSizeConverter from "../../components/tools/RingSizeConverter";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: ActiveLocale };
+const pageUrl = `https://blog.oiyo.net/${locale}/ring-size-converter/`;
+
+const meta: Record<ActiveLocale, { title: string; description: string; eyebrow: string }> = {
+  en: {
+    title: "Ring Size Chart & Converter — US, UK, EU, Japan",
+    description:
+      "Convert ring sizes between US, UK, EU and Japan through the finger's inside measurement, and see exactly where the printed charts round and disagree. Includes how to measure at home in millimetres.",
+    eyebrow: "Measured, not guessed",
+  },
+  ko: {
+    title: "반지 호수 변환표 — US · UK · EU · 일본/한국",
+    description:
+      "손가락 둘레를 기준으로 US·UK·EU·일본 호수를 변환하고, 시중 표들이 어디서 반올림하고 어긋나는지 그대로 보여줍니다. 집에서 밀리미터로 재는 법 포함.",
+    eyebrow: "재서 구하는 호수",
+  },
+  ja: {
+    title: "指輪サイズ換算表 — US · UK · EU · 日本",
+    description:
+      "指の内周を基準にUS・UK・EU・日本の号数を換算し、市販の対応表がどこで丸めて食い違うのかをそのまま表示します。自宅でミリ単位で測る方法つき。",
+    eyebrow: "測って出す号数",
+  },
+  zh: {
+    title: "戒指尺寸换算表 — US · UK · EU · 日本",
+    description:
+      "以手指内周为基准换算 US、UK、EU 与日本号数，并直接显示市售对照表在哪里四舍五入、彼此分歧。含在家用毫米测量的方法。",
+    eyebrow: "量出来的尺寸",
+  },
+  fr: {
+    title: "Tableau et convertisseur de taille de bague — US, UK, EU, Japon",
+    description:
+      "Convertissez les tailles de bague entre US, UK, EU et Japon à partir de la mesure intérieure du doigt, et voyez où les tableaux imprimés arrondissent et divergent. Méthode de mesure en millimètres incluse.",
+    eyebrow: "Mesuré, pas deviné",
+  },
+  es: {
+    title: "Tabla y conversor de talla de anillo — US, UK, EU, Japón",
+    description:
+      "Convierte tallas de anillo entre US, UK, EU y Japón a partir de la medida interior del dedo, y observa dónde redondean y discrepan las tablas impresas. Incluye cómo medir en casa en milímetros.",
+    eyebrow: "Medido, no adivinado",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+
+type Content = {
+  lead: string;
+  formulaTitle: string;
+  formulas: { label: string; value: string }[];
+  useTitle: string;
+  useCases: { title: string; body: string }[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  sourceTitle: string;
+  sources: string;
+  disclaimer: string;
+};
+
+const content: Record<ActiveLocale, Content> = {
+  en: {
+    lead: "Ring sizing has no single international standard. The US counts in numbers, the UK in letters, the EU in millimetres of circumference and Japan in 号 — and each was defined separately, so they do not land on each other's whole numbers. Printed charts hide that by rounding, which is how two reputable jewellers can name different sizes for the same finger. This converter works from the one thing all four agree on — the inside measurement of the finger — and shows both the exact figure and the size you would actually be sold.",
+    formulaTitle: "The four definitions",
+    formulas: [
+      { label: "US", value: "inside Ø = 11.63 + 0.8128 × size" },
+      { label: "UK — BS 6820", value: "circumference = 37.8 mm + 1.25 mm per letter" },
+      { label: "Japan / Korea — JIS S 4700", value: "inside Ø = 13.0 + (size − 1) ÷ 3" },
+    ],
+    useTitle: "What this is good for",
+    useCases: [
+      { title: "Buying from another country", body: "A UK jeweller's letter and a Japanese 号 describe the same finger through different arithmetic. Converting through millimetres avoids inheriting someone else's rounding." },
+      { title: "Sizing a gift without asking", body: "Measure the inside of a ring they already wear and enter the circumference. Diameter × π gives the number this tool wants." },
+      { title: "Checking a chart you were given", body: "Enter your size and compare the exact column with the chart in front of you. A half-size difference usually means the chart rounded, not that one of you is wrong." },
+    ],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Why do two ring size charts give me different answers?", answer: "Because the systems are defined independently and rarely coincide on whole numbers. A US 6 works out to Japanese 11.5, so one chart prints 11 and another prints 12. Both are rounding the same measurement in different directions." },
+      { question: "Is EU ring size the same as circumference in millimetres?", answer: "Yes. Under ISO 8653 the European size is simply the inside circumference in millimetres, which is why a size 54 ring measures 54 mm around the inside." },
+      { question: "Is the Korean 호 the same as the Japanese 号?", answer: "They use the same scale. Korean jewellers size on the JIS series, where size 10 is exactly 16.0 mm inside diameter." },
+      { question: "String or paper for measuring?", answer: "Paper. String stretches under tension and consistently reads a size small. Measure at the base of the finger, in the evening, and take the larger size if you fall between two." },
+    ],
+    sourceTitle: "Sources and method",
+    sources: "US sizes follow the standard inside-diameter series (11.63 mm at size 0, 0.8128 mm per size), which puts size 7 at 17.32 mm diameter and 54.4 mm circumference — matching the figure jewellers publish. UK letters follow BS 6820 (1987), which defines sizes by inside circumference starting at 37.8 mm for A and rising 1.25 mm per letter. Japanese and Korean sizes follow JIS S 4700. European sizes follow ISO 8653, where the size is the circumference in millimetres.",
+    disclaimer: "This is a conversion aid, not a fitting. Band width, knuckle size and temperature all change how a ring sits, so have anything expensive sized in person.",
+  },
+  ko: {
+    lead: "반지 호수에는 국제 표준이 없습니다. 미국은 숫자로, 영국은 알파벳으로, 유럽은 둘레 밀리미터로, 일본과 한국은 호로 셉니다 — 각각 따로 정의됐기 때문에 서로의 정수에 맞아떨어지지 않습니다. 시중 표는 이 어긋남을 반올림으로 덮기 때문에, 같은 손가락을 두고 멀쩡한 두 가게가 다른 호수를 말하게 됩니다. 이 변환기는 네 체계가 유일하게 합의하는 것 — 손가락 안쪽 치수 — 에서 출발해, 정확값과 실제로 판매되는 호수를 나란히 보여줍니다.",
+    formulaTitle: "네 가지 정의",
+    formulas: [
+      { label: "US", value: "내경 = 11.63 + 0.8128 × 호수" },
+      { label: "UK — BS 6820", value: "둘레 = 37.8mm + 문자당 1.25mm" },
+      { label: "일본/한국 — JIS S 4700", value: "내경 = 13.0 + (호수 − 1) ÷ 3" },
+    ],
+    useTitle: "이럴 때 씁니다",
+    useCases: [
+      { title: "해외에서 살 때", body: "영국의 알파벳과 일본의 号은 같은 손가락을 다른 산수로 적은 것입니다. 밀리미터를 거쳐 변환하면 남의 반올림을 물려받지 않습니다." },
+      { title: "묻지 않고 선물할 때", body: "상대가 이미 끼는 반지의 안쪽을 재서 둘레를 넣으세요. 내경 × π 가 이 도구가 원하는 값입니다." },
+      { title: "받은 표를 검증할 때", body: "본인 호수를 넣고 정확값 열과 눈앞의 표를 비교하세요. 반 호수 차이는 대개 표가 반올림한 것이지 둘 중 하나가 틀린 게 아닙니다." },
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "표마다 호수가 다르게 나오는데요?", answer: "체계들이 따로 정의됐고 정수끼리 거의 겹치지 않기 때문입니다. US 6은 일본 11.5호로 계산되는데, 어떤 표는 11로 어떤 표는 12로 적습니다. 같은 치수를 서로 다른 방향으로 반올림한 것입니다." },
+      { question: "EU 호수가 둘레 밀리미터와 같나요?", answer: "같습니다. ISO 8653에서 유럽 사이즈는 안쪽 둘레 밀리미터 그 자체입니다. 54호 반지의 안쪽 둘레가 54mm인 이유입니다." },
+      { question: "한국 호수와 일본 号이 같은가요?", answer: "같은 척도입니다. 한국 주얼리도 JIS 계열을 쓰며, 10호는 내경 정확히 16.0mm입니다." },
+      { question: "실과 종이 중 뭘로 재나요?", answer: "종이입니다. 실은 당기면 늘어나서 늘 한 호수 작게 나옵니다. 손가락 밑동에서, 저녁에 재고, 두 호수 사이면 큰 쪽을 고르세요." },
+    ],
+    sourceTitle: "출처와 계산 방식",
+    sources: "US는 표준 내경 계열(0호 = 11.63mm, 호당 0.8128mm)을 따릅니다. 이 식으로 7호는 내경 17.32mm·둘레 54.4mm가 되어 주얼리 업계가 공표하는 값과 일치합니다. UK 알파벳은 BS 6820(1987)을 따르며 A를 둘레 37.8mm로 두고 문자당 1.25mm씩 올립니다. 일본·한국 호수는 JIS S 4700, 유럽 사이즈는 ISO 8653(둘레 밀리미터)입니다.",
+    disclaimer: "이 페이지는 변환 보조 도구이며 실제 피팅이 아닙니다. 반지 폭·마디 굵기·체온에 따라 착용감이 달라지므로 고가 제품은 매장에서 직접 재보세요.",
+  },
+  ja: {
+    lead: "指輪のサイズに国際標準はありません。米国は数字、英国はアルファベット、欧州は内周ミリ、日本と韓国は号で数えます — それぞれ別々に定義されたため、互いの整数には一致しません。市販の対応表はこのずれを丸めて隠すので、同じ指について信頼できる二つの店が違う号数を告げることになります。この換算機は四体系が唯一合意するもの — 指の内側の寸法 — から出発し、正確な値と実際に売られている号数を並べて示します。",
+    formulaTitle: "四つの定義",
+    formulas: [
+      { label: "US", value: "内径 = 11.63 + 0.8128 × 号数" },
+      { label: "UK — BS 6820", value: "内周 = 37.8mm + 1文字あたり1.25mm" },
+      { label: "日本/韓国 — JIS S 4700", value: "内径 = 13.0 + (号数 − 1) ÷ 3" },
+    ],
+    useTitle: "こんなときに",
+    useCases: [
+      { title: "海外で買うとき", body: "英国の文字と日本の号は、同じ指を別の算術で書いたものです。ミリを経由すれば他人の丸めを引き継ぎません。" },
+      { title: "聞かずに贈るとき", body: "相手がすでに着けている指輪の内径を測り、内周を入力します。内径 × π がこの道具の求める値です。" },
+      { title: "もらった表を検証するとき", body: "自分の号数を入れ、正確値の列と手元の表を比べます。ハーフサイズの差はたいてい表の丸めで、どちらかが誤りというわけではありません。" },
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "表ごとに号数が違うのはなぜですか？", answer: "各体系が独立に定義され、整数どうしがほとんど重ならないからです。US 6 は日本の11.5号に相当し、ある表は11、別の表は12と書きます。同じ寸法を逆方向に丸めているだけです。" },
+      { question: "EUサイズは内周のミリと同じですか？", answer: "同じです。ISO 8653 では欧州サイズは内周のミリそのものです。54号の指輪の内周が54mmなのはそのためです。" },
+      { question: "韓国の호と日本の号は同じですか？", answer: "同じ目盛りです。韓国のジュエリーもJIS系列を用い、10号は内径ちょうど16.0mmです。" },
+      { question: "糸と紙のどちらで測りますか？", answer: "紙です。糸は引くと伸びて必ず一号小さく出ます。指の付け根で、夕方に測り、二つの号数の間なら大きい方を選んでください。" },
+    ],
+    sourceTitle: "出典と計算方法",
+    sources: "USは標準内径系列（0号 = 11.63mm、1号あたり0.8128mm）に従います。この式で7号は内径17.32mm・内周54.4mmとなり、ジュエリー業界が公表する値と一致します。UKの文字はBS 6820(1987)に従い、Aを内周37.8mmとして1文字ごとに1.25mm増えます。日本・韓国の号数はJIS S 4700、欧州サイズはISO 8653（内周ミリ）です。",
+    disclaimer: "このページは換算の補助であり、実際のフィッティングではありません。リング幅・関節の太さ・体温で着け心地が変わるため、高価なものは店頭で採寸してください。",
+  },
+  zh: {
+    lead: "戒指尺寸没有统一的国际标准。美国用数字，英国用字母，欧洲用内周毫米，日本与韩国用号 —— 各自独立定义，因此并不落在彼此的整数上。市售对照表用四舍五入把这种错位盖住，于是同一根手指会被两家正规店说成不同号数。这个换算器从四套体系唯一一致的东西出发 —— 手指内侧的尺寸 —— 并把精确值与实际售卖的号数并列显示。",
+    formulaTitle: "四种定义",
+    formulas: [
+      { label: "US", value: "内径 = 11.63 + 0.8128 × 号数" },
+      { label: "UK — BS 6820", value: "内周 = 37.8mm + 每字母 1.25mm" },
+      { label: "日本/韩国 — JIS S 4700", value: "内径 = 13.0 + (号数 − 1) ÷ 3" },
+    ],
+    useTitle: "适合这些情况",
+    useCases: [
+      { title: "跨国购买时", body: "英国的字母与日本的号，是用不同算术写下的同一根手指。经由毫米换算，就不会继承别人的四舍五入。" },
+      { title: "不问本人送礼时", body: "量一枚对方已在戴的戒指内侧，输入内周。内径 × π 就是这个工具要的数值。" },
+      { title: "核对拿到的对照表时", body: "输入自己的号数，把精确值那一列与手上的表比较。半号之差通常是表在四舍五入，而不是谁错了。" },
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "为什么不同表给出的号数不一样？", answer: "因为各体系独立定义，整数之间几乎不重合。US 6 换算成日本 11.5 号，有的表写 11，有的写 12。它们只是把同一尺寸往不同方向取整。" },
+      { question: "EU 尺寸等于内周毫米吗？", answer: "是的。按 ISO 8653，欧洲尺寸就是内周的毫米数，所以 54 号戒指的内周正好 54mm。" },
+      { question: "韩国的호和日本的号相同吗？", answer: "同一刻度。韩国珠宝也使用 JIS 系列，10 号内径正好 16.0mm。" },
+      { question: "用线还是用纸测量？", answer: "用纸。线受力会伸长，量出来总是偏小一号。在指根测量，选傍晚，若介于两号之间取大的。" },
+    ],
+    sourceTitle: "来源与算法",
+    sources: "US 采用标准内径序列（0 号 = 11.63mm，每号 0.8128mm）。据此 7 号为内径 17.32mm、内周 54.4mm，与珠宝业公布的数值一致。UK 字母依 BS 6820(1987)，以 A 为内周 37.8mm，每字母增加 1.25mm。日本与韩国号数依 JIS S 4700，欧洲尺寸依 ISO 8653（内周毫米）。",
+    disclaimer: "本页是换算辅助，不是实际试戴。戒圈宽度、指节粗细与体温都会影响佩戴感，贵重款式请到店实测。",
+  },
+  fr: {
+    lead: "Il n'existe pas de norme internationale unique pour les tailles de bague. Les États-Unis comptent en chiffres, le Royaume-Uni en lettres, l'Europe en millimètres de circonférence et le Japon en 号 — chacun défini séparément, si bien qu'ils ne tombent pas sur les entiers des autres. Les tableaux imprimés masquent cet écart en arrondissant : deux bijoutiers sérieux peuvent donc annoncer des tailles différentes pour le même doigt. Ce convertisseur part de la seule chose sur laquelle les quatre systèmes s'accordent — la mesure intérieure du doigt — et affiche à la fois la valeur exacte et la taille réellement vendue.",
+    formulaTitle: "Les quatre définitions",
+    formulas: [
+      { label: "US", value: "Ø intérieur = 11,63 + 0,8128 × taille" },
+      { label: "UK — BS 6820", value: "circonférence = 37,8 mm + 1,25 mm par lettre" },
+      { label: "Japon/Corée — JIS S 4700", value: "Ø intérieur = 13,0 + (taille − 1) ÷ 3" },
+    ],
+    useTitle: "À quoi cela sert",
+    useCases: [
+      { title: "Acheter à l'étranger", body: "La lettre d'un bijoutier britannique et le 号 japonais décrivent le même doigt par des calculs différents. Passer par les millimètres évite d'hériter de l'arrondi d'un autre." },
+      { title: "Offrir sans demander", body: "Mesurez l'intérieur d'une bague qu'elle ou il porte déjà et saisissez la circonférence. Diamètre × π donne la valeur attendue ici." },
+      { title: "Vérifier un tableau reçu", body: "Saisissez votre taille et comparez la colonne exacte au tableau que vous avez sous les yeux. Une demi-taille d'écart signifie généralement que le tableau a arrondi." },
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Pourquoi deux tableaux me donnent-ils des tailles différentes ?", answer: "Parce que les systèmes sont définis indépendamment et coïncident rarement sur des entiers. Un US 6 donne 11,5 en japonais : un tableau imprime 11, l'autre 12. Les deux arrondissent la même mesure dans des sens opposés." },
+      { question: "La taille EU est-elle la circonférence en millimètres ?", answer: "Oui. Selon l'ISO 8653, la taille européenne est la circonférence intérieure en millimètres : une bague taille 54 mesure 54 mm à l'intérieur." },
+      { question: "Le 호 coréen est-il le 号 japonais ?", answer: "C'est la même échelle. Les bijoutiers coréens utilisent la série JIS, où la taille 10 correspond exactement à 16,0 mm de diamètre intérieur." },
+      { question: "Ficelle ou papier pour mesurer ?", answer: "Du papier. La ficelle s'étire sous tension et donne systématiquement une taille en dessous. Mesurez à la base du doigt, le soir, et prenez la taille supérieure en cas d'hésitation." },
+    ],
+    sourceTitle: "Sources et méthode",
+    sources: "Les tailles US suivent la série standard de diamètre intérieur (11,63 mm à la taille 0, 0,8128 mm par taille), ce qui place la taille 7 à 17,32 mm de diamètre et 54,4 mm de circonférence — la valeur publiée par les bijoutiers. Les lettres britanniques suivent la BS 6820 (1987), qui part de 37,8 mm de circonférence pour A et progresse de 1,25 mm par lettre. Les tailles japonaises et coréennes suivent la JIS S 4700, les tailles européennes l'ISO 8653 (circonférence en millimètres).",
+    disclaimer: "Cette page est une aide à la conversion, pas un essayage. La largeur de l'anneau, l'articulation et la température modifient le ressenti : faites mesurer sur place toute pièce coûteuse.",
+  },
+  es: {
+    lead: "No existe una norma internacional única para las tallas de anillo. Estados Unidos cuenta en números, el Reino Unido en letras, Europa en milímetros de circunferencia y Japón en 号 — cada uno definido por separado, de modo que no caen en los enteros de los demás. Las tablas impresas tapan ese desajuste redondeando, y por eso dos joyeros solventes pueden dar tallas distintas para el mismo dedo. Este conversor parte de lo único en que los cuatro sistemas coinciden — la medida interior del dedo — y muestra a la vez el valor exacto y la talla que realmente se vende.",
+    formulaTitle: "Las cuatro definiciones",
+    formulas: [
+      { label: "US", value: "Ø interior = 11,63 + 0,8128 × talla" },
+      { label: "UK — BS 6820", value: "circunferencia = 37,8 mm + 1,25 mm por letra" },
+      { label: "Japón/Corea — JIS S 4700", value: "Ø interior = 13,0 + (talla − 1) ÷ 3" },
+    ],
+    useTitle: "Para qué sirve",
+    useCases: [
+      { title: "Comprar en otro país", body: "La letra de un joyero británico y el 号 japonés describen el mismo dedo con aritmética distinta. Convertir por milímetros evita heredar el redondeo ajeno." },
+      { title: "Regalar sin preguntar", body: "Mide el interior de un anillo que ya use e introduce la circunferencia. Diámetro × π es el valor que pide esta herramienta." },
+      { title: "Comprobar una tabla recibida", body: "Introduce tu talla y compara la columna exacta con la tabla que tienes delante. Media talla de diferencia suele ser redondeo, no un error." },
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Por qué dos tablas me dan tallas distintas?", answer: "Porque los sistemas se definieron por separado y rara vez coinciden en enteros. Una US 6 sale 11,5 en japonés: una tabla imprime 11 y otra 12. Ambas redondean la misma medida en sentidos opuestos." },
+      { question: "¿La talla EU es la circunferencia en milímetros?", answer: "Sí. Según ISO 8653, la talla europea es la circunferencia interior en milímetros: un anillo de talla 54 mide 54 mm por dentro." },
+      { question: "¿El 호 coreano es el 号 japonés?", answer: "Es la misma escala. La joyería coreana usa la serie JIS, donde la talla 10 equivale exactamente a 16,0 mm de diámetro interior." },
+      { question: "¿Hilo o papel para medir?", answer: "Papel. El hilo se estira al tensarlo y siempre marca una talla menos. Mide en la base del dedo, por la tarde, y si dudas entre dos tallas elige la mayor." },
+    ],
+    sourceTitle: "Fuentes y método",
+    sources: "Las tallas US siguen la serie estándar de diámetro interior (11,63 mm en la talla 0, 0,8128 mm por talla), lo que sitúa la talla 7 en 17,32 mm de diámetro y 54,4 mm de circunferencia, la cifra que publican los joyeros. Las letras británicas siguen la BS 6820 (1987), que parte de 37,8 mm de circunferencia para la A y sube 1,25 mm por letra. Las tallas japonesas y coreanas siguen la JIS S 4700, y las europeas la ISO 8653 (circunferencia en milímetros).",
+    disclaimer: "Esta página es una ayuda de conversión, no una prueba de ajuste. El ancho del aro, el nudillo y la temperatura cambian cómo asienta un anillo: haz medir en persona cualquier pieza cara.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "@id": `${pageUrl}#app`,
+      name: m.title,
+      url: pageUrl,
+      applicationCategory: "UtilitiesApplication",
+      operatingSystem: "Web",
+      description: m.description,
+      isAccessibleForFree: true,
+    },
+    {
+      "@type": "HowTo",
+      "@id": `${pageUrl}#howto`,
+      name: c.useTitle,
+      step: c.useCases.map((item, index) => ({
+        "@type": "HowToStep",
+        position: index + 1,
+        name: item.title,
+        text: item.body,
+      })),
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${pageUrl}#faq`,
+      mainEntity: c.faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: { "@type": "Answer", text: faq.answer },
+      })),
+    },
+  ],
+};
+---
+
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <div class="mx-auto max-w-3xl px-4 py-8">
+    <section class="mb-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <p class="text-sm font-semibold uppercase tracking-wide text-green-600">{m.eyebrow}</p>
+      <h1 class="mt-2 text-3xl font-black tracking-tight text-slate-950">{m.title}</h1>
+      <p class="mt-4 leading-8 text-slate-700">{c.lead}</p>
+    </section>
+
+    <RingSizeConverter client:load locale={locale as Locale} />
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-950">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-3 sm:grid-cols-3">
+        {c.formulas.map((formula) => (
+          <article class="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 class="text-sm font-semibold text-slate-500">{formula.label}</h3>
+            <p class="mt-2 font-mono text-sm leading-6 text-green-700">{formula.value}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-950">{c.useTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.useCases.map((item) => (
+          <article class="rounded-xl bg-green-50 p-4">
+            <h3 class="font-semibold text-slate-950">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-950">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-slate-950">
+              {faq.question}
+            </summary>
+            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10 rounded-xl border border-slate-200 bg-slate-50 p-5">
+      <h2 class="text-base font-bold text-slate-950">{c.sourceTitle}</h2>
+      <p class="mt-3 text-sm leading-6 text-slate-700">{c.sources}</p>
+      <p class="mt-3 text-sm leading-6 text-slate-500">{c.disclaimer}</p>
+    </section>
+  </div>
+</BaseLayout>
