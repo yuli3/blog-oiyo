@@ -1,57 +1,122 @@
 ---
 track: academy
 locale: en
-title: "CISSP Domain 4 — Key Security Concepts"
+title: "Access Control and Identity — Who Can Do What"
 category: "Computer Science"
 series: "CISSP Information Security Professional"
 chapter: 4
-chapterTitleShort: 'CISSP D4'
+chapterTitleShort: 'Access Control'
 author: OIYO Editorial
 tags:
   - CISSP
-  - information security
-  - cybersecurity
-description: "Core concepts for CISSP Domain 4 — essential knowledge for the CISSP exam. Chapter 4."
+  - access control
+  - IAM
+  - MFA
+  - least privilege
+description: "Authentication vs authorization, DAC/MAC/RBAC, MFA, and privileged access management. CISSP lecture 4."
 pubDate: '2026-05-31'
-noindex: true
-contentStage: rework
 ---
 
 import Callout from "@/components/mdx/Callout.astro";
 
-## Overview
+## Authentication vs Authorization
 
-This chapter covers key CISSP concepts for Domain 4. The CISSP exam tests your ability to apply security principles to real-world scenarios, not just memorize definitions.
+**Authentication**: Who are you?
+
+**Authorization**: What may you do?
+
+**Accounting**: What did you do?
+
+---
+
+## Authentication Factors
+
+| Factor | Meaning | Examples |
+|------|------|------|
+| **Knowledge** | Something you know | Password, PIN |
+| **Possession** | Something you have | OTP, smart card, hardware token |
+| **Inherence** | Something you are | Fingerprint, iris, face |
+| **Location** | Somewhere you are | IP, GPS |
+| **Behavior** | How you act | Typing pattern |
+
+**MFA**: Two or more factors from different categories.
 
 <Callout type="tip">
-The CISSP exam is a "managerial" exam — always think like a senior security manager, not a technical implementer. When in doubt, choose the answer that emphasizes risk management, policy, and business alignment.
+**OTP vs TOTP**: OTP is one-use. TOTP rotates on a clock (often 30 seconds) — Google Authenticator is TOTP. SMS OTP is weaker than an app or hardware token because of SIM swap.
 </Callout>
 
 ---
 
-## Core Concepts
+## Access-Control Models
 
-Understanding CISSP Domain 4 requires integrating knowledge across multiple security disciplines. Key areas include access controls, cryptography, network security, and security governance.
+### DAC
+The owner decides. Flexible. Easy to misconfigure.
+
+```
+File owner: "give a friend read"
+Examples: Unix file modes, Windows ACLs
+```
+
+### MAC
+The system decides from security labels. Military environments.
+
+```
+A Secret-labeled file → only Secret-or-higher clearance
+Users cannot grant access on their own
+```
+
+### RBAC
+Permissions attach to roles. The corporate default.
+
+```
+Physician role → patient records
+Nurse role → a narrower set of records
+Admin role → administrative systems
+```
+
+### ABAC
+User attributes + resource attributes + environment. Finest grain. Most complex.
+
+---
+
+## Privileged Access Management (PAM)
+
+For admins, DBAs, and other high-privilege accounts:
+
+- **Least privilege**: only what the job needs
+- **Just-in-time (JIT)**: privilege only for the window of work
+- **Session recording**: watch and store privileged sessions
+- **Password vault**: central admin secrets, automatic rotation
+
+---
+
+## Single Sign-On
+
+Authenticate once, reach many systems.
+
+**SAML**: XML, enterprise federation.  
+**OAuth 2.0**: Delegation — "Sign in with Google."  
+**OpenID Connect**: OAuth 2.0 plus an identity layer.
 
 ---
 
 ## Key Concept Cards
 
-**Think Like a Manager** ★★★★★
-: CISSP tests decision-making at the managerial level. Prioritize risk management and policy over technical implementation details.
+**DAC vs MAC vs RBAC** ★★★★★  
+: DAC = owner (flexible). MAC = labels (military). RBAC = roles (enterprise default).
 
-**Defense in Depth** ★★★★★
-: Multiple security layers. If one fails, the next defends. No single control is sufficient.
+**MFA** ★★★★★  
+: Two or more factor types. Knowledge + possession is the common pair. App/hardware beats SMS.
 
-**Least Privilege** ★★★★★
-: Grant only the minimum permissions necessary for a task. The golden rule of access management.
+**PAM** ★★★★★  
+: Least privilege, JIT, session recording. Limits insider misuse and stolen admin accounts.
 
 ---
 
 ## Practice Quiz
 
-**Q1. Which principle states that users should have only the access rights necessary to perform their job functions?**
-> The principle of least privilege. It minimizes the potential damage from accidental or intentional misuse of privileges, and reduces the attack surface available to compromised accounts.
+**Q1. A hospital must keep nurses off records only physicians may see. Which model fits?**  
+> RBAC. Bind full record access to the physician role and a narrower set to the nurse role. When staff change, grant or revoke the role — you are not managing every person one ACL at a time.
 
-**Q2. A security breach has occurred. What should be the FIRST response action?**
-> Containment — prevent the breach from spreading further. Immediately isolate affected systems from the network. Then proceed with eradication, recovery, and lessons learned in order.
+**Q2. Why does least privilege matter most on privileged accounts?**  
+> An admin account can reach the whole system. Compromise or misuse is organization-wide. JIT keeps day-to-day work on a normal account and lifts privilege only for a bounded task — which shrinks the attack surface.

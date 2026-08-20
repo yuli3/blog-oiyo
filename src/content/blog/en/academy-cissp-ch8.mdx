@@ -1,57 +1,124 @@
 ---
 track: academy
 locale: en
-title: "CISSP Domain 8 — Key Security Concepts"
+title: "Security Architecture and Vulnerability Assessment"
 category: "Computer Science"
 series: "CISSP Information Security Professional"
 chapter: 8
-chapterTitleShort: 'CISSP D8'
+chapterTitleShort: 'Security Architecture'
 author: OIYO Editorial
 tags:
   - CISSP
-  - information security
-  - cybersecurity
-description: "Core concepts for CISSP Domain 8 — essential knowledge for the CISSP exam. Chapter 8."
+  - security architecture
+  - vulnerability assessment
+  - penetration testing
+  - security controls
+description: "Defense in depth, control types, security models, vulnerability assessment vs pentest. CISSP lecture 8."
 pubDate: '2026-05-31'
-noindex: true
-contentStage: rework
 ---
 
 import Callout from "@/components/mdx/Callout.astro";
 
-## Overview
+## Defense in Depth
 
-This chapter covers key CISSP concepts for Domain 8. The CISSP exam tests your ability to apply security principles to real-world scenarios, not just memorize definitions.
+Do not hang the whole defense on one control:
+
+```
+Physical → network edge → internal network → host → application → data
+```
+
+If one layer fails, the next still has work to do.
+
+---
+
+## Control Types
+
+**By purpose**:
+- **Preventive**: stop the event. Firewall, encryption, access control
+- **Detective**: notice it. SIEM, IDS, audit logs
+- **Corrective**: fix after. Patch, restore from backup
+- **Deterrent**: raise the cost of trying. Signs, visible cameras
+
+**By implementation**:
+- **Administrative**: policy, procedure, training
+- **Technical**: firewall, crypto, IDS
+- **Physical**: locks, guards, mantraps
+
+---
+
+## Architecture Models
+
+**Bell-LaPadula**: confidentiality. No write up, no read down (military labels).
+
+**Biba**: integrity. No read up, no write down.
+
+**Clark-Wilson**: integrity via user → program → data (constrained access).
+
+**Brewer-Nash (Chinese Wall)**: conflict of interest. Block concurrent access to competing clients.
+
+---
+
+## Vulnerability Assessment vs Penetration Testing
+
+**Vulnerability scanning**: automated check for known issues (Nessus, OpenVAS).
+
+**Penetration testing**: authorized attacker simulation, including manual work.
+
+| Type | Prior knowledge | Character |
+|------|---------|------|
+| White box | Full | Thorough, internal |
+| Gray box | Partial | Balanced |
+| Black box | None | External attacker view |
+
+**Pentest stages** (authorized scope only):
+1. Reconnaissance
+2. Scanning
+3. Exploitation of a found weakness
+4. Privilege change
+5. Lateral movement
+6. Evidence for the report
+7. Report
+
+This is a process list for the exam, not instructions to run against a live system.
 
 <Callout type="tip">
-The CISSP exam is a "managerial" exam — always think like a senior security manager, not a technical implementer. When in doubt, choose the answer that emphasizes risk management, policy, and business alignment.
+**Red / blue / purple**: red = authorized attackers. Blue = defenders (SOC). Purple = the two working together to improve defense.
 </Callout>
 
 ---
 
-## Core Concepts
+## Series Map
 
-Understanding CISSP Domain 8 requires integrating knowledge across multiple security disciplines. Key areas include access controls, cryptography, network security, and security governance.
+| Domain | Core ideas |
+|-------|---------|
+| Security and risk | CIA, risk, compliance |
+| Asset security | Classification, data life cycle |
+| Security architecture | Defense in depth, models |
+| Network security | Firewall, VPN, Zero Trust |
+| IAM | Access control, MFA, PAM |
+| Security assessment | Scanning, pentest |
+| Security operations | IR, BCP/DRP, SIEM |
+| Software security | SDLC, OWASP, secure coding |
 
 ---
 
 ## Key Concept Cards
 
-**Think Like a Manager** ★★★★★
-: CISSP tests decision-making at the managerial level. Prioritize risk management and policy over technical implementation details.
+**Defense in depth** ★★★★★  
+: Several layers. One control failing is not the end.
 
-**Defense in Depth** ★★★★★
-: Multiple security layers. If one fails, the next defends. No single control is sufficient.
+**Prevent / detect / correct / deter** ★★★★★  
+: Four purposes. The exam asks you to pick the type that fits the story.
 
-**Least Privilege** ★★★★★
-: Grant only the minimum permissions necessary for a task. The golden rule of access management.
+**Pentest types** ★★★★☆  
+: Black box = outside view. White box = fullest internal test.
 
 ---
 
 ## Practice Quiz
 
-**Q1. Which principle states that users should have only the access rights necessary to perform their job functions?**
-> The principle of least privilege. It minimizes the potential damage from accidental or intentional misuse of privileges, and reduces the attack surface available to compromised accounts.
+**Q1. A firewall is which control type (purpose + implementation)?**  
+> Purpose: **preventive** — it blocks unauthorized traffic before it lands. Implementation: **technical**. Contrast with security training (administrative + preventive) or CCTV (physical + detective).
 
-**Q2. A security breach has occurred. What should be the FIRST response action?**
-> Containment — prevent the breach from spreading further. Immediately isolate affected systems from the network. Then proceed with eradication, recovery, and lessons learned in order.
+**Q2. Why does Bell-LaPadula fit a military environment?**  
+> It is built for confidentiality. No-read-up keeps lower clearance off higher labels. No-write-down stops a high label leaking into a low one. Military systems rank secrecy first, so this model matches.

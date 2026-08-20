@@ -1,57 +1,119 @@
 ---
 track: academy
 locale: en
-title: "CISSP Domain 5 — Key Security Concepts"
+title: "Software Security — Secure Code and the OWASP Top 10"
 category: "Computer Science"
 series: "CISSP Information Security Professional"
 chapter: 5
-chapterTitleShort: 'CISSP D5'
+chapterTitleShort: 'Software Security'
 author: OIYO Editorial
 tags:
   - CISSP
-  - information security
-  - cybersecurity
-description: "Core concepts for CISSP Domain 5 — essential knowledge for the CISSP exam. Chapter 5."
+  - software security
+  - OWASP
+  - injection
+  - XSS
+description: "Secure SDLC, OWASP Top 10 classes, input validation, SAST/DAST. CISSP lecture 5. Teaching notes, not an exploit guide."
 pubDate: '2026-05-31'
-noindex: true
-contentStage: rework
 ---
 
 import Callout from "@/components/mdx/Callout.astro";
 
-## Overview
+## Secure SDLC
 
-This chapter covers key CISSP concepts for Domain 5. The CISSP exam tests your ability to apply security principles to real-world scenarios, not just memorize definitions.
+Put security into each stage of the software life cycle:
 
-<Callout type="tip">
-The CISSP exam is a "managerial" exam — always think like a senior security manager, not a technical implementer. When in doubt, choose the answer that emphasizes risk management, policy, and business alignment.
-</Callout>
+**Requirements**: security requirements, threat modeling  
+**Design**: security architecture, STRIDE  
+**Development**: secure-coding rules  
+**Testing**: SAST, DAST, penetration tests  
+**Deploy**: hardening, secret management  
+**Maintain**: patches, vulnerability watch
+
+This lecture is exam and design language. It is not a how-to for attacking systems.
 
 ---
 
-## Core Concepts
+## OWASP Top 10 (2021)
 
-Understanding CISSP Domain 5 requires integrating knowledge across multiple security disciplines. Key areas include access controls, cryptography, network security, and security governance.
+Common web-application failure classes.
+
+### 1. Injection (including SQL)
+
+Untrusted input is executed as part of a query.
+
+Defense: **parameterized queries** (prepared statements) or an ORM. Never concatenate user input into SQL. Input filters alone are not enough.
+
+<Callout type="tip">
+The CISSP point is separation of code and data. If the database never treats user bytes as SQL, injection cannot run.
+</Callout>
+
+### 2. Broken Authentication
+
+Weak credentials, broken session handling.
+
+**Defense**: password policy, MFA, solid session management.
+
+### 3. Cross-Site Scripting (XSS)
+
+Untrusted content rendered as script in a page.
+
+**Defense**: encode/escape on output. Add a Content-Security-Policy header.
+
+### 4. Insecure Direct Object References
+
+Internal IDs in the URL, no authorization check.
+
+```
+/user/profile?id=1234 → changing the id must not grant another person's record
+```
+
+**Defense**: authorization on every object, not just a logged-in session.
+
+### 5. CSRF
+
+A browser with a live session is tricked into sending a request the user did not mean.
+
+**Defense**: CSRF tokens, SameSite cookies.
+
+---
+
+## Input Validation
+
+**Allowlists** beat denylists.
+
+**Output encoding**: transform data at display time so it cannot become markup or script.
+
+---
+
+## Security Testing
+
+| Method | Meaning |
+|------|------|
+| **SAST** | Analyze source before ship. White box. |
+| **DAST** | Analyze a running app. Black box. |
+| **Penetration test** | Human attacker simulation, in scope. |
+| **Code review** | A reviewer reads for security defects. |
 
 ---
 
 ## Key Concept Cards
 
-**Think Like a Manager** ★★★★★
-: CISSP tests decision-making at the managerial level. Prioritize risk management and policy over technical implementation details.
+**Injection defense** ★★★★★  
+: Parameterized queries. Never splice user input into SQL.
 
-**Defense in Depth** ★★★★★
-: Multiple security layers. If one fails, the next defends. No single control is sufficient.
+**XSS defense** ★★★★★  
+: Encode on output. CSP headers.
 
-**Least Privilege** ★★★★★
-: Grant only the minimum permissions necessary for a task. The golden rule of access management.
+**SAST vs DAST** ★★★★☆  
+: SAST = code, before build/ship. DAST = running app. Use both.
 
 ---
 
 ## Practice Quiz
 
-**Q1. Which principle states that users should have only the access rights necessary to perform their job functions?**
-> The principle of least privilege. It minimizes the potential damage from accidental or intentional misuse of privileges, and reduces the attack surface available to compromised accounts.
+**Q1. What is the most effective control against SQL injection on a login form?**  
+> Parameterized queries or an ORM. User bytes stay data. They cannot become part of the statement.
 
-**Q2. A security breach has occurred. What should be the FIRST response action?**
-> Containment — prevent the breach from spreading further. Immediately isolate affected systems from the network. Then proceed with eradication, recovery, and lessons learned in order.
+**Q2. How does CSRF work, and how does a token stop it?**  
+> The attacker lures a victim's browser into sending a request to a site where the victim is already authenticated. A CSRF token is an unguessable value bound to the form; the server rejects requests without it. The attacker cannot read the victim's token, so the forged request fails.

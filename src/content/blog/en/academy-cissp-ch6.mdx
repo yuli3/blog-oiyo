@@ -1,57 +1,117 @@
 ---
 track: academy
 locale: en
-title: "CISSP Domain 6 — Key Security Concepts"
+title: "Security Operations — Incident Response and Disaster Recovery"
 category: "Computer Science"
 series: "CISSP Information Security Professional"
 chapter: 6
-chapterTitleShort: 'CISSP D6'
+chapterTitleShort: 'Security Operations'
 author: OIYO Editorial
 tags:
   - CISSP
-  - information security
-  - cybersecurity
-description: "Core concepts for CISSP Domain 6 — essential knowledge for the CISSP exam. Chapter 6."
+  - incident response
+  - disaster recovery
+  - SIEM
+  - forensics
+description: "PICERL, digital forensics, SIEM, BCP/DRP, RPO/RTO. CISSP lecture 6."
 pubDate: '2026-05-31'
-noindex: true
-contentStage: rework
 ---
 
 import Callout from "@/components/mdx/Callout.astro";
 
-## Overview
+## Incident Response
 
-This chapter covers key CISSP concepts for Domain 6. The CISSP exam tests your ability to apply security principles to real-world scenarios, not just memorize definitions.
+### PICERL
+
+1. **Preparation**: policy, tools, drills
+2. **Identification**: detect and size the event
+3. **Containment**: stop spread
+4. **Eradication**: remove the cause
+5. **Recovery**: return to service
+6. **Lessons learned**: what to change
 
 <Callout type="tip">
-The CISSP exam is a "managerial" exam — always think like a senior security manager, not a technical implementer. When in doubt, choose the answer that emphasizes risk management, policy, and business alignment.
+**Contain first.** Powering a box off can destroy evidence. Isolate (pull it off the network), then collect.
 </Callout>
 
 ---
 
-## Core Concepts
+## Digital Forensics
 
-Understanding CISSP Domain 6 requires integrating knowledge across multiple security disciplines. Key areas include access controls, cryptography, network security, and security governance.
+Collect, analyze, preserve.
+
+**Integrity**: hash at collection (SHA-256). Detect later change.
+
+**Chain of custody**: who held it, when, in what state — a continuous record.
+
+**Order of volatility**:
+- **Volatile first**: RAM, live connections, running processes
+- **Then non-volatile**: disks, logs
+
+---
+
+## SIEM
+
+Central collection, analysis, and correlation of security events.
+
+**Functions**:
+- Logs from firewalls, IDS, OS, databases
+- Near-real-time anomaly detection
+- Alerts
+- Compliance reports
+
+**Examples of products**: Splunk, IBM QRadar, Microsoft Sentinel — names, not a buying list.
+
+---
+
+## BCP and DRP
+
+**BCP**: keep the business running through a disaster.
+
+**DRP**: restore IT systems and infrastructure.
+
+### Metrics
+
+**RPO**: maximum acceptable data loss.
+
+```
+RPO = 4 hours → back up at least every 4 hours
+```
+
+**RTO**: maximum acceptable time to restore.
+
+```
+RTO = 2 hours → the system must be up within 2 hours
+```
+
+### Recovery sites
+
+| Strategy | Cost | RTO |
+|------|------|-----|
+| Cold site | Low | Days to weeks |
+| Warm site | Medium | Hours to days |
+| Hot site | High | Minutes to hours |
+| Cloud DR | Flexible | Can be minutes |
 
 ---
 
 ## Key Concept Cards
 
-**Think Like a Manager** ★★★★★
-: CISSP tests decision-making at the managerial level. Prioritize risk management and policy over technical implementation details.
+**Incident response** ★★★★★  
+: Prepare → identify → contain → eradicate → recover → lessons. Containment first.
 
-**Defense in Depth** ★★★★★
-: Multiple security layers. If one fails, the next defends. No single control is sufficient.
+**RPO vs RTO** ★★★★★  
+: RPO sets backup frequency. RTO sets the DR strategy.
 
-**Least Privilege** ★★★★★
-: Grant only the minimum permissions necessary for a task. The golden rule of access management.
+**Hot / warm / cold** ★★★★☆  
+: Hot = fast and expensive. Cold = slow and cheap. Match RPO/RTO.
 
 ---
 
 ## Practice Quiz
 
-**Q1. Which principle states that users should have only the access rights necessary to perform their job functions?**
-> The principle of least privilege. It minimizes the potential damage from accidental or intentional misuse of privileges, and reduces the attack surface available to compromised accounts.
+**Q1. Ransomware is detected. What is the first IR action?**  
+> Containment. Isolate infected hosts so the malware cannot move laterally. Forensics matter, but spread comes first.
 
-**Q2. A security breach has occurred. What should be the FIRST response action?**
-> Containment — prevent the breach from spreading further. Immediately isolate affected systems from the network. Then proceed with eradication, recovery, and lessons learned in order.
+**Q2. RPO = 1 hour, RTO = 4 hours. What backup and recovery fit?**  
+> Backup or replicate at least hourly (RPO). Restore within 4 hours (RTO). Warm site or cloud DR can hit that. A cold site that takes days cannot.

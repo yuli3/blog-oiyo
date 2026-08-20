@@ -1,57 +1,99 @@
 ---
 track: academy
 locale: en
-title: "CISSP Domain 7 — Key Security Concepts"
+title: "Physical Security and Cloud Security"
 category: "Computer Science"
 series: "CISSP Information Security Professional"
 chapter: 7
-chapterTitleShort: 'CISSP D7'
+chapterTitleShort: 'Physical · Cloud'
 author: OIYO Editorial
 tags:
   - CISSP
-  - information security
-  - cybersecurity
-description: "Core concepts for CISSP Domain 7 — essential knowledge for the CISSP exam. Chapter 7."
+  - physical security
+  - cloud security
+  - data center
+  - shared responsibility
+description: "Physical access, environmental controls, cloud models, shared responsibility, CASB. CISSP lecture 7."
 pubDate: '2026-05-31'
-noindex: true
-contentStage: rework
 ---
 
 import Callout from "@/components/mdx/Callout.astro";
 
-## Overview
+## Physical Security
 
-This chapter covers key CISSP concepts for Domain 7. The CISSP exam tests your ability to apply security principles to real-world scenarios, not just memorize definitions.
+The outer layer of defense in depth:
 
-<Callout type="tip">
-The CISSP exam is a "managerial" exam — always think like a senior security manager, not a technical implementer. When in doubt, choose the answer that emphasizes risk management, policy, and business alignment.
-</Callout>
+```
+Perimeter (fence/CCTV) → gate → building → data center → server room → rack
+```
+
+### Physical access
+
+**Mantrap**: two doors, a small room between. One door must close before the other opens. Stops piggybacking.
+
+**Tailgating / piggybacking**: following an authorized person in. Needs awareness training, not just a badge reader.
+
+**Badge systems**: smart card plus PIN.
+
+### Environment
+
+**Temperature / humidity**: server rooms often targeted around 18–21°C and 45–55% RH.
+
+**Fire suppression**: Halon is retired. FM-200 or Inergen-class gases replace it. Water on live electrical gear is forbidden.
+
+**UPS**: ride through a short outage and shut down cleanly.
 
 ---
 
-## Core Concepts
+## Cloud Security
 
-Understanding CISSP Domain 7 requires integrating knowledge across multiple security disciplines. Key areas include access controls, cryptography, network security, and security governance.
+### Service models and shared responsibility
+
+| Model | CSP | Customer |
+|------|---------|---------|
+| **IaaS** | Hardware, network | OS, apps, data, hardening |
+| **PaaS** | Infra, OS, runtime | Apps, data |
+| **SaaS** | Infra and app | Data, user access |
+
+<Callout type="tip">
+Even in SaaS, **data** remains the customer's problem. The provider can harden the platform and still not save a misconfigured share of confidential records.
+</Callout>
+
+### Deployment models
+
+**Public**: AWS, Azure, GCP. Shared infra. Cheapest.
+
+**Private**: dedicated. Higher isolation, higher cost.
+
+**Hybrid**: sensitive data private, the rest public.
+
+**Multi-cloud**: more than one CSP. Reduces lock-in.
+
+### CASB
+
+A policy enforcement point between the organization and cloud services.
+
+Visibility (including Shadow IT), DLP, threat protection, compliance.
 
 ---
 
 ## Key Concept Cards
 
-**Think Like a Manager** ★★★★★
-: CISSP tests decision-making at the managerial level. Prioritize risk management and policy over technical implementation details.
+**Mantrap** ★★★★★  
+: Two-door lock. Stops piggybacking. High-security facilities.
 
-**Defense in Depth** ★★★★★
-: Multiple security layers. If one fails, the next defends. No single control is sufficient.
+**Shared responsibility** ★★★★★  
+: IaaS = customer from the OS up. PaaS = apps/data. SaaS = data/access. Data is always on the customer.
 
-**Least Privilege** ★★★★★
-: Grant only the minimum permissions necessary for a task. The golden rule of access management.
+**CASB** ★★★★☆  
+: Visibility and policy on cloud use. Finds Shadow IT.
 
 ---
 
 ## Practice Quiz
 
-**Q1. Which principle states that users should have only the access rights necessary to perform their job functions?**
-> The principle of least privilege. It minimizes the potential damage from accidental or intentional misuse of privileges, and reduces the attack surface available to compromised accounts.
+**Q1. Fire in a server room. Which suppression is safe for the servers?**  
+> Gas systems (FM-200, Inergen). They starve oxygen or absorb heat without soaking electronics. Water is banned in that room.
 
-**Q2. A security breach has occurred. What should be the FIRST response action?**
-> Containment — prevent the breach from spreading further. Immediately isolate affected systems from the network. Then proceed with eradication, recovery, and lessons learned in order.
+**Q2. Customer records sit in a SaaS CRM. Who owns data security?**  
+> Shared, but confidentiality and access control of *those records* sit with the customer. The vendor protects the platform. Who may see which field, and how the tenant is configured, is the customer's job.

@@ -1,57 +1,124 @@
 ---
 track: academy
 locale: en
-title: "CISSP Domain 3 — Key Security Concepts"
+title: "Network Security — From Firewalls to Zero Trust"
 category: "Computer Science"
 series: "CISSP Information Security Professional"
 chapter: 3
-chapterTitleShort: 'CISSP D3'
+chapterTitleShort: 'Network Security'
 author: OIYO Editorial
 tags:
   - CISSP
-  - information security
-  - cybersecurity
-description: "Core concepts for CISSP Domain 3 — essential knowledge for the CISSP exam. Chapter 3."
+  - network security
+  - firewall
+  - VPN
+  - Zero Trust
+description: "OSI layers, firewall types, IDS/IPS, VPN, Zero Trust, and common network attacks. CISSP lecture 3."
 pubDate: '2026-05-31'
-noindex: true
-contentStage: rework
 ---
 
 import Callout from "@/components/mdx/Callout.astro";
 
-## Overview
+## OSI Layers and Security
 
-This chapter covers key CISSP concepts for Domain 3. The CISSP exam tests your ability to apply security principles to real-world scenarios, not just memorize definitions.
+| Layer | Name | Security issue | Control |
+|------|------|---------|---------|
+| 7 | Application | XSS, SQL injection, phishing | WAF |
+| 6 | Presentation | Weak cryptography | TLS/SSL |
+| 5 | Session | Session hijacking | Session-token management |
+| 4 | Transport | SYN flood, port scans | Firewall, IPS |
+| 3 | Network | IP spoofing, routing attacks | Firewall, ACL |
+| 2 | Data link | ARP spoofing, MAC flooding | Dynamic ARP inspection |
+| 1 | Physical | Wiretap, physical access | Physical security |
+
+---
+
+## Firewall Types
+
+**Packet filter**: IP and port. Fast. No connection state.
+
+**Stateful**: Tracks TCP connection state. The current baseline.
+
+**Next-generation (NGFW)**: Application awareness, DPI, IPS in one box.
+
+**WAF**: Inspects HTTP. Used against OWASP Top 10 classes of bugs.
+
+---
+
+## IDS vs IPS
+
+**IDS**: Detects. Does not block.
+
+**IPS**: Detects and blocks.
+
+**Detection methods**:
+- **Signature**: Matches known attack patterns. Fast. Misses zero-days.
+- **Anomaly**: Flags deviation from a baseline. More false positives.
 
 <Callout type="tip">
-The CISSP exam is a "managerial" exam — always think like a senior security manager, not a technical implementer. When in doubt, choose the answer that emphasizes risk management, policy, and business alignment.
+**Placement**: IDS usually sees a copy of traffic (span/mirror), off the forwarding path. IPS sits inline and can drop packets. A false positive on IPS can take a real service down.
 </Callout>
 
 ---
 
-## Core Concepts
+## VPN
 
-Understanding CISSP Domain 3 requires integrating knowledge across multiple security disciplines. Key areas include access controls, cryptography, network security, and security governance.
+A private tunnel over a public network.
+
+**IPsec VPN**: Network layer. Fits site-to-site.
+
+**SSL/TLS VPN**: Application layer. Fits remote users, including browser access.
+
+**Types**:
+- **Site-to-site**: Two office networks
+- **Remote access**: A worker reaching the internal network
+
+---
+
+## Zero Trust
+
+**Never trust, always verify.**
+
+Legacy model: inside the network = trusted. Outside = untrusted.  
+Zero Trust: every request is verified, inside or out.
+
+**Core ideas**:
+1. Do not trust users, devices, or networks by default
+2. Least privilege
+3. Explicit verification (MFA, device posture)
+4. Assume breach
+
+---
+
+## Common Network Attacks
+
+**DoS/DDoS**: Availability. SYN flood, volumetric floods.
+
+**MITM**: Intercept and alter a session.
+
+**ARP spoofing**: Fake ARP replies to steal traffic.
+
+**DNS hijacking**: Answer a DNS query with a fake IP.
 
 ---
 
 ## Key Concept Cards
 
-**Think Like a Manager** ★★★★★
-: CISSP tests decision-making at the managerial level. Prioritize risk management and policy over technical implementation details.
+**Stateful firewall** ★★★★★  
+: Tracks TCP state. Smarter than a packet filter. Today's default firewall.
 
-**Defense in Depth** ★★★★★
-: Multiple security layers. If one fails, the next defends. No single control is sufficient.
+**IDS vs IPS** ★★★★★  
+: IDS = detect (not inline). IPS = detect and block (inline). IPS false positives can halt service.
 
-**Least Privilege** ★★★★★
-: Grant only the minimum permissions necessary for a task. The golden rule of access management.
+**Zero Trust** ★★★★★  
+: No default trust. Internal users and networks are not trusted either.
 
 ---
 
 ## Practice Quiz
 
-**Q1. Which principle states that users should have only the access rights necessary to perform their job functions?**
-> The principle of least privilege. It minimizes the potential damage from accidental or intentional misuse of privileges, and reduces the attack surface available to compromised accounts.
+**Q1. A remote worker needs a safe path to an internal file server. What do you use?**  
+> A remote-access SSL/TLS VPN. The worker authenticates (client or browser) and gets an encrypted tunnel. Pair it with MFA and device checks and you are also applying Zero Trust.
 
-**Q2. A security breach has occurred. What should be the FIRST response action?**
-> Containment — prevent the breach from spreading further. Immediately isolate affected systems from the network. Then proceed with eradication, recovery, and lessons learned in order.
+**Q2. Why does Zero Trust fit cloud better than a VPN-only model?**  
+> VPN assumes a trusted interior once you are on the network. Cloud has no clean interior. Zero Trust evaluates user, device, and request every time — which matches cloud, remote work, and SaaS.
