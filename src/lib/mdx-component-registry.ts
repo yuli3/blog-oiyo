@@ -232,7 +232,6 @@ import WeddingPlanningCalculator from "../components/calculators/WeddingPlanning
 import JeonseVsRentCalculator from "../components/calculators/JeonseVsRentCalculator";
 import IncorporationCalculator from "../components/calculators/IncorporationCalculator";
 import SeparateVsComprehensiveTaxCalc from "../components/tools/SeparateVsComprehensiveTaxCalc";
-import RealEstateCapitalGainsTaxCalc from "../components/tools/RealEstateCapitalGainsTaxCalc";
 import ComprehensiveIncomeTaxCalc from "../components/tools/ComprehensiveIncomeTaxCalc";
 
 // Batch-2 finance calculators (2026-05-16)
@@ -497,7 +496,6 @@ const islandComponents = {
   IncorporationCalculator,
   // Tax tools batch (2026-06-01)
   SeparateVsComprehensiveTaxCalc,
-  RealEstateCapitalGainsTaxCalc,
   ComprehensiveIncomeTaxCalc,
 };
 

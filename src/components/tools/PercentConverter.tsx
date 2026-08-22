@@ -21,6 +21,10 @@ interface Labels {
   increase: string;
   decrease: string;
   nochange: string;
+  discountTitle: string;
+  price: string;
+  discount: string;
+  discountResult: (price: string, saved: string) => string;
   placeholder: string;
   invalid: string;
 }
@@ -28,7 +32,7 @@ interface Labels {
 const LABELS: Record<Locale, Labels> = {
   en: {
     title: "Percentage Calculator",
-    subtitle: "The three most-used percentage operations in one place.",
+    subtitle: "Four common percentage operations in one place.",
     ofTitle: "What is A% of B?",
     ofA: "Percent (A)",
     ofB: "Of value (B)",
@@ -44,12 +48,16 @@ const LABELS: Record<Locale, Labels> = {
     increase: "Increase",
     decrease: "Decrease",
     nochange: "No change",
+    discountTitle: "Price after discount",
+    price: "Original price",
+    discount: "Discount (%)",
+    discountResult: (price, saved) => `${price} · save ${saved}`,
     placeholder: "Enter a number",
     invalid: "Enter valid numbers",
   },
   ko: {
     title: "퍼센트 계산기",
-    subtitle: "가장 많이 쓰는 백분율 계산 3가지를 한 곳에서.",
+    subtitle: "자주 쓰는 백분율 계산 네 가지를 한곳에 모았습니다.",
     ofTitle: "B의 A%는 얼마?",
     ofA: "퍼센트 (A)",
     ofB: "기준값 (B)",
@@ -65,12 +73,16 @@ const LABELS: Record<Locale, Labels> = {
     increase: "증가",
     decrease: "감소",
     nochange: "변화 없음",
+    discountTitle: "할인가는 얼마?",
+    price: "정가",
+    discount: "할인율 (%)",
+    discountResult: (price, saved) => `${price} · ${saved} 절약`,
     placeholder: "숫자를 입력하세요",
     invalid: "올바른 숫자를 입력하세요",
   },
   ja: {
     title: "パーセント計算機",
-    subtitle: "よく使う割合計算3種をひとまとめに。",
+    subtitle: "よく使う割合計算4種をひとまとめに。",
     ofTitle: "BのA%はいくつ？",
     ofA: "パーセント (A)",
     ofB: "基準値 (B)",
@@ -86,12 +98,16 @@ const LABELS: Record<Locale, Labels> = {
     increase: "増加",
     decrease: "減少",
     nochange: "変化なし",
+    discountTitle: "割引後の価格",
+    price: "定価",
+    discount: "割引率 (%)",
+    discountResult: (price, saved) => `${price}・${saved} お得`,
     placeholder: "数値を入力",
     invalid: "正しい数値を入力してください",
   },
   zh: {
     title: "百分比计算器",
-    subtitle: "把最常用的三种百分比计算放在一起。",
+    subtitle: "把常用的四种百分比计算放在一起。",
     ofTitle: "B 的 A% 是多少？",
     ofA: "百分比 (A)",
     ofB: "基准值 (B)",
@@ -107,12 +123,16 @@ const LABELS: Record<Locale, Labels> = {
     increase: "增加",
     decrease: "减少",
     nochange: "无变化",
+    discountTitle: "折后价格",
+    price: "原价",
+    discount: "折扣 (%)",
+    discountResult: (price, saved) => `${price} · 节省 ${saved}`,
     placeholder: "请输入数字",
     invalid: "请输入有效数字",
   },
   fr: {
     title: "Calculateur de Pourcentage",
-    subtitle: "Les trois opérations de pourcentage les plus utilisées.",
+    subtitle: "Quatre opérations de pourcentage courantes au même endroit.",
     ofTitle: "Combien font A% de B ?",
     ofA: "Pourcentage (A)",
     ofB: "Valeur (B)",
@@ -128,12 +148,16 @@ const LABELS: Record<Locale, Labels> = {
     increase: "Hausse",
     decrease: "Baisse",
     nochange: "Aucun changement",
+    discountTitle: "Prix après remise",
+    price: "Prix initial",
+    discount: "Remise (%)",
+    discountResult: (price, saved) => `${price} · économie ${saved}`,
     placeholder: "Entrez un nombre",
     invalid: "Entrez des nombres valides",
   },
   es: {
     title: "Calculadora de Porcentaje",
-    subtitle: "Las tres operaciones de porcentaje más usadas en un lugar.",
+    subtitle: "Cuatro operaciones de porcentaje comunes en un solo lugar.",
     ofTitle: "¿Cuánto es el A% de B?",
     ofA: "Porcentaje (A)",
     ofB: "Valor (B)",
@@ -149,6 +173,10 @@ const LABELS: Record<Locale, Labels> = {
     increase: "Aumento",
     decrease: "Disminución",
     nochange: "Sin cambio",
+    discountTitle: "Precio con descuento",
+    price: "Precio original",
+    discount: "Descuento (%)",
+    discountResult: (price, saved) => `${price} · ahorras ${saved}`,
     placeholder: "Introduce un número",
     invalid: "Introduce números válidos",
   },
@@ -172,6 +200,8 @@ export default function PercentConverter({ locale }: Props) {
   const [isB, setIsB] = useState("");
   const [chA, setChA] = useState("");
   const [chB, setChB] = useState("");
+  const [price, setPrice] = useState("");
+  const [discount, setDiscount] = useState("");
 
   const num = (s: string) => (s.trim() === "" ? NaN : Number(s));
 
@@ -190,6 +220,11 @@ export default function PercentConverter({ locale }: Props) {
     if (isNaN(a) || isNaN(b) || a === 0) return null;
     return ((b - a) / Math.abs(a)) * 100;
   })();
+  const discountVal = (() => {
+    const p = num(price), d = num(discount);
+    if (isNaN(p) || isNaN(d)) return null;
+    return { price: p * (1 - d / 100), saved: p * d / 100 };
+  })();
 
   const inputCls =
     "w-full rounded-lg border border-border px-3 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20";
@@ -198,7 +233,7 @@ export default function PercentConverter({ locale }: Props) {
 
   return (
     <GameContainer title={t.title} subtitle={t.subtitle}>
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {/* A% of B */}
         <div className={card}>
           <h3 className="font-semibold text-foreground">{t.ofTitle}</h3>
@@ -231,6 +266,15 @@ export default function PercentConverter({ locale }: Props) {
               {t.changeResult(fmt(Math.abs(chVal)), chVal > 0 ? t.increase : chVal < 0 ? t.decrease : t.nochange)}
             </div>
           )}
+        </div>
+
+        <div className={card}>
+          <h3 className="font-semibold text-foreground">{t.discountTitle}</h3>
+          <label className="mt-3 block text-xs text-muted-foreground">{t.price}</label>
+          <input className={inputCls} inputMode="decimal" placeholder={t.placeholder} value={price} onChange={(e) => setPrice(e.target.value)} />
+          <label className="mt-2 block text-xs text-muted-foreground">{t.discount}</label>
+          <input className={inputCls} inputMode="decimal" placeholder={t.placeholder} value={discount} onChange={(e) => setDiscount(e.target.value)} />
+          {discountVal !== null && <div className={resultCls}>{t.discountResult(fmt(discountVal.price), fmt(discountVal.saved))}</div>}
         </div>
       </div>
     </GameContainer>

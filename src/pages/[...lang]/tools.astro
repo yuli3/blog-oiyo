@@ -266,12 +266,6 @@ const converterTools: Tool[] = [
     title: { ko: "만나이 계산기", en: "Korean Age Calculator", ja: "韓国年齢計算機", fr: "Korean Age Calculator", es: "Korean Age Calculator", zh: "韩国年龄计算器", },
     description: { ko: "만·세는·연 나이", en: "International, counting, year age", ja: "満・数え・年年齢", fr: "International, counting, year age", es: "International, counting, year age", zh: "周岁·虚岁·年龄", },
   },
-  {
-    slug: "tdee-calculator",
-    emoji: "🔥",
-    title: { ko: "TDEE 계산기", en: "TDEE Calculator", ja: "TDEE計算機", fr: "TDEE Calculator", es: "TDEE Calculator", zh: "TDEE 计算器", },
-    description: { ko: "기초대사량·권장 칼로리", en: "BMR & daily calories", ja: "基礎代謝・必要カロリー", fr: "BMR & daily calories", es: "BMR & daily calories", zh: "基础代谢·每日热量", },
-  },
 ];
 
 const financeTools: Tool[] = [
@@ -513,12 +507,6 @@ const healthTools: Tool[] = [
     description: { ko: "체지방률 추정 및 분류", en: "Estimate and classify body fat %", ja: "体脂肪率推定と分類", fr: "Estimer et classer le % de masse grasse", es: "Estimar y clasificar % grasa corporal", zh: "估算并分类体脂百分比", },
   },
   {
-    slug: "calorie-calculator",
-    emoji: "🥗",
-    title: { ko: "칼로리 계산기", en: "Calorie Calculator", ja: "カロリー計算機", fr: "Calculateur de Calories", es: "Calculadora de Calorías", zh: "卡路里计算器", },
-    description: { ko: "하루 필요 칼로리 및 영양소 계산", en: "Daily calorie and nutrient needs", ja: "1日必要カロリーと栄養素計算", fr: "Besoins caloriques et nutritionnels", es: "Necesidades calóricas y nutricionales", zh: "每日所需卡路里及营养素计算", },
-  },
-  {
     slug: "nutrition-calculator",
     emoji: "🥦",
     title: { ko: "영양소 & 칼로리 계산기", en: "Nutrition Calculator", ja: "栄養素・カロリー計算機", fr: "Calculateur Nutrition", es: "Calculadora Nutrición", zh: "营养素计算器", },
@@ -642,10 +630,10 @@ const imageTools: Tool[] = [
     description: { ko: "이미지를 픽셀 아트로 변환", en: "Convert images to pixel art", ja: "画像をピクセルアートに変換", fr: "Convertir images en pixel art", es: "Convertir imágenes en pixel art", zh: "将图片转换为像素艺术", },
   },
   {
-    slug: "grayscale-converter",
+    slug: "image-processor",
     emoji: "⬛",
-    title: { ko: "흑백 변환기", en: "Grayscale Converter", ja: "グレースケール変換機", fr: "Convertisseur Niveaux de Gris", es: "Convertidor Escala de Grises", zh: "灰度轉換器", },
-    description: { ko: "컬러 이미지를 흑백으로 변환", en: "Convert color images to grayscale", ja: "カラー画像をグレースケールに変換", fr: "Convertir images couleur en NB", es: "Convertir imágenes color a escala grises", zh: "将彩色图片转换为灰度图", },
+    title: { ko: "이미지 편집기", en: "Image Studio", ja: "画像スタジオ", fr: "Studio d'Image", es: "Estudio de Imágenes", zh: "图片工作室", },
+    description: { ko: "압축·포맷 변환·흑백 처리를 한곳에서", en: "Optimize, convert and grayscale images", ja: "圧縮・形式変換・グレースケール", fr: "Optimiser, convertir et passer en gris", es: "Optimizar, convertir y pasar a gris", zh: "压缩、格式转换与灰度处理", },
   },
   {
     slug: "palette-extractor",
@@ -911,10 +899,11 @@ function pickEmoji(slug: string, title: string, bucket: string): string {
 const interactivePosts = await getCollection("blog", ({ data }) =>
   data.draft !== true && data.locale === locale && getTrackFromData(data) === "interactive");
 const curatedSlugs = new Set(categories.flatMap((c) => c.tools.map((t) => t.slug)));
+const consolidatedAliases = new Set(["grayscale-converter", "image-grayscale", "percent-converter"]);
 const interactiveByBucket = new Map<string, Tool[]>();
 for (const post of interactivePosts) {
   const slug = post.slug.split("/").slice(1).join("/");
-  if (!slug || curatedSlugs.has(slug)) continue;
+  if (!slug || curatedSlugs.has(slug) || consolidatedAliases.has(slug)) continue;
   if (EXCLUDED_CATEGORIES.has(post.data.category ?? "")) continue;
   const bucket = CAT_TO_BUCKET[post.data.category ?? ""] ?? "learning";
   const emoji = pickEmoji(slug, post.data.title ?? "", bucket);
