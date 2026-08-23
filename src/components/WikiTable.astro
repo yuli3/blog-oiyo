@@ -1,0 +1,85 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getTranslations } from "../lib/i18n";
+import type { Locale } from "../lib/i18n";
+import { seriesKeyOf } from "../lib/wiki-index";
+import { prioritySeriesName, prettifySlug } from "../data/priority-series";
+
+interface Props {
+  posts: CollectionEntry<"blog">[];
+  locale: string;
+  /** hide the series column on landing sections that are already scoped to one series */
+  showSeries?: boolean;
+}
+
+const { posts, locale, showSeries = true } = Astro.props;
+const t = await getTranslations(locale as Locale);
+const wikiT = (t as Record<string, unknown>).wiki as
+  | { thTitle: string; thSeries: string; thChapter: string; thDate: string }
+  | undefined;
+
+const th = {
+  title: wikiT?.thTitle ?? "Title",
+  series: wikiT?.thSeries ?? "Series",
+  chapter: wikiT?.thChapter ?? "Ch.",
+  date: wikiT?.thDate ?? "Date",
+};
+
+const dateLocale =
+  locale === "ko" ? "ko-KR"
+  : locale === "ja" ? "ja-JP"
+  : locale === "zh" ? "zh-CN"
+  : locale === "fr" ? "fr-FR"
+  : locale === "es" ? "es-ES"
+  : "en-US";
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString(dateLocale, { year: "numeric", month: "short", day: "numeric" });
+---
+
+<div class="overflow-x-auto border border-border rounded-lg">
+  <table class="w-full text-sm border-collapse">
+    <thead>
+      <tr class="border-b border-border bg-muted/40 text-left">
+        <th scope="col" class="px-3 py-2 font-bold text-xs uppercase tracking-widest text-muted-foreground">{th.title}</th>
+        {showSeries && <th scope="col" class="px-3 py-2 font-bold text-xs uppercase tracking-widest text-muted-foreground hidden sm:table-cell">{th.series}</th>}
+        <th scope="col" class="px-3 py-2 font-bold text-xs uppercase tracking-widest text-muted-foreground w-16 text-center hidden md:table-cell">{th.chapter}</th>
+        <th scope="col" class="px-3 py-2 font-bold text-xs uppercase tracking-widest text-muted-foreground w-32 text-right whitespace-nowrap">{th.date}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        posts.map((post, i) => {
+          const slug = post.slug.split("/").slice(1).join("/");
+          const href = `/${locale}/${slug}/`;
+          const ch = post.slug.match(/-ch(\d+)$/)?.[1];
+          const sKey = seriesKeyOf(post);
+          const seriesLabel = prioritySeriesName(sKey, locale) ?? prettifySlug(sKey);
+          return (
+            <tr
+              class:list={[
+                "border-b border-border/50 last:border-b-0 transition-colors hover:bg-primary/5",
+                i % 2 === 1 && "bg-muted/20",
+              ]}
+            >
+              <td class="px-3 py-2.5 max-w-[36rem]">
+                <a href={href} class="font-semibold text-foreground hover:text-primary hover:underline underline-offset-4 decoration-primary/40">
+                  {post.data.title}
+                </a>
+              </td>
+              {showSeries && (
+                <td class="px-3 py-2.5 text-muted-foreground hidden sm:table-cell whitespace-nowrap">
+                  <a href={`/${locale}/courses`} class="hover:text-primary">{seriesLabel}</a>
+                </td>
+              )}
+              <td class="px-3 py-2.5 text-center tabular-nums text-muted-foreground hidden md:table-cell">{ch ?? "—"}</td>
+              <td class="px-3 py-2.5 text-right tabular-nums text-muted-foreground whitespace-nowrap">
+                {post.data.pubDate && fmt(post.data.pubDate)}
+              </td>
+            </tr>
+          );
+        })
+      }
+    </tbody>
+  </table>
+</div>

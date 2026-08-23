@@ -1,0 +1,139 @@
+---
+import type { CollectionEntry } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import WikiTable from "./WikiTable.astro";
+import { getTranslations } from "../lib/i18n";
+import type { Locale } from "../lib/i18n";
+import { buildSeriesIndex, groupSeriesByCategory } from "../lib/wiki-index";
+import { PRIORITY_SERIES, prioritySeriesName, prettifySlug } from "../data/priority-series";
+import { slugifyCategory } from "../lib/taxonomy";
+
+interface Props {
+  locale: string;
+  title: string;
+  subtitle: string;
+  posts: CollectionEntry<"blog">[];
+}
+
+const { locale, title, subtitle, posts } = Astro.props;
+const t = await getTranslations(locale as Locale);
+const wikiT = (t as Record<string, unknown>).wiki as Record<string, string> | undefined;
+const categoryNames = (t.category.names ?? {}) as unknown as { [key: string]: string };
+
+const L = (key: string, fallback: string) => wikiT?.[key] ?? fallback;
+
+// ── series index for this locale ──────────────────────────────────────────
+const allSeries = Array.from(buildSeriesIndex(posts).values());
+const byKey = new Map(allSeries.map((s) => [s.key, s]));
+
+// Priority axis: curated top-traffic/importance series (see priority-series.ts).
+const priority = PRIORITY_SERIES.map((k) => byKey.get(k)).filter(
+  (s): s is NonNullable<typeof s> => !!s,
+);
+
+// Two-level category → series index for the sidebar.
+const catGroups = groupSeriesByCategory(allSeries);
+
+// Recent updates table.
+const recent = [...posts]
+  .sort((a, b) => {
+    const da = a.data.updatedDate ?? a.data.pubDate;
+    const db = b.data.updatedDate ?? b.data.pubDate;
+    return db.valueOf() - da.valueOf();
+  })
+  .slice(0, 15);
+
+const fmt = (d: Date) => {
+  const tag = locale === "ko" ? "ko-KR" : locale === "ja" ? "ja-JP" : locale === "zh" ? "zh-CN" : locale === "fr" ? "fr-FR" : locale === "es" ? "es-ES" : "en-US";
+  return d.toLocaleDateString(tag, { year: "numeric", month: "short", day: "numeric" });
+};
+
+const totalChapters = posts.length;
+const totalSeries = allSeries.length;
+
+const chapterWord = L("chapters", "chapters");
+---
+
+<BaseLayout title={title} description={subtitle}>
+  <section class="py-10 md:py-14">
+    <div class="container px-4">
+      <div class="border-b border-border pb-6 mb-8">
+        <h1 class="text-3xl md:text-4xl font-black tracking-tight text-foreground">{title}</h1>
+        <p class="mt-2 text-muted-foreground leading-relaxed max-w-2xl">{subtitle}</p>
+        <p class="mt-3 text-xs uppercase tracking-widest text-muted-foreground/60 tabular-nums">
+          {totalSeries} {L("seriesCount", "series")} · {totalChapters} {chapterWord}
+        </p>
+      </div>
+
+      <div class="grid gap-10 lg:grid-cols-[16rem_1fr] lg:gap-12">
+        <!-- ── Sidebar: pinned priority series + full category→series index ── -->
+        <aside class="lg:sticky lg:top-20 self-start">
+          <nav aria-label={L("seriesIndex", "Series index")}>
+            <p class="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/70 mb-3 border-b border-border pb-2">
+              {L("pinned", "Pinned series")}
+            </p>
+            <ul class="space-y-1.5 mb-8">
+              {priority.map((s) => (
+                <li>
+                  <a href={`/${locale}/${s.firstPost.slug.split("/").slice(1).join("/")}/`} class="flex items-baseline justify-between gap-2 text-sm font-semibold text-foreground hover:text-primary transition-colors">
+                    <span class="truncate">{prioritySeriesName(s.key, locale) ?? prettifySlug(s.key)}</span>
+                    <span class="text-[11px] tabular-nums text-muted-foreground/60 shrink-0">{s.chapterCount}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+
+            <p class="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/70 mb-3 border-b border-border pb-2">
+              {L("categoriesIndex", "Categories")}
+            </p>
+            {catGroups.map(([cat, list], gi) => (
+              <details class="group mb-1.5" open={gi < 4}>
+                <summary class="flex items-center justify-between cursor-pointer select-none py-1 text-sm font-semibold text-foreground hover:text-primary transition-colors list-none">
+                  <span class="truncate">{categoryNames[cat] ?? cat}</span>
+                  <span class="text-[11px] tabular-nums text-muted-foreground/60 shrink-0">{list.reduce((n, s) => n + s.chapterCount, 0)}</span>
+                </summary>
+                <ul class="ml-3 border-l border-border/60 pl-3 my-1 space-y-1">
+                  {list.slice(0, 8).map((s) => (
+                    <li>
+                      <a href={`/${locale}/${s.firstPost.slug.split("/").slice(1).join("/")}/`} class="block truncate py-0.5 text-[13px] text-muted-foreground hover:text-primary transition-colors">
+                        {prioritySeriesName(s.key, locale) ?? prettifySlug(s.key)}
+                        <span class="tabular-nums text-muted-foreground/50 ml-1">{s.chapterCount}</span>
+                      </a>
+                    </li>
+                  ))}
+                  <li>
+                    <a href={`/${locale}/category/${slugifyCategory(cat)}/`} class="block py-0.5 text-[13px] font-semibold text-primary/80 hover:text-primary">
+                      {L("viewCategory", "View all")} →
+                    </a>
+                  </li>
+                </ul>
+              </details>
+            ))}
+          </nav>
+        </aside>
+
+        <!-- ── Main column ─────────────────────────────────────────────────── -->
+        <div class="min-w-0 space-y-12">
+          {priority.map((s) => (
+            <section aria-labelledby={`sec-${s.key}`}>
+              <div class="flex items-baseline justify-between gap-3 border-b border-border mb-4 pb-2">
+                <h2 id={`sec-${s.key}`} class="text-lg font-bold tracking-tight text-foreground">
+                  {prioritySeriesName(s.key, locale) ?? prettifySlug(s.key)}
+                </h2>
+                <span class="text-xs tabular-nums text-muted-foreground/70 whitespace-nowrap">{s.chapterCount} {chapterWord}</span>
+              </div>
+              <WikiTable posts={[...s.posts].reverse().slice(0, 5)} locale={locale} showSeries={false} />
+            </section>
+          ))}
+
+          <section aria-labelledby="sec-recent">
+            <div class="border-b border-border mb-4 pb-2">
+              <h2 id="sec-recent" class="text-lg font-bold tracking-tight text-foreground">{L("recentUpdates", "Recent updates")}</h2>
+            </div>
+            <WikiTable posts={recent} locale={locale} />
+          </section>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
