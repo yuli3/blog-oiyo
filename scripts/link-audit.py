@@ -32,16 +32,16 @@ def norm(path: str) -> str:
 
 
 def load_redirect_sources(dist: Path) -> list[str]:
-    """Splat-aware source patterns from dist/_redirects (CF Pages)."""
-    f = dist / "_redirects"
-    if not f.exists():
-        return []
+    """Load both Pages residuals and the canonical Bulk Redirect SSOT."""
     sources = []
-    for line in f.read_text().splitlines():
-        line = line.strip()
-        if not line or line.startswith("#"):
+    for f in (dist / "_redirects", Path("data/redirects/canonical-redirects.txt")):
+        if not f.exists():
             continue
-        sources.append(line.split()[0])
+        for line in f.read_text().splitlines():
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            sources.append(line.split()[0])
     return sources
 
 
@@ -88,12 +88,19 @@ def main() -> None:
             elif not redirect_covers(redirect_sources, target):
                 broken.append((key, href))
 
-    # Orphans: locale-prefixed content pages nobody links to.
+    # Redirect/noindex shells deliberately have no inbound blog links: catalogs
+    # should point straight to their canonical owner instead of bouncing through
+    # these compatibility URLs. They are not content orphans.
     orphans = [
         k for k in pages
         if inbound[k] == 0
         and re.match(r"^/(en|ko|ja|zh|fr|es)/.+", k)
         and not k.endswith(("/404",))
+        and not re.search(
+            r'<meta name="robots" content="[^\"]*noindex',
+            pages[k].read_text(errors="ignore"),
+            re.IGNORECASE,
+        )
     ]
 
     print("## Link audit\n")
