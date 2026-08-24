@@ -1,0 +1,47 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import FinancialRatioExplorer from "../../components/tools/FinancialRatioExplorer.tsx";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+
+const meta: Record<Locale, { title: string; description: string }> = {
+  ko: {
+    title: "재무비율 탐색기 — 표에서 색으로 바로 확인하는 유동비율·부채비율·ROE",
+    description: "재무비율을 고르면 재무상태표·손익계산서에서 분자(파랑)와 분모(주황)가 바로 이어집니다. 유동비율·부채비율·ROE 등 8개 비율을 예시 재무제표로 인터랙티브하게 배우는 무료 도구.",
+  },
+  en: {
+    title: "Financial Ratio Explorer — See Current Ratio, Debt Ratio, ROE in the Statements",
+    description: "Pick a financial ratio and watch its numerator (blue) and denominator (amber) light up in a sample balance sheet and income statement. Learn 8 key ratios interactively, free.",
+  },
+  ja: {
+    title: "財務比率エクスプローラー — 流動比率・負債比率・ROEを表で色分け確認",
+    description: "財務比率を選ぶと、分子（青）と分母（オレンジ）がサンプルの貸借対照表・損益計算書で連動表示。8つの主要比率をインタラクティブに学べる無料ツール。",
+  },
+  fr: {
+    title: "Explorateur de Ratios Financiers — Ratio de liquidité, ROE dans les états",
+    description: "Choisissez un ratio financier et voyez son numérateur (bleu) et son dénominateur (orange) s'illuminer dans un bilan et un compte de résultat d'exemple. Apprenez 8 ratios clés, gratuitement.",
+  },
+  es: {
+    title: "Explorador de Ratios Financieros — Ratio corriente, ROE en los estados",
+    description: "Elige un ratio financiero y observa cómo su numerador (azul) y denominador (naranja) se iluminan en un balance y una cuenta de resultados de ejemplo. Aprende 8 ratios clave, gratis.",
+  },
+  zh: {
+    title: "财务比率探索器 — 在报表中用颜色看流动比率·负债比率·ROE",
+    description: "选择财务比率后，其分子（蓝色）与分母（橙色）会在示例资产负债表、利润表中联动高亮。交互式学习8个核心比率，免费工具。",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+---
+
+<BaseLayout title={m.title} description={m.description} heading={m.title} intro={m.description}>
+  <div class="mx-auto max-w-3xl px-4 py-8">
+    <FinancialRatioExplorer client:load locale={locale} />
+  </div>
+</BaseLayout>
