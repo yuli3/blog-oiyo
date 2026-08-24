@@ -1,62 +1,61 @@
 # Content Index (auto-generated)
 
-> Generated 2026-08-23T12:20:53.333Z from MDX frontmatter. Do not edit by hand — run `npm run content:manifest`.
+> Generated 2026-08-24T10:25:58.330Z from MDX frontmatter. Do not edit by hand — run `npm run content:manifest`.
 
-Total: **6812** entries · ko 3021 · en 1757 · ja 995 · zh 397 · es 321 · fr 321
+Total: **5917** entries · ko 2623 · en 1400 · ja 888 · zh 386 · es 310 · fr 310
 
 ## By track
 
-- **magazine**: 4096
-- **academy**: 2450
-- **interactive**: 266
+- **magazine**: 3375
+- **academy**: 2420
+- **interactive**: 122
 
 ## By category (raw)
 
 | Category | Count | In registry? |
 |---|--:|:--:|
-| Mind & Psychology | 1375 | ✅ |
-| Finance | 741 | ✅ |
+| Mind & Psychology | 1174 | ✅ |
 | Mythology | 606 | ❌ drift |
-| Mysticism | 495 | ✅ |
-| Lifestyle | 344 | ✅ |
-| Myth & Culture | 317 | ✅ |
-| Philosophy & Spirit | 303 | ✅ |
-| Computer Science | 274 | ✅ |
-| Law & Exam | 241 | ✅ |
-| Business | 176 | ✅ |
-| Tax | 172 | ✅ |
+| Finance | 597 | ✅ |
+| Mysticism | 494 | ✅ |
+| Computer Science | 249 | ✅ |
+| Lifestyle | 248 | ✅ |
+| Myth & Culture | 246 | ✅ |
+| Law & Exam | 239 | ✅ |
+| Philosophy & Spirit | 227 | ✅ |
 | Engineering | 171 | ✅ |
-| Exam | 140 | ✅ |
-| Health | 126 | ✅ |
-| Education | 123 | ✅ |
-| Real Estate | 107 | ✅ |
-| Science & Nature | 101 | ✅ |
+| Business | 157 | ✅ |
+| Exam | 133 | ✅ |
+| Tax | 123 | ✅ |
 | Economics | 98 | ❌ drift |
+| Science & Nature | 96 | ✅ |
 | Accounting | 93 | ✅ |
-| Humanities | 77 | ✅ |
-| Public Admin | 76 | ✅ |
-| Career | 50 | ✅ |
+| Real Estate | 88 | ✅ |
+| Education | 79 | ✅ |
+| Public Admin | 75 | ✅ |
+| Humanities | 71 | ✅ |
+| Health | 47 | ✅ |
 | English Grammar | 45 | ❌ drift |
 | Insights | 43 | ✅ |
 | Music History | 42 | ❌ drift |
 | Nursing | 39 | ❌ drift |
 | Financial Engineering | 36 | ❌ drift |
+| Career | 36 | ✅ |
 | Art Psychotherapy | 33 | ❌ drift |
-| Beauty | 31 | ✅ |
 | Actuarial Science | 30 | ❌ drift |
 | Statistics | 30 | ❌ drift |
 | Zoology | 30 | ❌ drift |
 | History | 29 | ❌ drift |
+| Beauty | 28 | ✅ |
 | Medicine | 26 | ❌ drift |
 | Technical Analysis | 25 | ❌ drift |
 | Law | 24 | ❌ drift |
-| Design | 21 | ✅ |
-| Games | 17 | ✅ |
 | Crypto | 15 | ❌ drift |
 | Product Management | 15 | ❌ drift |
-| Strategy | 15 | ✅ |
 | AI Literacy | 11 | ❌ drift |
 | Blockchain | 10 | ❌ drift |
+| Design | 10 | ✅ |
+| Games | 9 | ✅ |
 | Psychology | 8 | ❌ drift |
 | Natural Science | 7 | ❌ drift |
 | Mathematics | 7 | ❌ drift |
@@ -64,3 +63,4 @@ Total: **6812** entries · ko 3021 · en 1757 · ja 995 · zh 397 · es 321 · f
 | Society & Wealth | 5 | ✅ |
 | Social Science | 5 | ❌ drift |
 | Academy | 1 | ⚠️ track |
+| Strategy | 1 | ✅ |

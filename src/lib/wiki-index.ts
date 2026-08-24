@@ -1,4 +1,4 @@
-import type { CollectionEntry } from "astro:content";
+import { getCollection, type CollectionEntry } from "astro:content";
 import { getTrackFromData } from "./taxonomy";
 
 /**
@@ -81,6 +81,34 @@ export function trackOfLocale(posts: CollectionEntry<"blog">[], locale: string) 
   return posts.filter(
     (p) => p.data.locale === locale && p.data.draft !== true,
   );
+}
+
+type CategorySeriesGroups = [string, SeriesEntry[]][];
+
+let publishedPostsPromise: Promise<CollectionEntry<"blog">[]> | undefined;
+const drawerGroupsByLocale = new Map<string, Promise<CategorySeriesGroups>>();
+
+/**
+ * BaseLayout renders the drawer on every generated page. Keep the collection
+ * read and grouping work process-wide instead of repeating it per page.
+ */
+export function getDrawerSeriesGroups(locale: string): Promise<CategorySeriesGroups> {
+  const cached = drawerGroupsByLocale.get(locale);
+  if (cached) return cached;
+
+  publishedPostsPromise ??= getCollection(
+    "blog",
+    ({ data }) => data.draft !== true && !data.redirectToBlog,
+  );
+
+  const groups = publishedPostsPromise.then((allPosts) => {
+    const posts = allPosts.filter((post) => post.data.locale === locale);
+    return groupSeriesByCategory(Array.from(buildSeriesIndex(posts).values()))
+      .filter(([, list]) => list.length > 0)
+      .slice(0, 12);
+  });
+  drawerGroupsByLocale.set(locale, groups);
+  return groups;
 }
 
 export { getTrackFromData };
