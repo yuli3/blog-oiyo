@@ -7,6 +7,7 @@ import process from "node:process";
 
 const HOST = "blog.oiyo.net";
 const DEFAULT_LIMIT = 10_000;
+const LOCALES = ["en", "ko", "ja", "fr", "es", "zh"];
 const root = process.cwd();
 const inputPath = path.join(root, "data/redirects/canonical-redirects.txt");
 const pagesRedirectsPath = path.join(root, "public/_redirects");
@@ -81,7 +82,45 @@ for (const rule of rules) {
 const exportable = [];
 const residual = [];
 
+function appendBulkRedirect(source, target, line) {
+  const sourceUrl = `${HOST}${source}`;
+  const targetUrl = absoluteTarget(target);
+  validateUrl(sourceUrl, "source", line, errors);
+  validateUrl(targetUrl, "target", line, errors);
+  if (source.includes("?") || source.includes("#")) {
+    errors.push(`Bulk source cannot contain query or fragment at line ${line}: ${source}`);
+  }
+  if (targetUrl.includes("?")) {
+    errors.push(
+      `Target query conflicts with preserve_query_string=true at line ${line}: ${targetUrl}`,
+    );
+  }
+  exportable.push({
+    redirect: {
+      source_url: sourceUrl,
+      target_url: targetUrl,
+      status_code: 301,
+      include_subdomains: false,
+      subpath_matching: false,
+      preserve_query_string: true,
+      preserve_path_suffix: false,
+    },
+    source_line: line,
+  });
+}
+
 for (const rule of rules) {
+  const localeSplat = rule.source.match(/^\/:lang\/(.+)\*$/);
+  if (rule.status === 301 && localeSplat && !rule.target.includes("*")) {
+    for (const locale of LOCALES) {
+      const source = `/${locale}/${localeSplat[1]}`;
+      const target = rule.target.replaceAll(":lang", locale).replaceAll(":splat", "");
+      if (!inputSources.has(source)) appendBulkRedirect(source, target, rule.line);
+      if (!inputSources.has(`${source}/`)) appendBulkRedirect(`${source}/`, target, rule.line);
+    }
+    continue;
+  }
+
   const reason =
     rule.status === 200
       ? "Pages rewrite (Bulk Redirects only supports redirect status codes)"
@@ -96,39 +135,24 @@ for (const rule of rules) {
     continue;
   }
 
-  const sourceUrl = `${HOST}${rule.source}`;
-  const targetUrl = absoluteTarget(rule.target);
-  validateUrl(sourceUrl, "source", rule.line, errors);
-  validateUrl(targetUrl, "target", rule.line, errors);
-  if (rule.source.includes("?") || rule.source.includes("#")) {
-    errors.push(`Bulk source cannot contain query or fragment at line ${rule.line}: ${rule.source}`);
-  }
-  if (targetUrl.includes("?")) {
-    errors.push(
-      `Target query conflicts with preserve_query_string=true at line ${rule.line}: ${targetUrl}`,
-    );
-  }
-  exportable.push({
-    redirect: {
-      source_url: sourceUrl,
-      target_url: targetUrl,
-      status_code: 301,
-      include_subdomains: false,
-      subpath_matching: false,
-      preserve_query_string: true,
-      preserve_path_suffix: false,
-    },
-    source_line: rule.line,
-  });
+  appendBulkRedirect(rule.source, rule.target, rule.line);
 }
 
 const bulkSources = new Map();
+const dedupedExportable = [];
 for (const item of exportable) {
   const sourceUrl = item.redirect.source_url;
-  if (bulkSources.has(sourceUrl)) {
-    errors.push(`Duplicate Bulk source URL: ${sourceUrl}`);
+  const previousTarget = bulkSources.get(sourceUrl);
+  if (previousTarget) {
+    if (previousTarget !== item.redirect.target_url) {
+      errors.push(
+        `Conflicting generated Bulk source URL: ${sourceUrl} -> ${previousTarget} / ${item.redirect.target_url}`,
+      );
+    }
+    continue;
   }
   bulkSources.set(sourceUrl, item.redirect.target_url);
+  dedupedExportable.push(item);
 }
 
 for (const conflict of conflicts) {
@@ -141,20 +165,20 @@ for (const duplicate of duplicates) {
     `Duplicate source ${duplicate.source} at lines ${duplicate.firstLine} and ${duplicate.secondLine}`,
   );
 }
-if (exportable.length > DEFAULT_LIMIT) {
-  errors.push(`Bulk item count ${exportable.length} exceeds Free-plan quota ${DEFAULT_LIMIT}`);
+if (dedupedExportable.length > DEFAULT_LIMIT) {
+  errors.push(`Bulk item count ${dedupedExportable.length} exceeds Free-plan quota ${DEFAULT_LIMIT}`);
 }
 
-const chainSources = new Set(exportable.map((item) => `https://${item.redirect.source_url}`));
-const chains = exportable
+const chainSources = new Set(dedupedExportable.map((item) => `https://${item.redirect.source_url}`));
+const chains = dedupedExportable
   .filter((item) => chainSources.has(item.redirect.target_url))
   .map((item) => ({ source: item.redirect.source_url, target: item.redirect.target_url }));
-const loops = exportable
+const loops = dedupedExportable
   .filter((item) => `https://${item.redirect.source_url}` === item.redirect.target_url)
   .map((item) => item.redirect.source_url);
 if (loops.length) errors.push(`Self-redirect loops: ${loops.join(", ")}`);
 
-const apiItems = exportable.map(({ redirect }) => ({ redirect }));
+const apiItems = dedupedExportable.map(({ redirect }) => ({ redirect }));
 const csv = apiItems
   .map(({ redirect }) =>
     [
