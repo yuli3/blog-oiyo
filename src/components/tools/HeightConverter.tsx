@@ -30,6 +30,7 @@ import {
 } from "../ui/table";
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
 import type { Locale } from "../../lib/i18n";
+import { nearestFigures } from "../../data/height-reference-figures";
 
 // ── Korean height distributions ──────────────────────────────────────────────
 const KR_MALE_MEAN = 173.5;
@@ -92,6 +93,8 @@ interface Labels {
   country: string;
   avgMale: string;
   avgFemale: string;
+  sec5: string;
+  sec5Note: string;
 }
 
 const LABELS: Record<L, Labels> = {
@@ -127,6 +130,8 @@ const LABELS: Record<L, Labels> = {
     country: "국가",
     avgMale: "평균 남성 (cm)",
     avgFemale: "평균 여성 (cm)",
+    sec5: "당신과 비슷한 키의 인물",
+    sec5Note: "공개된 프로필 기준 신장이며 참고용입니다.",
   },
   en: {
     title: "Height Converter & Comparison",
@@ -160,6 +165,8 @@ const LABELS: Record<L, Labels> = {
     country: "Country",
     avgMale: "Avg. Male (cm)",
     avgFemale: "Avg. Female (cm)",
+    sec5: "People close to your height",
+    sec5Note: "Heights are approximate, based on public profiles.",
   },
   ja: {
     title: "身長変換・比較ツール",
@@ -193,6 +200,8 @@ const LABELS: Record<L, Labels> = {
     country: "国",
     avgMale: "平均男性 (cm)",
     avgFemale: "平均女性 (cm)",
+    sec5: "あなたと近い身長の人物",
+    sec5Note: "公開プロフィール基準の身長で、参考値です。",
   },
   fr: {
     title: "Convertisseur & Comparateur de Taille",
@@ -226,6 +235,8 @@ const LABELS: Record<L, Labels> = {
     country: "Pays",
     avgMale: "Moy. Homme (cm)",
     avgFemale: "Moy. Femme (cm)",
+    sec5: "Des personnalités proches de votre taille",
+    sec5Note: "Tailles approximatives, d'après des profils publics.",
   },
   es: {
     title: "Conversor y Comparador de Estatura",
@@ -259,6 +270,8 @@ const LABELS: Record<L, Labels> = {
     country: "País",
     avgMale: "Prom. Hombre (cm)",
     avgFemale: "Prom. Mujer (cm)",
+    sec5: "Personas con una estatura similar a la tuya",
+    sec5Note: "Estaturas aproximadas, según perfiles públicos.",
   },
   zh: {
     title: "身高换算与比较工具",
@@ -291,6 +304,8 @@ const LABELS: Record<L, Labels> = {
     country: "国家",
     avgMale: "平均男性（厘米）",
     avgFemale: "平均女性（厘米）",
+    sec5: "与你身高相近的人物",
+    sec5Note: "身高数据来自公开资料，仅供参考。",
   },
 };
 
@@ -457,6 +472,8 @@ export default function HeightConverter({ locale }: Props) {
       : "—";
   const percentileDistance =
     percentile !== null ? (isTop ? 100 - percentile : percentile) : null;
+
+  const similarFigures = validMyHeight ? nearestFigures(myHeightNum, 3) : [];
 
   const reset = useCallback(() => {
     setCmVal("170");
@@ -692,6 +709,27 @@ export default function HeightConverter({ locale }: Props) {
           </FieldGroup>
         </CardContent>
       </Card>
+
+      {/* ── Section 2b: Similar-height public figures ─────────────────────── */}
+      {similarFigures.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t.sec5}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-3 sm:grid-cols-3">
+              {similarFigures.map((f) => (
+                <div key={f.name} className="rounded-lg border bg-muted/50 p-3 text-center">
+                  <p className="text-sm font-medium">{f.name}</p>
+                  <p className={readout}>~{f.heightCm}{t.cmLabel}</p>
+                  <p className="text-xs text-muted-foreground">{f.field}</p>
+                </div>
+              ))}
+            </div>
+            <FieldDescription>{t.sec5Note}</FieldDescription>
+          </CardContent>
+        </Card>
+      )}
 
       {/* ── Section 3: Reference Table ────────────────────────────────────── */}
       <Card>

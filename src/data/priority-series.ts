@@ -1,31 +1,36 @@
 /**
  * Curated priority series for the wikidocs-style landing sidebar/sections.
  *
- * Selection basis: frontmatter `series:` chapter counts across all published
- * locales in data/catalog/content-inventory.master.csv (chapter count is the
- * best static proxy we have for traffic/importance until a GSC-derived
- * ranking lands — see AGENT_WORKLOG 2026-08 batch notes).
- *
- * Counts at selection time (published chapters, all locales):
- *   myth-dictionary 606 · economics-basics 84 · business-basics 61 ·
- *   psychology-basics 56 · accounting-basics 42 · english-grammar 45 ·
- *   public-administration-basics 45 · nursing-basics 39
+ * Selection basis: GSC (Google Search Console) impressions over the trailing
+ * 90 days for blog.oiyo.net, aggregated per series across all chapters
+ * and locales (clicks as tiebreak). Impressions, not clicks, because at
+ * blog's current traffic (~125 clicks / 2,870 impressions per 90d across
+ * 673 pages) per-series clicks are almost all 0-1 ties with no real signal;
+ * impressions are ~23x denser and actually differentiate. Only series whose
+ * key is already a clean URL-safe slug are eligible (matches the
+ * /series/{key}/ route's own filter — see isUrlSafeSeriesKey() in
+ * src/lib/wiki-index.ts). Generated 2026-08-25 by
+ * scripts/generate-priority-series.py (re-run: npm run priority-series:sync).
+ * Supersedes the earlier static chapter-count proxy.
  */
 export const PRIORITY_SERIES = [
-  "myth-dictionary",
+  "zoology-basics",
   "economics-basics",
+  "music-history",
+  "academy-economics-core",
   "business-basics",
-  "psychology-basics",
-  "accounting-basics",
-  "english-grammar",
+  "myth-dictionary",
   "public-administration-basics",
-  "nursing-basics",
+  "calculus",
 ] as const;
 
 export type PrioritySeriesKey = (typeof PRIORITY_SERIES)[number];
 
 /** Manually tuned display names per locale (user chose manual over auto-layout reuse). */
-export const PRIORITY_SERIES_NAMES: Record<PrioritySeriesKey, Record<string, string>> = {
+// Partial, not Record<PrioritySeriesKey, ...>: PRIORITY_SERIES is now
+// GSC-ranked and changes over time, so it can include a key with no manual
+// translation yet — prioritySeriesName() below falls back to prettifySlug().
+export const PRIORITY_SERIES_NAMES: Partial<Record<string, Record<string, string>>> = {
   "myth-dictionary": {
     ko: "신화 사전", en: "Myth Dictionary", ja: "神話事典",
     zh: "神话词典", fr: "Dictionnaire des mythes", es: "Diccionario de mitos",

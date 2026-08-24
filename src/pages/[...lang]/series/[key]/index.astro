@@ -1,0 +1,91 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../../../layouts/BaseLayout.astro";
+import WikiTable from "../../../../components/WikiTable.astro";
+import { getTranslations, locales } from "../../../../lib/i18n";
+import type { Locale } from "../../../../lib/i18n";
+import { buildSeriesIndex, isUrlSafeSeriesKey, type SeriesEntry } from "../../../../lib/wiki-index";
+import { prioritySeriesName, prettifySlug } from "../../../../data/priority-series";
+import { collectionPageJsonLd } from "../../../../lib/seo/structured-data";
+import { siteConfig } from "../../../../config/site.config";
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection("blog", ({ data }) => data.draft !== true);
+
+  return locales.flatMap((lang) => {
+    const localePosts = allPosts.filter((p) => p.data.locale === lang);
+    const series = Array.from(buildSeriesIndex(localePosts).values());
+    // Single-post "series" would just duplicate the article itself — only
+    // multi-chapter series get a dedicated hub page.
+    return series
+      .filter((s) => s.chapterCount >= 2 && isUrlSafeSeriesKey(s.key))
+      .map((s) => ({
+        params: { lang, key: s.key },
+        props: { locale: lang, series: s },
+      }));
+  });
+}
+
+const { locale, series } = Astro.props as { locale: Locale; series: SeriesEntry };
+const t = await getTranslations(locale);
+const courseT = (t as Record<string, unknown>).courses as Record<string, string> | undefined;
+const categoryNames = (t.category.names ?? {}) as Record<string, string>;
+
+const displayName = prioritySeriesName(series.key, locale) ?? prettifySlug(series.key);
+const categoryLabel = categoryNames[series.category] ?? series.category;
+const chaptersLabel = courseT?.chapters ?? "chapters";
+const startLabel = courseT?.startCourse ?? "Start";
+const allCoursesLabel = courseT?.allCourses ?? "All courses";
+
+const firstSlug = series.firstPost.slug.split("/").slice(1).join("/");
+const firstHref = `/${locale}/${firstSlug}/`;
+const pageUrl = `${siteConfig.url}/${locale}/series/${series.key}/`;
+
+const jsonLd = JSON.stringify(
+  collectionPageJsonLd({
+    name: displayName,
+    description: series.firstPost.data.description ?? displayName,
+    url: pageUrl,
+    inLanguage: locale,
+    items: series.posts.map((p) => ({
+      name: p.data.title,
+      url: `${siteConfig.url}/${locale}/${p.slug.split("/").slice(1).join("/")}/`,
+    })),
+  }),
+);
+---
+
+<BaseLayout
+  title={`${displayName} — ${series.chapterCount} ${chaptersLabel}`}
+  description={series.firstPost.data.description ?? displayName}
+  canonicalUrl={pageUrl}
+>
+  <script is:inline type="application/ld+json" set:html={jsonLd} />
+
+  <section class="py-10 md:py-16">
+    <div class="container px-4">
+      <div class="mb-8 max-w-3xl">
+        <a href={`/${locale}/courses`} class="mb-4 inline-block text-xs font-semibold text-muted-foreground hover:text-primary">
+          ← {allCoursesLabel}
+        </a>
+        <p class="mb-2 text-[11px] font-black uppercase tracking-[0.2em] text-primary">{categoryLabel}</p>
+        <h1 class="mb-3 text-3xl font-extrabold tracking-tight md:text-4xl">{displayName}</h1>
+        <p class="text-sm text-muted-foreground">
+          {series.chapterCount} {chaptersLabel}
+        </p>
+      </div>
+
+      <div class="mb-8 max-w-3xl">
+        <WikiTable posts={series.posts} locale={locale} showSeries={false} />
+      </div>
+
+      <a
+        href={firstHref}
+        class="inline-flex items-center gap-1.5 rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground transition-colors hover:bg-primary/90"
+      >
+        {startLabel}
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+      </a>
+    </div>
+  </section>
+</BaseLayout>

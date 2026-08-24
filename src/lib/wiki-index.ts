@@ -28,6 +28,18 @@ export function seriesKeyOf(post: CollectionEntry<"blog">): string {
   return post.data.series || post.slug.split("/").slice(1).join("/").replace(/-ch\d+$/, "");
 }
 
+/**
+ * A slug-derived key is always URL-safe (real file slugs are ASCII by this
+ * repo's convention). A frontmatter `series:` override is free text, though
+ * — some older batches used a human-readable/non-ASCII string there (e.g.
+ * "세법 핵심") that was never meant to be a URL segment. Only keys that are
+ * already a clean slug get a /series/{key}/ page; the rest still render as
+ * ordinary articles, they just don't get a dedicated hub.
+ */
+export function isUrlSafeSeriesKey(key: string): boolean {
+  return /^[a-z0-9]+(-[a-z0-9]+)*$/.test(key);
+}
+
 export function buildSeriesIndex(
   posts: CollectionEntry<"blog">[],
 ): Map<string, SeriesEntry> {
@@ -109,6 +121,35 @@ export function getDrawerSeriesGroups(locale: string): Promise<CategorySeriesGro
   });
   drawerGroupsByLocale.set(locale, groups);
   return groups;
+}
+
+const multiChapterKeysByLocale = new Map<string, Promise<Set<string>>>();
+
+/**
+ * Series keys with 2+ chapters in this locale — the only ones that get a
+ * dedicated /series/{key}/ page (a lone article's "series" is itself, so a
+ * hub page for it would just duplicate the article).
+ */
+export function getMultiChapterSeriesKeys(locale: string): Promise<Set<string>> {
+  const cached = multiChapterKeysByLocale.get(locale);
+  if (cached) return cached;
+
+  publishedPostsPromise ??= getCollection(
+    "blog",
+    ({ data }) => data.draft !== true && !data.redirectToBlog,
+  );
+
+  const keys = publishedPostsPromise.then((allPosts) => {
+    const posts = allPosts.filter((post) => post.data.locale === locale);
+    const series = buildSeriesIndex(posts);
+    return new Set(
+      Array.from(series.values())
+        .filter((s) => s.chapterCount >= 2 && isUrlSafeSeriesKey(s.key))
+        .map((s) => s.key),
+    );
+  });
+  multiChapterKeysByLocale.set(locale, keys);
+  return keys;
 }
 
 export { getTrackFromData };

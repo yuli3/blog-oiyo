@@ -2,7 +2,7 @@
 import type { CollectionEntry } from "astro:content";
 import { getTranslations } from "../lib/i18n";
 import type { Locale } from "../lib/i18n";
-import { seriesKeyOf } from "../lib/wiki-index";
+import { seriesKeyOf, getMultiChapterSeriesKeys } from "../lib/wiki-index";
 import { prioritySeriesName, prettifySlug } from "../data/priority-series";
 
 interface Props {
@@ -35,6 +35,8 @@ const dateLocale =
 
 const fmt = (d: Date) =>
   d.toLocaleDateString(dateLocale, { year: "numeric", month: "short", day: "numeric" });
+
+const multiChapterKeys = await getMultiChapterSeriesKeys(locale);
 ---
 
 <div class="overflow-x-auto border border-border rounded-lg">
@@ -69,7 +71,11 @@ const fmt = (d: Date) =>
               </td>
               {showSeries && (
                 <td class="px-3 py-2.5 text-muted-foreground hidden sm:table-cell whitespace-nowrap">
-                  <a href={`/${locale}/courses`} class="hover:text-primary">{seriesLabel}</a>
+                  {multiChapterKeys.has(sKey) ? (
+                    <a href={`/${locale}/series/${sKey}/`} class="hover:text-primary">{seriesLabel}</a>
+                  ) : (
+                    seriesLabel
+                  )}
                 </td>
               )}
               <td class="px-3 py-2.5 text-center tabular-nums text-muted-foreground hidden md:table-cell">{ch ?? "—"}</td>
