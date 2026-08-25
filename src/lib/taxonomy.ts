@@ -39,6 +39,10 @@ export const ACADEMY_CATEGORIES = [
   "Technical Analysis",
   "Negotiation",
   "Advanced Bonds",
+  "Real Estate",
+  "Engineering",
+  "Trade",
+  "Social Welfare",
 ] as const;
 
 export const MAGAZINE_CATEGORIES = [
