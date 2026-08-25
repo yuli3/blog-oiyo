@@ -22,7 +22,6 @@ export const ACADEMY_CATEGORIES = [
   "Financial Engineering",
   "Behavioral Economics",
   "Crypto",
-  "Game Theory",
   "History",
   "Product Management",
   "Psychology",

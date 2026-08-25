@@ -1,6 +1,6 @@
 # Content Index (auto-generated)
 
-> Generated 2026-08-25T06:07:46.007Z from MDX frontmatter. Do not edit by hand — run `npm run content:manifest`.
+> Generated 2026-08-25T06:23:06.563Z from MDX frontmatter. Do not edit by hand — run `npm run content:manifest`.
 
 Total: **5900** entries · ko 2616 · en 1393 · ja 885 · zh 386 · es 310 · fr 310
 
@@ -14,26 +14,25 @@ Total: **5900** entries · ko 2616 · en 1393 · ja 885 · zh 386 · es 310 · f
 
 | Category | Count | In registry? |
 |---|--:|:--:|
-| Mind & Psychology | 1107 | ✅ |
-| Mythology | 606 | ❌ drift |
+| Psychology | 1249 | ❌ drift |
+| Mythology | 700 | ❌ drift |
 | Finance | 604 | ✅ |
-| Mysticism | 491 | ✅ |
+| Mysticism | 551 | ✅ |
 | Computer Science | 253 | ✅ |
 | Lifestyle | 248 | ✅ |
-| Myth & Culture | 246 | ✅ |
-| Philosophy & Spirit | 227 | ✅ |
 | Law | 220 | ❌ drift |
 | Business | 202 | ✅ |
 | Engineering | 175 | ✅ |
 | Tax | 123 | ✅ |
+| Philosophy | 121 | ❌ drift |
+| History | 119 | ❌ drift |
 | Accounting | 112 | ✅ |
+| Economics | 103 | ❌ drift |
 | Real Estate | 102 | ✅ |
-| Economics | 100 | ❌ drift |
 | Public Admin | 86 | ✅ |
 | Education & Language | 78 | ❌ drift |
-| Psychology | 75 | ❌ drift |
+| Humanities | 73 | ✅ |
 | Science & Nature | 73 | ✅ |
-| Humanities | 67 | ✅ |
 | Statistics | 53 | ❌ drift |
 | English Grammar | 50 | ❌ drift |
 | Health | 47 | ✅ |
@@ -44,16 +43,16 @@ Total: **5900** entries · ko 2616 · en 1393 · ja 885 · zh 386 · es 310 · f
 | Art Psychotherapy | 33 | ❌ drift |
 | Actuarial Science | 30 | ❌ drift |
 | Zoology | 30 | ❌ drift |
-| History | 29 | ❌ drift |
 | Medicine | 28 | ❌ drift |
 | Beauty | 28 | ✅ |
 | Career | 27 | ✅ |
 | Technical Analysis | 25 | ❌ drift |
+| Logic | 23 | ❌ drift |
+| Natural Science | 22 | ❌ drift |
 | Social Welfare | 16 | ✅ |
 | Crypto | 15 | ❌ drift |
 | Product Management | 15 | ❌ drift |
 | Education | 14 | ✅ |
-| Natural Science | 13 | ❌ drift |
 | Trade | 12 | ✅ |
 | Games | 11 | ✅ |
 | Academy | 11 | ⚠️ track |
