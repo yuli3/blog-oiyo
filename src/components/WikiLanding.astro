@@ -5,7 +5,7 @@ import WikiTable from "./WikiTable.astro";
 import { getTranslations } from "../lib/i18n";
 import type { Locale } from "../lib/i18n";
 import { buildSeriesIndex, groupSeriesByCategory } from "../lib/wiki-index";
-import { PRIORITY_SERIES, prioritySeriesName, prettifySlug } from "../data/priority-series";
+import { PRIORITY_SERIES, prioritySeriesName, deriveSeriesLabel } from "../data/priority-series";
 import { slugifyCategory } from "../lib/taxonomy";
 
 interface Props {
@@ -82,7 +82,7 @@ const chapterWord = L("chapters", "chapters");
                   {list.slice(0, 8).map((s) => (
                     <li>
                       <a href={`/${locale}/${s.firstPost.slug.split("/").slice(1).join("/")}/`} class="block truncate py-0.5 text-[13px] text-muted-foreground hover:text-primary transition-colors">
-                        {prioritySeriesName(s.key, locale) ?? prettifySlug(s.key)}
+                        {prioritySeriesName(s.key, locale) ?? deriveSeriesLabel(s.firstPost.data.title, s.key)}
                         <span class="tabular-nums text-muted-foreground/50 ml-1">{s.chapterCount}</span>
                       </a>
                     </li>
@@ -104,7 +104,7 @@ const chapterWord = L("chapters", "chapters");
             <section aria-labelledby={`sec-${s.key}`}>
               <div class="flex items-baseline justify-between gap-3 border-b border-border mb-4 pb-2">
                 <h2 id={`sec-${s.key}`} class="text-lg font-bold tracking-tight text-foreground">
-                  {prioritySeriesName(s.key, locale) ?? prettifySlug(s.key)}
+                  {prioritySeriesName(s.key, locale) ?? deriveSeriesLabel(s.firstPost.data.title, s.key)}
                 </h2>
                 <span class="text-xs tabular-nums text-muted-foreground/70 whitespace-nowrap">{s.chapterCount} {chapterWord}</span>
               </div>

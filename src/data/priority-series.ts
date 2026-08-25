@@ -29,7 +29,7 @@ export type PrioritySeriesKey = (typeof PRIORITY_SERIES)[number];
 /** Manually tuned display names per locale (user chose manual over auto-layout reuse). */
 // Partial, not Record<PrioritySeriesKey, ...>: PRIORITY_SERIES is now
 // GSC-ranked and changes over time, so it can include a key with no manual
-// translation yet — prioritySeriesName() below falls back to prettifySlug().
+// translation yet — prioritySeriesName() below falls back to deriveSeriesLabel().
 export const PRIORITY_SERIES_NAMES: Partial<Record<string, Record<string, string>>> = {
   "myth-dictionary": {
     ko: "신화 사전", en: "Myth Dictionary", ja: "神話事典",
@@ -73,4 +73,22 @@ export function prioritySeriesName(key: string, locale: string): string | undefi
 /** Fallback: prettify a series slug ("economics-basics" → "Economics basics"). */
 export function prettifySlug(slug: string): string {
   return slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, " ");
+}
+
+/**
+ * Fallback for series without a PRIORITY_SERIES_NAMES entry: prettifySlug()
+ * always renders the raw English slug regardless of locale ("8 cognitive
+ * functions deep dive" on a ko page). Titles already follow the
+ * "{series name} — {chapter subtitle}" convention (established 2026-08-25)
+ * and are written per-locale, so splitting on the dash recovers a real,
+ * correctly-localized series name for free — no translation work needed.
+ * Falls through to the raw title (single-article "series of 1") or the
+ * slug only when neither is available.
+ */
+export function deriveSeriesLabel(title: string | undefined, slug: string): string {
+  if (title) {
+    const dashIdx = title.indexOf(" — ");
+    return dashIdx === -1 ? title : title.slice(0, dashIdx).trim();
+  }
+  return prettifySlug(slug);
 }

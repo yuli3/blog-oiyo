@@ -323,8 +323,12 @@ const redirectToBlog = post.data.redirectToBlog;
             <nav aria-label="Breadcrumb" class="mb-5 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
               <a href={`/${locale}/`} class="hover:text-primary hover:underline">{homeLabel[locale] ?? homeLabel.en}</a>
               <span aria-hidden="true">/</span>
-              <a href={sectionHref} class="hover:text-primary hover:underline">{sectionLabel}</a>
-              <span aria-hidden="true">/</span>
+              {sectionHref !== coursesHref && (
+                <>
+                  <a href={sectionHref} class="hover:text-primary hover:underline">{sectionLabel}</a>
+                  <span aria-hidden="true">/</span>
+                </>
+              )}
               <a href={`/${locale}/category/${rawCategory.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`} class="hover:text-primary hover:underline">{displayCategory}</a>
               {chapter !== null && <><span aria-hidden="true">/</span><span aria-current="page">{chapterStr(chapter)}</span></>}
             </nav>

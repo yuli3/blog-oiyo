@@ -5,7 +5,7 @@ import WikiTable from "../../../../components/WikiTable.astro";
 import { getTranslations, locales } from "../../../../lib/i18n";
 import type { Locale } from "../../../../lib/i18n";
 import { buildSeriesIndex, isUrlSafeSeriesKey, type SeriesEntry } from "../../../../lib/wiki-index";
-import { prioritySeriesName, prettifySlug } from "../../../../data/priority-series";
+import { prioritySeriesName, deriveSeriesLabel } from "../../../../data/priority-series";
 import { collectionPageJsonLd } from "../../../../lib/seo/structured-data";
 import { siteConfig } from "../../../../config/site.config";
 
@@ -31,11 +31,12 @@ const t = await getTranslations(locale);
 const courseT = (t as Record<string, unknown>).courses as Record<string, string> | undefined;
 const categoryNames = (t.category.names ?? {}) as Record<string, string>;
 
-const displayName = prioritySeriesName(series.key, locale) ?? prettifySlug(series.key);
+const displayName = prioritySeriesName(series.key, locale) ?? deriveSeriesLabel(series.firstPost.data.title, series.key);
 const categoryLabel = categoryNames[series.category] ?? series.category;
 const chaptersLabel = courseT?.chapters ?? "chapters";
 const startLabel = courseT?.startCourse ?? "Start";
-const allCoursesLabel = courseT?.allCourses ?? "All courses";
+const navT = (t as Record<string, unknown>).nav as Record<string, string> | undefined;
+const homeLabel = navT?.home ?? "Home";
 
 const firstSlug = series.firstPost.slug.split("/").slice(1).join("/");
 const firstHref = `/${locale}/${firstSlug}/`;
@@ -66,7 +67,7 @@ const jsonLd = JSON.stringify(
     <div class="container px-4">
       <div class="mb-8 max-w-3xl">
         <a href={`/${locale}/`} class="mb-4 inline-block text-xs font-semibold text-muted-foreground hover:text-primary">
-          ← {allCoursesLabel}
+          ← {homeLabel}
         </a>
         <p class="mb-2 text-[11px] font-black uppercase tracking-[0.2em] text-primary">{categoryLabel}</p>
         <h1 class="mb-3 text-3xl font-extrabold tracking-tight md:text-4xl">{displayName}</h1>

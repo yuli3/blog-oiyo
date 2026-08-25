@@ -9,7 +9,7 @@
 import { getTranslations } from "../lib/i18n";
 import type { Locale } from "../lib/i18n";
 import { getDrawerSeriesGroups } from "../lib/wiki-index";
-import { prioritySeriesName, prettifySlug } from "../data/priority-series";
+import { prioritySeriesName, deriveSeriesLabel } from "../data/priority-series";
 import { slugifyCategory } from "../lib/taxonomy";
 
 interface Props {
@@ -42,7 +42,7 @@ const label = wikiT?.browseByCategory ?? "Browse by category";
             href={`/${locale}/${s.firstPost.slug.split("/").slice(1).join("/")}/`}
             class="flex items-baseline justify-between gap-2 rounded-md px-2 py-1.5 text-[13px] text-muted-foreground hover:text-primary hover:bg-muted/40 transition-colors"
           >
-            <span class="truncate">{prioritySeriesName(s.key, locale) ?? prettifySlug(s.key)}</span>
+            <span class="truncate">{prioritySeriesName(s.key, locale) ?? deriveSeriesLabel(s.firstPost.data.title, s.key)}</span>
             <span class="text-[10px] tabular-nums opacity-60 shrink-0">{s.chapterCount}</span>
           </a>
         </li>

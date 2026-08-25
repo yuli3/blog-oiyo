@@ -20,9 +20,12 @@ const { seriesPosts, currentChapter, locale, seriesName, coursesHref } = Astro.p
 const total = seriesPosts.length;
 const progressPct = Math.round((currentChapter / total) * 100);
 
+const backLabel: Record<string, string> = { en: "Home", ko: "홈", ja: "ホーム", fr: "Accueil", es: "Inicio", zh: "首页" };
+const progressLabel: Record<string, string> = { en: "Progress", ko: "진행률", ja: "進捗", fr: "Progression", es: "Progreso", zh: "进度" };
+const navLabel: Record<string, string> = { en: "Course chapters", ko: "챕터 목록", ja: "章一覧", fr: "Chapitres du cours", es: "Capítulos del curso", zh: "章节列表" };
 ---
 
-<nav class="hidden lg:flex flex-col gap-0 text-sm" aria-label="Course chapters">
+<nav class="hidden lg:flex flex-col gap-0 text-sm" aria-label={navLabel[locale] ?? navLabel.en}>
   <!-- Back to courses + series name -->
   <div class="mb-4">
     <a
@@ -30,7 +33,7 @@ const progressPct = Math.round((currentChapter / total) * 100);
       class="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors mb-2"
     >
       <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-      All Courses
+      {backLabel[locale] ?? backLabel.en}
     </a>
     <div class="font-black text-xs uppercase tracking-widest text-foreground leading-snug">
       {seriesName}
@@ -40,7 +43,7 @@ const progressPct = Math.round((currentChapter / total) * 100);
   <!-- Progress bar -->
   <div class="mb-4">
     <div class="flex justify-between items-center mb-1">
-      <span class="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Progress</span>
+      <span class="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">{progressLabel[locale] ?? progressLabel.en}</span>
       <span class="text-[10px] font-black text-primary">{currentChapter}/{total}</span>
     </div>
     <div class="h-1.5 bg-border rounded-full overflow-hidden">
