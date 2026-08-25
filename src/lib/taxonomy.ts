@@ -43,6 +43,8 @@ export const ACADEMY_CATEGORIES = [
   "Engineering",
   "Trade",
   "Social Welfare",
+  "Photography",
+  "Library Science",
 ] as const;
 
 export const MAGAZINE_CATEGORIES = [
