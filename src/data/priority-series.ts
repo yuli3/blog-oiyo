@@ -36,32 +36,32 @@ export const PRIORITY_SERIES_NAMES: Partial<Record<string, Record<string, string
     zh: "神话词典", fr: "Dictionnaire des mythes", es: "Diccionario de mitos",
   },
   "economics-basics": {
-    ko: "경제학 기초", en: "Economics Basics", ja: "経済学基礎",
-    zh: "经济学基础", fr: "Économie : les bases", es: "Fundamentos de economía",
+    ko: "경제학", en: "Economics", ja: "経済学",
+    zh: "经济学", fr: "Économie", es: "Economía",
   },
   "business-basics": {
-    ko: "경영학 기초", en: "Business Basics", ja: "経営学基礎",
-    zh: "管理学基础", fr: "Gestion : les bases", es: "Fundamentos de gestión",
+    ko: "경영학", en: "Business", ja: "経営学",
+    zh: "管理学", fr: "Gestion", es: "Gestión",
   },
   "psychology-basics": {
-    ko: "심리학 기초", en: "Psychology Basics", ja: "心理学基礎",
-    zh: "心理学基础", fr: "Psychologie : les bases", es: "Fundamentos de psicología",
+    ko: "심리학", en: "Psychology", ja: "心理学",
+    zh: "心理学", fr: "Psychologie", es: "Psicología",
   },
   "accounting-basics": {
-    ko: "회계학 기초", en: "Accounting Basics", ja: "会計学基礎",
-    zh: "会计学基础", fr: "Comptabilité : les bases", es: "Fundamentos de contabilidad",
+    ko: "회계학", en: "Accounting", ja: "会計学",
+    zh: "会计学", fr: "Comptabilité", es: "Contabilidad",
   },
   "english-grammar": {
     ko: "영어 문법", en: "English Grammar", ja: "英語文法",
     zh: "英语语法", fr: "Grammaire anglaise", es: "Gramática inglesa",
   },
   "public-administration-basics": {
-    ko: "행정학 기초", en: "Public Administration Basics", ja: "行政学基礎",
-    zh: "行政学基础", fr: "Administration publique", es: "Administración pública",
+    ko: "행정학", en: "Public Administration", ja: "行政学",
+    zh: "行政学", fr: "Administration publique", es: "Administración pública",
   },
   "nursing-basics": {
-    ko: "간호학 기초", en: "Nursing Basics", ja: "看護学基礎",
-    zh: "护理学基础", fr: "Soins infirmiers", es: "Fundamentos de enfermería",
+    ko: "간호학", en: "Nursing", ja: "看護学",
+    zh: "护理学", fr: "Soins infirmiers", es: "Enfermería",
   },
 };
 

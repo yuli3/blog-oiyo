@@ -106,7 +106,12 @@ const chapterWord = L("chapters", "chapters");
                 <h2 id={`sec-${s.key}`} class="text-lg font-bold tracking-tight text-foreground">
                   {prioritySeriesName(s.key, locale) ?? deriveSeriesLabel(s.firstPost.data.title, s.key)}
                 </h2>
-                <span class="text-xs tabular-nums text-muted-foreground/70 whitespace-nowrap">{s.chapterCount} {chapterWord}</span>
+                <div class="flex items-baseline gap-3 shrink-0">
+                  <span class="text-xs tabular-nums text-muted-foreground/70 whitespace-nowrap">{s.chapterCount} {chapterWord}</span>
+                  <a href={`/${locale}/category/${slugifyCategory(s.category)}/`} class="text-xs font-semibold text-primary/80 hover:text-primary whitespace-nowrap">
+                    {L("viewCategory", "View all")} →
+                  </a>
+                </div>
               </div>
               <WikiTable posts={[...s.posts].reverse().slice(0, 5)} locale={locale} showSeries={false} />
             </section>
