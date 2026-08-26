@@ -88,6 +88,9 @@ for (const file of listHtmlFiles(dist)) {
 
   const canonical = html.match(/<link rel="canonical" href="([^"]+)"/)?.[1];
   const pageUrl = `${siteUrl}/${rel.replace(/index\.html$/, "")}`;
+  if (isNoindex && sitemapUrls.has(pageUrl)) {
+    failures.push(`${rel}: noindex page must not appear in sitemap`);
+  }
   if (explicitNoindexUrls.has(pageUrl) && sitemapUrls.has(pageUrl)) {
     failures.push(`${rel}: explicit frontmatter noindex page must not appear in sitemap`);
   }

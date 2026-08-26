@@ -46,7 +46,7 @@ function collectExcludedPageSlugs(directory) {
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
     if (!entry.isFile() || !entry.name.endsWith(".astro")) return [];
     const source = readFileSync(new URL(entry.name, directory), "utf8");
-    if (!/(?:OiyoCanonicalRedirect|BlogRedirect|<meta\s+name=["']robots["'][^>]*noindex|\bnoindex\b)/i.test(source)) return [];
+    if (!/(?:OiyoCanonicalRedirect|BlogRedirect|SameSiteRedirect|<meta\s+name=["']robots["'][^>]*noindex|\bnoindex\b)/i.test(source)) return [];
     return [entry.name.replace(/\.astro$/, "")];
   });
 }

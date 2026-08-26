@@ -11,22 +11,38 @@ import { siteConfig } from "../../../../config/site.config";
 
 export async function getStaticPaths() {
   const allPosts = await getCollection("blog", ({ data }) => data.draft !== true);
+  const seriesByLocale = new Map(
+    locales.map((lang) => [
+      lang,
+      buildSeriesIndex(allPosts.filter((p) => p.data.locale === lang)),
+    ]),
+  );
 
   return locales.flatMap((lang) => {
-    const localePosts = allPosts.filter((p) => p.data.locale === lang);
-    const series = Array.from(buildSeriesIndex(localePosts).values());
+    const series = Array.from(seriesByLocale.get(lang)?.values() ?? []);
     // Single-post "series" would just duplicate the article itself — only
     // multi-chapter series get a dedicated hub page.
     return series
       .filter((s) => s.chapterCount >= 2 && isUrlSafeSeriesKey(s.key))
       .map((s) => ({
         params: { lang, key: s.key },
-        props: { locale: lang, series: s },
+        props: {
+          locale: lang,
+          series: s,
+          availableLocales: locales.filter((candidate) => {
+            const candidateSeries = seriesByLocale.get(candidate)?.get(s.key);
+            return candidateSeries !== undefined && candidateSeries.chapterCount >= 2;
+          }),
+        },
       }));
   });
 }
 
-const { locale, series } = Astro.props as { locale: Locale; series: SeriesEntry };
+const { locale, series, availableLocales } = Astro.props as {
+  locale: Locale;
+  series: SeriesEntry;
+  availableLocales: Locale[];
+};
 const t = await getTranslations(locale);
 const courseT = (t as Record<string, unknown>).courses as Record<string, string> | undefined;
 const categoryNames = (t.category.names ?? {}) as Record<string, string>;
@@ -60,6 +76,7 @@ const jsonLd = JSON.stringify(
   title={`${displayName} — ${series.chapterCount} ${chaptersLabel}`}
   description={series.firstPost.data.description ?? displayName}
   canonicalUrl={pageUrl}
+  availableLocales={availableLocales}
 >
   <script is:inline type="application/ld+json" set:html={jsonLd} />
 
