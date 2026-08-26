@@ -89,7 +89,10 @@ npm run validate:i18n
 npm run validate:personality
 npm run verify:harness
 npm run audit:magazine-compat
+npm run audit:content-quality
 ```
+
+`audit:content-quality` now enforces content rule 6's prose minimum (baseline-gated via `config/prose-min-baseline.json` — see the script for why it's a ceiling, not zero-tolerance) in addition to its existing duplicate/forbidden-title/category checks. It was previously undocumented here despite existing as an npm script.
 
 ## 5. Definition of Done
 

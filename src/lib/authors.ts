@@ -89,6 +89,16 @@ const BYLINE_MAP: Record<string, AuthorEntity> = {
   "oiyo 역사부": DESKS.culture,
   "the imperial scribe": DESKS.culture,
   "mythos mind": DESKS.culture,
+  "oiyo編集部": DESKS.editorial,
+  "oiyo编辑部": DESKS.editorial,
+  "oiyo history": DESKS.culture,
+  "oiyo科学部": DESKS.science,
+  "oiyo歴史部": DESKS.culture,
+  "oiyo science": DESKS.science,
+  "oiyo 历史组": DESKS.culture,
+  "oiyo 科学组": DESKS.science,
+  "oiyo histoire": DESKS.culture,
+  "oiyo ciencia": DESKS.science,
 };
 
 /** Resolve a raw byline to an accountable editorial entity (never null). */

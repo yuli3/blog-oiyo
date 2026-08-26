@@ -7,6 +7,8 @@ const inventoryPath = path.join(root, "data/catalog/content-inventory.master.csv
 
 const hardFailures = [];
 const languageWarnings = [];
+const proseMinViolations = [];
+const proseMinBaselinePath = path.join(root, "config/prose-min-baseline.json");
 const categoryCounts = new Map();
 const duplicateBodies = new Map();
 const quarantinedDuplicateWarnings = [];
@@ -74,6 +76,23 @@ for (const file of listMdxFiles(contentRoot)) {
 
   if (text.includes("file:///")) {
     hardFailures.push(`${rel}: contains file:/// link`);
+  }
+
+  // Prose-minimum gate for track: interactive (AGENTS.md content rule 6: "any
+  // track: interactive article must contain >= 400 Korean characters of prose
+  // before the first component. Tool-dump articles without context paragraphs
+  // will be rejected."). This rule existed only as prose in AGENTS.md until
+  // 2026-08-26 -- 55 of 62 non-redirect interactive articles (89%) violated it
+  // with nothing catching them. Source: company-brain/projects/oiyo-ecosystem/
+  // low-quality-content-full-audit-2026-08-26.md P1-3.
+  if (locale === "ko" && field(frontmatter, "track") === "interactive" && !redirectOnly) {
+    const body = text.replace(/^---\n[\s\S]*?\n---\s*/, "");
+    const firstComponentIdx = body.search(/^<[A-Z][A-Za-z0-9]*[\s/>]/m);
+    const proseSection = firstComponentIdx === -1 ? body : body.slice(0, firstComponentIdx);
+    const koreanChars = (proseSection.match(/[가-힣]/g) ?? []).length;
+    if (koreanChars < 400) {
+      proseMinViolations.push(`${rel}: ${koreanChars} Korean chars before first component (need >= 400)`);
+    }
   }
 
   for (const pattern of forbiddenTitlePatterns) {
@@ -156,6 +175,27 @@ if (languageWarnings.length > 40) {
   console.warn(`warning: ${languageWarnings.length - 40} more language warnings omitted`);
 }
 
+// Prose-min is baseline-gated, not zero-tolerance: 55 of 62 existing
+// track: interactive articles already violate it (2026-08-26 measurement).
+// Bulk-rewriting 55 articles is a content batch, not a gate-addition batch --
+// this only stops the count from growing past today's number.
+const proseMinBaseline = fs.existsSync(proseMinBaselinePath)
+  ? JSON.parse(fs.readFileSync(proseMinBaselinePath, "utf8"))
+  : null;
+if (!proseMinBaseline) {
+  console.warn(
+    `warning: no baseline at config/prose-min-baseline.json. Current violations: ${proseMinViolations.length}. ` +
+      `Create the baseline file to enable the gate:\n` +
+      JSON.stringify({ maxViolations: proseMinViolations.length, recordedOn: new Date().toISOString().slice(0, 10) }, null, 2),
+  );
+} else if (proseMinViolations.length > proseMinBaseline.maxViolations) {
+  hardFailures.push(
+    `prose-min regrowth: ${proseMinViolations.length} track:interactive articles now violate the >=400-char rule, ` +
+      `baseline ceiling is ${proseMinBaseline.maxViolations} (recorded ${proseMinBaseline.recordedOn}). New violations:\n` +
+      proseMinViolations.slice(0, 15).map((v) => `    ${v}`).join("\n"),
+  );
+}
+
 if (hardFailures.length) {
   for (const failure of hardFailures) {
     console.error(`error: ${failure}`);
@@ -165,4 +205,7 @@ if (hardFailures.length) {
 }
 
 const warningCount = categoryWarningCount + languageWarnings.length + quarantinedDuplicateWarnings.length;
-console.log(`content quality audit passed (${warningCount} warning(s))`);
+console.log(
+  `content quality audit passed (${warningCount} warning(s)); prose-min violations: ${proseMinViolations.length}` +
+    (proseMinBaseline ? ` (ceiling ${proseMinBaseline.maxViolations})` : " (gate not yet enabled)"),
+);
