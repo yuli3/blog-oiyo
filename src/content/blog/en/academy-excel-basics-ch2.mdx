@@ -1,0 +1,326 @@
+---
+track: academy
+locale: en
+title: "Excel from Basics to Advanced — Data Management: Sort, Filter, Conditional Formatting"
+category: "Computer Science"
+series: "Excel from Basics to Advanced"
+chapter: 2
+chapterTitleShort: 'Data Management'
+author: OIYO Editorial
+tags:
+  - excel
+  - spreadsheets
+  - functions
+  - data analysis
+  - office skills
+  - productivity
+description: "Master Excel data management — single and multi-level sorting, AutoFilter and Advanced Filter, conditional formatting (color scales, data bars, icon sets), and data validation."
+pubDate: '2026-05-25'
+layoutVariant: lecture-series
+---
+
+## What Is Data Management?
+
+Data management means **sorting** a large dataset into the order you want, **filtering** it down to just the data you need, and **visually highlighting** rows based on conditions. It's one of Excel's most practical capabilities.
+
+**Three pillars of data management:**
+1. **Sort**: arrange data according to a chosen criterion
+2. **Filter**: show only rows that meet a condition
+3. **Conditional formatting**: automatically apply color or style based on a condition
+
+---
+
+## Sort
+
+### Basic sort (single criterion)
+
+**Ascending sort (A→Z, low→high)**: Data tab → Sort Ascending button (or Ctrl+Shift+A, if assigned)
+
+**Descending sort (Z→A, high→low)**: Data tab → Sort Descending button
+
+**Sort order by data type:**
+
+| Data type | Ascending order |
+|-----------|------------|
+| Numbers | Negative → zero → positive |
+| Text | Numbers → symbols → letters (A–Z) |
+| Dates | Earliest → most recent |
+| Booleans | FALSE → TRUE |
+| Errors | Last |
+| Blank cells | Always last |
+
+### Multi-level sort
+
+Apply several criteria in order of priority.
+
+**How**: Data tab → Sort → Add Level
+
+**Example**: sort by department, then by salary in descending order within each department
+
+| Level | Sort by | Order |
+|------|---------|---------|
+| Level 1 | Department | Ascending (A–Z) |
+| Level 2 | Salary | Descending (highest first) |
+
+### Custom list sort
+
+Sorts by a **user-defined order** — such as "Mon, Tue, Wed, Thu, Fri, Sat, Sun" — rather than alphabetical or numeric order.
+
+**Setting**: Sort dialog → Order → Custom List
+
+**Built-in lists**:
+- Days of the week: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
+- Month names: January, February... December
+- Abbreviated months: Jan, Feb... Dec
+
+---
+
+## Filter
+
+### AutoFilter
+
+Shows only the rows that meet a condition; the rest are hidden (not deleted).
+
+**Turn on**: Data tab → Filter (shortcut: Ctrl+Shift+L)
+→ Dropdown arrows appear in the header row
+
+**Filter option types:**
+
+| Option | Function |
+|------|------|
+| Text Filters | Equals, contains, begins with, ends with, custom |
+| Number Filters | Equals, greater than, less than, top/bottom N, above/below average |
+| Date Filters | This week/month/quarter/year, before/after a given date |
+| Filter by Color | Filter by a specific background or font color |
+| Search | Type directly into the search box in the dropdown |
+
+**Multi-criteria filtering**: combine AND/OR conditions across each column's filter
+
+### Advanced Filter
+
+Used to handle more complex conditions than AutoFilter, or to **extract results to a different location**.
+
+**Advantages of Advanced Filter:**
+- Apply OR conditions within the same column
+- Extract results to a different sheet or area
+- Extract only unique values, with no duplicates
+
+**Rules for writing the criteria range:**
+
+```
+Same row: AND condition (all must be satisfied)
+Different rows: OR condition (any one must be satisfied)
+
+Example criteria range:
+| Department | Salary |
+|------|------|
+| Sales | >50000 |
+| Marketing | |
+
+→ (Sales AND salary > 50,000) OR (Marketing)
+```
+
+**How**: Data tab → Advanced → set the list range and criteria range → check "Copy to another location"
+
+### Slicer
+
+A **visual filter tool** available since Excel 2010, letting you apply a filter with a single click.
+
+**Applies to**: Tables, PivotTables
+
+**Insert**: Insert tab → Slicer (or select a table/PivotTable and use the contextual tab)
+
+---
+
+## Conditional Formatting
+
+### What is conditional formatting?
+
+**Formatting (color, font, borders) is applied automatically** based on a cell's value or a formula result.
+
+**How**: Home tab → Conditional Formatting
+
+### Highlight Cell Rules
+
+| Rule | Example |
+|------|------|
+| Greater than | Red background for cells over 100 |
+| Less than | Yellow background for cells under 50 |
+| Between | Green font for cells between 50 and 100 |
+| Equal to | Highlight cells matching specific text |
+| Text that contains | Blue background for cells containing "Done" |
+| Dates | Today, yesterday, this week, last month, etc. |
+| Duplicate values | Highlight duplicate/unique values |
+
+### Color Scales
+
+Represents the **minimum-to-maximum range** as a color gradient.
+
+- 2-color scale: minimum (e.g., white) → maximum (e.g., red)
+- 3-color scale: minimum (red) → midpoint (yellow) → maximum (green)
+- Example use: in a gradebook, high scores = dark green, low scores = dark red
+
+### Data Bars
+
+Embeds **a bar chart inside the cell** to intuitively show relative magnitude.
+
+- Larger values display a longer bar
+- Color is customizable (solid or gradient)
+- Negative values can display in the opposite direction
+
+### Icon Sets
+
+Displays an **icon (arrows, traffic lights, stars, flags, etc.)** based on the cell's value.
+
+| Icon type | Example use |
+|-----------|---------|
+| Directional arrows | Change versus the prior month |
+| Traffic light (red/yellow/green) | Performance target attainment |
+| Stars (0–5) | Rating visualization |
+| Flags | Flagging items that need attention |
+
+**Setting icon thresholds**: adjustable by percentage or fixed value — e.g., top 33% green, middle 33% yellow, bottom 33% red
+
+### Formula-based conditional formatting
+
+Set more complex conditions using a **formula**.
+
+```
+Rule type: "Use a formula to determine which cells to format"
+
+Example 1 — shade even rows:
+=MOD(ROW(),2)=0
+
+Example 2 — highlight the whole row based on a column value:
+=$D2="Done"    (highlights the entire row when column D = "Done")
+→ Apply the format to a range like $A2:$Z2, covering the whole row
+
+Example 3 — highlight red if the due date is before today:
+=$C2<TODAY()
+```
+
+**Key point**: when building formula-based conditional formatting, combining a relative row with an absolute column is the trick to get right.
+
+---
+
+## Data Validation
+
+### What is data validation?
+
+Restricts the **type or range of data** that can be entered in a cell, preventing input errors.
+
+**How**: Data tab → Data Validation
+
+### Validation criteria types
+
+| Allow | Example setting |
+|---------|---------|
+| Whole number | Only integers between 1 and 100 |
+| Decimal | Between 0.0 and 10.0 |
+| List | Choose from a dropdown list |
+| Date | Any date after 2024-01-01 |
+| Time | Between 09:00 and 18:00 |
+| Text length | 10 characters or fewer |
+| Custom | =COUNTIF($A$1:A1,A1)=1 (prevents duplicates) |
+
+### Creating a dropdown list
+
+The most commonly used type of data validation.
+
+**Method 1 — direct entry**:
+- Allow: List → Source: Sales,Marketing,HR,IT
+
+**Method 2 — range reference**:
+- Allow: List → Source: =$F$1:$F$5 (write the list values in another cell range, then reference it)
+
+**Method 3 — defined name range**:
+- Formulas tab → Define Name → set a name such as "DepartmentList"
+- Source: =DepartmentList
+
+### Error alert settings
+
+Set the message shown when invalid data is entered.
+
+| Style | Behavior |
+|-------|------|
+| Stop | Entry blocked; user can only re-enter or cancel |
+| Warning | Warning shown; entry can still proceed |
+| Information | Message shown; entry can still proceed |
+
+### Dependent dropdowns
+
+A structure where the second dropdown's contents depend on what was selected in the first.
+
+```
+Step 1: choose a top-level category (Beverages/Food/Household goods)
+Step 2: only the sub-categories for the selected top-level category appear
+
+Implementation: using the INDIRECT function
+= INDIRECT($A1)  → interprets A1's value as a range name
+```
+
+---
+
+## Using the Table Feature
+
+### Advantages of an Excel Table
+
+Converting a normal range into a **Table (Ctrl+T)** unlocks a range of automation features.
+
+| Feature | Normal range | Table |
+|------|---------|---------|
+| Filter | Applied manually | Included automatically |
+| Auto-extending format | None | Extends automatically when a row is added |
+| Auto-extending formulas | None | Applied automatically to new rows |
+| Structured references | Not available | =TableName[ColumnName] |
+| Total row | Manual | Toggle to add instantly |
+| PivotTable integration | Range must be refreshed manually | Updates automatically |
+
+### Structured references
+
+```
+=SUM(SalesData[Revenue])        → Sum of the entire Revenue column
+=AVERAGE(SalesData[Salary])    → Average of the Salary column
+```
+
+---
+
+## 5-Question Practice Quiz
+
+**Q1.** In Advanced Filter, if you write multiple conditions on the same row of the criteria range, is AND or OR applied?
+
+> **Answer**: AND (all conditions must be satisfied simultaneously)
+>
+> **Explanation**: in Advanced Filter, conditions on the same row are AND, and conditions on different rows are OR. For example, if row 1 has Department="Sales" and Salary>50,000, only rows satisfying both conditions are filtered in.
+
+---
+
+**Q2.** Which formula would you use to shade only even-numbered rows with conditional formatting?
+
+> **Answer**: `=MOD(ROW(),2)=0`
+>
+> **Explanation**: ROW() returns the current row number, and MOD(row number, 2)=0 is true when the row number is evenly divisible by 2 (i.e., even). To highlight odd rows instead, use `=MOD(ROW(),2)=1`.
+
+---
+
+**Q3.** When creating a dropdown list from another cell range in Data Validation, what format should the value in the Source field take?
+
+> **Answer**: Enter the cell range as an absolute reference, such as `=$F$1:$F$10`.
+>
+> **Explanation**: when using a cell range as the source, it's best to use absolute references ($). Alternatively, you can define a name in the Formulas tab and enter it as `=DefinedName`.
+
+---
+
+**Q4.** What are the two biggest practical advantages of converting to an Excel Table (Ctrl+T)?
+
+> **Answer**: formats and formulas extend automatically (applied automatically when new rows are added), and structured references make formulas more readable.
+>
+> **Explanation**: once converted to a Table, existing formats and formulas are automatically applied as you add data. It also enables structured references such as `=SalesTable[Amount]`, making formulas easier to understand at a glance.
+
+---
+
+**Q5.** For a 3-color scale conditional format, how would you set thresholds to highlight the top 10%, middle, and bottom 10%?
+
+> **Answer**: Conditional Formatting → Color Scales → Edit Rule, then set the Minimum/Midpoint/Maximum type to "Percentile" and enter 10, 50, and 90 respectively.
+>
+> **Explanation**: by default, color scales distribute color based on the actual minimum, midpoint, and maximum values. Switching to a percentile basis concentrates the maximum/minimum colors on the top/bottom 10%, which is effective for spotting outliers.
