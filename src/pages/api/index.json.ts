@@ -27,8 +27,8 @@ export const GET: APIRoute = async () => {
     counts: manifest.counts,
     citation: "Attribution: Oiyo (blog.oiyo.net). Cite individual entries by their stable URL.",
     relatedNetwork: [
-      { role: "definition", url: "https://wiki.oiyo.net/knowledge/index.json" },
-      { role: "explanation", url: "https://blog.oiyo.net/knowledge/index.json" },
+      { role: "reference-and-knowledge", url: "https://wiki.oiyo.net/knowledge/index.json" },
+      { role: "publishing-and-utility", url: "https://blog.oiyo.net/knowledge/index.json" },
     ],
   };
   return new Response(JSON.stringify(body, null, 2), {

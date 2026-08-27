@@ -10,9 +10,8 @@ const posts = await getCollection("blog", ({ data }) => data.draft !== true);
 const guideCount = posts.length;
 const locales = siteConfig.locales;
 
-// Topic map: hub concepts from the shared seed. Blog is the explanation layer,
-// so each concept links to its canonical definition on wiki and shows how many
-// English blog guides explain it (tag match) — the cross-site path made visible.
+// Topic map: hub concepts from the shared seed and the number of English blog
+// guides covering each one. Route-level ownership is independent of format.
 // Unicode-aware: keep letters/numbers of any script (CJK, Hangul) so non-latin
 // tags/aliases (e.g. 해몽, 태몽) don't all collapse to the same token.
 const norm = (s: string) => s.toLowerCase().trim().replace(/[^\p{L}\p{N}]+/gu, "-").replace(/^-|-$/g, "");
@@ -49,45 +48,45 @@ const resources = [
 
 const network = [
   {
-    role: "Definition",
+    role: "Reference",
     title: "Oiyo Wiki",
     href: "https://wiki.oiyo.net/knowledge/",
     summary: "Source-backed definitions and concept graphs.",
-    details: "Use this layer when you need stable terms, cited references, and machine-readable DefinedTerm data.",
+    details: "Use this catalog when you need stable terms, cited references, and machine-readable DefinedTerm data.",
     catalogs: [{ label: "topics.json", href: "https://wiki.oiyo.net/knowledge/topics.json" }],
   },
   {
-    role: "Explanation",
+    role: "Publishing",
     title: "Oiyo Blog",
     href: "https://blog.oiyo.net/knowledge/",
     summary: "Guides, lessons, comparisons, and long-form context.",
-    details: "Use this layer when a reader needs examples, study paths, or a practical explanation before using a tool.",
+    details: "Use this catalog for guides, lessons, references, and established utilities published on the blog.",
     catalogs: [{ label: "guides.json", href: "/knowledge/guides.json" }],
     current: true,
   },
   {
-    role: "Execution",
+    role: "Interactive",
     title: "OIYO",
     href: "https://oiyo.net/knowledge/",
     summary: "Tests, calculators, results, and repeatable workflows.",
-    details: "Use this layer when the user wants to calculate, test, save a result, or turn knowledge into action.",
+    details: "Use this catalog when the user wants to calculate, test, save a result, or turn knowledge into action.",
     catalogs: [{ label: "tools.json", href: "https://oiyo.net/knowledge/tools.json" }],
   },
 ];
 ---
 
 <BaseLayout
-  title="Knowledge Layer — Citable Guides Data"
+  title="Knowledge Network — Citable Publishing Data"
   description="A machine-citable catalog of long-form guides and explainers across astrology, saju, personality, finance and certifications — for people and AI to cite."
 >
   <article class="py-24 max-w-3xl mx-auto px-6">
-    <p class="text-xs font-bold uppercase tracking-widest text-primary mb-4">Knowledge Layer · Explanation</p>
+    <p class="text-xs font-bold uppercase tracking-widest text-primary mb-4">Knowledge Network · Publishing</p>
     <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-6 leading-tight">
       Guides built to be cited
     </h1>
     <p class="text-lg text-muted-foreground leading-relaxed mb-10">
-      Oiyo Blog is the <strong>explanation layer</strong> of the Oiyo knowledge network: long-form guides,
-      lectures and explainers, published as clean HTML <em>and</em> as machine-readable catalogs.
+      Oiyo Blog publishes long-form guides, lectures, references, explainers, and established utilities
+      as clean HTML <em>and</em> as machine-readable catalogs.
     </p>
 
     <h2 class="text-2xl font-bold tracking-tight mb-4">Open data catalogs</h2>
@@ -119,9 +118,9 @@ const network = [
     )}
 
     <KnowledgeNetworkMap
-      eyebrow="Three layers"
+      eyebrow="Canonical catalogs"
       heading="The knowledge network"
-      intro="Start with the layer that matches the intent. Open the details only when you need the data contract behind it."
+      intro="Start with the canonical catalog that matches the task. A content format does not force a particular domain."
       layers={network}
     />
 
