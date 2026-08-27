@@ -1,0 +1,414 @@
+---
+track: academy
+locale: en
+title: "Excel from Basics to Advanced — Mastering Advanced Functions"
+category: "Computer Science"
+series: "Excel from Basics to Advanced"
+chapter: 3
+chapterTitleShort: 'Advanced Functions'
+author: OIYO Editorial
+tags:
+  - excel
+  - vlookup
+  - index
+  - match
+  - if function
+  - advanced functions
+  - office skills
+description: "A complete guide to Excel's advanced functions — VLOOKUP's limitations and the INDEX/MATCH combo, nested IF vs. IFS vs. SWITCH, SUMIF/COUNTIF, IFERROR error handling, and the TEXT function."
+pubDate: '2026-05-25'
+layoutVariant: lecture-series
+---
+
+## Why Advanced Functions?
+
+Basic functions (SUM, AVERAGE, IF) can't handle the more complex requirements of real work. **Advanced functions** are essential for pulling data from other sheets or files, handling complex conditions, and gracefully managing errors.
+
+---
+
+## VLOOKUP — From Basics to Its Limits
+
+### Basic VLOOKUP structure
+
+```
+=VLOOKUP(lookup_value, range, column_index, [match_type])
+```
+
+| Argument | Description |
+|------|------|
+| **lookup_value** | The value to search for (a cell reference is recommended) |
+| **range** | The range containing your data (searched from its first column) |
+| **column_index** | The column position of the value to return (relative to the range) |
+| **match_type** | FALSE (0) = exact match, TRUE (1) = approximate match |
+
+### Real-world examples
+
+```
+Look up a name by employee ID:
+=VLOOKUP(A2, EmployeeTable!$A:$D, 2, FALSE)
+→ Returns column 2 (name) from EmployeeTable, using A2's employee ID
+
+Look up a unit price by product code:
+=VLOOKUP(B5, $F$2:$H$100, 3, FALSE)
+→ Returns column 3 (unit price) from the F:H range, using B5's code
+```
+
+### VLOOKUP's 3 limitations
+
+**Limitation 1: no lookups to the left**
+```
+Can only search the first column of the range
+→ VLOOKUP can't find an employee ID by looking up a name
+```
+
+**Limitation 2: inserting a column breaks the index**
+```
+=VLOOKUP(A2, A:D, 3, FALSE)
+→ If a column is inserted between B and C, the index doesn't
+  automatically shift to 4
+→ The hard-coded column index "3" now returns the wrong column
+```
+
+**Limitation 3: can't handle duplicate values**
+```
+If the lookup value appears more than once, only the first match is returned
+```
+
+---
+
+## INDEX + MATCH — A Full Replacement for VLOOKUP
+
+### Understanding each function
+
+**INDEX**: returns the value at a specific position within a range
+
+```
+=INDEX(range, row_num, [col_num])
+
+=INDEX(B2:B100, 5)     → the 5th value in the range B2:B100
+=INDEX(A2:D100, 3, 2)  → the value in row 3, column 2
+```
+
+**MATCH**: returns the position (row/column number) of a lookup value within a range
+
+```
+=MATCH(lookup_value, range, [match_type])
+
+=MATCH("Alex Kim", A2:A100, 0)  → returns the row number where "Alex Kim" is found
+match_type: 0 = exact match (used in most cases)
+```
+
+### Combining INDEX + MATCH
+
+```
+=INDEX(return_range, MATCH(lookup_value, search_range, 0))
+```
+
+**VLOOKUP vs. INDEX+MATCH:**
+
+```
+[VLOOKUP approach] Find salary by name:
+=VLOOKUP("Alex Kim", B:E, 4, FALSE)
+→ Only works if the name is in the very first column, B
+
+[INDEX+MATCH approach] Search any column:
+=INDEX(E2:E100, MATCH("Alex Kim", C2:C100, 0))
+→ Searches column C (name), returns column E (salary)
+→ Works fine even if the lookup column is to the right of the return column
+```
+
+### INDEX+MATCH in practice
+
+**Dual-condition lookup (array formula):**
+```
+Find the salary where both department and title match:
+=INDEX(D2:D100,
+  MATCH(1, (B2:B100="Sales")*(C2:C100="Manager"), 0))
+Enter with Ctrl+Shift+Enter
+```
+
+**Dynamic column selection:**
+```
+Find a column dynamically by header name:
+=INDEX(A1:F100,
+  MATCH("Alex Kim", A1:A100, 0),
+  MATCH("Salary", A1:F1, 0))
+→ Uses MATCH for both the row and the column, then returns
+  the value at their intersection
+```
+
+---
+
+## Nested IF — Handling Multiple Conditions
+
+### IF basics, revisited
+
+```
+=IF(condition, value_if_true, value_if_false)
+=IF(A1>=60, "Pass", "Fail")
+```
+
+### Nested IF (3-tier example)
+
+```
+Assigning a grade based on a score:
+=IF(A1>=90, "A",
+  IF(A1>=80, "B",
+    IF(A1>=70, "C",
+      IF(A1>=60, "D", "F"))))
+```
+
+> **Note**: the deeper you nest IF statements, the harder they are to read. Excel 2019+ recommends IFS instead.
+
+### The IFS function (Excel 2019+)
+
+```
+=IFS(condition1, value1, condition2, value2, ..., TRUE, default)
+
+=IFS(A1>=90, "A",
+     A1>=80, "B",
+     A1>=70, "C",
+     A1>=60, "D",
+     TRUE, "F")
+```
+
+**Nested IF vs. IFS:**
+
+| Aspect | Nested IF | IFS |
+|------|--------|-----|
+| **Readability** | Low (deep indentation) | High (flat structure) |
+| **Max conditions** | 7 nested levels recommended | 127 |
+| **Default value** | The final FALSE value | `TRUE, default` |
+| **Version support** | All versions | Excel 2019+ |
+
+### The SWITCH function (exact value matching)
+
+```
+=SWITCH(expression,
+  value1, result1,
+  value2, result2,
+  ...,
+  default)
+
+Convert a department code to a department name:
+=SWITCH(A1,
+  "S", "Sales",
+  "M", "Marketing",
+  "D", "Development",
+  "Other")
+```
+
+---
+
+## SUMIF / COUNTIF / AVERAGEIF
+
+### Single-condition aggregation
+
+```
+SUMIF(range, criteria, [sum_range])
+COUNTIF(range, criteria)
+AVERAGEIF(range, criteria, [average_range])
+```
+
+**Real-world examples:**
+
+```
+Total revenue from the New York region:
+=SUMIF(B2:B100, "New York", D2:D100)
+
+Count of students scoring 80 or above:
+=COUNTIF(C2:C100, ">=80")
+
+Average salary in the Sales department:
+=AVERAGEIF(A2:A100, "Sales", E2:E100)
+
+Revenue since the 1st of this month:
+=SUMIF(A2:A100, ">="&DATE(2024,1,1), C2:C100)
+```
+
+### Multi-condition aggregation — SUMIFS / COUNTIFS / AVERAGEIFS
+
+```
+SUMIFS(sum_range, criteria_range1, criteria1, criteria_range2, criteria2, ...)
+COUNTIFS(criteria_range1, criteria1, criteria_range2, criteria2, ...)
+```
+
+**Real-world examples:**
+
+```
+Revenue from New York + Sales:
+=SUMIFS(D2:D100, B2:B100, "New York", A2:A100, "Sales")
+
+Units sold of a specific product in a specific period:
+=SUMIFS(E2:E100,
+  C2:C100, "Laptop",
+  A2:A100, ">="&DATE(2024,1,1),
+  A2:A100, "<="&DATE(2024,3,31))
+```
+
+---
+
+## IFERROR — Handling Errors Gracefully
+
+### Types of errors
+
+| Error | Cause |
+|------|------|
+| `#N/A` | VLOOKUP/MATCH couldn't find the lookup value |
+| `#DIV/0!` | Division by zero |
+| `#VALUE!` | Wrong data type |
+| `#REF!` | The referenced range was deleted |
+| `#NAME?` | A misspelled function name |
+
+### Using IFERROR
+
+```
+=IFERROR(formula, value_if_error)
+
+Return 0 on error:
+=IFERROR(VLOOKUP(A2, D:E, 2, FALSE), 0)
+
+Return a blank on error:
+=IFERROR(VLOOKUP(A2, D:E, 2, FALSE), "")
+
+Return a message on error:
+=IFERROR(VLOOKUP(A2, D:E, 2, FALSE), "No data found")
+```
+
+### IFNA — handles only #N/A errors
+
+```
+=IFNA(formula, value_if_na)
+
+=IFNA(MATCH(A2, B2:B100, 0), "Not registered")
+→ Handles only #N/A from VLOOKUP/MATCH; other errors still display normally
+```
+
+---
+
+## The TEXT Function — Formatting Numbers and Dates
+
+### Basic usage
+
+```
+=TEXT(value, format_code)
+```
+
+### Commonly used format codes
+
+| Purpose | Format code | Result |
+|------|---------|------|
+| Thousands separator | `"#,##0"` | 1,234,567 |
+| 2 decimal places | `"0.00"` | 3.14 |
+| Currency display | `"$#,##0"` | $50,000 |
+| Long date | `"mmmm d, yyyy"` | March 15, 2024 |
+| Day of week | `"dddd"` | Friday |
+| Time | `"hh:mm:ss"` | 09:30:00 |
+
+### Practical uses
+
+```
+Combining text and a date:
+="Report prepared on: "&TEXT(TODAY(), "yyyy-mm-dd")
+
+Adding a currency symbol to a number:
+="$"&TEXT(B2, "#,##0")
+→ $1,500,000
+
+Converting to a percentage:
+=TEXT(A2/B2, "0.0%")
+→ 75.3%
+```
+
+---
+
+## XLOOKUP — The Future Standard (Excel 365)
+
+### A complete replacement for VLOOKUP
+
+```
+=XLOOKUP(lookup_value, lookup_array, return_array,
+  [if_not_found], [match_mode], [search_mode])
+```
+
+**Advantages:**
+- Can look up to the left
+- Can return multiple columns at once
+- Built-in handling for #N/A
+- Supports reverse-direction search
+
+```
+Find an employee ID by name (a left-ward lookup):
+=XLOOKUP("Alex Kim", C2:C100, A2:A100, "Not found")
+
+Automatically returns "No data" when nothing is found:
+=XLOOKUP(A2, F:F, G:G, "No data found")
+```
+
+---
+
+## Key Concept Cards
+
+**VLOOKUP's limitations, summarized** ★★★★★
+: No lookups to the left; a column insert breaks the index; duplicate values return only the first match.
+*Alternative: INDEX+MATCH, or XLOOKUP (365)*
+
+**The IFERROR formula** ★★★★
+: `=IFERROR(original_formula, value_if_error)` — catches every error.
+*Note: IFNA only handles #N/A — other errors still display normally*
+
+**IFS vs. nested IF** ★★★
+: IFS is only available in Excel 2019+. On older versions, nested IF is required.
+*Check compatibility before choosing*
+
+---
+
+## 5-Question Practice Quiz
+
+**Q1.** In `=VLOOKUP(A2, B:E, 3, FALSE)`, what happens if a new column is inserted between columns B and C?
+- ① The formula adjusts automatically
+- ② The data from the newly inserted column is returned instead of the original column C data
+- ③ The formula returns an error
+- ④ Nothing changes
+
+**Answer**: ② *(Column index 3 now points to the newly inserted column — this is VLOOKUP's limitation)*
+
+---
+
+**Q2.** In `=INDEX(D2:D100, MATCH("Alex Kim", B2:B100, 0))`, what is the role of the MATCH function?
+- ① It searches for "Alex Kim" in column D
+- ② It returns the position (row number) of "Alex Kim" in column B
+- ③ It returns the 100th value in column D
+- ④ It counts how many times "Alex Kim" appears
+
+**Answer**: ② *(MATCH returns the position; INDEX returns the value at that position)*
+
+---
+
+**Q3.** What does `=SUMIFS(E2:E100, A2:A100, "Sales", C2:C100, ">=50000")` mean?
+- ① The count of rows where column A is "Sales," multiplied by 50,000
+- ② The sum of column E for rows where column A is "Sales" AND column C is 50,000 or more
+- ③ The sum of column E for rows where column A is "Sales" OR column C is 50,000 or more
+- ④ The average of column E
+
+**Answer**: ② *(SUMIFS treats every condition as AND)*
+
+---
+
+**Q4.** In `=IFERROR(VLOOKUP(A2,D:E,2,FALSE), "Not found")`, what happens if VLOOKUP returns a #DIV/0! error?
+- ① "Not found" is displayed
+- ② #DIV/0! is displayed as-is
+- ③ 0 is returned
+- ④ A blank cell is returned
+
+**Answer**: ① *(IFERROR handles every error type, including but not limited to #N/A)*
+
+---
+
+**Q5.** What is the result of `=TEXT(45000, "$#,##0")`?
+- ① 45000
+- ② $45,000
+- ③ 45,000 dollars
+- ④ #VALUE!
+
+**Answer**: ② *(TEXT converts a number into the specified format string)*

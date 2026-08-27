@@ -1,0 +1,301 @@
+---
+track: academy
+locale: en
+title: "Excel from Basics to Advanced — Excel Fundamentals: Interface and Core Functions"
+category: "Computer Science"
+series: "Excel from Basics to Advanced"
+chapter: 1
+chapterTitleShort: 'Basics & Functions'
+author: OIYO Editorial
+tags:
+  - excel
+  - spreadsheets
+  - functions
+  - data analysis
+  - office skills
+  - productivity
+description: "A complete rundown of Excel fundamentals — the Ribbon layout, cell reference types (relative, absolute, mixed), essential functions like SUM, AVERAGE, and IF, and AutoFill and formatting basics."
+pubDate: '2026-05-25'
+layoutVariant: lecture-series
+---
+
+## What Is Excel?
+
+**Microsoft Excel** is Microsoft's spreadsheet program — a workplace tool for entering, calculating, analyzing, and visualizing data.
+
+**Why Excel is so powerful:**
+- Automates complex calculations with formulas and functions
+- Summarizes huge datasets instantly with PivotTables
+- Visualizes data with charts and graphs
+- Automates repetitive tasks with macros (VBA)
+- The most widely used business tool in the world
+
+---
+
+## Fully Understanding the Excel Interface
+
+### Core components
+
+| Component | Location | Function |
+|----------|------|------|
+| Title bar | Very top | Shows the file name |
+| Quick Access Toolbar | Left of the title bar | Fast access to frequently used commands |
+| Ribbon | Below the title bar | Tab-based command groups |
+| Name Box | Left of the formula bar | Shows the current cell address |
+| Formula Bar | Right of the Name Box | Displays and edits cell content/formulas |
+| Column headers | Top of the sheet (A, B, C...) | Select and resize columns |
+| Row headers | Left of the sheet (1, 2, 3...) | Select and resize rows |
+| Cell pointer | Currently selected cell | Green outline |
+| Sheet tabs | Bottom | Switch between sheets |
+| Status bar | Very bottom | Shows sum, average, and count instantly |
+
+### Ribbon tab structure
+
+| Tab | Key functions |
+|----|---------|
+| Home | Font, alignment, number format, styles, cells, editing |
+| Insert | Tables, PivotTables, charts, sparklines, filters |
+| Page Layout | Print settings, margins, orientation, background |
+| Formulas | Insert function, Name Manager, formula auditing |
+| Data | External data, sort/filter, data validation, consolidate |
+| Review | Spell check, comments, protect sheet, share |
+| View | Window switching, freeze panes, zoom |
+| Developer | Macros, VBA editor, controls (must be enabled separately) |
+
+---
+
+## Cell Reference Types
+
+One of the most important concepts in Excel — it determines how a cell address changes when you copy or move a formula.
+
+### Relative Reference
+
+When you copy a formula, it **automatically adjusts based on the direction moved.**
+
+```
+=A1+B1 (entered in C1)
+→ Copied to C2: =A2+B2 (adjusts automatically)
+```
+
+**Use case**: applying the same calculation across consecutive rows/columns
+
+### Absolute Reference
+
+Using the dollar sign ($), the reference **stays fixed even when copied.**
+
+```
+=$A$1+B1 (entered in C1)
+→ Copied to C2: =$A$1+B2 (A1 stays fixed)
+```
+
+**Use case**: referencing a shared fixed value, such as a tax rate or exchange rate
+
+### Mixed Reference
+
+Only **the row or the column** is fixed.
+
+| Notation | Meaning | What changes on copy |
+|------|------|-----------------|
+| $A1 | Column A fixed, row varies | Only the row number changes |
+| A$1 | Row 1 fixed, column varies | Only the column letter changes |
+
+**F4 key**: cycles through reference types (relative → absolute → mixed → mixed → relative)
+
+### Example: comparing reference types
+
+Building a multiplication table (column A × row 1):
+
+```
+Cell B2: =$A2*B$1
+→ Copy right: =$A2*C$1, =$A2*D$1 (only B$1 changes)
+→ Copy down: =$A3*B$1, =$A4*B$1 ($A stays fixed, only the row changes)
+```
+
+---
+
+## Mastering Core Functions
+
+### SUM — Total
+
+```
+=SUM(number1, [number2], ...)
+=SUM(A1:A10)        → Sums A1 through A10
+=SUM(A1:A10, C1)    → Sums a range plus an individual cell
+=SUM(A:A)           → Sums the entire column A
+```
+
+### AVERAGE — Mean
+
+```
+=AVERAGE(number1, [number2], ...)
+=AVERAGE(A1:A10)    → Average of A1:A10 (excludes blank cells and text)
+```
+
+**Note**: blank cells are excluded from the average calculation. Don't confuse them with zero.
+
+### The COUNT family
+
+| Function | Purpose | Example |
+|------|------|------|
+| COUNT | Count of cells containing numbers | =COUNT(A1:A10) |
+| COUNTA | Count of non-empty cells | =COUNTA(A1:A10) |
+| COUNTBLANK | Count of blank cells | =COUNTBLANK(A1:A10) |
+| COUNTIF | Count of cells meeting a condition | =COUNTIF(A1:A10, ">100") |
+
+### MAX / MIN
+
+```
+=MAX(A1:A10)    → Maximum value
+=MIN(A1:A10)    → Minimum value
+=LARGE(A1:A10, 2)   → 2nd-largest value
+=SMALL(A1:A10, 3)   → 3rd-smallest value
+```
+
+### IF — Conditional branching
+
+```
+=IF(condition, value_if_true, value_if_false)
+=IF(A1>=60, "Pass", "Fail")
+=IF(B1>100, B1*0.9, B1)    → 10% discount if over 100
+```
+
+**Nested IF** (multiple conditions):
+
+```
+=IF(A1>=90, "A", IF(A1>=80, "B", IF(A1>=70, "C", "D")))
+```
+
+### The ROUND family
+
+| Function | Purpose | Example |
+|------|------|------|
+| ROUND | Round to nearest | =ROUND(3.456, 2) → 3.46 |
+| ROUNDUP | Round up | =ROUNDUP(3.451, 2) → 3.46 |
+| ROUNDDOWN | Round down | =ROUNDDOWN(3.456, 2) → 3.45 |
+| INT | Round down to integer | =INT(3.9) → 3 |
+| TRUNC | Truncate decimal places | =TRUNC(3.9) → 3 |
+
+### Date and time functions
+
+| Function | Purpose |
+|------|------|
+| TODAY() | Today's date (dynamic) |
+| NOW() | Current date and time (dynamic) |
+| DATE(year, month, day) | Creates a date value |
+| YEAR(date) | Extracts the year |
+| MONTH(date) | Extracts the month |
+| DAY(date) | Extracts the day |
+| DATEDIF(start, end, "Y") | Date difference (in years/months/days) |
+| WEEKDAY(date) | Day-of-week number (1 = Sunday) |
+
+### Text functions
+
+| Function | Purpose | Example |
+|------|------|------|
+| LEFT(text, n) | Extracts n characters from the left | =LEFT("Alexander", 4) → "Alex" |
+| RIGHT(text, n) | Extracts n characters from the right | =RIGHT("A-001", 3) → "001" |
+| MID(text, start, n) | Extracts n characters from the middle | =MID("Alexander", 2, 4) → "lexa" |
+| LEN(text) | Character count | =LEN("hello") → 5 |
+| CONCATENATE / & | Joins text | ="Sun"&"rise" → "Sunrise" |
+| TRIM(text) | Removes leading/trailing spaces | =TRIM(" Alex ") → "Alex" |
+| UPPER/LOWER | Converts case | =UPPER("abc") → "ABC" |
+| FIND(find_text, text) | Returns a position number | =FIND("-", "A-001") → 2 |
+
+---
+
+## AutoFill
+
+### Basic AutoFill
+
+Drag the **fill handle (+)** at the bottom-right corner of a cell to auto-complete a pattern.
+
+| Input | AutoFill result |
+|-------|---------------|
+| 1, 2 | 3, 4, 5, 6... |
+| Monday | Tuesday, Wednesday... |
+| Jan | Feb, Mar... |
+| 2024-01-01 | 2024-01-02, 2024-01-03... |
+| A001 | A002, A003... |
+
+### AutoFill for formulas
+
+Select a cell with a formula, then double-click the fill handle → it auto-fills down to the last row with data in the adjacent column.
+
+---
+
+## Basic Formatting
+
+### Number formats
+
+| Format type | Displayed as | Shortcut |
+|---------|--------|------|
+| General | 1234.5 | Ctrl+Shift+~ |
+| Number (thousands separator) | 1,234.50 | Ctrl+Shift+! |
+| Currency | $1,234 | Ctrl+Shift+$ |
+| Percentage | 12.35% | Ctrl+Shift+% |
+| Date | 2024-01-01 | Ctrl+Shift+# |
+| Time | 14:30 | Ctrl+Shift+@ |
+
+### Merging and alignment
+
+- **Merge Cells**: combines multiple cells into one (Home → Merge & Center)
+- **Wrap text**: Alt + Enter (line break within a cell)
+- **Indent**: Tab key, or the Indent button on the Home tab
+
+### Key shortcuts
+
+| Shortcut | Function |
+|-------|------|
+| Ctrl + C / V / X | Copy / Paste / Cut |
+| Ctrl + Z / Y | Undo / Redo |
+| Ctrl + S | Save |
+| Ctrl + Home | Jump to cell A1 |
+| Ctrl + End | Jump to the last cell with data |
+| Ctrl + Arrow key | Jump to the end of a contiguous data range |
+| Ctrl + Shift + End | Select through the last cell with data |
+| F2 | Edit mode for a cell |
+| F4 | Cycle reference type / repeat last action |
+| Alt + Enter | Line break within a cell |
+| Ctrl + 1 | Format Cells dialog |
+
+---
+
+## 5-Question Practice Quiz
+
+**Q1.** In `=SUM($A$1:A10)`, what kind of reference is A10, and how does the formula change if you copy it down one row?
+
+> **Answer**: A10 is a relative reference; copying the formula down one row turns it into `=SUM($A$1:A11)`.
+>
+> **Explanation**: `$A$1` is an absolute reference, so it stays fixed when copied. A10 is a relative reference, so copying down one row changes it to A11. This formula is used to compute a running total from A1 downward.
+
+---
+
+**Q2.** In cell B2 with the formula `=IF(A2>=90,"A",IF(A2>=80,"B","C"))`, what's the result when A2=75?
+
+> **Answer**: "C"
+>
+> **Explanation**: Since A2=75, the first condition A2>=90 is false, and the second condition A2>=80 is also false, so the final value "C" is returned.
+
+---
+
+**Q3.** In `=AVERAGE(10, 20, "", 30)`, how is the empty text "" handled?
+
+> **Answer**: The empty text is ignored, giving (10+20+30)/3 = 20.
+>
+> **Explanation**: AVERAGE excludes text and blank cells from its calculation. Zero is not excluded, however, so `=AVERAGE(10, 20, 0, 30)` = 15. Be careful about the difference between zero and a blank cell.
+
+---
+
+**Q4.** When building a multiplication table, if you enter `=$A2*B$1` in cell B2 and copy it right and down, how does it change in each direction?
+
+> **Answer**: Copied right: `=$A2*C$1` (B→C changes; A and row 1 stay fixed). Copied down: `=$A3*B$1` (row 2→3 changes; column A and row 1 stay fixed).
+>
+> **Explanation**: In `$A2`, `$A` fixes column A while 2 (the row) varies. In `B$1`, B (the column) varies while `$1` fixes row 1. This combination of mixed references is the key to building a multiplication table.
+
+---
+
+**Q5.** What is the result of `=ROUND(1234.5678, -2)`?
+
+> **Answer**: 1200
+>
+> **Explanation**: When ROUND's second argument is negative, it rounds to the left of the decimal point. -2 rounds to the hundreds place, so 1234.5678 → 1200. For reference, -1 rounds to the tens place → 1230, and -3 rounds to the thousands place → 1000.
