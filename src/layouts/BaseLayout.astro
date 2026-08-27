@@ -98,6 +98,7 @@ const allLangItems = [
 const langItems = availableLocales && availableLocales.length
   ? allLangItems.filter((li) => availableLocales.includes(li.code) || li.code === locale)
   : allLangItems;
+const currentLangItem = langItems.find((li) => li.code === locale) ?? langItems[0];
 
 const footerCopy: Record<string, { site: string; family: string; utility: string; knowledge: string; sitemap: string; support: string }> = {
   en: { site: "Blog", family: "OIYO family", utility: "Information", knowledge: "Knowledge index", sitemap: "Sitemap", support: "Support OIYO" },
@@ -186,15 +187,32 @@ const footerLabels = footerCopy[locale] ?? footerCopy.en;
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
           </a>
 
-          <!-- Language switcher -->
-          <div class="flex items-center gap-2 border-l border-border/40 pl-4">
-            {langItems.map(({ code, label, flag, name }) => (
-              <a
-                href={getLocalizedPath(code)}
-                class={`text-[11px] font-bold uppercase tracking-widest transition-colors hover:text-primary ${locale === code ? "text-primary" : "text-muted-foreground/70"}`}
-               aria-label={name} title={name}>{flag} {label}</a>
-            ))}
-          </div>
+          <!-- Language switcher: native <details>/<summary> disclosure, not a JS
+               <select> or framework island. SEO here is bottlenecked on
+               crawl/indexation, not content, so every locale link must stay a
+               real static <a href> in the DOM at parse time regardless of
+               open/closed state — <details> content is always in the DOM, so
+               nothing is lost to crawlers, while visually it collapses the
+               chip row into a compact dropdown. Reference convention: mirror
+               this pattern in oiyo/wiki/game rather than inventing a new one. -->
+          <nav aria-label="Language" class="border-l border-border/40 pl-4">
+            <details id="header-lang-switcher" class="group relative">
+              <summary
+                class="flex cursor-pointer list-none items-center gap-1 text-[11px] font-bold uppercase tracking-widest text-muted-foreground/70 transition-colors hover:text-primary [&::-webkit-details-marker]:hidden"
+              >
+                <span aria-hidden="true">{currentLangItem.flag}</span>{currentLangItem.label}
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="transition-transform duration-200 group-open:rotate-180"><path d="m6 9 6 6 6-6"/></svg>
+              </summary>
+              <div class="absolute right-0 top-full z-20 mt-2 flex min-w-max flex-col gap-0.5 rounded-lg border border-border bg-background p-1.5 shadow-lg">
+                {langItems.map(({ code, label, flag, name }) => (
+                  <a
+                    href={getLocalizedPath(code)}
+                    class={`flex items-center gap-1.5 rounded-md px-2 py-1.5 text-[11px] font-bold uppercase tracking-widest transition-colors hover:bg-muted/40 hover:text-primary ${locale === code ? "text-primary" : "text-muted-foreground/70"}`}
+                   aria-label={name} title={name} aria-current={locale === code ? "true" : undefined}><span aria-hidden="true">{flag}</span> {label}</a>
+                ))}
+              </div>
+            </details>
+          </nav>
         </nav>
 
         <!-- Right controls: hamburger -->
@@ -352,6 +370,18 @@ const footerLabels = footerCopy[locale] ?? footerCopy.en;
           window.scrollTo({ top: 0, behavior: "smooth" });
         });
         toggleVisibility();
+      })();
+
+      // ── Language switcher: close on outside click / Escape ──────────────────
+      (function () {
+        var lang = document.getElementById("header-lang-switcher");
+        if (!lang) return;
+        document.addEventListener("click", function (e) {
+          if (lang.open && !lang.contains(e.target)) lang.removeAttribute("open");
+        });
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape" && lang.open) lang.removeAttribute("open");
+        });
       })();
 
       // ── Mobile menu ───────────────────────────────────────────────────────
