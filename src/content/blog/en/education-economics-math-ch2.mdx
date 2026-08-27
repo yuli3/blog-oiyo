@@ -1,0 +1,240 @@
+---
+track: academy
+locale: en
+series: economics-math
+chapter: 2
+title: "Mathematics for Economics — Integrals, Matrices, and Economic Applications"
+category: "Economics"
+author: OIYO Editorial
+tags:
+  - Mathematical Economics
+  - Integrals
+  - Matrices
+  - Systems of Equations
+  - Dynamic Analysis
+description: "Mathematics for economics — indefinite and definite integrals with economic applications (consumer and producer surplus), matrix operations and inverse matrices, systems of equations (input-output analysis), and the basics of difference and differential equations, in one complete guide."
+pubDate: '2026-05-27'
+---
+
+> **Short answer first:** In economics, matrices are a tool for computing the interdependence of many industries and markets at once. The Leontief input-output model uses the technology matrix $A$ and final demand $f$ to solve for total output as $x=(I-A)^{-1}f$.
+
+## Integral Basics
+
+```
+Indefinite integral:
+→ ∫f(x)dx = F(x) + C (C: constant of integration)
+→ the reverse operation of differentiation
+
+Basic integration formulas:
+→ ∫xⁿdx = xⁿ⁺¹/(n+1) + C (n ≠ -1)
+→ ∫1/x dx = ln|x| + C
+→ ∫eˣdx = eˣ + C
+→ ∫eᵃˣdx = (1/a)eᵃˣ + C
+
+Integration techniques:
+
+Substitution:
+→ ∫f(g(x))g'(x)dx: substitute u = g(x)
+→ Example: ∫(2x+1)⁵dx → let u = 2x+1
+
+Integration by parts:
+→ ∫u·dv = uv - ∫v·du
+→ LIATE order: Logarithmic, Inverse trig, Algebraic, Trigonometric, Exponential
+→ Example: ∫x·eˣdx = xeˣ - eˣ + C
+
+Definite integral:
+→ ∫[a,b] f(x)dx = F(b) - F(a)
+→ geometric meaning: the area between the graph and the x-axis
+→ sign: positive (above the x-axis) / negative (below the x-axis)
+
+Fundamental theorem of calculus:
+→ for a continuous function f,
+  d/dx[∫[a,x] f(t)dt] = f(x)
+→ differentiation and integration are inverse operations
+```
+
+---
+
+## Economic Applications of Integrals
+
+```
+Consumer surplus:
+→ willingness to pay minus the actual market price
+→ CS = ∫[0, Q*] D(Q)dQ - P*Q*
+→ the area between the demand curve and the price line
+
+Producer surplus:
+→ actual market price minus the minimum price sellers would accept
+→ PS = P*Q* - ∫[0, Q*] S(Q)dQ
+→ the area between the price line and the supply curve
+
+Total surplus (Total Surplus) = CS + PS:
+→ maximized at the free-market equilibrium
+→ government regulation or a monopoly → produces deadweight loss
+
+Capital accumulation:
+→ dK/dt = I(t) (investment = the rate of change in capital)
+→ K(t) = K₀ + ∫[0,t] I(s)ds
+→ the sum of investment equals the change in the capital stock
+
+Present value and future value:
+→ PV = ∫[0,T] f(t)·e^(-rt) dt
+→ discounting under continuous compounding
+→ perpetuity: PV = R/r (constant income R, interest rate r)
+
+Recovering the consumption function:
+→ marginal propensity to consume, MPC = dC/dY
+→ consumption function C(Y) = C₀ + ∫MPC dY
+→ C₀ is pinned down by a baseline condition
+```
+
+---
+
+## Matrices
+
+```
+Definition of a matrix:
+→ an m × n matrix: m rows × n columns
+→ aᵢⱼ: the element in row i, column j
+
+Matrix operations:
+
+Addition/subtraction:
+→ element-wise operations between matrices of the same size
+→ A + B = [aᵢⱼ + bᵢⱼ]
+
+Scalar multiplication:
+→ cA = [c·aᵢⱼ]
+
+Matrix multiplication (A × B):
+→ A: m×k, B: k×n → AB: m×n
+→ (AB)ᵢⱼ = Σ aᵢₖ·bₖⱼ
+→ Note: AB ≠ BA in general (not commutative)
+→ Associative: (AB)C = A(BC) holds
+→ Distributive: A(B+C) = AB + AC holds
+
+Transpose:
+→ Aᵀ: swaps the rows and columns of A
+→ (AB)ᵀ = BᵀAᵀ
+
+Identity matrix (I):
+→ 1s along the main diagonal, 0s elsewhere
+→ AI = IA = A
+
+Inverse matrix (A⁻¹):
+→ AA⁻¹ = A⁻¹A = I
+→ for a 2×2 matrix: A⁻¹ = (1/det A) × [d, -b; -c, a]
+→ det A = ad - bc (the determinant)
+→ if det A = 0, no inverse exists (the matrix is singular)
+
+Cramer's rule:
+→ for an n×n system Ax = b
+→ xᵢ = det(Aᵢ) / det(A)
+→ Aᵢ: A with column i replaced by b
+```
+
+---
+
+## Economic Applications of Matrices
+
+```
+Solving systems of equations:
+→ convert to the form Ax = b
+→ x = A⁻¹b (using the inverse matrix)
+→ Gaussian elimination: use row operations to reach an upper-triangular matrix
+
+Simultaneous demand-supply equilibrium:
+→ a system of equations across two markets
+  Q₁ = a₁ + b₁P₁ + c₁P₂ (demand 1)
+  Q₁ = d₁ + e₁P₁ (supply 1) ... combine into a matrix and solve
+
+Leontief input-output analysis:
+→ analyzes trade relationships between industries in an economy
+→ Ax + f = x (A: the technology matrix, f: final demand)
+→ x = (I - A)⁻¹ f
+→ (I - A)⁻¹: the Leontief inverse (the multiplier effect)
+→ computes how a 1-unit increase in final demand ripples through total output
+
+National income determination model:
+→ Y = C + I + G (equilibrium condition)
+→ C = a + bY (consumption function)
+→ I, G exogenous → Y = (a + I + G) / (1 - b)
+→ in matrix form: extends to a multi-sector model
+
+Linear programming (LP):
+→ Maximize/minimize Z = c'x
+→ Subject to: Ax ≤ b, x ≥ 0
+→ Simplex method: a matrix-based algorithm
+→ used in economics for optimal resource allocation
+```
+
+### Worked Example: A Two-Industry Leontief Model
+
+Suppose we have two industries — agriculture and manufacturing — with the following input coefficients and final demand.
+
+```text
+A = [0.2  0.1]    f = [100]
+    [0.3  0.2]        [ 80]
+
+I - A = [ 0.8  -0.1]
+        [-0.3   0.8]
+
+(I - A)⁻¹ = (1 / 0.61)[0.8  0.1]
+                         [0.3  0.8]
+
+x = (I - A)⁻¹f
+  = [144.26]
+    [154.10]
+```
+
+Final demand is 100 and 80 respectively, but because the industries trade intermediate goods with each other, the total output required turns out to be roughly 144.26 and 154.10 — larger than final demand. That gap is the direct-plus-indirect production ripple effect. Real input-output tables cover dozens of industries, but the underlying math is the same. The **elasticity worked example** on demand and supply curve slopes continues in [Mathematics for Economics, Chapter 1](/en/education-economics-math-ch1).
+
+---
+
+## Basics of Dynamic Analysis
+
+```
+Difference equations:
+→ discrete-time models (t = 0, 1, 2, ...)
+→ first-order linear: yₜ = ayₜ₋₁ + b
+→ solution: yₜ = (y₀ - y*)aᵗ + y*
+  y*: the steady state = b/(1-a)
+→ stability condition: |a| < 1 → yₜ → y* as t → ∞
+
+Differential equations:
+→ continuous-time models
+→ first-order linear: dy/dt = ay + b
+→ solution: y(t) = (y₀ - y*)eᵃᵗ + y*
+  y* = -b/a
+→ stability condition: a < 0 → converges to the steady state
+
+Dynamics of the consumption-savings model:
+→ Keynesian model: Yt = C(Yt-1) + I (consumption depends on last period's income)
+→ a first-order difference equation → convergence condition: MPC < 1
+→ steady state: Y* = (I + C₀) / (1 - MPC)
+
+Dynamic stability of market equilibrium:
+→ the cobweb model:
+  current supply depends on last period's price expectation
+  Pₜ = the inverse demand of Qₜ, Qₜ = supply(Pₜ₋₁)
+→ convergence condition: |slope of supply| < |slope of demand|
+
+Phase diagrams:
+→ the dy/dt = 0 isocline: the steady-state locus
+→ arrows show the direction of the dynamics
+→ used to distinguish saddle paths from stable and unstable steady states
+```
+
+---
+
+## Frequently Asked Questions
+
+**Q. How are consumer surplus and deadweight loss connected?**
+A. At a free-market equilibrium, the sum of consumer surplus and producer surplus — total surplus — is maximized. But interventions such as price floors, price ceilings, monopoly power, or taxes push the quantity traded away from the efficient level. When that happens, total surplus falls, and that reduction is deadweight loss. Deadweight loss can be visualized as the triangular area between the demand and supply curves, and it represents the size of the market's inefficiency.
+
+**Q. How is the Leontief input-output matrix actually used?**
+A. The Leontief model expresses the interdependence between industries in an economy as a matrix, letting you calculate how a change in final demand ripples through total output across each industry. For example, if final demand for the automobile industry rises by $100 million, computing the inverse matrix (I-A)⁻¹ tells you how much more output supplying industries — steel, glass, electronics, and so on — need to produce. It's used in building national input-output tables, analyzing the effects of economic policy, tracing carbon-emission ripple effects, and more.
+
+## Sources
+
+- [OECD — Input-Output Tables and the Leontief inverse matrix](https://www.oecd.org/en/data/datasets/input-output-tables.html)

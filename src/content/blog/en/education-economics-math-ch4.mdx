@@ -1,0 +1,205 @@
+---
+track: academy
+locale: en
+series: economics-math
+chapter: 4
+title: "Mathematics for Economics — Dynamic Optimization, Behavioral Economics Math, and Networks"
+category: "Economics"
+author: OIYO Editorial
+tags:
+  - Mathematical Economics
+  - Dynamic Optimization
+  - Behavioral Economics Math
+  - Network Economics
+  - Stochastic Processes
+description: "Mathematics for economics — dynamic optimization (the Euler equation, the Bellman equation, continuous-time optimization), stochastic processes (Markov chains, Brownian motion, option pricing), the mathematical foundations of behavioral economics, and network economics, in one complete guide."
+pubDate: '2026-05-30'
+---
+
+## Dynamic Optimization
+
+```
+Dynamic programming:
+→ developed by Richard Bellman
+→ breaks multi-period decision problems into recursive steps
+→ the Bellman equation:
+  V(x) = max_u { F(x, u) + β·V(f(x, u)) }
+  V(x): the value function at state x
+  β: the discount factor (0 < β < 1)
+  F(x, u): the current-period payoff
+  f(x, u): the state-transition function
+→ the optimal policy function: u* = arg max { F + β·V }
+→ applications: capital accumulation, consumption-savings decisions, resource depletion problems
+
+Continuous-time optimal control:
+→ Pontryagin's Maximum Principle
+→ state variable x(t) and control variable u(t)
+→ the Hamiltonian:
+  H(x, u, λ) = F(x, u) + λ·f(x, u)
+  λ: the costate variable (shadow price — the marginal value of the state variable)
+→ optimality conditions:
+  ∂H/∂u = 0 (optimizing the control variable)
+  λ̇ = -∂H/∂x (the costate equation of motion)
+  ẋ = ∂H/∂λ (the state equation)
+
+The Euler equation:
+→ the optimal condition for consumption-savings decisions
+→ basic form: u'(C_t) = β(1+r)·u'(C_{t+1})
+  u'(·): marginal utility / β: the discount rate for time preference / r: the interest rate
+→ intuition: the marginal utility of consuming today equals the present value of the return from saving until tomorrow
+→ constant relative risk aversion utility (CRRA):
+  u(C) = C^(1-σ) / (1-σ)
+  the Euler equation becomes: ΔC/C = (1/σ)(r - ρ)
+  σ: the coefficient of relative risk aversion / ρ: the rate of time preference
+
+The Ramsey-Cass-Koopmans model:
+→ the standard dynamic macroeconomic model
+→ households: an infinitely lived utility-maximizing agent
+→ the balanced growth path: the long-run equilibrium level of capital and consumption
+→ the saddle path: pins down the initial level of consumption
+  if C₀ is too high, capital gets depleted; if too low, capital is over-accumulated
+```
+
+---
+
+## Stochastic Processes and Financial Mathematics
+
+```
+Stochastic processes:
+→ a sequence of random variables that changes over time
+→ the Markov property:
+  the current state alone determines future states (the past doesn't matter)
+  P(X_{t+1} | X_t, X_{t-1}, ...) = P(X_{t+1} | X_t)
+
+Markov chains:
+→ a Markov process with discrete states and discrete time
+→ transition matrix P: P_ij = P(X_{t+1} = j | X_t = i)
+→ economic applications:
+  business cycles: the transition probability between boom and recession
+  credit-rating transition matrices
+  employment-status transitions (employed, unemployed, not in the labor force)
+→ stationary distribution: π·P = π
+
+Brownian motion:
+→ the Wiener process W_t:
+  W_0 = 0 / independent increments / W_t - W_s ~ N(0, t-s)
+  continuous paths, non-differentiable almost everywhere
+→ the Itô correction term: (dW_t)² = dt (differs from ordinary calculus)
+→ the Itô integral and Itô's Lemma:
+  dF = (∂F/∂t + μ∂F/∂x + ½σ²∂²F/∂x²)dt + σ∂F/∂x·dW_t
+
+The Black-Scholes-Merton equation:
+→ the stock-price model: dS = μS·dt + σS·dW_t (geometric Brownian motion)
+→ the price of a European call option:
+  C = S·N(d₁) - K·e^(-rT)·N(d₂)
+  d₁ = [ln(S/K) + (r + σ²/2)T] / (σ√T)
+  d₂ = d₁ - σ√T
+  N(·): the standard normal CDF
+→ the option Greeks: Delta, Gamma, Theta, Vega, Rho
+→ limitations: assumes constant volatility and doesn't account for price jumps
+
+Vector autoregression (VAR):
+→ captures interdependence between multiple time series
+→ the impulse response function (IRF): the dynamics of variables following a shock
+→ variance decomposition: each variable's contribution to forecast error
+→ used to analyze macroeconomic shocks and the effects of monetary policy
+```
+
+---
+
+## The Mathematics of Behavioral Economics
+
+```
+Comparing theories of expected utility:
+→ standard expected utility theory (Von Neumann-Morgenstern):
+  EU = Σ p_i · u(x_i)
+  risk aversion: u''>0 (a concave function)
+→ the Allais Paradox: experimental evidence that violates EU theory
+  the certainty effect: overweighting outcomes that are certain
+
+Prospect theory (Kahneman & Tversky):
+→ the value function v(x):
+  gains: concave (risk averse)
+  losses: convex (risk seeking)
+  loss aversion coefficient: λ ≈ 2.25 (losses hurt roughly 2.25 times more than equivalent gains feel good)
+  evaluated relative to a reference point
+→ the probability weighting function w(p):
+  overweighting small probabilities: w(0.01) > 0.01
+  underweighting large probabilities: w(0.99) < 0.99
+  an inverse-S-shaped curve
+
+Hyperbolic discounting:
+→ standard exponential discounting: δ = 1/(1+r) (time-consistent)
+→ hyperbolic discounting: D(t) = 1/(1+kt)
+  the near-future discount rate exceeds the far-future discount rate
+  present bias: a reversal between choosing now vs. later
+→ the quasi-hyperbolic (β-δ) model:
+  U = u₀ + β·Σ δ^t·u_t (β < 1: present bias)
+→ applications: self-control problems around pensions, quitting smoking, and dieting
+
+The mathematics behind nudges:
+→ choice architecture: modeling the default effect
+  default x₀, switching cost c
+  probability of switching p = f(v(x₁) - v(x₀) - c)
+→ libertarian paternalism:
+  preserving freedom of choice while steering toward better choices
+  automatic enrollment defaults for retirement savings
+→ informational nudges: providing social-norm comparison information
+  "92% of your neighbors are already saving energy"
+```
+
+---
+
+## Network Economics
+
+```
+Network theory basics:
+→ a graph G = (V, E): a set of nodes V and a set of edges E
+→ degree: the number of edges connected to a node
+→ path length, clustering coefficient, and centrality measures
+→ scale-free networks:
+  degree distribution follows a power law: P(k) ~ k^(-γ)
+  hub nodes exist: the internet, social networks
+  the Barabási-Albert model: preferential attachment
+→ the small-world phenomenon:
+  high clustering plus short average path length
+  the Watts-Strogatz model
+
+Network externalities:
+→ more users → higher utility for other users
+→ direct externalities: phones, messaging apps (benefits from direct connections)
+→ indirect externalities: platforms (benefits from a growing set of complements)
+→ critical mass: the tipping point
+  beyond a minimum number of users, growth becomes self-sustaining
+  the maximization condition: u_i = v(n) - p ≥ 0
+
+Platform economics:
+→ two-sided markets:
+  a platform connecting two distinct user groups
+  pricing structure: one side free, the other side paying, is common
+  cross-network externalities: growth on one side raises value on the other
+→ the Rochet-Tirole model:
+  the optimal pricing structure: P_i = c_i - (n_j · ∂v_j/∂n_i) / (∂v_i/∂n_i)
+→ the tendency toward monopolization: winner-takes-all dynamics
+  the market dominance of large tech platforms
+
+Information economics and search theory:
+→ moral hazard and adverse selection: insurance market failures
+→ the Diamond search model:
+  labor-market search costs and matching efficiency
+  the search equilibrium between job seekers and firms
+→ matching theory:
+  the Gale-Shapley algorithm: stable matching
+  the 2012 Nobel Prize in Economics (Roth and Shapley): applications to real markets
+  school assignment, organ donation, and residency matching
+```
+
+---
+
+## Frequently Asked Questions
+
+**Q. How can the dynamic optimization in mathematical economics apply to real-life consumption-savings decisions?**
+A. The Euler equation is the core of the optimal consumption-savings decision. Intuitively, it works like this: "If you cut consumption by one dollar today and save it, it becomes (1+r) dollars next year with interest. If the utility from using that money to boost next year's consumption exceeds the utility of spending that dollar today, you should save — otherwise, spending today is optimal." In the Euler equation u'(C_t) = β(1+r)·u'(C_&#123;t+1&#125;), if β(1+r) = 1, consumption stays smooth (consumption smoothing). If β(1+r) > 1, it's optimal to increase future consumption (save more); if it's less than 1, it's optimal to increase consumption today. In real life, the hyperbolic discounting problem (present bias) interferes with this optimal plan. The pattern of making "just this one exception" over and over — in retirement savings, dieting, or study plans — comes directly from present bias, where β < 1. The fix is precommitment devices, like automatic transfers or automatic retirement-plan enrollment, that automate saving on behalf of your future self.
+
+**Q. Can the Black-Scholes equation accurately predict real option prices?**
+A. The Black-Scholes equation is arguably the most influential formula in financial history, but it has important limitations in real markets. Its assumptions don't quite match reality. It assumes constant volatility, but volatility itself actually fluctuates (the volatility smile/skew). It assumes stock prices move continuously, but in reality, sudden jumps and crashes happen. It assumes no transaction costs or taxes, which also doesn't match reality. That's why practitioners rely on the concept of implied volatility: plugging an observed market option price back into the Black-Scholes formula and solving for σ yields a different σ for each maturity and strike price (the volatility smile). Modern derivatives trading supplements Black-Scholes with stochastic volatility models (like the Heston model), jump-diffusion models, and local volatility models. Even so, Black-Scholes remains an essential tool for computing hedge ratios, managing risk, and benchmarking market volatility (as in the VIX calculation).
