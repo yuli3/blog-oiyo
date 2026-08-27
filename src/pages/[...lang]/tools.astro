@@ -900,10 +900,12 @@ const interactivePosts = await getCollection("blog", ({ data }) =>
   data.draft !== true && data.locale === locale && getTrackFromData(data) === "interactive");
 const curatedSlugs = new Set(categories.flatMap((c) => c.tools.map((t) => t.slug)));
 const consolidatedAliases = new Set(["grayscale-converter", "image-grayscale", "percent-converter"]);
+// OIYO is the sole owner of this interactive test; do not expose a Blog catalog card.
+const oiyoOnlyInteractive = new Set(["growth-mindset-test"]);
 const interactiveByBucket = new Map<string, Tool[]>();
 for (const post of interactivePosts) {
   const slug = post.slug.split("/").slice(1).join("/");
-  if (!slug || curatedSlugs.has(slug) || consolidatedAliases.has(slug)) continue;
+  if (!slug || curatedSlugs.has(slug) || consolidatedAliases.has(slug) || oiyoOnlyInteractive.has(slug)) continue;
   if (EXCLUDED_CATEGORIES.has(post.data.category ?? "")) continue;
   const bucket = CAT_TO_BUCKET[post.data.category ?? ""] ?? "learning";
   const emoji = pickEmoji(slug, post.data.title ?? "", bucket);

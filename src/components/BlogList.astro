@@ -26,9 +26,10 @@ interface Props {
   showIntentBundles?: boolean;
   jsonLd?: string;
   noindex?: boolean;
+  showCategoryCloud?: boolean;
 }
 
-const { page, locale, baseUrl, title, subtitle, activeCategory, showIntentBundles = false, jsonLd, noindex } = Astro.props;
+const { page, locale, baseUrl, title, subtitle, activeCategory, showIntentBundles = false, showCategoryCloud = true, jsonLd, noindex } = Astro.props;
 const paginationEnabled = siteConfig.features.pagination;
 const t = await getTranslations(locale as Locale);
 ---
@@ -57,7 +58,7 @@ const t = await getTranslations(locale as Locale);
 
       {showIntentBundles
         ? <IntentBundles locale={locale} />
-        : <CategoryCloud {locale} {activeCategory} />
+        : showCategoryCloud && <CategoryCloud {locale} {activeCategory} />
       }
 
       <WikiTable posts={page.data} locale={locale} />
