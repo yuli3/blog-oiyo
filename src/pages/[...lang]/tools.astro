@@ -843,6 +843,32 @@ const categories: Category[] = [
 // 2026-07-04 redirect stub. All excluded rather than left unmapped so the intent
 // is explicit, not an accident of the "learning" fallback.
 const EXCLUDED_CATEGORIES = new Set(["Mysticism", "Mind & Psychology", "Games", "Strategy"]);
+// OIYO owns these interactive experiences; the Blog tools catalog should not duplicate them.
+const oiyoOnlyInteractive = new Set([
+  "motivation-type-test",
+  "narcissism-test",
+  "procrastination-type-test",
+  "animal-personality-test",
+  "attachment-style-test",
+  "big-five-personality-test",
+  "burnout-test",
+  "disc-personality-test",
+  "empathy-test",
+  "enneagram-test",
+  "mbti-test",
+  "love-language-test",
+  "love-profile-test",
+  "resilience-test",
+  "self-esteem-test",
+  "mbti-career-test",
+  "dopamine-dependency-test",
+  "loneliness-test",
+  "mbti-love-compatibility-test",
+  "magazine-mbti-compass-test",
+  "personal-color-spring-warm-light-guide",
+  "personal-color-season-test",
+  "magazine-education-devtools-lab",
+]);
 const CAT_TO_BUCKET: Record<string, string> = {
   "Finance": "finance", "Tax": "finance", "Real Estate": "finance", "Business": "finance", "Career": "finance",
   "Health": "health",
@@ -900,8 +926,6 @@ const interactivePosts = await getCollection("blog", ({ data }) =>
   data.draft !== true && data.locale === locale && getTrackFromData(data) === "interactive");
 const curatedSlugs = new Set(categories.flatMap((c) => c.tools.map((t) => t.slug)));
 const consolidatedAliases = new Set(["grayscale-converter", "image-grayscale", "percent-converter"]);
-// OIYO is the sole owner of this interactive test; do not expose a Blog catalog card.
-const oiyoOnlyInteractive = new Set(["growth-mindset-test"]);
 const interactiveByBucket = new Map<string, Tool[]>();
 for (const post of interactivePosts) {
   const slug = post.slug.split("/").slice(1).join("/");
