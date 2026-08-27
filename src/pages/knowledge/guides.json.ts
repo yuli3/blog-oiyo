@@ -3,7 +3,7 @@ import { getCollection } from "astro:content";
 import { siteConfig } from "../../config/site.config";
 
 /**
- * Public machine-citable catalog of blog guides/articles (explanation layer).
+ * Public machine-citable catalog of canonical blog guides and articles.
  * Output: /knowledge/guides.json — a schema.org ItemList of Articles.
  *
  * Complements wiki's /knowledge/topics.json (definitions). Additive endpoint.
