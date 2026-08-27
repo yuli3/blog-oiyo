@@ -6,11 +6,11 @@ import manifest from "../../data/content-manifest.json";
  * Output: /api/categories.json
  */
 const CANONICAL = [
-  "Mind & Psychology", "Mysticism", "Finance", "Tax", "Real Estate", "Law & Exam",
+  "Mind & Psychology", "Mysticism", "Finance", "Tax", "Real Estate", "Law",
   "Exam", "Public Admin", "Business", "Career", "Computer Science", "Education",
   "Science & Nature", "Health", "Beauty", "Lifestyle", "Myth & Culture",
   "Humanities", "Philosophy & Spirit", "Insights", "Strategy", "Design",
-  "Games", "Society & Wealth",
+  "Sports", "Society & Wealth",
 ];
 
 export const GET: APIRoute = async () => {
