@@ -1,0 +1,160 @@
+---
+track: academy
+locale: en
+title: "Python Data Analysis Deep Dive — Complete Guide to Data Visualization with matplotlib, seaborn & plotly"
+description: "Master the three essential data visualization libraries. Covers static charts (matplotlib, seaborn) and interactive charts (plotly), plus a clear framework for choosing the right chart for the job."
+pubDate: "2026-06-02"
+category: "Computer Science"
+author: OIYO Editorial
+tags:
+  - Python
+  - matplotlib
+  - seaborn
+  - plotly
+  - data visualization
+series: "Python Data Analysis Deep Dive"
+chapter: 3
+---
+import Callout from "@/components/mdx/Callout.astro";
+
+## Lecture 3 Overview
+
+There's a saying that "one chart beats a thousand tables." Data visualization is a core skill for spotting patterns and communicating insights to stakeholders. We'll build the fundamentals with matplotlib, handle statistical visualization with seaborn, and build interactive dashboards with plotly.
+
+---
+
+## Which Chart Should You Use?
+
+Choosing the right chart is the single most important decision in visualization.
+
+| Goal | Recommended chart | Library |
+|---|---|---|
+| See a distribution | Histogram, KDE, box plot | seaborn |
+| Compare | Bar chart, box plot | seaborn, matplotlib |
+| Explore a relationship | Scatter plot, heatmap | seaborn |
+| Time series trend | Line chart | matplotlib, plotly |
+| Proportion | Pie chart, stacked bar | matplotlib |
+| Dashboard | Interactive chart | plotly |
+
+---
+
+## 1. matplotlib Basics
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+
+# A basic line chart
+fig, ax = plt.subplots(figsize=(10, 6))
+ax.plot(x, y, color='steelblue', linewidth=2, label='Actuals')
+ax.set_title('Monthly Revenue Trend', fontsize=14, fontweight='bold')
+ax.set_xlabel('Month')
+ax.set_ylabel('Revenue (in thousands)')
+ax.legend()
+ax.grid(True, alpha=0.3)
+plt.tight_layout()
+plt.show()
+
+# Multiple subplots
+fig, axes = plt.subplots(2, 2, figsize=(12, 8))
+axes[0, 0].hist(df['age'], bins=30, color='steelblue', alpha=0.7)
+axes[0, 0].set_title('Age Distribution')
+axes[0, 1].scatter(df['age'], df['income'], alpha=0.5)
+axes[0, 1].set_title('Age vs. Income')
+plt.tight_layout()
+```
+
+<Callout type="note">
+Custom fonts need to be configured separately. Set `matplotlib.rcParams['font.family']` to a font installed on your system — for example `'Arial'` or `'Helvetica'` — if the default font doesn't render the characters you need.
+</Callout>
+
+---
+
+## 2. seaborn: Statistical Visualization
+
+seaborn runs on top of matplotlib and is optimized for statistical visualization.
+
+```python
+import seaborn as sns
+
+# Histogram + KDE
+sns.histplot(df['score'], kde=True, bins=30)
+
+# Box plot — distribution and outliers at a glance
+sns.boxplot(x='dept', y='score', data=df, palette='Set2')
+
+# Violin plot — also shows the shape of the distribution
+sns.violinplot(x='dept', y='score', data=df)
+
+# Scatter plot + regression line
+sns.regplot(x='experience', y='salary', data=df, scatter_kws={'alpha': 0.5})
+
+# Correlation heatmap — an EDA essential
+corr = df.corr()
+sns.heatmap(corr, annot=True, fmt='.2f', cmap='RdYlGn', center=0)
+
+# pairplot — every pairwise relationship at once
+sns.pairplot(df[['age', 'income', 'score', 'dept']], hue='dept')
+```
+
+### FacetGrid — Multiple Plots by Condition
+
+```python
+g = sns.FacetGrid(df, col='dept', hue='gender', height=4)
+g.map(sns.scatterplot, 'experience', 'salary')
+g.add_legend()
+```
+
+---
+
+## 3. plotly: Interactive Visualization
+
+Use plotly for dashboards or interactive exploration in a Jupyter notebook.
+
+```python
+import plotly.express as px
+import plotly.graph_objects as go
+
+# A basic scatter plot
+fig = px.scatter(df, x='experience', y='salary', color='dept',
+                 hover_data=['name'], size='score',
+                 title='Experience vs. Salary')
+fig.show()
+
+# A time series line chart
+fig = px.line(df_time, x='date', y='value', color='category',
+              title='Trend Over Time by Category')
+fig.update_traces(mode='lines+markers')
+
+# An interactive bar chart
+fig = px.bar(df.groupby('dept')['score'].mean().reset_index(),
+             x='dept', y='score', color='dept',
+             title='Average Score by Department')
+fig.show()
+```
+
+<Callout type="tip">
+Charts built with plotly can be saved as HTML and shared on the web: `fig.write_html('chart.html')`
+</Callout>
+
+---
+
+## A Practical Visualization Checklist
+
+1. **Titles and labels**: Add clear descriptions to every axis and legend.
+2. **Color**: Use colorblind-friendly palettes (`colorblind` or `Set2`).
+3. **Scale**: A y-axis that doesn't start at zero can mislead readers.
+4. **Density vs. frequency**: Use density when comparing proportions.
+5. **Resolution**: `plt.savefig('plot.png', dpi=300, bbox_inches='tight')`
+
+---
+
+## Frequently Asked Questions
+
+**Q: Should I learn seaborn or plotly?**
+A: seaborn for static images meant for reports and papers; plotly for web dashboards and exploratory analysis. In real data analysis work, you'll need both.
+
+**Q: Is visualizing large datasets (a million rows) slow?**
+A: Plotting a million points is slow. Summarize first — sampling, aggregation, heatmaps, or 2D histograms — before visualizing. Pairing plotly with `datashader` is another option.
+
+<Callout type="tip">**Continue the series**: [Ch2. Data Preprocessing](/en/academy-python-data-analysis-ch2) · [Ch4. Complete Guide to EDA](/en/academy-python-data-analysis-ch4) · [Ch5. Practical Intro to Machine Learning](/en/academy-python-data-analysis-ch5)</Callout>

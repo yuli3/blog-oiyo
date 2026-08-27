@@ -1,0 +1,194 @@
+---
+track: academy
+locale: en
+title: "Python Data Analysis Deep Dive — Complete Guide to Data Preprocessing — Missing Values, Outliers & Encoding"
+description: "80% of real-world data needs preprocessing. From handling missing values and detecting outliers to converting data types and encoding categorical variables — everything you need before analysis, fully organized."
+pubDate: "2026-06-02"
+category: "Computer Science"
+author: OIYO Editorial
+tags:
+  - Python
+  - pandas
+  - data preprocessing
+  - missing values
+  - data science
+series: "Python Data Analysis Deep Dive"
+chapter: 2
+---
+import Callout from "@/components/mdx/Callout.astro";
+
+## Lecture 2 Overview
+
+Data scientists often say they spend 70–80% of their working time on preprocessing. No model, however sophisticated, means anything without clean data ("garbage in, garbage out"). This lecture systematically covers the preprocessing work you'll run into constantly in real projects.
+
+---
+
+## 1. Handling Missing Values
+
+### Detecting Missing Values
+
+```python
+import pandas as pd
+import numpy as np
+
+# Check the count of missing values
+df.isnull().sum()
+df.isna().sum()  # same thing
+
+# Check the percentage of missing values
+(df.isnull().sum() / len(df) * 100).sort_values(ascending=False)
+
+# View only rows that contain missing values
+df[df.isnull().any(axis=1)]
+```
+
+### Strategies for Handling Missing Values
+
+| Strategy | Code | When it fits |
+|---|---|---|
+| Drop rows | `df.dropna()` | Missing rate < 5%, plenty of data |
+| Drop column | `df.drop(columns=['col'])` | Missing rate > 70% |
+| Mean/median imputation | `df.fillna(df.mean())` | Numeric, no distribution skew |
+| Mode imputation | `df.fillna(df.mode()[0])` | Categorical |
+| Forward/backward fill | `df.fillna(method='ffill')` | Time series data |
+| Model-based imputation | KNNImputer | When precision matters |
+
+```python
+from sklearn.impute import SimpleImputer, KNNImputer
+
+# Impute with the mean
+imputer = SimpleImputer(strategy='mean')
+df[['age', 'income']] = imputer.fit_transform(df[['age', 'income']])
+
+# KNN-based imputation (more precise)
+knn_imputer = KNNImputer(n_neighbors=5)
+df_imputed = pd.DataFrame(knn_imputer.fit_transform(df_numeric), columns=df_numeric.columns)
+```
+
+<Callout type="note">
+Filling missing values with the mean without thinking distorts the distribution. First figure out whether the missingness is completely random (MCAR), conditionally random (MAR), or meaningful in itself (MNAR).
+</Callout>
+
+---
+
+## 2. Detecting and Handling Outliers
+
+### The IQR Method
+
+```python
+Q1 = df['score'].quantile(0.25)
+Q3 = df['score'].quantile(0.75)
+IQR = Q3 - Q1
+
+lower = Q1 - 1.5 * IQR
+upper = Q3 + 1.5 * IQR
+
+# Detect outliers
+outliers = df[(df['score'] < lower) | (df['score'] > upper)]
+
+# Clip outliers (cap them within a range)
+df['score_clipped'] = df['score'].clip(lower, upper)
+```
+
+### The Z-score Method
+
+```python
+from scipy import stats
+
+z_scores = np.abs(stats.zscore(df['score']))
+outliers = df[z_scores > 3]  # |z| > 3 counts as an outlier
+```
+
+---
+
+## 3. Converting Data Types
+
+```python
+# String → numeric (invalid entries become NaN with errors='coerce')
+df['amount'] = pd.to_numeric(df['amount'], errors='coerce')
+
+# Convert to datetime
+df['date'] = pd.to_datetime(df['date'], format='%Y-%m-%d')
+
+# Extract information from a date column
+df['year'] = df['date'].dt.year
+df['month'] = df['date'].dt.month
+df['dayofweek'] = df['date'].dt.dayofweek  # 0=Monday, 6=Sunday
+
+# Save memory: int64 → int32
+df['count'] = df['count'].astype('int32')
+# object → category (saves memory when values repeat a lot)
+df['dept'] = df['dept'].astype('category')
+```
+
+---
+
+## 4. Encoding Categorical Variables
+
+Machine learning models only understand numbers. Encoding converts string categorical data into numbers.
+
+### One-Hot Encoding
+
+```python
+# pandas get_dummies — simple
+df_encoded = pd.get_dummies(df, columns=['dept'], drop_first=True)
+
+# sklearn OneHotEncoder — for integrating into a pipeline
+from sklearn.preprocessing import OneHotEncoder
+enc = OneHotEncoder(sparse_output=False, drop='first')
+encoded = enc.fit_transform(df[['dept']])
+```
+
+### Label Encoding
+
+```python
+from sklearn.preprocessing import LabelEncoder
+le = LabelEncoder()
+df['dept_label'] = le.fit_transform(df['dept'])
+```
+
+### Ordinal Encoding
+
+Use this for categories that have a natural order (e.g., low → medium → high).
+
+```python
+from sklearn.preprocessing import OrdinalEncoder
+oe = OrdinalEncoder(categories=[['low', 'medium', 'high']])
+df['level_encoded'] = oe.fit_transform(df[['level']])
+```
+
+---
+
+## 5. Scaling
+
+Unifying the range of numeric variables tends to improve model performance.
+
+```python
+from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
+
+# StandardScaler: mean 0, standard deviation 1 (sensitive to outliers)
+scaler = StandardScaler()
+df_scaled = scaler.fit_transform(df[['age', 'income']])
+
+# MinMaxScaler: range 0–1 (sensitive to outliers)
+minmax = MinMaxScaler()
+
+# RobustScaler: based on median and IQR (robust to outliers)
+robust = RobustScaler()
+```
+
+<Callout type="tip">
+Fit your scaler on the **training data only**. On test data, apply `transform` only, using that same fitted scaler. This is the core principle for preventing data leakage.
+</Callout>
+
+---
+
+## Frequently Asked Questions
+
+**Q: Should I use One-Hot Encoding or Label Encoding?**
+A: If there's no natural order among categories, use One-Hot Encoding. For tree-based models (RandomForest, XGBoost, etc.), Label Encoding is fine too, since tree models don't assign meaning to the magnitude of a number.
+
+**Q: Should I always remove outliers?**
+A: No. First check whether an outlier is an error or a real phenomenon. In cases like fraud detection, the outliers themselves are the point.
+
+<Callout type="tip">**Continue the series**: [Ch1. Mastering pandas](/en/academy-python-data-analysis-ch1) · [Ch3. Visualization](/en/academy-python-data-analysis-ch3) · [Ch4. Complete Guide to EDA](/en/academy-python-data-analysis-ch4)</Callout>
