@@ -1,0 +1,143 @@
+---
+track: academy
+locale: en
+title: "Python Data Analysis Deep Dive — Mastering pandas — DataFrame Structure & Core Operations"
+description: "Master the structure, indexing, filtering, groupby, and merge operations of pandas DataFrames with real-world data. In data analysis work, 80% of tasks come down to pandas alone."
+pubDate: "2026-06-02"
+category: "Computer Science"
+author: OIYO Editorial
+tags:
+  - Python
+  - pandas
+  - data analysis
+  - DataFrame
+  - data science
+series: "Python Data Analysis Deep Dive"
+chapter: 1
+---
+import Callout from "@/components/mdx/Callout.astro";
+
+## Lecture 1 Overview
+
+In Python data analysis, pandas is the de facto standard library. If you already know SQL, pandas' logical structure will feel very familiar. This lecture isn't just a syntax walkthrough — it's built around the **patterns you actually run into in real work**, so you come away with a full understanding of pandas.
+
+---
+
+## The Core Structure of a pandas DataFrame
+
+A DataFrame is a two-dimensional, labeled data structure. It's conceptually the same as a spreadsheet or SQL table, but far more powerful to work with in Python.
+
+```python
+import pandas as pd
+import numpy as np
+
+# Create a basic DataFrame
+df = pd.DataFrame({
+    'name': ['Alice', 'Bob', 'Charlie', 'Diana'],
+    'score': [85, 92, 78, 96],
+    'dept': ['A', 'B', 'A', 'B'],
+    'date': pd.to_datetime(['2024-01-15', '2024-01-20', '2024-02-01', '2024-02-10'])
+})
+
+# Check the basics — the first thing you run when you receive new data
+print(df.shape)        # (4, 4) — number of rows, columns
+print(df.dtypes)       # data type of each column
+print(df.info())       # summary including null status
+print(df.describe())   # summary statistics for numeric columns
+```
+
+### The Index and Column Concept
+
+A DataFrame's `index` is its row labels, and `columns` are its column labels. It uses a default RangeIndex (0, 1, 2, …) unless you switch to a meaningful column, which often makes analysis more intuitive.
+
+```python
+# Set a specific column as the index
+df = df.set_index('name')
+# Reset it back
+df = df.reset_index()
+```
+
+---
+
+## Core Indexing: iloc vs loc
+
+This is where most pandas mistakes happen.
+
+| Method | Basis | Example |
+|---|---|---|
+| `df.iloc[row, col]` | Integer position | `df.iloc[0, 1]` → value at row 0, column 1 |
+| `df.loc[label, column]` | Label | `df.loc[0, 'score']` |
+| `df['column']` | Select a column | `df['score']` → returns a Series |
+| `df[['A', 'B']]` | Multiple columns | Returns a DataFrame |
+
+```python
+# Conditional filtering — same concept as a SQL WHERE clause
+high_score = df[df['score'] >= 90]
+dept_a = df[df['dept'] == 'A']
+
+# Compound conditions — use & (AND), | (OR), ~ (NOT)
+result = df[(df['score'] >= 85) & (df['dept'] == 'A')]
+
+# The query method — a more readable style
+result = df.query("score >= 85 and dept == 'A'")
+```
+
+---
+
+## groupby: The Heart of Analysis
+
+`groupby` maps directly onto SQL's `GROUP BY`. It splits data into groups and applies an aggregate function.
+
+```python
+# Average score by department
+df.groupby('dept')['score'].mean()
+
+# Apply multiple aggregate functions at once
+df.groupby('dept')['score'].agg(['mean', 'max', 'min', 'count'])
+
+# groupby on multiple columns at once
+df.groupby(['dept', 'date'])['score'].sum()
+
+# transform — keep the original df's shape while adding group-level stats
+df['dept_avg'] = df.groupby('dept')['score'].transform('mean')
+```
+
+<Callout type="tip">
+Get very clear on the difference between `agg` and `transform` after a `groupby`. `agg` reduces the row count (aggregation), while `transform` preserves the original shape (each row gets its group's statistic).
+</Callout>
+
+---
+
+## merge and join: Combining Data
+
+Combining multiple tables is a routine task in real work.
+
+```python
+# Equivalent to a SQL INNER JOIN
+result = pd.merge(df1, df2, on='key', how='inner')
+
+# LEFT JOIN — keeps every row from df1
+result = pd.merge(df1, df2, on='key', how='left')
+
+# Joining on differently named columns
+result = pd.merge(df1, df2, left_on='id', right_on='user_id', how='left')
+```
+
+| how option | SQL equivalent | Description |
+|---|---|---|
+| `inner` | INNER JOIN | Only rows that match on both sides |
+| `left` | LEFT JOIN | Keeps all of the left df |
+| `right` | RIGHT JOIN | Keeps all of the right df |
+| `outer` | FULL OUTER JOIN | Keeps everything on both sides |
+
+---
+
+## Frequently Asked Questions
+
+**Q: Should I learn pandas or polars?**
+A: If your current work involves a million rows or fewer, pandas is enough. polars can run 10–100x faster than pandas on large datasets, but its ecosystem is still smaller. The practical path is to master pandas first, then move to polars if you need it.
+
+**Q: Why does `SettingWithCopyWarning` show up?**
+A: It happens when you write a value into a copy of a DataFrame. Using `.loc` or an explicit `.copy()` instead of chained indexing resolves it.
+
+<Callout type="tip">**Continue the series**: [Ch2. Complete Guide to Data Preprocessing](/en/academy-python-data-analysis-ch2) · [Ch3. Visualization (matplotlib & seaborn)](/en/academy-python-data-analysis-ch3) · [Python Fundamentals series](/en/academy-python-basics-ch1)</Callout>

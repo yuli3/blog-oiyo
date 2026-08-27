@@ -1,0 +1,175 @@
+---
+track: academy
+locale: en
+title: "Python Data Analysis Deep Dive — Complete Guide to EDA — Everything About Exploratory Data Analysis"
+description: "Learn a systematic framework for Exploratory Data Analysis (EDA). From the moment you first receive data to the insights you draw from it, follow the exact thought process of a working analyst."
+pubDate: "2026-06-02"
+category: "Computer Science"
+author: OIYO Editorial
+tags:
+  - Python
+  - EDA
+  - exploratory data analysis
+  - data analysis
+  - data science
+series: "Python Data Analysis Deep Dive"
+chapter: 4
+---
+import Callout from "@/components/mdx/Callout.astro";
+
+## Lecture 4 Overview
+
+EDA (Exploratory Data Analysis) is the process of understanding your data and forming hypotheses. The concept, established by John Tukey, starts from the philosophy of "let the data speak first." Doing EDA thoroughly before modeling keeps you from heading in the wrong direction.
+
+---
+
+## The Five-Step EDA Framework
+
+### Step 1: Understand the Data's Structure
+
+```python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+def eda_basic(df):
+    print("=== Basic Info ===")
+    print(f"Shape: {df.shape}")
+    print(f"\nDtypes:\n{df.dtypes}")
+    print(f"\nMissing values:\n{df.isnull().sum()}")
+    print(f"\nDuplicate rows: {df.duplicated().sum()}")
+    print(f"\nSummary statistics:\n{df.describe()}")
+    return
+
+eda_basic(df)
+```
+
+### Step 2: Univariate Analysis
+
+Look at the distribution of each variable on its own.
+
+```python
+# Numeric variables
+fig, axes = plt.subplots(len(numeric_cols), 2, figsize=(12, 4*len(numeric_cols)))
+for i, col in enumerate(numeric_cols):
+    # Histogram
+    df[col].hist(ax=axes[i, 0], bins=30)
+    axes[i, 0].set_title(f'{col} distribution')
+    
+    # Box plot (check for outliers)
+    df.boxplot(column=col, ax=axes[i, 1])
+    axes[i, 1].set_title(f'{col} box plot')
+
+# Categorical variables
+for col in cat_cols:
+    df[col].value_counts().plot(kind='bar')
+    plt.title(f'{col} frequency')
+    plt.show()
+```
+
+### Step 3: Bivariate Analysis
+
+Explore the relationship between two variables.
+
+```python
+# Numeric vs. numeric → scatter plot + correlation coefficient
+corr_matrix = df[numeric_cols].corr()
+sns.heatmap(corr_matrix, annot=True, cmap='RdYlGn', center=0)
+
+# Categorical vs. numeric → box plot / violin plot
+sns.boxplot(x='category', y='target', data=df)
+
+# Categorical vs. categorical → cross-tab + heatmap
+ct = pd.crosstab(df['col1'], df['col2'], normalize='index')
+sns.heatmap(ct, annot=True, cmap='Blues')
+```
+
+### Step 4: Multivariate Analysis
+
+```python
+# pairplot — every relationship among several variables at once
+sns.pairplot(df[numeric_cols + ['target']], hue='target', diag_kind='kde')
+
+# 3D scatter plot (plotly)
+import plotly.express as px
+fig = px.scatter_3d(df, x='x1', y='x2', z='x3', color='target')
+fig.show()
+```
+
+### Step 5: Time Series Analysis (if applicable)
+
+```python
+df_time = df.set_index('date')
+
+# Visualize the trend
+df_time['value'].plot(figsize=(14, 5))
+plt.title('Trend Over Time')
+
+# Remove noise with a moving average
+df_time['MA_7'] = df_time['value'].rolling(7).mean()
+df_time['MA_30'] = df_time['value'].rolling(30).mean()
+df_time[['value', 'MA_7', 'MA_30']].plot(figsize=(14, 5))
+
+# Patterns by month/day of week
+df['month'] = df['date'].dt.month
+df.groupby('month')['value'].mean().plot(kind='bar')
+```
+
+---
+
+## Automated EDA Libraries
+
+There are tools that automate repetitive EDA work.
+
+```python
+# ydata-profiling (formerly pandas-profiling)
+from ydata_profiling import ProfileReport
+profile = ProfileReport(df, title="EDA Report", explorative=True)
+profile.to_file("eda_report.html")
+
+# sweetviz
+import sweetviz as sv
+report = sv.analyze(df)
+report.show_html("sweetviz_report.html")
+
+# dtale — interactive exploration
+import dtale
+d = dtale.show(df)
+d.open_browser()
+```
+
+<Callout type="tip">
+Automated EDA libraries are great for a quick first look, but deeper analysis grounded in domain knowledge still needs to be done by hand. Treat automated tools as a starting point, not the finish line.
+</Callout>
+
+---
+
+## An EDA Checklist
+
+**Basic understanding:**
+- [ ] Confirmed row and column counts
+- [ ] Is each column's data type appropriate?
+- [ ] Missing value rate and pattern
+- [ ] Whether duplicate rows exist
+
+**Distribution:**
+- [ ] Numeric: distribution shape, skewness, outliers
+- [ ] Categorical: class imbalance
+
+**Relationships:**
+- [ ] Correlation between the target variable and each feature
+- [ ] Multicollinearity among features
+- [ ] Seasonality and trend, if time series
+
+---
+
+## Frequently Asked Questions
+
+**Q: How much time should I spend on EDA?**
+A: Investing 20–30% of your total project time in EDA early on pays off with a much more efficient modeling stage. Don't rush it.
+
+**Q: If two variables have a high correlation, does that mean causation?**
+A: No. Correlation does not imply causation. To establish causation, you need experimental design (A/B testing) or causal inference techniques.
+
+<Callout type="tip">**Continue the series**: [Ch3. Visualization](/en/academy-python-data-analysis-ch3) · [Ch5. Practical Intro to Machine Learning](/en/academy-python-data-analysis-ch5) · [Python Fundamentals series](/en/academy-python-basics-ch1)</Callout>
