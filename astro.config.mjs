@@ -149,6 +149,20 @@ export default defineConfig({
             if (id.includes("node_modules/react-dom")) return "react-dom";
             if (id.includes("node_modules/react")) return "react-vendor";
             if (id.includes("node_modules/lucide-react")) return "lucide";
+            // clsx/tailwind-merge/cva/radix-ui back the shared `ui/*` primitives
+            // (button, card, toggle-group, ...) used by nearly every tool page.
+            // Without an explicit chunk, Rollup was free to co-locate this
+            // shared code with whichever consumer built first — which turned
+            // out to be recharts, so every button/card user (42+ pages with
+            // no chart at all, e.g. height-converter, hat/ring/shoe-size
+            // converters) paid an unused 432KB recharts + react-dom fetch via
+            // a side-effect-only cross-chunk import. See company-brain
+            // projects/oiyo-ecosystem/traffic-reports/
+            // 2026-08-25-height-converter-oiyo-en-decline-diagnosis.md.
+            if (id.includes("node_modules/clsx")) return "ui-vendor";
+            if (id.includes("node_modules/tailwind-merge")) return "ui-vendor";
+            if (id.includes("node_modules/class-variance-authority")) return "ui-vendor";
+            if (id.includes("node_modules/radix-ui")) return "ui-vendor";
           },
         },
       },
