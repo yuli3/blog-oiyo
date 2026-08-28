@@ -48,10 +48,15 @@ def load_redirect_sources(dist: Path) -> list[str]:
 def redirect_covers(sources: list[str], path: str) -> bool:
     for src in sources:
         if src.endswith("*"):
-            if path.startswith(src[:-1].rstrip("/")):
+            # Match wildcard prefixes that may also contain placeholder segments,
+            # e.g. /:lang/learning-style-test*.
+            prefix = src[:-1].rstrip("/")
+            pattern = re.escape(prefix).replace(r"\:", ":")
+            pattern = re.sub(r":[A-Za-z][A-Za-z0-9_]*", r"[^/]+", pattern)
+            if re.match(rf"^{pattern}(?:/.*)?$", path):
                 return True
         elif ":" in src:
-            # placeholder segments (e.g. /:lang/foo) match any single segment
+            # Placeholder segments (e.g. /:lang/foo) match any single segment.
             s_seg = norm(src).split("/")
             p_seg = path.split("/")
             if len(s_seg) == len(p_seg) and all(
