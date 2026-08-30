@@ -75,7 +75,6 @@ function classify(row) {
         "SWOTBuilder",
         "CompAdvantageCalculator",
         "VarianceAnalysis",
-        "MeetingCostCalculator",
         "PetAgeCalculator",
         "PregnancyCalculator",
       ].includes(name),
@@ -131,8 +130,6 @@ function classify(row) {
       "child-height-prediction-factors",
       "gpa-academic-performance-strategy",
       "intermittent-fasting-metabolism",
-      "meeting-cost-corporate-efficiency",
-      "meeting-cost-productivity",
       "pet-age-human-comparison",
       "pregnancy-cycle-womens-health",
     ].includes(slug)
@@ -231,8 +228,6 @@ function hasSlugPatternMatch(slug) {
       "child-height-prediction-factors",
       "gpa-academic-performance-strategy",
       "intermittent-fasting-metabolism",
-      "meeting-cost-corporate-efficiency",
-      "meeting-cost-productivity",
       "pet-age-human-comparison",
       "pregnancy-cycle-womens-health",
     ].includes(slug)

@@ -112,7 +112,6 @@ import RentComparisonCalculator from "../components/tools/RentComparisonCalculat
 import RentalYieldCalculator from "../components/tools/RentalYieldCalculator";
 import StockAverageCalculator from "../components/tools/StockAverageCalculator";
 import BmiCalculator from "../components/tools/BmiCalculator";
-import MeetingCostCalculator from "../components/tools/MeetingCostCalculator";
 import RoiCalculator from "../components/tools/RoiCalculator";
 import AgeCalculator from "../components/tools/AgeCalculator";
 import GpaCalculator from "../components/tools/GpaCalculator";
@@ -356,7 +355,6 @@ const islandComponents = {
   RentalYieldCalculator,
   StockAverageCalculator,
   BmiCalculator,
-  MeetingCostCalculator,
   RoiCalculator,
   AgeCalculator,
   GpaCalculator,

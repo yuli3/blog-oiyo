@@ -1,14 +1,14 @@
 # Content Index (auto-generated)
 
-> Generated 2026-08-27T22:53:10.090Z from MDX frontmatter. Do not edit by hand — run `npm run content:manifest`.
+> Generated 2026-08-30T03:31:34.018Z from MDX frontmatter. Do not edit by hand — run `npm run content:manifest`.
 
-Total: **6004** entries · ko 2586 · en 1585 · ja 869 · zh 372 · es 296 · fr 296
+Total: **6016** entries · ko 2585 · en 1606 · ja 868 · zh 369 · es 294 · fr 294
 
 ## By track
 
-- **magazine**: 3392
+- **magazine**: 3401
 - **academy**: 2520
-- **interactive**: 92
+- **interactive**: 95
 
 ## By category (raw)
 
@@ -17,27 +17,27 @@ Total: **6004** entries · ko 2586 · en 1585 · ja 869 · zh 372 · es 296 · f
 | Psychology | 1192 | ❌ drift |
 | Exam | 726 | ✅ |
 | Mythology | 700 | ❌ drift |
-| Mysticism | 573 | ✅ |
-| Finance | 521 | ✅ |
-| Lifestyle | 256 | ✅ |
+| Mysticism | 570 | ✅ |
+| Finance | 522 | ✅ |
+| Lifestyle | 259 | ✅ |
 | Law | 194 | ✅ |
-| Business | 178 | ✅ |
+| Business | 176 | ✅ |
 | Economics | 161 | ❌ drift |
-| Philosophy | 126 | ❌ drift |
+| Philosophy | 128 | ❌ drift |
 | History | 119 | ❌ drift |
-| Computer Science | 100 | ✅ |
+| Computer Science | 101 | ✅ |
 | Tax | 98 | ✅ |
 | Accounting | 92 | ✅ |
-| Humanities | 89 | ✅ |
-| Science & Nature | 84 | ✅ |
+| Humanities | 91 | ✅ |
+| Science & Nature | 86 | ✅ |
 | Public Admin | 78 | ✅ |
 | Real Estate | 74 | ✅ |
 | Education | 70 | ✅ |
-| Health | 55 | ✅ |
+| Health | 57 | ✅ |
 | Statistics | 53 | ❌ drift |
+| Career | 43 | ✅ |
 | Music History | 42 | ❌ drift |
-| Career | 42 | ✅ |
-| Insights | 41 | ✅ |
+| Insights | 42 | ✅ |
 | Nursing | 39 | ❌ drift |
 | Natural Science | 35 | ❌ drift |
 | Art Psychotherapy | 33 | ❌ drift |
@@ -56,6 +56,7 @@ Total: **6004** entries · ko 2586 · en 1585 · ja 869 · zh 372 · es 296 · f
 | Trade | 3 | ✅ |
 | Engineering | 3 | ✅ |
 | Society & Wealth | 2 | ✅ |
+| Strategy | 2 | ✅ |
+| Games | 1 | ❌ drift |
 | Career & Vocation | 1 | ❌ drift |
 | Social Science | 1 | ❌ drift |
-| Strategy | 1 | ✅ |
