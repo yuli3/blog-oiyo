@@ -1,146 +1,24 @@
-# AGENTS.md
+# Blog 작업 규칙
 
-This file is the canonical agent harness for `blog-oiyo`.
+시작·안전·승인 계약은 `/Users/seuncho/coding/AGENTS.md`, 현재 작업은 `/Users/seuncho/coding/company-brain/NOW.md`를 따른다. 이 파일은 Blog 고유 작성·렌더링 규칙만 다룬다.
 
-Before using this project-specific harness, read the cross-project harness:
+## 콘텐츠·데이터
 
-1. [/Users/seuncho/coding/AGENTS.md](/Users/seuncho/coding/AGENTS.md)
-2. [/Users/seuncho/coding/docs/AGENT_WORKLOG.md](/Users/seuncho/coding/docs/AGENT_WORKLOG.md)
-3. [/Users/seuncho/coding/docs/route-ownership.json](/Users/seuncho/coding/docs/route-ownership.json)
+- `academy`는 series/chapter가 있는 학습 흐름, `magazine`은 제한된 설명 surface, `interactive`는 읽기와 실행이 결합된 문서다. 명시적 track을 사용하고 필요한 series/chapter/embeddedTools를 누락하지 않는다.
+- 새 MDX는 `data/catalog/content-inventory.master.csv` 행과 함께 변경한다. 카테고리는 `data/catalog/category-registry.yaml`에 먼저 등록하고 `npm run verify:harness`로 확인한다.
+- 마이그레이션 후보는 기존 audit/revisit-later 카탈로그와 연결한다. 불확실한 후보는 보류하고 기존 정본을 우선한다.
+- interactive는 첫 컴포넌트 전 산문 400자 이상을 기준으로 한다. 제목·import·컴포넌트·표는 산문에서 제외한다. `config/prose-min-baseline.json`의 기존 위반 기준을 높여 새 위반을 통과시키지 않는다.
+- 실제 콘텐츠가 있는 로케일만 hreflang에 포함한다. `availableLocales` 흐름을 우회하거나 한국어 전용 문서의 외국어 alternate를 하드코딩하지 않는다.
 
-All coding agents working in this repository should treat this file as the first operational document, then follow the linked control documents and verification commands.
+## 렌더링
 
-## 1. Mission
+- MDX 컴포넌트는 route 파일에 직접 확장하지 않고 `src/lib/mdx-component-registry.ts`에서 관리한다. magazine의 허용 범위를 academy/interactive처럼 넓히지 않는다.
+- 기존 호환 bridge는 실제 호환성이 필요할 때만 유지한다. 이미지 위주 콘텐츠를 전제로 새 구조를 만들지 않는다.
+- 한 문서의 두 번째 이후 컴포넌트는 `client:load` 대신 `client:visible`을 사용한다. 사용자 입력 HTML은 DOMPurify 등 검증된 정화 없이 `dangerouslySetInnerHTML`에 넣지 않는다.
 
-`blog-oiyo` is not just a blog.
+## 검증·참조
 
-It is a structured content platform centered on three tracks:
-
-1. `academy`
-2. `magazine`
-3. `interactive`
-
-The long-term goal is:
-
-1. stable Cloudflare Pages publishing
-2. controlled MDOC-style authoring
-3. structured lecture and qualification systems
-4. selective migration from `ahoxy-nextjs`
-5. content and metadata that stay understandable across tools and agents
-
-## 2. Source of Truth Order
-
-Read these in order before making substantial changes:
-
-1. [docs/implementation-control-board.md](/Users/seuncho/coding/company-brain/AI-Sessions/raw/project-docs/blog/docs/implementation-control-board.md)
-2. [docs/content-charter.md](/Users/seuncho/coding/company-brain/AI-Sessions/raw/project-docs/blog/docs/content-charter.md)
-3. [docs/mdoc-authoring-spec.md](/Users/seuncho/coding/company-brain/AI-Sessions/raw/project-docs/blog/docs/mdoc-authoring-spec.md)
-4. [docs/component-allowlist.md](/Users/seuncho/coding/company-brain/AI-Sessions/raw/project-docs/blog/docs/component-allowlist.md)
-5. [docs/component-disallowlist.md](/Users/seuncho/coding/company-brain/AI-Sessions/raw/project-docs/blog/docs/component-disallowlist.md)
-6. [docs/component-registry-by-track.md](/Users/seuncho/coding/company-brain/AI-Sessions/raw/project-docs/blog/docs/component-registry-by-track.md)
-7. [docs/content-schema-implementation-draft.md](/Users/seuncho/coding/company-brain/AI-Sessions/raw/project-docs/blog/docs/content-schema-implementation-draft.md)
-8. [data/catalog/category-registry.yaml](/Users/seuncho/coding/blog/data/catalog/category-registry.yaml)
-9. [data/catalog/content-inventory.master.csv](/Users/seuncho/coding/blog/data/catalog/content-inventory.master.csv)
-10. [data/catalog/ahoxy-migration.revisit-later.csv](/Users/seuncho/coding/blog/data/catalog/ahoxy-migration.revisit-later.csv)
-
-## 3. Working Rules
-
-### Core rules
-
-1. registry before category growth
-2. metadata before mass migration
-3. renderer control before new component families
-4. priority backfill before broad expansion
-5. uncertain items go to `revisit-later`, not forced decisions
-
-### Content rules
-
-1. prefer explicit `track` over inferred track
-2. `academy` content should be series-aware and chapter-aware
-3. `magazine` should remain the narrowest rendering surface
-4. `interactive` must be reading-first, not tool-only
-5. do not add image-heavy assumptions; the design direction is image-light
-6. **Prose Minimum (FAANG gate)**: any `track: interactive` article must contain ≥ 400 Korean characters of prose before the first component. Count only non-heading, non-import, non-component, non-table lines. Tool-dump articles without context paragraphs will be rejected.
-7. **CSV-on-Create**: every new MDX article must have its row in `data/catalog/content-inventory.master.csv` created in the same commit. Run `verify:harness` immediately after; a missing CSV row is a blocking failure.
-8. **Hreflang Gate (SEO)**: ko-only `interactive` articles must NOT emit hreflang alternate tags for locales without actual content. The `availableLocales` prop mechanism in `[...slug].astro` → `BaseLayout` → `SEO.astro` handles this automatically — do not bypass it by hardcoding locales in frontmatter or layouts.
-
-### Rendering rules
-
-1. do not add MDX components directly to route files
-2. update [src/lib/mdx-component-registry.ts](/Users/seuncho/coding/blog/src/lib/mdx-component-registry.ts) instead
-3. keep `magazine` narrower than `academy` and `interactive`
-4. use the compatibility bridge only when needed to keep legacy content stable
-
-### Data rules
-
-1. new categories must be represented in `data/catalog/category-registry.yaml`
-2. priority work should be reflected in `data/catalog/content-inventory.master.csv`
-3. migration candidates should map back to `ahoxy-migration.audit.csv` or `revisit-later.csv`
-
-## 4. Standard Commands
-
-Use these commands as the default harness interface:
-
-```bash
-npm run build
-npm run type-check
-npm run lint
-npm run validate:i18n
-npm run validate:personality
-npm run verify:harness
-npm run audit:magazine-compat
-npm run audit:content-quality
-```
-
-`audit:content-quality` now enforces content rule 6's prose minimum (baseline-gated via `config/prose-min-baseline.json` — see the script for why it's a ceiling, not zero-tolerance) in addition to its existing duplicate/forbidden-title/category checks. It was previously undocumented here despite existing as an npm script.
-
-## 5. Definition of Done
-
-A task is not done just because files changed.
-
-It is done when:
-
-1. it matches the control documents
-2. metadata and taxonomy are still coherent
-3. the appropriate verification commands pass
-4. any new category, track, or series logic is reflected in the registry or inventory
-5. the final note explains what changed and what remains transitional
-
-## 6. Red Flags
-
-Pause and re-align if:
-
-1. a new content family appears without category registry support
-2. route files start accumulating direct component exposure again
-3. `magazine` grows toward an unrestricted MDX surface
-4. content is added without `track`, `series`, or `chapter` where required
-5. an agent starts optimizing for speed over auditability
-6. a new `interactive` article is created without a corresponding CSV row (see Content Rule 7)
-7. `client:load` is used for the 2nd or later component on a multi-component page (use `client:visible` instead)
-8. `dangerouslySetInnerHTML` is used without DOMPurify sanitization in any user-input component
-
-## 7. Agent Adapters
-
-Tool-specific instructions should stay thin.
-
-The following files are adapters and should point back here:
-
-1. [CLAUDE.md](/Users/seuncho/coding/blog/CLAUDE.md)
-2. [GEMINI.md](/Users/seuncho/coding/blog/GEMINI.md)
-3. [CURSOR.md](/Users/seuncho/coding/blog/CURSOR.md)
-4. [.cursor/rules/project-harness.mdc](/Users/seuncho/coding/blog/.cursor/rules/project-harness.mdc)
-
-## 8. Current State
-
-As of 2026-05-25 — see `/Users/seuncho/coding/docs/MASTER_PLAN.md` for the live cross-project roadmap.
-
-1. Schema transition complete — all `academy` files have `series:` + `chapter:`, all `interactive` have `embeddedTools:`
-2. Track-aware MDX registry split complete
-3. Series normalization complete — Korean `series:` field used everywhere (display bugs fixed 2026-05-25)
-4. Build pipeline green — `npm run build` + `type-check` 0 errors
-5. Content: **742 pieces** (Academy 437 · Magazine 280 · Lecture 25) across 7 locales
-6. Civil-law series reclassified: `track: magazine` → `track: academy` (2026-05-25)
-7. Cross-project promotion: ahoxy BlogBanner, footer card, home cross-promo pending commit
-8. Intent-first browse UX: 8 intent bundles, hub pages for accounting/economics live
-9. Data integrity items outstanding: `academy-labor-law-basic` ↔ `academy-labor-law-basics` duplicate; `academy-tax-basics`+`academy-tax-intro` split series
-10. Phase A content: 10 series each at ch1–2, need 3–5 more chapters each (see MASTER_PLAN § 4)
+- 코드·콘텐츠 변경: `npm run type-check`, `npm run validate:i18n`, `npm run verify:harness`, `npm run build`, 빌드 후 `npm run audit:seo`·`npm run audit:links`.
+- 콘텐츠/컴포넌트 범위에 따라 `npm run audit:content-quality`, `npm run audit:magazine-compat`, `npm run validate:personality`도 실행한다. 실제 명령 목록은 package.json이 정본이다.
+- 작성 스키마·허용 컴포넌트의 경위가 필요할 때만 `/Users/seuncho/coding/company-brain/AI-Sessions/raw/project-docs/blog/docs/`의 mdoc-authoring-spec, component-allowlist/disallowlist, component-registry-by-track, content-schema-implementation-draft를 조회한다. 과거 implementation-control-board를 현재 작업판으로 사용하지 않는다.
+- 완료 시 검증 결과, metadata/카탈로그 정합, 잔여·경고를 기록한다. 페이지 수·옛 로드맵은 여기에 복제하지 않는다.
