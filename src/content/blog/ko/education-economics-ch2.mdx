@@ -3,7 +3,8 @@ track: academy
 series: economics-basics
 chapter: 2
 title: "경제학원론 — 수요·공급 이론 및 시장의 균형"
-description: "수요와 공급의 결정요인, 곡선의 이동 원리, 그리고 시장 균형의 성립과 변동을 정병렬 경제학 스타일로 정밀 분석합니다. 개별 수요함수의 수평적 합산 등 수리적 기초를 다룹니다."
+description: "수요와 공급의 결정요인, 곡선의 이동 원리, 그리고 시장 균형의 성립과 변동을 계산 예제로 설명합니다. 개별 수요함수의 수평적 합산 등 수리적 기초를 다룹니다."
+updatedDate: 2026-08-31
 pubDate: 2026-03-01T00:00:00.000Z
 category: Economics
 tags:
@@ -29,18 +30,31 @@ import SupplyDemandChart from "@/components/mdx/SupplyDemandChart.astro";
 
 ## 1. 수요 (Demand)
 
-수요란 일정 기간 동안 소비자가 가격별로 구입하고자 하는 재화의 수량을 의미하며, 이는 구매 의사와 지불 능력이 뒷받침된 **유효수요(Effective Demand)**를 전제로 한다.
+수요는 일정 기간의 **가격과 구입하려는 수량 사이의 관계 전체**다. 수요량은 그 관계에서 특정 가격에 대응하는 수량이다. 두 개념 모두 구매 의사와 지불 능력이 있다는 전제 아래 사용한다.
 
 ### (1) 수요법칙과 수요곡선
 
 - **수요법칙**: 다른 조건이 일정할 때, 가격($P$)과 수요량($Q_d$)은 역(-)의 관계를 갖는다.
-- **예외**: 기펜재(Giffen goods), 베블런 효과(Veblen effect) 등.
+- **조건 확인**: 기펜재는 열등재 중에서도 가격 상승의 소득효과가 대체효과를 압도하는 경우다. 모든 열등재가 기펜재는 아니다. 높은 가격 자체를 지위의 신호로 평가하는 베블런 효과는 가격이 소비자의 평가에도 영향을 미치는 경우이므로, 다른 조건이 일정한 기본 모형과 구분한다.
 
 ### (2) 개별수요와 시장수요
 
 - 시장수요곡선은 개별수요곡선을 **수평적으로 합산(Horizontal Summation)**하여 도출한다.
 - <mark>**핵심**</mark>: 수평적 합산이란 동일 가격 수준에서 개별 소비자들의
   수요량을 모두 더하는 것을 의미한다 ($Q = \sum q_i$).
+
+#### 계산 예제: 수량을 더하되 음수는 제외한다
+
+두 소비자의 하루 수요가 $q_A=\max(0,40-P)$, $q_B=\max(0,60-2P)$라고 하자. 가격의 단위는 천 원, 수량의 단위는 개다.
+
+| 가격 P | A의 수요량 | B의 수요량 | 시장수요량 |
+|---|---|---|---|
+| 20 | 20 | 20 | 40 |
+| 30 | 10 | 0 | 10 |
+| 35 | 5 | 0 | 5 |
+| 40 | 0 | 0 | 0 |
+
+가격이 0 이상 30 이하이면 시장수요량은 $100-3P$다. 30을 초과하고 40 미만이면 A만 구입하므로 $40-P$이고, 40 이상이면 0이다. 가격 35에서 B의 식에 나온 −10을 그대로 더하면 실제로 존재하지 않는 음의 구매량을 합산하게 된다.
 
 ### (3) 수요량의 변화 vs 수요의 변화
 
@@ -64,12 +78,12 @@ import SupplyDemandChart from "@/components/mdx/SupplyDemandChart.astro";
 
 ## 2. 공급 (Supply)
 
-공급이란 생산자가 일정 기간 동안 판매하고자 하는 재화의 수량을 의미한다.
+공급은 일정 기간의 가격과 생산자가 판매할 의사와 능력이 있는 수량 사이의 관계다. 특정 가격에서의 수량은 공급량이라고 한다.
 
 ### (1) 공급법칙과 공급곡선
 
 - **공급법칙**: 다른 조건이 일정할 때, 가격($P$)과 공급량($Q_s$)은 정(+)의 관계를 갖는다.
-- **한계비용(MC)과의 관계**: 완전경쟁시장에서 기업의 공급곡선은 평균가변비용(AVC) 상단의 한계비용곡선과 일치한다.
+- **한계비용(MC)과의 관계**: 통상적인 U자형 비용곡선 아래 완전경쟁기업의 **단기** 공급곡선은 최소 평균가변비용(AVC) 이상에 있는 상승 구간의 한계비용(MC) 곡선이다. 가격이 최소 AVC보다 낮으면 생산을 중단한다. 최소 AVC와 같으면 생산과 중단의 이윤이 같으며, 장기 공급조건과 구분해야 한다.
 
 ### (2) 공급의 변화 요인
 
@@ -87,18 +101,16 @@ import SupplyDemandChart from "@/components/mdx/SupplyDemandChart.astro";
 
 - $Q_d = Q_s$ 인 지점에서 균형 가격($P^*$)과 균형 거래량($Q^*$)이 결정된다.
 
-<FormulaBox>
-  **수요·공급 함수 연립 방정식 풀이 예시** 수요함수: $Q_d = 100 - P$ 공급함수:
-  $Q_s = 20 + P$ 균형 조건 ($Q_d = Q_s$): $100 - P = 20 + P$ $\Rightarrow 2P =
-  80 \Rightarrow P^* = 40$ $\Rightarrow Q^* = 100 - 40 = 60$
-</FormulaBox>
+수요함수는 $Q_d=100-P$, 공급함수는 $Q_s=20+P$다. 두 수량이 같다는 조건으로 연립하면 $100-P=20+P$이므로 $2P=80$이다.
+
+<FormulaBox label="균형가격과 거래량" formula="P* = 40, Q* = 60" description="가격 40을 두 함수에 각각 대입하면 수요량과 공급량이 모두 60입니다." />
 
 <SupplyDemandChart
   title="수요·공급 기본 모형"
   xLabel="수량 (Q)"
   yLabel="가격 (P)"
   showSurplus={true}
-  caption="균형점 E에서 P*와 Q*가 결정됩니다. 파란 영역: 소비자잉여 / 녹색 영역: 생산자잉여"
+  caption="곡선과 잉여의 관계를 보이는 개념도이며 위 수치 예제의 그래프는 아닙니다. 파란 영역은 소비자잉여, 녹색 영역은 생산자잉여입니다."
 />
 
 ### (2) 균형의 변동 (Demand & Supply Shock)
@@ -113,12 +125,10 @@ import SupplyDemandChart from "@/components/mdx/SupplyDemandChart.astro";
 
 - **소비자잉여 (Consumer Surplus)**: 소비자가 지불할 용의가 있는 최대 금액과 실제 지불 금액의 차이. (수요곡선 하단과 가격선 상단의 면적)
 - **생산자잉여 (Producer Surplus)**: 생산자가 실제로 받은 금액과 최소한 받아야겠다고 생각한 금액의 차이. (가격선 하단과 공급곡선 상단의 면적)
-- **사회적 잉여 (Total Surplus)**: 소비자잉여 + 생산자잉여. 완전경쟁시장 균형에서 극대화된다.
+- **사회적 잉여 (Total Surplus)**: 소비자잉여 + 생산자잉여. 외부성·정보 문제 등이 없고 수요와 공급이 사회적 한계편익과 한계비용을 반영하는 경쟁시장 모형에서 균형 거래량이 총잉여를 극대화한다. 생산자잉여는 고정비용을 차감한 이윤과 다르다.
 
 <Callout type="important">
-  **수험 핵심**: 정부의 가격 규제(최고가격제, 최저가격제)나 조세 부과는 사회적
-  잉여의 손실인 **자중손실(Deadweight Loss)**을 발생시킨다. 이는 자원 배분의
-  비효율성을 초래하는 주범이다.
+  **조건부터 확인하기**: 외부성이 없는 경쟁시장에서 거래량을 줄이는 세금이나 구속력 있는 가격 규제는 자중손실을 만들 수 있다. 균형가격 40인 위 예제에서 가격상한 50은 거래를 제약하지 않는다. 반대로 오염의 외부비용을 반영한 교정세는 효율성을 높일 수 있다. 세금이 있다는 사실만으로 자중손실의 발생과 크기를 단정하지 않는다.
 </Callout>
 
 ---
@@ -131,8 +141,10 @@ import SupplyDemandChart from "@/components/mdx/SupplyDemandChart.astro";
 
 ## 📖 참고문헌
 
-- **[경제학원론] - 정병렬**: 수험 경제학의 바이블.
-- **[경제학강의] - 이준구**: 직관적 이해를 돕는 명저.
+- OpenStax, *Principles of Economics 3e*, [3.1 수요·공급·균형](https://openstax.org/books/principles-economics-3e/pages/3-1-demand-supply-and-equilibrium-in-markets-for-goods-and-services), [3.4 가격 규제](https://openstax.org/books/principles-economics-3e/pages/3-4-price-ceilings-and-price-floors), [3.5 잉여와 효율성](https://openstax.org/books/principles-economics-3e/pages/3-5-demand-supply-and-efficiency).
+- 같은 책, [8.2 완전경쟁기업의 생산 결정](https://openstax.org/books/principles-economics-3e/pages/8-2-how-perfectly-competitive-firms-make-output-decisions).
+
+확인일: 2026-08-31. 수요 합산 사례는 이 글에서 구성한 가상 예제다.
 
 ---
 
