@@ -1,0 +1,57 @@
+---
+interface Props {
+  title: string;
+  author: string;
+  updatedDate?: Date;
+  pubDate: Date;
+  canonicalUrl: string;
+}
+
+const { title, author, updatedDate, pubDate, canonicalUrl } = Astro.props;
+const dateLabel = updatedDate ? "최종 수정" : "발행";
+const date = (updatedDate ?? pubDate).toISOString().slice(0, 10);
+const citation = `${author}. 「${title}」. ${dateLabel} ${date}. ${canonicalUrl}`;
+---
+
+<section id="article-citation" aria-labelledby="article-citation-heading" class="mt-10 border-t border-border pt-6">
+  <h2 id="article-citation-heading" class="font-heading text-xl font-bold">인용 정보</h2>
+  <p data-citation-text class="mt-3 select-all break-words text-sm leading-7">{citation}</p>
+  <button
+    data-citation-copy
+    type="button"
+    hidden
+    class="mt-4 min-h-11 rounded-lg border border-primary px-4 py-2 text-sm font-semibold text-primary hover:bg-primary/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary aria-disabled:cursor-wait aria-disabled:opacity-60 print:hidden"
+  >인용 정보 복사</button>
+  <p data-citation-status role="status" aria-live="polite" aria-atomic="true" class="mt-2 min-h-12 text-sm leading-6 text-foreground print:hidden">문장을 선택해 직접 복사할 수도 있습니다.</p>
+</section>
+
+<script is:inline>
+  (() => {
+    const section = document.getElementById("article-citation");
+    const button = section?.querySelector("[data-citation-copy]");
+    const text = section?.querySelector("[data-citation-text]");
+    const status = section?.querySelector("[data-citation-status]");
+    if (!button || !text || !status || button.dataset.ready) return;
+    if (!window.isSecureContext || !navigator.clipboard?.writeText) return;
+    button.dataset.ready = "true";
+    button.hidden = false;
+    let copying = false;
+    button.addEventListener("click", async () => {
+      if (copying) return;
+      copying = true;
+      button.setAttribute("aria-disabled", "true");
+      button.textContent = "복사 중…";
+      status.textContent = "";
+      try {
+        await navigator.clipboard.writeText(text.textContent.trim());
+        status.textContent = "인용 정보를 복사했습니다.";
+      } catch {
+        status.textContent = "복사하지 못했습니다. 위 문장을 선택해 직접 복사해주세요.";
+      } finally {
+        copying = false;
+        button.removeAttribute("aria-disabled");
+        button.textContent = "인용 정보 복사";
+      }
+    });
+  })();
+</script>

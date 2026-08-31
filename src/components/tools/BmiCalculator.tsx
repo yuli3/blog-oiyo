@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useId, useState } from 'react';
 import { GameContainer } from '../ui/game/GamePrimitives';
 
 const BmiCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
@@ -7,6 +7,7 @@ const BmiCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
         en: { title: "BMI & Body Fat", desc: "Analyze your body data for health indicators.", height: "Height (cm)", weight: "Weight (kg)", age: "Age", gender: "Gender", male: "Male", female: "Female", result: "Result", status: "Status", fat: "Body Fat %" }
     }[locale === 'ko' ? 'ko' : 'en'];
 
+    const inputId = useId();
     const [height, setHeight] = useState(175);
     const [weight, setWeight] = useState(70);
     const [age, setAge] = useState(30);
@@ -29,27 +30,27 @@ const BmiCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
     return (
         <GameContainer title={t.title} subtitle="Health Analytics" onReset={() => { setHeight(175); setWeight(70); setAge(30); setGender('m'); }}>
             <div className="flex flex-col gap-10">
-                <p className="text-sm font-medium text-muted-foreground text-center">{t.desc}</p>
+                <p className="text-sm font-medium text-foreground text-center">{t.desc}</p>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-4">
-                        <div className="flex gap-2 p-1 bg-muted rounded-xl">
-                            <button onClick={() => setGender('m')} className={`flex-1 py-2 rounded-lg font-black text-xs ${gender === 'm' ? 'bg-background shadow-sm text-primary' : 'text-muted-foreground'}`}>{t.male}</button>
-                            <button onClick={() => setGender('f')} className={`flex-1 py-2 rounded-lg font-black text-xs ${gender === 'f' ? 'bg-background shadow-sm text-primary' : 'text-muted-foreground'}`}>{t.female}</button>
+                        <div role="group" aria-label={t.gender} className="flex gap-2 p-1 bg-muted rounded-xl">
+                            <button type="button" aria-pressed={gender === 'm'} onClick={() => setGender('m')} className={`flex-1 min-h-11 py-2 rounded-lg font-black text-xs ${gender === 'm' ? 'bg-background shadow-sm text-primary' : 'text-foreground'}`}>{t.male}</button>
+                            <button type="button" aria-pressed={gender === 'f'} onClick={() => setGender('f')} className={`flex-1 min-h-11 py-2 rounded-lg font-black text-xs ${gender === 'f' ? 'bg-background shadow-sm text-primary' : 'text-foreground'}`}>{t.female}</button>
                         </div>
                         <div className="space-y-2">
-                            <label className="text-[10px] font-black text-muted-foreground uppercase">{t.height}</label>
-                            <input type="number" value={height} onChange={(e) => setHeight(Number(e.target.value))} className="w-full p-4 bg-muted/30 rounded-2xl border border-border font-black" />
+                            <label htmlFor={`${inputId}-height`} className="text-xs font-black text-foreground uppercase">{t.height}</label>
+                            <input id={`${inputId}-height`} type="number" value={height} onChange={(e) => setHeight(Number(e.target.value))} className="w-full p-4 bg-muted/30 rounded-2xl border border-border font-black" />
                         </div>
                     </div>
                     <div className="space-y-4">
                         <div className="space-y-2">
-                             <label className="text-[10px] font-black text-muted-foreground uppercase">{t.weight}</label>
-                            <input type="number" value={weight} onChange={(e) => setWeight(Number(e.target.value))} className="w-full p-4 bg-muted/30 rounded-2xl border border-border font-black" />
+                             <label htmlFor={`${inputId}-weight`} className="text-xs font-black text-foreground uppercase">{t.weight}</label>
+                            <input id={`${inputId}-weight`} type="number" value={weight} onChange={(e) => setWeight(Number(e.target.value))} className="w-full p-4 bg-muted/30 rounded-2xl border border-border font-black" />
                         </div>
                         <div className="space-y-2">
-                             <label className="text-[10px] font-black text-muted-foreground uppercase">{t.age}</label>
-                            <input type="number" value={age} onChange={(e) => setAge(Number(e.target.value))} className="w-full p-4 bg-muted/30 rounded-2xl border border-border font-black" />
+                             <label htmlFor={`${inputId}-age`} className="text-xs font-black text-foreground uppercase">{t.age}</label>
+                            <input id={`${inputId}-age`} type="number" value={age} onChange={(e) => setAge(Number(e.target.value))} className="w-full p-4 bg-muted/30 rounded-2xl border border-border font-black" />
                         </div>
                     </div>
                 </div>

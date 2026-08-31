@@ -11,6 +11,7 @@ import { getRegisteredMdxComponents } from "../../lib/mdx-component-registry";
 import { getTrackFromData } from "../../lib/taxonomy";
 import { courseJsonLd } from "../../lib/seo/structured-data";
 import AuthorProfile from "../../components/AuthorProfile.astro";
+import ArticleCitation from "../../components/ArticleCitation.astro";
 import MysticTrinity from "../../components/MysticTrinity.astro";
 import OiyoCanonicalRedirect from "../../components/OiyoCanonicalRedirect.astro";
 import BlogRedirect from "../../components/BlogRedirect.astro";
@@ -140,6 +141,10 @@ const RELATED_HEADING: Record<string, string> = {
 };
 const { post, locale, prevPost, nextPost, seriesPosts, availableLocales, relatedPosts } = Astro.props;
 const { Content } = await post.render();
+const showCitation = locale === "ko" && [
+  "ko/academy-tax-law-basic-ch1",
+  "ko/academy-accounting-basics-ch2",
+].includes(post.slug);
 const tocEnabled = siteConfig.features.toc;
 const t = await getTranslations(locale as Locale);
 const categoryNames = (t.category.names ?? {}) as Record<string, string>;
@@ -478,6 +483,16 @@ const redirectToBlog = post.data.redirectToBlog;
           <div class="prose prose-stone prose-lg max-w-none prose-headings:font-heading prose-headings:font-bold prose-a:text-primary prose-pre:rounded-2xl prose-pre:bg-muted/10 prose-pre:border prose-pre:border-border/40 leading-relaxed text-pretty">
             <Content components={mdxComponents} />
           </div>
+
+          {showCitation && (
+            <ArticleCitation
+              title={post.data.title}
+              author={post.data.author}
+              updatedDate={post.data.updatedDate}
+              pubDate={post.data.pubDate}
+              canonicalUrl={new URL(post.data.canonicalUrl ?? Astro.url.pathname, Astro.site).href}
+            />
+          )}
 
           <!-- Author Profile Component for E-E-A-T SEO -->
           <AuthorProfile authorName={post.data.author} locale={locale} />
