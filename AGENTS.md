@@ -22,3 +22,5 @@
 - 콘텐츠/컴포넌트 범위에 따라 `npm run audit:content-quality`, `npm run audit:magazine-compat`, `npm run validate:personality`도 실행한다. 실제 명령 목록은 package.json이 정본이다.
 - 작성 스키마·허용 컴포넌트의 경위가 필요할 때만 `/Users/seuncho/coding/company-brain/AI-Sessions/raw/project-docs/blog/docs/`의 mdoc-authoring-spec, component-allowlist/disallowlist, component-registry-by-track, content-schema-implementation-draft를 조회한다. 과거 implementation-control-board를 현재 작업판으로 사용하지 않는다.
 - 완료 시 검증 결과, metadata/카탈로그 정합, 잔여·경고를 기록한다. 페이지 수·옛 로드맵은 여기에 복제하지 않는다.
+
+- `public/_headers`를 건드리면 `npm run audit:headers-collision`을 함께 돌린다. **Cloudflare Pages는 매칭되는 규칙을 전부 적용하고 같은 헤더를 이어 붙인다**(교체가 아니다). 넓은 규칙(`/*`)에 Cache-Control을 두면 자산별 정책과 충돌해 `max-age`가 두 개인 헤더가 나가고, RFC 9111이 반복 지시어 처리를 구현에 맡기므로 실효 정책이 모호해진다. 2026-09-01에 다섯 사이트 전부 그 상태였고 해시 자산의 1년 불변 캐시가 무효화돼 있었다. 캐시 정책은 좁은 경로에만 건다. 스크립트 정본은 `shared/scripts/`다.
