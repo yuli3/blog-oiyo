@@ -19,7 +19,8 @@
 ## 검증·참조
 
 - 코드·콘텐츠 변경: `npm run type-check`, `npm run validate:i18n`, `npm run verify:harness`, `npm run build`, 빌드 후 `npm run audit:seo`·`npm run audit:links`.
-- 콘텐츠/컴포넌트 범위에 따라 `npm run audit:content-quality`, `npm run audit:magazine-compat`, `npm run validate:personality`도 실행한다. 실제 명령 목록은 package.json이 정본이다.
+- 콘텐츠/컴포넌트 범위에 따라 `npm run audit:content-quality`, `npm run test:editorial-quality`, `npm run audit:magazine-compat`, `npm run validate:personality`도 실행한다. 실제 명령 목록은 package.json이 정본이다.
+- `audit:content-quality`는 기존 중복·금지제목·interactive 산문 래칫에 더해 출판 품질 축(허위 완결 제목, 홈페이지형 출처, 허위 권위, 그림 alt, 지식 시리즈 수치 예제)을 `config/editorial-quality-baseline.json` 천장으로 막는다. 천장을 올려서 PASS를 만들지 않는다. 등급 규칙은 `config/editorial-quality-tiers.json`. 현황만 보려면 `node scripts/audit-content-quality.mjs --inventory`.
 - 작성 스키마·허용 컴포넌트의 경위가 필요할 때만 `/Users/seuncho/coding/company-brain/AI-Sessions/raw/project-docs/blog/docs/`의 mdoc-authoring-spec, component-allowlist/disallowlist, component-registry-by-track, content-schema-implementation-draft를 조회한다. 과거 implementation-control-board를 현재 작업판으로 사용하지 않는다.
 - 완료 시 검증 결과, metadata/카탈로그 정합, 잔여·경고를 기록한다. 페이지 수·옛 로드맵은 여기에 복제하지 않는다.
 

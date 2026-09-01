@@ -1,9 +1,19 @@
 import fs from "node:fs";
 import path from "node:path";
+import {
+  applyBaseline,
+  baselineFromSummary,
+  inspectArticle,
+  loadTiersConfig,
+  summarize,
+} from "./lib/editorial-quality.mjs";
 
 const root = process.cwd();
 const contentRoot = path.join(root, "src/content/blog");
 const inventoryPath = path.join(root, "data/catalog/content-inventory.master.csv");
+const editorialBaselinePath = path.join(root, "config/editorial-quality-baseline.json");
+const writeBaseline = process.argv.includes("--write-baseline");
+const inventoryOnly = process.argv.includes("--inventory");
 
 const hardFailures = [];
 const languageWarnings = [];
@@ -12,6 +22,8 @@ const proseMinBaselinePath = path.join(root, "config/prose-min-baseline.json");
 const categoryCounts = new Map();
 const duplicateBodies = new Map();
 const quarantinedDuplicateWarnings = [];
+const editorialResults = [];
+const editorialTiers = loadTiersConfig(root);
 
 const forbiddenTitlePatterns = [
   /강목체/,
@@ -119,6 +131,15 @@ for (const file of listMdxFiles(contentRoot)) {
       duplicateBodies.set(body, group);
     }
   }
+
+  const contentRel = path.relative(contentRoot, file);
+  editorialResults.push(
+    inspectArticle({
+      rel: contentRel,
+      text,
+      tiers: editorialTiers,
+    }),
+  );
 }
 
 for (const group of duplicateBodies.values()) {
@@ -196,6 +217,59 @@ if (!proseMinBaseline) {
   );
 }
 
+const editorialSummary = summarize(editorialResults);
+if (inventoryOnly) {
+  console.log(
+    JSON.stringify(
+      {
+        files: editorialSummary.counts.files,
+        tiers: editorialSummary.counts.tiers,
+        axes: Object.fromEntries(
+          ["completenessTitle", "homepageSources", "fakeAuthority", "imageAlt", "workedExample"].map(
+            (axis) => [axis, editorialSummary.counts[axis]],
+          ),
+        ),
+      },
+      null,
+      2,
+    ),
+  );
+  process.exit(0);
+}
+
+if (writeBaseline) {
+  const next = baselineFromSummary(editorialSummary);
+  fs.writeFileSync(editorialBaselinePath, `${JSON.stringify(next, null, 2)}\n`);
+  console.log(
+    `wrote ${path.relative(root, editorialBaselinePath)} ceilings: ` +
+      `completenessTitle ${next.axes.completenessTitle.maxViolations}, ` +
+      `homepageSources ${next.axes.homepageSources.maxViolations}, ` +
+      `fakeAuthority ${next.axes.fakeAuthority.maxViolations}, ` +
+      `imageAlt ${next.axes.imageAlt.maxViolations}, ` +
+      `workedExample ${next.axes.workedExample.maxViolations}`,
+  );
+}
+
+const editorialBaseline = fs.existsSync(editorialBaselinePath)
+  ? JSON.parse(fs.readFileSync(editorialBaselinePath, "utf8"))
+  : null;
+if (!editorialBaseline) {
+  console.warn(
+    `warning: no baseline at config/editorial-quality-baseline.json. ` +
+      `Current editorial violations: completenessTitle ${editorialSummary.counts.completenessTitle}, ` +
+      `homepageSources ${editorialSummary.counts.homepageSources}, ` +
+      `fakeAuthority ${editorialSummary.counts.fakeAuthority}, ` +
+      `imageAlt ${editorialSummary.counts.imageAlt}, ` +
+      `workedExample ${editorialSummary.counts.workedExample}. ` +
+      `Create the baseline with: node scripts/audit-content-quality.mjs --write-baseline`,
+  );
+} else {
+  const { failures, missingBaseline } = applyBaseline(editorialSummary, editorialBaseline);
+  if (!missingBaseline) {
+    hardFailures.push(...failures);
+  }
+}
+
 if (hardFailures.length) {
   for (const failure of hardFailures) {
     console.error(`error: ${failure}`);
@@ -207,5 +281,16 @@ if (hardFailures.length) {
 const warningCount = categoryWarningCount + languageWarnings.length + quarantinedDuplicateWarnings.length;
 console.log(
   `content quality audit passed (${warningCount} warning(s)); prose-min violations: ${proseMinViolations.length}` +
-    (proseMinBaseline ? ` (ceiling ${proseMinBaseline.maxViolations})` : " (gate not yet enabled)"),
+    (proseMinBaseline ? ` (ceiling ${proseMinBaseline.maxViolations})` : " (gate not yet enabled)") +
+    `; editorial A/B/C ${editorialSummary.counts.tiers.A}/${editorialSummary.counts.tiers.B}/${editorialSummary.counts.tiers.C}` +
+    `; completenessTitle ${editorialSummary.counts.completenessTitle}` +
+    (editorialBaseline ? `/${editorialBaseline.axes.completenessTitle.maxViolations}` : "") +
+    `, homepageSources ${editorialSummary.counts.homepageSources}` +
+    (editorialBaseline ? `/${editorialBaseline.axes.homepageSources.maxViolations}` : "") +
+    `, fakeAuthority ${editorialSummary.counts.fakeAuthority}` +
+    (editorialBaseline ? `/${editorialBaseline.axes.fakeAuthority.maxViolations}` : "") +
+    `, imageAlt ${editorialSummary.counts.imageAlt}` +
+    (editorialBaseline ? `/${editorialBaseline.axes.imageAlt.maxViolations}` : "") +
+    `, workedExample ${editorialSummary.counts.workedExample}` +
+    (editorialBaseline ? `/${editorialBaseline.axes.workedExample.maxViolations}` : ""),
 );
