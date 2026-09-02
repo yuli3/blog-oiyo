@@ -1,12 +1,12 @@
 # Content Index (auto-generated)
 
-> Generated 2026-09-02T11:00:33.666Z from MDX frontmatter. Do not edit by hand — run `npm run content:manifest`.
+> Generated 2026-09-02T11:26:14.075Z from MDX frontmatter. Do not edit by hand — run `npm run content:manifest`.
 
-Total: **6001** entries · ko 2585 · en 1606 · ja 868 · zh 364 · es 289 · fr 289
+Total: **5998** entries · ko 2585 · en 1606 · ja 868 · zh 363 · es 288 · fr 288
 
 ## By track
 
-- **magazine**: 3386
+- **magazine**: 3383
 - **academy**: 2520
 - **interactive**: 95
 
@@ -24,7 +24,7 @@ Total: **6001** entries · ko 2585 · en 1606 · ja 868 · zh 364 · es 289 · f
 | Economics | 181 | ✅ |
 | Business | 176 | ✅ |
 | Philosophy | 128 | ✅ |
-| History | 119 | ❌ drift |
+| History | 116 | ❌ drift |
 | Computer Science | 101 | ✅ |
 | Tax | 98 | ✅ |
 | Accounting | 92 | ✅ |
