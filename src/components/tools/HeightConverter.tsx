@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { RotateCcw } from "lucide-react";
 import AnimatedNumber from "../ui/AnimatedNumber";
 import { Button } from "../ui/button";
@@ -31,6 +31,11 @@ import {
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
 import type { Locale } from "../../lib/i18n";
 import { nearestFigures } from "../../data/height-reference-figures";
+import {
+  heightConverterAnalyticsPayload,
+  type HeightConversionDirection,
+  type HeightConverterEvent,
+} from "../../lib/height-converter-analytics";
 
 // ── Korean height distributions ──────────────────────────────────────────────
 const KR_MALE_MEAN = 173.5;
@@ -415,6 +420,15 @@ interface Props {
 
 export default function HeightConverter({ locale }: Props) {
   const t = LABELS[locale] ?? LABELS.en;
+  const trackedInteractions = useRef(new Set<string>());
+
+  const trackOnce = useCallback((event: HeightConverterEvent, direction?: HeightConversionDirection) => {
+    const key = direction ? `${event}:${direction}` : event;
+    if (trackedInteractions.current.has(key)) return;
+    trackedInteractions.current.add(key);
+    const analytics = window as Window & { gtag?: (...args: unknown[]) => void };
+    analytics.gtag?.("event", event, heightConverterAnalyticsPayload({ locale, direction }));
+  }, [locale]);
 
   // Section 1 state
   const [cmVal, setCmVal] = useState("170");
@@ -476,12 +490,13 @@ export default function HeightConverter({ locale }: Props) {
   const similarFigures = validMyHeight ? nearestFigures(myHeightNum, 3) : [];
 
   const reset = useCallback(() => {
+    trackOnce("height_tool_reset");
     setCmVal("170");
     setFtVal("5");
     setInVal("7.0");
     setMyHeight("170");
     setMyGender("male");
-  }, []);
+  }, [trackOnce]);
 
   // 결과 수치는 세 곳에서 같은 모양이어야 한다. 크기·색을 각자 정하면 "값이 세 종류로
   // 보이는" 화면이 된다 — 강조는 자리와 여백이 하고, 글꼴은 한 단계만 올린다.
@@ -525,6 +540,7 @@ export default function HeightConverter({ locale }: Props) {
                     inputMode="decimal"
                     value={cmVal}
                     onChange={(e) => handleCmChange(e.target.value)}
+                    onBlur={() => parseFloat(cmVal) > 0 && trackOnce("height_conversion_complete", "cm_to_ft_in")}
                     placeholder="170"
                   />
                   <InputGroupAddon align="inline-end">
@@ -545,6 +561,7 @@ export default function HeightConverter({ locale }: Props) {
                       inputMode="decimal"
                       value={ftVal}
                       onChange={(e) => handleFtInChange(e.target.value, inVal)}
+                      onBlur={() => parseFloat(ftVal) >= 0 && parseFloat(inVal) >= 0 && trackOnce("height_conversion_complete", "ft_in_to_cm")}
                       aria-label={t.ftLabel}
                       placeholder="5"
                     />
@@ -560,6 +577,7 @@ export default function HeightConverter({ locale }: Props) {
                       step="0.1"
                       value={inVal}
                       onChange={(e) => handleFtInChange(ftVal, e.target.value)}
+                      onBlur={() => parseFloat(ftVal) >= 0 && parseFloat(inVal) >= 0 && trackOnce("height_conversion_complete", "ft_in_to_cm")}
                       aria-label={t.inLabel}
                       placeholder="7"
                     />
@@ -629,6 +647,7 @@ export default function HeightConverter({ locale }: Props) {
                     inputMode="decimal"
                     value={myHeight}
                     onChange={(e) => setMyHeight(e.target.value)}
+                    onBlur={() => validMyHeight && trackOnce("height_comparison_view")}
                     placeholder="170"
                   />
                   <InputGroupAddon align="inline-end">
@@ -646,7 +665,11 @@ export default function HeightConverter({ locale }: Props) {
                   type="single"
                   variant="outline"
                   value={myGender}
-                  onValueChange={(v) => v && setMyGender(v as "male" | "female")}
+                  onValueChange={(v) => {
+                    if (!v) return;
+                    setMyGender(v as "male" | "female");
+                    trackOnce("height_comparison_view");
+                  }}
                   className="w-full"
                 >
                   <ToggleGroupItem value="male" className="h-11 flex-1 sm:h-8">
