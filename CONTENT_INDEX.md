@@ -1,6 +1,6 @@
 # Content Index (auto-generated)
 
-> Generated 2026-08-30T09:11:02.501Z from MDX frontmatter. Do not edit by hand — run `npm run content:manifest`.
+> Generated 2026-09-02T10:01:11.394Z from MDX frontmatter. Do not edit by hand — run `npm run content:manifest`.
 
 Total: **6016** entries · ko 2585 · en 1606 · ja 868 · zh 369 · es 294 · fr 294
 
@@ -18,11 +18,11 @@ Total: **6016** entries · ko 2585 · en 1606 · ja 868 · zh 369 · es 294 · f
 | Exam | 726 | ✅ |
 | Mythology | 700 | ❌ drift |
 | Mysticism | 570 | ✅ |
-| Finance | 522 | ✅ |
+| Finance | 502 | ✅ |
 | Lifestyle | 259 | ✅ |
 | Law | 194 | ✅ |
+| Economics | 181 | ✅ |
 | Business | 176 | ✅ |
-| Economics | 161 | ❌ drift |
 | Philosophy | 128 | ❌ drift |
 | History | 119 | ❌ drift |
 | Computer Science | 101 | ✅ |
