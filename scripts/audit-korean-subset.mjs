@@ -39,12 +39,15 @@ if (!failures.length) {
       // 라틴·숫자·기본 구두점은 폴백(Georgia)이 제대로 그린다. 폴백이 없는
       // 문자만 본다 — 한글·한자·전각 기호.
       const cp = ch.codePointAt(0);
+      // **이 서체가 담을 수 있는 것만 본다.** Gowun Batang 의 cmap 은 한글
+      // 완성형 11,172자 + ASCII 95자가 전부다 — 한자와 가나는 글리프 자체가
+      // 없어서 서브셋에 넣을 수도 없다. 그것까지 검사하면 고칠 방법이 없는
+      // 실패를 계속 보고하게 된다. 한자는 폴백(Georgia→시스템 명조)이 그리고,
+      // 그건 이 서체를 쓰는 한 바꿀 수 없는 사실이다.
       const needsFont =
         (cp >= 0xac00 && cp <= 0xd7a3) || // 한글 완성형
         (cp >= 0x1100 && cp <= 0x11ff) || // 한글 자모
-        (cp >= 0x3130 && cp <= 0x318f) || // 호환 자모
-        (cp >= 0x4e00 && cp <= 0x9fff) || // 한자
-        (cp >= 0x3000 && cp <= 0x303f); // 전각 구두점
+        (cp >= 0x3130 && cp <= 0x318f); // 호환 자모
       if (!needsFont || covered.has(ch)) continue;
       if (!missing.has(ch)) missing.set(ch, []);
       if (missing.get(ch).length < 3) missing.get(ch).push(name);

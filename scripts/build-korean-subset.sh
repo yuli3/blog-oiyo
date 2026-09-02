@@ -26,6 +26,12 @@ chars = set()
 for f in sorted(glob.glob("src/content/blog/ko/*.mdx")):
     chars |= set(io.open(f, encoding="utf-8").read())
 chars = {c for c in chars if c.isprintable() or c == " "}
+# 서체가 담을 수 있는 것만 기록한다. Gowun Batang 은 한글 완성형과 ASCII 뿐이라
+# 한자·가나는 넣으려 해도 글리프가 없다 — 목록에만 남기면 감사가 영원히 실패한다.
+def coverable(c):
+    cp = ord(c)
+    return cp < 0x2500 or (0xAC00 <= cp <= 0xD7A3) or (0x1100 <= cp <= 0x11FF) or (0x3130 <= cp <= 0x318F)
+chars = {c for c in chars if coverable(c)}
 io.open(sys.argv[1], "w", encoding="utf-8").write("".join(sorted(chars)))
 print(f"  문자 {len(chars)}자")
 PY
