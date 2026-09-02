@@ -1,10 +1,18 @@
 #!/usr/bin/env bash
-# 한글 서브셋 재생성 — 2026-09-02.
+# 한글 서브셋 생성 — 2026-09-02.
 #
-# 글에 실제로 쓰인 글자만 담아 원본 8.2MB 를 140KB 로 줄인다.
-# `npm run audit:korean-subset` 이 FAIL 할 때(= 새 글에 없던 글자가 들어왔을 때)
-# 돌린다. CI 에서는 돌지 않는다 — 감사는 문자 목록만 비교하므로 Python 이 필요 없다.
+# **콘텐츠가 아니라 KS X 1001 완성형 2,350자로 자른다.** 글에 실제로 쓰인
+# 글자만 담는 코퍼스 방식도 만들어 봤는데(142KB, 지금보다 49KB 작다) 글이
+# 하나 늘 때마다 재생성이 필요했다. news 처럼 매일 글이 쌓이는 사이트에서는
+# 그 방식이 성립하지 않고, 재생성을 잊으면 새 글자만 폴백으로 렌더돼 한 문장
+# 안에서 서체가 섞인다 — 눈에 잘 안 띄고 조용히 늘어난다.
 #
+# KS X 1001 은 현대 한국어 텍스트의 사실상 전부를 덮는다. blog 의 글
+# 2,585편에서 벗어나는 글자는 4자였고, 그중 확인 가능한 것은 오타였다
+# ("더 눟게" ← "더 높게"). 49KB 를 더 내고 재생성·감사·Python 의존을 통째로
+# 없앤다.
+#
+# 이 스크립트는 **거의 돌 일이 없다.** 서체를 바꾸거나 기호를 더할 때만.
 # 필요: python3, fonttools, brotli
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -17,30 +25,25 @@ SRC="${TMPDIR:-/tmp}/GowunBatang-Regular.ttf"
 [ -f "$SRC" ] || curl -sL -o "$SRC" \
   "https://github.com/google/fonts/raw/main/ofl/gowunbatang/GowunBatang-Regular.ttf"
 
-CHARS="scripts/data/GowunBatang-corpus-400.chars.txt"
+CHARS="${TMPDIR:-/tmp}/ks-x-1001.txt"
 python3 - "$CHARS" <<'PY'
-import io, glob, sys
-# 원문 전체를 본다. frontmatter 의 title 은 h1 으로 렌더되고, 자르는 규칙을
-# 생성기와 감사에 각각 두면 갈라진다.
+import sys, io
 chars = set()
-for f in sorted(glob.glob("src/content/blog/ko/*.mdx")):
-    chars |= set(io.open(f, encoding="utf-8").read())
-chars = {c for c in chars if c.isprintable() or c == " "}
-# 서체가 담을 수 있는 것만 기록한다. Gowun Batang 은 한글 완성형과 ASCII 뿐이라
-# 한자·가나는 넣으려 해도 글리프가 없다 — 목록에만 남기면 감사가 영원히 실패한다.
-def coverable(c):
-    cp = ord(c)
-    return cp < 0x2500 or (0xAC00 <= cp <= 0xD7A3) or (0x1100 <= cp <= 0x11FF) or (0x3130 <= cp <= 0x318F)
-chars = {c for c in chars if coverable(c)}
+# KS X 1001 완성형 2,350자 — EUC-KR 의 한글 영역을 그대로 편다
+for hi in range(0xB0, 0xC9):
+    for lo in range(0xA1, 0xFF):
+        try: chars.add(bytes([hi, lo]).decode("euc-kr"))
+        except Exception: pass
+chars |= {chr(c) for c in range(0x20, 0x7F)}                    # ASCII
+chars |= set("·…“”‘’—–※→←↑↓°％±×÷≤≥≠∙■□▲▼●○★☆♥♡✓✔✕✖⋯「」『』〈〉《》【】")  # 본문에 흔한 기호
 io.open(sys.argv[1], "w", encoding="utf-8").write("".join(sorted(chars)))
-print(f"  문자 {len(chars)}자")
+print(f"  {len(chars)}자")
 PY
 
 # 한글은 완성형이라 복잡한 shaping 이 필요 없다 — layout feature 를 버려도 된다.
 "$VENV/bin/pyftsubset" "$SRC" \
-  --text-file="$CHARS" \
-  --flavor=woff2 \
+  --text-file="$CHARS" --flavor=woff2 \
   --layout-features= --no-hinting --desubroutinize \
-  --output-file=public/fonts/GowunBatang-corpus-400.woff2
+  --output-file=public/fonts/GowunBatang-ks-400.woff2
 
-ls -la public/fonts/GowunBatang-corpus-400.woff2 | awk '{printf "  → %.0f KB\n", $5/1024}'
+ls -la public/fonts/GowunBatang-ks-400.woff2 | awk '{printf "  → %.0f KB\n", $5/1024}'

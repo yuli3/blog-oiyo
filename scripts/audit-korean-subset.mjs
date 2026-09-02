@@ -1,78 +1,63 @@
 #!/usr/bin/env node
-// 한글 서브셋 커버리지 감사 — 2026-09-02.
+// 한글 서브셋 감사 — 2026-09-02.
 //
-// `public/fonts/GowunBatang-corpus-400.woff2` 는 **이 블로그의 글에 실제로 쓰인
-// 글자만** 담은 서브셋이다(원본 8.2MB → 140KB). 그래서 새 글에 없던 글자가
-// 들어오면 그 글자만 OS 폴백으로 렌더된다 — 두부는 안 뜨지만 한 문장 안에서
-// 서체가 섞인다. 눈으로는 잘 안 보이고, 글이 쌓일수록 조용히 늘어난다.
+// 본문 서체는 KS X 1001 완성형 2,350자로 자른 `GowunBatang-ks-400.woff2` 다.
+// 그 범위를 벗어나는 한글은 서체가 못 그려서 폴백으로 렌더되는데, **현대
+// 한국어 텍스트에서 그런 글자는 거의 항상 오타다.** 실제로 이 감사를 처음
+// 돌렸을 때 나온 4자 중 확인 가능한 것은 "더 눟게"(← "더 높게")였다.
 //
-// 폰트 파일을 파싱하지 않는다. 서브셋을 만들 때 쓴 문자 목록을 옆에 적어 두고
-// (`*.chars.txt`) **콘텐츠의 문자 집합이 그 안에 들어가는지**만 본다. woff2 를
-// 열지 않으므로 CI 에 Python 도 fonttools 도 필요 없다.
+// 그래서 이 감사는 폰트 커버리지 검사이자 **오타 탐지기**다. 기존 4자는
+// 예산으로 잡아 두고, 늘어나면 실패한다 — 새로 들어온 오타라는 뜻이다.
 //
-// 재생성: bash scripts/build-korean-subset.sh
+// 서체를 바꿀 때만: bash scripts/build-korean-subset.sh
 // usage: node scripts/audit-korean-subset.mjs
 import { readFileSync, readdirSync, statSync, existsSync } from "node:fs";
 import { join } from "node:path";
 
-const FONT = "public/fonts/GowunBatang-corpus-400.woff2";
-const MANIFEST = "scripts/data/GowunBatang-corpus-400.chars.txt";
+const FONT = "public/fonts/GowunBatang-ks-400.woff2";
 const CONTENT = "src/content/blog/ko";
+// 2026-09-02 실측. 줄이는 방향으로만 갱신한다 — 늘리는 건 오타를 승인하는 것이다.
+const TYPO_BUDGET = 4;
+const SIZE_CAP_KB = 240;
+
+const ks = new Set();
+for (let hi = 0xb0; hi <= 0xc8; hi++) {
+  for (let lo = 0xa1; lo <= 0xfe; lo++) {
+    try {
+      const ch = new TextDecoder("euc-kr", { fatal: true }).decode(new Uint8Array([hi, lo]));
+      ks.add(ch);
+    } catch { /* 빈 자리 */ }
+  }
+}
 
 const failures = [];
-if (!existsSync(FONT)) failures.push(`${FONT} 이 없다.`);
-if (!existsSync(MANIFEST)) failures.push(`${MANIFEST} 가 없다 — 서브셋에 무엇이 들어갔는지 알 수 없다.`);
+if (!existsSync(FONT)) {
+  failures.push(`${FONT} 이 없다. bash scripts/build-korean-subset.sh 로 만든다.`);
+} else {
+  const kb = statSync(FONT).size / 1024;
+  if (kb > SIZE_CAP_KB) {
+    failures.push(`${FONT} 이 ${kb.toFixed(0)} KB 다(상한 ${SIZE_CAP_KB}). 무엇이 늘었는지 보고 상한을 올릴지 판단한다.`);
+  }
 
-if (!failures.length) {
-  const covered = new Set([...readFileSync(MANIFEST, "utf8")]);
   const files = readdirSync(CONTENT).filter((f) => /\.mdx?$/.test(f));
-  const missing = new Map();
-
+  const odd = new Map();
   for (const name of files) {
-    // frontmatter 를 자르지 않는다. `title` 은 h1 으로 렌더되고, 자르는 규칙을
-    // 생성기와 감사 두 곳에 두면 그 둘이 갈라진다 — 실제로 갈라져서 362자가
-    // 서브셋 밖에 있었다(생성기 쪽 `re.sub` 이 `count=1` 없이 `---` 쌍을 전부
-    // 지워 본문 일부까지 날렸다). 양쪽 다 원문 전체를 본다.
-    const raw = readFileSync(join(CONTENT, name), "utf8");
-    for (const ch of raw) {
-      if (!ch.trim() && ch !== " ") continue;
-      // 라틴·숫자·기본 구두점은 폴백(Georgia)이 제대로 그린다. 폴백이 없는
-      // 문자만 본다 — 한글·한자·전각 기호.
+    for (const ch of readFileSync(join(CONTENT, name), "utf8")) {
       const cp = ch.codePointAt(0);
-      // **이 서체가 담을 수 있는 것만 본다.** Gowun Batang 의 cmap 은 한글
-      // 완성형 11,172자 + ASCII 95자가 전부다 — 한자와 가나는 글리프 자체가
-      // 없어서 서브셋에 넣을 수도 없다. 그것까지 검사하면 고칠 방법이 없는
-      // 실패를 계속 보고하게 된다. 한자는 폴백(Georgia→시스템 명조)이 그리고,
-      // 그건 이 서체를 쓰는 한 바꿀 수 없는 사실이다.
-      const needsFont =
-        (cp >= 0xac00 && cp <= 0xd7a3) || // 한글 완성형
-        (cp >= 0x1100 && cp <= 0x11ff) || // 한글 자모
-        (cp >= 0x3130 && cp <= 0x318f); // 호환 자모
-      if (!needsFont || covered.has(ch)) continue;
-      if (!missing.has(ch)) missing.set(ch, []);
-      if (missing.get(ch).length < 3) missing.get(ch).push(name);
+      if (cp < 0xac00 || cp > 0xd7a3) continue; // 한글 완성형만 본다
+      if (ks.has(ch)) continue;
+      if (!odd.has(ch)) odd.set(ch, name);
     }
   }
-
-  if (missing.size) {
-    const sample = [...missing.entries()].slice(0, 12)
-      .map(([ch, where]) => `${ch}(${where[0]})`).join(" ");
+  if (odd.size > TYPO_BUDGET) {
+    const list = [...odd.entries()].map(([c, f]) => `${c}(${f})`).join(" ");
     failures.push(
-      `서브셋에 없는 글자가 ${missing.size}자 있다. 그 글자만 OS 폴백으로 렌더된다.\n` +
-        `    예: ${sample}\n` +
-        `    고치기: bash scripts/build-korean-subset.sh 로 재생성한 뒤 커밋한다.`,
+      `KS X 1001 밖의 한글이 ${odd.size}자다(기록된 ${TYPO_BUDGET}자보다 늘었다). 대개 오타이고, 서체가 못 그려 폴백으로 렌더된다.\n    ${list}`,
     );
-  }
-
-  const kb = statSync(FONT).size / 1024;
-  // 코퍼스가 늘면 폰트도 커진다. 조용히 커지지 않게 상한을 둔다.
-  if (kb > 220) {
-    failures.push(`${FONT} 이 ${kb.toFixed(0)} KB 다(상한 220). 코퍼스가 얼마나 늘었는지 보고 상한을 올릴지 판단한다.`);
   }
   if (!failures.length) {
     console.log(
-      `한글 서브셋 감사 PASS — 글 ${files.length}편의 글자가 모두 서브셋 안에 있다. ` +
-        `폰트 ${kb.toFixed(0)} KB, 수록 ${covered.size}자.`,
+      `한글 서브셋 감사 PASS — 폰트 ${kb.toFixed(0)} KB, 글 ${files.length}편에서 KS 밖 한글 ${odd.size}/${TYPO_BUDGET}자.`,
     );
   }
 }
