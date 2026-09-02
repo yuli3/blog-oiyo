@@ -1,12 +1,12 @@
 # Content Index (auto-generated)
 
-> Generated 2026-09-02T10:28:00.652Z from MDX frontmatter. Do not edit by hand — run `npm run content:manifest`.
+> Generated 2026-09-02T11:00:33.666Z from MDX frontmatter. Do not edit by hand — run `npm run content:manifest`.
 
-Total: **6016** entries · ko 2585 · en 1606 · ja 868 · zh 369 · es 294 · fr 294
+Total: **6001** entries · ko 2585 · en 1606 · ja 868 · zh 364 · es 289 · fr 289
 
 ## By track
 
-- **magazine**: 3401
+- **magazine**: 3386
 - **academy**: 2520
 - **interactive**: 95
 
@@ -14,7 +14,7 @@ Total: **6016** entries · ko 2585 · en 1606 · ja 868 · zh 369 · es 294 · f
 
 | Category | Count | In registry? |
 |---|--:|:--:|
-| Psychology | 1192 | ✅ |
+| Psychology | 1177 | ✅ |
 | Exam | 726 | ✅ |
 | Mythology | 700 | ✅ |
 | Mysticism | 570 | ✅ |
