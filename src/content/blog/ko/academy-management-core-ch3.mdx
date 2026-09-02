@@ -19,6 +19,9 @@ pubDate: '2026-05-05'
 layoutVariant: lecture-series
 ---
 
+import PyramidDiagram from "@/components/mdx/PyramidDiagram.astro";
+import CompareTable from "@/components/mdx/CompareTable.astro";
+
 ## 조직행동학이란
 
 **조직행동학(Organizational Behavior, OB)**은 조직 내에서 사람들이 어떻게 생각하고, 느끼고, 행동하는지를 연구하는 학문입니다.
@@ -39,13 +42,17 @@ layoutVariant: lecture-series
 
 **5단계 욕구**:
 
-| 단계 | 욕구 | 직장 맥락 |
-|------|------|----------|
-| 5 (최고) | 자아실현 | 성장, 도전, 의미 있는 일 |
-| 4 | 존경 | 인정, 승진, 직함, 성취감 |
-| 3 | 소속감·사랑 | 팀워크, 우정, 소속감 |
-| 2 | 안전 | 고용 안정, 건강보험, 연금 |
-| 1 (기초) | 생리적 | 임금, 근무 환경 |
+<PyramidDiagram
+  title="매슬로우 욕구 5단계 — 직장에서는 이렇게 나타난다"
+  levels={[
+    { label: "생리적", sublabel: "Physiological", description: "임금, 근무 환경", color: "#9A5B10" },
+    { label: "안전", sublabel: "Safety", description: "고용 안정, 건강보험, 연금", color: "#8A6A4A" },
+    { label: "소속감·사랑", sublabel: "Love / Belonging", description: "팀워크, 우정, 소속감", color: "#6B8E4E" },
+    { label: "존경", sublabel: "Esteem", description: "인정, 승진, 직함, 성취감", color: "#4E6B33" },
+    { label: "자아실현", sublabel: "Self-Actualization", description: "성장, 도전, 의미 있는 일", color: "#2F4620" },
+  ]}
+  caption="아래로 갈수록 없을 때 더 아프고, 위로 갈수록 채워질 때 더 오래 간다."
+/>
 
 **현대적 재해석**: 매슬로우의 단계는 엄격한 순서가 아니라 동시에 여러 욕구가 작동합니다. 그러나 "사람은 충족되지 않은 욕구에 의해 동기 부여된다"는 핵심 통찰은 유효합니다.
 
@@ -55,14 +62,19 @@ layoutVariant: lecture-series
 
 **프레더릭 허즈버그(Frederick Herzberg)**는 "무엇이 직무 만족을 만드는가"를 연구하다 놀라운 발견을 했습니다 — 만족의 반대는 불만족이 아니라 "만족 없음"이고, 불만족의 반대는 만족이 아니라 "불만족 없음"이라는 뜻입니다.
 
-**위생 요인 (Hygiene Factors)**:
-- 없으면 불만족을 유발하지만, 있어도 동기를 주지 않는 요소
-- 예: 임금, 회사 정책, 근무 환경, 감독 방식, 동료 관계
-- 이것들을 개선하면 불만이 사라지지만, 직원이 열심히 일하게 만들지는 않습니다
-
-**동기 요인 (Motivators)**:
-- 있으면 만족과 동기를 주는 요소
-- 예: 성취감, 인정, 도전적인 일, 책임감, 성장과 발전
+<CompareTable
+  title="허즈버그의 2요인 — 다른 축이지 반대편이 아니다"
+  leftTitle="위생 요인 (Hygiene)"
+  rightTitle="동기 요인 (Motivators)"
+  leftColor="#8A6A4A"
+  rightColor="#4E6B33"
+  rows={[
+    { label: "없을 때", left: "불만족이 생긴다", right: "불만족까지 가지는 않는다" },
+    { label: "있을 때", left: "불만이 사라질 뿐 동기는 안 생긴다", right: "만족과 동기가 생긴다" },
+    { label: "예", left: "임금, 회사 정책, 근무 환경, 감독 방식, 동료 관계", right: "성취감, 인정, 도전적인 일, 책임감, 성장" },
+    { label: "고쳤을 때 얻는 것", left: "떠나지 않는 직원", right: "몰입하는 직원" },
+  ]}
+/>
 
 **경영 시사점**: 임금 인상이나 복지 개선(위생 요인)만으로는 동기부여가 불가능합니다. 직원이 진정으로 몰입하게 만들려면 일 자체가 의미 있고 성장할 수 있어야 합니다(동기 요인).
 

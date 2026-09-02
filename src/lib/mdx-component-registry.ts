@@ -73,7 +73,6 @@ import { BondPricer, PortfolioVisualizer } from "@/features/education-calculator
 import { TypingSpeedTest, PrisonersDilemma } from "@/features/education-calculators/UtilityGames";
 import { AttachmentTest } from "@/features/education-calculators/PsychologyTools";
 import { CVPGame } from "@/features/education-calculators/AccountingGames";
-import { SWOTBuilder } from "@/features/education-calculators/BusinessStrategyTools";
 import { DeveloperUnitConverter } from "@/features/education-calculators/DeveloperTools";
 import Gomoku from "../components/games/Gomoku";
 import ChessBoard from "../components/games/ChessBoard";
@@ -332,7 +331,6 @@ const islandComponents = {
   PrisonersDilemma,
   AttachmentTest,
   CVPGame,
-  SWOTBuilder,
   DeveloperUnitConverter,
   Gomoku,
   ChessBoard,
