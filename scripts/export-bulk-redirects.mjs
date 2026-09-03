@@ -82,7 +82,7 @@ for (const rule of rules) {
 const exportable = [];
 const residual = [];
 
-function appendBulkRedirect(source, target, line) {
+function appendBulkRedirect(source, target, line, kind) {
   const sourceUrl = `${HOST}${source}`;
   const targetUrl = absoluteTarget(target);
   validateUrl(sourceUrl, "source", line, errors);
@@ -106,6 +106,12 @@ function appendBulkRedirect(source, target, line) {
       preserve_path_suffix: false,
     },
     source_line: line,
+    // 어느 Cloudflare Bulk Redirect List 로 가는지. 라이브가 2026-08-24 부터
+    // oiyo_blog_canonical_redirects·oiyo_blog_locale_expansions 두 리스트로
+    // 나뉘어 있어(scripts/sync-bulk-redirects.mjs 가 이 값으로 갈라 싣는다),
+    // 여기서 나눠야 한다 — source_url 정규식으로 나중에 재추정하면 새 슬러그가
+    // 우연히 같은 모양이 될 때 오분류된다.
+    kind,
   });
 }
 
@@ -115,8 +121,9 @@ for (const rule of rules) {
     for (const locale of LOCALES) {
       const source = `/${locale}/${localeSplat[1]}`;
       const target = rule.target.replaceAll(":lang", locale).replaceAll(":splat", "");
-      if (!inputSources.has(source)) appendBulkRedirect(source, target, rule.line);
-      if (!inputSources.has(`${source}/`)) appendBulkRedirect(`${source}/`, target, rule.line);
+      if (!inputSources.has(source)) appendBulkRedirect(source, target, rule.line, "expansion");
+      if (!inputSources.has(`${source}/`))
+        appendBulkRedirect(`${source}/`, target, rule.line, "expansion");
     }
     continue;
   }
@@ -135,7 +142,7 @@ for (const rule of rules) {
     continue;
   }
 
-  appendBulkRedirect(rule.source, rule.target, rule.line);
+  appendBulkRedirect(rule.source, rule.target, rule.line, "canonical");
 }
 
 const bulkSources = new Map();
@@ -179,6 +186,14 @@ const loops = dedupedExportable
 if (loops.length) errors.push(`Self-redirect loops: ${loops.join(", ")}`);
 
 const apiItems = dedupedExportable.map(({ redirect }) => ({ redirect }));
+const itemsByList = {
+  canonical: dedupedExportable
+    .filter((item) => item.kind === "canonical")
+    .map(({ redirect }) => ({ redirect })),
+  expansion: dedupedExportable
+    .filter((item) => item.kind === "expansion")
+    .map(({ redirect }) => ({ redirect })),
+};
 const csv = apiItems
   .map(({ redirect }) =>
     [
@@ -246,6 +261,10 @@ if (!checkOnly) {
   await mkdir(outputDir, { recursive: true });
   const writes = [
     writeFile(path.join(outputDir, "bulk-redirect-items.json"), `${JSON.stringify(apiItems, null, 2)}\n`),
+    writeFile(
+      path.join(outputDir, "bulk-redirect-items-by-list.json"),
+      `${JSON.stringify(itemsByList, null, 2)}\n`,
+    ),
     writeFile(path.join(outputDir, "bulk-redirect-items.csv"), `${csv}\n`),
     writeFile(path.join(outputDir, "pages-residual-redirects.txt"), residualText),
     writeFile(path.join(outputDir, "manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`),
