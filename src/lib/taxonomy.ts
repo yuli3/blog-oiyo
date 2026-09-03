@@ -43,7 +43,6 @@ export const ACADEMY_CATEGORIES = [
 ] as const;
 
 export const MAGAZINE_CATEGORIES = [
-  "Mysticism",
   "Mythology",
   "Philosophy",
   "Life & Spirit",
