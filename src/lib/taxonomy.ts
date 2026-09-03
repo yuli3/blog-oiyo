@@ -1,8 +1,6 @@
 export type ContentTrack = "academy" | "magazine" | "interactive" | "education";
 
 export const EDUCATION_CATEGORIES = [
-  "Natural Science",
-  "Social Science",
   "Humanities",
   "Liberal Arts",
   "Health",
@@ -48,10 +46,8 @@ export const MAGAZINE_CATEGORIES = [
   "Mysticism",
   "Mythology",
   "Philosophy",
-  "Insights",
   "Life & Spirit",
   "Personality",
-  "Career & Vocation",
   "Generational",
 ] as const;
 
