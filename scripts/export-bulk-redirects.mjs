@@ -11,9 +11,9 @@ const DEFAULT_LIMIT = 10_000;
 // (developers.cloudflare.com/rules/url-forwarding/ — Free 10,000).
 // 같은 계정에 wiki 리스트(oiyo_wiki_canonical_redirects)가 함께 올라가 있어,
 // blog 것만 세면 남은 칸을 3,000개 넘게 부풀려 보고하게 된다. 2026-09-04 에
-// 실제로 3,607 로 나왔지만 진짜 여유는 415 였다.
+// 실제로 3,607 로 나왔지만 진짜 여유는 300여 칸이었다.
 // 값은 `GET /accounts/{id}/rules/lists` 의 num_items 로 다시 잰다.
-const OTHER_LIST_ITEMS = 3_192; // oiyo_wiki_canonical_redirects @ 2026-09-04
+const OTHER_LIST_ITEMS = 3_216; // oiyo_wiki_canonical_redirects @ 2026-09-04
 const LOCALES = ["en", "ko", "ja", "fr", "es", "zh"];
 const root = process.cwd();
 const inputPath = path.join(root, "data/redirects/canonical-redirects.txt");
