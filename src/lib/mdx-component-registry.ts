@@ -180,7 +180,6 @@ import NarcissismTest from "../components/tests/NarcissismTest";
 import ResilienceTest from "../components/tests/ResilienceTest";
 import LeadershipStyleTest from "../components/tests/LeadershipStyleTest";
 import GrowthMindsetTest from "../components/tests/GrowthMindsetTest";
-import LonelinessTest from "../components/tests/LonelinessTest";
 import ProcrastinationTypeTest from "../components/tests/ProcrastinationTypeTest";
 import MotivationTypeTest from "../components/tests/MotivationTypeTest";
 import DopamineDependencyTest from "../components/tests/DopamineDependencyTest";
@@ -437,7 +436,6 @@ const islandComponents = {
   ResilienceTest,
   LeadershipStyleTest,
   GrowthMindsetTest,
-  LonelinessTest,
   ProcrastinationTypeTest,
   MotivationTypeTest,
   DopamineDependencyTest,
