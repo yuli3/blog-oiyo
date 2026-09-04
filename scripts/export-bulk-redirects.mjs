@@ -7,6 +7,13 @@ import process from "node:process";
 
 const HOST = "blog.oiyo.net";
 const DEFAULT_LIMIT = 10_000;
+// Bulk Redirect 할당량은 리스트별이 아니라 **계정 전체** 합계다
+// (developers.cloudflare.com/rules/url-forwarding/ — Free 10,000).
+// 같은 계정에 wiki 리스트(oiyo_wiki_canonical_redirects)가 함께 올라가 있어,
+// blog 것만 세면 남은 칸을 3,000개 넘게 부풀려 보고하게 된다. 2026-09-04 에
+// 실제로 3,607 로 나왔지만 진짜 여유는 300여 칸이었다.
+// 값은 `GET /accounts/{id}/rules/lists` 의 num_items 로 다시 잰다.
+const OTHER_LIST_ITEMS = 3_216; // oiyo_wiki_canonical_redirects @ 2026-09-04
 const LOCALES = ["en", "ko", "ja", "fr", "es", "zh"];
 const root = process.cwd();
 const inputPath = path.join(root, "data/redirects/canonical-redirects.txt");
@@ -172,8 +179,10 @@ for (const duplicate of duplicates) {
     `Duplicate source ${duplicate.source} at lines ${duplicate.firstLine} and ${duplicate.secondLine}`,
   );
 }
-if (dedupedExportable.length > DEFAULT_LIMIT) {
-  errors.push(`Bulk item count ${dedupedExportable.length} exceeds Free-plan quota ${DEFAULT_LIMIT}`);
+if (dedupedExportable.length + OTHER_LIST_ITEMS > DEFAULT_LIMIT) {
+  errors.push(
+    `Bulk item count ${dedupedExportable.length} + other lists ${OTHER_LIST_ITEMS} exceeds account quota ${DEFAULT_LIMIT}`,
+  );
 }
 
 const chainSources = new Set(dedupedExportable.map((item) => `https://${item.redirect.source_url}`));
@@ -224,7 +233,8 @@ const manifest = {
   bulk_items: apiItems.length,
   residual_rules: residual.length,
   free_plan_limit: DEFAULT_LIMIT,
-  remaining_capacity: DEFAULT_LIMIT - apiItems.length,
+  other_list_items: OTHER_LIST_ITEMS,
+  remaining_capacity: DEFAULT_LIMIT - apiItems.length - OTHER_LIST_ITEMS,
   conflicts: conflicts.length,
   duplicates: duplicates.length,
   redirect_chains: chains.length,
