@@ -874,16 +874,13 @@
 # are 1-2 impressions each with 0 clicks and now 404 here.
 # Rule count is unchanged (6 out, 6 in) on purpose -- this file dies past rule
 # #303 and inserting would have pushed live rules over the edge.
-/:lang/meaning-of-akashic-records*  https://wiki.oiyo.net/:lang/meaning-of-akashic-records:splat  301
-/ko/lecture-*  https://wiki.oiyo.net/ko/lecture-:splat  301
-/ko/adler-*  https://wiki.oiyo.net/ko/adler-:splat  301
-
-# ── en locale ────────────────────────────────────────────────────
-/en/lecture-*  https://wiki.oiyo.net/en/lecture-:splat  301
-/en/adler-*  https://wiki.oiyo.net/en/adler-:splat  301
-
-# ── ja locale ────────────────────────────────────────────────────
-/ja/lecture-*  https://wiki.oiyo.net/ja/lecture-:splat  301
+# 2026-09-04 lecture-*·adler-* catch-all 5개를 지운다. wiki 사이트맵에
+# lecture/adler 가 한 건도 없다 — 이 규칙들은 전부 301 → wiki 404 였다.
+# 더 나쁜 것은 blog 가 실제로 가진 글까지 밖으로 밀어냈다는 점이다:
+#   blog.oiyo.net/ko/lecture-civil-law-05/ → wiki.oiyo.net/... → 404
+# GA 404 목록에 안 잡힌 이유가 이것이다. 아무도 도달할 수 없어 세션이 0이다.
+# akashic 은 목적지를 최종 주소로 당긴다 (blog→wiki→wiki→oiyo 3홉이었다).
+/:lang/meaning-of-akashic-records*  https://oiyo.net/:lang/akashic-records/about/  301
 
 # ── fr/es locale — education 파일 없음, redirect 불필요 ──────────
 
@@ -4602,3 +4599,74 @@
 /en/loneliness-test/  https://oiyo.net/en/loneliness-test/  301
 /ko/loneliness-test  https://oiyo.net/ko/loneliness-test/  301
 /ko/loneliness-test/  https://oiyo.net/ko/loneliness-test/  301
+
+# 2026-09-04 GA4 실측 404 처리 (28일 · 50 URL · 206세션).
+# 근거: company-brain/projects/oiyo-ecosystem/traffic-reports/2026-09-04-404-investigation.md
+# + 이 날 GA4 pageTitle CONTAINS "404" 전수(89행) 와 라이브 HEAD 재확인.
+
+# ── ① 죽은 ahoxy 시절 tool 허브 (124세션, 최대 원인).
+# 개별 tool-* 규칙은 Bulk Redirect 가 Pages 보다 먼저 돌아 그대로 이긴다.
+# 여기 와일드카드는 Bulk 에서 안 잡힌 나머지만 받아 도구 목록으로 보낸다.
+# 와일드카드라 Bulk 할당량(계정 10,000)을 한 칸도 쓰지 않는다.
+/en/tool-*  /en/tools/  301
+/ko/tool-*  /ko/tools/  301
+/ja/tool-*  /ja/tools/  301
+/fr/tool-*  /fr/tools/  301
+/es/tool-*  /es/tools/  301
+/zh/tool-*  /zh/tools/  301
+
+# ── ② 해체된 mind-psychology 카테고리 (페이지네이션 잔재 포함).
+/en/category/mind-psychology*  /en/  301
+/ko/category/mind-psychology*  /ko/  301
+/ja/category/mind-psychology*  /ja/  301
+/fr/category/mind-psychology*  /fr/  301
+/es/category/mind-psychology*  /es/  301
+/zh/category/mind-psychology*  /zh/  301
+
+# ── ③ 없는 magazine 허브 (29세션). 트랙 인덱스 라우트가 없어 홈으로 보낸다.
+/:lang/magazine*  /:lang/  301
+
+# ── ④ 슬래시 짝 누락 — GA 가 실제로 404 를 본 무슬래시 10건.
+# 슬래시본은 301 인데 무슬래시본이 Bulk 에 없어 Pages 로 떨어져 404 였다.
+/en/academy-astrology-basics-ch2  https://oiyo.net/en/academy-astrology-basics-ch2/  301
+/en/academy-gambling-prevention-ch6  https://oiyo.net/en/academy-gambling-prevention-ch6/  301
+/en/ascendant-rising-sign-mask  https://oiyo.net/en/ascendant-rising-sign-mask/  301
+/en/birth-flower-december-holly-narcissus-poinsettia  https://oiyo.net/en/birth-flower-december-holly-narcissus-poinsettia/  301
+/en/enneagram-type1-perfectionist-guide  https://oiyo.net/en/enneagram-type1-perfectionist-guide/  301
+/en/meaning-of-myth-nyx  https://oiyo.net/en/meaning-of-myth-nyx/  301
+/en/meaning-of-myth-thanatos  https://oiyo.net/en/meaning-of-myth-thanatos/  301
+/en/tarot-heros-journey-campbell  https://oiyo.net/en/tarot-heros-journey-campbell/  301
+/en/zodiac-aquarius-complete-guide  https://oiyo.net/en/zodiac-aquarius-complete-guide/  301
+/en/zodiac-compatibility-complete-guide  https://oiyo.net/en/zodiac-compatibility-complete-guide/  301
+
+# ── ⑤ 반대 방향 슬래시 짝 누락 전수 29건 (무슬래시만 있고 슬래시본이 없던 것).
+# `/ko/magazine-assertiveness-psychology/` 가 여기 걸려 404 였다. 싸므로 전수로 닫는다.
+/en/magazine-assertiveness-psychology/  https://oiyo.net/en/assertiveness-test/  301
+/en/magazine-burnout-signs-and-recovery/  https://oiyo.net/en/burnout/test/  301
+/en/magazine-communication-style-psychology/  https://oiyo.net/en/communication-style-test  301
+/en/magazine-conflict-style-psychology/  https://oiyo.net/en/conflict-style-test  301
+/en/magazine-empathy-psychology/  https://oiyo.net/en/empathy/test/  301
+/es/magazine-assertiveness-psychology/  https://oiyo.net/es/assertiveness-test/  301
+/es/magazine-burnout-signs-and-recovery/  https://oiyo.net/es/burnout/test/  301
+/es/magazine-communication-style-psychology/  https://oiyo.net/es/communication-style-test  301
+/es/magazine-conflict-style-psychology/  https://oiyo.net/es/conflict-style-test  301
+/es/magazine-empathy-psychology/  https://oiyo.net/es/empathy/test/  301
+/fr/magazine-assertiveness-psychology/  https://oiyo.net/fr/assertiveness-test/  301
+/fr/magazine-burnout-signs-and-recovery/  https://oiyo.net/fr/burnout/test/  301
+/fr/magazine-communication-style-psychology/  https://oiyo.net/fr/communication-style-test  301
+/fr/magazine-conflict-style-psychology/  https://oiyo.net/fr/conflict-style-test  301
+/fr/magazine-empathy-psychology/  https://oiyo.net/fr/empathy/test/  301
+/ja/magazine-burnout-signs-and-recovery/  https://oiyo.net/ja/burnout/test/  301
+/ja/magazine-communication-style-psychology/  https://oiyo.net/ja/communication-style-test  301
+/ja/magazine-conflict-style-psychology/  https://oiyo.net/ja/conflict-style-test  301
+/ja/magazine-empathy-psychology/  https://oiyo.net/ja/empathy/test/  301
+/ko/magazine-assertiveness-psychology/  https://oiyo.net/ko/assertiveness-test/  301
+/ko/magazine-burnout-signs-and-recovery/  https://oiyo.net/ko/burnout/test/  301
+/ko/magazine-communication-style-psychology/  https://oiyo.net/ko/communication-style-test  301
+/ko/magazine-conflict-style-psychology/  https://oiyo.net/ko/conflict-style-test  301
+/ko/magazine-empathy-psychology/  https://oiyo.net/ko/empathy/test/  301
+/zh/magazine-assertiveness-psychology/  https://oiyo.net/zh/assertiveness-test/  301
+/zh/magazine-burnout-signs-and-recovery/  https://oiyo.net/zh/burnout/test/  301
+/zh/magazine-communication-style-psychology/  https://oiyo.net/zh/communication-style-test  301
+/zh/magazine-conflict-style-psychology/  https://oiyo.net/zh/conflict-style-test  301
+/zh/magazine-empathy-psychology/  https://oiyo.net/zh/empathy/test/  301
