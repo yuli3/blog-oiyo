@@ -119,21 +119,40 @@ const LISTS = {
 
 const API_BASE = "https://api.cloudflare.com/client/v4";
 
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+/**
+ * 429 재시도 간격(초). 2026-09-04 실측: canonical 을 PUT 한 직후 expansion 을
+ * PUT 하면 `10040: you have been ratelimited` 로 막힌다. Cloudflare 는 계정당
+ * 대량 리스트 작업에 쿨다운을 둔다 — 두 리스트를 연달아 밀면 두 번째가
+ * 걸린다. 그때 절반만 반영된 채로 죽었다(canonical 만 4,098, expansion 은
+ * 1,666 그대로). 죽지 말고 기다렸다 다시 친다.
+ */
+const RETRY_BACKOFF_S = [20, 45, 90, 180, 300];
+
 async function cf(pathname, options = {}) {
-  const res = await fetch(`${API_BASE}${pathname}`, {
-    ...options,
-    headers: {
-      Authorization: `Bearer ${API_TOKEN}`,
-      "Content-Type": "application/json",
-      ...(options.headers || {}),
-    },
-  });
-  const body = await res.json();
-  if (!res.ok || body.success === false) {
+  for (let attempt = 0; ; attempt += 1) {
+    const res = await fetch(`${API_BASE}${pathname}`, {
+      ...options,
+      headers: {
+        Authorization: `Bearer ${API_TOKEN}`,
+        "Content-Type": "application/json",
+        ...(options.headers || {}),
+      },
+    });
+    const body = await res.json();
+    if (res.ok && body.success !== false) return body;
+
     const msg = (body.errors || []).map((e) => `${e.code}: ${e.message}`).join("; ") || res.statusText;
+    const rateLimited = res.status === 429 || (body.errors || []).some((e) => e.code === 10040);
+    if (rateLimited && attempt < RETRY_BACKOFF_S.length) {
+      const wait = RETRY_BACKOFF_S[attempt];
+      console.log(`  레이트리밋 — ${wait}초 뒤 재시도 (${attempt + 1}/${RETRY_BACKOFF_S.length})`);
+      await sleep(wait * 1000);
+      continue;
+    }
     throw new Error(`Cloudflare API ${pathname} 실패 (HTTP ${res.status}): ${msg}`);
   }
-  return body;
 }
 
 /**
@@ -158,6 +177,28 @@ async function listItemCount(listId) {
     throw new Error(`리스트 ${listId} 의 num_items 를 못 읽었다 — 건수를 모르면 가드가 무의미하다`);
   }
   return n;
+}
+
+/** 라이브 항목 전부를 커서로 훑어 온다. */
+async function fetchAllItems(listId) {
+  const out = [];
+  let cursor;
+  for (;;) {
+    const q = new URLSearchParams({ per_page: "500", ...(cursor ? { cursor } : {}) });
+    const r = await cf(`/accounts/${ACCOUNT_ID}/rules/lists/${listId}/items?${q}`);
+    out.push(...(r.result || []));
+    cursor = r.result_info?.cursors?.after;
+    if (!cursor) return out;
+  }
+}
+
+/** 라이브가 목표와 같은 내용인가. source→target 쌍을 정규화해 대조한다. */
+async function sameAsLive(listId, targetItems) {
+  const key = (redirect) =>
+    `${redirect.source_url} ${redirect.target_url} ${redirect.status_code ?? 301}`;
+  const live = new Set((await fetchAllItems(listId)).map((i) => key(i.redirect)));
+  if (live.size !== targetItems.length) return false;
+  return targetItems.every((i) => live.has(key(i.redirect)));
 }
 
 async function putAllItems(listId, items) {
@@ -207,6 +248,15 @@ for (const [kind, { id, name }] of Object.entries(LISTS)) {
   );
 
   if (!push) continue;
+
+  // 이미 목표와 같으면 밀지 않는다. 부분 실패 뒤 재실행할 때(2026-09-04 의
+  // 429 처럼) 멀쩡한 리스트를 또 밀어 쿨다운을 소모하는 걸 막는다.
+  // 건수만 보고 넘기면 "건수는 같은데 내용이 다른" 경우를 놓치므로 항목을
+  // 실제로 대조한다.
+  if (liveCount === targetItems.length && (await sameAsLive(id, targetItems))) {
+    console.log(`  SKIP — 이미 목표와 같다`);
+    continue;
+  }
 
   if (shrinkRatio < 0.5 && !force) {
     console.error(
