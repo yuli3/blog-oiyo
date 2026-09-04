@@ -18,6 +18,16 @@
  *   1. 절대 링크를 도메인별로 모아 각 사이트의 로컬 dist 로 실물 확인한다.
  *   2. 리다이렉트를 따라간 **최종 목적지**가 존재하는지 확인한다.
  *
+ * 2026-09-04 에 3번을 더했다:
+ *   3. **아무도 링크하지 않는 규칙까지** 목적지를 전수 확인한다.
+ *      1·2번은 dist 에서 발견된 링크만 본다. 이관해서 지운 글은 링크가 남지
+ *      않으므로 검사 자체가 안 된다 — 그날 `meaning-of-hexaco` 세 로케일을
+ *      `oiyo.net/{loc}/hexaco/` 로 보내고 Cloudflare 동기화까지 했는데
+ *      목적지가 404 였다. oiyo 라우트가 `[locale]/hexaco/about.astro` 뿐이라
+ *      실제 페이지는 `/hexaco/about/` 인데, 목적지를 정할 때 디렉터리 존재만
+ *      보고 index.html 을 안 봤다. **디렉터리가 있다고 페이지가 있는 게
+ *      아니다.**
+ *
  * 쓰는 법
  * -------
  *   node scripts/cross-site-link-audit.mjs
@@ -80,9 +90,9 @@ function loadRedirects(files) {
     for (const raw of readFileSync(f, "utf8").split(/\r?\n/)) {
       const line = raw.trim();
       if (!line || line.startsWith("#")) continue;
-      const [src, dst] = line.split(/\s+/);
+      const [src, dst, status] = line.split(/\s+/);
       if (!src || !dst) continue;
-      rules.push({ src, dst });
+      rules.push({ src, dst, status });
     }
   }
   return rules;
@@ -187,10 +197,60 @@ for (const [key, froms] of links) {
   result.brokenAfterRedirect.push({ host, pathname, to: r.to, from: [...froms] });
 }
 
+// ── 2차 패스: 리다이렉트 규칙의 목적지를 전수 확인한다 ──────────────────
+//
+// 1차 패스는 **dist 에서 발견된 링크**만 본다. 그래서 아무도 링크하지 않는
+// 규칙은 검사되지 않는다 — 이관해서 지운 글이 정확히 그렇다. 링크가 없으니
+// 1차 패스가 건드리지 않고, 그 사이 목적지가 틀려도 아무도 모른다.
+//
+// 2026-09-04 실측: `/{es,fr,zh}/meaning-of-hexaco → oiyo.net/{loc}/hexaco/` 를
+// 넣고 동기화까지 했는데 목적지가 404 였다. oiyo 의 라우트가
+// `[locale]/hexaco/about.astro` 뿐이라 실제 페이지는 `/hexaco/about/` 이다.
+// 목적지를 정할 때 디렉터리 존재만 보고 index.html 을 안 봐서 놓쳤다.
+// **디렉터리가 있다고 페이지가 있는 게 아니다.**
+//
+// 그래서 링크 유무와 무관하게 SSOT 의 모든 규칙을 목적지 기준으로 확인한다.
+result.deadTargets = [];
+result.targetsChecked = 0;
+
+{
+  const seen = new Set();
+  for (const [host, cfg] of Object.entries(SITES)) {
+    for (const { src, dst, status } of loadRedirects(cfg.redirects)) {
+      // 자리표시자가 남은 목적지는 실제 경로를 복원할 수 없다 — 1차 패스와
+      // 같은 이유로 넘긴다. 있지도 않은 경로를 만들어 내지 않는다.
+      if (/[:*]/.test(dst)) continue;
+      // 200 은 리다이렉트가 아니라 Pages 재작성이다. 목적지도 페이지가 아니라
+      // 자산일 수 있다(`/api/brand-facts.json`). 이 감사의 대상이 아니다.
+      if (status && !/^3\d\d$/.test(status)) continue;
+      // 확장자가 붙은 목적지는 index.html 을 갖는 페이지가 아니라 파일이다.
+      if (/\.[a-z0-9]{2,5}$/i.test(dst.replace(/\/$/, ""))) continue;
+      if (seen.has(dst)) continue;
+      seen.add(dst);
+
+      let dHost = host, dPath = dst;
+      if (/^https?:\/\//.test(dst)) {
+        try { const u = new URL(dst); dHost = u.host; dPath = u.pathname; } catch { continue; }
+      }
+      const dSite = loaded[dHost];
+      if (!dSite?.pages) continue; // 목적지 사이트 dist 가 없으면 판정 불가
+
+      result.targetsChecked += 1;
+      const dNorm = dPath.replace(/\/$/, "") || "/";
+      if (!dSite.pages.has(dNorm) && !dSite.pages.has(dPath)) {
+        result.deadTargets.push({ host, src, to: dst });
+      }
+    }
+  }
+}
+
+const failed = () =>
+  result.brokenDirect.length || result.brokenAfterRedirect.length || result.deadTargets.length;
+
 // ── 출력 ────────────────────────────────────────────────────────────────
 if (asJson) {
   console.log(JSON.stringify(result, null, 2));
-  process.exit(result.brokenDirect.length || result.brokenAfterRedirect.length ? 1 : 0);
+  process.exit(failed() ? 1 : 0);
 }
 
 const total = links.size;
@@ -200,7 +260,11 @@ console.log(`- 바로 존재: **${result.ok.toLocaleString()}**`);
 console.log(`- 리다이렉트를 거쳐 존재: **${result.viaRedirect.toLocaleString()}**`);
 console.log(`- ❌ 깨짐(규칙도 페이지도 없음): **${result.brokenDirect.length.toLocaleString()}**`);
 console.log(`- ❌ 리다이렉트 목적지가 없음: **${result.brokenAfterRedirect.length.toLocaleString()}**`);
-console.log(`- ⚠️ 검증 불가: **${result.unverifiable.length.toLocaleString()}**\n`);
+console.log(`- ⚠️ 검증 불가: **${result.unverifiable.length.toLocaleString()}**`);
+console.log(
+  `- 규칙 목적지 전수 확인: **${result.targetsChecked.toLocaleString()}**개 중 ` +
+    `❌ 죽은 목적지 **${result.deadTargets.length.toLocaleString()}**\n`,
+);
 
 const byHost = (arr) => {
   const m = {};
@@ -223,9 +287,17 @@ if (result.brokenAfterRedirect.length) {
   if (result.brokenAfterRedirect.length > 25) console.log(`- …외 ${result.brokenAfterRedirect.length - 25}건`);
   console.log("");
 }
+if (result.deadTargets.length) {
+  console.log(`### ❌ 규칙 목적지가 없음 — 아무도 링크하지 않아 1차 패스가 못 보는 부류\n`);
+  for (const d of result.deadTargets.slice(0, 25)) {
+    console.log(`- \`${d.src}\` → \`${d.to}\``);
+  }
+  if (result.deadTargets.length > 25) console.log(`- …외 ${result.deadTargets.length - 25}건`);
+  console.log(`\n(디렉터리가 아니라 index.html 기준으로 본다 — 디렉터리가 있다고 페이지가 있는 게 아니다.)\n`);
+}
 if (result.unverifiable.length) {
   console.log(`### ⚠️ 검증 불가 — 도메인별 ${JSON.stringify(byHost(result.unverifiable))}`);
   console.log(`(해당 사이트를 빌드하면 확인된다)\n`);
 }
 
-process.exit(result.brokenDirect.length || result.brokenAfterRedirect.length ? 1 : 0);
+process.exit(failed() ? 1 : 0);
