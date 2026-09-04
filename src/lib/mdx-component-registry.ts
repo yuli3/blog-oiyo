@@ -46,6 +46,10 @@ import {
   LecturePieChart,
   LectureBarChart,
 } from "@/features/education-common/components/LectureVisuals";
+// lieflat-charts 포팅 도표(2026-09-04). LectureBarChart 는 F1 을 내부에서
+// 먼저 시도하므로 따로 등록하지 않는다 — 이 둘은 저자가 직접 부른다.
+import PairedRungs from "@/features/education-common/components/PairedRungs";
+import RungWaterfall from "@/features/education-common/components/RungWaterfall";
 import {
   OptionPayoffChart,
   FrontierChart,
@@ -296,6 +300,8 @@ const lectureComponents = {
   LectureProcess,
   LecturePieChart,
   LectureBarChart,
+  PairedRungs,
+  RungWaterfall,
   OptionPayoffChart,
   FrontierChart,
   NPVChart,

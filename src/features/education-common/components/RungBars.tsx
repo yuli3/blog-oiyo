@@ -1,4 +1,5 @@
 import { inlineMd } from "../../../lib/utils";
+import { jitter, planScale } from "./rung-scale";
 
 /**
  * F1 Rung Bars — lieflat-charts 시험 포팅 (2026-09-04, 세운 지시).
@@ -34,54 +35,11 @@ export interface RungRow {
   color?: string;
 }
 
-/** 원본 `rnd(i,k)` — 두 정수를 섞어 0~1 을 낸다. 결정적이라 SSR 과 어긋나지 않는다. */
-function jitter(a: number, b: number): number {
-  return Math.abs(((a * 73856093) ^ (b * 19349663)) % 1000) / 1000;
-}
-
-const NICE_UNITS = [1, 2, 5, 10, 20, 25, 50, 100, 200, 250, 500, 1000];
-
-/** 가장 큰 막대가 TARGET_MAX 칸 안에 들어오는 가장 작은 "깔끔한" 단위. */
-const TARGET_MAX = 38;
-const HARD_MAX = 40;
 const MAX_CATEGORIES = 8;
 
-export function pickUnit(max: number): number | null {
-  for (const u of NICE_UNITS) {
-    if (Math.ceil(max / u) <= TARGET_MAX) return u;
-  }
-  return null;
-}
-
-/**
- * 이 데이터를 눈금으로 정직하게 그릴 수 있는가.
- * 그릴 수 없으면 null — 호출부는 기존 막대로 넘어간다.
- */
 export function planRungs(rows: RungRow[]): { unit: number; counts: number[] } | null {
   if (!rows.length || rows.length > MAX_CATEGORIES) return null;
-  if (rows.some((r) => !Number.isFinite(r.value) || r.value < 0)) return null;
-
-  const max = Math.max(...rows.map((r) => r.value));
-  if (max <= 0) return null;
-
-  const unit = pickUnit(max);
-  if (unit === null) return null;
-
-  const counts = rows.map((r) => Math.round(r.value / unit));
-  if (Math.max(...counts) > HARD_MAX) return null;
-
-  // 0 이 아닌 값이 0칸이 되면 그 막대는 거짓말이 된다.
-  if (rows.some((r, i) => r.value > 0 && counts[i] === 0)) return null;
-
-  // 칸 수를 세어 나온 값이 실제 값과 크게 어긋나면 이 도표의 약속이 깨진다.
-  // 예: [0.5, 1.5, 2.5] 는 단위 1 에서 1·2·3칸이 되는데, 0.5 를 한 칸으로
-  // 그리면 오차가 100% 다. 세어서 얻은 숫자가 틀리면 세게 할 이유가 없다.
-  const MAX_REL_ERROR = 0.1;
-  if (rows.some((r, i) => r.value > 0 && Math.abs(counts[i] * unit - r.value) / r.value > MAX_REL_ERROR)) {
-    return null;
-  }
-
-  return { unit, counts };
+  return planScale(rows.map((r) => r.value));
 }
 
 const md = (s: unknown) => ({ __html: inlineMd(String(s ?? "")) });
