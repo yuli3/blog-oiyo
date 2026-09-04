@@ -136,9 +136,28 @@ async function cf(pathname, options = {}) {
   return body;
 }
 
+/**
+ * 리스트의 현재 항목 수.
+ *
+ * 2026-09-04: `/items?per_page=1` 의 `result_info.total_count` 를 읽고 있었는데,
+ * 이 엔드포인트는 커서 페이지네이션이라 total_count 를 주지 않는다. 그래서
+ * fallback 인 `result.length` 가 잡혀 **라이브가 늘 1건으로 보고됐다.**
+ * 실제로는 canonical 2,496 · expansion 1,666 이었다.
+ *
+ * 이게 위험했던 이유: 축소 가드가 `대상 / 라이브` 비율로 걸리는데, 분모가 1이면
+ * 비율이 늘 거대해져 **가드가 절대 발동하지 않는다.** 리스트를 통째로 날리는
+ * 사고를 막으라고 만든 장치가 꺼져 있던 셈이다. 반영 후 검증(`after`)도 같은
+ * 함수를 쓰니 똑같이 무의미했다.
+ *
+ * 정확한 출처는 리스트 메타의 `num_items` 다.
+ */
 async function listItemCount(listId) {
-  const r = await cf(`/accounts/${ACCOUNT_ID}/rules/lists/${listId}/items?per_page=1`);
-  return r.result_info?.total_count ?? r.result?.length ?? 0;
+  const r = await cf(`/accounts/${ACCOUNT_ID}/rules/lists/${listId}`);
+  const n = r.result?.num_items;
+  if (typeof n !== "number") {
+    throw new Error(`리스트 ${listId} 의 num_items 를 못 읽었다 — 건수를 모르면 가드가 무의미하다`);
+  }
+  return n;
 }
 
 async function putAllItems(listId, items) {
