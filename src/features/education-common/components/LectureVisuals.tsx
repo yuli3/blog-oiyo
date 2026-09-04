@@ -1,4 +1,5 @@
 import { inlineMd } from "../../../lib/utils";
+import RungBars, { planRungs } from "./RungBars";
 
 /**
  * 강의형 본문의 표·단계·차트.
@@ -112,6 +113,14 @@ export function LectureProcess({ title, steps }: any) {
 export function LectureBarChart(props: any) {
   const rows = normalize(props);
   if (!rows.length) return null;
+
+  // 2026-09-04: lieflat-charts 의 F1 Rung Bars 를 먼저 시도한다. 막대를 셀 수
+  // 있는 눈금으로 쌓는 쪽이 같은 데이터를 더 정직하게 보여준다. 눈금으로
+  // 정직하게 못 그리는 데이터(항목 8개 초과, 단위가 안 맞아 작은 값이 0칸이
+  // 되는 경우 등)에는 RungBars 가 null 을 돌려주고, 아래 기존 막대가 받는다.
+  const rungs = <RungBars title={props.title} description={props.description} rows={rows} unitLabel={props.unitLabel} />;
+  if (planRungs(rows)) return rungs;
+
   const max = Math.max(...rows.map((r) => r.value), 1);
   return (
     <div className="my-12 rounded-3xl border border-border/40 bg-muted/20 p-8">

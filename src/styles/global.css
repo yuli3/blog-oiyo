@@ -237,3 +237,31 @@
 /* Mobile overflow containment (FAANG audit 2026-07-05) — drawer-safe: no body overflow clipping */
 img, svg, video, canvas, iframe { max-width: 100%; }
 pre { max-width: 100%; overflow-x: auto; }
+
+/* ── F1 Rung Bars (lieflat-charts 포팅, 2026-09-04) ───────────────────────
+   막대를 셀 수 있는 가로 눈금으로 쌓는 도표. SVG 는 서버에서 완성되므로
+   여기 있는 건 전부 "있으면 좋은" 연출이다 — JS 없이도, 이 CSS 가 안 와도
+   도표는 읽힌다. */
+.rung-bars { color: var(--foreground); }
+.rung-bars .rung-tick { fill: var(--border); }
+.rung-bars .rung-axis { stroke: var(--border); }
+.rung-bars .rung-label,
+.rung-bars .rung-legend { fill: var(--muted-foreground); }
+
+.rung-bars line,
+.rung-bars circle,
+.rung-bars text {
+  animation: rung-fade 0.9s ease both;
+}
+@keyframes rung-fade { from { opacity: 0; } }
+
+/* 끄지 않고 줄인다 — 눈금이 수백 개라 계단식 지연이 길다. 지연만 걷어내고
+   페이드는 남긴다(A2 계약: 모션 선호가 낮아도 상태 변화는 보여야 한다). */
+@media (prefers-reduced-motion: reduce) {
+  .rung-bars line,
+  .rung-bars circle,
+  .rung-bars text {
+    animation-duration: 0.01ms;
+    animation-delay: 0s !important;
+  }
+}
