@@ -11,14 +11,15 @@ interface ChapterPost {
 interface Props {
   seriesPosts: ChapterPost[];
   currentChapter: number;
+  currentPosition: number;
   locale: string;
   seriesName: string;
   coursesHref: string;
 }
 
-const { seriesPosts, currentChapter, locale, seriesName, coursesHref } = Astro.props;
+const { seriesPosts, currentChapter, currentPosition, locale, seriesName, coursesHref } = Astro.props;
 const total = seriesPosts.length;
-const progressPct = Math.round((currentChapter / total) * 100);
+const progressPct = Math.round((currentPosition / total) * 100);
 
 const backLabel: Record<string, string> = { en: "Home", ko: "홈", ja: "ホーム", fr: "Accueil", es: "Inicio", zh: "首页" };
 const progressLabel: Record<string, string> = { en: "Progress", ko: "진행률", ja: "進捗", fr: "Progression", es: "Progreso", zh: "进度" };
@@ -44,7 +45,7 @@ const navLabel: Record<string, string> = { en: "Course chapters", ko: "챕터 �
   <div class="mb-4">
     <div class="flex justify-between items-center mb-1">
       <span class="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">{progressLabel[locale] ?? progressLabel.en}</span>
-      <span class="text-[10px] font-black text-primary">{currentChapter}/{total}</span>
+      <span class="text-[10px] font-black text-primary">{currentPosition}/{total}</span>
     </div>
     <div class="h-1.5 bg-border rounded-full overflow-hidden">
       <div

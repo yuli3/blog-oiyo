@@ -157,6 +157,9 @@ const mdxComponents = getRegisteredMdxComponents(track);
 const chMatch = post.slug.match(/-ch(\d+)$/);
 const chapter = chMatch ? parseInt(chMatch[1], 10) : null;
 const isSeriesPost = chapter !== null && seriesPosts !== null && seriesPosts.length > 0;
+const currentSeriesPosition = isSeriesPost
+  ? seriesPosts!.findIndex((seriesPost) => seriesPost.slug === post.slug) + 1
+  : 0;
 
 // Derive series name for sidebar — prefer frontmatter `series` field over slug-derived name
 const seriesName = isSeriesPost
@@ -187,7 +190,7 @@ if (isSeriesPost && chapter !== null) {
       description: `A ${totalChapters}-chapter educational series on ${seriesName}.`,
       url: `${siteConfig.url}/${locale}/${courseSlugBase}-ch1/`,
     },
-    position: chapter,
+    position: currentSeriesPosition,
     numberOfItems: totalChapters,
     url: `${siteConfig.url}/${locale}/${post.slug.split("/").slice(1).join("/")}/`,
   });
@@ -312,6 +315,7 @@ const redirectToBlog = post.data.redirectToBlog;
               <ChapterSidebar
                 seriesPosts={seriesPosts!}
                 currentChapter={chapter!}
+                currentPosition={currentSeriesPosition}
                 locale={locale}
                 seriesName={seriesName!}
                 coursesHref={coursesHref}
@@ -405,7 +409,7 @@ const redirectToBlog = post.data.redirectToBlog;
                       </a>
                     );
                   })()}
-                  <span class="text-[10px] font-black text-muted-foreground">{chapter}/{seriesPosts!.length}</span>
+                  <span class="text-[10px] font-black text-muted-foreground">{currentSeriesPosition}/{seriesPosts!.length}</span>
                   {nextPost && (() => {
                     const ns = nextPost.slug.split("/");
                     return (
@@ -428,12 +432,12 @@ const redirectToBlog = post.data.redirectToBlog;
                 <div class="flex-1">
                   <div class="flex justify-between items-center mb-1.5">
                     <span class="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">{seriesName}</span>
-                    <span class="text-[10px] font-black text-primary">{chapter} / {seriesPosts!.length}</span>
+                    <span class="text-[10px] font-black text-primary">{currentSeriesPosition} / {seriesPosts!.length}</span>
                   </div>
                   <div class="h-1 bg-border rounded-full overflow-hidden">
                     <div
                       class="h-full bg-primary rounded-full"
-                      style={`width: ${Math.round((chapter! / seriesPosts!.length) * 100)}%`}
+                      style={`width: ${Math.round((currentSeriesPosition / seriesPosts!.length) * 100)}%`}
                     />
                   </div>
                 </div>
