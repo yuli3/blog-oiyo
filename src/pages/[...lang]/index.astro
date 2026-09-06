@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import WikiLanding from "../../components/WikiLanding.astro";
 import { getTranslations, locales } from "../../lib/i18n";
+import { isRedirectStub } from "../../lib/wiki-index";
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -14,7 +15,7 @@ const { locale } = Astro.props;
 const t = await getTranslations(locale);
 
 const posts = await getCollection("blog", ({ data }) => {
-  return data.draft !== true && data.locale === locale;
+  return data.draft !== true && data.locale === locale && !isRedirectStub(data);
 });
 
 posts.sort((a, b) => {
