@@ -7,8 +7,12 @@ interface Props {
   locale: Locale;
   slugs: string[];
   current?: string;
+  /** Override section heading. */
+  heading?: string;
+  /** "next" uses "Try next" wording for pages/session CTAs. */
+  variant?: "related" | "next";
 }
-const { locale, slugs, current } = Astro.props as Props;
+const { locale, slugs, current, heading, variant = "related" } = Astro.props as Props;
 
 type Loc = Record<Locale, string>;
 interface Tool { icon: string; label: Loc }
@@ -138,9 +142,14 @@ const TOOLS: Record<string, Tool> = {
   "discount-calculator": { icon: "🏷️", label: { ko: "할인가 계산기", en: "Discount Calculator", ja: "割引計算機", fr: "Calculateur de remise", es: "Calculadora de descuento", zh: "折扣计算器" } },
 };
 
-const HEADING: Record<Locale, string> = {
+const HEADING_RELATED: Record<Locale, string> = {
   ko: "관련 도구", en: "Related tools", ja: "関連ツール", fr: "Outils associés", es: "Herramientas relacionadas", zh: "相关工具",
 };
+const HEADING_NEXT: Record<Locale, string> = {
+  ko: "다음으로 써보기", en: "Try next", ja: "次に試す", fr: "Essayer ensuite", es: "Probar después", zh: "接着试试",
+};
+
+const headingLabel = heading ?? (variant === "next" ? HEADING_NEXT : HEADING_RELATED)[locale];
 
 const items = slugs
   .filter((s) => s !== current && TOOLS[s])
@@ -148,8 +157,8 @@ const items = slugs
 ---
 
 {items.length > 0 && (
-  <nav class="mt-10" aria-label={HEADING[locale]}>
-    <h2 class="text-xl font-bold text-slate-900">{HEADING[locale]}</h2>
+  <nav class="mt-10" aria-label={headingLabel} data-cta="related-tools" data-variant={variant}>
+    <h2 class="text-xl font-bold text-slate-900">{headingLabel}</h2>
     <div class="mt-4 flex flex-wrap gap-2">
       {items.map((tool) => (
         <a

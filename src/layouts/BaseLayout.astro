@@ -440,6 +440,15 @@ const footerLabels = footerCopy[locale] ?? footerCopy.en;
       <slot />
     </main>
 
+    {/* Landing "next one page" CTA slot — pages/session lever; no ad slots. */}
+    {Astro.slots.has("bottom-cta") && (
+      <aside class="border-t border-border/40 bg-muted/10" data-cta-slot="bottom" aria-label="Next page">
+        <div class="container px-4 py-8 md:py-10">
+          <slot name="bottom-cta" />
+        </div>
+      </aside>
+    )}
+
     <!-- Back to top button -->
     <button
       id="back-to-top"
