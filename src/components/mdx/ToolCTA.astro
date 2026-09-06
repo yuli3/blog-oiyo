@@ -1,4 +1,6 @@
 ---
+import { toolCtaHref } from '@/lib/tool-cta-href';
+
 interface ToolMeta {
   name_ko: string;
   name_en: string;
@@ -416,27 +418,6 @@ const TOOL_META: Record<string, ToolMeta> = {
   },
 };
 
-// family-first targets: link the OIYO family page when one exists (#strategy)
-const HREF_OVERRIDES: Record<string, (l: string) => string> = {
-  mbti: (l) => `https://oiyo.net/${l}/mbti/test?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta`,
-  riasec: (l) => `https://oiyo.net/${l}/riasec-career-test?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta`,
-  "adhd-screening": (l) => `https://oiyo.net/${l}/adhd/test?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta`,
-  disc: (l) => `https://oiyo.net/${l}/disc-personality-test?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta`,
-  "attachment-style": (l) => `https://oiyo.net/${l}/attachment-style/test?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta`,
-  lovelanguage: (l) => `https://oiyo.net/${l}/love-language/test?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta`,
-  egogram: (l) => `https://oiyo.net/${l}/egogram-test?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta`,
-  "depression-test": (l) => `https://oiyo.net/${l}/depression/test?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta`,
-  "stress-type": (l) => `https://oiyo.net/${l}/stress-type-test?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta`,
-  "eq-insight": (l) => `https://oiyo.net/${l}/eq/test?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta`,
-  hormones: (l) => `https://oiyo.net/${l}/hormones-test?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta`,
-  "learning-style": (l) => `https://oiyo.net/${l}/learning-style-test?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta`,
-  "self-esteem-compass": (l) => `https://oiyo.net/${l}/self-esteem/test?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta`,
-  "empathy-test": (l) => `https://oiyo.net/${l}/empathy/test?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta`,
-  investment: (l) => `https://oiyo.net/${l}/investment-type/test?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta`,
-  chess: (l) => `https://game.oiyo.net/${l}/chess/`,
-  gomoku: (l) => `https://game.oiyo.net/${l}/gomoku/`,
-};
-
 const { tool, locale = "ko" } = Astro.props;
 
 const meta = TOOL_META[tool];
@@ -445,10 +426,7 @@ const isKo = locale === "ko";
 const name = meta ? (isKo ? meta.name_ko : meta.name_en) : "";
 const description = meta ? (isKo ? meta.description_ko : meta.description_en) : "";
 const ctaLabel = isKo ? "계산해보기 →" : "Try it →";
-import { AHOXY_URL } from '@/config/site.config';
-const href = HREF_OVERRIDES[tool]
-  ? HREF_OVERRIDES[tool](locale)
-  : `${AHOXY_URL}/${locale}/${tool}?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta`;
+const href = toolCtaHref(tool, locale);
 ---
 
 {meta && (
