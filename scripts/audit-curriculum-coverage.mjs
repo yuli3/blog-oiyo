@@ -11,7 +11,12 @@ const requested = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
 const check = process.argv.includes("--check");
 
 const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-const normalize = (value) => value.normalize("NFKC").toLowerCase().replace(/\s+/g, " ");
+const normalize = (value) =>
+  value
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/\r\n/g, "\n")
+    .replace(/[^\S\r\n]+/g, " ");
 
 const curriculumFiles = (await readdir(curriculaDir))
   .filter((name) => name.endsWith(".json"))
@@ -25,7 +30,10 @@ for (const fileName of curriculumFiles) {
   const curriculum = JSON.parse(await readFile(path.join(curriculaDir, fileName), "utf8"));
   const allContentNames = await readdir(contentDir);
   const contentNames = allContentNames.filter(
-    (name) => name.endsWith(".mdx") && curriculum.seriesPrefixes.some((prefix) => name.startsWith(prefix)),
+    (name) =>
+      name.endsWith(".mdx") &&
+      (curriculum.seriesPrefixes.some((prefix) => name.startsWith(prefix)) ||
+        (curriculum.seriesFiles ?? []).includes(name.replace(/\.mdx$/, ""))),
   );
   const documents = await Promise.all(
     contentNames.map(async (name) => ({ name, body: normalize(await readFile(path.join(contentDir, name), "utf8")) })),
