@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import HeightConverter from "../../components/tools/HeightConverter";
+import RelatedToolLinks from "../../components/RelatedToolLinks.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -314,14 +315,22 @@ const structuredData = {
 
 <BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
-  <div class="mx-auto max-w-3xl px-4 py-8">
-    <section class="mb-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+  <div class="mx-auto max-w-3xl overflow-x-hidden px-4 py-8">
+    <section class="mb-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
       <p class="text-sm font-semibold uppercase tracking-wide text-green-600">Height converter</p>
       <h1 class="mt-2 text-3xl font-black tracking-tight text-slate-950">{m.title}</h1>
-      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
     </section>
 
+    {/* Tool first so gender-compare result is above the fold / one tab away. */}
     <HeightConverter client:load locale={locale as Locale} />
+
+    {/* Optional S: one cross-link tile to existing ring/shoe channel only. */}
+    <RelatedToolLinks locale={locale} current="height-converter" slugs={["ring-size-converter", "shoe-size-converter"]} />
+
+    <section class="mt-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <h2 class="text-xl font-bold text-slate-950">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
+    </section>
 
     <figure class="mt-8">
       <img
@@ -340,11 +349,6 @@ const structuredData = {
         loading="lazy"
       />
     </figure>
-
-    <section class="mt-10 border-t border-slate-200 pt-8">
-      <h2 class="text-2xl font-bold text-slate-950">{c.introTitle}</h2>
-      <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
-    </section>
 
     <section class="mt-10">
       <h2 class="text-xl font-bold text-slate-950">{c.formulaTitle}</h2>
