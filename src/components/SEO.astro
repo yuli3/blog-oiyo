@@ -2,6 +2,7 @@
 import { siteConfig } from "../config/site.config";
 import { getAuthor } from "../lib/authors";
 import deindexedLocales from "../config/deindexed-locales.json";
+import { resolveOgImage } from "../lib/og-image";
 
 // Crawl-budget policy — see astro.config.mjs. These locales stay reachable for
 // users but are kept out of the index and out of the sitemap/hreflang cluster.
@@ -17,6 +18,7 @@ interface Props {
   updatedDate?: Date;
   tags?: string[];
   category?: string;
+  track?: string;
   author?: string;
   availableLocales?: string[];
   // Search-result pages must stay out of the index (Google quality guidelines).
@@ -26,17 +28,25 @@ interface Props {
 const {
   title = siteConfig.title,
   description = siteConfig.description,
-  image = `${siteConfig.url}/og-image.png`,
+  image,
   canonicalURL = new URL(Astro.url.pathname, Astro.site),
   type = "website",
   pubDate,
   updatedDate,
   tags,
   category,
+  track,
   author = siteConfig.author,
   availableLocales,
   noindex = false,
 } = Astro.props;
+
+const resolvedImage = resolveOgImage({
+  explicitImage: image,
+  track,
+  pathname: Astro.url.pathname,
+  siteUrl: siteConfig.url,
+});
 
 const siteTitle =
   title === siteConfig.title ? title : `${title} | ${siteConfig.title}`;
@@ -177,13 +187,13 @@ const hreflangMap: Record<string, string> = {
 <meta property="og:site_name" content={siteConfig.name} />
 <meta property="og:title" content={siteTitle} />
 <meta property="og:description" content={description} />
-{image && <meta property="og:image" content={image} />}
-{image && <meta property="og:image:width" content="1200" />}
-{image && <meta property="og:image:height" content="630" />}
+<meta property="og:image" content={resolvedImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={siteTitle} />
 <meta name="twitter:description" content={description} />
-{image && <meta name="twitter:image" content={image} />}
+<meta name="twitter:image" content={resolvedImage} />
 <!-- og:locale uses BCP-47 with underscore notation -->
 <meta property="og:locale" content={(hreflangMap[currentLocale] ?? "en").replace("-", "_")} />
 
@@ -209,8 +219,8 @@ const hreflangMap: Record<string, string> = {
 <meta property="twitter:url" content={Astro.url} />
 <meta property="twitter:title" content={siteTitle} />
 <meta property="twitter:description" content={description} />
-{image && <meta property="twitter:image" content={new URL(image, Astro.url)} />}
-{image && <meta property="twitter:image:alt" content={title} />}
+<meta property="twitter:image" content={resolvedImage} />
+<meta property="twitter:image:alt" content={title} />
 {
   siteConfig.seo.twitterHandle && (
     <meta property="twitter:site" content={siteConfig.seo.twitterHandle} />

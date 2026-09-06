@@ -23,6 +23,7 @@ interface Props {
   updatedDate?: Date;
   tags?: string[];
   category?: string;
+  track?: string;
   author?: string;
   availableLocales?: string[];
   canonicalUrl?: string;
@@ -35,7 +36,7 @@ interface Props {
   intro?: string;
 }
 
-const { title, description, image, type, pubDate, updatedDate, tags, category, author, availableLocales, canonicalUrl, noindex, heading, intro } = Astro.props;
+const { title, description, image, type, pubDate, updatedDate, tags, category, track, author, availableLocales, canonicalUrl, noindex, heading, intro } = Astro.props;
 const locale = getLocaleFromPath(Astro.url.pathname);
 const t = await getTranslations(locale);
 const nav = t.nav as Record<string, string>;
@@ -114,7 +115,7 @@ const footerLabels = footerCopy[locale] ?? footerCopy.en;
   class:list={["scroll-smooth", { "snap-y snap-mandatory": scrollSnapEnabled }]}
 >
   <head>
-    <SEO {title} {description} {image} {type} {pubDate} {updatedDate} {tags} {category} {author} {availableLocales} canonicalURL={canonicalUrl} {noindex} />
+    <SEO {title} {description} {image} {type} {pubDate} {updatedDate} {tags} {category} {track} {author} {availableLocales} canonicalURL={canonicalUrl} {noindex} />
 
     <!-- Mermaid diagram rendering (only executes if mermaid code blocks are present) -->
     <script type="module" is:inline>
