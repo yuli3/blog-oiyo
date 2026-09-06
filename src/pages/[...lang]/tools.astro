@@ -1,12 +1,17 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import RelatedPosts from "../../components/RelatedPosts.astro";
+import RelatedToolLinks from "../../components/RelatedToolLinks.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 import { collectionPageJsonLd } from "../../lib/seo/structured-data";
 import { siteConfig } from "../../config/site.config";
 import { getTrackFromData } from "../../lib/taxonomy";
 import oiyoCanonicalMap from "../../data/oiyo-canonical-map.json";
+import { buildSeriesIndex } from "../../lib/wiki-index";
+import { PRIORITY_SERIES } from "../../data/priority-series";
+import { firstChapterSlugs } from "../../lib/related-next";
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({
@@ -948,6 +953,16 @@ for (const cat of categories) {
   if (extra && extra.length) cat.tools = [...cat.tools, ...extra];
 }
 
+const academyPosts = await getCollection("blog", ({ data }) =>
+  data.draft !== true && data.locale === locale);
+const toolsSeriesByKey = buildSeriesIndex(academyPosts);
+const toolsNextReadSlugs = firstChapterSlugs(
+  PRIORITY_SERIES.map((k) => toolsSeriesByKey.get(k)).filter(
+    (s): s is NonNullable<typeof s> => !!s,
+  ),
+  3,
+);
+
 // Drop any curated card whose canonical lives on oiyo.net entirely — 2026-09-03
 // 세운 지시: "oiyo로 곧바로 리다이렉트 되는 항목들은 굳이 없어도 됩니다".
 // 이전엔 href만 oiyo로 바꿔 카드를 남겼는데, 그러면 blog 가 자기 것이 아닌
@@ -1216,4 +1231,13 @@ const catalogJsonLd = JSON.stringify(
 
     </div>
   </section>
+
+  <div slot="bottom-cta" class="max-w-4xl mx-auto space-y-6">
+    <RelatedToolLinks
+      locale={locale}
+      variant="next"
+      slugs={["height-converter", "salary-calculator", "sleep-calculator", "percentage-calculator", "korean-age-calculator", "currency-converter"]}
+    />
+    <RelatedPosts locale={locale} slugs={toolsNextReadSlugs} variant="next" maxItems={3} />
+  </div>
 </BaseLayout>

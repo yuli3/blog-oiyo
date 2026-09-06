@@ -2,11 +2,14 @@
 import type { CollectionEntry } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import WikiTable from "./WikiTable.astro";
+import RelatedPosts from "./RelatedPosts.astro";
+import RelatedToolLinks from "./RelatedToolLinks.astro";
 import { getTranslations } from "../lib/i18n";
 import type { Locale } from "../lib/i18n";
 import { buildSeriesIndex, groupSeriesByCategory } from "../lib/wiki-index";
 import { PRIORITY_SERIES, prioritySeriesName, deriveSeriesLabel } from "../data/priority-series";
 import { slugifyCategory } from "../lib/taxonomy";
+import { firstChapterSlugs } from "../lib/related-next";
 
 interface Props {
   locale: string;
@@ -30,6 +33,9 @@ const byKey = new Map(allSeries.map((s) => [s.key, s]));
 const priority = PRIORITY_SERIES.map((k) => byKey.get(k)).filter(
   (s): s is NonNullable<typeof s> => !!s,
 );
+
+// Fixed "next one page" CTA: first chapter of top priority series (pages/session).
+const nextReadSlugs = firstChapterSlugs(priority, 3);
 
 // Two-level category → series index for the sidebar.
 const catGroups = groupSeriesByCategory(allSeries);
@@ -127,4 +133,13 @@ const chapterWord = L("chapters", "chapters");
       </div>
     </div>
   </section>
+
+  <div slot="bottom-cta" class="max-w-4xl mx-auto space-y-6">
+    <RelatedPosts locale={locale} slugs={nextReadSlugs} variant="next" maxItems={3} />
+    <RelatedToolLinks
+      locale={locale as Locale}
+      variant="next"
+      slugs={["height-converter", "salary-calculator", "sleep-calculator", "percentage-calculator", "bmi-calculator"]}
+    />
+  </div>
 </BaseLayout>

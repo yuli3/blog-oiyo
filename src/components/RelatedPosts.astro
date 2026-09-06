@@ -2,54 +2,56 @@
 import { getCollection } from "astro:content";
 import { getTranslations } from "../lib/i18n";
 import type { Locale } from "../lib/i18n";
+import {
+  NEXT_READ_LABELS,
+  RELATED_POST_LABELS,
+  resolveCuratedPosts,
+  scoreRelatedPosts,
+} from "../lib/related-next";
 
 interface Props {
-  currentSlug: string;
-  tags: string[];
+  currentSlug?: string;
+  tags?: string[];
   category?: string;
   locale?: string;
   maxItems?: number;
+  /** Locale-free post slugs for curated landing CTAs. */
+  slugs?: string[];
+  /** Override section heading. */
+  heading?: string;
+  /** "next" uses "Next read" wording for pages/session CTAs. */
+  variant?: "related" | "next";
 }
 
-const { currentSlug, tags, category, locale = "en", maxItems = 3 } = Astro.props;
+const {
+  currentSlug,
+  tags = [],
+  category,
+  locale = "en",
+  maxItems = 3,
+  slugs,
+  heading,
+  variant = "related",
+} = Astro.props;
 
 const allPosts = await getCollection("blog", (post) => !post.data.draft);
 
-// Score posts by tag overlap + category match
-const scored = allPosts
-  .filter((post) => post.slug !== currentSlug)
-  .filter((post) => {
-    const postLocale = post.slug.split("/")[0];
-    return postLocale === locale;
-  })
-  .map((post) => {
-    const sharedTags = (post.data.tags ?? []).filter((t: string) => tags.includes(t));
-    const categoryBonus = post.data.category === category ? 2 : 0;
-    return { post, score: sharedTags.length + categoryBonus };
-  })
-  .filter((item) => item.score > 0)
-  .sort((a, b) => b.score - a.score)
-  .slice(0, maxItems)
-  .map((item) => item.post);
+const scored =
+  slugs && slugs.length > 0
+    ? resolveCuratedPosts(allPosts, locale, slugs, maxItems)
+    : scoreRelatedPosts(allPosts, { locale, currentSlug, tags, category, maxItems });
 
 const hasResults = scored.length > 0;
 
 const t = await getTranslations(locale as Locale);
 const categoryNames = (t.category.names ?? {}) as Record<string, string>;
 
-const labels: Record<string, string> = {
-  en: "Related Posts",
-  ko: "관련 글",
-  ja: "関連記事",
-  zh: "相关文章",
-  fr: "Articles connexes",
-  es: "Artículos relacionados",
-};
-const label = labels[locale] ?? labels.en;
+const labelMap = variant === "next" ? NEXT_READ_LABELS : RELATED_POST_LABELS;
+const label = heading ?? labelMap[locale] ?? labelMap.en;
 ---
 
 {hasResults && (
-<section class="mt-12 pt-10 border-t border-border/40 not-prose">
+<section class="mt-12 pt-10 border-t border-border/40 not-prose" data-cta="related-posts" data-variant={variant}>
   <h3 class="text-sm font-bold uppercase tracking-widest text-muted-foreground mb-5">{label}</h3>
   <div class="grid gap-4 sm:grid-cols-3">
     {scored.map((post) => {
