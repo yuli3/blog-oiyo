@@ -6,7 +6,7 @@ import RelatedPosts from "./RelatedPosts.astro";
 import RelatedToolLinks from "./RelatedToolLinks.astro";
 import { getTranslations } from "../lib/i18n";
 import type { Locale } from "../lib/i18n";
-import { buildSeriesIndex, groupSeriesByCategory } from "../lib/wiki-index";
+import { buildSeriesIndex, groupSeriesByCategory, isRedirectStub } from "../lib/wiki-index";
 import { PRIORITY_SERIES, prioritySeriesName, deriveSeriesLabel } from "../data/priority-series";
 import { slugifyCategory } from "../lib/taxonomy";
 import { firstChapterSlugs } from "../lib/related-next";
@@ -18,7 +18,8 @@ interface Props {
   posts: CollectionEntry<"blog">[];
 }
 
-const { locale, title, subtitle, posts } = Astro.props;
+const { locale, title, subtitle, posts: incomingPosts } = Astro.props;
+const posts = incomingPosts.filter((p) => !isRedirectStub(p.data));
 const t = await getTranslations(locale as Locale);
 const wikiT = (t as Record<string, unknown>).wiki as Record<string, string> | undefined;
 const categoryNames = (t.category.names ?? {}) as unknown as { [key: string]: string };

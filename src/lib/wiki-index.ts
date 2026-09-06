@@ -1,5 +1,6 @@
 import { getCollection, type CollectionEntry } from "astro:content";
 import { getTrackFromData } from "./taxonomy";
+import { isRedirectStub } from "./redirect-stub";
 
 /**
  * Wikidocs-style landing / drawer helpers.
@@ -18,6 +19,13 @@ export interface SeriesEntry {
   chapterCount: number;
   lastUpdated: Date;
 }
+
+export { isRedirectStub } from "./redirect-stub";
+
+const publishedCollectionFilter = ({
+  data,
+}: CollectionEntry<"blog">): boolean =>
+  data.draft !== true && !isRedirectStub(data);
 
 const chapterOf = (post: CollectionEntry<"blog">): number =>
   parseInt(post.slug.match(/-ch(\d+)$/)?.[1] ?? "0", 10);
@@ -110,7 +118,7 @@ export function getDrawerSeriesGroups(locale: string): Promise<CategorySeriesGro
 
   publishedPostsPromise ??= getCollection(
     "blog",
-    ({ data }) => data.draft !== true && !data.redirectToBlog,
+    publishedCollectionFilter,
   );
 
   const groups = publishedPostsPromise.then((allPosts) => {
@@ -136,7 +144,7 @@ export function getMultiChapterSeriesKeys(locale: string): Promise<Set<string>> 
 
   publishedPostsPromise ??= getCollection(
     "blog",
-    ({ data }) => data.draft !== true && !data.redirectToBlog,
+    publishedCollectionFilter,
   );
 
   const keys = publishedPostsPromise.then((allPosts) => {
