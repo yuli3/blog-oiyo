@@ -1,0 +1,63 @@
+---
+import type { Locale } from "../lib/i18n";
+import { legalLinks } from "../lib/legal-links";
+
+export interface LegalSection {
+  heading: string;
+  body: string[];
+  list?: string[];
+}
+
+interface Props {
+  doc: "privacy" | "terms";
+  sections: LegalSection[];
+  locale: Locale;
+  /** Localized "Privacy Policy" label, for the terms → privacy cross-link. */
+  privacyLabel: string;
+  /** Localized "See:" lead-in for external link lines. */
+  seeLabel: string;
+}
+
+const { doc, sections, locale, privacyLabel, seeLabel } = Astro.props;
+---
+
+<div class="prose prose-stone lg:prose-lg max-w-none animate-fade-up delay-200">
+  {
+    sections.map((section, index) => {
+      const links = legalLinks(doc, index, locale, privacyLabel);
+      return (
+        <section>
+          <h2>{section.heading}</h2>
+          {section.body.map((paragraph) => (
+            <p>{paragraph}</p>
+          ))}
+          {section.list && section.list.length > 0 && (
+            <ul>
+              {section.list.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          )}
+          {links.length > 0 && (
+            <p>
+              {seeLabel}{" "}
+              {links.map((link, i) => (
+                <>
+                  {i > 0 && " · "}
+                  <a
+                    href={link.href}
+                    {...(link.href.startsWith("http")
+                      ? { target: "_blank", rel: "noopener noreferrer" }
+                      : {})}
+                  >
+                    {link.label}
+                  </a>
+                </>
+              ))}
+            </p>
+          )}
+        </section>
+      );
+    })
+  }
+</div>
