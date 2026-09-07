@@ -16,45 +16,45 @@ type CTAConfig = {
   href: (locale: string) => string;
 };
 
+// Keyed by exact lowercased article category. Every target is a live, indexable
+// page on oiyo.net (personality / decision / fortune surfaces — oiyo owns those;
+// blog's own /tools/ is calculators, not tests). No fuzzy matching: a CTA only
+// renders when the category is deliberately mapped, so every rendered link is a
+// clean, relevant cross-site signal. (FAANG P1 #10 — was 4 loose keys, one 404.)
 const CTA_MAP: Record<string, CTAConfig> = {
   finance: {
     icon: '💰',
-    title: { en: 'Know Your Financial Personality', ko: '나의 금융 성향 테스트', ja: '投資性格診断', fr: 'Testez votre personnalité financière', es: 'Conoce tu perfil financiero' },
-    desc: { en: 'Your numbers tell one story — your personality tells another. Explore our finance and decision-making tools.', ko: '숫자는 하나의 이야기, 성격은 다른 이야기를 합니다. 금융·의사결정 도구를 탐색해보세요.', ja: '数字は一つの物語、性格は別の物語を語ります。金融・意思決定ツールをご利用ください。', fr: 'Les chiffres racontent une histoire, votre personnalité en raconte une autre. Explorez nos outils.', es: 'Los números cuentan una historia, tu personalidad cuenta otra. Explora nuestras herramientas.' },
-    cta: { en: 'Explore Finance Tools →', ko: '금융 도구 모음 →', ja: '金融ツールを探索する →', fr: 'Explorer les outils finance →', es: 'Explorar herramientas financieras →' },
-    href: (locale) => `/${locale}/tools/`,
+    title: { en: 'Know Your Financial Personality', ko: '나의 금융 성향 테스트', ja: 'お金の性格診断', fr: 'Testez votre personnalité financière', es: 'Conoce tu perfil financiero' },
+    desc: { en: 'Your numbers tell one story — your money mindset tells another. Take a free test to see how you relate to money.', ko: '숫자는 하나의 이야기, 돈을 대하는 마음은 다른 이야기를 합니다. 무료 검사로 나의 금융 성향을 확인해보세요.', ja: '数字は一つの物語、お金への向き合い方は別の物語です。無料テストであなたの金銭傾向を確認しましょう。', fr: 'Les chiffres racontent une histoire, votre rapport à l’argent en raconte une autre. Faites un test gratuit.', es: 'Los números cuentan una historia, tu relación con el dinero cuenta otra. Haz un test gratuito.' },
+    cta: { en: 'Take a Money Test →', ko: '금융 성향 검사 하기 →', ja: 'お金のテストを受ける →', fr: 'Faire le test →', es: 'Hacer el test →' },
+    href: (locale) => `https://oiyo.net/${locale}/tests/`,
   },
-  'behavioral economics': {
+  economics: {
     icon: '🎯',
-    title: { en: 'Understand Your Decision-Making Style', ko: '나의 의사결정 성향 파악', ja: '意思決定スタイルを理解する', fr: 'Comprendre votre style de décision', es: 'Comprende tu estilo de toma de decisiones' },
-    desc: { en: 'Behavioral biases shape your choices more than you know. Explore personality and decision-making tools to understand yourself better.', ko: '행동 편향이 당신의 선택에 생각보다 더 큰 영향을 미칩니다. 성격·의사결정 도구로 자신을 탐구해보세요.', ja: '行動バイアスはあなたの選択に想像以上の影響を与えます。性格・意思決定ツールで自分を探求しましょう。', fr: 'Les biais comportementaux influencent vos choix plus que vous ne le croyez. Explorez nos outils.', es: 'Los sesgos conductuales moldean tus elecciones más de lo que crees. Explora nuestras herramientas.' },
-    cta: { en: 'Explore Decision Tools →', ko: '의사결정 도구 탐색 →', ja: '意思決定ツールを探索する →', fr: 'Explorer les outils de décision →', es: 'Explorar herramientas de decisión →' },
-    href: (locale) => `/${locale}/tools/`,
+    title: { en: 'Spot Your Decision-Making Biases', ko: '나의 의사결정 편향 확인', ja: '意思決定バイアスを見つける', fr: 'Repérez vos biais de décision', es: 'Detecta tus sesgos de decisión' },
+    desc: { en: 'Behavioral economics shows that biases shape your choices more than you know. Take a free test to spot yours.', ko: '행동경제학은 편향이 생각보다 우리 선택을 크게 좌우한다고 말합니다. 무료 검사로 나의 편향을 확인해보세요.', ja: '行動経済学は、バイアスが想像以上に選択を左右すると示します。無料テストで自分のバイアスを確認しましょう。', fr: 'L’économie comportementale montre que les biais pèsent plus qu’on ne le croit. Faites un test gratuit.', es: 'La economía del comportamiento muestra que los sesgos pesan más de lo que crees. Haz un test gratuito.' },
+    cta: { en: 'Take the Bias Test →', ko: '편향 검사 하기 →', ja: 'バイアステストを受ける →', fr: 'Faire le test de biais →', es: 'Hacer el test de sesgos →' },
+    href: (locale) => `https://oiyo.net/${locale}/cognitive-bias-test/`,
   },
   philosophy: {
     icon: '🔮',
     title: { en: 'Explore Your Core Motivations', ko: '나의 근본 동기 탐구', ja: '核心的な動機を探求する', fr: 'Explorez vos motivations profondes', es: 'Explora tus motivaciones fundamentales' },
-    desc: { en: 'Uncover the deep drives behind how you think and act. Explore personality type tests and self-discovery tools.', ko: '당신의 생각과 행동 이면의 깊은 동기를 발견하세요. 성격 유형 테스트와 자기 탐구 도구를 이용해보세요.', ja: 'あなたの思考と行動の背後にある深い動機を発見してください。性格タイプテストと自己発見ツールをご利用ください。', fr: 'Découvrez les motivations profondes derrière vos pensées et actions. Explorez les outils de découverte.', es: 'Descubre las motivaciones profundas detrás de cómo piensas y actúas. Explora herramientas de autodescubrimiento.' },
-    cta: { en: 'Explore Self-Discovery Tools →', ko: '자기 탐구 도구 모음 →', ja: '自己発見ツールを探索 →', fr: 'Explorer les outils de découverte →', es: 'Explorar herramientas de autodescubrimiento →' },
-    href: (locale) => `/${locale}/tools/`,
+    desc: { en: 'Uncover the deep drives behind how you think and act. Start with a free personality or self-understanding test.', ko: '당신의 생각과 행동 이면의 깊은 동기를 발견하세요. 무료 성격·자기이해 검사로 시작해보세요.', ja: 'あなたの思考と行動の背後にある深い動機を発見してください。無料の性格・自己理解テストから。', fr: 'Découvrez les motivations profondes derrière vos pensées et vos actes. Commencez par un test gratuit.', es: 'Descubre las motivaciones profundas detrás de cómo piensas y actúas. Empieza con un test gratuito.' },
+    cta: { en: 'Explore the Tests →', ko: '검사 둘러보기 →', ja: 'テストを見る →', fr: 'Voir les tests →', es: 'Ver los tests →' },
+    href: (locale) => `https://oiyo.net/${locale}/tests/`,
   },
-  life: {
+  lifestyle: {
     icon: '✨',
-    title: { en: 'Get Your Daily Tarot Card', ko: '오늘의 타로 카드', ja: '今日のタロットカード', fr: 'Tirez votre carte tarot du jour', es: 'Tu carta tarot del día' },
-    desc: { en: 'Draw a daily tarot card for reflection and insight. A moment of mindfulness to start or end your day.', ko: '매일 타로 카드를 뽑아 하루를 돌아보세요. 하루를 시작하거나 마무리하는 마음챙김의 순간.', ja: '毎日タロットカードを引いて、一日を振り返りましょう。マインドフルネスのひとときを。', fr: 'Tirez une carte tarot quotidienne pour la réflexion. Un moment de pleine conscience.', es: 'Saca una carta tarot diaria para reflexionar. Un momento de mindfulness para tu día.' },
-    cta: { en: 'Draw Today\'s Card →', ko: '오늘의 카드 뽑기 →', ja: '今日のカードを引く →', fr: 'Tirer ma carte du jour →', es: 'Sacar mi carta del día →' },
-    href: (locale) => `https://oiyo.net/${locale}/tarot/daily`,
+    title: { en: 'Today’s Fortune & Tarot', ko: '오늘의 운세와 타로', ja: '今日の運勢とタロット', fr: 'Fortune & tarot du jour', es: 'Fortuna y tarot de hoy' },
+    desc: { en: 'From your birth date alone: today’s fortune across saju, zodiac and star sign — plus a tarot card. A short ritual to open your day.', ko: '생년월일만으로 보는 사주·띠·별자리 오늘의 운세, 그리고 타로 한 장. 하루를 여는 짧은 리추얼.', ja: '生年月日だけで見る四柱推命・干支・星座の今日の運勢と、タロット一枚。一日を開く短いリチュアル。', fr: 'À partir de votre date de naissance : la fortune du jour (saju, zodiaque, signe) et une carte de tarot.', es: 'Solo con tu fecha de nacimiento: la fortuna de hoy (saju, zodiaco, signo) y una carta de tarot.' },
+    cta: { en: 'See Today’s Fortune →', ko: '오늘의 운세 보기 →', ja: '今日の運勢を見る →', fr: 'Voir la fortune du jour →', es: 'Ver la fortuna de hoy →' },
+    href: (locale) => `https://oiyo.net/${locale}/today/`,
   },
 };
 
-// Category matching — try exact, then partial
+// Exact match only — the category must be deliberately mapped above.
 function matchCTA(category: string): CTAConfig | null {
-  const lower = category.toLowerCase();
-  if (CTA_MAP[lower]) return CTA_MAP[lower];
-  for (const key of Object.keys(CTA_MAP)) {
-    if (lower.includes(key) || key.includes(lower)) return CTA_MAP[key];
-  }
-  return null;
+  return CTA_MAP[category.toLowerCase()] ?? null;
 }
 
 const config = matchCTA(cat);
