@@ -79,7 +79,15 @@ export default defineConfig({
         // In lockstep with the noindex on those routes — a URL that is both
         // sitemap-listed and noindex sends search engines two opposite signals.
         if (path.includes("/category/")) return false;
-        if (/\/\d+\/?$/.test(path)) return false;
+        // ...but /ko/year/1985/ is an article, not page 1985 of a listing. The
+        // rule below reads "ends in a number" and so swallowed 87 birth-year
+        // pages that are index,follow and self-canonical: indexable, yet never
+        // advertised. Measured 2026-09-08, only 14 of the 88 had any impression
+        // in 90 days, on exactly on-intent queries (`1969년생 띠`, `69년생 나이`)
+        // at position 37-64 — the profile of a page Google found by accident.
+        // Everything else caught by the rule is real pagination and is noindex.
+        const isYearArticle = /\/year\/\d{4}\/?$/.test(path);
+        if (!isYearArticle && /\/\d+\/?$/.test(path)) return false;
         // Exclude paths with underscore segments
         if (path.split("/").some((seg) => seg.startsWith("_"))) return false;
         // Exclude /index duplicate (trailing slash version is canonical)
