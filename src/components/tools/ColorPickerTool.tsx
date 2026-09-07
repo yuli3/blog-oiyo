@@ -204,7 +204,7 @@ export default function ColorPickerTool({ locale: lp = 'ko' }: Props) {
     navigator.clipboard.writeText(value).then(() => {
       setCopiedKey(key)
       setTimeout(() => setCopiedKey(null), 1500)
-    })
+    }).catch(() => {})
   }, [])
 
   function handleRandomize() {

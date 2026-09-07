@@ -93,7 +93,7 @@ const LoremIpsumGenerator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
     navigator.clipboard.writeText(output).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
-    });
+    }).catch(() => {});
   };
 
   const countOptions = mode === 'paragraphs' ? [1, 2, 3, 5, 10] : [50, 100, 200, 500];

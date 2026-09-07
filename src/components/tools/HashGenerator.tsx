@@ -58,7 +58,7 @@ const HashGenerator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
     navigator.clipboard.writeText(hash).then(() => {
       setCopiedAlgo(algo);
       setTimeout(() => setCopiedAlgo(null), 1500);
-    });
+    }).catch(() => {});
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {

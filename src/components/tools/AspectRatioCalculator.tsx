@@ -179,7 +179,7 @@ export default function AspectRatioCalculator({ locale: lp = 'ko' }: Props) {
     navigator.clipboard.writeText(value).then(() => {
       setCopied(key)
       setTimeout(() => setCopied(null), 1500)
-    })
+    }).catch(() => {})
   }
 
   // Compute results for mode 1

@@ -55,7 +55,7 @@ function ShareButton({ text, locale }: { text: string; locale: string }) {
   const label = locale === 'ja' ? 'コピー' : locale === 'en' ? 'Copy Result' : '결과 복사';
   const copiedLabel = locale === 'ja' ? 'コピー済み' : locale === 'en' ? 'Copied!' : '복사됨!';
   const copy = () => {
-    navigator.clipboard.writeText(text).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); });
+    navigator.clipboard.writeText(text).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); }).catch(() => {});
   };
   return (
     <button onClick={copy} className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-slate-700 transition-colors px-3 py-1.5 border border-slate-200 rounded-full hover:bg-slate-50">

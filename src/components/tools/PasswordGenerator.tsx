@@ -118,7 +118,7 @@ const PasswordGenerator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
     navigator.clipboard.writeText(pw).then(() => {
       setCopiedIdx(idx);
       setTimeout(() => setCopiedIdx(null), 1500);
-    });
+    }).catch(() => {});
   };
 
   const Toggle = ({ checked, onChange, label }: { checked: boolean; onChange: () => void; label: string }) => (
