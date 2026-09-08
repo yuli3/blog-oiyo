@@ -27,6 +27,15 @@ const DEINDEXED_LOCALES = new Set(
   JSON.parse(readFileSync(new URL("./src/config/deindexed-locales.json", import.meta.url), "utf8")),
 );
 
+// Narrow exceptions to that policy, by slug. The 2026-07-14 deindex was decided
+// on clicks, and a page sitting at position 28 cannot produce clicks — so a slug
+// with real demand looked identical to a dead one. These slugs stay indexed in
+// every locale. Keyed by slug rather than by locale path so the hreflang cluster
+// stays reciprocal on its own.
+const DEINDEX_EXCEPTION_SLUGS = new Set(
+  JSON.parse(readFileSync(new URL("./src/config/deindexed-locale-exceptions.json", import.meta.url), "utf8")),
+);
+
 /** @param {URL} directory @param {string} prefix @returns {string[]} */
 function collectExcludedContentRoutes(directory, prefix = "") {
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
@@ -97,8 +106,13 @@ export default defineConfig({
         if (segs.length === 2 && BRIDGE_SLUGS.has(segs[1])) return false;
         // Exclude noindex embed widgets (canonical is the full tool page)
         if (segs.includes("embed")) return false;
-        // Exclude deindexed locales (crawl budget).
-        if (segs.length > 0 && DEINDEXED_LOCALES.has(segs[0])) return false;
+        // Exclude deindexed locales (crawl budget), minus the slug exceptions.
+        if (
+          segs.length > 0 &&
+          DEINDEXED_LOCALES.has(segs[0]) &&
+          !(segs.length === 2 && DEINDEX_EXCEPTION_SLUGS.has(segs[1]))
+        )
+          return false;
         // Exclude content explicitly quarantined through frontmatter.
         if (EXCLUDED_CONTENT_ROUTES.has(path.replace(/\/$/, ""))) return false;
         if (segs.length === 2 && EXCLUDED_PAGE_SLUGS.has(segs[1])) return false;

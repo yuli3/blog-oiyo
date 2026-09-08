@@ -2,11 +2,15 @@
 import { siteConfig } from "../config/site.config";
 import { getAuthor } from "../lib/authors";
 import deindexedLocales from "../config/deindexed-locales.json";
+import deindexExceptionSlugs from "../config/deindexed-locale-exceptions.json";
 import { resolveOgImage } from "../lib/og-image";
 
 // Crawl-budget policy — see astro.config.mjs. These locales stay reachable for
 // users but are kept out of the index and out of the sitemap/hreflang cluster.
 const DEINDEXED_LOCALES = new Set<string>(deindexedLocales);
+// Slugs that stay indexed in every locale despite the policy above. Must stay in
+// lockstep with astro.config.mjs — sitemap and robots meta cannot disagree.
+const DEINDEX_EXCEPTION_SLUGS = new Set<string>(deindexExceptionSlugs);
 
 interface Props {
   title?: string;
@@ -74,7 +78,11 @@ const allLocales =
 // Deindexed locales are dropped from the hreflang cluster: Google discards
 // hreflang annotations pointing at noindex URLs, so advertising them only
 // muddies the cluster.
-const locales = allLocales.filter((l: string) => !DEINDEXED_LOCALES.has(l));
+const isDeindexException =
+  isLocalePath && pathSegments.length === 2 && DEINDEX_EXCEPTION_SLUGS.has(pathSegments[1]);
+const locales = isDeindexException
+  ? allLocales
+  : allLocales.filter((l: string) => !DEINDEXED_LOCALES.has(l));
 const xDefaultLocale = locales.includes(siteConfig.locale)
   ? siteConfig.locale
   : (locales.includes(currentLocale) ? currentLocale : locales[0]);
@@ -99,7 +107,7 @@ const googleAdsenseId = siteConfig.analytics.googleAdsenseId;
 const resolvedCanonicalUrl = new URL(String(canonicalURL), Astro.site);
 const canonicalHost = resolvedCanonicalUrl.hostname;
 const isCrossDomainCanonical = canonicalHost !== new URL(siteConfig.url).hostname;
-const isDeindexedLocale = DEINDEXED_LOCALES.has(currentLocale);
+const isDeindexedLocale = DEINDEXED_LOCALES.has(currentLocale) && !isDeindexException;
 const robotsContent = noindex || isCrossDomainCanonical || isDeindexedLocale
   ? "noindex, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
   : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1";
