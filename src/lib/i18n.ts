@@ -48,5 +48,9 @@ export function getLocaleFromPath(pathname: string): Locale {
 // 언어별 URL 생성
 export function getLocalizedPath(locale: Locale, path: string): string {
   const basePath = localePaths[locale];
-  return `${basePath}${path}`;
+  // The trailing slash is the canonical form — every sitemap entry and every
+  // canonical tag carries one, and the host 301s the slashless URL. Without it
+  // the related-tool links, which exist precisely to pass equity to the tool
+  // pages, spent that equity on a redirect instead (2026-09-08).
+  return `${basePath}${path}`.replace(/\/?$/, "/");
 }
