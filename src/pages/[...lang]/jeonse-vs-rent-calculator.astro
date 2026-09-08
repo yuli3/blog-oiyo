@@ -1,7 +1,11 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import RelatedToolLinks from "../../components/RelatedToolLinks.astro";
 import JeonseVsRentCalculatorComp from "../../components/calculators/JeonseVsRentCalculator";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import RelatedToolLinks from "../../components/RelatedToolLinks.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -39,11 +43,169 @@ const meta: Record<Locale, { title: string; description: string }> = {
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content = {
+  ko: {
+    eyebrow: "부동산 계산 도구",
+    introTitle: "전세와 월세를 같은 단위로 놓고 비교합니다",
+    intro: "전세는 목돈이 묶이고 월세는 매달 나갑니다. 단위가 달라 그대로는 비교되지 않으므로, 이 도구는 양쪽을 모두 '한 달에 실제로 사라지는 돈'으로 환산합니다. 전세는 대출이자와 자기 보증금의 기회비용, 월세는 월세액과 보증금의 기회비용입니다.",
+    howToTitle: "사용 방법",
+    steps: [
+      "전세보증금과 그중 대출로 조달하는 금액, 전세대출 금리를 입력합니다.",
+      "월세 조건(보증금과 월세액)을 입력합니다.",
+      "기회비용 이율을 정합니다 — 그 돈을 실제로 넣어 둘 곳의 세후 수익률로 잡습니다.",
+      "월 실질 비용을 비교하고, 차액이 이사·중개비를 넘는지 확인합니다.",
+    ],
+    highlightsTitle: "이 계산에서 놓치기 쉬운 것",
+    highlights: [
+      { title: "기회비용을 0으로 두면 전세가 항상 이깁니다", body: "전세가 유리해 보이는 계산은 대개 보증금이 아무 수익도 못 낸다고 가정한 결과입니다. 실제로 넣어 둘 곳의 세후 수익률을 넣어야 비교가 성립합니다." },
+      { title: "전환율에는 법정 상한이 있습니다", body: "기존 계약의 보증금을 월세로 돌릴 때 적용할 수 있는 비율은 법으로 제한됩니다. 상한을 넘는 전환 요구는 그 초과분이 효력을 갖지 않습니다." },
+      { title: "돌려받지 못할 위험은 비용에 안 잡힙니다", body: "전세는 보증금 반환 위험이 있고 이 계산에는 들어가지 않습니다. 보증보험료를 월 비용에 더해 보는 편이 현실에 가깝습니다." },
+    ],
+    relatedTitle: "관련 계산기",
+    related: [
+      { href: "/ko/jeonse-guarantee-calculator/", label: "전세보증금 반환보증 계산기", desc: "보증료를 월 비용에 더해 봅니다." },
+      { href: "/ko/jeonse-vs-buy-calculator/", label: "전세 vs 매매 계산기", desc: "사는 쪽까지 넣어 비교합니다." },
+      { href: "/ko/rent-comparison-calculator/", label: "월세 조건 비교 계산기", desc: "보증금·월세 조합을 비교합니다." },
+    ],
+    disclaimer: "참고용 계산이며 세금·중개보수·관리비·이사비용은 포함하지 않습니다. 금리와 법정 전환율 상한은 수시로 바뀌므로 계약 전 아래 공식 출처에서 확인하세요.",
+  },
+  en: {
+    eyebrow: "Real Estate Tool",
+    introTitle: "Putting jeonse and monthly rent in the same unit",
+    intro: "Jeonse locks up a lump sum; monthly rent leaves every month. They are not comparable as-is, so this tool converts both into what actually disappears per month: for jeonse, loan interest plus the opportunity cost of your own deposit; for rent, the rent plus the opportunity cost of its smaller deposit.",
+    howToTitle: "How to use",
+    steps: [
+      "Enter the jeonse deposit, how much of it is borrowed, and the loan rate.",
+      "Enter the monthly-rent terms (deposit and monthly amount).",
+      "Set the opportunity-cost rate — the after-tax return you would actually get elsewhere.",
+      "Compare monthly real cost, and check whether the gap exceeds moving and agency fees.",
+    ],
+    highlightsTitle: "What this comparison usually gets wrong",
+    highlights: [
+      { title: "Set opportunity cost to zero and jeonse always wins", body: "Comparisons that favour jeonse usually assume the deposit earns nothing. Use the after-tax return you would really get." },
+      { title: "The conversion rate has a legal ceiling", body: "Converting an existing deposit into monthly rent is capped by law; a demand above the cap is ineffective as to the excess." },
+      { title: "Deposit risk is not in the number", body: "Jeonse carries the risk of not getting the deposit back, which this calculation ignores. Adding the guarantee premium to the monthly cost is closer to reality." },
+    ],
+    relatedTitle: "Related calculators",
+    related: [
+      { href: "/en/jeonse-guarantee-calculator/", label: "Jeonse Guarantee Calculator", desc: "Add the guarantee premium to monthly cost." },
+      { href: "/en/jeonse-vs-buy-calculator/", label: "Jeonse vs Buy Calculator", desc: "Bring buying into the comparison." },
+      { href: "/en/rent-comparison-calculator/", label: "Rent Comparison Calculator", desc: "Compare deposit and rent combinations." },
+    ],
+    disclaimer: "For reference only; taxes, agency fees, maintenance charges and moving costs are excluded. Rates and the statutory conversion ceiling change, so confirm with the official sources below before signing.",
+  },
+  ja: {
+    eyebrow: "不動産計算ツール",
+    introTitle: "チョンセと月極家賃を同じ単位に揃えて比較します",
+    intro: "チョンセはまとまった資金が拘束され、月極家賃は毎月出ていきます。単位が違うのでそのままでは比較できません。本ツールは双方を「1か月に実際に消える金額」に換算します。チョンセはローン利息と自己資金の機会費用、月極は家賃と保証金の機会費用です。",
+    howToTitle: "使い方",
+    steps: [
+      "チョンセ保証金、そのうち借入額、チョンセローン金利を入力します。",
+      "月極家賃の条件（保証金と月額）を入力します。",
+      "機会費用の利率を決めます — その資金を実際に置く先の税引後利回りを使います。",
+      "月次の実質コストを比較し、差額が引越し・仲介費用を上回るか確認します。",
+    ],
+    highlightsTitle: "見落としやすい点",
+    highlights: [
+      { title: "機会費用を0にするとチョンセが必ず勝ちます", body: "チョンセ有利という計算の多くは、保証金が何も生まないという前提によります。実際に得られる税引後利回りを入れてください。" },
+      { title: "転換率には法定上限があります", body: "既存契約の保証金を月極に転換する際の比率は法で制限され、上限超過分は効力を持ちません。" },
+      { title: "返還されない危険は数字に入りません", body: "チョンセには保証金が返らない危険があり、この計算には含まれません。保証保険料を月次コストに加えると現実に近づきます。" },
+    ],
+    relatedTitle: "関連計算機",
+    related: [
+      { href: "/ja/jeonse-guarantee-calculator/", label: "チョンセ保証金返還保証 計算機", desc: "保証料を月次コストに加えます。" },
+      { href: "/ja/jeonse-vs-buy-calculator/", label: "チョンセ vs 購入 計算機", desc: "購入も含めて比較します。" },
+      { href: "/ja/rent-comparison-calculator/", label: "月極条件 比較計算機", desc: "保証金と家賃の組合せを比較します。" },
+    ],
+    disclaimer: "参考用です。税金・仲介手数料・管理費・引越費用は含みません。金利と法定転換率の上限は変わるため、契約前に下記の公式情報でご確認ください。",
+  },
+};
+
+const faqs = {
+  ko: [
+    {
+      q: "전월세전환율에 법으로 정해진 상한이 있나요?",
+      a: "있습니다. 주택임대차보호법 제7조의2와 같은 법 시행령 제9조는 기존 계약의 보증금을 월세로 전환할 때 적용할 비율의 상한을 '연 10%'와 '한국은행 기준금리 + 대통령령으로 정하는 이율' 중 낮은 쪽으로 정합니다. 기준금리에 연동되므로 고정값이 아니고, 상한을 넘는 부분은 효력이 없습니다. 다만 이 상한은 기존 계약의 전환에 적용되는 것이지 신규 계약의 조건 자체를 규제하지는 않습니다. 조문과 현재 이율은 국가법령정보센터에서 확인하세요. (확인일 2026-09)",
+    },
+    {
+      q: "기회비용 이율은 몇 %로 넣어야 하나요?",
+      a: "정답은 없지만 원칙은 있습니다 — 그 돈을 실제로 넣어 둘 곳의 세후 수익률입니다. 예금에 둘 사람이 주식 기대수익률을 넣으면 월세가 부당하게 유리해집니다. 반대로 0%를 넣으면 전세가 항상 이깁니다. 보수적으로는 예금 금리, 공격적으로는 본인의 실제 포트폴리오 수익률로 두 번 계산해 보는 편이 낫습니다.",
+    },
+    {
+      q: "전세가 유리하다고 나왔는데 그대로 믿어도 되나요?",
+      a: "이 계산에 들어가지 않은 것이 둘 있습니다. 첫째는 보증금을 돌려받지 못할 위험이고, 둘째는 그 위험을 덜기 위한 반환보증 보험료입니다. 보험료를 월 비용에 더하면 차이가 줄거나 뒤집히기도 합니다. 또 전세대출 금리는 변동인 경우가 많아 계약 기간 중 올라갈 수 있습니다.",
+    },
+    {
+      q: "월세 세액공제는 왜 반영되지 않나요?",
+      a: "공제 대상 여부가 총급여, 주택 규모, 세대주 여부 등 개인 조건에 달려 있어 일률적으로 넣으면 오히려 틀린 숫자가 되기 때문입니다. 본인이 대상이라면 연말정산에서 돌려받는 금액을 월 단위로 나눠 월세 쪽 비용에서 빼고 다시 보세요. 요건은 국세청 홈택스에서 확인할 수 있습니다.",
+    },
+  ],
+  en: [
+    {
+      q: "Is there a legal ceiling on converting a deposit to monthly rent?",
+      a: "Yes. Article 7-2 of the Housing Lease Protection Act and Article 9 of its Enforcement Decree cap the rate used when converting an existing deposit into monthly rent at the lower of 10% per year and the Bank of Korea base rate plus a rate set by Presidential Decree. Because it tracks the base rate it is not a fixed number, and any excess above the cap is ineffective. Note the cap governs conversion of an existing contract, not the terms of a brand-new one. Check the current text at Korea's national law information centre. (Checked 2026-09)",
+    },
+    {
+      q: "What opportunity-cost rate should I enter?",
+      a: "There is no single right answer, but there is a rule: the after-tax return you would actually get on that money. Someone who would keep it in a deposit account should not enter an equity expected return — that unfairly favours monthly rent. Entering 0% makes jeonse win automatically. Running it twice, once with a deposit rate and once with your real portfolio return, is more informative than one number.",
+    },
+    {
+      q: "It says jeonse is cheaper. Can I take that at face value?",
+      a: "Two things are missing. First, the risk of not getting the deposit back; second, the guarantee premium you would pay to reduce that risk. Adding the premium to the monthly cost narrows and sometimes reverses the gap. Jeonse loan rates are also often variable and can rise during the term.",
+    },
+    {
+      q: "Why is the monthly-rent tax credit not included?",
+      a: "Eligibility depends on total salary, home size and household status, so applying it uniformly would produce a wrong number more often than a right one. If you qualify, divide the annual refund by twelve, subtract it from the rent side, and look again. Requirements are published by Korea's National Tax Service.",
+    },
+  ],
+  ja: [
+    {
+      q: "保証金の月極転換に法定上限はありますか？",
+      a: "あります。住宅賃貸借保護法第7条の2および同施行令第9条は、既存契約の保証金を月極に転換する際の比率の上限を「年10%」と「韓国銀行基準金利＋大統領令で定める利率」の低い方としています。基準金利に連動するため固定値ではなく、上限超過分は効力を持ちません。なお本上限は既存契約の転換に適用されるもので、新規契約の条件そのものを規制するものではありません。条文と現行利率は国家法令情報センターでご確認ください。（確認日 2026-09）",
+    },
+    {
+      q: "機会費用の利率は何%にすべきですか？",
+      a: "唯一の正解はありませんが原則はあります — その資金を実際に置く先の税引後利回りです。預金に置く人が株式の期待収益率を入れると月極が不当に有利になります。0%にすればチョンセが必ず勝ちます。預金金利と実際のポートフォリオ利回りの二通りで計算する方が有用です。",
+    },
+    {
+      q: "チョンセが安いと出ました。そのまま信じてよいですか？",
+      a: "この計算には二つが欠けています。保証金が返還されない危険と、その危険を減らすための保証保険料です。保険料を月次コストに加えると差は縮まり、逆転することもあります。チョンセローン金利は変動の場合が多く、契約期間中に上がる可能性もあります。",
+    },
+    {
+      q: "月極家賃の税額控除はなぜ反映されないのですか？",
+      a: "対象可否が総給与・住宅規模・世帯主か否かなど個人の条件に依存し、一律に適用するとかえって誤った数字になるためです。対象であれば年末調整での還付額を12で割り、月極側の費用から差し引いて再度ご覧ください。要件は韓国国税庁で確認できます。",
+    },
+  ],
+};
+
+const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
+const sourcesHeading = locale === "ko" ? "공식 출처" : locale === "ja" ? "公式情報" : "Official sources";
 ---
 
-<BaseLayout title={m.title} description={m.description} heading={m.title} intro={m.description}>
-  <div class="mx-auto max-w-2xl px-4 py-8">
-    <JeonseVsRentCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
-    <RelatedToolLinks locale={locale} current="jeonse-vs-rent-calculator" slugs={["jeonse-guarantee-calculator", "jeonse-vs-rent-calculator", "jeonse-monthly-converter", "rental-yield-calculator", "rental-roi-calculator", "rent-comparison-calculator"]} />
-  </div>
+<BaseLayout title={m.title} description={m.description}>
+  <ToolShell
+    title={m.title}
+    description={m.description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="jeonse-vs-rent-calculator"
+    content={c}
+    applicationCategory="FinanceApplication"
+  >
+    <div class="mx-auto max-w-2xl">
+      <JeonseVsRentCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+      <section class="mt-8 rounded-xl border border-slate-200 bg-slate-50 p-5 text-sm leading-6 text-slate-700">
+        <h2 class="mb-2 text-base font-bold text-slate-900">{sourcesHeading}</h2>
+        <ul class="list-disc space-y-1 pl-5">
+          <li><a class="underline" href="https://www.law.go.kr" rel="noopener nofollow" target="_blank">국가법령정보센터 — 주택임대차보호법 제7조의2·시행령 제9조</a></li>
+          <li><a class="underline" href="https://www.bok.or.kr" rel="noopener nofollow" target="_blank">한국은행 기준금리</a></li>
+          <li><a class="underline" href="https://www.khug.or.kr" rel="noopener nofollow" target="_blank">HUG 전세보증금 반환보증</a></li>
+        </ul>
+        <p class="mt-3 text-xs text-slate-500">확인일 2026-09 · 금리와 법정 전환율 상한은 수시로 바뀌므로 계약 전 원문을 확인하세요.</p>
+      </section>
+      <RelatedToolLinks locale={locale} current="jeonse-vs-rent-calculator" slugs={["jeonse-guarantee-calculator", "jeonse-monthly-converter", "rental-yield-calculator", "rental-roi-calculator", "rent-comparison-calculator"]} />
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
 </BaseLayout>

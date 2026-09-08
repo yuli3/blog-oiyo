@@ -2,6 +2,10 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import RelatedToolLinks from "../../components/RelatedToolLinks.astro";
 import IsaVsPensionCalculatorComp from "../../components/calculators/IsaVsPensionCalculator";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -39,11 +43,168 @@ const meta: Record<Locale, { title: string; description: string }> = {
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content = {
+  ko: {
+    eyebrow: "절세 계산 도구",
+    introTitle: "두 계좌는 경쟁 관계가 아닙니다",
+    intro: "ISA와 연금저축·IRP는 세금을 깎아 주는 방식이 다릅니다. 연금계좌는 넣을 때 세액공제로 지금 돌려주는 대신 나중에 찾을 때 과세하고, ISA는 지금 돌려주는 것은 없지만 만기 때 이익 일부를 비과세하고 나머지도 낮은 세율로 분리과세합니다. 이 도구는 납입액·기간·수익률·소득 구간을 넣어 두 방식의 결과를 같은 시점 금액으로 비교합니다.",
+    howToTitle: "사용 방법",
+    steps: [
+      "연간 납입액과 납입 기간을 입력합니다.",
+      "기대 수익률을 넣습니다 — 낙관·보수 두 번 계산하는 편이 낫습니다.",
+      "총급여 구간을 고릅니다. 세액공제율이 여기서 갈립니다.",
+      "세액공제로 지금 받는 돈과 나중에 낼 세금을 함께 본 결과를 비교합니다.",
+    ],
+    highlightsTitle: "결정을 가르는 세 가지",
+    highlights: [
+      { title: "돈이 언제 필요한가", body: "연금계좌는 55세 이후 연금으로 받는 것을 전제로 세제 혜택을 줍니다. 중도 인출하면 받았던 공제를 기타소득세로 되돌려 내므로, 중간에 쓸 돈이면 유리함이 뒤집힙니다." },
+      { title: "지금 세율이 높은가", body: "세액공제는 지금 내는 세금을 깎아 줍니다. 소득이 높을수록 즉시 이득이 크고, 소득이 낮거나 낼 세금 자체가 적으면 공제받을 것이 없어 ISA 쪽이 상대적으로 유리해집니다." },
+      { title: "한도는 계좌마다 따로", body: "ISA와 연금계좌는 납입 한도와 세제 한도가 서로 다르게 정해져 있어, 한쪽을 채운 뒤 다른 쪽을 쓰는 조합이 가능합니다. 둘 중 하나를 고르는 문제가 아닌 경우가 많습니다." },
+    ],
+    relatedTitle: "관련 계산기",
+    related: [
+      { href: "/ko/pension-optimizer-calculator/", label: "연금 수령 최적화 계산기", desc: "언제부터 받을지 비교합니다." },
+      { href: "/ko/pension-tax-calculator/", label: "연금소득세 계산기", desc: "받을 때 내는 세금을 봅니다." },
+      { href: "/ko/financial-investment-tax-calculator/", label: "금융투자소득세 계산기", desc: "일반 계좌와 비교합니다." },
+    ],
+    disclaimer: "참고용이며 실제 세액은 소득 구성·부양가족·다른 공제에 따라 달라집니다. 한도와 공제율은 세법 개정으로 바뀌므로 납입 전 아래 공식 출처에서 확인하세요.",
+  },
+  en: {
+    eyebrow: "Tax Planning Tool",
+    introTitle: "These two accounts are not rivals",
+    intro: "Korea's ISA and pension savings accounts (연금저축/IRP) relieve tax in different directions. A pension account gives you a credit now and taxes the money when you draw it; an ISA gives you nothing now but exempts part of the gain at maturity and taxes the rest separately at a low rate. This tool converts both into a comparable end amount.",
+    howToTitle: "How to use",
+    steps: [
+      "Enter your annual contribution and the number of years.",
+      "Enter an expected return — running an optimistic and a conservative case is more useful than one.",
+      "Pick your salary band; the credit rate changes there.",
+      "Compare the result with the credit received now and the tax paid later both counted.",
+    ],
+    highlightsTitle: "Three things that decide it",
+    highlights: [
+      { title: "When you need the money", body: "The pension account's benefit assumes you draw it as a pension from age 55. Withdrawing early claws back the credit as other-income tax, which can reverse the comparison entirely." },
+      { title: "Whether your rate is high now", body: "A tax credit reduces tax you owe today. The higher your income, the bigger the immediate gain; with little tax to offset there is nothing to credit, which favours the ISA." },
+      { title: "The limits are separate", body: "The two have their own contribution and tax limits, so filling one and then using the other is possible. It is often not an either-or choice." },
+    ],
+    relatedTitle: "Related calculators",
+    related: [
+      { href: "/en/pension-optimizer-calculator/", label: "Pension Timing Calculator", desc: "Compare when to start drawing." },
+      { href: "/en/pension-tax-calculator/", label: "Pension Income Tax Calculator", desc: "See the tax on withdrawal." },
+      { href: "/en/financial-investment-tax-calculator/", label: "Investment Income Tax Calculator", desc: "Compare with a regular account." },
+    ],
+    disclaimer: "For reference only; your actual tax depends on income composition, dependants and other deductions. Limits and credit rates change with tax law, so confirm with the official sources below before contributing.",
+  },
+  ja: {
+    eyebrow: "節税計算ツール",
+    introTitle: "この二つの口座は競合ではありません",
+    intro: "韓国のISAと年金貯蓄・IRPは減税の方向が異なります。年金口座は拠出時に税額控除で今返し、受取時に課税します。ISAは今返るものはありませんが、満期時に利益の一部を非課税とし残りも低率で分離課税します。本ツールは双方を同一時点の金額に換算して比較します。",
+    howToTitle: "使い方",
+    steps: [
+      "年間拠出額と拠出年数を入力します。",
+      "期待利回りを入力します — 楽観・保守の二通りが有用です。",
+      "総給与の区分を選びます。税額控除率がここで分かれます。",
+      "今受け取る控除と後で払う税を合わせた結果を比較します。",
+    ],
+    highlightsTitle: "判断を分ける三点",
+    highlights: [
+      { title: "いつ資金が必要か", body: "年金口座の優遇は55歳以降に年金として受け取ることが前提です。中途引出しでは受けた控除をその他所得税として戻すため、途中で使う資金なら有利不利が逆転します。" },
+      { title: "今の税率が高いか", body: "税額控除は今払う税を減らします。所得が高いほど即時の利得が大きく、控除する税自体が少なければISAが相対的に有利になります。" },
+      { title: "限度は口座ごとに別", body: "拠出限度と税制限度が別に定められており、一方を埋めてから他方を使う組合せが可能です。二者択一ではない場合が多いです。" },
+    ],
+    relatedTitle: "関連計算機",
+    related: [
+      { href: "/ja/pension-optimizer-calculator/", label: "年金受給最適化 計算機", desc: "いつから受け取るか比較します。" },
+      { href: "/ja/pension-tax-calculator/", label: "年金所得税 計算機", desc: "受取時の税を確認します。" },
+      { href: "/ja/financial-investment-tax-calculator/", label: "金融投資所得税 計算機", desc: "一般口座と比較します。" },
+    ],
+    disclaimer: "参考用です。実際の税額は所得構成・扶養家族・他の控除により異なります。限度と控除率は税法改正で変わるため、拠出前に下記の公式情報でご確認ください。",
+  },
+};
+
+const faqs = {
+  ko: [
+    {
+      q: "세액공제율은 무엇으로 갈리나요?",
+      a: "총급여(또는 종합소득금액) 수준입니다. 소득세법 제59조의3은 연금계좌 납입액에 대한 세액공제율을 소득 구간에 따라 다르게 정하고, 기준 이하이면 더 높은 율을 적용합니다. 공제 대상 납입 한도도 연금저축과 IRP를 합쳐 별도로 정해져 있습니다. 구간·율·한도는 개정이 잦으므로 국세청 홈택스나 국가법령정보센터에서 해당 과세연도 기준을 확인하세요. (확인일 2026-09)",
+    },
+    {
+      q: "중도에 해지하면 어떻게 되나요?",
+      a: "연금 외의 형태로 받으면 세액공제를 받았던 납입액과 운용수익에 기타소득세가 부과됩니다. 즉 지금 돌려받은 돈을 나중에 되돌려 내는 구조라, 5년 안에 쓸 돈을 연금계좌에 넣는 것은 대체로 손해입니다. 이 계산기는 만기까지 유지하는 것을 전제로 하므로 중도 해지 시나리오는 반영하지 않습니다.",
+    },
+    {
+      q: "ISA와 연금저축 중 하나만 골라야 하나요?",
+      a: "아닙니다. 납입 한도가 계좌별로 따로 정해져 있어 둘 다 쓸 수 있습니다. 순서를 정한다면 '세액공제로 지금 확실히 돌려받는 것'과 '유동성'의 우선순위 문제입니다. 소득이 있어 공제받을 세금이 있고 55세까지 묶어도 되는 돈이면 연금계좌를, 중간에 쓸 수 있어야 하면 ISA를 먼저 고려합니다.",
+    },
+    {
+      q: "수익률은 몇 %로 넣나요?",
+      a: "이 계산의 결론은 수익률 가정에 크게 흔들립니다. 하나의 숫자를 믿기보다 보수적 가정과 낙관적 가정으로 두 번 돌려, 어느 가정에서 결론이 뒤집히는지 보는 편이 실제 의사결정에 더 쓸모 있습니다.",
+    },
+  ],
+  en: [
+    {
+      q: "What determines the credit rate?",
+      a: "Your total salary (or global income). Article 59-3 of the Income Tax Act sets different credit rates by income band, with the higher rate applying below the threshold, and the creditable contribution limit is set separately across 연금저축 and IRP combined. Bands, rates and limits are amended often, so check the figures for your tax year with Korea's National Tax Service or the national law information centre. (Checked 2026-09)",
+    },
+    {
+      q: "What happens if I close it early?",
+      a: "Taking the money in any form other than a pension triggers other-income tax on the credited contributions and the investment gains — you give back what you were refunded. Money you will need within five years generally does not belong in a pension account. This calculator assumes you hold to maturity and does not model early closure.",
+    },
+    {
+      q: "Do I have to choose one?",
+      a: "No. The contribution limits are set per account, so you can use both. If you need an order, it is a trade-off between a certain refund now and liquidity: if you have tax to offset and can lock the money until 55, the pension account first; if you may need it sooner, the ISA.",
+    },
+    {
+      q: "What return should I assume?",
+      a: "This comparison swings heavily on the return assumption. Rather than trusting one figure, run a conservative and an optimistic case and see under which assumption the answer flips — that is the more useful output.",
+    },
+  ],
+  ja: [
+    {
+      q: "税額控除率は何で分かれますか？",
+      a: "総給与（または総合所得金額）の水準です。所得税法第59条の3は年金口座の拠出額に対する控除率を所得区分ごとに定め、基準以下ではより高い率を適用します。控除対象の拠出限度も年金貯蓄とIRPを合算して別に定められています。区分・率・限度は改正が多いため、該当課税年度の基準を韓国国税庁または国家法令情報センターでご確認ください。（確認日 2026-09）",
+    },
+    {
+      q: "中途解約するとどうなりますか？",
+      a: "年金以外の形で受け取ると、控除を受けた拠出額と運用収益にその他所得税が課されます。今返ってきた分を後で戻す構造のため、5年以内に使う資金を年金口座に入れるのは概ね不利です。本計算機は満期保有を前提とし、中途解約は反映しません。",
+    },
+    {
+      q: "どちらか一方を選ぶ必要がありますか？",
+      a: "いいえ。拠出限度は口座ごとに別なので併用できます。順序を決めるなら「今確実に返る控除」と「流動性」の優先順位の問題です。控除する税があり55歳まで拘束してよい資金なら年金口座、途中で使う可能性があればISAを先に検討します。",
+    },
+    {
+      q: "利回りは何%にしますか？",
+      a: "この比較は利回り前提で大きく揺れます。単一の数字を信じるより、保守的・楽観的の二通りで回し、どの前提で結論が逆転するかを見る方が実際の判断に役立ちます。",
+    },
+  ],
+};
+
+const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
+const sourcesHeading = locale === "ko" ? "공식 출처" : locale === "ja" ? "公式情報" : "Official sources";
 ---
 
-<BaseLayout title={m.title} description={m.description} heading={m.title} intro={m.description}>
-  <div class="mx-auto max-w-2xl px-4 py-8">
-    <IsaVsPensionCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
-    <RelatedToolLinks locale={locale} current="isa-vs-pension-calculator" slugs={["early-repayment-calculator", "expense-ratio-calculator", "financial-investment-tax-calculator", "isa-vs-pension-calculator", "latte-factor-calculator", "overseas-stock-saver-calculator", "pension-optimizer-calculator", "compound2-calculator", "macro-economics-calculator", "compound-interest-calculator", "roi-calculator"]} />
-  </div>
+<BaseLayout title={m.title} description={m.description}>
+  <ToolShell
+    title={m.title}
+    description={m.description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="isa-vs-pension-calculator"
+    content={c}
+    applicationCategory="FinanceApplication"
+  >
+    <div class="mx-auto max-w-2xl">
+      <IsaVsPensionCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+      <section class="mt-8 rounded-xl border border-slate-200 bg-slate-50 p-5 text-sm leading-6 text-slate-700">
+        <h2 class="mb-2 text-base font-bold text-slate-900">{sourcesHeading}</h2>
+        <ul class="list-disc space-y-1 pl-5">
+          <li><a class="underline" href="https://www.law.go.kr" rel="noopener nofollow" target="_blank">국가법령정보센터 — 소득세법 제59조의3, 조세특례제한법(ISA)</a></li>
+          <li><a class="underline" href="https://hometax.go.kr" rel="noopener nofollow" target="_blank">국세청 홈택스 — 연금계좌 세액공제</a></li>
+        </ul>
+        <p class="mt-3 text-xs text-slate-500">확인일 2026-09 · 한도와 공제율은 세법 개정으로 바뀌므로 해당 과세연도 기준을 원문에서 확인하세요.</p>
+      </section>
+      <RelatedToolLinks locale={locale} current="isa-vs-pension-calculator" slugs={["early-repayment-calculator", "expense-ratio-calculator", "financial-investment-tax-calculator", "latte-factor-calculator", "overseas-stock-saver-calculator", "pension-optimizer-calculator", "compound2-calculator", "macro-economics-calculator", "compound-interest-calculator", "roi-calculator"]} />
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
 </BaseLayout>

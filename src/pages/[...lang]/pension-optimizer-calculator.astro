@@ -2,6 +2,10 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import RelatedToolLinks from "../../components/RelatedToolLinks.astro";
 import PensionOptimizerCalculatorComp from "../../components/calculators/PensionOptimizerCalculator";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
 
@@ -42,11 +46,168 @@ const meta: Record<Locale, { title: string; description: string }> = {
 };
 
 const m = meta[locale] ?? meta.en;
+
+const content = {
+  ko: {
+    eyebrow: "노후 계산 도구",
+    introTitle: "언제부터 받을지가 얼마를 받을지를 정합니다",
+    intro: "국민연금은 정해진 나이보다 일찍 받으면 매달 금액이 깎이고, 늦추면 늘어납니다. 일찍 받으면 적은 돈을 오래, 늦게 받으면 큰 돈을 짧게 받으므로 어느 쪽이 유리한지는 얼마나 오래 사는가에 달립니다. 이 도구는 그 손익분기 나이를 계산합니다.",
+    howToTitle: "사용 방법",
+    steps: [
+      "예상 연금월액과 정상 수령 개시 나이를 입력합니다.",
+      "앞당기거나 미룰 개월 수를 정합니다.",
+      "감액·증액이 적용된 월 수령액과 누적액을 확인합니다.",
+      "손익분기 나이를 보고, 그 나이를 넘길 가능성으로 판단합니다.",
+    ],
+    highlightsTitle: "숫자만 보면 놓치는 것",
+    highlights: [
+      { title: "손익분기는 대개 70대 중후반입니다", body: "조기수령이 누적액에서 뒤집히는 시점은 보통 이 구간입니다. 그 전에 돈이 급하거나 건강이 나쁘면 조기수령이 합리적일 수 있습니다 — 손해가 아니라 다른 선택입니다." },
+      { title: "감액은 평생 갑니다", body: "조기수령의 감액률은 한 번 정해지면 이후 계속 적용됩니다. 일시적으로 적게 받는 것이 아니라 수령액 자체가 낮아집니다." },
+      { title: "받는 동안에도 세금이 있습니다", body: "연금소득에도 과세가 되고, 다른 소득과 합쳐지면 건강보험료에도 영향이 갈 수 있습니다. 세전 금액만으로 비교하면 실제 차이보다 커 보입니다." },
+    ],
+    relatedTitle: "관련 계산기",
+    related: [
+      { href: "/ko/pension-tax-calculator/", label: "연금소득세 계산기", desc: "받을 때 내는 세금을 봅니다." },
+      { href: "/ko/isa-vs-pension-calculator/", label: "ISA vs 연금저축 계산기", desc: "쌓는 단계의 절세를 비교합니다." },
+      { href: "/ko/fire-retirement-calculator/", label: "은퇴 자금 계산기", desc: "필요한 노후 자금을 봅니다." },
+    ],
+    disclaimer: "참고용이며 실제 연금액은 가입 기간·소득·부양가족과 제도 개정에 따라 달라집니다. 정확한 예상 금액은 국민연금공단에서 본인 가입 이력으로 조회하세요.",
+  },
+  en: {
+    eyebrow: "Retirement Tool",
+    introTitle: "When you start decides how much you get",
+    intro: "Korea's National Pension reduces the monthly amount if you claim before the normal age and increases it if you defer. Claiming early means less money for longer; deferring means more money for a shorter time, so which wins depends on how long you live. This tool finds that break-even age.",
+    howToTitle: "How to use",
+    steps: [
+      "Enter your expected monthly pension and the normal starting age.",
+      "Choose how many months to advance or defer.",
+      "See the adjusted monthly amount and the cumulative total.",
+      "Read the break-even age and judge it against your own outlook.",
+    ],
+    highlightsTitle: "What the number alone hides",
+    highlights: [
+      { title: "Break-even usually lands in the mid-to-late 70s", body: "That is where deferring overtakes claiming early on cumulative total. If you need the money sooner or your health is poor, claiming early is a different choice, not a mistake." },
+      { title: "The reduction is permanent", body: "The early-claim reduction, once set, applies for life. It lowers the pension itself rather than deferring part of it." },
+      { title: "Pension income is taxed", body: "Pension income is taxable and, combined with other income, can affect health-insurance contributions. Comparing pre-tax amounts overstates the real gap." },
+    ],
+    relatedTitle: "Related calculators",
+    related: [
+      { href: "/en/pension-tax-calculator/", label: "Pension Income Tax Calculator", desc: "See the tax on what you draw." },
+      { href: "/en/isa-vs-pension-calculator/", label: "ISA vs Pension Calculator", desc: "Compare tax relief while saving." },
+      { href: "/en/fire-retirement-calculator/", label: "Retirement Fund Calculator", desc: "Estimate what you need." },
+    ],
+    disclaimer: "For reference only; your actual pension depends on contribution history, income, dependants and future reform. Get a personalised estimate from the National Pension Service using your own record.",
+  },
+  ja: {
+    eyebrow: "老後計算ツール",
+    introTitle: "いつから受け取るかが受給額を決めます",
+    intro: "韓国の国民年金は所定の年齢より早く受け取ると月額が減り、遅らせると増えます。早ければ少額を長く、遅ければ多額を短く受け取るため、どちらが有利かは寿命に依存します。本ツールはその損益分岐年齢を計算します。",
+    howToTitle: "使い方",
+    steps: [
+      "予想年金月額と通常の受給開始年齢を入力します。",
+      "繰上げ・繰下げの月数を選びます。",
+      "調整後の月額と累計額を確認します。",
+      "損益分岐年齢を読み、自身の見通しと照らします。",
+    ],
+    highlightsTitle: "数字だけでは見落とすこと",
+    highlights: [
+      { title: "損益分岐は概ね70代半ば以降です", body: "繰下げが累計で追い越す時点はこの辺りです。それ以前に資金が必要、あるいは健康上の理由があれば繰上げは誤りではなく別の選択です。" },
+      { title: "減額は生涯続きます", body: "繰上げの減額率は一度決まると以後ずっと適用されます。一時的に少ないのではなく年金額そのものが下がります。" },
+      { title: "受給中にも税があります", body: "年金所得にも課税され、他の所得と合算されると健康保険料に影響することがあります。税引前だけで比べると差が実際より大きく見えます。" },
+    ],
+    relatedTitle: "関連計算機",
+    related: [
+      { href: "/ja/pension-tax-calculator/", label: "年金所得税 計算機", desc: "受取時の税を確認します。" },
+      { href: "/ja/isa-vs-pension-calculator/", label: "ISA vs 年金貯蓄 計算機", desc: "積立段階の節税を比較します。" },
+      { href: "/ja/fire-retirement-calculator/", label: "退職資金 計算機", desc: "必要な老後資金を確認します。" },
+    ],
+    disclaimer: "参考用です。実際の年金額は加入期間・所得・扶養家族や制度改正により異なります。正確な見込額は国民年金公団でご自身の記録から照会してください。",
+  },
+};
+
+const faqs = {
+  ko: [
+    {
+      q: "조기수령과 연기연금의 증감은 어떤 근거로 정해지나요?",
+      a: "국민연금법이 정합니다. 조기노령연금은 앞당긴 기간에 비례해 연금액을 감액하고(같은 법 제61조 계열 조항), 연기연금은 미룬 기간에 비례해 가산합니다(제62조 계열 조항). 감액·가산은 월 단위로 적용되며 최대 5년 범위에서 조정할 수 있습니다. 구체적 비율과 상한은 제도 개정으로 달라질 수 있으므로 국민연금공단 또는 국가법령정보센터에서 현행 조문을 확인하세요. (확인일 2026-09)",
+    },
+    {
+      q: "손익분기 나이를 넘기면 무조건 연기가 이득인가요?",
+      a: "누적 수령액만 보면 그렇습니다. 다만 그 나이까지 다른 소득으로 생활할 수 있어야 하고, 미루는 동안의 생활비를 어디서 충당하는지가 실제 비용입니다. 저축을 헐어 버티는 경우 그 저축의 기회비용까지 넣어야 공정한 비교가 됩니다.",
+    },
+    {
+      q: "조기수령은 손해인가요?",
+      a: "손해라고 단정할 수 없습니다. 소득이 끊긴 기간을 메워야 하거나 건강 문제로 기대여명이 짧다면, 늦게 받는 큰 금액보다 지금 받는 적은 금액이 더 쓸모 있습니다. 손익분기는 확률적 기준이지 정답이 아닙니다.",
+    },
+    {
+      q: "이 계산에 물가 상승은 반영되나요?",
+      a: "국민연금은 물가에 연동해 조정되는 제도이지만, 이 도구는 명목 금액 기준으로 비교합니다. 조기·연기 어느 쪽에도 같은 연동이 적용되므로 손익분기 시점의 비교에는 큰 영향이 없지만, 절대 금액을 미래 구매력으로 읽으면 안 됩니다.",
+    },
+  ],
+  en: [
+    {
+      q: "What sets the early and deferred adjustment?",
+      a: "The National Pension Act. Early claiming reduces the pension in proportion to how early you claim, and deferral adds in proportion to how long you defer, both applied per month and adjustable within a five-year range. The exact rates and caps can change with reform, so confirm the current provisions with the National Pension Service or Korea's national law information centre. (Checked 2026-09)",
+    },
+    {
+      q: "If I expect to pass the break-even age, is deferring always better?",
+      a: "On cumulative amount, yes. But you must be able to live on something else until then, and where that money comes from is the real cost. If you draw down savings to bridge the gap, the opportunity cost of those savings belongs in the comparison.",
+    },
+    {
+      q: "Is claiming early a mistake?",
+      a: "Not necessarily. If you need to bridge a gap in income, or your life expectancy is shortened by health, a smaller amount now can be worth more than a larger amount later. Break-even is a probabilistic benchmark, not a verdict.",
+    },
+    {
+      q: "Does this account for inflation?",
+      a: "The pension itself is indexed, but this tool compares nominal amounts. The same indexation applies to both paths, so the break-even point is largely unaffected — but do not read the absolute figures as future purchasing power.",
+    },
+  ],
+  ja: [
+    {
+      q: "繰上げ・繰下げの増減は何に基づきますか？",
+      a: "国民年金法が定めます。繰上げ老齢年金は繰り上げた期間に比例して減額し、繰下げ年金は繰り下げた期間に比例して加算します。いずれも月単位で適用され、最大5年の範囲で調整できます。具体的な率と上限は制度改正で変わり得るため、国民年金公団または国家法令情報センターで現行条文をご確認ください。（確認日 2026-09）",
+    },
+    {
+      q: "損益分岐年齢を超えるなら繰下げが必ず得ですか？",
+      a: "累計受給額だけで見ればそうです。ただしその年齢まで他の収入で生活できる必要があり、その間の生活費をどこから賄うかが実際のコストです。貯蓄を取り崩すなら、その機会費用も比較に含めるべきです。",
+    },
+    {
+      q: "繰上げは損ですか？",
+      a: "一概に損とは言えません。収入の空白を埋める必要がある、あるいは健康上の理由で余命が短いと見込まれる場合、後の大きい額より今の小さい額の方が役立ちます。損益分岐は確率的な目安であって正解ではありません。",
+    },
+    {
+      q: "物価上昇は反映されますか？",
+      a: "国民年金は物価に連動して調整される制度ですが、本ツールは名目額で比較します。繰上げ・繰下げの双方に同じ連動が及ぶため損益分岐時点への影響は小さいものの、絶対額を将来の購買力として読まないでください。",
+    },
+  ],
+};
+
+const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
+const sourcesHeading = locale === "ko" ? "공식 출처" : locale === "ja" ? "公式情報" : "Official sources";
 ---
 
-<BaseLayout title={m.title} description={m.description} heading={m.title} intro={m.description}>
-  <div class="mx-auto max-w-2xl px-4 py-8">
-    <PensionOptimizerCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
-    <RelatedToolLinks locale={locale} current="pension-optimizer-calculator" slugs={["early-repayment-calculator", "expense-ratio-calculator", "financial-investment-tax-calculator", "isa-vs-pension-calculator", "latte-factor-calculator", "overseas-stock-saver-calculator", "pension-optimizer-calculator", "compound2-calculator", "macro-economics-calculator", "compound-interest-calculator", "roi-calculator"]} />
-  </div>
+<BaseLayout title={m.title} description={m.description}>
+  <ToolShell
+    title={m.title}
+    description={m.description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="pension-optimizer-calculator"
+    content={c}
+    applicationCategory="FinanceApplication"
+  >
+    <div class="mx-auto max-w-2xl">
+      <PensionOptimizerCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+      <section class="mt-8 rounded-xl border border-slate-200 bg-slate-50 p-5 text-sm leading-6 text-slate-700">
+        <h2 class="mb-2 text-base font-bold text-slate-900">{sourcesHeading}</h2>
+        <ul class="list-disc space-y-1 pl-5">
+          <li><a class="underline" href="https://www.nps.or.kr" rel="noopener nofollow" target="_blank">국민연금공단 — 예상연금액 조회·조기노령연금·연기연금</a></li>
+          <li><a class="underline" href="https://www.law.go.kr" rel="noopener nofollow" target="_blank">국가법령정보센터 — 국민연금법</a></li>
+        </ul>
+        <p class="mt-3 text-xs text-slate-500">확인일 2026-09 · 감액·가산률과 개시 연령은 제도 개정으로 달라질 수 있습니다. 본인 예상액은 가입 이력으로 조회하세요.</p>
+      </section>
+      <RelatedToolLinks locale={locale} current="pension-optimizer-calculator" slugs={["early-repayment-calculator", "expense-ratio-calculator", "financial-investment-tax-calculator", "isa-vs-pension-calculator", "latte-factor-calculator", "overseas-stock-saver-calculator", "compound2-calculator", "macro-economics-calculator", "compound-interest-calculator", "roi-calculator"]} />
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
 </BaseLayout>
