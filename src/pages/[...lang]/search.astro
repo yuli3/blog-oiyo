@@ -42,7 +42,6 @@ const crossLabels = ({
   es: { heading: "Buscar en nuestros otros sitios", target: "Buscar en la wiki OIYO", oiyo: "Ver los tests de OIYO" },
 } as Record<string, { heading: string; target: string; oiyo: string }>)[locale] ?? {
   heading: "Search more on our other sites", target: "Search OIYO Wiki", oiyo: "Browse OIYO tests" };
-const crossSearchBase = `https://wiki.oiyo.net/${locale}/search/`;
 
 const searchLabels = {
   title: translations.search.title,
@@ -72,10 +71,6 @@ const searchLabels = {
       <div id="cross-search" class="hidden mt-10 rounded-xl border border-border/60 bg-card p-4">
         <p class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3">{crossLabels.heading}</p>
         <div class="flex flex-wrap gap-2">
-          <a id="cross-search-link" href={crossSearchBase} rel="noopener"
-             class="rounded-lg border border-border bg-background px-3 py-1.5 text-sm font-medium hover:border-primary/50 hover:text-primary transition-colors">
-            {crossLabels.target} →
-          </a>
           <a href={`https://oiyo.net/${locale}/tests/`} rel="noopener"
              class="rounded-lg border border-border bg-background px-3 py-1.5 text-sm font-medium hover:border-primary/50 hover:text-primary transition-colors">
             {crossLabels.oiyo} →
@@ -178,13 +173,10 @@ const searchLabels = {
           }
           const results = fuse.search(query);
           renderResults(results, query);
+          // 2026-09-08: wiki 크로스검색을 뺐다. 남은 oiyo 링크는 질의를 싣지 않는
+          // 고정 링크라 href 를 갱신할 대상이 없다 — 표시 여부만 남긴다.
           const cross = document.getElementById("cross-search");
-          const crossLink = document.getElementById("cross-search-link") as HTMLAnchorElement | null;
-          if (cross && crossLink) {
-            cross.classList.toggle("hidden", !query.trim());
-            const base = crossLink.href.split("?")[0];
-            crossLink.href = `${base}?q=${encodeURIComponent(query.trim())}`;
-          }
+          if (cross) cross.classList.toggle("hidden", !query.trim());
           const url = new URL(window.location.href);
           url.searchParams.set("q", query);
           history.replaceState(null, "", url.toString());

@@ -37,13 +37,7 @@ export const brandFacts = {
       role: "ax-showcase",
       knowledgeManifest: null,
     },
-    {
-      name: "Oiyo Wiki",
-      url: "https://wiki.oiyo.net/",
-      role: "reference-and-knowledge",
-      knowledgeManifest: "https://wiki.oiyo.net/knowledge/index.json",
-    },
-    {
+        {
       name: "Oiyo Blog",
       url: "https://blog.oiyo.net/",
       role: "publishing-and-utility",
