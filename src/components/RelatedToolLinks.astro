@@ -2,6 +2,19 @@
 // 도구/계산기 페이지용 관련 링크 (토픽 클러스터 내부링크 — SEO 링크에쿼티 + AIEO).
 // oiyo RelatedTools 패턴의 blog 판. slug 기반, 6로케일 라벨 curated.
 import { getLocalizedPath, type Locale } from "../lib/i18n";
+import bridgeSlugs from "../config/bridge-slugs.json";
+import oiyoCanonical from "../data/oiyo-canonical-map.json";
+import { OIYO_URL } from "../config/site.config";
+
+// 브리지 슬러그는 blog 에 리다이렉트 스텁만 있고 정본은 oiyo 에 있다. blog 경로로
+// 링크하면 ko/en 은 301 을 한 번 타고, 스텁이 없는 ja/zh/fr/es 는 그냥 404 였다
+// (2026-09-08 실측 4건). 정본으로 바로 보낸다 — oiyo 는 6로케일 모두 갖고 있다.
+const BRIDGE = new Set<string>(bridgeSlugs as string[]);
+const CANON = oiyoCanonical as Record<string, string>;
+const toolHref = (locale: Locale, slug: string): string => {
+  const canon = BRIDGE.has(slug) ? CANON[slug] : undefined;
+  return canon ? `${OIYO_URL}/${locale}${canon}/` : getLocalizedPath(locale, `/${slug}`);
+};
 
 interface Props {
   locale: Locale;
@@ -162,7 +175,7 @@ const items = slugs
     <div class="mt-4 flex flex-wrap gap-2">
       {items.map((tool) => (
         <a
-          href={getLocalizedPath(locale, `/${tool.slug}`)}
+          href={toolHref(locale, tool.slug)}
           class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-green-300 hover:bg-green-50"
         >
           <span aria-hidden="true">{tool.icon}</span>
