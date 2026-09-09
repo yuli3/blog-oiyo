@@ -63,7 +63,7 @@ f.close()   # 반드시 닫아야 함!
 
 `with` 문을 사용하면 블록을 벗어날 때 **자동으로 파일이 닫힙니다**. `close()`를 깜빡하는 실수를 방지할 수 있어 강력히 권장됩니다.
 
-```
+```python
 with open("hello.txt", "w", encoding="utf-8") as f:
     f.write("안녕하세요!\n")
     f.write("파이썬 파일 입출력입니다.\n")
@@ -76,7 +76,7 @@ with open("hello.txt", "w", encoding="utf-8") as f:
 
 ### read() — 전체 내용 읽기
 
-```
+```python
 with open("hello.txt", "r", encoding="utf-8") as f:
     content = f.read()
     print(content)
@@ -88,7 +88,7 @@ with open("hello.txt", "r", encoding="utf-8") as f:
 
 ### readline() — 한 줄씩 읽기
 
-```
+```python
 with open("hello.txt", "r", encoding="utf-8") as f:
     line1 = f.readline()   # 첫 번째 줄
     line2 = f.readline()   # 두 번째 줄
@@ -98,7 +98,7 @@ with open("hello.txt", "r", encoding="utf-8") as f:
 
 ### readlines() — 모든 줄을 리스트로
 
-```
+```python
 with open("hello.txt", "r", encoding="utf-8") as f:
     lines = f.readlines()   # ['안녕하세요!\n', '파이썬 파일 입출력입니다.\n']
     for line in lines:
@@ -107,7 +107,7 @@ with open("hello.txt", "r", encoding="utf-8") as f:
 
 ### for 루프로 읽기 (가장 효율적)
 
-```
+```python
 with open("hello.txt", "r", encoding="utf-8") as f:
     for line in f:
         print(line.strip())
@@ -128,7 +128,7 @@ with open("output.txt", "w", encoding="utf-8") as f:
 
 ### writelines() — 리스트의 각 요소 쓰기
 
-```
+```python
 lines = ["사과\n", "바나나\n", "딸기\n"]
 with open("fruits.txt", "w", encoding="utf-8") as f:
     f.writelines(lines)
@@ -136,7 +136,7 @@ with open("fruits.txt", "w", encoding="utf-8") as f:
 
 ### 파일에 내용 추가 ('a' 모드)
 
-```
+```python
 # 기존 파일 내용 유지하면서 추가
 with open("log.txt", "a", encoding="utf-8") as f:
     f.write("새로운 로그 항목\n")
@@ -148,7 +148,7 @@ with open("log.txt", "a", encoding="utf-8") as f:
 
 CSV(Comma-Separated Values)는 데이터를 쉼표로 구분하는 텍스트 형식입니다.
 
-```
+```python
 import csv
 
 # CSV 쓰기
@@ -177,7 +177,7 @@ with open("people.csv", "r", encoding="utf-8-sig") as f:
 
 JSON은 웹 API와 설정 파일에서 널리 쓰이는 데이터 형식입니다.
 
-```
+```python
 import json
 
 # 파이썬 딕셔너리 → JSON 파일
@@ -225,7 +225,7 @@ with open("data.json", "r", encoding="utf-8") as f:
 
 ## try-except 문
 
-```
+```text
 try:
     # 예외가 발생할 수 있는 코드
     위험한_코드
@@ -234,7 +234,7 @@ except 예외종류:
     처리_코드
 ```
 
-```
+```python
 # 기본 예외처리
 try:
     num = int(input("숫자를 입력하세요: "))
@@ -250,7 +250,7 @@ except ZeroDivisionError:
 
 ## 여러 예외 처리
 
-```
+```python
 try:
     numbers = [1, 2, 3]
     index = int(input("인덱스 입력: "))
@@ -268,7 +268,7 @@ except Exception as e:
 
 ## else와 finally
 
-```
+```python
 try:
     코드
 except 예외:
@@ -281,7 +281,7 @@ finally:
     정리_코드
 ```
 
-```
+```python
 def safe_divide(a, b):
     try:
         result = a / b
@@ -299,7 +299,7 @@ print(safe_divide(10, 0))
 ```
 
 출력:
-```
+```text
 나눗셈 성공!
 나눗셈 시도 완료.
 5.0
@@ -312,7 +312,7 @@ None
 
 ## 예외 정보 활용
 
-```
+```python
 try:
     result = int("abc")
 except ValueError as e:
@@ -326,7 +326,7 @@ except ValueError as e:
 
 직접 예외를 발생시킬 수 있습니다.
 
-```
+```python
 def set_age(age):
     if age < 0:
         raise ValueError(f"나이는 0 이상이어야 합니다. 입력값: {age}")
@@ -344,7 +344,7 @@ except ValueError as e:
 
 ## 파일 처리 + 예외처리 결합
 
-```
+```python
 def read_file_safe(filename):
     """안전하게 파일을 읽는 함수"""
     try:
@@ -369,7 +369,7 @@ if content is None:
 
 ## 실전 예제 — 점수 파일 처리 프로그램
 
-```
+```python
 # score_processor.py
 import json
 
@@ -446,7 +446,7 @@ except (TypeError, ValueError) as e:
 ---
 
 **Q3.** 다음 코드에서 `finally` 블록이 출력되는 경우를 모두 나열하세요.
-```
+```python
 try:
     x = int("abc")
     print("성공")
