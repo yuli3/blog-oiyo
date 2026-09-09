@@ -11,6 +11,7 @@ import ResultGraph from "../components/mdx/ResultGraph.astro";
 import BarChart from "../components/mdx/BarChart.astro";
 import PieChart from "../components/mdx/PieChart.astro";
 import FlowChart from "../components/mdx/FlowChart.astro";
+import StepFlow from "../components/mdx/StepFlow.astro";
 import CompareTable from "../components/mdx/CompareTable.astro";
 import Fraction from "../components/mdx/Fraction.astro";
 import FormulaBox from "../components/mdx/FormulaBox.astro";
@@ -261,6 +262,9 @@ const editorialComponents = {
 
 const diagramComponents = {
   FlowChart,
+  // 콘텐츠에서 27회 쓰이는데 레지스트리에 없어, 쓰는 글마다 import 를 직접 달고
+  // 있었다. 등록해 두면 다른 도식 컴포넌트처럼 그냥 쓸 수 있다.
+  StepFlow,
   CompareTable,
   Timeline,
   ProgressBar,
