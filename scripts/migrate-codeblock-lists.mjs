@@ -21,8 +21,10 @@ const ROOT = 'src/content/blog';
 const args = process.argv.slice(2);
 const opt = (n, d = null) => { const i = args.indexOf(`--${n}`); return i >= 0 && args[i + 1] && !args[i + 1].startsWith('--') ? args[i + 1] : d; };
 const WRITE = args.includes('--write');
+const SHOW_SKIPS = args.includes('--skips');   // 옮기지 못한 블록을 대신 보여준다
 const wantCategory = opt('category');
 const wantLocale = opt('locale');
+const wantSeries = opt('series');
 const LIMIT = Number(opt('show', 4));
 
 // MDX 에서 `{...}` 는 JSX 표현식이다. 펜스 밖으로 꺼내면 자바스크립트로 파싱돼
@@ -45,52 +47,111 @@ function depthOf(indent) {
   return null;  // 6칸 이상은 도식일 가능성이 높다 — 손대지 않는다
 }
 
-function convert(content, kind) {
-  const lines = content.split('\n').map((l) => l.replace(/\s+$/, ''));
-  const out = [];
-  let sawItem = false;
+// 강의 원고의 블록은 하나의 목록이 아니라 **여러 덩이가 빈 줄로 붙어 있다.**
+// 법률 시리즈가 전형이다:
+//
+//   상법:                       ← 머리
+//   기업·상거래를 규율하는 특별법   ← 몸(산문)
+//                               ← 빈 줄
+//   상법의 특성:                  ← 다음 덩이의 머리
+//   ① 민법의 특별법: ...          ← 몸(항목)
+//
+// 그래서 빈 줄로 잘라 덩이마다 머리와 몸을 정한다. 이전 판은 머리를 첫 줄에서만
+// 인정해 Law 172개 중 171개를 통째로 거부했다.
+const PROSE_RUN_MAX = 3;   // 이보다 긴 산문 덩이는 목록이 아니라 본문이다 — 포기한다
+const CONTINUATION = /^(\s+|→|↳)/;   // 앞 항목에 이어지는 줄
 
-  for (const line of lines) {
-    if (!line.trim()) { out.push(''); continue; }
-
-    const b = BULLET.exec(line);
-    if (b) {
-      const d = depthOf(b[1]);
-      if (d === null) return null;
-      out.push(`${'  '.repeat(d)}- ${escapeMdx(b[2].trim())}`);
-      sawItem = true;
-      continue;
-    }
-
-    const n = NUMBERED.exec(line);
-    if (n) {
-      const d = depthOf(n[1]);
-      if (d === null) return null;
-      const num = n[2] ?? String(CIRCLED.indexOf(n[3]) + 1);
-      out.push(`${'  '.repeat(d)}${num}. ${escapeMdx(n[4].trim())}`);
-      sawItem = true;
-      continue;
-    }
-
-    // 목록을 여는 한 줄은 굵게 세워 둔다.
-    if (LEAD_IN.test(line) && !sawItem) { out.push(`**${escapeMdx(line.trim())}**`, ''); continue; }
-
-    const d = DEFINITION.exec(line);
-    if (d) {
-      const depth = depthOf(d[1]);
-      // 용어 쪽에 문장부호가 들어 있으면 정의가 아니라 산문이다.
-      if (depth === null || /[.!?。]/.test(d[2])) return null;
-      out.push(`${'  '.repeat(depth)}- **${escapeMdx(d[2].trim())}**: ${escapeMdx(d[3].trim())}`);
-      sawItem = true;
-      continue;
-    }
-
-    // 그 밖의 산문이 섞이면 포기한다 — 목록과 설명이 뒤엉킨 블록은
-    // 사람이 구조를 정해야 한다.
-    return null;
+/** 항목 한 줄을 마크다운으로. 항목이 아니면 null. */
+function asItem(line) {
+  const b = BULLET.exec(line);
+  if (b) {
+    const d = depthOf(b[1]);
+    return d === null ? null : `${'  '.repeat(d)}- ${escapeMdx(b[2].trim())}`;
   }
-  if (!sawItem) return null;
-  return out.join('\n').replace(/\n{3,}/g, '\n\n').trim();
+  const n = NUMBERED.exec(line);
+  if (n) {
+    const d = depthOf(n[1]);
+    if (d === null) return null;
+    const num = n[2] ?? String(CIRCLED.indexOf(n[3]) + 1);
+    return `${'  '.repeat(d)}${num}. ${escapeMdx(n[4].trim())}`;
+  }
+  const def = DEFINITION.exec(line);
+  if (def) {
+    const d = depthOf(def[1]);
+    // 용어 쪽에 문장부호가 들어 있으면 정의가 아니라 산문이다.
+    if (d === null || /[.!?。]/.test(def[2])) return null;
+    return `${'  '.repeat(d)}- **${escapeMdx(def[2].trim())}**: ${escapeMdx(def[3].trim())}`;
+  }
+  return null;
+}
+
+/** 여러 줄 산문은 줄바꿈을 지킨다 — 원문에서 줄이 나뉜 데는 이유가 있다. */
+const proseBlock = (lines) => lines.map((l) => escapeMdx(l)).join('  \n');
+
+/** 빈 줄로 잘린 덩이 하나. 옮기지 못하면 null — 블록 전체를 포기한다. */
+function convertGroup(lines) {
+  let head = null;
+  let body = lines;
+  if (LEAD_IN.test(lines[0]) && lines.length > 1) { head = lines[0].trim(); body = lines.slice(1); }
+
+  const prose = [];
+  const items = [];
+  for (const line of body) {
+    const item = asItem(line);
+    if (item) { items.push(item); continue; }
+    // 들여쓴 줄·화살표 줄은 새 항목이 아니라 앞 항목의 이어짐이다.
+    // 새 항목으로 끊으면 문장이 두 동강 난다(2026-09-09 개요 변환에서 겪음).
+    if (items.length && CONTINUATION.test(line)) {
+      items[items.length - 1] += ` ${escapeMdx(line.trim())}`;
+      continue;
+    }
+    if (items.length) return null;   // 항목이 시작된 뒤의 산문은 사람이 판단한다
+    // 산문도 마찬가지로 이어짐을 합친다. 다만 나란한 두 규칙
+    // ("A 면 → B" / "C 면 → D") 을 한 줄로 붙이면 병렬이 사라지므로,
+    // 이어짐 표시가 있는 줄만 합치고 나머지는 줄을 지킨다.
+    if (prose.length && CONTINUATION.test(line)) prose[prose.length - 1] += ` ${line.trim()}`;
+    else prose.push(line.trim());
+  }
+  if (prose.length > PROSE_RUN_MAX) return null;
+  if (!head && !items.length) return null;   // 산문만 있는 덩이는 옮길 근거가 없다
+
+  const out = [];
+  if (head) {
+    const label = escapeMdx(head.replace(/:\s*$/, ''));
+    // 머리 + 산문 한 줄이면 한 줄짜리 정의로 붙인다. 그 밖에는 줄을 나눈다.
+    if (prose.length === 1 && !items.length) out.push(`**${label}** — ${escapeMdx(prose[0])}`);
+    else {
+      out.push(`**${label}**`, '');
+      if (prose.length) out.push(proseBlock(prose), '');
+    }
+  } else if (prose.length) {
+    out.push(proseBlock(prose), '');
+  }
+  if (items.length) out.push(...items);
+  return { md: out.join('\n').replace(/\n+$/, ''), hasItem: items.length > 0 };
+}
+
+function convert(content) {
+  const lines = content.split('\n').map((l) => l.replace(/\s+$/, ''));
+  const groups = [];
+  let cur = [];
+  for (const line of lines) {
+    if (line.trim()) cur.push(line);
+    else if (cur.length) { groups.push(cur); cur = []; }
+  }
+  if (cur.length) groups.push(cur);
+  if (!groups.length) return null;
+
+  const parts = [];
+  let sawItem = false;
+  for (const g of groups) {
+    const r = convertGroup(g);
+    if (!r) return null;
+    sawItem ||= r.hasItem;
+    parts.push(r.md);
+  }
+  if (!sawItem) return null;   // 목록이 하나도 없으면 이 스크립트의 대상이 아니다
+  return parts.join('\n\n').replace(/\n{3,}/g, '\n\n').trim();
 }
 
 function walk(dir) {
@@ -112,6 +173,7 @@ for (const path of walk(ROOT)) {
   if (wantLocale && locale !== wantLocale) continue;
   let text = readFileSync(path, 'utf8');
   if (wantCategory && fm(text, 'category') !== wantCategory) continue;
+  if (wantSeries && fm(text, 'series') !== wantSeries) continue;
 
   const blocks = extractUntaggedBlocks(text)
     .map((b) => ({ ...b, kind: classifyBlock(b.content) }))
@@ -120,9 +182,13 @@ for (const path of walk(ROOT)) {
 
   let changed = false;
   for (const block of [...blocks].reverse()) {
-    const md = convert(block.content, block.kind);
-    if (!md) { skipped += 1; continue; }
-    if (previews.length < LIMIT) previews.push({ path, before: block.content.trim(), after: md });
+    const md = convert(block.content);
+    if (!md) {
+      skipped += 1;
+      if (SHOW_SKIPS && previews.length < LIMIT) previews.push({ path, before: block.content.trim(), after: '(건너뜀)' });
+      continue;
+    }
+    if (!SHOW_SKIPS && previews.length < LIMIT) previews.push({ path, before: block.content.trim(), after: md });
     text = `${text.slice(0, block.start)}${md}${text.slice(block.end)}`;
     converted += 1; changed = true;
   }
