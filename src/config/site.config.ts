@@ -13,8 +13,6 @@ export const siteConfig = {
   themeColor: "#65a30d",
   features: {
     scrollSnap: false,
-    // TOC intentionally disabled (commented out in article layout as well)
-    toc: false,
     pagination: true,
   },
   // 실존하는 공식 계정이 생기면 채울 것 (가짜 링크 금지). 현재 미운영.

@@ -1,7 +1,6 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-// import TOC from "../../components/TOC.astro";
 import ChapterSidebar from "../../components/ChapterSidebar.astro";
 import BlogCTA from "../../components/BlogCTA.astro";
 import { siteConfig } from "../../config/site.config";
@@ -145,7 +144,6 @@ const showCitation = locale === "ko" && [
   "ko/academy-tax-law-basic-ch1",
   "ko/academy-accounting-basics-ch2",
 ].includes(post.slug);
-const tocEnabled = siteConfig.features.toc;
 const t = await getTranslations(locale as Locale);
 const categoryNames = (t.category.names ?? {}) as Record<string, string>;
 // Strip surrounding quotes that some frontmatter values may carry (e.g. category: "Psychology")
@@ -297,16 +295,14 @@ const redirectToBlog = post.data.redirectToBlog;
     <div class="container px-4">
       <!--
         Layout grid:
-        - Series chapter: [ChapterSidebar 200px | Content 1fr | TOC 240px]
-        - Regular post:   [Content 1fr | TOC 240px]
+        - Series chapter: [ChapterSidebar 200px | Content 1fr]
+        - Regular post:   [Content 1fr]
+        목차 사이드바는 2026-09-09 에 제거했다 — 세운이 의도적으로 끈 기능이고
+        앞으로도 쓰지 않는다. 오른쪽 240px 트랙도 함께 걷어냈다.
       -->
       <div
         class:list={[
-          isSeriesPost
-            ? "lg:grid lg:grid-cols-[200px_1fr_240px] lg:gap-10 xl:gap-16"
-            : tocEnabled
-            ? "lg:grid lg:grid-cols-[1fr_240px] lg:gap-16"
-            : "",
+          isSeriesPost ? "lg:grid lg:grid-cols-[200px_1fr] lg:gap-10 xl:gap-16" : "",
         ]}
       >
         <!-- Left: Chapter Sidebar (series posts only, desktop) -->
@@ -485,7 +481,7 @@ const redirectToBlog = post.data.redirectToBlog;
           )}
 
           <!-- Main content -->
-          <div class="prose prose-stone prose-lg max-w-none prose-headings:font-heading prose-headings:font-bold prose-a:text-primary prose-pre:rounded-2xl prose-pre:bg-muted/10 prose-pre:border prose-pre:border-border/40 leading-relaxed text-pretty">
+          <div class="prose-content prose prose-stone prose-lg max-w-none prose-headings:font-heading prose-headings:font-bold prose-a:text-primary prose-pre:rounded-2xl prose-pre:bg-muted/10 prose-pre:border prose-pre:border-border/40 leading-relaxed text-pretty">
             <Content components={mdxComponents} />
           </div>
 
@@ -571,11 +567,6 @@ const redirectToBlog = post.data.redirectToBlog;
           )}
 
         </div>
-
-        <!-- Right: TOC sidebar (disabled by request) -->
-        {/*
-          {tocEnabled && <TOC headings={headings} />}
-        */}
       </div>
     </div>
   </article>

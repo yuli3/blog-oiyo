@@ -276,3 +276,32 @@ pre { max-width: 100%; overflow-x: auto; }
     animation-delay: 0s !important;
   }
 }
+
+/* ── KaTeX 수식 블록 ──
+   본문 코드펜스를 KaTeX 로 옮기면서 생긴 문제. 한글이 섞인 식은 라틴 수식보다
+   훨씬 넓어서 모바일에서 오른쪽이 잘린다(2026-09-09 파일럿 실측: 폭 524px 가
+   343px 화면을 넘어갔고 스크롤 단서도 없었다). 변환기가 A/(B+C) 를 \frac 로
+   바꿔 폭을 줄이지만 그래도 넘치는 식이 남으므로, 넘칠 때 가로 스크롤이
+   가능하다는 것을 눈에 보이게 한다. */
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-block: 0.25rem;
+  /* 넘치는 쪽에만 옅은 그림자를 띄워 "더 있다"를 알린다. 가리개 색은 페이지
+     배경과 같아야 한다 — #fff 로 두면 올리브빛 배경 위에 흰 얼룩으로 보인다. */
+  background:
+    linear-gradient(to right, var(--color-background, #fff) 30%, transparent),
+    linear-gradient(to right, transparent, var(--color-background, #fff) 70%) 100% 0,
+    radial-gradient(farthest-side at 0 50%, rgba(0, 0, 0, 0.12), transparent),
+    radial-gradient(farthest-side at 100% 50%, rgba(0, 0, 0, 0.12), transparent) 100% 0;
+  background-repeat: no-repeat;
+  background-size: 40px 100%, 40px 100%, 14px 100%, 14px 100%;
+  background-attachment: local, local, scroll, scroll;
+}
+
+@media (max-width: 480px) {
+  /* 그래도 넘치는 긴 식은 살짝 줄여 한 화면에 들어오게 한다. */
+  .katex-display > .katex { font-size: 0.95em; }
+}
+
+
