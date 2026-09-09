@@ -24,6 +24,10 @@ const wantCategory = opt('category');
 const wantLocale = opt('locale');
 const LIMIT = Number(opt('show', 4));
 
+// MDX 에서 `{...}` 는 JSX 표현식이다. 펜스 밖으로 꺼내면 자바스크립트로 파싱돼
+// 빌드가 깨진다(2026-09-09 `Y_{t−1}` 로 실제 발생). 평문으로 나가는 값은 escape 한다.
+const escapeMdx = (s) => s.replace(/([{}])/g, '\\$1');
+
 const BULLET = /^(\s*)[-•*]\s+(\S.*)$/;
 const NUMBERED = /^(\s*)(?:(\d+)[.)]|([①-⑳]))\s+(\S.*)$/;
 const LEAD_IN = /^\S.*:\s*$/;          // "재고자산의 종류:" 처럼 목록을 여는 줄
@@ -54,7 +58,7 @@ function convert(content, kind) {
     if (b) {
       const d = depthOf(b[1]);
       if (d === null) return null;
-      out.push(`${'  '.repeat(d)}- ${b[2].trim()}`);
+      out.push(`${'  '.repeat(d)}- ${escapeMdx(b[2].trim())}`);
       sawItem = true;
       continue;
     }
@@ -64,20 +68,20 @@ function convert(content, kind) {
       const d = depthOf(n[1]);
       if (d === null) return null;
       const num = n[2] ?? String(CIRCLED.indexOf(n[3]) + 1);
-      out.push(`${'  '.repeat(d)}${num}. ${n[4].trim()}`);
+      out.push(`${'  '.repeat(d)}${num}. ${escapeMdx(n[4].trim())}`);
       sawItem = true;
       continue;
     }
 
     // 목록을 여는 한 줄은 굵게 세워 둔다.
-    if (LEAD_IN.test(line) && !sawItem) { out.push(`**${line.trim()}**`, ''); continue; }
+    if (LEAD_IN.test(line) && !sawItem) { out.push(`**${escapeMdx(line.trim())}**`, ''); continue; }
 
     const d = DEFINITION.exec(line);
     if (d) {
       const depth = depthOf(d[1]);
       // 용어 쪽에 문장부호가 들어 있으면 정의가 아니라 산문이다.
       if (depth === null || /[.!?。]/.test(d[2])) return null;
-      out.push(`${'  '.repeat(depth)}- **${d[2].trim()}**: ${d[3].trim()}`);
+      out.push(`${'  '.repeat(depth)}- **${escapeMdx(d[2].trim())}**: ${escapeMdx(d[3].trim())}`);
       sawItem = true;
       continue;
     }
