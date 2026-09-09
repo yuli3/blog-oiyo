@@ -1,4 +1,9 @@
 ---
+// 색은 Tailwind 팔레트가 아니라 시맨틱 토큰에서 가져온다. 이전 판의
+// `bg-green-500/10` · `text-green-900` 은 테마를 바꿔도 따라오지 않고, 무엇보다
+// **본문 글자색을 진한 초록으로 고정**해 상자 안 글이 바깥과 다른 색으로 읽혔다.
+// 지면 색만 톤을 주고 글자는 `text-foreground` 로 둔다.
+
 interface Props {
   type?: "abstract" | "insight" | "info" | string;
   title?: string;
@@ -7,11 +12,9 @@ interface Props {
 const { type = "info", title } = Astro.props;
 
 const typeStyles = {
-  abstract:
-    "bg-green-500/10 border-green-500/20 text-green-900",
-  insight:
-    "bg-amber-500/10 border-amber-500/20 text-amber-900",
-  info: "bg-muted/30 border-border/40 text-foreground",
+  abstract: "bg-primary/5 border-primary/20",
+  insight: "bg-warning/10 border-warning/25",
+  info: "bg-muted/30 border-border/40",
 };
 
 const currentStyle =
@@ -20,7 +23,7 @@ const currentStyle =
 
 <div
   class:list={[
-    "my-8 p-6 rounded-2xl border backdrop-blur-sm animate-fade-up",
+    "my-8 p-6 rounded-2xl border backdrop-blur-sm animate-fade-up text-foreground",
     currentStyle,
   ]}
 >
