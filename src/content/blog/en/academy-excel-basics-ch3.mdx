@@ -43,15 +43,17 @@ Basic functions (SUM, AVERAGE, IF) can't handle the more complex requirements of
 
 ### Real-world examples
 
-```
-Look up a name by employee ID:
-=VLOOKUP(A2, EmployeeTable!$A:$D, 2, FALSE)
-→ Returns column 2 (name) from EmployeeTable, using A2's employee ID
+**Look up a name by employee ID:**
 
-Look up a unit price by product code:
+=VLOOKUP(A2, EmployeeTable!$A:$D, 2, FALSE)
+
+- Returns column 2 (name) from EmployeeTable, using A2's employee ID
+
+**Look up a unit price by product code:**
+
 =VLOOKUP(B5, $F$2:$H$100, 3, FALSE)
-→ Returns column 3 (unit price) from the F:H range, using B5's code
-```
+
+- Returns column 3 (unit price) from the F:H range, using B5's code
 
 ### VLOOKUP's 3 limitations
 
@@ -62,12 +64,10 @@ Can only search the first column of the range
 ```
 
 **Limitation 2: inserting a column breaks the index**
-```
 =VLOOKUP(A2, A:D, 3, FALSE)
-→ If a column is inserted between B and C, the index doesn't
-  automatically shift to 4
-→ The hard-coded column index "3" now returns the wrong column
-```
+
+- If a column is inserted between B and C, the index doesn't automatically shift to 4
+- The hard-coded column index "3" now returns the wrong column
 
 **Limitation 3: can't handle duplicate values**
 ```
@@ -106,16 +106,18 @@ match_type: 0 = exact match (used in most cases)
 
 **VLOOKUP vs. INDEX+MATCH:**
 
-```
-[VLOOKUP approach] Find salary by name:
-=VLOOKUP("Alex Kim", B:E, 4, FALSE)
-→ Only works if the name is in the very first column, B
+**[VLOOKUP approach] Find salary by name:**
 
-[INDEX+MATCH approach] Search any column:
+=VLOOKUP("Alex Kim", B:E, 4, FALSE)
+
+- Only works if the name is in the very first column, B
+
+**[INDEX+MATCH approach] Search any column:**
+
 =INDEX(E2:E100, MATCH("Alex Kim", C2:C100, 0))
-→ Searches column C (name), returns column E (salary)
-→ Works fine even if the lookup column is to the right of the return column
-```
+
+- Searches column C (name), returns column E (salary)
+- Works fine even if the lookup column is to the right of the return column
 
 ### INDEX+MATCH in practice
 
@@ -316,18 +318,21 @@ Units sold of a specific product in a specific period:
 
 ### Practical uses
 
-```
-Combining text and a date:
-="Report prepared on: "&TEXT(TODAY(), "yyyy-mm-dd")
+**Combining text and a date:**
 
-Adding a currency symbol to a number:
+**="Report prepared on**: "&TEXT(TODAY(), "yyyy-mm-dd")
+
+**Adding a currency symbol to a number:**
+
 ="$"&TEXT(B2, "#,##0")
-→ $1,500,000
 
-Converting to a percentage:
+- $1,500,000
+
+**Converting to a percentage:**
+
 =TEXT(A2/B2, "0.0%")
-→ 75.3%
-```
+
+- 75.3%
 
 ---
 

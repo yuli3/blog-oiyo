@@ -55,9 +55,10 @@ const depthOf = (indent) => {
 function convert(content) {
   const out = [];
   let lastItem = -1;   // out 에서 마지막 목록 항목의 위치
+  let proseRun = 0;    // 항목이 시작되기 전 덩이를 여는 산문 줄 수
 
   for (const line of content.split('\n')) {
-    if (!line.trim()) { out.push(''); lastItem = -1; continue; }
+    if (!line.trim()) { out.push(''); lastItem = -1; proseRun = 0; continue; }
 
     const a = ARROW.exec(line);
     if (a) {
@@ -90,10 +91,26 @@ function convert(content) {
     const c = CONTINUATION.exec(line);
     if (c && lastItem >= 0) { out[lastItem] += ` ${escapeMdx(c[1].trim())}`; continue; }
 
-    if (LEAD_IN.test(line)) { out.push(`**${escapeMdx(line.trim())}**`, ''); lastItem = -1; continue; }
+    if (LEAD_IN.test(line)) { out.push(`**${escapeMdx(line.trim())}**`, ''); lastItem = -1; proseRun = 0; continue; }
 
-    return null;   // 산문이 섞이면 사람이 구조를 정해야 한다
+    // 콜론 없이 덩이를 여는 줄 — "Example: Product manufacturing costs" 처럼
+    // 항목 앞에 놓인 한 줄짜리 도입문. 이전 판은 이 한 줄 때문에 블록을 통째로
+    // 거부했고, 그게 613개가 남은 가장 큰 이유였다. 항목이 시작되기 전 두 줄까지만
+    // 허용한다 — 그보다 길면 목록이 아니라 본문이다.
+    if (lastItem < 0 && proseRun < 2 && !/^\s/.test(line)) {
+      out.push(itemText(line), '');
+      proseRun += 1;
+      continue;
+    }
+
+    return null;   // 항목 사이에 섞인 산문은 사람이 구조를 정해야 한다
   }
+
+  // 항목 본문에 화살표가 다시 나오면 개요가 아니라 흐름도다
+  // ("→ Conv → Conv → Conv"). 줄로 쪼개면 연결이 끊긴다.
+  const arrowItems = out.filter((l) => /^\s*- /.test(l));
+  const chained = arrowItems.filter((l) => /[→▶⇒]/.test(l)).length;
+  if (arrowItems.length && chained >= arrowItems.length / 2) return null;
 
   const md = out.join('\n').replace(/\n{3,}/g, '\n\n').trim();
   return /^[-\d]/m.test(md) ? md : null;   // 목록이 하나도 없으면 옮길 이유가 없다
