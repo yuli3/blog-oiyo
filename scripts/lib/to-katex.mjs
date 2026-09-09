@@ -137,7 +137,14 @@ function rendersInKatex(latex) {
 }
 
 function convert(content) {
-  const lines = content.split('\n').map((l) => l.trimEnd()).filter((l) => l.trim());
+  const raw = content.split('\n').map((l) => l.trimEnd()).filter((l) => l.trim());
+  // 통째로 괄호에 싸인 줄은 식이 아니라 윗 식에 달린 주석이다. 독립 행으로 두면
+  // 정렬표에 빈 좌변이 하나 더 생긴다 — 앞 줄 뒤에 붙여 주석으로 처리한다.
+  const lines = [];
+  for (const l of raw) {
+    if (lines.length && /^\s*[(（][^()]*[)）]\s*$/.test(l)) lines[lines.length - 1] += `  ${l.trim()}`;
+    else lines.push(l);
+  }
   const out = lines.map(toLatex);
   if (out.some((l) => l === null)) return null;
   if (out.length === 1) {

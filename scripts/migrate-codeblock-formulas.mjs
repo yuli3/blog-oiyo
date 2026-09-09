@@ -42,11 +42,20 @@ function asCaptionedFormula(content) {
   const caption = CAPTION.test(lines[0]) ? lines.shift().trim().replace(/:\s*$/, '') : null;
   if (!lines.length) return null;
   if (!lines.some((l) => l.includes('='))) return null;   // = 가 없으면 흐름도거나 산문이다
-  const ok = lines.every((l, i) =>
+  const isFormula = (l, i) =>
     l.includes('=') || OPERATOR_FIRST.test(l) ||
     // 사다리의 라벨 줄 — 바로 다음 줄이 `=` 로 시작하면 이 줄은 그 식의 이름이다
-    (lines[i + 1] && /^\s*=/.test(lines[i + 1])));
-  return ok ? { caption, body: lines.join('\n') } : null;
+    (lines[i + 1] && /^\s*=/.test(lines[i + 1]));
+  if (lines.every(isFormula)) return { caption, body: lines.join('\n') };
+
+  // 식 목록 안에는 식 없이 이름만 놓인 줄이 섞인다("Operating Income Growth Rate").
+  // 그 한 줄 때문에 블록을 통째로 버리지 않되, 산문을 빨아들이지 않도록 좁힌다:
+  // 짧고, 문장부호가 없고, 블록의 절반 이상이 실제 식일 때만 받는다.
+  const formulaCount = lines.filter(isFormula).length;
+  if (formulaCount < Math.ceil(lines.length / 2)) return null;
+  const bare = lines.filter((l, i) => !isFormula(l, i));
+  if (bare.some((l) => l.trim().length > 60 || /[.!?。]/.test(l))) return null;
+  return { caption, body: lines.join('\n') };
 }
 
 function walk(dir) {
