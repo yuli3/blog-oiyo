@@ -1,9 +1,61 @@
 ---
+// 본문 강조 상자.
+//
+// 이 컴포넌트는 오랫동안 **props 를 하나도 받지 않았다.** 그런데 본문에서는
+// 1,444번 쓰이면서 그중 1,354번이 `type` 을 넘기고 있었다 — tip 572 · warning 251 ·
+// note 209 · info 181 · important 135 · success 6. 전부 조용히 버려지고 파란 테두리
+// 하나로 똑같이 그려졌다. 글쓴이가 경고로 쓴 것이 경고로 보이지 않았다.
+//
+// 색은 하드코딩하지 않고 시맨틱 토큰을 쓴다(`--warning`·`--success`·`--info`·
+// `--destructive`). 이전 판의 `#f8fafc`·`#3b82f6`·`#1e293b` 는 토큰 감사의
+// "토큰 밖 사용" 예산을 갉아먹고 있었고, 테마를 바꿔도 따라오지 않았다.
+//
+// `variant` 는 `type` 의 별칭이다 — 본문 30곳이 그 이름으로 쓰고 있어 함께 받는다.
+// 이름을 하나로 통일하는 편이 낫지만, 그건 본문 30곳을 고치는 별개 작업이다.
 
+interface Props {
+  type?: string;
+  /** `type` 의 별칭. 본문 30곳이 이 이름을 쓴다. */
+  variant?: string;
+  title?: string;
+}
+
+const { type, variant, title } = Astro.props;
+
+// 톤은 넷뿐이다. 여섯 가지 이름이 여섯 가지 색이 되면 본문이 색 카탈로그가 된다.
+//   note·info  → 중립. 곁들이는 설명
+//   tip        → 강조. 도움이 되는 요령
+//   warning    → 주의
+//   important  → 강한 주의. 틀리면 손해가 나는 것
+//   success    → 확인·완료
+const TONES = {
+  note: "border-l-border bg-muted/40",
+  info: "border-l-info bg-info/5",
+  tip: "border-l-primary bg-primary/5",
+  warning: "border-l-warning bg-warning/10",
+  important: "border-l-destructive bg-destructive/5",
+  success: "border-l-success bg-success/5",
+} as const;
+
+const key = (variant ?? type ?? "note").toLowerCase();
+const tone = TONES[key as keyof typeof TONES] ?? TONES.note;
 ---
 
-<div
-  style="padding:1.5rem; background-color:#f8fafc; border-left:4px solid #3b82f6; border-radius:0.5rem; margin:1.5rem 0; color:#1e293b; font-size:1.05rem; box-shadow:0 1px 3px rgba(0,0,0,0.1); line-height:1.6;"
+<aside
+  class:list={[
+    "my-6 rounded-r-lg border-l-4 border-y border-r border-border/40 bg-card",
+    "px-5 py-4 text-[1.02em] leading-relaxed text-foreground",
+    tone,
+  ]}
 >
-  <slot />
-</div>
+  {
+    title && (
+      <p class="mb-2 text-sm font-semibold tracking-wide text-foreground/80">
+        {title}
+      </p>
+    )
+  }
+  <div class="[&>:first-child]:mt-0 [&>:last-child]:mb-0">
+    <slot />
+  </div>
+</aside>
