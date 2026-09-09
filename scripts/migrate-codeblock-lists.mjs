@@ -14,6 +14,7 @@
 //   node scripts/migrate-codeblock-lists.mjs --locale ko --category Economics --write
 import { readFileSync, writeFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
+import { escapeMdx } from './lib/mdx-escape.mjs';
 import { classifyBlock, extractUntaggedBlocks } from './lib/codeblock-classify.mjs';
 
 const ROOT = 'src/content/blog';
@@ -26,8 +27,6 @@ const LIMIT = Number(opt('show', 4));
 
 // MDX 에서 `{...}` 는 JSX 표현식이다. 펜스 밖으로 꺼내면 자바스크립트로 파싱돼
 // 빌드가 깨진다(2026-09-09 `Y_{t−1}` 로 실제 발생). 평문으로 나가는 값은 escape 한다.
-const escapeMdx = (s) => s.replace(/([{}])/g, '\\$1');
-
 const BULLET = /^(\s*)[-•*]\s+(\S.*)$/;
 const NUMBERED = /^(\s*)(?:(\d+)[.)]|([①-⑳]))\s+(\S.*)$/;
 const LEAD_IN = /^\S.*:\s*$/;          // "재고자산의 종류:" 처럼 목록을 여는 줄

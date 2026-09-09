@@ -516,23 +516,21 @@ print(round(acc, 4))
 
 ## 자주 나오는 실수와 함정
 
-```
 1. scaler.fit_transform(X_test) 사용 — 반드시 transform()만 사용
-   → 테스트 데이터로 fit하면 데이터 누수(Data Leakage) 발생
+  - 테스트 데이터로 fit하면 데이터 누수(Data Leakage) 발생
 
 2. fillna 후 inplace=True 미사용 — 원본 데이터프레임이 변경 안됨
-   → df['col'].fillna(0, inplace=True) 또는
-   → df['col'] = df['col'].fillna(0) 사용
+  - df['col'].fillna(0, inplace=True) 또는
+  - df['col'] = df['col'].fillna(0) 사용
 
 3. groupby 결과를 인덱스 포함 그대로 사용
-   → reset_index() 호출하여 일반 데이터프레임으로 변환
+  - reset_index() 호출하여 일반 데이터프레임으로 변환
 
 4. 분류 문제에서 predict_proba()[:, 1] 누락
-   → AUC/ROC 계산 시 확률값 필요, predict()는 클래스 레이블 반환
+  - AUC/ROC 계산 시 확률값 필요, predict()는 클래스 레이블 반환
 
 5. CSV 저장 시 index=True (기본값) 사용
-   → to_csv('result.csv', index=False) 명시 필수
-```
+  - to_csv('result.csv', index=False) 명시 필수
 
 ---
 

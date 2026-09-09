@@ -19,7 +19,9 @@ const SIGNALS = [
   ['sql', [/\bSELECT\b[\s\S]*\bFROM\b/i, /\b(?:INSERT INTO|UPDATE|DELETE FROM|CREATE TABLE|GROUP BY|ORDER BY|JOIN)\b/i]],
   // excel 은 수식 신호가 **필수**다. 셀 참조나 "Step 1:" 같은 산문만으로 걸리면
   // 안내문에 코드 색이 칠해진다(실측 오탐).
-  ['excel', [/^\s*=\s*[A-Z][A-Z0-9.]*\s*\(/m, /\$[A-Z]+\$?\d+/], { require: 0 }],
+  // shiki 에 'excel' 문법이 없어 plaintext 로 떨어진다. 'vb' 가 =FUNC(A1) 형태를
+  // 가장 가깝게 칠한다(빌드 로그의 fallback 경고도 사라진다).
+  ['vb', [/^\s*=\s*[A-Z][A-Z0-9.]*\s*\(/m, /\$[A-Z]+\$?\d+/], { require: 0 }],
   ['bash', [/^\s*\$\s+\w/m, /^\s*(?:npm|npx|pip|git|cd|ls|sudo|curl|docker)\s/m]],
   ['json', [/^\s*[{[][\s\S]*[}\]]\s*$/, /"[^"]+"\s*:\s*(?:"|\d|\{|\[)/]],
   ['html', [/<\/?[a-z][a-z0-9]*(?:\s[^>]*)?>/i]],

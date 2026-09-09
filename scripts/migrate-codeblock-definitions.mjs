@@ -17,6 +17,7 @@
 //   node scripts/migrate-codeblock-definitions.mjs --write
 import { readFileSync, writeFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
+import { escapeMdx } from './lib/mdx-escape.mjs';
 import { toKatexBlock } from './lib/to-katex.mjs';
 import { classifyBlock, extractUntaggedBlocks, isFormulaLine } from './lib/codeblock-classify.mjs';
 
@@ -30,13 +31,6 @@ const LIMIT = Number(opt('show', 4));
 
 const KEY_VALUE = /^\s*([^:\n]{1,44}):\s+(\S.*)$/;
 
-/**
- * MDX 에서 `{...}` 는 JSX 표현식이다. 코드펜스 안에서는 글자였지만 본문으로 꺼내는
- * 순간 자바스크립트로 파싱된다 — `Y_{t−1}` 이 빌드를 통째로 깨뜨렸다
- * (academy-statistics-basics-ch9, `Unexpected character '−'`). `$$…$$` 안은
- * remark-math 가 먼저 토큰화해 안전하지만, 목록·표로 나가는 평문은 막아야 한다. */
-const escapeMdx = (s) => s.replace(/([{}])/g, '\\$1');
-const LEAD_IN = /^\S.*:\s*$/;
 const BULLET = /^\s*[-•*]\s+(\S.*)$/;
 
 /** 셀 안의 파이프는 표를 깨뜨린다. */
