@@ -16,7 +16,9 @@ const SYMBOLS = [
 ];
 
 // KaTeX 로 옮길 수 없는 문자가 남으면 그 블록은 손대지 않는다.
-const UNSUPPORTED = /[│├└┌┐┘─▲▼◀▶✓✔①-⑳]/;
+// KaTeX 는 이 글자들의 자형을 갖고 있지 않다. 렌더는 경고만 내고 통과하므로
+// rendersInKatex 도 잡지 못하고, 페이지에 빈 네모가 남는다(₩ 로 실측).
+const UNSUPPORTED = /[│├└┌┐┘─▲▼◀▶✓✔①-⑳₩€£¥]/;
 
 // 스프레드시트 수식은 `=` 로 시작해 수학식처럼 보이지만 코드다. KaTeX 에 넣으면
 // `$D$2` 의 달러가 수식 구분자로 읽혀 깨진다(실측: academy-computer-skills-ch1).
@@ -65,7 +67,9 @@ function wrapCjk(s) {
  */
 const LATEX_WORDS = /^(text|frac|times|div|sum|int|sqrt|leq|geq|neq|pm|approx|equiv|infty|alpha|beta|pi|Delta|mu|sigma|theta|lambda|rho|begin|end|aligned|forall|exists|neg|to|Rightarrow|leftrightarrow|in|quad|qquad)$/;
 function wrapLatinWords(s) {
-  return s.replace(/(?<!\\)\b[A-Za-z]{2,}(?:\s+[A-Za-z]{2,})*\b/g, (run) => {
+  // 낱말 안의 하이픈은 낱말의 일부다. 여기서 끊으면 `Non-cash` 가
+  // `\text{Non} - \text{cash}` 가 되어 뺄셈 간격으로 벌어진다.
+  return s.replace(/(?<!\\)\b[A-Za-z]{2,}(?:[-'’][A-Za-z]+)*['’]?(?:\s+[A-Za-z]{2,}(?:[-'’][A-Za-z]+)*['’]?)*/g, (run) => {
     if (!/[a-z]/.test(run)) return run;
     if (LATEX_WORDS.test(run)) return run;
     return `\\text{${run}}`;
@@ -98,10 +102,19 @@ function toLatex(line) {
   s = s.replace(SUB_RUN, (run) => `_{${[...run].map((c) => SUB_CHAR[c] ?? c).join('')}}`);
   // 괄호 안 한글 주석은 \text 로 옮기기 전에 그대로 둔다(아래 wrapCjk 가 처리).
   for (const [re, to] of SYMBOLS) s = s.replace(re, to);
+  // 식 끝에 달린 괄호 주석은 식이 아니라 설명이다. 수식으로 파싱하면
+  // `(2:1 or 200% recommended)` 가 비율 콜론과 낱낱의 \text 로 흩어진다.
+  let note = '';
+  const tail = /\s{2,}(\([^()]*[a-z가-힣][^()]*\))\s*$/.exec(s);
+  if (tail) { note = tail[1]; s = s.slice(0, tail.index); }
+
   s = wrapCjk(s);
   s = wrapLatinWords(s);
   s = toFraction(s);
   s = s.replace(/\s{2,}/g, ' ').trim();
+  // 이미 이스케이프된 것에 다시 붙이면 `\%` 가 `\\%` 가 되고, aligned 안에서
+  // `\\` 는 행 바꿈이라 % 만 다음 줄로 떨어진다. 전에 38개를 이렇게 망가뜨렸다.
+  if (note) s += ` \\quad \\text{${note.replace(/(?<!\\)([{}$&%#_])/g, '\\$1')}}`;
   return s || null;
 }
 

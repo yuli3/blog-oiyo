@@ -21,6 +21,13 @@ const WRITE = args.includes('--write');
 const wantCategory = opt('category');
 const wantLocale = opt('locale');
 const LIMIT = Number(opt('show', 6));
+const SHOW_SKIPS = args.includes('--skips');
+
+// `formula` 만 보던 것을 셋으로 넓힌다. 셋 다 최종 형태가 KaTeX 다:
+//   calc-ladder          세로로 쌓인 가감산 사다리 → aligned
+//   formula-with-legend  `라벨 = 식  (주석)` → aligned + \quad\text{주석}
+// 남은 유형(개요·도식)은 사람이 컴포넌트를 골라야 하므로 그대로 둔다.
+const KINDS = new Set(['formula', 'calc-ladder', 'formula-with-legend']);
 
 function walk(dir) {
   const out = [];
@@ -42,15 +49,19 @@ for (const path of walk(ROOT)) {
   let text = readFileSync(path, 'utf8');
   if (wantCategory && fm(text, 'category') !== wantCategory) continue;
 
-  const blocks = extractUntaggedBlocks(text).filter((b) => classifyBlock(b.content) === 'formula');
+  const blocks = extractUntaggedBlocks(text).filter((b) => KINDS.has(classifyBlock(b.content)));
   if (!blocks.length) continue;
 
   let changed = false;
   // 뒤에서부터 바꿔야 앞쪽 오프셋이 밀리지 않는다.
   for (const block of [...blocks].reverse()) {
     const latex = toKatexBlock(block.content);
-    if (!latex) { skipped += 1; continue; }
-    if (previews.length < LIMIT) previews.push({ path, before: block.content.trim(), after: latex });
+    if (!latex) {
+      skipped += 1;
+      if (SHOW_SKIPS && previews.length < LIMIT) previews.push({ path, before: block.content.trim(), after: '(건너뜀)' });
+      continue;
+    }
+    if (!SHOW_SKIPS && previews.length < LIMIT) previews.push({ path, before: block.content.trim(), after: latex });
     text = text.slice(0, block.start) + latex + text.slice(block.end);
     converted += 1; changed = true;
   }
