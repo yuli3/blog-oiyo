@@ -30,6 +30,14 @@ const wantLocale = opt('locale');
 const wantSeries = opt('series');
 const LIMIT = Number(opt('show', 4));
 
+// ⚠ 이 정규식들은 옆 스크립트(migrate-codeblock-{lists,definitions,outlines})의
+// 같은 이름 정규식과 **비슷해 보이지만 의도적으로 다르다.** 하나로 합치면 조용히
+// 동작이 바뀐다. 2026-09-10 코퍼스 실측:
+//   depthOf 5칸판 vs 6칸판    → 정확히 6칸 들여쓴 줄 5,047개에서 갈린다
+//   NUMBERED 원문자 포함 여부  → ①~⑳ 로 시작하는 줄 1,236개에서 갈린다
+//   CONTINUATION 세 변형       → 매치 수가 56,627 / 13,231 / 45,471 로 다르다
+// 진짜 중복은 LEAD_IN 하나뿐이라 모듈로 뺄 값어치가 없다. 이스케이프는 이미
+// lib/mdx-escape.mjs 로 합쳐져 있다(`<18.5` 빌드 실패의 원인이 그 흩어짐이었다).
 const KEY_VALUE = /^\s*([^:\n]{1,44}):\s+(\S.*)$/;
 
 const LEAD_IN = /^\S.*:\s*$/;   // "계산 예시:" 처럼 조각을 여는 한 줄
