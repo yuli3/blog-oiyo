@@ -63,13 +63,11 @@ Since EMV > 0, launching the product is the favorable decision.
 
 Sequential decisions are visualized as a tree structure.
 
-```
-              [Boom: 0.6]  → +$500k
-Launch ──────
-              [Bust:  0.4] → −$150k
-
-No Launch ── [Certain]    → $0
-```
+- **Launch**
+  - Boom (probability 0.6) → +\$500k
+  - Bust (probability 0.4) → −\$150k
+- **No launch**
+  - Certain → \$0
 
 A decision tree is analyzed using **rollback (backward induction)**. Starting from the end, EMV is calculated up through each branch, selecting the optimal decision at each node.
 
@@ -85,13 +83,14 @@ A decision tree is analyzed using **rollback (backward induction)**. Starting fr
 
 ### (2) Basic LP Structure
 
-```
-Maximize: Z = 5X + 4Y      ← Objective function (profit)
-Subject to:
-  6X + 4Y ≤ 24             ← Resource A usage limit
-  X + 2Y  ≤ 6              ← Resource B usage limit
-  X, Y ≥ 0                 ← Non-negativity constraints
-```
+$$
+\begin{aligned}
+\text{Maximize } & Z = 5X + 4Y && \text{(objective function: profit)} \\
+\text{subject to } & 6X + 4Y \le 24 && \text{(resource A usage limit)} \\
+& X + 2Y \le 6 && \text{(resource B usage limit)} \\
+& X,\ Y \ge 0 && \text{(non-negativity constraints)}
+\end{aligned}
+$$
 
 **Solution**: When constraints are graphed, they define a feasible region. The optimal value of the objective function always lies at one of the **corner points** of that region.
 
