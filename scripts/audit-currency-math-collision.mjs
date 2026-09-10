@@ -25,7 +25,9 @@ for (const entry of readdirSync(CONTENT, { withFileTypes: true })) {
   for (const file of readdirSync(dir)) {
     if (!file.endsWith(".mdx")) continue;
     scanned += 1;
-    const text = readFileSync(`${dir}/${file}`, "utf8").replace(/```[\s\S]*?```/g, "");
+    // 코드 안의 $ 는 수식으로 파싱되지 않는다 — 펜스 블록과 인라인 코드(`=VLOOKUP($E$2…)` 같은
+    // 스프레드시트 절대참조)를 모두 빼고 본다.
+    const text = readFileSync(`${dir}/${file}`, "utf8").replace(/```[\s\S]*?```/g, "").replace(/`[^`\n]*`/g, "");
     const bad = [];
     for (const match of text.matchAll(/(?<!\\)\$[0-9][^\n$]{0,60}\$/g)) {
       if (!MATH_COMMAND.test(match[0])) bad.push(match[0].slice(0, 40));
