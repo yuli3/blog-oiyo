@@ -58,19 +58,15 @@ layoutVariant: lecture-series
 
 **프로세스의 메모리 구조**:
 
-```
-┌──────────────┐ 높은 주소
-│   스택(Stack) │ ← 함수 호출, 지역 변수 (LIFO, 높은→낮은 주소로 증가)
-├──────────────┤
-│      ↓       │
-│      ↑       │
-│    힙(Heap)   │ ← 동적 메모리 할당 (malloc, new)
-├──────────────┤
-│   데이터(Data)│ ← 전역 변수, 정적 변수
-├──────────────┤
-│  코드(Code)   │ ← 프로그램 명령어 (텍스트 영역)
-└──────────────┘ 낮은 주소
-```
+높은 주소에서 낮은 주소 순으로:
+
+| 영역 | 담는 것 |
+|---|---|
+| 스택(Stack) | 함수 호출, 지역 변수. LIFO, 높은 주소에서 낮은 주소 쪽으로 자란다 |
+| (빈 공간) | 스택은 아래로, 힙은 위로 자라며 이 공간을 나눠 쓴다 |
+| 힙(Heap) | 동적 메모리 할당 (malloc, new) |
+| 데이터(Data) | 전역 변수, 정적 변수 |
+| 코드(Code) | 프로그램 명령어 (텍스트 영역) |
 
 ### PCB (Process Control Block)
 
@@ -89,19 +85,14 @@ layoutVariant: lecture-series
 
 프로세스는 생명주기 동안 다음 5가지 상태를 전이합니다.
 
-```
-               생성(admitted)        디스패치(dispatch)
-    New ─────────────────→ Ready ─────────────────→ Running
-                              ↑                          │
-                              │ 타임아웃(timeout)         │
-                              │ 선점(preemption)  ←───────┘
-                              │
-                              │ 입출력 완료(I/O complete)
-                           Waiting ←── Running (I/O 요청)
-                                              │
-                                              ↓ 종료(exit)
-                                          Terminated
-```
+| 전이 | 계기 |
+|---|---|
+| New → Ready | 생성(admitted) |
+| Ready → Running | 디스패치(dispatch) |
+| Running → Ready | 타임아웃(timeout), 선점(preemption) |
+| Running → Waiting | 입출력 요청 |
+| Waiting → Ready | 입출력 완료(I/O complete) |
+| Running → Terminated | 종료(exit) |
 
 | 상태 | 설명 |
 |------|------|

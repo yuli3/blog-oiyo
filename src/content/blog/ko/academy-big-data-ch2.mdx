@@ -21,21 +21,17 @@ layoutVariant: lecture-series
 
 머신러닝은 데이터에서 패턴을 자동으로 학습하여 예측·분류·군집화를 수행하는 기법입니다. 빅데이터 분석기사 시험에서는 **지도학습과 비지도학습의 구분**, 그리고 각 알고리즘의 원리와 적용 상황을 명확히 이해해야 합니다.
 
-```
-머신러닝 학습 유형:
+**머신러닝 학습 유형**
 
-지도학습 (Supervised Learning)
-├── 분류 (Classification): 이산형 출력 (스팸/정상, 양성/음성)
-└── 회귀 (Regression): 연속형 출력 (주가, 기온 예측)
-
-비지도학습 (Unsupervised Learning)
-├── 군집화 (Clustering): 유사한 데이터 묶기
-├── 차원축소 (Dimensionality Reduction): PCA, t-SNE
-└── 연관 규칙 (Association Rule): 장바구니 분석
-
-강화학습 (Reinforcement Learning)
-└── 에이전트가 보상·벌점을 통해 최적 행동 학습
-```
+- **지도학습 (Supervised Learning)**
+  - 분류 (Classification): 이산형 출력 (스팸/정상, 양성/음성)
+  - 회귀 (Regression): 연속형 출력 (주가, 기온 예측)
+- **비지도학습 (Unsupervised Learning)**
+  - 군집화 (Clustering): 유사한 데이터 묶기
+  - 차원축소 (Dimensionality Reduction): PCA, t-SNE
+  - 연관 규칙 (Association Rule): 장바구니 분석
+- **강화학습 (Reinforcement Learning)**
+  - 에이전트가 보상·벌점을 통해 최적 행동을 학습
 
 ---
 
@@ -75,16 +71,15 @@ $$
 
 이름에 '회귀'가 들어가지만 **분류 알고리즘**입니다. 시그모이드 함수로 확률을 출력합니다.
 
-```
-로지스틱 함수(Sigmoid):
-P(y=1|x) = 1 / (1 + e^(-z))
-where z = β₀ + β₁x₁ + β₂x₂ + ...
+**로지스틱 함수(Sigmoid)**
 
-출력값 범위: (0, 1) → 0.5 기준으로 클래스 분류
+- P(y=1|x) = 1 / (1 + e^(-z)) where z = β₀ + β₁x₁ + β₂x₂ + ...
 
-로그 오즈비 (Log-odds / Logit):
-log(P/(1-P)) = β₀ + β₁x₁ + ...
-```
+**출력값 범위**: (0, 1) → 0.5 기준으로 클래스 분류
+
+**로그 오즈비 (Log-odds / Logit)**
+
+- log(P/(1-P)) = β₀ + β₁x₁ + ...
 
 - 해석이 쉽고 훈련 속도가 빠름
 - 선형 결정 경계(Linear Decision Boundary)
@@ -94,27 +89,20 @@ log(P/(1-P)) = β₀ + β₁x₁ + ...
 
 데이터를 **조건부 규칙**에 따라 재귀적으로 분할하여 트리 구조를 형성합니다.
 
-```
-예시 구조:
-              [나이 < 30?]
-             /           \
-         예(Yes)          아니오(No)
-          /                  \
-    [소득 > 500?]         [구매=No]
-    /        \
-구매=Yes   구매=No
-```
+**예시 구조**
+
+- 나이 &lt; 30?
+  - 예 → 소득 > 500?
+    - 예 → 구매 = Yes
+    - 아니오 → 구매 = No
+  - 아니오 → 구매 = No
 
 **분할 기준**:
 
-```
-정보이득(Information Gain) = 엔트로피 감소량
-엔트로피(Entropy) = -Σ p_i × log₂(p_i)
-→ 불순도가 가장 많이 감소하는 방향으로 분할
+- 정보이득(Information Gain) = 엔트로피 감소량
+- 엔트로피(Entropy) = -Σ p_i × log₂(p_i) → 불순도가 가장 많이 감소하는 방향으로 분할
 
-지니 불순도(Gini Impurity) = 1 - Σ p_i²
-→ CART 알고리즘에서 사용 (scikit-learn 기본값)
-```
+지니 불순도(Gini Impurity) = 1 - Σ p_i² → CART 알고리즘에서 사용 (scikit-learn 기본값)
 
 - 해석 용이성이 가장 높은 알고리즘
 - 과적합(overfitting) 위험 높음 → 가지치기(Pruning) 필요
@@ -164,23 +152,19 @@ log(P/(1-P)) = β₀ + β₁x₁ + ...
 
 데이터를 **K개의 군집**으로 나누는 가장 대표적인 군집화 알고리즘입니다.
 
-```
-K-means 알고리즘 절차:
+**K-means 알고리즘 절차**
+
 1. K개의 초기 중심점(centroid) 무작위 설정
 2. 각 데이터 포인트를 가장 가까운 중심점 군집에 배정
 3. 각 군집의 새로운 중심점 계산 (평균값)
 4. 중심점 변화가 없을 때까지 2-3 반복
 
-군집 간 거리: 유클리디안 거리 주로 사용
-d(x, y) = √(Σ(xi - yi)²)
-```
+- **군집 간 거리**: 유클리디안 거리 주로 사용
+- d(x, y) = √(Σ(xi - yi)²)
 
 **K 값 결정**: 엘보우 방법(Elbow Method) 사용
 
-```
-Within-Cluster Sum of Squares (WCSS)를 K별로 계산
-→ WCSS 감소폭이 급격히 줄어드는 "팔꿈치(elbow)" 지점의 K 선택
-```
+Within-Cluster Sum of Squares (WCSS)를 K별로 계산 → WCSS 감소폭이 급격히 줄어드는 "팔꿈치(elbow)" 지점의 K 선택
 
 **K-means의 한계**:
 - K를 사전 지정해야 함
@@ -195,27 +179,23 @@ Within-Cluster Sum of Squares (WCSS)를 K별로 계산
 
 **혼동행렬 (Confusion Matrix)**:
 
-- **예측**: 양성(Positive)    예측: 음성(Negative)
-- **실제**: 양성      TP (True Positive)      FN (False Negative)
-- **실제**: 음성      FP (False Positive)     TN (True Negative)
+| | 예측: 양성 (Positive) | 예측: 음성 (Negative) |
+|---|---|---|
+| **실제: 양성** | TP (True Positive) | FN (False Negative) |
+| **실제: 음성** | FP (False Positive) | TN (True Negative) |
 
 **주요 평가 지표**:
 
-```
-정확도(Accuracy)  = (TP + TN) / (TP + FP + FN + TN)
-                  → 전체 중 올바르게 예측한 비율
-
-정밀도(Precision) = TP / (TP + FP)
-                  → 양성 예측 중 실제 양성 비율
-                  → "예측한 것이 맞을 확률"
-
-재현율(Recall)    = TP / (TP + FN)
-                  → 실제 양성 중 양성으로 예측한 비율
-                  → "놓치지 않을 확률"
-
-F1 Score         = 2 × (Precision × Recall) / (Precision + Recall)
-                  → 정밀도와 재현율의 조화 평균
-```
+- 정확도(Accuracy) = (TP + TN) / (TP + FP + FN + TN)
+  - 전체 중 올바르게 예측한 비율
+- 정밀도(Precision) = TP / (TP + FP)
+  - 양성 예측 중 실제 양성 비율
+  - "예측한 것이 맞을 확률"
+- 재현율(Recall) = TP / (TP + FN)
+  - 실제 양성 중 양성으로 예측한 비율
+  - "놓치지 않을 확률"
+- F1 Score = 2 × (Precision × Recall) / (Precision + Recall)
+  - 정밀도와 재현율의 조화 평균
 
 **정밀도 vs 재현율 트레이드오프**:
 - 암 진단: **재현율** 우선 (양성을 놓치면 치명적)
@@ -223,27 +203,20 @@ F1 Score         = 2 × (Precision × Recall) / (Precision + Recall)
 
 **ROC Curve & AUC**:
 
-```
-ROC Curve: FPR(x축) vs TPR(y축) 플롯
-AUC(Area Under Curve): 0.5 = 무작위, 1.0 = 완벽한 분류
-AUC ≥ 0.9: 우수 / 0.7-0.9: 양호 / 0.5-0.7: 미흡
-```
+- **ROC Curve**: FPR(x축) vs TPR(y축) 플롯
+- **AUC(Area Under Curve)**: 0.5 = 무작위, 1.0 = 완벽한 분류
+- **AUC ≥ 0.9**: 우수 / 0.7-0.9: 양호 / 0.5-0.7: 미흡
 
 ### 회귀 모델 평가
 
-```
-MAE (Mean Absolute Error)  = Σ|yi - ŷi| / n
-  → 이상치에 덜 민감, 해석 쉬움
-
-MSE (Mean Squared Error)   = Σ(yi - ŷi)² / n
-  → 이상치에 민감 (큰 오차에 큰 페널티)
-
-RMSE (Root MSE)            = √MSE
-  → MSE에 제곱근 → 원래 단위로 해석 가능
-
-R² (결정계수)               = 1 - (SSR / SST)
-  → 모델이 데이터 분산을 설명하는 비율 (0~1, 높을수록 좋음)
-```
+- MAE (Mean Absolute Error) = Σ|yi - ŷi| / n
+  - 이상치에 덜 민감, 해석 쉬움
+- MSE (Mean Squared Error) = Σ(yi - ŷi)² / n
+  - 이상치에 민감 (큰 오차에 큰 페널티)
+- RMSE (Root MSE) = √MSE
+  - MSE에 제곱근 → 원래 단위로 해석 가능
+- R² (결정계수) = 1 - (SSR / SST)
+  - 모델이 데이터 분산을 설명하는 비율 (0~1, 높을수록 좋음)
 
 ---
 
@@ -251,31 +224,26 @@ R² (결정계수)               = 1 - (SSR / SST)
 
 ### 교차검증 (Cross-Validation)
 
-```
-K-Fold 교차검증:
+**K-Fold 교차검증**
+
 1. 데이터를 K개의 폴드(fold)로 분할
 2. K-1개 폴드로 훈련, 나머지 1개로 검증
 3. K번 반복하여 평균 성능 계산
 
-일반적으로 K=5 또는 K=10 사용
-→ 더 신뢰할 수 있는 모델 성능 추정 가능
-```
+일반적으로 K=5 또는 K=10 사용 → 더 신뢰할 수 있는 모델 성능 추정 가능
 
 ### 정규화 (Regularization)
 
 과적합된 모델은 계수(가중치)가 매우 커지는 경향이 있습니다. 정규화는 계수 크기에 페널티를 부여합니다.
 
-```
-Ridge(L2 정규화): 비용함수 + λ × Σβⱼ²
-  → 계수를 0에 가깝게 축소, 0이 되지는 않음
-  → 다중공선성 문제 완화
+- **Ridge(L2 정규화)**: 비용함수 + λ × Σβⱼ²
+  - 계수를 0에 가깝게 축소, 0이 되지는 않음
+  - 다중공선성 문제 완화
+- **Lasso(L1 정규화)**: 비용함수 + λ × Σ|βⱼ|
+  - 계수를 정확히 0으로 만들 수 있음 → 변수 선택 효과
+  - 희소(sparse) 모델 생성
 
-Lasso(L1 정규화): 비용함수 + λ × Σ|βⱼ|
-  → 계수를 정확히 0으로 만들 수 있음 → 변수 선택 효과
-  → 희소(sparse) 모델 생성
-
-ElasticNet: Ridge + Lasso 결합
-```
+**ElasticNet**: Ridge + Lasso 결합
 
 ### 기타 과적합 방지 기법
 
