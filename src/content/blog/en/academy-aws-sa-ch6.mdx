@@ -29,10 +29,7 @@ AWS-managed relational database service. AWS handles OS patching, DB installatio
 ### Multi-AZ Deployment
 High availability configuration:
 
-```
-Primary DB (AZ-a) → Synchronous replication → Standby DB (AZ-b)
-                    (Automatic failover: ~60-120 seconds)
-```
+Primary DB (AZ-a) → synchronous replication → Standby DB (AZ-b). If the primary fails, RDS fails over to the standby automatically in about 60–120 seconds.
 
 - **Synchronous replication**: Write to primary simultaneously writes to standby
 - **Automatic failover**: Standby promoted automatically on primary failure
@@ -41,10 +38,7 @@ Primary DB (AZ-a) → Synchronous replication → Standby DB (AZ-b)
 ### Read Replicas
 Copies that handle read traffic to offload the primary:
 
-```
-Primary DB → Asynchronous replication → Read Replica 1 (read-only)
-                                     → Read Replica 2 (read-only)
-```
+Primary DB → Asynchronous replication → Read Replica 1 (read-only) → Read Replica 2 (read-only)
 
 - Writes: primary DB only
 - Reads: distribute across primary + replicas
@@ -92,10 +86,8 @@ In-memory caching service — reduces database load and improves response time.
 | **Memcached** | Simple caching, multi-threaded, horizontal scaling |
 
 **Cache-aside pattern**:
-```
-Request → Check ElastiCache (Cache Hit) → Immediate response
-                            (Cache Miss) → Query DB → Store in cache → Response
-```
+- **Cache hit**: Request → check ElastiCache → immediate response
+- **Cache miss**: Request → check ElastiCache → query DB → store in cache → response
 
 ---
 
