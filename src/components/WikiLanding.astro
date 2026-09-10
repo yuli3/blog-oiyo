@@ -74,23 +74,23 @@ const chapterWord = L("chapters", "chapters");
 
       <div class="grid gap-10 lg:grid-cols-[16rem_1fr] lg:gap-12">
         <!-- ── Sidebar: full category→series index ────────────────────────── -->
-        <aside class="lg:sticky lg:top-20 self-start">
+        <aside class="min-w-0 lg:sticky lg:top-20 self-start">
           <nav aria-label={L("seriesIndex", "Series index")}>
             <p class="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/70 mb-3 border-b border-border pb-2">
               {L("categoriesIndex", "Categories")}
             </p>
             {catGroups.map(([cat, list], gi) => (
               <details class="group mb-1.5" open={gi < 4}>
-                <summary class="flex items-center justify-between cursor-pointer select-none py-1 text-sm font-semibold text-foreground hover:text-primary transition-colors list-none">
+                <summary class="flex min-w-0 items-center justify-between cursor-pointer select-none py-1 text-sm font-semibold text-foreground hover:text-primary transition-colors list-none">
                   <span class="truncate">{categoryNames[cat] ?? cat}</span>
                   <span class="text-[11px] tabular-nums text-muted-foreground/60 shrink-0">{list.reduce((n, s) => n + s.chapterCount, 0)}</span>
                 </summary>
                 <ul class="ml-3 border-l border-border/60 pl-3 my-1 space-y-1">
                   {list.slice(0, 8).map((s) => (
                     <li>
-                      <a href={`/${locale}/${s.firstPost.slug.split("/").slice(1).join("/")}/`} class="block truncate py-0.5 text-[13px] text-muted-foreground hover:text-primary transition-colors">
-                        {prioritySeriesName(s.key, locale) ?? deriveSeriesLabel(s.firstPost.data.title, s.key)}
-                        <span class="tabular-nums text-muted-foreground/50 ml-1">{s.chapterCount}</span>
+                      <a href={`/${locale}/${s.firstPost.slug.split("/").slice(1).join("/")}/`} class="flex min-w-0 items-baseline gap-1 py-0.5 text-[13px] text-muted-foreground hover:text-primary transition-colors">
+                        <span class="truncate">{prioritySeriesName(s.key, locale) ?? deriveSeriesLabel(s.firstPost.data.title, s.key)}</span>
+                        <span class="tabular-nums text-muted-foreground/50 shrink-0">{s.chapterCount}</span>
                       </a>
                     </li>
                   ))}
@@ -110,7 +110,7 @@ const chapterWord = L("chapters", "chapters");
           {priority.map((s) => (
             <section aria-labelledby={`sec-${s.key}`}>
               <div class="flex items-baseline justify-between gap-3 border-b border-border mb-4 pb-2">
-                <h2 id={`sec-${s.key}`} class="text-lg font-bold tracking-tight text-foreground">
+                <h2 id={`sec-${s.key}`} class="min-w-0 truncate text-lg font-bold tracking-tight text-foreground">
                   {prioritySeriesName(s.key, locale) ?? deriveSeriesLabel(s.firstPost.data.title, s.key)}
                 </h2>
                 <div class="flex items-baseline gap-3 shrink-0">

@@ -44,10 +44,10 @@ const md = (s: unknown) => ({ __html: inlineMd(String(s ?? "")) });
 // ── LectureTable ────────────────────────────────────────────────────────
 export function LectureTable({ title, headers, rows, highlightColumns = [] }: any) {
   return (
-    <div className="my-10 overflow-x-auto rounded-2xl border border-border/40 bg-card shadow-sm">
+    <div className="my-6 overflow-x-auto rounded-2xl border border-border/40 bg-card shadow-sm sm:my-10">
       <table className="w-full border-collapse text-left text-[0.95rem]">
         {title && (
-          <caption className="border-b border-border/40 bg-muted/20 px-6 py-5 text-left text-lg font-bold text-foreground">
+          <caption className="border-b border-border/40 bg-muted/20 px-4 py-3.5 text-left text-base font-bold text-foreground sm:px-6 sm:py-5 sm:text-lg">
             {title}
           </caption>
         )}
@@ -55,7 +55,7 @@ export function LectureTable({ title, headers, rows, highlightColumns = [] }: an
           <thead className="bg-muted/30">
             <tr>
               {headers.map((h: any, i: number) => (
-                <th key={i} className="whitespace-nowrap px-6 py-4 font-semibold text-muted-foreground" dangerouslySetInnerHTML={md(h)} />
+                <th key={i} className="px-3 py-3 font-semibold text-muted-foreground sm:whitespace-nowrap sm:px-6 sm:py-4" dangerouslySetInnerHTML={md(h)} />
               ))}
             </tr>
           </thead>
@@ -66,7 +66,7 @@ export function LectureTable({ title, headers, rows, highlightColumns = [] }: an
               {r.map((c: any, j: number) => (
                 <td
                   key={j}
-                  className={`px-6 py-4 leading-relaxed text-foreground ${
+                  className={`px-3 py-3 leading-relaxed text-foreground sm:px-6 sm:py-4 ${
                     highlightColumns.includes(j) ? "bg-primary/5 font-medium" : ""
                   }`}
                   dangerouslySetInnerHTML={md(c)}
@@ -83,18 +83,18 @@ export function LectureTable({ title, headers, rows, highlightColumns = [] }: an
 // ── LectureProcess ──────────────────────────────────────────────────────
 export function LectureProcess({ title, steps }: any) {
   return (
-    <div className="my-10 rounded-3xl border border-border/40 bg-card p-8 shadow-sm">
-      {title && <h4 className="mb-8 mt-0 text-center text-xl font-bold text-foreground">{title}</h4>}
-      <div className="flex flex-col gap-6">
+    <div className="my-6 rounded-3xl border border-border/40 bg-card p-4 shadow-sm sm:my-10 sm:p-8">
+      {title && <h4 className="mb-5 mt-0 text-center text-lg font-bold text-foreground sm:mb-8 sm:text-xl">{title}</h4>}
+      <div className="flex flex-col gap-4 sm:gap-6">
         {steps?.map((step: any, i: number) => (
-          <div key={i} className="flex gap-6">
+          <div key={i} className="flex gap-3 sm:gap-6">
             <div className="flex flex-col items-center">
               <div className="z-10 flex h-10 w-10 items-center justify-center rounded-full bg-primary font-bold text-primary-foreground shadow">
                 {i + 1}
               </div>
               {i < steps.length - 1 && <div className="my-2 w-0.5 grow bg-primary/25" />}
             </div>
-            <div className={i < steps.length - 1 ? "pb-6" : ""}>
+            <div className={i < steps.length - 1 ? "pb-4 sm:pb-6" : ""}>
               <strong className="mb-1.5 block text-[1.05rem] text-foreground" dangerouslySetInnerHTML={md(step.label)} />
               {step.description && (
                 <p className="m-0 text-[0.95rem] leading-relaxed text-muted-foreground" dangerouslySetInnerHTML={md(step.description)} />
