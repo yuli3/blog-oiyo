@@ -172,7 +172,7 @@ const RentalRoiCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
         {result && (
           <div className="mt-4 space-y-4" aria-live="polite">
             {/* ROI hero */}
-            <div className="bg-orange-600 text-white rounded-2xl p-6 text-center">
+            <div className="bg-orange-600 text-white rounded-2xl p-4 sm:p-6 text-center">
               <p className="text-sm font-semibold opacity-80 mb-1">
                 {ko ? '임대수익률 (연)' : 'Annual Rental ROI'}
               </p>

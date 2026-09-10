@@ -45,7 +45,7 @@ const LottoGenerator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =
                     <button 
                         onClick={generateAll}
                         disabled={isGenerating}
-                        className="group relative px-12 py-4 bg-primary text-primary-foreground rounded-full font-black text-xl shadow-lg hover:shadow-primary/40 transition-all overflow-hidden"
+                        className="group relative px-5 sm:px-12 py-4 bg-primary text-primary-foreground rounded-full font-black text-xl shadow-lg hover:shadow-primary/40 transition-all overflow-hidden"
                     >
                         <span className="relative z-10 flex items-center gap-3">
                             {isGenerating ? 'GENERATING...' : t.gen}

@@ -216,7 +216,7 @@ const JeonsevsBuyCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'k
         {result && (
           <div className="space-y-4 pt-4">
             <div
-              className={`p-6 rounded-2xl text-center border-2 ${
+              className={`p-4 sm:p-6 rounded-2xl text-center border-2 ${
                 result.recommendation === 'buy'
                   ? 'bg-green-600 border-green-700 text-white'
                   : 'bg-green-600 border-green-700 text-white'

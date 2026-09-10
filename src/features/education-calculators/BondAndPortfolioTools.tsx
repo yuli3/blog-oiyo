@@ -30,7 +30,7 @@ export const BondPricer: React.FC = () => {
     const price = calculatePrice();
 
     return (
-        <Card className="p-6 bg-slate-50 border-slate-200 shadow-lg mt-8">
+        <Card className="p-4 sm:p-6 bg-slate-50 border-slate-200 shadow-lg mt-8">
             <div className="flex items-center gap-2 mb-6 border-b pb-4 text-slate-800">
                 <Landmark size={20} className="text-amber-600" />
                 <h3 className="text-xl font-bold">인터랙티브 채권 가격 계산기</h3>
@@ -54,7 +54,7 @@ export const BondPricer: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="flex flex-col justify-center items-center bg-white rounded-2xl border border-slate-200 p-6 shadow-inner">
+                <div className="flex flex-col justify-center items-center bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 shadow-inner">
                     <span className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">채권 현재 가격 (PV)</span>
                     <div className="text-5xl font-black text-slate-900 font-mono tracking-tighter">
                         ₩{Math.round(price).toLocaleString()}
@@ -98,7 +98,7 @@ export const PortfolioVisualizer: React.FC = () => {
     }
 
     return (
-        <Card className="p-6 bg-white border-slate-200 shadow-xl mt-8">
+        <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-8">
             <div className="flex items-center gap-2 mb-6 border-b pb-4 text-slate-900">
                 <TrendingUp size={20} className="text-green-600" />
                 <h3 className="text-xl font-bold">포트폴리오 위험-수익 시각화</h3>

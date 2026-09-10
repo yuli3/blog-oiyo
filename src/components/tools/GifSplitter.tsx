@@ -255,7 +255,7 @@ export default function GifSplitter({ locale }: { locale: Locale }) {
           {t.privacy}
         </p>
 
-        <label className="block cursor-pointer rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 px-4 py-10 text-center transition hover:border-green-300 hover:bg-green-50">
+        <label className="block cursor-pointer rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 px-4 py-6 sm:py-10 text-center transition hover:border-green-300 hover:bg-green-50">
           <span className="block text-base font-semibold text-slate-900">{frames.length ? t.replace : t.upload}</span>
           <span className="mt-2 block text-sm text-slate-600">{t.empty}</span>
           <input type="file" accept="image/gif,.gif" className="hidden" onChange={handleFileSelect} />

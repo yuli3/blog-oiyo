@@ -161,7 +161,7 @@ const TaiwanSalaryCalculator: React.FC<Props> = ({ locale = 'zh' }) => {
                     </div>
                 </div>
 
-                <div className="rounded-2xl border border-border bg-muted/30 p-6 flex flex-col gap-3">
+                <div className="rounded-2xl border border-border bg-muted/30 p-4 sm:p-6 flex flex-col gap-3">
                     <h4 className="text-sm font-bold text-foreground">{t.deductions}</h4>
                     <div className="flex flex-col gap-2">
                         {[
@@ -180,7 +180,7 @@ const TaiwanSalaryCalculator: React.FC<Props> = ({ locale = 'zh' }) => {
                     </div>
                 </div>
 
-                <div className="rounded-2xl border border-border bg-muted/30 p-6 flex flex-col gap-3">
+                <div className="rounded-2xl border border-border bg-muted/30 p-4 sm:p-6 flex flex-col gap-3">
                     <div className="flex justify-between items-center text-sm border-t border-border pt-2">
                         <span className="font-bold text-foreground">{t.incomeTax}</span>
                         <span className="font-bold text-destructive">{fmt(monthlyTax)}</span>

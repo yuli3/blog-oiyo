@@ -146,7 +146,7 @@ export function LoveLanguageTest({ locale = 'ko' }: { locale?: 'ko' | 'en' | 'ja
   const maxScore = Math.max(...Object.values(state.scores));
 
   return (
-    <Card className="p-6 bg-white border-slate-200 shadow-xl mt-8 overflow-hidden">
+    <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-8 overflow-hidden">
       {!state.done ? (
         <div className="space-y-6">
           <div className="flex items-center gap-2">
@@ -184,7 +184,7 @@ export function LoveLanguageTest({ locale = 'ko' }: { locale?: 'ko' | 'en' | 'ja
             <p className="text-xs text-slate-500 italic">{llMeta[primary][L].tip}</p>
           </div>
           <div className="flex items-center justify-between">
-            <Button variant="outline" onClick={() => dispatch({ type: 'reset' })} className="rounded-full px-6">{resetLabel}</Button>
+            <Button variant="outline" onClick={() => dispatch({ type: 'reset' })} className="rounded-full px-4 sm:px-6">{resetLabel}</Button>
             <ShareButton locale={L} text={`${llMeta[primary][L].name} — blog.oiyo.net`} />
           </div>
           <p className="text-[10px] text-slate-400 italic">* Gary Chapman의 《The Five Love Languages》(1992)에 기반한 자기 이해 도구입니다.</p>
@@ -249,7 +249,7 @@ export function EmpathyTest({ locale = 'ko' }: { locale?: 'ko' | 'en' | 'ja' }) 
   const levelKey = totalPct >= 75 ? 'high' : totalPct >= 50 ? 'mid' : 'low';
 
   return (
-    <Card className="p-6 bg-white border-slate-200 shadow-xl mt-8">
+    <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-8">
       {!state.done ? (
         <div className="space-y-6">
           <div className="flex items-center gap-2">
@@ -287,7 +287,7 @@ export function EmpathyTest({ locale = 'ko' }: { locale?: 'ko' | 'en' | 'ja' }) 
             <p className="text-sm text-slate-700 leading-relaxed">{levelDesc[levelKey][L]}</p>
           </div>
           <div className="flex items-center justify-between">
-            <Button variant="outline" onClick={() => dispatch({ type: 'reset' })} className="rounded-full px-6">{resetLabel}</Button>
+            <Button variant="outline" onClick={() => dispatch({ type: 'reset' })} className="rounded-full px-4 sm:px-6">{resetLabel}</Button>
             <ShareButton locale={L} text={`${level} ${totalPct}% — blog.oiyo.net`} />
           </div>
           <p className="text-[10px] text-slate-400 italic">* Baron-Cohen & Wheelwright(2004) 공감 지수(EQ) 연구에 기반합니다.</p>
@@ -368,7 +368,7 @@ export function AnimalTypeTest({ locale = 'ko' }: { locale?: 'ko' | 'en' | 'ja' 
   const maxScore = sorted[0][1] || 1;
 
   return (
-    <Card className="p-6 bg-white border-slate-200 shadow-xl mt-8">
+    <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-8">
       {!state.done ? (
         <div className="space-y-6">
           <div className="flex items-center gap-2">
@@ -416,7 +416,7 @@ export function AnimalTypeTest({ locale = 'ko' }: { locale?: 'ko' | 'en' | 'ja' 
             </div>
           </div>
           <div className="flex items-center justify-between">
-            <Button variant="outline" onClick={() => dispatch({ type: 'reset' })} className="rounded-full px-6">{resetLabel}</Button>
+            <Button variant="outline" onClick={() => dispatch({ type: 'reset' })} className="rounded-full px-4 sm:px-6">{resetLabel}</Button>
             <ShareButton locale={L} text={`${animalMeta[primary].emoji} ${animalMeta[primary][L].name} — blog.oiyo.net`} />
           </div>
         </div>
@@ -508,7 +508,7 @@ export function FullMBTITest({ locale = 'ko' }: { locale?: 'ko' | 'en' | 'ja' })
   };
 
   return (
-    <Card className="p-6 bg-white border-slate-200 shadow-xl mt-8">
+    <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-8">
       {!state.done ? (
         <div className="space-y-6">
           <div className="flex items-center gap-2">
@@ -561,7 +561,7 @@ export function FullMBTITest({ locale = 'ko' }: { locale?: 'ko' | 'en' | 'ja' })
             <p className="text-sm text-slate-700 leading-relaxed">{(mbtiTypes[type] ?? mbtiTypes['ENFP'])[L]}</p>
           </div>
           <div className="flex items-center justify-between">
-            <Button variant="outline" onClick={() => dispatch({ type: 'reset' })} className="rounded-full px-6">{resetLabel}</Button>
+            <Button variant="outline" onClick={() => dispatch({ type: 'reset' })} className="rounded-full px-4 sm:px-6">{resetLabel}</Button>
             <ShareButton locale={L} text={`MBTI: ${type} — blog.oiyo.net`} />
           </div>
           <p className="text-[10px] text-slate-400 italic">* Myers-Briggs Type Indicator(MBTI)는 Isabel Myers와 Katharine Briggs가 개발한 자기 이해 도구입니다.</p>

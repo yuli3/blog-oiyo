@@ -42,7 +42,7 @@ const EtfRecommender: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =
                 
                 {step < questions.length ? (
                     <div className="w-full max-w-sm space-y-6 animate-in slide-in-from-right">
-                        <div className="bg-muted/30 p-8 rounded-3xl border border-border">
+                        <div className="bg-muted/30 p-4 sm:p-8 rounded-3xl border border-border">
                             <h5 className="text-xl font-black mb-8 leading-tight">{questions[step].q}</h5>
                             <div className="space-y-3">
                                 {questions[step].options.map((o, i) => (
@@ -61,7 +61,7 @@ const EtfRecommender: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =
                     </div>
                 ) : (
                     <div className="w-full max-w-xl animate-in zoom-in-95">
-                        <div className="p-10 bg-foreground rounded-[40px] text-background text-center shadow-2xl relative overflow-hidden">
+                        <div className="p-5 sm:p-10 bg-foreground rounded-[40px] text-background text-center shadow-2xl relative overflow-hidden">
                             <p className="text-[10px] font-black text-primary uppercase tracking-widest mb-2">{t.result}</p>
                             <h4 className="text-4xl font-black mb-4">{rec.type}</h4>
                             <p className="text-sm text-background/50 mb-10">{rec.desc}</p>

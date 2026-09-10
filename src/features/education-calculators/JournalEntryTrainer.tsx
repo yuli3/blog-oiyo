@@ -355,7 +355,7 @@ export const JournalEntryTrainer: React.FC<JournalEntryTrainerProps> = ({ locale
         <h3 className="text-xl font-bold text-green-900 mb-2">
           {locale === 'ko' ? '결과 보기' : 'Quiz Results'}
         </h3>
-        <div className="flex flex-col items-center py-8">
+        <div className="flex flex-col items-center py-5 sm:py-8">
           <div className="w-28 h-28 rounded-full bg-green-100 border-4 border-green-400 flex flex-col items-center justify-center mb-4">
             <span className="text-3xl font-bold text-green-700">{state.score}</span>
             <span className="text-sm text-green-500">/ {SCENARIOS.length}</span>
@@ -372,7 +372,7 @@ export const JournalEntryTrainer: React.FC<JournalEntryTrainerProps> = ({ locale
           </p>
           <button
             onClick={() => dispatch({ type: 'RESTART' })}
-            className="px-6 py-3 bg-green-600 text-white font-bold rounded-xl hover:bg-green-700 transition-colors"
+            className="px-4 sm:px-6 py-3 bg-green-600 text-white font-bold rounded-xl hover:bg-green-700 transition-colors"
             aria-label={locale === 'ko' ? '다시 시작' : 'Restart quiz'}
           >
             {locale === 'ko' ? '다시 시작' : 'Restart Quiz'}

@@ -369,7 +369,7 @@ export default function ToeicScoreConverter({ locale }: Props) {
 
       {/* Result */}
       {result && (
-        <div className={`rounded-2xl border border-gray-200 ${result.bgColor} p-6 space-y-5`}>
+        <div className={`rounded-2xl border border-gray-200 ${result.bgColor} p-4 sm:p-6 space-y-5`}>
           <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider">
             {t.resultTitle}
           </p>

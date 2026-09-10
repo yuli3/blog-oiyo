@@ -64,7 +64,7 @@ export default function VatCalculator() {
   return (
     <div className="not-prose my-8 rounded-2xl border border-border bg-card shadow-sm overflow-hidden">
       {/* Header */}
-      <div className="bg-gradient-to-r from-green-600 to-green-500 px-6 py-4">
+      <div className="bg-gradient-to-r from-green-600 to-green-500 px-4 sm:px-6 py-4">
         <div className="flex items-center gap-2">
           <span className="text-2xl">🧾</span>
           <div>
@@ -74,7 +74,7 @@ export default function VatCalculator() {
         </div>
       </div>
 
-      <div className="p-6 space-y-5">
+      <div className="p-4 sm:p-6 space-y-5">
         {/* Mode tabs */}
         <div className="grid grid-cols-2 gap-2 p-1 bg-muted rounded-xl">
           {modes.map((m) => (

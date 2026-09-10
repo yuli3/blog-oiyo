@@ -228,7 +228,7 @@ const EarlyRepaymentCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'ko'
                 <p className="text-[10px] text-muted-foreground">≈ {(result.termReduction/12).toFixed(1)}{t.years}</p>
               </div>
             </div>
-            <div className={`p-6 rounded-3xl border-2 text-center space-y-1 ${result.netSaving > 0 ? 'bg-success/10 border-success/40' : 'bg-warning/10 border-warning/30'}`}>
+            <div className={`p-4 sm:p-6 rounded-3xl border-2 text-center space-y-1 ${result.netSaving > 0 ? 'bg-success/10 border-success/40' : 'bg-warning/10 border-warning/30'}`}>
               <p className={`text-[10px] font-black uppercase tracking-widest ${result.netSaving > 0 ? 'text-success' : 'text-warning'}`}>{t.netSaving}</p>
               <p className={`text-4xl font-black ${result.netSaving > 0 ? 'text-success' : 'text-warning'}`}>{result.netSaving >= 0 ? '+' : ''}{curr}{fmtMoney(result.netSaving, locale)}</p>
               {result.penalty > 0 && <p className="text-xs text-muted-foreground">{t.penalty}: {curr}{fmtMoney(result.penalty, locale)}</p>}

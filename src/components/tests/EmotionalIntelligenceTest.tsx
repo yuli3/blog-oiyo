@@ -288,7 +288,7 @@ export default function EmotionalIntelligenceTest({ locale: localeProp }: Props)
           <div className="bg-green-500 h-1.5 rounded-full" style={{ width: `${((idx + 1) / questions.length) * 100}%` }} />
         </div>
       </div>
-      <div className="bg-white border border-gray-200 rounded-xl p-6 space-y-4 shadow-sm">
+      <div className="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 space-y-4 shadow-sm">
         <div className="flex items-center gap-2">
           <span className="text-xs px-2 py-0.5 rounded-full text-white" style={{ backgroundColor: dimInfo[q.dim].color }}>{dimInfo[q.dim].name[locale]}</span>
         </div>

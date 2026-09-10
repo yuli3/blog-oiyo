@@ -247,7 +247,7 @@ export default function LoveProfileTest({ locale = "ko" }: Props) {
           <div className="h-2 rounded-full bg-gradient-to-r from-rose-400 to-pink-500 transition-all" style={{width:`${progress}%`}} />
         </div>
       </div>
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-4 min-h-[90px] flex items-center">
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-6 mb-4 min-h-[90px] flex items-center">
         <p className="text-base text-gray-800 leading-relaxed">{qText}</p>
       </div>
       <div className="grid grid-cols-5 gap-2 mb-4">

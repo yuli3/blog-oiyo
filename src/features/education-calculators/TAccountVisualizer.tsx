@@ -328,7 +328,7 @@ export const TAccountVisualizer: React.FC<TAccountVisualizerProps> = ({ locale =
       {state.activeTab === 'taccounts' && (
         <div role="tabpanel">
           {tAccounts.length === 0 ? (
-            <p className="text-slate-400 text-sm text-center py-8">
+            <p className="text-slate-400 text-sm text-center py-5 sm:py-8">
               {locale === 'ko' ? '분개를 입력하면 T계정이 표시됩니다.' : 'Enter journal entries to see T-accounts.'}
             </p>
           ) : (
@@ -401,7 +401,7 @@ export const TAccountVisualizer: React.FC<TAccountVisualizerProps> = ({ locale =
       {state.activeTab === 'trialbalance' && (
         <div role="tabpanel">
           {tAccounts.length === 0 ? (
-            <p className="text-slate-400 text-sm text-center py-8">
+            <p className="text-slate-400 text-sm text-center py-5 sm:py-8">
               {locale === 'ko' ? '분개를 입력하면 잔액시산표가 표시됩니다.' : 'Enter journal entries to see the trial balance.'}
             </p>
           ) : (

@@ -112,7 +112,7 @@ const Blackjack: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
                 {/* Info Display */}
                 <div className="h-12 flex items-center justify-center">
                     {message && (
-                        <div className={`px-8 py-2 rounded-full font-black text-lg shadow-sm animate-in zoom-in-95 ${message === 'win' ? 'bg-primary text-primary-foreground' : message === 'lost' ? 'bg-destructive text-destructive-foreground' : 'bg-muted text-muted-foreground'}`}>
+                        <div className={`px-4 sm:px-8 py-2 rounded-full font-black text-lg shadow-sm animate-in zoom-in-95 ${message === 'win' ? 'bg-primary text-primary-foreground' : message === 'lost' ? 'bg-destructive text-destructive-foreground' : 'bg-muted text-muted-foreground'}`}>
                             {t[message as keyof typeof t]}
                         </div>
                     )}
@@ -135,11 +135,11 @@ const Blackjack: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
                     <div className="flex justify-center gap-4">
                         {status === 'playing' ? (
                             <>
-                                <button onClick={hit} className="px-10 py-3 bg-primary text-primary-foreground rounded-full font-black shadow-lg hover:opacity-90">{t.hit}</button>
-                                <button onClick={stand} className="px-10 py-3 bg-muted text-foreground rounded-full font-black shadow-sm border border-border">{t.stand}</button>
+                                <button onClick={hit} className="px-5 sm:px-10 py-3 bg-primary text-primary-foreground rounded-full font-black shadow-lg hover:opacity-90">{t.hit}</button>
+                                <button onClick={stand} className="px-5 sm:px-10 py-3 bg-muted text-foreground rounded-full font-black shadow-sm border border-border">{t.stand}</button>
                             </>
                         ) : (
-                            <button onClick={initGame} className="px-10 py-3 bg-primary text-primary-foreground rounded-full font-black shadow-lg">{t.reset}</button>
+                            <button onClick={initGame} className="px-5 sm:px-10 py-3 bg-primary text-primary-foreground rounded-full font-black shadow-lg">{t.reset}</button>
                         )}
                     </div>
                 </div>

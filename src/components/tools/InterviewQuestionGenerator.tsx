@@ -502,7 +502,7 @@ export default function InterviewQuestionGenerator({ locale }: Props) {
       </div>
 
       {/* Settings Card */}
-      <div className="bg-card border border-border rounded-2xl p-6 flex flex-col gap-4">
+      <div className="bg-card border border-border rounded-2xl p-4 sm:p-6 flex flex-col gap-4">
         {/* Job */}
         <div className="flex flex-col gap-1.5">
           <label className="text-sm font-bold text-foreground">{t.jobLabel}</label>

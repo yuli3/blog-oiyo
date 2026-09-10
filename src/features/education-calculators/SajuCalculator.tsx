@@ -159,7 +159,7 @@ export function SajuCalculator() {
   ];
 
   return (
-    <Card className="p-6 bg-white border-slate-200 shadow-xl mt-8">
+    <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-8">
       <div className="space-y-6">
         <div>
           <h3 className="text-lg font-black text-slate-900">사주팔자 계산기</h3>

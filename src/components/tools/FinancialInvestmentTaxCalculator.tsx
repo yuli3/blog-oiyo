@@ -349,7 +349,7 @@ const FinancialInvestmentTaxCalculator: React.FC<{ locale?: Locale }> = ({ local
       <div className="space-y-4">
         {/* Tax amount hero */}
         {result.totalTax === 0 ? (
-          <div className="p-6 rounded-2xl bg-success/10 border border-success/30 text-center">
+          <div className="p-4 sm:p-6 rounded-2xl bg-success/10 border border-success/30 text-center">
             <p className="text-2xl font-black text-success">✓ {t.zeroTax}</p>
           </div>
         ) : (

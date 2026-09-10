@@ -43,7 +43,7 @@ export const ISLMSimulator: React.FC = () => {
     const eqR = 0.5 * eqY - 10 - Number(mShift);
 
     return (
-        <Card className="p-6 bg-white border-slate-200 shadow-lg mt-8">
+        <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-lg mt-8">
             <div className="flex items-center gap-2 mb-6 text-slate-900 border-b pb-4">
                 <Activity className="text-rose-500" />
                 <h3 className="text-xl font-bold">인터랙티브 IS-LM 모델 시뮬레이터</h3>
@@ -79,7 +79,7 @@ export const ISLMSimulator: React.FC = () => {
                     </p>
                 </div>
 
-                <div className="space-y-8 bg-slate-50 p-6 rounded-xl border border-slate-200">
+                <div className="space-y-8 bg-slate-50 p-4 sm:p-6 rounded-xl border border-slate-200">
                     <div>
                         <div className="flex justify-between items-center mb-4">
                             <label className="text-sm font-bold text-slate-700 flex items-center gap-2">

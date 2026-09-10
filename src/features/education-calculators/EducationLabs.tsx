@@ -25,7 +25,7 @@ export const CVPLab: React.FC = () => {
   }, [contributionMargin, sellingPrice]);
 
   return (
-    <Card className="p-6 bg-white border-slate-200 shadow-xl mt-8">
+    <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-8">
       <div className="flex items-center gap-2 mb-6 text-slate-900 border-b pb-4">
         <Target className="text-green-500" />
         <h3 className="text-xl font-bold">CVP 손익분기점 라보</h3>
@@ -139,7 +139,7 @@ export const SamplingErrorLab: React.FC = () => {
   }, [results, avg]);
 
   return (
-    <Card className="p-6 bg-white border-slate-200 shadow-xl mt-8">
+    <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-8">
       <div className="flex items-center gap-2 mb-6 text-slate-900 border-b pb-4">
         <Target className="text-green-500" />
         <h3 className="text-xl font-bold">표본오차 실험실</h3>

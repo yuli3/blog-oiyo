@@ -288,7 +288,7 @@ export default function AngerStyleTest({ locale: localeProp }: Props) {
           <div className="bg-red-400 h-1.5 rounded-full" style={{ width: `${((idx + 1) / scenarios.length) * 100}%` }} />
         </div>
       </div>
-      <div className="bg-white border border-gray-200 rounded-xl p-6 space-y-4 shadow-sm">
+      <div className="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 space-y-4 shadow-sm">
         <p className="text-sm font-semibold text-gray-500">📍 {t.progress} {idx + 1}</p>
         <p className="text-base font-medium text-gray-800 leading-relaxed">{s[locale]}</p>
         <p className="text-xs text-gray-400">{t.choose}</p>

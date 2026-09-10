@@ -123,7 +123,7 @@ export function LectureBarChart(props: any) {
 
   const max = Math.max(...rows.map((r) => r.value), 1);
   return (
-    <div className="my-12 rounded-3xl border border-border/40 bg-muted/20 p-8">
+    <div className="my-12 rounded-3xl border border-border/40 bg-muted/20 p-4 sm:p-8">
       {props.title && (
         <h3 className="mb-2 text-center text-sm font-bold uppercase tracking-[0.2em] text-primary/60">{props.title}</h3>
       )}
@@ -165,7 +165,7 @@ export function LecturePieChart(props: any) {
   const total = rows.reduce((s, r) => s + r.value, 0) || 1;
   const palette = ["var(--color-primary)", "#f43f5e", "#f59e0b", "#0ea5e9", "#8b5cf6", "#10b981"];
   return (
-    <div className="my-12 rounded-3xl border border-border/40 bg-muted/20 p-8">
+    <div className="my-12 rounded-3xl border border-border/40 bg-muted/20 p-4 sm:p-8">
       {props.title && (
         <h3 className="mb-2 text-center text-sm font-bold uppercase tracking-[0.2em] text-primary/60">{props.title}</h3>
       )}

@@ -95,8 +95,8 @@ export const AttachmentTest: React.FC = () => {
     };
 
     return (
-        <Card className="p-8 bg-white border-slate-200 shadow-2xl mt-8 min-h-[450px] flex flex-col justify-center overflow-hidden relative">
-            <div className="absolute top-0 right-0 p-8 opacity-5">
+        <Card className="p-4 sm:p-8 bg-white border-slate-200 shadow-2xl mt-8 min-h-[450px] flex flex-col justify-center overflow-hidden relative">
+            <div className="absolute top-0 right-0 p-4 sm:p-8 opacity-5">
                 <Heart size={150} fill="currentColor" className="text-rose-200" />
             </div>
 
@@ -118,7 +118,7 @@ export const AttachmentTest: React.FC = () => {
                             <button
                                 key={i}
                                 onClick={() => handleAnswer(opt.type)}
-                                className="p-6 bg-slate-50 hover:bg-white border-2 border-slate-100 hover:border-rose-400 rounded-2xl text-slate-700 font-bold transition-all text-lg shadow-sm hover:shadow-xl active:scale-95 text-left"
+                                className="p-4 sm:p-6 bg-slate-50 hover:bg-white border-2 border-slate-100 hover:border-rose-400 rounded-2xl text-slate-700 font-bold transition-all text-lg shadow-sm hover:shadow-xl active:scale-95 text-left"
                             >
                                 {opt.text}
                             </button>
@@ -128,7 +128,7 @@ export const AttachmentTest: React.FC = () => {
             ) : (
                 <div className="text-center space-y-8 animate-in zoom-in duration-500 relative z-10 p-4">
                     <div className="flex justify-center mb-4">
-                        <div className={`p-6 rounded-full ${result.color} shadow-lg`}>
+                        <div className={`p-4 sm:p-6 rounded-full ${result.color} shadow-lg`}>
                             {result.icon}
                         </div>
                     </div>
@@ -141,7 +141,7 @@ export const AttachmentTest: React.FC = () => {
                     </div>
                     
                     <div className="pt-6">
-                        <Button onClick={reset} variant="outline" className="rounded-full px-10 border-2 hover:bg-slate-50 font-bold">테스트 다시하기</Button>
+                        <Button onClick={reset} variant="outline" className="rounded-full px-5 sm:px-10 border-2 hover:bg-slate-50 font-bold">테스트 다시하기</Button>
                     </div>
 
                     <p className="text-[10px] text-slate-400 mt-8 italic">
@@ -439,7 +439,7 @@ export const MBTIQuickTest: React.FC<{ locale?: "ko" | "en" | "ja" }> = ({ local
     };
 
     return (
-        <Card className="p-8 bg-white border-slate-200 shadow-2xl mt-8 min-h-[460px] flex flex-col justify-center overflow-hidden relative">
+        <Card className="p-4 sm:p-8 bg-white border-slate-200 shadow-2xl mt-8 min-h-[460px] flex flex-col justify-center overflow-hidden relative">
             <div className="absolute -top-12 -right-10 w-40 h-40 rounded-full bg-emerald-100/50 blur-2xl" />
             <div className="absolute -bottom-12 -left-10 w-40 h-40 rounded-full bg-indigo-100/50 blur-2xl" />
 
@@ -469,7 +469,7 @@ export const MBTIQuickTest: React.FC<{ locale?: "ko" | "en" | "ja" }> = ({ local
                             <button
                                 key={i}
                                 onClick={() => handleAnswer(questions[step].dimension, opt.value)}
-                                className="p-6 bg-slate-50 hover:bg-white border-2 border-slate-100 hover:border-emerald-400 rounded-2xl text-slate-700 font-bold transition-all text-lg shadow-sm hover:shadow-xl active:scale-95 text-left"
+                                className="p-4 sm:p-6 bg-slate-50 hover:bg-white border-2 border-slate-100 hover:border-emerald-400 rounded-2xl text-slate-700 font-bold transition-all text-lg shadow-sm hover:shadow-xl active:scale-95 text-left"
                             >
                                 {opt.text}
                             </button>
@@ -479,7 +479,7 @@ export const MBTIQuickTest: React.FC<{ locale?: "ko" | "en" | "ja" }> = ({ local
             ) : (
                 <div className="text-center space-y-8 animate-in zoom-in duration-500 relative z-10 p-4">
                     <div className="flex justify-center mb-4">
-                        <div className="p-6 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 shadow-lg">
+                        <div className="p-4 sm:p-6 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 shadow-lg">
                             <Compass className="w-12 h-12" />
                         </div>
                     </div>
@@ -501,7 +501,7 @@ export const MBTIQuickTest: React.FC<{ locale?: "ko" | "en" | "ja" }> = ({ local
                     </div>
 
                     <div className="pt-6">
-                        <Button onClick={reset} variant="outline" className="rounded-full px-10 border-2 hover:bg-slate-50 font-bold">
+                        <Button onClick={reset} variant="outline" className="rounded-full px-5 sm:px-10 border-2 hover:bg-slate-50 font-bold">
                             {active.reset}
                         </Button>
                     </div>

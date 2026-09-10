@@ -149,7 +149,7 @@ export default function CapitalGainsTaxCalculator() {
 
   return (
     <div className="not-prose my-8 rounded-2xl border border-border bg-card shadow-sm overflow-hidden">
-      <div className="bg-gradient-to-r from-rose-600 to-pink-500 px-6 py-4">
+      <div className="bg-gradient-to-r from-rose-600 to-pink-500 px-4 sm:px-6 py-4">
         <div className="flex items-center gap-2">
           <span className="text-2xl">🏠</span>
           <div>
@@ -159,7 +159,7 @@ export default function CapitalGainsTaxCalculator() {
         </div>
       </div>
 
-      <div className="p-6 space-y-5">
+      <div className="p-4 sm:p-6 space-y-5">
         {/* Asset type */}
         <div>
           <label className="block text-sm font-semibold mb-2 text-foreground">자산 유형</label>

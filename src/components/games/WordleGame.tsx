@@ -229,7 +229,7 @@ const WordleGame: React.FC = () => {
   }
 
   return (
-    <div className="not-prose flex flex-col items-center gap-6 py-8 px-4 max-w-lg mx-auto select-none">
+    <div className="not-prose flex flex-col items-center gap-6 py-5 sm:py-8 px-4 max-w-lg mx-auto select-none">
       {/* Header */}
       <div className="w-full text-center border-b border-border pb-4">
         <h1 className="text-3xl font-black tracking-widest">WORDLE</h1>
@@ -261,7 +261,7 @@ const WordleGame: React.FC = () => {
         <div className="flex flex-col items-center gap-3">
           <button
             onClick={resetGame}
-            className="px-6 py-3 rounded-2xl bg-primary text-primary-foreground font-black hover:bg-primary/90 transition-colors"
+            className="px-4 sm:px-6 py-3 rounded-2xl bg-primary text-primary-foreground font-black hover:bg-primary/90 transition-colors"
           >
             {status === 'won' ? '🎉 Play Again' : '🔄 Try Again'}
           </button>

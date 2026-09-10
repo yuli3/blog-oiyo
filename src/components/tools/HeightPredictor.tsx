@@ -40,7 +40,7 @@ const HeightPredictor: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) 
                     </div>
                 </div>
 
-                <div className="relative p-10 bg-primary/5 border border-primary/20 rounded-[40px] text-center shadow-2xl animate-in zoom-in-95 group overflow-hidden">
+                <div className="relative p-5 sm:p-10 bg-primary/5 border border-primary/20 rounded-[40px] text-center shadow-2xl animate-in zoom-in-95 group overflow-hidden">
                     <p className="text-[10px] font-black text-primary uppercase tracking-[0.3em] mb-4">{t.result}</p>
                     <div className="flex items-center justify-center gap-4">
                         <h2 className="text-7xl font-black text-primary">{predictedHeight.toFixed(1)}</h2>

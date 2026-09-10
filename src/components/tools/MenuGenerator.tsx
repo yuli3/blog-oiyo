@@ -252,7 +252,7 @@ export default function MenuGenerator() {
           onClick={generate}
           disabled={isGenerating}
           size="lg"
-          className="flex-1 text-base py-6"
+          className="flex-1 text-base py-4 sm:py-6"
         >
           <Shuffle className="mr-2 size-5" />
           {isGenerating ? '선택 중...' : '랜덤 메뉴 고르기'}
@@ -262,7 +262,7 @@ export default function MenuGenerator() {
           disabled={isGenerating}
           size="lg"
           variant="outline"
-          className="flex-1 text-base py-6"
+          className="flex-1 text-base py-4 sm:py-6"
         >
           <Shuffle className="mr-2 size-5" />
           깜짝 메뉴 (전체)
@@ -272,7 +272,7 @@ export default function MenuGenerator() {
           disabled={isGenerating}
           size="lg"
           variant="secondary"
-          className="flex-1 text-base py-6"
+          className="flex-1 text-base py-4 sm:py-6"
         >
           <Swords className="mr-2 size-5" />
           메뉴 배틀 ⚔️
@@ -282,7 +282,7 @@ export default function MenuGenerator() {
       {/* Spin animation */}
       {isGenerating && spinText && (
         <Card>
-          <CardContent className="py-10 text-center">
+          <CardContent className="py-6 sm:py-10 text-center">
             <p className="text-4xl font-bold animate-pulse">{spinText}</p>
             <p className="text-sm text-muted-foreground mt-2">메뉴를 고르는 중...</p>
           </CardContent>
@@ -302,7 +302,7 @@ export default function MenuGenerator() {
                 <button
                   key={idx}
                   onClick={() => chooseBattle(opt)}
-                  className="group min-h-[160px] rounded-xl border-2 border-border p-6 text-center hover:border-primary hover:bg-primary/5 transition-colors"
+                  className="group min-h-[160px] rounded-xl border-2 border-border p-4 sm:p-6 text-center hover:border-primary hover:bg-primary/5 transition-colors"
                 >
                   <div className="text-4xl mb-3">{idx === 0 ? '👈' : '👉'}</div>
                   <div className="text-xl font-bold">{opt.split(' ')[0]}</div>
@@ -346,7 +346,7 @@ export default function MenuGenerator() {
                 />
               </div>
             )}
-            <div className="p-6 text-center space-y-4">
+            <div className="p-4 sm:p-6 text-center space-y-4">
               <p className="text-3xl font-bold">{selectedMenu.split(' ')[0]}</p>
               {selectedMenu.includes(' ') && (
                 <p className="text-sm text-muted-foreground">{selectedMenu.split(' ').slice(1).join(' ')}</p>

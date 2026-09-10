@@ -130,7 +130,7 @@ export default function ColorPairs({ locale = "ko" }: { locale?: Locale }) {
           </div>
         </div>
       ) : (
-        <div className="rounded-3xl border p-6" style={{ background: `#${a}`, color: `#${b}` }}>
+        <div className="rounded-3xl border p-4 sm:p-6" style={{ background: `#${a}`, color: `#${b}` }}>
           <p className="text-2xl font-black">Aa</p>
           <p className="mt-2 text-sm">{lang === "ko" ? "본문처럼 읽히는지 보세요." : "See if this reads as body text."}</p>
           <button type="button" className="mt-4 rounded-full px-4 py-2 text-sm font-black" style={{ background: `#${b}`, color: `#${a}` }}>{lang === "ko" ? "버튼" : "Button"}</button>

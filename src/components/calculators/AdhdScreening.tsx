@@ -39,7 +39,7 @@ const AdhdScreening: React.FC = () => {
     const isComplete = Object.keys(answers).length === questions.length;
 
     return (
-        <div className="not-prose my-12 p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto">
+        <div className="not-prose my-12 p-4 sm:p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto">
             {!showResults ? (
                 <div className="space-y-8">
                     <div className="text-center mb-8">
@@ -77,7 +77,7 @@ const AdhdScreening: React.FC = () => {
                         <button
                             disabled={!isComplete}
                             onClick={() => setShowResults(true)}
-                            className={`px-12 py-4 rounded-2xl font-bold text-lg transition-all ${
+                            className={`px-5 sm:px-12 py-4 rounded-2xl font-bold text-lg transition-all ${
                                 isComplete 
                                     ? 'bg-green-600 text-white hover:bg-green-700 shadow-lg' 
                                     : 'bg-slate-200 text-slate-400 cursor-not-allowed'
@@ -97,7 +97,7 @@ const AdhdScreening: React.FC = () => {
                     
                     <h3 className="text-3xl font-black text-slate-900">진단 결과</h3>
                     
-                    <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
+                    <div className="bg-slate-50 p-4 sm:p-6 rounded-2xl border border-slate-100">
                         <div className="text-sm text-slate-500 uppercase tracking-widest mb-1">주의 필요 지표 (Flags)</div>
                         <div className="text-5xl font-black text-green-600 mb-2">{results.flags} / 6</div>
                         <p className="text-slate-600 text-sm leading-relaxed">

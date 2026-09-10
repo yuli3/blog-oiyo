@@ -23,7 +23,7 @@ const StockAverageCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {/* Current Block */}
-                    <div className="p-6 bg-muted/40 rounded-3xl border border-border space-y-4">
+                    <div className="p-4 sm:p-6 bg-muted/40 rounded-3xl border border-border space-y-4">
                         <div className="flex items-center gap-2 mb-2">
                             <span className="w-2 h-2 rounded-full bg-destructive/40" />
                             <h5 className="text-xs font-black text-muted-foreground uppercase">{t.current}</h5>
@@ -41,7 +41,7 @@ const StockAverageCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
                     </div>
 
                     {/* Add Block */}
-                    <div className="p-6 bg-primary/5 rounded-3xl border border-primary/20 space-y-4">
+                    <div className="p-4 sm:p-6 bg-primary/5 rounded-3xl border border-primary/20 space-y-4">
                         <div className="flex items-center gap-2 mb-2">
                             <span className="w-2 h-2 rounded-full bg-primary" />
                             <h5 className="text-xs font-black text-primary uppercase">{t.add}</h5>
@@ -60,7 +60,7 @@ const StockAverageCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
                 </div>
 
                 {/* Result Area */}
-                <div className="p-8 bg-foreground rounded-[40px] text-background animate-in zoom-in-95">
+                <div className="p-4 sm:p-8 bg-foreground rounded-[40px] text-background animate-in zoom-in-95">
                     <p className="text-[10px] font-black text-background/60 uppercase tracking-widest text-center mb-2">{t.result}</p>
                     <div className="text-center mb-8">
                         <p className="text-[10px] text-background/50 uppercase mb-1">{t.avg}</p>

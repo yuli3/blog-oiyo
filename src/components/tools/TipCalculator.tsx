@@ -119,11 +119,11 @@ const TipCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'en' }) => {
 
         {/* Results */}
         <div className="grid grid-cols-2 gap-4 mt-2">
-          <div className="p-6 rounded-3xl bg-muted/40 border border-border text-center space-y-1">
+          <div className="p-4 sm:p-6 rounded-3xl bg-muted/40 border border-border text-center space-y-1">
             <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{t.total}</p>
             <p className="text-3xl font-black">{currency}{fmt(total, locale)}</p>
           </div>
-          <div className="p-6 rounded-3xl bg-primary/10 border-2 border-primary/30 text-center space-y-1">
+          <div className="p-4 sm:p-6 rounded-3xl bg-primary/10 border-2 border-primary/30 text-center space-y-1">
             <p className="text-[10px] font-black uppercase tracking-widest text-primary/70">{t.each}</p>
             <p className="text-3xl font-black text-primary">{currency}{fmt(totalPerPerson, locale)}</p>
           </div>

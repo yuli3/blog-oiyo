@@ -43,7 +43,7 @@ export default function Calculator() {
     };
 
     return (
-        <div className="max-w-xs mx-auto my-8 p-6 bg-card border border-border rounded-3xl shadow-2xl backdrop-blur-sm animate-fade-up">
+        <div className="max-w-xs mx-auto my-8 p-4 sm:p-6 bg-card border border-border rounded-3xl shadow-2xl backdrop-blur-sm animate-fade-up">
             <div className="mb-4 p-4 bg-muted/30 rounded-2xl text-right">
                 <div className="text-xs text-muted-foreground h-4 mb-1">{equation}</div>
                 <div className="text-3xl font-bold font-heading overflow-hidden whitespace-nowrap">{display}</div>

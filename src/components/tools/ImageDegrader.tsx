@@ -99,7 +99,7 @@ const ImageDegrader: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
                         </div>
                         <div className="flex gap-4">
                             <button onClick={download} className="flex-1 py-4 bg-primary text-primary-foreground rounded-2xl font-black shadow-lg">SAVE AS JPEG</button>
-                            <label className="px-8 py-4 bg-muted text-foreground rounded-2xl font-black cursor-pointer border border-border shadow-sm">
+                            <label className="px-4 sm:px-8 py-4 bg-muted text-foreground rounded-2xl font-black cursor-pointer border border-border shadow-sm">
                                 {t.upload}
                                 <input type="file" className="hidden" accept="image/*" onChange={handleUpload} />
                             </label>

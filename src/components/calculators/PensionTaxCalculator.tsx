@@ -173,7 +173,7 @@ const PensionTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko
         {result && (
           <div className="mt-4 space-y-4" aria-live="polite">
             {/* Refund amount hero */}
-            <div className="bg-rose-600 text-white rounded-2xl p-6 text-center">
+            <div className="bg-rose-600 text-white rounded-2xl p-4 sm:p-6 text-center">
               <p className="text-sm font-semibold opacity-80 mb-1">
                 {ko ? '예상 세액공제 환급액' : 'Estimated Tax Credit Refund'}
               </p>

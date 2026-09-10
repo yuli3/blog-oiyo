@@ -627,7 +627,7 @@ export default function EmojiPicker({ locale }: Props) {
         {/* Emoji Grid */}
         <div className="relative">
           {displayedEmojis.length === 0 ? (
-            <p className="text-center text-muted-foreground text-sm py-10">
+            <p className="text-center text-muted-foreground text-sm py-6 sm:py-10">
               {activeTab === "recent" && !isSearching
                 ? t.recentEmpty
                 : t.noResults}

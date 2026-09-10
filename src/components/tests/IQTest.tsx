@@ -768,7 +768,7 @@ export default function IQTest({ locale }: Props) {
         </div>
         <button
           onClick={() => setPhase("test")}
-          className="px-8 py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition-colors"
+          className="px-4 sm:px-8 py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition-colors"
         >
           {t.startBtn}
         </button>
@@ -917,7 +917,7 @@ export default function IQTest({ locale }: Props) {
     return (
       <div className="space-y-5">
         {/* IQ Card */}
-        <div className={`rounded-2xl border-2 bg-gradient-to-br ${bgGrad} p-6 text-center space-y-2`}>
+        <div className={`rounded-2xl border-2 bg-gradient-to-br ${bgGrad} p-4 sm:p-6 text-center space-y-2`}>
           <div className="text-4xl">🧠</div>
           <p className="text-sm text-gray-500 font-medium">{t.estimatedIQ}</p>
           <p className={`text-6xl font-black ${iqColor}`}>{iq}</p>

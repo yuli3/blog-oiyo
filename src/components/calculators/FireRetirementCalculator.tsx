@@ -199,7 +199,7 @@ const FireRetirementCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
           {result ? (
             <div className="space-y-4">
               {result.alreadyFire ? (
-                <div className="p-6 bg-green-600 text-white rounded-2xl text-center">
+                <div className="p-4 sm:p-6 bg-green-600 text-white rounded-2xl text-center">
                   <div className="text-2xl font-bold mb-2">
                     {locale === 'ko' ? '이미 FIRE 달성!' : 'Already FIRE!'}
                   </div>

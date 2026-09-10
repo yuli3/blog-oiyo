@@ -45,15 +45,15 @@ const PregnancyCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="p-6 bg-destructive/10 border border-destructive/20 rounded-3xl text-center space-y-2">
+                    <div className="p-4 sm:p-6 bg-destructive/10 border border-destructive/20 rounded-3xl text-center space-y-2">
                         <p className="text-[10px] font-black text-destructive uppercase">{t.ovulation}</p>
                         <p className="font-black text-destructive">{formatDate(ovulationDate)}</p>
                     </div>
-                    <div className="p-6 bg-success/10 border border-success/20 rounded-3xl text-center space-y-2">
+                    <div className="p-4 sm:p-6 bg-success/10 border border-success/20 rounded-3xl text-center space-y-2">
                         <p className="text-[10px] font-black text-success uppercase">{t.fertility}</p>
                         <p className="font-black text-success text-xs">{formatDate(fertStart)} ~ {formatDate(fertEnd)}</p>
                     </div>
-                    <div className="p-6 bg-foreground border border-background/15 rounded-3xl text-center space-y-2">
+                    <div className="p-4 sm:p-6 bg-foreground border border-background/15 rounded-3xl text-center space-y-2">
                         <p className="text-[10px] font-black text-primary uppercase">{t.dueDate}</p>
                         <p className="font-black text-background">{formatDate(dueDate)}</p>
                     </div>

@@ -194,7 +194,7 @@ export default function CritiQuestTest({ locale: localeProp }: Props) {
   if (phase === "result") {
     const r = t.results[level];
     return (
-      <div className="not-prose my-10 p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto text-center space-y-6">
+      <div className="not-prose my-10 p-4 sm:p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto text-center space-y-6">
         <p className="text-xs font-bold text-rose-500 uppercase tracking-widest">{t.resultLabel}</p>
         <div className="text-6xl">{r.emoji}</div>
         <h3 className="text-3xl font-black text-slate-900">{r.title}</h3>
@@ -207,7 +207,7 @@ export default function CritiQuestTest({ locale: localeProp }: Props) {
             <div className="h-3 bg-rose-500 rounded-full transition-all" style={{ width: `${Math.round(pct * 100)}%` }} />
           </div>
         </div>
-        <div className="p-6 bg-rose-50 rounded-2xl border border-rose-100">
+        <div className="p-4 sm:p-6 bg-rose-50 rounded-2xl border border-rose-100">
           <p className="text-slate-700 text-base leading-relaxed">{r.desc}</p>
         </div>
         <button onClick={() => { setAnswers({}); setRevealed({}); setPhase("quiz"); }} className="text-slate-400 text-sm hover:underline">{t.retake}</button>
@@ -216,7 +216,7 @@ export default function CritiQuestTest({ locale: localeProp }: Props) {
   }
 
   return (
-    <div className="not-prose my-10 p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto space-y-8">
+    <div className="not-prose my-10 p-4 sm:p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto space-y-8">
       <div className="text-center">
         <h3 className="text-2xl font-black text-slate-900">{t.title}</h3>
         <p className="text-sm text-slate-500 mt-2">{t.description}</p>
@@ -271,7 +271,7 @@ export default function CritiQuestTest({ locale: localeProp }: Props) {
         <button
           disabled={!isComplete}
           onClick={() => setPhase("result")}
-          className={`px-10 py-3 rounded-2xl font-bold text-base transition-all ${isComplete ? "bg-rose-500 text-white hover:bg-rose-600 shadow-lg" : "bg-slate-200 text-slate-400 cursor-not-allowed"}`}
+          className={`px-5 sm:px-10 py-3 rounded-2xl font-bold text-base transition-all ${isComplete ? "bg-rose-500 text-white hover:bg-rose-600 shadow-lg" : "bg-slate-200 text-slate-400 cursor-not-allowed"}`}
         >
           {lang === "ko" ? "결과 보기" : "See Results"}
         </button>

@@ -132,7 +132,7 @@ const BodyFatCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
                     ))}
                 </div>
 
-                <div className="p-8 bg-foreground rounded-[32px] text-background flex flex-col gap-6 shadow-2xl">
+                <div className="p-4 sm:p-8 bg-foreground rounded-[32px] text-background flex flex-col gap-6 shadow-2xl">
                     <div className="flex flex-col sm:flex-row gap-6 items-center justify-around">
                         <div className="text-center space-y-1">
                             <p className="text-[10px] font-black text-background/60 uppercase tracking-widest">{t.bodyFat}</p>

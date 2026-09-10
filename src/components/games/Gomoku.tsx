@@ -199,10 +199,10 @@ const Gomoku: React.FC<{ locale?: Locale }> = ({ locale = 'ko' }) => {
 
                 {winner !== null && (
                     <div className="absolute inset-0 z-10 bg-background/60 backdrop-blur-sm flex flex-col items-center justify-center animate-in fade-in zoom-in-95">
-                        <div className="bg-card p-8 rounded-3xl shadow-xl border border-border text-center">
+                        <div className="bg-card p-4 sm:p-8 rounded-3xl shadow-xl border border-border text-center">
                             <h4 className="text-3xl font-black text-foreground mb-2">{winLabel}</h4>
                             <p className="text-muted-foreground mb-6 uppercase tracking-widest font-bold text-xs">{t.over}</p>
-                            <button onClick={reset} className="px-10 py-3 bg-primary text-primary-foreground rounded-full font-bold shadow-lg">
+                            <button onClick={reset} className="px-5 sm:px-10 py-3 bg-primary text-primary-foreground rounded-full font-bold shadow-lg">
                                 {t.reset}
                             </button>
                         </div>

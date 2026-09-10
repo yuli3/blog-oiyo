@@ -148,7 +148,7 @@ const Dominoes: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
             {winner && (
                 <div className="absolute inset-0 z-20 bg-background/80 backdrop-blur-md rounded-4xl flex flex-col items-center justify-center animate-in fade-in zoom-in-95">
                     <h4 className="text-4xl font-black text-primary mb-4">{winner} {t.win}</h4>
-                    <button onClick={initGame} className="px-10 py-3 bg-primary text-primary-foreground rounded-full font-bold shadow-lg">
+                    <button onClick={initGame} className="px-5 sm:px-10 py-3 bg-primary text-primary-foreground rounded-full font-bold shadow-lg">
                         {t.reset}
                     </button>
                 </div>

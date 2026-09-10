@@ -103,7 +103,7 @@ export default function SeveranceCalculator() {
 
   return (
     <div className="not-prose my-8 rounded-2xl border border-border bg-card shadow-sm overflow-hidden">
-      <div className="bg-gradient-to-r from-cyan-600 to-teal-500 px-6 py-4">
+      <div className="bg-gradient-to-r from-cyan-600 to-teal-500 px-4 sm:px-6 py-4">
         <div className="flex items-center gap-2">
           <span className="text-2xl">📋</span>
           <div>
@@ -113,7 +113,7 @@ export default function SeveranceCalculator() {
         </div>
       </div>
 
-      <div className="p-6 space-y-5">
+      <div className="p-4 sm:p-6 space-y-5">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
             <label className="block text-sm font-semibold mb-1.5 text-foreground">월 통상임금 (원)</label>

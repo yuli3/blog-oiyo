@@ -242,7 +242,7 @@ const AimTrainer: React.FC<Props> = ({ locale }) => {
   const grade = getGrade(accuracy);
 
   return (
-    <div className="not-prose my-12 p-6 bg-card text-card-foreground rounded-3xl border border-border shadow-sm max-w-xl mx-auto select-none">
+    <div className="not-prose my-12 p-4 sm:p-6 bg-card text-card-foreground rounded-3xl border border-border shadow-sm max-w-xl mx-auto select-none">
       <div className="flex justify-between items-center mb-4">
         <span className="text-sm font-bold text-muted-foreground uppercase tracking-widest">
           {t.title}
@@ -267,7 +267,7 @@ const AimTrainer: React.FC<Props> = ({ locale }) => {
       </div>
 
       {phase === "intro" && (
-        <div className="flex flex-col items-center justify-center gap-6 py-12">
+        <div className="flex flex-col items-center justify-center gap-6 py-6 sm:py-12">
           <div className="w-16 h-16 bg-violet-100 rounded-2xl flex items-center justify-center">
             <span className="text-3xl">🎯</span>
           </div>
@@ -276,7 +276,7 @@ const AimTrainer: React.FC<Props> = ({ locale }) => {
           </p>
           <button
             onClick={startGame}
-            className="px-10 py-3 bg-violet-500 text-white rounded-full font-bold hover:bg-violet-600 transition-colors"
+            className="px-5 sm:px-10 py-3 bg-violet-500 text-white rounded-full font-bold hover:bg-violet-600 transition-colors"
           >
             {t.start}
           </button>
@@ -316,7 +316,7 @@ const AimTrainer: React.FC<Props> = ({ locale }) => {
       )}
 
       {phase === "result" && (
-        <div className="flex flex-col items-center gap-5 py-8">
+        <div className="flex flex-col items-center gap-5 py-5 sm:py-8">
           <h3 className="text-xl font-black text-primary">{t.result}</h3>
           <div className="grid grid-cols-2 gap-4 w-full max-w-xs">
             <div className="bg-muted/40 rounded-2xl p-4 text-center">
@@ -345,7 +345,7 @@ const AimTrainer: React.FC<Props> = ({ locale }) => {
           </div>
           <button
             onClick={startGame}
-            className="px-10 py-3 bg-violet-500 text-white rounded-full font-bold hover:bg-violet-600 transition-colors"
+            className="px-5 sm:px-10 py-3 bg-violet-500 text-white rounded-full font-bold hover:bg-violet-600 transition-colors"
           >
             {t.restart}
           </button>

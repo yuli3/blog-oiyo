@@ -301,7 +301,7 @@ const FuelCostCalculator = ({ locale }: Props) => {
 
         {/* Results */}
         <div className="grid grid-cols-2 gap-4">
-          <div className="p-6 bg-foreground rounded-3xl text-background shadow-lg text-center">
+          <div className="p-4 sm:p-6 bg-foreground rounded-3xl text-background shadow-lg text-center">
             <p className="text-[10px] font-black text-background/60 uppercase tracking-widest mb-2">
               {t.totalCost}
             </p>
@@ -309,7 +309,7 @@ const FuelCostCalculator = ({ locale }: Props) => {
               ₩{fmtKRW(totalCost)}
             </p>
           </div>
-          <div className="p-6 bg-muted/40 border border-border rounded-3xl text-center">
+          <div className="p-4 sm:p-6 bg-muted/40 border border-border rounded-3xl text-center">
             <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-2">
               {t.perPerson}
             </p>

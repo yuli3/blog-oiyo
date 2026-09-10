@@ -58,7 +58,7 @@ const BrokerageCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
                     />
                 </div>
 
-                <div className="p-8 bg-foreground rounded-[32px] text-background text-center animate-in slide-in-from-bottom-6">
+                <div className="p-4 sm:p-8 bg-foreground rounded-[32px] text-background text-center animate-in slide-in-from-bottom-6">
                     <p className="text-[10px] font-black text-background/60 uppercase tracking-widest mb-2">{t.result}</p>
                     <h4 className="text-4xl font-black text-primary">₩{Math.round(fee).toLocaleString()}</h4>
                     <div className="flex justify-center gap-6 mt-6 border-t border-background/15 pt-6">

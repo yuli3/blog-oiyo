@@ -36,8 +36,8 @@ export const CVPGame: React.FC = () => {
     };
 
     return (
-        <Card className="p-8 bg-slate-50 border-slate-200 shadow-2xl mt-8 overflow-hidden relative">
-            <div className="absolute top-0 right-0 p-8 opacity-10">
+        <Card className="p-4 sm:p-8 bg-slate-50 border-slate-200 shadow-2xl mt-8 overflow-hidden relative">
+            <div className="absolute top-0 right-0 p-4 sm:p-8 opacity-10">
                 <Coins size={120} className="text-amber-300" />
             </div>
 
@@ -84,7 +84,7 @@ export const CVPGame: React.FC = () => {
                 </div>
 
                 <div className="flex flex-col gap-4">
-                    <div className="flex-1 p-6 bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-center items-center text-center">
+                    <div className="flex-1 p-4 sm:p-6 bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-center items-center text-center">
                         <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">현재 예상 이익</span>
                         <div className={`text-4xl font-black font-mono transition-colors ${profit >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
                             {profit >= 0 ? '+' : ''}₩{profit.toLocaleString()}
@@ -99,7 +99,7 @@ export const CVPGame: React.FC = () => {
                     
                     <Button 
                         onClick={simulate}
-                        className={`w-full py-8 text-xl font-bold rounded-2xl shadow-lg transition-all active:scale-95 ${profit >= targetProfit ? 'bg-emerald-600 text-white' : 'bg-slate-900 text-white'}`}
+                        className={`w-full py-5 sm:py-8 text-xl font-bold rounded-2xl shadow-lg transition-all active:scale-95 ${profit >= targetProfit ? 'bg-emerald-600 text-white' : 'bg-slate-900 text-white'}`}
                     >
                         시뮬레이션 가동
                     </Button>
@@ -107,7 +107,7 @@ export const CVPGame: React.FC = () => {
             </div>
 
             {isSimulated && (
-                <div className={`p-6 rounded-2xl animate-in zoom-in duration-300 ${win ? 'bg-emerald-100 border-2 border-emerald-300' : 'bg-rose-100 border-2 border-rose-300'}`}>
+                <div className={`p-4 sm:p-6 rounded-2xl animate-in zoom-in duration-300 ${win ? 'bg-emerald-100 border-2 border-emerald-300' : 'bg-rose-100 border-2 border-rose-300'}`}>
                     <div className="flex items-center gap-4">
                         <div className="p-3 bg-white rounded-full">
                             {win ? <TrendingUp className="text-emerald-500" /> : <TrendingDown className="text-rose-500" />}

@@ -54,7 +54,7 @@ export function LostArkAuctionCalc() {
   ];
 
   return (
-    <Card className="p-6 bg-white border-slate-200 shadow-xl mt-8">
+    <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-8">
       <div className="space-y-5">
         <div>
           <h3 className="text-lg font-black text-slate-900 mb-1">로스트아크 경매 계산기</h3>
@@ -274,7 +274,7 @@ export function LostArkRaidSplitter() {
   const games = getGameCount(raidType);
 
   return (
-    <Card className="p-6 bg-white border-slate-200 shadow-xl mt-8">
+    <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-8">
       <div className="space-y-5">
         <div className="flex items-start justify-between">
           <div>

@@ -46,14 +46,14 @@ const SvgStudio: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
                             value={code} 
                             onChange={(e) => setCode(e.target.value)}
                             spellCheck={false}
-                            className="w-full h-80 bg-foreground text-success font-mono text-xs p-6 rounded-3xl border-4 border-background/15 focus:ring-4 focus:ring-success/30 outline-none shadow-inner"
+                            className="w-full h-80 bg-foreground text-success font-mono text-xs p-4 sm:p-6 rounded-3xl border-4 border-background/15 focus:ring-4 focus:ring-success/30 outline-none shadow-inner"
                         />
                     </div>
 
                     {/* Preview Area */}
                     <div className="flex-1 space-y-3">
                         <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">{t.preview}</p>
-                        <div className="w-full h-80 bg-card rounded-3xl border border-border shadow-sm flex items-center justify-center p-8 overflow-hidden relative group">
+                        <div className="w-full h-80 bg-card rounded-3xl border border-border shadow-sm flex items-center justify-center p-4 sm:p-8 overflow-hidden relative group">
                             <div 
                                 className="max-w-full max-h-full flex items-center justify-center"
                                 dangerouslySetInnerHTML={{ __html: safeHtml }}
@@ -65,8 +65,8 @@ const SvgStudio: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
                 </div>
 
                 <div className="flex gap-4 w-full justify-center">
-                    <button onClick={copyToClipboard} className="px-10 py-3 bg-muted text-foreground rounded-full font-black border border-border hover:bg-muted/80 transition-colors">{t.copy}</button>
-                    <button onClick={downloadFile} className="px-10 py-3 bg-primary text-primary-foreground rounded-full font-black shadow-lg hover:opacity-90 transition-opacity">{t.download}</button>
+                    <button onClick={copyToClipboard} className="px-5 sm:px-10 py-3 bg-muted text-foreground rounded-full font-black border border-border hover:bg-muted/80 transition-colors">{t.copy}</button>
+                    <button onClick={downloadFile} className="px-5 sm:px-10 py-3 bg-primary text-primary-foreground rounded-full font-black shadow-lg hover:opacity-90 transition-opacity">{t.download}</button>
                 </div>
             </div>
         </GameContainer>

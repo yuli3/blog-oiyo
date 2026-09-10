@@ -1013,11 +1013,11 @@ export default function MbtiLoveTest({ locale = 'ko' }: Props) {
     ]
 
     return (
-      <div className="max-w-2xl mx-auto px-4 py-8 space-y-6">
+      <div className="max-w-2xl mx-auto px-4 py-5 sm:py-8 space-y-6">
         {/* Header */}
         <div className="text-center space-y-2">
           <p className="text-sm font-medium text-muted-foreground uppercase tracking-widest">{t.resultTitle}</p>
-          <div className="inline-block bg-primary text-primary-foreground text-4xl font-black px-6 py-2 rounded-lg">
+          <div className="inline-block bg-primary text-primary-foreground text-4xl font-black px-4 sm:px-6 py-2 rounded-lg">
             {result.type}
           </div>
           <p className="text-xl font-bold">{data.name}</p>
@@ -1120,7 +1120,7 @@ export default function MbtiLoveTest({ locale = 'ko' }: Props) {
   const progress = Math.round((current / questions.length) * 100)
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8 space-y-6">
+    <div className="max-w-2xl mx-auto px-4 py-5 sm:py-8 space-y-6">
       {/* Header */}
       <div className="space-y-1">
         <p className="text-xs font-medium text-muted-foreground uppercase tracking-widest">{t.title}</p>

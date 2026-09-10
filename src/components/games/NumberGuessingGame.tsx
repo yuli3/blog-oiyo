@@ -221,7 +221,7 @@ const NumberGuessingGame: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
                 onClick={handleSubmit}
                 disabled={!state.guess || throttled}
                 aria-label={t.submit}
-                className="px-6 py-3 rounded-2xl bg-primary text-primary-foreground font-black hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-95"
+                className="px-4 sm:px-6 py-3 rounded-2xl bg-primary text-primary-foreground font-black hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-95"
               >
                 {t.submit}
               </button>

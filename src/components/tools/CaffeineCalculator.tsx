@@ -48,11 +48,11 @@ const CaffeineCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
                     </div>
                 </div>
 
-                <div className={`p-10 rounded-[40px] border-4 transition-all duration-500 text-center space-y-4 shadow-2xl relative overflow-hidden ${isAlert ? 'bg-warning/10 border-warning/30' : 'bg-success/10 border-success/30'}`}>
+                <div className={`p-5 sm:p-10 rounded-[40px] border-4 transition-all duration-500 text-center space-y-4 shadow-2xl relative overflow-hidden ${isAlert ? 'bg-warning/10 border-warning/30' : 'bg-success/10 border-success/30'}`}>
                     <div className="relative z-10">
                         <p className={`text-[10px] font-black uppercase tracking-widest ${isAlert ? 'text-warning' : 'text-success'}`}>{t.result}</p>
                         <h2 className={`text-6xl font-black ${isAlert ? 'text-warning' : 'text-success'}`}>{remaining.toFixed(1)}mg</h2>
-                        <div className={`inline-block px-6 py-2 rounded-full font-black text-sm uppercase ${isAlert ? 'bg-warning/20 text-warning' : 'bg-success/20 text-success'}`}>
+                        <div className={`inline-block px-4 sm:px-6 py-2 rounded-full font-black text-sm uppercase ${isAlert ? 'bg-warning/20 text-warning' : 'bg-success/20 text-success'}`}>
                             {isAlert ? t.danger : t.safe}
                         </div>
                         <p className="mt-6 text-sm font-medium text-muted-foreground max-w-sm mx-auto">

@@ -36,8 +36,8 @@ export const DeveloperUnitConverter: React.FC = () => {
     };
 
     return (
-        <Card className="p-8 bg-slate-950 border-slate-800 text-white shadow-2xl mt-8 overflow-hidden relative">
-            <div className="absolute top-0 right-0 p-8 opacity-5">
+        <Card className="p-4 sm:p-8 bg-slate-950 border-slate-800 text-white shadow-2xl mt-8 overflow-hidden relative">
+            <div className="absolute top-0 right-0 p-4 sm:p-8 opacity-5">
                 <Code size={100} />
             </div>
 
@@ -50,7 +50,7 @@ export const DeveloperUnitConverter: React.FC = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
                 {/* PX to REM */}
-                <div className="space-y-4 p-6 bg-slate-900 rounded-2xl border border-white/5">
+                <div className="space-y-4 p-4 sm:p-6 bg-slate-900 rounded-2xl border border-white/5">
                     <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-4">PX to REM Converter</span>
                     <div className="space-y-4">
                         <div className="grid grid-cols-2 gap-4">
@@ -81,7 +81,7 @@ export const DeveloperUnitConverter: React.FC = () => {
                 </div>
 
                 {/* HEX to RGB */}
-                <div className="space-y-4 p-6 bg-slate-900 rounded-2xl border border-white/5">
+                <div className="space-y-4 p-4 sm:p-6 bg-slate-900 rounded-2xl border border-white/5">
                     <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-4">Color Converter (HEX to RGB)</span>
                     <div className="space-y-4">
                         <div>

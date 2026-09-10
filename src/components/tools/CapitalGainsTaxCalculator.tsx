@@ -262,11 +262,11 @@ const CapitalGainsTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale 
                 )}
 
                 {isExempt ? (
-                    <div className="rounded-2xl bg-success/10 border border-success/30 p-6 text-center">
+                    <div className="rounded-2xl bg-success/10 border border-success/30 p-4 sm:p-6 text-center">
                         <p className="text-success font-bold text-base">{t[noteKey]}</p>
                     </div>
                 ) : (
-                    <div className="rounded-2xl border border-border bg-muted/30 p-6 flex flex-col gap-3">
+                    <div className="rounded-2xl border border-border bg-muted/30 p-4 sm:p-6 flex flex-col gap-3">
                         {[
                             { label: t.gainAmount, value: `₩${fmt(gain)}`, highlight: false },
                             ...(assetType === 'realestate' && longTermDeductionAmt > 0 ? [{ label: t.longTermDeduction, value: `-₩${fmt(longTermDeductionAmt)}`, highlight: false }] : []),

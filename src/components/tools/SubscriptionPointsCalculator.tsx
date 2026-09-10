@@ -180,7 +180,7 @@ const SubscriptionPointsCalculator: React.FC<{ locale?: Locale }> = ({ locale = 
 
         {/* Result */}
         <div className="space-y-4">
-          <div className="p-8 rounded-[32px] bg-muted/30 border-2 border-border text-center space-y-3">
+          <div className="p-4 sm:p-8 rounded-[32px] bg-muted/30 border-2 border-border text-center space-y-3">
             <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{t.totalScore}</p>
             <p className="text-6xl font-black">{total}</p>
             <p className="text-sm font-bold text-muted-foreground">{t.maxScore}</p>

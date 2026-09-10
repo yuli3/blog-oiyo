@@ -234,7 +234,7 @@ const SleepCalculator: React.FC<{ locale?: Lang }> = ({ locale = 'ko' }) => {
                     />
                 </div>
 
-                <div className="p-6 bg-foreground rounded-[32px] text-background flex flex-col gap-4 shadow-2xl">
+                <div className="p-4 sm:p-6 bg-foreground rounded-[32px] text-background flex flex-col gap-4 shadow-2xl">
                     <p className="text-[10px] font-black text-background/60 uppercase tracking-widest text-center">{t.results}</p>
                     <div className="grid grid-cols-3 gap-3">
                         {results.map(r => (

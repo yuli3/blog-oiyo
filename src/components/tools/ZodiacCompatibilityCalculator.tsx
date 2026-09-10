@@ -416,7 +416,7 @@ export default function ZodiacCompatibilityCalculator({ locale = "ko" }: Props) 
       ) : (
         <div className="space-y-4">
           {/* Sign display */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 text-center">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 text-center">
             <div className="flex items-center justify-center gap-6 mb-5">
               {[sign1, sign2].map((s, i) => {
                 const el = SIGN_ELEMENT[s as ZodiacSign];

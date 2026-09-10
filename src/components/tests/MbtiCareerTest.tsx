@@ -1142,7 +1142,7 @@ export default function MbtiCareerTest({ locale: localeProp = 'ko' }: Props) {
             />
           </div>
         </div>
-        <div className="rounded-xl border bg-card p-6 text-center">
+        <div className="rounded-xl border bg-card p-4 sm:p-6 text-center">
           <p className="text-lg font-medium">{q.text}</p>
         </div>
         <div className="grid gap-3">

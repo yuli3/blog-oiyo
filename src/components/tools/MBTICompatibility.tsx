@@ -676,7 +676,7 @@ export default function MBTICompatibility({ locale }: Props) {
         {typeA && typeB && (
           <button
             onClick={() => setShowResult(true)}
-            className="px-6 py-2.5 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition-colors text-sm"
+            className="px-4 sm:px-6 py-2.5 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition-colors text-sm"
           >
             {t.analyzeBtn}
           </button>

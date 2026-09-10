@@ -36,7 +36,7 @@ const AcquisitionTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
                     </div>
                 </div>
 
-                <div className="bg-foreground rounded-[32px] p-8 text-background animate-in zoom-in-95">
+                <div className="bg-foreground rounded-[32px] p-4 sm:p-8 text-background animate-in zoom-in-95">
                     <div className="flex justify-between items-center mb-6">
                         <span className="text-[10px] font-black text-background/60 uppercase">{t.result}</span>
                         <h4 className="text-2xl font-black text-primary">₩{Math.round(total).toLocaleString()}</h4>

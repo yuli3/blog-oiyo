@@ -223,7 +223,7 @@ const Checkers: React.FC<{ locale?: Locale }> = ({ locale = 'ko' }) => {
             {winner && (
                 <div className="absolute inset-0 z-20 bg-background/60 backdrop-blur-sm rounded-4xl flex flex-col items-center justify-center animate-in fade-in zoom-in-95">
                     <h4 className="text-4xl font-black text-foreground mb-4">{winLabel}</h4>
-                    <button onClick={initGame} className="px-10 py-3 bg-primary text-primary-foreground rounded-full font-bold shadow-lg">
+                    <button onClick={initGame} className="px-5 sm:px-10 py-3 bg-primary text-primary-foreground rounded-full font-bold shadow-lg">
                         {t.reset}
                     </button>
                 </div>

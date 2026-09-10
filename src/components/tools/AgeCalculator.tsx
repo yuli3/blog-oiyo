@@ -33,17 +33,17 @@ const AgeCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
                 
                 <div className="w-full max-w-sm mx-auto space-y-4">
                     <label className="text-[10px] font-black text-muted-foreground uppercase">{t.birth}</label>
-                    <input type="date" value={birth} onChange={(e) => setBirth(e.target.value)} className="w-full p-6 bg-muted/30 rounded-[32px] border border-border font-black text-2xl text-center outline-none focus:ring-4 focus:ring-primary/10" />
+                    <input type="date" value={birth} onChange={(e) => setBirth(e.target.value)} className="w-full p-4 sm:p-6 bg-muted/30 rounded-[32px] border border-border font-black text-2xl text-center outline-none focus:ring-4 focus:ring-primary/10" />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="p-8 bg-foreground rounded-[40px] text-background text-center shadow-xl flex flex-col justify-center">
+                    <div className="p-4 sm:p-8 bg-foreground rounded-[40px] text-background text-center shadow-xl flex flex-col justify-center">
                         <p className="text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-2">{t.intlAge}</p>
                         <h2 className="text-6xl font-black">{age}</h2>
                         <p className="text-xs text-background/60 mt-2">표준 법적 나이</p>
                     </div>
                     
-                    <div className="p-8 bg-muted/30 rounded-[40px] flex flex-col justify-center gap-6">
+                    <div className="p-4 sm:p-8 bg-muted/30 rounded-[40px] flex flex-col justify-center gap-6">
                         <div className="flex justify-between items-center border-b border-border pb-4">
                             <span className="text-[10px] font-black text-muted-foreground uppercase">{t.yearAge}</span>
                             <span className="text-lg font-bold">{yearAge}세</span>
@@ -54,7 +54,7 @@ const AgeCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
                         </div>
                     </div>
 
-                    <div className="p-8 bg-primary/5 border border-primary/20 rounded-[40px] flex flex-col justify-center space-y-4">
+                    <div className="p-4 sm:p-8 bg-primary/5 border border-primary/20 rounded-[40px] flex flex-col justify-center space-y-4">
                         <p className="text-[10px] font-black text-primary uppercase">{t.event}</p>
                         <div className="space-y-4">
                             <div className="flex gap-4 items-center">

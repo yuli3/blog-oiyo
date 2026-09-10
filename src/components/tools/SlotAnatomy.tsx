@@ -201,7 +201,7 @@ const SlotAnatomy: React.FC<{ locale?: string }> = ({ locale = "ko" }) => {
         type="button"
         onClick={run}
         disabled={busy}
-        className="w-full rounded-xl bg-slate-900 px-6 py-4 text-base font-bold text-white transition-colors hover:bg-slate-700 disabled:opacity-60"
+        className="w-full rounded-xl bg-slate-900 px-4 sm:px-6 py-4 text-base font-bold text-white transition-colors hover:bg-slate-700 disabled:opacity-60"
       >
         {busy ? t.running : t.runLabel}
       </button>

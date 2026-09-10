@@ -70,7 +70,7 @@ const MbtiSalaryExpert: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' })
     const data = t.types[selectedType] || t.types.ENTJ;
 
     return (
-        <div className="not-prose my-12 p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-3xl mx-auto">
+        <div className="not-prose my-12 p-4 sm:p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-3xl mx-auto">
             <h3 className="text-2xl font-black text-center text-slate-900 mb-8">{t.title}</h3>
             
             <div className="flex flex-wrap justify-center gap-2 mb-10">
@@ -101,7 +101,7 @@ const MbtiSalaryExpert: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' })
                     </div>
                 </div>
 
-                <div className="p-6 rounded-2xl bg-slate-900 text-white flex flex-col">
+                <div className="p-4 sm:p-6 rounded-2xl bg-slate-900 text-white flex flex-col">
                     <h4 className="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-4">💬 {t.script}</h4>
                     <div className="flex-1 italic text-lg leading-relaxed mb-4">
                         <span className="text-4xl text-indigo-500 font-serif">"</span>

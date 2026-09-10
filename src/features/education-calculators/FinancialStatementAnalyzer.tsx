@@ -339,19 +339,19 @@ export const FinancialStatementAnalyzer: React.FC = () => {
   return (
     <Card className="bg-white border border-emerald-100 shadow-xl rounded-2xl overflow-hidden mt-8">
       {/* Header */}
-      <div className="bg-emerald-700 px-6 py-5">
+      <div className="bg-emerald-700 px-4 sm:px-6 py-5">
         <h3 className="text-lg font-bold text-white">재무제표 분석기</h3>
         <p className="text-xs text-emerald-200 mt-1">재무상태표 · 손익계산서 · 현금흐름표 · 비율 벤치마크</p>
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 px-6 pt-4 pb-0" role="tablist" aria-label="재무제표 분석 탭">
+      <div className="flex gap-2 px-4 sm:px-6 pt-4 pb-0" role="tablist" aria-label="재무제표 분석 탭">
         <TabButton active={activeTab === 0} onClick={() => setActiveTab(0)}>B/S + I/S</TabButton>
         <TabButton active={activeTab === 1} onClick={() => setActiveTab(1)}>현금흐름표</TabButton>
         <TabButton active={activeTab === 2} onClick={() => setActiveTab(2)}>비율 벤치마크</TabButton>
       </div>
 
-      <div className="px-6 pb-6 pt-4">
+      <div className="px-4 sm:px-6 pb-6 pt-4">
 
         {/* ── Tab 0: B/S + I/S ── */}
         {activeTab === 0 && (

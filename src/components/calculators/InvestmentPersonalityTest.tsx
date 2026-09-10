@@ -76,7 +76,7 @@ const InvestmentPersonalityTest: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale 
     const isComplete = Object.keys(answers).length === t.questions.length;
 
     return (
-        <div className="not-prose my-12 p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto">
+        <div className="not-prose my-12 p-4 sm:p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto">
             {!showResults ? (
                 <div className="space-y-6">
                     <div className="text-center mb-10">
@@ -111,7 +111,7 @@ const InvestmentPersonalityTest: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale 
                         <button
                             disabled={!isComplete}
                             onClick={() => setShowResults(true)}
-                            className={`px-12 py-4 rounded-2xl font-bold text-lg transition-all ${
+                            className={`px-5 sm:px-12 py-4 rounded-2xl font-bold text-lg transition-all ${
                                 isComplete 
                                     ? 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-xl' 
                                     : 'bg-slate-200 text-slate-400 cursor-not-allowed'
@@ -122,14 +122,14 @@ const InvestmentPersonalityTest: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale 
                     </div>
                 </div>
             ) : (
-                <div className="text-center space-y-8 py-6 animate-fade-in">
+                <div className="text-center space-y-8 py-4 sm:py-6 animate-fade-in">
                     <div className="space-y-2">
                         <span className="text-xs font-bold text-indigo-500 uppercase tracking-widest">{locale === 'ko' ? '당신의 투자 DNA' : 'Your Investment DNA'}</span>
                         {/* @ts-ignore */}
                         <h3 className="text-4xl font-black text-slate-900">{t.results[resultType].title}</h3>
                     </div>
 
-                    <div className="p-8 bg-indigo-50 rounded-3xl border border-indigo-100">
+                    <div className="p-4 sm:p-8 bg-indigo-50 rounded-3xl border border-indigo-100">
                         {/* @ts-ignore */}
                         <p className="text-slate-700 text-lg leading-relaxed">{t.results[resultType].desc}</p>
                     </div>

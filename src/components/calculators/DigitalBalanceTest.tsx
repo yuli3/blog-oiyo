@@ -32,7 +32,7 @@ const DigitalBalanceTest: React.FC = () => {
     const interpretation = getInterpretation(score);
 
     return (
-        <div className="not-prose my-12 p-8 bg-slate-50 border border-slate-200 rounded-3xl shadow-lg max-w-2xl mx-auto">
+        <div className="not-prose my-12 p-4 sm:p-8 bg-slate-50 border border-slate-200 rounded-3xl shadow-lg max-w-2xl mx-auto">
             {!showResults ? (
                 <div className="space-y-8">
                     <div className="text-center">
@@ -67,7 +67,7 @@ const DigitalBalanceTest: React.FC = () => {
                         <button
                             disabled={!isComplete}
                             onClick={() => setShowResults(true)}
-                            className={`px-10 py-4 rounded-full font-bold transition-all ${
+                            className={`px-5 sm:px-10 py-4 rounded-full font-bold transition-all ${
                                 isComplete 
                                     ? 'bg-black text-white hover:scale-105 shadow-xl' 
                                     : 'bg-slate-200 text-slate-400 cursor-not-allowed'
@@ -78,19 +78,19 @@ const DigitalBalanceTest: React.FC = () => {
                     </div>
                 </div>
             ) : (
-                <div className="text-center space-y-8 py-6 animate-fade-in">
+                <div className="text-center space-y-8 py-4 sm:py-6 animate-fade-in">
                     <div>
                         <span className="text-sm font-bold text-slate-400 uppercase tracking-widest">분석 결과</span>
                         <h3 className={`text-5xl font-black mt-2 ${interpretation.color}`}>{interpretation.title}</h3>
                     </div>
 
-                    <div className="p-6 bg-white rounded-2xl border border-slate-100 shadow-inner">
+                    <div className="p-4 sm:p-6 bg-white rounded-2xl border border-slate-100 shadow-inner">
                         <p className="text-slate-700 leading-relaxed font-medium">
                             {interpretation.desc}
                         </p>
                     </div>
 
-                    <div className="bg-slate-900 text-white p-6 rounded-2xl text-left space-y-3">
+                    <div className="bg-slate-900 text-white p-4 sm:p-6 rounded-2xl text-left space-y-3">
                         <p className="text-xs font-bold uppercase text-slate-400">오늘부터 실천할 액션 아이템:</p>
                         <ul className="text-sm space-y-2 font-medium">
                             <li>📅 침실에는 스마트폰 들고 들어가지 않기</li>

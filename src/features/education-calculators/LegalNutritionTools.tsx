@@ -63,7 +63,7 @@ export function LegalInterestCalc({ locale = 'ko' }: { locale?: 'ko' | 'en' | 'j
   }[L];
 
   return (
-    <Card className="p-6 bg-white border-slate-200 shadow-xl mt-8">
+    <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-8">
       <div className="space-y-5">
         <div className="flex items-center justify-between">
           <div>
@@ -225,7 +225,7 @@ export function NutritionCalculator({ locale = 'ko' }: { locale?: 'ko' | 'en' | 
   ];
 
   return (
-    <Card className="p-6 bg-white border-slate-200 shadow-xl mt-8">
+    <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-8">
       <div className="space-y-5">
         <div>
           <h3 className="text-lg font-black text-slate-900">{copy.title}</h3>
@@ -262,7 +262,7 @@ export function NutritionCalculator({ locale = 'ko' }: { locale?: 'ko' | 'en' | 
 
         {/* Selected foods */}
         {selected.length === 0 ? (
-          <div className="text-center py-8 text-slate-400">
+          <div className="text-center py-5 sm:py-8 text-slate-400">
             <p className="font-semibold">{copy.empty}</p>
           </div>
         ) : (

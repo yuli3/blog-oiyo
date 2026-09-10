@@ -668,12 +668,12 @@ export const TaxFormulaExplorer: React.FC = () => {
 
   return (
     <Card className="bg-white border border-green-100 shadow-xl rounded-2xl overflow-hidden mt-8">
-      <div className="bg-green-700 px-6 py-5">
+      <div className="bg-green-700 px-4 sm:px-6 py-5">
         <h3 className="text-lg font-bold text-white">세법 계산 산식 인터랙티브</h3>
         <p className="text-xs text-green-200 mt-1">6대 세목 공식을 직접 입력하며 계산 구조를 확인하세요</p>
       </div>
 
-      <div className="flex gap-1.5 flex-wrap px-6 pt-4 pb-0" role="tablist" aria-label="세목 탭">
+      <div className="flex gap-1.5 flex-wrap px-4 sm:px-6 pt-4 pb-0" role="tablist" aria-label="세목 탭">
         {TAB_LABELS.map((tab, i) => (
           <TabButton key={tab.short} active={activeTab === i} onClick={() => setActiveTab(i as TaxTab)}>
             {tab.short}
@@ -681,7 +681,7 @@ export const TaxFormulaExplorer: React.FC = () => {
         ))}
       </div>
 
-      <div className="px-6 pb-6 pt-4">
+      <div className="px-4 sm:px-6 pb-6 pt-4">
         <h4 className="text-sm font-bold text-slate-700 mb-1">{TAB_LABELS[activeTab].full} 계산 구조</h4>
         <p className="text-[10px] text-slate-400 mb-4">금액 단위: 만원 / 값을 수정하면 결과가 즉시 업데이트됩니다</p>
 

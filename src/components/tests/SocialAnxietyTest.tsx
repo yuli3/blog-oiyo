@@ -267,7 +267,7 @@ export default function SocialAnxietyTest({ locale: localeProp }: Props) {
 
     return (
       <div className="space-y-6">
-        <div className="rounded-2xl p-6 text-center" style={{ background: `${lv.color}12`, border: `1px solid ${lv.color}40` }}>
+        <div className="rounded-2xl p-4 sm:p-6 text-center" style={{ background: `${lv.color}12`, border: `1px solid ${lv.color}40` }}>
           <p className="mb-1 text-sm font-medium text-gray-500">{tx.resultTitle}</p>
           <div className="mb-2 text-5xl">{lv.emoji}</div>
           <h2 className="text-2xl font-bold text-gray-900">{ld.title}</h2>
@@ -336,7 +336,7 @@ export default function SocialAnxietyTest({ locale: localeProp }: Props) {
         <span className="text-sm text-gray-500">{tx.progress(idx + 1, questions.length)}</span>
       </div>
 
-      <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+      <div className="rounded-2xl border border-gray-100 bg-white p-4 sm:p-6 shadow-sm">
         <p className="mb-6 text-center text-lg font-medium text-gray-800">{q[locale]}</p>
         <div className="grid grid-cols-2 gap-3">
           {scoreOptions.map((opt) => (

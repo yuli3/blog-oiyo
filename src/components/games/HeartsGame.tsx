@@ -112,12 +112,12 @@ const HeartsGame: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
             </div>
 
             {round > 13 && (
-                <div className="absolute inset-0 z-20 bg-background/80 backdrop-blur-md rounded-4xl flex flex-col items-center justify-center p-10 text-center animate-in fade-in zoom-in-95">
+                <div className="absolute inset-0 z-20 bg-background/80 backdrop-blur-md rounded-4xl flex flex-col items-center justify-center p-5 sm:p-10 text-center animate-in fade-in zoom-in-95">
                     <h4 className={`text-4xl font-black mb-4 ${penalty < 10 ? 'text-primary' : 'text-destructive'}`}>
                         {penalty < 10 ? t.win : t.lost}
                     </h4>
                     <p className="text-lg font-bold text-muted-foreground mb-8 italic">Total Penalty: {penalty}</p>
-                    <button onClick={initGame} className="px-12 py-4 bg-primary text-primary-foreground rounded-full font-black shadow-lg">
+                    <button onClick={initGame} className="px-5 sm:px-12 py-4 bg-primary text-primary-foreground rounded-full font-black shadow-lg">
                         {t.reset}
                     </button>
                 </div>

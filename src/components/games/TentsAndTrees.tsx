@@ -100,7 +100,7 @@ const TentsAndTrees: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
                 {isWon && (
                     <div className="mt-8 text-center animate-in fade-in slide-in-from-bottom-2">
                         <h4 className="text-2xl font-black text-primary mb-4">{t.win}</h4>
-                        <button onClick={initGame} className="px-10 py-3 bg-primary text-primary-foreground rounded-full font-bold shadow-lg">NEXT CHALLENGE</button>
+                        <button onClick={initGame} className="px-5 sm:px-10 py-3 bg-primary text-primary-foreground rounded-full font-bold shadow-lg">NEXT CHALLENGE</button>
                     </div>
                 )}
             </div>

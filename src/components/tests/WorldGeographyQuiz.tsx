@@ -102,12 +102,12 @@ export default function WorldGeographyQuiz({ locale }: Props) {
 
   if (!started || questions.length === 0) {
     return (
-      <div className="text-center space-y-6 py-8">
+      <div className="text-center space-y-6 py-5 sm:py-8">
         <div className="text-5xl">🌍</div>
         <h1 className="text-2xl font-bold">{l.title}</h1>
         <p className="text-muted-foreground">{l.subtitle}</p>
         <p className="text-sm text-muted-foreground">10문제 · 무작위 출제</p>
-        <button onClick={start} className="px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:bg-primary/90 transition-colors">{l.start}</button>
+        <button onClick={start} className="px-4 sm:px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:bg-primary/90 transition-colors">{l.start}</button>
       </div>
     )
   }
@@ -125,7 +125,7 @@ export default function WorldGeographyQuiz({ locale }: Props) {
         <div className="flex gap-1.5 justify-center flex-wrap">
           {history.map((h, i) => <span key={i} className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${h ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>{i + 1}</span>)}
         </div>
-        <button onClick={start} className="px-8 py-3 border rounded-full text-sm font-medium hover:bg-accent transition-colors">{l.restart}</button>
+        <button onClick={start} className="px-4 sm:px-8 py-3 border rounded-full text-sm font-medium hover:bg-accent transition-colors">{l.restart}</button>
       </div>
     )
   }

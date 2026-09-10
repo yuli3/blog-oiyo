@@ -79,7 +79,7 @@ const ImageCropper: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => 
                             </div>
                         ) : (
                             <label className="cursor-pointer flex flex-col items-center gap-4">
-                                <div className="p-6 bg-primary/10 rounded-full text-primary text-4xl">📐</div>
+                                <div className="p-4 sm:p-6 bg-primary/10 rounded-full text-primary text-4xl">📐</div>
                                 <span className="text-xs font-black text-primary uppercase tracking-widest">{t.upload}</span>
                                 <input type="file" className="hidden" accept="image/*" onChange={handleUpload} />
                             </label>

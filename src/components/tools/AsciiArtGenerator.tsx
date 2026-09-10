@@ -61,7 +61,7 @@ const AsciiArtGenerator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
             <div className="flex flex-col items-center gap-8">
                 <p className="text-sm font-medium text-muted-foreground text-center max-w-md">{t.desc}</p>
                 
-                <div className="w-full bg-foreground rounded-3xl p-6 shadow-2xl overflow-hidden relative group border-4 border-background/15">
+                <div className="w-full bg-foreground rounded-3xl p-4 sm:p-6 shadow-2xl overflow-hidden relative group border-4 border-background/15">
                     {ascii ? (
                         <pre 
                             style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize}px` }} 
@@ -84,7 +84,7 @@ const AsciiArtGenerator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
                             <span className="text-[10px] font-black text-muted-foreground ml-2">SIZE</span>
                             <input type="range" min="4" max="16" value={fontSize} onChange={(e) => setFontSize(Number(e.target.value))} className="flex-1" />
                         </div>
-                        <button onClick={copyToClipboard} className="px-8 py-3 bg-primary text-primary-foreground rounded-full font-black shadow-lg">{t.copy}</button>
+                        <button onClick={copyToClipboard} className="px-4 sm:px-8 py-3 bg-primary text-primary-foreground rounded-full font-black shadow-lg">{t.copy}</button>
                     </div>
                 )}
             </div>

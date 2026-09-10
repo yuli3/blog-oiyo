@@ -36,7 +36,7 @@ export const VarianceAnalysis: React.FC = () => {
     const tVar = formatVar(totalVariance);
 
     return (
-        <Card className="p-6 bg-white border-slate-200 shadow-xl mt-8 overflow-hidden">
+        <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-8 overflow-hidden">
             <div className="flex items-center gap-2 mb-6 text-slate-900 border-b pb-4">
                 <ArrowLeftRight className="text-blue-500" />
                 <h3 className="text-xl font-bold">원가 차이 분석(Variance Analysis) 시뮬레이터</h3>
@@ -92,7 +92,7 @@ export const VarianceAnalysis: React.FC = () => {
                 </div>
             </div>
 
-            <div className="mt-12 bg-slate-900 rounded-2xl p-6 text-white">
+            <div className="mt-12 bg-slate-900 rounded-2xl p-4 sm:p-6 text-white">
                 <div className="flex items-center gap-2 mb-4 text-slate-400">
                     <AlertCircle size={16}/>
                     <span className="text-xs font-bold uppercase tracking-widest">분석 리포트 (Total Variance)</span>
@@ -104,7 +104,7 @@ export const VarianceAnalysis: React.FC = () => {
                             표준 원가(₩{standardCost.toLocaleString()}) 대비 실제 지출액의 차이입니다.
                         </p>
                     </div>
-                    <div className="px-6 py-3 bg-slate-800 rounded-xl border border-slate-700">
+                    <div className="px-4 sm:px-6 py-3 bg-slate-800 rounded-xl border border-slate-700">
                         <div className="flex items-center gap-4">
                            {totalVariance >= 0 ? <TrendingDown className="text-emerald-400"/> : <TrendingUp className="text-rose-500"/>}
                            <span className="text-sm font-bold">{totalVariance >= 0 ? "목표 원가 절감 달성!" : "원가 초과 발생 (집중 관리 필요)"}</span>

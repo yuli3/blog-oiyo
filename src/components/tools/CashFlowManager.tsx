@@ -287,7 +287,7 @@ export default function CashFlowManager({ locale = 'ko' }: { locale?: string }) 
     <div className="not-prose my-12 space-y-3 max-w-3xl mx-auto">
 
       {/* Summary */}
-      <div className="p-6 bg-foreground text-background rounded-3xl">
+      <div className="p-4 sm:p-6 bg-foreground text-background rounded-3xl">
         <div className="flex items-center justify-between mb-4">
           <p className="text-[10px] font-black text-background/50 uppercase tracking-widest">월간 현금흐름 요약</p>
           <button
@@ -578,7 +578,7 @@ export default function CashFlowManager({ locale = 'ko' }: { locale?: string }) 
             </div>
           </div>
         ) : (
-          <p className="text-xs text-muted-foreground text-center py-6">
+          <p className="text-xs text-muted-foreground text-center py-4 sm:py-6">
             위에서 종목을 추가하면 배당 계산이 시작됩니다.
           </p>
         )}
@@ -586,7 +586,7 @@ export default function CashFlowManager({ locale = 'ko' }: { locale?: string }) 
 
       {/* Chart */}
       {chartData.length > 0 && (
-        <div className="p-6 bg-card border border-border rounded-3xl">
+        <div className="p-4 sm:p-6 bg-card border border-border rounded-3xl">
           <p className="text-sm font-black text-foreground mb-4">지출 구성</p>
           <ResponsiveContainer width="100%" height={180}>
             <PieChart>

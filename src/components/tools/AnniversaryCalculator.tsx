@@ -200,7 +200,7 @@ const AnniversaryCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'en' })
           <>
             {result.type === 'anniversary' && (
               <>
-                <div className="p-8 rounded-[32px] bg-pink-50 border-2 border-pink-200 text-center space-y-2">
+                <div className="p-4 sm:p-8 rounded-[32px] bg-pink-50 border-2 border-pink-200 text-center space-y-2">
                   {eventName && <p className="text-sm font-bold text-pink-500">{eventName}</p>}
                   <p className="text-[10px] font-black uppercase tracking-widest text-pink-400">{t.today}</p>
                   <p className="text-6xl font-black text-pink-600">D+{result.elapsed + 1}</p>
@@ -229,7 +229,7 @@ const AnniversaryCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'en' })
             )}
 
             {result.type === 'dday' && (
-              <div className={`p-8 rounded-[32px] border-2 text-center space-y-2 ${result.diff === 0 ? 'bg-green-50 border-green-300' : result.diff > 0 ? 'bg-green-50 border-green-200' : 'bg-muted/30 border-border'}`}>
+              <div className={`p-4 sm:p-8 rounded-[32px] border-2 text-center space-y-2 ${result.diff === 0 ? 'bg-green-50 border-green-300' : result.diff > 0 ? 'bg-green-50 border-green-200' : 'bg-muted/30 border-border'}`}>
                 {eventName && <p className={`text-sm font-bold ${result.diff >= 0 ? 'text-green-500' : 'text-muted-foreground'}`}>{eventName}</p>}
                 <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{t.dDayLabel}</p>
                 <p className={`text-6xl font-black ${result.diff === 0 ? 'text-green-600' : result.diff > 0 ? 'text-green-600' : 'text-muted-foreground'}`}>

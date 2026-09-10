@@ -245,7 +245,7 @@ const Stopwatch: React.FC<{ t: Labels }> = ({ t }) => {
   return (
     <div className="flex flex-col gap-6">
       {/* Display */}
-      <div className="rounded-3xl bg-foreground p-8 text-center select-none">
+      <div className="rounded-3xl bg-foreground p-4 sm:p-8 text-center select-none">
         <p className="font-mono text-5xl sm:text-6xl font-black text-background tracking-tight">
           {fmtStopwatch(elapsed)}
         </p>

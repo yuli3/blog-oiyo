@@ -144,7 +144,7 @@ const FreeCell: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
             {isWon && (
                 <div className="absolute inset-0 z-30 bg-background/90 backdrop-blur-xl rounded-4xl flex flex-col items-center justify-center animate-in fade-in zoom-in-95">
                     <h4 className="text-4xl font-black text-primary mb-4">{t.win}</h4>
-                    <button onClick={initGame} className="px-12 py-4 bg-primary text-primary-foreground rounded-full font-black shadow-lg">RESTART</button>
+                    <button onClick={initGame} className="px-5 sm:px-12 py-4 bg-primary text-primary-foreground rounded-full font-black shadow-lg">RESTART</button>
                 </div>
             )}
         </GameContainer>

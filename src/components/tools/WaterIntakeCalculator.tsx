@@ -146,7 +146,7 @@ const WaterIntakeCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'k
                     </div>
                 </div>
 
-                <div className="p-8 bg-stone-900 rounded-[32px] text-white flex flex-col gap-5 shadow-2xl">
+                <div className="p-4 sm:p-8 bg-stone-900 rounded-[32px] text-white flex flex-col gap-5 shadow-2xl">
                     <div className="text-center">
                         <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest mb-1">{t.total}</p>
                         <p className="text-6xl font-black text-blue-400">{Math.round(total)}<span className="text-xl text-stone-400 ml-1">{t.ml}</span></p>

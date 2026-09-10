@@ -127,7 +127,7 @@ const Game2048: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
     };
 
     return (
-        <div className="not-prose my-12 p-8 bg-card border border-border rounded-4xl shadow-sm max-w-sm mx-auto">
+        <div className="not-prose my-12 p-4 sm:p-8 bg-card border border-border rounded-4xl shadow-sm max-w-sm mx-auto">
             <div className="flex justify-between items-end mb-8">
                 <div>
                     <h3 className="text-xl font-black text-foreground">{t.title}</h3>
@@ -171,7 +171,7 @@ const Game2048: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
                         <h4 className="text-3xl font-black text-foreground">{status === 'won' ? t.win : t.over}</h4>
                         <button 
                             onClick={initGame}
-                            className="px-8 py-3 bg-primary text-primary-foreground rounded-full font-bold shadow-lg"
+                            className="px-4 sm:px-8 py-3 bg-primary text-primary-foreground rounded-full font-bold shadow-lg"
                         >
                             {t.reset}
                         </button>

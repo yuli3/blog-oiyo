@@ -74,7 +74,7 @@ const ChimpTest: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
     };
 
     return (
-        <div className="not-prose my-12 p-8 bg-card text-card-foreground rounded-3xl border border-border shadow-sm max-w-xl mx-auto">
+        <div className="not-prose my-12 p-4 sm:p-8 bg-card text-card-foreground rounded-3xl border border-border shadow-sm max-w-xl mx-auto">
             <div className="flex justify-between items-center mb-6">
                 <div className="text-sm font-bold text-muted-foreground uppercase tracking-widest">{t.title}</div>
                 <div className="flex gap-4">
@@ -88,10 +88,10 @@ const ChimpTest: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
                     <div className="w-16 h-16 bg-primary/10 text-primary rounded-2xl flex items-center justify-center animate-bounce">
                         <span className="text-3xl">🧠</span>
                     </div>
-                    <p className="text-muted-foreground px-8 leading-relaxed">{t.desc}</p>
+                    <p className="text-muted-foreground px-4 sm:px-8 leading-relaxed">{t.desc}</p>
                     <button 
                         onClick={() => initLevel(1)}
-                        className="px-10 py-3 bg-primary text-primary-foreground rounded-full font-bold hover:opacity-90 transition-all scale-110"
+                        className="px-5 sm:px-10 py-3 bg-primary text-primary-foreground rounded-full font-bold hover:opacity-90 transition-all scale-110"
                     >
                         {t.start}
                     </button>
@@ -146,7 +146,7 @@ const ChimpTest: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
                             <p className="text-muted-foreground font-medium">Level {level} Completed!</p>
                             <button 
                                 onClick={() => { setLevel(level + 1); initLevel(level + 1); }}
-                                className="px-10 py-3 bg-primary text-primary-foreground rounded-full font-bold hover:opacity-90"
+                                className="px-5 sm:px-10 py-3 bg-primary text-primary-foreground rounded-full font-bold hover:opacity-90"
                             >
                                 {t.next}
                             </button>
@@ -158,7 +158,7 @@ const ChimpTest: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
                             <p className="text-muted-foreground font-medium">Total Score: {level}</p>
                             <button 
                                 onClick={() => { setLevel(1); initLevel(1); }}
-                                className="px-10 py-3 bg-destructive text-destructive-foreground rounded-full font-bold hover:opacity-90"
+                                className="px-5 sm:px-10 py-3 bg-destructive text-destructive-foreground rounded-full font-bold hover:opacity-90"
                             >
                                 {t.retry}
                             </button>

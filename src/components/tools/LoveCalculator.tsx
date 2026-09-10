@@ -416,7 +416,7 @@ export default function LoveCalculator({ locale }: Props) {
 
       {/* Result */}
       {result !== null && (
-        <div className="rounded-2xl border border-pink-200 bg-gradient-to-br from-pink-50 to-rose-50 p-6 text-center space-y-4">
+        <div className="rounded-2xl border border-pink-200 bg-gradient-to-br from-pink-50 to-rose-50 p-4 sm:p-6 text-center space-y-4">
           <p className="text-sm font-medium text-pink-500 uppercase tracking-wider">
             {t.resultTitle}
           </p>
@@ -445,7 +445,7 @@ export default function LoveCalculator({ locale }: Props) {
 
           <button
             onClick={handleReset}
-            className="mt-2 rounded-lg border border-pink-300 px-6 py-2 text-sm font-medium text-pink-600 hover:bg-pink-50 transition-colors"
+            className="mt-2 rounded-lg border border-pink-300 px-4 sm:px-6 py-2 text-sm font-medium text-pink-600 hover:bg-pink-50 transition-colors"
           >
             {t.resetBtn}
           </button>

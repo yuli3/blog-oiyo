@@ -174,7 +174,7 @@ const GiftTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
         <div className="flex flex-col justify-center space-y-4">
           {result ? (
             <>
-              <div className="p-6 bg-green-600 text-white rounded-2xl text-center">
+              <div className="p-4 sm:p-6 bg-green-600 text-white rounded-2xl text-center">
                 <p className="text-xs font-bold uppercase tracking-widest opacity-80 mb-1">
                   {locale === 'ko' ? '납부할 증여세 (지방세 포함)' : 'Gift Tax Due (incl. Local Tax)'}
                 </p>

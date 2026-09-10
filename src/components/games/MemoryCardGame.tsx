@@ -253,7 +253,7 @@ const MemoryCardGame: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =
               </p>
               <button
                 onClick={() => dispatch({ type: 'RESET' })}
-                className="mt-3 px-6 py-2 rounded-xl bg-primary text-primary-foreground font-black text-sm hover:bg-primary/90 transition-all"
+                className="mt-3 px-4 sm:px-6 py-2 rounded-xl bg-primary text-primary-foreground font-black text-sm hover:bg-primary/90 transition-all"
               >
                 {t.reset}
               </button>

@@ -569,7 +569,7 @@ export default function MarriageAgeCalculator({ locale }: Props) {
 
       {/* Result */}
       {result && (
-        <div className="rounded-2xl border border-rose-200 bg-gradient-to-br from-rose-50 to-pink-50 p-6 space-y-5">
+        <div className="rounded-2xl border border-rose-200 bg-gradient-to-br from-rose-50 to-pink-50 p-4 sm:p-6 space-y-5">
           <h2 className="text-center font-bold text-rose-600 text-lg">{t.resultTitle}</h2>
 
           {/* Age range */}

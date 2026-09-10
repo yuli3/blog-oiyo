@@ -432,7 +432,7 @@ export default function DividendCalendar({ locale = "ko" }: { locale?: Locale })
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
           <div
             ref={detailRef}
-            className="bg-background rounded-2xl border border-border shadow-2xl p-6 max-w-sm w-full flex flex-col gap-4"
+            className="bg-background rounded-2xl border border-border shadow-2xl p-4 sm:p-6 max-w-sm w-full flex flex-col gap-4"
           >
             <div className="flex items-start justify-between gap-2">
               <div>

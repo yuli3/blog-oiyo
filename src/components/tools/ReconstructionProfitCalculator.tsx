@@ -269,7 +269,7 @@ const ReconstructionProfitCalculator = ({ locale }: Props) => {
         </div>
 
         {/* Results */}
-        <div className="p-8 bg-foreground rounded-[32px] text-background shadow-2xl space-y-6">
+        <div className="p-4 sm:p-8 bg-foreground rounded-[32px] text-background shadow-2xl space-y-6">
           {/* Grade */}
           <div className="text-center pb-4 border-b border-background/15">
             <p className="text-[10px] font-black text-background/60 uppercase tracking-widest mb-2">

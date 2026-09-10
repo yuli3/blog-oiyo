@@ -40,17 +40,17 @@ const IsaCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="p-8 bg-muted/40 rounded-[32px] border border-border space-y-2">
+                    <div className="p-4 sm:p-8 bg-muted/40 rounded-[32px] border border-border space-y-2">
                         <p className="text-[10px] font-black text-muted-foreground uppercase">{t.baseRate}</p>
                         <h4 className="text-2xl font-black">₩{Math.round(generalTax).toLocaleString()}</h4>
                     </div>
-                    <div className="p-8 bg-success/10 border border-success/20 rounded-[32px] space-y-2 animate-in slide-in-from-bottom-4">
+                    <div className="p-4 sm:p-8 bg-success/10 border border-success/20 rounded-[32px] space-y-2 animate-in slide-in-from-bottom-4">
                         <p className="text-[10px] font-black text-success uppercase">ISA {t.tax}</p>
                         <h4 className="text-2xl font-black text-success">₩{Math.round(isaTax).toLocaleString()}</h4>
                     </div>
                 </div>
 
-                <div className="p-10 bg-primary rounded-[40px] text-primary-foreground text-center shadow-2xl relative overflow-hidden group">
+                <div className="p-5 sm:p-10 bg-primary rounded-[40px] text-primary-foreground text-center shadow-2xl relative overflow-hidden group">
                     <p className="text-xs font-black uppercase tracking-widest opacity-80 mb-2">{t.save}</p>
                     <h2 className="text-5xl font-black">₩{Math.round(savedAmount).toLocaleString()}</h2>
                     <p className="mt-4 text-xs font-medium opacity-70">ISA 계좌를 이용하면 이만큼의 수익을 더 지킬 수 있습니다.</p>

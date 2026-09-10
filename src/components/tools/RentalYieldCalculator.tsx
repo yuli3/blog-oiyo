@@ -56,7 +56,7 @@ const RentalYieldCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'k
                     </div>
                 </div>
 
-                <div className="p-10 bg-foreground rounded-[40px] text-background animate-in zoom-in-95 shadow-2xl relative overflow-hidden">
+                <div className="p-5 sm:p-10 bg-foreground rounded-[40px] text-background animate-in zoom-in-95 shadow-2xl relative overflow-hidden">
                     <h4 className="text-center text-[10px] font-black text-background/60 uppercase tracking-[0.2em] mb-8">{t.result}</h4>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center relative z-10">

@@ -337,7 +337,7 @@ export default function BloodTypePersonality({ locale }: Props) {
               <button
                 key={type}
                 onClick={() => setSelected(type)}
-                className={`flex flex-col items-center justify-center p-8 rounded-2xl border-2 ${data.bg} ${data.border} hover:shadow-md transition-all hover:scale-105 cursor-pointer`}
+                className={`flex flex-col items-center justify-center p-4 sm:p-8 rounded-2xl border-2 ${data.bg} ${data.border} hover:shadow-md transition-all hover:scale-105 cursor-pointer`}
               >
                 <span className="text-5xl mb-3">{data.emoji}</span>
                 <span className={`text-2xl font-bold ${data.color}`}>{ui.types[type]}</span>
@@ -365,7 +365,7 @@ export default function BloodTypePersonality({ locale }: Props) {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className={`rounded-2xl p-6 text-center ${data.bg} border-2 ${data.border}`}>
+      <div className={`rounded-2xl p-4 sm:p-6 text-center ${data.bg} border-2 ${data.border}`}>
         <div className="text-6xl mb-2">{data.emoji}</div>
         <h1 className={`text-3xl font-bold ${data.color}`}>{ui.types[selected]}</h1>
         <p className="mt-3 text-gray-700 text-sm leading-relaxed">{data.description[locale]}</p>

@@ -779,7 +779,7 @@ export default function ZodiacPersonality({ locale }: Props) {
   return (
     <div className="space-y-5">
       {/* Header */}
-      <div className={`rounded-2xl p-6 text-center border-2 ${ELEMENT_BG[el]}`}>
+      <div className={`rounded-2xl p-4 sm:p-6 text-center border-2 ${ELEMENT_BG[el]}`}>
         <div className="text-6xl mb-1">{z.emoji}</div>
         <h1 className={`text-3xl font-bold ${ELEMENT_COLOR[el]}`}>{z.name[locale]}</h1>
         <div className="flex justify-center gap-4 mt-2 text-xs text-gray-500">

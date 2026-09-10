@@ -295,7 +295,7 @@ export default function EnneagramTest({ locale = "ko" }: Props) {
     const wingNums = info.wing;
     return (
       <div className="max-w-xl mx-auto p-4 space-y-4">
-        <div className={`rounded-2xl border-2 p-6 text-center ${info.color}`}>
+        <div className={`rounded-2xl border-2 p-4 sm:p-6 text-center ${info.color}`}>
           <div className="text-5xl mb-2">{info.emoji}</div>
           <p className="text-sm text-gray-500 mb-1">{ui.resultTitle}</p>
           <h2 className="text-2xl font-black text-gray-800">
@@ -374,7 +374,7 @@ export default function EnneagramTest({ locale = "ko" }: Props) {
       </div>
 
       {/* Question */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-4 min-h-[100px] flex items-center">
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-6 mb-4 min-h-[100px] flex items-center">
         <p className="text-base text-gray-800 leading-relaxed">{qText}</p>
       </div>
 

@@ -42,7 +42,7 @@ export default function ChildHeightCalculator() {
   };
 
   return (
-    <div className="my-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+    <div className="my-8 rounded-2xl border border-gray-200 bg-white p-4 sm:p-6 shadow-sm">
       <h3 className="mb-4 text-xl font-bold text-gray-900">자녀 예상 키 계산기</h3>
       <p className="mb-4 text-xs text-gray-500">
         태너(Tanner) 중간 부모 신장 공식 기반 — 유전적 잠재 키를 추정합니다.

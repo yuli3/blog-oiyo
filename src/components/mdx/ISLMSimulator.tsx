@@ -32,7 +32,7 @@ export default function ISLMSimulator() {
   const eqR = eqY - monetaryPolicy;
 
   return (
-    <div className="my-8 rounded-xl border border-border/60 bg-card p-6 shadow-sm not-prose">
+    <div className="my-8 rounded-xl border border-border/60 bg-card p-4 sm:p-6 shadow-sm not-prose">
       <div className="mb-6 border-b border-border/40 pb-4">
         <h3 className="font-heading text-lg font-bold">거시경제 IS-LM 모형 시뮬레이터</h3>
         <p className="text-sm text-muted-foreground mt-1">

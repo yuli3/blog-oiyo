@@ -591,7 +591,7 @@ export default function TaxSavingsRoadmap({ locale = 'ko' }: { locale?: Locale }
           ))}
 
           {applicableTips.length === 0 && (
-            <p className="text-center text-gray-500 py-8">{t.noTips}</p>
+            <p className="text-center text-gray-500 py-5 sm:py-8">{t.noTips}</p>
           )}
         </div>
       )}

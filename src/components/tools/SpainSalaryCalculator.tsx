@@ -219,7 +219,7 @@ const SpainSalaryCalculator: React.FC<Props> = ({ locale = 'es' }) => {
                     </div>
                 </div>
 
-                <div className="rounded-2xl border border-border bg-muted/30 p-6 flex flex-col gap-3">
+                <div className="rounded-2xl border border-border bg-muted/30 p-4 sm:p-6 flex flex-col gap-3">
                     <h4 className="text-sm font-bold text-foreground">{t.cotizaciones}</h4>
                     <div className="flex flex-col gap-2">
                         {monthlySSRows.map(({ label, value }) => (
@@ -235,7 +235,7 @@ const SpainSalaryCalculator: React.FC<Props> = ({ locale = 'es' }) => {
                     </div>
                 </div>
 
-                <div className="rounded-2xl border border-border bg-muted/30 p-6 flex flex-col gap-3">
+                <div className="rounded-2xl border border-border bg-muted/30 p-4 sm:p-6 flex flex-col gap-3">
                     <div className="flex justify-between items-center text-sm">
                         <span className="font-medium text-muted-foreground">{t.netBeforeIR}</span>
                         <span className="font-bold text-foreground">{fmtEuro(netBeforeIRMonthly)}</span>

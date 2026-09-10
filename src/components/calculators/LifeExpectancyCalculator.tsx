@@ -242,7 +242,7 @@ const LifeExpectancyCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
         <div className="space-y-4">
           {result ? (
             <>
-              <div className="p-6 bg-green-600 text-white rounded-2xl text-center">
+              <div className="p-4 sm:p-6 bg-green-600 text-white rounded-2xl text-center">
                 <p className="text-xs font-bold uppercase tracking-widest opacity-80 mb-1">
                   {locale === 'ko' ? '예상 기대수명' : 'Expected Lifespan'}
                 </p>

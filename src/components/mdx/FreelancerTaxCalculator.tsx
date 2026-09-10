@@ -106,7 +106,7 @@ export default function FreelancerTaxCalculator() {
 
   return (
     <div className="not-prose my-8 rounded-2xl border border-border bg-card shadow-sm overflow-hidden">
-      <div className="bg-gradient-to-r from-orange-600 to-amber-500 px-6 py-4">
+      <div className="bg-gradient-to-r from-orange-600 to-amber-500 px-4 sm:px-6 py-4">
         <div className="flex items-center gap-2">
           <span className="text-2xl">🧑‍💻</span>
           <div>
@@ -116,7 +116,7 @@ export default function FreelancerTaxCalculator() {
         </div>
       </div>
 
-      <div className="p-6 space-y-5">
+      <div className="p-4 sm:p-6 space-y-5">
         {/* Income */}
         <div>
           <label className="block text-sm font-semibold mb-1.5 text-foreground">연간 총수입 (원)</label>

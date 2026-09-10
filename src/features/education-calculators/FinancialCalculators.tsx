@@ -21,7 +21,7 @@ export const CVPCalculator: React.FC = () => {
   const contributionMarginRatio = (contributionMargin / sellingPrice) * 100;
 
   return (
-    <Card className="p-6 bg-slate-900 border-slate-800 text-slate-100 shadow-xl">
+    <Card className="p-4 sm:p-6 bg-slate-900 border-slate-800 text-slate-100 shadow-xl">
       <div className="flex items-center gap-2 mb-6 border-b border-slate-800 pb-4">
         <Calculator className="text-blue-400 w-6 h-6" />
         <h3 className="text-xl font-bold">CVP (손익분기점) 계산기</h3>
@@ -58,7 +58,7 @@ export const CVPCalculator: React.FC = () => {
           </div>
         </div>
 
-        <div className="bg-slate-800/50 p-6 rounded-xl border border-slate-700 flex flex-col justify-center gap-4">
+        <div className="bg-slate-800/50 p-4 sm:p-6 rounded-xl border border-slate-700 flex flex-col justify-center gap-4">
           <div className="flex justify-between items-center">
             <span className="text-slate-400">단위당 공헌이익</span>
             <span className="text-xl font-mono text-emerald-400">{contributionMargin.toLocaleString()}원</span>
@@ -139,7 +139,7 @@ export const NPVCalculator: React.FC<{ locale?: keyof typeof npvCopy }> = ({ loc
     const decision = npv === null ? null : npv > 0 ? copy.accept : npv < 0 ? copy.reject : copy.neutral;
 
     return (
-        <Card className="p-6 bg-slate-900 border-slate-800 text-slate-100 shadow-xl mt-8">
+        <Card className="p-4 sm:p-6 bg-slate-900 border-slate-800 text-slate-100 shadow-xl mt-8">
             <div className="flex items-center gap-2 mb-6 border-b border-slate-800 pb-4">
                 <TrendingUp className="text-green-300 w-6 h-6" />
                 <h3 className="text-xl font-bold">{copy.title}</h3>
@@ -197,8 +197,8 @@ export const NPVCalculator: React.FC<{ locale?: keyof typeof npvCopy }> = ({ loc
                     </Field>
                 </FieldGroup>
 
-                <div className="bg-slate-800/50 p-6 rounded-xl border border-slate-700 flex flex-col justify-center gap-4">
-                    <div className="flex flex-col gap-2 items-center rounded-lg border border-green-500/30 bg-green-500/10 py-6">
+                <div className="bg-slate-800/50 p-4 sm:p-6 rounded-xl border border-slate-700 flex flex-col justify-center gap-4">
+                    <div className="flex flex-col gap-2 items-center rounded-lg border border-green-500/30 bg-green-500/10 py-4 sm:py-6">
                         <span className="text-green-300 text-sm font-bold">{copy.result}</span>
                         <span aria-live="polite" className={`text-4xl font-bold font-mono ${npv === null ? 'text-slate-400' : npv >= 0 ? 'text-green-300' : 'text-rose-300'}`}>
                             {npv === null ? '—' : `${Math.round(npv).toLocaleString(locale === 'ko' ? 'ko-KR' : 'en-US')} ${copy.won}`}

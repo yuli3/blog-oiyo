@@ -295,7 +295,7 @@ export default function PomodoroTimer({ locale }: Props) {
       </div>
 
       {/* SVG ring timer */}
-      <div className={`rounded-3xl p-8 ${colors.bg} w-full max-w-xs flex justify-center`}>
+      <div className={`rounded-3xl p-4 sm:p-8 ${colors.bg} w-full max-w-xs flex justify-center`}>
         <div className="relative w-52 h-52 flex items-center justify-center">
           <svg
             viewBox="0 0 200 200"
@@ -338,7 +338,7 @@ export default function PomodoroTimer({ locale }: Props) {
       <div className="flex gap-3">
         <button
           onClick={() => setRunning((r) => !r)}
-          className={`px-8 py-3 rounded-full font-bold text-white text-lg shadow transition-all active:scale-95 ${
+          className={`px-4 sm:px-8 py-3 rounded-full font-bold text-white text-lg shadow transition-all active:scale-95 ${
             running
               ? "bg-warning hover:bg-warning"
               : "bg-foreground hover:bg-foreground/90"

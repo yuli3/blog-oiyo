@@ -285,7 +285,7 @@ export default function DepressionScreeningTest({ locale: lp = 'ko' }: Props) {
             <div className="h-full bg-primary transition-all duration-300" style={{ width: `${progress}%` }} />
           </div>
         </div>
-        <div className="rounded-xl border bg-card p-6 text-center">
+        <div className="rounded-xl border bg-card p-4 sm:p-6 text-center">
           <p className="text-sm text-muted-foreground mb-2">{lb.questionOf(current + 1, questions.length)}</p>
           <p className="text-lg font-medium leading-relaxed">{q.text}</p>
           <p className="text-xs text-muted-foreground mt-3">{lb.screeningNote.split('.')[0]}.</p>

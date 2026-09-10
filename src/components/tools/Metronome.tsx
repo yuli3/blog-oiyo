@@ -313,7 +313,7 @@ export default function Metronome({ locale }: Props) {
       {/* Start / Stop */}
       <button
         onClick={handleToggle}
-        className={`px-12 py-4 rounded-full font-bold text-xl shadow-lg transition-all active:scale-95 ${
+        className={`px-5 sm:px-12 py-4 rounded-full font-bold text-xl shadow-lg transition-all active:scale-95 ${
           running
             ? "bg-destructive hover:bg-destructive text-white"
             : "bg-foreground hover:bg-foreground/90 text-white"
@@ -325,7 +325,7 @@ export default function Metronome({ locale }: Props) {
       {/* Tap Tempo */}
       <button
         onClick={handleTapTempo}
-        className="px-8 py-3 rounded-full font-semibold border-2 border-border text-muted-foreground hover:bg-muted hover:text-foreground transition-all active:scale-95 select-none"
+        className="px-4 sm:px-8 py-3 rounded-full font-semibold border-2 border-border text-muted-foreground hover:bg-muted hover:text-foreground transition-all active:scale-95 select-none"
       >
         🥁 {t.tapTempo}
       </button>

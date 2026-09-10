@@ -76,7 +76,7 @@ const MetadataViewer: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =
                 </div>
 
                 {preview && (
-                    <label className="px-10 py-3 bg-primary text-primary-foreground rounded-full font-black cursor-pointer shadow-lg">
+                    <label className="px-5 sm:px-10 py-3 bg-primary text-primary-foreground rounded-full font-black cursor-pointer shadow-lg">
                         {t.upload}
                         <input type="file" className="hidden" accept="image/*" onChange={handleUpload} />
                     </label>

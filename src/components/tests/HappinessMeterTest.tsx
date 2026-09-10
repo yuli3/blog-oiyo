@@ -145,7 +145,7 @@ export default function HappinessMeterTest({ locale: localeProp }: Props) {
 
     return (
       <div className="space-y-6">
-        <div className="rounded-2xl p-6 text-center" style={{ background: `linear-gradient(135deg, ${level.color}18, ${level.color}08)`, border: `1px solid ${level.color}30` }}>
+        <div className="rounded-2xl p-4 sm:p-6 text-center" style={{ background: `linear-gradient(135deg, ${level.color}18, ${level.color}08)`, border: `1px solid ${level.color}30` }}>
           <p className="text-sm font-medium text-gray-500 mb-1">{ui.resultTitle}</p>
           <div className="text-5xl mb-2">{level.emoji}</div>
           <h2 className="text-2xl font-bold text-gray-900">{level.label}</h2>
@@ -192,7 +192,7 @@ export default function HappinessMeterTest({ locale: localeProp }: Props) {
         </div>
         <span className="text-sm text-gray-500">{ui.progress(idx + 1, questions.length)}</span>
       </div>
-      <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+      <div className="rounded-2xl border border-gray-100 bg-white p-4 sm:p-6 shadow-sm">
         <p className="mb-2 text-center text-lg font-medium text-gray-800">{q[locale]}</p>
         <p className="mb-5 text-center text-xs text-gray-400">{ui.scale}</p>
         <div className="space-y-2">

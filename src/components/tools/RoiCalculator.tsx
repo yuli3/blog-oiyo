@@ -30,7 +30,7 @@ const RoiCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
                     </div>
                 </div>
 
-                <div className="p-10 bg-foreground rounded-[40px] text-background shadow-2xl relative overflow-hidden text-center">
+                <div className="p-5 sm:p-10 bg-foreground rounded-[40px] text-background shadow-2xl relative overflow-hidden text-center">
                     <p className="text-[10px] font-black text-background/60 uppercase tracking-widest mb-4">{t.roi}</p>
                     <h2 className={`text-6xl font-black mb-8 ${roi >=0 ? 'text-primary' : 'text-destructive'}`}>
                         {roi.toFixed(1)}%

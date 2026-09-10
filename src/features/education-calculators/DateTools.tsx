@@ -104,7 +104,7 @@ export function AnniversaryCalculator({ locale = 'ko' }: { locale?: 'ko' | 'en' 
     : `私たちは${elapsed}日目です！❤️ — blog.oiyo.net`;
 
   return (
-    <Card className="p-6 bg-white border-slate-200 shadow-xl mt-8">
+    <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-8">
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -319,7 +319,7 @@ export function DdayCalculator({ locale = 'ko' }: { locale?: 'ko' | 'en' | 'ja' 
   }[L];
 
   return (
-    <Card className="p-6 bg-white border-slate-200 shadow-xl mt-8">
+    <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-8">
       <div className="space-y-5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -390,7 +390,7 @@ export function DdayCalculator({ locale = 'ko' }: { locale?: 'ko' | 'en' | 'ja' 
 
         {/* Events list */}
         {mounted && events.length === 0 && !state.adding ? (
-          <div className="text-center py-10 text-slate-400">
+          <div className="text-center py-6 sm:py-10 text-slate-400">
             <Clock className="w-10 h-10 mx-auto mb-3 opacity-30" />
             <p className="font-semibold">{copy.empty}</p>
           </div>

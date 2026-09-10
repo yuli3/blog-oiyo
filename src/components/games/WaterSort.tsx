@@ -94,7 +94,7 @@ const WaterSort: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
                 {isWon && (
                     <div className="text-center animate-in zoom-in-95">
                         <h4 className="text-2xl font-black text-primary mb-4">{t.win}</h4>
-                        <button onClick={initGame} className="px-10 py-3 bg-primary text-primary-foreground rounded-full font-bold shadow-lg">PLAY AGAIN</button>
+                        <button onClick={initGame} className="px-5 sm:px-10 py-3 bg-primary text-primary-foreground rounded-full font-bold shadow-lg">PLAY AGAIN</button>
                     </div>
                 )}
             </div>

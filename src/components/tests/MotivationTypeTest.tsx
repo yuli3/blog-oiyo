@@ -227,7 +227,7 @@ export default function MotivationTypeTest({ locale: localeProp }: Props) {
           <div className="bg-amber-500 h-1.5 rounded-full" style={{ width: `${((idx + 1) / questions.length) * 100}%` }} />
         </div>
       </div>
-      <div className="bg-white border border-gray-200 rounded-xl p-6 space-y-4 shadow-sm">
+      <div className="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 space-y-4 shadow-sm">
         <p className="text-base font-medium text-gray-800 leading-relaxed">{q[locale]}</p>
         <p className="text-xs text-gray-400">{t.scale}</p>
         <div className="space-y-2">

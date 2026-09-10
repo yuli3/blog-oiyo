@@ -1121,7 +1121,7 @@ export default function PersonalColorTest({ locale }: Props) {
   return (
     <div className="space-y-5">
       {/* Header */}
-      <div className={`rounded-2xl p-6 text-center ${sd.headerBg}`}>
+      <div className={`rounded-2xl p-4 sm:p-6 text-center ${sd.headerBg}`}>
         <div className="text-5xl mb-2">{sd.emoji}</div>
         <div className={`inline-block px-3 py-1 rounded-full text-xs font-bold border mb-2 ${sd.badge}`}>
           {ui.yourType}

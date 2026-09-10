@@ -184,7 +184,7 @@ export default function TypingSpeedTest({ locale }: Props) {
       ) : status === 'idle' ? (
         <div className="text-center py-4">
           <p className="text-sm text-muted-foreground mb-4">{l.waiting}</p>
-          <button onClick={start} className="px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:bg-primary/90 transition-colors">{l.start}</button>
+          <button onClick={start} className="px-4 sm:px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:bg-primary/90 transition-colors">{l.start}</button>
         </div>
       ) : (
         <div className="space-y-4">

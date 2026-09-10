@@ -52,7 +52,7 @@ const PsychologyWordle: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' })
     };
 
     return (
-        <div className="not-prose my-12 p-8 bg-card border border-border rounded-3xl shadow-sm max-w-sm mx-auto">
+        <div className="not-prose my-12 p-4 sm:p-8 bg-card border border-border rounded-3xl shadow-sm max-w-sm mx-auto">
             <h3 className="text-xl font-black text-center text-foreground mb-2">{t.title}</h3>
             <p className="text-[10px] text-center text-muted-foreground uppercase tracking-widest mb-8">{t.desc}</p>
 
@@ -102,7 +102,7 @@ const PsychologyWordle: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' })
                     <p className="text-lg font-bold text-foreground mb-4">{status === 'won' ? t.won : `${t.lost} ${targetWord}`}</p>
                     <button 
                         onClick={() => { setGuesses([]); setStatus('playing'); }}
-                        className="px-8 py-3 bg-primary text-primary-foreground rounded-full font-bold shadow-lg"
+                        className="px-4 sm:px-8 py-3 bg-primary text-primary-foreground rounded-full font-bold shadow-lg"
                     >
                         {t.playAgain}
                     </button>

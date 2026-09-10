@@ -60,8 +60,8 @@ export const TypingSpeedTest: React.FC = () => {
     };
 
     return (
-        <Card className="p-8 bg-slate-950 border-slate-800 text-white shadow-2xl mt-8 relative overflow-hidden">
-            <div className="absolute top-0 right-0 p-8 opacity-5">
+        <Card className="p-4 sm:p-8 bg-slate-950 border-slate-800 text-white shadow-2xl mt-8 relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-4 sm:p-8 opacity-5">
                 <Keyboard size={120} />
             </div>
 
@@ -76,7 +76,7 @@ export const TypingSpeedTest: React.FC = () => {
             </div>
 
             <div className="space-y-6 relative z-10">
-                <div className="p-6 bg-slate-900/50 rounded-2xl border border-white/5 text-lg leading-relaxed font-medium select-none">
+                <div className="p-4 sm:p-6 bg-slate-900/50 rounded-2xl border border-white/5 text-lg leading-relaxed font-medium select-none">
                     {textToType.split("").map((char, i) => {
                         let color = "text-slate-500";
                         if (i < inputValue.length) {
@@ -114,11 +114,11 @@ export const TypingSpeedTest: React.FC = () => {
                 </div>
 
                 {isFinished && (
-                    <div className="p-6 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl text-center animate-in zoom-in">
+                    <div className="p-4 sm:p-6 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl text-center animate-in zoom-in">
                         <Trophy className="mx-auto mb-2 text-yellow-300" size={32} />
                         <h4 className="text-xl font-bold mb-1">테스트 완료!</h4>
                         <p className="text-blue-100 text-sm">기록: {wpm} WPM | 정확도 {accuracy}%</p>
-                        <Button onClick={reset} className="mt-4 bg-white text-blue-600 hover:bg-slate-100 font-bold px-8 rounded-full">다시 도전</Button>
+                        <Button onClick={reset} className="mt-4 bg-white text-blue-600 hover:bg-slate-100 font-bold px-4 sm:px-8 rounded-full">다시 도전</Button>
                     </div>
                 )}
             </div>
@@ -170,7 +170,7 @@ export const PrisonersDilemma: React.FC = () => {
     };
 
     return (
-        <Card className="p-8 bg-white border-slate-200 shadow-xl mt-8">
+        <Card className="p-4 sm:p-8 bg-white border-slate-200 shadow-xl mt-8">
             <div className="flex items-center justify-between mb-8 border-b pb-4">
                 <h3 className="text-xl font-bold flex items-center gap-2">
                     <span className="p-1 px-2 bg-slate-900 text-white rounded text-sm">GAME THEORY</span>
@@ -188,11 +188,11 @@ export const PrisonersDilemma: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-2 gap-8 mb-8 text-center">
-                <div className="p-6 bg-blue-50 rounded-2xl border border-blue-100">
+                <div className="p-4 sm:p-6 bg-blue-50 rounded-2xl border border-blue-100">
                     <div className="text-xs font-bold text-blue-400 mb-2">플레이어 점수</div>
                     <div className="text-4xl font-black text-blue-600">{playerScore}</div>
                 </div>
-                <div className="p-6 bg-rose-50 rounded-2xl border border-rose-100">
+                <div className="p-4 sm:p-6 bg-rose-50 rounded-2xl border border-rose-100">
                     <div className="text-xs font-bold text-rose-400 mb-2">AI 점수</div>
                     <div className="text-4xl font-black text-rose-600">{aiScore}</div>
                 </div>
@@ -201,7 +201,7 @@ export const PrisonersDilemma: React.FC = () => {
             <div className="flex gap-4 justify-center mb-10">
                 <Button 
                     onClick={() => play("Cooperate")}
-                    className="flex-1 py-10 bg-emerald-500 hover:bg-emerald-600 text-white rounded-2xl shadow-lg border-b-4 border-emerald-700 active:border-b-0 active:translate-y-1 transition-all"
+                    className="flex-1 py-6 sm:py-10 bg-emerald-500 hover:bg-emerald-600 text-white rounded-2xl shadow-lg border-b-4 border-emerald-700 active:border-b-0 active:translate-y-1 transition-all"
                 >
                     <div className="flex flex-col gap-1">
                         <span className="text-2xl font-black">협력 (Cooperate)</span>
@@ -210,7 +210,7 @@ export const PrisonersDilemma: React.FC = () => {
                 </Button>
                 <Button 
                     onClick={() => play("Defect")}
-                    className="flex-1 py-10 bg-slate-800 hover:bg-slate-950 text-white rounded-2xl shadow-lg border-b-4 border-slate-950 active:border-b-0 active:translate-y-1 transition-all"
+                    className="flex-1 py-6 sm:py-10 bg-slate-800 hover:bg-slate-950 text-white rounded-2xl shadow-lg border-b-4 border-slate-950 active:border-b-0 active:translate-y-1 transition-all"
                 >
                     <div className="flex flex-col gap-1">
                         <span className="text-2xl font-black">배신 (Defect)</span>

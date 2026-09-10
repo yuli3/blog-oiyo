@@ -282,7 +282,7 @@ const ConnectFour: React.FC<Props> = ({ locale }) => {
   const cellGap = 6;
 
   return (
-    <div className="not-prose my-12 p-6 bg-card text-card-foreground rounded-3xl border border-border shadow-sm max-w-xl mx-auto select-none">
+    <div className="not-prose my-12 p-4 sm:p-6 bg-card text-card-foreground rounded-3xl border border-border shadow-sm max-w-xl mx-auto select-none">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <span className="text-sm font-bold text-muted-foreground uppercase tracking-widest">
@@ -476,7 +476,7 @@ const ConnectFour: React.FC<Props> = ({ locale }) => {
         <div className="mt-4 flex justify-center">
           <button
             onClick={resetGame}
-            className="px-10 py-3 bg-blue-600 text-white rounded-full font-bold hover:bg-blue-700 transition-colors"
+            className="px-5 sm:px-10 py-3 bg-blue-600 text-white rounded-full font-bold hover:bg-blue-700 transition-colors"
           >
             {t.restart}
           </button>

@@ -31,16 +31,16 @@ const FreelancerTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 
                 
                 <div className="w-full max-w-sm mx-auto space-y-4">
                     <label className="text-[10px] font-black text-muted-foreground uppercase">{t.income}</label>
-                    <input type="number" value={income} onChange={(e) => setIncome(Number(e.target.value))} className="w-full p-6 bg-muted/30 rounded-[32px] border border-border font-black text-2xl text-center outline-none focus:ring-4 focus:ring-primary/10" />
+                    <input type="number" value={income} onChange={(e) => setIncome(Number(e.target.value))} className="w-full p-4 sm:p-6 bg-muted/30 rounded-[32px] border border-border font-black text-2xl text-center outline-none focus:ring-4 focus:ring-primary/10" />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="p-8 bg-foreground rounded-[40px] text-background space-y-2 text-center shadow-xl">
+                    <div className="p-4 sm:p-8 bg-foreground rounded-[40px] text-background space-y-2 text-center shadow-xl">
                         <p className="text-[10px] font-black text-background/60 uppercase tracking-widest">{t.net}</p>
                         <h2 className="text-3xl font-black text-primary">₩{Math.round(netPay).toLocaleString()}</h2>
                         <p className="text-[10px] text-background/60">-{t.tax33}: ₩{Math.round(tax33).toLocaleString()}</p>
                     </div>
-                    <div className="p-8 bg-success/10 border border-success/20 rounded-[40px] space-y-2 text-center">
+                    <div className="p-4 sm:p-8 bg-success/10 border border-success/20 rounded-[40px] space-y-2 text-center">
                         <p className="text-[10px] font-black text-success uppercase tracking-widest">{locale === 'ko' ? '5월 정산 예상' : 'May Settlement'}</p>
                         <h2 className={`text-3xl font-black ${settlement > 0 ? 'text-destructive' : 'text-success'}`}>
                             {settlement > 0 ? `+₩${Math.round(settlement).toLocaleString()}` : `환급 ₩${Math.round(Math.abs(settlement)).toLocaleString()}`}

@@ -886,7 +886,7 @@ export default function DailyFortune({ locale }: Props) {
 
       {!result ? (
         /* Input */
-        <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
+        <div className="rounded-2xl border border-gray-200 bg-white p-4 sm:p-8 shadow-sm">
           <label className="mb-2 block text-sm font-medium text-gray-700">
             {ui.birthLabel}
           </label>

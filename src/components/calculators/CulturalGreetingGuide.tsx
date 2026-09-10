@@ -73,7 +73,7 @@ const CulturalGreetingGuide: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'k
     const data = t.countries[selectedCountry] || t.countries.korea;
 
     return (
-        <div className="not-prose my-12 p-8 bg-gradient-to-br from-amber-50 to-orange-50 border border-orange-100 rounded-3xl shadow-xl">
+        <div className="not-prose my-12 p-4 sm:p-8 bg-gradient-to-br from-amber-50 to-orange-50 border border-orange-100 rounded-3xl shadow-xl">
             <h3 className="text-2xl font-black text-center text-slate-900 mb-8">{t.ui.selectCountry}</h3>
             
             <div className="flex justify-center gap-4 mb-10">
@@ -94,7 +94,7 @@ const CulturalGreetingGuide: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'k
             </div>
 
             <div className="space-y-4">
-                <div className="p-6 bg-white/80 backdrop-blur-sm rounded-2xl border border-orange-100">
+                <div className="p-4 sm:p-6 bg-white/80 backdrop-blur-sm rounded-2xl border border-orange-100">
                     <div className="flex items-center gap-2 mb-3">
                         <span className="p-1.5 bg-orange-100 rounded-lg text-orange-600">🏮</span>
                         <h4 className="font-bold text-slate-900">{t.ui.customs}</h4>
@@ -103,14 +103,14 @@ const CulturalGreetingGuide: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'k
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="p-6 bg-white/80 backdrop-blur-sm rounded-2xl border border-orange-100">
+                    <div className="p-4 sm:p-6 bg-white/80 backdrop-blur-sm rounded-2xl border border-orange-100">
                         <div className="flex items-center gap-2 mb-3">
                             <span className="p-1.5 bg-green-100 rounded-lg text-green-600">✅</span>
                             <h4 className="font-bold text-slate-900">{t.ui.etiquette}</h4>
                         </div>
                         <p className="text-slate-700 text-sm leading-relaxed">{data.etiquette}</p>
                     </div>
-                    <div className="p-6 bg-white/80 backdrop-blur-sm rounded-2xl border border-orange-100">
+                    <div className="p-4 sm:p-6 bg-white/80 backdrop-blur-sm rounded-2xl border border-orange-100">
                         <div className="flex items-center gap-2 mb-3">
                             <span className="p-1.5 bg-rose-100 rounded-lg text-rose-600">❌</span>
                             <h4 className="font-bold text-slate-900">{t.ui.avoid}</h4>

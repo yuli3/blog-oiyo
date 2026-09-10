@@ -25,7 +25,7 @@ const RentComparisonCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {/* Jeonse Block */}
-                    <div className="p-8 bg-muted/40 rounded-[32px] border border-border space-y-6">
+                    <div className="p-4 sm:p-8 bg-muted/40 rounded-[32px] border border-border space-y-6">
                         <h5 className="text-xs font-black text-muted-foreground uppercase tracking-widest">{t.jeonse}</h5>
                         <div className="space-y-4">
                             <div>
@@ -44,7 +44,7 @@ const RentComparisonCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
                     </div>
 
                     {/* Wolse Block */}
-                    <div className="p-8 bg-primary/5 rounded-[32px] border border-primary/20 space-y-6">
+                    <div className="p-4 sm:p-8 bg-primary/5 rounded-[32px] border border-primary/20 space-y-6">
                         <h5 className="text-xs font-black text-primary uppercase tracking-widest">{t.wolse}</h5>
                         <div className="space-y-4">
                             <div>
@@ -63,7 +63,7 @@ const RentComparisonCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
                     </div>
                 </div>
 
-                <div className="p-10 bg-foreground rounded-[40px] text-background text-center animate-in fade-in zoom-in shadow-2xl">
+                <div className="p-5 sm:p-10 bg-foreground rounded-[40px] text-background text-center animate-in fade-in zoom-in shadow-2xl">
                     <h4 className="text-3xl font-black text-primary mb-2 uppercase">{winner}</h4>
                     <p className="text-xs text-background/50">{t.resultDesc}</p>
                     <div className="mt-6 text-4xl font-black text-background">₩{Math.round(diff).toLocaleString()}</div>

@@ -321,7 +321,7 @@ const DdayCounter: React.FC<{ locale?: Locale }> = ({ locale = "en" }) => {
       {/* Event list */}
       <div className="flex flex-col gap-3">
         {hydrated && sorted.length === 0 ? (
-          <div className="rounded-2xl border-2 border-dashed border-border p-10 text-center">
+          <div className="rounded-2xl border-2 border-dashed border-border p-5 sm:p-10 text-center">
             <p className="text-sm text-muted-foreground font-medium">{t.empty}</p>
           </div>
         ) : (

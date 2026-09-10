@@ -397,7 +397,7 @@ export default function BabyNameGenerator({ locale }: Props) {
         <div className="space-y-3">
           <h2 className="text-lg font-semibold text-gray-800">{t.resultTitle}</h2>
           {results.length === 0 ? (
-            <p className="text-center text-gray-500 py-6">{t.noResult}</p>
+            <p className="text-center text-gray-500 py-4 sm:py-6">{t.noResult}</p>
           ) : (
             results.map((entry) => (
               <div

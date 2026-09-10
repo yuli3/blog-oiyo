@@ -31,7 +31,7 @@ export const StoneSimulator: React.FC = () => {
   };
 
   return (
-    <Card className="p-6 bg-slate-950 border-slate-800 text-slate-100 shadow-2xl overflow-hidden relative">
+    <Card className="p-4 sm:p-6 bg-slate-950 border-slate-800 text-slate-100 shadow-2xl overflow-hidden relative">
       <div className="absolute top-0 right-0 p-4 opacity-10">
         <Dice5 size={120} />
       </div>
@@ -56,7 +56,7 @@ export const StoneSimulator: React.FC = () => {
 
         <Button 
             onClick={attempt}
-            className="w-full max-w-xs py-8 text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 shadow-[0_0_30px_rgba(37,99,235,0.4)] transition-all active:scale-95"
+            className="w-full max-w-xs py-5 sm:py-8 text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 shadow-[0_0_30px_rgba(37,99,235,0.4)] transition-all active:scale-95"
         >
             확률 도전
         </Button>

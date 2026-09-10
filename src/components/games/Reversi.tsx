@@ -175,10 +175,10 @@ const Reversi: React.FC<{ locale?: Locale }> = ({ locale = 'ko' }) => {
 
                 {winner !== null && (
                     <div className="absolute inset-0 z-10 bg-background/60 backdrop-blur-sm rounded-2xl flex flex-col items-center justify-center animate-in fade-in zoom-in-95">
-                        <div className="bg-card p-10 rounded-3xl shadow-xl border-4 border-primary/20 text-center">
+                        <div className="bg-card p-5 sm:p-10 rounded-3xl shadow-xl border-4 border-primary/20 text-center">
                             <h4 className="text-4xl font-black text-foreground mb-2">{winLabel}</h4>
                             <p className="text-muted-foreground mb-8 font-bold uppercase tracking-widest">{t.over}</p>
-                            <button onClick={initGame} className="px-12 py-4 bg-primary text-primary-foreground rounded-full font-black shadow-lg hover:scale-105 transition-transform">
+                            <button onClick={initGame} className="px-5 sm:px-12 py-4 bg-primary text-primary-foreground rounded-full font-black shadow-lg hover:scale-105 transition-transform">
                                 {t.reset}
                             </button>
                         </div>

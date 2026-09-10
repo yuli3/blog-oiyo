@@ -166,7 +166,7 @@ const PresentValueCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
         {result && (
           <div className="mt-4 space-y-4" aria-live="polite" aria-atomic="true">
             {/* PV hero */}
-            <div className="bg-green-600 text-white rounded-2xl p-6 text-center">
+            <div className="bg-green-600 text-white rounded-2xl p-4 sm:p-6 text-center">
               <p className="text-sm font-semibold opacity-80 mb-1">
                 {ko ? '현재 가치 (PV)' : 'Present Value (PV)'}
               </p>

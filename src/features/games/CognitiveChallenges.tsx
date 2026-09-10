@@ -405,7 +405,7 @@ export function ChimpTest({ locale = 'ko' }: { locale?: 'ko' | 'en' | 'ja' }) {
 
             <Button
               onClick={handleStart}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-full px-10 font-bold text-base"
+              className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-full px-5 sm:px-10 font-bold text-base"
               aria-label={copy.startBtn}
             >
               {copy.startBtn}
@@ -1012,7 +1012,7 @@ export function KeyboardReactionTest({ locale = 'ko' }: { locale?: 'ko' | 'en' |
 
             <Button
               onClick={handleStart}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-full px-10 font-bold text-base"
+              className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-full px-5 sm:px-10 font-bold text-base"
               aria-label={copy.startBtn}
             >
               {copy.startBtn}
@@ -1022,7 +1022,7 @@ export function KeyboardReactionTest({ locale = 'ko' }: { locale?: 'ko' | 'en' |
 
         {/* Countdown Screen */}
         {state.phase === 'countdown' && (
-          <div className="flex flex-col items-center justify-center gap-4 py-10">
+          <div className="flex flex-col items-center justify-center gap-4 py-6 sm:py-10">
             <div
               key={state.countdownTick}
               className="w-24 h-24 rounded-full bg-emerald-100 border-4 border-emerald-300 flex items-center justify-center"
@@ -1078,7 +1078,7 @@ export function KeyboardReactionTest({ locale = 'ko' }: { locale?: 'ko' | 'en' |
             </div>
 
             {/* Key display */}
-            <div className="flex flex-col items-center gap-4 py-6">
+            <div className="flex flex-col items-center gap-4 py-4 sm:py-6">
               <p className="text-sm font-bold text-slate-500">
                 {locale === 'ko'
                   ? `'${state.currentKey}' ${copy.pressKey}`

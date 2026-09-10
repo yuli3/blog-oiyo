@@ -55,7 +55,7 @@ const BmiCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
                     </div>
                 </div>
 
-                <div className="p-10 bg-foreground rounded-[40px] text-background flex flex-col md:flex-row gap-12 items-center justify-around shadow-2xl animate-in zoom-in-95">
+                <div className="p-5 sm:p-10 bg-foreground rounded-[40px] text-background flex flex-col md:flex-row gap-12 items-center justify-around shadow-2xl animate-in zoom-in-95">
                     <div className="text-center space-y-2">
                         <p className="text-[10px] font-black text-background/60 uppercase tracking-widest">BMI</p>
                         <h2 className="text-6xl font-black text-primary">{bmi.toFixed(1)}</h2>

@@ -254,7 +254,7 @@ export default function EmotionalMindTest({ locale: localeProp }: Props) {
 
     return (
       <div className="space-y-6">
-        <div className="rounded-2xl bg-gradient-to-br from-green-50 to-green-50 border border-green-200 p-6 text-center">
+        <div className="rounded-2xl bg-gradient-to-br from-green-50 to-green-50 border border-green-200 p-4 sm:p-6 text-center">
           <p className="text-sm font-medium text-green-600 mb-1">{tx.resultTitle}</p>
           <div className="text-5xl mb-2">🧠</div>
           <h2 className="text-2xl font-bold text-gray-900">{overallLevel.label}</h2>
@@ -309,7 +309,7 @@ export default function EmotionalMindTest({ locale: localeProp }: Props) {
         </div>
         <span className="text-sm text-gray-500">{tx.progress(idx + 1, questions.length)}</span>
       </div>
-      <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+      <div className="rounded-2xl border border-gray-100 bg-white p-4 sm:p-6 shadow-sm">
         <p className="mb-5 text-center text-lg font-medium text-gray-800">{q[locale]}</p>
         <div className="space-y-3">
           {q.options.map((opt, i) => (

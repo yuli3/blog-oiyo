@@ -389,7 +389,7 @@ export default function LeadershipStyleTest({ locale: localeProp }: Props) {
     return (
       <div className="space-y-6">
         <div
-          className="rounded-2xl p-6 text-center"
+          className="rounded-2xl p-4 sm:p-6 text-center"
           style={{ background: `linear-gradient(135deg, ${r.color}18, ${r.color}08)`, border: `1px solid ${r.color}30` }}
         >
           <p className="mb-1 text-sm font-medium text-gray-500">{tx.resultTitle}</p>
@@ -469,7 +469,7 @@ export default function LeadershipStyleTest({ locale: localeProp }: Props) {
         <span className="text-sm text-gray-500">{tx.progress(idx + 1, questions.length)}</span>
       </div>
 
-      <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+      <div className="rounded-2xl border border-gray-100 bg-white p-4 sm:p-6 shadow-sm">
         <p className="mb-5 text-center text-lg font-medium text-gray-800">{q[locale]}</p>
         <div className="space-y-3">
           {q.options.map((opt, i) => (

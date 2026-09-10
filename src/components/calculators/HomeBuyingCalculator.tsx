@@ -70,7 +70,7 @@ const HomeBuyingCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko
     };
 
     return (
-        <div className="not-prose my-12 p-8 bg-slate-50 border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto">
+        <div className="not-prose my-12 p-4 sm:p-8 bg-slate-50 border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto">
             {!showResults ? (
                 <div className="space-y-6">
                     <h3 className="text-2xl font-black text-center text-slate-900 mb-8">{t.title}</h3>
@@ -116,14 +116,14 @@ const HomeBuyingCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="p-6 bg-white rounded-2xl border border-slate-100">
+                        <div className="p-4 sm:p-6 bg-white rounded-2xl border border-slate-100">
                             <h4 className="text-xs font-bold text-green-500 uppercase mb-2">{t.results.buyScenario}</h4>
                             <div className="text-xl font-bold text-slate-900 mb-1">
                                 {formatWon(calculations.buyNet)}
                             </div>
                             <p className="text-[10px] text-slate-400">{t.results.buyDetails}</p>
                         </div>
-                        <div className="p-6 bg-white rounded-2xl border border-slate-100">
+                        <div className="p-4 sm:p-6 bg-white rounded-2xl border border-slate-100">
                             <h4 className="text-xs font-bold text-green-500 uppercase mb-2">{t.results.rentScenario}</h4>
                             <div className="text-xl font-bold text-slate-900 mb-1">
                                 {formatWon(calculations.rentNet)}

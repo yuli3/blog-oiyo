@@ -50,7 +50,7 @@ const SeveranceCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
                     </div>
                 </div>
 
-                <div className="p-10 bg-foreground rounded-[40px] text-background animate-in slide-in-from-bottom-6 shadow-2xl relative overflow-hidden">
+                <div className="p-5 sm:p-10 bg-foreground rounded-[40px] text-background animate-in slide-in-from-bottom-6 shadow-2xl relative overflow-hidden">
                     <p className="text-[10px] font-black text-background/60 uppercase tracking-widest text-center mb-4">{t.result}</p>
                     <h2 className="text-5xl font-black text-center text-primary mb-10">₩{Math.round(severance).toLocaleString()}</h2>
                     

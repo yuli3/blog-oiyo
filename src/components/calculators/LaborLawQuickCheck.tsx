@@ -62,7 +62,7 @@ const LaborLawQuickCheck: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
     const [openIdx, setOpenIdx] = useState<string | null>(null);
 
     return (
-        <div className="not-prose my-12 p-8 bg-slate-900 text-white rounded-3xl shadow-2xl border border-slate-800">
+        <div className="not-prose my-12 p-4 sm:p-8 bg-slate-900 text-white rounded-3xl shadow-2xl border border-slate-800">
             <h3 className="text-2xl font-black text-center mb-8 bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
                 {t.title}
             </h3>
@@ -107,7 +107,7 @@ const LaborLawQuickCheck: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
             </div>
 
             <div className="mt-10 flex justify-center">
-                <button className="px-8 py-3 bg-gradient-to-r from-blue-600 to-emerald-600 rounded-full font-bold hover:scale-105 transition-all shadow-lg shadow-blue-500/20">
+                <button className="px-4 sm:px-8 py-3 bg-gradient-to-r from-blue-600 to-emerald-600 rounded-full font-bold hover:scale-105 transition-all shadow-lg shadow-blue-500/20">
                     {t.cta}
                 </button>
             </div>

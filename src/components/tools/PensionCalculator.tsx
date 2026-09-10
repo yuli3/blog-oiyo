@@ -34,7 +34,7 @@ const PensionCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
                         </div>
                     </div>
 
-                    <div className="bg-foreground rounded-[32px] p-8 text-background flex flex-col justify-center animate-in slide-in-from-right">
+                    <div className="bg-foreground rounded-[32px] p-4 sm:p-8 text-background flex flex-col justify-center animate-in slide-in-from-right">
                         <p className="text-[10px] font-black text-background/60 uppercase tracking-widest mb-2">{t.result}</p>
                         <h2 className="text-4xl font-black text-primary mb-6">₩{Math.round(refund).toLocaleString()}</h2>
                         

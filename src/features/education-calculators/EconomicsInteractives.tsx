@@ -174,12 +174,12 @@ export const SupplyDemandSimulator: React.FC = () => {
 
   return (
     <Card className="bg-white border border-emerald-100 shadow-xl rounded-2xl overflow-hidden mt-8">
-      <div className="bg-emerald-700 px-6 py-5">
+      <div className="bg-emerald-700 px-4 sm:px-6 py-5">
         <h3 className="text-lg font-bold text-white">수요공급 시뮬레이터</h3>
         <p className="text-xs text-emerald-200 mt-1">슬라이더로 곡선을 이동하며 균형가격과 잉여를 확인하세요</p>
       </div>
 
-      <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="p-4 sm:p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Graph */}
         <div>
           <svg
@@ -393,12 +393,12 @@ export const ElasticityCalculator: React.FC = () => {
 
   return (
     <Card className="bg-white border border-emerald-100 shadow-xl rounded-2xl overflow-hidden mt-8">
-      <div className="bg-emerald-700 px-6 py-5">
+      <div className="bg-emerald-700 px-4 sm:px-6 py-5">
         <h3 className="text-lg font-bold text-white">탄력성 계산기</h3>
         <p className="text-xs text-emerald-200 mt-1">호탄력성(Arc Elasticity) 공식 — 중간점 방법 사용</p>
       </div>
 
-      <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="p-4 sm:p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Price inputs (shared) */}
         <div>
           <p className="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-3">가격 변화 (공통)</p>

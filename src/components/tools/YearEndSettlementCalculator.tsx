@@ -189,7 +189,7 @@ const YearEndSettlementCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
                 </div>
 
                 {/* Result summary */}
-                <div className={`rounded-2xl p-6 border-2 text-center ${isRefund ? 'bg-success/10 border-success' : 'bg-warning/10 border-warning'}`}>
+                <div className={`rounded-2xl p-4 sm:p-6 border-2 text-center ${isRefund ? 'bg-success/10 border-success' : 'bg-warning/10 border-warning'}`}>
                     <p className="text-sm font-bold uppercase tracking-wide mb-2 ${isRefund ? 'text-success' : 'text-warning'}">
                         {isRefund ? t.refund : t.additionalTax}
                     </p>
@@ -199,7 +199,7 @@ const YearEndSettlementCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
                 </div>
 
                 {/* Breakdown */}
-                <div className="rounded-2xl border border-border bg-muted/30 p-6 flex flex-col gap-3">
+                <div className="rounded-2xl border border-border bg-muted/30 p-4 sm:p-6 flex flex-col gap-3">
                     <h4 className="text-sm font-bold text-foreground">{t.breakdown}</h4>
                     {[
                         { label: t.totalIncomeTax, value: `₩${fmt(calculatedTax)}` },

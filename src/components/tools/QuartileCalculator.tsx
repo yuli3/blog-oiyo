@@ -49,7 +49,7 @@ export default function QuartileCalculator({ locale }: { locale: Locale }) {
   }, [raw]);
 
   return (
-    <div className="not-prose my-8 mx-auto max-w-xl rounded-3xl border border-border bg-card p-6 shadow-sm">
+    <div className="not-prose my-8 mx-auto max-w-xl rounded-3xl border border-border bg-card p-4 sm:p-6 shadow-sm">
       <label className="mb-1 block text-xs font-bold uppercase tracking-widest text-muted-foreground" htmlFor="q1q3-in">{t.inputLabel}</label>
       <textarea id="q1q3-in" rows={3} value={raw} placeholder={t.placeholder}
         onChange={(e) => { setRaw(e.target.value); setShow(false); }}

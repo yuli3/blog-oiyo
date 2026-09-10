@@ -130,7 +130,7 @@ const VatCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
                             />
                         </div>
 
-                        <div className="rounded-2xl border border-border bg-muted/30 p-6 flex flex-col gap-3">
+                        <div className="rounded-2xl border border-border bg-muted/30 p-4 sm:p-6 flex flex-col gap-3">
                             {[
                                 { label: t.supplyValue, value: `₩${fmt(supplyValue)}`, em: false },
                                 { label: t.vatAmount, value: `₩${fmt(vatAmount)}`, em: false },

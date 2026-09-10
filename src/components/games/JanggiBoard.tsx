@@ -51,7 +51,7 @@ const JanggiBoard: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
     };
 
     return (
-        <div className="not-prose my-12 p-8 bg-[#e8dcc4] border-8 border-[#c4a484] rounded-xl shadow-xl max-w-lg mx-auto overflow-hidden">
+        <div className="not-prose my-12 p-4 sm:p-8 bg-[#e8dcc4] border-8 border-[#c4a484] rounded-xl shadow-xl max-w-lg mx-auto overflow-hidden">
             <div className="flex justify-between items-center mb-6">
                 <div>
                     <h3 className="text-xl font-black text-stone-800">{t.title}</h3>

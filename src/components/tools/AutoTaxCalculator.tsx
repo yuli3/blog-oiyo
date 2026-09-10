@@ -46,7 +46,7 @@ const AutoTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
                     </div>
                 </div>
 
-                <div className="p-10 bg-foreground rounded-[40px] text-background shadow-2xl animate-in zoom-in-95">
+                <div className="p-5 sm:p-10 bg-foreground rounded-[40px] text-background shadow-2xl animate-in zoom-in-95">
                     <div className="text-center mb-8">
                         <p className="text-[10px] font-black text-background/60 uppercase tracking-widest mb-2">{t.result}</p>
                         <h2 className="text-5xl font-black text-primary">₩{Math.round(total).toLocaleString()}</h2>

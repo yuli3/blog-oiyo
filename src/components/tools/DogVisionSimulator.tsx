@@ -72,7 +72,7 @@ const DogVisionSimulator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
                         </>
                     ) : (
                         <label className="cursor-pointer flex flex-col items-center gap-4">
-                            <div className="p-6 bg-primary/10 rounded-full text-4xl">🐶</div>
+                            <div className="p-4 sm:p-6 bg-primary/10 rounded-full text-4xl">🐶</div>
                             <span className="text-xs font-black text-primary uppercase tracking-widest">{t.upload}</span>
                             <input type="file" className="hidden" accept="image/*" onChange={handleUpload} />
                         </label>
@@ -86,11 +86,11 @@ const DogVisionSimulator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
                             onMouseUp={() => setIsOriginal(false)}
                             onTouchStart={() => setIsOriginal(true)}
                             onTouchEnd={() => setIsOriginal(false)}
-                            className="px-10 py-3 bg-primary text-primary-foreground rounded-full font-black shadow-lg active:scale-95 transition-all select-none"
+                            className="px-5 sm:px-10 py-3 bg-primary text-primary-foreground rounded-full font-black shadow-lg active:scale-95 transition-all select-none"
                         >
                             {t.compare}
                         </button>
-                        <label className="px-10 py-3 bg-muted text-foreground rounded-full font-black cursor-pointer shadow-sm border border-border">
+                        <label className="px-5 sm:px-10 py-3 bg-muted text-foreground rounded-full font-black cursor-pointer shadow-sm border border-border">
                             {t.upload}
                             <input type="file" className="hidden" accept="image/*" onChange={handleUpload} />
                         </label>

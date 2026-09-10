@@ -95,7 +95,7 @@ const SnakeGame: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
     }, [score, best]);
 
     return (
-        <div className="not-prose my-12 p-8 bg-card border border-border rounded-4xl shadow-sm max-w-sm mx-auto">
+        <div className="not-prose my-12 p-4 sm:p-8 bg-card border border-border rounded-4xl shadow-sm max-w-sm mx-auto">
             <div className="flex justify-between items-end mb-8 text-foreground">
                 <div>
                     <h3 className="text-xl font-black">{t.title}</h3>
@@ -125,7 +125,7 @@ const SnakeGame: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
                 </svg>
 
                 {status !== 'playing' && (
-                    <div className="absolute inset-0 bg-background/60 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center animate-in fade-in zoom-in-95">
+                    <div className="absolute inset-0 bg-background/60 backdrop-blur-md flex flex-col items-center justify-center p-4 sm:p-6 text-center animate-in fade-in zoom-in-95">
                         {status === 'idle' ? (
                             <div className="space-y-4">
                                 <div className="w-16 h-16 bg-primary/10 rounded-3xl flex items-center justify-center mx-auto mb-4">
@@ -133,7 +133,7 @@ const SnakeGame: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
                                 </div>
                                 <button 
                                     onClick={initGame}
-                                    className="px-8 py-3 bg-primary text-primary-foreground rounded-full font-bold shadow-lg"
+                                    className="px-4 sm:px-8 py-3 bg-primary text-primary-foreground rounded-full font-bold shadow-lg"
                                 >
                                     {t.start}
                                 </button>
@@ -144,7 +144,7 @@ const SnakeGame: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
                                 <p className="text-sm font-medium text-muted-foreground">Final Rank: {score / 10} Stars</p>
                                 <button 
                                     onClick={initGame}
-                                    className="px-8 py-3 bg-destructive text-destructive-foreground rounded-full font-bold shadow-lg"
+                                    className="px-4 sm:px-8 py-3 bg-destructive text-destructive-foreground rounded-full font-bold shadow-lg"
                                 >
                                     {t.reset}
                                 </button>

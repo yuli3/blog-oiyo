@@ -37,7 +37,7 @@ const DsrCalculator: React.FC = () => {
     }, [income, existingDebt, newLoan, interestRate, loanTerm]);
 
     return (
-        <div className="not-prose my-12 p-8 bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200 rounded-3xl shadow-xl">
+        <div className="not-prose my-12 p-4 sm:p-8 bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200 rounded-3xl shadow-xl">
             <div className="flex flex-col md:flex-row gap-8">
                 {/* Inputs */}
                 <div className="flex-1 space-y-6">
@@ -100,7 +100,7 @@ const DsrCalculator: React.FC = () => {
                 </div>
 
                 {/* Results */}
-                <div className="flex-1 p-6 bg-white rounded-2xl border border-blue-100 shadow-sm flex flex-col justify-center items-center text-center">
+                <div className="flex-1 p-4 sm:p-6 bg-white rounded-2xl border border-blue-100 shadow-sm flex flex-col justify-center items-center text-center">
                     <div className="mb-6">
                         <span className="text-sm font-medium text-slate-500 uppercase tracking-widest">나의 DSR 지수</span>
                         <div className={`text-6xl font-black mt-2 ${dsr > 40 ? 'text-rose-500' : 'text-emerald-500'}`}>

@@ -84,7 +84,7 @@ export default function PersonaScopeTest({ locale: localeProp }: Props) {
 
   if (phase === "result") {
     return (
-      <div className="not-prose my-10 p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto space-y-6">
+      <div className="not-prose my-10 p-4 sm:p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto space-y-6">
         <div className="text-center">
           <p className="text-xs font-bold text-lime-500 uppercase tracking-widest">{t.resultLabel}</p>
           <h3 className="text-2xl font-black text-slate-900 mt-2">🔭</h3>
@@ -119,7 +119,7 @@ export default function PersonaScopeTest({ locale: localeProp }: Props) {
   }
 
   return (
-    <div className="not-prose my-10 p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto space-y-8">
+    <div className="not-prose my-10 p-4 sm:p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto space-y-8">
       <div className="text-center">
         <h3 className="text-2xl font-black text-slate-900">{t.title}</h3>
         <p className="text-sm text-slate-500 mt-2">{t.description}</p>
@@ -149,7 +149,7 @@ export default function PersonaScopeTest({ locale: localeProp }: Props) {
         <button
           disabled={!isComplete}
           onClick={() => setPhase("result")}
-          className={`px-10 py-3 rounded-2xl font-bold text-base transition-all ${isComplete ? "bg-lime-600 text-white hover:bg-lime-700 shadow-lg" : "bg-slate-200 text-slate-400 cursor-not-allowed"}`}
+          className={`px-5 sm:px-10 py-3 rounded-2xl font-bold text-base transition-all ${isComplete ? "bg-lime-600 text-white hover:bg-lime-700 shadow-lg" : "bg-slate-200 text-slate-400 cursor-not-allowed"}`}
         >
           {lang === "ko" ? "결과 보기" : "See Results"}
         </button>

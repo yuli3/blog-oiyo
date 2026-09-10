@@ -68,7 +68,7 @@ const PetAgeCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' })
                     </div>
                 </div>
 
-                <div className="p-10 bg-primary/5 border border-primary/20 rounded-[40px] text-center shadow-2xl animate-in zoom-in-95">
+                <div className="p-5 sm:p-10 bg-primary/5 border border-primary/20 rounded-[40px] text-center shadow-2xl animate-in zoom-in-95">
                     <p className="text-[10px] font-black text-primary uppercase tracking-widest mb-4">{t.result}</p>
                     <div className="flex items-center justify-center gap-4">
                         <h2 className="text-6xl font-black text-primary">{humanAge}</h2>
