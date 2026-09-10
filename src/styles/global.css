@@ -238,6 +238,17 @@
   @apply leading-[1.8] text-pretty mb-6 sm:mb-8;
 }
 
+/* 목록 항목 사이에 빈 줄이 끼면 마크다운은 느슨한 목록을 만들어 항목마다 <p> 를
+   씌운다. 그 <p> 가 위의 본문 문단 간격을 그대로 받아, 느슨한 목록은 항목 사이가
+   촘촘한 목록의 두 배로 벌어졌다(2026-09-10 375px: 항목 <p> 위아래 24px).
+   목록의 간격은 li 가 맡고, 항목 안 문단은 문단끼리의 간격만 갖는다. */
+.prose li > p {
+  margin-block: 0;
+}
+.prose li > p + p {
+  margin-top: 0.5em;
+}
+
 .prose h2, .prose h3 {
   @apply mt-10 mb-4 sm:mt-16 sm:mb-6 font-serif font-bold tracking-tighter;
 }
