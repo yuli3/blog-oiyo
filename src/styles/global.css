@@ -210,19 +210,36 @@
 }
 
 .prose pre {
-  @apply rounded-2xl shadow-sm border border-border/40 p-6;
+  @apply rounded-2xl shadow-sm border border-border/40 p-4 sm:p-6;
 }
 
 .prose blockquote {
-  @apply border-l-4 border-primary bg-primary/5 px-8 py-4 rounded-r-2xl font-serif text-xl italic tracking-tight text-primary/80;
+  @apply border-l-4 border-primary bg-primary/5 px-4 py-3 sm:px-8 sm:py-4 rounded-r-2xl font-serif text-lg sm:text-xl italic tracking-tight text-primary/80;
+}
+/* 인용문 안의 문단이 본문 문단 간격(.prose p 의 mb-8 + 플러그인 상단 여백)을
+   그대로 물려받아, 한 줄짜리 풀이도 상자 안에 위 27px·아래 32px 의 빈 공간이
+   생겼다(2026-09-10 375px 실측: 한 줄 인용문 높이 159px). 상자의 여백은
+   blockquote 패딩이 맡고, 문단은 문단끼리의 간격만 갖는다. */
+.prose blockquote > p {
+  margin-block: 0;
+}
+.prose blockquote > p + p {
+  margin-top: 0.6em;
+}
+/* 타이포그래피 플러그인은 인용문 첫·끝 문단에 “ ” 를 자동으로 붙인다. 이 사이트의
+   > 는 인용보다 퀴즈 풀이·요약·암기 포인트로 쓰여서, 계산 결과에 따옴표가
+   붙어 있었다. */
+.prose blockquote > p::before,
+.prose blockquote > p::after {
+  content: none;
 }
 
 .prose p {
-  @apply leading-[1.8] text-pretty mb-8;
+  @apply leading-[1.8] text-pretty mb-6 sm:mb-8;
 }
 
 .prose h2, .prose h3 {
-  @apply mt-16 mb-6 font-serif font-bold tracking-tighter;
+  @apply mt-10 mb-4 sm:mt-16 sm:mb-6 font-serif font-bold tracking-tighter;
 }
 
 .prose a {
