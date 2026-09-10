@@ -35,10 +35,10 @@ const SvgStudio: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
 
     return (
         <GameContainer title={t.title} subtitle="Infinite Resolution Analytics" onReset={() => setCode(DEFAULT_SVG)}>
-            <div className="flex flex-col items-center gap-8">
+            <div className="flex flex-col items-center gap-5 sm:gap-8">
                 <p className="text-sm font-medium text-muted-foreground text-center max-w-md">{t.desc}</p>
                 
-                <div className="w-full flex flex-col lg:flex-row gap-8 items-stretch">
+                <div className="w-full flex flex-col lg:flex-row gap-5 sm:gap-8 items-stretch">
                     {/* Editor Area */}
                     <div className="flex-1 space-y-3">
                         <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">{t.editor}</p>

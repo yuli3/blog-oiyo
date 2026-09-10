@@ -24,10 +24,10 @@ const SeveranceCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
 
     return (
         <GameContainer title={t.title} subtitle="Employment Exit Strategy" onReset={() => { setJoinDate('2020-01-01'); setMonthlyWage(4000000); setAnnualBonus(10000000); }}>
-            <div className="flex flex-col gap-10">
+            <div className="flex flex-col gap-6 sm:gap-10">
                 <p className="text-sm font-medium text-muted-foreground text-center">{t.desc}</p>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8">
                     <div className="space-y-4">
                         <div className="space-y-2">
                              <label className="text-[10px] font-black text-muted-foreground uppercase">{t.join}</label>
@@ -52,9 +52,9 @@ const SeveranceCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
 
                 <div className="p-5 sm:p-10 bg-foreground rounded-[40px] text-background animate-in slide-in-from-bottom-6 shadow-2xl relative overflow-hidden">
                     <p className="text-[10px] font-black text-background/60 uppercase tracking-widest text-center mb-4">{t.result}</p>
-                    <h2 className="text-5xl font-black text-center text-primary mb-10">₩{Math.round(severance).toLocaleString()}</h2>
+                    <h2 className="text-5xl font-black text-center text-primary mb-6 sm:mb-10">₩{Math.round(severance).toLocaleString()}</h2>
                     
-                    <div className="grid grid-cols-2 gap-8 border-t border-background/15 pt-8">
+                    <div className="grid grid-cols-2 gap-5 sm:gap-8 border-t border-background/15 pt-5 sm:pt-8">
                         <div className="text-center">
                             <p className="text-[10px] text-background/60 uppercase mb-1">{t.days}</p>
                             <p className="text-xl font-bold">{diffDays}일</p>

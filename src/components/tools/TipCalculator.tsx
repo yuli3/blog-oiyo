@@ -46,7 +46,7 @@ const TipCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'en' }) => {
       subtitle={t.subtitle}
       onReset={() => { setBill(defaultBill); setTipPct(15); setSplit(2); }}
     >
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-5 sm:gap-8">
         {/* Bill input */}
         <div className="space-y-3">
           <label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">

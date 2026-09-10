@@ -39,7 +39,7 @@ const LottoGenerator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =
 
     return (
         <GameContainer title={t.title} subtitle="Luck & Statistics" onReset={() => setNumbers([])}>
-            <div className="space-y-8">
+            <div className="space-y-5 sm:space-y-8">
                 <div className="text-center">
                     <p className="text-sm font-medium text-muted-foreground mb-6 leading-relaxed">{t.desc}</p>
                     <button 

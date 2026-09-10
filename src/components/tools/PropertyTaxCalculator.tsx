@@ -25,10 +25,10 @@ const PropertyTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'k
 
     return (
         <GameContainer title={t.title} subtitle="Asset Ownership Analytics" onReset={() => { setValue(600000000); setRatio(60); }}>
-            <div className="flex flex-col gap-10">
+            <div className="flex flex-col gap-6 sm:gap-10">
                 <p className="text-sm font-medium text-muted-foreground text-center">{t.desc}</p>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8">
                     <div className="space-y-4">
                         <label className="text-[10px] font-black text-muted-foreground uppercase">{t.value}</label>
                         <input type="number" value={value} onChange={(e) => setValue(Number(e.target.value))} className="w-full p-4 sm:p-6 bg-muted/30 rounded-[32px] border border-border font-black text-xl outline-none" />
@@ -43,12 +43,12 @@ const PropertyTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'k
                 </div>
 
                 <div className="p-5 sm:p-10 bg-foreground rounded-[40px] text-background shadow-2xl relative overflow-hidden animate-in zoom-in-95">
-                    <div className="text-center mb-8 relative z-10">
+                    <div className="text-center mb-5 sm:mb-8 relative z-10">
                         <p className="text-[10px] font-black text-background/60 uppercase tracking-widest mb-2">{t.result}</p>
                         <h2 className="text-5xl font-black text-primary">₩{Math.round(total).toLocaleString()}</h2>
                     </div>
                     
-                    <div className="grid grid-cols-3 gap-4 border-t border-background/15 pt-8 relative z-10">
+                    <div className="grid grid-cols-3 gap-4 border-t border-background/15 pt-5 sm:pt-8 relative z-10">
                         <div className="text-center">
                             <p className="text-[10px] text-background/60 uppercase">{t.tax}</p>
                             <p className="text-sm font-bold">₩{Math.round(baseTax).toLocaleString()}</p>

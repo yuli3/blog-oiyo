@@ -79,12 +79,12 @@ const LoanCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =
   const invalidTerm = Boolean(error) && Number(termMonths) <= 0;
 
   return (
-    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
+    <div className="not-prose my-7 sm:my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
       <h3 className="text-xl font-bold text-green-900 mb-6">
         {locale === 'ko' ? '대출 계산기 (원리금균등상환)' : 'Loan Repayment Calculator'}
       </h3>
 
-      <div className="grid md:grid-cols-2 gap-8">
+      <div className="grid md:grid-cols-2 gap-5 sm:gap-8">
         {/* Inputs */}
         <div className="space-y-4">
           <FieldGroup className="gap-4">
@@ -204,7 +204,7 @@ const LoanCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =
 
       {/* Schedule table */}
       {result && result.schedule.length > 0 && (
-        <div className="mt-8 overflow-x-auto">
+        <div className="mt-5 sm:mt-8 overflow-x-auto">
           <h4 className="text-sm font-bold text-green-800 mb-3">
             {locale === 'ko' ? '상환 스케줄 (첫 12개월)' : 'Repayment Schedule (First 12 months)'}
           </h4>

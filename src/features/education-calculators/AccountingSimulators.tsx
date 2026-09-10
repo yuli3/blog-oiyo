@@ -36,13 +36,13 @@ export const VarianceAnalysis: React.FC = () => {
     const tVar = formatVar(totalVariance);
 
     return (
-        <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-8 overflow-hidden">
+        <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-5 sm:mt-8 overflow-hidden">
             <div className="flex items-center gap-2 mb-6 text-slate-900 border-b pb-4">
                 <ArrowLeftRight className="text-blue-500" />
                 <h3 className="text-xl font-bold">원가 차이 분석(Variance Analysis) 시뮬레이터</h3>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8 mb-5 sm:mb-8">
                 <div className="space-y-4 p-4 bg-blue-50/30 rounded-xl border border-blue-100">
                     <span className="text-xs font-bold text-blue-600 uppercase">실제 데이터 (Actual)</span>
                     <div className="grid grid-cols-2 gap-4">
@@ -60,7 +60,7 @@ export const VarianceAnalysis: React.FC = () => {
                 </div>
             </div>
 
-            <div className="relative pt-10 pb-6 hidden md:block">
+            <div className="relative pt-6 sm:pt-10 pb-6 hidden md:block">
                 <div className="flex justify-between text-center px-4">
                     <div className="w-1/3">
                         <div className="text-xs font-bold text-slate-500 mb-1">실제 원가</div>
@@ -92,7 +92,7 @@ export const VarianceAnalysis: React.FC = () => {
                 </div>
             </div>
 
-            <div className="mt-12 bg-slate-900 rounded-2xl p-4 sm:p-6 text-white">
+            <div className="mt-7 sm:mt-12 bg-slate-900 rounded-2xl p-4 sm:p-6 text-white">
                 <div className="flex items-center gap-2 mb-4 text-slate-400">
                     <AlertCircle size={16}/>
                     <span className="text-xs font-bold uppercase tracking-widest">분석 리포트 (Total Variance)</span>

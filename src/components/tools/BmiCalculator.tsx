@@ -29,10 +29,10 @@ const BmiCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
 
     return (
         <GameContainer title={t.title} subtitle="Health Analytics" onReset={() => { setHeight(175); setWeight(70); setAge(30); setGender('m'); }}>
-            <div className="flex flex-col gap-10">
+            <div className="flex flex-col gap-6 sm:gap-10">
                 <p className="text-sm font-medium text-foreground text-center">{t.desc}</p>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8">
                     <div className="space-y-4">
                         <div role="group" aria-label={t.gender} className="flex gap-2 p-1 bg-muted rounded-xl">
                             <button type="button" aria-pressed={gender === 'm'} onClick={() => setGender('m')} className={`flex-1 min-h-11 py-2 rounded-lg font-black text-xs ${gender === 'm' ? 'bg-background shadow-sm text-primary' : 'text-foreground'}`}>{t.male}</button>
@@ -55,7 +55,7 @@ const BmiCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
                     </div>
                 </div>
 
-                <div className="p-5 sm:p-10 bg-foreground rounded-[40px] text-background flex flex-col md:flex-row gap-12 items-center justify-around shadow-2xl animate-in zoom-in-95">
+                <div className="p-5 sm:p-10 bg-foreground rounded-[40px] text-background flex flex-col md:flex-row gap-7 sm:gap-12 items-center justify-around shadow-2xl animate-in zoom-in-95">
                     <div className="text-center space-y-2">
                         <p className="text-[10px] font-black text-background/60 uppercase tracking-widest">BMI</p>
                         <h2 className="text-6xl font-black text-primary">{bmi.toFixed(1)}</h2>

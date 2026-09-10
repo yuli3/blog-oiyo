@@ -342,7 +342,7 @@ export function ChimpTest({ locale = 'ko' }: { locale?: 'ko' | 'en' | 'ja' }) {
   };
 
   return (
-    <Card className="not-prose mt-8 overflow-hidden border-2 border-emerald-100 shadow-2xl rounded-2xl max-w-lg mx-auto">
+    <Card className="not-prose mt-5 sm:mt-8 overflow-hidden border-2 border-emerald-100 shadow-2xl rounded-2xl max-w-lg mx-auto">
       <CardHeader className="border-b border-slate-100 bg-gradient-to-r from-emerald-50 to-slate-50 pb-3">
         <div className="flex items-start justify-between gap-2">
           <div>
@@ -949,7 +949,7 @@ export function KeyboardReactionTest({ locale = 'ko' }: { locale?: 'ko' | 'en' |
           : 'text-slate-600 bg-slate-50 border-slate-200';
 
   return (
-    <Card className="not-prose mt-8 overflow-hidden border-2 border-emerald-100 shadow-2xl rounded-2xl max-w-lg mx-auto">
+    <Card className="not-prose mt-5 sm:mt-8 overflow-hidden border-2 border-emerald-100 shadow-2xl rounded-2xl max-w-lg mx-auto">
       <CardHeader className="border-b border-slate-100 bg-gradient-to-r from-emerald-50 to-slate-50 pb-3">
         <div className="flex items-start justify-between gap-2">
           <div>

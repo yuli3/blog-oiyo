@@ -140,8 +140,8 @@ const TypingTest: React.FC<{ locale?: Locale }> = ({ locale = 'en' }) => {
   const wpmMsg = finalWPM >= 80 ? t.excellent : finalWPM >= 50 ? t.great : finalWPM >= 30 ? t.good : t.keep;
 
   return (
-    <div className="not-prose my-8 p-6 sm:p-10 bg-card border border-border rounded-4xl shadow-sm max-w-2xl mx-auto">
-      <div className="flex justify-between items-end mb-8">
+    <div className="not-prose my-5 sm:my-8 p-6 sm:p-10 bg-card border border-border rounded-4xl shadow-sm max-w-2xl mx-auto">
+      <div className="flex justify-between items-end mb-5 sm:mb-8">
         <div>
           <h2 className="text-2xl font-black">{t.title}</h2>
           <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mt-1">{t.subtitle}</p>

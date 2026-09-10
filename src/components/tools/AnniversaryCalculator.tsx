@@ -139,7 +139,7 @@ const AnniversaryCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'en' })
       subtitle={t.subtitle}
       onReset={() => { setStartDate(todayStr); setTargetDate(todayStr); setEventName(''); }}
     >
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-5 sm:gap-8">
         {/* Mode toggle */}
         <div className="flex rounded-2xl border border-border overflow-hidden">
           {(['anniversary', 'dday'] as const).map(m => (

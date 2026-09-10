@@ -173,7 +173,7 @@ export const SupplyDemandSimulator: React.FC = () => {
       : '';
 
   return (
-    <Card className="bg-white border border-emerald-100 shadow-xl rounded-2xl overflow-hidden mt-8">
+    <Card className="bg-white border border-emerald-100 shadow-xl rounded-2xl overflow-hidden mt-5 sm:mt-8">
       <div className="bg-emerald-700 px-4 sm:px-6 py-5">
         <h3 className="text-lg font-bold text-white">수요공급 시뮬레이터</h3>
         <p className="text-xs text-emerald-200 mt-1">슬라이더로 곡선을 이동하며 균형가격과 잉여를 확인하세요</p>
@@ -392,7 +392,7 @@ export const ElasticityCalculator: React.FC = () => {
   const inputClass = "w-full text-right text-sm bg-white border border-emerald-200 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-emerald-400";
 
   return (
-    <Card className="bg-white border border-emerald-100 shadow-xl rounded-2xl overflow-hidden mt-8">
+    <Card className="bg-white border border-emerald-100 shadow-xl rounded-2xl overflow-hidden mt-5 sm:mt-8">
       <div className="bg-emerald-700 px-4 sm:px-6 py-5">
         <h3 className="text-lg font-bold text-white">탄력성 계산기</h3>
         <p className="text-xs text-emerald-200 mt-1">호탄력성(Arc Elasticity) 공식 — 중간점 방법 사용</p>

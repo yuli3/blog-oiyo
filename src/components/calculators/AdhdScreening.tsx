@@ -39,15 +39,15 @@ const AdhdScreening: React.FC = () => {
     const isComplete = Object.keys(answers).length === questions.length;
 
     return (
-        <div className="not-prose my-12 p-4 sm:p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto">
+        <div className="not-prose my-7 sm:my-12 p-4 sm:p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto">
             {!showResults ? (
-                <div className="space-y-8">
-                    <div className="text-center mb-8">
+                <div className="space-y-5 sm:space-y-8">
+                    <div className="text-center mb-5 sm:mb-8">
                         <h3 className="text-2xl font-bold text-slate-900">성인 ADHD 자가진단 (ASRS v1.1)</h3>
                         <p className="text-sm text-slate-500 mt-2">지난 6개월 동안의 자신의 상태를 가장 잘 나타내는 항목에 체크해 주세요.</p>
                     </div>
 
-                    <div className="space-y-10">
+                    <div className="space-y-6 sm:space-y-10">
                         {questions.map((q, idx) => (
                             <div key={q.id} className="space-y-4">
                                 <div className="flex gap-4">
@@ -73,7 +73,7 @@ const AdhdScreening: React.FC = () => {
                         ))}
                     </div>
 
-                    <div className="pt-8 border-t border-slate-100 flex justify-center">
+                    <div className="pt-5 sm:pt-8 border-t border-slate-100 flex justify-center">
                         <button
                             disabled={!isComplete}
                             onClick={() => setShowResults(true)}

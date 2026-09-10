@@ -21,7 +21,7 @@ const CompoundInterestCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale
 
     return (
         <GameContainer title={t.title} subtitle="Exponential Growth Dynamics" onReset={() => { setPrincipal(10000000); setMonthly(1000000); setRate(7); setYears(20); }}>
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-5 sm:gap-8">
                 <p className="text-sm font-medium text-muted-foreground text-center">{t.desc}</p>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -48,7 +48,7 @@ const CompoundInterestCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale
                         <p className="text-[10px] font-black text-background/50 uppercase tracking-widest text-center mb-2">{years}년 뒤 예상 자산</p>
                         <h4 className="text-3xl md:text-5xl font-black text-primary text-center leading-tight">₩{Math.round(futureValue).toLocaleString()}</h4>
                         
-                        <div className="grid grid-cols-2 gap-8 mt-8 border-t border-background/15 pt-8">
+                        <div className="grid grid-cols-2 gap-5 sm:gap-8 mt-5 sm:mt-8 border-t border-background/15 pt-5 sm:pt-8">
                             <div className="text-center">
                                 <p className="text-[10px] text-background/60 uppercase mb-1">{t.invest}</p>
                                 <p className="text-lg font-bold">₩{Math.round(totalInvested).toLocaleString()}</p>

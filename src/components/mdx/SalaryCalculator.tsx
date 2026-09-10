@@ -91,7 +91,7 @@ export default function SalaryCalculator() {
   }, [annualSalary, dependents]);
 
   return (
-    <div className="not-prose my-8 rounded-2xl border border-border bg-card shadow-sm overflow-hidden">
+    <div className="not-prose my-5 sm:my-8 rounded-2xl border border-border bg-card shadow-sm overflow-hidden">
       {/* Header */}
       <div className="bg-gradient-to-r from-green-600 to-green-500 px-4 sm:px-6 py-4">
         <div className="flex items-center gap-2">

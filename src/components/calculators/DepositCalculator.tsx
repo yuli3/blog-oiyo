@@ -97,7 +97,7 @@ const DepositCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
   const invalidPeriod = Boolean(error) && Number(period) <= 0;
 
   return (
-    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
+    <div className="not-prose my-7 sm:my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
       <h3 className="text-xl font-bold text-green-900 mb-6">
         {ko ? '예금·적금 계산기' : 'Deposit & Savings Calculator'}
       </h3>

@@ -29,10 +29,10 @@ const PetAgeCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' })
 
     return (
         <GameContainer title={t.title} subtitle="Species Lifecycle Bridge" onReset={() => { setType('dog'); setAge(3); setSize('m'); }}>
-            <div className="flex flex-col gap-10">
+            <div className="flex flex-col gap-6 sm:gap-10">
                 <p className="text-sm font-medium text-muted-foreground text-center">{t.desc}</p>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8">
                     <div className="space-y-6">
                         <div className="flex gap-2 p-1 bg-muted rounded-xl">
                             <button onClick={() => setType('dog')} className={`flex-1 py-3 rounded-lg font-black text-xs transition-all ${type === 'dog' ? 'bg-background shadow-sm text-primary' : 'text-muted-foreground'}`}>🐶 {t.dog}</button>

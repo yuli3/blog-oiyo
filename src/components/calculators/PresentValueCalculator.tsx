@@ -65,7 +65,7 @@ const PresentValueCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
   const endYear = currentYear + Math.floor(Number(durationMonths) / 12);
 
   return (
-    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
+    <div className="not-prose my-7 sm:my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
       <h3 className="text-xl font-bold text-green-900 mb-2">
         {ko ? '연금 현재가치 계산기' : 'Present Value (Annuity) Calculator'}
       </h3>

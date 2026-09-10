@@ -58,7 +58,7 @@ const AsciiArtGenerator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
 
     return (
         <GameContainer title={t.title} subtitle="Digital Nostalgia" onReset={() => setAscii('')}>
-            <div className="flex flex-col items-center gap-8">
+            <div className="flex flex-col items-center gap-5 sm:gap-8">
                 <p className="text-sm font-medium text-muted-foreground text-center max-w-md">{t.desc}</p>
                 
                 <div className="w-full bg-foreground rounded-3xl p-4 sm:p-6 shadow-2xl overflow-hidden relative group border-4 border-background/15">

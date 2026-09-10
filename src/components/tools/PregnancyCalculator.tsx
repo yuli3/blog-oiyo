@@ -30,10 +30,10 @@ const PregnancyCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
 
     return (
         <GameContainer title={t.title} subtitle="Life Cycle Management" onReset={() => { setLmp(new Date().toISOString().split('T')[0]); setCycle(28); }}>
-            <div className="flex flex-col gap-10">
+            <div className="flex flex-col gap-6 sm:gap-10">
                 <p className="text-sm font-medium text-muted-foreground text-center max-w-md mx-auto">{t.desc}</p>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8">
                     <div className="space-y-4">
                         <label className="text-[10px] font-black text-muted-foreground uppercase">{t.lmp}</label>
                         <input type="date" value={lmp} onChange={(e) => setLmp(e.target.value)} className="w-full p-4 bg-muted/30 rounded-2xl border border-border font-black outline-none" />

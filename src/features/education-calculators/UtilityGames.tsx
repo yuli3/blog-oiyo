@@ -60,12 +60,12 @@ export const TypingSpeedTest: React.FC = () => {
     };
 
     return (
-        <Card className="p-4 sm:p-8 bg-slate-950 border-slate-800 text-white shadow-2xl mt-8 relative overflow-hidden">
+        <Card className="p-4 sm:p-8 bg-slate-950 border-slate-800 text-white shadow-2xl mt-5 sm:mt-8 relative overflow-hidden">
             <div className="absolute top-0 right-0 p-4 sm:p-8 opacity-5">
                 <Keyboard size={120} />
             </div>
 
-            <div className="flex items-center justify-between mb-8 border-b border-white/10 pb-4 relative z-10">
+            <div className="flex items-center justify-between mb-5 sm:mb-8 border-b border-white/10 pb-4 relative z-10">
                 <div className="flex items-center gap-2">
                     <Zap className="text-yellow-400 fill-yellow-400" />
                     <h3 className="text-xl font-black italic tracking-tighter">타이핑 속도 테스트</h3>
@@ -170,8 +170,8 @@ export const PrisonersDilemma: React.FC = () => {
     };
 
     return (
-        <Card className="p-4 sm:p-8 bg-white border-slate-200 shadow-xl mt-8">
-            <div className="flex items-center justify-between mb-8 border-b pb-4">
+        <Card className="p-4 sm:p-8 bg-white border-slate-200 shadow-xl mt-5 sm:mt-8">
+            <div className="flex items-center justify-between mb-5 sm:mb-8 border-b pb-4">
                 <h3 className="text-xl font-bold flex items-center gap-2">
                     <span className="p-1 px-2 bg-slate-900 text-white rounded text-sm">GAME THEORY</span>
                     죄수의 딜레마 게임
@@ -187,7 +187,7 @@ export const PrisonersDilemma: React.FC = () => {
                 </select>
             </div>
 
-            <div className="grid grid-cols-2 gap-8 mb-8 text-center">
+            <div className="grid grid-cols-2 gap-5 sm:gap-8 mb-5 sm:mb-8 text-center">
                 <div className="p-4 sm:p-6 bg-blue-50 rounded-2xl border border-blue-100">
                     <div className="text-xs font-bold text-blue-400 mb-2">플레이어 점수</div>
                     <div className="text-4xl font-black text-blue-600">{playerScore}</div>
@@ -198,7 +198,7 @@ export const PrisonersDilemma: React.FC = () => {
                 </div>
             </div>
 
-            <div className="flex gap-4 justify-center mb-10">
+            <div className="flex gap-4 justify-center mb-6 sm:mb-10">
                 <Button 
                     onClick={() => play("Cooperate")}
                     className="flex-1 py-6 sm:py-10 bg-emerald-500 hover:bg-emerald-600 text-white rounded-2xl shadow-lg border-b-4 border-emerald-700 active:border-b-0 active:translate-y-1 transition-all"
@@ -231,7 +231,7 @@ export const PrisonersDilemma: React.FC = () => {
                 ))}
             </div>
 
-            <div className="mt-8 flex justify-center">
+            <div className="mt-5 sm:mt-8 flex justify-center">
                  <Button variant="ghost" size="sm" onClick={reset} className="text-slate-400">초기화</Button>
             </div>
         </Card>

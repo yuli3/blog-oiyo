@@ -179,7 +179,7 @@ const LoremIpsumGenerator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
             </button>
           </>
         ) : (
-          <p className="text-sm text-muted-foreground text-center mt-8">{t.placeholder}</p>
+          <p className="text-sm text-muted-foreground text-center mt-5 sm:mt-8">{t.placeholder}</p>
         )}
       </div>
     </div>

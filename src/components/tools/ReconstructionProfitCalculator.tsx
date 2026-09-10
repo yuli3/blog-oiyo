@@ -201,7 +201,7 @@ const ReconstructionProfitCalculator = ({ locale }: Props) => {
 
   return (
     <GameContainer title={t.title} subtitle={t.subtitle} onReset={handleReset}>
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-5 sm:gap-8">
         {/* Inputs */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div className="space-y-2">

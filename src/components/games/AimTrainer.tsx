@@ -242,7 +242,7 @@ const AimTrainer: React.FC<Props> = ({ locale }) => {
   const grade = getGrade(accuracy);
 
   return (
-    <div className="not-prose my-12 p-4 sm:p-6 bg-card text-card-foreground rounded-3xl border border-border shadow-sm max-w-xl mx-auto select-none">
+    <div className="not-prose my-7 sm:my-12 p-4 sm:p-6 bg-card text-card-foreground rounded-3xl border border-border shadow-sm max-w-xl mx-auto select-none">
       <div className="flex justify-between items-center mb-4">
         <span className="text-sm font-bold text-muted-foreground uppercase tracking-widest">
           {t.title}

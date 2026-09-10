@@ -26,7 +26,7 @@ const FreelancerTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 
 
     return (
         <GameContainer title={t.title} subtitle="Freelance Economy Analytics" onReset={() => setIncome(3000000)}>
-            <div className="flex flex-col gap-10">
+            <div className="flex flex-col gap-6 sm:gap-10">
                 <p className="text-sm font-medium text-muted-foreground text-center max-w-lg mx-auto">{t.desc}</p>
                 
                 <div className="w-full max-w-sm mx-auto space-y-4">
@@ -34,7 +34,7 @@ const FreelancerTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 
                     <input type="number" value={income} onChange={(e) => setIncome(Number(e.target.value))} className="w-full p-4 sm:p-6 bg-muted/30 rounded-[32px] border border-border font-black text-2xl text-center outline-none focus:ring-4 focus:ring-primary/10" />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8">
                     <div className="p-4 sm:p-8 bg-foreground rounded-[40px] text-background space-y-2 text-center shadow-xl">
                         <p className="text-[10px] font-black text-background/60 uppercase tracking-widest">{t.net}</p>
                         <h2 className="text-3xl font-black text-primary">₩{Math.round(netPay).toLocaleString()}</h2>

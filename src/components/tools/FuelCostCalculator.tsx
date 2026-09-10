@@ -195,7 +195,7 @@ const FuelCostCalculator = ({ locale }: Props) => {
 
   return (
     <GameContainer title={t.title} subtitle={t.subtitle} onReset={handleReset}>
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-5 sm:gap-8">
         {/* Route presets */}
         <div className="space-y-3">
           <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">

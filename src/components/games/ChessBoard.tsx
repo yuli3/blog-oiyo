@@ -158,7 +158,7 @@ const ChessBoard: React.FC<{ locale?: Locale }> = ({ locale = 'ko' }) => {
     : null;
 
   return (
-    <div className="not-prose my-12 p-4 sm:p-8 bg-card border border-border rounded-4xl shadow-sm max-w-lg mx-auto">
+    <div className="not-prose my-7 sm:my-12 p-4 sm:p-8 bg-card border border-border rounded-4xl shadow-sm max-w-lg mx-auto">
       <div className="flex justify-between items-center mb-4">
         <div>
           <h3 className="text-xl font-black text-foreground">{t.title}</h3>
@@ -242,7 +242,7 @@ const ChessBoard: React.FC<{ locale?: Locale }> = ({ locale = 'ko' }) => {
         )}
       </div>
 
-      <div className="mt-8 grid grid-cols-3 gap-2">
+      <div className="mt-5 sm:mt-8 grid grid-cols-3 gap-2">
         {([['p', t.pawn], ['n', t.knight], ['b', t.bishop], ['r', t.rook], ['q', t.queen], ['k', t.king]] as const).map(([key, label]) => (
           <div key={key} className="flex items-center gap-2 p-2 bg-muted rounded-xl">
             <span className="text-xl">{pieceIcons[key]}</span>

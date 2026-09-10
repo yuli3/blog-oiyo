@@ -20,10 +20,10 @@ const RentComparisonCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
 
     return (
         <GameContainer title={t.title} subtitle="Housing Cost Optimization" onReset={() => { setJeonseDep(200000000); setWolseDep(20000000); setWolseRent(1000000); setRate(4); }}>
-            <div className="flex flex-col gap-10">
+            <div className="flex flex-col gap-6 sm:gap-10">
                 <p className="text-sm font-medium text-muted-foreground text-center">{t.desc}</p>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8">
                     {/* Jeonse Block */}
                     <div className="p-4 sm:p-8 bg-muted/40 rounded-[32px] border border-border space-y-6">
                         <h5 className="text-xs font-black text-muted-foreground uppercase tracking-widest">{t.jeonse}</h5>

@@ -169,7 +169,7 @@ const FranceSalaryCalculator: React.FC<Props> = ({ locale = 'fr' }) => {
 
     return (
         <GameContainer title={t.title} subtitle="Simulateur salaire net — France 2024" onReset={handleReset}>
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-5 sm:gap-8">
                 <p className="text-sm font-medium text-muted-foreground text-center">{t.desc}</p>
 
                 <div className="flex flex-col gap-4">

@@ -102,7 +102,7 @@ export default function SeveranceCalculator() {
   }, [monthlySalary, bonus, years, months, days]);
 
   return (
-    <div className="not-prose my-8 rounded-2xl border border-border bg-card shadow-sm overflow-hidden">
+    <div className="not-prose my-5 sm:my-8 rounded-2xl border border-border bg-card shadow-sm overflow-hidden">
       <div className="bg-gradient-to-r from-cyan-600 to-teal-500 px-4 sm:px-6 py-4">
         <div className="flex items-center gap-2">
           <span className="text-2xl">📋</span>

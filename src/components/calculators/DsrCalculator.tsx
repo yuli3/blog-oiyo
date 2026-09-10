@@ -37,8 +37,8 @@ const DsrCalculator: React.FC = () => {
     }, [income, existingDebt, newLoan, interestRate, loanTerm]);
 
     return (
-        <div className="not-prose my-12 p-4 sm:p-8 bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200 rounded-3xl shadow-xl">
-            <div className="flex flex-col md:flex-row gap-8">
+        <div className="not-prose my-7 sm:my-12 p-4 sm:p-8 bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200 rounded-3xl shadow-xl">
+            <div className="flex flex-col md:flex-row gap-5 sm:gap-8">
                 {/* Inputs */}
                 <div className="flex-1 space-y-6">
                     <h3 className="text-xl font-bold text-slate-900 mb-4">대출 정보 입력</h3>
@@ -113,7 +113,7 @@ const DsrCalculator: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="w-full h-4 bg-slate-100 rounded-full overflow-hidden mb-8 relative">
+                    <div className="w-full h-4 bg-slate-100 rounded-full overflow-hidden mb-5 sm:mb-8 relative">
                         <div 
                             className={`h-full transition-all duration-500 ${dsr > 40 ? 'bg-rose-500' : 'bg-emerald-500'}`} 
                             style={{ width: `${Math.min(dsr, 100)}%` }}
@@ -147,7 +147,7 @@ const DsrCalculator: React.FC = () => {
                     </div>
                 </div>
             </div>
-            <div className="mt-8 text-[10px] text-slate-400 text-center uppercase tracking-tighter">
+            <div className="mt-5 sm:mt-8 text-[10px] text-slate-400 text-center uppercase tracking-tighter">
                 * 위 계산 결과는 참고용이며 실제 은행의 심사 기준과 다를 수 있습니다. (스트레스 DSR 미반영)
             </div>
         </div>

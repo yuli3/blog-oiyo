@@ -351,7 +351,7 @@ export const JournalEntryTrainer: React.FC<JournalEntryTrainerProps> = ({ locale
   if (state.showResults) {
     const pct = Math.round((state.score / SCENARIOS.length) * 100);
     return (
-      <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
+      <div className="not-prose my-7 sm:my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
         <h3 className="text-xl font-bold text-green-900 mb-2">
           {locale === 'ko' ? '결과 보기' : 'Quiz Results'}
         </h3>
@@ -383,7 +383,7 @@ export const JournalEntryTrainer: React.FC<JournalEntryTrainerProps> = ({ locale
   }
 
   return (
-    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
+    <div className="not-prose my-7 sm:my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-xl font-bold text-green-900">

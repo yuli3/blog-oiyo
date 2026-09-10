@@ -73,10 +73,10 @@ const CulturalGreetingGuide: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'k
     const data = t.countries[selectedCountry] || t.countries.korea;
 
     return (
-        <div className="not-prose my-12 p-4 sm:p-8 bg-gradient-to-br from-amber-50 to-orange-50 border border-orange-100 rounded-3xl shadow-xl">
-            <h3 className="text-2xl font-black text-center text-slate-900 mb-8">{t.ui.selectCountry}</h3>
+        <div className="not-prose my-7 sm:my-12 p-4 sm:p-8 bg-gradient-to-br from-amber-50 to-orange-50 border border-orange-100 rounded-3xl shadow-xl">
+            <h3 className="text-2xl font-black text-center text-slate-900 mb-5 sm:mb-8">{t.ui.selectCountry}</h3>
             
-            <div className="flex justify-center gap-4 mb-10">
+            <div className="flex justify-center gap-4 mb-6 sm:mb-10">
                 {Object.keys(t.countries).map(cid => (
                     <button
                         key={cid}

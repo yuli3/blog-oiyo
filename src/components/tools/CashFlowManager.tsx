@@ -284,7 +284,7 @@ export default function CashFlowManager({ locale = 'ko' }: { locale?: string }) 
   };
 
   return (
-    <div className="not-prose my-12 space-y-3 max-w-3xl mx-auto">
+    <div className="not-prose my-7 sm:my-12 space-y-3 max-w-3xl mx-auto">
 
       {/* Summary */}
       <div className="p-4 sm:p-6 bg-foreground text-background rounded-3xl">

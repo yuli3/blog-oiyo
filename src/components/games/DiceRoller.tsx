@@ -206,7 +206,7 @@ const DiceRoller: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
 
       {/* History */}
       {state.history.length > 0 && (
-        <div className="mt-8">
+        <div className="mt-5 sm:mt-8">
           <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3">{t.history}</p>
           <div className="space-y-2 max-h-64 overflow-y-auto" role="log" aria-label={t.history}>
             {state.history.map((record) => (

@@ -32,15 +32,15 @@ const DigitalBalanceTest: React.FC = () => {
     const interpretation = getInterpretation(score);
 
     return (
-        <div className="not-prose my-12 p-4 sm:p-8 bg-slate-50 border border-slate-200 rounded-3xl shadow-lg max-w-2xl mx-auto">
+        <div className="not-prose my-7 sm:my-12 p-4 sm:p-8 bg-slate-50 border border-slate-200 rounded-3xl shadow-lg max-w-2xl mx-auto">
             {!showResults ? (
-                <div className="space-y-8">
+                <div className="space-y-5 sm:space-y-8">
                     <div className="text-center">
                         <h3 className="text-2xl font-black text-slate-900">나의 디지털 중독 지수 테스트</h3>
                         <p className="text-sm text-slate-500 mt-2">간단한 체크를 통해 나의 디지털 웰빙 상태를 확인하세요.</p>
                     </div>
 
-                    <div className="space-y-8">
+                    <div className="space-y-5 sm:space-y-8">
                         {questions.map((q, idx) => (
                             <div key={q.id} className="space-y-4">
                                 <p className="text-lg font-bold text-slate-800">{idx + 1}. {q.text}</p>
@@ -78,7 +78,7 @@ const DigitalBalanceTest: React.FC = () => {
                     </div>
                 </div>
             ) : (
-                <div className="text-center space-y-8 py-4 sm:py-6 animate-fade-in">
+                <div className="text-center space-y-5 sm:space-y-8 py-4 sm:py-6 animate-fade-in">
                     <div>
                         <span className="text-sm font-bold text-slate-400 uppercase tracking-widest">분석 결과</span>
                         <h3 className={`text-5xl font-black mt-2 ${interpretation.color}`}>{interpretation.title}</h3>

@@ -494,7 +494,7 @@ export default function InterviewQuestionGenerator({ locale }: Props) {
   }, []);
 
   return (
-    <div className="not-prose my-8 flex flex-col gap-6">
+    <div className="not-prose my-5 sm:my-8 flex flex-col gap-6">
       {/* Header */}
       <div>
         <h2 className="text-2xl font-black text-foreground">{t.title}</h2>

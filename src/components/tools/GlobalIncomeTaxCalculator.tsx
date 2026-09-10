@@ -215,8 +215,8 @@ const GlobalIncomeTaxCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'en
   };
 
   return (
-    <div className="not-prose my-8 p-6 sm:p-10 bg-card border border-border rounded-4xl shadow-sm max-w-2xl mx-auto">
-      <div className="mb-8">
+    <div className="not-prose my-5 sm:my-8 p-6 sm:p-10 bg-card border border-border rounded-4xl shadow-sm max-w-2xl mx-auto">
+      <div className="mb-5 sm:mb-8">
         <h2 className="text-2xl font-black">{t.title}</h2>
         <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mt-1">{t.subtitle}</p>
       </div>

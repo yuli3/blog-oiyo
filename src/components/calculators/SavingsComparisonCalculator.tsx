@@ -115,12 +115,12 @@ const SavingsComparisonCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
   const bestResult = results.length > 0 ? [...results].sort((a, b) => b.netTotal - a.netTotal)[0] : null;
 
   return (
-    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
+    <div className="not-prose my-7 sm:my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
       <h3 className="text-xl font-bold text-green-900 mb-6">
         {locale === 'ko' ? '저축 상품 비교 계산기' : 'Savings Product Comparison'}
       </h3>
 
-      <div className="grid md:grid-cols-2 gap-8">
+      <div className="grid md:grid-cols-2 gap-5 sm:gap-8">
         {/* Inputs */}
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">

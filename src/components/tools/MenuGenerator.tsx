@@ -205,7 +205,7 @@ export default function MenuGenerator() {
   const isFav = selectedMenu ? favorites.includes(selectedMenu) : false;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-5 sm:space-y-8">
       {/* Cuisine selector */}
       <div>
         <p className="text-sm font-semibold mb-3 text-muted-foreground uppercase tracking-widest">음식 종류</p>
@@ -372,7 +372,7 @@ export default function MenuGenerator() {
       )}
 
       {!selectedMenu && !isGenerating && !battleMode && (
-        <div className="my-8 rounded-xl border-2 border-dashed border-border py-16 text-center text-muted-foreground">
+        <div className="my-5 sm:my-8 rounded-xl border-2 border-dashed border-border py-16 text-center text-muted-foreground">
           <Shuffle className="mx-auto mb-3 size-8 opacity-40" />
           <p className="font-medium">음식 종류를 선택하고 버튼을 눌러보세요!</p>
           <p className="text-sm mt-1">매일 메뉴 고민, 이제 끝!</p>

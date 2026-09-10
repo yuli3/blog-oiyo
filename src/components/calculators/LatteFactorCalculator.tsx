@@ -69,12 +69,12 @@ const LatteFactorCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'k
   ];
 
   return (
-    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-amber-50 to-yellow-50 border border-amber-200 rounded-3xl shadow-xl">
+    <div className="not-prose my-7 sm:my-12 p-6 md:p-8 bg-gradient-to-br from-amber-50 to-yellow-50 border border-amber-200 rounded-3xl shadow-xl">
       <h3 className="text-xl font-bold text-amber-900 mb-6">
         {locale === 'ko' ? '라떼 팩터 계산기' : 'Latte Factor Calculator'}
       </h3>
 
-      <div className="grid md:grid-cols-2 gap-8">
+      <div className="grid md:grid-cols-2 gap-5 sm:gap-8">
         {/* Inputs */}
         <div className="space-y-4">
           <div className="space-y-1">

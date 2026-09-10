@@ -58,7 +58,7 @@ export default function CryptoTaxCalculator({ locale = 'ko' }: { locale?: 'ko' |
   };
 
   return (
-    <div className="my-8 rounded-2xl border border-gray-200 bg-white p-4 sm:p-6 shadow-sm">
+    <div className="my-5 sm:my-8 rounded-2xl border border-gray-200 bg-white p-4 sm:p-6 shadow-sm">
       <h3 className="mb-6 text-xl font-bold text-gray-900">{en ? 'Korea Crypto Tax Estimator' : '가상자산 세금 예상 계산기'}</h3>
       <p className="mb-4 text-xs text-gray-400">
         {en ? 'Scheduled from 2027: ₩2.5M deduction, 20% income tax + 2% local income tax' : '2027년 적용 예정 기준: 기본공제 250만원, 소득세 20% + 지방소득세 2%'}

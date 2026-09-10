@@ -32,10 +32,10 @@ const Base64Converter: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) 
 
     return (
         <GameContainer title={t.title} subtitle="Binary to Text Serialization" onReset={() => { setBase64(''); setPreview(null); }}>
-            <div className="flex flex-col items-center gap-8">
+            <div className="flex flex-col items-center gap-5 sm:gap-8">
                 <p className="text-sm font-medium text-muted-foreground text-center max-w-md">{t.desc}</p>
                 
-                <div className="w-full flex flex-col lg:flex-row gap-8 items-start">
+                <div className="w-full flex flex-col lg:flex-row gap-5 sm:gap-8 items-start">
                     <div className="w-full lg:w-48 aspect-square bg-muted/30 rounded-3xl border-4 border-dashed border-muted flex flex-col items-center justify-center overflow-hidden relative shadow-inner">
                         {preview ? (
                             <img src={preview} alt="Preview" className="w-full h-full object-cover" />

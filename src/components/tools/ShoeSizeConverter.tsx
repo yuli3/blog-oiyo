@@ -309,7 +309,7 @@ export default function ShoeSizeConverter({ locale }: { locale: Locale }) {
   }, [raw, from, offset]);
 
   return (
-    <div className="not-prose my-10 flex max-w-2xl flex-col gap-6 mx-auto">
+    <div className="not-prose my-6 sm:my-10 flex max-w-2xl flex-col gap-6 mx-auto">
       <div className="flex items-start justify-between gap-4">
         <div className="space-y-1">
           <h3 className="text-xl font-semibold tracking-tight">{t.title}</h3>

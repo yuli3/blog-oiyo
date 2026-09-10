@@ -139,7 +139,7 @@ export const NPVCalculator: React.FC<{ locale?: keyof typeof npvCopy }> = ({ loc
     const decision = npv === null ? null : npv > 0 ? copy.accept : npv < 0 ? copy.reject : copy.neutral;
 
     return (
-        <Card className="p-4 sm:p-6 bg-slate-900 border-slate-800 text-slate-100 shadow-xl mt-8">
+        <Card className="p-4 sm:p-6 bg-slate-900 border-slate-800 text-slate-100 shadow-xl mt-5 sm:mt-8">
             <div className="flex items-center gap-2 mb-6 border-b border-slate-800 pb-4">
                 <TrendingUp className="text-green-300 w-6 h-6" />
                 <h3 className="text-xl font-bold">{copy.title}</h3>

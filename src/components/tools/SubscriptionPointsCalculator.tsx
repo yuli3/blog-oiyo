@@ -106,7 +106,7 @@ const SubscriptionPointsCalculator: React.FC<{ locale?: Locale }> = ({ locale = 
       subtitle={t.subtitle}
       onReset={() => { setDeps(0); setBankYears(5); setNoPropYears(5); setHasProperty(false); }}
     >
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-5 sm:gap-8">
 
         {/* Dependents */}
         <div className="space-y-3">

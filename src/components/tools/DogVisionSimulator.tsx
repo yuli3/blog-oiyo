@@ -55,7 +55,7 @@ const DogVisionSimulator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
 
     return (
         <GameContainer title={t.title} subtitle="Perspective Shift" onReset={() => setImage(null)}>
-            <div className="flex flex-col items-center gap-8">
+            <div className="flex flex-col items-center gap-5 sm:gap-8">
                 <p className="text-sm font-medium text-muted-foreground text-center max-w-md">{t.desc}</p>
                 
                 <div className="w-full aspect-video bg-muted/40 rounded-3xl border-4 border-dashed border-muted flex flex-col items-center justify-center overflow-hidden relative group">

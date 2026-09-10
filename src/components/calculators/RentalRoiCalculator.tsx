@@ -64,7 +64,7 @@ const RentalRoiCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
   };
 
   return (
-    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-orange-50 to-red-50 border border-orange-200 rounded-3xl shadow-xl">
+    <div className="not-prose my-7 sm:my-12 p-6 md:p-8 bg-gradient-to-br from-orange-50 to-red-50 border border-orange-200 rounded-3xl shadow-xl">
       <h3 className="text-xl font-bold text-orange-900 mb-2">
         {ko ? '임대수익률 계산기' : 'Rental ROI Calculator'}
       </h3>

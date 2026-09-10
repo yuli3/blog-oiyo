@@ -167,7 +167,7 @@ export default function TaxTimeline({ locale = 'ko' }: { locale?: string }) {
   }, [todayPct]);
 
   return (
-    <section className="not-prose mb-10">
+    <section className="not-prose mb-6 sm:mb-10">
       <h2 className="text-xl font-black text-foreground">{ui.title}</h2>
       <p className="mt-1 text-sm text-muted-foreground">{ui.subtitle}</p>
 

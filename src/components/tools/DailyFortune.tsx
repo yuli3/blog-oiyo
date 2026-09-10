@@ -879,7 +879,7 @@ export default function DailyFortune({ locale }: Props) {
   return (
     <div className="mx-auto max-w-2xl">
       {/* Header */}
-      <div className="mb-8 text-center">
+      <div className="mb-5 sm:mb-8 text-center">
         <h1 className="mb-2 text-3xl font-bold text-gray-900">{ui.title}</h1>
         <p className="text-gray-500">{ui.subtitle}</p>
       </div>

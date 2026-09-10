@@ -457,7 +457,7 @@ export function ConnectFour({ locale = 'ko' }: { locale?: Locale }) {
   const canDrop = state.status === 'playing' && !state.isAiTurn;
 
   return (
-    <Card className="not-prose mt-8 overflow-hidden border-2 border-emerald-100 shadow-2xl rounded-2xl max-w-lg mx-auto">
+    <Card className="not-prose mt-5 sm:mt-8 overflow-hidden border-2 border-emerald-100 shadow-2xl rounded-2xl max-w-lg mx-auto">
       <CardHeader className="border-b border-slate-100 bg-gradient-to-r from-emerald-50 to-slate-50 pb-3">
         <div className="flex items-start justify-between gap-2">
           <div>
@@ -943,7 +943,7 @@ export function TierListMaker({ locale = 'ko' }: { locale?: Locale }) {
   const unrankedBucket = state.tiers.find((t) => t.id === UNRANKED_ID)!;
 
   return (
-    <Card className="not-prose mt-8 overflow-hidden border-2 border-emerald-100 shadow-2xl rounded-2xl max-w-2xl mx-auto">
+    <Card className="not-prose mt-5 sm:mt-8 overflow-hidden border-2 border-emerald-100 shadow-2xl rounded-2xl max-w-2xl mx-auto">
       <CardHeader className="border-b border-slate-100 bg-gradient-to-r from-emerald-50 to-slate-50 pb-3">
         <div className="flex items-start justify-between gap-2">
           <div>

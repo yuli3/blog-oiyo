@@ -92,7 +92,7 @@ const Blackjack: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
 
     return (
         <GameContainer title={t.title} subtitle="Probability & Risk" onReset={initGame}>
-            <div className="space-y-12">
+            <div className="space-y-7 sm:space-y-12">
                 {/* Dealer Area */}
                 <div className="text-center">
                     <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-4">{t.dealer} {status === 'result' ? `(${calculateScore(dealerHand)})` : ''}</p>

@@ -121,7 +121,7 @@ const LegalInterestCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 
   const liveRate = useMemo(() => getRate(), [rateType, customRate]);
 
   return (
-    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 rounded-3xl shadow-xl">
+    <div className="not-prose my-7 sm:my-12 p-6 md:p-8 bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 rounded-3xl shadow-xl">
       <h3 className="text-xl font-bold text-amber-900 mb-6">{t.title}</h3>
 
       <div className="space-y-5">

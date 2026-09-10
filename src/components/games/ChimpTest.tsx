@@ -74,7 +74,7 @@ const ChimpTest: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
     };
 
     return (
-        <div className="not-prose my-12 p-4 sm:p-8 bg-card text-card-foreground rounded-3xl border border-border shadow-sm max-w-xl mx-auto">
+        <div className="not-prose my-7 sm:my-12 p-4 sm:p-8 bg-card text-card-foreground rounded-3xl border border-border shadow-sm max-w-xl mx-auto">
             <div className="flex justify-between items-center mb-6">
                 <div className="text-sm font-bold text-muted-foreground uppercase tracking-widest">{t.title}</div>
                 <div className="flex gap-4">

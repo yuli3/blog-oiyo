@@ -123,7 +123,7 @@ const AnnualLeaveCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'ko' })
       subtitle={t.subtitle}
       onReset={() => { setUsedDays(0); }}
     >
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-5 sm:gap-8">
         {/* Dates */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-2">

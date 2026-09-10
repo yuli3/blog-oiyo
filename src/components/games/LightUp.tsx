@@ -72,7 +72,7 @@ const LightUp: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
 
     return (
         <GameContainer title={t.title} subtitle="Logic & Illumination" onReset={initGame}>
-            <p className="text-sm font-medium text-muted-foreground mb-8 text-center">{t.desc}</p>
+            <p className="text-sm font-medium text-muted-foreground mb-5 sm:mb-8 text-center">{t.desc}</p>
             
             <div className="grid grid-cols-7 gap-1 bg-muted/30 p-2 rounded-2xl border border-border aspect-square w-full max-w-sm mx-auto overflow-hidden">
                 {grid.map((row, r) => row.map((cell, c) => (
@@ -95,7 +95,7 @@ const LightUp: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
             </div>
 
             {isWon && (
-                <div className="mt-8 text-center animate-in fade-in slide-in-from-bottom-2">
+                <div className="mt-5 sm:mt-8 text-center animate-in fade-in slide-in-from-bottom-2">
                     <h4 className="text-2xl font-black text-primary mb-4">{t.win}</h4>
                     <button onClick={initGame} className="px-5 sm:px-10 py-3 bg-primary text-primary-foreground rounded-full font-bold shadow-lg">PLAY AGAIN</button>
                 </div>

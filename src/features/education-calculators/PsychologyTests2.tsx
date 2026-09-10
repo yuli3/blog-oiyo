@@ -146,7 +146,7 @@ export function LoveLanguageTest({ locale = 'ko' }: { locale?: 'ko' | 'en' | 'ja
   const maxScore = Math.max(...Object.values(state.scores));
 
   return (
-    <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-8 overflow-hidden">
+    <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-5 sm:mt-8 overflow-hidden">
       {!state.done ? (
         <div className="space-y-6">
           <div className="flex items-center gap-2">
@@ -249,7 +249,7 @@ export function EmpathyTest({ locale = 'ko' }: { locale?: 'ko' | 'en' | 'ja' }) 
   const levelKey = totalPct >= 75 ? 'high' : totalPct >= 50 ? 'mid' : 'low';
 
   return (
-    <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-8">
+    <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-5 sm:mt-8">
       {!state.done ? (
         <div className="space-y-6">
           <div className="flex items-center gap-2">
@@ -368,7 +368,7 @@ export function AnimalTypeTest({ locale = 'ko' }: { locale?: 'ko' | 'en' | 'ja' 
   const maxScore = sorted[0][1] || 1;
 
   return (
-    <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-8">
+    <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-5 sm:mt-8">
       {!state.done ? (
         <div className="space-y-6">
           <div className="flex items-center gap-2">
@@ -508,7 +508,7 @@ export function FullMBTITest({ locale = 'ko' }: { locale?: 'ko' | 'en' | 'ja' })
   };
 
   return (
-    <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-8">
+    <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-5 sm:mt-8">
       {!state.done ? (
         <div className="space-y-6">
           <div className="flex items-center gap-2">

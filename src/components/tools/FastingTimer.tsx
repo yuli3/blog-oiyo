@@ -34,7 +34,7 @@ const FastingTimer: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => 
 
     return (
         <GameContainer title={t.title} subtitle="Metabolic Health Assistant" onReset={() => { setIsFasting(false); setStartTime(null); setElapsed(0); }}>
-            <div className="flex flex-col items-center gap-10">
+            <div className="flex flex-col items-center gap-6 sm:gap-10">
                 <p className="text-sm font-medium text-muted-foreground text-center max-w-md">{t.desc}</p>
                 
                 <div className="flex gap-4 p-1 bg-muted rounded-2xl w-full max-w-sm">

@@ -145,7 +145,7 @@ const SlotAnatomy: React.FC<{ locale?: string }> = ({ locale = "ko" }) => {
   const amp = big ? nearMissAmplification(big) : null;
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-6 sm:space-y-10">
       {/* 1. reel layout */}
       <section>
         <h2 className="text-xl font-bold text-slate-900">{t.reelTitle}</h2>

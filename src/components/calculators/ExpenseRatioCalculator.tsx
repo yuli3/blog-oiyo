@@ -59,7 +59,7 @@ const ExpenseRatioCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
   };
 
   return (
-    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-lime-50 to-green-50 border border-lime-200 rounded-3xl shadow-xl">
+    <div className="not-prose my-7 sm:my-12 p-6 md:p-8 bg-gradient-to-br from-lime-50 to-green-50 border border-lime-200 rounded-3xl shadow-xl">
       <h3 className="text-xl font-bold text-lime-900 mb-2">
         {ko ? '추계 vs 기장 비용 비율 계산기' : 'Estimated vs Bookkeeping Expense Comparison'}
       </h3>

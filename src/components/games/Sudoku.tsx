@@ -49,7 +49,7 @@ const Sudoku: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
     return (
         <GameContainer title={t.title} subtitle="Pure Deduction" onReset={initGame}>
             <div className="flex flex-col items-center">
-                <p className="text-sm font-medium text-muted-foreground mb-8 text-center">{t.desc}</p>
+                <p className="text-sm font-medium text-muted-foreground mb-5 sm:mb-8 text-center">{t.desc}</p>
                 
                 <div className="bg-stone-800 p-1 rounded-sm shadow-2xl grid grid-cols-9 aspect-square w-full max-w-md border-4 border-stone-800">
                     {grid.map((row, r) => row.map((val, c) => {
@@ -73,7 +73,7 @@ const Sudoku: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
                 </div>
 
                 {/* Number Pad */}
-                <div className="mt-8 grid grid-cols-9 gap-1 sm:gap-2 w-full max-w-md">
+                <div className="mt-5 sm:mt-8 grid grid-cols-9 gap-1 sm:gap-2 w-full max-w-md">
                     {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(n => (
                         <button 
                             key={n}
@@ -86,7 +86,7 @@ const Sudoku: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
                 </div>
 
                 {isWon && (
-                    <div className="mt-8 text-center animate-in zoom-in-95">
+                    <div className="mt-5 sm:mt-8 text-center animate-in zoom-in-95">
                         <h4 className="text-2xl font-black text-primary">{t.win}</h4>
                     </div>
                 )}

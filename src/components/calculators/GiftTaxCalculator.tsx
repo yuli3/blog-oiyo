@@ -88,12 +88,12 @@ const GiftTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
   };
 
   return (
-    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
+    <div className="not-prose my-7 sm:my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
       <h3 className="text-xl font-bold text-green-900 mb-6">
         {locale === 'ko' ? '증여세 계산기 (2024년 기준)' : 'Gift Tax Calculator (2024 Korea)'}
       </h3>
 
-      <div className="grid md:grid-cols-2 gap-8">
+      <div className="grid md:grid-cols-2 gap-5 sm:gap-8">
         {/* Inputs */}
         <div className="space-y-4">
           <div className="space-y-1">
@@ -226,7 +226,7 @@ const GiftTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
       </div>
 
       {/* 공제 한도 안내 */}
-      <div className="mt-8 p-5 bg-white rounded-2xl border border-green-100">
+      <div className="mt-5 sm:mt-8 p-5 bg-white rounded-2xl border border-green-100">
         <p className="text-sm font-bold text-green-800 mb-3">
           {locale === 'ko' ? '2024년 증여세 공제 한도 (10년 단위)' : '2024 Gift Tax Deduction Limits (per 10 years)'}
         </p>

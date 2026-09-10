@@ -28,7 +28,7 @@ const AgeCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
 
     return (
         <GameContainer title={t.title} subtitle="Temporal Identity Bridge" onReset={() => setBirth('1990-01-01')}>
-            <div className="flex flex-col gap-10">
+            <div className="flex flex-col gap-6 sm:gap-10">
                 <p className="text-sm font-medium text-muted-foreground text-center max-w-md mx-auto">{t.desc}</p>
                 
                 <div className="w-full max-w-sm mx-auto space-y-4">

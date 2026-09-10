@@ -29,7 +29,7 @@ export const TruthTableGenerator: React.FC = () => {
     ];
 
     return (
-        <Card className="p-4 sm:p-6 bg-slate-900 border-slate-800 text-white shadow-2xl mt-8">
+        <Card className="p-4 sm:p-6 bg-slate-900 border-slate-800 text-white shadow-2xl mt-5 sm:mt-8">
             <div className="flex items-center gap-3 mb-6 border-b border-slate-800 pb-4">
                 <Table className="text-emerald-400" />
                 <h3 className="text-xl font-bold">인터랙티브 진리표 생성기</h3>

@@ -464,7 +464,7 @@ export default function HatSizeConverter({ locale = "en" }: { locale?: Locale })
         </FieldGroup>
 
         {result && (
-          <div className="mt-8">
+          <div className="mt-5 sm:mt-8">
             <h3 className="text-base font-semibold">{t.resultTitle}</h3>
             <p className="text-muted-foreground mt-1 text-sm">{t.resultDesc}</p>
             <Table className="mt-4">

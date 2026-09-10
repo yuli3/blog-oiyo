@@ -905,7 +905,7 @@ export default function DailyHoroscope({ locale }: Props) {
           {/* Lucky section */}
           <div className="rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-50 to-purple-50 p-5">
             <h3 className="mb-3 text-center font-bold text-violet-800">✨ {ui.luckySection}</h3>
-            <div className="flex justify-center gap-10">
+            <div className="flex justify-center gap-6 sm:gap-10">
               <div className="text-center">
                 <p className="text-xs text-violet-500 mb-1">{ui.luckyColor}</p>
                 <p className="text-lg font-semibold text-violet-700">{result.luckyColor}</p>

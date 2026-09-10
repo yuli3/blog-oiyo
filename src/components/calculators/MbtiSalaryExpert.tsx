@@ -70,10 +70,10 @@ const MbtiSalaryExpert: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' })
     const data = t.types[selectedType] || t.types.ENTJ;
 
     return (
-        <div className="not-prose my-12 p-4 sm:p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-3xl mx-auto">
-            <h3 className="text-2xl font-black text-center text-slate-900 mb-8">{t.title}</h3>
+        <div className="not-prose my-7 sm:my-12 p-4 sm:p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-3xl mx-auto">
+            <h3 className="text-2xl font-black text-center text-slate-900 mb-5 sm:mb-8">{t.title}</h3>
             
-            <div className="flex flex-wrap justify-center gap-2 mb-10">
+            <div className="flex flex-wrap justify-center gap-2 mb-6 sm:mb-10">
                 {Object.keys(t.types).map(type => (
                     <button
                         key={type}

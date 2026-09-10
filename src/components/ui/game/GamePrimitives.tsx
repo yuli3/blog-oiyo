@@ -54,8 +54,8 @@ export const PlayingCard: React.FC<PlayingCardProps> = ({ suit, value, isFaceUp 
 
 export const GameContainer: React.FC<{ title: string; subtitle?: string; onReset?: () => void; children: React.ReactNode }> = ({ title, subtitle, onReset, children }) => {
     return (
-        <div className="not-prose my-12 p-6 sm:p-10 bg-card border border-border rounded-4xl shadow-sm max-w-2xl mx-auto">
-            <div className="flex justify-between items-end mb-8">
+        <div className="not-prose my-7 sm:my-12 p-6 sm:p-10 bg-card border border-border rounded-4xl shadow-sm max-w-2xl mx-auto">
+            <div className="flex justify-between items-end mb-5 sm:mb-8">
                 <div>
                     <h3 className="text-2xl font-black text-foreground">{title}</h3>
                     {subtitle && <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-[0.2em] mt-1">{subtitle}</p>}

@@ -30,13 +30,13 @@ export const BondPricer: React.FC = () => {
     const price = calculatePrice();
 
     return (
-        <Card className="p-4 sm:p-6 bg-slate-50 border-slate-200 shadow-lg mt-8">
+        <Card className="p-4 sm:p-6 bg-slate-50 border-slate-200 shadow-lg mt-5 sm:mt-8">
             <div className="flex items-center gap-2 mb-6 border-b pb-4 text-slate-800">
                 <Landmark size={20} className="text-amber-600" />
                 <h3 className="text-xl font-bold">인터랙티브 채권 가격 계산기</h3>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8">
                 <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                         <Field><FieldLabel htmlFor="bond-par" className="text-slate-600">액면가 (Par Value)</FieldLabel><InputGroup className="border-slate-300 bg-white"><InputGroupInput id="bond-par" type="number" value={par} onChange={e => setPar(Number(e.target.value))} className="text-slate-900"/><InputGroupAddon className="border-slate-300 text-slate-500">₩</InputGroupAddon></InputGroup></Field>
@@ -98,7 +98,7 @@ export const PortfolioVisualizer: React.FC = () => {
     }
 
     return (
-        <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-8">
+        <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-5 sm:mt-8">
             <div className="flex items-center gap-2 mb-6 border-b pb-4 text-slate-900">
                 <TrendingUp size={20} className="text-green-600" />
                 <h3 className="text-xl font-bold">포트폴리오 위험-수익 시각화</h3>

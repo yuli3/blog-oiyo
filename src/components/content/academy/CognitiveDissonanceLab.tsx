@@ -150,7 +150,7 @@ export default function CognitiveDissonanceLab() {
   return (
     <section
       aria-labelledby="cognitive-dissonance-lab-title"
-      className="not-prose my-8 overflow-hidden rounded-2xl border border-slate-200 bg-white text-slate-950"
+      className="not-prose my-5 sm:my-8 overflow-hidden rounded-2xl border border-slate-200 bg-white text-slate-950"
     >
       <div className="border-b border-slate-200 bg-lime-50 px-5 py-5 sm:px-7">
         <div className="flex flex-wrap items-start justify-between gap-4">

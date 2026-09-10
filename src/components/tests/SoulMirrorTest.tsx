@@ -116,7 +116,7 @@ export default function SoulMirrorTest({ locale: localeProp }: Props) {
   if (phase === "result") {
     const r = t.results[topType];
     return (
-      <div className="not-prose my-10 p-4 sm:p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto text-center space-y-6">
+      <div className="not-prose my-6 sm:my-10 p-4 sm:p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto text-center space-y-6">
         <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">{t.resultLabel}</p>
         <div className="text-6xl">{r.emoji}</div>
         <h3 className="text-3xl font-black text-slate-900">{r.title}</h3>
@@ -129,7 +129,7 @@ export default function SoulMirrorTest({ locale: localeProp }: Props) {
   }
 
   return (
-    <div className="not-prose my-10 p-4 sm:p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto space-y-8">
+    <div className="not-prose my-6 sm:my-10 p-4 sm:p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto space-y-5 sm:space-y-8">
       <div className="text-center">
         <h3 className="text-2xl font-black text-slate-900">{t.title}</h3>
         <p className="text-sm text-slate-500 mt-2">{t.description}</p>
@@ -137,7 +137,7 @@ export default function SoulMirrorTest({ locale: localeProp }: Props) {
           <div className="h-2 bg-slate-600 rounded-full transition-all" style={{ width: `${(Object.keys(answers).length / t.questions.length) * 100}%` }} />
         </div>
       </div>
-      <div className="space-y-8">
+      <div className="space-y-5 sm:space-y-8">
         {t.questions.map((q, i) => (
           <div key={q.id} className="space-y-3">
             <p className="font-semibold text-slate-800 leading-snug">{i + 1}. {q.text}</p>

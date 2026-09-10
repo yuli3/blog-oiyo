@@ -76,9 +76,9 @@ export const PersonalColorMiniTest: React.FC = () => {
     };
 
     return (
-        <Card className="p-4 sm:p-8 bg-gradient-to-br from-rose-50 to-green-50 border-white shadow-2xl mt-8 min-h-[400px] flex flex-col justify-center">
+        <Card className="p-4 sm:p-8 bg-gradient-to-br from-rose-50 to-green-50 border-white shadow-2xl mt-5 sm:mt-8 min-h-[400px] flex flex-col justify-center">
             {!result ? (
-                <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <div className="space-y-5 sm:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
                     <div className="flex items-center gap-2 mb-4 justify-center">
                         <Palette className="text-rose-400" />
                         <h3 className="text-xl font-bold text-slate-800">나의 퍼스널 컬러 자가진단</h3>
@@ -103,7 +103,7 @@ export const PersonalColorMiniTest: React.FC = () => {
                     </div>
                 </div>
             ) : (
-                <div className="text-center space-y-8 animate-in zoom-in duration-500">
+                <div className="text-center space-y-5 sm:space-y-8 animate-in zoom-in duration-500">
                     <div className="flex justify-center">
                         <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center">
                             <CheckCircle2 className="text-green-500 w-10 h-10" />

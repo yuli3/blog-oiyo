@@ -120,7 +120,7 @@ const ChinaSalaryCalculator: React.FC<Props> = ({ locale = 'zh' }) => {
 
     return (
         <GameContainer title={t.title} subtitle="Net Pay Estimator — Shanghai 2026" onReset={handleReset}>
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-5 sm:gap-8">
                 <p className="text-sm font-medium text-muted-foreground text-center">{t.desc}</p>
 
                 <div className="flex flex-col gap-4">

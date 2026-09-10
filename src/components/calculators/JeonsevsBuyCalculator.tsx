@@ -93,7 +93,7 @@ const JeonsevsBuyCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'k
   };
 
   return (
-    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
+    <div className="not-prose my-7 sm:my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
       <h3 className="text-xl font-bold text-green-900 mb-6">
         {locale === 'ko' ? '전세 vs 매매 비교 계산기' : 'Jeonse vs Buy Calculator'}
       </h3>
@@ -274,7 +274,7 @@ const JeonsevsBuyCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'k
                   <span className="text-slate-500">{locale === 'ko' ? '보증금 기회비용' : 'Opportunity Cost'}</span>
                   <span className="font-bold">{fmt(result.opportunityCost)}원</span>
                 </div>
-                <div className="flex justify-between border-t pt-2 font-bold mt-8">
+                <div className="flex justify-between border-t pt-2 font-bold mt-5 sm:mt-8">
                   <span>{locale === 'ko' ? '순 비용' : 'Net Cost'}</span>
                   <span className="text-green-700">{fmt(result.totalJeonseCost)}원</span>
                 </div>

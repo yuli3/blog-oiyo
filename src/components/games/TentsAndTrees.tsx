@@ -55,7 +55,7 @@ const TentsAndTrees: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
     return (
         <GameContainer title={t.title} subtitle="Logical Deployment" onReset={initGame}>
             <div className="flex flex-col items-center">
-                <p className="text-sm font-medium text-muted-foreground mb-8 text-center leading-relaxed">
+                <p className="text-sm font-medium text-muted-foreground mb-5 sm:mb-8 text-center leading-relaxed">
                     {t.desc}<br/>
                     <span className="text-[10px] opacity-60">* 텐트끼리는 이웃할 수 없습니다 (대각선 포함)</span>
                 </p>
@@ -98,7 +98,7 @@ const TentsAndTrees: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
                 </div>
 
                 {isWon && (
-                    <div className="mt-8 text-center animate-in fade-in slide-in-from-bottom-2">
+                    <div className="mt-5 sm:mt-8 text-center animate-in fade-in slide-in-from-bottom-2">
                         <h4 className="text-2xl font-black text-primary mb-4">{t.win}</h4>
                         <button onClick={initGame} className="px-5 sm:px-10 py-3 bg-primary text-primary-foreground rounded-full font-bold shadow-lg">NEXT CHALLENGE</button>
                     </div>

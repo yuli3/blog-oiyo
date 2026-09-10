@@ -76,15 +76,15 @@ const InvestmentPersonalityTest: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale 
     const isComplete = Object.keys(answers).length === t.questions.length;
 
     return (
-        <div className="not-prose my-12 p-4 sm:p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto">
+        <div className="not-prose my-7 sm:my-12 p-4 sm:p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto">
             {!showResults ? (
                 <div className="space-y-6">
-                    <div className="text-center mb-10">
+                    <div className="text-center mb-6 sm:mb-10">
                         <h3 className="text-2xl font-black text-slate-900">{t.title}</h3>
                         <p className="text-sm text-slate-500 mt-2">{t.description}</p>
                     </div>
 
-                    <div className="space-y-10">
+                    <div className="space-y-6 sm:space-y-10">
                         {t.questions.map((q, idx) => (
                             <div key={q.id} className="space-y-4">
                                 <p className="text-lg font-bold text-slate-800 leading-tight">{idx + 1}. {q.text}</p>
@@ -107,7 +107,7 @@ const InvestmentPersonalityTest: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale 
                         ))}
                     </div>
 
-                    <div className="pt-8 flex justify-center">
+                    <div className="pt-5 sm:pt-8 flex justify-center">
                         <button
                             disabled={!isComplete}
                             onClick={() => setShowResults(true)}
@@ -122,7 +122,7 @@ const InvestmentPersonalityTest: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale 
                     </div>
                 </div>
             ) : (
-                <div className="text-center space-y-8 py-4 sm:py-6 animate-fade-in">
+                <div className="text-center space-y-5 sm:space-y-8 py-4 sm:py-6 animate-fade-in">
                     <div className="space-y-2">
                         <span className="text-xs font-bold text-indigo-500 uppercase tracking-widest">{locale === 'ko' ? '당신의 투자 DNA' : 'Your Investment DNA'}</span>
                         {/* @ts-ignore */}

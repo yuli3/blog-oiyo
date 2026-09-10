@@ -67,9 +67,9 @@ const WaterSort: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
     return (
         <GameContainer title={t.title} subtitle="Process Refining" onReset={initGame}>
             <div className="flex flex-col items-center">
-                <p className="text-sm font-medium text-muted-foreground mb-12 text-center">{t.desc}</p>
+                <p className="text-sm font-medium text-muted-foreground mb-7 sm:mb-12 text-center">{t.desc}</p>
                 
-                <div className="grid grid-cols-4 sm:grid-cols-7 gap-4 mb-12">
+                <div className="grid grid-cols-4 sm:grid-cols-7 gap-4 mb-7 sm:mb-12">
                     {tubes.map((tube, i) => (
                         <div 
                             key={i} 

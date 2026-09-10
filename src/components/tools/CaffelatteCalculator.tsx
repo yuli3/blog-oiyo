@@ -20,7 +20,7 @@ const CaffelatteCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko
 
     return (
         <GameContainer title={t.title} subtitle="Micro-Saving Compound Power" onReset={() => { setDaily(5000); setRate(6); setYears(30); }}>
-            <div className="flex flex-col gap-10">
+            <div className="flex flex-col gap-6 sm:gap-10">
                 <p className="text-sm font-medium text-muted-foreground text-center max-w-lg mx-auto">{t.desc}</p>
                 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

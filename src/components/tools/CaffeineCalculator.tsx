@@ -19,7 +19,7 @@ const CaffeineCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
 
     return (
         <GameContainer title={t.title} subtitle="Sleep Hygiene Analytics" onReset={() => { setAmount(150); setIntakeHour(13); setBedHour(23); }}>
-            <div className="flex flex-col gap-10">
+            <div className="flex flex-col gap-6 sm:gap-10">
                 <p className="text-sm font-medium text-muted-foreground text-center">{t.desc}</p>
                 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

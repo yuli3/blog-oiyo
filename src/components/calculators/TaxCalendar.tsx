@@ -90,7 +90,7 @@ const TaxCalendar: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
   const filtered = TAX_EVENTS.filter((e) => e.relevantTo.includes(jobType));
 
   return (
-    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
+    <div className="not-prose my-7 sm:my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
       <h3 className="text-xl font-bold text-green-900 mb-2">
         {locale === 'ko' ? '세금 납부 캘린더' : 'Tax Payment Calendar'}
       </h3>

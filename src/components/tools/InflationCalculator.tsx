@@ -16,7 +16,7 @@ const InflationCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
 
     return (
         <GameContainer title={t.title} subtitle="Purchasing Power Analytics" onReset={() => { setAmount(1000000); setRate(3); setYears(10); }}>
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-5 sm:gap-8">
                 <p className="text-sm font-medium text-muted-foreground text-center">{t.desc}</p>
                 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

@@ -146,7 +146,7 @@ const LifeExpectancyCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
   );
 
   return (
-    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
+    <div className="not-prose my-7 sm:my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
       <h3 className="text-xl font-bold text-green-900 mb-2">
         {locale === 'ko' ? '기대수명 계산기' : 'Life Expectancy Calculator'}
       </h3>
@@ -154,7 +154,7 @@ const LifeExpectancyCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
         {locale === 'ko' ? '통계청 2023 생명표 기준 (남 79.9세, 여 85.6세)' : 'Based on 2023 KOSTAT Life Tables (M: 79.9, F: 85.6)'}
       </p>
 
-      <div className="grid md:grid-cols-2 gap-8">
+      <div className="grid md:grid-cols-2 gap-5 sm:gap-8">
         {/* Inputs */}
         <div className="space-y-5">
           <div className="space-y-1">

@@ -326,7 +326,7 @@ const FuelEfficiencyCalculator: React.FC<{ locale?: Locale }> = ({ locale = "ko"
 
   return (
     <GameContainer title={t.title} subtitle={t.subtitle} onReset={handleReset}>
-      <div className="flex flex-col gap-10">
+      <div className="flex flex-col gap-6 sm:gap-10">
 
         {/* Section 1: Real fuel economy */}
         <section className="space-y-5">

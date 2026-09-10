@@ -365,7 +365,7 @@ const AptSubscriptionScore: React.FC<Props> = ({ locale = "ko" }) => {
         setSubscriptionMonths(60);
       }}
     >
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-5 sm:gap-8">
         <p className="text-sm font-medium text-muted-foreground text-center">{t.desc}</p>
 
         {/* Homeless Period */}

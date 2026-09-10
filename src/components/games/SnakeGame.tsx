@@ -95,8 +95,8 @@ const SnakeGame: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
     }, [score, best]);
 
     return (
-        <div className="not-prose my-12 p-4 sm:p-8 bg-card border border-border rounded-4xl shadow-sm max-w-sm mx-auto">
-            <div className="flex justify-between items-end mb-8 text-foreground">
+        <div className="not-prose my-7 sm:my-12 p-4 sm:p-8 bg-card border border-border rounded-4xl shadow-sm max-w-sm mx-auto">
+            <div className="flex justify-between items-end mb-5 sm:mb-8 text-foreground">
                 <div>
                     <h3 className="text-xl font-black">{t.title}</h3>
                     <p className="text-[10px] text-muted-foreground font-bold tracking-[0.2em] uppercase">{t.food} Accumulation</p>
@@ -154,7 +154,7 @@ const SnakeGame: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
                 )}
             </div>
 
-            <div className="mt-8 flex justify-between text-[10px] font-bold text-muted-foreground/50 uppercase tracking-widest">
+            <div className="mt-5 sm:mt-8 flex justify-between text-[10px] font-bold text-muted-foreground/50 uppercase tracking-widest">
                 <span>Directing with arrows</span>
                 <span>Best Career: {best}</span>
             </div>

@@ -17,13 +17,13 @@ export const CAPMCalculator: React.FC = () => {
     const ke = rf + beta * (rm - rf);
 
     return (
-        <Card className="p-4 sm:p-6 bg-slate-900 border-slate-800 text-white shadow-xl mt-8">
+        <Card className="p-4 sm:p-6 bg-slate-900 border-slate-800 text-white shadow-xl mt-5 sm:mt-8">
             <div className="flex items-center gap-2 mb-6 border-b border-slate-800 pb-4">
                 <TrendingUp className="text-blue-400" />
                 <h3 className="text-xl font-bold font-heading">CAPM (자본자산가격모형) 계산기</h3>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8">
                 <FieldGroup>
                     <Field><FieldLabel htmlFor="capm-rf">무위험수익률 (Rf)</FieldLabel><InputGroup><InputGroupInput id="capm-rf" type="number" value={rf} onChange={e => setRf(Number(e.target.value))}/><InputGroupAddon>%</InputGroupAddon></InputGroup></Field>
                     <Field><FieldLabel htmlFor="capm-beta">베타 (Beta, β)</FieldLabel><InputGroup><InputGroupInput id="capm-beta" type="number" value={beta} onChange={e => setBeta(Number(e.target.value))}/></InputGroup></Field>
@@ -58,13 +58,13 @@ export const WACCCalculator: React.FC = () => {
     const wacc = (equity / total) * ke + (debt / total) * kd * (1 - tax / 100);
 
     return (
-        <Card className="p-4 sm:p-6 bg-slate-900 border-slate-800 text-white shadow-xl mt-8">
+        <Card className="p-4 sm:p-6 bg-slate-900 border-slate-800 text-white shadow-xl mt-5 sm:mt-8">
             <div className="flex items-center gap-2 mb-6 border-b border-slate-800 pb-4">
                 <Landmark className="text-emerald-400" />
                 <h3 className="text-xl font-bold font-heading">WACC (가중평균자본비용) 계산기</h3>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8">
                 <FieldGroup className="gap-3">
                     <div className="grid grid-cols-2 gap-2">
                         <Field><FieldLabel htmlFor="wacc-equity">자기자본 (E)</FieldLabel><InputGroup><InputGroupInput id="wacc-equity" type="number" value={equity} onChange={e => setEquity(Number(e.target.value))}/></InputGroup></Field>

@@ -183,14 +183,14 @@ const SeparateVsComprehensiveTaxCalc: React.FC<{ locale?: Locale }> = ({ locale 
     : 'bg-info/10 border-info/30';
 
   return (
-    <div className="not-prose my-8 p-6 sm:p-10 bg-card border border-border rounded-4xl shadow-sm max-w-2xl mx-auto">
-      <div className="mb-8">
+    <div className="not-prose my-5 sm:my-8 p-6 sm:p-10 bg-card border border-border rounded-4xl shadow-sm max-w-2xl mx-auto">
+      <div className="mb-5 sm:mb-8">
         <h2 className="text-2xl font-black">{t.title}</h2>
         <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mt-1">{t.subtitle}</p>
       </div>
 
       {/* Inputs */}
-      <div className="space-y-3 mb-8">
+      <div className="space-y-3 mb-5 sm:mb-8">
         {inputFields.map(({ label, value, setter, accent }) => (
           <div key={label} className="grid grid-cols-2 gap-3 items-center">
             <label className={`text-xs font-bold ${accent ? 'text-primary' : 'text-foreground'}`}>{label}</label>

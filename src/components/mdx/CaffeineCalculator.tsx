@@ -76,7 +76,7 @@ export default function CaffeineCalculator() {
   const bedtimeRemainder = result ? getHalfLifeInfo(16, result.total) : '0';
 
   return (
-    <div className="my-8 rounded-2xl border border-gray-200 bg-white p-4 sm:p-6 shadow-sm">
+    <div className="my-5 sm:my-8 rounded-2xl border border-gray-200 bg-white p-4 sm:p-6 shadow-sm">
       <h3 className="mb-6 text-xl font-bold text-gray-900">카페인 섭취량 계산기</h3>
 
       <div className="mb-4">

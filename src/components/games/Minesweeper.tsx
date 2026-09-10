@@ -99,7 +99,7 @@ const Minesweeper: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
     const flaggedCount = board.flat().filter(c => c.isFlagged).length;
 
     return (
-        <div className="not-prose my-12 p-4 sm:p-8 bg-card border border-border rounded-3xl shadow-sm max-w-sm mx-auto">
+        <div className="not-prose my-7 sm:my-12 p-4 sm:p-8 bg-card border border-border rounded-3xl shadow-sm max-w-sm mx-auto">
             <div className="flex justify-between items-center mb-6">
                 <div className="px-3 py-1 bg-muted rounded-lg text-xs font-black text-muted-foreground">🚩 {MINE_COUNT - flaggedCount}</div>
                 <div className="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full group cursor-pointer" onClick={initBoard}>
@@ -128,7 +128,7 @@ const Minesweeper: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
             </div>
 
             {status !== 'playing' && (
-                <div className="mt-8 text-center animate-in fade-in slide-in-from-bottom-2">
+                <div className="mt-5 sm:mt-8 text-center animate-in fade-in slide-in-from-bottom-2">
                     <p className={`text-lg font-black ${status === 'won' ? 'text-primary' : 'text-destructive'}`}>
                         {status === 'won' ? t.win : t.over}
                     </p>

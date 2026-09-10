@@ -32,7 +32,7 @@ const BrokerageCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
 
     return (
         <GameContainer title={t.title} subtitle="Smart Trading Tools" onReset={() => { setType('buy'); setPrice(500000000); }}>
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-5 sm:gap-8">
                 <p className="text-sm font-medium text-muted-foreground text-center">{t.desc}</p>
                 
                 <div className="flex gap-4 p-1 bg-muted rounded-2xl border border-border">

@@ -62,10 +62,10 @@ const PaletteExtractor: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' })
 
     return (
         <GameContainer title={t.title} subtitle="Nature's Color Theory" onReset={() => { setImage(null); setPalette([]); }}>
-            <div className="flex flex-col items-center gap-10">
+            <div className="flex flex-col items-center gap-6 sm:gap-10">
                 <p className="text-sm font-medium text-muted-foreground text-center max-w-md">{t.desc}</p>
                 
-                <div className="flex flex-col lg:flex-row gap-10 w-full items-center lg:items-start text-center">
+                <div className="flex flex-col lg:flex-row gap-6 sm:gap-10 w-full items-center lg:items-start text-center">
                     <div className="w-full lg:w-1/2 aspect-square bg-muted/30 rounded-3xl border-4 border-dashed border-muted flex flex-col items-center justify-center overflow-hidden relative">
                         {image ? (
                             <img src={image} alt="Uploaded" className="w-full h-full object-cover" />

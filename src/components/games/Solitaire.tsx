@@ -95,7 +95,7 @@ const Solitaire: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
 
     return (
         <GameContainer title={t.title} subtitle="Order & Focus" onReset={initGame}>
-            <div className="space-y-8">
+            <div className="space-y-5 sm:space-y-8">
                 {/* Top Section */}
                 <div className="flex justify-between items-start">
                     <div className="flex gap-4">

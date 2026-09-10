@@ -40,7 +40,7 @@ const WheelSpinner: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => 
 
     return (
         <GameContainer title={t.title} subtitle="Decision Making Assistance" onReset={() => setItems(['Pizza', 'Burger', 'Sushi', 'Pasta'])}>
-            <div className="flex flex-col md:flex-row gap-12 items-center">
+            <div className="flex flex-col md:flex-row gap-7 sm:gap-12 items-center">
                 {/* Wheel UI */}
                 <div className="relative">
                     {/* Fixed Pointer */}
@@ -71,7 +71,7 @@ const WheelSpinner: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => 
                                 <div 
                                     key={`label-${i}`}
                                     style={{ transform: `rotate(${i * angle + angle/2}deg)` }}
-                                    className="absolute inset-0 flex items-start justify-center pt-8 text-[10px] font-black text-foreground/80 uppercase tracking-tighter"
+                                    className="absolute inset-0 flex items-start justify-center pt-5 sm:pt-8 text-[10px] font-black text-foreground/80 uppercase tracking-tighter"
                                 >
                                     <span className="rotate-90 origin-center">{item}</span>
                                 </div>

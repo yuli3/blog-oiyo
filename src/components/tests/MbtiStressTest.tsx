@@ -439,8 +439,8 @@ const MbtiStressTest: React.FC<{ locale?: Locale }> = ({ locale = 'en' }) => {
     const c = COLOR_MAP[profile.color] ?? COLOR_MAP.indigo;
 
     return (
-      <div className="not-prose my-8 p-6 sm:p-10 bg-card border border-border rounded-4xl shadow-sm max-w-2xl mx-auto">
-        <div className={`flex items-center gap-4 mb-8 p-5 rounded-2xl border ${c.bg} ${c.border}`}>
+      <div className="not-prose my-5 sm:my-8 p-6 sm:p-10 bg-card border border-border rounded-4xl shadow-sm max-w-2xl mx-auto">
+        <div className={`flex items-center gap-4 mb-5 sm:mb-8 p-5 rounded-2xl border ${c.bg} ${c.border}`}>
           <span className="text-5xl">{profile.badge}</span>
           <div>
             <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">MBTI</p>
@@ -483,8 +483,8 @@ const MbtiStressTest: React.FC<{ locale?: Locale }> = ({ locale = 'en' }) => {
   }
 
   return (
-    <div className="not-prose my-8 p-6 sm:p-10 bg-card border border-border rounded-4xl shadow-sm max-w-2xl mx-auto">
-      <div className="mb-8">
+    <div className="not-prose my-5 sm:my-8 p-6 sm:p-10 bg-card border border-border rounded-4xl shadow-sm max-w-2xl mx-auto">
+      <div className="mb-5 sm:mb-8">
         <h2 className="text-2xl font-black">{t.title}</h2>
         <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mt-1">{t.subtitle}</p>
       </div>

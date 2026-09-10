@@ -243,8 +243,8 @@ const SalaryNegotiationCalculator = ({ locale }: Props) => {
   };
 
   return (
-    <div className="not-prose my-8 p-6 sm:p-10 bg-card border border-border rounded-4xl shadow-sm max-w-2xl mx-auto">
-      <div className="mb-8">
+    <div className="not-prose my-5 sm:my-8 p-6 sm:p-10 bg-card border border-border rounded-4xl shadow-sm max-w-2xl mx-auto">
+      <div className="mb-5 sm:mb-8">
         <h2 className="text-2xl font-black">{t.title}</h2>
         <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mt-1">{t.subtitle}</p>
       </div>
@@ -277,7 +277,7 @@ const SalaryNegotiationCalculator = ({ locale }: Props) => {
       </div>
 
       {/* Reset button */}
-      <div className="flex gap-3 mb-8">
+      <div className="flex gap-3 mb-5 sm:mb-8">
         <button
           onClick={handleReset}
           className="px-5 py-3 rounded-2xl border border-border bg-muted/20 font-bold text-sm hover:bg-accent transition-colors"
@@ -287,7 +287,7 @@ const SalaryNegotiationCalculator = ({ locale }: Props) => {
       </div>
 
       {/* Scenario cards */}
-      <div className="space-y-4 mb-8">
+      <div className="space-y-4 mb-5 sm:mb-8">
         {scenarios.map((key) => {
           const r = getResult(key);
           const colors = SCENARIO_COLORS[key];

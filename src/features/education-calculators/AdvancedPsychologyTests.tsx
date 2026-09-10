@@ -586,7 +586,7 @@ export function FullDISCTest({ locale = 'ko' }: { locale?: 'ko' | 'en' | 'ja' })
     const shareText = `[DISC 결과] ${copy.typeNames[state.result]}: ${localeData.headline}\n${localeData.desc.slice(0, 100)}...`;
 
     return (
-      <Card className="mt-8 overflow-hidden border-2 border-emerald-100 shadow-2xl rounded-2xl">
+      <Card className="mt-5 sm:mt-8 overflow-hidden border-2 border-emerald-100 shadow-2xl rounded-2xl">
         <CardHeader className="border-b border-slate-100 bg-gradient-to-r from-emerald-50 to-slate-50">
           <div className="flex items-center gap-3">
             <div className={`p-3 rounded-xl border-2 ${res.color}`}>{res.icon}</div>
@@ -663,7 +663,7 @@ export function FullDISCTest({ locale = 'ko' }: { locale?: 'ko' | 'en' | 'ja' })
   }));
 
   return (
-    <Card className="mt-8 overflow-hidden border-2 border-slate-100 shadow-2xl rounded-2xl">
+    <Card className="mt-5 sm:mt-8 overflow-hidden border-2 border-slate-100 shadow-2xl rounded-2xl">
       <CardHeader className="border-b border-slate-100 bg-gradient-to-r from-emerald-50 to-slate-50">
         <div className="flex items-center gap-2 mb-1">
           <Brain className="w-5 h-5 text-emerald-500" aria-hidden="true" />
@@ -931,7 +931,7 @@ export function AttachmentStyleTest({ locale = 'ko' }: { locale?: 'ko' | 'en' | 
     const shareText = `[애착 유형 결과] ${copy.typeNames[state.result]}: ${localeData.headline}\n${localeData.tip}`;
 
     return (
-      <Card className="mt-8 overflow-hidden border-2 border-emerald-100 shadow-2xl rounded-2xl">
+      <Card className="mt-5 sm:mt-8 overflow-hidden border-2 border-emerald-100 shadow-2xl rounded-2xl">
         <CardHeader className="border-b border-slate-100 bg-gradient-to-r from-emerald-50 to-slate-50">
           <div className="flex items-center gap-3">
             <div className={`p-3 rounded-xl border-2 ${res.color}`}>{res.icon}</div>
@@ -998,7 +998,7 @@ export function AttachmentStyleTest({ locale = 'ko' }: { locale?: 'ko' | 'en' | 
   const q = ATTACHMENT_QUESTIONS[state.step];
 
   return (
-    <Card className="mt-8 overflow-hidden border-2 border-slate-100 shadow-2xl rounded-2xl">
+    <Card className="mt-5 sm:mt-8 overflow-hidden border-2 border-slate-100 shadow-2xl rounded-2xl">
       <CardHeader className="border-b border-slate-100 bg-gradient-to-r from-emerald-50 to-slate-50">
         <div className="flex items-center gap-2 mb-1">
           <Heart className="w-5 h-5 text-rose-500" aria-hidden="true" />
@@ -1224,7 +1224,7 @@ export function BigFiveTest({ locale = 'ko' }: { locale?: 'ko' | 'en' | 'ja' }) 
     const shareText = `[빅파이브 성격 결과]\n${shareLines.join('\n')}`;
 
     return (
-      <Card className="mt-8 overflow-hidden border-2 border-emerald-100 shadow-2xl rounded-2xl">
+      <Card className="mt-5 sm:mt-8 overflow-hidden border-2 border-emerald-100 shadow-2xl rounded-2xl">
         <CardHeader className="border-b border-slate-100 bg-gradient-to-r from-emerald-50 to-slate-50">
           <div className="flex items-center gap-2 mb-1">
             <Brain className="w-5 h-5 text-emerald-500" aria-hidden="true" />
@@ -1292,7 +1292,7 @@ export function BigFiveTest({ locale = 'ko' }: { locale?: 'ko' | 'en' | 'ja' }) 
   const q = BIG_FIVE_QUESTIONS[state.step];
 
   return (
-    <Card className="mt-8 overflow-hidden border-2 border-slate-100 shadow-2xl rounded-2xl">
+    <Card className="mt-5 sm:mt-8 overflow-hidden border-2 border-slate-100 shadow-2xl rounded-2xl">
       <CardHeader className="border-b border-slate-100 bg-gradient-to-r from-emerald-50 to-slate-50">
         <div className="flex items-center gap-2 mb-1">
           <Brain className="w-5 h-5 text-emerald-500" aria-hidden="true" />

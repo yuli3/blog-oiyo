@@ -22,10 +22,10 @@ const IsaCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
 
     return (
         <GameContainer title={t.title} subtitle="Strategic Tax Optimization" onReset={() => { setProfit(10000000); setIsaType('general'); }}>
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-5 sm:gap-8">
                 <p className="text-sm font-medium text-muted-foreground text-center">{t.desc}</p>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8">
                     <div className="space-y-4">
                         <label className="text-[10px] font-black text-muted-foreground uppercase">{t.profit}</label>
                         <input type="number" value={profit} onChange={(e) => setProfit(Number(e.target.value))} className="w-full p-4 bg-muted/30 rounded-2xl border border-border font-black text-xl outline-none" />

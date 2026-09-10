@@ -16,10 +16,10 @@ const RoiCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
 
     return (
         <GameContainer title={t.title} subtitle="Efficiency Measurement Monitor" onReset={() => { setCost(10000000); setGain(15000000); }}>
-            <div className="flex flex-col gap-10">
+            <div className="flex flex-col gap-6 sm:gap-10">
                 <p className="text-sm font-medium text-muted-foreground text-center max-w-md mx-auto">{t.desc}</p>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8">
                     <div className="space-y-4">
                         <label className="text-[10px] font-black text-muted-foreground uppercase">{t.cost}</label>
                         <input type="number" value={cost} onChange={(e) => setCost(Number(e.target.value))} className="w-full p-4 bg-muted/30 rounded-2xl border border-border font-black text-lg outline-none" />
@@ -32,11 +32,11 @@ const RoiCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
 
                 <div className="p-5 sm:p-10 bg-foreground rounded-[40px] text-background shadow-2xl relative overflow-hidden text-center">
                     <p className="text-[10px] font-black text-background/60 uppercase tracking-widest mb-4">{t.roi}</p>
-                    <h2 className={`text-6xl font-black mb-8 ${roi >=0 ? 'text-primary' : 'text-destructive'}`}>
+                    <h2 className={`text-6xl font-black mb-5 sm:mb-8 ${roi >=0 ? 'text-primary' : 'text-destructive'}`}>
                         {roi.toFixed(1)}%
                     </h2>
                     
-                    <div className="grid grid-cols-2 gap-8 border-t border-background/15 pt-8">
+                    <div className="grid grid-cols-2 gap-5 sm:gap-8 border-t border-background/15 pt-5 sm:pt-8">
                         <div>
                             <p className="text-[10px] text-background/60 uppercase mb-1">{t.profit}</p>
                             <p className={`text-xl font-bold ${profit >=0 ? 'text-background' : 'text-destructive'}`}>₩{Math.round(profit).toLocaleString()}</p>

@@ -72,7 +72,7 @@ const HeartsGame: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
 
     return (
         <GameContainer title={t.title} subtitle="Risk Distribution" onReset={initGame}>
-            <div className="flex justify-between items-center mb-10">
+            <div className="flex justify-between items-center mb-6 sm:mb-10">
                 <p className="text-sm font-medium text-muted-foreground">{t.desc}</p>
                 <div className="px-4 py-2 bg-destructive/10 border border-destructive/20 rounded-2xl">
                     <span className="text-xs font-black text-destructive uppercase">{t.score}: {penalty}</span>
@@ -80,7 +80,7 @@ const HeartsGame: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
             </div>
 
             {/* Table Area */}
-            <div className="h-64 bg-chart-1/20 rounded-3xl border border-dashed border-chart-1/30 relative flex items-center justify-center gap-4 mb-10 overflow-hidden">
+            <div className="h-64 bg-chart-1/20 rounded-3xl border border-dashed border-chart-1/30 relative flex items-center justify-center gap-4 mb-6 sm:mb-10 overflow-hidden">
                 {played.length > 0 ? (
                     played.map((c, i) => (
                         <div key={i} className={`animate-in fade-in slide-in-from-bottom-4 duration-500 delay-[${i*100}ms]`}>
@@ -116,7 +116,7 @@ const HeartsGame: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
                     <h4 className={`text-4xl font-black mb-4 ${penalty < 10 ? 'text-primary' : 'text-destructive'}`}>
                         {penalty < 10 ? t.win : t.lost}
                     </h4>
-                    <p className="text-lg font-bold text-muted-foreground mb-8 italic">Total Penalty: {penalty}</p>
+                    <p className="text-lg font-bold text-muted-foreground mb-5 sm:mb-8 italic">Total Penalty: {penalty}</p>
                     <button onClick={initGame} className="px-5 sm:px-12 py-4 bg-primary text-primary-foreground rounded-full font-black shadow-lg">
                         {t.reset}
                     </button>

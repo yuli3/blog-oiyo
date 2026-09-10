@@ -17,10 +17,10 @@ const HeightPredictor: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) 
 
     return (
         <GameContainer title={t.title} subtitle="Genetic Growth Analytics" onReset={() => { setDadHeight(175); setMomHeight(160); setGender('b'); }}>
-            <div className="flex flex-col gap-10">
+            <div className="flex flex-col gap-6 sm:gap-10">
                 <p className="text-sm font-medium text-muted-foreground text-center max-w-md mx-auto">{t.desc}</p>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8">
                     <div className="space-y-6">
                         <div className="flex gap-2 p-1 bg-muted rounded-xl">
                             <button onClick={() => setGender('b')} className={`flex-1 py-3 rounded-lg font-black text-xs transition-all ${gender === 'b' ? 'bg-background shadow-sm text-primary' : 'text-muted-foreground'}`}>👦 {t.boy}</button>
@@ -48,7 +48,7 @@ const HeightPredictor: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) 
                     </div>
                     
                     {/* Visual ruler-like element */}
-                    <div className="mt-8 h-4 w-full bg-muted/30 rounded-full relative overflow-hidden">
+                    <div className="mt-5 sm:mt-8 h-4 w-full bg-muted/30 rounded-full relative overflow-hidden">
                         <div className="absolute top-0 left-0 h-full bg-primary/40" style={{ width: `${(predictedHeight / 210) * 100}%` }} />
                         <div className="absolute top-0 right-0 h-full w-px bg-muted-foreground" style={{ left: '80%' }} /> {/* 170cm mark approx */}
                     </div>

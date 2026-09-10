@@ -18,10 +18,10 @@ const StockAverageCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
 
     return (
         <GameContainer title={t.title} subtitle="Strategic Averaging Analytics" onReset={() => { setCurrentPrice(10000); setCurrentQty(100); setAddPrice(8000); setAddQty(100); }}>
-            <div className="flex flex-col gap-10">
+            <div className="flex flex-col gap-6 sm:gap-10">
                 <p className="text-sm font-medium text-muted-foreground text-center">{t.desc}</p>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8">
                     {/* Current Block */}
                     <div className="p-4 sm:p-6 bg-muted/40 rounded-3xl border border-border space-y-4">
                         <div className="flex items-center gap-2 mb-2">
@@ -62,7 +62,7 @@ const StockAverageCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
                 {/* Result Area */}
                 <div className="p-4 sm:p-8 bg-foreground rounded-[40px] text-background animate-in zoom-in-95">
                     <p className="text-[10px] font-black text-background/60 uppercase tracking-widest text-center mb-2">{t.result}</p>
-                    <div className="text-center mb-8">
+                    <div className="text-center mb-5 sm:mb-8">
                         <p className="text-[10px] text-background/50 uppercase mb-1">{t.avg}</p>
                         <h4 className="text-4xl font-black text-primary">₩{Math.round(newAverage).toLocaleString()}</h4>
                     </div>

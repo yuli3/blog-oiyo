@@ -96,7 +96,7 @@ const FreeCell: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
 
     return (
         <GameContainer title={t.title} subtitle="Asset Allocation" onReset={initGame}>
-            <div className="space-y-8">
+            <div className="space-y-5 sm:space-y-8">
                 {/* Top: FreeCells & Foundation */}
                 <div className="flex justify-between">
                     <div className="flex gap-2">

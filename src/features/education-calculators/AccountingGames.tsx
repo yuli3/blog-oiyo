@@ -36,12 +36,12 @@ export const CVPGame: React.FC = () => {
     };
 
     return (
-        <Card className="p-4 sm:p-8 bg-slate-50 border-slate-200 shadow-2xl mt-8 overflow-hidden relative">
+        <Card className="p-4 sm:p-8 bg-slate-50 border-slate-200 shadow-2xl mt-5 sm:mt-8 overflow-hidden relative">
             <div className="absolute top-0 right-0 p-4 sm:p-8 opacity-10">
                 <Coins size={120} className="text-amber-300" />
             </div>
 
-            <div className="flex items-center justify-between mb-8 border-b pb-4">
+            <div className="flex items-center justify-between mb-5 sm:mb-8 border-b pb-4">
                 <div className="flex items-center gap-2">
                     <Target className="text-rose-500" />
                     <h3 className="text-xl font-bold">CVP 경영 시뮬레이션 게임</h3>
@@ -51,7 +51,7 @@ export const CVPGame: React.FC = () => {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8 mb-5 sm:mb-8">
                 <div className="space-y-6">
                     <div>
                         <div className="flex justify-between text-xs font-bold text-slate-500 mb-2 uppercase tracking-widest">

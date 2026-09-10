@@ -19,10 +19,10 @@ const PensionCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
 
     return (
         <GameContainer title={t.title} subtitle="13th Month Bonus Planner" onReset={() => { setSalary(50000000); setAmount(9000000); }}>
-            <div className="flex flex-col gap-10">
+            <div className="flex flex-col gap-6 sm:gap-10">
                 <p className="text-sm font-medium text-muted-foreground text-center max-w-lg mx-auto">{t.desc}</p>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8">
                     <div className="space-y-6">
                         <div className="space-y-2">
                              <label className="text-[10px] font-black text-muted-foreground uppercase">{t.income}</label>

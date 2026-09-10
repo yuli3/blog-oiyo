@@ -165,7 +165,7 @@ const CapitalGainsTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale 
 
     return (
         <GameContainer title={t.title} subtitle="Capital Gains Tax Estimator" onReset={handleReset}>
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-5 sm:gap-8">
                 <p className="text-sm font-medium text-muted-foreground text-center">{t.desc}</p>
 
                 {/* Asset type selector */}

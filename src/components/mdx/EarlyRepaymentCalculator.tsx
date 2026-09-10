@@ -44,7 +44,7 @@ export default function EarlyRepaymentCalculator() {
   };
 
   return (
-    <div className="my-8 rounded-2xl border border-gray-200 bg-white p-4 sm:p-6 shadow-sm">
+    <div className="my-5 sm:my-8 rounded-2xl border border-gray-200 bg-white p-4 sm:p-6 shadow-sm">
       <h3 className="mb-6 text-xl font-bold text-gray-900">중도상환수수료 계산기</h3>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">

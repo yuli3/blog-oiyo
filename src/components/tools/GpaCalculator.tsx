@@ -23,7 +23,7 @@ const GpaCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
 
     return (
         <GameContainer title={t.title} subtitle="Academic Performance Mirror" onReset={() => setCourses([{ id: 1, name: '', grade: 'A+', credit: 3 }])}>
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-5 sm:gap-8">
                 <p className="text-sm font-medium text-muted-foreground text-center">{t.desc}</p>
                 
                 <div className="flex justify-center gap-4 mb-4">

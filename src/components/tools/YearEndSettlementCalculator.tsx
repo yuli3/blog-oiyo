@@ -150,7 +150,7 @@ const YearEndSettlementCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
 
     return (
         <GameContainer title={t.title} subtitle="Year-End Tax Settlement" onReset={handleReset}>
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-5 sm:gap-8">
                 <p className="text-sm font-medium text-muted-foreground text-center">{t.desc}</p>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

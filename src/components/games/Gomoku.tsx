@@ -120,7 +120,7 @@ const Gomoku: React.FC<{ locale?: Locale }> = ({ locale = 'ko' }) => {
         : `${winner === 1 ? t.black : t.white} ${t.win}`;
 
     return (
-        <div className="not-prose my-12 p-4 sm:p-8 bg-card border border-border rounded-4xl shadow-sm max-w-lg mx-auto">
+        <div className="not-prose my-7 sm:my-12 p-4 sm:p-8 bg-card border border-border rounded-4xl shadow-sm max-w-lg mx-auto">
             <div className="flex justify-between items-center mb-4">
                 <div>
                     <h3 className="text-xl font-black text-foreground">{t.title}</h3>

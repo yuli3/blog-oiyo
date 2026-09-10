@@ -36,19 +36,19 @@ export const DeveloperUnitConverter: React.FC = () => {
     };
 
     return (
-        <Card className="p-4 sm:p-8 bg-slate-950 border-slate-800 text-white shadow-2xl mt-8 overflow-hidden relative">
+        <Card className="p-4 sm:p-8 bg-slate-950 border-slate-800 text-white shadow-2xl mt-5 sm:mt-8 overflow-hidden relative">
             <div className="absolute top-0 right-0 p-4 sm:p-8 opacity-5">
                 <Code size={100} />
             </div>
 
-            <div className="flex items-center gap-2 mb-8 border-b border-white/10 pb-4 relative z-10">
+            <div className="flex items-center gap-2 mb-5 sm:mb-8 border-b border-white/10 pb-4 relative z-10">
                 <div className="p-1.5 bg-blue-600 rounded-lg">
                     <ArrowLeftRight size={18} className="text-white" />
                 </div>
                 <h3 className="text-xl font-bold tracking-tight">개발자 & 디자이너 유틸리티</h3>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8 relative z-10">
                 {/* PX to REM */}
                 <div className="space-y-4 p-4 sm:p-6 bg-slate-900 rounded-2xl border border-white/5">
                     <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-4">PX to REM Converter</span>

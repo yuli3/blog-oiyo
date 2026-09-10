@@ -26,13 +26,13 @@ export const CompAdvantageCalculator: React.FC = () => {
     const advY = costAY < costBY ? 'A' : 'B';
 
     return (
-        <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-8 overflow-hidden">
+        <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-5 sm:mt-8 overflow-hidden">
             <div className="flex items-center gap-2 mb-6 text-slate-900 border-b pb-4">
                 <Scale className="text-indigo-500" />
                 <h3 className="text-xl font-bold">인터랙티브 비교우위 계산기</h3>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8 mb-5 sm:mb-8">
                 <div className="space-y-4 p-4 bg-slate-50 rounded-xl border border-slate-100">
                     <div className="font-bold text-indigo-600 flex items-center gap-2 mb-2">
                         <Globe size={16}/> A국 (Country A)

@@ -127,8 +127,8 @@ const Game2048: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
     };
 
     return (
-        <div className="not-prose my-12 p-4 sm:p-8 bg-card border border-border rounded-4xl shadow-sm max-w-sm mx-auto">
-            <div className="flex justify-between items-end mb-8">
+        <div className="not-prose my-7 sm:my-12 p-4 sm:p-8 bg-card border border-border rounded-4xl shadow-sm max-w-sm mx-auto">
+            <div className="flex justify-between items-end mb-5 sm:mb-8">
                 <div>
                     <h3 className="text-xl font-black text-foreground">{t.title}</h3>
                     <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">Growth Logic</p>
@@ -179,7 +179,7 @@ const Game2048: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
                 )}
             </div>
 
-            <div className="mt-8 flex justify-between items-center text-[10px] text-muted-foreground font-medium italic">
+            <div className="mt-5 sm:mt-8 flex justify-between items-center text-[10px] text-muted-foreground font-medium italic">
                 <span>* Use Arrow Keys to move</span>
                 <span>Best: {best}</span>
             </div>

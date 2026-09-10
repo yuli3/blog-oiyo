@@ -109,7 +109,7 @@ const Dominoes: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
 
     return (
         <GameContainer title={t.title} subtitle="Seamless Connectivity" onReset={initGame}>
-            <div className="flex justify-between items-center mb-10">
+            <div className="flex justify-between items-center mb-6 sm:mb-10">
                 <div className={`px-4 py-2 rounded-2xl border ${isPlayerTurn ? 'bg-primary/10 border-primary' : 'bg-muted border-transparent opacity-50'}`}>
                     <span className="text-xs font-black uppercase tracking-widest">{isPlayerTurn ? t.player : t.cpu} {t.turn}</span>
                 </div>
@@ -119,7 +119,7 @@ const Dominoes: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
             </div>
 
             {/* Domino Board */}
-            <div className="h-48 bg-muted/40 rounded-3xl border border-border flex items-center justify-center p-4 overflow-x-auto gap-1 shadow-inner mb-10 scrolling-touch">
+            <div className="h-48 bg-muted/40 rounded-3xl border border-border flex items-center justify-center p-4 overflow-x-auto gap-1 shadow-inner mb-6 sm:mb-10 scrolling-touch">
                 {board.map((d) => (
                     <div key={d.id} className="flex flex-shrink-0 bg-card border border-border rounded-md shadow-sm divide-x divide-border">
                         <div className="p-1">{renderPip(d.left)}</div>

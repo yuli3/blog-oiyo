@@ -50,10 +50,10 @@ const ImageCropper: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => 
 
     return (
         <GameContainer title={t.title} subtitle="Framing Perfection" onReset={() => setImage(null)}>
-            <div className="flex flex-col items-center gap-8">
+            <div className="flex flex-col items-center gap-5 sm:gap-8">
                 <p className="text-sm font-medium text-muted-foreground text-center max-w-md">{t.desc}</p>
                 
-                <div className="w-full flex flex-col md:flex-row gap-8">
+                <div className="w-full flex flex-col md:flex-row gap-5 sm:gap-8">
                     {/* Preview Area */}
                     <div className="flex-1 aspect-square bg-muted/30 rounded-3xl border-4 border-dashed border-muted flex flex-col items-center justify-center overflow-hidden relative shadow-inner group">
                         {image ? (

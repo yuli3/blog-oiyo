@@ -107,7 +107,7 @@ const WeddingPlanningCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale 
   };
 
   return (
-    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-pink-50 to-rose-50 border border-pink-200 rounded-3xl shadow-xl">
+    <div className="not-prose my-7 sm:my-12 p-6 md:p-8 bg-gradient-to-br from-pink-50 to-rose-50 border border-pink-200 rounded-3xl shadow-xl">
       <h3 className="text-xl font-bold text-pink-900 mb-6">{t.title}</h3>
 
       <div className="space-y-5">

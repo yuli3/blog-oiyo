@@ -36,7 +36,7 @@ export const StoneSimulator: React.FC = () => {
         <Dice5 size={120} />
       </div>
 
-      <div className="flex items-center justify-between mb-8 border-b border-slate-800 pb-4 relative z-10">
+      <div className="flex items-center justify-between mb-5 sm:mb-8 border-b border-slate-800 pb-4 relative z-10">
         <div className="flex items-center gap-2">
           <Zap className="text-yellow-400 fill-yellow-400" />
           <h3 className="text-xl font-bold italic tracking-tighter">세공 확률 시뮬레이터</h3>
@@ -46,7 +46,7 @@ export const StoneSimulator: React.FC = () => {
         </Button>
       </div>
 
-      <div className="flex flex-col items-center gap-8 relative z-10">
+      <div className="flex flex-col items-center gap-5 sm:gap-8 relative z-10">
         <div className="text-center">
             <span className="text-sm font-bold text-slate-500 uppercase tracking-widest block mb-2">현재 성공 확률</span>
             <div className="text-6xl font-black font-mono text-blue-400 drop-shadow-[0_0_15px_rgba(96,165,250,0.5)]">

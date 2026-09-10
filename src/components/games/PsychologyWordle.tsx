@@ -52,11 +52,11 @@ const PsychologyWordle: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' })
     };
 
     return (
-        <div className="not-prose my-12 p-4 sm:p-8 bg-card border border-border rounded-3xl shadow-sm max-w-sm mx-auto">
+        <div className="not-prose my-7 sm:my-12 p-4 sm:p-8 bg-card border border-border rounded-3xl shadow-sm max-w-sm mx-auto">
             <h3 className="text-xl font-black text-center text-foreground mb-2">{t.title}</h3>
-            <p className="text-[10px] text-center text-muted-foreground uppercase tracking-widest mb-8">{t.desc}</p>
+            <p className="text-[10px] text-center text-muted-foreground uppercase tracking-widest mb-5 sm:mb-8">{t.desc}</p>
 
-            <div className="grid gap-2 mb-8">
+            <div className="grid gap-2 mb-5 sm:mb-8">
                 {Array.from({ length: maxGuesses }).map((_, i) => {
                     const guess = guesses[i] || (i === guesses.length ? currentGuess : '');
                     const isSubmitted = i < guesses.length;

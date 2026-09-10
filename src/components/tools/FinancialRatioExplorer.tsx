@@ -126,7 +126,7 @@ export default function FinancialRatioExplorer({ locale }: Props) {
   );
 
   return (
-    <div className="not-prose my-8 space-y-6">
+    <div className="not-prose my-5 sm:my-8 space-y-6">
       <div className="text-center">
         <h2 className="text-xl font-black text-gray-900">{t.title}</h2>
         <p className="text-sm text-gray-500">{t.subtitle}</p>

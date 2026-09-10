@@ -23,10 +23,10 @@ const RentalYieldCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'k
 
     return (
         <GameContainer title={t.title} subtitle="Investment Efficiency Analytics" onReset={() => { setPrice(500000000); setDeposit(50000000); setRent(2000000); setLoan(200000000); setLoanRate(4.5); }}>
-            <div className="flex flex-col gap-10">
+            <div className="flex flex-col gap-6 sm:gap-10">
                 <p className="text-sm font-medium text-muted-foreground text-center">{t.desc}</p>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8">
                     <div className="space-y-4">
                         <div className="space-y-2">
                             <label className="text-[10px] font-black text-muted-foreground uppercase">{t.price}</label>
@@ -57,9 +57,9 @@ const RentalYieldCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'k
                 </div>
 
                 <div className="p-5 sm:p-10 bg-foreground rounded-[40px] text-background animate-in zoom-in-95 shadow-2xl relative overflow-hidden">
-                    <h4 className="text-center text-[10px] font-black text-background/60 uppercase tracking-[0.2em] mb-8">{t.result}</h4>
+                    <h4 className="text-center text-[10px] font-black text-background/60 uppercase tracking-[0.2em] mb-5 sm:mb-8">{t.result}</h4>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center relative z-10">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-7 sm:gap-12 items-center relative z-10">
                         <div className="text-center md:text-left space-y-2">
                             <p className="text-xs text-background/50 font-medium uppercase">{t.netYield}</p>
                             <h2 className="text-5xl font-black text-primary">{yieldRate.toFixed(2)}%</h2>

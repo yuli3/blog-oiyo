@@ -337,7 +337,7 @@ export const FinancialStatementAnalyzer: React.FC = () => {
   // ── Render ─────────────────────────────────────────────────────────────────
 
   return (
-    <Card className="bg-white border border-emerald-100 shadow-xl rounded-2xl overflow-hidden mt-8">
+    <Card className="bg-white border border-emerald-100 shadow-xl rounded-2xl overflow-hidden mt-5 sm:mt-8">
       {/* Header */}
       <div className="bg-emerald-700 px-4 sm:px-6 py-5">
         <h3 className="text-lg font-bold text-white">재무제표 분석기</h3>
@@ -792,7 +792,7 @@ export const FinancialRatioTrendAnalyzer: React.FC<{ locale?: 'ko' | 'en' }> = (
   const ratios = React.useMemo(() => calcRatios(years), [years]);
 
   return (
-    <div className="not-prose my-12 p-6 md:p-8 bg-gradient-to-br from-emerald-50 to-green-50 border border-emerald-200 rounded-3xl shadow-xl">
+    <div className="not-prose my-7 sm:my-12 p-6 md:p-8 bg-gradient-to-br from-emerald-50 to-green-50 border border-emerald-200 rounded-3xl shadow-xl">
       <h3 className="text-xl font-bold text-emerald-900 mb-2">
         {locale === 'ko' ? '재무비율 추세 분석기' : 'Financial Ratio Trend Analyzer'}
       </h3>

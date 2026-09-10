@@ -95,13 +95,13 @@ export const AttachmentTest: React.FC = () => {
     };
 
     return (
-        <Card className="p-4 sm:p-8 bg-white border-slate-200 shadow-2xl mt-8 min-h-[450px] flex flex-col justify-center overflow-hidden relative">
+        <Card className="p-4 sm:p-8 bg-white border-slate-200 shadow-2xl mt-5 sm:mt-8 min-h-[450px] flex flex-col justify-center overflow-hidden relative">
             <div className="absolute top-0 right-0 p-4 sm:p-8 opacity-5">
                 <Heart size={150} fill="currentColor" className="text-rose-200" />
             </div>
 
             {!result ? (
-                <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 relative z-10">
+                <div className="space-y-5 sm:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 relative z-10">
                     <div className="flex items-center gap-2 mb-4 justify-center">
                         <Heart className="text-rose-500 fill-rose-500" />
                         <h3 className="text-xl font-bold text-slate-900">나의 연애 애착 유형 테스트</h3>
@@ -126,7 +126,7 @@ export const AttachmentTest: React.FC = () => {
                     </div>
                 </div>
             ) : (
-                <div className="text-center space-y-8 animate-in zoom-in duration-500 relative z-10 p-4">
+                <div className="text-center space-y-5 sm:space-y-8 animate-in zoom-in duration-500 relative z-10 p-4">
                     <div className="flex justify-center mb-4">
                         <div className={`p-4 sm:p-6 rounded-full ${result.color} shadow-lg`}>
                             {result.icon}
@@ -144,7 +144,7 @@ export const AttachmentTest: React.FC = () => {
                         <Button onClick={reset} variant="outline" className="rounded-full px-5 sm:px-10 border-2 hover:bg-slate-50 font-bold">테스트 다시하기</Button>
                     </div>
 
-                    <p className="text-[10px] text-slate-400 mt-8 italic">
+                    <p className="text-[10px] text-slate-400 mt-5 sm:mt-8 italic">
                         * 이 테스트는 성인 애착 유형 이론(Adult Attachment Theory)을 기반으로 oiyo.net에서 재구성한 간이 진단입니다.
                     </p>
                 </div>
@@ -439,12 +439,12 @@ export const MBTIQuickTest: React.FC<{ locale?: "ko" | "en" | "ja" }> = ({ local
     };
 
     return (
-        <Card className="p-4 sm:p-8 bg-white border-slate-200 shadow-2xl mt-8 min-h-[460px] flex flex-col justify-center overflow-hidden relative">
+        <Card className="p-4 sm:p-8 bg-white border-slate-200 shadow-2xl mt-5 sm:mt-8 min-h-[460px] flex flex-col justify-center overflow-hidden relative">
             <div className="absolute -top-12 -right-10 w-40 h-40 rounded-full bg-emerald-100/50 blur-2xl" />
             <div className="absolute -bottom-12 -left-10 w-40 h-40 rounded-full bg-indigo-100/50 blur-2xl" />
 
             {!result ? (
-                <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 relative z-10">
+                <div className="space-y-5 sm:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 relative z-10">
                     <div className="flex items-center gap-2 mb-4 justify-center">
                         <Compass className="text-emerald-500" />
                         <h3 className="text-xl font-black text-slate-900">{active.title}</h3>
@@ -477,7 +477,7 @@ export const MBTIQuickTest: React.FC<{ locale?: "ko" | "en" | "ja" }> = ({ local
                     </div>
                 </div>
             ) : (
-                <div className="text-center space-y-8 animate-in zoom-in duration-500 relative z-10 p-4">
+                <div className="text-center space-y-5 sm:space-y-8 animate-in zoom-in duration-500 relative z-10 p-4">
                     <div className="flex justify-center mb-4">
                         <div className="p-4 sm:p-6 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 shadow-lg">
                             <Compass className="w-12 h-12" />
@@ -506,7 +506,7 @@ export const MBTIQuickTest: React.FC<{ locale?: "ko" | "en" | "ja" }> = ({ local
                         </Button>
                     </div>
 
-                    <p className="text-[10px] text-slate-400 mt-8 italic">
+                    <p className="text-[10px] text-slate-400 mt-5 sm:mt-8 italic">
                         {active.footer}
                     </p>
                 </div>
