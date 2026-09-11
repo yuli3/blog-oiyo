@@ -35,16 +35,14 @@ Why use a database instead of plain files?
 
 ## Relational Database (RDBMS)
 
-```
 Core concepts:
-Table:         rows (records) + columns (fields/attributes)
-Primary Key (PK): uniquely identifies each row
-Foreign Key (FK):  references a PK in another table → expresses relationships
+- **Table**: rows (records) + columns (fields/attributes)
+- **Primary Key (PK)**: uniquely identifies each row
+- **Foreign Key (FK)**: references a PK in another table → expresses relationships
 
-Example: Orders table
-OrderID (PK) | CustomerID (FK) | ProductID (FK) | OrderDate  | Amount
-001          | C001            | P005           | 2026-01-01 | $500
-```
+- **Example**: Orders table
+OrderID (PK) | CustomerID (FK) | ProductID (FK) | OrderDate · | Amount
+001 · | C001 · | P005 · | 2026-01-01 | $500
 
 ---
 
@@ -83,18 +81,16 @@ WHERE orders.amount > 1000;
 
 A design principle to reduce redundancy and improve data integrity:
 
-```
-1NF (First Normal Form):   each column holds atomic values (no arrays)
-2NF (Second Normal Form):  remove partial functional dependencies
-3NF (Third Normal Form):   remove transitive functional dependencies
+- **1NF (First Normal Form)**: each column holds atomic values (no arrays)
+- **2NF (Second Normal Form)**: remove partial functional dependencies
+- **3NF (Third Normal Form)**: remove transitive functional dependencies
 
-Example: a de-normalized orders table
+- **Example**: a de-normalized orders table
 OrderID | CustomerName | CustomerAddress | ProductName | ProductPrice
-→ Split customer and product info into their own tables
+- Split customer and product info into their own tables
 
-Benefits of normalization:  eliminates redundancy, ensures consistency
-Benefits of denormalization: fewer joins → better read performance (trade-off)
-```
+- **Benefits of normalization**: eliminates redundancy, ensures consistency
+- **Benefits of denormalization**: fewer joins → better read performance (trade-off)
 
 ---
 
@@ -123,47 +119,50 @@ Benefits of denormalization: fewer joins → better read performance (trade-off)
 
 ## Transaction (ACID)
 
-```
-Atomicity:
-→ All-or-nothing: no partial success
-→ Bank transfer: debit succeeds + credit succeeds, or both are rolled back
+**Atomicity:**
 
-Consistency:
-→ Data integrity is maintained before and after the transaction
-→ Total balance remains unchanged
+- **All-or-nothing**: no partial success
+- **Bank transfer**: debit succeeds + credit succeeds, or both are rolled back
 
-Isolation:
-→ Concurrent transactions minimize interference with each other
+**Consistency:**
 
-Durability:
-→ Committed data persists even after a system failure
+- Data integrity is maintained before and after the transaction
+- Total balance remains unchanged
 
-SQL transaction example:
+**Isolation:**
+
+- Concurrent transactions minimize interference with each other
+
+**Durability:**
+
+- Committed data persists even after a system failure
+
+**SQL transaction example:**
+
 BEGIN;
 UPDATE accounts SET balance = balance - 1000 WHERE account_id = 'A';
 UPDATE accounts SET balance = balance + 1000 WHERE account_id = 'B';
 COMMIT;  -- or ROLLBACK on error
-```
 
 ---
 
 ## NoSQL vs. Relational DB
 
-```
-Relational DB: structured data, fixed schema, complex relationships, ACID
-NoSQL:         unstructured/semi-structured, flexible schema, horizontal scaling
+- **Relational DB**: structured data, fixed schema, complex relationships, ACID
+- **NoSQL**: unstructured/semi-structured, flexible schema, horizontal scaling
 
-NoSQL types:
-Document DB:   MongoDB — stores JSON documents (flexible schema)
-Key-Value DB:  Redis — cache, session storage (ultra-fast)
-Column DB:     Cassandra — large-scale time-series data
-Graph DB:      Neo4j — social networks, recommendation engines
+**NoSQL types:**
 
-When to choose:
-→ Clear data structure with complex relationships: RDBMS
-→ Rapid scaling, flexible schema: NoSQL
-→ In practice: hybrid usage is common
-```
+- **Document DB**: MongoDB — stores JSON documents (flexible schema)
+- **Key-Value DB**: Redis — cache, session storage (ultra-fast)
+- **Column DB**: Cassandra — large-scale time-series data
+- **Graph DB**: Neo4j — social networks, recommendation engines
+
+**When to choose:**
+
+- Clear data structure with complex relationships: RDBMS
+- **Rapid scaling, flexible schema**: NoSQL
+- **In practice**: hybrid usage is common
 
 ---
 
