@@ -7,7 +7,7 @@ import RelatedToolLinks from "./RelatedToolLinks.astro";
 import { getTranslations } from "../lib/i18n";
 import type { Locale } from "../lib/i18n";
 import { buildSeriesIndex, groupSeriesByCategory, isRedirectStub } from "../lib/wiki-index";
-import { PRIORITY_SERIES, prioritySeriesName, deriveSeriesLabel } from "../data/priority-series";
+import { PRIORITY_SERIES, seriesDisplayName } from "../data/priority-series";
 import { slugifyCategory } from "../lib/taxonomy";
 import { firstChapterSlugs } from "../lib/related-next";
 
@@ -89,7 +89,7 @@ const chapterWord = L("chapters", "chapters");
                   {list.slice(0, 8).map((s) => (
                     <li>
                       <a href={`/${locale}/${s.firstPost.slug.split("/").slice(1).join("/")}/`} class="flex min-w-0 items-baseline gap-1 py-1 text-[13px] text-muted-foreground hover:text-primary transition-colors">
-                        <span class="truncate">{prioritySeriesName(s.key, locale) ?? deriveSeriesLabel(s.firstPost.data.title, s.key)}</span>
+                        <span class="truncate">{seriesDisplayName(s.key, locale, s.firstPost.data.title)}</span>
                         <span class="tabular-nums text-muted-foreground/50 shrink-0">{s.chapterCount}</span>
                       </a>
                     </li>
@@ -111,7 +111,7 @@ const chapterWord = L("chapters", "chapters");
             <section aria-labelledby={`sec-${s.key}`}>
               <div class="flex items-baseline justify-between gap-3 border-b border-border mb-4 pb-2">
                 <h2 id={`sec-${s.key}`} class="min-w-0 truncate text-lg font-bold tracking-tight text-foreground">
-                  {prioritySeriesName(s.key, locale) ?? deriveSeriesLabel(s.firstPost.data.title, s.key)}
+                  {seriesDisplayName(s.key, locale, s.firstPost.data.title)}
                 </h2>
                 <div class="flex items-baseline gap-3 shrink-0">
                   <span class="text-xs tabular-nums text-muted-foreground/70 whitespace-nowrap">{s.chapterCount} {chapterWord}</span>

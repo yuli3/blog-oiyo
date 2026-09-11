@@ -40,7 +40,9 @@ export const PRIORITY_SERIES_NAMES: Partial<Record<string, Record<string, string
     zh: "经济学", fr: "Économie", es: "Economía",
   },
   "business-basics": {
-    ko: "경영학", en: "Business", ja: "経営学",
+    // B1 (2026-09-11): KO aligns with chapter「공기업 경영학」prefix; EN preferred public-enterprise framing.
+    // JA/ZH/FR/ES left for Translator gate (non-KO).
+    ko: "공기업 경영학", en: "Public Enterprise Management", ja: "経営学",
     zh: "管理学", fr: "Gestion", es: "Gestión",
   },
   "psychology-basics": {
@@ -91,4 +93,28 @@ export function deriveSeriesLabel(title: string | undefined, slug: string): stri
     return dashIdx === -1 ? title : title.slice(0, dashIdx).trim();
   }
   return prettifySlug(slug);
+}
+
+/**
+ * Locked display-name order for series surfaces (B3, 2026-09-11):
+ * 1. prioritySeriesName map hit
+ * 2. non-URL-safe key → use key itself (FM series is already a human label)
+ * 3. else deriveSeriesLabel(firstPost.title, key)
+ *
+ * Does NOT rename chapter titles.
+ */
+/** Must stay in sync with isUrlSafeSeriesKey() in src/lib/wiki-index.ts. */
+function isUrlSafeSeriesKeyLocal(key: string): boolean {
+  return /^[a-z0-9]+(-[a-z0-9]+)*$/.test(key);
+}
+
+export function seriesDisplayName(
+  key: string,
+  locale: string,
+  firstPostTitle?: string,
+): string {
+  const mapped = prioritySeriesName(key, locale);
+  if (mapped) return mapped;
+  if (!isUrlSafeSeriesKeyLocal(key)) return key;
+  return deriveSeriesLabel(firstPostTitle, key);
 }
