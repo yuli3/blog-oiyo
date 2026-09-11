@@ -1,0 +1,24 @@
+---
+import type { SeriesEntry } from "../lib/wiki-index";
+import SeriesCard from "./SeriesCard.astro";
+
+interface Props {
+  seriesList: SeriesEntry[];
+  locale: string;
+  chaptersLabel: string;
+  ctaLabel: string;
+}
+
+const { seriesList, locale, chaptersLabel, ctaLabel } = Astro.props;
+---
+
+<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+  {seriesList.map((s) => (
+    <SeriesCard
+      series={s}
+      locale={locale}
+      chaptersLabel={chaptersLabel}
+      ctaLabel={ctaLabel}
+    />
+  ))}
+</div>
