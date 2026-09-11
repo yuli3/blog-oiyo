@@ -35,11 +35,9 @@ Introduced by Ian Goodfellow in 2014, GANs are an elegant two-model system.
 
 ### The Adversarial Game
 
-```
-Generator ←→ Discriminator
-Creates fake data    Classifies real vs. fake
-↓ Learns to fool     ↓ Learns to detect
-```
+- **Generator** ↔ **Discriminator**
+- Generator: Creates fake data → Learns to fool
+- Discriminator: Classifies real vs. fake → Learns to detect
 
 - **Generator**: Random noise → fake image. Goal: fool the discriminator
 - **Discriminator**: Real vs. fake. Goal: not be fooled
@@ -64,13 +62,16 @@ Creates fake data    Classifies real vs. fake
 
 ### Core Idea: Learn to Denoise
 
-```
-Training:
-Clean image → Gradually add Gaussian noise T times → Pure noise
-                ↓ Learn to reverse this process
-Generation:
-Pure random noise → Gradually remove noise T times → Generated image
-```
+**Training:**
+1. Clean image
+2. Gradually add Gaussian noise T times
+3. Pure noise
+4. Learn to reverse this process
+
+**Generation:**
+1. Pure random noise
+2. Gradually remove noise T times
+3. Generated image
 
 1. **Forward process**: Progressively add Gaussian noise to a clean image over T steps
 2. **Backward process (learning)**: Train a neural network to predict the noise added at each step
@@ -88,12 +89,10 @@ GPT (Generative Pre-trained Transformer) is the architecture behind ChatGPT, Cla
 
 ### How It Works
 
-```
-Input: "The capital of France is"
-Output: " Paris"  (predict next token)
-        " , a"    (predict next token, given all previous tokens)
-        ...
-```
+- **Input**: "The capital of France is"
+- **Output**: " Paris"  (predict next token)
+" , a"    (predict next token, given all previous tokens)
+...
 
 **Autoregressive generation**: repeatedly predict the next token conditioned on all previously generated tokens.
 

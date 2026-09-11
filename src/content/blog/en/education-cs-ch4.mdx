@@ -84,20 +84,18 @@ The OS decides which process gets CPU time:
 
 ## Synchronization Issues — Race Conditions
 
-```
 Race Condition:
 Two threads access the same resource simultaneously → unpredictable results
 
 Example:
 count = 0
-Thread A: count = count + 1  (read → compute → write)
-Thread B: count = count + 1  (runs concurrently)
-→ Result might be count = 1  (should be 2)
+- **Thread A**: count = count + 1  (read → compute → write)
+- **Thread B**: count = count + 1  (runs concurrently)
+- Result might be count = 1  (should be 2)
 
 Solutions:
-Mutex:     only one thread can access at a time
-Semaphore: allows up to n threads simultaneously
-```
+- **Mutex**: only one thread can access at a time
+- **Semaphore**: allows up to n threads simultaneously
 
 ### Deadlock
 
@@ -118,41 +116,43 @@ Semaphore: allows up to n threads simultaneously
 
 ## Memory Management
 
-```
-Virtual Memory:
-→ Creates the illusion of a larger address space than physical RAM
-→ Only the needed portion is loaded into RAM at any time
-→ The rest resides on disk (swap space)
+**Virtual Memory:**
 
-Page Replacement Algorithms:
-LRU (Least Recently Used): replace the page not used for the longest time — most widely used
-FIFO: replace the oldest page
-Optimal: requires knowing future references — theoretical only
+- Creates the illusion of a larger address space than physical RAM
+- Only the needed portion is loaded into RAM at any time
+- The rest resides on disk (swap space)
 
-Cache hierarchy (fast → slow, small → large):
+**Page Replacement Algorithms:**
+
+- **LRU (Least Recently Used)**: replace the page not used for the longest time — most widely used
+- **FIFO**: replace the oldest page
+- **Optimal**: requires knowing future references — theoretical only
+
+**Cache hierarchy (fast → slow, small → large):**
+
 Registers (ps) → L1 Cache (1ns) → L2 Cache (5ns) → L3 (20ns)
-→ RAM (100ns) → SSD (100µs) → HDD (10ms)
-```
+- RAM (100ns) → SSD (100µs) → HDD (10ms)
 
 ---
 
 ## File System
 
-```
-File system roles:
-→ Manages the logical structure of files and directories
-→ Allocates and tracks storage device blocks
+**File system roles:**
 
-Common file systems:
-FAT32: legacy Windows, USB drives (4 GB file size limit)
-NTFS:  modern Windows (large files, security, journaling)
-ext4:  Linux default
-APFS:  macOS (encryption, snapshots)
+- Manages the logical structure of files and directories
+- Allocates and tracks storage device blocks
 
-inode (Linux):
-→ Stores file metadata (size, permissions, timestamps, data block pointers)
-→ Filename ≠ inode (hard links are possible because of this)
-```
+**Common file systems:**
+
+- **FAT32**: legacy Windows, USB drives (4 GB file size limit)
+- **NTFS**: modern Windows (large files, security, journaling)
+- **ext4**: Linux default
+- **APFS**: macOS (encryption, snapshots)
+
+**inode (Linux):**
+
+- Stores file metadata (size, permissions, timestamps, data block pointers)
+- Filename ≠ inode (hard links are possible because of this)
 
 ---
 

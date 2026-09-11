@@ -30,7 +30,7 @@ Basic functions (SUM, AVERAGE, IF) can't handle the more complex requirements of
 
 ### Basic VLOOKUP structure
 
-```
+```vb
 =VLOOKUP(lookup_value, range, column_index, [match_type])
 ```
 
@@ -58,7 +58,7 @@ Basic functions (SUM, AVERAGE, IF) can't handle the more complex requirements of
 ### VLOOKUP's 3 limitations
 
 **Limitation 1: no lookups to the left**
-```
+```text
 Can only search the first column of the range
 → VLOOKUP can't find an employee ID by looking up a name
 ```
@@ -80,7 +80,7 @@ If the lookup value appears more than once, only the first match is returned
 
 **INDEX**: returns the value at a specific position within a range
 
-```
+```vb
 =INDEX(range, row_num, [col_num])
 
 =INDEX(B2:B100, 5)     → the 5th value in the range B2:B100
@@ -89,7 +89,7 @@ If the lookup value appears more than once, only the first match is returned
 
 **MATCH**: returns the position (row/column number) of a lookup value within a range
 
-```
+```vb
 =MATCH(lookup_value, range, [match_type])
 
 =MATCH("Alex Kim", A2:A100, 0)  → returns the row number where "Alex Kim" is found
@@ -98,7 +98,7 @@ match_type: 0 = exact match (used in most cases)
 
 ### Combining INDEX + MATCH
 
-```
+```vb
 =INDEX(return_range, MATCH(lookup_value, search_range, 0))
 ```
 
@@ -120,7 +120,7 @@ match_type: 0 = exact match (used in most cases)
 ### INDEX+MATCH in practice
 
 **Dual-condition lookup (array formula):**
-```
+```vb
 Find the salary where both department and title match:
 =INDEX(D2:D100,
   MATCH(1, (B2:B100="Sales")*(C2:C100="Manager"), 0))
@@ -128,7 +128,7 @@ Enter with Ctrl+Shift+Enter
 ```
 
 **Dynamic column selection:**
-```
+```vb
 Find a column dynamically by header name:
 =INDEX(A1:F100,
   MATCH("Alex Kim", A1:A100, 0),
@@ -143,14 +143,14 @@ Find a column dynamically by header name:
 
 ### IF basics, revisited
 
-```
+```vb
 =IF(condition, value_if_true, value_if_false)
 =IF(A1>=60, "Pass", "Fail")
 ```
 
 ### Nested IF (3-tier example)
 
-```
+```vb
 Assigning a grade based on a score:
 =IF(A1>=90, "A",
   IF(A1>=80, "B",
@@ -162,7 +162,7 @@ Assigning a grade based on a score:
 
 ### The IFS function (Excel 2019+)
 
-```
+```vb
 =IFS(condition1, value1, condition2, value2, ..., TRUE, default)
 
 =IFS(A1>=90, "A",
@@ -183,7 +183,7 @@ Assigning a grade based on a score:
 
 ### The SWITCH function (exact value matching)
 
-```
+```vb
 =SWITCH(expression,
   value1, result1,
   value2, result2,
@@ -210,7 +210,7 @@ AVERAGEIF(range, criteria, [average_range])
 
 **Real-world examples:**
 
-```
+```vb
 Total revenue from the New York region:
 =SUMIF(B2:B100, "New York", D2:D100)
 
@@ -231,7 +231,7 @@ COUNTIFS(criteria_range1, criteria1, criteria_range2, criteria2, ...)
 
 **Real-world examples:**
 
-```
+```vb
 Revenue from New York + Sales:
 =SUMIFS(D2:D100, B2:B100, "New York", A2:A100, "Sales")
 
@@ -282,7 +282,7 @@ Units sold of a specific product in a specific period:
 
 ### IFNA — handles only #N/A errors
 
-```
+```vb
 =IFNA(formula, value_if_na)
 
 =IFNA(MATCH(A2, B2:B100, 0), "Not registered")
@@ -295,7 +295,7 @@ Units sold of a specific product in a specific period:
 
 ### Basic usage
 
-```
+```vb
 =TEXT(value, format_code)
 ```
 
@@ -334,7 +334,7 @@ Units sold of a specific product in a specific period:
 
 ### A complete replacement for VLOOKUP
 
-```
+```vb
 =XLOOKUP(lookup_value, lookup_array, return_array,
   [if_not_found], [match_mode], [search_mode])
 ```
@@ -345,7 +345,7 @@ Units sold of a specific product in a specific period:
 - Built-in handling for #N/A
 - Supports reverse-direction search
 
-```
+```vb
 Find an employee ID by name (a left-ward lookup):
 =XLOOKUP("Alex Kim", C2:C100, A2:A100, "Not found")
 
