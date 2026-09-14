@@ -14,14 +14,10 @@
  * Supersedes the earlier static chapter-count proxy.
  */
 export const PRIORITY_SERIES = [
-  "zoology-basics",
-  "economics-basics",
-  "music-history",
-  "academy-economics-core",
   "business-basics",
-  "myth-dictionary",
-  "public-administration-basics",
-  "calculus",
+  "economics-introduction",
+  "accounting-basics",
+  "qualification-roadmaps",
 ] as const;
 
 export type PrioritySeriesKey = (typeof PRIORITY_SERIES)[number];
@@ -35,9 +31,9 @@ export const PRIORITY_SERIES_NAMES: Partial<Record<string, Record<string, string
     ko: "신화 사전", en: "Myth Dictionary", ja: "神話事典",
     zh: "神话词典", fr: "Dictionnaire des mythes", es: "Diccionario de mitos",
   },
-  "economics-basics": {
-    ko: "경제학", en: "Economics", ja: "経済学",
-    zh: "经济学", fr: "Économie", es: "Economía",
+  "economics-introduction": {
+    ko: "경제학개론", en: "Introduction to Economics", ja: "経済学概論",
+    zh: "经济学概论", fr: "Introduction à l’économie", es: "Introducción a la economía",
   },
   "business-basics": {
     ko: "경영학", en: "Business", ja: "経営学",
@@ -50,6 +46,10 @@ export const PRIORITY_SERIES_NAMES: Partial<Record<string, Record<string, string
   "accounting-basics": {
     ko: "회계학", en: "Accounting", ja: "会計学",
     zh: "会计学", fr: "Comptabilité", es: "Contabilidad",
+  },
+  "qualification-roadmaps": {
+    ko: "시험", en: "Exams", ja: "試験",
+    zh: "考试", fr: "Examens", es: "Exámenes",
   },
   "english-grammar": {
     ko: "영어 문법", en: "English Grammar", ja: "英語文法",

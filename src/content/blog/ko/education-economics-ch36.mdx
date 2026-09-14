@@ -1,0 +1,83 @@
+---
+track: academy
+series: international-finance
+chapter: 1
+title: "국제금융론 — 환율 결정: 실질환율·구매력평가·이자율평가"
+description: "원/달러 표시법에서 절상·절하를 구분하고 실질환율, 구매력평가, 무위험 이자율평가와 위험프리미엄을 계산해 장·단기 환율을 분석합니다."
+pubDate: 2026-09-14
+category: Economics
+tags: ["경제학", "환율", "구매력평가", "이자율평가", "실질환율"]
+locale: ko
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 국제금융론 — 환율은 표시법부터 확인한다
+
+`원/달러` 환율은 1달러를 사는 데 필요한 원화다. 이 값이 1,300에서 1,400으로 오르면 달러가 비싸지고 원화는 절하된다. “환율 상승=자국통화 강세”로 읽는 오류는 어느 통화를 분자에 두었는지 확인하지 않아서 생긴다.
+
+## 1. 명목환율과 실질환율을 구분한다
+
+원/달러 명목환율을 `E`, 미국 물가를 `P*`, 한국 물가를 `P`라 두면 실질환율을 다음처럼 정의할 수 있다.
+
+<FormulaBox
+  label="실질환율"
+  formula="q=E\frac{P^*}{P}"
+  description="q 상승은 이 표시법에서 외국재 대비 국내재의 상대가격 하락, 즉 실질절하를 뜻한다."
+/>
+
+`E=1300`, 미국 가격 100달러, 같은 한국 상품 가격 156,000원이면 `q=1300×100/156000≈0.833`이다. 명목환율이 10% 올라도 한국 물가가 미국보다 같은 만큼 더 오르면 실질환율은 거의 변하지 않을 수 있다.
+
+## 2. 구매력평가는 장기 기준점이지 단기 예측기가 아니다
+
+절대적 구매력평가는 동일 상품 바구니의 가격을 환산했을 때 같아지는 환율을 말한다. 상대적 구매력평가는 두 국가의 인플레이션 차이가 환율 변화율에 반영된다고 본다.
+
+<FormulaBox
+  label="상대적 구매력평가의 근사"
+  formula="\frac{\Delta E}{E}\approx \pi-\pi^*"
+  description="국내 인플레이션이 해외보다 높으면 원/외화 환율이 상승해 국내통화가 절하되는 방향이다."
+/>
+
+운송비, 관세, 비교역재, 품질 차이와 시장지배력 때문에 일물일가는 단기에 잘 성립하지 않는다. 생산성이 높은 국가의 비교역재 가격이 높은 Balassa–Samuelson 효과도 단순 PPP 편차를 설명한다.
+
+## 3. 단기 환율은 자산수익률과 기대에 민감하다
+
+무위험 이자율평가에서 국내채권 수익과 환헤지한 해외채권 수익이 같아야 차익거래 기회가 사라진다.
+
+<FormulaBox
+  label="커버드 이자율평가"
+  formula="1+i=(1+i^*)\frac{F}{E}"
+  description="F는 선물환율이다. 거래비용과 신용·자금조달 제약이 없다는 조건이 필요하다."
+/>
+
+미국금리 4%, 한국금리 3%, 현물환율 1,300원이라면 근사 선물환율은 `1300×1.03/1.04≈1287.5원`이다. 선물환이 이 관계에서 크게 벗어나면 차익거래가 작동하지만, 위기에는 달러 조달비용과 대차대조표 제약으로 괴리가 지속될 수 있다.
+
+## 4. 금리 인상과 통화가치의 관계는 조건부다
+
+예상환율과 위험프리미엄이 고정되어 있다면 국내금리 상승은 국내자산 수요를 높여 통화절상 압력을 만든다. 그러나 금리 인상이 국가위험 상승에 대한 반응이라면 위험프리미엄이 더 크게 올라 통화가 오히려 약세일 수 있다. 정책 원인과 시장 반응을 함께 봐야 한다.
+
+<LectureTable
+  title="환율을 움직이는 서로 다른 충격"
+  headers={["충격", "단기 경로", "장기 확인점"]}
+  rows={[
+    ["국내 인플레이션 상승", "기대·금리반응에 의존", "PPP상 절하 압력"],
+    ["국내금리 상승", "자본유입 가능", "정책 원인·위험프리미엄"],
+    ["수출수요 증가", "외화공급 증가", "생산능력·수입유발"],
+    ["위험회피 강화", "안전자산 선호", "통화별 안전자산 지위"],
+  ]}
+/>
+
+<Callout type="warning">
+환율 상승이 수출을 반드시 늘리고 경상수지를 즉시 개선한다는 결론은 가격 전가, 계약통화, 수출입 탄력성, 생산능력과 시차를 생략한다. 이 조건은 다음 장에서 다룬다.
+</Callout>
+
+## 참고 자료
+
+- 한국은행, [경제통계시스템 ECOS](https://ecos.bok.or.kr/)
+- Bank for International Settlements, [Effective exchange rates](https://www.bis.org/statistics/eer.htm)
+- IMF, [International Financial Statistics](https://data.imf.org/IFS)

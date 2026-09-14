@@ -54,7 +54,7 @@ const multiChapterKeys = await getMultiChapterSeriesKeys(locale);
         posts.map((post, i) => {
           const slug = post.slug.split("/").slice(1).join("/");
           const href = `/${locale}/${slug}/`;
-          const ch = post.slug.match(/-ch(\d+)$/)?.[1];
+          const ch = post.data.chapter ?? post.slug.match(/-ch(\d+)$/)?.[1];
           const sKey = seriesKeyOf(post);
           const seriesLabel = prioritySeriesName(sKey, locale) ?? deriveSeriesLabel(post.data.title, sKey);
           return (

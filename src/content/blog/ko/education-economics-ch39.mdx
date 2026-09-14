@@ -1,71 +1,93 @@
 ---
 track: academy
-series: economics-basics
-chapter: 39
-title: "경제학 — IS-LM 모형 — 거시경제 정책의 상호작용"
-description: "재화시장(IS)과 화폐시장(LM)의 동시 균형을 분석하는 거시경제학의 정수를 배웁니다. 인터랙티브 시뮬레이션으로 재정정책과 통화정책의 효과를 직접 확인해 보세요."
+series: macroeconomics
+chapter: 23
+title: "거시경제학 — IS-LM 연립해와 재정·통화정책 비교정태"
+description: "소비·투자·화폐수요 함수에서 IS와 LM을 도출하고 연립방정식으로 균형소득과 이자율, 정책승수와 구축효과를 계산합니다."
 pubDate: 2026-04-14
+updatedDate: 2026-09-14
 category: Economics
-tags:
-  - Education
-  - 경제학
-  - IS-LM
-  - 재정정책
-  - 통화정책
+tags: ["경제학", "IS-LM", "비교정태", "재정정책", "통화정책"]
 locale: ko
 author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+embeddedTools: ["IS-LM 시뮬레이터"]
 ---
 
-import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 import { ISLMSimulator } from "@/features/education-calculators/EconomicSimulators";
 
-# IS-LM 모형: 정책의 시나리오
+# 거시경제학 — IS-LM을 연립방정식으로 풀기
 
-거시경제학에서 정책의 효과를 분석할 때 가장 먼저 꺼내는 도구가 바로 **IS-LM 모형**입니다. 영국의 경제학자 존 힉스(John Hicks)가 케인즈의 『일반이론』을 도식화하며 정립된 이 모형은 실물 경제(재화 시장)와 금융 경제(화폐 시장)가 어떻게 연결되는지 보여줍니다.
+제18장과 제28장에서 정책 방향을 비교했다. 이 장에서는 그 화살표를 소비·투자·화폐수요 함수에서 직접 도출한다. IS-LM은 단기 가격수준이 주어진 폐쇄경제 모형이며, 산출과 이자율의 동시 결정을 설명한다.
 
----
+## 1. 재화시장 균형에서 IS를 도출한다
 
-## 1. IS 곡선 (Investment-Saving)
+`C=C₀+c(Y-T)`, `I=I₀-bi`이고 정부지출이 `G`일 때 재화시장 균형은 다음과 같다.
 
-재화 시장의 균형을 나타냅니다. 소득(Y)이 증가하면 저축이 늘어나고, 투자가 그와 균형을 이루려면 이자율(r)이 낮아져야 합니다. 따라서 **우하향**하는 형태를 띱니다.
+<FormulaBox
+  label="IS 곡선"
+  formula="Y=C_0+c(Y-T)+I_0-bi+G \Rightarrow Y=\frac{C_0-cT+I_0+G-bi}{1-c}"
+  description="이자율이 오르면 투자가 줄어 균형산출이 낮아지므로 IS는 우하향한다."
+/>
 
-- **이동 요인**: 정부 지출(G) 증가나 조세(T) 감소 등 재정정책에 의해 이동합니다.
+정부지출 증가, 감세, 소비·투자 기대 개선은 각 이자율에서 계획지출을 높여 IS를 오른쪽으로 이동시킨다. 이자율 변화에 따른 산출 변화는 곡선상 이동이다.
 
----
+## 2. 화폐시장 균형에서 LM을 도출한다
 
-## 2. LM 곡선 (Liquidity preference-Money supply)
+실질화폐수요를 `L=kY-hi`, 실질화폐공급을 `M/P`라 두면 다음과 같다.
 
-화폐 시장의 균형을 나타냅니다. 소득(Y)이 증가하면 거래적 화폐 수요가 늘어나고, 화폐 공급이 일정할 때 균형을 맞추려면 이자율(r)이 올라가야 합니다. 따라서 **우상향**하는 형태를 띱니다.
+<FormulaBox
+  label="LM 곡선"
+  formula="\frac{M}{P}=kY-hi \Rightarrow i=\frac{k}{h}Y-\frac{M/P}{h}"
+  description="소득이 오르면 거래수요가 늘어 주어진 실질통화량에서 이자율이 상승하므로 LM은 우상향한다."
+/>
 
-- **이동 요인**: 중앙은행의 통화 공급량(M) 변화에 의해 이동합니다.
+명목통화량 증가 또는 물가 하락은 실질공급을 늘려 LM을 아래·오른쪽으로 이동시킨다.
 
----
+## 3. 연립해로 정책승수를 계산한다
 
-## 3. 인터랙티브 정책 시뮬레이터
+`C=100+0.8(Y-100)`, `I=150-10i`, `G=100`, `M/P=200`, `L=0.5Y-20i`라고 하자. 두 균형식은 `IS: Y=1350-50i`, `LM: Y=400+40i`가 된다. 연립하면 `i≈10.56`, `Y≈822.22`다.
 
-아래 시뮬레이터의 슬라이더를 조절하여 각 정책이 경제 전체의 소득과 이자율에 어떤 영향을 미치는지 확인해 보세요.
-
-<ISLMSimulator client:visible />
-
-<Callout type="info">
-**구축 효과(Crowding-out Effect)**: 정부 지출(G)을 늘려 IS곡선을 우측으로 이동시키면 소득(Y)이 증가하지만, 동시에 이자율(r)도 상승합니다. 이자율 상승은 민간 투자를 위축시켜 재정정책의 효과를 일부 상쇄하게 되는데, 이를 구축 효과라고 합니다.
-</Callout>
-
----
-
-## 4. 정책 시나리오 분석
+정부지출을 20 늘리면 IS 절편은 100 증가한다. 새 균형은 `Y≈866.67`, `i≈11.67`이다. 산출은 약 44.45 증가한다. 화폐시장을 무시한 단순 지출승수 `1/(1-0.8)=5`라면 100 증가해야 하지만, 이자율 상승과 투자 감소가 55.55를 구축했다.
 
 <LectureTable
-  title="정책에 따른 균형의 변화 결과"
-  headers={["정책", "곡선 이동", "소득(Y) 변화", "이자율(r) 변화"]}
+  title="같은 모형의 정책 변화"
+  headers={["변화", "곡선", "Y", "i"]}
   rows={[
-    ["확장적 재정정책 (G↑)", "IS 우측 이동", "증가 (↑)", "상승 (↑)"],
-    ["확장적 통화정책 (M↑)", "LM 우측 이동", "증가 (↑)", "하락 (↓)"],
+    ["G 증가", "IS 우측", "상승", "상승"],
+    ["T 감소", "IS 우측", "상승", "상승"],
+    ["M/P 증가", "LM 우측", "상승", "하락"],
+    ["P 상승, M 고정", "LM 좌측", "하락", "상승"],
   ]}
 />
 
----
+## 4. 기울기는 정책효과의 크기를 결정한다
 
-IS-LM 모형은 현대 거시경제 정책을 이해하는 가장 강력한 문법입니다. 시뮬레이터로 복잡한 수식 뒤에 숨겨진 직관적인 움직임을 내 것으로 만들어 보세요!
+투자의 금리민감도 `b`가 크면 IS가 평평해지고 재정확대의 금리 상승이 투자를 크게 줄인다. 화폐수요의 금리민감도 `h`가 크면 LM이 평평해져 재정정책의 구축효과가 작아진다. 반면 통화확대의 금리 하락이 지출로 이어지려면 IS가 충분히 반응해야 한다.
+
+<ISLMSimulator client:visible />
+
+시뮬레이터의 이동은 비교정태다. 한 균형에서 다른 균형으로 가는 시간, 기대 변화와 정책시차를 직접 보여주지는 않는다.
+
+## 5. IS-LM의 경계를 넘을 때 필요한 모형
+
+- 물가를 내생화하려면 AD-AS가 필요하다.
+- 개방경제와 환율제도를 넣으려면 Mundell–Fleming 모형이 필요하다.
+- 기대와 정책금리 준칙을 중심에 두려면 새케인즈 IS곡선과 Phillips곡선을 쓴다.
+- 금융기관의 대차대조표·신용스프레드는 전통적 IS-LM에 없다.
+
+<Callout type="warning">
+IS-LM의 정책효과를 시대와 제도에 관계없는 법칙으로 사용하지 않는다. 폐쇄경제, 고정물가, 외생적 통화공급이라는 가정이 바뀌면 곡선과 정책수단의 해석도 바뀐다.
+</Callout>
+
+다음 장에서는 비교우위를 숫자로 판별하고 생산·소비 가능집합과 교역조건의 이득을 계산한다.
+
+## 참고 자료
+
+- MIT OpenCourseWare, [Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)
+- 한국은행, [통화정책](https://www.bok.or.kr/portal/main/contents.do?menuNo=200291)
+- Olivier Blanchard, *Macroeconomics*
