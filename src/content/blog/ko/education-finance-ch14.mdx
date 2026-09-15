@@ -2,59 +2,64 @@
 track: academy
 series: financial-management
 chapter: 14
-title: "재무관리 — 포트폴리오 이론과 분산 투자 — 달걀을 한 바구니에 담지 마라"
-description: "상관관계가 낮은 자산을 섞어 위험을 줄이는 마코위츠의 현대 포트폴리오 이론(MPT)을 시각화 도구와 함께 마스터합니다."
+title: "재무관리 — 분산의 한계와 체계적 위험"
+description: "총변동성 40% 가운데 분산 가능한 75%를 분해하고, 시장이 보상하는 것은 베타 위험뿐이라는 자본비용 함의를 복습합니다."
 pubDate: 2026-04-14
+updatedDate: 2026-09-15
 category: Finance
-tags:
-  - Education
-  - 재무관리
-  - 포트폴리오
-  - MPT
-  - 분산투자
+tags: ["재무관리", "체계적위험", "분산투자", "베타"]
 locale: ko
 author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
-import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
 import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
-import { PortfolioVisualizer } from "@/features/education-calculators/BondAndPortfolioTools";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# 포트폴리오 이론과 분산 투자
+# 재무관리 — 분산으로 지운 위험에는 기대수익률이 붙지 않는다
 
-"수익은 높이고 위험은 낮출 수 있을까?" 해리 마코위츠(Harry Markowitz)는 1952년, 자산들 간의 **상관관계**를 활용하면 전체 수익률을 훼손하지 않으면서도 위험을 획기적으로 줄일 수 있다는 점을 수학적으로 증명했습니다.
+[3장](/ko/education-finance-ch3/)은 두 자산의 공분산으로 표준편차가 꺾이는 식을 계산한다. 공식을 다시 풀지 않는다. 이 장은 그 꺾임이 어디서 멈추고, 왜 총위험 σ가 자본비용의 입력이 아닌가다.
 
----
+## 1. 총분산은 시장이 가져가는 조각과 남는 조각이다
 
-## 1. 포트폴리오 효과의 핵심
-
-두 자산의 기대수익률은 단순한 가중평균이지만, **위험(표준편차)**은 자산 간의 상관계수(Correlation)가 1보다 작기만 하면 각 자산의 위험 합계보다 작아집니다.
+어떤 주식의 표준편차 40%, 시장 20%, 상관계수 0.5면 베타는 `0.5 × 40% / 20% = 1.0`이다. 총분산은 `0.40^2 = 0.16`이다. 체계적 분산은 `β^2 × σ_M^2 = 0.04`이다. 남는 0.12는 고유분산이고, 총분산의 75%다.
 
 <FormulaBox
-  formula="\sigma_p = \sqrt{w_1^2\sigma_1^2 + w_2^2\sigma_2^2 + 2w_1w_2\sigma_1\sigma_2\rho_{12}}"
-  label="Portfolio Risk Formula"
-  description="ρ12: 두 자산 간의 상관계수. 이 값이 낮을수록 분산 효과가 커집니다."
-  color="#2563eb"
+  label="위험의 분해"
+  formula="σ_i^2 = β_i^2 σ_M^2 + σ_e^2"
+  description="σ_e^2 = 0.12 는 다른 주식과 섞으면 평균적으로 희석된다. 시장 조각 0.04는 같이 움직이므로 남는다."
 />
 
----
+잘 분산된 투자자에게 남는 위험은 베타 쪽이다. 그래서 [4장](/ko/education-finance-ch4/)의 요구수익률은 σ가 아니라 β에 붙는다. r_f=3%, 프리미엄 5%면 이 주식의 기대는 8%다. 혼자 이 주식만 들고 견디는 40% 변동에 대한 추가 보상은 그 식에 없다.
 
-## 2. 위험-수익 시각화 시뮬레이션
+## 2. 종목을 늘려도 체계적 위험은 0이 되지 않는다
 
-주식(고위험-고수익)과 채권(저위험-저수익)의 비중을 조절할 때 그려지는 궤적을 확인해 보세요.
+고유분이 서로 약하게만 상관되면 동일가중 n종목의 고유분산은 대략 1/n로 줄어든다. 시장 베타의 평균은 줄지 않는다. “30개면 끝”은 경험적 관찰이지 정리의 상수다.
 
-<PortfolioVisualizer client:visible />
+<LectureTable
+  title="누가 그 위험을 감수하는가"
+  headers={["보유", "남는 위험", "시장이 붙이는 기대"]}
+  rows={[
+    ["주식 1종, σ=40%", "고유+체계", "β=1이면 8%"],
+    ["잘 분산, β=1", "체계 ≈ 20%", "같은 8%"],
+    ["β=0 보험형", "시장과 반대", "8%보다 낮음"],
+  ]}
+/>
 
----
+기업이 사업 다각화로 고유위험을 줄여도, 주주가 스스로 분산할 수 있으면 그 다각화는 자본비용을 자동으로 낮추지 않는다. 가치는 양의 NPV에서 온다.
 
-## 3. 효율적 투자 기회 집합 (Efficient Frontier)
-
-시뮬레이션 그래프에서 동일한 위험 수준에서 가장 높은 수익을 주거나, 동일한 수익 수준에서 가장 낮은 위험을 주는 포트폴리오들의 집합을 **효율적 투자선**이라고 부릅니다. 합리적인 투자자라면 반드시 이 선 위에 있는 포트폴리오를 선택해야 합니다.
-
-<Callout type="tip">
-**상관관계의 중요성**: 상관계수가 -1인 두 자산을 섞으면 이론적으로 비체계적 위험을 0까지 줄일 수 있습니다. 이것이 주식과 금, 달러 등을 섞어서 투자하는 자산 배분 전략의 근거입니다.
+<Callout type="warning">
+위기 때 고유분이 같이 움직이면 75%가 사라지지 않는다. 노동소득·주택처럼 팔 수 없는 위험을 이미 가진 투자자에게는 시장 베타만으로 부족하다. 가격 모형이 보상하지 않는다고 해서, 집중 보유자의 파산 위험이 없다는 뜻이 아니다.
 </Callout>
 
----
+## 확인문제
 
-분산 투자는 금융 시장에서 유일하게 공짜로 주어지는 점심(Free Lunch)이라고 불립니다. 과학적인 자산 배분으로 탄탄한 수익의 지도를 그려보시길 바랍니다.
+σ=40%, σ_M=20%, ρ=0.5이면 β=1.0배, 고유분산은 총분산의 75%다. 기대수익률은 8%로 남는다. 40% 변동을 혼자 감당한 대가는 프리미엄에 더해지지 않는다.
+
+## 참고 자료
+
+- Richard Brealey, Stewart Myers, and Franklin Allen, *Principles of Corporate Finance*, ch. 7–8
+- Stephen Ross, Randolph Westerfield, and Jeffrey Jaffe, *Corporate Finance*, ch. 11
+- Eugene Brigham and Joel Houston, *Fundamentals of Financial Management*, ch. 6

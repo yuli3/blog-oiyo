@@ -2,64 +2,65 @@
 track: academy
 series: financial-management
 chapter: 11
-title: "재무관리 — 자본예산과 NPV — 미래 가치를 현재로 선점하는 법"
-description: "기업의 장기적 투자를 결정하는 자본예산의 핵심 도구인 NPV(Net Present Value)를 마스터합니다. 인터랙티브 NPV 계산기로 할인율과 현금흐름의 상관관계를 탐구합니다."
+title: "재무관리 — 자본예산 현금흐름 구축"
+description: "증분 현금흐름에서 매몰비용을 빼고, 순운전자본 300만 원의 회수를 10%로 할인한 순부담을 계산해 NPV 입력의 재료를 복습합니다."
 pubDate: 2026-04-14
+updatedDate: 2026-09-15
 category: Finance
-tags:
-  - Education
-  - 재무관리
-  - 자본예산
-  - NPV
-  - 투자결정
+tags: ["재무관리", "증분현금흐름", "매몰비용", "순운전자본"]
 locale: ko
 author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
-import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
 import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
-import { NPVCalculator } from "@/features/education-calculators/FinancialCalculators";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# 자본예산과 NPV (Net Present Value)
+# 재무관리 — 자본예산의 현금흐름은 증분이고, 매몰은 이미 나갔다
 
-기업이 지속적으로 성장하기 위해서는 새로운 공장, 신기술, 혹은 타 기업 인수에 투자해야 합니다. 이러한 장기적 투자 결정 과정을 **자본예산(Capital Budgeting)**이라고 하며, 그 중 가장 이론적으로 완벽한 기준이 바로 **NPV(순현재가치)법**입니다.
+[5장](/ko/education-finance-ch5/)은 주어진 CF로 NPV와 IRR을 비교한다. 이 장은 그 CF를 어떻게 만드는가다. 채택 규칙을 다시 외우지 않는다.
 
----
+## 1. 의사결정에 남는 것은 ‘이 프로젝트가 바꾸는 현금’이다
 
-## 1. NPV의 개념
+이미 쓴 연구비 500만 원은 채택·기각과 무관하다. 건물을 이 사업에 쓰면 포기하는 임대료는 기회비용이다. 연 120만 원을 포기하면 세후 기회비용이 매년 나간다. 신제품이 기존 매출을 연 200만 원 잠식하면 그 세후분도 증분에서 뺀다.
 
-NPV는 해당 투자로 인해 미래에 기대되는 현금흐름의 현재가치 합계에서 초기 투자 비용을 차감한 값입니다.
+기계 2,000만 원, 법인세 25%, 내용연수 3년 정액이면 연 감가상각 666.7만 원이다. 영업현금은 회계이익이 아니다.
 
 <FormulaBox
-  formula="NPV = \sum_&#123;t=1&#125;^&#123;n&#125; \frac&#123;CF_t&#125;{(1+k)^t} - I_0"
-  label="NPV Formula"
-  description="CFt: t년차 유입액, k: 할인율(자본비용), I0: 초기투자액"
-  color="#8b5cf6"
+  label="영업현금흐름"
+  formula="OCF = (매출-현금비용-감가)×(1-T_c) + 감가"
+  description="같은 식은 (매출-현금비용)×(1-T_c) + 감가×T_c 이다. 감가상각은 현금이 아니지만 절세는 현금이다."
 />
 
-- **NPV > 0**: 기업 가치를 증대시키므로 **수락**
-- **NPV < 0**: 기업 가치를 훼손하므로 **기각**
+매출 1,500만 원, 현금비용 600만 원이면 OCF는 `(1,500-600-666.7)×0.75 + 666.7 = 841.7만 원`이다.
 
----
+## 2. 순운전자본은 t=0에 묶였다가 만기에 풀린다
 
-## 2. 인터랙티브 NPV 시뮬레이션
+재고·매출채권이 늘면 현금이 묶인다. 기초에 순운전자본 300만 원을 넣고 3년 뒤 전액 회수하면, 할인율 10%에서 회수의 현재가치는 `300 / 1.1^3 = 225.4만 원`이다. 순부담의 현재가치는 74.6만 원이다. 회수를 빼먹으면 투자를 과대계상한다.
 
-아래 계산기로 자본비용(할인율)이 변할 때 투자의 타당성이 어떻게 바뀌는지 직접 실험해 보세요.
-
-<NPVCalculator client:visible />
+<LectureTable
+  title="NPV 입력에 넣는가"
+  headers={["항목", "처리", "이유"]}
+  rows={[
+    ["이미 지출한 연구비 500만 원", "제외", "매몰"],
+    ["포기 임대료", "세후 유출", "기회비용"],
+    ["NWC 300만 원", "t=0 유출, 만기 유입", "회수를 잊으면 왜곡"],
+    ["이자", "OCF에서 제외", "WACC에 이미 있음"],
+  ]}
+/>
 
 <Callout type="warning">
-**할인율의 무서움**: 할인율이 5%에서 15%로 증가하면 동일한 현금흐름에도 불구하고 NPV가 급격히 하락합니다. 고금리 시대에 투자가 위축되는 논리적 근거가 여기에 있습니다.
+WACC로 할인하면서 이자까지 OCF에서 빼면 부채 비용을 두 번 반영한다. 감가상각 방법·세율이 바뀌면 절세 시점만 바뀌고, 총액이 같은 것도 아니다. 잔존가치에 세금이 붙으면 세후 처분현금이 마지막 CF다.
 </Callout>
 
----
+## 확인문제
 
-## 3. NPV법의 장점
+NWC 300만 원을 3년 뒤 회수하고 할인율 10%이면 회수 PV는 225.4만 원, 순부담은 74.6만 원이다. 연구비 500만 원을 초기투자에 더하면 매몰을 미래 결정에 끌어온 것이다.
 
-1. **화폐의 시간 가치**: 미래의 돈과 현재의 돈의 차이를 정확히 반영합니다.
-2. **기업 가치 극대화**: NPV는 기업 가치의 순증가분을 나타내므로 주주 부의 극대화 목적과 일치합니다.
-3. **가산 원리**: 여러 독립적인 프로젝트의 NPV를 단순히 합산하여 전체 가치를 알 수 있습니다.
+## 참고 자료
 
----
-
-재무관리는 단순히 돈을 관리하는 것이 아니라, **'불확실성을 어떻게 현재의 가치로 환산할 것인가'**를 고민하는 학문입니다. NPV로 냉철한 투자 판단의 기준을 세우십시오.
+- Richard Brealey, Stewart Myers, and Franklin Allen, *Principles of Corporate Finance*, ch. 6
+- Stephen Ross, Randolph Westerfield, and Jeffrey Jaffe, *Corporate Finance*, ch. 6
+- Eugene Brigham and Joel Houston, *Fundamentals of Financial Management*, ch. 12
