@@ -14,7 +14,7 @@
  * Supersedes the earlier static chapter-count proxy.
  */
 export const PRIORITY_SERIES = [
-  "business-basics",
+  "management-principles",
   "economics-introduction",
   "accounting-basics",
   "qualification-roadmaps",
@@ -35,9 +35,29 @@ export const PRIORITY_SERIES_NAMES: Partial<Record<string, Record<string, string
     ko: "경제학개론", en: "Introduction to Economics", ja: "経済学概論",
     zh: "经济学概论", fr: "Introduction à l’économie", es: "Introducción a la economía",
   },
-  "business-basics": {
-    ko: "경영학", en: "Business", ja: "経営学",
-    zh: "管理学", fr: "Gestion", es: "Gestión",
+  "management-principles": {
+    ko: "경영학원론", en: "Principles of Management", ja: "経営学原論",
+    zh: "管理学原理", fr: "Principes de gestion", es: "Principios de administración",
+  },
+  "organizational-behavior": {
+    ko: "조직행동론", en: "Organizational Behavior", ja: "組織行動論",
+    zh: "组织行为学", fr: "Comportement organisationnel", es: "Comportamiento organizacional",
+  },
+  "human-resource-management": {
+    ko: "인적자원관리", en: "Human Resource Management", ja: "人的資源管理",
+    zh: "人力资源管理", fr: "Gestion des ressources humaines", es: "Gestión de recursos humanos",
+  },
+  "marketing-management": {
+    ko: "마케팅관리", en: "Marketing Management", ja: "マーケティング管理",
+    zh: "营销管理", fr: "Gestion du marketing", es: "Gestión de marketing",
+  },
+  "operations-management": {
+    ko: "생산운영관리", en: "Operations Management", ja: "生産管理",
+    zh: "运营管理", fr: "Gestion des opérations", es: "Dirección de operaciones",
+  },
+  "financial-management": {
+    ko: "재무관리", en: "Financial Management", ja: "財務管理",
+    zh: "财务管理", fr: "Gestion financière", es: "Gestión financiera",
   },
   "psychology-basics": {
     ko: "심리학", en: "Psychology", ja: "心理学",
