@@ -95,6 +95,46 @@ export const PRIORITY_SERIES_NAMES: Partial<Record<string, Record<string, string
     ko: "재무제표분석", en: "Financial Statement Analysis", ja: "財務諸表分析",
     zh: "财务报表分析", fr: "Analyse des états financiers", es: "Análisis de estados financieros",
   },
+  "civil-law": {
+    ko: "민법", en: "Civil Law", ja: "民法",
+    zh: "民法", fr: "Droit civil", es: "Derecho civil",
+  },
+  "criminal-law": {
+    ko: "형법", en: "Criminal Law", ja: "刑法",
+    zh: "刑法", fr: "Droit pénal", es: "Derecho penal",
+  },
+  "constitutional-law": {
+    ko: "헌법", en: "Constitutional Law", ja: "憲法",
+    zh: "宪法", fr: "Droit constitutionnel", es: "Derecho constitucional",
+  },
+  "commercial-law": {
+    ko: "상법", en: "Commercial Law", ja: "商法",
+    zh: "商法", fr: "Droit commercial", es: "Derecho mercantil",
+  },
+  "administrative-law": {
+    ko: "행정법", en: "Administrative Law", ja: "行政法",
+    zh: "行政法", fr: "Droit administratif", es: "Derecho administrativo",
+  },
+  "civil-procedure": {
+    ko: "민사소송법", en: "Civil Procedure", ja: "民事訴訟法",
+    zh: "民事诉讼法", fr: "Procédure civile", es: "Procedimiento civil",
+  },
+  "criminal-procedure": {
+    ko: "형사소송법", en: "Criminal Procedure", ja: "刑事訴訟法",
+    zh: "刑事诉讼法", fr: "Procédure pénale", es: "Procedimiento penal",
+  },
+  "labor-law": {
+    ko: "노동법", en: "Labor Law", ja: "労働法",
+    zh: "劳动法", fr: "Droit du travail", es: "Derecho laboral",
+  },
+  "intellectual-property-law": {
+    ko: "지식재산권법", en: "Intellectual Property Law", ja: "知的財産法",
+    zh: "知识产权法", fr: "Propriété intellectuelle", es: "Propiedad intelectual",
+  },
+  "legal-practice": {
+    ko: "계약실무", en: "Contract Practice", ja: "契約実務",
+    zh: "合同实务", fr: "Pratique contractuelle", es: "Práctica contractual",
+  },
   "accounting-basics": {
     ko: "회계학", en: "Accounting", ja: "会計学",
     zh: "会计学", fr: "Comptabilité", es: "Contabilidad",
