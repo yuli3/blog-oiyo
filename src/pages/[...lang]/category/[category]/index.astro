@@ -4,7 +4,7 @@ import BlogList from "../../../../components/BlogList.astro";
 import CategorySeriesList from "../../../../components/CategorySeriesList.astro";
 import { getTranslations, locales } from "../../../../lib/i18n";
 import { siteConfig } from "../../../../config/site.config";
-import { getTrack, getTrackFromData, slugifyCategory } from "../../../../lib/taxonomy";
+import { getTrack, slugifyCategory } from "../../../../lib/taxonomy";
 import { collectionPageJsonLd } from "../../../../lib/seo/structured-data";
 import {
   buildSeriesIndex,
@@ -80,7 +80,7 @@ const page = {
 };
 
 const localePrefix = `/${locale}`;
-const track = posts[0] ? getTrackFromData(posts[0].data) : getTrack(originalCategory);
+const track = getTrack(originalCategory);
 
 const displayName = (t.category.names as Record<string, string>)?.[originalCategory] ?? originalCategory;
 const displaySubtitle = track === "academy"
