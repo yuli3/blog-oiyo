@@ -2,144 +2,63 @@
 track: academy
 series: financial-management
 chapter: 1
-title: "재무관리 — 금융기초 — 부의 연금술: 재무관리의 목표와 화폐의 시간가치"
-description: >-
-  재무관리의 궁극적 목표인 기업가치 극대화를 이해하고, 모든 재무적 의사결정의 기초가 되는 화폐의 시간가치(TVM) 개념을 심층적으로
-  마스터합니다.
-pubDate: 2026-03-01T00:00:00.000Z
+title: "재무관리 — 기업가치 목표와 화폐의 시간가치"
+description: "이윤 극대화가 시간·위험을 빠뜨리는 이유를 기업가치와 대비하고, 할인율 10%에서 PV·FV·연금의 숫자를 복습합니다."
+pubDate: 2026-03-01
+updatedDate: 2026-09-15
 category: Finance
-tags:
-  - Education
-  - finance
-  - 공사공단필기
+tags: ["재무관리", "기업가치", "TVM", "현재가치"]
 locale: ko
-market: KR
-contentScope: local
-localizationMode: original
 author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
-import Callout from "@/components/mdx/Callout.astro";
-import StatCards from "@/components/mdx/StatCards.astro";
-import CompareTable from "@/components/mdx/CompareTable.astro";
+
 import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# 부의 연금술: 재무관리의 목표와 화폐의 시간가치
+# 재무관리 — 목표는 당기순이익이 아니라 위험 조정 현재가치다
 
-학우 여러분, 반갑습니다. '교수님'과 함께하는 **재무관리(Financial Management)**의 세계에 오신 것을 환영합니다. 경영학의 여러 분야 중에서도 재무관리는 가장 차갑고 논리적이지만, 동시에 가장 역동적인 '돈의 흐름'을 다루는 학문입니다.
+이 과정은 한 기업의 투자·조달·배당이다. 시장 균형과 차익거래는 [금융경제학](/ko/education-financial-economics-ch1/)으로 넘긴다. 회계가 과거를 기록한다면 재무관리는 미래 현금흐름에 가격을 매긴다.
 
-<Callout type="note">
-사람들은 흔히 재무관리를 단순히 '회계'와 혼동하곤 합니다. 하지만 회계가 과거의 기록으로 성적표를 만드는 작업이라면, 재무관리는 그 성적표를 바탕으로 **"미래의 가치를 창조하는 의사결정"**을 내리는 작업입니다.
-</Callout>
+## 1. 이윤 극대화는 의사결정 규칙이 되지 못한다
 
----
+올해 이익 1,200만 원과 내년 이익 1,200만 원을 같은 점수로 더하면 기다림의 대가가 빠진다. 확실한 1,200만 원과 기댓값만 같은 1,200만 원도 같은 이익이 아니다. 감가상각 방법만 바꿔 이익을 올리는 선택은 현금을 만들지 않는다.
 
-## 1. 재무관리의 북극성: 무엇을 위해 관리하는가?
-
-기업의 모든 행동에는 목적이 있어야 합니다.
-
-### (1) 이윤 극대화 vs 기업가치 극대화
-
-<CompareTable
-  title="재무관리의 목표 변천사"
-  leftTitle="이윤 극대화 (Profit Maximization)"
-  rightTitle="기업가치 극대화 (Value Maximization)"
+<LectureTable
+  title="두 목표가 빠뜨리는 것"
+  headers={["목표", "보는 것", "빠지는 것"]}
   rows={[
-    { label: "목표의 대상", left: "단기적인 '회계상 당기순이익'", right: "장기적인 '주식가치 총액 (주주 부)'" },
-    { label: "시점 고려", left: "타이밍을 무시함 (미래의 1억 = 현재의 1억)", right: "★ 화폐의 시간가치를 엄격히 반영" },
-    { label: "위험 고려", left: "위험 수준을 무시함", right: "★ 현금흐름의 불확실성(위험)을 할인율에 반영" },
-    { label: "평가", left: "현대 재무학에서는 폐기된 이론", right: "현대 재무관리의 통일된 최종 목표" }
+    ["이윤 극대화", "당기 회계이익", "시점, 위험, 현금"],
+    ["기업가치 극대화", "위험 조정 현재가치", "측정 오차·대리인 왜곡"],
   ]}
-  leftColor="#ef4444"
-  rightColor="#3b82f6"
 />
 
-따라서 현대 재무관리는 **"주주 부의 극대화(기업가치 극대화)"**를 최종 목표로 삼습니다. 이는 미래의 모든 이익과 도사리고 있는 위험을 '현재의 통찰'로 통합한 가장 진보적인 개념입니다.
+주주가 경영자에게 맡기면 규모·특권·안정이 가치보다 앞설 수 있다. 감시·보상설계는 비용을 치르고 그 갭을 줄일 뿐, 목표 정의를 바꾸지는 않는다.
 
-### (2) 대리인 문제 (Agency Problem)
+## 2. 오늘의 1원은 내일의 1원이 아니다
 
-주주(본인)가 경영자(대리인)에게 회사를 위임했을 때 발생하는 근본적인 정보 비대칭과 이익 상충 문제입니다.
-
-- **대리인 비용 3가지**: 감시비용(외부감사), 확증비용(IR 공시), 잔여손실
-- **해결책**: 스톡옵션(자사주 매입 선택권) 부여로 주주의 이익과 경영자의 이익을 동기화시킴.
-
----
-
-## 2. 시간의 마법: 화폐의 시간가치 (TVM)
-
-재무학의 제1원칙은 이것입니다. **"오늘의 1원은 내일의 1원보다 가치가 높다."** 왜냐하면 오늘의 1원은 1) 투자를 통한 이자수익 기회비용이 있고, 2) 인플레이션으로 인한 구매력 하락을 방어하며, 3) 불확실성(위험)이 없기 때문입니다.
-
-<StatCards
-  items={[
-    {
-      label: "PV",
-      value: "현재가치",
-      icon: "💵",
-      description: "미래의 현금을 일정한 이자율로 할인한 오늘의 가치 (할인)"
-    },
-    {
-      label: "FV",
-      value: "미래가치",
-      icon: "📈",
-      description: "현재의 원금에 이자가 눈덩이처럼 불어난 미래의 가치 (복리)"
-    },
-    {
-      label: "r",
-      value: "할인율/이자율",
-      icon: "⚖️",
-      description: "시간에 대한 보상과 위험에 대한 프리미엄의 합"
-    }
-  ]}
-  cols={3}
-/>
-
-### 🔄 가치 환산의 메커니즘
-
-```mermaid
-graph LR
-    A[현금 100만원 <br/> PV] -->|할증 10% 이자| B[1년 뒤 110만원 <br/> FV]
-    B -->|할인 10% 위험반영| A
-    style A fill:#f9f,stroke:#333,stroke-width:2px
-    style B fill:#bbf,stroke:#333,stroke-width:2px
-```
-
-### (1) 미래가치 산출과 복리의 힘
-
-아인슈타인이 '세계 8대 불가사의'라고 불렀던 것이 바로 **복리(Compound Interest)**입니다. 이자에 이자가 붙는 마법입니다.
+할인율 10%에서 1년 뒤 1,200만 원의 현재가치는 `1,200 / 1.1 = 1,090.9만 원`이다. 같은 1,000만 원을 3년 복리로 굴리면 `1,000 × 1.1^3 = 1,331만 원`이다.
 
 <FormulaBox
-  label="미래가치 (FV) 방정식"
-  formula="FV_n = PV \times (1 + r)^n"
-  description="이자율(r)이 높아지거나 기간(n)이 길어지면 미래가치는 기하급수적으로 폭발합니다."
-  color="#10b981"
+  label="현재가치"
+  formula="PV = FV / (1+r)^n"
+  description="r이 기회비용과 위험을 담는다. 영구연금은 PV = C / r 이다. 매년 120만 원, r=10%면 1,200만 원."
 />
 
-### (2) 현재가치 산출과 할인의 마법
+5년 동안 매년 말 200만 원을 받는 정상연금의 현재가치는 `200 × (1 - 1/1.1^5) / 0.10 = 758.2만 원`이다. 기시연금은 한 기 덜 할인한다. 주식·채권 공식은 [2장](/ko/education-finance-ch2/), 프로젝트 채택 규칙은 [5장](/ko/education-finance-ch5/)이다.
 
-<FormulaBox
-  label="현재가치 (PV) 방정식"
-  formula="PV = \frac&#123;FV_n&#125;{(1 + r)^n}"
-  description="미래에 받을 돈을 현재가치로 끌어오는 필수 공식입니다. 분모의 할인율(위험)이 클수록 현재 가치는 폭락합니다."
-  color="#f59e0b"
-/>
-
----
-
-## 3. 영구연금: 마르지 않는 샘물의 가치
-
-매달 일정액을 영원히 받는 연금(Perpetuity)의 가치는 무한대일까요? 아닙니다.
-
-<FormulaBox
-  label="영구연금의 현재가치"
-  formula="PV = \frac&#123;C&#125;&#123;r&#125;"
-  description="매기수령액(C)을 이자율(r)로 나눈 값. 회사의 영구적 가치나 부동산 월세 수익률 계산의 뼈대입니다."
-  color="#6366f1"
-/>
-
----
-
-<Callout type="important">
-**[금융기초 Ch1 출제 포인트 요약]**
-1. 이윤 극대화의 치명적 결함 3가지: 시간 무시, 위험 무시, 현금흐름 무시.
-2. 대리인 문제의 해결책 = 주식매입선택권 (스톡옵션)
-3. 복리와 할인의 기본 수식 지배력: 할인율(r)이 커지면 현재가치(PV)는 작아진다.
+<Callout type="warning">
+명목 현금흐름은 명목 할인율, 실질은 실질로 맞춘다. 인플레이션을 분자에만 넣거나 분모에만 넣으면 가치가 틀린다. 개인 예금 이자와 기업의 자본비용은 같은 r이 아니다.
 </Callout>
+
+## 확인문제
+
+1년 뒤 1,200만 원을 10%로 할인한 값은 1,090.9만 원이다. 같은 금액을 할인 없이 이익으로 더하면 시간가치가 0인 셈이다. 2년 뒤 1,200만 원은 `1,200 / 1.21 = 991.7만 원`으로 더 작다.
+
+## 참고 자료
+
+- Richard Brealey, Stewart Myers, and Franklin Allen, *Principles of Corporate Finance*, ch. 1–2
+- Stephen Ross, Randolph Westerfield, and Jeffrey Jaffe, *Corporate Finance*, ch. 1, 4
+- Eugene Brigham and Joel Houston, *Fundamentals of Financial Management*, ch. 1, 5

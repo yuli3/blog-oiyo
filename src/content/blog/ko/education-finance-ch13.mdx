@@ -2,61 +2,61 @@
 track: academy
 series: financial-management
 chapter: 13
-title: "재무관리 — 채권의 가치평가 — 확정 수익의 미학"
-description: "미래의 현금흐름이 약속된 채권의 가격은 어떻게 결정될까요? 표면금리와 시장금리의 역비례 관계를 인터랙티브 채권 계산기로 이해해 봅니다."
+title: "재무관리 — 채권 듀레이션과 금리위험"
+description: "액면 1,000만 원 2년 만기 채권의 수정듀레이션으로 금리 1%p 상승 때 가격 하락 폭을 계산하고, 쿠폰 채권과 제로의 차이를 복습합니다."
 pubDate: 2026-04-14
+updatedDate: 2026-09-15
 category: Finance
-tags:
-  - Education
-  - 재무관리
-  - 채권
-  - 가치평가
-  - 금리
+tags: ["재무관리", "듀레이션", "금리위험", "채권"]
 locale: ko
 author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
-import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
 import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
-import { BondPricer } from "@/features/education-calculators/BondAndPortfolioTools";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# 채권의 가치평가 (Bond Valuation)
+# 재무관리 — 금리위험의 크기는 액면이 아니라 듀레이션이다
 
-채권은 발행자가 투자자에게 미래의 특정 시점에 원금과 이자를 지급할 것을 약속한 증서입니다. 주식과 달리 현금흐름이 확정적이기 때문에 가치 평가가 상대적으로 직관적이지만, **시장 금리**와의 역동적인 관계를 이해하는 것이 핵심입니다.
+[2장](/ko/education-finance-ch2/)은 쿠폰과 원금을 할인해서 가격을 구한다. 금리가 오르면 가격이 내린다는 역관계는 이미 나왔다. 이 장은 얼마나 내리는가, 그리고 그 민감도를 무엇으로 재는가다.
 
----
+## 1. 맥컬리 듀레이션은 현금흐름의 가중평균 만기다
 
-## 1. 채권 가격 결정의 원리
-
-채권의 가격은 만기까지 받을 모든 이자와 원금을 현재가치로 할인하여 합산한 값입니다.
+액면 1,000만 원, 쿠폰 10%, 만기 2년, y=10%이면 가격은 액면이다. 1년차 쿠폰 100만 원의 현재가치는 90.9만 원, 2년차 1,100만 원은 909.1만 원이다. 맥컬리 듀레이션은 `(1×90.9 + 2×909.1) / 1,000 = 1.909년`이다. 쿠폰이 있어 만기 2년보다 짧다.
 
 <FormulaBox
-  formula="P = \sum_&#123;t=1&#125;^&#123;n&#125; \frac&#123;C&#125;{(1+r)^t} + \frac&#123;M&#125;{(1+r)^n}"
-  label="Bond Pricing Formula"
-  description="C: 이자액, M: 액면가, r: 시장수익률(YTM), n: 만기"
-  color="#d97706"
+  label="수정듀레이션 근사"
+  formula="ΔP / P ≈ -D_mod × Δy"
+  description="D_mod = 1.909 / 1.10 = 1.735. Δy=+1%p이면 ΔP ≈ -17.4만 원, 가격 ≈ 982.6만 원."
 />
 
----
+현재가 1,000만 원인 2년 제로는 듀레이션이 2년이다. 수정듀레이션 1.818, 같은 1%p에 약 18.2만 원이 빠진다. 쿠폰이 앞당긴 현금이 금리위험을 조금 줄인다.
 
-## 2. 인터랙티브 채권 시뮬레이션
+## 2. 만기가 같다고 금리위험이 같지 않다
 
-시장의 요구수익률(할인율)이 변할 때 채권의 가격이 어떻게 변하는지 확인해 보세요.
+낮은 쿠폰, 낮은 y, 긴 만기는 듀레이션을 늘린다. 자산 듀레이션과 부채 듀레이션이 어긋난 기관은 금리 이동에 순가치가 흔들린다. 면역은 그 갭을 맞추려는 시도이지, 볼록성·수익률곡선의 비평행 이동까지 지우지는 못한다.
 
-<BondPricer client:visible />
+<LectureTable
+  title="같은 만기 2년, 다른 민감도"
+  headers={["채권", "D_mod", "+1%p 근사 ΔP"]}
+  rows={[
+    ["10% 쿠폰 액면", "1.735", "-17.4만 원"],
+    ["제로쿠폰", "1.818", "-18.2만 원"],
+  ]}
+/>
 
 <Callout type="warning">
-**금리와 채권 가격의 역관계**: 시장 금리가 상승하면 기존에 발행된 채권의 매력도가 떨어지므로 가격은 하락합니다. 반대로 금리가 하락하면 채권 가격은 상승합니다. "금리가 오르면 채권 투자자는 눈물을 흘린다"는 격언이 여기서 나옵니다.
+듀레이션 근사는 직선이다. 금리 이동이 크면 볼록성만큼 실제 가격이 근사보다 덜 떨어지거나 더 오른다. “채권은 안전하다”와 “이 채권의 수정듀레이션은 1.7이다”는 다른 문장이다. 신용스프레드 확대는 y의 다른 조각이다.
 </Callout>
 
----
+## 확인문제
 
-## 3. 발행 형태의 구분
+액면 1,000만 원 2년 10% 쿠폰, y=10%에서 금리가 1%p 오르면 수정듀레이션 근사 하락은 17.4만 원이다. 같은 만기 제로는 약 18.2만 원이다. 만기만 보고 금리위험을 같다고 쓰면 쿠폰 구조를 무시한 것이다.
 
-- **평가 발행 (Par)**: 표면금리 = 시장금리 (가격 = 액면가)
-- **할인 발행 (Discount)**: 표면금리 < 시장금리 (가격 < 액면가)
-- **할증 발행 (Premium)**: 표면금리 > 시장금리 (가격 > 액면가)
+## 참고 자료
 
----
-
-채권은 안정적인 포트폴리오의 중추입니다. 금리의 움직임에 따란 채권 가치의 변화를 이해하는 것은 거시경제와 금융 시장을 읽는 가장 중요한 열쇠 중 하나입니다.
+- Richard Brealey, Stewart Myers, and Franklin Allen, *Principles of Corporate Finance*, ch. 3, 23
+- Stephen Ross, Randolph Westerfield, and Jeffrey Jaffe, *Corporate Finance*, ch. 8
+- Eugene Brigham and Joel Houston, *Fundamentals of Financial Management*, ch. 7

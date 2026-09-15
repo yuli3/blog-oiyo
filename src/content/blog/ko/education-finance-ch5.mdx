@@ -2,99 +2,64 @@
 track: academy
 series: financial-management
 chapter: 5
-title: "재무관리 — 운명의 결산: 자본예산 (NPV vs. IRR)"
-description: >-
-  기업은 어떻게 거대한 투자를 결정할까요? 순현재가치(NPV)와 내부수익률(IRR)을 마스터하여 비즈니스 프로젝트의 타당성을 평가하는 법을
-  배웁니다.
-pubDate: 2026-03-01T00:00:00.000Z
+title: "재무관리 — NPV·IRR·회수기간과 상호배타 투자"
+description: "할인율 10%에서 규모가 다른 두 프로젝트의 NPV와 IRR이 엇갈리는 예를 계산하고, 상호배타일 때 어느 규칙을 남기는지 복습합니다."
+pubDate: 2026-03-01
+updatedDate: 2026-09-15
 category: Finance
-tags:
-  - Education
-  - finance
+tags: ["재무관리", "NPV", "IRR", "자본예산"]
 locale: ko
 author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
-import {
-  LectureTable,
-  LectureProcess,
-  LecturePieChart,
-  LectureBarChart,
-} from "@/features/education-common/components/LectureVisuals";
 
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# 운명의 결산: 자본예산 (NPV vs. IRR)
+# 재무관리 — 상호배타 투자에서는 IRR이 아니라 NPV를 따른다
 
-10조 원 규모의 반도체 공장을 지어야 할까요? 2억 달러짜리 블록버스터 영화 제작을 승인해야 할까요? 이러한 거대한 의사결정의 무게를 다루는 것이 바로 **자본예산(Capital Budgeting)**입니다.
+자본예산은 현금을 어디에 묶을지의 결정이다. 현금흐름을 어떻게 잡을지는 [11장](/ko/education-finance-ch11/)이다. 이 장은 이미 주어진 증분 현금흐름을 NPV·IRR·회수기간이 다르게 줄 세우는 경우다.
 
-오늘 우리는 막연한 '기대'를 '논리'로 바꾸는 법을 배웁니다. 수학적인 도구를 활용해 그 프로젝트가 실제로 주주의 가치를 창출하는지 판별하는 방법입니다.
+## 1. NPV는 가치 증가분, IRR은 손익분기 할인율이다
 
----
+프로젝트 A는 지금 1,000만 원을 넣고 1년 뒤 1,200만 원을 받는다. 할인율 10%에서 NPV는 `1,200/1.1 - 1,000 = 90.9만 원`이다. IRR은 20%다. `NPV > 0` 이면 자본비용 이상으로 가치를 만든다.
 
-## 1. NPV: 재무학의 황금률
+<FormulaBox
+  label="순현재가치"
+  formula="NPV = -I_0 + CF_1/(1+r) + CF_2/(1+r)^2 + ..."
+  description="IRR은 NPV를 0으로 만드는 r이다. 독립 프로젝트에서는 IRR이 자본비용보다 크면 NPV도 양인 경우가 많다."
+/>
 
-**순현재가치(NPV)**는 기업 재무의 주춧돌입니다. 계산식은 다음과 같습니다.
-**<mark>NPV = (미래 현금유입의 현재가치) - (초기 투자비용)</mark>**
+회수기간은 A가 1년이다. 시간가치를 무시하고, 회수 이후 현금은 버린다. 유동성 스크린이지 가치 규칙이 아니다.
 
-- **NPV > 0**: 프로젝트는 가치를 창출함. <mark><strong>채택!</strong></mark>
-- **NPV < 0**: 프로젝트는 가치를 파괴함. <mark><strong>기각!</strong></mark>
+## 2. 규모가 다르면 IRR과 NPV가 엇갈린다
+
+상호배타 프로젝트 B는 지금 3,000만 원, 1년 뒤 3,450만 원이다. NPV는 `3,450/1.1 - 3,000 = 136.4만 원`, IRR은 15%다.
 
 <LectureTable
-  title="왜 NPV가 최강인가?"
-  headers={["특징", "장점", "중요성"]}
+  title="한 개만 고를 때"
+  headers={["규칙", "선택", "이유"]}
   rows={[
-    ["화폐의 시간가치", "반영됨", "자본 비용을 정확하게 고려"],
-    ["현금흐름 중시", "반영됨", "장부상 이익이 아닌 '진짜 현금'을 측정"],
-    ["가치 가산성", "가능함", "NPV(A) + NPV(B) = 합계 가치"],
-  ]}
-  highlightColumns={[0]}
-/>
-
----
-
-## 2. IRR: 직관의 지표
-
-**내부수익률(IRR)**이란 프로젝트의 NPV를 정확히 0으로 만드는 할인율을 말합니다. 쉽게 말해, 그 프로젝트가 내는 '손익분기점 수익률'을 의미합니다.
-
-<LectureProcess
-  steps={[
-    { label: "자본비용 파악", description: "우리의 '기준 수익률(k)'을 확인" },
-    { label: "IRR 산출", description: "유입과 유출의 PV가 같아지는 지점의 수익률 계산" },
-    { label: "비교 분석", description: "IRR > k 인가? (수익률 > 비용)" },
-    { label: "결정", description: "수익률이 비용보다 높다면 채택!" },
+    ["NPV", "B (136.4만 원)", "주주 부가 더 늘어난다"],
+    ["IRR", "A (20%)", "투입 대비 비율이 높다"],
+    ["회수기간", "둘 다 1년", "순위를 가르지 못한다"],
   ]}
 />
 
-<mark><strong>NPV와 IRR의 충돌</strong></mark>: 대부분의 경우 두 방식의 결론은 일치합니다. 하지만 투자 규모나 타이밍이 크게 다를 경우, **늘 NPV를 우선**해야 합니다. NPV는 우리 부가 실제로 얼마나 늘어나는지 '절대량'을 보여주기 때문입니다.
+남는 2,000만 원을 10%로만 굴릴 수 있다면, A를 고른 기회비용은 B가 만들던 136.4만 원이다. 비율이 높은 쪽이 가치 최대가 아니다. 현금흐름 부호가 여러 번 바뀌면 IRR은 여러 개가 될 수 있다.
 
----
+<Callout type="warning">
+자본배급 아래에서는 수익성지수(PI)가 단서를 주지만, 조합의 합산 NPV를 대체하지는 않는다. IRR의 재투자 가정(IRR로 재투자)은 자본비용 재투자보다 낙관적인 경우가 많다. 상호배타면 NPV를 남긴다.
+</Callout>
 
-## 3. 보조 도구들: 회수기간법 & PI
+## 확인문제
 
-경영자들은 때때로 빠른 판단을 위해 더 단순한 도구들을 병행합니다.
+할인율 10%에서 A의 NPV는 90.9만 원(IRR 20%), B의 NPV는 136.4만 원(IRR 15%)이다. 둘 중 하나만 택하면 B다. IRR 5%p 우위를 규모 차이보다 앞에 두면 45.5만 원의 가치를 포기한다.
 
-<LectureTable
-  title="투자 판단 보조 도구"
-  headers={["기법", "핵심 질문", "특징"]}
-  rows={[
-    ["회수기간법", "원금을 언제 다 찾는가?", "단순하지만 시간가치와 이후 현금흐름 무시"],
-    ["수익성지수 (PI)", "1원당 얼마의 가치를 내는가?", "예산 제약 하에서 우선순위 정할 때 유용"],
-  ]}
-/>
+## 참고 자료
 
----
-
-## 4. 마무리: 부의 창출을 향한 실천
-
-자본예산은 단순히 숫자를 두드리는 과정이 아닙니다. 그것은 <mark><strong>"전략적인 자원 배분"</strong></mark>입니다. (+)의 NPV 프로젝트를 지속적으로 채택하는 기업은 지속 가능한 현금흐름을 구축하고, 결국 주가 상승이라는 열매를 맺게 됩니다.
-
----
-
-## 📖 참고문헌
-- **[기업재무원론] - 브릴리, 마이어스, 알렌**: 전 세계 MBA에서 교과서로 쓰이는 '바이블'.
-- **[모든 주식을 소유하라] - 존 보글**: 기업의 성장이 투자자에게 왜 중요한지 본질을 꿰뚫는 통찰.
-- **[경영은 실행이다] - 래리 보시디**: 재무적 계획과 실제 실행 사이의 가교를 고민하게 하는 책.
-
----
-
-다음 시간은 모든 프로젝트가 뛰어넘어야 할 허들, **자본비용(WACC): 투자의 기준점**에 대해 배워보겠습니다.
+- Richard Brealey, Stewart Myers, and Franklin Allen, *Principles of Corporate Finance*, ch. 5–6
+- Stephen Ross, Randolph Westerfield, and Jeffrey Jaffe, *Corporate Finance*, ch. 5–6
+- Eugene Brigham and Joel Houston, *Fundamentals of Financial Management*, ch. 10–12
