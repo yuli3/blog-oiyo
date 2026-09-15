@@ -1,0 +1,76 @@
+---
+track: academy
+series: financial-economics
+chapter: 4
+title: "금융경제학 — 금융중개·비대칭정보·신용할당"
+description: "은행이 존재하는 이유를 거래비용과 비대칭정보로 설명하고, 금리만 올려서는 초과수요가 해소되지 않는 신용할당을 수치 예로 보입니다."
+pubDate: 2026-09-15
+category: Economics
+tags: ["경제학", "금융경제학", "금융중개", "역선택", "신용할당"]
+locale: ko
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 금융경제학 — 은행은 중개자가 아니라 정보와 유동성을 만드는 기업이다
+
+가계가 기업 증권에 직접 투자하면 금융기관이 필요 없다는 모형이 있다. 현실에서 은행·펀드·보험이 남는 이유는 만기변환, 위임 감시, 지급결제, 그리고 빌려가는 쪽과 빌려주는 쪽의 정보 차이다.
+
+## 1. 직접금융이 모든 위험을 이전하지는 못한다
+
+완비시장이면 상태조건부 청구권으로 위험을 나눌 수 있다. 차입자의 노력을 계약서에 다 적지 못하고, 부실을 검증하는 데 비용이 들면 그 시장은 불완비다. Diamond의 위임 감시 모형에서 다수의 채권자가 각자 감시하는 대신 은행 하나가 감시하고 예금자들이 은행을 감시하는 편이 싸다.
+
+<LectureTable
+  title="금융기관이 제공하는 변환"
+  headers={["변환", "예", "남는 위험"]}
+  rows={[
+    ["만기", "단기예금 → 장기대출", "인출 집중, 차환 중단"],
+    ["규모", "소액예금 → 대규모 여신", "한 차입자에 편중"],
+    ["위험", "분산된 대출 포트폴리오", "공통충격, 상관 부실"],
+    ["정보", "심사·사후감시", "숨겨진 유형·숨겨진 행동"],
+  ]}
+/>
+
+만기변환은 그 자체로 유동성 보험이다. 동시에 뱅크런의 재료이기도 하다. 그 증폭은 [5장 금융위기](/ko/education-economics-ch38/)에서 다룬다.
+
+## 2. 금리를 올리면 평균 차입자 품질이 떨어질 수 있다
+
+Stiglitz–Weiss 신용할당의 핵심은 이자율이 가격이자 선별장치라는 점이다. 금리를 올리면 안전한 차입자는 빠져나가고, 위험한 프로젝트만 남는다. 은행의 기대수익이 금리에 대해 단조 증가하지 않는다.
+
+안전한 유형은 성공 확률 90%, 성공 시 회수 120원, 실패 시 0원이다. 위험한 유형은 성공 확률 50%, 성공 시 200원이다. 둘 다 기대현금흐름은 108원과 100원이다. 대출원금 100원에 이자율 20%면 상환액은 120원이다.
+
+- 안전 유형의 기대이익: `0.9×(120-120)=0` — 빌릴 유인이 사라진다
+- 위험 유형의 기대이익: `0.5×(200-120)=40원` — 여전히 빌린다
+
+은행이 유형을 구분하지 못하면 금리 인상은 포트폴리오를 위험 유형으로 채운다. 기대회수가 오히려 줄어 대출을 배급하는 편이 낫다.
+
+<FormulaBox
+  label="은행 기대수익이 꺾이는 지점"
+  formula="\partial E[\pi]/\partial r = 0"
+  description="그 이자율 이상에서는 가격을 더 올려 초과수요를 없애지 않고, 심사를 통과한 일부만 대출한다."
+/>
+
+담보, 자기자본 참여, 관계형 금융은 이 선별 실패를 줄이려는 계약이다. 담보가 없는 차입자 시장에서는 금리만의 균형이 존재하지 않을 수 있다.
+
+## 3. 도덕적 해이는 대출 이후의 행동 변화다
+
+역선택이 숨겨진 유형이면 도덕적 해이는 숨겨진 행동이다. 레버리지가 높아지면 주주는 위쪽 이익을 취하고 아래쪽 손실을 채권자·예금보험에 넘긴다. 자기자본 규제와 코버넌트는 그 옵션 가치를 줄이려는 장치다.
+
+<Callout type="warning">
+신용이 부족한 것을 곧바로 “자금이 없다”로 읽지 않는다. 가계 저축이 있어도 심사 비용과 역선택 때문에 특정 기업·국가에 대출이 닫힐 수 있다. 반대로 담보가격이 오르면 같은 프로젝트가 갑자기 대출 가능해져 호황을 증폭한다.
+</Callout>
+
+## 확인문제
+
+은행이 금리를 10%에서 25%로 올렸더니 연체율이 같이 올랐다. 이것이 수요 곡선 위의 이동만으로 설명되는가. 금리 인상이 차입자 구성을 바꿨다면 공급자의 기대수익 곡선이 꺾인 것이고, 배급이 균형일 수 있다.
+
+## 참고 자료
+
+- Joseph Stiglitz and Andrew Weiss, “Credit Rationing in Markets with Imperfect Information,” *American Economic Review* (1981)
+- Douglas Diamond, “Financial Intermediation and Delegated Monitoring,” *Review of Economic Studies* (1984)
+- 한국은행, [금융안정보고서](https://www.bok.or.kr/portal/singl/newsData/listPage.do?menuNo=200717)

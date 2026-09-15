@@ -1,0 +1,71 @@
+---
+track: academy
+series: econometrics
+chapter: 3
+title: "계량경제학 — 다중회귀와 가우스–마르코프"
+description: "통제 변수가 부분 회귀 계수를 어떻게 바꾸는지 보이고, BLUE가 성립하는 가정과 이분산·다중공선성에서 깨지는 지점을 구분합니다."
+pubDate: 2026-09-15
+category: Economics
+tags: ["경제학", "계량경제학", "다중회귀", "가우스마르코프", "이분산"]
+locale: ko
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 계량경제학 — 변수를 더 넣는 것은 다른 기울기를 묻는 것이다
+
+교육만 넣은 임금 회귀의 기울기와, 경력·성별을 같이 넣은 기울기는 같은 파라미터가 아니다. 후자는 “다른 통제가 고정됐을 때”의 부분 효과다. 통제가 누락 변수를 대신하려면 그 변수가 처치보다 앞에서 결정돼야 한다.
+
+## 1. Frisch–Waugh: 다른 변수의 잔차에 회귀한다
+
+`Y`를 `X`와 `W`에 회귀한 `X`의 계수는, `X`를 `W`에 회귀한 잔차를 `Y`의 `W` 잔차에 단순회귀한 계수와 같다. 교육 효과를 경력을 통제하고 보려면, 교육에서 경력으로 설명되는 부분을 뺀 변동만 사용한다.
+
+<FormulaBox
+  label="부분 회귀"
+  formula="\hat\beta_X = Cov(\tilde X, \tilde Y) / Var(\tilde X)"
+  description="물결은 W에 대한 잔차다. W가 X의 변동을 대부분 가져가면 \tilde X가 거의 0이 되어 추정이 흔들린다."
+/>
+
+교육과 경력이 거의 같이 움직이면 “경력 통제 후 교육 효과”를 자료가 구분하지 못한다. 이것이 다중공선성의 실체다. 분산팽창인자가 크다는 경고는, 질문이 자료의 변동과 맞지 않다는 뜻이다.
+
+## 2. 가우스–마르코프는 BLUE의 영수증이다
+
+선형, 외생성 `E[U|X,W]=0`, 동분산, 무자기상관이면 OLS는 선형 불편 추정량 가운데 분산이 가장 작다. 정규분포는 여기 들어가지 않는다. 정규성은 유한표본 t검정 해석에 쓰인다.
+
+<LectureTable
+  title="가정이 깨질 때"
+  headers={["가정", "깨진 증상", "대처"]}
+  rows={[
+    ["외생성", "능력 편의, 동시성", "식별 전략 변경 (4장)"],
+    ["동분산", "잔차 팬 모양", "강건 표준오차, WLS"],
+    ["무자기상관", "시계열 잔차 군집", "클러스터·HAC"],
+    ["선형", "곡선·교차항 무시", "함수 형태 재설정"],
+  ]}
+/>
+
+이분산이 있으면 OLS 점추정은 여전히 일관적일 수 있어도, 보통 표준오차는 틀린다. “유의하다”가 가장 먼저 죽는다. 관측 20개짜리 소표본에서 강건 표준오차만 바꾸고 안심하는 것도 위험하다.
+
+임금(만 원) 자료에서 저학력 잔차 분산이 작고 고학력에서 크다면, 고학력 구간의 기울기 불확실성을 과소평가하게 된다. 화이트 표준오차가 0.8에서 1.4로 커지면, 같은 계수 41.3의 t값이 줄어든다.
+
+## 3. 나쁜 통제는 편향을 줄이지 않는다
+
+직업, 임금 자체, 처치 이후의 중간 성과를 통제하면 총효과가 아니라 직접효과의 이상한 조각이 남거나, 선택 편향이 새로 생긴다. 교육 효과를 보면서 직업을 통제하는 것은 “교육을 받아도 같은 직업에 남을 때”의 효과다. 교육이 직업을 바꾸는 경로를 지운다.
+
+<Callout type="warning">
+조정 R²가 올라갔다고 모형을 “개선”했다고 쓰지 않는다. 예측이 목표면 표본 밖 오차를 보고, 인과가 목표면 식별 가정을 본다. 계수 개수를 늘려 유의성을 사냥하는 회귀는 다중검정의 다른 이름이다.
+</Callout>
+
+## 확인문제
+
+경력과 교육의 표본 상관이 0.95다. 교육 계수의 표준오차가 커진 것은 가우스–마르코프가 깨졌기 때문인가. 아니다. 선형 불편은 유지될 수 있고, `X`의 독자 변동이 부족해 분산이 커진 것이다.
+
+## 참고 자료
+
+- Jeffrey Wooldridge, *Introductory Econometrics*, ch. 3–8
+- Ragnar Frisch and Frederick Waugh, “Partial Time Regressions,” *Econometrica* (1933)
+- MIT OpenCourseWare, [14.32 Econometrics](https://ocw.mit.edu/courses/14-32-econometrics-spring-2007/)
