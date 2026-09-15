@@ -2,96 +2,61 @@
 track: academy
 series: macroeconomics
 chapter: 23
-title: "거시경제학 — IS-LM 연립해와 재정·통화정책 비교정태"
-description: "소비·투자·화폐수요 함수에서 IS와 LM을 도출하고 연립방정식으로 균형소득과 이자율, 정책승수와 구축효과를 계산합니다."
-pubDate: 2026-04-14
-updatedDate: 2026-09-14
+title: "거시경제학 — IS-LM 연립과 비교정태"
+description: "재화·화폐 균형을 두 식으로 풀어 재정 충격의 금리·산출을 동시에 구하고, 그래프 화살표가 숨기는 구축의 크기를 숫자로 복습합니다."
+pubDate: 2026-09-14
+updatedDate: 2026-09-15
 category: Economics
-tags: ["경제학", "IS-LM", "비교정태", "재정정책", "통화정책"]
+tags: ["경제학", "거시경제", "IS-LM", "비교정태"]
 locale: ko
 author: Oiyo
 layoutVariant: lecture-series
 contentStage: review
-embeddedTools: ["IS-LM 시뮬레이터"]
 ---
 
 import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
 import { LectureTable } from "@/features/education-common/components/LectureVisuals";
-import { ISLMSimulator } from "@/features/education-calculators/EconomicSimulators";
 
-# 거시경제학 — IS-LM을 연립방정식으로 풀기
+# 거시경제학 — 화살표 두 개는 연립 해를 대체하지 못한다
 
-제18장과 제28장에서 정책 방향을 비교했다. 이 장에서는 그 화살표를 소비·투자·화폐수요 함수에서 직접 도출한다. IS-LM은 단기 가격수준이 주어진 폐쇄경제 모형이며, 산출과 이자율의 동시 결정을 설명한다.
+14·18장이 기울기와 부호다. 이 장은 같은 모형을 식으로 푼다. 정책 시뮬레이터와 시험의 “얼마나”에 답하려면 교차점의 좌표가 필요하다.
 
-## 1. 재화시장 균형에서 IS를 도출한다
+## 1. 두 식
 
-`C=C₀+c(Y-T)`, `I=I₀-bi`이고 정부지출이 `G`일 때 재화시장 균형은 다음과 같다.
-
-<FormulaBox
-  label="IS 곡선"
-  formula="Y=C_0+c(Y-T)+I_0-bi+G \Rightarrow Y=\frac{C_0-cT+I_0+G-bi}{1-c}"
-  description="이자율이 오르면 투자가 줄어 균형산출이 낮아지므로 IS는 우하향한다."
-/>
-
-정부지출 증가, 감세, 소비·투자 기대 개선은 각 이자율에서 계획지출을 높여 IS를 오른쪽으로 이동시킨다. 이자율 변화에 따른 산출 변화는 곡선상 이동이다.
-
-## 2. 화폐시장 균형에서 LM을 도출한다
-
-실질화폐수요를 `L=kY-hi`, 실질화폐공급을 `M/P`라 두면 다음과 같다.
+선형으로 적으면 `Y=α-βr+γG`(IS), `r=δ+λY-μ(M/P)`(LM). 대입하면 Y와 r이 G, M의 함수가 된다. γ가 승수, β가 투자의 금리 탄력, λ가 거래 수요, μ가 화폐수요의 금리 탄력이다.
 
 <FormulaBox
-  label="LM 곡선"
-  formula="\frac{M}{P}=kY-hi \Rightarrow i=\frac{k}{h}Y-\frac{M/P}{h}"
-  description="소득이 오르면 거래수요가 늘어 주어진 실질통화량에서 이자율이 상승하므로 LM은 우상향한다."
+  label="재정 승수 (선형)"
+  formula="\frac{dY}{dG} = \gamma \big/ \big(1+\beta\lambda/\mu\big)"
+  description="μ→∞(함정)이면 분모 1, 승수 γ. μ→0(고전 LM)이면 분모 무한, 승수 0. 18장의 표가 이 식이다."
 />
 
-명목통화량 증가 또는 물가 하락은 실질공급을 늘려 LM을 아래·오른쪽으로 이동시킨다.
-
-## 3. 연립해로 정책승수를 계산한다
-
-`C=100+0.8(Y-100)`, `I=150-10i`, `G=100`, `M/P=200`, `L=0.5Y-20i`라고 하자. 두 균형식은 `IS: Y=1350-50i`, `LM: Y=400+40i`가 된다. 연립하면 `i≈10.56`, `Y≈822.22`다.
-
-정부지출을 20 늘리면 IS 절편은 100 증가한다. 새 균형은 `Y≈866.67`, `i≈11.67`이다. 산출은 약 44.45 증가한다. 화폐시장을 무시한 단순 지출승수 `1/(1-0.8)=5`라면 100 증가해야 하지만, 이자율 상승과 투자 감소가 55.55를 구축했다.
+ΔG=10조 원, 금리 상승으로 I가 3조 원 줄면 산출 증가는 폐쇄 승수보다 작다. 그 3조 원이 β·Δr이다.
 
 <LectureTable
-  title="같은 모형의 정책 변화"
-  headers={["변화", "곡선", "Y", "i"]}
+  title="계수와 이야기"
+  headers={["계수", "커지면"]}
   rows={[
-    ["G 증가", "IS 우측", "상승", "상승"],
-    ["T 감소", "IS 우측", "상승", "상승"],
-    ["M/P 증가", "LM 우측", "상승", "하락"],
-    ["P 상승, M 고정", "LM 좌측", "하락", "상승"],
+    ["γ", "재정 상한 ↑"],
+    ["β", "구축 ↑, 통화 경로 ↑"],
+    ["λ", "LM 가파름, 구축 ↑"],
+    ["μ", "LM 평평, 구축 ↓"],
   ]}
 />
 
-## 4. 기울기는 정책효과의 크기를 결정한다
-
-투자의 금리민감도 `b`가 크면 IS가 평평해지고 재정확대의 금리 상승이 투자를 크게 줄인다. 화폐수요의 금리민감도 `h`가 크면 LM이 평평해져 재정정책의 구축효과가 작아진다. 반면 통화확대의 금리 하락이 지출로 이어지려면 IS가 충분히 반응해야 한다.
-
-<ISLMSimulator client:visible />
-
-시뮬레이터의 이동은 비교정태다. 한 균형에서 다른 균형으로 가는 시간, 기대 변화와 정책시차를 직접 보여주지는 않는다.
-
-## 5. IS-LM의 경계를 넘을 때 필요한 모형
-
-- 물가를 내생화하려면 AD-AS가 필요하다.
-- 개방경제와 환율제도를 넣으려면 Mundell–Fleming 모형이 필요하다.
-- 기대와 정책금리 준칙을 중심에 두려면 새케인즈 IS곡선과 Phillips곡선을 쓴다.
-- 금융기관의 대차대조표·신용스프레드는 전통적 IS-LM에 없다.
-
 <Callout type="warning">
-IS-LM의 정책효과를 시대와 제도에 관계없는 법칙으로 사용하지 않는다. 폐쇄경제, 고정물가, 외생적 통화공급이라는 가정이 바뀌면 곡선과 정책수단의 해석도 바뀐다.
+선형 근사는 국소다. 제로하한에서 μ가 갑자기 커지는 것은 계수 하나가 아니라 체제의 전환이다. 숫자를 넣은 시뮬레이터가 그 꺾임을 안 넣으면 함정을 과소평가한다.
 </Callout>
 
-다음 장에서는 비교우위를 숫자로 판별하고 생산·소비 가능집합과 교역조건의 이득을 계산한다.
+물가 P를 내생으로 돌리면 AD가 되고 19장이다. 개방하면 r 대신 환율이 들어가고 국제금융 3장이다. 이 장의 해는 폐쇄·고정 P의 벤치마크 좌표다.
 
 ## 확인문제
 
-IS: Y=C+I(r)+G, LM: M/P=L(Y,r). 재정 ΔG=10조 원, 금리 상승으로 I가 3조 원 줄면 산출 증가는 폐쇄 승수보다 작다. 연립의 비교정태가 한 곡선 이동보다 정확하다.
+IS: Y=C+I(r)+G, LM: M/P=L(Y,r). 재정 ΔG=10조 원, 금리 상승으로 I가 3조 원 줄면 산출 증가는 폐쇄 승수보다 작다. 연립의 비교정태가 한 곡선 이동보다 정확하다. μ가 커지면 그 3조 원이 줄어든다.
 
 ## 참고 자료
 
-- MIT OpenCourseWare, [Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)
-- 한국은행, [통화정책](https://www.bok.or.kr/portal/main/contents.do?menuNo=200291)
-- Olivier Blanchard, *Macroeconomics*
+- John Hicks, “Mr. Keynes and the ‘Classics’,” *Econometrica* (1937)
+- N. Gregory Mankiw, *Macroeconomics*, ch. 12
+- MIT OpenCourseWare, [14.02 Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)

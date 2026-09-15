@@ -2,109 +2,64 @@
 track: academy
 series: macroeconomics
 chapter: 7
-title: "거시경제학 — IS-LM 모형의 응용 및 학파별 논쟁"
-description: "재정정책과 통화정책의 상대적 유효성을 학파별(케인즈 vs 고전학파) 시각에서 분석합니다. 유동성 함정과 완전 고용 균형의 달성 여부를 다룹니다."
+title: "거시경제학 — IS-LM 응용과 학파별 기울기"
+description: "LM의 기울기가 재정·통화 효과의 상대 강도를 어떻게 바꾸는지 비교하고, 유동성 함정과 고전적 영역을 같은 그림의 극단으로 위치시킵니다."
 pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-15
 category: Economics
-tags:
-  - Education
-  - economics
-  - 정병렬경제학
+tags: ["경제학", "거시경제", "IS-LM", "유동성함정"]
 locale: ko
 author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
 
-import {
-  LectureTable,
-} from "@/features/education-common/components/LectureVisuals";
 import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
-import ISLMSimulator from "@/components/mdx/ISLMSimulator.tsx";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# 거시경제학 — IS-LM 모형의 응용 및 학파별 논쟁
+# 거시경제학 — 어느 정책이 강한지는 LM이 얼마나 가파른가다
 
-앞서 배운 IS-LM 모형은 단순히 그래프를 그리는 도구가 아니다. 어떤 정책이 더 효과적인지는 각 곡선의 '기울기'에 달려 있으며, 이는 경제를 바라보는 학파 간의 철학적 차이로 이어진다.
+14장이 화살표를 그렸다면, 이 장은 기울기의 극단이 학파 이름보다 먼저임을 고정한다. 30장이 가정을 다시 푼다.
 
----
-
-## 1. 정책의 유효성과 곡선의 기울기
-
-### (1) 재정 정책의 유효성 (IS 이동)
-
-- 다른 조건이 같을 때 **IS가 가파를수록** 투자의 이자율 반응이 작아 재정확대에 따른 구축효과가 작습니다.
-- **LM이 평평할수록** 소득 증가에 필요한 이자율 상승이 작아 재정정책의 소득 효과가 상대적으로 큽니다.
-
-### (2) 통화 정책의 유효성 (LM 이동)
-
-- 다른 조건이 같을 때 **LM이 가파를수록** 통화공급 변화가 이자율을 크게 움직일 수 있습니다.
-- **IS가 평평할수록** 이자율 변화에 투자가 크게 반응해 통화정책의 소득 효과가 상대적으로 큽니다. ‘극대화’는 같은 단순 모형 안의 상대 비교이지 현실 효과의 보장이 아닙니다.
-
----
-
-## 2. 학파별 시각 차이
+## 1. 세 영역
 
 <LectureTable
-  title="케인즈학파 vs 통화주의자(고전학파)"
-  headers={["구분", "케인즈학파", "통화주의자 (고전학파)"]}
+  title="LM 기울기와 정책"
+  headers={["LM", "재정 ΔG", "통화 ΔM"]}
   rows={[
-    ["주요 정책", "재정 정책 강조", "통화 정책(준칙) 강조"],
-    [
-      "IS 기울기",
-      "급경사 (투자의 이자율 탄력성 낮음)",
-      "완경사 (투자의 이자율 탄력성 높음)",
-    ],
-    [
-      "LM 기울기",
-      "완경사 (화폐수요의 이자율 탄력성 높음)",
-      "급경사 (화폐수요는 소득의 함수)",
-    ],
-    ["경제 기저", "불안정함 (정부 개입 필요)", "안정적임 (시장 자율 신뢰)"],
+    ["수평(함정)", "승수에 가깝게 큼", "거의 0"],
+    ["우상향(중간)", "구축으로 약화", "금리↓·Y↑"],
+    ["수직(고전)", "구축 완전, Y≈0", "Y 효과 큼(물가 고정 시)"],
   ]}
-  highlightColumns={[1, 2]}
 />
 
----
+화폐수요의 금리 탄력이 무한대면 함정이다. 0이면 고전적 영역이다. “케인즈 vs 고전”은 이 탄성의 경험적 주장이다.
 
-## 3. 특수 상황: 유동성 함정 (Liquidity Trap)
+<FormulaBox
+  label="구축의 크기"
+  formula="\Delta Y = k(\Delta G + \Delta I(r))"
+  description="ΔI가 음수라 순효과가 kΔG보다 작다. 중앙은행이 r을 고정하면 ΔI≈0."
+/>
 
-<ISLMSimulator client:visible />
+세계 금리 상승은 개방경제에서 IS를 좌측으로 민다(자본유출·절하 경로는 국제금융). 폐쇄 IS-LM만으로 환율 처방을 쓰지 않는다.
 
-이자율이 너무 낮아 화폐수요 곡선이 수평이 되는 상태이다 ($LM$ 수평).
+## 2. 정책 혼합
 
-- **현상**: 통화량을 아무리 늘려도 이자율이 변하지 않아 실물 경제에 영향이 없음.
-- **정책 함의**: 전통적 통화량 확대의 금리경로가 약해질 수 있어 재정정책의 상대적 효과가 커집니다. 비전통적 통화정책·기대경로·금융안정정책까지 배제한 ‘유일한 해결책’이라는 뜻은 아닙니다.
+불황+함정이면 재정이 1차. 인플레+완전고용 근처면 긴축 통화가 1차. 스태그플레이션은 이 그림의 물가 고정이 깨진 자리라 19장이 필요하다.
 
----
+<Callout type="warning">
+학파 라벨로 답을 고르지 않는다. 화폐수요가 금리에 얼마나 반응하는지를 말한다. 1970년대 이후 많은 중앙은행이 금리 목표로 가면서, 수직 LM 사고실험은 운영 체제와  immiscible하다.
+</Callout>
 
-## 4. 구축효과 (Crowding-out Effect)의 재교정
-
-재정 정책 시 이자율 상승으로 민간 투자가 줄어드는 현상이다.
-
-- 구축 정도는 화폐시장 반응, 투자 탄력성, 중앙은행 대응과 유휴 생산능력에 달립니다. 학파를 항상 100% 구축 대 0% 구축으로 나누지 않습니다.
-
----
-
-## 5. 마무리: 실용적 정책 믹스
-
-현대 경제학은 어느 한쪽의 극단적 주장만을 따르지 않는다. 경기가 극도로 침체된 상황(유동성 함정)에서는 재정 정책을, 완만한 변동 상황에서는 통화 정책을 사용하는 등 상황에 맞는 **유연한 정책 선택**이 중요하다.
-
----
-
-## 📖 참고문헌
-
-- **[거시경제학] - 정병렬**: 학파별 정책 유효성 비교.
-- **[A Monetary History of the United States] - 밀턴 프리드먼**: 통화주의의 논리적 기초.
-
----
-
-수고하셨습니다. 다음 시간에는 물가 변동까지 고려하여 국민소득의 결정 요인을 확장하는 **AD-AS 모형과 공급측 경제학**에 대해 학습하겠습니다.
+유동성 함정에서 채권 매입은 민간 포트폴리오만 바꿀 수 있다. 기대 경로(미래 금리 안내)가 남는 이유다.
 
 ## 확인문제
 
-유동성 함정에서 LM이 수평이면 재정 승수는 폐쇄 소득-지출 승수에 가깝고, 통화 확장은 금리를 더 못 내린다. ‘어느 정책이 항상 강하다’는 학파 라벨이 아니라 LM 기울기다.
+함정에서 LM이 수평이면 재정 승수는 폐쇄 소득-지출 승수에 가깝고, 통화 확장은 금리를 더 못 내린다. ‘어느 정책이 항상 강하다’는 학파 이름이 아니라 LM 기울기다. 금리가 2%p 내려갈 여지가 없으면 ΔM의 Y 경로는 닫힌다.
 
 ## 참고 자료
 
-- N. Gregory Mankiw, *Macroeconomics*
+- N. Gregory Mankiw, *Macroeconomics*, ch. 12
+- John Hicks, “Mr. Keynes and the ‘Classics’,” *Econometrica* (1937)
 - MIT OpenCourseWare, [14.02 Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)
-- 한국은행, [국민계정 해설](https://www.bok.or.kr/portal/main/contents.do?menuNo=200554)

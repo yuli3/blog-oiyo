@@ -2,99 +2,64 @@
 track: academy
 series: macroeconomics
 chapter: 1
-title: "거시경제학 — 국민소득의 측정과 기초"
-description: "GDP의 정의, 측정 방법(삼면등가의 법칙), 그리고 명목 vs 실질 GDP의 차이를 분석합니다. 경제적 후생 지표로서의 성격과 한계를 다룹니다."
+title: "거시경제학 — 국민소득의 측정과 항등식"
+description: "GDP에 들어가는 거래와 빠지는 거래를 구분하고, 명목·실질과 디플레이터로 성장과 물가를 분리한 뒤 후생 지표가 아닌 이유를 계산합니다."
 pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-15
 category: Economics
-tags:
-  - Education
-  - economics
-  - 정병렬경제학
+tags: ["경제학", "거시경제", "GDP", "디플레이터"]
 locale: ko
 author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
 
-import {
-  LectureTable,
-} from "@/features/education-common/components/LectureVisuals";
 import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# 거시경제학 — 국민소득의 측정과 기초
+# 거시경제학 — GDP는 후생이 아니라 시장에서 잰 최종 생산이다
 
-한 나라의 경제 규모와 성적표를 어떻게 측정할까? 본 장에서는 거시경제의 가장 기본 지표인 **국내총생산(GDP)**의 개념과 측정 원리를 정밀하게 파헤친다.
+[개론 7장](/ko/academy-economics-basics-ch7/)이 정의를 고정했다면, 이 장은 항등식과 디플레이터를 **성장 분해의 출발점**으로 쓴다. 소비·투자 함수는 16–17장이다.
 
----
+## 1. 세 면은 같은 circul이다
 
-## 1. GDP의 정의와 특징
+<FormulaBox
+  label="지출 접근"
+  formula="Y = C + I + G + (X-M)"
+  description="G는 정부 소비·투자이지 이전지출이 아니다. I에는 재고 변동이 들어간다. 중간재는 최종재 가격에 이미 있다."
+/>
 
-국내총생산(Gross Domestic Product)은 "일정 기간 동안 한 나라 안에서 생산된 최종 생산물의 시장가치의 합"이다.
+명목 1년차: 사과 10개×1,000원+배 5개×2,000원=20,000원. 2년차: 12×1,200+5×2,200=25,400원. 기준년 가격 실질 2년=12×1,000+5×2,000=22,000원. 성장 10%, 디플레이터 25,400/22,000×100≈115.5.
 
-- **일정 기간**: 보통 1년 또는 1분기 (유량 변수, Flow).
-- **한 나라 안에서**: 영토 기준 (속지주의).
-- **최종 생산물**: 중간재는 제외하고 최종재만 계산하여 중복 계산을 방지한다.
-- **시장가치**: 시장에서 거래되는 것만 포함함을 원칙으로 한다 (가사 노동, 지하 경제 등은 제외).
+<LectureTable
+  title="GDP가 다르게 처리하는 거래"
+  headers={["거래", "GDP", "이유"]}
+  rows={[
+    ["신규 주택", "포함(I)", "그 기 생산"],
+    ["기존 주택 매매", "수수료만", "소유권 이전"],
+    ["수출", "X", "국내 생산"],
+    ["수입 소비", "C에 들었다가 M 차감", "국내 생산 아님"],
+    ["실업급여", "G 아님", "이전"],
+  ]}
+/>
 
----
+## 2. CPI와 디플레이터는 바구니가 다르다
 
-## 2. 국민소득 측정의 삼면등가의 법칙
+CPI는 고정 소비 바구니, 디플레이터는 국내 생산의 현재 구성이다. 수입 소비재는 CPI에 더 잘 잡힌다. 명목 성장 10%, 디플레이터 5%면 실질은 약 4.8%다. 110/1.05≈104.8.
 
-생산, 분배, 지출의 세 측면에서 측정한 국민소득은 이론적으로 모두 동일하다.
+<Callout type="warning">
+공해 복구 지출은 GDP를 올린다. 가계 내 생산과 여가는 빠진다. 성장률을 후생 개선과 같은 문장으로 읽지 않는다. GNI는 해외 순수취 요소소득을 더한다. 지표 선택이 이미 분석이다.
+</Callout>
 
-1. **생산 국민소득**: 각 생산단계에서 창출된 부가가치의 합.
-2. **분배 국민소득**: 임금 + 이자 + 지대 + 이윤의 합.
-3. **지출 국민소득**: 가계소비(C) + 기업투자(I) + 정부지출(G) + 순수출(NX).
-
-<FormulaBox>$Y = C + I + G + (X - M)$</FormulaBox>
-
----
-
-## 3. 명목 GDP vs 실질 GDP
-
-물가 변동의 착시를 제거해야 실제 생산량이 늘었는지 알 수 있다.
-
-- **명목 GDP**: 그해의 가격으로 계산.
-- **실질 GDP**: 기준 연도의 가격으로 계산. **경제성장률** 산출 시 사용된다.
-- **GDP 디플레이터**: 명목 GDP를 실질 GDP로 나눈 값으로, 나라 전체의 물가 수준을 나타낸다.
-
-<FormulaBox>
-  $GDP \text{ Deflator} = \frac{\text{Nominal GDP}}{\text{Real GDP}} \times 100$
-</FormulaBox>
-
----
-
-## 4. GDP와 GNI (국민총소득)
-
-과거에는 국민 경제의 성과 지표로 GNP를 썼으나, 현재는 영토 기준인 GDP와 소득 기준인 GNI를 주로 사용한다.
-
-- **GNI**: 한 나라의 국민이 국내외에서 벌어들인 소득의 합계.
-- **교역조건 변화의 반영**: 실질 GDP에 교역조건 변화에 따른 **무역 손익**을 더하면 실질 국내총소득(GDI)이 되고, 여기에 국외순수취요소소득을 더하면 실질 GNI가 된다.
-- <mark>**시험 핵심**</mark>: 나라의 덩치를 볼 때는 GDP를, 국민의 실제
-  **구매력(생활 수준)**을 볼 때는 실질 GNI를 확인해야 한다.
-
----
-
-## 5. 마무리: 숫자가 다 말해주지 못하는 것들
-
-GDP는 한 나라의 물질적 풍요를 보여주는 훌륭한 지표이지만, 여가 시간, 환경 오염, 소득 불평등 등 삶의 질(Well-being)의 모든 측면을 반영하지는 못한다. 따라서 보조 지표인 HDI(인간개발지수) 등을 함께 고려하는 안목이 필요하다.
-
----
-
-## 📖 참고문헌
-
-- **[거시경제학] - 정병렬**: 국민소득 계정의 수리적 분석.
-- **[경제학원론] - 이준구, 이창용**: 국민소득의 기초 개념.
-
----
-
-수고하셨습니다. 다음 시간에는 물가와 고용의 핵심 지표인 **인플레이션과 실업**에 대해 학습하겠습니다.
+잠재 GDP는 인플레를 가속하지 않는 생산 수준이다. 갭의 부호가 수요 충격인지 공급 충격인지는 12장·21장이 가른다.
 
 ## 확인문제
 
-명목 GDP가 100조 원에서 110조 원, 디플레이터가 100에서 105. 실질 성장은 약 4.8%이지 10%가 아니다. 110/1.05≈104.8.
+명목 GDP 100조 원→110조 원, 디플레이터 100→105. 실질 성장은 약 4.8%이지 10%가 아니다. 공무원 임금 10조 원은 G, 실업급여 10조 원은 G가 아니다.
 
 ## 참고 자료
 
-- N. Gregory Mankiw, *Macroeconomics*
-- MIT OpenCourseWare, [14.02 Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)
 - 한국은행, [국민계정 해설](https://www.bok.or.kr/portal/main/contents.do?menuNo=200554)
+- N. Gregory Mankiw, *Macroeconomics*, ch. 2–3
+- MIT OpenCourseWare, [14.02 Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)

@@ -2,95 +2,62 @@
 track: academy
 series: macroeconomics
 chapter: 5
-title: "거시경제학 — 소비함수론: 케인즈부터 생애주기 가설까지"
-description: "절대소득가설, 상대소득가설, 영구소득가설 및 생애주기가설 등 소비를 규정하는 다양한 이론들을 분석합니다. 유동성 제약과 예비적 저축동기를 다룹니다."
+title: "거시경제학 — 소비함수: 케인즈에서 항상소득까지"
+description: "케인즈 소비의 승수를 숫자로 풀고, 생애주기·항상소득이 왜 일시 소득의 MPC를 낮추는지, 유동성 제약이 그 예측을 깨는 지점을 복습합니다."
 pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-15
 category: Economics
-tags:
-  - Education
-  - economics
-  - 정병렬경제학
+tags: ["경제학", "거시경제", "소비함수", "항상소득"]
 locale: ko
 author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
 
-import {
-  LectureTable,
-} from "@/features/education-common/components/LectureVisuals";
 import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# 거시경제학 — 소비함수론: 케인즈부터 생애주기 가설까지
+# 거시경제학 — 소비는 올해 소득만이 아니라 생애 자원의 함수다
 
-국민소득의 가장 큰 구성 요소인 소비($C$)는 무엇에 의해 결정되는가? 케인즈의 단순한 모형에서 시작하여, 인간의 합리적이고 장기적인 계획을 반영한 현대 이론들까지 소비의 메커니즘을 심층 분석한다.
+케인즈 `C=c0+cY_d`는 단기 승수의 연료다. 중급 복습은 그 MPC가 **어느 소득**에 붙는지를 가른다. 일시 보너스와 영구 감세는 같은 c가 아니다.
 
----
+## 1. 케인즈 교차의 숫자
 
-## 1. 케인즈의 절대소득가설 (Absolute Income Hypothesis)
+`C=20+0.8Y_d`, `Y_d=Y-T`, `T=10조 원`, `I+G=50조 원`. `Y=20+0.8(Y-10)+50` → `0.2Y=62`, `Y=310조 원`. MPC가 0.6이면 승수 `1/0.4=2.5`로 Y가 낮아진다.
 
-소비는 현재의 가처분소득($Y_d$)에 의해서만 결정된다는 이론이다.
+<FormulaBox
+  label="단순 승수"
+  formula="k = 1/(1-MPC)"
+  description="한계세율 t, 수입 성향 m이 있으면 분모가 1-MPC(1-t)+m 쪽으로 커진다. 구축은 분자를 줄인다."
+/>
 
-<FormulaBox>
-  $C = C_0 + cY_d$ ($C_0$: 기초소비, $c$: 한계소비성향)
-</FormulaBox>
-- **특징**: 
-  - $0 < c < 1$ (한계소비성향은 0과 1 사이).
-  - 소득이 늘면 평균소비성향($APC = C/Y_d$)은 감소한다.
-- **측정 결과**: 단기적으로는 맞지만, 장기적으로 $APC$가 일정하다는 사실(쿠즈네츠의 발견)을 설명하지 못하는 한계가 있다.
+## 2. 항상소득·생애주기
 
----
+프리드먼: 소비는 항상소득에 붙고 일시 소득의 MPC는 작다. 모딜리아니: 평생 자원을 평활한다. 둘 다 **차입이 자유롭고 미래 소득을 담보할 수 있다**는 전제다.
 
-## 2. 듀젠베리의 상대소득가설 (Relative Income Hypothesis)
+<LectureTable
+  title="어느 MPC인가"
+  headers={["충격", "케인즈", "항상소득/생애"]}
+  rows={[
+    ["영구 감세", "큼", "큼"],
+    ["일시 재난지원", "큼", "작음"],
+    ["유동성 제약 가계", "큼", "일시에도 큼"],
+  ]}
+/>
 
-소비는 주변 사람의 소비 수준이나 과거 자신의 최고 소비 수준에 영향을 받는다는 가설이다.
+<Callout type="warning">
+랜덤워크 소비(홀)는 예측 가능한 소득 변화가 소비를 예측하지 못한다는 극단이다. 실증은 과도한 민감(과도반응)과 과도한 평활이 섞인다. 신용카드 한도와 주택 담보가 MPC를 바꾼다. 평균 MPC 0.8을 모든 정책에 붙이지 않는다.
+</Callout>
 
-1. **전시 효과 (Demonstration Effect)**: 이웃의 소비 수준을 따라 하려는 성향.
-2. **톱니 효과 (Ratchet Effect)**: 소득이 줄어도 과거의 소비 습관 때문에 소비가 비가역적으로 줄어들지 않는 현상.
-
----
-
-## 3. 프리드먼의 영구소득가설 (Permanent Income Hypothesis)
-
-소비를 결정하는 것은 일시적인 소득이 아니라, 평생 벌어들일 평균적 소득인 **영구 소득**이라는 이론이다.
-
-- **영구 소득**: 자산 가치와 미래 기대를 반영한 소득.
-- **일시 소득**: 보너스나 복권 당첨 등 우연한 소득.
-- **<mark>시사점</mark>**: 일시적인 조세 감면 정책은 영구 소득에 큰 영향을 주지 못하므로 소비 부양 효과가 미미하다.
-
----
-
-## 4. 모딜리아니의 생애주기가설 (Life-Cycle Hypothesis)
-
-사람은 생애 전체의 소득을 고려하여 청년기, 장년기, 노년기에 걸쳐 소비를 고르게 평준화(Consumption Smoothing)하려 한다는 이론이다.
-
-- **청년기**: 소득 < 소비 (차입).
-- **장년기**: 소득 > 소비 (저축).
-- **노년기**: 소득 > 소비 (장년기 저축 사용).
-- **정책적 의미**: 인구 구조 변화(고령화)가 국가 전체의 저축률에 지대한 영향을 미침을 시사한다.
-
----
-
-## 5. 마무리: 소비는 미래에 대한 믿음입니다
-
-단순히 오늘 번 돈을 쓰는 것이 아니라, 내일의 나를 믿고 오늘을 계획하는 것이 소비의 본질이다. 현대 거시경제학은 소비자의 '기대'와 '예산 제약'으로 경제 정책의 유효성을 평가한다.
-
----
-
-## 📖 참고문헌
-
-- **[거시경제학] - 정병렬**: 소비함수론의 수리 모형.
-- **[경제학원론] - 그레고리 맨큐**: 가계의 소비 결정 요인.
-
----
-
-수고하셨습니다. 다음 시간에는 기업의 미래 의사결정인 **투자함수론과 가속도 원리**에 대해 학습하겠습니다.
+절약의 역설은 단기 수요 모형에서 모두가 동시에 저축하면 소득이 줄어 총저축이 의도만큼 안 늘어난다는 이야기다. 장기 자본축적까지 부정하지 않는다. 22장이다.
 
 ## 확인문제
 
-케인즈 소비 C=20+0.8Yd, Yd=Y-T, T=10조 원. Y=C+50조 원이면 Y=20+0.8(Y-10)+50, 0.2Y=62, Y=310. MPC가 0.6이면 승수가 작아져 Y가 낮아진다.
+C=20+0.8(Y-10)+50 균형이 310조 원. 일시 이전 10조 원의 MPC가 0.3이면 1차 소비는 3조 원이다. 케인즈 0.8을 붙이면 8조 원으로 과대하다. 대상 가계의 제약 여부가 숫자다.
 
 ## 참고 자료
 
-- N. Gregory Mankiw, *Macroeconomics*
+- N. Gregory Mankiw, *Macroeconomics*, ch. 19
+- Milton Friedman, *A Theory of the Consumption Function*
 - MIT OpenCourseWare, [14.02 Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)
-- 한국은행, [국민계정 해설](https://www.bok.or.kr/portal/main/contents.do?menuNo=200554)
