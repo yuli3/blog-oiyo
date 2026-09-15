@@ -53,3 +53,8 @@ test("accounting-principles KO → 회계원리", () => {
   assert.equal(prioritySeriesName("accounting-principles", "ko"), "회계원리");
   assert.equal(seriesDisplayName("accounting-principles", "ko"), "회계원리");
 });
+
+test("civil-law KO → 민법", () => {
+  assert.equal(prioritySeriesName("civil-law", "ko"), "민법");
+  assert.equal(seriesDisplayName("civil-law", "ko"), "민법");
+});
