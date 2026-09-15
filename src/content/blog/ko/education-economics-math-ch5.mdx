@@ -1,0 +1,69 @@
+---
+track: academy
+locale: ko
+series: economics-math
+chapter: 5
+title: "경제수학 — 행렬과 투입산출"
+category: "Economics"
+author: Oiyo
+tags:
+  - 경제수학
+  - 행렬
+  - 투입산출
+  - 산업연관
+description: "2×2 투입산출에서 (I-A)의 역행렬이 최종수요 파급을 계산하는 이유를 풀고, 역행렬 존재가 기술 실현 가능성과 다른 이유를 복습합니다."
+pubDate: 2026-09-15
+updatedDate: 2026-09-15
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 경제수학 — 행렬은 한 시장이 아니라 산업 간 의존을 한 번에 푼다
+
+[2장](/ko/education-economics-math-ch2/)의 적분은 한 곡선 아래 면적이다. 재화가 서로를 중간재로 쓰면 그 면적을 산업마다 따로 더해서는 총산출이 안 나온다. 이 장은 `(I-A)^{-1}`이 그 순환을 닫는 이유를 복습한다.
+
+## 1. 최종수요와 총산출은 같은 벡터가 아니다
+
+중간 투입계수 `A`의 `(i,j)` 성분은 j 한 단위를 만들 때 필요한 i의 양이다. 최종수요가 `d`이면 총산출 `x`는 중간수요 `Ax`와 최종수요를 동시에 만족해야 한다.
+
+<FormulaBox
+  label="레온티예프 체계"
+  formula="x = Ax + d \quad \Rightarrow \quad x = (I-A)^{-1}d"
+  description="역행렬의 각 열은 그 산업 최종수요 1단위를 충당하려고 전 산업이 얼마나 돌아야 하는지를 가리킨다."
+/>
+
+`A=[[0.2,0.3],[0.1,0.4]]`, `d=(100,80)`이면 `I-A=[[0.8,-0.3],[-0.1,0.6]]`. 행렬식은 `0.48-0.03=0.45`. 역행렬은 `(1/0.45)[[0.6,0.3],[0.1,0.8]]`. 총산출은 대략 `(144.4개, 155.6개)`이다. 최종수요 100개와 80개보다 크다. 그 차이가 중간재 순환이다.
+
+## 2. 역행렬이 있다고 기술이 산 것은 아니다
+
+<LectureTable
+  title="행렬이 경제학에서 하는 일"
+  headers={["대상", "식", "실패할 때"]}
+  rows={[
+    ["투입산출", "(I-A)^{-1}d", "호킨스–사이먼 실패, 스펙트럴 반경이 1 이상"],
+    ["두 재 비교정태", "야코비안 부호", "국소 선형화 밖"],
+    ["포트폴리오", "공분산 행렬", "특이행렬, 완전상관"],
+  ]}
+/>
+
+호킨스–사이먼 조건은 `(I-A)`의 선행 주 소행렬식이 양일 것을 요구한다. 숫자를 넣을 수 있다는 것과 그 기술이 생산적인 것은 다르다. 비교정태의 야코비안은 [1장](/ko/education-economics-math-ch1/) 미분의 여러 변수 판이다. 공분산 행렬은 [재무관리](/ko/education-finance-ch3/)가 위험으로 읽는다.
+
+<Callout type="warning">
+역행렬 존재가 경제 안정은 아니다. 투입산출은 정태 수량 체계다. 가격이 조정되는지, 재고가 발산하는지는 묻지 않는다. 동학과 안정성은 [4장](/ko/education-economics-math-ch4/)이다. 큰 표의 계수를 인과로 읽지 않는다. 계량은 식별이 따로 있다.
+</Callout>
+
+한국은행 산업연관표는 이 2×2를 수십 산업으로 확장한 표다. 산술은 같다. 분류와 수입 처리가 바뀌면 같은 `d`에도 `x`가 바뀐다.
+
+## 확인문제
+
+위 `A`에서 최종수요만 두 번째 산업이 80에서 100으로 20 늘어나면, 역행렬 둘째 열 `(1/0.45)(0.3, 0.8) \approx (0.667, 1.778)`에 20을 곱해 총산출은 약 13.3개와 35.6개만큼 는다. 둘째 산업만 늘렸는데 첫째도 13.3개가 따라 는다. 중간재 링크가 없으면 첫째는 0이어야 한다.
+
+## 참고 자료
+
+- Alpha Chiang and Kevin Wainwright, *Fundamental Methods of Mathematical Economics*, ch. 15–16
+- Wassily Leontief, *Input-Output Economics*
+- 한국은행, [산업연관표](https://www.bok.or.kr/portal/main/contents.do?menuNo=200876)
