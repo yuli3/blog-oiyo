@@ -48,3 +48,8 @@ test("source lock: seriesDisplayName exported and 경영학원론 map present", 
   assert.match(src, /"management-principles"[\s\S]*?ko:\s*"경영학원론"/);
   assert.match(src, /"management-principles"[\s\S]*?en:\s*"Principles of Management"/);
 });
+
+test("accounting-principles KO → 회계원리", () => {
+  assert.equal(prioritySeriesName("accounting-principles", "ko"), "회계원리");
+  assert.equal(seriesDisplayName("accounting-principles", "ko"), "회계원리");
+});

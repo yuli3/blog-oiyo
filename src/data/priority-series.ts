@@ -16,7 +16,7 @@
 export const PRIORITY_SERIES = [
   "management-principles",
   "economics-introduction",
-  "accounting-basics",
+  "accounting-principles",
   "qualification-roadmaps",
 ] as const;
 
@@ -62,6 +62,38 @@ export const PRIORITY_SERIES_NAMES: Partial<Record<string, Record<string, string
   "psychology-basics": {
     ko: "심리학", en: "Psychology", ja: "心理学",
     zh: "心理学", fr: "Psychologie", es: "Psicología",
+  },
+  "accounting-principles": {
+    ko: "회계원리", en: "Principles of Accounting", ja: "会計原理",
+    zh: "会计原理", fr: "Principes comptables", es: "Principios de contabilidad",
+  },
+  "intermediate-accounting": {
+    ko: "중급회계", en: "Intermediate Accounting", ja: "中級会計",
+    zh: "中级会计", fr: "Comptabilité intermédiaire", es: "Contabilidad intermedia",
+  },
+  "advanced-accounting": {
+    ko: "고급회계", en: "Advanced Accounting", ja: "上級会計",
+    zh: "高级会计", fr: "Comptabilité avancée", es: "Contabilidad avanzada",
+  },
+  "cost-accounting": {
+    ko: "원가회계", en: "Cost Accounting", ja: "原価会計",
+    zh: "成本会计", fr: "Comptabilité des coûts", es: "Contabilidad de costos",
+  },
+  "managerial-accounting": {
+    ko: "관리회계", en: "Managerial Accounting", ja: "管理会計",
+    zh: "管理会计", fr: "Comptabilité de gestion", es: "Contabilidad de gestión",
+  },
+  "auditing": {
+    ko: "회계감사", en: "Auditing", ja: "監査",
+    zh: "审计", fr: "Audit", es: "Auditoría",
+  },
+  "tax-accounting": {
+    ko: "세무회계", en: "Tax Accounting", ja: "税務会計",
+    zh: "税务会计", fr: "Comptabilité fiscale", es: "Contabilidad fiscal",
+  },
+  "financial-statement-analysis": {
+    ko: "재무제표분석", en: "Financial Statement Analysis", ja: "財務諸表分析",
+    zh: "财务报表分析", fr: "Analyse des états financiers", es: "Análisis de estados financieros",
   },
   "accounting-basics": {
     ko: "회계학", en: "Accounting", ja: "会計学",
