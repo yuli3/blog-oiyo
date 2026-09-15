@@ -59,7 +59,7 @@ function inspect(file) {
   if (!/Callout/.test(text) && !/(반례|한계|가정이 깨|적용 범위)/.test(body)) {
     failures.push("missing limits/counterexample");
   }
-  if (!/\d[\d,]*(?:\.\d+)?\s*(?:만\s*원|억원|원|%|배)/.test(body)) {
+  if (!/\d[\d,]*(?:\.\d+)?\s*(?:만\s*원|억원|조\s*원|원|%|배|개|시간)/.test(body)) {
     failures.push("missing worked numeric example");
   }
   const sourceHeading = body.match(/^##[^\n]*(참고\s*자료|참고문헌|공식\s*출처\s*확인)[^\n]*$/m);
