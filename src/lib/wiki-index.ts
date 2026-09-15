@@ -28,7 +28,7 @@ const publishedCollectionFilter = ({
   data.draft !== true && !isRedirectStub(data);
 
 const chapterOf = (post: CollectionEntry<"blog">): number =>
-  parseInt(post.slug.match(/-ch(\d+)$/)?.[1] ?? "0", 10);
+  post.data.chapter ?? parseInt(post.slug.match(/-ch(\d+)$/)?.[1] ?? "0", 10);
 
 export function seriesKeyOf(post: CollectionEntry<"blog">): string {
   // frontmatter series is authoritative when present (e.g. myth-dictionary

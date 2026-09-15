@@ -1,0 +1,84 @@
+---
+track: academy
+series: financial-economics
+chapter: 2
+title: "금융경제학 — 기대효용·위험프리미엄·확률할인인자"
+description: "같은 기대현금흐름도 한계효용이 높은 상태에서 더 비싸진다는 점을 확률할인인자로 보이고, CAPM을 그 특수한 경우로 위치시킵니다."
+pubDate: 2026-09-15
+category: Economics
+tags: ["경제학", "금융경제학", "확률할인인자", "위험프리미엄", "기대효용"]
+locale: ko
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 금융경제학 — 위험한 현금흐름은 기댓값이 같아도 가격이 다르다
+
+1장의 상태가격 `q_s`를 확률로 나누면 확률할인인자(SDF)가 된다. 이 장에서는 그 값이 왜 불황에서 더 커지는지, 그리고 기업 재무에서 쓰는 CAPM이 어떤 가정 위의 특수한 경우인지를 본다.
+
+## 1. 한계효용이 높은 상태의 1원이 더 비싸다
+
+대표 소비자가 있고 효용이 시간에 분리된다고 하자. 오늘 소비를 1원 줄여 상태 `s`에서 1원을 더 얻는 대가는 내 한계효용 비율이다.
+
+<FormulaBox
+  label="확률할인인자"
+  formula="m_s = \beta u'(c_s) / u'(c_0)"
+  description="불황처럼 소비가 낮아 한계효용이 큰 상태에서 m이 커지고, 그 상태의 현금흐름은 더 높은 현재가치를 받는다."
+/>
+
+자산 가격은 현금흐름과 `m`의 곱을 기대한 값이다.
+
+<FormulaBox
+  label="자산가격"
+  formula="p = E[m x]"
+  description="x가 불황에서 큰 자산(보험, 국채)은 E[m x]가 커져 가격이 높고 기대수익률은 낮다."
+/>
+
+기대수익률로 다시 쓰면 `E[R] - r_f = - r_f Cov(m, R)`이다. 시장과 같이 움직이는 자산은 `m`과 음의 공분산을 가지므로 위험프리미엄이 양이다. “분산이 크다”가 아니라 “나쁜 상태에서 손실이 난다”가 가격에 들어가는 위험이다.
+
+## 2. 숫자로 보면 보험이 주식보다 비싸다
+
+무위험이자율 2%, 호황·불황 확률 각 50%라고 하자. 호황에서 `m=0.90`, 불황에서 `m=1.06`이다. 평균 `E[m]=0.98`이므로 `1/E[m]≈1.0204`로 무위험이자율과 맞는다.
+
+주식은 호황 140원, 불황 70원을 준다. 가격은 `0.5×(0.90×140 + 1.06×70) = 100.1원`이다. 기대현금흐름은 105원인데 가격은 그보다 낮다. 보험금은 호황 0원, 불황 100원이다. 가격은 `0.5×1.06×100 = 53원`이다. 기대현금흐름 50원보다 비싸다. 같은 기댓값 50원이라도 불황에 집중되면 프리미엄을 주고 산다.
+
+<LectureTable
+  title="위험이 가격에 들어가는 경로"
+  headers={["측정", "담는 것", "빠지는 것"]}
+  rows={[
+    ["분산·표준편차", "변동의 크기", "어느 상태에서 변동하는지"],
+    ["시장 베타", "시장과 같이 움직이는 정도", "시장 밖 소득 위험"],
+    ["SDF 공분산", "한계효용이 큰 상태의 손실", "선호·시장완비 가정이 틀릴 때"],
+  ]}
+/>
+
+## 3. CAPM은 SDF가 시장수익률의 선형일 때 나온다
+
+평균-분산 선호이거나 수익률이 정규분포이면 평균과 분산만으로 선택이 끝난다. 그때 SDF는 시장 포트폴리오 수익률의 선형이 되고, 위험프리미엄은 베타에 비례한다.
+
+<FormulaBox
+  label="CAPM"
+  formula="E[R_i] = r_f + \beta_i (E[R_m]-r_f)"
+  description="베타는 자산과 시장 공분산을 시장분산으로 나눈 값이다. 고유위험은 분산되면 가격에 남지 않는다는 주장이다."
+/>
+
+기업 실무의 CAPM 사용법은 [재무관리 4장](/ko/education-finance-ch4/)에 있다. 여기서 중요한 한계는 세 가지다. 시장 포트폴리오를 관측할 수 없고, 소비 위험과 시장 수익률이 다를 수 있으며, 노동소득·주택처럼 거래되지 않는 위험이 베타 밖으로 남는다.
+
+<Callout type="warning">
+주식의 역사적 초과수익률이 소비 위험으로 설명하기에 너무 크다는 것이 주식 프리미엄 퍼즐이다. 모형을 기각하지 않고 “사람들이 더 위험회피적이다”로만 메우면, 무위험이자율 퍼즐과 충돌한다. 설명은 습관형성, 장기위험, 재난 위험 등으로 나뉘며 합의된 한 식이 없다.
+</Callout>
+
+## 확인문제
+
+시장과 반대로 움직이는 자산의 기대수익률은 무위험이자율보다 높은가. 소비가 낮은 상태에서 이득을 주므로 SDF와 양의 공분산을 갖고, 위험프리미엄은 음이 된다. 보험이 그런 자산이다.
+
+## 참고 자료
+
+- John Cochrane, *Asset Pricing*, ch. 1
+- Rajnish Mehra and Edward Prescott, “The Equity Premium: A Puzzle,” *Journal of Monetary Economics* (1985)
+- MIT OpenCourseWare, [15.401 Finance Theory](https://ocw.mit.edu/courses/15-401-finance-theory-i-fall-2008/)

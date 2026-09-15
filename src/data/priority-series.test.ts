@@ -11,18 +11,18 @@ import {
 
 const here = dirname(fileURLToPath(import.meta.url));
 
-test("B1: business-basics KO → 공기업 경영학, EN → Public Enterprise Management", () => {
-  assert.equal(prioritySeriesName("business-basics", "ko"), "공기업 경영학");
-  assert.equal(prioritySeriesName("business-basics", "en"), "Public Enterprise Management");
-  assert.equal(seriesDisplayName("business-basics", "ko"), "공기업 경영학");
-  assert.equal(seriesDisplayName("business-basics", "en"), "Public Enterprise Management");
+test("B1: management-principles KO → 경영학원론, EN → Principles of Management", () => {
+  assert.equal(prioritySeriesName("management-principles", "ko"), "경영학원론");
+  assert.equal(prioritySeriesName("management-principles", "en"), "Principles of Management");
+  assert.equal(seriesDisplayName("management-principles", "ko"), "경영학원론");
+  assert.equal(seriesDisplayName("management-principles", "en"), "Principles of Management");
 });
 
-test("B1: JA/ZH/FR/ES left for Translator (unchanged legacy map)", () => {
-  assert.equal(prioritySeriesName("business-basics", "ja"), "経営学");
-  assert.equal(prioritySeriesName("business-basics", "zh"), "管理学");
-  assert.equal(prioritySeriesName("business-basics", "fr"), "Gestion");
-  assert.equal(prioritySeriesName("business-basics", "es"), "Gestión");
+test("B1: JA/ZH/FR/ES for 경영학원론", () => {
+  assert.equal(prioritySeriesName("management-principles", "ja"), "経営学原論");
+  assert.equal(prioritySeriesName("management-principles", "zh"), "管理学原理");
+  assert.equal(prioritySeriesName("management-principles", "fr"), "Principes de gestion");
+  assert.equal(prioritySeriesName("management-principles", "es"), "Principios de administración");
 });
 
 test("B3: non-URL-safe FM key uses key itself, not ch1 derive", () => {
@@ -42,9 +42,9 @@ test("B3: URL-safe key without map still derives from title", () => {
   );
 });
 
-test("source lock: seriesDisplayName exported and B1 strings present", () => {
+test("source lock: seriesDisplayName exported and 경영학원론 map present", () => {
   const src = readFileSync(join(here, "priority-series.ts"), "utf8");
   assert.match(src, /export function seriesDisplayName/);
-  assert.match(src, /"business-basics"[\s\S]*?ko:\s*"공기업 경영학"/);
-  assert.match(src, /"business-basics"[\s\S]*?en:\s*"Public Enterprise Management"/);
+  assert.match(src, /"management-principles"[\s\S]*?ko:\s*"경영학원론"/);
+  assert.match(src, /"management-principles"[\s\S]*?en:\s*"Principles of Management"/);
 });

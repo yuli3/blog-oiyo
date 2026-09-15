@@ -1,64 +1,88 @@
 ---
 track: academy
-series: economics-basics
-chapter: 40
-title: "경제학 — 비교우위론 — 무역이 상호 이득이 되는 이유"
-description: "데이비드 리카도의 비교우위론으로 각국이 자신 있는 분야에 특화할 때 얻는 무역의 이익을 학습합니다. 인터랙티브 기회비용 계산기로 직접 분석해보세요."
+series: international-trade
+chapter: 4
+title: "국제무역론 — 비교우위의 수리적 응용과 교역조건"
+description: "단위노동요구량에서 비교우위를 판별하고 생산·소비 가능집합, 교역조건, 임금범위와 다재화 리카도 모형의 조건을 계산합니다."
 pubDate: 2026-04-14
+updatedDate: 2026-09-14
 category: Economics
-tags:
-  - Education
-  - 경제학
-  - 비교우위
-  - 무역
-  - 리카도
+tags: ["경제학", "비교우위", "교역조건", "리카도모형", "무역이득"]
 locale: ko
 author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+embeddedTools: ["비교우위 계산기"]
 ---
 
-import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 import { CompAdvantageCalculator } from "@/features/education-calculators/TradeSimulators";
 
-# 비교우위론: 무역의 경제학
+# 국제무역론 — 비교우위를 생산과 소비의 문제로 풀기
 
-"한 국가가 모든 재화 생산에서 다른 국가보다 뒤처져 있다면, 과연 무역이 가능할까?" 이 질문에 대한 고전 경제학의 명쾌한 해답이 바로 **비교우위(Comparative Advantage)**입니다.
+제15장과 제34장은 비교우위의 원리와 무역모형을 소개했다. 이 장에서는 생산시간 자료에서 상대가격 범위와 무역이득을 계산한다. 절대생산성이 아니라 **한 재화를 더 만들 때 포기하는 다른 재화의 양**이 핵심이다.
 
----
+## 1. 단위노동요구량으로 기회비용을 계산한다
 
-## 1. 절대우위 vs 비교우위
+한국은 칩 1개에 4시간, 밀 1단위에 2시간이 필요하고, 호주는 각각 12시간과 3시간이 필요하다고 하자.
 
-- **절대우위 (Absolute Advantage)**: 한 나라가 다른 나라보다 더 적은 비용(시간)으로 재화를 생산할 수 있는 능력.
-- **비교우위 (Comparative Advantage)**: 한 나라가 다른 나라보다 더 낮은 **기회비용**으로 재화를 생산할 수 있는 능력.
+<LectureTable
+  title="생산기술과 기회비용"
+  headers={["국가", "칩 1개 노동", "밀 1단위 노동", "칩 1개의 기회비용"]}
+  rows={[
+    ["한국", "4", "2", "밀 2"],
+    ["호주", "12", "3", "밀 4"],
+  ]}
+/>
 
-리카도는 모든 분야에서 절대열위에 있는 국가라도, 상대적으로 기회비용이 낮은 분야에 **특화(Specialization)**하여 무역하면 두 국가 모두의 소비 가능 집합이 늘어난다는 것을 증명했습니다.
+한국은 두 재화 모두 절대생산성이 높지만 칩의 기회비용이 더 낮으므로 칩에 비교우위가 있다. 호주는 밀의 기회비용이 칩 `3/12=0.25`개로 한국의 `2/4=0.5`개보다 낮다.
 
----
+## 2. 국제 상대가격은 두 기회비용 사이에 있어야 한다
 
-## 2. 인터랙티브 분석 도구
+칩 1개의 국제가격이 밀 3단위라면 한국은 국내에서 밀 2를 포기해 칩을 만들고 밀 3과 교환한다. 칩 한 개당 밀 1을 더 얻는다. 호주는 국내에서 칩을 만들려면 밀 4를 포기하지만 무역으로 밀 3만 주면 되므로 밀 1을 절약한다.
 
-두 국가의 생산 시간을 입력하여 기회비용을 자동으로 계산하고, 어느 국가가 어느 재화에 비교우위가 있는지 확인해보세요.
+<FormulaBox
+  label="상호이득 교역조건"
+  formula="2<\frac{P_{칩}}{P_{밀}}<4"
+  description="경계에서는 한 나라가 무역에 무차별하고, 범위를 벗어나면 적어도 한 나라는 자급생산을 선호한다."
+/>
+
+## 3. 무역은 소비가능집합을 생산가능집합 밖으로 넓힌다
+
+한국의 노동이 40시간이면 자급자족 생산가능선은 `4C+2W=40`이다. 칩에 완전특화하면 10개를 생산한다. 국제가격이 칩 1개당 밀 3이라면 칩 4개를 수출하고 칩 6개·밀 12를 소비할 수 있다. 이 조합은 `4×6+2×12=48`시간이 필요하므로 자급 생산가능집합 밖이다.
+
+그러나 생산가능집합 확대가 아니라 **소비가능집합 확대**다. 생산기술 자체가 즉시 좋아진 것은 아니다.
+
+## 4. 상대임금은 생산성과 무역패턴을 함께 결정한다
+
+한국 임금을 `w_K`, 호주 임금을 `w_A`라 하자. 칩 생산비는 각각 `4w_K`, `12w_A`, 밀은 `2w_K`, `3w_A`다. 한국이 칩을, 호주가 밀을 생산하려면 다음 범위가 필요하다.
+
+<FormulaBox
+  label="특화가 유지되는 상대임금"
+  formula="\frac{12}{4}>\frac{w_K}{w_A}>\frac{3}{2}\quad\Rightarrow\quad 1.5<\frac{w_K}{w_A}<3"
+  description="한국의 임금이 생산성 우위보다 너무 높으면 칩 경쟁력을 잃고, 너무 낮으면 두 재화를 모두 더 싸게 생산한다."
+/>
+
+다재화 모형에서는 상대임금이 주어질 때 생산성 우위가 큰 재화부터 한 국가가 생산하고, 운송비와 비무역재가 경계를 바꾼다.
+
+## 5. 계산기가 보여주지 않는 조건
 
 <CompAdvantageCalculator client:visible />
 
----
-
-## 3. 기회비용 계산법
-
-X재 생산의 기회비용은 다음과 같이 계산됩니다.
-
-<FormulaBox
-  formula="X재\ 기회비용 = \frac{X재\ 생산에\ 필요한\ 노동시간}{Y재\ 생산에\ 필요한\ 노동시간} \times (Y재\ 단위)"
-  label="Opportunity Cost of X"
-  description="X재 한 단위를 더 만들기 위해 포기해야 하는 Y재의 양입니다."
-  color="#3b82f6"
-/>
-
-<Callout type="tip">
-**암기 팁**: "내가 알고 싶은 것($X$)의 시간"이 **분자**로 갑니다. 분모는 포기하는 것($Y$)의 시간입니다.
+<Callout type="warning">
+비교우위는 무역의 총이득 가능성을 설명하지만 전환비용, 실업 기간, 국내 분배와 환경 외부효과를 자동으로 해결하지 않는다. 완전특화 역시 일정한 기회비용과 무역비용 0이라는 단순화에 의존한다.
 </Callout>
 
----
+다음 장에서는 양자 무역의 중력식과, 중간재가 국경을 여러 번 넘는 부가가치 수출을 계산한다.
 
-비교우위론은 현대 자유무역의 가장 강력한 이론적 토대입니다. 개인의 삶에서도 모든 것을 다 잘하려고 하기보다, 나의 기회비용이 낮은 분야(비교우위)에 집중하는 것이 생산성을 극대화하는 길입니다.
+## 확인문제
+
+한국 칩 4시간, 밀 2시간, 호주 칩 12, 밀 3. 칩 기회비용은 한국 밀 2, 호주 밀 4. 국제 상대가격 3이면 양국 모두 이득 구간에 있다.
+
+## 참고 자료
+
+- MIT OpenCourseWare, [International Economics](https://ocw.mit.edu/search/?q=international%20economics)
+- World Trade Organization, [Trade data](https://data.wto.org/)
+- David Ricardo, *On the Principles of Political Economy and Taxation*

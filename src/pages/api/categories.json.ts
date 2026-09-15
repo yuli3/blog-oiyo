@@ -7,7 +7,7 @@ import manifest from "../../data/content-manifest.json";
  */
 const CANONICAL = [
   "Mind & Psychology", "Mysticism", "Finance", "Tax", "Real Estate", "Law",
-  "Exam", "Public Admin", "Business", "Career", "Computer Science", "Education",
+  "Exam", "Public Admin", "Business", "Computer Science", "Education",
   "Science & Nature", "Health", "Beauty", "Lifestyle", "Myth & Culture",
   "Humanities", "Philosophy & Spirit", "Insights", "Strategy", "Design",
   "Sports", "Society & Wealth",

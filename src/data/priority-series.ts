@@ -14,14 +14,10 @@
  * Supersedes the earlier static chapter-count proxy.
  */
 export const PRIORITY_SERIES = [
-  "zoology-basics",
-  "economics-basics",
-  "music-history",
-  "academy-economics-core",
-  "business-basics",
-  "myth-dictionary",
-  "public-administration-basics",
-  "calculus",
+  "management-principles",
+  "economics-introduction",
+  "accounting-basics",
+  "qualification-roadmaps",
 ] as const;
 
 export type PrioritySeriesKey = (typeof PRIORITY_SERIES)[number];
@@ -35,15 +31,33 @@ export const PRIORITY_SERIES_NAMES: Partial<Record<string, Record<string, string
     ko: "신화 사전", en: "Myth Dictionary", ja: "神話事典",
     zh: "神话词典", fr: "Dictionnaire des mythes", es: "Diccionario de mitos",
   },
-  "economics-basics": {
-    ko: "경제학", en: "Economics", ja: "経済学",
-    zh: "经济学", fr: "Économie", es: "Economía",
+  "economics-introduction": {
+    ko: "경제학개론", en: "Introduction to Economics", ja: "経済学概論",
+    zh: "经济学概论", fr: "Introduction à l’économie", es: "Introducción a la economía",
   },
-  "business-basics": {
-    // B1 (2026-09-11): KO aligns with chapter「공기업 경영학」prefix; EN preferred public-enterprise framing.
-    // JA/ZH/FR/ES left for Translator gate (non-KO).
-    ko: "공기업 경영학", en: "Public Enterprise Management", ja: "経営学",
-    zh: "管理学", fr: "Gestion", es: "Gestión",
+  "management-principles": {
+    ko: "경영학원론", en: "Principles of Management", ja: "経営学原論",
+    zh: "管理学原理", fr: "Principes de gestion", es: "Principios de administración",
+  },
+  "organizational-behavior": {
+    ko: "조직행동론", en: "Organizational Behavior", ja: "組織行動論",
+    zh: "组织行为学", fr: "Comportement organisationnel", es: "Comportamiento organizacional",
+  },
+  "human-resource-management": {
+    ko: "인적자원관리", en: "Human Resource Management", ja: "人的資源管理",
+    zh: "人力资源管理", fr: "Gestion des ressources humaines", es: "Gestión de recursos humanos",
+  },
+  "marketing-management": {
+    ko: "마케팅관리", en: "Marketing Management", ja: "マーケティング管理",
+    zh: "营销管理", fr: "Gestion du marketing", es: "Gestión de marketing",
+  },
+  "operations-management": {
+    ko: "생산운영관리", en: "Operations Management", ja: "生産管理",
+    zh: "运营管理", fr: "Gestion des opérations", es: "Dirección de operaciones",
+  },
+  "financial-management": {
+    ko: "재무관리", en: "Financial Management", ja: "財務管理",
+    zh: "财务管理", fr: "Gestion financière", es: "Gestión financiera",
   },
   "psychology-basics": {
     ko: "심리학", en: "Psychology", ja: "心理学",
@@ -52,6 +66,10 @@ export const PRIORITY_SERIES_NAMES: Partial<Record<string, Record<string, string
   "accounting-basics": {
     ko: "회계학", en: "Accounting", ja: "会計学",
     zh: "会计学", fr: "Comptabilité", es: "Contabilidad",
+  },
+  "qualification-roadmaps": {
+    ko: "시험", en: "Exams", ja: "試験",
+    zh: "考试", fr: "Examens", es: "Exámenes",
   },
   "english-grammar": {
     ko: "영어 문법", en: "English Grammar", ja: "英語文法",

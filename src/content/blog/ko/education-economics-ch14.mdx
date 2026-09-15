@@ -1,98 +1,65 @@
 ---
 track: academy
-series: economics-basics
-chapter: 14
-title: "경제학원론 — 총수요-총공급 모형 (IS-LM 기초)"
-description: "생산물 시장(IS)과 화폐 시장(LM)의 동시 균형을 분석합니다. 정부 지출과 통화 정책이 균형 국민소득과 이자율에 미치는 영향을 다룹니다."
+series: macroeconomics
+chapter: 4
+title: "거시경제학 — IS-LM 기초"
+description: "재화시장 IS와 화폐시장 LM을 금리-산출 평면에 올리고, 재정 이동이 구축으로 약해지고 통화 이동이 투자로 전달되는 비교정태를 계산합니다."
 pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-15
 category: Economics
-tags:
-  - Education
-  - economics
-  - 정병렬경제학
+tags: ["경제학", "거시경제", "IS-LM", "구축효과"]
 locale: ko
 author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
 
-import {
-  LectureTable,
-} from "@/features/education-common/components/LectureVisuals";
 import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
-import { ISLMSimulator } from "@/features/education-calculators/EconomicSimulators";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# 총수요-총공급 모형 (IS-LM 기초)
+# 거시경제학 — 단기 산출은 재화 균형과 화폐 균형을 동시에 만족하는 금리다
 
-거시경제학의 정수는 여러 시장의 상호작용을 한눈에 파악하는 일이다. 본 장에서는 힉스(J. Hicks)가 케인즈의 이론을 정형화한 **IS-LM 모형**으로 생산물 시장과 금융 시장이 어떻게 연결되는지 분석한다.
+물가를 당장 고정한 케인즈-힉스 골격이다. 소득-지출만 보면 금리가 안 보이고, 화폐만 보면 산출이 안 보인다. 연립은 39장이 숫자로 푼다. 이 장은 부호와 기울기다.
 
-이 장은 폐쇄경제, 단기 고정물가, 주어진 명목통화량을 둔 전통적 IS–LM 모형입니다. 곡선의 기울기와 정책효과는 소비·투자·화폐수요 함수의 탄력성에 따라 달라집니다.
+## 1. IS: 계획지출 = 산출
 
----
+`Y=C(Y-T)+I(r)+G`. r이 오르면 I가 줄고 Y가 줄어 IS는 우하향이다. G가 늘면 같은 r에서 Y가 커져 IS가 우측 이동한다.
 
-## 1. IS 곡선: 생산물 시장의 균형
-
-이자율($i$)과 국민소득($Y$)의 조합 중 생산물 시장이 균형을 이루는 점들의 집합이다.
-
-- **원리**: 이자율 하락 $\rightarrow$ 투자($I$) 증가 $\rightarrow$ 총수요 증가 $\rightarrow$ 국민소득($Y$) 증가.
-- **추이**: **우하향**하는 형태를 띤다.
-- **이동 요인**: 정부지출($G$) 증가, 조세($T$) 감소 등 재정 정책 시 우측으로 이동한다.
-
----
-
-## 2. LM 곡선: 화폐 시장의 균형
-
-화폐 공급과 화폐 수요가 일치하여 화폐 시장이 균형을 이루는 지점들의 집합이다.
-
-- **원리**: 국민소득($Y$) 증가 $\rightarrow$ 거래적 화폐수요 증가 $\rightarrow$ 화폐 부족 $\rightarrow$ 이자율($i$) 상승.
-- **추이**: **우상향**하는 형태를 띤다.
-- **이동 요인**: 통화량($M$) 공급 증가 시 우측(하단)으로 이동한다.
-
----
-
-## 3. IS-LM 동시 균형과 정책 효과
-
-두 곡선이 만나는 지점에서 균형 국민소득($Y^*$)과 균형 이자율($i^*$)이 결정된다.
-
-<ISLMSimulator client:visible />
-
-<LectureTable
-  title="경제 정책에 따른 효과 분석"
-  headers={["정책 구분", "주요 수단", "소득($Y$) 변화", "이자율($i$) 변화"]}
-  rows={[
-    ["확장적 재정정책", "정부지출 ↑", "Y ↑", "i ↑ (구축효과 발생)"],
-    ["확장적 통화정책", "통화량 ↑", "Y ↑", "i ↓"],
-  ]}
-  highlightColumns={[0]}
+<FormulaBox
+  label="IS의 직관"
+  formula="r \uparrow \;\Rightarrow\; I \downarrow \;\Rightarrow\; Y \downarrow"
+  description="승수가 클수록 같은 투자 감소가 산출을 더 떨어뜨려 IS가 평평해진다. 투자의 금리 탄력이 클수록 가파르다."
 />
 
-### (1) 구축효과 (Crowding-out Effect)
+## 2. LM: 화폐 수요 = 실질잔고
 
-- 정부가 지출을 늘리면 소득은 늘지만, 이자율이 함께 상승하여 민간의 투자($I$)를 위축시키는 현상이다. 이 때문에 재정 정책의 효과가 일부 상쇄된다.
+`M/P=L(Y,r)`. Y가 오르면 거래 수요가 늘어 같은 잔고에서 r이 올라야 한다. LM은 우상향. M이 늘거나 P가 내리면 LM 우측.
 
----
+재정 ΔG=10조 원, 금리 상승으로 I가 5조 원 줄면 1차 순수요는 5조 원이다. LM이 수평(함정)이면 구축이 거의 0이다. LM이 수직(고전)이면 산출 효과가 0에 가깝다.
 
-## 4. AD-AS 모형으로의 확장
+<LectureTable
+  title="두 충격"
+  headers={["충격", "이동", "r", "Y"]}
+  rows={[
+    ["G↑ (IS 우측)", "구축 가능", "↑", "↑ (LM 기울기에 의존)"],
+    ["M↑ (LM 우측)", "투자 경로", "↓", "↑"],
+    ["P↑", "LM 좌측", "↑", "↓"],
+  ]}
+/>
 
-명목통화량 등 다른 변수를 고정한 채 물가가 바뀔 때 실질통화량과 IS–LM 균형소득이 어떻게 달라지는지 연결하면 **총수요($AD$) 곡선**을 얻습니다.
+<Callout type="warning">
+IS-LM은 폐쇄·물가 고정·정태 기대의 벤치마크다. 개방은 국제금융 3장, 물가 조정은 19·26장, 기대는 20장. 표의 화살표를 항상 성립하는 정책 순위로 읽지 않는다.
+</Callout>
 
-- **총수요($AD$)**: 물가가 낮아지면 실질 가치가 상승하여 소비와 투자가 늘어나는 관계.
-- **총공급($AS$)**: 기업들이 물가 수준에 따라 생산하고자 하는 양.
-- <mark>**수험 핵심**</mark>: 단기에는 $AS$가 우상향하지만, 장기에는 **기대가
-  반영되어 수직선**이 된다는 점이 학파 간 논쟁의 핵심이다.
+유동성 함정에서 통화는 Y를 못 바꾸고 재정이 강해 보인다. 완전고용 근처에서 재정이 약해 보인다. 가정이지 이념이 아니다.
 
----
+## 확인문제
 
-## 5. 마무리: 정책 믹스 (Policy Mix)
+IS가 우측 이동해 금리가 2%p 오르고 투자가 5조 원 줄면, 재정 10조 원의 1차 효과는 구축 뒤 5조 원이다. LM을 수평으로 두면 그 5조 원이 되살아난다.
 
-정부는 재정 정책과 통화 정책을 적절히 조합하여 경기 변동을 조절한다. IS-LM 모형은 이러한 정책들이 경제 주체들의 의사결정에 어떤 경로(이자율 경로 등)로 전달되는지를 보여주는 가장 강력한 도구이다.
+## 참고 자료
 
----
-
-## 📖 참고문헌
-
-- **[거시경제학] - 정병렬**: IS-LM-AD-AS 통합 분석.
-- **[일반이론] - 존 메이너드 케인즈**: 현대 거시경제 정책의 기원.
-
----
-
-수고하셨습니다. 다음 시간에는 한 나라의 경계를 넘어 세계 시장과의 소통을 다루는 **국제경제학(무역 및 환율)**에 대해 학습하겠습니다.
+- N. Gregory Mankiw, *Macroeconomics*, ch. 11–12
+- John Hicks, “Mr. Keynes and the ‘Classics’,” *Econometrica* (1937)
+- MIT OpenCourseWare, [14.02 Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)

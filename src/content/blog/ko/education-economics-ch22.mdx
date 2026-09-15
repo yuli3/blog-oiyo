@@ -1,89 +1,61 @@
 ---
 track: academy
-series: economics-basics
-chapter: 22
-title: "경제학원론 — 경제 성장 이론: 솔로우(Solow) 모형"
-description: "장기 성장의 결정 요인을 분석하는 솔로우의 신고전학파 성장 모형을 정밀 분석합니다. 자본 심화, 황금률(Golden Rule), 그리고 수렴 가설을 다룹니다."
+series: macroeconomics
+chapter: 11
+title: "거시경제학 — 솔로우 성장 모형"
+description: "1인당 자본의 정상상태와 황금률을 계산하고, 저축률 상승이 수준 효과이지 영구 성장률이 아닌 이유와 전환 경로의 소비 비용을 복습합니다."
 pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-15
 category: Economics
-tags:
-  - Education
-  - economics
-  - 정병렬경제학
+tags: ["경제학", "거시경제", "솔로우", "정상상태"]
 locale: ko
 author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
 
-import {
-  LectureTable,
-} from "@/features/education-common/components/LectureVisuals";
 import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# 경제 성장 이론: 솔로우(Solow) 모형
+# 거시경제학 — 솔로우는 저축이 성장을 영구히 올리지 못함을 보이는 모형이다
 
-왜 어떤 나라는 부유하고 어떤 나라는 가난한가? 경제학의 가장 원대한 질문에 대해 로버트 솔로우(R. Solow)는 자본 생산성과 기술 진보라는 해답을 제시했다. 장기적인 삶의 수준을 결정하는 성장의 동력을 분석한다.
+[경제수학 4장](/ko/education-economics-math-ch4/)이 `\dot k`의 안정성을 풀었다. 이 장은 그 정상상태가 **수준**이지 **성장률**이 아님을 거시 언어로 고정한다. 내생적 성장은 23장이다.
 
----
+## 1. 정상상태
 
-## 1. 솔로우 성장 모형의 기초
+`\dot k=sf(k)-(δ+n)k`. `f=\sqrt k`, `s=0.2`, `δ+n=0.1`이면 `k*=4`, `y*=2`. `s=0.3`이면 `k*=9`, `y*=3`. 산출 **수준**이 50% 높아 보이지만, 정상 성장률은 여전히 외생 기술·인구다.
 
-### (1) 생산함수와 1인당 생산
+<FormulaBox
+  label="정상상태"
+  formula="s f(k^*)=(\delta+n)k^*"
+  description="황금률은 f'(k_gold)=δ+n. 위 숫자에서 k_gold=25. k*=4는 과소저축. 반대로 k*>k_gold면 저축을 줄여야 소비가 는다."
+/>
 
-- 규모에 대한 수익 불변(CRS)을 가정하고, 인구 1인당 변수로 치환한다.
-  <FormulaBox>$y = f(k)$ ($y$: 1인당 소득, $k$: 1인당 자본)</FormulaBox>
+수렴: k가 낮을수록 한동안 성장이 빠르다. 조건부 수렴은 저축·인구·기술이 비슷한 나라끼리라는 뜻이다. 절대 수렴과 섞지 않는다.
 
-### (2) 기본 방정식
+<LectureTable
+  title="무엇이 영구 성장률인가"
+  headers={["변수", "수준", "정상 성장률"]}
+  rows={[
+    ["s", "y* 이동", "불변"],
+    ["n, δ", "y* 반대", "1인당은 기술"],
+    ["기술 A", "y* 이동", "외생이면 성장의 원천"],
+  ]}
+/>
 
-경제의 자본량은 저축($s$)에 의해 늘어나고, 인구 증가($n$)와 감가상각($\delta$)에 의해 줄어든다.
+<Callout type="warning">
+저축률을 올리면 전환 경로에서 소비가 한동안 낮아질 수 있다. 장기 y*만 보고 “저축 증가는 항상 이득”이라고 쓰지 않는다. 그 비용을 내는 세대가 있다. 회계 투자 비율을 s로 바로 읽지도 않는다.
+</Callout>
 
-<FormulaBox>$\Delta k = sy - (n + \delta)k$</FormulaBox>
+솔로우 잔차(TFP)는 측정이지 설명이다. 23장이 그 잔차를 연구·인적자본으로 모형화한다.
 
----
+## 확인문제
 
-## 2. 균제 상태 (Steady State)
+s=0.2, δ+n=0.1, f=√k이면 k*=4. s가 0.3이 되면 k*=9. 정상 산출은 2에서 3으로 50% 늘지만, k가 4에서 9로 가는 동안 소비는 잠시 줄어들 수 있다.
 
-인구 1인당 자본량($k$)이 더 이상 변하지 않는 평형 상태를 의미한다.
+## 참고 자료
 
-- **조건**: $sy = (n + \delta)k$
-- **시사점**:
-  - 저축률($s$)이 높을수록 1인당 소득 수준($y^*$)은 높지만, **성장률**은 결국 인구 증가율 + 기술진보율에 수렴하게 된다.
-  - 단순한 자본 축적만으로는 **지속적인 성장**을 설명할 수 없음을 보여준다.
-
----
-
-## 3. 자본 축적의 황금률 (Golden Rule)
-
-성장이 목표가 아니라 '소비'가 목표라면, 1인당 소비($c$)를 극대화하는 자본 수준($k_G$)이 존재한다.
-
-- **조건**: 자본의 한계생산($MPK) = n + \delta$
-- if $MPK > n + \delta$: 자본이 부족한 상태 $\rightarrow$ 저축을 늘려야 함.
-- if $MPK < n + \delta$: 자본이 과다한 상태(동태적 비효율) $\rightarrow$ 소비를 늘려야 함.
-
----
-
-## 4. 성장의 요인 분해 (Growth Accounting)
-
-경제 성장을 노동 기여도, 자본 기여도, 그리고 **총요소생산성(TFP)**으로 나누어 분석한다.
-
-<FormulaBox>
-  $\frac{\Delta Y}{Y} = \frac{\Delta A}{A} + \alpha \frac{\Delta K}{K} + (1-\alpha) \frac{\Delta L}{L}$
-</FormulaBox>
-- <mark>**솔로우 잔차 (Solow Residual)**</mark>: 채택한 생산함수와 요소소득분배율로 계산한 노동·자본 기여를 제외한 잔여입니다. 기술·조직·자원배분·측정오차 등이 함께 들어갈 수 있으므로 순수 기술진보의 직접 관측값으로 등치하지 않습니다.
-
----
-
-## 5. 마무리: 기술 진보가 성장의 미래입니다
-
-솔로우 모형은 저축과 투자만으로는 성장의 한계에 부딪힌다는 것을 수학적으로 증명했다. 후속 연구인 **내생적 성장 이론**은 이 '기술 진보'가 외생적으로 주어지는 것이 아니라, 교육과 R&D 투자로 국가가 스스로 창출할 수 있음을 강조한다.
-
----
-
-## 📖 참고문헌
-
-- **[거시경제학] - 정병렬**: 솔로우 모형과 황금률의 수식 분석.
-- **[A Contribution to the Theory of Economic Growth] - 로버트 솔로우**: 현대 성장 이론의 기점.
-
----
-
-수고하셨습니다. 다음 시간에는 솔로우 모형의 한계를 넘어 인간 자본과 혁신을 강조하는 **내생적 성장 이론**에 대해 학습하겠습니다.
+- Robert Solow, “A Contribution to the Theory of Economic Growth,” *QJE* (1956)
+- N. Gregory Mankiw, *Macroeconomics*, ch. 8–9
+- MIT OpenCourseWare, [14.02 Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)

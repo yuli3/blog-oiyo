@@ -1,71 +1,62 @@
 ---
 track: academy
-series: economics-basics
-chapter: 39
-title: "경제학 — IS-LM 모형 — 거시경제 정책의 상호작용"
-description: "재화시장(IS)과 화폐시장(LM)의 동시 균형을 분석하는 거시경제학의 정수를 배웁니다. 인터랙티브 시뮬레이션으로 재정정책과 통화정책의 효과를 직접 확인해 보세요."
-pubDate: 2026-04-14
+series: macroeconomics
+chapter: 23
+title: "거시경제학 — IS-LM 연립과 비교정태"
+description: "재화·화폐 균형을 두 식으로 풀어 재정 충격의 금리·산출을 동시에 구하고, 그래프 화살표가 숨기는 구축의 크기를 숫자로 복습합니다."
+pubDate: 2026-09-14
+updatedDate: 2026-09-15
 category: Economics
-tags:
-  - Education
-  - 경제학
-  - IS-LM
-  - 재정정책
-  - 통화정책
+tags: ["경제학", "거시경제", "IS-LM", "비교정태"]
 locale: ko
 author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
 
-import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
-import { ISLMSimulator } from "@/features/education-calculators/EconomicSimulators";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# IS-LM 모형: 정책의 시나리오
+# 거시경제학 — 화살표 두 개는 연립 해를 대체하지 못한다
 
-거시경제학에서 정책의 효과를 분석할 때 가장 먼저 꺼내는 도구가 바로 **IS-LM 모형**입니다. 영국의 경제학자 존 힉스(John Hicks)가 케인즈의 『일반이론』을 도식화하며 정립된 이 모형은 실물 경제(재화 시장)와 금융 경제(화폐 시장)가 어떻게 연결되는지 보여줍니다.
+14·18장이 기울기와 부호다. 이 장은 같은 모형을 식으로 푼다. 정책 시뮬레이터와 시험의 “얼마나”에 답하려면 교차점의 좌표가 필요하다.
 
----
+## 1. 두 식
 
-## 1. IS 곡선 (Investment-Saving)
+선형으로 적으면 `Y=α-βr+γG`(IS), `r=δ+λY-μ(M/P)`(LM). 대입하면 Y와 r이 G, M의 함수가 된다. γ가 승수, β가 투자의 금리 탄력, λ가 거래 수요, μ가 화폐수요의 금리 탄력이다.
 
-재화 시장의 균형을 나타냅니다. 소득(Y)이 증가하면 저축이 늘어나고, 투자가 그와 균형을 이루려면 이자율(r)이 낮아져야 합니다. 따라서 **우하향**하는 형태를 띱니다.
+<FormulaBox
+  label="재정 승수 (선형)"
+  formula="\frac{dY}{dG} = \gamma \big/ \big(1+\beta\lambda/\mu\big)"
+  description="μ→∞(함정)이면 분모 1, 승수 γ. μ→0(고전 LM)이면 분모 무한, 승수 0. 18장의 표가 이 식이다."
+/>
 
-- **이동 요인**: 정부 지출(G) 증가나 조세(T) 감소 등 재정정책에 의해 이동합니다.
-
----
-
-## 2. LM 곡선 (Liquidity preference-Money supply)
-
-화폐 시장의 균형을 나타냅니다. 소득(Y)이 증가하면 거래적 화폐 수요가 늘어나고, 화폐 공급이 일정할 때 균형을 맞추려면 이자율(r)이 올라가야 합니다. 따라서 **우상향**하는 형태를 띱니다.
-
-- **이동 요인**: 중앙은행의 통화 공급량(M) 변화에 의해 이동합니다.
-
----
-
-## 3. 인터랙티브 정책 시뮬레이터
-
-아래 시뮬레이터의 슬라이더를 조절하여 각 정책이 경제 전체의 소득과 이자율에 어떤 영향을 미치는지 확인해 보세요.
-
-<ISLMSimulator client:visible />
-
-<Callout type="info">
-**구축 효과(Crowding-out Effect)**: 정부 지출(G)을 늘려 IS곡선을 우측으로 이동시키면 소득(Y)이 증가하지만, 동시에 이자율(r)도 상승합니다. 이자율 상승은 민간 투자를 위축시켜 재정정책의 효과를 일부 상쇄하게 되는데, 이를 구축 효과라고 합니다.
-</Callout>
-
----
-
-## 4. 정책 시나리오 분석
+ΔG=10조 원, 금리 상승으로 I가 3조 원 줄면 산출 증가는 폐쇄 승수보다 작다. 그 3조 원이 β·Δr이다.
 
 <LectureTable
-  title="정책에 따른 균형의 변화 결과"
-  headers={["정책", "곡선 이동", "소득(Y) 변화", "이자율(r) 변화"]}
+  title="계수와 이야기"
+  headers={["계수", "커지면"]}
   rows={[
-    ["확장적 재정정책 (G↑)", "IS 우측 이동", "증가 (↑)", "상승 (↑)"],
-    ["확장적 통화정책 (M↑)", "LM 우측 이동", "증가 (↑)", "하락 (↓)"],
+    ["γ", "재정 상한 ↑"],
+    ["β", "구축 ↑, 통화 경로 ↑"],
+    ["λ", "LM 가파름, 구축 ↑"],
+    ["μ", "LM 평평, 구축 ↓"],
   ]}
 />
 
----
+<Callout type="warning">
+선형 근사는 국소다. 제로하한에서 μ가 갑자기 커지는 것은 계수 하나가 아니라 체제의 전환이다. 숫자를 넣은 시뮬레이터가 그 꺾임을 안 넣으면 함정을 과소평가한다.
+</Callout>
 
-IS-LM 모형은 현대 거시경제 정책을 이해하는 가장 강력한 문법입니다. 시뮬레이터로 복잡한 수식 뒤에 숨겨진 직관적인 움직임을 내 것으로 만들어 보세요!
+물가 P를 내생으로 돌리면 AD가 되고 19장이다. 개방하면 r 대신 환율이 들어가고 국제금융 3장이다. 이 장의 해는 폐쇄·고정 P의 벤치마크 좌표다.
+
+## 확인문제
+
+IS: Y=C+I(r)+G, LM: M/P=L(Y,r). 재정 ΔG=10조 원, 금리 상승으로 I가 3조 원 줄면 산출 증가는 폐쇄 승수보다 작다. 연립의 비교정태가 한 곡선 이동보다 정확하다. μ가 커지면 그 3조 원이 줄어든다.
+
+## 참고 자료
+
+- John Hicks, “Mr. Keynes and the ‘Classics’,” *Econometrica* (1937)
+- N. Gregory Mankiw, *Macroeconomics*, ch. 12
+- MIT OpenCourseWare, [14.02 Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)

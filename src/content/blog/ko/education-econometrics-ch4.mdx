@@ -1,0 +1,74 @@
+---
+track: academy
+series: econometrics
+chapter: 4
+title: "계량경제학 — 내생성과 도구변수"
+description: "누락변수·동시성·측정오차가 OLS를 비일관적으로 만드는 방향을 구분하고, 도구변수의 관련성·배제제약을 1단계 F와 후기 검정으로 점검합니다."
+pubDate: 2026-09-15
+category: Economics
+tags: ["경제학", "계량경제학", "내생성", "도구변수", "누락변수"]
+locale: ko
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 계량경제학 — 내생성은 잔차가 X를 설명한다는 뜻이다
+
+OLS가 인과 기울기를 주려면 `Cov(X,U)=0`이어야 한다. 이 상관이 남는 대표적인 길은 세 가지다. 빠진 변수, 서로 결정하는 방정식, 부정확한 측정이다. 도구변수는 그 상관을 끊는 외생 변동을 빌려 온다.
+
+## 1. 누락변수 편의의 부호는 두 상관의 곱이다
+
+참 모형이 `Y = βX + γW + U`인데 `W`를 빼면 편의는 `γ · δ`에 가깝다. `δ`는 `X`를 `W`에 투영한 계수다.
+
+교육 `X`와 능력 `W`가 양의 상관이고 능력이 임금을 올리면, 교육을 단독 회귀한 계수는 과대평가된다. 반대로 측정된 교육 연수가 실제 인적자본을 과대 기록하면 감쇠 편의(attenuation)로 계수가 0 쪽으로 줄어든다. 같은 “틀린 OLS”라도 방향이 반대다.
+
+<LectureTable
+  title="내생성의 세 원천"
+  headers={["원천", "예", "OLS 방향"]}
+  rows={[
+    ["누락변수", "능력·동기", "보통 교육 효과 과대"],
+    ["동시성", "가격과 수량", "수요 기울기가 가파르거나 평평하게 왜곡"],
+    ["측정오차", "회고 소득, 부정확한 연수", "고전적 오차면 0 쪽으로 감쇠"],
+  ]}
+/>
+
+## 2. 좋은 도구는 관련성과 배제를 동시에 만족해야 한다
+
+도구 `Z`는 `X`를 움직이고(`관련성`), `Y`에는 `X`를 통해서만 영향을 줘야 한다(`배제제약`). 2SLS는 1단계에서 `X`를 `Z`에 회귀한 예측값으로 2단계 `Y` 회귀를 한다.
+
+<FormulaBox
+  label="IV 기울기 (단순)"
+  formula="\hat\beta_{IV} = Cov(Z,Y) / Cov(Z,X)"
+  description="Z가 X를 움직이지 않으면 분모가 0에 가깝고, 약한 도구가 된다."
+/>
+
+의무교육 연한 변화가 전형적인 후보 도구다. 법이 교육 연수를 바꾸고, 임금에는 교육을 통해서만 영향을 준다는 이야기가 설득력 있어야 한다. 법이 동시에 노동시장 제도를 바꿨다면 배제가 깨진다.
+
+1단계 F가 10을 넘는지 보는 규칙은 약도구 편의의 경험 법칙이다. F=4이면 2단계 계수가 참값의 여러 배로 기우는 표본이 흔하고, F=10은 그 편의를 줄이려는 허들일 뿐이다. 최근 문헌은 더 엄격한 임계값과 Anderson–Rubin 구간을 권한다. F가 크다고 배제제약이 증명되는 것은 아니다. 관련성만 본 것이다.
+
+## 3. 국소평균효과는 전체 ATE가 아니다
+
+이질적 효과 하에서 IV는 도구에 의해 행동이 바뀌는 사람들의 평균 효과(LATE)를 잡는다. 의무교육에 반응한 사람의 교육 수익이지, 이미 대학을 가려던 사람의 수익이 아니다. 정책 대상이 그 집단과 다르면 숫자를 옮기지 않는다.
+
+<Callout type="warning">
+도구를 “유의한 외생 변수”로 여러 개 넣어 보고 예쁜 2단계만 남기는 것은 식별이 아니다. 과다식별 검정이 기각되지 않은 것도, 모든 도구가 같은 방향으로 틀리면 통과할 수 있다. 배제제약은 제도 이야기로 방어하고, 검정은 보조다.
+</Callout>
+
+이 4장은 학부 계량경제학의 입구다. 패널, 시계열 단위근, 선택 모형은 후속 과정에서 다룬다. 지금 단계의 완료 조건은 회귀 계수에 인과 이름을 붙이기 전에 식별 문장을 쓸 수 있는 것이다.
+
+## 확인문제
+
+담배세 인상이 갑당 1,000원일 때 가격이 4,500원에서 5,400원으로만 오르면 전가는 90%다. 건강 인식이 세금과 흡연을 동시에 움직이면 이 90%를 수요 탄력성으로 읽어서는 안 된다.
+
+담배세가 담배 가격 도구로 쓰인다. 건강 인식이 동시에 세금 인상과 흡연을 움직이면 어느 가정이 깨지는가. 세금이 가격을 통해 흡연에만 영향을 준다는 배제제약이다. 관련성(세금→가격)은 남아 있을 수 있다.
+
+## 참고 자료
+
+- Joshua Angrist and Alan Krueger, “Does Compulsory School Attendance Affect Schooling and Earnings?,” *Quarterly Journal of Economics* (1991)
+- Joshua Angrist and Jörn-Steffen Pischke, *Mostly Harmless Econometrics*, ch. 4
+- Jeffrey Wooldridge, *Introductory Econometrics*, ch. 15
