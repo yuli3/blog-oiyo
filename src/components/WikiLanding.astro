@@ -7,7 +7,7 @@ import RelatedToolLinks from "./RelatedToolLinks.astro";
 import { getTranslations } from "../lib/i18n";
 import type { Locale } from "../lib/i18n";
 import { buildSeriesIndex, groupSeriesByCategory, isRedirectStub } from "../lib/wiki-index";
-import { prioritySeriesName, deriveSeriesLabel } from "../data/priority-series";
+import { PRIORITY_SERIES, seriesDisplayName } from "../data/priority-series";
 import { slugifyCategory } from "../lib/taxonomy";
 import { firstChapterSlugs } from "../lib/related-next";
 
@@ -28,27 +28,15 @@ const L = (key: string, fallback: string) => wikiT?.[key] ?? fallback;
 
 // ── series index for this locale ──────────────────────────────────────────
 const allSeries = Array.from(buildSeriesIndex(posts).values());
+const byKey = new Map(allSeries.map((s) => [s.key, s]));
 
-// The landing page teaches the information architecture before it optimizes
-// for traffic. These four durable study/job-preparation domains are deliberate;
-// individual series remain discoverable inside each category.
-const featuredCategoryOrder = ["Business", "Economics", "Accounting", "Exam"] as const;
-const featuredCategories = featuredCategoryOrder.map((category) => {
-  const series = allSeries.filter((entry) => entry.category === category);
-  const categoryPosts = series
-    .flatMap((entry) => entry.posts)
-    .sort((a, b) => {
-      const da = a.data.updatedDate ?? a.data.pubDate;
-      const db = b.data.updatedDate ?? b.data.pubDate;
-      return db.valueOf() - da.valueOf();
-    });
-  return { category, series, posts: categoryPosts };
-}).filter((entry) => entry.posts.length > 0);
+// Priority axis: curated top-traffic/importance series (see priority-series.ts).
+const priority = PRIORITY_SERIES.map((k) => byKey.get(k)).filter(
+  (s): s is NonNullable<typeof s> => !!s,
+);
 
 // Fixed "next one page" CTA: first chapter of top priority series (pages/session).
-const featuredFirstSeries = featuredCategories
-  .flatMap((entry) => entry.series.slice(0, 1));
-const nextReadSlugs = firstChapterSlugs(featuredFirstSeries, 3);
+const nextReadSlugs = firstChapterSlugs(priority, 3);
 
 // Two-level category → series index for the sidebar.
 const catGroups = groupSeriesByCategory(allSeries);
@@ -101,7 +89,7 @@ const chapterWord = L("chapters", "chapters");
                   {list.slice(0, 8).map((s) => (
                     <li>
                       <a href={`/${locale}/${s.firstPost.slug.split("/").slice(1).join("/")}/`} class="flex min-w-0 items-baseline gap-1 py-1 text-[13px] text-muted-foreground hover:text-primary transition-colors">
-                        <span class="truncate">{prioritySeriesName(s.key, locale) ?? deriveSeriesLabel(s.firstPost.data.title, s.key)}</span>
+                        <span class="truncate">{seriesDisplayName(s.key, locale, s.firstPost.data.title)}</span>
                         <span class="tabular-nums text-muted-foreground/50 shrink-0">{s.chapterCount}</span>
                       </a>
                     </li>
@@ -119,25 +107,22 @@ const chapterWord = L("chapters", "chapters");
 
         <!-- ── Main column ─────────────────────────────────────────────────── -->
         <div class="min-w-0 space-y-7 sm:space-y-12">
-          {featuredCategories.map((featured) => {
-            const categorySlug = slugifyCategory(featured.category);
-            const displayName = categoryNames[featured.category] ?? featured.category;
-            return (
-            <section aria-labelledby={`sec-${categorySlug}`}>
+          {priority.map((s) => (
+            <section aria-labelledby={`sec-${s.key}`}>
               <div class="flex items-baseline justify-between gap-3 border-b border-border mb-4 pb-2">
-                <h2 id={`sec-${categorySlug}`} class="min-w-0 truncate text-lg font-bold tracking-tight text-foreground">
-                  {displayName}
+                <h2 id={`sec-${s.key}`} class="min-w-0 truncate text-lg font-bold tracking-tight text-foreground">
+                  {seriesDisplayName(s.key, locale, s.firstPost.data.title)}
                 </h2>
                 <div class="flex items-baseline gap-3 shrink-0">
-                  <span class="text-xs tabular-nums text-muted-foreground/70 whitespace-nowrap">{featured.posts.length} {chapterWord}</span>
-                  <a href={`/${locale}/category/${categorySlug}/`} class="py-1.5 text-xs font-semibold text-primary/80 hover:text-primary whitespace-nowrap">
+                  <span class="text-xs tabular-nums text-muted-foreground/70 whitespace-nowrap">{s.chapterCount} {chapterWord}</span>
+                  <a href={`/${locale}/category/${slugifyCategory(s.category)}/`} class="py-1.5 text-xs font-semibold text-primary/80 hover:text-primary whitespace-nowrap">
                     {L("viewCategory", "View all")} →
                   </a>
                 </div>
               </div>
-              <WikiTable posts={featured.posts.slice(0, 5)} locale={locale} />
+              <WikiTable posts={[...s.posts].reverse().slice(0, 5)} locale={locale} showSeries={false} />
             </section>
-          )})}
+          ))}
 
           <section aria-labelledby="sec-recent">
             <div class="border-b border-border mb-4 pb-2">

@@ -1,10 +1,17 @@
 ---
 import { getCollection } from "astro:content";
 import BlogList from "../../../../components/BlogList.astro";
+import CategorySeriesList from "../../../../components/CategorySeriesList.astro";
 import { getTranslations, locales } from "../../../../lib/i18n";
 import { siteConfig } from "../../../../config/site.config";
 import { getTrack, getTrackFromData, slugifyCategory } from "../../../../lib/taxonomy";
 import { collectionPageJsonLd } from "../../../../lib/seo/structured-data";
+import {
+  buildSeriesIndex,
+  isUrlSafeSeriesKey,
+  type SeriesEntry,
+} from "../../../../lib/wiki-index";
+import { seriesDisplayName } from "../../../../data/priority-series";
 
 export async function getStaticPaths() {
   const allPosts = await getCollection(
@@ -82,29 +89,69 @@ const displaySubtitle = track === "academy"
     ? (((t as Record<string, unknown>).interactive as Record<string, string> | undefined)?.categorySubtitle ?? "Interactive reading and embedded tools related to {category}.").replace("{category}", displayName)
     : t.category.magazineSubtitle.replace("{category}", displayName);
 
+const courseT = (t as Record<string, unknown>).courses as Record<string, string> | undefined;
+const chaptersLabel = courseT?.chapters ?? "chapters";
+const ctaLabel = courseT?.startCourse ?? "Start";
+
+function seriesCardHref(s: SeriesEntry): string {
+  if (isUrlSafeSeriesKey(s.key) && s.chapterCount >= 2) {
+    return `${localePrefix}/series/${s.key}/`;
+  }
+  const firstSlug = s.firstPost.slug.split("/").slice(1).join("/");
+  return `${localePrefix}/${firstSlug}/`;
+}
+
+const isAcademySeriesMode = track === "academy";
+
+let seriesList: SeriesEntry[] = [];
+if (isAcademySeriesMode) {
+  seriesList = Array.from(buildSeriesIndex(posts).values()).sort(
+    (a, b) => b.chapterCount - a.chapterCount || a.key.localeCompare(b.key),
+  );
+}
+
 const catalogJsonLd = JSON.stringify(
   collectionPageJsonLd({
     name: `${displayName} — ${siteConfig.name}`,
     description: displaySubtitle,
     url: `${siteConfig.url}${localePrefix}/category/${category}/`,
     inLanguage: locale,
-    items: page.data.map((p) => ({
-      name: p.data.title,
-      url: `${siteConfig.url}/${locale}/${p.slug.split("/").slice(1).join("/")}/`,
-    })),
+    items: isAcademySeriesMode
+      ? seriesList.map((s) => ({
+          name: seriesDisplayName(s.key, locale, s.firstPost.data.title),
+          url: `${siteConfig.url}${seriesCardHref(s)}`,
+        }))
+      : page.data.map((p) => ({
+          name: p.data.title,
+          url: `${siteConfig.url}/${locale}/${p.slug.split("/").slice(1).join("/")}/`,
+        })),
   }),
 );
 ---
 
-<BlogList
-  page={page}
-  locale={locale}
-  baseUrl={`${localePrefix}/category/${category}`}
-  title={displayName}
-  subtitle={displaySubtitle}
-  activeCategory={category}
-  availableLocales={availableLocales}
-  noindex={true}
-  showCategoryCloud={false}
-  jsonLd={catalogJsonLd}
-/>
+{isAcademySeriesMode ? (
+  <CategorySeriesList
+    locale={locale}
+    title={displayName}
+    subtitle={displaySubtitle}
+    seriesList={seriesList}
+    chaptersLabel={chaptersLabel}
+    ctaLabel={ctaLabel}
+    availableLocales={availableLocales}
+    noindex={true}
+    jsonLd={catalogJsonLd}
+  />
+) : (
+  <BlogList
+    page={page}
+    locale={locale}
+    baseUrl={`${localePrefix}/category/${category}`}
+    title={displayName}
+    subtitle={displaySubtitle}
+    activeCategory={category}
+    availableLocales={availableLocales}
+    noindex={true}
+    showCategoryCloud={false}
+    jsonLd={catalogJsonLd}
+  />
+)}

@@ -112,3 +112,27 @@ export function deriveSeriesLabel(title: string | undefined, slug: string): stri
   }
   return prettifySlug(slug);
 }
+
+/**
+ * Locked display-name order for series surfaces (B3, 2026-09-11):
+ * 1. prioritySeriesName map hit
+ * 2. non-URL-safe key → use key itself (FM series is already a human label)
+ * 3. else deriveSeriesLabel(firstPost.title, key)
+ *
+ * Does NOT rename chapter titles.
+ */
+/** Must stay in sync with isUrlSafeSeriesKey() in src/lib/wiki-index.ts. */
+function isUrlSafeSeriesKeyLocal(key: string): boolean {
+  return /^[a-z0-9]+(-[a-z0-9]+)*$/.test(key);
+}
+
+export function seriesDisplayName(
+  key: string,
+  locale: string,
+  firstPostTitle?: string,
+): string {
+  const mapped = prioritySeriesName(key, locale);
+  if (mapped) return mapped;
+  if (!isUrlSafeSeriesKeyLocal(key)) return key;
+  return deriveSeriesLabel(firstPostTitle, key);
+}

@@ -19,6 +19,8 @@ export async function getStaticPaths() {
   const pagesByCatLocale: Record<string, Record<string, number>> = {};
   for (const post of allPosts) {
     if (!post.data.category || !post.data.locale) continue;
+    // Academy categories render as a single series-card page (B2) — no page 2+.
+    if (getTrack(post.data.category, post.data.track) === "academy") continue;
     const cslug = slugifyCategory(post.data.category);
     pagesByCatLocale[cslug] ??= {};
     pagesByCatLocale[cslug][post.data.locale] = (pagesByCatLocale[cslug][post.data.locale] ?? 0) + 1;
@@ -41,6 +43,14 @@ export async function getStaticPaths() {
 
     for (const category of categories) {
       if (!category) continue;
+
+      // B2: academy uses series cards on index only — skip paginated post lists.
+      const sample = langPosts.find(
+        (post) =>
+          post.data.category && slugifyCategory(post.data.category) === slugifyCategory(category),
+      );
+      const track = sample ? getTrackFromData(sample.data) : getTrack(category);
+      if (track === "academy") continue;
 
       const normalizedCategorySlug = slugifyCategory(category);
 
