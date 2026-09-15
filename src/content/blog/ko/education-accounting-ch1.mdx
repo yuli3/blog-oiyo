@@ -2,99 +2,67 @@
 track: academy
 series: accounting-principles
 chapter: 1
-title: "회계원리 — 회계 입문"
-description: 회계는 단순한 세금 계산이 아닙니다. 비즈니스의 현재 상태를 진단하고 미래를 설계하는 필수 언어입니다.
+title: "회계원리 — 복식부기·회계등식과 현금의 차이"
+description: "자산=부채+자본이 현금잔액과 왜 다른지, 출자·차입·외상매출 1,800만 원 거래로 복식과 단식의 경계를 복습합니다."
 pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-15
 category: Accounting
-subcategory: "회계원리"
-tags:
-  - Education
-  - accounting
+tags: ["회계원리", "복식부기", "회계등식"]
 locale: ko
 author: Oiyo
-updatedDate: 2026-09-15
+layoutVariant: lecture-series
+contentStage: review
 ---
 
-
-import {
-  LectureTable,
-  LectureProcess,
-  LecturePieChart,
-  LectureBarChart,
-} from "@/features/education-common/components/LectureVisuals";
-
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
-import { InvestmentSimulator } from '@/features/education-accounting-investing';
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# 비즈니스의 언어: 회계 입문
+# 회계원리 — 현금 장부는 등식이 아니다
 
-워런 버핏은 <mark><strong>"회계는 비즈니스의 언어"</strong></mark>라고 말했습니다. 해외 여행을 갈 때 현지 언어를 모르면 소통이 안 되듯, 비즈니스와 투자의 세계에서 회계를 모르면 기업과 대화할 수 없기 때문입니다.
+이 과정은 전표 암기가 아니다. 학부 회계원리가 묻는 것은 거래가 **왜 두 면을 동시에 움직이는지**, 현금이 **왜 자본이 아닌지**다. 자산 평가·손상은 [중급회계](/ko/education-accounting-ch4/), 제품원가는 [원가회계](/ko/academy-cost-accounting-ch1/), 내부 의사결정은 [관리회계](/ko/education-accounting-ch13/)로 넘긴다.
 
-오늘 우리는 기업의 '성적표'를 어떻게 읽는지, 그리고 모든 재무 기록을 지배하는 근본적인 논리를 배웁니다.
+## 1. 등식은 잔액의 항등식이다
 
----
-
-## 1. 회계의 빅방: 핵심 등식
-
-동네 구멍가게부터 수조 달러 가치의 테크 거인까지, 모든 현대 회계는 다음의 단순하고 절대 깨지지 않는 균형에서 출발합니다.
-
-<mark><strong>자산 (Assets) = 부채 (Liabilities) + 자본 (Equity)</strong></mark>
+출자 1,000만 원, 차입 400만 원, 장비 구입 300만 원, 외상 서비스 매출 500만 원, 대금 회수 200만 원, 임차료 100만 원. 기말은 현금 1,200, 매출채권 300, 장비 300 — 자산 1,800만 원. 차입 400, 자본금 1,000, 이익잉여금 400. `1,800 = 400 + 1,400`.
 
 <LectureTable
-  title="재무상태표의 3대 기둥"
-  headers={["구분", "쉬운 설명", "주요 예시"]}
+  title="한 거래가 건드리는 두 면"
+  headers={["거래", "증가", "감소·상대"]}
   rows={[
-    ["자산 (Assets)", "기업이 소유하고 있는 것", "현금, 재고, 기계, 특허권"],
-    ["부채 (Liabilities)", "타인에게 갚아야 할 것", "은행 대출, 외상 매입금"],
-    ["자본 (Equity)", "내 것 (주주의 몫)", "자본금, 이익잉여금"],
-  ]}
-  highlightColumns={[0]}
-/>
-
----
-
-## 2. 인터랙티브 시뮬레이션: 비즈니스 구축
-
-숫자가 실시간으로 어떻게 움직이는지 직접 확인해 보세요. 설립, 차입, 그리고 이익 발생이 재무상태표에 어떤 영향을 미치는지 아래 시뮬레이터로 체험해 볼 수 있습니다.
-
-<InvestmentSimulator client:visible />
-
----
-
-## 3. 가치의 생애주기: 기록의 흐름
-
-모든 기업 활동은 균형을 유지하기 위해 늘 등식의 양변을 동시에 변화시킵니다. 이를 **복식부기**라고 부릅니다.
-
-<LectureProcess
-  steps={[
-    { label: "설립 단계", description: "자본(Equity) 유입 → 자산(Cash) 증가" },
-    { label: "레버리지", description: "부채(Liabilities) 차입 → 자산(Machinery) 확보" },
-    { label: "영업 단계", description: "수익 창출 → 자산 증가 → 자본 증가" },
-    { label: "배분 단계", description: "배당금 지급 → 자산 감소 → 자본 감소" },
+    ["출자 1,000만 원", "현금", "자본금"],
+    ["차입 400만 원", "현금", "차입금"],
+    ["장비 300만 원", "장비", "현금"],
+    ["외상매출 500만 원", "매출채권", "수익(자본)"],
+    ["회수 200만 원", "현금", "매출채권"],
+    ["임차 100만 원", "비용(자본 감소)", "현금"],
   ]}
 />
 
----
+장비 구입은 자산 합계를 바꾸지 않는다. 외상매출은 현금 없이 자본을 늘린다. 이 두 문장이 단식 현금장부와 갈라지는 지점이다.
 
-## 4. 마무리: 엑스레이 시력을 갖춘 투자
+## 2. 복식은 원인과 결과를 한 줄에 묶는다
 
-주가는 결국 기업의 **내재 가치**를 따라갑니다. 재무제표를 읽을 줄 안다는 것은 기업이 돈을 실제로 벌고 있는지, 아니면 빚만 늘리고 있는지 '팩트'를 체크할 수 있다는 뜻입니다.
+<FormulaBox
+  label="회계등식"
+  formula="자산 = 부채 + 자본"
+  description="기말 현금 1,200만 원은 자산의 한 계정이다. 자본 1,400만 원과 맞출 이유가 없다."
+/>
 
-**"회계는 화려한 홍보 문구 너머로 비즈니스의 골격을 볼 수 있는 엑스레이 시력을 제공합니다."**
+단식은 현금 유출입만 본다. 같은 달을 현금으로만 닫으면 1,200만 원이 남고, 매출채권과 장비가 사라진다. 복식은 차변·대변 합이 같아도 계정 선택이 틀리면 등식은 맞는다. 균형은 완전성의 증명이 아니다.
 
----
+<Callout type="warning">
+이익잉여금 400만 원이 통장에 쌓여 있다는 뜻이 아니다. 그 자원은 장비와 매출채권에 묶일 수 있다. 개인 현금출납을 기업 재무제표에 옮기지 않는다. 반대로 현금이 늘었다고 이익이 난 것도 아니다. 출자와 차입이 현금만 키운 경우가 이 예다.
+</Callout>
 
-## 📖 참고문헌
-- **[현명한 투자자의 재무제표 읽는 법] - 벤자민 그레이엄**: 가치 투자의 아버지가 전하는 시대를 초월한 가이드.
-- **[워런 버핏의 재무제표 활용법] - 메어리 버핏**: 세계 최고의 투자자가 어떻게 회계를 도구로 활용하는지 보여주는 필독서.
-- **[숫자 울렁증을 위한 회계 수업]**: 각 재무제표가 어떻게 유기적으로 연결되는지 시각적으로 보여주는 최고의 입문서.
+세 표의 연결은 [2장](/ko/education-accounting-ch2/)이다.
 
----
+## 확인문제
 
-## 시험을 준비 중이라면
+현금은 1,000 + 400 − 300 + 200 − 100 = 1,200만 원이다. 같은 달 이익은 500 − 100 = 400만 원이다. 두 숫자를 같게 쓰면 복식을 단식으로 읽은 것이다.
 
-공기업·공무원 경영학 시험에서 회계는 한 단원으로 압축되어 출제됩니다. 시험 범위와 출제 관점을 먼저 확인하고 싶다면 [공기업 경영학 Ch12. 회계 및 재무관리](/ko/education-business-ch12/)를 보세요 — 재무비율·자본구조·파생상품이 시험에서 어떻게 묶여 나오는지 정리돼 있습니다. 이 시리즈는 그 단원을 이론 전 범위로 확장한 과정입니다.
+## 참고 자료
 
----
-
-다음 시간에는 재무상태표, 손익계산서, 현금흐름표라는 서로 연결된 지도, **재무제표의 유기적 관계**에 대해 깊이 있게 다뤄보겠습니다.
+- Donald Kieso, Jerry Weygandt, and Terry Warfield, *Intermediate Accounting*, ch. 1–3
+- 최관, *재무회계*
+- IASB, *Conceptual Framework for Financial Reporting* ([기준 목록의 개념체계](https://www.ifrs.org/issued-standards/list-of-standards/conceptual-framework/))

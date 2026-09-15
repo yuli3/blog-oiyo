@@ -1,251 +1,63 @@
 ---
 track: academy
-locale: ko
-title: "재무제표분석 — 재무비율"
-category: "Finance"
 series: financial-statement-analysis
 chapter: 2
-chapterTitleShort: '중급회계 · 재무비율 심층 분석'
-author: OIYO 편집부
-tags:
-  - 재무비율
-  - 수익성분석
-  - 안정성분석
-  - 재무분석
-  - 투자분석
-description: "재무비율 심층 분석 — 수익성(ROE·ROA·ROIC)·안정성(부채비율·이자보상배율)·성장성·효율성 4축으로 기업의 진짜 체력을 파악하는 방법."
-pubDate: '2026-06-01'
-layoutVariant: lecture-series
+title: "재무제표분석 — 재무비율 4축"
+description: "수익성·안정성·활동성·성장성으로 같은 등식을 나누고, ROE 50%가 레버리지 2.5배에서 온 숫자임을 분해합니다."
+pubDate: 2026-06-01
 updatedDate: 2026-09-15
+category: Finance
+tags: ["재무제표분석", "재무비율", "ROE", "듀퐁"]
+locale: ko
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
 
-import Callout from "@/components/mdx/Callout.astro"
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-## 재무비율 분석의 4축
+# 재무제표분석 — 비율은 합격선이 아니라 등식을 네 방향으로 나눈 값이다
 
-재무비율은 **절대값이 아닌 비율**로 기업 간 비교를 가능하게 합니다.
+발생과 현금의 간격은 [1장](/ko/academy-financial-accounting-advanced-ch1/)이다. 이 장은 그 숫자를 **수익성·안정성·활동성·성장성**으로 가른다. 운전자본 회전은 [5장](/ko/academy-accounting-basics-ch11/), 등식 자체는 [4장](/ko/academy-accounting-basics-ch10/)이다.
 
-- 수익성 비율  →  얼마나 잘 버는가?
-- 안정성 비율  →  재정적으로 안전한가?
-- 성장성 비율  →  얼마나 빠르게 성장하는가?
-- 효율성 비율  →  자산을 얼마나 효율적으로 쓰는가?
+## 1. 한 회사의 네 축
 
----
+매출 2,000만 원, 순이익 200만 원, 자산 1,000만 원, 자본 400만 원, 부채 600만 원. 전기 매출이 없으면 성장률은 만들지 않는다.
 
-## 수익성 비율 심화
+<LectureTable
+  title="같은 장부의 네 나눗셈"
+  headers={["축", "이 장부", "묻는 말"]}
+  rows={[
+    ["수익성", "순이익률 10%, ROA 20%, ROE 50%", "판 금액·자산·자본 대비 얼마를 남겼는가"],
+    ["안정성", "부채비율 150%, 자기자본비율 40%", "손실을 누가 먼저 감수하는가"],
+    ["활동성", "자산회전 2배", "자산을 몇 번 매출로 돌렸는가"],
+    ["성장성", "전기 없음", "한 기 장부만으로 만들지 않음"],
+  ]}
+/>
 
-### ROE (Return on Equity) — 자기자본이익률
+<FormulaBox
+  label="듀퐁 항등식"
+  formula="ROE = 순이익률 × 자산회전 × 레버리지"
+  description="10% × 2배 × 2.5배 = 50%. 세 조각 중 레버리지가 키운 ROE를 수익성 개선으로 읽지 않는다."
+/>
 
-$$
-ROE = \frac{\text{당기순이익}}{\text{자기자본}} \times 100
-$$
+## 2. 축을 섞으면 처방이 틀린다
 
-**목표치**: 업종 평균 이상, 일반적으로 15% 이상
-
-하지만 ROE는 **부채로 부풀릴 수 있습니다**. 진짜 수익성을 보려면 ROE를 분해해야 합니다.
-
-### 듀퐁 분석 (DuPont Analysis)
-
-$$
-\begin{aligned}
-ROE &= \text{순이익률} \times \text{자산회전율} \times \text{재무 레버리지} \\
-&= (\text{순이익}/\text{매출}) \times (\text{매출}/\text{총자산}) \times (\text{총자산}/\text{자기자본})
-\end{aligned}
-$$
-
-| 요소 | 의미 | 좋은 ROE vs 나쁜 ROE |
-|---|---|---|
-| 순이익률 높음 | 가격 경쟁력·원가 관리 | ✅ 좋음 |
-| 자산회전율 높음 | 자산 효율성 | ✅ 좋음 |
-| 재무레버리지 높음 | 부채로 ROE 부풀리기 | ⚠️ 주의 필요 |
-
----
-
-### ROIC (Return on Invested Capital) — 투하자본수익률
-
-$$
-\begin{aligned}
-ROIC &= NOPAT / \text{투하자본} \\
-&= \text{영업이익} \times (1-\frac{\text{세율})}{\text{자기자본} + \text{순부채}}
-\end{aligned}
-$$
-
-**ROIC vs WACC 비교:**
-- ROIC > WACC: 기업이 자본비용 이상의 수익 창출 → 가치 창조
-- ROIC < WACC: 자본 파괴 → 장기적으로 위험
-
-<Callout type="tip">
-**Warren Buffett의 원칙**: "좋은 기업은 높은 ROIC를 장기간 유지합니다." ROIC가 지속적으로 높은 기업이 진짜 경쟁 우위가 있는 기업입니다.
-</Callout>
-
-### EBITDA 마진
-
-$$
-\begin{aligned}
-EBITDA &= \text{영업이익} + \text{감가상각비} + \text{상각비} \\
-EBITDA \text{마진} &= \frac{EBITDA}{\text{매출}}
-\end{aligned}
-$$
-
-**사용 이유:**
-- 감가상각 정책·세금 차이를 제거한 순수 영업 수익성
-- 기업 인수·합병(M&A)에서 밸류에이션 기준으로 자주 사용
-
----
-
-## 안정성 비율 심화
-
-### 부채비율 (Debt-to-Equity Ratio)
-
-$$
-\text{부채비율} = \frac{\text{총부채}}{\text{자기자본}} \times 100
-$$
-
-**해석:**
-- 200% 이하: 일반적으로 양호
-- 300% 이상: 과도한 레버리지 주의
-
-하지만 부채비율만으로는 부족합니다. **부채의 성격**을 봐야 합니다.
-
-### 순부채비율 (Net Debt Ratio)
-
-$$
-\begin{aligned}
-\text{순부채} &= \text{차입금} - \text{현금 및 현금성 자산} \\
-\text{순부채비율} &= \frac{\text{순부채}}{EBITDA}
-\end{aligned}
-$$
-
-- < 1.0: 매우 안정적
-- 1.0~3.0: 보통
-- > 4.0: 과도한 부채 부담
-
-### 이자보상배율 (Interest Coverage Ratio)
-
-$$
-\text{이자보상배율} = \text{영업이익} / \text{이자비용}
-$$
-
-**해석:**
-- > 3: 안정적 (이자 3배 이상 벌음)
-- 1.5~3: 보통
-- < 1.5: 이자 상환 위험 신호
-
-### 유동비율과 당좌비율
-
-$$
-\begin{aligned}
-\text{유동비율} &= \frac{\text{유동자산}}{\text{유동부채}} \times 100 \\
-\text{당좌비율} &= (\text{유동자산} - \frac{\text{재고자산})}{\text{유동부채}} \times 100
-\end{aligned}
-$$
-
-**기준:**
-- 유동비율 > 150%: 양호
-- 당좌비율 > 100%: 안정적 (재고 없이도 단기채무 상환 가능)
-
----
-
-## 성장성 비율 분석
-
-### 매출 성장률 vs 이익 성장률 비교
-
-- **매출 성장률 > 이익 성장률**: 비용 증가, 마진 압박
-- **매출 성장률 < 이익 성장률**: 효율성 개선, 긍정적
-
-### CAGR (연평균 성장률) 계산
-
-$$
-CAGR = (\text{최종값}/\text{초기값})^(1/\text{연수}) - 1
-$$
-
-**예시**: 5년 전 매출 100억 → 현재 200억
-$$
-CAGR = (200/100)^(1/5) - 1 = 14.87\%
-$$
-
-### Rule of 40 (SaaS 기업 평가 지표)
-
-$$
-\text{Rule of} 40 = \text{매출 성장률}(\%) + \text{영업이익률}(\%)
-$$
-
-- > 40: 건강한 고성장 SaaS
-- 20~40: 보통
-- < 20: 개선 필요
-
----
-
-## 효율성 비율 분석
-
-### 자산회전율
-
-$$
-\text{자산회전율} = \text{매출} / \text{총자산}
-$$
-
-업종별 정상 범위가 다릅니다:
-- 유통업: 2~3 이상
-- 제조업: 0.8~1.5
-- 서비스업: 1.0 이상
-
-### 재고자산 관리 효율
-
-$$
-\begin{aligned}
-\text{재고 회전율} &= \frac{\text{매출원가}}{\text{평균 재고자산}} \\
-\text{재고 회전일수} &= \frac{365}{\text{재고 회전율}}
-\end{aligned}
-$$
-
-**해석**: 회전일수가 낮을수록 재고를 빠르게 판매하는 효율적 기업
-
-### 현금전환주기 (Cash Conversion Cycle)
-
-$$
-CCC = \text{재고 회전일수} + \text{매출채권 회전일수} - \text{매입채무 회전일수}
-$$
-
-- CCC < 0: 현금을 먼저 받고 나중에 지급 → 매우 이상적 (아마존, 쿠팡 등)
-- CCC > 0: 현금을 먼저 지출 → 운전자본 필요
-
----
-
-## 비율 분석의 실전 활용
-
-### 동종 업종 비교의 중요성
-
-재무비율은 **절대값이 아닌 상대적 비교**가 핵심입니다.
-
-| 업종 | 평균 ROE | 평균 부채비율 | 평균 자산회전율 |
-|---|---|---|---|
-| IT/소프트웨어 | 20-40% | 30-100% | 0.6-1.5 |
-| 유통/소매 | 10-20% | 150-300% | 1.5-3.0 |
-| 은행/금융 | 8-15% | 1000%+ | N/A |
-| 제조업 | 8-18% | 100-200% | 0.7-1.3 |
+이자보상·유동비율은 안정성 축이다. 이익률이 높아도 만기 부채가 현금보다 앞설 수 있다. 활동성이 높아도 마진이 0이면 수익성이 없다. 성장률이 이익률보다 빠르면 운전자본이 매출을 잡아먹을 수 있다. 그 현금은 [3장](/ko/academy-financial-accounting-advanced-ch3/)이다.
 
 <Callout type="warning">
-**업종 간 비교 금지**: 은행의 부채비율 1000%를 제조업과 비교하면 안 됩니다. 반드시 동일 업종 내에서 비교하세요.
+ROE 15%, 부채비율 200%, 유동비율 200% 같은 교과서 숫자를 이 회사의 합격선으로 붙이지 않는다. 업종·회계정책·연결범위가 다른 평균과 한 기 비율을 겨루지 않는다. 레버리지로 만든 50%는 안정성 축이 먼저 받아 적는다.
 </Callout>
 
-### 트렌드 분석: 5년 추이를 보라
+이자비용이 없으면 이자보상배율을 만들지 않는다. 주가가 없으면 PER을 만들지 않는다. 없는 분모를 가정으로 채우지 않는 것이 분석이다.
 
-단일 연도 비율보다 **5년간 추이**가 더 중요합니다.
+## 확인문제
 
-- ROE가 지속적으로 상승: 경쟁 우위 강화
-- ROE가 지속적으로 하락: 업계 압박 또는 비효율 증가
-- 들쭉날쭉: 사이클 산업이거나 사업 불안정
+매출 2,000만 원, 이익 200만 원, 자산 1,000만 원, 자본 400만 원이면 ROE는 50%다. 이익률 10%·회전 2배·레버리지 2.5배로 분해된다. 50%를 ‘우량 수익성’ 한 줄로 쓰지 않는다.
 
-<Callout type="tip">**이전 강의**: [Ch1. 재무제표 심화](/ko/academy-financial-accounting-advanced-ch1/) · **다음 강의**: [Ch3. 현금흐름 심화 분석](/ko/academy-financial-accounting-advanced-ch3/)</Callout>
+## 참고 자료
 
----
-
-## 공식 출처 확인
-
-수치·기준은 개정될 수 있습니다. 신고·신청 전 아래 공식 기관에서 최신 정보를 확인하세요.
-
-- [금융감독원](https://www.fss.or.kr)
-- [금융소비자 정보포털 파인](https://fine.fss.or.kr)
-
-*(확인일: 2026-06)*
-
+- Stephen Penman, *Financial Statement Analysis and Security Valuation*
+- Krishna Palepu, Paul Healy, and Erik Peek, *Business Analysis and Valuation*
