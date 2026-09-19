@@ -20,11 +20,11 @@ const INITIAL_DEDUCTIONS: DeductionItem[] = [
   { id: 'credit', label: '신용카드 등 사용액', sublabel: '연간 총액 (소득공제 한도 내 15–40% 적용)', max: 3000000, rate: 0.15, value: '' },
   { id: 'medical', label: '의료비 세액공제', sublabel: '본인·부양가족 의료비 (총급여 3% 초과분)', max: 7000000, rate: 0.15, value: '' },
   { id: 'education', label: '교육비 세액공제', sublabel: '본인·부양가족 교육비 (15% 세액공제)', max: 9000000, rate: 0.15, value: '' },
-  { id: 'donation', label: '기부금 세액공제', sublabel: '법정·지정 기부금 (15–30% 세액공제)', max: 0, rate: 0.15, value: '' },
-  { id: 'pension_savings', label: '연금저축·IRP 세액공제', sublabel: '연간 납입액 (400만~900만 원 한도, 13–16.5% 공제)', max: 9000000, rate: 0.165, value: '' },
+  { id: 'donation', label: '기부금 세액공제', sublabel: '특례·일반 기부금 (15–30% 세액공제)', max: 0, rate: 0.15, value: '' },
+  { id: 'pension_savings', label: '연금저축·IRP 세액공제', sublabel: '연간 납입액 (연금저축 600만 원, IRP 합산 900만 원 한도, 13.2–16.5% 공제)', max: 9000000, rate: 0.165, value: '' },
 ];
 
-// 소득세 구간 (2024년 기준, 단위: 원)
+// 소득세 구간 (2023년 귀속 이후 동일, 단위: 원)
 const TAX_BRACKETS = [
   { limit: 14000000, rate: 0.06, prev: 0, prevTax: 0 },
   { limit: 50000000, rate: 0.15, prev: 14000000, prevTax: 840000 },

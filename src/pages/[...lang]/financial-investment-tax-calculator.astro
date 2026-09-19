@@ -53,6 +53,35 @@ const meta: Record<ActiveLocale, { title: string; description: string }> = {
 
 const m = meta[locale] ?? meta.en;
 
+const repealNotice: Record<ActiveLocale, { title: string; body: string }> = {
+  ko: {
+    title: "금융투자소득세는 2024년 12월에 폐지되었습니다",
+    body: "2024년 12월 국회에서 금융투자소득세 폐지가 확정되어, 이 세목은 시행되지 않습니다. 이 페이지는 과거 제도 구조를 이해하려는 분을 위한 보관용 계산기이며, 실제 납세 의무를 계산하지 않습니다. 국내 상장주식 매매차익은 대주주 요건에 해당하지 않으면 양도소득세가 과세되지 않고, 해외주식은 종전처럼 양도소득세 대상입니다.",
+  },
+  en: {
+    title: "Korea's financial investment income tax was repealed in December 2024",
+    body: "The National Assembly repealed this tax in December 2024, so it never took effect. This page is kept as an archived calculator for understanding the former design; it does not compute any real tax liability.",
+  },
+  ja: {
+    title: "金融投資所得税は2024年12月に廃止されました",
+    body: "2024年12月に廃止が確定し、この税目は施行されていません。本ページは過去の制度を理解するための保存用計算機であり、実際の納税義務を計算するものではありません。",
+  },
+  fr: {
+    title: "L'impôt coréen sur les revenus d'investissement a été abrogé en décembre 2024",
+    body: "Le Parlement l'a abrogé en décembre 2024 ; il n'est jamais entré en vigueur. Cette page est un calculateur archivé, conservé à titre documentaire, et ne calcule aucune obligation fiscale réelle.",
+  },
+  es: {
+    title: "El impuesto coreano sobre ingresos de inversión fue derogado en diciembre de 2024",
+    body: "La Asamblea Nacional lo derogó en diciembre de 2024, por lo que nunca entró en vigor. Esta página se conserva como calculadora archivada con fines documentales y no calcula ninguna obligación fiscal real.",
+  },
+  zh: {
+    title: "韩国金融投资所得税已于2024年12月废止",
+    body: "2024年12月国会确定废止，该税目未曾施行。本页面作为存档计算器保留，用于理解此前的制度设计，不计算任何实际纳税义务。",
+  },
+};
+
+const notice = repealNotice[locale] ?? repealNotice.en;
+
 const content: Record<ActiveLocale, SeoContent> = {
   ko: {
     introTitle: "금융투자소득세 계산은 적용 국가의 제도를 먼저 확인해야 합니다",
@@ -76,7 +105,7 @@ const content: Record<ActiveLocale, SeoContent> = {
       answer: "한국 기준입니다. 다른 나라의 세율, 공제, 사회보험 구조에는 그대로 적용할 수 없습니다."
     }, {
       question: "실제 금액과 왜 다를 수 있나요?",
-      answer: "금융투자소득세는 시행 여부와 세부 적용 시점이 변동될 수 있어 실제 납세 의무와 다를 수 있습니다."
+      answer: "금융투자소득세는 2024년 12월에 폐지되어 시행되지 않습니다. 따라서 이 계산 결과는 실제 납세 의무가 아니라 과거 제도의 구조를 보여주는 값입니다."
     }, {
       question: "규칙은 매년 바뀌나요?",
       answer: "예. 세율, 공제 한도, 사회보험 요율은 매년 바뀔 수 있습니다. 신고나 납부 전에는 해당 연도의 공식 기준을 확인하세요."
@@ -252,9 +281,13 @@ const structuredData = [
 ];
 ---
 
-<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]} heading={m.title} intro={m.description}>
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]} heading={m.title} intro={m.description} noindex={true}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <div class="mx-auto max-w-2xl px-4 py-5 sm:py-8">
+    <aside class="mb-5 rounded-lg border border-amber-300 bg-amber-50 p-4 text-sm leading-relaxed text-amber-900 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-100">
+      <p class="font-semibold">{notice.title}</p>
+      <p class="mt-2">{notice.body}</p>
+    </aside>
     <FinancialInvestmentTaxCalculator client:load locale={locale} />
   
 
