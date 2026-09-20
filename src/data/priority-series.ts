@@ -20,6 +20,28 @@ export const PRIORITY_SERIES = [
   "qualification-roadmaps",
 ] as const;
 
+/**
+ * Landing centre axis — **학문(카테고리)** 기준이다. 시리즈(과목)가 아니다.
+ *
+ * 2026-09-20 세운 확정: 랜딩 가운데는 경영학·경제학·회계학·세법학·시험 다섯
+ * 학문을 고정 축으로 둔다. 그전까지는 PRIORITY_SERIES(과목 시리즈 4개)를 그려서
+ * 「경영학원론·경제학개론·회계원리·시험」처럼 **과목명**이 노출됐고, 학문명 목차
+ * 원칙(company-brain/projects/oiyo-ecosystem/blog-wiki-academic-curriculum-audit-plan-2026-09-14.md)과
+ * 어긋났다. 값은 src/locales/*.json 의 category.names 키와 같아야 한다.
+ *
+ * PRIORITY_SERIES 는 남긴다 — "다음 한 페이지" CTA(firstChapterSlugs)가 과목
+ * 단위 진입점을 쓰기 때문이다.
+ */
+export const PRIORITY_CATEGORIES = [
+  "Business",
+  "Economics",
+  "Accounting",
+  "Tax",
+  "Exam",
+] as const;
+
+export type PriorityCategoryKey = (typeof PRIORITY_CATEGORIES)[number];
+
 export type PrioritySeriesKey = (typeof PRIORITY_SERIES)[number];
 
 /** Manually tuned display names per locale (user chose manual over auto-layout reuse). */
@@ -27,6 +49,40 @@ export type PrioritySeriesKey = (typeof PRIORITY_SERIES)[number];
 // GSC-ranked and changes over time, so it can include a key with no manual
 // translation yet — prioritySeriesName() below falls back to deriveSeriesLabel().
 export const PRIORITY_SERIES_NAMES: Partial<Record<string, Record<string, string>>> = {
+  // 시험 시리즈 키는 "공인노무사-시험"처럼 하이픈이 섞인 한글이라 화면에 날것으로
+  // 나왔다(2026-09-19 A1 감사). 표시 이름만 6개 로케일로 정리한다 — 키와 URL은 그대로다.
+  "행정사-시험": {
+    ko: "행정사 시험", en: "Certified Administrative Agent Exam", ja: "行政士試験",
+    zh: "行政士考试", fr: "Examen d’agent administratif", es: "Examen de gestor administrativo",
+  },
+  "공인노무사-시험": {
+    ko: "공인노무사 시험", en: "Certified Labor Attorney Exam", ja: "公認労務士試験",
+    zh: "公认劳务士考试", fr: "Examen de conseiller du travail", es: "Examen de asesor laboral",
+  },
+  "변리사-시험": {
+    ko: "변리사 시험", en: "Patent Attorney Exam", ja: "弁理士試験",
+    zh: "专利代理人考试", fr: "Examen de conseil en brevets", es: "Examen de agente de patentes",
+  },
+  "법무사-시험": {
+    ko: "법무사 시험", en: "Judicial Scrivener Exam", ja: "司法書士試験",
+    zh: "司法书士考试", fr: "Examen de clerc juridique", es: "Examen de gestor judicial",
+  },
+  "세무사-시험": {
+    ko: "세무사 시험", en: "Certified Tax Accountant Exam", ja: "税理士試験",
+    zh: "税务士考试", fr: "Examen de conseiller fiscal", es: "Examen de asesor fiscal",
+  },
+  "공인회계사-시험": {
+    ko: "공인회계사 시험", en: "CPA Exam", ja: "公認会計士試験",
+    zh: "注册会计师考试", fr: "Examen d’expert-comptable", es: "Examen de contador público",
+  },
+  "경영지도사-시험": {
+    ko: "경영지도사 시험", en: "Management Consultant Exam", ja: "経営指導士試験",
+    zh: "经营指导士考试", fr: "Examen de consultant en gestion", es: "Examen de consultor de gestión",
+  },
+  "감정평가사-시험": {
+    ko: "감정평가사 시험", en: "Certified Appraiser Exam", ja: "不動産鑑定士試験",
+    zh: "估价师考试", fr: "Examen d’expert en évaluation", es: "Examen de tasador",
+  },
   "myth-dictionary": {
     ko: "신화 사전", en: "Myth Dictionary", ja: "神話事典",
     zh: "神话词典", fr: "Dictionnaire des mythes", es: "Diccionario de mitos",

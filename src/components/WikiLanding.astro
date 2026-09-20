@@ -7,7 +7,12 @@ import RelatedToolLinks from "./RelatedToolLinks.astro";
 import { getTranslations } from "../lib/i18n";
 import type { Locale } from "../lib/i18n";
 import { buildSeriesIndex, groupSeriesByCategory, isRedirectStub } from "../lib/wiki-index";
-import { PRIORITY_SERIES, seriesDisplayName } from "../data/priority-series";
+import {
+  PRIORITY_SERIES,
+  PRIORITY_CATEGORIES,
+  prioritySeriesName,
+  seriesDisplayName,
+} from "../data/priority-series";
 import { slugifyCategory } from "../lib/taxonomy";
 import { firstChapterSlugs } from "../lib/related-next";
 
@@ -39,7 +44,42 @@ const priority = PRIORITY_SERIES.map((k) => byKey.get(k)).filter(
 const nextReadSlugs = firstChapterSlugs(priority, 3);
 
 // Two-level category → series index for the sidebar.
-const catGroups = groupSeriesByCategory(allSeries);
+const catGroupsAll = groupSeriesByCategory(allSeries);
+const catGroupMap = new Map(catGroupsAll);
+
+// Landing centre: the five disciplines (학문) fixed by 세운 on 2026-09-20.
+// Sections list the **courses (과목)** inside each discipline, so the landing
+// reads as 학문 → 과목 instead of a flat list of survey series.
+// 과목으로 셀 수 있는 것만 남긴다. 한 편짜리 매거진 글이 "과목"으로 세어지면
+// 세법학이 20과목처럼 보이고(실제 학문 과정은 3개), 실용 가이드가 챕터 수만으로
+// 경영학원론보다 위에 걸린다. 그래서 (1) 2화 이상인 시리즈만, (2) academy·education
+// 트랙만 남기고, (3) 이름이 정리된 정규 과목(PRIORITY_SERIES_NAMES)을 먼저 놓는다.
+const COURSE_TRACKS = new Set(["academy", "education"]);
+const priorityCats = PRIORITY_CATEGORIES.map((cat) => {
+  const list = (catGroupMap.get(cat) ?? [])
+    .filter(
+      (s) =>
+        s.chapterCount >= 2 &&
+        COURSE_TRACKS.has(String(s.firstPost.data.track ?? "")),
+    )
+    .sort((a, b) => {
+      const ca = prioritySeriesName(a.key, locale) ? 0 : 1;
+      const cb = prioritySeriesName(b.key, locale) ? 0 : 1;
+      return ca - cb || b.chapterCount - a.chapterCount || a.key.localeCompare(b.key);
+    });
+  return { cat, list };
+}).filter((g) => g.list.length > 0);
+
+// Sidebar keeps every category, but the five disciplines come first and open.
+const prioritySet = new Set<string>(PRIORITY_CATEGORIES);
+const catGroups = [
+  ...catGroupsAll.filter(([cat]) => prioritySet.has(cat)).sort(
+    ([a], [b]) =>
+      PRIORITY_CATEGORIES.indexOf(a as (typeof PRIORITY_CATEGORIES)[number]) -
+      PRIORITY_CATEGORIES.indexOf(b as (typeof PRIORITY_CATEGORIES)[number]),
+  ),
+  ...catGroupsAll.filter(([cat]) => !prioritySet.has(cat)),
+];
 
 // Recent updates table.
 const recent = [...posts]
@@ -74,13 +114,13 @@ const chapterWord = L("chapters", "chapters");
 
       <div class="grid gap-10 lg:grid-cols-[16rem_1fr] lg:gap-12">
         <!-- ── Sidebar: full category→series index ────────────────────────── -->
-        <aside class="min-w-0 lg:sticky lg:top-20 self-start">
+        <aside class="order-2 min-w-0 lg:order-none lg:sticky lg:top-20 self-start">
           <nav aria-label={L("seriesIndex", "Series index")}>
             <p class="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/70 mb-3 border-b border-border pb-2">
               {L("categoriesIndex", "Categories")}
             </p>
             {catGroups.map(([cat, list], gi) => (
-              <details class="group mb-1.5" open={gi < 4}>
+              <details class="group mb-1.5" open={gi < priorityCats.length}>
                 <summary class="flex min-w-0 items-center justify-between cursor-pointer select-none py-1 text-sm font-semibold text-foreground hover:text-primary transition-colors list-none">
                   <span class="truncate">{categoryNames[cat] ?? cat}</span>
                   <span class="text-[11px] tabular-nums text-muted-foreground/60 shrink-0">{list.reduce((n, s) => n + s.chapterCount, 0)}</span>
@@ -106,27 +146,49 @@ const chapterWord = L("chapters", "chapters");
         </aside>
 
         <!-- ── Main column ─────────────────────────────────────────────────── -->
-        <div class="min-w-0 space-y-7 sm:space-y-12">
-          {priority.map((s) => (
-            <section aria-labelledby={`sec-${s.key}`}>
+        <div class="order-1 min-w-0 space-y-7 sm:space-y-12 lg:order-none">
+          {priorityCats.map(({ cat, list }) => (
+            <section aria-labelledby={`sec-${slugifyCategory(cat)}`}>
               <div class="flex items-baseline justify-between gap-3 border-b border-border mb-4 pb-2">
-                <h2 id={`sec-${s.key}`} class="min-w-0 truncate text-lg font-bold tracking-tight text-foreground">
-                  {seriesDisplayName(s.key, locale, s.firstPost.data.title)}
+                <h2 id={`sec-${slugifyCategory(cat)}`} class="min-w-0 truncate text-lg font-bold tracking-tight text-foreground">
+                  {categoryNames[cat] ?? cat}
                 </h2>
                 <div class="flex items-baseline gap-3 shrink-0">
-                  <span class="text-xs tabular-nums text-muted-foreground/70 whitespace-nowrap">{s.chapterCount} {chapterWord}</span>
-                  <a href={`/${locale}/category/${slugifyCategory(s.category)}/`} class="py-1.5 text-xs font-semibold text-primary/80 hover:text-primary whitespace-nowrap">
+                  <span class="text-xs tabular-nums text-muted-foreground/70 whitespace-nowrap">
+                    {list.length} {L("subjects", "subjects")} · {list.reduce((n, s) => n + s.chapterCount, 0)} {chapterWord}
+                  </span>
+                  <a href={`/${locale}/category/${slugifyCategory(cat)}/`} class="py-1.5 text-xs font-semibold text-primary/80 hover:text-primary whitespace-nowrap">
                     {L("viewCategory", "View all")} →
                   </a>
                 </div>
               </div>
-              <WikiTable posts={[...s.posts].reverse().slice(0, 5)} locale={locale} showSeries={false} />
+              <ul class="grid gap-x-6 gap-y-1 sm:grid-cols-2">
+                {list.slice(0, 8).map((s) => (
+                  <li class="min-w-0">
+                    <a
+                      href={`/${locale}/${s.firstPost.slug.split("/").slice(1).join("/")}/`}
+                      class="flex min-w-0 items-baseline justify-between gap-3 border-b border-border/40 py-2 text-sm text-foreground hover:text-primary transition-colors"
+                    >
+                      <span class="min-w-0 truncate">{seriesDisplayName(s.key, locale, s.firstPost.data.title)}</span>
+                      <span class="shrink-0 tabular-nums text-xs text-muted-foreground/60">{s.chapterCount}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              {list.length > 8 && (
+                <p class="mt-2 text-xs text-muted-foreground/70">
+                  +{list.length - 8}
+                </p>
+              )}
             </section>
           ))}
 
           <section aria-labelledby="sec-recent">
-            <div class="border-b border-border mb-4 pb-2">
-              <h2 id="sec-recent" class="text-lg font-bold tracking-tight text-foreground">{L("recentUpdates", "Recent updates")}</h2>
+            <div class="flex items-baseline justify-between gap-3 border-b border-border mb-4 pb-2">
+              <h2 id="sec-recent" class="min-w-0 truncate text-lg font-bold tracking-tight text-foreground">{L("recentUpdates", "Recent updates")}</h2>
+              <a href={`/${locale}/updates/`} class="shrink-0 py-1.5 text-xs font-semibold text-primary/80 hover:text-primary whitespace-nowrap">
+                {L("viewAllUpdates", "View all")} →
+              </a>
             </div>
             <WikiTable posts={recent} locale={locale} />
           </section>

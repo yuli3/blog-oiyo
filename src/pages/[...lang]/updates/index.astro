@@ -1,0 +1,96 @@
+---
+/**
+ * 최근 업데이트 전체보기.
+ *
+ * 랜딩(`WikiLanding.astro`)의 "최근 업데이트"는 15건에서 잘린다. 다른 섹션에는
+ * 전부 "전체 보기 →"가 있는데 이 섹션만 없어서, 갱신분을 따라가려면 사이트를
+ * 뒤져야 했다(2026-09-19 A1 감사). 이 라우트가 그 목적지다.
+ *
+ * 정렬 기준은 랜딩과 같다 — `updatedDate ?? pubDate` 내림차순. 랜딩이 보여주는
+ * 15건은 이 목록의 앞 15건과 정확히 같아야 한다.
+ */
+import { getCollection } from "astro:content";
+import BlogList from "../../../components/BlogList.astro";
+import { getTranslations, locales } from "../../../lib/i18n";
+import { siteConfig } from "../../../config/site.config";
+import { isRedirectStub } from "../../../lib/wiki-index";
+import { collectionPageJsonLd } from "../../../lib/seo/structured-data";
+
+export async function getStaticPaths() {
+  // Astro는 getStaticPaths를 격리 실행해서 컴포넌트 스코프 상수를 못 본다.
+  const POSTS_PER_PAGE = 30;
+  const allPosts = await getCollection("blog", ({ data }) => data.draft !== true);
+
+  // 로케일마다 문서 수가 달라 페이지 수도 다르다. 없는 페이지를 hreflang으로
+  // 가리키면 링크 감사가 깨진다(#27과 같은 문제) — 페이지 번호가 실제로 있는
+  // 로케일만 대체 언어로 넘긴다.
+  const pagesByLocale: Record<string, number> = {};
+  for (const lang of locales) {
+    const n = allPosts.filter(
+      (post) => post.data.locale === lang && !isRedirectStub(post.data),
+    ).length;
+    pagesByLocale[lang] = Math.max(1, Math.ceil(n / POSTS_PER_PAGE));
+  }
+
+  return locales.flatMap((lang) => {
+    const posts = allPosts
+      .filter((post) => post.data.locale === lang && !isRedirectStub(post.data))
+      .sort((a, b) => {
+        const da = a.data.updatedDate ?? a.data.pubDate;
+        const db = b.data.updatedDate ?? b.data.pubDate;
+        return db.valueOf() - da.valueOf();
+      });
+
+    const lastPage = Math.max(1, Math.ceil(posts.length / POSTS_PER_PAGE));
+
+    return [
+      {
+        params: { lang },
+        props: {
+          locale: lang,
+          currentPage: 1,
+          lastPage,
+          items: posts.slice(0, POSTS_PER_PAGE),
+          total: posts.length,
+          availableLocales: locales.filter((l) => pagesByLocale[l] >= 1),
+        },
+      },
+    ];
+  });
+}
+
+const { locale, currentPage, lastPage, items, total, availableLocales } = Astro.props;
+const t = await getTranslations(locale);
+const wikiT = (t as Record<string, unknown>).wiki as Record<string, string> | undefined;
+
+const title = wikiT?.recentUpdates ?? "Recent updates";
+const subtitle = (wikiT?.updatesSubtitle ?? "All {count} pages, newest first.").replace(
+  "{count}",
+  String(total),
+);
+const baseUrl = `/${locale}/updates`;
+
+const jsonLd = JSON.stringify(
+  collectionPageJsonLd({
+    name: `${title} — ${siteConfig.name}`,
+    description: subtitle,
+    url: `${siteConfig.url}${baseUrl}/`,
+    inLanguage: locale,
+    items: items.map((post) => ({
+      name: post.data.title,
+      url: `${siteConfig.url}/${locale}/${post.slug.split("/").slice(1).join("/")}/`,
+    })),
+  }),
+);
+---
+
+<BlogList
+  page={{ data: items, currentPage, lastPage }}
+  locale={locale}
+  baseUrl={baseUrl}
+  title={title}
+  subtitle={subtitle}
+  availableLocales={availableLocales}
+  jsonLd={jsonLd}
+  showCategoryCloud={false}
+/>
