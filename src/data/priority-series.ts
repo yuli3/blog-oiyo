@@ -49,6 +49,17 @@ export type PrioritySeriesKey = (typeof PRIORITY_SERIES)[number];
 // GSC-ranked and changes over time, so it can include a key with no manual
 // translation yet — prioritySeriesName() below falls back to deriveSeriesLabel().
 export const PRIORITY_SERIES_NAMES: Partial<Record<string, Record<string, string>>> = {
+  // 2026-09-20 세운 지시: 하위 과목에 '기초·핵심·완전정복'을 쓰지 않는다.
+  // 재정학은 시리즈 키가 URL-safe(public-finance)라 표시 이름만 정하면 되고,
+  // 세법 각론은 키 자체를 바꿨다(옛 키 "세법 핵심"). 두 경우 모두 URL은 그대로다.
+  "public-finance": {
+    ko: "재정학", en: "Public Finance", ja: "財政学",
+    zh: "财政学", fr: "Finances publiques", es: "Hacienda pública",
+  },
+  "세법 각론": {
+    ko: "세법 각론", en: "Tax Law by Tax Type", ja: "税法各論",
+    zh: "税法各论", fr: "Droit fiscal par impôt", es: "Derecho tributario por impuesto",
+  },
   // 시험 시리즈 키는 "공인노무사-시험"처럼 하이픈이 섞인 한글이라 화면에 날것으로
   // 나왔다(2026-09-19 A1 감사). 표시 이름만 6개 로케일로 정리한다 — 키와 URL은 그대로다.
   "행정사-시험": {
