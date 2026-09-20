@@ -8,6 +8,7 @@ import { getTrack, slugifyCategory } from "../../../../lib/taxonomy";
 import { collectionPageJsonLd } from "../../../../lib/seo/structured-data";
 import {
   buildSeriesIndex,
+  isRedirectStub,
   isUrlSafeSeriesKey,
   type SeriesEntry,
 } from "../../../../lib/wiki-index";
@@ -52,9 +53,15 @@ const { category } = Astro.params;
 const { originalCategory, locale, availableLocales } = Astro.props;
 const t = await getTranslations(locale);
 
+// Redirect stubs are noindex ex-URLs, not content. Without this filter they
+// surface in the course list under their raw slug (no `series` frontmatter →
+// key falls back to the slug) and poison the CollectionPage ItemList JSON-LD
+// with a noindex target — e.g. "education-economics-ch25_29" on
+// /ko/category/economics/. Same predicate the landing and updates pages use.
 const posts = await getCollection("blog", ({ data }) => {
   return (
     data.draft !== true &&
+    !isRedirectStub(data) &&
     data.locale === locale &&
     data.category && slugifyCategory(data.category) === category
   );
@@ -110,6 +117,14 @@ if (isAcademySeriesMode) {
   );
 }
 
+// A one-post "series" is just an article — buildSeriesIndex gives every post a
+// key, so standalone pieces ("에필로그: 족대를 들고…") used to render as course
+// cards reading "1 챕터". 63% of ko category rows were these. Split them out so
+// the course list means courses, without hiding the articles (they would
+// otherwise lose their only internal entry point).
+const courseList = seriesList.filter((s) => s.chapterCount >= 2);
+const articleList = seriesList.filter((s) => s.chapterCount < 2);
+
 const catalogJsonLd = JSON.stringify(
   collectionPageJsonLd({
     name: `${displayName} — ${siteConfig.name}`,
@@ -117,10 +132,18 @@ const catalogJsonLd = JSON.stringify(
     url: `${siteConfig.url}${localePrefix}/category/${category}/`,
     inLanguage: locale,
     items: isAcademySeriesMode
-      ? seriesList.map((s) => ({
-          name: seriesDisplayName(s.key, locale, s.firstPost.data.title),
-          url: `${siteConfig.url}${seriesCardHref(s)}`,
-        }))
+      ? [
+          // courses keep their series label; standalone pieces list under their
+          // own article title so the ItemList never names a slug.
+          ...courseList.map((s) => ({
+            name: seriesDisplayName(s.key, locale, s.firstPost.data.title),
+            url: `${siteConfig.url}${seriesCardHref(s)}`,
+          })),
+          ...articleList.map((s) => ({
+            name: s.firstPost.data.title,
+            url: `${siteConfig.url}${seriesCardHref(s)}`,
+          })),
+        ]
       : page.data.map((p) => ({
           name: p.data.title,
           url: `${siteConfig.url}/${locale}/${p.slug.split("/").slice(1).join("/")}/`,
@@ -134,7 +157,11 @@ const catalogJsonLd = JSON.stringify(
     locale={locale}
     title={displayName}
     subtitle={displaySubtitle}
-    seriesList={seriesList}
+    seriesList={courseList}
+    articleList={articleList}
+    coursesLabel={courseT?.coursesSection}
+    articlesLabel={courseT?.articlesSection}
+    articlesHint={courseT?.articlesSectionHint}
     chaptersLabel={chaptersLabel}
     ctaLabel={ctaLabel}
     availableLocales={availableLocales}

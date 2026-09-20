@@ -4,13 +4,20 @@ import BaseLayout from "../../../../layouts/BaseLayout.astro";
 import WikiTable from "../../../../components/WikiTable.astro";
 import { getTranslations, locales } from "../../../../lib/i18n";
 import type { Locale } from "../../../../lib/i18n";
-import { buildSeriesIndex, isUrlSafeSeriesKey, type SeriesEntry } from "../../../../lib/wiki-index";
+import { buildSeriesIndex, isRedirectStub, isUrlSafeSeriesKey, type SeriesEntry } from "../../../../lib/wiki-index";
 import { seriesDisplayName } from "../../../../data/priority-series";
 import { collectionPageJsonLd } from "../../../../lib/seo/structured-data";
 import { siteConfig } from "../../../../config/site.config";
 
 export async function getStaticPaths() {
-  const allPosts = await getCollection("blog", ({ data }) => data.draft !== true);
+  // Without the stub filter a series whose chapters were all redirected away
+  // still builds a hub page — /ko/series/corporate-finance/ rendered
+  // "재무관리의 기초 · 8 챕터" where every one of the 8 links redirects
+  // elsewhere. Stubs are noindex ex-URLs, so they must not count as chapters.
+  const allPosts = await getCollection(
+    "blog",
+    ({ data }) => data.draft !== true && !isRedirectStub(data),
+  );
   const seriesByLocale = new Map(
     locales.map((lang) => [
       lang,

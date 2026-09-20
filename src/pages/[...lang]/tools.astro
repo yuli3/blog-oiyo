@@ -9,7 +9,7 @@ import { collectionPageJsonLd } from "../../lib/seo/structured-data";
 import { siteConfig } from "../../config/site.config";
 import { getTrackFromData } from "../../lib/taxonomy";
 import oiyoCanonicalMap from "../../data/oiyo-canonical-map.json";
-import { buildSeriesIndex } from "../../lib/wiki-index";
+import { buildSeriesIndex, isRedirectStub } from "../../lib/wiki-index";
 import { PRIORITY_SERIES } from "../../data/priority-series";
 import { firstChapterSlugs } from "../../lib/related-next";
 
@@ -1325,8 +1325,9 @@ for (const cat of categories) {
   if (extra && extra.length) cat.tools = [...cat.tools, ...extra];
 }
 
+// Stubs are noindex ex-URLs — they must not become "next read" suggestions.
 const academyPosts = await getCollection("blog", ({ data }) =>
-  data.draft !== true && data.locale === locale);
+  data.draft !== true && !isRedirectStub(data) && data.locale === locale);
 const toolsSeriesByKey = buildSeriesIndex(academyPosts);
 const toolsNextReadSlugs = firstChapterSlugs(
   PRIORITY_SERIES.map((k) => toolsSeriesByKey.get(k)).filter(

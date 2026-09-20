@@ -5,14 +5,17 @@ import { getTranslations, locales } from "../../../../lib/i18n";
 import { getTrack, getTrackFromData, slugifyCategory } from "../../../../lib/taxonomy";
 import { collectionPageJsonLd } from "../../../../lib/seo/structured-data";
 import { siteConfig } from "../../../../config/site.config";
+import { isRedirectStub } from "../../../../lib/wiki-index";
 
 export async function getStaticPaths() {
   const postsPerPage = 24;
   const paths = [];
 
+  // Redirect stubs are noindex ex-URLs, not content — keep them out of the
+  // list and out of the page-count math. Matches index.astro and the landing.
   const allPosts = await getCollection(
     "blog",
-    ({ data }) => data.draft !== true,
+    ({ data }) => data.draft !== true && !isRedirectStub(data),
   );
 
   // per category-slug, per locale page counts — feeds the language switcher (#27)

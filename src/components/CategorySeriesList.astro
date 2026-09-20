@@ -11,6 +11,11 @@ interface Props {
   title: string;
   subtitle: string;
   seriesList: SeriesEntry[];
+  /** One-post "series" — rendered as plain links, not course cards. */
+  articleList?: SeriesEntry[];
+  coursesLabel?: string;
+  articlesLabel?: string;
+  articlesHint?: string;
   chaptersLabel: string;
   ctaLabel: string;
   availableLocales?: string[];
@@ -23,6 +28,10 @@ const {
   title,
   subtitle,
   seriesList,
+  articleList = [],
+  coursesLabel,
+  articlesLabel,
+  articlesHint,
   chaptersLabel,
   ctaLabel,
   availableLocales,
@@ -44,12 +53,46 @@ const {
         </p>
       </div>
 
-      <SeriesCardGrid
-        seriesList={seriesList}
-        locale={locale}
-        chaptersLabel={chaptersLabel}
-        ctaLabel={ctaLabel}
-      />
+      {seriesList.length > 0 && (
+        <>
+          {articleList.length > 0 && coursesLabel && (
+            <h2 class="mb-4 text-sm font-black uppercase tracking-[0.18em] text-muted-foreground">
+              {coursesLabel}
+            </h2>
+          )}
+          <SeriesCardGrid
+            seriesList={seriesList}
+            locale={locale}
+            chaptersLabel={chaptersLabel}
+            ctaLabel={ctaLabel}
+          />
+        </>
+      )}
+
+      {articleList.length > 0 && (
+        <div class={seriesList.length > 0 ? "mt-12 sm:mt-16" : ""}>
+          {articlesLabel && (
+            <h2 class="mb-1 text-sm font-black uppercase tracking-[0.18em] text-muted-foreground">
+              {articlesLabel}
+            </h2>
+          )}
+          {articlesHint && (
+            <p class="mb-4 text-sm text-muted-foreground">{articlesHint}</p>
+          )}
+          <ul class="divide-y divide-border rounded-xl border border-border">
+            {articleList.map((s) => (
+              <li>
+                <a
+                  href={`/${locale}/${s.firstPost.slug.split("/").slice(1).join("/")}/`}
+                  class="block px-4 py-3 text-sm font-medium text-foreground transition-colors hover:bg-muted/50 hover:text-primary"
+                >
+                  {s.firstPost.data.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   </section>
 </BaseLayout>
