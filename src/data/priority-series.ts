@@ -49,6 +49,60 @@ export type PrioritySeriesKey = (typeof PRIORITY_SERIES)[number];
 // GSC-ranked and changes over time, so it can include a key with no manual
 // translation yet — prioritySeriesName() below falls back to deriveSeriesLabel().
 export const PRIORITY_SERIES_NAMES: Partial<Record<string, Record<string, string>>> = {
+  // 2026-09-21: 표시명이 1장 제목으로 떨어지던 11개 과목에 학문·과목명을 준다.
+  // deriveSeriesLabel 은 제목을 " — " 로 자르는데 이 과목들의 제목은 부제를
+  // ":" 로 붙여서, 잘리지 않고 통째로 라벨이 됐다 — "통계학의 본질: 불확실성
+  // 속에서 질서를 찾다 · 10 챕터" 처럼. 키를 매핑하면 6개 로케일이 함께 풀린다.
+  "statistics-basics": {
+    ko: "통계학", en: "Statistics", ja: "統計学",
+    zh: "统计学", fr: "Statistique", es: "Estadística",
+  },
+  "medicine-basics": {
+    ko: "의학 개론", en: "Introduction to Medicine", ja: "医学概論",
+    zh: "医学概论", fr: "Introduction à la médecine", es: "Introducción a la medicina",
+  },
+  "zoology-basics": {
+    ko: "동물학", en: "Zoology", ja: "動物学",
+    zh: "动物学", fr: "Zoologie", es: "Zoología",
+  },
+  "world-history-basics": {
+    ko: "세계사", en: "World History", ja: "世界史",
+    zh: "世界史", fr: "Histoire du monde", es: "Historia universal",
+  },
+  "music-history": {
+    ko: "음악사", en: "Music History", ja: "音楽史",
+    zh: "音乐史", fr: "Histoire de la musique", es: "Historia de la música",
+  },
+  "actuarial-science-basics": {
+    ko: "보험수리학", en: "Actuarial Science", ja: "保険数理学",
+    zh: "精算学", fr: "Science actuarielle", es: "Ciencia actuarial",
+  },
+  "financial-engineering-basics": {
+    ko: "금융공학", en: "Financial Engineering", ja: "金融工学",
+    zh: "金融工程", fr: "Ingénierie financière", es: "Ingeniería financiera",
+  },
+  "advanced-bonds": {
+    ko: "채권론", en: "Fixed Income", ja: "債券論",
+    zh: "债券投资", fr: "Obligations", es: "Renta fija",
+  },
+  "crypto-basics": {
+    ko: "블록체인·암호자산", en: "Blockchain and Crypto Assets", ja: "ブロックチェーンと暗号資産",
+    zh: "区块链与加密资产", fr: "Blockchain et cryptoactifs", es: "Blockchain y criptoactivos",
+  },
+  // 키는 project-management 인데 category 가 Product Management 다. 본문 10장은
+  // 범위·일정·자원·예산·품질·리스크로 PMBOK 계열이라 프로젝트 관리가 맞다.
+  // 카테고리 정정은 별도 판단이 필요해 여기서는 표시명만 바로잡는다.
+  "project-management": {
+    ko: "프로젝트 관리", en: "Project Management", ja: "プロジェクトマネジメント",
+    zh: "项目管理", fr: "Gestion de projet", es: "Gestión de proyectos",
+  },
+  // 학문 과목이 아니라 20부작 기획 연재다. 각 장 제목이 "{장 제목} — 갈림길에
+  // 선 경제" 로, 2026-08-25 규약("{과목명} — {장 부제}")과 순서가 뒤집혀 있어
+  // deriveSeriesLabel 이 장 제목을 집어 간다. 연재명을 직접 지정한다.
+  "crossroads-economy": {
+    ko: "갈림길에 선 경제", en: "Economy at a Crossroads", ja: "岐路に立つ経済",
+    zh: "十字路口上的经济", fr: "L'économie à la croisée des chemins", es: "La economía en la encrucijada",
+  },
   // 2026-09-20: 세법 각론에서 1차 범위 밖 세목(상속·증여·양도·보유세)을 분리한 과정.
   "property-transfer-tax": {
     ko: "재산제세", en: "Property and Transfer Taxes", ja: "財産・譲渡関連税",
