@@ -49,6 +49,11 @@ export type PrioritySeriesKey = (typeof PRIORITY_SERIES)[number];
 // GSC-ranked and changes over time, so it can include a key with no manual
 // translation yet — prioritySeriesName() below falls back to deriveSeriesLabel().
 export const PRIORITY_SERIES_NAMES: Partial<Record<string, Record<string, string>>> = {
+  // 2026-09-20: 세법 각론에서 1차 범위 밖 세목(상속·증여·양도·보유세)을 분리한 과정.
+  "property-transfer-tax": {
+    ko: "재산제세", en: "Property and Transfer Taxes", ja: "財産・譲渡関連税",
+    zh: "财产与转让税", fr: "Impôts sur le patrimoine et les cessions", es: "Impuestos sobre patrimonio y transmisiones",
+  },
   // 2026-09-20 세운 지시: 하위 과목에 '기초·핵심·완전정복'을 쓰지 않는다.
   // 재정학은 시리즈 키가 URL-safe(public-finance)라 표시 이름만 정하면 되고,
   // 세법 각론은 키 자체를 바꿨다(옛 키 "세법 핵심"). 두 경우 모두 URL은 그대로다.
