@@ -1,7 +1,12 @@
 ---
 /**
  * FormulaBox — 수식/공식 강조 블록
- * KaTeX 없이 순수 CSS로 수식을 표현
+ *
+ * LaTeX 명령(\frac, \delta …)이나 첨자(^, _)가 있으면 KaTeX 로 조판한다.
+ * 2026-09-24 전까지는 문자열을 그대로 찍어 `s f(k^*)=(\delta+n)k^*` 가 날것으로
+ * 보였다. "순자산 − 자본금" 같은 말로 된 공식은 지금처럼 글자로 둔다.
+ * 수식 안의 한글은 \text{} 로 감싼다. 조판 실패는 빨간 글씨로 남아
+ * `npm run audit:katex` 가 잡는다(throwOnError: false).
  *
  * Props:
  *   formula     - 수식 텍스트 (메인 표시)
@@ -16,7 +21,16 @@ interface Props {
   color?: string;
 }
 
+import katex from "katex";
+
 const { formula, label, description, color = "#3b82f6" } = Astro.props;
+const isTex = /\\[a-zA-Z]|[\^_]/.test(formula);
+const texHtml = isTex
+  ? katex.renderToString(
+      formula.replace(/[가-힣]+(?:[\s·][가-힣]+)*/g, (run) => `\\text{${run}}`),
+      { displayMode: true, throwOnError: false, strict: "ignore" },
+    )
+  : null;
 ---
 
 <div class="edu-formula-box" style={`border-left-color: ${color};`}>
@@ -27,7 +41,9 @@ const { formula, label, description, color = "#3b82f6" } = Astro.props;
       </div>
     )
   }
-  <div class="edu-formula-box__formula">{formula}</div>
+  {texHtml
+    ? <div class="edu-formula-box__formula edu-formula-box__formula--tex" set:html={texHtml} />
+    : <div class="edu-formula-box__formula">{formula}</div>}
   {description && <div class="edu-formula-box__description">{description}</div>}
 </div>
 
@@ -55,6 +71,20 @@ const { formula, label, description, color = "#3b82f6" } = Astro.props;
     letter-spacing: 0.03em;
     margin: 0.25rem 0;
     line-height: 1.8;
+  }
+  /* KaTeX 조판본: 폭이 좁은 화면에서 페이지가 아니라 이 칸만 가로로 밀린다. */
+  .edu-formula-box__formula--tex {
+    font-family: inherit;
+    font-weight: 400;
+    letter-spacing: normal;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  .edu-formula-box__formula--tex :global(.katex-display) {
+    margin: 0.25rem 0;
+    /* 전역 .katex-display 의 스크롤 그림자 가리개는 페이지 배경색이라, 푸른 상자
+       안에서는 회색 블록으로 보인다. 상자 안에서는 끈다(가로 스크롤은 그대로). */
+    background: none;
   }
   .edu-formula-box__description {
     margin-top: 0.75rem;
