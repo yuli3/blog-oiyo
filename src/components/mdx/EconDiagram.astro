@@ -113,6 +113,7 @@ const uid = `ed-${Math.random().toString(36).slice(2, 8)}`;
 
     {curves.map((c) => {
       const at = c.points[Math.min(c.labelAt ?? c.points.length - 1, c.points.length - 1)];
+      const anchor = c.anchor ?? (yMin >= at[1] ? "end" : "start");
       return (
         <>
           <polyline
@@ -125,7 +126,7 @@ const uid = `ed-${Math.random().toString(36).slice(2, 8)}`;
             stroke-dasharray={c.dashed ? "7,5" : undefined}
           />
           {c.label && (
-            <text x={c.anchor === "end" ? px(at[0]) - 2 : px(at[0]) + 6} y={c.anchor === "end" ? py(at[1]) - 8 : py(at[1]) + 4} text-anchor={c.anchor === "end" ? "end" : "start"} font-size="12.5" font-weight="700" fill={toneOf(c.tone)}>{c.label}</text>
+            <text x={anchor === "end" ? px(at[0]) - 2 : px(at[0]) + 6} y={anchor === "end" ? py(at[1]) - 8 : py(at[1]) + 4} text-anchor={anchor} font-size="12.5" font-weight="700" fill={toneOf(c.tone)}>{c.label}</text>
           )}
         </>
       );

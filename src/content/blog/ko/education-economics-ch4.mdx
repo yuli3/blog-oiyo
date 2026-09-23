@@ -3,11 +3,11 @@ track: academy
 series: microeconomics
 chapter: 4
 title: "미시경제학 — 소비자 이론: 효용 극대화와 선택"
-description: "내부해 MRS=상대가격을 도출하고, 슬루츠키 분해로 가격 효과를 대체와 소득으로 나눈 뒤 코너해와 기펜재를 한계로 둡니다."
+description: "예산제약과 무차별곡선에서 최적 조건 MRS = Px/Py를 라그랑주로 유도하고, 콥-더글러스 수요함수, 코너해, 슬러츠키 분해(대체효과·소득효과)를 수치와 그래프로 정리합니다."
 pubDate: 2026-03-01T00:00:00.000Z
-updatedDate: 2026-09-15
+updatedDate: 2026-09-24
 category: Economics
-tags: ["경제학", "미시경제", "소비자이론", "MRS"]
+tags: ["경제학", "미시경제", "소비자이론", "무차별곡선", "슬러츠키"]
 locale: ko
 author: Oiyo
 layoutVariant: lecture-series
@@ -20,48 +20,119 @@ import { LectureTable } from "@/features/education-common/components/LectureVisu
 
 # 미시경제학 — 소비자는 원당 한계효용을 맞춘다
 
-[개론 3장](/ko/academy-economics-basics-ch3/)이 접점 조건을 소개했다면, 이 장은 그 등식이 **내부해·볼록 선호·양의 소비** 위의 문장임을 계산으로 못 박는다. 노동공급의 후방 굴절도 같은 소득-대체다.
+[개론 3장](/ko/academy-economics-basics-ch3/)이 접점 조건을 소개했다면, 이 장은 그 조건을 유도하고, 성립하지 않는 경우(코너해)와 가격 변화가 수요를 바꾸는 두 경로(대체효과·소득효과)를 계산한다. 2장의 수요곡선이 어디서 오는지가 이 장의 결론이다.
 
-## 1. 1계 조건과 코너
+## 1. 예산제약과 무차별곡선
+
+소득 $M$, 가격 $P_x$, $P_y$인 소비자의 **예산제약**은 $P_x x + P_y y \le M$이다. 예산선의 기울기 $-P_x/P_y$는 시장이 매기는 교환 비율이다.
+
+**무차별곡선**은 효용이 같은 묶음을 이은 선이다. 선호가 단조(많을수록 좋음)이고 볼록(섞은 것을 극단보다 선호)하면 무차별곡선은 우하향하고 원점을 향해 볼록하며 서로 교차하지 않는다. 기울기의 절댓값이 **한계대체율(MRS)**, 즉 $x$ 한 단위를 더 얻기 위해 포기할 의향이 있는 $y$의 양이다.
 
 <FormulaBox
-  label="내부해"
-  formula="MRS = MUx/MUy = Px/Py \quad\Leftrightarrow\quad MUx/Px = MUy/Py"
-  description="원당 한계효용이 더 큰 재로 예산을 옮긴다. 체감하면 등식이 복원된다."
+  label="한계대체율"
+  formula="MRS_{xy} = -\frac{dy}{dx}\Big|_{u=\bar u} = \frac{MU_x}{MU_y}"
+  description="무차별곡선 위에서 효용 변화는 MU_x dx + MU_y dy = 0이므로 기울기가 한계효용의 비율이 된다."
 />
 
-$MU_{x}=10$, $MU_{y}=4$, $P_{x}$=2,000원, $P_{y}$=1,000원이면 원당 효용은 1/200 vs 1/250. X를 늘린다. 완전대체재는 직선 무차별곡선이라 싼 재만 산다. 완전보완재는 직각이라 고정 비율이다.
+## 2. 최적 조건의 유도
 
-Cobb–Douglas $u=xy$, 예산 $2x+y$=12원이면 $x=3$, $y=6$, 승수 $λ=3$이다. 예산이 13원이 되면 효용 증가분은 약 3으로 $λ$의 근사와 맞다. 경제수학 3장의 라그랑주다.
+효용 $u(x,y)$를 예산제약 아래 극대화하는 라그랑주 함수는 $\mathcal{L}=u(x,y)+\lambda(M-P_x x-P_y y)$다. 1계 조건은 다음과 같다.
 
-## 2. 슬루츠키: 가격 변화는 두 경로다
+$$\frac{\partial u}{\partial x}=\lambda P_x,\qquad \frac{\partial u}{\partial y}=\lambda P_y$$
 
-X 가격 상승의 대체효과는 상대가격이 X에 불리해져 X를 줄인다. 소득효과는 실질소득 감소다. 정상재면 같은 방향, 열등재면 반대다. 소득효과가 대체를 이기면 기펜재다.
+두 식을 나누면 최적 조건이 나온다.
+
+<FormulaBox
+  label="내부해 조건"
+  formula="MRS_{xy}=\frac{MU_x}{MU_y}=\frac{P_x}{P_y}\quad\Longleftrightarrow\quad \frac{MU_x}{P_x}=\frac{MU_y}{P_y}=\lambda"
+  description="원당 한계효용이 같아야 한다. 한쪽이 크면 그 재화로 예산을 옮겨 효용을 높일 수 있다. λ는 소득 1원이 더 주는 효용(소득의 한계효용)이다."
+/>
+
+$MU_x=10$, $MU_y=4$, $P_x=2{,}000$원, $P_y=1{,}000$원이면 원당 한계효용은 $x$가 $1/200$, $y$가 $1/250$이다. $y$에서 1,000원을 빼 $x$에 쓰면 효용이 는다. 한계효용이 체감하므로 옮길수록 차이가 줄어 등식이 회복된다.
+
+## 3. 콥-더글러스 수요
+
+$u=x^{a}y^{1-a}$이면 1계 조건에서 $\frac{a\,y}{(1-a)\,x}=\frac{P_x}{P_y}$이고, 예산제약과 함께 풀면 수요함수가 나온다.
+
+<FormulaBox
+  label="콥-더글러스 수요함수"
+  formula="x^*=\frac{aM}{P_x},\qquad y^*=\frac{(1-a)M}{P_y}"
+  description="각 재화에 소득의 고정 비율(a, 1−a)을 쓴다. 자기 가격탄력성은 −1, 소득탄력성은 1, 교차탄력성은 0이다."
+/>
+
+$u=xy$($a=1/2$), $M=12$원, $P_x=2$원, $P_y=1$원이면 $x^*=3$, $y^*=6$, 효용 18이다. 이때 $\lambda=MU_x/P_x=y/2=3$이다. 소득이 13원이 되면 $x=3.25$, $y=6.5$로 효용이 약 21.1이 되어 약 3 늘어난다. $\lambda$가 소득 1원의 한계효용이라는 해석과 맞는다. 라그랑주 승수의 일반적인 해석은 [경제수학 3장](/ko/education-economics-math-ch3/)에 있다.
+
+## 4. 코너해: 등식이 성립하지 않을 때
+
+선호에 따라 최적점이 축 위에 있을 수 있다.
+
+- **완전대체재**($u=x+y$): 무차별곡선이 직선이다. $P_x<P_y$이면 $x$만 산다. MRS(=1)와 가격비가 같아지는 내부 접점이 없다.
+- **완전보완재**($u=\min(x,y)$): 무차별곡선이 직각이다. 항상 $x=y$인 꼭짓점을 고르고, 가격비와 무관하게 비율이 고정된다. MRS가 정의되지 않는 점이다.
+
+코너해에서는 $MU_x/P_x > MU_y/P_y$이면서 $y=0$일 수 있다. 1계 조건은 부등식(쿤-터커 조건)으로 바뀐다.
+
+## 5. 가격 변화의 두 경로: 슬러츠키 분해
+
+$x$의 가격이 오르면 두 가지가 동시에 일어난다. $x$가 상대적으로 비싸져 $y$로 옮기는 **대체효과**, 같은 소득으로 살 수 있는 것이 줄어드는 **소득효과**다.
+
+위 예에서 $P_x$가 2원에서 4원으로 오르면 새 수요는 $x=12/(2\times 4)=1.5$다. 총효과 $-1.5$를 나눠 보자. 원래 묶음(3, 6)을 새 가격으로 살 수 있도록 소득을 보상하면 $M'=4\times 3+6=18$원이 필요하다. 이 보상 소득에서 수요는 $x=18/8=2.25$다.
+
+- 대체효과: 3 → 2.25, **−0.75**
+- 소득효과: 2.25 → 1.5, **−0.75**
+
+<EconDiagram
+  title="가격 상승의 대체효과와 소득효과"
+  xLabel="x"
+  yLabel="y"
+  xMax={8}
+  yMax={13}
+  curves={[
+    { label: "B₁", points: [[0, 12], [6, 0]], tone: "blue", anchor: "end" },
+    { label: "B₂", points: [[0, 12], [3, 0]], tone: "red", anchor: "end" },
+    { label: "B′", points: [[1.25, 13], [4.5, 0]], tone: "gray", dashed: true, anchor: "end" },
+    { label: "u = 18", points: [[1.5, 12], [2, 9], [3, 6], [4, 4.5], [6, 3], [8, 2.25]], tone: "green" },
+    { label: "u = 9", points: [[0.75, 12], [1, 9], [1.5, 6], [3, 3], [4.5, 2], [8, 1.125]], tone: "green", dashed: true },
+  ]}
+  marks={[
+    { x: 3, y: 6, label: "A", xTick: "3" },
+    { x: 2.25, y: 9, label: "B", xTick: "2.25" },
+    { x: 1.5, y: 6, label: "C", xTick: "1.5" },
+  ]}
+  caption="A(3, 6)→B(2.25, 9)가 대체효과, B→C(1.5, 6)가 소득효과다. B₁은 원래 예산, B₂는 가격 상승 후 예산, 점선 B′는 보상 예산으로 원래 묶음 A를 지나며 새 가격비를 가진다(슬러츠키 보상이라 B는 u = 18보다 약간 높은 곡선 위에 있다)."
+/>
+
+<FormulaBox
+  label="슬러츠키 방정식"
+  formula="\frac{\partial x}{\partial P_x} = \frac{\partial x^{s}}{\partial P_x} - x\,\frac{\partial x}{\partial M}"
+  description="첫째 항(보상수요의 기울기)은 항상 0 이하다. 둘째 항의 부호는 소득탄력성이 정한다. 정상재는 두 효과가 같은 방향이다."
+/>
 
 <LectureTable
-  title="X 가격 상승"
-  headers={["재화", "대체", "소득", "순효과"]}
+  title="x 가격 상승의 효과"
+  headers={["재화", "대체효과", "소득효과", "총효과"]}
   rows={[
-    ["정상재", "X↓", "X↓", "X↓"],
-    ["열등재(비기펜)", "X↓", "X↑", "대개 X↓"],
-    ["기펜재", "X↓", "더 큰 X↑", "X↑"],
+    ["정상재", "x↓", "x↓", "x↓"],
+    ["열등재(기펜 아님)", "x↓", "x↑ (작음)", "x↓"],
+    ["기펜재", "x↓", "x↑ (큼)", "x↑"],
   ]}
 />
 
-Hicks는 원래 무차별곡선으로 보상하고, Slutsky는 원래 묶음을 살 수 있게 보상한다. 시험이 어느 보상을 쓰는지 먼저 본다.
+보상 방식은 두 가지다. **슬러츠키 보상**은 원래 묶음을 살 수 있게, **힉스 보상**은 원래 효용 수준에 머물게 소득을 보상한다. 작은 가격 변화에서는 두 결과가 같아진다. 문제를 풀 때는 어느 보상을 쓰는지 먼저 확인한다.
+
+같은 분해가 노동 공급에도 쓰인다. 임금이 오르면 여가가 비싸져 일을 늘리지만(대체효과), 소득이 늘어 여가를 더 사려 한다(소득효과). 고임금 구간에서 소득효과가 크면 노동 공급곡선이 뒤로 굽는다. [재정학 4장](/ko/academy-public-finance-ch4/)이 이 논리를 소득세에 쓴다.
 
 <Callout type="warning">
-순서 효용에서 $u$와 $\ln u$의 MRS는 같다. “효용이 두 배”는 기수 효용(위험)으로 넘어가기 전에는 틀린 말이다. 원당 균등은 정수 제약·배급에서 부등식이 된다.
+효용은 순서만 의미가 있다(서수 효용). $u=xy$와 $u=\ln x+\ln y$는 같은 선호를 나타내고 MRS도 같다. "효용이 두 배가 되었다"는 문장은 위험 아래 선택처럼 기수 효용을 따로 가정할 때만 의미가 있다. 또 정수 단위로만 살 수 있거나 배급이 있으면 원당 한계효용의 등식은 부등식이 된다.
 </Callout>
 
-현시선호는 효용 함수 없이 선택 자료의 일관성을 묻는다. WARP 위반은 그 자료로는 안정된 선호를 복원할 수 없다는 뜻이다.
+효용함수를 몰라도 선택 자료의 일관성은 검사할 수 있다. 묶음 A를 살 수 있을 때 B를 골랐다면, B를 살 수 있을 때 A를 골라서는 안 된다(현시선호 약공리, WARP). 이를 위반하는 자료로는 안정된 선호를 복원할 수 없다.
 
 ## 확인문제
 
-두 재 가격이 같고 $MU_{x}=6$, $MU_{y}=6$인데 X만 사고 있다. 1계 조건은 맞다. 완전대체면 예산 전체가 무차별일 수 있어, 등식이 내부 접점을 보장하지 않는다. 비음 조건을 확인해야 한다.
+$u=xy$, $M=24$원, $P_x=3$원, $P_y=2$원이다. 최적 묶음과 $\lambda$는? $x^*=24/(2\times 3)=4$, $y^*=24/(2\times 2)=6$이다. $\lambda=MU_x/P_x=y/3=2$로, $MU_y/P_y=x/2=2$와 같다. 원당 한계효용이 두 재화에서 같아졌다.
 
 ## 참고 자료
 
-- Hal Varian, *Intermediate Microeconomics*, ch. 3–8
-- MIT OpenCourseWare, [14.01 Principles of Microeconomics](https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/)
+- Hal Varian, *Intermediate Microeconomics*, ch. 2–8
 - Angus Deaton and John Muellbauer, *Economics and Consumer Behavior*, ch. 2
+- MIT OpenCourseWare, [14.01 Principles of Microeconomics](https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/)
