@@ -37,6 +37,7 @@ import PPFChart from "../components/mdx/PPFChart.astro";
 import BusinessCycle from "../components/mdx/BusinessCycle.astro";
 import ProductLifeCycle from "../components/mdx/ProductLifeCycle.astro";
 import KeynesianCross from "../components/mdx/KeynesianCross.astro";
+import EconDiagram from "../components/mdx/EconDiagram.astro";
 import OrgChart from "../components/mdx/OrgChart.astro";
 import PolicyCycle from "../components/mdx/PolicyCycle.astro";
 import MdxContentHeading from "../components/mdx/MdxContentHeading.astro";
@@ -296,6 +297,7 @@ const chartsAndMathComponents = {
   BusinessCycle,
   ProductLifeCycle,
   KeynesianCross,
+  EconDiagram,
 };
 
 const lectureComponents = {
