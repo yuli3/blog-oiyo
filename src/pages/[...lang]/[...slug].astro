@@ -39,31 +39,36 @@ export async function getStaticPaths() {
     (localesByBaseSlug[baseSlug] ??= new Set()).add(lang);
   }
 
+  const chapterOf = (p: (typeof allPosts)[0]) =>
+    p.data.chapter ?? parseInt(p.slug.match(/-ch(\d+)$/)?.[1] ?? "0", 10);
+  const isStub = (p: (typeof allPosts)[0]) => Boolean(p.data.redirectTo || p.data.redirectToBlog);
+  const seriesKeyOf = (p: (typeof allPosts)[0]): string | null => {
+    // 장 번호가 없는 글(같은 series 이름을 단 낱개 가이드·로드맵)은 강의 순서에 끼우지 않는다.
+    if (isStub(p) || chapterOf(p) <= 0) return null;
+    const locale = p.slug.split("/")[0];
+    if (p.data.series) return `${locale}::${p.data.series}`;
+    return /-ch\d+$/.test(p.slug) ? p.slug.replace(/-ch\d+$/, "") : null;
+  };
+
   return allPosts.map((post) => {
     const parts = post.slug.split("/");
     const lang = parts[0];
     const slug = parts.slice(1).join("/");
 
-    const chMatch = post.slug.match(/-ch(\d+)$/);
-
     let prevPost: (typeof allPosts)[0] | null = null;
     let nextPost: (typeof allPosts)[0] | null = null;
     let seriesPosts: typeof allPosts | null = null;
 
-    if (chMatch) {
-      // Series-aware navigation: find all posts in the same series (same locale prefix + series base)
-      const seriesBase = post.slug.replace(/-ch\d+$/, ""); // e.g. "ko/education-english-grammar"
+    // 강의 묶음과 순서는 frontmatter 의 series·chapter 가 정본이다. 슬러그의 -chN 은
+    // 옛 주소를 지키느라 과목과 어긋난다(옛 education-economics-ch1~41 이 미시·거시·
+    // 국제 과목으로 나뉜 뒤에도 슬러그로 묶으면 한 과정 41장이 되어, 거시 11장이
+    // "22/41" 로 보이고 사이드바에 미시 장이 섞였다 — 2026-09-24). series 가 없는 글만
+    // 예전처럼 슬러그로 묶는다. 리다이렉트 스텁은 목록에서 뺀다.
+    const seriesKey = seriesKeyOf(post);
+    if (seriesKey) {
       const sorted = allPosts
-        .filter(
-          (p) =>
-            p.slug.replace(/-ch\d+$/, "") === seriesBase &&
-            p.slug.match(/-ch\d+$/)
-        )
-        .sort((a, b) => {
-          const aNum = parseInt(a.slug.match(/-ch(\d+)$/)![1], 10);
-          const bNum = parseInt(b.slug.match(/-ch(\d+)$/)![1], 10);
-          return aNum - bNum;
-        });
+        .filter((p) => seriesKeyOf(p) === seriesKey)
+        .sort((a, b) => chapterOf(a) - chapterOf(b) || a.slug.localeCompare(b.slug));
       seriesPosts = sorted;
       const idx = sorted.findIndex((p) => p.slug === post.slug);
       prevPost = idx > 0 ? sorted[idx - 1] : null;
@@ -153,7 +158,10 @@ const track = getTrackFromData(post.data);
 const mdxComponents = getRegisteredMdxComponents(track);
 
 const chMatch = post.slug.match(/-ch(\d+)$/);
-const chapter = chMatch ? parseInt(chMatch[1], 10) : null;
+// 장 번호는 frontmatter chapter 가 정본, 없으면 슬러그의 -chN.
+const chapterNumOf = (p: { slug: string; data: { chapter?: number } }): number | null =>
+  p.data.chapter ?? (p.slug.match(/-ch(\d+)$/) ? parseInt(p.slug.match(/-ch(\d+)$/)![1], 10) : null);
+const chapter = post.data.chapter ?? (chMatch ? parseInt(chMatch[1], 10) : null);
 const isSeriesPost = chapter !== null && seriesPosts !== null && seriesPosts.length > 0;
 const currentSeriesPosition = isSeriesPost
   ? seriesPosts!.findIndex((seriesPost) => seriesPost.slug === post.slug) + 1
@@ -173,10 +181,6 @@ const seriesName = isSeriesPost
 let seriesJsonLd: string | null = null;
 if (isSeriesPost && chapter !== null) {
   const totalChapters = seriesPosts!.length;
-  const courseSlugBase = post.slug
-    .replace(/-ch\d+$/, "")
-    .replace(/^[a-z]+\//, "");
-
   seriesJsonLd = JSON.stringify({
     "@context": "https://schema.org",
     "@type": "Article",
@@ -186,7 +190,8 @@ if (isSeriesPost && chapter !== null) {
       "@type": "Course",
       name: `${seriesName} Course`,
       description: `A ${totalChapters}-chapter educational series on ${seriesName}.`,
-      url: `${siteConfig.url}/${locale}/${courseSlugBase}-ch1/`,
+      // 과정 첫 장의 실제 주소 — 슬러그 규칙(-ch1)이 아니라 정렬된 첫 장을 쓴다.
+      url: `${siteConfig.url}/${locale}/${seriesPosts![0].slug.split("/").slice(1).join("/")}/`,
     },
     position: currentSeriesPosition,
     numberOfItems: totalChapters,
@@ -526,7 +531,7 @@ const redirectToBlog = post.data.redirectToBlog;
               {prevPost ? (() => {
                 const prevParts = prevPost.slug.split("/");
                 const prevSlug = prevParts.slice(1).join("/");
-                const prevCh = prevPost.slug.match(/-ch(\d+)$/);
+                const prevCh = chapterNumOf(prevPost);
                 return (
                   <a
                     href={`/${locale}/${prevSlug}/`}
@@ -535,7 +540,7 @@ const redirectToBlog = post.data.redirectToBlog;
                     <span class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1">
                       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
                       {prevLabel[locale] ?? prevLabel.en}
-                      {prevCh && <span class="text-primary/60 ml-1">Ch.{prevCh[1]}</span>}
+                      {prevCh && <span class="text-primary/60 ml-1">Ch.{prevCh}</span>}
                     </span>
                     <span class="text-sm font-semibold leading-snug group-hover:text-primary transition-colors line-clamp-2">
                       {prevPost.data.title}
@@ -546,14 +551,14 @@ const redirectToBlog = post.data.redirectToBlog;
               {nextPost ? (() => {
                 const nextParts = nextPost.slug.split("/");
                 const nextSlug = nextParts.slice(1).join("/");
-                const nextCh = nextPost.slug.match(/-ch(\d+)$/);
+                const nextCh = chapterNumOf(nextPost);
                 return (
                   <a
                     href={`/${locale}/${nextSlug}/`}
                     class="group col-start-2 flex flex-col gap-1.5 rounded-xl border border-border/60 bg-card p-4 text-right hover:border-primary/50 hover:bg-primary/5 transition-colors"
                   >
                     <span class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground flex items-center justify-end gap-1">
-                      {nextCh && <span class="text-primary/60 mr-1">Ch.{nextCh[1]}</span>}
+                      {nextCh && <span class="text-primary/60 mr-1">Ch.{nextCh}</span>}
                       {nextLabel[locale] ?? nextLabel.en}
                       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
                     </span>
