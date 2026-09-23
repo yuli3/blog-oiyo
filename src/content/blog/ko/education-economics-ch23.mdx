@@ -3,11 +3,11 @@ track: academy
 series: macroeconomics
 chapter: 12
 title: "거시경제학 — 내생적 성장과 솔로우 잔차"
-description: "AK 모형에서 수확 체감이 사라지면 성장이 멈추지 않는 이유를 계산하고, TFP 잔차를 인과 설명으로 읽으면 안 되는 경계를 복습합니다."
+description: "성장 회계로 솔로우 잔차를 계산하고, 자본의 수확 체감이 사라지는 AK 모형에서 저축률이 성장률을 바꾸는 이유, 아이디어의 비경합성과 연구개발의 과소 공급, 인적자본, 규모 효과 비판과 제도의 역할을 정리합니다."
 pubDate: 2026-03-01T00:00:00.000Z
-updatedDate: 2026-09-15
+updatedDate: 2026-09-24
 category: Economics
-tags: ["경제학", "거시경제", "내생적성장", "TFP"]
+tags: ["경제학", "거시경제", "내생적성장", "성장회계", "총요소생산성"]
 locale: ko
 author: Oiyo
 layoutVariant: lecture-series
@@ -18,44 +18,69 @@ import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
 import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# 거시경제학 — 성장률을 모형 안으로 들이려면 수확 체감을 깨야 한다
+# 거시경제학 — 성장률을 모형 안에서 설명하려면 수확 체감을 넘어야 한다
 
-솔로우는 A의 성장을 밖에서 준다. 내생적 성장은 연구, 학습, 인적자본, 규모의 외부효과가 **A를 생산**하게 한다. AK는 그 극단의 산술이다.
+[11장](/ko/education-economics-ch22/)의 솔로우 모형에서 장기 1인당 성장의 원천은 기술이지만, 그 기술 진보율은 밖에서 주어졌다. **내생적 성장 이론**은 기술이 어떻게 만들어지는지를 모형 안으로 들여온다. 이 장은 먼저 기술의 기여를 재는 성장 회계를 보고, 이어 기술을 설명하는 모형들을 본다.
 
-## 1. AK: 체감이 없으면 정상상태가 없다
+## 1. 성장 회계: 솔로우 잔차
 
-$Y=\mathrm{AK}$, $\dot k=sAk-(δ+n)k$. $sA>δ+n$이면 k가 멈추지 않고 성장률 $sA-(δ+n)$이 영구다. 솔로우의 $f'<\text{평균}$이 사라진 결과다.
+콥-더글러스 생산함수 $Y=AK^{\alpha}L^{1-\alpha}$를 증가율로 쓰면
 
 <FormulaBox
-  label="AK 성장률"
-  formula="g = sA - (\delta+n)"
-  description="저축률이 성장률을 바꾼다. 솔로우와 정면으로 다른 함의다. 실증 수렴이 강하면 순수 AK는 과하다."
+  label="성장 회계"
+  formula="g_Y = \alpha\, g_K + (1-\alpha)\, g_L + g_A"
+  description="α는 자본소득 분배율. 산출 증가율에서 자본과 노동의 기여를 빼고 남은 g_A가 총요소생산성(TFP) 증가율, 즉 솔로우 잔차다."
 />
 
-로머형 아이디어: 비경합. 한 사람의 아이디어를 모두가 쓸 수 있어 사회적 수익이 사적 수익보다 크다. 연구 과소. 특허는 그 간격을 줄이려다 독점을 만든다. 10장의 공공재 문법이다.
+산출이 연 5%, 자본이 6%, 노동이 1% 늘고 $\alpha=0.4$라면 $g_A=5-0.4\times 6-0.6\times 1=2\%$다. 성장의 40%가 잔차에서 나왔다. 잔차에는 기술 진보뿐 아니라 교육 수준 향상, 자원 배분 개선, 측정 오차가 모두 섞여 있다. 아브라모비츠가 잔차를 "우리 무지의 척도"라고 부른 이유다.
+
+## 2. AK 모형: 수확 체감이 없으면 성장이 멈추지 않는다
+
+생산함수가 $Y=AK$이면 자본의 한계생산이 $A$로 일정하다. 솔로우 모형의 방정식은 $\Delta k=sAk-(\delta+n)k$가 되고, 1인당 자본의 성장률은
+
+<FormulaBox
+  label="AK 모형의 성장률"
+  formula="g = sA - (\delta + n)"
+  description="A = 0.5, δ+n = 0.05일 때 s = 0.2이면 성장률 5%, s = 0.3이면 10%다. 저축률이 성장률 자체를 바꾼다. 솔로우 모형과 정면으로 다른 결론이다."
+/>
+
+$K$를 기계뿐 아니라 인적자본과 지식까지 포함한 넓은 자본으로 해석하면, 자본을 쌓을수록 새로운 지식이 생겨 수확 체감이 상쇄된다는 논리가 가능하다. 학습효과(아로)나 인적자본의 외부효과(루카스)가 이런 해석의 근거다.
+
+## 3. 아이디어는 비경합적이다
+
+로머는 기술을 **아이디어**로 모형화했다. 아이디어의 핵심 성질은 **비경합성**이다. 한 기업이 설계도를 쓴다고 다른 기업이 쓸 수 있는 양이 줄지 않는다. 그래서 새 아이디어를 만드는 데 고정비가 들고, 한번 만들면 추가로 쓰는 비용은 거의 0이다. 이것이 경제 전체에 규모수익 체증을 만든다.
 
 <LectureTable
-  title="성장 모형이 저축에 대해 말하는 것"
-  headers={["모형", "s가 바꾸는 것"]}
+  title="아이디어가 만드는 시장 문제"
+  headers={["성질", "결과", "대응"]}
   rows={[
-    ["솔로우", "y* 수준, 성장률 아님"],
-    ["AK", "영구 성장률"],
-    ["인적자본 확장 솔로우", "수준+전이 속도"],
+    ["비경합성", "사회적 수익 > 사적 수익, 연구개발 과소 공급", "연구개발 보조, 공공 연구"],
+    ["부분적 배제 가능성", "특허로 독점 이윤을 줘야 연구 유인이 생긴다", "특허 기간과 범위의 설계"],
+    ["지식 파급", "앞선 연구가 뒤의 연구를 쉽게 한다", "개방된 기초 연구"],
   ]}
 />
 
-<Callout type="warning">
-성장 회계에서 TFP가 60%라는 분해는 “설명이 안 된 잔차의 몫”이다. 내생적 성장은 그 잔차를 이론으로 채우려는 시도이지, 60%가 연구를 증명하는 숫자가 아니다. 스케일 효과(인구가 클수록 성장)가 자료와 안 맞으면 모형을 수정해야 한다.
-</Callout>
+특허는 연구 유인을 주는 대신 독점의 자중손실([미시 7장](/ko/education-economics-ch7/))을 만든다. 발명 유인과 확산 사이의 균형이 특허 제도의 설계 문제다. 이는 [미시 10장](/ko/education-economics-ch10/)의 공공재 문제와 같은 구조다.
 
-조건부 수렴이 관찰되면 솔로우형, 성장률이 s와 같이 움직이면 내생형에 가깝다. 둘 다 부분적으로 맞을 수 있다. 33장이 비교한다.
+## 4. 규모 효과와 그 비판
+
+로머 모형의 초기 버전에서는 연구 인력이 많을수록 성장률이 높아진다. 인구가 큰 나라, 연구 인력이 늘어나는 나라일수록 성장률이 올라가야 한다. 존스는 20세기 후반 미국의 연구 인력이 몇 배로 늘었는데도 성장률은 높아지지 않았다고 지적했다. 새 아이디어를 찾기가 점점 어려워진다고 보면(**준내생적 성장**), 장기 성장률은 연구 인력의 증가율에 달리고 저축률이나 정책은 다시 수준에만 영향을 준다.
+
+## 5. 근본 원인: 제도
+
+자본, 인적자본, 기술이 성장의 **근접 원인**이라면, 그것들이 왜 어떤 나라에서는 쌓이고 어떤 나라에서는 쌓이지 않는지를 묻는 것이 **근본 원인** 논의다. 애쓰모글루, 존슨, 로빈슨은 재산권 보호와 권력 견제 같은 포용적 제도가 투자와 혁신의 유인을 만든다고 보고, 식민지 시기 정착 환경의 차이를 이용해 제도의 효과를 추정했다.
+
+<Callout type="warning">
+성장 회계에서 TFP 기여가 40%라는 분해는 "자본과 노동으로 설명되지 않는 몫"이지 연구개발의 효과를 증명하는 숫자가 아니다. 또 수렴이 자료에 뚜렷하면 순수 AK 모형은 과하고, 성장률이 저축과 함께 움직이면 순수 솔로우 모형이 부족하다. 두 관점은 서로 다른 시기와 나라에서 부분적으로 맞을 수 있다. 두 모형의 비교는 [22장](/ko/education-economics-ch33/)에서 정리한다.
+</Callout>
 
 ## 확인문제
 
-AK에서 sA>δ+n이면 성장이 멈추지 않는다. 솔로우 잔차가 성장의 60%라는 분해는 측정이지 인과 설명이 아니다. 수렴이 자료에 있으면 순수 AK는 과하다.
+산출 증가율 4%, 자본 증가율 5%, 노동 증가율 0.5%, 자본소득 분배율 0.3이면 TFP 증가율은? $4-0.3\times 5-0.7\times 0.5=2.15\%$다. 성장의 약 54%가 잔차에서 나왔다. AK 모형에서 $A=0.4$, $\delta+n=0.06$일 때 저축률 0.25의 성장률은 $0.25\times 0.4-0.06=4\%$다.
 
 ## 참고 자료
 
-- Paul Romer, “Endogenous Technological Change,” *JPE* (1990)
-- N. Gregory Mankiw, *Macroeconomics*, ch. 9
-- Robert Solow, “Technical Change and the Aggregate Production Function,” *REStat* (1957)
+- Paul Romer, "Endogenous Technological Change," *Journal of Political Economy* (1990)
+- Charles Jones, "R&D-Based Models of Economic Growth," *Journal of Political Economy* (1995)
+- Daron Acemoglu, Simon Johnson and James Robinson, "The Colonial Origins of Comparative Development," *American Economic Review* (2001)
+- Robert Solow, "Technical Change and the Aggregate Production Function," *Review of Economics and Statistics* (1957)

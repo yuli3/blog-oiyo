@@ -3,11 +3,11 @@ track: academy
 series: macroeconomics
 chapter: 4
 title: "거시경제학 — IS-LM 기초"
-description: "재화시장 IS와 화폐시장 LM을 금리-산출 평면에 올리고, 재정 이동이 구축으로 약해지고 통화 이동이 투자로 전달되는 비교정태를 계산합니다."
+description: "재화시장 균형 IS와 화폐시장 균형 LM을 선형 모형으로 유도하고, 정부지출 증가의 구축 효과와 통화 확장의 전달 경로를 같은 숫자로 계산해 그래프로 비교합니다."
 pubDate: 2026-03-01T00:00:00.000Z
-updatedDate: 2026-09-15
+updatedDate: 2026-09-24
 category: Economics
-tags: ["경제학", "거시경제", "IS-LM", "구축효과"]
+tags: ["경제학", "거시경제", "IS-LM", "구축효과", "비교정태"]
 locale: ko
 author: Oiyo
 layoutVariant: lecture-series
@@ -18,48 +18,84 @@ import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
 import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# 거시경제학 — 단기 산출은 재화 균형과 화폐 균형을 동시에 만족하는 금리다
+# 거시경제학 — 단기 산출은 재화시장과 화폐시장을 동시에 맞추는 금리에서 정해진다
 
-물가를 당장 고정한 케인즈-힉스 골격이다. 소득-지출만 보면 금리가 안 보이고, 화폐만 보면 산출이 안 보인다. 연립은 39장이 숫자로 푼다. 이 장은 부호와 기울기다.
+물가가 단기에 고정되어 있다고 두면, 산출은 수요가 정한다. 그런데 수요 중 투자는 금리에 달려 있고, 금리는 화폐시장에서 정해지며, 화폐 수요는 다시 산출에 달려 있다. 재화시장과 화폐시장을 따로 보면 이 순환이 끊긴다. **IS-LM**은 두 시장을 한 평면에 올려 동시에 푸는 모형이다. 이 장은 같은 숫자로 IS와 LM을 만들고 두 정책을 비교한다. 연립 해의 일반식은 [23장](/ko/education-economics-ch39/)에서 다룬다.
 
-## 1. IS: 계획지출 = 산출
+## 1. IS: 재화시장의 균형
 
-$Y=C(Y-T)+I(r)+G$. r이 오르면 I가 줄고 Y가 줄어 IS는 우하향이다. G가 늘면 같은 r에서 Y가 커져 IS가 우측 이동한다.
+소비 $C=20+0.8(Y-T)$, 세금 $T=10$, 투자 $I=40-2r$(r은 %), 정부지출 $G=30$(단위 조 원)인 경제를 보자. 재화시장 균형 $Y=C+I+G$에 대입하면
+
+$$Y=20+0.8(Y-10)+40-2r+30 \quad\Rightarrow\quad Y=410-10r$$
+
+금리가 1%p 오르면 투자가 2조 원 줄고, 승수 $1/(1-0.8)=5$를 거쳐 산출이 10조 원 준다. 그래서 IS는 우하향한다.
 
 <FormulaBox
-  label="IS의 직관"
-  formula="r \uparrow \;\Rightarrow\; I \downarrow \;\Rightarrow\; Y \downarrow"
-  description="승수가 클수록 같은 투자 감소가 산출을 더 떨어뜨려 IS가 평평해진다. 투자의 금리 탄력이 클수록 가파르다."
+  label="IS 기울기를 정하는 두 요인"
+  formula="Y = \frac{1}{1-c}\left(\bar A - b\,r\right)"
+  description="Ā는 금리와 무관한 지출, b는 투자의 금리 민감도. 승수 1/(1−c)가 크거나 b가 클수록 같은 금리 변화가 산출을 크게 바꿔 IS가 평평해진다. G가 늘면 IS가 오른쪽으로 이동한다."
 />
 
-## 2. LM: 화폐 수요 = 실질잔고
+## 2. LM: 화폐시장의 균형
 
-$M/P=L(Y,r)$. Y가 오르면 거래 수요가 늘어 같은 잔고에서 r이 올라야 한다. LM은 우상향. M이 늘거나 P가 내리면 LM 우측.
+실질화폐 수요가 $L=0.5Y-20r$이고 실질잔고 $M/P=180$이라고 하자. 균형 $M/P=L$에서
 
-재정 ΔG=10조 원, 금리 상승으로 I가 5조 원 줄면 1차 순수요는 5조 원이다. LM이 수평(함정)이면 구축이 거의 0이다. LM이 수직(고전)이면 산출 효과가 0에 가깝다.
+$$180=0.5Y-20r \quad\Rightarrow\quad r=0.025Y-9$$
+
+산출이 늘면 거래용 화폐 수요가 늘고, 잔고가 고정되어 있으므로 금리가 올라 채권 대신 화폐를 들고 있으려는 수요를 줄여야 한다. 그래서 LM은 우상향한다. 화폐 수요가 금리에 민감할수록(20이 클수록) LM이 평평하다. 통화량이 늘거나 물가가 내리면 LM이 오른쪽으로 이동한다.
+
+## 3. 균형과 두 정책
+
+IS와 LM을 연립하면 $Y=410-10(0.025Y-9)$에서 $Y=400$, $r=1\%$다.
+
+**재정 확장**: $G$를 10조 원 늘리면 IS는 $Y=460-10r$로 이동한다. 금리가 그대로라면 산출은 승수대로 50조 원 늘어 450이 된다. 그러나 산출이 늘면 화폐 수요가 늘어 금리가 오른다. 새 균형은 $Y=440$, $r=2\%$다. 금리 상승으로 투자가 2조 원 줄고, 그것이 승수를 거쳐 산출 10조 원을 밀어냈다. 이것이 **구축 효과**다.
+
+**통화 확장**: 실질잔고를 180에서 200으로 늘리면 LM은 $r=0.025Y-10$으로 이동한다. 새 균형은 $Y=408$, $r=0.2\%$다. 금리가 내려 투자가 늘고, 그것이 산출을 늘린다.
+
+<EconDiagram
+  title="IS-LM과 재정 확장의 구축 효과"
+  xLabel="Y"
+  yLabel="r (%)"
+  xMin={350}
+  xMax={470}
+  yMax={4}
+  curves={[
+    { label: "IS", points: [[370, 4], [410, 0]], tone: "blue", labelAt: 0 },
+    { label: "IS'", points: [[420, 4], [460, 0]], tone: "blue", dashed: true, labelAt: 0 },
+    { label: "LM", points: [[360, 0], [470, 2.75]], tone: "green" },
+  ]}
+  marks={[
+    { x: 400, y: 1, label: "E", guide: true, xTick: "400", yTick: "1" },
+    { x: 440, y: 2, label: "E'", guide: true, xTick: "440", yTick: "2" },
+    { x: 450, y: 1, label: "금리 고정 시", xTick: "450" },
+  ]}
+  caption="금리가 1%에 머물렀다면 산출은 450까지 늘었겠지만, LM을 따라 금리가 2%로 올라 440에서 멈춘다. 450과 440의 차이 10조 원이 구축된 투자의 승수 효과다."
+/>
 
 <LectureTable
-  title="두 충격"
-  headers={["충격", "이동", "r", "Y"]}
+  title="충격별 이동과 결과"
+  headers={["충격", "이동", "금리", "산출"]}
   rows={[
-    ["G↑ (IS 우측)", "구축 가능", "↑", "↑ (LM 기울기에 의존)"],
-    ["M↑ (LM 우측)", "투자 경로", "↓", "↑"],
-    ["P↑", "LM 좌측", "↑", "↓"],
+    ["G 증가", "IS 오른쪽", "↑", "↑ (구축으로 승수보다 작게)"],
+    ["T 인하", "IS 오른쪽", "↑", "↑"],
+    ["M 증가", "LM 오른쪽", "↓", "↑"],
+    ["P 상승", "LM 왼쪽 (M/P 감소)", "↑", "↓"],
+    ["기업 기대 악화", "IS 왼쪽", "↓", "↓"],
   ]}
 />
 
-<Callout type="warning">
-IS-LM은 폐쇄·물가 고정·정태 기대의 벤치마크다. 개방은 국제금융 3장, 물가 조정은 19·26장, 기대는 20장. 표의 화살표를 항상 성립하는 정책 순위로 읽지 않는다.
-</Callout>
+마지막 줄의 물가 상승이 LM을 왼쪽으로 옮겨 산출을 줄이는 경로가 [8장](/ko/education-economics-ch19/)의 총수요곡선을 만든다.
 
-유동성 함정에서 통화는 Y를 못 바꾸고 재정이 강해 보인다. 완전고용 근처에서 재정이 약해 보인다. 가정이지 이념이 아니다.
+<Callout type="warning">
+IS-LM은 폐쇄경제, 물가 고정, 기대가 변하지 않는다는 가정 위의 기준 모형이다. 개방경제는 [국제금융 3장](/ko/education-international-finance-ch3/), 물가 조정은 8장과 15장, 기대는 9장이 다룬다. 또 많은 중앙은행이 통화량이 아니라 금리를 목표로 하므로, 현실에서는 LM을 "중앙은행이 정한 금리 수준의 수평선"으로 그리는 편이 운영 방식에 더 가깝다. 이 경우 재정 확장의 구축은 중앙은행이 금리를 올리는지에 달려 있다.
+</Callout>
 
 ## 확인문제
 
-IS가 우측 이동해 금리가 2%p 오르고 투자가 5조 원 줄면, 재정 10조 원의 1차 효과는 구축 뒤 5조 원이다. LM을 수평으로 두면 그 5조 원이 되살아난다.
+위 경제에서 세금을 10조 원 줄이면(T = 0) 새 균형은? 감세는 첫 단계에서 소비를 $0.8\times 10=8$조 원만 늘리므로 IS는 $0.2Y=90-2r$, 즉 $Y=450-10r$이 된다. LM과 연립하면 $Y=450-0.25Y+90$에서 $Y=432$, $r=1.8\%$다. 같은 10조 원이라도 감세의 효과(32조 원)가 정부지출(40조 원)보다 작다. 첫 단계에서 일부가 저축되기 때문이다.
 
 ## 참고 자료
 
 - N. Gregory Mankiw, *Macroeconomics*, ch. 11–12
-- John Hicks, “Mr. Keynes and the ‘Classics’,” *Econometrica* (1937)
+- John Hicks, "Mr. Keynes and the 'Classics'," *Econometrica* (1937)
 - MIT OpenCourseWare, [14.02 Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)

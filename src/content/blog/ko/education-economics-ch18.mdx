@@ -3,11 +3,11 @@ track: academy
 series: macroeconomics
 chapter: 7
 title: "거시경제학 — IS-LM 응용과 학파별 기울기"
-description: "LM의 기울기가 재정·통화 효과의 상대 강도를 어떻게 바꾸는지 비교하고, 유동성 함정과 고전적 영역을 같은 그림의 극단으로 위치시킵니다."
+description: "재정·통화 승수를 IS-LM 모수로 유도하고, 화폐수요의 금리 탄력성이 무한대(유동성 함정)에서 0(고전파)까지 변할 때 두 정책의 효과가 어떻게 바뀌는지 같은 숫자로 계산해 그래프로 비교하며, 정책 혼합을 정리합니다."
 pubDate: 2026-03-01T00:00:00.000Z
-updatedDate: 2026-09-15
+updatedDate: 2026-09-24
 category: Economics
-tags: ["경제학", "거시경제", "IS-LM", "유동성함정"]
+tags: ["경제학", "거시경제", "IS-LM", "유동성함정", "정책혼합"]
 locale: ko
 author: Oiyo
 layoutVariant: lecture-series
@@ -18,48 +18,92 @@ import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
 import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# 거시경제학 — 어느 정책이 강한지는 LM이 얼마나 가파른가다
+# 거시경제학 — 어느 정책이 강한지는 학파가 아니라 곡선의 기울기가 정한다
 
-14장이 화살표를 그렸다면, 이 장은 기울기의 극단이 학파 이름보다 먼저임을 고정한다. 30장이 가정을 다시 푼다.
+[4장](/ko/education-economics-ch14/)은 IS와 LM을 이동시켜 부호를 봤다. 이 장은 효과의 **크기**를 정하는 기울기를 본다. 오랫동안 "재정정책이 강하다"(케인즈학파)와 "통화정책만 산출을 움직인다"(통화주의)의 논쟁은 사실상 화폐수요와 투자가 금리에 얼마나 민감한가에 대한 경험적 논쟁이었다.
 
-## 1. 세 영역
+## 1. 승수를 모수로 쓰기
+
+IS를 $Y=\alpha-\beta r+\gamma G$, LM을 $M/P=\lambda Y-\mu r$로 쓰자. $\beta$는 금리에 대한 지출의 민감도(승수 포함), $\gamma$는 정부지출 승수, $\lambda$는 화폐수요의 소득 민감도, $\mu$는 화폐수요의 금리 민감도다. LM에서 $r=(\lambda Y-M/P)/\mu$를 IS에 넣으면
+
+<FormulaBox
+  label="IS-LM의 정책 승수"
+  formula="\frac{dY}{dG}=\frac{\gamma}{1+\beta\lambda/\mu},\qquad \frac{dY}{d(M/P)}=\frac{\beta/\mu}{1+\beta\lambda/\mu}"
+  description="분모의 βλ/μ가 구축의 크기다. 산출이 늘면 화폐수요가 λ만큼 늘고, 그만큼 금리가 1/μ 비율로 올라, 지출을 β만큼 줄인다."
+/>
+
+4장의 예($\beta=10$, $\gamma=5$, $\lambda=0.5$, $\mu=20$)를 넣으면 재정 승수는 $5/1.25=4$, 실질잔고 승수는 $0.5/1.25=0.4$다. 4장에서 $G$ 10조 원이 산출을 40조 원, 실질잔고 20이 산출을 8조 원 늘린 것과 같다.
+
+## 2. 화폐수요의 금리 민감도에 따른 세 영역
+
+$\mu$만 바꿔 보면 두 정책의 상대적 힘이 뒤바뀐다.
 
 <LectureTable
-  title="LM 기울기와 정책"
-  headers={["LM", "재정 ΔG", "통화 ΔM"]}
+  title="μ에 따른 정책 승수 (β = 10, γ = 5, λ = 0.5)"
+  headers={["μ", "LM 모양", "재정 승수 dY/dG", "실질잔고 승수 dY/d(M/P)"]}
   rows={[
-    ["수평(함정)", "승수에 가깝게 큼", "거의 0"],
-    ["우상향(중간)", "구축으로 약화", "금리↓·Y↑"],
-    ["수직(고전)", "구축 완전, Y≈0", "Y 효과 큼(물가 고정 시)"],
+    ["→ ∞", "수평 (유동성 함정)", "5 (구축 없음)", "0"],
+    ["20", "완만한 우상향", "4", "0.4"],
+    ["5", "가파른 우상향", "2.5", "1"],
+    ["→ 0", "수직 (고전파)", "0 (완전 구축)", "2 (= 1/λ)"],
   ]}
 />
 
-화폐수요의 금리 탄력이 무한대면 함정이다. 0이면 고전적 영역이다. “케인즈 vs 고전”은 이 탄성의 경험적 주장이다.
-
-<FormulaBox
-  label="구축의 크기"
-  formula="\Delta Y = k(\Delta G + \Delta I(r))"
-  description="ΔI가 음수라 순효과가 kΔG보다 작다. 중앙은행이 r을 고정하면 ΔI≈0."
+<EconDiagram
+  title="같은 재정 확장, 세 가지 LM"
+  xLabel="Y"
+  yLabel="r (%)"
+  xMin={350}
+  xMax={470}
+  yMax={7}
+  curves={[
+    { label: "IS", points: [[350, 6], [410, 0]], tone: "blue", labelAt: 0 },
+    { label: "IS'", points: [[390, 7], [460, 0]], tone: "blue", dashed: true, labelAt: 0 },
+    { label: "LM 수평", points: [[350, 1], [470, 1]], tone: "gray", dashed: true },
+    { label: "LM", points: [[360, 0], [470, 2.75]], tone: "green" },
+    { label: "LM 수직", points: [[400, 0], [400, 7]], tone: "red", dashed: true },
+  ]}
+  marks={[
+    { x: 400, y: 1, label: "E" },
+    { x: 450, y: 1, label: "함정: +50", xTick: "450" },
+    { x: 440, y: 2, label: "보통: +40", xTick: "440" },
+    { x: 400, y: 6, label: "고전: 0" },
+  ]}
+  caption="정부지출 10조 원으로 IS가 오른쪽으로 50 이동한다. LM이 수평이면 금리가 오르지 않아 산출이 50 늘고, 수직이면 금리만 올라 산출은 그대로다."
 />
 
-세계 금리 상승은 개방경제에서 IS를 좌측으로 민다(자본유출·절하 경로는 국제금융). 폐쇄 IS-LM만으로 환율 처방을 쓰지 않는다.
+**유동성 함정**($\mu\to\infty$): 금리가 매우 낮아 사람들이 채권보다 화폐를 무한정 들고 있으려 하면, 통화를 늘려도 금리가 더 내려가지 않는다. 통화정책은 산출을 움직이지 못하고, 재정정책은 금리 상승이 없어 구축이 없다. 1930년대 대공황과 2008년 이후 제로금리 시기가 이 상황에 가깝다고 평가된다.
 
-## 2. 정책 혼합
+**고전파 영역**($\mu\to 0$): 화폐수요가 금리에 반응하지 않으면 $M/P=\lambda Y$로 산출이 실질잔고에 묶인다. 재정 확장은 금리만 올려 같은 크기의 민간 지출을 몰아낸다(완전 구축). 통화 확장은 산출을 움직이는 유일한 수단이 된다. [3장](/ko/education-economics-ch13/)의 화폐수량설과 같은 구조다.
 
-불황+함정이면 재정이 1차. 인플레+완전고용 근처면 긴축 통화가 1차. 스태그플레이션은 이 그림의 물가 고정이 깨진 자리라 19장이 필요하다.
+투자의 금리 민감도 $\beta$도 같은 역할을 한다. $\beta\to 0$이면 금리가 변해도 지출이 변하지 않으므로 구축이 없고(재정 강함), 통화정책이 금리를 내려도 지출이 늘지 않는다(통화 무력).
+
+## 3. 정책 혼합
+
+<LectureTable
+  title="상황별 정책 조합"
+  headers={["상황", "우선 수단", "이유"]}
+  rows={[
+    ["불황 + 금리 하한", "재정 확장", "통화의 금리 경로가 막혀 있다"],
+    ["불황 + 금리 여력", "통화 완화 (재정 병행 가능)", "구축 없이 투자를 늘린다"],
+    ["과열 + 재정적자", "재정 긴축 + 통화 완화", "산출은 유지하며 금리를 낮춰 투자 구성을 바꾼다"],
+    ["공급 충격 (물가↑ 산출↓)", "IS-LM만으로 부족", "물가가 움직이므로 8장 AD-AS가 필요하다"],
+  ]}
+/>
+
+재정 긴축과 통화 완화를 함께 쓰면 IS는 왼쪽, LM은 오른쪽으로 움직여 산출은 비슷하게 두고 금리를 낮출 수 있다. 같은 산출에서 정부지출 대신 민간 투자의 비중이 커져, 장기적으로 자본 축적에 유리하다.
 
 <Callout type="warning">
-학파 라벨로 답을 고르지 않는다. 화폐수요가 금리에 얼마나 반응하는지를 말한다. 1970년대 이후 많은 중앙은행이 금리 목표로 가면서, 수직 LM 사고실험은 운영 체제와 맞지 않는다.
+학파 이름으로 답을 고르지 않는다. 필요한 것은 화폐수요와 투자가 금리에 얼마나 반응하는지에 대한 경험적 판단이다. 또 금리 목표 체제에서는 중앙은행이 재정 확장에 맞춰 금리를 올릴지 여부가 사실상 LM의 기울기를 정한다. 유동성 함정에서도 중앙은행은 미래 금리 경로에 대한 약속(선제 지침)이나 장기채 매입으로 장기 금리와 기대를 움직여 효과를 낼 수 있다.
 </Callout>
-
-유동성 함정에서 채권 매입은 민간 포트폴리오만 바꿀 수 있다. 기대 경로(미래 금리 안내)가 남는 이유다.
 
 ## 확인문제
 
-함정에서 LM이 수평이면 재정 승수는 폐쇄 소득-지출 승수에 가깝고, 통화 확장은 금리를 더 못 내린다. ‘어느 정책이 항상 강하다’는 학파 이름이 아니라 LM 기울기다. 금리가 2%p 내려갈 여지가 없으면 ΔM의 Y 경로는 닫힌다.
+$\beta=10$, $\gamma=5$, $\lambda=0.5$, $\mu=10$일 때 정부지출 10조 원의 산출 효과와 실질잔고 20의 산출 효과는? 분모는 $1+10\times 0.5/10=1.5$다. 재정 효과는 $5/1.5\times 10\approx 33.3$조 원, 통화 효과는 $(10/10)/1.5\times 20\approx 13.3$조 원이다. $\mu$가 20에서 10으로 작아지자 재정 효과는 줄고(40 → 33.3) 통화 효과는 커졌다(8 → 13.3).
 
 ## 참고 자료
 
 - N. Gregory Mankiw, *Macroeconomics*, ch. 12
-- John Hicks, “Mr. Keynes and the ‘Classics’,” *Econometrica* (1937)
+- John Hicks, "Mr. Keynes and the 'Classics'," *Econometrica* (1937)
+- Paul Krugman, "It's Baaack: Japan's Slump and the Return of the Liquidity Trap," *Brookings Papers on Economic Activity* (1998)
 - MIT OpenCourseWare, [14.02 Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)

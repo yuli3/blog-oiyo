@@ -3,11 +3,11 @@ track: academy
 series: macroeconomics
 chapter: 10
 title: "거시경제학 — 경기 변동: 수요 충격과 공급 충격"
-description: "물가-산출 공분산의 부호로 수요 충격과 공급 충격을 가리고, 같은 불황에 수요 부양만 쓰면 왜 비용이 달라지는지 복습합니다."
+description: "경기 변동의 정형화된 사실(공행성·투자의 큰 변동성), 산출과 물가의 부호로 수요 충격과 공급 충격을 구분하는 방법, 스태그플레이션의 정책 딜레마, 실물경기변동론과 새케인즈학파의 차이, 충격의 전파 경로를 정리합니다."
 pubDate: 2026-03-01T00:00:00.000Z
-updatedDate: 2026-09-15
+updatedDate: 2026-09-24
 category: Economics
-tags: ["경제학", "거시경제", "경기변동", "공급충격"]
+tags: ["경제학", "거시경제", "경기변동", "공급충격", "스태그플레이션"]
 locale: ko
 author: Oiyo
 layoutVariant: lecture-series
@@ -18,41 +18,88 @@ import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
 import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# 거시경제학 — 불황의 이름은 하나여도 충격의 부호는 둘이다
+# 거시경제학 — 불황의 이름은 하나여도 충격의 방향은 둘이다
 
-산출이 잠재 아래로 떨어졌다는 관측만으로는 처방이 안 나온다. AD가 왼쪽인지 AS가 왼쪽인지에 따라 물가가 같이 내려가는지 올라가는지가 갈린다.
+산출이 잠재 수준 아래로 떨어졌다는 사실만으로는 처방이 나오지 않는다. 총수요가 줄었는지 총공급이 줄었는지에 따라 물가가 반대로 움직이고, 맞는 정책도 달라진다. 이 장은 [8장](/ko/education-economics-ch19/)의 AD-AS를 경기 변동의 진단 도구로 쓴다.
 
-## 1. 공분산이 식별의 힌트다
-
-<FormulaBox
-  label="부호"
-  formula="\mathrm{Cov}(\Delta Y,\Delta P)>0 \ \text{수요 쪽},\quad <0 \ \text{공급 쪽}"
-  description="단순 AD-AS의 식별 힌트다. 둘 다 움직이면 부호만으로 부족하다. 유가 20% 상승은 전형적 공급 충격이다."
-/>
-
-수요 충격: 금융 경색, 재정 긴축, 수출 붕괴. 공급 충격: 에너지, 환율 전가, 생산성, 팬데믹 제약. RBC는 공급(기술) 충격을 주기 원인으로 강조하고, 수요 쪽 모형은 명목 경직을 강조한다. 30장.
+## 1. 경기 변동의 정형화된 사실
 
 <LectureTable
-  title="같은 -2% 갭"
-  headers={["원인", "물가", "1차 도구"]}
+  title="경기 변동에서 반복적으로 관찰되는 사실"
+  headers={["사실", "내용"]}
   rows={[
-    ["AD 좌측", "같이 하락", "수요 부양"],
-    ["AS 좌측", "상승(스태그)", "부양은 물가 비용, 공급 병목 해소"],
+    ["공행성", "산출, 고용, 소비, 투자, 기업 이윤이 함께 움직인다"],
+    ["투자의 큰 변동", "투자의 변동폭이 산출보다 몇 배 크고, 소비는 산출보다 평탄하다"],
+    ["실업의 역행성", "산출이 줄 때 실업이 늘어난다(오쿤의 법칙)"],
+    ["불규칙성", "확장과 수축의 길이와 깊이가 일정하지 않아 '순환'보다 '변동'에 가깝다"],
   ]}
 />
 
-<Callout type="warning">
-평균 경기순환의 처방을 이번 순환에 붙이지 않는다. 2008은 수요·금융, 2022 전후는 공급·재개·에너지가 섞였다. ‘불황이니 금리 인하’는 부호를 건너뛴 문장이다.
-</Callout>
+투자가 크게 출렁이는 이유는 [6장](/ko/education-economics-ch17/)의 가속도 원리와 기대, 소비가 평탄한 이유는 [5장](/ko/education-economics-ch16/)의 소비 평활화에서 나온다.
 
-신경기변동론의 핵심은 충격이 아니라 **전파**다. 마찰, 금융 가속, 노동 매칭이 작은 충격을 크게 만든다. 31장의 유량이 그 한 경로다.
+## 2. 부호로 충격을 구분한다
+
+<FormulaBox
+  label="충격 식별의 첫 단서"
+  formula="\text{수요 충격: } \Delta Y,\ \Delta P\ \text{같은 방향}\qquad \text{공급 충격: } \Delta Y,\ \Delta P\ \text{반대 방향}"
+  description="AD가 이동하면 SRAS를 따라 산출과 물가가 같이 움직이고, SRAS가 이동하면 AD를 따라 반대로 움직인다. 두 충격이 동시에 오면 부호만으로 구분하기 어렵다."
+/>
+
+<EconDiagram
+  title="불리한 공급 충격: 스태그플레이션"
+  xLabel="Y"
+  yLabel="P"
+  xMax={100}
+  yMax={100}
+  curves={[
+    { label: "AD", points: [[20, 85], [85, 20]], tone: "blue" },
+    { label: "SRAS", points: [[20, 28.5], [85, 68.5]], tone: "green" },
+    { label: "SRAS'", points: [[10, 35.3], [75, 75.3]], tone: "green", dashed: true },
+    { label: "LRAS", points: [[55, 5], [55, 95]], tone: "red", anchor: "end" },
+  ]}
+  marks={[
+    { x: 55, y: 50, label: "E", guide: true, xTick: "Y*" },
+    { x: 46.9, y: 58.1, label: "E'", guide: true },
+  ]}
+  caption="유가 상승으로 SRAS가 왼쪽 위로 이동하면 산출은 줄고 물가는 오른다. 총수요 곡선을 따라 움직이므로 두 변수가 반대 방향이다."
+/>
+
+<LectureTable
+  title="같은 산출 감소, 다른 원인"
+  headers={["원인", "예", "물가", "1차 대응"]}
+  rows={[
+    ["총수요 감소", "금융 경색, 수출 급감, 재정 긴축", "하락", "통화·재정 확장"],
+    ["불리한 공급 충격", "유가 급등, 공급망 차질, 생산성 하락", "상승", "공급 병목 해소, 기대 관리"],
+  ]}
+/>
+
+공급 충격은 정책 당국을 딜레마에 빠뜨린다. 총수요를 늘리면 산출은 회복되지만 물가가 더 오르고, 기대 인플레이션이 오르면 [9장](/ko/education-economics-ch20/)의 필립스 곡선이 위로 이동해 비용이 커진다. 총수요를 줄이면 물가는 잡지만 불황이 깊어진다. 충격이 일시적이고 기대가 고정되어 있다면 "지나가게 두는" 선택도 가능하다. 1970년대에는 기대가 따라 올라 인플레이션이 고착되었고, 결국 큰 불황을 치르고서야 낮출 수 있었다.
+
+## 3. 무엇이 변동을 만드는가: 두 관점
+
+**실물경기변동(RBC) 이론**은 기술(생산성) 충격을 변동의 주된 원천으로 본다. 가격은 신축적이고, 경기 변동은 사람들이 생산성 변화에 최적으로 반응한 결과다. 불황도 효율적인 반응이므로 안정화 정책의 역할은 작다. 키들랜드와 프레스콧의 1982년 논문이 출발점이다.
+
+**새케인즈학파**는 가격과 임금의 경직성, 불완전 경쟁을 명시적으로 모형화한다. 이 경우 총수요 충격이 산출을 움직이고, 불황은 비효율적이며, 통화정책이 후생을 높일 수 있다. 오늘날 중앙은행이 쓰는 동태 확률 일반균형(DSGE) 모형은 RBC의 방법론(최적화하는 가계·기업, 합리적 기대)에 새케인즈학파의 경직성을 더한 형태다.
+
+## 4. 작은 충격이 큰 변동이 되는 전파 경로
+
+충격 자체보다 **증폭과 지속**이 중요하다는 것이 최근 연구의 초점이다.
+
+- **금융 가속기**: 자산 가격이 떨어지면 담보가치가 줄어 차입이 어려워지고, 투자가 줄어 자산 가격이 더 떨어진다. [금융경제학 5장](/ko/education-economics-ch38/)의 위기 증폭과 같은 구조다.
+- **노동시장 탐색**: 일자리가 사라진 뒤 새 일자리를 찾는 데 시간이 걸려 실업이 오래 지속된다([20장](/ko/education-economics-ch31/)).
+- **이력 효과**: 장기 실업자가 숙련을 잃으면 경기적 실업이 구조적 실업으로 바뀌어 잠재 산출 자체가 낮아진다.
+
+<Callout type="warning">
+평균적인 경기 순환의 처방을 이번 순환에 그대로 붙이지 않는다. 2008년 위기는 금융발 수요 충격, 2021~2022년 물가 급등은 공급 차질과 에너지 가격, 강한 수요 회복이 겹친 경우였다. "불황이니 금리 인하"는 충격의 방향을 확인하지 않은 문장이다. 실제 자료에서는 여러 충격이 동시에 오므로 산출과 물가의 부호 외에 기대 인플레이션, 임금, 원자재 가격을 함께 본다.
+</Callout>
 
 ## 확인문제
 
-유가 20% 상승은 산출↓물가↑이라 수요 충격과 물가 부호가 반대다. 같은 불황에 수요만 자극하면 물가 비용을 키운다. 산출이 2% 줄고 물가가 3% 오르는 조합을 AD 확장만으로 둘 다 고치지 못한다.
+한 해에 산출이 2% 줄고 물가가 3% 올랐다. 어떤 충격이 우세했고 총수요 확장으로 대응하면? 산출과 물가가 반대로 움직였으므로 불리한 공급 충격이 우세하다. 총수요를 늘려 산출을 되돌리면 물가는 3%보다 더 오르고, 기대 인플레이션이 따라 오르면 이후 더 큰 비용을 치러야 한다. 총수요 정책 하나로 두 변수를 모두 원래로 돌릴 수는 없다.
 
 ## 참고 자료
 
 - N. Gregory Mankiw, *Macroeconomics*, ch. 10, 14
-- Finn Kydland and Edward Prescott, “Time to Build and Aggregate Fluctuations,” *Econometrica* (1982)
+- Finn Kydland and Edward Prescott, "Time to Build and Aggregate Fluctuations," *Econometrica* (1982)
+- Ben Bernanke, Mark Gertler and Simon Gilchrist, "The Financial Accelerator in a Quantitative Business Cycle Framework," *Handbook of Macroeconomics* (1999)
 - MIT OpenCourseWare, [14.02 Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)
