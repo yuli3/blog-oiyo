@@ -11,6 +11,7 @@
  *   marks   - [{ x, y, label?, guide?, xTick?, yTick? }]  점. guide 면 두 축까지 점선
  *   arrows  - [{ from: [x,y], to: [x,y] }]               곡선 이동 방향
  *   xMin, xMax, yMin, yMax  축 범위(기본 0~100). 최솟값이 0이 아니면 축 끝에 물결 없이 그 값에서 시작한다
+ *   범위가 0을 가로지르면 축은 원점을 지난다
  *   curves[].anchor  "end" 면 라벨을 점 왼쪽 위에 붙인다(오른쪽 끝 곡선용)
  */
 type Pt = [number, number];
@@ -65,6 +66,9 @@ const cH = H - PAD.top - PAD.bottom;
 const px = (x: number) => PAD.left + ((x - xMin) / (xMax - xMin)) * cW;
 const py = (y: number) => PAD.top + cH - ((y - yMin) / (yMax - yMin)) * cH;
 const path = (pts: Pt[]) => pts.map(([x, y]) => `${px(x).toFixed(1)},${py(y).toFixed(1)}`).join(" ");
+// 범위가 0을 가로지르면 축을 원점에 그린다(가치함수처럼 음수 영역이 있는 도식).
+const axisX = xMin < 0 && xMax > 0 ? px(0) : PAD.left;
+const axisY = yMin < 0 && yMax > 0 ? py(0) : PAD.top + cH;
 const toneOf = (t?: Tone) => TONES[t ?? "blue"];
 const uid = `ed-${Math.random().toString(36).slice(2, 8)}`;
 ---
@@ -89,22 +93,22 @@ const uid = `ed-${Math.random().toString(36).slice(2, 8)}`;
       );
     })}
 
-    <line x1={PAD.left} y1={PAD.top - 6} x2={PAD.left} y2={PAD.top + cH} stroke="#334155" stroke-width="1.8" />
-    <line x1={PAD.left} y1={PAD.top + cH} x2={PAD.left + cW + 12} y2={PAD.top + cH} stroke="#334155" stroke-width="1.8" />
-    <text x={PAD.left + cW + 14} y={PAD.top + cH + 4} font-size="12" font-weight="600" fill="#475569">{xLabel}</text>
-    <text x={PAD.left} y={PAD.top - 10} text-anchor="middle" font-size="12" font-weight="600" fill="#475569">{yLabel}</text>
+    <line x1={axisX} y1={PAD.top - 6} x2={axisX} y2={PAD.top + cH} stroke="#334155" stroke-width="1.8" />
+    <line x1={PAD.left} y1={axisY} x2={PAD.left + cW + 12} y2={axisY} stroke="#334155" stroke-width="1.8" />
+    <text x={PAD.left + cW + 14} y={axisY + 4} font-size="12" font-weight="600" fill="#475569">{xLabel}</text>
+    <text x={axisX} y={PAD.top - 10} text-anchor="middle" font-size="12" font-weight="600" fill="#475569">{yLabel}</text>
 
     {marks.filter((m) => m.guide).map((m) => (
       <>
-        <line x1={px(m.x)} y1={py(m.y)} x2={px(m.x)} y2={py(yMin)} stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="4 4" />
-        <line x1={px(xMin)} y1={py(m.y)} x2={px(m.x)} y2={py(m.y)} stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="4 4" />
+        <line x1={px(m.x)} y1={py(m.y)} x2={px(m.x)} y2={axisY} stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="4 4" />
+        <line x1={axisX} y1={py(m.y)} x2={px(m.x)} y2={py(m.y)} stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="4 4" />
       </>
     ))}
     {marks.filter((m) => m.xTick).map((m) => (
-      <text x={px(m.x)} y={py(yMin) + 16} text-anchor="middle" font-size="11" fill="#64748b">{m.xTick}</text>
+      <text x={px(m.x)} y={axisY + 16} text-anchor="middle" font-size="11" fill="#64748b">{m.xTick}</text>
     ))}
     {marks.filter((m) => m.yTick).map((m) => (
-      <text x={PAD.left - 6} y={py(m.y) + 4} text-anchor="end" font-size="11" fill="#64748b">{m.yTick}</text>
+      <text x={axisX - 6} y={py(m.y) + 4} text-anchor="end" font-size="11" fill="#64748b">{m.yTick}</text>
     ))}
 
     {curves.map((c) => {
