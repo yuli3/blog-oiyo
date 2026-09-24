@@ -1,0 +1,97 @@
+---
+track: academy
+series: managerial-accounting
+chapter: 7
+title: "Contabilidad administrativa — Presupuesto de capital: flujos después de impuestos, VAN, TIR y periodo de recuperación"
+description: "Estima los flujos de efectivo incrementales después de impuestos de una inversión en equipo, incluido el escudo fiscal de la depreciación y el capital de trabajo, la evalúa con el valor actual neto, la tasa interna de retorno, el periodo de recuperación y la tasa de rendimiento contable, y explica por qué los métodos pueden llegar a conclusiones distintas."
+pubDate: 2026-09-24
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["contabilidad administrativa", "presupuesto de capital", "valor actual neto", "tasa interna de retorno", "periodo de recuperación", "escudo fiscal de la depreciación"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+Las decisiones de corto plazo del [capítulo 2](/es/education-accounting-ch16/) ignoraban el valor del dinero en el tiempo. En inversiones cuyos efectos duran varios años —equipos, plantas, productos nuevos— es decisivo **cuándo** entra y sale el efectivo. El presupuesto de capital evalúa los proyectos de largo plazo con flujos de efectivo y descuento. La estimación de la tasa de descuento (costo de capital) corresponde al curso de finanzas corporativas.
+
+## 1. Principios de los flujos incrementales
+
+- **Flujos de efectivo:** se usan flujos de efectivo, no utilidad contable. La depreciación no es una salida de efectivo.
+- **Incrementales:** solo se incluyen los flujos que cambian si se invierte. Se excluyen los costos hundidos y se incluyen los de oportunidad.
+- **Después de impuestos:** se refleja el impuesto a la renta. La depreciación no hace salir efectivo, pero reduce la base imponible y ahorra impuestos: es el **escudo fiscal**.
+- **Sin intereses:** el costo del financiamiento ya está en la tasa de descuento, así que no se resta de los flujos.
+- **Capital de trabajo:** el aumento de existencias y cuentas por cobrar al inicio es una salida de efectivo que se recupera al terminar el proyecto.
+
+## 2. Los flujos del proyecto
+
+La empresa BR quiere comprar un equipo de 10 millones de wones, con vida útil de cinco años, valor residual cero y depreciación lineal. Usarlo aumenta los ingresos en 6 millones al año y los costos de operación en efectivo en 2,5 millones. Requiere 1 millón de capital de trabajo al inicio, que se recupera íntegramente a los cinco años. La tasa de impuesto es del 20 % y la tasa de descuento, del 10 %.
+
+<FormulaBox
+  label="Flujo de operación anual después de impuestos"
+  formula="\text{Flujo después de impuestos} = (\text{Ingresos} - \text{Costos en efectivo}) \times (1 - t) + \text{Depreciación} \times t = 350 \times 0{,}8 + 200 \times 0{,}2 = 320"
+  description="En decenas de miles de wones. El escudo fiscal de la depreciación es 200 × 20 % = 40. El mismo resultado se obtiene con utilidad neta + depreciación = (350 − 200) × 0,8 + 200 = 320."
+/>
+
+<LectureTable
+  title="Flujos del proyecto (en decenas de miles de wones)"
+  headers={["Momento", "Equipo", "Capital de trabajo", "Flujo de operación", "Flujo neto"]}
+  rows={[
+    ["0", "−1.000", "−100", "", "−1.100"],
+    ["Años 1 a 4", "", "", "320", "320"],
+    ["Año 5", "", "+100", "320", "420"],
+  ]}
+/>
+
+## 3. Métodos de evaluación
+
+### A. Valor actual neto (VAN)
+
+$$
+\text{VAN} = -1.100 + 320 \times 3{,}7908 + 100 \times 0{,}6209 \approx -1.100 + 1.213{,}1 + 62{,}1 = 175{,}2
+$$
+
+El VAN, de unos 1,75 millones de wones, es positivo, así que se acepta. El VAN muestra en dinero cuánto valor añade la inversión a la empresa.
+
+### B. Tasa interna de retorno (TIR)
+
+Es la tasa de descuento que hace cero el VAN. Al 15 % el VAN es de unos 22,4 y al 16 %, de unos −4,6 (en decenas de miles de wones), así que la TIR ronda el 15,8 %. Supera el costo de capital del 10 %, así que se acepta.
+
+### C. Periodo de recuperación y tasa de rendimiento contable
+
+- **Periodo de recuperación:** el tiempo que tarda en recuperarse la inversión: $1.100 / 320 \approx 3{,}44$ años. Es fácil de calcular y señala el riesgo de liquidez, pero ignora el valor del dinero en el tiempo y los flujos posteriores.
+- **Tasa de rendimiento contable (TRC):** la utilidad neta anual media de $(350 - 200) \times 0{,}8 = 120$ (1,2 millones) dividida entre la inversión inicial de 10 millones da un 12 %. Se calcula fácilmente con datos contables, pero no refleja flujos de efectivo ni el valor del dinero en el tiempo.
+
+## 4. Conflictos entre métodos
+
+<LectureTable
+  title="Conflicto de orden entre proyectos mutuamente excluyentes (en decenas de miles de wones, tasa del 10 %)"
+  headers={["Proyecto", "Inversión", "Entrada al año", "VAN", "TIR"]}
+  rows={[
+    ["A", "100", "130", "18,2", "30 %"],
+    ["B", "1.000", "1.150", "45,5", "15 %"],
+  ]}
+/>
+
+Si solo puede elegirse uno, la TIR elige A y el VAN elige B. El que más valor añade a la empresa es B. La TIR ignora la escala y supone que los flujos intermedios se reinvierten a la TIR. Entre proyectos mutuamente excluyentes, la regla es elegir por **VAN**. Además, si el signo de los flujos cambia varias veces pueden aparecer varias TIR.
+
+<Callout type="warning">
+Los resultados del presupuesto de capital son tan fiables como las estimaciones de flujos. Los departamentos que quieren la inversión tienden a ser optimistas con el crecimiento de ventas y conservadores con los costos. Bajar un poco la tasa de descuento o suponer un valor residual más alto cambia mucho el VAN. Por eso se hacen en paralelo análisis de sensibilidad y de escenarios y, tras invertir, una **auditoría posterior** que compara lo real con lo estimado. El valor de las opciones estratégicas (ampliar, aplazar, abandonar) no aparece en el VAN tradicional.
+</Callout>
+
+## Ejercicio
+
+La empresa BS puede reducir sus costos en efectivo en 7 millones de wones al año comprando un equipo de 20 millones (vida útil de cuatro años, valor residual cero, depreciación lineal). La tasa de impuesto es del 25 % y la de descuento, del 8 % (factor de anualidad a cuatro años: 3,3121). ¿Cuáles son el flujo anual después de impuestos, el VAN y el periodo de recuperación?
+
+La depreciación es de 5 millones al año. El flujo después de impuestos es $700 \times 0{,}75 + 500 \times 0{,}25 = 525 + 125 = 650$ (6,5 millones). El VAN es $650 \times 3{,}3121 - 2.000 \approx 2.152{,}9 - 2.000 = 152{,}9$ (unos 1,53 millones). El periodo de recuperación es $2.000 / 650 \approx 3{,}08$ años. El VAN es positivo, así que se acepta.
+
+## Referencias
+
+- Charles Horngren, Srikant Datar y Madhav Rajan, *Cost Accounting: A Managerial Emphasis*, cap. 21
+- Richard Brealey, Stewart Myers y Franklin Allen, *Principles of Corporate Finance*, cap. 5–6
+- Ray Garrison, Eric Noreen y Peter Brewer, *Managerial Accounting*, cap. 14

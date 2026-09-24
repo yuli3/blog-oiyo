@@ -1,0 +1,97 @@
+---
+track: academy
+series: managerial-accounting
+chapter: 7
+title: "Comptabilité de gestion — Choix des investissements : flux après impôt, VAN, TRI et délai de récupération"
+description: "Estime les flux de trésorerie différentiels après impôt d'un investissement en équipement, y compris l'économie d'impôt sur l'amortissement et le besoin en fonds de roulement, l'évalue par la valeur actuelle nette, le taux de rentabilité interne, le délai de récupération et le taux de rendement comptable, et explique pourquoi ces méthodes peuvent diverger."
+pubDate: 2026-09-24
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["comptabilité de gestion", "choix des investissements", "valeur actuelle nette", "taux de rentabilité interne", "délai de récupération", "économie d'impôt sur l'amortissement"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+Les décisions à court terme du [chapitre 2](/fr/education-accounting-ch16/) ignoraient la valeur temps de l'argent. Pour les investissements dont les effets s'étalent sur plusieurs années — équipements, usines, nouveaux produits —, le **moment** où la trésorerie entre et sort est décisif. Le choix des investissements évalue les projets à long terme par les flux de trésorerie et l'actualisation. L'estimation du taux d'actualisation (coût du capital) relève du cours de finance d'entreprise.
+
+## 1. Principes des flux différentiels
+
+- **Flux de trésorerie :** on utilise les flux de trésorerie, non le résultat comptable. L'amortissement n'est pas un décaissement.
+- **Différentiel :** on ne retient que les flux modifiés par l'investissement. Les coûts irrécupérables sont exclus, les coûts d'opportunité inclus.
+- **Après impôt :** on tient compte de l'impôt sur les sociétés. L'amortissement ne fait pas sortir de trésorerie mais réduit le revenu imposable : c'est l'**économie d'impôt**.
+- **Hors intérêts :** le coût du financement est déjà intégré au taux d'actualisation ; on ne le déduit pas des flux.
+- **Besoin en fonds de roulement :** l'augmentation des stocks et des créances au départ est un décaissement, récupéré à la fin du projet.
+
+## 2. Les flux du projet
+
+La société BR envisage d'acheter un équipement de 10 millions de wons, amortissable linéairement sur cinq ans sans valeur résiduelle. Il augmente le chiffre d'affaires de 6 millions par an et les coûts d'exploitation décaissés de 2,5 millions. Il exige 1 million de fonds de roulement au départ, récupéré intégralement au bout de cinq ans. Le taux d'impôt est de 20 % et le taux d'actualisation de 10 %.
+
+<FormulaBox
+  label="Flux d'exploitation annuel après impôt"
+  formula="\text{Flux après impôt} = (\text{Recettes} - \text{Dépenses}) \times (1 - t) + \text{Amortissement} \times t = 350 \times 0{,}8 + 200 \times 0{,}2 = 320"
+  description="En dizaines de milliers de wons. L'économie d'impôt sur l'amortissement vaut 200 × 20 % = 40. On obtient le même résultat par résultat net + amortissement = (350 − 200) × 0,8 + 200 = 320."
+/>
+
+<LectureTable
+  title="Flux du projet (en dizaines de milliers de wons)"
+  headers={["Date", "Équipement", "Fonds de roulement", "Flux d'exploitation", "Flux net"]}
+  rows={[
+    ["0", "−1 000", "−100", "", "−1 100"],
+    ["Années 1 à 4", "", "", "320", "320"],
+    ["Année 5", "", "+100", "320", "420"],
+  ]}
+/>
+
+## 3. Méthodes d'évaluation
+
+### A. Valeur actuelle nette (VAN)
+
+$$
+\text{VAN} = -1\,100 + 320 \times 3{,}7908 + 100 \times 0{,}6209 \approx -1\,100 + 1\,213{,}1 + 62{,}1 = 175{,}2
+$$
+
+La VAN, d'environ 1,75 million de wons, est positive : on accepte le projet. Elle mesure en montant la valeur que l'investissement ajoute à l'entreprise.
+
+### B. Taux de rentabilité interne (TRI)
+
+C'est le taux d'actualisation qui annule la VAN. À 15 %, la VAN est d'environ 22,4 ; à 16 %, d'environ −4,6 (en dizaines de milliers de wons) : le TRI est d'environ 15,8 %. Il dépasse le coût du capital de 10 % : on accepte.
+
+### C. Délai de récupération et taux de rendement comptable
+
+- **Délai de récupération :** le temps nécessaire pour récupérer la mise, soit $1\,100 / 320 \approx 3{,}44$ ans. Simple à calculer et révélateur du risque de liquidité, il ignore la valeur temps et les flux postérieurs.
+- **Taux de rendement comptable (TRC) :** le résultat net annuel moyen de $(350 - 200) \times 0{,}8 = 120$ (1,2 million) rapporté à l'investissement initial de 10 millions donne 12 %. Facile à calculer à partir des comptes, il ne reflète ni les flux de trésorerie ni la valeur temps.
+
+## 4. Conflits entre méthodes
+
+<LectureTable
+  title="Classement contradictoire de projets exclusifs (en dizaines de milliers de wons, taux de 10 %)"
+  headers={["Projet", "Investissement", "Encaissement à 1 an", "VAN", "TRI"]}
+  rows={[
+    ["A", "100", "130", "18,2", "30 %"],
+    ["B", "1 000", "1 150", "45,5", "15 %"],
+  ]}
+/>
+
+Si un seul projet est possible, le TRI choisit A et la VAN choisit B. C'est B qui crée le plus de valeur. Le TRI ignore la taille et suppose le réinvestissement des flux intermédiaires au TRI. Pour des projets mutuellement exclusifs, la règle est de choisir selon la **VAN**. Quand le signe des flux change plusieurs fois, il peut aussi y avoir plusieurs TRI.
+
+<Callout type="warning">
+Le choix des investissements ne vaut que ce que valent les prévisions de flux. Les services demandeurs ont tendance à surestimer la croissance des ventes et à sous-estimer les coûts. Baisser légèrement le taux d'actualisation ou relever la valeur résiduelle modifie beaucoup la VAN. On mène donc en parallèle des analyses de sensibilité et de scénarios et, après l'investissement, un **audit a posteriori** comparant le réel aux prévisions. La valeur des options stratégiques (étendre, différer, abandonner) n'apparaît pas dans la VAN traditionnelle.
+</Callout>
+
+## Exercice
+
+La société BS peut réduire ses coûts décaissés de 7 millions de wons par an en achetant un équipement de 20 millions (durée de quatre ans, sans valeur résiduelle, amortissement linéaire). Le taux d'impôt est de 25 % et le taux d'actualisation de 8 % (facteur d'annuité sur quatre ans : 3,3121). Quels sont le flux annuel après impôt, la VAN et le délai de récupération ?
+
+L'amortissement est de 5 millions par an. Le flux après impôt vaut $700 \times 0{,}75 + 500 \times 0{,}25 = 525 + 125 = 650$ (6,5 millions). La VAN vaut $650 \times 3{,}3121 - 2\,000 \approx 2\,152{,}9 - 2\,000 = 152{,}9$ (environ 1,53 million). Le délai de récupération est de $2\,000 / 650 \approx 3{,}08$ ans. La VAN est positive : on accepte le projet.
+
+## Références
+
+- Charles Horngren, Srikant Datar et Madhav Rajan, *Cost Accounting: A Managerial Emphasis*, chap. 21
+- Richard Brealey, Stewart Myers et Franklin Allen, *Principles of Corporate Finance*, chap. 5–6
+- Ray Garrison, Eric Noreen et Peter Brewer, *Managerial Accounting*, chap. 14
