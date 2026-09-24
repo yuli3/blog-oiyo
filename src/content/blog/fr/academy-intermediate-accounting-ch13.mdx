@@ -1,0 +1,99 @@
+---
+track: academy
+series: intermediate-accounting
+chapter: 13
+title: "Comptabilité intermédiaire — Impôts sur le résultat : différences temporelles et impôts différés"
+description: "Répartit les écarts entre résultat comptable et résultat fiscal en différences permanentes et temporelles, calcule les actifs et passifs d'impôt différé et la charge d'impôt, puis explique pourquoi le taux effectif diffère du taux légal, la recouvrabilité des actifs d'impôt différé et l'effet d'un changement de taux."
+pubDate: 2026-09-24
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["comptabilité intermédiaire", "impôts sur le résultat", "différences temporelles", "actifs d'impôt différé", "passifs d'impôt différé", "taux effectif d'impôt"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+La comptabilité mesure le résultat selon les K-IFRS ; l'impôt mesure le résultat imposable selon la loi sur l'impôt des sociétés. Quand les deux chiffres diffèrent, la question est de savoir quelle charge d'impôt inscrire au compte de résultat. K-IFRS 1012 *Impôts sur le résultat* (IAS 12) impose de refléter à la fois **l'impôt dû maintenant** et **l'impôt qui sera plus élevé ou plus faible plus tard**. La manière d'établir les retraitements fiscaux eux-mêmes est traitée à part dans le cours de [comptabilité fiscale](/fr/academy-accounting-basics-ch7/).
+
+## 1. Deux sortes d'écarts
+
+- **Différences permanentes :** éléments que la comptabilité et le droit fiscal ne traitent jamais de la même façon — frais de réception au-delà du plafond, amendes et pénalités, intérêts exonérés. Elles ne se retournent jamais et ne créent pas d'impôt différé.
+- **Différences temporelles :** écarts entre **la valeur comptable d'un actif ou d'un passif et sa base fiscale**, qui se résorbent en augmentant ou en diminuant les résultats imposables futurs.
+
+<LectureTable
+  title="Les deux sens des différences temporelles"
+  headers={["Type", "Exemples", "Effet futur", "Comptabilisation"]}
+  rows={[
+    ["Différences temporelles imposables", "Intérêts à recevoir (produit comptable, imposable à l'encaissement), amortissement fiscal immédiat", "Hausse des résultats imposables futurs", "Passif d'impôt différé"],
+    ["Différences temporelles déductibles", "Amortissement au-delà du plafond fiscal, provisions non encore déductibles", "Baisse des résultats imposables futurs", "Actif d'impôt différé"],
+    ["Pertes et crédits d'impôt reportables", "Déficits fiscaux reportables", "Baisse de l'impôt futur", "Actif d'impôt différé"],
+  ]}
+/>
+
+## 2. Exemple chiffré
+
+Le résultat comptable (avant impôt) de la société GG pour 20X1 est de 10 millions de wons. Ses retraitements fiscaux sont les suivants. Pour simplifier, on retient un taux unique de 20 % (les taux réels de l'impôt coréen sur les sociétés sont progressifs ; voir le [chapitre 7 de comptabilité fiscale](/fr/academy-tax-accounting-ch7/)).
+
+- Amortissement au-delà du plafond fiscal : 1 million (réintégré ; différence temporelle déductible)
+- Frais de réception au-delà du plafond : 500 000 wons (réintégrés ; différence permanente)
+- Intérêts à recevoir : 300 000 wons (déduits ; différence temporelle imposable)
+
+Le résultat imposable vaut $1{,}000 + 100 + 50 - 30 = 1{,}120$ (en dizaines de milliers de wons), soit 11,2 millions, et l'impôt exigible $1{,}120 \times 20\% = 224$, soit 2,24 millions.
+
+<FormulaBox
+  label="Charge d'impôt"
+  formula="\text{Charge d'impôt} = \text{Impôt exigible} + (\text{PID de clôture} - \text{PID d'ouverture}) - (\text{AID de clôture} - \text{AID d'ouverture})"
+  description="L'actif d'impôt différé vaut 100 × 20 % = 20 et le passif d'impôt différé 30 × 20 % = 6 (en dizaines de milliers de wons). Sans soldes d'ouverture, la charge d'impôt vaut 224 + 6 − 20 = 210."
+/>
+
+<LectureTable
+  title="Écriture d'impôt (en dizaines de milliers de wons)"
+  headers={["Débit", "Montant", "Crédit", "Montant"]}
+  rows={[
+    ["Charge d'impôt sur le résultat", "210", "Impôt exigible à payer", "224"],
+    ["Actif d'impôt différé", "20", "Passif d'impôt différé", "6"],
+  ]}
+/>
+
+## 3. Taux effectif et rapprochement des taux
+
+Le taux effectif vaut $210 / 1{,}000 = 21\%$, au-dessus du taux légal de 20 %. L'écart d'un point provient de l'effet fiscal de 100 000 wons de la différence permanente de 500 000 wons. Les différences temporelles ne modifient pas le taux effectif, puisque l'impôt différé les rattache aux bonnes périodes.
+
+<FormulaBox
+  label="Rapprochement du taux légal et du taux effectif"
+  formula="\text{Charge d'impôt} = \text{Résultat comptable} \times \text{Taux légal} + \Sigma(\text{Différences permanentes} \times \text{Taux}) \pm \text{Écarts de taux, crédits, etc.}"
+  description="1 000 × 20 % + 50 × 20 % = 210 (en dizaines de milliers de wons). Le tableau de rapprochement des notes présente cette structure."
+/>
+
+## 4. Principes d'évaluation
+
+- **Taux :** on évalue aux taux attendus lors du retournement, en utilisant les taux adoptés (ou quasi adoptés) à la date de clôture. La Corée ayant relevé d'un point chaque tranche de l'impôt sur les sociétés à partir de 2026, les impôts différés constitués auparavant ont été réévalués. L'effet d'un changement de taux est comptabilisé là où l'élément d'origine l'a été (le plus souvent en résultat).
+- **Pas d'actualisation :** les impôts différés ne sont pas actualisés.
+- **Recouvrabilité des actifs d'impôt différé :** ils ne sont comptabilisés **que dans la mesure où il est probable que des bénéfices imposables futurs** permettront d'imputer les différences déductibles. Une société durablement déficitaire peut ne pas pouvoir les comptabiliser, ou devoir les réduire.
+- **Compensation :** actifs et passifs d'impôt différé sont compensés s'ils concernent le même contribuable et la même administration fiscale et qu'il existe un droit juridique de compensation. Tous les impôts différés sont classés en non courant.
+- **Éléments de capitaux propres :** l'effet d'impôt des éléments comptabilisés en autres éléments du résultat global ou directement en capitaux propres, comme un écart de réévaluation, est comptabilisé au même endroit.
+
+## 5. L'exception de comptabilisation initiale et l'amendement de 2023
+
+Aucun impôt différé n'est comptabilisé lors de la comptabilisation initiale d'un goodwill, ni lors de celle d'un actif ou d'un passif dans une transaction qui n'est pas un regroupement d'entreprises et n'affecte ni le résultat comptable ni le résultat fiscal. Toutefois, depuis l'amendement applicable en 2023, **les transactions comme les contrats de location ou les provisions pour démantèlement, qui créent des différences imposables et déductibles de même montant**, sont exclues de cette exception : un actif et un passif d'impôt différé sont alors comptabilisés.
+
+<Callout type="warning">
+Un actif d'impôt différé repose sur des prévisions de bénéfices futurs. Si une société déficitaire qui en a comptabilisé beaucoup revoit ses perspectives à la baisse, une forte charge d'impôt apparaît d'un coup et la perte nette se creuse. À l'inverse, les comptabiliser à nouveau en anticipant un redressement génère un produit d'impôt. Les années où la charge d'impôt évolue indépendamment du résultat avant impôt, consultez le rapprochement des taux et le détail des actifs d'impôt différé non comptabilisés. Les grands groupes soumis à l'impôt minimum mondial (Pilier 2) bénéficient en outre d'une exception temporaire à la comptabilisation des impôts différés correspondants.
+</Callout>
+
+## Exercice
+
+Le résultat comptable de la société HH pour 20X1 est de 20 millions de wons, au taux constant de 20 %. Ses retraitements fiscaux sont : dotation à la provision pour garantie de 1,5 million (réintégrée ; déductible lors du paiement à partir de 20X2), amendes de 400 000 wons (réintégrées) et équipement de 800 000 wons amorti immédiatement grâce à un régime fiscal de faveur (800 000 wons de déduction de plus que l'amortissement comptable, retournement ultérieur). Il n'existe pas de solde d'impôt différé d'ouverture. Quels sont l'impôt exigible, l'actif et le passif d'impôt différé, la charge d'impôt et le taux effectif ?
+
+Le résultat imposable vaut $2{,}000 + 150 + 40 - 80 = 2{,}110$ (en dizaines de milliers de wons) et l'impôt exigible 422. La provision pour garantie est une différence temporelle déductible donnant un actif d'impôt différé de 30 ; l'amortissement immédiat, une différence imposable donnant un passif de 16. Les amendes sont une différence permanente. La charge d'impôt vaut $422 + 16 - 30 = 408$, soit 4,08 millions, et le taux effectif $408 / 2{,}000 = 20.4\%$. L'écart de 0,4 point avec le taux légal provient de l'effet fiscal de 80 000 wons des 400 000 wons d'amendes.
+
+## Références
+
+- Korea Accounting Standards Board, K-IFRS 1012 *Impôts sur le résultat* (y compris l'amendement de 2023 sur l'impôt différé lié à une transaction unique)
+- Loi coréenne sur l'impôt des sociétés, article 55 (taux) — [Centre national d'information juridique](https://www.law.go.kr/법령/법인세법)
+- Donald Kieso, Jerry Weygandt et Terry Warfield, *Intermediate Accounting: IFRS Edition*, chap. 19

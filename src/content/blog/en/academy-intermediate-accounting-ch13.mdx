@@ -1,0 +1,99 @@
+---
+track: academy
+series: intermediate-accounting
+chapter: 13
+title: "Intermediate Accounting — Income Taxes: Temporary Differences and Deferred Tax"
+description: "Divides the differences between accounting profit and taxable profit into permanent and temporary differences, calculates deferred tax assets and liabilities and income tax expense, and explains why the effective tax rate differs from the statutory rate, the recoverability of deferred tax assets and the effect of rate changes."
+pubDate: 2026-09-24
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["intermediate accounting", "income taxes", "temporary differences", "deferred tax assets", "deferred tax liabilities", "effective tax rate"]
+locale: en
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+Accounting measures profit under K-IFRS; tax measures taxable profit under the Corporate Tax Act. When the two differ, the question is how to set income tax expense in the income statement. K-IFRS 1012 *Income Taxes* (IAS 12) requires expense to reflect both **tax payable now** and **tax that will be higher or lower later**. How to prepare the tax adjustments themselves is covered separately in the [Tax Accounting](/en/academy-accounting-basics-ch7/) course.
+
+## 1. Two kinds of difference
+
+- **Permanent differences:** items that accounting and tax law never treat the same way — entertainment expenses above the limit, fines and penalties, tax-exempt interest. They never reverse and create no deferred tax.
+- **Temporary differences:** differences between **the carrying amount of an asset or liability and its tax base**, which reverse by increasing or decreasing future taxable profit.
+
+<LectureTable
+  title="The two directions of temporary differences"
+  headers={["Type", "Examples", "Future effect", "Recognition"]}
+  rows={[
+    ["Taxable temporary differences", "Interest receivable (income for accounting, taxable when received), immediate write-off allowed for tax", "Increase future taxable profit", "Deferred tax liability"],
+    ["Deductible temporary differences", "Depreciation above the tax limit, provisions not yet deductible", "Decrease future taxable profit", "Deferred tax asset"],
+    ["Unused tax losses and credits carried forward", "Tax loss carryforwards", "Reduce future tax", "Deferred tax asset"],
+  ]}
+/>
+
+## 2. Worked example
+
+Company GG's accounting profit (profit before tax) for 20X1 is ₩10 million. Its tax adjustments are as follows. For simplicity, assume a single tax rate of 20% (actual Korean corporate tax rates are progressive and are covered in [Tax Accounting chapter 7](/en/academy-tax-accounting-ch7/)).
+
+- Depreciation above the tax limit of ₩1 million (added back; deductible temporary difference)
+- Entertainment expenses above the limit of ₩500,000 (added back; permanent difference)
+- Interest receivable of ₩300,000 (excluded from taxable income; taxable temporary difference)
+
+Taxable profit is $1{,}000 + 100 + 50 - 30 = 1{,}120$ (₩10,000), i.e. ₩11.2 million, and current tax (the tax payable) is $1{,}120 \times 20\% = 224$, i.e. ₩2.24 million.
+
+<FormulaBox
+  label="Income tax expense"
+  formula="\text{Tax expense} = \text{Current tax} + (\text{Closing DTL} - \text{Opening DTL}) - (\text{Closing DTA} - \text{Opening DTA})"
+  description="The deferred tax asset is 100 × 20% = 20 and the deferred tax liability 30 × 20% = 6 (₩10,000). With no opening balances, tax expense is 224 + 6 − 20 = 210."
+/>
+
+<LectureTable
+  title="Income tax entry (unit: ₩10,000)"
+  headers={["Debit", "Amount", "Credit", "Amount"]}
+  rows={[
+    ["Income tax expense", "210", "Current tax payable", "224"],
+    ["Deferred tax asset", "20", "Deferred tax liability", "6"],
+  ]}
+/>
+
+## 3. Effective tax rate and the rate reconciliation
+
+The effective tax rate is $210 / 1{,}000 = 21\%$, higher than the statutory 20%. The one-point difference comes from the tax effect of ₩100,000 on the ₩500,000 permanent difference. Temporary differences do not change the effective rate, because deferred tax aligns them across periods.
+
+<FormulaBox
+  label="Reconciling the statutory and effective rates"
+  formula="\text{Tax expense} = \text{Accounting profit} \times \text{Statutory rate} + \Sigma(\text{Permanent differences} \times \text{Rate}) \pm \text{Rate differences, credits, etc.}"
+  description="1,000 × 20% + 50 × 20% = 210 (₩10,000). The rate reconciliation table in the notes shows this structure."
+/>
+
+## 4. Measurement principles
+
+- **Tax rate:** measured at the rates expected to apply when the temporary differences reverse, using rates enacted (or substantively enacted) by the end of the reporting period. Korea raised its corporate tax rates by one percentage point in each bracket from 2026, so deferred tax built up earlier was remeasured for the increase. The effect of a rate change is recognized where the original item was recognized (mostly profit or loss).
+- **No discounting:** deferred tax is not discounted to present value.
+- **Recoverability of deferred tax assets:** recognized **only to the extent it is probable that future taxable profit** will be available to use the deductible temporary differences. A company with continuing losses may be unable to recognize, or must reduce, its deferred tax assets.
+- **Offsetting:** deferred tax assets and liabilities are offset if they relate to the same taxpayer and taxation authority and there is a legally enforceable right to set off. All deferred tax is classified as non-current.
+- **Items in equity:** the tax effect of items recognized in OCI or directly in equity, such as a revaluation surplus, is recognized there as well.
+
+## 5. The initial recognition exception and the 2023 amendment
+
+No deferred tax is recognized on the initial recognition of goodwill, or on the initial recognition of an asset or liability in a transaction that is not a business combination and affects neither accounting nor taxable profit. However, under the amendment effective from 2023, **transactions such as leases and decommissioning provisions that give rise to equal taxable and deductible differences** are excluded from this exception. For such transactions both a deferred tax asset and a deferred tax liability are recognized.
+
+<Callout type="warning">
+A deferred tax asset depends on forecasts of future profit. If a loss-making company that recognized large deferred tax assets lowers its outlook, a large tax expense arises at once and the net loss deepens. Conversely, recognizing them again on an expected recovery produces tax income. In a year when tax expense moves independently of pre-tax profit, check the rate reconciliation and the unrecognized deferred tax assets in the notes. Large groups subject to the global minimum tax (Pillar Two) also have a temporary exception from recognizing the related deferred tax.
+</Callout>
+
+## Check your understanding
+
+Company HH's accounting profit for 20X1 is ₩20 million and the tax rate is a constant 20%. Its tax adjustments are: a warranty provision charge of ₩1.5 million (added back; deductible when paid from 20X2), fines of ₩400,000 (added back), and ₩800,000 of equipment written off immediately under a tax incentive (₩800,000 more deduction than accounting depreciation, reversing in later years). There are no opening deferred tax balances. What are current tax, the deferred tax asset and liability, tax expense and the effective rate?
+
+Taxable profit is $2{,}000 + 150 + 40 - 80 = 2{,}110$ (₩10,000) and current tax is 422. The warranty provision is a deductible temporary difference giving a deferred tax asset of 30; the immediate write-off is a taxable temporary difference giving a deferred tax liability of 16. The fines are a permanent difference. Tax expense is $422 + 16 - 30 = 408$, i.e. ₩4.08 million, and the effective rate is $408 / 2{,}000 = 20.4\%$. The 0.4-point difference from the statutory rate comes from the ₩80,000 tax effect of the ₩400,000 of fines.
+
+## References
+
+- Korea Accounting Standards Board, K-IFRS 1012 *Income Taxes* (including the 2023 amendment on deferred tax related to a single transaction)
+- Corporate Tax Act, Article 55 (tax rates) — [National Law Information Center](https://www.law.go.kr/법령/법인세법)
+- Donald Kieso, Jerry Weygandt and Terry Warfield, *Intermediate Accounting: IFRS Edition*, ch. 19

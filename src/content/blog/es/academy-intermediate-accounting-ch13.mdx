@@ -1,0 +1,99 @@
+---
+track: academy
+series: intermediate-accounting
+chapter: 13
+title: "Contabilidad intermedia — Impuesto a las ganancias: diferencias temporarias e impuesto diferido"
+description: "Divide las diferencias entre el resultado contable y el fiscal en permanentes y temporarias, calcula activos y pasivos por impuesto diferido y el gasto por impuesto, y explica por qué la tasa efectiva difiere de la legal, la recuperabilidad de los activos por impuesto diferido y el efecto de un cambio de tasa."
+pubDate: 2026-09-24
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["contabilidad intermedia", "impuesto a las ganancias", "diferencias temporarias", "activos por impuesto diferido", "pasivos por impuesto diferido", "tasa efectiva"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+La contabilidad mide el resultado con las K-IFRS; el impuesto mide la base imponible con la Ley del Impuesto de Sociedades. Cuando las dos cifras difieren, la cuestión es qué gasto por impuesto registrar en el estado de resultados. La K-IFRS 1012 *Impuesto a las ganancias* (NIC 12) exige reflejar tanto **el impuesto que se paga ahora** como **el impuesto que será mayor o menor más adelante**. Cómo preparar los ajustes fiscales en sí se trata aparte en el curso de [Contabilidad tributaria](/es/academy-accounting-basics-ch7/).
+
+## 1. Dos tipos de diferencias
+
+- **Diferencias permanentes:** partidas que la contabilidad y la ley fiscal nunca tratan igual —gastos de representación por encima del límite, multas y sanciones, intereses exentos—. No revierten nunca ni generan impuesto diferido.
+- **Diferencias temporarias:** diferencias entre **el importe en libros de un activo o pasivo y su base fiscal**, que revierten aumentando o disminuyendo la base imponible futura.
+
+<LectureTable
+  title="Las dos direcciones de las diferencias temporarias"
+  headers={["Tipo", "Ejemplos", "Efecto futuro", "Reconocimiento"]}
+  rows={[
+    ["Diferencias temporarias imponibles", "Intereses por cobrar (ingreso contable, gravado al cobrarse), amortización fiscal inmediata", "Aumentan la base imponible futura", "Pasivo por impuesto diferido"],
+    ["Diferencias temporarias deducibles", "Depreciación por encima del límite fiscal, provisiones aún no deducibles", "Reducen la base imponible futura", "Activo por impuesto diferido"],
+    ["Pérdidas y créditos fiscales por compensar", "Pérdidas fiscales trasladables", "Reducen el impuesto futuro", "Activo por impuesto diferido"],
+  ]}
+/>
+
+## 2. Ejemplo
+
+El resultado contable (antes de impuestos) de la empresa GG en 20X1 es de 10 millones de wones. Sus ajustes fiscales son estos. Para simplificar, se supone una tasa única del 20 % (las tasas reales del impuesto de sociedades coreano son progresivas; véase el [capítulo 7 de Contabilidad tributaria](/es/academy-tax-accounting-ch7/)).
+
+- Depreciación por encima del límite fiscal: 1 millón (se suma; diferencia temporaria deducible)
+- Gastos de representación por encima del límite: 500.000 wones (se suman; diferencia permanente)
+- Intereses por cobrar: 300.000 wones (se restan; diferencia temporaria imponible)
+
+La base imponible es $1{,}000 + 100 + 50 - 30 = 1{,}120$ (en decenas de miles de wones), es decir, 11,2 millones, y el impuesto corriente (a pagar) es $1{,}120 \times 20\% = 224$, es decir, 2,24 millones.
+
+<FormulaBox
+  label="Gasto por impuesto"
+  formula="\text{Gasto por impuesto} = \text{Impuesto corriente} + (\text{PID final} - \text{PID inicial}) - (\text{AID final} - \text{AID inicial})"
+  description="El activo por impuesto diferido es 100 × 20 % = 20 y el pasivo 30 × 20 % = 6 (en decenas de miles de wones). Sin saldos iniciales, el gasto por impuesto es 224 + 6 − 20 = 210."
+/>
+
+<LectureTable
+  title="Asiento del impuesto (en decenas de miles de wones)"
+  headers={["Debe", "Importe", "Haber", "Importe"]}
+  rows={[
+    ["Gasto por impuesto a las ganancias", "210", "Impuesto corriente por pagar", "224"],
+    ["Activo por impuesto diferido", "20", "Pasivo por impuesto diferido", "6"],
+  ]}
+/>
+
+## 3. Tasa efectiva y conciliación de tasas
+
+La tasa efectiva es $210 / 1{,}000 = 21\%$, por encima del 20 % legal. El punto de diferencia viene del efecto fiscal de 100.000 wones de la diferencia permanente de 500.000 wones. Las diferencias temporarias no cambian la tasa efectiva, porque el impuesto diferido las ajusta entre periodos.
+
+<FormulaBox
+  label="Conciliación de la tasa legal y la efectiva"
+  formula="\text{Gasto por impuesto} = \text{Resultado contable} \times \text{Tasa legal} + \Sigma(\text{Diferencias permanentes} \times \text{Tasa}) \pm \text{Diferencias de tasa, créditos, etc.}"
+  description="1.000 × 20 % + 50 × 20 % = 210 (en decenas de miles de wones). La tabla de conciliación de tasas de las notas muestra esta estructura."
+/>
+
+## 4. Principios de medición
+
+- **Tasa:** se mide a las tasas que se espera aplicar cuando reviertan las diferencias, usando las aprobadas (o prácticamente aprobadas) al cierre. Corea subió un punto cada tramo del impuesto de sociedades desde 2026, así que el impuesto diferido acumulado antes se volvió a medir. El efecto de un cambio de tasa se reconoce donde se reconoció la partida original (en general, en resultados).
+- **Sin descuento:** el impuesto diferido no se descuenta a valor presente.
+- **Recuperabilidad de los activos por impuesto diferido:** se reconocen **solo en la medida en que sea probable disponer de ganancias fiscales futuras** para aprovechar las diferencias deducibles. Una empresa con pérdidas continuas puede no poder reconocerlos o tener que reducirlos.
+- **Compensación:** los activos y pasivos por impuesto diferido se compensan si corresponden al mismo contribuyente y autoridad fiscal y existe el derecho legal a compensar. Todo el impuesto diferido se clasifica como no corriente.
+- **Partidas de patrimonio:** el efecto fiscal de partidas reconocidas en ORI o directamente en patrimonio, como un superávit de revaluación, se reconoce en el mismo lugar.
+
+## 5. La exención de reconocimiento inicial y la modificación de 2023
+
+No se reconoce impuesto diferido en el reconocimiento inicial de un fondo de comercio, ni en el de un activo o pasivo en una transacción que no es una combinación de negocios y no afecta ni al resultado contable ni al fiscal. Sin embargo, con la modificación vigente desde 2023, **las transacciones como arrendamientos o provisiones por desmantelamiento, que generan diferencias imponibles y deducibles de igual importe**, quedan fuera de esta exención: en ellas se reconocen tanto un activo como un pasivo por impuesto diferido.
+
+<Callout type="warning">
+Un activo por impuesto diferido depende de las previsiones de ganancias futuras. Si una empresa con pérdidas que reconoció muchos activos diferidos rebaja sus perspectivas, surge de golpe un gran gasto por impuesto y la pérdida neta se agrava. A la inversa, reconocerlos de nuevo ante una recuperación esperada genera un ingreso por impuesto. En los años en que el gasto por impuesto se mueve al margen del resultado antes de impuestos, revise la conciliación de tasas y el detalle de activos diferidos no reconocidos en las notas. Los grandes grupos sujetos al impuesto mínimo global (Pilar Dos) tienen además una excepción temporal para no reconocer el impuesto diferido relacionado.
+</Callout>
+
+## Ejercicio
+
+El resultado contable de la empresa HH en 20X1 es de 20 millones de wones, con una tasa constante del 20 %. Sus ajustes fiscales son: dotación a la provisión por garantías de 1,5 millones (se suma; deducible al pagarse desde 20X2), multas de 400.000 wones (se suman) y un equipo de 800.000 wones amortizado de inmediato por un incentivo fiscal (800.000 wones más de deducción que la depreciación contable, con reversión en años posteriores). No hay saldos iniciales de impuesto diferido. ¿Cuáles son el impuesto corriente, el activo y el pasivo por impuesto diferido, el gasto por impuesto y la tasa efectiva?
+
+La base imponible es $2{,}000 + 150 + 40 - 80 = 2{,}110$ (en decenas de miles de wones) y el impuesto corriente, 422. La provisión por garantías es una diferencia temporaria deducible que da un activo diferido de 30; la amortización inmediata, una diferencia imponible que da un pasivo diferido de 16. Las multas son una diferencia permanente. El gasto por impuesto es $422 + 16 - 30 = 408$, es decir, 4,08 millones, y la tasa efectiva $408 / 2{,}000 = 20.4\%$. Los 0,4 puntos de diferencia con la tasa legal proceden del efecto fiscal de 80.000 wones de los 400.000 wones de multas.
+
+## Referencias
+
+- Korea Accounting Standards Board, K-IFRS 1012 *Impuesto a las ganancias* (incluida la modificación de 2023 sobre el impuesto diferido de una transacción única)
+- Ley coreana del Impuesto de Sociedades, artículo 55 (tasas) — [Centro Nacional de Información Jurídica](https://www.law.go.kr/법령/법인세법)
+- Donald Kieso, Jerry Weygandt y Terry Warfield, *Intermediate Accounting: IFRS Edition*, cap. 19
