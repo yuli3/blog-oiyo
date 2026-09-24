@@ -1,0 +1,106 @@
+---
+track: academy
+series: macroeconomics
+chapter: 6
+title: "Macroéconomie — La fonction d'investissement : le coût d'usage du capital"
+description: "Explique, chiffres et graphique à l'appui, comment les entreprises fixent un stock de capital cible en comparant le produit marginal du capital et son coût d'usage (r+δ)P_k, comment les variations de taux se transmettent à l'investissement, l'accélérateur, le q de Tobin, et pourquoi l'irréversibilité et les contraintes de crédit rendent l'investissement peu sensible aux taux."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["économie", "macroéconomie", "fonction d'investissement", "coût d'usage", "q de Tobin"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Macroéconomie — avant d'être une fonction du taux d'intérêt, l'investissement compare le rendement et le coût du capital
+
+La courbe IS du [chapitre 4](/fr/education-economics-ch14/) était décroissante parce que l'investissement réagit au taux d'intérêt. Ce chapitre examine le fondement microéconomique de cette réaction. Les entreprises comparent ce que rapporte et ce que coûte une unité de capital supplémentaire — la même logique que la valeur actuelle nette (VAN) en finance d'entreprise, appliquée aux variables macroéconomiques. L'investissement pèse moins que la consommation dans le PIB, mais il est bien plus volatil et explique une grande partie du cycle économique.
+
+## 1. Le coût d'usage du capital
+
+Ce que coûte à une entreprise l'usage d'une machine pendant un an n'est pas le prix de la machine, mais l'intérêt que cet argent aurait rapporté ailleurs plus la valeur que la machine perd par usure au cours de l'année.
+
+<FormulaBox
+  label="Coût d'usage du capital"
+  formula="uc = (r + \delta)\,P_k"
+  description="r est le taux d'intérêt réel, δ le taux de dépréciation et P_k le prix des biens d'équipement. Pour une machine de 100 millions de wons avec r = 5 % et δ = 10 %, le coût d'usage annuel est de 15 millions de wons. Avec l'impôt sur les sociétés et les crédits d'impôt à l'investissement, on l'ajuste en coût après impôt."
+/>
+
+L'entreprise accroît son capital jusqu'à ce que la **valeur du produit marginal** du capital égale le coût d'usage. Le produit marginal du capital étant décroissant, une baisse du coût d'usage augmente le stock de capital cible.
+
+Supposons que le rendement du capital d'une entreprise (valeur du produit marginal par unité de capital divisée par le prix des biens d'équipement) soit $MPK=20\,\%-0{,}5\,\%\times K$, avec $\delta=5\,\%$ :
+
+- $r=5\,\%$ : $uc=10\,\%$ → $20-0{,}5K=10$ → capital cible $K^*=20$
+- $r=3\,\%$ : $uc=8\,\%$ → $K^*=24$
+
+Si le capital actuel est de 18, l'investissement vaut 2 à 5 % et 6 à 3 %. Une baisse de 2 points du taux a triplé l'investissement. En agrégeant sur toutes les entreprises cette relation — une baisse des taux augmente le capital cible et donc l'investissement —, on obtient la fonction d'investissement $I(r)$.
+
+<EconDiagram
+  title="Capital cible et coût d'usage"
+  xLabel="K"
+  yLabel="Rendement / coût (%)"
+  xMax={40}
+  yMax={20}
+  curves={[
+    { label: "MPK", points: [[0, 20], [40, 0]], tone: "blue" },
+    { label: "uc (r=5 %)", points: [[0, 10], [40, 10]], tone: "red" },
+    { label: "uc (r=3 %)", points: [[0, 8], [40, 8]], tone: "red", dashed: true },
+  ]}
+  marks={[
+    { x: 20, y: 10, guide: true, xTick: "20" },
+    { x: 24, y: 8, guide: true, xTick: "24" },
+  ]}
+  caption="Quand le coût d'usage passe de 10 % à 8 %, le capital cible passe de 20 à 24. L'écart avec le capital actuel constitue l'investissement."
+/>
+
+Keynes exprimait la même décision par l'**efficacité marginale du capital (EMC)** : le taux d'actualisation qui égalise la valeur actuelle des rendements attendus d'un projet et son coût. On investit si l'EMC dépasse le taux de marché. L'essentiel, ce sont les anticipations. Si les entrepreneurs deviennent pessimistes, l'EMC baisse et l'investissement s'effondre même à taux inchangé. Ces variations d'anticipations, que Keynes appelait les « esprits animaux », **déplacent** la courbe IS.
+
+## 2. L'accélérateur
+
+Le capital cible est aussi proportionnel à la production. Si chaque unité produite exige $v$ unités de capital, $K^*=vY$ et l'investissement net est $I=v\,\Delta Y$. L'investissement réagit à la **variation** de la production, non à son **niveau**. Dans une branche où $v=3$, un ralentissement de la croissance de la production de 5 % à 3 % réduit l'investissement net de 40 %, alors que la production continue d'augmenter. C'est l'une des raisons pour lesquelles l'investissement est bien plus volatil que la consommation.
+
+## 3. Le q de Tobin
+
+<FormulaBox
+  label="q de Tobin"
+  formula="q = \frac{\text{Valeur de marché de l'entreprise}}{\text{Coût de remplacement de son capital}}"
+  description="Si q > 1, le marché valorise chaque won de capital à plus d'un won : acheter et installer du capital neuf crée de la valeur et l'entreprise investit. Si q < 1, racheter des entreprises existantes coûte moins cher qu'investir."
+/>
+
+Comme q intègre déjà l'appréciation par le marché boursier des rendements attendus, il contient la même information que le modèle du coût d'usage tout en étant observable. C'est aussi un canal par lequel la hausse des cours entraîne l'investissement.
+
+## 4. Quand l'investissement devient insensible aux taux
+
+<LectureTable
+  title="Pourquoi une baisse des taux peut ne pas relancer l'investissement"
+  headers={["Cause", "Mécanisme", "Exemple"]}
+  rows={[
+    ["Irréversibilité et incertitude", "Pour un investissement irréversible, l'option d'attendre a de la valeur", "Attentisme en cas de forte incertitude sur la politique ou la demande"],
+    ["Contraintes de crédit", "Le coût du financement externe dépasse largement le taux, ou le crédit est coupé", "PME pendant une crise financière"],
+    ["Surcapacités", "Avec un faible taux d'utilisation, le MPK lui-même est bas", "Début de récession"],
+    ["Dégradation des anticipations", "L'EMC et q baissent, IS se déplace vers la gauche", "Pessimisme conjoncturel"],
+  ]}
+/>
+
+L'investissement résidentiel et les variations de stocks obéissent à la même logique : le prix des logements rapporté au coût de construction (le q du logement) et le coût d'usage de la détention de stocks (intérêt plus stockage) déterminent chacun d'eux.
+
+<Callout type="warning">
+Avant de conclure que « la fonction d'investissement est fausse » parce que l'investissement n'a pas augmenté après une baisse des taux, vérifiez si l'incertitude, les conditions de crédit ou les anticipations n'ont pas déplacé la fonction d'investissement au même moment. Distinguer un mouvement le long d'une courbe d'un déplacement de la courbe est le même problème d'identification qu'au [chapitre 2 de Microéconomie](/fr/education-economics-ch2/). L'effet d'éviction d'une expansion budgétaire, qui fait monter les taux et baisser l'investissement, passe par la hausse du coût d'usage décrite dans ce chapitre.
+</Callout>
+
+## Exercice
+
+Une machine coûte 200 millions de wons, le taux réel est de 4 % et la dépréciation de 8 %. Quel est le coût d'usage annuel ? $(0{,}04+0{,}08)\times 200$ millions $=24$ millions de wons. Si la machine rapporte un rendement net de 20 millions par an, l'entreprise n'investit pas. Si le taux tombe à 1 %, le coût d'usage passe à 18 millions et l'entreprise investit.
+
+## Références
+
+- N. Gregory Mankiw, *Macroeconomics*, ch. 17
+- Dale Jorgenson, "Capital Theory and Investment Behavior," *American Economic Review* (1963)
+- James Tobin, "A General Equilibrium Approach to Monetary Theory," *Journal of Money, Credit and Banking* (1969)
+- Avinash Dixit and Robert Pindyck, *Investment under Uncertainty* (1994)

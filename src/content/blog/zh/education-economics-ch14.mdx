@@ -1,0 +1,101 @@
+---
+track: academy
+series: macroeconomics
+chapter: 4
+title: "宏观经济学 — IS-LM基础"
+description: "用线性模型推导商品市场均衡IS和货币市场均衡LM，并用同一组数字和图形比较政府支出增加的挤出效应与货币扩张的传导途径。"
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["经济学", "宏观经济学", "IS-LM", "挤出效应", "比较静态"]
+locale: zh
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 宏观经济学 — 短期产出由同时使商品市场和货币市场均衡的利率决定
+
+若短期内物价固定，产出由需求决定。但需求中的投资取决于利率，利率在货币市场中决定，而货币需求又取决于产出。分开看商品市场和货币市场，这个循环就断了。**IS-LM**把两个市场放在同一平面上同时求解。本章用同一组数字构建IS和LM，并比较两种政策。联立解的一般公式见[第23章](/zh/education-economics-ch39/)。
+
+## 1. IS:商品市场的均衡
+
+设消费$C=20+0.8(Y-T)$，税收$T=10$，投资$I=40-2r$(r以%计)，政府支出$G=30$(单位为万亿韩元)。代入商品市场均衡$Y=C+I+G$:
+
+$$Y=20+0.8(Y-10)+40-2r+30 \quad\Rightarrow\quad Y=410-10r$$
+
+利率上升1个百分点，投资减少2万亿韩元，经过乘数$1/(1-0.8)=5$，产出减少10万亿韩元。因此IS向右下方倾斜。
+
+<FormulaBox
+  label="决定IS斜率的两个因素"
+  formula="Y = \frac{1}{1-c}\left(\bar A - b\,r\right)"
+  description="Ā为与利率无关的支出，b为投资的利率敏感度。乘数1/(1−c)越大或b越大，同样的利率变化对产出影响越大，IS越平坦。G增加使IS右移。"
+/>
+
+## 2. LM:货币市场的均衡
+
+设实际货币需求为$L=0.5Y-20r$，实际货币余额$M/P=180$。由均衡$M/P=L$:
+
+$$180=0.5Y-20r \quad\Rightarrow\quad r=0.025Y-9$$
+
+产出增加时交易性货币需求增加，而余额固定，利率必须上升，以减少人们持有货币而非债券的需求。因此LM向右上方倾斜。货币需求对利率越敏感(20越大)，LM越平坦。货币量增加或物价下降时，LM右移。
+
+## 3. 均衡与两种政策
+
+联立IS和LM，由$Y=410-10(0.025Y-9)$得$Y=400$，$r=1\%$。
+
+**财政扩张**:$G$增加10万亿韩元，IS移到$Y=460-10r$。若利率不变，产出按乘数增加50万亿韩元，达到450。但产出增加使货币需求增加、利率上升。新的均衡为$Y=440$，$r=2\%$。利率上升使投资减少2万亿韩元，经乘数挤出了10万亿韩元产出。这就是**挤出效应**。
+
+**货币扩张**:实际余额从180增至200，LM移到$r=0.025Y-10$。新的均衡为$Y=408$，$r=0.2\%$。利率下降使投资增加，从而增加产出。
+
+<EconDiagram
+  title="IS-LM与财政扩张的挤出效应"
+  xLabel="Y"
+  yLabel="r (%)"
+  xMin={350}
+  xMax={470}
+  yMax={4}
+  curves={[
+    { label: "IS", points: [[370, 4], [410, 0]], tone: "blue", labelAt: 0 },
+    { label: "IS'", points: [[420, 4], [460, 0]], tone: "blue", dashed: true, labelAt: 0 },
+    { label: "LM", points: [[360, 0], [470, 2.75]], tone: "green" },
+  ]}
+  marks={[
+    { x: 400, y: 1, label: "E", guide: true, xTick: "400", yTick: "1" },
+    { x: 440, y: 2, label: "E'", guide: true, xTick: "440", yTick: "2" },
+    { x: 450, y: 1, label: "利率不变时", xTick: "450" },
+  ]}
+  caption="若利率停留在1%，产出本应增至450，但沿LM利率升至2%，产出停在440。450与440之间10万亿韩元的差距，就是被挤出投资的乘数效应。"
+/>
+
+<LectureTable
+  title="各种冲击的移动与结果"
+  headers={["冲击", "移动", "利率", "产出"]}
+  rows={[
+    ["G增加", "IS右移", "↑", "↑(因挤出而小于乘数)"],
+    ["T减税", "IS右移", "↑", "↑"],
+    ["M增加", "LM右移", "↓", "↑"],
+    ["P上升", "LM左移(M/P减少)", "↑", "↓"],
+    ["企业预期恶化", "IS左移", "↓", "↓"],
+  ]}
+/>
+
+倒数第二行中物价上涨使LM左移、产出减少的路径，构成了[第8章](/zh/education-economics-ch19/)的总需求曲线。
+
+<Callout type="warning">
+IS-LM是建立在封闭经济、物价固定、预期不变等假设之上的基准模型。开放经济见[国际金融第3章](/zh/education-international-finance-ch3/)，物价调整见第8章和第15章，预期见第9章。此外，许多中央银行以利率而非货币量为目标，因此在现实中把LM画成"中央银行设定的利率水平上的水平线"更接近实际操作。这时，财政扩张的挤出取决于中央银行是否加息。
+</Callout>
+
+## 练习题
+
+在上述经济中减税10万亿韩元(T = 0)，新的均衡是什么?减税在第一轮只使消费增加$0.8\times 10=8$万亿韩元，所以IS变为$0.2Y=90-2r$，即$Y=450-10r$。与LM联立，由$Y=450-0.25Y+90$得$Y=432$，$r=1.8\%$。同样是10万亿韩元，减税的效果(32万亿韩元)小于政府支出(40万亿韩元)，因为第一轮中有一部分被储蓄了。
+
+## 参考资料
+
+- N. Gregory Mankiw, *Macroeconomics*, ch. 11–12
+- John Hicks, "Mr. Keynes and the 'Classics'," *Econometrica* (1937)
+- MIT OpenCourseWare, [14.02 Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)

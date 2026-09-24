@@ -1,72 +1,119 @@
 ---
 track: academy
-series: economics-basics
-chapter: 11
-title: "Macroeconomic Equilibrium (IS-LM, AD-AS)"
-description: >-
-  Learn the IS-LM model, which represents the simultaneous equilibrium of the
-  product and money markets, and through it, master the principles of Aggregate
-  Demand (AD) and Aggregate Supply (AS).
+series: macroeconomics
+chapter: 1
+title: "Macroeconomics — Measuring National Income and Its Identities"
+description: "Checks with one economy's numbers why GDP measured by production, expenditure and income is the same, and covers nominal versus real GDP and the deflator, GDP versus GNI, the saving–investment identity and why GDP is not a welfare measure."
 pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
 category: Economics
-tags:
-  - Education
-  - economics
+tags: ["economics", "macroeconomics", "GDP", "national accounts", "deflator"]
 locale: en
 author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
 
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# Macroeconomic Equilibrium (IS-LM, AD-AS)
+# Macroeconomics — GDP Is Final Output Valued at Market Prices, Not Welfare
 
-The IS-LM and AD-AS models are the most powerful tools for analyzing how macroeconomic policies affect national income, interest rates, and prices.
+If [Introduction to Economics, Chapter 7](/en/academy-economics-basics-ch7/) fixed the definition of GDP, this chapter uses the national accounting identities as the starting point for macroeconomic models. The consumption function (Chapter 5), the investment function (Chapter 6) and IS-LM (Chapter 4) all add behavioural assumptions to these identities.
 
----
+## 1. Three approaches measure the same circular flow in different places
 
-## 1. IS-LM Model (Short-run analysis, Fixed Prices)
+**Gross domestic product (GDP)** is the market value of final goods and services produced within a country in a given period. The same value can be measured in three places.
 
-### (1) IS Curve (Product Market Equilibrium)
+Suppose a farmer sells wheat to a mill for 300 won, the mill sells flour to a bakery for 600 won, and the bakery sells bread to consumers for 1,000 won.
 
-- **Definition**: Combinations of interest rate (r) and national income (Y) that clear the product market.
-- **Characteristic**: As interest rates fall, investment increases, leading to higher income, so the curve is **downward-sloping**.
-- **Shift**: Moves to the **right** when government spending increases or investment increases.
+<LectureTable
+  title="One economy's GDP measured three ways"
+  headers={["Approach", "Calculation", "Value"]}
+  rows={[
+    ["Production (sum of value added)", "300 + (600−300) + (1,000−600)", "1,000"],
+    ["Expenditure (final purchases)", "Consumers' purchases of bread", "1,000"],
+    ["Income (sum of incomes)", "Wages, profits, interest and rent at each stage", "1,000"],
+  ]}
+/>
 
-### (2) LM Curve (Money Market Equilibrium)
+The value added at each stage becomes the income of the people who work there and of the owners of capital, and the final sale price is the sum of all the value added. Adding the 600 won of flour separately would count value already contained in the price of bread twice. That is why intermediate goods are excluded.
 
-- **Definition**: Combinations of interest rate (r) and national income (Y) that clear the money market.
-- **Characteristic**: As income rises, money demand increases, pushing up interest rates, so the curve is **upward-sloping**.
-- **Shift**: Moves to the **right (down)** when the money supply increases.
+<FormulaBox
+  label="Expenditure identity"
+  formula="Y = C + I + G + (X - M)"
+  description="C is consumption, I investment (equipment, construction and changes in inventories), G government purchases of goods and services, X−M net exports. Transfers such as unemployment benefits and pensions are not payment for production and are excluded from G."
+/>
 
----
+<LectureTable
+  title="How GDP treats different transactions"
+  headers={["Transaction", "Treatment in GDP", "Reason"]}
+  rows={[
+    ["New house construction", "Included (I)", "Produced in the period"],
+    ["Sale of an existing house", "Only the agent's fee", "Transfer of ownership, not production"],
+    ["Unsold inventory", "Included (change in inventories in I)", "Production has already taken place"],
+    ["Imported consumer goods", "In C, then subtracted in M", "Not domestic production"],
+    ["Civil servants' salaries", "Included (G)", "Production of administrative services"],
+    ["Unemployment benefits", "Excluded", "Transfer payment"],
+  ]}
+/>
 
-## 2. Policy Effects and Crowding-out
+## 2. Saving finances investment and net exports
 
-1. **Expansionary Fiscal Policy ($G \uparrow$)**: Rightward shift of IS curve $\rightarrow$ Increase in income, rise in interest rates.
-2. **Crowding-out Effect**: When government spending increases, interest rates rise, which in turn reduces private investment. This reduces the overall increase in income.
-3. **Expansionary Monetary Policy ($M \uparrow$)**: Rightward shift of LM curve $\rightarrow$ Increase in income, fall in interest rates.
+Rearranging the expenditure identity gives the relationship between saving and investment. With private saving $S_p=Y-T-C$ (disposable income minus consumption) and government saving $S_g=T-G$:
 
----
+<FormulaBox
+  label="Saving–investment identity"
+  formula="S_p + S_g = I + (X - M)"
+  description="National saving equals domestic investment plus net lending abroad (the current account). If the government deficit rises, either private saving rises, investment falls or the current account worsens."
+/>
 
-## 3. AD-AS Model (Includes price changes)
+This is an identity and says nothing about causation. Whether a fiscal deficit reduces investment (crowding out), raises private saving (Ricardian equivalence) or worsens the current account (twin deficits) depends on behavioural assumptions, which are covered in [Public Finance, Chapter 6](/en/academy-public-finance-ch6/) and Chapter 4 of this course.
 
-### (1) Aggregate Demand (AD)
+## 3. Nominal and real GDP, and the deflator
 
-- Represents the relationship between price (P) and income (Y), and is **downward-sloping**. As prices fall, the real value of assets rises, increasing income (Pigou effect).
+Consider an economy with two goods.
 
-### (2) Aggregate Supply (AS)
+<LectureTable
+  title="Nominal and real GDP"
+  headers={["", "Apples", "Pears", "Nominal GDP", "Real GDP (year-1 prices)"]}
+  rows={[
+    ["Year 1", "10 × 1,000 won", "5 × 2,000 won", "20,000 won", "20,000 won"],
+    ["Year 2", "12 × 1,200 won", "5 × 2,200 won", "25,400 won", "22,000 won"],
+  ]}
+/>
 
-- **Classical (Long-run)**: A vertical line. (Regardless of price, the economy is always at its potential output level)
-- **Keynesian (Short-run)**: Upward-sloping or horizontal. (Due to nominal wage rigidity, an increase in prices leads to more production)
+Nominal GDP rose by 27%, but real GDP, which measures only the change in quantities, rose by 10%. The rest is price increases.
 
-### (3) Changes in Equilibrium and Stagflation
+<FormulaBox
+  label="GDP deflator"
+  formula="\text{Deflator} = \frac{\text{Nominal GDP}}{\text{Real GDP}}\times 100 = \frac{25{,}400}{22{,}000}\times 100 \approx 115.5"
+  description="Nominal growth ≈ real growth + deflator inflation. If nominal growth is 10% and the deflator rises 5%, real growth is 1.10/1.05 − 1 ≈ 4.8%."
+/>
 
-- **Stagflation**: A worst-case scenario where the AS curve shifts to the **left** (e.g., due to rising raw material prices), causing **prices to rise while income decreases (unemployment rises)**.
+Keeping base-year prices fixed for a long time overweights goods whose prices fall quickly (electronics). That is why many countries chain growth rates using prices from adjacent years (**chain weighting**). The difference between the deflator and the consumer price index (CPI) is discussed in Chapter 2.
 
----
+## 4. GDP and GNI
 
-## Key Checklist
+GDP is based on **where** output is produced; gross national income (GNI) on **who** earns the income.
 
-- [ ] What do we call the phenomenon where an increase in government spending leads to higher interest rates and a reduction in private investment? (Answer: Crowding-out effect)
-- [ ] In which direction does the LM curve shift when the money supply increases? (Answer: Right/Down)
-- [ ] Which curve likely shifted if both prices and income are rising simultaneously? (Answer: Rightward shift of the AD curve)
-- [ ] Why is the Long-Run Aggregate Supply (LRAS) curve vertical?
+$$GNI = GDP + \text{net factor income from abroad}$$
+
+A country with large returns on foreign investment has GNI above GDP; a country with much inward direct investment has the reverse. And when the terms of trade deteriorate (export prices rise less than import prices), the same real GDP buys less, so real GNI grows more slowly than real GDP.
+
+<Callout type="warning">
+GDP is not a measure of welfare. Household production (housework, care) and leisure are excluded, and spending to clean up pollution raises GDP. It also ignores distribution and the depletion of assets such as natural resources. Do not equate a higher growth rate with a better quality of life. That said, GDP per capita is strongly correlated with many welfare indicators such as life expectancy and education and remains the most useful single indicator.
+</Callout>
+
+**Potential GDP** is the level of output that can be sustained without accelerating inflation. The sign and causes of the gap between actual and potential GDP (the output gap) are covered in AD-AS (Chapter 8) and business cycles (Chapter 10).
+
+## Check your understanding
+
+Nominal GDP rises from 100 trillion to 110 trillion won and the deflator from 100 to 105. What is real growth? $1.10/1.05-1\approx 4.8\%$. If in the same year the government spent 10 trillion won on civil servants' salaries and 10 trillion won on unemployment benefits, only the 10 trillion won of salaries enters G.
+
+## References
+
+- Bank of Korea, [Guide to National Accounts](https://www.bok.or.kr/portal/main/contents.do?menuNo=200554) (in Korean)
+- N. Gregory Mankiw, *Macroeconomics*, ch. 2–3
+- MIT OpenCourseWare, [14.02 Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)

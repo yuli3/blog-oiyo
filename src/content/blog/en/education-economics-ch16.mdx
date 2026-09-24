@@ -1,86 +1,103 @@
 ---
 track: academy
-series: economics-basics
-chapter: 16
-title: "Economic Principles — Consumption Function Theory: From Keynes to the Life Cycle Hypothesis"
-description: "We analyze various theories that regulate consumption, including the absolute income hypothesis, relative income hypothesis, permanent income hypothesis, and life cycle hypothesis. It addresses liq..."
+series: macroeconomics
+chapter: 5
+title: "Macroeconomics — The Consumption Function: From Keynes to Permanent Income"
+description: "Computes the multiplier with the Keynesian consumption function and Keynesian cross, and then, starting from the Kuznets puzzle, covers the permanent-income and life-cycle hypotheses, random-walk consumption and why liquidity constraints change the marginal propensity to consume, with numbers and a graph."
 pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
 category: Economics
-tags:
-  - Education
-  - economics
-  - 정병렬경제학
+tags: ["economics", "macroeconomics", "consumption function", "permanent income", "life cycle"]
 locale: en
 author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
 
-import {
-  LectureTable,
-} from "@/features/education-common/components/LectureVisuals";
 import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# Consumption Function Theory: From Keynes to the Life-Cycle Hypothesis
+# Macroeconomics — Consumption Depends on Lifetime Resources, Not Just This Year's Income
 
-What determines consumption ($C$), the largest component of national income? This chapter examines the mechanics of consumption, from Keynes's simple model to modern theories that reflect people's rational, long-term planning.
+Consumption is the largest component of GDP, and how strongly it responds to income (the marginal propensity to consume) sets the size of the multiplier. This chapter computes the multiplier with Keynes's simple consumption function and then turns to theories that ask **which income** the marginal propensity to consume refers to. A one-off payment and a permanent tax cut are not the same number.
 
----
+## 1. The Keynesian consumption function and cross
 
-## 1. Keynes's Absolute Income Hypothesis
+<FormulaBox
+  label="Keynesian consumption function"
+  formula="C = c_0 + c\,Y_d,\qquad 0<c<1"
+  description="c_0 is autonomous consumption, c the marginal propensity to consume (MPC) and Y_d = Y − T disposable income. The average propensity to consume C/Y_d falls as income rises."
+/>
 
-This theory holds that consumption is determined solely by current disposable income ($Y_d$).
+With $C=20+0.8(Y-10)$ and investment plus government spending $I+G=50$ (trillion won), planned expenditure is $AE=62+0.8Y$. Equilibrium is where planned expenditure equals output: $Y=62+0.8Y$, so $Y=310$ trillion won.
 
-<FormulaBox>
-  $C = C_0 + cY_d$ ($C_0$: autonomous consumption, $c$: marginal propensity to consume)
-</FormulaBox>
-- **Features**:
-  - $0 < c < 1$ (the marginal propensity to consume lies between 0 and 1).
-  - As income rises, the average propensity to consume ($APC = C/Y_d$) falls.
-- **Empirical result**: It fits the short run, but cannot explain Kuznets's finding that $APC$ remains constant over the long run.
+<EconDiagram
+  title="The Keynesian cross and the multiplier"
+  xLabel="Y"
+  yLabel="AE"
+  xMax={400}
+  yMax={400}
+  curves={[
+    { label: "45°", points: [[0, 0], [400, 400]], tone: "gray", dashed: true },
+    { label: "AE", points: [[0, 62], [400, 382]], tone: "blue" },
+    { label: "AE'", points: [[0, 72], [400, 392]], tone: "blue", dashed: true, labelAt: 0 },
+  ]}
+  marks={[
+    { x: 310, y: 310, label: "E", guide: true, xTick: "310" },
+    { x: 360, y: 360, label: "E'", guide: true, xTick: "360" },
+  ]}
+  caption="When government spending rises by 10 trillion won and AE shifts up by 10, equilibrium output rises by 50 trillion won, because 80% of each increase in income is spent again and again."
+/>
 
----
+If government spending rises by 10 trillion won, the equilibrium is $Y=72+0.8Y$, or 360 trillion won. The multiplier is $1/(1-0.8)=5$. With an MPC of 0.6 the multiplier falls to 2.5. The size of the multiplier is very sensitive to the MPC.
 
-## 2. Duesenberry's Relative Income Hypothesis
+## 2. The Kuznets puzzle
 
-This hypothesis says that consumption is influenced by the consumption level of people around us and by one's own previous peak consumption level.
+The Keynesian consumption function fitted cross-sections of households and short time series well: higher-income households consumed a smaller share of their income. But when Kuznets examined decades of long-run data, the average propensity to consume was almost constant. The mismatch — a falling average propensity in the short run but not in the long run — is the **Kuznets puzzle**. The next two theories answered it.
 
-1. **Demonstration Effect**: The tendency to imitate neighbors' consumption levels.
-2. **Ratchet Effect**: The tendency for consumption not to fall irreversibly when income falls, because of past consumption habits.
+## 3. The permanent-income and life-cycle hypotheses
 
----
+**Friedman's permanent-income hypothesis**: income consists of **permanent income**, expected over the long run, and **transitory income**, and consumption responds mainly to permanent income. A household whose income is temporarily high in a given year has a low measured consumption ratio that year. This is why high-income households appear to have a low average propensity in cross-sections. In the long run transitory income averages out and the average propensity is constant.
 
-## 3. Friedman's Permanent Income Hypothesis
+**Modigliani's life-cycle hypothesis**: people try to spread their lifetime resources evenly over their lives. They save while working and run down savings in retirement.
 
-This theory holds that consumption is determined not by temporary income but by **permanent income**, the average income one expects to earn over a lifetime.
+<FormulaBox
+  label="Life-cycle consumption (simple form with zero interest)"
+  formula="C = \frac{W + R\,Y}{T}"
+  description="W is current wealth, R remaining working years, Y annual income and T remaining lifetime. With wealth of 200 million won, 20 years of work at 50 million won a year and 40 years of life left, C = (200 million + 1 billion)/40 = 30 million won."
+/>
 
-- **Permanent income**: Income reflecting asset values and expectations about the future.
-- **Temporary income**: Windfall income such as a bonus or lottery winnings.
-- **<mark>Implication</mark>**: A temporary tax cut has little effect on permanent income, so its power to stimulate consumption is limited.
+In the example, this person saves 20 million won a year while working. If wealth rises by 100 million won (say, from a rise in house prices), annual consumption rises by $100\text{ million}/40=2.5$ million won: the marginal propensity to consume out of wealth is 0.025.
 
----
+<LectureTable
+  title="The MPC depends on the kind of income change"
+  headers={["Income change", "Keynes", "Permanent income / life cycle"]}
+  rows={[
+    ["Permanent tax cut", "Large", "Large"],
+    ["One-off payment", "Large", "Small (a small share of lifetime income)"],
+    ["Announcement of higher future income", "None (current income unchanged)", "Consumption rises now"],
+    ["Temporary income for a liquidity-constrained household", "Large", "Large (it would like to smooth but cannot borrow)"],
+  ]}
+/>
 
-## 4. Modigliani's Life-Cycle Hypothesis
+## 4. Random-walk consumption and liquidity constraints
 
-This theory holds that people try to smooth consumption over youth, middle age, and old age by considering income across their entire lives.
+Hall showed that combining the permanent-income hypothesis with rational expectations implies that changes in consumption should be unpredictable, because predictable income changes are already reflected in today's consumption (**random-walk consumption**). In the data, consumption often responds even to predictable income increases, such as scheduled tax refunds — **excess sensitivity**.
 
-- **Youth**: income < consumption (borrowing).
-- **Middle age**: income > consumption (saving).
-- **Old age**: income > consumption (using savings accumulated in middle age).
-- **Policy implication**: Changes in population structure, such as aging, have a profound effect on a country's overall saving rate.
+One reason is **liquidity constraints**. Even if future income is high, a household that cannot borrow now cannot smooth consumption. In a study of the 2008 US tax rebates (Parker and co-authors), households spent a substantial share of the rebate within a quarter, and those with few liquid assets responded more. Credit card limits and mortgage terms are channels that change the aggregate MPC. The role of present bias and mental accounting is covered in [Behavioural Economics, Chapters 4 and 6](/en/academy-behavioral-economics-ch4/).
 
----
+<Callout type="warning">
+Applying an average MPC of 0.8 to every policy greatly overstates the multiplier. How much of a one-off payment leaks into saving and debt repayment depends on the income, assets and credit of the recipients. Also, the **paradox of thrift** — if everyone tries to save more at once, income falls and total saving does not rise as intended — is a story about the short run with deficient demand. It does not contradict the proposition in [Chapter 11](/en/education-economics-ch22/) that in the long run saving supports capital accumulation and growth.
+</Callout>
 
-## 5. Wrapping Up: Consumption Is Confidence in the Future
+## Check your understanding
 
-The essence of consumption is not simply spending what one earned today; it is planning today because one trusts one's future self. Modern macroeconomics evaluates the effectiveness of economic policy through consumers' expectations and budget constraints.
+In this economy a one-off transfer of 10 trillion won is paid, and recipients' MPC is 0.3. What is the first-round increase in consumption? 3 trillion won. If the households whose incomes then rise have an MPC of 0.8, the total effect is $3\times 5=15$ trillion won. Applying Keynes's 0.8 from the start, $10\times 0.8\times 5=40$ trillion won, overstates it by more than twice.
 
----
+## References
 
-## 📖 References
-
-- **[Macroeconomics] - Jeong Byeong-ryeol**: Mathematical models of consumption functions.
-- **[Principles of Economics] - Gregory Mankiw**: Determinants of household consumption.
-
----
-
-Well done. Next, we will study **investment function theory and the accelerator principle**, which concern firms' decisions about the future.
+- N. Gregory Mankiw, *Macroeconomics*, ch. 16
+- Milton Friedman, *A Theory of the Consumption Function* (1957)
+- Robert Hall, "Stochastic Implications of the Life Cycle–Permanent Income Hypothesis," *Journal of Political Economy* (1978)
+- Jonathan Parker et al., "Consumer Spending and the Economic Stimulus Payments of 2008," *American Economic Review* (2013)

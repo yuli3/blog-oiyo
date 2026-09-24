@@ -1,0 +1,109 @@
+---
+track: academy
+series: macroeconomics
+chapter: 7
+title: "Macroeconomía — Aplicaciones de IS-LM: pendientes y escuelas de pensamiento"
+description: "Deriva los multiplicadores fiscal y monetario a partir de los parámetros de IS-LM, calcula con los mismos números y un gráfico cómo cambian los efectos de ambas políticas cuando la sensibilidad de la demanda de dinero al tipo va de infinito (trampa de liquidez) a cero (caso clásico), y analiza la combinación de políticas."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["economía", "macroeconomía", "IS-LM", "trampa de liquidez", "combinación de políticas"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Macroeconomía — qué política es más potente depende de las pendientes, no de la escuela
+
+El [capítulo 4](/es/education-economics-ch14/) desplazó la IS y la LM para ver el signo de los efectos. Este capítulo estudia las pendientes que determinan su **tamaño**. El largo debate entre «la política fiscal es potente» (keynesianos) y «solo la política monetaria mueve la producción» (monetaristas) fue, en realidad, un debate empírico sobre la sensibilidad de la demanda de dinero y de la inversión al tipo de interés.
+
+## 1. Los multiplicadores en función de los parámetros
+
+Escribamos la IS como $Y=\alpha-\beta r+\gamma G$ y la LM como $M/P=\lambda Y-\mu r$. $\beta$ es la sensibilidad del gasto al tipo (incluido el multiplicador), $\gamma$ el multiplicador del gasto público, $\lambda$ la sensibilidad de la demanda de dinero a la renta y $\mu$ su sensibilidad al tipo. Sustituyendo en la IS $r=(\lambda Y-M/P)/\mu$, obtenido de la LM:
+
+<FormulaBox
+  label="Multiplicadores de política en IS-LM"
+  formula="\frac{dY}{dG}=\frac{\gamma}{1+\beta\lambda/\mu},\qquad \frac{dY}{d(M/P)}=\frac{\beta/\mu}{1+\beta\lambda/\mu}"
+  description="El término βλ/μ del denominador es el tamaño del efecto expulsión: al subir la producción, la demanda de dinero crece en λ, el tipo sube a razón de 1/μ y el gasto cae en β."
+/>
+
+Con el ejemplo del capítulo 4 ($\beta=10$, $\gamma=5$, $\lambda=0{,}5$, $\mu=20$), el multiplicador fiscal es $5/1{,}25=4$ y el de los saldos reales $0{,}5/1{,}25=0{,}4$. Coincide con el capítulo 4, donde 10 billones de G elevaban la producción en 40 billones y 20 de saldos reales en 8 billones.
+
+## 2. Tres regiones según la sensibilidad de la demanda de dinero al tipo
+
+Cambiando solo $\mu$ se invierte la fuerza relativa de ambas políticas.
+
+<LectureTable
+  title="Multiplicadores según μ (β = 10, γ = 5, λ = 0,5)"
+  headers={["μ", "Forma de la LM", "Multiplicador fiscal dY/dG", "Multiplicador de saldos reales dY/d(M/P)"]}
+  rows={[
+    ["→ ∞", "Horizontal (trampa de liquidez)", "5 (sin efecto expulsión)", "0"],
+    ["20", "Ligeramente creciente", "4", "0,4"],
+    ["5", "Muy creciente", "2,5", "1"],
+    ["→ 0", "Vertical (clásica)", "0 (expulsión total)", "2 (= 1/λ)"],
+  ]}
+/>
+
+<EconDiagram
+  title="La misma expansión fiscal con tres curvas LM"
+  xLabel="Y"
+  yLabel="r (%)"
+  xMin={350}
+  xMax={470}
+  yMax={7}
+  curves={[
+    { label: "IS", points: [[350, 6], [410, 0]], tone: "blue", labelAt: 0 },
+    { label: "IS'", points: [[390, 7], [460, 0]], tone: "blue", dashed: true, labelAt: 0 },
+    { label: "LM horizontal", points: [[350, 1], [470, 1]], tone: "gray", dashed: true },
+    { label: "LM", points: [[360, 0], [470, 2.75]], tone: "green" },
+    { label: "LM vertical", points: [[400, 0], [400, 7]], tone: "red", dashed: true },
+  ]}
+  marks={[
+    { x: 400, y: 1, label: "E" },
+    { x: 450, y: 1, label: "Trampa: +50", xTick: "450" },
+    { x: 440, y: 2, label: "Normal: +40", xTick: "440" },
+    { x: 400, y: 6, label: "Clásico: 0" },
+  ]}
+  caption="Un gasto público de 10 billones desplaza la IS 50 a la derecha. Con una LM horizontal el tipo no sube y la producción aumenta 50; con una LM vertical solo sube el tipo y la producción no cambia."
+/>
+
+**Trampa de liquidez** ($\mu\to\infty$): cuando los tipos son tan bajos que la gente está dispuesta a mantener cantidades ilimitadas de dinero en lugar de bonos, aumentar la oferta monetaria ya no los baja. La política monetaria no puede mover la producción, y la fiscal no provoca efecto expulsión porque los tipos no suben. La Gran Depresión de los años treinta y el periodo de tipos cero tras 2008 suelen considerarse cercanos a esta situación.
+
+**Región clásica** ($\mu\to 0$): si la demanda de dinero no responde al tipo, $M/P=\lambda Y$ ata la producción a los saldos reales. Una expansión fiscal solo sube el tipo y expulsa la misma cantidad de gasto privado (expulsión total). La expansión monetaria se convierte en la única forma de mover la producción: la misma estructura que la teoría cuantitativa del [capítulo 3](/es/education-economics-ch13/).
+
+La sensibilidad de la inversión al tipo, $\beta$, cumple el mismo papel. Si $\beta\to 0$, el gasto no cambia con los tipos: no hay efecto expulsión (la política fiscal es fuerte) y la política monetaria no puede aumentar el gasto aunque baje los tipos (es impotente).
+
+## 3. La combinación de políticas
+
+<LectureTable
+  title="Combinaciones de políticas según la situación"
+  headers={["Situación", "Instrumento prioritario", "Motivo"]}
+  rows={[
+    ["Recesión + tipos en el suelo", "Expansión fiscal", "El canal del tipo de interés de la política monetaria está bloqueado"],
+    ["Recesión + margen para bajar tipos", "Relajación monetaria (con apoyo fiscal si procede)", "Aumenta la inversión sin efecto expulsión"],
+    ["Recalentamiento + déficit público", "Contracción fiscal + relajación monetaria", "Mantiene la producción y baja los tipos para reorientar hacia la inversión"],
+    ["Perturbación de oferta (precios ↑, producción ↓)", "IS-LM no basta", "Los precios se mueven: hace falta el OA-DA del capítulo 8"],
+  ]}
+/>
+
+Combinar una contracción fiscal con una relajación monetaria desplaza la IS a la izquierda y la LM a la derecha: los tipos bajan y la producción queda aproximadamente igual. Con la misma producción, gana peso la inversión privada frente al gasto público, lo que favorece la acumulación de capital a largo plazo.
+
+<Callout type="warning">
+No elija respuestas por la etiqueta de una escuela. Lo que hace falta es un juicio empírico sobre cuánto responden la demanda de dinero y la inversión a los tipos. Y con un objetivo de tipos de interés, que el banco central suba o no su tipo ante una expansión fiscal determina de hecho la pendiente de la LM. Incluso en una trampa de liquidez, un banco central puede actuar comprometiéndose con una senda futura de tipos (orientación sobre la política futura) o comprando bonos a largo plazo para influir en los tipos largos y en las expectativas.
+</Callout>
+
+## Ejercicio
+
+Con $\beta=10$, $\gamma=5$, $\lambda=0{,}5$ y $\mu=10$, ¿cuáles son los efectos sobre la producción de 10 billones de gasto público y de 20 de saldos reales? El denominador es $1+10\times 0{,}5/10=1{,}5$. El efecto fiscal es $5/1{,}5\times 10\approx 33{,}3$ billones y el monetario $(10/10)/1{,}5\times 20\approx 13{,}3$ billones. Al bajar $\mu$ de 20 a 10, el efecto fiscal se reduce (40 → 33,3) y el monetario crece (8 → 13,3).
+
+## Referencias
+
+- N. Gregory Mankiw, *Macroeconomics*, ch. 12
+- John Hicks, "Mr. Keynes and the 'Classics'," *Econometrica* (1937)
+- Paul Krugman, "It's Baaack: Japan's Slump and the Return of the Liquidity Trap," *Brookings Papers on Economic Activity* (1998)
+- MIT OpenCourseWare, [14.02 Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)

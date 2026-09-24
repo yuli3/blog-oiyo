@@ -1,0 +1,110 @@
+---
+track: academy
+series: macroeconomics
+chapter: 8
+title: "Macroeconomía — OA-DA y el nivel de precios"
+description: "Deriva la curva de demanda agregada dejando variar el nivel de precios en IS-LM y combina la oferta agregada a corto plazo creciente, fruto de la rigidez de precios, con la oferta agregada a largo plazo vertical para calcular, con los mismos números y un gráfico, los efectos a corto y largo plazo de una expansión monetaria y de las perturbaciones de oferta."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["economía", "macroeconomía", "OA-DA", "oferta agregada", "neutralidad del dinero"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Macroeconomía — cuando los precios se mueven, un punto de IS-LM se convierte en la curva de demanda agregada
+
+El modelo IS-LM del [capítulo 4](/es/education-economics-ch14/) mantenía fijos los precios. Cuando sube el nivel de precios, cae el poder adquisitivo real de una cantidad nominal de dinero dada, $M/P$, la LM se desplaza a la izquierda y la producción baja. Uniendo estas combinaciones de precios y producción se obtiene la **curva de demanda agregada (DA)**. Añadiendo una **curva de oferta agregada (OA)**, que indica cuánto producen las empresas a cada nivel de precios, se determinan a la vez los precios y la producción.
+
+## 1. Derivación de la curva de demanda agregada
+
+En la economía del capítulo 4 (IS: $Y=410-10r$, demanda de dinero $0{,}5Y-20r$), fijemos la cantidad nominal de dinero en $M=180$ y dejemos variable el nivel de precios $P$. La LM pasa a ser $180/P=0{,}5Y-20r$. Eliminando $r$ con la IS:
+
+<FormulaBox
+  label="Curva de demanda agregada"
+  formula="Y = 328 + \frac{72}{P}"
+  description="Con P = 1, Y = 400 (el equilibrio del capítulo 4); con P = 1,2, Y = 388; con P = 0,8, Y = 418. Un nivel de precios más alto reduce los saldos reales, sube el tipo de interés y baja la inversión (efecto Keynes)."
+/>
+
+Un **movimiento a lo largo** de la curva DA se debe a un cambio del nivel de precios; un **desplazamiento** de la propia curva, al gasto público, los impuestos, la cantidad nominal de dinero o las expectativas. Si la cantidad nominal de dinero sube un 10 %, la DA pasa a ser $Y=328+79{,}2/P$: una curva que alcanza una producción de 400 con un nivel de precios de 1,1.
+
+## 2. Oferta agregada a corto y largo plazo
+
+A **largo plazo**, salarios y precios se ajustan por completo, de modo que la producción se mantiene en el nivel potencial $Y^*$ que fijan el trabajo, el capital y la tecnología. La oferta agregada a largo plazo (OALP) es vertical en $Y^*$.
+
+A **corto plazo**, por los contratos de salarios nominales, los costes de menú y la información imperfecta, los precios no se ajustan de inmediato. Cuando los precios son más altos de lo esperado, las empresas producen más.
+
+<FormulaBox
+  label="Oferta agregada a corto plazo"
+  formula="P = P^e + \frac{1}{\alpha}\,(Y - Y^*)"
+  description="P^e es el nivel de precios esperado. La producción solo supera el potencial si los precios efectivos superan las expectativas. Cuando las expectativas alcanzan a los precios efectivos, la OACP se desplaza hacia arriba y la producción vuelve a Y*."
+/>
+
+Tomemos $Y^*=400$, $P^e=1$ y una pendiente $1/\alpha=0{,}002$.
+
+## 3. Corto y largo plazo de una expansión monetaria
+
+Si la cantidad nominal de dinero sube un 10 %:
+
+- **Corto plazo**: la nueva DA y la OACP inicial se cortan en $Y\approx 406{,}2$ y $P\approx 1{,}012$. La producción sube mucho y los precios poco.
+- **Largo plazo**: a medida que la gente eleva sus precios esperados para reflejar la subida, la OACP se desplaza hacia arriba. Cuando el precio esperado llega a 1,1, el nuevo equilibrio es $Y=400$, $P=1{,}1$. La producción vuelve al potencial y solo han subido los precios, exactamente un 10 %.
+
+<EconDiagram
+  title="Efectos a corto y largo plazo de una expansión monetaria"
+  xLabel="Y"
+  yLabel="P"
+  xMin={385}
+  xMax={425}
+  yMin={0.85}
+  yMax={1.2}
+  curves={[
+    { label: "DA", points: [[390, 1.161], [395, 1.075], [400, 1.0], [405, 0.935], [410, 0.878]], tone: "blue" },
+    { label: "DA'", points: [[395, 1.182], [400, 1.1], [405, 1.029], [410, 0.966], [415, 0.91], [420, 0.861]], tone: "blue", dashed: true },
+    { label: "OACP", points: [[385, 0.97], [425, 1.05]], tone: "green" },
+    { label: "OACP'", points: [[385, 1.07], [425, 1.15]], tone: "green", dashed: true },
+    { label: "OALP", points: [[400, 0.85], [400, 1.2]], tone: "red", anchor: "end" },
+  ]}
+  marks={[
+    { x: 400, y: 1.0, label: "E", yTick: "1,0" },
+    { x: 406.2, y: 1.012, label: "Corto plazo" },
+    { x: 400, y: 1.1, label: "Largo plazo", yTick: "1,1" },
+  ]}
+  caption="Una expansión monetaria desplaza la DA a la derecha y eleva la producción a corto plazo, pero cuando se ajustan las expectativas y la OACP se desplaza hacia arriba, a largo plazo solo suben los precios en el nivel de producción potencial."
+/>
+
+Que la cantidad nominal de dinero no pueda cambiar a largo plazo las variables reales (producción, empleo) y solo altere los precios es la **neutralidad del dinero a largo plazo**. Cuánto dura y cuán grande es el efecto a corto plazo depende de la pendiente de la OACP y de la rapidez con que se ajustan las expectativas. Esta senda de ajuste se estudia con más detalle en el [capítulo 15](/es/education-economics-ch26/).
+
+## 4. Cuatro perturbaciones
+
+<LectureTable
+  title="Resultados a corto y largo plazo por perturbación"
+  headers={["Perturbación", "Corto plazo (Y, P)", "Largo plazo"]}
+  rows={[
+    ["Sube la demanda agregada (G↑, M↑)", "Y↑ P↑", "Y = Y*, P↑"],
+    ["Baja la demanda agregada", "Y↓ P↓", "Y = Y*, P↓ (recesión larga si el ajuste es lento)"],
+    ["Perturbación de oferta adversa (petróleo↑)", "Y↓ P↑ (estanflación)", "Si es temporal se vuelve al inicio; si es permanente cae Y*"],
+    ["Perturbación de oferta favorable (productividad↑)", "Y↑ P↓", "Sube Y*"],
+  ]}
+/>
+
+Una perturbación de oferta adversa pone a las autoridades ante un dilema. Aumentar la demanda para proteger la producción sube aún más los precios; reducirla para contener los precios agrava la recesión. Las crisis del petróleo de los años setenta fueron un caso así; las opciones de política se tratan en el [capítulo 10](/es/education-economics-ch21/) y el [capítulo 13](/es/education-economics-ch24/).
+
+<Callout type="warning">
+Una oferta agregada a largo plazo vertical no significa que «la política es impotente», sino que el **nivel** de producción es independiente de la demanda agregada a largo plazo. El crecimiento que eleva la propia producción potencial es el tema de los [capítulos 11 y 12](/es/education-economics-ch22/). Y si se ignora la rigidez de precios a corto plazo y se interpreta toda recesión con una OA vertical, se califica de «natural» un desempleo causado por falta de demanda. A la inversa, ignorar el ajuste a largo plazo lleva a creer que ampliar la demanda eleva la producción para siempre.
+</Callout>
+
+## Ejercicio
+
+En esta economía, ¿cuál es el equilibrio a largo plazo si la cantidad nominal de dinero sube un 20 %? A largo plazo $Y=400$ y la DA es $Y=328+86{,}4/P$, así que $86{,}4/P=72$ da $P=1{,}2$. Los precios suben exactamente un 20 %. Los saldos reales $M/P=216/1{,}2=180$ vuelven a su nivel inicial, de modo que el tipo de interés y la inversión también regresan a sus valores iniciales.
+
+## Referencias
+
+- N. Gregory Mankiw, *Macroeconomics*, ch. 10, 14
+- Olivier Blanchard, *Macroeconomics*, ch. 7–9
+- MIT OpenCourseWare, [14.02 Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)

@@ -1,0 +1,101 @@
+---
+track: academy
+series: macroeconomics
+chapter: 4
+title: "Macroéconomie — Les bases du modèle IS-LM"
+description: "Dérive l'équilibre du marché des biens IS et celui du marché de la monnaie LM dans un modèle linéaire, puis compare avec les mêmes chiffres et un graphique l'effet d'éviction d'une hausse des dépenses publiques et la transmission d'une expansion monétaire."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["économie", "macroéconomie", "IS-LM", "effet d'éviction", "statique comparative"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Macroéconomie — la production de court terme est fixée par le taux qui équilibre à la fois le marché des biens et celui de la monnaie
+
+Si les prix sont fixes à court terme, la production est déterminée par la demande. Mais une partie de la demande, l'investissement, dépend du taux d'intérêt ; ce taux se forme sur le marché de la monnaie ; et la demande de monnaie dépend à son tour de la production. Examiner séparément marché des biens et marché de la monnaie rompt cette boucle. Le modèle **IS-LM** place les deux marchés sur un même plan et les résout ensemble. Ce chapitre construit IS et LM avec les mêmes chiffres et compare deux politiques. La formule générale de la solution simultanée figure au [chapitre 23](/fr/education-economics-ch39/).
+
+## 1. IS : l'équilibre du marché des biens
+
+Considérons une économie avec une consommation $C=20+0{,}8(Y-T)$, des impôts $T=10$, un investissement $I=40-2r$ (r en %) et des dépenses publiques $G=30$ (en milliers de milliards de wons). En substituant dans l'équilibre $Y=C+I+G$ :
+
+$$Y=20+0{,}8(Y-10)+40-2r+30 \quad\Rightarrow\quad Y=410-10r$$
+
+Quand le taux d'intérêt augmente de 1 point, l'investissement baisse de 2 000 milliards de wons et, via le multiplicateur $1/(1-0{,}8)=5$, la production baisse de 10 000 milliards. C'est pourquoi IS est décroissante.
+
+<FormulaBox
+  label="Deux facteurs qui fixent la pente d'IS"
+  formula="Y = \frac{1}{1-c}\left(\bar A - b\,r\right)"
+  description="Ā est la dépense indépendante du taux et b la sensibilité de l'investissement au taux. Plus le multiplicateur 1/(1−c) ou b est grand, plus une variation donnée du taux modifie la production, et plus IS est plate. Une hausse de G déplace IS vers la droite."
+/>
+
+## 2. LM : l'équilibre du marché de la monnaie
+
+Soit une demande de monnaie réelle $L=0{,}5Y-20r$ et des encaisses réelles $M/P=180$. À l'équilibre $M/P=L$ :
+
+$$180=0{,}5Y-20r \quad\Rightarrow\quad r=0{,}025Y-9$$
+
+Quand la production augmente, la demande de monnaie de transaction augmente ; les encaisses étant fixes, le taux doit monter pour réduire la demande de monnaie au détriment des obligations. C'est pourquoi LM est croissante. Plus la demande de monnaie est sensible au taux (plus le 20 est grand), plus LM est plate. Une hausse de la masse monétaire ou une baisse des prix déplace LM vers la droite.
+
+## 3. L'équilibre et deux politiques
+
+En résolvant IS et LM ensemble, $Y=410-10(0{,}025Y-9)$ donne $Y=400$ et $r=1\,\%$.
+
+**Expansion budgétaire** : augmenter $G$ de 10 000 milliards de wons déplace IS en $Y=460-10r$. Si le taux restait inchangé, la production augmenterait de tout l'effet multiplicateur, 50 000 milliards, jusqu'à 450. Mais la hausse de la production accroît la demande de monnaie et le taux monte. Le nouvel équilibre est $Y=440$, $r=2\,\%$. La hausse du taux réduit l'investissement de 2 000 milliards, ce qui, via le multiplicateur, évince 10 000 milliards de production. C'est l'**effet d'éviction**.
+
+**Expansion monétaire** : faire passer les encaisses réelles de 180 à 200 déplace LM en $r=0{,}025Y-10$. Le nouvel équilibre est $Y=408$, $r=0{,}2\,\%$. La baisse du taux stimule l'investissement, qui accroît la production.
+
+<EconDiagram
+  title="IS-LM et l'effet d'éviction d'une expansion budgétaire"
+  xLabel="Y"
+  yLabel="r (%)"
+  xMin={350}
+  xMax={470}
+  yMax={4}
+  curves={[
+    { label: "IS", points: [[370, 4], [410, 0]], tone: "blue", labelAt: 0 },
+    { label: "IS'", points: [[420, 4], [460, 0]], tone: "blue", dashed: true, labelAt: 0 },
+    { label: "LM", points: [[360, 0], [470, 2.75]], tone: "green" },
+  ]}
+  marks={[
+    { x: 400, y: 1, label: "E", guide: true, xTick: "400", yTick: "1" },
+    { x: 440, y: 2, label: "E'", guide: true, xTick: "440", yTick: "2" },
+    { x: 450, y: 1, label: "Taux fixe", xTick: "450" },
+  ]}
+  caption="Si le taux était resté à 1 %, la production aurait atteint 450, mais le taux monte à 2 % le long de LM et la production s'arrête à 440. L'écart de 10 000 milliards entre 450 et 440 est l'effet multiplicateur de l'investissement évincé."
+/>
+
+<LectureTable
+  title="Chocs, déplacements et résultats"
+  headers={["Choc", "Déplacement", "Taux d'intérêt", "Production"]}
+  rows={[
+    ["Hausse de G", "IS vers la droite", "↑", "↑ (moins que le multiplicateur à cause de l'éviction)"],
+    ["Baisse de T", "IS vers la droite", "↑", "↑"],
+    ["Hausse de M", "LM vers la droite", "↓", "↑"],
+    ["Hausse de P", "LM vers la gauche (M/P baisse)", "↑", "↓"],
+    ["Dégradation des anticipations des entreprises", "IS vers la gauche", "↓", "↓"],
+  ]}
+/>
+
+Le mécanisme de l'avant-dernière ligne, où une hausse des prix déplace LM vers la gauche et réduit la production, engendre la courbe de demande globale du [chapitre 8](/fr/education-economics-ch19/).
+
+<Callout type="warning">
+IS-LM est un modèle de référence qui suppose une économie fermée, des prix fixes et des anticipations constantes. L'économie ouverte est traitée au [chapitre 3 de Finance internationale](/fr/education-international-finance-ch3/), l'ajustement des prix aux chapitres 8 et 15, et les anticipations au chapitre 9. De plus, comme de nombreuses banques centrales ciblent un taux plutôt que la masse monétaire, il est en pratique plus fidèle à leur fonctionnement de tracer LM comme « une droite horizontale au taux choisi par la banque centrale ». L'éviction due à une expansion budgétaire dépend alors de la hausse ou non de ce taux par la banque centrale.
+</Callout>
+
+## Exercice
+
+Dans cette économie, quel est le nouvel équilibre si les impôts baissent de 10 000 milliards de wons (T = 0) ? La baisse d'impôt n'augmente d'abord la consommation que de $0{,}8\times 10=8$ milliers de milliards, donc IS devient $0{,}2Y=90-2r$, soit $Y=450-10r$. Avec LM, $Y=450-0{,}25Y+90$ donne $Y=432$ et $r=1{,}8\,\%$. Les mêmes 10 000 milliards ont un effet plus faible sous forme de baisse d'impôt (32 000 milliards) que de dépense publique (40 000 milliards), car une partie est épargnée au premier tour.
+
+## Références
+
+- N. Gregory Mankiw, *Macroeconomics*, ch. 11–12
+- John Hicks, "Mr. Keynes and the 'Classics'," *Econometrica* (1937)
+- MIT OpenCourseWare, [14.02 Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)

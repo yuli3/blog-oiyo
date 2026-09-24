@@ -1,0 +1,110 @@
+---
+track: academy
+series: macroeconomics
+chapter: 8
+title: "Macroéconomie — Le modèle OA-DA et le niveau des prix"
+description: "Dérive la courbe de demande globale en faisant varier le niveau des prix dans IS-LM, puis combine l'offre globale de court terme croissante, due à la rigidité des prix, et l'offre globale de long terme verticale pour calculer, avec les mêmes chiffres et un graphique, les effets de court et de long terme d'une expansion monétaire et des chocs d'offre."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["économie", "macroéconomie", "OA-DA", "offre globale", "neutralité de la monnaie"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Macroéconomie — quand les prix bougent, un point d'IS-LM devient la courbe de demande globale
+
+Le modèle IS-LM du [chapitre 4](/fr/education-economics-ch14/) fixait les prix. Lorsque le niveau des prix monte, le pouvoir d'achat réel d'une masse monétaire nominale donnée, $M/P$, diminue, LM se déplace vers la gauche et la production baisse. Relier ces combinaisons de prix et de production donne la **courbe de demande globale (DA)**. En y ajoutant une **courbe d'offre globale (OA)**, qui indique combien les entreprises produisent à chaque niveau de prix, on détermine ensemble les prix et la production.
+
+## 1. Dériver la courbe de demande globale
+
+Dans l'économie du chapitre 4 (IS : $Y=410-10r$, demande de monnaie $0{,}5Y-20r$), fixons la masse monétaire nominale à $M=180$ et laissons le niveau des prix $P$ variable. LM devient $180/P=0{,}5Y-20r$. En éliminant $r$ grâce à IS :
+
+<FormulaBox
+  label="Courbe de demande globale"
+  formula="Y = 328 + \frac{72}{P}"
+  description="À P = 1, Y = 400 (l'équilibre du chapitre 4) ; à P = 1,2, Y = 388 ; à P = 0,8, Y = 418. Un niveau des prix plus élevé réduit les encaisses réelles, fait monter le taux et baisser l'investissement (effet Keynes)."
+/>
+
+Un **mouvement le long** de la courbe DA est dû à une variation du niveau des prix ; un **déplacement** de la courbe elle-même est dû aux dépenses publiques, aux impôts, à la masse monétaire nominale ou aux anticipations. Si la masse monétaire nominale augmente de 10 %, DA devient $Y=328+79{,}2/P$ : une courbe qui atteint la production de 400 au niveau de prix 1,1.
+
+## 2. Offre globale de court et de long terme
+
+À **long terme**, salaires et prix s'ajustent pleinement : la production reste au niveau potentiel $Y^*$ fixé par le travail, le capital et la technologie. L'offre globale de long terme (OALT) est verticale en $Y^*$.
+
+À **court terme**, en raison des contrats de salaires nominaux, des coûts de menu et de l'information imparfaite, les prix ne s'ajustent pas immédiatement. Lorsque les prix sont plus élevés que prévu, les entreprises produisent davantage.
+
+<FormulaBox
+  label="Offre globale de court terme"
+  formula="P = P^e + \frac{1}{\alpha}\,(Y - Y^*)"
+  description="P^e est le niveau des prix anticipé. La production ne dépasse le potentiel que si les prix effectifs dépassent les anticipations. Quand les anticipations rattrapent les prix effectifs, l'OACT se déplace vers le haut et la production revient à Y*."
+/>
+
+Prenons $Y^*=400$, $P^e=1$ et une pente $1/\alpha=0{,}002$.
+
+## 3. Court et long terme d'une expansion monétaire
+
+Si la masse monétaire nominale augmente de 10 % :
+
+- **Court terme** : la nouvelle DA et l'OACT initiale se croisent en $Y\approx 406{,}2$ et $P\approx 1{,}012$. La production augmente beaucoup et les prix un peu.
+- **Long terme** : à mesure que les agents relèvent leurs prix anticipés pour tenir compte de la hausse, l'OACT se déplace vers le haut. Quand le prix anticipé atteint 1,1, le nouvel équilibre est $Y=400$, $P=1{,}1$. La production revient au potentiel et seuls les prix ont augmenté, exactement de 10 %.
+
+<EconDiagram
+  title="Effets de court et de long terme d'une expansion monétaire"
+  xLabel="Y"
+  yLabel="P"
+  xMin={385}
+  xMax={425}
+  yMin={0.85}
+  yMax={1.2}
+  curves={[
+    { label: "DA", points: [[390, 1.161], [395, 1.075], [400, 1.0], [405, 0.935], [410, 0.878]], tone: "blue" },
+    { label: "DA'", points: [[395, 1.182], [400, 1.1], [405, 1.029], [410, 0.966], [415, 0.91], [420, 0.861]], tone: "blue", dashed: true },
+    { label: "OACT", points: [[385, 0.97], [425, 1.05]], tone: "green" },
+    { label: "OACT'", points: [[385, 1.07], [425, 1.15]], tone: "green", dashed: true },
+    { label: "OALT", points: [[400, 0.85], [400, 1.2]], tone: "red", anchor: "end" },
+  ]}
+  marks={[
+    { x: 400, y: 1.0, label: "E", yTick: "1,0" },
+    { x: 406.2, y: 1.012, label: "Court terme" },
+    { x: 400, y: 1.1, label: "Long terme", yTick: "1,1" },
+  ]}
+  caption="Une expansion monétaire déplace DA vers la droite et accroît la production à court terme ; mais lorsque les anticipations s'ajustent et que l'OACT se déplace vers le haut, seuls les prix augmentent à long terme, au niveau de la production potentielle."
+/>
+
+Le fait que la monnaie nominale ne puisse pas modifier les variables réelles (production, emploi) à long terme et ne change que les prix est la **neutralité de la monnaie à long terme**. L'ampleur et la durée de l'effet de court terme dépendent de la pente de l'OACT et de la vitesse d'ajustement des anticipations. Ce chemin d'ajustement est approfondi au [chapitre 15](/fr/education-economics-ch26/).
+
+## 4. Quatre chocs
+
+<LectureTable
+  title="Résultats de court et de long terme selon le choc"
+  headers={["Choc", "Court terme (Y, P)", "Long terme"]}
+  rows={[
+    ["Hausse de la demande globale (G↑, M↑)", "Y↑ P↑", "Y = Y*, P↑"],
+    ["Baisse de la demande globale", "Y↓ P↓", "Y = Y*, P↓ (récession longue si l'ajustement est lent)"],
+    ["Choc d'offre défavorable (prix du pétrole↑)", "Y↓ P↑ (stagflation)", "Retour au point de départ s'il est temporaire ; Y* baisse s'il est permanent"],
+    ["Choc d'offre favorable (productivité↑)", "Y↑ P↓", "Y* augmente"],
+  ]}
+/>
+
+Un choc d'offre défavorable place les autorités devant un dilemme. Stimuler la demande pour protéger la production fait encore monter les prix ; la freiner pour contenir les prix aggrave la récession. Les chocs pétroliers des années 1970 en sont un exemple ; les options de politique économique sont traitées aux [chapitre 10](/fr/education-economics-ch21/) et [chapitre 13](/fr/education-economics-ch24/).
+
+<Callout type="warning">
+Une offre globale de long terme verticale ne signifie pas que « la politique est impuissante », mais que le **niveau** de la production est indépendant de la demande globale à long terme. La croissance qui augmente la production potentielle elle-même fait l'objet des [chapitres 11 et 12](/fr/education-economics-ch22/). Et ignorer la rigidité des prix à court terme pour lire toute récession avec une OA verticale conduit à qualifier de « naturel » un chômage dû à une demande insuffisante. À l'inverse, ignorer l'ajustement de long terme conduit à croire qu'une relance de la demande augmente la production indéfiniment.
+</Callout>
+
+## Exercice
+
+Dans cette économie, quel est l'équilibre de long terme si la masse monétaire nominale augmente de 20 % ? À long terme $Y=400$ et DA est $Y=328+86{,}4/P$, donc $86{,}4/P=72$ donne $P=1{,}2$. Les prix augmentent exactement de 20 %. Les encaisses réelles $M/P=216/1{,}2=180$ reviennent à leur niveau initial, de sorte que taux d'intérêt et investissement retrouvent aussi leurs valeurs initiales.
+
+## Références
+
+- N. Gregory Mankiw, *Macroeconomics*, ch. 10, 14
+- Olivier Blanchard, *Macroeconomics*, ch. 7–9
+- MIT OpenCourseWare, [14.02 Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)

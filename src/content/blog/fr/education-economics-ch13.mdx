@@ -1,0 +1,96 @@
+---
+track: academy
+series: macroeconomics
+chapter: 3
+title: "Macroéconomie — Demande et offre de monnaie, et fuites du multiplicateur"
+description: "Présente les fonctions de la monnaie et les agrégats monétaires, calcule le multiplicateur monétaire à partir de la base monétaire avec le ratio de billets, le taux de réserves et les réserves excédentaires, explique pourquoi la base monétaire devient endogène sous un ciblage du taux d'intérêt, et traite du lien entre prix des obligations et taux ainsi que des conditions de la théorie quantitative de la monnaie."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["économie", "macroéconomie", "multiplicateur monétaire", "base monétaire", "théorie quantitative de la monnaie"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Macroéconomie — la banque centrale agit sur la base monétaire, pas sur un multiple automatique des dépôts
+
+Si le [chapitre 8 d'Introduction à l'économie](/fr/academy-economics-basics-ch8/) a montré la limite supérieure du multiplicateur monétaire, ce chapitre explique pourquoi le multiplicateur reste en deçà de cette limite, et comment le sens de causalité des manuels s'est inversé lorsque les banques centrales sont passées d'un ciblage de la masse monétaire à un ciblage des taux d'intérêt. La fonction de demande de monnaie est approfondie au [chapitre 16](/fr/education-economics-ch27/) et les bilans bancaires au [chapitre 18](/fr/education-economics-ch29/).
+
+## 1. Fonctions de la monnaie et agrégats
+
+La monnaie sert d'**intermédiaire des échanges** (elle supprime la double coïncidence des besoins qu'exige le troc), d'**unité de compte** (elle exprime les prix dans une seule unité) et de **réserve de valeur** (elle transporte le pouvoir d'achat dans le temps). Obligations et actions remplissent aussi la troisième fonction, mais la monnaie offre la plus grande liquidité — elle se dépense immédiatement — au prix d'un faible rendement.
+
+<LectureTable
+  title="Agrégats monétaires"
+  headers={["Agrégat", "Composition", "Nature"]}
+  rows={[
+    ["Base monétaire (H)", "Billets détenus par le public + réserves des banques", "Engagement de la banque centrale"],
+    ["M1 (monnaie au sens étroit)", "Billets + dépôts à vue et à accès immédiat", "Moyen de paiement"],
+    ["M2 (monnaie au sens large)", "M1 + dépôts à terme, instruments de marché, etc.", "Paiement + épargne de court terme"],
+  ]}
+/>
+
+## 2. Le multiplicateur monétaire : de la base monétaire à la masse monétaire
+
+Les banques ne gardent qu'une partie de leurs dépôts en réserves et prêtent le reste. Les prêts deviennent des dépôts dans d'autres banques, dont une partie est à nouveau prêtée. Ce processus transforme la base monétaire en une masse monétaire plusieurs fois plus grande.
+
+Avec un ratio billets/dépôts $c$, un taux de réserves obligatoires $r$ et un taux de réserves excédentaires $e$, la masse monétaire est $M=C+D$, la base monétaire $H=C+R$, et $C=cD$, $R=(r+e)D$, d'où :
+
+<FormulaBox
+  label="Multiplicateur monétaire"
+  formula="\frac{M}{H}=\frac{1+c}{c+r+e}"
+  description="Avec r = 10 %, c = 20 % et e = 0, le multiplicateur vaut 1,2/0,3 = 4 : 1 000 milliards de wons de base monétaire deviennent 4 000 milliards de monnaie. Sans fuite en billets ni réserves excédentaires, la limite supérieure est 1/r = 10."
+/>
+
+Le multiplicateur est **une limite supérieure, pas une valeur fixe**. Si le public détient beaucoup de billets ($c$↑), les prêts ne reviennent pas sous forme de dépôts ; si les banques accumulent des réserves excédentaires au lieu de prêter ($e$↑), la chaîne se rompt. Avec 10 % de réserves excédentaires, le multiplicateur tombe à $1{,}2/0{,}4=3$. À l'inverse, même si le taux de réserves obligatoires est abaissé à 5 %, le multiplicateur revient à $1{,}2/0{,}3=4$ si les banques gardent 5 % de réserves excédentaires. Changement institutionnel et création effective de crédit sont deux chiffres différents.
+
+Après la crise financière de 2008, de nombreuses banques centrales ont acheté massivement des actifs et fortement accru la base monétaire, mais la masse monétaire n'a pas augmenté en proportion, car les banques ont accumulé des réserves excédentaires. C'est un cas où $e$ augmente et où le multiplicateur s'effondre.
+
+## 3. Des objectifs de masse monétaire aux objectifs de taux
+
+<LectureTable
+  title="Ce qui est fixé selon le cadre opérationnel"
+  headers={["Objectif opérationnel", "Fixé par la banque centrale", "Déterminé par le marché"]}
+  rows={[
+    ["Objectif de masse monétaire", "Base monétaire ou masse monétaire", "Taux d'intérêt de court terme"],
+    ["Objectif de taux", "Taux directeur (taux de marché de court terme)", "Base monétaire (liquidité fournie)"],
+  ]}
+/>
+
+De nombreuses banques centrales, dont la Banque de Corée, fixent un taux directeur et fournissent ou retirent autant de liquidité que nécessaire pour maintenir les taux de marché de court terme à ce niveau. Quand les banques prêtent davantage et ont besoin de plus de réserves, la banque centrale les leur fournit pour défendre le taux. Dans ce cadre, la causalité ne va pas de « base monétaire → multiplicateur → masse monétaire » mais de « demande de crédit → dépôts → besoin de réserves → base monétaire ». La base monétaire est passée du statut de variable exogène à celui de variable endogène.
+
+## 4. Taux d'intérêt et prix des obligations
+
+Une obligation zéro-coupon payant 10 000 wons dans un an vaut $P=10\,000/(1+i)$ : environ 9 804 wons à 2 % et 9 615 wons à 4 %. Hausse des taux et baisse du prix des obligations sont deux façons de décrire le même événement. Quand la banque centrale achète des obligations (opérations d'open market), leur prix monte et les taux baissent.
+
+## 5. La théorie quantitative de la monnaie et ses conditions
+
+<FormulaBox
+  label="Équation des échanges"
+  formula="MV = PY"
+  description="Masse monétaire M, vitesse de circulation V, niveau des prix P, production réelle Y. Elle est proche d'une identité vraie par définition."
+/>
+
+La **théorie quantitative de la monnaie** ajoute deux hypothèses à cette identité. Si la vitesse $V$ est stable et que la production $Y$ est fixée au potentiel indépendamment de la monnaie, une hausse de $M$ entraîne une hausse de $P$. En taux de croissance, $\pi\approx g_M+g_V-g_Y$. Si la monnaie croît de 8 % par an, la production réelle de 3 % et que la vitesse est constante, l'inflation est d'environ 5 %.
+
+Cette relation se vérifie bien à long terme et dans les pays à forte inflation, mais mal à court terme. À court terme, les prix sont rigides, si bien que $Y$ réagit à la monnaie, et lorsque les taux changent, la demande de monnaie se modifie et $V$ bouge aussi.
+
+<Callout type="warning">
+« Créer de la monnaie ne fait qu'augmenter les prix » est une proposition de long terme. À court terme, production et vitesse bougent aussi, de sorte que la façon dont une hausse de la monnaie se répercute sur les prix n'est pas déterminée. À l'inverse, lorsque les taux sont à leur plancher, comme dans une trappe à liquidité, monnaie et obligations deviennent quasi substituables, et acheter des obligations pour accroître la base monétaire ne fait plus baisser les taux. C'est la partie horizontale de la courbe LM du chapitre 4.
+</Callout>
+
+## Exercice
+
+Avec $r=10\,\%$, $c=20\,\%$ et $e=0$, le multiplicateur vaut 4. Combien vaut-il si les banques gardent 10 % de réserves excédentaires ? $1{,}2/(0{,}2+0{,}1+0{,}1)=3$. La monnaie créée à partir de 1 000 milliards de wons de base passe de 4 000 à 3 000 milliards. Pour maintenir la masse monétaire, la banque centrale devrait porter la base monétaire à environ 1 330 milliards de wons.
+
+## Références
+
+- Banque de Corée, [Cadre de la politique monétaire](https://www.bok.or.kr/portal/main/contents.do?menuNo=200287) (en coréen)
+- N. Gregory Mankiw, *Macroeconomics*, ch. 4–5
+- MIT OpenCourseWare, [14.02 Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)

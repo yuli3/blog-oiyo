@@ -1,0 +1,103 @@
+---
+track: academy
+series: macroeconomics
+chapter: 5
+title: "Macroeconomía — La función de consumo: de Keynes a la renta permanente"
+description: "Calcula el multiplicador con la función de consumo keynesiana y la cruz keynesiana y, partiendo del enigma de Kuznets, presenta las hipótesis de la renta permanente y del ciclo vital, el consumo como paseo aleatorio y por qué las restricciones de liquidez cambian la propensión marginal a consumir, con números y un gráfico."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["economía", "macroeconomía", "función de consumo", "renta permanente", "ciclo vital"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Macroeconomía — el consumo depende de los recursos de toda la vida, no solo de la renta de este año
+
+El consumo es el mayor componente del PIB, y su sensibilidad a la renta (la propensión marginal a consumir) determina el tamaño del multiplicador. Este capítulo calcula el multiplicador con la función de consumo simple de Keynes y después pasa a las teorías que se preguntan a **qué renta** se refiere esa propensión marginal. Una ayuda puntual y una rebaja fiscal permanente no son el mismo número.
+
+## 1. Función de consumo keynesiana y cruz keynesiana
+
+<FormulaBox
+  label="Función de consumo keynesiana"
+  formula="C = c_0 + c\,Y_d,\qquad 0<c<1"
+  description="c_0 es el consumo autónomo, c la propensión marginal a consumir (PMgC) e Y_d = Y − T la renta disponible. La propensión media a consumir C/Y_d baja al subir la renta."
+/>
+
+Con $C=20+0{,}8(Y-10)$ e inversión más gasto público $I+G=50$ (billones de wones), el gasto planeado es $AE=62+0{,}8Y$. El equilibrio está donde el gasto planeado iguala la producción: $Y=62+0{,}8Y$, es decir, $Y=310$ billones.
+
+<EconDiagram
+  title="La cruz keynesiana y el multiplicador"
+  xLabel="Y"
+  yLabel="AE"
+  xMax={400}
+  yMax={400}
+  curves={[
+    { label: "45°", points: [[0, 0], [400, 400]], tone: "gray", dashed: true },
+    { label: "AE", points: [[0, 62], [400, 382]], tone: "blue" },
+    { label: "AE'", points: [[0, 72], [400, 392]], tone: "blue", dashed: true, labelAt: 0 },
+  ]}
+  marks={[
+    { x: 310, y: 310, label: "E", guide: true, xTick: "310" },
+    { x: 360, y: 360, label: "E'", guide: true, xTick: "360" },
+  ]}
+  caption="Cuando el gasto público sube 10 billones y el AE se desplaza 10 hacia arriba, la producción de equilibrio sube 50 billones, porque el 80 % de cada aumento de renta vuelve a gastarse una y otra vez."
+/>
+
+Si el gasto público sube 10 billones de wones, el equilibrio es $Y=72+0{,}8Y$, es decir, 360 billones. El multiplicador es $1/(1-0{,}8)=5$. Con una PMgC de 0,6 baja a 2,5: el tamaño del multiplicador es muy sensible a la PMgC.
+
+## 2. El enigma de Kuznets
+
+La función de consumo keynesiana se ajustaba bien a los datos transversales de hogares y a series cortas: los hogares con más renta consumían una proporción menor. Pero cuando Kuznets examinó datos de varias décadas, la propensión media a consumir era casi constante. Esta discrepancia —una propensión media que baja a corto plazo pero no a largo— es el **enigma de Kuznets**. Las dos teorías siguientes le dieron respuesta.
+
+## 3. Renta permanente y ciclo vital
+
+**Hipótesis de la renta permanente de Friedman**: la renta se compone de **renta permanente**, esperada a largo plazo, y **renta transitoria**, y el consumo responde sobre todo a la permanente. Un hogar cuya renta es temporalmente alta en un año concreto presenta ese año una tasa de consumo medida baja. Por eso en los datos transversales los hogares de renta alta parecen tener una propensión media baja. A largo plazo las rentas transitorias se compensan y la propensión media es constante.
+
+**Hipótesis del ciclo vital de Modigliani**: las personas intentan repartir de manera uniforme sus recursos a lo largo de la vida. Ahorran mientras trabajan y desahorran en la jubilación.
+
+<FormulaBox
+  label="Consumo del ciclo vital (forma simple con tipo de interés nulo)"
+  formula="C = \frac{W + R\,Y}{T}"
+  description="W es la riqueza actual, R los años de trabajo restantes, Y la renta anual y T los años de vida restantes. Con una riqueza de 200 millones de wones, 20 años de trabajo a 50 millones anuales y 40 años de vida por delante, C = (200 millones + 1.000 millones)/40 = 30 millones de wones."
+/>
+
+En el ejemplo, esta persona ahorra 20 millones de wones al año mientras trabaja. Si su riqueza aumenta en 100 millones (por ejemplo, por la subida del precio de la vivienda), su consumo anual sube $100\text{ millones}/40=2{,}5$ millones: la propensión marginal a consumir de la riqueza es 0,025.
+
+<LectureTable
+  title="La PMgC depende del tipo de cambio en la renta"
+  headers={["Cambio en la renta", "Keynes", "Renta permanente / ciclo vital"]}
+  rows={[
+    ["Rebaja fiscal permanente", "Grande", "Grande"],
+    ["Ayuda puntual", "Grande", "Pequeña (poca parte de la renta de toda la vida)"],
+    ["Anuncio de una renta futura mayor", "Nula (renta actual sin cambios)", "El consumo sube ya"],
+    ["Renta transitoria de un hogar con restricción de liquidez", "Grande", "Grande (querría suavizar pero no puede endeudarse)"],
+  ]}
+/>
+
+## 4. Consumo como paseo aleatorio y restricciones de liquidez
+
+Hall demostró que, al combinar la renta permanente con las expectativas racionales, los cambios del consumo deberían ser impredecibles, porque los cambios previsibles de la renta ya están incorporados al consumo de hoy (**consumo como paseo aleatorio**). En los datos, sin embargo, el consumo responde a menudo a aumentos previsibles de la renta, como devoluciones fiscales programadas: es la **sensibilidad excesiva**.
+
+Una razón son las **restricciones de liquidez**. Aunque la renta futura sea alta, un hogar que no puede endeudarse ahora no puede suavizar su consumo. En un estudio sobre las devoluciones fiscales de EE. UU. en 2008 (Parker y coautores), los hogares gastaron una parte considerable de la devolución en un trimestre, y los que tenían pocos activos líquidos respondieron más. Los límites de las tarjetas de crédito y las condiciones hipotecarias son canales que cambian la PMgC agregada. El papel del sesgo del presente y de la contabilidad mental se trata en los [capítulos 4 y 6 de Economía conductual](/es/academy-behavioral-economics-ch4/).
+
+<Callout type="warning">
+Aplicar una PMgC media de 0,8 a todas las políticas sobrestima mucho el multiplicador. Cuánto de una ayuda puntual se filtra al ahorro y a devolver deudas depende de la renta, la riqueza y el acceso al crédito de los hogares que la reciben. Además, la **paradoja del ahorro** —si todos intentan ahorrar más a la vez, la renta cae y el ahorro total no sube como se pretendía— se refiere al corto plazo con demanda insuficiente. No contradice la idea del [capítulo 11](/es/education-economics-ch22/) de que, a largo plazo, el ahorro sostiene la acumulación de capital y el crecimiento.
+</Callout>
+
+## Ejercicio
+
+En esta economía se paga una transferencia puntual de 10 billones de wones y la PMgC de los hogares que la reciben es 0,3. ¿Cuál es el aumento del consumo en la primera ronda? 3 billones. Si los hogares cuya renta sube después tienen una PMgC de 0,8, el efecto total es $3\times 5=15$ billones. Aplicar desde el principio el 0,8 de Keynes, $10\times 0{,}8\times 5=40$ billones, lo sobrestima más del doble.
+
+## Referencias
+
+- N. Gregory Mankiw, *Macroeconomics*, ch. 16
+- Milton Friedman, *A Theory of the Consumption Function* (1957)
+- Robert Hall, "Stochastic Implications of the Life Cycle–Permanent Income Hypothesis," *Journal of Political Economy* (1978)
+- Jonathan Parker et al., "Consumer Spending and the Economic Stimulus Payments of 2008," *American Economic Review* (2013)

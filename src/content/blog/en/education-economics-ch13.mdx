@@ -1,65 +1,96 @@
 ---
 track: academy
-series: economics-basics
-chapter: 13
-title: Business Cycles and Economic Growth
-description: >-
-  Analyze the causes of short-term business cycles and the drivers of long-term
-  economic growth. Focus on the role of capital accumulation and technological
-  progress in the Solow growth model.
+series: macroeconomics
+chapter: 3
+title: "Macroeconomics — Money Demand and Supply, and Leakages from the Multiplier"
+description: "Covers the functions of money and monetary aggregates, computes the money multiplier from base money using the currency ratio, reserve ratio and excess reserves, explains why base money becomes endogenous under interest-rate targeting, and discusses bond prices and interest rates and the conditions for the quantity theory of money."
 pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
 category: Economics
-tags:
-  - Education
-  - economics
+tags: ["economics", "macroeconomics", "money multiplier", "base money", "quantity theory of money"]
 locale: en
 author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
 
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# Business Cycles and Economic Growth
+# Macroeconomics — What a Central Bank Changes Is Base Money, Not an Automatic Multiple of Deposits
 
-The ultimate goal of macroeconomics is to overcome recessions and achieve sustainable growth. This chapter studies short-term fluctuations (business cycles) and long-term trends (economic growth).
+If [Introduction to Economics, Chapter 8](/en/academy-economics-basics-ch8/) showed the upper limit of the money multiplier, this chapter explains why the multiplier falls short of that limit and how the textbook direction of causation was reversed as central banks moved from targeting the money supply to targeting interest rates. The money demand function is covered further in [Chapter 16](/en/education-economics-ch27/) and bank balance sheets in [Chapter 18](/en/education-economics-ch29/).
 
----
+## 1. Functions of money and monetary aggregates
 
-## 1. Business Cycle
+Money serves as a **medium of exchange** (removing barter's need for a double coincidence of wants), a **unit of account** (expressing prices in one unit) and a **store of value** (carrying purchasing power into the future). Bonds and shares also perform the third function, but money offers the highest liquidity — it can be spent immediately — at the cost of a low return.
 
-A phenomenon where real GDP periodically rises and falls around potential GDP.
+<LectureTable
+  title="Monetary aggregates"
+  headers={["Aggregate", "Components", "Nature"]}
+  rows={[
+    ["Base money (H)", "Currency held by the public + bank reserves", "Liability of the central bank"],
+    ["M1 (narrow money)", "Currency + demand and instant-access deposits", "Means of payment"],
+    ["M2 (broad money)", "M1 + time deposits, market instruments, etc.", "Payment + short-term saving"],
+  ]}
+/>
 
-- **Phases**: Recovery $\rightarrow$ Expansion (Peak) $\rightarrow$ Contraction $\rightarrow$ Recession (Trough).
-- **Causes**:
-  - **New Keynesian School**: Variations in aggregate demand and price rigidity are the causes.
-  - **Real Business Cycle (RBC) Theory**: Real shocks, such as technological shocks or sudden changes in oil prices, are the causes.
+## 2. The money multiplier: from base money to the money supply
 
----
+Banks keep only part of their deposits as reserves and lend the rest. The loans become deposits at other banks, and part of those is lent again. This process turns base money into a money supply several times larger.
 
-## 2. Economic Growth Theory
+With a currency–deposit ratio $c$, a required reserve ratio $r$ and an excess reserve ratio $e$, the money supply is $M=C+D$, base money is $H=C+R$, and $C=cD$, $R=(r+e)D$, so:
 
-A long-term phenomenon where the production possibilities frontier itself shifts outward.
+<FormulaBox
+  label="Money multiplier"
+  formula="\frac{M}{H}=\frac{1+c}{c+r+e}"
+  description="With r = 10%, c = 20% and e = 0, the multiplier is 1.2/0.3 = 4: 1 trillion won of base money becomes 4 trillion won of money. Without currency leakage or excess reserves, the upper limit is 1/r = 10."
+/>
 
-### (1) Solow Growth Model
+The multiplier is **an upper limit, not a fixed number**. If people hold a lot of currency ($c$↑), loans do not come back as deposits; if banks build excess reserves instead of lending ($e$↑), the chain is broken. If banks hold excess reserves of 10%, the multiplier falls to $1.2/0.4=3$. Conversely, even if the reserve requirement is cut to 5%, the multiplier is back at $1.2/0.3=4$ if banks hold 5% excess reserves. Institutional changes and actual credit creation are different numbers.
 
-- **Capital Accumulation**: Increasing capital through savings increases production, but since the marginal product of capital is diminishing, capital alone cannot lead to infinite growth.
-- **Steady State**: A state where investment in capital equals the depreciation of capital, so that capital and output per worker no longer change.
-- **Role of Saving Rate**: A higher saving rate increases the **level** of income per worker in the long run, but it does not permanently increase the long-run **growth rate**.
-- **Technological Progress**: The only source of sustained growth in income per worker in the long run is **technological progress**.
+After the 2008 financial crisis many central banks bought assets on a large scale and expanded base money greatly, but the money supply did not grow proportionally because banks accumulated excess reserves. This is an example of $e$ rising and the multiplier collapsing.
 
-### (2) Convergence Hypothesis
+## 3. From money-supply targets to interest-rate targets
 
-- A hypothesis that, given similar technology levels, poorer countries with lower initial capital will grow faster than richer countries and eventually catch up.
+<LectureTable
+  title="What is set under each operating framework"
+  headers={["Operating target", "Set by the central bank", "Determined in the market"]}
+  rows={[
+    ["Money-supply target", "Base money or the money supply", "Short-term interest rate"],
+    ["Interest-rate target", "Policy rate (short-term market rate)", "Base money (amount of liquidity supplied)"],
+  ]}
+/>
 
----
+Many central banks, including the Bank of Korea, set a policy rate and supply or absorb as much liquidity as needed to keep short-term market rates at that level. When banks lend more and need more reserves, the central bank supplies reserves to defend the rate. Under this framework causation runs not "base money → multiplier → money supply" but "loan demand → deposits → demand for reserves → base money". Base money has changed from an exogenous to an endogenous variable.
 
-## 3. Endogenous Growth Theory
+## 4. Interest rates and bond prices
 
-- Unlike the Solow model, which treats technological progress as an external variable, this theory sees technological progress and human capital investment as determined by choices within the economy (Education, R&D).
+A zero-coupon bond paying 10,000 won in one year has price $P=10{,}000/(1+i)$. At 2% it is about 9,804 won; at 4%, about 9,615 won. A rise in interest rates and a fall in bond prices are two descriptions of the same event. When a central bank buys bonds (open-market purchases), bond prices rise and interest rates fall.
 
----
+## 5. The quantity theory of money and its conditions
 
-## Key Checklist
+<FormulaBox
+  label="Equation of exchange"
+  formula="MV = PY"
+  description="Money supply M, velocity V, price level P, real output Y. It is close to an identity that holds by definition."
+/>
 
-- [ ] In the Solow model, what is the key factor driving actual growth in income per worker? (Answer: Technological Progress)
-- [ ] Does raising the saving rate permanently increase the long-run economic growth rate? (Answer: No, only the level of income increases)
-- [ ] What does Real Business Cycle (RBC) theory see as the cause of business cycles? (Answer: Real shocks like technological shifts)
-- [ ] What do we call the phenomenon where poor countries catch up with rich countries? (Answer: Convergence Hypothesis)
+The **quantity theory of money** adds two assumptions to this identity. If velocity $V$ is stable and output $Y$ is set at potential independently of money, an increase in $M$ leads to an increase in $P$. In growth rates, $\pi\approx g_M+g_V-g_Y$. If money grows 8% a year, real output 3% and velocity is constant, inflation is about 5%.
+
+The relationship fits well in the long run and in high-inflation countries, but not in the short run. In the short run prices are sticky, so $Y$ responds to money, and when interest rates change, money demand shifts and $V$ moves too.
+
+<Callout type="warning">
+"Printing money only raises prices" is a long-run statement. In the short run output and velocity move too, so how an increase in money is split into price increases is not determined. Conversely, when interest rates are at their floor, as in a liquidity trap, money and bonds become near-perfect substitutes, and buying bonds to expand base money cannot push rates lower. That is the flat section of the LM curve in Chapter 4.
+</Callout>
+
+## Check your understanding
+
+With $r=10\%$, $c=20\%$ and $e=0$, the multiplier is 4. What is it if banks hold 10% excess reserves? $1.2/(0.2+0.1+0.1)=3$. The money created from 1 trillion won of base money falls from 4 trillion to 3 trillion won. To keep the money supply unchanged, the central bank would need to raise base money to about 1.33 trillion won.
+
+## References
+
+- Bank of Korea, [Monetary Policy Framework](https://www.bok.or.kr/portal/main/contents.do?menuNo=200287) (in Korean)
+- N. Gregory Mankiw, *Macroeconomics*, ch. 4–5
+- MIT OpenCourseWare, [14.02 Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)

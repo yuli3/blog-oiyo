@@ -1,0 +1,109 @@
+---
+track: academy
+series: macroeconomics
+chapter: 7
+title: "Macroéconomie — Applications d'IS-LM : pentes et écoles de pensée"
+description: "Dérive les multiplicateurs budgétaire et monétaire à partir des paramètres d'IS-LM, calcule avec les mêmes chiffres et un graphique comment l'effet des deux politiques change lorsque la sensibilité de la demande de monnaie au taux varie de l'infini (trappe à liquidité) à zéro (cas classique), et discute de la combinaison des politiques."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["économie", "macroéconomie", "IS-LM", "trappe à liquidité", "policy mix"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Macroéconomie — la politique la plus efficace dépend des pentes, pas de l'école
+
+Le [chapitre 4](/fr/education-economics-ch14/) a déplacé IS et LM pour voir le signe des effets. Ce chapitre examine les pentes qui en déterminent l'**ampleur**. Le long débat entre « la politique budgétaire est puissante » (keynésiens) et « seule la politique monétaire agit sur la production » (monétaristes) était en réalité un débat empirique sur la sensibilité de la demande de monnaie et de l'investissement au taux d'intérêt.
+
+## 1. Écrire les multiplicateurs en fonction des paramètres
+
+Écrivons IS $Y=\alpha-\beta r+\gamma G$ et LM $M/P=\lambda Y-\mu r$. $\beta$ est la sensibilité de la dépense au taux (multiplicateur compris), $\gamma$ le multiplicateur des dépenses publiques, $\lambda$ la sensibilité de la demande de monnaie au revenu et $\mu$ sa sensibilité au taux. En remplaçant dans IS $r=(\lambda Y-M/P)/\mu$ tiré de LM :
+
+<FormulaBox
+  label="Multiplicateurs des politiques dans IS-LM"
+  formula="\frac{dY}{dG}=\frac{\gamma}{1+\beta\lambda/\mu},\qquad \frac{dY}{d(M/P)}=\frac{\beta/\mu}{1+\beta\lambda/\mu}"
+  description="Le terme βλ/μ au dénominateur mesure l'éviction : quand la production augmente, la demande de monnaie croît de λ, le taux monte au rythme 1/μ et la dépense baisse de β."
+/>
+
+Avec l'exemple du chapitre 4 ($\beta=10$, $\gamma=5$, $\lambda=0{,}5$, $\mu=20$), le multiplicateur budgétaire vaut $5/1{,}25=4$ et le multiplicateur des encaisses réelles $0{,}5/1{,}25=0{,}4$. On retrouve le chapitre 4, où 10 000 milliards de G augmentaient la production de 40 000 milliards et 20 d'encaisses réelles de 8 000 milliards.
+
+## 2. Trois zones selon la sensibilité de la demande de monnaie au taux
+
+En ne modifiant que $\mu$, la force relative des deux politiques s'inverse.
+
+<LectureTable
+  title="Multiplicateurs selon μ (β = 10, γ = 5, λ = 0,5)"
+  headers={["μ", "Forme de LM", "Multiplicateur budgétaire dY/dG", "Multiplicateur des encaisses dY/d(M/P)"]}
+  rows={[
+    ["→ ∞", "Horizontale (trappe à liquidité)", "5 (pas d'éviction)", "0"],
+    ["20", "Légèrement croissante", "4", "0,4"],
+    ["5", "Fortement croissante", "2,5", "1"],
+    ["→ 0", "Verticale (classique)", "0 (éviction totale)", "2 (= 1/λ)"],
+  ]}
+/>
+
+<EconDiagram
+  title="La même expansion budgétaire avec trois courbes LM"
+  xLabel="Y"
+  yLabel="r (%)"
+  xMin={350}
+  xMax={470}
+  yMax={7}
+  curves={[
+    { label: "IS", points: [[350, 6], [410, 0]], tone: "blue", labelAt: 0 },
+    { label: "IS'", points: [[390, 7], [460, 0]], tone: "blue", dashed: true, labelAt: 0 },
+    { label: "LM horizontale", points: [[350, 1], [470, 1]], tone: "gray", dashed: true },
+    { label: "LM", points: [[360, 0], [470, 2.75]], tone: "green" },
+    { label: "LM verticale", points: [[400, 0], [400, 7]], tone: "red", dashed: true },
+  ]}
+  marks={[
+    { x: 400, y: 1, label: "E" },
+    { x: 450, y: 1, label: "Trappe : +50", xTick: "450" },
+    { x: 440, y: 2, label: "Normal : +40", xTick: "440" },
+    { x: 400, y: 6, label: "Classique : 0" },
+  ]}
+  caption="10 000 milliards de dépenses publiques déplacent IS de 50 vers la droite. Avec une LM horizontale, le taux ne monte pas et la production augmente de 50 ; avec une LM verticale, seul le taux monte et la production ne change pas."
+/>
+
+**Trappe à liquidité** ($\mu\to\infty$) : quand les taux sont si bas que chacun accepte de détenir une quantité illimitée de monnaie plutôt que des obligations, accroître la masse monétaire ne peut plus faire baisser les taux. La politique monétaire ne peut pas agir sur la production, et la politique budgétaire ne provoque aucune éviction puisque les taux ne montent pas. La Grande Dépression des années 1930 et la période de taux nuls après 2008 sont souvent jugées proches de cette situation.
+
+**Zone classique** ($\mu\to 0$) : si la demande de monnaie ne réagit pas au taux, $M/P=\lambda Y$ lie la production aux encaisses réelles. Une expansion budgétaire ne fait que monter le taux et évince autant de dépense privée (éviction totale). L'expansion monétaire devient le seul moyen d'agir sur la production — la même structure que la théorie quantitative du [chapitre 3](/fr/education-economics-ch13/).
+
+La sensibilité de l'investissement au taux, $\beta$, joue le même rôle. Si $\beta\to 0$, la dépense ne réagit pas aux taux : pas d'éviction (la politique budgétaire est forte), et la politique monétaire ne peut accroître la dépense même en baissant les taux (elle est impuissante).
+
+## 3. La combinaison des politiques
+
+<LectureTable
+  title="Combinaisons de politiques selon la situation"
+  headers={["Situation", "Instrument prioritaire", "Raison"]}
+  rows={[
+    ["Récession + taux au plancher", "Expansion budgétaire", "Le canal du taux de la politique monétaire est bloqué"],
+    ["Récession + marge de baisse des taux", "Assouplissement monétaire (éventuellement avec un soutien budgétaire)", "Stimule l'investissement sans éviction"],
+    ["Surchauffe + déficit public", "Resserrement budgétaire + assouplissement monétaire", "Maintient la production en baissant les taux pour réorienter vers l'investissement"],
+    ["Choc d'offre (prix ↑, production ↓)", "IS-LM ne suffit pas", "Les prix bougent : il faut le modèle OA-DA du chapitre 8"],
+  ]}
+/>
+
+Associer un resserrement budgétaire à un assouplissement monétaire déplace IS vers la gauche et LM vers la droite : les taux baissent et la production reste à peu près inchangée. À production égale, la part de l'investissement privé augmente par rapport aux dépenses publiques, ce qui favorise l'accumulation du capital à long terme.
+
+<Callout type="warning">
+Ne choisissez pas une réponse selon l'étiquette d'une école. Il faut un jugement empirique sur la réactivité de la demande de monnaie et de l'investissement aux taux. Et sous ciblage du taux, la décision de la banque centrale de relever ou non son taux face à une expansion budgétaire détermine de fait la pente de LM. Même dans une trappe à liquidité, une banque centrale peut agir en s'engageant sur la trajectoire future des taux (forward guidance) ou en achetant des obligations longues pour influer sur les taux longs et les anticipations.
+</Callout>
+
+## Exercice
+
+Avec $\beta=10$, $\gamma=5$, $\lambda=0{,}5$ et $\mu=10$, quels sont les effets sur la production de 10 000 milliards de dépenses publiques et de 20 d'encaisses réelles ? Le dénominateur vaut $1+10\times 0{,}5/10=1{,}5$. L'effet budgétaire est de $5/1{,}5\times 10\approx 33{,}3$ milliers de milliards et l'effet monétaire de $(10/10)/1{,}5\times 20\approx 13{,}3$. Quand $\mu$ passe de 20 à 10, l'effet budgétaire diminue (40 → 33,3) et l'effet monétaire augmente (8 → 13,3).
+
+## Références
+
+- N. Gregory Mankiw, *Macroeconomics*, ch. 12
+- John Hicks, "Mr. Keynes and the 'Classics'," *Econometrica* (1937)
+- Paul Krugman, "It's Baaack: Japan's Slump and the Return of the Liquidity Trap," *Brookings Papers on Economic Activity* (1998)
+- MIT OpenCourseWare, [14.02 Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)

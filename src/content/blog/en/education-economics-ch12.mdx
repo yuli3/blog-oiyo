@@ -1,69 +1,109 @@
 ---
 track: academy
-series: economics-basics
-chapter: 12
-title: Inflation and Unemployment
-description: >-
-  Analyze the causes of unemployment and inflation, the two major challenges of
-  macroeconomics, and study the Phillips curve, which represents the
-  relationship between them.
+series: macroeconomics
+chapter: 2
+title: "Macroeconomics — Measuring Inflation and Unemployment"
+description: "Uses numbers to cover how the consumer price index is built and biased, how the CPI differs from the GDP deflator, the Fisher equation and the redistribution caused by unexpected inflation, the denominators of the unemployment, employment and participation rates and discouraged workers, and the three types of unemployment."
 pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
 category: Economics
-tags:
-  - Education
-  - economics
+tags: ["economics", "macroeconomics", "inflation", "unemployment rate", "Fisher equation"]
 locale: en
 author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
 
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# Inflation and Unemployment
+# Macroeconomics — To Interpret Prices and Unemployment, Start with How They Are Measured
 
-Maintaining stable prices and a low unemployment rate are key policy goals for every nation. This chapter covers the causes of unemployment and inflation and their correlation.
+The two goals of macroeconomic policy are price stability and full employment. The Phillips curve, which links them as a trade-off, is covered in [Chapter 9](/en/education-economics-ch20/); this chapter first sets out what the two variables measure and where illusions arise.
 
----
+## 1. The consumer price index is the price of a fixed basket
 
-## 1. Unemployment
+The **consumer price index (CPI)** fixes a representative household's consumption basket at a base date and measures how the cost of buying that basket changes.
 
-### (1) Types of Unemployment
+<LectureTable
+  title="Computing the CPI (base-year basket: 10 kg of rice, 20 bus rides)"
+  headers={["", "Rice per kg", "Bus ride", "Basket cost", "CPI"]}
+  rows={[
+    ["Base year", "3,000 won", "1,500 won", "60,000 won", "100"],
+    ["Next year", "3,300 won", "1,500 won", "63,000 won", "105"],
+  ]}
+/>
 
-1. **Frictional Unemployment**: Temporary unemployment occurring during job transitions or job searches (Voluntary).
-2. **Structural Unemployment**: Occurs when there is a mismatch between the skills of job seekers and the skills required by employers due to changes in industry structure or technological innovation.
-3. **Cyclical Unemployment**: Unemployment caused by a recession (lack of aggregate demand).
+The inflation rate is a **rate of change** in the price level, not the **level** itself. If the CPI goes from 110 to 120, inflation is $(120-110)/110\approx 9.1\%$. "The CPI is 120, so prices rose 20%" mistakes the cumulative rise since the base year for this year's inflation.
 
-### (2) Natural Rate of Unemployment
+A fixed basket has a systematic **upward bias**.
 
-- The rate of unemployment that exists when cyclical unemployment is zero (Frictional + Structural unemployment).
-- The normal level of unemployment that an economy maintains in the long run.
+- **Substitution bias**: when rice becomes more expensive people buy more bread, but the basket is fixed and overweights the dearer rice.
+- **Quality bias**: if a smartphone at the same price gets better every year, the index records no price change. Without quality adjustment it misses the fall in the real price.
+- **New-product bias**: new products enter the basket late, so the price declines early in their life are missed.
 
-### (3) Okun's Law
+<LectureTable
+  title="CPI versus the GDP deflator"
+  headers={["", "CPI", "GDP deflator"]}
+  rows={[
+    ["Coverage", "Consumer goods bought by households", "All final goods produced domestically"],
+    ["Imports", "Included", "Excluded"],
+    ["Weights", "Fixed basket", "Current output mix"],
+    ["Example", "Strongly reflects higher prices of imported oil", "Reflects prices of domestically made equipment"],
+  ]}
+/>
 
-- Describes the inverse relationship between unemployment and real GDP. An empirical law stating that for every 1% point increase in the unemployment rate, GDP falls by approximately 2-3% points.
+## 2. Nominal and real: the Fisher equation
 
----
+<FormulaBox
+  label="Fisher equation (approximation)"
+  formula="i \approx r + \pi^e"
+  description="The nominal interest rate i is the real rate r plus expected inflation π^e. The exact form is (1+i) = (1+r)(1+π^e)."
+/>
 
-## 2. Inflation
+If nominal wages rise 5% while the CPI rises 9.1%, real wages fall by $1.05/1.091-1\approx -3.8\%$.
 
-A continuous increase in the general price level.
+**Expected** inflation is built into contract interest rates, so it redistributes little. **Unexpected** inflation transfers wealth from creditors to debtors. If you lend at a nominal 5% expecting 2% inflation and inflation turns out to be 6%, the real rate the creditor receives is −1%, not 3%. People holding fixed-rate loans as lenders, pensioners and others with incomes fixed in nominal terms lose out.
 
-- **Demand-Pull Inflation**: Caused by aggregate demand exceeding aggregate supply (Economic overheating).
-- **Cost-Push Inflation**: Caused by rising raw material prices or wages (The cause of stagflation).
-- **Expected vs. Unexpected Inflation**: In the case of the latter, an unfair redistribution of wealth and income occurs (Lenders lose, Borrowers gain).
+## 3. For the unemployment rate, the denominator matters
 
----
+<FormulaBox
+  label="Labour market indicators"
+  formula="\text{Unemployment rate} = \frac{\text{Unemployed}}{\text{Labour force}},\quad \text{Employment rate} = \frac{\text{Employed}}{\text{Working-age population}}"
+  description="Labour force = employed + unemployed. The unemployed are people able and willing to work who actively searched but have no job. People who have given up searching are classified as outside the labour force."
+/>
 
-## 3. Phillips Curve
+Consider an economy with a working-age population of 100, of whom 57 are employed, 3 unemployed and 40 outside the labour force. The unemployment rate is $3/60=5\%$, the employment rate 57% and the participation rate 60%.
 
-A curve representing the relationship between the unemployment rate and the inflation rate.
+If one unemployed person gives up and becomes a **discouraged worker**, there are 2 unemployed in a labour force of 59 and the unemployment rate **falls** to about 3.4%. Nothing has improved in the labour market, yet the unemployment rate looks better. The employment rate (57%) is unchanged, so looking at both rates together avoids the illusion.
 
-1. **Short-Run Phillips Curve**: An **inverse (trade-off) relationship** exists between the unemployment rate and the inflation rate. (To curb inflation, one must accept higher unemployment)
-2. **Long-Run Phillips Curve**: In the long run, as people's expectations reflect in prices, the Phillips curve becomes a **vertical line at the natural rate of unemployment**. Thus, in the long run, unemployment cannot be reduced through monetary policy.
+## 4. Three types of unemployment
 
----
+<LectureTable
+  title="Types of unemployment and responses"
+  headers={["Type", "Cause", "Response"]}
+  rows={[
+    ["Frictional", "Search time when changing jobs or entering work", "Better matching of vacancies and job seekers"],
+    ["Structural", "Mismatch of skills and jobs after technological or industrial change", "Retraining, support for relocation"],
+    ["Cyclical", "Insufficient aggregate demand", "Monetary and fiscal policy"],
+  ]}
+/>
 
-## Key Checklist
+Frictional and structural unemployment remain even when the economy is strong. The unemployment rate made up of these two is the **natural rate of unemployment**. It is not zero, and it depends on institutions such as unemployment benefits and minimum wages and on how efficiently the labour market matches workers to jobs. How to compute the natural rate from flows into and out of unemployment is covered in [Chapter 20](/en/education-economics-ch31/).
 
-- [ ] What is the term for temporary unemployment that occurs while moving between jobs? (Answer: Frictional Unemployment)
-- [ ] If unexpected inflation occurs, who benefits more: the lender (creditor) or the borrower (debtor)? (Answer: Debtor)
-- [ ] Why is the Long-Run Phillips curve vertical? (Answer: Because people fully anticipate changes in the price level)
-- [ ] What is the name of the law that explains the relationship between unemployment and GDP? (Answer: Okun's Law)
+The empirical relationship between cyclical unemployment and output is **Okun's law**: when unemployment is 1 percentage point above its natural rate, output is roughly 2% below potential, a relation observed in many countries. The coefficient is an empirical regularity that varies across countries and periods, not an identity.
+
+<Callout type="warning">
+Core inflation (excluding food and energy) is a tool for filtering out temporary price shocks to see the trend; it is not the definition of "true inflation". What households actually feel includes food and energy. And a low unemployment rate does not mean a healthy labour market if many people work part-time involuntarily or have stopped looking. Look also at broader unemployment measures (labour underutilisation indicators).
+</Callout>
+
+## Check your understanding
+
+The CPI rises from 110 to 120 and nominal wages by 5%. What are inflation and the change in real wages? Inflation is about 9.1% and real wages fall about 3.8%. If in the same year one of the 3 unemployed gave up searching, the unemployment rate would fall from 5% to about 3.4%, but the employment rate would stay at 57%.
+
+## References
+
+- Statistics Korea, [Economically Active Population Survey](https://kostat.go.kr/incomeNc/) (in Korean)
+- N. Gregory Mankiw, *Macroeconomics*, ch. 2, 7
+- MIT OpenCourseWare, [14.02 Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)

@@ -1,91 +1,106 @@
 ---
 track: academy
-series: economics-basics
-chapter: 17
-title: "Economic Principles — Investment Function Theory: Choices for the Future"
-description: "We analyze the investment decision principles of companies through present value method, marginal efficiency theory, and Tobin's q theory. We cover acceleration principles and flexible acceleration..."
+series: macroeconomics
+chapter: 6
+title: "Macroeconomics — The Investment Function: The User Cost of Capital"
+description: "Explains with numbers and a graph how firms set a target capital stock by comparing the marginal product of capital with the user cost (r+δ)P_k, how interest-rate changes feed into investment, the accelerator, Tobin's q, and why irreversibility and credit constraints make investment insensitive to interest rates."
 pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
 category: Economics
-tags:
-  - Education
-  - economics
-  - 정병렬경제학
+tags: ["economics", "macroeconomics", "investment function", "user cost", "Tobin's q"]
 locale: en
 author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
 
-import {
-  LectureTable,
-} from "@/features/education-common/components/LectureVisuals";
 import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# Investment Function Theory: Choices for the Future
+# Macroeconomics — Before Being a Function of the Interest Rate, Investment Is a Comparison of Capital's Return and Cost
 
-Although investment is smaller than consumption, it is the most volatile and central factor behind business-cycle fluctuations. This chapter closely examines the economic determinants of investment: how firms decide to expand equipment and build factories.
+The IS curve of [Chapter 4](/en/education-economics-ch14/) sloped downward because investment responds to the interest rate. This chapter looks at the microeconomic basis for that response. Firms compare what one more unit of capital earns with what it costs — the same logic as net present value (NPV) in corporate finance, applied to macroeconomic variables. Investment is smaller than consumption in GDP but far more volatile, and it explains much of the business cycle.
 
----
+## 1. The user cost of capital
 
-## 1. Traditional Theories of Investment Decisions
+The cost to a firm of using a machine for a year is not the price of the machine itself but the interest the money could have earned elsewhere plus the value the machine loses through wear over the year.
 
-### (1) Net Present Value (NPV)
+<FormulaBox
+  label="User cost of capital"
+  formula="uc = (r + \delta)\,P_k"
+  description="r is the real interest rate, δ the depreciation rate and P_k the price of capital goods. For a 100-million-won machine with r = 5% and δ = 10%, the annual user cost is 15 million won. With corporate tax and investment tax credits, it is adjusted to an after-tax cost."
+/>
 
-Future returns are discounted to present value and compared with the cost of investment.
+A firm adds capital until the **value of the marginal product** of capital equals the user cost. Because the marginal product of capital diminishes, a lower user cost raises the target capital stock.
 
-<FormulaBox>
-  Invest when $NPV = \sum \frac{R_t}{(1+i)^t} - I > 0$.
-</FormulaBox>
+Suppose a firm's return on capital (the value of the marginal product per unit of capital divided by the price of capital goods) is $MPK=20\%-0.5\%\times K$, and $\delta=5\%$:
 
-### (2) Marginal Efficiency of Investment (MEI)
+- $r=5\%$: $uc=10\%$ → $20-0.5K=10$ → target capital $K^*=20$
+- $r=3\%$: $uc=8\%$ → $K^*=24$
 
-- Investment is undertaken when the marginal efficiency of investment ($r$) exceeds the market interest rate ($i$).
-- **Keynes's view**: Investment is driven not only by interest rates but also strongly by entrepreneurs' “animal spirits.”
+If the current capital stock is 18, investment is 2 at an interest rate of 5% and 6 at 3%. A 2-point rate cut tripled investment. Adding up across all firms this relationship — lower rates raise the target capital stock and hence investment — gives the investment function $I(r)$.
 
----
+<EconDiagram
+  title="Target capital and the user cost"
+  xLabel="K"
+  yLabel="Return / cost (%)"
+  xMax={40}
+  yMax={20}
+  curves={[
+    { label: "MPK", points: [[0, 20], [40, 0]], tone: "blue" },
+    { label: "uc (r=5%)", points: [[0, 10], [40, 10]], tone: "red" },
+    { label: "uc (r=3%)", points: [[0, 8], [40, 8]], tone: "red", dashed: true },
+  ]}
+  marks={[
+    { x: 20, y: 10, guide: true, xTick: "20" },
+    { x: 24, y: 8, guide: true, xTick: "24" },
+  ]}
+  caption="When the user cost falls from 10% to 8%, the target capital stock rises from 20 to 24. The gap from the current capital stock is investment."
+/>
 
-## 2. The Accelerator Principle
+Keynes expressed the same decision through the **marginal efficiency of capital (MEC)**: the discount rate that makes the present value of a project's expected returns equal to its cost. Firms invest if the MEC exceeds the market interest rate. The key is expectations. If entrepreneurs turn pessimistic, the MEC falls and investment collapses even if interest rates are unchanged. These swings in expectations, which Keynes called "animal spirits", **shift** the IS curve.
 
-This principle states that a change in demand for consumer goods produces a larger change in demand for capital goods (investment).
+## 2. The accelerator
 
-- **Principle**: Investment is determined in proportion to the **increase** in output.
-- **Limitation**: It does not operate when capacity utilization is low and tends to exaggerate reality; the flexible accelerator model addresses this limitation.
+The target capital stock is also proportional to output. If each unit of output needs $v$ units of capital, $K^*=vY$ and net investment is $I=v\,\Delta Y$. Investment responds to the **change** in output, not its **level**. In an industry with $v=3$, a slowdown in output growth from 5% to 3% cuts net investment by 40% even though output is still growing. This is one reason investment is far more volatile than consumption.
 
----
+## 3. Tobin's q
 
-## 3. Tobin's q Theory
+<FormulaBox
+  label="Tobin's q"
+  formula="q = \frac{\text{Market value of the firm}}{\text{Replacement cost of its capital}}"
+  description="If q > 1, the market values each won of capital at more than a won, so buying and installing new capital adds value and firms invest. If q < 1, buying existing firms is cheaper than investing."
+/>
 
-This modern theory uses information from financial markets, especially stock markets, as an indicator for investment.
+Because q reflects the stock market's view of expected returns, it carries the same information as the user-cost model while being observable. It is also a channel through which rising share prices lead investment.
 
-<FormulaBox>
-  $q = \frac{\text{Market value of the firm}}{\text{Physical replacement cost of the firm's assets}}$
-</FormulaBox>
+## 4. When investment becomes insensitive to interest rates
 
-- **$q > 1$**: The stock-market value exceeds the firm's physical value $\rightarrow$ **expand investment**.
-- **$q < 1$**: Buying a firm is cheaper than investing in it $\rightarrow$ **reduce investment**.
-- <mark>**Implication**</mark>: This provides a theoretical basis for stock-price indices to serve as leading indicators of the real economy.
+<LectureTable
+  title="Why rate cuts may not lead to investment"
+  headers={["Reason", "Mechanism", "Example"]}
+  rows={[
+    ["Irreversibility and uncertainty", "For investments that cannot be undone, the option to wait has value", "Waiting when policy or demand uncertainty is high"],
+    ["Credit constraints", "The cost of external finance rises far above the interest rate, or credit is cut off", "Small firms during a financial crisis"],
+    ["Excess capacity", "With low utilisation the MPK itself is low", "Early in a recession"],
+    ["Worsening expectations", "The MEC and q fall, shifting IS left", "Business pessimism"],
+  ]}
+/>
 
----
+Residential and inventory investment follow the same logic: the house price relative to construction cost (the q of housing) and the user cost of holding inventories (interest plus storage) drive each.
 
-## 4. User Cost of Capital
+<Callout type="warning">
+Before concluding that "the investment function is wrong" because investment did not rise after a rate cut, check whether uncertainty, credit conditions or expectations shifted the investment function over the same period. Distinguishing a movement along a curve from a shift of the curve is the same identification problem as in [Microeconomics, Chapter 2](/en/education-economics-ch2/). The crowding-out effect of a fiscal expansion, which raises interest rates and lowers investment, works through the rise in the user cost described in this chapter.
+</Callout>
 
-This neoclassical investment theory compares the cost of maintaining one unit of capital with its marginal productivity.
+## Check your understanding
 
-- **User cost**: interest cost + depreciation − the rate of increase in asset prices.
-- **Optimal investment**: determined where the marginal product of capital (MPK) equals the user cost.
+A machine costs 200 million won, the real interest rate is 4% and depreciation is 8%. What is the annual user cost? $(0.04+0.08)\times 200$ million = 24 million won. If the machine earns a net return of 20 million won a year, the firm does not invest. If the interest rate falls to 1%, the user cost becomes 18 million won and the firm invests.
 
----
+## References
 
-## 5. Wrapping Up: Investment Is Tomorrow's Growth Engine
-
-In the short run, investment causes fluctuations in aggregate demand; in the long run, it expands productive capacity and becomes a foundation for growth. Investment's sensitivity to interest rates makes it the most important channel through which monetary policy reaches the real economy.
-
----
-
-## 📖 References
-
-- **[Macroeconomics] - Jeong Byeong-ryeol**: Mathematical derivation of investment theory.
-- **[Corporate Investment Theory] - James Tobin**: The formulation of q theory.
-
----
-
-Well done. Next, we will study an **in-depth analysis of the IS-LM model and policy effectiveness**, which emerges from the behavior of households and firms.
+- N. Gregory Mankiw, *Macroeconomics*, ch. 17
+- Dale Jorgenson, "Capital Theory and Investment Behavior," *American Economic Review* (1963)
+- James Tobin, "A General Equilibrium Approach to Monetary Theory," *Journal of Money, Credit and Banking* (1969)
+- Avinash Dixit and Robert Pindyck, *Investment under Uncertainty* (1994)

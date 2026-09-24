@@ -1,0 +1,106 @@
+---
+track: academy
+series: macroeconomics
+chapter: 6
+title: "宏观经济学 — 投资函数:资本的使用成本"
+description: "用数字和图形整理企业如何比较资本的边际产品与使用成本(r+δ)P_k来确定目标资本量，利率变化如何传导到投资，加速原理、托宾q，以及不可逆性和信贷约束为何使投资对利率不敏感。"
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["经济学", "宏观经济学", "投资函数", "使用成本", "托宾q"]
+locale: zh
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 宏观经济学 — 投资首先是资本收益与成本的比较，然后才是利率的函数
+
+[第4章](/zh/education-economics-ch14/)的IS曲线向右下方倾斜，是因为投资对利率作出反应。本章考察这一反应的微观基础。企业比较多使用一单位资本的收益与成本，这与公司财务中净现值(NPV)的判断是同一逻辑，只是用于宏观变量。投资在GDP中的比重小于消费，但波动大得多，能解释经济周期的相当一部分。
+
+## 1. 资本的使用成本
+
+企业使用一台机器一年的成本，不是机器价格本身，而是这笔钱用在别处可得的利息，加上一年中磨损失去的价值。
+
+<FormulaBox
+  label="使用成本"
+  formula="uc = (r + \delta)\,P_k"
+  description="r为实际利率，δ为折旧率，P_k为资本品价格。1亿韩元的机器，r = 5%、δ = 10%时，年使用成本为1500万韩元。若有公司税和投资税收抵免，则调整为税后成本。"
+/>
+
+企业不断增加资本，直到资本的**边际产品价值**等于使用成本。资本的边际产量递减，因此使用成本下降，目标资本量就会增加。
+
+设某企业的资本收益率(每单位资本的边际产品价值除以资本品价格)为$MPK=20\%-0.5\%\times K$，$\delta=5\%$:
+
+- $r=5\%$:$uc=10\%$ → $20-0.5K=10$ → 目标资本$K^*=20$
+- $r=3\%$:$uc=8\%$ → $K^*=24$
+
+若当前资本为18，利率5%时投资为2，利率3%时为6。利率下降2个百分点使投资增至三倍。把"利率下降→目标资本增加→投资增加"这一关系对所有企业加总，就得到投资函数$I(r)$。
+
+<EconDiagram
+  title="目标资本量与使用成本"
+  xLabel="K"
+  yLabel="收益率·成本(%)"
+  xMax={40}
+  yMax={20}
+  curves={[
+    { label: "MPK", points: [[0, 20], [40, 0]], tone: "blue" },
+    { label: "uc (r=5%)", points: [[0, 10], [40, 10]], tone: "red" },
+    { label: "uc (r=3%)", points: [[0, 8], [40, 8]], tone: "red", dashed: true },
+  ]}
+  marks={[
+    { x: 20, y: 10, guide: true, xTick: "20" },
+    { x: 24, y: 8, guide: true, xTick: "24" },
+  ]}
+  caption="使用成本从10%降至8%，目标资本量从20增至24。与现有资本量之差就是投资。"
+/>
+
+凯恩斯用**资本边际效率(MEC)**表达了同样的判断。使投资项目预期收益现值等于成本的贴现率就是MEC，MEC高于市场利率就投资。关键在于预期。企业家的前景变得悲观时，即使利率不变，MEC也会下降，投资骤减。凯恩斯称之为"动物精神"的这种预期变化，会使IS曲线**移动**。
+
+## 2. 加速原理
+
+目标资本量也与产量成正比。若每单位产出需要$v$单位资本，则$K^*=vY$，净投资为$I=v\,\Delta Y$。投资对产出的**变化**而不是**水平**作出反应。在$v=3$的行业中，产出增长率仅从5%放缓到3%，尽管产出仍在增长，净投资却减少40%。这是投资波动远大于消费的原因之一。
+
+## 3. 托宾q
+
+<FormulaBox
+  label="托宾q"
+  formula="q = \frac{\text{企业的市场价值}}{\text{所持资本的重置成本}}"
+  description="q > 1意味着市场对每1韩元资本的估值高于1韩元，购置并安装新资本能增加价值，于是投资。q < 1时，收购现有企业比投资更便宜。"
+/>
+
+q是股票市场已经反映预期收益的指标，它与使用成本模型包含相同的信息，而且可以观测。这也是股价上涨带动投资的一条途径。
+
+## 4. 投资何时对利率不敏感
+
+<LectureTable
+  title="降息为何可能不带来投资"
+  headers={["原因", "机制", "例子"]}
+  rows={[
+    ["不可逆性与不确定性", "对不可逆的投资而言，等待的期权有价值", "政策或需求不确定性大时的观望"],
+    ["信贷约束", "外部融资成本远高于利率，或贷款中断", "金融危机中的中小企业"],
+    ["产能过剩", "开工率低时MPK本身就低", "衰退初期"],
+    ["预期恶化", "MEC和q下降，IS左移", "经济悲观"],
+  ]}
+/>
+
+住房投资和存货投资遵循同样的逻辑。相对于建造成本的房价(住房的q)、持有存货的使用成本(利息+仓储费)分别决定这两类投资。
+
+<Callout type="warning">
+降息后投资没有增加，不要急于得出"投资函数错了"的结论，先检查同一时期不确定性、信贷状况或预期是否使投资函数发生了移动。区分沿曲线的移动和曲线本身的移动，与[微观第2章](/zh/education-economics-ch2/)的识别问题相同。财政扩张推高利率、减少投资的挤出效应，正是通过本章所说的使用成本上升这一途径。
+</Callout>
+
+## 练习题
+
+机器价格2亿韩元，实际利率4%，折旧率8%，年使用成本是多少?$(0.04+0.08)\times 2$亿$=2400$万韩元。若这台机器每年带来2000万韩元的净收益，就不投资。利率降到1%时，使用成本变为1800万韩元，就会投资。
+
+## 参考资料
+
+- N. Gregory Mankiw, *Macroeconomics*, ch. 17
+- Dale Jorgenson, "Capital Theory and Investment Behavior," *American Economic Review* (1963)
+- James Tobin, "A General Equilibrium Approach to Monetary Theory," *Journal of Money, Credit and Banking* (1969)
+- Avinash Dixit and Robert Pindyck, *Investment under Uncertainty* (1994)

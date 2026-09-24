@@ -1,0 +1,101 @@
+---
+track: academy
+series: macroeconomics
+chapter: 4
+title: "Macroeconomía — Fundamentos del modelo IS-LM"
+description: "Deriva el equilibrio del mercado de bienes IS y el del mercado de dinero LM en un modelo lineal, y compara con los mismos números y un gráfico el efecto expulsión de un aumento del gasto público y la transmisión de una expansión monetaria."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["economía", "macroeconomía", "IS-LM", "efecto expulsión", "estática comparativa"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Macroeconomía — la producción a corto plazo la fija el tipo de interés que equilibra a la vez el mercado de bienes y el de dinero
+
+Si los precios están fijos a corto plazo, la producción la determina la demanda. Pero parte de la demanda, la inversión, depende del tipo de interés; el tipo se forma en el mercado de dinero; y la demanda de dinero depende a su vez de la producción. Mirar por separado el mercado de bienes y el de dinero rompe este circuito. El modelo **IS-LM** coloca ambos mercados en un mismo plano y los resuelve a la vez. Este capítulo construye IS y LM con los mismos números y compara dos políticas. La fórmula general de la solución simultánea está en el [capítulo 23](/es/education-economics-ch39/).
+
+## 1. IS: el equilibrio del mercado de bienes
+
+Consideremos una economía con consumo $C=20+0{,}8(Y-T)$, impuestos $T=10$, inversión $I=40-2r$ (r en %) y gasto público $G=30$ (en billones de wones). Sustituyendo en el equilibrio $Y=C+I+G$:
+
+$$Y=20+0{,}8(Y-10)+40-2r+30 \quad\Rightarrow\quad Y=410-10r$$
+
+Cuando el tipo de interés sube 1 punto, la inversión cae 2 billones de wones y, a través del multiplicador $1/(1-0{,}8)=5$, la producción cae 10 billones. Por eso la IS tiene pendiente negativa.
+
+<FormulaBox
+  label="Dos factores que fijan la pendiente de la IS"
+  formula="Y = \frac{1}{1-c}\left(\bar A - b\,r\right)"
+  description="Ā es el gasto independiente del tipo de interés y b la sensibilidad de la inversión al tipo. Cuanto mayores son el multiplicador 1/(1−c) o b, más altera la producción un cambio dado del tipo y más plana es la IS. Un aumento de G desplaza la IS a la derecha."
+/>
+
+## 2. LM: el equilibrio del mercado de dinero
+
+Sea una demanda real de dinero $L=0{,}5Y-20r$ y unos saldos reales $M/P=180$. En equilibrio $M/P=L$:
+
+$$180=0{,}5Y-20r \quad\Rightarrow\quad r=0{,}025Y-9$$
+
+Cuando sube la producción, aumenta la demanda de dinero para transacciones y, como los saldos están fijos, el tipo debe subir para reducir la demanda de mantener dinero en lugar de bonos. Por eso la LM tiene pendiente positiva. Cuanto más sensible es la demanda de dinero al tipo (cuanto mayor el 20), más plana es la LM. Un aumento de la oferta monetaria o una bajada de precios desplazan la LM a la derecha.
+
+## 3. El equilibrio y dos políticas
+
+Resolviendo IS y LM a la vez, $Y=410-10(0{,}025Y-9)$ da $Y=400$ y $r=1\,\%$.
+
+**Expansión fiscal**: aumentar $G$ en 10 billones de wones desplaza la IS a $Y=460-10r$. Si el tipo no cambiara, la producción subiría todo el efecto multiplicador, 50 billones, hasta 450. Pero al subir la producción aumenta la demanda de dinero y el tipo sube. El nuevo equilibrio es $Y=440$, $r=2\,\%$. La subida del tipo reduce la inversión en 2 billones, lo que, vía multiplicador, expulsa 10 billones de producción. Es el **efecto expulsión**.
+
+**Expansión monetaria**: elevar los saldos reales de 180 a 200 desplaza la LM a $r=0{,}025Y-10$. El nuevo equilibrio es $Y=408$, $r=0{,}2\,\%$. La bajada del tipo aumenta la inversión, que eleva la producción.
+
+<EconDiagram
+  title="IS-LM y el efecto expulsión de una expansión fiscal"
+  xLabel="Y"
+  yLabel="r (%)"
+  xMin={350}
+  xMax={470}
+  yMax={4}
+  curves={[
+    { label: "IS", points: [[370, 4], [410, 0]], tone: "blue", labelAt: 0 },
+    { label: "IS'", points: [[420, 4], [460, 0]], tone: "blue", dashed: true, labelAt: 0 },
+    { label: "LM", points: [[360, 0], [470, 2.75]], tone: "green" },
+  ]}
+  marks={[
+    { x: 400, y: 1, label: "E", guide: true, xTick: "400", yTick: "1" },
+    { x: 440, y: 2, label: "E'", guide: true, xTick: "440", yTick: "2" },
+    { x: 450, y: 1, label: "Tipo fijo", xTick: "450" },
+  ]}
+  caption="Si el tipo se hubiera quedado en el 1 %, la producción habría llegado a 450, pero el tipo sube al 2 % a lo largo de la LM y la producción se detiene en 440. La diferencia de 10 billones entre 450 y 440 es el efecto multiplicador de la inversión expulsada."
+/>
+
+<LectureTable
+  title="Perturbaciones, desplazamientos y resultados"
+  headers={["Perturbación", "Desplazamiento", "Tipo de interés", "Producción"]}
+  rows={[
+    ["Sube G", "IS a la derecha", "↑", "↑ (menos que el multiplicador por el efecto expulsión)"],
+    ["Baja T", "IS a la derecha", "↑", "↑"],
+    ["Sube M", "LM a la derecha", "↓", "↑"],
+    ["Sube P", "LM a la izquierda (baja M/P)", "↑", "↓"],
+    ["Empeoran las expectativas empresariales", "IS a la izquierda", "↓", "↓"],
+  ]}
+/>
+
+La vía de la penúltima fila, en la que una subida de precios desplaza la LM a la izquierda y reduce la producción, genera la curva de demanda agregada del [capítulo 8](/es/education-economics-ch19/).
+
+<Callout type="warning">
+IS-LM es un modelo de referencia que supone una economía cerrada, precios fijos y expectativas que no cambian. La economía abierta se trata en el [capítulo 3 de Finanzas internacionales](/es/education-international-finance-ch3/), el ajuste de precios en los capítulos 8 y 15, y las expectativas en el capítulo 9. Además, como muchos bancos centrales fijan un tipo de interés y no la cantidad de dinero, en la práctica se acerca más a su funcionamiento dibujar la LM como «una recta horizontal al tipo que elige el banco central». Entonces el efecto expulsión de una expansión fiscal depende de si el banco central sube o no el tipo.
+</Callout>
+
+## Ejercicio
+
+En esta economía, ¿cuál es el nuevo equilibrio si se bajan los impuestos en 10 billones de wones (T = 0)? La rebaja fiscal solo aumenta el consumo en $0{,}8\times 10=8$ billones en la primera ronda, así que la IS pasa a $0{,}2Y=90-2r$, es decir, $Y=450-10r$. Con la LM, $Y=450-0{,}25Y+90$ da $Y=432$ y $r=1{,}8\,\%$. Los mismos 10 billones tienen menos efecto como rebaja fiscal (32 billones) que como gasto público (40 billones), porque parte se ahorra en la primera ronda.
+
+## Referencias
+
+- N. Gregory Mankiw, *Macroeconomics*, ch. 11–12
+- John Hicks, "Mr. Keynes and the 'Classics'," *Econometrica* (1937)
+- MIT OpenCourseWare, [14.02 Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)

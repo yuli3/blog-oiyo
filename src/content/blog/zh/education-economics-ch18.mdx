@@ -1,0 +1,109 @@
+---
+track: academy
+series: macroeconomics
+chapter: 7
+title: "宏观经济学 — IS-LM的应用与各学派的斜率"
+description: "用IS-LM参数推导财政与货币乘数，用同一组数字和图形比较当货币需求的利率弹性从无穷大(流动性陷阱)变到零(古典情形)时两种政策效果如何变化，并整理政策组合。"
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["经济学", "宏观经济学", "IS-LM", "流动性陷阱", "政策组合"]
+locale: zh
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 宏观经济学 — 哪种政策更有力，取决于曲线的斜率而不是学派
+
+[第4章](/zh/education-economics-ch14/)通过移动IS和LM看到了政策效果的符号。本章考察决定效果**大小**的斜率。长期以来，"财政政策有力"(凯恩斯学派)与"只有货币政策能影响产出"(货币主义)之争，实际上是关于货币需求和投资对利率有多敏感的实证之争。
+
+## 1. 用参数表示乘数
+
+把IS写成$Y=\alpha-\beta r+\gamma G$，LM写成$M/P=\lambda Y-\mu r$。$\beta$为支出对利率的敏感度(含乘数)，$\gamma$为政府支出乘数，$\lambda$为货币需求的收入敏感度，$\mu$为货币需求的利率敏感度。由LM得$r=(\lambda Y-M/P)/\mu$，代入IS:
+
+<FormulaBox
+  label="IS-LM中的政策乘数"
+  formula="\frac{dY}{dG}=\frac{\gamma}{1+\beta\lambda/\mu},\qquad \frac{dY}{d(M/P)}=\frac{\beta/\mu}{1+\beta\lambda/\mu}"
+  description="分母中的βλ/μ就是挤出的大小:产出增加使货币需求增加λ，利率按1/μ的比例上升，支出减少β。"
+/>
+
+代入第4章的例子($\beta=10$，$\gamma=5$，$\lambda=0.5$，$\mu=20$)，财政乘数为$5/1.25=4$，实际余额乘数为$0.5/1.25=0.4$。这与第4章中10万亿韩元的$G$使产出增加40万亿韩元、实际余额20使产出增加8万亿韩元相同。
+
+## 2. 按货币需求利率敏感度划分的三个区域
+
+只改变$\mu$，两种政策的相对力量就会逆转。
+
+<LectureTable
+  title="不同μ下的政策乘数(β = 10，γ = 5，λ = 0.5)"
+  headers={["μ", "LM形状", "财政乘数 dY/dG", "实际余额乘数 dY/d(M/P)"]}
+  rows={[
+    ["→ ∞", "水平(流动性陷阱)", "5(无挤出)", "0"],
+    ["20", "平缓上升", "4", "0.4"],
+    ["5", "陡峭上升", "2.5", "1"],
+    ["→ 0", "垂直(古典情形)", "0(完全挤出)", "2(= 1/λ)"],
+  ]}
+/>
+
+<EconDiagram
+  title="同样的财政扩张，三种LM"
+  xLabel="Y"
+  yLabel="r (%)"
+  xMin={350}
+  xMax={470}
+  yMax={7}
+  curves={[
+    { label: "IS", points: [[350, 6], [410, 0]], tone: "blue", labelAt: 0 },
+    { label: "IS'", points: [[390, 7], [460, 0]], tone: "blue", dashed: true, labelAt: 0 },
+    { label: "水平LM", points: [[350, 1], [470, 1]], tone: "gray", dashed: true },
+    { label: "LM", points: [[360, 0], [470, 2.75]], tone: "green" },
+    { label: "垂直LM", points: [[400, 0], [400, 7]], tone: "red", dashed: true },
+  ]}
+  marks={[
+    { x: 400, y: 1, label: "E" },
+    { x: 450, y: 1, label: "陷阱:+50", xTick: "450" },
+    { x: 440, y: 2, label: "一般:+40", xTick: "440" },
+    { x: 400, y: 6, label: "古典:0" },
+  ]}
+  caption="10万亿韩元的政府支出使IS右移50。LM水平时利率不上升，产出增加50；LM垂直时只有利率上升，产出不变。"
+/>
+
+**流动性陷阱**($\mu\to\infty$):利率极低，人们愿意无限持有货币而不持有债券时，增加货币也无法再压低利率。货币政策无法影响产出，财政政策因利率不上升而没有挤出。20世纪30年代大萧条和2008年后的零利率时期常被认为接近这种情形。
+
+**古典区域**($\mu\to 0$):若货币需求对利率没有反应，由$M/P=\lambda Y$，产出被实际余额锁定。财政扩张只会推高利率，挤出同等规模的私人支出(完全挤出)。货币扩张成为影响产出的唯一手段。这与[第3章](/zh/education-economics-ch13/)的货币数量论结构相同。
+
+投资的利率敏感度$\beta$起同样的作用。若$\beta\to 0$，利率变化不影响支出，因而没有挤出(财政有力)，而货币政策即使降低利率也无法增加支出(货币无力)。
+
+## 3. 政策组合
+
+<LectureTable
+  title="不同情形下的政策组合"
+  headers={["情形", "优先手段", "理由"]}
+  rows={[
+    ["衰退 + 利率触及下限", "财政扩张", "货币政策的利率渠道被堵"],
+    ["衰退 + 有降息空间", "货币宽松(可配合财政)", "在没有挤出的情况下增加投资"],
+    ["过热 + 财政赤字", "财政紧缩 + 货币宽松", "保持产出的同时降低利率，改变投资构成"],
+    ["供给冲击(物价↑ 产出↓)", "仅靠IS-LM不够", "物价在变动，需要第8章的AD-AS"],
+  ]}
+/>
+
+财政紧缩与货币宽松结合时，IS左移、LM右移，可以在产出大致不变的情况下降低利率。在同样的产出下，私人投资相对政府支出的比重上升，长期内有利于资本积累。
+
+<Callout type="warning">
+不要按学派名称选答案。需要的是对货币需求和投资对利率反应程度的实证判断。此外，在利率目标制下，中央银行是否随财政扩张而加息，实际上决定了LM的斜率。即使处于流动性陷阱，中央银行也可以通过承诺未来利率路径(前瞻性指引)或购买长期债券来影响长期利率和预期，从而产生效果。
+</Callout>
+
+## 练习题
+
+$\beta=10$，$\gamma=5$，$\lambda=0.5$，$\mu=10$时，10万亿韩元政府支出和20实际余额的产出效应分别是多少?分母为$1+10\times 0.5/10=1.5$。财政效应为$5/1.5\times 10\approx 33.3$万亿韩元，货币效应为$(10/10)/1.5\times 20\approx 13.3$万亿韩元。$\mu$从20降到10时，财政效应减小(40 → 33.3)，货币效应增大(8 → 13.3)。
+
+## 参考资料
+
+- N. Gregory Mankiw, *Macroeconomics*, ch. 12
+- John Hicks, "Mr. Keynes and the 'Classics'," *Econometrica* (1937)
+- Paul Krugman, "It's Baaack: Japan's Slump and the Return of the Liquidity Trap," *Brookings Papers on Economic Activity* (1998)
+- MIT OpenCourseWare, [14.02 Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)

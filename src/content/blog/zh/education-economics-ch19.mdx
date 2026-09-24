@@ -1,0 +1,110 @@
+---
+track: academy
+series: macroeconomics
+chapter: 8
+title: "宏观经济学 — AD-AS与物价"
+description: "在IS-LM中让物价变动，推导总需求曲线，再叠加由价格粘性产生的向上倾斜的短期总供给和垂直的长期总供给，用同一组数字和图形计算货币扩张与供给冲击的短期和长期效果。"
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["经济学", "宏观经济学", "AD-AS", "总供给", "货币中性"]
+locale: zh
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 宏观经济学 — 物价一变动，IS-LM中的一个点就成了总需求曲线
+
+[第4章](/zh/education-economics-ch14/)的IS-LM把物价固定。物价上升时，同样名义货币量的实际购买力$M/P$下降，LM左移，产出减少。把物价与产出的这种关系连起来，就是**总需求(AD)曲线**。再加上表示企业在各物价水平上生产多少的**总供给(AS)曲线**，物价和产出就同时被决定。
+
+## 1. 总需求曲线的推导
+
+在第4章的经济中(IS:$Y=410-10r$，货币需求$0.5Y-20r$)，设名义货币量$M=180$，把物价$P$留作变量，则LM为$180/P=0.5Y-20r$。与IS联立消去$r$:
+
+<FormulaBox
+  label="总需求曲线"
+  formula="Y = 328 + \frac{72}{P}"
+  description="P = 1时Y = 400(第4章的均衡)，P = 1.2时为388，P = 0.8时为418。物价上升使实际余额减少、利率上升、投资减少(凯恩斯效应)。"
+/>
+
+沿AD曲线的**移动**是由物价变化引起的，AD曲线本身的**移动**则由政府支出、税收、名义货币量、预期等因素引起。名义货币量增加10%时，AD变为$Y=328+79.2/P$，这条曲线在物价1.1时实现同样的产出400。
+
+## 2. 短期总供给与长期总供给
+
+**长期**内工资和价格都会调整，产出停留在由劳动、资本、技术决定的潜在产出$Y^*$。长期总供给(LRAS)在$Y^*$处垂直。
+
+**短期**内，由于名义工资合同、菜单成本和不完全信息，价格不会立即调整。物价高于预期时，企业增加生产。
+
+<FormulaBox
+  label="短期总供给"
+  formula="P = P^e + \frac{1}{\alpha}\,(Y - Y^*)"
+  description="P^e为预期物价。只有实际物价高于预期时，产出才会超过潜在水平。预期赶上实际物价后，SRAS上移，产出回到Y*。"
+/>
+
+设$Y^*=400$，$P^e=1$，斜率$1/\alpha=0.002$。
+
+## 3. 货币扩张的短期与长期
+
+名义货币量增加10%时:
+
+- **短期**:新的AD与原有SRAS的交点为$Y\approx 406.2$，$P\approx 1.012$。产出大幅增加，物价略有上升。
+- **长期**:人们看到物价上涨而提高预期物价，SRAS上移。预期物价达到1.1时，新均衡为$Y=400$，$P=1.1$。产出回到潜在水平，只有物价恰好上涨10%。
+
+<EconDiagram
+  title="货币扩张的短期与长期效果"
+  xLabel="Y"
+  yLabel="P"
+  xMin={385}
+  xMax={425}
+  yMin={0.85}
+  yMax={1.2}
+  curves={[
+    { label: "AD", points: [[390, 1.161], [395, 1.075], [400, 1.0], [405, 0.935], [410, 0.878]], tone: "blue" },
+    { label: "AD'", points: [[395, 1.182], [400, 1.1], [405, 1.029], [410, 0.966], [415, 0.91], [420, 0.861]], tone: "blue", dashed: true },
+    { label: "SRAS", points: [[385, 0.97], [425, 1.05]], tone: "green" },
+    { label: "SRAS'", points: [[385, 1.07], [425, 1.15]], tone: "green", dashed: true },
+    { label: "LRAS", points: [[400, 0.85], [400, 1.2]], tone: "red", anchor: "end" },
+  ]}
+  marks={[
+    { x: 400, y: 1.0, label: "E", yTick: "1.0" },
+    { x: 406.2, y: 1.012, label: "短期" },
+    { x: 400, y: 1.1, label: "长期", yTick: "1.1" },
+  ]}
+  caption="货币扩张使AD右移，短期内产出增加；但预期调整、SRAS上移后，长期内在潜在产出上只有物价上涨。"
+/>
+
+名义货币量在长期内无法改变实际变量(产出、就业)、只改变物价的性质，称为**货币的长期中性**。短期效果有多大、持续多久，取决于SRAS的斜率和预期调整的速度。这一调整路径在[第15章](/zh/education-economics-ch26/)中进一步讨论。
+
+## 4. 四种冲击
+
+<LectureTable
+  title="各种冲击的短期与长期结果"
+  headers={["冲击", "短期(Y, P)", "长期"]}
+  rows={[
+    ["总需求增加(G↑、M↑)", "Y↑ P↑", "Y = Y*，P↑"],
+    ["总需求减少", "Y↓ P↓", "Y = Y*，P↓(调整缓慢则衰退漫长)"],
+    ["不利供给冲击(油价↑)", "Y↓ P↑(滞胀)", "若是暂时的则恢复原状，若是永久的则Y*下降"],
+    ["有利供给冲击(生产率↑)", "Y↑ P↓", "Y*上升"],
+  ]}
+/>
+
+不利的供给冲击使政策当局陷入两难。扩大总需求以保产出，物价会进一步上涨；压缩总需求以抑制物价，衰退会加深。20世纪70年代的石油危机就是这种情况，应对的选择见[第10章](/zh/education-economics-ch21/)和[第13章](/zh/education-economics-ch24/)。
+
+<Callout type="warning">
+垂直的长期总供给并不意味着"政策无效"，而是指产出**水平**在长期内与总需求无关。提高潜在产出本身的增长是[第11、12章](/zh/education-economics-ch22/)的主题。此外，若忽视短期价格粘性、用垂直的AS解读所有衰退，就会把总需求不足造成的失业误判为"自然的"。反过来，若忽视长期调整，就会误以为扩大总需求能永远增加产出。
+</Callout>
+
+## 练习题
+
+在上述经济中名义货币量增加20%，长期均衡是什么?长期内$Y=400$，AD为$Y=328+86.4/P$，由$86.4/P=72$得$P=1.2$，物价恰好上涨20%。实际余额$M/P=216/1.2=180$回到原水平，利率和投资也恢复原状。
+
+## 参考资料
+
+- N. Gregory Mankiw, *Macroeconomics*, ch. 10, 14
+- Olivier Blanchard, *Macroeconomics*, ch. 7–9
+- MIT OpenCourseWare, [14.02 Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)

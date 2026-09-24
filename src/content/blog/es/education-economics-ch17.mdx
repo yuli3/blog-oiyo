@@ -1,0 +1,106 @@
+---
+track: academy
+series: macroeconomics
+chapter: 6
+title: "Macroeconomía — La función de inversión: el coste de uso del capital"
+description: "Explica con números y un gráfico cómo las empresas fijan un stock de capital objetivo comparando el producto marginal del capital con su coste de uso (r+δ)P_k, cómo los cambios de tipos se transmiten a la inversión, el acelerador, la q de Tobin y por qué la irreversibilidad y las restricciones de crédito hacen la inversión poco sensible a los tipos."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["economía", "macroeconomía", "función de inversión", "coste de uso", "q de Tobin"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Macroeconomía — antes de ser función del tipo de interés, la inversión compara el rendimiento y el coste del capital
+
+La curva IS del [capítulo 4](/es/education-economics-ch14/) tenía pendiente negativa porque la inversión responde al tipo de interés. Este capítulo examina el fundamento microeconómico de esa respuesta. Las empresas comparan lo que rinde y lo que cuesta una unidad más de capital: la misma lógica que el valor actual neto (VAN) de las finanzas corporativas, aplicada a variables macroeconómicas. La inversión pesa menos que el consumo en el PIB, pero es mucho más volátil y explica buena parte del ciclo económico.
+
+## 1. El coste de uso del capital
+
+Lo que le cuesta a una empresa usar una máquina durante un año no es el precio de la máquina, sino el interés que ese dinero habría rendido en otro uso más el valor que la máquina pierde por desgaste durante el año.
+
+<FormulaBox
+  label="Coste de uso del capital"
+  formula="uc = (r + \delta)\,P_k"
+  description="r es el tipo de interés real, δ la tasa de depreciación y P_k el precio de los bienes de capital. Para una máquina de 100 millones de wones con r = 5 % y δ = 10 %, el coste de uso anual es de 15 millones de wones. Con impuesto de sociedades y deducciones por inversión se ajusta a coste después de impuestos."
+/>
+
+La empresa aumenta su capital hasta que el **valor del producto marginal** del capital iguala el coste de uso. Como el producto marginal del capital es decreciente, un coste de uso menor eleva el capital objetivo.
+
+Supongamos que el rendimiento del capital de una empresa (valor del producto marginal por unidad de capital dividido por el precio de los bienes de capital) es $MPK=20\,\%-0{,}5\,\%\times K$ y que $\delta=5\,\%$:
+
+- $r=5\,\%$: $uc=10\,\%$ → $20-0{,}5K=10$ → capital objetivo $K^*=20$
+- $r=3\,\%$: $uc=8\,\%$ → $K^*=24$
+
+Si el capital actual es 18, la inversión es 2 con un tipo del 5 % y 6 con un 3 %. Una bajada de 2 puntos triplicó la inversión. Sumando para todas las empresas esta relación —tipos más bajos elevan el capital objetivo y, por tanto, la inversión— se obtiene la función de inversión $I(r)$.
+
+<EconDiagram
+  title="Capital objetivo y coste de uso"
+  xLabel="K"
+  yLabel="Rendimiento / coste (%)"
+  xMax={40}
+  yMax={20}
+  curves={[
+    { label: "MPK", points: [[0, 20], [40, 0]], tone: "blue" },
+    { label: "uc (r=5 %)", points: [[0, 10], [40, 10]], tone: "red" },
+    { label: "uc (r=3 %)", points: [[0, 8], [40, 8]], tone: "red", dashed: true },
+  ]}
+  marks={[
+    { x: 20, y: 10, guide: true, xTick: "20" },
+    { x: 24, y: 8, guide: true, xTick: "24" },
+  ]}
+  caption="Cuando el coste de uso baja del 10 % al 8 %, el capital objetivo pasa de 20 a 24. La diferencia con el capital actual es la inversión."
+/>
+
+Keynes expresó la misma decisión mediante la **eficiencia marginal del capital (EMC)**: el tipo de descuento que iguala el valor actual de los rendimientos esperados de un proyecto con su coste. Se invierte si la EMC supera el tipo de mercado. La clave son las expectativas. Si los empresarios se vuelven pesimistas, la EMC cae y la inversión se desploma aunque los tipos no cambien. Estos vaivenes de expectativas, que Keynes llamó «espíritus animales», **desplazan** la curva IS.
+
+## 2. El acelerador
+
+El capital objetivo también es proporcional a la producción. Si cada unidad producida necesita $v$ unidades de capital, $K^*=vY$ y la inversión neta es $I=v\,\Delta Y$. La inversión responde al **cambio** de la producción, no a su **nivel**. En una industria con $v=3$, que el crecimiento de la producción se frene del 5 % al 3 % reduce la inversión neta un 40 %, aunque la producción siga creciendo. Es una de las razones por las que la inversión es mucho más volátil que el consumo.
+
+## 3. La q de Tobin
+
+<FormulaBox
+  label="q de Tobin"
+  formula="q = \frac{\text{Valor de mercado de la empresa}}{\text{Coste de reposición de su capital}}"
+  description="Si q > 1, el mercado valora cada won de capital en más de un won: comprar e instalar capital nuevo crea valor y la empresa invierte. Si q < 1, comprar empresas existentes es más barato que invertir."
+/>
+
+Como q ya incorpora la valoración bursátil de los rendimientos esperados, contiene la misma información que el modelo del coste de uso y además es observable. También es un canal por el que las subidas bursátiles impulsan la inversión.
+
+## 4. Cuándo la inversión se vuelve insensible a los tipos
+
+<LectureTable
+  title="Por qué una bajada de tipos puede no traducirse en inversión"
+  headers={["Causa", "Mecanismo", "Ejemplo"]}
+  rows={[
+    ["Irreversibilidad e incertidumbre", "En una inversión irreversible, la opción de esperar tiene valor", "Compás de espera cuando hay mucha incertidumbre sobre políticas o demanda"],
+    ["Restricciones de crédito", "El coste de la financiación externa supera con creces el tipo, o se corta el crédito", "Pymes durante una crisis financiera"],
+    ["Exceso de capacidad", "Con baja utilización, el propio MPK es bajo", "Inicio de una recesión"],
+    ["Empeoran las expectativas", "Caen la EMC y q y la IS se desplaza a la izquierda", "Pesimismo económico"],
+  ]}
+/>
+
+La inversión residencial y la variación de existencias siguen la misma lógica: el precio de la vivienda respecto al coste de construcción (la q de la vivienda) y el coste de uso de mantener existencias (intereses más almacenamiento) determinan cada una.
+
+<Callout type="warning">
+Antes de concluir que «la función de inversión está mal» porque la inversión no subió tras bajar los tipos, compruebe si en ese mismo periodo la incertidumbre, las condiciones de crédito o las expectativas desplazaron la función de inversión. Distinguir un movimiento a lo largo de una curva de un desplazamiento de la curva es el mismo problema de identificación del [capítulo 2 de Microeconomía](/es/education-economics-ch2/). El efecto expulsión de una expansión fiscal, que sube los tipos y reduce la inversión, actúa a través del aumento del coste de uso descrito en este capítulo.
+</Callout>
+
+## Ejercicio
+
+Una máquina cuesta 200 millones de wones, el tipo real es del 4 % y la depreciación del 8 %. ¿Cuál es el coste de uso anual? $(0{,}04+0{,}08)\times 200$ millones $=24$ millones de wones. Si la máquina rinde 20 millones netos al año, la empresa no invierte. Si el tipo baja al 1 %, el coste de uso pasa a 18 millones y la empresa invierte.
+
+## Referencias
+
+- N. Gregory Mankiw, *Macroeconomics*, ch. 17
+- Dale Jorgenson, "Capital Theory and Investment Behavior," *American Economic Review* (1963)
+- James Tobin, "A General Equilibrium Approach to Monetary Theory," *Journal of Money, Credit and Banking* (1969)
+- Avinash Dixit and Robert Pindyck, *Investment under Uncertainty* (1994)

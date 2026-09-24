@@ -1,0 +1,103 @@
+---
+track: academy
+series: macroeconomics
+chapter: 5
+title: "宏观经济学 — 消费函数:从凯恩斯到持久收入"
+description: "用凯恩斯消费函数和凯恩斯交叉图计算乘数，并从库兹涅茨之谜出发，用数字和图形整理持久收入假说、生命周期假说、随机游走消费，以及流动性约束为何改变边际消费倾向。"
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["经济学", "宏观经济学", "消费函数", "持久收入", "生命周期"]
+locale: zh
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 宏观经济学 — 消费不只取决于今年的收入，而是一生资源的函数
+
+消费是GDP中最大的组成部分，消费对收入变化的反应程度(边际消费倾向)决定了乘数的大小。本章先用凯恩斯的简单消费函数计算乘数，然后转向追问边际消费倾向针对的是**哪种收入**的理论。一次性补贴和永久性减税不是同一个数字。
+
+## 1. 凯恩斯消费函数与交叉图
+
+<FormulaBox
+  label="凯恩斯消费函数"
+  formula="C = c_0 + c\,Y_d,\qquad 0<c<1"
+  description="c_0为与收入无关的自发消费，c为边际消费倾向(MPC)，Y_d = Y − T为可支配收入。平均消费倾向C/Y_d随收入增加而下降。"
+/>
+
+若$C=20+0.8(Y-10)$，投资与政府支出之和$I+G=50$(万亿韩元)，计划支出为$AE=62+0.8Y$。均衡是计划支出等于产出之处:$Y=62+0.8Y$，即$Y=310$万亿韩元。
+
+<EconDiagram
+  title="凯恩斯交叉图与乘数"
+  xLabel="Y"
+  yLabel="AE"
+  xMax={400}
+  yMax={400}
+  curves={[
+    { label: "45°", points: [[0, 0], [400, 400]], tone: "gray", dashed: true },
+    { label: "AE", points: [[0, 62], [400, 382]], tone: "blue" },
+    { label: "AE'", points: [[0, 72], [400, 392]], tone: "blue", dashed: true, labelAt: 0 },
+  ]}
+  marks={[
+    { x: 310, y: 310, label: "E", guide: true, xTick: "310" },
+    { x: 360, y: 360, label: "E'", guide: true, xTick: "360" },
+  ]}
+  caption="政府支出增加10万亿韩元、AE上移10时，均衡产出增加50万亿韩元，因为增加的收入中有80%被一再用于消费。"
+/>
+
+政府支出增加10万亿韩元时，均衡为$Y=72+0.8Y$，即360万亿韩元。乘数为$1/(1-0.8)=5$。若MPC为0.6，乘数降至2.5。乘数的大小对MPC非常敏感。
+
+## 2. 库兹涅茨之谜
+
+凯恩斯消费函数与家庭横截面数据和短期时间序列拟合良好:收入越高的家庭，消费占收入的比例越低。但库兹涅茨考察数十年的长期数据时发现，平均消费倾向几乎不变。短期内平均消费倾向随收入下降、长期却不下降，这种矛盾就是**库兹涅茨之谜**。下面两种理论回答了这个问题。
+
+## 3. 持久收入假说与生命周期假说
+
+**弗里德曼的持久收入假说**:收入分为长期预期的**持久收入**和暂时的**暂时收入**，消费主要对持久收入作出反应。某年收入暂时偏高的家庭，当年测得的消费率偏低。这就是横截面数据中高收入阶层平均消费倾向显得较低的原因。长期内暂时收入平均相互抵消，平均消费倾向保持不变。
+
+**莫迪利安尼的生命周期假说**:人们希望把一生的资源均匀地用于一生的消费。工作期储蓄，退休期动用储蓄。
+
+<FormulaBox
+  label="生命周期消费(零利率的简单形式)"
+  formula="C = \frac{W + R\,Y}{T}"
+  description="W为当前资产，R为剩余工作年数，Y为年收入，T为剩余寿命年数。资产2亿韩元、退休前20年每年收入5000万韩元、剩余寿命40年，则C = (2亿 + 10亿)/40 = 3000万韩元。"
+/>
+
+上例中此人在工作期每年储蓄2000万韩元。若资产增加1亿韩元(例如房价上涨)，年消费增加$1\text{亿}/40=250$万韩元，即对资产的边际消费倾向为0.025。
+
+<LectureTable
+  title="MPC随收入变化的类型而不同"
+  headers={["收入变化", "凯恩斯", "持久收入·生命周期"]}
+  rows={[
+    ["永久性减税", "大", "大"],
+    ["一次性补贴", "大", "小(占一生收入的比重小)"],
+    ["宣布未来收入将增加", "无(当前收入不变)", "现在就增加消费"],
+    ["受流动性约束家庭的暂时收入", "大", "大(想平滑消费却借不到钱)"],
+  ]}
+/>
+
+## 4. 随机游走消费与流动性约束
+
+霍尔证明，在持久收入假说中加入理性预期后，消费的变化应当是不可预测的，因为可预测的收入变化已经反映在今天的消费中(**随机游走消费**)。实证中却经常观察到，消费对可预测的收入增加(例如预定的退税)也有反应，即**过度敏感性**。
+
+原因之一是**流动性约束**。即使未来收入高，现在借不到钱也无法平滑消费。在对2008年美国退税的研究中(帕克等)，家庭在一个季度内就花掉了退税的相当一部分，流动资产少的家庭反应更大。信用卡额度和住房贷款条件是改变宏观MPC的途径。现时偏差和心理账户的作用见[行为经济学第4、6章](/zh/academy-behavioral-economics-ch4/)。
+
+<Callout type="warning">
+把平均MPC 0.8套用到所有政策上，会大大高估乘数。一次性补贴有多少漏入储蓄和偿债，取决于受益家庭的收入、资产和信贷状况。此外，**节俭悖论**(所有人同时想多储蓄，收入下降，总储蓄并未如愿增加)讲的是需求不足的短期。它与[第11章](/zh/education-economics-ch22/)中长期储蓄支持资本积累和增长的命题并不矛盾。
+</Callout>
+
+## 练习题
+
+在上述经济中发放一次性转移支付10万亿韩元，受益家庭的MPC为0.3，第一轮消费增加多少?3万亿韩元。若之后乘数过程中收入增加的家庭MPC为0.8，总效应为$3\times 5=15$万亿韩元。若一开始就套用凯恩斯的0.8，算成$10\times 0.8\times 5=40$万亿韩元，就高估了两倍以上。
+
+## 参考资料
+
+- N. Gregory Mankiw, *Macroeconomics*, ch. 16
+- Milton Friedman, *A Theory of the Consumption Function* (1957)
+- Robert Hall, "Stochastic Implications of the Life Cycle–Permanent Income Hypothesis," *Journal of Political Economy* (1978)
+- Jonathan Parker et al., "Consumer Spending and the Economic Stimulus Payments of 2008," *American Economic Review* (2013)

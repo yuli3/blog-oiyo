@@ -1,99 +1,109 @@
 ---
 track: academy
-series: economics-basics
-chapter: 18
-title: "Economic Principles — Applications of the IS-LM model and debates among schools of thought"
-description: "The relative effectiveness of fiscal and monetary policies is analyzed from the perspective of each school (Keynes vs. classical). It addresses liquidity traps and whether full employment equilibri..."
+series: macroeconomics
+chapter: 7
+title: "Macroeconomics — Applying IS-LM: Slopes and Schools of Thought"
+description: "Derives fiscal and monetary multipliers from IS-LM parameters, computes with the same numbers and a graph how the effects of both policies change as the interest sensitivity of money demand ranges from infinity (liquidity trap) to zero (classical case), and discusses the policy mix."
 pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
 category: Economics
-tags:
-  - Education
-  - economics
-  - 정병렬경제학
+tags: ["economics", "macroeconomics", "IS-LM", "liquidity trap", "policy mix"]
 locale: en
 author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
-import {
-  LectureTable,
-} from "@/features/education-common/components/LectureVisuals";
+
 import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
-import ISLMSimulator from "@/components/mdx/ISLMSimulator.tsx";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# Applications of the IS-LM Model and Debates Between Schools of Thought
+# Macroeconomics — Which Policy Is Stronger Depends on the Slopes, Not the School
 
-The IS-LM model learned previously is not merely a tool for drawing graphs. How effective a given policy is depends on the "slope" of each curve, which leads to philosophical differences between economic schools of thought regarding the economy.
+[Chapter 4](/en/education-economics-ch14/) shifted IS and LM to see the signs of policy effects. This chapter looks at the slopes that determine their **size**. The long-running debate between "fiscal policy is powerful" (Keynesians) and "only monetary policy moves output" (monetarists) was in effect an empirical debate about how sensitive money demand and investment are to the interest rate.
 
----
+## 1. Writing the multipliers in terms of parameters
 
-## 1. Policy Effectiveness and the Slopes of the Curves
+Write IS as $Y=\alpha-\beta r+\gamma G$ and LM as $M/P=\lambda Y-\mu r$. $\beta$ is the sensitivity of spending to the interest rate (including the multiplier), $\gamma$ the government spending multiplier, $\lambda$ the income sensitivity of money demand and $\mu$ its interest sensitivity. Substituting $r=(\lambda Y-M/P)/\mu$ from LM into IS:
 
-### (1) Effectiveness of Fiscal Policy (IS Shift)
-
-- The **more vertical the IS curve** (investment is interest-inelastic): The effectiveness of fiscal policy is **maximized**.
-- The **more horizontal the LM curve** (liquidity trap): The effectiveness of fiscal policy is **maximized** (because there is no crowding-out effect).
-
-### (2) Effectiveness of Monetary Policy (LM Shift)
-
-- The **more vertical the LM curve** (money demand is interest-inelastic): The effectiveness of monetary policy is **maximized** (argued by monetarists).
-- The **more horizontal the IS curve** (investment is highly interest-elastic): The effectiveness of monetary policy is **maximized**.
-
----
-
-## 2. Differences in Perspectives by School of Thought
-
-<LectureTable
-  title="Keynesian vs. Monetarist (Classical) Schools"
-  headers={["Category", "Keynesian School", "Monetarist (Classical) School"]}
-  rows={[
-    ["Key Policy", "Emphasizes fiscal policy", "Emphasizes monetary policy (rules)"],
-    [
-      "IS Slope",
-      "Steep (Low interest elasticity of investment)",
-      "Flat (High interest elasticity of investment)",
-    ],
-    [
-      "LM Slope",
-      "Flat (High interest elasticity of money demand)",
-      "Steep (Money demand is a function of income)",
-    ],
-    ["Economic Foundation", "Unstable (Government intervention required)", "Stable (Trust in market self-regulation)"],
-  ]}
-  highlightColumns={[1, 2]}
+<FormulaBox
+  label="Policy multipliers in IS-LM"
+  formula="\frac{dY}{dG}=\frac{\gamma}{1+\beta\lambda/\mu},\qquad \frac{dY}{d(M/P)}=\frac{\beta/\mu}{1+\beta\lambda/\mu}"
+  description="The term βλ/μ in the denominator is the size of crowding out: as output rises, money demand rises by λ, the interest rate rises at the rate 1/μ, and spending falls by β."
 />
 
----
+With the example of Chapter 4 ($\beta=10$, $\gamma=5$, $\lambda=0.5$, $\mu=20$), the fiscal multiplier is $5/1.25=4$ and the real-balance multiplier $0.5/1.25=0.4$. This matches Chapter 4, where 10 trillion won of G raised output by 40 trillion and 20 of real balances raised it by 8 trillion.
 
-## 3. Special Situation: Liquidity Trap
+## 2. Three regions by the interest sensitivity of money demand
 
-<ISLMSimulator client:visible />
+Changing only $\mu$ reverses the relative strength of the two policies.
 
-A state where the interest rate is so low that the money demand curve becomes horizontal ($LM$ is horizontal).
+<LectureTable
+  title="Policy multipliers by μ (β = 10, γ = 5, λ = 0.5)"
+  headers={["μ", "Shape of LM", "Fiscal multiplier dY/dG", "Real-balance multiplier dY/d(M/P)"]}
+  rows={[
+    ["→ ∞", "Horizontal (liquidity trap)", "5 (no crowding out)", "0"],
+    ["20", "Gently upward-sloping", "4", "0.4"],
+    ["5", "Steeply upward-sloping", "2.5", "1"],
+    ["→ 0", "Vertical (classical)", "0 (full crowding out)", "2 (= 1/λ)"],
+  ]}
+/>
 
-- **Phenomenon**: No matter how much the money supply increases, the interest rate does not change, having no effect on the real economy.
-- **Solution**: Keynes argued that in this situation, only **fiscal policy**, where the government directly spends money, is the sole solution.
+<EconDiagram
+  title="The same fiscal expansion with three LM curves"
+  xLabel="Y"
+  yLabel="r (%)"
+  xMin={350}
+  xMax={470}
+  yMax={7}
+  curves={[
+    { label: "IS", points: [[350, 6], [410, 0]], tone: "blue", labelAt: 0 },
+    { label: "IS'", points: [[390, 7], [460, 0]], tone: "blue", dashed: true, labelAt: 0 },
+    { label: "Flat LM", points: [[350, 1], [470, 1]], tone: "gray", dashed: true },
+    { label: "LM", points: [[360, 0], [470, 2.75]], tone: "green" },
+    { label: "Vertical LM", points: [[400, 0], [400, 7]], tone: "red", dashed: true },
+  ]}
+  marks={[
+    { x: 400, y: 1, label: "E" },
+    { x: 450, y: 1, label: "Trap: +50", xTick: "450" },
+    { x: 440, y: 2, label: "Normal: +40", xTick: "440" },
+    { x: 400, y: 6, label: "Classical: 0" },
+  ]}
+  caption="Government spending of 10 trillion won shifts IS right by 50. With a flat LM the interest rate does not rise and output rises by 50; with a vertical LM only the interest rate rises and output is unchanged."
+/>
 
----
+**Liquidity trap** ($\mu\to\infty$): when interest rates are so low that people are willing to hold unlimited money instead of bonds, increasing the money supply cannot push rates lower. Monetary policy cannot move output, and fiscal policy causes no crowding out because rates do not rise. The Great Depression of the 1930s and the zero-interest-rate period after 2008 are often seen as close to this situation.
 
-## 4. Recalibration of the Crowding-out Effect
+**Classical region** ($\mu\to 0$): if money demand does not respond to the interest rate, $M/P=\lambda Y$ ties output to real balances. A fiscal expansion only raises the interest rate and crowds out an equal amount of private spending (full crowding out). Monetary expansion becomes the only way to move output — the same structure as the quantity theory of money in [Chapter 3](/en/education-economics-ch13/).
 
-A phenomenon where private investment decreases due to rising interest rates during fiscal policy implementation.
+The interest sensitivity of investment $\beta$ plays the same role. If $\beta\to 0$, spending does not change when rates change, so there is no crowding out (fiscal policy is strong), and monetary policy cannot raise spending even if it lowers rates (monetary policy is powerless).
 
-- The classical school viewed the crowding-out effect as 100% occurring, thus rendering fiscal policy useless, whereas the Keynesian school counters that the income-increasing effect is larger when there is idle capacity.
+## 3. The policy mix
 
----
+<LectureTable
+  title="Policy combinations by situation"
+  headers={["Situation", "Primary instrument", "Reason"]}
+  rows={[
+    ["Recession + rates at the floor", "Fiscal expansion", "The interest-rate channel of monetary policy is blocked"],
+    ["Recession + room to cut rates", "Monetary easing (possibly with fiscal support)", "Raises investment without crowding out"],
+    ["Overheating + fiscal deficit", "Fiscal tightening + monetary easing", "Keeps output while lowering rates to shift the composition towards investment"],
+    ["Supply shock (prices up, output down)", "IS-LM alone is not enough", "Prices move, so the AD-AS model of Chapter 8 is needed"],
+  ]}
+/>
 
-## 5. Wrapping Up: Pragmatic Policy Mix
+Combining fiscal tightening with monetary easing moves IS left and LM right, lowering interest rates while keeping output roughly unchanged. At the same output the share of private investment rises relative to government spending, which favours capital accumulation in the long run.
 
-Modern economics does not follow only one side's extreme arguments. **Flexible policy selection** tailored to the situation is important, such as using fiscal policy in extremely depressed economic conditions (liquidity trap) and monetary policy during moderate fluctuations.
+<Callout type="warning">
+Do not choose answers by school labels. What is needed is an empirical judgement about how responsive money demand and investment are to interest rates. And under interest-rate targeting, whether the central bank raises its rate in response to a fiscal expansion effectively determines the slope of LM. Even in a liquidity trap, a central bank can have an effect by committing to a future path of rates (forward guidance) or by buying long-term bonds to move long-term rates and expectations.
+</Callout>
 
----
+## Check your understanding
 
-## 📖 References
+With $\beta=10$, $\gamma=5$, $\lambda=0.5$ and $\mu=10$, what are the output effects of 10 trillion won of government spending and of 20 of real balances? The denominator is $1+10\times 0.5/10=1.5$. The fiscal effect is $5/1.5\times 10\approx 33.3$ trillion won and the monetary effect $(10/10)/1.5\times 20\approx 13.3$ trillion won. As $\mu$ falls from 20 to 10, the fiscal effect shrinks (40 → 33.3) and the monetary effect grows (8 → 13.3).
 
-- **[Macroeconomics] - Byung-ryul Jung**: Comparison of policy effectiveness by economic school.
-- **[A Monetary History of the United States] - Milton Friedman**: Logical foundations of monetarism.
+## References
 
----
-
-Great job. In the next session, we will study the **AD-AS Model and Supply-Side Economics**, which expand the determinants of national income by taking price level fluctuations into account.
+- N. Gregory Mankiw, *Macroeconomics*, ch. 12
+- John Hicks, "Mr. Keynes and the 'Classics'," *Econometrica* (1937)
+- Paul Krugman, "It's Baaack: Japan's Slump and the Return of the Liquidity Trap," *Brookings Papers on Economic Activity* (1998)
+- MIT OpenCourseWare, [14.02 Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)

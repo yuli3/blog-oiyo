@@ -1,0 +1,109 @@
+---
+track: academy
+series: macroeconomics
+chapter: 2
+title: "Macroéconomie — Mesurer l'inflation et le chômage"
+description: "Présente, chiffres à l'appui, la construction et les biais de l'indice des prix à la consommation, la différence entre IPC et déflateur du PIB, l'équation de Fisher et la redistribution due à l'inflation imprévue, les dénominateurs des taux de chômage, d'emploi et d'activité et les travailleurs découragés, ainsi que les trois types de chômage."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["économie", "macroéconomie", "inflation", "taux de chômage", "équation de Fisher"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Macroéconomie — pour interpréter prix et chômage, il faut d'abord savoir comment on les mesure
+
+Les deux objectifs de la politique macroéconomique sont la stabilité des prix et le plein emploi. La courbe de Phillips, qui les relie par un arbitrage, est traitée au [chapitre 9](/fr/education-economics-ch20/) ; ce chapitre expose d'abord ce que mesurent ces deux variables et où naissent les illusions.
+
+## 1. L'indice des prix à la consommation est le prix d'un panier fixe
+
+L'**indice des prix à la consommation (IPC)** fixe le panier de consommation d'un ménage représentatif à une date de base et mesure l'évolution du coût d'achat de ce panier.
+
+<LectureTable
+  title="Calcul de l'IPC (panier de l'année de base : 10 kg de riz, 20 trajets en bus)"
+  headers={["", "Riz par kg", "Trajet en bus", "Coût du panier", "IPC"]}
+  rows={[
+    ["Année de base", "3 000 wons", "1 500 wons", "60 000 wons", "100"],
+    ["Année suivante", "3 300 wons", "1 500 wons", "63 000 wons", "105"],
+  ]}
+/>
+
+Le taux d'inflation est un **taux de variation** du niveau des prix, pas ce **niveau** lui-même. Si l'IPC passe de 110 à 120, l'inflation est de $(120-110)/110\approx 9{,}1\,\%$. « L'IPC est à 120, donc les prix ont augmenté de 20 % » confond la hausse cumulée depuis l'année de base avec l'inflation de l'année.
+
+Un panier fixe comporte un **biais à la hausse** systématique.
+
+- **Biais de substitution** : quand le riz renchérit, les gens achètent plus de pain, mais le panier fixe surpondère le riz devenu plus cher.
+- **Biais de qualité** : si un smartphone vendu au même prix s'améliore chaque année, l'indice n'enregistre aucune variation de prix. Sans ajustement pour la qualité, il manque la baisse du prix réel.
+- **Biais des nouveaux produits** : les nouveaux produits entrent tardivement dans le panier, si bien que les baisses de prix de leurs débuts sont ignorées.
+
+<LectureTable
+  title="IPC et déflateur du PIB"
+  headers={["", "IPC", "Déflateur du PIB"]}
+  rows={[
+    ["Champ", "Biens de consommation achetés par les ménages", "Tous les biens finals produits dans le pays"],
+    ["Importations", "Incluses", "Exclues"],
+    ["Pondération", "Panier fixe", "Composition courante de la production"],
+    ["Exemple", "Reflète fortement la hausse du pétrole importé", "Reflète le prix des équipements produits dans le pays"],
+  ]}
+/>
+
+## 2. Nominal et réel : l'équation de Fisher
+
+<FormulaBox
+  label="Équation de Fisher (approximation)"
+  formula="i \approx r + \pi^e"
+  description="Le taux d'intérêt nominal i est la somme du taux réel r et de l'inflation anticipée π^e. La forme exacte est (1+i) = (1+r)(1+π^e)."
+/>
+
+Si les salaires nominaux augmentent de 5 % et l'IPC de 9,1 %, le salaire réel baisse de $1{,}05/1{,}091-1\approx -3{,}8\,\%$.
+
+L'inflation **anticipée** est intégrée aux taux contractuels et redistribue peu. L'inflation **imprévue** transfère de la richesse des créanciers vers les débiteurs. Si vous prêtez à 5 % nominal en anticipant 2 % d'inflation et que l'inflation atteint 6 %, le taux réel perçu par le créancier est de −1 %, et non de 3 %. Les prêteurs à taux fixe, les retraités et tous ceux dont les revenus sont fixés en termes nominaux y perdent.
+
+## 3. Pour le taux de chômage, le dénominateur compte
+
+<FormulaBox
+  label="Indicateurs du marché du travail"
+  formula="\text{Taux de chômage} = \frac{\text{Chômeurs}}{\text{Population active}},\quad \text{Taux d'emploi} = \frac{\text{Personnes en emploi}}{\text{Population en âge de travailler}}"
+  description="Population active = personnes en emploi + chômeurs. Un chômeur est une personne apte et disposée à travailler, qui a activement cherché un emploi sans en trouver. Celles qui ont renoncé à chercher sont classées comme inactives."
+/>
+
+Prenons une économie dont la population en âge de travailler compte 100 personnes : 57 en emploi, 3 chômeurs et 40 inactifs. Le taux de chômage est de $3/60=5\,\%$, le taux d'emploi de 57 % et le taux d'activité de 60 %.
+
+Si un chômeur renonce à chercher et devient un **travailleur découragé**, il reste 2 chômeurs pour une population active de 59, et le taux de chômage **baisse** à environ 3,4 %. Rien ne s'est amélioré sur le marché du travail, et pourtant le taux de chômage paraît meilleur. Le taux d'emploi (57 %) est inchangé : regarder les deux taux ensemble permet d'éviter l'illusion.
+
+## 4. Trois types de chômage
+
+<LectureTable
+  title="Types de chômage et réponses"
+  headers={["Type", "Cause", "Réponse"]}
+  rows={[
+    ["Frictionnel", "Temps de recherche lors d'un changement d'emploi ou d'une première embauche", "Mieux mettre en relation offres et demandeurs d'emploi"],
+    ["Structurel", "Inadéquation entre compétences et emplois après un changement technique ou sectoriel", "Formation, aide à la mobilité géographique"],
+    ["Conjoncturel", "Demande globale insuffisante", "Politiques monétaire et budgétaire"],
+  ]}
+/>
+
+Le chômage frictionnel et le chômage structurel subsistent même quand l'économie va bien. Le taux de chômage qu'ils constituent est le **taux de chômage naturel**. Il n'est pas nul et dépend d'institutions comme l'assurance chômage et le salaire minimum, ainsi que de l'efficacité de l'appariement sur le marché du travail. La façon de le calculer à partir des flux d'entrée et de sortie du chômage est présentée au [chapitre 20](/fr/education-economics-ch31/).
+
+La relation empirique entre chômage conjoncturel et production est la **loi d'Okun** : lorsque le chômage dépasse de 1 point son taux naturel, la production est inférieure d'environ 2 % à son potentiel, relation observée dans de nombreux pays. Le coefficient est une régularité empirique qui varie selon les pays et les périodes, non une identité.
+
+<Callout type="warning">
+L'inflation sous-jacente (hors alimentation et énergie) est un outil pour filtrer les chocs de prix temporaires et voir la tendance ; ce n'est pas la définition de la « vraie inflation ». Ce que ressentent les ménages inclut l'alimentation et l'énergie. Et un faible taux de chômage ne signifie pas un marché du travail sain si beaucoup travaillent à temps partiel sans l'avoir choisi ou ont cessé de chercher. Regardez aussi les mesures élargies du sous-emploi.
+</Callout>
+
+## Exercice
+
+L'IPC passe de 110 à 120 et les salaires nominaux augmentent de 5 %. Quels sont l'inflation et la variation du salaire réel ? L'inflation est d'environ 9,1 % et le salaire réel baisse d'environ 3,8 %. Si la même année l'un des 3 chômeurs renonçait à chercher, le taux de chômage tomberait de 5 % à environ 3,4 %, mais le taux d'emploi resterait à 57 %.
+
+## Références
+
+- Statistics Korea, [Enquête sur la population active](https://kostat.go.kr/incomeNc/) (en coréen)
+- N. Gregory Mankiw, *Macroeconomics*, ch. 2, 7
+- MIT OpenCourseWare, [14.02 Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)

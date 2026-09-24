@@ -1,0 +1,103 @@
+---
+track: academy
+series: macroeconomics
+chapter: 5
+title: "Macroéconomie — La fonction de consommation : de Keynes au revenu permanent"
+description: "Calcule le multiplicateur avec la fonction de consommation keynésienne et la croix keynésienne, puis, à partir de l'énigme de Kuznets, présente les hypothèses du revenu permanent et du cycle de vie, la consommation en marche aléatoire et les raisons pour lesquelles les contraintes de liquidité modifient la propension marginale à consommer, chiffres et graphique à l'appui."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["économie", "macroéconomie", "fonction de consommation", "revenu permanent", "cycle de vie"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Macroéconomie — la consommation dépend des ressources de toute une vie, pas seulement du revenu de l'année
+
+La consommation est la plus grande composante du PIB, et sa sensibilité au revenu (la propension marginale à consommer) détermine la taille du multiplicateur. Ce chapitre calcule le multiplicateur avec la fonction de consommation simple de Keynes, puis passe aux théories qui se demandent à **quel revenu** se rapporte cette propension marginale. Une aide ponctuelle et une baisse d'impôt permanente ne donnent pas le même chiffre.
+
+## 1. Fonction de consommation keynésienne et croix keynésienne
+
+<FormulaBox
+  label="Fonction de consommation keynésienne"
+  formula="C = c_0 + c\,Y_d,\qquad 0<c<1"
+  description="c_0 est la consommation autonome, c la propension marginale à consommer (PmC) et Y_d = Y − T le revenu disponible. La propension moyenne à consommer C/Y_d baisse quand le revenu augmente."
+/>
+
+Avec $C=20+0{,}8(Y-10)$ et un investissement plus dépenses publiques $I+G=50$ (milliers de milliards de wons), la dépense planifiée est $AE=62+0{,}8Y$. L'équilibre est atteint lorsque la dépense planifiée égale la production : $Y=62+0{,}8Y$, soit $Y=310$.
+
+<EconDiagram
+  title="La croix keynésienne et le multiplicateur"
+  xLabel="Y"
+  yLabel="AE"
+  xMax={400}
+  yMax={400}
+  curves={[
+    { label: "45°", points: [[0, 0], [400, 400]], tone: "gray", dashed: true },
+    { label: "AE", points: [[0, 62], [400, 382]], tone: "blue" },
+    { label: "AE'", points: [[0, 72], [400, 392]], tone: "blue", dashed: true, labelAt: 0 },
+  ]}
+  marks={[
+    { x: 310, y: 310, label: "E", guide: true, xTick: "310" },
+    { x: 360, y: 360, label: "E'", guide: true, xTick: "360" },
+  ]}
+  caption="Quand les dépenses publiques augmentent de 10 et que AE se déplace de 10 vers le haut, la production d'équilibre augmente de 50, car 80 % de chaque hausse de revenu est dépensé encore et encore."
+/>
+
+Si les dépenses publiques augmentent de 10 000 milliards de wons, l'équilibre devient $Y=72+0{,}8Y$, soit 360. Le multiplicateur vaut $1/(1-0{,}8)=5$. Avec une PmC de 0,6, il tombe à 2,5 : la taille du multiplicateur est très sensible à la PmC.
+
+## 2. L'énigme de Kuznets
+
+La fonction de consommation keynésienne s'ajustait bien aux données en coupe des ménages et aux courtes séries temporelles : les ménages plus riches consommaient une plus faible part de leur revenu. Mais en examinant plusieurs décennies de données, Kuznets constata que la propension moyenne à consommer était presque constante. Ce décalage — une propension moyenne qui baisse à court terme mais pas à long terme — est l'**énigme de Kuznets**. Les deux théories suivantes y ont répondu.
+
+## 3. Revenu permanent et cycle de vie
+
+**Hypothèse du revenu permanent de Friedman** : le revenu se compose d'un **revenu permanent**, attendu sur le long terme, et d'un **revenu transitoire**, et la consommation réagit surtout au revenu permanent. Un ménage dont le revenu est temporairement élevé une année donnée affiche cette année-là un taux de consommation mesuré faible. C'est pourquoi les ménages aisés semblent avoir une faible propension moyenne dans les données en coupe. À long terme, les revenus transitoires se compensent et la propension moyenne est constante.
+
+**Hypothèse du cycle de vie de Modigliani** : les individus cherchent à répartir uniformément leurs ressources sur toute leur vie. Ils épargnent pendant leur vie active et puisent dans leur épargne à la retraite.
+
+<FormulaBox
+  label="Consommation de cycle de vie (forme simple, taux d'intérêt nul)"
+  formula="C = \frac{W + R\,Y}{T}"
+  description="W est le patrimoine actuel, R le nombre d'années de travail restantes, Y le revenu annuel et T la durée de vie restante. Avec un patrimoine de 200 millions de wons, 20 ans de travail à 50 millions par an et 40 ans de vie restants, C = (200 millions + 1 milliard)/40 = 30 millions de wons."
+/>
+
+Dans cet exemple, la personne épargne 20 millions de wons par an pendant sa vie active. Si son patrimoine augmente de 100 millions (par exemple grâce à la hausse des prix immobiliers), sa consommation annuelle augmente de $100\text{ millions}/40=2{,}5$ millions : la propension marginale à consommer le patrimoine est de 0,025.
+
+<LectureTable
+  title="La PmC dépend du type de variation du revenu"
+  headers={["Variation du revenu", "Keynes", "Revenu permanent / cycle de vie"]}
+  rows={[
+    ["Baisse d'impôt permanente", "Forte", "Forte"],
+    ["Aide ponctuelle", "Forte", "Faible (petite part du revenu de toute une vie)"],
+    ["Annonce d'une hausse future du revenu", "Nulle (revenu courant inchangé)", "La consommation augmente dès maintenant"],
+    ["Revenu transitoire d'un ménage contraint en liquidité", "Forte", "Forte (il voudrait lisser mais ne peut pas emprunter)"],
+  ]}
+/>
+
+## 4. Consommation en marche aléatoire et contraintes de liquidité
+
+Hall a montré qu'en combinant le revenu permanent et les anticipations rationnelles, les variations de la consommation devraient être imprévisibles, puisque les variations prévisibles du revenu sont déjà intégrées à la consommation d'aujourd'hui (**consommation en marche aléatoire**). Dans les données, la consommation réagit pourtant souvent à des hausses de revenu prévisibles, comme des remboursements d'impôt programmés : c'est la **sensibilité excessive**.
+
+L'une des raisons est la **contrainte de liquidité**. Même si le revenu futur est élevé, un ménage qui ne peut pas emprunter aujourd'hui ne peut pas lisser sa consommation. Dans une étude des remboursements d'impôt américains de 2008 (Parker et coauteurs), les ménages ont dépensé une part importante du remboursement dans le trimestre, et ceux qui avaient peu d'actifs liquides ont réagi davantage. Les plafonds de carte de crédit et les conditions des prêts immobiliers sont des canaux qui modifient la PmC agrégée. Le rôle du biais pour le présent et de la comptabilité mentale est traité aux [chapitres 4 et 6 d'Économie comportementale](/fr/academy-behavioral-economics-ch4/).
+
+<Callout type="warning">
+Appliquer une PmC moyenne de 0,8 à toutes les politiques surestime fortement le multiplicateur. La part d'une aide ponctuelle qui s'échappe en épargne et en remboursement de dettes dépend du revenu, du patrimoine et de l'accès au crédit des bénéficiaires. De plus, le **paradoxe de l'épargne** — si tout le monde veut épargner davantage en même temps, le revenu baisse et l'épargne totale n'augmente pas comme prévu — concerne le court terme en situation de demande insuffisante. Il ne contredit pas l'idée, au [chapitre 11](/fr/education-economics-ch22/), qu'à long terme l'épargne soutient l'accumulation du capital et la croissance.
+</Callout>
+
+## Exercice
+
+Dans cette économie, un transfert ponctuel de 10 000 milliards de wons est versé et la PmC des bénéficiaires est de 0,3. Quelle est la hausse de la consommation au premier tour ? 3 000 milliards. Si les ménages dont le revenu augmente ensuite ont une PmC de 0,8, l'effet total est de $3\times 5=15$ milliers de milliards. Appliquer d'emblée le 0,8 de Keynes, $10\times 0{,}8\times 5=40$, surestime l'effet de plus du double.
+
+## Références
+
+- N. Gregory Mankiw, *Macroeconomics*, ch. 16
+- Milton Friedman, *A Theory of the Consumption Function* (1957)
+- Robert Hall, "Stochastic Implications of the Life Cycle–Permanent Income Hypothesis," *Journal of Political Economy* (1978)
+- Jonathan Parker et al., "Consumer Spending and the Economic Stimulus Payments of 2008," *American Economic Review* (2013)
