@@ -1,150 +1,100 @@
 ---
 track: academy
 locale: en
-title: "Introduction to Behavioral Economics — Why Humans Make Irrational Decisions"
+title: "Behavioral Economics — Where the Standard Model Goes Wrong"
 category: "Economics"
+series: behavioral-economics
+chapter: 1
+chapterTitleShort: 'The Standard Model and Departures'
 author: OIYO Editorial
 tags:
-  - behavioral-economics
-  - psychology
-  - decision-making
-  - cognitive-bias
-  - economics
-description: >-
-  Behavioral economics explores why people consistently deviate from the rational-agent model. This chapter introduces Kahneman and Tversky's Prospect Theory, loss aversion, anchoring, mental accounting, and status quo bias — along with the nudge framework that turns these insights into policy.
+  - behavioral economics
+  - bounded rationality
+  - expected utility
+  - experimental economics
+description: "Maps the whole course: which assumptions of the standard economic model behavioral economics revises (preferences, beliefs, decision processes), bounded rationality, the role of laboratory and field evidence, and the replication problem."
 pubDate: '2026-05-04'
+updatedDate: '2026-09-24'
+layoutVariant: lecture-series
 ---
 
-## Why Do Humans Make Irrational Decisions?
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-Traditional economics assumes that humans are **Homo Economicus** — rational agents who possess complete information and act to maximize their own utility.
+# Behavioral Economics — A More Precise Claim than "People Are Irrational"
 
-Reality tells a different story.
+Summarizing behavioral economics as "people are irrational" leaves almost nothing usable. A more precise summary is this: the standard economic model makes specific assumptions about preferences, beliefs and the choice process, and some of them fail systematically, in predictable directions. Knowing the direction of the failure lets us fix the model, and the fixed model yields different predictions and policies from the standard one.
 
-People:
-- Feel that a product must be a better deal when it's marked down from a high original price (anchoring)
-- Experience the pain of losing \$100 as more than twice as intense as the pleasure of gaining \$100 (loss aversion)
-- Choose \$50 today over \$100 in three years, yet also choose \$5 tomorrow over \$10 today (present bias)
+## 1. Three assumptions of the standard model
 
-The discipline that studies these inconsistencies is **Behavioral Economics**.
+The consumer of microeconomics chooses as follows.
 
----
+<FormulaBox
+  label="Choice in the standard model"
+  formula="\max_{x}\; \sum_{t=0}^{T} \delta^{t} \sum_{s} p_s\, u(x_{t,s})"
+  description="It contains utility over outcomes u (preferences), probabilities p_s of states s (beliefs), exponential discounting δ^t, and the assumption that this problem is solved exactly (the choice process)."
+/>
 
-## The Birth of Behavioral Economics
+This expression contains at least three assumptions.
 
-Behavioral economics emerged in the 1970s from the collaboration of two psychologists.
+- **Preferences**: utility depends only on final outcomes (levels of wealth, amounts consumed), people care only about their own outcomes, and they discount time consistently.
+- **Beliefs**: probabilities are updated correctly by Bayes' rule.
+- **Choice process**: given their preferences and beliefs, people compute the optimum exactly and choose the same answer however the problem is presented.
 
-**Daniel Kahneman** and **Amos Tversky** began documenting decision-making patterns that classical economics could not explain. Their research culminated in the 1979 landmark paper **Prospect Theory**, and Kahneman was awarded the Nobel Prize in Economics in 2002 (Tversky had passed away in 1996 and was ineligible).
+The main findings of behavioral economics correspond to each of these three assumptions.
 
-**Richard Thaler** extended the field — introducing mental accounting and the nudge framework — and received the Nobel Prize in Economics in 2017.
+<LectureTable
+  title="Map of the course"
+  headers={["Assumption revised", "Key concepts", "Chapters"]}
+  rows={[
+    ["Preferences: levels of outcomes", "Reference points, loss aversion", "Chapters 2 and 3"],
+    ["Preferences: time consistency", "Present bias, β-δ discounting", "Chapter 4"],
+    ["Beliefs: Bayesian updating", "Representativeness and availability heuristics, overconfidence", "Chapter 5"],
+    ["Choice process: fungibility", "Mental accounting, sunk costs", "Chapter 6"],
+    ["Preferences: self-interest", "Inequity aversion, reciprocity", "Chapter 7"],
+    ["Applications", "Behavioral finance, choice architecture", "Chapters 8 and 9"],
+    ["Methods and limits", "Replicability, behavioral welfare economics", "Chapter 10"],
+  ]}
+/>
 
----
+## 2. Bounded rationality
 
-## Core Concept 1: Prospect Theory
+Simon argued that people do not optimize but **satisfice**: instead of comparing every alternative, they stop when a good-enough option appears, because gathering information and calculating are costly. From this viewpoint, heuristics (simple rules of judgement) are not defects but rational responses to limited cognitive resources.
 
-The central insight of Prospect Theory is that people respond not to outcomes in absolute terms, but to **changes relative to a reference point**.
+What interests behavioral economics is where heuristics go wrong **systematically**. Random errors cancel out on average, but systematic errors accumulate across whole markets and, because they are predictable, can be built into models.
 
-### Three Properties of the Value Function
+## 3. Where does the evidence come from?
 
-1. **Reference Dependence**: People evaluate outcomes as gains or losses from their current state — not as absolute levels of wealth.
+<LectureTable
+  title="Evidence in behavioral economics"
+  headers={["Method", "Strengths", "Weaknesses"]}
+  rows={[
+    ["Laboratory experiments", "Control variables and isolate causes", "Student samples, small stakes, artificial settings"],
+    ["Field experiments", "Random assignment in real environments", "Costly; hard to separate mechanisms"],
+    ["Natural experiments and observational data", "Large stakes and real decisions", "Hard to rule out other interpretations"],
+  ]}
+/>
 
-2. **Loss Aversion**: Losses hurt approximately **2.25 times** more than equivalent gains feel good. "Losing \$1,000" is far more painful than "gaining \$1,000" is pleasurable.
+For example, the evidence on automatic enrolment in retirement plans (Chapter 9) came from an observational study comparing new employees' participation rates before and after one firm changed its plan. With large stakes and real saving as the outcome, it is more persuasive than a laboratory experiment. Conversely, measuring pure inequity aversion is better done with laboratory games (Chapter 7) free of reputation and repeated dealings.
 
-3. **Diminishing Sensitivity**: The marginal impact of gains and losses decreases as they grow larger. Going from \$100 to \$200 feels better than going from \$1,000 to \$1,100, even though both are \$100 gains.
+## 4. Why departures do not mean abandoning the standard model
 
-### Real-Life Applications
+The standard model is still the benchmark. Good behavioral models include the standard model as a special case: the β-δ model of Chapter 4 returns to the standard model when $\beta=1$, and the inequity aversion model of Chapter 7 when the inequity coefficients are zero. This allows the size of a departure to be measured by a single parameter and tested with data.
 
-- **Stock investing**: Loss aversion makes investors hold losing positions too long. "If I sell now, I lock in the loss."
-- **Insurance**: Actuarially the premium may exceed expected loss, but the fear of losing assets drives people to buy coverage.
-- **Return policies**: "30-day money-back guarantee" leverages loss aversion — consumers feel safer because potential loss is reduced.
+One must also ask whether markets correct biases. In repeated decisions with quick feedback (daily grocery shopping), learning reduces bias. In rare decisions with slow feedback (retirement saving, buying a home, marriage), biases persist. That is why the findings of behavioral economics matter most for policy in the latter domain.
 
----
+<Callout type="warning">
+Some famous early findings in behavioral economics turned out to be small or failed to replicate in large-scale replication studies (Chapter 10). Distinguish results confirmed repeatedly across methods, such as loss aversion, present bias and default effects, from results resting on a single laboratory study. This course states the strength of the evidence alongside each concept.
+</Callout>
 
-## Core Concept 2: The Anchoring Effect
+## Check your understanding
 
-**Anchoring** is the cognitive bias by which the first number or piece of information encountered has a disproportionate influence on subsequent judgments.
+How would you rewrite the claim "buying lottery tickets is irrational" in terms of the three assumptions of the standard model? Buying lottery tickets could be explained by risk-loving preferences (preferences), overestimating the chance of winning (beliefs), or a decision process that overweights small probabilities (the probability weighting of Chapter 3). Predictions and policies differ depending on which assumption fails. If people overestimate probabilities, providing information helps; if probability weighting is the cause, the prediction is that information alone will not change behaviour much.
 
-### Kahneman and Tversky's Experiment
+## References
 
-Participants watched a roulette wheel stop at either 10 or 65 (the outcomes were rigged), then were asked: "What percentage of UN member states are African countries?"
-
-- Group that saw 10: estimated an average of **25%**
-- Group that saw 65: estimated an average of **45%**
-
-A completely random, irrelevant number produced dramatically different judgments.
-
-### Real-Life Applications
-
-- **Negotiation**: The party who names a number first sets the anchor. High first offers yield higher final settlements.
-- **Price tags**: "Original price \$200 → Sale price \$120" establishes \$200 as an anchor, making \$120 feel like a bargain.
-- **Salary negotiation**: Candidates who state a (high) number first tend to receive higher offers.
-
----
-
-## Core Concept 3: Mental Accounting
-
-Richard Thaler's concept: people sort money into **separate psychological accounts** based on its source and intended use, then apply different rules to each account.
-
-### Examples
-
-- Winnings from gambling: spent freely ("found money")
-- Earned wages: spent carefully
-
-Logically both are identical dollars, but psychologically they are treated differently.
-
-- An unexpected bonus goes toward "home renovations"
-- The same amount received as salary gets saved
-
-### Real-Life Applications
-
-- **Budget categories**: People resist moving unspent "dining" budget into a "shopping" account
-- **Credit cards vs. cash**: Credit cards mute the "pain of paying," leading to higher spending
-- **Tax refunds**: Treated as a windfall bonus, refunds disproportionately fund impulse purchases
-
----
-
-## Core Concept 4: Status Quo Bias
-
-People have a strong tendency to prefer the current state over any change — largely because change implies the possibility of loss.
-
-### Experimental Evidence
-
-1990s US auto insurance reform in New Jersey and Pennsylvania:
-
-- New Jersey: **cheaper insurance (limited lawsuit rights)** set as default → 80% chose it
-- Pennsylvania: **more expensive insurance (full lawsuit rights)** set as default → 70% chose it
-
-The options were identical; only the **default** differed — yet the outcomes diverged by tens of percentage points.
-
-### Real-Life Applications
-
-- **Auto-enrollment in retirement plans**: Switching from opt-in to opt-out dramatically raises 401(k) participation rates
-- **Organ donation**: Countries with opt-out systems have far higher donation rates than opt-in countries
-- **Subscription services**: "Free trial — cancel anytime" exploits status quo bias; most people never cancel
-
----
-
-## Behavioral Economics Meets Policy: The Nudge
-
-Thaler and Cass Sunstein proposed **Nudge Theory** — using cognitive biases to guide people toward better choices without coercion or mandates.
-
-A nudge **redesigns the choice environment** so that better options become the path of least resistance.
-
-**Global examples:**
-- UK Behavioural Insights Team: adding "9 out of 10 people in your area have already paid their taxes" to late-payment notices → 15% improvement in collection rates
-- Cafeteria placement: positioning healthy food at eye level → 25% increase in healthy choices
-- Fly sticker in urinals (Amsterdam airport): 80% reduction in restroom cleaning costs
-
----
-
-## Chapter Summary
-
-| Concept | Description | Real-Life Example |
-|---------|-------------|-------------------|
-| Prospect Theory | Losses feel ~2× worse than equivalent gains | Why investors hold losing stocks |
-| Anchoring | The first number warps all subsequent judgment | Markdown pricing |
-| Mental Accounting | Same money spent differently based on source | Spending windfalls vs. wages |
-| Status Quo Bias | Preference for the current state over change | The power of default settings |
-| Nudge | Better choices through environment design | Public policy applications |
-
-Next chapter: **Present Bias and the Neuroscience of Procrastination** — why your future self always seems like a better decision-maker, and how this shapes financial choices.
+- Nick Wilkinson and Matthias Klaes, *An Introduction to Behavioral Economics*, ch. 1
+- Herbert Simon, "A Behavioral Model of Rational Choice," *Quarterly Journal of Economics* (1955)
+- Stefano DellaVigna, "Psychology and Economics: Evidence from the Field," *Journal of Economic Literature* (2009)
+- Richard Thaler, *Misbehaving: The Making of Behavioral Economics* (2015)

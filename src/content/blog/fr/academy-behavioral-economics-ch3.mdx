@@ -1,0 +1,116 @@
+---
+track: academy
+locale: fr
+title: "Économie comportementale — Théorie des perspectives (2) : pondération des probabilités et effet de dotation"
+category: "Economics"
+series: behavioral-economics
+chapter: 3
+chapterTitleShort: "Probabilités et effet de dotation"
+author: OIYO Éditorial
+tags:
+  - économie comportementale
+  - théorie des perspectives
+  - pondération des probabilités
+  - effet de dotation
+  - biais de statu quo
+description: "Explique par la théorie des perspectives la fonction de pondération qui surpondère les petites probabilités et sous-pondère les grandes, le paradoxe d'Allais, le schéma quadruple des attitudes face au risque, l'effet de dotation et le biais de statu quo, en évaluant la solidité des preuves."
+pubDate: '2026-05-04'
+updatedDate: '2026-09-24'
+layoutVariant: lecture-series
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Économie comportementale — les probabilités ne sont pas utilisées telles quelles, et ce que l'on possède devient plus cher
+
+La fonction de valeur du chapitre 2 portait sur l'évaluation des résultats. Le second élément de la théorie des perspectives concerne l'usage des probabilités. Dans la théorie de l'utilité espérée, les résultats sont pondérés proportionnellement à leurs probabilités. Dans la théorie des perspectives, les probabilités sont d'abord converties en **poids de décision**, et cette conversion n'est pas linéaire.
+
+## 1. Le paradoxe d'Allais et l'effet de certitude
+
+<LectureTable
+  title="La structure du paradoxe d'Allais"
+  headers={["Problème", "Option A", "Option B", "Choix fréquent"]}
+  rows={[
+    ["1", "100 millions de wons à coup sûr", "10 % : 500 millions ; 89 % : 100 millions ; 1 % : 0", "A"],
+    ["2", "11 % : 100 millions de wons ; 89 % : 0", "10 % : 500 millions de wons ; 90 % : 0", "B"],
+  ]}
+/>
+
+Hormis le résultat commun « 89 % de chances de gagner 100 millions de wons », les deux problèmes posent le même choix. La théorie de l'utilité espérée ignore les résultats communs : qui choisit A au problème 1 devrait aussi choisir l'option à 11 % correspondante au problème 2 (axiome d'indépendance). En pratique, beaucoup choisissent A en 1 et B en 2, car passer de 100 % à 99 % paraît bien plus important que passer de 11 % à 10 %. C'est l'**effet de certitude**.
+
+## 2. La fonction de pondération des probabilités
+
+<FormulaBox
+  label="Fonction de pondération des probabilités (Tversky et Kahneman 1992)"
+  formula="w(p) = \frac{p^{\gamma}}{\left(p^{\gamma}+(1-p)^{\gamma}\right)^{1/\gamma}}"
+  description="L'estimation pour les gains est γ ≈ 0,61. Avec γ = 1, w(p) = p, comme dans l'utilité espérée."
+/>
+
+Avec $\gamma=0{,}61$, une probabilité de 1 % pèse environ 5,5 % et une probabilité de 99 % environ 91 % ; 50 % devient environ 42 %. Les petites probabilités sont surpondérées, les probabilités moyennes et fortes sous-pondérées. Cette forme en S inversé explique à la fois l'effet de certitude et l'achat de billets de loterie.
+
+<EconDiagram
+  title="La fonction de pondération des probabilités (γ = 0,61)"
+  xLabel="p"
+  yLabel="w(p)"
+  xMax={100}
+  yMax={100}
+  curves={[
+    { label: "w(p)", points: [[0, 0], [1, 5.5], [5, 13.2], [10, 18.6], [20, 26.1], [30, 31.8], [50, 42.1], [70, 53.4], [80, 60.7], [90, 71.2], [99, 91.2], [100, 100]], tone: "blue", labelAt: 8 },
+    { label: "w = p", points: [[0, 0], [100, 100]], tone: "gray", dashed: true, anchor: "end" },
+  ]}
+  marks={[
+    { x: 1, y: 5.5, label: "1 % → 5,5 %" },
+    { x: 50, y: 42.1, guide: true, xTick: "50", yTick: "42" },
+  ]}
+  caption="Au-dessus de la diagonale (petites probabilités), il y a surpondération ; en dessous (probabilités moyennes et fortes), sous-pondération. Les deux courbes se croisent vers 30–40 %."
+/>
+
+## 3. Le schéma quadruple des attitudes face au risque
+
+En combinant la forme de la fonction de valeur (aversion au risque dans les gains, goût du risque dans les pertes) et la pondération des probabilités, on obtient quatre comportements.
+
+<LectureTable
+  title="Le schéma quadruple"
+  headers={["", "Gains", "Pertes"]}
+  rows={[
+    ["Probabilité élevée", "Aversion au risque — accepter une transaction plutôt qu'un procès", "Goût du risque — tenir bon plutôt que constater une perte"],
+    ["Probabilité faible", "Goût du risque — acheter des billets de loterie", "Aversion au risque — souscrire une assurance"],
+  ]}
+/>
+
+Le goût du risque apparaît pour les gains peu probables parce que la surpondération des petites probabilités l'emporte sur la concavité de la fonction de valeur. Une loterie rapportant 1 million de wons avec une probabilité de 1 % a une espérance de 10 000 wons, mais avec un poids de décision de 5,5 %, sa valeur subjective peut dépasser celle de 10 000 wons certains. Selon la même logique, on paie pour s'assurer contre 1 % de risque de perdre 1 million de wons une prime supérieure à la perte espérée de 10 000 wons.
+
+## 4. L'effet de dotation : ce que l'on possède est plus cher
+
+Kahneman, Knetsch et Thaler (1990) ont remis une tasse à la moitié des participants d'une expérience et les ont laissés l'échanger. Les tasses ayant été attribuées au hasard, environ la moitié aurait dû changer de mains si les préférences étaient les mêmes. Le volume d'échanges a été bien plus faible, et le prix médian exigé par les vendeurs dépassait environ deux fois ce que les acheteurs étaient prêts à payer.
+
+Avec l'aversion aux pertes du chapitre 2 : pour son propriétaire, vendre la tasse est une perte ; pour un non-propriétaire, l'acheter est un gain. Les pertes pesant plus lourd, le consentement à recevoir (CAR) dépasse le consentement à payer (CAP).
+
+<FormulaBox
+  label="Interprétation de l'effet de dotation par l'aversion aux pertes"
+  formula="\text{CAR} \approx \lambda \cdot \text{CAP}"
+  description="Si la fonction de valeur est linéaire près de l'origine, le rapport CAR/CAP égale le coefficient d'aversion aux pertes. Le rapport expérimental d'environ 2 concorde globalement avec les estimations de λ."
+/>
+
+L'effet de dotation affaiblit la prédiction du théorème de Coase (chapitre 1 de finances publiques). Selon celui à qui l'on attribue le droit, c'est le CAR ou le CAP qui sert de référence : l'allocation initiale peut donc influer sur l'allocation finale même sans coûts de transaction.
+
+## 5. Le biais de statu quo
+
+Quand plusieurs options existent, celle qui consiste à conserver la situation actuelle est trop souvent choisie. Samuelson et Zeckhauser (1988) ont montré qu'en présentant les mêmes options mais en désignant l'une d'elles comme le « statu quo », on augmente la part de ceux qui la choisissent. Tout changement par rapport au statu quo comporte à la fois des gains et des pertes, et si les pertes pèsent plus, ne rien changer paraît préférable. Les coûts de changement et l'évitement de la décision jouent dans le même sens. La conception des options par défaut du chapitre 9 exploite ce biais.
+
+<Callout type="warning">
+L'ampleur de l'effet de dotation est sensible aux protocoles expérimentaux. Plott et Zeiler (2005) ont rapporté que lorsque les participants étaient bien entraînés à la procédure et que les déclarations stratégiques étaient empêchées, l'écart entre CAR et CAP se réduisait nettement. On débat encore de savoir si cet écart vient entièrement des préférences ou en partie d'une mauvaise compréhension du protocole. Les estimations de la pondération des probabilités varient elles aussi selon les études. Le sens est robuste, l'ampleur dépend du contexte.
+</Callout>
+
+## Exercice
+
+Avec w(0,01) = 0,055 et une fonction de valeur pour les gains $v(x)=x^{0{,}88}$, que choisit-on entre « 1 million de wons avec une probabilité de 1 % » et « 20 000 wons à coup sûr » ? En dizaines de milliers de wons, la valeur de la loterie est $0{,}055\times 100^{0{,}88}\approx 0{,}055\times 57{,}5\approx 3{,}2$, et celle de 20 000 wons certains $2^{0{,}88}\approx 1{,}84$. On préfère une loterie d'espérance 10 000 wons à 20 000 wons certains. En utilisant la probabilité telle quelle ($w=0{,}01$), la valeur de la loterie serait de 0,58 et le choix s'inverserait.
+
+## Références
+
+- Maurice Allais, "Le comportement de l'homme rationnel devant le risque," *Econometrica* (1953)
+- Daniel Kahneman, Jack Knetsch and Richard Thaler, "Experimental Tests of the Endowment Effect and the Coase Theorem," *Journal of Political Economy* (1990)
+- William Samuelson and Richard Zeckhauser, "Status Quo Bias in Decision Making," *Journal of Risk and Uncertainty* (1988)
+- Charles Plott and Kathryn Zeiler, "The Willingness to Pay–Willingness to Accept Gap," *American Economic Review* (2005)

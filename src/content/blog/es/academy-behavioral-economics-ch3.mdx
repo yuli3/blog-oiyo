@@ -1,0 +1,116 @@
+---
+track: academy
+locale: es
+title: "Economía del comportamiento — Teoría prospectiva II: ponderación de probabilidades y efecto dotación"
+category: "Economics"
+series: behavioral-economics
+chapter: 3
+chapterTitleShort: 'Probabilidades y efecto dotación'
+author: OIYO Editorial
+tags:
+  - economía del comportamiento
+  - teoría prospectiva
+  - ponderación de probabilidades
+  - efecto dotación
+  - sesgo del statu quo
+description: "Explica con la teoría prospectiva la función de ponderación que sobrepondera las probabilidades pequeñas e infrapondera las grandes, la paradoja de Allais, el patrón cuádruple de actitudes ante el riesgo, el efecto dotación y el sesgo del statu quo, y valora la solidez de la evidencia."
+pubDate: '2026-05-04'
+updatedDate: '2026-09-24'
+layoutVariant: lecture-series
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Economía del comportamiento — las probabilidades no se usan tal cual, y lo que se posee se encarece
+
+La función de valor del capítulo 2 trataba de cómo se evalúan los resultados. El segundo elemento de la teoría prospectiva es cómo se usan las probabilidades. En la teoría de la utilidad esperada, los resultados se ponderan en proporción a sus probabilidades. En la teoría prospectiva, las probabilidades se transforman antes en **pesos de decisión**, y esa transformación no es lineal.
+
+## 1. La paradoja de Allais y el efecto certeza
+
+<LectureTable
+  title="La estructura de la paradoja de Allais"
+  headers={["Problema", "Opción A", "Opción B", "Elección frecuente"]}
+  rows={[
+    ["1", "100 millones de wones seguros", "10 %: 500 millones; 89 %: 100 millones; 1 %: 0", "A"],
+    ["2", "11 %: 100 millones de wones; 89 %: 0", "10 %: 500 millones de wones; 90 %: 0", "B"],
+  ]}
+/>
+
+Salvo el resultado común «89 % de probabilidad de 100 millones de wones», los dos problemas plantean la misma elección. La teoría de la utilidad esperada ignora los resultados comunes, así que quien elige A en el problema 1 debería elegir también la opción del 11 % correspondiente en el 2 (axioma de independencia). En la práctica, mucha gente elige A en el 1 y B en el 2, porque pasar del 100 % al 99 % se siente mucho más que pasar del 11 % al 10 %. Es el **efecto certeza**.
+
+## 2. La función de ponderación de probabilidades
+
+<FormulaBox
+  label="Función de ponderación de probabilidades (Tversky y Kahneman 1992)"
+  formula="w(p) = \frac{p^{\gamma}}{\left(p^{\gamma}+(1-p)^{\gamma}\right)^{1/\gamma}}"
+  description="La estimación para ganancias es γ ≈ 0,61. Con γ = 1, w(p) = p, como en la utilidad esperada."
+/>
+
+Con $\gamma=0{,}61$, una probabilidad del 1 % pesa alrededor del 5,5 % y una del 99 % alrededor del 91 %; el 50 % se convierte en un 42 %. Las probabilidades pequeñas se sobreponderan y las medias y altas se infraponderan. Esta forma de S invertida explica a la vez el efecto certeza y la compra de lotería.
+
+<EconDiagram
+  title="La función de ponderación de probabilidades (γ = 0,61)"
+  xLabel="p"
+  yLabel="w(p)"
+  xMax={100}
+  yMax={100}
+  curves={[
+    { label: "w(p)", points: [[0, 0], [1, 5.5], [5, 13.2], [10, 18.6], [20, 26.1], [30, 31.8], [50, 42.1], [70, 53.4], [80, 60.7], [90, 71.2], [99, 91.2], [100, 100]], tone: "blue", labelAt: 8 },
+    { label: "w = p", points: [[0, 0], [100, 100]], tone: "gray", dashed: true, anchor: "end" },
+  ]}
+  marks={[
+    { x: 1, y: 5.5, label: "1 % → 5,5 %" },
+    { x: 50, y: 42.1, guide: true, xTick: "50", yTick: "42" },
+  ]}
+  caption="Por encima de la diagonal (probabilidades pequeñas) hay sobreponderación; por debajo (probabilidades medias y altas), infraponderación. Las dos curvas se cruzan hacia el 30–40 %."
+/>
+
+## 3. El patrón cuádruple de actitudes ante el riesgo
+
+Combinando la forma de la función de valor (aversión al riesgo en las ganancias, búsqueda del riesgo en las pérdidas) con la ponderación de probabilidades se obtienen cuatro patrones.
+
+<LectureTable
+  title="El patrón cuádruple"
+  headers={["", "Ganancias", "Pérdidas"]}
+  rows={[
+    ["Probabilidad alta", "Aversión al riesgo — aceptar un acuerdo en vez de ir a juicio", "Búsqueda del riesgo — aguantar en vez de materializar una pérdida"],
+    ["Probabilidad baja", "Búsqueda del riesgo — comprar lotería", "Aversión al riesgo — contratar un seguro"],
+  ]}
+/>
+
+En las ganancias poco probables aparece la búsqueda del riesgo porque la sobreponderación de las probabilidades pequeñas se impone a la concavidad de la función de valor. Una lotería que paga 1 millón de wones con un 1 % de probabilidad tiene un valor esperado de 10.000 wones, pero con un peso de decisión del 5,5 % su valor subjetivo puede superar el de 10.000 wones seguros. Por la misma lógica, se paga por asegurarse contra un 1 % de probabilidad de perder 1 millón de wones una prima mayor que la pérdida esperada de 10.000 wones.
+
+## 4. El efecto dotación: lo que se posee es más caro
+
+Kahneman, Knetsch y Thaler (1990) dieron una taza a la mitad de los participantes de un experimento y les dejaron comerciar. Como las tazas se asignaron al azar, alrededor de la mitad debería haber cambiado de manos si las preferencias eran iguales. El volumen real de intercambio fue mucho menor, y el precio mediano que pedían los vendedores superaba en unas dos veces lo que los compradores estaban dispuestos a pagar.
+
+Con la aversión a las pérdidas del capítulo 2: para su dueño, vender la taza es una pérdida; para quien no la tiene, comprarla es una ganancia. Como las pérdidas pesan más, la disposición a aceptar (DAA) supera a la disposición a pagar (DAP).
+
+<FormulaBox
+  label="Interpretación del efecto dotación por aversión a las pérdidas"
+  formula="\text{DAA} \approx \lambda \cdot \text{DAP}"
+  description="Si la función de valor es lineal cerca del origen, la razón DAA/DAP es igual al coeficiente de aversión a las pérdidas. La razón experimental de alrededor de 2 concuerda en general con las estimaciones de λ."
+/>
+
+El efecto dotación debilita la predicción del teorema de Coase (capítulo 1 de hacienda pública). Según a quién se asigne el derecho, la referencia es la DAA o la DAP, de modo que la asignación inicial puede influir en la final aunque no haya costes de transacción.
+
+## 5. El sesgo del statu quo
+
+Cuando hay varias alternativas, se elige con demasiada frecuencia la de mantener la situación actual. Samuelson y Zeckhauser (1988) mostraron que, presentando las mismas opciones pero etiquetando una como «statu quo», aumenta la proporción de quienes la eligen. Todo cambio respecto al statu quo implica ganancias y pérdidas a la vez, y si las pérdidas pesan más, no cambiar parece mejor. Los costes de cambio y la evitación de decisiones actúan en el mismo sentido. El diseño de opciones por defecto del capítulo 9 aprovecha este sesgo.
+
+<Callout type="warning">
+La magnitud del efecto dotación es sensible a los procedimientos experimentales. Plott y Zeiler (2005) informaron de que, cuando se entrenaba bien a los participantes en el procedimiento y se evitaban las declaraciones estratégicas, la brecha entre DAA y DAP se reducía mucho. Sigue debatiéndose si la brecha procede por completo de las preferencias o en parte de malentendidos sobre el procedimiento. Las estimaciones de la ponderación de probabilidades también varían entre estudios. La dirección es sólida; la magnitud depende del contexto.
+</Callout>
+
+## Ejercicio
+
+Con w(0,01) = 0,055 y una función de valor para ganancias $v(x)=x^{0{,}88}$, ¿qué se elige entre «1 millón de wones con un 1 % de probabilidad» y «20.000 wones seguros»? En decenas de miles de wones, el valor de la lotería es $0{,}055\times 100^{0{,}88}\approx 0{,}055\times 57{,}5\approx 3{,}2$, y el de 20.000 wones seguros, $2^{0{,}88}\approx 1{,}84$. Se prefiere una lotería de valor esperado 10.000 wones a 20.000 wones seguros. Usando la probabilidad tal cual ($w=0{,}01$), el valor de la lotería sería 0,58 y la elección se invertiría.
+
+## Referencias
+
+- Maurice Allais, "Le comportement de l'homme rationnel devant le risque," *Econometrica* (1953)
+- Daniel Kahneman, Jack Knetsch and Richard Thaler, "Experimental Tests of the Endowment Effect and the Coase Theorem," *Journal of Political Economy* (1990)
+- William Samuelson and Richard Zeckhauser, "Status Quo Bias in Decision Making," *Journal of Risk and Uncertainty* (1988)
+- Charles Plott and Kathryn Zeiler, "The Willingness to Pay–Willingness to Accept Gap," *American Economic Review* (2005)

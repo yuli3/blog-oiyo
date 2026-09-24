@@ -1,152 +1,116 @@
 ---
 track: academy
 locale: en
-title: "Confirmation Bias and Herd Behavior — Why We Only Believe What We Already Believe"
+title: "Behavioral Economics — Prospect Theory II: Probability Weighting and the Endowment Effect"
 category: "Economics"
+series: behavioral-economics
+chapter: 3
+chapterTitleShort: 'Probability Weighting and Endowment'
 author: OIYO Editorial
 tags:
-  - behavioral-economics
-  - psychology
-  - confirmation-bias
-  - herd-behavior
-  - social-influence
-description: >-
-  Why do we ignore evidence that contradicts our beliefs? This chapter explores the neuroscience of confirmation bias, how echo chambers and filter bubbles amplify it, and how herd behavior drives financial bubbles.
+  - behavioral economics
+  - prospect theory
+  - probability weighting
+  - endowment effect
+  - status quo bias
+description: "Uses prospect theory to explain the probability weighting function that overweights small and underweights large probabilities, the Allais paradox, the fourfold pattern of risk attitudes, and the endowment effect and status quo bias, and assesses the strength of the evidence."
 pubDate: '2026-05-04'
+updatedDate: '2026-09-24'
+layoutVariant: lecture-series
 ---
 
-## Do We See the World as It Is?
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-We assume that humans are rational — that we gather evidence, analyze it, and reach logical conclusions.
+# Behavioral Economics — Probabilities Are Not Used as They Are, and What We Own Becomes Dearer
 
-Reality is nearly the opposite. We tend to **reach our conclusion first, then collect only the evidence that supports it**.
+The value function of Chapter 2 dealt with how outcomes are evaluated. The second element of prospect theory is how probabilities are used. In expected utility theory, outcomes are weighted in proportion to their probabilities. In prospect theory, probabilities are converted into **decision weights** before they are used, and the conversion is not linear.
 
-This is **Confirmation Bias**.
+## 1. The Allais paradox and the certainty effect
 
----
+<LectureTable
+  title="The structure of the Allais paradox"
+  headers={["Problem", "Option A", "Option B", "Common choice"]}
+  rows={[
+    ["1", "100 million won for sure", "10%: 500 million; 89%: 100 million; 1%: 0", "A"],
+    ["2", "11%: 100 million won; 89%: 0", "10%: 500 million won; 90%: 0", "B"],
+  ]}
+/>
 
-## What Is Confirmation Bias?
+Apart from the common outcome "89% chance of 100 million won," the two problems are the same choice. Expected utility theory ignores common outcomes, so someone who picks A in Problem 1 should also pick the corresponding 11% option in Problem 2 (the independence axiom). In practice many people pick A in 1 and B in 2, because a fall in probability from 100% to 99% feels much larger than a fall from 11% to 10%. This is the **certainty effect**.
 
-Confirmation bias is the tendency to **seek out, interpret, and remember information in ways that confirm what we already believe**.
+## 2. The probability weighting function
 
-### Peter Wason's Card Experiment (1960)
+<FormulaBox
+  label="Probability weighting function (Tversky and Kahneman 1992)"
+  formula="w(p) = \frac{p^{\gamma}}{\left(p^{\gamma}+(1-p)^{\gamma}\right)^{1/\gamma}}"
+  description="The estimate for gains is γ ≈ 0.61. With γ = 1, w(p) = p, as in expected utility."
+/>
 
-Four cards are on a table: **E, K, 4, 7**
+With $\gamma=0.61$, a 1% probability is weighted as about 5.5% and 99% as about 91%; 50% becomes about 42%. Small probabilities are overweighted, and medium to large probabilities underweighted. This inverse-S shape explains both the certainty effect and lottery purchases.
 
-Rule: "If a card has a vowel on one side, it has an even number on the other side."
+<EconDiagram
+  title="The probability weighting function (γ = 0.61)"
+  xLabel="p"
+  yLabel="w(p)"
+  xMax={100}
+  yMax={100}
+  curves={[
+    { label: "w(p)", points: [[0, 0], [1, 5.5], [5, 13.2], [10, 18.6], [20, 26.1], [30, 31.8], [50, 42.1], [70, 53.4], [80, 60.7], [90, 71.2], [99, 91.2], [100, 100]], tone: "blue", labelAt: 8 },
+    { label: "w = p", points: [[0, 0], [100, 100]], tone: "gray", dashed: true, anchor: "end" },
+  ]}
+  marks={[
+    { x: 1, y: 5.5, label: "1% → 5.5%" },
+    { x: 50, y: 42.1, guide: true, xTick: "50", yTick: "42" },
+  ]}
+  caption="Above the diagonal (small probabilities) is overweighting; below it (medium to large probabilities) is underweighting. The two curves cross at around 30–40%."
+/>
 
-Which cards must you flip to test whether the rule holds?
+## 3. The fourfold pattern of risk attitudes
 
-Most people choose **E and 4**: E to check for an even number behind it, and 4 to check for a vowel in front.
+Combining the shape of the value function (risk aversion in gains, risk seeking in losses) with probability weighting yields four patterns.
 
-The correct answer is **E and 7**. If the back of E is odd, the rule is violated. If the front of 7 is a vowel, the rule is violated. Card 4 tells us nothing — if a consonant appears behind it, the rule is fine.
+<LectureTable
+  title="The fourfold pattern"
+  headers={["", "Gains", "Losses"]}
+  rows={[
+    ["High probability", "Risk averse — accepting a settlement instead of going to trial", "Risk seeking — holding on instead of locking in a loss"],
+    ["Low probability", "Risk seeking — buying lottery tickets", "Risk averse — buying insurance"],
+  ]}
+/>
 
-We instinctively look for **confirmation**, not **falsification**.
+Risk seeking appears for low-probability gains because the overweighting of small probabilities overwhelms the concavity of the value function. A lottery paying 1 million won with 1% probability has an expected value of 10,000 won, but with a decision weight of 5.5% its subjective value can exceed that of a sure 10,000 won. By the same logic, people pay more than the expected loss of 10,000 won for insurance against a 1% chance of losing 1 million won.
 
----
+## 4. The endowment effect: what we own is dearer
 
-## Why Does Confirmation Bias Exist?
+Kahneman, Knetsch and Thaler (1990) gave half the participants in an experiment a mug and let them trade. Since the mugs were assigned at random, about half should have traded if preferences were the same. Actual trading volume was far lower, and the median price demanded by sellers was more than about twice what buyers were willing to pay.
 
-### Cognitive Ease
+In terms of the loss aversion of Chapter 2, selling the mug is a loss for its owner and buying it is a gain for a non-owner. Because losses loom larger, the willingness to accept (WTA) exceeds the willingness to pay (WTP).
 
-Information that matches what we already believe is **processed faster and feels pleasant**. Contradictory information creates cognitive load and discomfort.
+<FormulaBox
+  label="Loss aversion interpretation of the endowment effect"
+  formula="\text{WTA} \approx \lambda \cdot \text{WTP}"
+  description="If the value function is linear near the origin, the WTA/WTP ratio equals the loss aversion coefficient. The experimental ratio of around 2 broadly matches estimates of λ."
+/>
 
-The brain optimizes for efficiency. Confirmation bias is the brain conserving energy.
+The endowment effect weakens the prediction of the Coase theorem (Public Finance Chapter 1). Depending on who is given the right, either WTA or WTP becomes the benchmark, so the initial allocation can affect the final allocation even without transaction costs.
 
-### Ego Threat
+## 5. Status quo bias
 
-Evidence that we are wrong is not merely an informational update. It registers as a **threat to the self**. "My judgment was wrong" → "I am incompetent" → "My value is diminished." This chain activates automatically.
+When there are several alternatives, the option of keeping the current state is chosen too often. Samuelson and Zeckhauser (1988) showed that presenting the same options but labelling one as the "status quo" raises the share choosing it. Every change away from the status quo involves both gains and losses, and if losses feel larger, not changing looks better. Switching costs and decision avoidance work in the same direction. The default design of Chapter 9 exploits this bias.
 
-Changing a belief is not a cognitive act — it is a psychological risk.
+<Callout type="warning">
+The size of the endowment effect is sensitive to experimental procedures. Plott and Zeiler (2005) reported that when participants were trained thoroughly in the procedure and strategic misreporting was prevented, the gap between WTA and WTP shrank substantially. Whether the gap comes entirely from preferences or partly from misunderstanding the experimental procedure is still debated. Estimates of probability weighting also differ across studies. The direction is robust, but the size depends on context.
+</Callout>
 
-### Group Identity
+## Check your understanding
 
-Many of our beliefs are tied to **the identity of our group**. Political views, religious convictions, brand loyalties — updating them implies leaving the tribe. Confirmation bias functions partly as a mechanism for preserving group membership.
+With w(0.01) = 0.055 and a value function for gains of $v(x)=x^{0.88}$, which would someone choose: "1 million won with 1% probability" or "20,000 won for sure"? In units of 10,000 won, the lottery's value is $0.055\times 100^{0.88}\approx 0.055\times 57.5\approx 3.2$, and the value of a sure 20,000 won is $2^{0.88}\approx 1.84$. The person prefers a lottery with an expected value of 10,000 won to a sure 20,000 won. Using the probability as it is ($w=0.01$), the lottery's value would be 0.58, reversing the choice.
 
----
+## References
 
-## Echo Chambers and Filter Bubbles
-
-In the digital age, confirmation bias is **amplified** by technology.
-
-### Echo Chamber
-
-In a group of like-minded people, shared beliefs are continuously echoed and reinforced. When everyone you follow on social media holds the same perspective, that belief is confirmed repeatedly and becomes more resistant to challenge.
-
-### Filter Bubble
-
-A concept coined by Eli Pariser: algorithms analyze your past behavior and show you **only what you want to see**. Search results, YouTube recommendations, news feeds — all are optimized to reinforce existing beliefs.
-
-The combination of echo chambers and filter bubbles produces **fractured realities**. People who have consumed entirely different information streams about the same event can no longer even agree on basic facts, let alone interpret them together.
-
----
-
-## Herd Behavior
-
-If confirmation bias is an individual phenomenon, **herd behavior** is its collective expression.
-
-### Solomon Asch's Conformity Experiment (1951)
-
-Participants were given a simple task: judge the length of line segments. Seven confederates in the room deliberately gave the wrong answer.
-
-Result: **75% of participants conformed at least once** to the obviously wrong answer.
-
-Two reasons drive conformity:
-1. **Informational influence**: "If so many people agree, maybe I'm the one who's wrong."
-2. **Normative influence**: "Disagreeing risks social rejection."
-
----
-
-## Financial Bubbles: The Economic Consequences of Herd Behavior
-
-Financial markets are where herd behavior produces its most dramatic results.
-
-### The Dot-Com Bubble (1995–2000)
-
-Internet company stock prices soared regardless of earnings or revenues. "Everyone says it's going up, so it will" → everyone buys → prices actually rise → even more people buy. This feedback loop inflated a massive bubble. The NASDAQ fell 78% from peak to trough.
-
-### The 2008 Financial Crisis
-
-The belief that housing prices never fall (confirmation bias) + "everyone is buying, so I should too" (herd behavior). The result was the largest housing market collapse in US history.
-
-Economist **Robert Shiller** identifies **narratives** — stories collectively shared by a population — as the core engine of financial bubbles. It is not data that moves prices; it is the story of "everyone thinks this way."
-
----
-
-## Strategies to Reduce Confirmation Bias
-
-### 1. The Falsifiability Test
-
-"What evidence would prove my belief wrong?" If you cannot answer that question, your belief is closer to faith than to knowledge.
-
-### 2. Devil's Advocate
-
-Before important decisions, deliberately argue the opposing side. Assign someone in a group to formally voice objections. This is especially effective in committee decision-making.
-
-### 3. Seek Out Diverse Sources
-
-Intentionally consume perspectives from sources that disagree with you. Understanding the logic of the opposing view — even if uncomfortable — is a necessary cognitive exercise.
-
-### 4. Bayesian Thinking
-
-Practice **updating the strength of your beliefs** in proportion to new evidence. Not: "Does this confirm or deny?" But rather: "How much does this evidence shift the probability?" Treat beliefs as probabilities, not certainties.
-
----
-
-## Chapter Summary
-
-| Concept | Description | Real-Life Example |
-|---------|-------------|-------------------|
-| Confirmation Bias | Seeking only confirming information | Finding only "buy" news for stocks you already own |
-| Echo Chamber | Beliefs amplified in like-minded groups | Social media communities reinforcing one worldview |
-| Filter Bubble | Algorithm reinforcing existing preferences | YouTube recommendation loops |
-| Herd Behavior | Conforming to group judgments | Buying assets because "everyone else is" |
-| Financial Bubble | Collective result of herd behavior | Dot-com crash, 2008 housing crisis |
-
-**Countermeasures:**
-1. Falsifiability test ("What would prove me wrong?")
-2. Devil's advocate (deliberately argue the other side)
-3. Intentionally consume diverse information sources
-4. Bayesian updating (adjust beliefs proportionally to evidence)
-
-Next chapter: **The Sunk Cost Fallacy and Regret Aversion** — why we keep making bad decisions because of what we've already spent.
+- Maurice Allais, "Le comportement de l'homme rationnel devant le risque," *Econometrica* (1953)
+- Daniel Kahneman, Jack Knetsch and Richard Thaler, "Experimental Tests of the Endowment Effect and the Coase Theorem," *Journal of Political Economy* (1990)
+- William Samuelson and Richard Zeckhauser, "Status Quo Bias in Decision Making," *Journal of Risk and Uncertainty* (1988)
+- Charles Plott and Kathryn Zeiler, "The Willingness to Pay–Willingness to Accept Gap," *American Economic Review* (2005)

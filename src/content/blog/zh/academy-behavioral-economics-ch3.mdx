@@ -1,0 +1,116 @@
+---
+track: academy
+locale: zh
+title: "行为经济学 — 前景理论②:概率加权与禀赋效应"
+category: "Economics"
+series: behavioral-economics
+chapter: 3
+chapterTitleShort: '概率加权与禀赋效应'
+author: "OIYO编辑部"
+tags:
+  - 行为经济学
+  - 前景理论
+  - 概率加权
+  - 禀赋效应
+  - 现状偏差
+description: "用前景理论解释对小概率过度加权、对大概率加权不足的概率加权函数与阿莱悖论、风险态度的四重模式，以及禀赋效应和现状偏差，并整理证据的强度。"
+pubDate: '2026-05-04'
+updatedDate: '2026-09-24'
+layoutVariant: lecture-series
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 行为经济学 — 概率不会被原样使用，拥有的东西会变得更贵
+
+第2章的价值函数讨论的是如何评价结果。前景理论的第二个要素是如何使用概率。在期望效用理论中，结果按概率成比例加权。在前景理论中，概率先被转换为**决策权重**再使用，而这种转换不是线性的。
+
+## 1. 阿莱悖论与确定性效应
+
+<LectureTable
+  title="阿莱悖论的结构"
+  headers={["问题", "选项A", "选项B", "常见选择"]}
+  rows={[
+    ["1", "确定获得1亿韩元", "10%得5亿，89%得1亿，1%得0", "A"],
+    ["2", "11%得1亿韩元，89%得0", "10%得5亿韩元，90%得0", "B"],
+  ]}
+/>
+
+除去"89%的概率得1亿韩元"这一共同结果，两个问题是同样的选择。期望效用理论忽略共同结果，因此在问题1中选A的人，在问题2中也应选择与A对应的11%选项(独立性公理)。而实际上，许多人在问题1中选A，在问题2中选B。因为概率从100%降到99%，感觉比从11%降到10%大得多。这就是**确定性效应**。
+
+## 2. 概率加权函数
+
+<FormulaBox
+  label="概率加权函数(特沃斯基和卡尼曼1992)"
+  formula="w(p) = \frac{p^{\gamma}}{\left(p^{\gamma}+(1-p)^{\gamma}\right)^{1/\gamma}}"
+  description="收益区间的估计值为γ≈0.61。γ=1时w(p)=p，与期望效用相同。"
+/>
+
+代入$\gamma=0.61$，1%的概率被加权为约5.5%，99%被加权为约91%，50%约为42%。小概率被过度加权，中等以上的概率加权不足。这种反S形同时解释了确定性效应和购买彩票的行为。
+
+<EconDiagram
+  title="概率加权函数(γ = 0.61)"
+  xLabel="p"
+  yLabel="w(p)"
+  xMax={100}
+  yMax={100}
+  curves={[
+    { label: "w(p)", points: [[0, 0], [1, 5.5], [5, 13.2], [10, 18.6], [20, 26.1], [30, 31.8], [50, 42.1], [70, 53.4], [80, 60.7], [90, 71.2], [99, 91.2], [100, 100]], tone: "blue", labelAt: 8 },
+    { label: "w = p", points: [[0, 0], [100, 100]], tone: "gray", dashed: true, anchor: "end" },
+  ]}
+  marks={[
+    { x: 1, y: 5.5, label: "1% → 5.5%" },
+    { x: 50, y: 42.1, guide: true, xTick: "50", yTick: "42" },
+  ]}
+  caption="对角线上方(小概率)是过度加权，下方(中等以上概率)是加权不足。两条曲线在约30%至40%附近相交。"
+/>
+
+## 3. 风险态度的四重模式
+
+把价值函数的形状(收益时厌恶风险、损失时寻求风险)与概率加权结合起来，就得到四种模式。
+
+<LectureTable
+  title="四重模式"
+  headers={["", "收益", "损失"]}
+  rows={[
+    ["高概率", "风险厌恶——接受和解金、放弃诉讼", "风险寻求——不确认损失而死扛"],
+    ["低概率", "风险寻求——购买彩票", "风险厌恶——购买保险"],
+  ]}
+/>
+
+低概率收益中出现风险寻求，是因为对小概率的过度加权压倒了价值函数的凹性。以1%概率获得100万韩元的彩票期望值为1万韩元，但套用5.5%的决策权重后，其主观价值可能大于确定的1万韩元。同样的逻辑，人们会为避免以1%概率损失100万韩元而支付高于1万韩元期望损失的保费。
+
+## 4. 禀赋效应:拥有的东西更贵
+
+卡尼曼、克内奇和塞勒(1990)给一半实验参与者发了马克杯，让他们买卖。马克杯是随机分配的，若偏好相同，应有约一半成交。实际成交量远低于此，卖方要价的中位数约为买方愿付价格的2倍以上。
+
+用第2章的损失厌恶来解释:对所有者而言卖掉马克杯是损失，对非所有者而言买入是收益。损失感受更强，因此受偿意愿(WTA)高于支付意愿(WTP)。
+
+<FormulaBox
+  label="禀赋效应的损失厌恶解释"
+  formula="\text{WTA} \approx \lambda \cdot \text{WTP}"
+  description="若价值函数在原点附近是线性的，WTA/WTP之比就等于损失厌恶系数。实验中2左右的比值与λ的估计值大体一致。"
+/>
+
+禀赋效应削弱了科斯定理(财政学第1章)的预测。把权利分给谁，决定了以WTA还是WTP为基准，因此即使没有交易成本，初始分配也可能影响最终分配。
+
+## 5. 现状偏差
+
+有多个备选方案时，维持现状的选项被选中的次数过多。萨缪尔森和泽克豪泽(1988)表明，提供同样的选项，但把其中一个标为"现状"，该选项的选择率就会上升。偏离现状的任何变化都同时包含收益和损失，若损失感受更强，不变看起来就更有利。转换成本和回避决策也朝同一方向起作用。第9章的默认选项设计正是利用了这一偏差。
+
+<Callout type="warning">
+禀赋效应的大小对实验程序很敏感。普洛特和齐勒(2005)报告说，让参与者充分练习程序并防止策略性虚报后，WTA与WTP之间的差距大幅缩小。差距完全源于偏好，还是部分源于对实验程序的误解，至今仍有争论。概率加权的估计值也因研究而异。方向是稳健的，大小则取决于情境。
+</Callout>
+
+## 练习题
+
+若w(0.01)=0.055，收益区间的价值函数为$v(x)=x^{0.88}$，在"以1%的概率得100万韩元"和"确定得2万韩元"之间会选哪个?以万韩元计，彩票的价值为$0.055\times 100^{0.88}\approx 0.055\times 57.5\approx 3.2$，确定的2万韩元的价值为$2^{0.88}\approx 1.84$。人们更偏好期望值为1万韩元的彩票，而不是确定的2万韩元。若原样使用概率($w=0.01$)，彩票价值为0.58，选择就会逆转。
+
+## 参考资料
+
+- Maurice Allais, "Le comportement de l'homme rationnel devant le risque," *Econometrica* (1953)
+- Daniel Kahneman, Jack Knetsch and Richard Thaler, "Experimental Tests of the Endowment Effect and the Coase Theorem," *Journal of Political Economy* (1990)
+- William Samuelson and Richard Zeckhauser, "Status Quo Bias in Decision Making," *Journal of Risk and Uncertainty* (1988)
+- Charles Plott and Kathryn Zeiler, "The Willingness to Pay–Willingness to Accept Gap," *American Economic Review* (2005)

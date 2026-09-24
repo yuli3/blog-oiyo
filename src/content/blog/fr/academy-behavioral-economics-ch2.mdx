@@ -1,0 +1,108 @@
+---
+track: academy
+locale: fr
+title: "Économie comportementale — Théorie des perspectives (1) : point de référence et aversion aux pertes"
+category: "Economics"
+series: behavioral-economics
+chapter: 2
+chapterTitleShort: "Référence et aversion aux pertes"
+author: OIYO Éditorial
+tags:
+  - économie comportementale
+  - théorie des perspectives
+  - aversion aux pertes
+  - point de référence
+  - effet de cadrage
+description: "Présente par des formules et un graphique la fonction de valeur de la théorie des perspectives, où l'utilité dépend des gains et pertes par rapport à un point de référence plutôt que du niveau de richesse, et explique avec des exemples chiffrés le coefficient d'aversion aux pertes, l'effet de réflexion et les effets de cadrage."
+pubDate: '2026-05-04'
+updatedDate: '2026-09-24'
+layoutVariant: lecture-series
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Économie comportementale — on réagit aux variations, non au niveau de richesse
+
+Dans la théorie de l'utilité espérée, l'utilité est fonction de la richesse finale. Une personne qui possède 100 millions de wons et en gagne 1 million, et une autre qui en possède 102 millions et en perd 1 million, finissent toutes deux avec 101 millions : les deux situations sont identiques. La **théorie des perspectives** de Kahneman et Tversky abandonne cette hypothèse. Les gens évaluent les résultats comme des gains et des pertes par rapport à un point de référence, et ressentent les pertes bien plus fortement que des gains de même taille.
+
+## 1. Trois propriétés de la fonction de valeur
+
+<FormulaBox
+  label="La fonction de valeur de la théorie des perspectives"
+  formula="v(x)=\begin{cases} x^{\alpha} & x \ge 0 \\ -\lambda(-x)^{\beta} & x<0 \end{cases}"
+  description="x est la variation par rapport au point de référence. Les estimations de Tversky et Kahneman (1992) sont α = β ≈ 0,88 et λ ≈ 2,25."
+/>
+
+- **Dépendance à la référence** : la valeur est définie sur les variations $x$. Le point de référence est souvent le statu quo, mais peut être une attente ou un objectif.
+- **Aversion aux pertes** : comme $\lambda>1$, la courbe des pertes est plus pentue que celle des gains ; elle présente un coude à l'origine.
+- **Sensibilité décroissante** : comme $\alpha,\beta<1$, la fonction est concave pour les gains et convexe pour les pertes. Passer de 0 à 100 000 wons paraît important ; passer de 1 million à 1,1 million paraît minime.
+
+<EconDiagram
+  title="La fonction de valeur (α = β = 0,88, λ = 2,25)"
+  xLabel="x"
+  yLabel="v(x)"
+  xMin={-100}
+  xMax={100}
+  yMin={-130}
+  yMax={70}
+  curves={[
+    { label: "Gains", points: [[0, 0], [10, 7.6], [25, 17.0], [50, 31.3], [75, 44.7], [100, 57.5]], tone: "green", anchor: "end" },
+    { label: "Pertes", points: [[-100, -129.5], [-75, -100.5], [-50, -70.4], [-25, -38.2], [-10, -17.1], [0, 0]], tone: "red", labelAt: 0 },
+  ]}
+  marks={[
+    { x: 50, y: 31.3, guide: true, xTick: "+50", yTick: "31" },
+    { x: -50, y: -70.4, guide: true, xTick: "−50", yTick: "−70" },
+  ]}
+  caption="Une même variation de 50 vaut environ 31 comme gain et environ −70 comme perte. Le coude de la pente à l'origine, c'est l'aversion aux pertes."
+/>
+
+## 2. L'ampleur de l'aversion aux pertes
+
+Considérons un pile ou face où face rapporte $G$ wons et pile coûte 100 000 wons. Si l'espérance est positive ($G$ > 100 000 wons), une personne neutre au risque accepte. En pratique, la plupart des gens n'acceptent que lorsque $G$ approche 200 000 wons. Si la fonction de valeur est presque linéaire, la condition d'acceptation est $0{,}5G - 0{,}5\lambda\times 100\,000 \ge 0$, soit $G\ge\lambda\times 100\,000$ wons. C'est pourquoi les estimations de $\lambda$ issues de nombreuses expériences et études de terrain tournent surtout autour de 2.
+
+Expliquer ce comportement par l'utilité espérée exigerait une aversion au risque extrême même pour de petits enjeux. Rabin a montré qu'une fonction d'utilité assez concave pour refuser de petits paris conduirait, pour de gros enjeux, à des choix absurdes que personne ne ferait. L'aversion au risque sur de petits enjeux s'explique plus naturellement par le coude au point de référence que par la courbure de l'utilité de la richesse.
+
+## 3. L'effet de réflexion : prudence dans les gains, pari dans les pertes
+
+<LectureTable
+  title="Problèmes de choix de Kahneman et Tversky (1979)"
+  headers={["Problème", "Option A", "Option B", "Choix majoritaire"]}
+  rows={[
+    ["Gains", "Gagner 3 000 à coup sûr", "Gagner 4 000 avec une probabilité de 80 %", "A (80 %)"],
+    ["Pertes", "Perdre 3 000 à coup sûr", "Perdre 4 000 avec une probabilité de 80 %", "B (92 %)"],
+  ]}
+/>
+
+L'espérance de B, 3 200, dépasse celle de A. Dans le problème de gains, on a choisi l'option sûre à l'espérance plus faible ; dans celui de pertes, le pari à l'espérance plus défavorable. La concavité dans le domaine des gains et la convexité dans celui des pertes apparaissent directement. Cette asymétrie s'appelle l'**effet de réflexion**.
+
+Un exemple réel est le fait de conserver des actions en moins-value plutôt que de les vendre. Une fois dans le domaine des pertes, un pari offrant une chance de se refaire est plus attrayant que la constatation d'une perte certaine. On aboutit à l'effet de disposition du chapitre 8.
+
+## 4. Le cadrage : changer de référence change le choix
+
+Si le point de référence dépend de la manière de décrire un problème, la seule formulation peut modifier les choix même à résultats identiques. Dans le problème de la « maladie asiatique » de Tversky et Kahneman (1981), 600 personnes étant en danger :
+
+- « 200 personnes seront sauvées » contre « une chance sur trois que 600 personnes soient sauvées » → 72 % choisissent l'option sûre
+- « 400 personnes mourront » contre « deux chances sur trois que 600 personnes meurent » → 78 % choisissent le pari
+
+Les deux paires d'options ont exactement les mêmes résultats. La première formulation prend « tout le monde meurt » comme référence et fait des résultats des gains ; la seconde prend « personne ne meurt » comme référence et en fait des pertes. L'hypothèse d'**invariance à la description** du modèle standard (un même problème donne le même choix quelle que soit sa présentation) tombe.
+
+## 5. Le cadrage étroit
+
+Les gens tendent à évaluer les décisions une par une plutôt qu'en bloc. Proposé une seule fois, le pari 50:50 ci-dessus (gain de 150 000 wons, perte de 100 000 wons) est refusé par une personne dont $\lambda=2{,}25$. Vu comme un bloc de 100 paris identiques, la probabilité de perdre est infime et le gain espéré atteint 2,5 millions de wons. On refuse un pari qu'on accepterait en bloc parce qu'on le regarde isolément. C'est la logique de l'explication de l'énigme de la prime de risque au chapitre 8 (aversion myope aux pertes).
+
+<Callout type="warning">
+L'aversion aux pertes est un résultat confirmé à maintes reprises par plusieurs méthodes, mais son ampleur dépend du contexte. Chez les négociateurs fréquents, pour des biens détenus en vue de la vente et pour de petits enjeux, λ peut être proche de 1. « Les pertes pèsent exactement deux fois plus que les gains » est une estimation moyenne, non une loi.
+</Callout>
+
+## Exercice
+
+Si $\lambda=2$ et que la fonction de valeur est linéaire, quel est le X maximal pour lequel on accepte un pari rapportant 100 000 wons avec une probabilité de 60 % et coûtant X wons avec une probabilité de 40 % ? De $0{,}6\times 100\,000 - 0{,}4\times 2X \ge 0$, on tire $X\le 75\,000$ wons. Une personne neutre au risque accepterait jusqu'à 150 000 wons. L'aversion aux pertes a divisé par deux la perte acceptable.
+
+## Références
+
+- Daniel Kahneman and Amos Tversky, "Prospect Theory: An Analysis of Decision under Risk," *Econometrica* (1979)
+- Amos Tversky and Daniel Kahneman, "The Framing of Decisions and the Psychology of Choice," *Science* (1981)
+- Amos Tversky and Daniel Kahneman, "Advances in Prospect Theory: Cumulative Representation of Uncertainty," *Journal of Risk and Uncertainty* (1992)
+- Matthew Rabin, "Risk Aversion and Expected-Utility Theory: A Calibration Theorem," *Econometrica* (2000)

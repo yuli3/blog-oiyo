@@ -1,0 +1,108 @@
+---
+track: academy
+locale: zh
+title: "行为经济学 — 前景理论①:参照点与损失厌恶"
+category: "Economics"
+series: behavioral-economics
+chapter: 2
+chapterTitleShort: '参照点与损失厌恶'
+author: "OIYO编辑部"
+tags:
+  - 行为经济学
+  - 前景理论
+  - 损失厌恶
+  - 参照点
+  - 框架效应
+description: "用公式和图形整理前景理论的价值函数——效用取决于相对于参照点的得失而非财富水平，并用数值例子说明损失厌恶系数、反射效应和框架效应。"
+pubDate: '2026-05-04'
+updatedDate: '2026-09-24'
+layoutVariant: lecture-series
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 行为经济学 — 人们对变化作出反应，而不是对财富水平
+
+在期望效用理论中，效用是最终财富的函数。拥有1亿韩元的人得到100万韩元，与拥有1.02亿韩元的人失去100万韩元，最终财富都是1.01亿韩元，因此两者相同。卡尼曼和特沃斯基的**前景理论**放弃了这一假设。人们以参照点为基准，把结果分成收益和损失来评价，而且对损失的感受远强于同等大小的收益。
+
+## 1. 价值函数的三个性质
+
+<FormulaBox
+  label="前景理论的价值函数"
+  formula="v(x)=\begin{cases} x^{\alpha} & x \ge 0 \\ -\lambda(-x)^{\beta} & x<0 \end{cases}"
+  description="x是相对于参照点的变化。特沃斯基和卡尼曼(1992)的估计值为α=β≈0.88，λ≈2.25。"
+/>
+
+- **参照点依赖**:价值是针对变化$x$定义的。参照点通常是现状，但也可能是预期或目标。
+- **损失厌恶**:由于$\lambda>1$，损失曲线比收益曲线更陡，在原点处出现折角。
+- **敏感度递减**:由于$\alpha,\beta<1$，函数在收益区间是凹的，在损失区间是凸的。从0韩元增加到10万韩元感觉很大，从100万韩元增加到110万韩元则感觉很小。
+
+<EconDiagram
+  title="价值函数(α = β = 0.88，λ = 2.25)"
+  xLabel="x"
+  yLabel="v(x)"
+  xMin={-100}
+  xMax={100}
+  yMin={-130}
+  yMax={70}
+  curves={[
+    { label: "收益", points: [[0, 0], [10, 7.6], [25, 17.0], [50, 31.3], [75, 44.7], [100, 57.5]], tone: "green", anchor: "end" },
+    { label: "损失", points: [[-100, -129.5], [-75, -100.5], [-50, -70.4], [-25, -38.2], [-10, -17.1], [0, 0]], tone: "red", labelAt: 0 },
+  ]}
+  marks={[
+    { x: 50, y: 31.3, guide: true, xTick: "+50", yTick: "31" },
+    { x: -50, y: -70.4, guide: true, xTick: "−50", yTick: "−70" },
+  ]}
+  caption="同样50的变化，作为收益价值约为31，作为损失价值约为−70。原点处斜率的折角就是损失厌恶。"
+/>
+
+## 2. 损失厌恶有多大
+
+设想掷硬币的赌局:正面赢$G$韩元，反面输10万韩元。只要期望值大于0($G$ > 10万韩元)，风险中性者就会接受。而实际上，大多数人要到$G$接近20万韩元才会接受。若价值函数接近线性，接受这一赌局的条件是$0.5G - 0.5\lambda\times 10 \ge 0$(以万韩元计)，即$G\ge\lambda\times 10$万韩元。这就是许多实验和实地研究估计的$\lambda$大多在2左右的原因。
+
+若要用期望效用理论解释这种行为，就需要在小赌注上也极度厌恶风险。拉宾证明，凹性足以拒绝小额赌局的效用函数，在大赌注上必然会作出无人会作的荒谬选择。小赌注上的风险厌恶，用参照点处的折角来解释要比用财富效用的曲率自然得多。
+
+## 3. 反射效应:收益时求稳，损失时赌博
+
+<LectureTable
+  title="卡尼曼和特沃斯基(1979)的选择问题"
+  headers={["问题", "选项A", "选项B", "多数人的选择"]}
+  rows={[
+    ["收益", "确定获得3000", "以80%的概率获得4000", "A(80%)"],
+    ["损失", "确定损失3000", "以80%的概率损失4000", "B(92%)"],
+  ]}
+/>
+
+B的期望值为3200，大于A。在收益问题中，人们选择了期望值较低的确定选项;在损失问题中，却选择了期望值更差的赌局。收益区间的凹性和损失区间的凸性直接显现出来。这种不对称称为**反射效应**。
+
+现实中的例子是，对处于亏损的股票不卖出而死守。一旦处在损失区间，有机会回本的赌局就比确定兑现损失更有吸引力。这与第8章的处置效应相连。
+
+## 4. 框架效应:改变参照点，选择就会改变
+
+若参照点随描述方式而变，那么即使结果相同，仅凭表述就能改变选择。在特沃斯基和卡尼曼(1981)的"亚洲疾病"问题中，有600人面临危险:
+
+- "能救活200人" vs "有三分之一的概率救活600人" → 72%选择确定的一方
+- "会有400人死亡" vs "有三分之二的概率600人全部死亡" → 78%选择赌局
+
+两组选项的结果完全相同。第一种表述以"所有人死亡"为参照点，使结果变成收益;第二种表述以"无人死亡"为参照点，使结果变成损失。标准模型中**描述不变性**(同一问题无论如何表述都作出同样选择)的假设被打破了。
+
+## 5. 狭窄框架
+
+人们倾向于把多个决策逐一分开评价，而不是放在一起评价。前面50:50的赌局(收益15万韩元、损失10万韩元)若只赌一次，$\lambda=2.25$的人会拒绝。若把同样的赌局看成100次的组合，亏损的概率极小，期望收益为250万韩元。本来作为组合会接受的赌局，却因为逐一看待而被拒绝。第8章对股权溢价之谜的解释(短视损失厌恶)正是这一逻辑。
+
+<Callout type="warning">
+损失厌恶是经多种方法反复确认的发现，但其大小因情境而异。对于频繁交易者、本来就为出售而持有的物品以及小赌注，λ有时接近1。"损失的分量恰好是收益的2倍"不是定律，而是平均估计值。
+</Callout>
+
+## 练习题
+
+若$\lambda=2$且价值函数为线性，对"以60%的概率赢得10万韩元、以40%的概率损失X韩元"的赌局，能接受的最大X是多少?由$0.6\times 10 - 0.4\times 2X \ge 0$(以万韩元计)得$X\le 7.5$万韩元。风险中性者可以接受到15万韩元。损失厌恶使可接受的损失规模减半。
+
+## 参考资料
+
+- Daniel Kahneman and Amos Tversky, "Prospect Theory: An Analysis of Decision under Risk," *Econometrica* (1979)
+- Amos Tversky and Daniel Kahneman, "The Framing of Decisions and the Psychology of Choice," *Science* (1981)
+- Amos Tversky and Daniel Kahneman, "Advances in Prospect Theory: Cumulative Representation of Uncertainty," *Journal of Risk and Uncertainty* (1992)
+- Matthew Rabin, "Risk Aversion and Expected-Utility Theory: A Calibration Theorem," *Econometrica* (2000)

@@ -1,0 +1,108 @@
+---
+track: academy
+locale: es
+title: "Economía del comportamiento — Teoría prospectiva I: punto de referencia y aversión a las pérdidas"
+category: "Economics"
+series: behavioral-economics
+chapter: 2
+chapterTitleShort: 'Referencia y aversión a pérdidas'
+author: OIYO Editorial
+tags:
+  - economía del comportamiento
+  - teoría prospectiva
+  - aversión a las pérdidas
+  - punto de referencia
+  - efecto marco
+description: "Presenta con fórmulas y un gráfico la función de valor de la teoría prospectiva, en la que la utilidad depende de ganancias y pérdidas respecto a un punto de referencia y no del nivel de riqueza, y explica con ejemplos numéricos el coeficiente de aversión a las pérdidas, el efecto reflejo y los efectos marco."
+pubDate: '2026-05-04'
+updatedDate: '2026-09-24'
+layoutVariant: lecture-series
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Economía del comportamiento — la gente reacciona a los cambios, no al nivel de riqueza
+
+En la teoría de la utilidad esperada, la utilidad es función de la riqueza final. Quien tiene 100 millones de wones y gana 1 millón, y quien tiene 102 millones y pierde 1 millón, acaban ambos con 101 millones: las dos situaciones son iguales. La **teoría prospectiva** de Kahneman y Tversky abandona este supuesto. La gente evalúa los resultados como ganancias y pérdidas respecto a un punto de referencia, y siente las pérdidas con mucha más fuerza que las ganancias del mismo tamaño.
+
+## 1. Tres propiedades de la función de valor
+
+<FormulaBox
+  label="La función de valor de la teoría prospectiva"
+  formula="v(x)=\begin{cases} x^{\alpha} & x \ge 0 \\ -\lambda(-x)^{\beta} & x<0 \end{cases}"
+  description="x es el cambio respecto al punto de referencia. Las estimaciones de Tversky y Kahneman (1992) son α = β ≈ 0,88 y λ ≈ 2,25."
+/>
+
+- **Dependencia de la referencia**: el valor se define sobre cambios $x$. El punto de referencia suele ser la situación actual, pero puede ser una expectativa o una meta.
+- **Aversión a las pérdidas**: como $\lambda>1$, la curva de pérdidas es más empinada que la de ganancias; tiene un quiebre en el origen.
+- **Sensibilidad decreciente**: como $\alpha,\beta<1$, la función es cóncava en las ganancias y convexa en las pérdidas. Pasar de 0 a 100.000 wones se siente mucho; pasar de 1 millón a 1,1 millones, poco.
+
+<EconDiagram
+  title="La función de valor (α = β = 0,88, λ = 2,25)"
+  xLabel="x"
+  yLabel="v(x)"
+  xMin={-100}
+  xMax={100}
+  yMin={-130}
+  yMax={70}
+  curves={[
+    { label: "Ganancias", points: [[0, 0], [10, 7.6], [25, 17.0], [50, 31.3], [75, 44.7], [100, 57.5]], tone: "green", anchor: "end" },
+    { label: "Pérdidas", points: [[-100, -129.5], [-75, -100.5], [-50, -70.4], [-25, -38.2], [-10, -17.1], [0, 0]], tone: "red", labelAt: 0 },
+  ]}
+  marks={[
+    { x: 50, y: 31.3, guide: true, xTick: "+50", yTick: "31" },
+    { x: -50, y: -70.4, guide: true, xTick: "−50", yTick: "−70" },
+  ]}
+  caption="Un mismo cambio de 50 vale unos 31 como ganancia y unos −70 como pérdida. El quiebre de la pendiente en el origen es la aversión a las pérdidas."
+/>
+
+## 2. ¿Cuán grande es la aversión a las pérdidas?
+
+Consideremos una moneda al aire en la que cara gana $G$ wones y cruz pierde 100.000 wones. Si el valor esperado es positivo ($G$ > 100.000 wones), una persona neutral al riesgo acepta. En la práctica, la mayoría solo acepta cuando $G$ se acerca a 200.000 wones. Si la función de valor es casi lineal, la condición para aceptar es $0{,}5G - 0{,}5\lambda\times 100.000 \ge 0$, es decir, $G\ge\lambda\times 100.000$ wones. Por eso las estimaciones de $\lambda$ en muchos experimentos y estudios de campo rondan el 2.
+
+Explicar esta conducta con la utilidad esperada exigiría una aversión extrema al riesgo incluso con apuestas pequeñas. Rabin demostró que una función de utilidad lo bastante cóncava como para rechazar apuestas pequeñas llevaría, con apuestas grandes, a elecciones absurdas que nadie haría. La aversión al riesgo con apuestas pequeñas se explica mejor por el quiebre en el punto de referencia que por la curvatura de la utilidad de la riqueza.
+
+## 3. El efecto reflejo: seguridad en las ganancias, apuesta en las pérdidas
+
+<LectureTable
+  title="Problemas de elección de Kahneman y Tversky (1979)"
+  headers={["Problema", "Opción A", "Opción B", "Elección mayoritaria"]}
+  rows={[
+    ["Ganancias", "Ganar 3.000 con seguridad", "Ganar 4.000 con un 80 % de probabilidad", "A (80 %)"],
+    ["Pérdidas", "Perder 3.000 con seguridad", "Perder 4.000 con un 80 % de probabilidad", "B (92 %)"],
+  ]}
+/>
+
+El valor esperado de B, 3.200, supera al de A. En el problema de ganancias se eligió la opción segura de menor valor esperado; en el de pérdidas, la apuesta de peor valor esperado. La concavidad en las ganancias y la convexidad en las pérdidas se ven directamente. Esta asimetría se llama **efecto reflejo**.
+
+Un ejemplo real es aferrarse a acciones con pérdidas en lugar de venderlas. Una vez en el terreno de las pérdidas, una apuesta con posibilidades de recuperación es más atractiva que materializar una pérdida segura. Esto lleva al efecto disposición del capítulo 8.
+
+## 4. El efecto marco: si cambia la referencia, cambia la elección
+
+Si el punto de referencia depende de cómo se describe un problema, la sola formulación puede cambiar la elección aunque los resultados sean idénticos. En el problema de la «enfermedad asiática» de Tversky y Kahneman (1981), con 600 personas en peligro:
+
+- «Se salvarán 200 personas» frente a «hay un tercio de probabilidad de que se salven 600» → el 72 % eligió la opción segura
+- «Morirán 400 personas» frente a «hay dos tercios de probabilidad de que mueran 600» → el 78 % eligió la apuesta
+
+Las dos parejas de opciones tienen exactamente los mismos resultados. La primera formulación toma «mueren todos» como referencia y convierte los resultados en ganancias; la segunda toma «no muere nadie» como referencia y los convierte en pérdidas. Se rompe el supuesto de **invariancia a la descripción** del modelo estándar (un mismo problema da la misma elección se describa como se describa).
+
+## 5. El encuadre estrecho
+
+La gente tiende a evaluar las decisiones una a una en lugar de en conjunto. Ofrecida una sola vez, la apuesta 50:50 anterior (ganancia de 150.000 wones, pérdida de 100.000) la rechaza quien tiene $\lambda=2{,}25$. Vista como un paquete de 100 apuestas iguales, la probabilidad de perder es ínfima y la ganancia esperada es de 2,5 millones de wones. Se rechaza una apuesta que se aceptaría en paquete porque se mira de forma aislada. Es la lógica de la explicación del enigma de la prima de riesgo en el capítulo 8 (aversión miope a las pérdidas).
+
+<Callout type="warning">
+La aversión a las pérdidas es un hallazgo confirmado repetidamente con varios métodos, pero su magnitud depende del contexto. En operadores frecuentes, en bienes que se tenían para vender y con apuestas pequeñas, λ puede salir cercano a 1. «Las pérdidas pesan exactamente el doble que las ganancias» es una estimación media, no una ley.
+</Callout>
+
+## Ejercicio
+
+Si $\lambda=2$ y la función de valor es lineal, ¿cuál es el máximo X con el que se acepta una apuesta que gana 100.000 wones con un 60 % de probabilidad y pierde X wones con un 40 %? De $0{,}6\times 100.000 - 0{,}4\times 2X \ge 0$ se obtiene $X\le 75.000$ wones. Una persona neutral al riesgo aceptaría hasta 150.000 wones. La aversión a las pérdidas ha reducido a la mitad la pérdida aceptable.
+
+## Referencias
+
+- Daniel Kahneman and Amos Tversky, "Prospect Theory: An Analysis of Decision under Risk," *Econometrica* (1979)
+- Amos Tversky and Daniel Kahneman, "The Framing of Decisions and the Psychology of Choice," *Science* (1981)
+- Amos Tversky and Daniel Kahneman, "Advances in Prospect Theory: Cumulative Representation of Uncertainty," *Journal of Risk and Uncertainty* (1992)
+- Matthew Rabin, "Risk Aversion and Expected-Utility Theory: A Calibration Theorem," *Econometrica* (2000)
