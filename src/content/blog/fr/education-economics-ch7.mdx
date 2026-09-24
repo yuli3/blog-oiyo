@@ -1,0 +1,125 @@
+---
+track: academy
+series: microeconomics
+chapter: 7
+title: "Microéconomie — Monopole : quantité, prix et perte sèche"
+description: "Explique pourquoi la recette marginale d'un monopole est inférieure au prix, calcule la production Rm = Cm et la perte sèche, l'indice de Lerner et la règle de l'inverse de l'élasticité, la discrimination par les prix du troisième degré et les options de régulation d'un monopole naturel, chiffres et graphique à l'appui."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["économie", "microéconomie", "monopole", "discrimination par les prix", "indice de Lerner"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Microéconomie — le monopole choisit la quantité, la demande fixe le prix
+
+Une entreprise concurrentielle considère le prix comme donné. Un monopole fait face à toute la demande du marché : vendre une unité de plus l'oblige à baisser le prix des unités qu'il vendait déjà. C'est pourquoi sa recette marginale est inférieure au prix, et cet écart explique tous les résultats du monopole.
+
+## 1. La recette marginale est inférieure au prix
+
+Avec la demande $P=120-Q$, la recette totale est $RT=120Q-Q^2$ et la recette marginale $Rm=120-2Q$. Pour une demande linéaire, la Rm est une droite de même ordonnée à l'origine et de pente double.
+
+Si baisser le prix de 81 à 80 wons fait passer les ventes de 39 à 40 unités, l'entreprise gagne 80 wons sur l'unité supplémentaire mais perd 1 won sur chacune des 39 unités existantes, soit 39 wons. La recette marginale est de 41 wons, bien en dessous du prix de 80 wons.
+
+## 2. Maximisation du profit et perte sèche
+
+Avec un coût marginal de 40 wons, $120-2Q=40$ donne $Q_m=40$, et le prix lu sur la courbe de demande est $P_m=80$ wons. Un marché concurrentiel ayant la même demande et les mêmes coûts aurait $P=Cm=40$ wons et $Q_c=80$.
+
+<EconDiagram
+  title="Quantité, prix et perte sèche du monopole"
+  xLabel="Q"
+  yLabel="P"
+  xMax={120}
+  yMax={125}
+  curves={[
+    { label: "D", points: [[0, 120], [120, 0]], tone: "blue", anchor: "end" },
+    { label: "Rm", points: [[0, 120], [60, 0]], tone: "violet", anchor: "end" },
+    { label: "Cm", points: [[0, 40], [120, 40]], tone: "red" },
+  ]}
+  areas={[
+    { points: [[0, 80], [40, 80], [40, 40], [0, 40]], tone: "green", label: "Profit du monopole 1 600" },
+    { points: [[40, 80], [80, 40], [40, 40]], tone: "amber", label: "Perte sèche" },
+  ]}
+  marks={[
+    { x: 40, y: 80, label: "Monopole", guide: true, xTick: "40", yTick: "80" },
+    { x: 80, y: 40, label: "Concurrence", xTick: "80" },
+  ]}
+  caption="Le monopole choisit Q = 40, où Rm = Cm, et fixe le prix de 80 wons lu sur la courbe de demande. Les échanges perdus entre 40 et 80 unités constituent la perte sèche."
+/>
+
+<LectureTable
+  title="Surplus en concurrence et en monopole"
+  headers={["", "Concurrence", "Monopole"]}
+  rows={[
+    ["Prix et quantité", "40 wons, 80 unités", "80 wons, 40 unités"],
+    ["Surplus du consommateur", "½×80×80 = 3 200", "½×40×40 = 800"],
+    ["Surplus du producteur (profit)", "0", "40×40 = 1 600"],
+    ["Perte sèche", "0", "½×40×40 = 800"],
+  ]}
+/>
+
+Sur la baisse de 2 400 du surplus du consommateur, 1 600 sont **transférés** au monopole et 800 **disparaissent**. Du point de vue de l'efficacité, le coût du monopole est la perte de 800, pas le transfert, qui relève de la répartition.
+
+## 3. Mesurer le pouvoir de marché : l'indice de Lerner
+
+En remplaçant $Rm=P(1-1/|\varepsilon|)$ du [chapitre 3](/fr/education-economics-ch3/) dans $Rm=Cm$, on obtient une règle de tarification.
+
+<FormulaBox
+  label="Indice de Lerner et règle de l'inverse de l'élasticité"
+  formula="L=\frac{P-MC}{P}=\frac{1}{|\varepsilon|}"
+  description="À l'équilibre de monopole (P = 80, Q = 40), |ε| = 80/40 = 2, donc L = 0,5 = (80−40)/80. Plus la demande est élastique, plus le prix doit rester proche du coût marginal."
+/>
+
+Deux conclusions s'ensuivent. Un monopole ne produit que là où $|\varepsilon|>1$, sur la partie élastique de la demande ; sur la partie inélastique, augmenter le prix accroît la recette et réduit le coût. Et s'il existe des substituts proches, même un monopole ne peut guère augmenter son prix.
+
+## 4. La discrimination par les prix
+
+Pratiquer des prix différents selon les consommateurs suppose deux conditions : pouvoir distinguer les groupes, et empêcher ceux qui achètent bon marché de revendre à ceux qui paieraient plus.
+
+<LectureTable
+  title="Trois types de discrimination par les prix"
+  headers={["Type", "Méthode", "Résultat"]}
+  rows={[
+    ["Premier degré (parfaite)", "Chaque consommateur paie sa disposition à payer", "Quantité concurrentielle ; l'entreprise capte tout le surplus"],
+    ["Deuxième degré", "Les consommateurs s'auto-sélectionnent selon des tarifs par quantité ou version", "Remises sur volume, classe économique/affaires"],
+    ["Troisième degré", "Prix différents selon des groupes observables", "Tarifs étudiants, prix par pays"],
+  ]}
+/>
+
+Exemple de discrimination du troisième degré : le groupe A a pour demande $P=100-Q$, le groupe B $P=60-Q$, et $Cm=20$ wons. On applique $Rm=Cm$ dans chaque groupe.
+
+- A : $100-2Q=20$ → $Q=40$, $P=60$ wons. Élasticité en ce point $|\varepsilon|=60/40=1{,}5$
+- B : $60-2Q=20$ → $Q=20$, $P=40$ wons. Élasticité en ce point $|\varepsilon|=40/20=2$
+
+Le groupe B, plus élastique, obtient le prix le plus bas : c'est la règle de Lerner appliquée groupe par groupe.
+
+La discrimination du premier degré supprime la perte sèche, car l'entreprise vend à tous ceux dont la disposition à payer est au moins égale au coût marginal. L'efficacité est celle de la concurrence, mais le surplus du consommateur est nul — preuve supplémentaire qu'efficacité et répartition sont deux questions distinctes.
+
+## 5. Monopole naturel et régulation
+
+Si le coût moyen décroît sur toute l'étendue de la demande, la production par une seule entreprise est la moins coûteuse ([chapitre 5](/fr/education-economics-ch5/)). Chaque façon de réguler un tel **monopole naturel** a un coût.
+
+- **Tarification au coût marginal** ($P=Cm$) : efficace, mais là où le coût moyen décroît, $Cm<CM$ et l'entreprise est en perte ; il faut une subvention.
+- **Tarification au coût moyen** ($P=CM$) : pas de perte, mais $P>Cm$ laisse une perte sèche et affaiblit l'incitation à réduire les coûts.
+- **Tarif binôme** : un abonnement couvre les coûts fixes et le prix d'usage égale le coût marginal. Certains consommateurs peuvent renoncer à cause de l'abonnement.
+
+<Callout type="warning">
+Être seul sur un marché ne garantit pas un prix de monopole. Si l'entrée et la sortie sont libres et sans coût (marché contestable), la simple menace d'entrée maintient le prix près du coût moyen. À l'inverse, plusieurs entreprises qui s'entendent peuvent reproduire le résultat du monopole (chapitre 8). Le pouvoir de marché se mesure à la capacité de maintenir le prix au-dessus du coût marginal, pas au nombre d'entreprises.
+</Callout>
+
+## Exercice
+
+Avec la demande $P=120-Q$ et $Cm=20$ wons, quels sont la quantité, le prix et la perte sèche du monopole ? $120-2Q=20$ donne $Q=50$ et $P=70$ wons. La quantité concurrentielle, tirée de $120-Q=20$, est 100. La perte sèche vaut $\tfrac{1}{2}\times(70-20)\times(100-50)=1\,250$ wons. L'indice de Lerner vaut $(70-20)/70\approx 0{,}71$, l'inverse de l'élasticité en ce point, $70/50=1{,}4$.
+
+## Références
+
+- Hal Varian, *Intermediate Microeconomics*, ch. 25–26
+- Jean Tirole, *The Theory of Industrial Organization*, ch. 1, 3
+- MIT OpenCourseWare, [14.01 Principles of Microeconomics](https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/)

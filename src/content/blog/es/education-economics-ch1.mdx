@@ -1,0 +1,129 @@
+---
+track: academy
+series: microeconomics
+chapter: 1
+title: "Microeconomía — Escasez, coste de oportunidad y frontera de posibilidades de producción"
+description: "Calcula el coste de oportunidad como suma de costes explícitos e implícitos, explica por qué crece la relación marginal de transformación a lo largo de la FPP, distingue eficiencia técnica y asignativa y muestra cómo tratar los costes hundidos, con números y un gráfico."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["economía", "microeconomía", "coste de oportunidad", "FPP", "relación marginal de transformación"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Microeconomía — la elección empieza en la restricción tecnológica, antes de que aparezca ningún precio
+
+Si el [capítulo 1 de Introducción a la economía](/es/academy-economics-basics-ch1/) fijó la definición de coste de oportunidad, este capítulo escribe ese coste como **una pendiente sobre la tecnología de producción**. Toda optimización en microeconomía empieza por escribir, en cantidades, «¿a qué renuncio?». La pendiente equivalente del lado del consumidor (la relación marginal de sustitución) vuelve en el capítulo 4, y la condición de eficiencia en la que ambas se encuentran, en el capítulo 10.
+
+## 1. El coste de oportunidad incluye lo que no aparece en la contabilidad
+
+El **coste de oportunidad** de una elección es el valor de la mejor alternativa a la que se renuncia. Incluye los **costes explícitos**, pagados en dinero, y también los **costes implícitos**: ingresos a los que se renuncia aunque no haya ningún pago.
+
+Supongamos que una empleada deja un trabajo de 35 millones de wones al año para cursar un máster de un año cuya matrícula cuesta 10 millones de wones.
+
+- Coste explícito: matrícula, 10 millones de wones
+- Coste implícito: salario al que renuncia, 35 millones de wones
+- Coste de oportunidad total: 45 millones de wones
+
+Los gastos de manutención no se cuentan. Estudie o siga trabajando, tendrá que comer y dormir, así que no son un coste **adicional** creado por esta elección. El coste de oportunidad es la diferencia entre «lo que se gasta si se elige» y «lo que se gastaría de todos modos».
+
+## 2. La pendiente de la FPP es el coste de oportunidad marginal
+
+Supongamos que una economía usa sus recursos y su tecnología para producir solo chips y trigo. La curva que une las combinaciones máximas posibles cuando todos los recursos se usan eficientemente es la **frontera de posibilidades de producción (FPP)**.
+
+<LectureTable
+  title="Combinaciones sobre la FPP"
+  headers={["Punto", "Chips", "Trigo", "Trigo sacrificado por 2 chips más"]}
+  rows={[
+    ["", "0", "20", "—"],
+    ["A", "2", "18", "2"],
+    ["B", "4", "14", "4"],
+    ["", "6", "9,5", "4,5"],
+    ["C", "8", "4", "5,5"],
+  ]}
+/>
+
+Pasar de A a B aporta 2 chips y cuesta 4 unidades de trigo: un chip cuesta 2 unidades de trigo. Pasar de B a C aporta 4 chips a cambio de 10 unidades de trigo: el coste de oportunidad de un chip sube a 2,5 unidades de trigo. Que cada chip adicional cueste más trigo se denomina **coste de oportunidad creciente**.
+
+<FormulaBox
+  label="Relación marginal de transformación"
+  formula="MRT = \left|\frac{\Delta Y}{\Delta X}\right| = \frac{MC_x}{MC_y}"
+  description="Valor absoluto de la pendiente de la FPP. Es el trigo que podría producirse con los recursos necesarios para un chip más, por lo que coincide con el cociente de los costes marginales de ambos bienes."
+/>
+
+¿Por qué la RMT es un cociente de costes marginales? Si una unidad de recursos vale $w$, un chip necesita $MC_x/w$ unidades de recursos. Dedicados al trigo, esos recursos producen $(MC_x/w)/(MC_y/w)=MC_x/MC_y$ unidades de trigo, ya que cada unidad de trigo requiere $MC_y/w$.
+
+<EconDiagram
+  title="Una frontera de posibilidades de producción cóncava"
+  xLabel="Chips"
+  yLabel="Trigo"
+  xMax={12}
+  yMax={22}
+  curves={[
+    { label: "FPP", points: [[0, 20], [2, 18], [4, 14], [6, 9.5], [8, 4], [9, 0]], tone: "blue", labelAt: 4 },
+  ]}
+  marks={[
+    { x: 2, y: 18, label: "A" },
+    { x: 4, y: 14, label: "B" },
+    { x: 8, y: 4, label: "C" },
+    { x: 5, y: 6, label: "D (ineficiente)" },
+    { x: 8, y: 12, label: "E (inalcanzable)" },
+  ]}
+  caption="Los puntos sobre la curva (A, B, C) son técnicamente eficientes, el punto interior (D) deja recursos ociosos y el punto exterior (E) no puede alcanzarse con los recursos y la tecnología actuales."
+/>
+
+**¿Por qué es cóncava?** Porque los recursos no son igual de útiles para ambos bienes. Para producir pocos chips se trasladan primero los recursos más adecuados para chips (ingenieros cualificados, salas blancas). A medida que se producen más chips, hay que trasladar también recursos más adecuados para el trigo (tierras de cultivo, mano de obra agrícola), de modo que cada chip adicional cuesta más trigo. Si todos los recursos fueran igual de útiles para ambos bienes, la FPP sería una recta y la RMT constante.
+
+## 3. Estar sobre la curva no hace óptimo a un punto
+
+Un punto sobre la FPP es **técnicamente eficiente**: no hay recursos ociosos. Que esa combinación sea la que la gente desea es otra cuestión. La **eficiencia asignativa** se alcanza cuando el ritmo al que la producción puede intercambiar los bienes (la RMT) coincide con el ritmo al que los consumidores están dispuestos a intercambiarlos (la relación marginal de sustitución, RMS).
+
+<FormulaBox
+  label="Condición de eficiencia asignativa"
+  formula="MRT_{xy} = MRS_{xy}"
+  description="En mercados competitivos las empresas eligen RMT = Px/Py y los consumidores RMS = Px/Py, de modo que los precios enlazan ambas condiciones. Los capítulos 4 y 10 vuelven sobre ello."
+/>
+
+Si todo el mundo quiere mucho más trigo pero la economía produce en C (8 chips, 4 de trigo), la producción es técnicamente eficiente pero ineficiente en la asignación. «Sobre la FPP = óptimo» es una afirmación falsa.
+
+## 4. Por qué se desplaza la curva
+
+- **Más recursos** (acumulación de trabajo y capital): ambos extremos se desplazan hacia fuera.
+- **Progreso técnico en un solo bien**: solo se alarga el extremo de ese bien. Si la tecnología de chips se duplica, el extremo de chips pasa de 9 a 18 mientras que el del trigo sigue en 20. Como los chips necesitan ahora menos recursos, los liberados pueden ir al trigo, y en la mayoría de las combinaciones la economía también puede tener más trigo.
+
+## 5. Los costes hundidos no son costes de oportunidad
+
+Un coste ya pagado e irrecuperable no es un coste de oportunidad, porque las decisiones futuras no obligan a renunciar a nada. Supongamos que se han gastado 30 millones de wones en equipos irrecuperables y que invertir 8 millones más permitiría recuperar 12 millones. La pregunta es: «¿obtengo 12 millones gastando otros 8?». El beneficio neto es de +4 millones, así que conviene continuar. Sumar los 30 millones ya gastados —«gastamos 38 millones para recuperar 12»— lleva erróneamente a abandonar. La tendencia opuesta, seguir con un proyecto con pérdidas por los costes hundidos, se trata en el [capítulo 6 de Economía conductual](/es/academy-behavioral-economics-ch6/).
+
+<LectureTable
+  title="Lo que este capítulo añade al curso introductorio"
+  headers={["Curso introductorio", "Microeconomía, capítulo 1"]}
+  rows={[
+    ["Coste de oportunidad = mejor alternativa sacrificada", "Coste explícito + implícito; la RMT cambia de un punto a otro"],
+    ["Dentro / sobre / fuera de la FPP", "Eficiencia técnica ≠ eficiencia asignativa (RMT = RMS)"],
+    ["Ignorar los costes hundidos", "Solo lo recuperable es coste futuro"],
+  ]}
+/>
+
+<Callout type="warning">
+La FPP solo recoge costes privados. Si una fábrica de chips contamina el agua y reduce la cosecha de trigo, la RMT social es más pronunciada que la privada. La combinación que el mercado elige con la RMT privada contiene demasiados chips desde el punto de vista social. Esa brecha se trata en el [capítulo 10](/es/education-economics-ch10/) y en el [capítulo 1 de Hacienda pública](/es/academy-public-finance-ch1/).
+</Callout>
+
+Si dos países tienen RMT distintas, cada uno puede especializarse en el bien con menor coste de oportunidad e intercambiar, de modo que ambos consuman combinaciones fuera de su propia FPP. Esto es la ventaja comparativa; los cálculos están en [Comercio internacional](/es/education-economics-ch15/).
+
+## Ejercicio
+
+Una FPP lineal permite como máximo 10 chips o 20 unidades de trigo. Si la economía produce 6 chips, ¿cuánto trigo puede producir como máximo? El coste de oportunidad de un chip es constante e igual a $20/10=2$ unidades de trigo, así que el trigo es $20-2\times 6=8$. El punto (6, 6) queda dentro de la curva: el coste de oportunidad no ha cambiado, sino que hay recursos capaces de producir 2 unidades de trigo que están ociosos.
+
+## Referencias
+
+- Hal Varian, *Intermediate Microeconomics*, ch. 32
+- N. Gregory Mankiw, *Principles of Economics*, ch. 1–3
+- MIT OpenCourseWare, [14.01 Principles of Microeconomics](https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/)

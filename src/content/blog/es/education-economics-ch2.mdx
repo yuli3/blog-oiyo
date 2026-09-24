@@ -1,0 +1,107 @@
+---
+track: academy
+series: microeconomics
+chapter: 2
+title: "Microeconomía — Oferta, demanda y estática comparativa"
+description: "Resuelve el equilibrio lineal de oferta y demanda en forma general, muestra cómo los signos de los cambios de precio y cantidad identifican qué curva se desplazó y calcula la escasez y la pérdida irrecuperable de un precio máximo, con números y un gráfico."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["economía", "microeconomía", "oferta y demanda", "estática comparativa", "control de precios"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Microeconomía — un precio y una cantidad observados son una intersección, no una curva de demanda
+
+Si el [capítulo 2 de Introducción a la economía](/es/academy-economics-basics-ch2/) distinguió el desplazamiento de una curva del movimiento a lo largo de ella, este capítulo convierte esa distinción en un problema de **identificación**. Los precios y cantidades registrados en los datos no son puntos de la curva de demanda ni de la de oferta: son los puntos donde ambas se cruzaron. Hay que saber qué curva se movió para poder interpretarlos.
+
+## 1. Resolver el equilibrio en forma general
+
+Una demanda lineal $Q_d=a-bP$ y una oferta $Q_s=c+dP$ ($b,d>0$) se cruzan en:
+
+<FormulaBox
+  label="Equilibrio de un mercado lineal"
+  formula="P^*=\frac{a-c}{b+d},\qquad Q^*=\frac{ad+bc}{b+d}"
+  description="Si la ordenada en el origen de la demanda a sube en 1, el precio sube 1/(b+d) y la cantidad d/(b+d). Cuanto más empinada es la oferta (menor d), más se traduce un aumento de demanda en subida de precio."
+/>
+
+Con demanda $Q_d=100-2P$ y oferta $Q_s=10+P$, $P^*=90/3=30$ wones y $Q^*=40$.
+
+- Si el aumento de la renta lleva la demanda a $Q_d=112-2P$, entonces $P^*=34$ wones y $Q^*=44$. Precio y cantidad **suben a la vez**. Según la fórmula, $a$ subió 12, así que el precio sube $12/3=4$ y la cantidad $12\times 1/3=4$.
+- Si el encarecimiento de los insumos lleva la oferta a $Q_s=4+P$, entonces $P^*=32$ wones y $Q^*=36$. El precio sube y la cantidad **baja**.
+
+<EconDiagram
+  title="Aumento de la demanda y nuevo equilibrio"
+  xLabel="Q"
+  yLabel="P"
+  xMax={60}
+  yMax={60}
+  curves={[
+    { label: "D", points: [[0, 50], [60, 20]], tone: "blue" },
+    { label: "D'", points: [[0, 56], [60, 26]], tone: "blue", dashed: true },
+    { label: "O", points: [[10, 0], [60, 50]], tone: "green" },
+  ]}
+  marks={[
+    { x: 40, y: 30, label: "E", guide: true, xTick: "40", yTick: "30" },
+    { x: 44, y: 34, label: "E'", guide: true, xTick: "44", yTick: "34" },
+  ]}
+  arrows={[{ from: [20, 40], to: [26, 43] }]}
+  caption="Cuando la demanda se desplaza a la derecha, precio y cantidad suben juntos a lo largo de la curva de oferta. Si se hubiera desplazado la oferta, se moverían en sentidos opuestos a lo largo de la curva de demanda."
+/>
+
+<LectureTable
+  title="Signos de la estática comparativa"
+  headers={["Perturbación", "Precio", "Cantidad"]}
+  rows={[
+    ["Aumento de la demanda", "↑", "↑"],
+    ["Disminución de la demanda", "↓", "↓"],
+    ["Aumento de la oferta", "↓", "↑"],
+    ["Disminución de la oferta", "↑", "↓"],
+    ["Aumento simultáneo de oferta y demanda", "Ambiguo", "↑"],
+  ]}
+/>
+
+El precio por sí solo no revela la causa. Si la cantidad subió con el precio, dominó una perturbación de demanda; si bajó, una de oferta. Cuando ambas curvas se mueven a la vez, el signo de una de las variables depende de sus tamaños relativos y queda ambiguo.
+
+## 2. Por qué no se puede trazar una curva de demanda uniendo puntos
+
+Supongamos que representamos los precios y las ventas anuales de un producto y los puntos suben hacia la derecha. Es tentador concluir que «cuanto más caro, más se compra», pero si la oferta se mantuvo fija mientras la demanda crecía cada año, los puntos dibujan la **curva de oferta**. Para estimar una curva de demanda se necesita una variación que desplace la oferta sin tocar la demanda (por ejemplo, el clima que altera la oferta de una cosecha). Este es el **problema de identificación** de la econometría; su herramienta estándar, las variables instrumentales, se presenta en el [capítulo 4 de Econometría](/es/education-econometrics-ch4/).
+
+«La demanda de vivienda cayó porque subieron los tipos de interés» describe un hecho que desplazó la curva de demanda a través del coste del crédito. «Las compraventas cayeron porque subieron los precios de la vivienda» puede ser un movimiento a lo largo de la misma curva de demanda o el resultado de una menor oferta. Confundir la causa lleva a la política contraria.
+
+## 3. Un precio máximo crea escasez y cambia la forma de racionar
+
+Si al mercado anterior (equilibrio en 30 wones) se le impone un precio máximo de 20 wones, la cantidad demandada es $100-40=60$ y la ofrecida $10+20=30$: una escasez de 30. Lo que el precio ya no raciona pasan a racionarlo las colas, los sorteos, los contactos, el mercado negro y la menor calidad.
+
+La **pérdida irrecuperable de eficiencia** por la caída de la cantidad de 40 a 30 es el triángulo entre las curvas de demanda y oferta, de 30 a 40 unidades. Con una cantidad de 30, los consumidores están dispuestos a pagar $P=50-Q/2=35$ wones y el coste marginal de los productores es $P=Q-10=20$ wones.
+
+<FormulaBox
+  label="Pérdida irrecuperable de un precio máximo"
+  formula="DWL=\tfrac{1}{2}\times(35-20)\times(40-30)=75"
+  description="Esos 10 intercambios valían más para los consumidores de lo que costaba producirlos y, aun así, desaparecen. Si se cuenta el tiempo perdido en las colas, la pérdida real es mayor."
+/>
+
+«Bajar el precio beneficia a los consumidores» solo es cierto para las 30 personas que compran. Hay que restar las pérdidas de quienes no pueden comprar y el coste de las colas para obtener el efecto neto sobre el conjunto de los consumidores. Un precio mínimo (salario mínimo, precio garantizado de una cosecha) hace lo contrario y genera exceso de oferta.
+
+<Callout type="warning">
+Unos puntos observados crecientes no son un contraejemplo de la ley de la demanda. Una curva de demanda realmente creciente —un bien Giffen— exige un bien inferior cuyo efecto renta supere al efecto sustitución, algo raro (capítulo 4). Ante datos crecientes, compruebe primero si la oferta estaba de verdad fija.
+</Callout>
+
+La afirmación de que el equilibrio competitivo maximiza el excedente total solo se cumple con competencia perfecta, sin externalidades y con información perfecta. Los capítulos 5 a 10 relajan esos supuestos uno a uno.
+
+## Ejercicio
+
+Demanda $Q_d=80-P$, oferta $Q_s=20+P$. El equilibrio es $P=30$ wones y $Q=50$. Con un precio máximo de 20 wones, la demanda es 60 y la oferta 40: una escasez de 20. Con una cantidad de 40, el precio de demanda es 40 wones y el de oferta 20 wones, así que la pérdida irrecuperable es $\tfrac{1}{2}\times 20\times 10=100$.
+
+## Referencias
+
+- Hal Varian, *Intermediate Microeconomics*, ch. 1, 16
+- N. Gregory Mankiw, *Principles of Economics*, ch. 4, 6
+- MIT OpenCourseWare, [14.01 Principles of Microeconomics](https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/)

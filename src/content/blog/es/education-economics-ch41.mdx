@@ -1,0 +1,110 @@
+---
+track: academy
+series: microeconomics
+chapter: 11
+title: "Microeconomía — Teoría de juegos: estrategias mixtas, repetición y credibilidad"
+description: "Calcula equilibrios de Nash en estrategias mixtas a partir de condiciones de indiferencia cuando no hay equilibrio en estrategias puras, y presenta con ejemplos numéricos la inducción hacia atrás y el equilibrio perfecto en subjuegos de un juego de entrada, las amenazas no creíbles y el compromiso, y el factor de descuento crítico de los juegos repetidos."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["economía", "microeconomía", "teoría de juegos", "equilibrio de Nash", "equilibrio perfecto en subjuegos"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Microeconomía — un equilibrio es una mejor respuesta mutua, dada la elección del otro
+
+El equilibrio de Cournot del [capítulo 8](/es/education-economics-ch8/) ya era un equilibrio de Nash. Este capítulo generaliza las herramientas de la teoría de juegos: cuando no hay equilibrio en estrategias puras (estrategias mixtas), cuando las decisiones se toman en secuencia (inducción hacia atrás) y cuando el mismo juego se repite (factor de descuento). Conviene aclarar primero que la optimización de una persona y el equilibrio entre varias son conceptos distintos: en la optimización el entorno es fijo; en el equilibrio, la elección de cada uno es el entorno de los demás.
+
+## 1. Equilibrio de Nash
+
+Un **equilibrio de Nash** es una combinación de estrategias en la que ningún jugador tiene incentivo a cambiar la suya, dadas las estrategias de los demás. En el dilema del prisionero, (confesar, confesar) es un equilibrio de Nash, aunque es peor para ambos que callar. El equilibrio de Nash es un concepto de estabilidad, no de eficiencia.
+
+## 2. Estrategias mixtas: probabilidades que dejan indiferente al rival
+
+El siguiente juego no tiene equilibrio en estrategias puras (cada casilla muestra los pagos del jugador fila y del jugador columna).
+
+<LectureTable
+  title="Un juego sin equilibrio en estrategias puras"
+  headers={["", "Columna: izquierda", "Columna: derecha"]}
+  rows={[
+    ["Fila: arriba", "(2, 1)", "(0, 3)"],
+    ["Fila: abajo", "(1, 2)", "(3, 0)"],
+  ]}
+/>
+
+Desde cualquier casilla, alguien quiere desviarse. En (arriba, izquierda), Columna pasa a derecha; en (arriba, derecha), Fila pasa a abajo; en (abajo, derecha), Columna pasa a izquierda; en (abajo, izquierda), Fila pasa a arriba.
+
+En un equilibrio en estrategias mixtas, cada jugador elige probabilidades que **dejan al otro indiferente** entre sus dos estrategias puras. Si el otro no fuera indiferente, jugaría solo una estrategia pura, y entonces mi mezcla dejaría de ser una mejor respuesta.
+
+- Si Columna juega izquierda con probabilidad $q$, el pago esperado de Fila es $2q$ con arriba y $q+3(1-q)=3-2q$ con abajo. Son iguales cuando $q=3/4$.
+- Si Fila juega arriba con probabilidad $p$, el pago esperado de Columna es $p+2(1-p)=2-p$ con izquierda y $3p$ con derecha. Son iguales cuando $p=1/2$.
+
+<FormulaBox
+  label="Condición de equilibrio de Nash en estrategias mixtas"
+  formula="E[u_{-i}(s_1)\mid \sigma_i] = E[u_{-i}(s_2)\mid \sigma_i]"
+  description="Mis probabilidades σ_i son las que igualan los pagos esperados de las dos estrategias puras del otro jugador. Son los pagos del otro, no los míos, los que fijan mis probabilidades."
+/>
+
+El equilibrio es (Fila: arriba con 1/2, Columna: izquierda con 3/4); el pago esperado de Fila es $2\times 0{,}75=1{,}5$ y el de Columna $3\times 0{,}5=1{,}5$. Un error frecuente es suponer un 50 % por defecto o calcular las probabilidades con los propios pagos. La frecuencia con la que un lanzador de penaltis tira a la izquierda o a la derecha no la fijan sus preferencias, sino la capacidad del portero para detener cada lado.
+
+## 3. Juegos secuenciales e inducción hacia atrás
+
+Cuando las decisiones se toman en secuencia, se dibuja el juego como un árbol y se resuelve desde el final. Un entrante decide si entra en un mercado ocupado por una empresa establecida; si entra, esta decide si inicia una guerra de precios o se acomoda.
+
+<LectureTable
+  title="Un juego de entrada (pago del entrante, pago de la establecida)"
+  headers={["Decisión del entrante", "Respuesta de la establecida", "Pagos"]}
+  rows={[
+    ["No entrar", "—", "(0, 100)"],
+    ["Entrar", "Acomodarse", "(30, 50)"],
+    ["Entrar", "Guerra de precios", "(−10, 20)"],
+  ]}
+/>
+
+La establecida amenaza: «Si entras, iniciaré una guerra de precios». Si el entrante la cree, no entra, y (no entrar, guerra de precios) es un equilibrio de Nash. Pero una vez que el entrante ha entrado, a la establecida le conviene más acomodarse (50) que pelear (20). La amenaza **no es creíble**.
+
+Resolviendo por inducción hacia atrás, en la última etapa la establecida se acomoda, y el entrante, sabiéndolo, entra (30 > 0). Un equilibrio que es mejor respuesta en todos los subjuegos es un **equilibrio perfecto en subjuegos**; descarta los equilibrios de Nash basados en amenazas no creíbles.
+
+La forma de hacer creíble una amenaza es el **compromiso**. Si la establecida construye de antemano mucha capacidad, de modo que tras la entrada inundar el mercado le resulte más rentable que acomodarse (por ejemplo, guerra de precios 60 > acomodarse 50), la amenaza se convierte en una verdadera mejor respuesta y la entrada queda disuadida. Por eso las inversiones hundidas e irreversibles tienen valor estratégico: es la misma lógica que la del líder de Stackelberg del capítulo 8.
+
+## 4. Juegos repetidos
+
+Un juego en el que se traiciona si se juega una sola vez puede sostener la cooperación si se repite. Supongamos que cooperar da 400 wones por periodo, desviarse una vez da 700 wones en ese periodo y, a partir de ahí, el rival castiga para siempre, de modo que cada periodo da 50 wones. Con un factor de descuento $\delta$:
+
+$$\frac{400}{1-\delta}\ \ge\ 700+\frac{50\,\delta}{1-\delta}\quad\Longleftrightarrow\quad \delta\ \ge\ \frac{700-400}{700-50}\approx 0{,}46$$
+
+El numerador son los 300 wones extra de desviarse una vez; el denominador, la diferencia de 650 wones entre el pago del desvío y el del castigo. Si el futuro importa lo suficiente, cooperar es un equilibrio. La condición de colusión del capítulo 8 es una aplicación de esta fórmula.
+
+Dos advertencias. Primera: en un juego repetido un número finito de veces cuyo final se conoce, se traiciona con seguridad en el último periodo, por tanto también en el anterior, y la inducción hacia atrás deshace la cooperación desde el primero; la cooperación necesita un final incierto. Segunda: en los juegos repetidos indefinidamente, muchísimos resultados pueden ser equilibrios, no solo la cooperación (teorema folk). La repetición hace **posible** la cooperación, pero no la **garantiza**.
+
+<LectureTable
+  title="Cuándo son creíbles las amenazas y las promesas"
+  headers={["Afirmación", "Condición de credibilidad", "Herramienta"]}
+  rows={[
+    ["Tomaré represalias", "La represalia debe ser una mejor respuesta en ese momento", "Equilibrio perfecto en subjuegos"],
+    ["Iniciaré una guerra de precios", "La senda de guerra debe ser un equilibrio", "Factor de descuento, observabilidad del desvío"],
+    ["Impediré la entrada", "Las opciones deben quedar atadas por una inversión irreversible", "Capacidad hundida, contratos a largo plazo"],
+  ]}
+/>
+
+<Callout type="warning">
+Un equilibrio de Nash no tiene por qué ser eficiente (dilema del prisionero), y una asignación eficiente no tiene por qué ser un equilibrio (si nadie puede imponerla, los jugadores se desvían). Además, el pago esperado de una estrategia mixta es un promedio de muchas partidas, no lo que se obtiene en una sola. En los experimentos la gente no mezcla con tanta precisión como predice la teoría y también le importa la equidad ([capítulo 7 de Economía conductual](/es/academy-behavioral-economics-ch7/)).
+</Callout>
+
+## Ejercicio
+
+En la tabla anterior, si Columna juega izquierda con probabilidad 3/4, ¿cuáles son los pagos esperados de las dos estrategias de Fila? Arriba da $2\times 0{,}75=1{,}5$ y abajo $1\times 0{,}75+3\times 0{,}25=1{,}5$: son iguales. Fila está indiferente, así que mezclar 1/2–1/2 también es una mejor respuesta. Si Columna jugara izquierda con 0,9, arriba daría 1,8 y abajo 1,2, Fila solo jugaría arriba, Columna pasaría entonces a derecha y el equilibrio se rompería.
+
+## Referencias
+
+- Robert Gibbons, *Game Theory for Applied Economists*, ch. 1–2
+- Avinash Dixit and Susan Skeath, *Games of Strategy*, ch. 6–7, 10
+- Hal Varian, *Intermediate Microeconomics*, ch. 29–30
+- MIT OpenCourseWare, [14.12 Economic Applications of Game Theory](https://ocw.mit.edu/courses/14-12-economic-applications-of-game-theory-fall-2012/)

@@ -1,92 +1,110 @@
 ---
 track: academy
-series: economics-basics
+series: microeconomics
 chapter: 3
-title: Consumer Theory
-description: >-
-  Analyze the process of a consumer's rational choice to maximize utility within
-  a limited budget using indifference curves and budget lines.
+title: "Microeconomics — Elasticity and Tax Incidence"
+description: "Covers point and arc elasticity and their link to revenue (MR = P(1−1/|ε|)), why elasticity changes along a linear demand curve, income and cross elasticities, and how a tax burden is split according to relative elasticities, with numbers and a graph."
 pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
 category: Economics
-tags:
-  - Education
-  - economics
+tags: ["economics", "microeconomics", "elasticity", "tax incidence", "total revenue"]
 locale: en
 author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
 
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# Consumer Theory
+# Microeconomics — Measure Responses in Ratios, Not Slopes
 
-Consumer theory addresses the question: "How does a consumer maximize their satisfaction (utility) given a certain budget?"
+Chapter 2 used the slopes of curves to compute changes in price and quantity. Slopes depend on units: switching prices from won to thousands of won multiplies the slope by 1,000. **Elasticity** measures changes in percentages and removes units. This chapter computes elasticities and uses them to read revenue and tax burdens.
 
----
+## 1. Point and arc elasticity
 
-## 1. Utility and Marginal Utility
+<FormulaBox
+  label="Price elasticity of demand"
+  formula="\varepsilon = \frac{dQ/Q}{dP/P} = \frac{dQ}{dP}\cdot\frac{P}{Q}"
+  description="With demand Q = 100 − 2P and P = 20 won, Q = 60 and ε = −2 × (20/60) = −2/3. Since |ε| < 1, demand is inelastic at this point."
+/>
 
-### (1) Utility
+When prices change a lot, the value depends on the starting point, so we use the **arc (midpoint) elasticity**, based on the average of the two points. If the price moves from 10 to 12 won and the quantity from 100 to 80, the midpoint is $P=11$ won, $Q=90$.
 
-Subjective satisfaction a consumer derives from consuming goods.
+$$|\varepsilon| = \frac{20/90}{2/11} \approx 1.22$$
 
-- **Marginal Utility (MU)**: The additional utility gained from consuming one more unit of a good.
-- **Law of Diminishing Marginal Utility**: As the consumption of a good increases, the satisfaction derived from each additional unit (MU) tends to decrease.
+Demand is elastic, so raising the price lowers revenue. Indeed, revenue fell from 1,000 to 960 won.
 
-### (2) Utility Maximization Condition (Equimarginal Principle)
+## 2. Elasticity changes along a linear demand curve
 
-$\frac{MU_x}{P_x} = \frac{MU_y}{P_y}$
-In other words, total utility is maximized when the marginal utility per dollar spent is equal across all goods.
+A linear demand curve has a constant slope but its elasticity differs at every point, because $P/Q$ rises as we move up the curve. For $Q=100-2P$, the price intercept is 50 won and the quantity intercept is 100.
 
----
+<EconDiagram
+  title="Elasticity regions on a linear demand curve"
+  xLabel="Q"
+  yLabel="P"
+  xMax={100}
+  yMax={50}
+  curves={[{ label: "D", points: [[0, 50], [100, 0]], tone: "blue" }]}
+  marks={[
+    { x: 50, y: 25, label: "|ε| = 1", guide: true, xTick: "50", yTick: "25" },
+    { x: 20, y: 40, label: "|ε| = 4" },
+    { x: 80, y: 10, label: "|ε| = 0.25" },
+  ]}
+  caption="Above the midpoint demand is elastic, below it inelastic. At P = 40 won, |ε| = 2 × 40/20 = 4; at P = 10 won, |ε| = 2 × 10/80 = 0.25."
+/>
 
-## 2. Indifference Curve
+## 3. Elasticity and total revenue
 
-A curve connecting combinations of two goods that provide the consumer with the same level of satisfaction.
+Differentiating total revenue $TR=P\cdot Q$ with respect to quantity gives marginal revenue.
 
-### (1) Properties
+<FormulaBox
+  label="Marginal revenue and elasticity"
+  formula="MR = \frac{dTR}{dQ} = P\left(1-\frac{1}{|\varepsilon|}\right)"
+  description="If |ε| > 1, MR > 0: cutting the price to sell more raises revenue. At |ε| = 1, MR = 0 and revenue is at its maximum. If |ε| < 1, revenue rises only when the price is raised."
+/>
 
-1. It is downward-sloping. (To get more of one good, you must give up some of another)
-2. Curves further from the origin represent higher levels of utility.
-3. Curves do not intersect.
-4. It is **convex** to the origin. (Due to the Law of Diminishing Marginal Rate of Substitution)
+For the linear demand $Q=100-2P$, revenue peaks at the midpoint ($P=25$ won, $Q=50$) at 1,250 won. In Chapter 7 the conclusion that a monopolist, choosing $MR=MC>0$, **always produces on the elastic part of demand** follows directly from this formula.
 
-### (2) Marginal Rate of Substitution (MRS)
+## 4. What determines elasticity, and other elasticities
 
-$MRS_{xy} = \frac{MU_x}{MU_y}$
-The amount of good Y a consumer is willing to give up to obtain one additional unit of good X while maintaining the same utility level.
+- **Availability of substitutes**: the more close substitutes, the more elastic. Demand for "a particular brand of cola" is far more elastic than demand for "drinks".
+- **Share of spending**: the larger the share of income, the more sensitive to price.
+- **Time**: demand is more elastic in the long run, when there is time to find alternatives. When petrol prices rise, people drive a little less in the short run but change cars and move house in the long run.
 
----
+<LectureTable
+  title="Three elasticities of demand"
+  headers={["Elasticity", "Definition", "Meaning of the sign"]}
+  rows={[
+    ["Price elasticity", "% change in quantity demanded for a 1% change in own price", "Negative (law of demand)"],
+    ["Income elasticity", "% change in quantity demanded for a 1% change in income", "Positive: normal good (above 1: luxury); negative: inferior good"],
+    ["Cross elasticity", "% change in quantity demanded for a 1% change in another good's price", "Positive: substitutes; negative: complements"],
+  ]}
+/>
 
-## 3. Budget Line
+## 5. The less elastic side bears the tax
 
-A line representing combinations of two goods that a consumer can purchase with a given income.
-$P_x \cdot X + P_y \cdot Y = I$ (where I is Income)
+Take a market with demand $Q=100-P$ and supply $Q=P$ and impose a tax of 10 won per unit. Let consumers pay $P_d$ and producers receive $P_s=P_d-10$. Then $100-P_d=P_d-10$ gives $P_d=55$ won, $P_s=45$ won and $Q=45$. Relative to the pre-tax price of 50 won, consumers bear 5 won and producers 5 won, because the two elasticities are equal at the equilibrium.
 
-- **Change in Income**: The budget line shifts **parallelly**.
-- **Change in Price**: The **slope** of the budget line changes.
+<FormulaBox
+  label="Splitting the burden"
+  formula="\frac{\text{Consumers' burden}}{\text{Producers' burden}} = \frac{\varepsilon_s}{|\varepsilon_d|}"
+  description="If supply is twice as elastic as demand, consumers bear twice as much as producers. The side that can escape by responding to price bears less."
+/>
 
----
+Whether the tax is levied on sellers or buyers, the equilibrium wedge in a competitive market is the same. Who hands money to the tax office (statutory incidence) differs from whose welfare falls (economic incidence). The size of the deadweight loss, its relation to the tax rate and the Ramsey rule continue in [Public Finance, Chapter 2](/en/academy-public-finance-ch2/).
 
-## 4. Consumer Equilibrium and Derivation of Demand
+<Callout type="warning">
+"Firms pay the tax" looks only at statutory incidence. In perfect competition the share passed on is set by elasticities, and under monopoly, depending on the curvature of demand, the price can rise by more than the tax. Elasticity estimates also differ between the short and long run, so say which period's burden you mean.
+</Callout>
 
-### (1) Consumer Equilibrium
+## Check your understanding
 
-Occurs where the indifference curve is **tangent** to the budget line.
-Condition: $MRS_{xy} = \frac{P_x}{P_y}$
+The price of coffee rises from 4,000 to 5,000 won and sales fall from 200 to 180 cups. What is the midpoint elasticity? The quantity change is $20/190\approx 0.105$ and the price change $1{,}000/4{,}500\approx 0.222$, so $|\varepsilon|\approx 0.47$. Demand is inelastic, so revenue rises from 800,000 to 900,000 won. If a rival café opens nearby, elasticity in this range rises and the same price increase could reduce revenue.
 
-### (2) Income and Substitution Effects
+## References
 
-A change in price causes a change in quantity demanded due to two effects:
-
-1. **Substitution Effect**: Moving toward the relatively cheaper good (always in the opposite direction of price).
-2. **Income Effect**: The change in quantity demanded due to the change in real income.
-
-> **Giffen Good**: A specific type of inferior good where demand increases as price rises. This happens when the income effect outweighs the substitution effect.
-
----
-
-## Key Checklist
-
-- [ ] Why is the indifference curve convex to the origin? (Answer: Diminishing MRS)
-- [ ] How does the budget line move when income increases?
-- [ ] Which economic principle describes the act of looking for 'value for money'? (Answer: Equimarginal Principle)
-- [ ] For a normal good, are the income effect and substitution effect in the same or opposite direction when price falls?
+- Hal Varian, *Intermediate Microeconomics*, ch. 15–16
+- N. Gregory Mankiw, *Principles of Economics*, ch. 5–6
+- MIT OpenCourseWare, [14.01 Principles of Microeconomics](https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/)

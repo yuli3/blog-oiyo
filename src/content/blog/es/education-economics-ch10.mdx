@@ -1,0 +1,111 @@
+---
+track: academy
+series: microeconomics
+chapter: 10
+title: "Microeconomía — Fallos de mercado: externalidades, bienes públicos e información"
+description: "Calcula las externalidades como la diferencia entre coste marginal privado y social, compara el impuesto pigouviano, el teorema de Coase y los impuestos frente a los límites de cantidad (Weitzman), y presenta el polizón en los bienes públicos, la selección adversa en el mercado de «cacharros» y la señalización."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["economía", "microeconomía", "fallos de mercado", "externalidades", "selección adversa"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Microeconomía — un fallo de mercado no es la ausencia de intercambio, sino un precio equivocado
+
+El equilibrio competitivo del capítulo 6 era eficiente porque los precios recogían tanto el beneficio marginal social como el coste marginal social. Este capítulo examina tres formas en que esa condición se rompe: costes que no entran en los precios (externalidades), bienes a los que no se puede poner precio (bienes públicos) e intercambios en los que el precio no transmite la calidad (información asimétrica). Convierte en cálculos las definiciones del [capítulo 6 de Introducción a la economía](/es/academy-economics-basics-ch6/), y el diseño de políticas continúa en el [capítulo 1 de Hacienda pública](/es/academy-public-finance-ch1/).
+
+## 1. Externalidades: la diferencia entre coste privado y coste social
+
+Supongamos que el coste marginal privado de una empresa es $CMg_p=10+Q$, que cada unidad producida causa 8 wones de daño a los vecinos y que la demanda es $P=50-Q$. El coste marginal social es $CMg_s=18+Q$.
+
+- Equilibrio de mercado: $10+Q=50-Q$ → $Q=20$, $P=30$ wones
+- Óptimo social: $18+Q=50-Q$ → $Q=16$, $P=34$ wones
+
+El mercado sobreproduce 4 unidades. La parte de esas 4 unidades en la que el coste social supera al beneficio es una pérdida irrecuperable de $\tfrac{1}{2}\times 8\times 4=16$ wones.
+
+<EconDiagram
+  title="Una externalidad negativa: sobreproducción"
+  xLabel="Q"
+  yLabel="P"
+  xMax={30}
+  yMax={50}
+  curves={[
+    { label: "D", points: [[0, 50], [30, 20]], tone: "blue" },
+    { label: "CMg_p", points: [[0, 10], [30, 40]], tone: "green" },
+    { label: "CMg_s", points: [[0, 18], [30, 48]], tone: "red", dashed: true },
+  ]}
+  areas={[{ points: [[16, 34], [20, 38], [20, 30]], tone: "amber" }]}
+  marks={[
+    { x: 20, y: 30, label: "Mercado", guide: true, xTick: "20", yTick: "30" },
+    { x: 16, y: 34, label: "Óptimo", guide: true, xTick: "16", yTick: "34" },
+  ]}
+  caption="El triángulo sombreado es la pérdida irrecuperable de 16 wones. Un impuesto de 8 wones por unidad eleva el coste privado hasta el social."
+/>
+
+<FormulaBox
+  label="Impuesto pigouviano"
+  formula="t = MC_s(Q^*) - MC_p(Q^*)"
+  description="El daño marginal evaluado en la cantidad óptima. Aquí el daño es constante y vale 8 wones, pero si crece con la producción (por ejemplo 2Q), el tipo también debe calcularse en la cantidad óptima."
+/>
+
+El **teorema de Coase** afirma que, si los derechos de propiedad están claros y negociar no cuesta nada, las partes alcanzarán la cantidad eficiente negociando, tenga quien tenga el derecho. Puede funcionar con un solo vecino, pero cuando hay miles de afectados y el daño es irreversible, la negociación es imposible.
+
+**¿Impuesto o límite de cantidad?** Un impuesto fija el precio y deja que la cantidad se ajuste; los permisos negociables fijan la cantidad y dejan que el precio se ajuste. Cuando el Gobierno no conoce bien los costes de reducción, Weitzman propuso un criterio: si el daño crece bruscamente a partir de cierta cantidad (curva de daño marginal empinada), es más seguro fijar la cantidad; si los costes de reducción crecen bruscamente (curva de coste marginal de reducción empinada), fijar el precio hace menos costosos los errores de estimación.
+
+## 2. Bienes públicos y recursos comunes
+
+Clasificar los bienes según dos dimensiones muestra dónde el mercado abastece bien y dónde no.
+
+<LectureTable
+  title="Clasificación de los bienes"
+  headers={["", "Excluible", "No excluible"]}
+  rows={[
+    ["Rival", "Bienes privados (bien provistos por el mercado)", "Recursos comunes (sobreexplotados)"],
+    ["No rival", "Bienes club (televisión de pago, autopistas de peaje poco congestionadas)", "Bienes públicos puros (infraprovistos)"],
+  ]}
+/>
+
+Como un bien público puro puede usarse sin pagar, la mejor estrategia de cada uno es esperar a que paguen los demás: el **polizón**. La condición de eficiencia es la de Samuelson, según la cual la suma vertical de los beneficios marginales individuales iguala el coste marginal; hay un ejemplo numérico en el [capítulo 1 de Hacienda pública](/es/academy-public-finance-ch1/).
+
+Los recursos comunes plantean el problema opuesto. Lo que pesca uno reduce lo que pueden pescar los demás, pero nadie tiene en cuenta ese coste, y las pesquerías se sobreexplotan (la **tragedia de los comunes**). Las cuotas de captura, las tasas de uso y la asignación de derechos de propiedad son remedios, y Ostrom documentó además comunidades que gestionaron recursos comunes durante mucho tiempo con sus propias normas.
+
+## 3. Información asimétrica: el mercado de «cacharros»
+
+En un mercado de coches usados, la mitad son buenos (valen 13 millones de wones para los vendedores y 15 millones para los compradores) y la mitad malos (6 millones para los vendedores y 8 millones para los compradores). Con información simétrica se venden todos. Si los compradores no pueden distinguirlos, no pagarán más que el valor esperado, $0{,}5\times 15+0{,}5\times 8=11{,}5$ millones de wones.
+
+A ese precio, los dueños de coches buenos no venden por menos de 13 millones y abandonan el mercado. Si los compradores saben que solo quedan coches malos, el precio cae a 8 millones. Han desaparecido las ventas de coches buenos, que habrían beneficiado a todos. Esto es la **selección adversa**.
+
+<LectureTable
+  title="Dos formas de información asimétrica"
+  headers={["", "Selección adversa", "Riesgo moral"]}
+  rows={[
+    ["Qué se oculta", "El tipo antes del contrato (calidad, riesgo)", "La acción después del contrato (esfuerzo, cuidado)"],
+    ["Ejemplos", "Coches usados, salud de quienes solicitan un seguro", "Descuido una vez asegurado, agentes que se escaquean"],
+    ["Respuestas", "Garantías, inspecciones, señales, seguro obligatorio", "Franquicias y copagos, retribución por resultados, supervisión"],
+  ]}
+/>
+
+La parte informada también puede revelar la calidad por sí misma. Quien vende un coche bueno ofrece garantía, y quien busca empleo con capacidad obtiene títulos costosos. En el **modelo de señalización** de Spence, un título puede distinguir a los más capaces aunque no eleve la productividad, siempre que a ellos les cueste menos obtenerlo.
+
+<Callout type="warning">
+La existencia de un fallo de mercado no es condición suficiente para que la intervención pública tenga éxito. El Gobierno tampoco conoce el tamaño del daño ni los costes de reducción, los reguladores pueden quedar capturados por los sectores que regulan y los propios impuestos generan exceso de gravamen. La intervención se juzga comparando el coste del fallo de mercado con el del fallo del Estado.
+</Callout>
+
+## Ejercicio
+
+Con un coste marginal privado de $10+Q$, un daño marginal de 8 wones por unidad y una demanda $P=50-Q$, ¿cuánto sobreproduce el mercado y cuál es el impuesto pigouviano? La producción de mercado es 20 y la óptima 16, así que hay 4 unidades de sobreproducción y el impuesto es de 8 wones. Si el daño marginal fuera $0{,}5Q$, creciente con la producción, el coste marginal social sería $10+1{,}5Q$, $10+1{,}5Q=50-Q$ daría $Q^*=16$ y el impuesto sería el daño marginal en ese punto, $0{,}5\times 16=8$ wones. También aquí el impuesto es el daño marginal medido en la cantidad óptima.
+
+## Referencias
+
+- Hal Varian, *Intermediate Microeconomics*, ch. 35–38
+- Ronald Coase, "The Problem of Social Cost," *Journal of Law and Economics* (1960)
+- George Akerlof, "The Market for 'Lemons'," *Quarterly Journal of Economics* (1970)
+- Martin Weitzman, "Prices vs. Quantities," *Review of Economic Studies* (1974)

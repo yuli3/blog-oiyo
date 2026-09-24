@@ -1,63 +1,110 @@
 ---
-locale: en
 track: academy
-title: "Economics — Game Theory: The Prisoner's Dilemma — The Economics of Cooperation and Betrayal"
+series: microeconomics
+chapter: 11
+title: "Microeconomics — Game Theory: Mixed Strategies, Repetition and Credibility"
+description: "Finds mixed-strategy Nash equilibria from indifference conditions when no pure-strategy equilibrium exists, and covers backward induction and subgame-perfect equilibrium in an entry game, non-credible threats and commitment, and the critical discount factor of repeated games, with numerical examples."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
 category: Economics
-author: OIYO Editorial
-tags:
-  - Education
-  - Economics
-  - GameTheory
-  - PrisonersDilemma
-  - NashEquilibrium
-description: >-
-  When the other person's choice affects your outcome, what should you choose? Learn the Prisoner's Dilemma — the pinnacle of strategic equilibrium — and Nash Equilibrium through an interactive game simulation.
-pubDate: 2026-04-14
+tags: ["economics", "microeconomics", "game theory", "Nash equilibrium", "subgame-perfect equilibrium"]
+locale: en
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
 
-import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
-import { PrisonersDilemma } from "@/features/education-calculators/UtilityGames";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# Game Theory: The Prisoner's Dilemma
+# Microeconomics — An Equilibrium Is a Mutual Best Response, Holding the Other's Choice Fixed
 
-In modern economics, individual and corporate decisions are never made in a vacuum. Will a rival firm cut its price? Will an accomplice confess? **Game Theory** is the discipline that analyzes strategic choices in exactly these kinds of **mutually interdependent situations**.
+The Cournot equilibrium of [Chapter 8](/en/education-economics-ch8/) was already a Nash equilibrium. This chapter generalises the tools of game theory: when there is no equilibrium in pure strategies (mixed strategies), when choices happen in sequence (backward induction), and when the same game is repeated (discount factors). First, note that optimisation by one person and equilibrium among several are different concepts. In optimisation the environment is fixed; in equilibrium each player's choice is the others' environment.
 
----
+## 1. Nash equilibrium
 
-## 1. The Payoff Matrix
+A **Nash equilibrium** is a combination of strategies in which no player has an incentive to change strategy, taking the others' strategies as given. In the prisoner's dilemma, (confess, confess) is a Nash equilibrium, yet it is worse for both than staying silent. Nash equilibrium is a concept of stability, not of efficiency.
 
-In the Prisoner's Dilemma, the payoffs for each combination of choices are as follows:
+## 2. Mixed strategies: probabilities that make the rival indifferent
+
+The following game has no equilibrium in pure strategies (each cell shows the row player's and the column player's payoffs).
 
 <LectureTable
-  title="Prisoner's Dilemma Payoff Matrix"
-  headers={["", "B Cooperates", "B Defects"]}
+  title="A game with no pure-strategy equilibrium"
+  headers={["", "Column: Left", "Column: Right"]}
   rows={[
-    ["A Cooperates", "(3, 3) - Best outcome", "(0, 5)"],
-    ["A Defects", "(5, 0)", "(1, 1) - Equilibrium"],
+    ["Row: Up", "(2, 1)", "(0, 3)"],
+    ["Row: Down", "(1, 2)", "(3, 0)"],
   ]}
 />
 
----
+From any cell someone wants to deviate. At (Up, Left) Column switches to Right; at (Up, Right) Row switches to Down; at (Down, Right) Column switches to Left; at (Down, Left) Row switches to Up.
 
-## 2. Interactive Game Simulation
+In a mixed-strategy equilibrium, each player chooses probabilities that **make the other player indifferent** between their two pure strategies. If the other were not indifferent, they would play only one pure strategy, and then my mixing would no longer be a best response.
 
-Play the game against an AI. When the AI's strategy is set to "Tit-for-Tat," it starts by cooperating — but the moment you defect, it retaliates immediately.
+- If Column plays Left with probability $q$, Row's expected payoff is $2q$ from Up and $q+3(1-q)=3-2q$ from Down. They are equal when $q=3/4$.
+- If Row plays Up with probability $p$, Column's expected payoff is $p+2(1-p)=2-p$ from Left and $3p$ from Right. They are equal when $p=1/2$.
 
-<PrisonersDilemma client:visible />
+<FormulaBox
+  label="Condition for a mixed-strategy Nash equilibrium"
+  formula="E[u_{-i}(s_1)\mid \sigma_i] = E[u_{-i}(s_2)\mid \sigma_i]"
+  description="My probabilities σ_i are those that equalise the expected payoffs of the other player's two pure strategies. My probabilities are set by the other player's payoffs, not mine."
+/>
 
----
+The equilibrium is (Row: Up with 1/2, Column: Left with 3/4); Row's expected payoff is $2\times 0.75=1.5$ and Column's is $3\times 0.5=1.5$. A common mistake is to assume 50% by default or to compute the probabilities from one's own payoffs. How often a penalty taker shoots left or right is determined not by the taker's preferences but by the goalkeeper's ability to save each side.
 
-## 3. Dominant Strategy and Nash Equilibrium
+## 3. Sequential games and backward induction
 
-- **Dominant Strategy**: The choice that is best for you regardless of what the other player does. In this game, "Defect" is the dominant strategy.
-- **Nash Equilibrium**: A state where, given the other player's strategy, neither player has any incentive to change their own. (Defect, Defect) is the Nash Equilibrium of this game.
+When choices are made in sequence, draw the game as a tree and solve it from the end. An entrant decides whether to enter a market held by an incumbent; if it enters, the incumbent decides whether to start a price war or accommodate.
+
+<LectureTable
+  title="An entry game (entrant's payoff, incumbent's payoff)"
+  headers={["Entrant's choice", "Incumbent's response", "Payoffs"]}
+  rows={[
+    ["Stay out", "—", "(0, 100)"],
+    ["Enter", "Accommodate", "(30, 50)"],
+    ["Enter", "Price war", "(−10, 20)"],
+  ]}
+/>
+
+The incumbent threatens: "If you enter, I will start a price war." If the entrant believes it, it stays out, and (stay out, price war) is a Nash equilibrium. But once the entrant has actually entered, the incumbent is better off accommodating (50) than fighting (20). The threat is **not credible**.
+
+Solving by backward induction, the incumbent accommodates at the last stage, and the entrant, knowing this, enters (30 > 0). An equilibrium that is a best response in every subgame is a **subgame-perfect equilibrium**; it filters out Nash equilibria that rely on non-credible threats.
+
+The way to make a threat credible is **commitment**. If the incumbent builds large capacity in advance so that, after entry, flooding the market is actually more profitable than accommodating (say, price war 60 > accommodate 50), the threat becomes a genuine best response and entry is deterred. This is why irreversible sunk investments have strategic value — the same logic as the Stackelberg leader in Chapter 8.
+
+## 4. Repeated games
+
+A game in which players defect when it is played once can sustain cooperation when it is repeated. Suppose cooperating yields 400 won per period, deviating once yields 700 won in that period, and thereafter the rival punishes forever so that each period yields 50 won. With discount factor $\delta$:
+
+$$\frac{400}{1-\delta}\ \ge\ 700+\frac{50\,\delta}{1-\delta}\quad\Longleftrightarrow\quad \delta\ \ge\ \frac{700-400}{700-50}\approx 0.46$$
+
+The numerator is the extra 300 won gained by deviating once; the denominator is the 650-won difference between the deviation payoff and the punishment payoff. If the future matters enough, cooperation is an equilibrium. The collusion condition in Chapter 8 is an application of this formula.
+
+Two caveats. First, in a finitely repeated game whose end is known, players defect in the last period for certain, so they also defect in the one before, and backward induction unravels cooperation from the first period. Cooperation needs an uncertain end. Second, in infinitely repeated games a great many outcomes can be equilibria, not just cooperation (the folk theorem). Repetition makes cooperation **possible**, not **guaranteed**.
+
+<LectureTable
+  title="When threats and promises are credible"
+  headers={["Statement", "Condition for credibility", "Tool"]}
+  rows={[
+    ["I will retaliate", "Retaliation must be a best response at that point", "Subgame-perfect equilibrium"],
+    ["I will start a price war", "The war path must be an equilibrium", "Discount factor, observability of deviation"],
+    ["I will block entry", "Options must be tied by irreversible investment", "Sunk capacity, long-term contracts"],
+  ]}
+/>
 
 <Callout type="warning">
-**Pareto Inefficiency**: The tragedy of the Prisoner's Dilemma is that while each individual rationally chooses to "Defect," both end up worse off than if they had both "Cooperated."
+A Nash equilibrium need not be efficient (the prisoner's dilemma), and an efficient allocation need not be an equilibrium (if no one can enforce it, players deviate). Also, the expected payoff of a mixed strategy is an average over many plays, not what one gets in a single play. In experiments people do not mix as precisely as theory predicts and also care about fairness ([Behavioural Economics, Chapter 7](/en/academy-behavioral-economics-ch7/)).
 </Callout>
 
----
+## Check your understanding
 
-Game theory is a framework for explaining countless social phenomena — oligopoly collusion, nuclear arms races, environmental protection agreements, and more. Use the simulator to feel firsthand the delicate balance between betrayal and cooperation.
+In the table above, when Column plays Left with probability 3/4, what are Row's expected payoffs from its two strategies? Up gives $2\times 0.75=1.5$ and Down $1\times 0.75+3\times 0.25=1.5$ — equal. Row is indifferent, so mixing 1/2–1/2 is also a best response. If Column played Left with probability 0.9, Up would yield 1.8 and Down 1.2, so Row would play only Up, and Column would then switch to Right, breaking the equilibrium.
+
+## References
+
+- Robert Gibbons, *Game Theory for Applied Economists*, ch. 1–2
+- Avinash Dixit and Susan Skeath, *Games of Strategy*, ch. 6–7, 10
+- Hal Varian, *Intermediate Microeconomics*, ch. 29–30
+- MIT OpenCourseWare, [14.12 Economic Applications of Game Theory](https://ocw.mit.edu/courses/14-12-economic-applications-of-game-theory-fall-2012/)

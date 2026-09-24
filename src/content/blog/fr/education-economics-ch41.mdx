@@ -1,0 +1,110 @@
+---
+track: academy
+series: microeconomics
+chapter: 11
+title: "Microéconomie — Théorie des jeux : stratégies mixtes, répétition et crédibilité"
+description: "Détermine les équilibres de Nash en stratégies mixtes à partir des conditions d'indifférence lorsqu'il n'existe pas d'équilibre en stratégies pures, et présente, exemples chiffrés à l'appui, l'induction à rebours et l'équilibre parfait en sous-jeux d'un jeu d'entrée, les menaces non crédibles et l'engagement, ainsi que le facteur d'actualisation critique des jeux répétés."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["économie", "microéconomie", "théorie des jeux", "équilibre de Nash", "équilibre parfait en sous-jeux"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Microéconomie — un équilibre est une meilleure réponse mutuelle, le choix de l'autre étant fixé
+
+L'équilibre de Cournot du [chapitre 8](/fr/education-economics-ch8/) était déjà un équilibre de Nash. Ce chapitre généralise les outils de la théorie des jeux : quand il n'existe pas d'équilibre en stratégies pures (stratégies mixtes), quand les choix se font en séquence (induction à rebours) et quand le même jeu est répété (facteur d'actualisation). Notons d'abord que l'optimisation d'un individu et l'équilibre entre plusieurs sont deux concepts distincts : dans l'optimisation, l'environnement est fixe ; à l'équilibre, le choix de chacun constitue l'environnement des autres.
+
+## 1. L'équilibre de Nash
+
+Un **équilibre de Nash** est une combinaison de stratégies dans laquelle aucun joueur n'a intérêt à changer de stratégie, compte tenu des stratégies des autres. Dans le dilemme du prisonnier, (avouer, avouer) est un équilibre de Nash, pourtant pire pour les deux que se taire. L'équilibre de Nash est une notion de stabilité, non d'efficacité.
+
+## 2. Stratégies mixtes : des probabilités qui rendent l'adversaire indifférent
+
+Le jeu suivant n'a pas d'équilibre en stratégies pures (chaque case indique les gains du joueur ligne et du joueur colonne).
+
+<LectureTable
+  title="Un jeu sans équilibre en stratégies pures"
+  headers={["", "Colonne : gauche", "Colonne : droite"]}
+  rows={[
+    ["Ligne : haut", "(2, 1)", "(0, 3)"],
+    ["Ligne : bas", "(1, 2)", "(3, 0)"],
+  ]}
+/>
+
+Quelle que soit la case de départ, quelqu'un veut dévier. En (haut, gauche), Colonne passe à droite ; en (haut, droite), Ligne passe à bas ; en (bas, droite), Colonne passe à gauche ; en (bas, gauche), Ligne passe à haut.
+
+Dans un équilibre en stratégies mixtes, chaque joueur choisit des probabilités qui **rendent l'autre indifférent** entre ses deux stratégies pures. Si l'autre n'était pas indifférent, il ne jouerait qu'une stratégie pure, et mon mélange ne serait plus une meilleure réponse.
+
+- Si Colonne joue gauche avec la probabilité $q$, le gain espéré de Ligne est $2q$ en jouant haut et $q+3(1-q)=3-2q$ en jouant bas. Ils sont égaux pour $q=3/4$.
+- Si Ligne joue haut avec la probabilité $p$, le gain espéré de Colonne est $p+2(1-p)=2-p$ en jouant gauche et $3p$ en jouant droite. Ils sont égaux pour $p=1/2$.
+
+<FormulaBox
+  label="Condition d'équilibre de Nash en stratégies mixtes"
+  formula="E[u_{-i}(s_1)\mid \sigma_i] = E[u_{-i}(s_2)\mid \sigma_i]"
+  description="Mes probabilités σ_i sont celles qui égalisent les gains espérés des deux stratégies pures de l'autre joueur. Ce sont les gains de l'autre, et non les miens, qui fixent mes probabilités."
+/>
+
+L'équilibre est (Ligne : haut avec 1/2, Colonne : gauche avec 3/4) ; le gain espéré de Ligne est $2\times 0{,}75=1{,}5$ et celui de Colonne $3\times 0{,}5=1{,}5$. L'erreur courante consiste à supposer 50 % par défaut ou à calculer les probabilités à partir de ses propres gains. La fréquence à laquelle un tireur de penalty vise à gauche ou à droite ne dépend pas de ses préférences mais de la capacité du gardien à arrêter chaque côté.
+
+## 3. Jeux séquentiels et induction à rebours
+
+Quand les choix se font en séquence, on représente le jeu par un arbre et on le résout en partant de la fin. Un entrant décide d'entrer ou non sur un marché tenu par une entreprise en place ; s'il entre, celle-ci décide de lancer une guerre des prix ou de s'accommoder.
+
+<LectureTable
+  title="Un jeu d'entrée (gain de l'entrant, gain de l'entreprise en place)"
+  headers={["Choix de l'entrant", "Réponse de l'entreprise en place", "Gains"]}
+  rows={[
+    ["Ne pas entrer", "—", "(0, 100)"],
+    ["Entrer", "S'accommoder", "(30, 50)"],
+    ["Entrer", "Guerre des prix", "(−10, 20)"],
+  ]}
+/>
+
+L'entreprise en place menace : « Si vous entrez, je lance une guerre des prix. » Si l'entrant la croit, il reste dehors, et (ne pas entrer, guerre des prix) est un équilibre de Nash. Mais une fois l'entrant installé, l'entreprise en place a intérêt à s'accommoder (50) plutôt qu'à combattre (20). La menace n'est **pas crédible**.
+
+Par induction à rebours, l'entreprise en place s'accommode à la dernière étape, et l'entrant, le sachant, entre (30 > 0). Un équilibre qui est une meilleure réponse dans chaque sous-jeu est un **équilibre parfait en sous-jeux** ; il élimine les équilibres de Nash fondés sur des menaces non crédibles.
+
+Pour rendre une menace crédible, il faut un **engagement**. Si l'entreprise en place construit d'avance une grande capacité, de sorte qu'après l'entrée inonder le marché devienne plus rentable que s'accommoder (par exemple guerre des prix 60 > accommodement 50), la menace devient une vraie meilleure réponse et l'entrée est dissuadée. C'est pourquoi les investissements irréversibles ont une valeur stratégique — la même logique que le meneur de Stackelberg du chapitre 8.
+
+## 4. Jeux répétés
+
+Un jeu où l'on trahit lorsqu'il n'est joué qu'une fois peut soutenir la coopération s'il est répété. Supposons que coopérer rapporte 400 wons par période, que dévier une fois rapporte 700 wons sur cette période, puis que le rival punisse à jamais, de sorte que chaque période ne rapporte plus que 50 wons. Avec un facteur d'actualisation $\delta$ :
+
+$$\frac{400}{1-\delta}\ \ge\ 700+\frac{50\,\delta}{1-\delta}\quad\Longleftrightarrow\quad \delta\ \ge\ \frac{700-400}{700-50}\approx 0{,}46$$
+
+Le numérateur est le gain supplémentaire de 300 wons d'une déviation ; le dénominateur, l'écart de 650 wons entre le gain de déviation et le gain de punition. Si l'avenir compte suffisamment, la coopération est un équilibre. La condition de collusion du chapitre 8 en est une application.
+
+Deux mises en garde. D'abord, dans un jeu répété un nombre fini de fois dont la fin est connue, les joueurs trahissent à coup sûr à la dernière période, donc aussi à l'avant-dernière, et l'induction à rebours détruit la coopération dès la première période : la coopération exige une fin incertaine. Ensuite, dans les jeux répétés indéfiniment, un très grand nombre d'issues peuvent être des équilibres, pas seulement la coopération (théorème folk). La répétition rend la coopération **possible**, elle ne la **garantit** pas.
+
+<LectureTable
+  title="Quand menaces et promesses sont crédibles"
+  headers={["Déclaration", "Condition de crédibilité", "Outil"]}
+  rows={[
+    ["Je riposterai", "La riposte doit être une meilleure réponse à ce moment-là", "Équilibre parfait en sous-jeux"],
+    ["Je lancerai une guerre des prix", "Le chemin de guerre doit être un équilibre", "Facteur d'actualisation, observabilité des déviations"],
+    ["J'empêcherai l'entrée", "Les options doivent être liées par un investissement irréversible", "Capacité irrécupérable, contrats de long terme"],
+  ]}
+/>
+
+<Callout type="warning">
+Un équilibre de Nash n'est pas forcément efficace (dilemme du prisonnier), et une allocation efficace n'est pas forcément un équilibre (si personne ne peut l'imposer, les joueurs dévient). En outre, le gain espéré d'une stratégie mixte est une moyenne sur de nombreuses parties, non ce que l'on obtient en une seule. En expérience, les gens ne mélangent pas aussi précisément que la théorie le prévoit et se soucient aussi d'équité ([chapitre 7 d'Économie comportementale](/fr/academy-behavioral-economics-ch7/)).
+</Callout>
+
+## Exercice
+
+Dans le tableau ci-dessus, si Colonne joue gauche avec la probabilité 3/4, quels sont les gains espérés des deux stratégies de Ligne ? Haut donne $2\times 0{,}75=1{,}5$ et bas $1\times 0{,}75+3\times 0{,}25=1{,}5$ : ils sont égaux. Ligne est indifférent, donc mélanger à 1/2–1/2 est aussi une meilleure réponse. Si Colonne jouait gauche avec 0,9, haut rapporterait 1,8 et bas 1,2 : Ligne ne jouerait que haut, Colonne passerait alors à droite et l'équilibre serait rompu.
+
+## Références
+
+- Robert Gibbons, *Game Theory for Applied Economists*, ch. 1–2
+- Avinash Dixit and Susan Skeath, *Games of Strategy*, ch. 6–7, 10
+- Hal Varian, *Intermediate Microeconomics*, ch. 29–30
+- MIT OpenCourseWare, [14.12 Economic Applications of Game Theory](https://ocw.mit.edu/courses/14-12-economic-applications-of-game-theory-fall-2012/)

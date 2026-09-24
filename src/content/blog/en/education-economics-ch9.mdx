@@ -1,74 +1,110 @@
 ---
 track: academy
-series: economics-basics
+series: microeconomics
 chapter: 9
-title: Classical vs. Keynesian School
-description: >-
-  Understand the differences between the two major streams of macroeconomics,
-  the Classical and Keynesian schools, and study the context in which Keynesian
-  economics emerged during the Great Depression.
+title: "Microeconomics — Factor Markets and Distribution"
+description: "Shows that labour demand is a derived demand based on the value of the marginal product, explains how output-market monopoly and monopsony reduce employment, when a minimum wage can raise employment under monopsony, and covers wage differentials and economic rent, with numbers and a graph."
 pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
 category: Economics
-tags:
-  - Education
-  - economics
+tags: ["economics", "microeconomics", "factor markets", "monopsony", "minimum wage"]
 locale: en
 author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
 
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# Classical vs. Keynesian School
+# Microeconomics — The Wage Is the Value of the Marginal Product, Not a Share of the Average
 
-Modern macroeconomics has evolved through the debate between the Classical school, which believes in the market's self-healing ability, and the Keynesian school, which emphasizes active government intervention.
+The prices of labour and capital are also set by supply and demand. But firms want labour not for its own sake but for what it produces. Factor demand is therefore derived from demand for output, and employment and wages depend on whether the output market and the factor market are competitive.
 
----
+## 1. Labour demand in competitive markets
 
-## 1. Classical School
+Hiring one more worker raises output by $MP_L$, which is sold at price $P$. The extra revenue is the **value of the marginal product** $VMP_L=P\cdot MP_L$. If the wage is below it, the firm hires more; if above, it hires less.
 
-Extending the logic of Adam Smith's 'invisible hand', this school believes that the market always finds its own equilibrium.
+<FormulaBox
+  label="Labour demand of a competitive firm"
+  formula="P\cdot MP_L = w"
+  description="Because the marginal product diminishes, the VMP_L curve slopes downward and is the firm's labour demand curve. A higher output price or higher productivity shifts labour demand to the right."
+/>
 
-- **Core Logic (Say's Law)**: "Supply creates its own demand." Production generates income, which in turn is used to buy goods, so overproduction cannot occur.
-- **Characteristics**:
-  1. **Perfect Price Flexibility**: Prices, wages, and interest rates are highly flexible, resolving imbalances immediately.
-  2. **Supply-Side Focus**: Production capacity is the key to economic growth.
-  3. **Role of Government**: Night-watchman state (Small Government). The government should not interfere in the market.
+If the marginal product is 20 units and the output price 10,000 won, $VMP_L=200{,}000$ won. With a wage of 100,000 won, the firm hires more. As labour increases, the marginal product falls, and hiring stops where $VMP_L$ reaches 100,000 won.
 
----
+If the output market is a monopoly, selling extra output also lowers its price, so revenue rises by $MR$ rather than $P$. Labour demand becomes the marginal revenue product $MRP_L=MR\cdot MP_L$, and since $MR<P$, employment is lower at the same wage. The underproduction of Chapter 7 shows up as underemployment in the factor market.
 
-## 2. Keynesian School
+**Euler's theorem**: if the production function has constant returns to scale and every factor is paid its value of marginal product, factor payments exactly exhaust the value of output. With Cobb–Douglas $Q=K^{0.3}L^{0.7}$, labour's share is 70% and capital's 30%. This is not an ethical claim that the distribution is fair but an accounting result under competition and constant returns.
 
-A new perspective presented by John Maynard Keynes when the Great Depression of the 1930s could not be explained by Classical theory.
+## 2. Monopsony: when there is a single buyer
 
-- **Core Logic (Principle of Effective Demand)**: "Demand creates its own supply." The total output of an economy is determined by 'Effective Demand'—the desire to buy goods.
-- **Characteristics**:
-  1. **Price Rigidity**: Specifically, wages and prices are 'sticky' and do not fall easily. Thus, it takes too long for the market to recover on its own during a recession.
-  2. **Demand-Side Focus**: The cause of recession is a lack of demand.
-  3. **Role of Government**: Active government intervention (Big Government). The government should create demand by increasing spending.
+If a region has only one large employer, that firm faces the whole labour supply curve. To hire one more worker it must raise the wage, and it must raise existing workers' wages too. So the cost of one more worker, the **marginal factor cost (MFC)**, exceeds the wage — the mirror image of $MR<P$ in Chapter 7.
 
----
+Suppose labour supply is $w=L$ (in 10,000 won) and the marginal revenue product of labour is $MRP_L=30-L$. The total wage bill is $wL=L^2$, so $MFC=2L$.
 
-## 3. Summary Comparison
+- **Competitive labour market**: $30-L=L$ → $L=15$, $w=150{,}000$ won
+- **Monopsony**: $30-L=2L$ → $L=10$. The wage is read off the supply curve: $w=100{,}000$ won
 
-| Category        | Classical School           | Keynesian School                  |
-| :-------------- | :------------------------- | :-------------------------------- |
-| **Focus**       | Supply (Long-run analysis) | Demand (Short-run analysis)       |
-| **Prices**      | Perfectly Flexible         | Rigid (Sticky downwards)          |
-| **Equilibrium** | Always at Full Employment  | Involuntary Unemployment possible |
-| **Government**  | Laissez-faire              | Active Intervention               |
+Monopsony lowers both employment and the wage. The gap between the value workers create ($MRP_L=200{,}000$ won) and what they are paid (100,000 won) is the monopsonist's profit.
 
----
+<EconDiagram
+  title="A monopsony labour market"
+  xLabel="L"
+  yLabel="w (10,000 won)"
+  xMax={30}
+  yMax={32}
+  curves={[
+    { label: "MRP", points: [[0, 30], [30, 0]], tone: "blue" },
+    { label: "Supply w = L", points: [[0, 0], [30, 30]], tone: "green" },
+    { label: "MFC", points: [[0, 0], [15, 30]], tone: "red", dashed: true },
+  ]}
+  marks={[
+    { x: 10, y: 10, label: "Monopsony", guide: true, xTick: "10", yTick: "10" },
+    { x: 10, y: 20, label: "MRP = MFC" },
+    { x: 15, y: 15, label: "Competition", guide: true, xTick: "15", yTick: "15" },
+  ]}
+  caption="The monopsonist hires 10 workers where MRP = MFC and pays the lowest wage those 10 will accept, 100,000 won."
+/>
 
-## 4. Modern Perspective: Complementary Relationship
+Now suppose a minimum wage of 150,000 won is set. Below 150,000 won the firm can hire more without raising the wage, so the MFC becomes flat at 150,000 won. The firm hires up to 15 workers, where $MRP_L=15$. **The minimum wage has raised both employment and the wage.** If it is raised to 200,000 won, employment falls back to 10 where $MRP_L=20$, and beyond that employment starts to fall.
 
-Modern economics tends to see Keynesian arguments as valid in the short run and Classical arguments as valid in the long run.
+<LectureTable
+  title="Market structure and the hiring condition"
+  headers={["Output market \\ labour market", "Competitive", "Monopsony"]}
+  rows={[
+    ["Competitive", "P·MP_L = w", "P·MP_L = MFC > w"],
+    ["Monopoly", "MR·MP_L = w", "MR·MP_L = MFC, lowest employment"],
+  ]}
+/>
 
-> **Lesson of the Great Depression**: It showed that markets can be imperfect and that appropriate fiscal and monetary policies by the government can sometimes save an economy from crisis.
+## 3. Why wages differ
 
----
+Wages differ even within the same market for several reasons.
 
-## Key Checklist
+- **Human capital**: education and training raise productivity and hence the value of the marginal product. Why the return to education is hard to estimate (ability moves both education and wages) is discussed in [Econometrics, Chapter 1](/en/education-econometrics-ch1/).
+- **Compensating differentials**: dangerous, unpleasant or irregular jobs must pay more to attract workers of the same ability.
+- **Market structure**: monopsony, unions and bargaining power pull wages away from the value of the marginal product.
+- **Discrimination**: wage differences based on characteristics unrelated to productivity. Competition penalises discriminating firms through higher costs, but if customers or co-workers have discriminatory preferences, competition alone does not remove it.
 
-- [ ] What law states "supply creates its own demand"? (Answer: Say's Law)
-- [ ] What did Keynes call the phenomenon where wages do not easily fall to low levels? (Answer: Price Rigidity / Sticky Wages)
-- [ ] According to Keynes, what was the primary cause of a severe economic downturn like the Great Depression? (Answer: Lack of Effective Demand)
-- [ ] Which school focuses more on long-term economic growth? (Answer: Classical School)
+## 4. Economic rent
+
+The payment to a factor whose supply is perfectly inelastic is **economic rent**. The amount of land is fixed regardless of its price, so land rent is determined by demand, and rent does not change the supply of land. More broadly, any payment above the minimum needed to keep a factor in its current use is rent — for example, the part of a star athlete's salary above what they could earn in another occupation.
+
+Taxing rent causes no deadweight loss because supply does not shrink. By the incidence rule of [Chapter 3](/en/education-economics-ch3/), the inelastic side bears the whole tax. This is why a land tax has long been discussed as an efficient tax.
+
+<Callout type="warning">
+"Minimum wages raise unemployment" and "minimum wages raise employment" are statements about different market structures. In a competitive labour market, a minimum wage above equilibrium reduces employment; under monopsony, it raises employment within a certain range. Which structure a market resembles, and whether a given increase falls within that range, must be judged from data rather than theory. This is also why empirical results differ by region and by the size of the increase.
+</Callout>
+
+## Check your understanding
+
+Should a competitive firm with a marginal product of 20 units, a wage of 100,000 won and an output price of 10,000 won hire more? $VMP_L=200{,}000$ won > 100,000 won, so yes. If the output market is a monopoly with marginal revenue of 5,000 won, $MRP_L=100{,}000$ won equals the wage and the firm is already at its optimum. The same production function gives different employment depending on the structure of the output market.
+
+## References
+
+- Hal Varian, *Intermediate Microeconomics*, ch. 26
+- George Borjas, *Labor Economics*, ch. 4–6
+- Alan Manning, *Monopsony in Motion* (2003)
+- MIT OpenCourseWare, [14.01 Principles of Microeconomics](https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/)

@@ -1,0 +1,117 @@
+---
+track: academy
+series: microeconomics
+chapter: 5
+title: "微观经济学 — 生产者理论:成本最小化与利润"
+description: "从生产函数和等产量线推导成本最小化条件MRTS = w/r，用数字和图形整理短期成本曲线(MC、AVC、ATC)之间的关系、停产条件P < AVC，以及规模报酬与长期平均成本。"
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["经济学", "微观经济学", "生产者理论", "成本曲线", "规模报酬"]
+locale: zh
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 微观经济学 — 利润由边际而不是平均决定
+
+如果说[经济学导论第4章](/zh/academy-economics-basics-ch4/)写出了MR = MC，那么本章求解这一等式背后的两个步骤。先找到以最低成本生产给定产量的要素组合(成本最小化)，再用这一成本决定产量(利润最大化)。短期停产为何发生在$P<AVC$而不是$P<ATC$，也由此而来。
+
+## 1. 生产函数与等产量线
+
+生产函数$Q=F(K,L)$表示用资本$K$和劳动$L$能生产的最大产量。**边际产量**$MP_L=\partial Q/\partial L$是在其他要素不变时多投入1单位劳动所增加的产量，通常递减。
+
+连接产量相同的要素组合的曲线称为**等产量线**。其斜率的绝对值是**边际技术替代率(MRTS)**，即1单位劳动能替代的资本数量，等于$MP_L/MP_K$。它对应第4章的无差异曲线和MRS。
+
+## 2. 成本最小化
+
+在工资$w$、资本租金$r$下以最低成本生产产量$Q$的条件，与消费者最优条件结构相同。
+
+<FormulaBox
+  label="成本最小化条件"
+  formula="MRTS=\frac{MP_L}{MP_K}=\frac{w}{r}\quad\Longleftrightarrow\quad \frac{MP_L}{w}=\frac{MP_K}{r}"
+  description="使每韩元的边际产量相等。若劳动每韩元的边际产量更大，减少资本、增加劳动就能以更低成本生产同样产量。"
+/>
+
+若$Q=K^{0.5}L^{0.5}$，$w=1$万韩元，$r=4$万韩元，则$MP_L/MP_K=K/L=w/r=1/4$，所以$L=4K$。要生产100单位，需要$KL=10{,}000$，由$4K^2=10{,}000$得$K=50$，$L=200$。成本为$1\times 200+4\times 50=400$万韩元。
+
+工资上涨时，企业为生产同样产量而用资本替代劳动(**替代效应**)。若成本上升使产量本身减少，劳动需求会进一步下降(**产出效应**)。讨论最低工资对就业的影响时必须同时考虑两种效应，原因就在于此。
+
+## 3. 短期成本曲线
+
+短期内资本固定，因而产生固定成本。以总成本$TC=200+40Q+Q^2$(万韩元)为例。
+
+<LectureTable
+  title="成本概念"
+  headers={["概念", "公式", "Q = 10时"]}
+  rows={[
+    ["固定成本FC", "200", "200万韩元"],
+    ["可变成本VC", "40Q + Q²", "500万韩元"],
+    ["边际成本MC", "dTC/dQ = 40 + 2Q", "60万韩元"],
+    ["平均可变成本AVC", "VC/Q = 40 + Q", "50万韩元"],
+    ["平均总成本ATC", "TC/Q = 200/Q + 40 + Q", "70万韩元"],
+  ]}
+/>
+
+<EconDiagram
+  title="短期成本曲线(TC = 200 + 40Q + Q²)"
+  xLabel="Q"
+  yLabel="万韩元"
+  xMax={30}
+  yMin={30}
+  yMax={110}
+  curves={[
+    { label: "MC", points: [[0, 40], [30, 100]], tone: "red" },
+    { label: "ATC", points: [[4, 94], [5, 85], [8, 73], [10, 70], [14.14, 68.3], [20, 70], [25, 73], [30, 76.7]], tone: "blue" },
+    { label: "AVC", points: [[0, 40], [30, 70]], tone: "green" },
+  ]}
+  marks={[{ x: 14.14, y: 68.3, label: "ATC最低点", guide: true, xTick: "14.1", yTick: "68.3" }]}
+  caption="MC穿过ATC的最低点。MC低于平均值时把平均值拉低，高于平均值时把平均值拉高。"
+/>
+
+**边际与平均的关系**:考试平均分为70分时，下一次考60分平均分就下降，考80分平均分就上升。成本也一样。在MC < ATC的区间ATC下降，在MC > ATC的区间ATC上升，所以MC穿过ATC的最低点。上例中解$40+2Q=200/Q+40+Q$得$Q=\sqrt{200}\approx 14.1$，此时ATC约为68.3万韩元。
+
+## 4. 竞争企业的短期决策
+
+对价格接受者而言$MR=P$，因此在$P=MC$处生产。接着判断是生产还是停产。即使停产，200万韩元的固定成本也照样支出，所以要比较的是"能否收回可变成本"。
+
+- $P=80$万韩元:由$80=40+2Q$得$Q=20$。AVC为60万韩元，ATC为70万韩元。每单位利润10万韩元，总利润200万韩元。
+- $P=45$万韩元:$Q=2.5$。AVC为42.5万韩元 < 45万韩元，因此生产。价格低于ATC，所以亏损，但生产能获得超过可变成本的6.25万韩元，收回部分固定成本。
+- $P=30$万韩元:在所有$Q$上都有$P<AVC$(最低40万韩元)，因此停产。损失以固定成本200万韩元为限。
+
+<LectureTable
+  title="短期判断"
+  headers={["价格", "生产", "利润"]}
+  rows={[
+    ["P > ATC最低值", "P = MC", "正的经济利润"],
+    ["AVC最低值 < P < ATC最低值", "P = MC", "亏损，但收回部分固定成本"],
+    ["P < AVC最低值", "Q = 0", "亏损等于固定成本"],
+  ]}
+/>
+
+因此，竞争企业的短期供给曲线是AVC最低点以上的MC曲线。第6章把它们加总成行业供给。
+
+## 5. 长期与规模报酬
+
+长期内所有要素都可变，因此没有固定成本。所有要素增加到$t$倍时，若产量增加超过$t$倍，为**规模报酬递增**；恰好$t$倍，为**不变**；少于$t$倍，为**递减**。对$Q=K^aL^b$，分别对应$a+b>1$、$=1$、$<1$。
+
+在规模报酬递增的区间，长期平均成本下降(规模经济)。如果长期平均成本在整个市场需求范围内持续下降，由一家企业供给最便宜。这就是第7章的**自然垄断**。
+
+<Callout type="warning">
+MR = MC只是一阶条件。只有MC从下方穿过MR时才是利润最大，在MC下降区间的交点可能是利润最小。此外，把固定成本按产量分摊计算"单位成本"，并因价格低于它而停止生产，在短期内是错误的。已经签约、无法避免的固定成本不应计入决策。
+</Callout>
+
+## 练习题
+
+$TC=100+20Q+Q^2$(万韩元)、$P=80$万韩元的竞争企业，最优产量和利润是多少?由$MC=20+2Q=80$得$Q=30$。ATC为$100/30+20+30\approx 53.3$万韩元，所以每单位利润约26.7万韩元，总利润为$80\times 30-(100+600+900)=800$万韩元。判断标准是$P=MC$，而不是$P=ATC$。
+
+## 参考资料
+
+- Hal Varian, *Intermediate Microeconomics*, ch. 19–23
+- N. Gregory Mankiw, *Principles of Economics*, ch. 13
+- MIT OpenCourseWare, [14.01 Principles of Microeconomics](https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/)

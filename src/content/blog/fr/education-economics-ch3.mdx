@@ -1,0 +1,110 @@
+---
+track: academy
+series: microeconomics
+chapter: 3
+title: "Microéconomie — Élasticité et incidence fiscale"
+description: "Présente l'élasticité ponctuelle et l'élasticité d'arc et leur lien avec la recette (Rm = P(1−1/|ε|)), explique pourquoi l'élasticité varie le long d'une demande linéaire, les élasticités revenu et croisée, et la répartition de la charge fiscale selon les élasticités relatives, chiffres et graphique à l'appui."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["économie", "microéconomie", "élasticité", "incidence fiscale", "recette totale"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Microéconomie — mesurer les réactions en proportions, pas en pentes
+
+Le chapitre 2 a utilisé les pentes des courbes pour calculer les variations de prix et de quantité. Or une pente dépend des unités : exprimer les prix en milliers de wons plutôt qu'en wons multiplie la pente par 1 000. L'**élasticité** mesure les variations en pourcentage et fait disparaître les unités. Ce chapitre calcule des élasticités et s'en sert pour lire la recette et la charge fiscale.
+
+## 1. Élasticité ponctuelle et élasticité d'arc
+
+<FormulaBox
+  label="Élasticité-prix de la demande"
+  formula="\varepsilon = \frac{dQ/Q}{dP/P} = \frac{dQ}{dP}\cdot\frac{P}{Q}"
+  description="Avec la demande Q = 100 − 2P et P = 20 wons, Q = 60 et ε = −2 × (20/60) = −2/3. Comme |ε| < 1, la demande est inélastique en ce point."
+/>
+
+Lorsque le prix varie fortement, la valeur dépend du point de départ ; on utilise alors l'**élasticité d'arc (formule du point milieu)**, calculée sur la moyenne des deux points. Si le prix passe de 10 à 12 wons et la quantité de 100 à 80, le point milieu est $P=11$ wons, $Q=90$.
+
+$$|\varepsilon| = \frac{20/90}{2/11} \approx 1{,}22$$
+
+La demande est élastique : augmenter le prix réduit la recette. De fait, la recette est passée de 1 000 à 960 wons.
+
+## 2. L'élasticité varie le long d'une demande linéaire
+
+Une demande linéaire a une pente constante, mais son élasticité change en chaque point, car $P/Q$ augmente à mesure que l'on remonte la courbe. Pour $Q=100-2P$, l'ordonnée à l'origine est de 50 wons et l'abscisse à l'origine de 100.
+
+<EconDiagram
+  title="Zones d'élasticité sur une demande linéaire"
+  xLabel="Q"
+  yLabel="P"
+  xMax={100}
+  yMax={50}
+  curves={[{ label: "D", points: [[0, 50], [100, 0]], tone: "blue" }]}
+  marks={[
+    { x: 50, y: 25, label: "|ε| = 1", guide: true, xTick: "50", yTick: "25" },
+    { x: 20, y: 40, label: "|ε| = 4" },
+    { x: 80, y: 10, label: "|ε| = 0,25" },
+  ]}
+  caption="Au-dessus du point milieu la demande est élastique, en dessous inélastique. À P = 40 wons, |ε| = 2 × 40/20 = 4 ; à P = 10 wons, |ε| = 2 × 10/80 = 0,25."
+/>
+
+## 3. Élasticité et recette totale
+
+En dérivant la recette totale $TR=P\cdot Q$ par rapport à la quantité, on obtient la recette marginale.
+
+<FormulaBox
+  label="Recette marginale et élasticité"
+  formula="MR = \frac{dTR}{dQ} = P\left(1-\frac{1}{|\varepsilon|}\right)"
+  description="Si |ε| > 1, Rm > 0 : baisser le prix pour vendre davantage augmente la recette. À |ε| = 1, Rm = 0 et la recette est maximale. Si |ε| < 1, seule une hausse de prix augmente la recette."
+/>
+
+Pour la demande linéaire $Q=100-2P$, la recette atteint son maximum au point milieu ($P=25$ wons, $Q=50$), soit 1 250 wons. Au chapitre 7, le résultat selon lequel un monopole, qui choisit $MR=MC>0$, **produit toujours sur la partie élastique de la demande** découle directement de cette formule.
+
+## 4. Ce qui détermine l'élasticité, et les autres élasticités
+
+- **Existence de substituts** : plus il y a de substituts proches, plus la demande est élastique. La demande pour « une marque de cola donnée » est bien plus élastique que la demande de « boissons ».
+- **Part dans la dépense** : plus la part du revenu est grande, plus la sensibilité au prix est forte.
+- **Temps** : la demande est plus élastique à long terme, quand on a le temps de trouver des alternatives. Quand le carburant renchérit, on roule un peu moins à court terme, mais à long terme on change de voiture et de logement.
+
+<LectureTable
+  title="Trois élasticités de la demande"
+  headers={["Élasticité", "Définition", "Sens du signe"]}
+  rows={[
+    ["Élasticité-prix", "Variation en % de la quantité demandée pour une variation de 1 % du prix du bien", "Négatif (loi de la demande)"],
+    ["Élasticité-revenu", "Variation en % de la quantité demandée pour une variation de 1 % du revenu", "Positif : bien normal (au-delà de 1 : bien de luxe) ; négatif : bien inférieur"],
+    ["Élasticité croisée", "Variation en % de la quantité demandée pour une variation de 1 % du prix d'un autre bien", "Positif : substituts ; négatif : compléments"],
+  ]}
+/>
+
+## 5. C'est le côté le moins élastique qui supporte l'impôt
+
+Prenons un marché où la demande est $Q=100-P$ et l'offre $Q=P$, et instaurons une taxe de 10 wons par unité. Notons $P_d$ le prix payé par les consommateurs et $P_s=P_d-10$ celui reçu par les producteurs. Alors $100-P_d=P_d-10$ donne $P_d=55$ wons, $P_s=45$ wons et $Q=45$. Par rapport au prix de 50 wons avant impôt, les consommateurs supportent 5 wons et les producteurs 5 wons, car les deux élasticités sont égales à l'équilibre.
+
+<FormulaBox
+  label="Partage de la charge"
+  formula="\frac{\text{Charge des consommateurs}}{\text{Charge des producteurs}} = \frac{\varepsilon_s}{|\varepsilon_d|}"
+  description="Si l'offre est deux fois plus élastique que la demande, les consommateurs supportent deux fois plus que les producteurs. Le côté qui peut s'échapper en réagissant au prix supporte moins."
+/>
+
+Que la taxe soit prélevée sur les vendeurs ou sur les acheteurs, le coin fiscal d'équilibre d'un marché concurrentiel est le même. Qui verse l'argent au fisc (incidence légale) diffère de qui voit son bien-être baisser (incidence économique). L'ampleur de la perte sèche, son lien avec le taux et la règle de Ramsey sont développés au [chapitre 2 de Finances publiques](/fr/academy-public-finance-ch2/).
+
+<Callout type="warning">
+« Ce sont les entreprises qui paient l'impôt » ne regarde que l'incidence légale. En concurrence parfaite, la part répercutée est fixée par les élasticités ; en monopole, selon la courbure de la demande, le prix peut même augmenter davantage que la taxe. Les élasticités estimées diffèrent aussi entre court et long terme : précisez de quelle période vous parlez.
+</Callout>
+
+## Exercice
+
+Le prix d'un café passe de 4 000 à 5 000 wons et les ventes de 200 à 180 tasses. Quelle est l'élasticité au point milieu ? La variation de quantité est $20/190\approx 0{,}105$ et celle du prix $1\,000/4\,500\approx 0{,}222$, donc $|\varepsilon|\approx 0{,}47$. La demande est inélastique : la recette passe de 800 000 à 900 000 wons. Si un café concurrent ouvre à proximité, l'élasticité augmente dans cette zone et la même hausse de prix pourrait réduire la recette.
+
+## Références
+
+- Hal Varian, *Intermediate Microeconomics*, ch. 15–16
+- N. Gregory Mankiw, *Principles of Economics*, ch. 5–6
+- MIT OpenCourseWare, [14.01 Principles of Microeconomics](https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/)

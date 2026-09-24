@@ -1,0 +1,110 @@
+---
+track: academy
+series: microeconomics
+chapter: 9
+title: "Microéconomie — Marchés des facteurs et répartition"
+description: "Montre que la demande de travail est une demande dérivée fondée sur la valeur du produit marginal, explique comment le monopole sur le marché des produits et le monopsone réduisent l'emploi, quand un salaire minimum peut accroître l'emploi en monopsone, et présente les écarts de salaire et la rente économique, chiffres et graphique à l'appui."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["économie", "microéconomie", "marchés des facteurs", "monopsone", "salaire minimum"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Microéconomie — le salaire est la valeur du produit marginal, pas une part de la moyenne
+
+Les prix du travail et du capital sont eux aussi fixés par l'offre et la demande. Mais les entreprises ne veulent pas du travail pour lui-même : elles le veulent pour ce qu'il produit. La demande de facteurs dérive donc de la demande de produits, et l'emploi comme les salaires dépendent du caractère concurrentiel ou non du marché des produits et du marché des facteurs.
+
+## 1. La demande de travail en concurrence
+
+Embaucher un travailleur de plus augmente la production de $MP_L$, vendue au prix $P$. La recette supplémentaire est la **valeur du produit marginal** $VMP_L=P\cdot MP_L$. Si le salaire lui est inférieur, l'entreprise embauche ; s'il lui est supérieur, elle réduit ses effectifs.
+
+<FormulaBox
+  label="Demande de travail d'une entreprise concurrentielle"
+  formula="P\cdot MP_L = w"
+  description="Le produit marginal étant décroissant, la courbe de VMP_L est décroissante et constitue la demande de travail de l'entreprise. Une hausse du prix du produit ou de la productivité la déplace vers la droite."
+/>
+
+Si le produit marginal est de 20 unités et le prix du produit de 10 000 wons, $VMP_L=200\,000$ wons. Avec un salaire de 100 000 wons, l'entreprise embauche. À mesure que l'emploi augmente, le produit marginal baisse, et l'embauche s'arrête lorsque $VMP_L$ atteint 100 000 wons.
+
+Si le marché des produits est un monopole, vendre davantage fait aussi baisser le prix : la recette augmente de $Rm$ et non de $P$. La demande de travail devient la recette du produit marginal $MRP_L=Rm\cdot MP_L$ ; comme $Rm<P$, l'emploi est plus faible pour un même salaire. La sous-production du chapitre 7 apparaît comme un sous-emploi sur le marché des facteurs.
+
+**Théorème d'Euler** : si la fonction de production a des rendements d'échelle constants et que chaque facteur est rémunéré à la valeur de son produit marginal, la somme des rémunérations épuise exactement la valeur de la production. Avec la Cobb-Douglas $Q=K^{0{,}3}L^{0{,}7}$, la part du travail est de 70 % et celle du capital de 30 %. Ce n'est pas une affirmation éthique sur l'équité de la répartition, mais un résultat comptable sous concurrence et rendements constants.
+
+## 2. Le monopsone : un seul acheteur
+
+Si une région ne compte qu'un grand employeur, celui-ci fait face à toute la courbe d'offre de travail. Pour embaucher une personne de plus, il doit augmenter le salaire, y compris celui des salariés en place. Le coût d'un travailleur supplémentaire, le **coût marginal du facteur (CMF)**, dépasse donc le salaire : c'est le reflet du $Rm<P$ du chapitre 7.
+
+Supposons une offre de travail $w=L$ (en dizaines de milliers de wons) et une recette du produit marginal du travail $MRP_L=30-L$. La masse salariale est $wL=L^2$, donc $CMF=2L$.
+
+- **Marché du travail concurrentiel** : $30-L=L$ → $L=15$, $w=150\,000$ wons
+- **Monopsone** : $30-L=2L$ → $L=10$. Le salaire se lit sur la courbe d'offre : $w=100\,000$ wons
+
+Le monopsone réduit à la fois l'emploi et le salaire. L'écart entre la valeur créée par les travailleurs ($MRP_L=200\,000$ wons) et leur salaire (100 000 wons) constitue le profit du monopsone.
+
+<EconDiagram
+  title="Un marché du travail en monopsone"
+  xLabel="L"
+  yLabel="w (10 000 wons)"
+  xMax={30}
+  yMax={32}
+  curves={[
+    { label: "MRP", points: [[0, 30], [30, 0]], tone: "blue" },
+    { label: "Offre w = L", points: [[0, 0], [30, 30]], tone: "green" },
+    { label: "CMF", points: [[0, 0], [15, 30]], tone: "red", dashed: true },
+  ]}
+  marks={[
+    { x: 10, y: 10, label: "Monopsone", guide: true, xTick: "10", yTick: "10" },
+    { x: 10, y: 20, label: "MRP = CMF" },
+    { x: 15, y: 15, label: "Concurrence", guide: true, xTick: "15", yTick: "15" },
+  ]}
+  caption="Le monopsone embauche 10 travailleurs là où MRP = CMF et verse le salaire le plus bas que ces 10 acceptent, soit 100 000 wons."
+/>
+
+Fixons maintenant un salaire minimum de 150 000 wons. En dessous de 150 000 wons, l'entreprise peut embaucher davantage sans augmenter le salaire : le CMF devient horizontal à 150 000 wons. Elle embauche jusqu'à 15 travailleurs, là où $MRP_L=15$. **Le salaire minimum a accru à la fois l'emploi et le salaire.** S'il est porté à 200 000 wons, l'emploi retombe à 10 là où $MRP_L=20$, et au-delà il commence à diminuer.
+
+<LectureTable
+  title="Structure de marché et condition d'embauche"
+  headers={["Marché des produits \\ marché du travail", "Concurrentiel", "Monopsone"]}
+  rows={[
+    ["Concurrentiel", "P·MP_L = w", "P·MP_L = CMF > w"],
+    ["Monopole", "Rm·MP_L = w", "Rm·MP_L = CMF, emploi le plus faible"],
+  ]}
+/>
+
+## 3. Pourquoi les salaires diffèrent
+
+Les salaires diffèrent même au sein d'un même marché, pour plusieurs raisons.
+
+- **Capital humain** : l'éducation et la formation accroissent la productivité et donc la valeur du produit marginal. Pourquoi le rendement de l'éducation est difficile à estimer (les aptitudes influencent à la fois l'éducation et le salaire) est discuté au [chapitre 1 d'Économétrie](/fr/education-econometrics-ch1/).
+- **Différences compensatrices** : les emplois dangereux, pénibles ou irréguliers doivent mieux payer pour attirer des travailleurs de même aptitude.
+- **Structure de marché** : monopsone, syndicats et pouvoir de négociation éloignent le salaire de la valeur du produit marginal.
+- **Discrimination** : écarts de salaire liés à des caractéristiques sans rapport avec la productivité. La concurrence pénalise les entreprises qui discriminent par des coûts plus élevés, mais si les clients ou les collègues ont des préférences discriminatoires, elle ne suffit pas à l'éliminer.
+
+## 4. La rente économique
+
+La rémunération d'un facteur dont l'offre est parfaitement inélastique est une **rente économique**. La quantité de terre est fixe quel que soit son prix : la rente foncière est déterminée par la demande et ne modifie pas l'offre de terre. Plus largement, tout ce qui excède le minimum nécessaire pour maintenir un facteur dans son usage actuel est une rente — par exemple, la part du salaire d'un sportif vedette qui dépasse ce qu'il gagnerait dans un autre métier.
+
+Taxer une rente ne crée pas de perte sèche, puisque l'offre ne diminue pas. D'après la règle d'incidence du [chapitre 3](/fr/education-economics-ch3/), le côté inélastique supporte tout l'impôt. C'est pourquoi l'impôt foncier est depuis longtemps présenté comme un impôt efficace.
+
+<Callout type="warning">
+« Le salaire minimum augmente le chômage » et « le salaire minimum augmente l'emploi » sont des affirmations portant sur des structures de marché différentes. Sur un marché du travail concurrentiel, un salaire minimum supérieur à l'équilibre réduit l'emploi ; en monopsone, il l'augmente dans une certaine plage. À quelle structure ressemble un marché, et si une hausse donnée reste dans cette plage, se juge avec des données, pas avec la seule théorie. C'est aussi pourquoi les résultats empiriques varient selon les régions et l'ampleur des hausses.
+</Callout>
+
+## Exercice
+
+Une entreprise concurrentielle dont le produit marginal est de 20 unités, le salaire de 100 000 wons et le prix du produit de 10 000 wons doit-elle embaucher ? $VMP_L=200\,000$ wons > 100 000 wons : oui. Si le marché des produits est un monopole avec une recette marginale de 5 000 wons, $MRP_L=100\,000$ wons égale le salaire et l'entreprise est déjà à l'optimum. Une même fonction de production donne un emploi différent selon la structure du marché des produits.
+
+## Références
+
+- Hal Varian, *Intermediate Microeconomics*, ch. 26
+- George Borjas, *Labor Economics*, ch. 4–6
+- Alan Manning, *Monopsony in Motion* (2003)
+- MIT OpenCourseWare, [14.01 Principles of Microeconomics](https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/)

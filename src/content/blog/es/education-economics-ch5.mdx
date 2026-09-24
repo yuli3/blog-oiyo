@@ -1,0 +1,117 @@
+---
+track: academy
+series: microeconomics
+chapter: 5
+title: "Microeconomía — Teoría del productor: minimización de costes y beneficio"
+description: "Deriva la condición de minimización de costes RMST = w/r a partir de la función de producción y las isocuantas, explica la relación entre las curvas de coste a corto plazo (CMg, CVMe, CTMe) y la condición de cierre P < CVMe, y presenta los rendimientos a escala y el coste medio a largo plazo, con números y un gráfico."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["economía", "microeconomía", "teoría del productor", "curvas de coste", "rendimientos a escala"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Microeconomía — el beneficio se decide en el margen, no en la media
+
+Si el [capítulo 4 de Introducción a la economía](/es/academy-economics-basics-ch4/) planteó IMg = CMg, este capítulo resuelve los dos pasos que hay detrás. Primero, encontrar la combinación de factores más barata para una producción dada (minimización de costes); después, elegir la producción a partir de ese coste (maximización del beneficio). Aquí se ve también por qué una empresa cierra a corto plazo cuando $P<CVMe$ y no cuando $P<CTMe$.
+
+## 1. Función de producción e isocuantas
+
+La función de producción $Q=F(K,L)$ da la producción máxima que se obtiene con capital $K$ y trabajo $L$. El **producto marginal** $MP_L=\partial Q/\partial L$ es la producción adicional de una unidad más de trabajo, manteniendo fijos los demás factores; suele ser decreciente.
+
+Una **isocuanta** une las combinaciones de factores que dan la misma producción. El valor absoluto de su pendiente es la **relación marginal de sustitución técnica (RMST)** —cuánto capital puede sustituir una unidad de trabajo— y es igual a $MP_L/MP_K$. Es el equivalente, para el productor, de la curva de indiferencia y la RMS del capítulo 4.
+
+## 2. Minimización de costes
+
+La condición para producir $Q$ al menor coste posible, con un salario $w$ y un coste de uso del capital $r$, tiene la misma estructura que el óptimo del consumidor.
+
+<FormulaBox
+  label="Condición de minimización de costes"
+  formula="MRTS=\frac{MP_L}{MP_K}=\frac{w}{r}\quad\Longleftrightarrow\quad \frac{MP_L}{w}=\frac{MP_K}{r}"
+  description="El producto marginal por won debe ser igual. Si el del trabajo es mayor, reducir capital y aumentar trabajo permite obtener la misma producción más barata."
+/>
+
+Con $Q=K^{0{,}5}L^{0{,}5}$, $w=10.000$ wones y $r=40.000$ wones, $MP_L/MP_K=K/L=w/r=1/4$, así que $L=4K$. Para producir 100 unidades hace falta $KL=10.000$, y $4K^2=10.000$ da $K=50$ y $L=200$. El coste es $1\times 200+4\times 50=400$ (en decenas de miles de wones), es decir, 4 millones de wones.
+
+Cuando sube el salario, la empresa sustituye trabajo por capital para una misma producción (**efecto sustitución**). Si los mayores costes reducen además la producción, la demanda de trabajo cae aún más (**efecto producción**). Por eso ambos efectos importan al discutir el impacto de un salario mínimo sobre el empleo.
+
+## 3. Curvas de coste a corto plazo
+
+A corto plazo el capital es fijo, lo que genera costes fijos. Tomemos el coste total $CT=200+40Q+Q^2$ (en decenas de miles de wones).
+
+<LectureTable
+  title="Conceptos de coste"
+  headers={["Concepto", "Fórmula", "Con Q = 10"]}
+  rows={[
+    ["Coste fijo CF", "200", "2 millones de wones"],
+    ["Coste variable CV", "40Q + Q²", "5 millones de wones"],
+    ["Coste marginal CMg", "dCT/dQ = 40 + 2Q", "600.000 wones"],
+    ["Coste variable medio CVMe", "CV/Q = 40 + Q", "500.000 wones"],
+    ["Coste total medio CTMe", "CT/Q = 200/Q + 40 + Q", "700.000 wones"],
+  ]}
+/>
+
+<EconDiagram
+  title="Curvas de coste a corto plazo (CT = 200 + 40Q + Q²)"
+  xLabel="Q"
+  yLabel="10.000 wones"
+  xMax={30}
+  yMin={30}
+  yMax={110}
+  curves={[
+    { label: "CMg", points: [[0, 40], [30, 100]], tone: "red" },
+    { label: "CTMe", points: [[4, 94], [5, 85], [8, 73], [10, 70], [14.14, 68.3], [20, 70], [25, 73], [30, 76.7]], tone: "blue" },
+    { label: "CVMe", points: [[0, 40], [30, 70]], tone: "green" },
+  ]}
+  marks={[{ x: 14.14, y: 68.3, label: "mínimo del CTMe", guide: true, xTick: "14,1", yTick: "68,3" }]}
+  caption="El CMg pasa por el mínimo del CTMe. Cuando está por debajo de la media la hace bajar, y cuando está por encima la hace subir."
+/>
+
+**Marginal y medio.** Si tu nota media es 70 y la siguiente nota es 60, la media baja; si es 80, sube. Con los costes ocurre lo mismo. Donde CMg < CTMe, el CTMe baja; donde CMg > CTMe, sube. Por eso el CMg corta al CTMe en su mínimo. En el ejemplo, $40+2Q=200/Q+40+Q$ da $Q=\sqrt{200}\approx 14{,}1$, donde el CTMe es de unos 683.000 wones.
+
+## 4. La decisión a corto plazo de la empresa competitiva
+
+Para un precio-aceptante, $IMg=P$, así que produce donde $P=CMg$. Después decide si producir o no. Los 2 millones de wones de costes fijos se pagan aunque cierre, de modo que la pregunta es: «¿cubro los costes variables?».
+
+- $P=800.000$ wones: $80=40+2Q$ da $Q=20$. El CVMe es 600.000 wones y el CTMe 700.000 wones. Beneficio de 100.000 wones por unidad, 2 millones en total.
+- $P=450.000$ wones: $Q=2{,}5$. El CVMe es 425.000 wones < 450.000 wones, así que produce. Como el precio es inferior al CTMe tiene pérdidas, pero produciendo gana 62.500 wones por encima de los costes variables, con lo que cubre parte de los fijos.
+- $P=300.000$ wones: $P<CVMe$ para cualquier $Q$ (mínimo 400.000 wones), así que cierra. Su pérdida se limita a los costes fijos de 2 millones de wones.
+
+<LectureTable
+  title="Decisión a corto plazo"
+  headers={["Precio", "Producción", "Beneficio"]}
+  rows={[
+    ["P > mínimo del CTMe", "P = CMg", "Beneficio económico positivo"],
+    ["Mínimo del CVMe < P < mínimo del CTMe", "P = CMg", "Pérdida, pero se cubre parte de los costes fijos"],
+    ["P < mínimo del CVMe", "Q = 0", "Pérdida igual a los costes fijos"],
+  ]}
+/>
+
+Por tanto, la curva de oferta a corto plazo de la empresa competitiva es la curva de CMg por encima del mínimo del CVMe. El capítulo 6 las suma para obtener la oferta de la industria.
+
+## 5. El largo plazo y los rendimientos a escala
+
+A largo plazo todos los factores son variables, así que no hay costes fijos. Si multiplicar todos los factores por $t$ multiplica la producción por más de $t$, hay **rendimientos crecientes a escala**; exactamente por $t$, **constantes**; por menos, **decrecientes**. Para $Q=K^aL^b$ esto corresponde a $a+b>1$, $=1$ y $<1$.
+
+Con rendimientos crecientes, el coste medio a largo plazo desciende (economías de escala). Si sigue bajando en todo el rango de la demanda del mercado, lo más barato es que produzca una sola empresa. Es el **monopolio natural** del capítulo 7.
+
+<Callout type="warning">
+IMg = CMg es solo una condición de primer orden. Para un máximo de beneficio, el CMg debe cortar al IMg desde abajo; donde el CMg es decreciente, el corte puede ser un mínimo de beneficio. Y repartir los costes fijos entre la producción para calcular un «coste unitario» y dejar de producir porque el precio es inferior es un error a corto plazo. Los costes fijos ya comprometidos e inevitables no deben entrar en la decisión.
+</Callout>
+
+## Ejercicio
+
+Una empresa competitiva tiene $CT=100+20Q+Q^2$ (en decenas de miles de wones) y se enfrenta a $P=800.000$ wones. ¿Cuáles son su producción óptima y su beneficio? $CMg=20+2Q=80$ da $Q=30$. El CTMe es $100/30+20+30\approx 53{,}3$, unos 533.000 wones, de modo que el beneficio es de unos 267.000 wones por unidad y $80\times 30-(100+600+900)=800$, es decir, 8 millones de wones en total. La regla es $P=CMg$, no $P=CTMe$.
+
+## Referencias
+
+- Hal Varian, *Intermediate Microeconomics*, ch. 19–23
+- N. Gregory Mankiw, *Principles of Economics*, ch. 13
+- MIT OpenCourseWare, [14.01 Principles of Microeconomics](https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/)

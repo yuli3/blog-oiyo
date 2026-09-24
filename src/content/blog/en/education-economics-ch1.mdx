@@ -1,82 +1,129 @@
 ---
 track: academy
-series: economics-basics
+series: microeconomics
 chapter: 1
-title: Foundations of Economics
-description: >-
-  Understand the core principles of economic thinking, including the principle
-  of scarcity, opportunity cost, and the Production Possibilities Frontier
-  (PPF).
+title: "Microeconomics — Scarcity, Opportunity Cost and the Production Possibilities Frontier"
+description: "Calculates opportunity cost as explicit plus implicit cost, explains why the marginal rate of transformation along the PPF rises, separates technical from allocative efficiency, and shows how to treat sunk costs, with numbers and a graph."
 pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
 category: Economics
-tags:
-  - Education
-  - economics
+tags: ["economics", "microeconomics", "opportunity cost", "PPF", "marginal rate of transformation"]
 locale: en
 author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
 
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# Foundations of Economics
+# Microeconomics — Choice Starts with the Technology Constraint, Before Any Price Appears
 
-Economics is the study of choice. Because resources are limited while human desires are infinite, we study how to solve the problem of **Scarcity** efficiently.
+If [Introduction to Economics, Chapter 1](/en/academy-economics-basics-ch1/) pinned down the definition of opportunity cost, this chapter writes that cost as **a slope on the production technology**. Every optimisation problem in microeconomics starts by writing down, in quantities, "what do I give up?" The consumer-side counterpart of this slope (the marginal rate of substitution) returns in Chapter 4, and the efficiency condition where the two meet returns in Chapter 10.
 
----
+## 1. Opportunity cost counts costs that never appear in the books
 
-## 1. The Essence of Economics and Choice
+The **opportunity cost** of a choice is the value of the next-best alternative given up. It includes not only **explicit costs**, which are paid in money, but also **implicit costs**: income forgone even though no money changes hands.
 
-### (1) The Principle of Scarcity
+Suppose an employee quits a job paying KRW 35 million a year to spend one year in a graduate programme with KRW 10 million tuition.
 
-This refers to the state where resources are relatively insufficient compared to human desires. It is important to note that scarcity is not just about a small quantity, but about being insufficient 'relative to desire'.
+- Explicit cost: tuition, KRW 10 million
+- Implicit cost: forgone salary, KRW 35 million
+- Total opportunity cost: KRW 45 million
 
----
+Living expenses are left out. You eat and sleep whether you study or keep working, so they are not an **additional** cost created by this choice. Opportunity cost is the difference between "what you spend if you choose it" and "what you would spend anyway".
 
-### (2) Opportunity Cost
+## 2. The slope of the PPF is the marginal opportunity cost
 
-The value of the **best alternative** foregone when making a choice.
+Suppose an economy uses its resources and technology to produce only chips and wheat. The line joining the maximum combinations it can produce when all resources are used efficiently is the **production possibilities frontier (PPF)**.
 
-- **Explicit Cost**: Actual out-of-pocket cash expenditures.
-- **Implicit Cost**: Potential income foregone.
-- **Opportunity Cost = Explicit Cost + Implicit Cost**
+<LectureTable
+  title="Combinations on the PPF"
+  headers={["Point", "Chips", "Wheat", "Wheat given up per 2 extra chips"]}
+  rows={[
+    ["", "0", "20", "—"],
+    ["A", "2", "18", "2"],
+    ["B", "4", "14", "4"],
+    ["", "6", "9.5", "4.5"],
+    ["C", "8", "4", "5.5"],
+  ]}
+/>
 
-> **Sunk Cost**: Costs that have already been incurred and cannot be recovered. When making rational decisions, sunk costs should be ignored.
+Moving from A to B gains 2 chips and gives up 4 units of wheat, so one chip costs 2 units of wheat. Moving from B to C gains 4 chips for 10 units of wheat, so the opportunity cost of a chip rises to 2.5 units of wheat. The fact that each additional chip costs more wheat is called **increasing opportunity cost**.
 
----
+<FormulaBox
+  label="Marginal rate of transformation"
+  formula="MRT = \left|\frac{\Delta Y}{\Delta X}\right| = \frac{MC_x}{MC_y}"
+  description="The absolute value of the PPF slope. It is the wheat that could have been produced with the resources needed for one more chip, so it equals the ratio of the two goods' marginal costs."
+/>
 
-## 2. Methodology of Economics
+Why is the MRT a ratio of marginal costs? Let one unit of resources be worth $w$. One chip needs $MC_x/w$ units of resources. Used for wheat, those resources produce $(MC_x/w)/(MC_y/w)=MC_x/MC_y$ units of wheat, because each unit of wheat needs $MC_y/w$ units.
 
-| Category                | Description                            | Key Question       |
-| :---------------------- | :------------------------------------- | :----------------- |
-| **Positive Economics**  | Analyzes facts as they are (Objective) | "What is"          |
-| **Normative Economics** | Involves value judgments (Subjective)  | "What ought to be" |
+<EconDiagram
+  title="A concave production possibilities frontier"
+  xLabel="Chips"
+  yLabel="Wheat"
+  xMax={12}
+  yMax={22}
+  curves={[
+    { label: "PPF", points: [[0, 20], [2, 18], [4, 14], [6, 9.5], [8, 4], [9, 0]], tone: "blue", labelAt: 4 },
+  ]}
+  marks={[
+    { x: 2, y: 18, label: "A" },
+    { x: 4, y: 14, label: "B" },
+    { x: 8, y: 4, label: "C" },
+    { x: 5, y: 6, label: "D (inefficient)" },
+    { x: 8, y: 12, label: "E (unattainable)" },
+  ]}
+  caption="Points on the curve (A, B, C) are technically efficient, the point inside (D) leaves resources idle, and the point outside (E) cannot be reached with current resources and technology."
+/>
 
----
+**Why is it concave?** Because resources are not equally useful for both goods. When we make only a few chips we move the resources best suited to chips first (skilled engineers, clean rooms). As we make more chips we must also move resources better suited to wheat (farmland, farm labour), so each extra chip costs more wheat. If every resource were equally useful for both goods, the PPF would be a straight line and the MRT constant.
 
-## 3. Production Possibilities Frontier (PPF)
+## 3. Being on the curve does not make a point optimal
 
-A curve showing the maximum combinations of two goods that a society can produce using all its available resources and technology.
+A point on the PPF is **technically efficient**: no resources are left idle. Whether that combination is what people want is a separate question. **Allocative efficiency** is reached when the rate at which production can trade the goods (the MRT) equals the rate at which consumers are willing to trade them (the marginal rate of substitution, MRS).
 
-### (1) Characteristics
+<FormulaBox
+  label="Allocative efficiency condition"
+  formula="MRT_{xy} = MRS_{xy}"
+  description="In competitive markets firms choose MRT = Px/Py and consumers choose MRS = Px/Py, so prices link the two conditions. Chapters 4 and 10 return to this."
+/>
 
-- **Efficiency**: All points on the curve represent efficient use of resources.
-- **Increasing Opportunity Cost**: The curve is typically bowed-out (concave) from the origin because as production of one good increases, the amount of the other good that must be sacrificed (opportunity cost) increases.
+If everyone wants much more wheat but the economy produces at C (8 chips, 4 wheat), production is technically efficient but allocatively inefficient. "On the PPF = optimal" is a false statement.
 
-### (2) Shifts of the Curve
+## 4. Why the curve shifts
 
-- **Economic Growth**: Technological progress or an increase in resources shifts the PPF **outward**.
+- **More resources** (labour and capital accumulation): both intercepts move outward.
+- **Technical progress in one good**: only that good's intercept moves. If chip technology doubles, the chip intercept moves from 9 to 18 while the wheat intercept stays at 20. Because chips now need fewer resources, the freed resources can go to wheat, so at most combinations the economy can also have more wheat.
 
----
+## 5. Sunk costs are not opportunity costs
 
-## 4. Economic Systems and Efficiency
+A cost already paid that cannot be recovered is not an opportunity cost, because nothing is given up by future choices. Suppose KRW 30 million has been spent on unrecoverable equipment, and a further KRW 8 million would let the project recover KRW 12 million. The question is "do I get KRW 12 million by spending another KRW 8 million?" The net benefit is +KRW 4 million, so the project should continue. Adding the KRW 30 million already spent — "we spend KRW 38 million to recover 12" — leads to the wrong decision to stop. The opposite tendency, continuing a losing project because of sunk costs, is covered in [Behavioural Economics, Chapter 6](/en/academy-behavioral-economics-ch6/).
 
-1. **Market Economy**: Resource allocation is determined by the price mechanism (the 'Invisible Hand'). (Emphasis on efficiency)
-2. **Planned Economy**: Resource allocation is determined by government instructions and control. (Emphasis on equity)
+<LectureTable
+  title="What this chapter adds to the introductory course"
+  headers={["Introductory course", "Microeconomics, Chapter 1"]}
+  rows={[
+    ["Opportunity cost = best alternative given up", "Explicit + implicit cost; the MRT differs from point to point"],
+    ["Inside / on / outside the PPF", "Technical efficiency ≠ allocative efficiency (MRT = MRS)"],
+    ["Ignore sunk costs", "Only recoverable amounts are forward-looking costs"],
+  ]}
+/>
 
----
+<Callout type="warning">
+The PPF contains only private costs. If a chip factory pollutes water and lowers the wheat harvest, the economy's social MRT is steeper than the private MRT. The output mix a market chooses using the private MRT contains too many chips from society's point of view. That gap is covered in [Chapter 10](/en/education-economics-ch10/) and [Public Finance, Chapter 1](/en/academy-public-finance-ch1/).
+</Callout>
 
-## Key Checklist
+If two countries have different MRTs, each can specialise in the good with the lower opportunity cost and trade, so that both consume combinations outside their own PPFs. This is comparative advantage; the calculations are in [International Trade](/en/education-economics-ch15/).
 
-- [ ] Should sunk costs be included when calculating opportunity cost? (Answer: No)
-- [ ] What does a point inside the PPF indicate? (Answer: Inefficiency or unemployment)
-- [ ] How does the PPF change when the amount of resources increases?
-- [ ] Is "The government should work to lower the unemployment rate" a statement of positive or normative economics? (Answer: Normative)
+## Check your understanding
+
+A straight-line PPF allows at most 10 chips or 20 units of wheat. If the economy makes 6 chips, what is the most wheat it can make? The opportunity cost of a chip is a constant $20/10=2$ units of wheat, so wheat is $20-2\times 6=8$. The point (6, 6) lies inside the curve. The opportunity cost has not changed; resources that could make 2 units of wheat are sitting idle.
+
+## References
+
+- Hal Varian, *Intermediate Microeconomics*, ch. 32
+- N. Gregory Mankiw, *Principles of Economics*, ch. 1–3
+- MIT OpenCourseWare, [14.01 Principles of Microeconomics](https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/)

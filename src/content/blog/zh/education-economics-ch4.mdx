@@ -1,0 +1,138 @@
+---
+track: academy
+series: microeconomics
+chapter: 4
+title: "微观经济学 — 消费者理论:效用最大化与选择"
+description: "从预算约束和无差异曲线出发，用拉格朗日方法推导最优条件MRS = Px/Py，并用数字和图形整理柯布-道格拉斯需求函数、角点解以及斯卢茨基分解(替代效应与收入效应)。"
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["经济学", "微观经济学", "消费者理论", "无差异曲线", "斯卢茨基"]
+locale: zh
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 微观经济学 — 消费者使每一韩元的边际效用相等
+
+如果说[经济学导论第3章](/zh/academy-economics-basics-ch3/)介绍了相切条件，那么本章推导这一条件，考察它不成立的情形(角点解)，并计算价格变化改变需求的两条途径(替代效应与收入效应)。第2章的需求曲线从何而来，正是本章的结论。
+
+## 1. 预算约束与无差异曲线
+
+收入为$M$、面对价格$P_x$和$P_y$的消费者，其**预算约束**为$P_x x + P_y y \le M$。预算线的斜率$-P_x/P_y$是市场给出的交换比率。
+
+**无差异曲线**连接效用相同的商品组合。若偏好是单调的(越多越好)且凸的(偏好混合而非极端)，无差异曲线向右下方倾斜、凸向原点且互不相交。其斜率的绝对值就是**边际替代率(MRS)**，即为多得1单位$x$愿意放弃的$y$的数量。
+
+<FormulaBox
+  label="边际替代率"
+  formula="MRS_{xy} = -\frac{dy}{dx}\Big|_{u=\bar u} = \frac{MU_x}{MU_y}"
+  description="沿无差异曲线，效用变化为MU_x dx + MU_y dy = 0，因此斜率等于边际效用之比。"
+/>
+
+## 2. 最优条件的推导
+
+在预算约束下最大化效用$u(x,y)$的拉格朗日函数为$\mathcal{L}=u(x,y)+\lambda(M-P_x x-P_y y)$。一阶条件为:
+
+$$\frac{\partial u}{\partial x}=\lambda P_x,\qquad \frac{\partial u}{\partial y}=\lambda P_y$$
+
+两式相除即得最优条件。
+
+<FormulaBox
+  label="内点解条件"
+  formula="MRS_{xy}=\frac{MU_x}{MU_y}=\frac{P_x}{P_y}\quad\Longleftrightarrow\quad \frac{MU_x}{P_x}=\frac{MU_y}{P_y}=\lambda"
+  description="每一韩元的边际效用必须相等。若一方更大，把预算移向该商品就能提高效用。λ是多1韩元收入带来的效用(收入的边际效用)。"
+/>
+
+若$MU_x=10$，$MU_y=4$，$P_x=2{,}000$韩元，$P_y=1{,}000$韩元，则每韩元的边际效用$x$为$1/200$，$y$为$1/250$。从$y$中拿出1000韩元用于$x$，效用会增加。由于边际效用递减，越移动差距越小，等式得以恢复。
+
+## 3. 柯布-道格拉斯需求
+
+若$u=x^{a}y^{1-a}$，由一阶条件得$\frac{a\,y}{(1-a)\,x}=\frac{P_x}{P_y}$，与预算约束联立即得需求函数。
+
+<FormulaBox
+  label="柯布-道格拉斯需求函数"
+  formula="x^*=\frac{aM}{P_x},\qquad y^*=\frac{(1-a)M}{P_y}"
+  description="在每种商品上花费收入的固定比例(a、1−a)。自身价格弹性为−1，收入弹性为1，交叉弹性为0。"
+/>
+
+若$u=xy$($a=1/2$)，$M=12$韩元，$P_x=2$韩元，$P_y=1$韩元，则$x^*=3$，$y^*=6$，效用为18。此时$\lambda=MU_x/P_x=y/2=3$。收入增至13韩元时，$x=3.25$，$y=6.5$，效用约为21.1，约增加3，与$\lambda$是1韩元收入的边际效用这一解释一致。拉格朗日乘数的一般解释见[经济数学第3章](/zh/education-economics-math-ch3/)。
+
+## 4. 角点解:等式不成立时
+
+根据偏好不同，最优点可能落在坐标轴上。
+
+- **完全替代品**($u=x+y$):无差异曲线是直线。若$P_x<P_y$，只买$x$。不存在MRS(=1)等于价格比的内部切点。
+- **完全互补品**($u=\min(x,y)$):无差异曲线呈直角。总是选择$x=y$的拐点，比例与价格比无关而固定。在该点MRS没有定义。
+
+在角点解处，可能$y=0$而$MU_x/P_x > MU_y/P_y$。一阶条件变为不等式(库恩-塔克条件)。
+
+## 5. 价格变化的两条途径:斯卢茨基分解
+
+$x$的价格上涨时，两件事同时发生:$x$相对变贵，消费转向$y$的**替代效应**；同样的收入能买到的东西减少的**收入效应**。
+
+在上例中，若$P_x$从2韩元涨到4韩元，新需求为$x=12/(2\times 4)=1.5$。把总效应$-1.5$拆开。为使消费者能以新价格买得起原来的组合(3, 6)，需要把收入补偿到$M'=4\times 3+6=18$韩元。在这一补偿收入下，需求为$x=18/8=2.25$。
+
+- 替代效应:3 → 2.25，**−0.75**
+- 收入效应:2.25 → 1.5，**−0.75**
+
+<EconDiagram
+  title="价格上涨的替代效应与收入效应"
+  xLabel="x"
+  yLabel="y"
+  xMax={8}
+  yMax={13}
+  curves={[
+    { label: "B₁", points: [[0, 12], [6, 0]], tone: "blue", anchor: "end" },
+    { label: "B₂", points: [[0, 12], [3, 0]], tone: "red", anchor: "end" },
+    { label: "B′", points: [[1.25, 13], [4.5, 0]], tone: "gray", dashed: true, anchor: "end" },
+    { label: "u = 18", points: [[1.5, 12], [2, 9], [3, 6], [4, 4.5], [6, 3], [8, 2.25]], tone: "green" },
+    { label: "u = 9", points: [[0.75, 12], [1, 9], [1.5, 6], [3, 3], [4.5, 2], [8, 1.125]], tone: "green", dashed: true },
+  ]}
+  marks={[
+    { x: 3, y: 6, label: "A", xTick: "3" },
+    { x: 2.25, y: 9, label: "B", xTick: "2.25" },
+    { x: 1.5, y: 6, label: "C", xTick: "1.5" },
+  ]}
+  caption="A(3, 6)→B(2.25, 9)是替代效应，B→C(1.5, 6)是收入效应。B₁为原预算，B₂为涨价后的预算，虚线B′为补偿预算，它以新价格比经过原组合A(由于是斯卢茨基补偿，B位于比u = 18略高的无差异曲线上)。"
+/>
+
+<FormulaBox
+  label="斯卢茨基方程"
+  formula="\frac{\partial x}{\partial P_x} = \frac{\partial x^{s}}{\partial P_x} - x\,\frac{\partial x}{\partial M}"
+  description="第一项(补偿需求的斜率)总是不大于0。第二项的符号由收入弹性决定。对正常品，两种效应方向相同。"
+/>
+
+<LectureTable
+  title="x价格上涨的效应"
+  headers={["商品", "替代效应", "收入效应", "总效应"]}
+  rows={[
+    ["正常品", "x↓", "x↓", "x↓"],
+    ["劣等品(非吉芬品)", "x↓", "x↑(小)", "x↓"],
+    ["吉芬品", "x↓", "x↑(大)", "x↑"],
+  ]}
+/>
+
+补偿方式有两种。**斯卢茨基补偿**使消费者买得起原来的组合，**希克斯补偿**使消费者停留在原来的效用水平。价格变化很小时两者一致。解题时先确认使用的是哪种补偿。
+
+同样的分解也用于劳动供给。工资上涨使闲暇变贵，于是多工作(替代效应)；但收入增加，又想多买闲暇(收入效应)。若高工资区间收入效应更大，劳动供给曲线就会向后弯曲。[财政学第4章](/zh/academy-public-finance-ch4/)把这一逻辑用于所得税。
+
+<Callout type="warning">
+效用只有顺序有意义(序数效用)。$u=xy$与$u=\ln x+\ln y$表示同一偏好，MRS也相同。"效用翻了一倍"这种说法，只有在像风险下的选择那样另外假定基数效用时才有意义。此外，若只能按整数单位购买或存在配给，每韩元边际效用相等的条件就变为不等式。
+</Callout>
+
+即使不知道效用函数，也可以检验选择数据的一致性。如果在买得起A时选择了B，那么在买得起B时就不应选择A(显示偏好弱公理，WARP)。违反它的数据无法还原出稳定的偏好。
+
+## 练习题
+
+$u=xy$，$M=24$韩元，$P_x=3$韩元，$P_y=2$韩元。最优组合与$\lambda$是多少?$x^*=24/(2\times 3)=4$，$y^*=24/(2\times 2)=6$。$\lambda=MU_x/P_x=y/3=2$，与$MU_y/P_y=x/2=2$相等。两种商品每韩元的边际效用相等。
+
+## 参考资料
+
+- Hal Varian, *Intermediate Microeconomics*, ch. 2–8
+- Angus Deaton and John Muellbauer, *Economics and Consumer Behavior*, ch. 2
+- MIT OpenCourseWare, [14.01 Principles of Microeconomics](https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/)

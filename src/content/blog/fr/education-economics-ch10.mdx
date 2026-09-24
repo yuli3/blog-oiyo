@@ -1,0 +1,111 @@
+---
+track: academy
+series: microeconomics
+chapter: 10
+title: "Microéconomie — Défaillances de marché : externalités, biens publics et information"
+description: "Calcule les externalités comme l'écart entre coût marginal privé et coût marginal social, compare taxe pigouvienne, théorème de Coase et taxe contre quotas (Weitzman), et présente le passager clandestin des biens publics, la sélection adverse sur le marché des voitures d'occasion et le signal."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["économie", "microéconomie", "défaillances de marché", "externalités", "sélection adverse"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Microéconomie — une défaillance de marché n'est pas l'absence d'échange, mais un prix faux
+
+L'équilibre concurrentiel du chapitre 6 était efficace parce que les prix intégraient à la fois le bénéfice marginal social et le coût marginal social. Ce chapitre examine trois façons dont cette condition se rompt : des coûts absents des prix (externalités), des biens auxquels on ne peut pas donner de prix (biens publics) et des échanges où le prix ne peut pas transmettre la qualité (asymétrie d'information). Il transforme en calculs les définitions du [chapitre 6 d'Introduction à l'économie](/fr/academy-economics-basics-ch6/), et la conception des politiques se poursuit au [chapitre 1 de Finances publiques](/fr/academy-public-finance-ch1/).
+
+## 1. Externalités : l'écart entre coût privé et coût social
+
+Supposons qu'une entreprise ait un coût marginal privé $Cm_p=10+Q$, que chaque unité produite cause 8 wons de dommages au voisinage et que la demande soit $P=50-Q$. Le coût marginal social est $Cm_s=18+Q$.
+
+- Équilibre de marché : $10+Q=50-Q$ → $Q=20$, $P=30$ wons
+- Optimum social : $18+Q=50-Q$ → $Q=16$, $P=34$ wons
+
+Le marché surproduit de 4 unités. La partie de ces 4 unités où le coût social dépasse le bénéfice est une perte sèche de $\tfrac{1}{2}\times 8\times 4=16$ wons.
+
+<EconDiagram
+  title="Une externalité négative : surproduction"
+  xLabel="Q"
+  yLabel="P"
+  xMax={30}
+  yMax={50}
+  curves={[
+    { label: "D", points: [[0, 50], [30, 20]], tone: "blue" },
+    { label: "Cm_p", points: [[0, 10], [30, 40]], tone: "green" },
+    { label: "Cm_s", points: [[0, 18], [30, 48]], tone: "red", dashed: true },
+  ]}
+  areas={[{ points: [[16, 34], [20, 38], [20, 30]], tone: "amber" }]}
+  marks={[
+    { x: 20, y: 30, label: "Marché", guide: true, xTick: "20", yTick: "30" },
+    { x: 16, y: 34, label: "Optimum", guide: true, xTick: "16", yTick: "34" },
+  ]}
+  caption="Le triangle grisé est la perte sèche de 16 wons. Une taxe de 8 wons par unité porte le coût privé au niveau du coût social."
+/>
+
+<FormulaBox
+  label="Taxe pigouvienne"
+  formula="t = MC_s(Q^*) - MC_p(Q^*)"
+  description="Le dommage marginal évalué à la quantité optimale. Ici le dommage est constant et vaut 8 wons, mais s'il augmente avec la production (par exemple 2Q), le taux doit lui aussi être calculé à la quantité optimale."
+/>
+
+Le **théorème de Coase** affirme que si les droits de propriété sont clairs et la négociation sans coût, les parties atteindront la quantité efficace par la négociation, quel que soit le détenteur du droit. Cela peut fonctionner avec un seul voisin, mais lorsque les victimes se comptent par milliers et que les dommages sont irréversibles, la négociation est impossible.
+
+**Taxe ou quotas ?** Une taxe fixe le prix et laisse la quantité s'ajuster ; des permis échangeables fixent la quantité et laissent le prix s'ajuster. Lorsque l'État ne connaît pas précisément les coûts de dépollution, Weitzman propose un critère : si le dommage augmente fortement au-delà d'une certaine quantité (courbe de dommage marginal pentue), mieux vaut fixer la quantité ; si les coûts de dépollution augmentent fortement (courbe de coût marginal de dépollution pentue), fixer le prix rend les erreurs d'estimation moins coûteuses.
+
+## 2. Biens publics et ressources communes
+
+Classer les biens selon deux dimensions montre où les marchés approvisionnent bien et où ils échouent.
+
+<LectureTable
+  title="Classification des biens"
+  headers={["", "Excluable", "Non excluable"]}
+  rows={[
+    ["Rival", "Biens privés (bien fournis par le marché)", "Ressources communes (surexploitées)"],
+    ["Non rival", "Biens de club (télévision payante, autoroutes à péage peu fréquentées)", "Biens publics purs (sous-produits)"],
+  ]}
+/>
+
+Comme un bien public pur peut être utilisé sans payer, la meilleure stratégie de chacun est d'attendre que les autres paient : c'est le **passager clandestin**. La condition d'efficacité est la condition de Samuelson, selon laquelle la somme verticale des bénéfices marginaux individuels égale le coût marginal ; un exemple chiffré figure au [chapitre 1 de Finances publiques](/fr/academy-public-finance-ch1/).
+
+Les ressources communes posent le problème inverse. Le poisson pêché par l'un réduit ce que les autres peuvent pêcher, mais personne n'en tient compte : les pêcheries sont surexploitées (**tragédie des communs**). Quotas de pêche, redevances et attribution de droits de propriété sont des remèdes, et Ostrom a aussi documenté des communautés qui ont géré durablement des ressources communes grâce à leurs propres règles.
+
+## 3. Asymétrie d'information : le marché des « tacots »
+
+Sur un marché de voitures d'occasion, la moitié des voitures sont bonnes (valant 13 millions de wons pour les vendeurs et 15 millions pour les acheteurs) et la moitié mauvaises (6 millions pour les vendeurs, 8 millions pour les acheteurs). En information symétrique, toutes les voitures s'échangent. Si les acheteurs ne peuvent pas les distinguer, ils ne paieront pas plus que la valeur espérée, $0{,}5\times 15+0{,}5\times 8=11{,}5$ millions de wons.
+
+À ce prix, les propriétaires de bonnes voitures refusent de vendre en dessous de 13 millions et quittent le marché. Si les acheteurs savent qu'il ne reste que des mauvaises voitures, le prix tombe à 8 millions. Les ventes de bonnes voitures, qui auraient profité à tous, ont disparu. C'est la **sélection adverse**.
+
+<LectureTable
+  title="Deux formes d'asymétrie d'information"
+  headers={["", "Sélection adverse", "Aléa moral"]}
+  rows={[
+    ["Ce qui est caché", "Le type avant le contrat (qualité, risque)", "L'action après le contrat (effort, prudence)"],
+    ["Exemples", "Voitures d'occasion, santé des candidats à l'assurance", "Imprudence une fois assuré, agents qui tirent au flanc"],
+    ["Réponses", "Garanties, inspections, signaux, assurance obligatoire", "Franchises et tickets modérateurs, rémunération à la performance, contrôle"],
+  ]}
+/>
+
+La partie informée peut aussi révéler elle-même la qualité. Les vendeurs de bonnes voitures offrent des garanties, et les candidats compétents obtiennent des diplômes coûteux. Dans le **modèle de signal** de Spence, un diplôme peut distinguer les plus compétents même s'il n'accroît pas la productivité, à condition qu'il leur coûte moins cher à obtenir.
+
+<Callout type="warning">
+L'existence d'une défaillance de marché n'est pas une condition suffisante au succès de l'intervention publique. L'État ignore lui aussi l'ampleur des dommages et les coûts de dépollution, les régulateurs peuvent être capturés par les secteurs qu'ils régulent et l'impôt crée lui-même une charge excédentaire. L'intervention se juge en comparant le coût de la défaillance du marché à celui de la défaillance de l'État.
+</Callout>
+
+## Exercice
+
+Avec un coût marginal privé $10+Q$, un dommage marginal de 8 wons par unité et une demande $P=50-Q$, de combien le marché surproduit-il et quelle est la taxe pigouvienne ? La production de marché est de 20 et l'optimum de 16 : 4 unités de surproduction et une taxe de 8 wons. Si le dommage marginal était $0{,}5Q$, croissant avec la production, le coût marginal social serait $10+1{,}5Q$, $10+1{,}5Q=50-Q$ donnerait $Q^*=16$, et la taxe serait le dommage marginal en ce point, $0{,}5\times 16=8$ wons. Là encore, la taxe égale le dommage marginal mesuré à la quantité optimale.
+
+## Références
+
+- Hal Varian, *Intermediate Microeconomics*, ch. 35–38
+- Ronald Coase, "The Problem of Social Cost," *Journal of Law and Economics* (1960)
+- George Akerlof, "The Market for 'Lemons'," *Quarterly Journal of Economics* (1970)
+- Martin Weitzman, "Prices vs. Quantities," *Review of Economic Studies* (1974)

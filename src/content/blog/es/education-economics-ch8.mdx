@@ -1,0 +1,114 @@
+---
+track: academy
+series: microeconomics
+chapter: 8
+title: "Microeconomía — Oligopolio y competencia monopolística"
+description: "Compara, sobre una misma curva de demanda y con números y un gráfico, las funciones de reacción de Cournot y el equilibrio de Nash, la ventaja del líder de Stackelberg, la paradoja de Bertrand, el incentivo a romper un cártel y el factor de descuento crítico de un juego repetido, y la capacidad ociosa a largo plazo de la competencia monopolística."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["economía", "microeconomía", "oligopolio", "Cournot", "colusión"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Microeconomía — en el oligopolio, la estrategia del rival forma parte de tu demanda
+
+Con pocas empresas, ninguna puede tomar el precio como dado, como una empresa competitiva, ni aprovechar sola toda la demanda del mercado, como un monopolista. La mejor elección de cada una depende de lo que hagan las demás. Este capítulo mantiene la misma demanda de mercado, $P=120-Q$, y un coste marginal nulo, y compara cómo cambian los resultados según la variable estratégica que usan las empresas. La teoría general de las estrategias mixtas y los juegos repetidos está en el [capítulo 11](/es/education-economics-ch41/).
+
+## 1. Cournot: elegir cantidades a la vez
+
+Dos empresas eligen simultáneamente sus producciones $q_1$ y $q_2$, y el mercado fija el precio $P=120-(q_1+q_2)$. El beneficio de la empresa 1 es $\pi_1=q_1(120-q_1-q_2)$. Maximizándolo con la producción del rival como dada:
+
+$$\frac{\partial \pi_1}{\partial q_1}=120-2q_1-q_2=0 \quad\Rightarrow\quad q_1=\frac{120-q_2}{2}$$
+
+Esta es la **función de reacción** de la empresa 1: cuanto más produce el rival, menos produzco yo. Junto con la función de reacción simétrica de la empresa 2 se obtiene $q_1=q_2=40$, una producción de mercado de 80 y un precio de 40 wones. Cada empresa responde de forma óptima a la otra, así que este punto es un **equilibrio de Nash**.
+
+<EconDiagram
+  title="Funciones de reacción de Cournot"
+  xLabel="q₁"
+  yLabel="q₂"
+  xMax={120}
+  yMax={120}
+  curves={[
+    { label: "R₁", points: [[0, 120], [60, 0]], tone: "blue", labelAt: 0 },
+    { label: "R₂", points: [[0, 60], [120, 0]], tone: "green" },
+  ]}
+  marks={[
+    { x: 40, y: 40, label: "Cournot (40, 40)", guide: true, xTick: "40", yTick: "40" },
+    { x: 30, y: 30, label: "Cártel" },
+    { x: 60, y: 30, label: "Stackelberg (60, 30)" },
+  ]}
+  caption="El equilibrio de Cournot está donde se cruzan las dos funciones de reacción. El punto del cártel es mejor para ambas empresas, pero no está en ninguna función de reacción."
+/>
+
+<FormulaBox
+  label="Cournot simétrico con n empresas (demanda P = a − Q, coste marginal c)"
+  formula="q_i=\frac{a-c}{n+1},\qquad P=\frac{a+nc}{n+1}"
+  description="n = 1 es el monopolio; al crecer n, el precio converge al coste marginal c. Es el canal por el que el número de empresas reduce el poder de mercado."
+/>
+
+## 2. Stackelberg: mover primero compensa
+
+Si la empresa 1 fija su producción primero y la empresa 2 responde tras observarla, la empresa 1 introduce la función de reacción de la empresa 2, $q_2=(120-q_1)/2$, en su propio beneficio:
+
+$$\pi_1=q_1\left(120-q_1-\frac{120-q_1}{2}\right)=q_1\cdot\frac{120-q_1}{2}$$
+
+Maximizando se obtiene $q_1=60$, $q_2=30$ y un precio de 30 wones. El líder gana 1.800 wones, más que los 1.600 de Cournot, y el beneficio del seguidor cae a 900. Comprometerse primero con una producción grande hace que el rival produzca menos. Por eso las decisiones difíciles de revertir, como invertir en capacidad, tienen valor estratégico.
+
+## 3. Bertrand: competir en precios
+
+Si dos empresas que venden un producto idéntico compiten en precios, rebajar el precio del rival en solo 1 won permite quedarse con todo el mercado. Mientras el precio supere el coste marginal, ambas tienen incentivo a recortarlo un poco, así que el equilibrio es $P=CMg$. Que dos empresas generen el resultado competitivo es la **paradoja de Bertrand**.
+
+La paradoja se resuelve en tres casos: límites de capacidad que impiden a la empresa más barata atender todo el mercado; diferenciación de producto, que hace que un precio algo mayor no suponga perder a todos los clientes; e interacción repetida, en la que una bajada de precio puede castigarse.
+
+## 4. Colusión e incentivo a desviarse
+
+Si las dos empresas acuerdan comportarse como un monopolio, la producción de mercado es 60, el precio 60 wones y cada una produce 30 con un beneficio de 1.800 wones, más que los 1.600 de Cournot. Pero si el rival produce 30, mi mejor respuesta es $q_1=(120-30)/2=45$. El precio cae a 45 wones, pero yo gano 2.025 wones y el beneficio del rival baja a 1.350. En un juego de una sola vez, el cártel no se sostiene.
+
+La repetición cambia las cosas. Con una estrategia de gatillo que vuelve para siempre a Cournot tras cualquier desviación, mantener el acuerdo vale $1.800/(1-\delta)$ y desviarse vale $2.025+1.600\,\delta/(1-\delta)$.
+
+<FormulaBox
+  label="Condición para sostener la colusión"
+  formula="\delta \ge \frac{\pi^{\text{desvío}}-\pi^{\text{cártel}}}{\pi^{\text{desvío}}-\pi^{\text{castigo}}}=\frac{2.025-1.800}{2.025-1.600}\approx 0{,}53"
+  description="Si el futuro importa lo suficiente (δ alto), la pérdida permanente del castigo supera la ganancia puntual del desvío y el cártel se mantiene. La colusión es más fácil con interacciones frecuentes, desvíos que se detectan rápido y pocas empresas."
+/>
+
+Por eso las autoridades de competencia usan programas de **clemencia**, que reducen la multa a la primera empresa que confiesa: aumentan el premio por traicionar al cártel desde dentro.
+
+<LectureTable
+  title="Comparación con la misma demanda (P = 120 − Q, CMg = 0)"
+  headers={["Modelo", "Producción de mercado", "Precio", "Beneficio por empresa"]}
+  rows={[
+    ["Monopolio / cártel", "60", "60 wones", "1.800 (repartido entre 2 empresas)"],
+    ["Stackelberg", "90", "30 wones", "1.800 / 900"],
+    ["Cournot", "80", "40 wones", "1.600 / 1.600"],
+    ["Bertrand", "120", "0 wones", "0 / 0"],
+  ]}
+/>
+
+## 5. Competencia monopolística
+
+Los mercados con muchas empresas y libre entrada pero productos ligeramente distintos (restaurantes, peluquerías, ropa) se denominan **competencia monopolística**. Por la diferenciación, cada empresa tiene su propia demanda con pendiente negativa y produce donde $IMg=CMg$. Si hay beneficios a corto plazo, entran productos similares y reducen la demanda de cada empresa. A largo plazo el beneficio es nulo donde la curva de demanda es tangente a la de coste medio.
+
+Como resultado, $P=CTMe>CMg$ incluso a largo plazo. El precio supera el coste marginal y las empresas producen menos que la cantidad que minimiza el coste medio, dejando **capacidad ociosa**. Considerarlo simplemente ineficiente depende del valor de la variedad: si la gente quiere muchas opciones, un coste medio algo mayor puede ser un precio razonable.
+
+<Callout type="warning">
+La curva de demanda quebrada (los rivales siguen las bajadas de precio pero no las subidas) describe la rigidez de los precios de oligopolio, pero no la explica, porque no demuestra que ese comportamiento sea un equilibrio. Además, los resultados de un mercado dependen mucho de las reglas del juego —competencia en cantidades o en precios, jugadas simultáneas o secuenciales—, así que identifique la variable estratégica y el orden de las jugadas antes de elegir un modelo.
+</Callout>
+
+## Ejercicio
+
+¿Cuál es el equilibrio de Cournot con la demanda $P=100-Q$ y dos empresas con coste marginal de 10 wones? Según la fórmula, $q_i=(100-10)/3=30$, producción de mercado 60, precio 40 wones y beneficio $(40-10)\times 30=900$ wones por empresa. Con colusión, la producción de mercado es 45 (nivel de monopolio), el precio 55 wones y cada empresa produce 22,5 unidades con un beneficio de 1.012,5 wones, mejor para ambas; pero la mejor respuesta a un rival que produce 22,5 es $(90-22{,}5)/2=33{,}75$, así que la colusión no se sostiene en un juego de una sola vez.
+
+## Referencias
+
+- Hal Varian, *Intermediate Microeconomics*, ch. 27–28
+- Jean Tirole, *The Theory of Industrial Organization*, ch. 5–6
+- MIT OpenCourseWare, [14.01 Principles of Microeconomics](https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/)

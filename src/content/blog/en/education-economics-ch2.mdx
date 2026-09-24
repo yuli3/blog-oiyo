@@ -1,83 +1,107 @@
 ---
 track: academy
-series: economics-basics
+series: microeconomics
 chapter: 2
-title: "Demand, Supply, and Market Equilibrium"
-description: >-
-  Learn the principles of price determination through the laws of demand and
-  supply, and understand how policy changes affect market equilibrium and
-  elasticity.
+title: "Microeconomics — Supply, Demand and Comparative Statics"
+description: "Solves the linear supply-and-demand equilibrium in general form, shows how the signs of price and quantity changes identify which curve moved, and computes the shortage and deadweight loss of a price ceiling, with numbers and a graph."
 pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
 category: Economics
-tags:
-  - Education
-  - economics
+tags: ["economics", "microeconomics", "supply and demand", "comparative statics", "price controls"]
 locale: en
 author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
 
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# Demand, Supply, and Market Equilibrium
+# Microeconomics — An Observed Price and Quantity Is an Intersection, Not a Demand Curve
 
-In a market economy, price acts as the 'invisible hand'. Understanding how price and quantity are determined where demand and supply meet is the core of economics.
+If [Introduction to Economics, Chapter 2](/en/academy-economics-basics-ch2/) separated a shift of a curve from a movement along it, this chapter turns that distinction into a problem of **identification**. The prices and quantities recorded in data are points on neither the demand curve nor the supply curve; they are where the two met. We need to know which curve moved before we can interpret those points.
 
----
+## 1. Solving the equilibrium in general form
 
-## 1. Basics of Demand and Supply
+Linear demand $Q_d=a-bP$ and supply $Q_s=c+dP$ ($b,d>0$) meet at:
 
-### (1) Demand
+<FormulaBox
+  label="Equilibrium of a linear market"
+  formula="P^*=\frac{a-c}{b+d},\qquad Q^*=\frac{ad+bc}{b+d}"
+  description="If the demand intercept a rises by 1, price rises by 1/(b+d) and quantity by d/(b+d). The steeper the supply curve (the smaller d), the more of a demand increase goes into price."
+/>
 
-- **Law of Demand**: As the price of a good increases, the quantity demanded decreases, and as the price decreases, the quantity demanded increases (inverse relationship).
-- **Change in Quantity Demanded vs. Change in Demand**:
-  - **Change in Quantity Demanded**: A movement along the curve caused by a change in the **price** of the good itself.
-  - **Change in Demand**: A shift of the entire curve caused by **factors other than price** (income, tastes, prices of related goods, etc.).
+With demand $Q_d=100-2P$ and supply $Q_s=10+P$, $P^*=90/3=30$ won and $Q^*=40$.
 
-### (2) Supply
+- If higher income moves demand to $Q_d=112-2P$, then $P^*=34$ won and $Q^*=44$. Price and quantity **rise together**. By the formula, $a$ rose by 12, so price rises by $12/3=4$ and quantity by $12\times 1/3=4$.
+- If higher input costs move supply to $Q_s=4+P$, then $P^*=32$ won and $Q^*=36$. Price rises and quantity **falls**.
 
-- **Law of Supply**: As the price of a good increases, the quantity supplied increases, and as the price decreases, the quantity supplied decreases (direct relationship).
+<EconDiagram
+  title="An increase in demand and the new equilibrium"
+  xLabel="Q"
+  yLabel="P"
+  xMax={60}
+  yMax={60}
+  curves={[
+    { label: "D", points: [[0, 50], [60, 20]], tone: "blue" },
+    { label: "D'", points: [[0, 56], [60, 26]], tone: "blue", dashed: true },
+    { label: "S", points: [[10, 0], [60, 50]], tone: "green" },
+  ]}
+  marks={[
+    { x: 40, y: 30, label: "E", guide: true, xTick: "40", yTick: "30" },
+    { x: 44, y: 34, label: "E'", guide: true, xTick: "44", yTick: "34" },
+  ]}
+  arrows={[{ from: [20, 40], to: [26, 43] }]}
+  caption="When demand shifts right, price and quantity rise together along the supply curve. Had supply shifted, price and quantity would have moved in opposite directions along the demand curve."
+/>
 
----
+<LectureTable
+  title="Signs of comparative statics"
+  headers={["Shock", "Price", "Quantity"]}
+  rows={[
+    ["Demand increases", "↑", "↑"],
+    ["Demand decreases", "↓", "↓"],
+    ["Supply increases", "↓", "↑"],
+    ["Supply decreases", "↑", "↓"],
+    ["Demand and supply both increase", "Ambiguous", "↑"],
+  ]}
+/>
 
-## 2. Market Equilibrium
+Price alone does not reveal the cause. If quantity rose with price, a demand shock dominated; if quantity fell, a supply shock dominated. When both curves move at once, the sign of one variable depends on their relative sizes and becomes ambiguous.
 
-The point where the quantity demanded equals the quantity supplied determines the **Equilibrium Price** and **Equilibrium Quantity**.
+## 2. Why you cannot draw a demand curve by joining the dots
 
-| State                        | Description                           | Change in Price |
-| :--------------------------- | :------------------------------------ | :-------------- |
-| **Shortage** (Excess Demand) | Quantity Demanded > Quantity Supplied | Price Increases |
-| **Surplus** (Excess Supply)  | Quantity Supplied > Quantity Demanded | Price Decreases |
+Suppose you plot a product's yearly prices and sales and the points slope upward. It is tempting to conclude that "people buy more when the price is higher", but if supply stayed put while demand grew every year, the points trace out the **supply curve**. To estimate a demand curve you need variation that moves supply while leaving demand unchanged (for example, weather shifting the supply of a crop). This is the **identification problem** of econometrics; its standard tool, instrumental variables, is covered in [Econometrics, Chapter 4](/en/education-econometrics-ch4/).
 
----
+"Housing demand fell because interest rates rose" describes an event that shifted the demand curve through the cost of borrowing. "Transactions fell because house prices rose" may be a movement along the same demand curve, or the result of reduced supply. Misreading the cause leads to the opposite policy.
 
-## 3. Elasticity
+## 3. A price ceiling creates a shortage and changes how goods are rationed
 
-A measure of how sensitive demand or supply is to changes in price or income.
+If the market above (equilibrium price 30 won) is given a ceiling of 20 won, quantity demanded is $100-40=60$ and quantity supplied is $10+20=30$: a shortage of 30. What price no longer rations is rationed instead by queues, lotteries, connections, black markets and lower quality.
 
-### (1) Price Elasticity of Demand ($\epsilon_d$)
+The **deadweight loss** from quantity falling from 40 to 30 is the triangle between the demand and supply curves from 30 to 40 units. At a quantity of 30, consumers are willing to pay $P=50-Q/2=35$ won and producers' marginal cost is $P=Q-10=20$ won.
 
-- **$\epsilon_d > 1$ (Elastic)**: The percent change in quantity is larger than the percent change in price. (Common when there are many substitutes)
-- **$\epsilon_d < 1$ (Inelastic)**: The percent change in quantity is smaller than the percent change in price. (Common for necessities)
+<FormulaBox
+  label="Deadweight loss of a price ceiling"
+  formula="DWL=\tfrac{1}{2}\times(35-20)\times(40-30)=75"
+  description="Those 10 trades would have been worth more to consumers than they cost to produce, yet they disappear. Counting the time spent queuing, the true loss is larger."
+/>
 
-### (2) Income and Cross-Price Elasticity
+"Lower prices benefit consumers" holds only for the 30 people who actually buy. The losses of those who cannot buy and the cost of queuing must be subtracted to find the net effect on consumers as a whole. A price floor (a minimum wage, a guaranteed crop price) does the opposite and creates excess supply.
 
-- **Income Elasticity > 0**: Normal Good / **Income Elasticity < 0**: Inferior Good
-- **Cross-Price Elasticity > 0**: Substitutes / **Cross-Price Elasticity < 0**: Complements
+<Callout type="warning">
+Upward-sloping observed points are not a counterexample to the law of demand. A demand curve that genuinely slopes upward — a Giffen good — requires an inferior good whose income effect overwhelms the substitution effect, which is rare (Chapter 4). When data slope upward, first check whether supply was actually held fixed.
+</Callout>
 
----
+The claim that competitive equilibrium maximises total surplus holds only under perfect competition, no externalities and perfect information. Chapters 5–10 relax these assumptions one by one.
 
-## 4. Consumer and Producer Surplus
+## Check your understanding
 
-- **Consumer Surplus**: The difference between the maximum amount a consumer is willing to pay and the actual price paid.
-- **Producer Surplus**: The difference between the actual price received and the minimum amount a producer is willing to accept.
-- **Total Welfare (Social Surplus)** = Consumer Surplus + Producer Surplus
+Demand $Q_d=80-P$, supply $Q_s=20+P$. The equilibrium is $P=30$ won and $Q=50$. With a ceiling of 20 won, demand is 60 and supply 40, a shortage of 20. At a quantity of 40 the demand price is 40 won and the supply price 20 won, so the deadweight loss is $\tfrac{1}{2}\times 20\times 10=100$.
 
-> Social welfare is maximized when the market is allowed to reach equilibrium freely. Government intervention like taxes or price controls can lead to **Deadweight Loss**.
+## References
 
----
-
-## Key Checklist
-
-- [ ] If the price of Cola rises, how does the demand for Cider change? (Cross-price elasticity perspective)
-- [ ] If technological innovation reduces production costs, which way does the supply curve shift?
-- [ ] What do we call the case where the price elasticity of demand is 0? (Answer: Perfectly Inelastic)
-- [ ] What phenomenon occurs when the market price is higher than the equilibrium price? (Answer: Surplus)
+- Hal Varian, *Intermediate Microeconomics*, ch. 1, 16
+- N. Gregory Mankiw, *Principles of Economics*, ch. 4, 6
+- MIT OpenCourseWare, [14.01 Principles of Microeconomics](https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/)

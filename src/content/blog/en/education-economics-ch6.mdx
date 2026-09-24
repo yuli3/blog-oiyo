@@ -1,75 +1,118 @@
 ---
 track: academy
-series: economics-basics
+series: microeconomics
 chapter: 6
-title: Factor Markets and Income Distribution
-description: >-
-  Learn how the prices of production factors like labor and capital are
-  determined, and study indicators for measuring social inequality and
-  redistribution policies.
+title: "Microeconomics — Perfect Competition: Short-Run Supply and Zero Long-Run Profit"
+description: "Builds industry supply from individual firms' supply curves, follows with numbers and a graph how entry and exit push price to minimum average cost in the long run, and covers constant-, increasing- and decreasing-cost industries and why competition is efficient."
 pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
 category: Economics
-tags:
-  - Education
-  - economics
+tags: ["economics", "microeconomics", "perfect competition", "long-run equilibrium", "entry and exit"]
 locale: en
 author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
 
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# Factor Markets and Income Distribution
+# Microeconomics — Long-Run Competitive Equilibrium Means Zero Economic Profit, Not Zero Accounting Profit
 
-In contrast to the product markets we have discussed so far, in factor markets, households are the suppliers and firms are the demanders.
+The individual firm of Chapter 5 produced where $P=MC$ and shut down at prices below minimum AVC. This chapter looks at markets with many such firms. In the short run the number of firms is fixed; in the long run profit attracts entry and losses cause exit.
 
----
+## 1. Conditions for perfect competition
 
-## 1. Demand for Production Factors
+<LectureTable
+  title="Assumptions of perfect competition"
+  headers={["Assumption", "Meaning", "If it fails"]}
+  rows={[
+    ["Many firms and consumers", "No one can influence the price", "Market power (Chapters 7–8)"],
+    ["Homogeneous product", "Every firm's output is a perfect substitute", "Differentiation, monopolistic competition (Chapter 8)"],
+    ["Free entry and exit", "Long-run profit disappears", "Excess profit persists"],
+    ["Perfect information", "Prices and quality are fully known", "Adverse selection (Chapter 10)"],
+  ]}
+/>
 
-A firm's demand for production factors is a **Derived Demand** that arises from the demand for the goods those factors produce.
+The demand curve facing an individual firm is horizontal at the market price, because charging even slightly more loses every customer. Hence $MR=P$.
 
-### (1) Determination of Labor Demand (In Perfect Competition)
+## 2. Short-run industry supply is the horizontal sum of firms' supply
 
-- **Value of Marginal Product (VMP)**: The increase in total revenue from hiring one additional unit of labor ($P \times MPL$).
-- **Equilibrium Condition**: $VMP = w$ (where w is the wage).
-- A firm hires labor up to the point where the wage equals the value of the marginal product of labor.
+Suppose 100 firms each have $MC=2q$ (in 10,000 won) and $AVC=q$. Each firm's supply is $P=2q$, i.e. $q=P/2$ (above AVC). Adding quantities at the same price gives industry supply $Q=100\times P/2=50P$.
 
----
+With demand $Q=200-10P$, $50P=200-10P$ gives $P=10/3\approx 3.33$ (about 33,300 won) and $Q\approx 166.7$. Each firm produces about 1.67, where AVC ≈ 1.67 < 3.33, so every firm produces.
 
-## 2. Supply of Labor (The Household's Choice)
+## 3. Long run: entry pushes price to minimum average cost
 
-Labor supply is a matter of choosing between leisure and income.
+If profit is positive, new firms enter, supply rises and the price falls. If there are losses, firms exit, supply falls and the price rises. Adjustment stops when the price equals every firm's minimum average cost.
 
-- **Substitution Effect**: As wages rise, the opportunity cost of leisure increases, leading individuals to decrease leisure and increase labor.
-- **Income Effect**: As wages rise, real income increases, leading individuals to consume more leisure (a normal good) and decrease labor.
-- **Backward-Bending Labor Supply Curve**: A phenomenon where labor supply actually decreases as wages rise above a certain level, because the income effect outweighs the substitution effect.
+<FormulaBox
+  label="Long-run competitive equilibrium"
+  formula="P = MC = \min ATC"
+  description="Firms produce optimally at P = MC, economic profit is zero, and each firm operates at the scale with the lowest average cost."
+/>
 
----
+**Zero economic profit** is not zero accounting profit. ATC includes the opportunity cost of the owners' capital and time (normal profit). Even if the books show a profit, economic profit is zero when that profit equals what the resources would earn elsewhere.
 
-## 3. Measuring Income Distribution
+Consider a **constant-cost industry** in which all firms have the same costs and input prices do not depend on the size of the industry. If minimum ATC is 40 won (at an output of 4 per firm) and market demand is $P=120-Q$, the long-run equilibrium is $P=40$ won, $Q=80$ and 20 firms.
 
-Key indicators used to measure the degree of income inequality in a society.
+Suppose demand rises to $P=140-Q$. If the short-run supply of the existing 20 firms is $P=40+(Q-80)/2$:
 
-| Indicator                   | Description                                                                                                              | Characteristics                                             |
-| :-------------------------- | :----------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------- |
-| **Lorenz Curve**            | Represents the relationship between the cumulative percentage of the population and the cumulative percentage of income. | Closer to the diagonal line means more equal.               |
-| **Gini Coefficient**        | A numerical value derived from the Lorenz curve (0 to 1).                                                                | **Closer to 0 is more equal**, closer to 1 is more unequal. |
-| **Decile Dispersion Ratio** | Ratio of the income of the bottom 40% to the top 20%.                                                                    | **Larger value means more equal.**                          |
+- **Short run**: $140-Q=40+(Q-80)/2$ gives $Q\approx 93.3$ and $P\approx 46.7$ won. Existing firms make a profit.
+- **Long run**: profit attracts entry and the price returns to 40 won. Quantity is $140-40=100$ and there are 25 firms.
 
----
+<EconDiagram
+  title="Short- and long-run adjustment after a demand increase (constant-cost industry)"
+  xLabel="Q"
+  yLabel="P"
+  xMin={40}
+  xMax={120}
+  yMin={20}
+  yMax={80}
+  curves={[
+    { label: "D", points: [[40, 80], [100, 20]], tone: "blue", anchor: "end" },
+    { label: "D'", points: [[60, 80], [120, 20]], tone: "blue", dashed: true, anchor: "end" },
+    { label: "S (20 firms)", points: [[50, 25], [110, 55]], tone: "green" },
+    { label: "LRS", points: [[40, 40], [120, 40]], tone: "gray", dashed: true },
+  ]}
+  marks={[
+    { x: 80, y: 40, label: "E", xTick: "80" },
+    { x: 93.3, y: 46.7, label: "Short run" },
+    { x: 100, y: 40, label: "Long run", xTick: "100" },
+  ]}
+  caption="When demand rises, the price climbs to about 46.7 won in the short run, but entry expands supply and in the long run the price returns to 40 won on the horizontal long-run supply curve (LRS)."
+/>
 
-## 4. Income Redistribution Policies
+<LectureTable
+  title="Industry cost structure and long-run supply"
+  headers={["Type", "Long-run supply", "Long-run price after a demand increase", "Example"]}
+  rows={[
+    ["Constant cost", "Horizontal", "Unchanged", "Industries with plentiful inputs"],
+    ["Increasing cost", "Upward-sloping", "Higher", "Industries needing specialised labour or land"],
+    ["Decreasing cost", "Downward-sloping", "Lower", "Clusters where supply chains become cheaper"],
+  ]}
+/>
 
-Governments intervene to mitigate inequality arising from the market.
+## 4. Why competition is efficient
 
-- **Progressive Tax**: Applying higher tax rates to higher income levels.
-- **Public Assistance/Social Security**: Providing livelihood support or insurance to the socially vulnerable.
-- **Negative Income Tax**: A system where those below a certain income level receive subsidies instead of paying taxes.
+In long-run competitive equilibrium two kinds of efficiency hold at once.
 
----
+- **Allocative efficiency**: $P=MC$. The value consumers place on the last unit equals its cost, so there is no deadweight loss.
+- **Productive efficiency**: $P=\min ATC$. Each firm produces at its cheapest scale.
 
-## Key Checklist
+The monopoly of Chapter 7 violates the first, and the monopolistic competition of Chapter 8 the second. But this is a partial-equilibrium result that assumes no externalities and no information problems; Chapter 10 relaxes those conditions.
 
-- [ ] What two values does a firm compare when deciding whether to hire additional labor? (Answer: VMP and Wage)
-- [ ] Why might labor supply decrease when wages rise? (Answer: Income effect is larger than Substitution effect)
-- [ ] Between a society with a Gini coefficient of 0.2 and one with 0.5, which is more equal? (Answer: 0.2)
-- [ ] What is the Gini coefficient if the Lorenz curve coincides with the diagonal line? (Answer: 0)
+<Callout type="warning">
+Free entry does not merely mean that the law allows entry. If licences, locations, brands or network effects act as de facto barriers, profits can persist without attracting entry. And if firms' costs differ, low-cost firms earn positive profit (rent) even in the long run. Even agricultural markets, the textbook example of perfect competition, do not fully meet the conditions because of quality differences and information asymmetries.
+</Callout>
+
+## Check your understanding
+
+What is the optimal output of a competitive firm with $P=30$ won, $MC=2Q$ and $AVC=Q$? $30=2Q$ gives $Q=15$. AVC is 15 won < 30 won, so the firm produces. With a fixed cost of 100 won, ATC is $15+100/15\approx 21.7$ won, so profit is about 8.3 won per unit and $30\times 15-(100+225)=125$ won in total. This profit attracts entry, which lowers the price.
+
+## References
+
+- Hal Varian, *Intermediate Microeconomics*, ch. 23–24
+- N. Gregory Mankiw, *Principles of Economics*, ch. 14
+- MIT OpenCourseWare, [14.01 Principles of Microeconomics](https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/)

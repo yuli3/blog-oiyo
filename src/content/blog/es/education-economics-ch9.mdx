@@ -1,0 +1,110 @@
+---
+track: academy
+series: microeconomics
+chapter: 9
+title: "Microeconomía — Mercados de factores y distribución"
+description: "Muestra que la demanda de trabajo es una demanda derivada basada en el valor del producto marginal, explica cómo el monopolio en el mercado de bienes y el monopsonio reducen el empleo, cuándo un salario mínimo puede aumentar el empleo con monopsonio, y presenta las diferencias salariales y la renta económica, con números y un gráfico."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["economía", "microeconomía", "mercados de factores", "monopsonio", "salario mínimo"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Microeconomía — el salario es el valor del producto marginal, no una parte del producto medio
+
+Los precios del trabajo y del capital también los fijan la oferta y la demanda. Pero las empresas no quieren trabajo por sí mismo, sino por lo que produce. La demanda de factores deriva de la demanda de bienes, y el empleo y los salarios dependen de si el mercado de bienes y el de factores son competitivos.
+
+## 1. La demanda de trabajo en mercados competitivos
+
+Contratar a un trabajador más aumenta la producción en $MP_L$, que se vende al precio $P$. El ingreso adicional es el **valor del producto marginal** $VMP_L=P\cdot MP_L$. Si el salario es menor, la empresa contrata más; si es mayor, contrata menos.
+
+<FormulaBox
+  label="Demanda de trabajo de una empresa competitiva"
+  formula="P\cdot MP_L = w"
+  description="Como el producto marginal es decreciente, la curva de VMP_L tiene pendiente negativa y es la curva de demanda de trabajo de la empresa. Un precio del bien o una productividad más altos la desplazan a la derecha."
+/>
+
+Si el producto marginal es de 20 unidades y el precio del bien de 10.000 wones, $VMP_L=200.000$ wones. Con un salario de 100.000 wones, la empresa contrata más. A medida que aumenta el trabajo, el producto marginal baja, y la contratación se detiene cuando $VMP_L$ llega a 100.000 wones.
+
+Si el mercado de bienes es un monopolio, vender más producción también reduce su precio, así que el ingreso crece en $IMg$ y no en $P$. La demanda de trabajo pasa a ser el ingreso del producto marginal $MRP_L=IMg\cdot MP_L$ y, como $IMg<P$, el empleo es menor con el mismo salario. La subproducción del capítulo 7 aparece como subempleo en el mercado de factores.
+
+**Teorema de Euler**: si la función de producción tiene rendimientos constantes a escala y cada factor cobra el valor de su producto marginal, los pagos a los factores agotan exactamente el valor de la producción. Con la Cobb-Douglas $Q=K^{0{,}3}L^{0{,}7}$, la participación del trabajo es del 70 % y la del capital del 30 %. No es una afirmación ética sobre la justicia del reparto, sino un resultado contable bajo competencia y rendimientos constantes.
+
+## 2. Monopsonio: cuando hay un solo comprador
+
+Si en una región hay un único gran empleador, esa empresa se enfrenta a toda la curva de oferta de trabajo. Para contratar a una persona más tiene que subir el salario, y también el de los trabajadores que ya tiene. Por eso el coste de un trabajador adicional, el **coste marginal del factor (CMF)**, supera el salario: es el reflejo del $IMg<P$ del capítulo 7.
+
+Supongamos una oferta de trabajo $w=L$ (en decenas de miles de wones) y un ingreso del producto marginal del trabajo $MRP_L=30-L$. La masa salarial es $wL=L^2$, así que $CMF=2L$.
+
+- **Mercado de trabajo competitivo**: $30-L=L$ → $L=15$, $w=150.000$ wones
+- **Monopsonio**: $30-L=2L$ → $L=10$. El salario se lee en la curva de oferta: $w=100.000$ wones
+
+El monopsonio reduce tanto el empleo como el salario. La diferencia entre el valor que crean los trabajadores ($MRP_L=200.000$ wones) y lo que cobran (100.000 wones) es el beneficio del monopsonista.
+
+<EconDiagram
+  title="Un mercado de trabajo con monopsonio"
+  xLabel="L"
+  yLabel="w (10.000 wones)"
+  xMax={30}
+  yMax={32}
+  curves={[
+    { label: "MRP", points: [[0, 30], [30, 0]], tone: "blue" },
+    { label: "Oferta w = L", points: [[0, 0], [30, 30]], tone: "green" },
+    { label: "CMF", points: [[0, 0], [15, 30]], tone: "red", dashed: true },
+  ]}
+  marks={[
+    { x: 10, y: 10, label: "Monopsonio", guide: true, xTick: "10", yTick: "10" },
+    { x: 10, y: 20, label: "MRP = CMF" },
+    { x: 15, y: 15, label: "Competencia", guide: true, xTick: "15", yTick: "15" },
+  ]}
+  caption="El monopsonista contrata a 10 trabajadores donde MRP = CMF y paga el salario más bajo que esos 10 aceptan, 100.000 wones."
+/>
+
+Supongamos ahora un salario mínimo de 150.000 wones. Por debajo de 150.000 wones la empresa puede contratar más sin subir el salario, así que el CMF se vuelve horizontal en 150.000 wones. La empresa contrata hasta 15 trabajadores, donde $MRP_L=15$. **El salario mínimo ha aumentado a la vez el empleo y el salario.** Si se sube a 200.000 wones, el empleo vuelve a 10 donde $MRP_L=20$, y por encima de eso el empleo empieza a caer.
+
+<LectureTable
+  title="Estructura de mercado y condición de contratación"
+  headers={["Mercado de bienes \\ mercado de trabajo", "Competitivo", "Monopsonio"]}
+  rows={[
+    ["Competitivo", "P·MP_L = w", "P·MP_L = CMF > w"],
+    ["Monopolio", "IMg·MP_L = w", "IMg·MP_L = CMF, el menor empleo"],
+  ]}
+/>
+
+## 3. Por qué difieren los salarios
+
+Incluso dentro del mismo mercado los salarios difieren por varias razones.
+
+- **Capital humano**: la educación y la formación elevan la productividad y, con ella, el valor del producto marginal. Por qué es difícil estimar el rendimiento de la educación (la capacidad influye a la vez en la educación y en el salario) se trata en el [capítulo 1 de Econometría](/es/education-econometrics-ch1/).
+- **Diferencias compensatorias**: los trabajos peligrosos, desagradables o irregulares deben pagar más para atraer a trabajadores de la misma capacidad.
+- **Estructura de mercado**: el monopsonio, los sindicatos y el poder de negociación alejan el salario del valor del producto marginal.
+- **Discriminación**: diferencias salariales por características sin relación con la productividad. La competencia penaliza con mayores costes a las empresas que discriminan, pero si los clientes o los compañeros tienen preferencias discriminatorias, la competencia por sí sola no la elimina.
+
+## 4. La renta económica
+
+El pago a un factor cuya oferta es perfectamente inelástica es una **renta económica**. La cantidad de tierra es fija con independencia de su precio, de modo que la renta de la tierra la determina la demanda y no altera la oferta de tierra. En sentido amplio, todo pago por encima del mínimo necesario para mantener un factor en su uso actual es renta; por ejemplo, la parte del sueldo de un deportista estrella que supera lo que ganaría en otra ocupación.
+
+Gravar una renta no genera pérdida irrecuperable, porque la oferta no se reduce. Según la regla de incidencia del [capítulo 3](/es/education-economics-ch3/), el lado inelástico soporta todo el impuesto. Por eso el impuesto sobre la tierra se ha propuesto desde hace mucho como un impuesto eficiente.
+
+<Callout type="warning">
+«El salario mínimo aumenta el desempleo» y «el salario mínimo aumenta el empleo» son afirmaciones sobre estructuras de mercado distintas. En un mercado de trabajo competitivo, un salario mínimo por encima del equilibrio reduce el empleo; con monopsonio, lo aumenta dentro de cierto rango. A qué estructura se parece un mercado, y si una subida concreta queda dentro de ese rango, debe juzgarse con datos y no solo con teoría. Por eso los resultados empíricos varían según la región y el tamaño de la subida.
+</Callout>
+
+## Ejercicio
+
+¿Debe contratar más una empresa competitiva con un producto marginal de 20 unidades, un salario de 100.000 wones y un precio del bien de 10.000 wones? $VMP_L=200.000$ wones > 100.000 wones, así que sí. Si el mercado de bienes es un monopolio con un ingreso marginal de 5.000 wones, $MRP_L=100.000$ wones es igual al salario y la empresa ya está en su óptimo. La misma función de producción da empleos distintos según la estructura del mercado de bienes.
+
+## Referencias
+
+- Hal Varian, *Intermediate Microeconomics*, ch. 26
+- George Borjas, *Labor Economics*, ch. 4–6
+- Alan Manning, *Monopsony in Motion* (2003)
+- MIT OpenCourseWare, [14.01 Principles of Microeconomics](https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/)

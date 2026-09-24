@@ -1,0 +1,110 @@
+---
+track: academy
+series: microeconomics
+chapter: 3
+title: "微观经济学 — 弹性与税收归宿"
+description: "整理点弹性、弧弹性与总收益的关系(MR = P(1−1/|ε|))，线性需求曲线上弹性为何变化，收入弹性与交叉弹性，以及税负如何按相对弹性分担，并配以数字和图形。"
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["经济学", "微观经济学", "弹性", "税收归宿", "总收益"]
+locale: zh
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 微观经济学 — 用比率而不是斜率来衡量反应
+
+第2章的比较静态用曲线斜率计算价格和数量的变化。斜率取决于单位:把价格单位从韩元换成千韩元，斜率就变成1000倍。**弹性**用百分比衡量变化，从而消除单位。本章计算弹性，并用它来解读总收益和税负。
+
+## 1. 点弹性与弧弹性
+
+<FormulaBox
+  label="需求价格弹性"
+  formula="\varepsilon = \frac{dQ/Q}{dP/P} = \frac{dQ}{dP}\cdot\frac{P}{Q}"
+  description="需求为Q = 100 − 2P、价格为20韩元时，Q = 60，ε = −2 × (20/60) = −2/3。由于|ε| < 1，需求在这一点缺乏弹性。"
+/>
+
+价格变化较大时，弹性值取决于起点，因此使用以两点平均值为基准的**弧弹性(中点公式)**。若价格从10韩元变为12韩元，数量从100变为80，中点为$P=11$韩元，$Q=90$。
+
+$$|\varepsilon| = \frac{20/90}{2/11} \approx 1.22$$
+
+需求富有弹性，所以提价会使收益减少。实际上，收益从1000韩元降到了960韩元。
+
+## 2. 线性需求曲线上的弹性会变化
+
+线性需求的斜率不变，但弹性在每一点都不同，因为越往上$P/Q$越大。对$Q=100-2P$，价格截距为50韩元，数量截距为100。
+
+<EconDiagram
+  title="线性需求的弹性区间"
+  xLabel="Q"
+  yLabel="P"
+  xMax={100}
+  yMax={50}
+  curves={[{ label: "D", points: [[0, 50], [100, 0]], tone: "blue" }]}
+  marks={[
+    { x: 50, y: 25, label: "|ε| = 1", guide: true, xTick: "50", yTick: "25" },
+    { x: 20, y: 40, label: "|ε| = 4" },
+    { x: 80, y: 10, label: "|ε| = 0.25" },
+  ]}
+  caption="中点以上富有弹性，中点以下缺乏弹性。P = 40韩元时|ε| = 2 × 40/20 = 4，P = 10韩元时|ε| = 2 × 10/80 = 0.25。"
+/>
+
+## 3. 弹性与总收益
+
+把总收益$TR=P\cdot Q$对数量求导，得到边际收益。
+
+<FormulaBox
+  label="边际收益与弹性"
+  formula="MR = \frac{dTR}{dQ} = P\left(1-\frac{1}{|\varepsilon|}\right)"
+  description="|ε| > 1时MR > 0，降价增加销量会使收益增加。|ε| = 1时MR = 0，收益最大；|ε| < 1时只有提价才能增加收益。"
+/>
+
+对线性需求$Q=100-2P$，收益在中点($P=25$韩元，$Q=50$)达到最大，为1250韩元。第7章中垄断企业选择$MR=MC>0$的点，因而**总是在需求富有弹性的区间生产**，这一结论可直接由此式得出。
+
+## 4. 决定弹性的因素与其他弹性
+
+- **替代品的多少**:相近的替代品越多，弹性越大。"某一品牌可乐"的需求远比"饮料"的需求富有弹性。
+- **支出占比**:占收入比重越大，对价格越敏感。
+- **时间**:时间越长，越有时间寻找替代办法，弹性越大。汽油涨价时，短期内人们只是少开一点车，长期则会换车、搬家。
+
+<LectureTable
+  title="需求的三种弹性"
+  headers={["弹性", "定义", "符号的含义"]}
+  rows={[
+    ["价格弹性", "自身价格变化1%时需求量的百分比变化", "负(需求定律)"],
+    ["收入弹性", "收入变化1%时需求量的百分比变化", "正:正常品(大于1为奢侈品)；负:劣等品"],
+    ["交叉弹性", "其他商品价格变化1%时需求量的百分比变化", "正:替代品；负:互补品"],
+  ]}
+/>
+
+## 5. 弹性较小的一方承担税负
+
+在需求$Q=100-P$、供给$Q=P$的市场上征收每单位10韩元的税。设消费者支付的价格为$P_d$，生产者得到的价格为$P_s=P_d-10$，由$100-P_d=P_d-10$得$P_d=55$韩元，$P_s=45$韩元，$Q=45$。与税前价格50韩元相比，消费者承担5韩元，生产者承担5韩元，因为均衡点上两种弹性相等。
+
+<FormulaBox
+  label="税负的分担"
+  formula="\frac{\text{消费者负担}}{\text{生产者负担}} = \frac{\varepsilon_s}{|\varepsilon_d|}"
+  description="若供给弹性是需求弹性的两倍，消费者承担的税负就是生产者的两倍。能通过对价格作出反应而逃避的一方承担得少。"
+/>
+
+无论税向卖方还是买方征收，竞争市场的均衡税楔都相同。谁把钱交给税务机关(法定归宿)与谁的福利减少(经济归宿)是两回事。无谓损失的大小、它与税率的关系以及拉姆齐法则，见[财政学第2章](/zh/academy-public-finance-ch2/)。
+
+<Callout type="warning">
+"企业交税"只看到了法定归宿。在完全竞争中，转嫁比例由弹性决定；在垄断下，取决于需求曲线的曲率，价格涨幅甚至可能超过税额。弹性的估计值在短期和长期也不同，因此要说明讨论的是哪个时期的负担。
+</Callout>
+
+## 练习题
+
+咖啡价格从4000韩元涨到5000韩元，销量从200杯降到180杯。按中点计算的弹性是多少?数量变化率为$20/190\approx 0.105$，价格变化率为$1{,}000/4{,}500\approx 0.222$，所以$|\varepsilon|\approx 0.47$。需求缺乏弹性，收益从80万韩元增至90万韩元。如果附近开了一家替代的咖啡馆，这一区间的弹性会变大，同样的提价可能使收益减少。
+
+## 参考资料
+
+- Hal Varian, *Intermediate Microeconomics*, ch. 15–16
+- N. Gregory Mankiw, *Principles of Economics*, ch. 5–6
+- MIT OpenCourseWare, [14.01 Principles of Microeconomics](https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/)

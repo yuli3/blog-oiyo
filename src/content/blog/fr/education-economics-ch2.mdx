@@ -1,0 +1,107 @@
+---
+track: academy
+series: microeconomics
+chapter: 2
+title: "Microéconomie — Offre, demande et statique comparative"
+description: "Résout l'équilibre linéaire offre-demande sous forme générale, montre comment les signes des variations de prix et de quantité identifient la courbe qui s'est déplacée, et calcule la pénurie et la perte sèche d'un prix plafond, chiffres et graphique à l'appui."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["économie", "microéconomie", "offre et demande", "statique comparative", "contrôle des prix"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Microéconomie — un prix et une quantité observés sont une intersection, pas une courbe de demande
+
+Si le [chapitre 2 d'Introduction à l'économie](/fr/academy-economics-basics-ch2/) a distingué le déplacement d'une courbe d'un mouvement le long de celle-ci, ce chapitre transforme cette distinction en problème d'**identification**. Les prix et quantités enregistrés dans les données ne sont des points ni de la courbe de demande ni de la courbe d'offre : ce sont les points où elles se sont rencontrées. Il faut savoir quelle courbe s'est déplacée pour pouvoir les interpréter.
+
+## 1. Résoudre l'équilibre sous forme générale
+
+Une demande linéaire $Q_d=a-bP$ et une offre $Q_s=c+dP$ ($b,d>0$) se croisent en :
+
+<FormulaBox
+  label="Équilibre d'un marché linéaire"
+  formula="P^*=\frac{a-c}{b+d},\qquad Q^*=\frac{ad+bc}{b+d}"
+  description="Si l'ordonnée à l'origine de la demande a augmente de 1, le prix monte de 1/(b+d) et la quantité de d/(b+d). Plus l'offre est pentue (d petit), plus une hausse de la demande se traduit par une hausse de prix."
+/>
+
+Avec une demande $Q_d=100-2P$ et une offre $Q_s=10+P$, $P^*=90/3=30$ wons et $Q^*=40$.
+
+- Si la hausse des revenus porte la demande à $Q_d=112-2P$, alors $P^*=34$ wons et $Q^*=44$. Prix et quantité **augmentent ensemble**. D'après la formule, $a$ a augmenté de 12 : le prix monte de $12/3=4$ et la quantité de $12\times 1/3=4$.
+- Si la hausse du coût des intrants porte l'offre à $Q_s=4+P$, alors $P^*=32$ wons et $Q^*=36$. Le prix monte et la quantité **baisse**.
+
+<EconDiagram
+  title="Hausse de la demande et nouvel équilibre"
+  xLabel="Q"
+  yLabel="P"
+  xMax={60}
+  yMax={60}
+  curves={[
+    { label: "D", points: [[0, 50], [60, 20]], tone: "blue" },
+    { label: "D'", points: [[0, 56], [60, 26]], tone: "blue", dashed: true },
+    { label: "O", points: [[10, 0], [60, 50]], tone: "green" },
+  ]}
+  marks={[
+    { x: 40, y: 30, label: "E", guide: true, xTick: "40", yTick: "30" },
+    { x: 44, y: 34, label: "E'", guide: true, xTick: "44", yTick: "34" },
+  ]}
+  arrows={[{ from: [20, 40], to: [26, 43] }]}
+  caption="Quand la demande se déplace vers la droite, prix et quantité montent ensemble le long de la courbe d'offre. Si l'offre s'était déplacée, ils auraient évolué en sens inverse le long de la courbe de demande."
+/>
+
+<LectureTable
+  title="Signes de la statique comparative"
+  headers={["Choc", "Prix", "Quantité"]}
+  rows={[
+    ["Hausse de la demande", "↑", "↑"],
+    ["Baisse de la demande", "↓", "↓"],
+    ["Hausse de l'offre", "↓", "↑"],
+    ["Baisse de l'offre", "↑", "↓"],
+    ["Hausse simultanée de l'offre et de la demande", "Indéterminé", "↑"],
+  ]}
+/>
+
+Le prix seul ne révèle pas la cause. Si la quantité a augmenté avec le prix, c'est un choc de demande qui domine ; si elle a baissé, c'est un choc d'offre. Lorsque les deux courbes bougent en même temps, le signe de l'une des variables dépend de leurs tailles relatives et devient indéterminé.
+
+## 2. Pourquoi on ne trace pas une courbe de demande en reliant les points
+
+Supposons que l'on représente les prix et les ventes annuels d'un produit et que les points montent vers la droite. On est tenté de conclure que « plus le prix est élevé, plus on achète », mais si l'offre est restée fixe pendant que la demande augmentait chaque année, les points dessinent la **courbe d'offre**. Pour estimer une courbe de demande, il faut une variation qui déplace l'offre sans toucher à la demande (par exemple la météo qui modifie l'offre d'une récolte). C'est le **problème d'identification** de l'économétrie ; son outil standard, les variables instrumentales, est présenté au [chapitre 4 d'Économétrie](/fr/education-econometrics-ch4/).
+
+« La demande de logements a baissé parce que les taux ont monté » décrit un événement qui a déplacé la courbe de demande via le coût du crédit. « Les transactions ont baissé parce que les prix ont monté » peut être un mouvement le long de la même courbe de demande, ou le résultat d'une baisse de l'offre. Se tromper de cause conduit à la politique inverse.
+
+## 3. Un prix plafond crée une pénurie et change le mode de rationnement
+
+Si l'on impose au marché ci-dessus (équilibre à 30 wons) un prix plafond de 20 wons, la quantité demandée est $100-40=60$ et la quantité offerte $10+20=30$ : une pénurie de 30. Ce que le prix ne rationne plus est rationné par les files d'attente, le tirage au sort, les relations, le marché noir et la baisse de qualité.
+
+La **perte sèche** due au recul de la quantité de 40 à 30 est le triangle compris entre les courbes de demande et d'offre, de 30 à 40 unités. Pour une quantité de 30, les consommateurs sont prêts à payer $P=50-Q/2=35$ wons et le coût marginal des producteurs est $P=Q-10=20$ wons.
+
+<FormulaBox
+  label="Perte sèche d'un prix plafond"
+  formula="DWL=\tfrac{1}{2}\times(35-20)\times(40-30)=75"
+  description="Ces 10 échanges valaient plus pour les consommateurs qu'ils ne coûtaient à produire, et pourtant ils disparaissent. En comptant le temps passé à faire la queue, la perte réelle est plus grande."
+/>
+
+« Baisser le prix profite aux consommateurs » n'est vrai que pour les 30 personnes qui achètent effectivement. Il faut retrancher les pertes de ceux qui ne peuvent pas acheter et le coût des files d'attente pour obtenir l'effet net sur l'ensemble des consommateurs. Un prix plancher (salaire minimum, prix garanti d'une récolte) produit l'inverse : un excès d'offre.
+
+<Callout type="warning">
+Des points observés croissants ne sont pas un contre-exemple à la loi de la demande. Une courbe de demande réellement croissante — un bien de Giffen — exige un bien inférieur dont l'effet revenu l'emporte sur l'effet de substitution, ce qui est rare (chapitre 4). Face à des données croissantes, vérifiez d'abord que l'offre était bien fixe.
+</Callout>
+
+L'affirmation selon laquelle l'équilibre concurrentiel maximise le surplus total ne vaut qu'en concurrence parfaite, sans externalités et en information parfaite. Les chapitres 5 à 10 lèvent ces hypothèses une à une.
+
+## Exercice
+
+Demande $Q_d=80-P$, offre $Q_s=20+P$. L'équilibre est $P=30$ wons et $Q=50$. Avec un plafond de 20 wons, la demande est de 60 et l'offre de 40 : une pénurie de 20. Pour une quantité de 40, le prix de demande est de 40 wons et le prix d'offre de 20 wons, donc la perte sèche vaut $\tfrac{1}{2}\times 20\times 10=100$.
+
+## Références
+
+- Hal Varian, *Intermediate Microeconomics*, ch. 1, 16
+- N. Gregory Mankiw, *Principles of Economics*, ch. 4, 6
+- MIT OpenCourseWare, [14.01 Principles of Microeconomics](https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/)

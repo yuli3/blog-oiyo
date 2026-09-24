@@ -1,0 +1,125 @@
+---
+track: academy
+series: microeconomics
+chapter: 7
+title: "Microeconomía — Monopolio: cantidad, precio y pérdida irrecuperable"
+description: "Explica por qué el ingreso marginal de un monopolista está por debajo del precio, calcula la producción IMg = CMg y la pérdida irrecuperable, el índice de Lerner y la regla de la inversa de la elasticidad, la discriminación de precios de tercer grado y las opciones para regular un monopolio natural, con números y un gráfico."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["economía", "microeconomía", "monopolio", "discriminación de precios", "índice de Lerner"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Microeconomía — el monopolista elige la cantidad y la demanda fija el precio
+
+Una empresa competitiva toma el precio como dado. Un monopolista se enfrenta a toda la demanda del mercado, así que vender una unidad más le obliga a bajar el precio de las unidades que ya vendía. Por eso su ingreso marginal es menor que el precio, y esa brecha explica todos los resultados del monopolio.
+
+## 1. El ingreso marginal está por debajo del precio
+
+Con la demanda $P=120-Q$, el ingreso total es $IT=120Q-Q^2$ y el ingreso marginal $IMg=120-2Q$. Con demanda lineal, el IMg es una recta con la misma ordenada en el origen y el doble de pendiente.
+
+Si bajar el precio de 81 a 80 wones eleva las ventas de 39 a 40 unidades, la empresa gana 80 wones con la unidad adicional pero pierde 1 won en cada una de las 39 existentes, 39 wones en total. El ingreso marginal es de 41 wones, muy por debajo del precio de 80 wones.
+
+## 2. Maximización del beneficio y pérdida irrecuperable
+
+Con un coste marginal de 40 wones, $120-2Q=40$ da $Q_m=40$, y el precio leído en la curva de demanda es $P_m=80$ wones. Un mercado competitivo con la misma demanda y los mismos costes tendría $P=CMg=40$ wones y $Q_c=80$.
+
+<EconDiagram
+  title="Cantidad, precio y pérdida irrecuperable del monopolio"
+  xLabel="Q"
+  yLabel="P"
+  xMax={120}
+  yMax={125}
+  curves={[
+    { label: "D", points: [[0, 120], [120, 0]], tone: "blue", anchor: "end" },
+    { label: "IMg", points: [[0, 120], [60, 0]], tone: "violet", anchor: "end" },
+    { label: "CMg", points: [[0, 40], [120, 40]], tone: "red" },
+  ]}
+  areas={[
+    { points: [[0, 80], [40, 80], [40, 40], [0, 40]], tone: "green", label: "Beneficio del monopolio 1.600" },
+    { points: [[40, 80], [80, 40], [40, 40]], tone: "amber", label: "Pérdida" },
+  ]}
+  marks={[
+    { x: 40, y: 80, label: "Monopolio", guide: true, xTick: "40", yTick: "80" },
+    { x: 80, y: 40, label: "Competencia", xTick: "80" },
+  ]}
+  caption="El monopolista elige Q = 40, donde IMg = CMg, y fija el precio de 80 wones de la curva de demanda. Los intercambios perdidos entre 40 y 80 unidades son la pérdida irrecuperable."
+/>
+
+<LectureTable
+  title="Excedentes en competencia y en monopolio"
+  headers={["", "Competencia", "Monopolio"]}
+  rows={[
+    ["Precio y cantidad", "40 wones, 80 unidades", "80 wones, 40 unidades"],
+    ["Excedente del consumidor", "½×80×80 = 3.200", "½×40×40 = 800"],
+    ["Excedente del productor (beneficio)", "0", "40×40 = 1.600"],
+    ["Pérdida irrecuperable", "0", "½×40×40 = 800"],
+  ]}
+/>
+
+De la caída de 2.400 en el excedente del consumidor, 1.600 se **transfieren** al monopolista y 800 **desaparecen**. Desde el punto de vista de la eficiencia, el coste del monopolio son esos 800 perdidos, no la transferencia, que es una cuestión de distribución.
+
+## 3. Medir el poder de mercado: el índice de Lerner
+
+Sustituyendo $IMg=P(1-1/|\varepsilon|)$ del [capítulo 3](/es/education-economics-ch3/) en $IMg=CMg$ se obtiene una regla de precios.
+
+<FormulaBox
+  label="Índice de Lerner y regla de la inversa de la elasticidad"
+  formula="L=\frac{P-MC}{P}=\frac{1}{|\varepsilon|}"
+  description="En el equilibrio de monopolio (P = 80, Q = 40), |ε| = 80/40 = 2, así que L = 0,5 = (80−40)/80. Cuanto más elástica es la demanda, más cerca del coste marginal debe quedarse el precio."
+/>
+
+De aquí salen dos conclusiones. Un monopolista solo produce donde $|\varepsilon|>1$, en el tramo elástico de la demanda; en el inelástico, subir el precio aumenta el ingreso y reduce el coste. Y si existen sustitutivos cercanos, ni siquiera un monopolista puede subir mucho el precio.
+
+## 4. Discriminación de precios
+
+Cobrar precios distintos a distintos consumidores exige dos condiciones: poder distinguir los grupos e impedir que quien compra barato revenda a quien pagaría más.
+
+<LectureTable
+  title="Tres tipos de discriminación de precios"
+  headers={["Tipo", "Método", "Resultado"]}
+  rows={[
+    ["Primer grado (perfecta)", "Cada consumidor paga su disposición a pagar", "Cantidad competitiva; la empresa se queda con todo el excedente"],
+    ["Segundo grado", "Los consumidores se autoseleccionan entre tarifas por cantidad o versión", "Descuentos por volumen, clase turista/business"],
+    ["Tercer grado", "Precios distintos para grupos observables", "Descuentos para estudiantes, precios por país"],
+  ]}
+/>
+
+Un ejemplo de discriminación de tercer grado: el grupo A tiene la demanda $P=100-Q$, el grupo B $P=60-Q$ y $CMg=20$ wones. Se aplica $IMg=CMg$ en cada grupo.
+
+- A: $100-2Q=20$ → $Q=40$, $P=60$ wones. Elasticidad en ese punto $|\varepsilon|=60/40=1{,}5$
+- B: $60-2Q=20$ → $Q=20$, $P=40$ wones. Elasticidad en ese punto $|\varepsilon|=40/20=2$
+
+El grupo B, más elástico, obtiene el precio más bajo: la regla de Lerner aplicada grupo a grupo.
+
+La discriminación de primer grado elimina la pérdida irrecuperable, porque la empresa vende a todo aquel cuya disposición a pagar sea al menos el coste marginal. La eficiencia es la de la competencia, pero el excedente del consumidor es cero: otra muestra de que eficiencia y distribución son cuestiones distintas.
+
+## 5. Monopolio natural y regulación
+
+Si el coste medio desciende en todo el rango de la demanda, lo más barato es que produzca una sola empresa ([capítulo 5](/es/education-economics-ch5/)). Cada forma de regular un **monopolio natural** tiene un coste.
+
+- **Precio igual al coste marginal** ($P=CMg$): eficiente, pero donde el coste medio desciende $CMg<CMe$ y la empresa tiene pérdidas; hace falta una subvención.
+- **Precio igual al coste medio** ($P=CMe$): no hay pérdidas, pero $P>CMg$ deja una pérdida irrecuperable y debilita los incentivos a reducir costes.
+- **Tarifa en dos partes**: una cuota fija cubre los costes fijos y el precio por uso iguala el coste marginal. Algunos consumidores pueden no darse de alta por la cuota.
+
+<Callout type="warning">
+Ser la única empresa no garantiza un precio de monopolio. Si la entrada y la salida son libres y sin coste (mercado disputable), la mera amenaza de entrada mantiene el precio cerca del coste medio. A la inversa, varias empresas que se coluden pueden reproducir el resultado del monopolio (capítulo 8). El poder de mercado se mide por la capacidad de mantener el precio por encima del coste marginal, no por el número de empresas.
+</Callout>
+
+## Ejercicio
+
+Con la demanda $P=120-Q$ y $CMg=20$ wones, ¿cuáles son la cantidad, el precio y la pérdida irrecuperable del monopolio? $120-2Q=20$ da $Q=50$ y $P=70$ wones. La cantidad competitiva, de $120-Q=20$, es 100. La pérdida irrecuperable es $\tfrac{1}{2}\times(70-20)\times(100-50)=1.250$ wones. El índice de Lerner es $(70-20)/70\approx 0{,}71$, la inversa de la elasticidad en ese punto, $70/50=1{,}4$.
+
+## Referencias
+
+- Hal Varian, *Intermediate Microeconomics*, ch. 25–26
+- Jean Tirole, *The Theory of Industrial Organization*, ch. 1, 3
+- MIT OpenCourseWare, [14.01 Principles of Microeconomics](https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/)

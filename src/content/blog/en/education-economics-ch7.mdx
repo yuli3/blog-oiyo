@@ -1,70 +1,125 @@
 ---
 track: academy
-series: economics-basics
+series: microeconomics
 chapter: 7
-title: Market Failure and the Role of Government
-description: >-
-  Study why markets may fail to allocate resources efficiently, covering
-  externalities, public goods, and information asymmetry, and explore Coase
-  Theorem and government intervention strategies.
+title: "Microeconomics — Monopoly: Quantity, Price and Deadweight Loss"
+description: "Explains why a monopolist's marginal revenue lies below price, computes the MR = MC output and the deadweight loss, the Lerner index and the inverse-elasticity pricing rule, third-degree price discrimination, and the options for regulating a natural monopoly, with numbers and a graph."
 pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
 category: Economics
-tags:
-  - Education
-  - economics
+tags: ["economics", "microeconomics", "monopoly", "price discrimination", "Lerner index"]
 locale: en
 author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
 
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# Market Failure and the Role of Government
+# Microeconomics — A Monopolist Chooses the Quantity; Demand Sets the Price
 
-When a market fails to allocate resources efficiently, we call this **Market Failure**. In such cases, the government intervenes to restore efficiency.
+A competitive firm takes the price as given. A monopolist faces the whole market demand, so selling one more unit means lowering the price of the units it was already selling. That is why marginal revenue is below price, and this gap drives every result about monopoly.
 
----
+## 1. Marginal revenue is below price
 
-## 1. Externality
+With demand $P=120-Q$, total revenue is $TR=120Q-Q^2$ and marginal revenue is $MR=120-2Q$. For linear demand, MR is a straight line with the same intercept and twice the slope.
 
-A situation where the actions of one person impose a cost or provide a benefit to a third party without payment being made for it.
+If cutting the price from 81 to 80 won raises sales from 39 to 40, the firm earns 80 won on the extra unit but loses 1 won on each of the 39 existing units, 39 won in total. Marginal revenue is 41 won — far below the price of 80 won.
 
-| Type                     | Description                                        | Example                     | Government Action             |
-| :----------------------- | :------------------------------------------------- | :-------------------------- | :---------------------------- |
-| **Negative Externality** | Social Cost > Private Cost (Overproduction)        | Pollution, Noise            | **Pigouvian Tax**, Regulation |
-| **Positive Externality** | Social Benefit > Private Benefit (Underproduction) | Basic Research, Landscaping | **Subsidies**                 |
+## 2. Profit maximisation and deadweight loss
 
-> **Coase Theorem**: If property rights are clearly defined and transaction costs are sufficiently low, private parties can negotiate to solve externality problems efficiently without government intervention.
+With a marginal cost of 40 won, $120-2Q=40$ gives $Q_m=40$, and the price read off the demand curve is $P_m=80$ won. A competitive market with the same demand and cost would have $P=MC=40$ won and $Q_c=80$.
 
----
+<EconDiagram
+  title="Monopoly quantity, price and deadweight loss"
+  xLabel="Q"
+  yLabel="P"
+  xMax={120}
+  yMax={125}
+  curves={[
+    { label: "D", points: [[0, 120], [120, 0]], tone: "blue", anchor: "end" },
+    { label: "MR", points: [[0, 120], [60, 0]], tone: "violet", anchor: "end" },
+    { label: "MC", points: [[0, 40], [120, 40]], tone: "red" },
+  ]}
+  areas={[
+    { points: [[0, 80], [40, 80], [40, 40], [0, 40]], tone: "green", label: "Monopoly profit 1,600" },
+    { points: [[40, 80], [80, 40], [40, 40]], tone: "amber", label: "DWL" },
+  ]}
+  marks={[
+    { x: 40, y: 80, label: "Monopoly", guide: true, xTick: "40", yTick: "80" },
+    { x: 80, y: 40, label: "Competition", xTick: "80" },
+  ]}
+  caption="The monopolist chooses Q = 40 where MR = MC and charges the price of 80 won on the demand curve. The trades lost between 40 and 80 units are the deadweight loss."
+/>
 
-## 2. Public Goods
+<LectureTable
+  title="Surplus under competition and monopoly"
+  headers={["", "Competition", "Monopoly"]}
+  rows={[
+    ["Price and quantity", "40 won, 80 units", "80 won, 40 units"],
+    ["Consumer surplus", "½×80×80 = 3,200", "½×40×40 = 800"],
+    ["Producer surplus (profit)", "0", "40×40 = 1,600"],
+    ["Deadweight loss", "0", "½×40×40 = 800"],
+  ]}
+/>
 
-Goods or services that can be consumed by everyone simultaneously.
+Of the 2,400 fall in consumer surplus, 1,600 is **transferred** to the monopolist and 800 **disappears** altogether. From an efficiency standpoint, the cost of monopoly is the lost 800, not the transfer; the transfer is a question of distribution.
 
-- **Characteristics**:
-  1. **Non-rivalry**: One person's consumption does not reduce the amount available for others.
-  2. **Non-exclusivity**: People cannot be excluded from consuming the good even if they do not pay for it.
-- **Market Failure**: Because of non-exclusivity, the **Free-rider Problem** occurs—people enjoy the benefits without paying. Consequently, markets produce less than the socially optimal amount.
+## 3. Measuring market power: the Lerner index
 
----
+Substituting $MR=P(1-1/|\varepsilon|)$ from [Chapter 3](/en/education-economics-ch3/) into $MR=MC$ gives a pricing rule.
 
-## 3. Information Asymmetry
+<FormulaBox
+  label="Lerner index and the inverse-elasticity rule"
+  formula="L=\frac{P-MC}{P}=\frac{1}{|\varepsilon|}"
+  description="At the monopoly equilibrium (P = 80, Q = 40), |ε| = 80/40 = 2, so L = 0.5 = (80−40)/80. The more elastic demand is, the closer the price must stay to marginal cost."
+/>
 
-A situation where one party to a transaction has more information than the other.
+Two conclusions follow. A monopolist produces only where $|\varepsilon|>1$, on the elastic part of demand; on the inelastic part, raising the price increases revenue and lowers cost. And if close substitutes exist, even a monopolist cannot raise the price much.
 
-1. **Adverse Selection**: Before a transaction, the poorly informed party ends up trading with an undesirable partner (e.g., used car market, insurance). -> Solutions: Signaling (degrees, certifications), Screening.
-2. **Moral Hazard**: After a transaction, the poorly informed party cannot observe the other's behavior, leading to undesirable actions (e.g., principal-agent problem). -> Solutions: Incentive design, Monitoring.
+## 4. Price discrimination
 
----
+Charging different consumers different prices requires two things: the firm must be able to tell groups apart, and those who buy cheaply must not be able to resell to those who would pay more.
 
-## 4. Market Failure vs. Government Failure
+<LectureTable
+  title="Three types of price discrimination"
+  headers={["Type", "Method", "Result"]}
+  rows={[
+    ["First degree (perfect)", "Each consumer pays their willingness to pay", "Quantity at the competitive level; the firm captures all surplus"],
+    ["Second degree", "Consumers self-select among quantity or version prices", "Bulk discounts, economy/business class"],
+    ["Third degree", "Different prices for observable groups", "Student discounts, country pricing"],
+  ]}
+/>
 
-Government intervention does not always result in the best outcome. **Government Failure** occurs when interventions worsen resource allocation due to imperfect information, political motives, or bureaucratic inefficiency.
+An example of third-degree discrimination: group A has demand $P=100-Q$, group B has $P=60-Q$, and $MC=20$ won. Apply $MR=MC$ in each group.
 
----
+- A: $100-2Q=20$ → $Q=40$, $P=60$ won. Elasticity at this point $|\varepsilon|=60/40=1.5$
+- B: $60-2Q=20$ → $Q=20$, $P=40$ won. Elasticity at this point $|\varepsilon|=40/20=2$
 
-## Key Checklist
+The more elastic group B gets the lower price: the Lerner rule applied group by group.
 
-- [ ] A factory emits smoke, causing damage to residents without compensation. Which is larger, private cost or social cost? (Answer: Social cost)
-- [ ] Which characteristic of public goods leads to the 'free-rider problem'? (Answer: Non-exclusivity)
-- [ ] What do we call the phenomenon in the used car market where only low-quality cars are traded? (Answer: Adverse Selection)
-- [ ] What is the theorem stating that externalities can be solved through negotiation if transaction costs are zero? (Answer: Coase Theorem)
+First-degree discrimination eliminates deadweight loss, because the firm sells to everyone whose willingness to pay is at least marginal cost. Efficiency matches competition, but consumer surplus is zero — another reminder that efficiency and distribution are different questions.
+
+## 5. Natural monopoly and regulation
+
+If average cost falls over the whole range of market demand, supply by a single firm is cheapest ([Chapter 5](/en/education-economics-ch5/)). Each way of regulating such a **natural monopoly** has a cost.
+
+- **Marginal-cost pricing** ($P=MC$): efficient, but where average cost is falling $MC<AC$, so the firm makes a loss and needs a subsidy.
+- **Average-cost pricing** ($P=AC$): no loss, but $P>MC$ leaves a deadweight loss and weakens incentives to cut costs.
+- **Two-part tariff**: a fixed fee covers fixed costs and the usage charge equals marginal cost. Some consumers may not sign up because of the fee.
+
+<Callout type="warning">
+Being the only firm does not guarantee a monopoly price. If entry and exit are free and costless (a contestable market), the mere threat of entry keeps the price close to average cost. Conversely, several firms that collude can produce the monopoly outcome (Chapter 8). Market power is measured by the ability to keep price above marginal cost, not by the number of firms.
+</Callout>
+
+## Check your understanding
+
+For demand $P=120-Q$ and $MC=20$ won, what are the monopoly quantity, price and deadweight loss? $120-2Q=20$ gives $Q=50$ and $P=70$ won. The competitive quantity, from $120-Q=20$, is 100. The deadweight loss is $\tfrac{1}{2}\times(70-20)\times(100-50)=1{,}250$ won. The Lerner index is $(70-20)/70\approx 0.71$, the inverse of the elasticity at this point, $70/50=1.4$.
+
+## References
+
+- Hal Varian, *Intermediate Microeconomics*, ch. 25–26
+- Jean Tirole, *The Theory of Industrial Organization*, ch. 1, 3
+- MIT OpenCourseWare, [14.01 Principles of Microeconomics](https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/)

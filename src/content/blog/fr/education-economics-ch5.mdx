@@ -1,0 +1,117 @@
+---
+track: academy
+series: microeconomics
+chapter: 5
+title: "Microéconomie — Théorie du producteur : minimisation des coûts et profit"
+description: "Dérive la condition de minimisation des coûts TMST = w/r à partir de la fonction de production et des isoquantes, explique les relations entre les courbes de coût de court terme (Cm, CVM, CTM) et la condition de fermeture P < CVM, et présente les rendements d'échelle et le coût moyen de long terme, chiffres et graphique à l'appui."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["économie", "microéconomie", "théorie du producteur", "courbes de coût", "rendements d'échelle"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Microéconomie — le profit se décide à la marge, pas en moyenne
+
+Si le [chapitre 4 d'Introduction à l'économie](/fr/academy-economics-basics-ch4/) a posé Rm = Cm, ce chapitre détaille les deux étapes qui se cachent derrière. D'abord, trouver la combinaison de facteurs la moins coûteuse pour une production donnée (minimisation des coûts) ; ensuite, choisir la production à partir de ce coût (maximisation du profit). C'est aussi là que l'on comprend pourquoi une entreprise ferme à court terme quand $P<CVM$, et non quand $P<CTM$.
+
+## 1. Fonction de production et isoquantes
+
+La fonction de production $Q=F(K,L)$ donne la production maximale obtenue avec le capital $K$ et le travail $L$. Le **produit marginal** $MP_L=\partial Q/\partial L$ est la production supplémentaire due à une unité de travail en plus, les autres facteurs étant fixés ; il est généralement décroissant.
+
+Une **isoquante** relie les combinaisons de facteurs donnant la même production. La valeur absolue de sa pente est le **taux marginal de substitution technique (TMST)** — la quantité de capital qu'une unité de travail peut remplacer —, égal à $MP_L/MP_K$. C'est l'équivalent, pour le producteur, de la courbe d'indifférence et du TMS du chapitre 4.
+
+## 2. Minimisation des coûts
+
+La condition pour produire $Q$ au moindre coût, avec un salaire $w$ et un coût d'usage du capital $r$, a la même structure que l'optimum du consommateur.
+
+<FormulaBox
+  label="Condition de minimisation des coûts"
+  formula="MRTS=\frac{MP_L}{MP_K}=\frac{w}{r}\quad\Longleftrightarrow\quad \frac{MP_L}{w}=\frac{MP_K}{r}"
+  description="Le produit marginal par won doit être égal. Si celui du travail est plus élevé, réduire le capital et augmenter le travail permet d'obtenir la même production à moindre coût."
+/>
+
+Avec $Q=K^{0{,}5}L^{0{,}5}$, $w=10\,000$ wons et $r=40\,000$ wons, $MP_L/MP_K=K/L=w/r=1/4$, donc $L=4K$. Pour produire 100 unités, il faut $KL=10\,000$, et $4K^2=10\,000$ donne $K=50$ et $L=200$. Le coût est $1\times 200+4\times 50=400$ (en dizaines de milliers de wons), soit 4 millions de wons.
+
+Quand le salaire augmente, l'entreprise substitue du capital au travail pour une même production (**effet de substitution**). Si la hausse des coûts réduit aussi la production, la demande de travail baisse davantage (**effet de production**). C'est pourquoi les deux effets comptent lorsqu'on discute de l'impact d'un salaire minimum sur l'emploi.
+
+## 3. Courbes de coût de court terme
+
+À court terme, le capital est fixe, ce qui crée des coûts fixes. Prenons un coût total $CT=200+40Q+Q^2$ (en dizaines de milliers de wons).
+
+<LectureTable
+  title="Notions de coût"
+  headers={["Notion", "Formule", "Pour Q = 10"]}
+  rows={[
+    ["Coût fixe CF", "200", "2 millions de wons"],
+    ["Coût variable CV", "40Q + Q²", "5 millions de wons"],
+    ["Coût marginal Cm", "dCT/dQ = 40 + 2Q", "600 000 wons"],
+    ["Coût variable moyen CVM", "CV/Q = 40 + Q", "500 000 wons"],
+    ["Coût total moyen CTM", "CT/Q = 200/Q + 40 + Q", "700 000 wons"],
+  ]}
+/>
+
+<EconDiagram
+  title="Courbes de coût de court terme (CT = 200 + 40Q + Q²)"
+  xLabel="Q"
+  yLabel="10 000 wons"
+  xMax={30}
+  yMin={30}
+  yMax={110}
+  curves={[
+    { label: "Cm", points: [[0, 40], [30, 100]], tone: "red" },
+    { label: "CTM", points: [[4, 94], [5, 85], [8, 73], [10, 70], [14.14, 68.3], [20, 70], [25, 73], [30, 76.7]], tone: "blue" },
+    { label: "CVM", points: [[0, 40], [30, 70]], tone: "green" },
+  ]}
+  marks={[{ x: 14.14, y: 68.3, label: "minimum du CTM", guide: true, xTick: "14,1", yTick: "68,3" }]}
+  caption="Le Cm passe par le minimum du CTM. Lorsqu'il est inférieur à la moyenne, il la fait baisser ; lorsqu'il est supérieur, il la fait monter."
+/>
+
+**Marginal et moyen.** Si votre moyenne est de 70 et que la note suivante est 60, la moyenne baisse ; si elle est de 80, elle monte. Les coûts fonctionnent de la même manière. Là où Cm < CTM, le CTM baisse ; là où Cm > CTM, il monte. Le Cm croise donc le CTM en son minimum. Dans l'exemple, $40+2Q=200/Q+40+Q$ donne $Q=\sqrt{200}\approx 14{,}1$, où le CTM vaut environ 683 000 wons.
+
+## 4. La décision de court terme d'une entreprise concurrentielle
+
+Pour un preneur de prix, $Rm=P$, donc il produit là où $P=Cm$. Il décide ensuite s'il produit ou non. Les 2 millions de wons de coûts fixes sont payés même en cas de fermeture ; la question est donc : « est-ce que je couvre mes coûts variables ? ».
+
+- $P=800\,000$ wons : $80=40+2Q$ donne $Q=20$. Le CVM est de 600 000 wons et le CTM de 700 000 wons. Profit de 100 000 wons par unité, 2 millions au total.
+- $P=450\,000$ wons : $Q=2{,}5$. Le CVM vaut 425 000 wons < 450 000 wons, donc l'entreprise produit. Le prix étant inférieur au CTM, elle perd de l'argent, mais en produisant elle gagne 62 500 wons au-delà de ses coûts variables, ce qui couvre une partie des coûts fixes.
+- $P=300\,000$ wons : $P<CVM$ pour tout $Q$ (minimum 400 000 wons), donc l'entreprise ferme. Sa perte se limite aux coûts fixes de 2 millions de wons.
+
+<LectureTable
+  title="Décision de court terme"
+  headers={["Prix", "Production", "Profit"]}
+  rows={[
+    ["P > minimum du CTM", "P = Cm", "Profit économique positif"],
+    ["Minimum du CVM < P < minimum du CTM", "P = Cm", "Perte, mais une partie des coûts fixes est couverte"],
+    ["P < minimum du CVM", "Q = 0", "Perte égale aux coûts fixes"],
+  ]}
+/>
+
+La courbe d'offre de court terme d'une entreprise concurrentielle est donc la courbe de Cm au-dessus du minimum du CVM. Le chapitre 6 les additionne pour obtenir l'offre de la branche.
+
+## 5. Le long terme et les rendements d'échelle
+
+À long terme, tous les facteurs sont variables : il n'y a plus de coûts fixes. Si multiplier tous les facteurs par $t$ multiplie la production par plus de $t$, les **rendements d'échelle sont croissants** ; exactement $t$, **constants** ; moins, **décroissants**. Pour $Q=K^aL^b$, cela correspond à $a+b>1$, $=1$ et $<1$.
+
+Avec des rendements croissants, le coût moyen de long terme diminue (économies d'échelle). S'il continue de baisser sur toute l'étendue de la demande du marché, la production par une seule entreprise est la moins chère. C'est le **monopole naturel** du chapitre 7.
+
+<Callout type="warning">
+Rm = Cm n'est qu'une condition du premier ordre. Pour un maximum de profit, le Cm doit couper la Rm par le bas ; là où le Cm décroît, l'intersection peut être un minimum de profit. Et répartir les coûts fixes sur la production pour calculer un « coût unitaire », puis cesser de produire parce que le prix est inférieur, est une erreur à court terme. Les coûts fixes déjà engagés et inévitables ne doivent pas entrer dans la décision.
+</Callout>
+
+## Exercice
+
+Une entreprise concurrentielle a $CT=100+20Q+Q^2$ (en dizaines de milliers de wons) et fait face à $P=800\,000$ wons. Quels sont sa production optimale et son profit ? $Cm=20+2Q=80$ donne $Q=30$. Le CTM vaut $100/30+20+30\approx 53{,}3$, soit environ 533 000 wons, d'où un profit d'environ 267 000 wons par unité et $80\times 30-(100+600+900)=800$, soit 8 millions de wons au total. La règle est $P=Cm$, pas $P=CTM$.
+
+## Références
+
+- Hal Varian, *Intermediate Microeconomics*, ch. 19–23
+- N. Gregory Mankiw, *Principles of Economics*, ch. 13
+- MIT OpenCourseWare, [14.01 Principles of Microeconomics](https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/)

@@ -1,0 +1,114 @@
+---
+track: academy
+series: microeconomics
+chapter: 8
+title: "Microéconomie — Oligopole et concurrence monopolistique"
+description: "Compare, sur une même courbe de demande et chiffres et graphique à l'appui, les fonctions de réaction de Cournot et l'équilibre de Nash, l'avantage du meneur de Stackelberg, le paradoxe de Bertrand, l'incitation à tricher dans un cartel et le facteur d'actualisation critique d'un jeu répété, ainsi que la surcapacité de long terme de la concurrence monopolistique."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["économie", "microéconomie", "oligopole", "Cournot", "collusion"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Microéconomie — en oligopole, la stratégie des rivaux fait partie de votre demande
+
+Avec peu d'entreprises, aucune ne peut considérer le prix comme donné comme une entreprise concurrentielle, ni exploiter seule toute la demande du marché comme un monopole. Le meilleur choix de chacune dépend de celui des autres. Ce chapitre conserve la même demande de marché, $P=120-Q$, et un coût marginal nul, et compare les résultats selon la variable stratégique utilisée. La théorie générale des stratégies mixtes et des jeux répétés figure au [chapitre 11](/fr/education-economics-ch41/).
+
+## 1. Cournot : choisir les quantités simultanément
+
+Deux entreprises choisissent en même temps leurs productions $q_1$ et $q_2$, et le marché fixe le prix $P=120-(q_1+q_2)$. Le profit de l'entreprise 1 est $\pi_1=q_1(120-q_1-q_2)$. En le maximisant, la production du rival étant donnée :
+
+$$\frac{\partial \pi_1}{\partial q_1}=120-2q_1-q_2=0 \quad\Rightarrow\quad q_1=\frac{120-q_2}{2}$$
+
+C'est la **fonction de réaction** de l'entreprise 1 : plus le rival produit, moins je produis. Avec la fonction de réaction symétrique de l'entreprise 2, on obtient $q_1=q_2=40$, une production de marché de 80 et un prix de 40 wons. Chaque entreprise répond au mieux à l'autre : ce point est un **équilibre de Nash**.
+
+<EconDiagram
+  title="Fonctions de réaction de Cournot"
+  xLabel="q₁"
+  yLabel="q₂"
+  xMax={120}
+  yMax={120}
+  curves={[
+    { label: "R₁", points: [[0, 120], [60, 0]], tone: "blue", labelAt: 0 },
+    { label: "R₂", points: [[0, 60], [120, 0]], tone: "green" },
+  ]}
+  marks={[
+    { x: 40, y: 40, label: "Cournot (40, 40)", guide: true, xTick: "40", yTick: "40" },
+    { x: 30, y: 30, label: "Cartel" },
+    { x: 60, y: 30, label: "Stackelberg (60, 30)" },
+  ]}
+  caption="L'équilibre de Cournot est à l'intersection des deux fonctions de réaction. Le point de cartel est meilleur pour les deux entreprises mais ne se trouve sur aucune des deux fonctions de réaction."
+/>
+
+<FormulaBox
+  label="Cournot symétrique à n entreprises (demande P = a − Q, coût marginal c)"
+  formula="q_i=\frac{a-c}{n+1},\qquad P=\frac{a+nc}{n+1}"
+  description="n = 1 correspond au monopole ; quand n augmente, le prix converge vers le coût marginal c. C'est le canal par lequel le nombre d'entreprises réduit le pouvoir de marché."
+/>
+
+## 2. Stackelberg : jouer en premier rapporte
+
+Si l'entreprise 1 fixe sa production en premier et que l'entreprise 2 réagit après l'avoir observée, l'entreprise 1 intègre la fonction de réaction de l'entreprise 2, $q_2=(120-q_1)/2$, dans son profit :
+
+$$\pi_1=q_1\left(120-q_1-\frac{120-q_1}{2}\right)=q_1\cdot\frac{120-q_1}{2}$$
+
+La maximisation donne $q_1=60$, $q_2=30$ et un prix de 30 wons. Le meneur gagne 1 800 wons, plus que les 1 600 de Cournot, et le profit du suiveur tombe à 900. S'engager d'abord sur une production élevée pousse le rival à produire moins. C'est pourquoi les choix difficilement réversibles, comme l'investissement en capacité, ont une valeur stratégique.
+
+## 3. Bertrand : la concurrence par les prix
+
+Si deux entreprises vendant un produit identique se concurrencent par les prix, casser le prix du rival d'un seul won permet de capter tout le marché. Tant que le prix dépasse le coût marginal, chacune a intérêt à le rogner un peu : l'équilibre est $P=Cm$. Que deux entreprises produisent le résultat concurrentiel est le **paradoxe de Bertrand**.
+
+Le paradoxe se dissout dans trois cas : des capacités limitées empêchent l'entreprise la moins chère de servir tout le marché ; la différenciation fait qu'un prix un peu plus élevé ne fait pas perdre tous les clients ; en interaction répétée, une baisse de prix peut être punie.
+
+## 4. Collusion et incitation à tricher
+
+Si les deux entreprises s'entendent pour se comporter comme un monopole, la production du marché est de 60, le prix de 60 wons et chacune produit 30 pour un profit de 1 800 wons, plus que les 1 600 de Cournot. Mais si le rival produit 30, ma meilleure réponse est $q_1=(120-30)/2=45$. Le prix tombe à 45 wons, mais je gagne 2 025 wons et le profit du rival chute à 1 350. Dans un jeu en un coup, le cartel ne tient pas.
+
+La répétition change la donne. Avec une stratégie de déclenchement qui revient définitivement à Cournot après toute déviation, respecter l'accord vaut $1\,800/(1-\delta)$ et tricher vaut $2\,025+1\,600\,\delta/(1-\delta)$.
+
+<FormulaBox
+  label="Condition de maintien de la collusion"
+  formula="\delta \ge \frac{\pi^{\text{triche}}-\pi^{\text{cartel}}}{\pi^{\text{triche}}-\pi^{\text{punition}}}=\frac{2\,025-1\,800}{2\,025-1\,600}\approx 0{,}53"
+  description="Si l'avenir compte assez (δ élevé), la perte permanente due à la punition l'emporte sur le gain ponctuel de la triche et le cartel tient. La collusion est plus facile quand les interactions sont fréquentes, la triche vite détectée et les entreprises peu nombreuses."
+/>
+
+C'est pourquoi les autorités de concurrence utilisent des programmes de **clémence**, qui réduisent l'amende de la première entreprise qui avoue : ils accroissent le gain à faire défection au sein du cartel.
+
+<LectureTable
+  title="Comparaison sur la même demande (P = 120 − Q, Cm = 0)"
+  headers={["Modèle", "Production du marché", "Prix", "Profit par entreprise"]}
+  rows={[
+    ["Monopole / cartel", "60", "60 wons", "1 800 (partagé entre 2 entreprises)"],
+    ["Stackelberg", "90", "30 wons", "1 800 / 900"],
+    ["Cournot", "80", "40 wons", "1 600 / 1 600"],
+    ["Bertrand", "120", "0 won", "0 / 0"],
+  ]}
+/>
+
+## 5. Concurrence monopolistique
+
+Les marchés comptant de nombreuses entreprises et une libre entrée, mais des produits légèrement différents (restaurants, salons de coiffure, habillement), relèvent de la **concurrence monopolistique**. Grâce à la différenciation, chaque entreprise a sa propre demande décroissante et produit là où $Rm=Cm$. Si des profits apparaissent à court terme, des produits similaires entrent et réduisent la demande adressée à chacune. À long terme, le profit est nul là où la courbe de demande est tangente à la courbe de coût moyen.
+
+En conséquence, $P=CTM>Cm$ même à long terme. Le prix dépasse le coût marginal et les entreprises produisent moins que la quantité qui minimise le coût moyen, laissant une **surcapacité**. La juger simplement inefficace dépend de la valeur accordée à la variété : si les gens veulent beaucoup de choix, un coût moyen un peu plus élevé peut être un prix acceptable.
+
+<Callout type="warning">
+La courbe de demande coudée (les rivaux suivent les baisses de prix mais pas les hausses) décrit la rigidité des prix d'oligopole sans l'expliquer, car elle ne montre pas que ce comportement est un équilibre. En outre, les résultats d'un marché dépendent fortement des règles du jeu — concurrence en quantités ou en prix, coups simultanés ou séquentiels. Identifiez la variable stratégique et l'ordre des coups avant de choisir un modèle.
+</Callout>
+
+## Exercice
+
+Quel est l'équilibre de Cournot avec la demande $P=100-Q$ et deux entreprises de coût marginal 10 wons ? D'après la formule, $q_i=(100-10)/3=30$, production de marché 60, prix 40 wons et profit $(40-10)\times 30=900$ wons par entreprise. En collusion, la production du marché est de 45 (niveau de monopole), le prix de 55 wons et chaque entreprise produit 22,5 unités pour un profit de 1 012,5 wons, ce qui est mieux pour les deux ; mais la meilleure réponse à un rival produisant 22,5 est $(90-22{,}5)/2=33{,}75$, donc la collusion ne tient pas dans un jeu en un coup.
+
+## Références
+
+- Hal Varian, *Intermediate Microeconomics*, ch. 27–28
+- Jean Tirole, *The Theory of Industrial Organization*, ch. 5–6
+- MIT OpenCourseWare, [14.01 Principles of Microeconomics](https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/)

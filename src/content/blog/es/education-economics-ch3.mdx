@@ -1,0 +1,110 @@
+---
+track: academy
+series: microeconomics
+chapter: 3
+title: "Microeconomía — Elasticidad e incidencia fiscal"
+description: "Presenta la elasticidad puntual y la de arco y su relación con el ingreso (IMg = P(1−1/|ε|)), explica por qué la elasticidad cambia a lo largo de una demanda lineal, las elasticidades renta y cruzada, y cómo se reparte la carga de un impuesto según las elasticidades relativas, con números y un gráfico."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["economía", "microeconomía", "elasticidad", "incidencia fiscal", "ingreso total"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Microeconomía — medir las respuestas en proporciones, no en pendientes
+
+El capítulo 2 usó las pendientes de las curvas para calcular variaciones de precio y cantidad. Pero una pendiente depende de las unidades: expresar los precios en miles de wones en lugar de wones multiplica la pendiente por 1.000. La **elasticidad** mide las variaciones en porcentaje y elimina las unidades. Este capítulo calcula elasticidades y las usa para interpretar el ingreso y la carga de un impuesto.
+
+## 1. Elasticidad puntual y elasticidad de arco
+
+<FormulaBox
+  label="Elasticidad precio de la demanda"
+  formula="\varepsilon = \frac{dQ/Q}{dP/P} = \frac{dQ}{dP}\cdot\frac{P}{Q}"
+  description="Con la demanda Q = 100 − 2P y P = 20 wones, Q = 60 y ε = −2 × (20/60) = −2/3. Como |ε| < 1, la demanda es inelástica en ese punto."
+/>
+
+Cuando el precio cambia mucho, el valor depende del punto de partida, así que se usa la **elasticidad de arco (fórmula del punto medio)**, basada en la media de los dos puntos. Si el precio pasa de 10 a 12 wones y la cantidad de 100 a 80, el punto medio es $P=11$ wones, $Q=90$.
+
+$$|\varepsilon| = \frac{20/90}{2/11} \approx 1{,}22$$
+
+La demanda es elástica, así que subir el precio reduce el ingreso. De hecho, el ingreso bajó de 1.000 a 960 wones.
+
+## 2. La elasticidad cambia a lo largo de una demanda lineal
+
+Una demanda lineal tiene pendiente constante, pero su elasticidad es distinta en cada punto, porque $P/Q$ aumenta al subir por la curva. Para $Q=100-2P$, la ordenada en el origen es 50 wones y la abscisa en el origen 100.
+
+<EconDiagram
+  title="Tramos de elasticidad en una demanda lineal"
+  xLabel="Q"
+  yLabel="P"
+  xMax={100}
+  yMax={50}
+  curves={[{ label: "D", points: [[0, 50], [100, 0]], tone: "blue" }]}
+  marks={[
+    { x: 50, y: 25, label: "|ε| = 1", guide: true, xTick: "50", yTick: "25" },
+    { x: 20, y: 40, label: "|ε| = 4" },
+    { x: 80, y: 10, label: "|ε| = 0,25" },
+  ]}
+  caption="Por encima del punto medio la demanda es elástica y por debajo inelástica. Con P = 40 wones, |ε| = 2 × 40/20 = 4; con P = 10 wones, |ε| = 2 × 10/80 = 0,25."
+/>
+
+## 3. Elasticidad e ingreso total
+
+Derivando el ingreso total $TR=P\cdot Q$ respecto a la cantidad se obtiene el ingreso marginal.
+
+<FormulaBox
+  label="Ingreso marginal y elasticidad"
+  formula="MR = \frac{dTR}{dQ} = P\left(1-\frac{1}{|\varepsilon|}\right)"
+  description="Si |ε| > 1, IMg > 0: bajar el precio para vender más aumenta el ingreso. Con |ε| = 1, IMg = 0 y el ingreso es máximo. Si |ε| < 1, solo una subida de precio aumenta el ingreso."
+/>
+
+Para la demanda lineal $Q=100-2P$, el ingreso alcanza su máximo en el punto medio ($P=25$ wones, $Q=50$): 1.250 wones. En el capítulo 7, la conclusión de que un monopolista, que elige $MR=MC>0$, **siempre produce en el tramo elástico de la demanda** se deduce directamente de esta fórmula.
+
+## 4. Qué determina la elasticidad, y otras elasticidades
+
+- **Existencia de sustitutivos**: cuantos más sustitutivos cercanos, más elástica. La demanda de «una marca concreta de cola» es mucho más elástica que la de «bebidas».
+- **Peso en el gasto**: cuanto mayor es la proporción de la renta, mayor la sensibilidad al precio.
+- **Tiempo**: la demanda es más elástica a largo plazo, cuando hay tiempo para buscar alternativas. Si sube la gasolina, a corto plazo se conduce un poco menos; a largo plazo se cambia de coche y de vivienda.
+
+<LectureTable
+  title="Tres elasticidades de la demanda"
+  headers={["Elasticidad", "Definición", "Significado del signo"]}
+  rows={[
+    ["Elasticidad precio", "Variación % de la cantidad demandada ante una variación del 1 % del propio precio", "Negativo (ley de la demanda)"],
+    ["Elasticidad renta", "Variación % de la cantidad demandada ante una variación del 1 % de la renta", "Positivo: bien normal (mayor que 1: de lujo); negativo: bien inferior"],
+    ["Elasticidad cruzada", "Variación % de la cantidad demandada ante una variación del 1 % del precio de otro bien", "Positivo: sustitutivos; negativo: complementarios"],
+  ]}
+/>
+
+## 5. El lado menos elástico soporta el impuesto
+
+Tomemos un mercado con demanda $Q=100-P$ y oferta $Q=P$ e impongamos un impuesto de 10 wones por unidad. Si los consumidores pagan $P_d$ y los productores reciben $P_s=P_d-10$, entonces $100-P_d=P_d-10$ da $P_d=55$ wones, $P_s=45$ wones y $Q=45$. Frente al precio de 50 wones antes del impuesto, los consumidores soportan 5 wones y los productores 5 wones, porque ambas elasticidades son iguales en el equilibrio.
+
+<FormulaBox
+  label="Reparto de la carga"
+  formula="\frac{\text{Carga de los consumidores}}{\text{Carga de los productores}} = \frac{\varepsilon_s}{|\varepsilon_d|}"
+  description="Si la oferta es el doble de elástica que la demanda, los consumidores soportan el doble que los productores. Quien puede escapar reaccionando al precio soporta menos."
+/>
+
+Tanto si el impuesto recae legalmente sobre vendedores como sobre compradores, la cuña de equilibrio en un mercado competitivo es la misma. Quién entrega el dinero a Hacienda (incidencia legal) no coincide con quién ve reducido su bienestar (incidencia económica). El tamaño de la pérdida irrecuperable, su relación con el tipo impositivo y la regla de Ramsey continúan en el [capítulo 2 de Hacienda pública](/es/academy-public-finance-ch2/).
+
+<Callout type="warning">
+«Las empresas pagan el impuesto» solo mira la incidencia legal. En competencia perfecta, la proporción trasladada la fijan las elasticidades; en monopolio, según la curvatura de la demanda, el precio puede subir incluso más que el impuesto. Las elasticidades estimadas también difieren entre el corto y el largo plazo, así que conviene aclarar de qué periodo se habla.
+</Callout>
+
+## Ejercicio
+
+El precio de un café sube de 4.000 a 5.000 wones y las ventas bajan de 200 a 180 tazas. ¿Cuál es la elasticidad en el punto medio? La variación de la cantidad es $20/190\approx 0{,}105$ y la del precio $1.000/4.500\approx 0{,}222$, así que $|\varepsilon|\approx 0{,}47$. La demanda es inelástica, de modo que el ingreso pasa de 800.000 a 900.000 wones. Si abre una cafetería alternativa cerca, la elasticidad en ese tramo aumenta y la misma subida podría reducir el ingreso.
+
+## Referencias
+
+- Hal Varian, *Intermediate Microeconomics*, ch. 15–16
+- N. Gregory Mankiw, *Principles of Economics*, ch. 5–6
+- MIT OpenCourseWare, [14.01 Principles of Microeconomics](https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/)
