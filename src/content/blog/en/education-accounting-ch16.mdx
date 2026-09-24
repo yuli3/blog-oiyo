@@ -1,64 +1,96 @@
 ---
-locale: en
 track: academy
-title: "Accounting — Real-World Decision Making and the CVP Game — Think Like a Manager Maximizing Profit"
+series: managerial-accounting
+chapter: 2
+title: "Managerial Accounting — Short-Term Decisions: Special Orders, Make or Buy, Product Lines and Constrained Resources"
+description: "Applies relevant cost analysis to four typical decisions: accepting a special order with idle capacity and at full capacity, making or buying a component, dropping a product line that looks unprofitable, and choosing the product mix under a constrained resource."
+pubDate: 2026-04-14
+updatedDate: 2026-09-24
 category: Accounting
-subcategory: "Cost & Management Accounting"
-author: OIYO Editorial
-tags:
-  - Education
-  - Accounting
-  - CostAccounting
-  - ManagementSimulation
-  - CVPAnalysis
-description: >-
-  Apply the principles of fixed costs, variable costs, and pricing in a game format. Run a simulation to hit a target profit under realistic market constraints.
-pubDate: '2026-04-14'
+tags: ["managerial accounting", "special orders", "make or buy", "dropping a product line", "constrained resources"]
+locale: en
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
 
-import { CVPGame } from "@/features/education-calculators/AccountingGames";
-import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# Real-World Decision Making and the CVP Game
+This chapter applies the relevant cost principle of [chapter 1](/en/education-accounting-ch13/) to four typical short-term decisions. In all four the question is the same: **which revenues and costs change because of this decision?** How fixed costs are treated — especially common fixed costs shared with other products — decides the answer.
 
-Accounting principles are not just a technique for bookkeeping — they are **the language of business decision-making**. Building on the CVP analysis from Ch 14 and the variance analysis from Ch 15, we will now simulate the exact moments of choice that real managers face.
+## 1. Special orders
 
----
-
-## 1. The Manager's Dilemma: Cut Costs or Raise Prices?
-
-The arithmetic of increasing profit is clear, but reality is complex.
-
-- **Raise prices**: Unit contribution margin increases, but the law of demand means **sales volume (Q)** may fall.
-- **Cut costs**: Reducing variable costs requires technological innovation; lowering fixed costs (rent, labor) may require restructuring.
-
----
-
-## 2. Interactive Business Simulation
-
-You are the manager of a new product line. Set the optimal pricing and cost plan to hit a target profit of **$300**.
-
-<CVPGame client:visible />
-
----
-
-## 3. Summary of Core Business Metrics
+Company BK's product sells for ₩50,000 per unit, variable cost is ₩30,000 and fixed costs are ₩20 million a year (₩20,000 per unit at a capacity of 10,000 units). A customer offers to buy 1,000 units at ₩35,000 each.
 
 <LectureTable
-  title="Key Relationships in CVP Analysis"
-  headers={["Metric", "Formula", "Business Meaning"]}
+  title="Whether to accept the special order (unit: ₩10,000)"
+  headers={["Situation", "Incremental revenue", "Incremental cost", "Opportunity cost", "Incremental profit"]}
   rows={[
-    ["Unit Contribution Margin", "P − VC", "Net profit retained with each additional unit sold"],
-    ["Contribution Margin Ratio", "CM / P", "Profit generated per dollar of sales"],
-    ["Margin of Safety (MS)", "(Current Sales − BEP Sales) / Current Sales", "How far sales can decline before a loss occurs"],
+    ["Enough idle capacity (currently producing 8,000 units)", "3,500", "3,000", "0", "+500 → accept"],
+    ["Full capacity (all 10,000 units sold normally)", "3,500", "3,000", "Contribution margin of 1,000 regular units: 2,000", "−1,500 → reject"],
   ]}
 />
 
-<Callout type="info">
-**The Power of Leverage**: A company with high fixed costs experiences explosive profit growth the moment sales cross the break-even point — this is "operating leverage." But the reverse is equally true: losses deepen just as dramatically when volume falls below the BEP.
+With idle capacity, fixed costs are irrelevant to the order. A price below the ₩50,000 full unit cost still raises profit as long as it exceeds the ₩30,000 variable cost. At full capacity, the order displaces regular sales, so their contribution margin becomes an opportunity cost. Also consider qualitative factors such as the risk that existing customers learn of the discount and demand lower prices, and fair-trade issues.
+
+## 2. Make or buy
+
+BK makes 10,000 components itself. Per unit, costs are direct materials ₩10,000, direct labor ₩8,000, variable overhead ₩4,000 and fixed overhead ₩10,000 (of which a supervisor's salary of ₩3,000 is avoidable if production stops). An outside supplier offers them at ₩23,000 each.
+
+<FormulaBox
+  label="Relevant cost of making"
+  formula="\text{Relevant cost} = 1 + 0.8 + 0.4 + \underbrace{0.3}_{\text{avoidable fixed}} = 2.5 > 2.3"
+  description="In ₩10,000 per unit. The ₩7,000 of unavoidable fixed cost remains even if the part is bought, so it is irrelevant. Buying saves ₩2,000 per unit, ₩20 million in total."
+/>
+
+If the capacity freed by buying could be rented out for ₩3 million a year, that rent is also a benefit of buying (an opportunity cost of making). Conversely, the supplier's quality and delivery risks and the risk of leaking key technology are weighed outside the numbers.
+
+## 3. Dropping a product line
+
+Company BL's profit by product line is as follows. ₩6 million of common fixed costs was allocated in proportion to sales.
+
+<LectureTable
+  title="Profit by product line (unit: ₩10,000)"
+  headers={["Item", "A", "B", "C", "Total"]}
+  rows={[
+    ["Sales", "2,000", "1,500", "1,000", "4,500"],
+    ["Variable costs", "(1,200)", "(900)", "(700)", "(2,800)"],
+    ["Contribution margin", "800", "600", "300", "1,700"],
+    ["Avoidable fixed costs", "(200)", "(150)", "(200)", "(550)"],
+    ["Product line (segment) margin", "600", "450", "100", "1,150"],
+    ["Allocated common fixed costs", "(267)", "(200)", "(133)", "(600)"],
+    ["Operating profit", "333", "250", "−33", "550"],
+  ]}
+/>
+
+C appears to have an operating loss of ₩330,000, but dropping it eliminates only its ₩3 million contribution margin and ₩2 million of avoidable fixed costs, while its ₩1.33 million share of common fixed costs is reloaded onto A and B. Company profit **falls** to $550 - 100 = 450$ (₩4.5 million). The criterion is not operating profit after allocation but the **segment margin** (contribution margin − avoidable fixed costs). If C complements A and B by helping them sell, the loss from dropping it is even larger.
+
+## 4. Product mix under a constrained resource
+
+Machine time is limited to 1,000 hours a month. Product X earns a contribution margin of ₩40,000 per unit and needs 2 machine hours; product Y earns ₩30,000 per unit and needs 1 machine hour. Monthly demand is 400 units of X and 600 of Y.
+
+<FormulaBox
+  label="Contribution margin per unit of the constrained resource"
+  formula="\text{X}: \frac{4}{2} = 2 \text{ per hour}, \qquad \text{Y}: \frac{3}{1} = 3 \text{ per hour}"
+  description="In ₩10,000. X has the larger contribution margin per unit, but Y earns more per scarce machine hour. Make Y first."
+/>
+
+Make Y up to demand, 600 units (600 hours), and use the remaining 400 hours for 200 units of X. Contribution margin is $600 \times 3 + 200 \times 4 = 2{,}600$ (₩26 million). Making 400 units of X first (800 hours) and then 200 units of Y yields only $1{,}600 + 600 = 2{,}200$ (₩22 million). With several constraints, use linear programming. Expanding the capacity of the constrained resource (the bottleneck) is the fastest way to raise total profit.
+
+<Callout type="warning">
+Short-term decision analysis rests on the premise that "fixed costs do not change with this decision". If special orders are taken repeatedly or outsourcing keeps growing, fixed costs also become adjustable in the long run. And frequently accepting special orders at prices near variable cost undermines the whole pricing structure. Do not carry the conclusions of short-term analysis over into long-term pricing policy.
 </Callout>
 
----
+## Check your understanding
 
-Did you manage to hit the target by adjusting the numbers yourself? Accounting figures are not static data — they are a living, breathing engine of management that changes with every choice you make.
+Company BM makes a component for product Z at ₩15,000 per unit (direct materials 6,000, direct labor 4,000, variable overhead 2,000, allocated fixed overhead 3,000). Fixed overhead does not fall if component production stops. An outside supplier offers ₩13,000 per unit, and buying would free space to make another product earning ₩4 million a year in additional contribution margin. With annual requirements of 5,000 units, should BM buy?
+
+The relevant cost of making is the variable cost of ₩12,000, ₩1,000 less than the ₩13,000 purchase price, so ignoring the space, making is ₩5 million a year better. Adding the ₩4 million of contribution margin gained by buying, buying is still ₩1 million worse. Making remains ₩1 million a year better.
+
+## References
+
+- Charles Horngren, Srikant Datar and Madhav Rajan, *Cost Accounting: A Managerial Emphasis*, ch. 11
+- Ray Garrison, Eric Noreen and Peter Brewer, *Managerial Accounting*, ch. 12
+- Eliyahu Goldratt, *The Goal* (theory of constraints)
