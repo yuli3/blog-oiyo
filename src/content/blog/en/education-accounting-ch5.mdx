@@ -1,104 +1,96 @@
 ---
 track: academy
-series: accounting-basics
-chapter: 5
-title: "Intermediate Accounting II: Liabilities and Provisions"
-description: >-
-  Study the present value evaluation of financial liabilities, including
-  corporate bonds, and learn about provisions for future uncertain obligations.
-pubDate: 2026-03-01T00:00:00.000Z
+series: intermediate-accounting
+chapter: 8
+title: "Intermediate Accounting — Provisions and Contingent Liabilities: Recognition, Best Estimate and Present Value"
+description: "Sets out the three recognition criteria for provisions and the disclosure rules for contingent liabilities and assets, then calculates the expected value of a warranty, the present value and interest expense of a restoration provision, and special cases such as restructuring and onerous contracts."
+pubDate: 2026-03-01
+updatedDate: 2026-09-24
 category: Accounting
-subcategory: "Intermediate Accounting"
-tags:
-  - Education
-  - accounting
+tags: ["intermediate accounting", "provisions", "contingent liabilities", "warranties", "restoration provisions", "onerous contracts"]
 locale: en
 author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
 
-
-import { LectureTable, LectureProcess, LecturePieChart, LectureBarChart } from "@/features/education-common/components/LectureVisuals";
-
-
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# Intermediate Accounting II: Liabilities and Provisions
+A provision is **a liability of uncertain timing or amount**. Unlike ordinary liabilities it involves estimation, so the heart of the standard is when to recognize it as a liability and at what amount. The standard is K-IFRS 1037 *Provisions, Contingent Liabilities and Contingent Assets* (IAS 37). Financial liabilities such as bonds were covered in [chapter 7](/en/academy-intermediate-accounting-ch7/).
 
-Liabilities are more than just money to be repaid; they are a mirror reflecting a firm's financial strategy. Today, we learn the sophisticated calculations of **Financial Liabilities** that reflect the time value of money.
+## 1. Recognition criteria
 
----
+A provision is recognized when all three of the following are met.
 
-## 1. Bonds Payable and the Effective Interest Method
+1. The entity has a **present obligation** (legal or constructive) as a result of a past event.
+2. It is **probable** (more likely than not) that an outflow of resources embodying economic benefits will be required to settle the obligation.
+3. A **reliable estimate** can be made of the amount.
 
-Corporate bonds are debt securities issued by firms to raise large amounts of capital. The issuance price is determined by the market interest rate at the time of issuance.
+A **constructive obligation** arises when past practice or published policies create a valid expectation in others that the entity will discharge the responsibility. Even without a legal obligation, consistently honouring a policy of "free refunds within one year of purchase" creates a constructive obligation.
 
-<LectureTable
-  title="Comparison of Bond Issuance Types"
-  headers={["Type", "Condition (Market vs Face)", "Characteristics", "Carrying Amount Change"]}
-  rows={[
-    ["Discount", "Market Rate > Face Rate", "Issued cheaper than face value", "Gradual Increase ↑"],
-    ["Face", "Market Rate = Face Rate", "Issued at face value", "No Change -"],
-    ["Premium", "Market Rate < Face Rate", "Sold higher than face value", "Gradual Decrease ↓"],
-  ]}
-  highlightColumns={[0]}
-/>
+### A. It must not depend on future actions
 
-### 📈 Convergence of Bond Carrying Amount
+A present obligation must be one the entity cannot avoid whatever it does in future. An obligation to clean up pollution a factory has already caused is a present obligation. But if a change in the law requires filters to be fitted to the factory within three years, the entity can avoid this by closing the factory or changing how it operates, so there is no present obligation. **Future operating losses** are not provisions either.
 
-<style>{`
-  .amortization-flow { margin: 2rem 0; }
-`}</style>
-
-<LectureProcess
-  steps={[
-    {
-      label: "PV Valuation",
-      description: "Discount future cash flows (principal+interest) at market rate",
-    },
-    {
-      label: "Interest Expense",
-      description: "Recognize expense as Beginning Carrying Amount × Effective Interest Rate",
-    },
-    {
-      label: "Payment of Face Interest",
-      description: "Cash outflow as Face Value × Stated Interest Rate",
-    },
-    {
-      label: "Amortization",
-      description: "Adjust carrying amount by the difference between expense and payment",
-    },
-  ]}
-/>
-
----
-
-## 2. Provisions vs. Contingent Liabilities
-
-The recognition of a liability depends on the **presence of an obligation** and the **probability of resource outflow**.
+## 2. Contingent liabilities and contingent assets
 
 <LectureTable
-  title="Classification by Certainty of Obligation"
-  headers={["Item", "Recognition", "Estimation of Amount", "Treatment"]}
+  title="Treatment by probability of outflow and measurability"
+  headers={["Situation", "Treatment"]}
   rows={[
-    [
-      "Provisions",
-      "Recognized (In B/S)",
-      "Reliable estimate possible",
-      "Recorded as liability & expense",
-    ],
-    [
-      "Contingent Liabilities",
-      "Not Recognized (Excluded from B/S)",
-      "Difficult to estimate or low probability",
-      "Disclosed in Notes",
-    ],
-    ["Contingent Assets", "Never Recognized", "-", "Disclosed in Notes only if highly probable"],
+    ["Present obligation, outflow probable, reliable estimate possible", "Recognize a provision"],
+    ["Present obligation, outflow probable, no estimate possible (extremely rare)", "Disclose as a contingent liability"],
+    ["Present obligation uncertain, or outflow not probable", "Disclose as a contingent liability"],
+    ["Outflow remote", "No disclosure"],
+    ["Contingent asset with probable inflow of benefits", "Disclose in the notes (not recognized)"],
+    ["Inflow of benefits virtually certain", "Not a contingent asset; recognize as an asset"],
   ]}
 />
 
-<Callout type="note">
-  Like **Depreciation**, **Provisions** are the essence of accrual accounting. Typical examples
-  include pension provisions and warranty provisions.
+Contingent assets are not recognized so as not to bring forward unrealized gains. This is a typical area where liabilities and assets are treated asymmetrically.
+
+## 3. Measurement: the best estimate
+
+A provision is measured at the **best estimate** of the expenditure required to settle the obligation at the end of the reporting period.
+
+### A. A large population: expected value
+
+Company X sold 1,000 appliances this year. Experience shows that 20% have minor defects costing ₩50,000 each to repair, 5% have major defects costing ₩400,000 each, and the remaining 75% have none.
+
+<FormulaBox
+  label="Warranty provision (expected value)"
+  formula="1{,}000 \times (0.75 \times 0 + 0.20 \times 5 + 0.05 \times 40) = 1{,}000 \times 3 = 3{,}000"
+  description="Unit: ₩10,000 (₩30 million in total). An obligation involving a large population of items is measured by weighting possible outcomes by their probabilities."
+/>
+
+### B. A single obligation: the most likely outcome
+
+For a single obligation, such as one lawsuit, the most likely outcome is the starting point. But if the other possible outcomes are mostly higher or lower, the estimate is adjusted in that direction.
+
+### C. Present value and interest expense
+
+Where the time value of money is material, the provision is measured at present value. At the beginning of 20X1, company Y took on an obligation to dismantle and restore equipment in three years' time; the estimated cost is ₩10 million and the discount rate 5%. The initial provision is $1{,}000 / 1.05^3 ≈ 863.8$ (₩10,000), i.e. about ₩8.638 million, and the same amount is added to the cost of the equipment. Each year the opening provision multiplied by the discount rate is recognized as **interest expense**: ₩432,000 in 20X1, ₩453,000 in 20X2 and ₩476,000 in 20X3, so that the provision reaches ₩10 million at the end of year 3.
+
+## 4. Special cases
+
+- **Onerous contracts:** if the unavoidable costs of meeting a contract exceed the expected benefits, the net cost (the lower of the cost of fulfilling it and the penalty for exiting) is recognized as a provision. Under the 2022 amendment, the cost of fulfilling includes both incremental costs and an allocation of other directly related costs.
+- **Restructuring:** a constructive obligation arises when there is a detailed formal plan and the entity has started to implement it or announced its main features to those affected, raising a valid expectation. A board decision alone is not enough. Retraining or relocating continuing staff and investment in new systems are not included.
+- **Reimbursements:** amounts to be reimbursed by third parties, such as insurance, are recognized as a separate asset only when **virtually certain** and are not offset against the provision.
+
+<Callout type="warning">
+Provisions are easily used to manage earnings. Building large provisions in a good year and releasing them in a bad one makes profit look smooth. That is why the standard allows a provision to be used only for the expenditure for which it was originally recognized and requires it to be reviewed at each reporting date and adjusted to the best estimate. Litigation provisions and contingent liability notes can change significantly, so compare the movements and their basis year by year.
 </Callout>
 
-Well done! Next time, we will cover **Equity**, the shareholders' stake, and **Earnings Per Share (EPS)**, which summarizes a firm's performance into a single number.
+## Check your understanding
+
+At the end of 20X1 company Z faces two lawsuits. In lawsuit A, the probability of losing is 70%, and if it loses, damages will be ₩5 million (60%) or ₩8 million (40%). In lawsuit B, the probability of losing is 30%, with damages of ₩10 million if it loses. It is also virtually certain that an insurer will reimburse half of the damages in lawsuit A. How is this reflected in the financial statements?
+
+For lawsuit A an outflow is probable, so a provision is recognized. As a single obligation, the most likely outcome of ₩5 million is the starting point. But the other outcome (₩8 million, 40%) is higher, so the standard requires an amount above ₩5 million as the best estimate; the probability-weighted amount $500 \times 0.6 + 800 \times 0.4 = 620$ (₩10,000), i.e. ₩6.2 million, is a reference for that judgement. The insurance reimbursement is virtually certain and is recognized as a separate asset, not offset against the provision; in the income statement the provision expense may be presented net of the reimbursement. For lawsuit B an outflow is not probable, so nothing is recognized and it is disclosed as a contingent liability.
+
+## References
+
+- Korea Accounting Standards Board, K-IFRS 1037 *Provisions, Contingent Liabilities and Contingent Assets* (including the 2022 amendment on onerous contracts)
+- Korea Accounting Standards Board, K-IFRS Interpretation 2101 *Changes in Existing Decommissioning, Restoration and Similar Liabilities*
+- Donald Kieso, Jerry Weygandt and Terry Warfield, *Intermediate Accounting: IFRS Edition*, ch. 13
