@@ -1325,7 +1325,10 @@ for (const cat of categories) {
   if (extra && extra.length) cat.tools = [...cat.tools, ...extra];
 }
 
-// Stubs are noindex ex-URLs — they must not become "next read" suggestions.
+// Stubs are retired ex-URLs (robots-excluded) — they must not become "next read"
+// suggestions. Avoid the literal robots keyword in this file: astro.config.mjs
+// (collectExcludedPageSlugs) drops any top-level page whose source contains it
+// from the sitemap, and /{lang}/tools/ is an indexed hub that must be listed.
 const academyPosts = await getCollection("blog", ({ data }) =>
   data.draft !== true && !isRedirectStub(data) && data.locale === locale);
 const toolsSeriesByKey = buildSeriesIndex(academyPosts);

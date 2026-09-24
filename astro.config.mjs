@@ -82,6 +82,9 @@ export default defineConfig({
       filter: (page) => {
         const url = new URL(page);
         const path = url.pathname;
+        // Root is a server 301 to /en/ (public/_redirects); canonical English
+        // content lives at /en/. Same rule as wiki.
+        if (path === "/" || path === "") return false;
         // Category listings and pagination: served, not indexed. Measured
         // 2026-08-18, 2,278 such URLs across wiki and blog produced one click
         // in 90 days while taking crawl budget from the pages that earn it.
@@ -124,10 +127,6 @@ export default defineConfig({
       serialize: (item) => {
         const url = new URL(item.url);
         const path = url.pathname;
-        // Homepage — highest priority
-        if (path === "/" || path === "") {
-          return { ...item, priority: 1.0 };
-        }
         // Locale homepages (e.g. /ko/, /ja/, /fr/)
         if (/^\/(ko|ja|fr|es|zh)\/$/.test(path)) {
           return { ...item, priority: 0.9 };
@@ -144,7 +143,20 @@ export default defineConfig({
         return { ...item, priority: 0.6 };
       },
     }),
-    robotsTxt(),
+    // Single source for robots.txt: the integration writes dist/robots.txt and
+    // would overwrite a public/robots.txt anyway. /api/ stays crawlable: it
+    // serves the CORS-open content dataset meant for external/AI consumers and
+    // is the rewrite target of /brand-facts.json (linked from llms.txt).
+    robotsTxt({
+      host: true,
+      policy: [
+        {
+          userAgent: "*",
+          allow: "/",
+          disallow: ["*/search?*", "/search"],
+        },
+      ],
+    }),
   ],
   image: {
     service: {

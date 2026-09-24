@@ -71,6 +71,9 @@ const subtitle = (wikiT?.updatesSubtitle ?? "All {count} pages, newest first.").
   String(total),
 );
 const baseUrl = `/${locale}/updates`;
+// Page 2+ is pagination: noindex, follow, same rule as /{lang}/N/ and category
+// pages. The sitemap already drops it (numeric-tail rule in astro.config.mjs),
+// and hreflang-reconcile strips alternates from noindex pages. Page 1 stays indexed.
 
 const jsonLd = JSON.stringify(
   collectionPageJsonLd({
@@ -95,4 +98,5 @@ const jsonLd = JSON.stringify(
   availableLocales={availableLocales}
   jsonLd={jsonLd}
   showCategoryCloud={false}
+  noindex={true}
 />
