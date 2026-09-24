@@ -1,0 +1,104 @@
+---
+track: academy
+series: cost-accounting
+chapter: 8
+title: "Contabilidad de costos — Asignación de departamentos de servicio: métodos directo, escalonado y recíproco"
+description: "Calcula con los mismos datos tres formas de trasladar a los departamentos de producción los costos de departamentos de servicio como energía y mantenimiento, explica por qué el costo de producción cambia según cuánto se reflejen los servicios que se prestan entre sí los departamentos de servicio, y presenta las tasas duales."
+pubDate: 2026-03-01
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["contabilidad de costos", "departamentos de servicio", "método directo", "método escalonado", "método recíproco", "tasas duales"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+Una fábrica tiene **departamentos de producción** que fabrican directamente los productos (mecanizado, ensamblaje) y **departamentos de servicio** que los apoyan (energía, mantenimiento, control de calidad). Para calcular el costo de los productos, primero hay que trasladar los costos de los departamentos de servicio a los de producción y luego aplicarlos a los productos con las tasas de los departamentos de producción. Este capítulo compara tres formas de hacer ese primer paso. La necesidad de tasas departamentales se vio en el [capítulo 5](/es/education-accounting-ch12/).
+
+## 1. Datos
+
+Los departamentos de servicio de la empresa YY son energía (S1) y mantenimiento (S2); los de producción, mecanizado (P1) y ensamblaje (P2). Sus costos y las proporciones de servicios prestados son los siguientes.
+
+<LectureTable
+  title="Costos de los departamentos de servicio y proporción de servicios prestados"
+  headers={["Departamento que presta", "Costo (decenas de miles de wones)", "A S1", "A S2", "A P1", "A P2"]}
+  rows={[
+    ["Energía (S1)", "200", "—", "20 %", "50 %", "30 %"],
+    ["Mantenimiento (S2)", "300", "10 %", "—", "60 %", "30 %"],
+  ]}
+/>
+
+## 2. Método directo
+
+Se **ignoran** los servicios que se prestan entre sí los departamentos de servicio y los costos se asignan solo a los de producción según sus proporciones.
+
+- S1: P1 y P2 en proporción 50 : 30 → P1 $200 \times 5/8 = 125$, P2 75
+- S2: P1 y P2 en proporción 60 : 30 → P1 $300 \times 2/3 = 200$, P2 100
+
+P1 recibe 3,25 millones de wones y P2 1,75 millones. Es el cálculo más sencillo, pero no refleja que mantenimiento consume energía.
+
+## 3. Método escalonado
+
+Se fija un **orden** entre los departamentos de servicio: el que se asigna antes reparte también a los siguientes y después ya no recibe nada. Normalmente va primero el que más servicios presta a otros departamentos de servicio. S1 (20 % a S2) se asigna antes que S2 (10 % a S1).
+
+- Los 200 de S1: 40 a S2, 100 a P1, 60 a P2
+- Los $300 + 40 = 340$ de S2: no vuelve nada a S1, así que P1 y P2 se reparten 60 : 30 → P1 $340 \times 2/3 \approx 226{,}7$, P2 ≈ 113,3
+
+P1 recibe unos 3,267 millones y P2 unos 1,733 millones. Si se cambia el orden, cambia el resultado.
+
+## 4. Método recíproco
+
+Se reflejan **todos** los servicios intercambiados entre departamentos de servicio. El costo total de cada departamento de servicio (su costo propio más lo que recibe de los demás) se obtiene con un sistema de ecuaciones.
+
+<FormulaBox
+  label="Sistema de ecuaciones del método recíproco"
+  formula="\begin{aligned}S_1 &= 200 + 0{,}1\,S_2 \\ S_2 &= 300 + 0{,}2\,S_1\end{aligned} \quad\Rightarrow\quad S_1 = \frac{230}{0{,}98} \approx 234{,}69, \quad S_2 \approx 346{,}94"
+  description="Al sustituir la segunda ecuación en la primera se obtiene S1 = 200 + 30 + 0,02 S1. Los costos totales así obtenidos se asignan a todos los departamentos según sus proporciones de servicio."
+/>
+
+<LectureTable
+  title="Resultados del método recíproco (en decenas de miles de wones)"
+  headers={["Departamento", "De S1 (234,69)", "De S2 (346,94)", "Total"]}
+  rows={[
+    ["P1", "50 % → 117,35", "60 % → 208,16", "325,51"],
+    ["P2", "30 % → 70,41", "30 % → 104,08", "174,49"],
+    ["Total", "", "", "500,00"],
+  ]}
+/>
+
+<LectureTable
+  title="Comparación de los tres métodos (en decenas de miles de wones)"
+  headers={["Método", "P1", "P2"]}
+  rows={[
+    ["Método directo", "325,0", "175,0"],
+    ["Método escalonado (S1 primero)", "326,7", "173,3"],
+    ["Método recíproco", "325,5", "174,5"],
+  ]}
+/>
+
+En este ejemplo las proporciones intercambiadas entre departamentos de servicio son pequeñas y las diferencias también, pero si son grandes, la distorsión del método directo crece. Con cualquier método, el total de los departamentos de producción es el mismo: 5 millones. Asignar es repartir un total, no aumentarlo ni reducirlo.
+
+## 5. Tasas duales
+
+Consiste en **separar los costos de los departamentos de servicio en variables y fijos** y asignarlos con bases distintas: los variables según el **uso real** y los fijos según el **uso máximo disponible (capacidad práctica)**. Los costos fijos surgen de dotar la capacidad necesaria para el máximo que requieren los departamentos de producción; así se evita que, en los meses en que un departamento usa poco, otros carguen con esos costos.
+
+<Callout type="warning">
+Asignar los costos de los departamentos de servicio a costo real traslada sus ineficiencias a los responsables de producción: si mantenimiento despilfarra, sube el costo de producción. Por eso, para evaluar el desempeño, conviene asignar con **costos presupuestados o tasas estándar** y dejar la diferencia con lo real como responsabilidad del departamento de servicio ([capítulo 5 de Contabilidad administrativa](/es/academy-accounting-basics-ch6/)).
+</Callout>
+
+## Ejercicio
+
+El departamento de servicio A de la empresa ZZ (costo de 1 millón de wones) presta el 25 % de sus servicios a B, el 50 % al departamento de producción X y el 25 % a Y; el departamento de servicio B (costo de 1,5 millones) presta el 20 % a A, el 40 % a X y el 40 % a Y. ¿Cuánto se asigna a X y a Y con el método recíproco?
+
+$A = 100 + 0{,}2B$ y $B = 150 + 0{,}25A$. Al sustituir, $A = 100 + 30 + 0{,}05A$, de modo que $A = 130/0{,}95 \approx 136{,}84$ y $B = 150 + 34{,}21 = 184{,}21$. X recibe $0{,}5 \times 136{,}84 + 0{,}4 \times 184{,}21 \approx 68{,}42 + 73{,}68 = 142{,}11$ e Y $0{,}25 \times 136{,}84 + 0{,}4 \times 184{,}21 \approx 34{,}21 + 73{,}68 = 107{,}89$ (en decenas de miles de wones). El total de 2,5 millones coincide con la suma de los costos de los dos departamentos de servicio.
+
+## Referencias
+
+- Charles Horngren, Srikant Datar y Madhav Rajan, *Cost Accounting: A Managerial Emphasis*, cap. 15
+- Ray Garrison, Eric Noreen y Peter Brewer, *Managerial Accounting*, apéndice sobre la asignación de departamentos de servicio
+- Robert Kaplan y Anthony Atkinson, *Advanced Management Accounting*, cap. 3

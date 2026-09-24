@@ -1,98 +1,104 @@
 ---
 track: academy
-series: accounting-basics
-chapter: 11
-title: "Cost Management I: Cost Flow and Allocation"
-description: >-
-  How much did it cost to make one product? Study the basics of cost accounting
-  to track numbers on the manufacturing floor.
-pubDate: 2026-03-01T00:00:00.000Z
+series: cost-accounting
+chapter: 8
+title: "Cost Accounting — Allocating Support Department Costs: Direct, Step-Down and Reciprocal Methods"
+description: "Calculates, with the same data, three ways of moving the costs of support departments such as power and maintenance to production departments, explains why production department costs differ depending on how far services exchanged between support departments are reflected, and covers dual-rate allocation."
+pubDate: 2026-03-01
+updatedDate: 2026-09-24
 category: Accounting
-subcategory: "Cost & Management Accounting"
-tags:
-  - Education
-  - accounting
+tags: ["cost accounting", "support departments", "direct method", "step-down method", "reciprocal method", "dual rates"]
 locale: en
 author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
 
-
-import { LectureTable, LectureProcess, LecturePieChart, LectureBarChart } from "@/features/education-common/components/LectureVisuals";
-
-
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# Cost Management I: Cost Flow and Allocation
+A factory has **production departments** that make products directly (machining, assembly) and **support departments** that serve them (power, maintenance, quality control). To calculate product costs, support department costs must first be moved to production departments and then applied to products with production department rates. This chapter compares three ways of doing the first step. The case for departmental rates was made in [chapter 5](/en/education-accounting-ch12/).
 
-Until now, we have learned about reporting for external investors (Financial Accounting). Now, we learn about internal data for managers: **Cost Accounting**. You must know the true cost of making one product to set prices and generate profits.
+## 1. Data
 
----
-
-## 1. Three Elements of Manufacturing Cost
-
-Resources used in production are managed in three broad categories.
-
-<LecturePieChart
-  title="Typical Composition of Manufacturing Cost"
-  description="Proportions vary by industry, but the three-element structure remains."
-  data={[
-    { name: "Direct Materials (DM)", value: 45, color: "var(--color-primary)" },
-    { name: "Direct Labor (DL)", value: 25, color: "#f43f5e" },
-    { name: "Manufacturing Overhead (OH)", value: 30, color: "#fbbf24" },
-  ]}
-/>
-
----
-
-## 2. Cost Allocation
-
-The core of cost accounting is finding out **"Who is responsible?"** The profitability of a product can look different depending on how un-trackable common costs (overhead) are allocated.
+Company YY's support departments are power (S1) and maintenance (S2); its production departments are machining (P1) and assembly (P2). Support department costs and the shares of services provided are as follows.
 
 <LectureTable
-  title="Comparison of Costing Methods"
-  headers={["Category", "Traditional Costing", "Activity-Based Costing (ABC)"]}
+  title="Support department costs and shares of services provided"
+  headers={["Providing department", "Cost (₩10,000)", "To S1", "To S2", "To P1", "To P2"]}
   rows={[
-    [
-      "Allocation Basis",
-      "Volume-based (Hours, qty, etc.)",
-      "Analysis of various activities (drivers)",
-    ],
-    ["Precision", "Low (Simple)", "Very High"],
-    [
-      "Suitable Environment",
-      "Mass production of few products",
-      "Many products, small volumes / complex processes",
-    ],
-    ["Cost/Effort", "Low", "High (Requires system building)"],
-  ]}
-  highlightColumns={[2]}
-/>
-
----
-
-## 3. Cost Flow
-
-From input to sale, costs flow through the following accounts and are finally reflected in the Income Statement.
-
-<LectureProcess
-  steps={[
-    { label: "Materials", description: "Value of materials waiting in the warehouse" },
-    {
-      label: "Work-in-Process (WIP)",
-      description: "In the process of being machined (Conversion costs added)",
-    },
-    { label: "Finished Goods", description: "Production complete and waiting for shipment" },
-    {
-      label: "Cost of Goods Sold (COGS)",
-      description: "Converted to expense at the point of sale",
-    },
+    ["Power (S1)", "200", "—", "20%", "50%", "30%"],
+    ["Maintenance (S2)", "300", "10%", "—", "60%", "30%"],
   ]}
 />
 
-<Callout type="tip">
-  **Professor's Word**: There is a saying that "Costs are not measured, but calculated by managers."
-  Choosing a rational allocation basis determines the success or failure of managerial
-  decision-making.
+## 2. Direct method
+
+Services exchanged between support departments are **ignored**, and costs are allocated only to production departments in proportion to their shares.
+
+- S1: P1 and P2 in the ratio 50 : 30 → P1 $200 \times 5/8 = 125$, P2 75
+- S2: P1 and P2 in the ratio 60 : 30 → P1 $300 \times 2/3 = 200$, P2 100
+
+P1 receives ₩3.25 million and P2 ₩1.75 million. It is the simplest calculation but ignores the reality that maintenance uses power.
+
+## 3. Step-down method
+
+Support departments are allocated in a set **sequence**: a department allocated earlier allocates to later ones and receives nothing back afterwards. Usually the department that provides the most service to other support departments goes first. S1 (20% to S2) is allocated before S2 (10% to S1).
+
+- S1's 200: 40 to S2, 100 to P1, 60 to P2
+- S2's $300 + 40 = 340$: nothing goes back to S1, so P1 and P2 share 60 : 30 → P1 $340 \times 2/3 ≈ 226.7$, P2 ≈ 113.3
+
+P1 receives about ₩3.267 million and P2 about ₩1.733 million. Changing the sequence changes the result.
+
+## 4. Reciprocal method
+
+**All** services exchanged between support departments are reflected. Each support department's total cost (its own cost plus costs received from other support departments) is found with simultaneous equations.
+
+<FormulaBox
+  label="Simultaneous equations of the reciprocal method"
+  formula="\begin{aligned}S_1 &= 200 + 0.1\,S_2 \\ S_2 &= 300 + 0.2\,S_1\end{aligned} \quad\Rightarrow\quad S_1 = \frac{230}{0.98} ≈ 234.69, \quad S_2 ≈ 346.94"
+  description="Substituting the second equation into the first gives S1 = 200 + 30 + 0.02 S1. The total costs found this way are allocated to all departments in each department's service shares."
+/>
+
+<LectureTable
+  title="Results of the reciprocal method (unit: ₩10,000)"
+  headers={["Department", "From S1 (234.69)", "From S2 (346.94)", "Total"]}
+  rows={[
+    ["P1", "50% → 117.35", "60% → 208.16", "325.51"],
+    ["P2", "30% → 70.41", "30% → 104.08", "174.49"],
+    ["Total", "", "", "500.00"],
+  ]}
+/>
+
+<LectureTable
+  title="Comparing the three methods (unit: ₩10,000)"
+  headers={["Method", "P1", "P2"]}
+  rows={[
+    ["Direct method", "325.0", "175.0"],
+    ["Step-down method (S1 first)", "326.7", "173.3"],
+    ["Reciprocal method", "325.5", "174.5"],
+  ]}
+/>
+
+In this example the shares exchanged between support departments are small, so the differences are small, but with larger shares the direct method's distortion grows. Under every method the production departments' total is the same ₩5 million: allocation divides the total, it does not increase or reduce it.
+
+## 5. Dual rates
+
+Dual-rate allocation **splits support department costs into variable and fixed costs** and allocates them on different bases: variable costs on **actual usage**, fixed costs on **maximum available usage (practical capacity)**. Fixed costs arise from providing enough capacity for the maximum that production departments need, so this stops other departments from bearing those costs in months when one department uses little.
+
+<Callout type="warning">
+Allocating support department costs at actual cost passes support departments' inefficiencies on to production managers — if maintenance is wasteful, production department costs rise. For performance evaluation it is therefore better to allocate at **budgeted costs or standard rates** and leave the difference from actual as the support department's responsibility ([Managerial Accounting chapter 5](/en/academy-accounting-basics-ch6/)).
 </Callout>
 
-Next time, we will explore various costing systems based on production methods, such as mass production and job-order production.
+## Check your understanding
+
+Company ZZ's support department A (cost ₩1 million) provides 25% of its services to B, 50% to production department X and 25% to Y; support department B (cost ₩1.5 million) provides 20% to A, 40% to X and 40% to Y. How much is allocated to X and Y under the reciprocal method?
+
+$A = 100 + 0.2B$ and $B = 150 + 0.25A$. Substituting gives $A = 100 + 30 + 0.05A$, so $A = 130/0.95 ≈ 136.84$ and $B = 150 + 34.21 = 184.21$. X receives $0.5 \times 136.84 + 0.4 \times 184.21 ≈ 68.42 + 73.68 = 142.11$ and Y $0.25 \times 136.84 + 0.4 \times 184.21 ≈ 34.21 + 73.68 = 107.89$ (₩10,000). The total of ₩2.5 million equals the two support departments' combined costs.
+
+## References
+
+- Charles Horngren, Srikant Datar and Madhav Rajan, *Cost Accounting: A Managerial Emphasis*, ch. 15
+- Ray Garrison, Eric Noreen and Peter Brewer, *Managerial Accounting*, appendix on service department allocations
+- Robert Kaplan and Anthony Atkinson, *Advanced Management Accounting*, ch. 3

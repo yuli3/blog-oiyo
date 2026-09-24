@@ -1,0 +1,104 @@
+---
+track: academy
+series: cost-accounting
+chapter: 8
+title: "Comptabilité analytique — Répartition des sections auxiliaires : méthodes directe, en cascade et réciproque"
+description: "Calcule sur les mêmes données trois façons de transférer aux sections principales les coûts des sections auxiliaires comme l'énergie et l'entretien, explique pourquoi le coût des sections principales varie selon la prise en compte des prestations réciproques entre sections auxiliaires, et présente le double taux."
+pubDate: 2026-03-01
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["comptabilité analytique", "sections auxiliaires", "méthode directe", "méthode en cascade", "prestations réciproques", "double taux"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+Une usine comprend des **sections principales** qui fabriquent directement les produits (usinage, montage) et des **sections auxiliaires** qui les soutiennent (énergie, entretien, contrôle qualité). Pour calculer le coût des produits, il faut d'abord transférer les coûts des sections auxiliaires aux sections principales, puis les imputer aux produits avec les taux des sections principales. Ce chapitre compare trois façons de réaliser la première étape. L'intérêt des taux par section a été montré au [chapitre 5](/fr/education-accounting-ch12/).
+
+## 1. Données
+
+Les sections auxiliaires de la société YY sont l'énergie (S1) et l'entretien (S2) ; ses sections principales sont l'usinage (P1) et le montage (P2). Les coûts des sections auxiliaires et la répartition de leurs prestations sont les suivants.
+
+<LectureTable
+  title="Coûts des sections auxiliaires et répartition des prestations"
+  headers={["Section prestataire", "Coût (en dizaines de milliers de wons)", "À S1", "À S2", "À P1", "À P2"]}
+  rows={[
+    ["Énergie (S1)", "200", "—", "20 %", "50 %", "30 %"],
+    ["Entretien (S2)", "300", "10 %", "—", "60 %", "30 %"],
+  ]}
+/>
+
+## 2. Méthode directe
+
+On **ignore** les prestations échangées entre sections auxiliaires et l'on répartit les coûts uniquement entre sections principales, au prorata de leurs parts.
+
+- S1 : P1 et P2 dans le rapport 50 : 30 → P1 $200 \times 5/8 = 125$, P2 75
+- S2 : P1 et P2 dans le rapport 60 : 30 → P1 $300 \times 2/3 = 200$, P2 100
+
+P1 reçoit 3,25 millions de wons et P2 1,75 million. C'est le calcul le plus simple, mais il ignore que l'entretien consomme de l'énergie.
+
+## 3. Méthode en cascade
+
+On fixe un **ordre** entre sections auxiliaires : une section répartie plus tôt répartit aussi sur les suivantes et ne reçoit plus rien ensuite. On commence généralement par la section qui fournit le plus de prestations aux autres sections auxiliaires. S1 (20 % à S2) passe avant S2 (10 % à S1).
+
+- Les 200 de S1 : 40 à S2, 100 à P1, 60 à P2
+- Les $300 + 40 = 340$ de S2 : rien ne revient à S1, donc P1 et P2 se partagent 60 : 30 → P1 $340 \times 2/3 \approx 226{,}7$, P2 ≈ 113,3
+
+P1 reçoit environ 3,267 millions et P2 environ 1,733 million. Changer l'ordre change le résultat.
+
+## 4. Méthode réciproque
+
+On tient compte de **toutes** les prestations échangées entre sections auxiliaires. Le coût total de chaque section auxiliaire (son propre coût plus ce qu'elle reçoit des autres) s'obtient par un système d'équations.
+
+<FormulaBox
+  label="Système d'équations de la méthode réciproque"
+  formula="\begin{aligned}S_1 &= 200 + 0{,}1\,S_2 \\ S_2 &= 300 + 0{,}2\,S_1\end{aligned} \quad\Rightarrow\quad S_1 = \frac{230}{0{,}98} \approx 234{,}69, \quad S_2 \approx 346{,}94"
+  description="En substituant la seconde équation dans la première, on obtient S1 = 200 + 30 + 0,02 S1. Les coûts totaux ainsi obtenus sont répartis sur toutes les sections selon les parts de prestations."
+/>
+
+<LectureTable
+  title="Résultats de la méthode réciproque (en dizaines de milliers de wons)"
+  headers={["Section", "De S1 (234,69)", "De S2 (346,94)", "Total"]}
+  rows={[
+    ["P1", "50 % → 117,35", "60 % → 208,16", "325,51"],
+    ["P2", "30 % → 70,41", "30 % → 104,08", "174,49"],
+    ["Total", "", "", "500,00"],
+  ]}
+/>
+
+<LectureTable
+  title="Comparaison des trois méthodes (en dizaines de milliers de wons)"
+  headers={["Méthode", "P1", "P2"]}
+  rows={[
+    ["Méthode directe", "325,0", "175,0"],
+    ["Méthode en cascade (S1 d'abord)", "326,7", "173,3"],
+    ["Méthode réciproque", "325,5", "174,5"],
+  ]}
+/>
+
+Ici, les parts échangées entre sections auxiliaires sont faibles et les écarts aussi, mais lorsqu'elles sont importantes, la distorsion de la méthode directe grandit. Quelle que soit la méthode, le total des sections principales reste de 5 millions : répartir, c'est partager un total, non l'augmenter ou le réduire.
+
+## 5. Double taux
+
+Cette méthode **sépare les coûts des sections auxiliaires en coûts variables et fixes** et les répartit sur des bases différentes : les coûts variables selon la **consommation réelle**, les coûts fixes selon la **consommation maximale disponible (capacité prévue)**. Les coûts fixes découlent de la capacité installée pour couvrir les besoins maximaux des sections principales ; on évite ainsi qu'une section supporte ces coûts à la place d'une autre les mois où celle-ci consomme peu.
+
+<Callout type="warning">
+Répartir les coûts des sections auxiliaires à leur coût réel transfère leurs inefficacités aux responsables des sections principales : si l'entretien gaspille, le coût de la production augmente. Pour l'évaluation des performances, mieux vaut répartir sur la base de **coûts budgétés ou de taux standard** et laisser l'écart avec le réel à la charge de la section auxiliaire ([chapitre 5 de comptabilité de gestion](/fr/academy-accounting-basics-ch6/)).
+</Callout>
+
+## Exercice
+
+La section auxiliaire A de la société ZZ (coût de 1 million de wons) fournit 25 % de ses prestations à B, 50 % à la section principale X et 25 % à Y ; la section auxiliaire B (coût de 1,5 million) fournit 20 % à A, 40 % à X et 40 % à Y. Quels montants sont répartis sur X et Y selon la méthode réciproque ?
+
+$A = 100 + 0{,}2B$ et $B = 150 + 0{,}25A$. Par substitution, $A = 100 + 30 + 0{,}05A$, d'où $A = 130/0{,}95 \approx 136{,}84$ et $B = 150 + 34{,}21 = 184{,}21$. X reçoit $0{,}5 \times 136{,}84 + 0{,}4 \times 184{,}21 \approx 68{,}42 + 73{,}68 = 142{,}11$ et Y $0{,}25 \times 136{,}84 + 0{,}4 \times 184{,}21 \approx 34{,}21 + 73{,}68 = 107{,}89$ (en dizaines de milliers de wons). Le total de 2,5 millions égale la somme des coûts des deux sections auxiliaires.
+
+## Références
+
+- Charles Horngren, Srikant Datar et Madhav Rajan, *Cost Accounting: A Managerial Emphasis*, chap. 15
+- Ray Garrison, Eric Noreen et Peter Brewer, *Managerial Accounting*, annexe sur la répartition des coûts des services
+- Robert Kaplan et Anthony Atkinson, *Advanced Management Accounting*, chap. 3
