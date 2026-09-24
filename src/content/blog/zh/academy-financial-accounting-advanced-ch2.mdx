@@ -1,0 +1,84 @@
+---
+track: academy
+series: financial-statement-analysis
+chapter: 2
+title: "财务报表分析 — 财务比率：流动性、偿债能力、盈利能力与营运能力"
+description: "用FA公司的财务报表计算流动比率和速动比率、产权比率和利息保障倍数、ROA和ROE、总资产周转率，并整理使用平均余额还是期末余额的选择以及解读比率时的常见错误。"
+pubDate: 2026-06-01
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["财务报表分析", "财务比率", "流动比率", "产权比率", "ROE", "利息保障倍数"]
+locale: zh
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+财务比率通过两个数字的关系概括公司的特征。本章用[第1章](/zh/academy-financial-accounting-advanced-ch1/)中FA公司20X2年的财务报表，按四个维度计算代表性比率（单位：亿韩元）。盈利能力比率的分解见[第3章](/zh/academy-accounting-basics-ch10/)，周转率的详细解读见[第4章](/zh/academy-accounting-basics-ch11/)。
+
+## 1. 流动性：短期偿付能力
+
+<LectureTable
+  title="流动性比率（20X2年末）"
+  headers={["比率", "公式", "FA公司"]}
+  rows={[
+    ["流动比率", "流动资产 ÷ 流动负债", "400 ÷ 200 = 200%"],
+    ["速动比率", "（流动资产 − 存货）÷ 流动负债", "200 ÷ 200 = 100%"],
+    ["现金比率", "现金 ÷ 流动负债", "50 ÷ 200 = 25%"],
+  ]}
+/>
+
+流动比率200%传统上被视为良好。但流动资产有一半是存货，速动比率只有100%。存货卖不出去，偿还短期负债就会很紧张。存货变现越慢的行业，越要同时看速动比率。
+
+## 2. 偿债能力：长期偿付能力与杠杆
+
+<LectureTable
+  title="偿债能力比率"
+  headers={["比率", "公式", "FA公司"]}
+  rows={[
+    ["产权比率（负债权益比）", "负债 ÷ 所有者权益", "500 ÷ 500 = 100%"],
+    ["权益比率", "所有者权益 ÷ 资产", "500 ÷ 1,000 = 50%"],
+    ["借款依存度", "借款 ÷ 资产", "(80 + 300) ÷ 1,000 = 38%"],
+    ["利息保障倍数", "营业利润 ÷ 利息费用", "144 ÷ 24 = 6.0倍"],
+  ]}
+/>
+
+产权比率包括应付账款这类经营性负债，若只看有息负债，应使用借款依存度。利息保障倍数6倍，意味着营业利润可以支付六次利息。韩国银行把利息保障倍数连续三年低于1的企业归为边缘企业（[第7章](/zh/academy-financial-statement-analysis-ch7/)）。
+
+## 3. 盈利能力：资产和权益的收益率
+
+<FormulaBox
+  label="ROA与ROE"
+  formula="\text{ROA} = \frac{\text{净利润}}{\text{平均总资产}} = \frac{96}{(900 + 1{,}000)/2} ≈ 10.1\%, \qquad \text{ROE} = \frac{\text{净利润}}{\text{平均所有者权益}} = \frac{96}{(450 + 500)/2} ≈ 20.2\%"
+  description="分子是全年的流量，分母原则上也应使用期初与期末的平均数。若用期末余额，ROA为9.6%，ROE为19.2%。"
+/>
+
+ROE约为ROA的两倍，是因为一半资产靠负债筹集。负债放大收益率，就是**财务杠杆**效应。若计算ROA时要包括债权人的份额，有时分子使用加回税后利息费用后的利润。
+
+## 4. 营运能力：资产使用效率
+
+总资产周转率是营业收入除以平均总资产，为$1{,}200 / 950 ≈ 1.26$次，即每1韩元资产创造1.26韩元收入。应收账款、存货、应付账款周转率和现金转换周期在[第4章](/zh/academy-accounting-basics-ch11/)计算。
+
+## 5. 成长能力
+
+第1章的趋势分析显示，收入增长20%，营业利润增长44%，净利润增长55%。资产增长11%，相对于增长而言资产投入较少。分析增长率时，要检查是否有并购等一次性因素，并与内生增长区分开来。
+
+<Callout type="warning">
+比率的好坏因行业而异。银行的产权比率超过1,000%也属正常；软件企业几乎没有存货，流动比率与速动比率相同。分母很小或为负数时，比率就失去意义：资不抵债企业即使净亏损，ROE也可能为正。年末还清借款、年初再借的**粉饰（窗饰）**会让按期末余额计算的比率显得更好，应同时查看季度平均余额。
+</Callout>
+
+## 练习题
+
+若FA公司在20X2年末用现金40亿韩元偿还短期借款40亿韩元，流动比率和速动比率分别如何变化？这笔交易能说改善了公司的实际偿付能力吗？
+
+流动资产变为360亿韩元，流动负债变为160亿韩元。流动比率变为225%，速动比率为$(360 - 200) / 160 = 100\%$，保持不变。流动比率从200%升至225%，只是因为分子和分母减去了相同金额。实际上现金减少，可以立即动用的钱变少了，很难说偿付能力得到改善。比率大于100%时，分子分母同减相同金额会使比率上升，这是算术效应。
+
+## 参考资料
+
+- Krishna Palepu, Paul Healy and Erik Peek, *Business Analysis and Valuation: IFRS Edition*, ch. 5
+- 韩国银行，[企业经营分析](https://www.bok.or.kr/portal/main/contents.do?menuNo=200544)
+- Stephen Penman, *Financial Statement Analysis and Security Valuation*, ch. 11
