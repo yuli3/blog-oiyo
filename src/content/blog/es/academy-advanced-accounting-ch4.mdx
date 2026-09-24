@@ -1,0 +1,100 @@
+---
+track: academy
+series: advanced-accounting
+chapter: 4
+title: "Contabilidad avanzada — Transacciones intragrupo: eliminar el resultado no realizado y asignarlo a las PNC"
+description: "Elimina el resultado no realizado de transacciones intragrupo de existencias y de PP&E y calcula cómo se reparte el efecto de la eliminación entre los propietarios de la controladora y las participaciones no controladoras en ventas descendentes y ascendentes."
+pubDate: 2026-09-24
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["contabilidad avanzada", "estados financieros consolidados", "transacciones intragrupo", "resultado no realizado", "ventas ascendentes", "ventas descendentes"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+Un grupo es una sola entidad económica. Cuando la controladora y una subsidiaria se compran y venden bienes entre sí, desde fuera solo se han trasladado del almacén A al almacén B. Por eso se eliminan las ventas y compras intragrupo, los saldos por cobrar y por pagar entre ellas y **el resultado aún no realizado mediante una venta fuera del grupo**. Lo básico de la consolidación posterior a la adquisición se vio en el [capítulo 3](/es/academy-advanced-accounting-ch3/).
+
+## 1. Qué se elimina
+
+<LectureTable
+  title="Partidas que se eliminan en la consolidación"
+  headers={["Transacción", "Qué se elimina"]}
+  rows={[
+    ["Venta de existencias", "Todo el ingreso y costo de ventas intragrupo y el resultado no realizado que queda en existencias finales"],
+    ["Venta de PP&E", "El resultado por la venta y la diferencia de depreciación posterior"],
+    ["Préstamos", "Préstamos por cobrar y por pagar, ingresos y gastos por intereses"],
+    ["Servicios", "Ingresos y gastos por comisiones"],
+    ["Dividendos", "Dividendos de la subsidiaria e ingreso por dividendos de la controladora"],
+  ]}
+/>
+
+Una pérdida en una transacción intragrupo puede ser indicio de deterioro de un activo, así que primero se evalúa el deterioro y solo se elimina la pérdida si no lo refleja.
+
+## 2. Ventas descendentes y ascendentes
+
+- **Ventas descendentes:** la controladora vende a la subsidiaria. El resultado no realizado está en el resultado de la controladora, así que se resta **íntegramente de la parte de los propietarios de la controladora**.
+- **Ventas ascendentes:** la subsidiaria vende a la controladora. El resultado no realizado está en el resultado de la subsidiaria, así que se reduce su resultado ajustado y **las PNC soportan su porcentaje**.
+
+Con las K-IFRS se elimina el importe íntegro en ambos casos; solo cambia quién soporta el efecto.
+
+## 3. Transacciones intragrupo de existencias
+
+P tiene el 80 % de S. En 20X1, S vendió a P mercadería que le costó 4 millones de wones por 5 millones (ascendente), y P no había vendido fuera del grupo el 40 % al cierre. P también vendió a S mercadería que le costó 2,4 millones por 3 millones (descendente), y S aún tenía el 50 %.
+
+<LectureTable
+  title="Cálculo del resultado no realizado (en decenas de miles de wones)"
+  headers={["Transacción", "Margen intragrupo", "Parte en existencias al cierre", "Resultado no realizado", "Lo soporta"]}
+  rows={[
+    ["S → P (ascendente)", "100", "40 %", "40", "Controladora 32, PNC 8"],
+    ["P → S (descendente)", "60", "50 %", "30", "Controladora 30"],
+  ]}
+/>
+
+Los ajustes de consolidación son estos:
+
+1. Eliminar el ingreso intragrupo de 8 millones (500 + 300) y el mismo importe de costo de ventas. Ambos bajan a la vez; el resultado no cambia.
+2. Restar de las existencias finales el resultado no realizado de 700.000 wones y aumentar en esa cifra el costo de ventas.
+
+Si el resultado informado por S es de 2 millones (sin amortización de valor razonable), su resultado ajustado es $200 - 40 = 160$ (en decenas de miles de wones) y el atribuible a las PNC $160 \times 20\% = 32$, es decir, 320.000 wones. El resultado no realizado descendente de 300.000 wones no afecta a las PNC.
+
+### A. Realización en el año siguiente
+
+Cuando en 20X2 se vende fuera del grupo el inventario restante, el resultado no realizado se realiza. En la consolidación de 20X2 se reduce el costo de ventas en los 700.000 wones de resultado no realizado de las existencias iniciales, y el resultado se recupera. La parte ascendente de 400.000 wones se suma al resultado ajustado de S de 20X2 y las PNC recuperan sus 80.000 wones.
+
+<FormulaBox
+  label="Resultado ajustado de la subsidiaria con ventas ascendentes"
+  formula="\text{Resultado ajustado} = \text{Resultado informado} - \text{No realizado al cierre (asc.)} + \text{No realizado inicial ya realizado (asc.)} - \text{Amortización de valor razonable}"
+  description="El resultado atribuible a las PNC es este resultado ajustado por su porcentaje."
+/>
+
+## 4. Transacciones intragrupo de PP&E
+
+A comienzos de 20X1, P vendió a S por 3 millones de wones una máquina con importe en libros de 2 millones (descendente). S la deprecia en su vida útil restante de cinco años, sin valor residual.
+
+- 20X1: se elimina la ganancia de 1 millón de P. S deprecia 600.000 wones al año sobre 3 millones, pero para el grupo el costo es de 2 millones y solo corresponde depreciar 400.000 wones al año. Se revierte el exceso de 200.000 wones.
+- Efecto neto: el resultado consolidado de 20X1 se ajusta en $-100 + 20 = -80$ (en decenas de miles de wones). El importe en libros de la máquina al cierre está sobrevalorado en $240 - 160 = 80$ y se reduce en esa cifra.
+- Desde 20X2: cada año se revierten los 200.000 wones de exceso de depreciación, de modo que el millón eliminado se realiza por completo en cinco años.
+
+En una venta ascendente de PP&E se elimina el mismo importe, pero el efecto se reparte también a las PNC según su porcentaje.
+
+<Callout type="warning">
+Si las transacciones intragrupo no se eliminan bien, se inflan las ventas y el resultado del grupo. Empujar grandes cantidades a subsidiarias al cierre del trimestre para elevar el resultado separado se neutraliza en la consolidación, pero puede engañar a quien solo lea los estados separados. Si la nota de partes relacionadas muestra grandes volúmenes de compras y ventas, lea con cautela el resultado separado.
+</Callout>
+
+## Ejercicio
+
+W tiene el 60 % de X. En 20X1, X vendió a W mercadería que le costó 6 millones de wones por 7,5 millones, y W aún tenía un tercio al cierre. X informa un resultado de 3 millones en 20X1 y no hay diferencias de valor razonable. ¿Cuál es el resultado no realizado a eliminar, el resultado ajustado de X y el resultado atribuible a las PNC?
+
+El margen intragrupo es de 1,5 millones y queda un tercio, así que el resultado no realizado es de 500.000 wones. Al ser una venta ascendente, el resultado ajustado de X es $300 - 50 = 250$ (en decenas de miles de wones), es decir, 2,5 millones. El resultado atribuible a las PNC es $250 \times 40\% = 100$, es decir, 1 millón. En la consolidación se eliminan 7,5 millones de ingreso y costo de ventas intragrupo, y se reducen las existencias finales en 500.000 wones aumentando en esa cifra el costo de ventas.
+
+## Referencias
+
+- Korea Accounting Standards Board, K-IFRS 1110 *Estados financieros consolidados* (B86 procedimientos de consolidación)
+- Joe Hoyle, Thomas Schaefer y Timothy Doupnik, *Advanced Accounting*, cap. 5–6
+- IASB, [*IFRS 10 Consolidated Financial Statements*](https://www.ifrs.org/issued-standards/list-of-standards/ifrs-10-consolidated-financial-statements/)
