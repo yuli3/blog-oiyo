@@ -1,0 +1,87 @@
+---
+track: academy
+series: cost-accounting
+chapter: 12
+title: "Contabilidad de costos — Costeo variable y costeo absorbente: por qué difieren las utilidades"
+description: "Prepara con datos de dos años los estados de resultados por costeo absorbente y por costeo variable, que difieren en si los costos indirectos de fabricación fijos son costo del producto o del periodo, explica la diferencia de utilidad por la variación de existencias y presenta el costeo throughput."
+pubDate: 2026-06-22
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["contabilidad de costos", "costeo variable", "costeo absorbente", "costeo throughput", "margen de contribución"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+Los estados financieros para información externa usan el **costeo absorbente**: los costos indirectos de fabricación fijos se incluyen en el costo del producto y se difieren en las existencias. La gestión interna suele usar el **costeo variable**, que trata esos costos fijos como gasto del periodo en que se incurren, de modo que la utilidad se mueve con las ventas y no con la producción. Los dos métodos difieren en un solo punto, pero ese punto puede cambiar mucho la utilidad.
+
+## 1. En qué difieren los dos métodos
+
+<LectureTable
+  title="Comparación del tratamiento de costos"
+  headers={["Costo", "Costeo absorbente", "Costeo variable"]}
+  rows={[
+    ["Materiales directos, mano de obra directa, costos indirectos variables", "Costo del producto", "Costo del producto"],
+    ["Costos indirectos de fabricación fijos", "Costo del producto (incluido en existencias)", "Costo del periodo"],
+    ["Gastos de venta y administración variables y fijos", "Costo del periodo", "Costo del periodo"],
+    ["Formato del estado de resultados", "Utilidad bruta", "Margen de contribución"],
+  ]}
+/>
+
+## 2. Comparación con dos años de datos
+
+El precio de venta de la empresa BE es de 100.000 wones por unidad, el costo variable de fabricación de 30.000 wones por unidad y el gasto variable de venta de 10.000 wones por unidad. Los costos indirectos de fabricación fijos anuales son 20 millones y los gastos fijos de venta y administración, 5 millones; la capacidad normal es de 1.000 unidades. En 20X1 fabricó 1.000 unidades y vendió 800; en 20X2 fabricó 800 y vendió 1.000. No hay inventario inicial, y el costo fijo de fabricación por unidad en costeo absorbente es de 20.000 wones sobre la capacidad normal.
+
+<LectureTable
+  title="Utilidad de operación por año (en decenas de miles de wones)"
+  headers={["Partida", "20X1 absorbente", "20X1 variable", "20X2 absorbente", "20X2 variable"]}
+  rows={[
+    ["Ventas", "8.000", "8.000", "10.000", "10.000"],
+    ["Costo de ventas (absorbente: 5 por unidad)", "(4.000)", "", "(5.000)", ""],
+    ["Costos fijos no aplicados (por debajo de la capacidad)", "", "", "(400)", ""],
+    ["Costos variables (4 por unidad)", "", "(3.200)", "", "(4.000)"],
+    ["Costos indirectos de fabricación fijos", "", "(2.000)", "", "(2.000)"],
+    ["Gastos variables de venta", "(800)", "", "(1.000)", ""],
+    ["Gastos fijos de venta y administración", "(500)", "(500)", "(500)", "(500)"],
+    ["Utilidad de operación", "2.700", "2.300", "3.100", "3.500"],
+  ]}
+/>
+
+En el costeo absorbente de 20X2 la producción quedó 200 unidades por debajo de la capacidad normal, así que 4 millones de costos fijos no se aplicaron y se reconocieron como gasto del periodo (la variación de volumen del [capítulo 11](/es/education-accounting-ch15/)).
+
+## 3. Por qué difieren las utilidades
+
+<FormulaBox
+  label="Diferencia de utilidad entre ambos métodos"
+  formula="\text{Utilidad absorbente} - \text{Utilidad variable} = (\text{Unidades finales} - \text{Unidades iniciales}) \times \text{Costo fijo por unidad}"
+  description="En 20X1 las existencias aumentaron 200 unidades, así que la utilidad absorbente es mayor en (200 − 0) × 2 = 400 (4 millones). En 20X2 bajaron 200 unidades, así que es menor en (0 − 200) × 2 = −400."
+/>
+
+Cuando aumentan las existencias, parte de los costos fijos de fabricación queda enterrada en ellas y pasa al periodo siguiente, así que la utilidad absorbente es mayor. Cuando disminuyen, se liberan los costos fijos diferidos antes y la utilidad absorbente es menor. En los dos años juntos, producción y ventas se igualan (1.800 unidades) y la utilidad total es la misma: 58 millones.
+
+La utilidad del costeo variable solo sigue a las ventas. Si las ventas pasan de 800 a 1.000 unidades, el margen de contribución (60.000 wones por unidad) sube 12 millones y la utilidad también. Con costeo absorbente solo subió 4 millones.
+
+## 4. Costeo throughput
+
+El **costeo throughput** (supervariable) va un paso más allá y considera costo del producto **solo los materiales directos**, tratando incluso la mano de obra directa y los costos indirectos variables como costos del periodo, con el argumento de que a corto plazo la mano de obra también es prácticamente fija. Casi elimina el incentivo a acumular existencias para inflar la utilidad. Las ventas menos los materiales directos se llaman **contribución throughput**.
+
+<Callout type="warning">
+Con costeo absorbente, la utilidad sube **solo por fabricar más productos que no se venderán**, porque los costos fijos se difieren en las existencias. Si la remuneración de los directivos depende de la utilidad absorbente, surge un incentivo a sobreproducir. Sospeche esa posibilidad en una empresa cuyas existencias crecen más rápido que las ventas y cuya utilidad sube mientras empeora el flujo de efectivo operativo. Por eso la evaluación interna del desempeño usa también la utilidad por costeo variable.
+</Callout>
+
+## Ejercicio
+
+El costo fijo de fabricación por unidad de la empresa BF (sobre la capacidad normal) es de 15.000 wones. El inventario inicial es de 300 unidades, el final de 700 unidades y la utilidad de operación por costeo variable, de 40 millones de wones. Suponiendo que no hay variación de volumen, ¿cuál es la utilidad de operación por costeo absorbente? Si al año siguiente el inventario baja de 700 a 100 unidades, ¿cuál es la diferencia entre las utilidades de ambos métodos?
+
+El inventario aumentó 400 unidades, así que la utilidad absorbente es mayor en $400 \times 1{,}5 = 600$ (6 millones): 46 millones de wones. Al año siguiente el inventario baja 600 unidades, así que la utilidad absorbente es menor que la variable en $600 \times 1{,}5 = 900$ (9 millones).
+
+## Referencias
+
+- Charles Horngren, Srikant Datar y Madhav Rajan, *Cost Accounting: A Managerial Emphasis*, cap. 9
+- Eliyahu Goldratt y Jeff Cox, *The Goal*
+- Ray Garrison, Eric Noreen y Peter Brewer, *Managerial Accounting*, cap. 6

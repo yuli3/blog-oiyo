@@ -1,65 +1,91 @@
 ---
-locale: en
 track: academy
-title: "Accounting — Standard Costing and Variance Analysis — Taking Management Accounting to the Next Level"
+series: cost-accounting
+chapter: 11
+title: "Cost Accounting — Fixed Overhead Variances and Standard Costing in Full"
+description: "Calculates the fixed manufacturing overhead budget and volume variances, groups overhead variances in two-way, three-way and four-way analyses, and sets out how standard cost variances are disposed of to cost of sales and inventories at period-end."
+pubDate: 2026-04-14
+updatedDate: 2026-09-24
 category: Accounting
-subcategory: "Cost & Management Accounting"
-author: OIYO Editorial
-tags:
-  - Education
-  - Accounting
-  - CostAccounting
-  - StandardCosting
-  - VarianceAnalysis
-description: >-
-  Learn the standard costing system that measures management efficiency by comparing target costs with actual costs. Build real-world intuition with an interactive variance analyzer covering AQ, AP, SQ, and SP.
-pubDate: '2026-04-14'
+tags: ["cost accounting", "fixed manufacturing overhead", "volume variance", "budget variance", "standard costing"]
+locale: en
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
 
-import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
-import { VarianceAnalysis } from "@/features/education-calculators/AccountingSimulators";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# Standard Costing and Variance Analysis
+The variable cost variances of [chapter 10](/en/academy-cost-accounting-ch6/) all had a "price × quantity" structure. Fixed manufacturing overhead is incurred regardless of activity, so its variances are different in kind. To apply fixed costs to products, a rate divided by a denominator level of activity is used, and when actual activity differs from that level, a **variance that was never in the budget** appears.
 
-Telling a manager "last month's costs came in at $100,000" is not enough information. Saying "the original plan was $90,000, but raw material prices rose, adding $10,000 to the total" is what enables meaningful decision-making. The system that makes this possible is **Standard Costing**.
+## 1. The fixed overhead rate
 
----
+<FormulaBox
+  label="Standard fixed overhead rate"
+  formula="\text{Standard rate} = \frac{\text{Budgeted fixed manufacturing overhead}}{\text{Denominator level of activity}}"
+  description="Company BB's monthly budgeted fixed manufacturing overhead is ₩30 million and its denominator level is 2,000 direct labor hours, so the rate is ₩15,000 per hour."
+/>
 
-## 1. What Is Standard Cost?
+Actual output this month is 1,000 units, so standard hours allowed are 1,500 (1.5 hours per unit), and actual fixed manufacturing overhead is ₩31 million.
 
-Standard cost is a scientifically and statistically determined **target cost that should be achieved**. It serves as a benchmark against which actual costs are compared after the fact, enabling an evaluation of operational performance.
-
----
-
-## 2. Cost Variance Analysis Simulator
-
-Analyze the two most critical variances: Price Variance and Efficiency Variance.
-
-<VarianceAnalysis client:visible />
-
-<Callout type="tip">
-**Favorable (F) vs Unfavorable (U) Variances**
-- **Favorable (F)**: Actual cost < Standard cost (cost savings)
-- **Unfavorable (U)**: Actual cost > Standard cost (cost overrun)
-</Callout>
-
----
-
-## 3. Eight-Direction Analysis of Price and Efficiency Variances
-
-Price variance is typically the responsibility of the **purchasing department**, while efficiency variance is usually attributed to the **production department**.
+## 2. Budget and volume variances
 
 <LectureTable
-  title="Direct Materials Variance Analysis Formulas"
-  headers={["Item", "Formula", "Responsible Department"]}
+  title="Fixed manufacturing overhead variances (unit: ₩10,000)"
+  headers={["Item", "Calculation", "Amount"]}
   rows={[
-    ["Price Variance", "AQ × (SP − AP)", "Purchasing Department"],
-    ["Efficiency Variance", "SP × (SQ − AQ)", "Production Department"],
+    ["Actual", "", "3,100"],
+    ["Budget", "", "3,000"],
+    ["Standard overhead applied", "1,500 hours × 1.5", "2,250"],
+    ["Budget (spending) variance", "3,100 − 3,000", "100 U"],
+    ["Volume variance", "3,000 − 2,250", "750 U"],
+    ["Total variance", "3,100 − 2,250", "850 U"],
   ]}
 />
 
----
+- **Budget variance:** actual fixed costs exceeded budget. It is a variance managers can control.
+- **Volume variance:** output fell short of the denominator level, so ₩7.5 million of fixed cost was not applied to products. It signals not wasted cost but **underused capacity**. The cause may be weak demand, equipment breakdowns or production planning.
 
-Standard costing goes beyond accounting figures to form the foundation of **responsibility accounting**. Use the simulator to build a complete mental model of the chain: AQ (Actual Quantity), AP (Actual Price), SQ (Standard Quantity Allowed), and SP (Standard Price).
+There is no efficiency variance for fixed costs, because using more labor hours does not increase fixed costs.
+
+## 3. Grouping overhead variances
+
+Combined with the variable overhead variances from [chapter 10](/en/academy-cost-accounting-ch6/) (spending −24, efficiency +24, in ₩10,000), they can be grouped as follows.
+
+<LectureTable
+  title="Methods of overhead variance analysis (unit: ₩10,000)"
+  headers={["Method", "Components", "Amount"]}
+  rows={[
+    ["Four-way", "Variable spending −24 / variable efficiency +24 / fixed budget +100 / volume +750", "Total 850 U"],
+    ["Three-way", "Spending (variable spending + fixed budget) +76 / efficiency +24 / volume +750", "Total 850 U"],
+    ["Two-way", "Budget (spending + efficiency) +100 / volume +750", "Total 850 U"],
+  ]}
+/>
+
+The three-way spending variance is the difference between total actual overhead (variable 600 + fixed 3,100) and the flexible budget based on actual hours (624 + 3,000). However they are grouped, the total variance is the same. How finely to split variances depends on whom you hold responsible.
+
+## 4. Disposing of variances at period-end
+
+Inventories and cost of sales recorded at standard cost must be brought close to actual cost before external reporting.
+
+- **Adjust cost of sales:** if variances are small, add or deduct them in full to cost of sales.
+- **Proration:** if variances are material, prorate them across work in process, finished goods and cost of sales.
+- **The special case of the volume variance:** unallocated fixed overhead arising from abnormally low production is not included in inventory but expensed in the period incurred, under K-IFRS 1002 ([Intermediate Accounting chapter 2](/en/academy-intermediate-accounting-ch2/)).
+
+<Callout type="warning">
+Do not read a volume variance as a management failure just because it is labelled "unfavorable". Increasing output to eliminate the volume variance when demand has fallen only piles up inventory and defers fixed costs into it, inflating profit. The volume variance is information on capacity utilization, not on cost control. Use the budget variance to evaluate managers and the volume variance to plan capacity.
+</Callout>
+
+## Check your understanding
+
+Company BD's annual budgeted fixed manufacturing overhead is ₩120 million and its denominator level is 24,000 machine hours. Standard machine hours allowed for actual output are 26,000, and actual fixed manufacturing overhead is ₩118 million. What are the budget and volume variances, and are they favorable or unfavorable?
+
+The rate is ₩5,000 per hour and standard overhead applied is $26{,}000 \times 5{,}000$ won, i.e. ₩130 million. The budget variance is $11{,}800 - 12{,}000 = -200$ (₩2 million), favorable. The volume variance is $12{,}000 - 13{,}000 = -1{,}000$ (₩10 million), favorable: running the equipment more than the denominator level applied ₩10 million more fixed cost than budgeted. The total variance is ₩12 million overapplied (favorable).
+
+## References
+
+- Charles Horngren, Srikant Datar and Madhav Rajan, *Cost Accounting: A Managerial Emphasis*, ch. 8
+- Ray Garrison, Eric Noreen and Peter Brewer, *Managerial Accounting*, ch. 11
+- Korea Accounting Standards Board, K-IFRS 1002 *Inventories*

@@ -1,0 +1,87 @@
+---
+track: academy
+series: cost-accounting
+chapter: 12
+title: "Comptabilité analytique — Coûts variables et coûts complets : pourquoi les résultats diffèrent"
+description: "Établit sur deux exercices les comptes de résultat en coûts complets et en coûts variables, qui diffèrent selon que les frais généraux de production fixes sont un coût du produit ou de la période, explique l'écart de résultat par la variation des stocks et présente la comptabilité du débit (throughput)."
+pubDate: 2026-06-22
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["comptabilité analytique", "coûts variables", "coûts complets", "comptabilité du débit", "marge sur coûts variables"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+Les états financiers destinés à l'information externe reposent sur les **coûts complets** : les frais généraux de production fixes sont incorporés au coût des produits et différés en stock. La gestion interne utilise souvent les **coûts variables**, qui traitent ces frais fixes comme une charge de la période et font varier le résultat avec les ventes plutôt qu'avec la production. Les deux méthodes ne diffèrent que sur un point, mais ce point peut beaucoup modifier le résultat.
+
+## 1. Ce qui distingue les deux méthodes
+
+<LectureTable
+  title="Comparaison du traitement des coûts"
+  headers={["Coût", "Coûts complets", "Coûts variables"]}
+  rows={[
+    ["Matières directes, main-d'œuvre directe, frais généraux variables", "Coût du produit", "Coût du produit"],
+    ["Frais généraux de production fixes", "Coût du produit (inclus dans les stocks)", "Charge de la période"],
+    ["Frais commerciaux et administratifs variables et fixes", "Charge de la période", "Charge de la période"],
+    ["Présentation du compte de résultat", "Marge brute", "Marge sur coûts variables"],
+  ]}
+/>
+
+## 2. Comparaison sur deux exercices
+
+Le prix de vente de la société BE est de 100 000 wons l'unité, le coût variable de production de 30 000 wons l'unité et les frais variables de vente de 10 000 wons l'unité. Les frais généraux de production fixes annuels s'élèvent à 20 millions et les frais commerciaux et administratifs fixes à 5 millions ; la capacité normale est de 1 000 unités. En 20X1, BE a produit 1 000 unités et en a vendu 800 ; en 20X2, elle en a produit 800 et vendu 1 000. Il n'y a pas de stock initial, et le coût fixe de production unitaire en coûts complets est de 20 000 wons sur la base de la capacité normale.
+
+<LectureTable
+  title="Résultat d'exploitation par exercice (en dizaines de milliers de wons)"
+  headers={["Élément", "20X1 complets", "20X1 variables", "20X2 complets", "20X2 variables"]}
+  rows={[
+    ["Chiffre d'affaires", "8 000", "8 000", "10 000", "10 000"],
+    ["Coût des ventes (complets : 5 par unité)", "(4 000)", "", "(5 000)", ""],
+    ["Frais fixes non imputés (sous-activité)", "", "", "(400)", ""],
+    ["Coûts variables (4 par unité)", "", "(3 200)", "", "(4 000)"],
+    ["Frais généraux de production fixes", "", "(2 000)", "", "(2 000)"],
+    ["Frais variables de vente", "(800)", "", "(1 000)", ""],
+    ["Frais commerciaux et administratifs fixes", "(500)", "(500)", "(500)", "(500)"],
+    ["Résultat d'exploitation", "2 700", "2 300", "3 100", "3 500"],
+  ]}
+/>
+
+En coûts complets en 20X2, la production a été inférieure de 200 unités à la capacité normale : 4 millions de frais fixes n'ont pas été imputés et ont été passés en charges de la période (l'écart sur activité du [chapitre 11](/fr/education-accounting-ch15/)).
+
+## 3. Pourquoi les résultats diffèrent
+
+<FormulaBox
+  label="Écart de résultat entre les deux méthodes"
+  formula="\text{Résultat en coûts complets} - \text{Résultat en coûts variables} = (\text{Stock final} - \text{Stock initial}) \times \text{Coût fixe unitaire}"
+  description="En 20X1, le stock a augmenté de 200 unités : le résultat en coûts complets est supérieur de (200 − 0) × 2 = 400 (4 millions). En 20X2, il a diminué de 200 unités : il est inférieur de (0 − 200) × 2 = −400."
+/>
+
+Quand le stock augmente, une partie des frais fixes est enfouie dans les stocks et reportée à l'exercice suivant : le résultat en coûts complets est plus élevé. Quand il diminue, les frais fixes différés auparavant sont libérés : il est plus faible. Sur les deux exercices, production et ventes s'égalisent (1 800 unités) et le résultat cumulé est le même, 58 millions.
+
+Le résultat en coûts variables ne suit que les ventes. Quand elles passent de 800 à 1 000 unités, la marge sur coûts variables (60 000 wons l'unité) augmente de 12 millions, et le résultat aussi. En coûts complets, il n'a augmenté que de 4 millions.
+
+## 4. La comptabilité du débit
+
+La **comptabilité du débit** (throughput accounting) va plus loin : elle ne considère comme coût du produit que **les matières directes** et traite même la main-d'œuvre directe et les frais généraux variables en charges de la période, au motif qu'à court terme les coûts de personnel sont eux aussi pratiquement fixes. Elle supprime presque toute incitation à constituer des stocks pour gonfler le résultat. Le chiffre d'affaires moins les matières directes s'appelle la **contribution au débit**.
+
+<Callout type="warning">
+En coûts complets, le résultat augmente **simplement en fabricant davantage de produits qui ne se vendront pas**, car les frais fixes sont différés en stock. Si la rémunération des dirigeants est liée au résultat en coûts complets, une incitation à la surproduction apparaît. Soupçonnez cette possibilité chez une société dont les stocks croissent plus vite que les ventes et dont le résultat augmente alors que les flux de trésorerie d'exploitation se dégradent. C'est pourquoi on utilise en parallèle le résultat en coûts variables pour l'évaluation interne des performances.
+</Callout>
+
+## Exercice
+
+Le coût fixe de production unitaire de la société BF (sur la base de la capacité normale) est de 15 000 wons. Le stock initial est de 300 unités, le stock final de 700 unités, et le résultat d'exploitation en coûts variables de 40 millions de wons. En supposant qu'il n'y a pas d'écart sur activité, quel est le résultat d'exploitation en coûts complets ? Si l'année suivante le stock passe de 700 à 100 unités, quel est l'écart entre les deux résultats ?
+
+Le stock a augmenté de 400 unités : le résultat en coûts complets est supérieur de $400 \times 1{,}5 = 600$ (6 millions), soit 46 millions de wons. L'année suivante, le stock baisse de 600 unités : le résultat en coûts complets est inférieur au résultat en coûts variables de $600 \times 1{,}5 = 900$ (9 millions).
+
+## Références
+
+- Charles Horngren, Srikant Datar et Madhav Rajan, *Cost Accounting: A Managerial Emphasis*, chap. 9
+- Eliyahu Goldratt et Jeff Cox, *The Goal*
+- Ray Garrison, Eric Noreen et Peter Brewer, *Managerial Accounting*, chap. 6
