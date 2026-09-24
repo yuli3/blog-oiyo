@@ -1,63 +1,88 @@
 ---
-locale: en
 track: academy
-title: "Economics — Comparative Advantage — Why Trade Benefits Everyone"
-category: Economics
-author: OIYO Editorial
-tags:
-  - Education
-  - Economics
-  - ComparativeAdvantage
-  - Trade
-  - Ricardo
-description: >-
-  Learn the gains from trade through David Ricardo's theory of comparative advantage — how countries benefit by specializing in what they produce at the lowest opportunity cost. Analyze it yourself with the interactive opportunity cost calculator.
+series: international-trade
+chapter: 4
+title: "International Trade — Mathematical Applications of Comparative Advantage and the Terms of Trade"
+description: "Identifies comparative advantage from unit labour requirements and calculates production and consumption possibility sets, the terms of trade, the wage range and the conditions of the many-good Ricardian model."
 pubDate: 2026-04-14
+updatedDate: 2026-09-24
+category: Economics
+tags: ["economics", "comparative advantage", "terms of trade", "Ricardian model", "gains from trade"]
+locale: en
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+embeddedTools: ["Comparative advantage calculator"]
 ---
 
-import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 import { CompAdvantageCalculator } from "@/features/education-calculators/TradeSimulators";
 
-# Comparative Advantage: The Economics of Trade
+# International Trade — Solving Comparative Advantage as a Problem of Production and Consumption
 
-"If one country is less efficient than another in producing every good, can trade still be mutually beneficial?" Classical economics gives a clear answer: yes — through **Comparative Advantage**.
+[Chapter 1](/en/education-economics-ch15/) and [chapter 2](/en/education-economics-ch34/) introduced the principle of comparative advantage and trade models. This chapter calculates the range of relative prices and the gains from trade from data on production time. The key is not absolute productivity but **how much of the other good is given up to make one more unit of a good**.
 
----
+## 1. Opportunity costs from unit labour requirements
 
-## 1. Absolute Advantage vs Comparative Advantage
+Suppose Korea needs 4 hours for one chip and 2 hours for one unit of wheat, while Australia needs 12 and 3 hours.
 
-- **Absolute Advantage**: The ability of a country to produce a good using fewer resources (time) than another country.
-- **Comparative Advantage**: The ability of a country to produce a good at a lower **opportunity cost** than another country.
+<LectureTable
+  title="Technology and opportunity costs"
+  headers={["Country", "Labour per chip", "Labour per unit of wheat", "Opportunity cost of one chip"]}
+  rows={[
+    ["Korea", "4", "2", "2 wheat"],
+    ["Australia", "12", "3", "4 wheat"],
+  ]}
+/>
 
-Ricardo proved that even a country at an absolute disadvantage in all areas can benefit from **specialization** — focusing on the product where its opportunity cost is relatively lower — allowing both countries to expand their consumption possibilities through trade.
+Korea has higher absolute productivity in both goods, but its opportunity cost of chips is lower, so it has a comparative advantage in chips. Australia's opportunity cost of wheat is $3/12=0.25$ chips, lower than Korea's $2/4=0.5$ chips.
 
----
+## 2. The world relative price must lie between the two opportunity costs
 
-## 2. Interactive Analysis Tool
+If the world price of one chip is 3 units of wheat, Korea gives up 2 wheat at home to make a chip and exchanges it for 3 wheat, gaining 1 wheat per chip. Australia would have to give up 4 wheat to make a chip at home, but through trade it only pays 3, saving 1 wheat.
 
-Enter the production times for two countries to automatically calculate opportunity costs and see which country has a comparative advantage in which good.
+<FormulaBox
+  label="Terms of trade with mutual gains"
+  formula="2<\frac{P_{\text{chips}}}{P_{\text{wheat}}}<4"
+  description="At the boundary one country is indifferent to trade; outside the range at least one country prefers to produce for itself."
+/>
+
+## 3. Trade pushes the consumption possibility set beyond the production possibility set
+
+If Korea has 40 hours of labour, its autarky production possibility line is $4C+2W=40$. Fully specialized in chips, it produces 10. If the world price is 3 wheat per chip, it can export 4 chips and consume 6 chips and 12 wheat. That bundle would take $4×6+2×12=48$ hours, so it lies outside the autarky production possibility set.
+
+This is an expansion of the **consumption** possibility set, not of the production possibility set. The technology itself has not suddenly improved.
+
+## 4. Relative wages are determined jointly with productivity and the pattern of trade
+
+Let Korea's wage be $w_K$ and Australia's $w_A$. The cost of a chip is $4w_K$ and $12w_A$ respectively, and of wheat $2w_K$ and $3w_A$. For Korea to produce chips and Australia wheat, the following range is needed.
+
+<FormulaBox
+  label="Relative wages that sustain specialization"
+  formula="\frac{12}{4}>\frac{w_K}{w_A}>\frac{3}{2}\quad\Rightarrow\quad 1.5<\frac{w_K}{w_A}<3"
+  description="If Korea's wage is too high relative to its productivity advantage, it loses competitiveness in chips; if it is too low, Korea produces both goods more cheaply."
+/>
+
+In the many-good model, given relative wages, a country produces the goods in which its productivity advantage is largest, and transport costs and non-traded goods move the boundary.
+
+## 5. Conditions the calculator does not show
 
 <CompAdvantageCalculator client:visible />
 
----
-
-## 3. How to Calculate Opportunity Cost
-
-The opportunity cost of producing Good X is calculated as follows:
-
-<FormulaBox
-  formula="Opportunity\ Cost\ of\ X = \frac{Labor\ Hours\ Required\ for\ X}{Labor\ Hours\ Required\ for\ Y} \times (Units\ of\ Y)"
-  label="Opportunity Cost of X"
-  description="The amount of Good Y you must give up to produce one additional unit of Good X."
-  color="#3b82f6"
-/>
-
-<Callout type="tip">
-**Memory tip**: The time for what you *want* ($X$) goes in the **numerator**. The denominator is the time for what you give up ($Y$).
+<Callout type="warning">
+Comparative advantage explains the possibility of total gains from trade, but it does not automatically resolve transition costs, spells of unemployment, domestic distribution or environmental externalities. Complete specialization also relies on the simplifications of constant opportunity costs and zero trade costs.
 </Callout>
 
----
+The next chapter calculates the gravity equation for bilateral trade and value-added exports, in which intermediates cross borders several times.
 
-Comparative advantage is the most powerful theoretical foundation for modern free trade. In your own life, too, focusing on the area where your opportunity cost is lowest — your comparative advantage — is the path to maximizing productivity rather than trying to be good at everything.
+## Check your understanding
+
+If the world price rises to 4 wheat per chip and sits on the boundary of the range, who gets the gains? Korea uses its 40 hours to make 10 chips, exports 4 for 16 wheat, and consumes 6 chips and 16 wheat. That bundle would take $4×6+2×16=56$ hours, even further out than at a price of 3 (48 hours). Australia is indifferent: paying 4 wheat for a chip costs the same as making it. The closer the terms of trade are to one country's opportunity cost, the more the gains go to the other country.
+
+## References
+
+- MIT OpenCourseWare, [14.54 International Trade](https://ocw.mit.edu/courses/14-54-international-trade-fall-2016/)
+- World Trade Organization, [Trade data](https://data.wto.org/)
+- David Ricardo, *On the Principles of Political Economy and Taxation*

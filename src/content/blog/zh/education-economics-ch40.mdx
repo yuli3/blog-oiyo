@@ -1,0 +1,88 @@
+---
+track: academy
+series: international-trade
+chapter: 4
+title: "国际贸易学 — 比较优势的数学应用与贸易条件"
+description: "根据单位劳动投入量判别比较优势，并计算生产与消费可能集合、贸易条件、工资范围以及多商品李嘉图模型的条件。"
+pubDate: 2026-04-14
+updatedDate: 2026-09-24
+category: Economics
+tags: ["经济学", "比较优势", "贸易条件", "李嘉图模型", "贸易利得"]
+locale: zh
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+embeddedTools: ["比较优势计算器"]
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+import { CompAdvantageCalculator } from "@/features/education-calculators/TradeSimulators";
+
+# 国际贸易学 — 把比较优势当作生产与消费问题来求解
+
+[第1章](/zh/education-economics-ch15/)和[第2章](/zh/education-economics-ch34/)介绍了比较优势原理和贸易模型。本章根据生产时间数据计算相对价格范围和贸易利得。关键不在绝对生产率，而在于**多生产一单位某商品时要放弃多少另一种商品**。
+
+## 1. 用单位劳动投入量计算机会成本
+
+假设韩国生产1个芯片需要4小时，生产1单位小麦需要2小时;澳大利亚分别需要12小时和3小时。
+
+<LectureTable
+  title="生产技术与机会成本"
+  headers={["国家", "每个芯片的劳动", "每单位小麦的劳动", "1个芯片的机会成本"]}
+  rows={[
+    ["韩国", "4", "2", "小麦2"],
+    ["澳大利亚", "12", "3", "小麦4"],
+  ]}
+/>
+
+韩国在两种商品上的绝对生产率都更高，但芯片的机会成本更低，所以在芯片上有比较优势。澳大利亚小麦的机会成本是$3/12=0.25$个芯片，低于韩国的$2/4=0.5$个。
+
+## 2. 国际相对价格必须位于两个机会成本之间
+
+若1个芯片的国际价格是3单位小麦，韩国在国内放弃2单位小麦生产芯片，再换回3单位小麦，每个芯片多得1单位小麦。澳大利亚若在国内生产芯片需放弃4单位小麦，通过贸易只需付3单位，节省1单位小麦。
+
+<FormulaBox
+  label="互利的贸易条件"
+  formula="2<\frac{P_{\text{芯片}}}{P_{\text{小麦}}}<4"
+  description="在边界上，一国对贸易无差异;超出范围，至少一国宁愿自给生产。"
+/>
+
+## 3. 贸易使消费可能集合扩展到生产可能集合之外
+
+若韩国有40小时劳动，自给自足的生产可能线为$4C+2W=40$。完全专业化生产芯片可得10个。若国际价格为每个芯片3单位小麦，韩国可以出口4个芯片，消费6个芯片和12单位小麦。这一组合需要$4×6+2×12=48$小时，位于自给自足的生产可能集合之外。
+
+这是**消费**可能集合的扩大，而不是生产可能集合的扩大。生产技术本身并没有立刻变好。
+
+## 4. 相对工资与生产率和贸易模式共同决定
+
+设韩国工资为$w_K$，澳大利亚工资为$w_A$。芯片的生产成本分别为$4w_K$和$12w_A$，小麦为$2w_K$和$3w_A$。要让韩国生产芯片、澳大利亚生产小麦，需要满足以下范围。
+
+<FormulaBox
+  label="维持专业化的相对工资"
+  formula="\frac{12}{4}>\frac{w_K}{w_A}>\frac{3}{2}\quad\Rightarrow\quad 1.5<\frac{w_K}{w_A}<3"
+  description="韩国工资相对其生产率优势过高，就会失去芯片竞争力;过低，则两种商品都由韩国更便宜地生产。"
+/>
+
+在多商品模型中，给定相对工资，一国从生产率优势最大的商品开始生产，运输成本和非贸易品会移动边界。
+
+## 5. 计算器没有显示的条件
+
+<CompAdvantageCalculator client:visible />
+
+<Callout type="warning">
+比较优势说明了贸易总利得的可能性，但不会自动解决转型成本、失业期、国内分配和环境外部性。完全专业化同样依赖机会成本不变和贸易成本为零这些简化。
+</Callout>
+
+下一章计算双边贸易的引力方程，以及中间品多次跨越国境的增加值出口。
+
+## 练习题
+
+若国际价格升到每个芯片4单位小麦，落在范围的边界上，利得归谁?韩国用40小时生产10个芯片，出口4个换得16单位小麦，消费6个芯片和16单位小麦。这一组合需要$4×6+2×16=56$小时，比价格为3时(48小时)更远。澳大利亚付4单位小麦买1个芯片与自己生产没有区别，因此对贸易无差异。贸易条件越接近某一国的机会成本，利得就越集中到另一国。
+
+## 参考资料
+
+- MIT OpenCourseWare, [14.54 International Trade](https://ocw.mit.edu/courses/14-54-international-trade-fall-2016/)
+- World Trade Organization, [Trade data](https://data.wto.org/)
+- David Ricardo, *On the Principles of Political Economy and Taxation*
