@@ -1,0 +1,122 @@
+---
+track: academy
+locale: en
+title: "Public Finance — Fiscal Policy: Multipliers, Ricardian Equivalence and Debt Dynamics"
+category: "Economics"
+series: public-finance
+chapter: 6
+chapterTitleShort: 'Fiscal Policy and Debt'
+author: OIYO Editorial
+tags:
+  - public finance
+  - fiscal multiplier
+  - Ricardian equivalence
+  - government debt
+  - fiscal rules
+description: "Uses numerical examples to cover spending, tax and balanced-budget multipliers, how automatic stabilizers shrink the multiplier, the conditions for Ricardian equivalence, the debt-ratio dynamics (r−g)b and fiscal rules."
+pubDate: '2026-05-05'
+updatedDate: '2026-09-24'
+layoutVariant: lecture-series
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Public Finance — Fiscal Policy Moves Today's Demand and Tomorrow's Taxes Together
+
+The previous chapters looked at how taxes and spending change choices in individual markets. This chapter turns to the macro side: how much aggregate demand moves when government spending and taxes change, and, if they are financed by borrowing, what path the debt follows. The macroeconomic background of the model is in the [IS-LM chapter of Macroeconomics](/en/education-economics-ch14/).
+
+## 1. Leakages determine the multiplier
+
+In the simplest model, with fixed prices and an unchanged interest rate, consumption is a fixed share $c$ (the marginal propensity to consume) of disposable income. When government spending rises by 1, income rises by 1, a share $c$ of it is spent again and raises income, and so on.
+
+<FormulaBox
+  label="The simple multiplier"
+  formula="\frac{\Delta Y}{\Delta G} = \frac{1}{1-c},\qquad \frac{\Delta Y}{\Delta T} = \frac{-c}{1-c}"
+  description="With c = 0.8, the spending multiplier is 5 and the tax multiplier −4. Part of a tax cut is saved in the first round, so its multiplier is smaller than that of spending."
+/>
+
+If spending and taxes are raised by the same amount (a balanced budget), income rises by the sum of the two multipliers, $\frac{1-c}{1-c}=1$. This is the **balanced-budget multiplier of 1**.
+
+Real multipliers are far smaller than 5 because of leakages other than saving. Adding an income tax rate $\tau$ and a marginal propensity to import $m$ gives the following.
+
+<FormulaBox
+  label="The multiplier with leakages"
+  formula="\frac{\Delta Y}{\Delta G} = \frac{1}{1-c(1-\tau)+m}"
+  description="With c = 0.8, τ = 0.25 and m = 0.2, it is 1/(1−0.6+0.2) = 1/0.6 ≈ 1.67. Taxes and imports absorb part of the income gain in every round."
+/>
+
+The same leakages are **automatic stabilizers**. When the economy weakens and incomes fall, progressive income tax payments fall faster and unemployment benefit spending rises, cushioning the fall in disposable income without any decision by parliament. That a higher tax rate $\tau$ means a smaller multiplier also means, conversely, that private shocks spread less into income.
+
+## 2. Other channels that shrink the multiplier
+
+<LectureTable
+  title="Channels that shrink the multiplier"
+  headers={["Channel", "Mechanism", "Weakens when"]}
+  rows={[
+    ["Interest-rate crowding out", "Government borrowing raises rates and private investment falls", "Rates are stuck at the lower bound or the central bank holds them fixed"],
+    ["Exchange-rate crowding out", "Higher rates and capital inflows appreciate the currency and net exports fall", "Fixed exchange rates, capital controls"],
+    ["Ricardian equivalence", "Households anticipate future taxes and save more", "Liquidity constraints, myopia, short horizons"],
+    ["Supply constraints", "Prices rise near full employment", "Idle capacity and unemployment are large"],
+  ]}
+/>
+
+Empirical estimates are mostly scattered between 0.5 and 2 and tend to be larger in recessions and at the interest-rate lower bound. There is no single "right" multiplier; its value depends on the monetary policy response and the state of the economy.
+
+## 3. Ricardian equivalence: debt is future taxes
+
+Suppose the government cuts taxes by 100 today, issues 100 of bonds and next year collects principal and interest of $100(1+r)$ in taxes. The present value of the future tax is exactly 100. If households know this and consume on the basis of their lifetime budgets, they save the entire 100 from the tax cut to pay next year's tax. Consumption does not change, and the rise in private saving exactly offsets the fall in government saving.
+
+This conclusion needs strong assumptions.
+
+- Households smooth consumption over lifetime income without borrowing constraints.
+- Those who will pay the future taxes are the same people who get the tax cut now, or they care altruistically about their children's generation.
+- Taxes are lump sum (with distortionary taxes, the timing of taxes changes behaviour).
+
+The larger the share of liquidity-constrained households, and the more the tax burden shifts to the next generation, the weaker equivalence becomes. Even so, Ricardian equivalence serves as a benchmark that corrects the illusion that "debt-financed spending is free."
+
+## 4. The debt ratio is a contest between r and g
+
+With a debt-to-GDP ratio $b$, a primary balance (balance excluding interest) surplus ratio $s$, a real interest rate $r$ and a real growth rate $g$, the debt ratio moves as follows.
+
+<FormulaBox
+  label="Debt-ratio dynamics"
+  formula="\Delta b \approx (r-g)\,b - s"
+  description="Interest makes the debt grow and growth enlarges the denominator. The primary balance that keeps the debt ratio stable is s* = (r−g)b."
+/>
+
+With a debt ratio of 50%, $r=3\%$ and $g=4\%$, $(r-g)b=-0.5$ points. Even with a primary deficit of 0.5% of GDP, the debt ratio stays put. Conversely, with $r=5\%$ and $g=3\%$, $(r-g)b=1$ point, so a primary surplus of 1% of GDP is needed to hold the ratio. The same 50% debt can be a completely different burden depending on the interest-rate and growth environment.
+
+<EconDiagram
+  title="Debt-ratio paths (b₀ = 50%, primary balance 0)"
+  xLabel="Year"
+  yLabel="b (%)"
+  xMax={20}
+  yMin={30}
+  yMax={80}
+  curves={[
+    { label: "r − g = +2 pt", points: [[0, 50], [5, 55.2], [10, 60.9], [15, 67.3], [20, 74.3]], tone: "red", anchor: "end" },
+    { label: "r − g = 0", points: [[0, 50], [20, 50]], tone: "gray", dashed: true, anchor: "end" },
+    { label: "r − g = −1 pt", points: [[0, 50], [5, 47.6], [10, 45.2], [15, 43.0], [20, 40.9]], tone: "green", anchor: "end" },
+  ]}
+  marks={[{ x: 0, y: 50, yTick: "50" }, { x: 20, y: 74.3, yTick: "74", xTick: "20" }]}
+  caption="Even with a balanced primary budget, if r exceeds g by 2 points the debt ratio reaches about 74% after 20 years. The calculation approximates b(t) = 50 × (1 + (r−g))^t."
+/>
+
+**Fiscal rules** put a brake on these dynamics. They include debt limits (for example 60% of GDP), budget-balance limits and limits on spending growth. Spending rules leave cyclically varying revenue alone and so preserve automatic stabilizers; balance rules risk forcing austerity in downturns, so they use cyclically adjusted balances or escape clauses.
+
+<Callout type="warning">
+A single threshold such as "debt above X% of GDP is dangerous" has weak foundations. Sustainability differs with the same ratio depending on whether the debt is in domestic currency, how long its maturity is, who holds it and which way r−g points. Rather than one ratio, look at the interest burden and the path of the primary balance together.
+</Callout>
+
+## Check your understanding
+
+In an economy with a marginal propensity to consume of 0.75, an income tax rate of 0.2 and a marginal propensity to import of 0.1, what is the effect of a 10-trillion-won rise in government spending? The multiplier is $1/(1-0.75\times 0.8+0.1)=1/0.5=2$, so income rises by 20 trillion won. Tax revenue rises by $0.2\times 20=4$ trillion won on the extra income, so the deficit rises not by 10 trillion but by 6 trillion won.
+
+## References
+
+- Olivier Blanchard, *Macroeconomics*, ch. 3, 22
+- Robert Barro, "Are Government Bonds Net Wealth?," *Journal of Political Economy* (1974)
+- Valerie Ramey, "Ten Years After the Financial Crisis: What Have We Learned from the Renaissance in Fiscal Research?," *Journal of Economic Perspectives* (2019)
+- IMF, *Fiscal Monitor* (annual report)

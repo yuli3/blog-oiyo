@@ -1,0 +1,115 @@
+---
+track: academy
+locale: fr
+title: "Finances publiques — Impôt sur le revenu et impôt sur les sociétés : effets sur le travail, l'épargne et l'investissement"
+category: "Economics"
+series: public-finance
+chapter: 4
+chapterTitleShort: "Revenu et sociétés"
+author: OIYO Éditorial
+tags:
+  - finances publiques
+  - impôt sur le revenu
+  - impôt sur les sociétés
+  - courbe de Laffer
+  - double imposition
+description: "Présente avec des exemples chiffrés les effets de substitution et de revenu de l'impôt sur l'offre de travail, l'élasticité du revenu imposable et le taux maximisant la recette, l'imposition des intérêts et l'épargne, ainsi que le biais en faveur de la dette et la double imposition de l'impôt sur les sociétés."
+pubDate: '2026-05-05'
+updatedDate: '2026-09-24'
+layoutVariant: lecture-series
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Finances publiques — l'impôt sur le revenu modifie le prix du travail, de l'épargne et de l'investissement
+
+Ce chapitre applique l'analyse d'équilibre partiel du chapitre 2 aux impôts les plus importants. L'impôt sur le revenu modifie le prix du travail par rapport au loisir (le salaire après impôt) et celui de la consommation future par rapport à la consommation présente (le taux d'intérêt après impôt). L'impôt sur les sociétés modifie le coût du capital et le mode de financement de l'investissement. L'ampleur de chaque réaction détermine la charge excédentaire et la recette.
+
+## 1. L'offre de travail : c'est aux données, non à la théorie, de trancher
+
+Un impôt de 20 % sur un salaire horaire de 10 000 wons ramène le salaire après impôt à 8 000 wons. Ce changement se décompose en deux effets.
+
+- **Effet de substitution** : une heure de loisir coûte moins cher (moins de revenu après impôt sacrifié) ; on prend plus de loisir et on travaille moins.
+- **Effet de revenu** : les mêmes heures rapportent moins ; on prend moins de loisir et on travaille plus (si le loisir est un bien normal).
+
+Les deux effets jouant en sens contraire, la théorie seule ne dit pas si une hausse d'impôt réduit ou augmente l'offre de travail. Si l'effet de revenu grandit aux salaires élevés, la courbe d'offre de travail peut même s'infléchir vers l'arrière.
+
+Or ce qui détermine la charge excédentaire, c'est l'**élasticité compensée (hicksienne)**, c'est-à-dire le seul effet de substitution. L'effet de revenu est une réaction au revenu prélevé par l'impôt et se produirait de la même façon avec un impôt forfaitaire. Même si les heures ne changent pas du tout, un fort effet de substitution signifie une forte charge excédentaire. Conclure que « les gens travaillent autant après une hausse d'impôt, donc il n'y a pas de coût » revient à mal interpréter un cas où les deux effets se compensent.
+
+<LectureTable
+  title="Synthèse empirique des élasticités de l'offre de travail"
+  headers={["Groupe et réaction", "Conclusion générale"]}
+  rows={[
+    ["Heures des apporteurs principaux de revenu", "Élasticité faible"],
+    ["Participation des femmes mariées et des seconds apporteurs", "Élasticité relativement forte"],
+    ["Revenu imposable (déclaré) des hauts revenus", "Réagit plus par l'ajustement du calendrier et de la forme des revenus que par le travail"],
+  ]}
+/>
+
+## 2. L'élasticité du revenu imposable et le taux qui maximise la recette
+
+La recherche moderne s'intéresse moins aux heures qu'à la réaction du **revenu imposable** aux taux. Celui-ci capte non seulement le travail, mais aussi les changements de forme de la rémunération, l'usage des déductions et le décalage temporel des revenus. Supposons que le revenu imposable ait une élasticité $e$ par rapport au taux net $(1-t)$.
+
+<FormulaBox
+  label="Revenu imposable et recette"
+  formula="z(t) = z_0 (1-t)^{e},\qquad R(t) = t\, z_0 (1-t)^{e}"
+  description="Relever le taux accroît mécaniquement la recette et la réduit par les comportements, le revenu imposable diminuant. Le taux qui maximise la recette, où les deux effets s'égalisent, est t* = 1/(1+e)."
+/>
+
+Avec $e=0{,}25$, $t^*=1/1{,}25=80\,\%$. Au-delà, une baisse de taux augmente la recette. C'est la logique de la **courbe de Laffer**. La courbe elle-même n'est pas contestée ; la question est de savoir de quel côté de $t^*$ se trouvent les taux actuels, et d'après les élasticités estimées dans la littérature (surtout entre 0,1 et 0,4), les taux de l'impôt sur le revenu de la plupart des pays se situent à gauche du sommet.
+
+<EconDiagram
+  title="La courbe de Laffer (e = 0,25)"
+  xLabel="t (%)"
+  yLabel="Recette"
+  xMax={100}
+  yMax={60}
+  curves={[
+    { label: "R(t)", points: [[0, 0], [20, 18.9], [40, 35.2], [60, 47.7], [70, 51.8], [80, 53.5], [85, 52.9], [90, 50.6], [95, 44.9], [99, 31.3], [100, 0]], tone: "blue", labelAt: 5 },
+  ]}
+  marks={[{ x: 80, y: 53.5, label: "t* = 80 %", guide: true, xTick: "80" }]}
+  caption="Plus l'élasticité est forte, plus le sommet se déplace vers la gauche. Avec e = 1, t* = 50 %."
+/>
+
+Le taux de la tranche supérieure doit aussi refléter la forme de la distribution des hauts revenus. Plus la queue de la distribution est épaisse (plus le paramètre de Pareto $a$ est petit), plus une hausse de taux touche de revenus. La formule de Saez $t^*=1/(1+a\,e)$ avec $a=1{,}5$ et $e=0{,}25$ donne environ 73 %. C'est un repère de maximisation de la recette ; le taux optimal est plus bas selon le poids accordé au bien-être des plus hauts revenus.
+
+## 3. L'imposition des intérêts et l'épargne
+
+Dans un modèle à deux périodes, épargner 1 won aujourd'hui permet de consommer $1+r(1-t)$ wons demain. Avec un taux d'intérêt de 5 % et un impôt de 20 % sur les intérêts, le rendement après impôt est de 4 %. L'impôt sur les intérêts renchérit la consommation future.
+
+Là encore, l'effet de substitution (la consommation future est plus chère, on épargne moins) et l'effet de revenu (il faut épargner davantage pour atteindre un objectif de patrimoine retraite) jouent en sens inverse. Les estimations empiriques de l'élasticité de l'épargne au taux d'intérêt sont faibles et incertaines. En revanche, la réaction de la **forme de l'épargne** aux avantages fiscaux, comme ceux de l'épargne retraite, est forte. Il faut toujours garder à l'esprit que ces comptes peuvent simplement absorber une épargne existante sans accroître l'épargne totale.
+
+En présence d'inflation, l'imposition des intérêts nominaux relève le taux effectif. Avec un taux nominal de 5 %, une inflation de 3 % et un taux d'imposition de 20 %, le rendement nominal après impôt de 4 % moins l'inflation laisse un rendement réel de 1 %. L'impôt prélève la moitié du rendement réel avant impôt de 2 % : le taux effectif en termes réels est de 50 %.
+
+## 4. L'impôt sur les sociétés : qui paie et que change-t-il ?
+
+L'assiette de l'impôt sur les sociétés part du bénéfice comptable, qui diffère du profit économique. Les intérêts de la dette sont déductibles comme charges, mais pas le coût d'opportunité des fonds propres rémunérant les actionnaires. L'impôt sur les sociétés **favorise donc le financement par la dette**. L'endettement excessif accroissant le risque de faillite, certains pays ont introduit une déduction du coût des fonds propres (ACE).
+
+Ce qui influe sur les décisions d'investissement n'est pas le taux légal, mais le **taux effectif marginal**. Un amortissement plus rapide (amortissement accéléré) reporte l'impôt et abaisse le taux effectif sous le taux légal. La déduction immédiate de la totalité de l'investissement (passage en charges immédiat) rend nul le taux effectif sur l'investissement marginal et ne laisse imposés que les surprofits.
+
+**Double imposition** : quand une société paie l'impôt sur ses bénéfices et distribue le reste en dividendes, les actionnaires paient à nouveau un impôt sur les dividendes. Avec un taux de 20 % sur les sociétés et de 15 % sur les dividendes, sur 100 wons de bénéfice il reste aux actionnaires $100\times(1-0{,}2)\times(1-0{,}15)=68$ wons.
+
+<FormulaBox
+  label="Taux global sur les bénéfices distribués"
+  formula="t_{\text{global}} = t_c + (1-t_c)\,t_d = 0{,}20 + 0{,}80\times 0{,}15 = 0{,}32"
+  description="Si les mêmes 100 wons avaient été versés en intérêts, ils auraient été déduits au niveau de la société et soumis au seul impôt sur les intérêts. Cet écart est une autre source du biais en faveur de la dette."
+/>
+
+Le crédit d'impôt sur les dividendes (mécanisme de majoration) atténue la double imposition en restituant à l'actionnaire une partie de l'impôt payé par la société.
+
+<Callout type="warning">
+« Baisser l'impôt sur les sociétés ne profite qu'aux entreprises » et « baisser l'impôt sur les sociétés fait fortement augmenter l'investissement et les salaires » sautent tous deux l'incidence et les élasticités. Comme l'a montré le chapitre 2, en économie ouverte une partie de la charge de l'impôt sur les sociétés passe aux salariés, mais les estimations de cette part varient beaucoup selon les études. De plus, baisser le taux légal profite aussi aux surprofits du capital déjà installé : si le seul but est d'encourager l'investissement, modifier les règles d'amortissement donne plus d'effet par won de recette.
+</Callout>
+
+## Exercice
+
+Quel est le taux qui maximise la recette quand l'élasticité du revenu imposable vaut 0,5 ? $t^*=1/(1+0{,}5)\approx 66{,}7\,\%$. Si le taux actuel passe de 40 % à 45 %, le revenu imposable est multiplié par $(0{,}55/0{,}60)^{0{,}5}\approx 0{,}957$, soit une baisse d'environ 4,3 %, mais la recette est multipliée par $0{,}45\times 0{,}957/0{,}40\approx 1{,}077$, soit une hausse d'environ 7,7 %. C'est que l'on se trouve à gauche du sommet.
+
+## Références
+
+- Jonathan Gruber, *Public Finance and Public Policy*, ch. 21–24
+- Emmanuel Saez, Joel Slemrod and Seth Giertz, "The Elasticity of Taxable Income with Respect to Marginal Tax Rates," *Journal of Economic Literature* (2012)
+- Peter Diamond and Emmanuel Saez, "The Case for a Progressive Tax," *Journal of Economic Perspectives* (2011)
+- Harvey Rosen and Ted Gayer, *Public Finance*, ch. 16–18

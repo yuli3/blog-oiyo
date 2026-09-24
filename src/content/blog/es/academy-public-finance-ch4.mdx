@@ -1,0 +1,115 @@
+---
+track: academy
+locale: es
+title: "Hacienda pública — Impuesto sobre la renta y sobre sociedades: efectos sobre el trabajo, el ahorro y la inversión"
+category: "Economics"
+series: public-finance
+chapter: 4
+chapterTitleShort: 'Renta y sociedades'
+author: OIYO Editorial
+tags:
+  - hacienda pública
+  - impuesto sobre la renta
+  - impuesto sobre sociedades
+  - curva de Laffer
+  - doble imposición
+description: "Presenta con ejemplos numéricos los efectos sustitución y renta del impuesto sobre la oferta de trabajo, la elasticidad de la renta imponible y el tipo que maximiza la recaudación, la tributación de los intereses y el ahorro, y el sesgo a favor de la deuda y la doble imposición del impuesto sobre sociedades."
+pubDate: '2026-05-05'
+updatedDate: '2026-09-24'
+layoutVariant: lecture-series
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Hacienda pública — el impuesto sobre la renta cambia el precio del trabajo, el ahorro y la inversión
+
+Este capítulo aplica el análisis de equilibrio parcial del capítulo 2 a los impuestos más importantes. El impuesto sobre la renta cambia el precio del trabajo frente al ocio (el salario después de impuestos) y el del consumo futuro frente al presente (el tipo de interés después de impuestos). El impuesto sobre sociedades cambia el coste del capital y la forma de financiar la inversión. Cuánto cambia cada uno la conducta determina el exceso de gravamen y la recaudación.
+
+## 1. La oferta de trabajo: la dirección la deciden los datos, no la teoría
+
+Un impuesto del 20 % sobre un salario de 10.000 wones por hora lo deja en 8.000 wones después de impuestos. Este cambio se descompone en dos efectos.
+
+- **Efecto sustitución**: una hora de ocio se ha abaratado (se sacrifica menos renta neta), así que se toma más ocio y se trabaja menos.
+- **Efecto renta**: las mismas horas dan menos renta, así que se toma menos ocio y se trabaja más (si el ocio es un bien normal).
+
+Como los dos efectos van en sentidos opuestos, la teoría por sí sola no dice si subir el impuesto reduce o aumenta la oferta de trabajo. Si el efecto renta crece con salarios altos, la curva de oferta de trabajo puede incluso volverse hacia atrás.
+
+Sin embargo, lo que determina el exceso de gravamen es la **elasticidad compensada (hicksiana)**, es decir, solo el efecto sustitución. El efecto renta es una reacción a la renta que se lleva el impuesto y se produciría igual con un impuesto de suma fija. Aunque las horas no cambien nada, un gran efecto sustitución significa un gran exceso de gravamen. Concluir que «la gente trabaja igual tras subir el impuesto, así que no hay coste» es malinterpretar un caso en que los dos efectos se compensan.
+
+<LectureTable
+  title="Resumen empírico de las elasticidades de la oferta de trabajo"
+  headers={["Grupo y respuesta", "Conclusión general"]}
+  rows={[
+    ["Horas de quienes aportan la renta principal", "Elasticidad pequeña"],
+    ["Participación de mujeres casadas y segundos perceptores", "Elasticidad relativamente grande"],
+    ["Renta imponible (declarada) de las rentas altas", "Responden más ajustando el momento y la forma de la renta que trabajando"],
+  ]}
+/>
+
+## 2. La elasticidad de la renta imponible y el tipo que maximiza la recaudación
+
+La investigación moderna se fija menos en las horas que en cuánto responde la **renta imponible** a los tipos. La renta imponible recoge no solo el trabajo, sino también cambios en la forma de retribución, el uso de deducciones y el traslado de rentas en el tiempo. Supongamos que la renta imponible tiene una elasticidad $e$ respecto a la proporción neta $(1-t)$.
+
+<FormulaBox
+  label="Renta imponible y recaudación"
+  formula="z(t) = z_0 (1-t)^{e},\qquad R(t) = t\, z_0 (1-t)^{e}"
+  description="Subir el tipo aumenta mecánicamente la recaudación y la reduce por la conducta, al caer la renta imponible. El tipo que maximiza la recaudación, donde ambos efectos se igualan, es t* = 1/(1+e)."
+/>
+
+Con $e=0{,}25$, $t^*=1/1{,}25=80\,\%$. Por encima de ese tipo, bajarlo aumenta la recaudación. Es la lógica de la **curva de Laffer**. La curva en sí no se discute; la cuestión es en qué lado de $t^*$ están los tipos actuales, y a juzgar por las elasticidades estimadas en la literatura (sobre todo entre 0,1 y 0,4), los tipos del impuesto sobre la renta de la mayoría de los países están a la izquierda del máximo.
+
+<EconDiagram
+  title="La curva de Laffer (e = 0,25)"
+  xLabel="t (%)"
+  yLabel="Recaudación"
+  xMax={100}
+  yMax={60}
+  curves={[
+    { label: "R(t)", points: [[0, 0], [20, 18.9], [40, 35.2], [60, 47.7], [70, 51.8], [80, 53.5], [85, 52.9], [90, 50.6], [95, 44.9], [99, 31.3], [100, 0]], tone: "blue", labelAt: 5 },
+  ]}
+  marks={[{ x: 80, y: 53.5, label: "t* = 80 %", guide: true, xTick: "80" }]}
+  caption="Cuanto mayor es la elasticidad, más a la izquierda está el máximo. Con e = 1, t* = 50 %."
+/>
+
+El tipo del tramo superior debe reflejar además la forma de la distribución de las rentas más altas. Cuanto más gruesa es la cola de la distribución (cuanto menor es el parámetro de Pareto $a$), más renta afecta una subida del tipo. La fórmula de Saez $t^*=1/(1+a\,e)$ con $a=1{,}5$ y $e=0{,}25$ da alrededor del 73 %. Es una referencia de máxima recaudación; el tipo óptimo es menor según el peso que se dé al bienestar de las rentas más altas.
+
+## 3. La tributación de los intereses y el ahorro
+
+En un modelo de dos periodos, ahorrar 1 won hoy permite consumir $1+r(1-t)$ wones mañana. Con un tipo de interés del 5 % y un impuesto del 20 % sobre los intereses, el rendimiento neto es del 4 %. El impuesto sobre los intereses encarece el consumo futuro.
+
+También aquí el efecto sustitución (el consumo futuro es más caro, así que se ahorra menos) y el efecto renta (hay que ahorrar más para alcanzar un patrimonio objetivo para la jubilación) van en sentidos opuestos. Las estimaciones empíricas de la elasticidad del ahorro al tipo de interés son pequeñas e inciertas. En cambio, la respuesta de la **forma del ahorro** a los beneficios fiscales, como los de los planes de pensiones, es grande. Hay que tener siempre en cuenta que esas cuentas pueden limitarse a absorber ahorro ya existente sin aumentar el ahorro total.
+
+Con inflación, gravar los intereses nominales eleva el tipo efectivo. Con un tipo nominal del 5 %, una inflación del 3 % y un tipo impositivo del 20 %, el rendimiento nominal neto del 4 % menos la inflación deja un rendimiento real del 1 %. El impuesto se lleva la mitad del rendimiento real bruto del 2 %, así que el tipo efectivo en términos reales es del 50 %.
+
+## 4. El impuesto sobre sociedades: quién paga y qué cambia
+
+La base del impuesto sobre sociedades parte del beneficio contable, que difiere del beneficio económico. Los intereses de la deuda son deducibles como gasto, pero el coste de oportunidad de los fondos propios que remuneran a los accionistas no lo es. Por eso el impuesto sobre sociedades **favorece la financiación con deuda**. Como el endeudamiento excesivo aumenta el riesgo de quiebra, algunos países han introducido una deducción por el coste de los fondos propios (ACE).
+
+Lo que influye en las decisiones de inversión no es el tipo legal, sino el **tipo efectivo marginal**. Amortizar más deprisa (amortización acelerada) aplaza el impuesto y deja el tipo efectivo por debajo del legal. Deducir de inmediato todo el coste de la inversión (libertad de amortización) anula el tipo efectivo sobre la inversión marginal y deja gravados solo los beneficios extraordinarios.
+
+**Doble imposición**: cuando una sociedad paga el impuesto sobre sus beneficios y reparte el resto como dividendos, los accionistas vuelven a pagar un impuesto sobre los dividendos. Con un tipo del 20 % en sociedades y del 15 % en dividendos, de 100 wones de beneficio quedan en manos del accionista $100\times(1-0{,}2)\times(1-0{,}15)=68$ wones.
+
+<FormulaBox
+  label="Tipo combinado sobre los beneficios distribuidos"
+  formula="t_{\text{comb}} = t_c + (1-t_c)\,t_d = 0{,}20 + 0{,}80\times 0{,}15 = 0{,}32"
+  description="Si los mismos 100 wones se hubieran pagado como intereses, se habrían deducido en la sociedad y solo tributarían como rentas del capital. Esta diferencia es otra fuente del sesgo a favor de la deuda."
+/>
+
+La deducción por dividendos (mecanismo de elevación al íntegro) suaviza la doble imposición devolviendo al accionista parte del impuesto pagado por la sociedad.
+
+<Callout type="warning">
+«Bajar el impuesto sobre sociedades solo beneficia a las empresas» y «bajar el impuesto sobre sociedades aumenta mucho la inversión y los salarios» se saltan ambas la incidencia y las elasticidades. Como se vio en el capítulo 2, en una economía abierta parte de la carga del impuesto sobre sociedades pasa a los trabajadores, pero las estimaciones de esa parte varían mucho entre estudios. Además, bajar el tipo legal también beneficia a los beneficios extraordinarios del capital ya instalado, así que, si el objetivo es solo incentivar la inversión, cambiar las reglas de amortización da más efecto por won recaudado.
+</Callout>
+
+## Ejercicio
+
+¿Cuál es el tipo que maximiza la recaudación si la elasticidad de la renta imponible es 0,5? $t^*=1/(1+0{,}5)\approx 66{,}7\,\%$. Si el tipo actual sube del 40 % al 45 %, la renta imponible se multiplica por $(0{,}55/0{,}60)^{0{,}5}\approx 0{,}957$, una caída de alrededor del 4,3 %, pero la recaudación se multiplica por $0{,}45\times 0{,}957/0{,}40\approx 1{,}077$, un aumento de alrededor del 7,7 %. Es porque se está a la izquierda del máximo.
+
+## Referencias
+
+- Jonathan Gruber, *Public Finance and Public Policy*, ch. 21–24
+- Emmanuel Saez, Joel Slemrod and Seth Giertz, "The Elasticity of Taxable Income with Respect to Marginal Tax Rates," *Journal of Economic Literature* (2012)
+- Peter Diamond and Emmanuel Saez, "The Case for a Progressive Tax," *Journal of Economic Perspectives* (2011)
+- Harvey Rosen and Ted Gayer, *Public Finance*, ch. 16–18
