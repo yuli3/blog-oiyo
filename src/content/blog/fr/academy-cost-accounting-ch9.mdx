@@ -1,0 +1,108 @@
+---
+track: academy
+series: cost-accounting
+chapter: 6
+title: "Comptabilité analytique — Rebuts et freintes : imputation des rebuts normaux et rebuts anormaux"
+description: "Distingue rebuts, freintes et déchets, fixe la quantité de rebuts normaux par rapport au point de contrôle, puis calcule comment la méthode des coûts par processus impute le coût des rebuts normaux aux unités conformes et traite celui des rebuts anormaux en perte de la période."
+pubDate: 2026-09-24
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["comptabilité analytique", "rebuts", "freintes", "rebuts normaux", "rebuts anormaux", "point de contrôle"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+Toute production donne des défauts. Faut-il reporter le coût des unités défectueuses sur les bons produits, ou le traiter à part comme une perte ? C'est la question de ce chapitre. Le critère est de savoir **si le défaut est inévitable même dans une production efficiente**. On ajoute ici les rebuts aux coûts par processus du [chapitre 4](/fr/academy-cost-accounting-ch4/).
+
+## 1. Rebuts, freintes et déchets
+
+- **Rebuts :** unités défectueuses qui ne respectent pas les normes de qualité et ne peuvent être vendues normalement. Les unités subsistent.
+- **Freintes :** diminution de la quantité engagée par évaporation, contraction, etc. Aucune forme physique ne subsiste.
+- **Déchets :** résidus de transformation (chutes de bois, par exemple). S'ils sont vendables, leur valeur est déduite du coût.
+- **Unités à retoucher :** unités défectueuses qui deviennent conformes après une dépense supplémentaire.
+
+## 2. Rebuts normaux et anormaux
+
+<LectureTable
+  title="Classement et traitement des rebuts"
+  headers={["Catégorie", "Nature", "Traitement"]}
+  rows={[
+    ["Rebuts normaux", "Inévitables même dans des conditions efficientes (taux inhérent au processus)", "Partie du coût des produits, imputée aux unités conformes"],
+    ["Rebuts anormaux", "Dus à des causes maîtrisables : panne de machine, négligence", "Perte de la période (charge hors exploitation, etc.)"],
+  ]}
+/>
+
+La tolérance de rebuts normaux se fixe généralement en pourcentage des **unités conformes ayant franchi le point de contrôle**. Comme les rebuts sont détectés au contrôle, la position du point de contrôle détermine le coût incorporé aux rebuts et les unités conformes qui supportent le coût des rebuts normaux.
+
+## 3. Exemple chiffré
+
+La société UU incorpore les matières au début du processus et contrôle à 50 % d'avancement. Les rebuts normaux représentent 6 % des unités conformes contrôlées. Il n'y a pas d'en-cours initial.
+
+<LectureTable
+  title="Flux physique"
+  headers={["Élément", "Quantité", "Avancement (transformation)"]}
+  rows={[
+    ["Lancées dans la période", "1 000", ""],
+    ["Achevées", "750", "100 %"],
+    ["Rebuts (détectés au contrôle)", "50", "50 %"],
+    ["En-cours final", "200", "30 %"],
+  ]}
+/>
+
+L'en-cours final, avancé à 30 %, n'a pas encore atteint le point de contrôle (50 %). Les seules unités conformes contrôlées dans la période sont donc les 750 unités achevées. Les rebuts normaux s'élèvent à $750 \times 6\,\% = 45$ unités et les rebuts anormaux à $50 - 45 = 5$ unités.
+
+### A. Unités équivalentes et coûts unitaires
+
+Le coût des matières de la période est de 50 millions de wons et le coût de transformation de 16,7 millions.
+
+- Unités équivalentes matières : $750 + 50 + 200 = 1\,000$ → coût unitaire 5 (50 000 wons)
+- Unités équivalentes transformation : $750 + 50 \times 50\,\% + 200 \times 30\,\% = 835$ → coût unitaire 2 (20 000 wons)
+
+<FormulaBox
+  label="Coût d'une unité rebutée"
+  formula="\text{Coût unitaire du rebut} = \text{Taux matières} \times 100\,\% + \text{Taux transformation} \times \text{Avancement au contrôle} = 5 + 2 \times 50\,\% = 6"
+  description="En dizaines de milliers de wons. Une unité rebutée n'a été transformée que jusqu'au point de contrôle : elle ne supporte que 50 % du coût de transformation."
+/>
+
+### B. Répartition des coûts
+
+<LectureTable
+  title="Répartition des coûts (en dizaines de milliers de wons)"
+  headers={["Élément", "Calcul", "Montant"]}
+  rows={[
+    ["Produits achevés (avant rebuts)", "750 × (5 + 2)", "5 250"],
+    ["Coût des rebuts normaux", "45 × 6 → ajouté aux produits achevés", "270"],
+    ["Coût des produits achevés", "", "5 520"],
+    ["En-cours final", "200 × 5 + 60 × 2", "1 120"],
+    ["Coût des rebuts anormaux (perte de la période)", "5 × 6", "30"],
+    ["Total", "", "6 670"],
+  ]}
+/>
+
+L'en-cours final n'ayant pas franchi le point de contrôle, les 2,7 millions de rebuts normaux sont imputés **en totalité aux produits achevés**. Si l'en-cours final avait déjà été contrôlé, ce coût serait réparti entre produits achevés et en-cours final au prorata des unités conformes. Le total de 6 670 égale le coût total $5\,000 + 1\,670$.
+
+## 4. Freintes et valeur de cession des rebuts
+
+La freinte réduit la production par rapport aux entrées : une freinte normale est absorbée naturellement par la hausse du coût unitaire de la production restante. Si les rebuts peuvent être vendus à bas prix, leur valeur nette de réalisation est déduite du coût des rebuts, et seul le solde est traité comme normal ou anormal.
+
+<Callout type="warning">
+Le taux de rebuts normaux est une estimation qui pèse sur le coût. Un taux élevé fait passer des pertes anormales dans le coût des produits, les diffère en stock et fait paraître les pertes de la période plus faibles. À l'inverse, pour mesurer les progrès du processus, il faut suivre à part l'évolution des rebuts anormaux. La norme impose d'ailleurs d'exclure du coût des stocks les montants anormaux de gaspillage ([chapitre 2 de comptabilité intermédiaire](/fr/academy-intermediate-accounting-ch2/)).
+</Callout>
+
+## Exercice
+
+La société VV incorpore les matières au début du processus et contrôle à 40 % d'avancement. Les rebuts normaux représentent 5 % des unités conformes. Unités lancées : 2 000 ; achevées : 1 500 ; rebutées : 120 ; en-cours final : 380 unités (avancement 60 %). Pas d'en-cours initial. Combien y a-t-il de rebuts normaux et anormaux, et qui supporte le coût des rebuts normaux ?
+
+L'en-cours final, avancé à 60 %, a dépassé le point de contrôle de 40 % : il est conforme. Les unités conformes sont $1\,500 + 380 = 1\,880$, les rebuts normaux $1\,880 \times 5\,\% = 94$ et les rebuts anormaux $120 - 94 = 26$. Le coût des rebuts normaux est partagé entre produits achevés et en-cours final au prorata des unités conformes (1 500 : 380). Le coût des 26 rebuts anormaux est une perte de la période.
+
+## Références
+
+- Charles Horngren, Srikant Datar et Madhav Rajan, *Cost Accounting: A Managerial Emphasis*, chap. 18
+- Korea Accounting Standards Board, K-IFRS 1002 *Stocks* (gaspillages anormaux)
+- Ray Garrison, Eric Noreen et Peter Brewer, *Managerial Accounting*, chap. 4

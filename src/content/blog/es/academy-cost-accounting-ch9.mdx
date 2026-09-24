@@ -1,0 +1,108 @@
+---
+track: academy
+series: cost-accounting
+chapter: 6
+title: "Contabilidad de costos — Unidades dañadas y mermas: asignación del daño normal y daño anormal"
+description: "Distingue unidades dañadas, mermas y desperdicios, fija la cantidad de daño normal según el punto de inspección y calcula cómo el costeo por procesos asigna el costo del daño normal a las unidades buenas y trata el del daño anormal como pérdida del periodo."
+pubDate: 2026-09-24
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["contabilidad de costos", "unidades dañadas", "mermas", "daño normal", "daño anormal", "punto de inspección"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+Toda producción genera defectos. ¿Hay que cargar el costo de las unidades defectuosas a los productos buenos o verlo aparte como pérdida? Esa es la pregunta de este capítulo. El criterio es **si el defecto es inevitable incluso en una producción eficiente**. Aquí se añaden las unidades dañadas al costeo por procesos del [capítulo 4](/es/academy-cost-accounting-ch4/).
+
+## 1. Unidades dañadas, mermas y desperdicios
+
+- **Unidades dañadas:** unidades defectuosas que no cumplen los estándares de calidad y no pueden venderse normalmente. Las unidades siguen existiendo.
+- **Mermas:** reducción de la cantidad incorporada por evaporación, contracción, etc. No queda forma física.
+- **Desperdicios:** restos del proceso (retazos de madera, por ejemplo). Si se pueden vender, su valor se resta del costo.
+- **Reprocesos:** unidades defectuosas que se convierten en buenas tras un costo adicional de reparación.
+
+## 2. Daño normal y daño anormal
+
+<LectureTable
+  title="Clasificación y tratamiento de las unidades dañadas"
+  headers={["Tipo", "Naturaleza", "Tratamiento"]}
+  rows={[
+    ["Daño normal", "Inevitable incluso en condiciones eficientes (tasa propia del proceso)", "Parte del costo del producto, asignado a las unidades buenas"],
+    ["Daño anormal", "Por causas controlables, como averías o descuidos", "Pérdida del periodo (gasto no operativo, etc.)"],
+  ]}
+/>
+
+El nivel permitido de daño normal suele fijarse como un porcentaje de las **unidades buenas que superan el punto de inspección**. Como el daño se detecta en la inspección, la ubicación del punto de inspección determina el costo incorporado a las unidades dañadas y qué unidades buenas cargan con el costo del daño normal.
+
+## 3. Ejemplo
+
+La empresa UU agrega los materiales al inicio del proceso e inspecciona al 50 % de avance. El daño normal es el 6 % de las unidades buenas inspeccionadas. No hay producción en proceso inicial.
+
+<LectureTable
+  title="Flujo físico"
+  headers={["Partida", "Unidades", "Avance de conversión"]}
+  rows={[
+    ["Iniciadas en el periodo", "1.000", ""],
+    ["Terminadas", "750", "100 %"],
+    ["Dañadas (detectadas en inspección)", "50", "50 %"],
+    ["PP final", "200", "30 %"],
+  ]}
+/>
+
+La producción en proceso final, con un 30 % de avance, aún no ha llegado al punto de inspección (50 %). Por eso las únicas unidades buenas inspeccionadas en el periodo son las 750 terminadas. El daño normal es $750 \times 6\,\% = 45$ unidades y el anormal, $50 - 45 = 5$ unidades.
+
+### A. Unidades equivalentes y costos unitarios
+
+El costo de materiales del periodo es de 50 millones de wones y el de conversión, de 16,7 millones.
+
+- Unidades equivalentes de materiales: $750 + 50 + 200 = 1.000$ → costo unitario 5 (50.000 wones)
+- Unidades equivalentes de conversión: $750 + 50 \times 50\,\% + 200 \times 30\,\% = 835$ → costo unitario 2 (20.000 wones)
+
+<FormulaBox
+  label="Costo de una unidad dañada"
+  formula="\text{Costo unitario dañado} = \text{Tasa de materiales} \times 100\,\% + \text{Tasa de conversión} \times \text{Avance en la inspección} = 5 + 2 \times 50\,\% = 6"
+  description="En decenas de miles de wones. Una unidad dañada solo se procesó hasta el punto de inspección, así que carga solo el 50 % del costo de conversión."
+/>
+
+### B. Asignación de costos
+
+<LectureTable
+  title="Asignación de costos (en decenas de miles de wones)"
+  headers={["Partida", "Cálculo", "Importe"]}
+  rows={[
+    ["Unidades terminadas (antes del daño)", "750 × (5 + 2)", "5.250"],
+    ["Costo del daño normal", "45 × 6 → se suma a las terminadas", "270"],
+    ["Costo de las unidades terminadas", "", "5.520"],
+    ["PP final", "200 × 5 + 60 × 2", "1.120"],
+    ["Costo del daño anormal (pérdida del periodo)", "5 × 6", "30"],
+    ["Total", "", "6.670"],
+  ]}
+/>
+
+Como la producción en proceso final no ha pasado el punto de inspección, los 2,7 millones del daño normal se asignan **íntegramente a las unidades terminadas**. Si la producción en proceso final ya hubiera sido inspeccionada, ese costo se repartiría entre terminadas y producción en proceso final en proporción a sus unidades buenas. El total de 6.670 coincide con el costo total $5.000 + 1.670$.
+
+## 4. Mermas y valor de disposición de las unidades dañadas
+
+La merma reduce la producción frente a lo incorporado, así que una merma normal se absorbe de forma natural al subir el costo unitario de la producción restante. Si las unidades dañadas pueden venderse a bajo precio, su valor neto realizable se resta del costo del daño y solo el resto se trata como normal o anormal.
+
+<Callout type="warning">
+La tasa de daño normal es una estimación que determina el costo. Si se fija alta, las pérdidas anormales pasan al costo del producto, se difieren en existencias y las pérdidas del periodo parecen menores. A la inversa, para ver los avances en la mejora del proceso hay que seguir aparte la tendencia del daño anormal. La norma también exige excluir del costo de las existencias los importes anormales de desperdicio ([capítulo 2 de Contabilidad intermedia](/es/academy-intermediate-accounting-ch2/)).
+</Callout>
+
+## Ejercicio
+
+La empresa VV agrega los materiales al inicio del proceso e inspecciona al 40 % de avance. El daño normal es el 5 % de las unidades buenas. Iniciadas: 2.000; terminadas: 1.500; dañadas: 120; producción en proceso final: 380 unidades (60 % de avance). No hay producción en proceso inicial. ¿Cuántas unidades son daño normal y anormal, y quién carga con el costo del daño normal?
+
+La producción en proceso final, con un 60 % de avance, ya pasó el punto de inspección del 40 %, así que son unidades buenas. Las unidades buenas son $1.500 + 380 = 1.880$, el daño normal $1.880 \times 5\,\% = 94$ y el anormal $120 - 94 = 26$. El costo del daño normal se reparte entre terminadas y producción en proceso final en proporción a sus unidades buenas (1.500 : 380). El costo de las 26 unidades con daño anormal es una pérdida del periodo.
+
+## Referencias
+
+- Charles Horngren, Srikant Datar y Madhav Rajan, *Cost Accounting: A Managerial Emphasis*, cap. 18
+- Korea Accounting Standards Board, K-IFRS 1002 *Inventarios* (desperdicios anormales)
+- Ray Garrison, Eric Noreen y Peter Brewer, *Managerial Accounting*, cap. 4

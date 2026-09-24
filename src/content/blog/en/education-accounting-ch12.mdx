@@ -1,102 +1,86 @@
 ---
 track: academy
-series: accounting-basics
-chapter: 12
-title: "Cost Management II: Costing Systems by Product"
-description: >-
-  Understand the difference between job-order and process costing, and learn
-  performance management techniques through standard costing.
-pubDate: 2026-03-01T00:00:00.000Z
+series: cost-accounting
+chapter: 5
+title: "Cost Accounting — Choosing a Costing System: Job, Process and Operation Costing"
+description: "Sets out which of job costing, process costing and operation costing, which blends the two, fits a given degree of product homogeneity and production method, and calculates how choosing the wrong system distorts product costs."
+pubDate: 2026-03-01
+updatedDate: 2026-09-24
 category: Accounting
-subcategory: "Cost & Management Accounting"
-tags:
-  - Education
-  - accounting
+tags: ["cost accounting", "costing systems", "job costing", "process costing", "operation costing"]
 locale: en
 author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
 
-
-import { LectureTable, LectureProcess, LecturePieChart, LectureBarChart } from "@/features/education-common/components/LectureVisuals";
-
-
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# Cost Management II: Costing Systems by Product
+[Chapter 3](/en/academy-cost-accounting-ch3/) and [chapter 4](/en/academy-cost-accounting-ch4/) covered job costing and process costing. Real factories often fit neither neatly. This chapter deals with **which system to use when**, and how costs go wrong when the wrong system is chosen.
 
-Different production methods require different costing methods. The accounting for a company building one plane at a time cannot be the same as that for a factory churning out ten thousand packs of ramen, right?
-
----
-
-## 1. Job-Order Costing vs. Process Costing
-
-The algorithms for collecting and allocating costs vary depending on the production method.
+## 1. Selection criteria
 
 <LectureTable
-  title="Comparison of Major Costing Systems"
-  headers={["Category", "Job-order Costing", "Process Costing"]}
+  title="Comparing costing systems"
+  headers={["Criterion", "Job costing", "Process costing", "Operation costing"]}
   rows={[
-    [
-      "Production Method",
-      "Custom-made / Many types, low volume",
-      "Continuous mass production / Few types, high volume",
-    ],
-    ["Cost Collection", "Collected individually by job", "Averaged by process"],
-    ["Key Challenge", "Rational allocation of overhead", "Calculation of Equivalent Units (EU)"],
-    [
-      "Industry Examples",
-      "Construction, Shipbuilding, Aerospace",
-      "Refining, Milling, Paper, Chemicals",
-    ],
-  ]}
-  highlightColumns={[1, 2]}
-/>
-
-> The core skill in process costing is calculating **Equivalent Units**. This is the process of measuring economic substance—defining "how many finished units 10 partially finished items are equal to."
-
----
-
-## 2. Standard Costing and Variance Analysis
-
-Standard costing allows for 'Management by Exception' by comparing actual performance with pre-set targets (standards).
-
-<LectureTable
-  title="Cost Variance Analysis"
-  headers={["Category", "Price/Rate Variance", "Quantity/Efficiency Variance"]}
-  rows={[
-    ["Materials", "Variance due to unit price changes", "Variance due to quantity used"],
-    ["Labor", "Variance due to wage rate changes", "Variance due to working hours"],
-    ["Accountability", "Purchasing Department", "Production Department"],
+    ["Products", "Heterogeneous, made to order", "Homogeneous, continuous mass production", "Different materials, same conversion operations"],
+    ["Unit of cost accumulation", "Job", "Process and period", "Materials by job, conversion costs by operation"],
+    ["Unit cost", "Job cost ÷ units in the job", "Process cost ÷ equivalent units", "Job materials + operation conversion rate"],
+    ["Industry examples", "Shipbuilding, construction, consulting, printing", "Oil refining, paper, cement, beverages", "Clothing (different fabrics, same cutting and sewing), furniture"],
   ]}
 />
 
----
+There are two key questions: does **resource consumption differ greatly** from one product unit to another, and is the **cost of tracing** costs to each product less than the value of that information? If both answers are yes, use job costing; if both are no, use process costing.
 
-## 3. Absorption Costing vs. Variable Costing
+## 2. Operation costing
 
-Operating profit can vary depending on how fixed manufacturing overhead is treated.
+Suppose a clothing factory makes cotton shirts and silk shirts. The fabric cost differs greatly between products, but the cutting, sewing and packing operations are the same. Here **direct materials are traced by job (batch)** and **conversion costs are collected by operation and applied at a rate per equivalent unit**.
 
 <LectureTable
-  headers={["Category", "Absorption Costing (External)", "Variable Costing (Internal)"]}
+  title="Cost by shirt batch (unit: ₩10,000)"
+  headers={["Batch", "Quantity", "Fabric (direct materials)", "Conversion cost (0.8 per shirt)", "Batch cost", "Cost per shirt"]}
   rows={[
-    [
-      "Fixed Cost Treatment",
-      "Included in product cost (Inventory)",
-      "Treated immediately as period expense",
-    ],
-    ["Advantages", "Complies with GAAP", "Prevents profit distortion from volume changes"],
-    [
-      "Disadvantages",
-      "Profit can be inflated by increasing inventory",
-      "Not for external reporting",
-    ],
+    ["Cotton shirts", "1,000", "1,500", "800", "2,300", "2.3"],
+    ["Silk shirts", "500", "3,000", "400", "3,400", "6.8"],
+    ["Total", "1,500", "4,500", "1,200", "5,700", ""],
   ]}
 />
+
+The ₩12 million of conversion cost divided by 1,500 shirts gives an operation rate of ₩8,000 per shirt, and only the fabric cost is traced by batch.
+
+## 3. Distortion from the wrong system
+
+If the same factory used process costing and divided all costs by total quantity, the cost per shirt would be $5{,}700 / 1{,}500 = 3.8$ (₩10,000).
+
+<FormulaBox
+  label="Distortion from averaging"
+  formula="\text{Cost distortion} = \text{Average unit cost} - \text{Actual unit cost}"
+  description="Cotton shirts: 3.8 − 2.3 = +1.5 (overcosted); silk shirts: 3.8 − 6.8 = −3.0 (undercosted), in ₩10,000. Cotton shirts end up carrying silk shirts' costs — a cost cross-subsidy."
+/>
+
+Pricing on these costs would put cotton shirts on the market above competitors, losing share, while silk shirts would be sold below cost at a loss. Choosing a costing system is not an accounting technicality but the basis of pricing and product-mix decisions.
+
+## 4. Service businesses and departmental costing
+
+Hospitals, law firms and accounting firms are classic job-costing businesses, because the time and resources spent differ for each patient or case. Repetitive services such as call centers or bank teller transactions, by contrast, suit an average cost per transaction — the logic of process costing.
+
+With several departments, manufacturing overhead is collected by department and **departmental rates** are used. Applying machine-intensive departments' overhead on machine hours and manual departments' overhead on labor hours is more accurate than a single plantwide rate. Allocating support department costs to production departments is covered in [chapter 8](/en/education-accounting-ch11/).
 
 <Callout type="warning">
-  **The Trap of Inventory Assets**: In absorption costing, an illusion of increased operating profit
-  can occur simply by producing more items (even if unsold) as fixed costs get hidden in inventory.
-  Managers must be wary of this.
+A more elaborate system is not always better. Tracing costs takes time and money, and if resource consumption differs little between products, simple process costing is enough. Conversely, if product variety grows and production shifts to small batches of many products while the old simple system stays in use, cost distortions accumulate and profitability judgements are turned upside down. Activity-based costing in [chapter 9](/en/academy-cost-accounting-ch5/) responds to this problem.
 </Callout>
 
-This is the final chapter! and we will see how to bloom the flowers of **Management Accounting** by using all these numbers to make business decisions.
+## Check your understanding
+
+Company TT makes a small part A (10,000 units) and a custom part B (500 units). Direct materials are ₩10,000 per unit for A and ₩60,000 per unit for B. Conversion costs total ₩130 million, and on a machine-hour basis A used 8,000 hours and B 2,000 hours. What are the unit costs of A and B if all costs are divided by total quantity, and if materials are traced and conversion costs applied on machine hours?
+
+Total cost is materials of $10{,}000 + 3{,}000 = 13{,}000$ plus conversion of 13,000, i.e. ₩260 million. Divided by 10,500 units, that is about 2.48 (₩24,800) per unit. Tracing materials and applying conversion costs on machine hours gives a conversion rate of 1.3 (₩13,000) per hour. A costs $1 + 8{,}000 \times 1.3 / 10{,}000 = 2.04$ and B $6 + 2{,}000 \times 1.3 / 500 = 11.2$ (₩10,000). The simple average overcosts A by about ₩4,400 and undercosts B by about ₩87,200.
+
+## References
+
+- Charles Horngren, Srikant Datar and Madhav Rajan, *Cost Accounting: A Managerial Emphasis*, ch. 4, 17
+- Ray Garrison, Eric Noreen and Peter Brewer, *Managerial Accounting*, ch. 3–4
+- Robert Kaplan and Robin Cooper, *Cost and Effect*, ch. 1
