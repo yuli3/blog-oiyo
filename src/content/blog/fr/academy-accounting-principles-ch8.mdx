@@ -1,0 +1,130 @@
+---
+track: academy
+series: accounting-principles
+chapter: 8
+title: "Principes de comptabilité — Les stocks : hypothèses de flux de coûts et coût ou valeur nette de réalisation"
+description: "Présente la différence entre inventaire permanent et inventaire intermittent, calcule le coût des ventes selon le PEPS, le coût moyen pondéré périodique et le coût moyen pondéré mobile à partir des mêmes achats et ventes, puis intègre les manquants et la dépréciation à la valeur nette de réalisation."
+pubDate: 2026-09-24
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["principes de comptabilité", "stocks", "PEPS", "coût moyen pondéré", "coût ou valeur nette de réalisation", "valeur nette de réalisation"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+Pour une entreprise qui vend des marchandises, la plus grosse charge est souvent le coût des ventes et le plus gros actif courant les stocks. Ces deux chiffres résultent du partage d'une même masse de coûts entre **la part vendue** et **la part restante**. Ce chapitre traite des règles de ce partage : la façon de compter les quantités et l'hypothèse de flux de coûts qui fixe le coût unitaire. La norme de référence est K-IFRS 1002 *Stocks* (IAS 2). Le calcul des coûts de production est traité en [comptabilité de gestion](/fr/academy-cost-accounting-ch1/).
+
+## 1. L'équation de base du coût des ventes
+
+<FormulaBox
+  label="Coût des ventes"
+  formula="\text{Coût des ventes} = \text{Stock initial} + \text{Achats} - \text{Stock final}"
+  description="Les marchandises disponibles à la vente (stock initial + achats) se partagent entre ce qui a été vendu et ce qui reste. Surévaluer le stock final réduit le coût des ventes et augmente le résultat."
+/>
+
+À cause de cette équation, une erreur sur le stock final devient une erreur sur le résultat de l'exercice. Et comme le stock final de cette année est le stock initial de l'année suivante, l'erreur fait varier le résultat suivant en sens inverse et se compense sur deux exercices.
+
+## 2. Deux façons de compter les quantités
+
+- **Inventaire permanent :** entrées et sorties sont enregistrées au fil de l'eau, de sorte que la quantité en stock est toujours connue. Le coût des ventes est aussi enregistré à chaque vente.
+- **Inventaire intermittent :** seuls les achats sont enregistrés pendant l'exercice ; à la clôture, on compte physiquement l'entrepôt pour fixer la quantité finale et on déduit le coût des ventes de l'équation ci-dessus.
+
+En pratique, la plupart des entreprises tiennent un inventaire permanent et effectuent aussi un comptage à la clôture. L'écart entre quantité théorique et quantité comptée constitue les **manquants**. Avec le seul inventaire intermittent, les quantités perdues par vol ou casse se fondent dans le coût des ventes et n'apparaissent jamais.
+
+## 3. Les hypothèses de flux qui fixent le coût unitaire
+
+Lorsqu'un même article a été acheté plusieurs fois à des prix différents, il faut décider à quel coût unitaire correspondent les unités vendues. La norme n'admet que l'**identification spécifique** (articles distincts et particuliers), le **premier entré, premier sorti (PEPS)** et le **coût moyen pondéré**. Le dernier entré, premier sorti est interdit en K-IFRS.
+
+### A. Données
+
+<LectureTable
+  title="Entrées et sorties du produit A (coût unitaire en wons)"
+  headers={["Date", "Opération", "Quantité", "Coût unitaire", "Montant"]}
+  rows={[
+    ["1/1", "Stock initial", "100", "1 000", "100 000"],
+    ["10/3", "Achat", "200", "1 200", "240 000"],
+    ["20/5", "Vente", "250", "", ""],
+    ["15/8", "Achat", "300", "1 300", "390 000"],
+    ["5/11", "Vente", "150", "", ""],
+    ["Total", "Disponible à la vente", "600", "", "730 000"],
+  ]}
+/>
+
+400 unités sont vendues et 200 restent en fin d'exercice.
+
+### B. PEPS
+
+On suppose que les premières unités entrées sont les premières vendues. Les 400 unités vendues sont le stock initial de 100 (100 000 wons), l'achat de mars de 200 (240 000 wons) et 100 unités de l'achat d'août (130 000 wons). Le coût des ventes s'élève à 470 000 wons et le stock final à 200 unités d'août × 1 300 wons = 260 000 wons. Le résultat est le même en inventaire permanent ou intermittent.
+
+### C. Coût moyen pondéré périodique
+
+On calcule un seul coût moyen à la clôture : $730{,}000 / 600 = 1{,}216.67$ wons. Le coût des ventes vaut $400 \times 1{,}216.67 ≈ 486{,}667$ wons et le stock final environ 243 333 wons.
+
+### D. Coût moyen pondéré mobile (inventaire permanent + moyenne pondérée)
+
+On recalcule le coût moyen après chaque achat.
+
+<LectureTable
+  title="Calcul du coût moyen mobile (en wons)"
+  headers={["Date", "Quantité", "Coût moyen", "Solde", "Coût des ventes"]}
+  rows={[
+    ["Après l'achat du 10/3", "300", "1 133,33", "340 000", ""],
+    ["Vente de 250 le 20/5", "50", "1 133,33", "56 667", "283 333"],
+    ["Après l'achat du 15/8", "350", "1 276,19", "446 667", ""],
+    ["Vente de 150 le 5/11", "200", "1 276,19", "255 238", "191 429"],
+  ]}
+/>
+
+Le coût des ventes vaut $283{,}333 + 191{,}429 = 474{,}762$ wons et le stock final 255 238 wons.
+
+<LectureTable
+  title="Comparaison des trois méthodes (en wons)"
+  headers={["Méthode", "Coût des ventes", "Stock final"]}
+  rows={[
+    ["PEPS", "470 000", "260 000"],
+    ["Coût moyen mobile", "474 762", "255 238"],
+    ["Coût moyen périodique", "486 667", "243 333"],
+  ]}
+/>
+
+En période de hausse des prix d'achat, le PEPS donne le coût des ventes le plus faible et le résultat le plus élevé. En contrepartie, le stock final est proche des prix récents, ce qui rapproche le montant du bilan de la valeur actuelle. Quelle que soit la méthode, le total de 730 000 wons est identique ; seule sa répartition entre exercices change.
+
+## 4. Manquants et règle du coût ou de la valeur nette de réalisation
+
+### A. Perte sur manquants
+
+Si la quantité théorique de clôture est de 200 et le comptage donne 190, les 10 unités manquantes (13 000 wons au coût PEPS de 1 300 wons) constituent une perte sur manquants. Les manquants dans la limite normale sont généralement intégrés au coût des ventes ; les manquants anormaux sont traités en autres charges.
+
+### B. Dépréciation à la valeur nette de réalisation
+
+Les stocks sont évalués **au plus faible du coût et de la valeur nette de réalisation**. La valeur nette de réalisation est le prix de vente estimé diminué des coûts estimés d'achèvement et de vente.
+
+<FormulaBox
+  label="Dépréciation des stocks"
+  formula="\text{Dépréciation} = \text{Quantité} \times \max(0,\ \text{Coût unitaire} - \text{VNR unitaire})"
+  description="Avec une quantité comptée de 190, un coût de 1 300 wons, un prix de vente estimé de 1 350 wons et des frais de vente de 100 wons, la VNR est de 1 250 wons. La dépréciation vaut 190 × 50 = 9 500 wons."
+/>
+
+La dépréciation est intégrée au coût des ventes et présentée en déduction via une provision pour dépréciation des stocks. Si les prix de vente remontent lors d'un exercice ultérieur, elle est reprise **dans la limite de la valeur comptable d'origine**. La règle s'applique en principe article par article ; les articles similaires ou liés peuvent être regroupés. L'appliquer globalement à tout le stock est interdit, car les pertes seraient masquées par les gains.
+
+<Callout type="warning">
+Le montant du stock final fait largement appel au jugement de la direction. Ne pas déprécier un stock obsolète ou gonfler les quantités comptées réduit le coût des ventes et augmente le résultat. Lorsque les stocks croissent plus vite que les ventes ou que la durée de rotation s'allonge, vérifiez dans les notes la variation de la provision pour dépréciation afin de voir si les dépréciations ont été correctement enregistrées. Changer d'hypothèse de flux de coûts est un changement de méthode comptable : il s'applique rétrospectivement et doit être justifié dans les notes.
+</Callout>
+
+## Exercice
+
+Avec les données de la section 3, la société C utilise le PEPS ; le comptage de clôture donne 195 unités et la VNR unitaire est de 1 280 wons. Les manquants sont jugés normaux. Quels sont le coût des ventes au compte de résultat (manquants et dépréciation compris) et les stocks nets au bilan ?
+
+Le coût des unités vendues selon le PEPS est de 470 000 wons. Sur la quantité théorique de 200, 5 unités manquent : la perte vaut $5 \times 1{,}300 = 6{,}500$ wons. Les 195 unités restantes coûtent 253 500 wons et la dépréciation vaut $195 \times (1{,}300 - 1{,}280) = 3{,}900$ wons. Le coût des ventes s'élève à $470{,}000 + 6{,}500 + 3{,}900 = 480{,}400$ wons et les stocks nets à $195 \times 1{,}280 = 249{,}600$ wons. Les 730 000 wons disponibles à la vente se répartissent exactement entre 480 400 wons de coût des ventes et 249 600 wons de stock final.
+
+## Références
+
+- Korea Accounting Standards Board, K-IFRS 1002 *Stocks*
+- Korea Accounting Standards Board, K-IFRS 1008 *Méthodes comptables, changements d'estimations comptables et erreurs*
+- Jerry Weygandt, Paul Kimmel et Donald Kieso, *Financial Accounting with International Financial Reporting Standards*, chap. 6

@@ -1,0 +1,130 @@
+---
+track: academy
+series: accounting-principles
+chapter: 8
+title: "Principles of Accounting — Inventories: Cost Flow Assumptions and the Lower of Cost and NRV"
+description: "Sets out the difference between the perpetual and periodic systems, calculates cost of sales under FIFO, periodic weighted average and moving average from the same purchase and sales data, and then reflects inventory shrinkage and write-downs to net realizable value."
+pubDate: 2026-09-24
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["principles of accounting", "inventories", "FIFO", "weighted average", "lower of cost and NRV", "net realizable value"]
+locale: en
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+For a company that sells goods, the largest expense is often cost of sales and the largest current asset inventory. The two numbers result from splitting one pool of cost into **the part sold** and **the part remaining**. This chapter covers the rules for that split: how quantities are counted and the cost flow assumption that sets unit cost. The standard is K-IFRS 1002 *Inventories* (IAS 2). Manufacturing costs are calculated in [Cost Accounting](/en/academy-cost-accounting-ch1/).
+
+## 1. The basic equation of cost of sales
+
+<FormulaBox
+  label="Cost of sales"
+  formula="\text{Cost of sales} = \text{Opening inventory} + \text{Purchases} - \text{Closing inventory}"
+  description="Goods available for sale (opening + purchases) are split into what was sold and what remains. Overstating closing inventory lowers cost of sales and raises profit."
+/>
+
+Because of this equation, an error in closing inventory becomes an error in this year's profit. And since this year's closing inventory is next year's opening inventory, the error moves next year's profit in the opposite direction and offsets over the two years.
+
+## 2. Two ways of counting quantities
+
+- **Perpetual system:** receipts and issues are recorded as they happen, so the book quantity of inventory is always known. Cost of sales is also recorded at each sale.
+- **Periodic system:** only purchases are recorded during the period; at year-end the warehouse is physically counted to fix the closing quantity, and cost of sales is derived from the equation above.
+
+In practice, most companies keep perpetual records and also count at year-end. The difference between book and counted quantities is **inventory shrinkage**. With only the periodic system, quantities lost to theft or damage are buried in cost of sales and never surface.
+
+## 3. Cost flow assumptions that set unit cost
+
+When the same item has been bought several times at different prices, one must decide which unit cost the items sold carried. The standard permits only **specific identification** (for distinct special items), **first-in, first-out (FIFO)** and **weighted average**. Last-in, first-out cannot be used under K-IFRS.
+
+### A. Data
+
+<LectureTable
+  title="Receipts and issues of product A (unit cost in ₩)"
+  headers={["Date", "Event", "Quantity", "Unit cost", "Amount"]}
+  rows={[
+    ["1/1", "Opening inventory", "100", "1,000", "100,000"],
+    ["3/10", "Purchase", "200", "1,200", "240,000"],
+    ["5/20", "Sale", "250", "", ""],
+    ["8/15", "Purchase", "300", "1,300", "390,000"],
+    ["11/5", "Sale", "150", "", ""],
+    ["Total", "Available for sale", "600", "", "730,000"],
+  ]}
+/>
+
+400 units are sold and 200 remain at year-end.
+
+### B. FIFO
+
+The first units in are assumed to be the first sold. The 400 units sold are the opening 100 (₩100,000), the March purchase of 200 (₩240,000) and 100 from the August purchase (₩130,000). Cost of sales is ₩470,000, and closing inventory is 200 units from August × ₩1,300 = ₩260,000. The result is the same under the perpetual and periodic systems.
+
+### C. Periodic weighted average
+
+A single average unit cost is calculated at year-end: $730{,}000 / 600 = 1{,}216.67$. Cost of sales is $400 \times 1{,}216.67 ≈ 486{,}667$ and closing inventory about ₩243,333.
+
+### D. Moving average (perpetual + weighted average)
+
+A new average unit cost is calculated after each purchase.
+
+<LectureTable
+  title="Moving average calculation (unit: ₩)"
+  headers={["Date", "Quantity", "Average unit cost", "Balance", "Cost of sales"]}
+  rows={[
+    ["After 3/10 purchase", "300", "1,133.33", "340,000", ""],
+    ["5/20 sale of 250", "50", "1,133.33", "56,667", "283,333"],
+    ["After 8/15 purchase", "350", "1,276.19", "446,667", ""],
+    ["11/5 sale of 150", "200", "1,276.19", "255,238", "191,429"],
+  ]}
+/>
+
+Cost of sales is $283{,}333 + 191{,}429 = 474{,}762$ and closing inventory ₩255,238.
+
+<LectureTable
+  title="Comparison of the three methods (unit: ₩)"
+  headers={["Method", "Cost of sales", "Closing inventory"]}
+  rows={[
+    ["FIFO", "470,000", "260,000"],
+    ["Moving average", "474,762", "255,238"],
+    ["Periodic weighted average", "486,667", "243,333"],
+  ]}
+/>
+
+When purchase prices are rising, FIFO gives the lowest cost of sales and the highest profit. In exchange, closing inventory is close to recent prices, so the amount in the statement of financial position is nearer current value. Whatever the method, the total of ₩730,000 is the same; only the allocation between periods differs.
+
+## 4. Shrinkage and the lower of cost and NRV
+
+### A. Inventory shrinkage loss
+
+If the book quantity at year-end is 200 but the count shows 190, the 10 units (₩13,000 at the FIFO unit cost of ₩1,300) are a shrinkage loss. Shrinkage within the normal range is usually included in cost of sales, while abnormal shrinkage is treated as another expense.
+
+### B. Write-down to net realizable value
+
+Inventories are measured at **the lower of cost and net realizable value**. Net realizable value is the estimated selling price less the estimated costs of completion and sale.
+
+<FormulaBox
+  label="Inventory write-down"
+  formula="\text{Write-down} = \text{Quantity} \times \max(0,\ \text{Unit cost} - \text{Unit NRV})"
+  description="With a counted quantity of 190, cost of ₩1,300, estimated selling price of ₩1,350 and selling costs of ₩100, NRV is ₩1,250. The write-down is 190 × 50 = ₩9,500."
+/>
+
+The write-down is included in cost of sales and presented as a deduction through an inventory valuation allowance. If selling prices recover in a later period, the write-down is reversed, **limited to the original carrying amount**. The rule is applied item by item in principle; similar or related items may be grouped. Applying it to the whole inventory at once is not permitted, because losses would be hidden by gains.
+
+<Callout type="warning">
+The amount of closing inventory involves a great deal of management judgement. Failing to write down obsolete inventory or inflating counted quantities reduces cost of sales and increases profit. When inventory grows faster than sales or days in inventory lengthen, check the movement in the inventory valuation allowance in the notes to see whether write-downs have been properly reflected. Changing the cost flow assumption is a change in accounting policy: it is applied retrospectively and must be justified in the disclosures.
+</Callout>
+
+## Check your understanding
+
+Using the data in section 3, company C uses FIFO; the year-end count is 195 units and NRV per unit is ₩1,280. The shrinkage is judged normal. What are cost of sales in the income statement (including shrinkage and write-down) and net inventory in the statement of financial position?
+
+The cost of units sold under FIFO is ₩470,000. Of the book quantity of 200, 5 units are missing, so the shrinkage loss is $5 \times 1{,}300 = 6{,}500$. The remaining 195 units cost ₩253,500, and the write-down is $195 \times (1{,}300 - 1{,}280) = 3{,}900$. Cost of sales is $470{,}000 + 6{,}500 + 3{,}900 = 480{,}400$ and net inventory is $195 \times 1{,}280 = 249{,}600$. The goods available for sale of ₩730,000 split exactly into cost of sales of ₩480,400 and closing inventory of ₩249,600.
+
+## References
+
+- Korea Accounting Standards Board, K-IFRS 1002 *Inventories*
+- Korea Accounting Standards Board, K-IFRS 1008 *Accounting Policies, Changes in Accounting Estimates and Errors*
+- Jerry Weygandt, Paul Kimmel and Donald Kieso, *Financial Accounting with International Financial Reporting Standards*, ch. 6

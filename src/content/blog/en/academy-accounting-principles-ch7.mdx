@@ -1,0 +1,123 @@
+---
+track: academy
+series: accounting-principles
+chapter: 7
+title: "Principles of Accounting — Cash and Trade Receivables: Bank Reconciliation and Expected Credit Losses"
+description: "Learns the scope of cash and cash equivalents and how to prepare a bank reconciliation, then calculates the loss allowance on trade receivables with an ageing-based provision matrix and carries it through to the entries for write-offs and recoveries."
+pubDate: 2026-09-24
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["principles of accounting", "cash and cash equivalents", "bank reconciliation", "trade receivables", "expected credit losses", "loss allowance"]
+locale: en
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+Cash and trade receivables are the assets at the last stage of operations. Cash looks unambiguous, yet the company's books and the bank balance easily diverge; receivables carry no guarantee of full collection. This chapter covers how to present the two assets at their **correct balance** and at the **amount expected to be collected**.
+
+## 1. The scope of cash and cash equivalents
+
+Cash and cash equivalents in the statement of financial position include cash on hand, demand deposits and **cash equivalents**: assets readily convertible to known amounts of cash without significant transaction costs and subject to an insignificant risk of changes in value. Typically these are debt securities or time deposits **with a maturity of three months or less from the date of acquisition** (K-IFRS 1007, IAS 7).
+
+- A time deposit with two months to maturity when acquired: a cash equivalent.
+- A time deposit with one year to maturity when acquired and two months left at the reporting date: not a cash equivalent but a short-term financial instrument. The test is maturity from the **date of acquisition**.
+- Equity instruments (shares): in principle not cash equivalents, because their prices fluctuate.
+- Restricted deposits (such as deposits pledged as collateral): classified separately according to the restriction period and disclosed in the notes.
+
+## 2. Bank reconciliation
+
+It is common for the deposit balance in the company's books at month-end to differ from the bank statement. A bank reconciliation adjusts each balance to the **correct balance** so that the two agree.
+
+### A. Causes of differences
+
+<LectureTable
+  title="Causes of differences and the side to adjust"
+  headers={["Cause", "Example", "Side to adjust"]}
+  rows={[
+    ["Deposits in transit", "Deposited at month-end but processed by the bank next month", "Add to bank balance"],
+    ["Outstanding cheques", "Cheques issued by the company but not yet presented to the bank", "Deduct from bank balance"],
+    ["Bank charges", "Charges withdrawn without notice to the company", "Deduct from book balance"],
+    ["Collections and interest", "Notes collected by the bank, deposit interest", "Add to book balance"],
+    ["Dishonoured cheques", "A customer's cheque recorded as deposited bounces", "Deduct from book balance"],
+    ["Recording errors", "An amount miscopied", "The side where the error arose"],
+  ]}
+/>
+
+### B. Reconciling with numbers
+
+At the end of September, the company's book balance is ₩45.2 million and the bank balance ₩48 million. On checking, there are deposits in transit of ₩3 million, outstanding cheques of ₩4.5 million, bank charges of ₩20,000, a collection of ₩1.2 million and a customer's dishonoured cheque of ₩380,000. The company also finds that a cheque of ₩3.3 million issued to a supplier was recorded in the books as ₩3.8 million.
+
+<LectureTable
+  title="Bank reconciliation (unit: ₩10,000)"
+  headers={["Bank side", "Amount", "Book side", "Amount"]}
+  rows={[
+    ["Balance per bank", "4,800", "Balance per books", "4,520"],
+    ["+ Deposits in transit", "300", "+ Collection", "120"],
+    ["− Outstanding cheques", "(450)", "+ Correction of cheque error", "50"],
+    ["", "", "− Bank charges", "(2)"],
+    ["", "", "− Dishonoured cheque", "(38)"],
+    ["Correct balance", "4,650", "Correct balance", "4,650"],
+  ]}
+/>
+
+The cheque error overstated a payment by ₩500,000, so the book balance was **understated** by ₩500,000; hence ₩500,000 is added on the book side. Before the recording error was found, the two sides stood at 4,650 and 4,600, a difference of ₩500,000. The size and direction of a remaining difference are clues for finding errors: if the book side is lower, suspect a missing deposit or an overstated payment first.
+
+Once reconciled, the company journalizes **only the book-side items**: the collection 120, the error correction 50, the charges 2 and the dishonoured cheque 38. The dishonoured cheque is recorded as Dr trade receivables 38 / Cr deposits 38, reinstating the claim on the customer. Bank-side items (deposits in transit, outstanding cheques) are not journalized, because the bank will reflect them in time.
+
+## 3. Trade receivables and expected credit losses
+
+### A. The principle of the loss allowance
+
+Trade receivables are presented at the amount expected to be collected. K-IFRS 1109 (IFRS 9) uses an **expected credit loss** model: an allowance is built for losses expected in the future, not only those already incurred. For trade receivables without a significant financing component, the **simplified approach** measures lifetime expected credit losses from the start.
+
+### B. The provision matrix
+
+In practice, loss rates by ageing band are set from historical collection experience adjusted for current conditions and forecasts, and applied to the balance in each band.
+
+<LectureTable
+  title="Loss allowance by ageing analysis (31 December, unit: ₩10,000)"
+  headers={["Days past due", "Balance", "Expected loss rate", "Expected credit loss"]}
+  rows={[
+    ["Not past due", "6,000", "1%", "60"],
+    ["1–30 days", "2,000", "4%", "80"],
+    ["31–90 days", "1,200", "10%", "120"],
+    ["91–180 days", "500", "30%", "150"],
+    ["Over 180 days", "300", "60%", "180"],
+    ["Total", "10,000", "", "590"],
+  ]}
+/>
+
+<FormulaBox
+  label="Impairment loss (bad debt expense) for the year"
+  formula="\text{Impairment loss} = \text{Required closing allowance} - (\text{Opening allowance} - \text{Write-offs} + \text{Recoveries of amounts written off})"
+  description="With an opening allowance of ₩5 million, write-offs of ₩3.2 million and recoveries of ₩200,000, the balance before provision is ₩2 million. The ₩3.9 million difference from the required ₩5.9 million is recognized as impairment loss."
+/>
+
+## 4. Entries for write-offs and recoveries
+
+- **Write-off:** when a customer's bankruptcy makes ₩3.2 million of receivables uncollectible, Dr loss allowance 320 / Cr trade receivables 320. This uses an amount already estimated as an expense, so profit does not change at this point.
+- **Recovery of an amount written off:** if ₩200,000 is later received, Dr cash 20 / Cr loss allowance 20. The allowance is reinstated and reflected in the year-end provision.
+- **Year-end provision:** Dr impairment loss 390 / Cr loss allowance 390.
+
+The statement of financial position presents receivables of ₩100 million less a loss allowance of ₩5.9 million, a net ₩94.1 million expected to be collected.
+
+<Callout type="warning">
+Expected loss rates are estimates. Lowering the rate for the over-180-day band from 60% to 40% reduces the allowance by ₩600,000 and raises profit by the same amount. The standard's requirement to reflect economic forecasts has widened the room for judgement, which is why auditors perform retrospective reviews comparing past estimates with actual losses. Tax law sets a separate limit on deductible bad-debt allowances, so the accounting allowance and the tax amount differ ([Tax Accounting chapter 6](/en/academy-tax-accounting-ch6/)).
+</Callout>
+
+## Check your understanding
+
+Company B's closing receivables are ₩40 million not past due (loss rate 2%), ₩10 million 60 days past due (10%) and ₩5 million 200 days past due (50%). The opening loss allowance was ₩3 million, ₩1.5 million was written off during the year, and there were no recoveries. What are this year's impairment loss and the net receivables at year-end?
+
+The required allowance is $4{,}000 \times 2\% + 1{,}000 \times 10\% + 500 \times 50\% = 80 + 100 + 250 = 430$ (₩10,000), i.e. ₩4.3 million. The allowance before provision is $300 - 150 = 150$, so the impairment loss is $430 - 150 = 280$, i.e. ₩2.8 million. Net receivables are the gross ₩55 million less ₩4.3 million, or ₩50.7 million.
+
+## References
+
+- Korea Accounting Standards Board, K-IFRS 1007 *Statement of Cash Flows* (cash equivalents)
+- Korea Accounting Standards Board, K-IFRS 1109 *Financial Instruments* (5.5 Impairment, simplified approach)
+- Jerry Weygandt, Paul Kimmel and Donald Kieso, *Financial Accounting with International Financial Reporting Standards*, ch. 7–8

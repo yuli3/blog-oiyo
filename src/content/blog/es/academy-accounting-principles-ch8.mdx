@@ -1,0 +1,130 @@
+---
+track: academy
+series: accounting-principles
+chapter: 8
+title: "Principios de contabilidad — Existencias: supuestos de flujo de costos y costo o valor neto realizable"
+description: "Ordena la diferencia entre inventario permanente y periódico, calcula el costo de ventas con FIFO, promedio ponderado periódico y promedio móvil a partir de los mismos datos de compras y ventas, y luego refleja las mermas y la rebaja al valor neto realizable."
+pubDate: 2026-09-24
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["principios de contabilidad", "existencias", "FIFO", "promedio ponderado", "costo o valor neto realizable", "valor neto realizable"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+En una empresa que vende mercaderías, el mayor gasto suele ser el costo de ventas y el mayor activo corriente, las existencias. Ambas cifras resultan de dividir una misma masa de costos entre **la parte vendida** y **la parte que queda**. Este capítulo trata las reglas de esa división: cómo se cuentan las cantidades y qué supuesto de flujo de costos fija el costo unitario. La norma es la K-IFRS 1002 *Inventarios* (NIC 2). El cálculo de costos de producción se trata en [Contabilidad de costos](/es/academy-cost-accounting-ch1/).
+
+## 1. La ecuación básica del costo de ventas
+
+<FormulaBox
+  label="Costo de ventas"
+  formula="\text{Costo de ventas} = \text{Existencias iniciales} + \text{Compras} - \text{Existencias finales}"
+  description="Las mercaderías disponibles para la venta (inicial + compras) se dividen entre lo vendido y lo que queda. Sobrevalorar las existencias finales reduce el costo de ventas y eleva el resultado."
+/>
+
+Por esta ecuación, un error en las existencias finales se convierte en un error en el resultado del año. Y como las existencias finales de este año son las iniciales del siguiente, el error mueve el resultado del año siguiente en sentido contrario y se compensa en dos años.
+
+## 2. Dos formas de contar cantidades
+
+- **Inventario permanente:** entradas y salidas se registran a medida que ocurren, así que siempre se conoce la cantidad en libros. El costo de ventas también se registra en cada venta.
+- **Inventario periódico:** durante el periodo solo se registran las compras; al cierre se cuenta físicamente el almacén para fijar la cantidad final y el costo de ventas se deduce con la ecuación anterior.
+
+En la práctica, la mayoría de las empresas llevan inventario permanente y además hacen un recuento al cierre. La diferencia entre la cantidad en libros y la contada son las **mermas**. Con solo el inventario periódico, las unidades perdidas por robo o daño quedan escondidas en el costo de ventas y nunca aparecen.
+
+## 3. Supuestos de flujo de costos que fijan el costo unitario
+
+Si el mismo artículo se compró varias veces a precios distintos, hay que decidir a qué costo unitario corresponden las unidades vendidas. La norma solo permite la **identificación específica** (artículos especiales y diferenciables), **primera entrada, primera salida (FIFO)** y **promedio ponderado**. Última entrada, primera salida no puede usarse bajo K-IFRS.
+
+### A. Datos
+
+<LectureTable
+  title="Entradas y salidas del producto A (costo unitario en wones)"
+  headers={["Fecha", "Movimiento", "Cantidad", "Costo unitario", "Importe"]}
+  rows={[
+    ["1/1", "Existencias iniciales", "100", "1.000", "100.000"],
+    ["10/3", "Compra", "200", "1.200", "240.000"],
+    ["20/5", "Venta", "250", "", ""],
+    ["15/8", "Compra", "300", "1.300", "390.000"],
+    ["5/11", "Venta", "150", "", ""],
+    ["Total", "Disponible para la venta", "600", "", "730.000"],
+  ]}
+/>
+
+Se venden 400 unidades y quedan 200 al cierre.
+
+### B. FIFO
+
+Se supone que las primeras unidades en entrar son las primeras en venderse. Las 400 vendidas son las 100 iniciales (100.000 wones), las 200 de marzo (240.000 wones) y 100 de la compra de agosto (130.000 wones). El costo de ventas es de 470.000 wones y las existencias finales, 200 unidades de agosto × 1.300 wones = 260.000 wones. El resultado es el mismo con inventario permanente o periódico.
+
+### C. Promedio ponderado periódico
+
+Se calcula un único costo promedio al cierre: $730{,}000 / 600 = 1{,}216.67$ wones. El costo de ventas es $400 \times 1{,}216.67 ≈ 486{,}667$ wones y las existencias finales, unos 243.333 wones.
+
+### D. Promedio móvil (inventario permanente + promedio ponderado)
+
+Se recalcula el costo promedio tras cada compra.
+
+<LectureTable
+  title="Cálculo del promedio móvil (en wones)"
+  headers={["Fecha", "Cantidad", "Costo promedio", "Saldo", "Costo de ventas"]}
+  rows={[
+    ["Tras la compra del 10/3", "300", "1.133,33", "340.000", ""],
+    ["Venta de 250 el 20/5", "50", "1.133,33", "56.667", "283.333"],
+    ["Tras la compra del 15/8", "350", "1.276,19", "446.667", ""],
+    ["Venta de 150 el 5/11", "200", "1.276,19", "255.238", "191.429"],
+  ]}
+/>
+
+El costo de ventas es $283{,}333 + 191{,}429 = 474{,}762$ wones y las existencias finales, 255.238 wones.
+
+<LectureTable
+  title="Comparación de los tres métodos (en wones)"
+  headers={["Método", "Costo de ventas", "Existencias finales"]}
+  rows={[
+    ["FIFO", "470.000", "260.000"],
+    ["Promedio móvil", "474.762", "255.238"],
+    ["Promedio ponderado periódico", "486.667", "243.333"],
+  ]}
+/>
+
+Cuando los precios de compra suben, FIFO da el menor costo de ventas y el mayor resultado. A cambio, las existencias finales se acercan a los precios recientes, así que el importe del estado de situación financiera está más cerca del valor actual. Con cualquier método, el total de 730.000 wones es el mismo; solo cambia su reparto entre periodos.
+
+## 4. Mermas y regla del costo o valor neto realizable
+
+### A. Pérdida por mermas
+
+Si la cantidad en libros al cierre es 200 pero el recuento da 190, las 10 unidades (13.000 wones al costo FIFO de 1.300 wones) son una pérdida por mermas. Las mermas dentro del rango normal suelen incluirse en el costo de ventas; las anormales se tratan como otros gastos.
+
+### B. Rebaja al valor neto realizable
+
+Las existencias se miden **al menor entre el costo y el valor neto realizable**. El valor neto realizable es el precio de venta estimado menos los costos estimados de terminación y venta.
+
+<FormulaBox
+  label="Rebaja de existencias"
+  formula="\text{Rebaja} = \text{Cantidad} \times \max(0,\ \text{Costo unitario} - \text{VNR unitario})"
+  description="Con 190 unidades contadas, costo de 1.300 wones, precio de venta estimado de 1.350 wones y costos de venta de 100 wones, el VNR es de 1.250 wones. La rebaja es 190 × 50 = 9.500 wones."
+/>
+
+La rebaja se incluye en el costo de ventas y se presenta restando mediante una estimación por deterioro de existencias. Si los precios se recuperan en un periodo posterior, se revierte **con el límite del importe en libros original**. La regla se aplica en principio partida por partida; las partidas similares o relacionadas pueden agruparse. No se permite aplicarla al total de las existencias, porque las pérdidas quedarían ocultas por las ganancias.
+
+<Callout type="warning">
+El importe de las existencias finales implica mucho juicio de la dirección. No rebajar existencias obsoletas o inflar las cantidades contadas reduce el costo de ventas y aumenta el resultado. Si las existencias crecen más rápido que las ventas o se alargan los días de inventario, revise en notas el movimiento de la estimación por deterioro para ver si las rebajas se reflejaron bien. Cambiar el supuesto de flujo de costos es un cambio de política contable: se aplica retroactivamente y debe justificarse en las revelaciones.
+</Callout>
+
+## Ejercicio
+
+Con los datos de la sección 3, la empresa C usa FIFO; el recuento de cierre da 195 unidades y el VNR unitario es de 1.280 wones. Las mermas se consideran normales. ¿Cuál es el costo de ventas del estado de resultados (incluidas mermas y rebaja) y el neto de existencias del estado de situación financiera?
+
+El costo de lo vendido con FIFO es de 470.000 wones. De las 200 unidades en libros faltan 5, así que la pérdida por mermas es $5 \times 1{,}300 = 6{,}500$ wones. Las 195 restantes cuestan 253.500 wones y la rebaja es $195 \times (1{,}300 - 1{,}280) = 3{,}900$ wones. El costo de ventas es $470{,}000 + 6{,}500 + 3{,}900 = 480{,}400$ wones y el neto de existencias, $195 \times 1{,}280 = 249{,}600$ wones. Los 730.000 wones disponibles para la venta se reparten exactamente entre 480.400 wones de costo de ventas y 249.600 wones de existencias finales.
+
+## Referencias
+
+- Korea Accounting Standards Board, K-IFRS 1002 *Inventarios*
+- Korea Accounting Standards Board, K-IFRS 1008 *Políticas contables, cambios en las estimaciones contables y errores*
+- Jerry Weygandt, Paul Kimmel y Donald Kieso, *Financial Accounting with International Financial Reporting Standards*, cap. 6
