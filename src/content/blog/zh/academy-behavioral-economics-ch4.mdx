@@ -1,0 +1,113 @@
+---
+track: academy
+locale: zh
+title: "行为经济学 — 现时偏差与时间不一致"
+category: "Economics"
+series: behavioral-economics
+chapter: 4
+chapterTitleShort: '现时偏差与β-δ贴现'
+author: "OIYO编辑部"
+tags:
+  - 行为经济学
+  - 现时偏差
+  - 准双曲贴现
+  - 自我控制
+  - 承诺机制
+description: "用数值说明指数贴现与准双曲(β-δ)贴现的区别以及偏好逆转产生的原因，并整理天真者与成熟者的差别、承诺机制以及“明天储蓄更多”(SMarT)之类的设计。"
+pubDate: '2026-05-04'
+updatedDate: '2026-09-24'
+layoutVariant: lecture-series
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 行为经济学 — 今天的我和明天的我制定不同的计划
+
+对未来进行贴现本身并非不理性，问题在于贴现的方式。在标准模型的指数贴现下，今天制定的计划明天仍然想照做。而现实中的人对遥远的未来会耐心地作计划，等那个未来变成"现在"时又推翻计划。
+
+## 1. 指数贴现是时间一致的
+
+<FormulaBox
+  label="指数贴现"
+  formula="U_0 = u_0 + \delta u_1 + \delta^2 u_2 + \cdots"
+  description="任意两期之间的贴现率都同为δ。今天看“10天后vs 11天后”，与10天后看“今天vs明天”的交换比率相同，所以计划不会被推翻。"
+/>
+
+## 2. 准双曲贴现与偏好逆转
+
+莱布森的**β-δ模型**在"现在"和"以后"之间加入额外的贴现$\beta<1$。
+
+<FormulaBox
+  label="准双曲(β-δ)贴现"
+  formula="U_0 = u_0 + \beta\left(\delta u_1 + \delta^2 u_2 + \cdots\right)"
+  description="β=1时回到指数贴现。实证估计值因研究而异，但β小于1这一方向已被反复确认。"
+/>
+
+问一个$\beta=0.7$、$\delta=1$(为简便起见不作长期贴现)的人下面的问题(金额以万韩元计)。
+
+- **1月1日提问**:"3月1日得10万韩元" vs "3月2日得11万韩元"→ 两者都在未来，都按$\beta$贴现:$0.7\times 10 = 7$ vs $0.7\times 11=7.7$。选择11万韩元。
+- **3月1日再问**:"今天得10万韩元" vs "明天得11万韩元"→ 今天的钱不贴现:$10$ vs $0.7\times 11 = 7.7$。选择10万韩元。
+
+同一个人面对同样两个选项，只因时点改变就推翻了偏好。这就是**时间不一致**。节食、运动、储蓄和有截止期限的工作中反复出现"明天再开始"，就是这种结构。
+
+<EconDiagram
+  title="β-δ贴现的贴现因子(β = 0.7，δ = 0.99)"
+  xLabel="期数"
+  yLabel="贴现因子"
+  xMax={20}
+  yMax={1.05}
+  curves={[
+    { label: "指数(δ = 0.99)", points: [[0, 1], [5, 0.951], [10, 0.904], [15, 0.860], [20, 0.818]], tone: "gray", dashed: true, anchor: "end" },
+    { label: "β-δ", points: [[0, 1], [1, 0.693], [5, 0.666], [10, 0.633], [15, 0.602], [20, 0.573]], tone: "blue", anchor: "end" },
+  ]}
+  marks={[{ x: 1, y: 0.693, label: "从现在到下一期的骤降" }]}
+  caption="β-δ贴现只在从第0期到第1期时大幅下降，此后按与指数贴现相同的比率递减。"
+/>
+
+## 3. 天真与成熟
+
+有现时偏差的人是否知道未来的自己同样有现时偏差，会使行为有所不同。
+
+<LectureTable
+  title="天真者与成熟者"
+  headers={["类型", "对未来自我的信念", "行为"]}
+  rows={[
+    ["天真型", "明天的我会按计划行事", "不断拖延，不购买承诺机制"],
+    ["成熟型", "明天的我也会拖延", "购买承诺机制，有时提前完成"],
+  ]}
+/>
+
+奥多诺休和拉宾的例子:必须从四部电影中选一部去看，越往后的电影越好，但只能看一部。天真的人可能不断地说"下周看部更好的"，结果一部也没看成。成熟的人知道未来的自己会拖延，反而会早作决定。
+
+## 4. 健身房会员:实地证据
+
+德拉维尼亚和马尔门迪尔(2006)利用美国健身房会员数据表明，按月付费的会员用实际到访次数平摊后，每次约付17美元。若买10次卡(每次10美元)会更便宜。他们选择月卡时预期会常去，实际上却去得较少。这一证据与高估未来自我控制的**天真型现时偏差**相符。
+
+## 5. 承诺机制与储蓄设计
+
+成熟的人会为自我限制未来选项的**承诺机制**付费，例如限制提前支取的储蓄产品、未达目标就要赔钱的合约以及圣诞储蓄计划。在标准模型中，没有理由为减少选项的合约付费，因此对承诺机制的需求本身就是现时偏差的证据。
+
+塞勒和贝纳茨的**"明天储蓄更多"(SMarT)**计划同时利用了现时偏差和损失厌恶。它让员工事先承诺，不是现在，而是从下一次加薪起提高储蓄率。
+
+- 因为是未来的提高，现时偏差的作用较弱(现在不必牺牲)。
+- 从加薪部分中扣除，到手收入不减少，因而不会感觉是损失。
+- 随时可以退出，但由于现状偏差(第3章)，大多数人留了下来。
+
+在最早实行的企业中，参与者的平均储蓄率在约40个月里从3.5%升至13.6%。
+
+<Callout type="warning">
+β的估计值因任务和方法不同，从0.6左右到接近1分布很广。尤其是以金钱为奖励的实验，由于人们并不会一拿到钱就消费，可能低估现时偏差。以消费或努力(完成任务)为基准测量的研究，往往报告更明显的现时偏差。
+</Callout>
+
+## 练习题
+
+一个$\beta=0.8$、$\delta=1$的人面临这样的选择:今天付出成本6(运动的痛苦)，明天获得收益7(健康)。若今天作决定会怎样?$-6+0.8\times 7=-0.4<0$，所以不运动。若他昨天制定这个计划，$0.8\times(-6+7)=0.8>0$，他会计划"明天去运动"。这就是会制订计划却拖延执行的结构。
+
+## 参考资料
+
+- David Laibson, "Golden Eggs and Hyperbolic Discounting," *Quarterly Journal of Economics* (1997)
+- Ted O'Donoghue and Matthew Rabin, "Doing It Now or Later," *American Economic Review* (1999)
+- Stefano DellaVigna and Ulrike Malmendier, "Paying Not to Go to the Gym," *American Economic Review* (2006)
+- Richard Thaler and Shlomo Benartzi, "Save More Tomorrow," *Journal of Political Economy* (2004)

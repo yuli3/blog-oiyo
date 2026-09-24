@@ -1,0 +1,113 @@
+---
+track: academy
+locale: fr
+title: "Économie comportementale — Biais pour le présent et incohérence temporelle"
+category: "Economics"
+series: behavioral-economics
+chapter: 4
+chapterTitleShort: "Biais pour le présent, β-δ"
+author: OIYO Éditorial
+tags:
+  - économie comportementale
+  - biais pour le présent
+  - actualisation quasi hyperbolique
+  - maîtrise de soi
+  - dispositifs d'engagement
+description: "Montre avec des chiffres la différence entre actualisation exponentielle et quasi hyperbolique (β-δ) et la raison des inversions de préférences, et présente la différence entre agents naïfs et avertis, les dispositifs d'engagement et des mécanismes comme Save More Tomorrow."
+pubDate: '2026-05-04'
+updatedDate: '2026-09-24'
+layoutVariant: lecture-series
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Économie comportementale — le moi d'aujourd'hui et celui de demain ne font pas les mêmes projets
+
+Actualiser l'avenir n'a rien d'irrationnel en soi. Le problème tient à la manière d'actualiser. Avec l'actualisation exponentielle du modèle standard, on veut encore demain suivre le plan fait aujourd'hui. Dans la réalité, on planifie avec patience pour un avenir lointain, puis on renverse ses plans quand cet avenir devient « maintenant ».
+
+## 1. L'actualisation exponentielle est cohérente dans le temps
+
+<FormulaBox
+  label="Actualisation exponentielle"
+  formula="U_0 = u_0 + \delta u_1 + \delta^2 u_2 + \cdots"
+  description="Le taux d'actualisation entre deux périodes quelconques est le même, δ. L'arbitrage « dans 10 jours contre dans 11 jours » vu aujourd'hui est le même que « aujourd'hui contre demain » vu dans 10 jours : les plans ne sont jamais renversés."
+/>
+
+## 2. Actualisation quasi hyperbolique et inversion des préférences
+
+Le **modèle β-δ** de Laibson ajoute une actualisation supplémentaire $\beta<1$ entre « maintenant » et « plus tard ».
+
+<FormulaBox
+  label="Actualisation quasi hyperbolique (β-δ)"
+  formula="U_0 = u_0 + \beta\left(\delta u_1 + \delta^2 u_2 + \cdots\right)"
+  description="Avec β = 1, on retrouve l'actualisation exponentielle. Les estimations empiriques varient selon les études, mais le fait que β soit inférieur à 1 a été confirmé à maintes reprises."
+/>
+
+Posons les questions suivantes à une personne dont $\beta=0{,}7$ et $\delta=1$ (pas d'actualisation de long terme, pour simplifier), en dizaines de milliers de wons.
+
+- **Le 1er janvier** : « 100 000 wons le 1er mars » contre « 110 000 wons le 2 mars » → les deux sont dans le futur et sont actualisés par $\beta$ : $0{,}7\times 10 = 7$ contre $0{,}7\times 11=7{,}7$. Elle choisit 110 000 wons.
+- **De nouveau le 1er mars** : « 100 000 wons aujourd'hui » contre « 110 000 wons demain » → le montant d'aujourd'hui n'est pas actualisé : $10$ contre $0{,}7\times 11 = 7{,}7$. Elle choisit 100 000 wons.
+
+La même personne a inversé sa préférence entre les deux mêmes options du seul fait du changement de date. C'est l'**incohérence temporelle**. C'est la structure du « je commence demain » répété pour les régimes, le sport, l'épargne et le travail à échéance.
+
+<EconDiagram
+  title="Facteurs d'actualisation β-δ (β = 0,7, δ = 0,99)"
+  xLabel="Période"
+  yLabel="Facteur d'actualisation"
+  xMax={20}
+  yMax={1.05}
+  curves={[
+    { label: "Exponentielle (δ = 0,99)", points: [[0, 1], [5, 0.951], [10, 0.904], [15, 0.860], [20, 0.818]], tone: "gray", dashed: true, anchor: "end" },
+    { label: "β-δ", points: [[0, 1], [1, 0.693], [5, 0.666], [10, 0.633], [15, 0.602], [20, 0.573]], tone: "blue", anchor: "end" },
+  ]}
+  marks={[{ x: 1, y: 0.693, label: "Chute entre maintenant et la période suivante" }]}
+  caption="L'actualisation β-δ ne chute fortement qu'entre les périodes 0 et 1 ; ensuite, elle décroît au même rythme que l'actualisation exponentielle."
+/>
+
+## 3. Naïveté et lucidité
+
+Le comportement diffère selon que la personne biaisée vers le présent sait ou non que son moi futur le sera aussi.
+
+<LectureTable
+  title="Agents naïfs et avertis"
+  headers={["Type", "Croyance sur son moi futur", "Comportement"]}
+  rows={[
+    ["Naïf", "Mon moi de demain suivra le plan", "Continue de procrastiner ; n'achète pas de dispositif d'engagement"],
+    ["Averti", "Mon moi de demain procrastinera aussi", "Achète des dispositifs d'engagement ; agit parfois en avance"],
+  ]}
+/>
+
+L'exemple d'O'Donoghue et Rabin : on doit aller voir un film parmi quatre, chacun meilleur que le précédent, mais on ne peut en voir qu'un. Le naïf risque de répéter « j'en verrai un meilleur la semaine prochaine » et de tous les manquer. L'averti, sachant que son moi futur procrastinera, décide au contraire tôt.
+
+## 4. Les abonnements de salle de sport : les preuves de terrain
+
+DellaVigna et Malmendier (2006) ont montré, à partir de données de salles de sport américaines, que les abonnés au mois payaient environ 17 dollars par visite effective. Une carte de 10 entrées (10 dollars la visite) leur serait revenue moins cher. En choisissant l'abonnement mensuel, ils prévoyaient d'y aller souvent, mais y allaient moins. C'est une preuve compatible avec un **biais pour le présent naïf**, qui surestime la maîtrise de soi future.
+
+## 5. Dispositifs d'engagement et conception de l'épargne
+
+Les agents avertis paient pour des **dispositifs d'engagement** qui restreignent leurs propres choix futurs : produits d'épargne à retraits limités, contrats où l'on perd de l'argent si l'on manque son objectif, clubs d'épargne de Noël. Dans le modèle standard, rien ne justifie de payer pour un contrat qui supprime des options : la demande même de dispositifs d'engagement témoigne du biais pour le présent.
+
+Le programme **Save More Tomorrow (SMarT)** de Thaler et Benartzi a combiné biais pour le présent et aversion aux pertes. Les salariés s'engageaient à l'avance à relever leur taux d'épargne non pas maintenant, mais à partir de leur prochaine augmentation.
+
+- La hausse étant future, le biais pour le présent joue moins (pas de sacrifice immédiat).
+- Prélevée sur l'augmentation, elle ne réduit pas le salaire net et n'est donc pas ressentie comme une perte.
+- On pouvait se retirer à tout moment, mais du fait du biais de statu quo (chapitre 3), la plupart sont restés.
+
+Dans la première entreprise qui l'a adopté, le taux d'épargne moyen des participants est passé de 3,5 % à 13,6 % en une quarantaine de mois.
+
+<Callout type="warning">
+Les estimations de β sont très dispersées, des environs de 0,6 à presque 1, selon la tâche et la méthode. Les expériences qui utilisent l'argent comme récompense peuvent notamment sous-estimer le biais pour le présent, car on ne consomme pas l'argent dès qu'on le reçoit. Les études qui mesurent la consommation ou l'effort (réalisation de tâches) tendent à trouver un biais plus net.
+</Callout>
+
+## Exercice
+
+Une personne dont $\beta=0{,}8$ et $\delta=1$ doit choisir entre supporter aujourd'hui un coût de 6 (la pénibilité de l'exercice) et obtenir demain un bénéfice de 7 (la santé). Si elle décide aujourd'hui ? $-6+0{,}8\times 7=-0{,}4<0$ : elle ne fait pas d'exercice. Si elle avait fait ce plan hier, $0{,}8\times(-6+7)=0{,}8>0$ : elle aurait prévu « je ferai du sport demain ». Elle planifie, mais reporte l'exécution.
+
+## Références
+
+- David Laibson, "Golden Eggs and Hyperbolic Discounting," *Quarterly Journal of Economics* (1997)
+- Ted O'Donoghue and Matthew Rabin, "Doing It Now or Later," *American Economic Review* (1999)
+- Stefano DellaVigna and Ulrike Malmendier, "Paying Not to Go to the Gym," *American Economic Review* (2006)
+- Richard Thaler and Shlomo Benartzi, "Save More Tomorrow," *Journal of Political Economy* (2004)

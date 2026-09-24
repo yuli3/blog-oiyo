@@ -1,0 +1,113 @@
+---
+track: academy
+locale: es
+title: "Economía del comportamiento — Sesgo del presente e inconsistencia temporal"
+category: "Economics"
+series: behavioral-economics
+chapter: 4
+chapterTitleShort: 'Sesgo del presente y β-δ'
+author: OIYO Editorial
+tags:
+  - economía del comportamiento
+  - sesgo del presente
+  - descuento cuasihiperbólico
+  - autocontrol
+  - mecanismos de compromiso
+description: "Muestra con cifras la diferencia entre el descuento exponencial y el cuasihiperbólico (β-δ) y por qué se invierten las preferencias, y presenta la diferencia entre agentes ingenuos y sofisticados, los mecanismos de compromiso y diseños como Save More Tomorrow."
+pubDate: '2026-05-04'
+updatedDate: '2026-09-24'
+layoutVariant: lecture-series
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Economía del comportamiento — el yo de hoy y el de mañana hacen planes distintos
+
+Descontar el futuro no es irracional en sí. El problema es cómo se descuenta. Con el descuento exponencial del modelo estándar, el plan hecho hoy es uno que mañana se sigue queriendo cumplir. La gente real planifica con paciencia para un futuro lejano y luego cambia de plan cuando ese futuro se convierte en «ahora».
+
+## 1. El descuento exponencial es coherente en el tiempo
+
+<FormulaBox
+  label="Descuento exponencial"
+  formula="U_0 = u_0 + \delta u_1 + \delta^2 u_2 + \cdots"
+  description="La tasa de descuento entre dos periodos cualesquiera es la misma, δ. El intercambio «dentro de 10 días frente a dentro de 11» visto hoy es igual al de «hoy frente a mañana» visto dentro de 10 días, así que los planes nunca se invierten."
+/>
+
+## 2. Descuento cuasihiperbólico e inversión de preferencias
+
+El **modelo β-δ** de Laibson añade un descuento adicional $\beta<1$ entre «ahora» y «después».
+
+<FormulaBox
+  label="Descuento cuasihiperbólico (β-δ)"
+  formula="U_0 = u_0 + \beta\left(\delta u_1 + \delta^2 u_2 + \cdots\right)"
+  description="Con β = 1 se vuelve al descuento exponencial. Las estimaciones empíricas varían entre estudios, pero se ha confirmado repetidamente que β es menor que 1."
+/>
+
+Preguntemos lo siguiente a alguien con $\beta=0{,}7$ y $\delta=1$ (sin descuento a largo plazo, por simplicidad), en decenas de miles de wones.
+
+- **Preguntado el 1 de enero**: «100.000 wones el 1 de marzo» frente a «110.000 wones el 2 de marzo» → ambos están en el futuro y se descuentan con $\beta$: $0{,}7\times 10 = 7$ frente a $0{,}7\times 11=7{,}7$. Elige 110.000 wones.
+- **Preguntado de nuevo el 1 de marzo**: «100.000 wones hoy» frente a «110.000 wones mañana» → lo de hoy no se descuenta: $10$ frente a $0{,}7\times 11 = 7{,}7$. Elige 100.000 wones.
+
+La misma persona invirtió su preferencia entre las mismas dos opciones solo porque cambió el momento. Es la **inconsistencia temporal**. Es la estructura del «empiezo mañana» que se repite en las dietas, el ejercicio, el ahorro y el trabajo con plazos.
+
+<EconDiagram
+  title="Factores de descuento β-δ (β = 0,7, δ = 0,99)"
+  xLabel="Periodo"
+  yLabel="Factor de descuento"
+  xMax={20}
+  yMax={1.05}
+  curves={[
+    { label: "Exponencial (δ = 0,99)", points: [[0, 1], [5, 0.951], [10, 0.904], [15, 0.860], [20, 0.818]], tone: "gray", dashed: true, anchor: "end" },
+    { label: "β-δ", points: [[0, 1], [1, 0.693], [5, 0.666], [10, 0.633], [15, 0.602], [20, 0.573]], tone: "blue", anchor: "end" },
+  ]}
+  marks={[{ x: 1, y: 0.693, label: "Caída brusca del ahora al periodo siguiente" }]}
+  caption="El descuento β-δ solo cae con fuerza entre el periodo 0 y el 1; después disminuye al mismo ritmo que el exponencial."
+/>
+
+## 3. Ingenuidad y sofisticación
+
+La conducta cambia según que la persona con sesgo del presente sepa o no que su yo futuro también lo tendrá.
+
+<LectureTable
+  title="Agentes ingenuos y sofisticados"
+  headers={["Tipo", "Creencia sobre el yo futuro", "Conducta"]}
+  rows={[
+    ["Ingenuo", "Mi yo de mañana cumplirá el plan", "Sigue aplazando; no compra mecanismos de compromiso"],
+    ["Sofisticado", "Mi yo de mañana también aplazará", "Compra mecanismos de compromiso; a veces actúa por adelantado"],
+  ]}
+/>
+
+El ejemplo de O'Donoghue y Rabin: hay que ir a ver una de cuatro películas, cada una mejor que la anterior, pero solo se puede ver una. El ingenuo puede repetir «la semana que viene veo una mejor» y perderlas todas. El sofisticado, sabiendo que su yo futuro aplazará, decide pronto.
+
+## 4. Las cuotas del gimnasio: evidencia de campo
+
+DellaVigna y Malmendier (2006) mostraron con datos de gimnasios estadounidenses que los socios con cuota mensual, divididas sus cuotas por las visitas reales, pagaban unos 17 dólares por visita. Un bono de 10 visitas (10 dólares por visita) les habría salido más barato. Al elegir la cuota mensual esperaban ir a menudo, pero fueron menos. Es una evidencia coherente con un **sesgo del presente ingenuo**, que sobrestima el autocontrol futuro.
+
+## 5. Mecanismos de compromiso y diseño del ahorro
+
+Los sofisticados pagan por **mecanismos de compromiso** que restringen sus propias opciones futuras: productos de ahorro con retiradas limitadas, contratos en los que se pierde dinero si no se cumple una meta, clubes de ahorro navideño. En el modelo estándar no hay razón para pagar por un contrato que elimina opciones, así que la propia demanda de mecanismos de compromiso es evidencia del sesgo del presente.
+
+El programa **Save More Tomorrow (SMarT)** de Thaler y Benartzi combinó el sesgo del presente y la aversión a las pérdidas. Los empleados se comprometían de antemano a subir su tasa de ahorro no ahora, sino a partir de su próxima subida salarial.
+
+- Como la subida es futura, el sesgo del presente pesa menos (no hay sacrificio ahora).
+- Como sale de la subida salarial, el sueldo neto no baja, así que no se siente como una pérdida.
+- Se podía abandonar en cualquier momento, pero por el sesgo del statu quo (capítulo 3) la mayoría se quedó.
+
+En la primera empresa que lo adoptó, la tasa de ahorro media de los participantes pasó del 3,5 % al 13,6 % en unos 40 meses.
+
+<Callout type="warning">
+Las estimaciones de β se dispersan mucho, desde el entorno de 0,6 hasta casi 1, según la tarea y el método. En particular, los experimentos que usan dinero como recompensa pueden infravalorar el sesgo del presente, porque la gente no consume el dinero en cuanto lo recibe. Los estudios que miden consumo o esfuerzo (realizar tareas) tienden a encontrar un sesgo más claro.
+</Callout>
+
+## Ejercicio
+
+Una persona con $\beta=0{,}8$ y $\delta=1$ debe elegir entre soportar hoy un coste de 6 (lo penoso del ejercicio) y obtener mañana un beneficio de 7 (la salud). ¿Qué pasa si decide hoy? $-6+0{,}8\times 7=-0{,}4<0$, así que no hace ejercicio. Si hubiera hecho el plan ayer, $0{,}8\times(-6+7)=0{,}8>0$, habría planeado «mañana hago ejercicio». Hace planes, pero aplaza su ejecución.
+
+## Referencias
+
+- David Laibson, "Golden Eggs and Hyperbolic Discounting," *Quarterly Journal of Economics* (1997)
+- Ted O'Donoghue and Matthew Rabin, "Doing It Now or Later," *American Economic Review* (1999)
+- Stefano DellaVigna and Ulrike Malmendier, "Paying Not to Go to the Gym," *American Economic Review* (2006)
+- Richard Thaler and Shlomo Benartzi, "Save More Tomorrow," *Journal of Political Economy* (2004)

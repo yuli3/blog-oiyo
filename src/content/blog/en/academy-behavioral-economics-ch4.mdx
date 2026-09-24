@@ -1,143 +1,113 @@
 ---
 track: academy
 locale: en
-title: "The Sunk Cost Fallacy and Regret Aversion — Why We Keep Making Bad Choices"
+title: "Behavioral Economics — Present Bias and Time Inconsistency"
 category: "Economics"
+series: behavioral-economics
+chapter: 4
+chapterTitleShort: 'Present Bias and β-δ Discounting'
 author: OIYO Editorial
 tags:
-  - behavioral-economics
-  - psychology
-  - sunk-cost
-  - regret-aversion
-  - decision-making
-description: >-
-  Why do sunk costs trap us in bad decisions? This chapter examines the psychology behind the sunk cost fallacy and the Concorde Effect, explores why we fear regret more than loss itself, and provides practical strategies for breaking free.
+  - behavioral economics
+  - present bias
+  - quasi-hyperbolic discounting
+  - self-control
+  - commitment devices
+description: "Shows with numbers the difference between exponential and quasi-hyperbolic (β-δ) discounting and why preference reversals occur, and covers the difference between naive and sophisticated agents, commitment devices and designs such as Save More Tomorrow."
 pubDate: '2026-05-04'
+updatedDate: '2026-09-24'
+layoutVariant: lecture-series
 ---
 
-## "We've Come This Far..."
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-Sitting through a boring movie because you already paid for the ticket. Finishing a bad meal at a buffet because it cost $40. Staying in an incompatible relationship because you've been together for two years. Continuing a failing project because you've already invested three years in it.
+# Behavioral Economics — Today's Self and Tomorrow's Self Make Different Plans
 
-What do all of these share?
+Discounting the future is not in itself irrational. The problem is how we discount. With the exponential discounting of the standard model, the plan made today is one we still want to follow tomorrow. Real people plan patiently for the distant future and then reverse their plans when that future becomes "now."
 
-**Past costs are driving present bad decisions.**
+## 1. Exponential discounting is time-consistent
 
-Economists call this the **Sunk Cost Fallacy**.
+<FormulaBox
+  label="Exponential discounting"
+  formula="U_0 = u_0 + \delta u_1 + \delta^2 u_2 + \cdots"
+  description="The discount rate between any two periods is the same, δ. The trade-off between 'in 10 days vs in 11 days' seen today equals that between 'today vs tomorrow' seen 10 days from now, so plans are never reversed."
+/>
 
----
+## 2. Quasi-hyperbolic discounting and preference reversals
 
-## What Is a Sunk Cost?
+Laibson's **β-δ model** adds an extra discount $\beta<1$ between "now" and "later."
 
-A **sunk cost** is a cost that has already been incurred and cannot be recovered.
+<FormulaBox
+  label="Quasi-hyperbolic (β-δ) discounting"
+  formula="U_0 = u_0 + \beta\left(\delta u_1 + \delta^2 u_2 + \cdots\right)"
+  description="With β = 1 it reduces to exponential discounting. Empirical estimates vary across studies, but the finding that β is below 1 has been confirmed repeatedly."
+/>
 
-The principle of rational economics is clear: **sunk costs should have no bearing on future decisions.** The past expenditure has happened; future decisions should consider only future costs and benefits.
+Ask someone with $\beta=0.7$ and $\delta=1$ (no long-run discounting, for simplicity) the following, in units of 10,000 won.
 
-**Example:**
-- You paid $15 for a movie ticket. Thirty minutes in, you're bored and the film is clearly getting worse.
-- Rational analysis: if the remaining movie is not worth your remaining time, leave.
-- Actual behavior: "I already paid, so I'll stay."
+- **Asked on 1 January**: "100,000 won on 1 March" vs "110,000 won on 2 March" → both are in the future, so both are discounted by $\beta$: $0.7\times 10 = 7$ vs $0.7\times 11=7.7$. The person picks 110,000 won.
+- **Asked again on 1 March**: "100,000 won today" vs "110,000 won tomorrow" → today's amount is not discounted: $10$ vs $0.7\times 11 = 7.7$. The person picks 100,000 won.
 
-The $15 is gone whether you stay or go. The only cost of remaining is **the rest of your evening**.
+The same person reversed their preference over the same two options just because the timing changed. This is **time inconsistency**. It is the structure behind the repeated "starting tomorrow" in dieting, exercise, saving and work with deadlines.
 
----
+<EconDiagram
+  title="Discount factors under β-δ discounting (β = 0.7, δ = 0.99)"
+  xLabel="Period"
+  yLabel="Discount factor"
+  xMax={20}
+  yMax={1.05}
+  curves={[
+    { label: "Exponential (δ = 0.99)", points: [[0, 1], [5, 0.951], [10, 0.904], [15, 0.860], [20, 0.818]], tone: "gray", dashed: true, anchor: "end" },
+    { label: "β-δ", points: [[0, 1], [1, 0.693], [5, 0.666], [10, 0.633], [15, 0.602], [20, 0.573]], tone: "blue", anchor: "end" },
+  ]}
+  marks={[{ x: 1, y: 0.693, label: "Sharp drop from now to next period" }]}
+  caption="β-δ discounting falls steeply only between period 0 and period 1; after that it declines at the same rate as exponential discounting."
+/>
 
-## Psychological Roots of the Sunk Cost Fallacy
+## 3. Naivety and sophistication
 
-### 1. Loss Aversion
+Behaviour differs depending on whether a present-biased person knows that their future self will also be present-biased.
 
-From Prospect Theory (Chapter 1): losses feel approximately 2.25 times as painful as equivalent gains feel pleasurable.
+<LectureTable
+  title="Naive and sophisticated agents"
+  headers={["Type", "Belief about future self", "Behaviour"]}
+  rows={[
+    ["Naive", "Tomorrow's self will follow the plan", "Keeps procrastinating; does not buy commitment devices"],
+    ["Sophisticated", "Tomorrow's self will also procrastinate", "Buys commitment devices; sometimes acts early"],
+  ]}
+/>
 
-Acknowledging a sunk cost means **confirming a loss**. "I made a bad choice" is painful to admit. By continuing to invest, we maintain the psychological fiction that the loss is not yet finalized.
+O'Donoghue and Rabin's example: you must see one of four films, each better than the last, but can see only one. A naive person may keep saying "I'll see a better one next week" and miss them all. A sophisticated person, knowing their future self will procrastinate, actually decides early.
 
-### 2. Consistency Desire
+## 4. Gym memberships: evidence from the field
 
-People want to see themselves as consistent. "I invested in this" → "therefore it must be valuable" → "therefore I should continue" — this logic chain runs automatically, even when the opposite is true.
+DellaVigna and Malmendier (2006) showed with US gym membership data that monthly members, dividing their fees by actual visits, paid about 17 dollars per visit. A 10-visit pass (10 dollars a visit) would have been cheaper. When choosing the monthly plan they expected to go often but went less. This is evidence consistent with **naive present bias**, which overestimates future self-control.
 
-### 3. Completion Bias
+## 5. Commitment devices and saving design
 
-The discomfort of leaving something unfinished. The brain tends to dwell on incomplete tasks (the **Zeigarnik Effect**). This discomfort pushes people to complete things even when completing them is irrational.
+Sophisticated people pay for **commitment devices** that restrict their own future choices: savings products with withdrawal restrictions, contracts that forfeit money if a goal is missed, Christmas savings clubs. In the standard model there is no reason to pay for a contract that removes options, so demand for commitment devices is itself evidence of present bias.
 
----
+Thaler and Benartzi's **Save More Tomorrow (SMarT)** programme used present bias and loss aversion together. Employees committed in advance to raising their saving rate not now, but from their next pay rise.
 
-## The Sunk Cost Fallacy in Practice
+- Because the increase is in the future, present bias bites less (no sacrifice now).
+- Because it comes out of the pay rise, take-home pay does not fall, so it does not feel like a loss.
+- Participants could leave at any time, but because of status quo bias (Chapter 3), most stayed.
 
-### In Investing
+At the first firm to adopt it, participants' average saving rate rose from 3.5% to 13.6% over about 40 months.
 
-"I'm already down 50% — if I sell now, I lock in the loss." → The investor watches the position fall further, compounding the damage.
+<Callout type="warning">
+Estimates of β are widely scattered, from the 0.6s to nearly 1, depending on the task and method. Experiments that use money as the reward in particular may understate present bias, because people do not consume money as soon as they receive it. Studies that measure consumption or effort (completing tasks) tend to report clearer present bias.
+</Callout>
 
-Warren Buffett: "When you find yourself in a hole, the best course of action is to **stop digging**."
+## Check your understanding
 
-### In Relationships
+A person with $\beta=0.8$ and $\delta=1$ faces a choice with a cost of 6 today (the pain of exercise) and a benefit of 7 tomorrow (health). Deciding today? $-6+0.8\times 7=-0.4<0$, so the person does not exercise. Had they made the plan yesterday, $0.8\times(-6+7)=0.8>0$, so they would have planned "I'll exercise tomorrow." They make plans but postpone carrying them out.
 
-"We've been together for five years" becomes the reason to continue an incompatible relationship. But those five years are already spent. The only real question is how to spend the next five.
+## References
 
-### In Business and Projects
-
-Companies continue pouring budget into failed projects because the amount already spent creates enormous psychological pressure to persist. The **Concorde Fallacy (Concorde Effect)** is named for exactly this: the British and French governments discovered early in development that the supersonic jet would never be commercially viable — but the billions already invested made stopping feel impossible. They spent decades continuing what they knew was a mistake.
-
----
-
-## Regret Aversion
-
-Closely intertwined with the sunk cost fallacy is **Regret Aversion**.
-
-People fear **regret** more intensely than simple loss. "My decision caused this outcome" creates far more pain than the same outcome attributed to external forces.
-
-### Action Regret vs. Inaction Regret
-
-**In the short term**: regret from action ("I shouldn't have done that") is more intense.
-**In the long term**: regret from inaction ("I should have tried") is stronger and more persistent.
-
-Research by Gilovich and Medvec (1994) found that what older people regret most are **the things they didn't do** — dreams not pursued, feelings not expressed, projects never started.
-
-This asymmetry has an important implication: tolerating short-term discomfort to act is the better strategy for minimizing long-term regret.
-
-### Regret Aversion and Status Quo Bias
-
-"If I change course and it goes wrong, I'll regret it more than if I do nothing and it goes wrong." This fear of action-induced regret keeps people stuck with the status quo — ignoring the fact that inaction regret grows larger over time.
-
----
-
-## Strategies for Better Decisions
-
-### 1. Zero-Based Thinking
-
-"If I were making this decision fresh today, with no prior commitments, would I make the same choice?"
-
-Mentally set the past to zero. Evaluate the situation purely on current information and future prospects. "Would I start this relationship today?" "Would I begin this project today?"
-
-### 2. Ask Your Future Self
-
-"How will I see this decision one year from now?" Shift perspective from the immediate pain of the loss to a longer time horizon.
-
-### 3. Reframe: Loss Frame vs. Gain Frame
-
-"If I quit, I lose what I've already put in." → **Loss frame**
-"If I quit, I reclaim the time and energy I'd otherwise spend." → **Gain frame**
-
-Viewing the same situation through a gain frame produces more rational decisions.
-
-### 4. Pre-commitment (Exit Rules)
-
-Before starting an investment or project, define in advance: "Under what conditions, and at what threshold, will I stop?" Setting a stop-loss level, a project review date, or a relationship re-evaluation point before emotions are engaged reduces vulnerability to the sunk cost trap when things go wrong.
-
----
-
-## Chapter Summary
-
-| Concept | Description | Real-Life Example |
-|---------|-------------|-------------------|
-| Sunk Cost | Irrecoverable past expenditure | Money already spent on a ticket |
-| Sunk Cost Fallacy | Past costs distorting future decisions | Sitting through a bad movie |
-| Concorde Effect | Continuing a failing project | Escalating budget on a failing product |
-| Regret Aversion | Avoiding regret by maintaining status quo | Choosing inaction to avoid blame |
-| Inaction Regret | Long-term regret grows larger over time | Regretting dreams not pursued |
-
-**Countermeasures:**
-1. Zero-based thinking ("If starting fresh, would I still choose this?")
-2. Ask your future self
-3. Reframe in gains, not losses
-4. Pre-commitment with defined exit rules
-
-Next chapter: **The Availability Heuristic and Representativeness Bias** — why the things that come to mind most easily feel most true.
+- David Laibson, "Golden Eggs and Hyperbolic Discounting," *Quarterly Journal of Economics* (1997)
+- Ted O'Donoghue and Matthew Rabin, "Doing It Now or Later," *American Economic Review* (1999)
+- Stefano DellaVigna and Ulrike Malmendier, "Paying Not to Go to the Gym," *American Economic Review* (2006)
+- Richard Thaler and Shlomo Benartzi, "Save More Tomorrow," *Journal of Political Economy* (2004)

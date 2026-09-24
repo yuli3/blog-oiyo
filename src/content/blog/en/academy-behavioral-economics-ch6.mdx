@@ -1,132 +1,94 @@
 ---
 track: academy
 locale: en
-title: "Ego Depletion and Decision Fatigue — Why We Make Worse Choices as the Day Goes On"
+title: "Behavioral Economics — Mental Accounting and Sunk Costs"
 category: "Economics"
+series: behavioral-economics
+chapter: 6
+chapterTitleShort: 'Mental Accounting and Sunk Costs'
 author: OIYO Editorial
 tags:
-  - behavioral-economics
-  - psychology
-  - decision-fatigue
-  - ego-depletion
-  - willpower
-description: >-
-  Is the number of good decisions you can make in a day finite? This chapter examines ego depletion theory and decision fatigue, the striking pattern in parole board rulings, and practical strategies for protecting your best judgment.
+  - behavioral economics
+  - mental accounting
+  - sunk costs
+  - transaction utility
+  - hedonic editing
+description: "Links to prospect theory, with numerical examples, mental accounting that breaks the standard assumption that money is fungible, transaction utility and reference prices, segregating and integrating gains and losses, the sunk cost effect and income-targeting behaviour."
 pubDate: '2026-05-04'
+updatedDate: '2026-09-24'
+layoutVariant: lecture-series
 ---
 
-## The Evening's Bad Choices
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-Why do you swear off snacks after lunch, then find yourself tearing into chips at 11 PM? Why does impulse buying spike on tired evenings? Why do long meetings tend to drift toward the most cautious, non-committal resolution?
+# Behavioral Economics — Put a Label on Money and the Same Money Is Spent Differently
 
-The common answer: **Ego Depletion and Decision Fatigue**.
+In the standard model, money is **fungible**. 100,000 won received as salary and 100,000 won won in a lottery, 100,000 won in a food account and 100,000 won in a travel account, are all part of the same budget constraint. Thaler called **mental accounting** the way people put money into different "accounts" by source, purpose and timing, and spend each account by different rules.
 
----
+## 1. Evidence that fungibility breaks down
 
-## Ego Depletion Theory
+<LectureTable
+  title="Traces of mental accounting"
+  headers={["Phenomenon", "Standard model prediction", "Observed behaviour"]}
+  rows={[
+    ["Budget compartments", "Leftover food money is spent elsewhere", "When the food budget is used up, even needed food is postponed"],
+    ["Holding high-interest debt and low-interest savings together", "Pay off the debt with the savings", "The emergency savings account is not touched"],
+    ["Windfall income", "Same marginal propensity to consume as a won of salary", "Bonuses and tax refunds are spent more readily"],
+    ["Labelled cash", "Cash is the same as an unconditional transfer", "Support labelled 'for education' is spent more on education"],
+  ]}
+/>
 
-### Roy Baumeister's Discovery
+The last row connects to the comparison of cash and in-kind transfers in Public Finance Chapter 3. In the standard model, cash that merely carries a label should have the same effect as ordinary cash, but there is field evidence that the label itself changes spending.
 
-Psychologist Roy Baumeister conducted a landmark experiment in 1998.
+## 2. Transaction utility: the pleasure of a good deal
 
-Participants were divided into two groups:
-- **Group A**: Seated before a plate of chocolate chip cookies, instructed to eat only radishes (forced to resist temptation)
-- **Group B**: Free to eat the cookies
+Thaler split the value of a purchase into two parts.
 
-Both groups then worked on difficult geometry puzzles (which were, in reality, unsolvable).
+<FormulaBox
+  label="Acquisition utility and transaction utility"
+  formula="\text{Total utility} = \underbrace{v(\bar{p}) - v(p)}_{\text{acquisition utility}} + \underbrace{v(p^{*}) - v(p)}_{\text{transaction utility}}"
+  description="p is the price paid, p̄ the price equivalent to the value of the item to me, and p* the reference price (the price I expect to be fair)."
+/>
 
-**Result**: The group that ate radishes (who had spent self-control energy) gave up significantly sooner.
+A friend offers to fetch a beer for someone lying on a beach and asks how much they would pay. When the beer was to come from a fancy resort hotel, the median willingness to pay was 2.65 dollars; from a small grocery store, 1.50 dollars (Thaler 1985). The beer drunk and the place it is drunk are the same, so acquisition utility is the same. The hotel's reference price is higher, so the same price feels less like a "rip-off."
 
-Baumeister named this **Ego Depletion**: willpower is a finite resource — like a muscle — that diminishes with use.
+Transaction utility explains why sales and labels such as "X% off the list price" are so powerful. People buy things they do not need when transaction utility is large.
 
----
+## 3. Hedonic editing: segregate or integrate?
 
-## The Parole Board Study
+Using the shape of the value function from Chapter 2, total value depends on whether outcomes are viewed together or separately.
 
-In 2011, Shai Danziger and colleagues analyzed 1,100 parole hearing decisions by Israeli judges.
+- **Segregate gains**: the gain domain is concave, so $v(50)+v(50) > v(100)$. Giving gifts in several instalments brings more pleasure than giving them all at once.
+- **Integrate losses**: the loss domain is convex, so $v(-100) > v(-50)+v(-50)$. Paying one combined bill hurts less than paying several charges.
+- **Separate a small gain from a large loss**: a small gain mixed into a large loss is barely felt. Treated separately as a "silver lining," it is worth much more (a cash rebate after buying a car).
 
-**Results:**
-- First case of the morning: approval rate **~65%**
-- Just before lunch: approval rate **~0%**
-- First case after lunch: back to **~65%**
-- End of afternoon session: back to **~0%**
+With the estimate from Chapter 2 ($\alpha=0.88$), $v(50)+v(50)\approx 62.5$ and $v(100)\approx 57.5$. Splitting the same 100 into two brings about 9% more pleasure.
 
-When controlling for the seriousness of the crime, prior record, and rehabilitation plans, **time of day** was the single strongest predictor of outcome.
+## 4. The sunk cost effect
 
-Fatigued, decision-worn judges defaulted to the **safest choice — maintaining the status quo (keeping the prisoner incarcerated)**. Granting parole required complex, individualized judgment; denial required none.
+Costs already incurred and unrecoverable should not affect future choices. In practice, the more people have already paid, the more they want to keep using the project or item.
 
-This is one of the most striking real-world demonstrations of decision fatigue.
+Arkes and Blumer (1985) randomly divided buyers of season tickets to a university theatre into groups paying full price, a 13% discount and a 47% discount. In the first half of the season, the full-price group attended more performances. The same performances, similar people — they went more just because they had paid more. The effect faded in the second half of the season.
 
----
+In mental accounting terms, buying a ticket records a loss in a "theatre account." Attending closes the account and offsets the loss; not attending confirms the loss. Combined with the loss aversion of Chapter 2, people keep making low-value choices to avoid confirming a loss. Failed large projects by firms and governments that continue "because of everything we have already invested" have the same structure.
 
-## The Mechanism of Decision Fatigue
+## 5. Income targets and narrow periods
 
-The act of making decisions consumes cognitive energy. Decision quality and decision quantity are inversely related.
+Camerer et al. (1997) reported that New York taxi drivers quit early on busy days when their hourly earnings are high. This is the opposite of the standard labour supply model (work more when wages are high). One interpretation is that drivers use a daily income target as a reference point and stop once they reach it. Later reanalyses by Farber and others found the effect to be small or limited to some drivers, and the debate continues.
 
-**Two escape routes from decision fatigue:**
+<Callout type="warning">
+Taking sunk costs into account is not always an error. If there are reasons that affect future value — reputation (quitting loses trust), learning (going further reveals the value) or self-signalling (I am someone who finishes things) — continuing can be rational. The error is when past spending itself becomes the basis for the decision.
+</Callout>
 
-1. **Impulsive action**: Bypassing careful deliberation — "Let's just get this one."
-2. **Status quo preservation**: Choosing to do nothing — "Keep things as they are."
+## Check your understanding
 
-Both represent degraded decision quality.
+You bought a 100,000-won concert ticket and on the day there is a downpour. If the value of attending (net of the inconvenience of getting there) is 60,000 won, should you go? The 100,000 won already paid will not come back whether you go or not, so the comparison is between "60,000 won gained by going" and "0 won by not going." The net value is positive, so you should go. If the net value were −20,000 won, you should not go, and "I don't want to waste the 100,000 won" is not a reason.
 
----
+## References
 
-## Additional Findings on Ego Depletion
-
-### Glucose and Willpower
-
-Baumeister's follow-up research: giving depleted participants a glucose-containing drink restored self-control performance. Sugar-free diet drinks had no effect.
-
-This suggests a biological substrate — the brain uses glucose as its primary fuel for executive function.
-
-**Note**: Subsequent replication attempts have found smaller and less consistent effect sizes for the glucose-specific mechanism. The basic ego depletion effect itself has been confirmed in multiple meta-analyses, though its magnitude is debated.
-
-### The Role of Belief
-
-Intriguingly, people who believe willpower is **unlimited** experience less ego depletion. The belief that willpower is a scarce resource may itself accelerate depletion — pointing to a significant psychological component in the phenomenon.
-
----
-
-## Practical Applications: When to Make Important Decisions
-
-### 1. Schedule High-Stakes Decisions in the Morning
-
-Cognitive capacity peaks after adequate rest. Important negotiations, contract review, long-term consequential decisions — schedule them as early in the day as possible.
-
-### 2. Decision Minimization
-
-Steve Jobs wore the same black turtleneck every day. President Obama kept his wardrobe to gray and blue suits only. These were not eccentricities — they were deliberate strategies to conserve decision-making capacity for things that mattered.
-
-Automate or simplify routine decisions (meals, clothing, daily routines) to preserve cognitive resources for genuinely important choices.
-
-### 3. Rule-Based Behavior
-
-Pre-establish rules for vulnerable situations: "No online shopping after 9 PM." "I do not make major purchases when I'm tired or hungry." Rules made in advance operate automatically in depleted states, preventing bad choices before they happen.
-
-### 4. Eat and Sleep
-
-Adequate nutrition before a decision and sufficient sleep the night before are not just health advice — physical energy is the direct biological foundation of decision quality.
-
-### 5. Agenda Management
-
-Never place the most important agenda item last in a long meeting. Participants will be in a state of decision fatigue when it comes up, and will default to the most conservative or passive resolution available.
-
----
-
-## Chapter Summary
-
-| Concept | Description | Real-Life Example |
-|---------|-------------|-------------------|
-| Ego Depletion | Willpower diminishes with use | Impulse eating late at night |
-| Decision Fatigue | More decisions → worse judgment | Judges' afternoon parole denials |
-| Status Quo Default | Depleted people choose inaction | Deferring complex decisions indefinitely |
-| Impulse Default | Depleted people choose reactively | Late-night impulse purchases |
-
-**Optimization Strategies:**
-1. Important decisions → morning
-2. Routine decisions → automate and routinize
-3. Pre-set rules → protect against depleted bad choices
-4. Food and sleep → maintain cognitive energy
-
-Next chapter: **The Framing Effect and Choice Architecture** — why the exact same information leads to entirely different decisions depending on how it's presented.
+- Richard Thaler, "Mental Accounting and Consumer Choice," *Marketing Science* (1985)
+- Richard Thaler, "Mental Accounting Matters," *Journal of Behavioral Decision Making* (1999)
+- Hal Arkes and Catherine Blumer, "The Psychology of Sunk Cost," *Organizational Behavior and Human Decision Processes* (1985)
+- Colin Camerer et al., "Labor Supply of New York City Cabdrivers: One Day at a Time," *Quarterly Journal of Economics* (1997)
