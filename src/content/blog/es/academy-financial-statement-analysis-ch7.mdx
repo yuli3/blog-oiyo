@@ -1,0 +1,90 @@
+---
+track: academy
+series: financial-statement-analysis
+chapter: 7
+title: "Análisis de estados financieros — Análisis crediticio y predicción de quiebras: razones de cobertura y Z-score de Altman"
+description: "Ordena el marco del análisis crediticio desde la óptica del acreedor, calcula deuda neta/EBITDA, cobertura de intereses y razón de cobertura del servicio de la deuda, compara FA con una empresa en dificultades mediante el Z-score de Altman y expone los criterios de empresa marginal y los límites del modelo."
+pubDate: 2026-09-24
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["análisis de estados financieros", "análisis crediticio", "Z-score de Altman", "deuda neta sobre EBITDA", "empresas marginales"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+El accionista pregunta cuánto crecerá la utilidad; el acreedor, **si le pagarán a tiempo**. Por mucho que crezca la utilidad, el acreedor no recibe más que el principal y los intereses pactados, y si la empresa quiebra, sufre pérdidas. Por eso el análisis crediticio se centra en el riesgo a la baja: el equilibrio entre la capacidad de generar efectivo y la carga de la deuda (en cientos de millones de wones).
+
+## 1. El marco del análisis crediticio
+
+Las **5 C** tradicionales son cinco ángulos para evaluar a un prestatario: carácter (Character, voluntad e historial de pago), capacidad (Capacity, aptitud para pagar con flujos de efectivo), capital (Capital, patrimonio que absorbe pérdidas), colateral (Collateral) y condiciones (Conditions, sector y economía). El análisis de estados financieros cuantifica sobre todo la capacidad y el capital.
+
+## 2. Razones de cobertura y de apalancamiento
+
+El EBITDA de FA en 20X2 (utilidad de operación + depreciación) es $144 + 60 = 204$. Los préstamos son 80 de corto plazo y 300 de largo plazo, y el efectivo, 50. Supongamos que el principal que vence el año próximo son los 80 de préstamos de corto plazo.
+
+<LectureTable
+  title="Indicadores crediticios de FA"
+  headers={["Indicador", "Fórmula", "FA", "Interpretación"]}
+  rows={[
+    ["Deuda neta/EBITDA", "(Préstamos − efectivo) ÷ EBITDA", "330 ÷ 204 ≈ 1,6 veces", "Unos 1,6 años de EBITDA para pagar la deuda neta"],
+    ["Cobertura de intereses", "Utilidad de operación ÷ gasto por intereses", "144 ÷ 24 = 6,0 veces", "Capacidad para pagar intereses"],
+    ["Cobertura de intereses con EBITDA", "EBITDA ÷ gasto por intereses", "204 ÷ 24 = 8,5 veces", "Capacidad en efectivo para pagar intereses"],
+    ["Cobertura del servicio de la deuda (DSCR)", "EBITDA ÷ (intereses + amortización del principal)", "204 ÷ 104 ≈ 2,0 veces", "Por debajo de 1, depende del refinanciamiento"],
+    ["Flujo operativo/préstamos totales", "106 ÷ 380", "Alrededor del 28 %", "Capacidad del flujo para pagar deuda"],
+  ]}
+/>
+
+Las calificadoras de riesgo usan estos indicadores, junto con referencias sectoriales, para decidir las calificaciones. Las calificaciones coreanas van de AAA a D, y BBB− o superior se considera grado de inversión.
+
+## 3. El Z-score de Altman
+
+Altman (1968) construyó, con datos de fabricantes estadounidenses cotizados, una función discriminante que separa las empresas quebradas de las sanas.
+
+<FormulaBox
+  label="Z-score de Altman (fabricantes cotizados)"
+  formula="Z = 1{,}2X_1 + 1{,}4X_2 + 3{,}3X_3 + 0{,}6X_4 + 1{,}0X_5"
+  description="X1 = capital de trabajo/activo total, X2 = ganancias acumuladas/activo total, X3 = EBIT/activo total, X4 = valor de mercado del patrimonio/pasivo total, X5 = ventas/activo total. Z > 2,99: zona segura; 1,81 a 2,99: zona gris; por debajo de 1,81: riesgo de quiebra."
+/>
+
+Supongamos que la capitalización bursátil de FA es de 800.
+
+<LectureTable
+  title="Z-score de FA y de FH"
+  headers={["Variable", "Valor FA", "Aporte FA", "Valor FH", "Aporte FH"]}
+  rows={[
+    ["X1 capital de trabajo/activo total", "200/1.000 = 0,20", "0,24", "−0,05", "−0,06"],
+    ["X2 ganancias acumuladas/activo total", "300/1.000 = 0,30", "0,42", "0,02", "0,03"],
+    ["X3 EBIT/activo total", "144/1.000 = 0,144", "0,48", "0,01", "0,03"],
+    ["X4 capitalización/pasivo total", "800/500 = 1,60", "0,96", "0,25", "0,15"],
+    ["X5 ventas/activo total", "1.200/1.000 = 1,20", "1,20", "0,80", "0,80"],
+    ["Z", "", "Alrededor de 3,30 (seguro)", "", "Alrededor de 0,95 (riesgo de quiebra)"],
+  ]}
+/>
+
+FH muestra los signos típicos de dificultad: capital de trabajo negativo, casi ninguna utilidad acumulada y una utilidad de operación que no alcanza para los intereses.
+
+## 4. Empresas marginales
+
+El Banco de Corea clasifica como empresas marginales a las que tienen **una cobertura de intereses inferior a 1 durante tres años seguidos**: durante tres años, lo ganado con la operación ni siquiera alcanzó para pagar intereses. Cuando suben las tasas, aumenta el gasto por intereses y crece la proporción de empresas marginales. La proporción de empresas marginales entre las sujetas a auditoría externa se publica periódicamente en el Informe de Estabilidad Financiera del Banco de Corea.
+
+<Callout type="warning">
+El Z-score se construyó con una muestra de fabricantes estadounidenses de los años sesenta. Existen versiones revisadas para empresas no cotizadas (Z′) y no manufactureras (Z″), y aplicarlo tal cual a empresas coreanas puede desplazar los umbrales. Además, las cifras contables son históricas y detectan tarde las crisis de liquidez repentinas. En el análisis crediticio, revise siempre en las notas los pasivos contingentes, las garantías otorgadas, los pasivos por arrendamiento, los compromisos financieros de los préstamos (covenants) y el calendario de vencimientos. Si los vencimientos se concentran, el riesgo de refinanciamiento es alto aunque las razones luzcan bien.
+</Callout>
+
+## Ejercicio
+
+El activo total de FI es de 200.000 millones de wones, su capital de trabajo de 10.000 millones, sus ganancias acumuladas de −20.000 millones, su EBIT de 4.000 millones, su capitalización de 30.000 millones, su pasivo total de 150.000 millones y sus ventas de 160.000 millones. El gasto por intereses es de 6.000 millones. ¿Cuáles son su Z-score y su cobertura de intereses, y cómo la evalúa?
+
+$X_1 = 0{,}05$, $X_2 = -0{,}10$, $X_3 = 0{,}02$, $X_4 = 0{,}20$ y $X_5 = 0{,}80$. $Z = 0{,}06 - 0{,}14 + 0{,}066 + 0{,}12 + 0{,}80 \approx 0{,}91$: zona de riesgo de quiebra. La cobertura de intereses es $40 / 60 \approx 0{,}67$ veces: la utilidad de operación no alcanza para los intereses. Si esto dura tres años, será una empresa marginal. Con el patrimonio mermado por pérdidas y mucha deuda, también le costará conseguir financiamiento adicional.
+
+## Referencias
+
+- Edward Altman, «Financial Ratios, Discriminant Analysis and the Prediction of Corporate Bankruptcy», *Journal of Finance* (1968)
+- Banco de Corea, [Financial Stability Report](https://www.bok.or.kr/portal/singl/newsData/listPage.do?menuNo=200717)
+- Krishna Palepu, Paul Healy y Erik Peek, *Business Analysis and Valuation: IFRS Edition*, cap. 10

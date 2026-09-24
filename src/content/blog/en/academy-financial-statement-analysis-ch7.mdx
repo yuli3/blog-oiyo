@@ -1,0 +1,90 @@
+---
+track: academy
+series: financial-statement-analysis
+chapter: 7
+title: "Financial Statement Analysis — Credit Analysis and Distress Prediction: Coverage Ratios and the Altman Z-score"
+description: "Sets out the framework of credit analysis from the creditor's viewpoint, calculates net debt/EBITDA, interest coverage and the debt service coverage ratio, compares FA with a distressed company using the Altman Z-score, and covers the criteria for marginal firms and the limits of the model."
+pubDate: 2026-09-24
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["financial statement analysis", "credit analysis", "Altman Z-score", "net debt to EBITDA", "marginal firms"]
+locale: en
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+Shareholders ask how much profit will grow; creditors ask **whether they will be repaid on time**. However much profit grows, creditors receive no more than the agreed principal and interest, and if the company fails they bear losses. So credit analysis focuses on downside risk — the balance between cash-generating power and the debt burden (unit: ₩100 million).
+
+## 1. The credit analysis framework
+
+The traditional **5 Cs** are five perspectives for assessing a borrower: Character (willingness and record of repayment), Capacity (ability to repay from cash flow), Capital (equity to absorb losses), Collateral and Conditions (industry and economy). Financial statement analysis mainly quantifies capacity and capital.
+
+## 2. Coverage and leverage ratios
+
+FA's EBITDA for 20X2 (operating profit + depreciation) is $144 + 60 = 204$. Borrowings are 80 short-term and 300 long-term, and cash is 50. Assume the principal due next year is the 80 of short-term borrowings.
+
+<LectureTable
+  title="FA's credit metrics"
+  headers={["Metric", "Formula", "FA", "Interpretation"]}
+  rows={[
+    ["Net debt/EBITDA", "(Borrowings − cash) ÷ EBITDA", "330 ÷ 204 ≈ 1.6 times", "About 1.6 years of EBITDA to repay net debt"],
+    ["Interest coverage", "Operating profit ÷ interest expense", "144 ÷ 24 = 6.0 times", "Capacity to pay interest"],
+    ["EBITDA interest coverage", "EBITDA ÷ interest expense", "204 ÷ 24 = 8.5 times", "Cash-based interest capacity"],
+    ["Debt service coverage ratio (DSCR)", "EBITDA ÷ (interest + principal repayment)", "204 ÷ 104 ≈ 2.0 times", "Below 1 means reliance on refinancing"],
+    ["Operating cash flow/total borrowings", "106 ÷ 380", "About 28%", "Cash flow's capacity to repay debt"],
+  ]}
+/>
+
+Credit rating agencies use such metrics together with industry benchmarks in their rating decisions. Korean credit ratings run from AAA to D, with BBB− and above regarded as investment grade.
+
+## 3. The Altman Z-score
+
+Altman (1968) built a discriminant function separating bankrupt from healthy companies using data on listed US manufacturers.
+
+<FormulaBox
+  label="Altman Z-score (listed manufacturers)"
+  formula="Z = 1.2X_1 + 1.4X_2 + 3.3X_3 + 0.6X_4 + 1.0X_5"
+  description="X1 = working capital/total assets, X2 = retained earnings/total assets, X3 = EBIT/total assets, X4 = market value of equity/total liabilities, X5 = sales/total assets. Z > 2.99 is safe, 1.81–2.99 the grey zone and below 1.81 distress risk."
+/>
+
+Assume FA's market capitalization is 800.
+
+<LectureTable
+  title="Z-scores of FA and FH"
+  headers={["Variable", "FA value", "FA contribution", "FH value", "FH contribution"]}
+  rows={[
+    ["X1 working capital/total assets", "200/1,000 = 0.20", "0.24", "−0.05", "−0.06"],
+    ["X2 retained earnings/total assets", "300/1,000 = 0.30", "0.42", "0.02", "0.03"],
+    ["X3 EBIT/total assets", "144/1,000 = 0.144", "0.48", "0.01", "0.03"],
+    ["X4 market capitalization/total liabilities", "800/500 = 1.60", "0.96", "0.25", "0.15"],
+    ["X5 sales/total assets", "1,200/1,000 = 1.20", "1.20", "0.80", "0.80"],
+    ["Z", "", "About 3.30 (safe)", "", "About 0.95 (distress risk)"],
+  ]}
+/>
+
+FH shows the classic signs of distress: negative working capital, almost no accumulated profit and operating profit that cannot cover interest.
+
+## 4. Marginal firms
+
+The Bank of Korea classifies companies with **interest coverage below 1 for three consecutive years** as marginal firms — meaning that for three years the money earned from operations could not even pay the interest. When interest rates rise, interest expense grows and the share of marginal firms increases. The share of marginal firms among externally audited companies is published regularly in the Bank of Korea's Financial Stability Report.
+
+<Callout type="warning">
+The Z-score was built on a 1960s sample of US manufacturers. Revised models exist for private companies (Z′) and non-manufacturers (Z″), and applying it unchanged to Korean companies may put the cut-offs in the wrong place. Accounting figures are also historical and pick up sudden liquidity crises late. In credit analysis, always check the notes for contingent liabilities, guarantees, lease liabilities, financial covenants on borrowings and the maturity profile. If borrowings mature all at once, refinancing risk is high even when ratios look good.
+</Callout>
+
+## Check your understanding
+
+FI's total assets are ₩200 billion, working capital ₩10 billion, retained earnings −₩20 billion, EBIT ₩4 billion, market capitalization ₩30 billion, total liabilities ₩150 billion and sales ₩160 billion. Interest expense is ₩6 billion. What are its Z-score and interest coverage, and how would you assess it?
+
+$X_1 = 0.05$, $X_2 = -0.10$, $X_3 = 0.02$, $X_4 = 0.20$ and $X_5 = 0.80$. $Z = 0.06 - 0.14 + 0.066 + 0.12 + 0.80 ≈ 0.91$, in the distress zone. Interest coverage is $40 / 60 ≈ 0.67$ times, so operating profit cannot cover interest. If this continues for three years it becomes a marginal firm. With equity eroded by losses and heavy debt, raising further funds will also be difficult.
+
+## References
+
+- Edward Altman, "Financial Ratios, Discriminant Analysis and the Prediction of Corporate Bankruptcy," *Journal of Finance* (1968)
+- Bank of Korea, [Financial Stability Report](https://www.bok.or.kr/portal/singl/newsData/listPage.do?menuNo=200717)
+- Krishna Palepu, Paul Healy and Erik Peek, *Business Analysis and Valuation: IFRS Edition*, ch. 10

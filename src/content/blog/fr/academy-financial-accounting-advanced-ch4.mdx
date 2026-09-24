@@ -1,0 +1,86 @@
+---
+track: academy
+series: financial-statement-analysis
+chapter: 8
+title: "Analyse financière — Chiffres comptables et valeur de l'entreprise : modèle du résultat résiduel et PBR"
+description: "Dérive le modèle du résultat résiduel du modèle d'actualisation des dividendes, estime la valeur des capitaux propres de FA à partir de leur valeur comptable et des surprofits, présente le lien entre PBR, PER, ROE et coût des capitaux propres, et retrouve le ROE attendu implicite dans le cours."
+pubDate: 2026-06-01
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["analyse financière", "modèle du résultat résiduel", "évaluation d'entreprise", "PBR", "ROE"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+La dernière étape de l'analyse des états financiers transforme les résultats en **valeur**. Le modèle d'actualisation des flux de trésorerie (DCF) est très utilisé, mais il existe aussi le **modèle du résultat résiduel** (RIM), qui part directement des chiffres comptables. Avec des hypothèses cohérentes, les deux donnent la même valeur. Ce chapitre montre, avec le modèle du résultat résiduel, comment l'information comptable se relie à la valeur.
+
+## 1. Définition du résultat résiduel
+
+Le **résultat résiduel** (surprofit) est le résultat net diminué de la rémunération minimale exigée par les actionnaires, c'est-à-dire du coût des capitaux propres.
+
+$$
+\text{RR}_t = \text{RN}_t - r \times B_{t-1} = (\text{ROE}_t - r) \times B_{t-1}
+$$
+
+$B_{t-1}$ est la valeur comptable des capitaux propres d'ouverture et $r$ le coût des capitaux propres. Le résultat résiduel n'est positif que si le ROE dépasse ce coût. Un bénéfice inférieur au coût des capitaux propres détruit de la valeur actionnariale.
+
+## 2. Le modèle du résultat résiduel
+
+En ajoutant au modèle d'actualisation des dividendes la **relation de surplus propre** (variation des capitaux propres = résultat net − dividendes, sans augmentation de capital), on obtient :
+
+<FormulaBox
+  label="Modèle du résultat résiduel"
+  formula="V_0 = B_0 + \sum_{t=1}^{\infty} \frac{\text{RR}_t}{(1 + r)^t} \quad \Rightarrow \quad V_0 = B_0 + \frac{\text{RR}_1}{r - g}\ (\text{si le résultat résiduel croît au taux } g)"
+  description="La valeur des capitaux propres est la valeur comptable actuelle augmentée de la valeur actuelle des résultats résiduels futurs. La valeur comptable est le point de départ ; la capacité à dégager des surprofits crée la prime."
+/>
+
+## 3. Estimation de la valeur de FA
+
+Les capitaux propres de FA s'élèvent à 50 milliards de wons fin 20X2 et leur coût à 10 %. Supposons que le ROE reste à 20 % et que le résultat résiduel ne croisse pas.
+
+- Résultat résiduel 20X3 : $(20\,\% - 10\,\%) \times 500 = 50$ (5 milliards)
+- Valeur : $500 + 50 / 0{,}10 = 1\,000$ (100 milliards)
+- PBR justifié : $1\,000 / 500 = 2{,}0$
+
+<LectureTable
+  title="Valeur selon l'hypothèse de ROE (capitaux propres 500, coût 10 %, sans croissance ; en centaines de millions de wons)"
+  headers={["ROE", "Résultat résiduel", "Valeur", "PBR"]}
+  rows={[
+    ["8 %", "−10", "400", "0,8"],
+    ["10 %", "0", "500", "1,0"],
+    ["16 %", "30", "800", "1,6"],
+    ["20 %", "50", "1 000", "2,0"],
+  ]}
+/>
+
+Si le ROE égale le coût des capitaux propres, le PBR vaut 1 : l'entreprise ne vaut que sa valeur comptable. Si le ROE est inférieur, le PBR est inférieur à 1. Cela ne signifie pas que l'action vaut moins que la valeur liquidative, mais que le marché juge que **continuer à employer ce capital détruit de la valeur**.
+
+## 4. Les anticipations contenues dans le cours
+
+Le [chapitre 7](/fr/academy-financial-statement-analysis-ch7/) supposait une capitalisation de FA de 80 milliards. En retrouvant le ROE attendu implicite dans ce prix, $800 = 500 + \text{RR} / 0{,}10$ donne $\text{RR} = 30$ (3 milliards), soit un ROE attendu de 16 %. Le marché anticipe un recul du ROE de FA de 20 % à environ 16 %. Le [chapitre 3](/fr/academy-accounting-basics-ch10/) a montré qu'une bonne part du ROE de FA provient du levier financier. L'analyste juge si cette anticipation est trop pessimiste ou raisonnable, puis décide d'investir ou non.
+
+## 5. Lien avec le PER
+
+Le PER rapporte le cours au bénéfice. Vu par le modèle du résultat résiduel, il reflète la **croissance du bénéfice** et la **persistance des surprofits**. Quand des gains non récurrents gonflent le résultat net, le PER paraît bas ; recalculé sur le résultat normalisé ([chapitre 6](/fr/academy-financial-statement-analysis-ch6/)), il remonte. Lisez le PBR avec le ROE et le PER avec la croissance du bénéfice.
+
+<Callout type="warning">
+Parce qu'il part des chiffres comptables, le modèle du résultat résiduel subit les distorsions comptables. Une comptabilité prudente (R&D passée immédiatement en charges) réduit la valeur comptable et fait paraître le ROE futur plus élevé ; une comptabilité agressive fait l'inverse. Le modèle est conçu pour donner la même valeur quelle que soit la méthode, mais sur un horizon de prévision court cette compensation ne joue pas entièrement. Un point d'écart sur le coût des capitaux propres modifie aussi fortement la valeur : présentez le résultat sous forme de fourchette selon les hypothèses, non comme un chiffre unique.
+</Callout>
+
+## Exercice
+
+Les capitaux propres de FJ sont de 200 milliards de wons et leur coût de 8 %. Le ROE attendu l'an prochain est de 12 %, et l'on suppose que le résultat résiduel croîtra ensuite de 2 % par an. Calculez la valeur des capitaux propres et le PBR justifié. Si la capitalisation actuelle est de 240 milliards, quel taux de croissance du résultat résiduel le marché retient-il ?
+
+Le résultat résiduel de l'an prochain vaut $(12\,\% - 8\,\%) \times 2\,000 = 80$ (8 milliards). La valeur vaut $2\,000 + 80 / (0{,}08 - 0{,}02) \approx 2\,000 + 1\,333 = 3\,333$ (environ 333 milliards), soit un PBR d'environ 1,67. Avec une capitalisation de 240 milliards, $2\,400 = 2\,000 + 80 / (0{,}08 - g)$ donne $0{,}08 - g = 0{,}2$, donc $g = -12\,\%$. Le marché anticipe une disparition rapide des surprofits.
+
+## Références
+
+- Stephen Penman, *Financial Statement Analysis and Security Valuation*, chap. 5–6
+- James Ohlson, « Earnings, Book Values, and Dividends in Equity Valuation », *Contemporary Accounting Research* (1995)
+- Krishna Palepu, Paul Healy et Erik Peek, *Business Analysis and Valuation: IFRS Edition*, chap. 7–8

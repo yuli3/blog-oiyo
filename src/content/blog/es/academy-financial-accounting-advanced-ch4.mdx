@@ -1,0 +1,86 @@
+---
+track: academy
+series: financial-statement-analysis
+chapter: 8
+title: "Análisis de estados financieros — Cifras contables y valor de la empresa: el modelo de ingreso residual y el P/VL"
+description: "Deriva el modelo de ingreso residual a partir del modelo de descuento de dividendos, estima el valor del patrimonio de FA con su valor en libros y las utilidades anormales, y ordena la relación entre P/VL, PER, ROE y costo del patrimonio, deduciendo el ROE esperado implícito en el precio de mercado."
+pubDate: 2026-06-01
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["análisis de estados financieros", "modelo de ingreso residual", "valoración de empresas", "precio sobre valor en libros", "ROE"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+La última etapa del análisis de estados financieros convierte los resultados en **valor**. El modelo de flujos de efectivo descontados (DCF) es muy usado, pero también existe el **modelo de ingreso residual** (RIM), que parte directamente de las cifras contables. Con supuestos coherentes, ambos dan el mismo valor. Este capítulo usa el modelo de ingreso residual para ver cómo se conecta la información contable con el valor.
+
+## 1. Definición del ingreso residual
+
+El **ingreso residual** (utilidad anormal) es la utilidad neta menos el rendimiento mínimo que exigen los accionistas, es decir, el costo del patrimonio.
+
+$$
+\text{IR}_t = \text{UN}_t - r \times B_{t-1} = (\text{ROE}_t - r) \times B_{t-1}
+$$
+
+$B_{t-1}$ es el valor en libros del patrimonio al inicio y $r$, el costo del patrimonio. El ingreso residual solo es positivo si el ROE supera ese costo. Una utilidad que no llega al costo del patrimonio destruye valor para el accionista.
+
+## 2. El modelo de ingreso residual
+
+Si al modelo de descuento de dividendos se le añade la **relación de excedente limpio** (variación del patrimonio = utilidad neta − dividendos, sin emisiones de acciones), se obtiene:
+
+<FormulaBox
+  label="Modelo de ingreso residual"
+  formula="V_0 = B_0 + \sum_{t=1}^{\infty} \frac{\text{IR}_t}{(1 + r)^t} \quad \Rightarrow \quad V_0 = B_0 + \frac{\text{IR}_1}{r - g}\ (\text{si el ingreso residual crece a la tasa } g)"
+  description="El valor del patrimonio es el valor en libros actual más el valor presente de los ingresos residuales futuros. El valor en libros es el punto de partida; la capacidad de obtener rendimientos anormales crea la prima."
+/>
+
+## 3. Estimación del valor de FA
+
+El patrimonio de FA a fines de 20X2 es de 50.000 millones de wones y su costo, del 10 %. Supongamos que el ROE se mantiene en el 20 % y que el ingreso residual no crece.
+
+- Ingreso residual de 20X3: $(20\,\% - 10\,\%) \times 500 = 50$ (5.000 millones)
+- Valor: $500 + 50 / 0{,}10 = 1.000$ (100.000 millones)
+- P/VL justificado: $1.000 / 500 = 2{,}0$ veces
+
+<LectureTable
+  title="Valor según el supuesto de ROE (patrimonio 500, costo 10 %, sin crecimiento; en cientos de millones de wones)"
+  headers={["ROE", "Ingreso residual", "Valor", "P/VL"]}
+  rows={[
+    ["8 %", "−10", "400", "0,8"],
+    ["10 %", "0", "500", "1,0"],
+    ["16 %", "30", "800", "1,6"],
+    ["20 %", "50", "1.000", "2,0"],
+  ]}
+/>
+
+Si el ROE es igual al costo del patrimonio, el P/VL es 1: la empresa solo vale su valor en libros. Si el ROE es menor, el P/VL es inferior a 1. No significa que la acción valga menos que el valor de liquidación, sino que el mercado juzga que **seguir usando ese capital destruye valor**.
+
+## 4. Las expectativas implícitas en el precio
+
+En el [capítulo 7](/es/academy-financial-statement-analysis-ch7/) supusimos una capitalización de FA de 80.000 millones. Si se deduce el ROE esperado implícito en ese precio, $800 = 500 + \text{IR} / 0{,}10$ da $\text{IR} = 30$ (3.000 millones), es decir, un ROE esperado del 16 %. El mercado espera que el ROE de FA baje del 20 % a alrededor del 16 %. En el [capítulo 3](/es/academy-accounting-basics-ch10/) vimos que buena parte del ROE de FA viene del apalancamiento financiero. El analista juzga si esa expectativa es demasiado pesimista o adecuada y decide si invertir.
+
+## 5. Relación con el PER
+
+El PER es el precio dividido entre la utilidad. Visto con el modelo de ingreso residual, el PER refleja el **crecimiento de las utilidades** y la **persistencia de los rendimientos anormales**. Cuando partidas no recurrentes inflan la utilidad neta, el PER parece bajo, pero recalculado con la utilidad normalizada ([capítulo 6](/es/academy-financial-statement-analysis-ch6/)) sube. Lea el P/VL junto con el ROE y el PER junto con el crecimiento de las utilidades.
+
+<Callout type="warning">
+Como parte de cifras contables, el modelo de ingreso residual se ve afectado por las distorsiones contables. Una contabilidad conservadora (llevar la I+D directamente a gasto) reduce el valor en libros y hace parecer más alto el ROE futuro; una contabilidad agresiva hace lo contrario. El modelo está diseñado para dar el mismo valor sea cual sea el método contable, pero con un horizonte de previsión corto esa compensación no se produce del todo. Además, un punto porcentual de diferencia en el costo del patrimonio cambia mucho el valor, así que presente el resultado como un rango según los supuestos, no como una sola cifra.
+</Callout>
+
+## Ejercicio
+
+El patrimonio de FJ es de 200.000 millones de wones y su costo, del 8 %. Se espera un ROE del 12 % el año próximo y se supone que el ingreso residual crecerá después un 2 % anual. Calcule con el modelo de ingreso residual el valor del patrimonio y el P/VL justificado. Si la capitalización actual es de 240.000 millones, ¿qué tasa de crecimiento del ingreso residual supone el mercado?
+
+El ingreso residual del año próximo es $(12\,\% - 8\,\%) \times 2.000 = 80$ (8.000 millones). El valor es $2.000 + 80 / (0{,}08 - 0{,}02) \approx 2.000 + 1.333 = 3.333$ (unos 333.000 millones), un P/VL de alrededor de 1,67. Con una capitalización de 240.000 millones, $2.400 = 2.000 + 80 / (0{,}08 - g)$ da $0{,}08 - g = 0{,}2$, así que $g = -12\,\%$. El mercado espera que las utilidades anormales desaparezcan rápido.
+
+## Referencias
+
+- Stephen Penman, *Financial Statement Analysis and Security Valuation*, cap. 5–6
+- James Ohlson, «Earnings, Book Values, and Dividends in Equity Valuation», *Contemporary Accounting Research* (1995)
+- Krishna Palepu, Paul Healy y Erik Peek, *Business Analysis and Valuation: IFRS Edition*, cap. 7–8

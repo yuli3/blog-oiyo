@@ -1,0 +1,86 @@
+---
+track: academy
+series: financial-statement-analysis
+chapter: 8
+title: "财务报表分析 — 会计数字与企业价值：剩余收益模型与市净率"
+description: "由股利折现模型推导剩余收益模型，用权益账面价值和超额收益估计FA公司的股权价值，并整理市净率、市盈率与ROE、资本成本的关系，倒推市价中隐含的预期ROE。"
+pubDate: 2026-06-01
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["财务报表分析", "剩余收益模型", "企业价值评估", "市净率", "ROE"]
+locale: zh
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+财务报表分析的最后一步，是把分析结果转化为**价值**。现金流量折现模型（DCF）应用广泛，但也有直接从会计数字出发的**剩余收益模型**（RIM）。只要假设一致，两种模型给出的价值相同。本章用剩余收益模型观察会计信息如何与价值相联系。
+
+## 1. 剩余收益的定义
+
+**剩余收益**（超额收益）是净利润减去股东要求的最低回报，即股权资本成本后的金额。
+
+$$
+\text{RI}_t = \text{NI}_t - r \times B_{t-1} = (\text{ROE}_t - r) \times B_{t-1}
+$$
+
+$B_{t-1}$是期初权益账面价值，$r$是股权资本成本。只有ROE高于资本成本时，剩余收益才为正。即使盈利，若达不到资本成本，也会损害股东价值。
+
+## 2. 剩余收益模型
+
+在股利折现模型中加入**干净盈余关系**（权益变动 = 净利润 − 股利，无增资），就得到下式：
+
+<FormulaBox
+  label="剩余收益模型"
+  formula="V_0 = B_0 + \sum_{t=1}^{\infty} \frac{\text{RI}_t}{(1 + r)^t} \quad \Rightarrow \quad V_0 = B_0 + \frac{\text{RI}_1}{r - g}\ (\text{剩余收益以 } g \text{ 增长时})"
+  description="股权价值等于当前账面价值加上未来剩余收益的现值。账面价值是价值的起点，获取超额回报的能力创造溢价。"
+/>
+
+## 3. 估计FA公司的价值
+
+FA公司20X2年末权益为500亿韩元，股权资本成本10%。假设今后ROE保持20%，剩余收益不增长。
+
+- 20X3年剩余收益：$(20\% - 10\%) \times 500 = 50$亿韩元
+- 价值：$500 + 50 / 0.10 = 1{,}000$亿韩元
+- 合理市净率：$1{,}000 / 500 = 2.0$倍
+
+<LectureTable
+  title="不同ROE假设下的价值（权益500亿韩元，资本成本10%，零增长）"
+  headers={["ROE", "剩余收益", "价值", "市净率"]}
+  rows={[
+    ["8%", "−10", "400", "0.8"],
+    ["10%", "0", "500", "1.0"],
+    ["16%", "30", "800", "1.6"],
+    ["20%", "50", "1,000", "2.0"],
+  ]}
+/>
+
+ROE等于资本成本时，市净率为1，价值只等于账面价值。ROE低于资本成本时，市净率小于1，这并不意味着比清算价值便宜，而是市场判断**继续使用这些资本会损害价值**。
+
+## 4. 市价中隐含的预期
+
+[第7章](/zh/academy-financial-statement-analysis-ch7/)假设FA公司市值为800亿韩元。倒推这一价格中隐含的预期ROE：由$800 = 500 + \text{RI} / 0.10$得$\text{RI} = 30$亿韩元，即预期ROE为16%。市场认为FA公司的ROE将从20%降到16%左右。[第3章](/zh/academy-accounting-basics-ch10/)显示FA公司ROE相当大一部分来自财务杠杆。分析师要判断这一预期是过于悲观还是恰当，并据此作出投资决策。
+
+## 5. 与市盈率的关系
+
+市盈率是价格除以盈利。从剩余收益模型看，市盈率反映**盈利增长**和**超额回报的持续性**。一次性收益使净利润虚增时，市盈率看起来偏低，但用正常化利润（[第6章](/zh/academy-financial-statement-analysis-ch6/)）重新计算就会变高。市净率要与ROE搭配解读，市盈率要与盈利增长搭配解读。
+
+<Callout type="warning">
+剩余收益模型从会计数字出发，因此会受到会计扭曲的影响。稳健的会计处理（研发支出立即费用化）会减少账面价值、使未来ROE显得更高，激进的会计处理则相反。模型本身的设计使其价值不受会计方法影响，但预测期较短时，这种抵消不会完全发生。此外，资本成本相差1个百分点，价值就会大幅变化，因此结果应按不同假设给出区间，而不是单一数字。
+</Callout>
+
+## 练习题
+
+FJ公司权益为2,000亿韩元，资本成本8%。预计明年ROE为12%，假设此后剩余收益每年增长2%。用剩余收益模型求股权价值和合理市净率。若当前市值为2,400亿韩元，市场认为剩余收益增长率是多少？
+
+明年剩余收益为$(12\% - 8\%) \times 2{,}000 = 80$亿韩元。价值为$2{,}000 + 80 / (0.08 - 0.02) ≈ 2{,}000 + 1{,}333 = 3{,}333$亿韩元，市净率约1.67倍。若市值为2,400亿韩元，由$2{,}400 = 2{,}000 + 80 / (0.08 - g)$得$0.08 - g = 0.2$，$g = -12\%$。市场认为超额收益会迅速消失。
+
+## 参考资料
+
+- Stephen Penman, *Financial Statement Analysis and Security Valuation*, ch. 5–6
+- James Ohlson, "Earnings, Book Values, and Dividends in Equity Valuation," *Contemporary Accounting Research* (1995)
+- Krishna Palepu, Paul Healy and Erik Peek, *Business Analysis and Valuation: IFRS Edition*, ch. 7–8

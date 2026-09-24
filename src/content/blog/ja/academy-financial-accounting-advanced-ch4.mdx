@@ -1,0 +1,86 @@
+---
+track: academy
+series: financial-statement-analysis
+chapter: 8
+title: "財務諸表分析 — 会計の数字と企業価値：残余利益モデルとPBR"
+description: "配当割引モデルから残余利益モデルを導き、自己資本の帳簿価額と超過利益でFA社の株式価値を推定したうえで、PBR・PERとROE・資本コストの関係、時価に織り込まれた期待ROEを逆算します。"
+pubDate: 2026-06-01
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["財務諸表分析", "残余利益モデル", "企業価値評価", "PBR", "ROE"]
+locale: ja
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+財務諸表分析の最後の段階は、分析の結果を**価値**に換えることである。割引キャッシュフロー・モデル（DCF）が広く使われるが、会計の数字から直接出発する**残余利益モデル**（RIM）もある。二つのモデルは、仮定が一貫していれば同じ価値を与える。この章では、残余利益モデルで会計情報が価値とどうつながるかを見る。
+
+## 1. 残余利益の定義
+
+**残余利益**（超過利益）とは、純利益から株主が要求する最低限の収益、つまり株主資本コストを差し引いた金額である。
+
+$$
+\text{RI}_t = \text{NI}_t - r \times B_{t-1} = (\text{ROE}_t - r) \times B_{t-1}
+$$
+
+$B_{t-1}$は期首の自己資本の帳簿価額、$r$は株主資本コストである。ROEが資本コストより高いときだけ残余利益はプラスになる。利益を出しても資本コストに届かなければ、株主価値を損なう。
+
+## 2. 残余利益モデル
+
+配当割引モデルに**クリーン・サープラス関係**（純資産の変動 = 純利益 − 配当、増資なし）を入れると、次の式が得られる。
+
+<FormulaBox
+  label="残余利益モデル"
+  formula="V_0 = B_0 + \sum_{t=1}^{\infty} \frac{\text{RI}_t}{(1 + r)^t} \quad \Rightarrow \quad V_0 = B_0 + \frac{\text{RI}_1}{r - g}\ (\text{残余利益が } g \text{ で成長するとき})"
+  description="株式価値は、現在の帳簿価額に将来の残余利益の現在価値を加えたものである。帳簿価額が価値の出発点であり、超過収益を上げる能力がプレミアムを生む。"
+/>
+
+## 3. FA社の価値の推定
+
+FA社の20X2年末の自己資本は500億ウォン、株主資本コストは10%である。今後ROE 20%を維持し、残余利益は成長しないと仮定しよう。
+
+- 20X3年の残余利益：$(20\% - 10\%) \times 500 = 50$億ウォン
+- 価値：$500 + 50 / 0.10 = 1{,}000$億ウォン
+- 理論PBR：$1{,}000 / 500 = 2.0$倍
+
+<LectureTable
+  title="ROEの仮定による価値（自己資本500億ウォン、資本コスト10%、無成長）"
+  headers={["ROE", "残余利益", "価値", "PBR"]}
+  rows={[
+    ["8%", "−10", "400", "0.8"],
+    ["10%", "0", "500", "1.0"],
+    ["16%", "30", "800", "1.6"],
+    ["20%", "50", "1,000", "2.0"],
+  ]}
+/>
+
+ROEが資本コストと等しければPBRは1である。帳簿価額分の価値しかない。ROEが資本コストより低ければPBRは1より小さく、これは清算価値より安いという意味ではなく、**資本を使い続ければ価値を損なう**という市場の判断である。
+
+## 4. 時価に織り込まれた期待
+
+[第7章](/ja/academy-financial-statement-analysis-ch7/)でFA社の時価総額を800億ウォンと仮定した。この価格に織り込まれた期待ROEを逆算すると、$800 = 500 + \text{RI} / 0.10$から$\text{RI} = 30$億ウォン、つまり期待ROEは16%である。市場はFA社のROEが20%から16%程度に下がると見ている。[第3章](/ja/academy-accounting-basics-ch10/)で、FA社のROEのかなりの部分が財務レバレッジから来ていることを見た。アナリストは、この期待が悲観的すぎるのか妥当なのかを判断して投資決定を下す。
+
+## 5. PERとの関係
+
+PERは株価を利益で割った値である。残余利益モデルから見ると、PERは**利益の成長**と**超過収益の持続性**を反映する。一時的な利益で純利益が膨らむとPERは低く見えるが、正常化利益（[第6章](/ja/academy-financial-statement-analysis-ch6/)）で計算し直すと高くなる。PBRはROEと、PERは利益成長と組み合わせて読む。
+
+<Callout type="warning">
+残余利益モデルは会計の数字から出発するので、会計上のゆがみの影響を受ける。保守的な会計（研究開発費の即時費用処理）は帳簿価額を減らして将来のROEを高く見せ、積極的な会計はその逆である。モデル自体は会計方法にかかわらず同じ価値を与えるよう設計されているが、予測期間が短いとこの相殺が完全には起こらない。また、資本コストが1ポイント違うだけで価値は大きく変わるので、結果は一つの数字ではなく、仮定ごとの幅で示す。
+</Callout>
+
+## 確認問題
+
+FJ社の自己資本は2,000億ウォン、資本コストは8%である。来年のROEは12%と予想され、残余利益はその後毎年2%ずつ成長すると仮定する。残余利益モデルで株式価値と理論PBRを求めよ。現在の時価総額が2,400億ウォンなら、市場は残余利益の成長率を何%と見ているか。
+
+来年の残余利益は$(12\% - 8\%) \times 2{,}000 = 80$億ウォンである。価値は$2{,}000 + 80 / (0.08 - 0.02) ≈ 2{,}000 + 1{,}333 = 3{,}333$億ウォン、PBRは約1.67倍である。時価が2,400億ウォンなら、$2{,}400 = 2{,}000 + 80 / (0.08 - g)$から$0.08 - g = 0.2$となり、$g = -12\%$である。市場は超過利益が急速に消えると見ている。
+
+## 参考資料
+
+- Stephen Penman, *Financial Statement Analysis and Security Valuation*, ch. 5–6
+- James Ohlson, "Earnings, Book Values, and Dividends in Equity Valuation," *Contemporary Accounting Research* (1995)
+- Krishna Palepu, Paul Healy and Erik Peek, *Business Analysis and Valuation: IFRS Edition*, ch. 7–8

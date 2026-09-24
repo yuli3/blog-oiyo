@@ -1,0 +1,90 @@
+---
+track: academy
+series: financial-statement-analysis
+chapter: 7
+title: "Analyse financière — Analyse crédit et prévision des défaillances : ratios de couverture et Z-score d'Altman"
+description: "Présente le cadre de l'analyse crédit du point de vue du créancier, calcule dette nette/EBITDA, couverture des intérêts et ratio de couverture du service de la dette, compare FA à une entreprise en difficulté avec le Z-score d'Altman, puis expose les critères d'entreprise marginale et les limites du modèle."
+pubDate: 2026-09-24
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["analyse financière", "analyse crédit", "Z-score d'Altman", "dette nette sur EBITDA", "entreprises marginales"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+L'actionnaire se demande de combien le résultat va croître ; le créancier, **s'il sera remboursé à temps**. Si élevé que soit le résultat, le créancier ne touche pas plus que le principal et les intérêts convenus, et il subit des pertes si l'entreprise fait défaut. L'analyse crédit se concentre donc sur le risque de baisse : l'équilibre entre capacité à générer de la trésorerie et poids de la dette (en centaines de millions de wons).
+
+## 1. Le cadre de l'analyse crédit
+
+Les **5 C** traditionnels sont cinq angles d'appréciation de l'emprunteur : le caractère (Character, volonté et historique de remboursement), la capacité (Capacity, aptitude à rembourser sur les flux de trésorerie), le capital (Capital, fonds propres pour absorber les pertes), les garanties (Collateral) et les conditions (Conditions, secteur et conjoncture). L'analyse financière quantifie surtout la capacité et le capital.
+
+## 2. Ratios de couverture et de levier
+
+L'EBITDA de FA en 20X2 (résultat d'exploitation + amortissements) est de $144 + 60 = 204$. Les emprunts sont de 80 à court terme et 300 à long terme, la trésorerie de 50. Supposons que le principal à rembourser l'an prochain corresponde aux 80 d'emprunts à court terme.
+
+<LectureTable
+  title="Indicateurs de crédit de FA"
+  headers={["Indicateur", "Formule", "FA", "Interprétation"]}
+  rows={[
+    ["Dette nette/EBITDA", "(Emprunts − trésorerie) ÷ EBITDA", "330 ÷ 204 ≈ 1,6 fois", "Environ 1,6 année d'EBITDA pour rembourser la dette nette"],
+    ["Couverture des intérêts", "Résultat d'exploitation ÷ charges d'intérêts", "144 ÷ 24 = 6,0 fois", "Capacité à payer les intérêts"],
+    ["Couverture des intérêts par l'EBITDA", "EBITDA ÷ charges d'intérêts", "204 ÷ 24 = 8,5 fois", "Capacité en trésorerie à payer les intérêts"],
+    ["Couverture du service de la dette (DSCR)", "EBITDA ÷ (intérêts + remboursement du principal)", "204 ÷ 104 ≈ 2,0 fois", "Sous 1, dépendance au refinancement"],
+    ["Flux d'exploitation/emprunts totaux", "106 ÷ 380", "Environ 28 %", "Capacité des flux à rembourser la dette"],
+  ]}
+/>
+
+Les agences de notation utilisent ces indicateurs, avec des références sectorielles, pour décider des notes. Les notes coréennes vont de AAA à D, BBB− et au-dessus correspondant à la catégorie investissement.
+
+## 3. Le Z-score d'Altman
+
+Altman (1968) a construit, à partir de données sur des industriels américains cotés, une fonction discriminante séparant les entreprises défaillantes des entreprises saines.
+
+<FormulaBox
+  label="Z-score d'Altman (industriels cotés)"
+  formula="Z = 1{,}2X_1 + 1{,}4X_2 + 3{,}3X_3 + 0{,}6X_4 + 1{,}0X_5"
+  description="X1 = fonds de roulement/actif total, X2 = résultats non distribués/actif total, X3 = EBIT/actif total, X4 = capitalisation boursière/dettes totales, X5 = chiffre d'affaires/actif total. Z > 2,99 : zone sûre ; 1,81 à 2,99 : zone grise ; sous 1,81 : risque de défaillance."
+/>
+
+Supposons une capitalisation boursière de FA de 800.
+
+<LectureTable
+  title="Z-score de FA et de FH"
+  headers={["Variable", "Valeur FA", "Contribution FA", "Valeur FH", "Contribution FH"]}
+  rows={[
+    ["X1 fonds de roulement/actif total", "200/1 000 = 0,20", "0,24", "−0,05", "−0,06"],
+    ["X2 résultats non distribués/actif total", "300/1 000 = 0,30", "0,42", "0,02", "0,03"],
+    ["X3 EBIT/actif total", "144/1 000 = 0,144", "0,48", "0,01", "0,03"],
+    ["X4 capitalisation/dettes totales", "800/500 = 1,60", "0,96", "0,25", "0,15"],
+    ["X5 chiffre d'affaires/actif total", "1 200/1 000 = 1,20", "1,20", "0,80", "0,80"],
+    ["Z", "", "Environ 3,30 (sûr)", "", "Environ 0,95 (risque de défaillance)"],
+  ]}
+/>
+
+FH présente les signes classiques de difficulté : fonds de roulement négatif, quasi-absence de résultats accumulés et résultat d'exploitation insuffisant pour payer les intérêts.
+
+## 4. Les entreprises marginales
+
+La Banque de Corée classe comme entreprises marginales celles dont **la couverture des intérêts est inférieure à 1 trois années de suite** : pendant trois ans, l'argent gagné par l'exploitation n'a même pas suffi à payer les intérêts. Quand les taux montent, les charges d'intérêts augmentent et la part d'entreprises marginales s'accroît. La part des entreprises marginales parmi les sociétés soumises à l'audit externe est publiée régulièrement dans le rapport sur la stabilité financière de la Banque de Corée.
+
+<Callout type="warning">
+Le Z-score a été construit sur un échantillon d'industriels américains des années 1960. Il existe des versions révisées pour les sociétés non cotées (Z′) et hors industrie (Z″), et l'appliquer tel quel aux entreprises coréennes peut décaler les seuils. Les chiffres comptables, historiques, détectent en outre tardivement les crises de liquidité brutales. En analyse crédit, vérifiez toujours dans les notes les passifs éventuels, les garanties données, les dettes locatives, les clauses financières des emprunts (covenants) et l'échéancier. Si les échéances sont concentrées, le risque de refinancement est élevé même avec de bons ratios.
+</Callout>
+
+## Exercice
+
+L'actif total de FI est de 200 milliards de wons, son fonds de roulement de 10 milliards, ses résultats non distribués de −20 milliards, son EBIT de 4 milliards, sa capitalisation de 30 milliards, ses dettes totales de 150 milliards et son chiffre d'affaires de 160 milliards. Les charges d'intérêts s'élèvent à 6 milliards. Quels sont son Z-score et sa couverture des intérêts, et comment l'évaluer ?
+
+$X_1 = 0{,}05$, $X_2 = -0{,}10$, $X_3 = 0{,}02$, $X_4 = 0{,}20$ et $X_5 = 0{,}80$. $Z = 0{,}06 - 0{,}14 + 0{,}066 + 0{,}12 + 0{,}80 \approx 0{,}91$ : zone de risque de défaillance. La couverture des intérêts vaut $40 / 60 \approx 0{,}67$ : le résultat d'exploitation ne couvre pas les intérêts. Si cela dure trois ans, FI devient une entreprise marginale. Avec des capitaux propres entamés par les pertes et une forte dette, lever de nouveaux fonds sera aussi difficile.
+
+## Références
+
+- Edward Altman, « Financial Ratios, Discriminant Analysis and the Prediction of Corporate Bankruptcy », *Journal of Finance* (1968)
+- Banque de Corée, [Financial Stability Report](https://www.bok.or.kr/portal/singl/newsData/listPage.do?menuNo=200717)
+- Krishna Palepu, Paul Healy et Erik Peek, *Business Analysis and Valuation: IFRS Edition*, chap. 10

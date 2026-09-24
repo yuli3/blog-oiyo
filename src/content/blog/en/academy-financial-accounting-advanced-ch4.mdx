@@ -1,0 +1,86 @@
+---
+track: academy
+series: financial-statement-analysis
+chapter: 8
+title: "Financial Statement Analysis — Accounting Numbers and Firm Value: The Residual Income Model and P/B"
+description: "Derives the residual income model from the dividend discount model, estimates FA's equity value from the book value of equity and abnormal earnings, and works back from the market price to the expected ROE it implies, alongside the relationship between P/B, P/E, ROE and the cost of equity."
+pubDate: 2026-06-01
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["financial statement analysis", "residual income model", "valuation", "price-to-book", "ROE"]
+locale: en
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+The last stage of financial statement analysis turns the results into **value**. The discounted cash flow (DCF) model is widely used, but there is also the **residual income model** (RIM), which starts directly from accounting numbers. With consistent assumptions, the two give the same value. This chapter uses the residual income model to see how accounting information connects to value.
+
+## 1. Defining residual income
+
+**Residual income** (abnormal earnings) is net profit minus the minimum return shareholders require, that is, the cost of equity.
+
+$$
+\text{RI}_t = \text{NI}_t - r \times B_{t-1} = (\text{ROE}_t - r) \times B_{t-1}
+$$
+
+$B_{t-1}$ is the opening book value of equity and $r$ the cost of equity. Residual income is positive only when ROE exceeds the cost of equity. Profit that falls short of the cost of equity destroys shareholder value.
+
+## 2. The residual income model
+
+Adding **clean surplus accounting** (change in equity = net profit − dividends, with no share issues) to the dividend discount model gives:
+
+<FormulaBox
+  label="Residual income model"
+  formula="V_0 = B_0 + \sum_{t=1}^{\infty} \frac{\text{RI}_t}{(1 + r)^t} \quad \Rightarrow \quad V_0 = B_0 + \frac{\text{RI}_1}{r - g}\ (\text{if residual income grows at } g)"
+  description="Equity value is current book value plus the present value of future residual income. Book value is the starting point of value; the ability to earn abnormal returns creates the premium."
+/>
+
+## 3. Estimating FA's value
+
+FA's equity at the end of 20X2 is ₩50 billion and its cost of equity 10%. Assume ROE stays at 20% and residual income does not grow.
+
+- Residual income for 20X3: $(20\% - 10\%) \times 500 = 50$ (₩5 billion)
+- Value: $500 + 50 / 0.10 = 1{,}000$ (₩100 billion)
+- Justified P/B: $1{,}000 / 500 = 2.0$ times
+
+<LectureTable
+  title="Value under different ROE assumptions (equity 500, cost of equity 10%, no growth; unit: ₩100 million)"
+  headers={["ROE", "Residual income", "Value", "P/B"]}
+  rows={[
+    ["8%", "−10", "400", "0.8"],
+    ["10%", "0", "500", "1.0"],
+    ["16%", "30", "800", "1.6"],
+    ["20%", "50", "1,000", "2.0"],
+  ]}
+/>
+
+When ROE equals the cost of equity, P/B is 1: the company is worth only its book value. When ROE is below the cost of equity, P/B is below 1. That does not mean the shares are cheaper than liquidation value; it is the market's judgement that **continuing to use the capital destroys value**.
+
+## 4. Expectations embedded in the market price
+
+[Chapter 7](/en/academy-financial-statement-analysis-ch7/) assumed FA's market capitalization to be ₩80 billion. Working back the expected ROE embedded in this price, $800 = 500 + \text{RI} / 0.10$ gives $\text{RI} = 30$ (₩3 billion), an expected ROE of 16%. The market expects FA's ROE to fall from 20% to about 16%. [Chapter 3](/en/academy-accounting-basics-ch10/) showed that much of FA's ROE comes from financial leverage. The analyst judges whether this expectation is too pessimistic or appropriate, and makes an investment decision.
+
+## 5. Relationship with P/E
+
+P/E is price divided by earnings. Seen through the residual income model, P/E reflects **earnings growth** and the **persistence of abnormal returns**. When one-off gains inflate net profit, P/E looks low, but recalculated on normalized earnings ([chapter 6](/en/academy-financial-statement-analysis-ch6/)) it rises. Read P/B together with ROE, and P/E together with earnings growth.
+
+<Callout type="warning">
+Because the residual income model starts from accounting numbers, it is affected by accounting distortions. Conservative accounting (expensing R&D immediately) reduces book value and makes future ROE look higher; aggressive accounting does the opposite. The model is designed to give the same value regardless of accounting method, but with a short forecast horizon this offset does not fully occur. A 1-percentage-point difference in the cost of equity also changes value greatly, so present the result as a range under different assumptions, not a single number.
+</Callout>
+
+## Check your understanding
+
+FJ's equity is ₩200 billion and its cost of equity 8%. Next year's ROE is expected to be 12%, and residual income is assumed to grow by 2% a year thereafter. Find the equity value and justified P/B with the residual income model. If the current market capitalization is ₩240 billion, what residual income growth rate is the market assuming?
+
+Next year's residual income is $(12\% - 8\%) \times 2{,}000 = 80$ (₩8 billion). Value is $2{,}000 + 80 / (0.08 - 0.02) ≈ 2{,}000 + 1{,}333 = 3{,}333$ (about ₩333 billion), a P/B of about 1.67. With a market value of ₩240 billion, $2{,}400 = 2{,}000 + 80 / (0.08 - g)$ gives $0.08 - g = 0.2$, so $g = -12\%$. The market expects abnormal earnings to disappear quickly.
+
+## References
+
+- Stephen Penman, *Financial Statement Analysis and Security Valuation*, ch. 5–6
+- James Ohlson, "Earnings, Book Values, and Dividends in Equity Valuation," *Contemporary Accounting Research* (1995)
+- Krishna Palepu, Paul Healy and Erik Peek, *Business Analysis and Valuation: IFRS Edition*, ch. 7–8
