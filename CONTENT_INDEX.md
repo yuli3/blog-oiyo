@@ -1,6 +1,6 @@
 # Content Index (auto-generated)
 
-> Generated 2026-09-24T15:37:08.493Z from MDX frontmatter. Do not edit by hand — run `npm run content:manifest`.
+> Generated 2026-09-24T15:37:42.391Z from MDX frontmatter. Do not edit by hand — run `npm run content:manifest`.
 
 Total: **3870** entries · ko 1962 · en 975 · ja 418 · zh 211 · es 152 · fr 152
 
