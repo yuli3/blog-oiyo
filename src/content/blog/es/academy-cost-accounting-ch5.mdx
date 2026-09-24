@@ -1,0 +1,106 @@
+---
+track: academy
+series: cost-accounting
+chapter: 9
+title: "Contabilidad de costos — Costeo basado en actividades (ABC): actividades, generadores de costo y jerarquía de costos"
+description: "Muestra por qué una tasa única tradicional subcostea los productos complejos de bajo volumen y asigna los costos indirectos de fabricación por actividades, generadores de costo y la jerarquía de costos de nivel unidad, lote, producto e instalación para recalcular el costo de dos productos."
+pubDate: 2026-06-22
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["contabilidad de costos", "costeo basado en actividades", "ABC", "generadores de costo", "jerarquía de costos"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+El costeo tradicional asigna los costos indirectos de fabricación con una sola **base proporcional al volumen**, como las horas de mano de obra directa o las horas máquina. Sin embargo, buena parte de los costos indirectos de las fábricas actuales no nace del volumen, sino del **número de lotes, preparaciones y tipos de producto**. El costeo basado en actividades (ABC) acumula los costos indirectos por las **actividades** que los causan y los asigna a los productos según cuánto consume cada uno de cada actividad.
+
+## 1. El procedimiento ABC
+
+1. Identificar las principales **actividades** (preparación de máquinas, órdenes de compra, inspección de calidad, funcionamiento de máquinas).
+2. Reunir los costos indirectos en un **grupo de costos** por actividad.
+3. Elegir el **generador de costo** de cada actividad (número de preparaciones, número de órdenes, horas de inspección, horas máquina).
+4. Calcular la tasa de cada actividad: costo de la actividad ÷ cantidad total del generador.
+5. Asignar multiplicando la tasa por la cantidad del generador que consumió cada producto.
+
+## 2. La jerarquía de costos
+
+<LectureTable
+  title="Jerarquía de costos de las actividades"
+  headers={["Nivel", "Qué causa el costo", "Ejemplos", "Generadores de costo"]}
+  rows={[
+    ["Unidad", "Producir una unidad", "Energía de las máquinas, suministros", "Horas máquina, unidades producidas"],
+    ["Lote", "Procesar un lote", "Preparaciones, órdenes de compra, inspección de la primera pieza", "Número de preparaciones, número de órdenes"],
+    ["Producto", "Mantener una línea de producto", "Diseño, gestión de piezas, cambios de ingeniería", "Número de productos, número de cambios"],
+    ["Instalación", "Mantener toda la planta", "Administración de planta, depreciación de edificios, seguros", "Bases de asignación débiles (superficie, etc.)"],
+  ]}
+/>
+
+Los costos de nivel lote y de nivel producto no son proporcionales al volumen: preparar un lote cuesta lo mismo si tiene 100 unidades que si tiene 10.000. Por eso la asignación por volumen carga demasiado estos costos a los productos de alto volumen y muy poco a los de bajo volumen.
+
+## 3. Ejemplo
+
+La empresa AB fabrica un producto estándar S de alto volumen y un producto a medida C de bajo volumen. Los costos indirectos de fabricación suman 120 millones de wones.
+
+<LectureTable
+  title="Datos de los productos"
+  headers={["Partida", "Estándar S", "A medida C", "Total"]}
+  rows={[
+    ["Unidades producidas", "10.000", "1.000", ""],
+    ["Horas de mano de obra directa", "20.000", "4.000", "24.000"],
+    ["Número de preparaciones", "20", "80", "100"],
+    ["Horas de inspección", "300", "700", "1.000"],
+    ["Horas máquina", "30.000", "10.000", "40.000"],
+  ]}
+/>
+
+Los costos por actividad son 40 millones de preparación, 30 millones de inspección de calidad y 50 millones de funcionamiento de máquinas.
+
+### A. Asignación tradicional (horas de mano de obra directa)
+
+La tasa es $12.000 / 24.000 = 0{,}5$ (5.000 wones por hora). A S se le asignan 100 millones y a C 20 millones, así que el costo indirecto por unidad es de 10.000 wones para S y 20.000 wones para C.
+
+### B. Asignación ABC
+
+<LectureTable
+  title="Asignación por actividad (en decenas de miles de wones)"
+  headers={["Actividad", "Tasa", "S", "C"]}
+  rows={[
+    ["Preparación", "4.000 ÷ 100 preparaciones = 40", "20 × 40 = 800", "80 × 40 = 3.200"],
+    ["Inspección de calidad", "3.000 ÷ 1.000 horas = 3", "300 × 3 = 900", "700 × 3 = 2.100"],
+    ["Funcionamiento de máquinas", "5.000 ÷ 40.000 horas = 0,125", "30.000 × 0,125 = 3.750", "10.000 × 0,125 = 1.250"],
+    ["Total", "", "5.450", "6.550"],
+    ["Costo indirecto por unidad", "", "0,545", "6,55"],
+  ]}
+/>
+
+<FormulaBox
+  label="Tamaño de la distorsión"
+  formula="\text{Costo indirecto por unidad de C}: \underbrace{2}_{\text{tradicional}} \rightarrow \underbrace{6{,}55}_{\text{ABC}}, \qquad \text{S}: 1 \rightarrow 0{,}545"
+  description="En decenas de miles de wones. El método tradicional trasladaba al producto estándar los costos de preparación e inspección del producto a medida: subcosteaba C en unos 45.500 wones y sobrecosteaba S en unos 4.550 wones."
+/>
+
+## 4. Usos y límites del ABC
+
+La información ABC se usa para fijar precios, decidir la mezcla de productos, analizar la rentabilidad por cliente y mejorar procesos. Si el costo del producto a medida C sube mucho, aparecen opciones: subir su precio, reducir el tiempo de preparación para abaratarlo o fijar una cantidad mínima de pedido. La gestión orientada a reducir los costos de las actividades se llama **gestión basada en actividades (ABM)**.
+
+<Callout type="warning">
+El ABC sigue siendo una asignación. Los costos de nivel instalación tienen una relación causal débil con los productos, así que cualquier base para repartirlos es arbitraria. Además, buena parte de los costos asignados con ABC son fijos y no bajan a corto plazo: dejar de producir C no elimina de inmediato los salarios del personal de preparación. Decisiones como abandonar un producto deben basarse en los costos realmente evitables, no en los costos ABC ([capítulo 2 de Contabilidad administrativa](/es/education-accounting-ch16/)). Implantar y mantener el ABC tampoco es barato.
+</Callout>
+
+## Ejercicio
+
+La empresa AC fabrica dos productos, M (5.000 unidades, 50 órdenes) y N (500 unidades, 150 órdenes). ¿Cuál es el costo de procesamiento de órdenes por unidad de N si los 8 millones de wones de ese costo se asignan por unidades producidas, y si se asignan por número de órdenes (ABC)?
+
+Por unidades producidas, la tasa es $800 / 5.500 \approx 0{,}145$ por unidad (en decenas de miles de wones), así que N cuesta unos 1.455 wones por unidad. Por número de órdenes, la tasa es $800 / 200 = 4$ (40.000 wones) por orden; a N se le asignan $150 \times 4 = 600$ (6 millones), es decir, 12.000 wones por unidad. El costo de N, un producto de bajo volumen con pedidos frecuentes, queda muy subcosteado con la base de volumen.
+
+## Referencias
+
+- Robert Kaplan y Robin Cooper, *Cost and Effect: Using Integrated Cost Systems to Drive Profitability and Performance*
+- Charles Horngren, Srikant Datar y Madhav Rajan, *Cost Accounting: A Managerial Emphasis*, cap. 5
+- Robert Kaplan y Steven Anderson, «Time-Driven Activity-Based Costing», *Harvard Business Review* (2004)

@@ -1,0 +1,106 @@
+---
+track: academy
+series: cost-accounting
+chapter: 9
+title: "Comptabilité analytique — Méthode ABC : activités, inducteurs de coûts et hiérarchie des coûts"
+description: "Montre pourquoi un taux d'imputation unique traditionnel sous-évalue le coût des produits complexes fabriqués en petite quantité, puis répartit les frais généraux par activités, inducteurs de coûts et hiérarchie des coûts (unité, lot, produit, structure) pour recalculer le coût de deux produits."
+pubDate: 2026-06-22
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["comptabilité analytique", "méthode ABC", "coûts par activités", "inducteurs de coûts", "hiérarchie des coûts"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+Le calcul des coûts traditionnel impute les frais généraux de production sur une seule **base proportionnelle au volume**, comme les heures de main-d'œuvre directe ou les heures-machine. Or une bonne partie des frais indirects des usines actuelles naît non du volume mais du **nombre de lots, de réglages et de références**. La méthode des coûts par activités (ABC) regroupe les frais indirects par **activité** qui les génère et les répartit sur les produits selon leur consommation de chaque activité.
+
+## 1. La démarche ABC
+
+1. Identifier les principales **activités** (réglages, commandes d'achat, contrôle qualité, fonctionnement des machines).
+2. Regrouper les frais généraux dans un **centre de regroupement** par activité.
+3. Choisir pour chaque activité l'**inducteur de coût** qui l'explique (nombre de réglages, nombre de commandes, heures de contrôle, heures-machine).
+4. Calculer le taux de chaque activité : coût de l'activité ÷ volume total de l'inducteur.
+5. Répartir en multipliant le taux par le volume d'inducteur consommé par chaque produit.
+
+## 2. La hiérarchie des coûts
+
+<LectureTable
+  title="Hiérarchie des coûts des activités"
+  headers={["Niveau", "Ce qui génère le coût", "Exemples", "Inducteurs"]}
+  rows={[
+    ["Unité", "La production d'une unité", "Énergie des machines, fournitures", "Heures-machine, quantité produite"],
+    ["Lot", "Le traitement d'un lot", "Réglages, commandes d'achat, contrôle du premier article", "Nombre de réglages, nombre de commandes"],
+    ["Produit", "Le maintien d'une référence", "Conception, gestion des composants, modifications techniques", "Nombre de références, nombre de modifications"],
+    ["Structure", "Le maintien de l'usine entière", "Direction de l'usine, amortissement des bâtiments, assurance", "Bases de répartition faibles (surface, etc.)"],
+  ]}
+/>
+
+Les coûts de lot et de produit ne sont pas proportionnels au volume : un réglage coûte autant pour un lot de 100 unités que pour un lot de 10 000. L'imputation au volume surcharge donc les produits de grande série et allège les petites séries.
+
+## 3. Exemple chiffré
+
+La société AB fabrique un produit standard S en grande série et un produit sur mesure C en petite quantité. Les frais généraux de production s'élèvent à 120 millions de wons.
+
+<LectureTable
+  title="Données produits"
+  headers={["Élément", "Standard S", "Sur mesure C", "Total"]}
+  rows={[
+    ["Quantité produite", "10 000", "1 000", ""],
+    ["Heures de main-d'œuvre directe", "20 000", "4 000", "24 000"],
+    ["Nombre de réglages", "20", "80", "100"],
+    ["Heures de contrôle", "300", "700", "1 000"],
+    ["Heures-machine", "30 000", "10 000", "40 000"],
+  ]}
+/>
+
+Le coût des activités est de 40 millions pour les réglages, 30 millions pour le contrôle qualité et 50 millions pour le fonctionnement des machines.
+
+### A. Imputation traditionnelle (heures de main-d'œuvre directe)
+
+Le taux est de $12\,000 / 24\,000 = 0{,}5$ (5 000 wons l'heure). S reçoit 100 millions et C 20 millions : les frais indirects unitaires sont de 10 000 wons pour S et de 20 000 wons pour C.
+
+### B. Répartition ABC
+
+<LectureTable
+  title="Répartition par activité (en dizaines de milliers de wons)"
+  headers={["Activité", "Taux", "S", "C"]}
+  rows={[
+    ["Réglages", "4 000 ÷ 100 réglages = 40", "20 × 40 = 800", "80 × 40 = 3 200"],
+    ["Contrôle qualité", "3 000 ÷ 1 000 heures = 3", "300 × 3 = 900", "700 × 3 = 2 100"],
+    ["Fonctionnement des machines", "5 000 ÷ 40 000 heures = 0,125", "30 000 × 0,125 = 3 750", "10 000 × 0,125 = 1 250"],
+    ["Total", "", "5 450", "6 550"],
+    ["Frais indirects par unité", "", "0,545", "6,55"],
+  ]}
+/>
+
+<FormulaBox
+  label="Ampleur de la distorsion"
+  formula="\text{Frais indirects unitaires de C} : \underbrace{2}_{\text{traditionnel}} \rightarrow \underbrace{6{,}55}_{\text{ABC}}, \qquad \text{S} : 1 \rightarrow 0{,}545"
+  description="En dizaines de milliers de wons. La méthode traditionnelle reportait sur le produit standard les coûts de réglage et de contrôle du produit sur mesure : C était sous-évalué d'environ 45 500 wons et S surévalué d'environ 4 550 wons."
+/>
+
+## 4. Usages et limites de la méthode ABC
+
+L'information ABC sert à fixer les prix, à choisir la gamme, à analyser la rentabilité par client et à améliorer les processus. Si le coût du produit sur mesure C augmente fortement, plusieurs options apparaissent : relever son prix, réduire le temps de réglage pour baisser le coût ou fixer une quantité minimale de commande. La gestion qui vise à réduire le coût des activités s'appelle la **gestion par les activités (ABM)**.
+
+<Callout type="warning">
+La méthode ABC reste une répartition. Les coûts de structure ont un lien causal faible avec les produits : toute base de répartition est arbitraire. Une large part des coûts répartis par ABC est en outre fixe et ne baisse pas à court terme : arrêter C ne supprime pas aussitôt les salaires de l'équipe de réglage. Des décisions comme l'abandon d'un produit doivent reposer sur les coûts réellement évitables, non sur les coûts ABC ([chapitre 2 de comptabilité de gestion](/fr/education-accounting-ch16/)). Mettre en place et maintenir la méthode ABC coûte d'ailleurs cher.
+</Callout>
+
+## Exercice
+
+La société AC fabrique deux produits, M (5 000 unités, 50 commandes) et N (500 unités, 150 commandes). Quel est le coût unitaire de traitement des commandes de N si l'on répartit 8 millions de wons de coûts de traitement des commandes selon la quantité produite, puis selon le nombre de commandes (ABC) ?
+
+Selon la quantité produite, le taux est de $800 / 5\,500 \approx 0{,}145$ par unité (en dizaines de milliers de wons) : le coût unitaire de N est d'environ 1 455 wons. Selon le nombre de commandes, le taux est de $800 / 200 = 4$ (40 000 wons) par commande ; N reçoit $150 \times 4 = 600$ (6 millions), soit 12 000 wons par unité. Le coût de N, produit de petite série commandé fréquemment, est fortement sous-évalué avec la base volume.
+
+## Références
+
+- Robert Kaplan et Robin Cooper, *Cost and Effect: Using Integrated Cost Systems to Drive Profitability and Performance*
+- Charles Horngren, Srikant Datar et Madhav Rajan, *Cost Accounting: A Managerial Emphasis*, chap. 5
+- Robert Kaplan et Steven Anderson, « Time-Driven Activity-Based Costing », *Harvard Business Review* (2004)
