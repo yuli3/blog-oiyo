@@ -1,0 +1,71 @@
+---
+track: academy
+series: international-finance
+chapter: 3
+title: "国際金融論 — マンデル=フレミングと開放経済の政策"
+description: "IS-LM-BPで財政・金融政策の効果が為替制度によって変わる比較静学を計算し、資本移動が完全なときのクラウディングアウトの経路を区別します。"
+pubDate: 2026-09-15
+updatedDate: 2026-09-24
+category: Economics
+tags: ["経済学", "国際金融", "マンデル=フレミング", "為替制度", "資本移動"]
+locale: ja
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 国際金融論 — 開放経済では、同じ財政政策でも為替制度によって別の働きをする
+
+閉鎖経済のIS-LMは[マクロ経済学第23章](/ja/education-economics-ch39/)にある。国境を開くと、金利と為替レートが資本の流れを通じて結びつき、純輸出がISをもう一度押す。マンデル=フレミングは、そのつながりを短期・価格硬直・静学に単純化したモデルである。
+
+## 1. BP曲線は外国為替市場が均衡する金利と産出の組み合わせである
+
+資本が完全に移動するなら、国内金利は世界金利$r^*$から離れられない。BPは水平である。資本移動が不完全なら、産出が増えるほど輸入が増えて経常収支が悪化するので、均衡にはより高い金利が必要になり、BPは右上がりになる。
+
+<FormulaBox
+  label="BP均衡(単純化)"
+  formula="NX(Y, E) + KA(r-r^*) = 0"
+  description="Eはウォン/外貨。Eの上昇(減価)はNXを改善し、rの上昇は資本流入を増やす。表示方法を先に固定する。"
+/>
+
+第1〜2章の為替レートと国際収支の会計が、ここでIS側に入ってくる。減価がすぐにNXを改善するという仮定が、マーシャル=ラーナー条件とタイムラグに左右されるという点もそのままである。
+
+## 2. 固定為替レートでは、金融政策は外国為替市場に縛られる
+
+固定為替レートで資本が完全に移動するなら、国内金利の引き下げは資本流出を招き、減価圧力を生む。中央銀行がレートを守るには、外貨を売ってベースマネーを吸収する。LMは元の位置に戻る。独立した金融政策はない。
+
+財政拡張はISを右に押し、金利上昇圧力が資本流入を招く。増価圧力を抑えるにはベースマネーを増やさなければならず、LMがついていく。産出効果は大きくなる。
+
+<LectureTable
+  title="資本の完全移動、短期の価格硬直"
+  headers={["ショック", "変動為替レート", "固定為替レート"]}
+  rows={[
+    ["財政拡張", "増価で純輸出がクラウディングアウト、産出効果は弱い", "通貨がついていき、産出効果は大きい"],
+    ["金融緩和", "減価で純輸出が増加、産出効果は大きい", "為替介入で無力"],
+    ["世界金利の上昇", "資本流出・減価", "外貨準備の減少・引き締め"],
+  ]}
+/>
+
+変動為替レートのもとでは、政府支出10兆ウォンが金利上昇圧力を生み、資本流入でウォンが増価すれば純輸出が減る。資本が完全に移動するなら、国内金利が$r^*$に戻るまで増価が続くので、純輸出は10兆ウォン近く減り、産出はほとんど増えない。資本移動が不完全で、増価が純輸出を4兆ウォンしか減らさないなら、1次の純需要の増加は6兆ウォンである。開放度と資本移動性が高いほど、このクラウディングアウトは大きい。
+
+## 3. このモデルが抜かしているもの
+
+物価の調整、予想為替レート、バランスシートの外貨建て負債、ゼロ金利制約は入っていない。新興国がドルで借金をしている場合、減価は純輸出を改善する前に債務負担を大きくする。そのとき、変動為替レートでの「金融政策は有効」は成り立たないことがある。
+
+<Callout type="warning">
+表の矢印を制度の処方として読まない。固定為替レートを選べば金融政策をあきらめることになるという比較静学であって、固定がいつも悪いという意味ではない。インフレのアンカー、外国為替市場の厚み、外貨建て債務の比率をあわせて見なければならない。その選択は次の章のトリレンマである。
+</Callout>
+
+## 確認問題
+
+資本がほとんど移動しない固定為替レートの国で、財政拡張は産出を上げるか。BPが急なら、産出の増加に伴う輸入の増加が、金利上昇に伴う資本流入を上回り、国際収支は赤字になる。レートを守るために中央銀行が外貨を売れば通貨量が減り、LMが左に移動して産出効果は弱まる。「固定為替レートなら財政政策が強い」は、完全移動という仮定の結果である。
+
+## 参考資料
+
+- Robert Mundell, "Capital Mobility and Stabilization Policy under Fixed and Flexible Exchange Rates," *Canadian Journal of Economics* (1963)
+- J. Marcus Fleming, "Domestic Financial Policies under Fixed and Floating Exchange Rates," *IMF Staff Papers* (1962)
+- IMF, [Annual Report on Exchange Arrangements and Exchange Restrictions](https://www.imf.org/en/Publications/Annual-Report-on-Exchange-Arrangements-and-Exchange-Restrictions)
