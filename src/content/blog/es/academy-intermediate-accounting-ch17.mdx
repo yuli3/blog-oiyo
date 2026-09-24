@@ -1,0 +1,98 @@
+---
+track: academy
+series: intermediate-accounting
+chapter: 17
+title: "Contabilidad intermedia — Ganancias por acción: promedio ponderado de acciones y dilución"
+description: "Resta los dividendos preferentes del numerador de las ganancias básicas por acción, calcula el promedio ponderado de acciones ordinarias tras ampliaciones, emisiones liberadas y acciones propias, y refleja el efecto dilutivo de las opciones y los bonos convertibles con el método de las acciones propias y el de conversión supuesta."
+pubDate: 2026-09-24
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["contabilidad intermedia", "ganancias por acción", "promedio ponderado de acciones", "ganancias diluidas por acción", "método de las acciones propias"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+Las ganancias por acción (GPA) son el resultado que obtiene una acción ordinaria en un periodo. Como denominador de la relación precio-ganancia (PER), es una de las cifras que más miran los inversores. La K-IFRS 1033 (NIC 33) exige a las sociedades cotizadas, entre otras, presentar las **ganancias básicas** y las **ganancias diluidas por acción** en el estado de resultados. La contabilidad de las transacciones de patrimonio se vio en el [capítulo 9](/es/education-accounting-ch6/) y las opciones en el [capítulo 15](/es/academy-intermediate-accounting-ch15/).
+
+## 1. Ganancias básicas por acción
+
+<FormulaBox
+  label="Ganancias básicas por acción"
+  formula="\text{GPA básicas} = \frac{\text{Resultado del periodo} - \text{Dividendos preferentes, etc.}}{\text{Promedio ponderado de acciones ordinarias en circulación}}"
+  description="En las acciones preferentes acumulativas se resta el dividendo del periodo se haya acordado o no; en las no acumulativas, solo los dividendos acordados para el periodo."
+/>
+
+### A. Promedio ponderado de acciones ordinarias
+
+Las acciones se ponderan por el tiempo que están en circulación. Sin embargo, **las operaciones que cambian el número de acciones sin cambio en los recursos** (emisiones liberadas, dividendos en acciones, desdoblamientos) se ajustan retroactivamente como si hubieran ocurrido al inicio del periodo, y las GPA comparativas también se reexpresan.
+
+Datos de la empresa QQ en 20X1: 10.000 acciones en circulación al inicio; emisión de 3.000 acciones a precio de mercado el 1 de abril; emisión liberada del 10 % el 1 de julio; compra de 1.200 acciones propias el 1 de octubre.
+
+<LectureTable
+  title="Promedio ponderado de acciones ordinarias"
+  headers={["Partida", "Acciones", "Ajuste por emisión liberada", "Ponderación", "Acciones ponderadas"]}
+  rows={[
+    ["Inicial", "10.000", "× 1,1 = 11.000", "12/12", "11.000"],
+    ["Emisión del 1/4", "3.000", "× 1,1 = 3.300", "9/12", "2.475"],
+    ["Acciones propias del 1/10", "(1.200)", "(compradas tras la emisión liberada)", "3/12", "(300)"],
+    ["Total", "", "", "", "13.175"],
+  ]}
+/>
+
+La emisión liberada se aplica a las acciones existentes y a la emisión de abril, así que ambas se multiplican por 1,1. Las acciones propias se compraron después de la emisión liberada, así que no se ajustan. Una emisión con derechos a un precio inferior al de mercado combina una emisión a valor razonable y un elemento liberado; este se separa y se ajusta retroactivamente.
+
+Con un resultado de 20 millones de wones y dividendos preferentes acumulativos de 2 millones, las GPA básicas son $18{,}000{,}000 / 13{,}175 ≈ 1{,}366$ wones.
+
+## 2. Ganancias diluidas por acción
+
+Suponen que todas las acciones ordinarias potenciales (opciones, bonos convertibles, acciones preferentes convertibles, etc.) se han convertido en ordinarias. **Solo se incluyen las que son dilutivas**; las que subirían las GPA (antidilutivas) se excluyen.
+
+### A. Opciones: el método de las acciones propias
+
+Al ejercerse las opciones, la empresa cobra el precio de ejercicio. Se supone que usa ese efectivo para recomprar acciones al **precio medio de mercado**, y solo el neto de acciones emitidas sin contraprestación se suma al denominador. El numerador no se ajusta.
+
+Con 1.000 opciones a un precio de ejercicio de 8.000 wones y un precio medio de 10.000 wones, los 8 millones cobrados permitirían recomprar 800 acciones. Las acciones incrementales son $1{,}000 - 800 = 200$. Si el precio de ejercicio supera el precio medio, las opciones son antidilutivas y se excluyen.
+
+### B. Bonos convertibles: el método de conversión supuesta
+
+Se supone que el bono convertible se convirtió al inicio del periodo (o en su emisión). Se suman al denominador las acciones de la conversión y al numerador el **gasto por intereses después de impuestos**, porque si se hubiera convertido no se habrían pagado intereses.
+
+Si QQ tiene desde el inicio un bono convertible con gasto por intereses de 1 millón (tasa impositiva del 20 %) y 1.000 acciones emitibles en la conversión, el ajuste del numerador es de 800.000 wones y el del denominador, de 1.000 acciones.
+
+### C. Orden de inclusión
+
+Con varias acciones potenciales, se incluyen **en orden de menor a mayor ganancia por acción incremental**, comprobando la dilución en cada paso. Para las opciones esa ganancia es de 0 wones ($0/200$) y para el bono convertible, de 800 wones ($800{,}000/1{,}000$).
+
+<LectureTable
+  title="Orden de cálculo de las GPA diluidas"
+  headers={["Paso", "Numerador (wones)", "Denominador (acciones)", "GPA", "Efecto"]}
+  rows={[
+    ["Básicas", "18.000.000", "13.175", "1.366", ""],
+    ["+ Opciones", "18.000.000", "13.375", "1.346", "Dilutivo"],
+    ["+ Bono convertible", "18.800.000", "14.375", "1.308", "Dilutivo"],
+  ]}
+/>
+
+Las GPA diluidas son 1.308 wones. Si al incluir el bono convertible las GPA hubieran subido por encima de 1.346 wones, sería antidilutivo y se excluiría, usando 1.346 wones.
+
+<Callout type="warning">
+Recomprar acciones reduce el denominador y eleva las GPA. El crecimiento de las GPA puede parecer bueno aunque el resultado no crezca, así que mire por separado el crecimiento del resultado y la variación del número de acciones. Una gran brecha entre las GPA básicas y diluidas indica mucha dilución potencial por bonos convertibles, opciones y similares. Si hay operaciones discontinuadas, las GPA de operaciones continuadas se muestran aparte.
+</Callout>
+
+## Ejercicio
+
+El resultado de 20X1 de la empresa RR es de 33 millones de wones y no tiene acciones preferentes. Tenía 20.000 acciones en circulación al inicio, emitió 6.000 a precio de mercado el 1 de mayo y pagó un dividendo en acciones de 0,2 acciones por acción el 1 de septiembre. ¿Cuáles son las GPA básicas?
+
+El dividendo en acciones se aplica retroactivamente a las acciones iniciales y a la emisión de mayo. Las iniciales pasan a $20{,}000 \times 1.2 = 24{,}000$ (12 meses) y la emisión a $6{,}000 \times 1.2 = 7{,}200$, que ponderadas por 8/12 dan 4.800. El promedio ponderado es de 28.800 acciones y las GPA básicas, $33{,}000{,}000 / 28{,}800 ≈ 1{,}146$ wones.
+
+## Referencias
+
+- Korea Accounting Standards Board, K-IFRS 1033 *Ganancias por acción*
+- IASB, [*IAS 33 Earnings per Share*](https://www.ifrs.org/issued-standards/list-of-standards/ias-33-earnings-per-share/)
+- Donald Kieso, Jerry Weygandt y Terry Warfield, *Intermediate Accounting: IFRS Edition*, cap. 16

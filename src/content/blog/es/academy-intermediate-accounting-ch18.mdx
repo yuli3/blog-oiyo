@@ -1,0 +1,100 @@
+---
+track: academy
+series: intermediate-accounting
+chapter: 18
+title: "Contabilidad intermedia — Preparar el estado de flujos de efectivo: método directo y análisis de cuentas"
+description: "Deriva del estado de resultados y de los estados de situación comparativos los flujos operativos por el método directo (cobros a clientes, pagos a proveedores, intereses e impuestos pagados) y reconstruye lo pagado y cobrado por PP&E mediante el análisis de las cuentas del activo y de la depreciación acumulada."
+pubDate: 2026-09-24
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["contabilidad intermedia", "estado de flujos de efectivo", "método directo", "método indirecto", "análisis de cuentas"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+El [capítulo 11 de Principios de contabilidad](/es/academy-accounting-basics-ch4/) presentó la estructura del estado de flujos de efectivo y el método indirecto. Este capítulo muestra cómo reconstruir los flujos cuando no hay mayor de transacciones y **solo se dispone de los estados financieros**, la técnica más usada en exámenes y en el análisis práctico. La clave es pasar las partidas del estado de resultados a base efectivo añadiéndoles las variaciones de las cuentas de balance relacionadas.
+
+## 1. Derivar los flujos operativos por el método directo
+
+<LectureTable
+  title="Cómo convertir partidas de resultados en flujos de efectivo"
+  headers={["Flujo", "Punto de partida (resultados)", "Ajuste (estado de situación)"]}
+  rows={[
+    ["Cobros a clientes", "Ventas", "− aumento de cuentas por cobrar + aumento de anticipos recibidos − castigos"],
+    ["Pagos a proveedores", "Costo de ventas", "+ aumento de existencias − aumento de cuentas por pagar"],
+    ["Pagos a empleados", "Sueldos", "− aumento de sueldos por pagar"],
+    ["Intereses pagados", "Gasto por intereses", "− aumento de intereses por pagar − amortización del descuento de bonos"],
+    ["Impuestos pagados", "Gasto por impuesto", "− aumento del impuesto corriente por pagar − aumento del pasivo diferido + aumento del activo diferido"],
+  ]}
+/>
+
+Las partes que no implican efectivo, como la depreciación o la amortización de un descuento de bonos, deben quitarse de la partida correspondiente. La amortización del descuento está incluida en el gasto por intereses, pero no salió en efectivo.
+
+## 2. Ejemplo
+
+Datos de la empresa SS en 20X1 (en decenas de miles de wones):
+
+- Estado de resultados: ventas 5.000, costo de ventas 3.000, sueldos 600, depreciación 700, gasto por intereses 200 (con 30 de amortización del descuento), ganancia por venta de PP&E 50, impuesto 150, resultado 400
+- Variaciones del estado de situación: cuentas por cobrar +300, existencias −100, cuentas por pagar +120, sueldos por pagar −20, intereses por pagar +10, impuesto corriente por pagar +40, pasivo por impuesto diferido +10
+
+<LectureTable
+  title="Flujos operativos por el método directo (en decenas de miles de wones)"
+  headers={["Partida", "Cálculo", "Importe"]}
+  rows={[
+    ["Cobros a clientes", "5.000 − 300", "4.700"],
+    ["Pagos a proveedores", "3.000 − 100 − 120", "(2.780)"],
+    ["Pagos a empleados", "600 + 20", "(620)"],
+    ["Intereses pagados", "200 − 10 − 30", "(160)"],
+    ["Impuestos pagados", "150 − 40 − 10", "(100)"],
+    ["Flujo neto de operación", "", "1.040"],
+  ]}
+/>
+
+Comprobándolo por el método indirecto: $400 + 700 + 30 - 50 - 300 + 100 + 120 - 20 + 10 + 40 + 10 = 1{,}040$, lo mismo. La amortización del descuento de 30 es un gasto sin efectivo y se suma; la ganancia por venta de 50 se relaciona con inversión y se resta.
+
+## 3. Actividades de inversión: reconstruir mediante análisis de cuentas
+
+Lo pagado por adquirir PP&E y lo cobrado al venderla no se ve solo con las variaciones del balance. Las cuentas se reconstruyen a partir de los saldos inicial y final y de la información de resultados.
+
+<LectureTable
+  title="Información sobre PP&E (en decenas de miles de wones)"
+  headers={["Cuenta", "Inicial", "Final", "Información adicional"]}
+  rows={[
+    ["PP&E (costo)", "5.000", "5.600", "Costo del equipo vendido: 800"],
+    ["Depreciación acumulada", "2.000", "2.300", "Depreciación del año: 700"],
+  ]}
+/>
+
+<FormulaBox
+  label="Análisis de cuentas"
+  formula="\begin{aligned}\text{Adquisiciones} &= \text{Costo final} - \text{Costo inicial} + \text{Costo vendido} = 5{,}600 - 5{,}000 + 800 = 1{,}400 \\ \text{Depreciación de lo vendido} &= \text{Inicial} + \text{Depreciación} - \text{Final} = 2{,}000 + 700 - 2{,}300 = 400 \\ \text{Precio de venta} &= (800 - 400) + \text{Ganancia } 50 = 450\end{aligned}"
+  description="Las adquisiciones de 1.400 son una salida de inversión y el precio de venta de 450 una entrada de inversión (en decenas de miles de wones). Lo que no implica efectivo, como compras a crédito o arrendamientos, se excluye y se revela en notas como transacción no monetaria."
+/>
+
+Los préstamos, bonos y cuentas de patrimonio se analizan igual para obtener los flujos de financiación: préstamos y pagos, emisiones de acciones y dividendos. Los dividendos pagados equivalen a ganancias acumuladas iniciales + resultado − ganancias acumuladas finales (sin otros movimientos), ajustados por la variación de dividendos por pagar.
+
+## 4. Actividades de inversión y financiación no monetarias
+
+Las actividades significativas de inversión y financiación que no implican efectivo se excluyen del cuerpo del estado y se revelan en notas: conversión de bonos en acciones, adquisición de derechos de uso mediante arrendamientos, adquisiciones de activos asumiendo pasivos. También se exige conciliar los pasivos que surgen de actividades de financiación entre el inicio y el cierre, separando cambios en efectivo y no monetarios (tipo de cambio, valor razonable, nuevos arrendamientos).
+
+<Callout type="warning">
+El estado por el método indirecto no muestra cuánto se cobró realmente a los clientes, así que cuesta ver el efecto de inflar el flujo operativo retrasando pagos a proveedores o vendiendo cuentas por cobrar. Recalcular por el método directo y comparar ventas con cobros a clientes, y costo de ventas con pagos a proveedores, revela qué hay detrás de los ajustes del capital de trabajo. Ajuste también las diferencias de clasificación de intereses y dividendos entre empresas al comparar.
+</Callout>
+
+## Ejercicio
+
+Las ventas de la empresa TT son de 80 millones de wones y sus cuentas por cobrar (netas) pasaron de 12 millones al inicio a 15 millones al cierre. En los gastos de venta y administración hay una pérdida por deterioro de 500.000 wones por la corrección por pérdidas, y se castigaron 300.000 wones de cuentas por cobrar. El costo de ventas es de 50 millones, las existencias bajaron 4 millones y las cuentas por pagar 1,5 millones. ¿Cuánto son los cobros a clientes y los pagos a proveedores?
+
+Las cuentas por cobrar netas subieron 3 millones. Ese aumento neto incluye el efecto de la pérdida por deterioro de 500.000 wones, que aumentó la corrección y redujo el neto; por eso, al calcular en neto, se resta la pérdida por deterioro de las ventas. Los cobros a clientes son $8{,}000 - 50 - 300 = 7{,}650$ (en decenas de miles de wones), es decir, 76,5 millones; calculando en bruto se obtiene lo mismo. El castigo de 300.000 wones reduce a la vez la corrección y las cuentas por cobrar brutas, sin efecto en el neto. Los pagos a proveedores son $5{,}000 - 400 + 150 = 4{,}750$, es decir, 47,5 millones.
+
+## Referencias
+
+- Korea Accounting Standards Board, K-IFRS 1007 *Estado de flujos de efectivo* (incluida la revelación de cambios en pasivos de financiación)
+- Donald Kieso, Jerry Weygandt y Terry Warfield, *Intermediate Accounting: IFRS Edition*, cap. 23
+- IASB, [*IAS 7 Statement of Cash Flows*](https://www.ifrs.org/issued-standards/list-of-standards/ias-7-statement-of-cash-flows/)

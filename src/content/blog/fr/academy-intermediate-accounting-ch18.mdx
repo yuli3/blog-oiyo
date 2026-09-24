@@ -1,0 +1,100 @@
+---
+track: academy
+series: intermediate-accounting
+chapter: 18
+title: "Comptabilité intermédiaire — Établir le tableau des flux de trésorerie : méthode directe et analyse des comptes"
+description: "Déduit du compte de résultat et des bilans comparatifs les flux opérationnels selon la méthode directe (encaissements clients, décaissements fournisseurs, intérêts et impôts payés), puis retrouve les acquisitions et cessions d'immobilisations par l'analyse des comptes d'immobilisations et d'amortissements cumulés."
+pubDate: 2026-09-24
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["comptabilité intermédiaire", "tableau des flux de trésorerie", "méthode directe", "méthode indirecte", "analyse des comptes"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+Le [chapitre 11 des principes de comptabilité](/fr/academy-accounting-basics-ch4/) a présenté la structure du tableau des flux de trésorerie et la méthode indirecte. Ce chapitre montre comment reconstituer les flux lorsqu'on ne dispose pas du détail des opérations mais **seulement des états financiers** — la technique la plus utilisée aux examens comme en analyse. L'essentiel est de convertir les postes du compte de résultat en base trésorerie en y rattachant les variations des comptes de bilan correspondants.
+
+## 1. Déduire les flux opérationnels selon la méthode directe
+
+<LectureTable
+  title="Convertir les postes du compte de résultat en flux de trésorerie"
+  headers={["Flux", "Point de départ (résultat)", "Ajustement (bilan)"]}
+  rows={[
+    ["Encaissements clients", "Chiffre d'affaires", "− hausse des créances + hausse des avances reçues − passages en perte"],
+    ["Décaissements fournisseurs", "Coût des ventes", "+ hausse des stocks − hausse des dettes fournisseurs"],
+    ["Décaissements salariés", "Salaires", "− hausse des salaires à payer"],
+    ["Intérêts payés", "Charge d'intérêts", "− hausse des intérêts à payer − amortissement de la décote obligataire"],
+    ["Impôts payés", "Charge d'impôt", "− hausse de l'impôt exigible à payer − hausse du passif d'impôt différé + hausse de l'actif d'impôt différé"],
+  ]}
+/>
+
+Les éléments sans contrepartie de trésorerie, comme les amortissements ou l'amortissement d'une décote obligataire, doivent être retirés du poste concerné. L'amortissement de la décote est compris dans la charge d'intérêts mais n'a donné lieu à aucun décaissement.
+
+## 2. Exemple chiffré
+
+Données de la société SS pour 20X1 (en dizaines de milliers de wons) :
+
+- Compte de résultat : chiffre d'affaires 5 000, coût des ventes 3 000, salaires 600, amortissements 700, charge d'intérêts 200 (dont 30 d'amortissement de décote), plus-value de cession d'immobilisations 50, impôt 150, résultat net 400
+- Variations du bilan : créances +300, stocks −100, dettes fournisseurs +120, salaires à payer −20, intérêts à payer +10, impôt exigible à payer +40, passif d'impôt différé +10
+
+<LectureTable
+  title="Flux opérationnels selon la méthode directe (en dizaines de milliers de wons)"
+  headers={["Élément", "Calcul", "Montant"]}
+  rows={[
+    ["Encaissements clients", "5 000 − 300", "4 700"],
+    ["Décaissements fournisseurs", "3 000 − 100 − 120", "(2 780)"],
+    ["Décaissements salariés", "600 + 20", "(620)"],
+    ["Intérêts payés", "200 − 10 − 30", "(160)"],
+    ["Impôts payés", "150 − 40 − 10", "(100)"],
+    ["Flux net de trésorerie opérationnel", "", "1 040"],
+  ]}
+/>
+
+Par la méthode indirecte : $400 + 700 + 30 - 50 - 300 + 100 + 120 - 20 + 10 + 40 + 10 = 1{,}040$, le même montant. L'amortissement de décote de 30 est une charge non monétaire réintégrée ; la plus-value de 50, liée à l'investissement, est déduite.
+
+## 3. Activités d'investissement : reconstituer par l'analyse des comptes
+
+Les montants payés pour acquérir des immobilisations et reçus lors de leur cession ne se lisent pas dans les seules variations du bilan. On reconstitue les comptes à partir des soldes d'ouverture et de clôture et des informations du compte de résultat.
+
+<LectureTable
+  title="Informations sur les immobilisations (en dizaines de milliers de wons)"
+  headers={["Compte", "Ouverture", "Clôture", "Information complémentaire"]}
+  rows={[
+    ["Immobilisations (valeur brute)", "5 000", "5 600", "Coût de l'équipement cédé : 800"],
+    ["Amortissements cumulés", "2 000", "2 300", "Dotation de l'exercice : 700"],
+  ]}
+/>
+
+<FormulaBox
+  label="Analyse des comptes"
+  formula="\begin{aligned}\text{Acquisitions} &= \text{Brut de clôture} - \text{Brut d'ouverture} + \text{Brut cédé} = 5{,}600 - 5{,}000 + 800 = 1{,}400 \\ \text{Amortissements des actifs cédés} &= \text{Ouverture} + \text{Dotation} - \text{Clôture} = 2{,}000 + 700 - 2{,}300 = 400 \\ \text{Prix de cession} &= (800 - 400) + \text{Plus-value } 50 = 450\end{aligned}"
+  description="Les acquisitions de 1 400 sont un décaissement d'investissement et le prix de cession de 450 un encaissement d'investissement (en dizaines de milliers de wons). Les éléments sans trésorerie, comme les achats à crédit ou les locations, sont exclus et mentionnés dans les notes comme opérations non monétaires."
+/>
+
+Les emprunts, obligations et capitaux propres s'analysent de la même façon pour obtenir les flux de financement : emprunts et remboursements, augmentations de capital et dividendes. Les dividendes versés égalent les résultats non distribués d'ouverture + résultat net − résultats non distribués de clôture (en l'absence d'autres mouvements), corrigés de la variation des dividendes à payer.
+
+## 4. Opérations d'investissement et de financement non monétaires
+
+Les opérations significatives d'investissement et de financement sans trésorerie sont exclues du corps du tableau et mentionnées dans les notes : conversion d'obligations en actions, acquisition de droits d'utilisation par des contrats de location, acquisition d'actifs par reprise de dettes. On exige aussi un rapprochement des passifs issus des activités de financement entre l'ouverture et la clôture, distinguant variations de trésorerie et variations non monétaires (change, juste valeur, nouveaux contrats de location).
+
+<Callout type="warning">
+Le seul tableau selon la méthode indirecte ne montre pas combien a réellement été encaissé auprès des clients : l'effet d'un report des paiements fournisseurs ou d'une cession de créances qui gonfle le flux opérationnel y est peu visible. Recalculer selon la méthode directe et comparer chiffre d'affaires et encaissements clients, coût des ventes et décaissements fournisseurs révèle la réalité des ajustements du besoin en fonds de roulement. Pensez aussi à corriger les différences de classement des intérêts et dividendes entre sociétés.
+</Callout>
+
+## Exercice
+
+Le chiffre d'affaires de la société TT est de 80 millions de wons, et ses créances (nettes) sont passées de 12 millions à l'ouverture à 15 millions à la clôture. Une perte de valeur de 500 000 wons liée à la correction de valeur figure dans les frais commerciaux et administratifs, et 300 000 wons de créances ont été passés en perte. Le coût des ventes est de 50 millions, les stocks ont baissé de 4 millions et les dettes fournisseurs de 1,5 million. Quels sont les encaissements clients et les décaissements fournisseurs ?
+
+Les créances nettes ont augmenté de 3 millions. Cette hausse nette intègre l'effet de la perte de valeur de 500 000 wons, qui a accru la correction de valeur et réduit le net ; en raisonnant en net, on déduit donc la perte de valeur du chiffre d'affaires. Les encaissements clients valent $8{,}000 - 50 - 300 = 7{,}650$ (en dizaines de milliers de wons), soit 76,5 millions ; le raisonnement en brut donne le même résultat. Le passage en perte de 300 000 wons réduit à la fois la correction et les créances brutes, sans effet sur le net. Les décaissements fournisseurs valent $5{,}000 - 400 + 150 = 4{,}750$, soit 47,5 millions.
+
+## Références
+
+- Korea Accounting Standards Board, K-IFRS 1007 *Tableau des flux de trésorerie* (y compris l'information sur les variations des passifs de financement)
+- Donald Kieso, Jerry Weygandt et Terry Warfield, *Intermediate Accounting: IFRS Edition*, chap. 23
+- IASB, [*IAS 7 Statement of Cash Flows*](https://www.ifrs.org/issued-standards/list-of-standards/ias-7-statement-of-cash-flows/)
