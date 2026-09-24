@@ -1,83 +1,84 @@
 ---
-locale: en
 track: academy
-title: "Accounting — Cost Accounting and CVP Analysis — Drawing the Map of Profit"
+series: managerial-accounting
+chapter: 3
+title: "Managerial Accounting — Extending CVP Analysis: Sales Mix, After-Tax Target Profit and Uncertainty"
+description: "Finds the break-even point for a multi-product company from the weighted-average contribution margin and sales mix, and extends CVP analysis to after-tax target profit, sensitivity analysis of price and cost changes, and expected-value judgements when demand is uncertain."
+pubDate: 2026-04-14
+updatedDate: 2026-09-24
 category: Accounting
-subcategory: "Cost & Management Accounting"
-author: OIYO Editorial
-tags:
-  - Education
-  - Accounting
-  - CostAccounting
-  - CVPAnalysis
-  - BreakEvenPoint
-description: >-
-  Learn the core of CVP (Cost-Volume-Profit) analysis: how to distinguish fixed and variable costs and calculate the break-even point to analyze a company's profit structure — with an interactive calculator.
-pubDate: '2026-04-14'
+tags: ["managerial accounting", "CVP analysis", "sales mix", "after-tax target profit", "sensitivity analysis"]
+locale: en
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
 
-import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
-import { CVPCalculator } from "@/features/education-calculators/FinancialCalculators";
-import { CVPChart } from "@/features/education-calculators/FinancialCharts";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# Cost Accounting and CVP Analysis
+The basic CVP analysis of [Cost Accounting chapter 13](/en/academy-cost-accounting-ch8/) assumed one product, pre-tax profit and known demand. Real companies sell several products, pay tax and cannot be sure of their sales volume. This chapter relaxes these three assumptions one by one to fit CVP analysis to real decisions.
 
-The crown jewel of cost accounting is undoubtedly **CVP (Cost-Volume-Profit) analysis**. It is the core decision-making tool for answering questions like: how many units must be sold to avoid a loss, or what level of sales is needed to hit a target profit?
+## 1. Multiple products and the sales mix
 
----
+Company BN sells product A (price ₩100,000, variable cost ₩60,000) and product B (price ₩80,000, variable cost ₩60,000) in a unit ratio of 3 : 1. Common fixed costs are ₩14 million.
 
-## 1. Understanding Cost Behavior
+<FormulaBox
+  label="Weighted-average unit contribution margin"
+  formula="\overline{CM} = \frac{3 \times 4 + 1 \times 2}{3 + 1} = 3.5, \qquad Q_{BEP} = \frac{1{,}400}{3.5} = 400\text{ units}"
+  description="In ₩10,000. Splitting 400 units 3 : 1 gives a break-even point of 300 units of A and 100 of B. Calculating with 100 'packages' (3 A + 1 B, contribution margin 14) gives the same answer."
+/>
 
-CVP analysis requires distinguishing how costs change in response to the level of activity (production or sales volume).
+### A. When the sales mix changes
+
+If the mix shifts to 1 : 1, the weighted-average contribution margin becomes $(4 + 2)/2 = 3$ and break-even rises to about 467 units. Even at the same total volume, profit falls as the share of low-margin B grows. Tying sales incentives only to revenue can tilt the mix toward easy-to-sell, low-margin products.
+
+## 2. After-tax target profit
+
+With income tax, a target **after-tax** profit is converted to pre-tax profit.
+
+<FormulaBox
+  label="Units for an after-tax target profit"
+  formula="Q = \frac{F + \dfrac{\text{Target after-tax profit}}{1 - t}}{\overline{CM}} = \frac{1{,}400 + \dfrac{560}{1 - 0.2}}{3.5} = \frac{1{,}400 + 700}{3.5} = 600\text{ units}"
+  description="At a 20% tax rate, keeping ₩5.6 million after tax needs ₩7 million before tax. The break-even point is unaffected by tax because profit there is zero."
+/>
+
+## 3. Sensitivity analysis
+
+Look at how much the result moves when assumptions change. If BN cuts A's price by 10% (from ₩100,000 to ₩90,000), A's contribution margin becomes ₩30,000, the weighted-average contribution margin $(3 \times 3 + 2)/4 = 2.75$ and break-even about 509 units. A 10% price cut raises break-even by 27%. Unless you are confident the cut will lift volume by more than 27%, it reduces profit.
 
 <LectureTable
-  title="Cost Classification: Variable Costs vs Fixed Costs"
-  headers={["Type", "Definition", "Total Amount Behavior", "Per-Unit Cost Behavior"]}
+  title="Sensitivity by variable (baseline break-even: 400 units)"
+  headers={["Change", "New weighted-average CM", "New break-even point"]}
   rows={[
-    ["Variable Cost (VC)", "Costs that vary in proportion to activity level", "Increases proportionally (↑)", "Constant (const)"],
-    ["Fixed Cost (FC)", "Costs that remain unchanged regardless of activity level", "Constant (const)", "Decreases as activity rises (↓)"],
+    ["A's price cut by 10%", "₩27,500", "About 509 units"],
+    ["Variable costs up 5% (both products)", "3.5 − 0.3 = ₩32,000", "About 438 units"],
+    ["Fixed costs up 10%", "₩35,000", "440 units"],
   ]}
 />
 
----
+## 4. Uncertainty and expected value
 
-## 2. Contribution Margin
+When volume is uncertain, compute expected profit from the probability of each scenario. BN is considering spending ₩3 million on a new advertising campaign. Without it, sales are 500 units with 50% probability and 700 with 50%. With it, 600 units with 50% and 900 with 50%.
 
-Contribution margin is selling price minus variable costs — it represents **the amount that contributes to recovering fixed costs and generating profit**.
+- No advertising: expected volume 600 units, expected profit $600 \times 3.5 - 1{,}400 = 700$ (₩7 million)
+- Advertising: expected volume 750 units, expected profit $750 \times 3.5 - 1{,}700 = 925$ (₩9.25 million)
 
-<FormulaBox
-  formula="Contribution Margin = Sales Revenue − Variable Costs"
-  label="Unit Contribution Margin"
-  description="The amount that contributes to fixed cost recovery with each additional unit sold."
-  color="#3b82f6"
-/>
+The expected incremental profit from advertising is ₩2.25 million. In the worst scenario (600 units), however, profit is ₩4 million, only ₩500,000 more than the worst case without advertising (500 units, ₩3.5 million). A risk-averse manager looks not only at expected value but also at the variance of profit and the worst outcome.
 
-### (2) Visual Analysis: The Pressure of Fixed Costs
-
-<CVPChart client:visible sellingPrice={1000} variableCost={600} fixedCost={400000} />
-
----
-
-## 3. Break-Even Point (BEP)
-
-The break-even point is the level at which total sales revenue equals total costs — the point at which **profit is zero**.
-
-<CVPCalculator client:visible />
-
-<Callout type="info">
-**Interactive Analysis**: In the calculator above, try increasing the "fixed costs." You will see the break-even sales volume jump sharply. This is the essence of leverage and risk.
+<Callout type="warning">
+A multi-product break-even point is a single number only **on the assumption that the sales mix holds**. The actual mix keeps shifting with seasons, competition and sales strategy. And unless fixed costs are split into common and product-specific costs, product-level break-even points cannot be calculated. CVP analysis is a linear approximation, so do not extrapolate far beyond the planning range.
 </Callout>
 
----
+## Check your understanding
 
-## 4. Essential Formula Summary
+Company BO sells products P (contribution margin ratio 50%) and Q (30%) in a revenue ratio of 60 : 40. Fixed costs are ₩21 million and the tax rate is 25%. What are break-even sales and the sales needed for an after-tax profit of ₩9 million?
 
-1. **Break-even sales quantity (Q)** = Total Fixed Costs ÷ Unit Contribution Margin
-2. **Break-even sales revenue** = Total Fixed Costs ÷ Contribution Margin Ratio
-3. **Sales quantity for target profit** = (Total Fixed Costs + Target Profit) ÷ Unit Contribution Margin
+The weighted-average contribution margin ratio is $0.6 \times 50\% + 0.4 \times 30\% = 42\%$. Break-even sales are $2{,}100 / 0.42 = 5{,}000$ (₩50 million). The pre-tax profit for ₩9 million after tax is $900 / 0.75 = 1{,}200$ (₩12 million), so required sales are $(2{,}100 + 1{,}200) / 0.42 ≈ 7{,}857$, about ₩78.57 million.
 
----
+## References
 
-Cost accounting is the process of drawing a management roadmap from numbers. Use CVP analysis to plan a safe and confident business journey.
+- Charles Horngren, Srikant Datar and Madhav Rajan, *Cost Accounting: A Managerial Emphasis*, ch. 3
+- Ray Garrison, Eric Noreen and Peter Brewer, *Managerial Accounting*, ch. 5
+- Robert Kaplan and Anthony Atkinson, *Advanced Management Accounting*, ch. 2

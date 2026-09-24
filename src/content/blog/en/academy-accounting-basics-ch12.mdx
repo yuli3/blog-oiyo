@@ -1,184 +1,112 @@
 ---
 track: academy
+series: managerial-accounting
+chapter: 4
+title: "Managerial Accounting — Master Budgets and Flexible Budgets: From the Sales Budget to the Cash Budget"
+description: "Prepares, with quarterly data, the linked structure of a master budget running from the sales budget through the production budget and raw materials purchases budget to the cash budget, and sets out the difference between static and flexible budgets, budgeting approaches and the problem of budgetary slack."
+pubDate: 2026-05-22
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["managerial accounting", "master budget", "production budget", "cash budget", "flexible budget"]
 locale: en
-title: "Cost Budgets and Variance Analysis Explained"
-category: "Accounting"
-author: OIYO Editorial
-tags:
-  - accounting
-  - cost accounting
-  - fixed budget
-  - flexible budget
-  - variance analysis
-  - efficiency variance
-description: "Fixed versus flexible budgets, and how price, volume and efficiency variances reveal where cost control actually broke down."
-pubDate: '2026-05-22'
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
 
-## Why Split Budgets Into Types?
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-The most common illusion in cost accounting is concluding "actual costs exceeded budget → performance was bad." But if production volume increased, it would be *natural* for total costs to exceed the original plan. Effective cost control begins with distinguishing between a **fixed budget** and a **flexible budget**.
+A budget turns the business plan into numbers. It works out in advance how much will be sold next year, how much must be made to do so, how much material must be bought and when cash will run short. A budget is a planning tool and also the benchmark for performance evaluation, compared later with actual results. Variance analysis was covered in [Cost Accounting chapter 10](/en/academy-cost-accounting-ch6/).
 
----
+## 1. The structure of the master budget
 
-## 1. Fixed Budget (Static Budget)
+A master budget links several budgets like a chain. The starting point is always the **sales budget**, because the quantity to be made depends on the quantity to be sold.
 
-A **fixed budget** is prepared for a single assumed activity level.
+<LectureTable
+  title="The sequence of the master budget"
+  headers={["Step", "Budget", "Main inputs"]}
+  rows={[
+    ["1", "Sales budget", "Expected sales volume × selling price"],
+    ["2", "Production budget", "Sales volume + desired closing finished goods − opening finished goods"],
+    ["3", "Raw materials purchases, labor and overhead budgets", "Production × requirement per unit"],
+    ["4", "Cost of sales and selling and administrative budgets", "Product costs, selling-related costs"],
+    ["5", "Cash budget", "Timing of cash inflows and outflows from the budgets above"],
+    ["6", "Budgeted financial statements", "Budgeted income statement and statement of financial position"],
+  ]}
+/>
 
-**Example**: budget prepared assuming 1,000 units of monthly production
+## 2. The sales and production budgets
 
-### Strengths
+Company BP expects to sell 1,000 units in Q1, 1,200 in Q2 and 1,500 in Q3. The selling price is ₩100,000 per unit. Finished goods at each quarter-end are kept at 20% of the next quarter's sales, and finished goods at the start of Q1 are 200 units.
 
-- Simple to create.
-- Provides a clear baseline.
+<FormulaBox
+  label="Production budget"
+  formula="\text{Production} = \text{Expected sales} + \text{Desired closing finished goods} - \text{Opening finished goods}"
+  description="Q1: 1,000 + 1,200 × 20% − 200 = 1,040 units. Q2: 1,200 + 1,500 × 20% − 240 = 1,260 units."
+/>
 
-### Limitations
+## 3. The raw materials purchases budget
 
-- When actual output differs, comparisons become distorted.
-- Impossible to separate cost increases due to volume from cost increases due to inefficiency.
+Each unit needs 2 kg of raw materials at ₩10,000 per kg. Raw materials at each quarter-end are kept at 10% of the next quarter's production requirement, and raw materials at the start of Q1 are 200 kg.
 
----
+<LectureTable
+  title="Raw materials purchases budget"
+  headers={["Item", "Q1", "Q2"]}
+  rows={[
+    ["Production requirement (production × 2 kg)", "2,080 kg", "2,520 kg"],
+    ["Desired closing raw materials", "252 kg (10% of Q2 requirement)", "Set from Q3 production"],
+    ["Opening raw materials", "(200 kg)", "(252 kg)"],
+    ["Quantity purchased", "2,132 kg", "—"],
+    ["Purchase cost (₩10,000 per kg)", "₩21.32 million", "—"],
+  ]}
+/>
 
-## 2. Flexible Budget
+## 4. The cash budget
 
-A **flexible budget** recalculates the plan using the *actual* activity level.
+The cash budget looks at **the timing of cash, not profit**. BP collects 60% of sales in the quarter of sale and 40% in the next quarter. Collections in Q1 of the previous year's Q4 receivables are ₩35 million. Raw materials are paid 50% in the quarter of purchase and 50% in the next, and ₩10 million is still owed for the previous Q4's purchases. Q1 cash payments for wages and expenses are ₩45 million, opening cash is ₩5 million and the minimum cash balance is ₩10 million.
 
-$$
-\text{Flexible Budget} = \text{budget recomputed at the actual production volume achieved}
-$$
+<LectureTable
+  title="Q1 cash budget (unit: ₩10,000)"
+  headers={["Item", "Calculation", "Amount"]}
+  rows={[
+    ["Opening cash", "", "500"],
+    ["Collections: current-quarter sales", "10,000 × 60%", "6,000"],
+    ["Collections: prior-quarter sales", "", "3,500"],
+    ["Materials payments: current-quarter purchases", "2,132 × 50%", "(1,066)"],
+    ["Materials payments: prior-quarter purchases", "", "(1,000)"],
+    ["Wages and expenses", "", "(4,500)"],
+    ["Closing cash before borrowing", "", "3,434"],
+    ["Excess over minimum cash balance", "3,434 − 1,000", "2,434"],
+  ]}
+/>
 
-If production was 1,200 units instead of the planned 1,000, the flexible budget asks: *what should costs have been for 1,200 units?*
+In Q1 there is a surplus and no borrowing is needed. In the quarter just before sales rise, such as Q3, production and material purchases increase first and cash flows out ahead of collections, so even a profitable company may need short-term borrowing. The cash budget shows this timing in advance.
 
-### Why it matters
+## 5. Static and flexible budgets
 
-Only by using a flexible budget can you separate:
+A **static budget** is prepared for one planned level of activity. A **flexible budget** recalculates the cost budget for the actual level of activity. If Q1 planned 1,000 units but 1,100 were actually sold, it is natural that variable costs exceed plan. When evaluating performance, compare with a flexible budget for 1,100 units to separate the volume effect from the effect of cost control.
 
-- Variances caused by changes in volume
-- Variances caused by poor cost control
+## 6. Budgeting approaches and behavior
 
----
+- **Incremental budgeting:** adds a percentage to last year's budget. Simple, but inefficiencies carry forward.
+- **Zero-based budgeting:** justifies every activity again from zero. Thorough, but time-consuming.
+- **Rolling budget:** adds a new quarter each time one ends, so it always looks 12 months ahead.
+- **Participative budgeting:** staff take part in preparing the budget. Acceptance is high, but slack creeps in easily.
 
-## 3. The Overall Variance Structure
+<Callout type="warning">
+Evaluating performance against budgets creates **budgetary slack**: managers try to budget revenue low and costs high so targets are easy to hit. And where unspent budget at year-end means a smaller budget next year, needless spending bunches up. This is the tension of using a budget as both a planning tool and an evaluation standard. It is reduced with devices such as relative evaluation, ex-post adjustment of targets and penalties for slack.
+</Callout>
 
-Cost variance analysis is typically layered as follows:
+## Check your understanding
 
-$$
-\begin{aligned}
-&\text{Static Budget Variance} \\
-&= \text{Actual Cost} − \text{Fixed Budget Cost} \\
-&\text{Volume Variance} \\
-&= \text{Flexible Budget Cost} − \text{Fixed Budget Cost} \\
-&\text{Controllable Variance} \\
-&= \text{Actual Cost} − \text{Flexible Budget Cost}
-\end{aligned}
-$$
+Company BQ expects to sell 2,000 units in April, 2,500 in May and 3,000 in June. Finished goods at each month-end are kept at 30% of next month's sales, and inventory at the start of April is 500 units. What is production in April and May? If 70% of sales are collected in the month of sale and 30% the following month, and the selling price is ₩40,000 per unit, what are May's collections?
 
-This structure lets you explain *why* a variance occurred — step by step.
+April production is $2{,}000 + 2{,}500 \times 30\% - 500 = 2{,}250$ units and May production $2{,}500 + 3{,}000 \times 30\% - 750 = 2{,}650$ units. May collections are 70% of May's ₩100 million of sales, ₩70 million, plus 30% of April's ₩80 million, ₩24 million: ₩94 million in total.
 
----
+## References
 
-## 4. Static Budget Variance
-
-The static budget variance is the broadest, first-pass comparison.
-
-$$
-\text{Static Budget Variance} = \text{Actual Cost} − \text{Fixed Budget Cost}
-$$
-
-On its own, this figure cannot tell you whether cost overruns resulted from:
-
-- Higher production volume, or
-- Operational inefficiency
-
-That is why management accounting goes further.
-
----
-
-## 5. Volume Variance
-
-The volume variance captures the difference caused by actual activity differing from plan.
-
-$$
-\text{Volume Variance} = \text{Flexible Budget Cost} − \text{Fixed Budget Cost}
-$$
-
-If planned production was 1,000 units but actual was 1,200, the additional cost of producing those extra units is natural — not a failure of cost control. Labeling this portion "inefficiency" distorts performance evaluation.
-
----
-
-## 6. Price Variance and Efficiency Variance
-
-Standard costing drills down further and typically splits variances into two components.
-
-### Price Variance
-
-$$
-\text{Price Variance} = \text{Actual Quantity} \times (\text{Standard Price} − \text{Actual Price})
-$$
-
-Driven by purchasing conditions, unit-price negotiations, and raw material market movements.
-
-### Efficiency Variance
-
-$$
-\text{Efficiency Variance} = \text{Standard Price} \times (\text{Standard Quantity Allowed} − \text{Actual Quantity Used})
-$$
-
-If more materials or labor were consumed than standard to produce the same output, efficiency has declined.
-
-**Efficiency variance** answers *"how wastefully were inputs used?"* rather than *"how expensive were inputs?"*
-
----
-
-## 7. Real-World Reporting Flow
-
-A manager receiving a variance report typically works through these layers:
-
-1. Total variance vs. fixed budget
-2. Identify how much is explained by volume difference
-3. Examine controllable variance vs. flexible budget
-4. Break down into price variance and efficiency variance
-5. Assign to responsible departments
-
-| Variance | Primary responsibility |
-|----------|----------------------|
-| Price variance | Purchasing department |
-| Efficiency variance | Production department |
-| Volume variance | Demand planning / production scheduling |
-
----
-
-## 8. Practical Intuition
-
-The same "unfavorable" variance can mean very different things:
-
-- **Unfavorable price variance**: rising raw material prices, failed negotiations, emergency procurement
-- **Unfavorable efficiency variance**: skill gaps, equipment inefficiency, rising defect rates
-- **Unfavorable volume variance**: actual production significantly below plan, spreading fixed costs more thinly
-
-Variance analysis is not just a tool for assigning blame — it is **a map for finding root causes**.
-
----
-
-## Key Concept Cards
-
-**Fixed Budget vs. Flexible Budget** ★★★★★  
-Fixed budget uses planned activity level; flexible budget uses actual activity level. The starting point for all variance analysis.
-
-**Volume Variance** ★★★★★  
-The variance explained by production volume differing from plan. Must be separated from controllable failures.
-
-**Efficiency Variance** ★★★★☆  
-Shows whether more inputs were consumed than the standard allows for a given output level. The key signal of on-the-floor operational efficiency.
-
----
-
-## Practice Quiz
-
-**Q. Actual cost exceeded the fixed budget, but the flexible-budget variance was favorable. What does this mean?**
-
-> Production volume exceeded the plan, so total cost naturally rose — but relative to the actual level of activity, costs were controlled *better* than planned. Volume drove the overrun, not inefficiency.
-
-**Q. An unfavorable efficiency variance persists across multiple months. What is the first thing to investigate?**
-
-> The root cause of excess input consumption. Common starting points: defect rate, equipment condition, worker skill levels, and process design flaws.
+- Charles Horngren, Srikant Datar and Madhav Rajan, *Cost Accounting: A Managerial Emphasis*, ch. 6
+- Ray Garrison, Eric Noreen and Peter Brewer, *Managerial Accounting*, ch. 8
+- Jeremy Hope and Robin Fraser, *Beyond Budgeting*
