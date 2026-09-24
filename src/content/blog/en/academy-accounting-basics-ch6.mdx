@@ -1,152 +1,93 @@
 ---
 track: academy
+series: managerial-accounting
+chapter: 5
+title: "Managerial Accounting — Responsibility Accounting and Performance Evaluation: ROI, Residual Income and EVA for Investment Centers"
+description: "Sets out the principles of responsibility accounting, which divides responsibility into cost, revenue, profit and investment centers, then measures investment center performance with return on investment (ROI), residual income (RI) and economic value added (EVA), confirming by calculation the suboptimization ROI creates."
+pubDate: 2026-05-12
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["managerial accounting", "responsibility accounting", "return on investment", "residual income", "EVA", "performance evaluation"]
 locale: en
-title: "Inventory and Cost Accounting — CVP Analysis and the Fundamentals of Cost Calculation"
-category: "Accounting"
-author: OIYO Editorial
-tags:
-  - inventory
-  - cost accounting
-  - CVP analysis
-  - break-even point
-  - manufacturing cost
-  - accounting
-description: >-
-  Inventory valuation methods (FIFO and weighted average), the components of manufacturing cost, and CVP (cost-volume-profit) analysis including break-even point calculation — the sixth lecture in the Accounting Basics series.
-pubDate: '2026-05-12'
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
 
-import { CVPLab } from "@/features/education-calculators/EducationLabs";
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-## What Is Inventory?
+As a company grows, it delegates decision rights to divisions. Once authority is delegated, someone must be held responsible for the results and evaluated. Responsibility accounting divides the organization into **responsibility centers** and measures each center's performance on the items it **can control**. Budgets are covered in [chapter 4](/en/academy-accounting-basics-ch12/) and prices for internal transactions between divisions in [chapter 6](/en/academy-managerial-accounting-ch6/).
 
-**Inventory**: Assets held for sale in the ordinary course of business, or in the process of being produced for such sale.
+## 1. Responsibility centers
 
-**Types of Inventory:**
+<LectureTable
+  title="Types of responsibility center"
+  headers={["Type", "Responsible for", "Performance measure", "Examples"]}
+  rows={[
+    ["Cost center", "Costs", "Costs against budget, standard cost variances", "Production department, accounting team"],
+    ["Revenue center", "Revenue", "Meeting sales targets", "Sales branch"],
+    ["Profit center", "Revenues and costs", "Segment margin, contribution margin", "Product division"],
+    ["Investment center", "Revenues, costs and invested assets", "ROI, residual income, EVA", "Independent division, subsidiary"],
+  ]}
+/>
 
-- Merchandise: Finished goods purchased for resale (retail/wholesale)
-- Finished Goods: Products manufactured by the company (manufacturing)
-- Work-in-Progress (WIP): Goods partially through the production process
-- Raw Materials: Materials to be used in production
+Under the **controllability principle**, managers are evaluated only on items they can control. Items the division head cannot influence, such as common costs allocated by head office or exchange rates, are excluded from the manager's evaluation. They may be included when looking at the division's own economic performance: evaluating the manager and evaluating the division serve different purposes.
 
----
+## 2. Return on investment (ROI)
 
-## Inventory Valuation Methods
+<FormulaBox
+  label="ROI and the DuPont breakdown"
+  formula="\text{ROI} = \frac{\text{Operating profit}}{\text{Invested assets}} = \underbrace{\frac{\text{Operating profit}}{\text{Sales}}}_{\text{Margin}} \times \underbrace{\frac{\text{Sales}}{\text{Invested assets}}}_{\text{Turnover}}"
+  description="ROI rises by widening margins, selling more with the same assets, or cutting unneeded assets."
+/>
 
-The method used to allocate inventory costs affects both cost of goods sold (COGS) and ending inventory balances.
+Division X has sales of ₩100 million, operating profit of ₩10 million and invested assets of ₩50 million: a 10% margin, turnover of 2 and ROI of 20%.
 
-### First-In, First-Out (FIFO)
-Assumes the oldest inventory is sold first.
+## 3. The suboptimization problem of ROI
 
-```
-Example: Purchased 100 units at $10 each in January, 100 units at $12 each in February.
-         Sold 150 units in March.
+A new project is proposed for division X: an investment of ₩10 million earning ₩1.5 million a year in operating profit (ROI 15%). The company's cost of capital (minimum required return) is 12%.
 
-COGS = 100 units × $10 + 50 units × $12 = $1,600
-Ending Inventory = 50 units × $12 = $600
-```
+- From the company's view: 15% > 12%, so the project creates value.
+- From the division head's view: with the project, ROI falls from 20% to $(1{,}000 + 150)/(5{,}000 + 1{,}000) ≈ 19.2\%$. A division head evaluated on ROI will want to reject it.
 
-**During periods of rising prices**: Ending inventory value ↑, COGS ↓, Net Income ↑
+When the division's interest and the company's interest diverge, it is called **suboptimization**. The higher a division's ROI, the stronger its incentive to reject investments that benefit the company, and there is also an incentive not to replace old (heavily depreciated) assets with new ones.
 
-### Weighted Average Cost
-Allocates costs based on an average unit cost calculated across all purchases.
+## 4. Residual income and EVA
 
-$$
-\text{Average Unit Cost} = \frac{\text{Total Cost of Purchases}}{\text{Total Units Purchased}}
-$$
-
-### Method Not Permitted Under IFRS
-**Last-In, First-Out (LIFO)**: Assumes the most recently purchased goods are sold first. **Prohibited under IFRS** (though still permitted under US GAAP).
-
----
-
-## Components of Manufacturing Cost
-
-**Manufacturing Cost**:
-- Direct Materials   → Raw materials directly incorporated into the product
-- + Direct Labor     → Wages of production workers
-- + Manufacturing Overhead → Factory rent, depreciation, indirect materials
-- **= Total Manufacturing Cost**
-
-**Period Costs**: Selling and administrative expenses not directly tied to production (expensed in the current period)
-
----
-
-## CVP Analysis (Cost-Volume-Profit Analysis)
-
-Analysis of how changes in costs and volume (output) affect profit.
-
-**Core concepts**:
-$$
-\begin{aligned}
-\text{Contribution Margin} &= \text{Revenue} − \text{Variable Costs} \\
-\text{Contribution Margin Ratio} &= \frac{\text{Contribution Margin}}{\text{Revenue}} \\
-\text{Operating Income} &= \text{Contribution Margin} − \text{Fixed Costs}
-\end{aligned}
-$$
-
-### Break-Even Point (BEP)
-
-The level of sales at which operating income equals zero.
+**Residual income (RI)** is operating profit minus the minimum required return on invested assets.
 
 $$
-\begin{aligned}
-\text{BEP in Units} &= \frac{\text{Fixed Costs}}{\text{Contribution Margin Per Unit}} \\
-\text{BEP in Revenue} &= \frac{\text{Fixed Costs}}{\text{Contribution Margin Ratio}} \\
-&\text{Example}: \text{Fixed costs} \$100,000, \text{Selling price} \$\frac{10}{\text{unit}}, \text{Variable cost} \$\frac{6}{\text{unit}} \\
-\text{Contribution margin per unit} &= 10 − 6 = \$4 \\
-\text{BEP in units} &= \frac{100,000}{4} = 25,000 \text{units} \\
-\text{BEP in revenue} &= 25,000 \times \$10 = \$250,000
-\end{aligned}
+\text{RI} = \text{Operating profit} - \text{Invested assets} \times \text{Required return}
 $$
 
-### Target Profit Sales Volume
+Division X's current RI is $1{,}000 - 5{,}000 \times 12\% = 400$ (₩4 million). Adding the project raises it to $1{,}150 - 6{,}000 \times 12\% = 430$ (₩4.3 million). Every investment that beats the required return increases RI, so goals are aligned. But RI is an amount, which makes divisions of different sizes hard to compare.
 
-$$
-\text{Target Sales Volume} = (\text{Fixed Costs} + \text{Target Profit}) / \text{Contribution Margin Per Unit}
-$$
+**Economic value added (EVA)** is a form of residual income that deducts from after-tax operating profit the invested capital multiplied by the **weighted average cost of capital (WACC)**. Its hallmark is adjusting accounting figures toward economic substance, for example by capitalizing research and development.
 
-### Try It Yourself
+<LectureTable
+  title="Comparing performance measures"
+  headers={["Measure", "Strengths", "Limitations"]}
+  rows={[
+    ["ROI", "A ratio, so divisions of different sizes can be compared", "Suboptimization; older assets make ROI look higher"],
+    ["Residual income", "Encourages investment above the required return", "An amount, so affected by size"],
+    ["EVA", "Closer to economic profit through cost of capital and accounting adjustments", "Many adjustments make it complex; still a short-term measure"],
+  ]}
+/>
 
-Adjust price, variable cost, and fixed cost to see how the break-even point shifts.
+<Callout type="warning">
+All financial measures are vulnerable to easy ways of raising short-term profit. Cutting R&D, training and equipment maintenance improves this year's ROI and EVA but erodes future competitiveness. That is why the balanced scorecard ([chapter 8](/en/academy-managerial-accounting-ch8/)) emerged, which looks at non-financial measures — customers, internal processes, learning and growth — alongside financial ones. Also, if invested assets are measured at net carrying amount, ROI rises automatically as depreciation accumulates.
+</Callout>
 
-<CVPLab client:visible />
+## Check your understanding
 
----
+Division Y's operating profit is ₩24 million, its invested assets ₩160 million and its required return 10%. How do ROI and residual income change if a project with an investment of ₩20 million and annual operating profit of ₩2.6 million is added? Under which measure would the division head accept the project?
 
-## Margin of Safety
+Current ROI is 15% and residual income $2{,}400 - 16{,}000 \times 10\% = 800$ (₩8 million). The project's ROI is 13%. After adding it, ROI falls to $2{,}660 / 18{,}000 ≈ 14.8\%$, while residual income rises by ₩600,000 to $2{,}660 - 18{,}000 \times 10\% = 860$ (₩8.6 million). The project's 13% return exceeds the 10% required return, so it benefits the company. Evaluated on residual income, the head would accept it; evaluated on ROI, there is an incentive to reject it.
 
-$$
-\begin{aligned}
-\text{Margin of Safety} &= \text{Actual Revenue} − \text{BEP Revenue} \\
-\text{Margin of Safety Ratio} &= \frac{\text{Margin of Safety}}{\text{Actual Revenue}} \times 100\%
-\end{aligned}
-$$
+## References
 
-The higher the margin of safety ratio, the more comfortable the buffer above the break-even point.
-
----
-
-## Key Concept Cards
-
-**FIFO** ★★★★★
-: Assumes the oldest inventory is sold first. During periods of rising prices, ending inventory carries higher value and net income is reported higher.
-*Memory tip: FIFO = oldest goods sold first*
-
-**Contribution Margin** ★★★★★
-: Revenue minus variable costs. The amount that contributes to covering fixed costs and generating profit.
-*Memory tip: Contribution margin = the portion that "contributes" to covering fixed costs*
-
-**Break-Even Point (BEP)** ★★★★★
-: The sales volume or revenue level at which profit is zero. BEP = Fixed Costs ÷ Contribution Margin Ratio. Any sales above this level generate profit.
-*Memory tip: BEP = Fixed Costs ÷ (Selling Price − Variable Cost per unit)*
-
----
-
-## Practice Quiz
-
-**Q. Between FIFO and weighted average, which method reports higher profit during a period of rising prices?**
-> FIFO. The older (cheaper) inventory is recognized as COGS first, resulting in lower COGS and higher reported profit.
-
-**Q. Fixed costs are \$20,000; selling price is \$5/unit; variable cost is \$3/unit. What is the break-even point in units?**
-> Contribution margin per unit = \$5 − \$3 = \$2. BEP = \$20,000 ÷ \$2 = 10,000 units.
+- Charles Horngren, Srikant Datar and Madhav Rajan, *Cost Accounting: A Managerial Emphasis*, ch. 23
+- Ray Garrison, Eric Noreen and Peter Brewer, *Managerial Accounting*, ch. 11
+- G. Bennett Stewart, *The Quest for Value* (EVA)
