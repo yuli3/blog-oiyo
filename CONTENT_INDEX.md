@@ -1,12 +1,12 @@
 # Content Index (auto-generated)
 
-> Generated 2026-09-24T20:30:47.734Z from MDX frontmatter. Do not edit by hand — run `npm run content:manifest`.
+> Generated 2026-09-24T20:36:04.537Z from MDX frontmatter. Do not edit by hand — run `npm run content:manifest`.
 
-Total: **4108** entries · ko 1962 · en 1011 · ja 461 · zh 264 · es 205 · fr 205
+Total: **4118** entries · ko 1962 · en 1013 · ja 463 · zh 266 · es 207 · fr 207
 
 ## By track
 
-- **academy**: 3106
+- **academy**: 3116
 - **magazine**: 962
 - **interactive**: 37
 - **(none)**: 3
@@ -18,7 +18,7 @@ Total: **4108** entries · ko 1962 · en 1011 · ja 461 · zh 264 · es 205 · f
 | Exam | 782 | ✅ |
 | Economics | 564 | ✅ |
 | Finance | 505 | ✅ |
-| Accounting | 429 | ✅ |
+| Accounting | 439 | ✅ |
 | Law | 194 | ✅ |
 | Business | 174 | ✅ |
 | Science & Nature | 173 | ✅ |
