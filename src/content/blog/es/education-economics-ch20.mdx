@@ -1,0 +1,105 @@
+---
+track: academy
+series: macroeconomics
+chapter: 9
+title: "Macroeconomía — Expectativas: de las adaptativas a las racionales"
+description: "Muestra en un gráfico, con la curva de Phillips aumentada con expectativas, el dilema a corto plazo y la verticalidad a largo plazo, calcula la inflación acelerada con expectativas adaptativas y la tasa de sacrificio de la desinflación, y presenta las expectativas racionales, la ineficacia de la política, la credibilidad y el anclaje de expectativas."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["economía", "macroeconomía", "curva de Phillips", "expectativas racionales", "tasa de sacrificio"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Macroeconomía — cuando cambian las expectativas, la misma tasa de paro trae una inflación distinta
+
+En 1958 Phillips observó en datos británicos que los salarios crecían más deprisa cuando el paro era bajo. En los años sesenta esta relación se interpretó como un menú de políticas: aceptando algo más de inflación se podía reducir el paro de forma permanente. En los setenta, cuando aparecieron a la vez inflación y paro elevados, el menú se vino abajo. La variable que faltaba eran las **expectativas**.
+
+## 1. La curva de Phillips aumentada con expectativas
+
+<FormulaBox
+  label="Curva de Phillips aumentada con expectativas"
+  formula="\pi = \pi^e - \beta\,(u - u^*) + \varepsilon"
+  description="π^e es la inflación esperada, u* la tasa natural de paro y ε una perturbación de oferta. Cuando el paro iguala su tasa natural, la inflación iguala a la esperada. Es la oferta agregada a corto plazo del capítulo 8 reescrita en términos de paro e inflación."
+/>
+
+Sean $u^*=4\,\%$ y $\beta=0{,}5$. Con una inflación esperada del 2 %, la inflación es del 3 % con un paro del 2 % y del 1 % con un paro del 6 %. Si la inflación esperada sube al 5 %, toda la curva de Phillips a corto plazo se desplaza 3 puntos hacia arriba, y con un paro del 2 % la inflación pasa a ser del 6 %.
+
+<EconDiagram
+  title="Curvas de Phillips a corto y largo plazo"
+  xLabel="u (%)"
+  yLabel="π (%)"
+  xMax={8}
+  yMax={7}
+  curves={[
+    { label: "CPCP (πᵉ=2 %)", points: [[2, 3], [8, 0]], tone: "blue" },
+    { label: "CPCP (πᵉ=5 %)", points: [[2, 6], [8, 3]], tone: "blue", dashed: true },
+    { label: "CPLP", points: [[4, 0], [4, 7]], tone: "red", anchor: "end" },
+  ]}
+  marks={[
+    { x: 4, y: 2, label: "A", yTick: "2" },
+    { x: 3, y: 2.5, label: "B" },
+    { x: 4, y: 5, label: "C", yTick: "5" },
+  ]}
+  caption="Reducir el paro al 3 % desde A lleva la economía a B a corto plazo, pero cuando las expectativas alcanzan la mayor inflación la curva se desplaza hacia arriba. A largo plazo, con la tasa natural del 4 %, solo es más alta la inflación."
+/>
+
+A largo plazo, cuando las expectativas coinciden con la inflación efectiva ($\pi=\pi^e$), el paro vuelve a $u^*$. **La curva de Phillips a largo plazo es vertical en la tasa natural.** Friedman y Phelps llegaron a esta conclusión a finales de los sesenta, antes de que llegara la estanflación.
+
+## 2. Expectativas adaptativas e inflación acelerada
+
+Supongamos que la gente toma la inflación del año pasado como expectativa para este ($\pi^e_t=\pi_{t-1}$). La curva de Phillips pasa a ser $\pi_t-\pi_{t-1}=-\beta(u_t-u^*)$.
+
+Si el Gobierno intenta mantener el paro en el 3 %, la inflación sube 0,5 puntos cada año: 2 %, 2,5 %, 3 %, etc. Para **mantener** el paro por debajo de su tasa natural, la inflación debe **acelerarse** sin cesar. Por eso la tasa natural se llama también NAIRU (tasa de paro que no acelera la inflación).
+
+A la inversa, bajar la inflación del 5 % al 2 % (**desinflación**) exige mantener el paro por encima de su tasa natural. Para lograr $\Delta\pi=-3$ hace falta $\sum(u-u^*)=3/0{,}5=6$: 6 puntos-año de paro excedente. Si, según la ley de Okun, 1 punto de paro equivale al 2 % de la producción, la pérdida acumulada de producción es del 12 % del PIB.
+
+<FormulaBox
+  label="Tasa de sacrificio"
+  formula="\text{Tasa de sacrificio} = \frac{\text{Pérdida acumulada de producción (\% del PIB)}}{\text{Bajada de la inflación (puntos)}} = \frac{12}{3} = 4"
+  description="Bajar la inflación 1 punto cuesta el 4 % del PIB. Las estimaciones reales varían mucho según el país, la época y la credibilidad de la política."
+/>
+
+## 3. Expectativas racionales y credibilidad
+
+Las **expectativas racionales** son la hipótesis de que la gente forma sus expectativas con toda la información disponible y su comprensión del funcionamiento de la economía, de modo que no repite errores sistemáticos. No solo mira la inflación pasada, sino también lo que hará el banco central.
+
+De ahí se sigue una conclusión fuerte. Si la regla de política es conocida y los precios son flexibles, una política monetaria **anticipada** se refleja de inmediato en las expectativas y solo cambia los precios, no la producción (**proposición de ineficacia de la política**). Solo la política no anticipada afecta a la producción a corto plazo.
+
+También hay una implicación para la desinflación. Si la gente cree el compromiso de un banco central de endurecer la política, la inflación esperada baja enseguida y la curva de Phillips se desplaza hacia abajo, de modo que la inflación puede reducirse sin mucho paro. La tasa de sacrificio depende de la credibilidad. Sargent interpretó así el rápido final de varias hiperinflaciones europeas de los años veinte mediante cambios bruscos de régimen fiscal y monetario.
+
+<LectureTable
+  title="Formación de expectativas e implicaciones para la política"
+  headers={["Expectativas", "Formación", "Implicación", "Debilidad"]}
+  rows={[
+    ["Estáticas", "π^e fija", "El dilema a corto plazo parece permanente", "La gente aprende"],
+    ["Adaptativas", "Siguen la inflación pasada", "Inflación acelerada, desinflación lenta", "No anticipan cambios de política"],
+    ["Racionales", "Usan toda la información y el modelo", "La política anticipada es neutral; la credibilidad reduce la tasa de sacrificio", "Costes de información, rigidez de precios"],
+  ]}
+/>
+
+## 4. La crítica de Lucas
+
+Lucas señaló que las relaciones macroeconómicas estimadas con datos del pasado (como la pendiente de la curva de Phillips) cambian cuando cambia la política, porque las expectativas y la conducta de la gente responden al régimen de política. El derrumbe en los setenta de la curva de Phillips estable de los sesenta es un ejemplo. Su argumento, según el cual la evaluación de políticas debe basarse en modelos construidos sobre preferencias y tecnologías que no cambian con la política, transformó la metodología macroeconómica.
+
+<Callout type="warning">
+Las expectativas racionales no significan que «la gente acierta el futuro», sino que «los errores de previsión no son sistemáticos»: es una hipótesis del modelo. Si reunir información cuesta, la gente puede prestar poca atención a la inflación. Y si precios y salarios son rígidos, incluso la política anticipada mueve la producción a corto plazo. Que los bancos centrales actuales anuncien objetivos de inflación y usen la orientación sobre la política futura son formas de emplear las expectativas como instrumento. Cuando están ancladas cerca del objetivo, las perturbaciones de demanda se transmiten menos a los precios.
+</Callout>
+
+## Ejercicio
+
+En una economía con $u^*=5\,\%$, $\beta=0{,}4$ y expectativas adaptativas, ¿cuánto paro excedente acumulado hace falta para bajar la inflación del 6 % al 2 %? $\Delta\pi=-4$, así que $\sum(u-u^*)=4/0{,}4=10$ puntos-año. Hacerlo en dos años exigiría un paro del 10 % cada año. Si la credibilidad fuera alta y las expectativas bajaran de inmediato al 2 %, el coste sería mucho menor.
+
+## Referencias
+
+- Milton Friedman, "The Role of Monetary Policy," *American Economic Review* (1968)
+- Robert Lucas, "Econometric Policy Evaluation: A Critique," *Carnegie-Rochester Conference Series* (1976)
+- Thomas Sargent, "The Ends of Four Big Inflations" (1982)
+- N. Gregory Mankiw, *Macroeconomics*, ch. 14

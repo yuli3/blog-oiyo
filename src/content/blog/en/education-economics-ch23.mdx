@@ -1,77 +1,86 @@
 ---
 track: academy
-series: economics-basics
-chapter: 23
-title: "Economic Principles — Endogenous growth theory and modern growth theory"
-description: "We analyze endogenous growth theories (AK model, Romer model) that attempt to explain technological progress within the model. Covers the impact of human capital and R&D investments on long-term gr..."
+series: macroeconomics
+chapter: 12
+title: "Macroeconomics — Endogenous Growth and the Solow Residual"
+description: "Computes the Solow residual with growth accounting, explains why the saving rate changes the growth rate in the AK model where diminishing returns to capital disappear, and covers the non-rivalry of ideas and the undersupply of R&D, human capital, the critique of scale effects and the role of institutions."
 pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
 category: Economics
-tags:
-  - Education
-  - economics
-  - 정병렬경제학
+tags: ["economics", "macroeconomics", "endogenous growth", "growth accounting", "total factor productivity"]
 locale: en
 author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
-import {
-  LectureTable,
-} from "@/features/education-common/components/LectureVisuals";
+
 import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# Endogenous Growth Theory and Modern Growth Theory
+# Macroeconomics — To Explain the Growth Rate Inside the Model, We Must Get Past Diminishing Returns
 
-The Solow model assumed technological progress—the core of long-term growth—as given from the outside, failing to explain it. Paul Romer and Robert Lucas pioneered **endogenous growth theory** by investigating how knowledge and innovation are generated from within the economy.
+In the Solow model of [Chapter 11](/en/education-economics-ch22/), the source of long-run growth per person is technology, but its rate of progress was given from outside. **Endogenous growth theory** brings the creation of technology inside the model. This chapter first looks at growth accounting, which measures the contribution of technology, and then at models that explain technology.
 
----
+## 1. Growth accounting: the Solow residual
 
-## 1. The AK Model: Overcoming Diminishing Productivity
+Writing the Cobb-Douglas production function $Y=AK^{\alpha}L^{1-\alpha}$ in growth rates gives
 
-The biggest difference from the Solow model is the rejection of **diminishing marginal productivity** of capital.
+<FormulaBox
+  label="Growth accounting"
+  formula="g_Y = \alpha\, g_K + (1-\alpha)\, g_L + g_A"
+  description="α is capital's share of income. What remains of output growth after subtracting the contributions of capital and labour, g_A, is the growth rate of total factor productivity (TFP), the Solow residual."
+/>
 
-- **Concept**: Capital ($K$) includes not only physical capital but also knowledge and learning by doing, so productivity does not decrease even with continuous investment.
-  <FormulaBox>$Y = AK$</FormulaBox>
-- **Result**: The savings rate ($s$) can raise not only the short-term income level but also the **long-term growth rate ($g$)** itself.
+If output grows by 5% a year, capital by 6% and labour by 1%, with $\alpha=0.4$, then $g_A=5-0.4\times 6-0.6\times 1=2\%$. Forty per cent of growth came from the residual. The residual mixes technological progress with rising education, better resource allocation and measurement error. That is why Abramovitz called it "a measure of our ignorance."
 
----
+## 2. The AK model: without diminishing returns, growth never stops
 
-## 2. Human Capital Theory (Lucas)
+If the production function is $Y=AK$, the marginal product of capital is constant at $A$. The Solow equation becomes $\Delta k=sAk-(\delta+n)k$, and the growth rate of capital per worker is
 
-This is the theory that the skill and education level of workers serve as the engine of growth.
+<FormulaBox
+  label="Growth rate in the AK model"
+  formula="g = sA - (\delta + n)"
+  description="With A = 0.5 and δ+n = 0.05, s = 0.2 gives growth of 5% and s = 0.3 gives 10%. The saving rate changes the growth rate itself — a conclusion directly opposed to the Solow model."
+/>
 
-- **Core**: Investment in education generates external economic effects, dramatically increasing the productivity of the entire nation.
-- **Implication**: Building an **education system** is more important than mere aid for developing countries to leap into wealthy nations.
+If $K$ is read as broad capital that includes not only machines but also human capital and knowledge, one can argue that accumulating capital creates new knowledge that offsets diminishing returns. Learning by doing (Arrow) and the externalities of human capital (Lucas) are the grounds for this interpretation.
 
----
+## 3. Ideas are non-rival
 
-## 3. R&D and Technological Progress Model (Romer)
+Romer modelled technology as **ideas**. The key property of ideas is **non-rivalry**: one firm using a blueprint does not reduce the amount another firm can use. Creating a new idea therefore involves a fixed cost, but once it exists the cost of using it again is almost zero. This produces increasing returns to scale for the economy as a whole.
 
-Technology is not discovered by chance, but is the result of for-profit firms intentionally creating it in pursuit of patent rights and other rewards.
+<LectureTable
+  title="Market problems created by ideas"
+  headers={["Property", "Result", "Response"]}
+  rows={[
+    ["Non-rivalry", "Social return > private return; R&D is undersupplied", "R&D subsidies, public research"],
+    ["Partial excludability", "Research incentives require monopoly profits through patents", "Designing patent length and scope"],
+    ["Knowledge spillovers", "Earlier research makes later research easier", "Open basic research"],
+  ]}
+/>
 
-- **Non-rivalry of Knowledge**: Once developed, the value of technology does not diminish even when multiple firms use it simultaneously, maximizing economies of scale.
-- **Policy Implication**: Intellectual property rights must be protected to strengthen corporate incentives for innovation.
+Patents provide research incentives but create the deadweight loss of monopoly ([Micro Chapter 7](/en/education-economics-ch7/)). The balance between the incentive to invent and diffusion is the design problem of the patent system. It has the same structure as the public goods problem of [Micro Chapter 10](/en/education-economics-ch10/).
 
----
+## 4. Scale effects and their critique
 
-## 4. Convergence Hypothesis
+In early versions of the Romer model, more researchers mean faster growth. Countries with large populations, or with growing numbers of researchers, should grow faster. Jones pointed out that although the number of US researchers multiplied in the late twentieth century, the growth rate did not rise. If new ideas become ever harder to find (**semi-endogenous growth**), the long-run growth rate depends on the growth of the research workforce, and saving rates and policy once again affect only levels.
 
-- **Absolute Convergence**: Poor countries grow faster than rich countries and eventually reach the same level (Solow's prediction).
-- **Conditional Convergence**: Levels converge only among countries with similar fundamental conditions such as savings rates and education levels.
-- <mark>**Reality**</mark>: Endogenous growth theory warns that if gaps in education and technology widen, income disparities between nations can actually become more severe.
+## 5. Fundamental causes: institutions
 
----
+If capital, human capital and technology are the **proximate causes** of growth, the debate about **fundamental causes** asks why they accumulate in some countries and not in others. Acemoglu, Johnson and Robinson argue that inclusive institutions, such as secure property rights and checks on power, create the incentives to invest and innovate, and they estimated the effect of institutions using differences in settlement conditions during the colonial period.
 
-## 5. Wrapping Up: An Era Where Creativity Determines National Power
+<Callout type="warning">
+The finding that TFP contributes 40% in growth accounting is "the share not explained by capital and labour," not a number that proves the effect of R&D. Moreover, if convergence is clear in the data, a pure AK model goes too far; if growth moves with saving, a pure Solow model falls short. The two views may each partly fit different periods and countries. The two models are compared in [Chapter 22](/en/education-economics-ch33/).
+</Callout>
 
-If past growth was an era of quantitative inputs such as capital and labor, modern growth is an era of qualitative inputs such as knowledge and ideas. Endogenous growth theory provides the strongest economic rationale for why governments must support R&D and nurture talent.
+## Check your understanding
 
----
+If output grows by 4%, capital by 5% and labour by 0.5%, and capital's share of income is 0.3, what is TFP growth? $4-0.3\times 5-0.7\times 0.5=2.15\%$. About 54% of growth came from the residual. In the AK model with $A=0.4$ and $\delta+n=0.06$, a saving rate of 0.25 gives growth of $0.25\times 0.4-0.06=4\%$.
 
-## 📖 References
+## References
 
-- **[Macroeconomics] - Jeong Byeong-yeol**: Mathematical comparison of endogenous growth models.
-- **[Endogenous Technological Change] - Paul Romer**: Theory that won the 2018 Nobel Prize in Economics.
-
----
-
-Great work. In the next session, we will study **fiscal policy and national debt**, the specific actions of the government in managing the stability and growth of the national economy.
+- Paul Romer, "Endogenous Technological Change," *Journal of Political Economy* (1990)
+- Charles Jones, "R&D-Based Models of Economic Growth," *Journal of Political Economy* (1995)
+- Daron Acemoglu, Simon Johnson and James Robinson, "The Colonial Origins of Comparative Development," *American Economic Review* (2001)
+- Robert Solow, "Technical Change and the Aggregate Production Function," *Review of Economics and Statistics* (1957)

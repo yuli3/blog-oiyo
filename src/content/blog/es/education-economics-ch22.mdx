@@ -1,0 +1,106 @@
+---
+track: academy
+series: macroeconomics
+chapter: 11
+title: "Macroeconomía — El modelo de crecimiento de Solow"
+description: "Obtiene el estado estacionario a partir de la dinámica del capital por trabajador, sf(k) = (δ+n)k, y explica con cifras y gráficos por qué la tasa de ahorro cambia el nivel de producción pero no la tasa de crecimiento a largo plazo, la regla de oro del capital y el consumo durante la transición, la convergencia condicional y el papel del progreso técnico."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["economía", "macroeconomía", "modelo de Solow", "estado estacionario", "regla de oro"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Macroeconomía — el modelo de Solow muestra que el ahorro no puede elevar para siempre la tasa de crecimiento
+
+Los capítulos anteriores trataron el corto plazo, en el que la producción sube y baja en torno a su potencial. A partir de este capítulo nos preguntamos por qué la producción potencial misma difiere entre países y crece con el tiempo. Al mostrar que la acumulación de capital por sí sola no puede hacer crecer indefinidamente la renta por persona, el modelo de Solow revela que la fuente del crecimiento a largo plazo es la tecnología. La estabilidad de las ecuaciones diferenciales se trata en el [capítulo 4 de matemáticas para economía](/es/education-economics-math-ch4/).
+
+## 1. La dinámica del capital por trabajador
+
+Sea la función de producción por trabajador $y=f(k)$, con producto marginal del capital decreciente. Cada año se ahorra e invierte una fracción $s$ de la producción, el capital se deprecia a la tasa $\delta$ y el número de trabajadores crece a la tasa $n$. La variación del capital por trabajador es
+
+<FormulaBox
+  label="Ecuación fundamental del modelo de Solow"
+  formula="\Delta k = s\,f(k) - (\delta + n)\,k"
+  description="El primer término es la inversión por trabajador; el segundo, la inversión necesaria para mantener el capital por trabajador (reponer el capital desgastado y dotar a los nuevos trabajadores). El k* en que ambos se igualan es el estado estacionario."
+/>
+
+Con $f(k)=\sqrt{k}$, $s=0{,}2$ y $\delta+n=0{,}1$, el estado estacionario cumple $0{,}2\sqrt{k}=0{,}1k$, luego $\sqrt{k}=2$, es decir, $k^*=4$ e $y^*=2$.
+
+<EconDiagram
+  title="El estado estacionario del modelo de Solow"
+  xLabel="k"
+  yLabel="Inversión por trabajador"
+  xMax={16}
+  yMax={1.4}
+  curves={[
+    { label: "0,2√k", points: [[0, 0], [0.25, 0.1], [1, 0.2], [2, 0.283], [4, 0.4], [6, 0.49], [9, 0.6], [12, 0.693], [16, 0.8]], tone: "blue" },
+    { label: "0,3√k", points: [[0, 0], [0.25, 0.15], [1, 0.3], [2, 0.424], [4, 0.6], [6, 0.735], [9, 0.9], [12, 1.039], [16, 1.2]], tone: "blue", dashed: true },
+    { label: "(δ+n)k", points: [[0, 0], [14, 1.4]], tone: "red", anchor: "end" },
+  ]}
+  marks={[
+    { x: 4, y: 0.4, guide: true, xTick: "k* = 4" },
+    { x: 9, y: 0.9, guide: true, xTick: "k* = 9" },
+  ]}
+  caption="Si la curva de inversión está por encima de la recta de inversión necesaria, k aumenta; si está por debajo, disminuye. Una subida de la tasa de ahorro de 0,2 a 0,3 desplaza el estado estacionario de 4 a 9."
+/>
+
+Cuando $k$ está por debajo del estado estacionario, la inversión por trabajador supera la necesaria y $k$ aumenta; por encima, $k$ disminuye. Se parta de donde se parta, la economía converge a $k^*$.
+
+## 2. La tasa de ahorro cambia el nivel, no la tasa de crecimiento
+
+Si la tasa de ahorro sube a 0,3, el estado estacionario cumple $0{,}3\sqrt{k}=0{,}1k$, de modo que $k^*=9$ e $y^*=3$. La producción por trabajador es un 50 % mayor. Pero al alcanzar el nuevo estado estacionario, deja de crecer otra vez. Como el producto marginal del capital es decreciente, cada unidad adicional de capital añade menos producción, hasta que la inversión apenas cubre lo necesario.
+
+Una tasa de ahorro mayor solo eleva el crecimiento durante la transición. Si la tasa de ahorro pasa a 0,3 cuando $k=4$, el capital por trabajador crece un $0{,}3\times 2/4-0{,}1=5\,\%$ el primer año, y esa tasa tiende a 0 a medida que $k$ se acerca a 9.
+
+<LectureTable
+  title="Qué cambia qué"
+  headers={["Cambio", "Nivel estacionario de producción por trabajador", "Crecimiento estacionario por trabajador"]}
+  rows={[
+    ["Sube la tasa de ahorro s", "Aumenta", "No cambia (0)"],
+    ["Sube el crecimiento de la población n", "Disminuye", "No cambia (0)"],
+    ["Tasa de progreso técnico g", "—", "Igual a g"],
+  ]}
+/>
+
+## 3. La regla de oro: el capital que maximiza el consumo
+
+Ahorrar más eleva la producción, pero puede reducir el consumo. El consumo estacionario por trabajador es $c^*=f(k^*)-(\delta+n)k^*$, y la condición que lo maximiza es
+
+<FormulaBox
+  label="Condición de la regla de oro"
+  formula="f'(k_{gold}) = \delta + n"
+  description="El consumo es máximo donde el producto marginal del capital iguala el coste de mantener el capital. En el ejemplo, 1/(2√k) = 0,1, así que k_gold = 25; la tasa de ahorro que lo logra es 0,5 y el consumo vale 2,5."
+/>
+
+Las tasas de ahorro de 0,2 (consumo 1,6) y 0,3 (consumo 2,1) dejan ambas menos capital que la regla de oro. En esta economía, ahorrar más eleva el consumo a largo plazo, pero al inicio de la transición el consumo cae tanto como sube el ahorro. El año en que la tasa de ahorro pasa de 0,2 a 0,3, el consumo es $0{,}7\times 2=1{,}4$, por debajo del 1,6 inicial. La generación actual paga el coste y las futuras reciben el beneficio. A la inversa, una economía con más capital que la regla de oro puede aumentar el consumo presente y futuro ahorrando menos.
+
+## 4. Convergencia y progreso técnico
+
+El modelo predice que los países con menos capital crecen más deprisa. Pero solo los países con tasas de ahorro, crecimiento de la población y tecnología parecidos convergen al mismo estado estacionario (**convergencia condicional**). La **convergencia absoluta**, según la cual todos los países convergerían a la misma renta, apenas aparece en los datos, que encajan mejor con la convergencia condicional.
+
+Si la tecnología que aumenta la eficiencia del trabajo progresa a una tasa $g$ anual, la producción por trabajador crece de forma continuada a la tasa $g$ en el estado estacionario. En el modelo de Solow, la tecnología es la única fuente que explica un crecimiento **sostenido** de la renta por persona. Sin embargo, esa tasa de progreso técnico viene dada desde fuera del modelo.
+
+La contabilidad del crecimiento descompone el crecimiento de la producción por factores. En $g_Y=\alpha g_K+(1-\alpha)g_L+g_A$, el resto $g_A$ que queda al restar las contribuciones del capital y del trabajo se llama **residuo de Solow** (crecimiento de la productividad total de los factores). El residuo es una medición, no una explicación. Qué impulsa el progreso técnico es el objeto de la teoría del crecimiento endógeno del [capítulo 12](/es/education-economics-ch23/).
+
+<Callout type="warning">
+«Ahorrar más eleva para siempre la tasa de crecimiento» no es una conclusión del modelo de Solow. Tampoco debe leerse directamente la tasa de inversión de la contabilidad nacional como la $s$ del modelo, ni interpretarse que todos los países deben converger a la misma renta. Lo que el modelo predice es la convergencia condicional entre países de estructura parecida.
+</Callout>
+
+## Ejercicio
+
+Una economía con $f(k)=\sqrt{k}$ y $\delta+n=0{,}1$ tiene una tasa de ahorro de 0,2. ¿Cuáles son la producción y el consumo estacionarios por trabajador? $k^*=4$, $y^*=2$ y $c^*=0{,}8\times 2=1{,}6$. Si el crecimiento de la población sube de modo que $\delta+n=0{,}2$, entonces $0{,}2\sqrt{k}=0{,}2k$ da $k^*=1$ e $y^*=1$: la producción por trabajador se reduce a la mitad.
+
+## Referencias
+
+- Robert Solow, "A Contribution to the Theory of Economic Growth," *Quarterly Journal of Economics* (1956)
+- N. Gregory Mankiw, David Romer and David Weil, "A Contribution to the Empirics of Economic Growth," *Quarterly Journal of Economics* (1992)
+- N. Gregory Mankiw, *Macroeconomics*, ch. 8–9
+- MIT OpenCourseWare, [14.02 Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)

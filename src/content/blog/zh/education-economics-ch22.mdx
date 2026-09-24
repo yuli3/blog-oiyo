@@ -1,0 +1,106 @@
+---
+track: academy
+series: macroeconomics
+chapter: 11
+title: "宏观经济学 — 索洛增长模型"
+description: "由人均资本的动态 sf(k) = (δ+n)k 求出稳态，用数值和图形整理储蓄率为何能改变产出水平却不能改变长期增长率、黄金律资本存量与过渡期的消费、条件收敛以及技术进步的作用。"
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["经济学", "宏观经济学", "索洛模型", "稳态", "黄金律"]
+locale: zh
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 宏观经济学 — 索洛模型表明储蓄无法永久提高增长率
+
+前面几章讨论的是产出围绕潜在水平上下波动的短期。从本章开始，我们要问:潜在产出本身为何因国而异，又为何随时间增长。索洛模型得出仅靠资本积累无法让人均收入持续增长的结论，从而揭示长期增长的源泉是技术。微分方程的稳定性在[经济数学第4章](/zh/education-economics-math-ch4/)中讨论。
+
+## 1. 人均资本的动态
+
+设每个工人的生产函数为$y=f(k)$，资本的边际产出递减。每年把产出的$s$储蓄起来用于投资，资本以$\delta$的比率折旧，工人数以$n$的比率增加。人均资本的变化为
+
+<FormulaBox
+  label="索洛模型的基本方程"
+  formula="\Delta k = s\,f(k) - (\delta + n)\,k"
+  description="第一项是人均投资，第二项是维持人均资本不变所需的投资(补充折旧的资本+为新工人配备的资本)。两者相等时的k*就是稳态。"
+/>
+
+若$f(k)=\sqrt{k}$，$s=0.2$，$\delta+n=0.1$，稳态由$0.2\sqrt{k}=0.1k$得$\sqrt{k}=2$，即$k^*=4$，$y^*=2$。
+
+<EconDiagram
+  title="索洛模型的稳态"
+  xLabel="k"
+  yLabel="人均投资"
+  xMax={16}
+  yMax={1.4}
+  curves={[
+    { label: "0.2√k", points: [[0, 0], [0.25, 0.1], [1, 0.2], [2, 0.283], [4, 0.4], [6, 0.49], [9, 0.6], [12, 0.693], [16, 0.8]], tone: "blue" },
+    { label: "0.3√k", points: [[0, 0], [0.25, 0.15], [1, 0.3], [2, 0.424], [4, 0.6], [6, 0.735], [9, 0.9], [12, 1.039], [16, 1.2]], tone: "blue", dashed: true },
+    { label: "(δ+n)k", points: [[0, 0], [14, 1.4]], tone: "red", anchor: "end" },
+  ]}
+  marks={[
+    { x: 4, y: 0.4, guide: true, xTick: "k* = 4" },
+    { x: 9, y: 0.9, guide: true, xTick: "k* = 9" },
+  ]}
+  caption="投资曲线位于所需投资直线上方时k增加，位于下方时k减少。储蓄率由0.2升至0.3时，稳态从4移到9。"
+/>
+
+$k$小于稳态时，人均投资大于所需投资，$k$增加;大于稳态时则减少。无论从哪里出发，都收敛于$k^*$。
+
+## 2. 储蓄率改变水平，不改变增长率
+
+储蓄率升至0.3时，稳态由$0.3\sqrt{k}=0.1k$得$k^*=9$，$y^*=3$，人均产出提高50%。但一旦到达新的稳态，人均产出又停止增长。由于资本的边际产出递减，资本积累得越多，追加的产出越小，最终只能勉强满足所需投资。
+
+储蓄率上升只在过渡期内提高增长率。若在$k=4$时储蓄率变为0.3，第一年人均资本增长率为$0.3\times 2/4-0.1=5\%$，越接近9，这一增长率越趋近于0。
+
+<LectureTable
+  title="什么改变什么"
+  headers={["变化", "稳态人均产出水平", "稳态人均增长率"]}
+  rows={[
+    ["储蓄率s上升", "提高", "不变(0)"],
+    ["人口增长率n上升", "降低", "不变(0)"],
+    ["技术进步率g", "—", "等于g"],
+  ]}
+/>
+
+## 3. 黄金律:使消费最大化的资本存量
+
+储蓄越多，产出越高，但消费可能减少。稳态人均消费为$c^*=f(k^*)-(\delta+n)k^*$，使其最大化的条件是
+
+<FormulaBox
+  label="黄金律条件"
+  formula="f'(k_{gold}) = \delta + n"
+  description="资本的边际产出等于维持资本的成本时，消费最大。上例中1/(2√k) = 0.1，所以k_gold = 25，实现它的储蓄率为0.5，消费为2.5。"
+/>
+
+储蓄率0.2(消费1.6)和0.3(消费2.1)的资本都少于黄金律水平。在这个经济中提高储蓄率会增加长期消费，但过渡期初期消费会按储蓄增加的幅度减少。储蓄率由0.2升至0.3的那一年，消费为$0.7\times 2=1.4$，低于原来的1.6。当代人承担成本，后代人享受好处。反之，资本多于黄金律的经济可以通过减少储蓄同时增加现在和将来的消费。
+
+## 4. 收敛与技术进步
+
+模型预测资本少的国家增长更快。但只有储蓄率、人口增长率和技术相近的国家才会收敛到同一稳态(**条件收敛**)。所有国家都收敛到同一收入的**绝对收敛**在数据中并不明显，数据与条件收敛更为吻合。
+
+若提高劳动效率的技术每年以$g$的比率进步，稳态下人均产出将持续以$g$的比率增长。在索洛模型中，技术是解释人均收入**持续**增长的唯一来源。然而技术进步率是从模型外部给定的。
+
+增长核算把产出增长按要素分解。在$g_Y=\alpha g_K+(1-\alpha)g_L+g_A$中，扣除资本和劳动贡献后的余项$g_A$称为**索洛残差**(全要素生产率增长)。残差是测量而不是解释。什么推动技术进步，由[第12章](/zh/education-economics-ch23/)的内生增长理论讨论。
+
+<Callout type="warning">
+"增加储蓄会永久提高增长率"不是索洛模型的结论。也不要把国民账户中的投资率直接当作模型中的$s$，或把模型解读为所有国家都必须收敛到同一收入。模型预测的是结构相似的国家之间的条件收敛。
+</Callout>
+
+## 练习题
+
+某经济$f(k)=\sqrt{k}$、$\delta+n=0.1$，储蓄率为0.2。稳态人均产出和消费是多少?$k^*=4$，$y^*=2$，$c^*=0.8\times 2=1.6$。若人口增长率上升使$\delta+n=0.2$，则由$0.2\sqrt{k}=0.2k$得$k^*=1$，$y^*=1$，人均产出减半。
+
+## 参考资料
+
+- Robert Solow, "A Contribution to the Theory of Economic Growth," *Quarterly Journal of Economics* (1956)
+- N. Gregory Mankiw, David Romer and David Weil, "A Contribution to the Empirics of Economic Growth," *Quarterly Journal of Economics* (1992)
+- N. Gregory Mankiw, *Macroeconomics*, ch. 8–9
+- MIT OpenCourseWare, [14.02 Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)

@@ -1,99 +1,105 @@
 ---
 track: academy
-series: economics-basics
-chapter: 21
-title: "Economic Principles — Business cycle theory and neuroeconomic theory"
-description: >-
-  We analyze traditional business cycle theory and real business cycle (RBC)
-  theory. It covers trends in modern macroeconomics, including balanced economic
-  fluctuations and menu cost models.
+series: macroeconomics
+chapter: 10
+title: "Macroeconomics — Business Cycles: Demand Shocks and Supply Shocks"
+description: "Covers the stylized facts of business cycles (comovement, volatile investment), how to tell demand shocks from supply shocks by the signs of output and prices, the policy dilemma of stagflation, the difference between real business cycle theory and New Keynesian economics, and how shocks propagate."
 pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
 category: Economics
-tags:
-  - Education
-  - economics
-  - 정병렬경제학
+tags: ["economics", "macroeconomics", "business cycles", "supply shock", "stagflation"]
 locale: en
 author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
-import {
-  LectureTable,
-} from "@/features/education-common/components/LectureVisuals";
+
 import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
-import BusinessCycle from "@/components/mdx/BusinessCycle.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# Business Cycle Theory and New Business Cycle Theories
+# Macroeconomics — A Recession Has One Name, but Shocks Come from Two Directions
 
-While economies grow continuously, they experience **business cycles** in which booms and recessions repeat along the way. This chapter analyzes the fierce debates among different schools of thought over whether 'demand' or 'technology (supply)' is the primary culprit behind these fluctuations.
+The fact that output has fallen below potential does not by itself tell us what to do. Depending on whether aggregate demand or aggregate supply has fallen, prices move in opposite directions and the right policy differs. This chapter uses the AD-AS model of [Chapter 8](/en/education-economics-ch19/) as a diagnostic tool for business cycles.
 
----
-
-<BusinessCycle
-  title="Business Cycle"
-  showTrend={true}
-  caption="Actual GDP fluctuates around potential GDP (trend line). Peaks and troughs repeat."
-/>
-
-## 1. Traditional Business Cycle Theories
-
-### (1) Keynesian School (Demand-Oriented)
-
-- Views 'insufficient aggregate demand' caused by fluctuations in consumption and investment as the cause of recessions.
-- Because the market cannot heal itself, active government intervention is necessary.
-
-### (2) Monetarists (Friedman)
-
-- Argue that rapid changes in the money supply exacerbate business cycles.
-
----
-
-## 2. New Classical School: Real Business Cycle (RBC) Theory
-
-Proposes 'equilibrium business cycle theory', arguing that business cycles can occur even in equilibrium states.
-
-- **Cause**: Business cycles are driven by 'real supply shocks' such as **technological innovations and changes in raw material prices**, rather than aggregate demand shocks.
-- **Characteristics**: Business cycles are not market failures, but the result of **optimal choices** made by economic agents in response to changed environments. Therefore, government intervention rather causes inefficiency.
-
----
-
-## 3. New Keynesian School: Establishing Microfoundations
-
-While accepting the rational expectations hypothesis of the New Classical school, they attempted to micro-prove why prices and wages are 'sticky'.
-
-1. **Menu Cost**: Prices change sluggishly due to the cost of price adjustment.
-2. **Efficiency Wage**: Wages do not fall because firms pay wages higher than the market equilibrium to increase productivity.
-3. **Staggered Price Setting**: Timing varies by firm, creating a time lag in overall price adjustment.
-
----
-
-## 4. Key Terms in Business Cycles
+## 1. Stylized facts of business cycles
 
 <LectureTable
-  title="Phases and Characteristics of Business Cycles"
-  headers={["Phase", "Production/Consumption", "Unemployment Rate", "Prices/Interest Rates"]}
+  title="Facts repeatedly observed in business cycles"
+  headers={["Fact", "Description"]}
   rows={[
-    ["Boom", "Increasing (Active)", "Low", "Upward Pressure"],
-    ["Recession", "Starting to Decrease", "Starting to Increase", "Slowdown in Rise"],
-    ["Depression", "Decreasing (Severe)", "Very High", "Falling / Low Interest Rates"],
-    ["Recovery", "Starting to Increase", "Starting to Decrease", "Stable"],
+    ["Comovement", "Output, employment, consumption, investment and corporate profits move together"],
+    ["Volatile investment", "Investment fluctuates several times more than output; consumption is smoother than output"],
+    ["Countercyclical unemployment", "Unemployment rises when output falls (Okun's law)"],
+    ["Irregularity", "Expansions and contractions vary in length and depth, so they are closer to 'fluctuations' than 'cycles'"],
   ]}
-  highlightColumns={[0]}
 />
 
----
+Investment swings widely because of the accelerator principle and expectations from [Chapter 6](/en/education-economics-ch17/); consumption is smooth because of the consumption smoothing of [Chapter 5](/en/education-economics-ch16/).
 
-## 5. Wrapping Up: Fluctuations are Inevitable Growing Pains
+## 2. Identifying shocks by their signs
 
-Perspectives on business cycles are largely divided into 'disasters to be prevented through demand management' and 'natural processes resulting from technological progress'. Modern macroeconomic policy focuses on appropriately harmonizing these two views to reduce the amplitude of fluctuations and build social safety nets.
+<FormulaBox
+  label="A first clue for identifying shocks"
+  formula="\text{Demand shock: } \Delta Y,\ \Delta P\ \text{same direction}\qquad \text{Supply shock: } \Delta Y,\ \Delta P\ \text{opposite directions}"
+  description="When AD shifts, output and prices move together along SRAS; when SRAS shifts, they move in opposite directions along AD. When both shocks hit at once, signs alone are hard to interpret."
+/>
 
----
+<EconDiagram
+  title="An adverse supply shock: stagflation"
+  xLabel="Y"
+  yLabel="P"
+  xMax={100}
+  yMax={100}
+  curves={[
+    { label: "AD", points: [[20, 85], [85, 20]], tone: "blue" },
+    { label: "SRAS", points: [[20, 28.5], [85, 68.5]], tone: "green" },
+    { label: "SRAS'", points: [[10, 35.3], [75, 75.3]], tone: "green", dashed: true },
+    { label: "LRAS", points: [[55, 5], [55, 95]], tone: "red", anchor: "end" },
+  ]}
+  marks={[
+    { x: 55, y: 50, label: "E", guide: true, xTick: "Y*" },
+    { x: 46.9, y: 58.1, label: "E'", guide: true },
+  ]}
+  caption="When an oil price rise shifts SRAS up and to the left, output falls and prices rise. Because the economy moves along the aggregate demand curve, the two variables move in opposite directions."
+/>
 
-## 📖 References
+<LectureTable
+  title="The same fall in output, different causes"
+  headers={["Cause", "Examples", "Prices", "First response"]}
+  rows={[
+    ["Fall in aggregate demand", "Credit crunch, collapse in exports, fiscal austerity", "Fall", "Monetary and fiscal expansion"],
+    ["Adverse supply shock", "Oil price spike, supply-chain disruption, productivity slowdown", "Rise", "Easing supply bottlenecks, managing expectations"],
+  ]}
+/>
 
-- **[Macroeconomics] - Jung Byeong-yeol**: Comparative analysis of RBC and New Keynesian schools.
-- **[A Modern Guide to Macroeconomics] - Snowdon & Vane**: History and development of macroeconomic schools.
+A supply shock puts policymakers in a dilemma. Raising aggregate demand restores output but pushes prices up further, and if expected inflation rises, the Phillips curve of [Chapter 9](/en/education-economics-ch20/) shifts up and the cost grows. Cutting aggregate demand controls prices but deepens the recession. If the shock is temporary and expectations are anchored, "looking through" it is also an option. In the 1970s expectations followed inflation up, inflation became entrenched, and it could only be brought down at the cost of a deep recession.
 
----
+## 3. What causes fluctuations: two views
 
-Good job. In the next session, we will study **Economic Growth Theory (Solow Model)**, which goes beyond temporary fluctuations to analyze how a nation's national wealth grows in the long run.
+**Real business cycle (RBC) theory** sees technology (productivity) shocks as the main source of fluctuations. Prices are flexible, and business cycles are the result of people responding optimally to changes in productivity. Since even recessions are efficient responses, there is little role for stabilization policy. The 1982 paper by Kydland and Prescott is the starting point.
+
+**New Keynesian economics** explicitly models price and wage stickiness and imperfect competition. Aggregate demand shocks then move output, recessions are inefficient and monetary policy can raise welfare. The dynamic stochastic general equilibrium (DSGE) models used by central banks today combine the RBC methodology (optimizing households and firms, rational expectations) with New Keynesian rigidities.
+
+## 4. Propagation: how small shocks become large fluctuations
+
+Recent research focuses less on the shocks themselves than on **amplification and persistence**.
+
+- **Financial accelerator**: when asset prices fall, collateral values shrink, borrowing becomes harder, investment falls and asset prices fall further. This is the same structure as crisis amplification in [Financial Economics Chapter 5](/en/education-economics-ch38/).
+- **Labour market search**: after jobs are destroyed it takes time to find new ones, so unemployment persists ([Chapter 20](/en/education-economics-ch31/)).
+- **Hysteresis**: when the long-term unemployed lose skills, cyclical unemployment turns into structural unemployment and potential output itself falls.
+
+<Callout type="warning">
+Do not apply the prescription for an average business cycle to this particular one. The 2008 crisis was a finance-driven demand shock; the 2021–2022 surge in prices combined supply disruptions, energy prices and a strong recovery in demand. "It's a recession, so cut rates" is a sentence that has not checked the direction of the shock. In real data several shocks arrive at once, so look at expected inflation, wages and commodity prices as well as the signs of output and prices.
+</Callout>
+
+## Check your understanding
+
+In one year output falls by 2% and prices rise by 3%. Which shock dominated, and what happens if policy responds with demand expansion? Output and prices moved in opposite directions, so an adverse supply shock dominated. Raising aggregate demand to restore output would push prices up by more than 3%, and if expected inflation follows, a larger cost must be paid later. A single demand policy cannot return both variables to where they were.
+
+## References
+
+- N. Gregory Mankiw, *Macroeconomics*, ch. 10, 14
+- Finn Kydland and Edward Prescott, "Time to Build and Aggregate Fluctuations," *Econometrica* (1982)
+- Ben Bernanke, Mark Gertler and Simon Gilchrist, "The Financial Accelerator in a Quantitative Business Cycle Framework," *Handbook of Macroeconomics* (1999)
+- MIT OpenCourseWare, [14.02 Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)

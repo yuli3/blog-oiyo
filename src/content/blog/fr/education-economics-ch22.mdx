@@ -1,0 +1,106 @@
+---
+track: academy
+series: macroeconomics
+chapter: 11
+title: "Macroéconomie — Le modèle de croissance de Solow"
+description: "Détermine l'état stationnaire à partir de la dynamique du capital par travailleur, sf(k) = (δ+n)k, et explique avec des chiffres et des graphiques pourquoi le taux d'épargne modifie le niveau de production mais pas le taux de croissance de long terme, la règle d'or du capital et la consommation pendant la transition, la convergence conditionnelle et le rôle du progrès technique."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["économie", "macroéconomie", "modèle de Solow", "état stationnaire", "règle d'or"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Macroéconomie — le modèle de Solow montre que l'épargne ne peut pas relever durablement le taux de croissance
+
+Les chapitres précédents traitaient du court terme, où la production oscille autour de son potentiel. À partir de ce chapitre, on se demande pourquoi la production potentielle elle-même diffère d'un pays à l'autre et augmente avec le temps. En montrant que l'accumulation du capital ne peut à elle seule faire croître indéfiniment le revenu par tête, le modèle de Solow révèle que la source de la croissance de long terme est la technologie. La stabilité des équations différentielles est traitée au [chapitre 4 de mathématiques pour l'économie](/fr/education-economics-math-ch4/).
+
+## 1. La dynamique du capital par travailleur
+
+Soit la fonction de production par travailleur $y=f(k)$, à productivité marginale du capital décroissante. Chaque année, une fraction $s$ de la production est épargnée et investie, le capital se déprécie au taux $\delta$ et le nombre de travailleurs croît au taux $n$. La variation du capital par travailleur est
+
+<FormulaBox
+  label="Équation fondamentale du modèle de Solow"
+  formula="\Delta k = s\,f(k) - (\delta + n)\,k"
+  description="Le premier terme est l'investissement par travailleur ; le second, l'investissement nécessaire pour maintenir le capital par travailleur (remplacer le capital usé et équiper les nouveaux travailleurs). Le k* qui les égalise est l'état stationnaire."
+/>
+
+Avec $f(k)=\sqrt{k}$, $s=0{,}2$ et $\delta+n=0{,}1$, l'état stationnaire vérifie $0{,}2\sqrt{k}=0{,}1k$, d'où $\sqrt{k}=2$, soit $k^*=4$ et $y^*=2$.
+
+<EconDiagram
+  title="L'état stationnaire du modèle de Solow"
+  xLabel="k"
+  yLabel="Investissement par travailleur"
+  xMax={16}
+  yMax={1.4}
+  curves={[
+    { label: "0,2√k", points: [[0, 0], [0.25, 0.1], [1, 0.2], [2, 0.283], [4, 0.4], [6, 0.49], [9, 0.6], [12, 0.693], [16, 0.8]], tone: "blue" },
+    { label: "0,3√k", points: [[0, 0], [0.25, 0.15], [1, 0.3], [2, 0.424], [4, 0.6], [6, 0.735], [9, 0.9], [12, 1.039], [16, 1.2]], tone: "blue", dashed: true },
+    { label: "(δ+n)k", points: [[0, 0], [14, 1.4]], tone: "red", anchor: "end" },
+  ]}
+  marks={[
+    { x: 4, y: 0.4, guide: true, xTick: "k* = 4" },
+    { x: 9, y: 0.9, guide: true, xTick: "k* = 9" },
+  ]}
+  caption="Quand la courbe d'investissement est au-dessus de la droite d'investissement nécessaire, k augmente ; en dessous, il diminue. Une hausse du taux d'épargne de 0,2 à 0,3 déplace l'état stationnaire de 4 à 9."
+/>
+
+Quand $k$ est inférieur à l'état stationnaire, l'investissement par travailleur dépasse l'investissement nécessaire et $k$ augmente ; au-dessus, $k$ diminue. Quel que soit le point de départ, l'économie converge vers $k^*$.
+
+## 2. Le taux d'épargne modifie le niveau, pas le taux de croissance
+
+Si le taux d'épargne passe à 0,3, l'état stationnaire vérifie $0{,}3\sqrt{k}=0{,}1k$, d'où $k^*=9$ et $y^*=3$. La production par travailleur est 50 % plus élevée. Mais une fois le nouvel état stationnaire atteint, elle cesse de croître. Comme la productivité marginale du capital décroît, chaque unité de capital supplémentaire ajoute moins de production, jusqu'à ce que l'investissement couvre tout juste le nécessaire.
+
+Une hausse du taux d'épargne n'élève la croissance que pendant la transition. Si le taux d'épargne passe à 0,3 lorsque $k=4$, le capital par travailleur croît de $0{,}3\times 2/4-0{,}1=5\,\%$ la première année, et ce taux tend vers 0 à mesure que $k$ approche de 9.
+
+<LectureTable
+  title="Qu'est-ce qui modifie quoi"
+  headers={["Changement", "Niveau stationnaire de la production par travailleur", "Croissance stationnaire par travailleur"]}
+  rows={[
+    ["Hausse du taux d'épargne s", "Augmente", "Inchangée (0)"],
+    ["Hausse de la croissance démographique n", "Diminue", "Inchangée (0)"],
+    ["Taux de progrès technique g", "—", "Égale à g"],
+  ]}
+/>
+
+## 3. La règle d'or : le stock de capital qui maximise la consommation
+
+Épargner davantage augmente la production mais peut réduire la consommation. La consommation stationnaire par travailleur est $c^*=f(k^*)-(\delta+n)k^*$, et la condition qui la maximise est
+
+<FormulaBox
+  label="Condition de la règle d'or"
+  formula="f'(k_{gold}) = \delta + n"
+  description="La consommation est maximale là où la productivité marginale du capital égale le coût de maintien du capital. Dans l'exemple, 1/(2√k) = 0,1, donc k_gold = 25 ; le taux d'épargne correspondant est 0,5 et la consommation vaut 2,5."
+/>
+
+Les taux d'épargne de 0,2 (consommation 1,6) et 0,3 (consommation 2,1) laissent tous deux moins de capital que la règle d'or. Dans cette économie, épargner davantage accroît la consommation de long terme, mais au début de la transition la consommation baisse d'autant que l'épargne augmente. L'année où le taux d'épargne passe de 0,2 à 0,3, la consommation vaut $0{,}7\times 2=1{,}4$, moins que les 1,6 initiaux. La génération actuelle supporte le coût, les générations futures en recueillent le bénéfice. À l'inverse, une économie dotée de plus de capital que la règle d'or peut accroître la consommation présente et future en épargnant moins.
+
+## 4. Convergence et progrès technique
+
+Le modèle prédit que les pays peu dotés en capital croissent plus vite. Mais seuls les pays aux taux d'épargne, croissance démographique et technologie semblables convergent vers le même état stationnaire (**convergence conditionnelle**). La **convergence absolue**, selon laquelle tous les pays convergeraient vers le même revenu, apparaît mal dans les données, qui s'accordent mieux avec la convergence conditionnelle.
+
+Si la technologie qui augmente l'efficacité du travail progresse au taux $g$ par an, la production par travailleur croît durablement au taux $g$ à l'état stationnaire. Dans le modèle de Solow, la technologie est la seule source capable d'expliquer une croissance **durable** du revenu par tête. Or ce taux de progrès technique est donné de l'extérieur du modèle.
+
+La comptabilité de la croissance décompose la croissance de la production par facteur. Dans $g_Y=\alpha g_K+(1-\alpha)g_L+g_A$, le reste $g_A$, une fois retirées les contributions du capital et du travail, est appelé **résidu de Solow** (croissance de la productivité globale des facteurs). Le résidu est une mesure, pas une explication. Ce qui engendre le progrès technique relève de la théorie de la croissance endogène du [chapitre 12](/fr/education-economics-ch23/).
+
+<Callout type="warning">
+« Épargner davantage relève durablement le taux de croissance » n'est pas une conclusion du modèle de Solow. Il ne faut pas non plus lire directement le taux d'investissement de la comptabilité nationale comme le $s$ du modèle, ni interpréter le modèle comme exigeant que tous les pays convergent vers le même revenu. Ce qu'il prédit, c'est une convergence conditionnelle entre pays de structure semblable.
+</Callout>
+
+## Exercice
+
+Une économie avec $f(k)=\sqrt{k}$ et $\delta+n=0{,}1$ a un taux d'épargne de 0,2. Quelles sont la production et la consommation stationnaires par travailleur ? $k^*=4$, $y^*=2$ et $c^*=0{,}8\times 2=1{,}6$. Si la croissance démographique augmente de sorte que $\delta+n=0{,}2$, alors $0{,}2\sqrt{k}=0{,}2k$ donne $k^*=1$ et $y^*=1$ : la production par travailleur est divisée par deux.
+
+## Références
+
+- Robert Solow, "A Contribution to the Theory of Economic Growth," *Quarterly Journal of Economics* (1956)
+- N. Gregory Mankiw, David Romer and David Weil, "A Contribution to the Empirics of Economic Growth," *Quarterly Journal of Economics* (1992)
+- N. Gregory Mankiw, *Macroeconomics*, ch. 8–9
+- MIT OpenCourseWare, [14.02 Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)
