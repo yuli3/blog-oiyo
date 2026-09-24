@@ -1,0 +1,106 @@
+---
+track: academy
+series: intermediate-accounting
+chapter: 5
+title: "Contabilidad intermedia — Deterioro del valor de los activos: importe recuperable, UGE y distribución"
+description: "Trabaja con ejemplos numéricos la revisión de indicios de deterioro, el cálculo del importe recuperable (el mayor entre el valor razonable menos los costos de disposición y el valor en uso), las unidades generadoras de efectivo y la asignación del fondo de comercio, el orden de distribución de la pérdida empezando por el fondo de comercio y el límite de las reversiones."
+pubDate: 2026-09-24
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["contabilidad intermedia", "deterioro del valor", "importe recuperable", "valor en uso", "unidad generadora de efectivo", "fondo de comercio"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+El deterioro no se reconoce automáticamente porque baje un precio de mercado. Se reconoce cuando lo que el activo generará en el futuro no alcanza su importe en libros. La K-IFRS 1036 *Deterioro del valor de los activos* (NIC 36) se aplica a propiedades, planta y equipo, activos intangibles, fondo de comercio, propiedades de inversión al costo, etc. Las existencias, los activos financieros y los activos por impuestos diferidos tienen sus propias normas.
+
+## 1. Cuándo hacer la prueba de deterioro
+
+Al cierre de cada periodo, la entidad evalúa si hay **indicios de deterioro** y solo estima el importe recuperable si los hay. Sin embargo, los siguientes activos se someten a prueba **cada año**, haya o no indicios:
+
+- el fondo de comercio;
+- los activos intangibles de vida útil indefinida;
+- los activos intangibles aún no disponibles para su uso (gastos de desarrollo en curso).
+
+<LectureTable
+  title="Indicios típicos de deterioro"
+  headers={["Fuentes externas", "Fuentes internas"]}
+  rows={[
+    ["Caída del valor de mercado significativamente mayor de lo esperado", "Evidencia de obsolescencia o daño físico"],
+    ["Cambios adversos en el entorno tecnológico, de mercado o legal", "Cambios significativos en el uso del activo (ociosidad, reestructuración)"],
+    ["Aumento de las tasas de mercado que eleva la tasa de descuento", "Informes internos que muestran un desempeño peor de lo esperado"],
+    ["Importe en libros de los activos netos superior a la capitalización bursátil", ""],
+  ]}
+/>
+
+## 2. El importe recuperable
+
+<FormulaBox
+  label="Importe recuperable y pérdida por deterioro"
+  formula="\begin{aligned}\text{Importe recuperable} &= \max(\text{Valor razonable menos costos de disposición},\ \text{Valor en uso}) \\ \text{Pérdida por deterioro} &= \text{Importe en libros} - \text{Importe recuperable} \quad (\text{si importe en libros} > \text{importe recuperable})\end{aligned}"
+  description="El valor razonable menos los costos de disposición es el valor razonable menos los costos incrementales de venta. El valor en uso es el valor presente de los flujos futuros de seguir usando el activo y disponer de él."
+/>
+
+Se toma el mayor de los dos porque un directivo racional elige lo más conveniente entre vender o usar. Si cualquiera de los dos supera el importe en libros, no hay deterioro.
+
+### A. Cálculo del valor en uso
+
+El valor en uso incluye solo los flujos del **activo en su estado actual**. Excluye los efectos de reestructuraciones aún no comprometidas o de inversiones futuras que mejoren el desempeño, así como el impuesto a las ganancias y los flujos de financiación. La tasa de descuento es una tasa **antes de impuestos** que refleja el valor temporal del dinero y los riesgos propios del activo.
+
+La máquina de la empresa R (importe en libros 12 millones de wones) generará entradas netas de 4 millones al año durante sus tres años restantes, sin valor de disposición al final. La tasa de descuento es del 10 %. El valor en uso es $400 \times 2.4869 ≈ 994.8$ (en decenas de miles de wones), unos 9,948 millones. El valor razonable menos los costos de disposición es de 9 millones. El importe recuperable es de 9,948 millones y la pérdida por deterioro $1{,}200 - 994.8 = 205.2$, es decir, 2,052 millones.
+
+## 3. Unidades generadoras de efectivo y fondo de comercio
+
+Si no puede estimarse el importe recuperable de un activo individual (porque solo genera efectivo junto con otros), la prueba se hace sobre la **unidad generadora de efectivo** (UGE) a la que pertenece: el grupo más pequeño de activos que genera entradas de efectivo en buena medida independientes de otros activos.
+
+El fondo de comercio no genera efectivo por sí solo, así que se asigna a las UGE (o grupos de UGE) que se beneficiarán de las sinergias de la combinación de negocios y se prueba con ellas. El nivel de asignación es el más bajo en que se controla el fondo de comercio a efectos de gestión interna y no puede ser mayor que un segmento de operación.
+
+### A. Orden de distribución de una pérdida por deterioro
+
+La pérdida de una UGE se distribuye en este orden:
+
+1. Primero se reduce el **fondo de comercio** asignado a la UGE.
+2. El resto se distribuye entre los demás activos de la UGE **en proporción a su importe en libros**.
+3. Pero ningún activo puede quedar por debajo del mayor entre su valor razonable menos los costos de disposición, su valor en uso (si puede determinarse) y cero. Lo que no pueda asignarse por este mínimo se redistribuye proporcionalmente entre los demás activos.
+
+<LectureTable
+  title="Distribución de la pérdida de una UGE (importe recuperable 900; en decenas de miles de wones)"
+  headers={["Activo", "Importe en libros", "Paso 1", "Paso 2 proporcional", "Tras el deterioro"]}
+  rows={[
+    ["Fondo de comercio", "200", "−200", "", "0"],
+    ["Edificio", "600", "", "−60 (100 × 6/10)", "540"],
+    ["Maquinaria", "400", "", "−40 (100 × 4/10)", "360"],
+    ["Total", "1.200", "−200", "−100", "900"],
+  ]}
+/>
+
+## 4. Reversión de las pérdidas por deterioro
+
+Al cierre de cada periodo se evalúa si hay indicios de que una pérdida anterior ha disminuido. Si los hay y el importe recuperable ha aumentado, la pérdida se revierte.
+
+- **Fondo de comercio:** nunca se revierte, porque el aumento del importe recuperable puede ser fondo de comercio generado internamente.
+- **Otros activos:** el importe en libros tras la reversión no puede superar **el que habría quedado, neto de depreciación, si no se hubiera reconocido el deterioro**.
+
+Depreciar en línea recta la máquina de la sección 2 durante sus tres años restantes tras el deterioro da 3,316 millones de wones al año. Si al cabo de un año su importe recuperable se ha recuperado hasta 8 millones, el importe en libros es $994.8 - 331.6 = 663.2$ (en decenas de miles de wones). Sin el deterioro, la depreciación original (importe en libros 1.200 en tres años, 400 al año) habría dejado 8 millones. Se revierten 1,368 millones, con el límite de 8 millones.
+
+<Callout type="warning">
+Las proyecciones de flujos y la tasa de descuento del valor en uso las fija la dirección. Subir un poco la tasa de crecimiento o bajar un punto la de descuento puede hacer desaparecer un deterioro. Por eso la norma exige revelar las hipótesis clave y las sensibilidades, y los auditores tratan a menudo estas estimaciones como asuntos clave de auditoría. Si una empresa con un fondo de comercio grande lleva años sin reconocer deterioro, compruebe si las hipótesis de tasa de descuento y crecimiento de las notas son razonables frente al sector y a los resultados pasados.
+</Callout>
+
+## Ejercicio
+
+La UGE de la empresa S está formada por un fondo de comercio de 1,5 millones de wones, un edificio de 5 millones y maquinaria de 3,5 millones, y su importe recuperable es de 7 millones. El valor razonable menos los costos de disposición de la maquinaria es de 3,3 millones; el importe recuperable individual del edificio no se conoce. ¿Cómo se distribuye la pérdida por deterioro?
+
+La pérdida es la diferencia de 3 millones entre el importe en libros total de 10 millones y el importe recuperable. Primero el fondo de comercio de 1,5 millones se reduce a cero, y los 1,5 millones restantes se reparten entre edificio y maquinaria en la proporción $500 : 350$: 882.000 wones al edificio y 618.000 a la maquinaria. Pero la maquinaria no puede bajar de 3,3 millones, así que solo puede reducirse 200.000 wones. Los 418.000 wones que no pueden asignarse van al edificio. El resultado es fondo de comercio 0, edificio 3,7 millones (−1,3 millones) y maquinaria 3,3 millones (−200.000), 7 millones en total.
+
+## Referencias
+
+- Korea Accounting Standards Board, K-IFRS 1036 *Deterioro del valor de los activos*
+- Donald Kieso, Jerry Weygandt y Terry Warfield, *Intermediate Accounting: IFRS Edition*, cap. 11
+- IASB, [*IAS 36 Impairment of Assets*](https://www.ifrs.org/issued-standards/list-of-standards/ias-36-impairment-of-assets/)

@@ -1,100 +1,111 @@
 ---
 track: academy
-series: accounting-basics
-chapter: 4
-title: "Intermediate Accounting I: Valuation and Impairment of Assets"
-description: >-
-  An in-depth look at how to value and record assets—the core of the balance
-  sheet—specifically focusing on financial assets and inventory.
-pubDate: 2026-03-01T00:00:00.000Z
+series: intermediate-accounting
+chapter: 6
+title: "Intermediate Accounting — Financial Assets: Classification, Measurement and Expected Credit Losses"
+description: "Classifies financial assets at amortized cost, FVOCI or FVPL by business model and contractual cash flow characteristics, then calculates the difference in profit when the same debt instrument is measured in each category and the three-stage expected credit loss model."
+pubDate: 2026-03-01
+updatedDate: 2026-09-24
 category: Accounting
-subcategory: "Intermediate Accounting"
-tags:
-  - Education
-  - accounting
+tags: ["intermediate accounting", "financial assets", "amortized cost", "FVOCI", "FVPL", "expected credit losses"]
 locale: en
 author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
 
-
-import { LectureTable, LectureProcess, LecturePieChart, LectureBarChart } from "@/features/education-common/components/LectureVisuals";
-
-
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# Intermediate Accounting I: Valuation and Impairment of Assets
+The same bond can be measured differently depending on **how the entity manages it**. K-IFRS 1109 *Financial Instruments* (IFRS 9) first fixes the classification, and the classification then determines measurement and where gains and losses are recognized. The basics of expected credit losses on trade receivables were covered in [Principles of Accounting chapter 7](/en/academy-accounting-principles-ch7/).
 
-We have now entered the 'Intermediate' realm. While basis accounting focuses on 'recording,' intermediate accounting focuses on how to measure the **Value** of those numbers.
+## 1. The two tests for classification
 
----
+### A. Contractual cash flow characteristics (SPPI)
 
-## 1. Classification and Measurement of Financial Assets
+The question is whether contractual cash flows are **solely payments of principal and interest**. Ordinary loans and bonds usually pass. Returns linked to share or commodity prices, or features such as conversion rights, fail. Equity instruments (shares) have no principal or interest and so fail.
 
-Financial assets are classified into three types based on the characteristics of contractual cash flows and the firm's business model. This is the most fundamental classification system in IFRS.
-
-<LectureTable
-  title="Comparison by Type of Financial Asset"
-  headers={[
-    "Classification",
-    "Holding Purpose",
-    "Period-End Valuation",
-    "Treatment of Gains/Losses",
-  ]}
-  rows={[
-    [
-      "FVPL (Profit/Loss)",
-      "Short-term Trading / Speculation",
-      "Fair Value",
-      "Profit or Loss (I/S)",
-    ],
-    [
-      "FVOCI (OCI)",
-      "Long-term Investment / Strategic",
-      "Fair Value",
-      "Other Comprehensive Income (Equity)",
-    ],
-    ["AC (Amortized Cost)", "Maturity (Principal+Interest)", "Amortized Cost", "None recognized"],
-  ]}
-  highlightColumns={[0, 3]}
-/>
-
----
-
-## 2. Inventory and Lower of Cost or Market (LCM)
-
-Inventory is measured at the lower of 'cost' or 'net realizable value.' This is the core of **Conservatism**, where losses are recognized early and gains are wait until realized.
-
-### 📦 Comparison of Inventory Costing Methods
+### B. Business model
 
 <LectureTable
-  headers={["Method", "Profit when prices rise", "Ending Inventory Value", "Characteristics"]}
+  title="Classification of debt instruments"
+  headers={["Business model", "Classification if SPPI is met", "Recognition of gains and losses"]}
   rows={[
-    ["FIFO", "Highest", "Closest to current value", "Matches physical flow"],
-    ["Weighted Average", "Middle", "Average value", "Simple to calculate"],
-    ["LIFO", "Lowest", "Old value (Understated)", "Good matching (Not allowed under IFRS)"],
+    ["Hold to collect contractual cash flows", "Amortized cost (AC)", "Interest income (effective interest), impairment, gains or losses on disposal"],
+    ["Both collect and sell", "Fair value through other comprehensive income (FVOCI)", "Interest and impairment in profit or loss; fair value changes in OCI; OCI reclassified to profit or loss on disposal"],
+    ["Other (trading, etc.)", "Fair value through profit or loss (FVPL)", "All changes in profit or loss"],
   ]}
 />
 
----
+If SPPI is not met, the asset is FVPL whatever the business model. An asset may also be **designated** at FVPL on initial recognition to eliminate or reduce an accounting mismatch.
 
-## 3. Revaluation and Impairment of Fixed Assets
+### C. The option for equity instruments
 
-Tangible assets like real estate or equipment have significant value fluctuations. Accounting manages this in two ways:
+For equity instruments not held for trading, an entity may make an **irrevocable election on initial recognition to designate them at FVOCI**. Fair value changes then go to OCI and are **not reclassified to profit or loss even on disposal**; only dividends go to profit or loss. Without the election, they are FVPL.
+
+## 2. Measuring the same bond in three categories
+
+At the beginning of 20X1 company T bought a three-year bond with a face amount of ₩10 million and a coupon of 5% (paid at year-end) at an effective rate of 7%. Its cost is $50 \times 2.6243 + 1{,}000 \times 0.8163 ≈ 947.5$ (₩10,000). Fair value at the end of 20X1 is ₩9.7 million.
+
+<FormulaBox
+  label="Effective interest method"
+  formula="\text{Interest income} = \text{Opening gross carrying amount} \times \text{Effective rate} = 947.5 \times 7\% ≈ 66.3"
+  description="The ₩163,000 difference from cash interest of ₩500,000 is amortization of the discount. Amortized cost at year-end is ₩9.638 million."
+/>
 
 <LectureTable
-  title="Revaluation vs. Impairment"
-  headers={["Category", "Revaluation Model", "Impairment Loss"]}
+  title="Effects in 20X1 by classification (unit: ₩10,000)"
+  headers={["Classification", "Statement of financial position", "Profit or loss", "OCI"]}
   rows={[
-    ["Choice", "Company's Choice (Policy)", "Mandatory (when signs exist)"],
-    ["Purpose", "Reflecting Fair Value (mainly upward)", "Reflecting irrecoverable value decline"],
-    ["Treatment", "Revaluation Surplus (Equity ↑)", "Impairment Loss (Expense)"],
+    ["Amortized cost", "963.8", "Interest income 66.3", "0"],
+    ["FVOCI", "970.0", "Interest income 66.3", "Fair value gain 6.2"],
+    ["FVPL", "970.0", "Interest 50 + fair value gain 22.5 = 72.5", "0"],
   ]}
 />
+
+Under FVOCI, profit is exactly the same as under amortized cost; only the statement of financial position shows fair value. Under FVPL the discount is not amortized separately, and the whole change in fair value from the opening amount goes to profit or loss. Interest and fair value gains may be shown separately depending on presentation, but the total is the same.
+
+## 3. The three-stage expected credit loss (ECL) model
+
+Impairment of debt instruments at amortized cost and FVOCI is recognized on the basis of expected credit losses.
+
+<LectureTable
+  title="Loss allowance by credit risk stage"
+  headers={["Stage", "Condition", "Measurement", "Basis for interest income"]}
+  rows={[
+    ["Stage 1", "No significant increase in credit risk since initial recognition", "12-month expected credit losses", "Gross carrying amount"],
+    ["Stage 2", "Significant increase in credit risk", "Lifetime expected credit losses", "Gross carrying amount"],
+    ["Stage 3", "Credit-impaired (default, etc.)", "Lifetime expected credit losses", "Net carrying amount (gross − allowance)"],
+  ]}
+/>
+
+<FormulaBox
+  label="Basic structure of expected credit losses"
+  formula="\text{ECL} = \text{PD} \times \text{LGD} \times \text{EAD}"
+  description="Probability of default × loss given default × exposure at default, as a probability-weighted average of several scenarios reflecting the time value of money."
+/>
+
+Suppose the bond above has a 12-month probability of default of 2%, a lifetime probability of default of 10% and a loss given default of 40%. In stage 1 the allowance is $2\% \times 40\% \times 1{,}000 = 8$, i.e. ₩80,000. If the issuer's credit rating falls sharply and the bond moves to stage 2, it rises to $10\% \times 40\% \times 1{,}000 = 40$, i.e. ₩400,000. The move between stages alone adds an impairment loss of ₩320,000. More than 30 days past due is a rebuttable presumption that credit risk has increased significantly.
+
+For FVOCI debt instruments, the loss allowance is recognized **in other comprehensive income** rather than reducing the fair value in the statement of financial position. The impairment loss still goes to profit or loss.
+
+## 4. Reclassification and derecognition
+
+Debt instruments are reclassified **only when the business model changes**, which is very rare. Equity instruments and assets designated at FVPL are not reclassified. A financial asset is derecognized when the rights to its cash flows expire or when it is transferred together with **substantially all the risks and rewards**. If notes receivable are discounted with recourse so that the risks are not transferred, they are not derecognized and the cash received is treated as borrowing.
 
 <Callout type="warning">
-  **Impairment Loss** is one of the items that current accountants look at most rigorously.
-  Impairment of Goodwill or obsolescence of machinery suggests a fatal flaw in the firm's future
-  earning capacity.
+Because gains on FVOCI equity instruments are never recycled to profit or loss, realizing a gain by selling the shares does not increase profit. Conversely, FVPL equity instruments make profit swing with every share price move. The volatility of earnings differs completely depending on how the same shares are classified, so for companies with large investments always read the classification and the breakdown of fair value gains and losses in the notes. Stage assessments and forward-looking information in expected credit losses are also management estimates.
 </Callout>
 
-Next time, we will explore the other side of assets: **Liabilities**, specifically the complex world of financial liabilities.
+## Check your understanding
+
+At the beginning of 20X1 company U bought listed shares for ₩10 million and designated them at FVOCI. Fair value at the end of 20X1 was ₩12 million, and it sold them all during 20X2 for ₩13.5 million. It received dividends of ₩300,000. What are profit or loss and OCI in 20X1 and 20X2? What if the same shares had been classified at FVPL?
+
+At FVOCI, OCI is ₩2 million in 20X1 and a further ₩1.5 million up to disposal in 20X2. The cumulative ₩3.5 million is not reclassified to profit or loss on disposal but may be transferred to retained earnings. Profit or loss is only the ₩300,000 of dividends. At FVPL, profit is ₩2 million in 20X1 and ₩1.5 million plus dividends of ₩300,000, or ₩1.8 million, in 20X2.
+
+## References
+
+- Korea Accounting Standards Board, K-IFRS 1109 *Financial Instruments* (classification and measurement, impairment, derecognition)
+- Korea Accounting Standards Board, K-IFRS 1107 *Financial Instruments: Disclosures*
+- Donald Kieso, Jerry Weygandt and Terry Warfield, *Intermediate Accounting: IFRS Edition*, ch. 17
