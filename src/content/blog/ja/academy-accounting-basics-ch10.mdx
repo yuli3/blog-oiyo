@@ -1,0 +1,88 @@
+---
+track: academy
+series: financial-statement-analysis
+chapter: 3
+title: "財務諸表分析 — デュポン分析：ROEを利益率・回転率・レバレッジに分ける"
+description: "ROEを売上高純利益率・総資産回転率・財務レバレッジの積に分ける3段階のデュポン分析と、税負担・利息負担・営業利益率を加えた5段階の分析をFA社と競合の資料に当てはめ、同じROEが異なる経路でつくられることを比べます。"
+pubDate: 2026-05-12
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["財務諸表分析", "デュポン分析", "ROE", "財務レバレッジ", "総資産回転率"]
+locale: ja
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+[第2章](/ja/academy-financial-accounting-advanced-ch2/)で、FA社のROEが約20.2%であることを見た。ROEだけでは、その収益率が高いマージンから来たのか、速い資産回転から来たのか、多い負債から来たのかが分からない。デュポン分析は、ROEを掛け算に分けてその源泉を示す。
+
+## 1. 3段階のデュポン分析
+
+<FormulaBox
+  label="3段階のデュポン分解"
+  formula="\text{ROE} = \underbrace{\frac{\text{純利益}}{\text{売上高}}}_{\text{売上高純利益率}} \times \underbrace{\frac{\text{売上高}}{\text{平均総資産}}}_{\text{総資産回転率}} \times \underbrace{\frac{\text{平均総資産}}{\text{平均純資産}}}_{\text{財務レバレッジ}}"
+  description="FA社20X2年：8% × 1.263 × 2.0 ≈ 20.2%。最初の二項の積がROA（10.1%）で、これにレバレッジを掛けるとROEになる。"
+/>
+
+## 2. 同じROE、違う経路
+
+同業のFB社と比べる（単位：億ウォン）。
+
+<LectureTable
+  title="FA社とFB社のデュポン分解"
+  headers={["項目", "FA社", "FB社"]}
+  rows={[
+    ["売上高", "1,200", "1,000"],
+    ["純利益", "96", "150"],
+    ["平均総資産", "950", "1,000"],
+    ["平均純資産", "475", "750"],
+    ["売上高純利益率", "8.0%", "15.0%"],
+    ["総資産回転率", "1.26回", "1.00回"],
+    ["財務レバレッジ", "2.00倍", "1.33倍"],
+    ["ROE", "20.2%", "20.0%"],
+  ]}
+/>
+
+二社のROEはほぼ同じである。FA社は低いマージンを速い回転と多い負債で補い、FB社は高いマージンと少ない負債で同じ収益率を出した。景気が悪化して売上が減れば、負債の多いFA社の利益のほうが大きく揺れる。同じROEでもリスクは違う。
+
+## 3. 5段階のデュポン分析
+
+売上高純利益率をさらに三つに分ければ、税金と利息の影響を切り分けられる。
+
+<FormulaBox
+  label="5段階のデュポン分解"
+  formula="\text{ROE} = \underbrace{\frac{\text{純利益}}{\text{税引前利益}}}_{\text{税負担}} \times \underbrace{\frac{\text{税引前利益}}{\text{営業利益}}}_{\text{利息負担}} \times \underbrace{\frac{\text{営業利益}}{\text{売上高}}}_{\text{営業利益率}} \times \text{総資産回転率} \times \text{財務レバレッジ}"
+  description="FA社：0.800 × 0.833 × 12.0% × 1.263 × 2.00 ≈ 20.2%。税負担0.8は実効税率20%、利息負担0.833は営業利益の16.7%が利息に消えるという意味である。"
+/>
+
+負債を増やせば財務レバレッジの項は大きくなるが、利息負担の項は小さくなる。レバレッジがROEを高めるには、追加の借入れで稼いだ営業利益がその利息より大きくなければならない。
+
+## 4. 営業の成果と財務の成果の分離
+
+伝統的なデュポン分析は、買掛金のような営業負債と借入金のような金融負債を区別しない。Penmanの再構成は、貸借対照表を**純営業資産**（営業資産−営業負債）と**純金融負債**（金融負債−金融資産）に分ける。そうすればROEを、営業で稼いだ収益率（RNOA）と財務レバレッジの効果に分けられる。
+
+$$
+\text{ROE} = \text{RNOA} + \frac{\text{純金融負債}}{\text{純資産}} \times (\text{RNOA} - \text{税引後の純借入利率})
+$$
+
+RNOAが借入利率より高ければ負債がROEを押し上げ、低ければ押し下げる。営業の競争力と資金調達の決定を別々に評価できる。
+
+<Callout type="warning">
+ROEは分母の純資産が小さいほど大きくなる。自社株を大量に買ったり多額の配当をしたりすれば純資産が減ってROEが上がるが、事業がよくなったわけではない。累積損失で純資産が小さくなった会社もROEが高く出ることがある。ROE改善の源泉がマージン・回転率なのかレバレッジなのかを、デュポン分解で常に確かめる。
+</Callout>
+
+## 確認問題
+
+FC社の売上高純利益率は5%、総資産回転率は2.0回、平均総資産は2,000億ウォン、平均純資産は800億ウォンである。ROEはいくらか。この会社が負債で資産を増やさずに売上高純利益率を6%に上げるのと、売上高純利益率はそのままで負債によって純資産に対する資産を3倍に増やすのとでは、どちらがROEをより高めるか。
+
+財務レバレッジは$2{,}000 / 800 = 2.5$倍なので、ROEは$5\% \times 2.0 \times 2.5 = 25\%$である。売上高純利益率を6%に上げればROEは30%、レバレッジを3倍にすれば（他の条件を不変と仮定）ROEも30%である。二つの経路のROEは同じだが、レバレッジの経路は利息費用が増えて実際の純利益率が下がりうるうえ、財務リスクも大きくなる。仮定が同じなら、純利益率の改善のほうが質のよいROEの上昇である。
+
+## 参考資料
+
+- Stephen Penman, *Financial Statement Analysis and Security Valuation*, ch. 11–12
+- Krishna Palepu, Paul Healy and Erik Peek, *Business Analysis and Valuation: IFRS Edition*, ch. 5
+- CFA Institute, *Financial Reporting and Analysis*, DuPont analysis

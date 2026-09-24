@@ -1,0 +1,88 @@
+---
+track: academy
+series: financial-statement-analysis
+chapter: 3
+title: "财务报表分析 — 杜邦分析：把ROE拆分为利润率、周转率与杠杆"
+description: "把ROE拆分为销售净利率、总资产周转率和财务杠杆乘积的三因素杜邦分析，以及加入税负、利息负担和营业利润率的五因素分析，应用于FA公司和竞争对手，比较同样的ROE如何经由不同路径产生。"
+pubDate: 2026-05-12
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["财务报表分析", "杜邦分析", "ROE", "财务杠杆", "总资产周转率"]
+locale: zh
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+[第2章](/zh/academy-financial-accounting-advanced-ch2/)显示FA公司的ROE约为20.2%。只看ROE，无法知道这个收益率来自高利润率、快速的资产周转，还是大量负债。杜邦分析把ROE拆成乘积，揭示其来源。
+
+## 1. 三因素杜邦分析
+
+<FormulaBox
+  label="三因素杜邦分解"
+  formula="\text{ROE} = \underbrace{\frac{\text{净利润}}{\text{营业收入}}}_{\text{销售净利率}} \times \underbrace{\frac{\text{营业收入}}{\text{平均总资产}}}_{\text{总资产周转率}} \times \underbrace{\frac{\text{平均总资产}}{\text{平均所有者权益}}}_{\text{财务杠杆}}"
+  description="FA公司20X2年：8% × 1.263 × 2.0 ≈ 20.2%。前两项之积为ROA（10.1%），再乘以杠杆就是ROE。"
+/>
+
+## 2. 同样的ROE，不同的路径
+
+与同行业的FB公司比较（单位：亿韩元）。
+
+<LectureTable
+  title="FA公司与FB公司的杜邦分解"
+  headers={["项目", "FA公司", "FB公司"]}
+  rows={[
+    ["营业收入", "1,200", "1,000"],
+    ["净利润", "96", "150"],
+    ["平均总资产", "950", "1,000"],
+    ["平均所有者权益", "475", "750"],
+    ["销售净利率", "8.0%", "15.0%"],
+    ["总资产周转率", "1.26次", "1.00次"],
+    ["财务杠杆", "2.00倍", "1.33倍"],
+    ["ROE", "20.2%", "20.0%"],
+  ]}
+/>
+
+两家公司的ROE几乎相同。FA公司用快速周转和高负债弥补了低利润率，FB公司则靠高利润率和低负债实现了同样的收益率。经济转差、收入下降时，负债多的FA公司利润波动更大。同样的ROE，风险却不同。
+
+## 3. 五因素杜邦分析
+
+把销售净利率再拆成三部分，就能分离税收和利息的影响。
+
+<FormulaBox
+  label="五因素杜邦分解"
+  formula="\text{ROE} = \underbrace{\frac{\text{净利润}}{\text{利润总额}}}_{\text{税负}} \times \underbrace{\frac{\text{利润总额}}{\text{营业利润}}}_{\text{利息负担}} \times \underbrace{\frac{\text{营业利润}}{\text{营业收入}}}_{\text{营业利润率}} \times \text{总资产周转率} \times \text{财务杠杆}"
+  description="FA公司：0.800 × 0.833 × 12.0% × 1.263 × 2.00 ≈ 20.2%。税负0.8表示实际税率20%，利息负担0.833表示营业利润的16.7%用于支付利息。"
+/>
+
+增加负债会使财务杠杆项变大，但利息负担项会变小。杠杆要提高ROE，新增借款所赚取的营业利润必须大于其利息。
+
+## 4. 分离经营业绩与财务业绩
+
+传统杜邦分析不区分应付账款这类经营负债与借款这类金融负债。Penman的重构把资产负债表分为**净经营资产**（经营资产 − 经营负债）和**净金融负债**（金融负债 − 金融资产），从而把ROE分为经营所得的收益率（RNOA）与财务杠杆效应。
+
+$$
+\text{ROE} = \text{RNOA} + \frac{\text{净金融负债}}{\text{所有者权益}} \times (\text{RNOA} - \text{税后净借款利率})
+$$
+
+RNOA高于借款利率，负债就推高ROE；低于借款利率，就拉低ROE。这样可以分别评价经营竞争力与融资决策。
+
+<Callout type="warning">
+分母所有者权益越小，ROE越大。大量回购股票或大额分红会减少权益、推高ROE，但业务并没有变好。因累计亏损而权益变小的公司，ROE也可能很高。要始终用杜邦分解确认ROE改善的来源是利润率和周转率，还是杠杆。
+</Callout>
+
+## 练习题
+
+FC公司销售净利率5%，总资产周转率2.0次，平均总资产2,000亿韩元，平均所有者权益800亿韩元。ROE是多少？该公司不用负债扩大资产而把销售净利率提高到6%，与保持利润率不变、用负债把资产扩大到权益的3倍，哪种方式更能提高ROE？
+
+财务杠杆为$2{,}000 / 800 = 2.5$倍，ROE为$5\% \times 2.0 \times 2.5 = 25\%$。把销售净利率提高到6%，ROE为30%；把杠杆提高到3倍（假设其他条件不变），ROE也是30%。两条路径的ROE相同，但杠杆路径会增加利息费用、可能压低实际净利率，财务风险也更大。在相同假设下，提高利润率是质量更高的ROE提升。
+
+## 参考资料
+
+- Stephen Penman, *Financial Statement Analysis and Security Valuation*, ch. 11–12
+- Krishna Palepu, Paul Healy and Erik Peek, *Business Analysis and Valuation: IFRS Edition*, ch. 5
+- CFA Institute, *Financial Reporting and Analysis*, DuPont analysis

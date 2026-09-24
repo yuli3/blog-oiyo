@@ -1,182 +1,77 @@
 ---
 track: academy
+series: financial-statement-analysis
+chapter: 4
+title: "Financial Statement Analysis — Working Capital and Turnover: The Cash Conversion Cycle"
+description: "Calculates FA's receivables, inventory and payables turnover and days to find the cash conversion cycle, and converts changes in days into the working capital needed and their effect on cash flow."
+pubDate: 2026-05-22
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["financial statement analysis", "working capital", "turnover", "cash conversion cycle", "days sales outstanding"]
 locale: en
-title: "Working Capital & Turnover Ratios — Reading Liquidity and Cash Conversion Speed"
-category: "Accounting"
-author: OIYO Editorial
-tags:
-  - accounting
-  - working capital
-  - current ratio
-  - quick ratio
-  - accounts receivable turnover
-  - inventory turnover
-description: >-
-  Current ratio, quick ratio, accounts receivable turnover, and inventory turnover — how to use these four metrics to assess a company's short-term payment capacity and cash conversion speed. Eleventh lecture in the Accounting Basics series.
-pubDate: '2026-05-22'
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
 
-## Why Study Working Capital and Turnover Ratios Separately?
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-The income statement answers *"how much did the company earn?"* The balance sheet answers *"what does the company hold right now?"* In practice, you need to connect both questions and ask: *"how fast is cash flowing through the business?"* The metrics that answer this are **liquidity ratios** and **activity ratios**.
+The trend analysis of [chapter 1](/en/academy-financial-accounting-advanced-ch1/) showed FA's receivables and inventories growing faster than revenue. This chapter checks that signal with turnover and days, and calculates how much cash is tied up in operations (unit: ₩100 million; 365 days a year).
 
----
+## 1. Working capital
 
-## 1. Current Ratio
+**Net working capital** is the current assets needed for operations minus operating current liabilities, commonly calculated as receivables + inventories − payables. FA's rose by ₩5 billion, from $120 + 160 - 100 = 180$ at the end of 20X1 to $150 + 200 - 120 = 230$ at the end of 20X2. That ₩5 billion is money earned as profit but tied up in operations instead of coming in as cash. Net working capital grew about 28%, faster than the 20% growth in revenue.
 
-The **current ratio** measures how comfortably a company can cover its short-term obligations.
+## 2. Turnover and days
 
-$$
-\text{Current Ratio} = \frac{\text{Current Assets}}{\text{Current Liabilities}} \times 100
-$$
+<LectureTable
+  title="FA's turnover and days, 20X2"
+  headers={["Item", "Turnover formula", "Turnover", "Days (365 ÷ turnover)"]}
+  rows={[
+    ["Receivables", "Revenue 1,200 ÷ average receivables 135", "8.89 times", "41.1 days (DSO)"],
+    ["Inventories", "Cost of sales 840 ÷ average inventory 180", "4.67 times", "78.2 days (DIO)"],
+    ["Payables", "Cost of sales 840 ÷ average payables 110", "7.64 times", "47.8 days (DPO)"],
+  ]}
+/>
 
-| Item | Meaning |
-|------|---------|
-| Current assets | Assets convertible to cash or consumed within one year |
-| Current liabilities | Obligations due within one year |
+Payables turnover should strictly be calculated on purchases; without purchases data, cost of sales is used instead. Purchases can be estimated as cost of sales + closing inventory − opening inventory (₩88 billion for FA, giving 45.6 days).
 
-### Interpretation
+## 3. The cash conversion cycle
 
-- Around 200% is traditionally considered healthy.
-- Too low signals short-term liquidity risk.
-- Too high can indicate idle inventory or excess cash — not automatically good.
+<FormulaBox
+  label="Cash conversion cycle"
+  formula="\text{CCC} = \text{DSO} + \text{DIO} - \text{DPO} = 41.1 + 78.2 - 47.8 = 71.5\text{ days}"
+  description="The time from paying for raw materials to receiving cash from customers. During that time the company funds its operations with its own or borrowed money."
+/>
 
-### Example
+There are no opening balances for 20X1, so comparing on year-end balances gives DSO of $120 / 1{,}000 \times 365 ≈ 43.8$ days, DIO of $160 / 720 \times 365 ≈ 81.1$ days and DPO of $100 / 720 \times 365 ≈ 50.7$ days. On year-end balances for 20X2, DSO is 45.6 days, DIO 86.9 days and DPO 52.1 days. On a like-for-like basis, both receivables days and inventory days have lengthened.
 
-- **Current Assets**: $800,000
-- **Current Liabilities**: $400,000
+## 4. Turning days into money
 
-$$
-\text{Current Ratio} = \$800,000 / \$400,000 \times 100 = 200\%
-$$
+Each extra day ties up that much more cash.
 
-Meaning: for every \$1 owed within the year, the company holds \$2 in current assets.
+<FormulaBox
+  label="Cash effect of a change in days"
+  formula="\text{Cash effect} = \Delta\text{Days} \times \frac{\text{Annual revenue (or cost of sales)}}{365}"
+  description="One day of FA's 20X2 revenue is about ₩329 million. Cutting receivables days from 45.6 to 40 releases about ₩1.84 billion of cash."
+/>
 
----
+Cutting inventory days from 86.9 to 75 releases one day of cost of sales, about ₩230 million, × 11.9 days ≈ ₩2.74 billion. Together the two recover most of the ₩5 billion increase in net working capital. Managing working capital is a way to generate cash without new financing.
 
-## 2. Quick Ratio
+<Callout type="warning">
+Higher turnover is not always better. Cutting inventory too far loses sales through stock-outs, and forcibly delaying payables damages supplier relationships or forfeits discounts. Factoring receivables or cutting inventory only at year-end also inflates turnover based on year-end balances. Supplier finance (reverse factoring) increases payables and makes DPO look longer, so check the notes' disclosure of supplier finance arrangements ([Principles of Accounting chapter 11](/en/academy-accounting-basics-ch4/)).
+</Callout>
 
-The **quick ratio** removes inventory from current assets to show how well a company can cover short-term debt using only immediately liquid assets.
+## Check your understanding
 
-$$
-\text{Quick Ratio} = (\text{Current Assets} − \text{Inventory}) / \text{Current Liabilities} \times 100
-$$
+FD's annual revenue is ₩73 billion and cost of sales ₩54.75 billion. Average receivables are ₩10 billion, average inventory ₩9 billion and average payables ₩6 billion. What are DSO, DIO, DPO and the cash conversion cycle? If negotiation with suppliers lengthens DPO by 10 days, how much does cash increase?
 
-Inventory is classified as a current asset on the balance sheet, but it may not convert to cash quickly. The quick ratio is therefore a more conservative measure than the current ratio.
+One day of revenue is ₩200 million and one day of cost of sales ₩150 million. DSO is $100 / 2 = 50$ days, DIO $90 / 1.5 = 60$ days and DPO $60 / 1.5 = 40$ days. The cash conversion cycle is $50 + 60 - 40 = 70$ days. Lengthening DPO by 10 days raises payables by $10 \times 1.5 = 15$, i.e. ₩1.5 billion, and that much cash stays in the company.
 
-### Example
+## References
 
-- **Current Assets**: $800,000
-- **Inventory**: $300,000
-- **Current Liabilities**: $400,000
-
-$$
-\text{Quick Ratio} = (\$800,000 − \$300,000) / \$400,000 \times 100 = 125\%
-$$
-
-Meaning: even after stripping out inventory, the company still has enough to cover short-term debt.
-
----
-
-## 3. Accounts Receivable Turnover
-
-When a company sells on credit, the money not yet collected is recorded as accounts receivable. The **accounts receivable turnover ratio** shows how quickly those credit sales convert to cash.
-
-$$
-\begin{aligned}
-\text{AR Turnover} &= \frac{\text{Net Credit Sales}}{\text{Average Accounts Receivable}} \\
-\text{Average AR} &= (\text{Beginning AR} + \text{Ending AR}) / 2
-\end{aligned}
-$$
-
-### Interpretation
-
-- Higher means faster collection.
-- A declining ratio may indicate lax credit management or growing bad-debt risk.
-
-### Companion metric
-
-$$
-\text{Days Sales Outstanding} (DSO) = \frac{365}{\text{AR Turnover}}
-$$
-
-For example, a turnover of 10× means the company collects payment on average every 36.5 days.
-
----
-
-## 4. Inventory Turnover
-
-The **inventory turnover ratio** shows how quickly goods sell and are replenished.
-
-$$
-\begin{aligned}
-\text{Inventory Turnover} &= \frac{\text{Cost of Goods Sold}}{\text{Average Inventory}} \\
-\text{Average Inventory} &= (\text{Beginning Inventory} + \text{Ending Inventory}) / 2
-\end{aligned}
-$$
-
-### Why use COGS, not revenue?
-
-Inventory is carried at cost on the balance sheet, so using COGS aligns the numerator and denominator on the same measurement basis.
-
-### Interpretation
-
-- Higher means goods are selling faster.
-- Too high risks stockouts.
-- Too low means goods sit in the warehouse, increasing storage costs and write-down risk.
-
-### Companion metric
-
-$$
-\text{Days Inventory Outstanding} (DIO) = \frac{365}{\text{Inventory Turnover}}
-$$
-
----
-
-## 5. Reading All Four Together
-
-| Ratio | Question it answers |
-|-------|-------------------|
-| Current Ratio | Can the company cover short-term obligations on paper? |
-| Quick Ratio | Can it survive even if inventory doesn't sell quickly? |
-| AR Turnover | Is the company collecting its credit sales promptly? |
-| Inventory Turnover | Is inventory moving or sitting idle in the warehouse? |
-
-All four converge on one fundamental question:
-
-**"Does this company not only generate profit but also move cash efficiently?"**
-
----
-
-## 6. Standards Differ by Industry
-
-- **Retail**: High inventory turnover but thinner margins.
-- **Manufacturing**: Carries more inventory, so turnover benchmarks differ.
-- **Platform / software companies**: Little physical inventory; rely more on DSO and cash conversion cycle.
-
-Always compare ratios against **industry peers**, **historical trends**, and **changes in working capital structure** rather than using absolute numbers in isolation.
-
----
-
-## Key Concept Cards
-
-**Current Ratio vs. Quick Ratio** ★★★★★  
-Current ratio includes inventory; quick ratio excludes it. The quick ratio is the more conservative short-term liquidity measure.
-
-**AR Turnover** ★★★★★  
-Measures how fast credit sales convert to cash. A declining ratio can be an early warning of cash flow problems.
-
-**Inventory Turnover** ★★★★☆  
-Based on COGS, measures the speed of inventory depletion. Low turnover means capital is tied up in the warehouse.
-
----
-
-## Practice Quiz
-
-**Q. The current ratio is high but the quick ratio is low. What situation might this suggest?**
-
-> Inventory may be an unusually large share of current assets. The company looks liquid on paper, but actual cash conversion could be slow.
-
-**Q. Revenue is growing but AR turnover keeps falling. What does this imply?**
-
-> Credit sales are being collected more slowly. Even as profits grow, cash flow risk is rising — a gap between reported earnings and actual cash received.
+- Krishna Palepu, Paul Healy and Erik Peek, *Business Analysis and Valuation: IFRS Edition*, ch. 5
+- Richard Brealey, Stewart Myers and Franklin Allen, *Principles of Corporate Finance*, ch. 30
+- Korea Accounting Standards Board, K-IFRS 1007 *Statement of Cash Flows* (disclosure of supplier finance arrangements)

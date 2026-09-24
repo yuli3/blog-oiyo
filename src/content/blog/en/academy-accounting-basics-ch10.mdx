@@ -1,158 +1,88 @@
 ---
 track: academy
+series: financial-statement-analysis
+chapter: 3
+title: "Financial Statement Analysis — DuPont Analysis: Breaking ROE into Margin, Turnover and Leverage"
+description: "Applies the three-step DuPont analysis, which splits ROE into net margin, total asset turnover and financial leverage, and the five-step version, which adds tax burden, interest burden and operating margin, to FA and a competitor, comparing how the same ROE is reached by different routes."
+pubDate: 2026-05-12
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["financial statement analysis", "DuPont analysis", "ROE", "financial leverage", "total asset turnover"]
 locale: en
-title: "Financial Ratio Analysis — Diagnosing a Company's Health Through Numbers"
-category: "Accounting"
-author: OIYO Editorial
-tags:
-  - financial ratios
-  - profitability
-  - liquidity
-  - solvency
-  - growth
-  - stock valuation
-  - accounting
-description: >-
-  Profitability, liquidity, solvency, activity, growth, and valuation ratio analysis, DuPont analysis, and industry-based ratio benchmarking — the tenth and final lecture in the Accounting Basics series.
-pubDate: '2026-05-12'
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
 
-## What Is Financial Ratio Analysis?
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-**Financial Ratio Analysis**: A method of evaluating a company's financial condition and operating performance by calculating ratios between items in the financial statements.
+[Chapter 2](/en/academy-financial-accounting-advanced-ch2/) showed that FA's ROE is about 20.2%. ROE alone cannot tell whether that return comes from high margins, fast asset turnover or heavy debt. DuPont analysis splits ROE into a product of factors to reveal its sources.
 
-**Comparison Benchmarks**:
-1. **Time-Series Analysis**: Same company's past vs. present performance
-2. **Cross-Sectional Analysis**: Comparison with competitors in the same industry
-3. **Industry Averages**: Comparison against published industry benchmarks
+## 1. Three-step DuPont analysis
 
----
+<FormulaBox
+  label="Three-step DuPont decomposition"
+  formula="\text{ROE} = \underbrace{\frac{\text{Net profit}}{\text{Revenue}}}_{\text{Net margin}} \times \underbrace{\frac{\text{Revenue}}{\text{Average total assets}}}_{\text{Asset turnover}} \times \underbrace{\frac{\text{Average total assets}}{\text{Average equity}}}_{\text{Financial leverage}}"
+  description="FA in 20X2: 8% × 1.263 × 2.0 ≈ 20.2%. The product of the first two terms is ROA (10.1%); multiplying by leverage gives ROE."
+/>
 
-## Profitability Ratios
+## 2. Same ROE, different routes
 
-Measure how efficiently a company generates profit.
+Compare FA with FB, a company in the same industry (unit: ₩100 million).
 
-$$
-\begin{aligned}
-\text{Gross Profit Margin} &= \frac{\text{Gross Profit}}{\text{Revenue}} \times 100\% \\
-\text{Operating Profit Margin} &= \frac{\text{Operating Income}}{\text{Revenue}} \times 100\% \\
-\text{Net Profit Margin} &= \frac{\text{Net Income}}{\text{Revenue}} \times 100\% \\
-ROA &= \frac{\text{Net Income}}{\text{Average Total Assets}} \times 100\% \\
-ROE &= \frac{\text{Net Income}}{\text{Average Shareholders}}' \text{Equity} \times 100\% \\
-ROIC &= \frac{NOPAT}{\text{Invested Capital}} \times 100\%
-\end{aligned}
-$$
+<LectureTable
+  title="DuPont decomposition of FA and FB"
+  headers={["Item", "FA", "FB"]}
+  rows={[
+    ["Revenue", "1,200", "1,000"],
+    ["Net profit", "96", "150"],
+    ["Average total assets", "950", "1,000"],
+    ["Average equity", "475", "750"],
+    ["Net margin", "8.0%", "15.0%"],
+    ["Asset turnover", "1.26 times", "1.00 times"],
+    ["Financial leverage", "2.00 times", "1.33 times"],
+    ["ROE", "20.2%", "20.0%"],
+  ]}
+/>
 
-**ROE vs. ROA**: ROE is from the shareholder's perspective; ROA measures total asset utilization efficiency. High leverage means ROE > ROA.
+The two companies' ROEs are almost identical. FA makes up for low margins with fast turnover and high debt; FB achieves the same return with high margins and little debt. If the economy weakens and sales fall, FA's heavily indebted profit swings more. The same ROE can carry different risk.
 
----
+## 3. Five-step DuPont analysis
 
-## Liquidity Ratios
+Splitting net margin into three further parts separates the effects of tax and interest.
 
-Measure the ability to meet short-term obligations.
+<FormulaBox
+  label="Five-step DuPont decomposition"
+  formula="\text{ROE} = \underbrace{\frac{\text{Net profit}}{\text{Pre-tax profit}}}_{\text{Tax burden}} \times \underbrace{\frac{\text{Pre-tax profit}}{\text{Operating profit}}}_{\text{Interest burden}} \times \underbrace{\frac{\text{Operating profit}}{\text{Revenue}}}_{\text{Operating margin}} \times \text{Asset turnover} \times \text{Financial leverage}"
+  description="FA: 0.800 × 0.833 × 12.0% × 1.263 × 2.00 ≈ 20.2%. A tax burden of 0.8 means an effective tax rate of 20%; an interest burden of 0.833 means 16.7% of operating profit goes on interest."
+/>
 
-$$
-\begin{aligned}
-\text{Current Ratio} &= \frac{\text{Current Assets}}{\text{Current Liabilities}} \times 100\% \quad \text{(2:1 or 200\% recommended)} \\
-\text{Quick Ratio} &= (\text{Current Assets} − \text{Inventory}) / \text{Current Liabilities} \times 100\% \quad \text{(1:1 or 100\%+)} \\
-\text{Cash Ratio} &= (\text{Cash} + \text{Cash Equivalents}) / \text{Current Liabilities} \times 100\%
-\end{aligned}
-$$
+More debt raises the leverage term but lowers the interest burden term. For leverage to raise ROE, the operating profit earned with the extra borrowing must exceed its interest.
 
----
+## 4. Separating operating and financing performance
 
-## Solvency / Leverage Ratios
-
-Measure long-term debt repayment ability and overall financial health.
-
-$$
-\begin{aligned}
-\text{Debt-to-Equity Ratio} &= \frac{\text{Total Liabilities}}{\text{Shareholders' Equity}} \times 100\% \quad \text{(lower = more stable)} \\
-\text{Equity Ratio} &= \frac{\text{Shareholders' Equity}}{\text{Total Assets}} \times 100\% \quad \text{(higher = more stable)} \\
-\text{Interest Coverage} &= \frac{\text{Operating Income}}{\text{Interest Expense}} \quad \text{(below 1 = danger)}
-\end{aligned}
-$$
-
-**Interest Coverage < 1**: Operating income is insufficient to cover interest payments → financial distress signal
-
----
-
-## Activity / Efficiency Ratios
-
-Measure how efficiently assets are being utilized.
+The traditional DuPont analysis does not distinguish operating liabilities such as trade payables from financial liabilities such as borrowings. Penman's reformulation splits the balance sheet into **net operating assets** (operating assets − operating liabilities) and **net financial obligations** (financial liabilities − financial assets). ROE can then be divided into the return earned from operations (RNOA) and the effect of financial leverage.
 
 $$
-\begin{aligned}
-\text{Asset Turnover} &= \frac{\text{Revenue}}{\text{Average Total Assets}} (\text{higher} = \text{more efficient}) \\
-\text{Inventory Turnover} &= \frac{COGS}{\text{Average Inventory}} \\
-\text{Accounts Receivable Turnover} &= \frac{\text{Revenue}}{\text{Average Accounts Receivable}} \\
-\text{Days Sales Outstanding} (DSO) &= \frac{365}{\text{Accounts Receivable Turnover}} (\text{days})
-\end{aligned}
+\text{ROE} = \text{RNOA} + \frac{\text{Net financial obligations}}{\text{Equity}} \times (\text{RNOA} - \text{After-tax net borrowing cost})
 $$
 
----
+If RNOA exceeds the borrowing rate, debt lifts ROE; if it falls short, debt drags ROE down. Operating competitiveness and financing decisions can then be assessed separately.
 
-## Growth Ratios
+<Callout type="warning">
+ROE grows as its denominator, equity, shrinks. Large share buybacks or heavy dividends reduce equity and raise ROE without the business improving. A company whose equity has shrunk through accumulated losses can also show a high ROE. Always check with a DuPont decomposition whether an ROE improvement comes from margin and turnover or from leverage.
+</Callout>
 
-$$
-\begin{aligned}
-\text{Revenue Growth Rate} &= (\text{Current Revenue} − \text{Prior Revenue}) / \text{Prior Revenue} \times 100\% \\
-&\text{Operating Income Growth Rate} \\
-&\text{Total Asset Growth Rate} \\
-\text{EPS Growth Rate} &= (\text{Current EPS} − \text{Prior EPS}) / \text{Prior EPS} \times 100\%
-\end{aligned}
-$$
+## Check your understanding
 
----
+FC's net margin is 5%, asset turnover 2.0, average total assets ₩200 billion and average equity ₩80 billion. What is its ROE? Which raises ROE more: increasing the net margin to 6% without adding debt-financed assets, or keeping the margin unchanged and using debt to raise assets to three times equity?
 
-## Stock Valuation Metrics
+Financial leverage is $2{,}000 / 800 = 2.5$, so ROE is $5\% \times 2.0 \times 2.5 = 25\%$. Raising the net margin to 6% gives an ROE of 30%; raising leverage to 3 (all else equal) also gives 30%. The two routes give the same ROE, but the leverage route adds interest expense that may lower the actual net margin, and it increases financial risk. On the same assumptions, improving the margin is the higher-quality rise in ROE.
 
-| Metric | Formula | Meaning |
-|--------|---------|---------|
-| **P/E Ratio** | Stock Price / EPS | How many times earnings investors are paying |
-| **P/B Ratio** | Stock Price / Book Value Per Share | Stock price relative to net asset value |
-| **EPS** | Net Income / Shares Outstanding | Earnings per share |
-| **Book Value Per Share (BPS)** | Net Assets / Shares Outstanding | Net assets per share |
-| **Dividend Yield** | Dividends Per Share / Stock Price × 100% | Return from dividends on investment |
+## References
 
----
-
-## DuPont Analysis
-
-A framework that decomposes ROE into three components to identify what is driving the result.
-
-$$
-\begin{aligned}
-ROE &= Net Profit Margin \times Asset Turnover \times Financial Leverage \\
-ROE &= (Net Income / Revenue) \times (Revenue / Total Assets) \times (Total Assets / Equity) \\
-&= Profitability \times Efficiency \times Leverage
-\end{aligned}
-$$
-
-**How to use it**: When ROE is high, determine whether it comes from improved profit margins, better asset utilization, or greater use of debt (leverage).
-
----
-
-## Key Concept Cards
-
-**Interest Coverage Ratio** ★★★★★
-: Operating Income ÷ Interest Expense. Below 1 means operating income cannot cover interest payments — a sign of financial distress.
-*Memory tip: Coverage of 1 = just barely covering interest; below 1 = danger*
-
-**DuPont Analysis** ★★★★★
-: ROE = Net Profit Margin × Asset Turnover × Financial Leverage. Decomposes the drivers of ROE change into three factors.
-*Memory tip: Profitability × Efficiency × Leverage*
-
-**P/B Ratio** ★★★★☆
-: Stock Price ÷ Book Value Per Share. Below 1 means the stock trades below net asset value (potentially undervalued).
-*Memory tip: P/B of 1 = trading at exact net asset value*
-
----
-
-## Practice Quiz
-
-**Q. Compare a company with a current ratio of 300% versus one with 80%.**
-> 300% means ample short-term liquidity. 80% means current assets are less than current liabilities — potential difficulty meeting short-term obligations. However, an excessively high current ratio may also indicate inefficient use of assets.
-
-**Q. Two companies have the same ROE but different DuPont analysis results. What does this mean?**
-> The same ROE can stem from very different sources: high profit margins, superior asset efficiency (high turnover), or heavy use of leverage (debt). ROE driven primarily by high leverage carries more financial risk than ROE driven by genuine profitability or efficiency.
+- Stephen Penman, *Financial Statement Analysis and Security Valuation*, ch. 11–12
+- Krishna Palepu, Paul Healy and Erik Peek, *Business Analysis and Valuation: IFRS Edition*, ch. 5
+- CFA Institute, *Financial Reporting and Analysis*, DuPont analysis
