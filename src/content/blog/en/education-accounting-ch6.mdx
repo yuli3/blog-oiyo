@@ -1,92 +1,106 @@
 ---
 track: academy
-series: accounting-basics
-chapter: 6
-title: "Intermediate Accounting III: Equity and Earnings Per Share"
-description: >-
-  Analyze the complex components of equity and capital transactions, along with
-  Earnings Per Share (EPS)—the indicator investors value most.
-pubDate: 2026-03-01T00:00:00.000Z
+series: intermediate-accounting
+chapter: 9
+title: "Intermediate Accounting — Equity: Share Issues, Capital Reductions, Treasury Shares, Dividends and Liability vs Equity"
+description: "Calculates rights issues and issue costs, the difference between bonus issues, stock dividends and share splits, the offset order for gains and losses on treasury shares under the cost method, paid and deficit-covering capital reductions, and sets out when redeemable preference shares are classified as liabilities."
+pubDate: 2026-03-01
+updatedDate: 2026-09-24
 category: Accounting
-subcategory: "Intermediate Accounting"
-tags:
-  - Education
-  - accounting
+tags: ["intermediate accounting", "equity", "treasury shares", "capital reduction", "stock dividends", "redeemable preference shares"]
 locale: en
 author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
 
-
-import { LectureTable, LectureProcess, LecturePieChart, LectureBarChart } from "@/features/education-common/components/LectureVisuals";
-
-
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# Intermediate Accounting III: Equity and Earnings Per Share
+Equity is the residual interest in assets after deducting liabilities. So the first question in equity accounting is "is this financial instrument really equity?", and the second is "which box of equity does a transaction with owners move?". The first is answered by K-IFRS 1032 (IAS 32), the second by the Korean Commercial Act and local practice. The basics of equity components were covered in [Principles of Accounting chapter 5](/en/academy-accounting-basics-ch2/) and [chapter 10](/en/academy-accounting-principles-ch10/). Earnings per share is covered in [chapter 17](/en/academy-intermediate-accounting-ch17/).
 
-Equity is the 'true stake of the shareholders' remaining after all liabilities are repaid. However, its composition is often much more complex than assets or liabilities. Today, we study the sophisticated classification of equity and the **distribution of earnings**.
+## 1. Distinguishing liabilities from equity
 
----
-
-## 1. Equity Structure
-
-Equity is the 'net assets' of a firm, calculated as assets minus all liabilities. In accounting, it is strictly classified based on its source as follows:
+If a financial instrument contains any **contractual obligation to deliver cash or another financial asset**, that part is a financial liability, even if its legal form is a share.
 
 <LectureTable
-  title="Five Categories of Equity"
-  headers={["Item", "Description", "Characteristics"]}
+  title="Classification of preference shares"
+  headers={["Terms", "Classification", "Reason"]}
   rows={[
-    ["Capital Stock", "Par value of paid-in capital", "Basis for shareholder proportions"],
-    ["Capital Surplus", "Amount issued in excess of par", "Not for dividends (Capitalizable)"],
-    [
-      "Capital Adjustment",
-      "Temporary contra accounts",
-      "Treasury stock, Discount on stock issuance",
-    ],
-    ["Accumulated OCI", "Unrealized gains/losses", "Revaluation surplus, FV appreciation"],
-    [
-      "Retained Earnings",
-      "Sum of accumulated net income",
-      "Source of dividends; solvency indicator",
-    ],
-  ]}
-  highlightColumns={[0, 2]}
-/>
-
----
-
-## 2. Treasury Stock and Capital Adjustment
-
-When a firm buys back its own shares, it is viewed not as the acquisition of an asset, but as a **return of capital.**
-
-<LectureTable
-  headers={["Category", "Accounting Treatment", "Impact"]}
-  rows={[
-    ["Acquisition", "Capital Adjustment (Contra)", "Total Equity Decreases ↓"],
-    ["Disposal", "Capital Surplus or Adjustment", "Equity Increases or Decreases"],
-    ["Retirement", "Capital Decrease (Reduction)", "Shares Outstanding ↓ EPS Increases ↑"],
+    ["Holder can demand redemption", "Financial liability", "The entity cannot avoid redemption"],
+    ["Must be redeemed on a fixed date", "Financial liability", "Mandatory redemption"],
+    ["Only the entity can choose to redeem and dividends are discretionary", "Equity", "No obligation to deliver"],
+    ["No redemption obligation, but cumulative dividends must be paid", "Dividend component is a liability (compound instrument)", "Obligation to pay dividends"],
   ]}
 />
 
----
+A contract settled in the entity's own equity instruments is equity only if it **exchanges a fixed number of shares for a fixed amount**. A contract under which the number of shares varies uses the shares like currency and is a financial liability.
 
-## 3. Earnings Per Share (EPS)
+## 2. Share issues
 
-This is the most critical indicator used by investors to judge a firm's profitability.
+### A. Rights issues
+
+Issuing 10,000 shares with a par value of ₩5,000 at ₩9,000 each, with issue costs of ₩3 million, gives share capital of ₩50 million and share premium of ₩90 million − ₩50 million − ₩3 million = ₩37 million. Issue costs are deducted from equity, not expensed. If shares are issued below par, the difference is recorded as a discount on share issue (capital adjustment) and first offset against share premium.
+
+### B. Bonus issues, stock dividends and share splits
 
 <LectureTable
-  title="Types and Calculation of EPS"
-  headers={["Type", "Subjects", "Meaning"]}
+  title="Three transactions that leave total equity unchanged (10,000 shares of ₩5,000 par)"
+  headers={["Transaction", "Share capital", "Capital surplus / retained earnings", "Number of shares", "Par value"]}
   rows={[
-    ["Basic EPS", "Outstanding common shares", "Actual stake of current shareholders"],
-    ["Diluted EPS", "Includes potential common shares", "Worst-case EPS if conversion occurs"],
+    ["Bonus issue (10%)", "+₩5m", "Capital surplus (or legal reserve) −₩5m", "11,000", "₩5,000"],
+    ["Stock dividend (10%)", "+₩5m", "Retained earnings −₩5m", "11,000", "₩5,000"],
+    ["Share split (1:2)", "No change", "No change", "20,000", "₩2,500"],
   ]}
 />
 
-<Callout type="important">
-  **The Trap of EPS**: Even if net income does not increase, EPS will rise if the number of shares
-  is reduced through retirement of treasury stock. One must separately analyze the **'quality of
-  earnings'** behind the numbers.
+In all three, total equity and shareholders' percentage interests are unchanged. A bonus issue turns legal reserves into share capital, a stock dividend turns distributable profit into share capital, and a share split moves no box of equity at all.
+
+## 3. Treasury shares (cost method)
+
+Treasury shares are recorded at cost and deducted from equity. On disposal, the difference between proceeds and cost is dealt with inside equity.
+
+<LectureTable
+  title="Treasury share transactions (unit: ₩10,000)"
+  headers={["Transaction", "Gain or loss", "Treatment"]}
+  rows={[
+    ["Buy 1,000 shares at ₩10,000", "—", "Treasury shares 1,000"],
+    ["Sell 300 shares at ₩13,000", "Gain 90", "Gain on disposal of treasury shares (capital surplus) 90"],
+    ["Sell 500 shares at ₩7,000", "Loss 150", "First offset against the gain of 90; the remaining 60 is a loss on disposal (capital adjustment)"],
+    ["Retire the remaining 200 shares", "—", "Share capital down 100 (par ₩5,000); difference of 100 is a loss on capital reduction"],
+  ]}
+/>
+
+A loss on disposal is first offset against existing gains on disposal of treasury shares; any remainder is held as a capital adjustment and later written off through appropriation of retained earnings. Gains and losses are settled only within equity because of the principle that no profit or loss is recognized on transactions with owners.
+
+## 4. Capital reductions
+
+- **Paid capital reduction:** shares are retired for consideration paid to shareholders. If less than par is paid, the difference is a **gain on capital reduction** (capital surplus); if more, a **loss on capital reduction** (capital adjustment).
+- **Deficit-covering capital reduction (without consideration):** share capital is reduced without payment to eliminate an accumulated deficit. Consolidating 20,000 shares of ₩5,000 par (share capital ₩100 million) at five into one reduces share capital to ₩20 million, and the ₩80 million reduction covers the deficit. If the reduction exceeds the deficit, the excess is a gain on capital reduction.
+
+<FormulaBox
+  label="Gain on capital reduction (paid)"
+  formula="\text{Gain on capital reduction} = \text{Reduction in share capital} - \text{Consideration paid} \quad (\text{when} > 0)"
+  description="Buying back and retiring 1,000 shares of ₩5,000 par at ₩3,000 each reduces share capital by ₩5 million for a payment of ₩3 million, a gain on capital reduction of ₩2 million."
+/>
+
+## 5. Appropriation of retained earnings and covering deficits
+
+Retained earnings are divided into the legal reserve, voluntary reserves and unappropriated retained earnings. A deficit is usually covered first by unappropriated retained earnings and voluntary reserves, and then by legal reserves. Before the 2011 amendment of the Commercial Act, the earned legal reserve had to be used before the capital reserve, but since the amendment there is no order between the two (Commercial Act, Article 460). If the capital and earned legal reserves together exceed 1.5 times share capital, the excess may be reduced by a shareholders' resolution and used, for example, for dividends (Article 461-2).
+
+<Callout type="warning">
+The boxes of equity differ by country. The body of K-IFRS requires little more than paid-in capital, retained earnings and other components, so the split into capital surplus and capital adjustments is a product of Korean practice and the Commercial Act. When comparing with foreign financial statements, it is safer to reconcile only total equity and accumulated other comprehensive income. Redeemable convertible preference shares (RCPS) are common in start-up investment; if holders have a redemption right, they are classified as liabilities and can push the debt ratio up sharply.
 </Callout>
 
-We have now finished the specific topics of financial accounting. In the next chapter, we will cover the new model for revenue recognition and hybrid financial instruments.
+## Check your understanding
+
+Company AA (par ₩5,000) bought 2,000 treasury shares at ₩8,000 each. It then sold 800 shares at ₩9,500 and 700 shares at ₩6,000, and retired the remaining 500. There was no opening balance of gains on disposal of treasury shares. How do the equity items change at each step, and by how much has total equity fallen overall?
+
+The purchase deducts treasury shares of ₩16 million from equity. Selling 800 shares brings in ₩7.6 million of cash; the ₩1.2 million difference from their cost of ₩6.4 million is a gain on disposal. Selling 700 shares brings in ₩4.2 million against a cost of ₩5.6 million, a loss of ₩1.4 million; it is first offset against the gain of ₩1.2 million, and the remaining ₩200,000 is a loss on disposal. Retiring 500 shares eliminates share capital of ₩2.5 million and treasury shares of ₩4 million, with the ₩1.5 million difference recorded as a loss on capital reduction. Total equity changes only by the cash flows: $-1{,}600 + 760 + 420 = -420$ (₩10,000), a fall of ₩4.2 million. The retirement does not change total equity.
+
+## References
+
+- Korea Accounting Standards Board, K-IFRS 1032 *Financial Instruments: Presentation*
+- Korean Commercial Act, Article 459 (capital reserve), Article 460 (use of legal reserves) and Article 461-2 (reduction of reserves) — [National Law Information Center](https://www.law.go.kr/법령/상법)
+- Donald Kieso, Jerry Weygandt and Terry Warfield, *Intermediate Accounting: IFRS Edition*, ch. 15
