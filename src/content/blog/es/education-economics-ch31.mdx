@@ -1,0 +1,96 @@
+---
+track: academy
+series: macroeconomics
+chapter: 20
+title: "Macroeconomía — El paro como stocks y flujos"
+description: "Calcula cómo el número de parados (un stock) lo determinan las separaciones y las salidas al empleo (flujos) con la tasa estacionaria s/(s+f), distingue con la curva de Beveridge la demanda insuficiente del peor emparejamiento y presenta cómo cambian los flujos el subsidio de paro, la protección del empleo y los salarios de eficiencia."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["economía", "macroeconomía", "paro", "curva de Beveridge", "búsqueda y emparejamiento"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Macroeconomía — la tasa de paro es un stock, pero sus causas son flujos
+
+El [capítulo 2](/es/education-economics-ch12/) precisó el denominador de la tasa de paro. Este capítulo examina cómo se acumula el número de parados. Cada mes muchas personas pierden su empleo mientras muchas otras encuentran uno. La tasa de paro se sitúa donde esos dos flujos se equilibran. Mirar los flujos muestra que una misma subida del paro puede tener causas distintas.
+
+## 1. La tasa de paro estacionaria
+
+Supongamos que cada mes una fracción $s$ de los ocupados $E$ pierde su empleo (tasa de separación) y una fracción $f$ de los parados $U$ encuentra uno (tasa de salida al empleo). Para que el número de parados no cambie, las entradas deben igualar a las salidas: $sE=fU$. Dividiendo por la población activa $L=E+U$ se obtiene
+
+<FormulaBox
+  label="Tasa de paro estacionaria"
+  formula="u^* = \frac{U}{L} = \frac{s}{s+f}"
+  description="Con una tasa de separación s = 2 % y una tasa de salida al empleo f = 40 % (mensuales), u* = 0,02/0,42 ≈ 4,8 %. Para reducir el paro hay que bajar s o subir f."
+/>
+
+Con 20 millones de ocupados y una tasa de separación mensual del 2 %, 400.000 personas pasan al paro cada mes. Si 1 millón de parados encuentra empleo con una probabilidad mensual del 40 %, también 400.000 personas encuentran trabajo cada mes. Cientos de miles de personas entran y salen del paro cada mes, pero el total se mantiene en 1 millón.
+
+En las recesiones es sobre todo $f$ lo que cae. Con la misma tasa de separación del 2 %, si la tasa de salida al empleo baja al 20 %, la tasa estacionaria pasa a $0{,}02/0{,}22\approx 9{,}1\,\%$, casi el doble. La duración media del paro ($1/f$) también sube de 2,5 a 5 meses.
+
+## 2. La curva de Beveridge
+
+Las **vacantes** de las empresas y los parados coexisten. La curva que representa su relación es la **curva de Beveridge**.
+
+<EconDiagram
+  title="La curva de Beveridge"
+  xLabel="Tasa de paro u (%)"
+  yLabel="Tasa de vacantes v (%)"
+  xMax={10}
+  yMax={7}
+  curves={[
+    { label: "Emparejamiento eficiente", points: [[2, 6], [3, 4], [4, 3], [6, 2], [8, 1.5], [10, 1.2]], tone: "blue", anchor: "end" },
+    { label: "Emparejamiento deficiente", points: [[3, 6.67], [4, 5], [5, 4], [6, 3.33], [8, 2.5], [10, 2]], tone: "red", dashed: true, anchor: "end" },
+  ]}
+  marks={[
+    { x: 3, y: 4, label: "Auge" },
+    { x: 6, y: 2, label: "Recesión" },
+    { x: 6, y: 3.33, label: "Más desajuste" },
+  ]}
+  arrows={[{ from: [3.5, 3.6], to: [5.5, 2.3] }, { from: [6.2, 2.1], to: [6.2, 3.1] }]}
+  caption="Bajar hacia la derecha a lo largo de la curva es demanda insuficiente (menos vacantes, más paro); un desplazamiento hacia fuera de la curva es un peor emparejamiento, con muchas vacantes y muchos parados a la vez."
+/>
+
+- **Movimiento a lo largo de la curva**: cuando la economía empeora, las empresas contratan menos, las vacantes bajan y el paro sube. Es paro por demanda insuficiente.
+- **Desplazamiento de la curva**: si hay muchas vacantes y también mucho paro, empleos y demandantes no encajan. Es paro estructural por un mayor desajuste entre cualificaciones, regiones y sectores.
+
+## 3. Instituciones y flujos
+
+<LectureTable
+  title="Efecto de las instituciones sobre los flujos"
+  headers={["Institución", "s (separaciones)", "f (salida al empleo)", "Efecto neto"]}
+  rows={[
+    ["Más protección del empleo", "La reduce", "La reduce (reticencia a contratar)", "Tasa de paro ambigua; episodios más largos"],
+    ["Subsidio de paro más alto", "—", "Puede reducirla (búsqueda más larga)", "A veces lleva a mejores emparejamientos"],
+    ["Formación e intermediación", "—", "La eleva", "Menos paro estructural"],
+  ]}
+/>
+
+No hay por qué considerar malo en sí que el subsidio de paro alargue la búsqueda de empleo: en lugar de aceptar deprisa un empleo inadecuado, se puede encontrar un emparejamiento más productivo. El sentido y la magnitud del efecto deben juzgarse con datos.
+
+## 4. Salarios de eficiencia y paro de espera
+
+Algunas empresas pagan salarios por encima del nivel que vacía el mercado, porque los salarios altos reducen la rotación, estimulan el esfuerzo y atraen buenos candidatos (**salarios de eficiencia**). Entonces los salarios no bajan y, aun en equilibrio, hay más personas que quieren trabajar que empleos. El paro puede parecer voluntario, pero en realidad es una cola de espera para los buenos empleos.
+
+<Callout type="warning">
+No hay que concluir solo a partir de la tasa de paro si es estructural o cíclico. Una misma tasa del 7 % indica demanda insuficiente si hay pocas vacantes y un problema de emparejamiento si hay muchas. Los remedios son opuestos: política de demanda agregada en el primer caso, formación y apoyo a la movilidad en el segundo. Hay que mirar juntas las entradas, las salidas y las vacantes.
+</Callout>
+
+## Ejercicio
+
+¿Cuál es la tasa de paro estacionaria de una economía con una tasa de separación mensual del 1,5 % y una tasa de salida al empleo del 30 %? $0{,}015/0{,}315\approx 4{,}8\,\%$. Si una recesión baja la tasa de salida al 15 %, pasa a $0{,}015/0{,}165\approx 9{,}1\,\%$. Si, en cambio, la tasa de separación se duplica al 3 % y la de salida sigue en el 30 %, resulta $0{,}03/0{,}33\approx 9{,}1\,\%$: la misma tasa de paro, pero un mercado de trabajo completamente distinto, con episodios cortos y mucha gente entrando y saliendo.
+
+## Referencias
+
+- Christopher Pissarides, *Equilibrium Unemployment Theory* (2000)
+- Robert Shimer, "Reassessing the Ins and Outs of Unemployment," *Review of Economic Dynamics* (2012)
+- N. Gregory Mankiw, *Macroeconomics*, ch. 7
+- Statistics Korea, [encuesta de población activa](https://kostat.go.kr/incomeNc/) (en coreano)

@@ -1,0 +1,96 @@
+---
+track: academy
+series: macroeconomics
+chapter: 20
+title: "Macroéconomie — Le chômage en stocks et en flux"
+description: "Calcule comment le nombre de chômeurs (un stock) est déterminé par les séparations et les retours à l'emploi (des flux) avec le taux stationnaire s/(s+f), distingue avec la courbe de Beveridge demande insuffisante et appariement dégradé, et présente l'effet de l'assurance chômage, de la protection de l'emploi et du salaire d'efficience."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["économie", "macroéconomie", "chômage", "courbe de Beveridge", "appariement"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Macroéconomie — le taux de chômage est un stock, mais ses causes sont des flux
+
+Le [chapitre 2](/fr/education-economics-ch12/) a précisé le dénominateur du taux de chômage. Ce chapitre examine comment le nombre de chômeurs s'accumule. Chaque mois, beaucoup de personnes perdent leur emploi tandis que beaucoup d'autres en trouvent un. Le taux de chômage s'établit là où ces deux flux s'équilibrent. Observer les flux montre qu'une même hausse du chômage peut avoir des causes différentes.
+
+## 1. Le taux de chômage stationnaire
+
+Supposons que chaque mois une fraction $s$ des personnes en emploi $E$ perdent leur emploi (taux de séparation) et une fraction $f$ des chômeurs $U$ en trouvent un (taux de retour à l'emploi). Pour que le nombre de chômeurs reste constant, les entrées doivent égaler les sorties : $sE=fU$. En divisant par la population active $L=E+U$, on obtient
+
+<FormulaBox
+  label="Taux de chômage stationnaire"
+  formula="u^* = \frac{U}{L} = \frac{s}{s+f}"
+  description="Avec un taux de séparation s = 2 % et un taux de retour à l'emploi f = 40 % (mensuels), u* = 0,02/0,42 ≈ 4,8 %. Pour réduire le chômage, il faut abaisser s ou relever f."
+/>
+
+Avec 20 millions de personnes en emploi et un taux de séparation mensuel de 2 %, 400 000 personnes deviennent chômeuses chaque mois. Si 1 million de chômeurs trouvent un emploi avec une probabilité mensuelle de 40 %, 400 000 personnes retrouvent aussi un emploi chaque mois. Des centaines de milliers de personnes entrent et sortent du chômage chaque mois, mais le total reste à 1 million.
+
+En récession, c'est surtout $f$ qui baisse. À taux de séparation inchangé de 2 %, si le taux de retour à l'emploi tombe à 20 %, le taux stationnaire devient $0{,}02/0{,}22\approx 9{,}1\,\%$, presque le double. La durée moyenne du chômage ($1/f$) passe aussi de 2,5 à 5 mois.
+
+## 2. La courbe de Beveridge
+
+Les **postes vacants** des entreprises et les chômeurs coexistent. La courbe qui représente leur relation est la **courbe de Beveridge**.
+
+<EconDiagram
+  title="La courbe de Beveridge"
+  xLabel="Taux de chômage u (%)"
+  yLabel="Taux de vacance v (%)"
+  xMax={10}
+  yMax={7}
+  curves={[
+    { label: "Appariement efficace", points: [[2, 6], [3, 4], [4, 3], [6, 2], [8, 1.5], [10, 1.2]], tone: "blue", anchor: "end" },
+    { label: "Appariement dégradé", points: [[3, 6.67], [4, 5], [5, 4], [6, 3.33], [8, 2.5], [10, 2]], tone: "red", dashed: true, anchor: "end" },
+  ]}
+  marks={[
+    { x: 3, y: 4, label: "Expansion" },
+    { x: 6, y: 2, label: "Récession" },
+    { x: 6, y: 3.33, label: "Inadéquation accrue" },
+  ]}
+  arrows={[{ from: [3.5, 3.6], to: [5.5, 2.3] }, { from: [6.2, 2.1], to: [6.2, 3.1] }]}
+  caption="Descendre vers la droite le long de la courbe correspond à une demande insuffisante (moins de postes vacants, plus de chômage) ; un déplacement de la courbe vers l'extérieur traduit un appariement dégradé, avec à la fois beaucoup de postes vacants et beaucoup de chômeurs."
+/>
+
+- **Mouvement le long de la courbe** : quand la conjoncture se dégrade, les entreprises embauchent moins, les postes vacants diminuent et le chômage augmente. C'est le chômage par insuffisance de la demande.
+- **Déplacement de la courbe** : s'il y a beaucoup de postes vacants et beaucoup de chômeurs, emplois et demandeurs ne se correspondent pas. C'est un chômage structurel dû à une inadéquation croissante entre compétences, régions et secteurs.
+
+## 3. Institutions et flux
+
+<LectureTable
+  title="Effet des institutions sur les flux"
+  headers={["Institution", "s (séparations)", "f (retour à l'emploi)", "Effet net"]}
+  rows={[
+    ["Protection de l'emploi renforcée", "Le réduit", "Le réduit (réticence à embaucher)", "Taux de chômage ambigu ; épisodes plus longs"],
+    ["Allocations chômage plus élevées", "—", "Peut le réduire (recherche plus longue)", "Mène parfois à de meilleurs appariements"],
+    ["Formation et placement", "—", "Le relève", "Moins de chômage structurel"],
+  ]}
+/>
+
+Il n'y a pas lieu de juger mauvais en soi que les allocations chômage allongent la recherche d'emploi : au lieu de se précipiter vers un emploi inadapté, on peut trouver un appariement plus productif. Le sens et l'ampleur de l'effet relèvent des données.
+
+## 4. Salaire d'efficience et chômage d'attente
+
+Certaines entreprises versent des salaires supérieurs au niveau d'équilibre du marché, car des salaires élevés réduisent la rotation, stimulent l'effort et attirent de bons candidats (**salaire d'efficience**). Les salaires ne baissent alors pas, si bien que même à l'équilibre, plus de personnes veulent un emploi qu'il n'y a d'emplois. Le chômage peut sembler volontaire, mais c'est en réalité une file d'attente pour les bons emplois.
+
+<Callout type="warning">
+Ne pas conclure du seul taux de chômage qu'il est structurel ou conjoncturel. Un même taux de 7 % traduit une demande insuffisante si les postes vacants sont rares, et un problème d'appariement s'ils sont nombreux. Les remèdes sont opposés : politique de demande dans le premier cas, formation et aide à la mobilité dans le second. Il faut regarder ensemble entrées, sorties et postes vacants.
+</Callout>
+
+## Exercice
+
+Quel est le taux de chômage stationnaire d'une économie avec un taux de séparation mensuel de 1,5 % et un taux de retour à l'emploi de 30 % ? $0{,}015/0{,}315\approx 4{,}8\,\%$. Si une récession fait tomber le taux de retour à l'emploi à 15 %, il devient $0{,}015/0{,}165\approx 9{,}1\,\%$. Si au contraire le taux de séparation double à 3 % et que le taux de retour reste à 30 %, on obtient $0{,}03/0{,}33\approx 9{,}1\,\%$ : le même taux de chômage, mais un marché du travail tout différent, avec des épisodes courts et beaucoup d'entrées et de sorties.
+
+## Références
+
+- Christopher Pissarides, *Equilibrium Unemployment Theory* (2000)
+- Robert Shimer, "Reassessing the Ins and Outs of Unemployment," *Review of Economic Dynamics* (2012)
+- N. Gregory Mankiw, *Macroeconomics*, ch. 7
+- Statistics Korea, [enquête sur la population active](https://kostat.go.kr/incomeNc/) (en coréen)
