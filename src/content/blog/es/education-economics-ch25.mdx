@@ -1,0 +1,110 @@
+---
+track: academy
+series: macroeconomics
+chapter: 14
+title: "Macroeconomía — Demanda efectiva y condiciones del multiplicador"
+description: "Calcula con cifras cómo la diferencia entre gasto planeado y producción ajusta la producción a través de las existencias, cómo se acumula el multiplicador ronda a ronda, cuánto lo reducen las filtraciones (impuestos, importaciones) y la paradoja del ahorro, y precisa cuándo funciona el multiplicador."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["economía", "macroeconomía", "demanda efectiva", "multiplicador", "paradoja del ahorro"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Macroeconomía — el multiplicador es un techo, no una promesa
+
+En el [capítulo 5](/es/education-economics-ch16/) calculamos la producción de equilibrio y el multiplicador con la cruz keynesiana. Este capítulo examina **cómo** se alcanza ese equilibrio, en qué orden se acumula realmente el multiplicador y en qué condiciones se reduce o desaparece. A corto plazo, cuando los precios no se mueven enseguida, la producción la determina la **demanda efectiva**, es decir, la demanda que realmente se gasta.
+
+## 1. Las existencias ajustan la producción
+
+Cuando el gasto planeado $AE$ difiere de la producción efectiva $Y$, la diferencia aparece como **variación no planeada de existencias**.
+
+<LectureTable
+  title="Gasto planeado y existencias (AE = 62 + 0,8Y, equilibrio Y = 310)"
+  headers={["Producción Y", "Gasto planeado AE", "Variación de existencias", "Reacción de las empresas"]}
+  rows={[
+    ["350", "342", "+8 (sin vender)", "Reducen la producción"],
+    ["310", "310", "0", "La mantienen"],
+    ["270", "278", "−8 (bajan las existencias)", "Aumentan la producción"],
+  ]}
+/>
+
+Si la producción supera el equilibrio, se acumulan existencias y las empresas reducen la producción; si queda por debajo, las existencias bajan y la aumentan. El núcleo del modelo keynesiano a corto plazo es que se ajustan las **cantidades**, no los precios. En la contabilidad nacional, la variación no planeada de existencias se cuenta como inversión, así que $Y=C+I+G+NX$ se cumple siempre a posteriori. La condición de equilibrio es que el gasto **planeado** iguale la producción.
+
+## 2. El multiplicador se acumula ronda a ronda
+
+Si el gasto público aumenta 10 billones de wones, esos 10 billones se convierten en renta de alguien; con una PMC de 0,8, se gastan 8 billones, que pasan a ser renta de otra persona.
+
+<LectureTable
+  title="El proceso multiplicador (ΔG = 10 billones de wones, PMC = 0,8)"
+  headers={["Ronda", "Renta adicional", "Acumulado"]}
+  rows={[
+    ["1", "10", "10"],
+    ["2", "8", "18"],
+    ["3", "6,4", "24,4"],
+    ["4", "5,12", "29,5"],
+    ["5", "4,10", "33,6"],
+    ["…", "…", "→ 50"],
+  ]}
+/>
+
+<FormulaBox
+  label="El multiplicador como serie geométrica"
+  formula="\Delta Y = \Delta G\,(1 + c + c^2 + \cdots) = \frac{\Delta G}{1-c}"
+  description="Incluso tras cinco rondas, solo ha aparecido unos dos tercios del efecto final de 50 billones de wones. Cada ronda lleva tiempo, así que el efecto multiplicador no llega de golpe."
+/>
+
+## 3. Las filtraciones reducen el multiplicador
+
+La parte del aumento de renta de cada ronda que no vuelve al consumo es una **filtración**. Además del ahorro, los impuestos y las importaciones son filtraciones.
+
+<FormulaBox
+  label="El multiplicador con filtraciones"
+  formula="k = \frac{1}{1 - c(1-t) + m}"
+  description="Con c = 0,8, un tipo impositivo marginal t = 0,25 y una propensión marginal a importar m = 0,2, k = 1/(1 − 0,6 + 0,2) ≈ 1,67: un tercio del valor de 5 sin filtraciones."
+/>
+
+Cuanto más pequeña y abierta es la economía, mayor es su propensión a importar y menor su multiplicador: parte del estímulo se filtra hacia los socios comerciales. También por eso, cuando varios países estimulan a la vez, las exportaciones de cada uno aumentan y el efecto de cada uno es mayor.
+
+## 4. La paradoja del ahorro
+
+¿Qué ocurre si todos los hogares intentan ahorrar más al mismo tiempo? En la economía anterior, supongamos que el consumo autónomo $c_0$ baja de 20 a 10 (los hogares quieren ahorrar 10 billones de wones más). El nuevo equilibrio es $Y=52/0{,}2=260$ billones, 50 billones menos. Con una renta disponible de 250 billones, el consumo es $10+0{,}8\times 250=210$ billones, y el ahorro privado, $250-210=40$ billones. En el equilibrio inicial, el ahorro privado también era $300-260=40$ billones. **Los hogares intentaron ahorrar más, pero solo bajó la renta; el ahorro siguió igual.**
+
+Según la identidad $S_p=I+(G-T)+NX$, si la inversión y el presupuesto están fijos, el ahorro privado no puede aumentar. Ahorrar más, racional para un individuo, solo reduce la renta del conjunto de la economía: es una **falacia de composición**.
+
+## 5. Cuándo funciona el multiplicador
+
+<LectureTable
+  title="Canales que reducen el multiplicador"
+  headers={["Canal", "Mecanismo", "Capítulo"]}
+  rows={[
+    ["Impuestos e importaciones", "Las filtraciones crecen en cada ronda", "Este capítulo"],
+    ["Subida de los tipos", "Cae la inversión (expulsión)", "Capítulos 4 y 17"],
+    ["Subida de los precios", "Bajan los saldos reales y las exportaciones netas", "Capítulos 8 y 15"],
+    ["Pleno empleo", "Las cantidades no pueden aumentar; solo suben los precios", "Capítulo 8"],
+    ["Impuestos futuros esperados", "Los hogares ahorran más", "Capítulo 6 de hacienda pública"],
+  ]}
+/>
+
+A la inversa, el multiplicador es mayor cuando los tipos están atrapados en su límite inferior y no hay expulsión, cuando hay mucha capacidad ociosa y paro, y cuando muchos hogares sufren restricciones de liquidez. Por eso los estudios posteriores a la crisis financiera hallaron multiplicadores fiscales mayores en recesión y en el límite inferior de los tipos.
+
+<Callout type="warning">
+«Cada won de gasto público aumenta el PIB en el multiplicador» no es una proposición general. Es un resultado de estática comparativa que supone recursos ociosos, un tipo de interés fijo y una economía cerrada. La paradoja del ahorro también se refiere al corto plazo con demanda insuficiente. A largo plazo, cerca del pleno empleo, el ahorro financia la inversión y la acumulación de capital ([capítulo 11](/es/education-economics-ch22/)).
+</Callout>
+
+## Ejercicio
+
+En una economía con PMC de 0,8, tipo impositivo marginal de 0,25 y sin importaciones, ¿qué efectos tienen 10 billones de wones de gasto público sobre la producción y la recaudación? El multiplicador es $1/(1-0{,}6)=2{,}5$, así que la producción aumenta 25 billones de wones y la recaudación $0{,}25\times 25=6{,}25$ billones. El déficit público no aumenta 10 billones, sino 3,75 billones. Con un tipo marginal nulo, el efecto sobre la producción sería de 50 billones de wones.
+
+## Referencias
+
+- John Maynard Keynes, *The General Theory of Employment, Interest and Money* (1936), ch. 10
+- N. Gregory Mankiw, *Macroeconomics*, ch. 11
+- Olivier Blanchard, *Macroeconomics*, ch. 3

@@ -1,0 +1,100 @@
+---
+track: academy
+series: macroeconomics
+chapter: 13
+title: "Macroeconomía — Los dilemas de la política de estabilización"
+description: "Presenta el principio de Tinbergen, calcula con la función de pérdida de un banco central la respuesta óptima a una perturbación de oferta entre inflación y brecha de producción, y explica la regla de Taylor, reglas frente a discrecionalidad, la inconsistencia temporal, los retardos y la estabilidad financiera."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["economía", "macroeconomía", "política monetaria", "regla de Taylor", "inconsistencia temporal"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Macroeconomía — a veces un solo tipo de interés no puede situar a la vez la inflación y la brecha de producción donde queremos
+
+El [capítulo 10](/es/education-economics-ch21/) distinguió las perturbaciones por su dirección. Ante una perturbación de demanda, precios y producción se mueven en el mismo sentido, y un solo tipo de interés puede corregir ambos. Ante una perturbación de oferta se mueven en sentidos opuestos, y corregir uno empeora el otro. Este capítulo escribe ese dilema como una ecuación y examina los principios con que eligen los bancos centrales.
+
+## 1. El número de objetivos e instrumentos
+
+Tinbergen sostuvo que $n$ objetivos independientes exigen al menos $n$ instrumentos independientes. Si a un solo tipo oficial se le encomiendan la estabilidad de precios, el pleno empleo, la estabilidad del tipo de cambio y la estabilidad financiera, habrá que renunciar a algunos. Por eso se usan políticas macroprudenciales, como los límites al crédito, para la estabilidad financiera, y políticas del mercado de trabajo para el paro estructural.
+
+## 2. La función de pérdida y las perturbaciones de oferta
+
+Supongamos que al banco central le desagradan tanto las desviaciones de la inflación respecto al objetivo como la brecha de producción.
+
+<FormulaBox
+  label="Función de pérdida del banco central"
+  formula="L = (\pi - \pi^*)^2 + \lambda\, y^2"
+  description="π* es el objetivo de inflación, y la brecha de producción (%) y λ el peso que se da a la estabilidad de la producción. Con λ = 0, el banco central solo se preocupa por la inflación."
+/>
+
+Supongamos que la inflación esperada está anclada en el objetivo del 2 % y que la curva de Phillips es $\pi=2+\kappa y+\varepsilon$, donde $\varepsilon$ es una perturbación de oferta. La brecha que minimiza la pérdida es $y=-\kappa(\pi-2)/\lambda$, y al sustituirla en la curva de Phillips se obtiene
+
+$$\pi-2=\frac{\varepsilon}{1+\kappa^2/\lambda}$$
+
+Con una perturbación de oferta $\varepsilon=3$ puntos y $\kappa=0{,}5$:
+
+<LectureTable
+  title="La misma perturbación de oferta, preferencias distintas"
+  headers={["λ", "Inflación", "Brecha de producción", "Interpretación"]}
+  rows={[
+    ["0 (solo inflación)", "2 %", "−6 %", "Devuelve de inmediato los precios al objetivo y acepta una recesión profunda"],
+    ["0,25", "3,5 %", "−3 %", "Absorbe la perturbación a medias"],
+    ["1", "4,4 %", "−1,2 %", "Absorbe la mayor parte en los precios"],
+    ["→ ∞ (solo producción)", "5 %", "0 %", "Traslada toda la perturbación a los precios"],
+  ]}
+/>
+
+Cómo se reparte la perturbación no lo decide la economía, sino un **juicio de valor**: $\lambda$. Ahora bien, el supuesto de expectativas ancladas es clave. Si se deja la inflación alta demasiado tiempo y suben las expectativas, la curva de Phillips se desplaza hacia arriba ([capítulo 9](/es/education-economics-ch20/)) y el dilema empeora en todos los momentos posteriores. Por eso muchos bancos centrales aplican **metas de inflación flexibles**, que tienen en cuenta la estabilidad de la producción mientras devuelven la inflación al objetivo a medio plazo.
+
+## 3. La regla de Taylor
+
+Taylor mostró que las decisiones de tipos de la Reserva Federal estadounidense se describían bien con una regla sencilla.
+
+<FormulaBox
+  label="Regla de Taylor"
+  formula="i = r^* + \pi + 0.5\,(\pi - \pi^*) + 0.5\,y"
+  description="r* es el tipo de interés real neutral. Si la inflación supera el objetivo en 1 punto, el tipo nominal sube 1,5 puntos y eleva el tipo real (principio de Taylor). Una brecha de producción negativa baja el tipo."
+/>
+
+Con $r^*=1\,\%$, una inflación del 4 %, un objetivo del 2 % y una brecha del −1 %, $i=1+4+0{,}5\times 2+0{,}5\times(-1)=5{,}5\,\%$. El coeficiente de la inflación debe ser mayor que 1 (el tipo nominal debe subir más que la inflación) para que el tipo real aumente y frene la inflación.
+
+## 4. Reglas frente a discrecionalidad, e inconsistencia temporal
+
+<LectureTable
+  title="Reglas y discrecionalidad"
+  headers={["", "Ventajas", "Inconvenientes"]}
+  rows={[
+    ["Reglas", "Anclan las expectativas y aumentan la previsibilidad", "Responden mal a perturbaciones excepcionales"],
+    ["Discrecionalidad", "Se adapta a las circunstancias", "Inconsistencia temporal, sesgo inflacionista"],
+  ]}
+/>
+
+Kydland y Prescott señalaron la **inconsistencia temporal**. Si hoy un banco central promete mantener baja la inflación y la gente la espera baja, mañana tendrá la tentación de usar una inflación sorpresa para reducir temporalmente el paro. Si la gente lo sabe, no cree la promesa desde el principio y espera una inflación alta. El resultado es el mismo paro con más inflación (**sesgo inflacionista**). La independencia del banco central, el nombramiento de gobernadores que priorizan la estabilidad de precios y los objetivos de inflación anunciados son mecanismos para hacer creíbles las promesas.
+
+## 5. Los retardos de la política
+
+La política sufre tres retardos: el **retardo de reconocimiento** hasta advertir la perturbación, el **retardo de ejecución** de decisiones y leyes, y el **retardo de efecto** hasta que la política influye en la economía. La política monetaria se ejecuta rápido pero su retardo de efecto es largo (normalmente de uno a dos años); la política fiscal puede actuar antes, pero legislarla lleva tiempo. Si los retardos son largos e inciertos, la política puede actuar cuando la coyuntura ya ha cambiado y agravar las fluctuaciones. Es la base empírica de la preferencia de Friedman por reglas sencillas frente al ajuste fino discrecional.
+
+<Callout type="warning">
+Si el tipo de interés se fija atendiendo a precios y empleo, los precios de los activos y la deuda de los hogares pueden moverse por su cuenta. Intentar lograr también la estabilidad financiera con ese único tipo obliga a sacrificar otros objetivos. Por eso hace falta la política macroprudencial (límites a la relación préstamo-valor y a la ratio de servicio de la deuda, colchón de capital anticíclico) como instrumento aparte. Los canales de amplificación de las crisis se tratan en el [capítulo 5 de economía financiera](/es/education-economics-ch38/).
+</Callout>
+
+## Ejercicio
+
+Con una regla de Taylor en la que $r^*=1\,\%$ y el objetivo de inflación es del 2 %, ¿cuál es el tipo oficial si la inflación es del 3 % y la brecha de producción del +2 %? $1+3+0{,}5\times 1+0{,}5\times 2=5{,}5\,\%$. Si, por una perturbación de oferta, la inflación también es del 3 % pero la brecha es del −2 %, el tipo es $1+3+0{,}5-1=3{,}5\,\%$. La regla combina con pesos las desviaciones de los dos objetivos y responde con un único tipo.
+
+## Referencias
+
+- John Taylor, "Discretion versus Policy Rules in Practice," *Carnegie-Rochester Conference Series* (1993)
+- Finn Kydland and Edward Prescott, "Rules Rather than Discretion," *Journal of Political Economy* (1977)
+- Banco de Corea, [Marco de la política monetaria](https://www.bok.or.kr/portal/main/contents.do?menuNo=200287) (en coreano)
+- N. Gregory Mankiw, *Macroeconomics*, ch. 18

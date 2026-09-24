@@ -1,77 +1,100 @@
 ---
 track: academy
-series: economics-basics
-chapter: 24
-title: "Economic Principles — Practice of economic stabilization policy and fiscal and monetary polic..."
-description: "We analyze the specific implementation principles of macroeconomic policies, policy lags, and political economic fluctuation theory. It covers modern operating methods such as Taylor's rule and inf..."
+series: macroeconomics
+chapter: 13
+title: "Macroeconomics — The Trade-offs of Stabilization Policy"
+description: "Covers Tinbergen's targets-and-instruments principle, uses a central bank loss function to compute how the optimal response to a supply shock splits it between inflation and the output gap, and explains the Taylor rule, rules versus discretion and time inconsistency, policy lags and financial stability."
 pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
 category: Economics
-tags:
-  - Education
-  - economics
-  - 정병렬경제학
+tags: ["economics", "macroeconomics", "monetary policy", "Taylor rule", "time inconsistency"]
 locale: en
 author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
-import {
-  LectureTable,
-} from "@/features/education-common/components/LectureVisuals";
+
 import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# Economic Stabilization Policies and Practical Fiscal & Monetary Policy
+# Macroeconomics — Sometimes One Interest Rate Cannot Put Both Inflation and the Output Gap Where We Want Them
 
-Theory is finally completed when applied to reality. As the final course of basic micro-macroeconomics, this chapter comprehensively summarizes what tools governments and central banks use to stabilize the actual economy and what difficulties they encounter.
+[Chapter 10](/en/education-economics-ch21/) distinguished shocks by their direction. With a demand shock, prices and output move in the same direction, so a single interest rate can correct both. With a supply shock they move in opposite directions, and fixing one worsens the other. This chapter writes that trade-off as an equation and looks at the principles central banks use to choose.
 
----
+## 1. The number of targets and instruments
 
-## 1. Rules vs. Discretion Debate
+Tinbergen argued that $n$ independent policy targets require at least $n$ independent instruments. If a single policy rate is charged with price stability, full employment, exchange-rate stability and financial stability, some of them must be given up. That is why macroprudential policies such as lending limits are used for financial stability, and labour market policies for structural unemployment.
 
-- **Discretion**: Flexibly changing policies according to circumstances (preferred by Keynesians).
-- **Rules**: Consistently executing according to pre-determined rules (preferred by monetarists).
-- <mark>**Dynamic Inconsistency**</mark>: The problem where if the government breaks its promise and changes policies for short-term achievements (e.g., elections), it loses market credibility and only causes inflation in the long run.
+## 2. The loss function and supply shocks
 
----
+Suppose the central bank dislikes both deviations of inflation from target and the output gap.
 
-## 2. Operation of Modern Monetary Policy: The Taylor Rule
+<FormulaBox
+  label="The central bank's loss function"
+  formula="L = (\pi - \pi^*)^2 + \lambda\, y^2"
+  description="π* is the inflation target, y the output gap (%) and λ the weight placed on output stability. With λ = 0 the central bank cares only about inflation."
+/>
 
-This is the formula used by central banks to determine the appropriate interest rate.
+Suppose expected inflation is anchored at the 2% target and the Phillips curve is $\pi=2+\kappa y+\varepsilon$, where $\varepsilon$ is a supply shock. The loss-minimizing output gap is $y=-\kappa(\pi-2)/\lambda$, and substituting it into the Phillips curve gives
 
-<FormulaBox>$i = r^* + \pi + \alpha(\pi - \pi^*) + \beta(y - y^*)$</FormulaBox>
+$$\pi-2=\frac{\varepsilon}{1+\kappa^2/\lambda}$$
 
-- **Meaning**: Interest rates are raised when current inflation is higher than the target ($\pi^*$) or output ($y$) is higher than potential output ($y^*$). It is a balanced approach that simultaneously considers inflation and economic overheating.
+With a supply shock of $\varepsilon=3$ points and $\kappa=0.5$:
 
-  ***
+<LectureTable
+  title="The same supply shock, different preferences"
+  headers={["λ", "Inflation", "Output gap", "Interpretation"]}
+  rows={[
+    ["0 (inflation only)", "2%", "−6%", "Returns prices to target at once and accepts a deep recession"],
+    ["0.25", "3.5%", "−3%", "Absorbs the shock half and half"],
+    ["1", "4.4%", "−1.2%", "Absorbs most of it in prices"],
+    ["→ ∞ (output only)", "5%", "0%", "Passes the whole shock through to prices"],
+  ]}
+/>
 
-## 3. Limitations of Fiscal Policy and National Debt
+How the shock is shared is decided not by economics but by a **value judgement**, $\lambda$. The assumption that expectations are anchored matters, though. If inflation is left high for long and expectations rise, the Phillips curve shifts up ([Chapter 9](/en/education-economics-ch20/)) and the trade-off worsens at every later date. That is why many central banks use **flexible inflation targeting**, which takes output stability into account while bringing inflation back to target over the medium term.
 
-Government spending is immediate but carries risks.
+## 3. The Taylor rule
 
-1. **Weakening of the Multiplier Effect**: Under an open economy, the multiplier effect can diminish due to increased imports or exchange rate fluctuations.
-2. **Sustainability of National Debt**: Increased issuance of government bonds burdens future generations and dampens private investment through rising interest rates (crowding-out effect).
+Taylor showed that the US Federal Reserve's interest rate decisions were well described by a simple rule.
 
----
+<FormulaBox
+  label="The Taylor rule"
+  formula="i = r^* + \pi + 0.5\,(\pi - \pi^*) + 0.5\,y"
+  description="r* is the neutral real interest rate. If inflation is 1 point above target, the nominal rate rises by 1.5 points, raising the real rate (the Taylor principle). A negative output gap lowers the rate."
+/>
 
-## 4. Inflation Targeting
+With $r^*=1\%$, inflation of 4%, a target of 2% and an output gap of −1%, $i=1+4+0.5\times 2+0.5\times(-1)=5.5\%$. The coefficient on inflation must exceed 1 (the nominal rate must rise by more than inflation) for the real rate to rise and restrain inflation.
 
-This method is adopted by many central banks, including the Bank of Korea.
+## 4. Rules versus discretion, and time inconsistency
 
-- **Principle**: Pre-announces an inflation rate target (e.g., 2%) and mobilizes all monetary means solely to achieve this target.
-- **Advantages**: Can suppress inflation psychology by stabilizing market expectations.
+<LectureTable
+  title="Rules and discretion"
+  headers={["", "Advantages", "Disadvantages"]}
+  rows={[
+    ["Rules", "Anchor expectations and increase predictability", "Respond poorly to exceptional shocks"],
+    ["Discretion", "Respond to circumstances", "Time inconsistency, inflation bias"],
+  ]}
+/>
 
----
+Kydland and Prescott pointed out **time inconsistency**. If a central bank promises today to keep inflation low and people come to expect low inflation, tomorrow it will be tempted to use surprise inflation to lower unemployment temporarily. If people know this, they do not believe the promise in the first place and expect high inflation. The result is unchanged unemployment and higher inflation (**inflation bias**). Central bank independence, appointing governors who put price stability first and announced inflation targets are devices that make promises credible.
 
-## 5. Wrapping Up: Harmonious Policy Mix
+## 5. Policy lags
 
-If microeconomics taught efficient "resource allocation," macroeconomics teaches "stable growth." When these two wheels turn in harmony, people's lives improve. You have now acquired all the basic principles of economics. In the following advanced macro (Ch25+) course, you will fit more complex puzzles of the real economy on top of this foundation.
+Policy faces three lags: the **recognition lag** before a shock is noticed, the **implementation lag** for decisions and legislation, and the **effect lag** before policy affects the economy. Monetary policy is quick to implement but has a long effect lag (usually one to two years); fiscal policy may act faster but takes time to legislate. When lags are long and uncertain, policy may take effect after the economy has already turned and amplify fluctuations. This is the empirical basis for Friedman's preference for simple rules over discretionary fine-tuning.
 
----
+<Callout type="warning">
+When the interest rate is set for prices and employment, asset prices and household debt may move on their own. Trying to achieve financial stability with the same single rate means sacrificing other targets. That is why macroprudential policy (loan-to-value and debt-service ratio limits, countercyclical capital buffers) is needed as a separate instrument. The amplification channels of crises are covered in [Financial Economics Chapter 5](/en/education-economics-ch38/).
+</Callout>
 
-## 📖 References
+## Check your understanding
 
-- **[Principles of Economics] - Jeong Byeong-ryeol**: Comprehensive summary of stabilization policies.
-- **[Macroeconomics] - Olivier Blanchard**: Policy issues in modern macroeconomics.
+Under a Taylor rule with $r^*=1\%$ and an inflation target of 2%, what is the policy rate if inflation is 3% and the output gap is +2%? $1+3+0.5\times 1+0.5\times 2=5.5\%$. If instead a supply shock has pushed inflation to 3% while the output gap is −2%, the rate is $1+3+0.5-1=3.5\%$. The rule blends deviations from the two targets with weights and answers with a single rate.
 
----
+## References
 
-Great job. This concludes all 24 core basic chapters of economics. Starting from the following **Ch25. Advanced Topics in Macroeconomics**, we will cover the latest academic discussions and more sophisticated mathematical models.
+- John Taylor, "Discretion versus Policy Rules in Practice," *Carnegie-Rochester Conference Series* (1993)
+- Finn Kydland and Edward Prescott, "Rules Rather than Discretion," *Journal of Political Economy* (1977)
+- Bank of Korea, [Monetary policy framework](https://www.bok.or.kr/portal/main/contents.do?menuNo=200287) (Korean)
+- N. Gregory Mankiw, *Macroeconomics*, ch. 18

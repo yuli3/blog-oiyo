@@ -1,0 +1,110 @@
+---
+track: academy
+series: macroeconomics
+chapter: 14
+title: "Macroéconomie — La demande effective et les conditions du multiplicateur"
+description: "Calcule avec des chiffres comment l'écart entre dépense planifiée et production ajuste la production via les stocks, comment le multiplicateur s'accumule tour après tour, combien les fuites (impôts, importations) le réduisent et le paradoxe de l'épargne, puis précise quand le multiplicateur fonctionne."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["économie", "macroéconomie", "demande effective", "multiplicateur", "paradoxe de l'épargne"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Macroéconomie — le multiplicateur est un plafond, pas une promesse
+
+Au [chapitre 5](/fr/education-economics-ch16/), nous avons calculé la production d'équilibre et le multiplicateur avec la croix keynésienne. Ce chapitre examine **comment** cet équilibre est atteint, dans quel ordre le multiplicateur s'accumule réellement, et dans quelles conditions il se réduit ou disparaît. À court terme, quand les prix ne bougent pas tout de suite, la production est déterminée par la **demande effective**, c'est-à-dire la demande réellement dépensée.
+
+## 1. Les stocks ajustent la production
+
+Quand la dépense planifiée $AE$ diffère de la production effective $Y$, l'écart apparaît sous forme de **variation de stocks non planifiée**.
+
+<LectureTable
+  title="Dépense planifiée et stocks (AE = 62 + 0,8Y, équilibre Y = 310)"
+  headers={["Production Y", "Dépense planifiée AE", "Variation de stocks", "Réaction des entreprises"]}
+  rows={[
+    ["350", "342", "+8 (invendus)", "Réduisent la production"],
+    ["310", "310", "0", "La maintiennent"],
+    ["270", "278", "−8 (déstockage)", "Augmentent la production"],
+  ]}
+/>
+
+Quand la production dépasse l'équilibre, les stocks s'accumulent et les entreprises réduisent la production ; quand elle est inférieure, les stocks diminuent et elles l'augmentent. Le cœur du modèle keynésien de court terme est que ce sont les **quantités**, et non les prix, qui s'ajustent. En comptabilité nationale, la variation de stocks non planifiée est comptée dans l'investissement, si bien que $Y=C+I+G+NX$ est toujours vérifié ex post. La condition d'équilibre est que la dépense **planifiée** égale la production.
+
+## 2. Le multiplicateur s'accumule tour après tour
+
+Si les dépenses publiques augmentent de 10 000 milliards de wons, ces 10 000 milliards deviennent le revenu de quelqu'un ; avec une PMC de 0,8, 8 000 milliards en sont dépensés et deviennent le revenu de quelqu'un d'autre.
+
+<LectureTable
+  title="Le processus multiplicateur (ΔG = 10 000 milliards de wons, PMC = 0,8)"
+  headers={["Tour", "Revenu supplémentaire", "Cumul"]}
+  rows={[
+    ["1", "10", "10"],
+    ["2", "8", "18"],
+    ["3", "6,4", "24,4"],
+    ["4", "5,12", "29,5"],
+    ["5", "4,10", "33,6"],
+    ["…", "…", "→ 50"],
+  ]}
+/>
+
+<FormulaBox
+  label="Le multiplicateur comme série géométrique"
+  formula="\Delta Y = \Delta G\,(1 + c + c^2 + \cdots) = \frac{\Delta G}{1-c}"
+  description="Même après cinq tours, seuls les deux tiers environ de l'effet final de 50 000 milliards de wons sont apparus. Chaque tour prend du temps : l'effet multiplicateur n'arrive pas d'un coup."
+/>
+
+## 3. Les fuites réduisent le multiplicateur
+
+La part du supplément de revenu de chaque tour qui ne revient pas en consommation est une **fuite**. Outre l'épargne, les impôts et les importations sont des fuites.
+
+<FormulaBox
+  label="Le multiplicateur avec fuites"
+  formula="k = \frac{1}{1 - c(1-t) + m}"
+  description="Avec c = 0,8, un taux marginal d'imposition t = 0,25 et une propension marginale à importer m = 0,2, k = 1/(1 − 0,6 + 0,2) ≈ 1,67 : le tiers de la valeur de 5 sans fuites."
+/>
+
+Plus l'économie est petite et ouverte, plus sa propension à importer est forte et son multiplicateur faible : une partie de la relance fuit vers les partenaires commerciaux. C'est aussi pourquoi, lorsque plusieurs pays relancent en même temps, les exportations de chacun augmentent et l'effet de chacun est plus grand.
+
+## 4. Le paradoxe de l'épargne
+
+Que se passe-t-il si tous les ménages cherchent à épargner davantage en même temps ? Dans l'économie ci-dessus, supposons que la consommation autonome $c_0$ passe de 20 à 10 (les ménages veulent épargner 10 000 milliards de wons de plus). En milliers de milliards de wons, le nouvel équilibre est $Y=52/0{,}2=260$, soit 50 de moins. Avec un revenu disponible de 250, la consommation vaut $10+0{,}8\times 250=210$, et l'épargne privée $250-210=40$. Dans l'équilibre initial, l'épargne privée valait aussi $300-260=40$. **Les ménages ont voulu épargner davantage, mais seul le revenu a baissé ; l'épargne est restée la même.**
+
+D'après l'identité $S_p=I+(G-T)+NX$, si l'investissement et le budget sont fixés, l'épargne privée ne peut pas augmenter. Épargner davantage, rationnel pour un individu, ne fait que réduire le revenu pour l'économie dans son ensemble : c'est un **sophisme de composition**.
+
+## 5. Quand le multiplicateur fonctionne
+
+<LectureTable
+  title="Canaux qui réduisent le multiplicateur"
+  headers={["Canal", "Mécanisme", "Chapitre"]}
+  rows={[
+    ["Impôts et importations", "Les fuites augmentent à chaque tour", "Ce chapitre"],
+    ["Hausse des taux", "L'investissement recule (éviction)", "Chapitres 4 et 17"],
+    ["Hausse des prix", "Les encaisses réelles et les exportations nettes baissent", "Chapitres 8 et 15"],
+    ["Plein emploi", "Les quantités ne peuvent augmenter, seuls les prix montent", "Chapitre 8"],
+    ["Impôts futurs anticipés", "Les ménages épargnent davantage", "Chapitre 6 de finances publiques"],
+  ]}
+/>
+
+À l'inverse, le multiplicateur est plus grand quand les taux sont bloqués à leur plancher et qu'il n'y a pas d'éviction, quand les capacités inemployées et le chômage sont importants, et quand de nombreux ménages sont contraints en liquidité. C'est pourquoi les études postérieures à la crise financière ont trouvé des multiplicateurs budgétaires plus élevés en récession et au plancher des taux.
+
+<Callout type="warning">
+« Chaque won de dépense publique augmente le PIB du montant du multiplicateur » n'est pas une proposition générale. C'est une conclusion de statique comparative qui suppose des ressources inemployées, un taux d'intérêt fixe et une économie fermée. Le paradoxe de l'épargne, lui aussi, concerne le court terme où la demande est insuffisante. À long terme, près du plein emploi, l'épargne finance l'investissement et l'accumulation du capital ([chapitre 11](/fr/education-economics-ch22/)).
+</Callout>
+
+## Exercice
+
+Dans une économie avec une PMC de 0,8, un taux marginal d'imposition de 0,25 et sans importations, quels sont les effets de 10 000 milliards de wons de dépenses publiques sur la production et les recettes fiscales ? Le multiplicateur vaut $1/(1-0{,}6)=2{,}5$ : la production augmente de 25 000 milliards de wons et les recettes de $0{,}25\times 25=6{,}25$, soit 6 250 milliards. Le déficit public augmente non pas de 10 000 mais de 3 750 milliards. Avec un taux marginal nul, l'effet sur la production serait de 50 000 milliards de wons.
+
+## Références
+
+- John Maynard Keynes, *The General Theory of Employment, Interest and Money* (1936), ch. 10
+- N. Gregory Mankiw, *Macroeconomics*, ch. 11
+- Olivier Blanchard, *Macroeconomics*, ch. 3
