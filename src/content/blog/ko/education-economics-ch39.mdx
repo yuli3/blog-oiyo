@@ -3,11 +3,11 @@ track: academy
 series: macroeconomics
 chapter: 23
 title: "거시경제학 — IS-LM 연립과 비교정태"
-description: "재화·화폐 균형을 두 식으로 풀어 재정 충격의 금리·산출을 동시에 구하고, 그래프 화살표가 숨기는 구축의 크기를 숫자로 복습합니다."
-pubDate: 2026-09-14
-updatedDate: 2026-09-15
+description: "선형 IS-LM을 연립방정식(행렬과 크라머 공식)으로 풀어 균형 산출·금리의 일반해를 구하고, 정부지출과 실질잔고의 비교정태 계수를 앞 장들의 숫자로 검산하며, 금리 하한이 선형 해를 깨는 지점을 정리합니다."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
 category: Economics
-tags: ["경제학", "거시경제", "IS-LM", "비교정태"]
+tags: ["경제학", "거시경제", "IS-LM", "비교정태", "크라머공식"]
 locale: ko
 author: Oiyo
 layoutVariant: lecture-series
@@ -20,43 +20,103 @@ import { LectureTable } from "@/features/education-common/components/LectureVisu
 
 # 거시경제학 — 화살표 두 개는 연립 해를 대체하지 못한다
 
-14·18장이 기울기와 부호다. 이 장은 같은 모형을 식으로 푼다. 정책 시뮬레이터와 시험의 “얼마나”에 답하려면 교차점의 좌표가 필요하다.
+[4장](/ko/education-economics-ch14/)과 [7장](/ko/education-economics-ch18/)은 곡선을 이동시켜 부호와 크기를 봤다. 이 장은 같은 모형을 연립방정식으로 풀어 균형과 비교정태 계수를 일반식으로 쓴다. "얼마나"에 답하고, 정책 시뮬레이션의 숫자가 어디서 나오는지 확인하려면 이 식이 필요하다.
 
-## 1. 두 식
+## 1. 연립방정식으로 쓰기
 
-선형으로 적으면 $Y=α-βr+γG$(IS), $M/P=λY-μr$(LM). 대입하면 Y와 r이 G, M의 함수가 된다. γ가 승수, β가 투자의 금리 탄력, λ가 거래 수요, μ가 화폐수요의 금리 탄력이다.
+IS와 LM을 다음처럼 쓴다.
+
+$$\text{IS: } Y=\alpha-\beta r+\gamma G,\qquad \text{LM: } \frac{M}{P}=\lambda Y-\mu r$$
+
+$\beta$는 금리에 대한 지출 반응(승수 포함), $\gamma$는 정부지출 승수, $\lambda$는 화폐수요의 소득 민감도, $\mu$는 금리 민감도다. 내생 변수 $Y$, $r$을 왼쪽에 모으면
 
 <FormulaBox
-  label="재정 승수 (선형)"
-  formula="\frac{dY}{dG} = \gamma \big/ \big(1+\beta\lambda/\mu\big)"
-  description="μ→∞(함정)이면 분모 1, 승수 γ. μ→0(고전 LM)이면 분모 무한, 승수 0. 18장의 표가 이 식이다."
+  label="행렬 형태"
+  formula="\begin{pmatrix} 1 & \beta \\ \lambda & -\mu \end{pmatrix}\begin{pmatrix} Y \\ r \end{pmatrix}=\begin{pmatrix} \alpha+\gamma G \\ M/P \end{pmatrix}"
+  description="계수 행렬의 행렬식은 −(μ + βλ)로 0이 아니므로 해가 하나 있다. 행렬로 연립방정식을 푸는 방법은 경제수학 5장에서 다룬다."
 />
 
-ΔG=10조 원, 금리 상승으로 I가 3조 원 줄면 산출 증가는 폐쇄 승수보다 작다. 그 3조 원이 β·Δr이다.
+크라머 공식으로 풀면
+
+<FormulaBox
+  label="균형 산출과 금리"
+  formula="Y^*=\frac{\mu(\alpha+\gamma G)+\beta\,M/P}{\mu+\beta\lambda},\qquad r^*=\frac{\lambda(\alpha+\gamma G)-M/P}{\mu+\beta\lambda}"
+  description="분모 μ + βλ가 두 시장의 상호작용이다. 분자는 각각 재화시장과 화폐시장의 외생 변수가 어떻게 섞이는지를 보여 준다."
+/>
+
+## 2. 앞 장의 숫자로 검산
+
+4장의 경제는 $\alpha=260$, $\beta=10$, $\gamma=5$, $G=30$, $\lambda=0.5$, $\mu=20$, $M/P=180$이다.
+
+- $Y^*=\dfrac{20\times 410+10\times 180}{20+5}=\dfrac{10{,}000}{25}=400$
+- $r^*=\dfrac{0.5\times 410-180}{25}=\dfrac{25}{25}=1\%$
+
+4장의 그래프 해와 같다.
+
+## 3. 비교정태 계수
+
+균형식을 외생 변수로 미분하면 정책 효과가 나온다.
 
 <LectureTable
-  title="계수와 이야기"
-  headers={["계수", "커지면"]}
+  title="비교정태 계수와 이 경제의 값"
+  headers={["계수", "일반식", "값", "4장 결과와 대조"]}
   rows={[
-    ["γ", "재정 상한 ↑"],
-    ["β", "구축 ↑, 통화 경로 ↑"],
-    ["λ", "LM 가파름, 구축 ↑"],
-    ["μ", "LM 평평, 구축 ↓"],
+    ["dY/dG", "μγ/(μ+βλ)", "4", "G +10 → Y +40"],
+    ["dr/dG", "λγ/(μ+βλ)", "0.1", "G +10 → r +1%p"],
+    ["dY/d(M/P)", "β/(μ+βλ)", "0.4", "M/P +20 → Y +8"],
+    ["dr/d(M/P)", "−1/(μ+βλ)", "−0.04", "M/P +20 → r −0.8%p"],
   ]}
 />
 
-<Callout type="warning">
-선형 근사는 국소다. 제로하한에서 μ가 갑자기 커지는 것은 계수 하나가 아니라 체제의 전환이다. 숫자를 넣은 시뮬레이터가 그 꺾임을 안 넣으면 함정을 과소평가한다.
-</Callout>
+첫 줄의 $\mu\gamma/(\mu+\beta\lambda)$는 7장의 $\gamma/(1+\beta\lambda/\mu)$와 같은 식이다. 계수 표를 보면 각 모수가 이야기에 어떻게 대응하는지 드러난다.
 
-물가 P를 내생으로 돌리면 AD가 되고 19장이다. 개방하면 r 대신 환율이 들어가고 국제금융 3장이다. 이 장의 해는 폐쇄·고정 P의 벤치마크 좌표다.
+<LectureTable
+  title="모수가 커질 때"
+  headers={["모수", "재정 효과", "통화 효과", "이유"]}
+  rows={[
+    ["γ (승수)", "커진다", "—", "같은 지출이 더 큰 수요를 만든다"],
+    ["β (지출의 금리 민감도)", "작아진다", "커진다", "금리 변화가 지출을 크게 바꾼다(구축↑, 통화 경로↑)"],
+    ["λ (화폐수요의 소득 민감도)", "작아진다", "작아진다", "산출이 늘 때 금리가 더 오른다"],
+    ["μ (화폐수요의 금리 민감도)", "커진다", "작아진다", "LM이 평평해진다"],
+  ]}
+/>
+
+## 4. 금리 하한이 선형 해를 깬다
+
+실질잔고를 220으로 크게 늘리면 선형 해는 $Y^*=(20\times 410+10\times 220)/25=416$, $r^*=(205-220)/25=-0.6\%$다. 그러나 명목 금리는 0 아래로 크게 내려갈 수 없다. 실제 균형은 금리 0에서 IS가 정하는 $Y=410$이고, 금리 0·산출 410에서 필요한 실질잔고는 $0.5\times 410=205$이므로, 205를 넘게 늘린 부분은 산출을 움직이지 못한다. 금리가 0에 닿는 순간 LM은 사실상 수평이 되고, 7장의 유동성 함정 영역으로 넘어간다.
+
+<EconDiagram
+  title="금리 하한과 통화 확장의 한계"
+  xLabel="Y"
+  yLabel="r (%)"
+  xMin={380}
+  xMax={430}
+  yMin={-1}
+  yMax={3}
+  curves={[
+    { label: "IS", points: [[380, 3], [420, -1]], tone: "blue", labelAt: 0 },
+    { label: "LM (180)", points: [[380, 0.5], [430, 1.75]], tone: "green" },
+    { label: "LM (220, 선형)", points: [[400, -1], [430, -0.25]], tone: "green", dashed: true },
+    { label: "금리 하한", points: [[380, 0], [430, 0]], tone: "gray", dashed: true },
+  ]}
+  marks={[
+    { x: 400, y: 1, label: "E", xTick: "400" },
+    { x: 410, y: 0, label: "하한 균형", xTick: "410" },
+    { x: 416, y: -0.6, label: "선형 해(불가능)" },
+  ]}
+  caption="선형 모형은 금리 −0.6%와 산출 416을 예측하지만, 금리 하한 때문에 실제 균형은 금리 0, 산출 410에 머문다."
+/>
+
+<Callout type="warning">
+선형 근사는 한 점 주변에서만 맞는다. 금리 하한처럼 모형의 구조가 바뀌는 지점에서는 계수가 아니라 체제가 바뀐다. 이 꺾임을 넣지 않은 정책 시뮬레이션은 통화정책의 효과를 과대평가한다. 물가를 내생 변수로 돌리면 [8장](/ko/education-economics-ch19/)의 총수요곡선이, 개방경제로 넓히면 [국제금융 3장](/ko/education-international-finance-ch3/)의 먼델-플레밍 모형이 된다.
+</Callout>
 
 ## 확인문제
 
-IS: Y=C+I(r)+G, LM: M/P=L(Y,r). 재정 ΔG=10조 원, 금리 상승으로 I가 3조 원 줄면 산출 증가는 폐쇄 승수보다 작다. 연립의 비교정태가 한 곡선 이동보다 정확하다. μ가 커지면 그 3조 원이 줄어든다.
+$\mu$가 20에서 5로 작아지면(LM이 가팔라지면) 재정 승수와 통화 승수는? 분모 $\mu+\beta\lambda$는 $5+5=10$이다. $dY/dG=5\times 5/10=2.5$, $dY/d(M/P)=10/10=1$이다. 재정 효과는 4에서 2.5로 줄고 통화 효과는 0.4에서 1로 커진다. 7장의 표와 같은 결과다.
 
 ## 참고 자료
 
-- John Hicks, “Mr. Keynes and the ‘Classics’,” *Econometrica* (1937)
+- John Hicks, "Mr. Keynes and the 'Classics'," *Econometrica* (1937)
+- Alpha Chiang and Kevin Wainwright, *Fundamental Methods of Mathematical Economics*, ch. 5, 8
 - N. Gregory Mankiw, *Macroeconomics*, ch. 12
-- MIT OpenCourseWare, [14.02 Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)
