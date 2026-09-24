@@ -1,0 +1,69 @@
+---
+track: academy
+locale: es
+series: economics-math
+chapter: 2
+title: "Matemáticas para economistas — Integración y reconstrucción de excedentes y totales"
+category: "Economics"
+author: Oiyo
+tags:
+  - matemáticas para la economía
+  - integración
+  - excedente del consumidor
+  - coste total
+description: "Reconstruye el excedente del consumidor y el coste variable con la integral definida, y repasa por qué los datos marginales solos no devuelven los niveles totales, ya que la constante de la integral indefinida es el coste fijo."
+pubDate: '2026-05-27'
+updatedDate: 2026-09-24
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Matemáticas para economistas — la integración vuelve a sumar los márgenes
+
+Si el [capítulo 1](/es/education-economics-math-ch1/) leyó el margen con la derivada, este capítulo suma esos márgenes para recuperar totales y excedentes. Las matrices que resuelven de una vez la interdependencia entre industrias están en el [capítulo 5](/es/education-economics-math-ch5/), y la optimización con restricciones en el [capítulo 3](/es/education-economics-math-ch3/).
+
+## 1. Una integral definida es un área, y esa área es un excedente
+
+Con una demanda $P=100-Q$ y un precio de 40 wones, la cantidad intercambiada es 60. El excedente del consumidor es $\int_0^{60} (100-Q-40)\,dQ = [60Q - Q^2/2]_0^{60} = 1800$ wones.
+
+Si la oferta es $P=10+Q$, el excedente del productor al mismo precio es $\int_0^{60} (40-(10+Q))\,dQ = 900$ wones, y el excedente total 2.700 wones. Cuando hay un impuesto, la pérdida irrecuperable se resta de esa área. El capítulo de microeconomía sobre impuestos usa ese gráfico.
+
+<FormulaBox
+  label="Coste variable y coste marginal"
+  formula="TVC(Q) = \int_0^Q MC(q)\,dq"
+  description="Si MC=6+2q, entonces TVC=6Q+Q^2. El coste fijo queda como constante de integración; la integración sola no puede recuperarlo."
+/>
+
+## 2. La constante de la integral indefinida es, en economía, el coste fijo
+
+El teorema fundamental del cálculo dice que $\frac{d}{dQ}\int_0^Q \mathrm{MC}(q)\,dq = \mathrm{MC}(Q)$. Se va del margen al total y se vuelve al margen. Pero si no se observa $+C$, el **nivel** del coste total queda vacío. Si los datos solo contienen la curva de coste marginal, el coste fijo hay que traerlo aparte de la contabilidad o de experimentos.
+
+<LectureTable
+  title="Lo que la integración recupera y lo que no"
+  headers={["Función integrada", "Qué se obtiene", "Qué no se obtiene"]}
+  rows={[
+    ["Precio de demanda", "Excedente del consumidor", "Una descomposición exacta de los efectos renta"],
+    ["Coste marginal", "Coste variable", "El coste fijo C"],
+    ["Utilidad marginal", "Diferencias de utilidad", "El nivel de utilidad en el origen"],
+  ]}
+/>
+
+<Callout type="warning">
+No concluya que un área mayor significa un bienestar mayor. No sume excedentes de dos mercados medidos en unidades distintas. Si la demanda inversa se desplaza con la renta, el excedente marshalliano se aparta de la variación compensatoria y la equivalente. Una integral es solo el área bajo una curva dada; no identifica la curva misma.
+</Callout>
+
+La log-linealización $d \ln Y = \varepsilon\, d \ln X$ convierte las elasticidades en sumas. Es el punto de partida de la contabilidad del crecimiento. Donde esas elasticidades se encuentran con los multiplicadores de la optimización con restricciones es el [capítulo 3](/es/education-economics-math-ch3/).
+
+## Ejercicio
+
+Con una demanda $P=80-2Q$ y un precio de 20 wones, ¿cuál es el excedente del consumidor? $Q=30$, e $\int_0^{30} (80-2q-20)\,dq = [60q - q^2]_0^{30} = 1800-900 = 900$ wones. Si el precio baja a 10 wones, $80-2Q=10$ da $Q=35$, e $\int_0^{35} (70-2q)\,dq = 70×35 - 35^2 = 2450-1225 = 1225$ wones. El área recoge a la vez la bajada del precio y el aumento de la cantidad.
+
+## Referencias
+
+- Alpha Chiang and Kevin Wainwright, *Fundamental Methods of Mathematical Economics*, ch. 13–14
+- Hal Varian, *Intermediate Microeconomics*, ch. 14
+- Carl Simon and Lawrence Blume, *Mathematics for Economists*

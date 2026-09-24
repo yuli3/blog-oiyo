@@ -1,0 +1,69 @@
+---
+track: academy
+locale: ja
+series: economics-math
+chapter: 5
+title: "経済数学 — 行列と産業連関"
+category: "Economics"
+author: Oiyo
+tags:
+  - 経済数学
+  - 行列
+  - 投入産出
+  - 産業連関
+description: "2×2の産業連関で(I-A)の逆行列が最終需要の波及を計算する理由を解き、逆行列が存在することと技術が実現可能であることが違う理由を復習します。"
+pubDate: '2026-05-27'
+updatedDate: 2026-09-24
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 経済数学 — 行列は一つの市場ではなく、産業間の依存関係を一度に解く
+
+[第2章](/ja/education-economics-math-ch2/)の積分は、一本の曲線の下の面積である。財が互いを中間財として使うなら、その面積を産業ごとに別々に足しても総産出にはならない。この章では、$(I-A)^{-1}$がその循環を閉じる理由を復習する。
+
+## 1. 最終需要と総産出は同じベクトルではない
+
+中間投入係数行列$A$の$(i,j)$成分は、jを1単位作るのに必要なiの量である。最終需要が$d$なら、総産出$x$は中間需要$Ax$と最終需要を同時に満たさなければならない。
+
+<FormulaBox
+  label="レオンチェフ体系"
+  formula="x = Ax + d \quad \Rightarrow \quad x = (I-A)^{-1}d"
+  description="逆行列の各列は、その産業の最終需要1単位をまかなうために、全産業がどれだけ動かなければならないかを示す。"
+/>
+
+$A=[[0.2,0.3],[0.1,0.4]]$、$d=(100,80)$なら、$I-A=[[0.8,-0.3],[-0.1,0.6]]$である。行列式は$0.48-0.03=0.45$、逆行列は$(1/0.45)[[0.6,0.3],[0.1,0.8]]$である。総産出は$(84/0.45, 74/0.45)$、およそ$(186.7, 164.4)$個で、最終需要の100個と80個より大きい。その差が中間財の循環である。
+
+## 2. 逆行列があるからといって、技術が成り立つわけではない
+
+<LectureTable
+  title="行列が経済学でする仕事"
+  headers={["対象", "式", "失敗するとき"]}
+  rows={[
+    ["産業連関", "(I-A)^{-1}d", "ホーキンス=サイモン条件の不成立、スペクトル半径が1以上"],
+    ["2財の比較静学", "ヤコビアンの符号", "局所的な線形化の外"],
+    ["ポートフォリオ", "共分散行列", "特異行列、完全相関"],
+  ]}
+/>
+
+ホーキンス=サイモン条件は、$(I-A)$の首座小行列式がすべて正であることを求める。数字を入れられることと、その技術が生産的であることは別である。比較静学のヤコビアンは、[第1章](/ja/education-economics-math-ch1/)の微分の多変数版である。共分散行列は、[企業財務](/ja/education-finance-ch3/)がリスクとして読む。
+
+<Callout type="warning">
+逆行列が存在することは、経済の安定ではない。産業連関は静学的な数量体系であり、価格が調整されるか、在庫が発散するかは問わない。動学と安定性は[第4章](/ja/education-economics-math-ch4/)で扱う。大きな表の係数を因果として読まない。計量には別に識別の問題がある。
+</Callout>
+
+韓国銀行の産業連関表は、この2×2を数十の産業に拡張した表である。算術は同じである。分類や輸入の扱いが変われば、同じ$d$でも$x$は変わる。
+
+## 確認問題
+
+上の$A$で、2番目の産業の最終需要だけが80から100へ20増えれば、逆行列の2列目$(1/0.45)(0.3, 0.8) \approx (0.667, 1.778)$に20を掛けて、総産出は約13.3個と35.6個増える。2番目の産業だけを増やしたのに、1番目も13.3個増える。中間財のつながりがなければ、1番目は0のはずである。
+
+## 参考資料
+
+- Alpha Chiang and Kevin Wainwright, *Fundamental Methods of Mathematical Economics*, ch. 15–16
+- Wassily Leontief, *Input-Output Economics*
+- 韓国銀行、[産業連関表](https://www.bok.or.kr/portal/main/contents.do?menuNo=200876)(韓国語)

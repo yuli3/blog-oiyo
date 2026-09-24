@@ -3,226 +3,78 @@ track: academy
 locale: en
 series: economics-math
 chapter: 1
-title: "Mathematics for Economics — Functions, Derivatives, and Economic Applications"
+title: "Mathematics for Economics — Functions, Derivatives and Economic Applications"
 category: "Economics"
-author: OIYO Editorial
+author: Oiyo
 tags:
-  - Mathematical Economics
-  - Derivatives
-  - Optimization
-  - Elasticity
-  - Marginal Analysis
-description: "Mathematics for economics — function basics, marginal vs. average concepts, basic differentiation rules (product, quotient, chain), elasticity in economics, profit optimization, and cost function analysis, in one complete guide."
+  - mathematical economics
+  - derivatives
+  - marginal analysis
+  - elasticity
+description: "Calculates marginal quantities and elasticities from demand and cost functions by differentiation, and reviews why the first-order condition for profit maximization differs from an average condition."
 pubDate: '2026-05-27'
+updatedDate: 2026-09-24
+layoutVariant: lecture-series
+contentStage: review
 ---
 
-## Functions and Economic Models
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-**The role of functions in economics:**
+# Mathematics for Economics — The Derivative Is the Grammar of the Margin
 
-- Express relationships between economic variables mathematically
-- **Example**: demand function Q = f(P), cost function C = f(Q)
+This course is not an introduction to calculus. It is for people who have seen derivatives at university and want to pin down again **which derivative is which economic quantity** in demand, cost and profit equations. Integration is in [chapter 2](/en/education-economics-math-ch2/), constraints in [chapter 3](/en/education-economics-math-ch3/), dynamics in [chapter 4](/en/education-economics-math-ch4/) and matrices in [chapter 5](/en/education-economics-math-ch5/).
 
-**Main function types:**
+## 1. The margin is not the average
 
-**Linear functions:**
+With demand $Q=100-2P$, quantity falls 2 units for each 1-won rise in price. Because the function is linear, this slope of $-2$ is the same everywhere, not just at one point. If total cost is $\mathrm{TC}=10+6Q+Q^2$ (in units of 10,000 won), then
 
-- **y = a + bx (a**: intercept, b: slope)
-- **Demand**: Q = 100 - 2P (Q falls as P rises)
-- **b = rate of change in quantity demanded**: price up 1 → quantity down 2
+<FormulaBox
+  label="Marginal cost"
+  formula="MC = dTC/dQ = 6 + 2Q"
+  description="At Q=4, MC=14. Average cost ATC=TC/Q=10/Q+6+Q is 12.5 at Q=4. The margin and the average diverge."
+/>
 
-**Nonlinear functions:**
+At $Q=4$, the cost of making one more unit is 140,000 won, not the average so far of 125,000 won. That is why the profit rule of section 2 uses the margin rather than the average.
 
-- **Quadratic**: TC = a + bQ + cQ² Total cost function — U-shaped curve
-- **Exponential**: Y = Ae^(rt) (growth model)
-- **Logarithmic**: useful for computing elasticity
+Elasticity is a derivative with the units removed.
 
-**Composite functions:**
+<FormulaBox
+  label="Point elasticity"
+  formula="\varepsilon = (dQ/dP)\cdot(P/Q)"
+  description="With Q=100-2P and P=20, Q=60 and ε=-2×(20/60)=-2/3. Since |ε|<1, a price rise at this point increases revenue."
+/>
 
-- **y = f(g(x))**: one function nested inside another
-- **Example**: Profit = TR(Q) - TC(Q) → profit as a function of Q
+Revenue is $\mathrm{TR}=P\cdot Q=20×60=1200$. At a price of 21, $Q=58$ and $\mathrm{TR}=1218$, higher. This matches the calculation for the inelastic range.
 
-**Inverse functions:**
+## 2. Profit maximization looks at the first and second order together
 
-- From f(x) = y, we get x = f⁻¹(y)
-- Supply function P = g(Q) ↔ Q = g⁻¹(P)
+With $\pi=\mathrm{TR}-\mathrm{TC}$, $\mathrm{TR}=40Q$ and $\mathrm{TC}=10+6Q+Q^2$, we get $\pi=34Q-Q^2-10$. $d\pi/dQ=34-2Q=0$ gives $Q=17$, and $d^2\pi/dQ^2=-2<0$, so it is a maximum. It is the same point where $\mathrm{MC}=6+2Q$ meets the price of 40.
 
-**Limits and continuity:**
+<Callout type="warning">
+Solving only the first-order condition can also pick up a minimum. If $\mathrm{TC}$ is in a range of decreasing marginal cost, MC falls and can meet MR a second time. That point is close to a profit minimum. Do not memorize equations without the graph.
+</Callout>
 
-- **lim(x→a) f(x)**: the limit of f(x) as x approaches a
-- In economic models, assuming continuity lets us analyze the response to small changes
-- Discontinuities reflect real-world features like price floors and regulatory caps
+The chain rule applies directly to composite production. If $Q=F(K(t))$, then $dQ/dt=F'(K)\cdot K'(t)$. When capital changes over time, the change in output is the product of the marginal product and investment. This connects to the optimization of chapter 3.
 
----
+<LectureTable
+  title="The economic quantity a derivative points to"
+  headers={["Function", "Derivative", "Name"]}
+  rows={[
+    ["TC(Q)", "TC'", "MC"],
+    ["TR(Q)", "TR'", "MR"],
+    ["Q(P)", "Q'·P/Q", "Price elasticity of demand"],
+    ["U(x,y) = constant", "dy/dx = -Ux/Uy", "Slope of the indifference curve (−MRS)"],
+  ]}
+/>
 
-## Basics of Differentiation and Its Rules
+## Check your understanding
 
-**The economic meaning of differentiation:**
+What is the optimal quantity for a competitive firm with $\mathrm{TC}=100+20Q+Q^2$ (in units of 10,000 won) and $P=80$? $\mathrm{MC}=20+2Q=80$ gives $Q=30$. Then $\mathrm{ATC}=100/30+20+30≈53.3$, so profit per unit is about 26.7 and total profit 800 (8 million won). Choose the point where $P=\mathrm{MC}$, not the point of minimum average cost.
 
-- **dy/dx**: the rate of change in y for a 1-unit change in x
-- In economics, this is the marginal concept
+## References
 
-**Key differentiation rules:**
-
-**Power rule:**
-
-- d/dx [xⁿ] = n·xⁿ⁻¹
-- **Example**: TC = 3Q² → dTC/dQ = 6Q (marginal cost, MC)
-
-**Sum/difference rule:**
-
-- d/dx [f(x) ± g(x)] = f'(x) ± g'(x)
-
-**Product rule:**
-
-- d/dx [f(x)·g(x)] = f'(x)g(x) + f(x)g'(x)
-- **Example**: used when computing MR from TR = P(Q)·Q
-
-**Quotient rule:**
-
-- d/dx [f(x)/g(x)] = [f'g - fg'] / g²
-
-**Chain rule:**
-
-- d/dx [f(g(x))] = f'(g(x))·g'(x)
-- **Example**: TC = (2Q + 1)³
-  - dTC/dQ = 3(2Q+1)² × 2 = 6(2Q+1)²
-
-**Exponential and logarithmic derivatives:**
-
-- d/dx [eˣ] = eˣ
-- d/dx [ln x] = 1/x
-- essential for growth and compound-interest calculations
-
-**Second derivative:**
-
-- **f''(x)**: the rate of change of the slope
-- used to determine concavity/convexity f''(x) < 0: concave (local maximum) → confirms a profit-maximizing condition f''(x) > 0: convex (local minimum) → confirms a cost-minimizing condition
-
----
-
-## Marginal Analysis
-
-**Marginal analysis:**
-
-**Marginal revenue (MR):**
-
-- MR = dTR/dQ
-- If TR = P·Q, then MR = d(P·Q)/dQ
-- **Monopoly**: TR = P(Q)·Q → MR = P + Q·(dP/dQ)
-- **Perfect competition**: P = MR (firms are price takers)
-
-**Marginal cost (MC):**
-
-- MC = dTC/dQ
-- **U-shaped MC curve**: falls initially, then rises
-
-**Marginal product (MP):**
-
-- MP = dTP/dL (with labor input L)
-- **Law of diminishing marginal product**: MP falls → MC rises
-
-**Profit-maximizing condition:**
-
-- Profit π = TR - TC
-- **First-order condition**: dπ/dQ = MR - MC = 0 → MR = MC
-- **Second-order condition**: d²π/dQ² < 0 → confirms MR falling and MC rising
-
-**Interpreting MR = MC:**
-
-- **MR > MC**: produce more → profit rises
-- **MR < MC**: produce less → profit rises
-- **MR = MC**: the quantity that maximizes profit (or minimizes loss)
-
-**Average vs. marginal:**
-
-- ATC = TC/Q
-- AFC = FC/Q
-- AVC = VC/Q
-- MC < ATC → ATC falling (average converges toward marginal)
-- MC > ATC → ATC rising
-
----
-
-## Elasticity
-
-**Price elasticity of demand (PED):**
-
-- Ed = (ΔQ/Q) / (ΔP/P) = (dQ/dP) × (P/Q)
-- Always negative → expressed as an absolute value
-- **|Ed| > 1**: elastic (demand is sensitive to price changes)
-- **|Ed| < 1**: inelastic (demand is insensitive to price changes)
-- **|Ed| = 1**: unit elastic
-
-**Elasticity and total revenue (TR):**
-
-- **Elastic**: raising price lowers TR (Q falls by a lot)
-- **Inelastic**: raising price raises TR (Q falls only slightly)
-- **Unit elastic**: TR is unchanged
-
-**Determinants of elasticity:**
-
-- **Number of substitutes**: more substitutes → more elastic
-- Necessity vs. luxury
-- **Time horizon**: more elastic over the long run
-- Share of income spent
-
-**Income elasticity of demand:**
-
-- Ey = (ΔQ/Q) / (ΔY/Y)
-- **Ey > 0**: normal good (demand rises as income rises)
-- **Ey > 1**: luxury good
-- **Ey < 0**: inferior good
-
-**Cross-price elasticity of demand:**
-
-- Exy = (ΔQx/Qx) / (ΔPy/Py)
-- **Positive**: substitutes (coffee price up → tea demand up)
-- **Negative**: complements (coffee price up → sugar demand down)
-
-**Log-linear demand function:**
-
-- ln Q = a + b·ln P → b = elasticity (a constant)
-- Log differentiation lets you read off elasticity directly
-
----
-
-## Cost Function Analysis
-
-**Short-run total cost structure:**
-
-- TC = FC + VC
-- **FC**: fixed cost (equipment, rent — independent of output)
-- **VC**: variable cost (materials, labor — proportional to output)
-
-**Example short-run cost function:**
-
-- TC = 100 + 10Q + Q² FC = 100, VC = 10Q + Q² MC = dTC/dQ = 10 + 2Q ATC = 100/Q + 10 + Q
-
-**Output that minimizes ATC:**
-
-- d(ATC)/dQ = 0
-- -100/Q² + 1 = 0 → Q = 10
-- **Check**: MC = ATC → 10 + 20 = 100/10 + 10 + 10 = 30
-
-**Economies and diseconomies of scale:**
-
-- **LTC (long-run total cost)**: all inputs variable
-- Long-run average cost (LAC): Economies of scale: the falling segment of LAC Diseconomies of scale: the rising segment of LAC Minimum efficient scale: the lowest point on LAC
-
-**Relationship to remember:**
-
-- **At the point where MC = AC**: AC is at its minimum
-- **MC < AC**: AC is falling
-- **MC > AC**: AC is rising
-- This relationship holds for MC vs. ATC and MC vs. AVC alike
-
----
-
-## Frequently Asked Questions
-
-**Q. Why is marginal cost U-shaped?**
-A. The U-shape of marginal cost reflects two forces in the production process. Early on, as labor input rises, division of labor and specialization raise marginal productivity, so the cost of each additional unit falls. But once capital (machines, factory space) is fixed in the short run, continuing to add labor eventually triggers the law of diminishing marginal returns — the efficiency of additional labor drops, and marginal cost starts rising again. The minimum of the marginal cost curve coincides with the minimum of average variable cost.
-
-**Q. Why does the profit-maximization condition MR = MC also need a second-order condition?**
-A. The first-order condition MR = MC identifies an extreme point (maximum or minimum) of the profit function — it doesn't guarantee a maximum. The second-order condition, d²π/dQ² < 0, confirms that the extreme point is actually a maximum (profit is at its highest). For instance, if the profit function is S-shaped, there can be multiple points where MR = MC, and one of those could actually be a profit minimum (a maximum loss). The second-order condition is needed to find the output level that truly maximizes profit across the whole range.
+- Alpha Chiang and Kevin Wainwright, *Fundamental Methods of Mathematical Economics*, ch. 6–9
+- Carl Simon and Lawrence Blume, *Mathematics for Economists*, ch. 3–5
+- MIT OpenCourseWare, [14.01 Principles of Microeconomics](https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/)

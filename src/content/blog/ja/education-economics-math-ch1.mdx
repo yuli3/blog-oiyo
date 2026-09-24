@@ -1,0 +1,80 @@
+---
+track: academy
+locale: ja
+series: economics-math
+chapter: 1
+title: "経済数学 — 関数・微分と経済への応用"
+category: "Economics"
+author: Oiyo
+tags:
+  - 経済数学
+  - 微分
+  - 限界分析
+  - 弾力性
+description: "需要関数・費用関数から微分で限界量と弾力性を計算し、利潤最大化の1階条件が平均の条件と違う理由を復習します。"
+pubDate: '2026-05-27'
+updatedDate: 2026-09-24
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 経済数学 — 微分は限界を書き表す文法である
+
+この科目は微積分の入門ではない。大学で導関数を学んだ人が、需要・費用・利潤の式で**どの導関数がどの経済量なのか**をもう一度固定する。積分は[第2章](/ja/education-economics-math-ch2/)、制約は[第3章](/ja/education-economics-math-ch3/)、動学は[第4章](/ja/education-economics-math-ch4/)、行列は[第5章](/ja/education-economics-math-ch5/)である。
+
+## 1. 限界は平均ではない
+
+需要が$Q=100-2P$なら、価格が1ウォン上がるごとに数量は2単位減る。関数が線形なので、この傾き$-2$はある一点だけでなくどこでも同じである。総費用が$\mathrm{TC}=10+6Q+Q^2$(万ウォン)なら、
+
+<FormulaBox
+  label="限界費用"
+  formula="MC = dTC/dQ = 6 + 2Q"
+  description="Q=4でMC=14万ウォン。平均費用ATC=TC/Q=10/Q+6+Qは、Q=4で12.5万ウォン。限界と平均は食い違う。"
+/>
+
+$Q=4$でもう1台作る費用は14万ウォンであって、これまでの平均12.5万ウォンではない。第2節の利潤のルールが平均ではなく限界を使う理由である。
+
+弾力性は、単位を消した導関数である。
+
+<FormulaBox
+  label="点弾力性"
+  formula="\varepsilon = (dQ/dP)\cdot(P/Q)"
+  description="Q=100-2P、P=20ならQ=60、ε=-2×(20/60)=-2/3。|ε|<1なので、この点では値上げが売上を増やす。"
+/>
+
+売上は$\mathrm{TR}=P\cdot Q=20×60=1200$である。価格が21なら$Q=58$、$\mathrm{TR}=1218$に増える。非弾力的な区間の計算と合っている。
+
+## 2. 利潤最大化は1階と2階をあわせて見る
+
+$\pi=\mathrm{TR}-\mathrm{TC}$、$\mathrm{TR}=40Q$、$\mathrm{TC}=10+6Q+Q^2$なら、$\pi=34Q-Q^2-10$である。$d\pi/dQ=34-2Q=0$から$Q=17$で、$d^2\pi/dQ^2=-2<0$なので極大である。$\mathrm{MC}=6+2Q$が価格40と交わる点と同じである。
+
+<Callout type="warning">
+1階条件だけを解くと、極小もとらえてしまう。$\mathrm{TC}$が限界費用の逓減する区間にあれば、MCが下がってMRともう一度交わることがある。その点は利潤最小に近い。グラフなしで等式だけを覚えない。
+</Callout>
+
+連鎖律は合成された生産にそのまま使われる。$Q=F(K(t))$なら$dQ/dt=F'(K)\cdot K'(t)$である。資本が時間とともに変わるとき、産出の変化は限界生産と投資の積になる。第3章の最適化につながる。
+
+<LectureTable
+  title="導関数が指す経済量"
+  headers={["式", "導関数", "名前"]}
+  rows={[
+    ["TC(Q)", "TC'", "MC"],
+    ["TR(Q)", "TR'", "MR"],
+    ["Q(P)", "Q'·P/Q", "需要の価格弾力性"],
+    ["U(x,y) = 一定", "dy/dx = -Ux/Uy", "無差別曲線の傾き(−MRS)"],
+  ]}
+/>
+
+## 確認問題
+
+$\mathrm{TC}=100+20Q+Q^2$(万ウォン)、$P=80$万ウォンの競争企業の最適数量は? $\mathrm{MC}=20+2Q=80$から$Q=30$である。このとき$\mathrm{ATC}=100/30+20+30≈53.3$万ウォンなので、1台あたりの利潤は約26.7万ウォン、総利潤は800万ウォンである。平均費用が最小の点ではなく、$P=\mathrm{MC}$の点で選ぶ。
+
+## 参考資料
+
+- Alpha Chiang and Kevin Wainwright, *Fundamental Methods of Mathematical Economics*, ch. 6–9
+- Carl Simon and Lawrence Blume, *Mathematics for Economists*, ch. 3–5
+- MIT OpenCourseWare, [14.01 Principles of Microeconomics](https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/)

@@ -1,0 +1,69 @@
+---
+track: academy
+locale: es
+series: economics-math
+chapter: 5
+title: "Matemáticas para economistas — Matrices y análisis input-output"
+category: "Economics"
+author: Oiyo
+tags:
+  - matemáticas para la economía
+  - matrices
+  - input-output
+  - relaciones intersectoriales
+description: "Explica por qué, en un modelo input-output 2×2, la inversa de (I-A) calcula la propagación de la demanda final, y repasa por qué la existencia de la inversa es distinta de la viabilidad técnica."
+pubDate: '2026-05-27'
+updatedDate: 2026-09-24
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Matemáticas para economistas — las matrices resuelven de una vez la interdependencia entre industrias, no un solo mercado
+
+La integral del [capítulo 2](/es/education-economics-math-ch2/) es el área bajo una sola curva. Cuando los bienes se usan unos a otros como insumos intermedios, sumar esas áreas industria por industria no da la producción total. Este capítulo repasa por qué $(I-A)^{-1}$ cierra ese circuito.
+
+## 1. La demanda final y la producción total no son el mismo vector
+
+El elemento $(i,j)$ de la matriz de coeficientes técnicos $A$ es la cantidad de i necesaria para producir una unidad de j. Si la demanda final es $d$, la producción total $x$ debe satisfacer a la vez la demanda intermedia $Ax$ y la demanda final.
+
+<FormulaBox
+  label="Sistema de Leontief"
+  formula="x = Ax + d \quad \Rightarrow \quad x = (I-A)^{-1}d"
+  description="Cada columna de la inversa indica cuánto deben producir todas las industrias para atender una unidad de demanda final de esa industria."
+/>
+
+Con $A=[[0{,}2;0{,}3],[0{,}1;0{,}4]]$ y $d=(100;80)$, $I-A=[[0{,}8;-0{,}3],[-0{,}1;0{,}6]]$. El determinante es $0{,}48-0{,}03=0{,}45$. La inversa es $(1/0{,}45)[[0{,}6;0{,}3],[0{,}1;0{,}8]]$. La producción total es $(84/0{,}45 ; 74/0{,}45)$, aproximadamente $(186{,}7 ; 164{,}4)$ unidades, más que la demanda final de 100 y 80 unidades. La diferencia es la circulación de insumos intermedios.
+
+## 2. Tener inversa no hace viable una técnica
+
+<LectureTable
+  title="Lo que hacen las matrices en economía"
+  headers={["Objeto", "Expresión", "Cuándo falla"]}
+  rows={[
+    ["Input-output", "(I-A)^{-1}d", "Falla Hawkins–Simon, radio espectral de 1 o más"],
+    ["Estática comparativa con dos bienes", "Signos del jacobiano", "Fuera de la linealización local"],
+    ["Cartera", "Matriz de covarianzas", "Matriz singular, correlación perfecta"],
+  ]}
+/>
+
+La condición de Hawkins–Simon exige que los menores principales dominantes de $(I-A)$ sean positivos. Poder introducir números no es lo mismo que disponer de una técnica productiva. El jacobiano de la estática comparativa es la versión de varias variables de las derivadas del [capítulo 1](/es/education-economics-math-ch1/). La matriz de covarianzas es lo que las [finanzas corporativas](/ko/education-finance-ch3/) (en coreano) leen como riesgo.
+
+<Callout type="warning">
+Que exista la inversa no es estabilidad económica. El modelo input-output es un sistema estático de cantidades; no pregunta si los precios se ajustan ni si las existencias divergen. La dinámica y la estabilidad están en el [capítulo 4](/es/education-economics-math-ch4/). No lea los coeficientes de una tabla grande como causales; la econometría tiene su propio problema de identificación.
+</Callout>
+
+Las tablas input-output del Banco de Corea amplían este 2×2 a decenas de industrias. La aritmética es la misma. Si cambian la clasificación o el tratamiento de las importaciones, $x$ cambia aunque $d$ sea el mismo.
+
+## Ejercicio
+
+Con la $A$ anterior, si solo la demanda final de la segunda industria sube 20, de 80 a 100, se multiplica la segunda columna de la inversa, $(1/0{,}45)(0{,}3 ; 0{,}8) \approx (0{,}667 ; 1{,}778)$, por 20: la producción total sube unas 13,3 y 35,6 unidades. Solo aumentó la demanda de la segunda industria y, sin embargo, la primera produce 13,3 unidades más. Sin vínculos intermedios, esa cifra sería 0.
+
+## Referencias
+
+- Alpha Chiang and Kevin Wainwright, *Fundamental Methods of Mathematical Economics*, ch. 15–16
+- Wassily Leontief, *Input-Output Economics*
+- Banco de Corea, [Tablas input-output](https://www.bok.or.kr/portal/main/contents.do?menuNo=200876) (en coreano)

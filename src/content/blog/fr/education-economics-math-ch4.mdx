@@ -1,0 +1,71 @@
+---
+track: academy
+locale: fr
+series: economics-math
+chapter: 4
+title: "Mathématiques pour économistes — Dynamique et stabilité"
+category: "Economics"
+author: Oiyo
+tags:
+  - mathématiques économiques
+  - équations différentielles
+  - modèle de Solow
+  - stabilité
+description: "Calcule l'état stationnaire et la stabilité d'équations différentielles du premier ordre avec l'accumulation du capital de Solow, et rappelle pourquoi les diagrammes de phase posent une autre question que la statique comparative."
+pubDate: '2026-05-27'
+updatedDate: 2026-09-24
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Mathématiques pour économistes — avec le temps, un optimum statique devient une équation différentielle
+
+La statique comparative saute d'un point à un autre. La dynamique se demande si le chemin entre les deux est réellement parcouru et si le système revient à son état stationnaire. La théorie macroéconomique de la croissance utilise cette grammaire.
+
+## 1. Solutions et stabilité des équations linéaires du premier ordre
+
+Si $\dot x = -a(x-x^*)$ avec $a>0$, alors $x(t)=x^*+(x_0-x^*)e^{-at}$, qui tend vers $x^*$ quand $t\to\infty$. Si $a<0$, la solution diverge. Le signe décide de la stabilité.
+
+Dans le modèle de Solow, le capital par travailleur $k$ suit $\dot k = s f(k) - (\delta+n)k$, et à l'état stationnaire $s f(k^*)=(\delta+n)k^*$. Avec $f(k)=\sqrt k$, $s=0{,}2$ et $\delta+n=0{,}1$, $0{,}2\sqrt k=0{,}1 k$ donne $\sqrt k=2$ et $k^*=4$. Si $k_0=1$, l'épargne l'emporte sur la dépréciation et la dilution démographique et $k$ augmente ; si $k_0=9$, il diminue.
+
+<FormulaBox
+  label="État stationnaire"
+  formula="s f(k^*) = (\delta+n)k^*"
+  description="Le niveau de capital où ce qu'ajoute l'épargne égale ce que retirent dilution et dépréciation. La règle d'or choisit séparément le s qui maximise la consommation."
+/>
+
+La règle d'or s'écrit $f'(k_{gold})=\delta+n$. Avec les chiffres ci-dessus, $f'=1/(2\sqrt k)=0{,}1$ donne $\sqrt k=5$ et $k=25$. Comme $k^*=4$ est inférieur à la règle d'or, relever le taux d'épargne peut accroître la consommation stationnaire. À l'inverse, en cas de suraccumulation, il faut réduire l'épargne pour accroître la consommation stationnaire.
+
+## 2. Un diagramme de phase, ce sont des flèches, pas des coefficients
+
+L'état stationnaire est le point qui sépare la zone où $\dot k>0$ de celle où $\dot k<0$. Un joli dessin ne signifie pas qu'on a lu les coefficients. La stabilité locale exige que le crochet de la linéarisation $\dot{\tilde k}=[sf'(k^*)-(\delta+n)]\tilde k$ soit négatif. Avec des rendements décroissants, $f'(k^*)<f(k^*)/k^*$, donc $sf'(k^*)<\delta+n$ est automatiquement vérifié. Dans l'exemple, $sf'(4)=0{,}2×0{,}25=0{,}05<0{,}1$.
+
+<LectureTable
+  title="Statique et dynamique"
+  headers={["Question", "Statique", "Dynamique"]}
+  rows={[
+    ["Si le taux d'épargne augmente", "k* augmente", "La vitesse à laquelle k rejoint k*"],
+    ["Après un choc", "Le nouvel équilibre", "Si le chemin oscille ou est monotone"],
+    ["Politique", "Niveau de long terme", "Consommation des générations de transition"],
+  ]}
+/>
+
+<Callout type="warning">
+La stabilité en temps continu et en temps discret n'obéissent pas à la même condition de signe. $x_{t+1}=bx_t$ exige $|b|<1$. $b=-1{,}2$ oscille en divergeant. N'écrivez pas un modèle macroéconomique trimestriel en y transposant telle quelle l'intuition du temps continu.
+</Callout>
+
+Le contrôle optimal (le hamiltonien) est le seuil suivant de ce chapitre. L'équation d'Euler de la consommation et de l'épargne, $u'(c_t)=\beta(1+r)u'(c_{t+1})$, en est la condition du premier ordre. Elle se situe à un autre niveau que le multiplicateur d'introduction.
+
+## Exercice
+
+Si le taux d'épargne passe de 20 % à 30 %, que vaut le nouveau $k^*$ ? $0{,}3\sqrt k=0{,}1k$ donne $\sqrt k=3$ et $k^*=9$. La consommation par travailleur $c=(1-s)f(k)$ vaut $0{,}8×2=1{,}6$ en $k=4$, tombe à $0{,}7×2=1{,}4$ au moment où le taux d'épargne augmente, puis remonte à $0{,}7×3=2{,}1$ quand $k$ approche 9. N'écrivez pas « épargner plus est toujours un gain » en ne regardant que le niveau de long terme. Les générations du chemin de transition en paient le coût.
+
+## Références
+
+- Robert Solow, « A Contribution to the Theory of Economic Growth », *QJE* (1956)
+- Alpha Chiang and Kevin Wainwright, *Fundamental Methods of Mathematical Economics*, ch. 14–15
+- MIT OpenCourseWare, [14.02 Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)

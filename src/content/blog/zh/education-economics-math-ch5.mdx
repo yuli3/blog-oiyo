@@ -1,0 +1,69 @@
+---
+track: academy
+locale: zh
+series: economics-math
+chapter: 5
+title: "经济数学 — 矩阵与投入产出"
+category: "Economics"
+author: Oiyo
+tags:
+  - 经济数学
+  - 矩阵
+  - 投入产出
+  - 产业关联
+description: "推导在2×2投入产出模型中(I-A)的逆矩阵为何能计算最终需求的波及效应，并复习逆矩阵存在为何不同于技术上可行。"
+pubDate: '2026-05-27'
+updatedDate: 2026-09-24
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 经济数学 — 矩阵一次性求解的不是单个市场，而是产业间的相互依存
+
+[第2章](/zh/education-economics-math-ch2/)的积分是一条曲线下的面积。若各种商品互为中间品，按产业分别加总这些面积得不到总产出。本章复习$(I-A)^{-1}$为何能闭合这种循环。
+
+## 1. 最终需求与总产出不是同一个向量
+
+中间投入系数矩阵$A$的$(i,j)$元素，是生产1单位j所需的i的数量。若最终需求为$d$，总产出$x$必须同时满足中间需求$Ax$和最终需求。
+
+<FormulaBox
+  label="列昂惕夫体系"
+  formula="x = Ax + d \quad \Rightarrow \quad x = (I-A)^{-1}d"
+  description="逆矩阵的每一列表示:为满足该产业1单位最终需求，所有产业需要运转多少。"
+/>
+
+若$A=[[0.2,0.3],[0.1,0.4]]$，$d=(100,80)$，则$I-A=[[0.8,-0.3],[-0.1,0.6]]$。行列式为$0.48-0.03=0.45$，逆矩阵为$(1/0.45)[[0.6,0.3],[0.1,0.8]]$。总产出为$(84/0.45, 74/0.45)$，约为$(186.7, 164.4)$个，大于最终需求的100个和80个。差额就是中间品的循环。
+
+## 2. 有逆矩阵不等于技术可行
+
+<LectureTable
+  title="矩阵在经济学中的作用"
+  headers={["对象", "表达式", "失效的情形"]}
+  rows={[
+    ["投入产出", "(I-A)^{-1}d", "霍金斯—西蒙条件不成立，谱半径大于等于1"],
+    ["两种商品的比较静态", "雅可比矩阵的符号", "超出局部线性化范围"],
+    ["投资组合", "协方差矩阵", "奇异矩阵、完全相关"],
+  ]}
+/>
+
+霍金斯—西蒙条件要求$(I-A)$的各阶顺序主子式为正。能代入数字，不等于这项技术是有生产力的。比较静态中的雅可比矩阵，是[第1章](/zh/education-economics-math-ch1/)导数的多变量版本。协方差矩阵在[公司财务](/ko/education-finance-ch3/)(韩文)中被解读为风险。
+
+<Callout type="warning">
+逆矩阵存在并不等于经济稳定。投入产出是静态的数量体系，不问价格是否调整、库存是否发散。动态与稳定性见[第4章](/zh/education-economics-math-ch4/)。不要把大表中的系数读成因果关系，计量经济学另有识别问题。
+</Callout>
+
+韩国银行的产业关联表把这个2×2扩展到数十个产业，算术相同。若分类或进口处理方式改变，即使$d$相同，$x$也会变化。
+
+## 练习题
+
+在上面的$A$中，若只有第二个产业的最终需求从80增加20到100，用逆矩阵第二列$(1/0.45)(0.3, 0.8) \approx (0.667, 1.778)$乘以20，总产出分别增加约13.3个和35.6个。只增加了第二个产业的需求，第一个产业也随之增加13.3个。若没有中间品联系，第一个产业的增量应为0。
+
+## 参考资料
+
+- Alpha Chiang and Kevin Wainwright, *Fundamental Methods of Mathematical Economics*, ch. 15–16
+- Wassily Leontief, *Input-Output Economics*
+- 韩国银行，[产业关联表](https://www.bok.or.kr/portal/main/contents.do?menuNo=200876)(韩文)

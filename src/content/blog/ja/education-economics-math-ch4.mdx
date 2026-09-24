@@ -1,0 +1,71 @@
+---
+track: academy
+locale: ja
+series: economics-math
+chapter: 4
+title: "経済数学 — 動学と安定性"
+category: "Economics"
+author: Oiyo
+tags:
+  - 経済数学
+  - 微分方程式
+  - ソロー・モデル
+  - 安定性
+description: "1階微分方程式の定常状態と安定性をソローの資本蓄積で計算し、位相図が比較静学と違う問いを投げかける理由を復習します。"
+pubDate: '2026-05-27'
+updatedDate: 2026-09-24
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 経済数学 — 静学的な最適は、時間が加わると微分方程式になる
+
+比較静学は、ある点から別の点へ跳ぶ。動学は、その間の経路を実際にたどるのか、定常状態に戻ってくるのかを問う。マクロの成長理論がこの文法を使う。
+
+## 1. 1階線形方程式の解と安定性
+
+$\dot x = -a(x-x^*)$で$a>0$なら、$x(t)=x^*+(x_0-x^*)e^{-at}$であり、$t\to\infty$で$x^*$に向かう。$a<0$なら発散する。符号が安定性を分ける。
+
+ソロー・モデルで1人あたり資本$k$は$\dot k = s f(k) - (\delta+n)k$に従い、定常状態では$s f(k^*)=(\delta+n)k^*$である。$f(k)=\sqrt k$、$s=0.2$、$\delta+n=0.1$なら、$0.2\sqrt k=0.1 k$から$\sqrt k=2$、$k^*=4$である。$k_0=1$なら貯蓄が減耗と人口による希釈を上回って$k$は上がり、$k_0=9$なら下がる。
+
+<FormulaBox
+  label="定常状態"
+  formula="s f(k^*) = (\delta+n)k^*"
+  description="貯蓄で積み上がる量と、希釈・減耗で失われる量が等しくなる資本水準。黄金律は、消費を最大にするsを別に選ぶ。"
+/>
+
+黄金律は$f'(k_{gold})=\delta+n$である。上の数字で$f'=1/(2\sqrt k)=0.1$なら$\sqrt k=5$、$k=25$である。$k^*=4$は黄金律より小さいので、貯蓄率を上げれば定常状態の消費は増えうる。逆に過剰貯蓄なら、貯蓄を減らしてはじめて定常状態の消費が増える。
+
+## 2. 位相図は矢印であって、係数ではない
+
+$\dot k>0$の区間と$\dot k<0$の区間を分ける点が定常状態である。図がきれいだからといって係数を読んだことにはならない。線形化$\dot{\tilde k}=[sf'(k^*)-(\delta+n)]\tilde k$の括弧が負であることが局所安定の条件である。収穫逓減なら$f'(k^*)<f(k^*)/k^*$なので、$sf'(k^*)<\delta+n$は自動的に成り立つ。上の例では$sf'(4)=0.2×0.25=0.05<0.1$である。
+
+<LectureTable
+  title="静学と動学"
+  headers={["問い", "静学", "動学"]}
+  rows={[
+    ["貯蓄率が上がれば", "k*が大きくなる", "kがk*に向かう速さ"],
+    ["ショックの後", "新しい均衡点", "経路が振動するか単調か"],
+    ["政策", "長期の水準", "移行期の世代の消費"],
+  ]}
+/>
+
+<Callout type="warning">
+連続時間の安定と離散時間の安定は、同じ符号の条件ではない。$x_{t+1}=bx_t$では$|b|<1$でなければならない。$b=-1.2$は振動しながら発散する。マクロ・モデルを四半期で書きながら、連続時間の直感をそのまま持ち込まない。
+</Callout>
+
+最適制御(ハミルトニアン)は、この章の次の敷居である。消費と貯蓄のオイラー方程式$u'(c_t)=\beta(1+r)u'(c_{t+1})$がその1階条件である。入門の乗数とは別の層にある。
+
+## 確認問題
+
+貯蓄率が20%から30%に上がると、新しい$k^*$は? $0.3\sqrt k=0.1k$から$\sqrt k=3$、$k^*=9$である。1人あたり消費$c=(1-s)f(k)$は、$k=4$で$0.8×2=1.6$だったのが、貯蓄率が上がった瞬間に$0.7×2=1.4$に下がり、$k$が9に近づくと$0.7×3=2.1$まで上がる。長期の水準だけを見て「貯蓄の増加は常に得だ」とは書かない。移行経路の世代が費用を払う。
+
+## 参考資料
+
+- Robert Solow, "A Contribution to the Theory of Economic Growth," *QJE* (1956)
+- Alpha Chiang and Kevin Wainwright, *Fundamental Methods of Mathematical Economics*, ch. 14–15
+- MIT OpenCourseWare, [14.02 Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)

@@ -1,0 +1,69 @@
+---
+track: academy
+locale: zh
+series: economics-math
+chapter: 2
+title: "经济数学 — 积分与剩余、总量的还原"
+category: "Economics"
+author: Oiyo
+tags:
+  - 经济数学
+  - 积分
+  - 消费者剩余
+  - 总成本
+description: "用定积分还原消费者剩余和可变成本，并复习由于不定积分的常数就是固定成本，仅凭边际数据无法还原总水平的原因。"
+pubDate: '2026-05-27'
+updatedDate: 2026-09-24
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 经济数学 — 积分是把边际重新加总的运算
+
+如果说[第1章](/zh/education-economics-math-ch1/)用导数读出边际，本章就是把这些边际加起来，还原总量和剩余。一次性求解产业间相互依存关系的矩阵见[第5章](/zh/education-economics-math-ch5/)，约束最优化见[第3章](/zh/education-economics-math-ch3/)。
+
+## 1. 定积分是面积，而这个面积就是剩余
+
+若需求为$P=100-Q$、价格为40韩元，成交量为60。消费者剩余为$\int_0^{60} (100-Q-40)\,dQ = [60Q - Q^2/2]_0^{60} = 1800$韩元。
+
+若供给为$P=10+Q$，同一价格下的生产者剩余为$\int_0^{60} (40-(10+Q))\,dQ = 900$韩元，总剩余为2700韩元。征税时，无谓损失就从这块面积中扣除。微观经济学的税收一章用的正是这幅图。
+
+<FormulaBox
+  label="可变成本与MC"
+  formula="TVC(Q) = \int_0^Q MC(q)\,dq"
+  description="若MC=6+2q，则TVC=6Q+Q^2。固定成本作为积分常数留下，仅靠积分无法还原固定成本。"
+/>
+
+## 2. 不定积分的常数在经济学中就是固定成本
+
+微积分基本定理告诉我们$\frac{d}{dQ}\int_0^Q \mathrm{MC}(q)\,dq = \mathrm{MC}(Q)$。从边际走到总量，再回到边际。但若$+C$观测不到，总成本的**水平**就是空白。若数据中只有边际成本曲线，固定成本就得另从会计资料或实验中获取。
+
+<LectureTable
+  title="积分能还原什么、不能还原什么"
+  headers={["被积对象", "得到的", "得不到的"]}
+  rows={[
+    ["需求价格", "消费者剩余", "收入效应的精确分解"],
+    ["MC", "可变成本", "固定成本C"],
+    ["边际效用", "效用差", "原点处的效用水平"],
+  ]}
+/>
+
+<Callout type="warning">
+不要因为面积大就断定福利大。不要把单位不同的两个市场的剩余相加。若反需求随收入变动，马歇尔剩余就会与补偿变化、等价变化不一致。积分只是给定曲线下的面积，并不能识别曲线本身。
+</Callout>
+
+对数线性化$d \ln Y = \varepsilon\, d \ln X$把弹性变成加法，这是增长核算的起点。这些弹性与约束最优化中的乘数相遇之处，见[第3章](/zh/education-economics-math-ch3/)。
+
+## 练习题
+
+需求为$P=80-2Q$、价格为20韩元时，消费者剩余是多少?$Q=30$，$\int_0^{30} (80-2q-20)\,dq = [60q - q^2]_0^{30} = 1800-900 = 900$韩元。若价格降到10韩元，由$80-2Q=10$得$Q=35$，$\int_0^{35} (70-2q)\,dq = 70×35 - 35^2 = 2450-1225 = 1225$韩元。面积同时包含了价格下降和数量增加。
+
+## 参考资料
+
+- Alpha Chiang and Kevin Wainwright, *Fundamental Methods of Mathematical Economics*, ch. 13–14
+- Hal Varian, *Intermediate Microeconomics*, ch. 14
+- Carl Simon and Lawrence Blume, *Mathematics for Economists*

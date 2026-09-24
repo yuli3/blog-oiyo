@@ -1,0 +1,80 @@
+---
+track: academy
+locale: fr
+series: economics-math
+chapter: 1
+title: "Mathématiques pour économistes — Fonctions, dérivées et applications économiques"
+category: "Economics"
+author: Oiyo
+tags:
+  - mathématiques économiques
+  - dérivées
+  - analyse marginale
+  - élasticité
+description: "Calcule par dérivation les grandeurs marginales et les élasticités à partir des fonctions de demande et de coût, et rappelle pourquoi la condition du premier ordre de maximisation du profit diffère d'une condition sur les moyennes."
+pubDate: '2026-05-27'
+updatedDate: 2026-09-24
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Mathématiques pour économistes — la dérivée est la grammaire de la marge
+
+Ce cours n'est pas une initiation au calcul différentiel. Il s'adresse à qui a déjà vu les dérivées à l'université et veut fixer de nouveau **quelle dérivée correspond à quelle grandeur économique** dans les équations de demande, de coût et de profit. L'intégration est au [chapitre 2](/fr/education-economics-math-ch2/), les contraintes au [chapitre 3](/fr/education-economics-math-ch3/), la dynamique au [chapitre 4](/fr/education-economics-math-ch4/) et les matrices au [chapitre 5](/fr/education-economics-math-ch5/).
+
+## 1. La marge n'est pas la moyenne
+
+Avec une demande $Q=100-2P$, la quantité baisse de 2 unités pour chaque hausse de prix de 1 won. La fonction étant linéaire, cette pente de $-2$ est la même partout, pas seulement en un point. Si le coût total est $\mathrm{TC}=10+6Q+Q^2$ (en dizaines de milliers de wons), alors
+
+<FormulaBox
+  label="Coût marginal"
+  formula="MC = dTC/dQ = 6 + 2Q"
+  description="En Q=4, MC=14. Le coût moyen ATC=TC/Q=10/Q+6+Q vaut 12,5 en Q=4. Marge et moyenne divergent."
+/>
+
+En $Q=4$, produire une unité de plus coûte 140 000 wons, et non la moyenne atteinte jusque-là de 125 000 wons. C'est pourquoi la règle de profit de la section 2 utilise la marge et non la moyenne.
+
+L'élasticité est une dérivée débarrassée de ses unités.
+
+<FormulaBox
+  label="Élasticité ponctuelle"
+  formula="\varepsilon = (dQ/dP)\cdot(P/Q)"
+  description="Avec Q=100-2P et P=20, Q=60 et ε=-2×(20/60)=-2/3. Comme |ε|<1, une hausse de prix en ce point accroît la recette."
+/>
+
+La recette vaut $\mathrm{TR}=P\cdot Q=20×60=1200$. Au prix de 21, $Q=58$ et $\mathrm{TR}=1218$, en hausse. Cela concorde avec le calcul dans la zone inélastique.
+
+## 2. La maximisation du profit examine ensemble le premier et le second ordre
+
+Avec $\pi=\mathrm{TR}-\mathrm{TC}$, $\mathrm{TR}=40Q$ et $\mathrm{TC}=10+6Q+Q^2$, on obtient $\pi=34Q-Q^2-10$. $d\pi/dQ=34-2Q=0$ donne $Q=17$, et $d^2\pi/dQ^2=-2<0$ : c'est un maximum. C'est le même point que celui où $\mathrm{MC}=6+2Q$ rencontre le prix de 40.
+
+<Callout type="warning">
+Ne résoudre que la condition du premier ordre peut aussi capter un minimum. Si $\mathrm{TC}$ se trouve dans une zone de coût marginal décroissant, MC baisse et peut croiser MR une seconde fois. Ce point est proche d'un minimum de profit. N'apprenez pas des égalités sans le graphique.
+</Callout>
+
+La règle de dérivation en chaîne s'applique directement à une production composée. Si $Q=F(K(t))$, alors $dQ/dt=F'(K)\cdot K'(t)$. Quand le capital varie dans le temps, la variation de la production est le produit de la productivité marginale et de l'investissement. Cela rejoint l'optimisation du chapitre 3.
+
+<LectureTable
+  title="La grandeur économique que désigne une dérivée"
+  headers={["Fonction", "Dérivée", "Nom"]}
+  rows={[
+    ["TC(Q)", "TC'", "Coût marginal"],
+    ["TR(Q)", "TR'", "Recette marginale"],
+    ["Q(P)", "Q'·P/Q", "Élasticité-prix de la demande"],
+    ["U(x,y) = constante", "dy/dx = -Ux/Uy", "Pente de la courbe d'indifférence (−TMS)"],
+  ]}
+/>
+
+## Exercice
+
+Quelle est la quantité optimale d'une entreprise concurrentielle avec $\mathrm{TC}=100+20Q+Q^2$ (en dizaines de milliers de wons) et $P=80$ ? $\mathrm{MC}=20+2Q=80$ donne $Q=30$. Alors $\mathrm{ATC}=100/30+20+30≈53{,}3$, soit un profit unitaire d'environ 26,7 et un profit total de 800 (8 millions de wons). On choisit le point où $P=\mathrm{MC}$, pas le minimum du coût moyen.
+
+## Références
+
+- Alpha Chiang and Kevin Wainwright, *Fundamental Methods of Mathematical Economics*, ch. 6–9
+- Carl Simon and Lawrence Blume, *Mathematics for Economists*, ch. 3–5
+- MIT OpenCourseWare, [14.01 Principles of Microeconomics](https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/)

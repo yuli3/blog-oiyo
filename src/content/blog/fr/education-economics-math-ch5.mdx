@@ -1,0 +1,69 @@
+---
+track: academy
+locale: fr
+series: economics-math
+chapter: 5
+title: "Mathématiques pour économistes — Matrices et analyse entrées-sorties"
+category: "Economics"
+author: Oiyo
+tags:
+  - mathématiques économiques
+  - matrices
+  - entrées-sorties
+  - relations interbranches
+description: "Montre pourquoi, dans un modèle entrées-sorties 2×2, l'inverse de (I-A) calcule la diffusion de la demande finale, et rappelle pourquoi l'existence d'un inverse diffère de la faisabilité technique."
+pubDate: '2026-05-27'
+updatedDate: 2026-09-24
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Mathématiques pour économistes — les matrices résolvent d'un coup l'interdépendance des branches, pas un seul marché
+
+L'intégrale du [chapitre 2](/fr/education-economics-math-ch2/) est l'aire sous une seule courbe. Quand les biens s'utilisent mutuellement comme consommations intermédiaires, additionner ces aires branche par branche ne donne pas la production totale. Ce chapitre rappelle pourquoi $(I-A)^{-1}$ referme cette boucle.
+
+## 1. Demande finale et production totale ne sont pas le même vecteur
+
+L'élément $(i,j)$ de la matrice des coefficients techniques $A$ est la quantité de i nécessaire pour produire une unité de j. Si la demande finale est $d$, la production totale $x$ doit satisfaire à la fois la demande intermédiaire $Ax$ et la demande finale.
+
+<FormulaBox
+  label="Système de Leontief"
+  formula="x = Ax + d \quad \Rightarrow \quad x = (I-A)^{-1}d"
+  description="Chaque colonne de l'inverse indique combien toutes les branches doivent produire pour satisfaire une unité de demande finale adressée à cette branche."
+/>
+
+Avec $A=[[0{,}2;0{,}3],[0{,}1;0{,}4]]$ et $d=(100;80)$, $I-A=[[0{,}8;-0{,}3],[-0{,}1;0{,}6]]$. Le déterminant vaut $0{,}48-0{,}03=0{,}45$. L'inverse est $(1/0{,}45)[[0{,}6;0{,}3],[0{,}1;0{,}8]]$. La production totale est $(84/0{,}45 ; 74/0{,}45)$, soit environ $(186{,}7 ; 164{,}4)$ unités, davantage que la demande finale de 100 et 80 unités. L'écart est la circulation des consommations intermédiaires.
+
+## 2. Avoir un inverse ne rend pas une technique viable
+
+<LectureTable
+  title="Ce que font les matrices en économie"
+  headers={["Objet", "Expression", "Quand cela échoue"]}
+  rows={[
+    ["Entrées-sorties", "(I-A)^{-1}d", "Échec de Hawkins–Simon, rayon spectral supérieur ou égal à 1"],
+    ["Statique comparative à deux biens", "Signes du jacobien", "Hors de la linéarisation locale"],
+    ["Portefeuille", "Matrice de covariance", "Matrice singulière, corrélation parfaite"],
+  ]}
+/>
+
+La condition de Hawkins–Simon exige que les mineurs principaux dominants de $(I-A)$ soient positifs. Pouvoir y introduire des nombres n'est pas la même chose que disposer d'une technique productive. Le jacobien de la statique comparative est la version à plusieurs variables des dérivées du [chapitre 1](/fr/education-economics-math-ch1/). La matrice de covariance est ce que la [finance d'entreprise](/ko/education-finance-ch3/) (en coréen) lit comme du risque.
+
+<Callout type="warning">
+L'existence d'un inverse n'est pas la stabilité économique. Le modèle entrées-sorties est un système statique de quantités ; il ne se demande pas si les prix s'ajustent ni si les stocks divergent. La dynamique et la stabilité sont au [chapitre 4](/fr/education-economics-math-ch4/). Ne lisez pas les coefficients d'un grand tableau comme des relations causales ; l'économétrie a son propre problème d'identification.
+</Callout>
+
+Les tableaux entrées-sorties de la Banque de Corée étendent ce 2×2 à des dizaines de branches. L'arithmétique est la même. Si la nomenclature ou le traitement des importations change, $x$ change même pour un même $d$.
+
+## Exercice
+
+Avec la matrice $A$ ci-dessus, si seule la demande finale de la deuxième branche augmente de 20, de 80 à 100, on multiplie la deuxième colonne de l'inverse, $(1/0{,}45)(0{,}3 ; 0{,}8) \approx (0{,}667 ; 1{,}778)$, par 20 : la production totale augmente d'environ 13,3 et 35,6 unités. Seule la demande de la deuxième branche a augmenté, et pourtant la première produit 13,3 unités de plus. Sans liens intermédiaires, ce chiffre serait 0.
+
+## Références
+
+- Alpha Chiang and Kevin Wainwright, *Fundamental Methods of Mathematical Economics*, ch. 15–16
+- Wassily Leontief, *Input-Output Economics*
+- Banque de Corée, [Tableaux entrées-sorties](https://www.bok.or.kr/portal/main/contents.do?menuNo=200876) (en coréen)

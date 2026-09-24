@@ -1,0 +1,71 @@
+---
+track: academy
+locale: zh
+series: economics-math
+chapter: 3
+title: "经济数学 — 约束最优化与拉格朗日乘数"
+category: "Economics"
+author: Oiyo
+tags:
+  - 经济数学
+  - 拉格朗日
+  - 最优化
+  - KKT
+description: "推导在预算约束下拉格朗日乘数为何是约束每放松一单位给目标函数带来的价值，并复习不等式约束下出现角点解的位置。"
+pubDate: '2026-05-27'
+updatedDate: 2026-09-24
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 经济数学 — 有约束时，仅靠导数不够
+
+没有约束时，$\nabla f=0$就是一阶条件。有预算或资源约束时，就必须沿着约束的边界移动。拉格朗日方法是把约束当作价格来处理的技巧。多人同时选择的纳什均衡和混合策略，属于微观经济学的[博弈论](/zh/education-economics-ch41/)。本章只讨论单个决策者的极值。
+
+## 1. 乘数是约束每一单位对目标函数的价值
+
+$\max u=xy$ s.t. $2x+y=12$。$L=xy+\lambda(12-2x-y)$。
+
+<FormulaBox
+  label="一阶条件"
+  formula="y=2\lambda,\quad x=\lambda,\quad 2x+y=12"
+  description="λ=x，y=2x。代入预算得2x+2x=12，x=3，y=6，λ=3。预算变为13韩元时，效用约增加3。"
+/>
+
+在$x=3, y=6$处$u=18$。预算为13韩元时，$x=3.25, y=6.5$，$u=21.125$，增加3.125，与$\lambda=3$的近似相符。这就是$\mathrm{MU}_x/P_x=\lambda$，即消费者理论中每韩元的边际效用。
+
+## 2. 有不等式和非负约束时，角点可以是解
+
+KKT条件在等式拉格朗日方法的基础上，加入了非紧约束的互补松弛性。若某种商品每韩元的边际效用低于其他商品，这种商品的消费就停在0。"总是内点相切"只是假设消费为正时的特殊解。
+
+<LectureTable
+  title="单个决策者使用的工具"
+  headers={["工具", "约束", "解告诉我们什么"]}
+  rows={[
+    ["一阶条件", "无", "驻点候选"],
+    ["拉格朗日方法", "等式", "边界上的极值与λ"],
+    ["KKT", "不等式、非负", "哪些约束是紧的"],
+  ]}
+/>
+
+二阶条件检查海塞矩阵是否负定(对应最大值)。只满足一阶条件就把鞍点当作利润最大点，会把产量选反。这与[第1章](/zh/education-economics-math-ch1/)中平均与边际的区分是一回事。
+
+<Callout type="warning">
+不要把乘数λ当作幸福的大小。对目标函数作单调变换，λ就会改变。同样的偏好写成$\ln u$，乘数的数值就不同。可以比较的是同一模型内的相对价格。多人相互之间的最优化不是一次最优化，而是均衡。
+</Callout>
+
+加入时间后，同样的一阶条件会变成微分方程。其稳态的稳定性见[第4章](/zh/education-economics-math-ch4/)。
+
+## 练习题
+
+预算从12韩元增加50%到18韩元时，按线性近似，效用似乎会增加$\Delta u \approx \lambda \Delta m = 3 × 6 = 18$。实际上$x=4.5, y=9$，$u=40.5$，增加了22.5，新的乘数为$\lambda=x=4.5$。在这个效用函数中λ随收入增大，所以线性近似只适用于小的变化。50%并不小。
+
+## 参考资料
+
+- Alpha Chiang and Kevin Wainwright, *Fundamental Methods of Mathematical Economics*, ch. 12
+- Carl Simon and Lawrence Blume, *Mathematics for Economists*, ch. 18–19
+- Harold Kuhn and Albert Tucker, "Nonlinear Programming," *Proceedings of the Second Berkeley Symposium on Mathematical Statistics and Probability* (1951)

@@ -1,0 +1,69 @@
+---
+track: academy
+locale: fr
+series: economics-math
+chapter: 2
+title: "Mathématiques pour économistes — Intégration et reconstitution des surplus et des totaux"
+category: "Economics"
+author: Oiyo
+tags:
+  - mathématiques économiques
+  - intégration
+  - surplus du consommateur
+  - coût total
+description: "Reconstitue le surplus du consommateur et le coût variable par l'intégrale définie, et rappelle pourquoi les seules données marginales ne restituent pas les niveaux totaux, la constante de l'intégrale indéfinie étant le coût fixe."
+pubDate: '2026-05-27'
+updatedDate: 2026-09-24
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Mathématiques pour économistes — l'intégration additionne de nouveau les marges
+
+Si le [chapitre 1](/fr/education-economics-math-ch1/) lisait la marge par la dérivée, ce chapitre additionne ces marges pour retrouver les totaux et les surplus. Les matrices qui résolvent d'un coup l'interdépendance des branches sont au [chapitre 5](/fr/education-economics-math-ch5/), et l'optimisation sous contrainte au [chapitre 3](/fr/education-economics-math-ch3/).
+
+## 1. Une intégrale définie est une aire, et cette aire est un surplus
+
+Avec une demande $P=100-Q$ et un prix de 40 wons, la quantité échangée est de 60. Le surplus du consommateur vaut $\int_0^{60} (100-Q-40)\,dQ = [60Q - Q^2/2]_0^{60} = 1800$ wons.
+
+Si l'offre est $P=10+Q$, le surplus du producteur au même prix vaut $\int_0^{60} (40-(10+Q))\,dQ = 900$ wons, et le surplus total 2 700 wons. Quand une taxe s'applique, la perte sèche est retranchée de cette aire. Le chapitre de microéconomie sur la fiscalité utilise ce schéma.
+
+<FormulaBox
+  label="Coût variable et coût marginal"
+  formula="TVC(Q) = \int_0^Q MC(q)\,dq"
+  description="Si MC=6+2q, alors TVC=6Q+Q^2. Le coût fixe demeure comme constante d'intégration ; l'intégration seule ne peut pas le restituer."
+/>
+
+## 2. La constante de l'intégrale indéfinie est, en économie, le coût fixe
+
+Le théorème fondamental de l'analyse dit que $\frac{d}{dQ}\int_0^Q \mathrm{MC}(q)\,dq = \mathrm{MC}(Q)$. On passe de la marge au total, puis on revient à la marge. Mais si $+C$ n'est pas observé, le **niveau** du coût total reste inconnu. Si les données ne contiennent que la courbe de coût marginal, le coût fixe doit être apporté séparément par la comptabilité ou l'expérience.
+
+<LectureTable
+  title="Ce que l'intégration restitue et ce qu'elle ne restitue pas"
+  headers={["Fonction intégrée", "Ce qu'on obtient", "Ce qu'on n'obtient pas"]}
+  rows={[
+    ["Prix de demande", "Surplus du consommateur", "Une décomposition exacte des effets revenu"],
+    ["Coût marginal", "Coût variable", "Le coût fixe C"],
+    ["Utilité marginale", "Écarts d'utilité", "Le niveau d'utilité à l'origine"],
+  ]}
+/>
+
+<Callout type="warning">
+Ne concluez pas qu'une aire plus grande signifie un bien-être plus grand. N'additionnez pas les surplus de deux marchés mesurés dans des unités différentes. Si la demande inverse se déplace avec le revenu, le surplus marshallien s'écarte des variations compensatrice et équivalente. Une intégrale n'est que l'aire sous une courbe donnée ; elle n'identifie pas la courbe elle-même.
+</Callout>
+
+La log-linéarisation $d \ln Y = \varepsilon\, d \ln X$ transforme les élasticités en sommes. C'est le point de départ de la comptabilité de la croissance. Là où ces élasticités rencontrent les multiplicateurs de l'optimisation sous contrainte, c'est le [chapitre 3](/fr/education-economics-math-ch3/).
+
+## Exercice
+
+Avec une demande $P=80-2Q$ et un prix de 20 wons, quel est le surplus du consommateur ? $Q=30$ et $\int_0^{30} (80-2q-20)\,dq = [60q - q^2]_0^{30} = 1800-900 = 900$ wons. Si le prix baisse à 10 wons, $80-2Q=10$ donne $Q=35$, et $\int_0^{35} (70-2q)\,dq = 70×35 - 35^2 = 2450-1225 = 1225$ wons. L'aire intègre à la fois la baisse du prix et la hausse de la quantité.
+
+## Références
+
+- Alpha Chiang and Kevin Wainwright, *Fundamental Methods of Mathematical Economics*, ch. 13–14
+- Hal Varian, *Intermediate Microeconomics*, ch. 14
+- Carl Simon and Lawrence Blume, *Mathematics for Economists*

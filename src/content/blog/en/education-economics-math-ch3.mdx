@@ -3,226 +3,69 @@ track: academy
 locale: en
 series: economics-math
 chapter: 3
-title: "Mathematics for Economics — Game Theory and Optimization"
+title: "Mathematics for Economics — Constrained Optimization and the Lagrange Multiplier"
 category: "Economics"
-author: OIYO Editorial
+author: Oiyo
 tags:
-  - Mathematical Economics
-  - Game Theory
-  - Nash Equilibrium
-  - Optimization
-  - Linear Programming
-description: "Mathematics for economics — game theory basics (normal-form games, Nash equilibrium, the prisoner's dilemma), repeated games and cooperation, multivariable optimization (the Lagrange multiplier method), the basics of linear programming, and auction theory, in one complete guide."
+  - mathematical economics
+  - Lagrangian
+  - optimization
+  - KKT
+description: "Works through why, under a budget constraint, the Lagrange multiplier is the value of one unit of the constraint to the objective, and reviews where corner solutions arise under inequality constraints."
 pubDate: '2026-05-27'
+updatedDate: 2026-09-24
+layoutVariant: lecture-series
+contentStage: review
 ---
 
-## Game Theory Basics
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-**Why game theory matters:**
+# Mathematics for Economics — With Constraints, Derivatives Alone Are Not Enough
 
-- the mathematical analysis of strategic interdependence
-- what's optimal for me depends on the other player's choice
-- applied in economics, international relations, biology, and computer science
+Without constraints, $\nabla f=0$ is the first-order condition. With a budget or resource constraint, one must move along its boundary. The Lagrangian is a technique that treats the constraint like a price. Nash equilibria and mixed strategies, where several people choose at once, belong to [game theory](/en/education-economics-ch41/) in microeconomics. This chapter deals only with the extrema of a single decision-maker.
 
-**Normal-form games:**
+## 1. The multiplier is the value of one unit of the constraint to the objective
 
-- **components**: players, strategies, payoffs
-- represented with a payoff matrix
+$\max u=xy$ s.t. $2x+y=12$. $L=xy+\lambda(12-2x-y)$.
 
-**Dominant strategy:**
+<FormulaBox
+  label="First-order conditions"
+  formula="y=2\lambda,\quad x=\lambda,\quad 2x+y=12"
+  description="λ=x and y=2x. Substituting into the budget gives 2x+2x=12, so x=3, y=6 and λ=3. If the budget becomes 13 won, utility rises by about 3."
+/>
 
-- a strategy that's always best regardless of the opponent's strategy
-- **weakly dominant strategy**: always at least as good, sometimes better
+At $x=3, y=6$, $u=18$. With a budget of 13 won, $x=3.25, y=6.5$ and $u=21.125$, an increase of 3.125 that matches the approximation $\lambda=3$. This is $\mathrm{MU}_x/P_x=\lambda$, the marginal utility per won of consumer theory.
 
-**Nash equilibrium:**
+## 2. With inequalities and non-negativity, corners can be the solution
 
-- a strategy combination where no player can gain by unilaterally deviating
-- **definition**: (s*₁, s*₂) is a Nash equilibrium
-  - if each player's strategy is a best response given the other's strategy
-- **Nash's theorem**: an equilibrium always exists (including mixed strategies)
+KKT adds complementary slackness for non-binding constraints to the equality Lagrangian. If a good's marginal utility per won is lower than another's, consumption of that good stops at zero. "Always an interior tangency" is a special solution that assumes positive consumption.
 
-**Best response:**
+<LectureTable
+  title="Tools for a single decision-maker"
+  headers={["Tool", "Constraint", "What the solution tells you"]}
+  rows={[
+    ["First-order conditions", "None", "Candidate stationary points"],
+    ["Lagrangian", "Equality", "Extrema on the boundary and λ"],
+    ["KKT", "Inequality, non-negativity", "Which constraints bind"],
+  ]}
+/>
 
-- **BR₁(s₂)**: player 1's best response to s₂
-- **Nash equilibrium**: s₁* ∈ BR₁(s₂*) AND s₂* ∈ BR₂(s₁*)
-- the intersection of best-response functions is the Nash equilibrium
+The second-order condition checks whether the Hessian is negative definite (for a maximum). Matching only the first order and reading a saddle point as maximum profit picks output the wrong way round. It is the same as the distinction between average and margin in [chapter 1](/en/education-economics-math-ch1/).
 
-**Mixed-strategy Nash equilibrium:**
+<Callout type="warning">
+Do not read the multiplier λ as the size of happiness. A monotonic transformation of the objective changes λ. With the same preferences written as $\ln u$, the multiplier takes a different value. What can be compared are relative prices within the same model. Mutual optimization by several people is not one optimization but an equilibrium.
+</Callout>
 
-- mixing strategies probabilistically
-- when no pure-strategy equilibrium exists, a mixed-strategy equilibrium does
-- choosing probabilities that make the opponent indifferent
+Once time is added, the same first-order conditions become differential equations. The stability of their steady state is covered in [chapter 4](/en/education-economics-math-ch4/).
 
----
+## Check your understanding
 
-## Common Game Types
+If the budget rises 50% from 12 won to 18 won, the linear approximation suggests that utility rises by $\Delta u \approx \lambda \Delta m = 3 × 6 = 18$. In fact $x=4.5, y=9$ and $u=40.5$, an increase of 22.5, and the new multiplier is $\lambda=x=4.5$. With this utility function λ grows with income, so the linear approximation holds only for small changes. 50% is not small.
 
-**The prisoner's dilemma:**
+## References
 
-**Payoff matrix (cooperate/defect):**
-
-- **both cooperate**: (3, 3)
-- **player 1 defects, player 2 cooperates**: (5, 0)
-- **player 1 cooperates, player 2 defects**: (0, 5)
-- **both defect**: (1, 1)
-
-**Analysis:**
-
-- **each player's dominant strategy**: defect
-- **Nash equilibrium**: (defect, defect) → payoff (1, 1)
-- **Pareto optimum**: (cooperate, cooperate) → (3, 3)
-- the clash between social optimum and individual rationality explains market failure
-
-**Applications:**
-
-- arms races, environmental agreements, price competition, cartel collapse
-
-**Coordination games:**
-
-- what matters is reaching the same equilibrium (a standardization problem)
-- **example**: which side of the road to drive on, technology standards
-
-**Sequential games:**
-
-- represented in extensive form (a game tree)
-- **backward induction**: solving from the end of the game backward
-- subgame perfect Nash equilibrium
-
-**Stackelberg equilibrium:**
-
-- the leader (first mover) decides first
-- **first-mover advantage**: capturing the opportunity of moving first
-
-**Chicken (a game of brinkmanship):**
-
-- **both swerve**: a small payoff
-- **one goes straight**: the one going straight gets a large payoff
-- **both go straight**: the worst outcome
-- two pure-strategy Nash equilibria, one mixed-strategy equilibrium
-
----
-
-## Repeated Games and Cooperation
-
-**Repeated games:**
-
-- the same game played multiple times
-- reputation and retaliation become possible → creates an incentive to cooperate
-
-**Finitely repeated games:**
-
-- in the last round, it's identical to a one-shot game → defect
-- **backward induction**: defection in every round → cooperation becomes impossible
-- if the end point is uncertain, cooperation can survive
-
-**Infinitely repeated games:**
-
-- **discount factor δ (0 < δ < 1)**: the present value of future payoffs
-- **tit-for-tat**: cooperate first, then mirror the opponent's last move
-- the Folk Theorem: if δ is large enough (the future matters enough), many cooperative equilibria are possible condition: cooperative payoff > one-time gain from defecting × (1-δ)/δ
-
-**Applications:**
-
-- implicit collusion among oligopolistic firms
-- compliance with international trade agreements
-- trust built through repeated transactions
-
-**Auction theory:**
-
-- **English auction**: price rises → the highest bidder wins
-- **Dutch auction**: price falls → the first bidder to accept wins
-- **sealed-bid, first-price**: the highest bidder pays their own bid
-- **sealed-bid, second-price (Vickrey)**: the highest bidder wins, but pays the second-highest bid truthful bidding is the dominant strategy (incentive compatible)
-
----
-
-## Multivariable Optimization
-
-**Optimizing multivariable functions:**
-
-**Extrema of a two-variable function f(x, y):**
-
-**First-order conditions:**
-
-- ∂f/∂x = 0
-- ∂f/∂y = 0
-- satisfying both simultaneously gives a critical point
-
-**Second-order conditions:**
-
-- the Hessian matrix: H = [fxx, fxy; fyx, fyy]
-- det(H) > 0 AND fxx < 0 → a local maximum
-- det(H) > 0 AND fxx > 0 → a local minimum
-- det(H) < 0 → a saddle point
-
-**Constrained optimization — the Lagrange multiplier method:**
-
-- **objective**: maximize f(x, y)
-- **constraint**: g(x, y) = c
-- **the Lagrangian**: L = f(x, y) - λ[g(x, y) - c]
-
-**Conditions:**
-
-- ∂L/∂x = ∂f/∂x - λ∂g/∂x = 0
-- ∂L/∂y = ∂f/∂y - λ∂g/∂y = 0
-- ∂L/∂λ = -(g(x,y) - c) = 0
-
-**Interpreting λ:**
-
-- the change in the objective function when the constraint is relaxed by one unit (a shadow price)
-- if λ = 1, relaxing the constraint by one unit increases the objective function by λ
-
-**Economic applications:**
-
-- **utility maximization**: maximize U(x,y) subject to pₓx + pᵧy = M
-- **cost minimization**: minimize wL + rK subject to Q = f(L, K)
-
----
-
-## Linear Programming
-
-**The basic form of a linear program**
-
-- **objective function**: maximize (or minimize) Z = c'x
-- **constraints**: Ax ≤ b (or = b)
-- **non-negativity**: x ≥ 0
-
-**Graphical solution (two variables)**
-
-1. graph the constraint lines
-2. identify the feasible region
-3. shift the objective-function line to find the optimal vertex → the optimal solution always occurs at a vertex
-
-**The simplex method**
-
-- an algorithm that systematically searches vertices
-- starts with non-basic variables at 0 and basic variables > 0
-- repeatedly moves to the vertex that increases the objective function
-
-**The dual problem**
-
-- every LP (the primal problem) has a corresponding dual LP
-- the primal's maximum equals the dual's minimum (the strong duality theorem)
-- the dual variables equal the Lagrange multipliers λ — the shadow prices of the constrained resources
-
-**Economic applications**
-
-- **production planning**: deciding the optimal output for multiple products
-- **transportation problems**: minimizing shipping costs from factories to warehouses
-- **portfolio optimization**: maximizing return subject to a risk constraint
-
-**Integer programming**
-
-- used when variables must be integers (number of factories, number of employees)
-- the branch-and-bound algorithm
-- more computationally complex than standard LP
-
----
-
-## Frequently Asked Questions
-
-**Q. Is a Nash equilibrium always socially optimal?**
-A. No. As the prisoner's dilemma shows, a Nash equilibrium is the outcome of individually rational strategies, but it isn't necessarily optimal from society's point of view. When both players defect at the Nash equilibrium, they get a payoff of (1, 1), even though both cooperating would produce the better outcome of (3, 3). This mismatch is a source of market failure, and it explains a wide range of economic phenomena — environmental pollution, the underprovision of public goods, and the collapse of cartels.
-
-**Q. What's the economic meaning of the Lagrange multiplier?**
-A. The Lagrange multiplier λ is a shadow price — it tells you how much the objective function changes when the constraint is relaxed by one unit. In a utility-maximization problem under an income constraint, for instance, λ tells you how much maximum utility rises when income increases by one dollar. In a production problem, it tells you how much more you could produce if the budget rose by one dollar. This concept is useful for valuing the marginal value of a resource, and it carries the same meaning as the dual variables in linear programming.
+- Alpha Chiang and Kevin Wainwright, *Fundamental Methods of Mathematical Economics*, ch. 12
+- Carl Simon and Lawrence Blume, *Mathematics for Economists*, ch. 18–19
+- Harold Kuhn and Albert Tucker, "Nonlinear Programming," *Proceedings of the Second Berkeley Symposium on Mathematical Statistics and Probability* (1951)

@@ -1,0 +1,80 @@
+---
+track: academy
+locale: zh
+series: economics-math
+chapter: 1
+title: "经济数学 — 函数、导数与经济应用"
+category: "Economics"
+author: Oiyo
+tags:
+  - 经济数学
+  - 导数
+  - 边际分析
+  - 弹性
+description: "用微分从需求函数和成本函数计算边际量与弹性，并复习利润最大化的一阶条件为何不同于平均条件。"
+pubDate: '2026-05-27'
+updatedDate: 2026-09-24
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 经济数学 — 导数是书写边际的语法
+
+本课程不是微积分入门。它面向在大学学过导数的人，帮助他们在需求、成本和利润方程中重新确定**哪个导数对应哪个经济量**。积分见[第2章](/zh/education-economics-math-ch2/)，约束见[第3章](/zh/education-economics-math-ch3/)，动态见[第4章](/zh/education-economics-math-ch4/)，矩阵见[第5章](/zh/education-economics-math-ch5/)。
+
+## 1. 边际不是平均
+
+若需求为$Q=100-2P$，价格每上涨1韩元，数量减少2单位。由于函数是线性的，这个斜率$-2$处处相同，而不只是某一点的值。若总成本为$\mathrm{TC}=10+6Q+Q^2$(万韩元)，则
+
+<FormulaBox
+  label="边际成本"
+  formula="MC = dTC/dQ = 6 + 2Q"
+  description="Q=4时MC=14万韩元。平均成本ATC=TC/Q=10/Q+6+Q在Q=4时为12.5万韩元。边际与平均出现分歧。"
+/>
+
+在$Q=4$时多生产一台的成本是14万韩元，而不是迄今为止的平均12.5万韩元。这就是第2节的利润规则使用边际而非平均的原因。
+
+弹性是去掉单位的导数。
+
+<FormulaBox
+  label="点弹性"
+  formula="\varepsilon = (dQ/dP)\cdot(P/Q)"
+  description="Q=100-2P、P=20时Q=60，ε=-2×(20/60)=-2/3。由于|ε|<1，在这一点提价会增加收入。"
+/>
+
+收入为$\mathrm{TR}=P\cdot Q=20×60=1200$。价格为21时，$Q=58$，$\mathrm{TR}=1218$，有所增加。这与缺乏弹性区间的计算一致。
+
+## 2. 利润最大化要同时看一阶和二阶条件
+
+若$\pi=\mathrm{TR}-\mathrm{TC}$，$\mathrm{TR}=40Q$，$\mathrm{TC}=10+6Q+Q^2$，则$\pi=34Q-Q^2-10$。由$d\pi/dQ=34-2Q=0$得$Q=17$，且$d^2\pi/dQ^2=-2<0$，所以是极大值。这与$\mathrm{MC}=6+2Q$和价格40相交的点相同。
+
+<Callout type="warning">
+只解一阶条件也可能得到极小值。若$\mathrm{TC}$处在边际成本递减的区间，MC下降，可能与MR再相交一次。那个点接近利润最小。不要脱离图形只背等式。
+</Callout>
+
+链式法则可直接用于复合生产。若$Q=F(K(t))$，则$dQ/dt=F'(K)\cdot K'(t)$。资本随时间变化时，产出的变化是边际产量与投资的乘积。这与第3章的最优化相衔接。
+
+<LectureTable
+  title="导数所指的经济量"
+  headers={["函数", "导数", "名称"]}
+  rows={[
+    ["TC(Q)", "TC'", "MC"],
+    ["TR(Q)", "TR'", "MR"],
+    ["Q(P)", "Q'·P/Q", "需求价格弹性"],
+    ["U(x,y) = 常数", "dy/dx = -Ux/Uy", "无差异曲线斜率(−MRS)"],
+  ]}
+/>
+
+## 练习题
+
+$\mathrm{TC}=100+20Q+Q^2$(万韩元)、$P=80$万韩元的竞争性企业，最优产量是多少?由$\mathrm{MC}=20+2Q=80$得$Q=30$。此时$\mathrm{ATC}=100/30+20+30≈53.3$万韩元，每台利润约26.7万韩元，总利润800万韩元。应在$P=\mathrm{MC}$处选择，而不是在平均成本最低处。
+
+## 参考资料
+
+- Alpha Chiang and Kevin Wainwright, *Fundamental Methods of Mathematical Economics*, ch. 6–9
+- Carl Simon and Lawrence Blume, *Mathematics for Economists*, ch. 3–5
+- MIT OpenCourseWare, [14.01 Principles of Microeconomics](https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/)

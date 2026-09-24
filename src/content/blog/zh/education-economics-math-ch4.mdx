@@ -1,0 +1,71 @@
+---
+track: academy
+locale: zh
+series: economics-math
+chapter: 4
+title: "经济数学 — 动态与稳定性"
+category: "Economics"
+author: Oiyo
+tags:
+  - 经济数学
+  - 微分方程
+  - 索洛模型
+  - 稳定性
+description: "用索洛资本积累计算一阶微分方程的稳态与稳定性，并复习相图为何提出了与比较静态不同的问题。"
+pubDate: '2026-05-27'
+updatedDate: 2026-09-24
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 经济数学 — 加入时间后，静态最优就变成微分方程
+
+比较静态从一个点跳到另一个点。动态分析则问:两点之间的路径是否真的会走过去，系统能否回到稳态。宏观增长理论使用的正是这套语法。
+
+## 1. 一阶线性方程的解与稳定性
+
+若$\dot x = -a(x-x^*)$且$a>0$，则$x(t)=x^*+(x_0-x^*)e^{-at}$，当$t\to\infty$时趋于$x^*$。若$a<0$则发散。符号决定稳定性。
+
+在索洛模型中，人均资本$k$满足$\dot k = s f(k) - (\delta+n)k$，稳态时$s f(k^*)=(\delta+n)k^*$。若$f(k)=\sqrt k$，$s=0.2$，$\delta+n=0.1$，由$0.2\sqrt k=0.1 k$得$\sqrt k=2$，$k^*=4$。若$k_0=1$，储蓄超过折旧和人口稀释，$k$上升;若$k_0=9$，$k$下降。
+
+<FormulaBox
+  label="稳态"
+  formula="s f(k^*) = (\delta+n)k^*"
+  description="储蓄积累的量与稀释、折旧损耗的量相等时的资本水平。黄金律另行选择使消费最大化的s。"
+/>
+
+黄金律为$f'(k_{gold})=\delta+n$。按上面的数字，$f'=1/(2\sqrt k)=0.1$，得$\sqrt k=5$，$k=25$。$k^*=4$低于黄金律水平，所以提高储蓄率可以增加稳态消费。反之，若储蓄过度，就要降低储蓄才能增加稳态消费。
+
+## 2. 相图是箭头，不是系数
+
+把$\dot k>0$的区间和$\dot k<0$的区间分开的点就是稳态。图画得好看，不等于读出了系数。局部稳定要求线性化$\dot{\tilde k}=[sf'(k^*)-(\delta+n)]\tilde k$中括号内为负。在边际报酬递减下，$f'(k^*)<f(k^*)/k^*$，所以$sf'(k^*)<\delta+n$自动成立。上例中$sf'(4)=0.2×0.25=0.05<0.1$。
+
+<LectureTable
+  title="静态与动态"
+  headers={["问题", "静态", "动态"]}
+  rows={[
+    ["储蓄率上升时", "k*变大", "k趋向k*的速度"],
+    ["冲击之后", "新的均衡点", "路径是振荡还是单调"],
+    ["政策", "长期水平", "过渡时期各代人的消费"],
+  ]}
+/>
+
+<Callout type="warning">
+连续时间的稳定和离散时间的稳定，条件并不相同。$x_{t+1}=bx_t$要求$|b|<1$。$b=-1.2$会振荡发散。不要按季度写宏观模型，却原封不动地套用连续时间的直觉。
+</Callout>
+
+最优控制(哈密顿函数)是本章之后的下一道门槛。消费—储蓄的欧拉方程$u'(c_t)=\beta(1+r)u'(c_{t+1})$就是它的一阶条件，与入门课中的乘数处在不同层次。
+
+## 练习题
+
+储蓄率从20%升到30%时，新的$k^*$是多少?由$0.3\sqrt k=0.1k$得$\sqrt k=3$，$k^*=9$。人均消费$c=(1-s)f(k)$在$k=4$时为$0.8×2=1.6$，储蓄率上升的瞬间降到$0.7×2=1.4$，随着$k$接近9又升到$0.7×3=2.1$。不要只看长期水平就写"增加储蓄总是有利的"。过渡路径上的几代人承担了成本。
+
+## 参考资料
+
+- Robert Solow, "A Contribution to the Theory of Economic Growth," *QJE* (1956)
+- Alpha Chiang and Kevin Wainwright, *Fundamental Methods of Mathematical Economics*, ch. 14–15
+- MIT OpenCourseWare, [14.02 Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)

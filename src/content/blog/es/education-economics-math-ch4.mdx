@@ -1,0 +1,71 @@
+---
+track: academy
+locale: es
+series: economics-math
+chapter: 4
+title: "Matemáticas para economistas — Dinámica y estabilidad"
+category: "Economics"
+author: Oiyo
+tags:
+  - matemáticas para la economía
+  - ecuaciones diferenciales
+  - modelo de Solow
+  - estabilidad
+description: "Calcula el estado estacionario y la estabilidad de ecuaciones diferenciales de primer orden con la acumulación de capital de Solow, y repasa por qué los diagramas de fase plantean otra pregunta que la estática comparativa."
+pubDate: '2026-05-27'
+updatedDate: 2026-09-24
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Matemáticas para economistas — al añadir el tiempo, un óptimo estático se convierte en una ecuación diferencial
+
+La estática comparativa salta de un punto a otro. La dinámica pregunta si el camino entre ambos se recorre de verdad y si el sistema vuelve a su estado estacionario. La teoría macroeconómica del crecimiento usa esta gramática.
+
+## 1. Soluciones y estabilidad de ecuaciones lineales de primer orden
+
+Si $\dot x = -a(x-x^*)$ con $a>0$, entonces $x(t)=x^*+(x_0-x^*)e^{-at}$, que tiende a $x^*$ cuando $t\to\infty$. Si $a<0$, diverge. El signo decide la estabilidad.
+
+En el modelo de Solow, el capital por trabajador $k$ sigue $\dot k = s f(k) - (\delta+n)k$, y en el estado estacionario $s f(k^*)=(\delta+n)k^*$. Con $f(k)=\sqrt k$, $s=0{,}2$ y $\delta+n=0{,}1$, $0{,}2\sqrt k=0{,}1 k$ da $\sqrt k=2$ y $k^*=4$. Si $k_0=1$, el ahorro supera a la depreciación y la dilución demográfica y $k$ sube; si $k_0=9$, baja.
+
+<FormulaBox
+  label="Estado estacionario"
+  formula="s f(k^*) = (\delta+n)k^*"
+  description="El nivel de capital en que lo que añade el ahorro iguala lo que restan la dilución y la depreciación. La regla de oro elige aparte la s que maximiza el consumo."
+/>
+
+La regla de oro es $f'(k_{gold})=\delta+n$. Con los números anteriores, $f'=1/(2\sqrt k)=0{,}1$ da $\sqrt k=5$ y $k=25$. Como $k^*=4$ está por debajo de la regla de oro, subir la tasa de ahorro puede aumentar el consumo estacionario. A la inversa, con exceso de ahorro hay que reducir el ahorro para que aumente el consumo estacionario.
+
+## 2. Un diagrama de fase son flechas, no coeficientes
+
+El estado estacionario es el punto que separa el tramo con $\dot k>0$ del tramo con $\dot k<0$. Que el dibujo sea bonito no significa haber leído los coeficientes. La estabilidad local exige que el corchete de la linealización $\dot{\tilde k}=[sf'(k^*)-(\delta+n)]\tilde k$ sea negativo. Con rendimientos decrecientes, $f'(k^*)<f(k^*)/k^*$, así que $sf'(k^*)<\delta+n$ se cumple automáticamente. En el ejemplo, $sf'(4)=0{,}2×0{,}25=0{,}05<0{,}1$.
+
+<LectureTable
+  title="Estática frente a dinámica"
+  headers={["Pregunta", "Estática", "Dinámica"]}
+  rows={[
+    ["Si sube la tasa de ahorro", "k* aumenta", "La velocidad con que k va hacia k*"],
+    ["Tras una perturbación", "El nuevo equilibrio", "Si la trayectoria oscila o es monótona"],
+    ["Política", "Nivel a largo plazo", "Consumo de las generaciones de transición"],
+  ]}
+/>
+
+<Callout type="warning">
+La estabilidad en tiempo continuo y en tiempo discreto no comparten la misma condición de signo. $x_{t+1}=bx_t$ exige $|b|<1$. $b=-1{,}2$ oscila y diverge. No escriba un modelo macroeconómico trimestral trasladando sin más la intuición del tiempo continuo.
+</Callout>
+
+El control óptimo (el hamiltoniano) es el siguiente umbral de este capítulo. La ecuación de Euler del consumo y el ahorro, $u'(c_t)=\beta(1+r)u'(c_{t+1})$, es su condición de primer orden. Está en otro nivel que el multiplicador de introducción.
+
+## Ejercicio
+
+Si la tasa de ahorro sube del 20 % al 30 %, ¿cuál es el nuevo $k^*$? $0{,}3\sqrt k=0{,}1k$ da $\sqrt k=3$ y $k^*=9$. El consumo por trabajador $c=(1-s)f(k)$ es $0{,}8×2=1{,}6$ en $k=4$, cae a $0{,}7×2=1{,}4$ en cuanto sube la tasa de ahorro y sube a $0{,}7×3=2{,}1$ cuando $k$ se acerca a 9. No escriba «ahorrar más siempre es una ganancia» mirando solo el nivel a largo plazo. Las generaciones de la transición pagan el coste.
+
+## Referencias
+
+- Robert Solow, «A Contribution to the Theory of Economic Growth», *QJE* (1956)
+- Alpha Chiang and Kevin Wainwright, *Fundamental Methods of Mathematical Economics*, ch. 14–15
+- MIT OpenCourseWare, [14.02 Principles of Macroeconomics](https://ocw.mit.edu/courses/14-02-principles-of-macroeconomics-spring-2023/)

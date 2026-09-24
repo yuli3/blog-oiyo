@@ -1,0 +1,69 @@
+---
+track: academy
+locale: ja
+series: economics-math
+chapter: 2
+title: "経済数学 — 積分と余剰・総量の復元"
+category: "Economics"
+author: Oiyo
+tags:
+  - 経済数学
+  - 積分
+  - 消費者余剰
+  - 総費用
+description: "定積分で消費者余剰と可変費用を復元し、不定積分の定数が固定費であるため、限界のデータだけでは総水準を戻せない理由を復習します。"
+pubDate: '2026-05-27'
+updatedDate: 2026-09-24
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 経済数学 — 積分は限界をもう一度足し合わせる演算である
+
+[第1章](/ja/education-economics-math-ch1/)が導関数で限界を読んだとすれば、この章はその限界を足し合わせて総量と余剰を取り戻す。産業間の依存関係を一度に解く行列は[第5章](/ja/education-economics-math-ch5/)、制約付き最適化は[第3章](/ja/education-economics-math-ch3/)である。
+
+## 1. 定積分は面積であり、その面積が余剰である
+
+需要が$P=100-Q$、価格が40ウォンなら、取引量は60である。消費者余剰は$\int_0^{60} (100-Q-40)\,dQ = [60Q - Q^2/2]_0^{60} = 1800$ウォンである。
+
+供給が$P=10+Q$なら、同じ価格での生産者余剰は$\int_0^{60} (40-(10+Q))\,dQ = 900$ウォンで、総余剰は2,700ウォンである。税がかかると、この面積から死荷重が抜ける。ミクロ経済学の租税の章がその図を使う。
+
+<FormulaBox
+  label="可変費用とMC"
+  formula="TVC(Q) = \int_0^Q MC(q)\,dq"
+  description="MC=6+2qならTVC=6Q+Q^2。固定費は積分定数として残る。積分だけでは固定費を復元できない。"
+/>
+
+## 2. 不定積分の定数は、経済では固定費である
+
+微積分学の基本定理は、$\frac{d}{dQ}\int_0^Q \mathrm{MC}(q)\,dq = \mathrm{MC}(Q)$であることを教えてくれる。限界から総量へ行き、また限界に戻ってくる。ただし$+C$が観測されなければ、総費用の**水準**は空白のままである。データに限界費用曲線しかなければ、固定費は会計や実験から別に持ってこなければならない。
+
+<LectureTable
+  title="積分が取り戻すもの、取り戻せないもの"
+  headers={["積分の対象", "得られるもの", "得られないもの"]}
+  rows={[
+    ["需要価格", "消費者余剰", "所得効果の正確な分解"],
+    ["MC", "可変費用", "固定費C"],
+    ["限界効用", "効用の差", "原点での効用水準"],
+  ]}
+/>
+
+<Callout type="warning">
+面積が大きいからといって、すぐに厚生が大きいと断定しない。単位の違う二つの市場の余剰を足し合わせない。逆需要が所得によって動くなら、マーシャルの余剰は補償変分・等価変分とずれる。積分は与えられた曲線の下の面積にすぎず、曲線そのものを識別するわけではない。
+</Callout>
+
+対数線形化$d \ln Y = \varepsilon\, d \ln X$は、弾力性を足し算にする。成長会計の出発点である。その弾力性が制約付き最適化の乗数と出会う場所は[第3章](/ja/education-economics-math-ch3/)である。
+
+## 確認問題
+
+需要が$P=80-2Q$、価格が20ウォンのときの消費者余剰は? $Q=30$で、$\int_0^{30} (80-2q-20)\,dq = [60q - q^2]_0^{30} = 1800-900 = 900$ウォンである。価格を10ウォンに下げると$80-2Q=10$から$Q=35$で、$\int_0^{35} (70-2q)\,dq = 70×35 - 35^2 = 2450-1225 = 1225$ウォンである。面積は価格の下落と数量の増加を一緒に含んでいる。
+
+## 参考資料
+
+- Alpha Chiang and Kevin Wainwright, *Fundamental Methods of Mathematical Economics*, ch. 13–14
+- Hal Varian, *Intermediate Microeconomics*, ch. 14
+- Carl Simon and Lawrence Blume, *Mathematics for Economists*

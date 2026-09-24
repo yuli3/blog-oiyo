@@ -1,0 +1,69 @@
+---
+track: academy
+locale: en
+series: economics-math
+chapter: 5
+title: "Mathematics for Economics — Matrices and Input-Output Analysis"
+category: "Economics"
+author: Oiyo
+tags:
+  - mathematical economics
+  - matrices
+  - input-output
+  - inter-industry linkages
+description: "Works through why, in a 2×2 input-output model, the inverse of (I-A) calculates how final demand spreads, and reviews why the existence of an inverse differs from technological feasibility."
+pubDate: '2026-05-27'
+updatedDate: 2026-09-24
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Mathematics for Economics — Matrices Solve Inter-Industry Dependence in One Go, Not One Market
+
+The integral of [chapter 2](/en/education-economics-math-ch2/) is the area under a single curve. When goods use one another as intermediates, adding those areas industry by industry does not give total output. This chapter reviews why $(I-A)^{-1}$ closes that loop.
+
+## 1. Final demand and total output are not the same vector
+
+The $(i,j)$ element of the intermediate input coefficient matrix $A$ is the amount of i needed to make one unit of j. If final demand is $d$, total output $x$ must satisfy intermediate demand $Ax$ and final demand at the same time.
+
+<FormulaBox
+  label="Leontief system"
+  formula="x = Ax + d \quad \Rightarrow \quad x = (I-A)^{-1}d"
+  description="Each column of the inverse shows how much every industry must run to meet one unit of final demand for that industry."
+/>
+
+With $A=[[0.2,0.3],[0.1,0.4]]$ and $d=(100,80)$, $I-A=[[0.8,-0.3],[-0.1,0.6]]$. The determinant is $0.48-0.03=0.45$. The inverse is $(1/0.45)[[0.6,0.3],[0.1,0.8]]$. Total output is $(84/0.45, 74/0.45)$, roughly $(186.7, 164.4)$ units — more than the final demand of 100 and 80 units. The difference is the circulation of intermediates.
+
+## 2. Having an inverse does not make a technology viable
+
+<LectureTable
+  title="What matrices do in economics"
+  headers={["Object", "Expression", "When it fails"]}
+  rows={[
+    ["Input-output", "(I-A)^{-1}d", "Hawkins–Simon fails, spectral radius of 1 or more"],
+    ["Comparative statics with two goods", "Signs of the Jacobian", "Outside the local linearization"],
+    ["Portfolio", "Covariance matrix", "Singular matrix, perfect correlation"],
+  ]}
+/>
+
+The Hawkins–Simon condition requires the leading principal minors of $(I-A)$ to be positive. Being able to plug in numbers is not the same as the technology being productive. The Jacobian of comparative statics is the multivariable version of the derivatives in [chapter 1](/en/education-economics-math-ch1/). The covariance matrix is what [corporate finance](/en/education-finance-ch3/) reads as risk.
+
+<Callout type="warning">
+The existence of an inverse is not economic stability. Input-output is a static quantity system; it does not ask whether prices adjust or whether inventories explode. Dynamics and stability are in [chapter 4](/en/education-economics-math-ch4/). Do not read the coefficients of a large table as causal; econometrics has its own identification problem.
+</Callout>
+
+The Bank of Korea's input-output tables extend this 2×2 to dozens of industries. The arithmetic is the same. If classifications or the treatment of imports change, $x$ changes even for the same $d$.
+
+## Check your understanding
+
+In the $A$ above, if only the second industry's final demand rises by 20, from 80 to 100, multiply the second column of the inverse, $(1/0.45)(0.3, 0.8) \approx (0.667, 1.778)$, by 20: total output rises by about 13.3 and 35.6 units. Only the second industry's demand rose, yet the first industry's output also rises by 13.3. Without intermediate links, the first would be 0.
+
+## References
+
+- Alpha Chiang and Kevin Wainwright, *Fundamental Methods of Mathematical Economics*, ch. 15–16
+- Wassily Leontief, *Input-Output Economics*
+- Bank of Korea, [Input-output tables](https://www.bok.or.kr/portal/main/contents.do?menuNo=200876) (Korean)

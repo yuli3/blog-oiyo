@@ -1,0 +1,80 @@
+---
+track: academy
+locale: es
+series: economics-math
+chapter: 1
+title: "Matemáticas para economistas — Funciones, derivadas y aplicaciones económicas"
+category: "Economics"
+author: Oiyo
+tags:
+  - matemáticas para la economía
+  - derivadas
+  - análisis marginal
+  - elasticidad
+description: "Calcula por derivación magnitudes marginales y elasticidades a partir de funciones de demanda y de coste, y repasa por qué la condición de primer orden de maximización del beneficio difiere de una condición sobre medias."
+pubDate: '2026-05-27'
+updatedDate: 2026-09-24
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Matemáticas para economistas — la derivada es la gramática del margen
+
+Este curso no es una introducción al cálculo. Es para quien ya vio derivadas en la universidad y quiere fijar de nuevo **qué derivada es qué magnitud económica** en las ecuaciones de demanda, coste y beneficio. La integración está en el [capítulo 2](/es/education-economics-math-ch2/), las restricciones en el [capítulo 3](/es/education-economics-math-ch3/), la dinámica en el [capítulo 4](/es/education-economics-math-ch4/) y las matrices en el [capítulo 5](/es/education-economics-math-ch5/).
+
+## 1. El margen no es la media
+
+Con una demanda $Q=100-2P$, la cantidad cae 2 unidades por cada won que sube el precio. Como la función es lineal, esa pendiente de $-2$ es la misma en todas partes, no solo en un punto. Si el coste total es $\mathrm{TC}=10+6Q+Q^2$ (en decenas de miles de wones), entonces
+
+<FormulaBox
+  label="Coste marginal"
+  formula="MC = dTC/dQ = 6 + 2Q"
+  description="En Q=4, MC=14. El coste medio ATC=TC/Q=10/Q+6+Q vale 12,5 en Q=4. Margen y media divergen."
+/>
+
+En $Q=4$, producir una unidad más cuesta 140.000 wones, no la media acumulada de 125.000 wones. Por eso la regla de beneficio de la sección 2 usa el margen y no la media.
+
+La elasticidad es una derivada sin unidades.
+
+<FormulaBox
+  label="Elasticidad puntual"
+  formula="\varepsilon = (dQ/dP)\cdot(P/Q)"
+  description="Con Q=100-2P y P=20, Q=60 y ε=-2×(20/60)=-2/3. Como |ε|<1, en este punto una subida de precio aumenta el ingreso."
+/>
+
+El ingreso es $\mathrm{TR}=P\cdot Q=20×60=1200$. Con un precio de 21, $Q=58$ y $\mathrm{TR}=1218$, mayor. Coincide con el cálculo del tramo inelástico.
+
+## 2. La maximización del beneficio mira a la vez el primer y el segundo orden
+
+Con $\pi=\mathrm{TR}-\mathrm{TC}$, $\mathrm{TR}=40Q$ y $\mathrm{TC}=10+6Q+Q^2$, se obtiene $\pi=34Q-Q^2-10$. $d\pi/dQ=34-2Q=0$ da $Q=17$, y $d^2\pi/dQ^2=-2<0$, así que es un máximo. Es el mismo punto en que $\mathrm{MC}=6+2Q$ corta el precio de 40.
+
+<Callout type="warning">
+Resolver solo la condición de primer orden puede captar también un mínimo. Si $\mathrm{TC}$ está en un tramo de coste marginal decreciente, el MC baja y puede cortar al MR una segunda vez. Ese punto está cerca de un mínimo de beneficio. No memorice igualdades sin el gráfico.
+</Callout>
+
+La regla de la cadena se aplica directamente a la producción compuesta. Si $Q=F(K(t))$, entonces $dQ/dt=F'(K)\cdot K'(t)$. Cuando el capital cambia en el tiempo, la variación de la producción es el producto del producto marginal y la inversión. Enlaza con la optimización del capítulo 3.
+
+<LectureTable
+  title="La magnitud económica a la que apunta una derivada"
+  headers={["Función", "Derivada", "Nombre"]}
+  rows={[
+    ["TC(Q)", "TC'", "Coste marginal"],
+    ["TR(Q)", "TR'", "Ingreso marginal"],
+    ["Q(P)", "Q'·P/Q", "Elasticidad precio de la demanda"],
+    ["U(x,y) = constante", "dy/dx = -Ux/Uy", "Pendiente de la curva de indiferencia (−RMS)"],
+  ]}
+/>
+
+## Ejercicio
+
+¿Cuál es la cantidad óptima de una empresa competitiva con $\mathrm{TC}=100+20Q+Q^2$ (en decenas de miles de wones) y $P=80$? $\mathrm{MC}=20+2Q=80$ da $Q=30$. Entonces $\mathrm{ATC}=100/30+20+30≈53{,}3$, así que el beneficio por unidad es de unos 26,7 y el beneficio total de 800 (8 millones de wones). Se elige el punto donde $P=\mathrm{MC}$, no el mínimo del coste medio.
+
+## Referencias
+
+- Alpha Chiang and Kevin Wainwright, *Fundamental Methods of Mathematical Economics*, ch. 6–9
+- Carl Simon and Lawrence Blume, *Mathematics for Economists*, ch. 3–5
+- MIT OpenCourseWare, [14.01 Principles of Microeconomics](https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/)
