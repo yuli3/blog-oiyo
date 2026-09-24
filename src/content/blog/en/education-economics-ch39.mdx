@@ -1,70 +1,122 @@
 ---
-locale: en
 track: academy
-title: "Economics — The IS-LM Model — How Macroeconomic Policies Interact"
+series: macroeconomics
+chapter: 23
+title: "Macroeconomics — Solving IS-LM Simultaneously and Comparative Statics"
+description: "Solves linear IS-LM as a system of equations (matrices and Cramer's rule) to get general solutions for equilibrium output and the interest rate, checks the comparative-static coefficients for government spending and real balances against earlier chapters' numbers, and shows where the interest-rate lower bound breaks the linear solution."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
 category: Economics
-author: OIYO Editorial
-tags:
-  - Education
-  - Economics
-  - IS-LM
-  - FiscalPolicy
-  - MonetaryPolicy
-description: >-
-  Learn the essence of macroeconomics — analyzing simultaneous equilibrium in the goods market (IS) and the money market (LM). Use the interactive simulator to see the effects of fiscal and monetary policy firsthand.
-pubDate: 2026-04-14
+tags: ["economics", "macroeconomics", "IS-LM", "comparative statics", "Cramer's rule"]
+locale: en
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
 
-import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
-import { ISLMSimulator } from "@/features/education-calculators/EconomicSimulators";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# The IS-LM Model: Policy Scenarios
+# Macroeconomics — Two Arrows Cannot Replace a Simultaneous Solution
 
-When analyzing the effects of policy in macroeconomics, the **IS-LM model** is the first tool economists reach for. Formalized by British economist John Hicks as a diagram of Keynes's *General Theory*, this model shows how the real economy (goods market) and the financial economy (money market) are connected.
+[Chapter 4](/en/education-economics-ch14/) and [Chapter 7](/en/education-economics-ch18/) shifted curves to see signs and magnitudes. This chapter solves the same model as a system of equations and writes the equilibrium and comparative-static coefficients as general formulas. These formulas are needed to answer "how much" and to see where the numbers in policy simulations come from.
 
----
+## 1. Writing the system of equations
 
-## 1. The IS Curve (Investment-Saving)
+Write IS and LM as follows.
 
-Represents equilibrium in the goods market. As income (Y) rises, saving increases, and for investment to remain in balance, the interest rate (r) must fall. The curve is therefore **downward-sloping**.
+$$\text{IS: } Y=\alpha-\beta r+\gamma G,\qquad \text{LM: } \frac{M}{P}=\lambda Y-\mu r$$
 
-- **Shift factors**: Moved by fiscal policy — an increase in government spending (G) or a decrease in taxes (T).
+$\beta$ is the response of spending to the interest rate (including the multiplier), $\gamma$ the government spending multiplier, $\lambda$ the income sensitivity of money demand and $\mu$ its interest sensitivity. Collecting the endogenous variables $Y$ and $r$ on the left gives
 
----
+<FormulaBox
+  label="Matrix form"
+  formula="\begin{pmatrix} 1 & \beta \\ \lambda & -\mu \end{pmatrix}\begin{pmatrix} Y \\ r \end{pmatrix}=\begin{pmatrix} \alpha+\gamma G \\ M/P \end{pmatrix}"
+  description="The determinant of the coefficient matrix is −(μ + βλ), which is not zero, so there is a unique solution. Solving systems of equations with matrices is covered in Economics Math Chapter 5."
+/>
 
-## 2. The LM Curve (Liquidity Preference–Money Supply)
+Solving with Cramer's rule gives
 
-Represents equilibrium in the money market. As income (Y) rises, transaction demand for money increases, and with a fixed money supply, the interest rate (r) must rise to restore equilibrium. The curve is therefore **upward-sloping**.
+<FormulaBox
+  label="Equilibrium output and interest rate"
+  formula="Y^*=\frac{\mu(\alpha+\gamma G)+\beta\,M/P}{\mu+\beta\lambda},\qquad r^*=\frac{\lambda(\alpha+\gamma G)-M/P}{\mu+\beta\lambda}"
+  description="The denominator μ + βλ captures the interaction between the two markets. The numerators show how the exogenous variables of the goods market and the money market are combined."
+/>
 
-- **Shift factors**: Moved by changes in the money supply (M) from the central bank.
+## 2. Checking against earlier numbers
 
----
+The Chapter 4 economy has $\alpha=260$, $\beta=10$, $\gamma=5$, $G=30$, $\lambda=0.5$, $\mu=20$ and $M/P=180$.
 
-## 3. Interactive Policy Simulator
+- $Y^*=\dfrac{20\times 410+10\times 180}{20+5}=\dfrac{10{,}000}{25}=400$
+- $r^*=\dfrac{0.5\times 410-180}{25}=\dfrac{25}{25}=1\%$
 
-Adjust the sliders in the simulator below to see how each policy affects the economy's overall income and interest rate.
+This matches the graphical solution of Chapter 4.
 
-<ISLMSimulator client:visible />
+## 3. Comparative-static coefficients
 
-<Callout type="info">
-**Crowding-Out Effect**: When government spending (G) increases and shifts the IS curve to the right, income (Y) rises — but so does the interest rate (r). The higher interest rate suppresses private investment, partially offsetting the impact of the fiscal expansion. This is known as the **crowding-out effect**.
-</Callout>
-
----
-
-## 4. Policy Scenario Analysis
+Differentiating the equilibrium formulas with respect to the exogenous variables gives the policy effects.
 
 <LectureTable
-  title="Effects of Policy on Equilibrium"
-  headers={["Policy", "Curve Shift", "Income (Y)", "Interest Rate (r)"]}
+  title="Comparative-static coefficients and their values in this economy"
+  headers={["Coefficient", "General formula", "Value", "Check against Chapter 4"]}
   rows={[
-    ["Expansionary Fiscal Policy (G↑)", "IS shifts right", "Increases (↑)", "Rises (↑)"],
-    ["Expansionary Monetary Policy (M↑)", "LM shifts right", "Increases (↑)", "Falls (↓)"],
+    ["dY/dG", "μγ/(μ+βλ)", "4", "G +10 → Y +40"],
+    ["dr/dG", "λγ/(μ+βλ)", "0.1", "G +10 → r +1 pt"],
+    ["dY/d(M/P)", "β/(μ+βλ)", "0.4", "M/P +20 → Y +8"],
+    ["dr/d(M/P)", "−1/(μ+βλ)", "−0.04", "M/P +20 → r −0.8 pt"],
   ]}
 />
 
----
+The $\mu\gamma/(\mu+\beta\lambda)$ in the first row is the same as $\gamma/(1+\beta\lambda/\mu)$ in Chapter 7. The coefficient table shows how each parameter corresponds to the story.
 
-The IS-LM model is the most powerful framework for understanding modern macroeconomic policy. Use the simulator to make the intuitive dynamics behind complex equations your own.
+<LectureTable
+  title="When a parameter gets larger"
+  headers={["Parameter", "Fiscal effect", "Monetary effect", "Reason"]}
+  rows={[
+    ["γ (multiplier)", "Larger", "—", "The same spending creates more demand"],
+    ["β (interest sensitivity of spending)", "Smaller", "Larger", "Interest-rate changes move spending a lot (more crowding out, stronger monetary channel)"],
+    ["λ (income sensitivity of money demand)", "Smaller", "Smaller", "The interest rate rises more when output rises"],
+    ["μ (interest sensitivity of money demand)", "Larger", "Smaller", "LM becomes flatter"],
+  ]}
+/>
+
+## 4. The interest-rate lower bound breaks the linear solution
+
+If real balances are raised sharply to 220, the linear solution is $Y^*=(20\times 410+10\times 220)/25=416$ and $r^*=(205-220)/25=-0.6\%$. But the nominal interest rate cannot fall far below zero. The actual equilibrium is $Y=410$, set by IS at a zero interest rate; at a zero rate and output of 410 the required real balances are $0.5\times 410=205$, so any increase beyond 205 does not move output. Once the interest rate hits zero, LM becomes effectively flat and we enter the liquidity-trap region of Chapter 7.
+
+<EconDiagram
+  title="The lower bound and the limits of monetary expansion"
+  xLabel="Y"
+  yLabel="r (%)"
+  xMin={380}
+  xMax={430}
+  yMin={-1}
+  yMax={3}
+  curves={[
+    { label: "IS", points: [[380, 3], [420, -1]], tone: "blue", labelAt: 0 },
+    { label: "LM (180)", points: [[380, 0.5], [430, 1.75]], tone: "green" },
+    { label: "LM (220, linear)", points: [[400, -1], [430, -0.25]], tone: "green", dashed: true },
+    { label: "Lower bound", points: [[380, 0], [430, 0]], tone: "gray", dashed: true },
+  ]}
+  marks={[
+    { x: 400, y: 1, label: "E", xTick: "400" },
+    { x: 410, y: 0, label: "Lower-bound equilibrium", xTick: "410" },
+    { x: 416, y: -0.6, label: "Linear solution (infeasible)" },
+  ]}
+  caption="The linear model predicts an interest rate of −0.6% and output of 416, but because of the lower bound the actual equilibrium stays at a zero rate and output of 410."
+/>
+
+<Callout type="warning">
+A linear approximation holds only around one point. Where the structure of the model changes, as at the interest-rate lower bound, it is the regime that changes, not the coefficients. Policy simulations that omit this kink overstate the effect of monetary policy. Making the price level endogenous gives the aggregate demand curve of [Chapter 8](/en/education-economics-ch19/); extending to an open economy gives the Mundell-Fleming model of [International Finance Chapter 3](/en/education-international-finance-ch3/).
+</Callout>
+
+## Check your understanding
+
+If $\mu$ falls from 20 to 5 (LM becomes steeper), what happens to the fiscal and monetary multipliers? The denominator $\mu+\beta\lambda$ becomes $5+5=10$. $dY/dG=5\times 5/10=2.5$ and $dY/d(M/P)=10/10=1$. The fiscal effect falls from 4 to 2.5 and the monetary effect rises from 0.4 to 1 — the same result as the table in Chapter 7.
+
+## References
+
+- John Hicks, "Mr. Keynes and the 'Classics'," *Econometrica* (1937)
+- Alpha Chiang and Kevin Wainwright, *Fundamental Methods of Mathematical Economics*, ch. 5, 8
+- N. Gregory Mankiw, *Macroeconomics*, ch. 12

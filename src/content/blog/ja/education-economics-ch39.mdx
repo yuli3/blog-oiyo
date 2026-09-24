@@ -1,0 +1,122 @@
+---
+track: academy
+series: macroeconomics
+chapter: 23
+title: "マクロ経済学 — IS-LMの連立と比較静学"
+description: "線形IS-LMを連立方程式(行列とクラメルの公式)で解いて均衡産出・金利の一般解を求め、政府支出と実質残高の比較静学の係数を前の章の数値で検算し、金利の下限が線形解を崩す点を整理します。"
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["経済学", "マクロ経済学", "IS-LM", "比較静学", "クラメルの公式"]
+locale: ja
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# マクロ経済学 — 2本の矢印は連立解の代わりにはならない
+
+[第4章](/ja/education-economics-ch14/)と[第7章](/ja/education-economics-ch18/)では曲線を動かして符号と大きさを見た。この章では同じモデルを連立方程式として解き、均衡と比較静学の係数を一般式で書く。「どれだけ」に答え、政策シミュレーションの数字がどこから来るのかを確かめるには、この式が必要である。
+
+## 1. 連立方程式で書く
+
+ISとLMを次のように書く。
+
+$$\text{IS: } Y=\alpha-\beta r+\gamma G,\qquad \text{LM: } \frac{M}{P}=\lambda Y-\mu r$$
+
+$\beta$は金利に対する支出の反応(乗数を含む)、$\gamma$は政府支出乗数、$\lambda$は貨幣需要の所得感応度、$\mu$は金利感応度である。内生変数$Y$、$r$を左辺に集めると
+
+<FormulaBox
+  label="行列の形"
+  formula="\begin{pmatrix} 1 & \beta \\ \lambda & -\mu \end{pmatrix}\begin{pmatrix} Y \\ r \end{pmatrix}=\begin{pmatrix} \alpha+\gamma G \\ M/P \end{pmatrix}"
+  description="係数行列の行列式は−(μ + βλ)で0ではないので、解がただ一つある。行列で連立方程式を解く方法は経済数学第5章で扱う。"
+/>
+
+クラメルの公式で解くと
+
+<FormulaBox
+  label="均衡産出と金利"
+  formula="Y^*=\frac{\mu(\alpha+\gamma G)+\beta\,M/P}{\mu+\beta\lambda},\qquad r^*=\frac{\lambda(\alpha+\gamma G)-M/P}{\mu+\beta\lambda}"
+  description="分母μ + βλが二つの市場の相互作用である。分子は、財市場と貨幣市場の外生変数がそれぞれどのように混ざるかを示す。"
+/>
+
+## 2. 前の章の数値で検算
+
+第4章の経済は$\alpha=260$、$\beta=10$、$\gamma=5$、$G=30$、$\lambda=0.5$、$\mu=20$、$M/P=180$である。
+
+- $Y^*=\dfrac{20\times 410+10\times 180}{20+5}=\dfrac{10{,}000}{25}=400$
+- $r^*=\dfrac{0.5\times 410-180}{25}=\dfrac{25}{25}=1\%$
+
+第4章のグラフによる解と同じである。
+
+## 3. 比較静学の係数
+
+均衡式を外生変数で微分すると、政策効果が出てくる。
+
+<LectureTable
+  title="比較静学の係数とこの経済での値"
+  headers={["係数", "一般式", "値", "第4章の結果との照合"]}
+  rows={[
+    ["dY/dG", "μγ/(μ+βλ)", "4", "G +10 → Y +40"],
+    ["dr/dG", "λγ/(μ+βλ)", "0.1", "G +10 → r +1%ポイント"],
+    ["dY/d(M/P)", "β/(μ+βλ)", "0.4", "M/P +20 → Y +8"],
+    ["dr/d(M/P)", "−1/(μ+βλ)", "−0.04", "M/P +20 → r −0.8%ポイント"],
+  ]}
+/>
+
+1行目の$\mu\gamma/(\mu+\beta\lambda)$は、第7章の$\gamma/(1+\beta\lambda/\mu)$と同じ式である。係数の表を見ると、各パラメータが話の筋にどう対応するかがわかる。
+
+<LectureTable
+  title="パラメータが大きくなると"
+  headers={["パラメータ", "財政の効果", "金融の効果", "理由"]}
+  rows={[
+    ["γ(乗数)", "大きくなる", "—", "同じ支出がより大きな需要を生む"],
+    ["β(支出の金利感応度)", "小さくなる", "大きくなる", "金利の変化が支出を大きく変える(クラウディング・アウト↑、金融の経路↑)"],
+    ["λ(貨幣需要の所得感応度)", "小さくなる", "小さくなる", "産出が増えると金利がより上がる"],
+    ["μ(貨幣需要の金利感応度)", "大きくなる", "小さくなる", "LMが平らになる"],
+  ]}
+/>
+
+## 4. 金利の下限が線形解を崩す
+
+実質残高を220まで大きく増やすと、線形解は$Y^*=(20\times 410+10\times 220)/25=416$、$r^*=(205-220)/25=-0.6\%$である。しかし名目金利はゼロを大きく下回ることはできない。実際の均衡は、金利0でISが決める$Y=410$であり、金利0・産出410で必要な実質残高は$0.5\times 410=205$なので、205を超えて増やした部分は産出を動かせない。金利が0に達した瞬間にLMは事実上水平になり、第7章の流動性の罠の領域に入る。
+
+<EconDiagram
+  title="金利の下限と金融拡張の限界"
+  xLabel="Y"
+  yLabel="r (%)"
+  xMin={380}
+  xMax={430}
+  yMin={-1}
+  yMax={3}
+  curves={[
+    { label: "IS", points: [[380, 3], [420, -1]], tone: "blue", labelAt: 0 },
+    { label: "LM (180)", points: [[380, 0.5], [430, 1.75]], tone: "green" },
+    { label: "LM (220、線形)", points: [[400, -1], [430, -0.25]], tone: "green", dashed: true },
+    { label: "金利の下限", points: [[380, 0], [430, 0]], tone: "gray", dashed: true },
+  ]}
+  marks={[
+    { x: 400, y: 1, label: "E", xTick: "400" },
+    { x: 410, y: 0, label: "下限での均衡", xTick: "410" },
+    { x: 416, y: -0.6, label: "線形解(実現不可)" },
+  ]}
+  caption="線形モデルは金利−0.6%、産出416を予測するが、金利の下限のため、実際の均衡は金利0、産出410にとどまる。"
+/>
+
+<Callout type="warning">
+線形近似は一点の周りでしか当てはまらない。金利の下限のようにモデルの構造が変わる点では、係数ではなく体制が変わる。この折れ目を入れない政策シミュレーションは、金融政策の効果を過大評価する。物価を内生変数にすれば[第8章](/ja/education-economics-ch19/)の総需要曲線になり、開放経済に広げれば[国際金融第3章](/ja/education-international-finance-ch3/)のマンデル=フレミング・モデルになる。
+</Callout>
+
+## 確認問題
+
+$\mu$が20から5に小さくなれば(LMが急になれば)、財政乗数と金融乗数は。分母$\mu+\beta\lambda$は$5+5=10$である。$dY/dG=5\times 5/10=2.5$、$dY/d(M/P)=10/10=1$である。財政の効果は4から2.5に小さくなり、金融の効果は0.4から1に大きくなる。第7章の表と同じ結果である。
+
+## 参考資料
+
+- John Hicks, "Mr. Keynes and the 'Classics'," *Econometrica* (1937)
+- Alpha Chiang and Kevin Wainwright, *Fundamental Methods of Mathematical Economics*, ch. 5, 8
+- N. Gregory Mankiw, *Macroeconomics*, ch. 12

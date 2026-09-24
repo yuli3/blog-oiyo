@@ -1,0 +1,122 @@
+---
+track: academy
+series: macroeconomics
+chapter: 23
+title: "宏观经济学 — IS-LM联立求解与比较静态"
+description: "把线性IS-LM作为联立方程组(矩阵与克莱姆法则)求解，得到均衡产出和利率的一般解，用前几章的数值检验政府支出与实际余额的比较静态系数，并说明利率下限在何处打破线性解。"
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["经济学", "宏观经济学", "IS-LM", "比较静态", "克莱姆法则"]
+locale: zh
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 宏观经济学 — 两个箭头代替不了联立解
+
+[第4章](/zh/education-economics-ch14/)和[第7章](/zh/education-economics-ch18/)通过移动曲线来看符号和大小。本章把同一个模型当作联立方程组求解，用一般式写出均衡和比较静态系数。要回答"多少"的问题、弄清政策模拟中的数字从何而来，就需要这些式子。
+
+## 1. 写成联立方程组
+
+把IS和LM写成如下形式。
+
+$$\text{IS: } Y=\alpha-\beta r+\gamma G,\qquad \text{LM: } \frac{M}{P}=\lambda Y-\mu r$$
+
+$\beta$是支出对利率的反应(含乘数)，$\gamma$是政府支出乘数，$\lambda$是货币需求对收入的敏感度，$\mu$是对利率的敏感度。把内生变量$Y$、$r$移到左边，得
+
+<FormulaBox
+  label="矩阵形式"
+  formula="\begin{pmatrix} 1 & \beta \\ \lambda & -\mu \end{pmatrix}\begin{pmatrix} Y \\ r \end{pmatrix}=\begin{pmatrix} \alpha+\gamma G \\ M/P \end{pmatrix}"
+  description="系数矩阵的行列式为−(μ + βλ)，不为零，因此有唯一解。用矩阵求解联立方程组的方法在经济数学第5章中讨论。"
+/>
+
+用克莱姆法则求解，得
+
+<FormulaBox
+  label="均衡产出与利率"
+  formula="Y^*=\frac{\mu(\alpha+\gamma G)+\beta\,M/P}{\mu+\beta\lambda},\qquad r^*=\frac{\lambda(\alpha+\gamma G)-M/P}{\mu+\beta\lambda}"
+  description="分母μ + βλ体现了两个市场的相互作用。分子分别显示产品市场和货币市场的外生变量如何组合。"
+/>
+
+## 2. 用前几章的数值检验
+
+第4章的经济中，$\alpha=260$，$\beta=10$，$\gamma=5$，$G=30$，$\lambda=0.5$，$\mu=20$，$M/P=180$。
+
+- $Y^*=\dfrac{20\times 410+10\times 180}{20+5}=\dfrac{10{,}000}{25}=400$
+- $r^*=\dfrac{0.5\times 410-180}{25}=\dfrac{25}{25}=1\%$
+
+与第4章的图解结果相同。
+
+## 3. 比较静态系数
+
+把均衡式对外生变量求导，就得到政策效果。
+
+<LectureTable
+  title="比较静态系数及其在本经济中的取值"
+  headers={["系数", "一般式", "取值", "与第4章结果对照"]}
+  rows={[
+    ["dY/dG", "μγ/(μ+βλ)", "4", "G +10 → Y +40"],
+    ["dr/dG", "λγ/(μ+βλ)", "0.1", "G +10 → r +1个百分点"],
+    ["dY/d(M/P)", "β/(μ+βλ)", "0.4", "M/P +20 → Y +8"],
+    ["dr/d(M/P)", "−1/(μ+βλ)", "−0.04", "M/P +20 → r −0.8个百分点"],
+  ]}
+/>
+
+第一行的$\mu\gamma/(\mu+\beta\lambda)$与第7章的$\gamma/(1+\beta\lambda/\mu)$是同一个式子。从系数表可以看出各参数与经济逻辑的对应关系。
+
+<LectureTable
+  title="参数变大时"
+  headers={["参数", "财政效果", "货币效果", "原因"]}
+  rows={[
+    ["γ(乘数)", "变大", "—", "同样的支出创造更多需求"],
+    ["β(支出的利率敏感度)", "变小", "变大", "利率变化会大幅改变支出(挤出↑、货币渠道↑)"],
+    ["λ(货币需求的收入敏感度)", "变小", "变小", "产出增加时利率上升更多"],
+    ["μ(货币需求的利率敏感度)", "变大", "变小", "LM变得平坦"],
+  ]}
+/>
+
+## 4. 利率下限打破线性解
+
+若把实际余额大幅增加到220，线性解为$Y^*=(20\times 410+10\times 220)/25=416$，$r^*=(205-220)/25=-0.6\%$。但名义利率不能大幅降到零以下。实际均衡是利率为0时由IS决定的$Y=410$;在利率0、产出410时所需的实际余额为$0.5\times 410=205$，因此超过205的部分无法推动产出。利率触及0的那一刻，LM实际上变为水平，进入第7章的流动性陷阱区域。
+
+<EconDiagram
+  title="利率下限与货币扩张的极限"
+  xLabel="Y"
+  yLabel="r (%)"
+  xMin={380}
+  xMax={430}
+  yMin={-1}
+  yMax={3}
+  curves={[
+    { label: "IS", points: [[380, 3], [420, -1]], tone: "blue", labelAt: 0 },
+    { label: "LM (180)", points: [[380, 0.5], [430, 1.75]], tone: "green" },
+    { label: "LM (220，线性)", points: [[400, -1], [430, -0.25]], tone: "green", dashed: true },
+    { label: "利率下限", points: [[380, 0], [430, 0]], tone: "gray", dashed: true },
+  ]}
+  marks={[
+    { x: 400, y: 1, label: "E", xTick: "400" },
+    { x: 410, y: 0, label: "下限均衡", xTick: "410" },
+    { x: 416, y: -0.6, label: "线性解(不可行)" },
+  ]}
+  caption="线性模型预测利率−0.6%、产出416，但由于利率下限，实际均衡停留在利率0、产出410。"
+/>
+
+<Callout type="warning">
+线性近似只在一个点附近成立。在利率下限这样模型结构发生变化的地方，变的不是系数，而是体制。不考虑这一拐点的政策模拟会高估货币政策的效果。把物价变为内生变量，就得到[第8章](/zh/education-economics-ch19/)的总需求曲线;扩展到开放经济，就得到[国际金融第3章](/zh/education-international-finance-ch3/)的蒙代尔-弗莱明模型。
+</Callout>
+
+## 练习题
+
+若$\mu$从20降到5(LM变陡)，财政乘数和货币乘数会怎样?分母$\mu+\beta\lambda$变为$5+5=10$。$dY/dG=5\times 5/10=2.5$，$dY/d(M/P)=10/10=1$。财政效果从4降到2.5，货币效果从0.4升到1，与第7章表中的结果相同。
+
+## 参考资料
+
+- John Hicks, "Mr. Keynes and the 'Classics'," *Econometrica* (1937)
+- Alpha Chiang and Kevin Wainwright, *Fundamental Methods of Mathematical Economics*, ch. 5, 8
+- N. Gregory Mankiw, *Macroeconomics*, ch. 12

@@ -1,0 +1,122 @@
+---
+track: academy
+series: macroeconomics
+chapter: 23
+title: "Macroéconomie — Résolution simultanée d'IS-LM et statique comparative"
+description: "Résout le modèle IS-LM linéaire comme un système d'équations (matrices et règle de Cramer) pour obtenir les solutions générales de la production et du taux d'équilibre, vérifie les coefficients de statique comparative avec les chiffres des chapitres précédents et montre où le plancher des taux rompt la solution linéaire."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["économie", "macroéconomie", "IS-LM", "statique comparative", "règle de Cramer"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Macroéconomie — deux flèches ne remplacent pas une résolution simultanée
+
+Les [chapitres 4](/fr/education-economics-ch14/) et [7](/fr/education-economics-ch18/) déplaçaient des courbes pour en lire le signe et l'ampleur des effets. Ce chapitre résout le même modèle comme un système d'équations et écrit l'équilibre et les coefficients de statique comparative sous forme générale. Ces formules sont nécessaires pour répondre à la question « de combien » et savoir d'où viennent les chiffres des simulations de politique économique.
+
+## 1. Écrire le système d'équations
+
+On écrit IS et LM ainsi.
+
+$$\text{IS : } Y=\alpha-\beta r+\gamma G,\qquad \text{LM : } \frac{M}{P}=\lambda Y-\mu r$$
+
+$\beta$ est la réaction de la dépense au taux d'intérêt (multiplicateur compris), $\gamma$ le multiplicateur des dépenses publiques, $\lambda$ la sensibilité de la demande de monnaie au revenu et $\mu$ sa sensibilité au taux. En regroupant à gauche les variables endogènes $Y$ et $r$, on obtient
+
+<FormulaBox
+  label="Forme matricielle"
+  formula="\begin{pmatrix} 1 & \beta \\ \lambda & -\mu \end{pmatrix}\begin{pmatrix} Y \\ r \end{pmatrix}=\begin{pmatrix} \alpha+\gamma G \\ M/P \end{pmatrix}"
+  description="Le déterminant de la matrice des coefficients vaut −(μ + βλ), non nul : la solution est unique. La résolution de systèmes par les matrices est traitée au chapitre 5 de mathématiques pour l'économie."
+/>
+
+La règle de Cramer donne
+
+<FormulaBox
+  label="Production et taux d'intérêt d'équilibre"
+  formula="Y^*=\frac{\mu(\alpha+\gamma G)+\beta\,M/P}{\mu+\beta\lambda},\qquad r^*=\frac{\lambda(\alpha+\gamma G)-M/P}{\mu+\beta\lambda}"
+  description="Le dénominateur μ + βλ traduit l'interaction entre les deux marchés. Les numérateurs montrent comment se combinent les variables exogènes du marché des biens et du marché de la monnaie."
+/>
+
+## 2. Vérification avec les chiffres précédents
+
+L'économie du chapitre 4 a $\alpha=260$, $\beta=10$, $\gamma=5$, $G=30$, $\lambda=0{,}5$, $\mu=20$ et $M/P=180$.
+
+- $Y^*=\dfrac{20\times 410+10\times 180}{20+5}=\dfrac{10\,000}{25}=400$
+- $r^*=\dfrac{0{,}5\times 410-180}{25}=\dfrac{25}{25}=1\,\%$
+
+On retrouve la solution graphique du chapitre 4.
+
+## 3. Les coefficients de statique comparative
+
+En dérivant les formules d'équilibre par rapport aux variables exogènes, on obtient les effets des politiques.
+
+<LectureTable
+  title="Coefficients de statique comparative et leurs valeurs dans cette économie"
+  headers={["Coefficient", "Formule générale", "Valeur", "Vérification avec le chapitre 4"]}
+  rows={[
+    ["dY/dG", "μγ/(μ+βλ)", "4", "G +10 → Y +40"],
+    ["dr/dG", "λγ/(μ+βλ)", "0,1", "G +10 → r +1 point"],
+    ["dY/d(M/P)", "β/(μ+βλ)", "0,4", "M/P +20 → Y +8"],
+    ["dr/d(M/P)", "−1/(μ+βλ)", "−0,04", "M/P +20 → r −0,8 point"],
+  ]}
+/>
+
+Le $\mu\gamma/(\mu+\beta\lambda)$ de la première ligne est identique au $\gamma/(1+\beta\lambda/\mu)$ du chapitre 7. Le tableau des coefficients montre à quoi correspond chaque paramètre dans le raisonnement économique.
+
+<LectureTable
+  title="Quand un paramètre augmente"
+  headers={["Paramètre", "Effet budgétaire", "Effet monétaire", "Raison"]}
+  rows={[
+    ["γ (multiplicateur)", "Plus grand", "—", "Une même dépense crée plus de demande"],
+    ["β (sensibilité de la dépense au taux)", "Plus petit", "Plus grand", "Les variations de taux modifient fortement la dépense (plus d'éviction, canal monétaire plus fort)"],
+    ["λ (sensibilité de la demande de monnaie au revenu)", "Plus petit", "Plus petit", "Le taux monte davantage quand la production augmente"],
+    ["μ (sensibilité de la demande de monnaie au taux)", "Plus grand", "Plus petit", "LM devient plus plate"],
+  ]}
+/>
+
+## 4. Le plancher des taux rompt la solution linéaire
+
+Si l'on porte les encaisses réelles à 220, la solution linéaire donne $Y^*=(20\times 410+10\times 220)/25=416$ et $r^*=(205-220)/25=-0{,}6\,\%$. Mais le taux nominal ne peut descendre nettement sous zéro. L'équilibre effectif est $Y=410$, fixé par IS à taux nul ; à taux nul et pour une production de 410, les encaisses réelles nécessaires valent $0{,}5\times 410=205$, si bien que tout ce qui dépasse 205 ne fait pas bouger la production. Dès que le taux touche zéro, LM devient de fait horizontale et l'on entre dans la zone de trappe à liquidité du chapitre 7.
+
+<EconDiagram
+  title="Le plancher des taux et les limites de l'expansion monétaire"
+  xLabel="Y"
+  yLabel="r (%)"
+  xMin={380}
+  xMax={430}
+  yMin={-1}
+  yMax={3}
+  curves={[
+    { label: "IS", points: [[380, 3], [420, -1]], tone: "blue", labelAt: 0 },
+    { label: "LM (180)", points: [[380, 0.5], [430, 1.75]], tone: "green" },
+    { label: "LM (220, linéaire)", points: [[400, -1], [430, -0.25]], tone: "green", dashed: true },
+    { label: "Plancher des taux", points: [[380, 0], [430, 0]], tone: "gray", dashed: true },
+  ]}
+  marks={[
+    { x: 400, y: 1, label: "E", xTick: "400" },
+    { x: 410, y: 0, label: "Équilibre au plancher", xTick: "410" },
+    { x: 416, y: -0.6, label: "Solution linéaire (impossible)" },
+  ]}
+  caption="Le modèle linéaire prédit un taux de −0,6 % et une production de 416, mais en raison du plancher des taux, l'équilibre effectif reste à un taux nul et une production de 410."
+/>
+
+<Callout type="warning">
+Une approximation linéaire ne vaut qu'autour d'un point. Là où la structure du modèle change, comme au plancher des taux, ce ne sont pas les coefficients qui changent mais le régime. Les simulations qui ignorent ce coude surestiment l'effet de la politique monétaire. En rendant le niveau des prix endogène, on obtient la courbe de demande globale du [chapitre 8](/fr/education-economics-ch19/) ; en passant à l'économie ouverte, le modèle de Mundell-Fleming du [chapitre 3 de finance internationale](/fr/education-international-finance-ch3/).
+</Callout>
+
+## Exercice
+
+Si $\mu$ passe de 20 à 5 (LM plus pentue), que deviennent les multiplicateurs budgétaire et monétaire ? Le dénominateur $\mu+\beta\lambda$ vaut $5+5=10$. $dY/dG=5\times 5/10=2{,}5$ et $dY/d(M/P)=10/10=1$. L'effet budgétaire passe de 4 à 2,5 et l'effet monétaire de 0,4 à 1 : le même résultat que le tableau du chapitre 7.
+
+## Références
+
+- John Hicks, "Mr. Keynes and the 'Classics'," *Econometrica* (1937)
+- Alpha Chiang and Kevin Wainwright, *Fundamental Methods of Mathematical Economics*, ch. 5, 8
+- N. Gregory Mankiw, *Macroeconomics*, ch. 12

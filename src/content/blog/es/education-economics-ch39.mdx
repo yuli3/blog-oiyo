@@ -1,0 +1,122 @@
+---
+track: academy
+series: macroeconomics
+chapter: 23
+title: "Macroeconomía — Resolución simultánea de IS-LM y estática comparativa"
+description: "Resuelve el modelo IS-LM lineal como sistema de ecuaciones (matrices y regla de Cramer) para obtener las soluciones generales de producción y tipo de interés de equilibrio, comprueba los coeficientes de estática comparativa con las cifras de capítulos anteriores y muestra dónde el límite inferior de los tipos rompe la solución lineal."
+pubDate: 2026-03-01T00:00:00.000Z
+updatedDate: 2026-09-24
+category: Economics
+tags: ["economía", "macroeconomía", "IS-LM", "estática comparativa", "regla de Cramer"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Macroeconomía — dos flechas no sustituyen a una solución simultánea
+
+Los [capítulos 4](/es/education-economics-ch14/) y [7](/es/education-economics-ch18/) desplazaban curvas para ver signos y magnitudes. Este capítulo resuelve el mismo modelo como un sistema de ecuaciones y escribe el equilibrio y los coeficientes de estática comparativa en forma general. Estas fórmulas hacen falta para responder a «cuánto» y para saber de dónde salen las cifras de las simulaciones de política.
+
+## 1. Escribir el sistema de ecuaciones
+
+Escribimos la IS y la LM así.
+
+$$\text{IS: } Y=\alpha-\beta r+\gamma G,\qquad \text{LM: } \frac{M}{P}=\lambda Y-\mu r$$
+
+$\beta$ es la respuesta del gasto al tipo de interés (multiplicador incluido), $\gamma$ el multiplicador del gasto público, $\lambda$ la sensibilidad de la demanda de dinero a la renta y $\mu$ su sensibilidad al tipo de interés. Agrupando a la izquierda las variables endógenas $Y$ y $r$, se obtiene
+
+<FormulaBox
+  label="Forma matricial"
+  formula="\begin{pmatrix} 1 & \beta \\ \lambda & -\mu \end{pmatrix}\begin{pmatrix} Y \\ r \end{pmatrix}=\begin{pmatrix} \alpha+\gamma G \\ M/P \end{pmatrix}"
+  description="El determinante de la matriz de coeficientes es −(μ + βλ), distinto de cero, así que la solución es única. La resolución de sistemas con matrices se trata en el capítulo 5 de matemáticas para economía."
+/>
+
+Con la regla de Cramer se obtiene
+
+<FormulaBox
+  label="Producción y tipo de interés de equilibrio"
+  formula="Y^*=\frac{\mu(\alpha+\gamma G)+\beta\,M/P}{\mu+\beta\lambda},\qquad r^*=\frac{\lambda(\alpha+\gamma G)-M/P}{\mu+\beta\lambda}"
+  description="El denominador μ + βλ recoge la interacción entre los dos mercados. Los numeradores muestran cómo se combinan las variables exógenas del mercado de bienes y del mercado de dinero."
+/>
+
+## 2. Comprobación con las cifras anteriores
+
+La economía del capítulo 4 tiene $\alpha=260$, $\beta=10$, $\gamma=5$, $G=30$, $\lambda=0{,}5$, $\mu=20$ y $M/P=180$.
+
+- $Y^*=\dfrac{20\times 410+10\times 180}{20+5}=\dfrac{10.000}{25}=400$
+- $r^*=\dfrac{0{,}5\times 410-180}{25}=\dfrac{25}{25}=1\,\%$
+
+Coincide con la solución gráfica del capítulo 4.
+
+## 3. Los coeficientes de estática comparativa
+
+Derivando las fórmulas de equilibrio respecto a las variables exógenas se obtienen los efectos de las políticas.
+
+<LectureTable
+  title="Coeficientes de estática comparativa y sus valores en esta economía"
+  headers={["Coeficiente", "Fórmula general", "Valor", "Comprobación con el capítulo 4"]}
+  rows={[
+    ["dY/dG", "μγ/(μ+βλ)", "4", "G +10 → Y +40"],
+    ["dr/dG", "λγ/(μ+βλ)", "0,1", "G +10 → r +1 punto"],
+    ["dY/d(M/P)", "β/(μ+βλ)", "0,4", "M/P +20 → Y +8"],
+    ["dr/d(M/P)", "−1/(μ+βλ)", "−0,04", "M/P +20 → r −0,8 puntos"],
+  ]}
+/>
+
+El $\mu\gamma/(\mu+\beta\lambda)$ de la primera fila es la misma expresión que el $\gamma/(1+\beta\lambda/\mu)$ del capítulo 7. La tabla de coeficientes muestra a qué parte del razonamiento corresponde cada parámetro.
+
+<LectureTable
+  title="Cuando un parámetro aumenta"
+  headers={["Parámetro", "Efecto fiscal", "Efecto monetario", "Razón"]}
+  rows={[
+    ["γ (multiplicador)", "Mayor", "—", "El mismo gasto crea más demanda"],
+    ["β (sensibilidad del gasto al tipo)", "Menor", "Mayor", "Los cambios de tipo mueven mucho el gasto (más expulsión, canal monetario más fuerte)"],
+    ["λ (sensibilidad de la demanda de dinero a la renta)", "Menor", "Menor", "El tipo sube más cuando aumenta la producción"],
+    ["μ (sensibilidad de la demanda de dinero al tipo)", "Mayor", "Menor", "La LM se vuelve más plana"],
+  ]}
+/>
+
+## 4. El límite inferior de los tipos rompe la solución lineal
+
+Si los saldos reales se elevan a 220, la solución lineal da $Y^*=(20\times 410+10\times 220)/25=416$ y $r^*=(205-220)/25=-0{,}6\,\%$. Pero el tipo nominal no puede bajar mucho de cero. El equilibrio efectivo es $Y=410$, que fija la IS con tipo cero; con tipo cero y producción de 410, los saldos reales necesarios son $0{,}5\times 410=205$, así que todo lo que supere 205 no mueve la producción. En cuanto el tipo toca cero, la LM se vuelve de hecho horizontal y se entra en la zona de trampa de liquidez del capítulo 7.
+
+<EconDiagram
+  title="El límite inferior y los límites de la expansión monetaria"
+  xLabel="Y"
+  yLabel="r (%)"
+  xMin={380}
+  xMax={430}
+  yMin={-1}
+  yMax={3}
+  curves={[
+    { label: "IS", points: [[380, 3], [420, -1]], tone: "blue", labelAt: 0 },
+    { label: "LM (180)", points: [[380, 0.5], [430, 1.75]], tone: "green" },
+    { label: "LM (220, lineal)", points: [[400, -1], [430, -0.25]], tone: "green", dashed: true },
+    { label: "Límite inferior", points: [[380, 0], [430, 0]], tone: "gray", dashed: true },
+  ]}
+  marks={[
+    { x: 400, y: 1, label: "E", xTick: "400" },
+    { x: 410, y: 0, label: "Equilibrio en el límite", xTick: "410" },
+    { x: 416, y: -0.6, label: "Solución lineal (imposible)" },
+  ]}
+  caption="El modelo lineal predice un tipo de −0,6 % y una producción de 416, pero por el límite inferior de los tipos el equilibrio efectivo se queda en tipo cero y producción de 410."
+/>
+
+<Callout type="warning">
+Una aproximación lineal solo vale en torno a un punto. Donde cambia la estructura del modelo, como en el límite inferior de los tipos, no cambian los coeficientes sino el régimen. Las simulaciones que omiten este quiebre sobrestiman el efecto de la política monetaria. Si el nivel de precios se hace endógeno, se obtiene la curva de demanda agregada del [capítulo 8](/es/education-economics-ch19/); si se amplía a una economía abierta, el modelo de Mundell-Fleming del [capítulo 3 de finanzas internacionales](/es/education-international-finance-ch3/).
+</Callout>
+
+## Ejercicio
+
+Si $\mu$ baja de 20 a 5 (la LM se vuelve más empinada), ¿qué ocurre con los multiplicadores fiscal y monetario? El denominador $\mu+\beta\lambda$ pasa a ser $5+5=10$. $dY/dG=5\times 5/10=2{,}5$ y $dY/d(M/P)=10/10=1$. El efecto fiscal baja de 4 a 2,5 y el monetario sube de 0,4 a 1: el mismo resultado que la tabla del capítulo 7.
+
+## Referencias
+
+- John Hicks, "Mr. Keynes and the 'Classics'," *Econometrica* (1937)
+- Alpha Chiang and Kevin Wainwright, *Fundamental Methods of Mathematical Economics*, ch. 5, 8
+- N. Gregory Mankiw, *Macroeconomics*, ch. 12
