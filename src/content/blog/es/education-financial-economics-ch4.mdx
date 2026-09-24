@@ -1,0 +1,77 @@
+---
+track: academy
+series: financial-economics
+chapter: 4
+title: "Economía financiera — Intermediación financiera, información asimétrica y racionamiento del crédito"
+description: "Explica por qué existen los bancos mediante los costes de transacción y la información asimétrica, y muestra con un ejemplo numérico el racionamiento del crédito, en el que subir el tipo no basta para eliminar el exceso de demanda."
+pubDate: 2026-09-15
+updatedDate: 2026-09-24
+category: Economics
+tags: ["economía", "economía financiera", "intermediación financiera", "selección adversa", "racionamiento del crédito"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Economía financiera — un banco no es un intermediario, sino una empresa que produce información y liquidez
+
+Hay modelos en los que las instituciones financieras sobran porque los hogares invierten directamente en valores de las empresas. En la realidad, bancos, fondos y aseguradoras siguen existiendo por la transformación de plazos, la supervisión delegada, los pagos y la diferencia de información entre prestatarios y prestamistas.
+
+## 1. La financiación directa no puede transferir todos los riesgos
+
+En mercados completos, el riesgo se reparte con derechos contingentes. Si el esfuerzo del prestatario no puede escribirse entero en un contrato y verificar un impago cuesta, ese mercado es incompleto. En el modelo de supervisión delegada de Diamond, es más barato que un banco supervise al prestatario y los depositantes supervisen al banco que el que muchos acreedores supervisen cada uno por su cuenta.
+
+<LectureTable
+  title="Transformaciones que ofrecen las instituciones financieras"
+  headers={["Transformación", "Ejemplo", "Riesgo que queda"]}
+  rows={[
+    ["Plazo", "Depósitos a corto → préstamos a largo", "Retiradas concentradas, corte de la refinanciación"],
+    ["Tamaño", "Depósitos pequeños → créditos grandes", "Concentración en un prestatario"],
+    ["Riesgo", "Cartera de préstamos diversificada", "Perturbaciones comunes, impagos correlacionados"],
+    ["Información", "Selección y supervisión posterior", "Tipos ocultos, acciones ocultas"],
+  ]}
+/>
+
+La transformación de plazos es en sí un seguro de liquidez. También es la materia prima de los pánicos bancarios. Esa amplificación se trata en el [capítulo 5 sobre crisis financieras](/es/education-economics-ch38/).
+
+## 2. Subir el tipo de interés puede empeorar la calidad media de los prestatarios
+
+El núcleo del racionamiento del crédito de Stiglitz–Weiss es que el tipo de interés es a la vez un precio y un mecanismo de selección. Subirlo expulsa a los prestatarios seguros y deja solo los proyectos arriesgados. La rentabilidad esperada del banco no aumenta de forma monótona con el tipo.
+
+El tipo seguro tiene éxito con probabilidad del 90 %, con 120 wones de cobro si tiene éxito y 0 si fracasa. El tipo arriesgado tiene éxito con probabilidad del 50 %, con 200 wones si tiene éxito. Sus flujos esperados son 108 y 100 wones, respectivamente. Con un principal de 100 wones al 20 %, el reembolso es de 120 wones.
+
+- Beneficio esperado del tipo seguro: $0{,}9×(120-120)=0$ — desaparece el incentivo a pedir prestado
+- Beneficio esperado del tipo arriesgado: $0{,}5×(200-120)=40$ wones — sigue pidiendo prestado
+
+Si el banco no distingue los tipos, subir el tipo llena su cartera de prestatarios arriesgados. Si ambos tipos son mitad y mitad, al 10 % (reembolso de 110 wones) los dos piden prestado y el cobro esperado del banco por préstamo es $0{,}5×(0{,}9×110)+0{,}5×(0{,}5×110)=77$ wones. Al subir al 20 % solo queda el tipo arriesgado y baja a $0{,}5×120=60$ wones. Racionar el crédito al 10 % es mejor que subir el tipo.
+
+<FormulaBox
+  label="El punto en que se quiebra la rentabilidad esperada del banco"
+  formula="\partial E[\pi]/\partial r = 0"
+  description="Por encima de ese tipo, el banco no sube más el precio para eliminar el exceso de demanda; presta solo a una parte de los solicitantes que superan la evaluación."
+/>
+
+Las garantías, la participación en el capital y la banca relacional son contratos que intentan reducir este fallo de selección. En el mercado de prestatarios sin garantías, puede no existir un equilibrio basado solo en el tipo de interés.
+
+## 3. El riesgo moral es un cambio de conducta después del préstamo
+
+Si la selección adversa trata de tipos ocultos, el riesgo moral trata de acciones ocultas. Cuando sube el apalancamiento, los accionistas se quedan con el potencial alcista y trasladan las pérdidas a los acreedores y al seguro de depósitos. Los requisitos de capital y las cláusulas restrictivas (covenants) sirven para reducir el valor de esa opción.
+
+<Callout type="warning">
+No lea de inmediato la escasez de crédito como «no hay dinero». Aunque haya ahorro de los hogares, el crédito a determinadas empresas o países puede cerrarse por los costes de evaluación y la selección adversa. A la inversa, cuando sube el precio de las garantías, el mismo proyecto puede volverse financiable de repente y amplificar la expansión.
+</Callout>
+
+## Ejercicio
+
+Un banco subió su tipo del 10 % al 25 % y la morosidad subió con él. ¿Puede explicarse solo con un movimiento a lo largo de la curva de demanda? Si la subida cambió la composición de los prestatarios, lo que se ha quebrado es la curva de rentabilidad esperada del prestamista, y el racionamiento puede ser el equilibrio.
+
+## Referencias
+
+- Joseph Stiglitz and Andrew Weiss, «Credit Rationing in Markets with Imperfect Information», *American Economic Review* (1981)
+- Douglas Diamond, «Financial Intermediation and Delegated Monitoring», *Review of Economic Studies* (1984)
+- Banco de Corea, [Informe de estabilidad financiera](https://www.bok.or.kr/portal/singl/newsData/listPage.do?menuNo=200717) (en coreano)

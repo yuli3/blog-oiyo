@@ -1,0 +1,79 @@
+---
+track: academy
+series: financial-economics
+chapter: 3
+title: "金融经济学 — 信息、市场效率与价格发现"
+description: "区分有效市场假说的三种形式，并计算格罗斯曼—斯蒂格利茨悖论:信息要反映到价格中，信息生产就必须仍有利可图。"
+pubDate: 2026-09-15
+updatedDate: 2026-09-24
+category: Economics
+tags: ["经济学", "金融经济学", "市场效率", "信息不对称", "价格发现"]
+locale: zh
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 金融经济学 — 价格要包含信息，就必须仍有研究的理由
+
+"市场是有效的"这句话用得太多了。如果不区分价格反映的是哪个信息集的条件期望，以及谁为何生产这些信息，反例到处都能找到。
+
+## 1. 弱式、半强式和强式的信息集不同
+
+法玛的分类区分了可预测性的类型。
+
+<LectureTable
+  title="有效市场假说的信息集"
+  headers={["形式", "认为价格反映的信息", "构成否定的证据"]}
+  rows={[
+    ["弱式", "过去的价格和成交量", "仅靠技术分析获得风险调整后的超额收益"],
+    ["半强式", "公开的会计信息和新闻", "信息披露后仍存在系统性漂移"],
+    ["强式", "连内幕信息也包括在内", "内部人平均获得超额收益"],
+  ]}
+/>
+
+强式几乎一开始就接近被否定，这正是内幕交易监管存在的原因。弱式和半强式并不是说"谁都赚不到钱"，而更接近于说:仅凭公开信息，没有任何规则在扣除风险和交易成本后还能留下收益。
+
+随机游走既不是有效性的必要条件，也不是充分条件。风险溢价变化时，即使出现可预测的收益率，也可能不是套利。反过来，即使价格含有误差，只要套利资本受到约束，误差就可能长期存在。
+
+## 2. 格罗斯曼—斯蒂格利茨:若完全反映，就没人去研究
+
+若假设信息可以零成本获得，价格完全反映该信息的均衡是可能的。现实中研究是有成本的。若价格包含100%的信息，研究利润就为零，没人去研究，价格也就无法包含信息。
+
+<FormulaBox
+  label="信息生产的均衡"
+  formula="E[\pi \mid \text{研究}] - c = E[\pi \mid \text{不研究}]"
+  description="若研究成本c为正，价格只能部分反映信息，使研究者的期望利润足以弥补成本。"
+/>
+
+因此，不能同时说"新闻会立即进入价格"和"研究毫无价值"。价格发现是有成本的活动，其回报以暂时误差或买卖价差的形式留存。
+
+用数字看:设每项研究成本为2韩元，信息尚未进入价格时研究利润为5韩元，已进入价格时为0韩元。设信息仍未被价格反映的概率为$p$，研究者的期望利润为$5p$韩元。在$5p=2$即$p=0.4$时，研究与不研究无差异。均衡时价格只反映60%的信息，剩下40%的缺口用来弥补研究成本。
+
+## 3. 异象是风险、错误定价还是成本?
+
+小盘股、价值股、动量等无法用市场贝塔解释的平均收益率差异被反复报告。解释分为三类。
+
+- 风险:在财务困难时期损失更大的风险所得到的补偿
+- 错误定价:过度反应和反应不足，受约束的套利
+- 成本与偏差:数据挖掘、交易成本、退市偏差
+
+有些异象在论文发表后消失或减弱，原因是发现本身引来了套利，或是在样本外无法重现。
+
+<Callout type="warning">
+价格没有立即变动，并不意味着市场无效。交易时间、流动性和解读公告的不确定性都会起作用。反过来，价格变动迅速也不意味着基本面价值是对的，价格可能迅速收敛到错误的值。
+</Callout>
+
+## 练习题
+
+若半强式有效成立，是否可能仅凭公司公告后的图表形态获得风险调整后的超额收益?公告是公开信息，图表形态是过去价格，所以若半强式成立，该策略的期望超额收益为零。实际数据中是否留有漂移，才是否定的证据。
+
+## 参考资料
+
+- Eugene Fama, "Efficient Capital Markets," *Journal of Finance* (1970)
+- Sanford Grossman and Joseph Stiglitz, "On the Impossibility of Informationally Efficient Markets," *American Economic Review* (1980)
+- 韩国交易所KIND，[上市公告制度](https://kind.krx.co.kr/disclosure/disclosureinfo.do?method=searchDisclosureMain)(韩文)

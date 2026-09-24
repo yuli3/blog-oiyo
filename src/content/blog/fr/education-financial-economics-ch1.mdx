@@ -1,0 +1,78 @@
+---
+track: academy
+series: financial-economics
+chapter: 1
+title: "Économie financière — Partage des risques, arbitrage et prix d'état"
+description: "Distingue l'économie financière de la finance d'entreprise et calcule comment les créances contingentes et les prix sans arbitrage répartissent le risque."
+pubDate: 2026-09-15
+updatedDate: 2026-09-24
+category: Economics
+tags: ["économie", "économie financière", "arbitrage", "prix d'état", "partage des risques"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Économie financière — le rôle des prix est de partager le risque
+
+Si la finance d'entreprise s'interroge sur l'investissement et la structure du capital d'une entreprise, l'économie financière se demande qui porte le risque dans l'ensemble de l'économie. Cours boursiers et taux d'intérêt sont, avant d'être des résultats de calculatrice sur « le juste prix », des prix relatifs qui décident qui renonce à consommer dans quel état du monde.
+
+Les calculs de VAN et de CMPC relèvent du [cours de finance d'entreprise](/ko/education-finance-ch1/) (en coréen). Ce cours examine l'équilibre et les contraintes d'absence d'arbitrage qui sous-tendent ces formules.
+
+## 1. Les créances contingentes ont la structure d'une assurance météo
+
+Supposons que l'an prochain l'économie soit soit en expansion, soit en récession. Un titre qui paie 1 won en expansion et 0 won en récession est appelé titre d'Arrow–Debreu. Les actions, obligations et options réelles sont des paniers de tels titres.
+
+Si le titre d'expansion vaut 0,40 won et le titre de récession 0,50 won, 1 won sans risque vaut 0,90 won. Le taux sans risque est d'environ 11,1 %.
+
+<FormulaBox
+  label="Prix d'une obligation sans risque"
+  formula="q_1 + q_2 = 1 / (1+r_f)"
+  description="Le prix d'un portefeuille qui paie 1 won dans tous les états est la valeur du facteur d'actualisation sans risque."
+/>
+
+Le prix sans arbitrage d'un actif qui paie 120 wons en expansion et 80 wons en récession est $120×0{,}40 + 80×0{,}50 = 88$ wons. S'il s'échange à 90 wons sur le marché, le vendre et acheter le portefeuille de réplication laisse un gain d'arbitrage.
+
+## 2. Sur des marchés complets, tout risque peut s'échanger
+
+Un marché est complet quand il existe autant d'actifs linéairement indépendants que d'états indépendants. Sur un marché complet, tout plan de consommation souhaité peut être construit par une combinaison de titres, et des flux identiques état par état doivent avoir le même prix.
+
+Sur un marché incomplet, ce n'est pas le cas. Les risques sans instrument de couverture — risque sur les revenus du travail, prix immobiliers, catastrophes — ne sont pas pleinement reflétés dans les prix et restent à la charge des individus. « Un marché s'est ouvert » et « le risque a été transféré » sont deux énoncés différents.
+
+<LectureTable
+  title="Les questions de trois disciplines"
+  headers={["Discipline", "Unité principale", "Question centrale"]}
+  rows={[
+    ["Finance d'entreprise", "L'entreprise", "À quel coût du capital évaluer ce projet ?"],
+    ["Ingénierie financière", "Le contrat", "Quel est le prix de réplication de ce dérivé ?"],
+    ["Économie financière", "L'équilibre de marché", "À qui le risque est-il transféré, et pourquoi son prix prend-il cette valeur ?"],
+  ]}
+/>
+
+## 3. L'absence d'arbitrage est une contrainte comptable, pas une préférence
+
+Une opportunité d'arbitrage est un portefeuille d'investissement net nul aujourd'hui qui rapporte un gain positif ou nul dans tous les états et strictement positif dans au moins un. Aucune hypothèse sur les préférences ou l'aversion au risque n'est nécessaire. Si deux actifs versent les mêmes flux dans tous les états mais ont des prix différents, il suffit d'acheter le moins cher et de vendre le plus cher.
+
+Les préférences interviennent une fois l'arbitrage disparu. Le prix du risque restant — quels états reçoivent des prix d'état plus élevés — dépend de l'utilité marginale et du partage des risques.
+
+<Callout type="warning">
+N'employez pas « le marché est efficient » et « il n'y a pas d'arbitrage » comme synonymes. L'absence d'arbitrage est la cohérence des prix de flux réplicables. La vitesse à laquelle l'information se reflète dans les prix, et le fait qu'il reste ou non une incitation à produire cette information, sont traités au chapitre 3.
+</Callout>
+
+## Exercice
+
+1. Si les prix d'état d'expansion et de récession valent 0,45 et 0,50, quel est le taux sans risque ?
+2. Si un actif qui paie 150 wons en expansion et 50 wons en récession s'échange à 80 wons, dans quel sens joue l'arbitrage ?
+
+Construire 1 won sans risque avec les titres d'expansion et de récession coûte 0,95 won, donc $r_f ≈ 5{,}3\%$. Le prix de réplication est $150×0{,}45 + 50×0{,}50 = 92{,}5$ wons : le prix de marché de 80 wons est trop bas. Achetez l'actif et vendez le portefeuille de réplication.
+
+## Références
+
+- John Cochrane, *Asset Pricing*, ch. 1–3
+- MIT OpenCourseWare, [15.401 Finance Theory](https://ocw.mit.edu/courses/15-401-finance-theory-i-fall-2008/)
+- Kenneth Arrow, « The Role of Securities in the Optimal Allocation of Risk-Bearing »

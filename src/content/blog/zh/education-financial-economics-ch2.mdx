@@ -1,0 +1,85 @@
+---
+track: academy
+series: financial-economics
+chapter: 2
+title: "金融经济学 — 期望效用、风险溢价与随机贴现因子"
+description: "用随机贴现因子说明同样的期望现金流在边际效用高的状态下更贵，并把CAPM定位为其特例。"
+pubDate: 2026-09-15
+updatedDate: 2026-09-24
+category: Economics
+tags: ["经济学", "金融经济学", "随机贴现因子", "风险溢价", "期望效用"]
+locale: zh
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 金融经济学 — 有风险的现金流即使期望值相同，价格也不同
+
+把第1章的状态价格$q_s$除以概率，就得到随机贴现因子(SDF)。本章考察这个值为何在衰退时更大，以及公司财务中使用的CAPM是在哪些假设下的特例。
+
+## 1. 边际效用高的状态下，1韩元更贵
+
+假设存在代表性消费者，效用在时间上可分。今天少消费1韩元、在状态$s$多得1韩元的代价，是边际效用之比。
+
+<FormulaBox
+  label="随机贴现因子"
+  formula="m_s = \beta u'(c_s) / u'(c_0)"
+  description="在衰退这类消费低、边际效用高的状态下，m更大，该状态的现金流获得更高的现值。"
+/>
+
+资产价格是现金流与$m$之积的期望值。
+
+<FormulaBox
+  label="资产价格"
+  formula="p = E[m x]"
+  description="x在衰退时较大的资产(保险、国债)E[m x]较大，因此价格高、期望收益率低。"
+/>
+
+用期望收益率改写，得$E[R] - r_f = -(1+r_f)\,\mathrm{Cov}(m, R)$。与市场同向变动的资产与$m$负相关，因此风险溢价为正。进入价格的风险不是"方差大"，而是"在坏状态下亏损"。
+
+## 2. 用数字看，保险比股票贵
+
+设无风险利率为2%，繁荣和衰退的概率各为50%。繁荣时$m=0.90$，衰退时$m=1.06$。均值$E[m]=0.98$，所以$1/E[m]≈1.0204$，与无风险利率一致。
+
+股票在繁荣时支付140韩元，衰退时支付70韩元，价格为$0.5×(0.90×140 + 1.06×70) = 100.1$韩元。期望现金流为105韩元，价格却更低。保险在繁荣时支付0韩元，衰退时支付100韩元，价格为$0.5×1.06×100 = 53$韩元，高于期望现金流50韩元。即使期望值同为50韩元，集中在衰退时支付的资产也要付溢价购买。
+
+<LectureTable
+  title="风险进入价格的渠道"
+  headers={["衡量方式", "包含什么", "遗漏什么"]}
+  rows={[
+    ["方差、标准差", "波动的大小", "在哪种状态下波动"],
+    ["市场贝塔", "与市场同向变动的程度", "市场之外的收入风险"],
+    ["与SDF的协方差", "边际效用高的状态下的损失", "偏好或完全市场假设不成立时"],
+  ]}
+/>
+
+## 3. 当SDF是市场收益率的线性函数时，就得到CAPM
+
+若偏好是均值—方差型，或收益率服从正态分布，选择只取决于均值和方差。这时SDF是市场组合收益率的线性函数，风险溢价与贝塔成正比。
+
+<FormulaBox
+  label="CAPM"
+  formula="E[R_i] = r_f + \beta_i (E[R_m]-r_f)"
+  description="贝塔是资产与市场的协方差除以市场方差。其主张是，特质风险一旦被分散，就不会反映在价格中。"
+/>
+
+企业实务中CAPM的用法见[公司财务第4章](/ko/education-finance-ch4/)(韩文)。这里重要的局限有三点:市场组合无法观测;消费风险可能与市场收益率不同;劳动收入、住房等不可交易的风险留在贝塔之外。
+
+<Callout type="warning">
+股票的历史超额收益率太高，难以用消费风险解释，这就是股权溢价之谜。若不否定模型，只用"人们更厌恶风险"来填补，就会与无风险利率之谜冲突。解释分为习惯形成、长期风险、灾难风险等，没有一个公认的公式。
+</Callout>
+
+## 练习题
+
+与市场反向变动的资产，期望收益率高于无风险利率吗?不高。它在消费低的状态下带来收益，因此与SDF正相关，风险溢价为负，期望收益率低于无风险利率。第2节的保险以53韩元买入、平均获得50韩元，期望收益率约为−5.7%。
+
+## 参考资料
+
+- John Cochrane, *Asset Pricing*, ch. 1
+- Rajnish Mehra and Edward Prescott, "The Equity Premium: A Puzzle," *Journal of Monetary Economics* (1985)
+- MIT OpenCourseWare, [15.401 Finance Theory](https://ocw.mit.edu/courses/15-401-finance-theory-i-fall-2008/)

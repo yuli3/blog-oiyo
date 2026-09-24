@@ -1,0 +1,85 @@
+---
+track: academy
+series: financial-economics
+chapter: 2
+title: "Financial Economics — Expected Utility, Risk Premiums and the Stochastic Discount Factor"
+description: "Uses the stochastic discount factor to show that the same expected cash flow is dearer in states of high marginal utility, and places the CAPM as a special case."
+pubDate: 2026-09-15
+updatedDate: 2026-09-24
+category: Economics
+tags: ["economics", "financial economics", "stochastic discount factor", "risk premium", "expected utility"]
+locale: en
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Financial Economics — Risky Cash Flows With the Same Expected Value Have Different Prices
+
+Dividing the state prices $q_s$ of chapter 1 by probabilities gives the stochastic discount factor (SDF). This chapter looks at why that value is larger in recessions, and at which assumptions make the CAPM used in corporate finance a special case.
+
+## 1. One won is dearer in a state of high marginal utility
+
+Suppose there is a representative consumer with time-separable utility. The price of giving up 1 won of consumption today to get 1 more won in state $s$ is the ratio of marginal utilities.
+
+<FormulaBox
+  label="Stochastic discount factor"
+  formula="m_s = \beta u'(c_s) / u'(c_0)"
+  description="In states such as recessions, where consumption is low and marginal utility high, m is larger, and cash flows in that state receive a higher present value."
+/>
+
+The price of an asset is the expected value of its cash flow times $m$.
+
+<FormulaBox
+  label="Asset price"
+  formula="p = E[m x]"
+  description="Assets whose x is large in recessions (insurance, government bonds) have a large E[m x], so their prices are high and expected returns low."
+/>
+
+Rewritten in terms of expected returns, $E[R] - r_f = -(1+r_f)\,\mathrm{Cov}(m, R)$. Assets that move with the market have a negative covariance with $m$, so their risk premium is positive. The risk that enters prices is not "high variance" but "losing money in bad states".
+
+## 2. In numbers, insurance is dearer than equity
+
+Let the risk-free rate be 2% and the probabilities of boom and recession 50% each. In the boom $m=0.90$ and in the recession $m=1.06$. The mean is $E[m]=0.98$, so $1/E[m]≈1.0204$, consistent with the risk-free rate.
+
+A share pays 140 won in the boom and 70 won in the recession. Its price is $0.5×(0.90×140 + 1.06×70) = 100.1$ won. The expected cash flow is 105 won, but the price is lower. An insurance policy pays 0 won in the boom and 100 won in the recession. Its price is $0.5×1.06×100 = 53$ won, more than the expected cash flow of 50 won. Even with the same expected value of 50 won, a payoff concentrated in recessions is bought at a premium.
+
+<LectureTable
+  title="The channels through which risk enters prices"
+  headers={["Measure", "What it captures", "What it misses"]}
+  rows={[
+    ["Variance, standard deviation", "The size of fluctuations", "In which states the fluctuations occur"],
+    ["Market beta", "How much the asset moves with the market", "Income risk outside the market"],
+    ["Covariance with the SDF", "Losses in states of high marginal utility", "Cases where preference or complete-market assumptions fail"],
+  ]}
+/>
+
+## 3. The CAPM arises when the SDF is linear in the market return
+
+With mean-variance preferences or normally distributed returns, choices depend only on the mean and variance. The SDF is then linear in the return on the market portfolio, and risk premiums are proportional to beta.
+
+<FormulaBox
+  label="CAPM"
+  formula="E[R_i] = r_f + \beta_i (E[R_m]-r_f)"
+  description="Beta is the covariance of the asset with the market divided by the market variance. The claim is that idiosyncratic risk, once diversified, is not priced."
+/>
+
+How firms use the CAPM in practice is covered in [corporate finance chapter 4](/en/education-finance-ch4/). The important limits here are three: the market portfolio cannot be observed, consumption risk can differ from market returns, and non-traded risks such as labour income and housing remain outside beta.
+
+<Callout type="warning">
+The equity premium puzzle is that the historical excess return on equities is too large to be explained by consumption risk. Filling the gap only with "people are more risk-averse" without rejecting the model collides with the risk-free rate puzzle. Explanations divide into habit formation, long-run risk, disaster risk and others, with no single agreed formula.
+</Callout>
+
+## Check your understanding
+
+Is the expected return on an asset that moves against the market higher than the risk-free rate? No. It pays off in states of low consumption, so it has a positive covariance with the SDF; its risk premium is negative and its expected return lower than the risk-free rate. The insurance in section 2 is bought for 53 won and pays 50 won on average, an expected return of about −5.7%.
+
+## References
+
+- John Cochrane, *Asset Pricing*, ch. 1
+- Rajnish Mehra and Edward Prescott, "The Equity Premium: A Puzzle," *Journal of Monetary Economics* (1985)
+- MIT OpenCourseWare, [15.401 Finance Theory](https://ocw.mit.edu/courses/15-401-finance-theory-i-fall-2008/)

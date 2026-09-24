@@ -1,0 +1,78 @@
+---
+track: academy
+series: financial-economics
+chapter: 1
+title: "Financial Economics — Risk Sharing, Arbitrage and State Prices"
+description: "Separates financial economics from corporate finance and calculates how state-contingent claims and no-arbitrage prices allocate risk."
+pubDate: 2026-09-15
+updatedDate: 2026-09-24
+category: Economics
+tags: ["economics", "financial economics", "arbitrage", "state prices", "risk sharing"]
+locale: en
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Financial Economics — What Prices Do Is Share Risk
+
+If corporate finance asks about one firm's investment and capital structure, financial economics asks who bears risk across the whole economy. Share prices and interest rates are, before they are calculator outputs for "what is fair", relative prices that decide who gives up consumption in which state.
+
+NPV and WACC calculations are covered in the [corporate finance course](/en/education-finance-ch1/). This course looks at the equilibrium and no-arbitrage constraints behind those formulas.
+
+## 1. State-contingent claims have the same structure as weather insurance
+
+Suppose next year the economy is either in a boom or a recession. A security that pays 1 won in the boom and 0 won in the recession is called an Arrow–Debreu security. Real shares, bonds and options are bundles of such securities.
+
+If the boom security costs 0.40 won and the recession security 0.50 won, a risk-free 1 won costs 0.90 won. The risk-free interest rate is about 11.1%.
+
+<FormulaBox
+  label="Price of a risk-free bond"
+  formula="q_1 + q_2 = 1 / (1+r_f)"
+  description="The price of a portfolio paying 1 won in every state is the value of the risk-free discount factor."
+/>
+
+The no-arbitrage price of an asset paying 120 won in the boom and 80 won in the recession is $120×0.40 + 80×0.50 = 88$ won. If it trades at 90 won in the market, selling it and buying the replicating portfolio leaves an arbitrage profit.
+
+## 2. In complete markets, every risk can be traded
+
+A market is complete when there are as many linearly independent assets as independent states. In a complete market, any desired consumption plan can be built from a combination of securities, and identical state-by-state cash flows must have the same price.
+
+In an incomplete market this fails. Risks with no hedging instrument — labour income risk, house prices, disasters — are not fully reflected in prices and stay with individuals. "A market has opened" and "risk has been transferred" are different statements.
+
+<LectureTable
+  title="The questions three subjects ask"
+  headers={["Subject", "Main unit", "Key question"]}
+  rows={[
+    ["Corporate finance", "The firm", "At what cost of capital should this project be valued?"],
+    ["Financial engineering", "The contract", "What is the replication price of this derivative?"],
+    ["Financial economics", "Market equilibrium", "To whom is risk transferred, and why does its price take that value?"],
+  ]}
+/>
+
+## 3. No arbitrage is an accounting constraint, not a preference
+
+An arbitrage opportunity is a portfolio with zero net investment today that yields a non-negative payoff in every state and a positive payoff in some state. No assumption about preferences or risk aversion is needed. If two assets pay the same cash flows in every state but have different prices, buying the cheap one and selling the dear one is enough.
+
+Preferences enter after arbitrage has gone. The price of the remaining risk — which states get higher state prices — depends on marginal utility and risk sharing.
+
+<Callout type="warning">
+Do not use "the market is efficient" and "there is no arbitrage" to mean the same thing. No arbitrage is the price consistency of replicable cash flows. How quickly information is reflected in prices, and whether any incentive to produce that information remains, is covered in chapter 3.
+</Callout>
+
+## Check your understanding
+
+1. If the boom and recession state prices are 0.45 and 0.50, what is the risk-free interest rate?
+2. If an asset paying 150 won in the boom and 50 won in the recession trades at 80 won, which way does the arbitrage run?
+
+Building a risk-free 1 won from the boom and recession securities costs 0.95 won, so $r_f ≈ 5.3\%$. The replication price is $150×0.45 + 50×0.50 = 92.5$ won, so the market price of 80 won is too low. Buy the asset and sell the replicating portfolio.
+
+## References
+
+- John Cochrane, *Asset Pricing*, ch. 1–3
+- MIT OpenCourseWare, [15.401 Finance Theory](https://ocw.mit.edu/courses/15-401-finance-theory-i-fall-2008/)
+- Kenneth Arrow, "The Role of Securities in the Optimal Allocation of Risk-Bearing"

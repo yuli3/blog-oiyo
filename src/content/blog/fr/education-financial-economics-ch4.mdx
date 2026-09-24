@@ -1,0 +1,77 @@
+---
+track: academy
+series: financial-economics
+chapter: 4
+title: "Économie financière — Intermédiation financière, asymétrie d'information et rationnement du crédit"
+description: "Explique l'existence des banques par les coûts de transaction et l'asymétrie d'information, et montre par un exemple chiffré le rationnement du crédit, où relever le taux ne suffit pas à résorber l'excès de demande."
+pubDate: 2026-09-15
+updatedDate: 2026-09-24
+category: Economics
+tags: ["économie", "économie financière", "intermédiation financière", "sélection adverse", "rationnement du crédit"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Économie financière — une banque n'est pas un simple intermédiaire, mais une entreprise qui produit de l'information et de la liquidité
+
+Certains modèles se passent d'institutions financières parce que les ménages investissent directement dans les titres des entreprises. Dans la réalité, banques, fonds et assureurs subsistent en raison de la transformation des échéances, de la surveillance déléguée, des paiements et de l'écart d'information entre emprunteurs et prêteurs.
+
+## 1. La finance directe ne peut pas transférer tous les risques
+
+Sur des marchés complets, le risque se partage au moyen de créances contingentes. Si l'effort de l'emprunteur ne peut pas être entièrement inscrit dans un contrat et que vérifier un défaut coûte cher, ce marché est incomplet. Dans le modèle de surveillance déléguée de Diamond, il revient moins cher qu'une seule banque surveille l'emprunteur et que les déposants surveillent la banque, plutôt que de laisser de nombreux créanciers surveiller chacun de leur côté.
+
+<LectureTable
+  title="Transformations assurées par les institutions financières"
+  headers={["Transformation", "Exemple", "Risque résiduel"]}
+  rows={[
+    ["Échéance", "Dépôts courts → prêts longs", "Retraits concentrés, arrêt du refinancement"],
+    ["Taille", "Petits dépôts → gros crédits", "Concentration sur un emprunteur"],
+    ["Risque", "Portefeuille de prêts diversifié", "Chocs communs, défauts corrélés"],
+    ["Information", "Sélection et surveillance a posteriori", "Types cachés, actions cachées"],
+  ]}
+/>
+
+La transformation des échéances est en soi une assurance de liquidité. C'est aussi la matière première des paniques bancaires. Cette amplification est traitée au [chapitre 5 sur les crises financières](/fr/education-economics-ch38/).
+
+## 2. Relever le taux peut dégrader la qualité moyenne des emprunteurs
+
+Le cœur du rationnement du crédit de Stiglitz–Weiss est que le taux d'intérêt est à la fois un prix et un outil de sélection. Le relever fait fuir les emprunteurs sûrs et ne laisse que les projets risqués. Le rendement espéré de la banque n'augmente pas de façon monotone avec le taux.
+
+Le type sûr réussit avec une probabilité de 90 %, avec 120 wons de recette en cas de succès et 0 won en cas d'échec. Le type risqué réussit avec une probabilité de 50 %, avec 200 wons en cas de succès. Leurs flux espérés sont respectivement de 108 et 100 wons. Pour un principal de 100 wons à 20 %, le remboursement est de 120 wons.
+
+- Profit espéré du type sûr : $0{,}9×(120-120)=0$ — l'incitation à emprunter disparaît
+- Profit espéré du type risqué : $0{,}5×(200-120)=40$ wons — il emprunte toujours
+
+Si la banque ne distingue pas les types, une hausse de taux remplit son portefeuille de types risqués. Si les deux types sont à parts égales, à 10 % (remboursement de 110 wons) les deux empruntent, et la recette espérée par prêt est de $0{,}5×(0{,}9×110)+0{,}5×(0{,}5×110)=77$ wons. Passer à 20 % ne laisse que le type risqué et la ramène à $0{,}5×120=60$ wons. Rationner le crédit à 10 % vaut mieux que relever le taux.
+
+<FormulaBox
+  label="Le point où le rendement espéré de la banque s'infléchit"
+  formula="\partial E[\pi]/\partial r = 0"
+  description="Au-delà de ce taux, la banque ne relève plus le prix pour résorber l'excès de demande ; elle ne prête qu'à une partie des candidats qui passent la sélection."
+/>
+
+Garanties, participation au capital et banque relationnelle sont des contrats qui visent à réduire cet échec de sélection. Sur le marché des emprunteurs sans garantie, un équilibre fondé sur le seul taux d'intérêt peut ne pas exister.
+
+## 3. L'aléa moral est un changement de comportement après le prêt
+
+Si la sélection adverse porte sur des types cachés, l'aléa moral porte sur des actions cachées. Quand le levier augmente, les actionnaires captent le potentiel de hausse et reportent les pertes sur les créanciers et l'assurance des dépôts. Les exigences de fonds propres et les clauses restrictives (covenants) servent à réduire la valeur de cette option.
+
+<Callout type="warning">
+Ne lisez pas d'emblée une pénurie de crédit comme « il n'y a pas d'argent ». Même avec une épargne des ménages disponible, les prêts à certaines entreprises ou à certains pays peuvent se fermer à cause des coûts de sélection et de la sélection adverse. À l'inverse, quand le prix des garanties augmente, un même projet peut soudain devenir finançable et amplifier l'expansion.
+</Callout>
+
+## Exercice
+
+Une banque a relevé son taux de 10 % à 25 %, et le taux d'impayés a augmenté lui aussi. Un simple déplacement le long de la courbe de demande suffit-il à l'expliquer ? Si la hausse du taux a modifié la composition des emprunteurs, c'est la courbe de rendement espéré du prêteur qui s'est infléchie, et le rationnement peut être l'équilibre.
+
+## Références
+
+- Joseph Stiglitz and Andrew Weiss, « Credit Rationing in Markets with Imperfect Information », *American Economic Review* (1981)
+- Douglas Diamond, « Financial Intermediation and Delegated Monitoring », *Review of Economic Studies* (1984)
+- Banque de Corée, [Rapport sur la stabilité financière](https://www.bok.or.kr/portal/singl/newsData/listPage.do?menuNo=200717) (en coréen)

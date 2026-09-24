@@ -1,0 +1,77 @@
+---
+track: academy
+series: financial-economics
+chapter: 4
+title: "Financial Economics — Financial Intermediation, Asymmetric Information and Credit Rationing"
+description: "Explains why banks exist through transaction costs and asymmetric information, and shows with a numerical example credit rationing, in which raising interest rates alone does not clear excess demand."
+pubDate: 2026-09-15
+updatedDate: 2026-09-24
+category: Economics
+tags: ["economics", "financial economics", "financial intermediation", "adverse selection", "credit rationing"]
+locale: en
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Financial Economics — A Bank Is Not a Middleman but a Firm That Produces Information and Liquidity
+
+There are models in which financial institutions are unnecessary because households invest directly in corporate securities. In reality banks, funds and insurers remain because of maturity transformation, delegated monitoring, payments and the information gap between borrowers and lenders.
+
+## 1. Direct finance cannot transfer every risk
+
+In complete markets, risk can be shared through state-contingent claims. If a borrower's effort cannot be fully written into a contract and verifying default is costly, that market is incomplete. In Diamond's delegated-monitoring model, it is cheaper for one bank to monitor the borrower and depositors to monitor the bank than for many creditors to monitor separately.
+
+<LectureTable
+  title="Transformations provided by financial institutions"
+  headers={["Transformation", "Example", "Remaining risk"]}
+  rows={[
+    ["Maturity", "Short-term deposits → long-term loans", "Concentrated withdrawals, refinancing halts"],
+    ["Size", "Small deposits → large loans", "Concentration on one borrower"],
+    ["Risk", "A diversified loan portfolio", "Common shocks, correlated defaults"],
+    ["Information", "Screening and ex post monitoring", "Hidden types, hidden actions"],
+  ]}
+/>
+
+Maturity transformation is itself liquidity insurance. It is also the raw material of bank runs. That amplification is covered in [chapter 5 on financial crises](/en/education-economics-ch38/).
+
+## 2. Raising the interest rate can lower average borrower quality
+
+The core of Stiglitz–Weiss credit rationing is that the interest rate is both a price and a screening device. Raising it drives safe borrowers out and leaves only risky projects. The bank's expected return does not rise monotonically with the interest rate.
+
+The safe type succeeds with probability 90%, repaying from 120 won on success and 0 won on failure. The risky type succeeds with probability 50%, with 200 won on success. Their expected cash flows are 108 won and 100 won respectively. With a principal of 100 won at 20% interest, the repayment is 120 won.
+
+- Expected profit of the safe type: $0.9×(120-120)=0$ — the incentive to borrow disappears
+- Expected profit of the risky type: $0.5×(200-120)=40$ won — it still borrows
+
+If the bank cannot tell the types apart, a rate hike fills its portfolio with the risky type. If the two types are half and half, at 10% interest (repayment 110 won) both borrow, and the bank's expected recovery per loan is $0.5×(0.9×110)+0.5×(0.5×110)=77$ won. Raising the rate to 20% leaves only the risky type and cuts it to $0.5×120=60$ won. Rationing loans at 10% is better than raising the rate.
+
+<FormulaBox
+  label="Where the bank's expected return turns"
+  formula="\partial E[\pi]/\partial r = 0"
+  description="Above that interest rate, the bank does not raise the price further to clear excess demand; it lends only to some applicants who pass screening."
+/>
+
+Collateral, equity participation and relationship banking are contracts that try to reduce this screening failure. In markets for borrowers without collateral, an equilibrium based on the interest rate alone may not exist.
+
+## 3. Moral hazard is a change in behaviour after the loan
+
+If adverse selection is about hidden types, moral hazard is about hidden actions. As leverage rises, shareholders take the upside and pass the downside to creditors and deposit insurance. Capital requirements and covenants are devices to reduce the value of that option.
+
+<Callout type="warning">
+Do not read a shortage of credit straight away as "there is no money". Even with household saving available, lending to particular firms or countries can shut down because of screening costs and adverse selection. Conversely, when collateral prices rise, the same project can suddenly become bankable and amplify a boom.
+</Callout>
+
+## Check your understanding
+
+A bank raised its interest rate from 10% to 25%, and delinquency rose too. Can this be explained just by a movement along the demand curve? If the rate hike changed the mix of borrowers, the lender's expected-return curve has turned, and rationing can be the equilibrium.
+
+## References
+
+- Joseph Stiglitz and Andrew Weiss, "Credit Rationing in Markets with Imperfect Information," *American Economic Review* (1981)
+- Douglas Diamond, "Financial Intermediation and Delegated Monitoring," *Review of Economic Studies* (1984)
+- Bank of Korea, [Financial Stability Report](https://www.bok.or.kr/portal/singl/newsData/listPage.do?menuNo=200717) (Korean)

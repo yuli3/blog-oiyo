@@ -1,0 +1,85 @@
+---
+track: academy
+series: financial-economics
+chapter: 2
+title: "Economía financiera — Utilidad esperada, prima de riesgo y factor de descuento estocástico"
+description: "Muestra con el factor de descuento estocástico que un mismo flujo esperado es más caro en estados de alta utilidad marginal, y sitúa el CAPM como un caso particular."
+pubDate: 2026-09-15
+updatedDate: 2026-09-24
+category: Economics
+tags: ["economía", "economía financiera", "factor de descuento estocástico", "prima de riesgo", "utilidad esperada"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Economía financiera — flujos con riesgo y el mismo valor esperado tienen precios distintos
+
+Dividir los precios de estado $q_s$ del capítulo 1 entre las probabilidades da el factor de descuento estocástico (FDE). Este capítulo ve por qué ese valor es mayor en las recesiones y bajo qué supuestos el CAPM que usan las finanzas corporativas es un caso particular.
+
+## 1. Un won vale más en un estado de alta utilidad marginal
+
+Supongamos un consumidor representativo con utilidad separable en el tiempo. El precio de renunciar hoy a 1 won de consumo para obtener 1 won más en el estado $s$ es el cociente de utilidades marginales.
+
+<FormulaBox
+  label="Factor de descuento estocástico"
+  formula="m_s = \beta u'(c_s) / u'(c_0)"
+  description="En estados como la recesión, con consumo bajo y utilidad marginal alta, m es mayor y los flujos de ese estado reciben un valor actual más alto."
+/>
+
+El precio de un activo es la esperanza del producto de su flujo por $m$.
+
+<FormulaBox
+  label="Precio de un activo"
+  formula="p = E[m x]"
+  description="Los activos cuyo x es grande en recesión (seguros, deuda pública) tienen un E[m x] alto: su precio es elevado y su rentabilidad esperada baja."
+/>
+
+Reescrito en rentabilidades esperadas, $E[R] - r_f = -(1+r_f)\,\mathrm{Cov}(m, R)$. Los activos que se mueven con el mercado tienen covarianza negativa con $m$, así que su prima de riesgo es positiva. El riesgo que entra en los precios no es «mucha varianza», sino «perder dinero en los estados malos».
+
+## 2. En cifras, el seguro es más caro que la acción
+
+Sea un tipo sin riesgo del 2 % y probabilidades de expansión y recesión del 50 % cada una. En expansión $m=0{,}90$ y en recesión $m=1{,}06$. La media es $E[m]=0{,}98$, así que $1/E[m]≈1{,}0204$, coherente con el tipo sin riesgo.
+
+Una acción paga 140 wones en expansión y 70 en recesión. Su precio es $0{,}5×(0{,}90×140 + 1{,}06×70) = 100{,}1$ wones. El flujo esperado es de 105 wones, pero el precio es menor. Un seguro paga 0 wones en expansión y 100 en recesión. Su precio es $0{,}5×1{,}06×100 = 53$ wones, más que el flujo esperado de 50. Con el mismo valor esperado de 50 wones, un pago concentrado en la recesión se compra con prima.
+
+<LectureTable
+  title="Los canales por los que el riesgo entra en los precios"
+  headers={["Medida", "Qué capta", "Qué pierde"]}
+  rows={[
+    ["Varianza, desviación típica", "El tamaño de las fluctuaciones", "En qué estados ocurren"],
+    ["Beta de mercado", "Cuánto se mueve el activo con el mercado", "El riesgo de renta fuera del mercado"],
+    ["Covarianza con el FDE", "Pérdidas en estados de alta utilidad marginal", "Casos en que fallan los supuestos de preferencias o de mercado completo"],
+  ]}
+/>
+
+## 3. El CAPM surge cuando el FDE es lineal en la rentabilidad del mercado
+
+Con preferencias media-varianza o rentabilidades con distribución normal, las elecciones dependen solo de la media y la varianza. El FDE pasa a ser lineal en la rentabilidad de la cartera de mercado, y las primas de riesgo son proporcionales a la beta.
+
+<FormulaBox
+  label="CAPM"
+  formula="E[R_i] = r_f + \beta_i (E[R_m]-r_f)"
+  description="La beta es la covarianza del activo con el mercado dividida por la varianza del mercado. La afirmación es que el riesgo idiosincrásico, una vez diversificado, no tiene precio."
+/>
+
+El uso práctico del CAPM en la empresa se trata en el [capítulo 4 de finanzas corporativas](/ko/education-finance-ch4/) (en coreano). Aquí importan tres límites: la cartera de mercado no es observable, el riesgo de consumo puede diferir de la rentabilidad del mercado y los riesgos no negociables, como la renta laboral y la vivienda, quedan fuera de la beta.
+
+<Callout type="warning">
+El enigma de la prima de las acciones es que la rentabilidad excedente histórica de las acciones es demasiado grande para explicarla con el riesgo de consumo. Cubrir la brecha solo con «la gente es más aversa al riesgo», sin rechazar el modelo, choca con el enigma del tipo sin riesgo. Las explicaciones se dividen en formación de hábitos, riesgo de largo plazo, riesgo de catástrofe y otras, sin una fórmula única aceptada.
+</Callout>
+
+## Ejercicio
+
+¿Es la rentabilidad esperada de un activo que se mueve contra el mercado mayor que el tipo sin riesgo? No. Paga en estados de bajo consumo, así que tiene covarianza positiva con el FDE; su prima de riesgo es negativa y su rentabilidad esperada, menor que el tipo sin riesgo. El seguro de la sección 2 se compra por 53 wones y paga 50 de media, una rentabilidad esperada de aproximadamente el −5,7 %.
+
+## Referencias
+
+- John Cochrane, *Asset Pricing*, ch. 1
+- Rajnish Mehra and Edward Prescott, «The Equity Premium: A Puzzle», *Journal of Monetary Economics* (1985)
+- MIT OpenCourseWare, [15.401 Finance Theory](https://ocw.mit.edu/courses/15-401-finance-theory-i-fall-2008/)

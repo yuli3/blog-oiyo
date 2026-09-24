@@ -1,0 +1,85 @@
+---
+track: academy
+series: financial-economics
+chapter: 2
+title: "Économie financière — Utilité espérée, prime de risque et facteur d'actualisation stochastique"
+description: "Montre avec le facteur d'actualisation stochastique qu'un même flux espéré coûte plus cher dans les états d'utilité marginale élevée, et situe le MEDAF comme un cas particulier."
+pubDate: 2026-09-15
+updatedDate: 2026-09-24
+category: Economics
+tags: ["économie", "économie financière", "facteur d'actualisation stochastique", "prime de risque", "utilité espérée"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Économie financière — des flux risqués de même espérance n'ont pas le même prix
+
+Diviser les prix d'état $q_s$ du chapitre 1 par les probabilités donne le facteur d'actualisation stochastique (FAS). Ce chapitre examine pourquoi cette valeur est plus élevée en récession, et sous quelles hypothèses le MEDAF utilisé en finance d'entreprise en est un cas particulier.
+
+## 1. Un won vaut plus cher dans un état d'utilité marginale élevée
+
+Supposons un consommateur représentatif dont l'utilité est séparable dans le temps. Le prix de renoncer à 1 won de consommation aujourd'hui pour obtenir 1 won de plus dans l'état $s$ est le rapport des utilités marginales.
+
+<FormulaBox
+  label="Facteur d'actualisation stochastique"
+  formula="m_s = \beta u'(c_s) / u'(c_0)"
+  description="Dans des états comme la récession, où la consommation est faible et l'utilité marginale élevée, m est plus grand et les flux de cet état reçoivent une valeur actuelle plus élevée."
+/>
+
+Le prix d'un actif est l'espérance du produit de son flux par $m$.
+
+<FormulaBox
+  label="Prix d'un actif"
+  formula="p = E[m x]"
+  description="Les actifs dont x est élevé en récession (assurance, obligations d'État) ont un E[m x] élevé : leur prix est haut et leur rendement espéré faible."
+/>
+
+Réécrit en rendements espérés, $E[R] - r_f = -(1+r_f)\,\mathrm{Cov}(m, R)$. Les actifs qui évoluent avec le marché ont une covariance négative avec $m$, donc une prime de risque positive. Le risque qui entre dans les prix n'est pas « une forte variance » mais « perdre de l'argent dans les mauvais états ».
+
+## 2. En chiffres, l'assurance coûte plus cher que l'action
+
+Soit un taux sans risque de 2 % et des probabilités d'expansion et de récession de 50 % chacune. En expansion $m=0{,}90$ et en récession $m=1{,}06$. La moyenne est $E[m]=0{,}98$, donc $1/E[m]≈1{,}0204$, conforme au taux sans risque.
+
+Une action verse 140 wons en expansion et 70 wons en récession. Son prix est $0{,}5×(0{,}90×140 + 1{,}06×70) = 100{,}1$ wons. Le flux espéré est de 105 wons, mais le prix est inférieur. Une assurance verse 0 won en expansion et 100 wons en récession. Son prix est $0{,}5×1{,}06×100 = 53$ wons, plus que le flux espéré de 50 wons. À espérance égale de 50 wons, un paiement concentré en récession s'achète avec une prime.
+
+<LectureTable
+  title="Les canaux par lesquels le risque entre dans les prix"
+  headers={["Mesure", "Ce qu'elle saisit", "Ce qu'elle manque"]}
+  rows={[
+    ["Variance, écart-type", "L'ampleur des fluctuations", "Dans quels états elles surviennent"],
+    ["Bêta de marché", "Le degré de co-mouvement avec le marché", "Le risque de revenu hors marché"],
+    ["Covariance avec le FAS", "Les pertes dans les états d'utilité marginale élevée", "Les cas où les hypothèses de préférences ou de marché complet échouent"],
+  ]}
+/>
+
+## 3. Le MEDAF apparaît quand le FAS est linéaire dans le rendement du marché
+
+Avec des préférences moyenne-variance ou des rendements normalement distribués, les choix ne dépendent que de la moyenne et de la variance. Le FAS devient alors linéaire dans le rendement du portefeuille de marché, et les primes de risque sont proportionnelles au bêta.
+
+<FormulaBox
+  label="MEDAF"
+  formula="E[R_i] = r_f + \beta_i (E[R_m]-r_f)"
+  description="Le bêta est la covariance de l'actif avec le marché divisée par la variance du marché. L'idée est que le risque spécifique, une fois diversifié, n'est pas rémunéré."
+/>
+
+L'usage pratique du MEDAF en entreprise est traité au [chapitre 4 de finance d'entreprise](/ko/education-finance-ch4/) (en coréen). Trois limites importent ici : le portefeuille de marché est inobservable, le risque de consommation peut différer du rendement du marché, et les risques non échangeables comme les revenus du travail et le logement restent hors du bêta.
+
+<Callout type="warning">
+L'énigme de la prime de risque sur actions tient à ce que le rendement excédentaire historique des actions est trop élevé pour s'expliquer par le risque de consommation. Combler l'écart par le seul « les gens sont plus averses au risque », sans rejeter le modèle, entre en conflit avec l'énigme du taux sans risque. Les explications se répartissent entre formation d'habitudes, risque de long terme, risque de catastrophe et d'autres, sans formule unique admise.
+</Callout>
+
+## Exercice
+
+Le rendement espéré d'un actif qui évolue à l'inverse du marché est-il supérieur au taux sans risque ? Non. Il paie dans les états de faible consommation, donc sa covariance avec le FAS est positive ; sa prime de risque est négative et son rendement espéré inférieur au taux sans risque. L'assurance de la section 2 s'achète 53 wons et rapporte 50 wons en moyenne, soit un rendement espéré d'environ −5,7 %.
+
+## Références
+
+- John Cochrane, *Asset Pricing*, ch. 1
+- Rajnish Mehra and Edward Prescott, « The Equity Premium: A Puzzle », *Journal of Monetary Economics* (1985)
+- MIT OpenCourseWare, [15.401 Finance Theory](https://ocw.mit.edu/courses/15-401-finance-theory-i-fall-2008/)
