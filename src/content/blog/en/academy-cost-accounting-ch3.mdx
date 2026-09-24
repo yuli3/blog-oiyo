@@ -1,0 +1,92 @@
+---
+track: academy
+series: cost-accounting
+chapter: 3
+title: "Cost Accounting — Job Costing: Job Cost Sheets and Predetermined Overhead Rates"
+description: "Sets out the structure of job costing, which accumulates costs by job, and the job cost sheet, applies manufacturing overhead with a predetermined rate, and disposes of underapplied or overapplied overhead by writing it off to cost of sales or prorating it."
+pubDate: 2026-06-22
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["cost accounting", "job costing", "job cost sheet", "predetermined overhead rate", "overhead variance"]
+locale: en
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+When every product has different specifications — custom furniture, ships, consulting projects — costs must be accumulated by **job**. That is job costing. Direct materials and direct labor are traced straight to the job, but manufacturing overhead must be allocated. The key question in this chapter is **when, and on what basis,** indirect costs are allocated. Process costing for homogeneous products is covered in [chapter 4](/en/academy-cost-accounting-ch4/).
+
+## 1. The job cost sheet
+
+A **job cost sheet** is kept for each job, recording the direct materials and direct labor used on it and the manufacturing overhead applied to it. The total of the cost sheets for unfinished jobs is work in process; completed but unsold jobs are finished goods; and delivered jobs become cost of sales.
+
+## 2. Why use a predetermined rate
+
+Allocating manufacturing overhead at actual amounts causes two problems.
+
+- **Timeliness:** actual overhead is only known at the end of the period. Until then, the cost of jobs already finished, and the prices to quote, cannot be known.
+- **Volatility:** overhead varies with the season, such as winter heating, and in low-output months fixed costs fall on fewer jobs, making unit costs jump.
+
+So a **predetermined overhead rate** is set at the start of the year and multiplied by the actual activity.
+
+<FormulaBox
+  label="Predetermined rate and applied overhead"
+  formula="\begin{aligned}\text{Predetermined rate} &= \frac{\text{Budgeted annual manufacturing overhead}}{\text{Budgeted annual activity}} \\ \text{Applied overhead} &= \text{Actual activity of the job} \times \text{Predetermined rate}\end{aligned}"
+  description="Choose an activity base with a causal link to the costs (direct labor hours, machine hours and so on)."
+/>
+
+## 3. Worked example
+
+Company PP applies overhead on direct labor hours. Budgeted annual manufacturing overhead is ₩100 million and budgeted direct labor hours are 5,000, so the predetermined rate is ₩20,000 per hour.
+
+<LectureTable
+  title="Cost by job (unit: ₩10,000)"
+  headers={["Job", "Direct materials", "Direct labor", "Direct labor hours", "Overhead applied", "Total", "Status"]}
+  rows={[
+    ["#101", "1,200", "900", "1,500", "3,000", "5,100", "Sold"],
+    ["#102", "800", "1,000", "2,000", "4,000", "5,800", "Sold"],
+    ["#103", "600", "500", "800", "1,600", "2,700", "Completed, unsold"],
+    ["#104", "300", "400", "500", "1,000", "1,700", "Unfinished"],
+    ["Total", "2,900", "2,800", "4,800", "9,600", "15,300", ""],
+  ]}
+/>
+
+Actual direct labor hours were 4,800, so applied overhead is ₩96 million. If actual manufacturing overhead is ₩100 million, overhead is **underapplied** by ₩4 million — costs were higher, or activity lower, than planned.
+
+## 4. Disposing of the variance
+
+<LectureTable
+  title="Disposing of ₩4 million of underapplied overhead (unit: ₩10,000)"
+  headers={["Method", "Work in process (#104)", "Finished goods (#103)", "Cost of sales (#101, #102)"]}
+  rows={[
+    ["Write-off to cost of sales", "0", "0", "+400"],
+    ["Proration on total cost", "400 × 1,700/15,300 ≈ 44", "400 × 2,700/15,300 ≈ 71", "400 × 10,900/15,300 ≈ 285"],
+    ["Proration on overhead applied", "400 × 1,000/9,600 ≈ 42", "400 × 1,600/9,600 ≈ 67", "400 × 7,000/9,600 ≈ 292"],
+  ]}
+/>
+
+- **Write-off to cost of sales:** add the whole variance to cost of sales. Simple, and used when the variance is small.
+- **Proration:** split it in proportion to the balances of work in process, finished goods and cost of sales, or to the overhead applied within them. This gives inventory amounts closer to actual cost. If the variance is material, proration is appropriate for financial reporting.
+- **Non-operating treatment:** a variance from abnormal causes (strikes, disasters) is not included in cost but recognized as a loss.
+
+Overapplied overhead is deducted in the same ways.
+
+<Callout type="warning">
+A single plantwide rate mixes up the costs of machine-intensive and labor-intensive jobs. If overhead is applied on labor hours but most actual overhead is machine depreciation, labor-intensive jobs bear too much cost. Departmental rates ([chapter 8](/en/education-accounting-ch11/)) or activity-based costing ([chapter 9](/en/academy-cost-accounting-ch5/)) reduce this distortion.
+</Callout>
+
+## Check your understanding
+
+Company QQ uses a predetermined rate based on machine hours. Budgeted annual manufacturing overhead is ₩36 million and budgeted machine hours 12,000. Actual machine hours were 11,000 and actual manufacturing overhead ₩34.5 million. What is the overhead variance, and is it under- or overapplied? If overhead applied in closing work in process, finished goods and cost of sales is ₩3.3 million, ₩6.6 million and ₩23.1 million respectively, by how much is cost of sales adjusted under proration on overhead applied?
+
+The predetermined rate is ₩3,000 per hour and applied overhead is $11{,}000 \times 3{,}000$ won, i.e. ₩33 million. That is ₩1.5 million less than the actual ₩34.5 million, so overhead is underapplied. Cost of sales accounts for 70% of the ₩33 million applied, so cost of sales increases by $150 \times 70\% = 105$, i.e. ₩1.05 million. Work in process increases by ₩150,000 and finished goods by ₩300,000.
+
+## References
+
+- Charles Horngren, Srikant Datar and Madhav Rajan, *Cost Accounting: A Managerial Emphasis*, ch. 4
+- Ray Garrison, Eric Noreen and Peter Brewer, *Managerial Accounting*, ch. 2–3
+- Korea Accounting Standards Board, K-IFRS 1002 *Inventories* (allocation of fixed production overheads)

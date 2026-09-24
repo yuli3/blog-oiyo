@@ -1,0 +1,92 @@
+---
+track: academy
+series: cost-accounting
+chapter: 3
+title: "Contabilidad de costos — Costeo por órdenes: hojas de costos y tasa predeterminada de costos indirectos"
+description: "Ordena la estructura del costeo por órdenes de trabajo, que acumula los costos por orden, y la hoja de costos, aplica los costos indirectos de fabricación con una tasa predeterminada y trata la subaplicación o sobreaplicación ajustando el costo de ventas o prorrateando."
+pubDate: 2026-06-22
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["contabilidad de costos", "costeo por órdenes", "hoja de costos", "tasa predeterminada", "variación de costos indirectos"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+Cuando cada producto tiene especificaciones distintas —muebles a medida, barcos, proyectos de consultoría—, los costos deben acumularse por **orden de trabajo**. Eso es el costeo por órdenes. Los materiales directos y la mano de obra directa se rastrean directamente hasta la orden, pero los costos indirectos de fabricación hay que asignarlos. La cuestión central de este capítulo es **cuándo y con qué base** se asignan los costos indirectos. El costeo por procesos para productos homogéneos se trata en el [capítulo 4](/es/academy-cost-accounting-ch4/).
+
+## 1. La hoja de costos
+
+Para cada orden se lleva una **hoja de costos** donde se registran los materiales directos, la mano de obra directa y los costos indirectos aplicados. La suma de las hojas de las órdenes no terminadas es la producción en proceso; las órdenes terminadas pero no vendidas son productos terminados, y las entregadas pasan a costo de ventas.
+
+## 2. Por qué una tasa predeterminada
+
+Asignar los costos indirectos por su importe real causa dos problemas:
+
+- **oportunidad:** los costos indirectos reales solo se conocen al final del periodo; hasta entonces no se sabe el costo de las órdenes ya terminadas ni qué precio cotizar;
+- **volatilidad:** los costos indirectos varían con la estación, como la calefacción en invierno, y en los meses de poca producción los costos fijos recaen sobre pocas órdenes y el costo unitario se dispara.
+
+Por eso se fija a comienzos del año una **tasa predeterminada** y se multiplica por la actividad real.
+
+<FormulaBox
+  label="Tasa predeterminada y costos indirectos aplicados"
+  formula="\begin{aligned}\text{Tasa predeterminada} &= \frac{\text{Presupuesto anual de costos indirectos}}{\text{Actividad anual presupuestada}} \\ \text{Costos aplicados} &= \text{Actividad real de la orden} \times \text{Tasa predeterminada}\end{aligned}"
+  description="Se elige una base de actividad con relación causal con los costos (horas de mano de obra directa, horas máquina, etc.)."
+/>
+
+## 3. Ejemplo
+
+La empresa PP aplica los costos indirectos según las horas de mano de obra directa. El presupuesto anual de costos indirectos es de 100 millones de wones y las horas presupuestadas, 5.000, así que la tasa predeterminada es de 20.000 wones por hora.
+
+<LectureTable
+  title="Costo por orden (en decenas de miles de wones)"
+  headers={["Orden", "Materiales directos", "Mano de obra directa", "Horas de MOD", "Costos indirectos aplicados", "Total", "Estado"]}
+  rows={[
+    ["#101", "1.200", "900", "1.500", "3.000", "5.100", "Vendida"],
+    ["#102", "800", "1.000", "2.000", "4.000", "5.800", "Vendida"],
+    ["#103", "600", "500", "800", "1.600", "2.700", "Terminada, sin vender"],
+    ["#104", "300", "400", "500", "1.000", "1.700", "En proceso"],
+    ["Total", "2.900", "2.800", "4.800", "9.600", "15.300", ""],
+  ]}
+/>
+
+Las horas reales de mano de obra directa fueron 4.800, así que se aplican 96 millones. Si los costos indirectos reales son 100 millones, hay una **subaplicación** de 4 millones: los costos fueron mayores, o la actividad menor, de lo previsto.
+
+## 4. Tratamiento de la variación
+
+<LectureTable
+  title="Tratamiento de una subaplicación de 4 millones (en decenas de miles de wones)"
+  headers={["Método", "Producción en proceso (#104)", "Productos terminados (#103)", "Costo de ventas (#101, #102)"]}
+  rows={[
+    ["Ajuste al costo de ventas", "0", "0", "+400"],
+    ["Prorrateo sobre el costo total", "400 × 1.700/15.300 ≈ 44", "400 × 2.700/15.300 ≈ 71", "400 × 10.900/15.300 ≈ 285"],
+    ["Prorrateo sobre los costos aplicados", "400 × 1.000/9.600 ≈ 42", "400 × 1.600/9.600 ≈ 67", "400 × 7.000/9.600 ≈ 292"],
+  ]}
+/>
+
+- **Ajuste al costo de ventas:** se suma toda la variación al costo de ventas. Es sencillo y se usa cuando la variación es pequeña.
+- **Prorrateo:** se reparte en proporción a los saldos de producción en proceso, productos terminados y costo de ventas, o a los costos indirectos aplicados que contienen. Así se obtienen existencias más cercanas al costo real. Si la variación es significativa, el prorrateo es el adecuado para la información financiera.
+- **Tratamiento no operativo:** una variación por causas anormales (huelgas, siniestros) no se incorpora al costo, sino que se reconoce como pérdida.
+
+La sobreaplicación se resta de las mismas formas.
+
+<Callout type="warning">
+Una sola tasa para toda la planta mezcla los costos de las órdenes intensivas en máquinas y de las intensivas en mano de obra. Si se aplica por horas de mano de obra pero la mayor parte de los costos indirectos reales es depreciación de máquinas, las órdenes intensivas en mano de obra cargan demasiado costo. Las tasas por departamento ([capítulo 8](/es/education-accounting-ch11/)) o el costeo basado en actividades ([capítulo 9](/es/academy-cost-accounting-ch5/)) reducen esa distorsión.
+</Callout>
+
+## Ejercicio
+
+La empresa QQ usa una tasa predeterminada basada en horas máquina. El presupuesto anual de costos indirectos es de 36 millones de wones y las horas máquina presupuestadas, 12.000. Las horas máquina reales fueron 11.000 y los costos indirectos reales, 34,5 millones. ¿Cuál es la variación y es subaplicación o sobreaplicación? Si los costos aplicados contenidos en la producción en proceso final, los productos terminados y el costo de ventas son 3,3, 6,6 y 23,1 millones, ¿cuánto se ajusta el costo de ventas con el prorrateo sobre los costos aplicados?
+
+La tasa predeterminada es de 3.000 wones por hora y los costos aplicados, $11.000 \times 3.000$, es decir, 33 millones. Son 1,5 millones menos que los 34,5 millones reales: hay subaplicación. El costo de ventas representa el 70 % de los 33 millones aplicados, así que aumenta en $150 \times 70\,\% = 105$, es decir, 1,05 millones. La producción en proceso aumenta en 150.000 wones y los productos terminados en 300.000 wones.
+
+## Referencias
+
+- Charles Horngren, Srikant Datar y Madhav Rajan, *Cost Accounting: A Managerial Emphasis*, cap. 4
+- Ray Garrison, Eric Noreen y Peter Brewer, *Managerial Accounting*, cap. 2–3
+- Korea Accounting Standards Board, K-IFRS 1002 *Inventarios* (distribución de los costos indirectos fijos de producción)

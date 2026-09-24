@@ -1,0 +1,112 @@
+---
+track: academy
+series: cost-accounting
+chapter: 4
+title: "Cost Accounting — Process Costing: Equivalent Units, Weighted-Average and FIFO"
+description: "Finds equivalent units by cost element for a process that continuously produces homogeneous products, calculates the cost of completed units and closing work in process with the weighted-average and FIFO methods when there is opening work in process, and compares the two."
+pubDate: 2026-06-22
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["cost accounting", "process costing", "equivalent units", "weighted-average method", "FIFO"]
+locale: en
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+When the same product is produced continuously in bulk — oil refining, flour milling, chemicals, beverages — costs cannot be collected by job. Instead, a period's costs are collected by **process** and divided by the quantity processed in that period. That is process costing. The difficulty is that half-finished work in process remains at the end of the period. A half-finished unit cannot be counted the same as a finished one, so **equivalent units** are used. Job costing was covered in [chapter 3](/en/academy-cost-accounting-ch3/).
+
+## 1. Equivalent units
+
+Equivalent units convert the effort put into a process into **the number of finished units it represents**. Because each cost element is added at a different point, they are calculated separately by element.
+
+- If materials are all added at the start of the process, closing work in process has 100% of its materials.
+- Conversion costs (direct labor + manufacturing overhead) are usually assumed to be added evenly as the process proceeds. 200 units of work in process that are 40% complete equal 80 units for conversion costs.
+
+## 2. Weighted-average and FIFO
+
+When there is opening work in process, the two methods diverge.
+
+- **Weighted-average:** mixes the cost and stage of completion of opening work in process with this period's inputs to find an average unit cost. Opening work in process is treated as if started this period.
+- **FIFO:** assumes opening work in process is completed first and finds the unit cost using **only the work done this period**. The cost of opening work in process is passed to completed units separately.
+
+<FormulaBox
+  label="Equivalent units by element"
+  formula="\begin{aligned}\text{Weighted-average EU} &= \text{Units completed} + \text{Closing WIP} \times \text{Stage of completion} \\ \text{FIFO EU} &= \text{Weighted-average EU} - \text{Opening WIP} \times \text{Opening stage of completion}\end{aligned}"
+  description="The difference between the two methods' equivalent units is the work already done on opening work in process in the prior period."
+/>
+
+## 3. Worked example
+
+Company RR's process data follow. Materials are all added at the start of the process.
+
+<LectureTable
+  title="Quantity and cost data (costs in ₩10,000)"
+  headers={["Item", "Units", "Stage of completion (conversion)", "Materials cost", "Conversion cost"]}
+  rows={[
+    ["Opening WIP", "200", "50%", "1,600", "402"],
+    ["Started this period", "1,000", "", "5,000", "2,760"],
+    ["Completed", "900", "100%", "", ""],
+    ["Closing WIP", "300", "40%", "", ""],
+  ]}
+/>
+
+### A. Weighted-average method
+
+<LectureTable
+  title="Weighted-average method (unit: ₩10,000)"
+  headers={["Element", "Equivalent units", "Total cost", "Cost per equivalent unit"]}
+  rows={[
+    ["Materials", "900 + 300 = 1,200", "1,600 + 5,000 = 6,600", "5.5"],
+    ["Conversion", "900 + 300 × 40% = 1,020", "402 + 2,760 = 3,162", "3.1"],
+  ]}
+/>
+
+The cost of completed units is $900 \times (5.5 + 3.1) = 7{,}740$ and closing work in process is $300 \times 5.5 + 120 \times 3.1 = 1{,}650 + 372 = 2{,}022$ (₩10,000). The total of 9,762 equals total costs of $1{,}600 + 402 + 5{,}000 + 2{,}760$.
+
+### B. FIFO method
+
+<LectureTable
+  title="FIFO method (unit: ₩10,000)"
+  headers={["Element", "Equivalent units", "Current period cost", "Cost per equivalent unit"]}
+  rows={[
+    ["Materials", "1,200 − 200 × 100% = 1,000", "5,000", "5.0"],
+    ["Conversion", "1,020 − 200 × 50% = 920", "2,760", "3.0"],
+  ]}
+/>
+
+The cost of completed units has three parts.
+
+- Cost of opening work in process: $1{,}600 + 402 = 2{,}002$
+- Current conversion cost to complete opening work in process: $200 \times 50\% \times 3.0 = 300$
+- 700 units started and completed this period: $700 \times (5.0 + 3.0) = 5{,}600$
+
+The cost of completed units is 7,902 and closing work in process is $300 \times 5.0 + 120 \times 3.0 = 1{,}860$ (₩10,000). The total is again 9,762.
+
+### C. Comparing the two methods
+
+FIFO's current unit costs (materials 5.0, conversion 3.0) are lower than the prior period's (materials 8.0, conversion 4.02). The weighted-average method mixes the expensive prior-period costs with the current ones, pushing up the unit cost of closing work in process (₩20.22 million), while FIFO puts the current period's lower costs into closing work in process (₩18.6 million). FIFO shows **current-period performance** separately, which helps in managing the process; the weighted-average method is simpler to calculate. With little opening work in process or small changes in unit cost, the two give similar results.
+
+## 4. Multiple processes and transferred-in costs
+
+With two or more processes, the cost of units completed in one process passes to the next. This is **transferred-in cost**; in the next process it is treated like materials added at the start, with equivalent units calculated at 100% completion.
+
+<Callout type="warning">
+The stage of completion is estimated by process managers. Setting a high stage of completion for closing work in process increases equivalent units and the cost allocated to closing work in process, which reduces the cost of completed units (and hence cost of sales) and raises profit. In manufacturing businesses where work in process is large, check the basis for the completion estimates. Spoilage also changes the equivalent-unit calculation; it is covered in [chapter 6](/en/academy-cost-accounting-ch9/).
+</Callout>
+
+## Check your understanding
+
+Company SS adds materials at the start of the process and uses FIFO. Opening work in process is 400 units (25% complete), 2,000 units were started, 2,100 were completed and closing work in process is 300 units (60% complete). Current materials cost is ₩40 million and current conversion cost ₩42.8 million. What are the cost per equivalent unit for materials and conversion, and the cost of closing work in process?
+
+Materials equivalent units are the 2,000 units started this period, so the unit cost is 2 (₩20,000). Conversion equivalent units are 2,180: completing opening work in process $400 \times 75\% = 300$, started and completed $2{,}100 - 400 = 1{,}700$, and closing $300 \times 60\% = 180$. The unit cost is $4{,}280 / 2{,}180 ≈ 1.963$ (₩10,000). Closing work in process costs $300 \times 2 + 180 \times 1.963 ≈ 600 + 353.4 = 953.4$, i.e. about ₩9.534 million.
+
+## References
+
+- Charles Horngren, Srikant Datar and Madhav Rajan, *Cost Accounting: A Managerial Emphasis*, ch. 17
+- Ray Garrison, Eric Noreen and Peter Brewer, *Managerial Accounting*, ch. 4
+- Korea Accounting Standards Board, K-IFRS 1002 *Inventories*

@@ -1,0 +1,112 @@
+---
+track: academy
+series: cost-accounting
+chapter: 4
+title: "Comptabilité analytique — Coûts par processus : unités équivalentes, coût moyen pondéré et PEPS"
+description: "Calcule les unités équivalentes par élément de coût dans un processus de production continue de produits homogènes, puis le coût des produits achevés et des en-cours finaux selon le coût moyen pondéré et le PEPS en présence d'en-cours initiaux, et compare les deux méthodes."
+pubDate: 2026-06-22
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["comptabilité analytique", "coûts par processus", "unités équivalentes", "coût moyen pondéré", "PEPS"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+Lorsqu'un même produit est fabriqué en continu et en grande quantité — raffinage, meunerie, chimie, boissons —, on ne peut pas accumuler les coûts par commande. On regroupe plutôt les coûts d'une période par **processus** et on les divise par les quantités traitées dans la période. C'est la méthode des coûts par processus. La difficulté tient aux en-cours à moitié terminés en fin de période : une unité à moitié faite ne compte pas comme une unité achevée, d'où le recours aux **unités équivalentes**. La méthode des coûts par commande a été vue au [chapitre 3](/fr/academy-cost-accounting-ch3/).
+
+## 1. Unités équivalentes
+
+Les unités équivalentes convertissent le travail incorporé dans un processus en **nombre d'unités achevées qu'il représente**. Chaque élément de coût étant incorporé à un moment différent, on les calcule élément par élément.
+
+- Si les matières sont toutes incorporées au début du processus, les en-cours finaux ont reçu 100 % de leurs matières.
+- On suppose généralement que les coûts de transformation (main-d'œuvre directe + frais généraux de production) sont incorporés uniformément au fil du processus. 200 unités en cours achevées à 40 % valent 80 unités pour les coûts de transformation.
+
+## 2. Coût moyen pondéré et PEPS
+
+En présence d'en-cours initiaux, les deux méthodes divergent.
+
+- **Coût moyen pondéré :** on mélange le coût et le degré d'avancement des en-cours initiaux avec les entrées de la période pour obtenir un coût unitaire moyen, comme si les en-cours initiaux avaient été lancés dans la période.
+- **PEPS (premier entré, premier sorti) :** on suppose que les en-cours initiaux sont achevés en premier et l'on calcule le coût unitaire **à partir du seul travail de la période**. Le coût des en-cours initiaux est transféré séparément aux produits achevés.
+
+<FormulaBox
+  label="Unités équivalentes par élément"
+  formula="\begin{aligned}\text{UE coût moyen} &= \text{Unités achevées} + \text{En-cours final} \times \text{Degré d'avancement} \\ \text{UE PEPS} &= \text{UE coût moyen} - \text{En-cours initial} \times \text{Degré d'avancement initial}\end{aligned}"
+  description="L'écart entre les deux méthodes correspond au travail déjà incorporé aux en-cours initiaux lors de la période précédente."
+/>
+
+## 3. Exemple chiffré
+
+Voici les données du processus de la société RR. Les matières sont toutes incorporées au début du processus.
+
+<LectureTable
+  title="Quantités et coûts (coûts en dizaines de milliers de wons)"
+  headers={["Élément", "Quantité", "Avancement (transformation)", "Coût des matières", "Coût de transformation"]}
+  rows={[
+    ["En-cours initial", "200 unités", "50 %", "1 600", "402"],
+    ["Lancées dans la période", "1 000 unités", "", "5 000", "2 760"],
+    ["Achevées", "900 unités", "100 %", "", ""],
+    ["En-cours final", "300 unités", "40 %", "", ""],
+  ]}
+/>
+
+### A. Coût moyen pondéré
+
+<LectureTable
+  title="Coût moyen pondéré (en dizaines de milliers de wons)"
+  headers={["Élément", "Unités équivalentes", "Coût total", "Coût par unité équivalente"]}
+  rows={[
+    ["Matières", "900 + 300 = 1 200", "1 600 + 5 000 = 6 600", "5,5"],
+    ["Transformation", "900 + 300 × 40 % = 1 020", "402 + 2 760 = 3 162", "3,1"],
+  ]}
+/>
+
+Le coût des produits achevés est de $900 \times (5{,}5 + 3{,}1) = 7\,740$ et celui des en-cours finaux de $300 \times 5{,}5 + 120 \times 3{,}1 = 1\,650 + 372 = 2\,022$ (en dizaines de milliers de wons). Le total de 9 762 égale le coût total $1\,600 + 402 + 5\,000 + 2\,760$.
+
+### B. PEPS
+
+<LectureTable
+  title="PEPS (en dizaines de milliers de wons)"
+  headers={["Élément", "Unités équivalentes", "Coût de la période", "Coût par unité équivalente"]}
+  rows={[
+    ["Matières", "1 200 − 200 × 100 % = 1 000", "5 000", "5,0"],
+    ["Transformation", "1 020 − 200 × 50 % = 920", "2 760", "3,0"],
+  ]}
+/>
+
+Le coût des produits achevés comprend trois parties :
+
+- coût des en-cours initiaux : $1\,600 + 402 = 2\,002$ ;
+- coût de transformation de la période pour achever les en-cours initiaux : $200 \times 50\,\% \times 3{,}0 = 300$ ;
+- 700 unités lancées et achevées dans la période : $700 \times (5{,}0 + 3{,}0) = 5\,600$.
+
+Le coût des produits achevés est de 7 902 et celui des en-cours finaux de $300 \times 5{,}0 + 120 \times 3{,}0 = 1\,860$ (en dizaines de milliers de wons). Le total est encore de 9 762.
+
+### C. Comparaison des deux méthodes
+
+Les coûts unitaires de la période en PEPS (matières 5,0, transformation 3,0) sont inférieurs à ceux de la période précédente (matières 8,0, transformation 4,02). Le coût moyen pondéré mélange les coûts antérieurs élevés à ceux de la période et relève le coût unitaire des en-cours finaux (20,22 millions), tandis que le PEPS y reporte les coûts plus bas de la période (18,6 millions). Le PEPS isole la **performance de la période**, ce qui aide à piloter le processus ; le coût moyen pondéré est plus simple à calculer. Avec peu d'en-cours initiaux ou de faibles variations de coûts unitaires, les résultats sont proches.
+
+## 4. Processus successifs et coûts transférés
+
+Avec deux processus ou plus, le coût des produits achevés d'un processus passe au suivant. Ce sont les **coûts transférés** ; dans le processus suivant, on les traite comme des matières incorporées au début, avec des unités équivalentes calculées à 100 % d'avancement.
+
+<Callout type="warning">
+Le degré d'avancement est estimé par les responsables du processus. Surestimer l'avancement des en-cours finaux accroît les unités équivalentes et le coût affecté aux en-cours finaux, ce qui réduit le coût des produits achevés (donc le coût des ventes) et gonfle le résultat. Dans les industries où les en-cours pèsent lourd, vérifiez le fondement de ces estimations. Les rebuts modifient aussi le calcul des unités équivalentes ; ils sont traités au [chapitre 6](/fr/academy-cost-accounting-ch9/).
+</Callout>
+
+## Exercice
+
+La société SS incorpore les matières au début du processus et applique le PEPS. En-cours initial : 400 unités (avancement 25 %) ; unités lancées : 2 000 ; unités achevées : 2 100 ; en-cours final : 300 unités (avancement 60 %). Le coût des matières de la période est de 40 millions de wons et le coût de transformation de 42,8 millions. Quels sont les coûts par unité équivalente des matières et de la transformation, et le coût des en-cours finaux ?
+
+Les unités équivalentes de matières sont les 2 000 unités lancées : coût unitaire de 2 (20 000 wons). Les unités équivalentes de transformation sont de 2 180 : achèvement des en-cours initiaux $400 \times 75\,\% = 300$, lancées et achevées $2\,100 - 400 = 1\,700$, en-cours final $300 \times 60\,\% = 180$. Le coût unitaire est de $4\,280 / 2\,180 \approx 1{,}963$ (en dizaines de milliers de wons). Les en-cours finaux coûtent $300 \times 2 + 180 \times 1{,}963 \approx 600 + 353{,}4 = 953{,}4$, soit environ 9,534 millions de wons.
+
+## Références
+
+- Charles Horngren, Srikant Datar et Madhav Rajan, *Cost Accounting: A Managerial Emphasis*, chap. 17
+- Ray Garrison, Eric Noreen et Peter Brewer, *Managerial Accounting*, chap. 4
+- Korea Accounting Standards Board, K-IFRS 1002 *Stocks*

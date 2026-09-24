@@ -1,0 +1,92 @@
+---
+track: academy
+series: cost-accounting
+chapter: 3
+title: "Comptabilité analytique — Coûts par commande : fiches de coût et imputation prédéterminée des frais généraux"
+description: "Présente la structure de la méthode des coûts par commande, qui accumule les coûts par commande, et la fiche de coût, impute les frais généraux de production à un taux prédéterminé, puis traite les sous-imputations et sur-imputations par ajustement du coût des ventes ou par répartition proportionnelle."
+pubDate: 2026-06-22
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["comptabilité analytique", "coûts par commande", "fiche de coût", "taux d'imputation prédéterminé", "écart d'imputation"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+Lorsque chaque produit a ses propres spécifications — meubles sur mesure, navires, missions de conseil —, il faut accumuler les coûts par **commande**. C'est la méthode des coûts par commande. Les matières et la main-d'œuvre directes se rattachent directement à la commande, mais les frais généraux de production doivent être répartis. La question centrale du chapitre est de savoir **quand et sur quelle base** répartir les coûts indirects. La méthode des coûts par processus pour les produits homogènes est traitée au [chapitre 4](/fr/academy-cost-accounting-ch4/).
+
+## 1. La fiche de coût
+
+Une **fiche de coût** est tenue pour chaque commande : on y inscrit les matières directes, la main-d'œuvre directe et les frais généraux imputés. Le total des fiches des commandes inachevées constitue les en-cours ; les commandes achevées mais non vendues sont des produits finis ; les commandes livrées deviennent coût des ventes.
+
+## 2. Pourquoi un taux prédéterminé
+
+Répartir les frais généraux à leur montant réel pose deux problèmes :
+
+- **délai :** les frais généraux réels ne sont connus qu'en fin de période ; d'ici là, on ignore le coût des commandes déjà terminées et le prix à proposer ;
+- **volatilité :** les frais généraux varient selon la saison, comme le chauffage en hiver, et les mois de faible production concentrent les coûts fixes sur peu de commandes, ce qui fait bondir les coûts unitaires.
+
+On fixe donc en début d'année un **taux d'imputation prédéterminé**, que l'on multiplie par l'activité réelle.
+
+<FormulaBox
+  label="Taux prédéterminé et frais imputés"
+  formula="\begin{aligned}\text{Taux prédéterminé} &= \frac{\text{Budget annuel de frais généraux de production}}{\text{Activité annuelle prévue}} \\ \text{Frais imputés} &= \text{Activité réelle de la commande} \times \text{Taux prédéterminé}\end{aligned}"
+  description="On choisit une unité d'œuvre liée causalement aux coûts (heures de main-d'œuvre directe, heures-machine, etc.)."
+/>
+
+## 3. Exemple chiffré
+
+La société PP impute les frais sur les heures de main-d'œuvre directe. Le budget annuel de frais généraux est de 100 millions de wons pour 5 000 heures prévues : le taux prédéterminé est de 20 000 wons l'heure.
+
+<LectureTable
+  title="Coût par commande (en dizaines de milliers de wons)"
+  headers={["Commande", "Matières directes", "Main-d'œuvre directe", "Heures de MOD", "Frais imputés", "Total", "État"]}
+  rows={[
+    ["#101", "1 200", "900", "1 500", "3 000", "5 100", "Vendue"],
+    ["#102", "800", "1 000", "2 000", "4 000", "5 800", "Vendue"],
+    ["#103", "600", "500", "800", "1 600", "2 700", "Achevée, non vendue"],
+    ["#104", "300", "400", "500", "1 000", "1 700", "Inachevée"],
+    ["Total", "2 900", "2 800", "4 800", "9 600", "15 300", ""],
+  ]}
+/>
+
+Les heures réelles de main-d'œuvre directe ont été de 4 800, d'où 96 millions de frais imputés. Si les frais généraux réels sont de 100 millions, il y a une **sous-imputation** de 4 millions : les coûts ont été plus élevés, ou l'activité plus faible, que prévu.
+
+## 4. Traitement de l'écart
+
+<LectureTable
+  title="Traitement d'une sous-imputation de 4 millions (en dizaines de milliers de wons)"
+  headers={["Méthode", "En-cours (#104)", "Produits finis (#103)", "Coût des ventes (#101, #102)"]}
+  rows={[
+    ["Ajustement du coût des ventes", "0", "0", "+400"],
+    ["Répartition sur le coût total", "400 × 1 700/15 300 ≈ 44", "400 × 2 700/15 300 ≈ 71", "400 × 10 900/15 300 ≈ 285"],
+    ["Répartition sur les frais imputés", "400 × 1 000/9 600 ≈ 42", "400 × 1 600/9 600 ≈ 67", "400 × 7 000/9 600 ≈ 292"],
+  ]}
+/>
+
+- **Ajustement du coût des ventes :** on ajoute tout l'écart au coût des ventes. Méthode simple, utilisée quand l'écart est faible.
+- **Répartition proportionnelle :** on répartit l'écart selon les soldes des en-cours, des produits finis et du coût des ventes, ou selon les frais imputés qu'ils contiennent. On obtient des stocks plus proches du coût réel. Si l'écart est significatif, la répartition est appropriée pour l'information financière.
+- **Traitement hors exploitation :** un écart dû à des causes anormales (grève, sinistre) n'est pas incorporé au coût mais comptabilisé en perte.
+
+Une sur-imputation se déduit de la même façon.
+
+<Callout type="warning">
+Un taux unique pour toute l'usine mélange les coûts des commandes gourmandes en machines et de celles gourmandes en main-d'œuvre. Si l'on impute sur les heures de main-d'œuvre alors que l'essentiel des frais réels est l'amortissement des machines, les commandes à forte intensité de main-d'œuvre supportent trop de coûts. Des taux par section ([chapitre 8](/fr/education-accounting-ch11/)) ou la méthode ABC ([chapitre 9](/fr/academy-cost-accounting-ch5/)) réduisent cette distorsion.
+</Callout>
+
+## Exercice
+
+La société QQ utilise un taux prédéterminé fondé sur les heures-machine. Le budget annuel de frais généraux est de 36 millions de wons pour 12 000 heures-machine prévues. Les heures-machine réelles ont été de 11 000 et les frais généraux réels de 34,5 millions. Quel est l'écart d'imputation et de quel sens est-il ? Si les frais imputés contenus dans les en-cours finaux, les produits finis et le coût des ventes sont respectivement de 3,3, 6,6 et 23,1 millions, de combien le coût des ventes est-il ajusté par répartition sur les frais imputés ?
+
+Le taux prédéterminé est de 3 000 wons l'heure et les frais imputés de $11\,000 \times 3\,000$, soit 33 millions. C'est 1,5 million de moins que les 34,5 millions réels : il s'agit d'une sous-imputation. Le coût des ventes représente 70 % des 33 millions imputés, il augmente donc de $150 \times 70\,\% = 105$, soit 1,05 million. Les en-cours augmentent de 150 000 wons et les produits finis de 300 000 wons.
+
+## Références
+
+- Charles Horngren, Srikant Datar et Madhav Rajan, *Cost Accounting: A Managerial Emphasis*, chap. 4
+- Ray Garrison, Eric Noreen et Peter Brewer, *Managerial Accounting*, chap. 2–3
+- Korea Accounting Standards Board, K-IFRS 1002 *Stocks* (affectation des frais généraux de production fixes)

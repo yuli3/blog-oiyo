@@ -1,0 +1,112 @@
+---
+track: academy
+series: cost-accounting
+chapter: 4
+title: "Contabilidad de costos — Costeo por procesos: unidades equivalentes, promedio ponderado y PEPS"
+description: "Obtiene las unidades equivalentes por elemento de costo en un proceso que produce de forma continua productos homogéneos, calcula el costo de las unidades terminadas y de la producción en proceso final con el promedio ponderado y PEPS cuando hay producción en proceso inicial, y compara ambos métodos."
+pubDate: 2026-06-22
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["contabilidad de costos", "costeo por procesos", "unidades equivalentes", "promedio ponderado", "PEPS"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+Cuando el mismo producto se fabrica de forma continua y en grandes cantidades —refinación de petróleo, molienda de harina, química, bebidas—, no se pueden acumular los costos por orden. En su lugar, se reúnen los costos de un periodo por **proceso** y se dividen entre la cantidad procesada en ese periodo. Eso es el costeo por procesos. La dificultad es que al cierre quedan unidades a medio terminar. Una unidad a medias no puede contarse igual que una terminada, así que se usan **unidades equivalentes**. El costeo por órdenes se vio en el [capítulo 3](/es/academy-cost-accounting-ch3/).
+
+## 1. Unidades equivalentes
+
+Las unidades equivalentes convierten el esfuerzo incorporado a un proceso en **el número de unidades terminadas que representa**. Como cada elemento de costo entra en un momento distinto, se calculan por separado para cada elemento.
+
+- Si los materiales se agregan todos al inicio del proceso, la producción en proceso final ya tiene el 100 % de sus materiales.
+- Los costos de conversión (mano de obra directa + costos indirectos de fabricación) suelen suponerse incorporados de manera uniforme a medida que avanza el proceso. 200 unidades en proceso con un 40 % de avance equivalen a 80 unidades de conversión.
+
+## 2. Promedio ponderado y PEPS
+
+Cuando hay producción en proceso inicial, los dos métodos se separan.
+
+- **Promedio ponderado:** mezcla el costo y el grado de avance de la producción en proceso inicial con las entradas del periodo para obtener un costo unitario promedio. Trata la producción en proceso inicial como si se hubiera iniciado en el periodo.
+- **PEPS (primeras entradas, primeras salidas):** supone que la producción en proceso inicial se termina primero y calcula el costo unitario **solo con el trabajo realizado en el periodo**. El costo de la producción en proceso inicial se traslada por separado a las unidades terminadas.
+
+<FormulaBox
+  label="Unidades equivalentes por elemento"
+  formula="\begin{aligned}\text{UE promedio ponderado} &= \text{Unidades terminadas} + \text{PP final} \times \text{Grado de avance} \\ \text{UE PEPS} &= \text{UE promedio ponderado} - \text{PP inicial} \times \text{Grado de avance inicial}\end{aligned}"
+  description="PP = producción en proceso. La diferencia entre ambos métodos es el trabajo que la producción en proceso inicial ya recibió en el periodo anterior."
+/>
+
+## 3. Ejemplo
+
+Estos son los datos del proceso de la empresa RR. Los materiales se agregan todos al inicio del proceso.
+
+<LectureTable
+  title="Datos de cantidades y costos (costos en decenas de miles de wones)"
+  headers={["Partida", "Unidades", "Grado de avance (conversión)", "Costo de materiales", "Costo de conversión"]}
+  rows={[
+    ["PP inicial", "200", "50 %", "1.600", "402"],
+    ["Iniciadas en el periodo", "1.000", "", "5.000", "2.760"],
+    ["Terminadas", "900", "100 %", "", ""],
+    ["PP final", "300", "40 %", "", ""],
+  ]}
+/>
+
+### A. Promedio ponderado
+
+<LectureTable
+  title="Promedio ponderado (en decenas de miles de wones)"
+  headers={["Elemento", "Unidades equivalentes", "Costo total", "Costo por unidad equivalente"]}
+  rows={[
+    ["Materiales", "900 + 300 = 1.200", "1.600 + 5.000 = 6.600", "5,5"],
+    ["Conversión", "900 + 300 × 40 % = 1.020", "402 + 2.760 = 3.162", "3,1"],
+  ]}
+/>
+
+El costo de las unidades terminadas es $900 \times (5{,}5 + 3{,}1) = 7.740$ y el de la producción en proceso final, $300 \times 5{,}5 + 120 \times 3{,}1 = 1.650 + 372 = 2.022$ (en decenas de miles de wones). El total de 9.762 coincide con el costo total $1.600 + 402 + 5.000 + 2.760$.
+
+### B. PEPS
+
+<LectureTable
+  title="PEPS (en decenas de miles de wones)"
+  headers={["Elemento", "Unidades equivalentes", "Costo del periodo", "Costo por unidad equivalente"]}
+  rows={[
+    ["Materiales", "1.200 − 200 × 100 % = 1.000", "5.000", "5,0"],
+    ["Conversión", "1.020 − 200 × 50 % = 920", "2.760", "3,0"],
+  ]}
+/>
+
+El costo de las unidades terminadas tiene tres partes:
+
+- costo de la producción en proceso inicial: $1.600 + 402 = 2.002$;
+- costo de conversión del periodo para terminar la producción en proceso inicial: $200 \times 50\,\% \times 3{,}0 = 300$;
+- 700 unidades iniciadas y terminadas en el periodo: $700 \times (5{,}0 + 3{,}0) = 5.600$.
+
+El costo de las unidades terminadas es 7.902 y el de la producción en proceso final, $300 \times 5{,}0 + 120 \times 3{,}0 = 1.860$ (en decenas de miles de wones). El total vuelve a ser 9.762.
+
+### C. Comparación de ambos métodos
+
+Los costos unitarios del periodo con PEPS (materiales 5,0, conversión 3,0) son menores que los del periodo anterior (materiales 8,0, conversión 4,02). El promedio ponderado mezcla los costos anteriores, más caros, con los del periodo y eleva el costo unitario de la producción en proceso final (20,22 millones), mientras que PEPS lleva a la producción en proceso final los costos más bajos del periodo (18,6 millones). PEPS muestra por separado el **desempeño del periodo**, lo que ayuda a gestionar el proceso; el promedio ponderado es más sencillo de calcular. Con poca producción en proceso inicial o pocas variaciones en el costo unitario, ambos dan resultados parecidos.
+
+## 4. Varios procesos y costos transferidos
+
+Con dos o más procesos, el costo de las unidades terminadas en un proceso pasa al siguiente. Son los **costos transferidos**; en el proceso siguiente se tratan como materiales agregados al inicio y sus unidades equivalentes se calculan con un avance del 100 %.
+
+<Callout type="warning">
+El grado de avance lo estiman los responsables del proceso. Si se fija alto el avance de la producción en proceso final, aumentan las unidades equivalentes y el costo asignado a esa producción, con lo que baja el costo de las unidades terminadas (y el costo de ventas) y sube la utilidad. En industrias con mucha producción en proceso, revise en qué se basan esas estimaciones. Las unidades dañadas también cambian el cálculo de las unidades equivalentes; se tratan en el [capítulo 6](/es/academy-cost-accounting-ch9/).
+</Callout>
+
+## Ejercicio
+
+La empresa SS agrega los materiales al inicio del proceso y usa PEPS. Producción en proceso inicial: 400 unidades (25 % de avance); iniciadas: 2.000; terminadas: 2.100; producción en proceso final: 300 unidades (60 % de avance). El costo de materiales del periodo es de 40 millones de wones y el de conversión, de 42,8 millones. ¿Cuáles son el costo por unidad equivalente de materiales y de conversión, y el costo de la producción en proceso final?
+
+Las unidades equivalentes de materiales son las 2.000 iniciadas en el periodo, así que el costo unitario es 2 (20.000 wones). Las de conversión son 2.180: terminar la producción inicial $400 \times 75\,\% = 300$, iniciadas y terminadas $2.100 - 400 = 1.700$ y final $300 \times 60\,\% = 180$. El costo unitario es $4.280 / 2.180 \approx 1{,}963$ (en decenas de miles de wones). La producción en proceso final cuesta $300 \times 2 + 180 \times 1{,}963 \approx 600 + 353{,}4 = 953{,}4$, unos 9,534 millones de wones.
+
+## Referencias
+
+- Charles Horngren, Srikant Datar y Madhav Rajan, *Cost Accounting: A Managerial Emphasis*, cap. 17
+- Ray Garrison, Eric Noreen y Peter Brewer, *Managerial Accounting*, cap. 4
+- Korea Accounting Standards Board, K-IFRS 1002 *Inventarios*
