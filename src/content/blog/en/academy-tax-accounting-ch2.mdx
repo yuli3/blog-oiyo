@@ -1,0 +1,87 @@
+---
+track: academy
+series: tax-accounting
+chapter: 2
+title: "Tax Accounting — Gross Income and Exclusions: Capital Transactions, Dividends Received and Treasury Shares"
+description: "Sets out the scope of gross income under the Corporate Tax Act and the items that differ from accounting revenue, then calculates the tax adjustments for capital transactions such as share premium and gains on capital reduction, the exclusion of dividends received by ownership level, and gains on treasury shares and debt forgiveness."
+pubDate: 2026-09-24
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["tax accounting", "gross income", "income exclusions", "dividends received", "gain on treasury shares", "debt forgiveness"]
+locale: en
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+Gross income is revenue arising from transactions that increase a corporation's net assets, **excluding contributions of capital and items specified by law** (Corporate Tax Act, Article 15). It largely overlaps with accounting revenue, but tax sometimes treats as gross income what accounting records in equity, or excludes from gross income what accounting treats as revenue. The structure of tax adjustments was covered in [chapter 1](/en/academy-accounting-basics-ch7/).
+
+## 1. Gross income items and differences from accounting
+
+<LectureTable
+  title="Typical items where accounting and tax differ"
+  headers={["Item", "Accounting", "Tax", "Tax adjustment"]}
+  rows={[
+    ["Gain on disposal of treasury shares", "Capital surplus", "Gross income", "Inclusion (other)"],
+    ["Gain on retirement of treasury shares (capital reduction)", "Capital surplus", "Not gross income", "No adjustment"],
+    ["Share premium", "Capital surplus", "Not gross income", "No adjustment"],
+    ["Gain on debt forgiveness", "Profit for the period", "Gross income (excluded if applied to offset tax loss carryforwards)", "Exclusion of the amount applied"],
+    ["Fair value gain on FVPL shares", "Profit for the period", "In principle not gross income (revaluation not recognized)", "Exclusion (negative retained)"],
+    ["Refund of corporate tax", "Revenue", "Not gross income (refund of a non-deductible tax)", "Exclusion (other)"],
+    ["Interest on national and local tax refunds", "Interest income", "Not gross income", "Exclusion (other)"],
+  ]}
+/>
+
+The **gain on disposal of treasury shares** is a classic difference. Tax regards treasury shares as an asset like any other shares and taxes the gain on disposal as gross income. Accounting treated it as a transaction with owners and recorded it in equity, so the amount missing from book profit is included in gross income (other).
+
+## 2. Exclusion of dividends received
+
+Dividends one corporation receives from another domestic corporation come out of profits that have already borne corporate tax. Taxing them in full would be double taxation, so a set percentage is excluded from gross income (Corporate Tax Act, Article 18-2). Since the 2023 revision, the percentage depends on **the shareholding in the paying corporation**, regardless of whether the recipient is a holding company.
+
+<LectureTable
+  title="Exclusion rates for dividends received"
+  headers={["Shareholding in the paying corporation", "Exclusion rate"]}
+  rows={[
+    ["50% or more", "100%"],
+    ["20% to under 50%", "80%"],
+    ["Under 20%", "30%"],
+  ]}
+/>
+
+<FormulaBox
+  label="Excluded dividends received"
+  formula="\text{Excluded amount} = \sum(\text{Dividends received} \times \text{Exclusion rate}) - \text{Deduction for related interest}"
+  description="If the recipient bought the shares with borrowed money, the excluded amount is reduced by the part of that interest attributable to the shares. The exclusion does not apply to dividends on shares acquired within three months before the record date, among others."
+/>
+
+TC received dividends of ₩10 million from A, in which it holds 60%, and ₩5 million from B, in which it holds 10%. With no interest deduction, the excluded amount is $1{,}000 \times 100\% + 500 \times 30\% = 1{,}150$ (₩11.5 million). Of the ₩15 million of accounting dividend income, only ₩3.5 million is taxed.
+
+## 3. Debt forgiveness and offsetting tax loss carryforwards
+
+If a supplier forgives ₩20 million of debt, accounting records a gain on debt forgiveness. Tax also treats it as gross income, but the amount **applied to offset tax loss carryforwards** is excluded (Corporate Tax Act, Article 18). The rule supports the rehabilitation of companies in poor financial health. If ₩15 million of tax loss carryforwards remain, up to ₩15 million is excluded and ₩5 million is taxed.
+
+## 4. Other gross income
+
+- **Deemed dividends:** money received by shareholders on a capital reduction, dissolution, merger and so on in excess of the acquisition cost of the shares is treated as a dividend.
+- **Securities bought at below market price from a related individual:** the difference between market value and the purchase price is gross income.
+- **Deemed rental income:** a corporation whose main business is renting real estate and that meets conditions such as borrowings exceeding twice its equity includes in gross income an amount equivalent to the interest that could be earned on rental deposits (Restriction of Special Taxation Act, Article 138).
+
+<Callout type="warning">
+Exclusion removes an item from the tax base; it does not deny the accounting revenue. Exclusion rates for dividends received change often, so check the law for the relevant business year: before the 2023 revision, holding companies and ordinary corporations had different rates. And if a fair value gain on FVPL shares was excluded, gross income will be correspondingly larger on disposal — the reverse adjustment follows.
+</Callout>
+
+## Check your understanding
+
+This year TD disposed of treasury shares and recorded a ₩3 million gain in capital surplus, received ₩8 million of dividends from C, in which it holds 30% (no interest deduction), and had ₩10 million of debt forgiven by a creditor. Its tax loss carryforwards are ₩6 million. What tax adjustments are needed?
+
+The ₩3 million gain on treasury shares is included in gross income (other). C's dividend comes from a 30% holding, so 80%, ₩6.4 million, is excluded (other). Of the ₩10 million gain on debt forgiveness, the ₩6 million applied to tax loss carryforwards is excluded (other) and ₩4 million is taxed. The net adjustment is $300 - 640 - 600 = -940$, i.e. −₩9.4 million.
+
+## References
+
+- *Corporate Tax Act*, Article 15 (scope of gross income), Article 17 (exclusion of revenue from capital transactions), Article 18 (exclusion of revaluation gains, etc.) and Article 18-2 (exclusion of dividends received by domestic corporations) — [Korea Law Information Center](https://www.law.go.kr/법령/법인세법)
+- Ministry of Economy and Finance, *2022 Tax Law Amendment Proposal* (reform of the exclusion of dividends received)
+- National Tax Service, *Guide to Corporate Tax Returns*
