@@ -1,0 +1,106 @@
+---
+track: academy
+series: tax-accounting
+chapter: 7
+title: "Comptabilité fiscale — Base imposable et impôt : déficits reportables, taux, impôt minimum et impôt à payer"
+description: "Obtient la base imposable en retranchant du résultat fiscal de l'exercice les déficits reportables, les revenus exonérés et les déductions, calcule l'impôt brut aux taux 2026 de l'impôt sur les sociétés, puis suit le passage par les crédits et réductions d'impôt, l'impôt minimum, les acomptes et les retenues à la source jusqu'au solde à payer, sur un exemple chiffré."
+pubDate: 2026-09-24
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["comptabilité fiscale", "base imposable", "déficits reportables", "taux de l'impôt sur les sociétés", "impôt minimum", "crédits d'impôt"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+Les retraitements des [chapitres 1](/fr/academy-accounting-basics-ch7/) à [6](/fr/academy-tax-accounting-ch6/) nous ont donné le résultat fiscal de l'exercice. Ce chapitre en part pour calculer l'impôt sur les sociétés réellement dû, en suivant l'ordre du tableau de détermination de la base et de l'impôt.
+
+## 1. La base imposable
+
+<FormulaBox
+  label="Base imposable"
+  formula="\text{Base imposable} = \text{Résultat fiscal} - \text{Déficits reportables} - \text{Revenus exonérés} - \text{Déductions}"
+  description="Les trois éléments sont retranchés dans cet ordre. Les revenus exonérés et les déductions ne se reportent pas sur l'année suivante : on impute donc d'abord les déficits reportables."
+/>
+
+Les **déficits reportables** sont les pertes fiscales d'exercices passés non encore imputées.
+
+- Les déficits nés au cours d'exercices ouverts à compter du 1er janvier 2020 se reportent pendant **15 ans** (10 ans pour les déficits antérieurs).
+- L'imputation est plafonnée à **80 %** du résultat fiscal de l'exercice pour les sociétés ordinaires, et à **100 %** notamment pour les PME et les sociétés qui exécutent un plan de redressement.
+- Les déficits les plus anciens s'imputent en premier. Une PME peut aussi opter pour le **report en arrière**, en obtenant le remboursement de l'impôt de l'exercice précédent l'année où naît le déficit.
+
+## 2. L'impôt brut
+
+<LectureTable
+  title="Taux de l'impôt sur les sociétés (exercices ouverts à compter du 1er janvier 2026)"
+  headers={["Base imposable", "Taux", "Abattement progressif"]}
+  rows={[
+    ["Jusqu'à 200 millions de wons", "10 %", "—"],
+    ["De 200 millions à 20 milliards de wons", "20 %", "20 millions de wons"],
+    ["De 20 à 300 milliards de wons", "22 %", "420 millions de wons"],
+    ["Au-delà de 300 milliards de wons", "25 %", "9,42 milliards de wons"],
+  ]}
+/>
+
+La réforme fiscale de 2025 a relevé chaque tranche d'un point par rapport au barème 9 %, 19 %, 21 % et 24 % de 2023–2025. Si l'exercice dure moins d'un an, la base est annualisée sur 12 mois, les taux appliqués, puis le résultat ramené au nombre de mois. L'impôt local sur le revenu des sociétés s'ajoute séparément, sur la base imposable, à des taux de 1 % à 2,5 %.
+
+## 3. Crédits et réductions d'impôt, impôt minimum
+
+On retranche de l'impôt brut les réductions prévues par la loi sur la restriction des régimes fiscaux spéciaux (réduction pour les PME en création, etc.) et les crédits d'impôt (crédit d'investissement intégré, crédit de R&D et de développement des ressources humaines, etc.). Pour que ces avantages ne réduisent pas trop l'impôt, l'**impôt minimum** fixe un plancher.
+
+<FormulaBox
+  label="Impôt minimum"
+  formula="\text{Impôt après réductions} \ge \text{Base avant réductions} \times \text{Taux minimum}"
+  description="Le taux minimum est de 7 % pour les PME ; pour les autres sociétés, il est de 10 % sur la part de la base avant réductions jusqu'à 10 milliards de wons, 12 % de 10 à 100 milliards et 17 % au-delà de 100 milliards. Si l'impôt après réductions est inférieur, les avantages sont écartés à hauteur de l'écart."
+/>
+
+Le crédit pour impôts étrangers, le crédit pour pertes dues à des catastrophes et le crédit de R&D des PME, entre autres, échappent à l'impôt minimum et se retranchent après son calcul. Les crédits refusés du fait de l'impôt minimum se reportent pendant **10 ans**.
+
+## 4. Exemple chiffré
+
+TO (société ordinaire, exercice de 12 mois) a un résultat fiscal de 3 milliards de wons. Elle dispose d'un déficit reportable de 500 millions né en 2021 et n'a ni revenus exonérés ni déductions. Son crédit d'investissement intégré, soumis à l'impôt minimum, est de 300 millions. Elle a déjà versé 120 millions d'acomptes et 10 millions de retenue à la source sur des intérêts.
+
+<LectureTable
+  title="Impôt sur les sociétés de TO (en dizaines de milliers de wons)"
+  headers={["Étape", "Calcul", "Montant"]}
+  rows={[
+    ["Résultat fiscal", "", "300 000"],
+    ["Imputation du déficit", "Dans la limite de 300 000 × 80 % = 240 000", "−50 000"],
+    ["Base imposable", "", "250 000"],
+    ["Impôt brut", "250 000 × 20 % − 2 000", "48 000"],
+    ["Impôt minimum", "250 000 × 10 %", "25 000"],
+    ["Crédit d'investissement admis", "48 000 − 25 000 (sur 30 000 demandés)", "−23 000"],
+    ["Charge fiscale totale", "", "25 000"],
+    ["Impôt déjà versé", "Acomptes 12 000 + retenue 1 000", "−13 000"],
+    ["Solde à payer", "", "12 000"],
+  ]}
+/>
+
+Les 70 millions de crédit non admis se reportent sur l'exercice suivant. Comme le solde dépasse 10 millions, une partie peut être **payée en plusieurs fois** dans le mois suivant l'échéance (deux mois pour les PME) : jusqu'à 50 % si le montant dépasse 20 millions, sinon la part au-delà de 10 millions.
+
+## 5. Déclaration et paiement
+
+- **Délai de déclaration :** dans les **3 mois** suivant le dernier jour du mois de clôture (le 31 mars de l'année suivante pour une clôture en décembre) ; quatre mois pour les sociétés soumises à la confirmation de déclaration diligente.
+- **Acompte :** si l'exercice dépasse six mois, il est versé dans les deux mois suivant l'expiration des six premiers mois, sur la base de l'impôt brut de l'exercice précédent ou de comptes provisoires du premier semestre.
+- **Pièces jointes :** états financiers, tableau des retraitements fiscaux, état de rapprochement du capital et des réserves, etc. Les soldes maintenus sont reportés sur l'année suivante par cet état.
+
+<Callout type="warning">
+En raison du plafond de 80 %, une société ordinaire paie l'impôt les années bénéficiaires même avec d'importants déficits accumulés. Et à cause de l'impôt minimum, environ 10 % de la base subsiste même avec de gros crédits. Taux, plafonds et taux de crédit sont révisés chaque année : vérifiez la loi et les indications du National Tax Service pour l'exercice concerné avant de calculer. Les chiffres de ce chapitre valent pour les exercices ouverts à compter du 1er janvier 2026.
+</Callout>
+
+## Exercice
+
+TP (PME, exercice de 12 mois) a un résultat fiscal de 500 millions de wons et des déficits reportables de 600 millions. Après imputation, quels sont la base imposable, l'impôt brut et le déficit restant ?
+
+Pour une PME, la limite est de 100 % du résultat : les 500 millions sont imputés en totalité, la base est nulle et l'impôt brut aussi. Le déficit restant de 100 millions se reporte sur l'exercice suivant dans le délai d'imputation. Une société ordinaire dans la même situation ne pourrait imputer que 400 millions : base de 100 millions et impôt brut de 100 millions × 10 % = 10 millions de wons.
+
+## Références
+
+- *Loi sur l'impôt des sociétés*, article 13 (base imposable), article 55 (taux), article 63 (acompte) et article 64 (paiement) — [Korea Law Information Center](https://www.law.go.kr/법령/법인세법)
+- *Loi sur la restriction des régimes fiscaux spéciaux*, article 132 (exclusion des réductions pour l'impôt inférieur à l'impôt minimum)
+- National Tax Service, [Taux de l'impôt sur les sociétés](https://www.nts.go.kr/nts/cm/cntnts/cntntsView.do?mi=2372&cntntsId=7746)
