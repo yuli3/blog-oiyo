@@ -1,0 +1,93 @@
+---
+track: academy
+series: auditing
+chapter: 5
+title: "Auditing — Audit Sampling: Attribute Sampling and Monetary Unit Sampling"
+description: "Distinguishes statistical and non-statistical sampling and sampling and non-sampling risk, finds the upper deviation limit in attribute sampling for tests of controls, and calculates sample sizes and projected misstatement with monetary unit sampling (MUS) for substantive procedures."
+pubDate: 2026-09-24
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["auditing", "audit sampling", "attribute sampling", "monetary unit sampling", "sampling risk"]
+locale: en
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+Auditors cannot examine every transaction. Selecting part of a population, examining it and projecting the result to the whole population is **audit sampling** (KSA 530). The moment a conclusion is drawn from a sample, there is a risk that the sample misrepresents the population. This chapter covers how to set sample sizes and evaluate results while managing that risk.
+
+## 1. Sampling risk and non-sampling risk
+
+- **Sampling risk:** the risk that the conclusion drawn from a sample differs from the conclusion that would be reached by examining the whole population. A larger sample reduces it.
+  - Tests of controls: concluding that a control is **more effective** than it is (the risk of overreliance) is the more dangerous error, because it leads to insufficient substantive procedures.
+  - Tests of details: concluding that there is **no** misstatement when there is (the risk of incorrect acceptance) is the more dangerous error, because it leads to an inappropriate clean opinion.
+- **Non-sampling risk:** the risk, unrelated to sampling, of using the wrong procedure or misinterpreting evidence. It is reduced through training, supervision and quality management.
+
+Statistical sampling uses random selection and probability theory, so sampling risk can be **measured**. In non-statistical sampling, the sample is set by the auditor's judgement and sampling risk cannot be measured numerically. The standards permit both.
+
+## 2. Tests of controls: attribute sampling
+
+Attribute sampling, which looks at whether a control operated (yes/no), estimates the **deviation rate**. Sample size depends on the tolerable deviation rate, the expected deviation rate and the confidence level.
+
+<FormulaBox
+  label="Upper deviation limit (Poisson approximation)"
+  formula="\text{Upper deviation limit} = \frac{\text{Confidence factor}(k,\ \text{confidence level})}{n}"
+  description="At 95% confidence the factor is 3.00 for k = 0 deviations found, 4.75 for 1, 6.30 for 2 and 7.76 for 3. If the upper limit is at or below the tolerable rate, the control can be relied on."
+/>
+
+With a tolerable deviation rate of 5%, 95% confidence and no expected deviations, the required sample is $3.00 / 5\% = 60$ items. If, as at AG in [chapter 3](/en/academy-auditing-ch3/), 3 of 60 items deviate, the upper limit is $7.76 / 60 ≈ 12.9\%$, above the tolerable rate. Had there been no deviations in 60 items, the upper limit would be 5% and the control could be relied on.
+
+## 3. Tests of details: monetary unit sampling (MUS)
+
+Monetary unit sampling treats the population as **a set of individual won** and samples won by won. The larger an item, the more likely it is to be selected, so overstatement risk is tested efficiently.
+
+### A. Sample size
+
+<FormulaBox
+  label="MUS sampling interval and sample size"
+  formula="\text{Sampling interval} = \frac{\text{Tolerable misstatement}}{\text{Confidence factor}}, \qquad n = \frac{\text{Population amount}}{\text{Sampling interval}}"
+  description="With receivables of ₩5 billion, tolerable misstatement of ₩200 million and 95% confidence (no misstatements expected, factor 3.0), the sampling interval is about ₩66.67 million and the sample is 75 items."
+/>
+
+Items larger than the sampling interval (₩66.67 million or more) are certain to be selected. They are tested separately in full, and the rest are selected systematically.
+
+### B. Evaluating results
+
+In the sample, a receivable with a book value of ₩10 million is found to have an audited value of ₩8 million. This item's misstatement ratio (tainting) is 20%. Because the item represents one sampling interval, the projected misstatement is $20\% \times 6{,}667 ≈ 1{,}333$ (₩10,000), about ₩13.33 million. Sampling risk is then added to find the **upper misstatement limit**.
+
+<FormulaBox
+  label="Upper misstatement limit (one overstatement)"
+  formula="\begin{aligned}\text{Basic precision} &= 3.00 \times 6{,}667 ≈ 20{,}000 \\ \text{Projected misstatement} &= 20\% \times 6{,}667 ≈ 1{,}333 \\ \text{Incremental allowance} &= (4.75 - 3.00 - 1) \times 20\% \times 6{,}667 ≈ 1{,}000 \\ \text{Upper misstatement limit} &≈ 22{,}333\end{aligned}"
+  description="In ₩10,000. The difference between the factors for one error (4.75) and none (3.00), less 1, gives 0.75 as the additional allowance for sampling risk. The upper limit of about ₩223.33 million exceeds the ₩200 million tolerable misstatement."
+/>
+
+When a sample designed to expect no misstatements finds one, the upper limit exceeds tolerable misstatement. The auditor then extends the sample, asks management to investigate and correct the population, or, if it is not corrected, considers modifying the opinion. Allowing for some expected misstatement at the design stage enlarges the sample but reduces such situations.
+
+<LectureTable
+  title="Interpreting MUS results"
+  headers={["Result", "Conclusion"]}
+  rows={[
+    ["Upper misstatement limit ≤ tolerable misstatement", "Accept the population"],
+    ["Upper misstatement limit > tolerable misstatement", "Extend the sample, ask management to investigate and correct, consider modifying the opinion"],
+  ]}
+/>
+
+<Callout type="warning">
+Monetary unit sampling is strong at finding overstatement and weak at understatement, because receivables recorded at zero or omitted altogether cannot be selected. Omissions of liabilities or expenses (completeness) are covered by procedures starting from other populations (payment records, supplier statements). And treating a misstatement found in the sample as "a one-off" and not projecting it underestimates total misstatement.
+</Callout>
+
+## Check your understanding
+
+AK's inventory has a book value of ₩3 billion. The auditor sets tolerable misstatement at ₩120 million and designs a monetary unit sample at 95% confidence (factor 3.0). What are the sampling interval and sample size? If an item in the sample with a book value of ₩5 million is actually worth only ₩3 million because of obsolescence, what is its projected misstatement?
+
+The sampling interval is $12{,}000 / 3.0 = 4{,}000$ (₩40 million) and the sample size $300{,}000 / 4{,}000 = 75$ items. The item's misstatement ratio is $(500 - 300) / 500 = 40\%$, so its projected misstatement is $40\% \times 4{,}000 = 1{,}600$, i.e. ₩16 million. The upper limit allowing for sampling risk, together with other findings, is then compared with tolerable misstatement.
+
+## References
+
+- Korean Institute of CPAs, Korean Standards on Auditing, KSA 530 *Audit Sampling*
+- AICPA, *Audit Guide: Audit Sampling*
+- Alvin Arens, Randal Elder and Mark Beasley, *Auditing and Assurance Services*, ch. 15, 17

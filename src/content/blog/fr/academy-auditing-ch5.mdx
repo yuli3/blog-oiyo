@@ -1,0 +1,93 @@
+---
+track: academy
+series: auditing
+chapter: 5
+title: "Audit — Sondages en audit : échantillonnage par attributs et par unités monétaires"
+description: "Distingue sondages statistiques et non statistiques, risque d'échantillonnage et risque non lié à l'échantillonnage, calcule le taux d'écart maximal d'un échantillonnage par attributs pour les tests de procédures, puis la taille d'échantillon et l'anomalie extrapolée d'un échantillonnage par unités monétaires (MUS) pour les contrôles substantifs."
+pubDate: 2026-09-24
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["audit", "sondages en audit", "échantillonnage par attributs", "échantillonnage par unités monétaires", "risque d'échantillonnage"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+L'auditeur ne peut examiner toutes les opérations. Prélever une partie d'une population, l'examiner et extrapoler le résultat à l'ensemble, c'est le **sondage en audit** (norme 530). Dès qu'une conclusion est tirée d'un échantillon, il existe un risque que celui-ci représente mal la population. Ce chapitre montre comment fixer la taille des échantillons et évaluer les résultats en maîtrisant ce risque.
+
+## 1. Risque d'échantillonnage et risque non lié à l'échantillonnage
+
+- **Risque d'échantillonnage :** risque que la conclusion tirée de l'échantillon diffère de celle qu'aurait donnée l'examen de toute la population. Il diminue quand l'échantillon grandit.
+  - Tests de procédures : conclure qu'un contrôle est **plus efficace** qu'il ne l'est (risque de confiance excessive) est l'erreur la plus dangereuse, car elle conduit à des contrôles substantifs insuffisants.
+  - Tests de détail : conclure à l'**absence** d'anomalie alors qu'il y en a une (risque d'acceptation à tort) est l'erreur la plus dangereuse, car elle conduit à une opinion sans réserve inappropriée.
+- **Risque non lié à l'échantillonnage :** risque, indépendant du sondage, d'utiliser une mauvaise procédure ou de mal interpréter les éléments probants. On le réduit par la formation, la supervision et la gestion de la qualité.
+
+Le sondage statistique, fondé sur une sélection aléatoire et la théorie des probabilités, permet de **mesurer** le risque d'échantillonnage. Dans le sondage non statistique, l'échantillon est fixé par jugement et ce risque ne se mesure pas. Les normes admettent les deux.
+
+## 2. Tests de procédures : l'échantillonnage par attributs
+
+L'échantillonnage par attributs, qui vérifie si un contrôle a fonctionné (oui/non), estime le **taux d'écart**. La taille de l'échantillon dépend du taux d'écart tolérable, du taux attendu et du niveau de confiance.
+
+<FormulaBox
+  label="Taux d'écart maximal (approximation de Poisson)"
+  formula="\text{Taux d'écart maximal} = \frac{\text{Coefficient de confiance}(k,\ \text{niveau de confiance})}{n}"
+  description="À 95 % de confiance, le coefficient vaut 3,00 pour k = 0 écart constaté, 4,75 pour 1, 6,30 pour 2 et 7,76 pour 3. Si le taux maximal est inférieur ou égal au taux tolérable, on peut s'appuyer sur le contrôle."
+/>
+
+Avec un taux tolérable de 5 %, une confiance de 95 % et aucun écart attendu, l'échantillon requis est de $3{,}00 / 5\,\% = 60$ éléments. Si, comme chez AG au [chapitre 3](/fr/academy-auditing-ch3/), 3 des 60 éléments présentent un écart, le taux maximal vaut $7{,}76 / 60 \approx 12{,}9\,\%$, au-delà du taux tolérable. Sans aucun écart sur 60 éléments, il serait de 5 % et le contrôle pourrait être retenu.
+
+## 3. Tests de détail : l'échantillonnage par unités monétaires (MUS)
+
+L'échantillonnage par unités monétaires considère la population comme **un ensemble de wons** et tire l'échantillon won par won. Plus un élément est important, plus il a de chances d'être sélectionné : le risque de surévaluation est testé efficacement.
+
+### A. Taille de l'échantillon
+
+<FormulaBox
+  label="Pas de sondage et taille d'échantillon en MUS"
+  formula="\text{Pas de sondage} = \frac{\text{Anomalie tolérable}}{\text{Coefficient de confiance}}, \qquad n = \frac{\text{Montant de la population}}{\text{Pas de sondage}}"
+  description="Avec 5 milliards de wons de créances, une anomalie tolérable de 200 millions et 95 % de confiance (aucune anomalie attendue, coefficient 3,0), le pas est d'environ 66,67 millions et l'échantillon de 75 éléments."
+/>
+
+Les éléments supérieurs au pas de sondage (66,67 millions ou plus) sont sélectionnés à coup sûr. On les teste séparément en totalité, et l'on tire les autres de façon systématique.
+
+### B. Évaluation des résultats
+
+Dans l'échantillon, une créance de 10 millions en comptabilité s'avère valoir 8 millions après audit. Son taux d'anomalie (tainting) est de 20 %. Comme l'élément représente un pas de sondage, l'anomalie extrapolée vaut $20\,\% \times 6\,667 \approx 1\,333$ (en dizaines de milliers de wons), soit environ 13,33 millions. On ajoute ensuite le risque d'échantillonnage pour obtenir la **limite supérieure d'anomalies**.
+
+<FormulaBox
+  label="Limite supérieure d'anomalies (une surévaluation)"
+  formula="\begin{aligned}\text{Précision de base} &= 3{,}00 \times 6\,667 \approx 20\,000 \\ \text{Anomalie extrapolée} &= 20\,\% \times 6\,667 \approx 1\,333 \\ \text{Provision incrémentale} &= (4{,}75 - 3{,}00 - 1) \times 20\,\% \times 6\,667 \approx 1\,000 \\ \text{Limite supérieure} &\approx 22\,333\end{aligned}"
+  description="En dizaines de milliers de wons. L'écart entre les coefficients pour une anomalie (4,75) et aucune (3,00), diminué de 1, donne 0,75 de provision supplémentaire pour risque d'échantillonnage. La limite d'environ 223,33 millions dépasse l'anomalie tolérable de 200 millions."
+/>
+
+Si un échantillon conçu sans anomalie attendue en révèle une, la limite supérieure dépasse l'anomalie tolérable. L'auditeur étend alors l'échantillon, demande à la direction d'enquêter et de corriger la population ou, à défaut de correction, envisage de modifier son opinion. Prévoir une petite anomalie attendue dès la conception agrandit l'échantillon mais limite ces situations.
+
+<LectureTable
+  title="Interprétation des résultats MUS"
+  headers={["Résultat", "Conclusion"]}
+  rows={[
+    ["Limite supérieure ≤ anomalie tolérable", "Accepter la population"],
+    ["Limite supérieure > anomalie tolérable", "Étendre l'échantillon, demander une enquête et une correction à la direction, envisager une opinion modifiée"],
+  ]}
+/>
+
+<Callout type="warning">
+L'échantillonnage par unités monétaires est efficace pour repérer les surévaluations et faible pour les sous-évaluations, car une créance comptabilisée à zéro ou omise ne peut pas être tirée. Les omissions de dettes ou de charges (exhaustivité) se traitent par des procédures partant d'autres populations (décaissements, relevés fournisseurs). Et considérer une anomalie trouvée dans l'échantillon comme « isolée » sans l'extrapoler conduit à sous-estimer l'anomalie totale.
+</Callout>
+
+## Exercice
+
+Les stocks d'AK ont une valeur comptable de 3 milliards de wons. L'auditeur fixe l'anomalie tolérable à 120 millions et conçoit un échantillonnage par unités monétaires à 95 % de confiance (coefficient 3,0). Quels sont le pas de sondage et la taille de l'échantillon ? Si un article de l'échantillon, comptabilisé 5 millions, ne vaut en réalité que 3 millions pour cause d'obsolescence, quelle est son anomalie extrapolée ?
+
+Le pas vaut $12\,000 / 3{,}0 = 4\,000$ (40 millions) et l'échantillon $300\,000 / 4\,000 = 75$ éléments. Le taux d'anomalie de l'article est de $(500 - 300) / 500 = 40\,\%$, d'où une anomalie extrapolée de $40\,\% \times 4\,000 = 1\,600$, soit 16 millions. La limite supérieure intégrant le risque d'échantillonnage, ajoutée aux autres constats, est ensuite comparée à l'anomalie tolérable.
+
+## Références
+
+- Korean Institute of CPAs, normes d'audit coréennes, norme 530 *Sondages en audit*
+- AICPA, *Audit Guide: Audit Sampling*
+- Alvin Arens, Randal Elder et Mark Beasley, *Auditing and Assurance Services*, chap. 15, 17

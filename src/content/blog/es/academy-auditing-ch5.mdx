@@ -1,0 +1,93 @@
+---
+track: academy
+series: auditing
+chapter: 5
+title: "Auditoría — Muestreo de auditoría: muestreo por atributos y muestreo por unidades monetarias"
+description: "Distingue el muestreo estadístico del no estadístico y el riesgo de muestreo del ajeno al muestreo, obtiene el límite superior de desviación en el muestreo por atributos de las pruebas de controles y calcula el tamaño de muestra y la incorrección proyectada con el muestreo por unidades monetarias (MUS) en los procedimientos sustantivos."
+pubDate: 2026-09-24
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["auditoría", "muestreo de auditoría", "muestreo por atributos", "muestreo por unidades monetarias", "riesgo de muestreo"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+El auditor no puede examinar todas las transacciones. Seleccionar una parte de la población, examinarla y proyectar el resultado al total es el **muestreo de auditoría** (norma 530). En cuanto se saca una conclusión de una muestra, surge el riesgo de que esta no represente bien a la población. Este capítulo trata cómo fijar el tamaño de la muestra y evaluar los resultados gestionando ese riesgo.
+
+## 1. Riesgo de muestreo y riesgo ajeno al muestreo
+
+- **Riesgo de muestreo:** riesgo de que la conclusión basada en la muestra difiera de la que se obtendría examinando toda la población. Disminuye al ampliar la muestra.
+  - Pruebas de controles: concluir que un control es **más eficaz** de lo que es (riesgo de exceso de confianza) es el error más peligroso, porque lleva a procedimientos sustantivos insuficientes.
+  - Pruebas de detalle: concluir que **no hay** incorrección cuando la hay (riesgo de aceptación incorrecta) es el más peligroso, porque lleva a una opinión favorable indebida.
+- **Riesgo ajeno al muestreo:** riesgo, independiente de la muestra, de usar un procedimiento equivocado o interpretar mal la evidencia. Se reduce con formación, supervisión y gestión de la calidad.
+
+El muestreo estadístico, con selección aleatoria y teoría de probabilidades, permite **medir** el riesgo de muestreo. En el no estadístico, la muestra se fija por juicio del auditor y ese riesgo no puede medirse numéricamente. Las normas admiten ambos.
+
+## 2. Pruebas de controles: muestreo por atributos
+
+El muestreo por atributos, que mira si un control funcionó (sí/no), estima la **tasa de desviación**. El tamaño de muestra depende de la tasa tolerable, la tasa esperada y el nivel de confianza.
+
+<FormulaBox
+  label="Límite superior de desviación (aproximación de Poisson)"
+  formula="\text{Límite superior de desviación} = \frac{\text{Factor de confianza}(k,\ \text{nivel de confianza})}{n}"
+  description="Con un 95 % de confianza, el factor es 3,00 para k = 0 desviaciones halladas, 4,75 para 1, 6,30 para 2 y 7,76 para 3. Si el límite superior es menor o igual que la tasa tolerable, puede confiarse en el control."
+/>
+
+Con una tasa tolerable del 5 %, un 95 % de confianza y ninguna desviación esperada, la muestra necesaria es $3{,}00 / 5\,\% = 60$ partidas. Si, como en AG en el [capítulo 3](/es/academy-auditing-ch3/), 3 de las 60 se desvían, el límite superior es $7{,}76 / 60 \approx 12{,}9\,\%$, por encima de la tasa tolerable. Sin desviaciones en 60 partidas, sería del 5 % y podría confiarse en el control.
+
+## 3. Pruebas de detalle: muestreo por unidades monetarias (MUS)
+
+El muestreo por unidades monetarias trata la población como **un conjunto de wones individuales** y selecciona won a won. Cuanto mayor es una partida, más probable es que salga, así que el riesgo de sobrevaloración se prueba con eficiencia.
+
+### A. Tamaño de la muestra
+
+<FormulaBox
+  label="Intervalo de muestreo y tamaño de muestra en MUS"
+  formula="\text{Intervalo de muestreo} = \frac{\text{Incorrección tolerable}}{\text{Factor de confianza}}, \qquad n = \frac{\text{Importe de la población}}{\text{Intervalo de muestreo}}"
+  description="Con 5.000 millones de wones de cuentas por cobrar, una incorrección tolerable de 200 millones y un 95 % de confianza (sin incorrecciones esperadas, factor 3,0), el intervalo es de unos 66,67 millones y la muestra, de 75 partidas."
+/>
+
+Las partidas mayores que el intervalo (66,67 millones o más) se seleccionan con seguridad. Se prueban por separado en su totalidad y el resto se selecciona de forma sistemática.
+
+### B. Evaluación de resultados
+
+En la muestra, una cuenta por cobrar de 10 millones en libros resulta tener un valor auditado de 8 millones. Su proporción de incorrección (tainting) es del 20 %. Como la partida representa un intervalo de muestreo, la incorrección proyectada es $20\,\% \times 6.667 \approx 1.333$ (en decenas de miles de wones), unos 13,33 millones. Luego se añade el riesgo de muestreo para obtener el **límite superior de incorrección**.
+
+<FormulaBox
+  label="Límite superior de incorrección (una sobrevaloración)"
+  formula="\begin{aligned}\text{Precisión básica} &= 3{,}00 \times 6.667 \approx 20.000 \\ \text{Incorrección proyectada} &= 20\,\% \times 6.667 \approx 1.333 \\ \text{Margen incremental} &= (4{,}75 - 3{,}00 - 1) \times 20\,\% \times 6.667 \approx 1.000 \\ \text{Límite superior} &\approx 22.333\end{aligned}"
+  description="En decenas de miles de wones. La diferencia entre los factores para una incorrección (4,75) y ninguna (3,00), menos 1, da 0,75 de margen adicional por riesgo de muestreo. El límite de unos 223,33 millones supera la incorrección tolerable de 200 millones."
+/>
+
+Si una muestra diseñada sin incorrecciones esperadas encuentra una, el límite superior supera la incorrección tolerable. El auditor amplía la muestra, pide a la dirección que investigue y corrija la población o, si no se corrige, considera modificar la opinión. Prever cierta incorrección esperada en el diseño agranda la muestra pero reduce estas situaciones.
+
+<LectureTable
+  title="Interpretación de los resultados del MUS"
+  headers={["Resultado", "Conclusión"]}
+  rows={[
+    ["Límite superior ≤ incorrección tolerable", "Aceptar la población"],
+    ["Límite superior > incorrección tolerable", "Ampliar la muestra, pedir a la dirección que investigue y corrija, considerar una opinión modificada"],
+  ]}
+/>
+
+<Callout type="warning">
+El muestreo por unidades monetarias es fuerte para hallar sobrevaloraciones y débil para las infravaloraciones, porque una cuenta por cobrar registrada en cero u omitida no puede salir en la muestra. Las omisiones de pasivos o gastos (integridad) se cubren con procedimientos que parten de otras poblaciones (registros de pagos, estados de proveedores). Además, tratar una incorrección hallada en la muestra como «un caso aislado» sin proyectarla subestima la incorrección total.
+</Callout>
+
+## Ejercicio
+
+Las existencias de AK tienen un valor en libros de 3.000 millones de wones. El auditor fija la incorrección tolerable en 120 millones y diseña un muestreo por unidades monetarias con un 95 % de confianza (factor 3,0). ¿Cuáles son el intervalo de muestreo y el tamaño de la muestra? Si una partida de la muestra con valor en libros de 5 millones vale en realidad solo 3 millones por obsolescencia, ¿cuál es su incorrección proyectada?
+
+El intervalo es $12.000 / 3{,}0 = 4.000$ (40 millones) y la muestra, $300.000 / 4.000 = 75$ partidas. La proporción de incorrección de la partida es $(500 - 300) / 500 = 40\,\%$, así que su incorrección proyectada es $40\,\% \times 4.000 = 1.600$, es decir, 16 millones. Luego se compara con la incorrección tolerable el límite superior que incorpora el riesgo de muestreo junto con los demás hallazgos.
+
+## Referencias
+
+- Korean Institute of CPAs, normas coreanas de auditoría, norma 530 *Muestreo de auditoría*
+- AICPA, *Audit Guide: Audit Sampling*
+- Alvin Arens, Randal Elder y Mark Beasley, *Auditing and Assurance Services*, cap. 15, 17
