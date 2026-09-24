@@ -1,0 +1,160 @@
+---
+track: academy
+locale: es
+title: "Hacienda pública — Fallos del mercado y papel del Estado"
+category: "Economics"
+series: public-finance
+chapter: 1
+chapterTitleShort: 'Fallos del mercado y Estado'
+author: OIYO Editorial
+tags:
+  - hacienda pública
+  - fallos del mercado
+  - bienes públicos
+  - externalidades
+  - fallos del Estado
+description: "Partiendo de los dos teoremas del bienestar, este capítulo presenta con ejemplos numéricos la condición de Samuelson para los bienes públicos, el impuesto pigouviano y el teorema de Coase para las externalidades y los fallos del Estado: cuándo está justificada la intervención pública y cuándo fracasa."
+pubDate: '2026-05-05'
+updatedDate: '2026-09-24'
+layoutVariant: lecture-series
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Hacienda pública — dónde falla el mercado y dónde falla el Estado
+
+La hacienda pública se pregunta qué debe hacer el Estado y a quién y cómo debe cobrar el coste. Ambas preguntas parten del mismo criterio: ¿alcanza el mercado por sí solo una asignación eficiente? Y si no, ¿mejora la situación que el Estado la corrija?
+
+## 1. Los dos teoremas del bienestar son la referencia
+
+**Primer teorema**: el equilibrio de un mercado en competencia perfecta es eficiente en el sentido de Pareto; no se puede mejorar a nadie sin empeorar a otro. Los supuestos son agentes precio-aceptantes, mercados completos, ausencia de externalidades e información perfecta.
+
+**Segundo teorema**: si las preferencias y la tecnología son convexas, cualquier asignación eficiente en el sentido de Pareto que se desee puede alcanzarse redistribuyendo las dotaciones iniciales y dejando después actuar al mercado. Eficiencia y equidad pueden tratarse por separado.
+
+Los dos teoremas dividen en dos los fundamentos de la intervención pública. Donde fallan los supuestos del primer teorema (fallos del mercado), el fundamento es la **eficiencia**; donde el resultado es eficiente pero la distribución resulta inaceptable, es la **equidad**. Sin embargo, la «redistribución de suma fija» que exige el segundo teorema apenas existe en la práctica. La redistribución real se hace con impuestos que cambian la conducta, como el impuesto sobre la renta, y por tanto conlleva costes de eficiencia. Ese es el tema de los capítulos 2 y 4.
+
+<LectureTable
+  title="Los supuestos del primer teorema y cuándo fallan"
+  headers={["Supuesto", "Cuándo falla", "Dónde lo trata la hacienda pública"]}
+  rows={[
+    ["Hay un mercado para cada bien", "Bienes públicos, externalidades", "Este capítulo"],
+    ["Agentes precio-aceptantes", "Monopolio natural", "Apartado 4 de este capítulo"],
+    ["Información perfecta", "Selección adversa, riesgo moral", "Capítulos 3 y 8"],
+    ["La redistribución de suma fija es posible", "Los impuestos reales cambian la conducta", "Capítulos 2 y 4"],
+  ]}
+/>
+
+## 2. En los bienes públicos, los beneficios marginales se suman en vertical
+
+Los bienes públicos son **no rivales** (el consumo de uno no reduce el de los demás) y **no excluibles** (es difícil excluir a quien no paga). La defensa nacional, la investigación básica y la protección contra inundaciones son ejemplos típicos. Los bienes no rivales pero excluibles (televisión de pago, una autopista de peaje poco transitada) son bienes club; los rivales pero difícilmente excluibles (caladeros, acuíferos) son recursos comunes.
+
+En los bienes privados se suman las cantidades a un mismo precio, así que las curvas de demanda se suman en **horizontal**. Todos consumen la misma cantidad de un bien público, así que a una misma cantidad se suman en **vertical** los beneficios marginales individuales.
+
+<FormulaBox
+  label="Condición de Samuelson"
+  formula="\sum_{i=1}^{n} MB_i(G) = MC(G)"
+  description="La cantidad eficiente de un bien público G es aquella en que la suma de los beneficios marginales de todos iguala al coste marginal. Difiere de la condición de los bienes privados MB_i = MC."
+/>
+
+Supongamos que dos vecinos, A y B, obtienen de $Q$ farolas unos beneficios marginales $MB_A=12-Q$ y $MB_B=8-Q$ (en decenas de miles de wones), y que cada farola tiene un coste marginal de 100.000 wones. Para $Q\le 8$, $\sum MB = 20-2Q$, así que la cantidad eficiente cumple $20-2Q=10$: $Q^*=5$.
+
+¿Qué ocurre si cada uno instala farolas por su cuenta? A instala mientras su propio beneficio marginal supere 100.000 wones: $12-Q=10$ da 2 farolas. A B, incluso la primera farola solo le reporta 80.000 wones, así que no instala ninguna y usa gratis las de A. La oferta privada de 2 queda por debajo de la cantidad eficiente de 5. Esa diferencia es el **polizón** (*free riding*).
+
+<EconDiagram
+  title="Bienes públicos: suma vertical de los beneficios marginales"
+  xLabel="Q"
+  yLabel="10.000 wones"
+  xMax={12}
+  yMax={22}
+  curves={[
+    { label: "MB_A", points: [[0, 12], [12, 0]], tone: "blue", labelAt: 0 },
+    { label: "MB_B", points: [[0, 8], [8, 0]], tone: "green", labelAt: 0 },
+    { label: "ΣMB", points: [[0, 20], [8, 4], [12, 0]], tone: "violet", labelAt: 0 },
+    { label: "MC", points: [[0, 10], [12, 10]], tone: "red" },
+  ]}
+  marks={[
+    { x: 5, y: 10, label: "Eficiente", guide: true, xTick: "5", yTick: "10" },
+    { x: 2, y: 10, label: "Oferta privada", guide: true, xTick: "2" },
+  ]}
+  caption="ΣMB apila las dos curvas a una misma Q. Tiene un quiebre en Q=8, donde el beneficio marginal de B llega a 0."
+/>
+
+El Estado no puede aplicar directamente la condición de Samuelson porque no conoce los $MB_i$. Si pregunta, quienes quieren ir de polizón declaran beneficios bajos, y quienes creen que no afectará a sus impuestos los exageran. El **equilibrio de Lindahl**, que reparte la carga en proporción al beneficio marginal de cada uno, es eficiente, pero choca con el mismo problema de información. En la práctica, la cantidad de bienes públicos se fija mediante el voto y el proceso presupuestario (capítulos 3 y 9).
+
+## 3. Las externalidades son costes ausentes de los precios
+
+Cuando la producción o el consumo imponen costes (externalidades negativas) o aportan beneficios (externalidades positivas) a personas ajenas a la transacción, los precios de mercado no recogen todos los costes sociales.
+
+Supongamos que una fábrica tiene un coste marginal privado $MPC=20+Q$, que el coste externo marginal de su contaminación es $MEC=10$ por unidad y que la demanda es $P=100-Q$.
+
+- Equilibrio de mercado: $100-Q=20+Q$ → $Q_m=40$, $P=60$
+- Óptimo social: $100-Q=30+Q$ → $Q^*=35$, $P=65$
+
+El mercado produce las unidades de 35 a 40, en las que el coste social (70) supera al beneficio (60). La pérdida neta en ese tramo es la pérdida irrecuperable de eficiencia.
+
+<FormulaBox
+  label="Pérdida irrecuperable por una externalidad"
+  formula="DWL = \tfrac{1}{2}\times MEC \times (Q_m - Q^*) = \tfrac{1}{2}\times 10 \times 5 = 25"
+  description="Es el triángulo entre MSC y la curva de demanda, de Q* a Q_m."
+/>
+
+<EconDiagram
+  title="Externalidad negativa e impuesto pigouviano"
+  xLabel="Q"
+  yLabel="P"
+  xMax={60}
+  yMax={100}
+  curves={[
+    { label: "D", points: [[0, 100], [60, 40]], tone: "blue" },
+    { label: "MPC", points: [[0, 20], [60, 80]], tone: "green" },
+    { label: "MSC", points: [[0, 30], [60, 90]], tone: "red", dashed: true },
+  ]}
+  areas={[{ points: [[35, 65], [40, 70], [40, 60]], tone: "amber" }]}
+  marks={[
+    { x: 40, y: 60, label: "Mercado", guide: true, xTick: "40", yTick: "60" },
+    { x: 35, y: 65, label: "Óptimo", guide: true, xTick: "35", yTick: "65" },
+  ]}
+  caption="El triángulo sombreado es la pérdida irrecuperable de 25. Un impuesto de 10 por unidad eleva MPC hasta MSC y da Q=35."
+/>
+
+El **impuesto pigouviano** es igual al coste externo marginal en la cantidad óptima; aquí, 10 por unidad. Con el impuesto, la empresa siente el coste externo como propio y elige por sí misma 35 unidades. Su ventaja frente a la regulación de cantidades es que el Estado no necesita conocer el coste de reducción de cada empresa. A la inversa, si se estima mal el coste externo marginal, el tipo del impuesto también será erróneo. Cuando los costes externos son inciertos y el daño se dispara a partir de un umbral, puede ser más seguro fijar un límite total y permitir el comercio de derechos de emisión.
+
+**El teorema de Coase**: si los derechos de propiedad están claros y no hay costes de transacción, la negociación entre las partes alcanza la cantidad eficiente, sea quien sea el titular de los derechos. La asignación de derechos solo cambia quién paga a quién (la distribución). En el ejemplo, si los vecinos tienen derecho al aire limpio, a la fábrica le conviene compensarlos y producir hasta 35 unidades; si el derecho lo tiene la fábrica, a los vecinos les conviene pagarle para que baje de 40 a 35. Con miles de afectados, los costes de negociación y el polizón hacen que la conclusión no se cumpla. El teorema de Coase no dice que el Estado sobre, sino que los costes de transacción determinan si hace falta su intervención.
+
+## 4. Monopolio natural e información asimétrica
+
+Cuando el coste medio decrece en todo el tramo de la demanda del mercado, lo más barato es que abastezca una sola empresa, como ocurre con las redes eléctricas y el abastecimiento de agua. El precio de monopolio lleva a producir poco, y regular el precio al nivel del coste marginal lo sitúa por debajo del coste medio y genera pérdidas. Por eso se elige entre regulación al coste medio, tarifas en dos partes (cuota fija más consumo) y empresa pública.
+
+La información asimétrica se ve con más claridad en los mercados de seguros. Si las aseguradoras no distinguen los riesgos, una prima media expulsa a los de bajo riesgo (selección adversa), y una vez asegurados, la gente tiene menos incentivos para tener cuidado (riesgo moral). Por eso surgen los seguros sociales obligatorios, un tema que se retoma en el capítulo 8.
+
+## 5. El Estado también falla
+
+Un fallo del mercado es condición necesaria para intervenir, no suficiente. La intervención pública puede fracasar por las razones siguientes.
+
+<LectureTable
+  title="Fuentes de los fallos del Estado"
+  headers={["Fuente", "Contenido", "Ejemplo"]}
+  rows={[
+    ["Falta de información", "No se conocen MB, MEC ni las curvas de coste", "Tipo pigouviano sobrestimado o subestimado"],
+    ["Problemas de incentivos", "Los objetivos de políticos y funcionarios difieren del bienestar social", "Maximización del presupuesto, gasto al ritmo del ciclo electoral"],
+    ["Búsqueda de rentas", "Se gastan recursos para capturar las ganancias que crea la regulación", "Presión para obtener licencias y subvenciones"],
+    ["Costes de aplicación", "Costes de recaudación, control y administración", "Sistemas complejos de deducciones"],
+  ]}
+/>
+
+<Callout type="warning">
+«El mercado ha fallado, así que debe actuar el Estado» y «el Estado falla, así que hay que dejarlo al mercado» cuentan ambos los costes de un solo lado. Lo que hay que comparar son dos instituciones imperfectas tal como funcionan en realidad. En el ejemplo de la externalidad, el criterio para intervenir es si la ganancia de 25 del impuesto pigouviano supera los costes de recaudación y control más las pérdidas por errores de estimación.
+</Callout>
+
+## Ejercicio
+
+Tres vecinos obtienen de un parque beneficios marginales de $30-Q$, $20-Q$ y $10-Q$ (en decenas de miles de wones, cero si salen negativos), y el coste marginal es de 300.000 wones. ¿Cuál es la cantidad eficiente? Para $Q\le 10$, $\sum MB=60-3Q=30$, así que $Q^*=10$. En ese punto el beneficio marginal del tercer vecino es 0: está justo en el límite. El primer vecino por sí solo no construiría nada, pues $30-Q=30$ da cero unidades.
+
+## Referencias
+
+- Jonathan Gruber, *Public Finance and Public Policy*, ch. 5–7
+- Harvey Rosen and Ted Gayer, *Public Finance*, ch. 3–5
+- Paul Samuelson, "The Pure Theory of Public Expenditure," *Review of Economics and Statistics* (1954)
+- Ronald Coase, "The Problem of Social Cost," *Journal of Law and Economics* (1960)

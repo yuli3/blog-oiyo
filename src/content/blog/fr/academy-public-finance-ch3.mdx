@@ -1,0 +1,111 @@
+---
+track: academy
+locale: fr
+title: "Finances publiques — Dépense publique : redistribution, prestations en nature et choix public"
+category: "Economics"
+series: public-finance
+chapter: 3
+chapterTitleShort: "Dépense et choix public"
+author: OIYO Éditorial
+tags:
+  - finances publiques
+  - dépense publique
+  - redistribution
+  - électeur médian
+  - choix public
+description: "Présente la différence entre transferts monétaires et en nature, le taux marginal de 100 % créé par les allocations différentielles, la conception par tranches du crédit d'impôt sur les revenus d'activité, le théorème de l'électeur médian et la recherche de rente : comment se décide la dépense publique et ce qu'elle change."
+pubDate: '2026-05-05'
+updatedDate: '2026-09-24'
+layoutVariant: lecture-series
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Finances publiques — la dépense, comme l'impôt, modifie les comportements
+
+Les biens publics et les externalités du chapitre 1 fondaient la dépense publique sur l'efficacité. Dans les budgets réels, la plus grande part va aux dépenses de redistribution, comme la protection sociale. Ce chapitre examine comment la conception de ces dépenses modifie les choix des bénéficiaires, et comment leur montant se décide dans le processus politique.
+
+## 1. En espèces ou en nature ?
+
+À montant égal, l'utilité qu'un bénéficiaire tire d'une somme en espèces est au moins égale à celle d'une prestation en nature : l'argent peut être dépensé librement, la prestation en nature doit servir à ce bien précis.
+
+Supposons qu'un ménage au revenu mensuel de 1 million de wons consacre 200 000 wons à l'alimentation. Si l'État lui remet un bon alimentaire de 300 000 wons, sa droite de budget se déplace parallèlement vers la droite jusqu'à 300 000 wons d'alimentation, et au-delà elle équivaut à 300 000 wons en espèces. Pour un ménage qui, avec 300 000 wons en espèces, dépenserait au moins autant en alimentation, bon et espèces reviennent au même. Pour un ménage qui, avec de l'argent, ne dépenserait que 250 000 wons en alimentation et le reste en loyer, le bon l'oblige à consommer 50 000 wons d'alimentation de plus qu'il ne le souhaite, et son utilité est inférieure à celle qu'il aurait eue avec de l'argent.
+
+Les prestations en nature restent pourtant courantes, pour trois raisons.
+
+- **Préférences paternalistes** : les contribuables paient volontiers pour « l'argent de la cantine des enfants », moins pour des sommes à usage libre.
+- **Auto-sélection** : les prestations en nature de moindre qualité ou soumises à une file d'attente, comme le logement social ou les repas gratuits, ne sont demandées que par ceux qui en ont réellement besoin. Elles deviennent un outil de ciblage quand les revenus sont difficiles à vérifier.
+- **Effets de prix** : les achats groupés réduisent les coûts unitaires. À l'inverse, distribuer des bons sur un marché à offre inélastique (logement locatif) fait monter les prix, et l'avantage fuit vers les offreurs.
+
+## 2. Une allocation différentielle taxe les revenus d'activité à 100 %
+
+Une **allocation différentielle** fixe un revenu minimum et comble l'écart entre celui-ci et le revenu. Si le minimum est de 1 million de wons par mois, un ménage sans revenu d'activité perçoit 1 million, et un ménage qui gagne 400 000 wons en perçoit 600 000. Tous deux finissent avec le même revenu de 1 million.
+
+Chaque won gagné réduit l'allocation d'un won : sous le seuil, le **taux marginal effectif est de 100 %**. Travailler n'augmente pas le revenu, et l'incitation au travail près du seuil disparaît. On peut abaisser ce taux en ne retirant qu'une partie de l'allocation à mesure que le revenu augmente, mais la plage de revenus éligibles s'élargit alors et le coût augmente.
+
+<FormulaBox
+  label="Structure d'une prestation linéaire"
+  formula="B = G - \tau \cdot E,\quad B \ge 0"
+  description="G est la prestation à revenu nul, τ le taux de dégressivité (taux marginal effectif) et E le revenu d'activité. La prestation s'éteint au revenu G/τ. Avec G = 100 et τ = 0,5 (en dizaines de milliers de wons), elle subsiste jusqu'à 2 millions de wons."
+/>
+
+Du niveau garanti $G$, du taux de dégressivité $\tau$ et du coût budgétaire, on ne peut choisir que deux. Relever la garantie et abaisser le taux élargit la plage d'éligibilité $G/\tau$, et le coût s'envole.
+
+Le **crédit d'impôt sur les revenus d'activité (EITC)** part de la direction opposée. Il comporte une phase croissante où l'aide augmente avec les revenus, un plateau constant et une phase dégressive. Dans la phase croissante, plus on travaille, plus on reçoit, ce qui accroît la participation au marché du travail. Dans la phase dégressive, le taux marginal effectif augmente du taux de dégressivité, ce qui peut réduire les heures de ceux qui travaillent déjà. Les études empiriques trouvent en général un effet fort sur la participation et un effet faible sur les heures.
+
+<EconDiagram
+  title="Les trois phases d'un crédit sur les revenus d'activité"
+  xLabel="Revenu d'activité"
+  yLabel="Crédit"
+  xMax={100}
+  yMax={40}
+  curves={[
+    { label: "", points: [[0, 0], [30, 30], [55, 30], [95, 0]], tone: "green" },
+  ]}
+  marks={[
+    { x: 30, y: 30, label: "Fin de la phase croissante", guide: true },
+    { x: 55, y: 30, label: "Début de la dégressivité", guide: true },
+  ]}
+  caption="La pente de la phase croissante est un taux marginal négatif (subvention) ; celle de la phase dégressive, un taux marginal positif. Seuils et pentes varient selon les dispositifs."
+/>
+
+## 3. Le montant des dépenses se décide par le vote
+
+La condition de Samuelson du chapitre 1 indique la quantité efficace de bien public, mais l'État ne connaît pas les bénéfices marginaux individuels. Les quantités réelles se décident par le vote et la négociation budgétaire. La discipline qui analyse ce processus avec les outils de l'économie est la **théorie du choix public**.
+
+**Le théorème de l'électeur médian** : si le choix porte sur une seule dimension (par exemple le budget d'une bibliothèque) et que les préférences de tous les électeurs sont unimodales (moins on aime un niveau, plus il s'éloigne de son niveau préféré), le vote majoritaire retient le niveau préféré de l'électeur médian.
+
+Supposons que trois habitants souhaitent pour la bibliothèque des budgets de 1, 3 et 8 milliards de wons. Face à 1 milliard, 3 milliards recueille les voix de ceux qui préfèrent 3 et 8 milliards ; face à 8 milliards, celles de ceux qui préfèrent 1 et 3 milliards. Le résultat est 3 milliards de wons. La moyenne des préférences est de 4 milliards, mais le vote majoritaire choisit la médiane, non la moyenne. L'intensité des préférences n'étant pas prise en compte, rien ne garantit que le niveau médian coïncide avec le niveau efficace de la condition de Samuelson.
+
+Si les préférences ne sont pas unimodales, le vote majoritaire peut tourner en rond (**paradoxe de Condorcet**) : A bat B, B bat C et C bat A. Le résultat dépend alors de l'ordre dans lequel les propositions sont mises aux voix, c'est-à-dire de celui qui contrôle l'ordre du jour.
+
+## 4. Les incitations au sein de l'État
+
+<LectureTable
+  title="Les défaillances de l'État selon le choix public"
+  headers={["Acteur", "Objectif supposé", "Conséquence"]}
+  rows={[
+    ["Élus", "Réélection", "Préfèrent les dépenses aux bénéfices visibles et aux coûts dispersés"],
+    ["Bureaucrates (Niskanen)", "Maximiser le budget de leur service", "Obtiennent grâce à leur avantage informationnel des budgets supérieurs au niveau efficace"],
+    ["Groupes d'intérêt", "Réglementations et subventions ciblées", "Les gros gains de quelques-uns l'emportent sur les petites pertes du grand nombre"],
+  ]}
+/>
+
+La **recherche de rente** consiste à dépenser des ressources pour capter les surprofits créés par une réglementation ou une subvention. Si une licence d'importation rapporte 1 milliard de wons de surprofit par an, les entreprises sont incitées à dépenser près de 1 milliard en lobbying, frais juridiques et publicité pour l'obtenir. Ces dépenses ne produisent rien : le coût social de la réglementation est donc le triangle de perte sèche du monopole augmenté d'une bonne partie du rectangle de surprofit (Tullock).
+
+<Callout type="warning">
+La théorie du choix public n'est pas la conclusion que « l'État est toujours inefficace », mais une méthode : « le processus politique peut lui aussi s'analyser par les incitations ». Le théorème de l'électeur médian et les modèles de maximisation du budget reposent sur des hypothèses fortes. La vraie question est de savoir dans quelle mesure la conception des institutions (plafonds budgétaires globaux, évaluation des résultats, appels d'offres ouverts) modifie ces incitations.
+</Callout>
+
+## Exercice
+
+Avec une prestation linéaire de niveau garanti $G=1{,}2$ million de wons et un taux de dégressivité $\tau=0{,}4$, quels sont la prestation et le revenu final d'un ménage gagnant 1,5 million de wons ? $B=1{,}2-0{,}4\times 1{,}5=0{,}6$ million, soit un revenu final de 2,1 millions de wons. La prestation s'éteint à $1{,}2/0{,}4=3$ millions de wons. Porter le taux à 0,6 ramène le point d'extinction à 2 millions et réduit le coût, mais les ménages de cette plage subissent alors un taux marginal effectif de 60 %.
+
+## Références
+
+- Jonathan Gruber, *Public Finance and Public Policy*, ch. 9, 17
+- Harvey Rosen and Ted Gayer, *Public Finance*, ch. 6, 13
+- William Niskanen, *Bureaucracy and Representative Government* (1971)
+- Gordon Tullock, "The Welfare Costs of Tariffs, Monopolies, and Theft," *Western Economic Journal* (1967)

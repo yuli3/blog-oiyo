@@ -1,0 +1,160 @@
+---
+track: academy
+locale: fr
+title: "Finances publiques — Défaillances du marché et rôle de l'État"
+category: "Economics"
+series: public-finance
+chapter: 1
+chapterTitleShort: "Défaillances du marché et État"
+author: OIYO Éditorial
+tags:
+  - finances publiques
+  - défaillances du marché
+  - biens publics
+  - externalités
+  - défaillances de l'État
+description: "Partant des deux théorèmes de l'économie du bien-être, ce chapitre présente avec des exemples chiffrés la condition de Samuelson pour les biens publics, la taxe pigouvienne et le théorème de Coase pour les externalités, et les défaillances de l'État : quand l'intervention publique est justifiée et quand elle échoue."
+pubDate: '2026-05-05'
+updatedDate: '2026-09-24'
+layoutVariant: lecture-series
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Finances publiques — là où le marché échoue et là où l'État échoue
+
+Les finances publiques se demandent ce que l'État doit faire, et auprès de qui et comment il doit lever les ressources nécessaires. Les deux questions partent du même critère : le marché atteint-il seul une allocation efficace, et sinon, une intervention publique améliore-t-elle la situation ?
+
+## 1. Les deux théorèmes du bien-être servent de référence
+
+**Premier théorème** : l'équilibre d'un marché de concurrence parfaite est Pareto-efficace ; on ne peut améliorer la situation de personne sans détériorer celle d'un autre. Les hypothèses sont des agents preneurs de prix, des marchés complets, l'absence d'externalités et une information parfaite.
+
+**Second théorème** : si les préférences et les technologies sont convexes, toute allocation Pareto-efficace souhaitée peut être atteinte en redistribuant les dotations initiales puis en laissant faire le marché. Efficacité et équité peuvent donc être traitées séparément.
+
+Les deux théorèmes séparent les justifications de l'intervention publique en deux. Là où les hypothèses du premier théorème tombent (défaillances du marché), la justification est l'**efficacité** ; là où le résultat est efficace mais la répartition inacceptable, c'est l'**équité**. Mais la « redistribution forfaitaire » requise par le second théorème n'existe presque pas en pratique. La redistribution réelle passe par des impôts qui modifient les comportements, comme l'impôt sur le revenu, et entraîne donc des coûts d'efficacité. C'est le sujet des chapitres 2 et 4.
+
+<LectureTable
+  title="Les hypothèses du premier théorème et leurs échecs"
+  headers={["Hypothèse", "Quand elle tombe", "Où les finances publiques la traitent"]}
+  rows={[
+    ["Il existe un marché pour chaque bien", "Biens publics, externalités", "Ce chapitre"],
+    ["Agents preneurs de prix", "Monopole naturel", "Section 4 de ce chapitre"],
+    ["Information parfaite", "Sélection adverse, aléa moral", "Chapitres 3 et 8"],
+    ["La redistribution forfaitaire est possible", "Les impôts réels modifient les comportements", "Chapitres 2 et 4"],
+  ]}
+/>
+
+## 2. Pour les biens publics, on additionne verticalement les bénéfices marginaux
+
+Les biens publics sont **non rivaux** (la consommation de l'un ne réduit pas celle des autres) et **non excluables** (il est difficile d'exclure ceux qui ne paient pas). La défense nationale, la recherche fondamentale et la protection contre les crues en sont des exemples types. Les biens non rivaux mais excluables (télévision payante, autoroute à péage peu fréquentée) sont des biens de club ; les biens rivaux mais difficilement excluables (pêcheries, nappes phréatiques) sont des ressources communes.
+
+Pour les biens privés, on additionne les quantités à prix donné : les courbes de demande s'additionnent **horizontalement**. Tout le monde consommant la même quantité d'un bien public, on additionne **verticalement** les bénéfices marginaux individuels à quantité donnée.
+
+<FormulaBox
+  label="Condition de Samuelson"
+  formula="\sum_{i=1}^{n} MB_i(G) = MC(G)"
+  description="La quantité efficace d'un bien public G est celle où la somme des bénéfices marginaux de tous égale le coût marginal. Cela diffère de la condition des biens privés MB_i = MC."
+/>
+
+Supposons que deux habitants, A et B, tirent de $Q$ lampadaires des bénéfices marginaux $MB_A=12-Q$ et $MB_B=8-Q$ (en dizaines de milliers de wons), et que chaque lampadaire coûte 100 000 wons à la marge. Pour $Q\le 8$, $\sum MB = 20-2Q$ : la quantité efficace vérifie $20-2Q=10$, soit $Q^*=5$.
+
+Que se passe-t-il si chacun installe des lampadaires de son côté ? A en installe tant que son bénéfice marginal dépasse 100 000 wons : $12-Q=10$ donne 2 lampadaires. Pour B, même le premier lampadaire ne rapporte que 80 000 wons : il n'en installe aucun et profite gratuitement de ceux de A. L'offre privée de 2 est inférieure à la quantité efficace de 5. Cet écart est le **passager clandestin**.
+
+<EconDiagram
+  title="Biens publics : somme verticale des bénéfices marginaux"
+  xLabel="Q"
+  yLabel="10 000 wons"
+  xMax={12}
+  yMax={22}
+  curves={[
+    { label: "MB_A", points: [[0, 12], [12, 0]], tone: "blue", labelAt: 0 },
+    { label: "MB_B", points: [[0, 8], [8, 0]], tone: "green", labelAt: 0 },
+    { label: "ΣMB", points: [[0, 20], [8, 4], [12, 0]], tone: "violet", labelAt: 0 },
+    { label: "MC", points: [[0, 10], [12, 10]], tone: "red" },
+  ]}
+  marks={[
+    { x: 5, y: 10, label: "Efficace", guide: true, xTick: "5", yTick: "10" },
+    { x: 2, y: 10, label: "Offre privée", guide: true, xTick: "2" },
+  ]}
+  caption="ΣMB empile les deux courbes à Q donné. Elle présente un coude en Q=8, où le bénéfice marginal de B devient nul."
+/>
+
+L'État ne peut pas appliquer directement la condition de Samuelson, car il ne connaît pas les $MB_i$. Interrogés, ceux qui veulent profiter gratuitement sous-déclarent leurs bénéfices, et ceux qui croient que cela n'a rien à voir avec leurs impôts les surestiment. L'**équilibre de Lindahl**, qui répartit la charge en proportion du bénéfice marginal de chacun, est efficace mais bute sur le même problème d'information. En pratique, la quantité de biens publics est fixée par le vote et la procédure budgétaire (chapitres 3 et 9).
+
+## 3. Les externalités sont des coûts absents des prix
+
+Quand la production ou la consommation impose des coûts (externalités négatives) ou procure des bénéfices (externalités positives) à des personnes extérieures à la transaction, les prix de marché ne reflètent pas l'intégralité des coûts sociaux.
+
+Supposons qu'une usine ait un coût marginal privé $MPC=20+Q$, que le coût externe marginal de sa pollution soit $MEC=10$ par unité et que la demande soit $P=100-Q$.
+
+- Équilibre de marché : $100-Q=20+Q$ → $Q_m=40$, $P=60$
+- Optimum social : $100-Q=30+Q$ → $Q^*=35$, $P=65$
+
+Le marché produit les unités de 35 à 40, pour lesquelles le coût social (70) dépasse le bénéfice (60). La perte nette sur ces unités est la perte sèche.
+
+<FormulaBox
+  label="Perte sèche due à une externalité"
+  formula="DWL = \tfrac{1}{2}\times MEC \times (Q_m - Q^*) = \tfrac{1}{2}\times 10 \times 5 = 25"
+  description="C'est le triangle compris entre MSC et la courbe de demande, de Q* à Q_m."
+/>
+
+<EconDiagram
+  title="Externalité négative et taxe pigouvienne"
+  xLabel="Q"
+  yLabel="P"
+  xMax={60}
+  yMax={100}
+  curves={[
+    { label: "D", points: [[0, 100], [60, 40]], tone: "blue" },
+    { label: "MPC", points: [[0, 20], [60, 80]], tone: "green" },
+    { label: "MSC", points: [[0, 30], [60, 90]], tone: "red", dashed: true },
+  ]}
+  areas={[{ points: [[35, 65], [40, 70], [40, 60]], tone: "amber" }]}
+  marks={[
+    { x: 40, y: 60, label: "Marché", guide: true, xTick: "40", yTick: "60" },
+    { x: 35, y: 65, label: "Optimum", guide: true, xTick: "35", yTick: "65" },
+  ]}
+  caption="Le triangle ombré est la perte sèche de 25. Une taxe de 10 par unité relève MPC jusqu'à MSC et donne Q=35."
+/>
+
+La **taxe pigouvienne** est égale au coût externe marginal à la quantité optimale, soit ici 10 par unité. Avec la taxe, l'entreprise ressent le coût externe comme le sien et choisit d'elle-même 35 unités. Son avantage sur la réglementation des quantités est que l'État n'a pas besoin de connaître le coût de dépollution de chaque entreprise. À l'inverse, si le coût externe marginal est mal estimé, le taux de la taxe l'est aussi. Lorsque les coûts externes sont incertains et que les dommages explosent au-delà d'un seuil, fixer un plafond global et laisser les entreprises échanger des permis peut être plus sûr.
+
+**Le théorème de Coase** : si les droits de propriété sont clairement définis et les coûts de transaction nuls, la négociation entre les parties aboutit à la quantité efficace quel que soit le détenteur des droits. L'attribution des droits ne change que qui paie qui (la répartition). Dans l'exemple, si les habitants ont droit à un air pur, l'usine a intérêt à les indemniser et à produire jusqu'à 35 unités ; si c'est l'usine qui détient le droit, les habitants ont intérêt à la payer pour qu'elle passe de 40 à 35. Avec des milliers de victimes, les coûts de négociation et le passager clandestin invalident cette conclusion. Le théorème de Coase ne dit pas que l'État est inutile, mais que les coûts de transaction déterminent si son intervention est nécessaire.
+
+## 4. Monopole naturel et asymétrie d'information
+
+Quand le coût moyen baisse sur toute l'étendue de la demande du marché, une seule entreprise produit au moindre coût : c'est le cas des réseaux électriques et de la distribution d'eau. Le prix de monopole entraîne une sous-production, tandis qu'une tarification imposée au coût marginal, inférieure au coût moyen, crée des pertes. On choisit donc entre tarification au coût moyen, tarif binôme (abonnement plus consommation) et entreprise publique.
+
+L'asymétrie d'information est la plus nette sur les marchés de l'assurance. Si les assureurs ne distinguent pas les risques, une prime moyenne chasse les assurés à faible risque (sélection adverse), et une fois assurés, les gens sont moins incités à la prudence (aléa moral). C'est pourquoi apparaissent les assurances sociales obligatoires, sujet repris au chapitre 8.
+
+## 5. L'État aussi échoue
+
+Une défaillance du marché est une condition nécessaire de l'intervention, non une condition suffisante. L'intervention publique peut échouer pour les raisons suivantes.
+
+<LectureTable
+  title="Sources des défaillances de l'État"
+  headers={["Source", "Contenu", "Exemple"]}
+  rows={[
+    ["Manque d'information", "MB, MEC et courbes de coût inconnus", "Taux de taxe pigouvienne sur- ou sous-estimé"],
+    ["Problèmes d'incitation", "Les objectifs des élus et fonctionnaires diffèrent du bien-être social", "Maximisation des budgets, dépenses calées sur le calendrier électoral"],
+    ["Recherche de rente", "Des ressources sont dépensées pour capter les gains créés par la réglementation", "Lobbying pour les autorisations et subventions"],
+    ["Coûts de mise en œuvre", "Coûts de collecte, de contrôle et d'administration", "Dispositifs complexes d'exonérations"],
+  ]}
+/>
+
+<Callout type="warning">
+« Le marché a échoué, donc l'État doit agir » et « l'État échoue, donc laissons faire le marché » ne comptent l'un comme l'autre que les coûts d'un seul côté. Il faut comparer deux institutions imparfaites telles qu'elles fonctionnent réellement. Dans l'exemple de l'externalité, le critère d'intervention est de savoir si le gain de 25 de la taxe pigouvienne dépasse les coûts de collecte et de contrôle ainsi que les pertes dues aux erreurs d'estimation.
+</Callout>
+
+## Exercice
+
+Trois habitants tirent d'un parc des bénéfices marginaux de $30-Q$, $20-Q$ et $10-Q$ (en dizaines de milliers de wons, nuls s'ils deviennent négatifs), et le coût marginal est de 300 000 wons. Quelle est la quantité efficace ? Pour $Q\le 10$, $\sum MB=60-3Q=30$, donc $Q^*=10$. Le bénéfice marginal du troisième habitant y est nul : il se trouve à la limite. Le premier habitant seul ne construirait rien, puisque $30-Q=30$ donne zéro unité.
+
+## Références
+
+- Jonathan Gruber, *Public Finance and Public Policy*, ch. 5–7
+- Harvey Rosen and Ted Gayer, *Public Finance*, ch. 3–5
+- Paul Samuelson, "The Pure Theory of Public Expenditure," *Review of Economics and Statistics* (1954)
+- Ronald Coase, "The Problem of Social Cost," *Journal of Law and Economics* (1960)

@@ -1,0 +1,160 @@
+---
+track: academy
+locale: en
+title: "Public Finance — Market Failure and the Role of Government"
+category: "Economics"
+series: public-finance
+chapter: 1
+chapterTitleShort: 'Market Failure and Government'
+author: OIYO Editorial
+tags:
+  - public finance
+  - market failure
+  - public goods
+  - externalities
+  - government failure
+description: "Starting from the two welfare theorems, this chapter uses numerical examples to cover the Samuelson condition for public goods, Pigouvian taxes and the Coase theorem for externalities, and government failure — when government intervention is justified and when it fails."
+pubDate: '2026-05-05'
+updatedDate: '2026-09-24'
+layoutVariant: lecture-series
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Public Finance — Where Markets Fail and Where Governments Fail
+
+Public finance asks what government should do, and from whom and how it should raise the money to pay for it. Both questions start from the same benchmark: does the market reach an efficient allocation on its own, and if not, does government intervention make things better?
+
+## 1. The two welfare theorems are the benchmark
+
+**First theorem**: the equilibrium of a perfectly competitive market is Pareto efficient — no one can be made better off without making someone else worse off. The assumptions are price-taking, complete markets, no externalities and perfect information.
+
+**Second theorem**: if preferences and technology are convex, any desired Pareto-efficient allocation can be reached by redistributing initial endowments and then leaving the rest to the market. Efficiency and equity can be handled separately.
+
+The two theorems split the grounds for government intervention in two. Where the assumptions of the first theorem fail (market failure), the ground is **efficiency**; where the outcome is efficient but the distribution is unacceptable, the ground is **equity**. The "lump-sum redistribution" required by the second theorem, however, hardly exists in practice. Real redistribution uses taxes that change behaviour, such as the income tax, and so carries efficiency costs. That is the subject of Chapters 2 and 4.
+
+<LectureTable
+  title="The assumptions of the first theorem and when they fail"
+  headers={["Assumption", "When it fails", "Where public finance deals with it"]}
+  rows={[
+    ["There is a market for every good", "Public goods, externalities", "This chapter"],
+    ["Price-taking", "Natural monopoly", "Section 4 of this chapter"],
+    ["Perfect information", "Adverse selection, moral hazard", "Chapters 3 and 8"],
+    ["Lump-sum redistribution is possible", "Real taxes change behaviour", "Chapters 2 and 4"],
+  ]}
+/>
+
+## 2. For public goods, add marginal benefits vertically
+
+Public goods are **non-rival** (one person's consumption does not reduce another's) and **non-excludable** (it is hard to keep out those who do not pay). National defence, basic research and flood protection are typical examples. Goods that are non-rival but excludable (pay television, an uncongested toll road) are club goods; goods that are rival but hard to exclude (fisheries, groundwater) are common resources.
+
+For private goods, quantities are added at the same price, so demand curves are summed **horizontally**. Everyone consumes the same quantity of a public good, so individual marginal benefits are added **vertically** at the same quantity.
+
+<FormulaBox
+  label="The Samuelson condition"
+  formula="\sum_{i=1}^{n} MB_i(G) = MC(G)"
+  description="The efficient quantity of a public good G is where the sum of everyone's marginal benefits equals marginal cost. This differs from the private-good condition MB_i = MC."
+/>
+
+Suppose two residents, A and B, get marginal benefits of $MB_A=12-Q$ and $MB_B=8-Q$ (in units of 10,000 won) from $Q$ streetlights, and each streetlight has a marginal cost of 100,000 won. For $Q\le 8$, $\sum MB = 20-2Q$, so the efficient quantity solves $20-2Q=10$: $Q^*=5$.
+
+What happens if each installs lights privately? A installs lights as long as A's own marginal benefit exceeds 100,000 won, so $12-Q=10$ gives 2 lights. B's marginal benefit is only 80,000 won even for the first light, so B installs none and uses A's lights for free. Private provision of 2 falls short of the efficient 5. The gap is **free riding**.
+
+<EconDiagram
+  title="Public goods: vertical summation of marginal benefits"
+  xLabel="Q"
+  yLabel="10,000 won"
+  xMax={12}
+  yMax={22}
+  curves={[
+    { label: "MB_A", points: [[0, 12], [12, 0]], tone: "blue", labelAt: 0 },
+    { label: "MB_B", points: [[0, 8], [8, 0]], tone: "green", labelAt: 0 },
+    { label: "ΣMB", points: [[0, 20], [8, 4], [12, 0]], tone: "violet", labelAt: 0 },
+    { label: "MC", points: [[0, 10], [12, 10]], tone: "red" },
+  ]}
+  marks={[
+    { x: 5, y: 10, label: "Efficient", guide: true, xTick: "5", yTick: "10" },
+    { x: 2, y: 10, label: "Private", guide: true, xTick: "2" },
+  ]}
+  caption="ΣMB stacks the two curves at the same Q. It kinks at Q=8, where B's marginal benefit reaches 0."
+/>
+
+Government cannot use the Samuelson condition directly because it does not know each $MB_i$. Asked, would-be free riders understate their benefits, and those who believe it has nothing to do with their taxes overstate them. The **Lindahl equilibrium**, which shares costs in proportion to each person's marginal benefit, is efficient but faces the same information problem. In practice, the quantity of public goods is set through voting and the budget process (Chapters 3 and 9).
+
+## 3. Externalities are costs missing from prices
+
+When production or consumption imposes costs (negative externalities) or benefits (positive externalities) on people who are not party to the transaction, market prices do not reflect full social costs.
+
+Suppose a factory's marginal private cost is $MPC=20+Q$, the marginal external cost of pollution is $MEC=10$ per unit, and demand is $P=100-Q$.
+
+- Market equilibrium: $100-Q=20+Q$ → $Q_m=40$, $P=60$
+- Social optimum: $100-Q=30+Q$ → $Q^*=35$, $P=65$
+
+The market produces the units from 35 to 40, where social cost (70) exceeds benefit (60). The net loss on those units is the deadweight loss.
+
+<FormulaBox
+  label="Deadweight loss from an externality"
+  formula="DWL = \tfrac{1}{2}\times MEC \times (Q_m - Q^*) = \tfrac{1}{2}\times 10 \times 5 = 25"
+  description="The triangle between MSC and the demand curve from Q* to Q_m."
+/>
+
+<EconDiagram
+  title="Negative externality and a Pigouvian tax"
+  xLabel="Q"
+  yLabel="P"
+  xMax={60}
+  yMax={100}
+  curves={[
+    { label: "D", points: [[0, 100], [60, 40]], tone: "blue" },
+    { label: "MPC", points: [[0, 20], [60, 80]], tone: "green" },
+    { label: "MSC", points: [[0, 30], [60, 90]], tone: "red", dashed: true },
+  ]}
+  areas={[{ points: [[35, 65], [40, 70], [40, 60]], tone: "amber" }]}
+  marks={[
+    { x: 40, y: 60, label: "Market", guide: true, xTick: "40", yTick: "60" },
+    { x: 35, y: 65, label: "Optimum", guide: true, xTick: "35", yTick: "65" },
+  ]}
+  caption="The shaded triangle is the deadweight loss of 25. A tax of 10 per unit raises MPC to MSC and gives Q=35."
+/>
+
+A **Pigouvian tax** equals the marginal external cost at the optimal quantity — here, 10 per unit. With the tax, the firm feels the external cost as its own and chooses 35 units by itself. Its advantage over quantity regulation is that the government need not know each firm's abatement costs. Conversely, if the marginal external cost is misestimated, the tax rate is wrong too. Where external costs are uncertain and damage surges past a threshold, setting a total cap and letting firms trade permits can be safer.
+
+**The Coase theorem**: if property rights are clear and transaction costs are zero, bargaining between the parties reaches the efficient quantity no matter who holds the rights. The allocation of rights changes only who pays whom (distribution). In the example, if residents hold the right to clean air, the factory does better compensating them and producing up to 35 units; if the factory holds the right, residents do better paying it to cut from 40 to 35. With thousands of victims, bargaining costs and free riding make the conclusion fail. The Coase theorem does not say government is unnecessary; it says that transaction costs determine whether government intervention is needed.
+
+## 4. Natural monopoly and asymmetric information
+
+When average cost keeps falling over the whole range of market demand, supply by a single firm is cheapest — as with power grids and water supply. A monopoly price leads to underproduction, while regulating price at marginal cost puts it below average cost and causes losses. The choice is therefore between average-cost pricing regulation, two-part tariffs (fixed charge plus usage fee) and public enterprise.
+
+Asymmetric information is starkest in insurance markets. If insurers cannot tell risks apart, average premiums drive out low-risk people (adverse selection), and once insured, people have less incentive to take care (moral hazard). This is why compulsory social insurance arises, a topic revisited in Chapter 8.
+
+## 5. Governments fail too
+
+Market failure is a necessary condition for intervention, not a sufficient one. Government intervention can fail for the following reasons.
+
+<LectureTable
+  title="Sources of government failure"
+  headers={["Source", "Description", "Example"]}
+  rows={[
+    ["Lack of information", "MB, MEC and cost curves are unknown", "Over- or underestimating the Pigouvian tax rate"],
+    ["Incentive problems", "Politicians' and officials' goals differ from social welfare", "Budget maximization, spending timed to elections"],
+    ["Rent seeking", "Resources are spent to capture gains created by regulation", "Lobbying for licences and subsidies"],
+    ["Implementation costs", "Costs of tax collection, monitoring and administration", "Complex systems of tax reliefs"],
+  ]}
+/>
+
+<Callout type="warning">
+"The market has failed, so government must act" and "government fails, so leave it to the market" both count the costs of only one side. What must be compared are two imperfect institutions as they actually work. In the externality example, the test for intervention is whether the Pigouvian tax's gain of 25 exceeds the costs of collection and monitoring plus the losses from estimation errors.
+</Callout>
+
+## Check your understanding
+
+Three residents have marginal benefits from a park of $30-Q$, $20-Q$ and $10-Q$ (in units of 10,000 won, zero when negative), and the marginal cost is 300,000 won. What is the efficient quantity? For $Q\le 10$, $\sum MB=60-3Q=30$, so $Q^*=10$. At that point the third resident's marginal benefit is 0, right at the boundary. The first resident alone would build nothing, since $30-Q=30$ gives zero units.
+
+## References
+
+- Jonathan Gruber, *Public Finance and Public Policy*, ch. 5–7
+- Harvey Rosen and Ted Gayer, *Public Finance*, ch. 3–5
+- Paul Samuelson, "The Pure Theory of Public Expenditure," *Review of Economics and Statistics* (1954)
+- Ronald Coase, "The Problem of Social Cost," *Journal of Law and Economics* (1960)

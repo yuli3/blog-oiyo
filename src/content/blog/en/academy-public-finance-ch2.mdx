@@ -1,0 +1,136 @@
+---
+track: academy
+locale: en
+title: "Public Finance — Tax Incidence and Excess Burden"
+category: "Economics"
+series: public-finance
+chapter: 2
+chapterTitleShort: 'Incidence and Excess Burden'
+author: OIYO Editorial
+tags:
+  - public finance
+  - tax incidence
+  - excess burden
+  - elasticity
+  - Ramsey rule
+description: "Who pays a tax and who bears it are different things. This chapter uses numerical examples to split incidence by elasticity, measure excess burden with the Harberger triangle, and cover the Ramsey rule and the criteria for tax fairness."
+pubDate: '2026-05-05'
+updatedDate: '2026-09-24'
+layoutVariant: lecture-series
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Public Finance — Taxes Are Borne Not by Whoever the Law Names but by the Less Elastic Side
+
+Chapter 1 dealt with what government should do. From this chapter on we look at how to raise the money. There are two criteria for judging a good tax: does it distort the economy less for the same revenue (efficiency), and is the burden shared fairly (equity)? Both require first knowing "who actually bears the tax."
+
+## 1. Statutory and economic incidence
+
+The burden on whoever the tax law names as liable to pay is **statutory incidence**; the burden on whoever is actually made worse off once prices adjust is **economic incidence**. In a competitive market, economic incidence is the same whether the tax is levied on sellers or buyers. The tax simply drives a wedge $t$ between the price consumers pay, $P_d$, and the price producers receive, $P_s$; which side the wedge is placed on does not affect the equilibrium.
+
+Consider a market with demand $Q_d=120-2P$ and supply $Q_s=P-30$. Without a tax, $P=50$ and $Q=20$. With a tax of 6 won per unit, $P_d-P_s=6$, and $120-2P_d = P_d-6-30$ gives:
+
+- Consumer price $P_d=52$ (up 2 won)
+- Producer price $P_s=46$ (down 4 won)
+- Quantity $Q=16$
+
+Of the 6-won tax, consumers bear 2 won and producers 4 won — regardless of whom the law names as the taxpayer.
+
+<EconDiagram
+  title="The wedge of a 6-won-per-unit tax"
+  xLabel="Q"
+  yLabel="P"
+  xMax={40}
+  yMin={30}
+  yMax={70}
+  curves={[
+    { label: "D", points: [[0, 60], [40, 40]], tone: "blue" },
+    { label: "S", points: [[0, 30], [40, 70]], tone: "green" },
+  ]}
+  areas={[
+    { points: [[0, 46], [16, 46], [16, 52], [0, 52]], tone: "violet", label: "Revenue 96" },
+    { points: [[16, 52], [20, 50], [16, 46]], tone: "red" },
+  ]}
+  marks={[
+    { x: 20, y: 50, label: "E", guide: true, xTick: "20", yTick: "50" },
+    { x: 16, y: 52, label: "P_d", yTick: "52", xTick: "16" },
+    { x: 16, y: 46, label: "P_s", yTick: "46" },
+  ]}
+  caption="The violet rectangle is tax revenue (6×16) and the red triangle the excess burden. The consumer price moved by 2 won and the producer price by 4 won."
+/>
+
+## 2. The less elastic side bears more
+
+Producers bore more because, at this equilibrium, supply is less elastic than demand. At $P=50$ and $Q=20$, the demand elasticity is $\varepsilon_d=-2\times 50/20=-5$ and the supply elasticity is $\varepsilon_s=1\times 50/20=2.5$.
+
+<FormulaBox
+  label="Consumers' share of the burden"
+  formula="\frac{\Delta P_d}{t} = \frac{\varepsilon_s}{\varepsilon_s + |\varepsilon_d|}"
+  description="Here 2.5/(2.5+5) = 1/3, i.e. 2 won of the 6. If supply is perfectly inelastic (ε_s = 0), producers bear it all; if demand is perfectly inelastic, consumers bear it all."
+/>
+
+The side that can escape by responding to prices bears less. Taxes on goods with inelastic demand, such as cigarettes, fall mostly on consumers; taxes on assets in fixed supply, such as land, fall mostly on owners. If labour supply barely responds to wages, social insurance contributions end up coming out of wages whether they are levied on workers or on employers.
+
+## 3. Excess burden grows with the square of the tax rate
+
+The trades between 16 and 20 units that would have taken place without the tax have disappeared. The surplus they would have generated is not transferred to revenue; it simply vanishes. This is the **excess burden** (deadweight loss).
+
+<FormulaBox
+  label="The Harberger triangle"
+  formula="DWL = \tfrac{1}{2}\, t\, \Delta Q \approx \tfrac{1}{2}\, t^2 \cdot \frac{\varepsilon_s |\varepsilon_d|}{\varepsilon_s+|\varepsilon_d|}\cdot \frac{Q}{P}"
+  description="In the example, ½×6×4 = 12. The formula also gives ½×36×(2.5×5/7.5)×(20/50) = 12."
+/>
+
+Doubling the tax to 12 won reduces quantity to 12 and raises the excess burden to $\tfrac{1}{2}\times 12\times 8=48$ — four times as much. Revenue rises only 1.5 times, from $96$ to $144$. Two design principles follow.
+
+- **Broad base, low rates**: for the same revenue, low rates on many goods cause less excess burden than a high rate on one good. This is the case for reforms that broaden the base by cutting exemptions and reliefs.
+- **Tax where elasticities are low**: excess burden is proportional to elasticity.
+
+The **Ramsey rule** formalizes the second principle. If demands for goods are independent and supply is perfectly elastic, the tax rates that minimize excess burden for a given revenue are inversely proportional to demand elasticities.
+
+<FormulaBox
+  label="The Ramsey inverse-elasticity rule"
+  formula="\frac{t_i}{P_i} \propto \frac{1}{|\varepsilon_i|}"
+  description="A good with an elasticity of 0.5 should be taxed at three times the rate of a good with an elasticity of 1.5."
+/>
+
+Following the Ramsey rule literally puts the highest rates on inelastic necessities such as food and medicine. Since these goods make up a large share of low-income households' spending, the rule collides head-on with equity. Real indirect tax design is about how to balance this conflict, as Chapter 5 revisits.
+
+## 4. Criteria for fairness
+
+<LectureTable
+  title="Two principles of tax fairness"
+  headers={["Principle", "Claim", "Suitable taxes", "Limits"]}
+  rows={[
+    ["Benefit principle", "Pay according to the benefit received from public services", "Fuel tax → roads, user fees", "Benefits of public goods are hard to measure; cannot redistribute"],
+    ["Ability-to-pay principle", "Pay according to ability to pay", "Progressive income tax", "Debate over whether ability means income, consumption or wealth"],
+  ]}
+/>
+
+The ability-to-pay principle splits in two directions. **Horizontal equity** requires equal taxes for equal ability; **vertical equity** requires higher taxes for greater ability. Progressivity is judged by the average tax rate. If the average rate (tax/income) rises with income, the tax is progressive; if it is constant, proportional; if it falls, regressive. Even with a constant marginal rate, a basic allowance makes the average rate rise with income, so the tax is progressive.
+
+For a tax that exempts income up to 10 million won and charges 20% above that, tax on an income of 20 million won is 2 million won (average rate 10%), and on 50 million won it is 8 million won (16%). The marginal rate is 20% in both cases, but the average rate rises, so the tax is progressive.
+
+## 5. Beyond partial equilibrium: who pays a tax on capital?
+
+Analysis of a single market misses effects that spill into other markets. Harberger's general equilibrium model showed that taxing only capital in the corporate sector drives capital into the non-corporate sector, so the return on all capital falls together. In a closed economy, all capital shares the burden.
+
+In a small open economy where capital moves freely across borders, the conclusion changes. If the after-tax return falls below the world interest rate, capital leaves, so the after-tax return is pinned to the world rate. The capital stock shrinks and the marginal product of labour falls, so the burden shifts to immobile labour and land. This difference in openness and capital mobility is why empirical estimates of corporate tax incidence vary so much across studies. Chapter 4 returns to it.
+
+<Callout type="warning">
+Sentences such as "tax companies and the rich will pay" or "consumption taxes are paid by consumers" look only at statutory incidence. Incidence is set by elasticity and mobility, and companies are ultimately some combination of shareholders, workers and consumers. When comparing policies, first write down how prices and quantities move, not who pays the tax office.
+</Callout>
+
+## Check your understanding
+
+A tax of 10 won per unit is imposed on a market with demand $Q_d=100-P$ and supply $Q_s=P$. The equilibrium moves from $P=50$, $Q=50$ to $P_d=55$, $P_s=45$, $Q=45$. Consumers and producers each bear 5 won, revenue is 450 won and the excess burden is $\tfrac{1}{2}\times 10\times 5=25$ won. Because the slopes are equal, the elasticities at this point are also equal, and the burden is split in half.
+
+## References
+
+- Jonathan Gruber, *Public Finance and Public Policy*, ch. 19–20
+- Harvey Rosen and Ted Gayer, *Public Finance*, ch. 14–15
+- Arnold Harberger, "The Incidence of the Corporation Income Tax," *Journal of Political Economy* (1962)
+- Frank Ramsey, "A Contribution to the Theory of Taxation," *Economic Journal* (1927)

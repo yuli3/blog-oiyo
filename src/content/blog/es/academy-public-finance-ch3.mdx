@@ -1,0 +1,111 @@
+---
+track: academy
+locale: es
+title: "Hacienda pública — Gasto público: redistribución, prestaciones en especie y elección pública"
+category: "Economics"
+series: public-finance
+chapter: 3
+chapterTitleShort: 'Gasto y elección pública'
+author: OIYO Editorial
+tags:
+  - hacienda pública
+  - gasto público
+  - redistribución
+  - votante mediano
+  - elección pública
+description: "Presenta la diferencia entre transferencias en dinero y en especie, el tipo marginal del 100 % que crean las prestaciones complementarias, el diseño por tramos del crédito fiscal por rentas del trabajo, el teorema del votante mediano y la búsqueda de rentas: cómo se decide el gasto público y qué cambia."
+pubDate: '2026-05-05'
+updatedDate: '2026-09-24'
+layoutVariant: lecture-series
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Hacienda pública — el gasto, como los impuestos, cambia la conducta
+
+Los bienes públicos y las externalidades del capítulo 1 eran el fundamento de eficiencia del gasto público. En los presupuestos reales, la mayor parte va al gasto redistributivo, como la protección social. Este capítulo examina cómo el diseño de ese gasto cambia las decisiones de los beneficiarios y cómo se fija su volumen en el proceso político.
+
+## 1. ¿En dinero o en especie?
+
+Para un mismo importe, la utilidad que obtiene el beneficiario del dinero es igual o mayor que la de una prestación en especie: el dinero puede gastarse libremente, mientras que la prestación en especie debe usarse en ese bien.
+
+Supongamos que un hogar con una renta mensual de 1 millón de wones gasta 200.000 wones en alimentación. Si el Estado le da un vale de alimentos de 300.000 wones, la recta de presupuesto se desplaza en paralelo a la derecha hasta 300.000 wones de alimentos y, a partir de ahí, equivale a 300.000 wones en dinero. Para un hogar que con 300.000 wones en dinero gastaría al menos esa cantidad en alimentos, vale y dinero dan igual. Para un hogar que con dinero solo gastaría 250.000 wones en alimentos y el resto en el alquiler, el vale le obliga a consumir 50.000 wones más de alimentos de los que quiere, y su utilidad es menor que con dinero.
+
+Aun así, las prestaciones en especie son frecuentes, por tres razones.
+
+- **Preferencias paternalistas**: los contribuyentes pagan con gusto «el dinero del comedor escolar», pero menos las ayudas de libre uso.
+- **Autoselección**: las prestaciones en especie de menor calidad o con listas de espera, como la vivienda social o las comidas gratuitas, solo las piden quienes de verdad las necesitan. Sirven para focalizar cuando la renta es difícil de comprobar.
+- **Efectos precio**: la compra al por mayor abarata el coste unitario. A la inversa, dar vales en un mercado de oferta inelástica (la vivienda de alquiler) sube los precios, y el beneficio se filtra a los oferentes.
+
+## 2. Una prestación complementaria grava las rentas del trabajo al 100 %
+
+Una **prestación complementaria** fija un nivel mínimo de vida y cubre la diferencia entre ese nivel y la renta. Si el mínimo es de 1 millón de wones al mes, un hogar sin rentas del trabajo recibe 1 millón y uno que gana 400.000 wones recibe 600.000. Ambos acaban con la misma renta de 1 millón.
+
+Cada won ganado reduce la prestación en un won, así que por debajo del mínimo el **tipo marginal efectivo es del 100 %**. Trabajar no aumenta la renta y desaparece el incentivo a trabajar cerca del umbral. Puede reducirse ese tipo retirando la prestación solo en parte a medida que sube la renta, pero entonces se amplía el tramo de renta con derecho a prestación y aumenta el coste.
+
+<FormulaBox
+  label="Estructura de una prestación lineal"
+  formula="B = G - \tau \cdot E,\quad B \ge 0"
+  description="G es la prestación con renta cero, τ el tipo de retirada (tipo marginal efectivo) y E las rentas del trabajo. La prestación se extingue con una renta de G/τ. Con G = 100 y τ = 0,5 (en decenas de miles de wones), se mantiene hasta 2 millones de wones."
+/>
+
+Del nivel garantizado $G$, el tipo de retirada $\tau$ y el coste presupuestario solo pueden elegirse dos. Subir la garantía y bajar el tipo de retirada amplía el tramo con derecho $G/\tau$ y el coste se dispara.
+
+El **crédito fiscal por rentas del trabajo (EITC)** se plantea desde el lado opuesto. Tiene un tramo creciente en que la ayuda sube con la renta, una meseta constante y un tramo decreciente. En el tramo creciente se recibe más cuanto más se trabaja, lo que aumenta la participación laboral. En el tramo decreciente, el tipo marginal efectivo sube en el tipo de retirada, lo que puede reducir las horas de quienes ya trabajan. Los estudios empíricos suelen hallar un efecto grande sobre la participación y pequeño sobre las horas.
+
+<EconDiagram
+  title="Los tres tramos de un crédito por rentas del trabajo"
+  xLabel="Rentas del trabajo"
+  yLabel="Crédito"
+  xMax={100}
+  yMax={40}
+  curves={[
+    { label: "", points: [[0, 0], [30, 30], [55, 30], [95, 0]], tone: "green" },
+  ]}
+  marks={[
+    { x: 30, y: 30, label: "Fin del tramo creciente", guide: true },
+    { x: 55, y: 30, label: "Inicio de la retirada", guide: true },
+  ]}
+  caption="La pendiente del tramo creciente es un tipo marginal negativo (subvención); la del tramo decreciente, un tipo marginal positivo. Los umbrales y pendientes varían según el sistema."
+/>
+
+## 3. El volumen del gasto se decide votando
+
+La condición de Samuelson del capítulo 1 indica la cantidad eficiente de un bien público, pero el Estado no conoce los beneficios marginales individuales. Las cantidades reales se fijan con votaciones y negociaciones presupuestarias. El campo que analiza este proceso con herramientas económicas es la **teoría de la elección pública**.
+
+**El teorema del votante mediano**: si la elección es unidimensional (por ejemplo, el presupuesto de una biblioteca) y las preferencias de todos los votantes son unimodales (cuanto más lejos del nivel preferido, menos gusta), la votación por mayoría elige el nivel preferido del votante mediano.
+
+Supongamos que tres vecinos quieren para la biblioteca presupuestos de 1.000, 3.000 y 8.000 millones de wones. Frente a 1.000 millones, la opción de 3.000 millones obtiene los votos de quienes prefieren 3.000 y 8.000; frente a 8.000 millones, los de quienes prefieren 1.000 y 3.000. El resultado es 3.000 millones de wones. La media de las preferencias es 4.000 millones, pero la mayoría elige la mediana, no la media. Como no cuenta la intensidad de las preferencias, no hay razón para que el nivel mediano coincida con el eficiente de la condición de Samuelson.
+
+Si las preferencias no son unimodales, la votación por mayoría puede ciclar (**paradoja de Condorcet**): A vence a B, B vence a C y C vence a A. Entonces el resultado depende del orden en que se someten las propuestas, es decir, de quien controla el orden del día.
+
+## 4. Los incentivos dentro del Estado
+
+<LectureTable
+  title="Los fallos del Estado según la elección pública"
+  headers={["Agente", "Objetivo supuesto", "Resultado"]}
+  rows={[
+    ["Políticos", "La reelección", "Prefieren gastos con beneficios visibles y costes dispersos"],
+    ["Burócratas (Niskanen)", "Maximizar el presupuesto de su departamento", "Con su ventaja informativa obtienen presupuestos mayores que el nivel eficiente"],
+    ["Grupos de interés", "Regulaciones y subvenciones concretas", "Las grandes ganancias de pocos se imponen a las pequeñas pérdidas de muchos"],
+  ]}
+/>
+
+La **búsqueda de rentas** consiste en gastar recursos para apropiarse de los beneficios extraordinarios que crean una regulación o una subvención. Si una licencia de importación genera 1.000 millones de wones de beneficio extraordinario al año, las empresas tienen incentivos para gastar casi 1.000 millones en presión política, abogados y publicidad para conseguirla. Ese gasto no produce nada, así que el coste social de la regulación es el triángulo de pérdida irrecuperable del monopolio más buena parte del rectángulo de beneficio extraordinario (Tullock).
+
+<Callout type="warning">
+La teoría de la elección pública no concluye que «el Estado siempre es ineficiente», sino que propone un método: «también el proceso político puede analizarse con incentivos». El teorema del votante mediano y los modelos de maximización del presupuesto se basan en supuestos fuertes. La pregunta real es cuánto cambian esos incentivos el diseño institucional (techos presupuestarios globales, evaluación de resultados, licitación abierta).
+</Callout>
+
+## Ejercicio
+
+Con una prestación lineal de nivel garantizado $G=1{,}2$ millones de wones y un tipo de retirada $\tau=0{,}4$, ¿cuáles son la prestación y la renta final de un hogar que gana 1,5 millones? $B=1{,}2-0{,}4\times 1{,}5=0{,}6$ millones, y la renta final es de 2,1 millones de wones. La prestación se extingue con una renta de $1{,}2/0{,}4=3$ millones. Si el tipo de retirada sube a 0,6, el punto de extinción baja a 2 millones y el coste disminuye, pero los hogares de ese tramo soportan un tipo marginal efectivo del 60 %.
+
+## Referencias
+
+- Jonathan Gruber, *Public Finance and Public Policy*, ch. 9, 17
+- Harvey Rosen and Ted Gayer, *Public Finance*, ch. 6, 13
+- William Niskanen, *Bureaucracy and Representative Government* (1971)
+- Gordon Tullock, "The Welfare Costs of Tariffs, Monopolies, and Theft," *Western Economic Journal* (1967)

@@ -1,0 +1,136 @@
+---
+track: academy
+locale: fr
+title: "Finances publiques — Incidence fiscale et charge excédentaire"
+category: "Economics"
+series: public-finance
+chapter: 2
+chapterTitleShort: "Incidence et charge excédentaire"
+author: OIYO Éditorial
+tags:
+  - finances publiques
+  - incidence fiscale
+  - charge excédentaire
+  - élasticité
+  - règle de Ramsey
+description: "Celui qui verse l'impôt n'est pas forcément celui qui le supporte. Ce chapitre répartit l'incidence selon les élasticités, mesure la charge excédentaire par le triangle de Harberger et présente la règle de Ramsey et les critères d'équité fiscale, avec des exemples chiffrés."
+pubDate: '2026-05-05'
+updatedDate: '2026-09-24'
+layoutVariant: lecture-series
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Finances publiques — l'impôt est supporté non par celui que désigne la loi, mais par le côté le moins élastique
+
+Le chapitre 1 portait sur ce que l'État doit faire. À partir de ce chapitre, on examine comment en financer le coût. Deux critères permettent de juger un bon impôt : distord-il moins l'économie pour une même recette (efficacité), et la charge est-elle répartie équitablement (équité) ? Les deux exigent de savoir d'abord « qui supporte réellement l'impôt ».
+
+## 1. Incidence légale et incidence économique
+
+La charge de celui que la loi fiscale désigne comme redevable est l'**incidence légale** ; la charge de celui dont le bien-être diminue réellement une fois les prix ajustés est l'**incidence économique**. Sur un marché concurrentiel, l'incidence économique est la même que l'impôt soit prélevé sur les vendeurs ou sur les acheteurs. L'impôt se contente d'enfoncer un coin $t$ entre le prix payé par les consommateurs, $P_d$, et le prix reçu par les producteurs, $P_s$ ; le côté où l'on place ce coin n'affecte pas l'équilibre.
+
+Considérons un marché où la demande est $Q_d=120-2P$ et l'offre $Q_s=P-30$. Sans impôt, $P=50$ et $Q=20$. Avec un impôt de 6 wons par unité, $P_d-P_s=6$, et $120-2P_d = P_d-6-30$ donne :
+
+- Prix payé par le consommateur $P_d=52$ (hausse de 2 wons)
+- Prix reçu par le producteur $P_s=46$ (baisse de 4 wons)
+- Quantité échangée $Q=16$
+
+Sur les 6 wons d'impôt, les consommateurs en supportent 2 et les producteurs 4, quel que soit le redevable désigné par la loi.
+
+<EconDiagram
+  title="Le coin fiscal d'un impôt de 6 wons par unité"
+  xLabel="Q"
+  yLabel="P"
+  xMax={40}
+  yMin={30}
+  yMax={70}
+  curves={[
+    { label: "D", points: [[0, 60], [40, 40]], tone: "blue" },
+    { label: "S", points: [[0, 30], [40, 70]], tone: "green" },
+  ]}
+  areas={[
+    { points: [[0, 46], [16, 46], [16, 52], [0, 52]], tone: "violet", label: "Recette 96" },
+    { points: [[16, 52], [20, 50], [16, 46]], tone: "red" },
+  ]}
+  marks={[
+    { x: 20, y: 50, label: "E", guide: true, xTick: "20", yTick: "50" },
+    { x: 16, y: 52, label: "P_d", yTick: "52", xTick: "16" },
+    { x: 16, y: 46, label: "P_s", yTick: "46" },
+  ]}
+  caption="Le rectangle violet est la recette fiscale (6×16), le triangle rouge la charge excédentaire. Le prix consommateur a varié de 2 wons, le prix producteur de 4 wons."
+/>
+
+## 2. Le côté le moins élastique supporte davantage
+
+Les producteurs ont supporté davantage parce qu'en ce point d'équilibre, l'offre est moins élastique que la demande. En $P=50$ et $Q=20$, l'élasticité de la demande vaut $\varepsilon_d=-2\times 50/20=-5$ et celle de l'offre $\varepsilon_s=1\times 50/20=2{,}5$.
+
+<FormulaBox
+  label="Part de la charge supportée par les consommateurs"
+  formula="\frac{\Delta P_d}{t} = \frac{\varepsilon_s}{\varepsilon_s + |\varepsilon_d|}"
+  description="Ici 2,5/(2,5+5) = 1/3, soit 2 wons sur 6. Si l'offre est parfaitement inélastique (ε_s = 0), les producteurs supportent tout ; si la demande est parfaitement inélastique, ce sont les consommateurs."
+/>
+
+Le côté qui peut s'échapper en réagissant aux prix supporte moins. Les taxes sur les biens à demande inélastique, comme le tabac, retombent surtout sur les consommateurs ; celles sur les actifs en offre fixe, comme la terre, retombent surtout sur les propriétaires. Si l'offre de travail réagit à peine aux salaires, les cotisations sociales finissent par être prélevées sur les salaires, qu'elles soient mises à la charge des salariés ou des employeurs.
+
+## 3. La charge excédentaire croît avec le carré du taux
+
+Les échanges de la 16e à la 20e unité, qui auraient eu lieu sans l'impôt, ont disparu. Le surplus qu'ils auraient créé n'est pas transféré en recette : il disparaît. C'est la **charge excédentaire** (perte sèche).
+
+<FormulaBox
+  label="Le triangle de Harberger"
+  formula="DWL = \tfrac{1}{2}\, t\, \Delta Q \approx \tfrac{1}{2}\, t^2 \cdot \frac{\varepsilon_s |\varepsilon_d|}{\varepsilon_s+|\varepsilon_d|}\cdot \frac{Q}{P}"
+  description="Dans l'exemple, ½×6×4 = 12. La formule donne aussi ½×36×(2,5×5/7,5)×(20/50) = 12."
+/>
+
+Doubler l'impôt à 12 wons ramène la quantité à 12 et porte la charge excédentaire à $\tfrac{1}{2}\times 12\times 8=48$, soit quatre fois plus. La recette n'augmente que de moitié, de $96$ à $144$. Deux principes de conception s'en déduisent.
+
+- **Assiette large, taux bas** : pour une même recette, des taux faibles sur de nombreux biens créent moins de charge excédentaire qu'un taux élevé sur un seul bien. C'est l'argument des réformes qui élargissent l'assiette en réduisant exonérations et niches.
+- **Taxer là où les élasticités sont faibles** : la charge excédentaire est proportionnelle à l'élasticité.
+
+La **règle de Ramsey** formalise le second principe. Si les demandes des biens sont indépendantes et l'offre parfaitement élastique, les taux qui minimisent la charge excédentaire sous contrainte de recette sont inversement proportionnels aux élasticités de la demande.
+
+<FormulaBox
+  label="Règle de l'inverse de l'élasticité de Ramsey"
+  formula="\frac{t_i}{P_i} \propto \frac{1}{|\varepsilon_i|}"
+  description="Un bien d'élasticité 0,5 devrait être taxé à un taux trois fois plus élevé qu'un bien d'élasticité 1,5."
+/>
+
+Appliquer la règle de Ramsey à la lettre impose les taux les plus élevés aux biens de première nécessité inélastiques comme l'alimentation et les médicaments. Comme ces biens pèsent lourd dans la consommation des ménages modestes, la règle entre en conflit frontal avec l'équité. La conception réelle des impôts indirects consiste à arbitrer ce conflit, comme le montre à nouveau le chapitre 5.
+
+## 4. Les critères d'équité
+
+<LectureTable
+  title="Deux principes d'équité fiscale"
+  headers={["Principe", "Idée", "Impôts adaptés", "Limites"]}
+  rows={[
+    ["Principe du bénéfice", "Payer selon le bénéfice tiré des services publics", "Taxe sur les carburants → routes, redevances", "Le bénéfice des biens publics est difficile à mesurer ; pas de redistribution"],
+    ["Principe de la capacité contributive", "Payer selon sa capacité à payer", "Impôt progressif sur le revenu", "Débat sur la mesure de la capacité : revenu, consommation ou patrimoine"],
+  ]}
+/>
+
+Le principe de capacité contributive se décline en deux directions. L'**équité horizontale** exige un même impôt à capacité égale ; l'**équité verticale**, un impôt plus lourd pour une capacité plus grande. La progressivité se juge au taux moyen. Si le taux moyen (impôt/revenu) augmente avec le revenu, l'impôt est progressif ; s'il est constant, proportionnel ; s'il baisse, régressif. Même avec un taux marginal constant, un abattement de base fait croître le taux moyen avec le revenu : l'impôt est alors progressif.
+
+Pour un impôt qui exonère le revenu jusqu'à 10 millions de wons et taxe à 20 % au-delà, l'impôt sur un revenu de 20 millions de wons est de 2 millions (taux moyen de 10 %), et sur 50 millions, de 8 millions (16 %). Le taux marginal est de 20 % dans les deux cas, mais le taux moyen augmente : l'impôt est progressif.
+
+## 5. Au-delà de l'équilibre partiel : qui paie l'impôt sur le capital ?
+
+Une analyse limitée à un seul marché ignore les effets qui se propagent aux autres. Le modèle d'équilibre général de Harberger a montré qu'en taxant seulement le capital du secteur des sociétés, le capital se déplace vers le secteur non incorporé et le rendement de tout le capital baisse ensemble. En économie fermée, l'ensemble du capital se partage la charge.
+
+Dans une petite économie ouverte où le capital circule librement, la conclusion change. Si le rendement après impôt tombe sous le taux d'intérêt mondial, le capital s'en va : le rendement après impôt est donc fixé au taux mondial. Le stock de capital diminue et la productivité marginale du travail baisse, si bien que la charge se reporte sur le travail et la terre, immobiles. Cette différence d'ouverture et de mobilité du capital explique pourquoi les estimations empiriques de l'incidence de l'impôt sur les sociétés varient autant d'une étude à l'autre. Le chapitre 4 y revient.
+
+<Callout type="warning">
+Des phrases comme « taxons les entreprises, les riches paieront » ou « les impôts sur la consommation sont payés par les consommateurs » ne regardent que l'incidence légale. L'incidence dépend des élasticités et de la mobilité, et une entreprise, c'est finalement des actionnaires, des salariés et des consommateurs. Pour comparer des politiques, écrivez d'abord comment évoluent prix et quantités, et non qui verse l'impôt.
+</Callout>
+
+## Exercice
+
+On impose une taxe de 10 wons par unité sur un marché où la demande est $Q_d=100-P$ et l'offre $Q_s=P$. L'équilibre passe de $P=50$, $Q=50$ à $P_d=55$, $P_s=45$, $Q=45$. Consommateurs et producteurs supportent chacun 5 wons, la recette est de 450 wons et la charge excédentaire de $\tfrac{1}{2}\times 10\times 5=25$ wons. Les pentes étant égales, les élasticités en ce point le sont aussi, et la charge se partage à parts égales.
+
+## Références
+
+- Jonathan Gruber, *Public Finance and Public Policy*, ch. 19–20
+- Harvey Rosen and Ted Gayer, *Public Finance*, ch. 14–15
+- Arnold Harberger, "The Incidence of the Corporation Income Tax," *Journal of Political Economy* (1962)
+- Frank Ramsey, "A Contribution to the Theory of Taxation," *Economic Journal* (1927)

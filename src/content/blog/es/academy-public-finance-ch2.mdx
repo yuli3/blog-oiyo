@@ -1,0 +1,136 @@
+---
+track: academy
+locale: es
+title: "Hacienda pública — Incidencia fiscal y exceso de gravamen"
+category: "Economics"
+series: public-finance
+chapter: 2
+chapterTitleShort: 'Incidencia y exceso de gravamen'
+author: OIYO Editorial
+tags:
+  - hacienda pública
+  - incidencia fiscal
+  - exceso de gravamen
+  - elasticidad
+  - regla de Ramsey
+description: "Quién ingresa un impuesto y quién lo soporta son cosas distintas. Este capítulo reparte la incidencia según las elasticidades, mide el exceso de gravamen con el triángulo de Harberger y presenta la regla de Ramsey y los criterios de equidad fiscal, con ejemplos numéricos."
+pubDate: '2026-05-05'
+updatedDate: '2026-09-24'
+layoutVariant: lecture-series
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Hacienda pública — el impuesto no lo soporta quien señala la ley, sino el lado menos elástico
+
+El capítulo 1 trató qué debe hacer el Estado. Desde este capítulo veremos cómo recaudar su coste. Hay dos criterios para juzgar un buen impuesto: ¿distorsiona menos la economía para una misma recaudación (eficiencia)? ¿Se reparte la carga con justicia (equidad)? Ambos exigen saber primero «quién soporta realmente el impuesto».
+
+## 1. Incidencia legal e incidencia económica
+
+La carga de quien la ley fiscal designa como sujeto pasivo es la **incidencia legal**; la carga de quien realmente ve reducido su bienestar una vez ajustados los precios es la **incidencia económica**. En un mercado competitivo, la incidencia económica es la misma tanto si el impuesto recae sobre los vendedores como sobre los compradores. El impuesto se limita a clavar una cuña $t$ entre el precio que pagan los consumidores, $P_d$, y el que reciben los productores, $P_s$; en qué lado se clave no afecta al equilibrio.
+
+Consideremos un mercado con demanda $Q_d=120-2P$ y oferta $Q_s=P-30$. Sin impuesto, $P=50$ y $Q=20$. Con un impuesto de 6 wones por unidad, $P_d-P_s=6$, y de $120-2P_d = P_d-6-30$ se obtiene:
+
+- Precio del consumidor $P_d=52$ (sube 2 wones)
+- Precio del productor $P_s=46$ (baja 4 wones)
+- Cantidad $Q=16$
+
+De los 6 wones del impuesto, los consumidores soportan 2 y los productores 4, con independencia de a quién designe la ley como contribuyente.
+
+<EconDiagram
+  title="La cuña de un impuesto de 6 wones por unidad"
+  xLabel="Q"
+  yLabel="P"
+  xMax={40}
+  yMin={30}
+  yMax={70}
+  curves={[
+    { label: "D", points: [[0, 60], [40, 40]], tone: "blue" },
+    { label: "S", points: [[0, 30], [40, 70]], tone: "green" },
+  ]}
+  areas={[
+    { points: [[0, 46], [16, 46], [16, 52], [0, 52]], tone: "violet", label: "Recaudación 96" },
+    { points: [[16, 52], [20, 50], [16, 46]], tone: "red" },
+  ]}
+  marks={[
+    { x: 20, y: 50, label: "E", guide: true, xTick: "20", yTick: "50" },
+    { x: 16, y: 52, label: "P_d", yTick: "52", xTick: "16" },
+    { x: 16, y: 46, label: "P_s", yTick: "46" },
+  ]}
+  caption="El rectángulo violeta es la recaudación (6×16) y el triángulo rojo el exceso de gravamen. El precio del consumidor se movió 2 wones y el del productor 4."
+/>
+
+## 2. El lado menos elástico soporta más
+
+Los productores soportaron más porque en este punto de equilibrio la oferta es menos elástica que la demanda. En $P=50$ y $Q=20$, la elasticidad de la demanda es $\varepsilon_d=-2\times 50/20=-5$ y la de la oferta $\varepsilon_s=1\times 50/20=2{,}5$.
+
+<FormulaBox
+  label="Parte de la carga que soportan los consumidores"
+  formula="\frac{\Delta P_d}{t} = \frac{\varepsilon_s}{\varepsilon_s + |\varepsilon_d|}"
+  description="Aquí 2,5/(2,5+5) = 1/3, es decir, 2 wones de 6. Si la oferta es perfectamente inelástica (ε_s = 0), los productores soportan todo; si lo es la demanda, los consumidores."
+/>
+
+El lado que puede escapar respondiendo a los precios soporta menos. Los impuestos sobre bienes de demanda inelástica, como el tabaco, recaen sobre todo en los consumidores; los que gravan activos de oferta fija, como el suelo, recaen sobre todo en los propietarios. Si la oferta de trabajo apenas responde al salario, las cotizaciones sociales acaban saliendo del salario, se impongan al trabajador o al empleador.
+
+## 3. El exceso de gravamen crece con el cuadrado del tipo
+
+Han desaparecido los intercambios de las unidades 16 a 20 que se habrían producido sin impuesto. El excedente que habrían generado no pasa a la recaudación: simplemente se pierde. Es el **exceso de gravamen** (pérdida irrecuperable de eficiencia).
+
+<FormulaBox
+  label="El triángulo de Harberger"
+  formula="DWL = \tfrac{1}{2}\, t\, \Delta Q \approx \tfrac{1}{2}\, t^2 \cdot \frac{\varepsilon_s |\varepsilon_d|}{\varepsilon_s+|\varepsilon_d|}\cdot \frac{Q}{P}"
+  description="En el ejemplo, ½×6×4 = 12. La fórmula también da ½×36×(2,5×5/7,5)×(20/50) = 12."
+/>
+
+Duplicar el impuesto a 12 wones reduce la cantidad a 12 y eleva el exceso de gravamen a $\tfrac{1}{2}\times 12\times 8=48$, cuatro veces más. La recaudación solo aumenta 1,5 veces, de $96$ a $144$. De aquí salen dos principios de diseño.
+
+- **Base amplia, tipos bajos**: para una misma recaudación, tipos bajos sobre muchos bienes generan menos exceso de gravamen que un tipo alto sobre uno solo. Es el fundamento de las reformas que amplían la base recortando exenciones y deducciones.
+- **Gravar donde la elasticidad es baja**: el exceso de gravamen es proporcional a la elasticidad.
+
+La **regla de Ramsey** formaliza el segundo principio. Si las demandas de los bienes son independientes y la oferta es perfectamente elástica, los tipos que minimizan el exceso de gravamen para una recaudación dada son inversamente proporcionales a las elasticidades de la demanda.
+
+<FormulaBox
+  label="Regla de la elasticidad inversa de Ramsey"
+  formula="\frac{t_i}{P_i} \propto \frac{1}{|\varepsilon_i|}"
+  description="Un bien con elasticidad 0,5 debería gravarse a un tipo tres veces mayor que un bien con elasticidad 1,5."
+/>
+
+Aplicar la regla de Ramsey al pie de la letra pone los tipos más altos sobre bienes de primera necesidad inelásticos, como alimentos y medicamentos. Como pesan mucho en el consumo de los hogares de renta baja, choca de frente con la equidad. El diseño real de los impuestos indirectos consiste en conciliar ese conflicto, como se retoma en el capítulo 5.
+
+## 4. Los criterios de equidad
+
+<LectureTable
+  title="Dos principios de equidad fiscal"
+  headers={["Principio", "Idea", "Impuestos adecuados", "Límites"]}
+  rows={[
+    ["Principio del beneficio", "Pagar según el beneficio recibido de los servicios públicos", "Impuesto sobre carburantes → carreteras, tasas", "El beneficio de los bienes públicos es difícil de medir; no redistribuye"],
+    ["Principio de capacidad de pago", "Pagar según la capacidad de pago", "Impuesto progresivo sobre la renta", "Debate sobre si medir la capacidad por la renta, el consumo o la riqueza"],
+  ]}
+/>
+
+El principio de capacidad de pago se divide en dos direcciones. La **equidad horizontal** exige igual impuesto a igual capacidad; la **equidad vertical**, más impuesto a mayor capacidad. La progresividad se juzga por el tipo medio. Si el tipo medio (cuota/renta) sube con la renta, el impuesto es progresivo; si se mantiene, proporcional; si baja, regresivo. Aunque el tipo marginal sea constante, un mínimo exento hace que el tipo medio suba con la renta, así que el impuesto es progresivo.
+
+Con un impuesto que deja exenta la renta hasta 10 millones de wones y grava al 20 % lo que exceda, la cuota sobre una renta de 20 millones es de 2 millones (tipo medio del 10 %), y sobre 50 millones, de 8 millones (16 %). El tipo marginal es del 20 % en ambos casos, pero el tipo medio sube: el impuesto es progresivo.
+
+## 5. Más allá del equilibrio parcial: ¿quién paga el impuesto sobre el capital?
+
+Un análisis de un solo mercado pasa por alto los efectos que se extienden a otros. El modelo de equilibrio general de Harberger mostró que, aunque solo se grave el capital del sector societario, el capital se desplaza al sector no societario y el rendimiento de todo el capital cae a la vez. En una economía cerrada, todo el capital comparte la carga.
+
+En una pequeña economía abierta donde el capital cruza fronteras libremente, la conclusión cambia. Si el rendimiento después de impuestos baja del tipo de interés mundial, el capital se va, así que ese rendimiento queda fijado al tipo mundial. El stock de capital se reduce y cae el producto marginal del trabajo, de modo que la carga se traslada al trabajo y al suelo, que no pueden moverse. Esa diferencia de apertura y movilidad del capital explica que las estimaciones empíricas de la incidencia del impuesto sobre sociedades varíen tanto entre estudios. El capítulo 4 vuelve sobre ello.
+
+<Callout type="warning">
+Frases como «si se grava a las empresas, pagarán los ricos» o «los impuestos sobre el consumo los pagan los consumidores» solo miran la incidencia legal. La incidencia la determinan la elasticidad y la movilidad, y las empresas son, en última instancia, accionistas, trabajadores y consumidores. Al comparar políticas, hay que escribir primero cómo se mueven precios y cantidades, no quién ingresa el impuesto.
+</Callout>
+
+## Ejercicio
+
+Se impone un impuesto de 10 wones por unidad en un mercado con demanda $Q_d=100-P$ y oferta $Q_s=P$. El equilibrio pasa de $P=50$, $Q=50$ a $P_d=55$, $P_s=45$, $Q=45$. Consumidores y productores soportan 5 wones cada uno, la recaudación es de 450 wones y el exceso de gravamen de $\tfrac{1}{2}\times 10\times 5=25$ wones. Como las pendientes son iguales, las elasticidades en ese punto también lo son, y la carga se reparte a partes iguales.
+
+## Referencias
+
+- Jonathan Gruber, *Public Finance and Public Policy*, ch. 19–20
+- Harvey Rosen and Ted Gayer, *Public Finance*, ch. 14–15
+- Arnold Harberger, "The Incidence of the Corporation Income Tax," *Journal of Political Economy* (1962)
+- Frank Ramsey, "A Contribution to the Theory of Taxation," *Economic Journal* (1927)
