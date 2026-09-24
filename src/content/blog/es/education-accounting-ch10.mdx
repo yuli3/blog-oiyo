@@ -1,0 +1,95 @@
+---
+track: academy
+series: advanced-accounting
+chapter: 7
+title: "Contabilidad avanzada — Derivados y contabilidad de coberturas"
+description: "Ordena la definición y la medición a valor razonable de los derivados, y compara los requisitos de la contabilidad de coberturas y el tratamiento de las coberturas de valor razonable, de flujos de efectivo y de la inversión neta en un negocio en el extranjero con ejemplos numéricos de un forward de divisas y un swap de tasas."
+pubDate: 2026-03-01
+updatedDate: 2026-09-24
+category: Accounting
+tags: ["contabilidad avanzada", "derivados", "contabilidad de coberturas", "cobertura de flujos de efectivo", "cobertura de valor razonable", "forward de divisas"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+Las empresas usan derivados para reducir su exposición a las tasas de cambio, las tasas de interés y los precios de las materias primas. El problema surge cuando la contabilidad no refleja bien esa cobertura económica. Los cambios de valor razonable del derivado van a resultados, pero si la partida cubierta sigue al costo o aún no se ha reconocido, solo se mueve un lado del resultado. La **contabilidad de coberturas** de la K-IFRS 1109 es una excepción opcional que elimina esa asimetría. Las bases de la conversión de moneda extranjera se vieron en el [capítulo 6](/es/academy-advanced-accounting-ch6/).
+
+## 1. Definición y medición de los derivados
+
+Un derivado es un instrumento financiero que cumple las tres características siguientes:
+
+1. su valor cambia en respuesta a una variable subyacente (tasa de interés, tasa de cambio, índice de precios, etc.);
+2. no requiere inversión neta inicial, o requiere una muy pequeña;
+3. se liquida en una fecha futura.
+
+Los forwards, futuros, opciones y swaps son los ejemplos típicos. Por regla general, los derivados se **miden a valor razonable con cambios en resultados**. En el caso de un **derivado implícito** en otro contrato, si el contrato anfitrión es un activo financiero se clasifica el conjunto sin separarlo; si no lo es y las características económicas no están estrechamente relacionadas, el derivado se separa y se contabiliza como tal.
+
+## 2. Requisitos de la contabilidad de coberturas
+
+La contabilidad de coberturas solo se aplica cuando se cumplen todos los requisitos siguientes, y **de forma prospectiva desde la fecha de designación**:
+
+- la relación está formada por instrumentos de cobertura y partidas cubiertas elegibles;
+- el objetivo y la estrategia de gestión del riesgo y la relación de cobertura se **designan y documentan formalmente**;
+- se cumplen los requisitos de eficacia: existe una **relación económica** entre la partida cubierta y el instrumento, el **efecto del riesgo de crédito** no domina los cambios de valor y la **razón de cobertura** coincide con la que realmente se usa para gestionar el riesgo.
+
+La prueba de eficacia del 80 %–125 % de la norma anterior (NIC 39) desapareció con la NIIF 9. En su lugar, la parte ineficaz se reconoce en resultados.
+
+## 3. Los tres tipos de cobertura
+
+<LectureTable
+  title="Tratamiento contable por tipo de cobertura"
+  headers={["Tipo", "Exposición cubierta", "Resultado del instrumento", "Resultado de la partida cubierta"]}
+  rows={[
+    ["Cobertura de valor razonable", "Cambios de valor razonable de activos, pasivos o compromisos en firme reconocidos", "Resultados", "Importe en libros ajustado por el riesgo cubierto, en resultados"],
+    ["Cobertura de flujos de efectivo", "Variabilidad de los flujos de transacciones previstas o pasivos a tasa variable", "Parte eficaz en ORI (reserva de cobertura de flujos de efectivo), parte ineficaz en resultados", "La reserva se reclasifica cuando la partida afecta a resultados, o se suma o resta al costo del activo"],
+    ["Cobertura de la inversión neta en un negocio en el extranjero", "Riesgo cambiario de los activos netos de un negocio en el extranjero", "Parte eficaz en ORI", "Se reclasifica al dar de baja el negocio en el extranjero"],
+  ]}
+/>
+
+## 4. Cobertura de flujos de efectivo: una compra prevista
+
+Al 1 de noviembre de 20X1, la empresa GG (moneda funcional: won) tiene casi la certeza de que dentro de tres meses comprará materias primas por 100.000 USD. Para protegerse de una subida del tipo de cambio, ese mismo día compra un forward de divisas a tres meses (compra de dólares) a una tasa forward de 1.300 wones y lo designa como cobertura de flujos de efectivo. El 31 de diciembre la tasa forward a un mes es de 1.330 wones y el 31 de enero de 20X2 la tasa al contado es de 1.340 wones. Se ignora el descuento.
+
+<LectureTable
+  title="Valor razonable y tratamiento del forward de divisas (en decenas de miles de wones)"
+  headers={["Fecha", "Valor razonable", "Variación", "Tratamiento"]}
+  rows={[
+    ["1/11/20X1 contrato", "0", "", "Sin asiento"],
+    ["31/12/20X1", "100.000 USD × (1.330 − 1.300) = 300", "+300", "ORI (reserva de cobertura) 300"],
+    ["31/1/20X2 vencimiento", "100.000 USD × (1.340 − 1.300) = 400", "+100", "ORI 100; liquidación por diferencias, se cobran 400"],
+  ]}
+/>
+
+Al comprar las materias primas al contado el 31 de enero, GG paga 134 millones de wones. Si se resta la reserva de 4 millones del costo de las materias primas (**ajuste de base**), estas quedan en 130 millones, igual al costo fijado con la tasa forward. En una transacción prevista que da lugar a un activo no financiero, la reserva debe incluirse así directamente en el costo del activo. Después, el efecto de la cobertura llega a resultados a medida que las materias primas pasan al costo de ventas.
+
+<FormulaBox
+  label="Costo fijado por la cobertura"
+  formula="\text{Costo de las materias primas} = 100.000\ \text{USD} \times 1.340 - \underbrace{400}_{\text{reserva}} = 13.000 = 100.000\ \text{USD} \times 1.300"
+  description="En decenas de miles de wones. Se mueva como se mueva la tasa al contado, el costo queda fijado en la tasa forward pactada de 1.300 wones. Sin contabilidad de coberturas, una ganancia de 3 millones en el forward iría primero a resultados en 20X1 y las materias primas costarían 134 millones."
+/>
+
+## 5. Cobertura de valor razonable: un préstamo a tasa fija
+
+La empresa HH tiene un préstamo de 1.000 millones de wones al 5 % fijo y, para cubrir su riesgo de tasa (el valor razonable sube cuando bajan las tasas de mercado), contrata un swap de tasas en el que recibe fijo y paga variable, designado como cobertura de valor razonable. Si las tasas bajan y el valor razonable del préstamo aumenta en 12 millones y el del swap en 11,5 millones, HH aumenta el importe en libros del préstamo en 12 millones reconociendo una pérdida y reconoce una ganancia de 11,5 millones en el swap. La diferencia de 500.000 wones es la **parte ineficaz** que queda en resultados. En la práctica, el préstamo se presenta como un pasivo a tasa variable.
+
+<Callout type="warning">
+La contabilidad de coberturas es opcional y la documentación va primero. No se puede designar una cobertura a posteriori, así que en una cobertura económica no documentada solo aparecen en resultados las ganancias y pérdidas del derivado, a menudo por importes grandes. Los astilleros y navieras que usan forwards de divisas a gran escala suelen informar pérdidas enormes en derivados en épocas de fuertes movimientos cambiarios, aunque sus pérdidas reales de caja sean pequeñas. A la inversa, si la cobertura supera la exposición real, se convierte en una posición especulativa que genera pérdidas reales. Compare los importes nocionales de las notas sobre derivados con el tamaño de la exposición cubierta.
+</Callout>
+
+## Ejercicio
+
+En la sección 4, si GG no hubiera aplicado contabilidad de coberturas, ¿cuáles serían los resultados de 20X1 y 20X2 y el costo de las materias primas? A la inversa, si la tasa al contado del 31 de enero hubiera bajado a 1.280 wones, ¿cuál sería el costo de las materias primas con contabilidad de coberturas?
+
+Sin contabilidad de coberturas, el forward está a VRCR. Se reconocen en resultados ganancias de 3 millones en 20X1 y de 1 millón en 20X2, y las materias primas cuestan 134 millones a la tasa al contado. En los periodos en que se venden, el costo de ventas es 4 millones mayor, así que el calendario del resultado queda desfasado. Si la tasa al contado baja a 1.280 wones, el valor razonable del forward es $100.000 \times (1.280 - 1.300) = -200$ (en decenas de miles de wones), es decir, −2 millones. La reserva es de −2 millones y las materias primas cuestan $12.800 + 200 = 13.000$, de nuevo fijadas en la tasa forward de 1.300 wones. Es el precio de renunciar a un movimiento cambiario favorable.
+
+## Referencias
+
+- Korea Accounting Standards Board, K-IFRS 1109 *Instrumentos financieros* (capítulo 6, contabilidad de coberturas)
+- Korea Accounting Standards Board, K-IFRS 1107 *Instrumentos financieros: información a revelar* (revelaciones sobre coberturas)
+- Joe Hoyle, Thomas Schaefer y Timothy Doupnik, *Advanced Accounting*, cap. 9

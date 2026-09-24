@@ -1,104 +1,95 @@
 ---
 track: academy
-series: accounting-basics
-chapter: 10
-title: "Advanced Accounting III: Derivatives and Hedge Accounting"
-description: >-
-  Understand the impact of exchange rate fluctuations on financial statements
-  and master the sophisticated accounting for derivatives used to manage risk.
-pubDate: 2026-03-01T00:00:00.000Z
+series: advanced-accounting
+chapter: 7
+title: "Advanced Accounting — Derivatives and Hedge Accounting"
+description: "Sets out the definition and fair value measurement of derivatives, then compares the qualifying criteria for hedge accounting and the accounting for fair value hedges, cash flow hedges and hedges of a net investment in a foreign operation, using numerical examples with a currency forward and an interest rate swap."
+pubDate: 2026-03-01
+updatedDate: 2026-09-24
 category: Accounting
-subcategory: "Advanced Accounting"
-tags:
-  - Education
-  - accounting
+tags: ["advanced accounting", "derivatives", "hedge accounting", "cash flow hedge", "fair value hedge", "currency forward"]
 locale: en
 author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
 
-
-import { LectureTable, LectureProcess, LecturePieChart, LectureBarChart } from "@/features/education-common/components/LectureVisuals";
-
-
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 
-# Advanced Accounting III: Derivatives and Hedge Accounting
+Companies use derivatives to reduce exposure to exchange rates, interest rates and commodity prices. The problem arises when accounting fails to show that economic hedge. A derivative's fair value changes go to profit or loss, but if the hedged item stays at cost or has not yet been recognized, only one side of profit or loss moves. **Hedge accounting** under K-IFRS 1109 is an optional exception that removes this mismatch. The basics of foreign currency translation were covered in [chapter 6](/en/academy-advanced-accounting-ch6/).
 
-The biggest enemy of global business is **volatility**. How does accounting manage and report situations where exchange rates fluctuate and commodity prices jump? This is the highlight of advanced accounting: **Derivatives** accounting.
+## 1. Definition and measurement of derivatives
 
----
+A derivative is a financial instrument with all three of the following features.
 
-## 1. Foreign Currency Transactions and Translation
+1. Its value changes in response to an underlying variable (interest rate, exchange rate, price index and so on).
+2. It requires no or only a very small initial net investment.
+3. It is settled at a future date.
 
-Exchange rate fluctuations significantly impact the profits of firms with many overseas transactions. Accounting applies different exchange rates based on the nature of the asset.
+Forwards, futures, options and swaps are typical. As a rule, derivatives are **measured at fair value with changes in profit or loss**. For an **embedded derivative** contained in another contract, if the host is a financial asset the whole contract is classified without separation; if the host is not a financial asset and the economic characteristics are not closely related, the derivative is separated and accounted for as a derivative.
 
-<LectureTable
-  title="Comparison: Monetary vs. Non-monetary Items"
-  headers={["Category", "Items", "Applicable Rate", "Result"]}
-  rows={[
-    [
-      "Monetary Items",
-      "Cash, Deposits, Loans, Receivables",
-      "Closing Rate (End-of-period rate)",
-      "Foreign Currency Translation Gain/Loss",
-    ],
-    [
-      "Non-monetary Items",
-      "Inventory, Tangible Assets, Intangible Assets",
-      "Historical Rate (Rate at acquisition)",
-      "No FX translation (Cost basis maintained)",
-    ],
-  ]}
-  highlightColumns={[0, 2]}
-/>
+## 2. Qualifying criteria for hedge accounting
 
----
+Hedge accounting is applied only when all of the following criteria are met, and **prospectively from the date of designation**.
 
-## 2. Derivatives Accounting
+- The relationship consists of eligible hedging instruments and eligible hedged items.
+- The risk management objective and strategy and the hedging relationship are **formally designated and documented**.
+- The hedge effectiveness requirements are met: there is an **economic relationship** between the hedged item and the instrument, the **effect of credit risk** does not dominate the value changes, and the **hedge ratio** equals the ratio actually used for risk management.
 
-Derivatives are contracts whose price is determined by the value of an underlying asset.
+The 80–125% effectiveness test of the former standard (IAS 39) was removed in IFRS 9. Instead, any ineffective portion is recognized in profit or loss.
+
+## 3. The three types of hedge
 
 <LectureTable
-  title="Characteristics of Key Derivatives"
-  headers={["Type", "Trading Method", "Accounting Treatment"]}
+  title="Accounting by type of hedge"
+  headers={["Type", "Hedged exposure", "Gain or loss on the instrument", "Gain or loss on the hedged item"]}
   rows={[
-    [
-      "Forwards/Futures",
-      "Trade at fixed price at a specific future date",
-      "Fair value valuation at each closing",
-    ],
-    ["Options", "Right to buy (Call) / Right to sell (Put)", "Record paid premium as an asset"],
-    ["Swaps", "Exchange future cash flows", "Present value evaluation of net cash flows"],
+    ["Fair value hedge", "Changes in fair value of recognized assets, liabilities or firm commitments", "Profit or loss", "Carrying amount adjusted for the hedged risk, through profit or loss"],
+    ["Cash flow hedge", "Variability in cash flows of forecast transactions or floating-rate liabilities", "Effective portion in OCI (cash flow hedge reserve), ineffective portion in profit or loss", "Reserve reclassified when the item affects profit or loss, or added to or deducted from the asset's cost"],
+    ["Hedge of a net investment in a foreign operation", "Currency risk on a foreign operation's net assets", "Effective portion in OCI", "Reclassified on disposal of the foreign operation"],
   ]}
 />
 
----
+## 4. Cash flow hedge: a forecast purchase
 
-## 3. Hedge Accounting
+Company GG (functional currency won) is highly likely to buy USD 100,000 of raw materials in three months, as of 1 November 20X1. To protect itself from a rising exchange rate, on the same day it buys a three-month currency forward (buying dollars) at a forward rate of ₩1,300 and designates it as a cash flow hedge. On 31 December the one-month forward rate is ₩1,330, and on 31 January 20X2 the spot rate is ₩1,340. Ignore discounting.
 
-If derivatives are used to reduce risk, the gains and losses of the 'hedged item' and the 'hedging instrument' must be aligned on the books to offset each other.
-
-<LectureProcess
-  steps={[
-    {
-      label: "Designate Item",
-      description: "Identify specific assets or future transactions to be hedged",
-    },
-    { label: "Designate Instrument", description: "Enter derivative contracts to offset the risk" },
-    {
-      label: "Assess Effectiveness",
-      description: "Measure how well the derivative actually blocks the risk",
-    },
-    {
-      label: "Offset Gains/Losses",
-      description: "Recognize gains/losses of both at the same time to eliminate volatility",
-    },
+<LectureTable
+  title="Fair value and treatment of the currency forward (unit: ₩10,000)"
+  headers={["Date", "Fair value", "Change", "Treatment"]}
+  rows={[
+    ["1 Nov 20X1 contract", "0", "", "No entry"],
+    ["31 Dec 20X1", "USD 100,000 × (1,330 − 1,300) = 300", "+300", "OCI (cash flow hedge reserve) 300"],
+    ["31 Jan 20X2 maturity", "USD 100,000 × (1,340 − 1,300) = 400", "+100", "OCI 100; forward net-settled, cash of 400 received"],
   ]}
 />
 
-<Callout type="note">
-  **Role of Advanced Accountants**: Derivatives accounting is highly sophisticated and crucial for
-  transparently disclosing risk management capabilities to investors, thereby gaining market trust.
+When the raw materials are bought at the spot rate on 31 January, GG pays ₩134 million. Deducting the ₩4 million reserve from the cost of the raw materials (a **basis adjustment**) brings them to ₩130 million, equal to the cost locked in at the forward rate. For a forecast transaction that results in a non-financial asset, the reserve must be included directly in the asset's cost like this. The hedge effect then reaches profit or loss as the raw materials pass into cost of sales.
+
+<FormulaBox
+  label="Cost fixed by the hedge"
+  formula="\text{Raw material cost} = \text{USD }100{,}000 \times 1{,}340 - \underbrace{400}_{\text{reserve}} = 13{,}000 = \text{USD }100{,}000 \times 1{,}300"
+  description="In ₩10,000. Whatever the spot rate does, the cost is fixed at the contracted forward rate of ₩1,300. Without hedge accounting, a ₩3 million gain on the forward would hit profit or loss first in 20X1 and the raw materials would cost ₩134 million."
+/>
+
+## 5. Fair value hedge: fixed-rate borrowings
+
+Company HH has ₩1 billion of borrowings at a fixed 5% and, to hedge their interest rate risk (the fair value rises when market rates fall), enters into an interest rate swap receiving fixed and paying floating, designated as a fair value hedge. If market rates fall so that the fair value of the borrowings rises by ₩12 million and the swap's fair value rises by ₩11.5 million, HH increases the carrying amount of the borrowings by ₩12 million, recognizing a loss, and recognizes a ₩11.5 million gain on the swap. The ₩500,000 difference is the **ineffective portion** left in profit or loss. In effect, the borrowings are reported like a floating-rate liability.
+
+<Callout type="warning">
+Hedge accounting is optional and documentation comes first. A hedge cannot be designated after the fact, so for an undocumented economic hedge only the derivative's gains and losses show up in profit or loss, often in large amounts. Shipbuilders and shipping companies that use large currency forwards often report huge derivative losses in periods of sharp currency moves while their actual cash losses are small. Conversely, if the hedge is larger than the actual exposure, it becomes a speculative position that leads to real losses. Compare the notional amounts in the derivative notes with the size of the hedged exposure.
 </Callout>
 
-Well, we have concluded our long journey through Financial Accounting! From the next chapter, we will venture into the world of **Cost/Management Accounting**, dealing with internal efficiency and costs.
+## Check your understanding
+
+In section 4, if GG had not applied hedge accounting, what would profit or loss in 20X1 and 20X2 and the cost of the raw materials be? Conversely, if the spot rate on 31 January had fallen to ₩1,280, what would the raw materials cost with hedge accounting?
+
+Without hedge accounting the currency forward is at FVPL. Gains of ₩3 million in 20X1 and ₩1 million in 20X2 are recognized in profit or loss, and the raw materials cost ₩134 million at the spot rate. In the periods when the raw materials are sold, cost of sales is ₩4 million higher, so the timing of profit or loss is mismatched. If the spot rate falls to ₩1,280, the forward's fair value is $\text{USD }100{,}000 \times (1{,}280 - 1{,}300) = -200$ (₩10,000), i.e. −₩2 million. The reserve is −₩2 million and the raw materials cost $12{,}800 + 200 = 13{,}000$ (₩10,000), again fixed at the forward rate of ₩1,300. That is the price of giving up the benefit of a favourable rate move.
+
+## References
+
+- Korea Accounting Standards Board, K-IFRS 1109 *Financial Instruments* (chapter 6, hedge accounting)
+- Korea Accounting Standards Board, K-IFRS 1107 *Financial Instruments: Disclosures* (hedge disclosures)
+- Joe Hoyle, Thomas Schaefer and Timothy Doupnik, *Advanced Accounting*, ch. 9
