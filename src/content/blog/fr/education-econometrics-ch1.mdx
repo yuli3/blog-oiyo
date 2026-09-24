@@ -1,0 +1,73 @@
+---
+track: academy
+series: econometrics
+chapter: 1
+title: "Économétrie — Les questions auxquelles répondent causalité, identification et régression"
+description: "Distingue corrélation et causalité, définit dans le cadre des résultats potentiels le problème d'identification entre traitement et résultat, puis répartit les rôles de la régression, des expériences et des variables instrumentales."
+pubDate: 2026-09-15
+updatedDate: 2026-09-24
+category: Economics
+tags: ["économie", "économétrie", "inférence causale", "identification", "analyse de régression"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Économétrie — sans se demander pourquoi les chiffres bougent, une régression reste descriptive
+
+Si les bases de la statistique traitent des distributions et des tests, l'économétrie se demande si les paramètres d'un modèle économique peuvent être distingués dans les données. Même si les années d'études et les salaires évoluent ensemble, il faut montrer séparément que la pente représente « l'effet d'une année d'études supplémentaire ».
+
+Pour les moyennes, les variances et les tests d'hypothèses, voir les [bases de la statistique](/ko/education-statistics-ch1/) (en coréen). Ce cours place ces outils au-dessus de l'endogénéité des données économiques.
+
+## 1. Sans résultats potentiels, pas d'énoncé causal
+
+Si le traitement $D_i$ de l'individu $i$ vaut 1, le salaire observé est $Y_i(1)$ ; s'il vaut 0, c'est $Y_i(0)$. On ne peut pas observer les deux pour la même personne. L'effet moyen du traitement est l'espérance de leur différence.
+
+<FormulaBox
+  label="Effet moyen du traitement"
+  formula="\mathrm{ATE} = E[Y(1)-Y(0)]"
+  description="Ce qu'on observe est E[Y|D=1] - E[Y|D=0]. Pour que cela égale l'ATE, le traitement doit être indépendant des résultats potentiels, ou un dispositif doit créer une telle condition."
+/>
+
+Que les personnes plus diplômées aient un salaire moyen plus élevé, c'est $E[Y|D=1]$. Ce qu'elles auraient gagné sans ces études, $E[Y(0)|D=1]$, n'est pas observé. Si les aptitudes et le milieu familial influencent à la fois $D$ et $Y(0)$, une simple différence de moyennes surestime l'effet.
+
+## 2. L'identification est une hypothèse qui précède l'estimation
+
+Un estimateur est une règle qui tire un nombre d'un échantillon. L'identification est l'hypothèse qui le fait converger vers le paramètre recherché quand l'échantillon grandit sans limite. Sans elle, les MCO ne donnent qu'« une approximation linéaire de l'espérance conditionnelle », et l'on ne peut pas parler d'effet d'une politique.
+
+<LectureTable
+  title="Même régression, questions différentes"
+  headers={["Question", "Hypothèse nécessaire", "Quand l'hypothèse tombe"]}
+  rows={[
+    ["Prévision", "Une espérance conditionnelle stable", "La pente se déplace quand l'environnement change"],
+    ["Statistique descriptive", "Aucune (par définition)", "Elle est lue comme un énoncé causal"],
+    ["Effet causal", "Indépendance conditionnelle, restrictions d'exclusion, etc.", "Biais d'aptitude, simultanéité, erreur de mesure"],
+  ]}
+/>
+
+Supposons qu'une régression donne l'écart d'emploi entre les régions qui ont relevé le salaire minimum et celles qui ne l'ont pas fait. Pour que cet écart soit l'effet du salaire minimum, les régions qui ne l'ont pas relevé doivent constituer le contrefactuel de celles qui l'ont fait. Si ce sont des régions à l'emploi déjà dégradé qui l'ont relevé, la régression en rend la politique responsable.
+
+## 3. Expériences, expériences naturelles et données d'observation relèvent de stratégies d'identification différentes
+
+L'affectation aléatoire rend $D$ quasi indépendant de $Y(0), Y(1)$. La plupart des données économiques ne sont pas expérimentales. Doubles différences, régression sur discontinuité et variables instrumentales empruntent chacune un contrefactuel différent.
+
+<Callout type="warning">
+Multiplier les variables de contrôle ne rend pas une estimation causale. Contrôler un canal intermédiaire supprime une partie de l'effet total, et ajouter des variables déterminées après le traitement crée un nouveau biais. « Un coefficient significatif » n'est pas une preuve d'identification.
+</Callout>
+
+Le chapitre suivant traite de l'algèbre de la régression simple et du sens des résidus, puis le suivant de Gauss–Markov et de l'endogénéité.
+
+## Exercice
+
+Une régression des ventes sur les dépenses publicitaires donne une pente de 2. Augmenter la publicité de 1 000 wons accroît-il les ventes de 2 000 wons ? On ne peut pas le conclure. Les entreprises aux ventes élevées peuvent dépenser davantage en publicité, et si le prix et la qualité bougent en même temps, ce 2 n'est pas un effet causal.
+
+## Références
+
+- Joshua Angrist and Jörn-Steffen Pischke, *Mostly Harmless Econometrics*, ch. 1–2
+- Guido Imbens and Donald Rubin, *Causal Inference for Statistics, Social, and Biomedical Sciences*, ch. 1
+- MIT OpenCourseWare, [14.32 Econometrics](https://ocw.mit.edu/courses/14-32-econometrics-spring-2007/)

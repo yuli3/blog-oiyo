@@ -1,0 +1,73 @@
+---
+track: academy
+series: econometrics
+chapter: 1
+title: "计量经济学 — 因果、识别与回归回答的问题"
+description: "区分相关与因果，在潜在结果框架中定义处理与结果之间的识别问题，并划分回归、实验和工具变量各自的作用。"
+pubDate: 2026-09-15
+updatedDate: 2026-09-24
+category: Economics
+tags: ["经济学", "计量经济学", "因果推断", "识别", "回归分析"]
+locale: zh
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 计量经济学 — 不追问数字为何变动，回归就只是描述性资料
+
+如果说统计学基础讨论分布和检验，计量经济学问的则是经济模型中的参数能否用数据区分出来。即使受教育年限与工资同向变动，这个斜率是否就是"多读一年书的效果"，也需要另行证明。
+
+均值、方差和假设检验见[统计学基础](/ko/education-statistics-ch1/)(韩文)。本课程把这些工具放在经济数据的内生性问题之上。
+
+## 1. 没有潜在结果，就写不出因果命题
+
+若个体$i$的处理$D_i$为1，观测到的工资为$Y_i(1)$;为0时为$Y_i(0)$。同一个人无法同时观测到两者。平均处理效应是二者之差的期望值。
+
+<FormulaBox
+  label="平均处理效应"
+  formula="\mathrm{ATE} = E[Y(1)-Y(0)]"
+  description="能观测到的是E[Y|D=1] - E[Y|D=0]。要使它等于ATE，处理必须与潜在结果独立，或者存在能创造这种条件的设计。"
+/>
+
+受教育多的人平均工资较高，这是$E[Y|D=1]$。他们若没有接受这些教育时的工资$E[Y(0)|D=1]$是看不到的。若能力和家庭背景同时影响$D$和$Y(0)$，简单的均值差就会高估效应。
+
+## 2. 识别是先于估计的假设
+
+估计量是从样本中取出数字的规则。识别则是保证样本无限增大时估计量收敛于目标参数的假设。没有这些假设，OLS只给出"条件均值的线性近似"，不能冠以政策效应之名。
+
+<LectureTable
+  title="同样的回归，不同的问题"
+  headers={["问题", "需要的假设", "假设不成立时"]}
+  rows={[
+    ["预测", "稳定的条件均值", "环境变化时斜率移动"],
+    ["描述统计", "无(定义)", "被当作因果命题解读"],
+    ["因果效应", "条件独立、排除限制等", "能力偏误、联立性、测量误差"],
+  ]}
+/>
+
+假设用回归求出了提高最低工资的地区与未提高地区的就业差异。要让这个差异成为最低工资的效应，未提高的地区必须是提高地区的反事实。若本来就业就差的地区才提高了最低工资，回归就会把责任归咎于政策。
+
+## 3. 实验、自然实验与观测数据的识别策略不同
+
+随机分配使$D$近似独立于$Y(0), Y(1)$。经济数据大多不是实验。双重差分、断点回归和工具变量各自借用了不同的反事实。
+
+<Callout type="warning">
+加入很多控制变量并不能使估计变成因果。控制中间路径会让一部分总效应消失，加入处理之后才决定的变量则会产生新的偏误。"显著的系数"不是识别的证据。
+</Callout>
+
+下一章讨论简单回归的代数和残差的含义，再下一章讨论高斯—马尔可夫定理与内生性。
+
+## 练习题
+
+把销售额对广告费做回归，斜率为2。广告增加1000韩元，销售额就会增加2000韩元吗?不能这样断定。销售额高的企业可能更有能力投放广告，若价格和质量同时变动，这个2就不是因果效应。
+
+## 参考资料
+
+- Joshua Angrist and Jörn-Steffen Pischke, *Mostly Harmless Econometrics*, ch. 1–2
+- Guido Imbens and Donald Rubin, *Causal Inference for Statistics, Social, and Biomedical Sciences*, ch. 1
+- MIT OpenCourseWare, [14.32 Econometrics](https://ocw.mit.edu/courses/14-32-econometrics-spring-2007/)

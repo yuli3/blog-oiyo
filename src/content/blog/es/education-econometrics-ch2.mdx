@@ -1,0 +1,79 @@
+---
+track: academy
+series: econometrics
+chapter: 2
+title: "Econometría — Regresión simple y mínimos cuadrados"
+description: "Deduce que MCO es el álgebra que minimiza la suma de cuadrados de los residuos, lee la pendiente como covarianza sobre varianza y muestra con un ejemplo numérico por qué los residuos no son errores causales."
+pubDate: 2026-09-15
+updatedDate: 2026-09-24
+category: Economics
+tags: ["economía", "econometría", "MCO", "regresión simple", "residuos"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Econometría — MCO es un cálculo que traza una recta por las medias, no una causa
+
+En la regresión simple $Y = \beta_0 + \beta_1 X + U$, MCO elige el par $(\beta_0, \beta_1)$ que minimiza la suma de cuadrados de los residuos. Para que coincida con el ATE del capítulo 1, $X$ y $U$ deben estar incorrelacionados. Este capítulo fija primero el cálculo y deja para el siguiente lo que hace ese supuesto.
+
+## 1. La pendiente sale de las ecuaciones normales
+
+Para una muestra de $n$ observaciones, se ajusta de modo que $\sum \hat u_i = 0$ y $\sum X_i \hat u_i = 0$. Es decir, la media de los residuos es cero y su covarianza muestral con $X$ también.
+
+<FormulaBox
+  label="Pendiente de MCO"
+  formula="\hat\beta_1 = \widehat{\mathrm{Cov}}(X,Y) / \widehat{\mathrm{Var}}(X)"
+  description="Cuánto se aparta Y de su media cuando lo hace X, dividido por la dispersión de X. Sin variación en X no se puede dividir."
+/>
+
+<FormulaBox
+  label="Constante"
+  formula="\hat\beta_0 = \bar Y - \hat\beta_1 \bar X"
+  description="La recta de regresión pasa por el punto medio de la muestra."
+/>
+
+Si los años de estudio son 12, 14 y 16 y los salarios (en decenas de miles de wones) 280, 320 y 390, entonces $\bar X=14$ e $\bar Y=330$. La suma de productos de desviaciones es $(-2)(-50)+0+(2)(60)=220$ y la suma de cuadrados de las desviaciones de $X$ es 8, así que la covarianza muestral es 110 y la varianza muestral 4 (ambas divididas entre $n-1$). Por tanto $\hat\beta_1=220/8=27{,}5$ (275.000 wones por año) y $\hat\beta_0=330-27{,}5×14=-55$. Covarianza y varianza deben dividirse entre el mismo denominador. La constante es negativa porque cero años de estudio es una extrapolación fuera de la muestra; mejor no interpretarla.
+
+## 2. El R² es una proporción de ajuste, no la prueba de que el modelo sea correcto
+
+<FormulaBox
+  label="Coeficiente de determinación"
+  formula="R^2 = 1 - SSR/SST"
+  description="SSR es la suma de cuadrados de los residuos y SST la suma total de cuadrados de Y. Añadir variables nunca reduce el R²."
+/>
+
+Decir que la educación explica el 40 % de la variación de los salarios significa que, en esta muestra, la recta de regresión sobre la educación recoge esa proporción de la suma total de cuadrados. Si una capacidad omitida mueve los salarios a través de la educación, el R² puede subir mientras la interpretación causal empeora.
+
+<LectureTable
+  title="Lo que MCO garantiza y lo que no"
+  headers={["Garantiza", "No garantiza"]}
+  rows={[
+    ["Residuos ⊥ X en la muestra", "U ⊥ X en la población"],
+    ["Pasa por el punto medio", "Significado económico de la constante"],
+    ["Mejor aproximación lineal de la media condicional (bajo supuestos)", "Efecto del tratamiento"],
+  ]}
+/>
+
+## 3. Los residuos no son el error no observado U
+
+El residuo $\hat u$ es lo que sobra de la regresión estimada. $U$ es la perturbación cuando el modelo es verdadero. Si el modelo está mal especificado, $\hat u$ puede ser pequeño sin que $U$ tenga sentido. Si la nube de puntos es curva y se traza una recta, los residuos se concentran a un lado. Lo que hay que hacer entonces no es añadir variables, sino reescribir la forma funcional.
+
+<Callout type="warning">
+Leer un coeficiente de 0,08 de una regresión del logaritmo del salario sobre la educación como «un año de estudios sube el salario un 8 %» es una aproximación. $\exp(0{,}08)-1≈8{,}3\%$, y también se trata de la media condicional cuando $U$ y la educación están incorrelacionados. No agrupe bajo la misma pendiente a personas en el techo educativo ni años mezclados con experiencia laboral.
+</Callout>
+
+## Ejercicio
+
+¿Estandarizar $X$ cambia $\hat\beta_1$? Sí. Dividir $X$ entre su desviación típica $s_X$ convierte la pendiente en $\hat\beta_1 s_X$. En el ejemplo de la sección 1, $s_X=2$, así que la pendiente estandarizada es 55 (550.000 wones): el cambio de Y por cada desviación típica de X. Es un número distinto de 27,5 en las unidades originales, pero describe la misma relación en otras unidades.
+
+## Referencias
+
+- Jeffrey Wooldridge, *Introductory Econometrics*, ch. 2
+- MIT OpenCourseWare, [14.32 Econometrics](https://ocw.mit.edu/courses/14-32-econometrics-spring-2007/)
+- Statistics Korea, [Encuesta de finanzas y condiciones de vida de los hogares](https://kostat.go.kr/incomeNc/) (en coreano)

@@ -1,0 +1,79 @@
+---
+track: academy
+series: econometrics
+chapter: 2
+title: "Econometrics — Simple Regression and Least Squares"
+description: "Derives OLS as the algebra that minimizes the sum of squared residuals, reads the slope as covariance over variance, and shows with a numerical example why residuals are not causal errors."
+pubDate: 2026-09-15
+updatedDate: 2026-09-24
+category: Economics
+tags: ["economics", "econometrics", "OLS", "simple regression", "residuals"]
+locale: en
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Econometrics — OLS Is a Calculation That Draws a Line Through Means, Not a Cause
+
+In the simple regression $Y = \beta_0 + \beta_1 X + U$, OLS chooses the $(\beta_0, \beta_1)$ that minimizes the sum of squared residuals. For that to match the ATE of chapter 1, $X$ and $U$ must be uncorrelated. This chapter pins down the calculation first and leaves what that assumption does to the next chapter.
+
+## 1. The slope comes from the normal equations
+
+For a sample of $n$ observations, fit so that $\sum \hat u_i = 0$ and $\sum X_i \hat u_i = 0$. This means the mean of the residuals is zero and the residuals have zero sample covariance with $X$.
+
+<FormulaBox
+  label="OLS slope"
+  formula="\hat\beta_1 = \widehat{\mathrm{Cov}}(X,Y) / \widehat{\mathrm{Var}}(X)"
+  description="How much Y deviates from its mean when X does, divided by how spread out X is. Without variation in X, the division is impossible."
+/>
+
+<FormulaBox
+  label="Intercept"
+  formula="\hat\beta_0 = \bar Y - \hat\beta_1 \bar X"
+  description="The regression line passes through the sample means."
+/>
+
+If years of schooling are 12, 14 and 16 and wages (in units of 10,000 won) are 280, 320 and 390, then $\bar X=14$ and $\bar Y=330$. The sum of cross-deviations is $(-2)(-50)+0+(2)(60)=220$ and the sum of squared deviations of $X$ is 8, so the sample covariance is 110 and the sample variance 4 (both divided by $n-1$). Then $\hat\beta_1=220/8=27.5$ (275,000 won per year) and $\hat\beta_0=330-27.5×14=-55$. Covariance and variance must be divided by the same denominator. The intercept is negative because zero years of schooling is extrapolated outside the sample; it is better not to interpret it.
+
+## 2. R² is a share of fit, not proof that the model is right
+
+<FormulaBox
+  label="Coefficient of determination"
+  formula="R^2 = 1 - SSR/SST"
+  description="SSR is the sum of squared residuals and SST the total sum of squares of Y. Adding variables never lowers R²."
+/>
+
+Saying that education explains 40% of the variation in wages means that, in this sample, the education regression line accounts for that share of the total sum of squares. If omitted ability moves wages through education, R² can rise while the causal interpretation gets worse.
+
+<LectureTable
+  title="What OLS guarantees and what it does not"
+  headers={["Guaranteed", "Not guaranteed"]}
+  rows={[
+    ["Residuals ⊥ X in the sample", "U ⊥ X in the population"],
+    ["Passes through the means", "Economic meaning of the intercept"],
+    ["Best linear approximation to the conditional mean (under assumptions)", "Treatment effect"],
+  ]}
+/>
+
+## 3. Residuals are not the unobserved error U
+
+The residual $\hat u$ is what is left over from the estimated regression. $U$ is the disturbance when the model is true. If the model is misspecified, $\hat u$ may be small while $U$ has no meaning. If the scatter plot is curved and a straight line is drawn, residuals bunch on one side. What is needed then is not more variables but a new functional form.
+
+<Callout type="warning">
+Reading a coefficient of 0.08 from a regression of log wages on schooling as "one year of schooling raises wages 8%" is an approximation. $\exp(0.08)-1≈8.3\%$, and this too is a statement about the conditional mean when $U$ and schooling are uncorrelated. Do not lump together people at an educational ceiling or years mixed up with work experience under the same slope.
+</Callout>
+
+## Check your understanding
+
+Does standardizing $X$ change $\hat\beta_1$? Yes. Dividing $X$ by its standard deviation $s_X$ turns the slope into $\hat\beta_1 s_X$. In the example of section 1, $s_X=2$, so the standardized slope is 55 (550,000 won), the change in Y per standard deviation of X. It differs from 27.5 in the original units, but it describes the same relationship in different units.
+
+## References
+
+- Jeffrey Wooldridge, *Introductory Econometrics*, ch. 2
+- MIT OpenCourseWare, [14.32 Econometrics](https://ocw.mit.edu/courses/14-32-econometrics-spring-2007/)
+- Statistics Korea, [Survey of Household Finances and Living Conditions](https://kostat.go.kr/incomeNc/) (Korean)

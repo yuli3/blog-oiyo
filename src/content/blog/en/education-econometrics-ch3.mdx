@@ -1,0 +1,72 @@
+---
+track: academy
+series: econometrics
+chapter: 3
+title: "Econometrics — Multiple Regression and Gauss–Markov"
+description: "Shows how control variables change partial regression coefficients, and separates the assumptions under which BLUE holds from the points where heteroskedasticity and multicollinearity break it."
+pubDate: 2026-09-15
+updatedDate: 2026-09-24
+category: Economics
+tags: ["economics", "econometrics", "multiple regression", "Gauss-Markov", "heteroskedasticity"]
+locale: en
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Econometrics — Adding Variables Means Asking About a Different Slope
+
+The slope of a wage regression on schooling alone and the slope with experience and gender added are not the same parameter. The latter is a partial effect "holding the other controls fixed". For a control to stand in for an omitted variable, that variable must be determined before the treatment.
+
+## 1. Frisch–Waugh: regress on the residuals of the other variables
+
+The coefficient on $X$ from regressing $Y$ on $X$ and $W$ equals the coefficient from a simple regression of the residual of $Y$ on $W$ on the residual of $X$ on $W$. To see the effect of schooling controlling for experience, only the variation in schooling not explained by experience is used.
+
+<FormulaBox
+  label="Partial regression"
+  formula="\hat\beta_X = \widehat{\mathrm{Cov}}(\tilde X, \tilde Y) / \widehat{\mathrm{Var}}(\tilde X)"
+  description="The tilde marks residuals after regressing on W. If W takes up most of the variation in X, the residual of X is almost zero and the estimate becomes unstable."
+/>
+
+If schooling and experience move almost together, the data cannot distinguish "the effect of schooling after controlling for experience". That is what multicollinearity really is. A warning of a large variance inflation factor means that the question does not match the variation in the data.
+
+## 2. Gauss–Markov is the receipt for BLUE
+
+With linearity, exogeneity $E[U|X,W]=0$, homoskedasticity and no autocorrelation, OLS has the smallest variance among linear unbiased estimators. Normality is not part of this. Normality is used to interpret finite-sample t-tests.
+
+<LectureTable
+  title="When the assumptions fail"
+  headers={["Assumption", "Symptom when broken", "Remedy"]}
+  rows={[
+    ["Exogeneity", "Ability bias, simultaneity", "Change the identification strategy (chapter 4)"],
+    ["Homoskedasticity", "Fan-shaped residuals", "Robust standard errors, WLS"],
+    ["No autocorrelation", "Clustered residuals in time series", "Cluster, HAC"],
+    ["Linearity", "Ignoring curves and interaction terms", "Respecify the functional form"],
+  ]}
+/>
+
+Under heteroskedasticity, OLS point estimates may still be consistent, but conventional standard errors are wrong. "Significant" is the first casualty. With a small sample of 20 observations, simply switching to robust standard errors and feeling reassured is also risky.
+
+If, in wage data (in units of 10,000 won), the residual variance is small for the less educated and large for the highly educated, the uncertainty of the slope in the high-education range is underestimated. If the White standard error rises from 0.8 to 1.4, the t-value of the same coefficient of 27.5 falls from about 34 to about 20.
+
+## 3. Bad controls do not reduce bias
+
+Controlling for occupation, job rank or other intermediate outcomes set after treatment leaves an odd slice of the direct effect rather than the total effect, or creates new selection bias. Looking at the effect of schooling while controlling for occupation gives the effect "when schooling leaves one in the same occupation". It erases the channel through which schooling changes occupation.
+
+<Callout type="warning">
+Do not write that a model has been "improved" because adjusted R² went up. If the goal is prediction, look at out-of-sample error; if it is causation, look at the identifying assumptions. A regression that adds coefficients to hunt for significance is multiple testing by another name.
+</Callout>
+
+## Check your understanding
+
+The sample correlation between experience and schooling is 0.95. Is the larger standard error on the schooling coefficient due to a breakdown of Gauss–Markov? No. Linear unbiasedness can still hold; the variance grew because $X$ lacks independent variation.
+
+## References
+
+- Jeffrey Wooldridge, *Introductory Econometrics*, ch. 3–8
+- Ragnar Frisch and Frederick Waugh, "Partial Time Regressions," *Econometrica* (1933)
+- MIT OpenCourseWare, [14.32 Econometrics](https://ocw.mit.edu/courses/14-32-econometrics-spring-2007/)

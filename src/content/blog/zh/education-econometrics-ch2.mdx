@@ -1,0 +1,79 @@
+---
+track: academy
+series: econometrics
+chapter: 2
+title: "计量经济学 — 简单回归与最小二乘法"
+description: "推导OLS是使残差平方和最小的代数运算，把斜率理解为协方差除以方差，并用数值例子说明残差为何不是因果误差。"
+pubDate: 2026-09-15
+updatedDate: 2026-09-24
+category: Economics
+tags: ["经济学", "计量经济学", "OLS", "简单回归", "残差"]
+locale: zh
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 计量经济学 — OLS是画一条均值线的计算，而不是原因
+
+在简单回归$Y = \beta_0 + \beta_1 X + U$中，OLS选择使残差平方和最小的$(\beta_0, \beta_1)$。要使它等于第1章的ATE，$X$与$U$必须不相关。本章先把计算确定下来，这一假设的作用留到下一章。
+
+## 1. 斜率来自正规方程
+
+对$n$个样本，使$\sum \hat u_i = 0$、$\sum X_i \hat u_i = 0$成立即可。这意味着残差均值为0，且残差与$X$的样本协方差为0。
+
+<FormulaBox
+  label="OLS斜率"
+  formula="\hat\beta_1 = \widehat{\mathrm{Cov}}(X,Y) / \widehat{\mathrm{Var}}(X)"
+  description="X偏离均值时Y随之偏离的程度，除以X的离散程度。X没有变动就无法相除。"
+/>
+
+<FormulaBox
+  label="截距"
+  formula="\hat\beta_0 = \bar Y - \hat\beta_1 \bar X"
+  description="回归线经过样本的均值点。"
+/>
+
+若受教育年限为12、14、16年，工资(万韩元)为280、320、390，则$\bar X=14$，$\bar Y=330$。离差乘积之和为$(-2)(-50)+0+(2)(60)=220$，$X$的离差平方和为8，所以样本协方差为110，样本方差为4(都除以$n-1$)，$\hat\beta_1=220/8=27.5$万韩元/年，$\hat\beta_0=330-27.5×14=-55$万韩元。协方差和方差必须除以相同的分母。截距为负，是因为把0年教育外推到了样本之外，最好不要解读。
+
+## 2. R²是拟合的比例，而不是模型正确与否
+
+<FormulaBox
+  label="决定系数"
+  formula="R^2 = 1 - SSR/SST"
+  description="SSR为残差平方和，SST为Y的总平方和。增加变量不会使R²下降。"
+/>
+
+说教育解释了工资变动的40%，意思是在这个样本中，教育回归线占了总平方和的这一比例。若被遗漏的能力通过教育影响工资，R²可能升高，因果解释反而更糟。
+
+<LectureTable
+  title="OLS保证什么、不保证什么"
+  headers={["保证", "不保证"]}
+  rows={[
+    ["样本中残差⊥X", "总体中U⊥X"],
+    ["经过均值点", "截距的经济含义"],
+    ["线性条件均值的最佳近似(在假设下)", "处理效应"],
+  ]}
+/>
+
+## 3. 残差不是不可观测的误差U
+
+残差$\hat u$是估计回归后剩下的部分。$U$是模型为真时的扰动项。模型设定错误时，即使$\hat u$很小，$U$也没有意义。散点图呈曲线却画直线，残差就会偏向一侧。此时该做的不是加入更多变量，而是重新设定函数形式。
+
+<Callout type="warning">
+把对数工资对教育回归得到的系数0.08读成"多受一年教育，工资提高8%"，是一种近似。$\exp(0.08)-1≈8.3\%$，而且这也只是在$U$与教育不相关时关于条件均值的说法。不要把处于学历上限的人、与工作经验混在一起的年限套进同一个斜率。
+</Callout>
+
+## 练习题
+
+把$X$标准化后，$\hat\beta_1$会变吗?会。把$X$除以标准差$s_X$后，斜率变为$\hat\beta_1 s_X$。第1节的例子中$s_X=2$，所以标准化斜率为55万韩元，表示"X每变动1个标准差时Y的变化"。它与原单位下的27.5数字不同，但描述的是用不同单位表示的同一关系。
+
+## 参考资料
+
+- Jeffrey Wooldridge, *Introductory Econometrics*, ch. 2
+- MIT OpenCourseWare, [14.32 Econometrics](https://ocw.mit.edu/courses/14-32-econometrics-spring-2007/)
+- 韩国统计厅，[家庭金融福利调查](https://kostat.go.kr/incomeNc/)(韩文)

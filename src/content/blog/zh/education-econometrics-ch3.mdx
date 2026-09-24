@@ -1,0 +1,72 @@
+---
+track: academy
+series: econometrics
+chapter: 3
+title: "计量经济学 — 多元回归与高斯—马尔可夫定理"
+description: "说明控制变量如何改变偏回归系数，并区分BLUE成立的假设与异方差、多重共线性使其失效的地方。"
+pubDate: 2026-09-15
+updatedDate: 2026-09-24
+category: Economics
+tags: ["经济学", "计量经济学", "多元回归", "高斯-马尔可夫", "异方差"]
+locale: zh
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 计量经济学 — 加入变量，就是在问另一个斜率
+
+只放教育的工资回归斜率，与同时放入工作经验和性别后的斜率，不是同一个参数。后者是"其他控制变量固定时"的偏效应。控制变量要替代遗漏变量，该变量必须在处理之前就已确定。
+
+## 1. 弗里希—沃定理:对其他变量的残差回归
+
+把$Y$对$X$和$W$回归得到的$X$系数，等于把$Y$对$W$回归的残差再对$X$对$W$回归的残差做简单回归所得的系数。要在控制工作经验的情况下看教育效应，只能使用教育中不能被工作经验解释的那部分变动。
+
+<FormulaBox
+  label="偏回归"
+  formula="\hat\beta_X = \widehat{\mathrm{Cov}}(\tilde X, \tilde Y) / \widehat{\mathrm{Var}}(\tilde X)"
+  description="波浪号表示对W回归后剩下的残差。若W拿走了X的大部分变动，X的残差几乎为0，估计就不稳定。"
+/>
+
+若教育与工作经验几乎同步变动，数据就无法区分"控制工作经验后的教育效应"。这就是多重共线性的实质。方差膨胀因子过大的警告，意味着问题与数据的变动不匹配。
+
+## 2. 高斯—马尔可夫定理是BLUE的收据
+
+在线性、外生性$E[U|X,W]=0$、同方差、无自相关的条件下，OLS在线性无偏估计量中方差最小。正态分布不在其中。正态性用于解读有限样本的t检验。
+
+<LectureTable
+  title="假设不成立时"
+  headers={["假设", "不成立时的症状", "对策"]}
+  rows={[
+    ["外生性", "能力偏误、联立性", "改变识别策略(第4章)"],
+    ["同方差", "残差呈扇形", "稳健标准误、WLS"],
+    ["无自相关", "时间序列残差聚集", "聚类、HAC"],
+    ["线性", "忽略曲线和交互项", "重新设定函数形式"],
+  ]}
+/>
+
+存在异方差时，OLS点估计仍可能是一致的，但普通标准误是错的。"显著"最先失效。在只有20个观测值的小样本中，仅仅换成稳健标准误就放心，也是危险的。
+
+若在工资(万韩元)数据中，低学历者残差方差小、高学历者残差方差大，就会低估高学历区间斜率的不确定性。怀特标准误若从0.8万韩元增至1.4万韩元，同一个系数27.5万韩元的t值会从约34降到约20。
+
+## 3. 不良控制不会减少偏误
+
+控制职业、职级等处理之后才确定的中间结果，留下的不是总效应，而是直接效应中一个奇怪的片段，或者会产生新的选择偏误。控制职业来看教育效应，得到的是"受了教育仍留在同一职业时"的效应，抹去了教育改变职业的渠道。
+
+<Callout type="warning">
+不要因为调整R²上升就写模型"改进"了。若目标是预测，就看样本外误差;若目标是因果，就看识别假设。通过增加系数来寻找显著性的回归，只是多重检验的另一个名字。
+</Callout>
+
+## 练习题
+
+工作经验与教育的样本相关系数为0.95。教育系数的标准误变大，是因为高斯—马尔可夫条件被破坏了吗?不是。线性无偏性仍可成立，方差变大是因为$X$缺乏独立的变动。
+
+## 参考资料
+
+- Jeffrey Wooldridge, *Introductory Econometrics*, ch. 3–8
+- Ragnar Frisch and Frederick Waugh, "Partial Time Regressions," *Econometrica* (1933)
+- MIT OpenCourseWare, [14.32 Econometrics](https://ocw.mit.edu/courses/14-32-econometrics-spring-2007/)

@@ -1,0 +1,72 @@
+---
+track: academy
+series: econometrics
+chapter: 3
+title: "Econometría — Regresión múltiple y teorema de Gauss–Markov"
+description: "Muestra cómo las variables de control cambian los coeficientes de regresión parcial y distingue los supuestos con los que se cumple ELIO de los puntos en que la heterocedasticidad y la multicolinealidad lo rompen."
+pubDate: 2026-09-15
+updatedDate: 2026-09-24
+category: Economics
+tags: ["economía", "econometría", "regresión múltiple", "Gauss-Markov", "heterocedasticidad"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Econometría — añadir variables es preguntar por otra pendiente
+
+La pendiente de una regresión salarial solo con educación y la pendiente al añadir experiencia y sexo no son el mismo parámetro. La segunda es un efecto parcial «manteniendo fijos los demás controles». Para que un control sustituya a una variable omitida, esa variable debe determinarse antes del tratamiento.
+
+## 1. Frisch–Waugh: regresar sobre los residuos de las demás variables
+
+El coeficiente de $X$ al regresar $Y$ sobre $X$ y $W$ es igual al coeficiente de la regresión simple del residuo de $Y$ sobre $W$ en el residuo de $X$ sobre $W$. Para ver el efecto de la educación controlando la experiencia, solo se usa la variación de la educación que la experiencia no explica.
+
+<FormulaBox
+  label="Regresión parcial"
+  formula="\hat\beta_X = \widehat{\mathrm{Cov}}(\tilde X, \tilde Y) / \widehat{\mathrm{Var}}(\tilde X)"
+  description="La tilde indica los residuos tras regresar sobre W. Si W absorbe casi toda la variación de X, el residuo de X es casi cero y la estimación se vuelve inestable."
+/>
+
+Si la educación y la experiencia se mueven casi juntas, los datos no pueden distinguir «el efecto de la educación controlando la experiencia». Eso es en realidad la multicolinealidad. El aviso de un factor de inflación de la varianza alto significa que la pregunta no encaja con la variación de los datos.
+
+## 2. Gauss–Markov es el recibo de ELIO
+
+Con linealidad, exogeneidad $E[U|X,W]=0$, homocedasticidad y ausencia de autocorrelación, MCO tiene la menor varianza entre los estimadores lineales insesgados (ELIO). La normalidad no forma parte de esto; se usa para interpretar los contrastes t en muestras finitas.
+
+<LectureTable
+  title="Cuando fallan los supuestos"
+  headers={["Supuesto", "Síntoma", "Remedio"]}
+  rows={[
+    ["Exogeneidad", "Sesgo de capacidad, simultaneidad", "Cambiar la estrategia de identificación (capítulo 4)"],
+    ["Homocedasticidad", "Residuos en abanico", "Errores típicos robustos, MCP"],
+    ["Ausencia de autocorrelación", "Residuos agrupados en series temporales", "Conglomerados, HAC"],
+    ["Linealidad", "Curvas e interacciones ignoradas", "Reespecificar la forma funcional"],
+  ]}
+/>
+
+Con heterocedasticidad, la estimación puntual de MCO puede seguir siendo consistente, pero los errores típicos habituales son erróneos. «Significativo» es la primera víctima. Con una muestra pequeña de 20 observaciones, quedarse tranquilo solo por cambiar a errores típicos robustos también es arriesgado.
+
+Si, en datos salariales (en decenas de miles de wones), la varianza de los residuos es pequeña en los menos formados y grande en los más formados, se subestima la incertidumbre de la pendiente en el tramo de mayor formación. Si el error típico de White pasa de 0,8 a 1,4, el estadístico t del mismo coeficiente de 27,5 baja de unos 34 a unos 20.
+
+## 3. Los malos controles no reducen el sesgo
+
+Controlar la ocupación, la categoría u otros resultados intermedios fijados tras el tratamiento deja no el efecto total, sino un fragmento extraño del efecto directo, o crea un nuevo sesgo de selección. Ver el efecto de la educación controlando la ocupación da el efecto «cuando la educación deja a la persona en la misma ocupación». Borra la vía por la que la educación cambia la ocupación.
+
+<Callout type="warning">
+No escriba que un modelo ha «mejorado» porque subió el R² ajustado. Si el objetivo es predecir, mire el error fuera de la muestra; si es causal, mire los supuestos de identificación. Una regresión que añade coeficientes para cazar significación es otro nombre de los contrastes múltiples.
+</Callout>
+
+## Ejercicio
+
+La correlación muestral entre experiencia y educación es 0,95. ¿El mayor error típico del coeficiente de la educación se debe a que falla Gauss–Markov? No. La insesgadez lineal puede mantenerse; la varianza creció porque $X$ carece de variación propia.
+
+## Referencias
+
+- Jeffrey Wooldridge, *Introductory Econometrics*, ch. 3–8
+- Ragnar Frisch and Frederick Waugh, «Partial Time Regressions», *Econometrica* (1933)
+- MIT OpenCourseWare, [14.32 Econometrics](https://ocw.mit.edu/courses/14-32-econometrics-spring-2007/)

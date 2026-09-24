@@ -1,0 +1,75 @@
+---
+track: academy
+series: econometrics
+chapter: 4
+title: "Econometrics — Endogeneity and Instrumental Variables"
+description: "Separates the directions in which omitted variables, simultaneity and measurement error make OLS inconsistent, and checks the relevance and exclusion of instruments with the first-stage F and further tests."
+pubDate: 2026-09-15
+updatedDate: 2026-09-24
+category: Economics
+tags: ["economics", "econometrics", "endogeneity", "instrumental variables", "omitted variables"]
+locale: en
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Econometrics — Endogeneity Means the Error Is Correlated With X
+
+For OLS to give a causal slope, $\mathrm{Cov}(X,U)=0$ must hold. There are three typical ways this correlation survives: a missing variable, equations that determine each other, and inaccurate measurement. An instrumental variable borrows exogenous variation that breaks that correlation.
+
+## 1. The sign of omitted-variable bias is the product of two relationships
+
+If the true model is $Y = \beta X + \gamma W + U$ and $W$ is left out, the bias is close to $\gamma\delta$, where $\delta$ is the coefficient from regressing $W$ on $X$.
+
+If schooling $X$ and ability $W$ are positively correlated and ability raises wages, the coefficient from regressing on schooling alone is overstated. Conversely, if measured years of schooling contain noise unrelated to true human capital, attenuation bias shrinks the coefficient towards zero. Both are "wrong OLS", but in opposite directions.
+
+<LectureTable
+  title="Three sources of endogeneity"
+  headers={["Source", "Example", "Direction of OLS"]}
+  rows={[
+    ["Omitted variables", "Ability, motivation", "Usually overstates the return to schooling"],
+    ["Simultaneity", "Price and quantity", "Demand slope distorted steeper or flatter"],
+    ["Measurement error", "Recalled income, inaccurate years", "Attenuated towards zero with classical error"],
+  ]}
+/>
+
+## 2. A good instrument must satisfy relevance and exclusion together
+
+An instrument $Z$ must move $X$ ($\text{relevance}$) and affect $Y$ only through $X$ ($\text{exclusion restriction}$). Two-stage least squares regresses $X$ on $Z$ in the first stage and uses the fitted values in the second-stage regression of $Y$.
+
+<FormulaBox
+  label="IV slope (simple)"
+  formula="\hat\beta_{IV} = \widehat{\mathrm{Cov}}(Z,Y) / \widehat{\mathrm{Cov}}(Z,X)"
+  description="If Z does not move X, the denominator is close to zero and the instrument is weak."
+/>
+
+Changes in the length of compulsory schooling are a classic candidate instrument. The story that the law changes years of schooling and affects wages only through schooling has to be convincing. If the law also changed labour-market institutions at the same time, exclusion fails.
+
+The rule of checking whether the first-stage F exceeds 10 is a rule of thumb for weak-instrument bias. With F = 4, samples in which the second-stage coefficient is off by several times the true value are common, and F = 10 is only a hurdle meant to reduce that bias. Recent literature recommends stricter thresholds and Anderson–Rubin intervals. A large F does not prove the exclusion restriction; it only checks relevance.
+
+## 3. The local average treatment effect is not the overall ATE
+
+With heterogeneous effects, IV captures the average effect for people whose behaviour the instrument changes (LATE). It is the return to schooling for those who responded to compulsory schooling, not for those who were going to university anyway. If the policy's target group differs from that group, do not carry the number over.
+
+<Callout type="warning">
+Trying out several "significant exogenous variables" as instruments and keeping only the pretty second stage is not identification. An overidentification test that is not rejected can also pass if all the instruments are wrong in the same direction. Defend the exclusion restriction with an institutional story; tests are secondary.
+</Callout>
+
+These four chapters are the entrance to undergraduate econometrics. Panels, unit roots in time series and selection models are covered in later courses. The completion criterion at this stage is being able to write an identification statement before attaching a causal name to a regression coefficient.
+
+## Check your understanding
+
+If a tobacco tax rise of 1,000 won per pack lifts the price from 4,500 won to 5,400 won, the tax pass-through rate is 90%. Suppose the tax rise is used as an instrument for the price of cigarettes. If health awareness moves both the tax rise and smoking, which assumption breaks?
+
+The exclusion restriction — that the tax affects smoking only through the price — breaks. Relevance (tax → price, 90% pass-through) can still be strong, so a large first-stage F cannot paper over the problem.
+
+## References
+
+- Joshua Angrist and Alan Krueger, "Does Compulsory School Attendance Affect Schooling and Earnings?," *Quarterly Journal of Economics* (1991)
+- Joshua Angrist and Jörn-Steffen Pischke, *Mostly Harmless Econometrics*, ch. 4
+- Jeffrey Wooldridge, *Introductory Econometrics*, ch. 15

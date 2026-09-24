@@ -1,0 +1,79 @@
+---
+track: academy
+series: econometrics
+chapter: 2
+title: "Économétrie — Régression simple et moindres carrés"
+description: "Établit que les MCO sont l'algèbre qui minimise la somme des carrés des résidus, lit la pente comme covariance sur variance et montre par un exemple chiffré pourquoi les résidus ne sont pas des erreurs causales."
+pubDate: 2026-09-15
+updatedDate: 2026-09-24
+category: Economics
+tags: ["économie", "économétrie", "MCO", "régression simple", "résidus"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Économétrie — les MCO tracent une droite passant par les moyennes, ils ne désignent pas une cause
+
+Dans la régression simple $Y = \beta_0 + \beta_1 X + U$, les MCO choisissent le couple $(\beta_0, \beta_1)$ qui minimise la somme des carrés des résidus. Pour que ce résultat coïncide avec l'ATE du chapitre 1, $X$ et $U$ doivent être non corrélés. Ce chapitre fixe d'abord le calcul et renvoie au suivant le rôle de cette hypothèse.
+
+## 1. La pente découle des équations normales
+
+Pour un échantillon de $n$ observations, on ajuste de sorte que $\sum \hat u_i = 0$ et $\sum X_i \hat u_i = 0$. Autrement dit, la moyenne des résidus est nulle et leur covariance empirique avec $X$ aussi.
+
+<FormulaBox
+  label="Pente des MCO"
+  formula="\hat\beta_1 = \widehat{\mathrm{Cov}}(X,Y) / \widehat{\mathrm{Var}}(X)"
+  description="La mesure dans laquelle Y s'écarte de sa moyenne quand X le fait, divisée par la dispersion de X. Sans variation de X, la division est impossible."
+/>
+
+<FormulaBox
+  label="Constante"
+  formula="\hat\beta_0 = \bar Y - \hat\beta_1 \bar X"
+  description="La droite de régression passe par le point moyen de l'échantillon."
+/>
+
+Si les années d'études valent 12, 14 et 16 et les salaires (en dizaines de milliers de wons) 280, 320 et 390, alors $\bar X=14$ et $\bar Y=330$. La somme des produits des écarts vaut $(-2)(-50)+0+(2)(60)=220$ et la somme des carrés des écarts de $X$ vaut 8 : la covariance empirique est de 110 et la variance empirique de 4 (toutes deux divisées par $n-1$). D'où $\hat\beta_1=220/8=27{,}5$ (275 000 wons par an) et $\hat\beta_0=330-27{,}5×14=-55$. Covariance et variance doivent être divisées par le même dénominateur. La constante est négative parce que zéro année d'études est une extrapolation hors échantillon ; mieux vaut ne pas l'interpréter.
+
+## 2. Le R² est une part d'ajustement, pas la preuve que le modèle est juste
+
+<FormulaBox
+  label="Coefficient de détermination"
+  formula="R^2 = 1 - SSR/SST"
+  description="SSR est la somme des carrés des résidus et SST la somme totale des carrés de Y. Ajouter des variables ne fait jamais baisser le R²."
+/>
+
+Dire que l'éducation explique 40 % de la variation des salaires signifie que, dans cet échantillon, la droite de régression sur l'éducation représente cette part de la somme totale des carrés. Si une aptitude omise agit sur les salaires à travers l'éducation, le R² peut augmenter alors que l'interprétation causale se dégrade.
+
+<LectureTable
+  title="Ce que les MCO garantissent et ce qu'ils ne garantissent pas"
+  headers={["Garanti", "Non garanti"]}
+  rows={[
+    ["Résidus ⊥ X dans l'échantillon", "U ⊥ X dans la population"],
+    ["Passage par le point moyen", "Sens économique de la constante"],
+    ["Meilleure approximation linéaire de l'espérance conditionnelle (sous hypothèses)", "Effet du traitement"],
+  ]}
+/>
+
+## 3. Les résidus ne sont pas l'erreur inobservée U
+
+Le résidu $\hat u$ est ce qui reste de la régression estimée. $U$ est la perturbation quand le modèle est vrai. Si le modèle est mal spécifié, $\hat u$ peut être petit alors que $U$ n'a aucun sens. Si le nuage de points est courbe et qu'on trace une droite, les résidus se concentrent d'un côté. Il faut alors non pas ajouter des variables, mais réécrire la forme fonctionnelle.
+
+<Callout type="warning">
+Lire un coefficient de 0,08 issu d'une régression du logarithme du salaire sur l'éducation comme « une année d'études augmente le salaire de 8 % » est une approximation. $\exp(0{,}08)-1≈8{,}3\%$, et il s'agit là encore de l'espérance conditionnelle quand $U$ et l'éducation sont non corrélés. Ne regroupez pas sous une même pente des personnes au plafond de diplôme ou des années mêlées à l'expérience professionnelle.
+</Callout>
+
+## Exercice
+
+Standardiser $X$ modifie-t-il $\hat\beta_1$ ? Oui. Diviser $X$ par son écart-type $s_X$ transforme la pente en $\hat\beta_1 s_X$. Dans l'exemple de la section 1, $s_X=2$, donc la pente standardisée vaut 55 (550 000 wons) : c'est la variation de Y pour un écart-type de X. Elle diffère de 27,5 en unités d'origine, mais décrit la même relation dans d'autres unités.
+
+## Références
+
+- Jeffrey Wooldridge, *Introductory Econometrics*, ch. 2
+- MIT OpenCourseWare, [14.32 Econometrics](https://ocw.mit.edu/courses/14-32-econometrics-spring-2007/)
+- Statistics Korea, [Enquête sur les finances et les conditions de vie des ménages](https://kostat.go.kr/incomeNc/) (en coréen)

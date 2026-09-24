@@ -1,0 +1,72 @@
+---
+track: academy
+series: econometrics
+chapter: 3
+title: "Économétrie — Régression multiple et théorème de Gauss–Markov"
+description: "Montre comment les variables de contrôle modifient les coefficients de régression partielle, et distingue les hypothèses sous lesquelles vaut le BLUE des points où l'hétéroscédasticité et la multicolinéarité le mettent en défaut."
+pubDate: 2026-09-15
+updatedDate: 2026-09-24
+category: Economics
+tags: ["économie", "économétrie", "régression multiple", "Gauss-Markov", "hétéroscédasticité"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Économétrie — ajouter des variables, c'est poser la question d'une autre pente
+
+La pente d'une régression des salaires sur la seule éducation et celle obtenue en ajoutant l'expérience et le sexe ne sont pas le même paramètre. La seconde est un effet partiel « à contrôles constants ». Pour qu'un contrôle remplace une variable omise, celle-ci doit être déterminée avant le traitement.
+
+## 1. Frisch–Waugh : régresser sur les résidus des autres variables
+
+Le coefficient de $X$ dans la régression de $Y$ sur $X$ et $W$ est égal au coefficient de la régression simple du résidu de $Y$ sur $W$ sur le résidu de $X$ sur $W$. Pour voir l'effet de l'éducation à expérience contrôlée, on n'utilise que la variation de l'éducation non expliquée par l'expérience.
+
+<FormulaBox
+  label="Régression partielle"
+  formula="\hat\beta_X = \widehat{\mathrm{Cov}}(\tilde X, \tilde Y) / \widehat{\mathrm{Var}}(\tilde X)"
+  description="Le tilde désigne les résidus après régression sur W. Si W absorbe l'essentiel de la variation de X, le résidu de X est presque nul et l'estimation devient instable."
+/>
+
+Si l'éducation et l'expérience évoluent presque ensemble, les données ne peuvent pas distinguer « l'effet de l'éducation à expérience contrôlée ». C'est ce qu'est réellement la multicolinéarité. Un facteur d'inflation de la variance élevé avertit que la question ne correspond pas à la variation des données.
+
+## 2. Gauss–Markov est le reçu du BLUE
+
+Avec la linéarité, l'exogénéité $E[U|X,W]=0$, l'homoscédasticité et l'absence d'autocorrélation, les MCO ont la plus petite variance parmi les estimateurs linéaires sans biais. La normalité n'en fait pas partie : elle sert à interpréter les tests t en échantillon fini.
+
+<LectureTable
+  title="Quand les hypothèses tombent"
+  headers={["Hypothèse", "Symptôme", "Remède"]}
+  rows={[
+    ["Exogénéité", "Biais d'aptitude, simultanéité", "Changer de stratégie d'identification (chapitre 4)"],
+    ["Homoscédasticité", "Résidus en éventail", "Écarts-types robustes, MCP"],
+    ["Absence d'autocorrélation", "Résidus groupés en série temporelle", "Grappes, HAC"],
+    ["Linéarité", "Courbes et interactions ignorées", "Respécifier la forme fonctionnelle"],
+  ]}
+/>
+
+En présence d'hétéroscédasticité, l'estimation ponctuelle des MCO peut rester convergente, mais les écarts-types usuels sont faux. « Significatif » est la première victime. Avec un petit échantillon de 20 observations, se contenter de passer aux écarts-types robustes est également risqué.
+
+Si, dans des données de salaires (en dizaines de milliers de wons), la variance des résidus est faible chez les moins diplômés et forte chez les plus diplômés, on sous-estime l'incertitude de la pente dans la tranche la plus diplômée. Si l'écart-type de White passe de 0,8 à 1,4, la statistique t du même coefficient de 27,5 tombe d'environ 34 à environ 20.
+
+## 3. Les mauvais contrôles ne réduisent pas le biais
+
+Contrôler la profession, le grade ou d'autres résultats intermédiaires fixés après le traitement laisse non pas l'effet total, mais un étrange fragment de l'effet direct, ou crée un nouveau biais de sélection. Examiner l'effet de l'éducation en contrôlant la profession donne l'effet « quand l'éducation laisse dans la même profession ». Cela efface le canal par lequel l'éducation change la profession.
+
+<Callout type="warning">
+N'écrivez pas qu'un modèle a été « amélioré » parce que le R² ajusté a augmenté. Si l'objectif est la prévision, regardez l'erreur hors échantillon ; s'il est causal, regardez les hypothèses d'identification. Une régression qui multiplie les coefficients pour traquer la significativité n'est qu'un autre nom des tests multiples.
+</Callout>
+
+## Exercice
+
+La corrélation empirique entre expérience et éducation est de 0,95. L'écart-type plus élevé du coefficient de l'éducation vient-il d'une violation de Gauss–Markov ? Non. L'absence de biais linéaire peut subsister ; la variance a augmenté parce que $X$ manque de variation propre.
+
+## Références
+
+- Jeffrey Wooldridge, *Introductory Econometrics*, ch. 3–8
+- Ragnar Frisch and Frederick Waugh, « Partial Time Regressions », *Econometrica* (1933)
+- MIT OpenCourseWare, [14.32 Econometrics](https://ocw.mit.edu/courses/14-32-econometrics-spring-2007/)

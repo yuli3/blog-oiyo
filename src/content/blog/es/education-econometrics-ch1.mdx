@@ -1,0 +1,73 @@
+---
+track: academy
+series: econometrics
+chapter: 1
+title: "Econometría — Las preguntas que responden la causalidad, la identificación y la regresión"
+description: "Distingue correlación y causalidad, define el problema de identificación entre tratamiento y resultado en el marco de resultados potenciales y reparte los papeles de la regresión, los experimentos y las variables instrumentales."
+pubDate: 2026-09-15
+updatedDate: 2026-09-24
+category: Economics
+tags: ["economía", "econometría", "inferencia causal", "identificación", "análisis de regresión"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Econometría — si no se pregunta por qué se mueven los números, una regresión es solo descriptiva
+
+Si la estadística básica trata de distribuciones y contrastes, la econometría pregunta si los parámetros de un modelo económico pueden distinguirse con los datos. Aunque los años de estudio y los salarios se muevan juntos, que la pendiente sea «el efecto de estudiar un año más» hay que demostrarlo aparte.
+
+Para medias, varianzas y contrastes de hipótesis, vea [estadística básica](/ko/education-statistics-ch1/) (en coreano). Este curso coloca esas herramientas sobre la endogeneidad de los datos económicos.
+
+## 1. Sin resultados potenciales no se pueden escribir afirmaciones causales
+
+Si el tratamiento $D_i$ del individuo $i$ es 1, el salario observado es $Y_i(1)$; si es 0, es $Y_i(0)$. No pueden observarse ambos en la misma persona. El efecto medio del tratamiento es la esperanza de su diferencia.
+
+<FormulaBox
+  label="Efecto medio del tratamiento"
+  formula="\mathrm{ATE} = E[Y(1)-Y(0)]"
+  description="Lo que se observa es E[Y|D=1] - E[Y|D=0]. Para que sea igual al ATE, el tratamiento debe ser independiente de los resultados potenciales, o debe haber un diseño que cree esa condición."
+/>
+
+Que las personas con más estudios tengan un salario medio más alto es $E[Y|D=1]$. Lo que habrían ganado sin esos estudios, $E[Y(0)|D=1]$, no se ve. Si la capacidad y el entorno familiar mueven a la vez $D$ e $Y(0)$, una simple diferencia de medias sobrestima el efecto.
+
+## 2. La identificación es un supuesto previo a la estimación
+
+Un estimador es una regla para extraer un número de una muestra. La identificación es el supuesto que lo hace converger al parámetro buscado cuando la muestra crece sin límite. Sin él, MCO solo da «una aproximación lineal de la media condicional» y no puede llamarse efecto de una política.
+
+<LectureTable
+  title="La misma regresión, preguntas distintas"
+  headers={["Pregunta", "Supuesto necesario", "Cuando el supuesto falla"]}
+  rows={[
+    ["Predicción", "Una media condicional estable", "La pendiente cambia cuando cambia el entorno"],
+    ["Estadística descriptiva", "Ninguno (por definición)", "Se lee como afirmación causal"],
+    ["Efecto causal", "Independencia condicional, restricciones de exclusión, etc.", "Sesgo de capacidad, simultaneidad, error de medida"],
+  ]}
+/>
+
+Supongamos que una regresión da la diferencia de empleo entre las regiones que subieron el salario mínimo y las que no. Para que esa diferencia sea el efecto del salario mínimo, las regiones que no lo subieron deben ser el contrafactual de las que sí. Si fueron regiones con un empleo ya débil las que lo subieron, la regresión culpa a la política.
+
+## 3. Experimentos, experimentos naturales y datos observacionales usan estrategias de identificación distintas
+
+La asignación aleatoria hace que $D$ sea casi independiente de $Y(0), Y(1)$. La mayoría de los datos económicos no son experimentales. Las diferencias en diferencias, la regresión discontinua y las variables instrumentales toman prestado, cada una, un contrafactual distinto.
+
+<Callout type="warning">
+Añadir muchas variables de control no hace causal una estimación. Controlar una vía intermedia elimina parte del efecto total, y añadir variables determinadas después del tratamiento crea un sesgo nuevo. «Un coeficiente significativo» no es prueba de identificación.
+</Callout>
+
+El capítulo siguiente trata del álgebra de la regresión simple y del significado de los residuos, y el posterior de Gauss–Markov y la endogeneidad.
+
+## Ejercicio
+
+Una regresión de las ventas sobre el gasto en publicidad da una pendiente de 2. ¿Aumentar la publicidad en 1.000 wones eleva las ventas en 2.000 wones? No puede concluirse. Las empresas con más ventas pueden gastar más en publicidad, y si el precio y la calidad se mueven a la vez, ese 2 no es un efecto causal.
+
+## Referencias
+
+- Joshua Angrist and Jörn-Steffen Pischke, *Mostly Harmless Econometrics*, ch. 1–2
+- Guido Imbens and Donald Rubin, *Causal Inference for Statistics, Social, and Biomedical Sciences*, ch. 1
+- MIT OpenCourseWare, [14.32 Econometrics](https://ocw.mit.edu/courses/14-32-econometrics-spring-2007/)

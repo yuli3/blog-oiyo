@@ -1,0 +1,75 @@
+---
+track: academy
+series: econometrics
+chapter: 4
+title: "计量经济学 — 内生性与工具变量"
+description: "区分遗漏变量、联立性和测量误差使OLS不一致的方向，并用第一阶段F统计量及后续检验来检查工具变量的相关性和排除限制。"
+pubDate: 2026-09-15
+updatedDate: 2026-09-24
+category: Economics
+tags: ["经济学", "计量经济学", "内生性", "工具变量", "遗漏变量"]
+locale: zh
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 计量经济学 — 内生性意味着误差项与X相关
+
+OLS要给出因果斜率，必须有$\mathrm{Cov}(X,U)=0$。这种相关性残留的典型途径有三条:遗漏变量、相互决定的方程和不准确的测量。工具变量借用能切断这种相关的外生变动。
+
+## 1. 遗漏变量偏误的符号是两个关系的乘积
+
+若真实模型为$Y = \beta X + \gamma W + U$而遗漏了$W$，偏误近似为$\gamma\delta$，其中$\delta$是把$W$对$X$回归得到的系数。
+
+若教育$X$与能力$W$正相关，而能力提高工资，那么只对教育回归得到的系数会被高估。反过来，若测得的受教育年限中混入与真实人力资本无关的噪声，衰减偏误会使系数向0收缩。同样是"错误的OLS"，方向却相反。
+
+<LectureTable
+  title="内生性的三个来源"
+  headers={["来源", "例子", "OLS的偏向"]}
+  rows={[
+    ["遗漏变量", "能力、动机", "通常高估教育效应"],
+    ["联立性", "价格与数量", "需求斜率被扭曲得更陡或更平"],
+    ["测量误差", "回忆的收入、不准确的年限", "经典误差下向0衰减"],
+  ]}
+/>
+
+## 2. 好的工具变量必须同时满足相关性和排除限制
+
+工具变量$Z$必须能推动$X$($\text{相关性}$)，且只能通过$X$影响$Y$($\text{排除限制}$)。两阶段最小二乘法在第一阶段把$X$对$Z$回归，再用拟合值做第二阶段的$Y$回归。
+
+<FormulaBox
+  label="IV斜率(简单情形)"
+  formula="\hat\beta_{IV} = \widehat{\mathrm{Cov}}(Z,Y) / \widehat{\mathrm{Cov}}(Z,X)"
+  description="若Z不推动X，分母接近0，就成了弱工具变量。"
+/>
+
+义务教育年限的变化是典型的候选工具变量。"法律改变了受教育年限，而且只通过教育影响工资"这一说法必须有说服力。若法律同时改变了劳动力市场制度，排除限制就不成立。
+
+检查第一阶段F是否超过10的规则，是关于弱工具变量偏误的经验法则。F=4时，第二阶段系数偏离真值数倍的样本很常见;F=10只是为减少这种偏误而设的门槛。近期文献建议使用更严格的临界值和安德森—鲁宾置信区间。F大并不能证明排除限制，它检查的只是相关性。
+
+## 3. 局部平均处理效应不是整体ATE
+
+在效应异质的情况下，IV捕捉的是行为因工具变量而改变的那部分人的平均效应(LATE)。它是对义务教育作出反应的人的教育回报，而不是本来就打算上大学的人的回报。若政策对象与这一群体不同，就不要照搬这个数字。
+
+<Callout type="warning">
+把若干"显著的外生变量"都拿来当工具变量试一遍，只保留好看的第二阶段结果，这不是识别。过度识别检验未被拒绝，也可能是因为所有工具变量都朝同一方向出错。排除限制要用制度背景来论证，检验只是辅助。
+</Callout>
+
+这四章是本科计量经济学的入口。面板数据、时间序列单位根和选择模型在后续课程中讨论。现阶段的完成标准是:在给回归系数冠以因果之名之前，能够写出识别陈述。
+
+## 练习题
+
+若香烟税每包提高1000韩元，价格从4500韩元升到5400韩元，税收的价格传导率为90%。假设用这次加税作为香烟价格的工具变量。若健康意识同时推动加税和吸烟行为，哪个假设会被破坏?
+
+"税收只通过价格影响吸烟"这一排除限制被破坏。相关性(税收→价格，传导率90%)依然可能很强，因此不能用第一阶段F很大来掩盖这个问题。
+
+## 参考资料
+
+- Joshua Angrist and Alan Krueger, "Does Compulsory School Attendance Affect Schooling and Earnings?," *Quarterly Journal of Economics* (1991)
+- Joshua Angrist and Jörn-Steffen Pischke, *Mostly Harmless Econometrics*, ch. 4
+- Jeffrey Wooldridge, *Introductory Econometrics*, ch. 15

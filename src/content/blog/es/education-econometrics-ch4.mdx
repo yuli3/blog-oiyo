@@ -1,0 +1,75 @@
+---
+track: academy
+series: econometrics
+chapter: 4
+title: "Econometría — Endogeneidad y variables instrumentales"
+description: "Distingue en qué dirección las variables omitidas, la simultaneidad y el error de medida hacen inconsistente a MCO, y comprueba la relevancia y la exclusión de los instrumentos con el F de primera etapa y otros contrastes."
+pubDate: 2026-09-15
+updatedDate: 2026-09-24
+category: Economics
+tags: ["economía", "econometría", "endogeneidad", "variables instrumentales", "variables omitidas"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Econometría — la endogeneidad significa que el error está correlacionado con X
+
+Para que MCO dé una pendiente causal, debe cumplirse $\mathrm{Cov}(X,U)=0$. Esta correlación sobrevive por tres vías típicas: una variable que falta, ecuaciones que se determinan mutuamente y una medición imprecisa. Una variable instrumental toma prestada una variación exógena que rompe esa correlación.
+
+## 1. El signo del sesgo por variable omitida es el producto de dos relaciones
+
+Si el modelo verdadero es $Y = \beta X + \gamma W + U$ y se omite $W$, el sesgo se aproxima a $\gamma\delta$, donde $\delta$ es el coeficiente de regresar $W$ sobre $X$.
+
+Si la educación $X$ y la capacidad $W$ están correlacionadas positivamente y la capacidad eleva los salarios, el coeficiente de regresar solo sobre la educación está sobrestimado. A la inversa, si los años de estudio medidos contienen ruido sin relación con el capital humano real, el sesgo de atenuación reduce el coeficiente hacia cero. Ambos son «MCO erróneo», pero en direcciones opuestas.
+
+<LectureTable
+  title="Tres fuentes de endogeneidad"
+  headers={["Fuente", "Ejemplo", "Dirección de MCO"]}
+  rows={[
+    ["Variables omitidas", "Capacidad, motivación", "Suele sobrestimar el rendimiento de la educación"],
+    ["Simultaneidad", "Precio y cantidad", "Pendiente de demanda distorsionada, más empinada o más plana"],
+    ["Error de medida", "Renta recordada, años imprecisos", "Atenuación hacia cero con error clásico"],
+  ]}
+/>
+
+## 2. Un buen instrumento debe cumplir a la vez relevancia y exclusión
+
+Un instrumento $Z$ debe mover $X$ ($\text{relevancia}$) y afectar a $Y$ solo a través de $X$ ($\text{restricción de exclusión}$). Los mínimos cuadrados en dos etapas regresan $X$ sobre $Z$ en la primera etapa y usan los valores ajustados en la regresión de $Y$ de la segunda.
+
+<FormulaBox
+  label="Pendiente VI (caso simple)"
+  formula="\hat\beta_{IV} = \widehat{\mathrm{Cov}}(Z,Y) / \widehat{\mathrm{Cov}}(Z,X)"
+  description="Si Z no mueve X, el denominador se acerca a cero y el instrumento es débil."
+/>
+
+Los cambios en la duración de la escolaridad obligatoria son un candidato clásico a instrumento. Tiene que resultar convincente el relato de que la ley cambia los años de estudio y afecta a los salarios solo a través de la educación. Si la ley cambió al mismo tiempo las instituciones del mercado laboral, la exclusión falla.
+
+La regla de comprobar si el F de primera etapa supera 10 es una regla práctica frente al sesgo de instrumentos débiles. Con F = 4 son frecuentes las muestras en que el coeficiente de la segunda etapa se desvía varias veces del valor verdadero, y F = 10 es solo un umbral para reducir ese sesgo. La literatura reciente recomienda umbrales más estrictos e intervalos de Anderson–Rubin. Un F grande no prueba la restricción de exclusión; solo comprueba la relevancia.
+
+## 3. El efecto medio local del tratamiento no es el ATE global
+
+Con efectos heterogéneos, la VI capta el efecto medio de las personas cuyo comportamiento cambia el instrumento (LATE). Es el rendimiento de la educación para quienes respondieron a la escolaridad obligatoria, no para quienes de todos modos iban a ir a la universidad. Si el grupo objetivo de una política es distinto, no traslade la cifra.
+
+<Callout type="warning">
+Probar varias «variables exógenas significativas» como instrumentos y quedarse solo con la segunda etapa más bonita no es identificación. Un contraste de sobreidentificación no rechazado también puede superarse si todos los instrumentos se equivocan en la misma dirección. La restricción de exclusión se defiende con un relato institucional; los contrastes son secundarios.
+</Callout>
+
+Estos cuatro capítulos son la puerta de entrada a la econometría de grado. Los datos de panel, las raíces unitarias en series temporales y los modelos de selección se tratan en cursos posteriores. El criterio de finalización en esta etapa es saber escribir una afirmación de identificación antes de poner un nombre causal a un coeficiente de regresión.
+
+## Ejercicio
+
+Si una subida del impuesto sobre el tabaco de 1.000 wones por cajetilla eleva el precio de 4.500 a 5.400 wones, la tasa de traslado del impuesto es del 90 %. Supongamos que esa subida se usa como instrumento del precio del tabaco. Si la conciencia sobre la salud mueve a la vez la subida del impuesto y el consumo de tabaco, ¿qué supuesto falla?
+
+Falla la restricción de exclusión: que el impuesto afecte al consumo de tabaco solo a través del precio. La relevancia (impuesto → precio, traslado del 90 %) puede seguir siendo fuerte, así que un F de primera etapa grande no puede tapar el problema.
+
+## Referencias
+
+- Joshua Angrist and Alan Krueger, «Does Compulsory School Attendance Affect Schooling and Earnings?», *Quarterly Journal of Economics* (1991)
+- Joshua Angrist and Jörn-Steffen Pischke, *Mostly Harmless Econometrics*, ch. 4
+- Jeffrey Wooldridge, *Introductory Econometrics*, ch. 15

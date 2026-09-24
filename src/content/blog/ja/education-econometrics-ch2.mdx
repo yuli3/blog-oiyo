@@ -1,0 +1,79 @@
+---
+track: academy
+series: econometrics
+chapter: 2
+title: "計量経済学 — 単回帰と最小二乗法"
+description: "OLSが残差平方和を最小化する代数であることを導き、傾きを共分散/分散として読んだうえで、残差が因果の誤差ではない理由を数値例で示します。"
+pubDate: 2026-09-15
+updatedDate: 2026-09-24
+category: Economics
+tags: ["経済学", "計量経済学", "OLS", "単回帰", "残差"]
+locale: ja
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 計量経済学 — OLSは平均の線を引く計算であって、原因ではない
+
+単回帰$Y = \beta_0 + \beta_1 X + U$で、OLSは残差平方和を最小にする$(\beta_0, \beta_1)$を選ぶ。それが第1章のATEと等しくなるには、$X$と$U$が無相関でなければならない。この章では計算を先に固定し、その仮定の役割は次の章に回す。
+
+## 1. 正規方程式から傾きが出てくる
+
+$n$個の標本について、$\sum \hat u_i = 0$、$\sum X_i \hat u_i = 0$となるように当てはめればよい。これは、残差の平均が0で、残差と$X$の標本共分散が0だという意味である。
+
+<FormulaBox
+  label="OLSの傾き"
+  formula="\hat\beta_1 = \widehat{\mathrm{Cov}}(X,Y) / \widehat{\mathrm{Var}}(X)"
+  description="Xが平均から外れるときにYが一緒に外れる度合いを、Xの散らばりで割った値である。Xに変動がなければ割れない。"
+/>
+
+<FormulaBox
+  label="切片"
+  formula="\hat\beta_0 = \bar Y - \hat\beta_1 \bar X"
+  description="回帰直線は標本の平均点を通る。"
+/>
+
+教育年数が12、14、16年で、賃金(万ウォン)が280、320、390なら、$\bar X=14$、$\bar Y=330$である。偏差の積の和は$(-2)(-50)+0+(2)(60)=220$、$X$の偏差平方和は8なので、標本共分散は110、標本分散は4(どちらも$n-1$で割る)であり、$\hat\beta_1=220/8=27.5$万ウォン/年、$\hat\beta_0=330-27.5×14=-55$万ウォンである。共分散と分散は同じ分母で割らなければならない。切片が負になるのは、教育年数0年を標本の外に外挿したからである。解釈しないほうがよい。
+
+## 2. R²は当てはまりの割合であって、モデルの正しさではない
+
+<FormulaBox
+  label="決定係数"
+  formula="R^2 = 1 - SSR/SST"
+  description="SSRは残差平方和、SSTはYの総平方和である。変数を加えてもR²は下がらない。"
+/>
+
+賃金の変動の40%を教育が説明するというのは、この標本で教育の回帰直線が総平方和のその割合を担うという意味である。欠落した能力が教育を通じて賃金を動かしていれば、R²は高くなり、因果の解釈はかえって悪くなりうる。
+
+<LectureTable
+  title="OLSが保証するものと保証しないもの"
+  headers={["保証する", "保証しない"]}
+  rows={[
+    ["標本で残差⊥X", "母集団でU⊥X"],
+    ["平均点を通る", "切片の経済的な意味"],
+    ["線形の条件付き平均の最良近似(仮定のもと)", "処置効果"],
+  ]}
+/>
+
+## 3. 残差は観測されない誤差Uではない
+
+残差$\hat u$は推定した回帰から残る部分である。$U$はモデルが正しいときの攪乱項である。モデルを誤って書けば、$\hat u$が小さくても$U$の意味はない。散布図が曲線なのに直線を引けば、残差は片側に偏る。そのときにすべきことは変数を増やすことではなく、関数形を書き直すことである。
+
+<Callout type="warning">
+対数賃金を教育に回帰した係数0.08を「教育1年で賃金8%」と読むのは近似である。$\exp(0.08)-1≈8.3\%$であり、これも$U$と教育が無相関であるときの条件付き平均の話である。学歴の上限にいる人や、職歴と混ざった年数を同じ傾きでくくらない。
+</Callout>
+
+## 確認問題
+
+$X$を標準化すると$\hat\beta_1$は変わるか。変わる。$X$を標準偏差$s_X$で割ると、傾きは$\hat\beta_1 s_X$になる。第1節の例では$s_X=2$なので標準化した傾きは55万ウォンで、「Xの1標準偏差あたりのYの変化」を表す。元の単位の27.5とは違う数字だが、同じ関係を別の単位で書いたものである。
+
+## 参考資料
+
+- Jeffrey Wooldridge, *Introductory Econometrics*, ch. 2
+- MIT OpenCourseWare, [14.32 Econometrics](https://ocw.mit.edu/courses/14-32-econometrics-spring-2007/)
+- 韓国統計庁、[家計金融福祉調査](https://kostat.go.kr/incomeNc/)(韓国語)

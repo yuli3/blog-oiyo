@@ -1,0 +1,73 @@
+---
+track: academy
+series: econometrics
+chapter: 1
+title: "Econometrics — The Questions Causality, Identification and Regression Answer"
+description: "Separates correlation from causation, defines the identification problem between treatment and outcome in the potential-outcomes framework, and divides the roles of regression, experiments and instrumental variables."
+pubDate: 2026-09-15
+updatedDate: 2026-09-24
+category: Economics
+tags: ["economics", "econometrics", "causal inference", "identification", "regression analysis"]
+locale: en
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Econometrics — If You Do Not Ask Why the Numbers Move, a Regression Is Only Descriptive
+
+If introductory statistics deals with distributions and tests, econometrics asks whether the parameters of an economic model can be distinguished in the data. Even if years of schooling and wages move together, whether the slope is "the effect of one more year of school" has to be shown separately.
+
+For means, variances and hypothesis testing, see [introductory statistics](/en/education-statistics-ch1/). This course places those tools on top of the endogeneity of economic data.
+
+## 1. Without potential outcomes, causal statements cannot be written
+
+If individual $i$'s treatment $D_i$ is 1, the observed wage is $Y_i(1)$; if 0, it is $Y_i(0)$. Both cannot be observed for the same person. The average treatment effect is the expected value of their difference.
+
+<FormulaBox
+  label="Average treatment effect"
+  formula="\mathrm{ATE} = E[Y(1)-Y(0)]"
+  description="What is observed is E[Y|D=1] - E[Y|D=0]. For this to equal the ATE, treatment must be independent of the potential outcomes, or there must be a design that creates such a condition."
+/>
+
+That people with more education earn higher average wages is $E[Y|D=1]$. What they would have earned without the education, $E[Y(0)|D=1]$, is not seen. If ability and family background move both $D$ and $Y(0)$, a simple difference in means overstates the effect.
+
+## 2. Identification is an assumption that comes before estimation
+
+An estimator is a rule for extracting a number from a sample. Identification is the assumption that makes it converge to the desired parameter as the sample grows without limit. Without it, OLS gives only "a linear approximation to the conditional mean", and the label "policy effect" cannot be attached.
+
+<LectureTable
+  title="The same regression, different questions"
+  headers={["Question", "Assumption needed", "When the assumption fails"]}
+  rows={[
+    ["Prediction", "A stable conditional mean", "The slope shifts when the environment changes"],
+    ["Descriptive statistics", "None (by definition)", "It gets read as a causal statement"],
+    ["Causal effect", "Conditional independence, exclusion restrictions and so on", "Ability bias, simultaneity, measurement error"],
+  ]}
+/>
+
+Suppose a regression gives the employment difference between regions that raised the minimum wage and regions that did not. For that difference to be the effect of the minimum wage, the regions that did not raise it must be the counterfactual for those that did. If regions with already weak employment were the ones that raised it, the regression blames the policy.
+
+## 3. Experiments, natural experiments and observational data use different identification strategies
+
+Random assignment makes $D$ close to independent of $Y(0), Y(1)$. Most economic data are not experiments. Difference-in-differences, regression discontinuity and instrumental variables each borrow a different counterfactual.
+
+<Callout type="warning">
+Adding many control variables does not make an estimate causal. Controlling for an intermediate pathway removes part of the total effect, and adding variables determined after treatment creates new bias. "A significant coefficient" is not evidence of identification.
+</Callout>
+
+The next chapter covers the algebra of simple regression and the meaning of residuals, and the one after that Gauss–Markov and endogeneity.
+
+## Check your understanding
+
+A regression of sales on advertising spending gives a slope of 2. Does increasing advertising by 1,000 won raise sales by 2,000 won? That cannot be concluded. Firms with high sales may be able to spend more on advertising, and if price and quality move at the same time, the 2 is not a causal effect.
+
+## References
+
+- Joshua Angrist and Jörn-Steffen Pischke, *Mostly Harmless Econometrics*, ch. 1–2
+- Guido Imbens and Donald Rubin, *Causal Inference for Statistics, Social, and Biomedical Sciences*, ch. 1
+- MIT OpenCourseWare, [14.32 Econometrics](https://ocw.mit.edu/courses/14-32-econometrics-spring-2007/)

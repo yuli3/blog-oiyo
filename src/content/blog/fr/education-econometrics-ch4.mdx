@@ -1,0 +1,75 @@
+---
+track: academy
+series: econometrics
+chapter: 4
+title: "Économétrie — Endogénéité et variables instrumentales"
+description: "Distingue les directions dans lesquelles variables omises, simultanéité et erreur de mesure rendent les MCO non convergents, et contrôle la pertinence et l'exclusion des instruments par le F de première étape et d'autres tests."
+pubDate: 2026-09-15
+updatedDate: 2026-09-24
+category: Economics
+tags: ["économie", "économétrie", "endogénéité", "variables instrumentales", "variables omises"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Économétrie — l'endogénéité signifie que l'erreur est corrélée à X
+
+Pour que les MCO donnent une pente causale, il faut $\mathrm{Cov}(X,U)=0$. Cette corrélation subsiste typiquement par trois voies : une variable manquante, des équations qui se déterminent mutuellement et une mesure inexacte. Une variable instrumentale emprunte une variation exogène qui rompt cette corrélation.
+
+## 1. Le signe du biais de variable omise est le produit de deux relations
+
+Si le vrai modèle est $Y = \beta X + \gamma W + U$ et qu'on omet $W$, le biais est proche de $\gamma\delta$, où $\delta$ est le coefficient de la régression de $W$ sur $X$.
+
+Si l'éducation $X$ et l'aptitude $W$ sont positivement corrélées et que l'aptitude accroît les salaires, le coefficient de la régression sur la seule éducation est surestimé. À l'inverse, si les années d'études mesurées contiennent un bruit sans rapport avec le capital humain réel, le biais d'atténuation ramène le coefficient vers zéro. Ce sont deux « MCO faux », mais de sens opposés.
+
+<LectureTable
+  title="Trois sources d'endogénéité"
+  headers={["Source", "Exemple", "Sens du biais des MCO"]}
+  rows={[
+    ["Variables omises", "Aptitude, motivation", "Surestime généralement le rendement de l'éducation"],
+    ["Simultanéité", "Prix et quantité", "Pente de demande faussée, plus raide ou plus plate"],
+    ["Erreur de mesure", "Revenus déclarés de mémoire, années imprécises", "Atténuation vers zéro avec une erreur classique"],
+  ]}
+/>
+
+## 2. Un bon instrument doit satisfaire à la fois pertinence et exclusion
+
+Un instrument $Z$ doit faire varier $X$ ($\text{pertinence}$) et n'influer sur $Y$ qu'à travers $X$ ($\text{restriction d'exclusion}$). Les doubles moindres carrés régressent $X$ sur $Z$ en première étape et utilisent les valeurs ajustées dans la régression de $Y$ en seconde étape.
+
+<FormulaBox
+  label="Pente VI (cas simple)"
+  formula="\hat\beta_{IV} = \widehat{\mathrm{Cov}}(Z,Y) / \widehat{\mathrm{Cov}}(Z,X)"
+  description="Si Z ne fait pas varier X, le dénominateur est proche de zéro et l'instrument est faible."
+/>
+
+Les changements de durée de la scolarité obligatoire sont un instrument candidat classique. Il faut que le récit selon lequel la loi modifie les années d'études et n'agit sur les salaires qu'à travers l'éducation soit convaincant. Si la loi a en même temps modifié les institutions du marché du travail, l'exclusion tombe.
+
+La règle consistant à vérifier que le F de première étape dépasse 10 est une règle empirique contre le biais des instruments faibles. Avec F = 4, les échantillons où le coefficient de seconde étape s'écarte de plusieurs fois la vraie valeur sont fréquents, et F = 10 n'est qu'un seuil destiné à réduire ce biais. La littérature récente recommande des seuils plus stricts et les intervalles d'Anderson–Rubin. Un F élevé ne prouve pas la restriction d'exclusion : il ne vérifie que la pertinence.
+
+## 3. L'effet moyen local du traitement n'est pas l'ATE global
+
+Avec des effets hétérogènes, la VI capte l'effet moyen pour les personnes dont l'instrument modifie le comportement (LATE). C'est le rendement de l'éducation pour ceux qui ont réagi à la scolarité obligatoire, pas pour ceux qui comptaient de toute façon aller à l'université. Si la population visée par une politique diffère de ce groupe, ne transposez pas le chiffre.
+
+<Callout type="warning">
+Essayer plusieurs « variables exogènes significatives » comme instruments et ne garder que la plus jolie seconde étape n'est pas de l'identification. Un test de suridentification non rejeté peut aussi passer si tous les instruments se trompent dans le même sens. La restriction d'exclusion se défend par un récit institutionnel ; les tests sont secondaires.
+</Callout>
+
+Ces quatre chapitres sont la porte d'entrée de l'économétrie de licence. Données de panel, racines unitaires en séries temporelles et modèles de sélection sont traités dans les cours suivants. Le critère d'achèvement à ce stade est de savoir écrire un énoncé d'identification avant de donner un nom causal à un coefficient de régression.
+
+## Exercice
+
+Si une hausse de la taxe sur le tabac de 1 000 wons par paquet fait passer le prix de 4 500 à 5 400 wons, le taux de répercussion de la taxe est de 90 %. Supposons que cette hausse de taxe serve d'instrument pour le prix des cigarettes. Si la sensibilité aux questions de santé influence à la fois la hausse de la taxe et le tabagisme, quelle hypothèse est violée ?
+
+C'est la restriction d'exclusion — la taxe n'agit sur le tabagisme qu'à travers le prix — qui est violée. La pertinence (taxe → prix, répercussion de 90 %) peut rester forte : un F de première étape élevé ne peut donc pas masquer le problème.
+
+## Références
+
+- Joshua Angrist and Alan Krueger, « Does Compulsory School Attendance Affect Schooling and Earnings? », *Quarterly Journal of Economics* (1991)
+- Joshua Angrist and Jörn-Steffen Pischke, *Mostly Harmless Econometrics*, ch. 4
+- Jeffrey Wooldridge, *Introductory Econometrics*, ch. 15
