@@ -3,9 +3,9 @@ track: academy
 series: microeconomics
 chapter: 1
 title: "Microeconomics — Scarcity, Opportunity Cost and the Production Possibilities Frontier"
-description: "Calculates opportunity cost as explicit plus implicit cost, explains why the marginal rate of transformation along the PPF rises, separates technical from allocative efficiency, and shows how to treat sunk costs, with numbers and a graph."
+description: "Counts opportunity cost with explicit and implicit costs, derives the production possibility frontier directly from production functions to show that the marginal rate of transformation is a ratio of marginal costs, solves the production choice at the tangency with the price line, and separates technical from allocative efficiency."
 pubDate: 2026-03-01T00:00:00.000Z
-updatedDate: 2026-09-24
+updatedDate: 2026-09-28
 category: Economics
 tags: ["economics", "microeconomics", "opportunity cost", "PPF", "marginal rate of transformation"]
 locale: en
@@ -81,6 +81,37 @@ Why is the MRT a ratio of marginal costs? Let one unit of resources be worth $w$
 
 **Why is it concave?** Because resources are not equally useful for both goods. When we make only a few chips we move the resources best suited to chips first (skilled engineers, clean rooms). As we make more chips we must also move resources better suited to wheat (farmland, farm labour), so each extra chip costs more wheat. If every resource were equally useful for both goods, the PPF would be a straight line and the MRT constant.
 
+
+### A. Deriving the curve from production functions
+
+The numbers in the table were assumptions. Let us see where the bowed shape comes from. Split 100 units of labour between chips and wheat, with technologies $X=\sqrt{L_x}$ and $Y=2\sqrt{L_y}$. Both show **diminishing marginal product**. The labour required is $L_x=X^2$ and $L_y=Y^2/4$, and since $L_x+L_y=100$:
+
+<FormulaBox
+  label="PPF from production functions"
+  formula="X^2+\frac{Y^2}{4}=100,\qquad MRT=-\frac{dY}{dX}=\frac{4X}{Y}"
+  description="Totally differentiating the constraint gives 2X\,dX+\tfrac{Y}{2}\,dY=0. As X rises and Y falls, the MRT grows, so the curve is bowed out from the origin."
+/>
+
+We can check directly that this MRT equals the ratio of marginal costs. One more chip needs $dL_x/dX=2X$ units of labour and one more unit of wheat $dL_y/dY=Y/2$, so $MC_x/MC_y=2X/(Y/2)=4X/Y$ — exactly the expression above. Conversely, if both technologies have constant returns ($X=L_x$, $Y=2L_y$), the PPF is the straight line $X+Y/2=100$ and the MRT is constant at 2. **The bowed shape comes from diminishing marginal product (or specialised resources).**
+
+Given prices, where on the curve does the economy produce? Maximising the value of output $p_xX+p_yY$ along the curve puts production where an iso-revenue line touches the PPF, so $MRT=p_x/p_y$. If chips cost twice as much as wheat, $4X/Y=2$, i.e. $Y=2X$; substituting into the constraint gives $2X^2=100$, so $X=\sqrt{50}\approx7.07$ and $Y\approx14.14$.
+
+<EconDiagram
+  title="PPF from production functions and the price-line tangency"
+  xLabel="Chips"
+  yLabel="Wheat"
+  xMax={12}
+  yMax={24}
+  curves={[
+    { label: "PPF", points: [[0, 20], [2, 19.6], [4, 18.33], [6, 16], [7.07, 14.14], [8, 12], [9, 8.72], [9.5, 6.24], [9.8, 3.98], [10, 0]], tone: "blue", labelAt: 2 },
+    { label: "p_x/p_y = 2", points: [[4.5, 19.28], [11, 6.28]], tone: "amber", dashed: true, anchor: "end" },
+  ]}
+  marks={[
+    { x: 7.07, y: 14.14, label: "E", guide: true, xTick: "7.07", yTick: "14.14" },
+  ]}
+  caption="On X²+Y²/4=100, the point E(7.07, 14.14) where an iso-revenue line of slope −2 touches the curve maximises the value of output. As chips become relatively dearer, E slides down and to the right."
+/>
+
 ## 3. Being on the curve does not make a point optimal
 
 A point on the PPF is **technically efficient**: no resources are left idle. Whether that combination is what people want is a separate question. **Allocative efficiency** is reached when the rate at which production can trade the goods (the MRT) equals the rate at which consumers are willing to trade them (the marginal rate of substitution, MRS).
@@ -120,7 +151,13 @@ If two countries have different MRTs, each can specialise in the good with the l
 
 ## Check your understanding
 
-A straight-line PPF allows at most 10 chips or 20 units of wheat. If the economy makes 6 chips, what is the most wheat it can make? The opportunity cost of a chip is a constant $20/10=2$ units of wheat, so wheat is $20-2\times 6=8$. The point (6, 6) lies inside the curve. The opportunity cost has not changed; resources that could make 2 units of wheat are sitting idle.
+**Problem 1.** On a straight-line PPF the economy can make at most 10 chips or 20 units of wheat. If it makes 6 chips, what is the most wheat it can make? What does it mean if the economy is producing (6 chips, 6 wheat)?
+
+**Solution.** The opportunity cost of a chip is constant at $20/10=2$ units of wheat, so the maximum is $20-2\times6=8$. The point (6, 6) lies inside the curve. The opportunity cost has not changed; resources that could make 2 more units of wheat are sitting idle.
+
+**Problem 2.** In the model above ($X^2+Y^2/4=100$), where does production move if chips and wheat come to have the same price?
+
+**Solution.** $MRT=p_x/p_y=1$, so $4X/Y=1$, i.e. $Y=4X$. Substituting gives $X^2+4X^2=100$, so $X=\sqrt{20}\approx4.47$ and $Y\approx17.89$. When the relative price of chips falls from 2 to 1, chip output drops from 7.07 to 4.47. Because the PPF is bowed out, a change in relative prices shifts the output mix **smoothly**. With a straight-line PPF the economy would specialise completely at one end depending on whether the price ratio is above or below 2.
 
 ## References
 
