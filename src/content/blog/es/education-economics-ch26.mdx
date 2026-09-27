@@ -3,9 +3,9 @@ track: academy
 series: macroeconomics
 chapter: 15
 title: "Macroeconomía — El ajuste a corto y largo plazo en el modelo OA-DA"
-description: "Calcula año a año la vuelta al equilibrio a largo plazo cuando los precios esperados y los salarios alcanzan una perturbación de demanda, y presenta qué fija la velocidad de ajuste, la rigidez a la baja de los salarios, la deflación por deudas, la histéresis y las perturbaciones de oferta temporales o permanentes."
+description: "Calcula cómo se desplaza la oferta agregada de corto plazo con expectativas adaptativas y la senda anual tras una expansión monetaria, deriva por aproximación lineal la tasa de amortiguación —la brecha dividida por 1+aγ cada año— y su vida media, y trata por qué las recesiones se ajustan más despacio y cómo juzgar los choques de oferta."
 pubDate: 2026-03-01T00:00:00.000Z
-updatedDate: 2026-09-24
+updatedDate: 2026-09-28
 category: Economics
 tags: ["economía", "macroeconomía", "OA-DA", "senda de ajuste", "deflación por deudas"]
 locale: es
@@ -51,6 +51,36 @@ En la economía del capítulo 8, supongamos que la oferta monetaria nominal aume
 
 La brecha se reduce alrededor de un 13 % al año. Con estas cifras, tarda unos cinco años en reducirse a la mitad. La velocidad de ajuste depende de la pendiente de la oferta agregada a corto plazo (la sensibilidad de salarios y precios a la brecha) y de la rapidez con que cambian las expectativas. Si las expectativas son racionales y la expansión monetaria se anunció, los precios esperados pueden subir de inmediato a 1,1 y apenas habrá efecto sobre la producción ([capítulo 9](/es/education-economics-ch20/)).
 
+
+### A. ¿De dónde sale el «13 % al año»?
+
+Comprobemos con una aproximación lineal por qué los cocientes de la tabla son casi constantes. Sea $P_\infty$ el nivel de precios de largo plazo y $g_t=Y_t-Y^*$ la brecha de producción. Cerca de la DA, $g_t\approx-a\,(P_t-P_\infty)$ con $a=|dY/dP|$; de la ecuación de ajuste anterior, $P_t=P_{t-1}+\gamma\,g_t$ con $\gamma=1/\alpha$. Restando $P_\infty$ en la segunda y sustituyendo la primera se obtiene:
+
+<FormulaBox
+  label="Tasa de amortiguación y vida media de la brecha"
+  formula="g_t=\frac{g_{t-1}}{1+a\gamma},\qquad t_{1/2}=\frac{\ln 2}{\ln(1+a\gamma)}"
+  description="Aquí a ≈ 79,2/1,1² ≈ 65 y γ = 0,002, así que la brecha se multiplica por unos 1/1,13 ≈ 0,88 cada año y su vida media es de unos 5,7 años, en línea con los cocientes de la tabla (en torno a 0,87)."
+/>
+
+La fórmula dice dos cosas. El ajuste es más rápido cuanto más empinada es la oferta de corto plazo (mayor $\gamma$) y cuanto más sensible es la DA a los precios (mayor $a$). Pero una OACP empinada también reduce el efecto sobre la producción el primer año. Cuanto más flexibles son los precios, más **pequeño y breve** es el efecto de un choque monetario; cuanto más rígidos, más **grande y duradero**.
+
+<EconDiagram
+  title="La brecha de producción tras una expansión monetaria"
+  xLabel="años"
+  yLabel="Y − Y*"
+  xMax={9}
+  yMax={7}
+  curves={[
+    { label: "brecha", points: [[0, 0], [1, 6.23], [2, 5.4], [3, 4.7], [4, 4.09], [5, 3.57], [6, 3.13], [7, 2.74], [8, 2.4]], tone: "blue", labelAt: 8 },
+  ]}
+  marks={[
+    { x: 1, y: 6.23, label: "6.23", xTick: "1" },
+    { x: 4, y: 4.09, label: "4.09", xTick: "4" },
+    { x: 8, y: 2.4, label: "2.40", xTick: "8" },
+  ]}
+  caption="La brecha de producción se abre hasta 6,23 el primer año y luego se reduce alrededor de un 13 % al año a medida que las expectativas se ponen al día. Tras ocho años persiste casi el 40 %."
+/>
+
 ## 3. Por qué el ajuste es más lento en una recesión
 
 Cuando cae la demanda agregada y la producción queda por debajo del potencial, en teoría bajan salarios y precios, aumentan los saldos reales y la producción se recupera. Pero esta senda es más lenta e incierta que la de la expansión.
@@ -78,7 +108,13 @@ Es difícil saber, cuando se produce, si una perturbación es temporal o permane
 
 ## Ejercicio
 
-Si en la senda anterior la brecha de producción se reduce cada año al 87 % de la del año anterior, ¿cuántos años tarda la brecha inicial de 6,2 en bajar de 1? De $6{,}2\times 0{,}87^n<1$ se obtiene $n>\ln(6{,}2)/\ln(1/0{,}87)\approx 13{,}1$, es decir, unos 14 años. Si las expectativas solo alcanzaran cada año la mitad de los precios efectivos, el ajuste sería aún más lento. El cálculo muestra cuánto determinan la pendiente y la forma de las expectativas la duración del ajuste.
+**Problema 1.** Si en la senda anterior la brecha de producción se reduce cada año al 87 % de la del año previo, ¿cuántos años tarda la brecha inicial de 6,2 en bajar de 1?
+
+**Solución.** $6{,}2\times0{,}87^n<1$ exige $n>\ln(6{,}2)/\ln(1/0{,}87)\approx13{,}1$, es decir unos 14 años. Si las expectativas solo siguieran cada año la mitad de los precios efectivos, el ajuste sería aún más lento. El cálculo muestra cuánto determinan la pendiente y la forma de las expectativas la duración del ajuste.
+
+**Problema 2.** Con lo demás igual, supongamos que la pendiente de la OACP es el doble, $\gamma=0{,}004$. ¿Cómo cambian la brecha del primer año y la vida media de una expansión monetaria del 10 %?
+
+**Solución.** El corte del primer año da $P\approx1{,}022$ y una brecha de unos 5,5, menor que 6,23. El factor de amortiguación es $1/(1+65\times0{,}004)=1/1{,}26\approx0{,}79$, así que la vida media es $\ln2/\ln1{,}26\approx3{,}0$ años, casi la mitad. Con precios más flexibles, el choque es menor y se desvanece antes.
 
 ## Referencias
 

@@ -3,9 +3,9 @@ track: academy
 series: macroeconomics
 chapter: 15
 title: "Macroeconomics — Short-Run and Long-Run Adjustment in AD-AS"
-description: "Computes year by year the path back to long-run equilibrium as expected prices and wages catch up after a demand shock, and covers what sets the speed of adjustment, downward nominal wage rigidity, debt deflation, hysteresis and the difference between temporary and permanent supply shocks."
+description: "Computes how short-run aggregate supply shifts under adaptive expectations and the year-by-year path after a monetary expansion, derives by linear approximation the decay rate — the output gap shrinking by 1/(1+aγ) each year — and its half-life, and covers why recessions adjust more slowly and how to judge supply shocks."
 pubDate: 2026-03-01T00:00:00.000Z
-updatedDate: 2026-09-24
+updatedDate: 2026-09-28
 category: Economics
 tags: ["economics", "macroeconomics", "AD-AS", "adjustment path", "debt deflation"]
 locale: en
@@ -51,6 +51,36 @@ In the economy of Chapter 8, suppose the nominal money supply rises by 10% (AD: 
 
 The gap shrinks by about 13% a year. With these numbers it takes about five years for the gap to halve. The speed of adjustment depends on the slope of short-run aggregate supply (how sensitive wages and prices are to the gap) and on how quickly expectations change. If expectations are rational and the monetary expansion was announced, the expected price level may jump to 1.1 at once, leaving almost no effect on output ([Chapter 9](/en/education-economics-ch20/)).
 
+
+### A. Where does "13% a year" come from?
+
+Let us check with a linear approximation why the ratios in the table are almost constant. Let $P_\infty$ be the long-run price level and $g_t=Y_t-Y^*$ the output gap. Near AD, $g_t\approx-a\,(P_t-P_\infty)$ with $a=|dY/dP|$; from the adjustment equation above, $P_t=P_{t-1}+\gamma\,g_t$ with $\gamma=1/\alpha$. Subtracting $P_\infty$ from the second and substituting the first gives:
+
+<FormulaBox
+  label="Decay rate and half-life of the output gap"
+  formula="g_t=\frac{g_{t-1}}{1+a\gamma},\qquad t_{1/2}=\frac{\ln 2}{\ln(1+a\gamma)}"
+  description="Here a ≈ 79.2/1.1² ≈ 65 and γ = 0.002, so the gap shrinks to about 1/1.13 ≈ 0.88 of its size each year and the half-life is about 5.7 years — consistent with the ratios in the table (around 0.87)."
+/>
+
+The formula says two things. Adjustment is faster the steeper short-run supply is (the larger $\gamma$) and the more price-sensitive AD is (the larger $a$). But a steeper SRAS also means a smaller output effect in the first year. The more flexible prices are, the **smaller and shorter** a monetary shock's effect; the stickier they are, the **larger and longer**.
+
+<EconDiagram
+  title="The output gap after a monetary expansion"
+  xLabel="years"
+  yLabel="Y − Y*"
+  xMax={9}
+  yMax={7}
+  curves={[
+    { label: "gap", points: [[0, 0], [1, 6.23], [2, 5.4], [3, 4.7], [4, 4.09], [5, 3.57], [6, 3.13], [7, 2.74], [8, 2.4]], tone: "blue", labelAt: 8 },
+  ]}
+  marks={[
+    { x: 1, y: 6.23, label: "6.23", xTick: "1" },
+    { x: 4, y: 4.09, label: "4.09", xTick: "4" },
+    { x: 8, y: 2.4, label: "2.40", xTick: "8" },
+  ]}
+  caption="The output gap opens to 6.23 in the first year and then shrinks by about 13% a year as expectations catch up. After eight years nearly 40% of it remains."
+/>
+
 ## 3. Why adjustment in a recession is slower
 
 When aggregate demand falls and output drops below potential, in theory wages and prices fall, real balances rise and output recovers. But this path is slower and less certain than on the expansion side.
@@ -78,7 +108,13 @@ Whether a shock is temporary or permanent is hard to tell when it hits. Treating
 
 ## Check your understanding
 
-If on the path above the output gap shrinks each year to 87% of the previous year's gap, how many years does it take for the first-year gap of 6.2 to fall below 1? From $6.2\times 0.87^n<1$, $n>\ln(6.2)/\ln(1/0.87)\approx 13.1$, so about 14 years. If expectations followed actual prices only halfway each year, adjustment would be slower still. The calculation shows how much the slope and the way expectations are formed govern the length of adjustment.
+**Problem 1.** If the output gap in the path above shrinks to 87% of the previous year's each year, how many years does it take for the first-year gap of 6.2 to fall below 1?
+
+**Solution.** $6.2\times0.87^n<1$ requires $n>\ln(6.2)/\ln(1/0.87)\approx13.1$, so about 14 years. If expectations followed actual prices only halfway each year, adjustment would be slower still. The calculation shows how much the slope and the way expectations form govern the length of adjustment.
+
+**Problem 2.** Other things equal, suppose the SRAS slope is twice as steep, $\gamma=0.004$. How do the first-year output gap and the half-life of a 10% monetary expansion change?
+
+**Solution.** Solving the first-year intersection gives $P\approx1.022$ and an output gap of about 5.5, smaller than 6.23. The decay factor is $1/(1+65\times0.004)=1/1.26\approx0.79$, so the half-life is $\ln2/\ln1.26\approx3.0$ years — nearly half as long. With more flexible prices, the shock is smaller and fades faster.
 
 ## References
 

@@ -3,9 +3,9 @@ track: academy
 series: macroeconomics
 chapter: 15
 title: "Macroéconomie — L'ajustement de court et de long terme dans le modèle AD-AS"
-description: "Calcule année par année le retour à l'équilibre de long terme quand prix anticipés et salaires rattrapent un choc de demande, et présente ce qui fixe la vitesse d'ajustement, la rigidité à la baisse des salaires, la déflation par la dette, l'hystérèse et les chocs d'offre temporaires ou permanents."
+description: "Calcule comment l'offre agrégée de court terme se déplace en anticipations adaptatives et le sentier annuel après une expansion monétaire, dérive par approximation linéaire le taux d'amortissement — l'écart de production divisé par 1+aγ chaque année — et sa demi-vie, et traite de la lenteur des ajustements en récession et des chocs d'offre."
 pubDate: 2026-03-01T00:00:00.000Z
-updatedDate: 2026-09-24
+updatedDate: 2026-09-28
 category: Economics
 tags: ["économie", "macroéconomie", "AD-AS", "trajectoire d'ajustement", "déflation par la dette"]
 locale: fr
@@ -51,6 +51,36 @@ Dans l'économie du chapitre 8, supposons que la masse monétaire nominale augme
 
 L'écart se réduit d'environ 13 % par an. Avec ces chiffres, il faut environ cinq ans pour qu'il diminue de moitié. La vitesse d'ajustement dépend de la pente de l'offre globale de court terme (la sensibilité des salaires et des prix à l'écart) et de la rapidité avec laquelle changent les anticipations. Si les anticipations sont rationnelles et l'expansion monétaire annoncée, les prix anticipés peuvent passer aussitôt à 1,1, sans presque aucun effet sur la production ([chapitre 9](/fr/education-economics-ch20/)).
 
+
+### A. D'où vient le « 13 % par an » ?
+
+Vérifions par une approximation linéaire pourquoi les rapports du tableau sont presque constants. Notons $P_\infty$ le niveau des prix de long terme et $g_t=Y_t-Y^*$ l'écart de production. Près de l’AD, $g_t\approx-a\,(P_t-P_\infty)$ avec $a=|dY/dP|$ ; d'après l'équation d'ajustement ci-dessus, $P_t=P_{t-1}+\gamma\,g_t$ avec $\gamma=1/\alpha$. En soustrayant $P_\infty$ de la seconde et en y reportant la première :
+
+<FormulaBox
+  label="Taux d'amortissement et demi-vie de l'écart de production"
+  formula="g_t=\frac{g_{t-1}}{1+a\gamma},\qquad t_{1/2}=\frac{\ln 2}{\ln(1+a\gamma)}"
+  description="Ici a ≈ 79,2/1,1² ≈ 65 et γ = 0,002 : l'écart est multiplié par environ 1/1,13 ≈ 0,88 chaque année et sa demi-vie est d'environ 5,7 ans, conforme aux rapports du tableau (autour de 0,87)."
+/>
+
+La formule dit deux choses. L'ajustement est d'autant plus rapide que l'offre de court terme est pentue ($\gamma$ grand) et que l’AD est sensible aux prix ($a$ grand). Mais une SRAS pentue réduit aussi l'effet sur la production la première année. Plus les prix sont flexibles, plus l'effet d'un choc monétaire est **faible et bref** ; plus ils sont rigides, plus il est **fort et durable**.
+
+<EconDiagram
+  title="L'écart de production après une expansion monétaire"
+  xLabel="années"
+  yLabel="Y − Y*"
+  xMax={9}
+  yMax={7}
+  curves={[
+    { label: "écart", points: [[0, 0], [1, 6.23], [2, 5.4], [3, 4.7], [4, 4.09], [5, 3.57], [6, 3.13], [7, 2.74], [8, 2.4]], tone: "blue", labelAt: 8 },
+  ]}
+  marks={[
+    { x: 1, y: 6.23, label: "6.23", xTick: "1" },
+    { x: 4, y: 4.09, label: "4.09", xTick: "4" },
+    { x: 8, y: 2.4, label: "2.40", xTick: "8" },
+  ]}
+  caption="L'écart de production s'ouvre à 6,23 la première année puis se réduit d'environ 13 % par an à mesure que les anticipations rattrapent. Après huit ans, près de 40 % de l'écart subsiste."
+/>
+
 ## 3. Pourquoi l'ajustement est plus lent en récession
 
 Quand la demande globale baisse et que la production tombe sous son potentiel, salaires et prix devraient en théorie baisser, les encaisses réelles augmenter et la production se redresser. Mais cette trajectoire est plus lente et plus incertaine que du côté de l'expansion.
@@ -78,7 +108,13 @@ Il est difficile de savoir, au moment où il survient, si un choc est temporaire
 
 ## Exercice
 
-Si, sur la trajectoire ci-dessus, l'écart de production se réduit chaque année à 87 % de celui de l'année précédente, combien d'années faut-il pour que l'écart initial de 6,2 passe sous 1 ? De $6{,}2\times 0{,}87^n<1$, on tire $n>\ln(6{,}2)/\ln(1/0{,}87)\approx 13{,}1$, soit environ 14 ans. Si les anticipations ne rattrapaient chaque année que la moitié des prix effectifs, l'ajustement serait encore plus lent. Le calcul montre combien la pente et le mode de formation des anticipations déterminent la durée de l'ajustement.
+**Problème 1.** Si, sur le sentier ci-dessus, l'écart de production est ramené chaque année à 87 % de celui de l'année précédente, combien d'années faut-il pour que l'écart initial de 6,2 passe sous 1 ?
+
+**Solution.** $6{,}2\times0{,}87^n<1$ exige $n>\ln(6{,}2)/\ln(1/0{,}87)\approx13{,}1$, soit environ 14 ans. Si les anticipations ne suivaient chaque année que la moitié des prix effectifs, l'ajustement serait encore plus lent. Le calcul montre à quel point la pente et le mode de formation des anticipations déterminent la durée de l'ajustement.
+
+**Problème 2.** Toutes choses égales par ailleurs, supposons la SRAS deux fois plus pentue, $\gamma=0{,}004$. Comment changent l'écart de production de la première année et la demi-vie d'une expansion monétaire de 10 % ?
+
+**Solution.** L'intersection de la première année donne $P\approx1{,}022$ et un écart d'environ 5,5, inférieur à 6,23. Le facteur d'amortissement vaut $1/(1+65\times0{,}004)=1/1{,}26\approx0{,}79$, d'où une demi-vie de $\ln2/\ln1{,}26\approx3{,}0$ ans, presque deux fois plus courte. Avec des prix plus flexibles, le choc est plus faible et s'efface plus vite.
 
 ## Références
 
