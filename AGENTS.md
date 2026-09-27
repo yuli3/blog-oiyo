@@ -16,6 +16,8 @@
 - 기존 호환 bridge는 실제 호환성이 필요할 때만 유지한다. 이미지 위주 콘텐츠를 전제로 새 구조를 만들지 않는다.
 - 한 문서의 두 번째 이후 컴포넌트는 `client:load` 대신 `client:visible`을 사용한다. 사용자 입력 HTML은 DOMPurify 등 검증된 정화 없이 `dangerouslySetInnerHTML`에 넣지 않는다.
 
+- Code comments: non-obvious branches / security / frozen formulas / intentional bypasses → comment WHY + date or decision link (see root `AGENTS.md`). Do not restate the next line.
+
 ## 검증·참조
 
 - 코드·콘텐츠 변경: `npm run type-check`, `npm run validate:i18n`, `npm run verify:harness`, `npm run build`, 빌드 후 `npm run audit:seo`·`npm run audit:links`.
