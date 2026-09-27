@@ -3,9 +3,9 @@ track: academy
 series: microeconomics
 chapter: 4
 title: "Microeconomics — Consumer Theory: Utility Maximisation and Choice"
-description: "Derives the optimality condition MRS = Px/Py from the budget constraint and indifference curves with a Lagrangian, and covers Cobb–Douglas demand, corner solutions and the Slutsky decomposition into substitution and income effects, with numbers and a graph."
+description: "Derives the optimality condition from the budget constraint and indifference curves by the Lagrangian method, computes Cobb-Douglas demand, corner solutions and the Slutsky decomposition, then uses the duality of the indirect utility and expenditure functions (Roy's identity, Shephard's lemma) to compute compensating and equivalent variation and compare them with consumer surplus."
 pubDate: 2026-03-01T00:00:00.000Z
-updatedDate: 2026-09-24
+updatedDate: 2026-09-28
 category: Economics
 tags: ["economics", "microeconomics", "consumer theory", "indifference curves", "Slutsky"]
 locale: en
@@ -127,9 +127,70 @@ Utility is ordinal: only the ranking matters. $u=xy$ and $u=\ln x+\ln y$ represe
 
 Even without knowing the utility function, we can test choice data for consistency. If bundle B was chosen when A was affordable, then A must not be chosen when B is affordable (the weak axiom of revealed preference, WARP). Data that violate it cannot be rationalised by stable preferences.
 
+
+## 6. Duality: maximising utility and minimising expenditure are two faces of one problem
+
+So far we solved "the most utility from a given income". Turning it around — "the cheapest way to reach a given utility" — lands on the same tangency. The value functions of the two problems are the **indirect utility function** $V(P_x,P_y,M)$ and the **expenditure function** $e(P_x,P_y,u)$. For $u=xy$:
+
+<FormulaBox
+  label="Value functions for u = xy"
+  formula="V=\frac{M^2}{4P_xP_y},\qquad e=2\sqrt{P_xP_y\,u},\qquad x^h=\sqrt{\frac{P_y\,u}{P_x}}"
+  description="V plugs the optimal bundle into utility; e inverts V with respect to M. x^h is Hicksian (compensated) demand, holding utility fixed."
+/>
+
+Differentiating the value functions returns the demands, with no need to re-solve the optimisation — that is what duality is for.
+
+<FormulaBox
+  label="Roy's identity and Shephard's lemma"
+  formula="x^*=-\frac{\partial V/\partial P_x}{\partial V/\partial M},\qquad x^h=\frac{\partial e}{\partial P_x}"
+  description="For u=xy, Roy's identity gives (M²/4P_x²P_y)/(M/2P_xP_y)=M/2P_x, the Marshallian demand; Shephard's lemma gives √(P_y u/P_x), the Hicksian demand."
+/>
+
+In the example of section 5 ($M=12$, $P_y=1$), when $P_x$ rises from 2 to 4, Hicksian compensation puts the substitution effect at $x^h=\sqrt{18/4}\approx2.12$, i.e. $-0.88$ — slightly larger than the Slutsky figure of $-0.75$. The gap vanishes as the price change gets smaller.
+
+### A. Measuring the cost of a price rise in money
+
+There are three ways to put a money value on the consumer's loss from a price rise.
+
+<LectureTable
+  title="Welfare cost of P_x rising from 2 to 4 (M=12, P_y=1)"
+  headers={["Measure", "Definition", "Value"]}
+  rows={[
+    ["Compensating variation CV", "Extra income needed at new prices to keep the original utility (18): e(4,1,18) − 12", "about 4.97"],
+    ["Equivalent variation EV", "Income that would have to be taken away at old prices to bring utility down to the new level (9): 12 − e(2,1,9)", "about 3.51"],
+    ["Loss of consumer surplus ΔCS", "Area under Marshallian demand ∫₂⁴ 6/P dP = 6 ln 2", "about 4.16"],
+  ]}
+/>
+
+For a normal good, $EV\le\Delta CS\le CV$ always holds (for a price rise). The gaps come from the income effect; the smaller it is, the closer the three measures. Cost-benefit analysis uses the area under Marshallian demand because the gap is usually small; for goods that take a large share of income, such as housing, computing CV or EV directly is more accurate.
+
+<EconDiagram
+  title="Marshallian and Hicksian demand"
+  xLabel="x"
+  yLabel="P_x"
+  xMax={7}
+  yMax={7}
+  curves={[
+    { label: "Marshallian", points: [[6, 1], [4, 1.5], [3, 2], [2, 3], [1.5, 4], [1.2, 5], [1, 6]], tone: "blue", labelAt: 0, anchor: "end" },
+    { label: "Hicksian (u=18)", points: [[4.24, 1], [3.46, 1.5], [3, 2], [2.45, 3], [2.12, 4], [1.9, 5], [1.73, 6]], tone: "violet", dashed: true, labelAt: 6 },
+  ]}
+  marks={[
+    { x: 3, y: 2, label: "A", guide: true, xTick: "3", yTick: "2" },
+    { x: 1.5, y: 4, label: "C", guide: true, xTick: "1.5", yTick: "4" },
+    { x: 2.12, y: 4, label: "B*" },
+  ]}
+  caption="The two curves meet at A(3, 2). When the price rises to 4, Marshallian demand falls to C (1.5), but Hicksian demand, compensated to keep utility at 18, stops at B* (2.12). The difference is the income effect; for a normal good the Hicksian curve is steeper."
+/>
+
 ## Check your understanding
 
-$u=xy$, $M=24$ won, $P_x=3$ won, $P_y=2$ won. What are the optimal bundle and $\lambda$? $x^*=24/(2\times 3)=4$ and $y^*=24/(2\times 2)=6$. $\lambda=MU_x/P_x=y/3=2$, equal to $MU_y/P_y=x/2=2$. Marginal utility per won is the same for both goods.
+**Problem 1.** With $u=xy$, $M=24$, $P_x=3$ and $P_y=2$, find the optimal bundle and $\lambda$.
+
+**Solution.** $x^*=24/(2\times3)=4$ and $y^*=24/(2\times2)=6$. $\lambda=MU_x/P_x=y/3=2$, equal to $MU_y/P_y=x/2=2$: marginal utility per won is equalised across the two goods.
+
+**Problem 2.** For the same consumer, $P_x$ rises from 3 to 6. Find the compensating variation (CV), the equivalent variation (EV) and the loss of consumer surplus, and check their order.
+
+**Solution.** Initial utility is $V=24^2/(4\times3\times2)=24$ and final utility $24^2/(4\times6\times2)=12$. $CV=e(6,2,24)-24=2\sqrt{288}-24\approx9.94$ and $EV=24-e(3,2,12)=24-2\sqrt{72}\approx7.03$. The loss of consumer surplus is $\int_3^6 12/P\,dP=12\ln2\approx8.32$. So $EV<\Delta CS<CV$, the order expected for a normal good.
 
 ## References
 
