@@ -9,8 +9,8 @@
 import { getTranslations } from "../lib/i18n";
 import type { Locale } from "../lib/i18n";
 import { getDrawerSeriesGroups } from "../lib/wiki-index";
-import { seriesDisplayName } from "../data/priority-series";
-import { slugifyCategory } from "../lib/taxonomy";
+import { PRIORITY_CATEGORIES, seriesDisplayName } from "../data/priority-series";
+import { OTHER_COPY, OTHER_GROUPS } from "../lib/other-articles";
 
 interface Props {
   locale: string;
@@ -22,14 +22,36 @@ const wikiT = (t as Record<string, unknown>).wiki as Record<string, string> | un
 const categoryNames = (t.category.names ?? {}) as unknown as { [key: string]: string };
 
 const catGroups = await getDrawerSeriesGroups(locale);
+const priorityGroups = PRIORITY_CATEGORIES.map((cat) => catGroups.find(([name]) => name === cat)).filter(
+  (group): group is (typeof catGroups)[number] => Boolean(group),
+);
+const remainingGroups = catGroups.filter(([cat]) => !PRIORITY_CATEGORIES.includes(cat as (typeof PRIORITY_CATEGORIES)[number]));
+// Keep the drawer compact on every article page; the landing lists every field.
+const orderedGroups = [
+  ...priorityGroups,
+  ["__other__", []] as (typeof catGroups)[number],
+  ...remainingGroups.slice(0, Math.max(0, 12 - priorityGroups.length)),
+];
 
 const label = wikiT?.browseByCategory ?? "Browse by category";
+const otherCopy = OTHER_COPY[locale] ?? OTHER_COPY.en;
 ---
 
 <p class="px-2 pt-2 pb-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/50">
   {label}
 </p>
-{catGroups.map(([cat, list]) => (
+{orderedGroups.map(([cat, list]) => cat === "__other__" ? (
+  <details class="rounded-lg">
+    <summary class="flex min-w-0 items-center justify-between cursor-pointer select-none h-11 px-2 rounded-lg text-sm font-bold text-muted-foreground hover:text-primary hover:bg-muted/40 transition-colors list-none">
+      <span>{otherCopy.title}</span>
+    </summary>
+    <ul class="ml-4 border-l border-border/50 pl-3 py-1 space-y-0.5">
+      {OTHER_GROUPS.map((group) => (
+        <li><a href={`/${locale}/other/${group}/`} class="block rounded-md px-2 py-2 text-[13px] text-muted-foreground hover:text-primary hover:bg-muted/40">{otherCopy.groups[group].title}</a></li>
+      ))}
+    </ul>
+  </details>
+) : (
   <details class="rounded-lg">
     <summary class="flex min-w-0 items-center justify-between cursor-pointer select-none h-11 px-2 rounded-lg text-sm font-bold text-muted-foreground hover:text-primary hover:bg-muted/40 transition-colors list-none">
       <span class="truncate">{categoryNames[cat] ?? cat}</span>

@@ -15,6 +15,7 @@ import {
 } from "../data/priority-series";
 import { slugifyCategory } from "../lib/taxonomy";
 import { firstChapterSlugs } from "../lib/related-next";
+import { isOtherArticle, OTHER_COPY, OTHER_GROUPS, otherGroupOf } from "../lib/other-articles";
 
 interface Props {
   locale: string;
@@ -126,6 +127,11 @@ const fmt = (d: Date) => {
 };
 
 const chapterWord = L("chapters", "chapters");
+const otherCopy = OTHER_COPY[locale] ?? OTHER_COPY.en;
+const otherArticles = posts.filter(isOtherArticle);
+const otherCounts = Object.fromEntries(OTHER_GROUPS.map((group) => [
+  group, otherArticles.filter((post) => otherGroupOf(post) === group).length,
+])) as Record<(typeof OTHER_GROUPS)[number], number>;
 ---
 
 <BaseLayout title={title} description={subtitle}>
@@ -215,6 +221,27 @@ const chapterWord = L("chapters", "chapters");
                 >
                   <span class="min-w-0 truncate">{categoryNames[c.cat] ?? c.cat}</span>
                   <span class="shrink-0 tabular-nums text-xs text-muted-foreground/60">{c.courses} · {c.chapters}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {otherArticles.length > 0 && (
+        <section aria-labelledby="sec-other-reading" class="mt-10 sm:mt-14">
+          <div class="border-b border-border pb-2">
+            <h2 id="sec-other-reading" class="text-lg font-bold tracking-tight text-foreground">
+              <a href={`/${locale}/other/`} class="hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">{otherCopy.title}</a>
+            </h2>
+            <p class="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">{otherCopy.intro}</p>
+          </div>
+          <ul class="grid gap-x-7 sm:grid-cols-3">
+            {OTHER_GROUPS.map((group) => (
+              <li>
+                <a href={`/${locale}/other/${group}/`} class="flex items-baseline justify-between gap-3 border-b border-border/60 py-3 text-sm text-foreground hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">
+                  <span>{otherCopy.groups[group].title}</span>
+                  <span class="shrink-0 tabular-nums text-muted-foreground">{otherCounts[group]}</span>
                 </a>
               </li>
             ))}

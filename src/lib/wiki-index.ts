@@ -123,9 +123,11 @@ export function getDrawerSeriesGroups(locale: string): Promise<CategorySeriesGro
 
   const groups = publishedPostsPromise.then((allPosts) => {
     const posts = allPosts.filter((post) => post.data.locale === locale);
-    return groupSeriesByCategory(Array.from(buildSeriesIndex(posts).values()))
-      .filter(([, list]) => list.length > 0)
-      .slice(0, 12);
+    return groupSeriesByCategory(Array.from(buildSeriesIndex(posts).values()).filter((series) =>
+      series.chapterCount >= 2 &&
+      (series.firstPost.data.track === "academy" || series.firstPost.data.track === "education")
+    ))
+      .filter(([, list]) => list.length > 0);
   });
   drawerGroupsByLocale.set(locale, groups);
   return groups;

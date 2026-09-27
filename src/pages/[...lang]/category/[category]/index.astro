@@ -13,6 +13,7 @@ import {
   type SeriesEntry,
 } from "../../../../lib/wiki-index";
 import { seriesDisplayName } from "../../../../data/priority-series";
+import { isOtherArticle } from "../../../../lib/other-articles";
 
 export async function getStaticPaths() {
   const allPosts = await getCollection(
@@ -122,8 +123,8 @@ if (isAcademySeriesMode) {
 // cards reading "1 챕터". 63% of ko category rows were these. Split them out so
 // the course list means courses, without hiding the articles (they would
 // otherwise lose their only internal entry point).
-const courseList = seriesList.filter((s) => s.chapterCount >= 2);
-const articleList = seriesList.filter((s) => s.chapterCount < 2);
+const courseList = seriesList.filter((s) => s.chapterCount >= 2 && !isOtherArticle(s.firstPost));
+const articleList = seriesList.filter((s) => s.chapterCount < 2 && !isOtherArticle(s.firstPost));
 
 const catalogJsonLd = JSON.stringify(
   collectionPageJsonLd({

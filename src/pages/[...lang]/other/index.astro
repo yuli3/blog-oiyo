@@ -1,0 +1,67 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { locales } from "../../../lib/i18n";
+import { isOtherArticle, otherGroupOf, OTHER_COPY, OTHER_GROUPS } from "../../../lib/other-articles";
+import { siteConfig } from "../../../config/site.config";
+import { collectionPageJsonLd } from "../../../lib/seo/structured-data";
+
+export async function getStaticPaths() {
+  const all = await getCollection("blog", isOtherArticle);
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang, articles: all.filter((post) => post.data.locale === lang) },
+  }));
+}
+
+const { locale, articles } = Astro.props;
+const copy = OTHER_COPY[locale] ?? OTHER_COPY.en;
+const groups = OTHER_GROUPS.map((key) => ({
+  key,
+  articles: articles.filter((post) => otherGroupOf(post) === key)
+    .sort((a, b) => (b.data.updatedDate ?? b.data.pubDate).valueOf() - (a.data.updatedDate ?? a.data.pubDate).valueOf()),
+}));
+const jsonLd = JSON.stringify(collectionPageJsonLd({
+  name: `${copy.title} — ${siteConfig.name}`,
+  description: copy.intro,
+  url: `${siteConfig.url}/${locale}/other/`,
+  inLanguage: locale,
+  items: groups.map(({ key }) => ({
+    name: copy.groups[key].title,
+    url: `${siteConfig.url}/${locale}/other/${key}/`,
+  })),
+}));
+---
+
+<BaseLayout title={copy.title} description={copy.intro} availableLocales={[...locales]}>
+  <script is:inline type="application/ld+json" set:html={jsonLd} />
+  <div class="container px-4 py-10 sm:py-14">
+    <header class="max-w-3xl border-b border-border pb-7">
+      <h1 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">{copy.title}</h1>
+      <p class="mt-3 text-base leading-relaxed text-muted-foreground">{copy.intro}</p>
+    </header>
+    <div class="mt-8 space-y-10 sm:mt-10 sm:space-y-12">
+      {groups.map(({ key, articles: list }) => (
+        <section aria-labelledby={`group-${key}`}>
+          <div class="flex flex-wrap items-baseline justify-between gap-2 border-b border-border pb-3">
+            <h2 id={`group-${key}`} class="text-xl font-bold text-foreground">
+              <a href={`/${locale}/other/${key}/`} class="hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring">{copy.groups[key].title}</a>
+            </h2>
+            <span class="text-sm tabular-nums text-muted-foreground">{list.length}</span>
+          </div>
+          <p class="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">{copy.groups[key].intro}</p>
+          {list.length > 0 ? (
+            <ul class="mt-4 grid gap-x-8 sm:grid-cols-2">
+              {list.slice(0, 6).map((post) => (
+                <li class="border-b border-border/60">
+                  <a href={`/${locale}/${post.slug.split("/").slice(1).join("/")}/`} class="block py-3 text-sm leading-snug text-foreground hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">{post.data.title}</a>
+                </li>
+              ))}
+            </ul>
+          ) : <p class="mt-4 text-sm text-muted-foreground">{copy.empty}</p>}
+          {list.length > 6 && <a href={`/${locale}/other/${key}/`} class="mt-4 inline-block py-2 text-sm font-semibold text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">{copy.all} →</a>}
+        </section>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
