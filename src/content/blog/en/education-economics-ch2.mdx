@@ -3,9 +3,9 @@ track: academy
 series: microeconomics
 chapter: 2
 title: "Microeconomics — Supply, Demand and Comparative Statics"
-description: "Solves the linear supply-and-demand equilibrium in general form, shows how the signs of price and quantity changes identify which curve moved, and computes the shortage and deadweight loss of a price ceiling, with numbers and a graph."
+description: "Solves the linear supply-and-demand equilibrium in general form, derives comparative statics by implicit differentiation down to an elasticity formula, states the Walrasian stability condition, and computes the shortage and deadweight loss of a price ceiling, with numbers and graphs."
 pubDate: 2026-03-01T00:00:00.000Z
-updatedDate: 2026-09-24
+updatedDate: 2026-09-28
 category: Economics
 tags: ["economics", "microeconomics", "supply and demand", "comparative statics", "price controls"]
 locale: en
@@ -68,6 +68,38 @@ With demand $Q_d=100-2P$ and supply $Q_s=10+P$, $P^*=90/3=30$ won and $Q^*=40$.
   ]}
 />
 
+### A. Beyond straight lines the signs stay the same — implicit differentiation
+
+The formula above comes from straight lines, but the conclusion is general. Write demand with a shift variable $\alpha$ such as income, $Q_d(P,\alpha)$, and supply as $Q_s(P)$ ($\partial Q_d/\partial P<0$, $\partial Q_d/\partial\alpha>0$, $Q_s'>0$). Totally differentiating the equilibrium condition $Q_d(P^*,\alpha)=Q_s(P^*)$ with respect to $\alpha$ gives:
+
+<FormulaBox
+  label="Comparative statics in general form"
+  formula="\frac{dP^*}{d\alpha}=\frac{\partial Q_d/\partial\alpha}{Q_s'-\partial Q_d/\partial P}>0,\qquad \frac{dQ^*}{d\alpha}=Q_s'\,\frac{dP^*}{d\alpha}>0"
+  description="The denominator is the supply slope plus the absolute demand slope, so it is always positive. With straight lines the numerator is 1 and the denominator b+d, which returns the formula of section 1."
+/>
+
+Multiplying by $P^*/Q^*$ turns this into elasticities, a more useful form. When a shock pushes the demand curve out horizontally by $s$ percent:
+
+<FormulaBox
+  label="Price change in elasticity form"
+  formula="\%\Delta P^*\approx\frac{s}{\varepsilon_s+|\varepsilon_d|},\qquad \%\Delta Q^*\approx\frac{\varepsilon_s}{\varepsilon_s+|\varepsilon_d|}\,s"
+  description="ε_s is the price elasticity of supply and ε_d the price elasticity of demand. The share of the shock that shows up in price is 1/(ε_s+|ε_d|); the share in quantity is ε_s/(ε_s+|ε_d|)."
+/>
+
+In the section 1 example, the elasticities at $(P,Q)=(30,40)$ are $|\varepsilon_d|=2\times30/40=1.5$ and $\varepsilon_s=1\times30/40=0.75$. Pushing demand out by 12 units, i.e. $s=30\%$, raises price by $30\%/2.25\approx13.3\%$ (30 → 34) and quantity by $0.75\times13.3\%=10\%$ (40 → 44) — exactly what we solved directly. The less elastic supply is, the more a demand shock leaks into price rather than quantity. Tax incidence in chapter 3 is another face of this formula.
+
+### B. Does the market return to equilibrium? — Walrasian stability
+
+Finding the intersection is one thing; the market **moving** to it is another. Suppose price rises when there is excess demand, $\dot P=k\,[Q_d(P)-Q_s(P)]$ with $k>0$. Linearising around equilibrium gives $\dot P\approx -k\,(b+d)\,(P-P^*)$, so if $b+d>0$ price returns to $P^*$ exponentially.
+
+<FormulaBox
+  label="Walrasian stability condition"
+  formula="\frac{d}{dP}\bigl[Q_d(P)-Q_s(P)\bigr]=-(b+d)<0"
+  description="It holds automatically when demand slopes down and supply slopes up. Where it fails — as in industries with economies of scale and downward-sloping supply — price can move away from an intersection even though one exists."
+/>
+
+Stability is also why the signs of comparative statics can be trusted (Samuelson's correspondence principle). If the equilibrium is unstable, the prediction "higher demand raises price" does not guarantee a path to the new equilibrium.
+
 Price alone does not reveal the cause. If quantity rose with price, a demand shock dominated; if quantity fell, a supply shock dominated. When both curves move at once, the sign of one variable depends on their relative sizes and becomes ambiguous.
 
 ## 2. Why you cannot draw a demand curve by joining the dots
@@ -88,6 +120,26 @@ The **deadweight loss** from quantity falling from 40 to 30 is the triangle betw
   description="Those 10 trades would have been worth more to consumers than they cost to produce, yet they disappear. Counting the time spent queuing, the true loss is larger."
 />
 
+<EconDiagram
+  title="A price ceiling at 20: shortage and deadweight loss"
+  xLabel="Q"
+  yLabel="P"
+  xMax={70}
+  yMax={60}
+  curves={[
+    { label: "D", points: [[0, 50], [70, 15]], tone: "blue" },
+    { label: "S", points: [[10, 0], [65, 55]], tone: "green" },
+    { label: "Ceiling", points: [[0, 20], [70, 20]], tone: "red", dashed: true },
+  ]}
+  areas={[{ points: [[30, 20], [30, 35], [40, 30]], tone: "amber", label: "DWL" }]}
+  marks={[
+    { x: 40, y: 30, label: "E", guide: true, xTick: "40", yTick: "30" },
+    { x: 30, y: 20, xTick: "30" },
+    { x: 60, y: 20, xTick: "60" },
+  ]}
+  caption="With price held at 20, quantity supplied is 30 and quantity demanded 60, a shortage of 30. The triangle over the untraded range 30–40 is the deadweight loss of 75."
+/>
+
 "Lower prices benefit consumers" holds only for the 30 people who actually buy. The losses of those who cannot buy and the cost of queuing must be subtracted to find the net effect on consumers as a whole. A price floor (a minimum wage, a guaranteed crop price) does the opposite and creates excess supply.
 
 <Callout type="warning">
@@ -98,7 +150,13 @@ The claim that competitive equilibrium maximises total surplus holds only under 
 
 ## Check your understanding
 
-Demand $Q_d=80-P$, supply $Q_s=20+P$. The equilibrium is $P=30$ won and $Q=50$. With a ceiling of 20 won, demand is 60 and supply 40, a shortage of 20. At a quantity of 40 the demand price is 40 won and the supply price 20 won, so the deadweight loss is $\tfrac{1}{2}\times 20\times 10=100$.
+**Problem 1.** A price ceiling of 20 is imposed in a market with demand $Q_d=80-P$ and supply $Q_s=20+P$. Find the shortage and the deadweight loss.
+
+**Solution.** Equilibrium solves $80-P=20+P$: $P^*=30$, $Q^*=50$. At 20, quantity demanded is 60 and quantity supplied 40, a shortage of 20. At a traded quantity of 40 the demand price is $80-40=40$ and the supply price $40-20=20$, so the deadweight loss is $\tfrac{1}{2}\times(40-20)\times(50-40)=100$.
+
+**Problem 2.** In a rice market, the elasticities at equilibrium are $|\varepsilon_d|=0.5$ and $\varepsilon_s=0.2$. A poor harvest shifts supply horizontally left by 7%. Roughly how much do price and quantity change?
+
+**Solution.** A supply shock uses the same formula with the sign reversed. Price rises by $7\%/(0.2+0.5)=10\%$. Quantity moves along the demand curve, so it falls by $|\varepsilon_d|\times10\%=5\%$. Because demand is inelastic, most of the shock shows up in price, and farm revenue ($P\times Q$) actually rises by about 4.5%. That is why prices spike after a bad harvest.
 
 ## References
 

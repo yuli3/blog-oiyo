@@ -3,9 +3,9 @@ track: academy
 series: microeconomics
 chapter: 2
 title: "微观经济学 — 供给、需求与比较静态分析"
-description: "用一般式求解线性供求均衡，说明如何根据价格和数量变化的符号识别是哪条曲线移动，并用数字和图形计算最高限价造成的短缺与无谓损失。"
+description: "用一般式求解线性供求均衡，用隐函数求导把比较静态推导到弹性公式，并用数字和图形梳理瓦尔拉斯调整的稳定条件以及最高限价造成的短缺与无谓损失。"
 pubDate: 2026-03-01T00:00:00.000Z
-updatedDate: 2026-09-24
+updatedDate: 2026-09-28
 category: Economics
 tags: ["经济学", "微观经济学", "供给与需求", "比较静态", "价格管制"]
 locale: zh
@@ -68,6 +68,38 @@ import { LectureTable } from "@/features/education-common/components/LectureVisu
   ]}
 />
 
+### 一、离开直线，符号依然不变——隐函数求导
+
+上面的公式只来自直线，但结论是一般性的。把收入这样的移动变量 $\alpha$ 放进需求，写成 $Q_d(P,\alpha)$，供给写成 $Q_s(P)$（$\partial Q_d/\partial P<0$，$\partial Q_d/\partial\alpha>0$，$Q_s'>0$）。对均衡条件 $Q_d(P^*,\alpha)=Q_s(P^*)$ 关于 $\alpha$ 全微分，得到：
+
+<FormulaBox
+  label="比较静态的一般式"
+  formula="\frac{dP^*}{d\alpha}=\frac{\partial Q_d/\partial\alpha}{Q_s'-\partial Q_d/\partial P}>0,\qquad \frac{dQ^*}{d\alpha}=Q_s'\,\frac{dP^*}{d\alpha}>0"
+  description="分母是供给斜率与需求斜率（绝对值）之和，因此总为正。若为直线，分子为1、分母为b+d，就回到第1节的公式。"
+/>
+
+两边乘以 $P^*/Q^*$ 换成弹性，形式更好用。若冲击使需求曲线水平外移 $s$%，则
+
+<FormulaBox
+  label="用弹性表示的价格变化率"
+  formula="\%\Delta P^*\approx\frac{s}{\varepsilon_s+|\varepsilon_d|},\qquad \%\Delta Q^*\approx\frac{\varepsilon_s}{\varepsilon_s+|\varepsilon_d|}\,s"
+  description="ε_s是供给价格弹性，ε_d是需求价格弹性。冲击中体现为价格的份额是1/(ε_s+|ε_d|)，体现为数量的份额是ε_s/(ε_s+|ε_d|)。"
+/>
+
+第1节例子中均衡点 $(P,Q)=(30,40)$ 的弹性为 $|\varepsilon_d|=2\times30/40=1.5$，$\varepsilon_s=1\times30/40=0.75$。把需求水平外移12个单位，即 $s=30\%$，价格上涨 $30\%/2.25\approx13.3\%$（30元→34元），数量上升 $0.75\times13.3\%=10\%$（40→44），与第1节直接求解的结果一致。供给越缺乏弹性，同样的需求冲击就越多地转化为价格而非数量。第3章的税收归宿正是这个公式的另一面。
+
+### 二、均衡会自行恢复吗——瓦尔拉斯稳定性
+
+找到交点是一回事，市场**走向**这个点是另一回事。设存在超额需求时价格上涨，调整为 $\dot P=k\,[Q_d(P)-Q_s(P)]$（$k>0$）。在均衡附近线性化得 $\dot P\approx -k\,(b+d)\,(P-P^*)$，因此若 $b+d>0$，价格会以指数方式回到 $P^*$。
+
+<FormulaBox
+  label="瓦尔拉斯稳定条件"
+  formula="\frac{d}{dP}\bigl[Q_d(P)-Q_s(P)\bigr]=-(b+d)<0"
+  description="需求向右下倾斜、供给向右上倾斜时自动满足。在具有规模经济、供给向右下倾斜的行业中，这一条件可能被打破，此时即使存在交点，价格也可能离它而去。"
+/>
+
+比较静态的符号之所以可信，也是因为稳定性（萨缪尔森的对应原理）。如果均衡不稳定，“需求增加则价格上升”的预测并不能保证通往新均衡的路径。
+
 仅凭价格无法判断原因。价格上涨时数量也增加，说明需求冲击占主导；数量减少，则说明供给冲击占主导。两条曲线同时移动时，某一变量的符号取决于两者的相对大小，因而不确定。
 
 ## 2. 为什么不能把点连起来画需求曲线
@@ -88,6 +120,26 @@ import { LectureTable } from "@/features/education-common/components/LectureVisu
   description="这10笔交易对消费者的价值高于生产成本，却消失了。若把排队所花的时间也算进去，实际损失更大。"
 />
 
+<EconDiagram
+  title="最高限价20元：短缺与无谓损失"
+  xLabel="Q"
+  yLabel="P"
+  xMax={70}
+  yMax={60}
+  curves={[
+    { label: "D", points: [[0, 50], [70, 15]], tone: "blue" },
+    { label: "S", points: [[10, 0], [65, 55]], tone: "green" },
+    { label: "最高限价", points: [[0, 20], [70, 20]], tone: "red", dashed: true },
+  ]}
+  areas={[{ points: [[30, 20], [30, 35], [40, 30]], tone: "amber", label: "DWL" }]}
+  marks={[
+    { x: 40, y: 30, label: "E", guide: true, xTick: "40", yTick: "30" },
+    { x: 30, y: 20, xTick: "30" },
+    { x: 60, y: 20, xTick: "60" },
+  ]}
+  caption="价格被固定在20元时，供给量为30、需求量为60，短缺30个。未能成交的30~40区间上的三角形就是无谓损失75。"
+/>
+
 "压低价格对消费者有利"只对真正买到商品的30人成立。扣除买不到的人的损失和排队成本之后，才能得到消费者整体的得失。最低限价(最低工资、农产品收购价)则相反，会造成过剩供给。
 
 <Callout type="warning">
@@ -98,7 +150,13 @@ import { LectureTable } from "@/features/education-common/components/LectureVisu
 
 ## 练习题
 
-需求$Q_d=80-P$，供给$Q_s=20+P$。均衡为$P=30$韩元，$Q=50$。若最高限价为20韩元，需求60，供给40，短缺20。成交量为40时需求价格为40韩元，供给价格为20韩元，所以无谓损失为$\tfrac{1}{2}\times 20\times 10=100$。
+**问题1.** 需求 $Q_d=80-P$、供给 $Q_s=20+P$ 的市场实行最高限价20元。求短缺量和无谓损失。
+
+**解答.** 由 $80-P=20+P$ 得均衡 $P^*=30$ 元，$Q^*=50$。在20元时需求量为60、供给量为40，短缺20个。成交量为40时，需求价格为 $80-40=40$ 元，供给价格为 $40-20=20$ 元，所以无谓损失为 $\tfrac{1}{2}\times(40-20)\times(50-40)=100$。
+
+**问题2.** 某大米市场在均衡点的需求价格弹性为 $|\varepsilon_d|=0.5$，供给价格弹性为 $\varepsilon_s=0.2$。歉收使供给曲线水平左移7%。价格和数量大约变化多少？
+
+**解答.** 供给冲击使用同一公式，只是符号相反。价格上涨 $7\%/(0.2+0.5)=10\%$。数量沿需求曲线移动，变化为 $-|\varepsilon_d|\times10\%=-5\%$。由于需求缺乏弹性，供给冲击大部分体现为价格，农户收入（$P\times Q$）反而增加约4.5%。这就是歉收时价格暴涨的原因。
 
 ## 参考资料
 

@@ -3,9 +3,9 @@ track: academy
 series: microeconomics
 chapter: 2
 title: "Microeconomía — Oferta, demanda y estática comparativa"
-description: "Resuelve el equilibrio lineal de oferta y demanda en forma general, muestra cómo los signos de los cambios de precio y cantidad identifican qué curva se desplazó y calcula la escasez y la pérdida irrecuperable de un precio máximo, con números y un gráfico."
+description: "Resuelve el equilibrio lineal de oferta y demanda en forma general, deriva la estática comparativa por diferenciación implícita hasta una fórmula en elasticidades, enuncia la condición de estabilidad walrasiana y calcula la escasez y la pérdida irrecuperable de un precio máximo, con números y gráficos."
 pubDate: 2026-03-01T00:00:00.000Z
-updatedDate: 2026-09-24
+updatedDate: 2026-09-28
 category: Economics
 tags: ["economía", "microeconomía", "oferta y demanda", "estática comparativa", "control de precios"]
 locale: es
@@ -68,6 +68,38 @@ Con demanda $Q_d=100-2P$ y oferta $Q_s=10+P$, $P^*=90/3=30$ wones y $Q^*=40$.
   ]}
 />
 
+### A. Fuera de las rectas los signos no cambian — diferenciación implícita
+
+La fórmula anterior sale de rectas, pero la conclusión es general. Escribamos la demanda con una variable de desplazamiento $\alpha$, como la renta, $Q_d(P,\alpha)$, y la oferta como $Q_s(P)$ ($\partial Q_d/\partial P<0$, $\partial Q_d/\partial\alpha>0$, $Q_s'>0$). Diferenciando totalmente la condición de equilibrio $Q_d(P^*,\alpha)=Q_s(P^*)$ respecto de $\alpha$ se obtiene:
+
+<FormulaBox
+  label="Estática comparativa en forma general"
+  formula="\frac{dP^*}{d\alpha}=\frac{\partial Q_d/\partial\alpha}{Q_s'-\partial Q_d/\partial P}>0,\qquad \frac{dQ^*}{d\alpha}=Q_s'\,\frac{dP^*}{d\alpha}>0"
+  description="El denominador es la pendiente de la oferta más la de la demanda en valor absoluto, así que siempre es positivo. Con rectas, el numerador es 1 y el denominador b+d, y se vuelve a la fórmula de la sección 1."
+/>
+
+Multiplicando por $P^*/Q^*$ se pasa a elasticidades, una forma más útil. Si un choque desplaza horizontalmente la demanda un $s$ % hacia fuera:
+
+<FormulaBox
+  label="Variación del precio en elasticidades"
+  formula="\%\Delta P^*\approx\frac{s}{\varepsilon_s+|\varepsilon_d|},\qquad \%\Delta Q^*\approx\frac{\varepsilon_s}{\varepsilon_s+|\varepsilon_d|}\,s"
+  description="ε_s es la elasticidad-precio de la oferta y ε_d la de la demanda. La parte del choque que va al precio es 1/(ε_s+|ε_d|) y la que va a la cantidad, ε_s/(ε_s+|ε_d|)."
+/>
+
+En el ejemplo de la sección 1, las elasticidades en $(P,Q)=(30,40)$ son $|\varepsilon_d|=2\times30/40=1{,}5$ y $\varepsilon_s=1\times30/40=0{,}75$. Desplazar la demanda 12 unidades, es decir $s=30\,\%$, sube el precio un $30\,\%/2{,}25\approx13{,}3\,\%$ (30 → 34) y la cantidad un $0{,}75\times13{,}3\,\%=10\,\%$ (40 → 44), justo lo que se obtuvo directamente. Cuanto menos elástica es la oferta, más se filtra un choque de demanda al precio en vez de a la cantidad. La incidencia de los impuestos del capítulo 3 es otra cara de esta fórmula.
+
+### B. ¿Vuelve solo el equilibrio? — Estabilidad walrasiana
+
+Encontrar la intersección es una cosa; que el mercado **vaya** hacia ella es otra. Supongamos que el precio sube cuando hay exceso de demanda, $\dot P=k\,[Q_d(P)-Q_s(P)]$ con $k>0$. Linealizando cerca del equilibrio, $\dot P\approx -k\,(b+d)\,(P-P^*)$, así que si $b+d>0$ el precio vuelve exponencialmente a $P^*$.
+
+<FormulaBox
+  label="Condición de estabilidad walrasiana"
+  formula="\frac{d}{dP}\bigl[Q_d(P)-Q_s(P)\bigr]=-(b+d)<0"
+  description="Se cumple automáticamente si la demanda es decreciente y la oferta creciente. Donde falla —industrias con economías de escala y oferta decreciente—, el precio puede alejarse de una intersección aunque exista."
+/>
+
+La estabilidad es también la razón por la que se puede confiar en los signos de la estática comparativa (principio de correspondencia de Samuelson). Si el equilibrio es inestable, la predicción «más demanda sube el precio» no garantiza un camino hacia el nuevo equilibrio.
+
 El precio por sí solo no revela la causa. Si la cantidad subió con el precio, dominó una perturbación de demanda; si bajó, una de oferta. Cuando ambas curvas se mueven a la vez, el signo de una de las variables depende de sus tamaños relativos y queda ambiguo.
 
 ## 2. Por qué no se puede trazar una curva de demanda uniendo puntos
@@ -88,6 +120,26 @@ La **pérdida irrecuperable de eficiencia** por la caída de la cantidad de 40 a
   description="Esos 10 intercambios valían más para los consumidores de lo que costaba producirlos y, aun así, desaparecen. Si se cuenta el tiempo perdido en las colas, la pérdida real es mayor."
 />
 
+<EconDiagram
+  title="Precio máximo de 20: escasez y pérdida irrecuperable"
+  xLabel="Q"
+  yLabel="P"
+  xMax={70}
+  yMax={60}
+  curves={[
+    { label: "D", points: [[0, 50], [70, 15]], tone: "blue" },
+    { label: "S", points: [[10, 0], [65, 55]], tone: "green" },
+    { label: "Máximo", points: [[0, 20], [70, 20]], tone: "red", dashed: true },
+  ]}
+  areas={[{ points: [[30, 20], [30, 35], [40, 30]], tone: "amber", label: "DWL" }]}
+  marks={[
+    { x: 40, y: 30, label: "E", guide: true, xTick: "40", yTick: "30" },
+    { x: 30, y: 20, xTick: "30" },
+    { x: 60, y: 20, xTick: "60" },
+  ]}
+  caption="Con el precio fijado en 20, la cantidad ofrecida es 30 y la demandada 60: faltan 30 unidades. El triángulo sobre el tramo no intercambiado 30–40 es la pérdida irrecuperable de 75."
+/>
+
 «Bajar el precio beneficia a los consumidores» solo es cierto para las 30 personas que compran. Hay que restar las pérdidas de quienes no pueden comprar y el coste de las colas para obtener el efecto neto sobre el conjunto de los consumidores. Un precio mínimo (salario mínimo, precio garantizado de una cosecha) hace lo contrario y genera exceso de oferta.
 
 <Callout type="warning">
@@ -98,7 +150,13 @@ La afirmación de que el equilibrio competitivo maximiza el excedente total solo
 
 ## Ejercicio
 
-Demanda $Q_d=80-P$, oferta $Q_s=20+P$. El equilibrio es $P=30$ wones y $Q=50$. Con un precio máximo de 20 wones, la demanda es 60 y la oferta 40: una escasez de 20. Con una cantidad de 40, el precio de demanda es 40 wones y el de oferta 20 wones, así que la pérdida irrecuperable es $\tfrac{1}{2}\times 20\times 10=100$.
+**Problema 1.** Se impone un precio máximo de 20 en un mercado con demanda $Q_d=80-P$ y oferta $Q_s=20+P$. Calcule la escasez y la pérdida irrecuperable.
+
+**Solución.** El equilibrio cumple $80-P=20+P$: $P^*=30$, $Q^*=50$. A 20, la cantidad demandada es 60 y la ofrecida 40, así que faltan 20 unidades. Con una cantidad intercambiada de 40, el precio de demanda es $80-40=40$ y el de oferta $40-20=20$, de modo que la pérdida irrecuperable es $\tfrac{1}{2}\times(40-20)\times(50-40)=100$.
+
+**Problema 2.** En un mercado de arroz, las elasticidades en el equilibrio son $|\varepsilon_d|=0{,}5$ y $\varepsilon_s=0{,}2$. Una mala cosecha desplaza la oferta horizontalmente un 7 % hacia la izquierda. ¿Cuánto cambian aproximadamente el precio y la cantidad?
+
+**Solución.** Un choque de oferta usa la misma fórmula con el signo invertido. El precio sube un $7\,\%/(0{,}2+0{,}5)=10\,\%$. La cantidad se mueve a lo largo de la demanda, así que baja un $|\varepsilon_d|\times10\,\%=5\,\%$. Como la demanda es inelástica, la mayor parte del choque se refleja en el precio y el ingreso agrícola ($P\times Q$) incluso sube alrededor de un 4,5 %. Por eso los precios se disparan tras una mala cosecha.
 
 ## Referencias
 

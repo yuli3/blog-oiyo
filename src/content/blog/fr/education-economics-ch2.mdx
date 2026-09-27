@@ -3,9 +3,9 @@ track: academy
 series: microeconomics
 chapter: 2
 title: "Microéconomie — Offre, demande et statique comparative"
-description: "Résout l'équilibre linéaire offre-demande sous forme générale, montre comment les signes des variations de prix et de quantité identifient la courbe qui s'est déplacée, et calcule la pénurie et la perte sèche d'un prix plafond, chiffres et graphique à l'appui."
+description: "Résout l'équilibre linéaire offre-demande sous forme générale, dérive la statique comparative par différentiation implicite jusqu'à une formule en élasticités, énonce la condition de stabilité walrasienne et calcule la pénurie et la perte sèche d'un prix plafond, chiffres et graphiques à l'appui."
 pubDate: 2026-03-01T00:00:00.000Z
-updatedDate: 2026-09-24
+updatedDate: 2026-09-28
 category: Economics
 tags: ["économie", "microéconomie", "offre et demande", "statique comparative", "contrôle des prix"]
 locale: fr
@@ -68,6 +68,38 @@ Avec une demande $Q_d=100-2P$ et une offre $Q_s=10+P$, $P^*=90/3=30$ wons et $Q^
   ]}
 />
 
+### A. Hors des droites, les signes restent les mêmes — différentiation implicite
+
+La formule ci-dessus vient de droites, mais la conclusion est générale. Écrivons la demande avec une variable de déplacement $\alpha$, comme le revenu, $Q_d(P,\alpha)$, et l'offre $Q_s(P)$ ($\partial Q_d/\partial P<0$, $\partial Q_d/\partial\alpha>0$, $Q_s'>0$). En différenciant totalement la condition d'équilibre $Q_d(P^*,\alpha)=Q_s(P^*)$ par rapport à $\alpha$, on obtient :
+
+<FormulaBox
+  label="Statique comparative sous forme générale"
+  formula="\frac{dP^*}{d\alpha}=\frac{\partial Q_d/\partial\alpha}{Q_s'-\partial Q_d/\partial P}>0,\qquad \frac{dQ^*}{d\alpha}=Q_s'\,\frac{dP^*}{d\alpha}>0"
+  description="Le dénominateur est la pente de l'offre plus la pente de la demande en valeur absolue : il est toujours positif. Avec des droites, le numérateur vaut 1 et le dénominateur b+d, ce qui redonne la formule de la section 1."
+/>
+
+En multipliant par $P^*/Q^*$, on passe aux élasticités, forme plus commode. Si un choc déplace horizontalement la courbe de demande de $s$ % vers l'extérieur :
+
+<FormulaBox
+  label="Variation du prix en élasticités"
+  formula="\%\Delta P^*\approx\frac{s}{\varepsilon_s+|\varepsilon_d|},\qquad \%\Delta Q^*\approx\frac{\varepsilon_s}{\varepsilon_s+|\varepsilon_d|}\,s"
+  description="ε_s est l'élasticité-prix de l'offre et ε_d celle de la demande. La part du choc qui passe dans le prix vaut 1/(ε_s+|ε_d|), celle qui passe dans la quantité ε_s/(ε_s+|ε_d|)."
+/>
+
+Dans l'exemple de la section 1, les élasticités au point $(P,Q)=(30,40)$ sont $|\varepsilon_d|=2\times30/40=1{,}5$ et $\varepsilon_s=1\times30/40=0{,}75$. Déplacer la demande de 12 unités, soit $s=30\,\%$, fait monter le prix de $30\,\%/2{,}25\approx13{,}3\,\%$ (30 → 34) et la quantité de $0{,}75\times13{,}3\,\%=10\,\%$ (40 → 44) — exactement le résultat du calcul direct. Plus l'offre est inélastique, plus un choc de demande se reporte sur le prix plutôt que sur la quantité. L'incidence fiscale du chapitre 3 est une autre face de cette formule.
+
+### B. L'équilibre revient-il de lui-même ? — Stabilité walrasienne
+
+Trouver l'intersection est une chose ; que le marché **s'y dirige** en est une autre. Supposons que le prix monte en cas de demande excédentaire : $\dot P=k\,[Q_d(P)-Q_s(P)]$, avec $k>0$. En linéarisant autour de l'équilibre, $\dot P\approx -k\,(b+d)\,(P-P^*)$ : si $b+d>0$, le prix revient exponentiellement vers $P^*$.
+
+<FormulaBox
+  label="Condition de stabilité walrasienne"
+  formula="\frac{d}{dP}\bigl[Q_d(P)-Q_s(P)\bigr]=-(b+d)<0"
+  description="Elle est automatiquement satisfaite quand la demande est décroissante et l'offre croissante. Là où elle échoue — industries à rendements croissants avec une offre décroissante —, le prix peut s'éloigner d'une intersection qui existe pourtant."
+/>
+
+C'est aussi grâce à la stabilité que l'on peut se fier aux signes de la statique comparative (principe de correspondance de Samuelson). Si l'équilibre est instable, la prédiction « une hausse de la demande fait monter le prix » ne garantit aucun chemin vers le nouvel équilibre.
+
 Le prix seul ne révèle pas la cause. Si la quantité a augmenté avec le prix, c'est un choc de demande qui domine ; si elle a baissé, c'est un choc d'offre. Lorsque les deux courbes bougent en même temps, le signe de l'une des variables dépend de leurs tailles relatives et devient indéterminé.
 
 ## 2. Pourquoi on ne trace pas une courbe de demande en reliant les points
@@ -88,6 +120,26 @@ La **perte sèche** due au recul de la quantité de 40 à 30 est le triangle com
   description="Ces 10 échanges valaient plus pour les consommateurs qu'ils ne coûtaient à produire, et pourtant ils disparaissent. En comptant le temps passé à faire la queue, la perte réelle est plus grande."
 />
 
+<EconDiagram
+  title="Prix plafond à 20 : pénurie et perte sèche"
+  xLabel="Q"
+  yLabel="P"
+  xMax={70}
+  yMax={60}
+  curves={[
+    { label: "D", points: [[0, 50], [70, 15]], tone: "blue" },
+    { label: "S", points: [[10, 0], [65, 55]], tone: "green" },
+    { label: "Plafond", points: [[0, 20], [70, 20]], tone: "red", dashed: true },
+  ]}
+  areas={[{ points: [[30, 20], [30, 35], [40, 30]], tone: "amber", label: "DWL" }]}
+  marks={[
+    { x: 40, y: 30, label: "E", guide: true, xTick: "40", yTick: "30" },
+    { x: 30, y: 20, xTick: "30" },
+    { x: 60, y: 20, xTick: "60" },
+  ]}
+  caption="Avec un prix bloqué à 20, la quantité offerte est de 30 et la quantité demandée de 60 : il manque 30 unités. Le triangle au-dessus de l'intervalle non échangé 30–40 est la perte sèche de 75."
+/>
+
 « Baisser le prix profite aux consommateurs » n'est vrai que pour les 30 personnes qui achètent effectivement. Il faut retrancher les pertes de ceux qui ne peuvent pas acheter et le coût des files d'attente pour obtenir l'effet net sur l'ensemble des consommateurs. Un prix plancher (salaire minimum, prix garanti d'une récolte) produit l'inverse : un excès d'offre.
 
 <Callout type="warning">
@@ -98,7 +150,13 @@ L'affirmation selon laquelle l'équilibre concurrentiel maximise le surplus tota
 
 ## Exercice
 
-Demande $Q_d=80-P$, offre $Q_s=20+P$. L'équilibre est $P=30$ wons et $Q=50$. Avec un plafond de 20 wons, la demande est de 60 et l'offre de 40 : une pénurie de 20. Pour une quantité de 40, le prix de demande est de 40 wons et le prix d'offre de 20 wons, donc la perte sèche vaut $\tfrac{1}{2}\times 20\times 10=100$.
+**Problème 1.** Un prix plafond de 20 est instauré sur un marché où la demande est $Q_d=80-P$ et l'offre $Q_s=20+P$. Calculez la pénurie et la perte sèche.
+
+**Solution.** L'équilibre vérifie $80-P=20+P$ : $P^*=30$, $Q^*=50$. À 20, la quantité demandée est de 60 et la quantité offerte de 40 : il manque 20 unités. Pour une quantité échangée de 40, le prix de demande vaut $80-40=40$ et le prix d'offre $40-20=20$ ; la perte sèche est donc $\tfrac{1}{2}\times(40-20)\times(50-40)=100$.
+
+**Problème 2.** Sur un marché du riz, les élasticités à l'équilibre sont $|\varepsilon_d|=0{,}5$ et $\varepsilon_s=0{,}2$. Une mauvaise récolte déplace l'offre horizontalement de 7 % vers la gauche. De combien varient environ le prix et la quantité ?
+
+**Solution.** Un choc d'offre utilise la même formule avec le signe inversé. Le prix monte de $7\,\%/(0{,}2+0{,}5)=10\,\%$. La quantité se déplace le long de la demande et baisse donc de $|\varepsilon_d|\times10\,\%=5\,\%$. La demande étant inélastique, l'essentiel du choc passe dans le prix, et le revenu agricole ($P\times Q$) augmente même d'environ 4,5 %. C'est pourquoi les prix s'envolent après une mauvaise récolte.
 
 ## Références
 
