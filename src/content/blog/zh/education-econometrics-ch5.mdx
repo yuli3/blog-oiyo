@@ -1,0 +1,88 @@
+---
+track: academy
+series: econometrics
+chapter: 5
+title: "计量经济学 — 面板固定效应与聚类"
+description: "通过数值例子理解固定效应如何消除不随时间变化的异质性、识别还需要什么，以及聚类标准误的作用。"
+pubDate: 2026-09-15
+updatedDate: 2026-09-27
+category: Economics
+tags: ["经济学", "计量经济学", "面板数据", "固定效应", "聚类"]
+locale: zh
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+market: GLOBAL
+contentScope: global
+noindex: true
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 面板数据能消除固定的异质性，却不能消除所有偏误
+
+工具变量借助外生变动；反复观察同一个人、企业或地区，则提供了另一种办法：用差分消除固定在观测单位上的特征。单位根分析属于另一类时间序列问题。
+
+## 1. 固定效应保留变化，而不是水平
+
+在 $Y_{it}=\alpha_i+\lambda_t+\beta X_{it}+u_{it}$ 中，如果 $\alpha_i$ 是能力或企业文化等不随时间变化的成分，减去个体均值或进行一阶差分便可将其消除。共同的年份效应 $\lambda_t$ 仍须单独控制。**某项在代数上消失，不等于 $\beta$ 已成为因果效应。**
+
+<FormulaBox
+  label="组内变换"
+  formula="Y_{it}-\bar Y_i = (\lambda_t-\bar\lambda_i)+\beta(X_{it}-\bar X_i)+(u_{it}-\bar u_i)"
+  description="减去每个个体的均值会消除 α_i，也会消除不随时间变化的 X；但不会自动消除年份效应。"
+/>
+
+假设观察三个人两年。扣除所有人共同增加的100万韩元工资后，每增加一年受教育时间，对应的工资变化为200万韩元。
+
+<LectureTable
+  title="假设的两期变化：区分共同上涨与个体内部变化"
+  headers={["个人", "受教育年数变化", "工资变化（万韩元）", "扣除共同的100万韩元"]}
+  rows={[
+    ["A", "0", "100", "0"],
+    ["B", "1", "300", "200"],
+    ["C", "2", "500", "400"],
+  ]}
+/>
+
+如果只比较横截面的水平，原本受教育更多者的高工资也会混在其中。但是，如果教育选择会对未来的工资冲击作出反应，组内得到的200万韩元关联也不能解释为因果效应。
+
+要使固定效应估计具有一致性，需要例如 $E(u_{it}\mid X_{i1},\ldots,X_{iT},\alpha_i)=0$ 这样的**严格外生性**，还需要处理随时间变化的混杂因素。当前工资冲击影响明年的教育选择，这种反馈就违背严格外生性。加入年份效应后，不同人受到不同程度的经济冲击仍可能留下来。
+
+## 2. 随机效应只有在更强假设下才能提高效率
+
+随机效应把 $\alpha_i$ 建模为误差结构的一部分。只有当 $\alpha_i$ 与解释变量不相关，并且外生性与误差协方差假设成立时，它才可能比固定效应更有效率。如果 $\alpha_i$ 与教育选择相关，所谓效率收益便伴随偏误。豪斯曼检验可以辅助检查假设，却不能代替对选择机制的制度分析。
+
+<LectureTable
+  title="各种面板估计量处理了什么、留下了什么"
+  headers={["估计方法", "对固定 α_i 的处理", "主要局限"]}
+  rows={[
+    ["固定效应", "消除不随时间变化的 α_i", "无法估计不变 X 的水平效应"],
+    ["一阶差分", "消除同一个 α_i", "两期时斜率与固定效应相同"],
+    ["随机效应", "将 α_i 纳入误差模型", "要求 α_i 与 X 不相关"],
+  ]}
+/>
+
+对样本和模型均相同的平衡两期面板，固定效应与一阶差分得到相同的斜率估计。三期以上时，两者的相对效率取决于误差的序列相关结构。不能笼统地说“两期数据的一阶差分必然损失效率”。
+
+同一个人的跨年误差相关时，应按**个人聚类**计算标准误。相反，同一年不同人之间的误差相关属于横截面方向的问题。年份固定效应可以吸收均匀的共同冲击，但仅按个人聚类无法解决异质的共同冲击。具体设计可能需要个人与年份双向聚类，或其他推断方法。如果只有四年，依赖四个年份聚类的常规渐近推断也难以可靠。聚类标准误不能修复识别问题。
+
+<Callout type="warning">
+固定效应不会自动赋予因果解释。随时间变化的遗漏变量、反向因果和测量误差仍然存在。处理选择若对预期工资或过去冲击作出反应，严格外生性可能失效。面板方法与工具变量不能互相替代。
+</Callout>
+
+## 检验理解
+
+**问题。** 观察20家企业四年，固定效应回归显示培训支出增加1%与生产率提高0.3%相关。如果同一年的行业景气同时影响两项变量，可以加入什么固定效应？仅按企业聚类能消除共同冲击问题吗？
+
+**解答。** 年份固定效应能吸收所有企业共同面对的同等水平冲击。如果各企业对景气的暴露程度不同，就需要额外设计。按企业聚类允许企业内部的序列相关，却不会自动处理同一年企业之间的相关性。要把0.3%称为因果效应，还须检查随时间变化的混杂和反馈。企业聚类只有20个、年份聚类只有4个时，标准误的近似也需谨慎。
+
+## 参考资料
+
+- Joshua Angrist and Jörn-Steffen Pischke, *Mostly Harmless Econometrics*, ch. 5
+- Jeffrey Wooldridge, *Econometric Analysis of Cross Section and Panel Data*, ch. 10
+- Peter Hull, [*Fixed Effects Identify a Weighted Sum of First- and Long-Differences Only Under a Parallel Trends Assumption*](https://www.mit.edu/~hull/FEvFD.pdf)
+- MIT OpenCourseWare, [*Linear Panel Data Models Under Strict and Weak Exogeneity*](https://ocw.mit.edu/courses/14-382-econometrics-spring-2017/049489cf2ae5d050409ee2c5cbd5346f_MIT14_382S17_lec8.pdf)
+- Cameron and Miller, [*A Practitioner's Guide to Cluster-Robust Inference*](https://escholarship.org/uc/item/1jq5d0pq)

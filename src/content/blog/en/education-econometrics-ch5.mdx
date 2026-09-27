@@ -1,0 +1,88 @@
+---
+track: academy
+series: econometrics
+chapter: 5
+title: "Econometrics — Panel Fixed Effects and Clustering"
+description: "Review how fixed effects remove time-invariant heterogeneity, what identification still requires, and why clustered standard errors matter."
+pubDate: 2026-09-15
+updatedDate: 2026-09-27
+category: Economics
+tags: ["economics", "econometrics", "panel data", "fixed effects", "clustering"]
+locale: en
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+market: GLOBAL
+contentScope: global
+noindex: true
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Panel data remove fixed heterogeneity—not every source of bias
+
+An instrument borrows exogenous variation. Repeated observations of the same person, firm, or region offer another strategy: differences can eliminate characteristics that stay fixed for that unit. Unit-root analysis is a separate time-series problem.
+
+## 1. Fixed effects retain changes, not levels
+
+In $Y_{it}=\alpha_i+\lambda_t+\beta X_{it}+u_{it}$, an individual mean subtraction or first difference eliminates $\alpha_i$ if it is constant over time—for example, a stable component of ability or corporate culture. Common year effects $\lambda_t$ need separate controls. **The algebraic elimination of a term is not proof that $\beta$ is causal.**
+
+<FormulaBox
+  label="Within transformation"
+  formula="Y_{it}-\bar Y_i = (\lambda_t-\bar\lambda_i)+\beta(X_{it}-\bar X_i)+(u_{it}-\bar u_i)"
+  description="Subtracting each unit's mean removes α_i and any time-invariant X. It does not by itself remove year effects."
+/>
+
+Suppose we observe three people for two years. After excluding a common wage increase of 1 million won, an additional year of education is associated with a wage change of 2 million won.
+
+<LectureTable
+  title="Hypothetical two-period changes: separate the common rise from within-person change"
+  headers={["Person", "Change in schooling (years)", "Change in wage (million won)", "Net of common 1 million won"]}
+  rows={[
+    ["A", "0", "1", "0"],
+    ["B", "1", "3", "2"],
+    ["C", "2", "5", "4"],
+  ]}
+/>
+
+A cross-sectional comparison of levels would also reflect pre-existing wage differences among people with different schooling. But even the 2-million-won within-person association is not causal if the schooling decision responds to future wage shocks.
+
+Consistency of fixed effects requires an identification condition such as **strict exogeneity**, $E(u_{it}\mid X_{i1},\ldots,X_{iT},\alpha_i)=0$, and a design that addresses time-varying confounders. Feedback from a current wage shock to next year's schooling violates that condition. Year effects cannot eliminate shocks to which different people are exposed differently.
+
+## 2. Random effects gain efficiency only under stronger assumptions
+
+Random effects model $\alpha_i$ as part of the error structure. They can be more efficient than fixed effects only when $\alpha_i$ is uncorrelated with the regressors and the relevant exogeneity and error-covariance assumptions hold. If $\alpha_i$ correlates with schooling choice, the apparent efficiency gain comes with bias. A Hausman test can help examine the assumptions; it cannot replace an institutional account of how choices were made.
+
+<LectureTable
+  title="What each panel estimator removes—and what it cannot identify"
+  headers={["Estimator", "Treatment of fixed α_i", "Key limitation"]}
+  rows={[
+    ["Fixed effects", "Removes time-invariant α_i", "Cannot estimate the level effect of invariant X"],
+    ["First differences", "Removes the same α_i", "Same slope as FE with two periods"],
+    ["Random effects", "Models α_i in the error", "Needs α_i uncorrelated with X"],
+  ]}
+/>
+
+In a balanced two-period panel with the same sample and specification, fixed effects and first differences produce the same slope estimate. With at least three periods, their relative efficiency depends on serial correlation in the errors. There is no general rule that first differencing loses efficiency merely because there are two periods.
+
+When errors from the same person correlate across years, calculate standard errors **clustered by person**. Correlation across people within a year is a different, cross-sectional problem. Year fixed effects can absorb a uniform common shock, but one-way person clustering does not resolve heterogeneous shared shocks. The design may call for two-way person-and-year clustering or another inferential method. With only four years, conventional asymptotic inference based on four time clusters is also unreliable. Cluster-robust standard errors do not repair identification.
+
+<Callout type="warning">
+Fixed effects do not automatically deliver causality. Time-varying omitted variables, reverse causality, and measurement error remain. A treatment response to expected wages or past shocks may violate strict exogeneity. Panel methods and instrumental variables are not interchangeable.
+</Callout>
+
+## Check your understanding
+
+**Problem.** You observe 20 firms for four years. A fixed-effects regression associates a 1% increase in training expenditure with a 0.3% increase in productivity. If conditions in the same year affect both variables, which fixed effects could you add? Does clustering by firm alone eliminate the shared-shock problem?
+
+**Solution.** Year fixed effects absorb a common level shock shared equally by firms. Unequal exposure to conditions requires further design. Firm clustering permits within-firm serial correlation; it does not automatically handle correlation across firms in the same year. Calling 0.3% a causal effect also requires examining time-varying confounding and feedback. With 20 firm clusters and four year clusters, standard-error approximations deserve particular caution.
+
+## References
+
+- Joshua Angrist and Jörn-Steffen Pischke, *Mostly Harmless Econometrics*, ch. 5
+- Jeffrey Wooldridge, *Econometric Analysis of Cross Section and Panel Data*, ch. 10
+- Peter Hull, [*Fixed Effects Identify a Weighted Sum of First- and Long-Differences Only Under a Parallel Trends Assumption*](https://www.mit.edu/~hull/FEvFD.pdf)
+- MIT OpenCourseWare, [*Linear Panel Data Models Under Strict and Weak Exogeneity*](https://ocw.mit.edu/courses/14-382-econometrics-spring-2017/049489cf2ae5d050409ee2c5cbd5346f_MIT14_382S17_lec8.pdf)
+- Cameron and Miller, [*A Practitioner's Guide to Cluster-Robust Inference*](https://escholarship.org/uc/item/1jq5d0pq)

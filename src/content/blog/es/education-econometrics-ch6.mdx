@@ -1,0 +1,77 @@
+---
+track: academy
+series: econometrics
+chapter: 6
+title: "Econometría — Estacionariedad y regresión espuria"
+description: "Por qué las series con tendencia producen estadísticos t engañosos y cómo distinguir diferenciación, cointegración y causalidad de Granger de la identificación causal."
+pubDate: 2026-09-15
+updatedDate: 2026-09-27
+category: Economics
+tags: ["economía", "econometría", "series temporales", "raíz unitaria", "regresión espuria"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+market: GLOBAL
+contentScope: global
+noindex: true
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Econometría — Antes de una regresión temporal, comprueba si la media se mantiene estable
+
+En los MCO de corte transversal suele suponerse que las observaciones son aproximadamente independientes. Si la inflación de este año depende de la del año pasado, ese supuesto deja de cumplirse. El [capítulo 5](/es/education-econometrics-ch5/) trata la heterogeneidad individual de los paneles; aquí estudiamos la persistencia temporal.
+
+## 1. La falta de estacionariedad puede inflar el estadístico t
+
+La estacionariedad débil exige que la media y la varianza sean constantes en el tiempo y que la covarianza entre dos momentos dependa solo de la distancia entre ellos, no de sus fechas. Una serie que se vuelve estacionaria al eliminar una tendencia determinista no es lo mismo que una serie con raíz unitaria, cuyos choques se acumulan de forma permanente. El paseo aleatorio $Y_t=Y_{t-1}+\varepsilon_t$ es un ejemplo del segundo caso. Si se regresan en niveles dos paseos aleatorios independientes, $R^2$ y los estadísticos $t$ convencionales pueden parecer elevados, especialmente en muestras largas. Es una regresión espuria.
+
+<FormulaBox
+  label="Raíz unitaria"
+  formula="Y_t = \rho Y_{t-1} + ε_t,\quad \rho=1"
+  description="Si ρ=1, los choques se acumulan. La primera diferencia ΔYₜ=εₜ puede ser estacionaria. No rechazar la prueba no demuestra que exista una raíz unitaria."
+/>
+
+Como ejemplo hipotético, una regresión en niveles de 100 observaciones de dos paseos aleatorios independientes podría arrojar $t=4,2$ y $R^2=38\%$ sin que exista relación alguna. Si al diferenciar las series se obtiene $t=0,4$, el primer resultado puede ser una ilusión causada por las tendencias.
+
+La hipótesis nula habitual de la prueba de Dickey–Fuller aumentada (ADF) es **la presencia de una raíz unitaria**. No rechazarla no equivale a demostrarla. La inclusión de una constante y una tendencia determinista, así como el número de retardos de diferencias para tratar la autocorrelación residual, dependen de los datos y del modelo. Los cambios estructurales y las muestras cortas pueden reducir la potencia de la prueba.
+
+## 2. La cointegración es una relación de largo plazo que no conviene borrar al diferenciar
+
+Dos series $I(1)$, $Y_t$ y $X_t$, están cointegradas si alguna combinación lineal $z_t=Y_t-\alpha-\beta X_t$ es $I(0)$. Sus niveles pueden contener una relación estadística de largo plazo que se perdería al diferenciar sin más. Sin embargo, la estacionariedad del residuo debe contrastarse con **valores críticos específicos para la cointegración**; el estadístico $t$ convencional de los MCO en niveles no se interpreta como el de una regresión estacionaria. La cointegración tampoco identifica por sí sola un efecto causal de $X$ sobre $Y$.
+
+Un modelo de corrección del error relaciona la desviación respecto al equilibrio de largo plazo en el periodo anterior con el cambio actual. Por ejemplo, si $\Delta Y_t=\lambda z_{t-1}+\gamma\Delta X_t+e_t$, $\lambda=-0,2$ y $z_{t-1}=10$, el cambio de $Y$ este periodo es $-2$ cuando los otros términos son cero. Es un **cálculo hipotético** de la velocidad de ajuste, no una estimación de una economía concreta. También hay que comprobar el signo y la estabilidad de $\lambda$ y diagnosticar los residuos.
+
+<LectureTable
+  title="Términos de series temporales fáciles de sobreinterpretar"
+  headers={["Término", "Lo que indica", "Lo que no demuestra"]}
+  rows={[
+    ["Causalidad de Granger", "El pasado de X ayuda a predecir Y", "Un efecto de intervención o identificación causal"],
+    ["No rechazar una raíz unitaria", "La prueba no descarta ρ=1", "Una prueba de la raíz unitaria; puede faltar potencia"],
+    ["Cointegración", "Un residuo estacionario de largo plazo", "Una relación inmune a cambios estructurales"],
+  ]}
+/>
+
+La causalidad de Granger pregunta si el pasado de $X$ ayuda a predecir $Y$. No afirma que una política que altere $X$ cambie $Y$. Un indicador adelantado no es necesariamente una causa.
+
+<Callout type="warning">
+Añadir indicadores estacionales o de tendencia no completa la identificación causal. Agrupar observaciones anteriores y posteriores a una ruptura estructural puede mezclar valores distintos de $\rho$ y $\beta$. Las series macroeconómicas suelen ser cortas: un estadístico t basado en 100 periodos no equivale a uno basado en 10 000 personas independientes.
+</Callout>
+
+La posibilidad de predecir los precios de los activos también depende del conjunto de información disponible para los inversores. La econometría debe preguntar primero si la regresión es espuria.
+
+## Comprueba lo aprendido
+
+**Pregunta.** El consumo y el PIB aumentan juntos durante 50 observaciones anuales. La regresión en niveles produce el estadístico convencional $t=6$. Ambas series podrían tener raíces unitarias. La regresión en diferencias da $t=1,1$ y una prueba de cointegración basada en residuos tampoco rechaza su hipótesis nula. ¿Qué puedes concluir?
+
+**Solución.** El estadístico en niveles no basta para afirmar ni una relación ni un efecto causal. En este ejemplo, el resultado en diferencias aporta poca evidencia de asociación lineal a corto plazo. No rechazar la prueba de cointegración **tampoco demuestra que no haya cointegración**. Hay que revisar la especificación de tendencias y retardos, la longitud de la muestra y los cambios estructurales. Si una prueba adecuada respalda después la cointegración, un modelo de corrección del error puede separar la relación de largo plazo del ajuste a corto plazo; la interpretación causal aún requiere una estrategia de identificación independiente.
+
+## Referencias
+
+- Clive Granger and Paul Newbold, “Spurious Regressions in Econometrics,” *Journal of Econometrics* (1974)
+- James Stock and Mark Watson, *Introduction to Econometrics*, capítulos sobre series temporales
+- Jeffrey Wooldridge, *Introductory Econometrics*, capítulos 11–18
+- Engle and Granger, [*Co-Integration and Error Correction: Representation, Estimation, and Testing*](https://www.ntuzov.com/Nik_Site/Niks_files/Research/papers/stat_arb/EG_1987.pdf)

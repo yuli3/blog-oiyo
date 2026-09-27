@@ -1,0 +1,77 @@
+---
+track: academy
+series: econometrics
+chapter: 6
+title: "Econometrics — Stationarity and Spurious Regression"
+description: "Why trending time series can yield misleading t-statistics, and how differencing, cointegration, and Granger causality differ from causal identification."
+pubDate: 2026-09-15
+updatedDate: 2026-09-27
+category: Economics
+tags: ["economics", "econometrics", "time series", "unit root", "spurious regression"]
+locale: en
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+market: GLOBAL
+contentScope: global
+noindex: true
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Econometrics — Before regressing over time, ask whether the mean stays put
+
+Cross-sectional OLS commonly assumes observations are close to independent. When this year's inflation depends on last year's, that assumption fails. [Chapter 5](/en/education-econometrics-ch5/) concerns individual heterogeneity in panels; this chapter concerns persistence over time.
+
+## 1. Nonstationarity can inflate a t-statistic
+
+Weak stationarity means that the mean and variance do not change over time and that the covariance between two observations depends on their lag, not their calendar dates. A series that becomes stationary after removing a deterministic trend differs from a unit-root series in which shocks accumulate permanently. The random walk $Y_t=Y_{t-1}+\varepsilon_t$ is a standard example of the latter. Regressing the levels of two independent random walks can produce apparently large $R^2$ and conventional $t$-statistics, especially as the sample grows. This is a spurious regression.
+
+<FormulaBox
+  label="Unit root"
+  formula="Y_t = \rho Y_{t-1} + ε_t,\quad \rho=1"
+  description="When ρ=1, shocks accumulate. The first difference ΔYₜ=εₜ may be stationary. Failure to reject a test is not proof of a unit root."
+/>
+
+As a hypothetical example, regressing 100 observations of two independent random walks might yield $t=4.2$ and $R^2=38\%$ despite there being no relationship. If the differenced regression yields $t=0.4$, the original statistic was an illusion created by the trends.
+
+The usual null hypothesis of an augmented Dickey–Fuller (ADF) test is **that a unit root is present**. Failure to reject does not prove it. Whether to include an intercept and deterministic trend, and how many lagged differences are needed to address residual autocorrelation, depends on the data and model. Short samples and structural breaks can make the test weak.
+
+## 2. Cointegration is a long-run relation that indiscriminate differencing can erase
+
+Two $I(1)$ series $Y_t$ and $X_t$ are cointegrated if some linear combination $z_t=Y_t-\alpha-\beta X_t$ is $I(0)$. Their levels may then contain a long-run statistical relation that indiscriminate differencing would discard. But residual stationarity must be tested using **cointegration-specific critical values**; ordinary level-OLS $t$-statistics cannot be interpreted as if this were a stationary regression. Cointegration alone does not identify a causal effect of $X$ on $Y$.
+
+An error-correction model relates last period's deviation from the long-run relation to this period's change. For example, if $\Delta Y_t=\lambda z_{t-1}+\gamma\Delta X_t+e_t$, $\lambda=-0.2$, and $z_{t-1}=10$, then this period's change in $Y$ is $-2$ when the other terms are zero. This is a **hypothetical calculation** of adjustment speed, not an estimate for a particular economy. Check the sign and stability of $\lambda$ and diagnose the residuals.
+
+<LectureTable
+  title="Terms that are easily overinterpreted"
+  headers={["Term", "What it establishes", "What it does not establish"]}
+  rows={[
+    ["Granger causality", "Past X helps predict Y", "An intervention or causal identification"],
+    ["Failure to reject a unit root", "The test could not reject ρ=1", "Proof of a unit root; power may be low"],
+    ["Cointegration", "A stationary long-run residual", "A relation immune to structural breaks"],
+  ]}
+/>
+
+Granger causality asks whether past $X$ helps predict $Y$. It does not establish that a policy changing $X$ would change $Y$. A leading indicator and a cause are not synonyms.
+
+<Callout type="warning">
+Adding seasonal or trend dummies does not finish causal identification. Pooling observations across a structural break may conflate different values of $\rho$ and $\beta$. Macroeconomic time series are often short: a $t$-statistic based on 100 periods is not equivalent to one based on 10,000 independent people.
+</Callout>
+
+The unpredictability of asset prices also depends on the information set available to investors. Econometrics first asks whether the regression itself is spurious.
+
+## Check your understanding
+
+**Question.** Annual consumption and GDP rise together in 50 observations, and the conventional level-regression statistic is $t=6$. Both series might have unit roots. A differenced regression yields $t=1.1$, while a residual-based cointegration test also fails to reject its null. What can you conclude?
+
+**Solution.** The level statistic alone supports neither a relationship nor a causal effect. In this example the differenced result gives weak evidence of a short-run linear association. Failure to reject the cointegration test's null is **not proof that cointegration is absent**. Examine the trend and lag specification, sample length, and structural breaks. If an appropriate test later supports cointegration, an error-correction model can separate the long-run relation from short-run adjustment, but a causal interpretation still requires a separate identification design.
+
+## References
+
+- Clive Granger and Paul Newbold, “Spurious Regressions in Econometrics,” *Journal of Econometrics* (1974)
+- James Stock and Mark Watson, *Introduction to Econometrics*, time-series chapters
+- Jeffrey Wooldridge, *Introductory Econometrics*, chapters 11–18
+- Engle and Granger, [*Co-Integration and Error Correction: Representation, Estimation, and Testing*](https://www.ntuzov.com/Nik_Site/Niks_files/Research/papers/stat_arb/EG_1987.pdf)

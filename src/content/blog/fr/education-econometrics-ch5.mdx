@@ -1,0 +1,88 @@
+---
+track: academy
+series: econometrics
+chapter: 5
+title: "Économétrie — effets fixes en panel et regroupement des erreurs"
+description: "Un exemple chiffré pour revoir ce que les effets fixes éliminent, les conditions d'identification restantes et le rôle des erreurs-types groupées."
+pubDate: 2026-09-15
+updatedDate: 2026-09-27
+category: Economics
+tags: ["économie", "économétrie", "données de panel", "effets fixes", "regroupement"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+market: GLOBAL
+contentScope: global
+noindex: true
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Un panel élimine l'hétérogénéité fixe, pas tous les biais
+
+Une variable instrumentale exploite une variation exogène. Observer plusieurs fois la même personne, entreprise ou région offre une autre possibilité : les différences éliminent les caractéristiques propres à l'unité qui restent constantes. L'analyse des racines unitaires relève d'une autre question, celle des séries chronologiques.
+
+## 1. Les effets fixes conservent les variations, non les niveaux
+
+Dans $Y_{it}=\alpha_i+\lambda_t+\beta X_{it}+u_{it}$, si $\alpha_i$ représente une composante stable, comme une aptitude ou une culture d'entreprise, soustraire la moyenne individuelle ou prendre la première différence l'élimine. Les effets d'année communs $\lambda_t$ doivent être contrôlés séparément. **La disparition algébrique d'un terme ne prouve pas que $\beta$ soit causal.**
+
+<FormulaBox
+  label="Transformation intra-individuelle"
+  formula="Y_{it}-\bar Y_i = (\lambda_t-\bar\lambda_i)+\beta(X_{it}-\bar X_i)+(u_{it}-\bar u_i)"
+  description="La soustraction de la moyenne individuelle supprime α_i et tout X invariant dans le temps, mais ne supprime pas à elle seule les effets d'année."
+/>
+
+Supposons que trois personnes soient observées pendant deux ans. Une fois retranchée une hausse de salaire commune de 1 million de wons, une année de scolarité supplémentaire correspond à une variation salariale de 2 millions de wons.
+
+<LectureTable
+  title="Variations fictives sur deux périodes : distinguer hausse commune et variation individuelle"
+  headers={["Personne", "Variation de scolarité (années)", "Variation salariale (10 000 wons)", "Après déduction de 1 million de wons"]}
+  rows={[
+    ["A", "0", "100", "0"],
+    ["B", "1", "300", "200"],
+    ["C", "2", "500", "400"],
+  ]}
+/>
+
+Comparer uniquement les niveaux en coupe transversale mêlerait cette variation aux salaires initialement plus élevés des personnes davantage scolarisées. Pourtant, même l'association intra-individuelle de 2 millions de wons n'est pas causale si le choix de poursuivre des études répond à des chocs salariaux futurs.
+
+La convergence de l'estimateur à effets fixes exige, par exemple, une **exogénéité stricte** telle que $E(u_{it}\mid X_{i1},\ldots,X_{iT},\alpha_i)=0$, ainsi qu'un dispositif traitant les facteurs de confusion variables dans le temps. Un choc salarial actuel influençant la scolarité de l'année suivante viole cette condition. Les effets d'année peuvent aussi laisser subsister des expositions différentes selon les individus à un même choc économique.
+
+## 2. Les effets aléatoires n'améliorent l'efficacité que sous des hypothèses plus fortes
+
+Les effets aléatoires modélisent $\alpha_i$ comme une partie de la structure de l'erreur. Ils ne peuvent être plus efficaces que les effets fixes que si $\alpha_i$ n'est pas corrélé aux variables explicatives et si les hypothèses d'exogénéité et de covariance des erreurs conviennent. Une corrélation entre $\alpha_i$ et le choix de scolarité transforme le gain apparent d'efficacité en biais. Le test de Hausman aide à examiner ces hypothèses, sans remplacer l'analyse institutionnelle des choix.
+
+<LectureTable
+  title="Ce que chaque estimateur de panel traite et ce qu'il laisse ouvert"
+  headers={["Estimateur", "Traitement de α_i fixe", "Limite principale"]}
+  rows={[
+    ["Effets fixes", "Élimine α_i invariant", "Ne mesure pas l'effet en niveau d'un X invariant"],
+    ["Premières différences", "Élimine le même α_i", "Même pente que les effets fixes sur deux périodes"],
+    ["Effets aléatoires", "Modélise α_i dans l'erreur", "Suppose α_i non corrélé à X"],
+  ]}
+/>
+
+Dans un panel équilibré à deux périodes, avec le même échantillon et la même spécification, effets fixes et premières différences donnent la même pente estimée. Dès trois périodes, leur efficacité relative dépend de l'autocorrélation des erreurs. Il n'existe pas de règle générale selon laquelle la différenciation perdrait en efficacité du seul fait que le panel comporte deux périodes.
+
+Si les erreurs d'une même personne sont corrélées d'une année à l'autre, on calcule des erreurs-types **groupées par personne**. Une corrélation entre personnes durant la même année est un autre problème, transversal. Les effets fixes d'année peuvent absorber un choc commun uniforme ; le seul regroupement par personne ne résout pas les chocs communs à effets hétérogènes. Selon le dispositif, il faut envisager un regroupement bidirectionnel personne-année ou une autre méthode d'inférence. Avec seulement quatre années, l'inférence asymptotique usuelle fondée sur quatre groupes temporels est elle aussi peu fiable. Les erreurs-types groupées ne réparent pas l'identification.
+
+<Callout type="warning">
+Les effets fixes ne garantissent pas la causalité. Variables omises qui changent au fil du temps, causalité inverse et erreurs de mesure demeurent. Si le traitement répond aux salaires attendus ou à des chocs passés, l'exogénéité stricte peut échouer. Panel et variables instrumentales ne se substituent pas l'un à l'autre.
+</Callout>
+
+## Vérifiez votre compréhension
+
+**Question.** Vingt entreprises sont suivies pendant quatre ans. Une régression à effets fixes associe une hausse de 1 % des dépenses de formation à une hausse de 0,3 % de la productivité. Si la conjoncture d'une même année agit sur les deux variables, quels effets fixes peut-on ajouter ? Le regroupement par entreprise suffit-il à faire disparaître le problème du choc commun ?
+
+**Réponse.** Les effets fixes d'année absorbent un choc de niveau identique pour toutes les entreprises. Des expositions différentes à la conjoncture réclament un dispositif supplémentaire. Le regroupement par entreprise autorise une corrélation sérielle au sein de chaque entreprise, sans traiter automatiquement la corrélation entre entreprises la même année. Interpréter les 0,3 % comme causaux exige aussi d'examiner les facteurs de confusion variables dans le temps et les effets de retour. Avec vingt groupes d'entreprises et quatre groupes d'années, l'approximation des erreurs-types appelle également de la prudence.
+
+## Références
+
+- Joshua Angrist and Jörn-Steffen Pischke, *Mostly Harmless Econometrics*, ch. 5
+- Jeffrey Wooldridge, *Econometric Analysis of Cross Section and Panel Data*, ch. 10
+- Peter Hull, [*Fixed Effects Identify a Weighted Sum of First- and Long-Differences Only Under a Parallel Trends Assumption*](https://www.mit.edu/~hull/FEvFD.pdf)
+- MIT OpenCourseWare, [*Linear Panel Data Models Under Strict and Weak Exogeneity*](https://ocw.mit.edu/courses/14-382-econometrics-spring-2017/049489cf2ae5d050409ee2c5cbd5346f_MIT14_382S17_lec8.pdf)
+- Cameron and Miller, [*A Practitioner's Guide to Cluster-Robust Inference*](https://escholarship.org/uc/item/1jq5d0pq)
