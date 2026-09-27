@@ -3,9 +3,9 @@ track: academy
 series: microeconomics
 chapter: 3
 title: "Microeconomics — Elasticity and Tax Incidence"
-description: "Covers point and arc elasticity and their link to revenue (MR = P(1−1/|ε|)), why elasticity changes along a linear demand curve, income and cross elasticities, and how a tax burden is split according to relative elasticities, with numbers and a graph."
+description: "Calculates point and arc elasticities, explains why elasticity changes along a linear demand curve and how it links to marginal revenue, and derives the incidence formula for a small tax and the Harberger deadweight-loss approximation to read tax burdens and inefficiency with numbers and a graph."
 pubDate: 2026-03-01T00:00:00.000Z
-updatedDate: 2026-09-24
+updatedDate: 2026-09-28
 category: Economics
 tags: ["economics", "microeconomics", "elasticity", "tax incidence", "total revenue"]
 locale: en
@@ -93,6 +93,48 @@ Take a market with demand $Q=100-P$ and supply $Q=P$ and impose a tax of 10 won 
   description="If supply is twice as elastic as demand, consumers bear twice as much as producers. The side that can escape by responding to price bears less."
 />
 
+### A. Deriving the incidence of a small tax in general form
+
+Where does this ratio come from? With a per-unit tax $t$, equilibrium requires $Q_d(P_s+t)=Q_s(P_s)$. Differentiating with respect to $t$ gives $Q_d'\,(dP_s/dt+1)=Q_s'\,dP_s/dt$; multiplying through by $P/Q$ to convert to elasticities (near the no-tax equilibrium $P_d\approx P_s\approx P$) yields:
+
+<FormulaBox
+  label="Pass-through of one unit of tax"
+  formula="\frac{dP_d}{dt}=\frac{\varepsilon_s}{\varepsilon_s+|\varepsilon_d|},\qquad \frac{dP_s}{dt}=-\frac{|\varepsilon_d|}{\varepsilon_s+|\varepsilon_d|}"
+  description="The two always differ by exactly 1. How much of the tax the consumer price absorbs depends on the relative size of the supply elasticity. The ratio of the two is the burden-sharing formula above."
+/>
+
+The value of the trades the tax destroys, the **deadweight loss**, can also be written in elasticities. The fall in quantity is $\Delta Q\approx\frac{\varepsilon_s|\varepsilon_d|}{\varepsilon_s+|\varepsilon_d|}\cdot\frac{Q}{P}\cdot t$, and the deadweight loss is a triangle with base $t$ and height $\Delta Q$.
+
+<FormulaBox
+  label="Harberger triangle"
+  formula="DWL\approx\frac{1}{2}\,t^{2}\,\frac{\varepsilon_s|\varepsilon_d|}{\varepsilon_s+|\varepsilon_d|}\cdot\frac{Q}{P}"
+  description="Deadweight loss rises with the square of the tax rate: doubling the tax quadruples the loss. The smaller both elasticities (the less quantity responds to price), the smaller the loss from a given tax."
+/>
+
+Check it in the market above. At the pre-tax equilibrium $(P,Q)=(50,50)$, $|\varepsilon_d|=\varepsilon_s=1$, so the formula gives $\tfrac12\times10^2\times\tfrac12\times1=25$ — the same as the triangle computed directly, $\tfrac12\times10\times(50-45)=25$ (the approximation is exact for straight lines). Raise the tax to 20 and quantity falls to 40, so the loss is $\tfrac12\times20\times10=100$, exactly four times as large. Revenue, meanwhile, goes from $10\times45=450$ to $20\times40=800$ — less than double. The tax principle of **broad bases and low rates** comes from this squared relationship.
+
+<EconDiagram
+  title="A per-unit tax of 10: wedge, revenue and deadweight loss"
+  xLabel="Q"
+  yLabel="P"
+  xMax={100}
+  yMax={100}
+  curves={[
+    { label: "D", points: [[0, 100], [100, 0]], tone: "blue" },
+    { label: "S", points: [[0, 0], [100, 100]], tone: "green" },
+  ]}
+  areas={[
+    { points: [[0, 45], [45, 45], [45, 55], [0, 55]], tone: "amber", label: "Revenue" },
+    { points: [[45, 45], [45, 55], [50, 50]], tone: "red", label: "DWL" },
+  ]}
+  marks={[
+    { x: 50, y: 50, label: "E", xTick: "50" },
+    { x: 45, y: 55, label: "P_d", guide: true, yTick: "55" },
+    { x: 45, y: 45, label: "P_s", guide: true, xTick: "45", yTick: "45" },
+  ]}
+  caption="A tax of 10 drives a wedge between the consumer price of 55 and the producer price of 45. The yellow rectangle is revenue of 450; the red triangle is the deadweight loss of 25 from the 5 trades that disappear."
+/>
+
 Whether the tax is levied on sellers or buyers, the equilibrium wedge in a competitive market is the same. Who hands money to the tax office (statutory incidence) differs from whose welfare falls (economic incidence). The size of the deadweight loss, its relation to the tax rate and the Ramsey rule continue in [Public Finance, Chapter 2](/en/academy-public-finance-ch2/).
 
 <Callout type="warning">
@@ -101,7 +143,13 @@ Whether the tax is levied on sellers or buyers, the equilibrium wedge in a compe
 
 ## Check your understanding
 
-The price of coffee rises from 4,000 to 5,000 won and sales fall from 200 to 180 cups. What is the midpoint elasticity? The quantity change is $20/190\approx 0.105$ and the price change $1{,}000/4{,}500\approx 0.222$, so $|\varepsilon|\approx 0.47$. Demand is inelastic, so revenue rises from 800,000 to 900,000 won. If a rival café opens nearby, elasticity in this range rises and the same price increase could reduce revenue.
+**Problem 1.** The price of coffee rises from 4,000 won to 5,000 won and sales fall from 200 cups to 180. Find the midpoint elasticity and the change in revenue.
+
+**Solution.** The quantity change is $20/190\approx0.105$ and the price change $1{,}000/4{,}500\approx0.222$, so $|\varepsilon|\approx0.47$. Demand is inelastic, so revenue rises from 800,000 won to 900,000 won. If a competing café opens nearby, elasticity in this range rises and the same increase could cut revenue.
+
+**Problem 2.** In a cigarette market, the elasticities at equilibrium are $|\varepsilon_d|=0.4$ and $\varepsilon_s=2$. If the tax per pack rises by 100 won, how much does the consumer price rise? If instead the tax rises by 200 won, how many times larger is the deadweight loss than with 100 won?
+
+**Solution.** The consumer price rises by $\varepsilon_s/(\varepsilon_s+|\varepsilon_d|)=2/2.4\approx83\%$ of the tax, about 83 won. Because demand is inelastic, most of the burden falls on smokers. Deadweight loss rises with the square of the tax, so at 200 won it is four times as large — though, with inelastic demand, small in absolute terms. That is why tobacco taxes are counted among taxes that raise a lot of revenue at little efficiency cost.
 
 ## References
 

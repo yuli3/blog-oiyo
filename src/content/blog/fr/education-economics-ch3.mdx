@@ -3,9 +3,9 @@ track: academy
 series: microeconomics
 chapter: 3
 title: "Microéconomie — Élasticité et incidence fiscale"
-description: "Présente l'élasticité ponctuelle et l'élasticité d'arc et leur lien avec la recette (Rm = P(1−1/|ε|)), explique pourquoi l'élasticité varie le long d'une demande linéaire, les élasticités revenu et croisée, et la répartition de la charge fiscale selon les élasticités relatives, chiffres et graphique à l'appui."
+description: "Calcule l'élasticité ponctuelle et l'élasticité d'arc, explique pourquoi l'élasticité varie le long d'une demande linéaire et son lien avec la recette marginale, et dérive la formule d'incidence d'une petite taxe et l'approximation de Harberger de la perte sèche pour lire la charge fiscale et l'inefficacité, chiffres et graphique à l'appui."
 pubDate: 2026-03-01T00:00:00.000Z
-updatedDate: 2026-09-24
+updatedDate: 2026-09-28
 category: Economics
 tags: ["économie", "microéconomie", "élasticité", "incidence fiscale", "recette totale"]
 locale: fr
@@ -93,6 +93,48 @@ Prenons un marché où la demande est $Q=100-P$ et l'offre $Q=P$, et instaurons 
   description="Si l'offre est deux fois plus élastique que la demande, les consommateurs supportent deux fois plus que les producteurs. Le côté qui peut s'échapper en réagissant au prix supporte moins."
 />
 
+### A. Dériver l'incidence d'une petite taxe sous forme générale
+
+D'où vient ce rapport ? Avec une taxe unitaire $t$, l'équilibre impose $Q_d(P_s+t)=Q_s(P_s)$. En dérivant par rapport à $t$, $Q_d'\,(dP_s/dt+1)=Q_s'\,dP_s/dt$ ; en multipliant par $P/Q$ pour passer aux élasticités (près de l'équilibre sans taxe, $P_d\approx P_s\approx P$), on obtient :
+
+<FormulaBox
+  label="Répercussion d'une unité de taxe"
+  formula="\frac{dP_d}{dt}=\frac{\varepsilon_s}{\varepsilon_s+|\varepsilon_d|},\qquad \frac{dP_s}{dt}=-\frac{|\varepsilon_d|}{\varepsilon_s+|\varepsilon_d|}"
+  description="Les deux diffèrent toujours d'exactement 1. La part de la taxe que le prix payé par le consommateur absorbe dépend du poids relatif de l'élasticité de l'offre. Leur rapport est la formule de partage de la charge ci-dessus."
+/>
+
+La valeur des échanges que la taxe fait disparaître, la **perte sèche**, s'écrit aussi en élasticités. La baisse de quantité vaut $\Delta Q\approx\frac{\varepsilon_s|\varepsilon_d|}{\varepsilon_s+|\varepsilon_d|}\cdot\frac{Q}{P}\cdot t$, et la perte sèche est un triangle de base $t$ et de hauteur $\Delta Q$.
+
+<FormulaBox
+  label="Triangle de Harberger"
+  formula="DWL\approx\frac{1}{2}\,t^{2}\,\frac{\varepsilon_s|\varepsilon_d|}{\varepsilon_s+|\varepsilon_d|}\cdot\frac{Q}{P}"
+  description="La perte sèche croît comme le carré du taux : doubler la taxe quadruple la perte. Plus les deux élasticités sont faibles (moins la quantité réagit au prix), plus la perte d'une taxe donnée est faible."
+/>
+
+Vérifions sur le marché ci-dessus. À l'équilibre sans taxe $(P,Q)=(50,50)$, $|\varepsilon_d|=\varepsilon_s=1$ ; la formule donne $\tfrac12\times10^2\times\tfrac12\times1=25$, comme le triangle calculé directement, $\tfrac12\times10\times(50-45)=25$ (l'approximation est exacte pour des droites). Portons la taxe à 20 : la quantité tombe à 40 et la perte vaut $\tfrac12\times20\times10=100$, exactement quatre fois plus. La recette, elle, passe de $10\times45=450$ à $20\times40=800$ — moins du double. Le principe fiscal **assiette large, taux bas** découle de cette relation quadratique.
+
+<EconDiagram
+  title="Taxe unitaire de 10 : coin fiscal, recette et perte sèche"
+  xLabel="Q"
+  yLabel="P"
+  xMax={100}
+  yMax={100}
+  curves={[
+    { label: "D", points: [[0, 100], [100, 0]], tone: "blue" },
+    { label: "S", points: [[0, 0], [100, 100]], tone: "green" },
+  ]}
+  areas={[
+    { points: [[0, 45], [45, 45], [45, 55], [0, 55]], tone: "amber", label: "Recette" },
+    { points: [[45, 45], [45, 55], [50, 50]], tone: "red", label: "DWL" },
+  ]}
+  marks={[
+    { x: 50, y: 50, label: "E", xTick: "50" },
+    { x: 45, y: 55, label: "P_d", guide: true, yTick: "55" },
+    { x: 45, y: 45, label: "P_s", guide: true, xTick: "45", yTick: "45" },
+  ]}
+  caption="Une taxe de 10 enfonce un coin entre le prix payé par le consommateur, 55, et le prix reçu par le producteur, 45. Le rectangle jaune est la recette de 450 ; le triangle rouge, la perte sèche de 25 due aux 5 échanges qui disparaissent."
+/>
+
 Que la taxe soit prélevée sur les vendeurs ou sur les acheteurs, le coin fiscal d'équilibre d'un marché concurrentiel est le même. Qui verse l'argent au fisc (incidence légale) diffère de qui voit son bien-être baisser (incidence économique). L'ampleur de la perte sèche, son lien avec le taux et la règle de Ramsey sont développés au [chapitre 2 de Finances publiques](/fr/academy-public-finance-ch2/).
 
 <Callout type="warning">
@@ -101,7 +143,13 @@ Que la taxe soit prélevée sur les vendeurs ou sur les acheteurs, le coin fisca
 
 ## Exercice
 
-Le prix d'un café passe de 4 000 à 5 000 wons et les ventes de 200 à 180 tasses. Quelle est l'élasticité au point milieu ? La variation de quantité est $20/190\approx 0{,}105$ et celle du prix $1\,000/4\,500\approx 0{,}222$, donc $|\varepsilon|\approx 0{,}47$. La demande est inélastique : la recette passe de 800 000 à 900 000 wons. Si un café concurrent ouvre à proximité, l'élasticité augmente dans cette zone et la même hausse de prix pourrait réduire la recette.
+**Problème 1.** Le prix du café passe de 4 000 à 5 000 wons et les ventes de 200 à 180 tasses. Calculez l'élasticité au point milieu et la variation de la recette.
+
+**Solution.** La variation de quantité vaut $20/190\approx0{,}105$ et celle du prix $1\,000/4\,500\approx0{,}222$, donc $|\varepsilon|\approx0{,}47$. La demande est inélastique : la recette passe de 800 000 à 900 000 wons. Si un café concurrent ouvre à proximité, l'élasticité augmente sur cette zone et la même hausse pourrait réduire la recette.
+
+**Problème 2.** Sur un marché du tabac, les élasticités à l'équilibre sont $|\varepsilon_d|=0{,}4$ et $\varepsilon_s=2$. Si la taxe par paquet augmente de 100 wons, de combien monte le prix payé par le consommateur ? Si elle augmente de 200 wons, combien de fois plus grande est la perte sèche qu'avec 100 wons ?
+
+**Solution.** Le prix payé monte de $\varepsilon_s/(\varepsilon_s+|\varepsilon_d|)=2/2{,}4\approx83\,\%$ de la taxe, soit environ 83 wons. La demande étant inélastique, l'essentiel de la charge retombe sur les fumeurs. La perte sèche croît comme le carré de la taxe : elle est quatre fois plus grande à 200 wons — mais reste faible en valeur absolue, la demande étant inélastique. C'est pourquoi les taxes sur le tabac comptent parmi celles qui rapportent beaucoup pour un faible coût d'efficacité.
 
 ## Références
 
