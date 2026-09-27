@@ -3,9 +3,9 @@ track: academy
 series: microeconomics
 chapter: 5
 title: "Microeconomía — Teoría del productor: minimización de costes y beneficio"
-description: "Deriva la condición de minimización de costes RMST = w/r a partir de la función de producción y las isocuantas, explica la relación entre las curvas de coste a corto plazo (CMg, CVMe, CTMe) y la condición de cierre P < CVMe, y presenta los rendimientos a escala y el coste medio a largo plazo, con números y un gráfico."
+description: "Plantea la condición de minimización de costes a partir de funciones de producción e isocuantas, deriva las demandas condicionadas de factores y la función de costes de largo plazo para una tecnología Cobb-Douglas, conecta el lema de Shephard y los rendimientos a escala con la forma de las curvas de costes y trata los costes de corto plazo, el cierre y la envolvente."
 pubDate: 2026-03-01T00:00:00.000Z
-updatedDate: 2026-09-24
+updatedDate: 2026-09-28
 category: Economics
 tags: ["economía", "microeconomía", "teoría del productor", "curvas de coste", "rendimientos a escala"]
 locale: es
@@ -106,9 +106,57 @@ Con rendimientos crecientes, el coste medio a largo plazo desciende (economías 
 IMg = CMg es solo una condición de primer orden. Para un máximo de beneficio, el CMg debe cortar al IMg desde abajo; donde el CMg es decreciente, el corte puede ser un mínimo de beneficio. Y repartir los costes fijos entre la producción para calcular un «coste unitario» y dejar de producir porque el precio es inferior es un error a corto plazo. Los costes fijos ya comprometidos e inevitables no deben entrar en la decisión.
 </Callout>
 
+
+### A. Derivar directamente la función de costes
+
+Llevemos el cálculo de la sección 2 a una fórmula general en la producción $Q$ y los precios de los factores $w,r$. Sustituyendo la condición de mínimo coste $L=(r/w)K$ en $Q=K^{0{,}5}L^{0{,}5}$ se obtienen las **demandas condicionadas de factores** y la **función de costes**.
+
+<FormulaBox
+  label="Demandas condicionadas y función de costes Cobb-Douglas"
+  formula="L^c=Q\sqrt{\frac{r}{w}},\qquad K^c=Q\sqrt{\frac{w}{r}},\qquad C(w,r,Q)=2Q\sqrt{wr}"
+  description="Con w=1, r=4 y Q=100: L=200, K=50 y C=400, como en la sección 2. Derivando la función de costes respecto de w se obtiene la demanda de trabajo (lema de Shephard): ∂C/∂w = Q√(r/w) = L^c."
+/>
+
+Para la forma general $Q=K^aL^b$, $C\propto Q^{1/(a+b)}$. El coste medio de largo plazo $C/Q\propto Q^{1/(a+b)-1}$ baja si $a+b>1$ (rendimientos crecientes), es constante si $a+b=1$ y sube si $a+b<1$. **Los rendimientos a escala son una propiedad de la función de producción que se traslada a la forma de la curva de costes.**
+
+### B. El coste de corto plazo está por encima del de largo plazo
+
+Fijemos el capital en $\bar K=50$. Producir $Q$ exige entonces $L=Q^2/\bar K$ unidades de trabajo, así que el coste total de corto plazo es $CTCP=4\times50+Q^2/50$. Con $Q=100$, $CTCP=400$, igual al coste de largo plazo; pero con $Q=150$, $CTCP=650$, 50 más que el coste de largo plazo $2\times150\times2=600$. Como el capital no puede cambiar, la producción solo crece con trabajo cada vez más caro.
+
+<FormulaBox
+  label="La relación de envolvente"
+  formula="CTLP(Q)=\min_{\bar K}\,CTCP(Q;\bar K)\;\le\;CTCP(Q;\bar K),\qquad \text{igualdad: }\bar K=K^c(Q)"
+  description="La curva de costes de largo plazo es la envolvente inferior de las curvas de corto plazo de todos los tamaños de planta. Cada curva de corto plazo solo toca la de largo plazo en la producción para la que su capital es óptimo."
+/>
+
+<EconDiagram
+  title="Coste medio de corto y de largo plazo (rendimientos constantes)"
+  xLabel="Q"
+  yLabel="por unidad"
+  xMax={210}
+  yMin={3}
+  yMax={6}
+  curves={[
+    { label: "CMeCP (K̄=25)", points: [[20, 5.8], [25, 5.0], [30, 4.53], [35, 4.26], [40, 4.1], [45, 4.02], [50, 4.0], [60, 4.07], [70, 4.23], [80, 4.45], [90, 4.71], [100, 5.0]], tone: "green", labelAt: 0 },
+    { label: "CMeCP (K̄=50)", points: [[40, 5.8], [50, 5.0], [60, 4.53], [70, 4.26], [80, 4.1], [90, 4.02], [100, 4.0], [120, 4.07], [140, 4.23], [160, 4.45], [180, 4.71], [200, 5.0]], tone: "blue", anchor: "end" },
+    { label: "CMeLP", points: [[10, 4], [210, 4]], tone: "red", dashed: true, anchor: "end" },
+  ]}
+  marks={[
+    { x: 50, y: 4, label: "a", xTick: "50" },
+    { x: 100, y: 4, label: "b", xTick: "100", yTick: "4" },
+  ]}
+  caption="Con rendimientos constantes, el coste medio de largo plazo es constante e igual a 4. La planta con capital 25 solo lo toca en Q=50 (a) y la de capital 50 en Q=100 (b); en el resto, cada una es más cara."
+/>
+
 ## Ejercicio
 
-Una empresa competitiva tiene $CT=100+20Q+Q^2$ (en decenas de miles de wones) y se enfrenta a $P=800.000$ wones. ¿Cuáles son su producción óptima y su beneficio? $CMg=20+2Q=80$ da $Q=30$. El CTMe es $100/30+20+30\approx 53{,}3$, unos 533.000 wones, de modo que el beneficio es de unos 267.000 wones por unidad y $80\times 30-(100+600+900)=800$, es decir, 8 millones de wones en total. La regla es $P=CMg$, no $P=CTMe$.
+**Problema 1.** Una empresa competitiva tiene $CT=100+20Q+Q^2$ (en decenas de miles de wones) y afronta $P=80$. Halle su producción óptima y su beneficio.
+
+**Solución.** $CMg=20+2Q=80$ da $Q=30$. El coste medio es $100/30+20+30\approx53{,}3$, así que el beneficio por unidad es de unos 26,7 y el total $80\times30-(100+600+900)=800$. La regla es $P=CMg$, no $P=CMe$.
+
+**Problema 2.** Con $Q=K^{0{,}5}L^{0{,}5}$, $w=4$ y $r=1$, halle el coste mínimo y la combinación de factores para producir 50. Si el capital se mantiene en ese nivel mientras la producción sube a 80, ¿cuánto supera el coste de corto plazo al de largo plazo?
+
+**Solución.** $C=2Q\sqrt{wr}=2\times50\times2=200$, con $L^c=50\sqrt{1/4}=25$ y $K^c=50\sqrt{4}=100$. Con el capital fijo en 100, producir $Q=80$ exige $L=80^2/100=64$, así que $CTCP=4\times64+1\times100=356$. A largo plazo costaría $2\times80\times2=320$: el corto plazo cuesta 36 más. Por eso los costes se disparan cuando se aumenta la producción con prisas.
 
 ## Referencias
 

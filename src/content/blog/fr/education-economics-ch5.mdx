@@ -3,9 +3,9 @@ track: academy
 series: microeconomics
 chapter: 5
 title: "Microéconomie — Théorie du producteur : minimisation des coûts et profit"
-description: "Dérive la condition de minimisation des coûts TMST = w/r à partir de la fonction de production et des isoquantes, explique les relations entre les courbes de coût de court terme (Cm, CVM, CTM) et la condition de fermeture P < CVM, et présente les rendements d'échelle et le coût moyen de long terme, chiffres et graphique à l'appui."
+description: "Pose la condition de minimisation des coûts à partir des fonctions de production et des isoquantes, dérive les demandes conditionnelles de facteurs et la fonction de coût de long terme pour une technologie Cobb-Douglas, relie le lemme de Shephard et les rendements d'échelle à la forme des courbes de coût, et traite les coûts de court terme, la fermeture et l’enveloppe court–long terme."
 pubDate: 2026-03-01T00:00:00.000Z
-updatedDate: 2026-09-24
+updatedDate: 2026-09-28
 category: Economics
 tags: ["économie", "microéconomie", "théorie du producteur", "courbes de coût", "rendements d'échelle"]
 locale: fr
@@ -106,9 +106,57 @@ Avec des rendements croissants, le coût moyen de long terme diminue (économies
 Rm = Cm n'est qu'une condition du premier ordre. Pour un maximum de profit, le Cm doit couper la Rm par le bas ; là où le Cm décroît, l'intersection peut être un minimum de profit. Et répartir les coûts fixes sur la production pour calculer un « coût unitaire », puis cesser de produire parce que le prix est inférieur, est une erreur à court terme. Les coûts fixes déjà engagés et inévitables ne doivent pas entrer dans la décision.
 </Callout>
 
+
+### A. Dériver directement la fonction de coût
+
+Généralisons le calcul de la section 2 en fonction de la production $Q$ et des prix des facteurs $w,r$. En reportant la condition de minimisation $L=(r/w)K$ dans $Q=K^{0{,}5}L^{0{,}5}$, on obtient les **demandes conditionnelles de facteurs** et la **fonction de coût**.
+
+<FormulaBox
+  label="Demandes conditionnelles et fonction de coût Cobb-Douglas"
+  formula="L^c=Q\sqrt{\frac{r}{w}},\qquad K^c=Q\sqrt{\frac{w}{r}},\qquad C(w,r,Q)=2Q\sqrt{wr}"
+  description="Avec w=1, r=4 et Q=100 : L=200, K=50, C=400, comme à la section 2. En dérivant la fonction de coût par rapport à w, on retrouve la demande de travail (lemme de Shephard) : ∂C/∂w = Q√(r/w) = L^c."
+/>
+
+Pour la forme générale $Q=K^aL^b$, $C\propto Q^{1/(a+b)}$. Le coût moyen de long terme $C/Q\propto Q^{1/(a+b)-1}$ baisse donc si $a+b>1$ (rendements croissants), reste constant si $a+b=1$ et augmente si $a+b<1$. **Les rendements d'échelle sont une propriété de la fonction de production, qui se transmet à la forme de la courbe de coût.**
+
+### B. Le coût de court terme est au-dessus du coût de long terme
+
+Fixons le capital à $\bar K=50$. Produire $Q$ exige alors $L=Q^2/\bar K$ unités de travail, d'où un coût total de court terme $CTCT=4\times50+Q^2/50$. À $Q=100$, $CTCT=400$, égal au coût de long terme ; mais à $Q=150$, $CTCT=650$, soit 50 de plus que le coût de long terme $2\times150\times2=600$. Le capital ne pouvant changer, la production ne peut croître qu'avec un travail de plus en plus coûteux.
+
+<FormulaBox
+  label="La relation d'enveloppe"
+  formula="CTLT(Q)=\min_{\bar K}\,CTCT(Q;\bar K)\;\le\;CTCT(Q;\bar K),\qquad \text{égalité : }\bar K=K^c(Q)"
+  description="La courbe de coût de long terme est l'enveloppe inférieure des courbes de court terme de toutes les tailles d'usine. Chaque courbe de court terme ne touche la courbe de long terme qu'à la production pour laquelle son capital est optimal."
+/>
+
+<EconDiagram
+  title="Coût moyen de court et de long terme (rendements constants)"
+  xLabel="Q"
+  yLabel="par unité"
+  xMax={210}
+  yMin={3}
+  yMax={6}
+  curves={[
+    { label: "CMCT (K̄=25)", points: [[20, 5.8], [25, 5.0], [30, 4.53], [35, 4.26], [40, 4.1], [45, 4.02], [50, 4.0], [60, 4.07], [70, 4.23], [80, 4.45], [90, 4.71], [100, 5.0]], tone: "green", labelAt: 0 },
+    { label: "CMCT (K̄=50)", points: [[40, 5.8], [50, 5.0], [60, 4.53], [70, 4.26], [80, 4.1], [90, 4.02], [100, 4.0], [120, 4.07], [140, 4.23], [160, 4.45], [180, 4.71], [200, 5.0]], tone: "blue", anchor: "end" },
+    { label: "CMLT", points: [[10, 4], [210, 4]], tone: "red", dashed: true, anchor: "end" },
+  ]}
+  marks={[
+    { x: 50, y: 4, label: "a", xTick: "50" },
+    { x: 100, y: 4, label: "b", xTick: "100", yTick: "4" },
+  ]}
+  caption="Avec des rendements constants, le coût moyen de long terme est constant à 4. L'usine de capital 25 ne le touche qu'en Q=50 (a), celle de capital 50 qu'en Q=100 (b) ; ailleurs, chacune coûte plus cher."
+/>
+
 ## Exercice
 
-Une entreprise concurrentielle a $CT=100+20Q+Q^2$ (en dizaines de milliers de wons) et fait face à $P=800\,000$ wons. Quels sont sa production optimale et son profit ? $Cm=20+2Q=80$ donne $Q=30$. Le CTM vaut $100/30+20+30\approx 53{,}3$, soit environ 533 000 wons, d'où un profit d'environ 267 000 wons par unité et $80\times 30-(100+600+900)=800$, soit 8 millions de wons au total. La règle est $P=Cm$, pas $P=CTM$.
+**Problème 1.** Une entreprise concurrentielle a $CT=100+20Q+Q^2$ (en dizaines de milliers de wons) et fait face à $P=80$. Trouvez sa production optimale et son profit.
+
+**Solution.** $Cm=20+2Q=80$ donne $Q=30$. Le coût moyen vaut $100/30+20+30\approx53{,}3$ : le profit unitaire est d'environ 26,7 et le profit total $80\times30-(100+600+900)=800$. La règle est $P=Cm$, pas $P=CM$.
+
+**Problème 2.** Avec $Q=K^{0{,}5}L^{0{,}5}$, $w=4$ et $r=1$, trouvez le coût minimal et la combinaison de facteurs pour produire 50. Si le capital reste à ce niveau pendant que la production passe à 80, de combien le coût de court terme dépasse-t-il celui de long terme ?
+
+**Solution.** $C=2Q\sqrt{wr}=2\times50\times2=200$, avec $L^c=50\sqrt{1/4}=25$ et $K^c=50\sqrt{4}=100$. Avec un capital fixé à 100, produire $Q=80$ exige $L=80^2/100=64$, d'où $CTCT=4\times64+1\times100=356$. À long terme, il en coûterait $2\times80\times2=320$ : le court terme coûte 36 de plus. C'est pourquoi les coûts grimpent vite quand on augmente la production dans l'urgence.
 
 ## Références
 

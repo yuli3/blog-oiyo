@@ -3,9 +3,9 @@ track: academy
 series: microeconomics
 chapter: 5
 title: "Microeconomics — Producer Theory: Cost Minimisation and Profit"
-description: "Derives the cost-minimisation condition MRTS = w/r from the production function and isoquants, explains the relationship among short-run cost curves (MC, AVC, ATC) and the shutdown condition P < AVC, and covers returns to scale and long-run average cost, with numbers and a graph."
+description: "Sets up the cost-minimisation condition from production functions and isoquants, derives conditional factor demands and the long-run cost function for Cobb-Douglas technology to link Shephard's lemma and returns to scale to the shape of cost curves, and covers short-run cost curves, the shutdown condition and the envelope relationship between short- and long-run costs with numbers and graphs."
 pubDate: 2026-03-01T00:00:00.000Z
-updatedDate: 2026-09-24
+updatedDate: 2026-09-28
 category: Economics
 tags: ["economics", "microeconomics", "producer theory", "cost curves", "returns to scale"]
 locale: en
@@ -106,9 +106,57 @@ With increasing returns, long-run average cost falls (economies of scale). If it
 MR = MC is only a first-order condition. For profit to be maximised, MC must cut MR from below; where MC is falling, the crossing can be a profit minimum. And spreading fixed costs over output to compute a "unit cost", then stopping production because the price is below it, is a short-run error. Fixed costs already committed and unavoidable should not enter the decision.
 </Callout>
 
+
+### A. Deriving the cost function directly
+
+Let us lift the calculation of section 2 to a general formula in output $Q$ and factor prices $w,r$. Substituting the cost-minimising condition $L=(r/w)K$ into $Q=K^{0.5}L^{0.5}$ gives the **conditional factor demands** and the **cost function**.
+
+<FormulaBox
+  label="Conditional factor demands and cost function for Cobb-Douglas"
+  formula="L^c=Q\sqrt{\frac{r}{w}},\qquad K^c=Q\sqrt{\frac{w}{r}},\qquad C(w,r,Q)=2Q\sqrt{wr}"
+  description="With w=1, r=4 and Q=100, L=200, K=50 and C=400, matching section 2. Differentiating the cost function with respect to w gives labour demand (Shephard's lemma): ∂C/∂w = Q√(r/w) = L^c."
+/>
+
+For the general form $Q=K^aL^b$, $C\propto Q^{1/(a+b)}$. Long-run average cost $C/Q\propto Q^{1/(a+b)-1}$ therefore falls if $a+b>1$ (increasing returns), is constant if $a+b=1$, and rises if $a+b<1$. **Returns to scale are a property of the production function, and they carry over into the shape of the cost curve.**
+
+### B. Short-run cost lies above long-run cost
+
+Fix capital at $\bar K=50$. Producing $Q$ then needs $L=Q^2/\bar K$ units of labour, so short-run total cost is $SRTC=4\times50+Q^2/50$. At $Q=100$, $SRTC=400$, equal to long-run cost; but at $Q=150$, $SRTC=650$, which is 50 more than the long-run cost of $2\times150\times2=600$. Capital cannot be changed, so output can only be raised with ever more expensive labour.
+
+<FormulaBox
+  label="The envelope relationship"
+  formula="LRTC(Q)=\min_{\bar K}\,SRTC(Q;\bar K)\;\le\;SRTC(Q;\bar K),\qquad \text{equality: }\bar K=K^c(Q)"
+  description="The long-run cost curve is the lower envelope of the short-run cost curves for every plant size. Each short-run curve touches the long-run curve only at the output for which its capital is optimal."
+/>
+
+<EconDiagram
+  title="Short-run and long-run average cost (constant returns)"
+  xLabel="Q"
+  yLabel="per unit"
+  xMax={210}
+  yMin={3}
+  yMax={6}
+  curves={[
+    { label: "SRAC (K̄=25)", points: [[20, 5.8], [25, 5.0], [30, 4.53], [35, 4.26], [40, 4.1], [45, 4.02], [50, 4.0], [60, 4.07], [70, 4.23], [80, 4.45], [90, 4.71], [100, 5.0]], tone: "green", labelAt: 0 },
+    { label: "SRAC (K̄=50)", points: [[40, 5.8], [50, 5.0], [60, 4.53], [70, 4.26], [80, 4.1], [90, 4.02], [100, 4.0], [120, 4.07], [140, 4.23], [160, 4.45], [180, 4.71], [200, 5.0]], tone: "blue", anchor: "end" },
+    { label: "LAC", points: [[10, 4], [210, 4]], tone: "red", dashed: true, anchor: "end" },
+  ]}
+  marks={[
+    { x: 50, y: 4, label: "a", xTick: "50" },
+    { x: 100, y: 4, label: "b", xTick: "100", yTick: "4" },
+  ]}
+  caption="With constant returns, long-run average cost is flat at 4. A plant with capital 25 touches it only at Q=50 (a), one with capital 50 only at Q=100 (b); elsewhere each is more expensive."
+/>
+
 ## Check your understanding
 
-A competitive firm has $TC=100+20Q+Q^2$ (in 10,000 won) and faces $P=800{,}000$ won. What are its optimal output and profit? $MC=20+2Q=80$ gives $Q=30$. ATC is $100/30+20+30\approx 53.3$, i.e. about 533,000 won, so profit is about 267,000 won per unit and $80\times 30-(100+600+900)=800$, i.e. 8 million won in total. The rule is $P=MC$, not $P=ATC$.
+**Problem 1.** A competitive firm has $TC=100+20Q+Q^2$ (in ten-thousand won) and faces $P=80$. Find its optimal output and profit.
+
+**Solution.** $MC=20+2Q=80$ gives $Q=30$. ATC is $100/30+20+30\approx53.3$, so profit per unit is about 26.7 and total profit is $80\times30-(100+600+900)=800$. The rule is $P=MC$, not $P=ATC$.
+
+**Problem 2.** With $Q=K^{0.5}L^{0.5}$, $w=4$ and $r=1$, find the minimum cost and factor mix for an output of 50. If capital is held at that level while output rises to 80, how much more does short-run cost exceed long-run cost?
+
+**Solution.** $C=2Q\sqrt{wr}=2\times50\times2=200$, with $L^c=50\sqrt{1/4}=25$ and $K^c=50\sqrt{4}=100$. Holding capital at 100 and producing $Q=80$ needs $L=80^2/100=64$, so $SRTC=4\times64+1\times100=356$. In the long run it would cost $2\times80\times2=320$, so the short run costs 36 more. That is why costs climb steeply when output is raised in a hurry.
 
 ## References
 
