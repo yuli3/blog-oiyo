@@ -3,9 +3,9 @@ track: academy
 series: macroeconomics
 chapter: 8
 title: "Macroéconomie — Le modèle OA-DA et le niveau des prix"
-description: "Dérive la courbe de demande globale en faisant varier le niveau des prix dans IS-LM, puis combine l'offre globale de court terme croissante, due à la rigidité des prix, et l'offre globale de long terme verticale pour calculer, avec les mêmes chiffres et un graphique, les effets de court et de long terme d'une expansion monétaire et des chocs d'offre."
+description: "Dérive la demande agrégée à partir d'IS-LM sous forme paramétrique pour montrer ce qui fixe sa pente, la combine avec l'offre agrégée de court et de long terme pour montrer les effets d'une expansion monétaire et la neutralité de la monnaie, puis compare chiffres et graphique à l'appui trois réponses à un choc d'offre défavorable."
 pubDate: 2026-03-01T00:00:00.000Z
-updatedDate: 2026-09-24
+updatedDate: 2026-09-28
 category: Economics
 tags: ["économie", "macroéconomie", "OA-DA", "offre globale", "neutralité de la monnaie"]
 locale: fr
@@ -34,6 +34,18 @@ Dans l'économie du chapitre 4 (IS : $Y=410-10r$, demande de monnaie $0{,}5Y-20r
 
 Un **mouvement le long** de la courbe DA est dû à une variation du niveau des prix ; un **déplacement** de la courbe elle-même est dû aux dépenses publiques, aux impôts, à la masse monétaire nominale ou aux anticipations. Si la masse monétaire nominale augmente de 10 %, DA devient $Y=328+79{,}2/P$ : une courbe qui atteint la production de 400 au niveau de prix 1,1.
 
+
+### A. La forme générale de la DA et sa pente
+
+Réécrire la formule avec des paramètres montre ce qui fixe la pente de la DA. En éliminant $r$ entre IS, $Y=\frac{1}{1-c}(\bar A-br)$, et LM, $M/P=kY-hr$ :
+
+<FormulaBox
+  label="La DA sous forme paramétrique"
+  formula="Y=\frac{\bar A+\frac{b}{h}\cdot\frac{M}{P}}{(1-c)+\frac{bk}{h}}"
+  description="Dans cette économie Ā=82, c=0,8, b=2, k=0,5 et h=20 : le dénominateur vaut 0,25 et Y = 328 + 0,4·(M/P). Avec M=180, on retrouve Y = 328 + 72/P."
+/>
+
+Une hausse des prix réduit $M/P$, et l'effet passe à la production par le coefficient $\frac{b/h}{(1-c)+bk/h}$. Si l'investissement est peu sensible au taux ($b$ petit) ou la demande de monnaie très sensible au taux ($h$ grand), le coefficient est faible et la DA est **plus pentue**. À l'extrême, dans une trappe à liquidité ($h\to\infty$), la baisse des prix accroît les encaisses réelles sans faire baisser le taux : la DA est verticale, et la seule baisse des prix ne met pas fin à la récession ([chapitre 15](/fr/education-economics-ch26/)).
 ## 2. Offre globale de court et de long terme
 
 À **long terme**, salaires et prix s'ajustent pleinement : la production reste au niveau potentiel $Y^*$ fixé par le travail, le capital et la technologie. L'offre globale de long terme (OALT) est verticale en $Y^*$.
@@ -99,9 +111,55 @@ Un choc d'offre défavorable place les autorités devant un dilemme. Stimuler la
 Une offre globale de long terme verticale ne signifie pas que « la politique est impuissante », mais que le **niveau** de la production est indépendant de la demande globale à long terme. La croissance qui augmente la production potentielle elle-même fait l'objet des [chapitres 11 et 12](/fr/education-economics-ch22/). Et ignorer la rigidité des prix à court terme pour lire toute récession avec une OA verticale conduit à qualifier de « naturel » un chômage dû à une demande insuffisante. À l'inverse, ignorer l'ajustement de long terme conduit à croire qu'une relance de la demande augmente la production indéfiniment.
 </Callout>
 
+
+### A. Le dilemme du choc d'offre en chiffres
+
+Supposons qu'une hausse du pétrole déplace l'OACT de 0,05 vers le haut d'un seul coup ($P=1{,}05+0{,}002(Y-400)$). Voici les résultats de la première année pour les trois voies possibles :
+
+<LectureTable
+  title="Trois choix après un choc d'offre défavorable (+0,05)"
+  headers={["Choix", "Monnaie nominale", "Prix", "Production", "Coût"]}
+  rows={[
+    ["Ne rien faire", "180 inchangé", "1,044", "397,0", "Production −3, prix +4,4 %"],
+    ["Accompagner", "189 (+5 %)", "1,050", "400,0", "Production préservée, prix +5 %"],
+    ["Stabiliser les prix", "117,5 (−34,7 %)", "1,000", "375,0", "Prix préservés, production −25"],
+  ]}
+/>
+
+Maintenir les prix à 1,0 exige $1=1{,}05+0{,}002(Y-400)$ sur l'OACT, soit $Y=375$, et la DA passant par ce point demande $M/P=(375-328)/0{,}4=117{,}5$. La pente de l'OACT — 0,2 % de prix pour 1 % d'écart de production — devient le **ratio de sacrifice**. Si le choc est temporaire, ne rien faire et laisser redescendre les anticipations est une voie de sortie ; si le choc s'incruste dans les prix anticipés, l'accompagnement enracine l'inflation. Le bon choix dépend de la solidité de l'ancrage des anticipations ([chapitre 9](/fr/education-economics-ch20/)).
+
+<EconDiagram
+  title="Choc d'offre : ne rien faire (A) ou accompagner (B)"
+  xLabel="Y"
+  yLabel="P"
+  xMin={385}
+  xMax={415}
+  yMin={0.9}
+  yMax={1.15}
+  curves={[
+    { label: "DA", points: [[392, 1.125], [395, 1.075], [400, 1.0], [405, 0.935], [410, 0.878]], tone: "blue", labelAt: 4 },
+    { label: "DA (accompagnée)", points: [[395, 1.128], [400, 1.05], [405, 0.982], [410, 0.922]], tone: "blue", dashed: true, labelAt: 3 },
+    { label: "OACT", points: [[385, 0.97], [415, 1.03]], tone: "green" },
+    { label: "OACT'", points: [[385, 1.02], [415, 1.08]], tone: "green", dashed: true },
+    { label: "OALT", points: [[400, 0.9], [400, 1.15]], tone: "red", anchor: "end" },
+  ]}
+  marks={[
+    { x: 400, y: 1.0, label: "E", yTick: "1.00" },
+    { x: 397, y: 1.044, label: "A", guide: true, xTick: "397", yTick: "1.044" },
+    { x: 400, y: 1.05, label: "B" },
+  ]}
+  caption="Quand l'OACT monte de 0,05, l'équilibre sans réaction est A (397 ; 1,044). Accroître la monnaie de 5 % déplace la DA et préserve la production en B (400 ; 1,05), au prix de prix plus élevés."
+/>
+
 ## Exercice
 
-Dans cette économie, quel est l'équilibre de long terme si la masse monétaire nominale augmente de 20 % ? À long terme $Y=400$ et DA est $Y=328+86{,}4/P$, donc $86{,}4/P=72$ donne $P=1{,}2$. Les prix augmentent exactement de 20 %. Les encaisses réelles $M/P=216/1{,}2=180$ reviennent à leur niveau initial, de sorte que taux d'intérêt et investissement retrouvent aussi leurs valeurs initiales.
+**Problème 1.** Dans l'économie ci-dessus, où se situe l'équilibre de long terme si la masse monétaire nominale augmente de 20 % ?
+
+**Solution.** À long terme $Y=400$ et la DA est $Y=328+86{,}4/P$, donc $86{,}4/P=72$ donne $P=1{,}2$. Le niveau des prix monte d'exactement 20 %. Les encaisses réelles $M/P=216/1{,}2=180$ reviennent à leur niveau initial, et avec elles le taux d'intérêt et l'investissement.
+
+**Problème 2.** Toutes choses égales par ailleurs, la sensibilité de la demande de monnaie au taux double : $h=40$. Avec une masse monétaire de 180, de combien baisse la production le long de la DA quand les prix passent de 1 à 1,1 ? Comparez avec l'économie initiale ($h=20$).
+
+**Solution.** Le dénominateur vaut $0{,}2+2\times0{,}5/40=0{,}225$ et le coefficient $(2/40)/0{,}225\approx0{,}222$, d'où $Y\approx364{,}4+40/P$. La production vaut 404,4 à un niveau de prix de 1 et 400,8 à 1,1 : baisse d'environ 3,6. Dans l'économie initiale, elle baissait de $72-72/1{,}1\approx6{,}5$. Plus la demande de monnaie est sensible au taux, plus la DA est pentue.
 
 ## Références
 

@@ -3,9 +3,9 @@ track: academy
 series: macroeconomics
 chapter: 8
 title: "Macroeconomics — AD-AS and the Price Level"
-description: "Derives the aggregate demand curve by letting the price level vary in IS-LM, then combines the upward-sloping short-run aggregate supply created by price stickiness with the vertical long-run aggregate supply to compute, with the same numbers and a graph, the short- and long-run effects of a monetary expansion and of supply shocks."
+description: "Derives the aggregate demand curve from IS-LM in parameter form to show what sets its slope, combines it with short- and long-run aggregate supply to show the effects of monetary expansion and monetary neutrality, then compares with numbers and a graph the output and price outcomes of accommodating, ignoring or offsetting an adverse supply shock."
 pubDate: 2026-03-01T00:00:00.000Z
-updatedDate: 2026-09-24
+updatedDate: 2026-09-28
 category: Economics
 tags: ["economics", "macroeconomics", "AD-AS", "aggregate supply", "monetary neutrality"]
 locale: en
@@ -34,6 +34,18 @@ In the economy of Chapter 4 (IS: $Y=410-10r$, money demand $0.5Y-20r$), set the 
 
 A **movement along** the AD curve is caused by a change in the price level; a **shift** of the AD curve itself is caused by government spending, taxes, the nominal money supply or expectations. If the nominal money supply rises by 10%, AD becomes $Y=328+79.2/P$, a curve that reaches output of 400 at a price level of 1.1.
 
+
+### A. The general form of the AD curve and its slope
+
+Rewriting the formula in parameters shows what sets the slope of AD. Eliminating $r$ from IS, $Y=\frac{1}{1-c}(\bar A-br)$, and LM, $M/P=kY-hr$, gives:
+
+<FormulaBox
+  label="The AD curve in parameter form"
+  formula="Y=\frac{\bar A+\frac{b}{h}\cdot\frac{M}{P}}{(1-c)+\frac{bk}{h}}"
+  description="In this economy Ā=82, c=0.8, b=2, k=0.5 and h=20, so the denominator is 0.25 and Y = 328 + 0.4·(M/P). With M=180 this is the Y = 328 + 72/P above."
+/>
+
+A higher price level cuts $M/P$, and the effect passes to output through the coefficient $\frac{b/h}{(1-c)+bk/h}$. If investment is insensitive to the interest rate (small $b$) or money demand is very interest-sensitive (large $h$), the coefficient is small and AD is **steeper**. In the extreme of a liquidity trap ($h\to\infty$), a falling price level raises real balances without lowering the interest rate, so AD is vertical — a case where falling prices alone do not end a recession ([chapter 15](/en/education-economics-ch26/)).
 ## 2. Short-run and long-run aggregate supply
 
 In the **long run** wages and prices fully adjust, so output stays at the potential output $Y^*$ set by labour, capital and technology. Long-run aggregate supply (LRAS) is vertical at $Y^*$.
@@ -99,9 +111,55 @@ An adverse supply shock puts policymakers in a dilemma. Raising aggregate demand
 A vertical long-run aggregate supply does not mean "policy is powerless"; it means the **level** of output is independent of aggregate demand in the long run. Growth that raises potential output itself is the subject of [Chapters 11 and 12](/en/education-economics-ch22/). And ignoring short-run price stickiness and reading every recession through a vertical AS leads to misclassifying unemployment caused by weak demand as "natural". Conversely, ignoring long-run adjustment leads to the mistaken belief that expanding demand raises output forever.
 </Callout>
 
+
+### A. The supply-shock dilemma in numbers
+
+Suppose an oil price rise shifts SRAS up by 0.05 in one go ($P=1.05+0.002(Y-400)$). The first-year outcomes of the three paths open to policymakers are:
+
+<LectureTable
+  title="Three choices after an adverse supply shock (+0.05)"
+  headers={["Choice", "Nominal money", "Price level", "Output", "Cost"]}
+  rows={[
+    ["Do nothing", "180 unchanged", "1.044", "397.0", "Output down 3, prices up 4.4%"],
+    ["Accommodate", "189 (+5%)", "1.050", "400.0", "Output protected, prices up 5%"],
+    ["Hold prices", "117.5 (−34.7%)", "1.000", "375.0", "Prices protected, output down 25"],
+  ]}
+/>
+
+Holding the price level at 1.0 requires $1=1.05+0.002(Y-400)$ on SRAS, i.e. $Y=375$, and the AD curve through that point needs $M/P=(375-328)/0.4=117.5$. The SRAS slope — 0.2% of prices per 1% of output gap — becomes the **sacrifice ratio**. If the supply shock is temporary, doing nothing and letting expectations come back down is one route to recovery; if the shock lodges in expected prices, accommodation entrenches inflation. Which is right depends on how firmly expectations are anchored ([chapter 9](/en/education-economics-ch20/)).
+
+<EconDiagram
+  title="Supply shock: doing nothing (A) versus accommodating (B)"
+  xLabel="Y"
+  yLabel="P"
+  xMin={385}
+  xMax={415}
+  yMin={0.9}
+  yMax={1.15}
+  curves={[
+    { label: "AD", points: [[392, 1.125], [395, 1.075], [400, 1.0], [405, 0.935], [410, 0.878]], tone: "blue", labelAt: 4 },
+    { label: "AD (accommodated)", points: [[395, 1.128], [400, 1.05], [405, 0.982], [410, 0.922]], tone: "blue", dashed: true, labelAt: 3 },
+    { label: "SRAS", points: [[385, 0.97], [415, 1.03]], tone: "green" },
+    { label: "SRAS'", points: [[385, 1.02], [415, 1.08]], tone: "green", dashed: true },
+    { label: "LRAS", points: [[400, 0.9], [400, 1.15]], tone: "red", anchor: "end" },
+  ]}
+  marks={[
+    { x: 400, y: 1.0, label: "E", yTick: "1.00" },
+    { x: 397, y: 1.044, label: "A", guide: true, xTick: "397", yTick: "1.044" },
+    { x: 400, y: 1.05, label: "B" },
+  ]}
+  caption="When SRAS shifts up by 0.05, the do-nothing equilibrium is A (397, 1.044). Raising money by 5% shifts AD so that output is protected at B (400, 1.05), at the cost of higher prices."
+/>
+
 ## Check your understanding
 
-In this economy, what is the long-run equilibrium if the nominal money supply rises by 20%? In the long run $Y=400$ and AD is $Y=328+86.4/P$, so $86.4/P=72$ gives $P=1.2$. Prices rise by exactly 20%. Real balances $M/P=216/1.2=180$ are back to their original level, so interest rates and investment return to their original values as well.
+**Problem 1.** In the economy above, where is the long-run equilibrium if the nominal money supply rises by 20%?
+
+**Solution.** In the long run $Y=400$ and AD is $Y=328+86.4/P$, so $86.4/P=72$ gives $P=1.2$. The price level rises by exactly 20%. Real balances $M/P=216/1.2=180$ return to their original level, so the interest rate and investment do too.
+
+**Problem 2.** Other things equal, suppose the interest sensitivity of money demand doubles to $h=40$. With nominal money at 180, how much does output on the AD curve fall when the price level rises from 1 to 1.1? Compare with the original economy ($h=20$).
+
+**Solution.** The denominator is $0.2+2\times0.5/40=0.225$ and the coefficient $(2/40)/0.225\approx0.222$, so AD is $Y\approx364.4+40/P$. Output is 404.4 at a price level of 1 and 400.8 at 1.1, a fall of about 3.6. In the original economy it fell by $72-72/1.1\approx6.5$. The more interest-sensitive money demand is, the steeper AD becomes.
 
 ## References
 

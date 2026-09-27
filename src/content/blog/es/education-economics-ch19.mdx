@@ -3,9 +3,9 @@ track: academy
 series: macroeconomics
 chapter: 8
 title: "Macroeconomía — OA-DA y el nivel de precios"
-description: "Deriva la curva de demanda agregada dejando variar el nivel de precios en IS-LM y combina la oferta agregada a corto plazo creciente, fruto de la rigidez de precios, con la oferta agregada a largo plazo vertical para calcular, con los mismos números y un gráfico, los efectos a corto y largo plazo de una expansión monetaria y de las perturbaciones de oferta."
+description: "Deriva la demanda agregada desde IS-LM en forma paramétrica para mostrar qué fija su pendiente, la combina con la oferta agregada de corto y largo plazo para mostrar los efectos de una expansión monetaria y la neutralidad del dinero, y compara con números y un gráfico tres respuestas a un choque de oferta adverso."
 pubDate: 2026-03-01T00:00:00.000Z
-updatedDate: 2026-09-24
+updatedDate: 2026-09-28
 category: Economics
 tags: ["economía", "macroeconomía", "OA-DA", "oferta agregada", "neutralidad del dinero"]
 locale: es
@@ -34,6 +34,18 @@ En la economía del capítulo 4 (IS: $Y=410-10r$, demanda de dinero $0{,}5Y-20r$
 
 Un **movimiento a lo largo** de la curva DA se debe a un cambio del nivel de precios; un **desplazamiento** de la propia curva, al gasto público, los impuestos, la cantidad nominal de dinero o las expectativas. Si la cantidad nominal de dinero sube un 10 %, la DA pasa a ser $Y=328+79{,}2/P$: una curva que alcanza una producción de 400 con un nivel de precios de 1,1.
 
+
+### A. La forma general de la DA y su pendiente
+
+Reescribir la fórmula con parámetros muestra qué fija la pendiente de la DA. Eliminando $r$ entre la IS, $Y=\frac{1}{1-c}(\bar A-br)$, y la LM, $M/P=kY-hr$:
+
+<FormulaBox
+  label="La DA en forma paramétrica"
+  formula="Y=\frac{\bar A+\frac{b}{h}\cdot\frac{M}{P}}{(1-c)+\frac{bk}{h}}"
+  description="En esta economía Ā=82, c=0,8, b=2, k=0,5 y h=20, así que el denominador es 0,25 e Y = 328 + 0,4·(M/P). Con M=180 se obtiene la Y = 328 + 72/P anterior."
+/>
+
+Una subida de precios reduce $M/P$, y el efecto pasa a la producción mediante el coeficiente $\frac{b/h}{(1-c)+bk/h}$. Si la inversión es poco sensible al tipo ($b$ pequeño) o la demanda de dinero es muy sensible al tipo ($h$ grande), el coeficiente es pequeño y la DA es **más empinada**. En el extremo de la trampa de liquidez ($h\to\infty$), la caída de precios eleva los saldos reales sin bajar el tipo, así que la DA es vertical: un caso en que la sola caída de precios no acaba con la recesión ([capítulo 15](/es/education-economics-ch26/)).
 ## 2. Oferta agregada a corto y largo plazo
 
 A **largo plazo**, salarios y precios se ajustan por completo, de modo que la producción se mantiene en el nivel potencial $Y^*$ que fijan el trabajo, el capital y la tecnología. La oferta agregada a largo plazo (OALP) es vertical en $Y^*$.
@@ -99,9 +111,55 @@ Una perturbación de oferta adversa pone a las autoridades ante un dilema. Aumen
 Una oferta agregada a largo plazo vertical no significa que «la política es impotente», sino que el **nivel** de producción es independiente de la demanda agregada a largo plazo. El crecimiento que eleva la propia producción potencial es el tema de los [capítulos 11 y 12](/es/education-economics-ch22/). Y si se ignora la rigidez de precios a corto plazo y se interpreta toda recesión con una OA vertical, se califica de «natural» un desempleo causado por falta de demanda. A la inversa, ignorar el ajuste a largo plazo lleva a creer que ampliar la demanda eleva la producción para siempre.
 </Callout>
 
+
+### A. El dilema del choque de oferta en números
+
+Supongamos que una subida del petróleo desplaza la OACP 0,05 hacia arriba de golpe ($P=1{,}05+0{,}002(Y-400)$). Los resultados del primer año de las tres vías disponibles son:
+
+<LectureTable
+  title="Tres opciones tras un choque de oferta adverso (+0,05)"
+  headers={["Opción", "Dinero nominal", "Precios", "Producción", "Coste"]}
+  rows={[
+    ["No hacer nada", "180 sin cambios", "1,044", "397,0", "Producción −3, precios +4,4 %"],
+    ["Acomodar", "189 (+5 %)", "1,050", "400,0", "Producción protegida, precios +5 %"],
+    ["Fijar precios", "117,5 (−34,7 %)", "1,000", "375,0", "Precios protegidos, producción −25"],
+  ]}
+/>
+
+Mantener los precios en 1,0 exige $1=1{,}05+0{,}002(Y-400)$ sobre la OACP, es decir $Y=375$, y la DA que pasa por ese punto requiere $M/P=(375-328)/0{,}4=117{,}5$. La pendiente de la OACP —0,2 % de precios por cada 1 % de brecha— se convierte en la **tasa de sacrificio**. Si el choque es temporal, no hacer nada y dejar que bajen las expectativas es una salida; si el choque se incrusta en los precios esperados, acomodarlo afianza la inflación. Cuál es correcta depende de lo firmemente ancladas que estén las expectativas ([capítulo 9](/es/education-economics-ch20/)).
+
+<EconDiagram
+  title="Choque de oferta: no hacer nada (A) frente a acomodar (B)"
+  xLabel="Y"
+  yLabel="P"
+  xMin={385}
+  xMax={415}
+  yMin={0.9}
+  yMax={1.15}
+  curves={[
+    { label: "DA", points: [[392, 1.125], [395, 1.075], [400, 1.0], [405, 0.935], [410, 0.878]], tone: "blue", labelAt: 4 },
+    { label: "DA (acomodada)", points: [[395, 1.128], [400, 1.05], [405, 0.982], [410, 0.922]], tone: "blue", dashed: true, labelAt: 3 },
+    { label: "OACP", points: [[385, 0.97], [415, 1.03]], tone: "green" },
+    { label: "OACP'", points: [[385, 1.02], [415, 1.08]], tone: "green", dashed: true },
+    { label: "OALP", points: [[400, 0.9], [400, 1.15]], tone: "red", anchor: "end" },
+  ]}
+  marks={[
+    { x: 400, y: 1.0, label: "E", yTick: "1.00" },
+    { x: 397, y: 1.044, label: "A", guide: true, xTick: "397", yTick: "1.044" },
+    { x: 400, y: 1.05, label: "B" },
+  ]}
+  caption="Cuando la OACP sube 0,05, el equilibrio sin respuesta es A (397; 1,044). Aumentar el dinero un 5 % desplaza la DA y protege la producción en B (400; 1,05), a costa de precios más altos."
+/>
+
 ## Ejercicio
 
-En esta economía, ¿cuál es el equilibrio a largo plazo si la cantidad nominal de dinero sube un 20 %? A largo plazo $Y=400$ y la DA es $Y=328+86{,}4/P$, así que $86{,}4/P=72$ da $P=1{,}2$. Los precios suben exactamente un 20 %. Los saldos reales $M/P=216/1{,}2=180$ vuelven a su nivel inicial, de modo que el tipo de interés y la inversión también regresan a sus valores iniciales.
+**Problema 1.** En la economía anterior, ¿dónde está el equilibrio de largo plazo si la oferta monetaria nominal sube un 20 %?
+
+**Solución.** A largo plazo $Y=400$ y la DA es $Y=328+86{,}4/P$, así que $86{,}4/P=72$ da $P=1{,}2$. El nivel de precios sube exactamente un 20 %. Los saldos reales $M/P=216/1{,}2=180$ vuelven a su nivel inicial, y con ellos el tipo de interés y la inversión.
+
+**Problema 2.** Con lo demás igual, la sensibilidad de la demanda de dinero al tipo se duplica: $h=40$. Con una oferta monetaria de 180, ¿cuánto cae la producción sobre la DA cuando los precios suben de 1 a 1,1? Compárelo con la economía original ($h=20$).
+
+**Solución.** El denominador es $0{,}2+2\times0{,}5/40=0{,}225$ y el coeficiente $(2/40)/0{,}225\approx0{,}222$, así que $Y\approx364{,}4+40/P$. La producción es 404,4 con precios en 1 y 400,8 con 1,1: una caída de unos 3,6. En la economía original caía $72-72/1{,}1\approx6{,}5$. Cuanto más sensible al tipo es la demanda de dinero, más empinada es la DA.
 
 ## Referencias
 
