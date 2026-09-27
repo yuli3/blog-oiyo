@@ -1,0 +1,89 @@
+---
+track: academy
+series: econometrics
+chapter: 5
+title: "계량경제학 — 패널 고정효과와 군집"
+description: "같은 개인을 여러 기 관측할 때 고정효과가 시간에 불변한 누락변수를 어떻게 지우는지, 그리고 군집 표준오차가 필요한 이유를 수치 예로 복습합니다."
+pubDate: 2026-09-15
+updatedDate: 2026-09-27
+category: Economics
+tags: ["경제학", "계량경제학", "패널", "고정효과", "군집"]
+locale: ko
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+market: GLOBAL
+contentScope: global
+noindex: true
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 계량경제학 — 패널은 시간에 안 변하는 이질성을 빼는 장치다
+
+[4장](/ko/education-econometrics-ch4/)의 도구변수는 외생 변동을 빌려 온다. 같은 사람·기업·지역을 여러 해 보면, 그 단위에 붙박인 성향을 차분으로 지울 수 있다. 시계열 단위근은 [6장](/ko/education-econometrics-ch6/)이다.
+
+## 1. 고정효과는 수준이 아니라 변화만 남긴다
+
+$Y_{it}=\alpha_i+\lambda_t+\beta X_{it}+u_{it}$에서 $\alpha_i$가 능력·조직문화처럼 시간에 불변이면 개인 평균을 빼거나 1기 차분해 제거할 수 있다. 공통 연도 효과 $\lambda_t$도 별도로 통제해야 한다. **항이 지워지는 대수적 사실과 $\beta$가 인과효과라는 주장은 다르다.**
+
+<FormulaBox
+  label="Within 변환"
+  formula="Y_{it}-\bar Y_i = (\lambda_t-\bar\lambda_i)+\beta(X_{it}-\bar X_i)+(u_{it}-\bar u_i)"
+  description="개인 평균을 빼면 α_i가 사라진다. 시간에 따라 안 움직이는 X도 함께 사라진다. 연도 효과는 이 변환만으로 사라지지 않는다."
+/>
+
+가상으로 세 사람을 2년 관측하자. 모두에게 공통인 임금 상승 100만 원을 제외하면 교육 1년 증가에 대응하는 임금 변화는 200만 원이다.
+
+<LectureTable
+  title="두 시점의 가상 변화 — 공통 상승과 개인 안 변화를 분리"
+  headers={["사람", "교육 변화(년)", "임금 변화(만 원)", "공통 100만 원 제외"]}
+  rows={[
+    ["A", "0", "100", "0"],
+    ["B", "1", "300", "200"],
+    ["C", "2", "500", "400"],
+  ]}
+/>
+
+횡단면 수준만 비교하면 원래 교육을 많이 받은 사람의 고임금과 이 변화가 섞인다. 다만 교육 선택이 미래 임금 충격에 반응했다면 이 200만 원도 인과효과가 아니다.
+
+고정효과의 일치성을 말하려면, 예를 들어 $E(u_{it}\mid X_{i1},\ldots,X_{iT},\alpha_i)=0$ 같은 **엄격 외생성**과 시간에 따라 변하는 교란을 통제할 설계가 필요하다. 현재의 임금 충격이 내년 교육 선택에 영향을 주는 피드백도 이 조건을 깨뜨린다. 연도 효과를 넣어도 사람마다 다른 경기 노출은 남을 수 있다.
+
+## 2. 확률효과는 그 이질성이 X와 안 상관일 때만 이득이다
+
+확률효과는 $\alpha_i$를 오차 구조의 일부로 모델링한다. $\alpha_i$와 설명변수가 무상관이고 외생성·오차 공분산 가정이 맞을 때에만 고정효과보다 효율적일 수 있다. $\alpha_i$가 교육 선택과 상관이면 그 이득은 편의로 바뀐다. 하우스만 검정은 가정 차이를 점검하는 보조 도구이지 제도 이야기를 대체하지 않는다.
+
+<LectureTable
+  title="패널에서 남는 것, 지워지는 것"
+  headers={["추정", "지우는 것", "못 보는 것"]}
+  rows={[
+    ["고정효과", "시간에 불변한 α_i", "불변 X의 수준 효과"],
+    ["1기 차분", "같은 α_i", "두 시점에는 FE와 같은 기울기"],
+    ["확률효과", "오차의 일부로 취급", "α_i와 X의 상관"],
+  ]}
+/>
+
+두 시점의 균형 패널에서 같은 표본·모형을 쓰면 고정효과와 1기 차분의 기울기 추정치는 같다. 시점이 셋 이상일 때의 효율 비교는 오차의 직렬상관 구조에 따라 달라진다. 따라서 ‘두 기라서 차분의 효율이 손실된다’는 일반 규칙은 없다.
+
+같은 사람의 여러 해 오차가 상관되면 **개인별 군집**으로 표준오차를 계산한다. 반대로 같은 해 여러 사람에게 남는 공통 충격은 **시간 방향의 횡단면 상관**이다. 균일한 공통 충격은 연도 고정효과로 흡수할 수 있지만, 이질적인 충격까지 개인별 군집 하나로 해결되지는 않는다. 설계에 따라 시간·개인 양방향 군집이나 다른 추론법을 검토해야 한다. 연도가 네 개뿐이라면 시간 군집 4개를 둔 통상 군집 점근추론도 신뢰하기 어렵다. 군집 표준오차는 식별을 고치는 도구가 아니다.
+
+<Callout type="warning">
+고정효과가 “인과를 자동으로 준다”고 쓰지 않는다. 시간에 따라 움직이는 누락변수, 역인과, 측정오차는 남는다. 처리가 예상 임금이나 과거 충격에 반응하면 엄격 외생성이 깨질 수 있다. 도구변수와 패널은 서로를 대체하지 않는다.
+</Callout>
+
+## 확인문제
+
+**문제.** 기업 20개를 4년 동안 관측해 훈련비 1% 증가에 생산성 0.3% 증가라는 고정효과 기울기를 얻었다. 같은 해 업황이 두 변수에 영향을 주었다면 어떤 고정효과를 추가할 수 있는가? 개인별 군집만으로 같은 해의 공통 충격 문제가 사라지는가?
+
+**풀이.** 연도 고정효과는 모든 기업에 같은 공통 수준 충격을 흡수한다. 업황 노출이 기업마다 다르면 추가 설계가 필요하다. 개인별 군집은 기업 내 시계열 상관을 허용하지만 기업 간 같은 해 상관까지 자동으로 고치지 않는다. 추정치 0.3%를 인과효과라 부르려면 시간 가변 교란과 피드백도 검토해야 한다. 기업 군집 20개·연도 4개라는 적은 군집 수에서는 표준오차의 근사에도 주의한다.
+
+## 참고 자료
+
+- Joshua Angrist and Jörn-Steffen Pischke, *Mostly Harmless Econometrics*, ch. 5
+- Jeffrey Wooldridge, *Econometric Analysis of Cross Section and Panel Data*, ch. 10
+- Peter Hull, [*Fixed Effects Identify a Weighted Sum of First- and Long-Differences Only Under a Parallel Trends Assumption*](https://www.mit.edu/~hull/FEvFD.pdf)
+- MIT OpenCourseWare, [*Linear Panel Data Models Under Strict and Weak Exogeneity*](https://ocw.mit.edu/courses/14-382-econometrics-spring-2017/049489cf2ae5d050409ee2c5cbd5346f_MIT14_382S17_lec8.pdf)
+- Cameron and Miller, [*A Practitioner's Guide to Cluster-Robust Inference*](https://escholarship.org/uc/item/1jq5d0pq)
+- 내생성·IV는 [4장](/ko/education-econometrics-ch4/)
