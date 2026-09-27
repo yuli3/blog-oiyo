@@ -3,9 +3,9 @@ track: academy
 series: microeconomics
 chapter: 7
 title: "Microeconomía — Monopolio: cantidad, precio y pérdida irrecuperable"
-description: "Explica por qué el ingreso marginal de un monopolista está por debajo del precio, calcula la producción IMg = CMg y la pérdida irrecuperable, el índice de Lerner y la regla de la inversa de la elasticidad, la discriminación de precios de tercer grado y las opciones para regular un monopolio natural, con números y un gráfico."
+description: "Parte de por qué el ingreso marginal es menor que el precio para hallar cantidad, precio y pérdida irrecuperable del monopolio, deriva el índice de Lerner, la regla de la elasticidad inversa y la traslación de costes (1/2 lineal, |ε|/(|ε|−1) con elasticidad constante) y explica por qué la discriminación de tercer grado reduce el bienestar si la producción no cambia."
 pubDate: 2026-03-01T00:00:00.000Z
-updatedDate: 2026-09-24
+updatedDate: 2026-09-28
 category: Economics
 tags: ["economía", "microeconomía", "monopolio", "discriminación de precios", "índice de Lerner"]
 locale: es
@@ -79,6 +79,39 @@ Sustituyendo $IMg=P(1-1/|\varepsilon|)$ del [capítulo 3](/es/education-economic
 
 De aquí salen dos conclusiones. Un monopolista solo produce donde $|\varepsilon|>1$, en el tramo elástico de la demanda; en el inelástico, subir el precio aumenta el ingreso y reduce el coste. Y si existen sustitutivos cercanos, ni siquiera un monopolista puede subir mucho el precio.
 
+
+### A. ¿Cuánto sube el precio de monopolio cuando sube el coste?
+
+En competencia, una subida del coste marginal se reparte según las elasticidades ([capítulo 3](/es/education-economics-ch3/)). En monopolio, la **forma** de la curva de demanda fija la traslación. Con demanda lineal $P=a-Q$, $IMg=a-2Q=CMg$ da $P_m=(a+CMg)/2$: si el coste marginal sube 1 won, el precio sube 0,5. Con demanda de elasticidad constante $Q=AP^{-\varepsilon}$, la regla de Lerner se convierte en la propia fórmula de precios.
+
+<FormulaBox
+  label="Traslación de costes en monopolio"
+  formula="\text{Lineal: }\frac{dP_m}{dCMg}=\frac{1}{2},\qquad \text{Elasticidad constante: }P_m=\frac{|\varepsilon|}{|\varepsilon|-1}\,CMg\;\Rightarrow\;\frac{dP_m}{dCMg}=\frac{|\varepsilon|}{|\varepsilon|-1}>1"
+  description="Con |ε|=2, el precio se fija en el doble del coste marginal, así que si el coste sube 1 won el precio sube 2. En monopolio, impuestos y subidas de costes pueden trasladarse en más del 100 %."
+/>
+
+En el ejemplo anterior, si el coste marginal sube de 40 a 60, $120-2Q=60$ da $Q=30$ y $P=90$. El coste subió 20 pero el precio solo 10: justo la traslación de 1/2 de la demanda lineal.
+
+<EconDiagram
+  title="Subida del coste marginal y precio de monopolio"
+  xLabel="Q"
+  yLabel="P"
+  xMax={120}
+  yMax={125}
+  curves={[
+    { label: "D", points: [[0, 120], [120, 0]], tone: "blue", anchor: "end" },
+    { label: "IMg", points: [[0, 120], [60, 0]], tone: "violet", anchor: "end" },
+    { label: "CMg", points: [[0, 40], [120, 40]], tone: "red" },
+    { label: "CMg'", points: [[0, 60], [120, 60]], tone: "red", dashed: true },
+  ]}
+  marks={[
+    { x: 40, y: 80, label: "E", guide: true, xTick: "40", yTick: "80" },
+    { x: 30, y: 90, label: "E'", guide: true, xTick: "30", yTick: "90" },
+  ]}
+  arrows={[{ from: [100, 42], to: [100, 58] }]}
+  caption="Cuando el coste marginal sube de 40 a 60, la producción cae a 30 donde IMg = CMg', y el precio leído en la curva de demanda pasa a 90. El precio sube solo la mitad de la subida del coste."
+/>
+
 ## 4. Discriminación de precios
 
 Cobrar precios distintos a distintos consumidores exige dos condiciones: poder distinguir los grupos e impedir que quien compra barato revenda a quien pagaría más.
@@ -102,6 +135,23 @@ El grupo B, más elástico, obtiene el precio más bajo: la regla de Lerner apli
 
 La discriminación de primer grado elimina la pérdida irrecuperable, porque la empresa vende a todo aquel cuya disposición a pagar sea al menos el coste marginal. La eficiencia es la de la competencia, pero el excedente del consumidor es cero: otra muestra de que eficiencia y distribución son cuestiones distintas.
 
+
+### A. ¿Aumenta el bienestar la discriminación de tercer grado?
+
+¿Y si la empresa tuviera que cobrar un precio único a los dos grupos? Por debajo de 60, la demanda total es $Q=(100-P)+(60-P)=160-2P$, es decir $P=80-Q/2$, y $IMg=80-Q=20$ da $Q=60$ y $P=50$ (compran ambos grupos: A 50 unidades, B 10).
+
+<LectureTable
+  title="Precio único frente a discriminación de tercer grado (CMg=20)"
+  headers={["", "Precio único 50", "Discriminación (A 60, B 40)"]}
+  rows={[
+    ["Producción total", "60 (A 50, B 10)", "60 (A 40, B 20)"],
+    ["Excedente del consumidor", "1.250 + 50 = 1.300", "800 + 200 = 1.000"],
+    ["Beneficio", "30 × 60 = 1.800", "40×40 + 20×20 = 2.000"],
+    ["Excedente total", "3.100", "3.000"],
+  ]}
+/>
+
+La producción total es 60 en ambos casos, pero el excedente total es 100 menor con discriminación. Repartir la misma cantidad entre los grupos a **precios distintos** hace que un consumidor de A dispuesto a pagar 60 se quede sin comprar mientras uno de B dispuesto a pagar solo 40 compra: una mala asignación. En general, para que la discriminación de tercer grado aumente el bienestar, **la producción total debe aumentar** (condición necesaria). Con demandas lineales y todos los grupos ya atendidos, la producción no cambia y la discriminación reduce el bienestar. Al contrario, si abre un grupo que con precio único no se atendería (un país de renta baja, por ejemplo), la producción aumenta y el bienestar también puede hacerlo.
 ## 5. Monopolio natural y regulación
 
 Si el coste medio desciende en todo el rango de la demanda, lo más barato es que produzca una sola empresa ([capítulo 5](/es/education-economics-ch5/)). Cada forma de regular un **monopolio natural** tiene un coste.
@@ -116,7 +166,13 @@ Ser la única empresa no garantiza un precio de monopolio. Si la entrada y la sa
 
 ## Ejercicio
 
-Con la demanda $P=120-Q$ y $CMg=20$ wones, ¿cuáles son la cantidad, el precio y la pérdida irrecuperable del monopolio? $120-2Q=20$ da $Q=50$ y $P=70$ wones. La cantidad competitiva, de $120-Q=20$, es 100. La pérdida irrecuperable es $\tfrac{1}{2}\times(70-20)\times(100-50)=1.250$ wones. El índice de Lerner es $(70-20)/70\approx 0{,}71$, la inversa de la elasticidad en ese punto, $70/50=1{,}4$.
+**Problema 1.** Para un monopolista con demanda $P=120-Q$ y $CMg=20$, halle la cantidad, el precio, la pérdida irrecuperable y el índice de Lerner.
+
+**Solución.** $120-2Q=20$ da $Q=50$ y $P=70$. La cantidad competitiva cumple $120-Q=20$, es decir 100, así que la pérdida irrecuperable es $\tfrac{1}{2}\times(70-20)\times(100-50)=1.250$. El índice de Lerner es $(70-20)/70\approx0{,}71$, la inversa de la elasticidad en ese punto, $70/50=1{,}4$.
+
+**Problema 2.** Un laboratorio es el único proveedor frente a una demanda con elasticidad-precio constante $|\varepsilon|=3$. Si el coste marginal sube de 10.000 a 12.000 wones, ¿cómo cambia el precio?
+
+**Solución.** Con demanda de elasticidad constante, $P_m=\frac{|\varepsilon|}{|\varepsilon|-1}CMg=1{,}5\,CMg$. El precio pasa de 15.000 a 18.000 wones, 3.000 más: por encima de la subida de coste de 2.000, una traslación del 150 %. El índice de Lerner es $1/3$ en ambos casos.
 
 ## Referencias
 

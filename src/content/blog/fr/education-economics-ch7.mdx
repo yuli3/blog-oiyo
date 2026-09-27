@@ -3,9 +3,9 @@ track: academy
 series: microeconomics
 chapter: 7
 title: "Microéconomie — Monopole : quantité, prix et perte sèche"
-description: "Explique pourquoi la recette marginale d'un monopole est inférieure au prix, calcule la production Rm = Cm et la perte sèche, l'indice de Lerner et la règle de l'inverse de l'élasticité, la discrimination par les prix du troisième degré et les options de régulation d'un monopole naturel, chiffres et graphique à l'appui."
+description: "Part de la raison pour laquelle la recette marginale est inférieure au prix pour trouver quantité, prix et perte sèche du monopole, dérive l'indice de Lerner, la règle de l'élasticité inverse et la répercussion des coûts (1/2 en linéaire, |ε|/(|ε|−1) à élasticité constante), et explique pourquoi la discrimination du troisième degré réduit le bien-être à production égale."
 pubDate: 2026-03-01T00:00:00.000Z
-updatedDate: 2026-09-24
+updatedDate: 2026-09-28
 category: Economics
 tags: ["économie", "microéconomie", "monopole", "discrimination par les prix", "indice de Lerner"]
 locale: fr
@@ -79,6 +79,39 @@ En remplaçant $Rm=P(1-1/|\varepsilon|)$ du [chapitre 3](/fr/education-economics
 
 Deux conclusions s'ensuivent. Un monopole ne produit que là où $|\varepsilon|>1$, sur la partie élastique de la demande ; sur la partie inélastique, augmenter le prix accroît la recette et réduit le coût. Et s'il existe des substituts proches, même un monopole ne peut guère augmenter son prix.
 
+
+### A. De combien monte le prix de monopole quand le coût augmente ?
+
+En concurrence, une hausse du coût marginal se répartit selon les élasticités ([chapitre 3](/fr/education-economics-ch3/)). En monopole, c'est la **forme** de la courbe de demande qui fixe la répercussion. Avec une demande linéaire $P=a-Q$, $Rm=a-2Q=Cm$ donne $P_m=(a+Cm)/2$ : une hausse de 1 won du coût marginal fait monter le prix de 0,5 won. Avec une demande à élasticité constante $Q=AP^{-\varepsilon}$, la règle de Lerner devient la formule de prix elle-même.
+
+<FormulaBox
+  label="Répercussion des coûts en monopole"
+  formula="\text{Linéaire : }\frac{dP_m}{dCm}=\frac{1}{2},\qquad \text{Élasticité constante : }P_m=\frac{|\varepsilon|}{|\varepsilon|-1}\,Cm\;\Rightarrow\;\frac{dP_m}{dCm}=\frac{|\varepsilon|}{|\varepsilon|-1}>1"
+  description="Avec |ε|=2, le prix est fixé au double du coût marginal : une hausse de coût de 1 won fait monter le prix de 2 wons. En monopole, taxes et hausses de coûts peuvent être répercutées à plus de 100 %."
+/>
+
+Dans l'exemple ci-dessus, si le coût marginal passe de 40 à 60, $120-2Q=60$ donne $Q=30$ et $P=90$. Le coût a augmenté de 20, le prix de 10 seulement : exactement la répercussion de 1/2 d'une demande linéaire.
+
+<EconDiagram
+  title="Hausse du coût marginal et prix de monopole"
+  xLabel="Q"
+  yLabel="P"
+  xMax={120}
+  yMax={125}
+  curves={[
+    { label: "D", points: [[0, 120], [120, 0]], tone: "blue", anchor: "end" },
+    { label: "Rm", points: [[0, 120], [60, 0]], tone: "violet", anchor: "end" },
+    { label: "Cm", points: [[0, 40], [120, 40]], tone: "red" },
+    { label: "Cm'", points: [[0, 60], [120, 60]], tone: "red", dashed: true },
+  ]}
+  marks={[
+    { x: 40, y: 80, label: "E", guide: true, xTick: "40", yTick: "80" },
+    { x: 30, y: 90, label: "E'", guide: true, xTick: "30", yTick: "90" },
+  ]}
+  arrows={[{ from: [100, 42], to: [100, 58] }]}
+  caption="Quand le coût marginal passe de 40 à 60, la production tombe à 30 là où Rm = Cm', et le prix lu sur la courbe de demande devient 90. Le prix n'augmente que de la moitié de la hausse du coût."
+/>
+
 ## 4. La discrimination par les prix
 
 Pratiquer des prix différents selon les consommateurs suppose deux conditions : pouvoir distinguer les groupes, et empêcher ceux qui achètent bon marché de revendre à ceux qui paieraient plus.
@@ -102,6 +135,23 @@ Le groupe B, plus élastique, obtient le prix le plus bas : c'est la règle de L
 
 La discrimination du premier degré supprime la perte sèche, car l'entreprise vend à tous ceux dont la disposition à payer est au moins égale au coût marginal. L'efficacité est celle de la concurrence, mais le surplus du consommateur est nul — preuve supplémentaire qu'efficacité et répartition sont deux questions distinctes.
 
+
+### A. La discrimination du troisième degré augmente-t-elle le bien-être ?
+
+Et si l'entreprise devait appliquer un prix unique aux deux groupes ? Sous 60, la demande totale est $Q=(100-P)+(60-P)=160-2P$, soit $P=80-Q/2$, et $Rm=80-Q=20$ donne $Q=60$ et $P=50$ (les deux groupes achètent : A 50 unités, B 10).
+
+<LectureTable
+  title="Prix unique ou discrimination du troisième degré (Cm=20)"
+  headers={["", "Prix unique 50", "Discrimination (A 60, B 40)"]}
+  rows={[
+    ["Production totale", "60 (A 50, B 10)", "60 (A 40, B 20)"],
+    ["Surplus des consommateurs", "1 250 + 50 = 1 300", "800 + 200 = 1 000"],
+    ["Profit", "30 × 60 = 1 800", "40×40 + 20×20 = 2 000"],
+    ["Surplus total", "3 100", "3 000"],
+  ]}
+/>
+
+La production totale est de 60 dans les deux cas, mais le surplus total est inférieur de 100 avec la discrimination. Répartir la même quantité entre les groupes à des **prix différents** fait qu'un consommateur A prêt à payer 60 n'achète pas, tandis qu'un consommateur B prêt à payer seulement 40 achète : c'est une mauvaise allocation. En général, pour que la discrimination du troisième degré augmente le bien-être, **la production totale doit augmenter** (condition nécessaire). Avec des demandes linéaires et tous les groupes déjà servis, la production ne change pas et la discrimination réduit le bien-être. À l'inverse, si elle ouvre un groupe qui ne serait pas servi au prix unique (un pays à faible revenu, par exemple), la production augmente et le bien-être peut augmenter aussi.
 ## 5. Monopole naturel et régulation
 
 Si le coût moyen décroît sur toute l'étendue de la demande, la production par une seule entreprise est la moins coûteuse ([chapitre 5](/fr/education-economics-ch5/)). Chaque façon de réguler un tel **monopole naturel** a un coût.
@@ -116,7 +166,13 @@ Si le coût moyen décroît sur toute l'étendue de la demande, la production pa
 
 ## Exercice
 
-Avec la demande $P=120-Q$ et $Cm=20$ wons, quels sont la quantité, le prix et la perte sèche du monopole ? $120-2Q=20$ donne $Q=50$ et $P=70$ wons. La quantité concurrentielle, tirée de $120-Q=20$, est 100. La perte sèche vaut $\tfrac{1}{2}\times(70-20)\times(100-50)=1\,250$ wons. L'indice de Lerner vaut $(70-20)/70\approx 0{,}71$, l'inverse de l'élasticité en ce point, $70/50=1{,}4$.
+**Problème 1.** Pour un monopole face à la demande $P=120-Q$ avec $Cm=20$, trouvez la quantité, le prix, la perte sèche et l'indice de Lerner.
+
+**Solution.** $120-2Q=20$ donne $Q=50$ et $P=70$. La quantité concurrentielle vérifie $120-Q=20$, soit 100 ; la perte sèche est donc $\tfrac{1}{2}\times(70-20)\times(100-50)=1\,250$. L'indice de Lerner vaut $(70-20)/70\approx0{,}71$, l'inverse de l'élasticité en ce point, $70/50=1{,}4$.
+
+**Problème 2.** Un laboratoire est seul fournisseur face à une demande d'élasticité-prix constante $|\varepsilon|=3$. Si le coût marginal passe de 10 000 à 12 000 wons, comment évolue le prix ?
+
+**Solution.** Avec une demande à élasticité constante, $P_m=\frac{|\varepsilon|}{|\varepsilon|-1}Cm=1{,}5\,Cm$. Le prix passe de 15 000 à 18 000 wons, soit 3 000 de plus — davantage que la hausse de coût de 2 000 : la répercussion est de 150 %. L'indice de Lerner vaut $1/3$ dans les deux cas.
 
 ## Références
 
