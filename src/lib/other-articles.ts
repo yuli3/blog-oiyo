@@ -23,12 +23,19 @@ export function isOtherArticle(post: CollectionEntry<"blog">): boolean {
 // 2026-09-28 2-6: 학문 카테고리 밑에 낱개 글로 남아 있던 두 시리즈를 D1 결정(2026-09-25)대로 기타로 옮겼다.
 // 카테고리 라벨(Accounting·Law·Medicine·Lifestyle)만으로는 묶음이 틀리게 나와 시리즈로 정한다.
 const CAREER_SLUG_PREFIXES = ["academy-qualification-roadmaps-"];
+// 2026-09-28 B2 결정: 학문 칸에 섞여 있던 자격·실무 시리즈. 카테고리(컴퓨터과학·행정학·인문학 등)만 보면
+// 교양으로 가므로 시리즈 이름으로 커리어·자격에 보낸다. 금융 실무 시리즈는 카테고리대로 생활·돈에 간다.
+const CAREER_SERIES = new Set([
+  // 다른 언어판의 같은 시리즈 이름
+  "Excel from Basics to Advanced", "International Trade English", "TOEIC Strategy",
+  "전산회계 2급", "투자자산운용사", "엑셀 기초~고급", "워드프로세서 1급", "ADsP 데이터분석 준전문가", "공문서 작성법", "9급 공무원 행정직 완전정복", "한국사능력검정", "사회조사분석사 2급 완전정복", "무역영어 1급 완전정복", "영어 문법 완성", "TOEIC 전략", "한국사능력검정 대비"]);
 const LIFE_MONEY_SLUG_PREFIXES = ["magazine-checklist-"];
 
 export function otherGroupOf(post: CollectionEntry<"blog">): OtherGroup {
   const base = post.slug.split("/").at(-1) ?? "";
   if (CAREER_ARTICLE_OVERRIDES.has(base) || CAREER_SLUG_PREFIXES.some((prefix) => base.startsWith(prefix))) return "career-credentials";
   if (LIFE_MONEY_SLUG_PREFIXES.some((prefix) => base.startsWith(prefix))) return "life-money";
+  if (CAREER_SERIES.has(String(post.data.series ?? ""))) return "career-credentials";
   const category = post.data.category ?? "";
   if (LIFE_MONEY.has(category)) return "life-money";
   if (CAREER.has(category)) return "career-credentials";
