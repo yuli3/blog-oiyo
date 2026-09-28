@@ -20,8 +20,15 @@ export function isOtherArticle(post: CollectionEntry<"blog">): boolean {
     post.data.track !== "academy" && post.data.track !== "education";
 }
 
+// 2026-09-28 2-6: 학문 카테고리 밑에 낱개 글로 남아 있던 두 시리즈를 D1 결정(2026-09-25)대로 기타로 옮겼다.
+// 카테고리 라벨(Accounting·Law·Medicine·Lifestyle)만으로는 묶음이 틀리게 나와 시리즈로 정한다.
+const CAREER_SLUG_PREFIXES = ["academy-qualification-roadmaps-"];
+const LIFE_MONEY_SLUG_PREFIXES = ["magazine-checklist-"];
+
 export function otherGroupOf(post: CollectionEntry<"blog">): OtherGroup {
-  if (CAREER_ARTICLE_OVERRIDES.has(post.slug.split("/").at(-1) ?? "")) return "career-credentials";
+  const base = post.slug.split("/").at(-1) ?? "";
+  if (CAREER_ARTICLE_OVERRIDES.has(base) || CAREER_SLUG_PREFIXES.some((prefix) => base.startsWith(prefix))) return "career-credentials";
+  if (LIFE_MONEY_SLUG_PREFIXES.some((prefix) => base.startsWith(prefix))) return "life-money";
   const category = post.data.category ?? "";
   if (LIFE_MONEY.has(category)) return "life-money";
   if (CAREER.has(category)) return "career-credentials";
