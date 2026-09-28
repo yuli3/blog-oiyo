@@ -145,7 +145,7 @@ const t = {
     yourScore: "총점",
     impact: "생활 영향",
     action: "권장 행동",
-    disclaimer: "이 테스트는 임상 진단이 아니며, 전문 진단을 대체할 수 없습니다.",
+    disclaimer: "이 테스트는 임상 진단이 아니며, 전문 진단을 대체할 수 없어요.",
     restart: "다시 하기",
     share: "결과 공유",
     copied: "복사됨!",

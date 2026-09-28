@@ -41,7 +41,7 @@ const ko = {
   lawRefLabel: '관련 법조항',
   descLabel: '설명',
   errorSelect: '청구 유형과 기산일을 입력해 주세요.',
-  disclaimer: '※ 본 계산기는 참고용이며, 법적 효력이 없습니다. 실제 소멸시효는 구체적 사실관계에 따라 다를 수 있습니다.',
+  disclaimer: '※ 본 계산기는 참고용이며, 법적 효력이 없어요. 실제 소멸시효는 구체적 사실관계에 따라 다를 수 있어요.',
   types: {
     civil_general: '일반 민사채권 (10년)',
     commercial: '상사채권 (5년)',

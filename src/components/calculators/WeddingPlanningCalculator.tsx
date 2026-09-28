@@ -32,7 +32,7 @@ const ko = {
   balance: '결혼 수지',
   positiveTip: (amount: string) => `축의금이 결혼 비용을 ${amount}원 초과합니다. 재무적으로 여유가 있습니다.`,
   negativeTip: (amount: string) => `결혼 비용이 축의금보다 ${amount}원 많습니다. 이 금액을 자산에서 충당해야 합니다.`,
-  disclaimer: '* 예상 비용입니다. 실제 비용은 계약 내용에 따라 달라질 수 있습니다.',
+  disclaimer: '* 예상 비용이에요. 실제 비용은 계약 내용에 따라 달라질 수 있어요.',
 };
 
 const en = {

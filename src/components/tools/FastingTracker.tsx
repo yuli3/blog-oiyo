@@ -47,7 +47,7 @@ const LABELS: Record<Locale, Labels> = {
   },
   ko: {
     title: "간헐적 단식 트래커",
-    subtitle: "16:8, 18:6, 20:4 단식 창을 현재 시간 기준으로 확인합니다.",
+    subtitle: "16:8, 18:6, 20:4 단식 창을 현재 시간 기준으로 확인해요.",
     methodLabel: "단식 방식",
     startTimeLabel: "마지막 식사 시간",
     statusTitle: { fasting: "단식 중", eating: "식사 가능 시간" },
@@ -61,7 +61,7 @@ const LABELS: Record<Locale, Labels> = {
     remaining: "남은 시간",
     fastingWindow: "단식 시간",
     eatingWindow: "식사 시간",
-    disclaimer: "이 타이머는 일반적인 생활 기록용이며 의학적 조언이 아닙니다. 건강 상태에 맞는 단식 계획은 전문가와 확인하세요.",
+    disclaimer: "이 타이머는 일반적인 생활 기록용이며 의학적 조언이 아니에요. 건강 상태에 맞는 단식 계획은 전문가와 확인하세요.",
     methods: { 16: "16:8 - 16시간 단식, 8시간 식사", 18: "18:6 - 18시간 단식, 6시간 식사", 20: "20:4 - 20시간 단식, 4시간 식사" },
   },
   ja: {

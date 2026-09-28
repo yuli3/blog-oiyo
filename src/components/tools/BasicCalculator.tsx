@@ -5,7 +5,7 @@ import type { Locale } from "../../lib/i18n";
 interface Labels { title: string; subtitle: string; clear: string; backspace: string; error: string; }
 const LABELS: Record<Locale, Labels> = {
   en: { title: "Basic Calculator", subtitle: "Arithmetic with decimals, percent, and clear.", clear: "C", backspace: "DEL", error: "Error" },
-  ko: { title: "기본 계산기", subtitle: "소수와 퍼센트를 포함한 사칙연산 계산기입니다.", clear: "C", backspace: "DEL", error: "오류" },
+  ko: { title: "기본 계산기", subtitle: "소수와 퍼센트를 포함한 사칙연산 계산기예요.", clear: "C", backspace: "DEL", error: "오류" },
   ja: { title: "基本計算機", subtitle: "小数とパーセントを含む四則演算に対応します。", clear: "C", backspace: "DEL", error: "エラー" },
   zh: { title: "基础计算器", subtitle: "支持小数、百分号和清除的四则运算。", clear: "C", backspace: "DEL", error: "错误" },
   fr: { title: "Calculatrice Basique", subtitle: "Calculs avec décimales, pourcentage et effacement.", clear: "C", backspace: "DEL", error: "Erreur" },

@@ -6,7 +6,7 @@ type Cell = { value: number; isDark: boolean; isError: boolean };
 
 const Hitori: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
     const t = {
-        ko: { title: "히토리 (Hitori)", desc: "중복된 숫자를 지워 가로세로 유일한 수만 남기세요!", reset: "판 갈기", win: "본질만 남았습니다!" },
+        ko: { title: "히토리 (Hitori)", desc: "중복된 숫자를 지워 가로세로 유일한 수만 남기세요!", reset: "판 갈기", win: "본질만 남았어요!" },
         en: { title: "Hitori", desc: "Shade duplicate numbers to leave only unique ones!", reset: "Restart", win: "Only essence remains!" }
     }[locale === 'ko' ? 'ko' : 'en'];
 

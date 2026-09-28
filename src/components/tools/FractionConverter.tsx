@@ -36,7 +36,7 @@ const LABELS: Record<Locale, Labels> = {
   },
   ko: {
     title: "분수 변환기",
-    subtitle: "분수, 소수, 퍼센트를 기약분수 기준으로 변환합니다.",
+    subtitle: "분수, 소수, 퍼센트를 기약분수 기준으로 변환해요.",
     fractionTitle: "분수 → 소수와 퍼센트",
     numeratorLabel: "분자",
     denominatorLabel: "분모",

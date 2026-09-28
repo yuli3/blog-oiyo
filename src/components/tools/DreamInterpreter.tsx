@@ -50,7 +50,7 @@ const UI: Record<
 > = {
   ko: {
     title: "꿈 해몽 인터프리터",
-    subtitle: "꿈에 등장한 상징을 선택하면 의미를 해석해드립니다",
+    subtitle: "꿈에 등장한 상징을 선택하면 의미를 해석해드려요",
     selectPrompt: "꿈 키워드 선택 (최대 5개)",
     interpretBtn: "해몽 보기",
     clearBtn: "초기화",

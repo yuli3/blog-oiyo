@@ -49,9 +49,9 @@ const WordCounterTool: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) 
         seconds: '초',
         topWords: '자주 쓴 단어 TOP 5',
         times: '회',
-        noText: '텍스트를 입력하면 통계가 표시됩니다.',
+        noText: '텍스트를 입력하면 통계가 표시돼요.',
         platformTitle: '플랫폼별 글자수 제한',
-        platformNote: 'X(트위터)는 한글·한자를 2자로 계산합니다(공식 규칙). 다른 항목은 글자 수 기준입니다.',
+        platformNote: 'X(트위터)는 한글·한자를 2자로 계산합니다(공식 규칙). 다른 항목은 글자 수 기준이에요.',
         over: '초과',
         platforms: {
           x: 'X (트위터, 280자)',

@@ -6,7 +6,7 @@ type Cell = { type: 'white' | 'black'; count?: number; hasBulb: boolean; isLit: 
 
 const LightUp: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
     const t = {
-        ko: { title: "라이트업 (Akari)", desc: "어두운 구석 없이 모든 칸을 밝히세요!", reset: "판 갈기", win: "세상이 밝아졌습니다!" },
+        ko: { title: "라이트업 (Akari)", desc: "어두운 구석 없이 모든 칸을 밝히세요!", reset: "판 갈기", win: "세상이 밝아졌어요!" },
         en: { title: "Light Up (Akari)", desc: "Light up every corner of the grid!", reset: "Restart", win: "The world is bright!" }
     }[locale === 'ko' ? 'ko' : 'en'];
 

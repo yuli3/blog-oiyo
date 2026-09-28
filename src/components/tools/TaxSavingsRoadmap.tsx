@@ -323,7 +323,7 @@ const L: Record<Locale, {
     totalSavings: '예상 절세액', tipsFound: '개 절세 전략 발견',
     priorityHigh: '필수', priorityMedium: '권장', priorityLow: '추가',
     savingsRange: '절세 예상', actionLabel: '실행 방법',
-    wan: '만원', noTips: '입력한 조건에 맞는 추가 절세 전략이 없습니다.',
+    wan: '만원', noTips: '입력한 조건에 맞는 추가 절세 전략이 없어요.',
   },
   en: {
     title: 'Tax Savings Roadmap', subtitle: 'Find the best tax strategies for your situation',

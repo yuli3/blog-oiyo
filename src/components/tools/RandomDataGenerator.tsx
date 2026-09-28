@@ -67,7 +67,7 @@ const LABELS: Record<Locale, Labels> = {
   },
   ko: {
     title: "랜덤 데이터 생성기",
-    subtitle: "이름, 이메일, 숫자, UUID, 날짜, 네트워크 값을 테스트용으로 생성합니다.",
+    subtitle: "이름, 이메일, 숫자, UUID, 날짜, 네트워크 값을 테스트용으로 생성해요.",
     typeLabel: "데이터 유형",
     countLabel: "행 수",
     minLabel: "최소값",

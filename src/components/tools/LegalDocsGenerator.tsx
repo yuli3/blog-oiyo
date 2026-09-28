@@ -121,7 +121,7 @@ const LABELS: Record<Locale, Labels> = {
   },
   ko: {
     title: "법률 문서 생성기",
-    subtitle: "소개, 개인정보 처리방침, 이용약관 초안을 템플릿으로 만듭니다.",
+    subtitle: "소개, 개인정보 처리방침, 이용약관 초안을 템플릿으로 만들어요.",
     companyName: "회사명",
     email: "이메일",
     contact: "추가 연락처(선택)",
@@ -150,7 +150,7 @@ const LABELS: Record<Locale, Labels> = {
     previewEmpty: "미리보기가 여기에 표시됩니다",
     previewHint: "정보를 입력하고 문서 생성을 누르세요.",
     privacyNote: "입력값은 브라우저에서 문서 생성에만 사용되며 저장되거나 전송되지 않습니다.",
-    disclaimer: "이 템플릿은 초안 작성용이며 법률 자문이 아닙니다. 게시 전 전문가 검토를 받으세요.",
+    disclaimer: "이 템플릿은 초안 작성용이며 법률 자문이 아니에요. 게시 전 전문가 검토를 받으세요.",
     lastUpdated: "마지막 생성",
     businessTypes: { ecommerce: "이커머스", saas: "SaaS", consulting: "컨설팅", healthcare: "헬스케어", education: "교육", technology: "기술" },
     documentTypes: { about: "소개", privacy: "개인정보", terms: "약관" },

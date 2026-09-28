@@ -147,7 +147,7 @@ const COPY: Record<Locale, Copy> = {
   },
   ko: {
     title: "모자 사이즈 변환 — US · UK · EU · S/M/L",
-    subtitle: "모자 사이즈는 전부 머리둘레가 옷을 갈아입은 것입니다. 그 옷을 벗겨서 보여줍니다.",
+    subtitle: "모자 사이즈는 전부 머리둘레가 옷을 갈아입은 것이에요. 그 옷을 벗겨서 보여줘요.",
     reset: "초기화",
     fromLabel: "무엇으로 재나요",
     fromCm: "머리둘레 (cm)",

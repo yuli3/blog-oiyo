@@ -423,7 +423,7 @@ const UI: Record<
     grainsLabel: "추천 곡류",
     cautionsLabel: "주의사항",
     avoidLabel: "피해야 할 음식",
-    disclaimer: "* 모든 정보는 참고용입니다. 소아과 전문의와 상담을 권장합니다.",
+    disclaimer: "* 모든 정보는 참고용이에요. 소아과 전문의와 상담을 권장해요.",
   },
   en: {
     title: "Baby Food Scheduler",

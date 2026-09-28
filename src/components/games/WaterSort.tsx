@@ -6,7 +6,7 @@ const TUBE_CAPACITY = 4;
 
 const WaterSort: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
     const t = {
-        ko: { title: "워터 소트 (Water Sort)", desc: "같은 색깔의 물을 정렬하세요!", reset: "판 갈기", win: "순수하게 정제되었습니다!" },
+        ko: { title: "워터 소트 (Water Sort)", desc: "같은 색깔의 물을 정렬하세요!", reset: "판 갈기", win: "순수하게 정제되었어요!" },
         en: { title: "Water Sort", desc: "Sort matching colored water into tubes!", reset: "Restart", win: "Purely Purified!" }
     }[locale === 'ko' ? 'ko' : 'en'];
 

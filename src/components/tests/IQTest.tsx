@@ -50,7 +50,7 @@ const UI: Record<
 > = {
   ko: {
     title: "IQ 추정 테스트",
-    subtitle: "15문항 패턴·논리·공간·수열 문제로 지적 능력을 추정합니다",
+    subtitle: "15문항 패턴·논리·공간·수열 문제로 지적 능력을 추정해요",
     startBtn: "테스트 시작",
     nextBtn: "다음",
     prevBtn: "이전",
@@ -66,7 +66,7 @@ const UI: Record<
     incorrect: "오답",
     explanation: "해설",
     reviewBtn: "문제 리뷰",
-    disclaimer: "이 결과는 재미를 위한 추정치입니다. 정확한 IQ 측정은 공인된 전문가 검사를 이용해주세요.",
+    disclaimer: "이 결과는 재미를 위한 추정치예요. 정확한 IQ 측정은 공인된 전문가 검사를 이용해주세요.",
     typeLabels: { number: "수열", pattern: "패턴", logic: "논리", spatial: "공간", verbal: "언어" },
     bands: {
       "130+": { label: "최우수 (130+)", description: "상위 2% — 매우 뛰어난 지적 능력" },

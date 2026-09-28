@@ -28,7 +28,7 @@ const LABELS: Record<Locale, Labels> = {
   },
   ko: {
     title: "각도 변환기",
-    subtitle: "도, 라디안, 그라드를 즉시 서로 변환합니다.",
+    subtitle: "도, 라디안, 그라드를 즉시 서로 변환해요.",
     valueLabel: "각도 값",
     unitLabel: "입력 단위",
     placeholder: "숫자를 입력하세요",

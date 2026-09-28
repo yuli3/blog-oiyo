@@ -29,7 +29,7 @@ const ko = {
   improvement: '개선',
   currentValue: '평가금액',
   unrealizedPnl: '미실현 손익',
-  disclaimer: '* 거래 수수료 및 세금은 반영되지 않습니다.',
+  disclaimer: '* 거래 수수료 및 세금은 반영되지 않아요.',
 };
 
 const en = {

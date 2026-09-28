@@ -103,7 +103,7 @@ const UI: Record<
     resultTitle: "궁합 점수",
     selectMbti1: "첫 번째 MBTI",
     selectMbti2: "두 번째 MBTI",
-    disclaimer: "* 재미로 보는 계산기입니다",
+    disclaimer: "* 재미로 보는 계산기예요",
     messages: [
       [90, "💍", "운명적인 만남! 소울메이트예요."],
       [70, "💕", "잘 어울리는 커플이에요!"],

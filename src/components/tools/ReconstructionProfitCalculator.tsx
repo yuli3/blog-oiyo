@@ -48,7 +48,7 @@ const LABELS: Record<Locale, Labels> = {
     gradePoor: "나쁨",
     unit: "만원",
     reset: "초기화",
-    disclaimer: "본 계산기는 참고용입니다. 실제 수익은 시장 상황에 따라 달라질 수 있습니다.",
+    disclaimer: "본 계산기는 참고용이에요. 실제 수익은 시장 상황에 따라 달라질 수 있어요.",
   },
   en: {
     title: "Reconstruction Profit Calculator",

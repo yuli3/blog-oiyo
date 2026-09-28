@@ -8,7 +8,7 @@ type Card = { suit: typeof SUITS[number]; value: string; power: number };
 
 const HeartsGame: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
     const t = {
-        ko: { title: "하트 (Hearts)", desc: "하트와 스페이드 퀸을 피하세요!", player: "나", cpu: "경쟁자", score: "벌점", reset: "다시 시작", win: "최고! 리스크를 피했습니다.", lost: "아뿔싸! 벌점이 많네요." },
+        ko: { title: "하트 (Hearts)", desc: "하트와 스페이드 퀸을 피하세요!", player: "나", cpu: "경쟁자", score: "벌점", reset: "다시 시작", win: "최고! 리스크를 피했어요.", lost: "아뿔싸! 벌점이 많네요." },
         en: { title: "Hearts Card Game", desc: "Avoid Hearts and the Queen of Spades!", player: "You", cpu: "CPUs", score: "Penalty", reset: "Restart", win: "Great! Risk avoided.", lost: "Oops! High penalty." }
     }[locale === 'ko' ? 'ko' : 'en'];
 

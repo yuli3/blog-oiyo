@@ -17,7 +17,7 @@ const LABELS: Record<Locale, {
   ko: {
     title: '월급 실수령액 계산기',
     subtitle: '2024년 기준 4대 보험 + 소득세 자동 계산',
-    note: '이 계산기는 참고용입니다. 실제 공제액은 회사 규정·소득공제 항목에 따라 달라질 수 있습니다.',
+    note: '이 계산기는 참고용이에요. 실제 공제액은 회사 규정·소득공제 항목에 따라 달라질 수 있어요.',
     grossLabel: '월 세전 급여 (만원)', dependentsLabel: '부양가족 수 (본인 포함)',
     nonTaxableLabel: '비과세 수당 (만원, 식대 등)',
     calculate: '계산하기', reset: '초기화',

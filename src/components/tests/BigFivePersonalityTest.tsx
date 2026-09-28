@@ -80,7 +80,7 @@ const LABELS: Record<SupportedLang, {
     secondaryTrait: '보조 특성',
     traitProfile: '차원별 분석',
     scoreLabel: '점수',
-    note: '이 테스트는 학술적 빅파이브 모델을 기반으로 하며, 전문적 진단을 대체하지 않습니다.',
+    note: '이 테스트는 학술적 빅파이브 모델을 기반으로 하며, 전문적 진단을 대체하지 않아요.',
     high: '높음',
     medium: '보통',
     low: '낮음',

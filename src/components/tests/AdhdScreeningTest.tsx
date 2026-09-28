@@ -55,8 +55,8 @@ const LABELS: Record<SupportedLang, {
     flagsOf: (n) => `${n} / 6항목`,
     guidanceLabel: '다음 단계 안내',
     disclaimerLabel: '중요 안내',
-    note: 'WHO ASRS Part A를 기반으로 한 참고용 도구입니다. 전문적 진단을 대체하지 않습니다.',
-    disclaimer: '이 테스트는 진단 도구가 아닙니다. 결과는 전문가 상담 전 참고 자료로만 활용하세요.',
+    note: 'WHO ASRS Part A를 기반으로 한 참고용 도구예요. 전문적 진단을 대체하지 않아요.',
+    disclaimer: '이 테스트는 진단 도구가 아니에요. 결과는 전문가 상담 전 참고 자료로만 활용하세요.',
   },
   en: {
     title: 'Adult ADHD Self-Screening',
@@ -147,7 +147,7 @@ const RESULTS: Record<FlagLevel, Record<SupportedLang, ResultData>> = {
     ko: {
       badge: '💚',
       title: '일반적 범위',
-      subtitle: '현재 ADHD 관련 특성이 두드러지지 않습니다',
+      subtitle: '현재 ADHD 관련 특성이 두드러지지 않아요',
       description: '응답 결과 ADHD 관련 특성이 일반적인 범위 안에 있습니다. 일상에서 집중과 조직화에 큰 어려움이 없는 편입니다.',
       guidance: [
         '현재 생활 패턴을 유지하세요',
@@ -182,7 +182,7 @@ const RESULTS: Record<FlagLevel, Record<SupportedLang, ResultData>> = {
     ko: {
       badge: '💛',
       title: '일부 특성 관찰',
-      subtitle: '일부 ADHD 관련 특성이 나타납니다',
+      subtitle: '일부 ADHD 관련 특성이 나타나요',
       description: 'ADHD와 관련된 일부 특성이 관찰됩니다. 특정 상황에서 집중이나 조직화에 어려움을 느낄 수 있습니다. 이는 스트레스, 수면 부족, 또는 환경적 요인으로도 나타날 수 있습니다.',
       guidance: [
         '집중을 방해하는 환경 요인(소음, 알림 등)을 줄여보세요',
@@ -220,7 +220,7 @@ const RESULTS: Record<FlagLevel, Record<SupportedLang, ResultData>> = {
     ko: {
       badge: '🧡',
       title: '여러 항목 신호',
-      subtitle: '여러 ADHD 관련 특성이 확인됩니다',
+      subtitle: '여러 ADHD 관련 특성이 확인돼요',
       description: '여러 ADHD 관련 특성이 관찰됩니다. 집중, 조직화, 충동 조절 등에서 반복적인 어려움을 경험하고 있을 수 있습니다. 전문가와의 상담이 도움이 될 수 있습니다.',
       guidance: [
         '정신건강의학과 또는 심리 전문가와의 상담을 권장합니다',
@@ -258,7 +258,7 @@ const RESULTS: Record<FlagLevel, Record<SupportedLang, ResultData>> = {
     ko: {
       badge: '❤️',
       title: '강한 신호',
-      subtitle: 'ADHD 특성이 강하게 나타납니다',
+      subtitle: 'ADHD 특성이 강하게 나타나요',
       description: 'ADHD와 관련된 특성이 여러 영역에서 강하게 나타나고 있습니다. 이 결과는 진단이 아니지만, 전문가의 평가를 받아보시길 진심으로 권장합니다. ADHD는 발견하면 효과적으로 도움받을 수 있는 조건입니다.',
       guidance: [
         '정신건강의학과 전문의 방문을 강력히 권장합니다',

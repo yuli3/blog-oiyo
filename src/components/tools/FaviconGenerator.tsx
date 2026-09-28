@@ -38,15 +38,15 @@ const LABELS: Record<Locale, Labels> = {
   },
   ko: {
     title: "파비콘 생성기",
-    subtitle: "로컬 이미지 하나로 주요 PNG 파비콘 크기를 만듭니다.",
+    subtitle: "로컬 이미지 하나로 주요 PNG 파비콘 크기를 만들어요.",
     upload: "이미지 선택",
     replace: "다른 이미지 선택",
     download: "다운로드",
     preview: "미리보기",
-    empty: "정사각형 로고나 이미지를 선택하세요. 각 PNG는 캔버스에서 로컬로 렌더링됩니다.",
+    empty: "정사각형 로고나 이미지를 선택하세요. 각 PNG는 캔버스에서 로컬로 렌더링돼요.",
     invalid: "올바른 이미지 파일을 선택하세요.",
     generated: "생성된 PNG 크기",
-    privacy: "로컬 처리: 원본 이미지는 브라우저에서 렌더링되며 업로드되지 않습니다.",
+    privacy: "로컬 처리: 원본 이미지는 브라우저에서 렌더링되며 업로드되지 않아요.",
   },
   ja: {
     title: "ファビコン生成ツール",

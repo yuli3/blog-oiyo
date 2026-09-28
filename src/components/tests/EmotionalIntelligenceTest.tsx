@@ -132,12 +132,12 @@ const ui: Record<SupportedLocale, {
   affirmation: string; restart: string; share: string; copied: string; note: string;
 }> = {
   ko: {
-    title: "감성 지능(EQ) 테스트", subtitle: "다니엘 골먼의 5가지 EQ 요소를 진단합니다",
+    title: "감성 지능(EQ) 테스트", subtitle: "다니엘 골먼의 5가지 EQ 요소를 진단해요",
     scale: "이 문장에 얼마나 동의하시나요?", progress: "질문",
     resultTitle: "나의 EQ 프로파일", total: "총점", dimScores: "5가지 EQ 요소 점수",
     growth: "성장 방법", affirmation: "오늘의 확언",
     restart: "다시 테스트하기", share: "결과 공유", copied: "링크가 복사되었습니다!",
-    note: "이 테스트는 다니엘 골먼(Daniel Goleman)의 EQ 이론에 기반하며, 자기 이해를 위한 참고 자료입니다.",
+    note: "이 테스트는 다니엘 골먼(Daniel Goleman)의 EQ 이론에 기반하며, 자기 이해를 위한 참고 자료예요.",
   },
   en: {
     title: "Emotional Intelligence (EQ) Test", subtitle: "Assess Goleman's 5 dimensions of EQ",

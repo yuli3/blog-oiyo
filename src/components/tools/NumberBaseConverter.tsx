@@ -28,12 +28,12 @@ const LABELS: Record<Locale, Labels> = {
   },
   ko: {
     title: "진법 변환기",
-    subtitle: "10진수, 2진수, 8진수, 16진수를 즉시 변환합니다.",
+    subtitle: "10진수, 2진수, 8진수, 16진수를 즉시 변환해요.",
     inputLabel: "입력값",
     fromBaseLabel: "입력 진법",
     resultsTitle: "변환 결과",
     placeholder: "값을 입력하세요",
-    invalid: "선택한 진법에 맞지 않는 자릿수가 포함되어 있습니다.",
+    invalid: "선택한 진법에 맞지 않는 자릿수가 포함되어 있어요.",
     baseLabels: { 2: "2진수", 8: "8진수", 10: "10진수", 16: "16진수" },
   },
   ja: {

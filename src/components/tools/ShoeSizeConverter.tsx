@@ -115,7 +115,7 @@ const COPY: Record<Locale, Copy> = {
   },
   ko: {
     title: "남성 ↔ 여성 신발 사이즈 변환",
-    subtitle: "발 길이를 거쳐 변환하므로 숫자가 어디서 나왔는지 보입니다",
+    subtitle: "발 길이를 거쳐 변환하므로 숫자가 어디서 나왔는지 보여요",
     reset: "초기화",
     fromLabel: "무엇으로 입력하나요",
     men: "US 남성",

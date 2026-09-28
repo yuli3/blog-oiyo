@@ -30,7 +30,7 @@ const LABELS: Record<Locale, Labels> = {
   },
   ko: {
     title: "과학적 표기법 변환기",
-    subtitle: "일반 숫자와 a × 10^n 표기를 서로 변환합니다.",
+    subtitle: "일반 숫자와 a × 10^n 표기를 서로 변환해요.",
     normalTitle: "일반 숫자 → 과학적 표기",
     normalLabel: "일반 숫자",
     sciTitle: "과학적 표기 → 일반 숫자",

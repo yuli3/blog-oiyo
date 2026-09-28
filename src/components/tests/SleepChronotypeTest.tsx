@@ -42,7 +42,7 @@ const LABELS: Record<SupportedLang, {
     optimalSleep: '최적 수면 시간',
     traits: '주요 특성',
     tips: '실천 팁',
-    note: '이 테스트는 Dr. Michael Breus의 크로노타입 모델을 기반으로 합니다. 전문적 진단을 대체하지 않습니다.',
+    note: '이 테스트는 Dr. Michael Breus의 크로노타입 모델을 기반으로 해요. 전문적 진단을 대체하지 않아요.',
   },
   en: {
     title: 'Sleep Chronotype Test',

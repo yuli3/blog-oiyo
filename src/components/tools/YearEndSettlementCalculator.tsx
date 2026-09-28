@@ -28,7 +28,7 @@ const YearEndSettlementCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
             creditCardDeduction: "신용카드 소득공제",
             pensionDeduction: "연금저축 세액공제",
             medicalDeduction: "의료비 세액공제",
-            note: "* 간이 계산 기준이며 실제 연말정산 결과와 차이가 있을 수 있습니다. 국세청 홈택스를 통해 정확한 계산을 권장합니다.",
+            note: "* 간이 계산 기준이며 실제 연말정산 결과와 차이가 있을 수 있어요. 국세청 홈택스를 통해 정확한 계산을 권장해요.",
         },
         en: {
             title: "Year-End Tax Settlement Estimator",

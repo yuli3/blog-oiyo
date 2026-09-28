@@ -119,7 +119,7 @@ const UI: Record<
 > = {
   ko: {
     title: "예방접종 스케줄러",
-    subtitle: "아이 생년월일을 입력하면 예방접종 일정을 알려드립니다",
+    subtitle: "아이 생년월일을 입력하면 예방접종 일정을 알려드려요",
     dobLabel: "아이 생년월일",
     dobPlaceholder: "",
     generateBtn: "일정 확인하기",

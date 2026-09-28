@@ -83,7 +83,7 @@ const RATIOS: Ratio[] = [
 
 interface Ui { title: string; subtitle: string; pick: string; bs: string; is: string; assets: string; liabeq: string; formula: string; result: string; healthy: string; watch: string; unit: string; note: string; }
 const L: Partial<Record<Locale, Ui>> = {
-  ko: { title: '재무비율 탐색기', subtitle: '비율을 고르면 재무제표에서 분자·분모가 색으로 이어집니다', pick: '재무비율 선택', bs: '재무상태표 (B/S)', is: '손익계산서 (I/S)', assets: '자산', liabeq: '부채 · 자본', formula: '공식', result: '결과', healthy: '양호', watch: '주의', unit: '백만원', note: '예시용 가상 회사 수치입니다. 적정 기준은 업종·상황에 따라 다르며, 투자·재무 판단의 근거로 삼지 마세요.' },
+  ko: { title: '재무비율 탐색기', subtitle: '비율을 고르면 재무제표에서 분자·분모가 색으로 이어져요', pick: '재무비율 선택', bs: '재무상태표 (B/S)', is: '손익계산서 (I/S)', assets: '자산', liabeq: '부채 · 자본', formula: '공식', result: '결과', healthy: '양호', watch: '주의', unit: '백만원', note: '예시용 가상 회사 수치예요. 적정 기준은 업종·상황에 따라 다르며, 투자·재무 판단의 근거로 삼지 마세요.' },
   en: { title: 'Financial Ratio Explorer', subtitle: 'Pick a ratio — its numerator and denominator light up in the statements', pick: 'Pick a ratio', bs: 'Balance Sheet (B/S)', is: 'Income Statement (I/S)', assets: 'Assets', liabeq: 'Liabilities & Equity', formula: 'Formula', result: 'Result', healthy: 'Healthy', watch: 'Watch', unit: 'KRW mn', note: 'Figures are an illustrative sample company. Healthy ranges vary by industry; do not use as a basis for investment decisions.' },
 };
 

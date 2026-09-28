@@ -5,7 +5,7 @@ type Card = { suit: 'hearts' | 'diamonds' | 'clubs' | 'spades'; value: string; p
 
 const FreeCell: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
     const t = {
-        ko: { title: "프리셀 (FreeCell)", desc: "빈 공간을 활용해 모든 카드를 정리하세요!", reset: "다시 시작", win: "완벽한 알고리즘! 성공입니다." },
+        ko: { title: "프리셀 (FreeCell)", desc: "빈 공간을 활용해 모든 카드를 정리하세요!", reset: "다시 시작", win: "완벽한 알고리즘! 성공이에요." },
         en: { title: "FreeCell", desc: "Use the free cells to organize all cards!", reset: "Restart", win: "Perfect Algorithm! Victory." }
     }[locale === 'ko' ? 'ko' : 'en'];
 

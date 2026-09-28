@@ -173,7 +173,7 @@ const UI: Record<Locale, {
     yearsLeft: (n) => `적령기까지 약 ${n}년 남았어요`,
     inRange: "지금이 바로 적령기입니다! 🎉",
     pastPeak: "통계적 적령기는 지났지만, 결혼에 늦은 나이는 없어요 😊",
-    disclaimer: "* 통계와 성향 데이터 기반의 재미 계산기입니다",
+    disclaimer: "* 통계와 성향 데이터 기반의 재미 계산기예요",
     occupationNames: {
       employee: "직장인",
       selfEmployed: "자영업",

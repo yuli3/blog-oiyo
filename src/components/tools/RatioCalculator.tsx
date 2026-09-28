@@ -34,7 +34,7 @@ const LABELS: Record<Locale, Labels> = {
   },
   ko: {
     title: "비율 계산기",
-    subtitle: "a:b 비율을 기약화하고 a:b = c:x 비례식의 x를 구합니다.",
+    subtitle: "a:b 비율을 기약화하고 a:b = c:x 비례식의 x를 구해요.",
     simplifyTitle: "a:b 기약화",
     solveTitle: "a:b = c:x 풀기",
     aLabel: "a",
@@ -44,7 +44,7 @@ const LABELS: Record<Locale, Labels> = {
     placeholder: "숫자를 입력하세요",
     simplifyResult: (a, b) => `기약비: ${a}:${b}`,
     solveResult: (x) => `x = ${x}`,
-    invalid: "올바른 숫자를 입력하세요. a:b = c:x에서는 a가 0일 수 없습니다.",
+    invalid: "올바른 숫자를 입력하세요. a:b = c:x에서는 a가 0일 수 없어요.",
   },
   ja: {
     title: "比率計算機",

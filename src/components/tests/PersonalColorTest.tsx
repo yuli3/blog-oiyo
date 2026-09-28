@@ -45,7 +45,7 @@ const UI: Record<Locale, {
     makeupLabel: "메이크업 추천",
     fashionLabel: "패션 스타일",
     celebsLabel: "같은 타입 셀럽",
-    disclaimer: "퍼스널 컬러 진단은 전문 컨설턴트 방문 시 더 정확한 결과를 얻을 수 있습니다.",
+    disclaimer: "퍼스널 컬러 진단은 전문 컨설턴트 방문 시 더 정확한 결과를 얻을 수 있어요.",
   },
   en: {
     title: "Personal Color Test",

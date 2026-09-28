@@ -23,7 +23,7 @@ const VatCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
             vatPayable: "납부할 VAT",
             vatRefund: "환급 VAT",
             quarterlyNote: "* 예정신고 기준 간이 계산입니다. 실제 신고 시 정확한 세무 처리가 필요합니다.",
-            note: "* 한국 부가가치세율은 표준 10%입니다. 영세율·면세 품목은 별도 확인하세요.",
+            note: "* 한국 부가가치세율은 표준 10%예요. 영세율·면세 품목은 별도 확인하세요.",
         },
         en: {
             title: "VAT Calculator",

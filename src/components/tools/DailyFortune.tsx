@@ -47,7 +47,7 @@ const UI: Record<
 > = {
   ko: {
     title: "오늘의 운세",
-    subtitle: "생년월일을 입력하면 오늘의 운세를 알려드립니다",
+    subtitle: "생년월일을 입력하면 오늘의 운세를 알려드려요",
     birthLabel: "생년월일",
     birthPlaceholder: "생년월일을 선택하세요",
     submitBtn: "운세 보기",

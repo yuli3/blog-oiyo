@@ -12,7 +12,7 @@ const LABELS: Record<Locale, {
     title: '타이핑 속도 테스트', subtitle: '1분간 얼마나 빠르고 정확하게 타이핑할 수 있나요?',
     start: '시작하기', restart: '다시 하기', stop: '중단',
     wpm: 'WPM (분당 단어)', cpm: 'CPM (분당 글자)', accuracy: '정확도', time: '남은 시간', errors: '오류',
-    result: '결과', typeHere: '아래 텍스트를 입력하세요', waiting: '시작을 누르면 타이머가 시작됩니다',
+    result: '결과', typeHere: '아래 텍스트를 입력하세요', waiting: '시작을 누르면 타이머가 시작돼요',
     finished: '완료!',
     level: (wpm) => wpm >= 80 ? '타이핑 고수 ⚡' : wpm >= 50 ? '중급자 👍' : wpm >= 30 ? '초보자 📝' : '연습이 필요해요 💪',
   },

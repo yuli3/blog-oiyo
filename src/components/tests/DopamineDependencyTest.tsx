@@ -17,7 +17,7 @@ const LABELS: Record<Locale, {
     yourLevel: '나의 도파민 의존 수준',
     scoreLabel: '의존도 점수', outOf: '/ 50점',
     symptoms: '나타나는 패턴', tips: '균형 회복 전략',
-    note: '이 진단은 의학적 진단을 대체하지 않습니다. 심각하다면 전문가의 도움을 받으세요.',
+    note: '이 진단은 의학적 진단을 대체하지 않아요. 심각하다면 전문가의 도움을 받으세요.',
     scaleLabels: ['전혀 없다', '거의 없다', '가끔', '자주', '항상'],
     progress: (c, t) => `${c} / ${t}`,
   },

@@ -57,7 +57,7 @@ const LABELS: Record<Locale, Labels> = {
   },
   ko: {
     title: "통합 변환기",
-    subtitle: "텍스트·진법·2진수·날짜를 한 곳에서 변환하는 개발자용 도구입니다.",
+    subtitle: "텍스트·진법·2진수·날짜를 한 곳에서 변환하는 개발자용 도구예요.",
     tabs: { ascii: "텍스트", base: "진법", binary: "2진수", roman: "로마숫자" },
     asciiTitle: "텍스트 → 2진수 & 16진수",
     asciiInput: "텍스트",

@@ -157,7 +157,7 @@ const COPY: Record<Locale, Copy> = {
   },
   ko: {
     title: "반지 호수 변환 — US · UK · EU · 일본/한국",
-    subtitle: "손가락 실측치를 거쳐 변환하므로 숫자가 어디서 나왔는지 보입니다",
+    subtitle: "손가락 실측치를 거쳐 변환하므로 숫자가 어디서 나왔는지 보여요",
     reset: "초기화",
     fromLabel: "무엇으로 입력하나요",
     fromCirc: "손가락 둘레",

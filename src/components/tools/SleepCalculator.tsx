@@ -52,7 +52,7 @@ const COPY: Record<Lang, Copy> = {
         chronotypeShort: { early: '아침형', normal: '중간형', late: '저녁형' },
         sleepDebt: '수면 부채 계산기', actualSleep: '어젯밤 실제 수면 시간 (시간)', debtResult: '수면 부채', none: '없음',
         fallAsleep: '잠들기까지 약 14분 소요 포함',
-        cycleTitle: '밤 사이 주기', cycleHint: '주기 사이(얕은 잠)에서 깨면 같은 시간을 자도 덜 피곤합니다. 세로선이 권장 기상 시각입니다.',
+        cycleTitle: '밤 사이 주기', cycleHint: '주기 사이(얕은 잠)에서 깨면 같은 시간을 자도 덜 피곤해요. 세로선이 권장 기상 시각이에요.',
         cycleLegendDeep: '깊은 잠', cycleLegendRem: '렘', cycleLegendWake: '얕은 잠 · 깨기 좋은 지점',
     },
     en: {

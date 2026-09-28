@@ -51,7 +51,7 @@ const L: Record<Locale, {
     ],
     won: "만원",
     pct: "%",
-    note: "* 세후 월급은 근로소득세·4대보험 간이 계산 기준입니다.",
+    note: "* 세후 월급은 근로소득세·4대보험 간이 계산 기준이에요.",
   },
   en: {
     title: "Salary Negotiation Simulator",

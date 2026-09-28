@@ -52,7 +52,7 @@ const LoremIpsumGenerator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
         generate: '생성하기',
         copy: '복사',
         copied: '복사됨',
-        placeholder: '생성하기 버튼을 누르면 텍스트가 나타납니다.',
+        placeholder: '생성하기 버튼을 누르면 텍스트가 나타나요.',
       }
     : {
         title: 'Lorem Ipsum Generator',

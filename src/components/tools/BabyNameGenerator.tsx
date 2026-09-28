@@ -179,7 +179,7 @@ const UI: Record<
     generateBtn: "이름 추천받기",
     resultTitle: "추천 이름",
     noResult: "조건에 맞는 이름이 없습니다. 다른 조합을 시도해보세요.",
-    disclaimer: "* 이름 추천은 참고용입니다. 작명 전문가와 상담을 권장합니다.",
+    disclaimer: "* 이름 추천은 참고용이에요. 작명 전문가와 상담을 권장해요.",
     elementLabel: "오행",
     genders: { boy: "남아", girl: "여아", neutral: "중립" },
     styles: { "korean-traditional": "한국 전통", modern: "현대 세련", english: "영어풍", japanese: "일본풍" },

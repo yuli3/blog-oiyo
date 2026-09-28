@@ -19,7 +19,7 @@ const SalaryCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' })
             incomeTax: "근로소득세",
             localTax: "지방소득세",
             totalDeduction: "총 공제액",
-            note: "* 근로소득세는 간이세액표 기준 추정치입니다. 실제 납부액은 연말정산 후 확정됩니다.",
+            note: "* 근로소득세는 간이세액표 기준 추정치예요. 실제 납부액은 연말정산 후 확정돼요.",
         },
         en: {
             title: "Salary Net Pay Calculator",

@@ -61,7 +61,7 @@ const ko = {
   jeonseTip: 'HUG 전세보증보험 기준 90% 이내 권장',
   calculate: '계산하기',
   reset: '초기화',
-  disclaimer: '* 참고용 계산기입니다. 실제 계약 전 전문가 상담을 권장합니다.',
+  disclaimer: '* 참고용 계산기예요. 실제 계약 전 전문가 상담을 권장해요.',
 };
 
 const en = {

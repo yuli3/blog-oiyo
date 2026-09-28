@@ -23,7 +23,7 @@ const LABELS: Record<Locale, {
     currency: '만원', monthly: '월',  annual: '연',
     milestones: '자산 마일스톤', scenario: '시나리오',
     conservative: '보수적 (연 3%)', moderate: '중간 (연 6%)', aggressive: '적극적 (연 9%)',
-    note: '이 시뮬레이터는 참고용입니다. 실제 투자 수익은 보장되지 않습니다.',
+    note: '이 시뮬레이터는 참고용이에요. 실제 투자 수익은 보장되지 않아요.',
     yearLabel: '년 후', finalLabel: '최종 예상 자산',
   },
   en: {

@@ -31,7 +31,7 @@ const LABELS: Record<Locale, Labels> = {
   },
   ko: {
     title: "이미지 픽셀화 도구",
-    subtitle: "평균 색상 블록으로 개인정보 보호나 픽셀아트 느낌을 만듭니다.",
+    subtitle: "평균 색상 블록으로 개인정보 보호나 픽셀아트 느낌을 만들어요.",
     upload: "이미지 선택",
     replace: "다른 이미지 선택",
     download: "PNG 다운로드",
@@ -39,7 +39,7 @@ const LABELS: Record<Locale, Labels> = {
     preview: "픽셀화 미리보기",
     empty: "로컬 이미지를 선택하고 블록 크기를 조절하세요.",
     invalid: "올바른 이미지 파일을 선택하세요.",
-    privacy: "로컬 처리: FileReader로 이미지를 읽고 캔버스에 다시 그립니다.",
+    privacy: "로컬 처리: FileReader로 이미지를 읽고 캔버스에 다시 그려요.",
   },
   ja: {
     title: "画像ピクセル化ツール",

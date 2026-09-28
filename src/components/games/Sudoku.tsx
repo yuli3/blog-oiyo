@@ -3,7 +3,7 @@ import { GameContainer } from '../ui/game/GamePrimitives';
 
 const Sudoku: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
     const t = {
-        ko: { title: "스도쿠 (Sudoku)", desc: "1부터 9까지 겹치지 않게 숫자를 채워보세요!", reset: "판 갈기", win: "완벽한 논리력입니다!" },
+        ko: { title: "스도쿠 (Sudoku)", desc: "1부터 9까지 겹치지 않게 숫자를 채워보세요!", reset: "판 갈기", win: "완벽한 논리력이에요!" },
         en: { title: "Sudoku", desc: "Fill in numbers 1-9 without overlap!", reset: "Restart", win: "Perfect Logic!" }
     }[locale === 'ko' ? 'ko' : 'en'];
 

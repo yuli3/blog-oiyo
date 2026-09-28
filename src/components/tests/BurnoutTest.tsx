@@ -23,7 +23,7 @@ const LABELS: Record<Locale, {
     restart: '다시 하기', share: '결과 공유', shareMsg: '내 번아웃 수준은',
     yourLevel: '나의 번아웃 수준', symptoms: '주요 증상', recovery: '회복 전략',
     warning: '주의', affirmation: '오늘의 메시지', scoreLabel: '번아웃 점수',
-    outOf: '/ 40점', note: '이 테스트는 전문적 진단을 대체하지 않습니다. 증상이 심각하면 전문가의 도움을 받으세요.',
+    outOf: '/ 40점', note: '이 테스트는 전문적 진단을 대체하지 않아요. 증상이 심각하면 전문가의 도움을 받으세요.',
   },
   en: {
     title: 'Burnout Self-Check', subtitle: 'How exhausted are you right now?',
@@ -87,11 +87,11 @@ const QUESTIONS: Record<Locale, Question[]> = {
 const RESULTS: Record<Level, Record<Locale, ResultData>> = {
   high: {
     ko: {
-      title: '심각한 번아웃', subtitle: '지금 당신에게는 진짜 휴식이 필요합니다',
+      title: '심각한 번아웃', subtitle: '지금 당신에게는 진짜 휴식이 필요해요',
       description: '번아웃이 심각한 상태입니다. 신체적·정서적·인지적 고갈이 동시에 일어나고 있습니다. 지금 당장 속도를 줄이고, 전문가의 도움을 받는 것을 진지하게 고려하세요.',
       symptoms: ['극심한 정서적 고갈', '냉소주의와 무관심', '업무 효율 급감', '신체 증상(두통, 불면, 소화장애)'],
       recovery: ['즉각적인 업무 부하 감소', '신뢰할 수 있는 사람과 대화', '전문 상담사 또는 의사 방문', '디지털 디톡스 실천', '가장 기본적인 자기 돌봄(수면, 식사, 걷기)'],
-      warning: '번아웃은 의지력으로 극복하는 것이 아닙니다. 스스로 해결하려고 혼자 버티지 마세요.',
+      warning: '번아웃은 의지력으로 극복하는 것이 아니에요. 스스로 해결하려고 혼자 버티지 마세요.',
       affirmation: '쉬는 것은 게으름이 아닙니다. 지금 당신에게 필요한 가장 용감한 행동은 멈추는 것입니다.',
     },
     en: {
@@ -113,11 +113,11 @@ const RESULTS: Record<Level, Record<Locale, ResultData>> = {
   },
   medium: {
     ko: {
-      title: '중간 수준의 번아웃', subtitle: '경고 신호가 켜지고 있습니다',
+      title: '중간 수준의 번아웃', subtitle: '경고 신호가 켜지고 있어요',
       description: '번아웃의 중간 단계입니다. 아직 회복 가능한 시점이지만, 지금 행동하지 않으면 심화될 수 있습니다. 생활 패턴을 점검하고 의도적인 회복 시간을 만들어야 합니다.',
       symptoms: ['만성적인 피로감', '감소하는 의욕과 집중력', '감정 기복 증가', '소소한 즐거움의 감소'],
       recovery: ['일과 휴식의 균형 재조정', '작은 즐거움을 의도적으로 만들기', '운동 또는 자연 속 시간', '할 일 목록 축소 및 우선순위 조정', '충분한 수면 확보'],
-      warning: '번아웃 초기 신호를 무시하면 회복에 더 오랜 시간이 걸립니다.',
+      warning: '번아웃 초기 신호를 무시하면 회복에 더 오랜 시간이 걸려요.',
       affirmation: '완벽하지 않아도 됩니다. 오늘 하루를 충분히 살아낸 당신은 이미 잘하고 있습니다.',
     },
     en: {
@@ -139,11 +139,11 @@ const RESULTS: Record<Level, Record<Locale, ResultData>> = {
   },
   low: {
     ko: {
-      title: '번아웃 위험 낮음', subtitle: '지금은 괜찮지만 예방이 중요합니다',
+      title: '번아웃 위험 낮음', subtitle: '지금은 괜찮지만 예방이 중요해요',
       description: '현재 번아웃 수준이 낮습니다. 하지만 번아웃은 갑자기 오는 것이 아니라 서서히 누적됩니다. 지금의 균형을 의도적으로 유지하는 것이 중요합니다.',
       symptoms: ['현재 주요 번아웃 증상 없음', '전반적인 기능 유지'],
       recovery: ['현재 생활 패턴 유지', '정기적인 자기 점검 습관', '즐거운 활동 꾸준히 유지', '경계 설정 연습'],
-      warning: '현재 괜찮더라도 무리한 일정이나 지속적인 스트레스는 번아웃을 불러올 수 있습니다.',
+      warning: '현재 괜찮더라도 무리한 일정이나 지속적인 스트레스는 번아웃을 불러올 수 있어요.',
       affirmation: '지금의 균형이 귀중합니다. 자신을 잘 돌보고 있는 당신을 응원합니다.',
     },
     en: {

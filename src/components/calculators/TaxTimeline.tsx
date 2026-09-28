@@ -136,10 +136,10 @@ function pct(month: number, day: number): number {
 const UI: Record<Lang, { title: string; subtitle: string; today: string; anytime: string; disclaimer: string }> = {
   ko: {
     title: '1년 세금 타임라인',
-    subtitle: '1월부터 12월까지, 세금별 신고·납부 기간을 가로로 펼쳤습니다. 좌우로 스크롤하세요.',
+    subtitle: '1월부터 12월까지, 세금별 신고·납부 기간을 가로로 펼쳤어요. 좌우로 스크롤하세요.',
     today: '오늘',
     anytime: '수시 (날짜가 정해져 있지 않은 세금)',
-    disclaimer: '기한이 주말·공휴일이면 다음 영업일로 연장됩니다. 정확한 기한은 국세청·위택스 고지 기준을 확인하세요.',
+    disclaimer: '기한이 주말·공휴일이면 다음 영업일로 연장돼요. 정확한 기한은 국세청·위택스 고지 기준을 확인하세요.',
   },
   en: {
     title: 'Korean tax deadlines — year at a glance',

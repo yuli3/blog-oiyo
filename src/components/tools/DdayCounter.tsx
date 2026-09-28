@@ -27,7 +27,7 @@ const L: Record<Locale, Labels> = {
     eventName: "이벤트 이름",
     eventDate: "목표 날짜",
     addBtn: "추가",
-    empty: "아직 등록된 D-Day가 없습니다",
+    empty: "아직 등록된 D-Day가 없어요",
     deleteBtn: "삭제",
     today: "오늘이에요!",
     maxReached: "최대 10개까지 등록할 수 있습니다.",

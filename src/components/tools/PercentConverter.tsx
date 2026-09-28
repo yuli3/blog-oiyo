@@ -57,7 +57,7 @@ const LABELS: Record<Locale, Labels> = {
   },
   ko: {
     title: "퍼센트 계산기",
-    subtitle: "자주 쓰는 백분율 계산 네 가지를 한곳에 모았습니다.",
+    subtitle: "자주 쓰는 백분율 계산 네 가지를 한곳에 모았어요.",
     ofTitle: "B의 A%는 얼마?",
     ofA: "퍼센트 (A)",
     ofB: "기준값 (B)",

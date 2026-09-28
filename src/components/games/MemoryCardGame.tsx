@@ -158,7 +158,7 @@ const MemoryCardGame: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =
       flips:  '뒤집기',
       matched: '맞춘 쌍',
       time:   '시간',
-      won:    '모두 맞췄습니다!',
+      won:    '모두 맞췄어요!',
       chooseLevel: '난이도를 선택하세요',
       pairs: (n: number, total: number) => `${n} / ${total} 쌍`,
     },

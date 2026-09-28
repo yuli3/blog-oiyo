@@ -57,7 +57,7 @@ const L: Record<Locale, {
     formula: "계산식: 월세 = (전세금 - 보증금) × 전환율 ÷ 12",
     won: "만원",
     wonUnit: "만원/월",
-    note: "* 법정 전월세 전환율은 기준금리+2%p 이내입니다. 실제 시장 전환율은 지역별로 상이할 수 있습니다.",
+    note: "* 법정 전월세 전환율은 기준금리+2%p 이내예요. 실제 시장 전환율은 지역별로 상이할 수 있어요.",
   },
   en: {
     title: "Jeonse ↔ Monthly Rent Converter",

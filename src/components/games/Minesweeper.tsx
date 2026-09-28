@@ -4,7 +4,7 @@ type Cell = { x: number; y: number; isMine: boolean; isRevealed: boolean; isFlag
 
 const Minesweeper: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
     const t = {
-        ko: { title: "지뢰찾기", mines: "남은 지뢰", time: "시간", over: "폭발! 게임 종료", win: "모든 지뢰를 찾았습니다!", reset: "새 게임" },
+        ko: { title: "지뢰찾기", mines: "남은 지뢰", time: "시간", over: "폭발! 게임 종료", win: "모든 지뢰를 찾았어요!", reset: "새 게임" },
         en: { title: "Minesweeper", mines: "Mines", time: "Time", over: "BOOM! Game Over", win: "You Win!", reset: "New Game" }
     }[locale === 'ko' ? 'ko' : 'en'];
 

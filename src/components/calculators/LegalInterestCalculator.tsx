@@ -31,7 +31,7 @@ const ko = {
   rateResultLabel: '적용 이율',
   totalLabel: '원금+이자 합계',
   error: '원금, 날짜를 올바르게 입력해 주세요.',
-  disclaimer: '* 단리 기준. 실제 법원 판결이나 계약 내용에 따라 다를 수 있습니다.',
+  disclaimer: '* 단리 기준. 실제 법원 판결이나 계약 내용에 따라 다를 수 있어요.',
   rates: {
     civil: { label: '민사 법정이자', desc: '연 5%', rate: 5 },
     commercial: { label: '상사 법정이자', desc: '연 6%', rate: 6 },

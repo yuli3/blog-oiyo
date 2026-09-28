@@ -30,7 +30,7 @@ const CapitalGainsTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale 
             totalTax: "총 납부세액",
             profitBeforeTax: "세전 수익",
             profitAfterTax: "세후 수익",
-            note: "* 간이 계산 기준이며 실제 세액은 국세청 확인 또는 세무사 상담을 권장합니다.",
+            note: "* 간이 계산 기준이며 실제 세액은 국세청 확인 또는 세무사 상담을 권장해요.",
             stockNote: "* 2025년 기준: 국내주식 소액주주 상장주식은 비과세. 금투세 시행 전 기준 적용.",
             foreignStockNote: "* 해외주식: 연간 양도차익 250만원 초과분에 대해 22% (지방세 포함) 적용.",
         },
