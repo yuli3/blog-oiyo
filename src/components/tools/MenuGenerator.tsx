@@ -191,7 +191,7 @@ export default function MenuGenerator() {
     const data = { title: '오늘 뭐 먹지?', text: `오늘 메뉴는 "${name}"으로 결정!`, url: window.location.href };
     try {
       if (navigator.share) await navigator.share(data);
-      else { await navigator.clipboard.writeText(`${data.text} ${data.url}`); alert('클립보드에 복사되었습니다!'); }
+      else { await navigator.clipboard.writeText(`${data.text} ${data.url}`); alert('클립보드에 복사했어요!'); }
     } catch (e) {
       if ((e as Error).name !== 'AbortError') console.error(e);
     }
