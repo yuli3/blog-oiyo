@@ -8,6 +8,7 @@
 - 새 MDX는 `data/catalog/content-inventory.master.csv` 행과 함께 변경한다. 카테고리는 `data/catalog/category-registry.yaml`에 먼저 등록하고 `npm run verify:harness`로 확인한다.
 - 마이그레이션 후보는 기존 audit/revisit-later 카탈로그와 연결한다. 불확실한 후보는 보류하고 기존 정본을 우선한다.
 - interactive는 첫 컴포넌트 전 산문 400자 이상을 기준으로 한다. 제목·import·컴포넌트·표는 산문에서 제외한다. `config/prose-min-baseline.json`의 기존 위반 기준을 높여 새 위반을 통과시키지 않는다.
+- 한국어 academy 본문 제목은 `## 1.` → `### 가.` → `#### 1)` 계층을 쓴다(2026-09-29 세운 요청 B4, 경영·경제·회계·법학이 기준 사례). 번호는 본문 절에만 붙이고 `핵심 요약`·`참고 자료`·`확인문제`·`자주 묻는 질문` 같은 부록 절은 번호 없이 둔다. 새 장과 손보는 장부터 맞추고, 여러 장을 한꺼번에 바꿀 때는 그 과목을 맡은 런타임과 겹치지 않는지 먼저 확인한다.
 - 실제 콘텐츠가 있는 로케일만 hreflang에 포함한다. `availableLocales` 흐름을 우회하거나 한국어 전용 문서의 외국어 alternate를 하드코딩하지 않는다.
 
 ## 렌더링
