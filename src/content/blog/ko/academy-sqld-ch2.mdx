@@ -20,15 +20,15 @@ pubDate: '2026-05-25'
 layoutVariant: lecture-series
 ---
 
-## DML(Data Manipulation Language) 심화
+## 1. DML(Data Manipulation Language) 심화
 
 SQLD 2과목의 핵심인 DML은 INSERT, UPDATE, DELETE, SELECT를 모두 포함합니다. 시험에서는 특히 **문법의 미묘한 차이**와 **실행 결과 예측**을 묻습니다.
 
 ---
 
-## INSERT 심화
+## 2. INSERT 심화
 
-### 기본 INSERT
+### 가. 기본 INSERT
 
 ```sql
 -- 단일 행 삽입
@@ -40,7 +40,7 @@ INSERT INTO employees
 VALUES (102, '이순신', 20, 6000000, SYSDATE);
 ```
 
-### 서브쿼리를 이용한 다중 행 삽입
+### 나. 서브쿼리를 이용한 다중 행 삽입
 
 ```sql
 -- 다른 테이블에서 데이터를 가져와 삽입
@@ -54,7 +54,7 @@ WHERE dept_id = 10;
 
 ---
 
-## UPDATE 심화
+## 3. UPDATE 심화
 
 ```sql
 -- 기본 UPDATE
@@ -68,7 +68,7 @@ SET salary = (SELECT AVG(salary) FROM employees)
 WHERE dept_id = 20;
 ```
 
-### UPDATE 시 주의사항
+### 가. UPDATE 시 주의사항
 
 ```sql
 -- WHERE 조건이 없으면 전체 행이 변경됨!
@@ -81,7 +81,7 @@ SET dept_id = (SELECT dept_id FROM departments);  -- 오류 (다중 행 반환)
 
 ---
 
-## DELETE vs TRUNCATE vs DROP
+## 4. DELETE vs TRUNCATE vs DROP
 
 | 구분 | DELETE | TRUNCATE | DROP |
 |------|--------|----------|------|
@@ -101,11 +101,11 @@ DROP TABLE employees;  -- 테이블 자체 삭제
 
 ---
 
-## JOIN 완전 정복
+## 5. JOIN 완전 정복
 
 JOIN은 SQLD에서 가장 많이 출제되는 개념입니다. 각 JOIN 유형의 결과 집합을 정확히 이해해야 합니다.
 
-### INNER JOIN (내부 조인)
+### 가. INNER JOIN (내부 조인)
 
 두 테이블에서 **조인 조건을 만족하는 행만** 반환합니다.
 
@@ -126,7 +126,7 @@ WHERE e.dept_id = d.dept_id;
 **departments**: [10:'영업', 20:'개발', 40:'인사']  
 INNER JOIN → A:영업, B:개발  (30, 40은 제외)
 
-### LEFT OUTER JOIN (좌측 외부 조인)
+### 나. LEFT OUTER JOIN (좌측 외부 조인)
 
 왼쪽 테이블의 **모든 행**을 반환하고, 오른쪽 테이블에 없으면 NULL.
 
@@ -137,7 +137,7 @@ LEFT OUTER JOIN departments d ON e.dept_id = d.dept_id;
 -- 결과: A:영업, B:개발, C:NULL
 ```
 
-### RIGHT OUTER JOIN (우측 외부 조인)
+### 다. RIGHT OUTER JOIN (우측 외부 조인)
 
 오른쪽 테이블의 **모든 행**을 반환하고, 왼쪽에 없으면 NULL.
 
@@ -148,7 +148,7 @@ RIGHT OUTER JOIN departments d ON e.dept_id = d.dept_id;
 -- 결과: A:영업, B:개발, NULL:인사
 ```
 
-### FULL OUTER JOIN
+### 라. FULL OUTER JOIN
 
 양쪽 테이블의 **모든 행**을 반환, 매칭되지 않으면 NULL.
 
@@ -159,7 +159,7 @@ FULL OUTER JOIN departments d ON e.dept_id = d.dept_id;
 -- 결과: A:영업, B:개발, C:NULL, NULL:인사
 ```
 
-### CROSS JOIN (교차 조인)
+### 마. CROSS JOIN (교차 조인)
 
 두 테이블의 **카티션 곱(모든 조합)** — 조인 조건 없음.
 
@@ -170,7 +170,7 @@ CROSS JOIN departments d;
 -- employees 3행 × departments 3행 = 9행
 ```
 
-### SELF JOIN (자기 참조 조인)
+### 바. SELF JOIN (자기 참조 조인)
 
 같은 테이블을 두 번 참조합니다.
 
@@ -183,9 +183,9 @@ LEFT JOIN employees m ON e.manager_id = m.emp_id;
 
 ---
 
-## 서브쿼리(Subquery) 완전 정복
+## 6. 서브쿼리(Subquery) 완전 정복
 
-### 단일 행 서브쿼리
+### 가. 단일 행 서브쿼리
 
 서브쿼리가 **1개의 값**을 반환 → `=, >, <, >=, <=, <>` 연산자 사용
 
@@ -196,7 +196,7 @@ FROM employees
 WHERE salary > (SELECT AVG(salary) FROM employees);
 ```
 
-### 다중 행 서브쿼리
+### 나. 다중 행 서브쿼리
 
 서브쿼리가 **여러 행**을 반환 → `IN, ANY, ALL` 연산자 사용
 
@@ -214,7 +214,7 @@ SELECT name FROM employees
 WHERE salary > ALL (SELECT salary FROM interns);
 ```
 
-### 상관(Correlated) 서브쿼리
+### 다. 상관(Correlated) 서브쿼리
 
 외부 쿼리의 값을 서브쿼리 안에서 참조 — **행마다 서브쿼리 실행**
 
@@ -231,9 +231,9 @@ WHERE e.salary > (
 
 ---
 
-## GROUP BY 고급 활용
+## 7. GROUP BY 고급 활용
 
-### HAVING vs WHERE
+### 가. HAVING vs WHERE
 
 ```sql
 -- WHERE: 그룹화 전 필터
@@ -246,7 +246,7 @@ GROUP BY dept_id
 HAVING AVG(salary) > 5000000;     -- 그룹 필터
 ```
 
-### ROLLUP과 CUBE
+### 나. ROLLUP과 CUBE
 
 ```sql
 -- ROLLUP: 계층적 소계
@@ -262,7 +262,7 @@ GROUP BY CUBE(dept_id, job_title);
 
 ---
 
-## 윈도우 함수(Window Function) 기초
+## 8. 윈도우 함수(Window Function) 기초
 
 SQLD에서 점점 비중이 높아지는 파트입니다.
 

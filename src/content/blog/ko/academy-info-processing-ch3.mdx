@@ -19,13 +19,13 @@ pubDate: '2026-05-25'
 layoutVariant: lecture-series
 ---
 
-## 운영체제(OS)란?
+## 1. 운영체제(OS)란?
 
 **운영체제(Operating System, OS)**는 컴퓨터 하드웨어와 사용자(응용 프로그램) 사이에서 중재자 역할을 하는 시스템 소프트웨어입니다. 하드웨어 자원을 효율적으로 관리하고, 사용자가 컴퓨터를 편리하게 사용할 수 있는 환경을 제공합니다.
 
 **대표적인 운영체제**: Windows, macOS, Linux, Android, iOS
 
-### 운영체제의 주요 기능
+### 가. 운영체제의 주요 기능
 
 | 기능 | 설명 |
 |------|------|
@@ -36,7 +36,7 @@ layoutVariant: lecture-series
 | **보안 및 보호** | 사용자 인증, 자원 접근 제어 |
 | **네트워킹** | 네트워크 프로토콜 지원, 통신 서비스 제공 |
 
-### 운영체제의 유형
+### 나. 운영체제의 유형
 
 - **일괄 처리 시스템(Batch Processing)**: 작업을 모아서 한꺼번에 처리. 사용자와의 상호작용 없음
 - **시분할 시스템(Time-Sharing)**: CPU 시간을 여러 사용자에게 분할하여 동시 사용 지원
@@ -46,9 +46,9 @@ layoutVariant: lecture-series
 
 ---
 
-## 프로세스 (Process)
+## 2. 프로세스 (Process)
 
-### 프로세스 vs 프로그램
+### 가. 프로세스 vs 프로그램
 
 | 구분 | 프로그램(Program) | 프로세스(Process) |
 |------|------------------|------------------|
@@ -68,7 +68,7 @@ layoutVariant: lecture-series
 | 데이터(Data) | 전역 변수, 정적 변수 |
 | 코드(Code) | 프로그램 명령어 (텍스트 영역) |
 
-### PCB (Process Control Block)
+### 나. PCB (Process Control Block)
 
 **PCB**는 운영체제가 각 프로세스를 관리하기 위해 유지하는 자료구조입니다.
 
@@ -81,7 +81,7 @@ layoutVariant: lecture-series
 - **입출력 상태 정보**: 열린 파일 목록
 - **우선순위**: 스케줄링에 사용
 
-### 프로세스 상태 전이 (Process State Transition)
+### 다. 프로세스 상태 전이 (Process State Transition)
 
 프로세스는 생명주기 동안 다음 5가지 상태를 전이합니다.
 
@@ -108,7 +108,7 @@ layoutVariant: lecture-series
 - **블록(Block)**: Running → Waiting (I/O 요청)
 - **웨이크업(Wake-up)**: Waiting → Ready (I/O 완료)
 
-### 프로세스 vs 스레드
+### 라. 프로세스 vs 스레드
 
 **스레드(Thread)**는 프로세스 내의 실행 단위입니다. 프로세스보다 가벼우며, 같은 프로세스 내 스레드들은 메모리(코드·데이터·힙)를 공유합니다.
 
@@ -125,11 +125,11 @@ layoutVariant: lecture-series
 
 ---
 
-## CPU 스케줄링
+## 3. CPU 스케줄링
 
 **CPU 스케줄링**은 준비 큐에 있는 프로세스들 중 어느 것을 CPU에 할당할지 결정하는 과정입니다.
 
-### 스케줄링 성능 척도
+### 가. 스케줄링 성능 척도
 
 | 척도 | 설명 | 방향 |
 |------|------|------|
@@ -139,9 +139,9 @@ layoutVariant: lecture-series
 | **대기 시간(Waiting Time)** | 준비 큐에서 대기한 총 시간 | ↓ 낮을수록 좋음 |
 | **반환 시간(Turnaround Time)** | 프로세스 제출부터 완료까지의 시간 | ↓ 낮을수록 좋음 |
 
-### 스케줄링 알고리즘
+### 나. 스케줄링 알고리즘
 
-#### 1. FCFS (First Come First Served) — 비선점
+#### 1) FCFS (First Come First Served) — 비선점
 
 도착한 순서대로 CPU를 할당합니다.
 
@@ -151,28 +151,28 @@ layoutVariant: lecture-series
 - **프로세스**: P1(24ms) → P2(3ms) → P3(3ms) 순서로 도착
 - **대기 시간**: P1=0, P2=24, P3=27 → 평균 대기 시간 = 17ms
 
-#### 2. SJF (Shortest Job First) — 비선점
+#### 2) SJF (Shortest Job First) — 비선점
 
 실행 시간이 가장 짧은 프로세스를 먼저 실행합니다.
 
 - **장점**: 평균 대기 시간이 최소 (최적 알고리즘)
 - **단점**: **기아(Starvation)** 현상 — 긴 프로세스가 무한 대기 가능. 실행 시간 예측 어려움
 
-#### 3. SRTF (Shortest Remaining Time First) — 선점형 SJF
+#### 3) SRTF (Shortest Remaining Time First) — 선점형 SJF
 
 현재 실행 중인 프로세스보다 남은 실행 시간이 짧은 프로세스가 도착하면 선점합니다.
 
 - **장점**: 평균 대기 시간 최소화
 - **단점**: 잦은 문맥 교환 오버헤드, 기아 현상
 
-#### 4. 우선순위 스케줄링 (Priority Scheduling)
+#### 4) 우선순위 스케줄링 (Priority Scheduling)
 
 각 프로세스에 우선순위를 부여하여 높은 우선순위 프로세스 먼저 실행합니다.
 
 - **선점형·비선점형 모두 가능**
 - **단점**: 기아 현상 → **에이징(Aging)**으로 해결 (오래 대기할수록 우선순위 증가)
 
-#### 5. 라운드 로빈 (Round Robin, RR) — 선점
+#### 5) 라운드 로빈 (Round Robin, RR) — 선점
 
 각 프로세스에 **타임 퀀텀(Time Quantum)** 만큼 CPU를 할당, 소진 시 다음 프로세스로 교체합니다.
 
@@ -180,7 +180,7 @@ layoutVariant: lecture-series
 - **단점**: 타임 퀀텀 설정이 중요 (너무 크면 FCFS와 유사, 너무 작으면 문맥 교환 오버헤드 증가)
 - **시분할 시스템에 적합**
 
-#### 6. 다단계 큐 (MLQ, Multilevel Queue)
+#### 6) 다단계 큐 (MLQ, Multilevel Queue)
 
 프로세스를 여러 큐로 분류하고, 각 큐마다 다른 스케줄링 알고리즘을 적용합니다.
 
@@ -192,9 +192,9 @@ layoutVariant: lecture-series
 
 ---
 
-## 메모리 관리
+## 4. 메모리 관리
 
-### 메모리 배치 기법
+### 가. 메모리 배치 기법
 
 | 기법 | 설명 | 문제점 |
 |------|------|-------|
@@ -209,7 +209,7 @@ layoutVariant: lecture-series
 - **최적 적합(Best Fit)**: 가장 작은 여유 공간 사용 — 외부 단편화 최소
 - **최악 적합(Worst Fit)**: 가장 큰 여유 공간 사용 — 큰 여유 공간 남김
 
-### 페이징 (Paging)
+### 나. 페이징 (Paging)
 
 프로세스의 논리 주소 공간을 **페이지(Page)** 단위로, 물리 메모리를 **프레임(Frame)** 단위로 분할하여 관리합니다.
 
@@ -219,7 +219,7 @@ layoutVariant: lecture-series
 - **장점**: 외부 단편화 없음
 - **단점**: 내부 단편화 발생 (마지막 페이지), 페이지 테이블 유지 오버헤드
 
-### 세그멘테이션 (Segmentation)
+### 다. 세그멘테이션 (Segmentation)
 
 프로그램을 **논리적 단위(세그먼트)** — 코드, 데이터, 스택 — 로 분할합니다.
 
@@ -230,7 +230,7 @@ layoutVariant: lecture-series
 
 ---
 
-## 가상 메모리 (Virtual Memory)
+## 5. 가상 메모리 (Virtual Memory)
 
 **가상 메모리**는 실제 물리 메모리보다 큰 프로그램을 실행할 수 있도록, 보조기억장치(디스크)를 주기억장치처럼 활용하는 기법입니다.
 
@@ -238,32 +238,32 @@ layoutVariant: lecture-series
 - **페이지 폴트(Page Fault)**: 요청한 페이지가 물리 메모리에 없을 때 발생 → 디스크에서 로드
 - **스래싱(Thrashing)**: 페이지 폴트가 너무 자주 발생하여 실제 작업보다 페이지 교체에 더 많은 시간을 소비하는 현상
 
-### 페이지 교체 알고리즘
+### 가. 페이지 교체 알고리즘
 
 물리 메모리가 가득 찼을 때 어떤 페이지를 교체할지 결정합니다.
 
-#### FIFO (First In First Out)
+#### 1) FIFO (First In First Out)
 
 가장 먼저 메모리에 올라온 페이지를 교체합니다.
 
 - **장점**: 구현 단순
 - **단점**: **벨레이디 이상(Belady's Anomaly)** — 프레임 수를 늘려도 페이지 폴트가 오히려 증가하는 현상
 
-#### LRU (Least Recently Used) — 가장 많이 사용
+#### 2) LRU (Least Recently Used) — 가장 많이 사용
 
 가장 오랫동안 사용되지 않은 페이지를 교체합니다.
 
 - **장점**: 최적 알고리즘에 근접, 실제로 가장 많이 사용
 - **단점**: 구현 비용 높음 (참조 시간 기록 필요)
 
-#### LFU (Least Frequently Used)
+#### 3) LFU (Least Frequently Used)
 
 참조 횟수가 가장 적은 페이지를 교체합니다.
 
 - **장점**: 자주 사용되는 페이지를 보호
 - **단점**: 초반에 많이 사용된 페이지가 나중에 쓸모없어도 남아있음
 
-#### OPT (Optimal) — 이론상 최적
+#### 4) OPT (Optimal) — 이론상 최적
 
 앞으로 가장 오랫동안 사용되지 않을 페이지를 교체합니다.
 
@@ -279,11 +279,11 @@ layoutVariant: lecture-series
 
 ---
 
-## 교착상태 (Deadlock)
+## 6. 교착상태 (Deadlock)
 
 **교착상태(Deadlock)**는 두 개 이상의 프로세스가 서로 상대방이 점유한 자원을 기다리며 무한 대기하는 상태입니다.
 
-### 교착상태 발생의 4가지 필요 조건
+### 가. 교착상태 발생의 4가지 필요 조건
 
 교착상태가 발생하려면 다음 4가지 조건이 **모두** 동시에 충족되어야 합니다.
 
@@ -296,9 +296,9 @@ layoutVariant: lecture-series
 
 **암기법**: 상점비순 (상호배제·점유대기·비선점·순환대기)
 
-### 교착상태 해결 방법
+### 나. 교착상태 해결 방법
 
-#### 1. 예방 (Prevention)
+#### 1) 예방 (Prevention)
 
 4가지 조건 중 하나를 제거하여 교착상태 자체를 방지합니다.
 
@@ -307,21 +307,21 @@ layoutVariant: lecture-series
 - **비선점 제거**: 자원을 강제로 회수 가능하게 → 일부 자원에만 적용 가능
 - **순환 대기 제거**: 자원에 번호를 부여하고 오름차순으로만 요청 → 구현 가능
 
-#### 2. 회피 (Avoidance)
+#### 2) 회피 (Avoidance)
 
 자원 할당 시 교착상태가 발생하지 않는지 미리 검사합니다.
 
 - **은행원 알고리즘(Banker's Algorithm)**: 안전 상태(Safe State)를 유지하는 할당만 허용
 - **안전 순서(Safe Sequence)**: 모든 프로세스가 완료될 수 있는 실행 순서가 존재
 
-#### 3. 탐지 (Detection)
+#### 3) 탐지 (Detection)
 
 교착상태가 발생했는지 주기적으로 검사합니다.
 
 - **자원 할당 그래프(Resource Allocation Graph)**: 사이클 존재 여부로 교착상태 탐지
 - **Wait-for 그래프**: 프로세스 간 대기 관계 그래프
 
-#### 4. 회복 (Recovery)
+#### 4) 회복 (Recovery)
 
 교착상태 탐지 후 정상 상태로 복구합니다.
 

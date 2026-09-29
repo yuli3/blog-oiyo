@@ -19,11 +19,11 @@ pubDate: '2026-05-31'
 
 import Callout from "@/components/mdx/Callout.astro";
 
-## Elastic Load Balancing(ELB)
+## 1. Elastic Load Balancing(ELB)
 
 들어오는 트래픽을 여러 서버에 분산시키는 서비스.
 
-### ALB (Application Load Balancer)
+### 가. ALB (Application Load Balancer)
 **7계층(HTTP/HTTPS)** 로드 밸런서.
 
 **고급 라우팅 기능**:
@@ -34,7 +34,7 @@ import Callout from "@/components/mdx/Callout.astro";
 
 **적합한 사용 사례**: 웹 애플리케이션, REST API, 마이크로서비스
 
-### NLB (Network Load Balancer)
+### 나. NLB (Network Load Balancer)
 **4계층(TCP/UDP)** 로드 밸런서.
 
 - 초저지연, 극고성능
@@ -47,19 +47,19 @@ import Callout from "@/components/mdx/Callout.astro";
 **시험 결정 트리**: HTTP/HTTPS 라우팅 필요? → ALB. 초저지연 TCP/UDP, 고정 IP 필요? → NLB. 서드파티 방화벽과 통합 필요? → GLB.
 </Callout>
 
-### GLB (Gateway Load Balancer)
+### 다. GLB (Gateway Load Balancer)
 **3계층** 로드 밸런서. 서드파티 방화벽, IDS/IPS 어플라이언스와 통합.
 
 ---
 
-## Auto Scaling Group (ASG)
+## 2. Auto Scaling Group (ASG)
 
-### 구성 요소
+### 가. 구성 요소
 1. **시작 템플릿**: AMI, 인스턴스 유형, 보안 그룹, IAM 역할
 2. **그룹 크기**: 최소/최대/원하는(Desired) 용량
 3. **스케일링 정책**
 
-### 스케일링 정책 유형
+### 나. 스케일링 정책 유형
 
 **동적 스케일링**:
 - **단순(Simple)**: CloudWatch 알람 → 정해진 수만큼 추가/제거
@@ -70,7 +70,7 @@ import Callout from "@/components/mdx/Callout.astro";
 
 **예측 스케일링**: ML이 과거 패턴 분석 → 사전 확장
 
-### 상태 확인 (Health Check)
+### 다. 상태 확인 (Health Check)
 
 - **EC2 상태 확인**: 인스턴스 하드웨어/소프트웨어 상태
 - **ELB 상태 확인**: 애플리케이션 레벨 응답 확인 (더 권장)
@@ -79,7 +79,7 @@ import Callout from "@/components/mdx/Callout.astro";
 
 ---
 
-## 고가용성 아키텍처 패턴
+## 3. 고가용성 아키텍처 패턴
 
 **기본 HA 패턴**:
 인터넷 → ALB (퍼블릭 서브넷, 다중 AZ) → ASG (프라이빗 서브넷, 다중 AZ) → RDS Multi-AZ (프라이빗 서브넷)

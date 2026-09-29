@@ -21,7 +21,7 @@ pubDate: '2026-05-25'
 layoutVariant: lecture-series
 ---
 
-## 파일 입출력이란
+## 1. 파일 입출력이란
 
 프로그램이 종료되면 메모리에 저장된 데이터는 모두 사라집니다. **파일 입출력(File I/O)**으로 데이터를 파일로 저장하거나 파일에서 읽어올 수 있습니다.
 
@@ -32,13 +32,13 @@ layoutVariant: lecture-series
 
 ---
 
-## open() 함수
+## 2. open() 함수
 
 $$
 \text{파일}_\text{객체} = \text{open}(\text{파일경로}, \text{모드}, \text{encoding}=\text{인코딩})
 $$
 
-### 파일 열기 모드
+### 가. 파일 열기 모드
 
 | 모드 | 의미 | 파일이 없으면 |
 |------|------|------------|
@@ -59,7 +59,7 @@ f.close()   # 반드시 닫아야 함!
 
 ---
 
-## with 문 — 자동으로 파일 닫기 (권장)
+## 3. with 문 — 자동으로 파일 닫기 (권장)
 
 `with` 문을 사용하면 블록을 벗어날 때 **자동으로 파일이 닫힙니다**. `close()`를 깜빡하는 실수를 방지할 수 있어 강력히 권장됩니다.
 
@@ -72,9 +72,9 @@ with open("hello.txt", "w", encoding="utf-8") as f:
 
 ---
 
-## 파일 읽기
+## 4. 파일 읽기
 
-### read() — 전체 내용 읽기
+### 가. read() — 전체 내용 읽기
 
 ```python
 with open("hello.txt", "r", encoding="utf-8") as f:
@@ -86,7 +86,7 @@ with open("hello.txt", "r", encoding="utf-8") as f:
 # 파이썬 파일 입출력입니다.
 ```
 
-### readline() — 한 줄씩 읽기
+### 나. readline() — 한 줄씩 읽기
 
 ```python
 with open("hello.txt", "r", encoding="utf-8") as f:
@@ -96,7 +96,7 @@ with open("hello.txt", "r", encoding="utf-8") as f:
     print(repr(line2))     # '파이썬 파일 입출력입니다.\n'
 ```
 
-### readlines() — 모든 줄을 리스트로
+### 다. readlines() — 모든 줄을 리스트로
 
 ```python
 with open("hello.txt", "r", encoding="utf-8") as f:
@@ -105,7 +105,7 @@ with open("hello.txt", "r", encoding="utf-8") as f:
         print(line.strip())  # strip()으로 줄바꿈 제거
 ```
 
-### for 루프로 읽기 (가장 효율적)
+### 라. for 루프로 읽기 (가장 효율적)
 
 ```python
 with open("hello.txt", "r", encoding="utf-8") as f:
@@ -115,9 +115,9 @@ with open("hello.txt", "r", encoding="utf-8") as f:
 
 ---
 
-## 파일 쓰기
+## 5. 파일 쓰기
 
-### write() — 문자열 쓰기
+### 가. write() — 문자열 쓰기
 
 ```python
 with open("output.txt", "w", encoding="utf-8") as f:
@@ -126,7 +126,7 @@ with open("output.txt", "w", encoding="utf-8") as f:
     f.write("세 번째 줄\n")
 ```
 
-### writelines() — 리스트의 각 요소 쓰기
+### 나. writelines() — 리스트의 각 요소 쓰기
 
 ```python
 lines = ["사과\n", "바나나\n", "딸기\n"]
@@ -134,7 +134,7 @@ with open("fruits.txt", "w", encoding="utf-8") as f:
     f.writelines(lines)
 ```
 
-### 파일에 내용 추가 ('a' 모드)
+### 다. 파일에 내용 추가 ('a' 모드)
 
 ```python
 # 기존 파일 내용 유지하면서 추가
@@ -144,7 +144,7 @@ with open("log.txt", "a", encoding="utf-8") as f:
 
 ---
 
-## CSV 파일 처리
+## 6. CSV 파일 처리
 
 CSV(Comma-Separated Values)는 데이터를 쉼표로 구분하는 텍스트 형식입니다.
 
@@ -173,7 +173,7 @@ with open("people.csv", "r", encoding="utf-8-sig") as f:
 
 ---
 
-## JSON 파일 처리
+## 7. JSON 파일 처리
 
 JSON은 웹 API와 설정 파일에서 널리 쓰이는 데이터 형식입니다.
 
@@ -200,13 +200,13 @@ with open("data.json", "r", encoding="utf-8") as f:
 
 ---
 
-## 예외처리 (Exception Handling)
+## 8. 예외처리 (Exception Handling)
 
 프로그램 실행 중 발생하는 오류를 **예외(Exception)**라고 합니다. 예외처리로 오류가 발생해도 프로그램이 중단되지 않고 계속 실행되도록 할 수 있습니다.
 
 ---
 
-## 주요 예외 종류
+## 9. 주요 예외 종류
 
 | 예외 이름 | 발생 상황 |
 |-----------|----------|
@@ -223,7 +223,7 @@ with open("data.json", "r", encoding="utf-8") as f:
 
 ---
 
-## try-except 문
+## 10. try-except 문
 
 ```text
 try:
@@ -248,7 +248,7 @@ except ZeroDivisionError:
 
 ---
 
-## 여러 예외 처리
+## 11. 여러 예외 처리
 
 ```python
 try:
@@ -266,7 +266,7 @@ except Exception as e:
 
 ---
 
-## else와 finally
+## 12. else와 finally
 
 ```python
 try:
@@ -310,7 +310,7 @@ None
 
 ---
 
-## 예외 정보 활용
+## 13. 예외 정보 활용
 
 ```python
 try:
@@ -322,7 +322,7 @@ except ValueError as e:
 
 ---
 
-## 예외 발생시키기 — raise
+## 14. 예외 발생시키기 — raise
 
 직접 예외를 발생시킬 수 있습니다.
 
@@ -342,7 +342,7 @@ except ValueError as e:
 
 ---
 
-## 파일 처리 + 예외처리 결합
+## 15. 파일 처리 + 예외처리 결합
 
 ```python
 def read_file_safe(filename):
@@ -367,7 +367,7 @@ if content is None:
 
 ---
 
-## 실전 예제 — 점수 파일 처리 프로그램
+## 16. 실전 예제 — 점수 파일 처리 프로그램
 
 ```python
 # score_processor.py

@@ -19,7 +19,7 @@ pubDate: '2026-05-25'
 layoutVariant: lecture-series
 ---
 
-## 실기 시험 구조 이해
+## 1. 실기 시험 구조 이해
 
 빅데이터 분석기사 실기 시험은 Python 또는 R을 사용하여 데이터를 분석하는 **작업형** 시험입니다. 시험 환경에는 인터넷 접속이 불가하며, 지정된 라이브러리만 사용할 수 있습니다.
 
@@ -49,9 +49,9 @@ layoutVariant: lecture-series
 
 ---
 
-## pandas 핵심 — 데이터 불러오기와 기본 탐색
+## 2. pandas 핵심 — 데이터 불러오기와 기본 탐색
 
-### CSV 파일 읽기
+### 가. CSV 파일 읽기
 
 ```python
 import pandas as pd
@@ -73,7 +73,7 @@ df = pd.read_csv('data.csv', index_col='ID')
 df = pd.read_csv('data.csv', sep='\t')
 ```
 
-### 데이터 기본 탐색
+### 나. 데이터 기본 탐색
 
 ```python
 # 데이터 크기
@@ -103,11 +103,11 @@ df['column'].nunique()   # 유일값 개수
 
 ---
 
-## pandas 핵심 — 결측치 처리
+## 3. pandas 핵심 — 결측치 처리
 
 결측치(NaN)는 실기 시험에서 **거의 모든 문제에 등장**합니다. 정확한 처리 방법을 암기해야 합니다.
 
-### 결측치 확인
+### 가. 결측치 확인
 
 ```python
 # 결측치 수 확인
@@ -121,7 +121,7 @@ df.isnull().mean()          # 열별 결측치 비율
 df[df.isnull().any(axis=1)]
 ```
 
-### 결측치 제거 (dropna)
+### 나. 결측치 제거 (dropna)
 
 ```python
 # 결측치가 있는 모든 행 제거
@@ -140,7 +140,7 @@ df.dropna(axis=1)
 df.dropna(inplace=True)
 ```
 
-### 결측치 채우기 (fillna)
+### 다. 결측치 채우기 (fillna)
 
 ```python
 # 특정 값으로 채우기
@@ -169,9 +169,9 @@ df['Age'].fillna(df['Age'].mean(), inplace=True)
 
 ---
 
-## pandas 핵심 — groupby와 집계
+## 4. pandas 핵심 — groupby와 집계
 
-### groupby 기본 사용
+### 가. groupby 기본 사용
 
 ```python
 # 단일 열로 그룹화
@@ -190,7 +190,7 @@ df.groupby('Region')['Sales'].agg(['mean', 'sum', 'count'])
 df.groupby('Region').agg({'Sales': 'sum', 'Profit': 'mean'})
 ```
 
-### 다중 그룹화 및 reset_index
+### 나. 다중 그룹화 및 reset_index
 
 ```python
 # 복수 기준으로 그룹화
@@ -200,7 +200,7 @@ df.groupby(['Region', 'Category'])['Sales'].sum()
 result = df.groupby('Region')['Sales'].sum().reset_index()
 ```
 
-### 유용한 집계 패턴
+### 다. 유용한 집계 패턴
 
 ```python
 # 그룹별 중앙값
@@ -218,9 +218,9 @@ df['rank'] = df.groupby('Category')['Sales'].rank(ascending=False)
 
 ---
 
-## pandas 핵심 — merge와 데이터 결합
+## 5. pandas 핵심 — merge와 데이터 결합
 
-### merge (SQL JOIN과 동일 개념)
+### 가. merge (SQL JOIN과 동일 개념)
 
 ```python
 # inner join (기본값) — 두 테이블에 모두 있는 키만 포함
@@ -239,7 +239,7 @@ result = pd.merge(df1, df2, on='ID', how='outer')
 result = pd.merge(df1, df2, left_on='user_id', right_on='customer_id')
 ```
 
-### concat — 데이터프레임 연결
+### 나. concat — 데이터프레임 연결
 
 ```python
 # 행 방향으로 연결 (위아래)
@@ -251,9 +251,9 @@ result = pd.concat([df1, df2], axis=1)
 
 ---
 
-## numpy 핵심 — 배열 생성과 기본 연산
+## 6. numpy 핵심 — 배열 생성과 기본 연산
 
-### numpy 배열 생성
+### 가. numpy 배열 생성
 
 ```python
 import numpy as np
@@ -271,7 +271,7 @@ np.arange(0, 10, 2)  # [0, 2, 4, 6, 8]
 np.linspace(0, 1, 5)  # 0~1 사이 균등 5개
 ```
 
-### 통계 연산
+### 나. 통계 연산
 
 ```python
 arr = np.array([2, 4, 6, 8, 10])
@@ -295,7 +295,7 @@ Q3 = np.percentile(arr, 75)
 IQR = Q3 - Q1
 ```
 
-### 배열 조작
+### 다. 배열 조작
 
 ```python
 arr = np.array([3, 1, 4, 1, 5, 9, 2, 6])
@@ -312,9 +312,9 @@ np.where(arr > 4, 1, 0)  # 조건부 값 변환
 
 ---
 
-## sklearn 핵심 — 머신러닝 파이프라인
+## 7. sklearn 핵심 — 머신러닝 파이프라인
 
-### 작업형 2유형 전체 흐름
+### 가. 작업형 2유형 전체 흐름
 
 실기 시험에서 작업형 2유형은 다음 흐름을 따릅니다.
 
@@ -327,7 +327,7 @@ np.where(arr > 4, 1, 0)  # 조건부 값 변환
 7. 평가 지표 계산
 8. 결과 CSV 저장
 
-### train_test_split — 데이터 분할
+### 나. train_test_split — 데이터 분할
 
 ```python
 from sklearn.model_selection import train_test_split
@@ -343,7 +343,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 ```
 
-### 스케일링 (StandardScaler)
+### 다. 스케일링 (StandardScaler)
 
 ```python
 from sklearn.preprocessing import StandardScaler
@@ -357,7 +357,7 @@ X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
 ```
 
-### 범주형 인코딩
+### 라. 범주형 인코딩
 
 ```python
 from sklearn.preprocessing import LabelEncoder
@@ -369,7 +369,7 @@ df['Gender'] = le.fit_transform(df['Gender'])  # 'M'→1, 'F'→0
 df = pd.get_dummies(df, columns=['Region'], drop_first=True)
 ```
 
-### 선형회귀 (LinearRegression)
+### 마. 선형회귀 (LinearRegression)
 
 ```python
 from sklearn.linear_model import LinearRegression
@@ -390,7 +390,7 @@ print(f'RMSE: {rmse:.4f}')
 print(f'R²: {r2:.4f}')
 ```
 
-### 분류 모델 (LogisticRegression, RandomForestClassifier)
+### 바. 분류 모델 (LogisticRegression, RandomForestClassifier)
 
 ```python
 from sklearn.linear_model import LogisticRegression
@@ -418,7 +418,7 @@ rf.fit(X_train, y_train)
 y_pred_rf = rf.predict(X_test)
 ```
 
-### 예측 결과 CSV 저장
+### 사. 예측 결과 CSV 저장
 
 ```python
 # 실기 시험에서 자주 요구되는 패턴
@@ -432,9 +432,9 @@ result.to_csv('result.csv', index=False)
 
 ---
 
-## 실전 문제 유형 3가지
+## 8. 실전 문제 유형 3가지
 
-### 유형 1: 특정 통계값 추출
+### 가. 유형 1: 특정 통계값 추출
 
 ```python
 문제 예시: 나이(Age) 열의 3사분위수(Q3)에서 1사분위수(Q1)를 뺀
@@ -451,7 +451,7 @@ IQR = Q3 - Q1
 print(round(IQR, 1))
 ```
 
-### 유형 2: 조건부 집계
+### 나. 유형 2: 조건부 집계
 
 ```python
 문제 예시: 성별(Gender)이 'M'이고 나이(Age)가 30 이상인
@@ -466,7 +466,7 @@ result = filtered['Purchase'].mean()
 print(round(result, 2))
 ```
 
-### 유형 3: 모델 학습 및 예측
+### 다. 유형 3: 모델 학습 및 예측
 
 ```python
 문제 예시: 주어진 훈련 데이터로 로지스틱 회귀 모델을 학습하고,
@@ -506,7 +506,7 @@ print(round(acc, 4))
 
 ---
 
-## 자주 나오는 실수와 함정
+## 9. 자주 나오는 실수와 함정
 
 1. scaler.fit_transform(X_test) 사용 — 반드시 transform()만 사용
   - 테스트 데이터로 fit하면 데이터 누수(Data Leakage) 발생

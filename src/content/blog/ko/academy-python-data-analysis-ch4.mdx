@@ -17,15 +17,15 @@ chapter: 4
 ---
 import Callout from "@/components/mdx/Callout.astro";
 
-## 4강 개요
+## 1. 4강 개요
 
 EDA(Exploratory Data Analysis, 탐색적 데이터 분석)는 데이터를 이해하고 가설을 세우는 과정입니다. 존 투키(John Tukey)가 정립한 이 개념은 "데이터가 무엇을 말하는지 먼저 들어라"는 철학에서 출발합니다. 모델링 전에 EDA를 철저히 하면 잘못된 방향으로 가는 것을 막을 수 있습니다.
 
 ---
 
-## EDA 5단계 프레임워크
+## 2. EDA 5단계 프레임워크
 
-### 1단계: 데이터 구조 파악
+### 가. 1단계: 데이터 구조 파악
 
 ```python
 import pandas as pd
@@ -45,7 +45,7 @@ def eda_basic(df):
 eda_basic(df)
 ```
 
-### 2단계: 단변량 분석 (Univariate)
+### 나. 2단계: 단변량 분석 (Univariate)
 
 각 변수 하나씩의 분포를 파악합니다.
 
@@ -68,7 +68,7 @@ for col in cat_cols:
     plt.show()
 ```
 
-### 3단계: 이변량 분석 (Bivariate)
+### 다. 3단계: 이변량 분석 (Bivariate)
 
 두 변수 간의 관계를 탐색합니다.
 
@@ -85,7 +85,7 @@ ct = pd.crosstab(df['col1'], df['col2'], normalize='index')
 sns.heatmap(ct, annot=True, cmap='Blues')
 ```
 
-### 4단계: 다변량 분석
+### 라. 4단계: 다변량 분석
 
 ```python
 # pairplot — 여러 변수 간 관계 한번에
@@ -97,7 +97,7 @@ fig = px.scatter_3d(df, x='x1', y='x2', z='x3', color='target')
 fig.show()
 ```
 
-### 5단계: 시계열 분석 (해당 시)
+### 마. 5단계: 시계열 분석 (해당 시)
 
 ```python
 df_time = df.set_index('date')
@@ -118,7 +118,7 @@ df.groupby('month')['value'].mean().plot(kind='bar')
 
 ---
 
-## 자동 EDA 라이브러리
+## 3. 자동 EDA 라이브러리
 
 반복적인 EDA 작업을 자동화하는 도구들이 있습니다.
 

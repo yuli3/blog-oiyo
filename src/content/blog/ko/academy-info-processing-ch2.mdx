@@ -17,11 +17,11 @@ pubDate: '2026-05-25'
 layoutVariant: lecture-series
 ---
 
-## 데이터베이스 개요
+## 1. 데이터베이스 개요
 
 **데이터베이스(Database, DB)**는 여러 사용자가 공유하고 사용할 목적으로 체계적으로 통합·조직·관리되는 데이터의 집합입니다.
 
-### DBMS (Database Management System)
+### 가. DBMS (Database Management System)
 
 **DBMS**는 데이터베이스를 생성·관리·운영하는 소프트웨어 시스템입니다. 사용자와 데이터베이스 사이에서 중재 역할을 수행합니다.
 
@@ -32,7 +32,7 @@ layoutVariant: lecture-series
 
 **대표적인 DBMS**: Oracle, MySQL, PostgreSQL, MS SQL Server, MariaDB
 
-### 데이터 독립성
+### 나. 데이터 독립성
 
 DBMS의 핵심 특성으로, 데이터 구조가 변경되어도 응용 프로그램이 영향을 받지 않는 성질입니다.
 
@@ -41,7 +41,7 @@ DBMS의 핵심 특성으로, 데이터 구조가 변경되어도 응용 프로�
 | **논리적 독립성** | 개념 스키마가 변경되어도 외부 스키마(응용 프로그램)에 영향 없음 |
 | **물리적 독립성** | 내부 스키마(저장 구조)가 변경되어도 개념 스키마에 영향 없음 |
 
-### 3단계 스키마 (ANSI/SPARC 구조)
+### 다. 3단계 스키마 (ANSI/SPARC 구조)
 
 외부 스키마 (External) — 사용자 뷰  
 ↕ 논리적 독립성  
@@ -51,11 +51,11 @@ DBMS의 핵심 특성으로, 데이터 구조가 변경되어도 응용 프로�
 
 ---
 
-## 관계형 데이터 모델
+## 2. 관계형 데이터 모델
 
 **관계형 데이터 모델(Relational Data Model)**은 데이터를 2차원 **테이블(Table/릴레이션)** 형태로 표현하는 모델입니다.
 
-### 릴레이션의 구성 요소
+### 가. 릴레이션의 구성 요소
 
 | 용어 | 설명 |
 |------|------|
@@ -66,7 +66,7 @@ DBMS의 핵심 특성으로, 데이터 구조가 변경되어도 응용 프로�
 | **차수(Degree)** | 속성의 개수 |
 | **카디널리티(Cardinality)** | 투플의 개수 |
 
-### 키(Key)의 종류
+### 나. 키(Key)의 종류
 
 | 키 종류 | 설명 |
 |--------|------|
@@ -83,11 +83,11 @@ DBMS의 핵심 특성으로, 데이터 구조가 변경되어도 응용 프로�
 
 ---
 
-## SQL DDL (Data Definition Language)
+## 3. SQL DDL (Data Definition Language)
 
 DDL은 데이터베이스 구조(스키마)를 정의·변경·삭제하는 명령어입니다.
 
-### CREATE — 테이블 생성
+### 가. CREATE — 테이블 생성
 
 ```sql
 CREATE TABLE 학생 (
@@ -112,7 +112,7 @@ CREATE TABLE 학생 (
 - `CHECK`: 도메인 제약 조건
 - `DEFAULT`: 기본값 설정
 
-### ALTER — 테이블 구조 변경
+### 나. ALTER — 테이블 구조 변경
 
 ```sql
 -- 컬럼 추가
@@ -128,7 +128,7 @@ ALTER TABLE 학생 DROP COLUMN 이메일;
 ALTER TABLE 학생 ADD CONSTRAINT UQ_이름 UNIQUE (이름);
 ```
 
-### DROP — 테이블 삭제
+### 다. DROP — 테이블 삭제
 
 ```sql
 -- 테이블 삭제 (참조하는 테이블 있으면 오류)
@@ -138,7 +138,7 @@ DROP TABLE 학생;
 DROP TABLE 학생 CASCADE CONSTRAINTS;
 ```
 
-### TRUNCATE — 데이터 전체 삭제 (DDL)
+### 라. TRUNCATE — 데이터 전체 삭제 (DDL)
 
 ```sql
 -- 테이블 구조는 유지, 데이터만 전체 삭제 (롤백 불가)
@@ -149,11 +149,11 @@ TRUNCATE TABLE 학생;
 
 ---
 
-## SQL DML (Data Manipulation Language)
+## 4. SQL DML (Data Manipulation Language)
 
 DML은 데이터를 조회·삽입·수정·삭제하는 명령어입니다.
 
-### SELECT — 데이터 조회
+### 가. SELECT — 데이터 조회
 
 ```sql
 -- 기본 구조
@@ -188,7 +188,7 @@ FETCH FIRST 3 ROWS ONLY; -- Oracle 12c+
 | `IS NULL` | `이메일 IS NULL` | NULL 확인 |
 | `EXISTS` | `WHERE EXISTS (서브쿼리)` | 서브쿼리 결과 존재 여부 |
 
-### INSERT — 데이터 삽입
+### 나. INSERT — 데이터 삽입
 
 ```sql
 -- 단일 행 삽입
@@ -202,7 +202,7 @@ FROM   학생
 WHERE  성적 >= 90;
 ```
 
-### UPDATE — 데이터 수정
+### 다. UPDATE — 데이터 수정
 
 ```sql
 -- 조건에 맞는 행 수정
@@ -212,7 +212,7 @@ SET    학년 = 학년 + 1,
 WHERE  입학연도 = 2023;
 ```
 
-### DELETE — 데이터 삭제
+### 라. DELETE — 데이터 삭제
 
 ```sql
 -- 조건에 맞는 행 삭제
@@ -225,11 +225,11 @@ DELETE FROM 임시데이터;
 
 ---
 
-## SQL DCL (Data Control Language)
+## 5. SQL DCL (Data Control Language)
 
 DCL은 데이터 접근 권한을 관리하는 명령어입니다.
 
-### GRANT — 권한 부여
+### 가. GRANT — 권한 부여
 
 ```sql
 -- 사용자에게 특정 권한 부여
@@ -242,7 +242,7 @@ GRANT ALL PRIVILEGES ON 학생 TO 사용자2;
 GRANT SELECT ON 성적 TO 사용자3 WITH GRANT OPTION;
 ```
 
-### REVOKE — 권한 회수
+### 나. REVOKE — 권한 회수
 
 ```sql
 -- 특정 권한 회수
@@ -259,7 +259,7 @@ REVOKE SELECT ON 성적 FROM 사용자3 CASCADE;
 
 ---
 
-## 정규화 (Normalization)
+## 6. 정규화 (Normalization)
 
 **정규화**는 데이터 중복을 최소화하고 데이터 무결성을 보장하기 위해 릴레이션을 더 작은 릴레이션으로 분해하는 과정입니다.
 
@@ -268,7 +268,7 @@ REVOKE SELECT ON 성적 FROM 사용자3 CASCADE;
 - **삭제 이상**: 데이터 삭제 시 의도치 않은 데이터도 함께 삭제
 - **갱신 이상**: 데이터 수정 시 일부만 변경되어 불일치 발생
 
-### 정규화 단계
+### 가. 정규화 단계
 
 **비정규형 → 1NF → 2NF → 3NF → BCNF → 4NF → 5NF**
 
@@ -299,11 +299,11 @@ $$
 
 ---
 
-## 트랜잭션 (Transaction)
+## 7. 트랜잭션 (Transaction)
 
 **트랜잭션**은 데이터베이스에서 하나의 논리적 작업 단위로, 모두 성공하거나 모두 실패해야 하는 연산의 집합입니다.
 
-### ACID 속성
+### 가. ACID 속성
 
 | 속성 | 영문 | 설명 |
 |------|------|------|
@@ -312,12 +312,12 @@ $$
 | **격리성** | Isolation | 동시에 실행되는 트랜잭션들이 서로 영향을 미치지 않아야 함 |
 | **지속성** | Durability | 성공한 트랜잭션의 결과는 영구적으로 반영 |
 
-### 트랜잭션 상태
+### 나. 트랜잭션 상태
 
 - 활동(Active) → 부분 완료(Partially Committed) → 완료(Committed) ↓
   - 실패(Failed) → 철회(Aborted/Rolled Back)
 
-### 동시성 제어 — 잠금(Lock)
+### 다. 동시성 제어 — 잠금(Lock)
 
 | 잠금 종류 | 읽기 | 쓰기 |
 |----------|------|------|
@@ -331,11 +331,11 @@ $$
 
 ---
 
-## 인덱스 (Index)
+## 8. 인덱스 (Index)
 
 **인덱스**는 데이터 검색 속도를 향상시키기 위한 데이터 구조입니다. 책의 색인과 유사합니다.
 
-### 인덱스 종류
+### 가. 인덱스 종류
 
 | 종류 | 설명 |
 |------|------|
@@ -360,7 +360,7 @@ DROP INDEX IDX_학생_이름;
 
 ---
 
-## 뷰 (View)
+## 9. 뷰 (View)
 
 **뷰(View)**는 하나 이상의 테이블을 기반으로 만들어진 가상 테이블입니다. 실제 데이터를 저장하지 않고 정의(쿼리)만 저장합니다.
 

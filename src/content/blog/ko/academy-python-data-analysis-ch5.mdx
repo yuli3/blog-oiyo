@@ -17,13 +17,13 @@ chapter: 5
 ---
 import Callout from "@/components/mdx/Callout.astro";
 
-## 5강 개요
+## 1. 5강 개요
 
 scikit-learn은 Python 머신러닝의 사실상 표준 라이브러리입니다. 일관된 API(`fit`, `transform`, `predict`)로 수십 가지 알고리즘을 동일한 방식으로 사용할 수 있습니다. 이번 강의에서는 실전 프로젝트를 처음부터 끝까지 따라가며 scikit-learn 워크플로우를 완전히 체화합니다.
 
 ---
 
-## scikit-learn 전체 워크플로우
+## 2. scikit-learn 전체 워크플로우
 
 1. 데이터 준비
 2. 훈련/테스트 분할
@@ -35,7 +35,7 @@ scikit-learn은 Python 머신러닝의 사실상 표준 라이브러리입니다
 
 ---
 
-## 1. 데이터 분할
+## 3. 데이터 분할
 
 ```python
 from sklearn.model_selection import train_test_split
@@ -55,7 +55,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 
 ---
 
-## 2. 파이프라인 (Pipeline)
+## 4. 파이프라인 (Pipeline)
 
 전처리 + 모델을 하나의 파이프라인으로 묶으면 데이터 누수를 방지하고 코드가 깔끔해집니다.
 
@@ -87,7 +87,7 @@ y_pred = pipeline.predict(X_test)
 
 ---
 
-## 3. 모델 선택 가이드
+## 5. 모델 선택 가이드
 
 | 문제 유형 | 데이터 크기 | 추천 모델 |
 |---|---|---|
@@ -117,9 +117,9 @@ for name, model in models.items():
 
 ---
 
-## 4. 평가 지표
+## 6. 평가 지표
 
-### 분류 지표
+### 가. 분류 지표
 
 ```python
 from sklearn.metrics import (
@@ -142,7 +142,7 @@ RocCurveDisplay.from_estimator(pipeline, X_test, y_test)
 | F1-Score | Precision과 Recall의 조화 평균 | 불균형 데이터 |
 | ROC-AUC | 전반적인 분류 성능 | 임계값 독립적 평가 |
 
-### 회귀 지표
+### 나. 회귀 지표
 
 ```python
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
@@ -154,7 +154,7 @@ r2 = r2_score(y_test, y_pred)
 
 ---
 
-## 5. 하이퍼파라미터 튜닝
+## 7. 하이퍼파라미터 튜닝
 
 ```python
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV

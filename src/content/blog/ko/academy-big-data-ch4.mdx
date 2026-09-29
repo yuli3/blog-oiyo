@@ -19,7 +19,7 @@ pubDate: '2026-05-25'
 layoutVariant: lecture-series
 ---
 
-## EDA(탐색적 데이터 분석)란?
+## 1. EDA(탐색적 데이터 분석)란?
 
 **탐색적 데이터 분석(Exploratory Data Analysis, EDA)**은 1977년 통계학자 존 투키(John Tukey)가 제안한 데이터 분석 접근법입니다. 가설 검정보다 데이터 자체를 먼저 **탐색·이해**하는 것을 우선시합니다.
 
@@ -33,7 +33,7 @@ layoutVariant: lecture-series
 
 빅데이터 분석기사 시험에서는 EDA의 각 단계에서 어떤 기법을 적용하는지, 그리고 시각화 차트의 종류와 용도를 명확히 이해해야 합니다.
 
-### EDA 단계별 체크리스트
+### 가. EDA 단계별 체크리스트
 
 - **1단계**: 데이터 구조 파악
   - □ 행/열 수 (shape)
@@ -127,9 +127,9 @@ layoutVariant: lecture-series
 
 ---
 
-## 시각화 차트 종류와 용도
+## 2. 시각화 차트 종류와 용도
 
-### 차트 선택 가이드
+### 가. 차트 선택 가이드
 
 **변수 유형에 따른 차트 선택**
 
@@ -163,9 +163,9 @@ layoutVariant: lecture-series
 
 ---
 
-## matplotlib 핵심 코드
+## 3. matplotlib 핵심 코드
 
-### 기본 설정
+### 가. 기본 설정
 
 ```python
 import matplotlib.pyplot as plt
@@ -175,7 +175,7 @@ matplotlib.rcParams['font.family'] = 'Malgun Gothic'  # 한글 폰트 (Windows)
 matplotlib.rcParams['axes.unicode_minus'] = False  # 마이너스 부호 깨짐 방지
 ```
 
-### 히스토그램 (Histogram)
+### 나. 히스토그램 (Histogram)
 
 ```python
 # 단순 히스토그램
@@ -191,7 +191,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-### 박스플롯 (Box Plot)
+### 다. 박스플롯 (Box Plot)
 
 ```python
 # 단순 박스플롯
@@ -215,7 +215,7 @@ plt.show()
 - **박스 크기** = IQR (중간 50% 범위)
 - **수염 길이** = Q1 − 1.5×IQR ~ Q3 + 1.5×IQR 이내
 
-### 산점도 (Scatter Plot)
+### 라. 산점도 (Scatter Plot)
 
 ```python
 plt.figure(figsize=(8, 6))
@@ -235,11 +235,11 @@ plt.show()
 
 ---
 
-## seaborn 핵심 코드
+## 4. seaborn 핵심 코드
 
 seaborn은 matplotlib 기반의 고수준 시각화 라이브러리로, 더 적은 코드로 아름다운 차트를 만들 수 있습니다.
 
-### seaborn 기본 설정
+### 가. seaborn 기본 설정
 
 ```python
 import seaborn as sns
@@ -247,7 +247,7 @@ sns.set_theme(style='whitegrid')  # 배경 테마
 sns.set_palette('pastel')          # 색상 팔레트
 ```
 
-### 분포 시각화
+### 나. 분포 시각화
 
 ```python
 # 히스토그램 + KDE 곡선
@@ -267,7 +267,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-### 상관행렬 히트맵
+### 다. 상관행렬 히트맵
 
 ```python
 # 상관행렬 계산
@@ -290,7 +290,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-### 산점도 행렬 (pairplot)
+### 라. 산점도 행렬 (pairplot)
 
 ```python
 # 모든 수치형 변수 쌍 산점도 + 대각선에 분포
@@ -299,7 +299,7 @@ plt.suptitle('변수 간 관계 탐색', y=1.02)
 plt.show()
 ```
 
-### 막대 그래프 (countplot / barplot)
+### 마. 막대 그래프 (countplot / barplot)
 
 ```python
 # 빈도 막대 그래프
@@ -316,9 +316,9 @@ plt.show()
 
 ---
 
-## 이상값 탐지와 처리
+## 5. 이상값 탐지와 처리
 
-### IQR 방법
+### 가. IQR 방법
 
 가장 보편적으로 사용되는 이상값 탐지 방법입니다.
 
@@ -345,7 +345,7 @@ IQR = Q3 - Q1
 df_clean = df[(df['Income'] >= Q1 - 1.5*IQR) & (df['Income'] <= Q3 + 1.5*IQR)]
 ```
 
-### Z-score 방법
+### 나. Z-score 방법
 
 ```python
 from scipy import stats
@@ -360,7 +360,7 @@ df_clean_z = df[z_scores <= threshold]
 print(f'Z-score 방법 이상값 수: {len(outliers_z)}')
 ```
 
-### IQR vs Z-score 비교
+### 다. IQR vs Z-score 비교
 
 **IQR 방법**
 
@@ -376,7 +376,7 @@ print(f'Z-score 방법 이상값 수: {len(outliers_z)}')
   - 대규모 데이터에서 안정적
   - 임계값(보통 3) 설정 필요
 
-### 이상값 처리 방법
+### 라. 이상값 처리 방법
 
 1. 제거 (Deletion)
   - 이상값이 측정 오류임이 확실한 경우
@@ -396,9 +396,9 @@ print(f'Z-score 방법 이상값 수: {len(outliers_z)}')
 
 ---
 
-## 상관분석
+## 6. 상관분석
 
-### 피어슨 상관계수 (Pearson Correlation)
+### 가. 피어슨 상관계수 (Pearson Correlation)
 
 **선형 관계**를 측정하는 가장 기본적인 상관계수입니다.
 
@@ -431,7 +431,7 @@ corr_matrix = df.corr(method='pearson')
 print(corr_matrix)
 ```
 
-### 스피어만 순위 상관계수 (Spearman Correlation)
+### 나. 스피어만 순위 상관계수 (Spearman Correlation)
 
 **순위(rank)** 기반 상관계수로, 비선형 단조 관계를 측정합니다.
 
@@ -458,7 +458,7 @@ print(f'스피어만 ρ = {rho:.4f}, p-value = {p_value:.4f}')
 corr_spearman = df.corr(method='spearman')
 ```
 
-### 상관분석 해석 주의사항
+### 다. 상관분석 해석 주의사항
 
 1. 상관 ≠ 인과
   - r이 높다고 원인-결과 관계가 있는 것이 아님
@@ -476,7 +476,7 @@ corr_spearman = df.corr(method='spearman')
 
 ---
 
-## EDA 실전 템플릿
+## 7. EDA 실전 템플릿
 
 ```python
 import pandas as pd

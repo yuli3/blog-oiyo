@@ -21,7 +21,7 @@ pubDate: '2026-05-25'
 layoutVariant: lecture-series
 ---
 
-## 외부 라이브러리란
+## 1. 외부 라이브러리란
 
 파이썬의 표준 라이브러리(math, os 등) 외에도 **PyPI(Python Package Index)**로 수십만 개의 서드파티 패키지를 설치하여 사용할 수 있습니다.
 
@@ -31,7 +31,7 @@ layoutVariant: lecture-series
 
 ---
 
-## pip로 패키지 설치
+## 2. pip로 패키지 설치
 
 ```bash
 # numpy와 pandas 설치
@@ -53,18 +53,18 @@ pip list | grep -E "numpy|pandas"
 
 ---
 
-## numpy 기초
+## 3. numpy 기초
 
 **numpy(Numerical Python)**는 파이썬에서 고성능 수치 계산을 위한 라이브러리입니다. 핵심은 **ndarray(N차원 배열)**입니다.
 
-### numpy 불러오기
+### 가. numpy 불러오기
 
 ```python
 import numpy as np   # np라는 별칭 사용 (관례)
 print(np.__version__)
 ```
 
-### 배열(ndarray) 생성
+### 나. 배열(ndarray) 생성
 
 ```python
 # 리스트로부터 생성
@@ -82,7 +82,7 @@ print(arr2d.ndim)    # 2
 print(arr2d.size)    # 9
 ```
 
-### 특수 배열 생성 함수
+### 다. 특수 배열 생성 함수
 
 ```python
 # 0으로 채운 배열
@@ -116,7 +116,7 @@ int_arr = np.random.randint(1, 7, (2, 3)) # 1~6 정수
 
 ---
 
-## numpy 배열 연산
+## 4. numpy 배열 연산
 
 numpy의 가장 큰 장점은 **벡터화 연산(Vectorized Operation)**입니다. 반복문 없이 배열 전체에 한 번에 연산을 적용합니다.
 
@@ -144,7 +144,7 @@ squared_arr = arr ** 2                # 즉시 적용
 
 ---
 
-## numpy 인덱싱과 슬라이싱
+## 5. numpy 인덱싱과 슬라이싱
 
 ```python
 arr = np.array([10, 20, 30, 40, 50])
@@ -167,7 +167,7 @@ print(mat[0:2, 0:2]) # 2x2 서브행렬
 #  [4 5]]
 ```
 
-### 불리언 인덱싱 (조건 필터링)
+### 가. 불리언 인덱싱 (조건 필터링)
 
 ```python
 scores = np.array([85, 92, 68, 74, 90, 55, 88])
@@ -184,7 +184,7 @@ print(scores[mask])
 
 ---
 
-## numpy 통계 함수
+## 6. numpy 통계 함수
 
 $$
 \text{data} = \text{np}.\text{array}([15, 22, 8, 34, 27, 12, 45, 19])
@@ -202,7 +202,7 @@ $$
 
 ---
 
-## numpy 배열 변형
+## 7. numpy 배열 변형
 
 ```python
 arr = np.arange(1, 13)    # [1,2,3,...,12]
@@ -224,18 +224,18 @@ print(mat.T)
 
 ---
 
-## pandas 기초
+## 8. pandas 기초
 
 **pandas**는 구조화된 데이터(표 형태)를 처리하기 위한 라이브러리입니다. Excel처럼 행과 열로 이루어진 데이터를 다루는 데 최적화되어 있습니다.
 
-### pandas 불러오기
+### 가. pandas 불러오기
 
 ```python
 import pandas as pd   # pd라는 별칭 사용 (관례)
 print(pd.__version__)
 ```
 
-### 핵심 자료구조: Series와 DataFrame
+### 나. 핵심 자료구조: Series와 DataFrame
 
 | 자료구조 | 설명 | 비유 |
 |---------|------|------|
@@ -244,7 +244,7 @@ print(pd.__version__)
 
 ---
 
-## Series 생성 및 활용
+## 9. Series 생성 및 활용
 
 ```python
 # 리스트로 생성
@@ -273,7 +273,7 @@ print(s3.index)    # Index(['서울', '부산', '인천'], dtype='object')
 
 ---
 
-## DataFrame 생성
+## 10. DataFrame 생성
 
 ```python
 # 딕셔너리로 생성
@@ -298,7 +298,7 @@ print(df.dtypes)   # 각 열의 타입
 
 ---
 
-## DataFrame 탐색
+## 11. DataFrame 탐색
 
 ```python
 # 기본 정보
@@ -320,7 +320,7 @@ print(df.loc[2])           # 레이블(인덱스) 기반 접근
 
 ---
 
-## 데이터 필터링 및 정렬
+## 12. 데이터 필터링 및 정렬
 
 ```python
 # 조건 필터링
@@ -342,7 +342,7 @@ print(top2)
 
 ---
 
-## 데이터 추가·수정·삭제
+## 13. 데이터 추가·수정·삭제
 
 ```python
 # 새 열 추가
@@ -362,7 +362,7 @@ df = df.drop("합격", axis=1)
 
 ---
 
-## 기초 통계 분석
+## 14. 기초 통계 분석
 
 ```python
 print(df["점수"].mean())    # 평균
@@ -381,7 +381,7 @@ print(df["도시"].value_counts())
 
 ---
 
-## CSV 파일 읽기/쓰기
+## 15. CSV 파일 읽기/쓰기
 
 ```python
 # DataFrame을 CSV로 저장
@@ -398,7 +398,7 @@ df_excel = pd.read_excel("students.xlsx")
 
 ---
 
-## 결측값 처리
+## 16. 결측값 처리
 
 ```python
 import numpy as np
@@ -423,7 +423,7 @@ df_filled2 = df2.fillna(df2.mean())          # 평균으로 채우기
 
 ---
 
-## 실전 예제 — 성적 데이터 분석
+## 17. 실전 예제 — 성적 데이터 분석
 
 ```python
 import pandas as pd

@@ -17,7 +17,7 @@ pubDate: '2026-05-25'
 layoutVariant: lecture-series
 ---
 
-## SQLD 자격증이란?
+## 1. SQLD 자격증이란?
 
 **SQLD(SQL Developer, SQL 개발자)**는 한국데이터산업진흥원(K-DATA)이 주관하는 국가공인 자격증입니다. 데이터베이스와 SQL에 대한 기본 지식과 활용 능력을 검증하며, IT 직종 취업·승진에서 가장 많이 요구되는 자격증 중 하나입니다.
 
@@ -25,7 +25,7 @@ layoutVariant: lecture-series
 **응시 자격**: 제한 없음 (누구나 응시 가능)  
 **공식 사이트**: www.dataq.or.kr
 
-### 시험 구조
+### 가. 시험 구조
 
 | 구분 | 내용 |
 |------|------|
@@ -39,9 +39,9 @@ layoutVariant: lecture-series
 
 ---
 
-## 데이터 모델링 기초
+## 2. 데이터 모델링 기초
 
-### 데이터 모델링이란?
+### 가. 데이터 모델링이란?
 
 **데이터 모델링**이란 현실 세계의 정보를 데이터베이스에 저장할 수 있도록 추상화·구조화하는 작업입니다. SQLD 1과목의 핵심이며, 개념적→논리적→물리적 모델링의 3단계로 진행됩니다.
 
@@ -51,7 +51,7 @@ layoutVariant: lecture-series
 | **논리적 모델링** | 개념을 구체적인 속성과 관계로 표현 | 정규화된 테이블 구조 |
 | **물리적 모델링** | 실제 DBMS에 맞게 구현 | DDL, 인덱스, 파티션 등 |
 
-### 개체-관계 모델 (ERD)
+### 나. 개체-관계 모델 (ERD)
 
 ERD(Entity-Relationship Diagram)는 개체(Entity), 속성(Attribute), 관계(Relationship)로 데이터 구조를 표현합니다.
 
@@ -66,7 +66,7 @@ ERD(Entity-Relationship Diagram)는 개체(Entity), 속성(Attribute), 관계(Re
 - M:N  — 여러 개체가 여러 개체와 대응 (예: 학생:강의)
   - M:N 관계는 교차 테이블(Junction Table)로 분리해야 함
 
-### 정규화 (Normalization)
+### 다. 정규화 (Normalization)
 
 정규화는 데이터 중복을 제거하고 데이터 무결성을 보장하기 위해 테이블 구조를 단계적으로 개선하는 과정입니다.
 
@@ -86,9 +86,9 @@ ERD(Entity-Relationship Diagram)는 개체(Entity), 속성(Attribute), 관계(Re
 
 ---
 
-## SQL 기초
+## 3. SQL 기초
 
-### SQL이란?
+### 가. SQL이란?
 
 **SQL(Structured Query Language)**은 관계형 데이터베이스를 관리하고 조작하기 위한 표준 언어입니다. SQL은 목적에 따라 다음과 같이 분류됩니다.
 
@@ -101,11 +101,11 @@ ERD(Entity-Relationship Diagram)는 개체(Entity), 속성(Attribute), 관계(Re
 
 ---
 
-## SELECT 문 완전 정복
+## 4. SELECT 문 완전 정복
 
 SELECT 문은 SQL의 핵심입니다. SQLD 시험의 2과목 대부분이 SELECT 관련 문제입니다.
 
-### SELECT 기본 구조와 실행 순서
+### 가. SELECT 기본 구조와 실행 순서
 
 ```sql
 SELECT   컬럼명1, 컬럼명2, ...   -- 5. 조회할 열 선택
@@ -118,7 +118,7 @@ ORDER BY 정렬 기준                -- 6. 정렬
 
 > **중요**: SQL은 작성 순서와 실행 순서가 다릅니다. 실행 순서: FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY
 
-### WHERE 절 주요 조건
+### 나. WHERE 절 주요 조건
 
 ```sql
 -- 비교 연산자
@@ -140,7 +140,7 @@ WHERE bonus IS NULL
 WHERE manager_id IS NOT NULL
 ```
 
-### GROUP BY와 HAVING
+### 다. GROUP BY와 HAVING
 
 ```sql
 -- 부서별 평균 급여 조회 (평균 급여 300만원 이상인 부서만)
@@ -155,11 +155,11 @@ ORDER BY avg_salary DESC;
 
 ---
 
-## JOIN 완전 정복
+## 5. JOIN 완전 정복
 
 JOIN은 두 개 이상의 테이블을 연결하여 데이터를 조회하는 연산입니다.
 
-### INNER JOIN (내부 조인)
+### 가. INNER JOIN (내부 조인)
 
 두 테이블에서 **조인 조건을 만족하는 행만** 반환합니다.
 
@@ -170,7 +170,7 @@ FROM   customers c
   INNER JOIN orders o ON c.customer_id = o.customer_id;
 ```
 
-### LEFT OUTER JOIN (왼쪽 외부 조인)
+### 나. LEFT OUTER JOIN (왼쪽 외부 조인)
 
 왼쪽 테이블의 모든 행을 반환하고, 오른쪽 테이블에 매칭이 없으면 NULL을 표시합니다.
 
@@ -182,7 +182,7 @@ FROM   customers c
 -- 주문이 없는 고객은 order_date가 NULL로 표시됨
 ```
 
-### CROSS JOIN (교차 조인)
+### 다. CROSS JOIN (교차 조인)
 
 두 테이블의 **모든 행의 조합**을 반환합니다. m행 × n행 = m×n행.
 
@@ -191,7 +191,7 @@ SELECT * FROM colors CROSS JOIN sizes;
 -- 색상 3가지 × 사이즈 4가지 = 12행 반환
 ```
 
-### JOIN 정리
+### 라. JOIN 정리
 
 | JOIN 종류 | 반환 행 |
 |----------|--------|
@@ -203,11 +203,11 @@ SELECT * FROM colors CROSS JOIN sizes;
 
 ---
 
-## 서브쿼리 (Subquery)
+## 6. 서브쿼리 (Subquery)
 
 서브쿼리는 SQL 문 안에 포함된 또 다른 SELECT 문입니다.
 
-### 단일행 서브쿼리
+### 가. 단일행 서브쿼리
 
 서브쿼리가 **한 행만** 반환. 단일행 비교 연산자(`=, >, <, >=, <=, <>`) 사용.
 
@@ -218,7 +218,7 @@ FROM   employees
 WHERE  salary > (SELECT AVG(salary) FROM employees);
 ```
 
-### 다중행 서브쿼리
+### 나. 다중행 서브쿼리
 
 서브쿼리가 **여러 행**을 반환. IN, ANY, ALL 연산자 사용.
 
@@ -230,7 +230,7 @@ WHERE  salary IN (SELECT salary FROM employees WHERE dept = '영업부')
   AND  dept <> '영업부';
 ```
 
-### 다중열 서브쿼리
+### 다. 다중열 서브쿼리
 
 서브쿼리가 여러 열을 반환.
 
@@ -245,7 +245,7 @@ WHERE  (dept_id, salary) IN (
 );
 ```
 
-### 스칼라 서브쿼리 & 인라인 뷰
+### 라. 스칼라 서브쿼리 & 인라인 뷰
 
 ```sql
 -- 스칼라 서브쿼리: SELECT 절에서 단일값 반환
@@ -264,7 +264,7 @@ WHERE  avg_salary > 3500000;
 
 ---
 
-## 집계함수 (Aggregate Functions)
+## 7. 집계함수 (Aggregate Functions)
 
 집계함수는 여러 행의 값을 계산하여 하나의 결과를 반환합니다.
 
@@ -290,11 +290,11 @@ FROM employees;
 
 ---
 
-## 윈도우 함수 (Window Functions)
+## 8. 윈도우 함수 (Window Functions)
 
 윈도우 함수는 파티션 내 행들 간의 계산을 수행합니다. GROUP BY와 달리 행을 집계하지 않고 각 행에 결과를 추가합니다.
 
-### 기본 문법
+### 가. 기본 문법
 
 ```sql
 함수명() OVER (
@@ -303,7 +303,7 @@ FROM employees;
 )
 ```
 
-### 순위 함수
+### 나. 순위 함수
 
 ```sql
 SELECT
@@ -322,7 +322,7 @@ FROM employees;
 | DENSE_RANK() | 같은 순위, 연속 | 1, 2, 2, 3 |
 | ROW_NUMBER() | 동점 없이 고유 번호 | 1, 2, 3, 4 |
 
-### LAG / LEAD 함수
+### 다. LAG / LEAD 함수
 
 이전 행과 다음 행의 값을 현재 행에서 참조합니다.
 
@@ -337,7 +337,7 @@ FROM orders;
 
 ---
 
-## NULL 처리 함수
+## 9. NULL 처리 함수
 
 NULL은 "알 수 없음"을 의미하며, 일반 비교 연산자로는 비교할 수 없습니다.
 
