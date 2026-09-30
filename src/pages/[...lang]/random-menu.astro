@@ -2,6 +2,7 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import MenuGenerator from "../../components/tools/MenuGenerator";
 import { locales } from "../../lib/i18n";
+import { catalogGroups, type CatalogGroupId } from "../../lib/menu-pick";
 
 type ActiveLocale = (typeof locales)[number];
 
@@ -72,7 +73,7 @@ const content: Record<ActiveLocale, PageContent> = {
     faqs: [
       { question: "정말 완전한 추천 알고리즘인가요?", answer: "아니에요. 이 도구는 취향 예측보다 결정 피로를 줄이는 무작위 선택과 기록 기능에 초점을 둬요." },
       { question: "즐겨찾기와 기록은 어디에 저장되나요?", answer: "브라우저의 localStorage에 저장돼요. 브라우저나 기기를 바꾸면 목록이 이어지지 않을 수 있어요." },
-      { question: "점메추와 저메추는 무엇이 다른가요?", answer: "점메추는 점심으로 표시된 메뉴만, 저메추는 저녁으로 표시된 메뉴만 고릅니다. 랜덤 메뉴는 끼니를 가리지 않아요." },
+      { question: "점메추와 저메추는 무엇이 다른가요?", answer: "점메추는 점심으로 표시된 메뉴만, 저메추는 저녁으로 표시된 메뉴만 고릅니다. 두 끼니에 모두 표시된 메뉴는 양쪽에서 나옵니다. 이름은 이 페이지의 목록과 같습니다. 랜덤 메뉴는 끼니를 가리지 않아요." },
       { question: "맛집 검색은 어떻게 작동하나요?", answer: "고른 메뉴 이름으로 카카오맵, 네이버 지도, 구글 지도의 검색을 열어요. 브라우저 위치는 보내지 않아요." },
     ],
     disclaimer: "추천 결과는 참고용이며 알레르기, 식단 제한, 영업시간, 실제 메뉴 가격은 직접 확인하세요.",
@@ -196,6 +197,90 @@ const content: Record<ActiveLocale, PageContent> = {
 
 const c = content[locale] ?? content.en;
 
+const catalogCopy: Record<ActiveLocale, { title: string; intro: string; groups: Record<CatalogGroupId, string> }> = {
+  ko: {
+    title: "이 페이지에서 고르는 메뉴",
+    intro: "점메추는 점심에만 나오는 메뉴와 공통 메뉴에서 고르고, 저메추는 저녁에만 나오는 메뉴와 공통 메뉴에서 고릅니다. 혼밥, 해장, 야식은 그 표시가 있는 메뉴입니다. 끼니 표시가 없는 메뉴는 랜덤 메뉴에서만 나옵니다.",
+    groups: {
+      lunchOnly: "점메추 · 점심에만 나오는 메뉴",
+      dinnerOnly: "저메추 · 저녁에만 나오는 메뉴",
+      both: "점메추·저메추 공통 메뉴",
+      solo: "혼밥",
+      hangover: "해장",
+      late: "야식",
+      unspecified: "랜덤 메뉴에만 나오는 메뉴",
+    },
+  },
+  en: {
+    title: "Dishes this page can pick",
+    intro: "Lunch pick draws from lunch-only dishes and the shared list. Dinner pick draws from dinner-only dishes and the shared list. Solo, hangover, and late-night groups follow those marks. Dishes with no meal mark appear only on Random menu.",
+    groups: {
+      lunchOnly: "Lunch pick · lunch only",
+      dinnerOnly: "Dinner pick · dinner only",
+      both: "Shared by lunch and dinner",
+      solo: "Eating alone",
+      hangover: "Hangover food",
+      late: "Late night",
+      unspecified: "Random menu only",
+    },
+  },
+  ja: {
+    title: "このページが選ぶメニュー",
+    intro: "昼食は昼だけのメニューと共通メニューから、夕食は夜だけのメニューと共通メニューから選びます。一人ご飯、二日酔い、夜食はその印が付いたメニューです。食事の印がないものはランダムメニューにだけ出ます。",
+    groups: {
+      lunchOnly: "昼食だけ",
+      dinnerOnly: "夕食だけ",
+      both: "昼食と夕食の共通",
+      solo: "一人ご飯",
+      hangover: "二日酔い",
+      late: "夜食",
+      unspecified: "ランダムメニューだけ",
+    },
+  },
+  zh: {
+    title: "这个页面会选的菜单",
+    intro: "午餐从仅午餐和共同菜单里选，晚餐从仅晚餐和共同菜单里选。独自吃、解酒、夜宵按各自标记。没有餐次标记的只出现在随机菜单。",
+    groups: {
+      lunchOnly: "仅午餐",
+      dinnerOnly: "仅晚餐",
+      both: "午餐和晚餐都能选",
+      solo: "独自吃",
+      hangover: "解酒",
+      late: "夜宵",
+      unspecified: "只在随机菜单",
+    },
+  },
+  fr: {
+    title: "Plats que cette page peut choisir",
+    intro: "Le déjeuner pioche dans les plats de midi et la liste commune. Le dîner pioche dans les plats du soir et la liste commune. Seul, lendemain difficile et nuit suivent ces marques. Un plat sans repas n'apparaît que dans le menu aléatoire.",
+    groups: {
+      lunchOnly: "Déjeuner seulement",
+      dinnerOnly: "Dîner seulement",
+      both: "Déjeuner et dîner",
+      solo: "Seul",
+      hangover: "Lendemain difficile",
+      late: "Nuit",
+      unspecified: "Menu aléatoire seulement",
+    },
+  },
+  es: {
+    title: "Platos que esta página puede elegir",
+    intro: "El almuerzo sale de los platos de mediodía y de la lista común. La cena sale de los platos de noche y de la lista común. Comer solo, resaca y noche siguen esas marcas. Un plato sin comida solo aparece en el menú aleatorio.",
+    groups: {
+      lunchOnly: "Solo almuerzo",
+      dinnerOnly: "Solo cena",
+      both: "Almuerzo y cena",
+      solo: "Comer solo",
+      hangover: "Resaca",
+      late: "Noche",
+      unspecified: "Solo menú aleatorio",
+    },
+  },
+};
+
+const catalog = catalogCopy[locale] ?? catalogCopy.en;
+const menuGroups = catalogGroups();
+
 const structuredData = [
   {
     "@context": "https://schema.org",
@@ -226,7 +311,27 @@ const structuredData = [
     </div>
     <MenuGenerator client:load locale={locale} />
 
-    <section class="mt-6 sm:mt-10 border-t border-slate-200 pt-5 sm:pt-8">
+    <section class="mt-6 sm:mt-10 border-t border-slate-200 pt-5 sm:pt-8" aria-labelledby="menu-catalog-title">
+      <h2 id="menu-catalog-title" class="text-xl font-bold text-slate-900">{catalog.title}</h2>
+      <p class="mt-3 leading-7 text-slate-700">{catalog.intro}</p>
+      <div class="mt-5 space-y-6">
+        {menuGroups.map((group) => (
+          <div>
+            <h3 id={`menu-${group.id}`} class="text-base font-semibold text-slate-900">
+              {catalog.groups[group.id]}
+              <span class="ml-1 font-normal text-slate-500">({group.labels.length})</span>
+            </h3>
+            <ul class="mt-2 columns-2 gap-x-6 text-sm leading-6 text-slate-700 sm:columns-3">
+              {group.labels.map((label) => (
+                <li class="break-inside-avoid break-words">{label}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-6 sm:mt-10">
       <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>
       <p class="mt-4 leading-8 text-slate-700">{c.intro}</p>
     </section>

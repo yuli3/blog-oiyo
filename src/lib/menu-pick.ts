@@ -62,3 +62,58 @@ export function mapSearchLinks(dish: string, placeWord: string, locale: string):
     google,
   ];
 }
+
+export type CatalogGroupId =
+  | 'lunchOnly'
+  | 'dinnerOnly'
+  | 'both'
+  | 'solo'
+  | 'hangover'
+  | 'late'
+  | 'unspecified';
+
+const CATALOG_ORDER: CatalogGroupId[] = [
+  'lunchOnly',
+  'dinnerOnly',
+  'both',
+  'solo',
+  'hangover',
+  'late',
+  'unspecified',
+];
+
+function rowLabel(item: MenuItem): string {
+  return item.menu.split(/\s+/).filter(Boolean).join(' · ');
+}
+
+// 2026-09-30: most rows carry both 점심 and 저녁. Writing both full lists
+// would repeat the same names, so exclusive meals stay separate from the shared set.
+export function catalogGroups(): { id: CatalogGroupId; labels: string[] }[] {
+  const buckets: Record<CatalogGroupId, string[]> = {
+    lunchOnly: [],
+    dinnerOnly: [],
+    both: [],
+    solo: [],
+    hangover: [],
+    late: [],
+    unspecified: [],
+  };
+
+  for (const item of menuData.all) {
+    const label = rowLabel(item);
+    const lunch = hasTag(item, '점심');
+    const dinner = hasTag(item, '저녁');
+    if (lunch && dinner) buckets.both.push(label);
+    else if (lunch) buckets.lunchOnly.push(label);
+    else if (dinner) buckets.dinnerOnly.push(label);
+    else buckets.unspecified.push(label);
+    if (hasTag(item, '혼밥')) buckets.solo.push(label);
+    if (hasTag(item, '해장')) buckets.hangover.push(label);
+    if (hasTag(item, '야식')) buckets.late.push(label);
+  }
+
+  return CATALOG_ORDER.map((id) => ({
+    id,
+    labels: [...new Set(buckets[id])].sort((a, b) => a.localeCompare(b, 'ko')),
+  })).filter((group) => group.labels.length > 0);
+}
