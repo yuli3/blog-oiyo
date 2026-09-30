@@ -30,11 +30,16 @@ const CAREER_SERIES = new Set([
   "Excel from Basics to Advanced", "International Trade English", "TOEIC Strategy",
   "전산회계 2급", "투자자산운용사", "엑셀 기초~고급", "워드프로세서 1급", "ADsP 데이터분석 준전문가", "공문서 작성법", "9급 공무원 행정직 완전정복", "한국사능력검정", "사회조사분석사 2급 완전정복", "무역영어 1급 완전정복", "영어 문법 완성", "TOEIC 전략", "한국사능력검정 대비"]);
 const LIFE_MONEY_SLUG_PREFIXES = ["magazine-checklist-"];
+// 2026-09-30: 27UP850K 사용기는 집에서 고른 가전 기록이라 기타의 생활·돈에 둔다.
+// Lifestyle 라벨만 따르면 교양으로 떨어진다. 금융 글이 아니므로 이 슬러그만 예외로 둔다.
+const LIFE_MONEY_ARTICLE_OVERRIDES = new Set([
+  "magazine-lg-27up850k-review",
+]);
 
 export function otherGroupOf(post: CollectionEntry<"blog">): OtherGroup {
   const base = post.slug.split("/").at(-1) ?? "";
   if (CAREER_ARTICLE_OVERRIDES.has(base) || CAREER_SLUG_PREFIXES.some((prefix) => base.startsWith(prefix))) return "career-credentials";
-  if (LIFE_MONEY_SLUG_PREFIXES.some((prefix) => base.startsWith(prefix))) return "life-money";
+  if (LIFE_MONEY_ARTICLE_OVERRIDES.has(base) || LIFE_MONEY_SLUG_PREFIXES.some((prefix) => base.startsWith(prefix))) return "life-money";
   if (CAREER_SERIES.has(String(post.data.series ?? ""))) return "career-credentials";
   const category = post.data.category ?? "";
   if (LIFE_MONEY.has(category)) return "life-money";
