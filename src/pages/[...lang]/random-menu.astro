@@ -13,8 +13,8 @@ const { locale } = Astro.props as { locale: ActiveLocale };
 
 const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
-    title: "랜덤 메뉴 고르기 — 오늘 뭐 먹지? 한식·일식·중식·양식 랜덤 추천",
-    description: "메뉴 고민 끝! 버튼 하나로 한식, 일식, 중식, 양식 등 300가지 이상 메뉴 중 랜덤 추천. 즐겨찾기·메뉴배틀·맛집 검색 지원.",
+    title: "점메추·저메추, 랜덤 메뉴 — 오늘 뭐 먹지?",
+    description: "점심은 점메추, 저녁은 저메추, 그 외에는 랜덤 메뉴. 한식·일식·중식·양식 후보에서 고르고, 지도 앱 검색으로 이어가요. 위치는 보내지 않아요.",
   },
   en: {
     title: "Random Food Picker — What Should I Eat Today?",
@@ -55,7 +55,7 @@ type PageContent = {
 const content: Record<ActiveLocale, PageContent> = {
   ko: {
     introTitle: "메뉴 고르기는 취향보다 피로가 문제일 때가 많아요",
-    intro: "점심, 저녁, 모임 메뉴를 정할 때 선택지가 많을수록 결정은 느려져요. 랜덤 메뉴 도구는 한식·일식·중식·양식 등 여러 후보를 무작위로 제안하고, 즐겨찾기·기록·메뉴 배틀·맛집 검색으로 가벼운 결정을 빨리 끝내도록 도와요.",
+    intro: "점심은 점메추, 저녁은 저메추, 끼니를 정하지 않았으면 랜덤 메뉴를 눌러요. 한식·일식·중식·양식 후보에서 그 끼니에 맞는 메뉴만 고르고, 마음에 들면 즐겨찾기·기록·메뉴 배틀로 이어가요. 지도 버튼은 카카오맵, 네이버 지도, 구글 지도의 검색만 열어요. 현재 위치는 보내지 않아요.",
     formulaTitle: "랜덤 추천 개념",
     formulas: [
       { title: "후보 풀", body: "고른 음식 종류 안에서 메뉴 후보를 모아 오늘의 선택 범위를 먼저 좁혀요." },
@@ -65,20 +65,21 @@ const content: Record<ActiveLocale, PageContent> = {
     howToTitle: "사용 방법",
     steps: [
       "음식 종류를 고르거나 전체 메뉴에서 시작해요.",
-      "랜덤 추천이나 메뉴 배틀로 오늘의 후보를 정해요.",
-      "마음에 들면 즐겨찾기에 저장하거나 맛집 검색으로 이어가요.",
+      "점메추, 저메추, 랜덤 메뉴 중 하나를 눌러 오늘의 후보를 정해요.",
+      "마음에 들면 즐겨찾기에 저장하거나 지도 검색으로 이어가요.",
     ],
     faqTitle: "자주 묻는 질문",
     faqs: [
       { question: "정말 완전한 추천 알고리즘인가요?", answer: "아니에요. 이 도구는 취향 예측보다 결정 피로를 줄이는 무작위 선택과 기록 기능에 초점을 둬요." },
       { question: "즐겨찾기와 기록은 어디에 저장되나요?", answer: "브라우저의 localStorage에 저장돼요. 브라우저나 기기를 바꾸면 목록이 이어지지 않을 수 있어요." },
-      { question: "맛집 검색은 어떻게 작동하나요?", answer: "고른 메뉴 이름으로 새 검색 창을 열어 주변 음식점이나 관련 결과를 찾을 수 있게 해요." },
+      { question: "점메추와 저메추는 무엇이 다른가요?", answer: "점메추는 점심으로 표시된 메뉴만, 저메추는 저녁으로 표시된 메뉴만 고릅니다. 랜덤 메뉴는 끼니를 가리지 않아요." },
+      { question: "맛집 검색은 어떻게 작동하나요?", answer: "고른 메뉴 이름으로 카카오맵, 네이버 지도, 구글 지도의 검색을 열어요. 브라우저 위치는 보내지 않아요." },
     ],
     disclaimer: "추천 결과는 참고용이며 알레르기, 식단 제한, 영업시간, 실제 메뉴 가격은 직접 확인하세요.",
   },
   en: {
     introTitle: "Choosing food is often about decision fatigue, not taste",
-    intro: "Lunch, dinner, and group meals can slow down when there are too many acceptable options. This random food picker narrows the pool by cuisine, suggests a menu at random, and supports favorites, history, battle mode, and restaurant search for a faster low-stakes decision.",
+    intro: "Use lunch pick, dinner pick, or a random menu when too many options slow the decision. Lunch and dinner stay inside dishes marked for that meal. Map buttons open a search in the map app and do not send your location.",
     formulaTitle: "Random choice concepts",
     formulas: [
       { title: "Candidate pool", body: "A cuisine filter limits the set of possible dishes before the random choice happens." },
@@ -95,7 +96,7 @@ const content: Record<ActiveLocale, PageContent> = {
     faqs: [
       { question: "Is this a personalized recommendation engine?", answer: "No. It is designed to reduce decision fatigue with random selection, history, and favorites rather than predict taste." },
       { question: "Where are favorites and history stored?", answer: "They are stored in your browser's localStorage. They may not carry over to another browser or device." },
-      { question: "How does restaurant search work?", answer: "The tool uses the selected menu name to open a search, helping you continue from choice to nearby or relevant options." },
+      { question: "How does restaurant search work?", answer: "It opens a map search for the chosen dish. Your location is not sent." },
     ],
     disclaimer: "Use results as suggestions only; check allergies, dietary rules, opening hours, and actual prices yourself.",
   },
@@ -118,7 +119,7 @@ const content: Record<ActiveLocale, PageContent> = {
     faqs: [
       { question: "個人向けの本格推薦ですか？", answer: "いいえ。好み予測ではなく、ランダム選択、履歴、お気に入りで決定疲れを減らすための道具です。" },
       { question: "お気に入りや履歴はどこに保存されますか？", answer: "ブラウザのlocalStorageに保存されます。別のブラウザや端末には引き継がれない場合があります。" },
-      { question: "店の検索はどう動きますか？", answer: "選ばれたメニュー名をもとに検索を開き、近くの店や関連情報を探しやすくします。" },
+      { question: "店の検索はどう動きますか？", answer: "選んだメニュー名で地図の検索を開きます。位置情報は送りません。" },
     ],
     disclaimer: "結果は参考です。アレルギー、食事制限、営業時間、実際の価格は自分で確認してください。",
   },
@@ -141,7 +142,7 @@ const content: Record<ActiveLocale, PageContent> = {
     faqs: [
       { question: "这是个性化推荐算法吗？", answer: "不是。它重点在于用随机选择、历史和收藏降低决策疲劳，而不是预测个人口味。" },
       { question: "收藏和历史保存在哪里？", answer: "它们保存在浏览器 localStorage 中。换浏览器或设备后可能不会同步。" },
-      { question: "餐厅搜索如何工作？", answer: "工具会根据所选菜单名打开搜索，帮助你从菜单决定继续找到相关餐厅结果。" },
+      { question: "餐厅搜索如何工作？", answer: "按所选菜名打开地图搜索。不会发送你的位置。" },
     ],
     disclaimer: "推荐仅供参考；过敏、饮食限制、营业时间和实际价格请自行确认。",
   },
@@ -164,7 +165,7 @@ const content: Record<ActiveLocale, PageContent> = {
     faqs: [
       { question: "Est-ce un moteur de recommandation personnalisé ?", answer: "Non. L'outil réduit surtout la fatigue décisionnelle avec tirage aléatoire, historique et favoris." },
       { question: "Où sont stockés favoris et historique ?", answer: "Ils sont enregistrés dans le localStorage du navigateur et peuvent ne pas suivre sur un autre appareil." },
-      { question: "Comment fonctionne la recherche de restaurant ?", answer: "Elle part du nom du plat sélectionné pour ouvrir une recherche et continuer vers des options proches ou pertinentes." },
+      { question: "Comment fonctionne la recherche de restaurant ?", answer: "Elle ouvre une recherche de carte pour le plat choisi. Votre position n'est pas envoyée." },
     ],
     disclaimer: "Ces résultats sont indicatifs ; vérifiez allergies, règles alimentaires, horaires et prix réels vous-même.",
   },
@@ -187,7 +188,7 @@ const content: Record<ActiveLocale, PageContent> = {
     faqs: [
       { question: "¿Es un motor de recomendación personalizado?", answer: "No. Está pensado para reducir la fatiga de decisión con azar, historial y favoritos, no para predecir gustos." },
       { question: "¿Dónde se guardan favoritos e historial?", answer: "Se guardan en localStorage del navegador. Puede que no se compartan con otro navegador o dispositivo." },
-      { question: "¿Cómo funciona la búsqueda de restaurantes?", answer: "Usa el nombre del menú seleccionado para abrir una búsqueda y pasar de la elección a opciones cercanas o relevantes." },
+      { question: "¿Cómo funciona la búsqueda de restaurantes?", answer: "Abre una búsqueda en el mapa con el plato elegido. No se envía tu ubicación." },
     ],
     disclaimer: "Usa los resultados como sugerencias; verifica alergias, restricciones dietéticas, horarios y precios reales por tu cuenta.",
   },
@@ -220,10 +221,10 @@ const structuredData = [
   <div class="mx-auto max-w-2xl px-4 py-5 sm:py-8">
     <div class="mb-5 sm:mb-8 text-center">
       <div class="text-5xl mb-3">🍽️</div>
-      <h1 class="text-3xl font-bold tracking-tight mb-2">랜덤 메뉴 고르기</h1>
-      <p class="text-muted-foreground">오늘 뭐 먹지? 버튼 하나로 메뉴 결정!</p>
+      <h1 class="text-3xl font-bold tracking-tight mb-2">{locale === 'ko' ? '랜덤 메뉴 고르기' : m.title.split('—')[0].trim()}</h1>
+      <p class="text-muted-foreground">{locale === 'ko' ? '점메추, 저메추, 아니면 아무거나.' : c.introTitle}</p>
     </div>
-    <MenuGenerator client:load />
+    <MenuGenerator client:load locale={locale} />
 
     <section class="mt-6 sm:mt-10 border-t border-slate-200 pt-5 sm:pt-8">
       <h2 class="text-2xl font-bold text-slate-900">{c.introTitle}</h2>

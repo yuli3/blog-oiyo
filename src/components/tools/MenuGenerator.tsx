@@ -10,6 +10,7 @@ import Search from 'lucide-react/dist/esm/icons/search'
 import CheckCircle from 'lucide-react/dist/esm/icons/check-circle'
 import Swords from 'lucide-react/dist/esm/icons/swords';
 import menuData, { countryLabels, type CountryType, type MenuItem } from '@/lib/menu-data';
+import { mapSearchLinks, mealFromQuery, poolFor, suggestedMeal, type MealMode } from '@/lib/menu-pick';
 
 const MAX_HISTORY = 10;
 const STORAGE_KEY_HISTORY = 'menu-history';
@@ -73,11 +74,9 @@ function useThrottle<T extends (...args: never[]) => void>(fn: T, ms: number): T
   );
 }
 
-// 상황·끼니·계절 필터 (menu-data 태그 어휘의 실용 부분집합)
+// 상황·계절 필터. 점심·저녁은 아래 점메추/저메추 버튼이 맡는다.
 const FILTER_TAGS: { key: string; label: string }[] = [
   { key: 'all', label: '전체' },
-  { key: '점심', label: '🥪 점심' },
-  { key: '저녁', label: '🍽️ 저녁' },
   { key: '야식', label: '🌙 야식' },
   { key: '해장', label: '🍲 해장' },
   { key: '여름', label: '☀️ 여름' },
@@ -87,9 +86,153 @@ const FILTER_TAGS: { key: string; label: string }[] = [
   { key: '회식', label: '🍻 회식' },
 ];
 
-export default function MenuGenerator() {
+type MealCopy = {
+  random: string;
+  lunch: string;
+  dinner: string;
+  hintLunch: string;
+  hintDinner: string;
+  mapsTitle: string;
+  mapsNote: string;
+  kakao: string;
+  naver: string;
+  google: string;
+  shareTitle: string;
+  shareAny: string;
+  shareLunch: string;
+  shareDinner: string;
+  placeWord: string;
+  emptyTitle: string;
+  emptyBody: string;
+};
+
+const COPY: Record<string, MealCopy> = {
+  ko: {
+    random: '랜덤 메뉴',
+    lunch: '점메추',
+    dinner: '저메추',
+    hintLunch: '지금은 점심 시간이에요.',
+    hintDinner: '지금은 저녁 시간이에요.',
+    mapsTitle: '지도에서 이 메뉴 찾기',
+    mapsNote: '지도 앱의 검색만 열어요. 위치는 보내지 않아요.',
+    kakao: '카카오맵',
+    naver: '네이버 지도',
+    google: '구글 지도',
+    shareTitle: '오늘 뭐 먹지?',
+    shareAny: '오늘 메뉴는 "{name}"이에요.',
+    shareLunch: '점메추는 "{name}"이에요.',
+    shareDinner: '저메추는 "{name}"이에요.',
+    placeWord: '맛집',
+    emptyTitle: '점메추, 저메추, 또는 랜덤 메뉴를 눌러 보세요.',
+    emptyBody: '점심과 저녁은 그 끼니 메뉴 안에서만 고릅니다.',
+  },
+  en: {
+    random: 'Random menu',
+    lunch: 'Lunch pick',
+    dinner: 'Dinner pick',
+    hintLunch: 'It is lunchtime on this device.',
+    hintDinner: 'It is dinnertime on this device.',
+    mapsTitle: 'Find this dish on a map',
+    mapsNote: 'Opens a map search. Your location is not sent.',
+    kakao: 'Kakao Map',
+    naver: 'Naver Map',
+    google: 'Google Maps',
+    shareTitle: 'What should we eat?',
+    shareAny: 'Today\'s menu is "{name}".',
+    shareLunch: 'Lunch pick: "{name}".',
+    shareDinner: 'Dinner pick: "{name}".',
+    placeWord: 'restaurant',
+    emptyTitle: 'Try a lunch pick, a dinner pick, or a random menu.',
+    emptyBody: 'Lunch and dinner stay inside dishes tagged for that meal.',
+  },
+  ja: {
+    random: 'ランダムメニュー',
+    lunch: '昼ごはん',
+    dinner: '夕ごはん',
+    hintLunch: 'この端末の時刻は昼です。',
+    hintDinner: 'この端末の時刻は夜です。',
+    mapsTitle: '地図でこのメニューを探す',
+    mapsNote: '地図アプリの検索を開きます。位置情報は送りません。',
+    kakao: 'カカオマップ',
+    naver: 'ネイバー地図',
+    google: 'Google マップ',
+    shareTitle: '今日は何を食べる？',
+    shareAny: '今日のメニューは「{name}」です。',
+    shareLunch: '昼ごはんは「{name}」です。',
+    shareDinner: '夕ごはんは「{name}」です。',
+    placeWord: 'レストラン',
+    emptyTitle: '昼ごはん、夕ごはん、またはランダムを押してください。',
+    emptyBody: '昼と夜は、その食事向けのメニューだけから選びます。',
+  },
+  zh: {
+    random: '随机菜单',
+    lunch: '午餐推荐',
+    dinner: '晚餐推荐',
+    hintLunch: '这台设备现在是午餐时间。',
+    hintDinner: '这台设备现在是晚餐时间。',
+    mapsTitle: '在地图上找这道菜',
+    mapsNote: '只打开地图搜索。不会发送你的位置。',
+    kakao: 'Kakao 地图',
+    naver: 'Naver 地图',
+    google: '谷歌地图',
+    shareTitle: '今天吃什么？',
+    shareAny: '今天的菜单是「{name}」。',
+    shareLunch: '午餐推荐是「{name}」。',
+    shareDinner: '晚餐推荐是「{name}」。',
+    placeWord: '餐厅',
+    emptyTitle: '选午餐、晚餐，或随机菜单。',
+    emptyBody: '午餐和晚餐只从对应餐次的菜里抽。',
+  },
+  fr: {
+    random: 'Menu au hasard',
+    lunch: 'Déjeuner',
+    dinner: 'Dîner',
+    hintLunch: 'Sur cet appareil, c\'est l\'heure du déjeuner.',
+    hintDinner: 'Sur cet appareil, c\'est l\'heure du dîner.',
+    mapsTitle: 'Chercher ce plat sur une carte',
+    mapsNote: 'Ouvre une recherche de carte. Votre position n\'est pas envoyée.',
+    kakao: 'Kakao Map',
+    naver: 'Naver Map',
+    google: 'Google Maps',
+    shareTitle: 'On mange quoi ?',
+    shareAny: 'Le menu du jour est « {name} ».',
+    shareLunch: 'Pour le déjeuner : « {name} ».',
+    shareDinner: 'Pour le dîner : « {name} ».',
+    placeWord: 'restaurant',
+    emptyTitle: 'Choisissez un déjeuner, un dîner, ou un menu au hasard.',
+    emptyBody: 'Le déjeuner et le dîner restent dans les plats de ce repas.',
+  },
+  es: {
+    random: 'Menú al azar',
+    lunch: 'Comida',
+    dinner: 'Cena',
+    hintLunch: 'En este dispositivo es hora de comer.',
+    hintDinner: 'En este dispositivo es hora de cenar.',
+    mapsTitle: 'Buscar este plato en un mapa',
+    mapsNote: 'Abre una búsqueda en el mapa. No se envía tu ubicación.',
+    kakao: 'Kakao Map',
+    naver: 'Naver Map',
+    google: 'Google Maps',
+    shareTitle: '¿Qué comemos?',
+    shareAny: 'El menú de hoy es «{name}».',
+    shareLunch: 'Para comer: «{name}».',
+    shareDinner: 'Para cenar: «{name}».',
+    placeWord: 'restaurante',
+    emptyTitle: 'Prueba comida, cena o un menú al azar.',
+    emptyBody: 'La comida y la cena salen solo de platos de esa comida.',
+  },
+};
+
+function fillName(template: string, name: string): string {
+  return template.replace('{name}', name);
+}
+
+export default function MenuGenerator({ locale = 'ko' }: { locale?: string }) {
+  const copy = COPY[locale] ?? COPY.en;
   const [selectedCountry, setSelectedCountry] = useState<CountryType>('all');
   const [selectedTag, setSelectedTag] = useState<string>('all');
+  const [meal, setMeal] = useState<MealMode>('any');
+  const [suggestion, setSuggestion] = useState<Exclude<MealMode, 'any'> | null>(null);
   const [selectedMenu, setSelectedMenu] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [history, setHistory] = useState<string[]>([]);
@@ -100,31 +243,49 @@ export default function MenuGenerator() {
   const [battleMode, setBattleMode] = useState(false);
   const [battleOptions, setBattleOptions] = useState<[string, string] | null>(null);
   const [imgError, setImgError] = useState(false);
+  const spinTimer = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     setHistory(getHistory());
     setFavorites(getFavorites());
+    const fromUrl = new URLSearchParams(window.location.search).get('meal');
+    if (fromUrl) setMeal(mealFromQuery(fromUrl));
+    setSuggestion(suggestedMeal(new Date().getHours()));
+    return () => {
+      if (spinTimer.current) clearInterval(spinTimer.current);
+    };
+  }, []);
+
+  const rememberMeal = useCallback((next: MealMode) => {
+    const url = new URL(window.location.href);
+    if (next === 'any') url.searchParams.delete('meal');
+    else url.searchParams.set('meal', next);
+    window.history.replaceState(null, '', url);
   }, []);
 
   const spin = useCallback((pool: MenuItem[]) => {
     if (pool.length === 0) return;
+    if (spinTimer.current) clearInterval(spinTimer.current);
     setIsGenerating(true);
     setSelectedMenu(null);
     setSelectedImage(null);
     setImgError(false);
     setSpinText('');
+    setBattleMode(false);
+    setBattleOptions(null);
 
     const duration = 2000;
     const interval = 100;
     const count = duration / interval;
     let i = 0;
 
-    const timer = setInterval(() => {
+    spinTimer.current = setInterval(() => {
       const r = pool[Math.floor(Math.random() * pool.length)];
       setSpinText(r.menu.split(' ')[0]);
       i++;
       if (i >= count) {
-        clearInterval(timer);
+        if (spinTimer.current) clearInterval(spinTimer.current);
+        spinTimer.current = null;
         const final = pool[Math.floor(Math.random() * pool.length)];
         setSelectedMenu(final.menu);
         setSelectedImage(final.image);
@@ -137,32 +298,33 @@ export default function MenuGenerator() {
     }, interval);
   }, []);
 
-  const generate = useThrottle(
-    useCallback(() => {
-      const base = menuData[selectedCountry];
-      const pool = selectedTag === 'all' ? base : base.filter((m) => m.tags?.includes(selectedTag));
-      // 태그 교차 결과가 비면 국가 풀 → 전체 순으로 폴백
-      spin(pool.length > 0 ? pool : base.length > 0 ? base : menuData.all);
-    }, [selectedCountry, selectedTag, spin]),
+  const pick = useThrottle(
+    useCallback((next: MealMode) => {
+      setMeal(next);
+      rememberMeal(next);
+      spin(poolFor(selectedCountry, next, selectedTag));
+    }, [rememberMeal, selectedCountry, selectedTag, spin]),
     1000
   );
 
   const generateSurprise = useThrottle(
     useCallback(() => {
+      setMeal('any');
+      rememberMeal('any');
       spin(menuData.all);
-    }, [spin]),
+    }, [rememberMeal, spin]),
     1000
   );
 
   const startBattle = useCallback(() => {
-    const pool = menuData.all;
+    const pool = poolFor(selectedCountry, meal, selectedTag);
     if (pool.length < 2) return;
     let i1 = Math.floor(Math.random() * pool.length);
     let i2 = Math.floor(Math.random() * pool.length);
     while (i2 === i1) i2 = Math.floor(Math.random() * pool.length);
     setBattleOptions([pool[i1].menu, pool[i2].menu]);
     setBattleMode(true);
-  }, []);
+  }, [meal, selectedCountry, selectedTag]);
 
   const chooseBattle = useCallback((winner: string) => {
     setSelectedMenu(winner);
@@ -188,19 +350,20 @@ export default function MenuGenerator() {
   const handleShare = useCallback(async () => {
     if (!selectedMenu) return;
     const name = selectedMenu.split(' ')[0];
-    const data = { title: '오늘 뭐 먹지?', text: `오늘 메뉴는 "${name}"으로 결정!`, url: window.location.href };
+    const template = meal === 'lunch' ? copy.shareLunch : meal === 'dinner' ? copy.shareDinner : copy.shareAny;
+    const data = { title: copy.shareTitle, text: fillName(template, name), url: window.location.href };
     try {
       if (navigator.share) await navigator.share(data);
       else { await navigator.clipboard.writeText(`${data.text} ${data.url}`); alert('클립보드에 복사했어요!'); }
     } catch (e) {
       if ((e as Error).name !== 'AbortError') console.error(e);
     }
-  }, [selectedMenu]);
+  }, [copy.shareAny, copy.shareDinner, copy.shareLunch, copy.shareTitle, meal, selectedMenu]);
 
   const handleSearch = useCallback((e: React.FormEvent) => {
     e.preventDefault();
-    if (searchQuery) window.open(`https://www.google.com/search?q=${encodeURIComponent(searchQuery + ' 맛집')}`, '_blank');
-  }, [searchQuery]);
+    if (searchQuery) window.open(`https://www.google.com/search?q=${encodeURIComponent(`${searchQuery} ${copy.placeWord}`)}`, '_blank');
+  }, [copy.placeWord, searchQuery]);
 
   const isFav = selectedMenu ? favorites.includes(selectedMenu) : false;
 
@@ -228,7 +391,7 @@ export default function MenuGenerator() {
 
       {/* Situation / meal-time / season selector */}
       <div>
-        <p className="text-sm font-semibold mb-3 text-muted-foreground uppercase tracking-widest">상황 · 끼니 · 계절</p>
+        <p className="text-sm font-semibold mb-3 text-muted-foreground uppercase tracking-widest">상황 · 계절</p>
         <div className="flex flex-wrap gap-2">
           {FILTER_TAGS.map((tg) => (
             <button
@@ -246,17 +409,54 @@ export default function MenuGenerator() {
         </div>
       </div>
 
-      {/* Action buttons */}
-      <div className="flex flex-col sm:flex-row gap-3">
+      {meal === 'any' && suggestion && (
+        <p className="text-sm text-muted-foreground">
+          {suggestion === 'lunch' ? copy.hintLunch : copy.hintDinner}{' '}
+          <button
+            type="button"
+            className="font-semibold text-foreground underline-offset-4 hover:underline"
+            aria-label={suggestion === 'lunch' ? `${copy.hintLunch} ${copy.lunch}` : `${copy.hintDinner} ${copy.dinner}`}
+            onClick={() => pick(suggestion)}
+          >
+            {suggestion === 'lunch' ? copy.lunch : copy.dinner}
+          </button>
+        </p>
+      )}
+
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         <Button
-          onClick={generate}
+          onClick={() => pick('any')}
           disabled={isGenerating}
           size="lg"
-          className="flex-1 text-base py-4 sm:py-6"
+          aria-pressed={meal === 'any'}
+          variant={meal === 'any' ? 'default' : 'outline'}
+          className="text-base py-4 sm:py-6"
         >
           <Shuffle className="mr-2 size-5" />
-          {isGenerating ? '선택 중...' : '랜덤 메뉴 고르기'}
+          {copy.random}
         </Button>
+        <Button
+          onClick={() => pick('lunch')}
+          disabled={isGenerating}
+          size="lg"
+          aria-pressed={meal === 'lunch'}
+          variant={meal === 'lunch' ? 'default' : 'outline'}
+          className="text-base py-4 sm:py-6"
+        >
+          {copy.lunch}
+        </Button>
+        <Button
+          onClick={() => pick('dinner')}
+          disabled={isGenerating}
+          size="lg"
+          aria-pressed={meal === 'dinner'}
+          variant={meal === 'dinner' ? 'default' : 'outline'}
+          className="text-base py-4 sm:py-6"
+        >
+          {copy.dinner}
+        </Button>
+      </div>
+      <div className="flex flex-col gap-3 sm:flex-row">
         <Button
           onClick={generateSurprise}
           disabled={isGenerating}
@@ -366,6 +566,19 @@ export default function MenuGenerator() {
                   공유
                 </Button>
               </div>
+              <div className="space-y-2 text-left">
+                <p className="text-sm font-semibold">{copy.mapsTitle}</p>
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+                  {mapSearchLinks(selectedMenu.split(' ')[0], copy.placeWord, locale).map((link) => (
+                    <Button key={link.id} variant="outline" size="sm" asChild>
+                      <a href={link.href} target="_blank" rel="noopener noreferrer">
+                        {link.id === 'kakao' ? copy.kakao : link.id === 'naver' ? copy.naver : copy.google}
+                      </a>
+                    </Button>
+                  ))}
+                </div>
+                <p className="text-xs text-muted-foreground">{copy.mapsNote}</p>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -374,8 +587,8 @@ export default function MenuGenerator() {
       {!selectedMenu && !isGenerating && !battleMode && (
         <div className="my-5 sm:my-8 rounded-xl border-2 border-dashed border-border py-16 text-center text-muted-foreground">
           <Shuffle className="mx-auto mb-3 size-8 opacity-40" />
-          <p className="font-medium">음식 종류를 선택하고 버튼을 눌러보세요!</p>
-          <p className="text-sm mt-1">매일 메뉴 고민, 이제 끝!</p>
+          <p className="font-medium">{copy.emptyTitle}</p>
+          <p className="text-sm mt-1">{copy.emptyBody}</p>
         </div>
       )}
 
@@ -386,7 +599,7 @@ export default function MenuGenerator() {
             <Search className="size-5 text-primary" />
             맛집 검색
           </CardTitle>
-          <CardDescription>결정된 메뉴의 맛집을 바로 찾아보세요</CardDescription>
+          <CardDescription>메뉴 이름으로 웹 검색을 열어요. 위치는 보내지 않아요.</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSearch} className="flex gap-2">
