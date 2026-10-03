@@ -186,10 +186,7 @@ print(result)   # 합격
 
 `for` 문은 시퀀스(리스트, 문자열, range 등)의 각 요소를 순서대로 순회합니다.
 
-```text
-for 변수 in 시퀀스:
-    반복할_코드
-```
+`for 변수 in 시퀀스:` 다음에 들여쓴 본문을 둡니다. 각 반복에서 다음 요소가 변수에 할당되고 본문이 실행됩니다. 리스트뿐 아니라 반복 가능한 객체(iterable)를 순회할 수 있으며, 요소가 모두 소진되면 반복이 끝납니다.
 
 ```python
 # 리스트 순회
@@ -252,10 +249,7 @@ for i in range(5, 0, -1):
 
 조건이 `True`인 동안 코드 블록을 반복합니다.
 
-```text
-while 조건:
-    반복할_코드
-```
+`while 조건:` 다음에 들여쓴 본문을 둡니다. 본문에 들어가기 전에 매번 조건을 평가하므로, 처음부터 조건이 거짓이면 본문은 한 번도 실행되지 않습니다. 조건이 언젠가 거짓이 되도록 상태를 갱신하거나, 본문에서 `break`로 종료해야 합니다.
 
 ```python
 count = 1
@@ -266,7 +260,7 @@ while count <= 5:
 print("반복 종료!")
 ```
 
-**무한 루프 주의**: `while True:`를 사용하면 무한히 반복됩니다. 반드시 `break`로 탈출 조건을 만들어야 합니다.
+**무한 루프 주의**: `while True:`는 조건 검사만으로 종료되지 않습니다. 아래 입력 검증 예제는 유효한 값을 받았을 때 `break`로 빠져나옵니다. 함수 안에서는 `return`으로도 반복을 끝낼 수 있습니다.
 
 ```python
 # while을 이용한 사용자 입력 검증
@@ -278,6 +272,8 @@ while True:
     else:
         print("올바른 나이를 입력하세요!")
 ```
+
+이 예제는 정수로 변환 가능한 입력의 범위만 검사합니다. `abc`처럼 정수가 아닌 입력은 `int()`에서 `ValueError`를 발생시키므로, 실제 입력 처리에는 예외처리도 필요합니다. 예외처리 방법은 6장에서 다룹니다.
 
 ---
 
@@ -372,46 +368,40 @@ for i in range(1, 6):
 
 ## enumerate() — 인덱스와 값 동시에
 
-$$
-\text{fruits} = ["\text{사과}", "\text{바나나}", "\text{딸기}"]
-$$
+`enumerate()`는 순회하면서 위치와 값을 함께 제공한다. 기본 시작 위치는 0이며, 사람이 읽는 번호에는 `start=1`을 사용할 수 있다.
 
-**for i, fruit in enumerate(fruits):**
-
-- **print(f"\{i+1\}번**: \{fruit\}")
-
-**# 출력:**
-
-- **# 1번**: 사과
-- **# 2번**: 바나나
-- **# 3번**: 딸기
-
-`enumerate(시퀀스, start=1)`으로 시작 인덱스 지정 가능:
 ```python
+fruits = ["사과", "바나나", "딸기"]
 for i, fruit in enumerate(fruits, start=1):
     print(f"{i}번: {fruit}")
 ```
 
+출력:
+```text
+1번: 사과
+2번: 바나나
+3번: 딸기
+```
+
 ---
 
-## zip() — 두 시퀀스 병렬 순회
+## zip() — 두 시퀀스 나란히 순회
 
-$$
-\begin{aligned}
-\text{names} &= ["\text{Alice}", "\text{Bob}", "\text{Charlie}"] \\
-\text{scores} &= [90, 85, 92]
-\end{aligned}
-$$
+`zip()`은 각 iterable에서 하나씩 꺼내 묶는다. 여기서 나란히 순회한다는 것은 스레드·CPU 병렬 실행이 아니다. 기본적으로 가장 짧은 입력이 소진되면 끝나므로, 행 개수가 반드시 같아야 하는 업무에서는 길이 불일치도 확인해야 한다.
 
-**for name, score in zip(names, scores):**
+```python
+names = ["Alice", "Bob", "Charlie"]
+scores = [90, 85, 92]
+for name, score in zip(names, scores):
+    print(f"{name}: {score}점")
+```
 
-- **print(f"\{name\}**: \{score\}점")
-
-**# 출력:**
-
-- **# Alice**: 90점
-- **# Bob**: 85점
-- **# Charlie**: 92점
+출력:
+```text
+Alice: 90점
+Bob: 85점
+Charlie: 92점
+```
 
 ---
 

@@ -31,7 +31,7 @@ layoutVariant: lecture-series
 
 ### 1. 업무 자동화
 
-반복적인 작업을 파이썬 스크립트로 자동화하면 수십 시간의 작업을 몇 초로 줄일 수 있습니다.
+반복 작업의 자동화 효과는 작업량·입출력 비용·검증과 오류 처리에 따라 달라진다. 실행 시간뿐 아니라 수작업 검토와 실패 복구 비용까지 비교해야 한다.
 
 - 파일/폴더 일괄 이름 변경
 - 엑셀 보고서 자동 생성
@@ -65,93 +65,277 @@ layoutVariant: lecture-series
 
 ---
 
+## 웹 수집: 요청과 HTML 해석을 분리하기
+
+웹 수집은 HTTP 응답을 받는 단계와 HTML에서 필요한 필드를 추출하는 단계로 나눈다. 두 단계를 분리하면 네트워크 없이도 선택자와 누락 데이터 처리를 검증할 수 있다. 아래는 한 페이지의 정적인 HTML만 해석하는 예제이며, 전체 사이트나 JavaScript로 나중에 표시되는 내용을 수집하는 도구가 아니다.
+
+가상환경에서 `python -m pip install requests beautifulsoup4`로 의존성을 설치한다. HTTP 상태 오류와 본문 해석 오류는 서로 다른 실패다. `raise_for_status()`는 4xx·5xx에서 예외를 발생시키지만, 정상 상태라는 이유만으로 필요한 HTML이나 JSON이 들어 있다는 보장은 없다.
+
+```python
+import requests
+from bs4 import BeautifulSoup
+
+def parse_quotes(html):
+    """필수 필드가 빠진 페이지를 성공으로 보고하지 않는다."""
+    soup = BeautifulSoup(html, "html.parser")
+    blocks = soup.select("div.quote")
+    if not blocks:
+        raise ValueError("인용문 영역이 없습니다: 페이지와 선택자를 확인하세요")
+    quotes = []
+    for index, block in enumerate(blocks, start=1):
+        text = block.select_one("span.text")
+        author = block.select_one("small.author")
+        if text is None or author is None:
+            raise ValueError(f"{index}번째 항목의 본문 또는 작성자가 없습니다")
+        text_value = text.get_text(" ", strip=True)
+        author_value = author.get_text(" ", strip=True)
+        if not text_value or not author_value:
+            raise ValueError(f"{index}번째 항목의 필수 값이 비어 있습니다")
+        quotes.append({
+            "text": text_value,
+            "author": author_value,
+            "tags": [t.get_text(" ", strip=True) for t in block.select("a.tag")],
+        })
+    return quotes
+
+def scrape_quotes(url, *, session=requests):
+    response = session.get(url, timeout=10)
+    response.raise_for_status()
+    return parse_quotes(response.text)
+
+sample_html = '''
+<div class="quote"><span class="text">실제 인용이 아닌 테스트 문장입니다.</span>
+<small class="author">테스트 작성자</small><a class="tag">검증</a></div>
+'''
+quotes = parse_quotes(sample_html)
+assert quotes[0]["author"] == "테스트 작성자"
+assert quotes[0]["tags"] == ["검증"]
+# 실제 요청은 접근 규칙을 확인한 URL을 직접 전달할 때만 수행한다.
+# quotes = scrape_quotes("https://quotes.toscrape.com")
+```
+
+`select_one()`은 일치하는 요소가 없으면 `None`을 반환하므로 바로 `.text`에 접근하면 안 된다. 여기서는 태그가 없는 것은 허용하되, 본문·작성자가 없거나 비면 페이지를 거부한다. 영역 자체가 없을 때도 선택자 변경·접근 차단·실제 빈 페이지를 구분할 수 없으므로 조용히 빈 목록을 반환하지 않는다. 원래 문장의 따옴표도 데이터이므로 임의로 제거하지 않는다.
+
+`timeout=10`은 연결과 응답 읽기의 대기 시간을 제한할 뿐, 다운로드 전체가 10초 안에 끝난다는 뜻이 아니다. 여러 페이지 수집, 재시도·중복 처리·HTML 변경 감지·총 실행시간 제한은 별도로 설계해야 한다. JSON 응답도 상태 확인 뒤 해석하고, 빈 응답이나 잘못된 JSON은 Requests의 exceptions 모듈에 있는 `JSONDecodeError`로 처리한다.
+
+실제 수집 전에는 이용약관·robots.txt·요청 빈도·저작권·개인정보를 확인한다. robots.txt의 허용은 모든 이용에 대한 법적 허가가 아니다. 로그인이나 접근 제한을 우회하지 않으며, 공개된 페이지라는 이유만으로 개인정보를 저장·재배포하지 않는다. 테스트는 위 고정 HTML로 시작하고 실제 요청은 필요한 범위에서만 수행한다.
+
+근거: [Requests 상태·JSON·timeout](https://requests.readthedocs.io/en/latest/user/quickstart/), [연결·읽기 timeout 구분](https://requests.readthedocs.io/en/latest/user/advanced/#timeouts), [Beautiful Soup 선택자](https://www.crummy.com/software/BeautifulSoup/bs4/doc/#css-selectors), [Soup Sieve select_one](https://facelessuser.github.io/soupsieve/api/#soupsieveselect_one).
+
 ## 실전 프로젝트 1: 파일 정리 자동화 스크립트
 
-다운로드 폴더의 파일을 확장자별로 자동 분류합니다.
+파일을 확장자별로 분류하되 기본값은 미리보기다. 전체 대상의 이름 충돌과 심볼릭 링크를 검사한 뒤에만 이동한다. 원본 다운로드 폴더가 아닌 폐기 가능한 복사본으로 시험한다.
 
 ```python
 import os
 import shutil
 from datetime import datetime
 
-def organize_files(source_dir):
-    """
-    지정된 디렉토리의 파일을 확장자별로 분류합니다.
-    """
-    # 확장자별 폴더 매핑
-    categories = {
-        "이미지": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".svg", ".webp"],
-        "문서": [".pdf", ".doc", ".docx", ".txt", ".hwp", ".pptx", ".xlsx"],
-        "동영상": [".mp4", ".avi", ".mov", ".mkv", ".wmv"],
-        "음악": [".mp3", ".wav", ".flac", ".aac"],
-        "압축파일": [".zip", ".rar", ".7z", ".tar", ".gz"],
-        "코드": [".py", ".js", ".html", ".css", ".java", ".cpp"],
-    }
+CATEGORIES = {
+    "이미지": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".svg", ".webp"],
+    "문서": [".pdf", ".doc", ".docx", ".txt", ".hwp", ".pptx", ".xlsx"],
+    "동영상": [".mp4", ".avi", ".mov", ".mkv", ".wmv"],
+    "음악": [".mp3", ".wav", ".flac", ".aac"],
+    "압축파일": [".zip", ".rar", ".7z", ".tar", ".gz"],
+    "코드": [".py", ".js", ".html", ".css", ".java", ".cpp"],
+}
 
-    # 역방향 매핑: 확장자 → 카테고리명
-    ext_to_category = {}
-    for category, extensions in categories.items():
-        for ext in extensions:
-            ext_to_category[ext] = category
+# 2026-10-03: 실행 전 전체 계획을 검사해 기존 파일 덮어쓰기를 막는다.
+EXT_MAP = {ext: cat for cat, exts in CATEGORIES.items() for ext in exts}
 
-    moved_count = 0
-    log_entries = []
+from pathlib import Path
 
-    for filename in os.listdir(source_dir):
-        filepath = os.path.join(source_dir, filename)
-
-        # 폴더는 건너뜀
-        if os.path.isdir(filepath):
+def organize_files(source: str, *, apply=False):
+    root = Path(source)
+    if root.is_symlink() or not root.is_dir():
+        raise ValueError("Use a real, controlled directory.")
+    plan, seen = [], set()
+    for src in sorted(root.iterdir()):
+        if src.is_symlink() or not src.is_file():
             continue
+        dest_dir = root / EXT_MAP.get(src.suffix.lower(), "기타")
+        if dest_dir.is_symlink() or (dest_dir.exists() and not dest_dir.is_dir()):
+            raise ValueError("Invalid destination directory.")
+        dest = dest_dir / src.name
+        key = str(dest).casefold()
+        if dest.exists() or dest.is_symlink() or key in seen:
+            raise FileExistsError(str(dest))
+        seen.add(key)
+        plan.append((src, dest))
 
-        # 확장자 추출
-        _, ext = os.path.splitext(filename)
-        ext = ext.lower()
+    for src, dest in plan:
+        print(f"{src.name} → {dest.relative_to(root)}")
+    if not apply:
+        return plan
 
-        # 카테고리 결정
-        category = ext_to_category.get(ext, "기타")
+    for src, dest in plan:
+        # 2026-10-03: 검사 후 상태가 달라질 수 있어 재확인한다. 원자적 작업은 아니다.
+        if src.is_symlink() or dest.exists() or dest.is_symlink():
+            raise FileExistsError(str(dest))
+        if dest.parent.is_symlink():
+            raise ValueError("Destination became a symlink.")
+        dest.parent.mkdir(exist_ok=True)
+        src.rename(dest)
+    stamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+    with (root / f"organize_{stamp}.log").open("x", encoding="utf-8") as f:
+        f.write("\n".join(f"{src.name} → {dest.relative_to(root)}" for src, dest in plan))
+    return plan
 
-        # 대상 폴더 생성
-        dest_dir = os.path.join(source_dir, category)
-        os.makedirs(dest_dir, exist_ok=True)
-
-        # 파일 이동
-        dest_path = os.path.join(dest_dir, filename)
-        shutil.move(filepath, dest_path)
-        moved_count += 1
-
-        log_msg = f"{filename} → {category}/"
-        log_entries.append(log_msg)
-        print(f"이동: {log_msg}")
-
-    # 로그 파일 저장
-    log_filename = f"organize_log_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
-    log_path = os.path.join(source_dir, log_filename)
-    with open(log_path, "w", encoding="utf-8") as f:
-        f.write(f"파일 정리 완료: {datetime.now()}\n")
-        f.write(f"총 {moved_count}개 파일 이동\n\n")
-        f.write("\n".join(log_entries))
-
-    print(f"\n완료! 총 {moved_count}개 파일을 정리했습니다.")
-    print(f"로그: {log_path}")
-
-# 실행 예시
-# organize_files("/Users/username/Downloads")
+# 임시 복사본에서 organize_files(folder)로 계획을 확인한다.
+# 검토 후 organize_files(folder, apply=True)로 실행한다.
 ```
+
+
+이 예제는 하나의 제어된 폴더에 단독 접근한다는 전제다. 실행 도중 오류가 나면 일부만 이동될 수 있고, 로그 실패가 이동을 되돌리지는 않는다. 백업·복구와 동시 실행 제어는 별도 설계해야 한다. 로그도 기존 파일을 덮어쓰지 않는 `x` 모드로 생성한다.
 
 ---
 
+## 파일 이름 일괄 변경: 계획과 실행 분리
+
+정규식으로 이름 앞 번호를 제거하는 예제다. 원하는 이름으로 바꾸는 것과 기존 파일을 덮어쓰지 않는 것은 별개의 요구사항이다. 먼저 전체 계획을 만들고 충돌을 확인한 뒤, 폐기 가능한 복사본에서만 실행한다.
+
+```python
+import os
+import re
+
+from pathlib import Path
+
+def batch_rename(folder: str, pattern: str, replacement: str, *, apply=False):
+    """파일명만 바꾸고 충돌·경로 변경은 실행 전에 거부한다."""
+    root = Path(folder)
+    if root.is_symlink() or not root.is_dir():
+        raise ValueError("제어 가능한 실제 폴더를 사용하세요.")
+    plan, seen = [], set()
+    for src in sorted(root.iterdir()):
+        if src.is_symlink() or not src.is_file():
+            continue
+        new_name = re.sub(pattern, replacement, src.name)
+        if new_name == src.name:
+            continue
+        if new_name in ("", ".", "..") or "/" in new_name or "\\" in new_name:
+            raise ValueError("변경 결과는 하나의 파일명이어야 합니다.")
+        dst = root / new_name
+        key = new_name.casefold()
+        # 2026-10-03: 기존 파일과 교환형 변경도 거부해 덮어쓰기를 막는다.
+        if dst.exists() or dst.is_symlink() or key in seen:
+            raise FileExistsError(str(dst))
+        seen.add(key)
+        plan.append((src, dst))
+    for src, dst in plan:
+        print(f"{src.name} → {dst.name}")
+    if apply:
+        for src, dst in plan:
+            if src.is_symlink() or dst.exists() or dst.is_symlink():
+                raise FileExistsError(str(dst))
+            src.rename(dst)
+    return plan
+
+# 예: "01_report.pdf" → "report.pdf", 기본값은 미리보기
+# batch_rename("./docs", r"^\d+_", "")
+```
+
+기본값은 미리보기다. 목적지에 파일이 있거나 두 파일이 같은 이름으로 바뀌거나 폴더 밖으로 이동하는 결과를 만들면 계획 단계에서 거부한다. 파일명을 서로 교환하는 작업도 지원하지 않는다. 적용 중 일부만 변경될 수 있으므로 백업과 단독 접근이 전제이며, 이 예제가 원자적 복구를 제공하지는 않는다.
+
+
+## 예약 실행: 간격과 시각의 차이
+
+### 작업 완료 후 일정 간격 기다리기
+
+```python
+import math
+import time
+
+def run_periodic(task, interval=300, *, runs=3, sleep=time.sleep):
+    if isinstance(interval, bool) or not isinstance(interval, (int, float)):
+        raise TypeError("간격은 숫자여야 합니다.")
+    try:
+        seconds = float(interval)
+    except OverflowError as exc:
+        raise ValueError("간격이 너무 큽니다.") from exc
+    if not math.isfinite(seconds) or seconds <= 0:
+        raise ValueError("간격은 유한한 양수여야 합니다.")
+    if runs is not None and (isinstance(runs, bool) or not isinstance(runs, int) or runs < 0):
+        raise ValueError("횟수는 0 이상의 정수 또는 None이어야 합니다.")
+    completed = 0
+    while runs is None or completed < runs:
+        task()  # 2026-10-03: 실패를 호출자에게 전달해 실패한 작업을 성공으로 보고하지 않는다.
+        completed += 1
+        if runs is None or completed < runs:
+            sleep(seconds)
+    return completed
+
+def check_updates():
+    print("테스트 업데이트 확인")
+
+# 유한 반복 테스트이며 웹 요청이나 파일 변경을 수행하지 않는다.
+run_periodic(check_updates, interval=1, runs=3)
+
+# 명시적으로 상시 실행하려면: run_periodic(check_updates, runs=None)
+```
+
+첫 작업은 즉시 실행한다. 기본 간격 300초는 앞 작업이 **끝난 뒤** 300초 기다린다는 뜻이며, 매 5분의 정각에 시작한다는 뜻이 아니다. 작업이 길면 다음 시작 시각도 밀린다. `runs=0`이면 실행하지 않고, 작업 예외는 숨기지 않고 루프를 중단해 호출자에게 전달한다. 유한 반복은 실습용이고 `runs=None`인 상시 실행은 프로세스를 점유하므로 종료·감시 정책이 필요하다. 운영체제 사정에 따라 sleep이 더 길어질 수 있어 정밀한 실행 시각을 보장하지 않는다.
+
+### 하루의 특정 시각에 실행하기
+
+```bash
+python -m pip install schedule
+```
+
+```python
+import schedule
+import time
+
+def daily_report():
+    print("테스트 보고서 생성")
+
+def check_updates():
+    print("테스트 업데이트 확인")
+
+def build_scheduler():
+    scheduler = schedule.Scheduler()
+    scheduler.every().day.at("09:00").do(daily_report)
+    scheduler.every(30).minutes.do(check_updates)
+    return scheduler
+
+def run_scheduler(scheduler, *, polls=3, sleep=time.sleep):
+    if polls is not None and (isinstance(polls, bool) or not isinstance(polls, int) or polls < 0):
+        raise ValueError("확인 횟수는 0 이상의 정수 또는 None이어야 합니다.")
+    count = 0
+    while polls is None or count < polls:
+        scheduler.run_pending()
+        count += 1
+        if polls is None or count < polls:
+            sleep(1)
+    return count
+
+scheduler = build_scheduler()
+run_scheduler(scheduler)  # 세 번 확인할 뿐, 예약 시각이 아니면 작업을 실행하지 않는다.
+# 명시적으로 상시 실행하려면: run_scheduler(scheduler, polls=None)
+```
+
+이 코드는 앞 실습의 함수를 가져오지 않아도 독립적으로 실행된다. 전역 예약 목록 대신 별도 Scheduler를 사용한다. 09:00은 Python 프로세스의 로컬 시간대다. 세 번 확인하는 동안 예약 시각이 오지 않으면 출력이 없어도 정상이며, 이를 보고서 생성 성공으로 해석하면 안 된다. `.at()`에 별도 시간대를 지정하려면 pytz가 추가로 필요하므로 서버 시간대·서머타임 요구를 먼저 정한다.
+
+이 예제의 작업은 같은 스레드에서 순차 실행된다. 긴 작업은 다른 작업 확인을 늦추고, 처리되지 않은 예외는 `run_pending()` 밖으로 전달된다. 프로세스 종료·호스트 절전 중에는 실행되지 않는다. 라이브러리는 예약 영속성·동시 실행·정밀 시각을 제공하지 않으므로, 운영 보고서라면 프로세스 감시·재시작·중복 실행 방지·로그·놓친 예약 처리 정책을 따로 설계한다. 파일 변경 예제를 바로 예약하지 않고 계획과 백업을 먼저 검토한다.
+
+근거: [Python sleep](https://docs.python.org/3/library/time.html#time.sleep), [schedule 범위와 한계](https://schedule.readthedocs.io/en/stable/), [작업 예외](https://schedule.readthedocs.io/en/stable/exception-handling.html), [시간대 처리](https://schedule.readthedocs.io/en/stable/timezones.html).
+
+
 ## 실전 프로젝트 2: 성적 분석 리포트 생성기
 
-CSV 파일의 학생 성적 데이터를 분석하고 리포트를 출력합니다.
+CSV 성적을 분석하는 학습 예제다. 비어 있지 않은 데이터와 모든 과목의 유한한 0~100점을 요구하며, 결측 점수를 조용히 제외해 평균을 내지 않는다. 원본과 다른 새 파일로 출력하고 기존 파일은 덮어쓰지 않는다. 아래 등급은 예시 정책이며 학교별 평가 규칙이 아니다.
 
 ```python
 import pandas as pd
 import numpy as np
 from datetime import date
+from pathlib import Path
 
-def analyze_grades(csv_path):
+def analyze_grades(csv_path, output_path=None):
     """성적 CSV 파일을 분석하고 리포트를 생성합니다."""
+    source = Path(csv_path)
+    destination = Path(output_path) if output_path is not None else source.with_name(source.stem + "_분석결과.csv")
+    if destination.resolve() == source.resolve():
+        raise ValueError("출력 경로는 원본과 달라야 한다.")
 
     # 데이터 로드
     try:
@@ -169,6 +353,14 @@ def analyze_grades(csv_path):
 
     # 평균 계산
     subjects = ["국어", "영어", "수학"]
+    if df.empty:
+        raise ValueError("빈 성적 자료는 분석하지 않는다.")
+    scores = df[subjects].apply(pd.to_numeric, errors="raise")
+    if not np.isfinite(scores.to_numpy(dtype=float)).all():
+        raise ValueError("결측값이나 유한하지 않은 점수는 허용하지 않는다.")
+    if not scores.ge(0).all().all() or not scores.le(100).all().all():
+        raise ValueError("점수는 0~100 범위여야 한다.")
+    df[subjects] = scores
     df["평균"] = df[subjects].mean(axis=1).round(1)
 
     # 등급 산정
@@ -211,13 +403,16 @@ def analyze_grades(csv_path):
     print(top5.to_string(index=False))
     print()
 
-    # 결과 저장
-    output_path = csv_path.replace(".csv", "_분석결과.csv")
-    df.to_csv(output_path, index=False, encoding="utf-8-sig")
-    print(f"분석 결과 저장: {output_path}")
+    # 2026-10-03: 배타적 생성으로 기존 결과와 원본의 덮어쓰기를 막는다.
+    with destination.open("x", encoding="utf-8-sig", newline="") as output:
+        df.to_csv(output, index=False)
+    print(f"분석 결과 저장: {destination}")
+    return destination
 
 # analyze_grades("students.csv")
 ```
+
+쓰기 실패 시 새 출력 파일 일부가 남을 수 있으므로 원자적 저장을 구현했다고 보지는 않는다. 통계의 표준편차는 pandas의 기본 표본 기준이며, 관측치 하나로는 정의되지 않는다. 동시 편집·트랜잭션·영구 이력 관리는 구현하지 않았다.
 
 ---
 
@@ -229,25 +424,68 @@ JSON 파일을 사용한 영단어 암기 프로그램입니다.
 import json
 import random
 import os
+from pathlib import Path
+from tempfile import NamedTemporaryFile
 
 WORDBOOK_FILE = "wordbook.json"
 
-def load_wordbook():
-    if os.path.exists(WORDBOOK_FILE):
-        with open(WORDBOOK_FILE, "r", encoding="utf-8") as f:
-            return json.load(f)
-    return {}
+def validate_wordbook(data):
+    if not isinstance(data, dict):
+        raise ValueError("단어와 뜻을 연결한 객체여야 합니다.")
+    if any(not isinstance(k, str) or not k.strip() or
+           not isinstance(v, str) or not v.strip() for k, v in data.items()):
+        raise ValueError("단어와 뜻은 비어 있지 않은 문자열이어야 합니다.")
+    return data
 
-def save_wordbook(wb):
-    with open(WORDBOOK_FILE, "w", encoding="utf-8") as f:
-        json.dump(wb, f, ensure_ascii=False, indent=2)
+def unique_pairs(pairs):
+    data = {}
+    for key, value in pairs:
+        if key in data:
+            raise ValueError("JSON에 중복 키가 있습니다.")
+        data[key] = value
+    return data
+
+def load_wordbook(path=None):
+    destination = Path(WORDBOOK_FILE if path is None else path)
+    if destination.is_symlink():
+        raise ValueError("단어장 파일에 심볼릭 링크를 사용하지 않습니다.")
+    try:
+        with destination.open("r", encoding="utf-8") as source:
+            data = json.load(source, object_pairs_hook=unique_pairs)
+    except FileNotFoundError:
+        return {}
+    return validate_wordbook(data)
+
+def save_wordbook(db, path=None):
+    validate_wordbook(db)
+    destination = Path(WORDBOOK_FILE if path is None else path)
+    load_wordbook(destination)  # 2026-10-03: 교체하기 전에 손상된 원본을 거부한다.
+    temporary = None
+    try:
+        with NamedTemporaryFile("w", encoding="utf-8", dir=destination.parent,
+                                prefix=".wordbook-", suffix=".tmp", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(db, output, ensure_ascii=False, indent=2)
+            output.flush()
+            os.fsync(output.fileno())
+        # 2026-10-03: 같은 폴더의 임시 파일로 원본 선절단을 피한다.
+        os.replace(temporary, destination)
+    finally:
+        if temporary is not None and temporary.exists():
+            temporary.unlink()
 
 def add_word(wb):
     word = input("영단어: ").strip()
     meaning = input("뜻: ").strip()
     if word and meaning:
-        wb[word] = meaning
-        save_wordbook(wb)
+        if word in wb:
+            print("이미 있는 단어입니다. 기존 뜻을 유지합니다.")
+            return
+        candidate = dict(wb)
+        candidate[word] = meaning
+        save_wordbook(candidate)
+        wb.clear()
+        wb.update(candidate)
         print(f"'{word}' 추가 완료!")
 
 def quiz(wb):
@@ -294,7 +532,98 @@ def main():
 # main()
 ```
 
+
+없는 파일만 빈 단어장으로 시작한다. 잘못된 JSON·중복 키·잘못된 자료형·읽기 권한 오류는 숨기거나 초기화하지 않고 호출자에게 전달한다. 기존 단어의 뜻은 자동 덮어쓰지 않는다. 추가할 자료를 복사해 저장하고, 저장이 성공한 뒤에만 메모리 값을 갱신한다. 오류가 나면 이 실습은 종료하며 원본을 확인한 뒤 재실행한다.
+
+임시 파일을 원본과 같은 폴더에 완성한 뒤 os.replace로 교체해 원본을 먼저 비우는 위험을 줄인다. 단독 접근하는 제어된 폴더가 전제이며, 동시 편집·심볼릭 링크 경쟁조건·기존 권한 유지·전원 손실 시 디렉터리 영속성까지 보장하는 데이터베이스는 아니다. 실제 운영에는 백업·잠금 또는 트랜잭션 저장소가 필요하다.
+
 ---
+
+## API 실습: 날씨 응답을 검증한 뒤 출력하기
+
+위도·경도로 위치를 정하고 요청·JSON 해석·출력을 나누는 예제다. 제공자는 좌표 조회와 별도 지오코더를 권장하며 기존 도시명 직접 조회는 폐기 예정 방식이다. 같은 이름의 도시가 여러 곳이면 첫 결과를 임의로 고르지 않는다. 영어 예제의 실제 도시 세 곳 호출을 기본 실행하지 않고, 고정된 가상 응답으로 흐름을 검증한다.
+
+```python
+import math
+import os
+import requests
+
+BASE = "https://api.openweathermap.org/data/2.5/weather"
+
+def finite_number(value, label, low=None, high=None):
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        raise ValueError(f"{label}: 숫자여야 합니다.")
+    try:
+        number = float(value)
+    except OverflowError as exc:
+        raise ValueError(f"{label}: 범위를 벗어났습니다.") from exc
+    if not math.isfinite(number) or (low is not None and number < low) or (high is not None and number > high):
+        raise ValueError(f"{label}: 유효하지 않은 값입니다.")
+    return number
+
+def parse_weather(data):
+    if not isinstance(data, dict):
+        raise ValueError("날씨 응답은 객체여야 합니다.")
+    try:
+        weather = data["weather"]
+        if not isinstance(weather, list) or not weather or not isinstance(weather[0], dict):
+            raise ValueError("날씨 설명이 없습니다.")
+        description = weather[0]["description"]
+        if not isinstance(description, str) or not description.strip():
+            raise ValueError("날씨 설명이 잘못됐습니다.")
+        main, wind = data["main"], data["wind"]
+        if not isinstance(main, dict) or not isinstance(wind, dict):
+            raise ValueError("기온 또는 바람 객체가 잘못됐습니다.")
+        return {
+            "description": description.strip(),
+            "temperature": finite_number(main["temp"], "temperature"),
+            "feels_like": finite_number(main["feels_like"], "feels_like"),
+            "humidity": finite_number(main["humidity"], "humidity", 0, 100),
+            "wind_speed": finite_number(wind["speed"], "wind_speed", 0),
+        }
+    except KeyError as exc:
+        raise ValueError("필수 날씨 필드가 없습니다.") from exc
+
+def get_weather(latitude, longitude, *, api_key=None, session=requests):
+    lat = finite_number(latitude, "latitude", -90, 90)
+    lon = finite_number(longitude, "longitude", -180, 180)
+    key = api_key if api_key is not None else os.environ.get("OPENWEATHER_API_KEY")
+    if not isinstance(key, str) or not key.strip():
+        raise ValueError("실제 요청에는 API 키가 필요합니다.")
+    try:
+        response = session.get(BASE, params={"lat": lat, "lon": lon,
+            "appid": key, "units": "metric"}, timeout=5, allow_redirects=False)
+        if not 200 <= response.status_code < 300:
+            raise RuntimeError(f"날씨 HTTP 상태 {response.status_code}")
+        data = response.json()
+    except requests.exceptions.JSONDecodeError:
+        raise RuntimeError("날씨 응답이 유효한 JSON이 아닙니다.") from None
+    except requests.exceptions.RequestException:
+        # 2026-10-03: 요청 예외에는 API 키가 포함된 URL이 들어갈 수 있다.
+        raise RuntimeError("날씨 네트워크 요청이 실패했습니다.") from None
+    return parse_weather(data)
+
+def display(data):
+    print(data["description"])
+    print(f"기온: {data['temperature']} °C")
+    print(f"체감기온: {data['feels_like']} °C")
+    print(f"습도: {data['humidity']} %")
+    print(f"풍속: {data['wind_speed']} m/s")
+
+fixture = {"weather": [{"description": "가상의 맑은 날씨"}],
+           "main": {"temp": 20, "feels_like": 19, "humidity": 50},
+           "wind": {"speed": 2}}
+display(parse_weather(fixture))  # 가상 자료이며 계정이나 네트워크가 필요 없다.
+# 실제 좌표와 비공개 환경변수 키를 직접 설정한 경우에만:
+# display(get_weather(latitude, longitude))
+```
+
+화면에 출력할 필드만 요구하며 위치 이름·국가 코드가 항상 존재한다고 가정하지 않는다. metric 응답의 기온은 섭씨, 풍속은 m/s다. 필드 누락·빈 설명·불리언이나 유한하지 않은 숫자·범위 밖 습도·음수 풍속은 0으로 대체하지 않고 거부한다. 구조 검증일 뿐 실제 관측의 기상학적 정확성을 보장하지 않는다.
+
+HTTP 성공·유효한 JSON·기대한 필드 구조는 각각 확인한다. 리다이렉트는 거부하고, 키가 포함될 수 있는 예외 원문 대신 일반 오류를 전달한다. 키는 코드 저장소·화면 캡처·로그에 남기지 않는다. timeout 5초는 요청 전체의 마감시간이 아니다. 실제 호출 전 요금제·할당량·약관을 확인하며, 이 코드는 가입이나 과금 호출 자동 재시도를 수행하지 않는다.
+
+근거: [OpenWeather 좌표 API와 응답 필드](https://openweathermap.org/api/current), [Requests JSON·timeout](https://requests.readthedocs.io/en/latest/user/quickstart/).
+
 
 ## Python 취업 활용 로드맵
 
@@ -311,17 +640,17 @@ def main():
 
 ### 단계별 학습 로드맵
 
-**1단계 — 기초 (0~3개월)**
+**1단계 — 기초 역량 확인**
 - Python 문법 마스터 (이 시리즈 완성!)
 - git/GitHub 기초
 - 간단한 CLI 프로젝트 2~3개
 
-**2단계 — 심화 (3~6개월)**
+**2단계 — 심화 역량 확인**
 - OOP(객체지향 프로그래밍) 이해
 - 데이터베이스 기초 (SQLite, PostgreSQL)
 - 원하는 분야 라이브러리 집중 학습
 
-**3단계 — 프로젝트 (6~12개월)**
+**3단계 — 프로젝트 적용**
 - 실전 프로젝트 GitHub에 공개
 - 포트폴리오 구성
 - Kaggle 참여 (데이터 분야) 또는 오픈소스 기여
@@ -397,7 +726,7 @@ print(mystery(6))
 **[문제 3]** 다음 중 올바른 딕셔너리 키로 사용할 수 없는 것을 모두 고르세요.
 ① `"hello"` ② `42` ③ `[1, 2, 3]` ④ `(1, 2)` ⑤ `True`
 
-**[정답 3]** ③ `[1, 2, 3]` — 리스트는 변경 가능(mutable)하므로 딕셔너리 키로 사용할 수 없습니다. 키는 반드시 해시 가능한(hashable) 타입이어야 하며, 문자열, 정수, 튜플, 불리언은 모두 키로 사용 가능합니다.
+**[정답 3]** ③ `[1, 2, 3]` — 내장 리스트는 해시 불가능하다. 나머지 보기의 값은 키로 사용할 수 있지만, 모든 튜플이 가능한 것은 아니다. 튜플은 각 원소가 해시 가능해야 하므로 `([1, 2],)`는 키로 사용할 수 없다. 해시 가능한 객체는 생존 기간에 해시값이 바뀌지 않고, 서로 같은 객체는 같은 해시값을 가져야 한다.
 
 ---
 
@@ -425,7 +754,7 @@ def divide(a, b):
 **[문제 5]** 리스트 컴프리헨션으로 다음 조건을 만족하는 코드를 작성하세요. 1~100 사이 숫자 중 3의 배수이거나 7의 배수인 숫자의 합계를 구하세요.
 
 **[정답 5]**
-```vb
+```python
 total = sum([x for x in range(1, 101) if x % 3 == 0 or x % 7 == 0])
 print(total)   # 2208
 ```
@@ -498,13 +827,11 @@ avg = df["점수"]._______()
 ```
 
 **[정답 9]**
-$$
-\begin{aligned}
-\text{high} &= \text{df}[\text{df}["\text{점수}"] >= 85] \\
-sorted_df &= \text{df}.sort_values("\text{점수}", \text{ascending}=\text{False}) \\
-\text{avg} &= \text{df}["\text{점수}"].\text{mean}()
-\end{aligned}
-$$
+```python
+high = df[df["점수"] >= 85]
+sorted_df = df.sort_values("점수", ascending=False)
+avg = df["점수"].mean()
+```
 
 ---
 
@@ -539,34 +866,39 @@ for name, info in result.items():
 **Q1.** 파이썬에서 **OOP(객체지향 프로그래밍)**의 4가지 핵심 개념을 나열하고 간단히 설명하세요.
 
 **A1.**
-1. **캡슐화(Encapsulation)**: 데이터와 메서드를 하나의 클래스로 묶고 외부에서의 접근을 제한합니다.
+1. **캡슐화(Encapsulation)**: 상태 변경을 클래스의 인터페이스로 모아 불변 조건을 관리한다. Python의 이름 맹글링은 이름 충돌을 줄이는 장치이지 보안상 접근 차단이 아니다.
 2. **상속(Inheritance)**: 부모 클래스의 속성과 메서드를 자식 클래스가 물려받아 재사용합니다.
 3. **다형성(Polymorphism)**: 같은 이름의 메서드가 클래스에 따라 다르게 동작합니다.
 4. **추상화(Abstraction)**: 복잡한 내부 구현을 숨기고 필요한 인터페이스만 노출합니다.
 
 ---
 
-**Q2.** 파이썬을 이용한 업무 자동화에서 가장 많이 쓰이는 라이브러리 3가지를 들고 각각의 용도를 설명하세요.
+**Q2.** 이 장의 실습에서 `pathlib`, `json`, `requests`와 Beautiful Soup은 각각 어떤 경계를 담당하는가?
 
 **A2.**
-1. **pandas**: CSV/Excel 데이터 처리, 보고서 자동 생성
-2. **openpyxl/xlwings**: Excel 파일 읽기·쓰기, 서식 지정, 차트 생성
-3. **selenium/playwright**: 웹 브라우저 자동화, 웹 스크래핑, 반복 입력 작업 자동화
+1. **pathlib**: 파일 경로와 이동 계획을 다룬다. 경로를 만들었다고 충돌이나 권한 문제가 해결되는 것은 아니다.
+2. **json**: 저장 형식을 해석·직렬화한다. 해석 성공과 단어장 스키마 검증 성공은 별개다.
+3. **requests와 Beautiful Soup**: 전자는 HTTP 응답을 받고, 후자는 HTML을 해석한다. HTTP 상태 검사와 필수 요소 검사를 각각 수행해야 한다.
 
 ---
 
 **Q3.** 프로젝트 폴더에 `requirements.txt`를 만들어 놓는 이유는 무엇이며, 어떻게 생성하나요?
 
-**A3.** `requirements.txt`는 프로젝트에 사용된 모든 패키지와 버전을 기록한 파일입니다. 다른 환경(팀원 PC, 서버 등)에서 동일한 패키지를 쉽게 설치할 수 있어 **재현성(reproducibility)**을 보장합니다.
-# 현재 환경의 패키지 목록 저장  
-pip freeze > requirements.txt
+**A3.** requirements 파일은 설치할 패키지의 요구사항을 기록한다. `pip freeze`는 현재 환경에 설치된 배포 패키지를 요구사항 형식으로 출력하므로, 프로젝트 전용 가상환경에서 실행해야 무관한 패키지가 섞이는 일을 줄일 수 있다.
 
-# 다른 환경에서 동일하게 설치  
-pip install -r requirements.txt
+```bash
+# 현재 프로젝트 환경의 패키지 목록 저장
+python -m pip freeze > requirements.txt
+
+# 다른 프로젝트 환경에서 요구사항 설치
+python -m pip install -r requirements.txt
+```
+
+이 기록은 재현성에 도움이 되지만 Python 버전·OS·시스템 라이브러리·외부 데이터까지 고정하지는 않는다. 직접 의존성과 전이 의존성을 검토하고, 지원 환경과 실행 검증 결과도 함께 기록해야 한다. 위 첫 명령은 기존 `requirements.txt`가 있으면 덮어쓰므로 저장 전에 내용을 확인한다.
 
 ---
 
-**Q4.** 데이터 분석 직무에서 Python과 함께 알아야 할 필수 기술 스택을 3가지 이상 나열하세요.
+**Q4.** 데이터 분석 직무의 요구사항을 검토할 때 Python과 함께 고려할 역량을 3가지 이상 설명하라. 모든 직무에 같은 도구가 필수인가?
 
 **A4.**
 - **SQL**: 데이터베이스 쿼리, 데이터 추출
@@ -576,13 +908,10 @@ pip install -r requirements.txt
 - **Jupyter Notebook**: 분석 과정 문서화, 대화형 실행
 - **git/GitHub**: 코드 버전 관리 및 협업
 
+이는 검토 후보이지 모든 직무의 필수 도구 목록이 아니다. 실제 데이터 접근 방식·보고 방식·협업 환경에 따라 필요한 역량을 선택한다.
+
 ---
 
-**Q5.** Python을 처음 배우는 사람이 실력을 빠르게 키우는 가장 효과적인 방법은 무엇인가요?
+**Q5.** 이 장의 단어장에서 후보 자료의 임시 파일 기록은 성공했지만 `os.replace`가 권한 오류로 실패했다. 메모리와 원본 파일은 어떻게 되어야 하며, 사용자에게 저장 성공을 알릴 수 있는가?
 
-**A5.** 가장 효과적인 방법은 **실제 문제를 해결하는 프로젝트를 만드는 것**입니다. 구체적으로:
-1. **본인이 필요한 것을 자동화** — 반복하는 작업을 파이썬으로 해결 (가장 동기부여가 큼)
-2. **작은 프로젝트를 완성** — 완벽하지 않아도 실행되는 프로그램을 완성하는 경험 축적
-3. **코딩 테스트 풀기** — 프로그래머스 Level 1부터 매일 1~2문제
-4. **코드 리뷰 받기** — GitHub에 올리고 다른 사람의 풀이와 비교
-5. **에러를 두려워하지 않기** — 오류 메시지를 읽고 이해하는 것이 실력 향상의 핵심
+**A5.** 저장 실패를 보고해야 한다. 본문 구현은 후보 복사본을 저장한 뒤에만 메모리를 갱신하므로 기존 메모리를 유지한다. 교체 전에 실패한 원본 파일도 유지하고 `finally`에서 임시 파일을 정리한다. 이 판단은 다른 프로세스가 동시에 편집하지 않는 통제된 폴더라는 전제 아래 성립한다. 원자적 교체가 동시 편집 제어나 전원 손실 복구까지 보장하는 것은 아니다.

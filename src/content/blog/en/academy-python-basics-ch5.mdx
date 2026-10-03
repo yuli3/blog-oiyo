@@ -1,89 +1,169 @@
 ---
 track: academy
 locale: en
-title: "Python — Standard Library & Package Management"
+title: "Python — Data Structures & Selection Criteria"
 category: "Computer Science"
 series: "Python Complete Guide"
 chapter: 5
-chapterTitleShort: 'Libraries & pip'
+chapterTitleShort: "Data Structures"
 author: OIYO Editorial
 tags:
   - Python
-  - standard library
-  - pip
-  - datetime
-  - virtual environment
-description: "Python essential standard library modules (os, datetime, random, collections), pip package management, and virtual environment setup."
+  - data structures
+  - collections
+description: "Review lists, dictionaries, tuples, sets and collections according to ordering, mutability and key requirements."
 pubDate: '2026-05-26'
 layoutVariant: lecture-series
 ---
 
-## datetime: Date and Time
+## Python's Four Core Data Structures
+
+| Structure | Properties and example |
+|-----------|------------------------|
+| list | Ordered, mutable, duplicates allowed. Example: `[1, 2, 3]`. |
+| tuple | Ordered, fixed item references, duplicates allowed. Example: `(1, 2, 3)`. Referenced mutable objects can still change. |
+| dict | Insertion order guaranteed since Python 3.7; mutable; keys are unique and must be hashable. Example: `{"a": 1}`. |
+| set | No positional order guarantee; mutable; unique hashable elements. Example: `{1, 2, 3}`. |
+
+---
+
+## Lists
 
 ```python
-from datetime import datetime, timedelta, date
+fruits = ["apple", "banana", "cherry", "apple"]
 
-# Current date/time
-now = datetime.now()
-print(now)  # 2026-05-26 14:30:15.123456
+# Indexing (0-based)
+print(fruits[0])    # apple
+print(fruits[-1])   # apple (last item)
 
-# Format output
-print(now.strftime("%B %d, %Y"))  # May 26, 2026
-print(now.strftime("%Y-%m-%d"))   # 2026-05-26
+# Slicing
+print(fruits[1:3])  # ['banana', 'cherry']
 
-# Date arithmetic
-tomorrow = now + timedelta(days=1)
-next_week = now + timedelta(weeks=1)
+# Key methods
+fruits.append("mango")      # Add to end
+fruits.insert(1, "grape")   # Insert at index 1
+fruits.remove("banana")     # Remove by value
+fruits.pop()                # Remove last item
+fruits.sort()               # Sort in place
+print(len(fruits))          # Length
 
-# Difference between dates
-date1 = date(2024, 1, 1)
-date2 = date(2026, 5, 26)
-diff = date2 - date1
-print(f"{diff.days} days apart")  # 876 days apart
+# List comprehension
+squares = [x**2 for x in range(10)]
+# [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+
+# Conditional comprehension
+evens = [x for x in range(20) if x % 2 == 0]
+# [0, 2, 4, 6, 8, 10, 12, 14, 16, 18]
 ```
 
 ---
 
-## os: Operating System Interface
+## Dictionaries
 
 ```python
-import os
+person = {
+    "name": "Alice",
+    "age": 30,
+    "city": "New York"
+}
 
-# Current working directory
-print(os.getcwd())
+# Access
+print(person["name"])                   # Alice
+print(person.get("age"))               # 30
+print(person.get("job", "Unknown"))    # Unknown (default if missing)
 
-# List directory contents
-files = os.listdir(".")
+# Add / modify
+person["email"] = "alice@example.com"
+person["age"] = 31
 
-# Create directories
-os.makedirs("data/outputs", exist_ok=True)
+# Delete
+del person["city"]
 
-# Environment variables
-api_key = os.environ.get("API_KEY", "default_value")
+# Iterate
+for key, value in person.items():
+    print(f"{key}: {value}")
 
-# Path operations
-path = os.path.join("data", "results.csv")
-print(os.path.exists(path))      # File exists?
-print(os.path.basename(path))    # results.csv
-print(os.path.dirname(path))     # data
+# Dictionary comprehension
+word_lengths = {word: len(word) for word in ["python", "java", "javascript"]}
+# {'python': 6, 'java': 4, 'javascript': 10}
 ```
 
 ---
 
-## random: Random Number Generation
+## Tuples and Sets
 
 ```python
-import random
+# Tuples: immutable sequences (good for coordinates, RGB values)
+coordinates = (40.7128, -74.0060)  # NYC coordinates
+lat, lon = coordinates  # Unpacking
 
-print(random.randint(1, 100))    # Random integer 1-100
-print(random.random())           # Random float 0.0-1.0
+# Sets: unordered, no duplicates
+numbers = {1, 2, 3, 3, 4, 4, 5}
+print(numbers)  # {1, 2, 3, 4, 5}
 
-items = ["apple", "banana", "cherry", "mango"]
-print(random.choice(items))      # Random single item
-print(random.sample(items, 2))   # 2 unique random items
+# Set operations
+a = {1, 2, 3, 4}
+b = {3, 4, 5, 6}
+print(a | b)  # Union: {1, 2, 3, 4, 5, 6}
+print(a & b)  # Intersection: {3, 4}
+print(a - b)  # Difference: {1, 2}
+```
 
-random.shuffle(items)             # Shuffle in place
-print(items)
+---
+
+## Nested mutation and shallow copies
+
+A tuple fixes its element references, not the objects they point to. Hashability is a separate requirement: a tuple containing a list is unhashable. Mutable user-defined instances can still be hashable by identity; do not infer hashability from mutability alone.
+
+```python
+bundle = (["draft"],)
+bundle[0].append("reviewed")
+assert bundle == (["draft", "reviewed"],)
+try:
+    hash(bundle)
+except TypeError:
+    print("The nested list makes this tuple unhashable.")
+```
+
+A shallow copy creates an outer container but shares its nested objects. With the built-in objects below, a deep copy instead creates an independent nested list. Deep copying is not a universal way to duplicate resources such as files or network connections.
+
+```python
+from copy import deepcopy
+
+original = {"tags": ["draft"]}
+shallow = dict(original)
+independent = deepcopy(original)
+shallow["tags"].append("reviewed")
+assert shallow is not original
+assert original["tags"] == ["draft", "reviewed"]
+assert independent["tags"] == ["draft"]
+```
+
+Chapter 8's wordbook can use a shallow candidate copy because its validated keys and values are strings. Introducing nested mutable values would require revisiting that assumption. Dictionary keys also use equality: `True`, `1`, and `1.0` compare equal and address the same entry. Validate identifiers if booleans and integers must be distinct in your application.
+
+See the [hashable definition](https://docs.python.org/3/glossary.html#term-hashable) and [copy semantics](https://docs.python.org/3/library/copy.html).
+
+## Practical Example: Grade Manager
+
+```python
+students = {
+    "Alice": [90, 85, 92],
+    "Bob": [78, 82, 75],
+    "Charlie": [95, 88, 91]
+}
+
+# Calculate averages with dict comprehension
+averages = {
+    name: sum(scores) / len(scores)
+    for name, scores in students.items()
+}
+
+# Sort and display
+for name, avg in sorted(averages.items(), key=lambda x: x[1], reverse=True):
+    print(f"{name}: {avg:.1f}")
+# Charlie: 91.3
+# Alice: 89.0
+# Bob: 78.3
 ```
 
 ---
@@ -112,46 +192,6 @@ queue.popleft()       # Remove from left
 
 ---
 
-## pip: Package Management
-
-```bash
-# Install packages
-pip install requests
-pip install pandas numpy matplotlib
-
-# Install specific version
-pip install requests==2.31.0
-
-# List installed packages
-pip list
-
-# Save requirements
-pip freeze > requirements.txt
-
-# Install from requirements
-pip install -r requirements.txt
-```
-
----
-
-## Virtual Environments
-
-```bash
-# Create virtual environment
-python -m venv myenv
-
-# Activate (Windows)
-myenv\Scripts\activate
-
-# Activate (Mac/Linux)
-source myenv/bin/activate
-
-# Deactivate
-deactivate
-```
-
----
-
 ## Chapter 6 Preview
 
-Next: **Data Analysis Basics** — pandas and NumPy for data manipulation, matplotlib for visualization.
+Next: **Files, Serialization & Exceptions**.

@@ -34,105 +34,74 @@ Calculus is the branch of mathematics that deals with change and accumulation. D
 
 ## A Review of Functions
 
-```
-The definition of a function f: A → B:
-→ A rule that assigns exactly one element f(x) of set B
-  to every element x of set A
+A function $f:A\to B$ assigns exactly one element of $B$ to each element of $A$. Its codomain is specified as part of the function; the attained range $f(A)$ need not equal that codomain.
 
-Domain: the set of possible inputs x
-Codomain: the set of possible outputs y
-Range: the set of actual output values y
-
-Examples of functions:
-→ f(x) = x²: domain R, range [0, ∞)
-→ f(x) = 1/x: domain R\{0} (excluding 0)
-→ f(x) = √x: domain [0, ∞)
-
-Types of functions:
-→ Polynomial functions: f(x) = aₙxⁿ + ... + a₀
-→ Rational functions: a ratio of polynomials (denominator ≠ 0)
-→ Trigonometric functions: sin, cos, tan, etc.
-→ Exponential functions: f(x) = aˣ (a > 0, a ≠ 1)
-→ Logarithmic functions: f(x) = logₐ(x)
-```
+| Concept | Real-valued example and conditions |
+| --- | --- |
+| Domain | $f(x)=1/x$ is defined on $\mathbb{R}\setminus\{0\}$. |
+| Codomain and range | For $f:\mathbb{R}\to\mathbb{R}$, $f(x)=x^2$, the codomain is $\mathbb{R}$ but the range is $[0,\infty)$. |
+| Square root | The real function $\sqrt{x}$ has domain $[0,\infty)$. |
+| Polynomial and rational | A polynomial $\sum_{k=0}^{n}a_kx^k$ or a ratio of polynomials; exclude inputs where the denominator is zero. |
+| Trigonometric | $\sin,\cos$ are defined for all real inputs; $\tan$ requires $\cos x\ne0$. |
+| Exponential and logarithmic | $a^x$ and $\log_a x$ with $a>0$, $a\ne1$; logarithms require $x>0$. |
 
 ---
 
 ## An Intuitive Understanding of the Limit
 
-```
-Intuitive limit:
-→ The value f(x) approaches as x approaches a
+$\lim_{x\to a}f(x)=L$ describes outputs approaching $L$ as inputs approach $a$. Here we consider finite limits of real functions, with $a$ an accumulation point of the domain. The value $f(a)$ need not be defined.
 
-Notation: lim f(x) = L
-           x→a
+$$
+\frac{x^2-1}{x-1}=x+1\quad(x\ne1),\qquad
+\lim_{x\to1}\frac{x^2-1}{x-1}=2.
+$$
 
-Example:
-→ lim (x² − 1)/(x − 1) = ?
-   x→1
+Cancellation is valid only for $x\ne1$. It does not make the original expression defined at $x=1$.
 
-Direct substitution: at x=1 the denominator = 0 → can't evaluate directly
+### The epsilon–delta definition and a proof
 
-Factoring:
-→ (x² − 1)/(x − 1) = (x−1)(x+1)/(x−1) = x+1 (x≠1)
-→ As x approaches 1: x+1 → 2
-→ So the limit = 2
+For every $\varepsilon>0$, there must exist a $\delta>0$ such that every domain input $x$ satisfying $0<|x-a|<\delta$ also satisfies $|f(x)-L|<\varepsilon$. The choice of $\delta$ may depend on $\varepsilon$, but cannot be selected separately after seeing each qualifying $x$.
 
-The key point:
-→ A limit is not the function's value at x=a,
-  it's the value f(x) approaches as x nears a
-```
+In the example, $a=1$ and $L=2$ give $|f(x)-2|=|x-1|$. For any $\varepsilon>0$, choose $\delta=\varepsilon$; the implication follows immediately. Checking a few nearby numerical inputs is not a proof covering all such inputs.
 
 ---
 
 ## Left-Hand and Right-Hand Limits
 
-```
-Right-hand limit:
-→ As x approaches a from the right (larger side)
-→ lim f(x) = L⁺
-   x→a⁺
+Write a right-hand approach as $\lim_{x\to a^+}f(x)$ and a left-hand approach as $\lim_{x\to a^-}f(x)$. When the domain permits approach from both sides, a two-sided finite limit exists exactly when the one-sided limits agree.
 
-Left-hand limit:
-→ As x approaches a from the left (smaller side)
-→ lim f(x) = L⁻
-   x→a⁻
+| Approach for $f(x)=|x|/x$ ($x\ne0$) | Function value |
+| --- | --- |
+| Toward $0$ from $x<0$ | $-1$ |
+| Toward $0$ from $x>0$ | $1$ |
 
-The condition for a limit to exist:
-→ If the left-hand limit = the right-hand limit = L, then
-  lim f(x) = L exists
-  x→a
-
-Example: the absolute-value function f(x) = |x| / x (x ≠ 0)
-→ x→0⁺: f(x) → +1
-→ x→0⁻: f(x) → −1
-→ Left-hand limit ≠ right-hand limit → the limit does not exist
-```
+The values differ, so $\lim_{x\to0}|x|/x$ does not exist. This is the absolute value divided by $x$, not the absolute-value function itself. At a domain endpoint, continuity uses approach from within the domain.
 
 ---
 
 ## Properties of Limits
 
-```
-Limit laws (if lim f(x) = L and lim g(x) = M):
-                 x→a             x→a
+Suppose $\lim_{x\to a}f(x)=L$ and $\lim_{x\to a}g(x)=M$ both exist as finite values, and $c$ is constant.
 
-1. Sum: lim [f(x) + g(x)] = L + M
-2. Difference: lim [f(x) − g(x)] = L − M
-3. Product: lim [f(x) · g(x)] = L · M
-4. Quotient: lim [f(x) / g(x)] = L/M (provided M ≠ 0)
-5. Constant multiple: lim [c · f(x)] = c · L
-6. Power: lim [f(x)]ⁿ = Lⁿ
+| Operation | Result and condition |
+| --- | --- |
+| Sum or difference | $\lim(f\pm g)=L\pm M$ |
+| Product | $\lim(fg)=LM$ |
+| Quotient | $\lim(f/g)=L/M$, requiring $M\ne0$ |
+| Constant multiple | $\lim(cf)=cL$ |
+| Power | $\lim f^n=L^n$; here $n$ is a positive integer |
 
-The Squeeze Theorem:
-→ If g(x) ≤ f(x) ≤ h(x) and
-  lim g(x) = lim h(x) = L, then
-  lim f(x) = L
+A zero denominator limit prevents use of the quotient law. The expression $0/0$ is not a limit value: further analysis is needed.
 
-Application:
-→ lim x·sin(1/x) = 0 (x→0)
-   (since |sin| ≤ 1)
-```
+### The squeeze theorem
+
+If $g(x)\le f(x)\le h(x)$ throughout a sufficiently small punctured neighborhood of $a$, and both bounding limits equal $L$, the middle limit also equals $L$.
+
+$$
+-|x|\le x\sin(1/x)\le |x|\quad(x\ne0).
+$$
+
+Both bounds follow from $|\sin(1/x)|\le1$. As $x\to0$, the bounds approach 0, so the middle limit is 0. Using $|x|$ ensures the bounds remain valid for negative inputs as well.
 
 ---
 
@@ -208,4 +177,4 @@ Application:
 A. Yes, easily. A function's limit can exist even where the function is not defined at x=a. For example, f(x) = (x²−1)/(x−1) is undefined at x=1, but its limit there is 2. Conversely, a function can be defined at a point yet still have a limit that differs from its function value there.
 
 **Q. Do I really need to know the epsilon-delta definition?**
-A. For most engineering and economics majors, the intuitive concept of a limit is sufficient. But if you're a math major, or need mathematical rigor, you should understand the epsilon-delta definition. We'll work with it in more depth in Chapter 2, when we cover derivatives.
+A. Intuition helps start a calculation but does not prove its conditions. The epsilon–delta example above shows how to choose an input tolerance for any output tolerance; this distinguishes convergence claims from numerical spot checks, regardless of major.
