@@ -85,6 +85,13 @@ export default defineConfig({
       filter: (page) => {
         const url = new URL(page);
         const path = url.pathname;
+        // 2026-10-04: the former fallback PM hub is a noindex compatibility
+        // redirect after restoring the English chapters' course metadata.
+        if (path.replace(/\/$/, "") === "/en/series/education-pm") return false;
+        // 2026-10-04: preserve the former CS hub as a noindex compatibility page.
+        if (path.replace(/\/$/, "") === "/en/series/education-cs") return false;
+        // 2026-10-04: the restored HRM course retains its old hub only as a noindex bridge.
+        if (path.replace(/\/$/, "") === "/en/series/academy-hrm-basics") return false;
         // Root is a server 301 to /en/ (public/_redirects); canonical English
         // content lives at /en/. Same rule as wiki.
         if (path === "/" || path === "") return false;
