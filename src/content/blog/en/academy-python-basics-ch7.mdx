@@ -1,368 +1,348 @@
 ---
 track: academy
 locale: en
-title: "Python — Web Scraping & Task Automation"
+title: "Python — NumPy, pandas & Data Quality"
 category: "Computer Science"
 series: "Python Complete Guide"
 chapter: 7
-chapterTitleShort: 'Scraping & Automation'
+chapterTitleShort: "NumPy, pandas"
 author: OIYO Editorial
 tags:
   - Python
-  - web scraping
-  - BeautifulSoup
-  - requests
-  - automation
-  - os
-  - shutil
-description: "Fetch web pages with requests, parse HTML with BeautifulSoup, automate file and folder tasks with os/shutil, and schedule recurring scripts."
+  - NumPy
+  - pandas
+  - data quality
+description: "Review NumPy and pandas operations, statistics, missing values and structured data workflows."
 pubDate: '2026-05-26'
 layoutVariant: lecture-series
 ---
 
-## Two Pillars of Practical Python
+## Why NumPy and pandas?
 
-Once you know Python's core syntax, the two most immediately useful skill areas are:
+Python's standard library handles general programming well, but **data analysis** demands specialized tools. Two libraries dominate the field:
 
-1. **Web scraping** — pulling data from websites automatically
-2. **File/task automation** — eliminating repetitive manual work
-
-Both require only the standard library plus two widely-used packages.
+| Library | Purpose | Key Abstraction |
+|---------|---------|----------------|
+| **NumPy** | Numerical computation, multi-dimensional arrays | `ndarray` |
+| **pandas** | Structured / tabular data manipulation | `DataFrame` |
 
 ```bash
-pip install requests beautifulsoup4
+python -m pip install numpy pandas
 ```
 
 ---
 
-## requests: Fetching Web Pages
+## NumPy Arrays
 
 ```python
-import requests
+import numpy as np
 
-response = requests.get("https://httpbin.org/get")
+# Create from a list
+arr = np.array([1, 2, 3, 4, 5])
+print(arr)          # [1 2 3 4 5]
+print(arr.dtype)    # int64
+print(arr.shape)    # (5,)
 
-print(response.status_code)    # 200
-print(response.headers["Content-Type"])
-
-# JSON response
-data = response.json()
-print(data["origin"])           # your IP address
-
-# Text response
-page = requests.get("https://example.com")
-print(page.text[:200])          # first 200 chars of HTML
+# 2-D array
+matrix = np.array([[1, 2, 3],
+                   [4, 5, 6]])
+print(matrix.shape)  # (2, 3)
+print(matrix.ndim)   # 2
+print(matrix.size)   # 6
 ```
 
-### Handling errors
+### Convenience constructors
 
 ```python
-try:
-    r = requests.get("https://example.com", timeout=5)
-    r.raise_for_status()    # raises HTTPError for 4xx/5xx
-except requests.exceptions.Timeout:
-    print("Request timed out.")
-except requests.exceptions.HTTPError as e:
-    print(f"HTTP error: {e}")
-except requests.exceptions.RequestException as e:
-    print(f"Request failed: {e}")
+np.zeros((3, 4))           # 3×4 array of 0.0
+np.ones((2, 3))            # 2×3 array of 1.0
+np.eye(3)                  # 3×3 identity matrix
+np.arange(0, 10, 2)        # [0 2 4 6 8]
+np.linspace(0, 1, 5)       # [0. 0.25 0.5 0.75 1.]
+np.random.randint(1, 7, (2, 3))  # 2×3 random ints 1–6
 ```
 
 ---
 
-## BeautifulSoup: Parsing HTML
+## Vectorized Operations
+
+NumPy's biggest advantage: **no loops needed**.
 
 ```python
-from bs4 import BeautifulSoup
-import requests
+a = np.array([1, 2, 3, 4, 5])
+b = np.array([10, 20, 30, 40, 50])
 
-html = requests.get("https://example.com").text
-soup = BeautifulSoup(html, "html.parser")
+print(a + b)    # [11 22 33 44 55]
+print(a * 2)    # [ 2  4  6  8 10]
+print(b / a)    # [10. 10. 10. 10. 10.]
+print(a ** 2)   # [ 1  4  9 16 25]
 
-# Tag navigation
-print(soup.title.text)          # page title
-print(soup.h1.text)             # first <h1>
-
-# Find one element
-first_link = soup.find("a")
-print(first_link["href"])
-
-# Find all matching elements
-links = soup.find_all("a")
-for link in links:
-    print(link.get("href"), link.text)
-```
-
-### CSS selector syntax
-
-```python
-# By class
-items = soup.select(".product-card")
-
-# By id
-header = soup.select_one("#main-header")
-
-# Nested selector
-prices = soup.select("ul.price-list li span.amount")
-for p in prices:
-    print(p.text.strip())
+# Compare with plain Python:
+# [x**2 for x in [1,2,3,4,5]]  — loop required
 ```
 
 ---
 
-## Practical Scraper — Quotes of the Day
+## Indexing and Boolean Filtering
 
 ```python
-import requests
-from bs4 import BeautifulSoup
-import json
+arr = np.array([10, 20, 30, 40, 50])
 
-def scrape_quotes(url="https://quotes.toscrape.com"):
-    """Scrape quotes, authors, and tags from the first page."""
-    r = requests.get(url, timeout=10)
-    r.raise_for_status()
-    soup = BeautifulSoup(r.text, "html.parser")
+print(arr[0])     # 10
+print(arr[-1])    # 50
+print(arr[1:4])   # [20 30 40]
 
-    quotes = []
-    for block in soup.select("div.quote"):
-        quotes.append({
-            "text":   block.select_one("span.text").text.strip('""“”'),
-            "author": block.select_one("small.author").text,
-            "tags":   [t.text for t in block.select("a.tag")],
-        })
+# 2-D slicing
+mat = np.arange(1, 10).reshape(3, 3)
+print(mat[:, 1])       # second column: [2 5 8]
+print(mat[0:2, 0:2])   # 2×2 sub-matrix
 
-    return quotes
-
-quotes = scrape_quotes()
-print(f"Scraped {len(quotes)} quotes")
-for q in quotes[:3]:
-    print(f'\n"{q["text"]}" — {q["author"]}')
-    print(f'  Tags: {", ".join(q["tags"])}')
-
-# Save to JSON
-with open("quotes.json", "w") as f:
-    json.dump(quotes, f, indent=2)
+# Boolean indexing
+scores = np.array([85, 92, 68, 74, 90, 55, 88])
+print(scores[scores >= 80])   # [85 92 90 88]
 ```
 
 ---
 
-## os and shutil: File Automation
+## NumPy Statistics
+
+This example treats all eight values as the population. The default `ddof=0` in `np.std()` and `np.var()` uses a divisor of n, not the n−1 divisor used for the usual sample variance estimate.
 
 ```python
-import os
-import shutil
+data = np.array([15, 22, 8, 34, 27, 12, 45, 19])
 
-# Directory operations
-os.makedirs("reports/2026/May", exist_ok=True)
-print(os.listdir("."))           # list current directory
-
-# File info
-path = "reports/2026/May/summary.txt"
-print(os.path.exists(path))     # False
-print(os.path.basename(path))   # summary.txt
-print(os.path.dirname(path))    # reports/2026/May
-_, ext = os.path.splitext(path) # ext = ".txt"
-
-# Copy / move / delete
-shutil.copy("source.txt", "backup/source.txt")
-shutil.move("temp.txt", "archive/temp.txt")
-os.remove("unwanted.txt")
-shutil.rmtree("old_folder")     # delete folder and contents
+print(f"Sum:    {np.sum(data)}")           # 182
+print(f"Mean:   {np.mean(data):.2f}")      # 22.75
+print(f"Median: {np.median(data)}")        # 20.5
+print(f"Std:    {np.std(data):.2f}")       # 11.44
+print(f"Var:    {np.var(data):.2f}")       # 130.94
+print(f"Min:    {np.min(data)} at [{np.argmin(data)}]")
+print(f"Max:    {np.max(data)} at [{np.argmax(data)}]")
 ```
 
 ---
 
-## Project: Download Organizer
-
-Sort files in a folder by type automatically.
+## pandas: Series
 
 ```python
-import os
-import shutil
-from datetime import datetime
+import pandas as pd
 
-CATEGORIES = {
-    "Images":    [".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg"],
-    "Documents": [".pdf", ".docx", ".txt", ".xlsx", ".pptx"],
-    "Videos":    [".mp4", ".mov", ".avi", ".mkv"],
-    "Audio":     [".mp3", ".wav", ".flac"],
-    "Archives":  [".zip", ".rar", ".7z", ".tar", ".gz"],
-    "Code":      [".py", ".js", ".ts", ".html", ".css"],
+# Series — a labelled 1-D array
+s = pd.Series([85, 92, 78, 90],
+              index=["Math", "English", "Korean", "Science"])
+
+print(s["Math"])            # 85
+print(s[["Math", "English"]])   # two-item subset
+print(s.mean())             # 86.25
+```
+
+---
+
+## pandas: DataFrame
+
+```python
+data = {
+    "name":  ["Alice", "Bob", "Carol", "Dan"],
+    "age":   [25, 30, 22, 28],
+    "city":  ["Seoul", "Busan", "Incheon", "Seoul"],
+    "score": [85, 92, 78, 90],
 }
 
-# Reverse map: extension → category
-EXT_MAP = {ext: cat for cat, exts in CATEGORIES.items() for ext in exts}
+df = pd.DataFrame(data)
+print(df)
+#     name  age     city  score
+# 0  Alice   25    Seoul     85
+# 1    Bob   30    Busan     92
+# 2  Carol   22  Incheon     78
+# 3    Dan   28    Seoul     90
 
-def organize(source: str) -> None:
-    moved, log = 0, []
-
-    for name in os.listdir(source):
-        src = os.path.join(source, name)
-        if os.path.isdir(src):
-            continue
-
-        _, ext = os.path.splitext(name)
-        category = EXT_MAP.get(ext.lower(), "Other")
-
-        dest_dir = os.path.join(source, category)
-        os.makedirs(dest_dir, exist_ok=True)
-
-        dest = os.path.join(dest_dir, name)
-        shutil.move(src, dest)
-        moved += 1
-        log.append(f"{name} → {category}/")
-        print(f"  {log[-1]}")
-
-    stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    with open(os.path.join(source, f"organize_{stamp}.log"), "w") as f:
-        f.write(f"Organized {moved} files on {datetime.now()}\n\n")
-        f.write("\n".join(log))
-
-    print(f"\nDone — {moved} files organized.")
-
-# organize("/Users/you/Downloads")
+print(df.shape)    # (4, 4)
+print(df.dtypes)
 ```
 
 ---
 
-## Project: Bulk File Renamer
+## Exploring a DataFrame
 
 ```python
-import os
-import re
+print(df.info())       # column types, non-null counts
+print(df.describe())   # numeric statistics
 
-def batch_rename(folder: str, pattern: str, replacement: str) -> None:
-    """
-    Rename all files in folder by replacing `pattern` (regex)
-    with `replacement` in each filename.
-    """
-    renamed = 0
-    for name in sorted(os.listdir(folder)):
-        new_name = re.sub(pattern, replacement, name)
-        if new_name == name:
-            continue
-        src = os.path.join(folder, name)
-        dst = os.path.join(folder, new_name)
-        os.rename(src, dst)
-        print(f"{name}  →  {new_name}")
-        renamed += 1
-    print(f"\n{renamed} files renamed.")
+print(df.head(2))   # first 2 rows
+print(df.tail(2))   # last 2 rows
 
-# Example: strip leading numbers like "01_report.pdf" → "report.pdf"
-# batch_rename("./docs", r"^\d+_", "")
+# Column access
+print(df["name"])              # Series
+print(df[["name", "score"]])   # DataFrame
+
+# Row access
+print(df.iloc[0])     # position-based
+print(df.loc[2])      # label-based
 ```
 
 ---
 
-## Scheduling Scripts
-
-### Simple interval loop (blocking)
+## Filtering and Sorting
 
 ```python
-import time
+# Single condition
+high = df[df["score"] >= 85]
 
-def check_updates():
-    print(f"Checking at {time.strftime('%H:%M:%S')}...")
+# Multiple conditions
+seoul_high = df[(df["city"] == "Seoul") & (df["score"] >= 85)]
 
-while True:
-    check_updates()
-    time.sleep(300)   # every 5 minutes
-```
+# Sort descending
+sorted_df = df.sort_values("score", ascending=False)
 
-### Cross-platform: schedule library
-
-```bash
-pip install schedule
-```
-
-```python
-import schedule
-import time
-
-def daily_report():
-    print("Generating daily report...")
-
-schedule.every().day.at("09:00").do(daily_report)
-schedule.every(30).minutes.do(check_updates)
-
-while True:
-    schedule.run_pending()
-    time.sleep(60)
+# Top 2 by score
+top2 = df.nlargest(2, "score")
 ```
 
 ---
 
-## Ethics and Robots.txt
+## Adding Columns and Grouping
 
-Before scraping any website:
+```python
+# Derived column
+df["grade"] = df["score"].apply(
+    lambda x: "A" if x >= 90 else ("B" if x >= 80 else "C")
+)
 
-1. **Check `robots.txt`** — `https://example.com/robots.txt` lists which paths crawlers may not access.
-2. **Respect rate limits** — add `time.sleep(1)` between requests to avoid overloading servers.
-3. **Check the Terms of Service** — some sites prohibit automated access.
-4. **Prefer APIs** — if the site offers a public API, use it instead of scraping HTML.
+# Group aggregation
+city_avg = df.groupby("city")["score"].mean()
+print(city_avg)
+
+# Value counts
+print(df["city"].value_counts())
+```
+
+---
+
+## Missing Values
+
+```python
+df2 = pd.DataFrame({
+    "A": [1, 2, None, 4],
+    "B": [5, None, 7, 8],
+})
+
+print(df2.isnull().sum())   # missing count per column
+
+df2.dropna()                # drop rows with any NaN
+df2.fillna(0)               # replace NaN with 0
+df2.fillna(df2.mean())      # replace NaN with column mean
+```
+
+---
+
+## CSV and JSON Workflows
+
+```python
+# Save DataFrame
+df.to_csv("students.csv", index=False)
+df.to_json("students.json", orient="records", indent=2)
+
+# Load DataFrame
+df_csv  = pd.read_csv("students.csv")
+df_json = pd.read_json("students.json")
+```
+
+---
+
+## Practical Example — Grade Report
+
+```python
+import numpy as np
+import pandas as pd
+
+np.random.seed(42)
+n = 20
+df = pd.DataFrame({
+    "id":      [f"S{i:03d}" for i in range(1, n + 1)],
+    "math":    np.random.randint(50, 101, n),
+    "english": np.random.randint(50, 101, n),
+    "science": np.random.randint(50, 101, n),
+})
+
+subjects = ["math", "english", "science"]
+df["avg"]   = df[subjects].mean(axis=1).round(1)
+df["grade"] = df["avg"].apply(
+    lambda x: "A" if x >= 90 else ("B" if x >= 80 else ("C" if x >= 70 else "D"))
+)
+
+print(f"Class average: {df['avg'].mean():.1f}")
+print("\nSubject means:")
+print(df[subjects].mean().round(1))
+print("\nGrade distribution:")
+print(df["grade"].value_counts().sort_index())
+print("\nTop 5 students:")
+print(df.nlargest(5, "avg")[["id", "avg", "grade"]])
+```
 
 ---
 
 ## Quick Reference
 
-| Task | Tool / Code |
-|------|------------|
-| HTTP GET | `requests.get(url)` |
-| Parse HTML | `BeautifulSoup(html, "html.parser")` |
-| CSS selector | `soup.select(".cls")` / `soup.select_one("#id")` |
-| List directory | `os.listdir(path)` |
-| Copy file | `shutil.copy(src, dst)` |
-| Move file | `shutil.move(src, dst)` |
-| Delete file | `os.remove(path)` |
-| Delete folder | `shutil.rmtree(path)` |
-| Schedule task | `schedule.every().day.at("HH:MM").do(fn)` |
+| Task | Code |
+|------|------|
+| Create array | `np.array([...])` |
+| Array shape | `.shape`, `.ndim`, `.size` |
+| Vectorized math | `arr * 2`, `arr + arr2` |
+| Boolean filter | `arr[arr > 4]` |
+| NumPy stats | `np.mean()`, `np.std()`, `np.sum()` |
+| Create DataFrame | `pd.DataFrame(dict)` |
+| Column select | `df["col"]` / `df[["c1","c2"]]` |
+| Row filter | `df[df["col"] > val]` |
+| Sort | `df.sort_values("col")` |
+| Groupby | `df.groupby("col")["val"].mean()` |
+| Missing values | `.isnull()`, `.dropna()`, `.fillna()` |
+| CSV round-trip | `.to_csv()` / `pd.read_csv()` |
 
 ---
 
 ## Practice Quiz
 
-**Q1.** What does `response.raise_for_status()` do and why is it useful?
+**Q1.** What is "vectorized operation" and why is it faster than a Python loop?
 
-**A1.** It raises an `HTTPError` if the response status code indicates a client error (4xx) or server error (5xx). Without it, `requests.get()` returns a response object regardless of the status code — you wouldn't know the request failed unless you checked `response.status_code` manually. Using `raise_for_status()` makes error handling explicit and concise.
-
----
-
-**Q2.** What is the difference between `soup.find("a")` and `soup.find_all("a")`?
-
-**A2.** `find()` returns the **first** matching element (or `None` if not found). `find_all()` returns a **list** of all matching elements (empty list if none). Use `find()` when you expect a unique element (e.g., the page title); use `find_all()` when you want every occurrence.
+**A1.** A vectorized operation applies a computation to an entire NumPy array at once, without a Python-level loop. NumPy delegates the work to compiled C code, bypassing Python's per-element overhead. For example, `arr * 2` multiplies every element simultaneously, while `[x * 2 for x in lst]` interprets each iteration in Python.
 
 ---
 
-**Q3.** Why should you add `time.sleep()` between scraping requests?
+**Q2.** What is the difference between `df["score"]` and `df[["score"]]`?
 
-**A3.** To avoid overloading the server. Sending dozens of requests per second mimics a denial-of-service attack, may trigger rate limiting or an IP ban, and is generally considered impolite. A 1–2 second delay between requests is a common courtesy and often required by `robots.txt`.
-
----
-
-**Q4.** What does `shutil.move()` do that `os.rename()` does not?
-
-**A4.** `os.rename()` only works within the same filesystem. If `src` and `dst` are on different drives or filesystems, it raises an error. `shutil.move()` handles cross-filesystem moves transparently by copying the file and then deleting the original.
+**A2.** `df["score"]` returns a **Series** (1-D). `df[["score"]]` returns a **DataFrame** (2-D, one column). Use the double-bracket form when you need a DataFrame or when selecting multiple columns: `df[["math", "english"]]`.
 
 ---
 
-**Q5.** You want to rename every `.jpeg` file in a folder to `.jpg`. Write the code.
+**Q3.** Write one line that selects students whose average is above 85 and whose city is "Seoul".
+
+**A3.**
+```python
+result = df[(df["avg"] > 85) & (df["city"] == "Seoul")]
+```
+
+---
+
+**Q4.** What does `np.array([[1,2,3],[4,5,6]]).reshape(3, 2)` produce? What are its `.shape`, `.ndim`, and `.size`?
+
+**A4.** A 3-row × 2-column matrix:
+```text
+[[1 2]
+ [3 4]
+ [5 6]]
+```
+`.shape` → `(3, 2)`, `.ndim` → `2`, `.size` → `6`.
+
+---
+
+**Q5.** What are two strategies for dealing with NaN values in a DataFrame, and when would you choose each?
 
 **A5.**
-```python
-import os
-
-folder = "./photos"
-for name in os.listdir(folder):
-    if name.lower().endswith(".jpeg"):
-        base = name[:-5]   # strip ".jpeg"
-        src = os.path.join(folder, name)
-        dst = os.path.join(folder, base + ".jpg")
-        os.rename(src, dst)
-        print(f"{name} → {base}.jpg")
-```
+- **`dropna()`** — removes rows (or columns) containing any NaN. Choose when missing data is rare and you can afford to lose those rows.
+- **`fillna(value)`** — replaces NaN with a constant or derived value (e.g., column mean). Choose when you want to retain all rows and missing values can be reasonably estimated.
 
 ---
 
 ## Chapter 8 Preview
 
-Next: **Real-World Projects & Python Career Paths** — a complete CLI app, API integration, portfolio tips, and a 10-question final exam covering the full series.
+Next: **Projects, Scraping & Automation**.

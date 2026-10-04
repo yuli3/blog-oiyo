@@ -1,155 +1,298 @@
 ---
 track: academy
 locale: en
-title: "Python — File Handling & Exception Management"
+title: "Python — Functions, Modules & Object-Oriented Programming"
 category: "Computer Science"
 series: "Python Complete Guide"
 chapter: 4
-chapterTitleShort: 'Files & Exceptions'
+chapterTitleShort: "Functions, Modules"
 author: OIYO Editorial
 tags:
   - Python
-  - file handling
-  - exceptions
-  - CSV
-  - JSON
-description: "Python file I/O (text, CSV, JSON), try-except exception handling, with statement, and a practical log file analysis example."
+  - functions
+  - modules
+  - OOP
+  - standard library
+description: "Review function contracts, mutable defaults, module execution, instance state, inheritance and standard-library examples."
 pubDate: '2026-05-26'
 layoutVariant: lecture-series
 ---
 
-## File Reading and Writing
+## Functions
+
+A function separates a reusable operation from its callers. Its signature describes accepted inputs; its return value and documented failures describe the result. Printing a value is not the same as returning it. A function that reaches its end without `return` returns `None`.
 
 ```python
-# Write to a text file
-with open("hello.txt", "w") as f:
-    f.write("Hello, Python!\n")
-    f.write("File writing test.\n")
+# Basic function
+def greet(name, greeting="Hello"):
+    """Return a greeting message."""
+    return f"{greeting}, {name}!"
 
-# Read entire file
-with open("hello.txt", "r") as f:
-    content = f.read()
-    print(content)
+print(greet("Alice"))              # Hello, Alice!
+print(greet("Bob", "Good morning")) # Good morning, Bob!
 
-# Read line by line
-with open("hello.txt", "r") as f:
-    for line in f:
-        print(line.strip())
+# Variable positional arguments (*args)
+def sum_all(*numbers):
+    return sum(numbers)
 
-# Append to file
-with open("hello.txt", "a") as f:
-    f.write("Appended line.\n")
+print(sum_all(1, 2, 3, 4, 5))  # 15
+
+# Variable keyword arguments (**kwargs)
+def print_info(**kwargs):
+    for key, value in kwargs.items():
+        print(f"{key}: {value}")
+
+print_info(name="Alice", age=30, city="NYC")
+```
+
+### Default arguments and shared state
+
+Default expressions are evaluated when the function is defined, not on every call. A mutable default can therefore retain changes from earlier calls. See the [official default-argument rules](https://docs.python.org/3/tutorial/controlflow.html#default-argument-values).
+
+```python
+def append_shared(item, items=[]):
+    items.append(item)
+    return items
+
+print(append_shared("A"))
+print(append_shared("B"))
+
+def append_fresh(item, items=None):
+    # 2026-10-03: omitted arguments must not share a list across calls.
+    if items is None:
+        items = []
+    items.append(item)
+    return items
+
+print(append_fresh("A"))
+print(append_fresh("B"))
+```
+
+Output:
+```text
+['A']
+['A', 'B']
+['A']
+['B']
+```
+
+The `None` convention creates a fresh list only when the argument is omitted. Passing a list explicitly still allows the function to mutate that list. If preserving the caller's data is part of the contract, copying requires a separate decision; a shallow copy does not duplicate nested mutable objects.
+
+### Scope and parameter rules
+
+In an ordinary positional parameter list, required parameters precede parameters with defaults. Required keyword-only parameters after `*` are a different case. `*args` collects positional arguments into a tuple; `**kwargs` collects keyword arguments into a dictionary. They do not mean that every input is valid.
+
+Assignment normally binds a local name. `global` allows rebinding a module-level name; `nonlocal` allows rebinding a name in an enclosing function scope. Mutating an object referred to by a name is different from rebinding that name. Prefer explicit inputs and returned results when hidden shared state would make the function difficult to test.
+
+---
+
+## Modules and execution boundaries
+
+A module supplies a namespace. A `.py` file is one common form, but built-in and extension modules also exist. Importing a module can execute its top-level initialization code: importing is not merely copying selected function definitions.
+
+Place script-only entry code behind an execution guard. Save this example separately as `example.py`:
+
+```python
+def main():
+    print("Direct execution entry point")
+
+if __name__ == "__main__":
+    main()
+```
+
+The guard makes the call to `main()` conditional; it does not prevent unguarded top-level code from running during import or provide a sandbox. See the [official top-level execution documentation](https://docs.python.org/3/library/__main__.html).
+
+---
+
+## Lambda Functions
+
+```python
+# Lambda: anonymous one-liner
+square = lambda x: x ** 2
+print(square(5))  # 25
+
+# Use with sorted()
+students = [("Alice", 92), ("Bob", 78), ("Charlie", 88)]
+sorted_by_score = sorted(students, key=lambda x: x[1], reverse=True)
+# [('Alice', 92), ('Charlie', 88), ('Bob', 78)]
+
+# Use with filter() and map()
+numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+evens = list(filter(lambda x: x % 2 == 0, numbers))
+squared = list(map(lambda x: x**2, numbers))
 ```
 
 ---
 
-## CSV File Handling
+## Classes and OOP
+
+An object holds its own state, while methods define operations on that state. A class is useful when state must persist across several operations; a stateless calculation does not need a class merely for formality. `__init__` initializes an instance after creation, and `self` refers to the instance receiving a method call. This example assumes ordinary finite numeric inputs, keeps the initial balance non-negative, and rejects transaction amounts that are not positive finite numbers before changing the balance.
 
 ```python
-import csv
+from math import isfinite
 
-# Write CSV
-data = [
-    ["Name", "Age", "Score"],
-    ["Alice", 25, 92],
-    ["Bob", 30, 78],
-    ["Charlie", 22, 88]
-]
 
-with open("students.csv", "w", newline="") as f:
-    writer = csv.writer(f)
-    writer.writerows(data)
+class BankAccount:
+    """Learning example; not a production banking implementation."""
 
-# Read CSV as dictionaries
-with open("students.csv", "r") as f:
-    reader = csv.DictReader(f)
-    for row in reader:
-        print(f"{row['Name']}: {row['Score']}")
+    def __init__(self, owner, balance=0):
+        if not isfinite(balance) or balance < 0:
+            raise ValueError("Balance must be finite and non-negative.")
+        self.owner = owner
+        self.__balance = balance
+
+    def deposit(self, amount):
+        # 2026-10-03: validate before mutation so invalid inputs cannot corrupt state.
+        if not isfinite(amount) or amount <= 0:
+            raise ValueError("Amount must be finite and positive.")
+        self.__balance += amount
+        print(f"Deposited ${amount:,.2f}. Balance: ${self.__balance:,.2f}")
+
+    def withdraw(self, amount):
+        if not isfinite(amount) or amount <= 0:
+            raise ValueError("Amount must be finite and positive.")
+        if amount > self.__balance:
+            print("Insufficient funds!")
+        else:
+            self.__balance -= amount
+            print(f"Withdrew ${amount:,.2f}. Balance: ${self.__balance:,.2f}")
+
+    def get_balance(self):
+        return self.__balance
+
+    def __str__(self):
+        return f"{self.owner}'s account (Balance: ${self.__balance:,.2f})"
+
+# Usage
+account = BankAccount("Alice", 1000)
+account.deposit(500)
+account.withdraw(300)
+print(account)  # Alice's account (Balance: $1,200.00)
 ```
+
+The double underscore in `__balance` triggers **name mangling**, which reduces accidental name collisions with subclasses. It does not make the value inaccessible or provide a security boundary. In this example, `get_balance()` is the supported reading interface and the transaction methods enforce the balance rules. See the [Python documentation on private variables](https://docs.python.org/3/tutorial/classes.html#private-variables).
+
+The example uses floating-point arithmetic for brevity. Real monetary software needs an explicit decimal or integer-unit representation, rounding rules, range checks, durable transaction records, and concurrency rules. Finite inputs can still produce an out-of-range arithmetic result; this class does not check that case. It is also not a complete API for normalizing arbitrary inputs such as strings or booleans.
 
 ---
 
-## JSON File Handling
+## Inheritance
 
 ```python
-import json
+class SavingsAccount(BankAccount):
+    """Savings account that earns interest."""
 
-# Write JSON
-person = {
-    "name": "Alice",
-    "age": 30,
-    "hobbies": ["reading", "coding", "travel"]
-}
+    def __init__(self, owner, balance=0, interest_rate=0.03):
+        super().__init__(owner, balance)
+        if not isfinite(interest_rate) or interest_rate < 0:
+            raise ValueError("Interest rate must be finite and non-negative.")
+        self.interest_rate = interest_rate
 
-with open("person.json", "w") as f:
-    json.dump(person, f, indent=2)
+    def add_interest(self):
+        interest = self.get_balance() * self.interest_rate
+        if interest > 0:
+            self.deposit(interest)
+        print(f"Interest added: ${interest:,.2f}")
 
-# Read JSON
-with open("person.json", "r") as f:
-    loaded = json.load(f)
-    print(loaded["name"])     # Alice
-    print(loaded["hobbies"])  # ['reading', 'coding', 'travel']
+savings = SavingsAccount("Bob", 5000, 0.05)
+savings.add_interest()  # Interest added: $250.00
 ```
 
----
+`super().__init__()` follows the inherited initialization path. In general, `super()` uses the method resolution order rather than simply selecting one immediate parent; this example uses single inheritance. Interest is calculated on the current balance for one illustrative period: `5,000 × 0.05 = 250`, leaving `5,250`. A zero balance or zero rate adds nothing and does not call `deposit(0)`. The example does not model day-count conventions or changing rates.
 
-## Exception Handling
+Alice's balance does not change when Bob's account earns interest because each instance initializes its own state. A mutable class-level list, in contrast, may be shared by instances. Create an independent per-instance list in `__init__` when sharing is not intended. See the [class and instance variable rules](https://docs.python.org/3/tutorial/classes.html#class-and-instance-variables). Inheritance is one reuse option; composition with a separate interest policy may be more suitable when behavior varies independently of account identity.
+
+### Checking failure boundaries
+
+Run this after defining and using `account` above:
 
 ```python
-# Basic try-except
-def divide(a, b):
+before = account.get_balance()
+for amount in (-10, 0, float("nan"), float("inf")):
     try:
-        result = a / b
-        return result
-    except ZeroDivisionError:
-        print("Error: Cannot divide by zero!")
-        return None
-    except TypeError:
-        print("Error: Please provide numbers!")
-        return None
-    finally:
-        print("Calculation attempted.")  # Always runs
+        account.withdraw(amount)
+    except ValueError:
+        assert account.get_balance() == before
 
-print(divide(10, 2))   # 5.0
-print(divide(10, 0))   # Error message + None
-print(divide(10, "a")) # Error message + None
+account.withdraw(before + 1)
+assert account.get_balance() == before
+print("Balance preserved after rejected inputs")
+```
 
-# File handling exceptions
-try:
-    with open("nonexistent.txt", "r") as f:
-        content = f.read()
-except FileNotFoundError:
-    print("File not found")
-except PermissionError:
-    print("No permission to access file")
+The output is `Insufficient funds!` followed by `Balance preserved after rejected inputs`. The check demonstrates validation before mutation, not a proof that every possible input is safe. Assertions are used for this learning check; optimized execution can remove them, so they must not replace production input validation or security checks.
+
+---
+
+## datetime: Date and Time
+
+```python
+from datetime import datetime, timedelta, date
+
+# Current date/time
+now = datetime.now()
+print(now)  # depends on when this code is executed
+
+# Format output
+print(now.strftime("%B %d, %Y"))  # locale-dependent month name
+print(now.strftime("%Y-%m-%d"))   # execution date
+
+# Date arithmetic
+tomorrow = now + timedelta(days=1)
+next_week = now + timedelta(weeks=1)
+
+# Difference between dates
+date1 = date(2024, 1, 1)
+date2 = date(2026, 5, 26)
+diff = date2 - date1
+print(f"{diff.days} days apart")  # 876 days apart
 ```
 
 ---
 
-## Custom Exceptions
+## os: Operating System Interface
 
 ```python
-class InsufficientFundsError(Exception):
-    def __init__(self, amount, balance):
-        self.amount = amount
-        self.balance = balance
-        super().__init__(
-            f"Insufficient funds: have ${balance:,.2f}, need ${amount:,.2f}"
-        )
+import os
 
-def withdraw(balance, amount):
-    if amount > balance:
-        raise InsufficientFundsError(amount, balance)
-    return balance - amount
+# Current working directory
+print(os.getcwd())
 
-try:
-    result = withdraw(100, 200)
-except InsufficientFundsError as e:
-    print(e)  # Insufficient funds: have $100.00, need $200.00
+# List directory contents
+files = os.listdir(".")
+
+# Create directories
+os.makedirs("data/outputs", exist_ok=True)
+
+# Environment variables
+api_key = os.environ.get("API_KEY")
+
+# Path operations
+path = os.path.join("data", "results.csv")
+print(os.path.exists(path))      # File exists?
+print(os.path.basename(path))    # results.csv
+print(os.path.dirname(path))     # data
+```
+
+---
+
+## random: Random Number Generation
+
+```python
+import random
+
+print(random.randint(1, 100))    # Random integer 1-100
+print(random.random())           # Random float 0.0-1.0
+
+items = ["apple", "banana", "cherry", "mango"]
+print(random.choice(items))      # Random single item
+print(random.sample(items, 2))   # 2 unique random items
+
+random.shuffle(items)             # Shuffle in place
+print(items)
 ```
 
 ---
 
 ## Chapter 5 Preview
 
-Next: **Standard Library & Package Management** — datetime, os, random, collections, pip, and virtual environments.
+Next: **Data Structures & Selection Criteria**.

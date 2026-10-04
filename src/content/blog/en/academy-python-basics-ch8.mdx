@@ -1,28 +1,477 @@
 ---
 track: academy
 locale: en
-title: "Python — Real-World Projects & Career Paths"
+title: "Python — Projects, Scraping & Automation"
 category: "Computer Science"
 series: "Python Complete Guide"
 chapter: 8
-chapterTitleShort: 'Projects & Careers'
+chapterTitleShort: "Projects, Scraping"
 author: OIYO Editorial
 tags:
   - Python
   - projects
-  - career
-  - portfolio
-  - API
-  - CLI
   - automation
-description: "Build a complete CLI vocabulary app, integrate a public REST API, map Python skills to job roles, and finish with a 10-question series final exam."
+  - web scraping
+  - career
+description: "Integrate scraping, file automation, CLI and API projects with failure and data-preservation boundaries."
 pubDate: '2026-05-26'
 layoutVariant: lecture-series
 ---
 
+## Two Pillars of Practical Python
+
+Once you know Python's core syntax, the two most immediately useful skill areas are:
+
+1. **Web scraping** — pulling data from websites automatically
+2. **File/task automation** — eliminating repetitive manual work
+
+Both require only the standard library plus two widely-used packages.
+
+```bash
+python -m pip install requests beautifulsoup4
+```
+
+---
+
+## requests: Fetching Web Pages
+
+```python
+import requests
+
+response = requests.get("https://httpbin.org/get", timeout=10)
+response.raise_for_status()
+
+print(response.status_code)    # actual status, not a promised result
+print(response.headers["Content-Type"])
+
+# JSON response
+data = response.json()
+print(type(data).__name__)     # do not print or store identifying response fields
+
+# Text response
+page = requests.get("https://example.com", timeout=10)
+page.raise_for_status()
+print(page.text[:200])          # first 200 chars of HTML
+```
+
+### Handling errors
+
+```python
+try:
+    r = requests.get("https://example.com", timeout=5)
+    r.raise_for_status()    # raises HTTPError for 4xx/5xx
+except requests.exceptions.Timeout:
+    print("Request timed out.")
+except requests.exceptions.HTTPError as e:
+    print(f"HTTP error: {e}")
+except requests.exceptions.RequestException as e:
+    print(f"Request failed: {e}")
+```
+
+---
+
+## BeautifulSoup: Parsing HTML
+
+```python
+from bs4 import BeautifulSoup
+import requests
+
+html = '<title>Fixture page</title><h1>Example</h1><a href="/example">Link</a>'
+soup = BeautifulSoup(html, "html.parser")
+
+# Tag navigation
+print(soup.title.get_text() if soup.title is not None else "No title")
+print(soup.h1.get_text() if soup.h1 is not None else "No heading")
+
+# Find one element
+first_link = soup.find("a")
+print(first_link.get("href") if first_link is not None else "No link")
+
+# Find all matching elements
+links = soup.find_all("a")
+for link in links:
+    print(link.get("href"), link.text)
+```
+
+### CSS selector syntax
+
+```python
+# By class
+items = soup.select(".product-card")
+
+# By id
+header = soup.select_one("#main-header")
+
+# Nested selector
+prices = soup.select("ul.price-list li span.amount")
+for p in prices:
+    print(p.text.strip())
+```
+
+---
+
+## Practical Scraper — Quotes of the Day
+
+```python
+import requests
+from bs4 import BeautifulSoup
+import json
+
+def scrape_quotes(url="https://quotes.toscrape.com", *, session=requests):
+    """Scrape quotes, authors, and tags from the first page."""
+    r = session.get(url, timeout=10)
+    r.raise_for_status()
+    return parse_quotes(r.text)
+
+def parse_quotes(html):
+    """Parse one page; reject missing required fields instead of hiding data loss."""
+    soup = BeautifulSoup(html, "html.parser")
+    blocks = soup.select("div.quote")
+    if not blocks:
+        raise ValueError("No quote blocks: check the page and selector")
+
+    quotes = []
+    for index, block in enumerate(blocks, start=1):
+        text = block.select_one("span.text")
+        author = block.select_one("small.author")
+        if text is None or author is None:
+            raise ValueError(f"Quote {index}: missing text or author")
+        text_value = text.get_text(" ", strip=True)
+        author_value = author.get_text(" ", strip=True)
+        if not text_value or not author_value:
+            raise ValueError(f"Quote {index}: empty text or author")
+        quotes.append({
+            "text": text_value,
+            "author": author_value,
+            "tags": [t.get_text(" ", strip=True) for t in block.select("a.tag")],
+        })
+
+    return quotes
+
+sample_html = '''
+<div class="quote"><span class="text">A sample, not a real quotation.</span>
+<small class="author">Fixture author</small><a class="tag">testing</a></div>
+'''
+quotes = parse_quotes(sample_html)  # No network or user data needed for this test.
+print(f"Scraped {len(quotes)} quotes")
+for q in quotes[:3]:
+    print(f'\n"{q["text"]}" — {q["author"]}')
+    print(f'  Tags: {", ".join(q["tags"])}')
+
+# Opt in only after checking access rules and choosing a new output path.
+# quotes = scrape_quotes()
+# with open("quotes.json", "x", encoding="utf-8") as f:
+#     json.dump(quotes, f, ensure_ascii=False, indent=2)
+```
+
+This is a **single-page HTML parser**, not a complete dataset collector. Empty tag lists are allowed; missing or empty text and author fields reject the page. An empty result may mean the selector changed, access was denied, or the page genuinely has no quotes, so this example stops rather than reporting success. JavaScript-rendered content, pagination, duplicate detection, retries and schema changes need separate handling.
+
+Requests' `timeout=10` limits connection and read waiting; it does **not** cap the entire download at ten seconds. Check HTTP status before interpreting the body. Successful JSON decoding does not prove a successful HTTP response, and `response.json()` can itself raise `JSONDecodeError` from Requests' exceptions module. These boundaries follow the [Requests Quickstart](https://requests.readthedocs.io/en/latest/user/quickstart/) and [timeout documentation](https://requests.readthedocs.io/en/latest/user/advanced/#timeouts). Selector behavior is documented in [Beautiful Soup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/#css-selectors) and [Soup Sieve](https://facelessuser.github.io/soupsieve/api/#soupsieveselect_one).
+
+---
+
+## os and shutil: File Automation
+
+Copying, moving and deleting files are different operations. The following demonstration creates its own temporary files, not files in a real Downloads folder. The temporary directory and its contents are removed when the context ends.
+
+```python
+import os
+import shutil
+from pathlib import Path
+from tempfile import TemporaryDirectory
+
+with TemporaryDirectory(prefix="python-file-demo-") as temp:
+    root = Path(temp)
+    source = root / "source.txt"
+    source.write_text("Temporary example only", encoding="utf-8")
+    backup = root / "backup"
+    backup.mkdir()
+    copied = backup / "copy.txt"
+    shutil.copy(source, copied)
+    moved = root / "moved.txt"
+    shutil.move(copied, moved)
+    print(os.path.basename(moved))
+    print(os.path.splitext(moved)[1])
+    # 2026-10-03: deletion is confined to files created by this temporary demo.
+    os.remove(moved)
+    shutil.rmtree(backup)
+    print(source.exists())
+```
+
+---
+
+## Project: Download Organizer
+
+Build a plan first; the default invocation only prints it. Symlinks and directories are excluded, and existing or case-insensitively duplicate targets abort the plan. Use a backed-up, exclusively controlled test folder before deliberately opting into changes. This is not an atomic batch or protection against concurrent filesystem changes.
+
+```python
+import os
+import shutil
+from datetime import datetime
+
+CATEGORIES = {
+    "Images":    [".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg"],
+    "Documents": [".pdf", ".docx", ".txt", ".xlsx", ".pptx"],
+    "Videos":    [".mp4", ".mov", ".avi", ".mkv"],
+    "Audio":     [".mp3", ".wav", ".flac"],
+    "Archives":  [".zip", ".rar", ".7z", ".tar", ".gz"],
+    "Code":      [".py", ".js", ".ts", ".html", ".css"],
+}
+
+# Reverse map: extension → category
+EXT_MAP = {ext: cat for cat, exts in CATEGORIES.items() for ext in exts}
+
+from pathlib import Path
+
+def organize(source: str, *, apply=False):
+    root = Path(source)
+    if root.is_symlink() or not root.is_dir():
+        raise ValueError("Use a real, controlled directory.")
+    plan, seen = [], set()
+    for src in sorted(root.iterdir()):
+        if src.is_symlink() or not src.is_file():
+            continue
+        dest_dir = root / EXT_MAP.get(src.suffix.lower(), "Other")
+        if dest_dir.is_symlink() or (dest_dir.exists() and not dest_dir.is_dir()):
+            raise ValueError("Invalid destination directory.")
+        dest = dest_dir / src.name
+        key = str(dest).casefold()
+        if dest.exists() or dest.is_symlink() or key in seen:
+            raise FileExistsError(str(dest))
+        seen.add(key)
+        plan.append((src, dest))
+
+    for src, dest in plan:
+        print(f"{src.name} → {dest.relative_to(root)}")
+    if not apply:
+        return plan
+
+    for src, dest in plan:
+        # 2026-10-03: recheck before each mutation; this is not a concurrent-safe transaction.
+        if src.is_symlink() or dest.exists() or dest.is_symlink():
+            raise FileExistsError(str(dest))
+        if dest.parent.is_symlink():
+            raise ValueError("Destination became a symlink.")
+        dest.parent.mkdir(exist_ok=True)
+        src.rename(dest)
+    stamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+    with (root / f"organize_{stamp}.log").open("x", encoding="utf-8") as f:
+        f.write("\n".join(f"{src.name} → {dest.relative_to(root)}" for src, dest in plan))
+    return plan
+
+# In a disposable fixture folder, organize(folder) previews without changes.
+# Only after reviewing it, organize(folder, apply=True) applies the plan.
+```
+
+---
+
+## Project: Bulk File Renamer
+
+```python
+import os
+import re
+
+from pathlib import Path
+
+def batch_rename(folder: str, pattern: str, replacement: str, *, apply=False):
+    """
+    Rename all files in folder by replacing `pattern` (regex)
+    with `replacement` in each filename.
+    """
+    root = Path(folder)
+    if root.is_symlink() or not root.is_dir():
+        raise ValueError("Use a real, controlled directory.")
+    plan, seen = [], set()
+    for src in sorted(root.iterdir()):
+        if src.is_symlink() or not src.is_file():
+            continue
+        new_name = re.sub(pattern, replacement, src.name)
+        if new_name == src.name:
+            continue
+        if new_name in ("", ".", "..") or "/" in new_name or "\\" in new_name:
+            raise ValueError("Replacement must remain one filename.")
+        dst = root / new_name
+        key = new_name.casefold()
+        # 2026-10-03: reject cycles and existing targets rather than overwriting them.
+        if dst.exists() or dst.is_symlink() or key in seen:
+            raise FileExistsError(str(dst))
+        seen.add(key)
+        plan.append((src, dst))
+    for src, dst in plan:
+        print(f"{src.name} → {dst.name}")
+    if apply:
+        for src, dst in plan:
+            if src.is_symlink() or dst.exists() or dst.is_symlink():
+                raise FileExistsError(str(dst))
+            src.rename(dst)
+    return plan
+
+# Example: strip leading numbers like "01_report.pdf" → "report.pdf"
+# batch_rename("./docs", r"^\d+_", "")
+```
+
+The default is a dry run. Existing targets, two sources mapping to one target, and path-changing replacements are rejected before any rename. Application can still fail halfway through, so backups and exclusive access are prerequisites, not optional claims supplied by the code.
+
+---
+
+## Scheduling Scripts
+
+### Fixed delay: completion, waiting, then the next run
+
+```python
+import math
+import time
+
+def run_periodic(task, interval=300, *, runs=3, sleep=time.sleep):
+    if isinstance(interval, bool) or not isinstance(interval, (int, float)):
+        raise TypeError("interval must be a number")
+    try:
+        seconds = float(interval)
+    except OverflowError as exc:
+        raise ValueError("interval is too large") from exc
+    if not math.isfinite(seconds) or seconds <= 0:
+        raise ValueError("interval must be finite and positive")
+    if runs is not None and (isinstance(runs, bool) or not isinstance(runs, int) or runs < 0):
+        raise ValueError("runs must be a nonnegative integer or None")
+    completed = 0
+    while runs is None or completed < runs:
+        task()  # 2026-10-03: propagate failures; do not report a failed job as success.
+        completed += 1
+        if runs is None or completed < runs:
+            sleep(seconds)
+    return completed
+
+def check_updates():
+    print("Checking fixture updates")
+
+# Finite demonstration; it does not fetch a website or change a file.
+run_periodic(check_updates, interval=1, runs=3)
+
+# Opt-in continuous operation: run_periodic(check_updates, runs=None)
+```
+
+The first job runs immediately. A 300-second interval means waiting 300 seconds **after the previous job finishes**, not starting exactly every five minutes. A slow job shifts subsequent start times. Zero runs does no work; a job exception stops the loop and propagates. The finite default is for practice; the opt-in continuous call keeps the process occupied until interrupted. `time.sleep()` may return later than requested, so this is not precise scheduling.
+
+### Calendar jobs with the schedule library
+
+```bash
+python -m pip install schedule
+```
+
+```python
+import schedule
+import time
+
+def daily_report():
+    print("Generating fixture report")
+
+def check_updates():
+    print("Checking fixture updates")
+
+def build_scheduler():
+    scheduler = schedule.Scheduler()
+    scheduler.every().day.at("09:00").do(daily_report)
+    scheduler.every(30).minutes.do(check_updates)
+    return scheduler
+
+def run_scheduler(scheduler, *, polls=3, sleep=time.sleep):
+    if polls is not None and (isinstance(polls, bool) or not isinstance(polls, int) or polls < 0):
+        raise ValueError("polls must be a nonnegative integer or None")
+    count = 0
+    while polls is None or count < polls:
+        scheduler.run_pending()
+        count += 1
+        if polls is None or count < polls:
+            sleep(1)
+    return count
+
+scheduler = build_scheduler()
+run_scheduler(scheduler)  # Three checks only; a scheduled job need not be due.
+# Opt-in continuous operation: run_scheduler(scheduler, polls=None)
+```
+
+This example is independent of the preceding code and uses a private scheduler rather than global jobs. 09:00 uses the Python process's local time zone; the three demonstration checks do not promise that either job runs. An explicit named time zone in `.at()` additionally requires pytz; confirm host time-zone and daylight-saving requirements before deployment.
+
+Jobs run sequentially in this polling thread. Long jobs delay other checks, and uncaught job exceptions propagate out of `run_pending()`. Sleeping or stopping the host does not keep the script running. This library does not provide persistent jobs, concurrent execution or exact timing. It is not a durable automation service: choose process supervision, restart handling, idempotency, logs and a missed-run policy before using it for operational reports. Do not schedule the file-changing examples without reviewing their plans and backups.
+
+Sources: [Python time and sleep](https://docs.python.org/3/library/time.html#time.sleep), [schedule capabilities and limits](https://schedule.readthedocs.io/en/stable/), [job exceptions](https://schedule.readthedocs.io/en/stable/exception-handling.html), [time-zone behavior](https://schedule.readthedocs.io/en/stable/timezones.html).
+
+---
+
+## Ethics and Robots.txt
+
+Before scraping any website:
+
+1. **Check `robots.txt`** — the [robots.txt example address](https://example.com/robots.txt) illustrates where published crawl preferences are found.
+2. **Respect rate limits** — add `time.sleep(1)` between requests to avoid overloading servers.
+3. **Check the Terms of Service** — some sites prohibit automated access.
+4. **Prefer APIs** — if the site offers a public API, use it instead of scraping HTML.
+
+---
+
+## Quick Reference
+
+| Task and API reference |
+|---|
+| HTTP GET: `requests.get(url)` |
+| Parse HTML: `BeautifulSoup(html, "html.parser")` |
+| CSS selector: `soup.select(".cls")` or `soup.select_one("#id")` |
+| List directory: `os.listdir(path)` |
+| Copy file: `shutil.copy(src, dst)` |
+| Move file: `shutil.move(src, dst)` |
+| Delete file: `os.remove(path)` — irreversible without a separate recovery mechanism. |
+| Delete folder: `shutil.rmtree(path)` — includes its contents; temporary fixture only in this chapter. |
+| Schedule task: `job = schedule.every().day`, then `job.at("HH:MM").do(fn)` |
+
+---
+
+## Practice Quiz
+
+**Q1.** What does `response.raise_for_status()` do and why is it useful?
+
+**A1.** It raises an `HTTPError` if the response status code indicates a client error (4xx) or server error (5xx). Without it, `requests.get()` returns a response object regardless of the status code — you wouldn't know the request failed unless you checked `response.status_code` manually. Using `raise_for_status()` makes error handling explicit and concise.
+
+---
+
+**Q2.** What is the difference between `soup.find("a")` and `soup.find_all("a")`?
+
+**A2.** `find()` returns the **first** matching element (or `None` if not found). `find_all()` returns a **list** of all matching elements (empty list if none). Use `find()` when you expect a unique element (e.g., the page title); use `find_all()` when you want every occurrence.
+
+---
+
+**Q3.** Why should you add `time.sleep()` between scraping requests?
+
+**A3.** To avoid overloading the server. Sending dozens of requests per second mimics a denial-of-service attack, may trigger rate limiting or an IP ban, and is generally considered impolite. A 1–2 second delay between requests is a common courtesy and often required by `robots.txt`.
+
+---
+
+**Q4.** What does `shutil.move()` do that `os.rename()` does not?
+
+**A4.** `os.rename()` only works within the same filesystem. If `src` and `dst` are on different drives or filesystems, it raises an error. `shutil.move()` handles cross-filesystem moves transparently by copying the file and then deleting the original.
+
+---
+
+**Q5.** You want to rename every `.jpeg` file in a folder to `.jpg`. Write the code.
+
+**A5.**
+```python
+import os
+
+folder = "./photos"
+for name in os.listdir(folder):
+    if name.lower().endswith(".jpeg"):
+        base = name[:-5]   # strip ".jpeg"
+        src = os.path.join(folder, name)
+        dst = os.path.join(folder, base + ".jpg")
+        os.rename(src, dst)
+        print(f"{name} → {base}.jpg")
+```
+
+---
+
 ## You've Made It to the Final Chapter
 
-Over seven chapters you've covered Python's core syntax, data structures, OOP, file handling, the standard library, data analysis, and automation. This chapter brings everything together:
+The preceding chapters reviewed syntax, state, functions, data structures, files and data analysis. This chapter adds scraping and automation and integrates those skills in learning projects, not complete production services:
 
 - **Three real-world projects** that combine multiple skills
 - **A career roadmap** mapping Python knowledge to job roles
@@ -32,44 +481,87 @@ Over seven chapters you've covered Python's core syntax, data structures, OOP, f
 
 ## What Python Developers Actually Build
 
-| Domain | Common Tasks | Key Libraries |
-|--------|-------------|---------------|
-| Data Analysis | Clean, transform, visualize data | pandas, matplotlib, seaborn |
-| Machine Learning | Train and deploy models | scikit-learn, TensorFlow, PyTorch |
-| Web Backend | REST APIs, databases | FastAPI, Django, Flask |
-| Automation | Scheduled jobs, file pipelines | os, shutil, schedule, Selenium |
-| Finance / Quant | Backtesting, risk models | QuantLib, zipline, yfinance |
-| DevOps | CI scripts, infra tooling | boto3, paramiko, fabric |
+| Domain | Common Tasks and Key Libraries |
+|---|---|
+| Data Analysis | Common Tasks: Clean, transform, visualize data. Key Libraries: pandas, matplotlib, seaborn. |
+| Machine Learning | Common Tasks: Train and deploy models. Key Libraries: scikit-learn, TensorFlow, PyTorch. |
+| Web Backend | Common Tasks: REST APIs, databases. Key Libraries: FastAPI, Django, Flask. |
+| Automation | Common Tasks: Scheduled jobs, file pipelines. Key Libraries: os, shutil, schedule, Selenium. |
+| Finance / Quant | Common Tasks: Backtesting, risk models. Key Libraries: QuantLib, zipline, yfinance. |
+| DevOps | Common Tasks: CI scripts, infra tooling. Key Libraries: boto3, paramiko, fabric. |
 
 ---
 
 ## Project 1: CLI Vocabulary Flashcard App
 
-A complete, runnable program using file I/O, JSON, and control flow.
+A runnable learning example using file I/O, JSON, and control flow; the operational limitations below still apply.
 
 ```python
 import json
 import random
 import os
+from pathlib import Path
+from tempfile import NamedTemporaryFile
 
 DB_FILE = "vocab.json"
 
-def load() -> dict:
-    if os.path.exists(DB_FILE):
-        with open(DB_FILE) as f:
-            return json.load(f)
-    return {}
+def validate_wordbook(data):
+    if not isinstance(data, dict):
+        raise ValueError("Expected an object mapping words to meanings")
+    if any(not isinstance(k, str) or not k.strip() or
+           not isinstance(v, str) or not v.strip() for k, v in data.items()):
+        raise ValueError("Words and meanings must be nonempty strings")
+    return data
 
-def save(db: dict) -> None:
-    with open(DB_FILE, "w") as f:
-        json.dump(db, f, indent=2)
+def unique_pairs(pairs):
+    data = {}
+    for key, value in pairs:
+        if key in data:
+            raise ValueError("Duplicate JSON key")
+        data[key] = value
+    return data
+
+def load(path=None):
+    destination = Path(DB_FILE if path is None else path)
+    if destination.is_symlink():
+        raise ValueError("Do not use a symlink as the database")
+    try:
+        with destination.open("r", encoding="utf-8") as source:
+            data = json.load(source, object_pairs_hook=unique_pairs)
+    except FileNotFoundError:
+        return {}
+    return validate_wordbook(data)
+
+def save(db, path=None):
+    validate_wordbook(db)
+    destination = Path(DB_FILE if path is None else path)
+    load(destination)  # 2026-10-03: reject damaged originals before replacing them.
+    temporary = None
+    try:
+        with NamedTemporaryFile("w", encoding="utf-8", dir=destination.parent,
+                                prefix=".wordbook-", suffix=".tmp", delete=False) as output:
+            temporary = Path(output.name)
+            json.dump(db, output, ensure_ascii=False, indent=2)
+            output.flush()
+            os.fsync(output.fileno())
+        # 2026-10-03: same-directory replacement avoids truncating the original first.
+        os.replace(temporary, destination)
+    finally:
+        if temporary is not None and temporary.exists():
+            temporary.unlink()
 
 def add_word(db: dict) -> None:
     word    = input("Word: ").strip().lower()
     meaning = input("Meaning: ").strip()
     if word and meaning:
-        db[word] = meaning
-        save(db)
+        if word in db:
+            print("Word already exists; keeping the previous meaning.")
+            return
+        candidate = dict(db)
+        candidate[word] = meaning
+        save(candidate)
+        db.clear()
+        db.update(candidate)
         print(f"✓ '{word}' saved.")
 
 def quiz(db: dict) -> None:
@@ -113,65 +605,115 @@ def main() -> None:
 # main()
 ```
 
+
+Only an absent file starts an empty database. Invalid JSON, duplicate keys, invalid schema and read-permission failures propagate instead of silently resetting data. Existing words keep their meanings. Addition saves a copy first, then updates memory only after success. On failure this learning program stops; inspect the original before restarting.
+
+A completed temporary file in the same directory is replaced with os.replace, avoiding initial truncation. This assumes exclusive access to a controlled directory. It is not a database with concurrent editing, symlink-race protection, preservation of old file permissions, or guaranteed directory durability after power loss. Operational use needs backups and locking or transactional storage.
+
 ---
 
 ## Project 2: REST API Client — Weather Dashboard
 
-Demonstrates `requests`, JSON parsing, and error handling together.
+Use coordinates for an unambiguous location. The provider recommends latitude/longitude and a separate geocoder for city names; the older built-in city-name lookup is deprecated. Do not pick the first matching city silently. The example preserves the request–JSON–display workflow but defaults to synthetic data instead of three live city requests.
 
 ```python
+import math
+import os
 import requests
 
-API_KEY = "your_api_key"   # sign up at openweathermap.org
-BASE    = "https://api.openweathermap.org/data/2.5/weather"
+BASE = "https://api.openweathermap.org/data/2.5/weather"
 
-def get_weather(city: str) -> dict | None:
-    params = {"q": city, "appid": API_KEY,
-              "units": "metric", "lang": "en"}
+def finite_number(value, label, low=None, high=None):
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        raise ValueError(f"{label}: expected a number")
     try:
-        r = requests.get(BASE, params=params, timeout=5)
-        r.raise_for_status()
-        return r.json()
-    except requests.exceptions.HTTPError as e:
-        if r.status_code == 404:
-            print(f"City '{city}' not found.")
-        else:
-            print(f"HTTP error: {e}")
-    except requests.exceptions.RequestException as e:
-        print(f"Connection error: {e}")
-    return None
+        number = float(value)
+    except OverflowError as exc:
+        raise ValueError(f"{label}: out of range") from exc
+    if not math.isfinite(number) or (low is not None and number < low) or (high is not None and number > high):
+        raise ValueError(f"{label}: invalid value")
+    return number
 
-def display(data: dict) -> None:
-    w = data["weather"][0]["description"].capitalize()
-    t = data["main"]["temp"]
-    feels = data["main"]["feels_like"]
-    hum   = data["main"]["humidity"]
-    wind  = data["wind"]["speed"]
-    print(f"\n=== {data['name']}, {data['sys']['country']} ===")
-    print(f"  {w}")
-    print(f"  Temperature : {t}°C  (feels like {feels}°C)")
-    print(f"  Humidity    : {hum}%")
-    print(f"  Wind        : {wind} m/s")
+def parse_weather(data):
+    if not isinstance(data, dict):
+        raise ValueError("Weather response must be an object")
+    try:
+        weather = data["weather"]
+        if not isinstance(weather, list) or not weather or not isinstance(weather[0], dict):
+            raise ValueError("Missing weather description")
+        description = weather[0]["description"]
+        if not isinstance(description, str) or not description.strip():
+            raise ValueError("Invalid weather description")
+        main, wind = data["main"], data["wind"]
+        if not isinstance(main, dict) or not isinstance(wind, dict):
+            raise ValueError("Invalid main or wind object")
+        return {
+            "description": description.strip(),
+            "temperature": finite_number(main["temp"], "temperature"),
+            "feels_like": finite_number(main["feels_like"], "feels_like"),
+            "humidity": finite_number(main["humidity"], "humidity", 0, 100),
+            "wind_speed": finite_number(wind["speed"], "wind_speed", 0),
+        }
+    except KeyError as exc:
+        raise ValueError("Missing required weather field") from exc
 
-cities = ["London", "Tokyo", "Sydney"]
-for city in cities:
-    data = get_weather(city)
-    if data:
-        display(data)
+def get_weather(latitude, longitude, *, api_key=None, session=requests):
+    lat = finite_number(latitude, "latitude", -90, 90)
+    lon = finite_number(longitude, "longitude", -180, 180)
+    key = api_key if api_key is not None else os.environ.get("OPENWEATHER_API_KEY")
+    if not isinstance(key, str) or not key.strip():
+        raise ValueError("An API key is required for an actual request")
+    try:
+        response = session.get(BASE, params={"lat": lat, "lon": lon,
+            "appid": key, "units": "metric"}, timeout=5, allow_redirects=False)
+        if not 200 <= response.status_code < 300:
+            raise RuntimeError(f"Weather HTTP status {response.status_code}")
+        data = response.json()
+    except requests.exceptions.JSONDecodeError:
+        raise RuntimeError("Weather response is not valid JSON") from None
+    except requests.exceptions.RequestException:
+        # 2026-10-03: request exceptions can contain a URL with the API key.
+        raise RuntimeError("Weather network request failed") from None
+    return parse_weather(data)
+
+def display(data):
+    print(data["description"])
+    print(f"Temperature: {data['temperature']} °C")
+    print(f"Feels like: {data['feels_like']} °C")
+    print(f"Humidity: {data['humidity']} %")
+    print(f"Wind: {data['wind_speed']} m/s")
+
+fixture = {"weather": [{"description": "fictional clear weather"}],
+           "main": {"temp": 20, "feels_like": 19, "humidity": 50},
+           "wind": {"speed": 2}}
+display(parse_weather(fixture))  # Synthetic data; no account or network needed.
+# Actual coordinates + your privately configured environment key:
+# display(get_weather(latitude, longitude))
 ```
+
+The parser requires only the fields displayed here; location names and country codes are not assumed to exist. Metric units mean Celsius and metres per second in this response. Missing fields, empty descriptions, Boolean/non-finite numbers, out-of-range humidity and negative wind speeds are rejected rather than displayed as zero. This is structural validation, not a meteorological accuracy guarantee.
+
+HTTP success, valid JSON and the expected schema are three separate checks. Redirects are rejected, and network errors are shown without exception text that might disclose the key. Keep keys outside source control, screenshots and logs. A five-second timeout is not an overall request deadline. Before opting into real calls, confirm your plan, quota and terms; this code neither registers an account nor retries billable calls automatically.
+
+Sources: [OpenWeather current-weather fields and coordinate API](https://openweathermap.org/api/current), [Requests JSON and timeout behavior](https://requests.readthedocs.io/en/latest/user/quickstart/).
 
 ---
 
 ## Project 3: Grade Report Generator
 
-Combines pandas, file I/O, and formatted output.
+Combines pandas, file I/O, and formatted output. The policy requires nonempty data and finite scores from 0 to 100 in all three subject columns; missing scores are not silently averaged away. The output is a separate, newly created file, never an existing file selected by string replacement.
 
 ```python
 import pandas as pd
 import numpy as np
 from datetime import date
+from pathlib import Path
 
-def grade_report(csv_path: str) -> None:
+def grade_report(csv_path: str, output_path=None):
+    source = Path(csv_path)
+    out = Path(output_path) if output_path is not None else source.with_name(source.stem + "_report.csv")
+    if out.resolve() == source.resolve():
+        raise ValueError("Output must differ from the input file.")
     try:
         df = pd.read_csv(csv_path)
     except FileNotFoundError:
@@ -179,10 +721,18 @@ def grade_report(csv_path: str) -> None:
         return
 
     subjects = ["math", "english", "science"]
+    if df.empty or not set(subjects).issubset(df.columns):
+        raise ValueError("Nonempty data with all subject columns is required.")
+    scores = df[subjects].apply(pd.to_numeric, errors="raise")
+    if not np.isfinite(scores.to_numpy(dtype=float)).all():
+        raise ValueError("Missing or non-finite scores are not allowed.")
+    if not scores.ge(0).all().all() or not scores.le(100).all().all():
+        raise ValueError("Scores must be between 0 and 100.")
+    df[subjects] = scores
     df["avg"]   = df[subjects].mean(axis=1).round(1)
     df["grade"] = df["avg"].apply(
         lambda x: "A" if x >= 90 else ("B" if x >= 80
-                  else ("C" if x >= 70 else "D")))
+                  else ("C" if x >= 70 else ("D" if x >= 60 else "F"))))
     df["rank"]  = df["avg"].rank(ascending=False, method="min").astype(int)
 
     sep = "=" * 56
@@ -195,7 +745,7 @@ def grade_report(csv_path: str) -> None:
     print(df[subjects].mean().round(1).to_string())
 
     print("\n[ Grade Distribution ]")
-    for g in "ABCD":
+    for g in "ABCDF":
         n = (df["grade"] == g).sum()
         print(f"  {g}: {'█' * n} ({n})")
 
@@ -203,30 +753,34 @@ def grade_report(csv_path: str) -> None:
     cols = ["rank"] + subjects + ["avg", "grade"]
     print(df.nsmallest(5, "rank")[cols].to_string(index=False))
 
-    out = csv_path.replace(".csv", "_report.csv")
-    df.to_csv(out, index=False)
+    # 2026-10-03: exclusive creation preserves any existing report or source.
+    with out.open("x", encoding="utf-8", newline="") as output:
+        df.to_csv(output, index=False)
     print(f"\nSaved: {out}")
+    return out
 
 # grade_report("students.csv")
 ```
+
+Exclusive creation rejects an existing output but is not atomic report publication: a write failure can leave a partial new report. This example does not implement transactional persistence or concurrent edits. The grading thresholds are illustrative, not an institution's assessment policy.
 
 ---
 
 ## Python Career Roadmap
 
-### Phase 1 — Foundation (0–3 months)
+### Phase 1 — Foundation
 
 - Complete this series
 - Learn `git` and GitHub basics
 - Build 2–3 small CLI projects
 
-### Phase 2 — Depth (3–6 months)
+### Phase 2 — Depth
 
 - Pick a domain (data, web, automation)
 - Study its core libraries deeply
 - Learn SQL basics
 
-### Phase 3 — Portfolio (6–12 months)
+### Phase 3 — Portfolio
 
 - Publish 3+ projects on GitHub with READMEs
 - Contribute to an open-source project
@@ -242,16 +796,16 @@ def grade_report(csv_path: str) -> None:
 
 ## Series Review
 
-| Chapter | Topic | Key Concepts |
-|---------|-------|-------------|
-| Ch1 | Setup & First Program | install, variables, `print()`, `input()` |
-| Ch2 | Data Structures | list, dict, tuple, set, comprehensions |
-| Ch3 | Functions & OOP | `def`, `class`, inheritance, encapsulation |
-| Ch4 | File Handling & Exceptions | `open()`, `with`, `try/except/finally` |
-| Ch5 | Standard Library & pip | `datetime`, `os`, `random`, virtual envs |
-| Ch6 | NumPy & pandas | `ndarray`, `DataFrame`, filtering, groupby |
-| Ch7 | Scraping & Automation | `requests`, BeautifulSoup, `shutil`, `schedule` |
-| Ch8 | Projects & Careers | CLI app, API client, career roadmap |
+| Chapter | Topic and Key Concepts |
+|---|---|
+| Ch1 | Execution Environment & Runtime Diagnosis. |
+| Ch2 | Names, Types, Strings & Conversion. |
+| Ch3 | Conditions, Loops & Iteration. |
+| Ch4 | Functions, Modules & Object-Oriented Programming. |
+| Ch5 | Data Structures & Selection Criteria. |
+| Ch6 | Files, Serialization & Exceptions. |
+| Ch7 | NumPy, pandas & Data Quality. |
+| Ch8 | Projects, Scraping & Automation. |
 
 ---
 
@@ -290,7 +844,7 @@ def mystery(n):
 
 ① `"hello"` ② `42` ③ `[1, 2, 3]` ④ `(1, 2)` ⑤ `True`
 
-**[A3]** ③ `[1, 2, 3]` — lists are **mutable** and therefore not hashable. Dictionary keys must be hashable (their hash value must remain constant). Strings, integers, tuples, and booleans are all hashable.
+**[A3]** ③ `[1, 2, 3]` — built-in lists are unhashable. The other values shown can be keys, but not every tuple can: all its elements must be hashable, so `([1, 2],)` cannot be a key. A hashable object's hash must remain constant during its lifetime, and objects that compare equal must have equal hashes.
 
 ---
 
@@ -435,34 +989,44 @@ Intent: a dictionary comprehension builds a summary for each student — average
 **Q1.** What are the four pillars of OOP in Python? Briefly define each.
 
 **A1.**
-1. **Encapsulation** — bundle data and methods in a class; restrict direct access to internals.
+1. **Encapsulation** — route state changes through a class interface to maintain invariants. Python name mangling reduces name collisions; it is not a security boundary that blocks access.
 2. **Inheritance** — a subclass inherits attributes and methods from a parent class, enabling reuse.
 3. **Polymorphism** — different classes implement the same method name with different behavior.
 4. **Abstraction** — expose only what callers need; hide implementation complexity.
 
 ---
 
-**Q2.** Name three Python libraries commonly used for workplace automation and their use cases.
+**Q2.** In this chapter's examples, which boundaries do `pathlib`, `json`, and `requests` with Beautiful Soup handle?
 
 **A2.**
-1. **pandas** — read, clean, and write CSV/Excel files; generate reports automatically.
-2. **openpyxl** — create formatted Excel workbooks, add charts and formulas.
-3. **Selenium / Playwright** — control a web browser programmatically: form filling, scraping, UI testing.
+1. **pathlib** handles paths and move plans; constructing a path does not resolve collisions or permissions.
+2. **json** parses and serializes the storage format. Successful parsing does not imply a valid wordbook schema.
+3. **requests and Beautiful Soup** handle HTTP responses and HTML parsing respectively. HTTP status checks and required-element checks are separate responsibilities.
 
 ---
 
 **Q3.** What is `requirements.txt`, how do you create it, and why does it matter?
 
-**A3.** It records every installed package and its exact version. Create it with `pip freeze > requirements.txt`. It matters because it lets anyone reproduce your exact environment: `pip install -r requirements.txt` installs identical versions, preventing "works on my machine" bugs.
+**A3.** A requirements file records package installation requirements. `pip freeze` outputs installed distributions in requirements format; run it inside the project's own virtual environment to avoid mixing in unrelated packages.
+
+```bash
+# Save the current project environment's package list
+python -m pip freeze > requirements.txt
+
+# Install requirements in another project environment
+python -m pip install -r requirements.txt
+```
+
+This helps reproducibility but does not pin the Python version, OS, system libraries, or external data. Review direct and transitive dependencies, document supported environments, and verify execution there. The first command overwrites an existing `requirements.txt`, so inspect it before saving.
 
 ---
 
-**Q4.** List at least five skills you should learn alongside Python for a data-analysis role.
+**Q4.** Explain at least three capabilities to consider alongside Python when reviewing a data-analysis role. Are the same tools mandatory for every role?
 
-**A4.** SQL, pandas/NumPy, matplotlib/seaborn, statistics fundamentals, Jupyter Notebook, and version control with git/GitHub.
+**A4.** Consider SQL for extraction, pandas/NumPy for transformation and numerical work, plotting tools for communication, statistics for inference, notebooks for documenting analysis, and version control for collaboration. These are candidates, not universal requirements: choose according to data access, reporting needs, and the team's environment.
 
 ---
 
-**Q5.** What is the single most effective habit for becoming a proficient Python developer?
+**Q5.** The wordbook's candidate temporary file was written successfully, but `os.replace` failed with a permission error. What should happen to memory and the original file? Can the program report a successful save?
 
-**A5.** **Build things you actually need.** Automating a real annoyance — renaming files, generating a weekly report, tracking prices — forces you to read documentation, debug real errors, and finish something end-to-end. Completed small projects compound faster than unfinished grand ones. Add daily coding-challenge practice (LeetCode/HackerRank) to sharpen fundamentals.
+**A5.** Report failure. The example saves a candidate copy before updating memory, so the previous in-memory state remains. A failure before replacement also leaves the original file intact; `finally` cleans up the temporary file. This reasoning assumes a controlled directory without concurrent editors. Atomic replacement alone does not provide concurrency control or power-loss recovery.
