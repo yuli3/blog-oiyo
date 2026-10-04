@@ -14,198 +14,146 @@ tags:
   - College Mathematics
 description: "College calculus — the definition of a function, the intuitive and rigorous definitions of a limit, properties of limits, continuous functions, and the intermediate value theorem."
 pubDate: '2026-05-27'
+updatedDate: '2026-10-05'
 ---
 
 ## What Is Calculus?
 
-Calculus is the branch of mathematics that deals with change and accumulation. Developed independently in the 17th century by Newton and Leibniz, it is the language of physics, engineering, economics, biology, and virtually every science.
+Calculus is the mathematics of change and accumulation. Newton and Leibniz each built a system for it in the 17th century, and it is now the shared language of physics, engineering, economics and biology.
 
-**The two pillars of calculus:**
+- **Differentiation** finds instantaneous rates of change.
+- **Integration** finds areas and accumulated quantities.
 
-1. **Differential calculus**: computing instantaneous rates of change
-2. **Integral calculus**: computing area and accumulated quantities
-
-**The relationship between differentiation and integration:**
-
-- **The Fundamental Theorem of Calculus**: differentiation and integration are inverse operations
-- The Newton-Leibniz theorem
+The two are tied together by the **Fundamental Theorem of Calculus**: integrating a continuous function and then differentiating returns the original function. This chapter covers what that theorem rests on: functions, limits and continuity.
 
 ---
 
 ## A Review of Functions
 
-```
-The definition of a function f: A → B:
-→ A rule that assigns exactly one element f(x) of set B
-  to every element x of set A
+A function $f:A\to B$ assigns exactly one element of $B$ to each element of $A$. Its codomain is specified as part of the function; the attained range $f(A)$ need not equal that codomain.
 
-Domain: the set of possible inputs x
-Codomain: the set of possible outputs y
-Range: the set of actual output values y
-
-Examples of functions:
-→ f(x) = x²: domain R, range [0, ∞)
-→ f(x) = 1/x: domain R\{0} (excluding 0)
-→ f(x) = √x: domain [0, ∞)
-
-Types of functions:
-→ Polynomial functions: f(x) = aₙxⁿ + ... + a₀
-→ Rational functions: a ratio of polynomials (denominator ≠ 0)
-→ Trigonometric functions: sin, cos, tan, etc.
-→ Exponential functions: f(x) = aˣ (a > 0, a ≠ 1)
-→ Logarithmic functions: f(x) = logₐ(x)
-```
+| Concept | Real-valued example and conditions |
+| --- | --- |
+| Domain | $f(x)=1/x$ is defined on $\mathbb{R}\setminus\{0\}$. |
+| Codomain and range | For $f:\mathbb{R}\to\mathbb{R}$, $f(x)=x^2$, the codomain is $\mathbb{R}$ but the range is $[0,\infty)$. |
+| Square root | The real function $\sqrt{x}$ has domain $[0,\infty)$. |
+| Polynomial and rational | A polynomial $\sum_{k=0}^{n}a_kx^k$ or a ratio of polynomials; exclude inputs where the denominator is zero. |
+| Trigonometric | $\sin,\cos$ are defined for all real inputs; $\tan$ requires $\cos x\ne0$. |
+| Exponential and logarithmic | $a^x$ and $\log_a x$ with $a>0$, $a\ne1$; logarithms require $x>0$. |
 
 ---
 
 ## An Intuitive Understanding of the Limit
 
-```
-Intuitive limit:
-→ The value f(x) approaches as x approaches a
+$\lim_{x\to a}f(x)=L$ describes outputs approaching $L$ as inputs approach $a$. Here we consider finite limits of real functions, with $a$ an accumulation point of the domain. The value $f(a)$ need not be defined.
 
-Notation: lim f(x) = L
-           x→a
+$$
+\frac{x^2-1}{x-1}=x+1\quad(x\ne1),\qquad
+\lim_{x\to1}\frac{x^2-1}{x-1}=2.
+$$
 
-Example:
-→ lim (x² − 1)/(x − 1) = ?
-   x→1
+Cancellation is valid only for $x\ne1$. It does not make the original expression defined at $x=1$.
 
-Direct substitution: at x=1 the denominator = 0 → can't evaluate directly
+### The epsilon–delta definition and a proof
 
-Factoring:
-→ (x² − 1)/(x − 1) = (x−1)(x+1)/(x−1) = x+1 (x≠1)
-→ As x approaches 1: x+1 → 2
-→ So the limit = 2
+For every $\varepsilon>0$, there must exist a $\delta>0$ such that every domain input $x$ satisfying $0<|x-a|<\delta$ also satisfies $|f(x)-L|<\varepsilon$. The choice of $\delta$ may depend on $\varepsilon$, but cannot be selected separately after seeing each qualifying $x$.
 
-The key point:
-→ A limit is not the function's value at x=a,
-  it's the value f(x) approaches as x nears a
-```
+In the example, $a=1$ and $L=2$ give $|f(x)-2|=|x-1|$. For any $\varepsilon>0$, choose $\delta=\varepsilon$; the implication follows immediately. Checking a few nearby numerical inputs is not a proof covering all such inputs.
 
 ---
 
 ## Left-Hand and Right-Hand Limits
 
-```
-Right-hand limit:
-→ As x approaches a from the right (larger side)
-→ lim f(x) = L⁺
-   x→a⁺
+Write a right-hand approach as $\lim_{x\to a^+}f(x)$ and a left-hand approach as $\lim_{x\to a^-}f(x)$. When the domain permits approach from both sides, a two-sided finite limit exists exactly when the one-sided limits agree.
 
-Left-hand limit:
-→ As x approaches a from the left (smaller side)
-→ lim f(x) = L⁻
-   x→a⁻
+| Approach for $f(x)=\lvert x\rvert/x$ ($x\ne0$) | Function value |
+| --- | --- |
+| Toward $0$ from $x<0$ | $-1$ |
+| Toward $0$ from $x>0$ | $1$ |
 
-The condition for a limit to exist:
-→ If the left-hand limit = the right-hand limit = L, then
-  lim f(x) = L exists
-  x→a
-
-Example: the absolute-value function f(x) = |x| / x (x ≠ 0)
-→ x→0⁺: f(x) → +1
-→ x→0⁻: f(x) → −1
-→ Left-hand limit ≠ right-hand limit → the limit does not exist
-```
+The values differ, so $\lim_{x\to0}|x|/x$ does not exist. This is the absolute value divided by $x$, not the absolute-value function itself. At a domain endpoint, continuity uses approach from within the domain.
 
 ---
 
 ## Properties of Limits
 
-```
-Limit laws (if lim f(x) = L and lim g(x) = M):
-                 x→a             x→a
+Suppose $\lim_{x\to a}f(x)=L$ and $\lim_{x\to a}g(x)=M$ both exist as finite values, and $c$ is constant.
 
-1. Sum: lim [f(x) + g(x)] = L + M
-2. Difference: lim [f(x) − g(x)] = L − M
-3. Product: lim [f(x) · g(x)] = L · M
-4. Quotient: lim [f(x) / g(x)] = L/M (provided M ≠ 0)
-5. Constant multiple: lim [c · f(x)] = c · L
-6. Power: lim [f(x)]ⁿ = Lⁿ
+| Operation | Result and condition |
+| --- | --- |
+| Sum or difference | $\lim(f\pm g)=L\pm M$ |
+| Product | $\lim(fg)=LM$ |
+| Quotient | $\lim(f/g)=L/M$, requiring $M\ne0$ |
+| Constant multiple | $\lim(cf)=cL$ |
+| Power | $\lim f^n=L^n$; here $n$ is a positive integer |
 
-The Squeeze Theorem:
-→ If g(x) ≤ f(x) ≤ h(x) and
-  lim g(x) = lim h(x) = L, then
-  lim f(x) = L
+A zero denominator limit prevents use of the quotient law. The expression $0/0$ is not a limit value: further analysis is needed.
 
-Application:
-→ lim x·sin(1/x) = 0 (x→0)
-   (since |sin| ≤ 1)
-```
+### The squeeze theorem
+
+If $g(x)\le f(x)\le h(x)$ throughout a sufficiently small punctured neighborhood of $a$, and both bounding limits equal $L$, the middle limit also equals $L$.
+
+$$
+-|x|\le x\sin(1/x)\le |x|\quad(x\ne0).
+$$
+
+Both bounds follow from $|\sin(1/x)|\le1$. As $x\to0$, the bounds approach 0, so the middle limit is 0. Using $|x|$ ensures the bounds remain valid for negative inputs as well.
 
 ---
 
-## Limits at Infinity
+## Limits at Infinity and Asymptotes
 
-**Limits as x → ∞:**
+If $f(x)$ approaches a finite value $L$ as $x$ grows without bound, we write $\lim_{x\to\infty}f(x)=L$. For a rational function, divide numerator and denominator by the highest power in the denominator.
 
-- The behavior of f(x) as x grows without bound
+$$
+\lim_{x\to\infty}\frac{3x^2+2x}{x^2-1}
+=\lim_{x\to\infty}\frac{3+2/x}{1-1/x^2}=\frac{3+0}{1-0}=3.
+$$
 
-**Example:**
+- **Horizontal asymptote:** if $\lim_{x\to\infty}f(x)=L$ or $\lim_{x\to-\infty}f(x)=L$, the line $y=L$ is a horizontal asymptote. Here it is $y=3$.
+- **Vertical asymptote:** if $f(x)\to\pm\infty$ as $x\to a^+$ or $x\to a^-$, the line $x=a$ is a vertical asymptote. The function above has them at $x=1$ and $x=-1$, where the denominator is zero and the numerator is not.
 
-- lim (3x² + 2x)/(x² − 1) = ? x→∞
-
-**Divide numerator and denominator by x²:**
-
-- lim (3 + 2/x)/(1 − 1/x²) = 3/1 = 3 x→∞
-
-**Horizontal asymptote:**
-
-- If lim f(x) = L, then y = L is a horizontal asymptote x→±∞
-
-**Vertical asymptote:**
-
-- If lim f(x) = ±∞, then x = a is a vertical asymptote x→a
+Writing $f(x)\to\infty$ does not say the limit exists; it describes how the function diverges.
 
 ---
 
 ## Continuity
 
-**The three conditions for continuity at x = a:**
+A function $f$ is **continuous** at a point $a$ of its domain when $\lim_{x\to a}f(x)=f(a)$. That one line contains three conditions.
 
-1. f(a) is defined
-2. lim f(x) exists x→a
-3. lim f(x) = f(a) x→a
+1. $f(a)$ is defined.
+2. $\lim_{x\to a}f(x)$ exists.
+3. The two values are equal.
 
-- All three conditions must hold for continuity
+| Type of discontinuity | Condition | Example |
+| --- | --- | --- |
+| Removable | The limit exists, but $f(a)$ is missing or differs from it | $\dfrac{x^2-1}{x-1}$ at $x=1$ |
+| Jump | Both one-sided limits are finite but unequal | $\lvert x\rvert/x$ at $x=0$ |
+| Infinite | At least one one-sided limit diverges to $\pm\infty$ | $1/x$ at $x=0$ |
 
-**Types of discontinuity:**
-
-1. **Removable discontinuity**: the limit exists but f(a) ≠ the limit
-2. **Jump discontinuity**: the left-hand limit ≠ the right-hand limit
-3. **Infinite discontinuity**: the limit is ±∞
-
-**Properties of continuous functions:**
-
-- Polynomial, trigonometric, exponential, and logarithmic functions: continuous on their domain
-- Sums, differences, products, and compositions of continuous functions: continuous
+Polynomial, trigonometric, exponential and logarithmic functions are continuous on their domains. Sums, differences, products and compositions of continuous functions are continuous, and a quotient is continuous wherever the denominator is nonzero.
 
 ---
 
 ## The Intermediate Value Theorem
 
-**The Intermediate Value Theorem:**
+If $f$ is continuous on the closed interval $[a,b]$ and $k$ lies between $f(a)$ and $f(b)$, then there is at least one $c\in(a,b)$ with $f(c)=k$.
 
-- If f is continuous on [a, b] and f(a) ≠ f(b), then for every value k between f(a) and f(b), there exists a c ∈ (a, b) such that f(c) = k
+A continuous function cannot skip values. If temperature is continuous in time and rises from 0°C in the morning to 15°C at noon, it passes through every temperature in between at least once.
 
-**Intuition:**
+**Example.** $f(x)=x^3-x-2$ is a polynomial, so it is continuous on $[1,2]$. Since $f(1)=-2<0$ and $f(2)=4>0$, some $c$ in $(1,2)$ satisfies $f(c)=0$. The theorem says only that a root **exists**; it gives neither its value nor how many there are.
 
-- A continuous function cannot "skip over" a value
-- If you travel from a place at 0°C to a place at 30°C, you pass through every temperature in between
-
-**Application:**
-
-- Proving a root exists for an equation
-- **Example**: f(x) = x³ − x − 2 f(1) = −2 < 0, f(2) = 4 > 0
-  - by the Intermediate Value Theorem, a root exists in (1, 2)
+Drop continuity and the theorem fails. $f(x)=1/x$ has $f(-1)=-1$ and $f(1)=1$, but it is not continuous on $[-1,1]$ and no $c$ gives $f(c)=0$.
 
 ---
 
-## Frequently Asked Questions
+## Check your understanding
 
-**Q. Can a function's limit differ from its actual value?**
-A. Yes, easily. A function's limit can exist even where the function is not defined at x=a. For example, f(x) = (x²−1)/(x−1) is undefined at x=1, but its limit there is 2. Conversely, a function can be defined at a point yet still have a limit that differs from its function value there.
+**Problem.** Find $\displaystyle\lim_{x\to2}\frac{x^2-4}{x-2}$ and classify the discontinuity of $g(x)=\dfrac{x^2-4}{x-2}$ at $x=2$. How should $g(2)$ be defined to make $g$ continuous?
 
-**Q. Do I really need to know the epsilon-delta definition?**
-A. For most engineering and economics majors, the intuitive concept of a limit is sufficient. But if you're a math major, or need mathematical rigor, you should understand the epsilon-delta definition. We'll work with it in more depth in Chapter 2, when we cover derivatives.
+**Solution.** For $x\ne2$, $\dfrac{x^2-4}{x-2}=x+2$, so the limit is 4. The limit exists but $g(2)$ is undefined, so the discontinuity is removable. Setting $g(2)=4$ gives $\lim_{x\to2}g(x)=g(2)$, and $g$ is continuous.
+
+## References
+
+- James Stewart, *Calculus: Early Transcendentals*, ch. 1–2
+- Michael Spivak, *Calculus*, ch. 5–7 (the ε–δ definition and theorems on continuous functions)
