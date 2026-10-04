@@ -6,7 +6,7 @@ interface Props {
 }
 
 const { data, title, height = "300px" } = Astro.props;
-const maxValue = Math.max(...data.map((d) => d.value));
+const maxValue = Math.max(0, ...data.map((d) => d.value));
 ---
 
 <div
@@ -21,30 +21,44 @@ const maxValue = Math.max(...data.map((d) => d.value));
   }
 
   <div
-    class="flex items-end gap-4 sm:gap-6 w-full"
-    style={`height: ${height};`}
+    class="bar-chart"
+    style={`--chart-height: ${height};`}
   >
     {
       data.map((item) => {
-        const percentage = (item.value / maxValue) * 100;
+        const percentage = maxValue > 0 ? (item.value / maxValue) * 100 : 0;
         return (
-          <div class="flex-1 flex flex-col items-center gap-4 h-full group">
-            <div class="flex-1 w-full flex items-end">
+          <div class="bar-chart__item" style={`--bar-size: ${percentage}%;`}>
+            <span class="bar-chart__label">{item.label}</span>
+            <span class="bar-chart__value">{item.value}</span>
+            <div class="bar-chart__track" aria-hidden="true">
               <div
-                class="w-full rounded-xl transition-all duration-500 group-hover:scale-x-105 group-hover:brightness-110 shadow-lg shadow-primary/5"
-                style={`height: ${percentage}%; background: ${item.color || "var(--color-primary)"}; opacity: 0.8;`}
-              >
-                <div class="opacity-0 group-hover:opacity-100 transition-opacity absolute -top-10 left-1/2 -translate-x-1/2 bg-foreground text-background text-[10px] font-bold px-2 py-1 rounded-md whitespace-nowrap">
-                  {item.value}
-                </div>
-              </div>
+                class="bar-chart__bar"
+                style={`background: ${item.color || "var(--color-primary)"};`}
+              />
             </div>
-            <span class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/60 text-center truncate w-full">
-              {item.label}
-            </span>
           </div>
         );
       })
     }
   </div>
 </div>
+
+<style>
+  /* 2026-10-04: Long translated labels must not set a flex column's minimum
+     width. Horizontal mobile rows also expose values without a hover gesture. */
+  .bar-chart { display: grid; gap: 1.25rem; min-width: 0; }
+  .bar-chart__item { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.5rem 1rem; min-width: 0; }
+  .bar-chart__label { overflow-wrap: anywhere; color: var(--color-foreground); font-size: 0.875rem; line-height: 1.5; }
+  .bar-chart__value { color: var(--color-foreground); font-size: 0.875rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .bar-chart__track { grid-column: 1 / -1; height: 0.75rem; min-width: 0; }
+  .bar-chart__bar { width: var(--bar-size); height: 100%; border-radius: 0.375rem; }
+  @media (min-width: 640px) {
+    .bar-chart { display: flex; align-items: stretch; gap: 1.5rem; }
+    .bar-chart__item { flex: 1 1 0; display: flex; flex-direction: column; align-items: stretch; gap: 0.5rem; }
+    .bar-chart__value { order: 0; text-align: center; }
+    .bar-chart__track { order: 1; display: flex; align-items: flex-end; height: var(--chart-height); }
+    .bar-chart__bar { width: 100%; height: var(--bar-size); }
+    .bar-chart__label { order: 2; text-align: center; }
+  }
+</style>

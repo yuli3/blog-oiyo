@@ -28,15 +28,12 @@ export async function getStaticPaths() {
     list.sort((a, b) => a.data.pubDate.getTime() - b.data.pubDate.getTime());
   }
 
-  // Build a map from base-slug → set of locales that actually have that slug.
-  // e.g. "tool-annual-leave-calculator" → ["ko"]
-  //      "education-accounting-ch1"    → ["ko", "en", "ja"]
-  const localesByBaseSlug: Record<string, Set<string>> = {};
+  // Keep sibling metadata: legacy slugs can name different courses by locale.
+  const siblingsByBaseSlug: Record<string, typeof allPosts> = {};
   for (const post of allPosts) {
     const parts = post.slug.split("/");
-    const lang = parts[0];
     const baseSlug = parts.slice(1).join("/");
-    (localesByBaseSlug[baseSlug] ??= new Set()).add(lang);
+    (siblingsByBaseSlug[baseSlug] ??= []).push(post);
   }
 
   const chapterOf = (p: (typeof allPosts)[0]) =>
@@ -74,11 +71,9 @@ export async function getStaticPaths() {
       prevPost = idx > 0 ? sorted[idx - 1] : null;
       nextPost = idx < sorted.length - 1 ? sorted[idx + 1] : null;
     } else {
-      // Non-series: pubDate-based across locale
-      const localePosts = byLocale[lang] ?? [];
-      const idx = localePosts.findIndex((p) => p.slug === post.slug);
-      prevPost = idx > 0 ? localePosts[idx - 1] : null;
-      nextPost = idx < localePosts.length - 1 ? localePosts[idx + 1] : null;
+      // 2026-10-04: publication dates do not define a learning sequence.
+      // Otherwise standalone insurance essays acquire unrelated exam chapters
+      // as "previous/next". Topic-scored relatedPosts remains the discovery path.
       seriesPosts = null;
     }
 
@@ -130,7 +125,27 @@ export async function getStaticPaths() {
       title: p.data.title,
     }));
 
-    const availableLocales = Array.from(localesByBaseSlug[slug] ?? [lang]);
+    // 2026-10-04: KO education-business-ch4 is OB1, EN/JA is marketing4.
+    // Existence alone cannot justify a translation link or hreflang. Course
+    // identity is a minimum guard, not proof of semantic translation quality.
+    // Legacy series can also be translated display names (e.g. ACCA); unequal
+    // labels do not establish unequal courses. Compare shared machine keys
+    // here, and leave unresolved display-name mappings for the content audit.
+    const availableLocales = (siblingsByBaseSlug[slug] ?? [post])
+      .filter((sibling) => {
+        if (sibling.slug === post.slug) return true;
+        const academic = getTrackFromData(post.data) === "academy" ||
+          getTrackFromData(sibling.data) === "academy";
+        if (!academic) return true;
+        const machineKey = (value: unknown): value is string =>
+          typeof value === "string" && /^[a-z]+(?:-[a-z0-9]+)+$/.test(value);
+        if (machineKey(post.data.series) && machineKey(sibling.data.series)) {
+          return post.data.series === sibling.data.series &&
+            chapterOf(post) === chapterOf(sibling);
+        }
+        return true;
+      })
+      .map((sibling) => sibling.slug.split("/")[0]);
 
     return {
       params: { lang, slug },
@@ -307,7 +322,9 @@ const redirectToBlog = post.data.redirectToBlog;
       -->
       <div
         class:list={[
-          isSeriesPost ? "lg:grid lg:grid-cols-[200px_1fr] lg:gap-10 xl:gap-16" : "",
+          // 2026-10-01: Let wide tables scroll inside the content track instead of
+          // forcing its automatic minimum wider than the viewport (Spanish accounting ch6).
+          isSeriesPost ? "lg:grid lg:grid-cols-[200px_minmax(0,1fr)] lg:gap-10 xl:gap-16" : "",
         ]}
       >
         <!-- Left: Chapter Sidebar (series posts only, desktop) -->

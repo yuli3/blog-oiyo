@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import fs from "node:fs";
 import path from "node:path";
+import matter from "gray-matter";
 
 const root = process.cwd();
 const contentRoot = path.join(root, "src/content/blog");
@@ -47,6 +48,7 @@ const errors = [];
 const warnings = [];
 const warningEntries = [];
 const warningCountsByMarket = new Map();
+const courseSiblings = new Map();
 const stats = {
   files: 0,
   withMarket: 0,
@@ -102,6 +104,19 @@ for (const file of listMdxFiles(contentRoot)) {
   const contentScope = field(frontmatter, "contentScope");
   const localizationMode = field(frontmatter, "localizationMode");
 
+  // 2026-10-04: equal legacy slugs can contain different academic subjects.
+  // Keep candidate evidence separate from errors: translated series labels
+  // and missing metadata do not prove either equivalence or mistranslation.
+  const data = matter(text).data;
+  if (!data.draft) {
+    const slug = path.relative(contentRoot, file).split(path.sep).slice(1).join("/");
+    const siblings = courseSiblings.get(slug) ?? [];
+    siblings.push({ locale, path: rel, track: data.track ?? null,
+      series: data.series ?? null, chapter: data.chapter ?? null,
+      title: data.title ?? null });
+    courseSiblings.set(slug, siblings);
+  }
+
   if (market) {
     stats.withMarket += 1;
     if (!allowedMarkets.has(market)) {
@@ -148,7 +163,24 @@ for (const file of listMdxFiles(contentRoot)) {
   }
 }
 
+const courseIdentityCandidates = [];
+const machineKey = (value) => typeof value === "string" && /^[a-z]+(?:-[a-z0-9]+)+$/.test(value);
+for (const [slug, siblings] of courseSiblings) {
+  if (siblings.length < 2 || !siblings.some((s) => s.track === "academy")) continue;
+  const reasons = new Set();
+  const chapters = new Set(siblings.filter((s) => typeof s.chapter === "number" && s.chapter > 0).map((s) => s.chapter));
+  const keys = new Set(siblings.filter((s) => machineKey(s.series)).map((s) => s.series));
+  if (chapters.size > 1) reasons.add("explicit-chapter-difference");
+  if (keys.size > 1) reasons.add("shared-key-difference");
+  if (new Set(siblings.map((s) => s.track)).size > 1) reasons.add("track-difference");
+  if (/-ch\d+\.mdx$/.test(slug) && siblings.some((s) => !s.series || !s.chapter)) reasons.add("chapter-metadata-missing");
+  if (new Set(siblings.map((s) => s.series)).size > 1 && siblings.some((s) => s.series && !machineKey(s.series))) reasons.add("localized-label-unresolved");
+  if (reasons.size) courseIdentityCandidates.push({ slug, reasons: [...reasons], siblings,
+    semanticStatus: "unreviewed", translationQuality: "unobserved" });
+}
+
 console.log(`localization audit — ${repoName}`);
+console.log(`course identity candidate groups: ${courseIdentityCandidates.length} (not confirmed translation errors)`);
 console.log(`files: ${stats.files}`);
 console.log(`with market metadata: ${stats.withMarket}`);
 console.log(`local-signal files: ${stats.localSignal}`);
@@ -188,6 +220,7 @@ if (reportPath) {
         warningCountsByMarket: Object.fromEntries(warningCountsByMarket),
         warnings: warningEntries,
         errors,
+        courseIdentityCandidates,
       },
       null,
       2,

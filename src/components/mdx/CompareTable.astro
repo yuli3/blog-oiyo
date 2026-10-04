@@ -10,6 +10,7 @@
  *   rows: string[][]
  */
 import { inlineMd } from "../../lib/utils";
+import { getLocaleFromPath, type Locale } from "../../lib/i18n";
 import { isGridCompareTable, type CompareObjectRow } from "./compare-table-mode";
 
 interface Props {
@@ -34,6 +35,17 @@ const {
 
 const grid = isGridCompareTable(headers, rows);
 const compareRows = grid ? [] : (rows as CompareObjectRow[]);
+// 2026-10-04: MDX comparison rows inherit the page locale; a Korean-only
+// default leaked into foreign-language articles even with translated content.
+const labelHeaders: Record<Locale, string> = {
+  ko: "구분",
+  en: "Aspect",
+  ja: "項目",
+  zh: "项目",
+  fr: "Critère",
+  es: "Aspecto",
+};
+const labelHeader = labelHeaders[getLocaleFromPath(Astro.url.pathname)];
 ---
 
 {grid ? (
@@ -67,7 +79,7 @@ const compareRows = grid ? [] : (rows as CompareObjectRow[]);
     <table>
       <thead>
         <tr>
-          <th class="edu-compare-table__label-header">구분</th>
+          <th class="edu-compare-table__label-header">{labelHeader}</th>
           <th style={`border-top: 3px solid ${leftColor}; color: ${leftColor};`}
             set:html={inlineMd(leftTitle ?? "")}
           ></th>

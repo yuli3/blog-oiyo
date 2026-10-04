@@ -3,13 +3,27 @@ import path from "node:path";
 import matter from "gray-matter";
 
 const root = process.cwd();
-// Magazine compatibility audit data is internal working data, so it lives in
-// company-brain rather than in this repo, which is public. These are local-only
-// tools — CI never runs them — so failing loudly here is the right behaviour.
-const catalogRoot = path.join(root, "..", "company-brain/AI-Sessions/raw/project-docs/blog/data/catalog");
 const contentRoot = path.join(root, "src/content/blog");
-const outputCsv = path.join(catalogRoot, "magazine-compatibility-audit.csv");
-const outputMd = path.join(root, "reports/260509-magazine-compatibility-audit.md");
+const writeReports = process.argv.includes("--write");
+const unknownArgs = process.argv.slice(2).filter((arg) => arg !== "--write");
+if (unknownArgs.length) throw new Error(`Unknown argument(s): ${unknownArgs.join(", ")}`);
+
+// 2026-10-04: worktrees are nested below coding/.worktrees; a sibling-only
+// lookup targets the wrong directory. Current audits must not overwrite raw
+// historical reports or put project records in the public code checkout.
+function findBrain(start) {
+  for (let current = start; ; current = path.dirname(current)) {
+    const candidate = path.join(current, "company-brain");
+    if (fs.existsSync(path.join(candidate, "AGENTS.md"))) return fs.realpathSync(candidate);
+    if (path.dirname(current) === current) throw new Error("company-brain not found; no reports written");
+  }
+}
+const reportRoot = writeReports
+  ? path.join(findBrain(root), "projects/oiyo-ecosystem/reports/magazine-compatibility")
+  : null;
+const stamp = new Date().toISOString().replaceAll(":", "-");
+const outputCsv = reportRoot ? path.join(reportRoot, `${stamp}.csv`) : null;
+const outputMd = reportRoot ? path.join(reportRoot, `${stamp}.md`) : null;
 
 const academyCategories = new Set([
   "Accounting",
@@ -197,10 +211,8 @@ const csvLines = [
   ),
 ];
 
-fs.writeFileSync(outputCsv, `${csvLines.join("\n")}\n`);
-
 const md = [
-  "# 260509 Magazine Compatibility Audit",
+  `# Magazine Compatibility Audit — ${stamp}`,
   "",
   "## Summary",
   "",
@@ -227,14 +239,19 @@ const md = [
   "",
   "## Output Files",
   "",
-  `1. [data/catalog/magazine-compatibility-audit.csv](/Users/seuncho/coding/blog/data/catalog/magazine-compatibility-audit.csv)`,
-  `2. [reports/260509-magazine-compatibility-audit.md](/Users/seuncho/coding/blog/reports/260509-magazine-compatibility-audit.md)`,
+  ...(writeReports ? [`1. [CSV](${outputCsv})`, `2. [Report](${outputMd})`] : ["Read-only run; no report files written."]),
   "",
   "## Working Note",
   "",
   "This audit uses explicit `track` when present and falls back to current category-based inference for legacy content. It is designed to support narrowing the `magazine` compatibility bridge over time.",
 ];
 
-fs.writeFileSync(outputMd, `${md.join("\n")}\n`);
+if (writeReports) {
+  fs.mkdirSync(reportRoot, { recursive: true });
+  // Exclusive creation preserves existing evidence even if an output name collides.
+  fs.writeFileSync(outputCsv, `${csvLines.join("\n")}\n`, { flag: "wx" });
+  fs.writeFileSync(outputMd, `${md.join("\n")}\n`, { flag: "wx" });
+  console.log(`reports: ${outputCsv}\n${outputMd}`);
+}
 
 console.log(`magazine audit complete: ${totalMagazine} files, ${bridgeCount} bridge users, ${outsideCount} outside-surface users`);
