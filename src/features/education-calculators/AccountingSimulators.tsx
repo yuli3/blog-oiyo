@@ -36,7 +36,7 @@ export const VarianceAnalysis: React.FC = () => {
     const tVar = formatVar(totalVariance);
 
     return (
-        <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-5 sm:mt-8 overflow-hidden">
+        <Card className="p-4 sm:p-6 bg-card border-border shadow-xl mt-5 sm:mt-8 overflow-hidden">
             <div className="flex items-center gap-2 mb-6 text-foreground border-b pb-4">
                 <ArrowLeftRight className="text-blue-500" />
                 <h3 className="text-xl font-bold">원가 차이 분석(Variance Analysis) 시뮬레이터</h3>
@@ -46,16 +46,16 @@ export const VarianceAnalysis: React.FC = () => {
                 <div className="space-y-4 p-4 bg-blue-50/30 rounded-xl border border-blue-100">
                     <span className="text-xs font-bold text-blue-600 uppercase">실제 데이터 (Actual)</span>
                     <div className="grid grid-cols-2 gap-4">
-                        <Field><FieldLabel htmlFor="variance-aq" className="text-slate-600">실제 투입량 (AQ)</FieldLabel><InputGroup className="border-slate-300 bg-white"><InputGroupInput id="variance-aq" type="number" value={aq} onChange={e => setAq(Number(e.target.value))} className="text-foreground"/></InputGroup></Field>
-                        <Field><FieldLabel htmlFor="variance-ap" className="text-slate-600">실제 가격 (AP)</FieldLabel><InputGroup className="border-slate-300 bg-white"><InputGroupInput id="variance-ap" type="number" value={ap} onChange={e => setAp(Number(e.target.value))} className="text-foreground"/></InputGroup></Field>
+                        <Field><FieldLabel htmlFor="variance-aq" className="text-slate-600">실제 투입량 (AQ)</FieldLabel><InputGroup className="border-slate-300 bg-card"><InputGroupInput id="variance-aq" type="number" value={aq} onChange={e => setAq(Number(e.target.value))} className="text-foreground"/></InputGroup></Field>
+                        <Field><FieldLabel htmlFor="variance-ap" className="text-slate-600">실제 가격 (AP)</FieldLabel><InputGroup className="border-slate-300 bg-card"><InputGroupInput id="variance-ap" type="number" value={ap} onChange={e => setAp(Number(e.target.value))} className="text-foreground"/></InputGroup></Field>
                     </div>
                 </div>
 
                 <div className="space-y-4 p-4 bg-emerald-50/30 rounded-xl border border-emerald-100">
                     <span className="text-xs font-bold text-emerald-600 uppercase">표준 데이터 (Standard)</span>
                     <div className="grid grid-cols-2 gap-4">
-                        <Field><FieldLabel htmlFor="variance-sq" className="text-slate-600">표준 허용량 (SQ)</FieldLabel><InputGroup className="border-slate-300 bg-white"><InputGroupInput id="variance-sq" type="number" value={sq} onChange={e => setSq(Number(e.target.value))} className="text-foreground"/></InputGroup></Field>
-                        <Field><FieldLabel htmlFor="variance-sp" className="text-slate-600">표준 가격 (SP)</FieldLabel><InputGroup className="border-slate-300 bg-white"><InputGroupInput id="variance-sp" type="number" value={sp} onChange={e => setSp(Number(e.target.value))} className="text-foreground"/></InputGroup></Field>
+                        <Field><FieldLabel htmlFor="variance-sq" className="text-slate-600">표준 허용량 (SQ)</FieldLabel><InputGroup className="border-slate-300 bg-card"><InputGroupInput id="variance-sq" type="number" value={sq} onChange={e => setSq(Number(e.target.value))} className="text-foreground"/></InputGroup></Field>
+                        <Field><FieldLabel htmlFor="variance-sp" className="text-slate-600">표준 가격 (SP)</FieldLabel><InputGroup className="border-slate-300 bg-card"><InputGroupInput id="variance-sp" type="number" value={sp} onChange={e => setSp(Number(e.target.value))} className="text-foreground"/></InputGroup></Field>
                     </div>
                 </div>
             </div>
@@ -81,12 +81,12 @@ export const VarianceAnalysis: React.FC = () => {
 
                 {/* Variance Labels */}
                 <div className="absolute top-24 left-[16.6%] right-[50%] h-px bg-slate-200 flex justify-center">
-                    <div className={`mt-2 text-xs font-bold px-2 py-0.5 rounded-full bg-white border ${pVar.color.replace('text-', 'border-').replace('-400', '-200') + ' ' + pVar.color}`}>
+                    <div className={`mt-2 text-xs font-bold px-2 py-0.5 rounded-full bg-card border ${pVar.color.replace('text-', 'border-').replace('-400', '-200') + ' ' + pVar.color}`}>
                         가격 차이: {pVar.text}
                     </div>
                 </div>
                 <div className="absolute top-24 left-[50%] right-[16.6%] h-px bg-slate-200 flex justify-center">
-                    <div className={`mt-2 text-xs font-bold px-2 py-0.5 rounded-full bg-white border ${eVar.color.replace('text-', 'border-').replace('-400', '-200') + ' ' + eVar.color}`}>
+                    <div className={`mt-2 text-xs font-bold px-2 py-0.5 rounded-full bg-card border ${eVar.color.replace('text-', 'border-').replace('-400', '-200') + ' ' + eVar.color}`}>
                         능률 차이: {eVar.text}
                     </div>
                 </div>

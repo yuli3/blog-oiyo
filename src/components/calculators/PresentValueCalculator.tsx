@@ -89,7 +89,7 @@ const PresentValueCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
                 className={`flex-1 py-2 rounded-xl text-sm font-bold border transition-colors ${
                   method === m
                     ? 'bg-green-600 text-white border-green-600'
-                    : 'bg-white text-green-700 border-green-200 hover:bg-green-50'
+                    : 'bg-card text-green-700 border-green-200 hover:bg-green-50'
                 }`}
               >
                 {m === 'compound'
@@ -114,7 +114,7 @@ const PresentValueCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
             value={monthlyPayment}
             onChange={(e) => setMonthlyPayment(e.target.value)}
             min="0"
-            className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+            className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
           />
         </div>
 
@@ -130,7 +130,7 @@ const PresentValueCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
                 className={`py-1.5 px-3 rounded-lg text-xs font-bold border transition-colors ${
                   durationMonths === p.value
                     ? 'bg-green-600 text-white border-green-600'
-                    : 'bg-white text-green-700 border-green-200 hover:bg-green-50'
+                    : 'bg-card text-green-700 border-green-200 hover:bg-green-50'
                 }`}
               >
                 {p.label}
@@ -142,7 +142,7 @@ const PresentValueCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
             value={durationMonths}
             onChange={(e) => setDurationMonths(e.target.value)}
             min="1"
-            className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+            className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
           />
         </div>
 
@@ -156,7 +156,7 @@ const PresentValueCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
             onChange={(e) => setAnnualRate(e.target.value)}
             min="0"
             step="0.1"
-            className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+            className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
           />
           <p className="text-xs text-green-400">
             {ko ? '법원 기준 5% 적용' : 'Korean court standard: 5%'}
@@ -178,7 +178,7 @@ const PresentValueCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
                 { label: ko ? '총 예정 수령액' : 'Total Scheduled', value: fmt(result.totalScheduled) },
                 { label: ko ? `할인계수 (${method === 'compound' ? '라이프니츠' : '호프만'})` : `Coefficient (${method})`, value: result.coefficient.toFixed(4) },
               ].map((item) => (
-                <div key={item.label} className="bg-white rounded-xl p-3 border border-green-100">
+                <div key={item.label} className="bg-card rounded-xl p-3 border border-green-100">
                   <p className="text-xs text-green-400 font-semibold mb-1">{item.label}</p>
                   <p className="text-sm font-bold text-green-900">{item.value}</p>
                 </div>

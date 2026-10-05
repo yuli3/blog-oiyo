@@ -180,19 +180,19 @@ export default function FaviconGenerator({ locale }: { locale: Locale }) {
         {isRendering && <p className="rounded-lg bg-green-50 px-3 py-2 text-sm font-semibold text-green-800">{t.generated}...</p>}
 
         {sourceUrl && (
-          <figure className="rounded-xl border border-slate-200 bg-white p-4">
+          <figure className="rounded-xl border border-border bg-card p-4">
             <figcaption className="mb-3 text-xs font-semibold uppercase text-muted-foreground">{t.preview}</figcaption>
-            <img src={sourceUrl} alt={t.preview} className="mx-auto h-32 w-32 rounded-lg border border-slate-200 object-contain" />
+            <img src={sourceUrl} alt={t.preview} className="mx-auto h-32 w-32 rounded-lg border border-border object-contain" />
           </figure>
         )}
 
         {previews.length > 0 && (
-          <section className="rounded-xl border border-slate-200 bg-white p-4">
+          <section className="rounded-xl border border-border bg-card p-4">
             <h3 className="font-semibold text-foreground">{t.generated}</h3>
             <div className="mt-4 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
               {previews.map((preview) => (
                 <article key={preview.size} className="rounded-lg border border-slate-100 bg-card p-3">
-                  <div className="flex h-28 items-center justify-center rounded-lg bg-white">
+                  <div className="flex h-28 items-center justify-center rounded-lg bg-card">
                     <img
                       src={preview.url}
                       alt={`${preview.size}x${preview.size}`}

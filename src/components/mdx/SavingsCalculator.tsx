@@ -71,7 +71,7 @@ export default function SavingsCalculator() {
   };
 
   return (
-    <div className="my-5 sm:my-8 rounded-2xl border border-gray-200 bg-white p-4 sm:p-6 shadow-sm">
+    <div className="my-5 sm:my-8 rounded-2xl border border-border bg-card p-4 sm:p-6 shadow-sm">
       <h3 className="mb-6 text-xl font-bold text-foreground">저축 목표 계산기</h3>
 
       <div className="mb-4 flex gap-3">
@@ -139,7 +139,7 @@ export default function SavingsCalculator() {
             </div>
           </div>
 
-          <div className="overflow-x-auto rounded-xl border border-gray-200">
+          <div className="overflow-x-auto rounded-xl border border-border">
             <table className="w-full text-xs">
               <thead className="bg-card">
                 <tr>

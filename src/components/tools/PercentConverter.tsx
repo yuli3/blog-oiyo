@@ -228,7 +228,7 @@ export default function PercentConverter({ locale }: Props) {
 
   const inputCls =
     "w-full rounded-lg border border-border px-3 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20";
-  const card = "rounded-xl border border-border bg-white p-4";
+  const card = "rounded-xl border border-border bg-card p-4";
   const resultCls = "mt-3 rounded-lg bg-accent px-3 py-2 text-sm font-semibold text-primary";
 
   return (

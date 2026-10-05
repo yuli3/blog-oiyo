@@ -277,7 +277,7 @@ export default function GifSplitter({ locale }: { locale: Locale }) {
 
             <div className="grid gap-4 sm:grid-cols-2">
               {frames.map((frame) => (
-                <article key={frame.index} className="rounded-xl border border-slate-200 bg-white p-3">
+                <article key={frame.index} className="rounded-xl border border-border bg-card p-3">
                   <img src={frame.url} alt={`${t.frame} ${frame.index + 1}`} className="h-40 w-full rounded-lg bg-slate-100 object-contain" />
                   <div className="mt-3 flex items-center justify-between gap-2 text-sm">
                     <div>

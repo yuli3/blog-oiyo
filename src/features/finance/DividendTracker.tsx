@@ -82,7 +82,7 @@ export function DividendTracker({ locale }: { locale: string }) {
     <section className="mx-auto max-w-4xl">
       <h1 className="text-2xl font-black text-green-950">{t.title}</h1>
       <p className="mt-2 text-sm text-green-700">{t.desc}</p>
-      <div className="mt-4 overflow-x-auto rounded-xl border border-green-100 bg-white p-4 shadow-sm">
+      <div className="mt-4 overflow-x-auto rounded-xl border border-green-100 bg-card p-4 shadow-sm">
         <table className="w-full min-w-[640px] text-sm">
           <thead><tr className="text-left text-xs text-muted-foreground">
             <th scope="col" className="pb-2">{t.ticker}</th><th scope="col">{t.shares}</th><th scope="col">{t.perShare}</th><th scope="col">{t.freq}</th><th scope="col">{t.exDate}</th><th scope="col">{t.tax}</th><th scope="col" className="text-right">{t.annualNet}</th><th scope="col"></th>

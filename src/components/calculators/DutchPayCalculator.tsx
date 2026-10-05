@@ -110,7 +110,7 @@ const DutchPayCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
             value={totalAmount}
             onChange={(e) => setTotalAmount(e.target.value)}
             min="0"
-            className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+            className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
             aria-label={locale === 'ko' ? '총 금액' : 'Total Amount'}
           />
         </div>
@@ -127,7 +127,7 @@ const DutchPayCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
                 className={`flex-1 py-2 rounded-xl text-sm font-bold transition-colors border ${
                   splitMode === mode
                     ? 'bg-green-600 text-white border-green-600'
-                    : 'bg-white text-green-700 border-green-200 hover:bg-green-50'
+                    : 'bg-card text-green-700 border-green-200 hover:bg-green-50'
                 }`}
                 aria-pressed={splitMode === mode}
               >
@@ -160,7 +160,7 @@ const DutchPayCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
                   type="text"
                   value={person.name}
                   onChange={(e) => updatePerson(person.id, 'name', e.target.value)}
-                  className="flex-1 p-2 bg-white border border-green-200 rounded-xl text-sm focus:ring-2 focus:ring-green-400 outline-none"
+                  className="flex-1 p-2 bg-card border border-green-200 rounded-xl text-sm focus:ring-2 focus:ring-green-400 outline-none"
                   aria-label={locale === 'ko' ? '이름' : 'Name'}
                 />
                 {splitMode === 'ratio' && (
@@ -169,7 +169,7 @@ const DutchPayCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
                     value={person.ratio}
                     onChange={(e) => updatePerson(person.id, 'ratio', Number(e.target.value))}
                     min="1"
-                    className="w-16 p-2 bg-white border border-green-200 rounded-xl text-sm text-center focus:ring-2 focus:ring-green-400 outline-none"
+                    className="w-16 p-2 bg-card border border-green-200 rounded-xl text-sm text-center focus:ring-2 focus:ring-green-400 outline-none"
                     aria-label={locale === 'ko' ? '비율' : 'Ratio'}
                   />
                 )}
@@ -191,7 +191,7 @@ const DutchPayCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
                         value={person.fixedAmount}
                         onChange={(e) => updatePerson(person.id, 'fixedAmount', Number(e.target.value))}
                         min="0"
-                        className="w-28 p-2 bg-white border border-green-200 rounded-xl text-sm focus:ring-2 focus:ring-green-400 outline-none"
+                        className="w-28 p-2 bg-card border border-green-200 rounded-xl text-sm focus:ring-2 focus:ring-green-400 outline-none"
                         aria-label={locale === 'ko' ? '고정금액' : 'Fixed amount'}
                       />
                     )}
@@ -226,7 +226,7 @@ const DutchPayCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
           </button>
           <button
             onClick={reset}
-            className="px-5 py-3 bg-white border border-green-300 hover:bg-green-50 text-green-700 font-bold rounded-xl transition-colors"
+            className="px-5 py-3 bg-card border border-green-300 hover:bg-green-50 text-green-700 font-bold rounded-xl transition-colors"
             aria-label={locale === 'ko' ? '초기화' : 'Reset'}
           >
             {locale === 'ko' ? '초기화' : 'Reset'}

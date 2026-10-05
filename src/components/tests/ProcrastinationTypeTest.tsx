@@ -380,7 +380,7 @@ export default function ProcrastinationTypeTest({ locale: localeProp }: Props) {
           <p className="mt-3 text-gray-600">{rd.description}</p>
         </div>
 
-        <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm space-y-4">
+        <div className="rounded-xl border border-gray-100 bg-card p-5 shadow-sm space-y-4">
           <div>
             <h3 className="font-semibold text-green-700">✅ {tx.strength}</h3>
             <p className="mt-1 text-sm text-gray-600">{rd.strength}</p>
@@ -395,7 +395,7 @@ export default function ProcrastinationTypeTest({ locale: localeProp }: Props) {
           </div>
         </div>
 
-        <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
+        <div className="rounded-xl border border-gray-100 bg-card p-5 shadow-sm">
           <h3 className="mb-4 font-semibold text-gray-700">{tx.scoreLabel}</h3>
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={chartData} layout="vertical" margin={{ left: 16 }}>
@@ -410,7 +410,7 @@ export default function ProcrastinationTypeTest({ locale: localeProp }: Props) {
         <div className="flex gap-3">
           <button
             onClick={restart}
-            className="flex-1 rounded-xl border border-gray-200 py-3 text-sm font-medium text-gray-700 transition hover:bg-card"
+            className="flex-1 rounded-xl border border-border py-3 text-sm font-medium text-gray-700 transition hover:bg-card"
           >
             {tx.restart}
           </button>
@@ -444,14 +444,14 @@ export default function ProcrastinationTypeTest({ locale: localeProp }: Props) {
         <span className="text-sm text-muted-foreground">{tx.progress(idx + 1, questions.length)}</span>
       </div>
 
-      <div className="rounded-2xl border border-gray-100 bg-white p-4 sm:p-6 shadow-sm">
+      <div className="rounded-2xl border border-gray-100 bg-card p-4 sm:p-6 shadow-sm">
         <p className="mb-5 text-center text-lg font-medium text-gray-800">{q[locale]}</p>
         <div className="space-y-3">
           {q.options.map((opt, i) => (
             <button
               key={i}
               onClick={() => pick(opt.type)}
-              className="w-full rounded-xl border border-gray-200 px-4 py-3 text-left text-sm text-gray-700 transition hover:border-green-300 hover:bg-green-50"
+              className="w-full rounded-xl border border-border px-4 py-3 text-left text-sm text-gray-700 transition hover:border-green-300 hover:bg-green-50"
             >
               {opt[locale]}
             </button>

@@ -98,7 +98,7 @@ const GiftVsInheritanceCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
             value={assetValue}
             onChange={(e) => setAssetValue(e.target.value)}
             min="0"
-            className="w-full p-3 bg-white border border-amber-200 rounded-xl focus:ring-2 focus:ring-amber-400 outline-none"
+            className="w-full p-3 bg-card border border-amber-200 rounded-xl focus:ring-2 focus:ring-amber-400 outline-none"
           />
         </div>
 
@@ -113,7 +113,7 @@ const GiftVsInheritanceCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
               onChange={(e) => setGrowthRate(e.target.value)}
               min="0"
               step="0.1"
-              className="w-full p-3 bg-white border border-amber-200 rounded-xl focus:ring-2 focus:ring-amber-400 outline-none"
+              className="w-full p-3 bg-card border border-amber-200 rounded-xl focus:ring-2 focus:ring-amber-400 outline-none"
             />
           </div>
           <div className="space-y-1">
@@ -126,7 +126,7 @@ const GiftVsInheritanceCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
               onChange={(e) => setYears(e.target.value)}
               min="1"
               max="50"
-              className="w-full p-3 bg-white border border-amber-200 rounded-xl focus:ring-2 focus:ring-amber-400 outline-none"
+              className="w-full p-3 bg-card border border-amber-200 rounded-xl focus:ring-2 focus:ring-amber-400 outline-none"
             />
           </div>
         </div>
@@ -146,7 +146,7 @@ const GiftVsInheritanceCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
           </button>
           <button
             onClick={reset}
-            className="px-5 py-3 bg-white border border-amber-300 hover:bg-amber-50 text-amber-700 font-bold rounded-xl transition-colors"
+            className="px-5 py-3 bg-card border border-amber-300 hover:bg-amber-50 text-amber-700 font-bold rounded-xl transition-colors"
           >
             {ko ? '초기화' : 'Reset'}
           </button>
@@ -177,7 +177,7 @@ const GiftVsInheritanceCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Gift card */}
               <div className={`rounded-xl p-4 border-2 space-y-2 ${
-                result.betterOption === 'gift' ? 'border-amber-400 bg-amber-50' : 'border-gray-200 bg-white'
+                result.betterOption === 'gift' ? 'border-amber-400 bg-amber-50' : 'border-border bg-card'
               }`}>
                 <h4 className="text-sm font-black text-amber-700 uppercase tracking-wide">
                   {ko ? '지금 증여' : 'Gift Now'}
@@ -196,7 +196,7 @@ const GiftVsInheritanceCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
 
               {/* Inheritance card */}
               <div className={`rounded-xl p-4 border-2 space-y-2 ${
-                result.betterOption === 'inherit' ? 'border-green-400 bg-green-50' : 'border-gray-200 bg-white'
+                result.betterOption === 'inherit' ? 'border-green-400 bg-green-50' : 'border-border bg-card'
               }`}>
                 <h4 className="text-sm font-black text-green-700 uppercase tracking-wide">
                   {ko ? '나중에 상속' : 'Inherit Later'}

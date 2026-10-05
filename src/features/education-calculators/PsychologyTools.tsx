@@ -95,7 +95,7 @@ export const AttachmentTest: React.FC = () => {
     };
 
     return (
-        <Card className="p-4 sm:p-8 bg-white border-slate-200 shadow-2xl mt-5 sm:mt-8 min-h-[450px] flex flex-col justify-center overflow-hidden relative">
+        <Card className="p-4 sm:p-8 bg-card border-border shadow-2xl mt-5 sm:mt-8 min-h-[450px] flex flex-col justify-center overflow-hidden relative">
             <div className="absolute top-0 right-0 p-4 sm:p-8 opacity-5">
                 <Heart size={150} fill="currentColor" className="text-rose-200" />
             </div>
@@ -439,7 +439,7 @@ export const MBTIQuickTest: React.FC<{ locale?: "ko" | "en" | "ja" }> = ({ local
     };
 
     return (
-        <Card className="p-4 sm:p-8 bg-white border-slate-200 shadow-2xl mt-5 sm:mt-8 min-h-[460px] flex flex-col justify-center overflow-hidden relative">
+        <Card className="p-4 sm:p-8 bg-card border-border shadow-2xl mt-5 sm:mt-8 min-h-[460px] flex flex-col justify-center overflow-hidden relative">
             <div className="absolute -top-12 -right-10 w-40 h-40 rounded-full bg-emerald-100/50 blur-2xl" />
             <div className="absolute -bottom-12 -left-10 w-40 h-40 rounded-full bg-indigo-100/50 blur-2xl" />
 

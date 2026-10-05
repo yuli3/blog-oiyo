@@ -37,7 +37,7 @@ const DsrCalculator: React.FC = () => {
     }, [income, existingDebt, newLoan, interestRate, loanTerm]);
 
     return (
-        <div className="not-prose my-7 sm:my-12 p-4 sm:p-8 bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200 rounded-3xl shadow-xl">
+        <div className="not-prose my-7 sm:my-12 p-4 sm:p-8 bg-gradient-to-br from-slate-50 to-slate-100 border border-border rounded-3xl shadow-xl">
             <div className="flex flex-col md:flex-row gap-5 sm:gap-8">
                 {/* Inputs */}
                 <div className="flex-1 space-y-6">
@@ -60,7 +60,7 @@ const DsrCalculator: React.FC = () => {
                         <input 
                             type="number" value={existingDebt / 10000} 
                             onChange={(e) => setExistingDebt(Number(e.target.value) * 10000)}
-                            className="w-full p-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                            className="w-full p-3 bg-card border border-border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                         />
                     </div>
 
@@ -80,14 +80,14 @@ const DsrCalculator: React.FC = () => {
                             <input 
                                 type="number" step="0.1" value={interestRate} 
                                 onChange={(e) => setInterestRate(Number(e.target.value))}
-                                className="w-full p-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                                className="w-full p-3 bg-card border border-border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                             />
                         </div>
                         <div className="space-y-2">
                             <label className="text-sm font-medium text-slate-600">기간 (년)</label>
                             <select 
                                 value={loanTerm} onChange={(e) => setLoanTerm(Number(e.target.value))}
-                                className="w-full p-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                                className="w-full p-3 bg-card border border-border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                             >
                                 <option value={10}>10년</option>
                                 <option value={20}>20년</option>
@@ -100,7 +100,7 @@ const DsrCalculator: React.FC = () => {
                 </div>
 
                 {/* Results */}
-                <div className="flex-1 p-4 sm:p-6 bg-white rounded-2xl border border-blue-100 shadow-sm flex flex-col justify-center items-center text-center">
+                <div className="flex-1 p-4 sm:p-6 bg-card rounded-2xl border border-blue-100 shadow-sm flex flex-col justify-center items-center text-center">
                     <div className="mb-6">
                         <span className="text-sm font-medium text-muted-foreground uppercase tracking-widest">나의 DSR 지수</span>
                         <div className={`text-6xl font-black mt-2 ${dsr > 40 ? 'text-rose-500' : 'text-emerald-500'}`}>

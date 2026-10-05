@@ -317,7 +317,7 @@ export default function BabyNameGenerator({ locale }: Props) {
         <p className="mt-1 text-muted-foreground">{t.subtitle}</p>
       </div>
 
-      <div className="rounded-2xl border border-gray-200 bg-white p-5 space-y-4">
+      <div className="rounded-2xl border border-border bg-card p-5 space-y-4">
         {/* Gender */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">{t.genderLabel}</label>
@@ -402,7 +402,7 @@ export default function BabyNameGenerator({ locale }: Props) {
             results.map((entry) => (
               <div
                 key={entry.name}
-                className="rounded-xl border border-gray-200 bg-white overflow-hidden"
+                className="rounded-xl border border-border bg-card overflow-hidden"
               >
                 <button
                   onClick={() => setExpanded(expanded === entry.name ? null : entry.name)}

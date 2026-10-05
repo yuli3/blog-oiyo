@@ -307,7 +307,7 @@ export default function ToeicScoreConverter({ locale }: Props) {
       </div>
 
       {/* Mode tabs */}
-      <div className="flex rounded-xl overflow-hidden border border-gray-200">
+      <div className="flex rounded-xl overflow-hidden border border-border">
         {(["toeic", "cefr"] as Mode[]).map((m) => (
           <button
             key={m}
@@ -315,7 +315,7 @@ export default function ToeicScoreConverter({ locale }: Props) {
             className={`flex-1 py-2.5 text-sm font-medium transition-colors ${
               mode === m
                 ? "bg-green-600 text-white"
-                : "bg-white text-gray-600 hover:bg-green-50"
+                : "bg-card text-gray-600 hover:bg-green-50"
             }`}
           >
             {m === "toeic" ? t.modeScore : t.modeCefr}
@@ -324,7 +324,7 @@ export default function ToeicScoreConverter({ locale }: Props) {
       </div>
 
       {/* Input */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-5 space-y-4">
+      <div className="rounded-2xl border border-border bg-card p-5 space-y-4">
         {mode === "toeic" ? (
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -369,35 +369,35 @@ export default function ToeicScoreConverter({ locale }: Props) {
 
       {/* Result */}
       {result && (
-        <div className={`rounded-2xl border border-gray-200 ${result.bgColor} p-4 sm:p-6 space-y-5`}>
+        <div className={`rounded-2xl border border-border ${result.bgColor} p-4 sm:p-6 space-y-5`}>
           <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
             {t.resultTitle}
           </p>
 
           {/* Score cards */}
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <div className="rounded-xl bg-white p-3 text-center shadow-sm">
+            <div className="rounded-xl bg-card p-3 text-center shadow-sm">
               <p className="text-xs text-muted-foreground mb-1">{t.cefrLabel}</p>
               <p className={`text-2xl font-extrabold ${result.color}`}>{result.cefr}</p>
             </div>
-            <div className="rounded-xl bg-white p-3 text-center shadow-sm">
+            <div className="rounded-xl bg-card p-3 text-center shadow-sm">
               <p className="text-xs text-muted-foreground mb-1">{t.toeicRangeLabel}</p>
               <p className="text-lg font-bold text-gray-800">
                 {result.toeicMin}–{result.toeicMax}
               </p>
             </div>
-            <div className="rounded-xl bg-white p-3 text-center shadow-sm">
+            <div className="rounded-xl bg-card p-3 text-center shadow-sm">
               <p className="text-xs text-muted-foreground mb-1">{t.ieltsLabel}</p>
               <p className="text-xl font-bold text-gray-800">{result.ielts}</p>
             </div>
-            <div className="rounded-xl bg-white p-3 text-center shadow-sm">
+            <div className="rounded-xl bg-card p-3 text-center shadow-sm">
               <p className="text-xs text-muted-foreground mb-1">{t.toeflLabel}</p>
               <p className="text-lg font-bold text-gray-800">{result.toefl}</p>
             </div>
           </div>
 
           {/* Job utility */}
-          <div className="rounded-xl bg-white p-4 space-y-2">
+          <div className="rounded-xl bg-card p-4 space-y-2">
             <p className="text-sm font-semibold text-gray-700">{t.jobUtilLabel}</p>
             <ul className="space-y-1">
               {t.jobUtil[result.cefr].map((item, i) => (
@@ -410,7 +410,7 @@ export default function ToeicScoreConverter({ locale }: Props) {
           </div>
 
           {/* Study tips */}
-          <div className="rounded-xl bg-white p-4 space-y-2">
+          <div className="rounded-xl bg-card p-4 space-y-2">
             <p className="text-sm font-semibold text-gray-700">{t.studyTipsLabel}</p>
             <ol className="space-y-1 list-decimal list-inside">
               {t.studyTips[result.cefr].map((tip, i) => (

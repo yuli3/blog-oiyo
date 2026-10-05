@@ -480,7 +480,7 @@ export default function TravelBudgetCalculator({ locale }: Props) {
       </div>
 
       {/* Form */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-5 space-y-4">
+      <div className="rounded-2xl border border-border bg-card p-5 space-y-4">
         {/* Destination */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -617,7 +617,7 @@ export default function TravelBudgetCalculator({ locale }: Props) {
           </div>
 
           {/* Breakdown */}
-          <div className="rounded-2xl border border-gray-200 bg-white p-5">
+          <div className="rounded-2xl border border-border bg-card p-5">
             <h3 className="text-sm font-semibold text-gray-700 mb-3">
               {t.breakdownTitle}
             </h3>

@@ -251,7 +251,7 @@ export default function AngerStyleTest({ locale: localeProp }: Props) {
             </BarChart>
           </ResponsiveContainer>
         </div>
-        <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-4">
+        <div className="bg-card border border-border rounded-xl p-5 space-y-4">
           <p className="text-gray-700 leading-relaxed">{d.description[locale]}</p>
           <div className="bg-orange-50 rounded-lg p-3">
             <h3 className="font-semibold text-orange-800 text-sm mb-1">⚡ {t.impact}</h3>
@@ -288,7 +288,7 @@ export default function AngerStyleTest({ locale: localeProp }: Props) {
           <div className="bg-red-400 h-1.5 rounded-full" style={{ width: `${((idx + 1) / scenarios.length) * 100}%` }} />
         </div>
       </div>
-      <div className="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 space-y-4 shadow-sm">
+      <div className="bg-card border border-border rounded-xl p-4 sm:p-6 space-y-4 shadow-sm">
         <p className="text-sm font-semibold text-muted-foreground">📍 {t.progress} {idx + 1}</p>
         <p className="text-base font-medium text-gray-800 leading-relaxed">{s[locale]}</p>
         <p className="text-xs text-gray-400">{t.choose}</p>

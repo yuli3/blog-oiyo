@@ -121,7 +121,7 @@ const JeonseVsRentCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
   };
 
   const fieldClass =
-    'w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none text-sm';
+    'w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none text-sm';
 
   return (
     <div className="not-prose my-7 sm:my-12 p-6 md:p-8 bg-gradient-to-br from-green-50 to-green-50 border border-green-200 rounded-3xl shadow-xl">
@@ -155,11 +155,11 @@ const JeonseVsRentCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
                 <label className="text-xs font-bold text-orange-800">{t.monthlyRent}</label>
-                <input type="number" value={monthlyRent} onChange={(e) => setMonthlyRent(e.target.value)} min="0" className="w-full p-3 bg-white border border-orange-200 rounded-xl focus:ring-2 focus:ring-orange-400 outline-none text-sm" />
+                <input type="number" value={monthlyRent} onChange={(e) => setMonthlyRent(e.target.value)} min="0" className="w-full p-3 bg-card border border-orange-200 rounded-xl focus:ring-2 focus:ring-orange-400 outline-none text-sm" />
               </div>
               <div className="space-y-1">
                 <label className="text-xs font-bold text-orange-800">{t.monthlyRentDeposit}</label>
-                <input type="number" value={monthlyRentDeposit} onChange={(e) => setMonthlyRentDeposit(e.target.value)} min="0" className="w-full p-3 bg-white border border-orange-200 rounded-xl focus:ring-2 focus:ring-orange-400 outline-none text-sm" />
+                <input type="number" value={monthlyRentDeposit} onChange={(e) => setMonthlyRentDeposit(e.target.value)} min="0" className="w-full p-3 bg-card border border-orange-200 rounded-xl focus:ring-2 focus:ring-orange-400 outline-none text-sm" />
               </div>
             </div>
           </div>
@@ -173,7 +173,7 @@ const JeonseVsRentCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
             <button onClick={calculate} className="flex-1 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl transition-colors">
               {t.calculate}
             </button>
-            <button onClick={reset} className="px-5 py-3 bg-white border border-green-300 hover:bg-green-50 text-green-700 font-bold rounded-xl transition-colors">
+            <button onClick={reset} className="px-5 py-3 bg-card border border-green-300 hover:bg-green-50 text-green-700 font-bold rounded-xl transition-colors">
               {t.reset}
             </button>
           </div>
@@ -190,7 +190,7 @@ const JeonseVsRentCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
               </div>
 
               {/* Jeonse breakdown */}
-              <div className="bg-white rounded-2xl border-2 border-green-200 p-4 space-y-2">
+              <div className="bg-card rounded-2xl border-2 border-green-200 p-4 space-y-2">
                 <p className="text-xs font-bold uppercase tracking-widest text-green-600">{t.optionA}</p>
                 <div className="flex justify-between items-baseline">
                   <span className="text-sm text-muted-foreground">{t.jeonseCost}</span>
@@ -203,7 +203,7 @@ const JeonseVsRentCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
               </div>
 
               {/* Rent breakdown */}
-              <div className="bg-white rounded-2xl border-2 border-orange-200 p-4 space-y-2">
+              <div className="bg-card rounded-2xl border-2 border-orange-200 p-4 space-y-2">
                 <p className="text-xs font-bold uppercase tracking-widest text-orange-600">{t.optionB}</p>
                 <div className="flex justify-between items-baseline">
                   <span className="text-sm text-muted-foreground">{t.rentCost}</span>
@@ -226,7 +226,7 @@ const JeonseVsRentCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
       </div>
 
       {/* FAQ */}
-      <div className="mt-6 p-5 bg-card border border-slate-200 rounded-2xl space-y-3 text-sm">
+      <div className="mt-6 p-5 bg-card border border-border rounded-2xl space-y-3 text-sm">
         <p className="font-bold text-slate-700">{t.faqTitle}</p>
         <div>
           <p className="text-xs font-bold text-green-700 uppercase tracking-wide">{t.faqOppCost}</p>

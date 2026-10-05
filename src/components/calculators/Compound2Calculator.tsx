@@ -91,7 +91,7 @@ const Compound2Calculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
               value={initialInvestment}
               onChange={(e) => setInitialInvestment(e.target.value)}
               min="0"
-              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+              className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
             />
           </div>
           <div className="space-y-1">
@@ -103,7 +103,7 @@ const Compound2Calculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
               value={monthlyContribution}
               onChange={(e) => setMonthlyContribution(e.target.value)}
               min="0"
-              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+              className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
             />
           </div>
           <div className="space-y-1">
@@ -116,7 +116,7 @@ const Compound2Calculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
               onChange={(e) => setInvestmentPeriod(e.target.value)}
               min="1"
               max="50"
-              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+              className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
             />
           </div>
           <div className="space-y-1">
@@ -129,7 +129,7 @@ const Compound2Calculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
               onChange={(e) => setInterestRate(e.target.value)}
               min="0"
               step="0.1"
-              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+              className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
             />
           </div>
           <div className="space-y-1 md:col-span-2">
@@ -142,7 +142,7 @@ const Compound2Calculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
               onChange={(e) => setRateRange(e.target.value)}
               min="0"
               step="0.5"
-              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+              className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
             />
           </div>
         </div>
@@ -162,7 +162,7 @@ const Compound2Calculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
           </button>
           <button
             onClick={reset}
-            className="px-5 py-3 bg-white border border-green-300 hover:bg-green-50 text-green-700 font-bold rounded-xl transition-colors"
+            className="px-5 py-3 bg-card border border-green-300 hover:bg-green-50 text-green-700 font-bold rounded-xl transition-colors"
           >
             {ko ? '초기화' : 'Reset'}
           </button>
@@ -193,7 +193,7 @@ const Compound2Calculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
             </div>
 
             {/* Summary row */}
-            <div className="bg-white rounded-xl border border-green-100 p-4 space-y-2">
+            <div className="bg-card rounded-xl border border-green-100 p-4 space-y-2">
               <div className="flex justify-between text-sm">
                 <span className="text-green-600 font-semibold">{ko ? '총 납입액' : 'Total Contributed'}</span>
                 <AnimatedNumber value={result.totalContributed} {...moneyProps} className="font-bold" />

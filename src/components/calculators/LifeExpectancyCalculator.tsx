@@ -128,7 +128,7 @@ const LifeExpectancyCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
             className={`cursor-pointer px-3 py-1.5 rounded-xl text-sm font-bold border transition-colors ${
               value === opt.value
                 ? 'bg-green-600 text-white border-green-600'
-                : 'bg-white text-green-700 border-green-200 hover:bg-green-50'
+                : 'bg-card text-green-700 border-green-200 hover:bg-green-50'
             }`}
           >
             <input
@@ -167,7 +167,7 @@ const LifeExpectancyCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
               onChange={(e) => setCurrentAge(e.target.value)}
               min="0"
               max="90"
-              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+              className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
               aria-label={locale === 'ko' ? '현재 나이' : 'Current Age'}
             />
           </div>
@@ -258,7 +258,7 @@ const LifeExpectancyCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
               </div>
 
               {/* Progress bar */}
-              <div className="p-4 bg-white rounded-2xl border border-green-100">
+              <div className="p-4 bg-card rounded-2xl border border-green-100">
                 <div className="flex justify-between text-xs text-muted-foreground mb-2">
                   <span>{locale === 'ko' ? '현재' : 'Now'}: {currentAge}세</span>
                   <span>{locale === 'ko' ? '예상 수명' : 'Lifespan'}: {result.adjustedLifeExpectancy}세</span>
@@ -282,13 +282,13 @@ const LifeExpectancyCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                <div className="p-4 bg-white rounded-2xl border border-green-100 text-center">
+                <div className="p-4 bg-card rounded-2xl border border-green-100 text-center">
                   <p className="text-xs text-muted-foreground font-bold mb-1">
                     {locale === 'ko' ? '건강수명' : 'Healthy Lifespan'}
                   </p>
                   <p className="text-2xl font-bold text-green-700">{result.healthyLifeExpectancy}세</p>
                 </div>
-                <div className="p-4 bg-white rounded-2xl border border-green-100 text-center">
+                <div className="p-4 bg-card rounded-2xl border border-green-100 text-center">
                   <p className="text-xs text-muted-foreground font-bold mb-1">
                     {locale === 'ko' ? '65세 이후 노후 기간' : 'Post-65 Retirement Years'}
                   </p>

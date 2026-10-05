@@ -84,7 +84,7 @@ const RentalRoiCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
             value={purchasePrice}
             onChange={(e) => setPurchasePrice(e.target.value)}
             min="0"
-            className="w-full p-3 bg-white border border-orange-200 rounded-xl focus:ring-2 focus:ring-orange-400 outline-none"
+            className="w-full p-3 bg-card border border-orange-200 rounded-xl focus:ring-2 focus:ring-orange-400 outline-none"
           />
         </div>
 
@@ -98,7 +98,7 @@ const RentalRoiCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
               value={deposit}
               onChange={(e) => setDeposit(e.target.value)}
               min="0"
-              className="w-full p-3 bg-white border border-orange-200 rounded-xl focus:ring-2 focus:ring-orange-400 outline-none"
+              className="w-full p-3 bg-card border border-orange-200 rounded-xl focus:ring-2 focus:ring-orange-400 outline-none"
             />
           </div>
           <div className="space-y-1">
@@ -110,7 +110,7 @@ const RentalRoiCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
               value={monthlyRent}
               onChange={(e) => setMonthlyRent(e.target.value)}
               min="0"
-              className="w-full p-3 bg-white border border-orange-200 rounded-xl focus:ring-2 focus:ring-orange-400 outline-none"
+              className="w-full p-3 bg-card border border-orange-200 rounded-xl focus:ring-2 focus:ring-orange-400 outline-none"
             />
           </div>
         </div>
@@ -129,7 +129,7 @@ const RentalRoiCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
                 value={loanAmount}
                 onChange={(e) => setLoanAmount(e.target.value)}
                 min="0"
-                className="w-full p-3 bg-white border border-orange-200 rounded-xl focus:ring-2 focus:ring-orange-400 outline-none"
+                className="w-full p-3 bg-card border border-orange-200 rounded-xl focus:ring-2 focus:ring-orange-400 outline-none"
               />
             </div>
             <div className="space-y-1">
@@ -142,7 +142,7 @@ const RentalRoiCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
                 onChange={(e) => setLoanRate(e.target.value)}
                 min="0"
                 step="0.1"
-                className="w-full p-3 bg-white border border-orange-200 rounded-xl focus:ring-2 focus:ring-orange-400 outline-none"
+                className="w-full p-3 bg-card border border-orange-200 rounded-xl focus:ring-2 focus:ring-orange-400 outline-none"
               />
             </div>
           </div>
@@ -163,7 +163,7 @@ const RentalRoiCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
           </button>
           <button
             onClick={reset}
-            className="px-5 py-3 bg-white border border-orange-300 hover:bg-orange-50 text-orange-700 font-bold rounded-xl transition-colors"
+            className="px-5 py-3 bg-card border border-orange-300 hover:bg-orange-50 text-orange-700 font-bold rounded-xl transition-colors"
           >
             {ko ? '초기화' : 'Reset'}
           </button>
@@ -193,7 +193,7 @@ const RentalRoiCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
                 { label: ko ? '연 순수익' : 'Annual Net Income', value: (result.annualNet >= 0 ? '+' : '') + fmt(result.annualNet), color: result.annualNet >= 0 ? 'text-green-700' : 'text-red-600' },
                 { label: ko ? '월 이자 비용' : 'Monthly Interest Cost', value: '-' + fmt(result.monthlyInterestCost), color: 'text-red-600' },
               ].map((item) => (
-                <div key={item.label} className="bg-white rounded-xl p-3 border border-orange-100">
+                <div key={item.label} className="bg-card rounded-xl p-3 border border-orange-100">
                   <p className="text-xs text-orange-400 font-semibold mb-1">{item.label}</p>
                   <p className={`text-sm font-bold ${item.color}`}>{item.value}</p>
                 </div>

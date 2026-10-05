@@ -153,7 +153,7 @@ export default function HappinessMeterTest({ locale: localeProp }: Props) {
           <p className="mt-3 text-sm text-gray-600">{level.description}</p>
         </div>
 
-        <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
+        <div className="rounded-xl border border-gray-100 bg-card p-5 shadow-sm">
           <h3 className="font-semibold text-gray-700 mb-3">{ui.tipsTitle}</h3>
           <div className="space-y-2">
             {tips[locale].map((tip, i) => (
@@ -166,7 +166,7 @@ export default function HappinessMeterTest({ locale: localeProp }: Props) {
         </div>
 
         <div className="flex gap-3">
-          <button onClick={restart} className="flex-1 rounded-xl border border-gray-200 py-3 text-sm font-medium text-gray-700 transition hover:bg-card">
+          <button onClick={restart} className="flex-1 rounded-xl border border-border py-3 text-sm font-medium text-gray-700 transition hover:bg-card">
             {ui.restart}
           </button>
           <button onClick={share} className="flex-1 rounded-xl py-3 text-sm font-medium text-white transition" style={{ backgroundColor: level.color }}>
@@ -192,12 +192,12 @@ export default function HappinessMeterTest({ locale: localeProp }: Props) {
         </div>
         <span className="text-sm text-muted-foreground">{ui.progress(idx + 1, questions.length)}</span>
       </div>
-      <div className="rounded-2xl border border-gray-100 bg-white p-4 sm:p-6 shadow-sm">
+      <div className="rounded-2xl border border-gray-100 bg-card p-4 sm:p-6 shadow-sm">
         <p className="mb-2 text-center text-lg font-medium text-gray-800">{q[locale]}</p>
         <p className="mb-5 text-center text-xs text-gray-400">{ui.scale}</p>
         <div className="space-y-2">
           {options.map((opt, i) => (
-            <button key={i} onClick={() => pick(i + 1)} className="w-full rounded-xl border border-gray-200 px-4 py-3 text-left text-sm text-gray-700 transition hover:border-amber-300 hover:bg-amber-50">
+            <button key={i} onClick={() => pick(i + 1)} className="w-full rounded-xl border border-border px-4 py-3 text-left text-sm text-gray-700 transition hover:border-amber-300 hover:bg-amber-50">
               <span className="font-medium text-amber-600 mr-2">{i + 1}.</span>{opt}
             </button>
           ))}

@@ -25,7 +25,7 @@ export const CVPLab: React.FC = () => {
   }, [contributionMargin, sellingPrice]);
 
   return (
-    <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-5 sm:mt-8">
+    <Card className="p-4 sm:p-6 bg-card border-border shadow-xl mt-5 sm:mt-8">
       <div className="flex items-center gap-2 mb-6 text-foreground border-b pb-4">
         <Target className="text-green-500" />
         <h3 className="text-xl font-bold">CVP 손익분기점 라보</h3>
@@ -33,31 +33,31 @@ export const CVPLab: React.FC = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="space-y-4 lg:col-span-1">
-          <div className="p-4 rounded-xl border border-slate-200 bg-card">
+          <div className="p-4 rounded-xl border border-border bg-card">
             <label className="text-xs font-bold text-muted-foreground block mb-2">단위당 판매가격 (P)</label>
             <input
               type="number"
               value={sellingPrice}
               onChange={(e) => setSellingPrice(Number(e.target.value))}
-              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-foreground"
+              className="w-full rounded-lg border border-border bg-card px-3 py-2 text-sm font-semibold text-foreground"
             />
           </div>
-          <div className="p-4 rounded-xl border border-slate-200 bg-card">
+          <div className="p-4 rounded-xl border border-border bg-card">
             <label className="text-xs font-bold text-muted-foreground block mb-2">단위당 변동원가 (VC)</label>
             <input
               type="number"
               value={variableCost}
               onChange={(e) => setVariableCost(Number(e.target.value))}
-              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-foreground"
+              className="w-full rounded-lg border border-border bg-card px-3 py-2 text-sm font-semibold text-foreground"
             />
           </div>
-          <div className="p-4 rounded-xl border border-slate-200 bg-card">
+          <div className="p-4 rounded-xl border border-border bg-card">
             <label className="text-xs font-bold text-muted-foreground block mb-2">총 고정원가 (FC)</label>
             <input
               type="number"
               value={fixedCost}
               onChange={(e) => setFixedCost(Number(e.target.value))}
-              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-foreground"
+              className="w-full rounded-lg border border-border bg-card px-3 py-2 text-sm font-semibold text-foreground"
             />
           </div>
 
@@ -139,7 +139,7 @@ export const SamplingErrorLab: React.FC = () => {
   }, [results, avg]);
 
   return (
-    <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-5 sm:mt-8">
+    <Card className="p-4 sm:p-6 bg-card border-border shadow-xl mt-5 sm:mt-8">
       <div className="flex items-center gap-2 mb-6 text-foreground border-b pb-4">
         <Target className="text-green-500" />
         <h3 className="text-xl font-bold">표본오차 실험실</h3>
@@ -147,31 +147,31 @@ export const SamplingErrorLab: React.FC = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="space-y-4 lg:col-span-1">
-          <div className="p-4 rounded-xl border border-slate-200 bg-card">
+          <div className="p-4 rounded-xl border border-border bg-card">
             <label className="text-xs font-bold text-muted-foreground block mb-2">모집단 비율 (예: 찬성률, %)</label>
             <input
               type="number"
               value={populationRate}
               onChange={(e) => setPopulationRate(Number(e.target.value))}
-              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-foreground"
+              className="w-full rounded-lg border border-border bg-card px-3 py-2 text-sm font-semibold text-foreground"
             />
           </div>
-          <div className="p-4 rounded-xl border border-slate-200 bg-card">
+          <div className="p-4 rounded-xl border border-border bg-card">
             <label className="text-xs font-bold text-muted-foreground block mb-2">표본 크기 (n)</label>
             <input
               type="number"
               value={sampleSize}
               onChange={(e) => setSampleSize(Number(e.target.value))}
-              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-foreground"
+              className="w-full rounded-lg border border-border bg-card px-3 py-2 text-sm font-semibold text-foreground"
             />
           </div>
-          <div className="p-4 rounded-xl border border-slate-200 bg-card">
+          <div className="p-4 rounded-xl border border-border bg-card">
             <label className="text-xs font-bold text-muted-foreground block mb-2">반복 횟수</label>
             <input
               type="number"
               value={trials}
               onChange={(e) => setTrials(Number(e.target.value))}
-              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-foreground"
+              className="w-full rounded-lg border border-border bg-card px-3 py-2 text-sm font-semibold text-foreground"
             />
           </div>
           <div className="p-4 rounded-xl border border-green-200 bg-green-50/50">
@@ -203,7 +203,7 @@ export const SamplingErrorLab: React.FC = () => {
             {results.map((value, idx) => (
               <div
                 key={idx}
-                className="rounded-lg border border-slate-200 bg-white px-2 py-3 text-center text-sm font-bold text-slate-700"
+                className="rounded-lg border border-border bg-card px-2 py-3 text-center text-sm font-bold text-slate-700"
               >
                 {value.toFixed(0)}%
               </div>

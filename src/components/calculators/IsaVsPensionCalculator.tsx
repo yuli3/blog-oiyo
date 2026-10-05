@@ -163,7 +163,7 @@ const IsaVsPensionCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
             value={annualInvestment}
             onChange={(e) => setAnnualInvestment(e.target.value)}
             min="0"
-            className="w-full p-3 bg-white border border-sky-200 rounded-xl focus:ring-2 focus:ring-sky-400 outline-none"
+            className="w-full p-3 bg-card border border-sky-200 rounded-xl focus:ring-2 focus:ring-sky-400 outline-none"
           />
         </div>
 
@@ -176,7 +176,7 @@ const IsaVsPensionCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
             value={annualIncome}
             onChange={(e) => setAnnualIncome(e.target.value)}
             min="0"
-            className="w-full p-3 bg-white border border-sky-200 rounded-xl focus:ring-2 focus:ring-sky-400 outline-none"
+            className="w-full p-3 bg-card border border-sky-200 rounded-xl focus:ring-2 focus:ring-sky-400 outline-none"
           />
         </div>
 
@@ -193,7 +193,7 @@ const IsaVsPensionCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
                   className={`flex-1 py-2 rounded-lg text-xs font-bold border transition-colors ${
                     years === y
                       ? 'bg-sky-600 text-white border-sky-600'
-                      : 'bg-white text-sky-700 border-sky-200 hover:bg-sky-50'
+                      : 'bg-card text-sky-700 border-sky-200 hover:bg-sky-50'
                   }`}
                 >
                   {y}{ko ? '년' : 'yr'}
@@ -211,7 +211,7 @@ const IsaVsPensionCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
               onChange={(e) => setExpectedReturn(e.target.value)}
               min="0"
               step="0.1"
-              className="w-full p-3 bg-white border border-sky-200 rounded-xl focus:ring-2 focus:ring-sky-400 outline-none"
+              className="w-full p-3 bg-card border border-sky-200 rounded-xl focus:ring-2 focus:ring-sky-400 outline-none"
             />
           </div>
         </div>
@@ -228,7 +228,7 @@ const IsaVsPensionCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
                 className={`flex-1 py-2 rounded-xl text-sm font-bold border transition-colors ${
                   isaType === t
                     ? 'bg-sky-600 text-white border-sky-600'
-                    : 'bg-white text-sky-700 border-sky-200 hover:bg-sky-50'
+                    : 'bg-card text-sky-700 border-sky-200 hover:bg-sky-50'
                 }`}
               >
                 {t === 'general'
@@ -254,7 +254,7 @@ const IsaVsPensionCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
           </button>
           <button
             onClick={reset}
-            className="px-5 py-3 bg-white border border-sky-300 hover:bg-sky-50 text-sky-700 font-bold rounded-xl transition-colors"
+            className="px-5 py-3 bg-card border border-sky-300 hover:bg-sky-50 text-sky-700 font-bold rounded-xl transition-colors"
           >
             {ko ? '초기화' : 'Reset'}
           </button>
@@ -263,7 +263,7 @@ const IsaVsPensionCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
         {result && (
           <div className="mt-4 space-y-4" aria-live="polite">
             {/* ISA Card */}
-            <div className="bg-white rounded-2xl border-2 border-sky-200 p-5 space-y-3">
+            <div className="bg-card rounded-2xl border-2 border-sky-200 p-5 space-y-3">
               <h4 className="text-base font-black text-sky-700 text-center">ISA</h4>
               <div className="text-center">
                 <p className="text-xs text-sky-500 font-semibold">{ko ? '최종 수령액' : 'Final Amount'}</p>
@@ -285,7 +285,7 @@ const IsaVsPensionCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
             </div>
 
             {/* Pension Card */}
-            <div className="bg-white rounded-2xl border-2 border-indigo-200 p-5 space-y-3">
+            <div className="bg-card rounded-2xl border-2 border-indigo-200 p-5 space-y-3">
               <h4 className="text-base font-black text-indigo-700 text-center">
                 {ko ? '연금저축+IRP' : 'Pension Savings + IRP'}
               </h4>

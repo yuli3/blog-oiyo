@@ -125,7 +125,7 @@ const StockYieldCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko
               onChange={(e) => setCurrentShares(e.target.value)}
               min="0"
               placeholder="0"
-              className="w-full p-3 bg-white border border-violet-200 rounded-xl focus:ring-2 focus:ring-violet-400 outline-none"
+              className="w-full p-3 bg-card border border-violet-200 rounded-xl focus:ring-2 focus:ring-violet-400 outline-none"
             />
           </div>
           <div className="space-y-1">
@@ -136,7 +136,7 @@ const StockYieldCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko
               onChange={(e) => setCurrentAvg(e.target.value)}
               min="0"
               placeholder="0"
-              className="w-full p-3 bg-white border border-violet-200 rounded-xl focus:ring-2 focus:ring-violet-400 outline-none"
+              className="w-full p-3 bg-card border border-violet-200 rounded-xl focus:ring-2 focus:ring-violet-400 outline-none"
             />
           </div>
 
@@ -149,7 +149,7 @@ const StockYieldCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko
               onChange={(e) => setBuyShares(e.target.value)}
               min="0"
               placeholder="0"
-              className="w-full p-3 bg-white border border-violet-200 rounded-xl focus:ring-2 focus:ring-violet-400 outline-none"
+              className="w-full p-3 bg-card border border-violet-200 rounded-xl focus:ring-2 focus:ring-violet-400 outline-none"
             />
           </div>
           <div className="space-y-1">
@@ -160,7 +160,7 @@ const StockYieldCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko
               onChange={(e) => setBuyPrice(e.target.value)}
               min="0"
               placeholder="0"
-              className="w-full p-3 bg-white border border-violet-200 rounded-xl focus:ring-2 focus:ring-violet-400 outline-none"
+              className="w-full p-3 bg-card border border-violet-200 rounded-xl focus:ring-2 focus:ring-violet-400 outline-none"
             />
           </div>
 
@@ -172,7 +172,7 @@ const StockYieldCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko
               onChange={(e) => setCurrentPrice(e.target.value)}
               min="0"
               placeholder="0"
-              className="w-full p-3 bg-white border border-violet-200 rounded-xl focus:ring-2 focus:ring-violet-400 outline-none"
+              className="w-full p-3 bg-card border border-violet-200 rounded-xl focus:ring-2 focus:ring-violet-400 outline-none"
             />
           </div>
 
@@ -191,7 +191,7 @@ const StockYieldCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko
             </button>
             <button
               onClick={reset}
-              className="px-5 py-3 bg-white border border-violet-300 hover:bg-violet-50 text-violet-700 font-bold rounded-xl transition-colors"
+              className="px-5 py-3 bg-card border border-violet-300 hover:bg-violet-50 text-violet-700 font-bold rounded-xl transition-colors"
             >
               {t.reset}
             </button>
@@ -224,7 +224,7 @@ const StockYieldCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko
                     colorClass: result.unrealizedPnl >= 0 ? 'text-emerald-600' : 'text-red-600',
                   },
                 ].map((item) => (
-                  <div key={item.label} className="bg-white rounded-2xl border border-violet-100 p-4 text-center">
+                  <div key={item.label} className="bg-card rounded-2xl border border-violet-100 p-4 text-center">
                     <p className="text-xs text-muted-foreground font-bold mb-1">{item.label}</p>
                     <p className={`text-sm font-bold ${item.colorClass ?? 'text-violet-700'}`}>{item.value}</p>
                   </div>

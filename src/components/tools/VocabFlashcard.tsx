@@ -629,7 +629,7 @@ export default function VocabFlashcard({ locale }: Props) {
             className={`rounded-xl border px-3 py-2.5 text-sm font-medium transition-colors ${
               selectedDeck === dk
                 ? "border-green-500 bg-green-500 text-white"
-                : "border-gray-200 bg-white text-gray-600 hover:border-green-400"
+                : "border-border bg-card text-gray-600 hover:border-green-400"
             }`}
           >
             <div>{t.decks[dk]}</div>
@@ -673,7 +673,7 @@ export default function VocabFlashcard({ locale }: Props) {
             >
               {/* Front */}
               <div
-                className="absolute inset-0 flex flex-col items-center justify-center rounded-2xl border-2 border-green-300 bg-white shadow-lg p-4 sm:p-6 text-center"
+                className="absolute inset-0 flex flex-col items-center justify-center rounded-2xl border-2 border-green-300 bg-card shadow-lg p-4 sm:p-6 text-center"
                 style={{ backfaceVisibility: "hidden" }}
               >
                 <p className="text-3xl font-extrabold text-foreground mb-3">
@@ -717,7 +717,7 @@ export default function VocabFlashcard({ locale }: Props) {
         </>
       ) : (
         /* Completed */
-        <div className="rounded-2xl border border-gray-200 bg-white p-4 sm:p-8 text-center space-y-4">
+        <div className="rounded-2xl border border-border bg-card p-4 sm:p-8 text-center space-y-4">
           <p className="text-4xl">🎉</p>
           <p className="text-xl font-bold text-foreground">{t.completedTitle}</p>
           <p className="text-muted-foreground">{t.completedMsg}</p>

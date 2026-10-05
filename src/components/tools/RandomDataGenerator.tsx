@@ -400,7 +400,7 @@ export default function RandomDataGenerator({ locale }: { locale: Locale }) {
 
   const inputCls = "w-full rounded-lg border border-border px-3 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20";
   const buttonCls = "rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90 disabled:opacity-50";
-  const secondaryButtonCls = "rounded-lg border border-border bg-white px-4 py-2 text-sm font-semibold text-muted-foreground transition hover:bg-background";
+  const secondaryButtonCls = "rounded-lg border border-border bg-card px-4 py-2 text-sm font-semibold text-muted-foreground transition hover:bg-background";
 
   const handleGenerate = () => {
     const safeCount = Math.max(1, Math.min(200, count));
@@ -424,7 +424,7 @@ export default function RandomDataGenerator({ locale }: { locale: Locale }) {
   return (
     <GameContainer title={t.title} subtitle={t.subtitle}>
       <div className="grid gap-5">
-        <div className="grid gap-4 rounded-xl border border-border bg-white p-4 md:grid-cols-2">
+        <div className="grid gap-4 rounded-xl border border-border bg-card p-4 md:grid-cols-2">
           <label className="text-sm font-medium text-muted-foreground">
             {t.typeLabel}
             <select className={`${inputCls} mt-1`} value={dataType} onChange={(e) => setDataType(e.target.value as DataType)}>

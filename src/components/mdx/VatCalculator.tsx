@@ -83,7 +83,7 @@ export default function VatCalculator() {
               onClick={() => { setMode(m.key); setInput(''); setDisplayInput(''); }}
               className={`rounded-lg px-3 py-2.5 text-sm font-semibold transition-all ${
                 mode === m.key
-                  ? 'bg-white shadow text-green-700'
+                  ? 'bg-card shadow text-green-700'
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >

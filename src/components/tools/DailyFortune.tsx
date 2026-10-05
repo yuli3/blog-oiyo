@@ -801,7 +801,7 @@ function FortuneCard({
       ? "from-yellow-50 to-amber-50 border-amber-200"
       : score >= 3
       ? "from-blue-50 to-indigo-50 border-blue-200"
-      : "from-gray-50 to-slate-50 border-gray-200";
+      : "from-gray-50 to-slate-50 border-border";
 
   return (
     <div className={`rounded-2xl border bg-gradient-to-br p-4 ${color}`}>
@@ -886,7 +886,7 @@ export default function DailyFortune({ locale }: Props) {
 
       {!result ? (
         /* Input */
-        <div className="rounded-2xl border border-gray-200 bg-white p-4 sm:p-8 shadow-sm">
+        <div className="rounded-2xl border border-border bg-card p-4 sm:p-8 shadow-sm">
           <label className="mb-2 block text-sm font-medium text-gray-700">
             {ui.birthLabel}
           </label>
@@ -895,7 +895,7 @@ export default function DailyFortune({ locale }: Props) {
             value={birth}
             onChange={(e) => setBirth(e.target.value)}
             max={getToday()}
-            className="mb-6 w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-foreground shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+            className="mb-6 w-full rounded-xl border border-gray-300 bg-card px-4 py-3 text-foreground shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
           />
           <button
             onClick={handleSubmit}

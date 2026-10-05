@@ -141,7 +141,7 @@ export default function FinancialRatioExplorer({ locale }: Props) {
               key={r.id}
               onClick={() => setRatioId(r.id)}
               className={`rounded-full border px-3 py-1.5 text-sm font-semibold transition-colors ${
-                ratioId === r.id ? 'border-gray-900 bg-gray-900 text-white' : 'border-gray-200 bg-white text-gray-600 hover:border-gray-400'
+                ratioId === r.id ? 'border-gray-900 bg-gray-900 text-white' : 'border-border bg-card text-gray-600 hover:border-gray-400'
               }`}
             >
               {r.name[lang]}
@@ -151,7 +151,7 @@ export default function FinancialRatioExplorer({ locale }: Props) {
       </div>
 
       {/* formula + result */}
-      <div className="rounded-2xl border border-gray-200 bg-card/60 p-4">
+      <div className="rounded-2xl border border-border bg-card/60 p-4">
         <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-center">
           <span className="text-base font-bold text-gray-800">{ratio.name[lang]}</span>
           <span className="text-gray-400">=</span>
@@ -171,14 +171,14 @@ export default function FinancialRatioExplorer({ locale }: Props) {
 
       {/* statements */}
       <div className="grid gap-5 md:grid-cols-2">
-        <div className="rounded-2xl border border-gray-200 p-4">
+        <div className="rounded-2xl border border-border p-4">
           <h3 className="mb-2 text-sm font-black text-gray-800">{t.bs} <span className="font-normal text-gray-400">· {t.unit}</span></h3>
           <p className="mb-1 text-xs font-bold text-gray-400">{t.assets}</p>
           {renderTable('asset')}
           <p className="mb-1 mt-3 text-xs font-bold text-gray-400">{t.liabeq}</p>
           {renderTable('liabeq')}
         </div>
-        <div className="rounded-2xl border border-gray-200 p-4">
+        <div className="rounded-2xl border border-border p-4">
           <h3 className="mb-2 text-sm font-black text-gray-800">{t.is} <span className="font-normal text-gray-400">· {t.unit}</span></h3>
           {renderTable('is')}
         </div>

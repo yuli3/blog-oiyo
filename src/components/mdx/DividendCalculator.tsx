@@ -70,7 +70,7 @@ export default function DividendCalculator() {
   const initialValue = parseFloat(initialInvestment.replace(/,/g, '')) || 0;
 
   return (
-    <div className="my-5 sm:my-8 rounded-2xl border border-gray-200 bg-white p-4 sm:p-6 shadow-sm">
+    <div className="my-5 sm:my-8 rounded-2xl border border-border bg-card p-4 sm:p-6 shadow-sm">
       <h3 className="mb-6 text-xl font-bold text-foreground">배당 투자 수익 계산기</h3>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -192,7 +192,7 @@ export default function DividendCalculator() {
             </div>
           </div>
 
-          <div className="overflow-x-auto rounded-xl border border-gray-200">
+          <div className="overflow-x-auto rounded-xl border border-border">
             <table className="w-full text-xs">
               <thead className="bg-card">
                 <tr>

@@ -85,7 +85,7 @@ const TraditionalCosting: React.FC<{ locale: 'ko' | 'en' }> = ({ locale }) => {
         <NumField label={locale === 'ko' ? '생산량 (단위)' : 'Units Produced'} value={units} onChange={setUnits} unit={locale === 'ko' ? '개' : 'units'} />
       </div>
 
-      <div className="bg-white border border-green-200 rounded-2xl p-4">
+      <div className="bg-card border border-green-200 rounded-2xl p-4">
         <p className="text-sm font-bold text-green-800 mb-3">
           {locale === 'ko' ? '원가 계산 결과' : 'Cost Calculation Results'}
         </p>
@@ -182,7 +182,7 @@ const ABCCosting: React.FC<{ locale: 'ko' | 'en' }> = ({ locale }) => {
           oh_trad: bOH_Trad, unitCost_trad: bUnitCost_Trad,
         },
       ].map((p) => (
-        <div key={p.name} className="bg-white border border-green-200 rounded-2xl p-4">
+        <div key={p.name} className="bg-card border border-green-200 rounded-2xl p-4">
           <p className="text-sm font-bold text-green-800 mb-3">{p.name}</p>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
             <NumField label={locale === 'ko' ? '생산량' : 'Units'} value={p.units} onChange={p.setUnits} unit={locale === 'ko' ? '개' : 'units'} />
@@ -277,7 +277,7 @@ const BEPAnalysis: React.FC<{ locale: 'ko' | 'en' }> = ({ locale }) => {
             color: 'blue',
           },
         ].map((panel) => (
-          <div key={panel.title} className={`bg-white border border-${panel.color}-200 rounded-2xl p-4`}>
+          <div key={panel.title} className={`bg-card border border-${panel.color}-200 rounded-2xl p-4`}>
             <p className={`text-sm font-bold text-${panel.color}-800 mb-3`}>{panel.title}</p>
             <div className="space-y-0.5">
               {panel.rows.map((row) => (
@@ -297,7 +297,7 @@ const BEPAnalysis: React.FC<{ locale: 'ko' | 'en' }> = ({ locale }) => {
 
       {/* Visual BEP */}
       {bepUnits > 0 && currentSales > 0 && (
-        <div className="bg-white border border-green-200 rounded-2xl p-4">
+        <div className="bg-card border border-green-200 rounded-2xl p-4">
           <p className="text-xs font-bold text-slate-600 mb-3">
             {locale === 'ko' ? '손익분기 구간 시각화' : 'Break-Even Visualization'}
           </p>
@@ -359,7 +359,7 @@ export const CostAccountingSimulator: React.FC<{ locale?: 'ko' | 'en' }> = ({ lo
             className={`flex-1 py-2.5 rounded-xl text-xs font-bold border transition-colors ${
               activeTab === t.key
                 ? 'bg-green-600 text-white border-green-600'
-                : 'bg-white text-green-700 border-green-200 hover:bg-green-50'
+                : 'bg-card text-green-700 border-green-200 hover:bg-green-50'
             }`}
           >
             {locale === 'ko' ? t.ko : t.en}

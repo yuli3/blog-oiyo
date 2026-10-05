@@ -128,7 +128,7 @@ const PensionOptimizerCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale
                 onChange={(e) => setCurrentAge(e.target.value)}
                 min="18"
                 max="64"
-                className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+                className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
                 aria-label={locale === 'ko' ? '현재 나이' : 'Current Age'}
               />
             </div>
@@ -142,7 +142,7 @@ const PensionOptimizerCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale
                 onChange={(e) => setLifeExpectancy(e.target.value)}
                 min="65"
                 max="100"
-                className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+                className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
                 aria-label={locale === 'ko' ? '기대수명' : 'Life Expectancy'}
               />
             </div>
@@ -157,7 +157,7 @@ const PensionOptimizerCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale
               value={income}
               onChange={(e) => setIncome(e.target.value)}
               min="0"
-              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+              className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
               aria-label={locale === 'ko' ? '연간 총소득' : 'Annual Income'}
             />
             {result && (
@@ -176,7 +176,7 @@ const PensionOptimizerCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale
               value={nationalPension}
               onChange={(e) => setNationalPension(e.target.value)}
               min="0"
-              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+              className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
               aria-label={locale === 'ko' ? '국민연금 예상 수령액' : 'National Pension'}
             />
           </div>
@@ -190,7 +190,7 @@ const PensionOptimizerCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale
               value={irpBalance}
               onChange={(e) => setIrpBalance(e.target.value)}
               min="0"
-              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+              className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
               aria-label={locale === 'ko' ? 'IRP 잔액' : 'IRP Balance'}
             />
           </div>
@@ -205,7 +205,7 @@ const PensionOptimizerCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale
                 value={pensionMonthly}
                 onChange={(e) => setPensionMonthly(e.target.value)}
                 min="0"
-                className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+                className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
                 aria-label={locale === 'ko' ? '연금저축 월납입' : 'Pension Savings monthly'}
               />
               <p className="text-xs text-green-500">
@@ -221,7 +221,7 @@ const PensionOptimizerCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale
                 value={irpMonthly}
                 onChange={(e) => setIrpMonthly(e.target.value)}
                 min="0"
-                className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+                className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
                 aria-label={locale === 'ko' ? 'IRP 월납입' : 'IRP monthly'}
               />
               <p className="text-xs text-green-500">
@@ -232,7 +232,7 @@ const PensionOptimizerCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale
 
           <button
             onClick={reset}
-            className="w-full py-2 bg-white border border-green-300 hover:bg-green-50 text-green-700 font-bold rounded-xl transition-colors text-sm"
+            className="w-full py-2 bg-card border border-green-300 hover:bg-green-50 text-green-700 font-bold rounded-xl transition-colors text-sm"
             aria-label={locale === 'ko' ? '초기화' : 'Reset'}
           >
             {locale === 'ko' ? '다시 계산하기' : 'Reset'}
@@ -255,7 +255,7 @@ const PensionOptimizerCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale
                   </div>
                   <div className="h-2 bg-white/30 rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-white rounded-full transition-all"
+                      className="h-full bg-card rounded-full transition-all"
                       style={{ width: `${result.achievementPct}%` }}
                       role="progressbar"
                       aria-valuenow={result.achievementPct}
@@ -270,13 +270,13 @@ const PensionOptimizerCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                <div className="p-4 bg-white rounded-2xl border border-green-100 text-center">
+                <div className="p-4 bg-card rounded-2xl border border-green-100 text-center">
                   <p className="text-xs text-muted-foreground font-bold mb-1">
                     {locale === 'ko' ? '은퇴 후 월 예상 소득' : 'Monthly Income at Retire'}
                   </p>
                   <p className="text-xl font-bold text-green-700">{fmt(result.monthlyRetirementIncome)}원</p>
                 </div>
-                <div className="p-4 bg-white rounded-2xl border border-green-100 text-center">
+                <div className="p-4 bg-card rounded-2xl border border-green-100 text-center">
                   <p className="text-xs text-muted-foreground font-bold mb-1">
                     {locale === 'ko' ? '65세 시점 총 노후 자산' : 'Retirement Assets at 65'}
                   </p>

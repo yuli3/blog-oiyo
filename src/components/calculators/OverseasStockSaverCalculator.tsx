@@ -73,7 +73,7 @@ const OverseasStockSaverCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ loca
       : 'text-green-700';
 
   return (
-    <div className="not-prose my-7 sm:my-12 p-6 md:p-8 bg-gradient-to-br from-slate-50 to-gray-100 border border-slate-200 rounded-3xl shadow-xl">
+    <div className="not-prose my-7 sm:my-12 p-6 md:p-8 bg-gradient-to-br from-slate-50 to-gray-100 border border-border rounded-3xl shadow-xl">
       <h3 className="text-xl font-bold text-foreground mb-2">
         {ko ? '해외주식 절세 전략 계산기' : 'Overseas Stock Tax Saver'}
       </h3>
@@ -94,7 +94,7 @@ const OverseasStockSaverCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ loca
             onChange={(e) => { setRealizedGain(e.target.value); setCalculated(false); }}
             min="0"
             step="100000"
-            className="w-full p-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-400 outline-none"
+            className="w-full p-3 bg-card border border-border rounded-xl focus:ring-2 focus:ring-slate-400 outline-none"
           />
         </div>
 
@@ -123,7 +123,7 @@ const OverseasStockSaverCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ loca
         {calculated && (
           <div className="mt-4 space-y-4" aria-live="polite">
             {/* Current tax */}
-            <div className="bg-white rounded-xl border border-slate-200 p-4 flex items-center justify-between">
+            <div className="bg-card rounded-xl border border-border p-4 flex items-center justify-between">
               <span className="text-sm font-bold text-slate-700">
                 {ko ? '현재 납부 예상 세금' : 'Estimated Tax (now)'}
               </span>

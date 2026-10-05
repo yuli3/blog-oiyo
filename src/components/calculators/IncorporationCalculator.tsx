@@ -156,7 +156,7 @@ const IncorporationCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 
   };
 
   return (
-    <div className="not-prose my-7 sm:my-12 p-6 md:p-8 bg-gradient-to-br from-slate-50 to-gray-50 border border-slate-200 rounded-3xl shadow-xl">
+    <div className="not-prose my-7 sm:my-12 p-6 md:p-8 bg-gradient-to-br from-slate-50 to-gray-50 border border-border rounded-3xl shadow-xl">
       <h3 className="text-xl font-bold text-foreground mb-6">{t.title}</h3>
 
       <div className="grid md:grid-cols-2 gap-5 sm:gap-8">
@@ -169,7 +169,7 @@ const IncorporationCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 
               value={revenue}
               onChange={(e) => setRevenue(e.target.value)}
               min="0"
-              className="w-full p-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-400 outline-none"
+              className="w-full p-3 bg-card border border-border rounded-xl focus:ring-2 focus:ring-slate-400 outline-none"
             />
           </div>
           <div className="space-y-1">
@@ -179,7 +179,7 @@ const IncorporationCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 
               value={expenses}
               onChange={(e) => setExpenses(e.target.value)}
               min="0"
-              className="w-full p-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-400 outline-none"
+              className="w-full p-3 bg-card border border-border rounded-xl focus:ring-2 focus:ring-slate-400 outline-none"
             />
           </div>
           <div className="space-y-1">
@@ -189,7 +189,7 @@ const IncorporationCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 
               value={founderSalary}
               onChange={(e) => setFounderSalary(e.target.value)}
               min="0"
-              className="w-full p-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-400 outline-none"
+              className="w-full p-3 bg-card border border-border rounded-xl focus:ring-2 focus:ring-slate-400 outline-none"
             />
           </div>
 
@@ -228,7 +228,7 @@ const IncorporationCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 
               </div>
 
               {/* Individual */}
-              <div className={`bg-white rounded-2xl border-2 p-4 space-y-2 ${result.betterOption === 'individual' ? 'border-rose-400' : 'border-slate-100'}`}>
+              <div className={`bg-card rounded-2xl border-2 p-4 space-y-2 ${result.betterOption === 'individual' ? 'border-rose-400' : 'border-slate-100'}`}>
                 <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">{t.individual}</p>
                 <div className="flex justify-between">
                   <span className="text-xs text-slate-400">{t.taxBase}</span>
@@ -245,7 +245,7 @@ const IncorporationCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 
               </div>
 
               {/* Corporation */}
-              <div className={`bg-white rounded-2xl border-2 p-4 space-y-2 ${result.betterOption === 'corporation' ? 'border-blue-400' : 'border-slate-100'}`}>
+              <div className={`bg-card rounded-2xl border-2 p-4 space-y-2 ${result.betterOption === 'corporation' ? 'border-blue-400' : 'border-slate-100'}`}>
                 <p className="text-xs font-bold uppercase tracking-widest text-blue-600">{t.corporation}</p>
                 <div className="flex justify-between">
                   <span className="text-xs text-slate-400">{t.taxBase}</span>
@@ -268,7 +268,7 @@ const IncorporationCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 
               <p className="text-xs text-slate-400">{t.tip}</p>
             </>
           ) : (
-            <div className="flex flex-col items-center justify-center h-40 border-2 border-dashed border-slate-200 rounded-2xl text-slate-300">
+            <div className="flex flex-col items-center justify-center h-40 border-2 border-dashed border-border rounded-2xl text-slate-300">
               <p className="text-sm font-bold text-slate-400">
                 {locale === 'ko' ? '정보를 입력하고 계산하세요' : 'Enter info and calculate'}
               </p>

@@ -536,7 +536,7 @@ export default function BabyFoodScheduler({ locale }: Props) {
       </div>
 
       {/* Slider */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-5 space-y-4">
+      <div className="rounded-2xl border border-border bg-card p-5 space-y-4">
         <div>
           <div className="flex justify-between items-center mb-2">
             <label className="text-sm font-medium text-gray-700">{t.sliderLabel}</label>
@@ -573,18 +573,18 @@ export default function BabyFoodScheduler({ locale }: Props) {
 
       {/* Quick stats */}
       <div className="grid grid-cols-2 gap-4">
-        <div className={`rounded-xl border ${borderClass} bg-white p-4 text-center`}>
+        <div className={`rounded-xl border ${borderClass} bg-card p-4 text-center`}>
           <div className="text-2xl font-bold text-foreground">{stage.timesPerDay}회</div>
           <div className="text-xs text-muted-foreground mt-1">{t.timesPerDay}</div>
         </div>
-        <div className={`rounded-xl border ${borderClass} bg-white p-4 text-center`}>
+        <div className={`rounded-xl border ${borderClass} bg-card p-4 text-center`}>
           <div className="text-2xl font-bold text-foreground">{stage.amountPerMealMl}ml</div>
           <div className="text-xs text-muted-foreground mt-1">{t.amountPerMeal}</div>
         </div>
       </div>
 
       {/* Texture */}
-      <div className={`rounded-xl border ${borderClass} bg-white p-4`}>
+      <div className={`rounded-xl border ${borderClass} bg-card p-4`}>
         <div className="text-sm font-semibold text-gray-700 mb-1">{t.texture}</div>
         <p className="text-sm text-gray-600">{stage.texture[locale] ?? stage.texture.en}</p>
       </div>

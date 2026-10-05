@@ -105,7 +105,7 @@ const GiftTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
               value={giftAmount}
               onChange={(e) => setGiftAmount(e.target.value)}
               min="0"
-              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+              className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
               aria-label={locale === 'ko' ? '증여 금액' : 'Gift Amount'}
             />
           </div>
@@ -117,7 +117,7 @@ const GiftTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
             <select
               value={relationship}
               onChange={(e) => setRelationship(e.target.value)}
-              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+              className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
               aria-label={locale === 'ko' ? '관계' : 'Relationship'}
             >
               {Object.entries(RELATIONSHIP_LABELS).map(([key, label]) => (
@@ -138,7 +138,7 @@ const GiftTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
               value={pastGifts}
               onChange={(e) => setPastGifts(e.target.value)}
               min="0"
-              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+              className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
               aria-label={locale === 'ko' ? '이전 증여 합계' : 'Prior gifts'}
             />
             <p className="text-xs text-green-500">
@@ -162,7 +162,7 @@ const GiftTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
             </button>
             <button
               onClick={reset}
-              className="px-5 py-3 bg-white border border-green-300 hover:bg-green-50 text-green-700 font-bold rounded-xl transition-colors"
+              className="px-5 py-3 bg-card border border-green-300 hover:bg-green-50 text-green-700 font-bold rounded-xl transition-colors"
               aria-label={locale === 'ko' ? '초기화' : 'Reset'}
             >
               {locale === 'ko' ? '초기화' : 'Reset'}
@@ -181,7 +181,7 @@ const GiftTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
                 <p className="text-4xl font-bold">{fmt(result.finalTax)}원</p>
               </div>
 
-              <div className="space-y-2 p-5 bg-white rounded-2xl border border-green-100 text-sm">
+              <div className="space-y-2 p-5 bg-card rounded-2xl border border-green-100 text-sm">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">{locale === 'ko' ? '증여 금액 합계' : 'Total Gift'}</span>
                   <span className="font-bold">{fmt(result.totalGiftAmount)}원</span>
@@ -226,7 +226,7 @@ const GiftTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
       </div>
 
       {/* 공제 한도 안내 */}
-      <div className="mt-5 sm:mt-8 p-5 bg-white rounded-2xl border border-green-100">
+      <div className="mt-5 sm:mt-8 p-5 bg-card rounded-2xl border border-green-100">
         <p className="text-sm font-bold text-green-800 mb-3">
           {locale === 'ko' ? '2024년 증여세 공제 한도 (10년 단위)' : '2024 Gift Tax Deduction Limits (per 10 years)'}
         </p>

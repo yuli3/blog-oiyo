@@ -118,7 +118,7 @@ export const TypingSpeedTest: React.FC = () => {
                         <Trophy className="mx-auto mb-2 text-yellow-300" size={32} />
                         <h4 className="text-xl font-bold mb-1">테스트 완료!</h4>
                         <p className="text-blue-100 text-sm">기록: {wpm} WPM | 정확도 {accuracy}%</p>
-                        <Button onClick={reset} className="mt-4 bg-white text-blue-600 hover:bg-slate-100 font-bold px-4 sm:px-8 rounded-full">다시 도전</Button>
+                        <Button onClick={reset} className="mt-4 bg-card text-blue-600 hover:bg-slate-100 font-bold px-4 sm:px-8 rounded-full">다시 도전</Button>
                     </div>
                 )}
             </div>
@@ -170,7 +170,7 @@ export const PrisonersDilemma: React.FC = () => {
     };
 
     return (
-        <Card className="p-4 sm:p-8 bg-white border-slate-200 shadow-xl mt-5 sm:mt-8">
+        <Card className="p-4 sm:p-8 bg-card border-border shadow-xl mt-5 sm:mt-8">
             <div className="flex items-center justify-between mb-5 sm:mb-8 border-b pb-4">
                 <h3 className="text-xl font-bold flex items-center gap-2">
                     <span className="p-1 px-2 bg-slate-900 text-white rounded text-sm">GAME THEORY</span>

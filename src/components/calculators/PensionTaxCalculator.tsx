@@ -91,7 +91,7 @@ const PensionTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko
                 className={`flex-1 py-2 rounded-xl text-sm font-bold border transition-colors ${
                   incomeType === t
                     ? 'bg-rose-600 text-white border-rose-600'
-                    : 'bg-white text-rose-700 border-rose-200 hover:bg-rose-50'
+                    : 'bg-card text-rose-700 border-rose-200 hover:bg-rose-50'
                 }`}
               >
                 {t === 'earned'
@@ -116,7 +116,7 @@ const PensionTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko
             value={annualIncome}
             onChange={(e) => setAnnualIncome(e.target.value)}
             min="0"
-            className="w-full p-3 bg-white border border-rose-200 rounded-xl focus:ring-2 focus:ring-rose-400 outline-none"
+            className="w-full p-3 bg-card border border-rose-200 rounded-xl focus:ring-2 focus:ring-rose-400 outline-none"
           />
         </div>
 
@@ -130,7 +130,7 @@ const PensionTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko
               value={pensionSavings}
               onChange={(e) => setPensionSavings(e.target.value)}
               min="0"
-              className="w-full p-3 bg-white border border-rose-200 rounded-xl focus:ring-2 focus:ring-rose-400 outline-none"
+              className="w-full p-3 bg-card border border-rose-200 rounded-xl focus:ring-2 focus:ring-rose-400 outline-none"
             />
             <p className="text-xs text-rose-400">{ko ? '공제한도: 600만원' : 'Limit: ₩6M'}</p>
           </div>
@@ -143,7 +143,7 @@ const PensionTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko
               value={irpDeposit}
               onChange={(e) => setIrpDeposit(e.target.value)}
               min="0"
-              className="w-full p-3 bg-white border border-rose-200 rounded-xl focus:ring-2 focus:ring-rose-400 outline-none"
+              className="w-full p-3 bg-card border border-rose-200 rounded-xl focus:ring-2 focus:ring-rose-400 outline-none"
             />
             <p className="text-xs text-rose-400">{ko ? '합산한도: 900만원' : 'Combined limit: ₩9M'}</p>
           </div>
@@ -164,7 +164,7 @@ const PensionTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko
           </button>
           <button
             onClick={reset}
-            className="px-5 py-3 bg-white border border-rose-300 hover:bg-rose-50 text-rose-700 font-bold rounded-xl transition-colors"
+            className="px-5 py-3 bg-card border border-rose-300 hover:bg-rose-50 text-rose-700 font-bold rounded-xl transition-colors"
           >
             {ko ? '초기화' : 'Reset'}
           </button>
@@ -191,7 +191,7 @@ const PensionTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko
                 { label: ko ? '연금저축 인정액' : 'Pension Recognized', value: fmt(result.pensionRecognized) },
                 { label: ko ? 'IRP 인정액' : 'IRP Recognized', value: fmt(result.irpRecognized) },
               ].map((item) => (
-                <div key={item.label} className="bg-white rounded-xl p-3 border border-rose-100">
+                <div key={item.label} className="bg-card rounded-xl p-3 border border-rose-100">
                   <p className="text-xs text-rose-400 font-semibold mb-1">{item.label}</p>
                   <p className="text-sm font-bold text-rose-900">{item.value}</p>
                 </div>

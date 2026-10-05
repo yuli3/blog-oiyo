@@ -63,7 +63,7 @@ export function LegalInterestCalc({ locale = 'ko' }: { locale?: 'ko' | 'en' | 'j
   }[L];
 
   return (
-    <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-5 sm:mt-8">
+    <Card className="p-4 sm:p-6 bg-card border-border shadow-xl mt-5 sm:mt-8">
       <div className="space-y-5">
         <div className="flex items-center justify-between">
           <div>
@@ -71,7 +71,7 @@ export function LegalInterestCalc({ locale = 'ko' }: { locale?: 'ko' | 'en' | 'j
             <p className="text-xs text-slate-400 mt-0.5">{copy.calcNote}</p>
           </div>
           <button onClick={() => { navigator.clipboard.writeText(copyText); setCopied(true); setTimeout(() => setCopied(false), 2000); }}
-            className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full border border-slate-200 hover:border-slate-300 transition-colors">
+            className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full border border-border hover:border-slate-300 transition-colors">
             {copied ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
             {copied ? (L === 'ko' ? '복사됨' : 'Copied') : (L === 'ko' ? '결과 복사' : 'Copy')}
           </button>
@@ -81,19 +81,19 @@ export function LegalInterestCalc({ locale = 'ko' }: { locale?: 'ko' | 'en' | 'j
           <div className="space-y-1">
             <label className="text-sm font-bold text-slate-600">{copy.principal}</label>
             <input type="number" min={0} value={principal || ''} onChange={e => setPrincipal(Math.max(0, parseInt(e.target.value) || 0))}
-              className="w-full border-2 border-slate-200 rounded-xl px-4 py-2.5 font-semibold focus:border-blue-400 outline-none transition-colors" />
+              className="w-full border-2 border-border rounded-xl px-4 py-2.5 font-semibold focus:border-blue-400 outline-none transition-colors" />
             <p className="text-xs text-slate-400">{fmtKRW(principal)}</p>
           </div>
           <div className="space-y-3">
             <div className="space-y-1">
               <label className="text-sm font-bold text-slate-600">{copy.start}</label>
               <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)} max={endDate}
-                className="w-full border-2 border-slate-200 rounded-xl px-4 py-2.5 font-semibold focus:border-blue-400 outline-none transition-colors" />
+                className="w-full border-2 border-border rounded-xl px-4 py-2.5 font-semibold focus:border-blue-400 outline-none transition-colors" />
             </div>
             <div className="space-y-1">
               <label className="text-sm font-bold text-slate-600">{copy.end}</label>
               <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)} min={startDate}
-                className="w-full border-2 border-slate-200 rounded-xl px-4 py-2.5 font-semibold focus:border-blue-400 outline-none transition-colors" />
+                className="w-full border-2 border-border rounded-xl px-4 py-2.5 font-semibold focus:border-blue-400 outline-none transition-colors" />
             </div>
           </div>
         </div>
@@ -104,7 +104,7 @@ export function LegalInterestCalc({ locale = 'ko' }: { locale?: 'ko' | 'en' | 'j
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {RATE_TYPES.map(r => (
               <button key={r.id} onClick={() => setRateId(r.id)}
-                className={`py-2 px-3 rounded-xl text-sm font-bold border-2 transition-colors text-left ${rateId === r.id ? 'bg-blue-50 border-blue-400 text-blue-700' : 'border-slate-200 text-muted-foreground hover:border-slate-300'}`}>
+                className={`py-2 px-3 rounded-xl text-sm font-bold border-2 transition-colors text-left ${rateId === r.id ? 'bg-blue-50 border-blue-400 text-blue-700' : 'border-border text-muted-foreground hover:border-slate-300'}`}>
                 <span className="block">{r[L]}</span>
                 {r.rate > 0 && <span className="text-xs font-normal opacity-70">{r.rate}%</span>}
               </button>
@@ -114,7 +114,7 @@ export function LegalInterestCalc({ locale = 'ko' }: { locale?: 'ko' | 'en' | 'j
             <div className="flex items-center gap-2 mt-2">
               <input type="number" min={0} max={99} step={0.1} value={customRate}
                 onChange={e => setCustomRate(parseFloat(e.target.value) || 0)}
-                className="w-32 border-2 border-slate-200 rounded-xl px-3 py-2 font-semibold focus:border-blue-400 outline-none" />
+                className="w-32 border-2 border-border rounded-xl px-3 py-2 font-semibold focus:border-blue-400 outline-none" />
               <Percent className="w-4 h-4 text-slate-400" />
             </div>
           )}
@@ -225,7 +225,7 @@ export function NutritionCalculator({ locale = 'ko' }: { locale?: 'ko' | 'en' | 
   ];
 
   return (
-    <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-5 sm:mt-8">
+    <Card className="p-4 sm:p-6 bg-card border-border shadow-xl mt-5 sm:mt-8">
       <div className="space-y-5">
         <div>
           <h3 className="text-lg font-black text-foreground">{copy.title}</h3>
@@ -236,12 +236,12 @@ export function NutritionCalculator({ locale = 'ko' }: { locale?: 'ko' | 'en' | 
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
           <input value={query} onChange={e => setQuery(e.target.value)} placeholder={copy.placeholder}
-            className="w-full pl-10 pr-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:border-emerald-400 outline-none transition-colors" />
+            className="w-full pl-10 pr-4 py-2.5 border-2 border-border rounded-xl text-sm focus:border-emerald-400 outline-none transition-colors" />
         </div>
 
         {/* Search results */}
         {query && (
-          <div className="bg-card rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-card rounded-xl border border-border overflow-hidden">
             {filtered.length === 0 ? (
               <p className="text-sm text-slate-400 p-3 text-center">{L === 'ko' ? '검색 결과 없음' : 'No results'}</p>
             ) : (
@@ -277,7 +277,7 @@ export function NutritionCalculator({ locale = 'ko' }: { locale?: 'ko' | 'en' | 
                 <div className="flex items-center gap-1.5">
                   <input type="number" value={grams} min={0} max={2000}
                     onChange={e => updateGrams(idx, parseInt(e.target.value) || 0)}
-                    className="w-16 border border-slate-200 rounded-lg px-2 py-1.5 text-sm font-bold text-center focus:border-emerald-400 outline-none" />
+                    className="w-16 border border-border rounded-lg px-2 py-1.5 text-sm font-bold text-center focus:border-emerald-400 outline-none" />
                   <span className="text-xs text-slate-400">{copy.grams}</span>
                 </div>
                 <button onClick={() => remove(idx)} className="p-1 hover:bg-rose-50 rounded-lg text-slate-300 hover:text-rose-400 transition-colors">
@@ -302,7 +302,7 @@ export function NutritionCalculator({ locale = 'ko' }: { locale?: 'ko' | 'en' | 
                     <span className="font-bold text-slate-600">{label}</span>
                     <span className="font-bold text-slate-800">{Math.round(val * 10) / 10}{unit}</span>
                   </div>
-                  <div className="h-2 w-full rounded-full bg-white overflow-hidden">
+                  <div className="h-2 w-full rounded-full bg-card overflow-hidden">
                     <div className={`h-full rounded-full transition-all duration-500 ${color}`} style={{ width: `${Math.min(100, (val / max) * 100)}%` }} />
                   </div>
                 </div>

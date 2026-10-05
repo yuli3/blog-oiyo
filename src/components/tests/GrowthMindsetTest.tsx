@@ -290,11 +290,11 @@ export default function GrowthMindsetTest({ locale: localeProp }: Props) {
           </div>
         </div>
 
-        <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
+        <div className="rounded-xl border border-gray-100 bg-card p-5 shadow-sm">
           <p className="text-sm text-gray-700 leading-relaxed">{td.description}</p>
         </div>
 
-        <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
+        <div className="rounded-xl border border-gray-100 bg-card p-5 shadow-sm">
           <h3 className="mb-3 font-semibold text-gray-700">🔍 {tx.traits}</h3>
           <div className="flex flex-wrap gap-2">
             {td.traits.map((trait, i) => (
@@ -305,7 +305,7 @@ export default function GrowthMindsetTest({ locale: localeProp }: Props) {
           </div>
         </div>
 
-        <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
+        <div className="rounded-xl border border-gray-100 bg-card p-5 shadow-sm">
           <ResponsiveContainer width="100%" height={120}>
             <BarChart data={chartData} layout="vertical" margin={{ left: 16 }}>
               <XAxis type="number" domain={[0, maxScore]} tick={{ fontSize: 11 }} />
@@ -322,7 +322,7 @@ export default function GrowthMindsetTest({ locale: localeProp }: Props) {
         </div>
 
         <div className="flex gap-3">
-          <button onClick={restart} className="flex-1 rounded-xl border border-gray-200 py-3 text-sm font-medium text-gray-700 transition hover:bg-card">
+          <button onClick={restart} className="flex-1 rounded-xl border border-border py-3 text-sm font-medium text-gray-700 transition hover:bg-card">
             {tx.restart}
           </button>
           <button onClick={share} className="flex-1 rounded-xl py-3 text-sm font-medium text-white transition" style={{ backgroundColor: tp.color }}>
@@ -353,14 +353,14 @@ export default function GrowthMindsetTest({ locale: localeProp }: Props) {
         <span className="text-sm text-muted-foreground">{tx.progress(idx + 1, questions.length)}</span>
       </div>
 
-      <div className="rounded-2xl border border-gray-100 bg-white p-4 sm:p-6 shadow-sm">
+      <div className="rounded-2xl border border-gray-100 bg-card p-4 sm:p-6 shadow-sm">
         <p className="mb-6 text-center text-lg font-medium text-gray-800">{q[locale]}</p>
         <div className="grid grid-cols-2 gap-3">
           {scoreOptions.map((opt) => (
             <button
               key={opt.value}
               onClick={() => pick(opt.value)}
-              className="rounded-xl border border-gray-200 px-4 py-4 text-center text-sm font-medium text-gray-700 transition hover:border-green-300 hover:bg-green-50"
+              className="rounded-xl border border-border px-4 py-4 text-center text-sm font-medium text-gray-700 transition hover:border-green-300 hover:bg-green-50"
             >
               {opt.label}
             </button>

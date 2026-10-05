@@ -114,7 +114,7 @@ const LatteFactorCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'ko' })
               value={dailyCost}
               onChange={(e) => setDailyCost(e.target.value)}
               min="0"
-              className="w-full p-3 bg-white border border-amber-200 rounded-xl focus:ring-2 focus:ring-amber-400 outline-none"
+              className="w-full p-3 bg-card border border-amber-200 rounded-xl focus:ring-2 focus:ring-amber-400 outline-none"
               aria-label={amountLabel}
             />
             <p className="text-xs text-amber-500">
@@ -129,7 +129,7 @@ const LatteFactorCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'ko' })
             <select
               value={frequency}
               onChange={(e) => setFrequency(e.target.value)}
-              className="w-full p-3 bg-white border border-amber-200 rounded-xl focus:ring-2 focus:ring-amber-400 outline-none"
+              className="w-full p-3 bg-card border border-amber-200 rounded-xl focus:ring-2 focus:ring-amber-400 outline-none"
               aria-label={frequencyLabel}
             >
               <option value="daily">{dailyLabel}</option>
@@ -149,7 +149,7 @@ const LatteFactorCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'ko' })
               step="0.1"
               min="0"
               max="30"
-              className="w-full p-3 bg-white border border-amber-200 rounded-xl focus:ring-2 focus:ring-amber-400 outline-none"
+              className="w-full p-3 bg-card border border-amber-200 rounded-xl focus:ring-2 focus:ring-amber-400 outline-none"
               aria-label={rateLabel}
             />
           </div>
@@ -170,7 +170,7 @@ const LatteFactorCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'ko' })
             </button>
             <button
               onClick={reset}
-              className="px-5 py-3 bg-white border border-amber-300 hover:bg-amber-50 text-amber-700 font-bold rounded-xl transition-colors"
+              className="px-5 py-3 bg-card border border-amber-300 hover:bg-amber-50 text-amber-700 font-bold rounded-xl transition-colors"
               aria-label={resetLabel}
             >
               {resetLabel}
@@ -182,7 +182,7 @@ const LatteFactorCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'ko' })
         <div className="space-y-4">
           {result ? (
             <>
-              <div className="p-4 bg-white rounded-2xl border border-amber-100">
+              <div className="p-4 bg-card rounded-2xl border border-amber-100">
                 <p className="text-xs text-amber-600 font-bold mb-1">
                   {monthlyLabel}
                 </p>
@@ -192,7 +192,7 @@ const LatteFactorCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'ko' })
               {/* WHY 2026-10-04: this panel is half the page width on desktop; three columns split long localized KRW amounts into unreadable fragments. */}
               <div className="grid grid-cols-1 gap-3">
                 {result.results.map((r) => (
-                  <div key={r.years} className="p-4 bg-white rounded-2xl border border-amber-100 text-center">
+                  <div key={r.years} className="p-4 bg-card rounded-2xl border border-amber-100 text-center">
                     <p className="text-xs text-amber-600 font-bold mb-1">{yearsLabel.replace('{n}', String(r.years))}</p>
                     <p className="text-xl font-bold text-amber-800 break-words">{fmt(r.total)}</p>
                     <p className="text-xs text-green-500 mt-1 break-words">{returnLabel}: +{fmt(r.interest)}</p>

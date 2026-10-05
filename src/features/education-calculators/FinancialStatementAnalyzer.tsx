@@ -70,7 +70,7 @@ const InputRow: React.FC<InputRowProps> = ({ label, value, onChange, unit = '억
           type="number"
           value={value}
           onChange={e => onChange(Number(e.target.value))}
-          className="w-24 text-right text-sm bg-white border border-emerald-200 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+          className="w-24 text-right text-sm bg-card border border-emerald-200 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-emerald-400"
           aria-label={label}
         />
       )}
@@ -172,7 +172,7 @@ interface FormulaFlowCardProps {
 }
 
 const FormulaFlowCard: React.FC<FormulaFlowCardProps> = ({ title, formula, takeaway, nodes, result }) => (
-  <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+  <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
     <div className="flex items-start justify-between gap-3">
       <div>
         <h5 className="text-sm font-bold text-slate-800">{title}</h5>
@@ -337,7 +337,7 @@ export const FinancialStatementAnalyzer: React.FC = () => {
   // ── Render ─────────────────────────────────────────────────────────────────
 
   return (
-    <Card className="bg-white border border-emerald-100 shadow-xl rounded-2xl overflow-hidden mt-5 sm:mt-8">
+    <Card className="bg-card border border-emerald-100 shadow-xl rounded-2xl overflow-hidden mt-5 sm:mt-8">
       {/* Header */}
       <div className="bg-emerald-700 px-4 sm:px-6 py-5">
         <h3 className="text-lg font-bold text-white">재무제표 분석기</h3>
@@ -502,15 +502,15 @@ export const FinancialStatementAnalyzer: React.FC = () => {
               <div className="rounded-2xl border border-emerald-100 bg-emerald-50/60 p-4">
                 <p className="text-xs font-bold text-emerald-800">듀퐁 분석: 순이익률 × 총자산회전율 × 레버리지 = ROE</p>
                 <div className="mt-3 grid gap-3 sm:grid-cols-4">
-                  <div className="rounded-xl bg-white p-3">
+                  <div className="rounded-xl bg-card p-3">
                     <p className="text-[10px] font-bold text-slate-400">순이익률</p>
                     <p className="text-lg font-bold text-violet-700">{derived.netMargin.toFixed(1)}%</p>
                   </div>
-                  <div className="rounded-xl bg-white p-3">
+                  <div className="rounded-xl bg-card p-3">
                     <p className="text-[10px] font-bold text-slate-400">총자산회전율</p>
                     <p className="text-lg font-bold text-sky-700">{derived.assetTurnover.toFixed(2)}회</p>
                   </div>
-                  <div className="rounded-xl bg-white p-3">
+                  <div className="rounded-xl bg-card p-3">
                     <p className="text-[10px] font-bold text-slate-400">레버리지</p>
                     <p className="text-lg font-bold text-amber-700">{derived.equityMultiplier.toFixed(2)}배</p>
                   </div>
@@ -586,7 +586,7 @@ export const FinancialStatementAnalyzer: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="rounded-2xl bg-card border border-slate-200 p-4 mt-2">
+                <div className="rounded-2xl bg-card border border-border p-4 mt-2">
                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">현금흐름 패턴 해석</p>
                   <p className="text-xs text-slate-600 leading-relaxed">
                     {cfDerived.operatingCF > 0 && cfDerived.investingCF < 0 && cfDerived.financingCF < 0
@@ -744,7 +744,7 @@ const TrendYearInput: React.FC<TrendYearInputProps> = ({ year, idx, onChange, lo
   ];
 
   return (
-    <div className="bg-white border border-emerald-200 rounded-2xl p-4">
+    <div className="bg-card border border-emerald-200 rounded-2xl p-4">
       <div className="mb-3">
         <label className="text-xs text-muted-foreground block mb-1">{locale === 'ko' ? '연도' : 'Year'}</label>
         <input
@@ -812,7 +812,7 @@ export const FinancialRatioTrendAnalyzer: React.FC<{ locale?: 'ko' | 'en' }> = (
             className={`flex-1 py-2.5 rounded-xl text-sm font-bold border transition-colors ${
               activeView === key
                 ? 'bg-emerald-600 text-white border-emerald-600'
-                : 'bg-white text-emerald-700 border-emerald-200 hover:bg-emerald-50'
+                : 'bg-card text-emerald-700 border-emerald-200 hover:bg-emerald-50'
             }`}
           >
             {locale === 'ko' ? ko : en}
@@ -849,7 +849,7 @@ export const FinancialRatioTrendAnalyzer: React.FC<{ locale?: 'ko' | 'en' }> = (
             const trendPositive = ratio.higherIsBetter ? trend >= 0 : trend <= 0;
 
             return (
-              <div key={ratio.name} className="bg-white border border-emerald-100 rounded-2xl p-4">
+              <div key={ratio.name} className="bg-card border border-emerald-100 rounded-2xl p-4">
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-sm font-bold text-slate-800">
                     {locale === 'ko' ? ratio.name : ratio.nameEn}

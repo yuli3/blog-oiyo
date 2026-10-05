@@ -83,7 +83,7 @@ const CulturalGreetingGuide: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'k
                         onClick={() => setSelectedCountry(cid)}
                         className={`group flex flex-col items-center gap-2 p-4 rounded-2xl transition-all ${
                             selectedCountry === cid
-                                ? 'bg-white shadow-lg scale-110 ring-2 ring-orange-400'
+                                ? 'bg-card shadow-lg scale-110 ring-2 ring-orange-400'
                                 : 'hover:bg-white/50'
                         }`}
                     >

@@ -132,7 +132,7 @@ const LegalInterestCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 
             value={principal}
             onChange={(e) => setPrincipal(e.target.value)}
             min="0"
-            className="w-full p-3 bg-white border border-amber-200 rounded-xl focus:ring-2 focus:ring-amber-400 outline-none"
+            className="w-full p-3 bg-card border border-amber-200 rounded-xl focus:ring-2 focus:ring-amber-400 outline-none"
           />
         </div>
 
@@ -143,7 +143,7 @@ const LegalInterestCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="w-full p-3 bg-white border border-amber-200 rounded-xl focus:ring-2 focus:ring-amber-400 outline-none"
+              className="w-full p-3 bg-card border border-amber-200 rounded-xl focus:ring-2 focus:ring-amber-400 outline-none"
             />
           </div>
           <div className="space-y-1">
@@ -152,7 +152,7 @@ const LegalInterestCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 
               type="date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="w-full p-3 bg-white border border-amber-200 rounded-xl focus:ring-2 focus:ring-amber-400 outline-none"
+              className="w-full p-3 bg-card border border-amber-200 rounded-xl focus:ring-2 focus:ring-amber-400 outline-none"
             />
           </div>
         </div>
@@ -167,7 +167,7 @@ const LegalInterestCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 
                 className={`p-3 rounded-xl border-2 text-left transition-colors ${
                   rateType === id
                     ? 'border-amber-500 bg-amber-50'
-                    : 'border-slate-200 bg-white hover:border-amber-300'
+                    : 'border-border bg-card hover:border-amber-300'
                 }`}
               >
                 <span className="block text-sm font-bold text-amber-800">
@@ -186,7 +186,7 @@ const LegalInterestCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 
                 onChange={(e) => setCustomRate(e.target.value)}
                 min="0"
                 step="0.1"
-                className="w-full p-3 bg-white border border-amber-200 rounded-xl focus:ring-2 focus:ring-amber-400 outline-none"
+                className="w-full p-3 bg-card border border-amber-200 rounded-xl focus:ring-2 focus:ring-amber-400 outline-none"
               />
             </div>
           )}
@@ -207,7 +207,7 @@ const LegalInterestCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 
           </button>
           <button
             onClick={reset}
-            className="px-5 py-3 bg-white border border-amber-300 hover:bg-amber-50 text-amber-700 font-bold rounded-xl transition-colors"
+            className="px-5 py-3 bg-card border border-amber-300 hover:bg-amber-50 text-amber-700 font-bold rounded-xl transition-colors"
           >
             {t.reset}
           </button>
@@ -226,7 +226,7 @@ const LegalInterestCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 
                 { label: t.rateResultLabel, value: `${liveRate}%` },
                 { label: t.totalLabel, value: fmt(result.total) + (locale === 'ko' ? '원' : '') },
               ].map((item) => (
-                <div key={item.label} className="bg-white rounded-2xl border border-amber-100 p-4 text-center">
+                <div key={item.label} className="bg-card rounded-2xl border border-amber-100 p-4 text-center">
                   <p className="text-xs text-muted-foreground font-bold mb-1">{item.label}</p>
                   <p className="text-sm font-bold text-amber-700">{item.value}</p>
                 </div>

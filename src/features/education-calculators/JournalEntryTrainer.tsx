@@ -408,7 +408,7 @@ export const JournalEntryTrainer: React.FC<JournalEntryTrainerProps> = ({ locale
       </div>
 
       {/* Scenario */}
-      <div className="bg-white border border-green-200 rounded-2xl p-5 mb-6">
+      <div className="bg-card border border-green-200 rounded-2xl p-5 mb-6">
         <p className="text-xs font-bold text-green-600 mb-1">
           {locale === 'ko' ? `문제 ${state.currentIdx + 1}` : `Question ${state.currentIdx + 1}`}
         </p>
@@ -426,7 +426,7 @@ export const JournalEntryTrainer: React.FC<JournalEntryTrainerProps> = ({ locale
       {/* Entry inputs */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         {/* Debit */}
-        <div className="bg-white border border-green-200 rounded-2xl p-4">
+        <div className="bg-card border border-green-200 rounded-2xl p-4">
           <label className="block text-xs font-bold text-green-700 mb-2" htmlFor="debit-account">
             {locale === 'ko' ? '차변 계정 (Dr)' : 'Debit Account (Dr)'}
           </label>
@@ -435,7 +435,7 @@ export const JournalEntryTrainer: React.FC<JournalEntryTrainerProps> = ({ locale
             value={state.selectedDebit}
             onChange={(e) => dispatch({ type: 'SELECT_DEBIT', payload: e.target.value })}
             disabled={state.checked}
-            className="w-full border border-green-200 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-400 disabled:opacity-60"
+            className="w-full border border-green-200 rounded-xl px-3 py-2 text-sm bg-card focus:outline-none focus:ring-2 focus:ring-green-400 disabled:opacity-60"
             aria-label={locale === 'ko' ? '차변 계정 선택' : 'Select debit account'}
           >
             <option value="">{locale === 'ko' ? '-- 계정 선택 --' : '-- Select Account --'}</option>
@@ -446,7 +446,7 @@ export const JournalEntryTrainer: React.FC<JournalEntryTrainerProps> = ({ locale
         </div>
 
         {/* Credit */}
-        <div className="bg-white border border-green-200 rounded-2xl p-4">
+        <div className="bg-card border border-green-200 rounded-2xl p-4">
           <label className="block text-xs font-bold text-green-700 mb-2" htmlFor="credit-account">
             {locale === 'ko' ? '대변 계정 (Cr)' : 'Credit Account (Cr)'}
           </label>
@@ -455,7 +455,7 @@ export const JournalEntryTrainer: React.FC<JournalEntryTrainerProps> = ({ locale
             value={state.selectedCredit}
             onChange={(e) => dispatch({ type: 'SELECT_CREDIT', payload: e.target.value })}
             disabled={state.checked}
-            className="w-full border border-green-200 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-400 disabled:opacity-60"
+            className="w-full border border-green-200 rounded-xl px-3 py-2 text-sm bg-card focus:outline-none focus:ring-2 focus:ring-green-400 disabled:opacity-60"
             aria-label={locale === 'ko' ? '대변 계정 선택' : 'Select credit account'}
           >
             <option value="">{locale === 'ko' ? '-- 계정 선택 --' : '-- Select Account --'}</option>
@@ -531,7 +531,7 @@ export const JournalEntryTrainer: React.FC<JournalEntryTrainerProps> = ({ locale
       )}
 
       {/* Principle reminder */}
-      <div className="mt-6 p-3 bg-white border border-green-100 rounded-xl text-xs text-muted-foreground">
+      <div className="mt-6 p-3 bg-card border border-green-100 rounded-xl text-xs text-muted-foreground">
         <span className="font-bold text-green-700">
           {locale === 'ko' ? '분개 원칙: ' : 'Principle: '}
         </span>

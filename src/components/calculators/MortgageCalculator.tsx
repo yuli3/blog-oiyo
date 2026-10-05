@@ -82,7 +82,7 @@ const MortgageCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
             value={price}
             onChange={(e) => setPrice(e.target.value)}
             min="0"
-            className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+            className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
           />
         </div>
 
@@ -95,7 +95,7 @@ const MortgageCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
             value={downPayment}
             onChange={(e) => setDownPayment(e.target.value)}
             min="0"
-            className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+            className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
           />
         </div>
 
@@ -110,7 +110,7 @@ const MortgageCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
               onChange={(e) => setInterestRate(e.target.value)}
               min="0"
               step="0.1"
-              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+              className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
             />
           </div>
           <div className="space-y-1">
@@ -123,7 +123,7 @@ const MortgageCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
               onChange={(e) => setLoanTermYears(e.target.value)}
               min="1"
               max="50"
-              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+              className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
             />
           </div>
         </div>
@@ -143,7 +143,7 @@ const MortgageCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
           </button>
           <button
             onClick={reset}
-            className="px-5 py-3 bg-white border border-green-300 hover:bg-green-50 text-green-700 font-bold rounded-xl transition-colors"
+            className="px-5 py-3 bg-card border border-green-300 hover:bg-green-50 text-green-700 font-bold rounded-xl transition-colors"
           >
             {ko ? '초기화' : 'Reset'}
           </button>
@@ -165,7 +165,7 @@ const MortgageCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
                 { label: ko ? '총 이자' : 'Total Interest', value: result.totalInterest, kind: 'money' as const },
                 { label: ko ? '총 상환액' : 'Total Payment', value: result.totalPayment, kind: 'money' as const },
               ].map((item) => (
-                <div key={item.label} className="bg-white rounded-xl p-4 border border-green-100">
+                <div key={item.label} className="bg-card rounded-xl p-4 border border-green-100">
                   <p className="text-xs text-green-500 font-semibold mb-1">{item.label}</p>
                   <AnimatedNumber
                     value={item.value}
@@ -183,7 +183,7 @@ const MortgageCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' 
             </div>
 
             {/* Simple bar breakdown */}
-            <div className="bg-white rounded-xl p-4 border border-green-100">
+            <div className="bg-card rounded-xl p-4 border border-green-100">
               <p className="text-xs font-bold text-green-700 mb-3">
                 {ko ? '원금 vs 이자 비율' : 'Principal vs Interest Breakdown'}
               </p>

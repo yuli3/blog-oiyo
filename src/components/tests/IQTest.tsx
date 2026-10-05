@@ -808,7 +808,7 @@ export default function IQTest({ locale }: Props) {
         </div>
 
         {/* Question card */}
-        <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm space-y-4">
+        <div className="bg-card border border-gray-100 rounded-2xl p-5 shadow-sm space-y-4">
           {/* Type badge */}
           <span className="inline-block text-xs px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600 font-medium">
             {t.typeLabels[q.type]}
@@ -835,7 +835,7 @@ export default function IQTest({ locale }: Props) {
                   className={`w-full text-left px-4 py-3 rounded-xl border-2 transition-all text-sm font-medium ${
                     isSelected
                       ? "border-indigo-500 bg-indigo-50 text-indigo-700"
-                      : "border-gray-100 bg-white text-gray-700 hover:border-gray-300"
+                      : "border-gray-100 bg-card text-gray-700 hover:border-gray-300"
                   }`}
                 >
                   <span className="mr-2 font-bold text-gray-400">{String.fromCharCode(65 + i)}.</span>
@@ -851,7 +851,7 @@ export default function IQTest({ locale }: Props) {
           <button
             onClick={prev}
             disabled={currentIndex === 0}
-            className="px-4 py-2.5 border border-gray-200 text-gray-600 rounded-xl font-medium hover:bg-card transition-colors text-sm disabled:opacity-30"
+            className="px-4 py-2.5 border border-border text-gray-600 rounded-xl font-medium hover:bg-card transition-colors text-sm disabled:opacity-30"
           >
             {t.prevBtn}
           </button>
@@ -943,7 +943,7 @@ export default function IQTest({ locale }: Props) {
         <div className="flex gap-3">
           <button
             onClick={reset}
-            className="flex-1 py-2.5 border border-gray-200 rounded-xl text-sm font-medium text-gray-600 hover:bg-card transition-colors"
+            className="flex-1 py-2.5 border border-border rounded-xl text-sm font-medium text-gray-600 hover:bg-card transition-colors"
           >
             {t.retakeBtn}
           </button>
@@ -987,12 +987,12 @@ export default function IQTest({ locale }: Props) {
               <span className={`text-sm font-bold ${isCorrect ? "text-green-600" : "text-rose-500"}`}>
                 {isCorrect ? "✅" : "❌"} Q{i + 1}
               </span>
-              <span className="text-xs bg-white px-2 py-0.5 rounded-full text-muted-foreground border">
+              <span className="text-xs bg-card px-2 py-0.5 rounded-full text-muted-foreground border">
                 {t.typeLabels[q.type]} · {q.points}pt
               </span>
             </div>
             {q.visual && (
-              <div className="bg-white rounded-lg p-2 text-center text-sm font-mono whitespace-pre-line text-gray-700">
+              <div className="bg-card rounded-lg p-2 text-center text-sm font-mono whitespace-pre-line text-gray-700">
                 {q.visual}
               </div>
             )}
@@ -1009,7 +1009,7 @@ export default function IQTest({ locale }: Props) {
                         ? "border-green-400 bg-green-100 text-green-800"
                         : isUser
                         ? "border-rose-400 bg-rose-100 text-rose-700"
-                        : "border-transparent bg-white text-muted-foreground"
+                        : "border-transparent bg-card text-muted-foreground"
                     }`}
                   >
                     {String.fromCharCode(65 + oi)}. {label}
@@ -1019,7 +1019,7 @@ export default function IQTest({ locale }: Props) {
                 );
               })}
             </div>
-            <div className="bg-white rounded-lg p-3 text-xs text-gray-600 leading-relaxed">
+            <div className="bg-card rounded-lg p-3 text-xs text-gray-600 leading-relaxed">
               💡 {t.explanation}: {q.explanation[locale]}
             </div>
           </div>

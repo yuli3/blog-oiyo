@@ -285,7 +285,7 @@ export default function UniversalConverter({ locale }: Props) {
         {tabBtn("roman", t.tabs.roman)}
       </div>
 
-      <div className="mt-5 rounded-xl border border-border bg-white p-4">
+      <div className="mt-5 rounded-xl border border-border bg-card p-4">
         {tab === "ascii" && (
           <div>
             <h3 className="font-semibold text-foreground">{t.asciiTitle}</h3>

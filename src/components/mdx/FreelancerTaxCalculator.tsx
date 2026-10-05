@@ -141,7 +141,7 @@ export default function FreelancerTaxCalculator() {
                 onClick={() => setExpenseMode(m)}
                 className={`rounded-lg px-3 py-2.5 text-sm font-semibold transition-all ${
                   expenseMode === m
-                    ? 'bg-white shadow text-orange-700'
+                    ? 'bg-card shadow text-orange-700'
                     : 'text-muted-foreground hover:text-foreground'
                 }`}
               >

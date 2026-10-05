@@ -102,11 +102,11 @@ const Toggle: React.FC<ToggleProps> = ({ label, value, onChange }) => (
   <button
     onClick={() => onChange(!value)}
     className={`w-full flex items-center gap-2 px-3 py-2 rounded-xl border text-xs font-bold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 ${
-      value ? 'bg-emerald-100 border-emerald-400 text-emerald-800' : 'bg-card border-slate-200 text-muted-foreground'
+      value ? 'bg-emerald-100 border-emerald-400 text-emerald-800' : 'bg-card border-border text-muted-foreground'
     }`}
     aria-pressed={value}
   >
-    <span className={`w-3 h-3 rounded-full border-2 ${value ? 'bg-emerald-500 border-emerald-500' : 'bg-white border-slate-300'}`} aria-hidden="true" />
+    <span className={`w-3 h-3 rounded-full border-2 ${value ? 'bg-emerald-500 border-emerald-500' : 'bg-card border-slate-300'}`} aria-hidden="true" />
     {label}
   </button>
 );
@@ -173,7 +173,7 @@ export const SupplyDemandSimulator: React.FC = () => {
       : '';
 
   return (
-    <Card className="bg-white border border-emerald-100 shadow-xl rounded-2xl overflow-hidden mt-5 sm:mt-8">
+    <Card className="bg-card border border-emerald-100 shadow-xl rounded-2xl overflow-hidden mt-5 sm:mt-8">
       <div className="bg-emerald-700 px-4 sm:px-6 py-5">
         <h3 className="text-lg font-bold text-white">수요공급 시뮬레이터</h3>
         <p className="text-xs text-emerald-200 mt-1">슬라이더로 곡선을 이동하며 균형가격과 잉여를 확인하세요</p>
@@ -389,10 +389,10 @@ export const ElasticityCalculator: React.FC = () => {
   const demandClass = classifyElasticity(demandElasticity);
   const supplyClass = classifyElasticity(supplyElasticity);
 
-  const inputClass = "w-full text-right text-sm bg-white border border-emerald-200 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-emerald-400";
+  const inputClass = "w-full text-right text-sm bg-card border border-emerald-200 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-emerald-400";
 
   return (
-    <Card className="bg-white border border-emerald-100 shadow-xl rounded-2xl overflow-hidden mt-5 sm:mt-8">
+    <Card className="bg-card border border-emerald-100 shadow-xl rounded-2xl overflow-hidden mt-5 sm:mt-8">
       <div className="bg-emerald-700 px-4 sm:px-6 py-5">
         <h3 className="text-lg font-bold text-white">탄력성 계산기</h3>
         <p className="text-xs text-emerald-200 mt-1">호탄력성(Arc Elasticity) 공식 — 중간점 방법 사용</p>
@@ -447,7 +447,7 @@ export const ElasticityCalculator: React.FC = () => {
               <span className="text-3xl font-bold tabular-nums">
                 {isFinite(demandElasticity) ? demandElasticity.toFixed(2) : '∞'}
               </span>
-              <span className="text-sm font-bold px-3 py-1 rounded-xl bg-white bg-opacity-60 border border-current">
+              <span className="text-sm font-bold px-3 py-1 rounded-xl bg-card bg-opacity-60 border border-current">
                 {demandClass}
               </span>
             </div>
@@ -468,7 +468,7 @@ export const ElasticityCalculator: React.FC = () => {
               <span className="text-3xl font-bold tabular-nums">
                 {isFinite(supplyElasticity) ? supplyElasticity.toFixed(2) : '∞'}
               </span>
-              <span className="text-sm font-bold px-3 py-1 rounded-xl bg-white bg-opacity-60 border border-current">
+              <span className="text-sm font-bold px-3 py-1 rounded-xl bg-card bg-opacity-60 border border-current">
                 {supplyClass}
               </span>
             </div>
@@ -476,7 +476,7 @@ export const ElasticityCalculator: React.FC = () => {
           </div>
 
           {/* Formula reference */}
-          <div className="rounded-xl bg-card border border-slate-200 p-3">
+          <div className="rounded-xl bg-card border border-border p-3">
             <p className="text-[10px] font-bold text-muted-foreground mb-2">호탄력성 공식 (중간점 방법)</p>
             <p className="text-[10px] text-slate-600 font-mono leading-relaxed">
               E = (%ΔQ) / (%ΔP)<br />

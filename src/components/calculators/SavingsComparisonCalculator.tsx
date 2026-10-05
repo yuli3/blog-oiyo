@@ -133,7 +133,7 @@ const SavingsComparisonCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
                 value={monthlySavings}
                 onChange={(e) => setMonthlySavings(e.target.value)}
                 min="0"
-                className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+                className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
                 aria-label={locale === 'ko' ? '월 저축액' : 'Monthly Savings'}
               />
             </div>
@@ -144,7 +144,7 @@ const SavingsComparisonCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
               <select
                 value={termYears}
                 onChange={(e) => setTermYears(e.target.value)}
-                className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+                className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
                 aria-label={locale === 'ko' ? '기간' : 'Term'}
               >
                 {[1, 2, 3, 5, 7, 10].map((y) => (
@@ -172,7 +172,7 @@ const SavingsComparisonCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
                     step="0.1"
                     min="0"
                     max="20"
-                    className="w-20 p-2 bg-white border border-green-200 rounded-xl text-center text-sm focus:ring-2 focus:ring-green-400 outline-none"
+                    className="w-20 p-2 bg-card border border-green-200 rounded-xl text-center text-sm focus:ring-2 focus:ring-green-400 outline-none"
                     aria-label={`${locale === 'ko' ? product.name : product.nameEn} 금리`}
                   />
                   <span className="text-sm text-green-600 font-bold">%</span>
@@ -197,7 +197,7 @@ const SavingsComparisonCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
             </button>
             <button
               onClick={reset}
-              className="px-5 py-3 bg-white border border-green-300 hover:bg-green-50 text-green-700 font-bold rounded-xl transition-colors"
+              className="px-5 py-3 bg-card border border-green-300 hover:bg-green-50 text-green-700 font-bold rounded-xl transition-colors"
               aria-label={locale === 'ko' ? '초기화' : 'Reset'}
             >
               {locale === 'ko' ? '초기화' : 'Reset'}
@@ -232,8 +232,8 @@ const SavingsComparisonCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
                       key={r.id}
                       className={`p-4 rounded-2xl border text-sm ${
                         r.rank === 1
-                          ? 'bg-white border-green-400 shadow-md'
-                          : 'bg-white border-green-100'
+                          ? 'bg-card border-green-400 shadow-md'
+                          : 'bg-card border-green-100'
                       }`}
                     >
                       <div className="flex justify-between items-center mb-2">

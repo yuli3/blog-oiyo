@@ -204,7 +204,7 @@ export const InheritanceTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ l
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Input panel */}
         <div className="space-y-4">
-          <div className="bg-white border border-green-200 rounded-2xl p-4">
+          <div className="bg-card border border-green-200 rounded-2xl p-4">
             <p className="text-sm font-bold text-green-800 mb-3">
               {locale === 'ko' ? '재산 현황 (만원)' : 'Estate Information (10K KRW)'}
             </p>
@@ -222,7 +222,7 @@ export const InheritanceTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ l
             </div>
           </div>
 
-          <div className="bg-white border border-green-200 rounded-2xl p-4">
+          <div className="bg-card border border-green-200 rounded-2xl p-4">
             <p className="text-sm font-bold text-green-800 mb-3">
               {locale === 'ko' ? '상속인 구성' : 'Heirs Composition'}
             </p>
@@ -253,7 +253,7 @@ export const InheritanceTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ l
             </div>
           </div>
 
-          <div className="bg-white border border-green-200 rounded-2xl p-4">
+          <div className="bg-card border border-green-200 rounded-2xl p-4">
             <p className="text-sm font-bold text-green-800 mb-3">
               {locale === 'ko' ? '세액공제 (만원)' : 'Tax Credits (10K KRW)'}
             </p>
@@ -267,7 +267,7 @@ export const InheritanceTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ l
 
         {/* Result panel */}
         <div className="space-y-4">
-          <div className="bg-white border border-green-200 rounded-2xl p-4">
+          <div className="bg-card border border-green-200 rounded-2xl p-4">
             <p className="text-sm font-bold text-green-800 mb-3">
               {locale === 'ko' ? '단계별 계산' : 'Step-by-Step Calculation'}
             </p>
@@ -306,7 +306,7 @@ export const InheritanceTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ l
           </div>
 
           {/* Progressive tax breakdown */}
-          <div className="bg-white border border-green-200 rounded-2xl p-4">
+          <div className="bg-card border border-green-200 rounded-2xl p-4">
             <p className="text-sm font-bold text-green-800 mb-3">
               {locale === 'ko' ? '누진세율 적용' : 'Progressive Tax Rate Application'}
             </p>

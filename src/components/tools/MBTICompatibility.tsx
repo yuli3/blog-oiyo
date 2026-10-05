@@ -620,7 +620,7 @@ export default function MBTICompatibility({ locale }: Props) {
                   className={`flex flex-col items-center gap-0.5 p-2 rounded-xl border-2 transition-all text-center ${
                     isSel
                       ? `${prof.color} ring-2 ring-offset-1 ring-current`
-                      : "bg-white border-gray-100 hover:border-gray-300"
+                      : "bg-card border-gray-100 hover:border-gray-300"
                   }`}
                 >
                   <span className="text-lg">{prof.emoji}</span>
@@ -658,7 +658,7 @@ export default function MBTICompatibility({ locale }: Props) {
               {TYPES[typeA].emoji} {typeA}
             </span>
           ) : (
-            <span className="px-4 py-2 rounded-full border-2 border-dashed border-gray-200 text-gray-400 text-sm">?</span>
+            <span className="px-4 py-2 rounded-full border-2 border-dashed border-border text-gray-400 text-sm">?</span>
           )}
           <span className="text-xl text-gray-400">💞</span>
           {typeB ? (
@@ -666,7 +666,7 @@ export default function MBTICompatibility({ locale }: Props) {
               {TYPES[typeB].emoji} {typeB}
             </span>
           ) : (
-            <span className="px-4 py-2 rounded-full border-2 border-dashed border-gray-200 text-gray-400 text-sm">?</span>
+            <span className="px-4 py-2 rounded-full border-2 border-dashed border-border text-gray-400 text-sm">?</span>
           )}
         </div>
       )}
@@ -684,7 +684,7 @@ export default function MBTICompatibility({ locale }: Props) {
         {(typeA || typeB) && (
           <button
             onClick={reset}
-            className="px-4 py-2.5 border border-gray-200 text-gray-600 rounded-xl font-medium hover:bg-card transition-colors text-sm"
+            className="px-4 py-2.5 border border-border text-gray-600 rounded-xl font-medium hover:bg-card transition-colors text-sm"
           >
             {t.resetBtn}
           </button>
@@ -700,7 +700,7 @@ export default function MBTICompatibility({ locale }: Props) {
             <p className="text-base font-bold text-gray-800">{t.levelLabels[compat.level]}</p>
             {/* Score bar */}
             <div className="max-w-xs mx-auto space-y-1">
-              <div className="w-full h-3 bg-white bg-opacity-60 rounded-full overflow-hidden border border-white">
+              <div className="w-full h-3 bg-card bg-opacity-60 rounded-full overflow-hidden border border-white">
                 <div
                   className={`h-full ${levelCfg.scoreBar} rounded-full transition-all duration-700`}
                   style={{ width: `${levelCfg.score}%` }}
@@ -715,7 +715,7 @@ export default function MBTICompatibility({ locale }: Props) {
             {([typeA, typeB] as MBTIType[]).map((tp) => {
               const prof = TYPES[tp];
               return (
-                <div key={tp} className="bg-white bg-opacity-70 rounded-xl p-3 space-y-2">
+                <div key={tp} className="bg-card bg-opacity-70 rounded-xl p-3 space-y-2">
                   <div className="flex items-center gap-2">
                     <span className="text-xl">{prof.emoji}</span>
                     <div>
@@ -736,13 +736,13 @@ export default function MBTICompatibility({ locale }: Props) {
           </div>
 
           {/* Summary */}
-          <div className="bg-white bg-opacity-70 rounded-xl p-4">
+          <div className="bg-card bg-opacity-70 rounded-xl p-4">
             <p className="text-xs font-semibold text-gray-600 mb-1">📝 {t.summaryLabel}</p>
             <p className="text-sm text-gray-700 leading-relaxed">{compat.summary[locale]}</p>
           </div>
 
           {/* Tips */}
-          <div className="bg-white bg-opacity-70 rounded-xl p-4 space-y-2">
+          <div className="bg-card bg-opacity-70 rounded-xl p-4 space-y-2">
             <p className="text-xs font-semibold text-indigo-600">💡 {t.tipsLabel}</p>
             {compat.tips[locale].map((tip, i) => (
               <p key={i} className="text-xs text-gray-700">• {tip}</p>

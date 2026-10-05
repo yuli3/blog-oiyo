@@ -112,7 +112,7 @@ const DepositCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
               className={`flex-1 py-2 rounded-xl text-sm font-bold border transition-colors ${
                 calcType === t
                   ? 'bg-green-600 text-white border-green-600'
-                  : 'bg-white text-green-700 border-green-200 hover:bg-green-50'
+                  : 'bg-card text-green-700 border-green-200 hover:bg-green-50'
               }`}
             >
               {t === 'deposit'
@@ -128,7 +128,7 @@ const DepositCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
               ? (ko ? '예금액' : 'Deposit Amount')
               : (ko ? '월 납입액' : 'Monthly Amount')}
           </FieldLabel>
-          <InputGroup className="min-h-12 border-green-200 bg-white focus-within:border-green-500 focus-within:ring-green-500/20">
+          <InputGroup className="min-h-12 border-green-200 bg-card focus-within:border-green-500 focus-within:ring-green-500/20">
             <InputGroupInput
               id="deposit-amount"
               type="number"
@@ -149,7 +149,7 @@ const DepositCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
             <FieldLabel htmlFor="deposit-rate" className="text-sm font-bold text-green-800">
               {ko ? '연 이율' : 'Annual Rate'}
             </FieldLabel>
-            <InputGroup className="min-h-12 border-green-200 bg-white focus-within:border-green-500 focus-within:ring-green-500/20">
+            <InputGroup className="min-h-12 border-green-200 bg-card focus-within:border-green-500 focus-within:ring-green-500/20">
               <InputGroupInput
                 id="deposit-rate"
                 type="number"
@@ -167,7 +167,7 @@ const DepositCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
             <FieldLabel htmlFor="deposit-period" className="text-sm font-bold text-green-800">
               {ko ? '기간' : 'Period'}
             </FieldLabel>
-            <InputGroup className="min-h-12 border-green-200 bg-white focus-within:border-green-500 focus-within:ring-green-500/20">
+            <InputGroup className="min-h-12 border-green-200 bg-card focus-within:border-green-500 focus-within:ring-green-500/20">
               <InputGroupInput
                 id="deposit-period"
                 type="number"
@@ -197,7 +197,7 @@ const DepositCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
                 className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold border transition-colors ${
                   taxType === t
                     ? 'bg-green-600 text-white border-green-600'
-                    : 'bg-white text-green-700 border-green-200 hover:bg-green-50'
+                    : 'bg-card text-green-700 border-green-200 hover:bg-green-50'
                 }`}
               >
                 {taxLabels[t]}
@@ -219,7 +219,7 @@ const DepositCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
                 className={`py-1.5 px-4 rounded-xl text-xs font-bold border transition-colors ${
                   isCompound === v
                     ? 'bg-green-600 text-white border-green-600'
-                    : 'bg-white text-green-700 border-green-200 hover:bg-green-50'
+                    : 'bg-card text-green-700 border-green-200 hover:bg-green-50'
                 }`}
               >
                 {v ? (ko ? '복리' : 'Compound') : (ko ? '단리' : 'Simple')}
@@ -239,7 +239,7 @@ const DepositCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
           </button>
           <button
             onClick={reset}
-            className="px-5 py-3 bg-white border border-green-300 hover:bg-green-50 text-green-700 font-bold rounded-xl transition-colors"
+            className="px-5 py-3 bg-card border border-green-300 hover:bg-green-50 text-green-700 font-bold rounded-xl transition-colors"
           >
             {ko ? '초기화' : 'Reset'}
           </button>
@@ -266,7 +266,7 @@ const DepositCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
                 { label: ko ? '세금' : 'Tax', value: result.tax, prefix: '-', color: 'text-red-600' },
                 { label: ko ? '세후 이자' : 'After-Tax Interest', value: result.afterTaxInterest, prefix: '+', color: 'text-green-700' },
               ].map((item) => (
-                <div key={item.label} className="bg-white rounded-xl p-3 border border-green-100">
+                <div key={item.label} className="bg-card rounded-xl p-3 border border-green-100">
                   <p className="text-xs text-green-500 font-semibold mb-1">{item.label}</p>
                   <AnimatedNumber
                     value={item.value}

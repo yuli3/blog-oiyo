@@ -237,7 +237,7 @@ export default function FastingTracker({ locale }: { locale: Locale }) {
   return (
     <GameContainer title={t.title} subtitle={t.subtitle}>
       <div className="space-y-6">
-        <div className="grid gap-4 rounded-xl border border-slate-200 bg-white p-4 sm:grid-cols-2">
+        <div className="grid gap-4 rounded-xl border border-border bg-card p-4 sm:grid-cols-2">
           <label className="block text-sm font-medium text-slate-700">
             {t.methodLabel}
             <select className={`${inputCls} mt-1`} value={method} onChange={(e) => setMethod(e.target.value as Method)}>
@@ -272,19 +272,19 @@ export default function FastingTracker({ locale }: { locale: Locale }) {
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2">
-          <div className="rounded-xl border border-slate-200 bg-white p-4">
+          <div className="rounded-xl border border-border bg-card p-4">
             <div className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">{t.elapsed}</div>
             <div className="mt-2 text-xl font-bold text-foreground">{formatDuration(state.elapsedMs)}</div>
           </div>
-          <div className="rounded-xl border border-slate-200 bg-white p-4">
+          <div className="rounded-xl border border-border bg-card p-4">
             <div className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">{t.remaining}</div>
             <div className="mt-2 text-xl font-bold text-foreground">{formatDuration(state.remainingMs)}</div>
           </div>
-          <div className="rounded-xl border border-slate-200 bg-white p-4">
+          <div className="rounded-xl border border-border bg-card p-4">
             <div className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">{t.fastingWindow}</div>
             <div className="mt-2 text-xl font-bold text-foreground">{state.fastHours}h</div>
           </div>
-          <div className="rounded-xl border border-slate-200 bg-white p-4">
+          <div className="rounded-xl border border-border bg-card p-4">
             <div className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">{t.eatingWindow}</div>
             <div className="mt-2 text-xl font-bold text-foreground">{state.eatHours}h</div>
           </div>

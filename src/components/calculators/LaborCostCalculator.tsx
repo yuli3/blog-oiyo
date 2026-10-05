@@ -132,7 +132,7 @@ const LaborCostCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
               value={salary}
               onChange={(e) => setSalary(e.target.value)}
               min="0"
-              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+              className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
             />
           </div>
 
@@ -146,7 +146,7 @@ const LaborCostCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
                   className={`flex-1 py-2 rounded-xl text-sm font-bold transition-colors border ${
                     foodAllowance === val
                       ? 'bg-green-600 text-white border-green-600'
-                      : 'bg-white text-green-700 border-green-200 hover:bg-green-50'
+                      : 'bg-card text-green-700 border-green-200 hover:bg-green-50'
                   }`}
                 >
                   {val === 0 ? t.foodNone : t.foodInclude}
@@ -155,7 +155,7 @@ const LaborCostCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
             </div>
           </div>
 
-          <div className="flex items-center justify-between p-4 bg-white border border-green-200 rounded-xl">
+          <div className="flex items-center justify-between p-4 bg-card border border-green-200 rounded-xl">
             <div>
               <p className="text-sm font-bold text-green-800">{t.severanceLabel}</p>
               <p className="text-xs text-muted-foreground">{t.severanceDesc}</p>
@@ -169,7 +169,7 @@ const LaborCostCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
               aria-checked={includeSeverance}
             >
               <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                className={`inline-block h-4 w-4 transform rounded-full bg-card transition-transform ${
                   includeSeverance ? 'translate-x-6' : 'translate-x-1'
                 }`}
               />
@@ -185,7 +185,7 @@ const LaborCostCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
             </button>
             <button
               onClick={reset}
-              className="px-5 py-3 bg-white border border-green-300 hover:bg-green-50 text-green-700 font-bold rounded-xl transition-colors"
+              className="px-5 py-3 bg-card border border-green-300 hover:bg-green-50 text-green-700 font-bold rounded-xl transition-colors"
             >
               {t.reset}
             </button>
@@ -207,7 +207,7 @@ const LaborCostCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
                   <span className="font-semibold text-slate-700">{t.insurance4}</span>
                   <span className="font-bold text-green-700">{fmt(result.insuranceTotal)}</span>
                 </div>
-                <div className="pl-4 space-y-1 bg-white rounded-xl p-3 border border-green-100 text-xs">
+                <div className="pl-4 space-y-1 bg-card rounded-xl p-3 border border-green-100 text-xs">
                   {[
                     { label: t.pension, val: result.pension },
                     { label: t.health, val: result.health },

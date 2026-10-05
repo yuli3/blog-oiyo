@@ -319,7 +319,7 @@ export default function LoveCalculator({ locale }: Props) {
       </div>
 
       {/* Mode tabs */}
-      <div className="flex rounded-xl overflow-hidden border border-gray-200">
+      <div className="flex rounded-xl overflow-hidden border border-border">
         {(["name", "mbti"] as Mode[]).map((m) => (
           <button
             key={m}
@@ -327,7 +327,7 @@ export default function LoveCalculator({ locale }: Props) {
             className={`flex-1 py-2.5 text-sm font-medium transition-colors ${
               mode === m
                 ? "bg-pink-500 text-white"
-                : "bg-white text-gray-600 hover:bg-pink-50"
+                : "bg-card text-gray-600 hover:bg-pink-50"
             }`}
           >
             {m === "name" ? t.modeNameTab : t.modeMbtiTab}
@@ -336,7 +336,7 @@ export default function LoveCalculator({ locale }: Props) {
       </div>
 
       {/* Inputs */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-5 space-y-4">
+      <div className="rounded-2xl border border-border bg-card p-5 space-y-4">
         {mode === "name" ? (
           <>
             <div>

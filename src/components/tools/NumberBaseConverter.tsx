@@ -109,7 +109,7 @@ export default function NumberBaseConverter({ locale }: Props) {
 
   const inputCls =
     "w-full rounded-lg border border-slate-300 px-3 py-2 text-foreground focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-100";
-  const card = "rounded-xl border border-slate-200 bg-white p-4";
+  const card = "rounded-xl border border-border bg-card p-4";
   const resultCls = "mt-2 break-all rounded-lg bg-green-50 px-3 py-2 font-mono text-sm font-semibold text-green-900";
 
   return (

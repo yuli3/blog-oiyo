@@ -493,7 +493,7 @@ export default function MarriageAgeCalculator({ locale }: Props) {
       </div>
 
       {/* Input card */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-5 space-y-4">
+      <div className="rounded-2xl border border-border bg-card p-5 space-y-4">
         {/* Gender */}
         <div>
           <p className="mb-2 text-sm font-medium text-gray-700">{t.genderLabel}</p>
@@ -505,7 +505,7 @@ export default function MarriageAgeCalculator({ locale }: Props) {
                 className={`flex-1 rounded-xl border py-2.5 text-sm font-medium transition-colors ${
                   gender === g
                     ? "border-rose-500 bg-rose-500 text-white"
-                    : "border-gray-200 bg-white text-gray-700 hover:border-rose-300"
+                    : "border-border bg-card text-gray-700 hover:border-rose-300"
                 }`}
               >
                 {g === "male" ? t.male : t.female}

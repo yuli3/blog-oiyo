@@ -109,7 +109,7 @@ const JeonsevsBuyCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'k
               value={purchasePrice}
               onChange={(e) => setPurchasePrice(e.target.value)}
               min="0"
-              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+              className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
               aria-label={locale === 'ko' ? '매매가' : 'Purchase Price'}
             />
           </div>
@@ -122,7 +122,7 @@ const JeonsevsBuyCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'k
               value={jeonsePrice}
               onChange={(e) => setJeonsePrice(e.target.value)}
               min="0"
-              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+              className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
               aria-label={locale === 'ko' ? '전세가' : 'Jeonse Deposit'}
             />
           </div>
@@ -140,7 +140,7 @@ const JeonsevsBuyCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'k
               step="0.1"
               min="0"
               max="20"
-              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+              className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
               aria-label={locale === 'ko' ? '대출 금리' : 'Mortgage Rate'}
             />
           </div>
@@ -154,7 +154,7 @@ const JeonsevsBuyCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'k
               onChange={(e) => setHoldingYears(e.target.value)}
               min="1"
               max="30"
-              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+              className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
               aria-label={locale === 'ko' ? '거주 기간' : 'Holding Years'}
             />
           </div>
@@ -169,7 +169,7 @@ const JeonsevsBuyCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'k
               step="0.1"
               min="0"
               max="20"
-              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+              className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
               aria-label={locale === 'ko' ? '집값 상승률' : 'Appreciation Rate'}
             />
           </div>
@@ -184,7 +184,7 @@ const JeonsevsBuyCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'k
               step="0.1"
               min="0"
               max="10"
-              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+              className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
               aria-label={locale === 'ko' ? '보증금 운용 수익률' : 'Deposit Opportunity Rate'}
             />
           </div>
@@ -206,7 +206,7 @@ const JeonsevsBuyCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'k
           </button>
           <button
             onClick={reset}
-            className="px-5 py-3 bg-white border border-green-300 hover:bg-green-50 text-green-700 font-bold rounded-xl transition-colors"
+            className="px-5 py-3 bg-card border border-green-300 hover:bg-green-50 text-green-700 font-bold rounded-xl transition-colors"
             aria-label={locale === 'ko' ? '초기화' : 'Reset'}
           >
             {locale === 'ko' ? '초기화' : 'Reset'}
@@ -240,7 +240,7 @@ const JeonsevsBuyCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'k
             </div>
 
             <div className="grid md:grid-cols-2 gap-4">
-              <div className="p-5 bg-white rounded-2xl border border-green-100 space-y-2">
+              <div className="p-5 bg-card rounded-2xl border border-green-100 space-y-2">
                 <p className="text-sm font-bold text-green-700 mb-3">
                   {locale === 'ko' ? '매매 총 비용' : 'Buy Total Cost'}
                 </p>
@@ -266,7 +266,7 @@ const JeonsevsBuyCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'k
                 </div>
               </div>
 
-              <div className="p-5 bg-white rounded-2xl border border-green-100 space-y-2">
+              <div className="p-5 bg-card rounded-2xl border border-green-100 space-y-2">
                 <p className="text-sm font-bold text-green-700 mb-3">
                   {locale === 'ko' ? '전세 총 비용' : 'Jeonse Total Cost'}
                 </p>

@@ -169,7 +169,7 @@ const SlotAnatomy: React.FC<{ locale?: string }> = ({ locale = "ko" }) => {
         <div className="mt-3 overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-slate-200 text-left text-xs uppercase tracking-wide text-muted-foreground">
+              <tr className="border-b border-border text-left text-xs uppercase tracking-wide text-muted-foreground">
                 <th className="py-2">{t.comboCol}</th>
                 <th className="py-2 text-right">{t.multiplierCol}</th>
                 <th className="py-2 text-right">{t.probCol}</th>
@@ -191,7 +191,7 @@ const SlotAnatomy: React.FC<{ locale?: string }> = ({ locale = "ko" }) => {
       </section>
 
       {/* 3. designed return */}
-      <section className="rounded-xl border border-slate-200 bg-card p-5">
+      <section className="rounded-xl border border-border bg-card p-5">
         <h2 className="text-xl font-bold text-foreground">{t.designTitle}</h2>
         <p className="mt-2 text-3xl font-black tabular-nums text-foreground">{designRtp.toFixed(2)}%</p>
         <p className="mt-2 text-sm leading-relaxed text-slate-600">{t.designNote(designRtp.toFixed(2))}</p>
@@ -214,7 +214,7 @@ const SlotAnatomy: React.FC<{ locale?: string }> = ({ locale = "ko" }) => {
           <div className="mt-4 overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-slate-200 text-left text-xs uppercase tracking-wide text-muted-foreground">
+                <tr className="border-b border-border text-left text-xs uppercase tracking-wide text-muted-foreground">
                   <th className="py-2">{t.spinsCol}</th>
                   <th className="py-2 text-right">{t.rangeCol}</th>
                   <th className="py-2 text-right">{t.spreadCol}</th>

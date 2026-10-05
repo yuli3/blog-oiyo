@@ -148,7 +148,7 @@ const Reversi: React.FC<{ locale?: Locale }> = ({ locale = 'ko' }) => {
                         <span className="text-xs font-black">{t.black}: {bCount}</span>
                     </div>
                     <div className={`flex items-center gap-2 p-3 rounded-2xl border transition-all ${!isBlackTurn ? 'bg-primary/10 border-primary' : 'bg-muted border-transparent opacity-50'}`}>
-                        <div className="w-4 h-4 rounded-full bg-white border border-slate-300" />
+                        <div className="w-4 h-4 rounded-full bg-card border border-slate-300" />
                         <span className="text-xs font-black">{t.white}: {wCount}</span>
                     </div>
                 </div>
@@ -167,7 +167,7 @@ const Reversi: React.FC<{ locale?: Locale }> = ({ locale = 'ko' }) => {
                         {validMoves.includes(i) && <div className="w-2 h-2 rounded-full bg-primary/40 animate-pulse" />}
                         {cell !== null && (
                             <div className={`w-[85%] h-[85%] rounded-full shadow-lg transform transition-all animate-in zoom-in-75 duration-300 ${
-                                cell === 1 ? 'bg-slate-900 border-b-4 border-slate-700' : 'bg-white border-b-4 border-slate-200'
+                                cell === 1 ? 'bg-slate-900 border-b-4 border-slate-700' : 'bg-card border-b-4 border-border'
                             }`} />
                         )}
                     </button>

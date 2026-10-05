@@ -1141,7 +1141,7 @@ export default function DreamInterpreter({ locale }: Props) {
               className={`px-3 py-1 rounded-full text-xs font-medium transition-colors border ${
                 isActive
                   ? `${c.bg} ${c.border} ${c.text}`
-                  : "bg-white border-gray-200 text-muted-foreground hover:bg-card"
+                  : "bg-white border-border text-muted-foreground hover:bg-card"
               }`}
             >
               {t.categoryLabels[cat]}
@@ -1164,7 +1164,7 @@ export default function DreamInterpreter({ locale }: Props) {
                 className={`flex flex-col items-center gap-1 p-3 rounded-xl border-2 transition-all text-center ${
                   isSelected
                     ? `${c.bg} ${c.border} ring-2 ring-offset-1 ring-current ${c.text}`
-                    : "bg-white border-gray-100 hover:border-gray-300 text-gray-700"
+                    : "bg-card border-gray-100 hover:border-gray-300 text-gray-700"
                 }`}
               >
                 <span className="text-2xl">{sym.emoji}</span>
@@ -1220,7 +1220,7 @@ export default function DreamInterpreter({ locale }: Props) {
         {selected.length > 0 && (
           <button
             onClick={clear}
-            className="px-4 py-2.5 border border-gray-200 text-gray-600 rounded-xl font-medium hover:bg-card transition-colors text-sm"
+            className="px-4 py-2.5 border border-border text-gray-600 rounded-xl font-medium hover:bg-card transition-colors text-sm"
           >
             {t.clearBtn}
           </button>
@@ -1256,18 +1256,18 @@ export default function DreamInterpreter({ locale }: Props) {
 
                 {/* Positive / Negative */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div className="bg-white bg-opacity-60 rounded-xl p-3">
+                  <div className="bg-card bg-opacity-60 rounded-xl p-3">
                     <p className="text-xs font-semibold text-emerald-600 mb-1">✅ {t.positiveLabel}</p>
                     <p className="text-xs text-gray-600 leading-relaxed">{sym.positive[locale]}</p>
                   </div>
-                  <div className="bg-white bg-opacity-60 rounded-xl p-3">
+                  <div className="bg-card bg-opacity-60 rounded-xl p-3">
                     <p className="text-xs font-semibold text-rose-500 mb-1">⚠️ {t.negativeLabel}</p>
                     <p className="text-xs text-gray-600 leading-relaxed">{sym.negative[locale]}</p>
                   </div>
                 </div>
 
                 {/* Advice */}
-                <div className="bg-white bg-opacity-70 rounded-xl p-3 border border-white">
+                <div className="bg-card bg-opacity-70 rounded-xl p-3 border border-white">
                   <p className={`text-xs font-semibold mb-1 ${c.text}`}>💡 {t.adviceLabel}</p>
                   <p className="text-xs text-gray-700 leading-relaxed">{sym.advice[locale]}</p>
                 </div>

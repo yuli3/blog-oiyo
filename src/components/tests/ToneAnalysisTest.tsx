@@ -250,7 +250,7 @@ export default function ToneAnalysisTest({ locale: localeProp }: Props) {
   if (phase === "result") {
     const r = t.results[topType];
     return (
-      <div className="not-prose my-6 sm:my-10 p-4 sm:p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto text-center space-y-6">
+      <div className="not-prose my-6 sm:my-10 p-4 sm:p-8 bg-card border border-border rounded-3xl shadow-xl max-w-2xl mx-auto text-center space-y-6">
         <p className="text-xs font-bold text-rose-500 uppercase tracking-widest">{t.resultLabel}</p>
         <div className="text-6xl">{r.emoji}</div>
         <h3 className="text-3xl font-black text-foreground">{r.title}</h3>
@@ -263,7 +263,7 @@ export default function ToneAnalysisTest({ locale: localeProp }: Props) {
   }
 
   return (
-    <div className="not-prose my-6 sm:my-10 p-4 sm:p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto space-y-5 sm:space-y-8">
+    <div className="not-prose my-6 sm:my-10 p-4 sm:p-8 bg-card border border-border rounded-3xl shadow-xl max-w-2xl mx-auto space-y-5 sm:space-y-8">
       <div className="text-center">
         <h3 className="text-2xl font-black text-foreground">{t.title}</h3>
         <p className="text-sm text-muted-foreground mt-2">{t.description}</p>
@@ -280,7 +280,7 @@ export default function ToneAnalysisTest({ locale: localeProp }: Props) {
                 <button
                   key={v}
                   onClick={() => setAnswers((prev) => ({ ...prev, [q.id]: opt.type }))}
-                  className={`w-full text-left py-2 px-3 text-sm rounded-lg border transition-all ${answers[q.id] === opt.type ? "bg-rose-600 border-rose-600 text-white font-bold shadow-md" : "bg-card border-slate-200 text-slate-600 hover:bg-slate-100"}`}
+                  className={`w-full text-left py-2 px-3 text-sm rounded-lg border transition-all ${answers[q.id] === opt.type ? "bg-rose-600 border-rose-600 text-white font-bold shadow-md" : "bg-card border-border text-slate-600 hover:bg-slate-100"}`}
                 >
                   {opt.text}
                 </button>

@@ -26,7 +26,7 @@ export const CompAdvantageCalculator: React.FC = () => {
     const advY = costAY < costBY ? 'A' : 'B';
 
     return (
-        <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-5 sm:mt-8 overflow-hidden">
+        <Card className="p-4 sm:p-6 bg-card border-border shadow-xl mt-5 sm:mt-8 overflow-hidden">
             <div className="flex items-center gap-2 mb-6 text-foreground border-b pb-4">
                 <Scale className="text-indigo-500" />
                 <h3 className="text-xl font-bold">인터랙티브 비교우위 계산기</h3>
@@ -39,11 +39,11 @@ export const CompAdvantageCalculator: React.FC = () => {
                     </div>
                     <div>
                         <label className="text-xs text-muted-foreground block mb-1">X재 1단위 생산 시간 (h)</label>
-                        <input type="number" value={aX} onChange={e => setAX(Number(e.target.value))} className="w-full p-2 border border-slate-200 rounded"/>
+                        <input type="number" value={aX} onChange={e => setAX(Number(e.target.value))} className="w-full p-2 border border-border rounded"/>
                     </div>
                     <div>
                         <label className="text-xs text-muted-foreground block mb-1">Y재 1단위 생산 시간 (h)</label>
-                        <input type="number" value={aY} onChange={e => setAY(Number(e.target.value))} className="w-full p-2 border border-slate-200 rounded"/>
+                        <input type="number" value={aY} onChange={e => setAY(Number(e.target.value))} className="w-full p-2 border border-border rounded"/>
                     </div>
                 </div>
 
@@ -53,11 +53,11 @@ export const CompAdvantageCalculator: React.FC = () => {
                     </div>
                     <div>
                         <label className="text-xs text-muted-foreground block mb-1">X재 1단위 생산 시간 (h)</label>
-                        <input type="number" value={bX} onChange={e => setBX(Number(e.target.value))} className="w-full p-2 border border-slate-200 rounded"/>
+                        <input type="number" value={bX} onChange={e => setBX(Number(e.target.value))} className="w-full p-2 border border-border rounded"/>
                     </div>
                     <div>
                         <label className="text-xs text-muted-foreground block mb-1">Y재 1단위 생산 시간 (h)</label>
-                        <input type="number" value={bY} onChange={e => setBY(Number(e.target.value))} className="w-full p-2 border border-slate-200 rounded"/>
+                        <input type="number" value={bY} onChange={e => setBY(Number(e.target.value))} className="w-full p-2 border border-border rounded"/>
                     </div>
                 </div>
             </div>

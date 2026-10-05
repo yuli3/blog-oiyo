@@ -91,7 +91,7 @@ const FireRetirementCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
                 onChange={(e) => setCurrentAge(e.target.value)}
                 min="1"
                 max="80"
-                className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+                className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
                 aria-label={locale === 'ko' ? '현재 나이' : 'Current Age'}
               />
             </div>
@@ -105,7 +105,7 @@ const FireRetirementCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
                 onChange={(e) => setTargetRetireAge(e.target.value)}
                 min="1"
                 max="80"
-                className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+                className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
                 aria-label={locale === 'ko' ? '목표 은퇴 나이' : 'Target Retire Age'}
               />
             </div>
@@ -120,7 +120,7 @@ const FireRetirementCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
               value={currentAssets}
               onChange={(e) => setCurrentAssets(e.target.value)}
               min="0"
-              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+              className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
               aria-label={locale === 'ko' ? '현재 자산' : 'Current Assets'}
             />
           </div>
@@ -134,7 +134,7 @@ const FireRetirementCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
               value={monthlySavings}
               onChange={(e) => setMonthlySavings(e.target.value)}
               min="0"
-              className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+              className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
               aria-label={locale === 'ko' ? '월 저축액' : 'Monthly Savings'}
             />
           </div>
@@ -151,7 +151,7 @@ const FireRetirementCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
                 step="0.1"
                 min="0"
                 max="30"
-                className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+                className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
                 aria-label={locale === 'ko' ? '연 수익률' : 'Annual Return Rate'}
               />
             </div>
@@ -164,7 +164,7 @@ const FireRetirementCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
                 value={annualSpending}
                 onChange={(e) => setAnnualSpending(e.target.value)}
                 min="0"
-                className="w-full p-3 bg-white border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
+                className="w-full p-3 bg-card border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 outline-none"
                 aria-label={locale === 'ko' ? '연 지출액' : 'Annual Spending'}
               />
             </div>
@@ -186,7 +186,7 @@ const FireRetirementCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
             </button>
             <button
               onClick={reset}
-              className="px-5 py-3 bg-white border border-green-300 hover:bg-green-50 text-green-700 font-bold rounded-xl transition-colors"
+              className="px-5 py-3 bg-card border border-green-300 hover:bg-green-50 text-green-700 font-bold rounded-xl transition-colors"
               aria-label={locale === 'ko' ? '다시 계산하기' : 'Reset'}
             >
               {locale === 'ko' ? '초기화' : 'Reset'}
@@ -209,7 +209,7 @@ const FireRetirementCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
                 </div>
               ) : (
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="p-4 bg-white rounded-2xl border border-green-100 text-center">
+                  <div className="p-4 bg-card rounded-2xl border border-green-100 text-center">
                     <span className="text-xs text-green-600 font-bold uppercase tracking-wide block mb-1">
                       {locale === 'ko' ? 'FIRE까지 기간' : 'Years to FIRE'}
                     </span>
@@ -220,7 +220,7 @@ const FireRetirementCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
                     />
                     <span className="text-sm text-green-500 ml-1">{locale === 'ko' ? '년' : 'yrs'}</span>
                   </div>
-                  <div className="p-4 bg-white rounded-2xl border border-green-100 text-center">
+                  <div className="p-4 bg-card rounded-2xl border border-green-100 text-center">
                     <span className="text-xs text-green-600 font-bold uppercase tracking-wide block mb-1">
                       {locale === 'ko' ? '은퇴 예상 나이' : 'FIRE Age'}
                     </span>
@@ -234,7 +234,7 @@ const FireRetirementCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
                 </div>
               )}
 
-              <div className="p-5 bg-white rounded-2xl border border-green-100">
+              <div className="p-5 bg-card rounded-2xl border border-green-100">
                 <div className="flex justify-between items-center mb-1">
                   <span className="text-sm text-muted-foreground">{locale === 'ko' ? 'FIRE 필요 자산 (4% 룰)' : 'FIRE Number (4% Rule)'}</span>
                 </div>

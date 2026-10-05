@@ -37,7 +37,7 @@ const InputRow: React.FC<InputRowProps> = ({
           type="number"
           value={value}
           onChange={e => onChange(Number(e.target.value))}
-          className="w-28 text-right text-sm bg-white border border-green-200 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-green-400"
+          className="w-28 text-right text-sm bg-card border border-green-200 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-green-400"
           aria-label={label}
         />
       )}
@@ -64,7 +64,7 @@ interface FormulaBoxProps {
 }
 
 const FormulaBox: React.FC<FormulaBoxProps> = ({ label, value, unit = '만원', isResult = false, note }) => (
-  <div className={`rounded-xl px-4 py-2 border ${isResult ? 'bg-green-600 border-green-700' : 'bg-card border-slate-200'}`}>
+  <div className={`rounded-xl px-4 py-2 border ${isResult ? 'bg-green-600 border-green-700' : 'bg-card border-border'}`}>
     <div className="flex items-center justify-between">
       <span className={`text-xs font-bold ${isResult ? 'text-green-100' : 'text-muted-foreground'}`}>{label}</span>
       <span className={`text-sm font-bold tabular-nums ${isResult ? 'text-white' : 'text-slate-800'}`}>
@@ -145,7 +145,7 @@ const IncomeTaxTab: React.FC = () => {
         <InputRow label="세액공제" value={taxCredit} onChange={setTaxCredit} negative />
 
         <SectionLabel text="세율 구간 (2024년 기준)" />
-        <table className="w-full text-xs border-collapse border border-slate-200 rounded-xl overflow-hidden">
+        <table className="w-full text-xs border-collapse border border-border rounded-xl overflow-hidden">
           <thead>
             <tr className="bg-slate-100">
               <th className="text-left px-2 py-1.5 text-[10px] font-bold text-muted-foreground">과세표준 구간</th>
@@ -233,7 +233,7 @@ const CorporateTaxTab: React.FC = () => {
         <InputRow label="세액공제·감면" value={taxCreditExemption} onChange={setTaxCreditExemption} negative />
 
         <SectionLabel text="법인세율 구간" />
-        <table className="w-full text-xs border-collapse border border-slate-200 rounded-xl overflow-hidden">
+        <table className="w-full text-xs border-collapse border border-border rounded-xl overflow-hidden">
           <thead>
             <tr className="bg-slate-100">
               <th className="text-left px-2 py-1.5 text-[10px] font-bold text-muted-foreground">과세표준 구간</th>
@@ -307,7 +307,7 @@ const VATTab: React.FC = () => {
               className={`flex-1 py-2 text-xs font-bold rounded-xl border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 ${
                 isSimplified === simplified
                   ? 'bg-green-600 text-white border-green-600'
-                  : 'bg-white text-slate-600 border-slate-200 hover:border-green-300'
+                  : 'bg-card text-slate-600 border-border hover:border-green-300'
               }`}
               aria-pressed={isSimplified === simplified}
             >
@@ -326,7 +326,7 @@ const VATTab: React.FC = () => {
           <InputRow label="업종별 부가가치율 (‰)" value={simplifiedRate} onChange={setSimplifiedRate} unit="‰" sublabel="업종마다 다름 (예: 소매 15‰)" />
         )}
 
-        <div className="mt-4 rounded-xl bg-card border border-slate-200 p-3">
+        <div className="mt-4 rounded-xl bg-card border border-border p-3">
           <p className="text-[10px] font-bold text-muted-foreground mb-1">일반과세자 vs 간이과세자</p>
           <table className="w-full text-[10px]">
             <thead>
@@ -433,21 +433,21 @@ const CapitalGainsTaxTab: React.FC = () => {
         <div className="flex gap-2 mt-3">
           <button
             onClick={() => setIsAdjustedArea(false)}
-            className={`flex-1 py-1.5 text-xs font-bold rounded-xl border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 ${!isAdjustedArea ? 'bg-green-600 text-white border-green-600' : 'bg-white text-slate-600 border-slate-200 hover:border-green-300'}`}
+            className={`flex-1 py-1.5 text-xs font-bold rounded-xl border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 ${!isAdjustedArea ? 'bg-green-600 text-white border-green-600' : 'bg-card text-slate-600 border-border hover:border-green-300'}`}
             aria-pressed={!isAdjustedArea}
           >
             비조정지역
           </button>
           <button
             onClick={() => setIsAdjustedArea(true)}
-            className={`flex-1 py-1.5 text-xs font-bold rounded-xl border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 ${isAdjustedArea ? 'bg-rose-500 text-white border-rose-500' : 'bg-white text-slate-600 border-slate-200 hover:border-rose-300'}`}
+            className={`flex-1 py-1.5 text-xs font-bold rounded-xl border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 ${isAdjustedArea ? 'bg-rose-500 text-white border-rose-500' : 'bg-card text-slate-600 border-border hover:border-rose-300'}`}
             aria-pressed={isAdjustedArea}
           >
             조정대상지역
           </button>
         </div>
 
-        <div className="mt-4 rounded-xl bg-card border border-slate-200 p-3">
+        <div className="mt-4 rounded-xl bg-card border border-border p-3">
           <p className="text-[10px] font-bold text-muted-foreground mb-1">장기보유특별공제율 (비조정지역)</p>
           <p className="text-[10px] text-muted-foreground">3년 이상 보유 시 (보유연수−2) × 2%, 최대 30%</p>
           <p className="text-[10px] text-green-700 font-bold mt-1">현재 공제율: {(longTermDeductionRate * 100).toFixed(0)}%</p>
@@ -523,7 +523,7 @@ const InheritanceTaxTab: React.FC = () => {
           <span className="flex-1 text-xs font-bold text-slate-700">배우자 공제 적용</span>
           <button
             onClick={() => setHasSpouse(!hasSpouse)}
-            className={`px-3 py-1 text-xs font-bold rounded-xl border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 ${hasSpouse ? 'bg-green-600 text-white border-green-600' : 'bg-slate-100 text-muted-foreground border-slate-200'}`}
+            className={`px-3 py-1 text-xs font-bold rounded-xl border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 ${hasSpouse ? 'bg-green-600 text-white border-green-600' : 'bg-slate-100 text-muted-foreground border-border'}`}
             aria-pressed={hasSpouse}
           >
             {hasSpouse ? '적용' : '미적용'}
@@ -547,7 +547,7 @@ const InheritanceTaxTab: React.FC = () => {
         <StepArrow />
         <FormulaBox label="납부세액" value={Math.round(finalTax)} isResult />
 
-        <div className="mt-3 rounded-xl bg-card border border-slate-200 p-3">
+        <div className="mt-3 rounded-xl bg-card border border-border p-3">
           <p className="text-[10px] font-bold text-muted-foreground mb-1">상속세 세율 구간</p>
           {[
             ['1억 이하', '10%'], ['1억~5억', '20%'], ['5억~10억', '30%'],
@@ -605,7 +605,7 @@ const GiftTaxTab: React.FC = () => {
               className={`py-1.5 text-xs font-bold rounded-xl border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 ${
                 relationship === opt.value
                   ? 'bg-green-600 text-white border-green-600'
-                  : 'bg-white text-slate-600 border-slate-200 hover:border-green-300'
+                  : 'bg-card text-slate-600 border-border hover:border-green-300'
               }`}
               aria-pressed={relationship === opt.value}
             >
@@ -667,7 +667,7 @@ export const TaxFormulaExplorer: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TaxTab>(0);
 
   return (
-    <Card className="bg-white border border-green-100 shadow-xl rounded-2xl overflow-hidden mt-5 sm:mt-8">
+    <Card className="bg-card border border-green-100 shadow-xl rounded-2xl overflow-hidden mt-5 sm:mt-8">
       <div className="bg-green-700 px-4 sm:px-6 py-5">
         <h3 className="text-lg font-bold text-white">세법 계산 산식 인터랙티브</h3>
         <p className="text-xs text-green-200 mt-1">6대 세목 공식을 직접 입력하며 계산 구조를 확인하세요</p>

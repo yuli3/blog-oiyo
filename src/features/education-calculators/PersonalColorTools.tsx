@@ -95,7 +95,7 @@ export const PersonalColorMiniTest: React.FC = () => {
                             <button
                                 key={i}
                                 onClick={() => handleAnswer(opt.type)}
-                                className="p-5 bg-white hover:bg-rose-50 border-2 border-slate-100 hover:border-rose-200 rounded-2xl text-slate-700 font-bold transition-all text-lg shadow-sm hover:shadow-md active:scale-95"
+                                className="p-5 bg-card hover:bg-rose-50 border-2 border-slate-100 hover:border-rose-200 rounded-2xl text-slate-700 font-bold transition-all text-lg shadow-sm hover:shadow-md active:scale-95"
                             >
                                 {opt.text}
                             </button>

@@ -76,7 +76,7 @@ export default function ColorRecognitionTest({ locale: localeProp }: Props) {
   if (phase === "result") {
     const r = t.results[topType];
     return (
-      <div className="not-prose my-6 sm:my-10 p-4 sm:p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto text-center space-y-6">
+      <div className="not-prose my-6 sm:my-10 p-4 sm:p-8 bg-card border border-border rounded-3xl shadow-xl max-w-2xl mx-auto text-center space-y-6">
         <p className="text-xs font-bold text-fuchsia-500 uppercase tracking-widest">{t.resultLabel}</p>
         <div className="text-6xl">{r.emoji}</div>
         <h3 className="text-3xl font-black text-foreground">{r.title}</h3>
@@ -89,7 +89,7 @@ export default function ColorRecognitionTest({ locale: localeProp }: Props) {
   }
 
   return (
-    <div className="not-prose my-6 sm:my-10 p-4 sm:p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto space-y-5 sm:space-y-8">
+    <div className="not-prose my-6 sm:my-10 p-4 sm:p-8 bg-card border border-border rounded-3xl shadow-xl max-w-2xl mx-auto space-y-5 sm:space-y-8">
       <div className="text-center">
         <h3 className="text-2xl font-black text-foreground">{t.title}</h3>
         <p className="text-sm text-muted-foreground mt-2">{t.description}</p>
@@ -106,7 +106,7 @@ export default function ColorRecognitionTest({ locale: localeProp }: Props) {
                 <button
                   key={v}
                   onClick={() => setAnswers((prev) => ({ ...prev, [q.id]: v + 1 }))}
-                  className={`py-2 px-1 text-[10px] rounded-lg border transition-all ${answers[q.id] === v + 1 ? "bg-fuchsia-600 border-fuchsia-600 text-white font-bold shadow-md" : "bg-card border-slate-200 text-muted-foreground hover:bg-slate-100"}`}
+                  className={`py-2 px-1 text-[10px] rounded-lg border transition-all ${answers[q.id] === v + 1 ? "bg-fuchsia-600 border-fuchsia-600 text-white font-bold shadow-md" : "bg-card border-border text-muted-foreground hover:bg-slate-100"}`}
                 >
                   {opt}
                 </button>

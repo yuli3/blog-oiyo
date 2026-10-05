@@ -36,7 +36,7 @@ export const CVPGame: React.FC = () => {
     };
 
     return (
-        <Card className="p-4 sm:p-8 bg-card border-slate-200 shadow-2xl mt-5 sm:mt-8 overflow-hidden relative">
+        <Card className="p-4 sm:p-8 bg-card border-border shadow-2xl mt-5 sm:mt-8 overflow-hidden relative">
             <div className="absolute top-0 right-0 p-4 sm:p-8 opacity-10">
                 <Coins size={120} className="text-amber-300" />
             </div>
@@ -84,7 +84,7 @@ export const CVPGame: React.FC = () => {
                 </div>
 
                 <div className="flex flex-col gap-4">
-                    <div className="flex-1 p-4 sm:p-6 bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-center items-center text-center">
+                    <div className="flex-1 p-4 sm:p-6 bg-card rounded-2xl border border-border shadow-sm flex flex-col justify-center items-center text-center">
                         <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">현재 예상 이익</span>
                         <div className={`text-4xl font-black font-mono transition-colors ${profit >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
                             {profit >= 0 ? '+' : ''}₩{profit.toLocaleString()}
@@ -109,7 +109,7 @@ export const CVPGame: React.FC = () => {
             {isSimulated && (
                 <div className={`p-4 sm:p-6 rounded-2xl animate-in zoom-in duration-300 ${win ? 'bg-emerald-100 border-2 border-emerald-300' : 'bg-rose-100 border-2 border-rose-300'}`}>
                     <div className="flex items-center gap-4">
-                        <div className="p-3 bg-white rounded-full">
+                        <div className="p-3 bg-card rounded-full">
                             {win ? <TrendingUp className="text-emerald-500" /> : <TrendingDown className="text-rose-500" />}
                         </div>
                         <div>

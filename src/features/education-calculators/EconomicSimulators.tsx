@@ -43,7 +43,7 @@ export const ISLMSimulator: React.FC = () => {
     const eqR = 0.5 * eqY - 10 - Number(mShift);
 
     return (
-        <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-lg mt-5 sm:mt-8">
+        <Card className="p-4 sm:p-6 bg-card border-border shadow-lg mt-5 sm:mt-8">
             <div className="flex items-center gap-2 mb-6 text-foreground border-b pb-4">
                 <Activity className="text-rose-500" />
                 <h3 className="text-xl font-bold">인터랙티브 IS-LM 모델 시뮬레이터</h3>
@@ -79,7 +79,7 @@ export const ISLMSimulator: React.FC = () => {
                     </p>
                 </div>
 
-                <div className="space-y-5 sm:space-y-8 bg-card p-4 sm:p-6 rounded-xl border border-slate-200">
+                <div className="space-y-5 sm:space-y-8 bg-card p-4 sm:p-6 rounded-xl border border-border">
                     <div>
                         <div className="flex justify-between items-center mb-4">
                             <label className="text-sm font-bold text-slate-700 flex items-center gap-2">
@@ -114,7 +114,7 @@ export const ISLMSimulator: React.FC = () => {
                         />
                     </div>
 
-                    <div className="pt-4 border-t border-slate-200">
+                    <div className="pt-4 border-t border-border">
                         <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">균형 분석 (Equilibrium)</div>
                         <div className="space-y-2">
                             <div className="flex justify-between">

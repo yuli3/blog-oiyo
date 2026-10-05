@@ -544,7 +544,7 @@ ${preview
   return (
     <GameContainer title={t.title} subtitle={t.subtitle}>
       <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
-        <div className="space-y-4 rounded-xl border border-slate-200 bg-white p-4">
+        <div className="space-y-4 rounded-xl border border-border bg-card p-4">
           <label className="block text-sm font-medium text-slate-700">
             {t.companyName}
             <input className={`${inputCls} mt-1`} value={companyInfo.name} onChange={(e) => setInfo({ name: e.target.value })} />
@@ -668,7 +668,7 @@ ${preview
           <p className="rounded-lg border border-amber-100 bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-900">{t.disclaimer}</p>
         </div>
 
-        <div className="rounded-xl border border-slate-200 bg-white p-4">
+        <div className="rounded-xl border border-border bg-card p-4">
           <div className="mb-3 flex flex-wrap gap-2">
             <button type="button" className={secondaryButtonCls} onClick={copyToClipboard} disabled={!preview}>
               {copied ? t.copied : t.copy}

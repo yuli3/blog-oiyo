@@ -127,7 +127,7 @@ const WeddingPlanningCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale 
                   onChange={(e) => f.setter(e.target.value)}
                   min="0"
                   placeholder="0"
-                  className="w-full p-3 bg-white border border-pink-200 rounded-xl focus:ring-2 focus:ring-pink-400 outline-none text-sm"
+                  className="w-full p-3 bg-card border border-pink-200 rounded-xl focus:ring-2 focus:ring-pink-400 outline-none text-sm"
                 />
               </div>
             ))}
@@ -153,7 +153,7 @@ const WeddingPlanningCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale 
                   value={f.value}
                   onChange={(e) => f.setter(e.target.value)}
                   min="0"
-                  className="w-full p-3 bg-white border border-pink-200 rounded-xl focus:ring-2 focus:ring-pink-400 outline-none text-sm"
+                  className="w-full p-3 bg-card border border-pink-200 rounded-xl focus:ring-2 focus:ring-pink-400 outline-none text-sm"
                 />
               </div>
             ))}
@@ -169,7 +169,7 @@ const WeddingPlanningCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale 
           </button>
           <button
             onClick={reset}
-            className="px-5 py-3 bg-white border border-pink-300 hover:bg-pink-50 text-pink-700 font-bold rounded-xl transition-colors"
+            className="px-5 py-3 bg-card border border-pink-300 hover:bg-pink-50 text-pink-700 font-bold rounded-xl transition-colors"
           >
             {t.reset}
           </button>
@@ -193,7 +193,7 @@ const WeddingPlanningCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale 
                   color: result.weddingBalance >= 0 ? 'text-green-600' : 'text-red-600',
                 },
               ].map((item) => (
-                <div key={item.label} className="bg-white rounded-2xl border border-pink-100 p-4 text-center">
+                <div key={item.label} className="bg-card rounded-2xl border border-pink-100 p-4 text-center">
                   <p className="text-xs text-muted-foreground font-bold mb-1">{item.label}</p>
                   <p className={`text-sm font-bold ${item.color}`}>{item.value}</p>
                 </div>

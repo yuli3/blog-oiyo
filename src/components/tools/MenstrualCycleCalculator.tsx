@@ -284,7 +284,7 @@ export default function MenstrualCycleCalculator({ locale = 'ko' }: { locale?: L
       </div>
 
       {/* Input form */}
-      <div className="bg-white rounded-2xl border border-gray-200 p-5 space-y-5">
+      <div className="bg-card rounded-2xl border border-border p-5 space-y-5">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">{t.lastPeriodLabel}</label>
           <input
@@ -383,7 +383,7 @@ export default function MenstrualCycleCalculator({ locale = 'ko' }: { locale?: L
           </div>
 
           {/* Cycle phases visual */}
-          <div className="bg-white rounded-2xl border border-gray-200 p-4">
+          <div className="bg-card rounded-2xl border border-border p-4">
             <h2 className="text-sm font-semibold text-gray-700 mb-3">
               {locale === 'ko' ? '주기 단계' : locale === 'ja' ? '周期の段階' : locale === 'fr' ? 'Phases du cycle' : locale === 'es' ? 'Fases del ciclo' : locale === 'zh' ? '周期阶段' : 'Cycle Phases'}
             </h2>
@@ -421,7 +421,7 @@ export default function MenstrualCycleCalculator({ locale = 'ko' }: { locale?: L
           </div>
 
           {/* Next 3 cycles */}
-          <div className="bg-white rounded-2xl border border-gray-200 p-4">
+          <div className="bg-card rounded-2xl border border-border p-4">
             <h2 className="text-sm font-semibold text-gray-700 mb-3">{t.next3Cycles}</h2>
             <div className="space-y-3">
               {futureCycles.map((c, i) => (

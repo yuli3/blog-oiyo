@@ -79,7 +79,7 @@ const ExpenseRatioCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
             value={revenue}
             onChange={(e) => setRevenue(e.target.value)}
             min="0"
-            className="w-full p-3 bg-white border border-lime-200 rounded-xl focus:ring-2 focus:ring-lime-400 outline-none"
+            className="w-full p-3 bg-card border border-lime-200 rounded-xl focus:ring-2 focus:ring-lime-400 outline-none"
           />
         </div>
 
@@ -95,7 +95,7 @@ const ExpenseRatioCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
               min="0"
               max="100"
               step="0.1"
-              className="w-full p-3 bg-white border border-lime-200 rounded-xl focus:ring-2 focus:ring-lime-400 outline-none"
+              className="w-full p-3 bg-card border border-lime-200 rounded-xl focus:ring-2 focus:ring-lime-400 outline-none"
             />
             <p className="text-xs text-lime-600">
               {ko ? '예: 음식점 ~85%, 프리랜서 ~60%' : 'e.g. Restaurant ~85%, Freelancer ~60%'}
@@ -110,7 +110,7 @@ const ExpenseRatioCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
               value={actualExpenses}
               onChange={(e) => setActualExpenses(e.target.value)}
               min="0"
-              className="w-full p-3 bg-white border border-lime-200 rounded-xl focus:ring-2 focus:ring-lime-400 outline-none"
+              className="w-full p-3 bg-card border border-lime-200 rounded-xl focus:ring-2 focus:ring-lime-400 outline-none"
             />
           </div>
         </div>
@@ -130,7 +130,7 @@ const ExpenseRatioCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
           </button>
           <button
             onClick={reset}
-            className="px-5 py-3 bg-white border border-lime-300 hover:bg-lime-50 text-lime-700 font-bold rounded-xl transition-colors"
+            className="px-5 py-3 bg-card border border-lime-300 hover:bg-lime-50 text-lime-700 font-bold rounded-xl transition-colors"
           >
             {ko ? '초기화' : 'Reset'}
           </button>
@@ -166,14 +166,14 @@ const ExpenseRatioCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
 
             {/* Two columns */}
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white rounded-xl border-2 border-lime-200 p-4 text-center">
+              <div className="bg-card rounded-xl border-2 border-lime-200 p-4 text-center">
                 <p className="text-xs font-bold text-lime-600 uppercase tracking-wide mb-2">
                   {ko ? '추계 (표준경비율)' : 'Estimated'}
                 </p>
                 <p className="text-xs text-muted-foreground mb-1">{ko ? '과세소득' : 'Taxable Income'}</p>
                 <p className="text-lg font-black text-lime-900">{fmt(result.incomeByRate)}</p>
               </div>
-              <div className="bg-white rounded-xl border-2 border-green-200 p-4 text-center">
+              <div className="bg-card rounded-xl border-2 border-green-200 p-4 text-center">
                 <p className="text-xs font-bold text-green-600 uppercase tracking-wide mb-2">
                   {ko ? '기장 (실제경비)' : 'Bookkeeping'}
                 </p>

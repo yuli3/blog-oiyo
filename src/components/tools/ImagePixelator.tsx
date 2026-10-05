@@ -201,7 +201,7 @@ export default function ImagePixelator({ locale }: { locale: Locale }) {
           </button>
         ) : (
           <>
-            <div className="rounded-xl border border-slate-200 bg-white p-3">
+            <div className="rounded-xl border border-border bg-card p-3">
               <div className="mb-2 flex items-center justify-between gap-3">
                 <span className="text-xs font-semibold uppercase text-muted-foreground">{t.preview}</span>
                 <span className="rounded-full bg-green-50 px-2 py-1 text-xs font-semibold text-green-800">{pixelSize}px</span>
@@ -209,7 +209,7 @@ export default function ImagePixelator({ locale }: { locale: Locale }) {
               <canvas ref={canvasRef} className="max-h-[520px] w-full rounded-lg object-contain" style={{ imageRendering: "pixelated" }} />
             </div>
 
-            <label className="block rounded-xl border border-slate-200 bg-card p-4">
+            <label className="block rounded-xl border border-border bg-card p-4">
               <span className="flex items-center justify-between text-sm font-semibold text-slate-800">
                 {t.pixelSize}
                 <span>{pixelSize}px</span>

@@ -113,7 +113,7 @@ export default function ColorPairs({ locale = "ko" }: { locale?: Locale }) {
       </div>
       <div className="flex gap-2">
         {(["fashion", "ui"] as const).map((mode) => (
-          <button key={mode} type="button" onClick={() => apply(a, b, mode)} className={`min-h-11 rounded-full px-4 text-sm font-black ${use === mode ? "bg-slate-900 text-white" : "border bg-white"}`}>{mode === "fashion" ? (lang === "ko" ? "패션" : "Fashion") : "UI"}</button>
+          <button key={mode} type="button" onClick={() => apply(a, b, mode)} className={`min-h-11 rounded-full px-4 text-sm font-black ${use === mode ? "bg-slate-900 text-white" : "border bg-card"}`}>{mode === "fashion" ? (lang === "ko" ? "패션" : "Fashion") : "UI"}</button>
         ))}
       </div>
       {use === "fashion" ? (
@@ -140,7 +140,7 @@ export default function ColorPairs({ locale = "ko" }: { locale?: Locale }) {
       <p className="text-sm leading-6 text-slate-600">{match ? (match.mood[lang] ?? match.mood.en) : (lang === "ko" ? "큐레이션 밖의 짝입니다. 취향·참고." : "Not in the curated list. Taste, not science.")}</p>
       <div className="flex flex-wrap gap-2">
         {catalog.pairs.map((row) => (
-          <button key={row.id} type="button" onClick={() => apply(row.a, row.b)} className="flex items-center gap-2 rounded-full border bg-white px-3 py-2 text-xs font-bold">
+          <button key={row.id} type="button" onClick={() => apply(row.a, row.b)} className="flex items-center gap-2 rounded-full border bg-card px-3 py-2 text-xs font-bold">
             <span className="h-4 w-4 rounded-full" style={{ background: `#${row.a}` }} />
             <span className="h-4 w-4 rounded-full" style={{ background: `#${row.b}` }} />
             {row.name[lang] ?? row.name.en}

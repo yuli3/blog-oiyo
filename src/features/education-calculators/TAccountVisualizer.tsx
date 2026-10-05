@@ -161,7 +161,7 @@ interface EntryRowProps {
 }
 
 const EntryRow: React.FC<EntryRowProps> = ({ entry, onUpdate, onRemove, canRemove, locale }) => (
-  <div className="grid grid-cols-1 md:grid-cols-6 gap-2 items-center p-3 bg-white border border-green-100 rounded-xl">
+  <div className="grid grid-cols-1 md:grid-cols-6 gap-2 items-center p-3 bg-card border border-green-100 rounded-xl">
     <input
       type="date"
       value={entry.date}
@@ -266,7 +266,7 @@ export const TAccountVisualizer: React.FC<TAccountVisualizerProps> = ({ locale =
             className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition-colors border ${
               state.activeTab === tab.key
                 ? 'bg-green-600 text-white border-green-600'
-                : 'bg-white text-green-700 border-green-200 hover:bg-green-50'
+                : 'bg-card text-green-700 border-green-200 hover:bg-green-50'
             }`}
           >
             {locale === 'ko' ? tab.ko : tab.en}
@@ -349,7 +349,7 @@ export const TAccountVisualizer: React.FC<TAccountVisualizerProps> = ({ locale =
                     </div>
 
                     {/* T shape */}
-                    <div className="flex bg-white">
+                    <div className="flex bg-card">
                       {/* Debit side */}
                       <div className="flex-1 border-r-2 border-slate-300 p-2">
                         <p className="text-xs font-bold text-muted-foreground mb-1">{locale === 'ko' ? '차변 (Dr)' : 'Dr'}</p>
@@ -405,7 +405,7 @@ export const TAccountVisualizer: React.FC<TAccountVisualizerProps> = ({ locale =
               {locale === 'ko' ? '분개를 입력하면 잔액시산표가 표시됩니다.' : 'Enter journal entries to see the trial balance.'}
             </p>
           ) : (
-            <div className="bg-white border border-green-200 rounded-2xl overflow-hidden">
+            <div className="bg-card border border-green-200 rounded-2xl overflow-hidden">
               <table className="w-full text-sm" aria-label={locale === 'ko' ? '잔액시산표' : 'Trial Balance'}>
                 <thead>
                   <tr className="bg-green-50">
@@ -422,7 +422,7 @@ export const TAccountVisualizer: React.FC<TAccountVisualizerProps> = ({ locale =
                 </thead>
                 <tbody>
                   {tAccounts.map((acc, idx) => (
-                    <tr key={acc.account} className={idx % 2 === 0 ? 'bg-white' : 'bg-card'}>
+                    <tr key={acc.account} className={idx % 2 === 0 ? 'bg-card' : 'bg-card'}>
                       <td className="px-4 py-2 text-slate-700">{acc.account}</td>
                       <td className="px-4 py-2 text-right font-bold text-green-700">
                         {acc.debitTotal > 0 ? acc.debitTotal.toLocaleString() : '—'}

@@ -107,7 +107,7 @@ export default function AngleConverter({ locale }: { locale: Locale }) {
 
   const inputCls =
     "w-full rounded-lg border border-border px-3 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20";
-  const card = "rounded-xl border border-border bg-white p-4";
+  const card = "rounded-xl border border-border bg-card p-4";
 
   return (
     <GameContainer title={t.title} subtitle={t.subtitle}>

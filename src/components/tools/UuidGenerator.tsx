@@ -81,7 +81,7 @@ const UuidGenerator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
         onClick={onChange}
         className={`relative w-10 h-6 rounded-full transition-colors ${checked ? 'bg-success' : 'bg-muted'}`}
       >
-        <span className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white shadow transition-transform ${checked ? 'translate-x-4' : ''}`} />
+        <span className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-card shadow transition-transform ${checked ? 'translate-x-4' : ''}`} />
       </button>
       <span className="text-sm text-muted-foreground">{label}</span>
     </label>

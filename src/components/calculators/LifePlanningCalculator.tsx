@@ -195,7 +195,7 @@ const LifePlanningCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
             onClick={() => setActiveTab(id)}
             className={`flex-1 py-2 rounded-xl text-sm font-bold transition-colors ${
               activeTab === id
-                ? 'bg-white text-rose-700 shadow-sm'
+                ? 'bg-card text-rose-700 shadow-sm'
                 : 'text-rose-500 hover:text-rose-700'
             }`}
           >
@@ -223,7 +223,7 @@ const LifePlanningCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
                   onChange={(e) => f.setter(e.target.value)}
                   min="0"
                   placeholder="0"
-                  className="w-full p-3 bg-white border border-rose-200 rounded-xl focus:ring-2 focus:ring-rose-400 outline-none text-sm"
+                  className="w-full p-3 bg-card border border-rose-200 rounded-xl focus:ring-2 focus:ring-rose-400 outline-none text-sm"
                 />
               </div>
             ))}
@@ -237,11 +237,11 @@ const LifePlanningCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
           {weddingResult && (
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
-                <div className="bg-white rounded-2xl border border-rose-100 p-4 text-center">
+                <div className="bg-card rounded-2xl border border-rose-100 p-4 text-center">
                   <p className="text-xs text-muted-foreground font-bold mb-1">{t.totalAsset}</p>
                   <p className="text-lg font-bold text-rose-700">{fmt(weddingResult.totalAsset)}{locale === 'ko' ? '원' : ''}</p>
                 </div>
-                <div className="bg-white rounded-2xl border border-rose-100 p-4 text-center">
+                <div className="bg-card rounded-2xl border border-rose-100 p-4 text-center">
                   <p className="text-xs text-muted-foreground font-bold mb-1">{t.netStart}</p>
                   <p className={`text-lg font-bold ${weddingResult.netStart < 0 ? 'text-red-600' : 'text-green-600'}`}>
                     {fmt(weddingResult.netStart)}{locale === 'ko' ? '원' : ''}
@@ -267,7 +267,7 @@ const LifePlanningCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
               value={currentCost}
               onChange={(e) => setCurrentCost(e.target.value)}
               min="0"
-              className="w-full p-3 bg-white border border-rose-200 rounded-xl focus:ring-2 focus:ring-rose-400 outline-none"
+              className="w-full p-3 bg-card border border-rose-200 rounded-xl focus:ring-2 focus:ring-rose-400 outline-none"
             />
           </div>
           <div className="grid grid-cols-3 gap-3">
@@ -284,7 +284,7 @@ const LifePlanningCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
                   onChange={(e) => f.setter(e.target.value)}
                   min="0"
                   step="0.1"
-                  className="w-full p-3 bg-white border border-rose-200 rounded-xl focus:ring-2 focus:ring-rose-400 outline-none text-sm"
+                  className="w-full p-3 bg-card border border-rose-200 rounded-xl focus:ring-2 focus:ring-rose-400 outline-none text-sm"
                 />
               </div>
             ))}
@@ -298,11 +298,11 @@ const LifePlanningCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
           {eduResult && (
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
-                <div className="bg-white rounded-2xl border border-rose-100 p-4 text-center">
+                <div className="bg-card rounded-2xl border border-rose-100 p-4 text-center">
                   <p className="text-xs text-muted-foreground font-bold mb-1">{t.futureCostLabel}</p>
                   <p className="text-sm font-bold text-rose-700">{fmt(eduResult.futureCost)}{locale === 'ko' ? '원' : ''}</p>
                 </div>
-                <div className="bg-white rounded-2xl border border-rose-100 p-4 text-center">
+                <div className="bg-card rounded-2xl border border-rose-100 p-4 text-center">
                   <p className="text-xs text-muted-foreground font-bold mb-1">{t.monthlySaveLabel}</p>
                   <p className="text-sm font-bold text-green-600">{fmt(eduResult.monthlySave)}{locale === 'ko' ? '원' : ''}</p>
                 </div>
@@ -325,7 +325,7 @@ const LifePlanningCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
               onChange={(e) => setHousePrice(e.target.value)}
               min="0"
               placeholder="0"
-              className="w-full p-3 bg-white border border-rose-200 rounded-xl focus:ring-2 focus:ring-rose-400 outline-none"
+              className="w-full p-3 bg-card border border-rose-200 rounded-xl focus:ring-2 focus:ring-rose-400 outline-none"
             />
             <p className="text-xs text-slate-400">{t.housePriceNote}</p>
           </div>
@@ -342,7 +342,7 @@ const LifePlanningCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
                   onChange={(e) => f.setter(e.target.value)}
                   min="0"
                   placeholder="0"
-                  className="w-full p-3 bg-white border border-rose-200 rounded-xl focus:ring-2 focus:ring-rose-400 outline-none text-sm"
+                  className="w-full p-3 bg-card border border-rose-200 rounded-xl focus:ring-2 focus:ring-rose-400 outline-none text-sm"
                 />
               </div>
             ))}
@@ -355,7 +355,7 @@ const LifePlanningCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
           </button>
           {jeonseResult && (
             <div className="space-y-3">
-              <div className="text-center p-5 bg-white rounded-2xl border border-rose-100">
+              <div className="text-center p-5 bg-card rounded-2xl border border-rose-100">
                 <p className="text-xs text-muted-foreground font-bold uppercase tracking-wide mb-1">{t.debtRatio}</p>
                 <p className={`text-4xl font-black ${jeonseResult.isSafe ? 'text-green-600' : 'text-red-600'}`}>
                   {jeonseResult.ratio}%
@@ -374,7 +374,7 @@ const LifePlanningCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
       <div className="flex gap-3 mt-6">
         <button
           onClick={resetAll}
-          className="w-full py-2 bg-white border border-rose-300 hover:bg-rose-50 text-rose-700 font-bold rounded-xl transition-colors text-sm"
+          className="w-full py-2 bg-card border border-rose-300 hover:bg-rose-50 text-rose-700 font-bold rounded-xl transition-colors text-sm"
         >
           {t.reset}
         </button>

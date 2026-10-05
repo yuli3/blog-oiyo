@@ -111,7 +111,7 @@ const TaxCalendar: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
             className={`py-3 rounded-xl text-sm font-bold transition-colors border ${
               jobType === type
                 ? 'bg-green-600 text-white border-green-600'
-                : 'bg-white text-green-700 border-green-200 hover:bg-green-50'
+                : 'bg-card text-green-700 border-green-200 hover:bg-green-50'
             }`}
             aria-pressed={jobType === type}
           >
@@ -121,7 +121,7 @@ const TaxCalendar: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
       </div>
 
       {/* Description panel */}
-      <div className="mb-6 px-4 py-2.5 bg-white border border-green-100 rounded-xl text-sm text-green-700">
+      <div className="mb-6 px-4 py-2.5 bg-card border border-green-100 rounded-xl text-sm text-green-700">
         <span className="font-bold mr-2">{locale === 'ko' ? JOB_LABELS[jobType].ko : JOB_LABELS[jobType].en}:</span>
         <span>{locale === 'ko' ? JOB_DESCRIPTIONS[jobType].ko : JOB_DESCRIPTIONS[jobType].en}</span>
       </div>
@@ -137,8 +137,8 @@ const TaxCalendar: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
               key={month}
               className={`p-4 rounded-2xl border ${
                 isCurrentMonth
-                  ? 'border-green-400 bg-white shadow-md'
-                  : 'border-green-100 bg-white'
+                  ? 'border-green-400 bg-card shadow-md'
+                  : 'border-green-100 bg-card'
               }`}
               aria-label={`${locale === 'ko' ? MONTH_NAMES_KO[month - 1] : MONTH_NAMES_EN[month - 1]} ${locale === 'ko' ? '세금 일정' : 'tax events'}`}
             >
