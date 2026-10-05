@@ -54,7 +54,7 @@ import { join, basename, dirname } from "node:path";
 // 줄이는 방향으로만 갱신한다 — 늘리는 것은 하드코딩을 승인하는 것이다.
 const PALETTE_BUDGET = {
   oiyo: 6053,
-  blog: 10764,
+  blog: 7274, // 2026-10-05: 회색 계열(글자 900·950 → foreground, 500 → muted-foreground, 바탕 50 → card)만 옮김. 밝기 차이 0.03 이하.
   wiki: 5370,
   game: 7428,
   news: 0, // news 는 처음부터 var(--*) 만 쓴다. 이 0 을 지킨다.

@@ -44,7 +44,7 @@ export const ISLMSimulator: React.FC = () => {
 
     return (
         <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-lg mt-5 sm:mt-8">
-            <div className="flex items-center gap-2 mb-6 text-slate-900 border-b pb-4">
+            <div className="flex items-center gap-2 mb-6 text-foreground border-b pb-4">
                 <Activity className="text-rose-500" />
                 <h3 className="text-xl font-bold">인터랙티브 IS-LM 모델 시뮬레이터</h3>
             </div>
@@ -74,12 +74,12 @@ export const ISLMSimulator: React.FC = () => {
                             </LineChart>
                         </ResponsiveContainer>
                     </div>
-                    <p className="text-xs text-slate-500 mt-4 text-center">
+                    <p className="text-xs text-muted-foreground mt-4 text-center">
                         * 재정정책(G)은 IS곡선을, 통화정책(M)은 LM곡선을 이동시킵니다.
                     </p>
                 </div>
 
-                <div className="space-y-5 sm:space-y-8 bg-slate-50 p-4 sm:p-6 rounded-xl border border-slate-200">
+                <div className="space-y-5 sm:space-y-8 bg-card p-4 sm:p-6 rounded-xl border border-slate-200">
                     <div>
                         <div className="flex justify-between items-center mb-4">
                             <label className="text-sm font-bold text-slate-700 flex items-center gap-2">
@@ -119,11 +119,11 @@ export const ISLMSimulator: React.FC = () => {
                         <div className="space-y-2">
                             <div className="flex justify-between">
                                 <span className="text-sm text-slate-600">균형 소득 (Y*)</span>
-                                <span className="font-mono font-bold text-slate-900">{eqY.toFixed(1)}</span>
+                                <span className="font-mono font-bold text-foreground">{eqY.toFixed(1)}</span>
                             </div>
                             <div className="flex justify-between">
                                 <span className="text-sm text-slate-600">균형 이자율 (r*)</span>
-                                <span className="font-mono font-bold text-slate-900">{eqR.toFixed(1)}%</span>
+                                <span className="font-mono font-bold text-foreground">{eqR.toFixed(1)}%</span>
                             </div>
                         </div>
                     </div>

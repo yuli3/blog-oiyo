@@ -531,8 +531,8 @@ export default function BabyFoodScheduler({ locale }: Props) {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900">{t.title}</h1>
-        <p className="mt-1 text-gray-500">{t.subtitle}</p>
+        <h1 className="text-2xl font-bold text-foreground">{t.title}</h1>
+        <p className="mt-1 text-muted-foreground">{t.subtitle}</p>
       </div>
 
       {/* Slider */}
@@ -540,9 +540,9 @@ export default function BabyFoodScheduler({ locale }: Props) {
         <div>
           <div className="flex justify-between items-center mb-2">
             <label className="text-sm font-medium text-gray-700">{t.sliderLabel}</label>
-            <span className="text-2xl font-bold text-gray-900">
+            <span className="text-2xl font-bold text-foreground">
               {months}
-              <span className="text-base font-normal text-gray-500 ml-1">{t.monthUnit}</span>
+              <span className="text-base font-normal text-muted-foreground ml-1">{t.monthUnit}</span>
             </span>
           </div>
           <input
@@ -574,12 +574,12 @@ export default function BabyFoodScheduler({ locale }: Props) {
       {/* Quick stats */}
       <div className="grid grid-cols-2 gap-4">
         <div className={`rounded-xl border ${borderClass} bg-white p-4 text-center`}>
-          <div className="text-2xl font-bold text-gray-900">{stage.timesPerDay}회</div>
-          <div className="text-xs text-gray-500 mt-1">{t.timesPerDay}</div>
+          <div className="text-2xl font-bold text-foreground">{stage.timesPerDay}회</div>
+          <div className="text-xs text-muted-foreground mt-1">{t.timesPerDay}</div>
         </div>
         <div className={`rounded-xl border ${borderClass} bg-white p-4 text-center`}>
-          <div className="text-2xl font-bold text-gray-900">{stage.amountPerMealMl}ml</div>
-          <div className="text-xs text-gray-500 mt-1">{t.amountPerMeal}</div>
+          <div className="text-2xl font-bold text-foreground">{stage.amountPerMealMl}ml</div>
+          <div className="text-xs text-muted-foreground mt-1">{t.amountPerMeal}</div>
         </div>
       </div>
 

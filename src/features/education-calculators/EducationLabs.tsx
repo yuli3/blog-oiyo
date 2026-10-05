@@ -26,38 +26,38 @@ export const CVPLab: React.FC = () => {
 
   return (
     <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-5 sm:mt-8">
-      <div className="flex items-center gap-2 mb-6 text-slate-900 border-b pb-4">
+      <div className="flex items-center gap-2 mb-6 text-foreground border-b pb-4">
         <Target className="text-green-500" />
         <h3 className="text-xl font-bold">CVP 손익분기점 라보</h3>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="space-y-4 lg:col-span-1">
-          <div className="p-4 rounded-xl border border-slate-200 bg-slate-50">
-            <label className="text-xs font-bold text-slate-500 block mb-2">단위당 판매가격 (P)</label>
+          <div className="p-4 rounded-xl border border-slate-200 bg-card">
+            <label className="text-xs font-bold text-muted-foreground block mb-2">단위당 판매가격 (P)</label>
             <input
               type="number"
               value={sellingPrice}
               onChange={(e) => setSellingPrice(Number(e.target.value))}
-              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-900"
+              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-foreground"
             />
           </div>
-          <div className="p-4 rounded-xl border border-slate-200 bg-slate-50">
-            <label className="text-xs font-bold text-slate-500 block mb-2">단위당 변동원가 (VC)</label>
+          <div className="p-4 rounded-xl border border-slate-200 bg-card">
+            <label className="text-xs font-bold text-muted-foreground block mb-2">단위당 변동원가 (VC)</label>
             <input
               type="number"
               value={variableCost}
               onChange={(e) => setVariableCost(Number(e.target.value))}
-              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-900"
+              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-foreground"
             />
           </div>
-          <div className="p-4 rounded-xl border border-slate-200 bg-slate-50">
-            <label className="text-xs font-bold text-slate-500 block mb-2">총 고정원가 (FC)</label>
+          <div className="p-4 rounded-xl border border-slate-200 bg-card">
+            <label className="text-xs font-bold text-muted-foreground block mb-2">총 고정원가 (FC)</label>
             <input
               type="number"
               value={fixedCost}
               onChange={(e) => setFixedCost(Number(e.target.value))}
-              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-900"
+              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-foreground"
             />
           </div>
 
@@ -67,19 +67,19 @@ export const CVPLab: React.FC = () => {
             </div>
             <div className="space-y-3 text-sm">
               <div className="flex items-center justify-between">
-                <span className="text-slate-500">단위당 공헌이익</span>
-                <span className="font-mono font-bold text-slate-900">
+                <span className="text-muted-foreground">단위당 공헌이익</span>
+                <span className="font-mono font-bold text-foreground">
                   {contributionMargin.toLocaleString()}원
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-slate-500">공헌이익률</span>
-                <span className="font-mono font-bold text-slate-900">
+                <span className="text-muted-foreground">공헌이익률</span>
+                <span className="font-mono font-bold text-foreground">
                   {contributionMarginRatio.toFixed(1)}%
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-slate-500">손익분기 판매량</span>
+                <span className="text-muted-foreground">손익분기 판매량</span>
                 <span className="font-mono font-bold text-green-600">
                   {breakEvenPoint.toLocaleString()} units
                 </span>
@@ -89,7 +89,7 @@ export const CVPLab: React.FC = () => {
         </div>
 
         <div className="lg:col-span-2">
-          <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">
+          <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3">
             <TrendingUp className="text-green-500" size={14} /> 손익분기점 시각화
           </div>
           <CVPChart
@@ -140,38 +140,38 @@ export const SamplingErrorLab: React.FC = () => {
 
   return (
     <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-5 sm:mt-8">
-      <div className="flex items-center gap-2 mb-6 text-slate-900 border-b pb-4">
+      <div className="flex items-center gap-2 mb-6 text-foreground border-b pb-4">
         <Target className="text-green-500" />
         <h3 className="text-xl font-bold">표본오차 실험실</h3>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="space-y-4 lg:col-span-1">
-          <div className="p-4 rounded-xl border border-slate-200 bg-slate-50">
-            <label className="text-xs font-bold text-slate-500 block mb-2">모집단 비율 (예: 찬성률, %)</label>
+          <div className="p-4 rounded-xl border border-slate-200 bg-card">
+            <label className="text-xs font-bold text-muted-foreground block mb-2">모집단 비율 (예: 찬성률, %)</label>
             <input
               type="number"
               value={populationRate}
               onChange={(e) => setPopulationRate(Number(e.target.value))}
-              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-900"
+              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-foreground"
             />
           </div>
-          <div className="p-4 rounded-xl border border-slate-200 bg-slate-50">
-            <label className="text-xs font-bold text-slate-500 block mb-2">표본 크기 (n)</label>
+          <div className="p-4 rounded-xl border border-slate-200 bg-card">
+            <label className="text-xs font-bold text-muted-foreground block mb-2">표본 크기 (n)</label>
             <input
               type="number"
               value={sampleSize}
               onChange={(e) => setSampleSize(Number(e.target.value))}
-              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-900"
+              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-foreground"
             />
           </div>
-          <div className="p-4 rounded-xl border border-slate-200 bg-slate-50">
-            <label className="text-xs font-bold text-slate-500 block mb-2">반복 횟수</label>
+          <div className="p-4 rounded-xl border border-slate-200 bg-card">
+            <label className="text-xs font-bold text-muted-foreground block mb-2">반복 횟수</label>
             <input
               type="number"
               value={trials}
               onChange={(e) => setTrials(Number(e.target.value))}
-              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-900"
+              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-foreground"
             />
           </div>
           <div className="p-4 rounded-xl border border-green-200 bg-green-50/50">
@@ -180,13 +180,13 @@ export const SamplingErrorLab: React.FC = () => {
             </div>
             <div className="space-y-3 text-sm">
               <div className="flex items-center justify-between">
-                <span className="text-slate-500">평균 추정치</span>
-                <span className="font-mono font-bold text-slate-900">
+                <span className="text-muted-foreground">평균 추정치</span>
+                <span className="font-mono font-bold text-foreground">
                   {avg.toFixed(1)}%
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-slate-500">변동성 (표준편차)</span>
+                <span className="text-muted-foreground">변동성 (표준편차)</span>
                 <span className="font-mono font-bold text-green-600">
                   {spread.toFixed(1)}
                 </span>
@@ -196,7 +196,7 @@ export const SamplingErrorLab: React.FC = () => {
         </div>
 
         <div className="lg:col-span-2">
-          <div className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">
+          <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3">
             표본별 추정치 분포
           </div>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
@@ -209,7 +209,7 @@ export const SamplingErrorLab: React.FC = () => {
               </div>
             ))}
           </div>
-          <p className="text-xs text-slate-500 mt-4 italic">
+          <p className="text-xs text-muted-foreground mt-4 italic">
             * 표본 크기가 커질수록 평균은 안정되고 변동성이 줄어듭니다.
           </p>
         </div>

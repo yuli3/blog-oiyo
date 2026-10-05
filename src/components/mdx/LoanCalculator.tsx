@@ -98,7 +98,7 @@ export default function LoanCalculator() {
 
   return (
     <div className="my-5 sm:my-8 rounded-2xl border border-gray-200 bg-white p-4 sm:p-6 shadow-sm">
-      <h3 className="mb-6 text-xl font-bold text-gray-900">대출 이자 계산기</h3>
+      <h3 className="mb-6 text-xl font-bold text-foreground">대출 이자 계산기</h3>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
@@ -168,22 +168,22 @@ export default function LoanCalculator() {
         <div className="mt-6 space-y-4">
           <div className="grid grid-cols-3 gap-3 text-center">
             <div className="rounded-xl bg-green-50 p-4">
-              <p className="text-xs text-gray-500">첫 달 납입액</p>
+              <p className="text-xs text-muted-foreground">첫 달 납입액</p>
               <p className="text-lg font-bold text-green-600">{formatKRW(firstPayment)}원</p>
             </div>
             <div className="rounded-xl bg-orange-50 p-4">
-              <p className="text-xs text-gray-500">총 이자</p>
+              <p className="text-xs text-muted-foreground">총 이자</p>
               <p className="text-lg font-bold text-orange-600">{formatKRW(totalInterest)}원</p>
             </div>
             <div className="rounded-xl bg-green-50 p-4">
-              <p className="text-xs text-gray-500">총 상환액</p>
+              <p className="text-xs text-muted-foreground">총 상환액</p>
               <p className="text-lg font-bold text-green-600">{formatKRW(totalPayment)}원</p>
             </div>
           </div>
 
           <div className="overflow-x-auto rounded-xl border border-gray-200">
             <table className="w-full text-xs">
-              <thead className="bg-gray-50">
+              <thead className="bg-card">
                 <tr>
                   {['회차', '월 납입액', '원금', '이자', '잔금'].map((h) => (
                     <th key={h} className="px-3 py-2 text-left font-semibold text-gray-700">
@@ -196,7 +196,7 @@ export default function LoanCalculator() {
                 {displayRows.map((row) => (
                   <tr key={row.month} className="border-t border-gray-100">
                     <td className="px-3 py-2 text-gray-600">{row.month}</td>
-                    <td className="px-3 py-2 font-medium text-gray-900">{formatKRW(row.payment)}</td>
+                    <td className="px-3 py-2 font-medium text-foreground">{formatKRW(row.payment)}</td>
                     <td className="px-3 py-2 text-green-600">{formatKRW(row.principal)}</td>
                     <td className="px-3 py-2 text-orange-600">{formatKRW(row.interest)}</td>
                     <td className="px-3 py-2 text-gray-600">{formatKRW(row.balance)}</td>
@@ -209,7 +209,7 @@ export default function LoanCalculator() {
           {result.length > 12 && (
             <button
               onClick={() => setShowFull((f) => !f)}
-              className="w-full rounded-lg border border-gray-300 py-2 text-sm text-gray-600 transition hover:bg-gray-50"
+              className="w-full rounded-lg border border-gray-300 py-2 text-sm text-gray-600 transition hover:bg-card"
             >
               {showFull ? '접기 ▲' : `전체 ${result.length}회 보기 ▼`}
             </button>

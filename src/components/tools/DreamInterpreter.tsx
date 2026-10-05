@@ -1108,8 +1108,8 @@ export default function DreamInterpreter({ locale }: Props) {
       {/* Header */}
       <div className="text-center space-y-2">
         <div className="text-4xl">🌙</div>
-        <h1 className="text-2xl font-bold text-gray-900">{t.title}</h1>
-        <p className="text-gray-500 text-sm">{t.subtitle}</p>
+        <h1 className="text-2xl font-bold text-foreground">{t.title}</h1>
+        <p className="text-muted-foreground text-sm">{t.subtitle}</p>
       </div>
 
       {/* Flash message */}
@@ -1141,7 +1141,7 @@ export default function DreamInterpreter({ locale }: Props) {
               className={`px-3 py-1 rounded-full text-xs font-medium transition-colors border ${
                 isActive
                   ? `${c.bg} ${c.border} ${c.text}`
-                  : "bg-white border-gray-200 text-gray-500 hover:bg-gray-50"
+                  : "bg-white border-gray-200 text-muted-foreground hover:bg-card"
               }`}
             >
               {t.categoryLabels[cat]}
@@ -1152,7 +1152,7 @@ export default function DreamInterpreter({ locale }: Props) {
 
       {/* Symbol grid */}
       <div>
-        <p className="text-xs text-gray-500 mb-3 text-center">{t.selectPrompt}</p>
+        <p className="text-xs text-muted-foreground mb-3 text-center">{t.selectPrompt}</p>
         <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
           {filtered.map((sym) => {
             const isSelected = selected.includes(sym.id);
@@ -1178,7 +1178,7 @@ export default function DreamInterpreter({ locale }: Props) {
       {/* Selected chips */}
       {selected.length > 0 && (
         <div className="space-y-2">
-          <p className="text-xs font-medium text-gray-500">{t.selectedLabel} ({selected.length}/{MAX})</p>
+          <p className="text-xs font-medium text-muted-foreground">{t.selectedLabel} ({selected.length}/{MAX})</p>
           <div className="flex flex-wrap gap-2">
             {selectedSymbols.map((sym) => {
               const c = CATEGORY_COLORS[sym.category];
@@ -1220,7 +1220,7 @@ export default function DreamInterpreter({ locale }: Props) {
         {selected.length > 0 && (
           <button
             onClick={clear}
-            className="px-4 py-2.5 border border-gray-200 text-gray-600 rounded-xl font-medium hover:bg-gray-50 transition-colors text-sm"
+            className="px-4 py-2.5 border border-gray-200 text-gray-600 rounded-xl font-medium hover:bg-card transition-colors text-sm"
           >
             {t.clearBtn}
           </button>

@@ -71,7 +71,7 @@ const MbtiSalaryExpert: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' })
 
     return (
         <div className="not-prose my-7 sm:my-12 p-4 sm:p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-3xl mx-auto">
-            <h3 className="text-2xl font-black text-center text-slate-900 mb-5 sm:mb-8">{t.title}</h3>
+            <h3 className="text-2xl font-black text-center text-foreground mb-5 sm:mb-8">{t.title}</h3>
             
             <div className="flex flex-wrap justify-center gap-2 mb-6 sm:mb-10">
                 {Object.keys(t.types).map(type => (
@@ -81,7 +81,7 @@ const MbtiSalaryExpert: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' })
                         className={`px-4 py-2 rounded-xl border font-bold transition-all ${
                             selectedType === type
                                 ? 'bg-indigo-600 border-indigo-600 text-white shadow-lg scale-110'
-                                : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-indigo-400'
+                                : 'bg-card border-slate-200 text-slate-600 hover:border-indigo-400'
                         }`}
                     >
                         {type}

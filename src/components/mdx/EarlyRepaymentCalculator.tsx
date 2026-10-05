@@ -45,7 +45,7 @@ export default function EarlyRepaymentCalculator() {
 
   return (
     <div className="my-5 sm:my-8 rounded-2xl border border-gray-200 bg-white p-4 sm:p-6 shadow-sm">
-      <h3 className="mb-6 text-xl font-bold text-gray-900">중도상환수수료 계산기</h3>
+      <h3 className="mb-6 text-xl font-bold text-foreground">중도상환수수료 계산기</h3>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {[
@@ -75,21 +75,21 @@ export default function EarlyRepaymentCalculator() {
             <p className="text-sm font-semibold text-gray-700">
               {result.breakEven ? '✅ 조기상환이 유리합니다' : '⚠️ 수수료가 이자 절감보다 많습니다'}
             </p>
-            <p className="mt-1 text-2xl font-bold text-gray-900">
+            <p className="mt-1 text-2xl font-bold text-foreground">
               순이익: {result.netBenefit >= 0 ? '+' : ''}{formatKRW(result.netBenefit)}원
             </p>
           </div>
           <div className="grid grid-cols-3 gap-3 text-center">
-            <div className="rounded-xl bg-gray-50 p-3">
-              <p className="text-xs text-gray-500">실효 수수료율</p>
+            <div className="rounded-xl bg-card p-3">
+              <p className="text-xs text-muted-foreground">실효 수수료율</p>
               <p className="text-sm font-bold text-gray-800">{(result.feeRateApplied * 100).toFixed(3)}%</p>
             </div>
             <div className="rounded-xl bg-orange-50 p-3">
-              <p className="text-xs text-gray-500">납부 수수료</p>
+              <p className="text-xs text-muted-foreground">납부 수수료</p>
               <p className="text-sm font-bold text-orange-600">{formatKRW(result.fee)}원</p>
             </div>
             <div className="rounded-xl bg-green-50 p-3">
-              <p className="text-xs text-gray-500">절감 이자 (추정)</p>
+              <p className="text-xs text-muted-foreground">절감 이자 (추정)</p>
               <p className="text-sm font-bold text-green-600">{formatKRW(result.interestSaved)}원</p>
             </div>
           </div>

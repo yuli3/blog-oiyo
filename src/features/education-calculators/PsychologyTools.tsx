@@ -104,7 +104,7 @@ export const AttachmentTest: React.FC = () => {
                 <div className="space-y-5 sm:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 relative z-10">
                     <div className="flex items-center gap-2 mb-4 justify-center">
                         <Heart className="text-rose-500 fill-rose-500" />
-                        <h3 className="text-xl font-bold text-slate-900">나의 연애 애착 유형 테스트</h3>
+                        <h3 className="text-xl font-bold text-foreground">나의 연애 애착 유형 테스트</h3>
                         <Sparkles className="text-amber-400 w-4 h-4" />
                     </div>
 
@@ -118,7 +118,7 @@ export const AttachmentTest: React.FC = () => {
                             <button
                                 key={i}
                                 onClick={() => handleAnswer(opt.type)}
-                                className="p-4 sm:p-6 bg-slate-50 hover:bg-white border-2 border-slate-100 hover:border-rose-400 rounded-2xl text-slate-700 font-bold transition-all text-lg shadow-sm hover:shadow-xl active:scale-95 text-left"
+                                className="p-4 sm:p-6 bg-card hover:bg-white border-2 border-slate-100 hover:border-rose-400 rounded-2xl text-slate-700 font-bold transition-all text-lg shadow-sm hover:shadow-xl active:scale-95 text-left"
                             >
                                 {opt.text}
                             </button>
@@ -134,14 +134,14 @@ export const AttachmentTest: React.FC = () => {
                     </div>
                     <div className="space-y-4">
                         <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">진단 결과</span>
-                        <h4 className="text-4xl font-black text-slate-900 tracking-tight">{result.title}</h4>
+                        <h4 className="text-4xl font-black text-foreground tracking-tight">{result.title}</h4>
                         <p className="text-slate-600 max-w-sm mx-auto leading-relaxed font-medium">
                             {result.description}
                         </p>
                     </div>
                     
                     <div className="pt-6">
-                        <Button onClick={reset} variant="outline" className="rounded-full px-5 sm:px-10 border-2 hover:bg-slate-50 font-bold">테스트 다시하기</Button>
+                        <Button onClick={reset} variant="outline" className="rounded-full px-5 sm:px-10 border-2 hover:bg-card font-bold">테스트 다시하기</Button>
                     </div>
 
                     <p className="text-[10px] text-slate-400 mt-5 sm:mt-8 italic">
@@ -447,7 +447,7 @@ export const MBTIQuickTest: React.FC<{ locale?: "ko" | "en" | "ja" }> = ({ local
                 <div className="space-y-5 sm:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 relative z-10">
                     <div className="flex items-center gap-2 mb-4 justify-center">
                         <Compass className="text-emerald-500" />
-                        <h3 className="text-xl font-black text-slate-900">{active.title}</h3>
+                        <h3 className="text-xl font-black text-foreground">{active.title}</h3>
                         <Sparkles className="text-amber-400 w-4 h-4" />
                     </div>
 
@@ -455,7 +455,7 @@ export const MBTIQuickTest: React.FC<{ locale?: "ko" | "en" | "ja" }> = ({ local
                         <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                             Question {step + 1} of {questions.length}
                         </div>
-                        <div className="flex items-center justify-center gap-2 text-slate-500">
+                        <div className="flex items-center justify-center gap-2 text-muted-foreground">
                             {questions[step].icon}
                             <span className="text-xs font-semibold">{active.miniLabel}</span>
                         </div>
@@ -469,7 +469,7 @@ export const MBTIQuickTest: React.FC<{ locale?: "ko" | "en" | "ja" }> = ({ local
                             <button
                                 key={i}
                                 onClick={() => handleAnswer(questions[step].dimension, opt.value)}
-                                className="p-4 sm:p-6 bg-slate-50 hover:bg-white border-2 border-slate-100 hover:border-emerald-400 rounded-2xl text-slate-700 font-bold transition-all text-lg shadow-sm hover:shadow-xl active:scale-95 text-left"
+                                className="p-4 sm:p-6 bg-card hover:bg-white border-2 border-slate-100 hover:border-emerald-400 rounded-2xl text-slate-700 font-bold transition-all text-lg shadow-sm hover:shadow-xl active:scale-95 text-left"
                             >
                                 {opt.text}
                             </button>
@@ -485,7 +485,7 @@ export const MBTIQuickTest: React.FC<{ locale?: "ko" | "en" | "ja" }> = ({ local
                     </div>
                     <div className="space-y-3">
                         <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{active.resultLabel}</span>
-                        <h4 className="text-4xl font-black text-slate-900 tracking-tight">{result.type}</h4>
+                        <h4 className="text-4xl font-black text-foreground tracking-tight">{result.type}</h4>
                         <p className={`font-bold text-emerald-700 ${getHeadlineClass(result.headline)}`}>
                             {result.headline}
                         </p>
@@ -501,7 +501,7 @@ export const MBTIQuickTest: React.FC<{ locale?: "ko" | "en" | "ja" }> = ({ local
                     </div>
 
                     <div className="pt-6">
-                        <Button onClick={reset} variant="outline" className="rounded-full px-5 sm:px-10 border-2 hover:bg-slate-50 font-bold">
+                        <Button onClick={reset} variant="outline" className="rounded-full px-5 sm:px-10 border-2 hover:bg-card font-bold">
                             {active.reset}
                         </Button>
                     </div>

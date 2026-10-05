@@ -175,7 +175,7 @@ const compatRows = [
 
     <!-- 띠 궁합 -->
     <section class="mt-6 sm:mt-10">
-      <h2 class="text-xl font-bold text-slate-900">{jiName}띠 궁합</h2>
+      <h2 class="text-xl font-bold text-foreground">{jiName}띠 궁합</h2>
       <div class="mt-4 space-y-3">
         {compatRows.map((row) => (
           <div class={`flex flex-wrap items-center gap-2 rounded-xl px-4 py-3 ${row.cls}`}>
@@ -188,17 +188,17 @@ const compatRows = [
 
     <!-- 생애 연표 -->
     <section class="mt-6 sm:mt-10">
-      <h2 class="text-xl font-bold text-slate-900">{year}년생 생애 연표</h2>
-      <p class="mt-2 text-sm text-slate-500">한국나이 기준 주요 시기와 해당 연도입니다.</p>
+      <h2 class="text-xl font-bold text-foreground">{year}년생 생애 연표</h2>
+      <p class="mt-2 text-sm text-muted-foreground">한국나이 기준 주요 시기와 해당 연도입니다.</p>
       <div class="mt-4 overflow-hidden rounded-xl border border-slate-200">
         <table class="w-full text-left text-sm">
-          <thead class="bg-slate-50 text-slate-500">
+          <thead class="bg-card text-muted-foreground">
             <tr><th class="px-4 py-2">시기</th><th class="px-4 py-2">한국나이</th><th class="px-4 py-2">연도</th></tr>
           </thead>
           <tbody class="divide-y divide-slate-100">
             {milestones.map((mi) => (
               <tr>
-                <td class="px-4 py-2 font-medium text-slate-800">{mi.group}{mi.explanation ? <span class="block text-xs font-normal text-slate-500">{mi.explanation}</span> : null}</td>
+                <td class="px-4 py-2 font-medium text-slate-800">{mi.group}{mi.explanation ? <span class="block text-xs font-normal text-muted-foreground">{mi.explanation}</span> : null}</td>
                 <td class="px-4 py-2 text-slate-600">{mi.age}세</td>
                 <td class="px-4 py-2 text-slate-600">{mi.calYear}년</td>
               </tr>
@@ -210,7 +210,7 @@ const compatRows = [
 
     <!-- 설명 -->
     <section class="mt-6 sm:mt-10 border-t border-slate-200 pt-5 sm:pt-8">
-      <h2 class="text-2xl font-bold text-slate-900">{year}년생, {ganji}년 {jiName}띠란?</h2>
+      <h2 class="text-2xl font-bold text-foreground">{year}년생, {ganji}년 {jiName}띠란?</h2>
       <p class="mt-4 leading-8 text-slate-700">
         {year}년에 태어난 사람은 십이지(十二支)로 {jiName}띠에 해당하며, 천간(天干)과 지지(地支)를 결합한 60갑자로는 <strong>{ganji}년</strong>입니다.
         60갑자는 10천간과 12지지가 맞물려 60년마다 한 번씩 같은 간지가 돌아오는 동아시아의 전통 역법으로, 태어난 해의 간지가 다시 돌아오는 해가 바로 <strong>환갑</strong>(만 60세 무렵)입니다.
@@ -222,11 +222,11 @@ const compatRows = [
 
     <!-- FAQ -->
     <section class="mt-6 sm:mt-10">
-      <h2 class="text-xl font-bold text-slate-900">자주 묻는 질문</h2>
+      <h2 class="text-xl font-bold text-foreground">자주 묻는 질문</h2>
       <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
         {faqs.map((f) => (
           <details class="group p-4">
-            <summary class="cursor-pointer list-none font-semibold text-slate-900">{f.question}</summary>
+            <summary class="cursor-pointer list-none font-semibold text-foreground">{f.question}</summary>
             <p class="mt-3 text-sm leading-6 text-slate-700">{f.answer}</p>
           </details>
         ))}
@@ -235,17 +235,17 @@ const compatRows = [
 
     <!-- 연도 내비게이션 -->
     <nav class="mt-6 sm:mt-10 flex items-center justify-between">
-      {prevYear ? <a class="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50" href={`/ko/year/${prevYear}`}>← {prevYear}년생</a> : <span></span>}
-      {nextYear ? <a class="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50" href={`/ko/year/${nextYear}`}>{nextYear}년생 →</a> : <span></span>}
+      {prevYear ? <a class="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-card" href={`/ko/year/${prevYear}`}>← {prevYear}년생</a> : <span></span>}
+      {nextYear ? <a class="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-card" href={`/ko/year/${nextYear}`}>{nextYear}년생 →</a> : <span></span>}
     </nav>
 
     <section class="mt-5 sm:mt-8">
-      <h2 class="text-sm font-semibold text-slate-500">{decadeStart}년대 출생연도</h2>
+      <h2 class="text-sm font-semibold text-muted-foreground">{decadeStart}년대 출생연도</h2>
       <div class="mt-3 flex flex-wrap gap-2">
         {decadeYears.map((y) => (
           y === year
             ? <span class="rounded-lg bg-green-600 px-3 py-1.5 text-sm font-semibold text-white">{y}</span>
-            : <a class="rounded-lg border border-slate-200 px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-50" href={`/ko/year/${y}`}>{y}</a>
+            : <a class="rounded-lg border border-slate-200 px-3 py-1.5 text-sm text-slate-700 hover:bg-card" href={`/ko/year/${y}`}>{y}</a>
         ))}
       </div>
     </section>

@@ -253,9 +253,9 @@ export default function MenstrualCycleCalculator({ locale = 'ko' }: { locale?: L
           <span className="text-lg">{icon}</span>
           <span className="text-xs font-semibold text-gray-600">{label}</span>
         </div>
-        <p className="font-bold text-gray-900 text-base">{formatDate(date, locale)}</p>
-        {subtext && <p className="text-xs text-gray-500 mt-0.5">{subtext}</p>}
-        <p className="text-xs font-medium text-gray-500 mt-1">{getDaysLabel(diff, t)}</p>
+        <p className="font-bold text-foreground text-base">{formatDate(date, locale)}</p>
+        {subtext && <p className="text-xs text-muted-foreground mt-0.5">{subtext}</p>}
+        <p className="text-xs font-medium text-muted-foreground mt-1">{getDaysLabel(diff, t)}</p>
       </div>
     );
   };
@@ -279,8 +279,8 @@ export default function MenstrualCycleCalculator({ locale = 'ko' }: { locale?: L
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900">{t.title}</h1>
-        <p className="text-gray-500 mt-1">{t.subtitle}</p>
+        <h1 className="text-2xl font-bold text-foreground">{t.title}</h1>
+        <p className="text-muted-foreground mt-1">{t.subtitle}</p>
       </div>
 
       {/* Input form */}
@@ -346,7 +346,7 @@ export default function MenstrualCycleCalculator({ locale = 'ko' }: { locale?: L
           {/* Current phase badge */}
           {currentPhase && (
             <div className={`rounded-xl border p-4 text-center ${currentPhase.bg}`}>
-              <p className="text-xs text-gray-500 mb-1">{t.todayIs} — {locale === 'ko' ? `주기 ${currentPhase.day}일째` : locale === 'ja' ? `周期${currentPhase.day}日目` : `Day ${currentPhase.day} of cycle`}</p>
+              <p className="text-xs text-muted-foreground mb-1">{t.todayIs} — {locale === 'ko' ? `주기 ${currentPhase.day}일째` : locale === 'ja' ? `周期${currentPhase.day}日目` : `Day ${currentPhase.day} of cycle`}</p>
               <p className={`text-xl font-bold ${currentPhase.color}`}>{currentPhase.label}</p>
             </div>
           )}

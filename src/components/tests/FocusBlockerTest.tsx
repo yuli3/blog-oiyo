@@ -223,7 +223,7 @@ export default function FocusBlockerTest({ locale: localeProp }: Props) {
         <div className="rounded-2xl bg-gradient-to-br from-orange-50 to-amber-50 border border-orange-200 p-4 sm:p-6 text-center">
           <p className="text-sm font-medium text-orange-600 mb-1">{tx.resultTitle}</p>
           <div className="text-5xl mb-2">🔍</div>
-          <h2 className="text-2xl font-bold text-gray-900">{categoryInfo[sorted[0]][locale].title}</h2>
+          <h2 className="text-2xl font-bold text-foreground">{categoryInfo[sorted[0]][locale].title}</h2>
           <p className="mt-2 text-sm text-gray-600">{locale === "ko" ? "가장 큰 방해 요소" : locale === "ja" ? "最大の妨害要素" : "Your biggest blocker"}</p>
         </div>
 
@@ -266,7 +266,7 @@ export default function FocusBlockerTest({ locale: localeProp }: Props) {
         </div>
 
         <div className="flex gap-3">
-          <button onClick={restart} className="flex-1 rounded-xl border border-gray-200 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-50">{tx.restart}</button>
+          <button onClick={restart} className="flex-1 rounded-xl border border-gray-200 py-3 text-sm font-medium text-gray-700 transition hover:bg-card">{tx.restart}</button>
           <button onClick={share} className="flex-1 rounded-xl py-3 text-sm font-medium text-white transition bg-orange-500 hover:bg-orange-600">{copied ? tx.copied : tx.share}</button>
         </div>
       </div>
@@ -278,14 +278,14 @@ export default function FocusBlockerTest({ locale: localeProp }: Props) {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900">{tx.title}</h1>
-        <p className="mt-1 text-gray-500">{tx.subtitle}</p>
+        <h1 className="text-2xl font-bold text-foreground">{tx.title}</h1>
+        <p className="mt-1 text-muted-foreground">{tx.subtitle}</p>
       </div>
       <div className="flex items-center gap-3">
         <div className="h-2 flex-1 overflow-hidden rounded-full bg-gray-100">
           <div className="h-full rounded-full bg-orange-500 transition-all duration-300" style={{ width: `${(idx / questions.length) * 100}%` }} />
         </div>
-        <span className="text-sm text-gray-500">{tx.progress(idx + 1, questions.length)}</span>
+        <span className="text-sm text-muted-foreground">{tx.progress(idx + 1, questions.length)}</span>
       </div>
       <div className="rounded-2xl border border-gray-100 bg-white p-4 sm:p-6 shadow-sm">
         <p className="mb-5 text-center text-lg font-medium text-gray-800">{q[locale]}</p>

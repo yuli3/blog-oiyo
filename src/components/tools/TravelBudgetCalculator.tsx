@@ -471,10 +471,10 @@ export default function TravelBudgetCalculator({ locale }: Props) {
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900">
+        <h1 className="text-2xl font-bold text-foreground">
           {t.title}
         </h1>
-        <p className="mt-1 text-sm text-gray-500">
+        <p className="mt-1 text-sm text-muted-foreground">
           {t.subtitle}
         </p>
       </div>
@@ -489,7 +489,7 @@ export default function TravelBudgetCalculator({ locale }: Props) {
           <select
             value={destination}
             onChange={(e) => { setDestination(e.target.value as Destination); setResult(null); }}
-            className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+            className="w-full rounded-lg border border-gray-300 bg-card px-4 py-2.5 text-foreground focus:outline-none focus:ring-2 focus:ring-emerald-400"
           >
             {DESTINATIONS.map((d) => (
               <option key={d} value={d}>
@@ -508,17 +508,17 @@ export default function TravelBudgetCalculator({ locale }: Props) {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => { setNights((n) => Math.max(1, n - 1)); setResult(null); }}
-                className="w-9 h-9 rounded-lg border border-gray-300 bg-gray-50 font-semibold text-gray-700 hover:bg-gray-100 transition-colors"
+                className="w-9 h-9 rounded-lg border border-gray-300 bg-card font-semibold text-gray-700 hover:bg-gray-100 transition-colors"
               >
                 −
               </button>
-              <span className="flex-1 text-center text-lg font-bold text-gray-900">
+              <span className="flex-1 text-center text-lg font-bold text-foreground">
                 {nights}
-                <span className="text-sm font-normal ml-1 text-gray-500">{t.nightsUnit}</span>
+                <span className="text-sm font-normal ml-1 text-muted-foreground">{t.nightsUnit}</span>
               </span>
               <button
                 onClick={() => { setNights((n) => Math.min(30, n + 1)); setResult(null); }}
-                className="w-9 h-9 rounded-lg border border-gray-300 bg-gray-50 font-semibold text-gray-700 hover:bg-gray-100 transition-colors"
+                className="w-9 h-9 rounded-lg border border-gray-300 bg-card font-semibold text-gray-700 hover:bg-gray-100 transition-colors"
               >
                 +
               </button>
@@ -531,17 +531,17 @@ export default function TravelBudgetCalculator({ locale }: Props) {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => { setPeople((p) => Math.max(1, p - 1)); setResult(null); }}
-                className="w-9 h-9 rounded-lg border border-gray-300 bg-gray-50 font-semibold text-gray-700 hover:bg-gray-100 transition-colors"
+                className="w-9 h-9 rounded-lg border border-gray-300 bg-card font-semibold text-gray-700 hover:bg-gray-100 transition-colors"
               >
                 −
               </button>
-              <span className="flex-1 text-center text-lg font-bold text-gray-900">
+              <span className="flex-1 text-center text-lg font-bold text-foreground">
                 {people}
-                <span className="text-sm font-normal ml-1 text-gray-500">{t.peopleUnit}</span>
+                <span className="text-sm font-normal ml-1 text-muted-foreground">{t.peopleUnit}</span>
               </span>
               <button
                 onClick={() => { setPeople((p) => Math.min(8, p + 1)); setResult(null); }}
-                className="w-9 h-9 rounded-lg border border-gray-300 bg-gray-50 font-semibold text-gray-700 hover:bg-gray-100 transition-colors"
+                className="w-9 h-9 rounded-lg border border-gray-300 bg-card font-semibold text-gray-700 hover:bg-gray-100 transition-colors"
               >
                 +
               </button>
@@ -558,7 +558,7 @@ export default function TravelBudgetCalculator({ locale }: Props) {
             <select
               value={accom}
               onChange={(e) => { setAccom(e.target.value as AccomGrade); setResult(null); }}
-              className="w-full rounded-lg border border-gray-300 bg-gray-50 px-3 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+              className="w-full rounded-lg border border-gray-300 bg-card px-3 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-emerald-400"
             >
               {ACCOM_GRADES.map((g) => (
                 <option key={g} value={g}>
@@ -574,7 +574,7 @@ export default function TravelBudgetCalculator({ locale }: Props) {
             <select
               value={flightClass}
               onChange={(e) => { setFlightClass(e.target.value as FlightClass); setResult(null); }}
-              className="w-full rounded-lg border border-gray-300 bg-gray-50 px-3 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+              className="w-full rounded-lg border border-gray-300 bg-card px-3 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-emerald-400"
             >
               {FLIGHT_CLASSES.map((fc) => (
                 <option key={fc} value={fc}>
@@ -628,7 +628,7 @@ export default function TravelBudgetCalculator({ locale }: Props) {
                   <div key={label}>
                     <div className="flex justify-between text-sm mb-1">
                       <span className="text-gray-600">{label}</span>
-                      <span className="font-semibold text-gray-900">
+                      <span className="font-semibold text-foreground">
                         {fmtKRW(value)}
                       </span>
                     </div>
@@ -667,7 +667,7 @@ export default function TravelBudgetCalculator({ locale }: Props) {
 
           <button
             onClick={reset}
-            className="w-full rounded-xl border border-gray-300 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+            className="w-full rounded-xl border border-gray-300 py-2.5 text-sm font-medium text-gray-600 hover:bg-card transition-colors"
           >
             {t.resetBtn}
           </button>

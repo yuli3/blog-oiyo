@@ -78,7 +78,7 @@ export const TypingSpeedTest: React.FC = () => {
             <div className="space-y-6 relative z-10">
                 <div className="p-4 sm:p-6 bg-slate-900/50 rounded-2xl border border-white/5 text-lg leading-relaxed font-medium select-none">
                     {textToType.split("").map((char, i) => {
-                        let color = "text-slate-500";
+                        let color = "text-muted-foreground";
                         if (i < inputValue.length) {
                             color = inputValue[i] === char ? "text-emerald-400" : "text-rose-500 underline decoration-2";
                         }
@@ -98,15 +98,15 @@ export const TypingSpeedTest: React.FC = () => {
 
                 <div className="grid grid-cols-3 gap-4">
                     <div className="p-4 bg-slate-900 rounded-xl border border-white/5 text-center">
-                        <div className="text-[10px] font-bold text-slate-500 uppercase mb-1">현재 속도 (WPM)</div>
+                        <div className="text-[10px] font-bold text-muted-foreground uppercase mb-1">현재 속도 (WPM)</div>
                         <div className="text-3xl font-black text-blue-400 font-mono">{wpm}</div>
                     </div>
                     <div className="p-4 bg-slate-900 rounded-xl border border-white/5 text-center">
-                        <div className="text-[10px] font-bold text-slate-500 uppercase mb-1">정확도 (ACC)</div>
+                        <div className="text-[10px] font-bold text-muted-foreground uppercase mb-1">정확도 (ACC)</div>
                         <div className="text-3xl font-black text-emerald-400 font-mono">{accuracy}%</div>
                     </div>
                     <div className="p-4 bg-slate-900 rounded-xl border border-white/5 text-center">
-                        <div className="text-[10px] font-bold text-slate-500 uppercase mb-1">경과 시간</div>
+                        <div className="text-[10px] font-bold text-muted-foreground uppercase mb-1">경과 시간</div>
                         <div className="text-3xl font-black text-amber-400 font-mono">
                             {startTime ? Math.round((Date.now() - (startTime || 0)) / 1000) : 0}s
                         </div>
@@ -221,9 +221,9 @@ export const PrisonersDilemma: React.FC = () => {
 
             <div className="space-y-2 max-h-[200px] overflow-y-auto pr-2 custom-scrollbar">
                 {history.slice().reverse().map((h, i) => (
-                    <div key={i} className="flex items-center justify-between p-3 bg-slate-50 rounded-lg text-xs">
+                    <div key={i} className="flex items-center justify-between p-3 bg-card rounded-lg text-xs">
                         <div className="flex gap-4 font-bold">
-                            <span className={h.player === "Cooperate" ? "text-emerald-500" : "text-slate-900"}>YOU: {h.player}</span>
+                            <span className={h.player === "Cooperate" ? "text-emerald-500" : "text-foreground"}>YOU: {h.player}</span>
                             <span className={h.ai === "Cooperate" ? "text-emerald-500" : "text-rose-500"}>AI: {h.ai}</span>
                         </div>
                         <span className="text-slate-400 italic">{h.result}</span>

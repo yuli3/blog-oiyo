@@ -441,7 +441,7 @@ function ScoreBar({ score }: { score: number }) {
     <div className="space-y-1">
       <div className="flex justify-between text-sm font-medium">
         <span className="text-gray-600"></span>
-        <span className="text-2xl font-bold text-gray-900">{score}<span className="text-base font-normal text-gray-500"> / 100</span></span>
+        <span className="text-2xl font-bold text-foreground">{score}<span className="text-base font-normal text-muted-foreground"> / 100</span></span>
       </div>
       <div className="relative h-4 rounded-full bg-gray-200 overflow-hidden">
         <div
@@ -488,8 +488,8 @@ export default function MarriageAgeCalculator({ locale }: Props) {
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900">{t.title}</h1>
-        <p className="mt-1 text-gray-500">{t.subtitle}</p>
+        <h1 className="text-2xl font-bold text-foreground">{t.title}</h1>
+        <p className="mt-1 text-muted-foreground">{t.subtitle}</p>
       </div>
 
       {/* Input card */}
@@ -520,7 +520,7 @@ export default function MarriageAgeCalculator({ locale }: Props) {
           <select
             value={mbti}
             onChange={(e) => { setMbti(e.target.value as MBTIType); setResult(null); }}
-            className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-rose-400"
+            className="w-full rounded-lg border border-gray-300 bg-card px-4 py-2.5 text-foreground focus:outline-none focus:ring-2 focus:ring-rose-400"
           >
             <option value="">{t.mbtiPlaceholder}</option>
             {MBTI_TYPES.map((m) => (
@@ -535,7 +535,7 @@ export default function MarriageAgeCalculator({ locale }: Props) {
           <select
             value={occupation}
             onChange={(e) => { setOccupation(e.target.value as OccupationType); setResult(null); }}
-            className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-rose-400"
+            className="w-full rounded-lg border border-gray-300 bg-card px-4 py-2.5 text-foreground focus:outline-none focus:ring-2 focus:ring-rose-400"
           >
             <option value="">{t.occupationPlaceholder}</option>
             {OCCUPATION_TYPES.map((o) => (
@@ -554,7 +554,7 @@ export default function MarriageAgeCalculator({ locale }: Props) {
             value={ageStr}
             onChange={(e) => { setAgeStr(e.target.value); setResult(null); }}
             placeholder={t.agePlaceholder}
-            className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-rose-400"
+            className="w-full rounded-lg border border-gray-300 bg-card px-4 py-2.5 text-foreground focus:outline-none focus:ring-2 focus:ring-rose-400"
           />
         </div>
 

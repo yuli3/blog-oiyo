@@ -104,7 +104,7 @@ function ReelStrip({ reel, stop, t }: { reel: typeof REELS[number]; stop: number
         <div
           key={r.pos}
           className={`flex h-12 w-16 items-center justify-center text-2xl ${
-            i === 1 ? "bg-amber-100 font-black" : "bg-slate-50 text-slate-400"
+            i === 1 ? "bg-amber-100 font-black" : "bg-card text-slate-400"
           } ${r.symbol === "seven" && i !== 1 ? "text-rose-500" : ""}`}
           aria-label={i === 1 ? `${t.paylineLabel}: ${SYMBOL_LABELS[r.symbol]}` : SYMBOL_LABELS[r.symbol]}
         >
@@ -148,7 +148,7 @@ const SlotAnatomy: React.FC<{ locale?: string }> = ({ locale = "ko" }) => {
     <div className="space-y-6 sm:space-y-10">
       {/* 1. reel layout */}
       <section>
-        <h2 className="text-xl font-bold text-slate-900">{t.reelTitle}</h2>
+        <h2 className="text-xl font-bold text-foreground">{t.reelTitle}</h2>
         <p className="mt-2 text-sm leading-relaxed text-slate-600">{t.reelNote}</p>
         <div className="mt-4 flex items-center gap-3">
           {REELS.map((reel, i) => (
@@ -165,11 +165,11 @@ const SlotAnatomy: React.FC<{ locale?: string }> = ({ locale = "ko" }) => {
 
       {/* 2. payout table */}
       <section>
-        <h2 className="text-xl font-bold text-slate-900">{t.payoutTitle}</h2>
+        <h2 className="text-xl font-bold text-foreground">{t.payoutTitle}</h2>
         <div className="mt-3 overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-slate-200 text-left text-xs uppercase tracking-wide text-slate-500">
+              <tr className="border-b border-slate-200 text-left text-xs uppercase tracking-wide text-muted-foreground">
                 <th className="py-2">{t.comboCol}</th>
                 <th className="py-2 text-right">{t.multiplierCol}</th>
                 <th className="py-2 text-right">{t.probCol}</th>
@@ -191,9 +191,9 @@ const SlotAnatomy: React.FC<{ locale?: string }> = ({ locale = "ko" }) => {
       </section>
 
       {/* 3. designed return */}
-      <section className="rounded-xl border border-slate-200 bg-slate-50 p-5">
-        <h2 className="text-xl font-bold text-slate-900">{t.designTitle}</h2>
-        <p className="mt-2 text-3xl font-black tabular-nums text-slate-900">{designRtp.toFixed(2)}%</p>
+      <section className="rounded-xl border border-slate-200 bg-card p-5">
+        <h2 className="text-xl font-bold text-foreground">{t.designTitle}</h2>
+        <p className="mt-2 text-3xl font-black tabular-nums text-foreground">{designRtp.toFixed(2)}%</p>
         <p className="mt-2 text-sm leading-relaxed text-slate-600">{t.designNote(designRtp.toFixed(2))}</p>
       </section>
 
@@ -209,12 +209,12 @@ const SlotAnatomy: React.FC<{ locale?: string }> = ({ locale = "ko" }) => {
       {/* 4. variance bands */}
       {bands && (
         <section>
-          <h2 className="text-xl font-bold text-slate-900">{t.bandTitle}</h2>
+          <h2 className="text-xl font-bold text-foreground">{t.bandTitle}</h2>
           <p className="mt-2 text-sm leading-relaxed text-slate-600">{t.bandNote}</p>
           <div className="mt-4 overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-slate-200 text-left text-xs uppercase tracking-wide text-slate-500">
+                <tr className="border-b border-slate-200 text-left text-xs uppercase tracking-wide text-muted-foreground">
                   <th className="py-2">{t.spinsCol}</th>
                   <th className="py-2 text-right">{t.rangeCol}</th>
                   <th className="py-2 text-right">{t.spreadCol}</th>
@@ -248,7 +248,7 @@ const SlotAnatomy: React.FC<{ locale?: string }> = ({ locale = "ko" }) => {
       {big && amp !== null && (
         <>
           <section>
-            <h2 className="text-xl font-bold text-slate-900">{t.nearTitle}</h2>
+            <h2 className="text-xl font-bold text-foreground">{t.nearTitle}</h2>
             <p className="mt-2 text-4xl font-black tabular-nums text-rose-600">{amp.toFixed(1)}×</p>
             <p className="mt-2 text-sm leading-relaxed text-slate-600">
               {t.nearNote(amp.toFixed(1), big.nearMisses.toLocaleString(), big.jackpots.toLocaleString())}
@@ -256,7 +256,7 @@ const SlotAnatomy: React.FC<{ locale?: string }> = ({ locale = "ko" }) => {
           </section>
 
           <section>
-            <h3 className="text-lg font-bold text-slate-900">{t.curveTitle}</h3>
+            <h3 className="text-lg font-bold text-foreground">{t.curveTitle}</h3>
             <div className="mt-3 h-64 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={big.curve} margin={{ top: 8, right: 8, bottom: 24, left: 8 }}>

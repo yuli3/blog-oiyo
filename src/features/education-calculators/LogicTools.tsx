@@ -37,28 +37,28 @@ export const TruthTableGenerator: React.FC = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <div className="flex flex-col gap-3">
-                    <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">연결사 선택</span>
+                    <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">연결사 선택</span>
                     <button 
                         onClick={() => setExpression("and")}
-                        className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${expression === "and" ? 'bg-emerald-500 text-slate-900' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}
+                        className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${expression === "and" ? 'bg-emerald-500 text-foreground' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}
                     >
                         그리고 (∧)
                     </button>
                     <button 
                         onClick={() => setExpression("or")}
-                        className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${expression === "or" ? 'bg-blue-500 text-slate-900' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}
+                        className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${expression === "or" ? 'bg-blue-500 text-foreground' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}
                     >
                         또는 (∨)
                     </button>
                     <button 
                         onClick={() => setExpression("arrow")}
-                        className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${expression === "arrow" ? 'bg-amber-500 text-slate-900' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}
+                        className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${expression === "arrow" ? 'bg-amber-500 text-foreground' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}
                     >
                         조건문 (→)
                     </button>
                     <button 
                         onClick={() => setExpression("bi")}
-                        className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${expression === "bi" ? 'bg-purple-500 text-slate-900' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}
+                        className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${expression === "bi" ? 'bg-purple-500 text-foreground' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}
                     >
                         쌍조건문 (↔)
                     </button>
@@ -95,7 +95,7 @@ export const TruthTableGenerator: React.FC = () => {
                             </tbody>
                         </table>
                     </div>
-                    <div className="mt-4 flex items-start gap-2 text-slate-500 text-xs italic bg-slate-800/30 p-3 rounded-lg">
+                    <div className="mt-4 flex items-start gap-2 text-muted-foreground text-xs italic bg-slate-800/30 p-3 rounded-lg">
                         <Info size={14} className="mt-0.5 flex-shrink-0" />
                         <p>
                             {expression === "arrow" && "조건문(A → B)은 전건(A)이 참이고 후건(B)이 거짓인 단 하나의 경우에만 거짓이 됩니다."}

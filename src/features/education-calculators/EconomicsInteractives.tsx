@@ -102,7 +102,7 @@ const Toggle: React.FC<ToggleProps> = ({ label, value, onChange }) => (
   <button
     onClick={() => onChange(!value)}
     className={`w-full flex items-center gap-2 px-3 py-2 rounded-xl border text-xs font-bold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 ${
-      value ? 'bg-emerald-100 border-emerald-400 text-emerald-800' : 'bg-slate-50 border-slate-200 text-slate-500'
+      value ? 'bg-emerald-100 border-emerald-400 text-emerald-800' : 'bg-card border-slate-200 text-muted-foreground'
     }`}
     aria-pressed={value}
   >
@@ -404,11 +404,11 @@ export const ElasticityCalculator: React.FC = () => {
           <p className="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-3">가격 변화 (공통)</p>
           <div className="grid grid-cols-2 gap-3 mb-4">
             <div>
-              <label className="text-[10px] font-bold text-slate-500 block mb-1">가격 1 (P₁)</label>
+              <label className="text-[10px] font-bold text-muted-foreground block mb-1">가격 1 (P₁)</label>
               <input type="number" value={p1} onChange={e => setP1(Number(e.target.value))} className={inputClass} aria-label="가격 1" />
             </div>
             <div>
-              <label className="text-[10px] font-bold text-slate-500 block mb-1">가격 2 (P₂)</label>
+              <label className="text-[10px] font-bold text-muted-foreground block mb-1">가격 2 (P₂)</label>
               <input type="number" value={p2} onChange={e => setP2(Number(e.target.value))} className={inputClass} aria-label="가격 2" />
             </div>
           </div>
@@ -416,11 +416,11 @@ export const ElasticityCalculator: React.FC = () => {
           <p className="text-[10px] font-bold text-blue-600 uppercase tracking-wider mb-2">수요량 변화</p>
           <div className="grid grid-cols-2 gap-3 mb-4">
             <div>
-              <label className="text-[10px] font-bold text-slate-500 block mb-1">수요량 1 (Q₁D)</label>
+              <label className="text-[10px] font-bold text-muted-foreground block mb-1">수요량 1 (Q₁D)</label>
               <input type="number" value={q1} onChange={e => setQ1(Number(e.target.value))} className={inputClass} aria-label="수요량 1" />
             </div>
             <div>
-              <label className="text-[10px] font-bold text-slate-500 block mb-1">수요량 2 (Q₂D)</label>
+              <label className="text-[10px] font-bold text-muted-foreground block mb-1">수요량 2 (Q₂D)</label>
               <input type="number" value={q2} onChange={e => setQ2(Number(e.target.value))} className={inputClass} aria-label="수요량 2" />
             </div>
           </div>
@@ -428,11 +428,11 @@ export const ElasticityCalculator: React.FC = () => {
           <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider mb-2">공급량 변화</p>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-[10px] font-bold text-slate-500 block mb-1">공급량 1 (Q₁S)</label>
+              <label className="text-[10px] font-bold text-muted-foreground block mb-1">공급량 1 (Q₁S)</label>
               <input type="number" value={sq1} onChange={e => setSQ1(Number(e.target.value))} className={inputClass} aria-label="공급량 1" />
             </div>
             <div>
-              <label className="text-[10px] font-bold text-slate-500 block mb-1">공급량 2 (Q₂S)</label>
+              <label className="text-[10px] font-bold text-muted-foreground block mb-1">공급량 2 (Q₂S)</label>
               <input type="number" value={sq2} onChange={e => setSQ2(Number(e.target.value))} className={inputClass} aria-label="공급량 2" />
             </div>
           </div>
@@ -476,8 +476,8 @@ export const ElasticityCalculator: React.FC = () => {
           </div>
 
           {/* Formula reference */}
-          <div className="rounded-xl bg-slate-50 border border-slate-200 p-3">
-            <p className="text-[10px] font-bold text-slate-500 mb-2">호탄력성 공식 (중간점 방법)</p>
+          <div className="rounded-xl bg-card border border-slate-200 p-3">
+            <p className="text-[10px] font-bold text-muted-foreground mb-2">호탄력성 공식 (중간점 방법)</p>
             <p className="text-[10px] text-slate-600 font-mono leading-relaxed">
               E = (%ΔQ) / (%ΔP)<br />
               %ΔQ = (Q₂−Q₁) / ((Q₁+Q₂)/2) × 100<br />

@@ -157,7 +157,7 @@ const IncorporationCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 
 
   return (
     <div className="not-prose my-7 sm:my-12 p-6 md:p-8 bg-gradient-to-br from-slate-50 to-gray-50 border border-slate-200 rounded-3xl shadow-xl">
-      <h3 className="text-xl font-bold text-slate-900 mb-6">{t.title}</h3>
+      <h3 className="text-xl font-bold text-foreground mb-6">{t.title}</h3>
 
       <div className="grid md:grid-cols-2 gap-5 sm:gap-8">
         {/* Inputs */}
@@ -202,7 +202,7 @@ const IncorporationCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 
             </button>
             <button
               onClick={reset}
-              className="px-5 py-3 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-bold rounded-xl transition-colors"
+              className="px-5 py-3 bg-white border border-slate-300 hover:bg-card text-slate-700 font-bold rounded-xl transition-colors"
             >
               {t.reset}
             </button>
@@ -229,7 +229,7 @@ const IncorporationCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 
 
               {/* Individual */}
               <div className={`bg-white rounded-2xl border-2 p-4 space-y-2 ${result.betterOption === 'individual' ? 'border-rose-400' : 'border-slate-100'}`}>
-                <p className="text-xs font-bold uppercase tracking-widest text-slate-500">{t.individual}</p>
+                <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">{t.individual}</p>
                 <div className="flex justify-between">
                   <span className="text-xs text-slate-400">{t.taxBase}</span>
                   <span className="text-xs font-bold">{fmt(result.indTaxBase)}{locale === 'ko' ? '원' : ''}</span>

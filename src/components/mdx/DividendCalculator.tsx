@@ -71,7 +71,7 @@ export default function DividendCalculator() {
 
   return (
     <div className="my-5 sm:my-8 rounded-2xl border border-gray-200 bg-white p-4 sm:p-6 shadow-sm">
-      <h3 className="mb-6 text-xl font-bold text-gray-900">배당 투자 수익 계산기</h3>
+      <h3 className="mb-6 text-xl font-bold text-foreground">배당 투자 수익 계산기</h3>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
@@ -173,19 +173,19 @@ export default function DividendCalculator() {
         <div className="mt-6 space-y-4">
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             <div className="rounded-xl bg-emerald-50 p-4 text-center">
-              <p className="text-xs text-gray-500">최종 포트폴리오 가치</p>
+              <p className="text-xs text-muted-foreground">최종 포트폴리오 가치</p>
               <p className="text-base font-bold text-emerald-600">{formatKRW(last.portfolioValue)}원</p>
             </div>
             <div className="rounded-xl bg-blue-50 p-4 text-center">
-              <p className="text-xs text-gray-500">연간 배당 ({years}년차)</p>
+              <p className="text-xs text-muted-foreground">연간 배당 ({years}년차)</p>
               <p className="text-base font-bold text-blue-600">{formatKRW(last.netDividend)}원</p>
             </div>
             <div className="rounded-xl bg-purple-50 p-4 text-center">
-              <p className="text-xs text-gray-500">누적 세후 배당</p>
+              <p className="text-xs text-muted-foreground">누적 세후 배당</p>
               <p className="text-base font-bold text-purple-600">{formatKRW(totalDividends)}원</p>
             </div>
             <div className="rounded-xl bg-orange-50 p-4 text-center">
-              <p className="text-xs text-gray-500">총 수익률</p>
+              <p className="text-xs text-muted-foreground">총 수익률</p>
               <p className="text-base font-bold text-orange-600">
                 {(((last.portfolioValue + (reinvest ? 0 : totalDividends)) / initialValue - 1) * 100).toFixed(1)}%
               </p>
@@ -194,7 +194,7 @@ export default function DividendCalculator() {
 
           <div className="overflow-x-auto rounded-xl border border-gray-200">
             <table className="w-full text-xs">
-              <thead className="bg-gray-50">
+              <thead className="bg-card">
                 <tr>
                   {['년차', '보유주수', '연 배당(세전)', '세금(15.4%)', '세후 배당', '포트폴리오 가치'].map((h) => (
                     <th key={h} className="px-3 py-2 text-left font-semibold text-gray-700">{h}</th>

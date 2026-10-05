@@ -537,9 +537,9 @@ ${preview
     downloadAsFile(`${baseName}.${format}`, preview, "text/plain");
   };
 
-  const inputCls = "w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100";
+  const inputCls = "w-full rounded-lg border border-slate-300 px-3 py-2 text-foreground focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100";
   const buttonCls = "rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-700";
-  const secondaryButtonCls = "rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:opacity-50";
+  const secondaryButtonCls = "rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-card disabled:opacity-50";
 
   return (
     <GameContainer title={t.title} subtitle={t.subtitle}>
@@ -686,7 +686,7 @@ ${preview
           <pre className="min-h-96 max-h-[34rem] overflow-auto whitespace-pre-wrap rounded-lg bg-slate-950 p-4 text-sm leading-6 text-slate-100">
             {preview || `${t.previewEmpty}\n\n${t.previewHint}`}
           </pre>
-          {lastUpdate && <div className="mt-2 text-right text-xs text-slate-500">{t.lastUpdated}: {lastUpdate.toLocaleTimeString()}</div>}
+          {lastUpdate && <div className="mt-2 text-right text-xs text-muted-foreground">{t.lastUpdated}: {lastUpdate.toLocaleTimeString()}</div>}
         </div>
       </div>
     </GameContainer>

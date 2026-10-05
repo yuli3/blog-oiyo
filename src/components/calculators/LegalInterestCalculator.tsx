@@ -173,7 +173,7 @@ const LegalInterestCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 
                 <span className="block text-sm font-bold text-amber-800">
                   {id === 'custom' ? t.rates.custom.desc : t.rates[id].desc}
                 </span>
-                <span className="block text-xs text-slate-500">{t.rates[id].label}</span>
+                <span className="block text-xs text-muted-foreground">{t.rates[id].label}</span>
               </button>
             ))}
           </div>
@@ -227,7 +227,7 @@ const LegalInterestCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 
                 { label: t.totalLabel, value: fmt(result.total) + (locale === 'ko' ? '원' : '') },
               ].map((item) => (
                 <div key={item.label} className="bg-white rounded-2xl border border-amber-100 p-4 text-center">
-                  <p className="text-xs text-slate-500 font-bold mb-1">{item.label}</p>
+                  <p className="text-xs text-muted-foreground font-bold mb-1">{item.label}</p>
                   <p className="text-sm font-bold text-amber-700">{item.value}</p>
                 </div>
               ))}

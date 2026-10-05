@@ -24,7 +24,7 @@ const NumField: React.FC<NumFieldProps> = ({ label, value, onChange, unit = '원
         className="flex-1 px-3 py-2 text-sm focus:outline-none"
         aria-label={label}
       />
-      {unit && <span className="px-2 text-xs text-slate-500 bg-slate-50 border-l border-green-100 py-2">{unit}</span>}
+      {unit && <span className="px-2 text-xs text-muted-foreground bg-card border-l border-green-100 py-2">{unit}</span>}
     </div>
   </div>
 );
@@ -312,7 +312,7 @@ const BEPAnalysis: React.FC<{ locale: 'ko' | 'en' }> = ({ locale }) => {
               aria-label="Break-even point"
             />
           </div>
-          <div className="flex justify-between text-xs text-slate-500 mt-1">
+          <div className="flex justify-between text-xs text-muted-foreground mt-1">
             <span>0</span>
             <span className="font-bold text-slate-700">
               BEP: {fmt(bepUnits)}{locale === 'ko' ? '개' : ' units'}

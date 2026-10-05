@@ -73,14 +73,14 @@ export default function PropertyTaxCalculator() {
 
   return (
     <div className="my-5 sm:my-8 rounded-2xl border border-gray-200 bg-white p-4 sm:p-6 shadow-sm">
-      <h3 className="mb-6 text-xl font-bold text-gray-900">재산세 계산기</h3>
+      <h3 className="mb-6 text-xl font-bold text-foreground">재산세 계산기</h3>
 
       <div className="mb-4 flex gap-2">
         {(['house', 'land', 'building'] as PropertyType[]).map((t) => {
           const label = t === 'house' ? '주택' : t === 'land' ? '토지' : '건물';
           return (
             <button key={t} onClick={() => setPropertyType(t)}
-              className={`flex-1 rounded-lg py-2 text-sm font-medium transition ${propertyType === t ? 'bg-green-600 text-white' : 'border border-gray-300 text-gray-600 hover:bg-gray-50'}`}>
+              className={`flex-1 rounded-lg py-2 text-sm font-medium transition ${propertyType === t ? 'bg-green-600 text-white' : 'border border-gray-300 text-gray-600 hover:bg-card'}`}>
               {label}
             </button>
           );
@@ -112,7 +112,7 @@ export default function PropertyTaxCalculator() {
       {result && (
         <div className="mt-6 space-y-3">
           <div className="rounded-xl bg-green-50 p-4">
-            <p className="text-xs text-gray-500">과세표준</p>
+            <p className="text-xs text-muted-foreground">과세표준</p>
             <p className="text-lg font-bold text-green-700">{formatKRW(result.taxBase)}원</p>
           </div>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -122,8 +122,8 @@ export default function PropertyTaxCalculator() {
               { label: '지방교육세(20%)', value: result.educationTax },
               { label: '합계', value: result.total },
             ].map(({ label, value }) => (
-              <div key={label} className="rounded-xl bg-gray-50 p-3 text-center">
-                <p className="text-xs text-gray-500">{label}</p>
+              <div key={label} className="rounded-xl bg-card p-3 text-center">
+                <p className="text-xs text-muted-foreground">{label}</p>
                 <p className="text-sm font-bold text-gray-800">{formatKRW(value)}원</p>
               </div>
             ))}

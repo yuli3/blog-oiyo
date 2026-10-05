@@ -158,7 +158,7 @@ const LaborCostCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
           <div className="flex items-center justify-between p-4 bg-white border border-green-200 rounded-xl">
             <div>
               <p className="text-sm font-bold text-green-800">{t.severanceLabel}</p>
-              <p className="text-xs text-slate-500">{t.severanceDesc}</p>
+              <p className="text-xs text-muted-foreground">{t.severanceDesc}</p>
             </div>
             <button
               onClick={() => setIncludeSeverance((v) => !v)}

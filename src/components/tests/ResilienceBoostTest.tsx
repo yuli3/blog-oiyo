@@ -155,9 +155,9 @@ export default function ResilienceBoostTest({ locale: localeProp }: Props) {
     return (
       <div className="space-y-6">
         <div className="rounded-2xl p-4 sm:p-6 text-center" style={{ background: `linear-gradient(135deg, ${overallLevel.color}18, ${overallLevel.color}08)`, border: `1px solid ${overallLevel.color}30` }}>
-          <p className="text-sm font-medium text-gray-500 mb-1">{tx.resultTitle}</p>
+          <p className="text-sm font-medium text-muted-foreground mb-1">{tx.resultTitle}</p>
           <div className="text-5xl mb-2">{overallLevel.emoji}</div>
-          <h2 className="text-2xl font-bold text-gray-900">{overallLevel.label}</h2>
+          <h2 className="text-2xl font-bold text-foreground">{overallLevel.label}</h2>
           <p className="text-3xl font-bold mt-1" style={{ color: overallLevel.color }}>{percentage}%</p>
           <p className="mt-3 text-sm text-gray-600">{overallLevel.description}</p>
         </div>
@@ -178,7 +178,7 @@ export default function ResilienceBoostTest({ locale: localeProp }: Props) {
                   <div className="h-2 rounded-full bg-gray-100 overflow-hidden mb-1">
                     <div className="h-full rounded-full transition-all" style={{ width: `${avg * 20}%`, backgroundColor: fi.color }} />
                   </div>
-                  <p className="text-xs text-gray-500">{fi[locale][level]}</p>
+                  <p className="text-xs text-muted-foreground">{fi[locale][level]}</p>
                 </div>
               );
             })}
@@ -186,7 +186,7 @@ export default function ResilienceBoostTest({ locale: localeProp }: Props) {
         </div>
 
         <div className="flex gap-3">
-          <button onClick={restart} className="flex-1 rounded-xl border border-gray-200 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-50">{tx.restart}</button>
+          <button onClick={restart} className="flex-1 rounded-xl border border-gray-200 py-3 text-sm font-medium text-gray-700 transition hover:bg-card">{tx.restart}</button>
           <button onClick={share} className="flex-1 rounded-xl py-3 text-sm font-medium text-white transition" style={{ backgroundColor: overallLevel.color }}>{copied ? tx.copied : tx.share}</button>
         </div>
       </div>
@@ -199,14 +199,14 @@ export default function ResilienceBoostTest({ locale: localeProp }: Props) {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900">{tx.title}</h1>
-        <p className="mt-1 text-gray-500">{tx.subtitle}</p>
+        <h1 className="text-2xl font-bold text-foreground">{tx.title}</h1>
+        <p className="mt-1 text-muted-foreground">{tx.subtitle}</p>
       </div>
       <div className="flex items-center gap-3">
         <div className="h-2 flex-1 overflow-hidden rounded-full bg-gray-100">
           <div className="h-full rounded-full bg-green-500 transition-all duration-300" style={{ width: `${(idx / questions.length) * 100}%` }} />
         </div>
-        <span className="text-sm text-gray-500">{tx.progress(idx + 1, questions.length)}</span>
+        <span className="text-sm text-muted-foreground">{tx.progress(idx + 1, questions.length)}</span>
       </div>
       <div className="rounded-2xl border border-gray-100 bg-white p-4 sm:p-6 shadow-sm">
         <p className="mb-5 text-center text-lg font-medium text-gray-800">{q[locale]}</p>

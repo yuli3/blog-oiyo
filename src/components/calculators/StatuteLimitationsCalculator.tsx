@@ -166,7 +166,7 @@ const StatuteLimitationsCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ loca
 
   return (
     <div className="not-prose my-7 sm:my-12 p-6 md:p-8 bg-gradient-to-br from-slate-50 to-green-50 border border-slate-200 rounded-3xl shadow-xl">
-      <h3 className="text-xl font-bold text-slate-900 mb-6">{t.title}</h3>
+      <h3 className="text-xl font-bold text-foreground mb-6">{t.title}</h3>
 
       <div className="space-y-5">
         <div className="space-y-1">
@@ -210,7 +210,7 @@ const StatuteLimitationsCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ loca
           </button>
           <button
             onClick={reset}
-            className="px-5 py-3 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-bold rounded-xl transition-colors"
+            className="px-5 py-3 bg-white border border-slate-300 hover:bg-card text-slate-700 font-bold rounded-xl transition-colors"
           >
             {t.reset}
           </button>
@@ -234,11 +234,11 @@ const StatuteLimitationsCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ loca
 
             <div className="bg-white rounded-2xl border border-slate-100 p-5 space-y-3">
               <div>
-                <p className="text-xs font-bold text-slate-500 uppercase tracking-wide mb-1">{t.lawRefLabel}</p>
+                <p className="text-xs font-bold text-muted-foreground uppercase tracking-wide mb-1">{t.lawRefLabel}</p>
                 <p className="text-sm font-semibold text-slate-800">{result.lawRef}</p>
               </div>
               <div className="border-t border-slate-100 pt-3">
-                <p className="text-xs font-bold text-slate-500 uppercase tracking-wide mb-1">{t.descLabel}</p>
+                <p className="text-xs font-bold text-muted-foreground uppercase tracking-wide mb-1">{t.descLabel}</p>
                 <p className="text-sm text-slate-700">{result.description}</p>
               </div>
             </div>

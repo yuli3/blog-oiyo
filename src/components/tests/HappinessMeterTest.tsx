@@ -146,9 +146,9 @@ export default function HappinessMeterTest({ locale: localeProp }: Props) {
     return (
       <div className="space-y-6">
         <div className="rounded-2xl p-4 sm:p-6 text-center" style={{ background: `linear-gradient(135deg, ${level.color}18, ${level.color}08)`, border: `1px solid ${level.color}30` }}>
-          <p className="text-sm font-medium text-gray-500 mb-1">{ui.resultTitle}</p>
+          <p className="text-sm font-medium text-muted-foreground mb-1">{ui.resultTitle}</p>
           <div className="text-5xl mb-2">{level.emoji}</div>
-          <h2 className="text-2xl font-bold text-gray-900">{level.label}</h2>
+          <h2 className="text-2xl font-bold text-foreground">{level.label}</h2>
           <p className="text-3xl font-bold mt-1" style={{ color: level.color }}>{displayScore} / 7</p>
           <p className="mt-3 text-sm text-gray-600">{level.description}</p>
         </div>
@@ -166,7 +166,7 @@ export default function HappinessMeterTest({ locale: localeProp }: Props) {
         </div>
 
         <div className="flex gap-3">
-          <button onClick={restart} className="flex-1 rounded-xl border border-gray-200 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-50">
+          <button onClick={restart} className="flex-1 rounded-xl border border-gray-200 py-3 text-sm font-medium text-gray-700 transition hover:bg-card">
             {ui.restart}
           </button>
           <button onClick={share} className="flex-1 rounded-xl py-3 text-sm font-medium text-white transition" style={{ backgroundColor: level.color }}>
@@ -183,14 +183,14 @@ export default function HappinessMeterTest({ locale: localeProp }: Props) {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900">{ui.title}</h1>
-        <p className="mt-1 text-gray-500">{ui.subtitle}</p>
+        <h1 className="text-2xl font-bold text-foreground">{ui.title}</h1>
+        <p className="mt-1 text-muted-foreground">{ui.subtitle}</p>
       </div>
       <div className="flex items-center gap-3">
         <div className="h-2 flex-1 overflow-hidden rounded-full bg-gray-100">
           <div className="h-full rounded-full bg-amber-400 transition-all duration-300" style={{ width: `${(idx / questions.length) * 100}%` }} />
         </div>
-        <span className="text-sm text-gray-500">{ui.progress(idx + 1, questions.length)}</span>
+        <span className="text-sm text-muted-foreground">{ui.progress(idx + 1, questions.length)}</span>
       </div>
       <div className="rounded-2xl border border-gray-100 bg-white p-4 sm:p-6 shadow-sm">
         <p className="mb-2 text-center text-lg font-medium text-gray-800">{q[locale]}</p>

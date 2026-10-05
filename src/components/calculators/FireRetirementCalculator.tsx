@@ -236,7 +236,7 @@ const FireRetirementCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
 
               <div className="p-5 bg-white rounded-2xl border border-green-100">
                 <div className="flex justify-between items-center mb-1">
-                  <span className="text-sm text-slate-500">{locale === 'ko' ? 'FIRE 필요 자산 (4% 룰)' : 'FIRE Number (4% Rule)'}</span>
+                  <span className="text-sm text-muted-foreground">{locale === 'ko' ? 'FIRE 필요 자산 (4% 룰)' : 'FIRE Number (4% Rule)'}</span>
                 </div>
                 <AnimatedNumber
                   value={result.fireNumber}

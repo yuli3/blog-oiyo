@@ -238,11 +238,11 @@ const LifePlanningCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
                 <div className="bg-white rounded-2xl border border-rose-100 p-4 text-center">
-                  <p className="text-xs text-slate-500 font-bold mb-1">{t.totalAsset}</p>
+                  <p className="text-xs text-muted-foreground font-bold mb-1">{t.totalAsset}</p>
                   <p className="text-lg font-bold text-rose-700">{fmt(weddingResult.totalAsset)}{locale === 'ko' ? '원' : ''}</p>
                 </div>
                 <div className="bg-white rounded-2xl border border-rose-100 p-4 text-center">
-                  <p className="text-xs text-slate-500 font-bold mb-1">{t.netStart}</p>
+                  <p className="text-xs text-muted-foreground font-bold mb-1">{t.netStart}</p>
                   <p className={`text-lg font-bold ${weddingResult.netStart < 0 ? 'text-red-600' : 'text-green-600'}`}>
                     {fmt(weddingResult.netStart)}{locale === 'ko' ? '원' : ''}
                   </p>
@@ -299,11 +299,11 @@ const LifePlanningCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
                 <div className="bg-white rounded-2xl border border-rose-100 p-4 text-center">
-                  <p className="text-xs text-slate-500 font-bold mb-1">{t.futureCostLabel}</p>
+                  <p className="text-xs text-muted-foreground font-bold mb-1">{t.futureCostLabel}</p>
                   <p className="text-sm font-bold text-rose-700">{fmt(eduResult.futureCost)}{locale === 'ko' ? '원' : ''}</p>
                 </div>
                 <div className="bg-white rounded-2xl border border-rose-100 p-4 text-center">
-                  <p className="text-xs text-slate-500 font-bold mb-1">{t.monthlySaveLabel}</p>
+                  <p className="text-xs text-muted-foreground font-bold mb-1">{t.monthlySaveLabel}</p>
                   <p className="text-sm font-bold text-green-600">{fmt(eduResult.monthlySave)}{locale === 'ko' ? '원' : ''}</p>
                 </div>
               </div>
@@ -356,7 +356,7 @@ const LifePlanningCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
           {jeonseResult && (
             <div className="space-y-3">
               <div className="text-center p-5 bg-white rounded-2xl border border-rose-100">
-                <p className="text-xs text-slate-500 font-bold uppercase tracking-wide mb-1">{t.debtRatio}</p>
+                <p className="text-xs text-muted-foreground font-bold uppercase tracking-wide mb-1">{t.debtRatio}</p>
                 <p className={`text-4xl font-black ${jeonseResult.isSafe ? 'text-green-600' : 'text-red-600'}`}>
                   {jeonseResult.ratio}%
                 </p>

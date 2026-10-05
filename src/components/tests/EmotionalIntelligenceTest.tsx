@@ -222,17 +222,17 @@ export default function EmotionalIntelligenceTest({ locale: localeProp }: Props)
     return (
       <div className="space-y-6">
         <div className="text-center space-y-2">
-          <h1 className="text-2xl font-bold text-gray-900">{t.resultTitle}</h1>
+          <h1 className="text-2xl font-bold text-foreground">{t.resultTitle}</h1>
           <div className="inline-block px-4 py-2 rounded-full text-white font-semibold"
             style={{ backgroundColor: ld.color }}>{ld.label[locale]}</div>
-          <div className="text-sm text-gray-500">{t.total}: {result.total} / {maxTotal} ({pct}%)</div>
+          <div className="text-sm text-muted-foreground">{t.total}: {result.total} / {maxTotal} ({pct}%)</div>
         </div>
 
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div className="h-2 rounded-full" style={{ width: `${pct}%`, backgroundColor: ld.color }} />
         </div>
 
-        <div className="bg-gray-50 rounded-xl p-4">
+        <div className="bg-card rounded-xl p-4">
           <h2 className="font-semibold text-gray-700 mb-2 text-sm">{t.dimScores}</h2>
           <ResponsiveContainer width="100%" height={240}>
             <RadarChart data={radarData}>
@@ -279,10 +279,10 @@ export default function EmotionalIntelligenceTest({ locale: localeProp }: Props)
   return (
     <div className="space-y-6">
       <div className="text-center space-y-1">
-        <h1 className="text-xl font-bold text-gray-900">{t.title}</h1>
-        <p className="text-sm text-gray-500">{t.subtitle}</p>
+        <h1 className="text-xl font-bold text-foreground">{t.title}</h1>
+        <p className="text-sm text-muted-foreground">{t.subtitle}</p>
       </div>
-      <div className="flex justify-between items-center text-sm text-gray-500">
+      <div className="flex justify-between items-center text-sm text-muted-foreground">
         <span>{t.progress} {idx + 1} / {questions.length}</span>
         <div className="w-48 bg-gray-200 rounded-full h-1.5">
           <div className="bg-green-500 h-1.5 rounded-full" style={{ width: `${((idx + 1) / questions.length) * 100}%` }} />
@@ -298,7 +298,7 @@ export default function EmotionalIntelligenceTest({ locale: localeProp }: Props)
           {scaleLabels[locale].map((label, i) => (
             <button key={i} onClick={() => pick(i)}
               className="w-full flex items-center gap-3 p-3 rounded-lg border border-gray-100 hover:border-green-300 hover:bg-green-50 transition-colors text-left">
-              <div className="w-6 h-6 rounded-full border-2 border-gray-300 flex items-center justify-center text-xs font-bold text-gray-500">{i}</div>
+              <div className="w-6 h-6 rounded-full border-2 border-gray-300 flex items-center justify-center text-xs font-bold text-muted-foreground">{i}</div>
               <span className="text-sm text-gray-700">{label}</span>
             </button>
           ))}

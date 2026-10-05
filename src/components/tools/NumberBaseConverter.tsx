@@ -108,7 +108,7 @@ export default function NumberBaseConverter({ locale }: Props) {
   const isInvalid = hasValue && converted.every((item) => item.value === null);
 
   const inputCls =
-    "w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-100";
+    "w-full rounded-lg border border-slate-300 px-3 py-2 text-foreground focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-100";
   const card = "rounded-xl border border-slate-200 bg-white p-4";
   const resultCls = "mt-2 break-all rounded-lg bg-green-50 px-3 py-2 font-mono text-sm font-semibold text-green-900";
 
@@ -116,9 +116,9 @@ export default function NumberBaseConverter({ locale }: Props) {
     <GameContainer title={t.title} subtitle={t.subtitle}>
       <div className="grid gap-4 md:grid-cols-[1fr_1.4fr]">
         <div className={card}>
-          <label className="block text-xs text-slate-500">{t.inputLabel}</label>
+          <label className="block text-xs text-muted-foreground">{t.inputLabel}</label>
           <input className={inputCls} placeholder={t.placeholder} value={value} onChange={(e) => setValue(e.target.value)} />
-          <label className="mt-3 block text-xs text-slate-500">{t.fromBaseLabel}</label>
+          <label className="mt-3 block text-xs text-muted-foreground">{t.fromBaseLabel}</label>
           <select className={inputCls} value={fromBase} onChange={(e) => setFromBase(Number(e.target.value) as BaseValue)}>
             {bases.map((base) => (
               <option key={base} value={base}>
@@ -130,11 +130,11 @@ export default function NumberBaseConverter({ locale }: Props) {
         </div>
 
         <div className={card}>
-          <h3 className="font-semibold text-slate-900">{t.resultsTitle}</h3>
+          <h3 className="font-semibold text-foreground">{t.resultsTitle}</h3>
           <div className="mt-3 grid gap-3 sm:grid-cols-2">
             {converted.map((item) => (
-              <div key={item.base} className="rounded-lg border border-slate-100 bg-slate-50 p-3">
-                <div className="text-xs font-medium text-slate-500">
+              <div key={item.base} className="rounded-lg border border-slate-100 bg-card p-3">
+                <div className="text-xs font-medium text-muted-foreground">
                   {t.baseLabels[item.base]} ({item.base})
                 </div>
                 <div className={resultCls}>{item.value ?? "—"}</div>

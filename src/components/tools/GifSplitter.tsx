@@ -255,8 +255,8 @@ export default function GifSplitter({ locale }: { locale: Locale }) {
           {t.privacy}
         </p>
 
-        <label className="block cursor-pointer rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 px-4 py-6 sm:py-10 text-center transition hover:border-green-300 hover:bg-green-50">
-          <span className="block text-base font-semibold text-slate-900">{frames.length ? t.replace : t.upload}</span>
+        <label className="block cursor-pointer rounded-xl border-2 border-dashed border-slate-300 bg-card px-4 py-6 sm:py-10 text-center transition hover:border-green-300 hover:bg-green-50">
+          <span className="block text-base font-semibold text-foreground">{frames.length ? t.replace : t.upload}</span>
           <span className="mt-2 block text-sm text-slate-600">{t.empty}</span>
           <input type="file" accept="image/gif,.gif" className="hidden" onChange={handleFileSelect} />
         </label>
@@ -281,17 +281,17 @@ export default function GifSplitter({ locale }: { locale: Locale }) {
                   <img src={frame.url} alt={`${t.frame} ${frame.index + 1}`} className="h-40 w-full rounded-lg bg-slate-100 object-contain" />
                   <div className="mt-3 flex items-center justify-between gap-2 text-sm">
                     <div>
-                      <p className="font-semibold text-slate-900">
+                      <p className="font-semibold text-foreground">
                         {t.frame} {frame.index + 1}
                       </p>
-                      <p className="text-xs text-slate-500">
+                      <p className="text-xs text-muted-foreground">
                         {frame.width}x{frame.height}
                         {frame.delayMs !== null ? ` · ${t.delay} ${frame.delayMs}ms` : ""}
                       </p>
                     </div>
                     <button
                       type="button"
-                      className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-800 transition hover:bg-slate-50"
+                      className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-800 transition hover:bg-card"
                       onClick={() => downloadUrl(frame.url, `gif-frame-${frame.index + 1}.png`)}
                     >
                       {t.download}

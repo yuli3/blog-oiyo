@@ -286,7 +286,7 @@ export const TAccountVisualizer: React.FC<TAccountVisualizerProps> = ({ locale =
               locale === 'ko' ? '대변 금액' : 'Cr Amount',
               '',
             ].map((h, i) => (
-              <span key={i} className="text-xs font-bold text-slate-500">{h}</span>
+              <span key={i} className="text-xs font-bold text-muted-foreground">{h}</span>
             ))}
           </div>
 
@@ -352,7 +352,7 @@ export const TAccountVisualizer: React.FC<TAccountVisualizerProps> = ({ locale =
                     <div className="flex bg-white">
                       {/* Debit side */}
                       <div className="flex-1 border-r-2 border-slate-300 p-2">
-                        <p className="text-xs font-bold text-slate-500 mb-1">{locale === 'ko' ? '차변 (Dr)' : 'Dr'}</p>
+                        <p className="text-xs font-bold text-muted-foreground mb-1">{locale === 'ko' ? '차변 (Dr)' : 'Dr'}</p>
                         {acc.debits.length === 0 ? (
                           <div style={{ minHeight: `${maxRows * 24}px` }} />
                         ) : (
@@ -366,7 +366,7 @@ export const TAccountVisualizer: React.FC<TAccountVisualizerProps> = ({ locale =
                       </div>
                       {/* Credit side */}
                       <div className="flex-1 p-2">
-                        <p className="text-xs font-bold text-slate-500 mb-1">{locale === 'ko' ? '대변 (Cr)' : 'Cr'}</p>
+                        <p className="text-xs font-bold text-muted-foreground mb-1">{locale === 'ko' ? '대변 (Cr)' : 'Cr'}</p>
                         {acc.credits.length === 0 ? (
                           <div style={{ minHeight: `${maxRows * 24}px` }} />
                         ) : (
@@ -422,7 +422,7 @@ export const TAccountVisualizer: React.FC<TAccountVisualizerProps> = ({ locale =
                 </thead>
                 <tbody>
                   {tAccounts.map((acc, idx) => (
-                    <tr key={acc.account} className={idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}>
+                    <tr key={acc.account} className={idx % 2 === 0 ? 'bg-white' : 'bg-card'}>
                       <td className="px-4 py-2 text-slate-700">{acc.account}</td>
                       <td className="px-4 py-2 text-right font-bold text-green-700">
                         {acc.debitTotal > 0 ? acc.debitTotal.toLocaleString() : '—'}

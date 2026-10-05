@@ -41,7 +41,7 @@ const DsrCalculator: React.FC = () => {
             <div className="flex flex-col md:flex-row gap-5 sm:gap-8">
                 {/* Inputs */}
                 <div className="flex-1 space-y-6">
-                    <h3 className="text-xl font-bold text-slate-900 mb-4">대출 정보 입력</h3>
+                    <h3 className="text-xl font-bold text-foreground mb-4">대출 정보 입력</h3>
                     
                     <div className="space-y-2">
                         <label className="text-sm font-medium text-slate-600">연간 총소득 (백만원)</label>
@@ -102,7 +102,7 @@ const DsrCalculator: React.FC = () => {
                 {/* Results */}
                 <div className="flex-1 p-4 sm:p-6 bg-white rounded-2xl border border-blue-100 shadow-sm flex flex-col justify-center items-center text-center">
                     <div className="mb-6">
-                        <span className="text-sm font-medium text-slate-500 uppercase tracking-widest">나의 DSR 지수</span>
+                        <span className="text-sm font-medium text-muted-foreground uppercase tracking-widest">나의 DSR 지수</span>
                         <div className={`text-6xl font-black mt-2 ${dsr > 40 ? 'text-rose-500' : 'text-emerald-500'}`}>
                             <AnimatedNumber
                                 value={dsr}
@@ -122,8 +122,8 @@ const DsrCalculator: React.FC = () => {
                     </div>
 
                     <div className="grid grid-cols-1 gap-4 w-full">
-                        <div className="p-4 rounded-xl bg-slate-50 border border-slate-100">
-                            <span className="text-xs text-slate-500 block mb-1">DSR 40% 기준 대출 가능 최대 금액</span>
+                        <div className="p-4 rounded-xl bg-card border border-slate-100">
+                            <span className="text-xs text-muted-foreground block mb-1">DSR 40% 기준 대출 가능 최대 금액</span>
                             <span className="text-xl font-bold text-blue-600">
                                 {maxLoan > 0 ? (
                                     <AnimatedNumber

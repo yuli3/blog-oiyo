@@ -85,7 +85,7 @@ export default function PerfectScopeTest({ locale: localeProp }: Props) {
       <div className="not-prose my-6 sm:my-10 p-4 sm:p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto text-center space-y-6">
         <p className="text-xs font-bold text-amber-500 uppercase tracking-widest">{t.resultLabel}</p>
         <div className="text-6xl">{r.emoji}</div>
-        <h3 className="text-3xl font-black text-slate-900">{r.title}</h3>
+        <h3 className="text-3xl font-black text-foreground">{r.title}</h3>
         <div className="p-4 sm:p-6 bg-amber-50 rounded-2xl border border-amber-100">
           <p className="text-slate-700 text-base leading-relaxed">{r.desc}</p>
         </div>
@@ -97,8 +97,8 @@ export default function PerfectScopeTest({ locale: localeProp }: Props) {
   return (
     <div className="not-prose my-6 sm:my-10 p-4 sm:p-8 bg-white border border-slate-200 rounded-3xl shadow-xl max-w-2xl mx-auto space-y-5 sm:space-y-8">
       <div className="text-center">
-        <h3 className="text-2xl font-black text-slate-900">{t.title}</h3>
-        <p className="text-sm text-slate-500 mt-2">{t.description}</p>
+        <h3 className="text-2xl font-black text-foreground">{t.title}</h3>
+        <p className="text-sm text-muted-foreground mt-2">{t.description}</p>
         <div className="mt-3 h-2 bg-slate-100 rounded-full">
           <div className="h-2 bg-amber-500 rounded-full transition-all" style={{ width: `${(Object.keys(answers).length / t.questions.length) * 100}%` }} />
         </div>
@@ -112,7 +112,7 @@ export default function PerfectScopeTest({ locale: localeProp }: Props) {
                 <button
                   key={v}
                   onClick={() => setAnswers((prev) => ({ ...prev, [q.id]: v + 1 }))}
-                  className={`py-2 px-1 text-[10px] rounded-lg border transition-all ${answers[q.id] === v + 1 ? "bg-amber-600 border-amber-600 text-white font-bold shadow-md" : "bg-slate-50 border-slate-200 text-slate-500 hover:bg-slate-100"}`}
+                  className={`py-2 px-1 text-[10px] rounded-lg border transition-all ${answers[q.id] === v + 1 ? "bg-amber-600 border-amber-600 text-white font-bold shadow-md" : "bg-card border-slate-200 text-muted-foreground hover:bg-slate-100"}`}
                 >
                   {opt}
                 </button>

@@ -51,7 +51,7 @@ export const DeveloperUnitConverter: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8 relative z-10">
                 {/* PX to REM */}
                 <div className="space-y-4 p-4 sm:p-6 bg-slate-900 rounded-2xl border border-white/5">
-                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-4">PX to REM Converter</span>
+                    <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest block mb-4">PX to REM Converter</span>
                     <div className="space-y-4">
                         <div className="grid grid-cols-2 gap-4">
                             <div>
@@ -74,7 +74,7 @@ export const DeveloperUnitConverter: React.FC = () => {
                                 {rem.toFixed(3)}rem
                             </div>
                             <button onClick={() => copyToClipboard(`${rem.toFixed(3)}rem`)} className="p-2 hover:bg-slate-800 rounded-lg opacity-0 group-hover:opacity-100 transition-all">
-                                <Copy size={16} className="text-slate-500 hover:text-white" />
+                                <Copy size={16} className="text-muted-foreground hover:text-white" />
                             </button>
                         </div>
                     </div>
@@ -82,7 +82,7 @@ export const DeveloperUnitConverter: React.FC = () => {
 
                 {/* HEX to RGB */}
                 <div className="space-y-4 p-4 sm:p-6 bg-slate-900 rounded-2xl border border-white/5">
-                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-4">Color Converter (HEX to RGB)</span>
+                    <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest block mb-4">Color Converter (HEX to RGB)</span>
                     <div className="space-y-4">
                         <div>
                             <label className="text-xs text-slate-400 mb-1 block">HEX Color</label>
@@ -102,7 +102,7 @@ export const DeveloperUnitConverter: React.FC = () => {
                                 {hexToRgb(hex)}
                             </div>
                             <button onClick={() => copyToClipboard(hexToRgb(hex))} className="p-2 hover:bg-slate-800 rounded-lg opacity-0 group-hover:opacity-100 transition-all">
-                                <Copy size={16} className="text-slate-500 hover:text-white" />
+                                <Copy size={16} className="text-muted-foreground hover:text-white" />
                             </button>
                         </div>
                     </div>

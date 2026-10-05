@@ -443,7 +443,7 @@ export default function TaxSavingsRoadmap({ locale = 'ko' }: { locale?: Locale }
             </div>
             <p className="text-sm text-gray-700 mb-2">{tip.desc[locale]}</p>
             <div className="flex flex-wrap gap-3 text-xs">
-              <span className="text-gray-500">
+              <span className="text-muted-foreground">
                 <span className={`font-semibold ${c.text}`}>{t.savingsRange}</span>
                 {': '}
                 <span className="font-semibold">{tip.savingsRange[0]}~{tip.savingsRange[1]} {t.wan}</span>
@@ -463,8 +463,8 @@ export default function TaxSavingsRoadmap({ locale = 'ko' }: { locale?: Locale }
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900">{t.title}</h1>
-        <p className="text-gray-500 mt-1">{t.subtitle}</p>
+        <h1 className="text-2xl font-bold text-foreground">{t.title}</h1>
+        <p className="text-muted-foreground mt-1">{t.subtitle}</p>
       </div>
 
       {/* Profile Form */}
@@ -591,7 +591,7 @@ export default function TaxSavingsRoadmap({ locale = 'ko' }: { locale?: Locale }
           ))}
 
           {applicableTips.length === 0 && (
-            <p className="text-center text-gray-500 py-5 sm:py-8">{t.noTips}</p>
+            <p className="text-center text-muted-foreground py-5 sm:py-8">{t.noTips}</p>
           )}
         </div>
       )}

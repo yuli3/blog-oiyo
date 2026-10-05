@@ -1017,8 +1017,8 @@ export default function PersonalColorTest({ locale }: Props) {
     return (
       <div className="space-y-6">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900">{ui.title}</h1>
-          <p className="mt-1 text-gray-500 text-sm">{ui.subtitle}</p>
+          <h1 className="text-2xl font-bold text-foreground">{ui.title}</h1>
+          <p className="mt-1 text-muted-foreground text-sm">{ui.subtitle}</p>
         </div>
         <div className="grid grid-cols-2 gap-3">
           {(["spring","summer","autumn","winter"] as Season[]).map((s) => {
@@ -1074,7 +1074,7 @@ export default function PersonalColorTest({ locale }: Props) {
                 className={`w-full text-left px-4 py-3 rounded-xl border-2 text-sm transition-all ${
                   isAnswered
                     ? "border-indigo-500 bg-indigo-50 text-indigo-800 font-medium"
-                    : "border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50 text-gray-700"
+                    : "border-gray-200 bg-white hover:border-gray-300 hover:bg-card text-gray-700"
                 }`}
               >
                 {txt as string}
@@ -1087,7 +1087,7 @@ export default function PersonalColorTest({ locale }: Props) {
           {current > 0 && (
             <button
               onClick={goPrev}
-              className="flex-1 py-2.5 rounded-xl border-2 border-gray-200 text-gray-600 text-sm font-medium hover:bg-gray-50"
+              className="flex-1 py-2.5 rounded-xl border-2 border-gray-200 text-gray-600 text-sm font-medium hover:bg-card"
             >
               ← {ui.prevBtn}
             </button>
@@ -1126,22 +1126,22 @@ export default function PersonalColorTest({ locale }: Props) {
         <div className={`inline-block px-3 py-1 rounded-full text-xs font-bold border mb-2 ${sd.badge}`}>
           {ui.yourType}
         </div>
-        <h1 className="text-2xl font-black text-gray-900">{sd.name[locale]}</h1>
+        <h1 className="text-2xl font-black text-foreground">{sd.name[locale]}</h1>
         <p className="text-sm text-gray-600 mt-1">{sd.subtitle[locale]}</p>
       </div>
 
       {/* Tone description */}
       <div className="rounded-xl border border-gray-200 p-4">
-        <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">{ui.toneLabel}</h2>
+        <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">{ui.toneLabel}</h2>
         <p className="text-sm text-gray-700 leading-relaxed">{sd.tone[locale]}</p>
       </div>
 
       {/* Best colors */}
       <div className="rounded-xl border border-gray-200 p-4">
-        <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">{ui.bestColorsLabel}</h2>
+        <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">{ui.bestColorsLabel}</h2>
         <div className="flex flex-wrap gap-2">
           {sd.bestColors.map((c) => (
-            <div key={c.hex} className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-gray-50 border border-gray-200">
+            <div key={c.hex} className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-card border border-gray-200">
               <div className="w-4 h-4 rounded-full border border-gray-300" style={{ backgroundColor: c.hex }} />
               <span className="text-xs text-gray-700">{c.name[locale]}</span>
             </div>
@@ -1151,14 +1151,14 @@ export default function PersonalColorTest({ locale }: Props) {
 
       {/* Avoid colors */}
       <div className="rounded-xl border border-gray-200 p-4">
-        <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">{ui.avoidColorsLabel}</h2>
+        <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">{ui.avoidColorsLabel}</h2>
         <div className="flex flex-wrap gap-2">
           {sd.avoidColors.map((c) => (
-            <div key={c.hex} className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-gray-50 border border-gray-200 opacity-60">
+            <div key={c.hex} className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-card border border-gray-200 opacity-60">
               <div className="w-4 h-4 rounded-full border border-gray-300 relative overflow-hidden" style={{ backgroundColor: c.hex }}>
                 <div className="absolute inset-0 flex items-center justify-center text-white text-xs font-bold">✕</div>
               </div>
-              <span className="text-xs text-gray-500 line-through">{c.name[locale]}</span>
+              <span className="text-xs text-muted-foreground line-through">{c.name[locale]}</span>
             </div>
           ))}
         </div>
@@ -1167,7 +1167,7 @@ export default function PersonalColorTest({ locale }: Props) {
       {/* Makeup & Fashion */}
       <div className="grid grid-cols-2 gap-3">
         <div className="rounded-xl border border-gray-200 p-4">
-          <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">💄 {ui.makeupLabel}</h2>
+          <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">💄 {ui.makeupLabel}</h2>
           <ul className="space-y-1">
             {sd.makeup[locale].map((m) => (
               <li key={m} className="text-xs text-gray-700">• {m}</li>
@@ -1175,7 +1175,7 @@ export default function PersonalColorTest({ locale }: Props) {
           </ul>
         </div>
         <div className="rounded-xl border border-gray-200 p-4">
-          <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">👗 {ui.fashionLabel}</h2>
+          <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">👗 {ui.fashionLabel}</h2>
           <ul className="space-y-1">
             {sd.fashion[locale].map((f) => (
               <li key={f} className="text-xs text-gray-700">• {f}</li>
@@ -1186,7 +1186,7 @@ export default function PersonalColorTest({ locale }: Props) {
 
       {/* Celebs */}
       <div className="rounded-xl border border-gray-200 p-4">
-        <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">{ui.celebsLabel}</h2>
+        <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">{ui.celebsLabel}</h2>
         <div className="flex flex-wrap gap-2">
           {sd.celebs.map((c) => (
             <span key={c} className="px-3 py-1 rounded-full text-xs bg-gray-100 text-gray-700 border border-gray-200">{c}</span>
@@ -1200,7 +1200,7 @@ export default function PersonalColorTest({ locale }: Props) {
       {/* Retake */}
       <button
         onClick={retake}
-        className="w-full py-3 rounded-xl border-2 border-gray-300 text-gray-600 text-sm font-medium hover:bg-gray-50 transition-colors"
+        className="w-full py-3 rounded-xl border-2 border-gray-300 text-gray-600 text-sm font-medium hover:bg-card transition-colors"
       >
         ↺ {ui.retakeBtn}
       </button>

@@ -183,7 +183,7 @@ const GiftTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
 
               <div className="space-y-2 p-5 bg-white rounded-2xl border border-green-100 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-slate-500">{locale === 'ko' ? '증여 금액 합계' : 'Total Gift'}</span>
+                  <span className="text-muted-foreground">{locale === 'ko' ? '증여 금액 합계' : 'Total Gift'}</span>
                   <span className="font-bold">{fmt(result.totalGiftAmount)}원</span>
                 </div>
                 <div className="flex justify-between text-green-600">
@@ -191,19 +191,19 @@ const GiftTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }
                   <span className="font-bold">-{fmt(result.deduction)}원</span>
                 </div>
                 <div className="flex justify-between border-t pt-2">
-                  <span className="text-slate-500">{locale === 'ko' ? '과세표준' : 'Taxable Base'}</span>
+                  <span className="text-muted-foreground">{locale === 'ko' ? '과세표준' : 'Taxable Base'}</span>
                   <span className="font-bold">{fmt(result.taxableBase)}원</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">{locale === 'ko' ? '적용 세율' : 'Tax Rate'}</span>
+                  <span className="text-muted-foreground">{locale === 'ko' ? '적용 세율' : 'Tax Rate'}</span>
                   <span className="font-bold">{result.bracketRate}%</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">{locale === 'ko' ? '증여세' : 'Gift Tax'}</span>
+                  <span className="text-muted-foreground">{locale === 'ko' ? '증여세' : 'Gift Tax'}</span>
                   <span className="font-bold">{fmt(result.giftTax)}원</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">{locale === 'ko' ? '지방세 (10%)' : 'Local Tax (10%)'}</span>
+                  <span className="text-muted-foreground">{locale === 'ko' ? '지방세 (10%)' : 'Local Tax (10%)'}</span>
                   <span className="font-bold">{fmt(result.localTax)}원</span>
                 </div>
               </div>

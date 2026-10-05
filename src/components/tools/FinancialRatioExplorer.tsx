@@ -116,7 +116,7 @@ export default function FinancialRatioExplorer({ locale }: Props) {
             <td className={`py-1 pr-2 ${l.indent ? 'pl-4 text-gray-600' : 'font-semibold text-gray-800'} ${l.subtotal ? 'font-bold' : ''} ${l.spacer ? 'pt-3' : ''}`}>
               {l.label[lang]}
             </td>
-            <td className={`py-1 text-right tabular-nums ${l.subtotal ? 'font-bold text-gray-900' : 'text-gray-600'} ${l.spacer ? 'pt-3' : ''}`}>
+            <td className={`py-1 text-right tabular-nums ${l.subtotal ? 'font-bold text-foreground' : 'text-gray-600'} ${l.spacer ? 'pt-3' : ''}`}>
               {fmt(l.value)}
             </td>
           </tr>
@@ -128,8 +128,8 @@ export default function FinancialRatioExplorer({ locale }: Props) {
   return (
     <div className="not-prose my-5 sm:my-8 space-y-6">
       <div className="text-center">
-        <h2 className="text-xl font-black text-gray-900">{t.title}</h2>
-        <p className="text-sm text-gray-500">{t.subtitle}</p>
+        <h2 className="text-xl font-black text-foreground">{t.title}</h2>
+        <p className="text-sm text-muted-foreground">{t.subtitle}</p>
       </div>
 
       {/* ratio picker */}
@@ -151,7 +151,7 @@ export default function FinancialRatioExplorer({ locale }: Props) {
       </div>
 
       {/* formula + result */}
-      <div className="rounded-2xl border border-gray-200 bg-gray-50/60 p-4">
+      <div className="rounded-2xl border border-gray-200 bg-card/60 p-4">
         <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-center">
           <span className="text-base font-bold text-gray-800">{ratio.name[lang]}</span>
           <span className="text-gray-400">=</span>
@@ -166,7 +166,7 @@ export default function FinancialRatioExplorer({ locale }: Props) {
             {isGood ? t.healthy : t.watch}
           </span>
         </div>
-        <p className="mt-3 text-center text-xs leading-relaxed text-gray-500">{ratio.read[lang]}</p>
+        <p className="mt-3 text-center text-xs leading-relaxed text-muted-foreground">{ratio.read[lang]}</p>
       </div>
 
       {/* statements */}

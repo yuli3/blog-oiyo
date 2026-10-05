@@ -171,8 +171,8 @@ export default function FaviconGenerator({ locale }: { locale: Locale }) {
 
         <input ref={inputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
 
-        <button type="button" className="w-full rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 px-4 py-6 sm:py-10 text-center transition hover:border-green-300 hover:bg-green-50" onClick={() => inputRef.current?.click()}>
-          <span className="block text-base font-semibold text-slate-900">{sourceUrl ? t.replace : t.upload}</span>
+        <button type="button" className="w-full rounded-xl border-2 border-dashed border-slate-300 bg-card px-4 py-6 sm:py-10 text-center transition hover:border-green-300 hover:bg-green-50" onClick={() => inputRef.current?.click()}>
+          <span className="block text-base font-semibold text-foreground">{sourceUrl ? t.replace : t.upload}</span>
           <span className="mt-2 block text-sm text-slate-600">{t.empty}</span>
         </button>
 
@@ -181,17 +181,17 @@ export default function FaviconGenerator({ locale }: { locale: Locale }) {
 
         {sourceUrl && (
           <figure className="rounded-xl border border-slate-200 bg-white p-4">
-            <figcaption className="mb-3 text-xs font-semibold uppercase text-slate-500">{t.preview}</figcaption>
+            <figcaption className="mb-3 text-xs font-semibold uppercase text-muted-foreground">{t.preview}</figcaption>
             <img src={sourceUrl} alt={t.preview} className="mx-auto h-32 w-32 rounded-lg border border-slate-200 object-contain" />
           </figure>
         )}
 
         {previews.length > 0 && (
           <section className="rounded-xl border border-slate-200 bg-white p-4">
-            <h3 className="font-semibold text-slate-900">{t.generated}</h3>
+            <h3 className="font-semibold text-foreground">{t.generated}</h3>
             <div className="mt-4 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
               {previews.map((preview) => (
-                <article key={preview.size} className="rounded-lg border border-slate-100 bg-slate-50 p-3">
+                <article key={preview.size} className="rounded-lg border border-slate-100 bg-card p-3">
                   <div className="flex h-28 items-center justify-center rounded-lg bg-white">
                     <img
                       src={preview.url}
@@ -201,10 +201,10 @@ export default function FaviconGenerator({ locale }: { locale: Locale }) {
                     />
                   </div>
                   <div className="mt-3 flex items-center justify-between gap-2">
-                    <span className="text-sm font-semibold text-slate-900">{preview.size}x{preview.size}</span>
+                    <span className="text-sm font-semibold text-foreground">{preview.size}x{preview.size}</span>
                     <button
                       type="button"
-                      className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-800 transition hover:bg-slate-50"
+                      className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-800 transition hover:bg-card"
                       onClick={() => downloadUrl(preview.url, `favicon-${preview.size}x${preview.size}.png`)}
                     >
                       {t.download}

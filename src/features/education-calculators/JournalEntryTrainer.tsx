@@ -283,7 +283,7 @@ const TAccountDisplay: React.FC<TAccountDisplayProps> = ({ scenario, locale }) =
           </div>
           <div className="flex min-h-[80px]">
             <div className="flex-1 border-r border-green-200 p-2">
-              <p className="text-xs font-bold text-slate-500 mb-1">
+              <p className="text-xs font-bold text-muted-foreground mb-1">
                 {locale === 'ko' ? '차변 (Dr)' : 'Debit (Dr)'}
               </p>
               <p className="text-sm font-bold text-green-700">
@@ -291,7 +291,7 @@ const TAccountDisplay: React.FC<TAccountDisplayProps> = ({ scenario, locale }) =
               </p>
             </div>
             <div className="flex-1 p-2">
-              <p className="text-xs font-bold text-slate-500 mb-1">
+              <p className="text-xs font-bold text-muted-foreground mb-1">
                 {locale === 'ko' ? '대변 (Cr)' : 'Credit (Cr)'}
               </p>
             </div>
@@ -304,12 +304,12 @@ const TAccountDisplay: React.FC<TAccountDisplayProps> = ({ scenario, locale }) =
           </div>
           <div className="flex min-h-[80px]">
             <div className="flex-1 border-r border-green-200 p-2">
-              <p className="text-xs font-bold text-slate-500 mb-1">
+              <p className="text-xs font-bold text-muted-foreground mb-1">
                 {locale === 'ko' ? '차변 (Dr)' : 'Debit (Dr)'}
               </p>
             </div>
             <div className="flex-1 p-2">
-              <p className="text-xs font-bold text-slate-500 mb-1">
+              <p className="text-xs font-bold text-muted-foreground mb-1">
                 {locale === 'ko' ? '대변 (Cr)' : 'Credit (Cr)'}
               </p>
               <p className="text-sm font-bold text-green-700">
@@ -363,7 +363,7 @@ export const JournalEntryTrainer: React.FC<JournalEntryTrainerProps> = ({ locale
           <p className="text-lg font-bold text-slate-700 mb-1">
             {locale === 'ko' ? `정답률 ${pct}%` : `${pct}% Correct`}
           </p>
-          <p className="text-sm text-slate-500 mb-6">
+          <p className="text-sm text-muted-foreground mb-6">
             {pct >= 80
               ? locale === 'ko' ? '우수합니다! 분개 원리를 잘 이해하고 있습니다.' : 'Excellent! You understand journal entry principles well.'
               : pct >= 60
@@ -393,7 +393,7 @@ export const JournalEntryTrainer: React.FC<JournalEntryTrainerProps> = ({ locale
           <span className="text-sm font-bold text-green-700" aria-live="polite">
             {locale === 'ko' ? `점수: ${state.score}/${SCENARIOS.length}` : `Score: ${state.score}/${SCENARIOS.length}`}
           </span>
-          <span className="text-xs text-slate-500">
+          <span className="text-xs text-muted-foreground">
             ({state.currentIdx + 1}/{SCENARIOS.length})
           </span>
         </div>
@@ -531,7 +531,7 @@ export const JournalEntryTrainer: React.FC<JournalEntryTrainerProps> = ({ locale
       )}
 
       {/* Principle reminder */}
-      <div className="mt-6 p-3 bg-white border border-green-100 rounded-xl text-xs text-slate-500">
+      <div className="mt-6 p-3 bg-white border border-green-100 rounded-xl text-xs text-muted-foreground">
         <span className="font-bold text-green-700">
           {locale === 'ko' ? '분개 원칙: ' : 'Principle: '}
         </span>

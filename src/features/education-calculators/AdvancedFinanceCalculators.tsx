@@ -35,7 +35,7 @@ export const CAPMCalculator: React.FC = () => {
                     <div className="text-5xl font-black text-white font-mono">
                         {ke.toFixed(2)}%
                     </div>
-                    <div className="mt-4 text-[10px] text-slate-500 text-center">
+                    <div className="mt-4 text-[10px] text-muted-foreground text-center">
                         Ke = {rf}% + {beta} × ({rm}% - {rf}%)
                     </div>
                 </div>
@@ -80,7 +80,7 @@ export const WACCCalculator: React.FC = () => {
                     <div className="text-5xl font-black text-white font-mono">
                         {wacc.toFixed(2)}%
                     </div>
-                    <div className="mt-4 text-[10px] text-slate-500 text-center leading-relaxed">
+                    <div className="mt-4 text-[10px] text-muted-foreground text-center leading-relaxed">
                         부채비율: {(debt/total*100).toFixed(1)}% | 자기자본비율: {(equity/total*100).toFixed(1)}%
                     </div>
                 </div>

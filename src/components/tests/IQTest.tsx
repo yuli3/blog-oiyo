@@ -751,8 +751,8 @@ export default function IQTest({ locale }: Props) {
     return (
       <div className="space-y-6 text-center">
         <div className="text-5xl">🧩</div>
-        <h1 className="text-2xl font-bold text-gray-900">{t.title}</h1>
-        <p className="text-gray-500 text-sm">{t.subtitle}</p>
+        <h1 className="text-2xl font-bold text-foreground">{t.title}</h1>
+        <p className="text-muted-foreground text-sm">{t.subtitle}</p>
         <div className="grid grid-cols-2 gap-3 max-w-xs mx-auto text-sm">
           <div className="bg-indigo-50 rounded-xl p-3 text-indigo-700 font-medium">
             📋 {QUESTIONS.length} Questions
@@ -761,7 +761,7 @@ export default function IQTest({ locale }: Props) {
             ⏱ {Math.floor(TOTAL_TIME / 60)} min
           </div>
           {(["number", "pattern", "logic", "spatial", "verbal"] as QuestionType[]).map((type) => (
-            <div key={type} className="bg-gray-50 rounded-xl p-2 text-gray-600 text-xs">
+            <div key={type} className="bg-card rounded-xl p-2 text-gray-600 text-xs">
               {t.typeLabels[type]}
             </div>
           ))}
@@ -791,7 +791,7 @@ export default function IQTest({ locale }: Props) {
       <div className="space-y-5">
         {/* Top bar */}
         <div className="flex items-center justify-between">
-          <span className="text-sm font-medium text-gray-500">
+          <span className="text-sm font-medium text-muted-foreground">
             {t.questionOf(currentIndex + 1, QUESTIONS.length)}
           </span>
           <span className={`text-sm font-bold ${timerColor}`}>
@@ -816,7 +816,7 @@ export default function IQTest({ locale }: Props) {
 
           {/* Visual */}
           {q.visual && (
-            <div className="bg-gray-50 rounded-xl p-4 text-center text-lg font-mono whitespace-pre-line text-gray-800 leading-relaxed">
+            <div className="bg-card rounded-xl p-4 text-center text-lg font-mono whitespace-pre-line text-gray-800 leading-relaxed">
               {q.visual}
             </div>
           )}
@@ -851,7 +851,7 @@ export default function IQTest({ locale }: Props) {
           <button
             onClick={prev}
             disabled={currentIndex === 0}
-            className="px-4 py-2.5 border border-gray-200 text-gray-600 rounded-xl font-medium hover:bg-gray-50 transition-colors text-sm disabled:opacity-30"
+            className="px-4 py-2.5 border border-gray-200 text-gray-600 rounded-xl font-medium hover:bg-card transition-colors text-sm disabled:opacity-30"
           >
             {t.prevBtn}
           </button>
@@ -919,10 +919,10 @@ export default function IQTest({ locale }: Props) {
         {/* IQ Card */}
         <div className={`rounded-2xl border-2 bg-gradient-to-br ${bgGrad} p-4 sm:p-6 text-center space-y-2`}>
           <div className="text-4xl">🧠</div>
-          <p className="text-sm text-gray-500 font-medium">{t.estimatedIQ}</p>
+          <p className="text-sm text-muted-foreground font-medium">{t.estimatedIQ}</p>
           <p className={`text-6xl font-black ${iqColor}`}>{iq}</p>
           <p className="text-sm font-semibold text-gray-700">{band.label}</p>
-          <p className="text-xs text-gray-500">{band.description}</p>
+          <p className="text-xs text-muted-foreground">{band.description}</p>
           <div className="flex justify-center gap-6 pt-2">
             <div className="text-center">
               <p className="text-xs text-gray-400">{t.yourScore}</p>
@@ -943,7 +943,7 @@ export default function IQTest({ locale }: Props) {
         <div className="flex gap-3">
           <button
             onClick={reset}
-            className="flex-1 py-2.5 border border-gray-200 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+            className="flex-1 py-2.5 border border-gray-200 rounded-xl text-sm font-medium text-gray-600 hover:bg-card transition-colors"
           >
             {t.retakeBtn}
           </button>
@@ -987,7 +987,7 @@ export default function IQTest({ locale }: Props) {
               <span className={`text-sm font-bold ${isCorrect ? "text-green-600" : "text-rose-500"}`}>
                 {isCorrect ? "✅" : "❌"} Q{i + 1}
               </span>
-              <span className="text-xs bg-white px-2 py-0.5 rounded-full text-gray-500 border">
+              <span className="text-xs bg-white px-2 py-0.5 rounded-full text-muted-foreground border">
                 {t.typeLabels[q.type]} · {q.points}pt
               </span>
             </div>
@@ -1009,7 +1009,7 @@ export default function IQTest({ locale }: Props) {
                         ? "border-green-400 bg-green-100 text-green-800"
                         : isUser
                         ? "border-rose-400 bg-rose-100 text-rose-700"
-                        : "border-transparent bg-white text-gray-500"
+                        : "border-transparent bg-white text-muted-foreground"
                     }`}
                   >
                     {String.fromCharCode(65 + oi)}. {label}

@@ -625,7 +625,7 @@ export default function MBTICompatibility({ locale }: Props) {
                 >
                   <span className="text-lg">{prof.emoji}</span>
                   <span className="text-xs font-bold text-gray-800">{tp}</span>
-                  <span className="text-[10px] text-gray-500 leading-tight hidden sm:block">{prof.nickname[locale]}</span>
+                  <span className="text-[10px] text-muted-foreground leading-tight hidden sm:block">{prof.nickname[locale]}</span>
                 </button>
               );
             })}
@@ -640,8 +640,8 @@ export default function MBTICompatibility({ locale }: Props) {
       {/* Header */}
       <div className="text-center space-y-2">
         <div className="text-4xl">💑</div>
-        <h1 className="text-2xl font-bold text-gray-900">{t.title}</h1>
-        <p className="text-gray-500 text-sm">{t.subtitle}</p>
+        <h1 className="text-2xl font-bold text-foreground">{t.title}</h1>
+        <p className="text-muted-foreground text-sm">{t.subtitle}</p>
       </div>
 
       {/* Type selectors */}
@@ -684,7 +684,7 @@ export default function MBTICompatibility({ locale }: Props) {
         {(typeA || typeB) && (
           <button
             onClick={reset}
-            className="px-4 py-2.5 border border-gray-200 text-gray-600 rounded-xl font-medium hover:bg-gray-50 transition-colors text-sm"
+            className="px-4 py-2.5 border border-gray-200 text-gray-600 rounded-xl font-medium hover:bg-card transition-colors text-sm"
           >
             {t.resetBtn}
           </button>
@@ -706,7 +706,7 @@ export default function MBTICompatibility({ locale }: Props) {
                   style={{ width: `${levelCfg.score}%` }}
                 />
               </div>
-              <p className="text-xs text-gray-500">{levelCfg.score}%</p>
+              <p className="text-xs text-muted-foreground">{levelCfg.score}%</p>
             </div>
           </div>
 
@@ -720,7 +720,7 @@ export default function MBTICompatibility({ locale }: Props) {
                     <span className="text-xl">{prof.emoji}</span>
                     <div>
                       <p className="text-sm font-bold text-gray-800">{tp}</p>
-                      <p className="text-xs text-gray-500">{prof.nickname[locale]}</p>
+                      <p className="text-xs text-muted-foreground">{prof.nickname[locale]}</p>
                     </div>
                   </div>
                   <p className="text-xs text-gray-600 leading-relaxed">{prof.description[locale]}</p>

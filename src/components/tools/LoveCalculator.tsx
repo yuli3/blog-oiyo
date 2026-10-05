@@ -312,10 +312,10 @@ export default function LoveCalculator({ locale }: Props) {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900">
+        <h1 className="text-2xl font-bold text-foreground">
           {t.title}
         </h1>
-        <p className="mt-1 text-gray-500">{t.subtitle}</p>
+        <p className="mt-1 text-muted-foreground">{t.subtitle}</p>
       </div>
 
       {/* Mode tabs */}
@@ -348,7 +348,7 @@ export default function LoveCalculator({ locale }: Props) {
                 value={name1}
                 onChange={(e) => { setName1(e.target.value); setResult(null); }}
                 placeholder={t.name1Placeholder}
-                className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-pink-400"
+                className="w-full rounded-lg border border-gray-300 bg-card px-4 py-2.5 text-foreground focus:outline-none focus:ring-2 focus:ring-pink-400"
               />
             </div>
             <div className="flex justify-center text-2xl">❤️</div>
@@ -361,7 +361,7 @@ export default function LoveCalculator({ locale }: Props) {
                 value={name2}
                 onChange={(e) => { setName2(e.target.value); setResult(null); }}
                 placeholder={t.name2Placeholder}
-                className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-pink-400"
+                className="w-full rounded-lg border border-gray-300 bg-card px-4 py-2.5 text-foreground focus:outline-none focus:ring-2 focus:ring-pink-400"
               />
             </div>
           </>
@@ -374,7 +374,7 @@ export default function LoveCalculator({ locale }: Props) {
               <select
                 value={mbti1}
                 onChange={(e) => { setMbti1(e.target.value as MBTIType); setResult(null); }}
-                className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-pink-400"
+                className="w-full rounded-lg border border-gray-300 bg-card px-4 py-2.5 text-foreground focus:outline-none focus:ring-2 focus:ring-pink-400"
               >
                 <option value="">—</option>
                 {MBTI_TYPES.map((t) => (
@@ -390,7 +390,7 @@ export default function LoveCalculator({ locale }: Props) {
               <select
                 value={mbti2}
                 onChange={(e) => { setMbti2(e.target.value as MBTIType); setResult(null); }}
-                className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-pink-400"
+                className="w-full rounded-lg border border-gray-300 bg-card px-4 py-2.5 text-foreground focus:outline-none focus:ring-2 focus:ring-pink-400"
               >
                 <option value="">—</option>
                 {MBTI_TYPES.map((t) => (

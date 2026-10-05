@@ -27,43 +27,43 @@ export const CompAdvantageCalculator: React.FC = () => {
 
     return (
         <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-5 sm:mt-8 overflow-hidden">
-            <div className="flex items-center gap-2 mb-6 text-slate-900 border-b pb-4">
+            <div className="flex items-center gap-2 mb-6 text-foreground border-b pb-4">
                 <Scale className="text-indigo-500" />
                 <h3 className="text-xl font-bold">인터랙티브 비교우위 계산기</h3>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8 mb-5 sm:mb-8">
-                <div className="space-y-4 p-4 bg-slate-50 rounded-xl border border-slate-100">
+                <div className="space-y-4 p-4 bg-card rounded-xl border border-slate-100">
                     <div className="font-bold text-indigo-600 flex items-center gap-2 mb-2">
                         <Globe size={16}/> A국 (Country A)
                     </div>
                     <div>
-                        <label className="text-xs text-slate-500 block mb-1">X재 1단위 생산 시간 (h)</label>
+                        <label className="text-xs text-muted-foreground block mb-1">X재 1단위 생산 시간 (h)</label>
                         <input type="number" value={aX} onChange={e => setAX(Number(e.target.value))} className="w-full p-2 border border-slate-200 rounded"/>
                     </div>
                     <div>
-                        <label className="text-xs text-slate-500 block mb-1">Y재 1단위 생산 시간 (h)</label>
+                        <label className="text-xs text-muted-foreground block mb-1">Y재 1단위 생산 시간 (h)</label>
                         <input type="number" value={aY} onChange={e => setAY(Number(e.target.value))} className="w-full p-2 border border-slate-200 rounded"/>
                     </div>
                 </div>
 
-                <div className="space-y-4 p-4 bg-slate-50 rounded-xl border border-slate-100">
+                <div className="space-y-4 p-4 bg-card rounded-xl border border-slate-100">
                     <div className="font-bold text-emerald-600 flex items-center gap-2 mb-2">
                         <Globe size={16}/> B국 (Country B)
                     </div>
                     <div>
-                        <label className="text-xs text-slate-500 block mb-1">X재 1단위 생산 시간 (h)</label>
+                        <label className="text-xs text-muted-foreground block mb-1">X재 1단위 생산 시간 (h)</label>
                         <input type="number" value={bX} onChange={e => setBX(Number(e.target.value))} className="w-full p-2 border border-slate-200 rounded"/>
                     </div>
                     <div>
-                        <label className="text-xs text-slate-500 block mb-1">Y재 1단위 생산 시간 (h)</label>
+                        <label className="text-xs text-muted-foreground block mb-1">Y재 1단위 생산 시간 (h)</label>
                         <input type="number" value={bY} onChange={e => setBY(Number(e.target.value))} className="w-full p-2 border border-slate-200 rounded"/>
                     </div>
                 </div>
             </div>
 
             <div className="bg-slate-900 text-white p-4 sm:p-6 rounded-2xl">
-                <div className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">분석 결과: 기회비용 및 비교우위</div>
+                <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-4">분석 결과: 기회비용 및 비교우위</div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-3">
                         <div className="flex justify-between items-center text-sm border-b border-slate-800 pb-2">

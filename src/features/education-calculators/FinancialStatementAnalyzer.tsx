@@ -121,7 +121,7 @@ const RatioGauge: React.FC<RatioGaugeProps> = ({ label, value, unit, level, desc
         <span className={`text-2xl font-bold ${colors.text}`}>
           {isFinite(value) ? value.toFixed(1) : '—'}
         </span>
-        <span className="text-xs text-slate-500 mb-1">{unit}</span>
+        <span className="text-xs text-muted-foreground mb-1">{unit}</span>
       </div>
       <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden mb-2">
         <div
@@ -133,7 +133,7 @@ const RatioGauge: React.FC<RatioGaugeProps> = ({ label, value, unit, level, desc
           aria-valuemax={100}
         />
       </div>
-      <p className="text-[10px] text-slate-500 leading-relaxed">{description}</p>
+      <p className="text-[10px] text-muted-foreground leading-relaxed">{description}</p>
     </div>
   );
 };
@@ -176,7 +176,7 @@ const FormulaFlowCard: React.FC<FormulaFlowCardProps> = ({ title, formula, takea
     <div className="flex items-start justify-between gap-3">
       <div>
         <h5 className="text-sm font-bold text-slate-800">{title}</h5>
-        <p className="mt-1 text-[11px] text-slate-500">{formula}</p>
+        <p className="mt-1 text-[11px] text-muted-foreground">{formula}</p>
       </div>
       <div className="text-right">
         <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">{result.label}</p>
@@ -189,7 +189,7 @@ const FormulaFlowCard: React.FC<FormulaFlowCardProps> = ({ title, formula, takea
 
     <div className="mt-3 grid gap-2 sm:grid-cols-[repeat(auto-fit,minmax(120px,1fr))]">
       {nodes.map((node) => (
-        <div key={node.label} className="rounded-xl border border-slate-100 bg-slate-50 p-3">
+        <div key={node.label} className="rounded-xl border border-slate-100 bg-card p-3">
           <div className="flex items-center justify-between gap-2">
             <span className="text-[11px] font-bold text-slate-700">{node.label}</span>
             <SourceBadge label={node.source} />
@@ -417,7 +417,7 @@ export const FinancialStatementAnalyzer: React.FC = () => {
                   { label: '시가총액', value: market.marketCap, color: 'text-amber-700' },
                   { label: '순이익률', value: derived.netMargin, color: 'text-violet-700', unit: '%' },
                 ].map(item => (
-                  <div key={item.label} className="rounded-xl bg-slate-50 border border-slate-100 p-3">
+                  <div key={item.label} className="rounded-xl bg-card border border-slate-100 p-3">
                     <p className="text-[10px] text-slate-400 font-bold">{item.label}</p>
                     <p className={`text-lg font-bold ${item.color}`}>{item.value.toFixed(1)}<span className="text-xs font-normal text-slate-400 ml-1">{item.unit ?? '억원'}</span></p>
                   </div>
@@ -562,7 +562,7 @@ export const FinancialStatementAnalyzer: React.FC = () => {
                   { label: '재무활동현금흐름', value: cfDerived.financingCF, positive: cfDerived.financingCF >= 0 },
                 ].map(item => (
                   <div key={item.label} className={`rounded-2xl p-4 border ${item.positive ? 'bg-emerald-50 border-emerald-200' : 'bg-rose-50 border-rose-200'}`}>
-                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">{item.label}</p>
+                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">{item.label}</p>
                     <p className={`text-2xl font-bold mt-1 ${item.positive ? 'text-emerald-700' : 'text-rose-600'}`}>
                       {item.positive ? '+' : ''}{item.value.toFixed(1)} <span className="text-sm font-normal text-slate-400">억원</span>
                     </p>
@@ -586,7 +586,7 @@ export const FinancialStatementAnalyzer: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="rounded-2xl bg-slate-50 border border-slate-200 p-4 mt-2">
+                <div className="rounded-2xl bg-card border border-slate-200 p-4 mt-2">
                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">현금흐름 패턴 해석</p>
                   <p className="text-xs text-slate-600 leading-relaxed">
                     {cfDerived.operatingCF > 0 && cfDerived.investingCF < 0 && cfDerived.financingCF < 0
@@ -606,7 +606,7 @@ export const FinancialStatementAnalyzer: React.FC = () => {
         {/* ── Tab 2: Benchmarks ── */}
         {activeTab === 2 && (
           <div>
-            <p className="text-xs text-slate-500 mb-4 leading-relaxed">
+            <p className="text-xs text-muted-foreground mb-4 leading-relaxed">
               B/S + I/S 탭의 값을 기반으로 계산됩니다. 한국 상장사 평균 기준으로 색상 신호를 표시합니다.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -746,7 +746,7 @@ const TrendYearInput: React.FC<TrendYearInputProps> = ({ year, idx, onChange, lo
   return (
     <div className="bg-white border border-emerald-200 rounded-2xl p-4">
       <div className="mb-3">
-        <label className="text-xs text-slate-500 block mb-1">{locale === 'ko' ? '연도' : 'Year'}</label>
+        <label className="text-xs text-muted-foreground block mb-1">{locale === 'ko' ? '연도' : 'Year'}</label>
         <input
           type="text"
           value={year.label}
@@ -758,7 +758,7 @@ const TrendYearInput: React.FC<TrendYearInputProps> = ({ year, idx, onChange, lo
       <div className="space-y-2">
         {fields.map((f) => (
           <div key={f.key} className="flex items-center gap-2">
-            <span className="text-xs text-slate-500 w-24 shrink-0">{locale === 'ko' ? f.ko : f.en}</span>
+            <span className="text-xs text-muted-foreground w-24 shrink-0">{locale === 'ko' ? f.ko : f.en}</span>
             <input
               type="number"
               value={year[f.key]}
@@ -834,7 +834,7 @@ export const FinancialRatioTrendAnalyzer: React.FC<{ locale?: 'ko' | 'en' }> = (
         <div className="space-y-4">
           {/* Year headers */}
           <div className="grid grid-cols-4 gap-2 px-2">
-            <span className="text-xs font-bold text-slate-500">
+            <span className="text-xs font-bold text-muted-foreground">
               {locale === 'ko' ? '지표' : 'Metric'}
             </span>
             {years.map((y, i) => (
@@ -898,7 +898,7 @@ export const FinancialRatioTrendAnalyzer: React.FC<{ locale?: 'ko' | 'en' }> = (
             ].map((l) => (
               <div key={l.label} className="flex items-center gap-1.5">
                 <span className={`w-3 h-3 rounded-full ${l.color}`} aria-hidden="true" />
-                <span className="text-slate-500">{l.label}</span>
+                <span className="text-muted-foreground">{l.label}</span>
               </div>
             ))}
           </div>

@@ -236,11 +236,11 @@ export default function AngerStyleTest({ locale: localeProp }: Props) {
     return (
       <div className="space-y-6">
         <div className="text-center space-y-2">
-          <h1 className="text-2xl font-bold text-gray-900">{t.resultTitle}</h1>
+          <h1 className="text-2xl font-bold text-foreground">{t.resultTitle}</h1>
           <div className="text-3xl">{d.emoji}</div>
           <div className="inline-block px-4 py-2 rounded-full text-white font-semibold" style={{ backgroundColor: d.color }}>{d.name[locale]}</div>
         </div>
-        <div className="bg-gray-50 rounded-xl p-4">
+        <div className="bg-card rounded-xl p-4">
           <h2 className="font-semibold text-gray-700 mb-2 text-sm">{t.allStyles}</h2>
           <ResponsiveContainer width="100%" height={180}>
             <BarChart data={chartData} layout="vertical" margin={{ left: 8, right: 24 }}>
@@ -279,17 +279,17 @@ export default function AngerStyleTest({ locale: localeProp }: Props) {
   return (
     <div className="space-y-6">
       <div className="text-center space-y-1">
-        <h1 className="text-xl font-bold text-gray-900">{t.title}</h1>
-        <p className="text-sm text-gray-500">{t.subtitle}</p>
+        <h1 className="text-xl font-bold text-foreground">{t.title}</h1>
+        <p className="text-sm text-muted-foreground">{t.subtitle}</p>
       </div>
-      <div className="flex justify-between items-center text-sm text-gray-500">
+      <div className="flex justify-between items-center text-sm text-muted-foreground">
         <span>{t.progress} {idx + 1} / {scenarios.length}</span>
         <div className="w-48 bg-gray-200 rounded-full h-1.5">
           <div className="bg-red-400 h-1.5 rounded-full" style={{ width: `${((idx + 1) / scenarios.length) * 100}%` }} />
         </div>
       </div>
       <div className="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 space-y-4 shadow-sm">
-        <p className="text-sm font-semibold text-gray-500">📍 {t.progress} {idx + 1}</p>
+        <p className="text-sm font-semibold text-muted-foreground">📍 {t.progress} {idx + 1}</p>
         <p className="text-base font-medium text-gray-800 leading-relaxed">{s[locale]}</p>
         <p className="text-xs text-gray-400">{t.choose}</p>
         <div className="space-y-2">

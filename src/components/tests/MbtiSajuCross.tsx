@@ -25,7 +25,7 @@ const ELEMENTS: Record<Element, {
   earth: { emoji:'🌍', bg:'bg-amber-50', border:'border-amber-300', text:'text-amber-800',
     ko:{name:'토(土)',symbol:'戊己',color:'황색',traits:['안정','신뢰','포용','실용','균형'],desc:'중앙의 땅 기운인 토는 모든 것을 포용하고 안정시킵니다. 신뢰감과 실용적인 지혜로 중심을 잡습니다.',season:'간절기',direction:'중앙'},
     en:{name:'Earth (土)',symbol:'戊己',color:'Yellow',traits:['Stability','Trust','Inclusivity','Practicality','Balance'],desc:'Earth energy, the center of all elements, embraces and stabilizes everything. Holds the center with trustworthiness and practical wisdom.',season:'Transition',direction:'Center'} },
-  metal: { emoji:'⚡', bg:'bg-slate-50', border:'border-slate-300', text:'text-slate-800',
+  metal: { emoji:'⚡', bg:'bg-card', border:'border-slate-300', text:'text-slate-800',
     ko:{name:'금(金)',symbol:'庚辛',color:'백색',traits:['분석력','원칙','결단력','완벽주의','독립심'],desc:'가을의 금속 기운은 날카롭고 예리합니다. 원칙과 기준을 중시하며 분석적이고 독립적으로 사고합니다.',season:'가을',direction:'서쪽'},
     en:{name:'Metal (金)',symbol:'庚辛',color:'White',traits:['Analysis','Principles','Decisiveness','Perfectionism','Independence'],desc:'Metal energy, like autumn, is sharp and precise. Values principles and standards, thinks analytically and independently.',season:'Autumn',direction:'West'} },
   water: { emoji:'💧', bg:'bg-green-50', border:'border-green-300', text:'text-green-800',

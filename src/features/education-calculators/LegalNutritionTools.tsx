@@ -67,7 +67,7 @@ export function LegalInterestCalc({ locale = 'ko' }: { locale?: 'ko' | 'en' | 'j
       <div className="space-y-5">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-lg font-black text-slate-900">{copy.title}</h3>
+            <h3 className="text-lg font-black text-foreground">{copy.title}</h3>
             <p className="text-xs text-slate-400 mt-0.5">{copy.calcNote}</p>
           </div>
           <button onClick={() => { navigator.clipboard.writeText(copyText); setCopied(true); setTimeout(() => setCopied(false), 2000); }}
@@ -104,7 +104,7 @@ export function LegalInterestCalc({ locale = 'ko' }: { locale?: 'ko' | 'en' | 'j
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {RATE_TYPES.map(r => (
               <button key={r.id} onClick={() => setRateId(r.id)}
-                className={`py-2 px-3 rounded-xl text-sm font-bold border-2 transition-colors text-left ${rateId === r.id ? 'bg-blue-50 border-blue-400 text-blue-700' : 'border-slate-200 text-slate-500 hover:border-slate-300'}`}>
+                className={`py-2 px-3 rounded-xl text-sm font-bold border-2 transition-colors text-left ${rateId === r.id ? 'bg-blue-50 border-blue-400 text-blue-700' : 'border-slate-200 text-muted-foreground hover:border-slate-300'}`}>
                 <span className="block">{r[L]}</span>
                 {r.rate > 0 && <span className="text-xs font-normal opacity-70">{r.rate}%</span>}
               </button>
@@ -128,7 +128,7 @@ export function LegalInterestCalc({ locale = 'ko' }: { locale?: 'ko' | 'en' | 'j
             { label: copy.interest, value: fmtKRW(result.interest), highlight: true },
             { label: copy.total, value: fmtKRW(result.total), highlight: true },
           ].map(({ label, value, highlight }) => value !== '' && (
-            <div key={label} className={`flex justify-between items-center px-4 py-3 rounded-xl border ${highlight ? 'bg-blue-50 border-blue-100' : 'bg-slate-50 border-slate-100'}`}>
+            <div key={label} className={`flex justify-between items-center px-4 py-3 rounded-xl border ${highlight ? 'bg-blue-50 border-blue-100' : 'bg-card border-slate-100'}`}>
               <span className="text-sm font-semibold text-slate-600">{label}</span>
               <span className={`font-black text-base ${highlight ? 'text-blue-700' : 'text-slate-800'}`}>{value}</span>
             </div>
@@ -228,7 +228,7 @@ export function NutritionCalculator({ locale = 'ko' }: { locale?: 'ko' | 'en' | 
     <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-5 sm:mt-8">
       <div className="space-y-5">
         <div>
-          <h3 className="text-lg font-black text-slate-900">{copy.title}</h3>
+          <h3 className="text-lg font-black text-foreground">{copy.title}</h3>
           <p className="text-xs text-slate-400 mt-0.5">{L === 'ko' ? '20가지 주요 식품 · 100g 기준 영양성분' : L === 'en' ? '20 common foods · per 100g data' : '主要食品20種・100g当たりデータ'}</p>
         </div>
 
@@ -241,7 +241,7 @@ export function NutritionCalculator({ locale = 'ko' }: { locale?: 'ko' | 'en' | 
 
         {/* Search results */}
         {query && (
-          <div className="bg-slate-50 rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-card rounded-xl border border-slate-200 overflow-hidden">
             {filtered.length === 0 ? (
               <p className="text-sm text-slate-400 p-3 text-center">{L === 'ko' ? '검색 결과 없음' : 'No results'}</p>
             ) : (
@@ -268,7 +268,7 @@ export function NutritionCalculator({ locale = 'ko' }: { locale?: 'ko' | 'en' | 
         ) : (
           <div className="space-y-2">
             {selected.map(({ food, grams }, idx) => (
-              <div key={food.name.ko} className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100">
+              <div key={food.name.ko} className="flex items-center gap-3 p-3 bg-card rounded-xl border border-slate-100">
                 <span className="text-xl">{food.emoji}</span>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-bold text-slate-800 truncate">{food.name[L]}</p>

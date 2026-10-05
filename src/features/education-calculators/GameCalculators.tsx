@@ -48,7 +48,7 @@ export const StoneSimulator: React.FC = () => {
 
       <div className="flex flex-col items-center gap-5 sm:gap-8 relative z-10">
         <div className="text-center">
-            <span className="text-sm font-bold text-slate-500 uppercase tracking-widest block mb-2">현재 성공 확률</span>
+            <span className="text-sm font-bold text-muted-foreground uppercase tracking-widest block mb-2">현재 성공 확률</span>
             <div className="text-6xl font-black font-mono text-blue-400 drop-shadow-[0_0_15px_rgba(96,165,250,0.5)]">
                 {successChance}%
             </div>
@@ -62,7 +62,7 @@ export const StoneSimulator: React.FC = () => {
         </Button>
 
         <div className="w-full">
-            <span className="text-xs font-bold text-slate-500 uppercase mb-3 block">최근 이력 (최대 10개)</span>
+            <span className="text-xs font-bold text-muted-foreground uppercase mb-3 block">최근 이력 (최대 10개)</span>
             <div className="flex gap-2 flex-wrap min-h-12 items-center justify-center p-4 bg-slate-900/50 rounded-lg border border-slate-800">
                 {history.slice(-10).map((h, i) => (
                     <div 

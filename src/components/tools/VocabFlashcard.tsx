@@ -608,8 +608,8 @@ export default function VocabFlashcard({ locale }: Props) {
   return (
     <div className="space-y-5">
       <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900">{t.title}</h1>
-        <p className="mt-1 text-gray-500">{t.subtitle}</p>
+        <h1 className="text-2xl font-bold text-foreground">{t.title}</h1>
+        <p className="mt-1 text-muted-foreground">{t.subtitle}</p>
       </div>
 
       {/* Today count */}
@@ -640,7 +640,7 @@ export default function VocabFlashcard({ locale }: Props) {
 
       {/* Progress */}
       <div>
-        <div className="flex justify-between text-xs text-gray-500 mb-1">
+        <div className="flex justify-between text-xs text-muted-foreground mb-1">
           <span>{t.cardCount} {Math.min(idx + 1, total)} / {total}</span>
           <span className="flex gap-3">
             <span className="text-green-600">{t.knownLabel}: {known.size}</span>
@@ -676,7 +676,7 @@ export default function VocabFlashcard({ locale }: Props) {
                 className="absolute inset-0 flex flex-col items-center justify-center rounded-2xl border-2 border-green-300 bg-white shadow-lg p-4 sm:p-6 text-center"
                 style={{ backfaceVisibility: "hidden" }}
               >
-                <p className="text-3xl font-extrabold text-gray-900 mb-3">
+                <p className="text-3xl font-extrabold text-foreground mb-3">
                   {current.word}
                 </p>
                 <p className="text-sm text-gray-400">{t.frontHint}</p>
@@ -687,7 +687,7 @@ export default function VocabFlashcard({ locale }: Props) {
                 style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
               >
                 <p className="text-xs font-semibold text-green-600 uppercase tracking-wider">{t.meaningLabel}</p>
-                <p className="text-base font-semibold text-gray-900">{current.meaning}</p>
+                <p className="text-base font-semibold text-foreground">{current.meaning}</p>
                 <p className="text-xs font-semibold text-green-600 uppercase tracking-wider">{t.exampleLabel}</p>
                 <p className="text-sm italic text-gray-600">"{current.example}"</p>
               </div>
@@ -719,8 +719,8 @@ export default function VocabFlashcard({ locale }: Props) {
         /* Completed */
         <div className="rounded-2xl border border-gray-200 bg-white p-4 sm:p-8 text-center space-y-4">
           <p className="text-4xl">🎉</p>
-          <p className="text-xl font-bold text-gray-900">{t.completedTitle}</p>
-          <p className="text-gray-500">{t.completedMsg}</p>
+          <p className="text-xl font-bold text-foreground">{t.completedTitle}</p>
+          <p className="text-muted-foreground">{t.completedMsg}</p>
           <div className="flex gap-2 justify-center text-sm">
             <span className="rounded-full bg-green-100 px-3 py-1 text-green-700">
               {t.knownLabel}: {known.size}
@@ -744,7 +744,7 @@ export default function VocabFlashcard({ locale }: Props) {
             )}
             <button
               onClick={handleReset}
-              className="flex-1 rounded-xl border border-gray-300 py-3 font-semibold text-gray-600 hover:bg-gray-50 transition-colors"
+              className="flex-1 rounded-xl border border-gray-300 py-3 font-semibold text-gray-600 hover:bg-card transition-colors"
             >
               {t.resetDeck}
             </button>

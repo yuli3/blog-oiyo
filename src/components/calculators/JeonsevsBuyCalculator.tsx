@@ -245,15 +245,15 @@ const JeonsevsBuyCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'k
                   {locale === 'ko' ? '매매 총 비용' : 'Buy Total Cost'}
                 </p>
                 <div className="flex justify-between text-sm">
-                  <span className="text-slate-500">{locale === 'ko' ? '자기자본(40%)' : 'Down Payment (40%)'}</span>
+                  <span className="text-muted-foreground">{locale === 'ko' ? '자기자본(40%)' : 'Down Payment (40%)'}</span>
                   <span className="font-bold">{fmt(result.downPayment)}원</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-slate-500">{locale === 'ko' ? '대출이자' : 'Mortgage Interest'}</span>
+                  <span className="text-muted-foreground">{locale === 'ko' ? '대출이자' : 'Mortgage Interest'}</span>
                   <span className="font-bold">{fmt(result.mortgageInterest)}원</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-slate-500">{locale === 'ko' ? '취득세' : 'Acquisition Tax'}</span>
+                  <span className="text-muted-foreground">{locale === 'ko' ? '취득세' : 'Acquisition Tax'}</span>
                   <span className="font-bold">{fmt(result.acquisitionTax)}원</span>
                 </div>
                 <div className="flex justify-between text-sm text-green-600">
@@ -271,7 +271,7 @@ const JeonsevsBuyCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'k
                   {locale === 'ko' ? '전세 총 비용' : 'Jeonse Total Cost'}
                 </p>
                 <div className="flex justify-between text-sm">
-                  <span className="text-slate-500">{locale === 'ko' ? '보증금 기회비용' : 'Opportunity Cost'}</span>
+                  <span className="text-muted-foreground">{locale === 'ko' ? '보증금 기회비용' : 'Opportunity Cost'}</span>
                   <span className="font-bold">{fmt(result.opportunityCost)}원</span>
                 </div>
                 <div className="flex justify-between border-t pt-2 font-bold mt-5 sm:mt-8">

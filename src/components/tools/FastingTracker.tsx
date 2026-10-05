@@ -230,7 +230,7 @@ export default function FastingTracker({ locale }: { locale: Locale }) {
     return () => window.clearInterval(interval);
   }, [method, startTime, t]);
 
-  const inputCls = "w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-100";
+  const inputCls = "w-full rounded-lg border border-slate-300 px-3 py-2 text-foreground focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-100";
   const statusCls = state.status === "fasting" ? "border-green-200 bg-green-50 text-green-900" : "border-green-200 bg-green-50 text-green-900";
   const barCls = state.status === "fasting" ? "bg-green-600" : "bg-green-600";
 
@@ -273,20 +273,20 @@ export default function FastingTracker({ locale }: { locale: Locale }) {
 
         <div className="grid gap-3 sm:grid-cols-2">
           <div className="rounded-xl border border-slate-200 bg-white p-4">
-            <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">{t.elapsed}</div>
-            <div className="mt-2 text-xl font-bold text-slate-900">{formatDuration(state.elapsedMs)}</div>
+            <div className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">{t.elapsed}</div>
+            <div className="mt-2 text-xl font-bold text-foreground">{formatDuration(state.elapsedMs)}</div>
           </div>
           <div className="rounded-xl border border-slate-200 bg-white p-4">
-            <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">{t.remaining}</div>
-            <div className="mt-2 text-xl font-bold text-slate-900">{formatDuration(state.remainingMs)}</div>
+            <div className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">{t.remaining}</div>
+            <div className="mt-2 text-xl font-bold text-foreground">{formatDuration(state.remainingMs)}</div>
           </div>
           <div className="rounded-xl border border-slate-200 bg-white p-4">
-            <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">{t.fastingWindow}</div>
-            <div className="mt-2 text-xl font-bold text-slate-900">{state.fastHours}h</div>
+            <div className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">{t.fastingWindow}</div>
+            <div className="mt-2 text-xl font-bold text-foreground">{state.fastHours}h</div>
           </div>
           <div className="rounded-xl border border-slate-200 bg-white p-4">
-            <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">{t.eatingWindow}</div>
-            <div className="mt-2 text-xl font-bold text-slate-900">{state.eatHours}h</div>
+            <div className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">{t.eatingWindow}</div>
+            <div className="mt-2 text-xl font-bold text-foreground">{state.eatHours}h</div>
           </div>
         </div>
 

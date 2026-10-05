@@ -59,7 +59,7 @@ export default function SleepCycleChart({
 
     return (
         <section className="mt-6" aria-labelledby={`${uid}-title`}>
-            <h3 id={`${uid}-title`} className="text-sm font-bold text-gray-900">{title}</h3>
+            <h3 id={`${uid}-title`} className="text-sm font-bold text-foreground">{title}</h3>
             <p className="mt-1 text-xs leading-5 text-gray-600">{hint}</p>
 
             <div className="mt-3 overflow-x-auto">

@@ -36,7 +36,7 @@ export const CVPGame: React.FC = () => {
     };
 
     return (
-        <Card className="p-4 sm:p-8 bg-slate-50 border-slate-200 shadow-2xl mt-5 sm:mt-8 overflow-hidden relative">
+        <Card className="p-4 sm:p-8 bg-card border-slate-200 shadow-2xl mt-5 sm:mt-8 overflow-hidden relative">
             <div className="absolute top-0 right-0 p-4 sm:p-8 opacity-10">
                 <Coins size={120} className="text-amber-300" />
             </div>
@@ -54,28 +54,28 @@ export const CVPGame: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8 mb-5 sm:mb-8">
                 <div className="space-y-6">
                     <div>
-                        <div className="flex justify-between text-xs font-bold text-slate-500 mb-2 uppercase tracking-widest">
+                        <div className="flex justify-between text-xs font-bold text-muted-foreground mb-2 uppercase tracking-widest">
                             <span>판매 가격 (Price)</span>
                             <span className="text-blue-600">₩{price.toLocaleString()}</span>
                         </div>
                         <input type="range" min="1500" max="3000" step="50" value={price} onChange={e => setPrice(Number(e.target.value))} className="w-full accent-blue-600"/>
                     </div>
                     <div>
-                        <div className="flex justify-between text-xs font-bold text-slate-500 mb-2 uppercase tracking-widest">
+                        <div className="flex justify-between text-xs font-bold text-muted-foreground mb-2 uppercase tracking-widest">
                             <span>단위당 변동비 (VC)</span>
                             <span className="text-rose-600">₩{vc.toLocaleString()}</span>
                         </div>
                         <input type="range" min="800" max="1500" step="50" value={vc} onChange={e => setVc(Number(e.target.value))} className="w-full accent-rose-600"/>
                     </div>
                     <div>
-                        <div className="flex justify-between text-xs font-bold text-slate-500 mb-2 uppercase tracking-widest">
+                        <div className="flex justify-between text-xs font-bold text-muted-foreground mb-2 uppercase tracking-widest">
                             <span>총 고정비 (FC)</span>
                             <span className="text-slate-600">₩{fc.toLocaleString()}</span>
                         </div>
                         <input type="range" min="300000" max="800000" step="10000" value={fc} onChange={e => setFc(Number(e.target.value))} className="w-full accent-slate-600"/>
                     </div>
                     <div>
-                        <div className="flex justify-between text-xs font-bold text-slate-500 mb-2 uppercase tracking-widest">
+                        <div className="flex justify-between text-xs font-bold text-muted-foreground mb-2 uppercase tracking-widest">
                             <span>예상 판매량 (Q)</span>
                             <span className="text-emerald-600">{sales} 개</span>
                         </div>
@@ -113,7 +113,7 @@ export const CVPGame: React.FC = () => {
                             {win ? <TrendingUp className="text-emerald-500" /> : <TrendingDown className="text-rose-500" />}
                         </div>
                         <div>
-                            <h4 className="text-lg font-bold text-slate-900">{win ? "목표 이익 달성 성공!" : "이익 미달: 전략 수정 필요"}</h4>
+                            <h4 className="text-lg font-bold text-foreground">{win ? "목표 이익 달성 성공!" : "이익 미달: 전략 수정 필요"}</h4>
                             <p className="text-sm text-slate-600">
                                 {win ? "훌륭한 가격 결정과 원가 관리입니다. 이 전략을 비즈니스에 적용해 보세요." : "가격이 낮거나 고정비가 너무 높습니다. 더 높은 공헌이익이 필요합니다."}
                             </p>

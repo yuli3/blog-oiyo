@@ -182,7 +182,7 @@ const GiftVsInheritanceCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
                 <h4 className="text-sm font-black text-amber-700 uppercase tracking-wide">
                   {ko ? '지금 증여' : 'Gift Now'}
                 </h4>
-                <div className="text-xs text-gray-500 space-y-1">
+                <div className="text-xs text-muted-foreground space-y-1">
                   <div className="flex justify-between">
                     <span>{ko ? '증여세' : 'Gift Tax'}</span>
                     <span className="font-bold text-red-600">-{fmt(result.giftTax)}</span>
@@ -201,7 +201,7 @@ const GiftVsInheritanceCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
                 <h4 className="text-sm font-black text-green-700 uppercase tracking-wide">
                   {ko ? '나중에 상속' : 'Inherit Later'}
                 </h4>
-                <div className="text-xs text-gray-500 space-y-1">
+                <div className="text-xs text-muted-foreground space-y-1">
                   <div className="flex justify-between">
                     <span>{ko ? '상속세' : 'Inheritance Tax'}</span>
                     <span className="font-bold text-red-600">-{fmt(result.inheritanceTax)}</span>

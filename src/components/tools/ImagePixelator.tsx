@@ -183,7 +183,7 @@ export default function ImagePixelator({ locale }: { locale: Locale }) {
   const buttonClass =
     "rounded-lg bg-green-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-green-700";
   const secondaryButtonClass =
-    "cursor-pointer rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50";
+    "cursor-pointer rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-card";
 
   return (
     <GameContainer title={t.title} subtitle={t.subtitle}>
@@ -195,21 +195,21 @@ export default function ImagePixelator({ locale }: { locale: Locale }) {
         <input ref={inputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
 
         {!imageSrc ? (
-          <button type="button" className="w-full rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 px-4 py-6 sm:py-12 text-center transition hover:border-green-300 hover:bg-green-50" onClick={() => inputRef.current?.click()}>
-            <span className="block text-base font-semibold text-slate-900">{t.upload}</span>
+          <button type="button" className="w-full rounded-xl border-2 border-dashed border-slate-300 bg-card px-4 py-6 sm:py-12 text-center transition hover:border-green-300 hover:bg-green-50" onClick={() => inputRef.current?.click()}>
+            <span className="block text-base font-semibold text-foreground">{t.upload}</span>
             <span className="mt-2 block text-sm text-slate-600">{t.empty}</span>
           </button>
         ) : (
           <>
             <div className="rounded-xl border border-slate-200 bg-white p-3">
               <div className="mb-2 flex items-center justify-between gap-3">
-                <span className="text-xs font-semibold uppercase text-slate-500">{t.preview}</span>
+                <span className="text-xs font-semibold uppercase text-muted-foreground">{t.preview}</span>
                 <span className="rounded-full bg-green-50 px-2 py-1 text-xs font-semibold text-green-800">{pixelSize}px</span>
               </div>
               <canvas ref={canvasRef} className="max-h-[520px] w-full rounded-lg object-contain" style={{ imageRendering: "pixelated" }} />
             </div>
 
-            <label className="block rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <label className="block rounded-xl border border-slate-200 bg-card p-4">
               <span className="flex items-center justify-between text-sm font-semibold text-slate-800">
                 {t.pixelSize}
                 <span>{pixelSize}px</span>

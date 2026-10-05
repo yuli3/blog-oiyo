@@ -193,7 +193,7 @@ const JeonseVsRentCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
               <div className="bg-white rounded-2xl border-2 border-green-200 p-4 space-y-2">
                 <p className="text-xs font-bold uppercase tracking-widest text-green-600">{t.optionA}</p>
                 <div className="flex justify-between items-baseline">
-                  <span className="text-sm text-slate-500">{t.jeonseCost}</span>
+                  <span className="text-sm text-muted-foreground">{t.jeonseCost}</span>
                   <span className="text-xl font-black text-green-700">{fmt(result.jeonseCost)} {t.perMonth}</span>
                 </div>
                 <div className="text-xs text-slate-400 space-y-1 pl-2">
@@ -206,7 +206,7 @@ const JeonseVsRentCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
               <div className="bg-white rounded-2xl border-2 border-orange-200 p-4 space-y-2">
                 <p className="text-xs font-bold uppercase tracking-widest text-orange-600">{t.optionB}</p>
                 <div className="flex justify-between items-baseline">
-                  <span className="text-sm text-slate-500">{t.rentCost}</span>
+                  <span className="text-sm text-muted-foreground">{t.rentCost}</span>
                   <span className="text-xl font-black text-orange-600">{fmt(result.rentCost)} {t.perMonth}</span>
                 </div>
                 <div className="text-xs text-slate-400 space-y-1 pl-2">
@@ -226,11 +226,11 @@ const JeonseVsRentCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
       </div>
 
       {/* FAQ */}
-      <div className="mt-6 p-5 bg-slate-50 border border-slate-200 rounded-2xl space-y-3 text-sm">
+      <div className="mt-6 p-5 bg-card border border-slate-200 rounded-2xl space-y-3 text-sm">
         <p className="font-bold text-slate-700">{t.faqTitle}</p>
         <div>
           <p className="text-xs font-bold text-green-700 uppercase tracking-wide">{t.faqOppCost}</p>
-          <p className="text-xs text-slate-500 mt-1">{t.faqOppCostDesc}</p>
+          <p className="text-xs text-muted-foreground mt-1">{t.faqOppCostDesc}</p>
         </div>
       </div>
 

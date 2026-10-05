@@ -295,7 +295,7 @@ export default function VaccinationSchedule({ locale }: Props) {
   };
 
   const statusStyle: Record<Status, string> = {
-    past: "border-l-4 border-l-gray-300 bg-gray-50 opacity-60",
+    past: "border-l-4 border-l-gray-300 bg-card opacity-60",
     current: "border-l-4 border-l-red-500 bg-red-50 shadow-md",
     upcoming: "border-l-4 border-l-yellow-400 bg-yellow-50",
   };
@@ -327,8 +327,8 @@ export default function VaccinationSchedule({ locale }: Props) {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900">{t.title}</h1>
-        <p className="mt-1 text-gray-500">{t.subtitle}</p>
+        <h1 className="text-2xl font-bold text-foreground">{t.title}</h1>
+        <p className="mt-1 text-muted-foreground">{t.subtitle}</p>
       </div>
 
       <div className="rounded-2xl border border-gray-200 bg-white p-5 space-y-4">
@@ -339,7 +339,7 @@ export default function VaccinationSchedule({ locale }: Props) {
             value={dob}
             onChange={(e) => { setDob(e.target.value); setSubmitted(false); }}
             max={new Date().toISOString().split("T")[0]}
-            className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-green-400"
+            className="w-full rounded-lg border border-gray-300 bg-card px-4 py-2.5 text-foreground focus:outline-none focus:ring-2 focus:ring-green-400"
           />
         </div>
         <button
@@ -390,14 +390,14 @@ export default function VaccinationSchedule({ locale }: Props) {
                     <div className="flex items-start justify-between gap-2">
                       <div>
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-semibold text-gray-900 text-sm">
+                          <span className="font-semibold text-foreground text-sm">
                             {row.vaccine.fullName[locale] ?? row.vaccine.fullName.en}
                           </span>
-                          <span className="text-xs text-gray-500">
+                          <span className="text-xs text-muted-foreground">
                             {row.shot.doseLabel}
                           </span>
                         </div>
-                        <p className="text-xs text-gray-500 mt-1">
+                        <p className="text-xs text-muted-foreground mt-1">
                           {formatDate(row.windowStart, locale)} ~ {formatDate(row.windowEnd, locale)}
                         </p>
                       </div>

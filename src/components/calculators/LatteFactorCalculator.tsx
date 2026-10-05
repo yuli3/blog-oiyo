@@ -213,7 +213,7 @@ const LatteFactorCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'ko' })
                         <span className={achievable ? 'text-green-700 font-bold' : 'text-slate-400'}>
                           {achievable ? '✓ ' : '○ '}{goal.name}
                         </span>
-                        <span className="text-slate-500">{fmt(goal.amount)}</span>
+                        <span className="text-muted-foreground">{fmt(goal.amount)}</span>
                       </div>
                     );
                   })}

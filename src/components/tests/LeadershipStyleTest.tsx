@@ -392,9 +392,9 @@ export default function LeadershipStyleTest({ locale: localeProp }: Props) {
           className="rounded-2xl p-4 sm:p-6 text-center"
           style={{ background: `linear-gradient(135deg, ${r.color}18, ${r.color}08)`, border: `1px solid ${r.color}30` }}
         >
-          <p className="mb-1 text-sm font-medium text-gray-500">{tx.resultTitle}</p>
+          <p className="mb-1 text-sm font-medium text-muted-foreground">{tx.resultTitle}</p>
           <div className="mb-2 text-5xl">{r.emoji}</div>
-          <h2 className="text-2xl font-bold text-gray-900">{rd.title}</h2>
+          <h2 className="text-2xl font-bold text-foreground">{rd.title}</h2>
           <p className="mt-1 text-sm" style={{ color: r.color }}>{tx.famousLabel}: {r.famous}</p>
           <p className="mt-3 text-gray-600">{rd.description}</p>
         </div>
@@ -434,7 +434,7 @@ export default function LeadershipStyleTest({ locale: localeProp }: Props) {
         <div className="flex gap-3">
           <button
             onClick={restart}
-            className="flex-1 rounded-xl border border-gray-200 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+            className="flex-1 rounded-xl border border-gray-200 py-3 text-sm font-medium text-gray-700 transition hover:bg-card"
           >
             {tx.restart}
           </button>
@@ -455,8 +455,8 @@ export default function LeadershipStyleTest({ locale: localeProp }: Props) {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900">{tx.title}</h1>
-        <p className="mt-1 text-gray-500">{tx.subtitle}</p>
+        <h1 className="text-2xl font-bold text-foreground">{tx.title}</h1>
+        <p className="mt-1 text-muted-foreground">{tx.subtitle}</p>
       </div>
 
       <div className="flex items-center gap-3">
@@ -466,7 +466,7 @@ export default function LeadershipStyleTest({ locale: localeProp }: Props) {
             style={{ width: `${(idx / questions.length) * 100}%` }}
           />
         </div>
-        <span className="text-sm text-gray-500">{tx.progress(idx + 1, questions.length)}</span>
+        <span className="text-sm text-muted-foreground">{tx.progress(idx + 1, questions.length)}</span>
       </div>
 
       <div className="rounded-2xl border border-gray-100 bg-white p-4 sm:p-6 shadow-sm">

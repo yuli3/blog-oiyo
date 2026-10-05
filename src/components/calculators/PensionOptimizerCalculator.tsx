@@ -271,13 +271,13 @@ const PensionOptimizerCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="p-4 bg-white rounded-2xl border border-green-100 text-center">
-                  <p className="text-xs text-slate-500 font-bold mb-1">
+                  <p className="text-xs text-muted-foreground font-bold mb-1">
                     {locale === 'ko' ? '은퇴 후 월 예상 소득' : 'Monthly Income at Retire'}
                   </p>
                   <p className="text-xl font-bold text-green-700">{fmt(result.monthlyRetirementIncome)}원</p>
                 </div>
                 <div className="p-4 bg-white rounded-2xl border border-green-100 text-center">
-                  <p className="text-xs text-slate-500 font-bold mb-1">
+                  <p className="text-xs text-muted-foreground font-bold mb-1">
                     {locale === 'ko' ? '65세 시점 총 노후 자산' : 'Retirement Assets at 65'}
                   </p>
                   <p className="text-xl font-bold text-green-700">{fmt(result.totalRetirementAsset)}원</p>

@@ -58,7 +58,7 @@ export default function StockYieldCalculator() {
 
   return (
     <div className="my-5 sm:my-8 rounded-2xl border border-gray-200 bg-white p-4 sm:p-6 shadow-sm">
-      <h3 className="mb-4 text-xl font-bold text-gray-900">주식 수익률 계산기</h3>
+      <h3 className="mb-4 text-xl font-bold text-foreground">주식 수익률 계산기</h3>
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
         {[
@@ -103,8 +103,8 @@ export default function StockYieldCalculator() {
               { label: '순 수익률', value: `${result.netYield >= 0 ? '+' : ''}${fmtPct(result.netYield)}%`, color: result.netYield >= 0 ? 'text-emerald-700' : 'text-red-700' },
               { label: '총 수익률 (세전)', value: `${result.totalYield >= 0 ? '+' : ''}${fmtPct(result.totalYield)}%`, color: 'text-indigo-600' },
             ].map(({ label, value, color }) => (
-              <div key={label} className="rounded-xl bg-gray-50 p-3 text-center">
-                <p className="text-xs text-gray-500">{label}</p>
+              <div key={label} className="rounded-xl bg-card p-3 text-center">
+                <p className="text-xs text-muted-foreground">{label}</p>
                 <p className={`text-sm font-bold ${color}`}>{value}</p>
               </div>
             ))}

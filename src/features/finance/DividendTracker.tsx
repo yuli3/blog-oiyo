@@ -84,7 +84,7 @@ export function DividendTracker({ locale }: { locale: string }) {
       <p className="mt-2 text-sm text-green-700">{t.desc}</p>
       <div className="mt-4 overflow-x-auto rounded-xl border border-green-100 bg-white p-4 shadow-sm">
         <table className="w-full min-w-[640px] text-sm">
-          <thead><tr className="text-left text-xs text-slate-500">
+          <thead><tr className="text-left text-xs text-muted-foreground">
             <th scope="col" className="pb-2">{t.ticker}</th><th scope="col">{t.shares}</th><th scope="col">{t.perShare}</th><th scope="col">{t.freq}</th><th scope="col">{t.exDate}</th><th scope="col">{t.tax}</th><th scope="col" className="text-right">{t.annualNet}</th><th scope="col"></th>
           </tr></thead>
           <tbody>
@@ -112,7 +112,7 @@ export function DividendTracker({ locale }: { locale: string }) {
         <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
           <button onClick={() => setRows((r) => [...r, blank()])} className="rounded-lg border border-green-300 px-3 py-1.5 text-sm font-bold text-green-700 hover:bg-green-50">{t.add}</button>
           <div className="flex items-center gap-4 text-sm">
-            <span className="text-slate-500">{t.total}</span>
+            <span className="text-muted-foreground">{t.total}</span>
             <span>{t.annualGross}: <b>{fmt(totals.gross)}</b></span>
             <span className="text-green-800">{t.annualNet}: <b>{fmt(totals.net)}</b></span>
             <button onClick={exportCsv} className="rounded-lg bg-green-700 px-3 py-1.5 text-sm font-bold text-white hover:bg-green-800">{t.csv}</button>

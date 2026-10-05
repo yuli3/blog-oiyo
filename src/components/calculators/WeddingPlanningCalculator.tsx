@@ -194,7 +194,7 @@ const WeddingPlanningCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale 
                 },
               ].map((item) => (
                 <div key={item.label} className="bg-white rounded-2xl border border-pink-100 p-4 text-center">
-                  <p className="text-xs text-slate-500 font-bold mb-1">{item.label}</p>
+                  <p className="text-xs text-muted-foreground font-bold mb-1">{item.label}</p>
                   <p className={`text-sm font-bold ${item.color}`}>{item.value}</p>
                 </div>
               ))}

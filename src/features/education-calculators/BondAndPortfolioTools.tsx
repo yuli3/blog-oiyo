@@ -30,7 +30,7 @@ export const BondPricer: React.FC = () => {
     const price = calculatePrice();
 
     return (
-        <Card className="p-4 sm:p-6 bg-slate-50 border-slate-200 shadow-lg mt-5 sm:mt-8">
+        <Card className="p-4 sm:p-6 bg-card border-slate-200 shadow-lg mt-5 sm:mt-8">
             <div className="flex items-center gap-2 mb-6 border-b pb-4 text-slate-800">
                 <Landmark size={20} className="text-amber-600" />
                 <h3 className="text-xl font-bold">인터랙티브 채권 가격 계산기</h3>
@@ -39,16 +39,16 @@ export const BondPricer: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8">
                 <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
-                        <Field><FieldLabel htmlFor="bond-par" className="text-slate-600">액면가 (Par Value)</FieldLabel><InputGroup className="border-slate-300 bg-white"><InputGroupInput id="bond-par" type="number" value={par} onChange={e => setPar(Number(e.target.value))} className="text-slate-900"/><InputGroupAddon className="border-slate-300 text-slate-500">₩</InputGroupAddon></InputGroup></Field>
-                        <Field><FieldLabel htmlFor="bond-years" className="text-slate-600">만기 (Years)</FieldLabel><InputGroup className="border-slate-300 bg-white"><InputGroupInput id="bond-years" type="number" value={years} onChange={e => setYears(Number(e.target.value))} className="text-slate-900"/><InputGroupAddon className="border-slate-300 text-slate-500">년</InputGroupAddon></InputGroup></Field>
+                        <Field><FieldLabel htmlFor="bond-par" className="text-slate-600">액면가 (Par Value)</FieldLabel><InputGroup className="border-slate-300 bg-white"><InputGroupInput id="bond-par" type="number" value={par} onChange={e => setPar(Number(e.target.value))} className="text-foreground"/><InputGroupAddon className="border-slate-300 text-muted-foreground">₩</InputGroupAddon></InputGroup></Field>
+                        <Field><FieldLabel htmlFor="bond-years" className="text-slate-600">만기 (Years)</FieldLabel><InputGroup className="border-slate-300 bg-white"><InputGroupInput id="bond-years" type="number" value={years} onChange={e => setYears(Number(e.target.value))} className="text-foreground"/><InputGroupAddon className="border-slate-300 text-muted-foreground">년</InputGroupAddon></InputGroup></Field>
                     </div>
                     <div>
-                        <label className="text-xs font-bold text-slate-500 mb-1 block">표면금리 (Coupon Rate, %)</label>
+                        <label className="text-xs font-bold text-muted-foreground mb-1 block">표면금리 (Coupon Rate, %)</label>
                         <input type="range" min="0" max="15" step="0.5" value={coupon} onChange={e => setCoupon(Number(e.target.value))} className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-amber-500"/>
                         <div className="text-right text-xs font-bold text-amber-600 mt-1">{coupon}%</div>
                     </div>
                     <div>
-                        <label className="text-xs font-bold text-slate-500 mb-1 block">시장요구수익률 (Yield, %)</label>
+                        <label className="text-xs font-bold text-muted-foreground mb-1 block">시장요구수익률 (Yield, %)</label>
                         <input type="range" min="0" max="15" step="0.5" value={yieldRate} onChange={e => setYieldRate(Number(e.target.value))} className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-green-500"/>
                         <div className="text-right text-xs font-bold text-green-600 mt-1">{yieldRate}%</div>
                     </div>
@@ -56,7 +56,7 @@ export const BondPricer: React.FC = () => {
 
                 <div className="flex flex-col justify-center items-center bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 shadow-inner">
                     <span className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">채권 현재 가격 (PV)</span>
-                    <div className="text-5xl font-black text-slate-900 font-mono tracking-tighter">
+                    <div className="text-5xl font-black text-foreground font-mono tracking-tighter">
                         ₩{Math.round(price).toLocaleString()}
                     </div>
                     <div className="mt-4 flex gap-2">
@@ -99,7 +99,7 @@ export const PortfolioVisualizer: React.FC = () => {
 
     return (
         <Card className="p-4 sm:p-6 bg-white border-slate-200 shadow-xl mt-5 sm:mt-8">
-            <div className="flex items-center gap-2 mb-6 border-b pb-4 text-slate-900">
+            <div className="flex items-center gap-2 mb-6 border-b pb-4 text-foreground">
                 <TrendingUp size={20} className="text-green-600" />
                 <h3 className="text-xl font-bold">포트폴리오 위험-수익 시각화</h3>
             </div>

@@ -880,8 +880,8 @@ export default function DailyFortune({ locale }: Props) {
     <div className="mx-auto max-w-2xl">
       {/* Header */}
       <div className="mb-5 sm:mb-8 text-center">
-        <h1 className="mb-2 text-3xl font-bold text-gray-900">{ui.title}</h1>
-        <p className="text-gray-500">{ui.subtitle}</p>
+        <h1 className="mb-2 text-3xl font-bold text-foreground">{ui.title}</h1>
+        <p className="text-muted-foreground">{ui.subtitle}</p>
       </div>
 
       {!result ? (
@@ -895,7 +895,7 @@ export default function DailyFortune({ locale }: Props) {
             value={birth}
             onChange={(e) => setBirth(e.target.value)}
             max={getToday()}
-            className="mb-6 w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+            className="mb-6 w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-foreground shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
           />
           <button
             onClick={handleSubmit}
@@ -950,7 +950,7 @@ export default function DailyFortune({ locale }: Props) {
           {/* Reset */}
           <button
             onClick={handleReset}
-            className="w-full rounded-xl border border-gray-300 bg-white py-3 font-medium text-gray-700 transition hover:bg-gray-50"
+            className="w-full rounded-xl border border-gray-300 bg-white py-3 font-medium text-gray-700 transition hover:bg-card"
           >
             🔄 {ui.tomorrow}
           </button>

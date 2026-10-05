@@ -140,7 +140,7 @@ export default function RatioCalculator({ locale }: Props) {
   })();
 
   const inputCls =
-    "w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-100";
+    "w-full rounded-lg border border-slate-300 px-3 py-2 text-foreground focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-100";
   const card = "rounded-xl border border-slate-200 bg-white p-4";
   const resultCls = "mt-3 rounded-lg bg-green-50 px-3 py-2 text-sm font-semibold text-green-900";
 
@@ -148,13 +148,13 @@ export default function RatioCalculator({ locale }: Props) {
     <GameContainer title={t.title} subtitle={t.subtitle}>
       <div className="grid gap-4 md:grid-cols-2">
         <div className={card}>
-          <h3 className="font-semibold text-slate-900">{t.simplifyTitle}</h3>
+          <h3 className="font-semibold text-foreground">{t.simplifyTitle}</h3>
           <div className="mt-3 grid grid-cols-2 gap-3">
-            <label className="block text-xs text-slate-500">
+            <label className="block text-xs text-muted-foreground">
               {t.aLabel}
               <input className={inputCls} inputMode="decimal" placeholder={t.placeholder} value={simpleA} onChange={(e) => setSimpleA(e.target.value)} />
             </label>
-            <label className="block text-xs text-slate-500">
+            <label className="block text-xs text-muted-foreground">
               {t.bLabel}
               <input className={inputCls} inputMode="decimal" placeholder={t.placeholder} value={simpleB} onChange={(e) => setSimpleB(e.target.value)} />
             </label>
@@ -163,17 +163,17 @@ export default function RatioCalculator({ locale }: Props) {
         </div>
 
         <div className={card}>
-          <h3 className="font-semibold text-slate-900">{t.solveTitle}</h3>
+          <h3 className="font-semibold text-foreground">{t.solveTitle}</h3>
           <div className="mt-3 grid grid-cols-3 gap-3">
-            <label className="block text-xs text-slate-500">
+            <label className="block text-xs text-muted-foreground">
               {t.aLabel}
               <input className={inputCls} inputMode="decimal" placeholder={t.placeholder} value={propA} onChange={(e) => setPropA(e.target.value)} />
             </label>
-            <label className="block text-xs text-slate-500">
+            <label className="block text-xs text-muted-foreground">
               {t.bLabel}
               <input className={inputCls} inputMode="decimal" placeholder={t.placeholder} value={propB} onChange={(e) => setPropB(e.target.value)} />
             </label>
-            <label className="block text-xs text-slate-500">
+            <label className="block text-xs text-muted-foreground">
               {t.cLabel}
               <input className={inputCls} inputMode="decimal" placeholder={t.placeholder} value={propC} onChange={(e) => setPropC(e.target.value)} />
             </label>

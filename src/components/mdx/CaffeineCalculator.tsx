@@ -77,7 +77,7 @@ export default function CaffeineCalculator() {
 
   return (
     <div className="my-5 sm:my-8 rounded-2xl border border-gray-200 bg-white p-4 sm:p-6 shadow-sm">
-      <h3 className="mb-6 text-xl font-bold text-gray-900">카페인 섭취량 계산기</h3>
+      <h3 className="mb-6 text-xl font-bold text-foreground">카페인 섭취량 계산기</h3>
 
       <div className="mb-4">
         <label className="mb-1 block text-sm font-medium text-gray-700">
@@ -171,13 +171,13 @@ export default function CaffeineCalculator() {
           })()}
 
           <div className="grid grid-cols-2 gap-3 text-center">
-            <div className="rounded-xl bg-gray-50 p-4">
-              <p className="text-xs text-gray-500">FDA 권장 한도</p>
+            <div className="rounded-xl bg-card p-4">
+              <p className="text-xs text-muted-foreground">FDA 권장 한도</p>
               <p className="text-lg font-bold text-gray-700">400mg</p>
               <p className="text-xs text-gray-400">잔여: {Math.max(0, 400 - result.total)}mg</p>
             </div>
-            <div className="rounded-xl bg-gray-50 p-4">
-              <p className="text-xs text-gray-500">취침 시 잔존량 (16h 후)</p>
+            <div className="rounded-xl bg-card p-4">
+              <p className="text-xs text-muted-foreground">취침 시 잔존량 (16h 후)</p>
               <p className="text-lg font-bold text-gray-700">{bedtimeRemainder}mg</p>
               <p className="text-xs text-gray-400">반감기 5.5시간 기준</p>
             </div>
@@ -189,7 +189,7 @@ export default function CaffeineCalculator() {
               {result.breakdown.map((b, i) => (
                 <div key={i} className="flex justify-between text-sm">
                   <span className="text-gray-600">{b.name}</span>
-                  <span className="font-medium text-gray-900">{b.mg}mg</span>
+                  <span className="font-medium text-foreground">{b.mg}mg</span>
                 </div>
               ))}
             </div>

@@ -405,7 +405,7 @@ const COLOR_MAP: Record<string, { bg: string; border: string; text: string; badg
   pink:    { bg: 'bg-pink-50',      border: 'border-pink-200',      text: 'text-pink-700',      badge: 'bg-pink-100 text-pink-800',          bar: 'bg-pink-500' },
   emerald: { bg: 'bg-emerald-50',border: 'border-emerald-200',text: 'text-emerald-700',badge: 'bg-emerald-100 text-emerald-800',bar: 'bg-emerald-500' },
   amber:   { bg: 'bg-amber-50',    border: 'border-amber-200',    text: 'text-amber-700',    badge: 'bg-amber-100 text-amber-800',      bar: 'bg-amber-500' },
-  slate:   { bg: 'bg-slate-50',    border: 'border-slate-200',    text: 'text-slate-700',    badge: 'bg-slate-100 text-slate-800',      bar: 'bg-slate-500' },
+  slate:   { bg: 'bg-card',    border: 'border-slate-200',    text: 'text-slate-700',    badge: 'bg-slate-100 text-slate-800',      bar: 'bg-slate-500' },
   teal:    { bg: 'bg-teal-50',      border: 'border-teal-200',      text: 'text-teal-700',      badge: 'bg-teal-100 text-teal-800',          bar: 'bg-teal-500' },
   blue:    { bg: 'bg-blue-50',      border: 'border-blue-200',      text: 'text-blue-700',      badge: 'bg-blue-100 text-blue-800',          bar: 'bg-blue-500' },
   rose:    { bg: 'bg-rose-50',      border: 'border-rose-200',      text: 'text-rose-700',      badge: 'bg-rose-100 text-rose-800',          bar: 'bg-rose-500' },

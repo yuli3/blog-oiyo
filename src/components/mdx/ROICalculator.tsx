@@ -41,7 +41,7 @@ export default function ROICalculator() {
 
   return (
     <div className="my-5 sm:my-8 rounded-2xl border border-gray-200 bg-white p-4 sm:p-6 shadow-sm">
-      <h3 className="mb-4 text-xl font-bold text-gray-900">투자 수익률(ROI) 계산기</h3>
+      <h3 className="mb-4 text-xl font-bold text-foreground">투자 수익률(ROI) 계산기</h3>
 
       <div className="mb-5 flex gap-2">
         {(['simple', 'annualized'] as const).map((m) => (
@@ -114,8 +114,8 @@ export default function ROICalculator() {
                   result.totalReturn >= 0 ? 'text-purple-600' : 'text-red-600',
               },
             ].map(({ label, value, color }) => (
-              <div key={label} className="rounded-xl bg-gray-50 p-3 text-center">
-                <p className="text-xs text-gray-500">{label}</p>
+              <div key={label} className="rounded-xl bg-card p-3 text-center">
+                <p className="text-xs text-muted-foreground">{label}</p>
                 <p className={`text-sm font-bold ${color}`}>{value}</p>
               </div>
             ))}

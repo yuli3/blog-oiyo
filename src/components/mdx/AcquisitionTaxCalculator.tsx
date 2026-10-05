@@ -60,14 +60,14 @@ export default function AcquisitionTaxCalculator() {
 
   return (
     <div className="my-5 sm:my-8 rounded-2xl border border-gray-200 bg-white p-4 sm:p-6 shadow-sm">
-      <h3 className="mb-6 text-xl font-bold text-gray-900">취득세 계산기</h3>
+      <h3 className="mb-6 text-xl font-bold text-foreground">취득세 계산기</h3>
 
       <div className="mb-4 flex gap-2">
         {(['house', 'land', 'commercial'] as PropertyKind[]).map((k) => {
           const label = k === 'house' ? '주택' : k === 'land' ? '토지' : '상가/오피스텔';
           return (
             <button key={k} onClick={() => setPropertyKind(k)}
-              className={`flex-1 rounded-lg py-2 text-sm font-medium transition ${propertyKind === k ? 'bg-green-600 text-white' : 'border border-gray-300 text-gray-600 hover:bg-gray-50'}`}>
+              className={`flex-1 rounded-lg py-2 text-sm font-medium transition ${propertyKind === k ? 'bg-green-600 text-white' : 'border border-gray-300 text-gray-600 hover:bg-card'}`}>
               {label}
             </button>
           );
@@ -80,7 +80,7 @@ export default function AcquisitionTaxCalculator() {
           <div className="flex gap-2">
             {(Object.keys(HOUSE_RATES) as HouseType[]).map((k) => (
               <button key={k} onClick={() => setHouseType(k)}
-                className={`flex-1 rounded-lg py-2 text-xs font-medium transition ${houseType === k ? 'bg-green-500 text-white' : 'border border-gray-300 text-gray-600 hover:bg-gray-50'}`}>
+                className={`flex-1 rounded-lg py-2 text-xs font-medium transition ${houseType === k ? 'bg-green-500 text-white' : 'border border-gray-300 text-gray-600 hover:bg-card'}`}>
                 {HOUSE_RATES[k].label}
               </button>
             ))}
@@ -102,7 +102,7 @@ export default function AcquisitionTaxCalculator() {
       {result && (
         <div className="mt-6 space-y-3">
           <div className="rounded-xl bg-green-50 p-4">
-            <p className="text-xs text-gray-500">적용 세율</p>
+            <p className="text-xs text-muted-foreground">적용 세율</p>
             <p className="text-2xl font-bold text-green-700">{(result.rate * 100).toFixed(1)}%</p>
           </div>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -112,8 +112,8 @@ export default function AcquisitionTaxCalculator() {
               { label: '농어촌특별세', value: result.specialTax },
               { label: '총 납부액', value: result.total },
             ].map(({ label, value }) => (
-              <div key={label} className="rounded-xl bg-gray-50 p-3 text-center">
-                <p className="text-xs text-gray-500">{label}</p>
+              <div key={label} className="rounded-xl bg-card p-3 text-center">
+                <p className="text-xs text-muted-foreground">{label}</p>
                 <p className="text-sm font-bold text-gray-800">{formatKRW(value)}원</p>
               </div>
             ))}

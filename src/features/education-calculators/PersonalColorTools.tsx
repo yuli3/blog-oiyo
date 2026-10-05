@@ -111,10 +111,10 @@ export const PersonalColorMiniTest: React.FC = () => {
                     </div>
                     <div className="space-y-2">
                         <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">진단 결과</span>
-                        <h4 className="text-4xl font-black text-slate-900 tracking-tight">당신은 <span className="text-rose-500 underline decoration-rose-200">{result}</span> 타입!</h4>
+                        <h4 className="text-4xl font-black text-foreground tracking-tight">당신은 <span className="text-rose-500 underline decoration-rose-200">{result}</span> 타입!</h4>
                     </div>
                     
-                    <p className="text-slate-500 max-w-sm mx-auto">
+                    <p className="text-muted-foreground max-w-sm mx-auto">
                         결과는 간이 테스트용입니다. 더 정확한 분석을 위해 각 타입 가이드를 확인해보세요!
                     </p>
 

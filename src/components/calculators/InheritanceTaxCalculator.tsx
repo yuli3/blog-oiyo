@@ -72,7 +72,7 @@ const NumInput: React.FC<NumInputProps> = ({ label, value, onChange, unit = '만
         className="flex-1 px-3 py-2 text-sm focus:outline-none"
         aria-label={label}
       />
-      <span className="px-2 text-xs text-slate-500 bg-slate-50 border-l border-green-100 py-2">{unit}</span>
+      <span className="px-2 text-xs text-muted-foreground bg-card border-l border-green-100 py-2">{unit}</span>
     </div>
   </div>
 );
@@ -279,7 +279,7 @@ export const InheritanceTaxCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ l
               <LabelValue label={locale === 'ko' ? '② 과세가액' : '② Taxable Estate'} value={calc.taxableEstate / 10000} highlight />
 
               <div className="pt-2">
-                <p className="text-xs font-bold text-slate-500 mb-1">
+                <p className="text-xs font-bold text-muted-foreground mb-1">
                   {locale === 'ko' ? '③ 상속공제' : '③ Deductions'}
                 </p>
                 {s.hasSpouse && (

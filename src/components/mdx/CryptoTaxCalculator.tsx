@@ -59,7 +59,7 @@ export default function CryptoTaxCalculator({ locale = 'ko' }: { locale?: 'ko' |
 
   return (
     <div className="my-5 sm:my-8 rounded-2xl border border-gray-200 bg-white p-4 sm:p-6 shadow-sm">
-      <h3 className="mb-6 text-xl font-bold text-gray-900">{en ? 'Korea Crypto Tax Estimator' : '가상자산 세금 예상 계산기'}</h3>
+      <h3 className="mb-6 text-xl font-bold text-foreground">{en ? 'Korea Crypto Tax Estimator' : '가상자산 세금 예상 계산기'}</h3>
       <p className="mb-4 text-xs text-gray-400">
         {en ? 'Scheduled from 2027: ₩2.5M deduction, 20% income tax + 2% local income tax' : '2027년 적용 예정 기준: 기본공제 250만원, 소득세 20% + 지방소득세 2%'}
       </p>
@@ -75,7 +75,7 @@ export default function CryptoTaxCalculator({ locale = 'ko' }: { locale?: 'ko' |
                 { label: en ? 'Fee (KRW)' : '수수료(원)', field: 'fee' as const, val: row.fee },
               ].map(({ label, field, val }) => (
                 <div key={field}>
-                  <label className="mb-0.5 block text-xs text-gray-500">{label}</label>
+                  <label className="mb-0.5 block text-xs text-muted-foreground">{label}</label>
                   <input type="number" value={val} onChange={(e) => updateRow(row.id, field, e.target.value)}
                     className="w-full rounded-lg border border-gray-300 px-2 py-1.5 text-xs" />
                 </div>
@@ -90,7 +90,7 @@ export default function CryptoTaxCalculator({ locale = 'ko' }: { locale?: 'ko' |
       </div>
 
       <button onClick={addRow}
-        className="mb-4 w-full rounded-lg border border-dashed border-gray-300 py-2 text-sm text-gray-500 hover:bg-gray-50">
+        className="mb-4 w-full rounded-lg border border-dashed border-gray-300 py-2 text-sm text-muted-foreground hover:bg-card">
         {en ? '+ Add transaction' : '+ 거래 추가'}
       </button>
 
@@ -118,8 +118,8 @@ export default function CryptoTaxCalculator({ locale = 'ko' }: { locale?: 'ko' |
               { label: en ? 'Local tax (2%)' : '지방소득세(2%)', value: result.localTax, color: 'text-red-500' },
               { label: en ? 'Estimated total' : '예상 총세액', value: result.total, color: 'text-red-700' },
             ].map(({ label, value, color }) => (
-              <div key={label} className="rounded-xl bg-gray-50 p-3 text-center">
-                <p className="text-xs text-gray-500">{label}</p>
+              <div key={label} className="rounded-xl bg-card p-3 text-center">
+                <p className="text-xs text-muted-foreground">{label}</p>
                 <p className={`text-sm font-bold ${color}`}>{formatKRW(value)}원</p>
               </div>
             ))}

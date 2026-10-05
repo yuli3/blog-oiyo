@@ -259,7 +259,7 @@ const LifeExpectancyCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
 
               {/* Progress bar */}
               <div className="p-4 bg-white rounded-2xl border border-green-100">
-                <div className="flex justify-between text-xs text-slate-500 mb-2">
+                <div className="flex justify-between text-xs text-muted-foreground mb-2">
                   <span>{locale === 'ko' ? '현재' : 'Now'}: {currentAge}세</span>
                   <span>{locale === 'ko' ? '예상 수명' : 'Lifespan'}: {result.adjustedLifeExpectancy}세</span>
                 </div>
@@ -283,13 +283,13 @@ const LifeExpectancyCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="p-4 bg-white rounded-2xl border border-green-100 text-center">
-                  <p className="text-xs text-slate-500 font-bold mb-1">
+                  <p className="text-xs text-muted-foreground font-bold mb-1">
                     {locale === 'ko' ? '건강수명' : 'Healthy Lifespan'}
                   </p>
                   <p className="text-2xl font-bold text-green-700">{result.healthyLifeExpectancy}세</p>
                 </div>
                 <div className="p-4 bg-white rounded-2xl border border-green-100 text-center">
-                  <p className="text-xs text-slate-500 font-bold mb-1">
+                  <p className="text-xs text-muted-foreground font-bold mb-1">
                     {locale === 'ko' ? '65세 이후 노후 기간' : 'Post-65 Retirement Years'}
                   </p>
                   <p className="text-2xl font-bold text-green-700">{result.retirementYears}년</p>

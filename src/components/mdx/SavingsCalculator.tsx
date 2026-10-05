@@ -72,18 +72,18 @@ export default function SavingsCalculator() {
 
   return (
     <div className="my-5 sm:my-8 rounded-2xl border border-gray-200 bg-white p-4 sm:p-6 shadow-sm">
-      <h3 className="mb-6 text-xl font-bold text-gray-900">저축 목표 계산기</h3>
+      <h3 className="mb-6 text-xl font-bold text-foreground">저축 목표 계산기</h3>
 
       <div className="mb-4 flex gap-3">
         <button
           onClick={() => setMode('target')}
-          className={`flex-1 rounded-lg py-2 text-sm font-medium transition ${mode === 'target' ? 'bg-green-600 text-white' : 'border border-gray-300 text-gray-600 hover:bg-gray-50'}`}
+          className={`flex-1 rounded-lg py-2 text-sm font-medium transition ${mode === 'target' ? 'bg-green-600 text-white' : 'border border-gray-300 text-gray-600 hover:bg-card'}`}
         >
           목표 금액 달성
         </button>
         <button
           onClick={() => setMode('monthly')}
-          className={`flex-1 rounded-lg py-2 text-sm font-medium transition ${mode === 'monthly' ? 'bg-green-600 text-white' : 'border border-gray-300 text-gray-600 hover:bg-gray-50'}`}
+          className={`flex-1 rounded-lg py-2 text-sm font-medium transition ${mode === 'monthly' ? 'bg-green-600 text-white' : 'border border-gray-300 text-gray-600 hover:bg-card'}`}
         >
           월 저축액 기반
         </button>
@@ -126,22 +126,22 @@ export default function SavingsCalculator() {
         <div className="mt-6 space-y-4">
           <div className="grid grid-cols-3 gap-3 text-center">
             <div className="rounded-xl bg-green-50 p-4">
-              <p className="text-xs text-gray-500">{result.label}</p>
+              <p className="text-xs text-muted-foreground">{result.label}</p>
               <p className="text-base font-bold text-green-600">{formatKRW(result.main)}원</p>
             </div>
             <div className="rounded-xl bg-green-50 p-4">
-              <p className="text-xs text-gray-500">총 납입 원금</p>
+              <p className="text-xs text-muted-foreground">총 납입 원금</p>
               <p className="text-base font-bold text-green-600">{formatKRW(result.totalPrincipal)}원</p>
             </div>
             <div className="rounded-xl bg-green-50 p-4">
-              <p className="text-xs text-gray-500">이자 수익</p>
+              <p className="text-xs text-muted-foreground">이자 수익</p>
               <p className="text-base font-bold text-green-600">{formatKRW(Math.abs(result.totalInterest))}원</p>
             </div>
           </div>
 
           <div className="overflow-x-auto rounded-xl border border-gray-200">
             <table className="w-full text-xs">
-              <thead className="bg-gray-50">
+              <thead className="bg-card">
                 <tr>
                   {['년차', '누적 원금', '누적 이자', '잔액'].map((h) => (
                     <th key={h} className="px-3 py-2 text-left font-semibold text-gray-700">{h}</th>
