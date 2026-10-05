@@ -1,0 +1,76 @@
+---
+track: academy
+series: econometrics
+chapter: 6
+title: "计量经济学——时间序列平稳性与伪回归"
+description: "解释有趋势的序列为何会产生误导性t值，并区分差分、协整、格兰杰因果关系与因果识别。"
+pubDate: 2026-09-15
+updatedDate: 2026-09-27
+category: Economics
+tags: ["经济学", "计量经济学", "时间序列", "单位根", "伪回归"]
+locale: zh
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+market: GLOBAL
+contentScope: global
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 计量经济学——做时间序列回归前，先看均值是否稳定
+
+横截面OLS通常假定观测值近似独立。如果今年的物价依赖去年的物价，这个假定就不成立。[第5章](/zh/education-econometrics-ch5/)讨论面板数据中的个体差异；本章讨论时间上的持续性。
+
+## 1. 非平稳性会让t值看起来过大
+
+弱平稳性要求均值和方差不随时间变化，两个时点的协方差只取决于间隔，而不取决于具体日期。去除确定性趋势后可平稳的序列，与冲击永久累积的单位根序列并不相同。随机游走 $Y_t=Y_{t-1}+\varepsilon_t$ 是后者的典型例子。把两个相互独立的随机游走按水平值做回归，样本越长，$R^2$ 和常规 $t$ 值有时越显著。这就是伪回归。
+
+<FormulaBox
+  label="单位根"
+  formula="Y_t = \rho Y_{t-1} + ε_t,\quad \rho=1"
+  description="ρ=1时，冲击会累积。一阶差分 ΔYₜ=εₜ 可能平稳。未拒绝检验原假设并不等于证明存在单位根。"
+/>
+
+假设用两个独立随机游走的100期数据做水平回归，得到 $t=4.2$、$R^2=38\%$，它们仍可能毫无关系。如果差分后的回归只有 $t=0.4$，原先的数值可能只是趋势造成的假象。
+
+扩展迪基—富勒（ADF）检验通常以**存在单位根**为原假设。不能拒绝原假设，并不等于证明单位根存在。是否加入截距和确定性趋势、加入几个差分滞后项以处理残差自相关，都应由数据与模型决定。结构突变或样本较短时，检验效力可能偏低。
+
+## 2. 协整是不能一概差分掉的长期关系
+
+如果两个 $I(1)$ 序列 $Y_t$ 和 $X_t$ 存在一个 $I(0)$ 的线性组合 $z_t=Y_t-\alpha-\beta X_t$，它们就是协整的。此时水平值可能含有长期统计关系，机械地差分会丢失这些信息。但残差平稳性必须用**协整检验专用的临界值**判断；不能把水平OLS的常规 $t$ 值当作平稳回归来解释。协整本身也不能识别 $X$ 对 $Y$ 的因果效应。
+
+误差修正模型把上期偏离长期关系的程度与本期变化联系起来。例如，在 $\Delta Y_t=\lambda z_{t-1}+\gamma\Delta X_t+e_t$ 中，若 $\lambda=-0.2$、$z_{t-1}=10$，其余项为零，本期 $Y$ 的变化就是 $-2$。这只是调整速度的**假设性计算**，不是对某个经济体的估计。还要检查 $\lambda$ 的符号、稳定性与残差诊断。
+
+<LectureTable
+  title="容易被过度解读的时间序列术语"
+  headers={["术语", "实际含义", "不意味着"]}
+  rows={[
+    ["格兰杰因果关系", "过去的X有助于预测Y", "干预效应或因果识别"],
+    ["未拒绝单位根假设", "无法排除ρ=1", "证明有单位根；也可能是检验效力不足"],
+    ["协整", "长期关系的残差平稳", "关系不会受结构突变影响"],
+  ]}
+/>
+
+格兰杰因果关系问的是“过去的 $X$ 能否帮助预测 $Y$”，而不是政策改变 $X$ 就会改变 $Y$。领先指标不等于原因。
+
+<Callout type="warning">
+加入季节或趋势虚拟变量，不代表已经完成因果识别。如果把结构突变前后的数据放在同一回归中，不同的 $\rho$ 和 $\beta$ 可能被混在一起。宏观时间序列往往较短；不能把100期数据的t值当成来自一万个独立个体的横截面结果。
+</Callout>
+
+资产价格是否可以预测，还取决于投资者掌握的信息集。计量经济学首先要问：这个回归是否只是伪回归？
+
+## 自测题
+
+**题目。** 消费与GDP的50个年度观测值都在上升，水平回归的常规统计量为 $t=6$。两条序列可能有单位根。差分回归的 $t=1.1$，残差协整检验也未拒绝原假设。可以得出什么结论？
+
+**解答。** 单靠水平回归的 $t=6$，既不能断言两者有真实关系，也不能断言存在因果效应。本例的差分结果表明，短期线性关联的证据较弱。协整检验未拒绝原假设，**也不能证明协整不存在**。应检查趋势与滞后项设定、样本长度和结构突变。如果合适的检验后来支持协整，可以用误差修正模型区分长期关系与短期调整；因果解释仍需另外设计识别策略。
+
+## 参考文献
+
+- Clive Granger and Paul Newbold, “Spurious Regressions in Econometrics,” *Journal of Econometrics* (1974)
+- James Stock and Mark Watson, *Introduction to Econometrics*，时间序列相关章节
+- Jeffrey Wooldridge, *Introductory Econometrics*，第11—18章
+- Engle and Granger, [*Co-Integration and Error Correction: Representation, Estimation, and Testing*](https://www.ntuzov.com/Nik_Site/Niks_files/Research/papers/stat_arb/EG_1987.pdf)

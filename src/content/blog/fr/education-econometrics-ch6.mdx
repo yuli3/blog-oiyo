@@ -1,0 +1,76 @@
+---
+track: academy
+series: econometrics
+chapter: 6
+title: "Économétrie — Stationnarité et régression fallacieuse"
+description: "Pourquoi des séries tendancielles peuvent produire des statistiques t trompeuses, et comment distinguer différenciation, cointégration et causalité de Granger de l'identification causale."
+pubDate: 2026-09-15
+updatedDate: 2026-09-27
+category: Economics
+tags: ["économie", "économétrie", "séries temporelles", "racine unitaire", "régression fallacieuse"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+market: GLOBAL
+contentScope: global
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Économétrie — Avant une régression temporelle, vérifiez la stabilité de la moyenne
+
+Les MCO en coupe transversale supposent souvent des observations à peu près indépendantes. Si l'inflation de cette année dépend de celle de l'an dernier, cette hypothèse ne tient plus. Le [chapitre 5](/fr/education-econometrics-ch5/) porte sur l'hétérogénéité individuelle dans les panels ; ici, nous étudions la persistance dans le temps.
+
+## 1. La non-stationnarité peut gonfler la statistique t
+
+La stationnarité faible exige une moyenne et une variance constantes dans le temps, ainsi qu'une covariance entre deux dates qui dépende de leur écart, non de leur position dans le calendrier. Une série rendue stationnaire par retrait d'une tendance déterministe n'est pas la même chose qu'une série à racine unitaire dont les chocs s'accumulent durablement. La marche aléatoire $Y_t=Y_{t-1}+\varepsilon_t$ illustre ce second cas. Régressées en niveaux l'une sur l'autre, deux marches aléatoires indépendantes peuvent donner un $R^2$ et des statistiques $t$ usuelles artificiellement élevés, surtout avec un échantillon long : c'est une régression fallacieuse.
+
+<FormulaBox
+  label="Racine unitaire"
+  formula="Y_t = \rho Y_{t-1} + ε_t,\quad \rho=1"
+  description="Pour ρ=1, les chocs s'accumulent. La première différence ΔYₜ=εₜ peut être stationnaire. Ne pas rejeter le test ne prouve pas la présence d'une racine unitaire."
+/>
+
+Imaginons 100 observations de deux marches aléatoires indépendantes : une régression en niveaux pourrait produire $t=4,2$ et $R^2=38\%$ alors qu'il n'existe aucun lien. Si la régression en différences donne $t=0,4$, le premier résultat peut être une illusion due aux tendances.
+
+L'hypothèse nulle habituelle du test de Dickey–Fuller augmenté (ADF) est **la présence d'une racine unitaire**. Ne pas la rejeter ne la démontre pas. Le choix d'une constante, d'une tendance déterministe et du nombre de retards des différences destinés à traiter l'autocorrélation des résidus dépend des données et du modèle. Une rupture structurelle ou un petit échantillon peut réduire la puissance du test.
+
+## 2. La cointégration est une relation de long terme à ne pas effacer par différenciation systématique
+
+Deux séries $I(1)$, $Y_t$ et $X_t$, sont cointégrées si une combinaison linéaire $z_t=Y_t-\alpha-\beta X_t$ est $I(0)$. Leurs niveaux peuvent alors contenir une relation statistique de long terme que la différenciation systématique ferait perdre. Mais la stationnarité des résidus doit être testée avec des **valeurs critiques propres à la cointégration** ; la statistique $t$ usuelle des MCO en niveaux ne s'interprète pas comme celle d'une régression stationnaire. La cointégration ne suffit pas non plus à identifier un effet causal de $X$ sur $Y$.
+
+Un modèle à correction d'erreur relie l'écart à la relation de long terme observé à la période précédente à la variation courante. Dans $\Delta Y_t=\lambda z_{t-1}+\gamma\Delta X_t+e_t$, supposons $\lambda=-0,2$ et $z_{t-1}=10$ : si les autres termes sont nuls, $Y$ varie de $-2$ cette période. C'est un **calcul hypothétique** de la vitesse d'ajustement, pas une estimation pour une économie réelle. Il faut aussi examiner le signe et la stabilité de $\lambda$, puis diagnostiquer les résidus.
+
+<LectureTable
+  title="Trois termes à ne pas surinterpréter"
+  headers={["Terme", "Ce qu'il indique", "Ce qu'il n'établit pas"]}
+  rows={[
+    ["Causalité de Granger", "Le passé de X aide à prévoir Y", "Un effet d'intervention ou une identification causale"],
+    ["Non-rejet de la racine unitaire", "Le test n'écarte pas ρ=1", "Une preuve de racine unitaire ; la puissance peut manquer"],
+    ["Cointégration", "Un résidu stationnaire de long terme", "Une relation insensible aux ruptures structurelles"],
+  ]}
+/>
+
+La causalité de Granger demande si le passé de $X$ aide à prévoir $Y$. Elle ne dit pas qu'une politique modifiant $X$ modifierait $Y$. Un indicateur avancé n'est pas nécessairement une cause.
+
+<Callout type="warning">
+L'ajout de variables indicatrices saisonnières ou de tendance ne règle pas l'identification causale. Réunir les observations avant et après une rupture structurelle peut mêler plusieurs valeurs de $\rho$ et de $\beta$. Les séries macroéconomiques sont souvent courtes : une statistique t obtenue sur 100 périodes n'est pas l'équivalent de celle issue de 10 000 individus indépendants.
+</Callout>
+
+La possibilité de prévoir les prix d'actifs dépend aussi de l'ensemble d'information dont disposent les investisseurs. L'économétrie doit d'abord écarter la possibilité d'une régression fallacieuse.
+
+## Vérifiez votre compréhension
+
+**Question.** Sur 50 années, consommation et PIB augmentent ensemble ; la régression en niveaux donne la statistique usuelle $t=6$. Les deux séries pourraient avoir des racines unitaires. En différences, on obtient $t=1,1$, et un test de cointégration fondé sur les résidus ne rejette pas non plus son hypothèse nulle. Que conclure ?
+
+**Corrigé.** La statistique en niveaux ne suffit à établir ni une relation ni un effet causal. Dans cet exemple, la régression en différences donne peu d'indices d'une association linéaire à court terme. Le non-rejet du test de cointégration **ne prouve pas l'absence de cointégration**. Il faut examiner la spécification des tendances et des retards, la taille de l'échantillon et les ruptures structurelles. Si un test adapté étaye ensuite la cointégration, un modèle à correction d'erreur peut séparer la relation de long terme de l'ajustement de court terme ; l'interprétation causale exige toujours une stratégie d'identification distincte.
+
+## Références
+
+- Clive Granger and Paul Newbold, “Spurious Regressions in Econometrics,” *Journal of Econometrics* (1974)
+- James Stock and Mark Watson, *Introduction to Econometrics*, chapitres sur les séries temporelles
+- Jeffrey Wooldridge, *Introductory Econometrics*, chapitres 11–18
+- Engle and Granger, [*Co-Integration and Error Correction: Representation, Estimation, and Testing*](https://www.ntuzov.com/Nik_Site/Niks_files/Research/papers/stat_arb/EG_1987.pdf)

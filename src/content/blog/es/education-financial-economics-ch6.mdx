@@ -1,0 +1,84 @@
+---
+track: academy
+series: financial-economics
+chapter: 6
+title: "Economía financiera — La estructura temporal de los tipos de interés"
+description: "Distinguir el tipo a plazo sin arbitraje de las expectativas de tipos futuros y analizar la prima por plazo sin suponer que siempre es positiva."
+pubDate: 2026-09-15
+updatedDate: 2026-09-27
+category: Economics
+tags: ["economía", "economía financiera", "estructura temporal", "hipótesis de expectativas", "tipo a plazo"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+market: GLOBAL
+contentScope: global
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Economía financiera — El tipo sin riesgo varía con el vencimiento
+
+El tipo sin riesgo presentado antes correspondía a un solo período. En la práctica, el rendimiento de los bonos públicos depende del vencimiento. El tipo sin riesgo empleado en el WACC de una empresa también sirve de dato para la dirección financiera. Aquí leemos la curva de rendimientos desde los precios de los activos: ¿qué información contiene realmente sobre las expectativas?
+
+## 1. La relación de no arbitraje no es la hipótesis de expectativas
+
+Partimos de los precios de **bonos cupón cero** comparables en riesgo de crédito, moneda y liquidez para definir los tipos al contado y a plazo por vencimiento. La ausencia de arbitraje relaciona el precio de una inversión a un año fijada hoy con los de una inversión a dos años y un contrato a plazo. Pero **el tipo al contado a un año que regirá dentro de un año todavía no se conoce**. Por tanto, el no arbitraje, por sí solo, no iguala los *rendimientos esperados* de un bono largo y una estrategia que renueva bonos cortos. Hacen falta supuestos adicionales, como una prima por plazo nula en la hipótesis pura de expectativas.
+
+<FormulaBox
+  label="Tipo a plazo a un año que comienza dentro de un año (bonos cupón cero con capitalización anual)"
+  formula="1+f_{t,1,2}=\frac{(1+y_t^{(2)})^2}{1+y_t^{(1)}}"
+  description="Con tipos al contado del 2 % a un año y del 3 % a dos años, el tipo a plazo a un año que comienza dentro de un año es aproximadamente del 4,01 %. No es el tipo que se realizará ni necesariamente su esperanza bajo la probabilidad real."
+/>
+
+Bajo aproximaciones adecuadas de vencimiento y capitalización, la hipótesis pura de expectativas interpreta el rendimiento a $n$ años como el promedio de la trayectoria esperada de tipos cortos. En términos más generales, **el rendimiento largo combina esa trayectoria esperada y una prima por plazo**. La prima remunera el riesgo de tipo de interés, pero puede ser positiva o negativa según su definición, el modelo y la fecha. Otra teoría, la *hipótesis de prima de liquidez*, supone una compensación positiva; eso no impone un signo universal a la prima por plazo. Una curva ascendente no demuestra, por sí sola, que se espere una subida de los tipos cortos.
+
+## 2. El tipo a plazo no es el futuro tipo al contado realizado
+
+El tipo a plazo es un **tipo implícito en precios** de bonos negociados hoy. Ciertos modelos de estructura temporal sin arbitraje lo relacionan con una medida neutral al riesgo, pero no puede interpretarse sin más como la esperanza del tipo corto futuro bajo la probabilidad real. También resulta excesivo escribir «tipo a plazo = esperanza neutral al riesgo» sin precisar la medida, la capitalización y los supuestos de convexidad. El tipo que finalmente se observe reflejará perturbaciones hoy desconocidas. La diferencia entre el tipo a plazo y el tipo al contado observado a posteriori mezcla prima de riesgo y error de predicción; la pendiente de una regresión sencilla que no los separe no permite juzgar la hipótesis de expectativas.
+
+Por ejemplo, supongamos que el tipo a plazo de aproximadamente 4,01 % incorpora una **prima por plazo de +1 punto porcentual definida sobre el tipo a plazo**. La esperanza del tipo corto del próximo año bajo la probabilidad real sería entonces, aproximadamente, del 3,01 %. Una prima de −1 punto implicaría alrededor del 5,01 %. Si ese punto de prima se aplicase al *rendimiento a dos años*, el cálculo cambiaría. Siempre hay que indicar a qué tipo se refiere la prima.
+
+<LectureTable
+  title="Un mismo tipo a plazo del 4,01 % y distintas expectativas"
+  headers={["Prima por plazo sobre el tipo a plazo", "Tipo a un año esperado para el próximo año (aprox.)", "Interpretación"]}
+  rows={[
+    ["0 puntos porcentuales", "4,01 %", "Hipótesis pura de expectativas"],
+    ["+1 punto porcentual", "3,01 %", "Expectativa inferior al tipo a plazo"],
+    ["−1 punto porcentual", "5,01 %", "Expectativa superior al tipo a plazo"],
+  ]}
+/>
+
+<LectureTable
+  title="Tres niveles para interpretar la estructura temporal"
+  headers={["Enfoque", "Qué refleja el rendimiento largo", "Limitación"]}
+  rows={[
+    ["Hipótesis pura de expectativas", "Trayectoria esperada de tipos cortos", "Supone una prima por plazo nula"],
+    ["Descomposición con prima por plazo", "Trayectoria esperada más una prima positiva o negativa", "Las estimaciones varían según el modelo"],
+    ["Preferencias y restricciones por vencimiento", "Oferta y demanda propias de cada plazo", "Debilita el supuesto de sustitución perfecta"],
+  ]}
+/>
+
+Cuando la política monetaria mueve los tipos cortos, la respuesta de los tipos largos depende tanto de las expectativas como de las primas. Descomponer un tipo nominal en tipo real e inflación esperada es una cuestión distinta del tipo de cambio real de finanzas internacionales. Aquí se comparan derechos de cobro sin riesgo con distintos vencimientos.
+
+<Callout type="warning">
+La estructura temporal y la duración de un bono en dirección financiera responden a preguntas diferentes. La duración aproxima cuánto cambia el precio de un bono cuando varía su rendimiento. Este capítulo pregunta cómo los rendimientos por vencimiento reflejan expectativas y primas. Una única beta del CAPM no explica la curva de los bonos públicos.
+</Callout>
+
+Las retiradas masivas de depósitos y la transformación de vencimientos muestran cómo una curva más empinada o un salto de los tipos cortos se traduce en beneficios y pérdidas bancarias. La teoría de la curva se estudia aquí; la quiebra de intermediarios corresponde al análisis de las crisis bancarias.
+
+## Comprueba lo aprendido
+
+**Problema.** Dos bonos cupón cero con las mismas condiciones de crédito y liquidez ofrecen tipos al contado del 2 % a un año y del 3 % a dos años. ¿Cuál es el tipo a plazo a un año que comienza dentro de un año con capitalización anual? Si ese tipo a plazo incorpora una prima por plazo de +1 punto porcentual, ¿cuál sería aproximadamente la esperanza del futuro tipo a un año bajo la probabilidad real?
+
+**Solución.** El tipo a plazo es $(1.03)^2/1.02-1\approx4.01\%$. El enunciado define la **prima de +1 punto sobre el tipo a plazo**, por lo que el tipo corto esperado es aproximadamente $4.01-1=3.01\%$. Una prima negativa o aplicada al *rendimiento a dos años* cambiaría el resultado. Los dos tipos al contado observados no identifican por separado ni la prima de riesgo ni una expectativa de subida de tipos.
+
+## Referencias
+
+- John Cochrane, *Asset Pricing*, capítulos sobre la estructura temporal
+- John Campbell, Andrew Lo y A. Craig MacKinlay, *The Econometrics of Financial Markets*, caps. 10–11
+- Reserva Federal, [*Three-Factor Nominal Term Structure Model*](https://www.federalreserve.gov/data/three-factor-nominal-term-structure-model.htm) — definición y signo de las primas por plazo
+- Reserva Federal, [*Cracking the Conundrum*](https://www.federalreserve.gov/pubs/feds/2007/200746/) — distinción entre tipos cortos esperados y primas por plazo

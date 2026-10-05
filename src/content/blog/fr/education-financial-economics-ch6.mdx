@@ -1,0 +1,84 @@
+---
+track: academy
+series: financial-economics
+chapter: 6
+title: "Économie financière — La structure par terme des taux d'intérêt"
+description: "Distinguer le taux à terme sans arbitrage des anticipations de taux courts et lire la prime de terme sans lui imposer un signe positif."
+pubDate: 2026-09-15
+updatedDate: 2026-09-27
+category: Economics
+tags: ["économie", "économie financière", "structure par terme", "hypothèse des anticipations", "taux à terme"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+market: GLOBAL
+contentScope: global
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Économie financière — Le taux sans risque dépend de l'échéance
+
+Le taux sans risque présenté plus haut ne portait que sur une période. En pratique, le rendement des obligations d'État varie avec leur échéance. Le taux sans risque utilisé dans le WACC d'une entreprise est aussi une donnée de la gestion financière. Ici, nous lisons dans les prix des actifs ce que la courbe des taux dit — et ne dit pas — des anticipations.
+
+## 1. La relation de non-arbitrage n'est pas l'hypothèse des anticipations
+
+Partons des prix d'**obligations zéro-coupon** comparables quant au crédit, à la monnaie et à la liquidité. Ils définissent les taux au comptant et les taux à terme par échéance. L'absence d'arbitrage relie les prix d'un placement d'un an fixé aujourd'hui à ceux d'un placement de deux ans assorti d'un contrat à terme. Mais **le taux au comptant d'un an qui prévaudra dans un an n'est pas encore connu**. L'absence d'arbitrage ne suffit donc pas à égaliser les *rendements espérés* d'une obligation longue et d'une stratégie de renouvellement d'obligations courtes. Il faut une hypothèse supplémentaire, telle qu'une prime de terme nulle dans l'hypothèse pure des anticipations.
+
+<FormulaBox
+  label="Taux à terme d'un an commençant dans un an (obligations zéro-coupon à capitalisation annuelle)"
+  formula="1+f_{t,1,2}=\frac{(1+y_t^{(2)})^2}{1+y_t^{(1)}}"
+  description="Si les taux au comptant à un et deux ans sont de 2 % et 3 %, le taux à terme d'un an commençant dans un an est d'environ 4,01 %. Il n'est ni le taux futur réalisé ni nécessairement son espérance en probabilité réelle."
+/>
+
+Sous des approximations appropriées d'échéance et de capitalisation, l'hypothèse pure des anticipations interprète le rendement à $n$ ans comme la moyenne de la trajectoire anticipée des taux courts. Plus généralement, **le taux long combine cette trajectoire anticipée et une prime de terme**. Cette prime rémunère le risque de taux, mais peut être positive ou négative selon sa définition, le modèle et la date. Une *hypothèse de prime de liquidité* distincte postule une rémunération positive ; elle ne fixe pas le signe de toute prime de terme. Une courbe ascendante ne prouve donc pas, à elle seule, qu'une hausse des taux courts est anticipée.
+
+## 2. Le taux à terme n'est pas le futur taux au comptant réalisé
+
+Le taux à terme est un **taux déduit des prix** des obligations échangées aujourd'hui. Certains modèles de structure par terme sans arbitrage le relient à une mesure risque-neutre, mais le taux à terme observé n'est pas simplement l'espérance du futur taux court sous la probabilité réelle. Écrire « taux à terme = espérance risque-neutre » sans préciser la mesure, la capitalisation et les hypothèses de convexité serait également trop réducteur. Des chocs imprévisibles aujourd'hui affecteront le taux réalisé. L'écart entre taux à terme et taux au comptant constaté après coup mêle prime de risque et erreur de prévision : la pente d'une régression simple qui ne les sépare pas ne tranche pas l'hypothèse des anticipations.
+
+Supposons, par exemple, que le taux à terme d'environ 4,01 % ci-dessus incorpore une **prime de terme de +1 point de pourcentage définie sur le taux à terme**. L'espérance du taux court de l'année prochaine, sous la probabilité réelle, est alors approximativement de 3,01 %. Avec une prime de −1 point, elle serait proche de 5,01 %. Si le point de prime s'appliquait au *rendement à deux ans*, le calcul changerait. Il faut toujours indiquer à quel taux la prime se rapporte.
+
+<LectureTable
+  title="Même taux à terme de 4,01 %, anticipations différentes"
+  headers={["Prime de terme sur le taux à terme", "Taux à un an anticipé pour l'an prochain (approx.)", "Interprétation"]}
+  rows={[
+    ["0 point de pourcentage", "4,01 %", "Hypothèse pure des anticipations"],
+    ["+1 point de pourcentage", "3,01 %", "Anticipation inférieure au taux à terme"],
+    ["−1 point de pourcentage", "5,01 %", "Anticipation supérieure au taux à terme"],
+  ]}
+/>
+
+<LectureTable
+  title="Trois niveaux de lecture de la structure par terme"
+  headers={["Cadre", "Ce que reflète le taux long", "Limite"]}
+  rows={[
+    ["Hypothèse pure des anticipations", "Trajectoire anticipée des taux courts", "Suppose une prime de terme nulle"],
+    ["Décomposition avec prime de terme", "Trajectoire anticipée et prime pouvant être positive ou négative", "Estimations sensibles au modèle"],
+    ["Préférences et contraintes par échéance", "Offre et demande propres à chaque échéance", "Remet en cause la substituabilité parfaite"],
+  ]}
+/>
+
+Quand la politique monétaire déplace les taux courts, la réaction des taux longs dépend à la fois des anticipations et des primes. Décomposer un taux nominal en taux réel et inflation anticipée est une autre question que le taux de change réel traité en finance internationale. Ici, nous comparons des créances sans risque de diverses échéances.
+
+<Callout type="warning">
+La structure par terme et la duration obligataire en gestion financière répondent à des questions distinctes. La duration approxime la variation du prix d'une obligation lorsque son rendement change. Ce chapitre demande comment les rendements par échéance reflètent anticipations et primes. Un seul bêta du MEDAF ne suffit pas à expliquer la courbe des obligations d'État.
+</Callout>
+
+Les paniques bancaires et la transformation des échéances montrent comment une courbe qui se raidit ou une flambée des taux courts affecte le résultat des banques. La théorie de la courbe est étudiée ici ; la défaillance des intermédiaires relève de l'analyse des crises bancaires.
+
+## Vérifiez votre compréhension
+
+**Question.** Pour des obligations zéro-coupon de même qualité de crédit et de même liquidité, les taux au comptant à un et deux ans sont de 2 % et 3 %. Quel est, en capitalisation annuelle, le taux à terme d'un an commençant dans un an ? Si ce taux à terme comprend une prime de terme de +1 point de pourcentage, quelle est approximativement l'espérance du futur taux à un an sous la probabilité réelle ?
+
+**Corrigé.** Le taux à terme vaut $(1.03)^2/1.02-1\approx4.01\%$. La question définit la **prime de +1 point sur le taux à terme** : l'espérance du taux court vaut donc environ $4.01-1=3.01\%$. Une prime négative ou appliquée au *rendement à deux ans* modifierait le résultat. Les deux seuls taux au comptant observés ne permettent d'identifier séparément ni la prime de risque ni une anticipation de hausse des taux.
+
+## Références
+
+- John Cochrane, *Asset Pricing*, chapitres sur la structure par terme
+- John Campbell, Andrew Lo et A. Craig MacKinlay, *The Econometrics of Financial Markets*, chap. 10–11
+- Réserve fédérale, [*Three-Factor Nominal Term Structure Model*](https://www.federalreserve.gov/data/three-factor-nominal-term-structure-model.htm) — définition et signe des primes de terme
+- Réserve fédérale, [*Cracking the Conundrum*](https://www.federalreserve.gov/pubs/feds/2007/200746/) — distinction entre taux courts anticipés et primes de terme

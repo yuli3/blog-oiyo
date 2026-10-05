@@ -1,0 +1,87 @@
+---
+track: academy
+series: econometrics
+chapter: 5
+title: "計量経済学 — パネル固定効果とクラスタリング"
+description: "固定効果が時間不変の異質性を除く仕組み、残る識別条件、クラスタ標準誤差の役割を数値例で確認します。"
+pubDate: 2026-09-15
+updatedDate: 2026-09-27
+category: Economics
+tags: ["経済学", "計量経済学", "パネルデータ", "固定効果", "クラスタリング"]
+locale: ja
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+market: GLOBAL
+contentScope: global
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# パネルデータで除けるのは固定された異質性であり、すべてのバイアスではない
+
+操作変数は外生的な変動を利用します。同じ人・企業・地域を繰り返し観測するパネルでは、個体に固定された特性を差分で除くという別の方法が使えます。単位根の分析は別の時系列上の論点です。
+
+## 1. 固定効果は水準ではなく変化を残す
+
+$Y_{it}=\alpha_i+\lambda_t+\beta X_{it}+u_{it}$ において、能力や企業文化の安定した部分など $\alpha_i$ が時間を通じて一定なら、個体平均を引くか一期階差を取ることで除去できます。共通の年効果 $\lambda_t$ は別途制御する必要があります。**項が代数的に消えることと、$\beta$ が因果効果であることは別です。**
+
+<FormulaBox
+  label="個体内変換"
+  formula="Y_{it}-\bar Y_i = (\lambda_t-\bar\lambda_i)+\beta(X_{it}-\bar X_i)+(u_{it}-\bar u_i)"
+  description="個体平均を引くと α_i と時間不変の X は消えます。ただし年効果は、この変換だけでは消えません。"
+/>
+
+仮に3人を2年間観測します。全員に共通する賃金上昇100万ウォンを差し引くと、就学年数の1年増加は賃金の200万ウォン増加と対応します。
+
+<LectureTable
+  title="仮想的な2時点の変化：共通の上昇と個体内変化を分ける"
+  headers={["人", "就学年数の変化（年）", "賃金の変化（万ウォン）", "共通の100万ウォンを控除"]}
+  rows={[
+    ["A", "0", "100", "0"],
+    ["B", "1", "300", "200"],
+    ["C", "2", "500", "400"],
+  ]}
+/>
+
+横断面の水準比較には、もともと教育年数が長い人の高賃金も混ざります。しかし、教育の選択が将来の賃金ショックに反応していたなら、個体内で得た200万ウォンの関連も因果効果ではありません。
+
+固定効果推定の一致性には、例えば $E(u_{it}\mid X_{i1},\ldots,X_{iT},\alpha_i)=0$ という**厳密な外生性**と、時間とともに変わる交絡に対処する設計が必要です。現在の賃金ショックが翌年の教育選択に影響するフィードバックも、この条件に反します。年効果を入れても、人によって異なる景気への曝露は残りえます。
+
+## 2. 変量効果が効率性を得られるのは、より強い仮定の下だけ
+
+変量効果は $\alpha_i$ を誤差構造の一部としてモデル化します。$\alpha_i$ と説明変数が無相関で、外生性と誤差共分散についての仮定も満たす場合に限り、固定効果より効率的になりえます。$\alpha_i$ が教育選択と相関すれば、効率性の見かけ上の利得はバイアスを伴います。ハウスマン検定は仮定を点検する補助にはなりますが、選択が生じる制度的背景の説明には代わりません。
+
+<LectureTable
+  title="各推定法が扱うものと残す問題"
+  headers={["推定法", "固定された α_i の扱い", "主な限界"]}
+  rows={[
+    ["固定効果", "時間不変の α_i を除去", "時間不変の X の水準効果は推定できない"],
+    ["一期階差", "同じ α_i を除去", "2時点では固定効果と同じ傾き"],
+    ["変量効果", "α_i を誤差の一部としてモデル化", "α_i と X の無相関が必要"],
+  ]}
+/>
+
+同じ標本・モデルを用いる均衡2時点パネルでは、固定効果と一期階差の傾き推定値は一致します。3時点以上での相対的な効率性は、誤差の系列相関構造によって変わります。「2時点だから階差の効率性が失われる」という一般則はありません。
+
+同一人物の年ごとの誤差が相関するなら、標準誤差を**人物単位でクラスタ化**します。一方、同じ年の複数人にまたがる相関は横断面方向の別問題です。均一な共通ショックは年固定効果で吸収できますが、異質な共通ショックを人物単位のクラスタ化だけで解決することはできません。設計によっては人物・年の二方向クラスタ化や別の推論法を検討します。年が4つしかない場合、時間クラスタ4個に依存する通常の漸近推論も信頼しにくくなります。クラスタ標準誤差は識別を修復する道具ではありません。
+
+<Callout type="warning">
+固定効果だけで因果関係が自動的に得られるわけではありません。時間とともに変わる欠落変数、逆因果、測定誤差は残ります。処置が予想賃金や過去のショックに反応すれば、厳密な外生性が崩れえます。パネルと操作変数は互いの代用品ではありません。
+</Callout>
+
+## 理解を確かめる
+
+**問題。** 20社を4年間観測し、固定効果回帰から研修費の1％増加と生産性の0.3％増加の関連を得ました。同じ年の景況が両変数に影響するなら、どの固定効果を追加できますか。企業単位のクラスタ化だけで共通ショックの問題は消えますか。
+
+**解答。** 年固定効果は全企業に等しく及ぶ共通の水準ショックを吸収します。景況への曝露が企業ごとに違えば、追加の設計が必要です。企業単位のクラスタ化は企業内の系列相関を許しますが、同じ年の企業間相関まで自動的には処理しません。0.3％を因果効果と呼ぶには、時間とともに変わる交絡とフィードバックも確認しなければなりません。企業クラスタ20個、年クラスタ4個という少数クラスタでの標準誤差近似にも注意が必要です。
+
+## 参考文献
+
+- Joshua Angrist and Jörn-Steffen Pischke, *Mostly Harmless Econometrics*, ch. 5
+- Jeffrey Wooldridge, *Econometric Analysis of Cross Section and Panel Data*, ch. 10
+- Peter Hull, [*Fixed Effects Identify a Weighted Sum of First- and Long-Differences Only Under a Parallel Trends Assumption*](https://www.mit.edu/~hull/FEvFD.pdf)
+- MIT OpenCourseWare, [*Linear Panel Data Models Under Strict and Weak Exogeneity*](https://ocw.mit.edu/courses/14-382-econometrics-spring-2017/049489cf2ae5d050409ee2c5cbd5346f_MIT14_382S17_lec8.pdf)
+- Cameron and Miller, [*A Practitioner's Guide to Cluster-Robust Inference*](https://escholarship.org/uc/item/1jq5d0pq)

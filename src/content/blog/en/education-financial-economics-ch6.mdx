@@ -1,0 +1,84 @@
+---
+track: academy
+series: financial-economics
+chapter: 6
+title: "Financial Economics — The Term Structure of Interest Rates"
+description: "Separate no-arbitrage forward rates from expectations of future short rates, and interpret term premia without assuming they are always positive."
+pubDate: 2026-09-15
+updatedDate: 2026-09-27
+category: Economics
+tags: ["economics", "financial economics", "term structure", "expectations hypothesis", "forward rate"]
+locale: en
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+market: GLOBAL
+contentScope: global
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Financial Economics — Risk-free rates differ across maturities
+
+The risk-free rate introduced earlier covered one period. In practice, government-bond yields differ by maturity. The risk-free rate used in a firm's WACC is also an input to [financial management](/en/education-finance-ch12/). Here we read the yield curve through asset prices: what, exactly, does it say about expectations?
+
+## 1. No-arbitrage and the expectations hypothesis are different claims
+
+Begin with **zero-coupon bonds** that share credit, currency, and liquidity characteristics. Their prices define spot and forward rates at each maturity. No-arbitrage links the prices of an investment fixed today for one year to those of a two-year investment and a forward contract. But **next year's one-year spot rate has not been fixed yet**. No-arbitrage alone therefore does not equate the *expected returns* on a long bond and a strategy that rolls over short bonds. That conclusion requires an extra assumption, such as the zero term premium of the pure expectations hypothesis.
+
+<FormulaBox
+  label="One-year forward rate starting in one year (annually compounded zero-coupon bonds)"
+  formula="1+f_{t,1,2}=\frac{(1+y_t^{(2)})^2}{1+y_t^{(1)}}"
+  description="With a 2% one-year spot rate and a 3% two-year spot rate, today's one-year forward rate starting in one year is about 4.01%. It is neither the future realized rate nor necessarily its real-world expected value."
+/>
+
+Under suitable maturity and compounding approximations, the pure expectations hypothesis reads an $n$-year yield as the average expected path of future short rates. More generally, **the long yield combines that expected path and a term premium**. The term premium compensates for interest-rate risk, but its sign can be positive or negative depending on definition, model, and date. A separate *liquidity-premium hypothesis* assumes positive compensation; that is not a universal sign rule for term premia. An upward-sloping curve alone does not prove that short rates are expected to rise.
+
+## 2. A forward rate is not the future realized spot rate
+
+A forward rate is a **price-derived rate** calculated from bond prices traded today. A particular no-arbitrage term-structure model can relate it to a risk-neutral measure, but the observed forward rate cannot simply be read as the real-world expectation of the future short rate. Even writing “forward rate = risk-neutral expectation” without specifying the measure, compounding, and convexity assumptions is too compressed. Unforeseen shocks also affect the realized rate. The gap between a forward and an ex-post spot rate contains both a risk premium and forecast error; a simple regression slope that does not separate them cannot decide the expectations hypothesis.
+
+For example, suppose the approximately 4.01% forward rate above contains a **+1 percentage-point term premium defined on the forward rate**. Then the real-world expectation of next year's short rate is approximately 3.01%. A −1 percentage-point premium would instead imply approximately 5.01%. If the 1-point premium were defined on the *two-year yield*, the calculation would differ. Always state which rate bears the premium.
+
+<LectureTable
+  title="Different expected paths with the same 4.01% forward rate"
+  headers={["Term premium on the forward rate", "Expected one-year rate next year (approx.)", "Interpretation"]}
+  rows={[
+    ["0 percentage points", "4.01%", "Pure expectations hypothesis"],
+    ["+1 percentage point", "3.01%", "Expectation below the forward rate"],
+    ["−1 percentage point", "5.01%", "Expectation above the forward rate"],
+  ]}
+/>
+
+<LectureTable
+  title="Three layers in interpreting the term structure"
+  headers={["Account", "What the long yield reflects", "Limitation"]}
+  rows={[
+    ["Pure expectations hypothesis", "Expected short-rate path", "Assumes a zero term premium"],
+    ["Term-premium decomposition", "Expected path plus a potentially positive or negative premium", "Estimates differ by model"],
+    ["Maturity preferences and constraints", "Maturity-specific supply and demand", "Weakens the assumption of perfect substitutability"],
+  ]}
+/>
+
+When monetary policy moves short rates, the long-rate response depends on both expectations and premia. Breaking a nominal rate into real rates and expected inflation is a different layer from the real exchange rate studied in international finance. This chapter concerns risk-free claims across maturities.
+
+<Callout type="warning">
+The term structure and bond duration in financial management answer different questions. Duration approximates how a bond's price changes when its yield changes. Here the question is how yields across maturities reflect expectations and premia. A single CAPM beta does not explain the government-bond curve.
+</Callout>
+
+Bank runs and maturity transformation translate steepening curves or surging short rates into bank earnings and losses. The curve's theory belongs here; intermediary failure belongs in the banking-crisis discussion.
+
+## Check your understanding
+
+**Problem.** Zero-coupon bonds with the same credit and liquidity conditions have a one-year spot rate of 2% and a two-year spot rate of 3%. What is the one-year forward rate starting in one year under annual compounding? If that forward rate contains a +1 percentage-point term premium, what is the approximate real-world expected future one-year rate?
+
+**Solution.** The forward rate is $(1.03)^2/1.02-1\approx4.01\%$. The problem defines the **+1 percentage-point premium on the forward rate**, so the expected short rate is approximately $4.01-1=3.01\%$. A negative premium or a premium attached to the *two-year yield* would change the answer. The two observed spot rates alone do not separately identify the risk premium or an expectation of rate increases.
+
+## References
+
+- John Cochrane, *Asset Pricing*, chapters on the term structure
+- John Campbell, Andrew Lo, and A. Craig MacKinlay, *The Econometrics of Financial Markets*, ch. 10–11
+- Federal Reserve, [*Three-Factor Nominal Term Structure Model*](https://www.federalreserve.gov/data/three-factor-nominal-term-structure-model.htm) — definition and sign of term premia
+- Federal Reserve, [*Cracking the Conundrum*](https://www.federalreserve.gov/pubs/feds/2007/200746/) — expected short rates versus term premia

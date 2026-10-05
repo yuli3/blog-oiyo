@@ -1,0 +1,76 @@
+---
+track: academy
+series: econometrics
+chapter: 6
+title: "계량경제학 — 시계열 정상성과 허구회귀"
+description: "추세가 있는 두 시계열을 그냥 회귀하면 t값이 커 보이는 이유를 보이고, 차분·공적분과 그랜저 인과를 식별과 구분합니다."
+pubDate: 2026-09-15
+updatedDate: 2026-09-27
+category: Economics
+tags: ["경제학", "계량경제학", "시계열", "단위근", "허구회귀"]
+locale: ko
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+market: GLOBAL
+contentScope: global
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 계량경제학 — 시간이 붙은 회귀는 평균이 멈추는지부터 묻는다
+
+횡단면 OLS는 관측이 독립에 가깝다고 가정한다. 올해 물가가 작년 물가에 붙어 있으면 그 가정이 깨진다. [5장](/ko/education-econometrics-ch5/)의 패널은 개인 이질성이고, 이 장은 시간의 기억이다.
+
+## 1. 정상성이 없으면 t값이 거짓으로 커진다
+
+약정상성(weak stationarity)은 평균과 분산이 시간에 따라 일정하고, 두 시점의 공분산이 달력 날짜가 아니라 시차에만 의존한다는 조건이다. 추세를 제거하면 정상인 계열과 충격이 영구히 누적되는 단위근 계열은 다르다. 확률보행 $Y_t=Y_{t-1}+\varepsilon_t$은 후자의 전형이다. 서로 독립인 두 확률보행을 수준으로 회귀하면 표본이 길수록 $R^2$와 통상 $t$값이 커 보이는 경우가 있다. 이것이 허구회귀다.
+
+<FormulaBox
+  label="단위근"
+  formula="Y_t = \rho Y_{t-1} + ε_t,\quad \rho=1"
+  description="ρ가 1이면 충격이 누적된다. 1차 차분 ΔY_t=ε_t는 정상일 수 있다. 검정의 기각 실패를 ‘단위근이 증명됐다’로 읽지 않는다."
+/>
+
+가상으로 독립인 두 난수 보행 100개를 회귀해 t=4.2, R²=38%가 나와도 관계는 없다. 차분한 뒤 t=0.4로 떨어지면 그 4.2는 추세가 만든 착시다.
+
+ADF 검정의 통상 귀무가설은 **단위근이 있다**는 것이다. 기각하지 못했다는 말은 단위근을 증명했다는 말이 아니다. 상수·결정적 추세를 포함할지, 몇 개의 차분 시차로 잔차의 자기상관을 다룰지는 자료와 모형에 따라 정해야 한다. 구조 변화나 짧은 표본에서는 검정력이 낮을 수 있다.
+
+## 2. 공적분은 차분으로 지워서는 안 되는 장기 관계다
+
+두 $I(1)$ 시계열 $Y_t$와 $X_t$의 어떤 선형결합 $z_t=Y_t-\alpha-\beta X_t$가 $I(0)$이면 공적분이다. 이때 수준 자료에 장기 통계 관계가 있을 수 있고, 무조건 차분하면 그 정보를 잃는다. 그러나 잔차의 정상성을 **공적분용 임계값**으로 검정해야 하며, 수준 OLS의 통상 $t$값을 정상 회귀처럼 읽으면 안 된다. 공적분 자체는 $X$가 $Y$를 일으킨다는 인과 식별도 아니다.
+
+오차수정모형은 전기의 장기 관계 이탈이 이번 기의 변화에 어떻게 연결되는지 쓴다. 예를 들어 $\Delta Y_t=\lambda z_{t-1}+\gamma\Delta X_t+e_t$에서 $\lambda=-0.2$라면, $z_{t-1}=10$인 경우 다른 항이 0일 때 이번 기 $Y$ 변화는 $-2$다. 이는 조정 속도의 **가상 계산**이지 특정 경제의 추정 결과가 아니다. $\lambda$의 부호·안정성과 잔차 진단도 확인해야 한다.
+
+<LectureTable
+  title="시계열에서 자주 바꾸는 이름"
+  headers={["말", "실제", "한계"]}
+  rows={[
+    ["그랜저 인과", "예측에 도움이 되나", "개입·식별이 아님"],
+    ["단위근 기각 실패", "ρ=1을 못 버림", "검정력 부족일 수 있음"],
+    ["공적분", "장기 균형 잔차", "구조 변화면 깨짐"],
+  ]}
+/>
+
+그랜저 인과는 “X의 과거가 Y의 예측을 돕는가”이다. 정책이 Y를 바꿨다는 문장이 아니다. 선행 지표와 원인을 같은 말로 쓰지 않는다.
+
+<Callout type="warning">
+계절·추세를 더미로 지웠다고 식별이 끝나지 않는다. 구조 변화 전후를 한 회귀에 넣으면 ρ도 β도 섞인다. 거시 시계열 길이는 짧다. 100기 t값을 횡단면 만 명처럼 읽지 않는다.
+</Callout>
+
+자산 가격의 예측 불가능성은 [금융경제학 3장](/ko/education-financial-economics-ch3/)의 정보 집합과 붙는다. 계량은 그 회귀가 허구가 아닌지를 먼저 묻는다.
+
+## 확인문제
+
+**문제.** 소비와 GDP의 연간 관측 50개가 함께 올랐고 수준 회귀에서 통상 $t=6$이다. 두 계열이 단위근을 가질 가능성이 있다. 차분 회귀의 $t=1.1$이고 잔차 공적분 검정도 귀무가설을 기각하지 못했다면 무엇을 결론 내릴 수 있는가?
+
+**풀이.** 수준의 $t=6$만으로 관계나 인과효과를 주장하지 않는다. 차분 결과는 이 예에서 단기 선형 연관의 증거가 약하다는 신호다. 공적분 검정의 기각 실패도 **공적분 부재의 증명은 아니다**. 검정식의 추세·시차, 표본 길이, 구조 변화를 점검한다. 적합한 검정에서 공적분 근거가 남으면 오차수정모형으로 장기 관계와 단기 조정을 구분하되, 인과 해석은 별도의 식별 설계가 필요하다.
+
+## 참고 자료
+
+- Clive Granger and Paul Newbold, “Spurious Regressions in Econometrics,” *Journal of Econometrics* (1974)
+- James Stock and Mark Watson, *Introduction to Econometrics*, time series chapters
+- Jeffrey Wooldridge, *Introductory Econometrics*, ch. 11–18
+- Engle and Granger, [*Co-Integration and Error Correction: Representation, Estimation, and Testing*](https://www.ntuzov.com/Nik_Site/Niks_files/Research/papers/stat_arb/EG_1987.pdf)
