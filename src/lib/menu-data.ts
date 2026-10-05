@@ -17,7 +17,7 @@ export type MenuItem = {
 
 export type MenuMap = Record<CountryType, MenuItem[]>;
 
-const IMG = '/img/ahoxy/menu';
+const IMG = '/img/oiyo/menu';
 
 const korea: MenuItem[] = [
   { menu: "김밥 꼬마김밥 충무김밥 참치김밥 유부김밥 불고기김밥 제육김밥", image: `${IMG}/gimbap.webp`, tags: ["점심", "저녁", "혼밥", "회식"] },
