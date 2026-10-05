@@ -29,6 +29,7 @@ const PAGES_DYNAMIC_LIMIT = 100;
 const root = process.cwd();
 const inputPath = path.join(root, "data/redirects/canonical-redirects.txt");
 const noSlashPath = path.join(root, "data/redirects/pages-noslash-sources.txt");
+const extraStaticPath = path.join(root, "data/redirects/pages-static-redirects.txt");
 const pagesRedirectsPath = path.join(root, "public/_redirects");
 const outputDir = path.join(root, "reports/cloudflare-bulk-redirects");
 const checkOnly = process.argv.includes("--check");
@@ -234,6 +235,33 @@ noSlashText.split(/\r?\n/).forEach((raw, index) => {
   noSlashRules.push({ raw: `${source}  ${target}  301`, reason: "slash-less twin of a moved article (Pages only)" });
 });
 
+// 2026-10-05: hand-listed Pages-only static rules (see the header of
+// data/redirects/pages-static-redirects.txt for why they are not Bulk items).
+const extraStaticRules = [];
+let extraStaticText = "";
+try {
+  extraStaticText = await readFile(extraStaticPath, "utf8");
+} catch (error) {
+  if (error.code !== "ENOENT") throw error;
+}
+extraStaticText.split(/\r?\n/).forEach((raw, index) => {
+  const line = raw.trim();
+  if (!line || line.startsWith("#")) return;
+  const where = `pages-static-redirects.txt line ${index + 1}`;
+  const fields = line.split(/\s+/);
+  if (fields.length !== 3 || fields[2] !== "301" || isDynamic(fields[0]) || isDynamic(fields[1])) {
+    errors.push(`Expected "source target 301" without wildcards at ${where}: ${raw}`);
+    return;
+  }
+  const [source, target] = fields;
+  if (bulkSources.has(`${HOST}${source}`) || seenNoSlash.has(source) ||
+      extraStaticRules.some((rule) => rule.source === source)) {
+    errors.push(`Source already redirected elsewhere at ${where}: ${source}`);
+    return;
+  }
+  extraStaticRules.push({ source, raw: `${source}  ${target}  301` });
+});
+
 const chainSources = new Set(dedupedExportable.map((item) => `https://${item.redirect.source_url}`));
 const chains = dedupedExportable
   .filter((item) => chainSources.has(item.redirect.target_url))
@@ -273,11 +301,14 @@ const residualText = [
   ...PAGES_FIRST_RULES.map((rule) => `# ${rule.reason}\n${rule.raw}`),
   ...(noSlashRules.length ? [`# ${noSlashRules[0].reason}`] : []),
   ...noSlashRules.map((rule) => rule.raw),
+  ...(extraStaticRules.length ? ["# extra exact-match rule (Pages only)"] : []),
+  ...extraStaticRules.map((rule) => rule.raw),
   ...residual.map((rule) => `# ${rule.reason}\n${rule.raw}`),
   "",
 ].join("\n");
 const pagesDynamic = residual.filter((rule) => isDynamic(rule.source) || isDynamic(rule.target)).length;
-const pagesStatic = PAGES_FIRST_RULES.length + noSlashRules.length + residual.length - pagesDynamic;
+const pagesStatic =
+  PAGES_FIRST_RULES.length + noSlashRules.length + extraStaticRules.length + residual.length - pagesDynamic;
 if (pagesStatic > PAGES_STATIC_LIMIT) {
   errors.push(`Pages static redirects ${pagesStatic} exceed the limit ${PAGES_STATIC_LIMIT}`);
 }
@@ -293,6 +324,7 @@ const manifest = {
   bulk_items: apiItems.length,
   residual_rules: residual.length,
   pages_noslash_rules: noSlashRules.length,
+  pages_extra_static_rules: extraStaticRules.length,
   pages_static_rules: pagesStatic,
   pages_dynamic_rules: pagesDynamic,
   free_plan_limit: DEFAULT_LIMIT,
