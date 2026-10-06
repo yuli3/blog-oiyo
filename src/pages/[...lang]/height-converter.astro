@@ -4,6 +4,7 @@ import HeightConverter from "../../components/tools/HeightConverter";
 import RelatedToolLinks from "../../components/RelatedToolLinks.astro";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
+import { heightPages } from "../../lib/height-equivalent";
 
 type ActiveLocale = (typeof locales)[number];
 
@@ -320,6 +321,30 @@ const structuredData = {
 
     {/* Optional S: one cross-link tile to existing ring/shoe channel only. */}
     <RelatedToolLinks locale={locale} current="height-converter" slugs={["ring-size-converter", "shoe-size-converter"]} />
+
+    {/* Per-height answer pages (2026-10-06). Listed here so each has a link from the page that
+        already ranks; Korean and English only, the languages those searches come in. */}
+    {(locale === "ko" || locale === "en") && (
+      <section class="mt-5 sm:mt-8 rounded-2xl border border-border bg-card p-4 sm:p-6">
+        <h2 class="text-xl font-bold text-foreground">{locale === "ko" ? "키별 남녀 환산표" : "Height equivalent chart by height"}</h2>
+        {(["female", "male"] as const).map((gender) => (
+          <div class="mt-4">
+            <h3 class="text-sm font-bold text-muted-foreground">
+              {locale === "ko" ? (gender === "female" ? "여자 키 → 남자 키" : "남자 키 → 여자 키") : (gender === "female" ? "Female to male" : "Male to female")}
+            </h3>
+            <ul class="mt-2 flex flex-wrap gap-1.5">
+              {heightPages(locale).filter((p) => p.gender === gender).map((p) => (
+                <li>
+                  <a class="inline-flex min-h-9 items-center rounded-full border border-border bg-muted px-3 text-sm font-semibold text-foreground hover:border-primary" href={`/${locale}/height-converter/${p.slug}/`}>
+                    {locale === "ko" ? `${p.cm}cm` : `${p.feet}'${p.inches}"`}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </section>
+    )}
 
     <section class="mt-5 sm:mt-8 rounded-2xl border border-border bg-card p-4 sm:p-6 shadow-sm">
       <h2 class="text-xl font-bold text-foreground">{c.introTitle}</h2>

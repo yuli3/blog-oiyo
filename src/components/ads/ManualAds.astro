@@ -84,6 +84,11 @@ const active = config.enabled && Boolean(client) && !noindex;
     if(heads.length>=cfg.minHeadings){var mid=box("article-mid",cfg.slots.articleMid,true);if(mid)prose.insertBefore(mid,heads[2])}
     var end=box("article-end",cfg.slots.articleEnd,false);
     if(end)prose.parentNode.insertBefore(end,prose.nextSibling);
+  }else if(main.querySelector("[data-manual-ad-after]")){
+    // A static answer page marks where its answer ends.
+    var mark=main.querySelector("[data-manual-ad-after]");
+    var after=box("article-end",cfg.slots.articleEnd,false);
+    if(after)mark.parentNode.insertBefore(after,mark.nextSibling);
   }else if(cfg.isTool){
     var island=main.querySelector("astro-island");
     var tool=island&&box("tool-result",cfg.slots.toolResult,false);

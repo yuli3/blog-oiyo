@@ -1,0 +1,199 @@
+---
+/**
+ * One page per height: "여자 키 170cm는 남자 키로?" / "5'7" female to male height".
+ *
+ * Why: over 90 days (2026-07-05..10-03) 150 of the family's 207 search clicks came from
+ * the height converter, on "male to female height converter" style queries, and Google's
+ * own suggestions for those queries are per-height ("여자 키 170 남자 키 환산",
+ * "5'7 female to male height"). Each page answers one of them outright and links back to
+ * the tool. Korean and English only, because those are the languages the queries come in.
+ */
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { siteConfig } from "../../../config/site.config";
+import {
+  HEIGHT_FEMALE_MEAN,
+  HEIGHT_FEMALE_SD,
+  HEIGHT_GAP,
+  HEIGHT_MALE_MEAN,
+  HEIGHT_MALE_SD,
+  formatFeetInches,
+  heightEquivalent,
+  heightPages,
+  type HeightPage,
+} from "../../../lib/height-equivalent";
+
+export function getStaticPaths() {
+  return (["ko", "en"] as const).flatMap((lang) =>
+    heightPages(lang).map((page) => ({ params: { lang, height: page.slug }, props: { locale: lang, page } })),
+  );
+}
+
+const { locale, page } = Astro.props as { locale: "ko" | "en"; page: HeightPage };
+const ko = locale === "ko";
+const result = heightEquivalent(page.gender, page.cm);
+const female = page.gender === "female";
+const cmText = (cm: number) => `${cm.toFixed(1).replace(/\.0$/, "")}cm`;
+const both = (cm: number) => (ko ? `${cmText(cm)} (${formatFeetInches(cm)})` : `${formatFeetInches(cm)} (${cmText(cm)})`);
+const mine = ko ? cmText(page.cm) : `${page.feet}'${page.inches}"`;
+const top = result.percentile >= 50;
+const share = (top ? 100 - result.percentile : result.percentile).toFixed(1);
+
+const t = ko
+  ? {
+      eyebrow: "남녀 키 환산",
+      title: `${female ? "여자" : "남자"} 키 ${mine}는 ${female ? "남자" : "여자"} 키로 ${cmText(result.byGap)}`,
+      description: `${female ? "여자" : "남자"} ${mine}를 ${female ? "남자" : "여자"} 키로 환산하면 평균 차이 기준 ${cmText(result.byGap)}, 같은 순위 기준 ${cmText(result.byRank)}예요. 상위 몇 %인지와 주변 키 환산표도 함께 볼 수 있어요.`,
+      answerLabel: `${female ? "남자" : "여자"} 키로 환산하면`,
+      gapNote: `남녀 평균 키 차이 ${HEIGHT_GAP}cm를 ${female ? "더한" : "뺀"} 값이에요. 키 변환기가 쓰는 방식과 같아요.`,
+      rankLabel: "같은 순위로 맞추면",
+      rankNote: `${female ? "여자" : "남자"} 중에서의 위치(표준편차 기준)가 같은 ${female ? "남자" : "여자"} 키예요.`,
+      rankTitle: `${female ? "여자" : "남자"} ${mine}는 어느 정도 키일까요?`,
+      rankBody: `이 계산기의 기준값으로 보면 ${female ? "여자" : "남자"} ${mine}는 ${top ? "상위" : "하위"} ${share}%예요. ${female ? "여자" : "남자"} 100명 중 약 ${Math.round(result.percentile)}명이 이보다 작아요.`,
+      whyTwoTitle: "환산값이 두 가지인 이유",
+      whyTwo: `평균 차이를 더하거나 빼는 방법은 간단하지만, 남자와 여자는 키가 퍼져 있는 정도가 달라요(표준편차 남 ${HEIGHT_MALE_SD}cm, 여 ${HEIGHT_FEMALE_SD}cm). 그래서 평균에서 멀어질수록 "같은 순위"로 맞춘 값과 차이가 벌어져요. 평균 근처에서는 두 값이 거의 같아요.`,
+      tableTitle: "주변 키 환산표",
+      colMine: female ? "여자 키" : "남자 키",
+      colGap: `${female ? "남자" : "여자"} 키 (평균 차이)`,
+      colRank: `${female ? "남자" : "여자"} 키 (같은 순위)`,
+      colPct: "순위",
+      pct: (p: number) => (p >= 50 ? `상위 ${(100 - p).toFixed(1)}%` : `하위 ${p.toFixed(1)}%`),
+      basisTitle: "계산 기준",
+      basis: `남자 평균 ${HEIGHT_MALE_MEAN}cm(표준편차 ${HEIGHT_MALE_SD}cm), 여자 평균 ${HEIGHT_FEMALE_MEAN}cm(표준편차 ${HEIGHT_FEMALE_SD}cm)를 쓰고, 키가 정규분포를 따른다고 가정해요. 키 변환기와 같은 기준값이에요. 통계적 참고값이라 개인의 건강이나 성장을 판단하는 데 쓰지 않아요.`,
+      toolCta: "다른 키로 직접 계산하기",
+      otherTitle: `${female ? "남자" : "여자"} 키 → ${female ? "여자" : "남자"} 키 환산도 보기`,
+      crumb: "키 변환기",
+    }
+  : {
+      eyebrow: "Height equivalent",
+      title: `${mine} ${female ? "female to male" : "male to female"} height: ${formatFeetInches(result.byGap)}`,
+      description: `A ${mine} ${female ? "woman" : "man"} is equivalent to a ${formatFeetInches(result.byGap)} ${female ? "man" : "woman"} by the average gap (${cmText(result.byGap)}), or ${formatFeetInches(result.byRank)} at the same rank. See the percentile and a chart of nearby heights.`,
+      answerLabel: `Equivalent ${female ? "male" : "female"} height`,
+      gapNote: `This ${female ? "adds" : "subtracts"} the ${HEIGHT_GAP} cm gap between the male and female averages. It is the method the height converter uses.`,
+      rankLabel: "Matched by rank",
+      rankNote: `The ${female ? "male" : "female"} height that sits at the same place among ${female ? "men" : "women"} (same number of standard deviations from the average).`,
+      rankTitle: `How tall is ${mine} for a ${female ? "woman" : "man"}?`,
+      rankBody: `With the reference values this calculator uses, a ${mine} ${female ? "woman" : "man"} is in the ${top ? "top" : "bottom"} ${share}%. About ${Math.round(result.percentile)} in 100 ${female ? "women" : "men"} are shorter.`,
+      whyTwoTitle: "Why there are two answers",
+      whyTwo: `Adding or subtracting the average gap is simple, but male and female heights are not spread equally (standard deviation ${HEIGHT_MALE_SD} cm for men, ${HEIGHT_FEMALE_SD} cm for women). The further a height is from the average, the more the rank-matched value drifts from the gap value. Near the average the two are almost the same.`,
+      tableTitle: "Chart of nearby heights",
+      colMine: female ? "Female height" : "Male height",
+      colGap: `${female ? "Male" : "Female"} (average gap)`,
+      colRank: `${female ? "Male" : "Female"} (same rank)`,
+      colPct: "Rank",
+      pct: (p: number) => (p >= 50 ? `top ${(100 - p).toFixed(1)}%` : `bottom ${p.toFixed(1)}%`),
+      basisTitle: "What this is based on",
+      basis: `Male average ${HEIGHT_MALE_MEAN} cm (standard deviation ${HEIGHT_MALE_SD} cm) and female average ${HEIGHT_FEMALE_MEAN} cm (standard deviation ${HEIGHT_FEMALE_SD} cm), the Korean reference values the height converter uses, assuming height is normally distributed. Averages differ by country, so treat this as a statistical reference. It says nothing about health or growth.`,
+      toolCta: "Try another height in the converter",
+      otherTitle: `See ${female ? "male to female" : "female to male"} heights too`,
+      crumb: "Height converter",
+    };
+
+const all = heightPages(locale);
+const sameGender = all.filter((p) => p.gender === page.gender);
+const index = sameGender.findIndex((p) => p.slug === page.slug);
+const nearby = sameGender.slice(Math.max(0, index - 4), index + 5);
+const opposite = all.filter((p) => p.gender !== page.gender);
+// The other direction, starting from the height this page arrived at.
+const oppositeNear = [...opposite].sort((a, b) => Math.abs(a.cm - result.byGap) - Math.abs(b.cm - result.byGap)).slice(0, 5).sort((a, b) => a.cm - b.cm);
+const label = (p: HeightPage) => (ko ? cmText(p.cm) : `${p.feet}'${p.inches}"`);
+const href = (p: HeightPage) => `/${locale}/height-converter/${p.slug}/`;
+const pageUrl = `${siteConfig.url}${href(page)}`;
+const toolUrl = `/${locale}/height-converter/`;
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "FAQPage",
+      mainEntity: [
+        { "@type": "Question", name: t.title.split(":")[0], acceptedAnswer: { "@type": "Answer", text: t.description } },
+        { "@type": "Question", name: t.rankTitle, acceptedAnswer: { "@type": "Answer", text: t.rankBody } },
+        { "@type": "Question", name: t.whyTwoTitle, acceptedAnswer: { "@type": "Answer", text: t.whyTwo } },
+      ],
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: t.crumb, item: `${siteConfig.url}${toolUrl}` },
+        { "@type": "ListItem", position: 2, name: t.title, item: pageUrl },
+      ],
+    },
+  ],
+};
+---
+
+<BaseLayout title={t.title} description={t.description} availableLocales={[locale]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <div class="mx-auto max-w-3xl px-4 py-5 sm:py-8">
+    <nav class="text-sm text-muted-foreground" aria-label="Breadcrumb">
+      <a class="font-semibold text-primary underline-offset-4 hover:underline" href={toolUrl}>{t.crumb}</a>
+      <span aria-hidden="true"> / </span>{mine}
+    </nav>
+
+    <section class="mt-3 rounded-2xl border border-border bg-card p-4 sm:p-6">
+      <p class="text-sm font-semibold uppercase tracking-wide text-primary">{t.eyebrow}</p>
+      <h1 class="mt-2 text-2xl font-black tracking-tight text-foreground sm:text-3xl">{t.title}</h1>
+      <div class="mt-5 grid gap-3 sm:grid-cols-2">
+        <div class="rounded-xl border border-primary bg-primary/10 p-4">
+          <p class="text-sm font-semibold text-muted-foreground">{t.answerLabel}</p>
+          <p class="mt-1 text-3xl font-black text-foreground">{both(result.byGap)}</p>
+          <p class="mt-2 text-sm leading-6 text-muted-foreground">{t.gapNote}</p>
+        </div>
+        <div class="rounded-xl border border-border bg-muted p-4">
+          <p class="text-sm font-semibold text-muted-foreground">{t.rankLabel}</p>
+          <p class="mt-1 text-3xl font-black text-foreground">{both(result.byRank)}</p>
+          <p class="mt-2 text-sm leading-6 text-muted-foreground">{t.rankNote}</p>
+        </div>
+      </div>
+      <a class="mt-5 inline-flex min-h-11 items-center rounded-full bg-primary px-5 text-sm font-bold text-primary-foreground" href={toolUrl}>{t.toolCta}</a>
+    </section>
+
+    <section class="mt-5 rounded-2xl border border-border bg-card p-4 sm:p-6" data-manual-ad-after>
+      <h2 class="text-xl font-bold text-foreground">{t.rankTitle}</h2>
+      <p class="mt-3 leading-8 text-foreground">{t.rankBody}</p>
+      <h2 class="mt-6 text-xl font-bold text-foreground">{t.whyTwoTitle}</h2>
+      <p class="mt-3 leading-8 text-foreground">{t.whyTwo}</p>
+    </section>
+
+    <section class="mt-5 rounded-2xl border border-border bg-card p-4 sm:p-6">
+      <h2 class="text-xl font-bold text-foreground">{t.tableTitle}</h2>
+      <div class="mt-4 overflow-x-auto">
+        <table class="w-full text-left text-sm">
+          <thead>
+            <tr class="border-b border-border text-muted-foreground">
+              <th class="py-2 pr-3 font-semibold">{t.colMine}</th>
+              <th class="py-2 pr-3 font-semibold">{t.colGap}</th>
+              <th class="py-2 pr-3 font-semibold">{t.colRank}</th>
+              <th class="py-2 font-semibold">{t.colPct}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {nearby.map((p) => {
+              const r = heightEquivalent(p.gender, p.cm);
+              const current = p.slug === page.slug;
+              return (
+                <tr class={`border-b border-border ${current ? "bg-primary/10 font-bold" : ""}`}>
+                  <td class="py-2 pr-3">{current ? label(p) : <a class="text-primary underline-offset-4 hover:underline" href={href(p)}>{label(p)}</a>}</td>
+                  <td class="py-2 pr-3">{both(r.byGap)}</td>
+                  <td class="py-2 pr-3">{both(r.byRank)}</td>
+                  <td class="py-2">{t.pct(r.percentile)}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="mt-5 rounded-2xl border border-border bg-card p-4 sm:p-6">
+      <h2 class="text-xl font-bold text-foreground">{t.otherTitle}</h2>
+      <ul class="mt-3 flex flex-wrap gap-2">
+        {oppositeNear.map((p) => (
+          <li><a class="inline-flex min-h-11 items-center rounded-full border border-border bg-muted px-4 text-sm font-semibold text-foreground hover:border-primary" href={href(p)}>{label(p)}</a></li>
+        ))}
+      </ul>
+      <h2 class="mt-6 text-xl font-bold text-foreground">{t.basisTitle}</h2>
+      <p class="mt-3 text-sm leading-7 text-muted-foreground">{t.basis}</p>
+    </section>
+  </div>
+</BaseLayout>
