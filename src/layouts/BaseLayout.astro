@@ -6,6 +6,7 @@ import "../styles/global.css";
 import "katex/dist/katex.min.css";
 import "@fontsource-variable/inter";
 import DrawerCategories from '../components/DrawerCategories.astro';
+import ManualAds from "../components/ads/ManualAds.astro";
 import { webApplicationJsonLd } from "../lib/seo/structured-data";
 import toolWebAppSlugs from "../config/tool-webapp-slugs.json";
 
@@ -442,8 +443,10 @@ const footerLabels = footerCopy[locale] ?? footerCopy.en;
       )}
       <slot />
     </main>
+    {/* Placed right after the content it rearranges, so it runs before first paint. */}
+    <ManualAds locale={locale} noindex={noindex} />
 
-    {/* Landing "next one page" CTA slot — pages/session lever; no ad slots. */}
+    {/* Landing "next one page" CTA slot — pages/session lever, not an ad position. */}
     {Astro.slots.has("bottom-cta") && (
       <aside class="border-t border-border/40 bg-muted/10" data-cta-slot="bottom" aria-label="Next page">
         <div class="container px-4 py-8 md:py-10">

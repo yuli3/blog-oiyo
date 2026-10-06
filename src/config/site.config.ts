@@ -38,6 +38,19 @@ export const siteConfig = {
     googleAnalyticsId: "G-915L6V38X6",
     googleAdsenseId: "ca-pub-9541920090543312",
   },
+  // Hand-placed AdSense units that run alongside Auto ads (세운 2026-10-06, 2-week trial on
+  // blog first). enabled:false removes every unit; an empty slot id removes that one spot.
+  // Ids are the ad units created in AdSense on 2026-10-06. See components/ads/ManualAds.astro.
+  manualAds: {
+    enabled: true,
+    slots: {
+      articleMid: "4081985236", // oiyo-blog-article-mid (in-article)
+      articleEnd: "2768903568", // oiyo-blog-article-end (display, responsive)
+      toolResult: "4737600514", // oiyo-blog-tool-result (display, responsive)
+    },
+    // A mid-article unit only in articles long enough to have a middle.
+    midArticleMinHeadings: 4,
+  },
   newsletter: {
     // Set to your Buttondown account slug to enable API subscription, or null to use mailto fallback
     buttondownUsername: null as string | null,
