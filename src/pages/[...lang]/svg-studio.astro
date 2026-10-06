@@ -1,5 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import LocalOnlyNote from "../../components/tools/LocalOnlyNote.astro";
+import RelatedToolLinks from "../../components/RelatedToolLinks.astro";
 import SvgStudioComp from "../../components/tools/SvgStudio";
 import { locales } from "../../lib/i18n";
 
@@ -222,6 +224,7 @@ const structuredData = [
   <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <div class="mx-auto max-w-2xl px-4 py-5 sm:py-8">
     <SvgStudioComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+    <LocalOnlyNote locale={locale} />
 
     <section class="mt-6 sm:mt-10 border-t border-border pt-5 sm:pt-8">
       <h2 class="text-2xl font-bold text-foreground">{c.introTitle}</h2>
@@ -260,5 +263,6 @@ const structuredData = [
     </section>
 
     <p class="mt-5 sm:mt-8 rounded-xl border border-warning/30 bg-warning/10 px-4 py-3 text-sm leading-6 text-foreground">{c.disclaimer}</p>
+    <RelatedToolLinks locale={locale} current="svg-studio" slugs={["image-cropper", "image-processor", "image-grayscale", "image-pixelate", "gif-splitter", "favicon-generator", "palette-extractor", "image-metadata-viewer", "svg-studio", "image-degrader", "ascii-art-generator"]} />
   </div>
 </BaseLayout>
