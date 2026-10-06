@@ -1,0 +1,30 @@
+---
+/**
+ * One line under a tool: nothing you add or type here leaves the browser.
+ * Only for tools whose component makes no network request at all;
+ * scripts/audit-tool-webapp.mjs fails the build if a page that shows this
+ * mounts a component that calls fetch, XHR, sendBeacon or a socket. 2026-10-06
+ */
+import type { Locale } from "../../lib/i18n";
+
+interface Props { locale: Locale }
+const { locale } = Astro.props as Props;
+
+const TEXT: Record<Locale, { title: string; body: string }> = {
+  ko: { title: "브라우저 안에서만 처리해요", body: "올린 파일과 입력한 내용은 서버로 전송되지 않아요." },
+  en: { title: "Runs entirely in your browser", body: "Files you add and text you type are never sent to a server." },
+  ja: { title: "ブラウザーの中だけで処理します", body: "追加したファイルや入力した内容がサーバーに送信されることはありません。" },
+  zh: { title: "只在浏览器内处理", body: "您添加的文件和输入的内容不会发送到服务器。" },
+  fr: { title: "Tout se passe dans votre navigateur", body: "Les fichiers ajoutés et le texte saisi ne sont jamais envoyés à un serveur." },
+  es: { title: "Todo se procesa en tu navegador", body: "Los archivos que añades y el texto que escribes nunca se envían a un servidor." },
+};
+const t = TEXT[locale] ?? TEXT.en;
+---
+
+<p class="mt-4 flex items-start gap-3 rounded-lg border border-border bg-card px-4 py-3 text-sm leading-6 text-muted-foreground" data-local-only-note>
+  <svg class="mt-0.5 h-5 w-5 shrink-0 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <rect x="5" y="11" width="14" height="9" rx="2"></rect>
+    <path d="M8 11V8a4 4 0 0 1 8 0v3"></path>
+  </svg>
+  <span><strong class="font-semibold text-foreground">{t.title}</strong> · {t.body}</span>
+</p>
