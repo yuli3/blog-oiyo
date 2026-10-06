@@ -1,0 +1,222 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import LocalOnlyNote from "../../components/tools/LocalOnlyNote.astro";
+import RelatedToolLinks from "../../components/RelatedToolLinks.astro";
+import ImageConverter from "../../components/tools/ImageConverter";
+import { locales } from "../../lib/i18n";
+import { siteConfig } from "../../config/site.config";
+import { toolStructuredData } from "../../lib/seo/structured-data";
+
+type ActiveLocale = (typeof locales)[number];
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: ActiveLocale };
+
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
+  ko: { title: "이미지 변환·압축 — HEIC·WebP·PNG를 JPG로, 용량 맞추기", description: "HEIC, WebP, PNG, JPG를 서로 바꾸고 원하는 용량(KB)에 맞춰 줄여요. 여러 장을 한 번에 처리하고 ZIP으로 받아요. 사진은 서버로 올라가지 않고 브라우저 안에서만 처리돼요." },
+  en: { title: "Image Converter and Compressor — HEIC, WebP, PNG to JPG, Fit a Size", description: "Convert between HEIC, WebP, PNG and JPG and compress to a target size in KB. Handle many files at once and download a ZIP. Photos are processed in your browser and never uploaded." },
+  ja: { title: "画像変換・圧縮 — HEIC・WebP・PNGをJPGに、容量を指定", description: "HEIC、WebP、PNG、JPGを相互に変換し、指定した容量(KB)まで圧縮します。複数枚をまとめて処理してZIPで保存できます。写真はアップロードされず、ブラウザーの中だけで処理します。" },
+  zh: { title: "图片转换·压缩 — HEIC·WebP·PNG转JPG，按大小压缩", description: "在HEIC、WebP、PNG、JPG之间互相转换，并压缩到指定大小(KB)。可批量处理并打包成ZIP下载。照片不会上传，全部在浏览器内处理。" },
+  fr: { title: "Convertisseur et compresseur d’images — HEIC, WebP, PNG en JPG, poids visé", description: "Convertissez entre HEIC, WebP, PNG et JPG et compressez jusqu’à un poids donné en Ko. Traitez plusieurs fichiers à la fois et téléchargez un ZIP. Les photos restent dans votre navigateur, sans envoi." },
+  es: { title: "Conversor y compresor de imágenes — HEIC, WebP, PNG a JPG, tamaño exacto", description: "Convierte entre HEIC, WebP, PNG y JPG y comprime hasta un tamaño en KB. Procesa varios archivos a la vez y descarga un ZIP. Las fotos se procesan en tu navegador y no se suben." },
+};
+
+type SeoContent = { introTitle: string; intro: string; factsTitle: string; facts: { title: string; body: string }[]; howToTitle: string; steps: string[]; faqTitle: string; faqs: { question: string; answer: string }[]; disclaimer: string };
+
+const content: Record<ActiveLocale, SeoContent> = {
+  ko: {
+    introTitle: "형식 바꾸기와 용량 줄이기를 한 화면에서",
+    intro: "아이폰 사진(HEIC)이 다른 곳에서 안 열리거나, 서류 접수에서 '200KB 이하'를 요구하거나, 내려받은 WebP를 PNG로 바꿔야 할 때 쓰는 도구예요. 형식을 고르고 화질이나 목표 용량을 정하면 여러 장을 한 번에 바꿔요.",
+    factsTitle: "형식을 고르는 기준",
+    facts: [
+      { title: "JPG", body: "사진에 맞아요. 거의 모든 기기와 접수 시스템에서 열려요. 투명한 부분은 저장되지 않아서 흰색으로 채워져요." },
+      { title: "WebP", body: "같은 화질에서 JPG보다 용량이 작아요. 구글은 25~34% 작다고 발표했어요. 웹에 올릴 이미지에 좋지만 오래된 프로그램에서는 안 열릴 수 있어요." },
+      { title: "PNG", body: "화질이 전혀 떨어지지 않고 투명한 부분이 유지돼요. 화면 캡처, 로고, 글자가 많은 이미지에 맞고, 사진은 용량이 커져요." },
+    ],
+    howToTitle: "사용 방법",
+    steps: ["이미지를 끌어다 놓거나 파일을 골라요. 한 번에 30장까지 넣을 수 있어요.", "저장 형식을 골라요.", "화질을 정하거나, '용량에 맞추기'에서 목표 KB를 적어요. 필요하면 긴 변 크기도 줄여요.", "변환하기를 누르고, 한 장씩 또는 ZIP으로 저장해요."],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "사진이 서버로 올라가나요?", answer: "올라가지 않아요. 변환과 압축은 모두 브라우저 안에서 이루어져요. HEIC 파일을 처음 넣을 때 해석 도구(약 1.3MB)를 내려받지만, 사진을 보내는 것은 아니에요." },
+      { question: "'용량에 맞추기'는 어떻게 작동하나요?", answer: "먼저 화질을 낮춰 가며 목표보다 작은 것 중 화질이 가장 좋은 결과를 찾아요. 화질을 꽤 낮춰도 목표보다 크면 그때부터 가로세로 크기를 조금씩 줄여요. 그래도 안 되면 가장 작게 나온 결과를 주고 알려 줘요." },
+      { question: "HEIC가 무엇인가요?", answer: "아이폰이 2017년 iOS 11부터 기본으로 쓰는 사진 형식이에요. JPG보다 용량이 작지만 열지 못하는 프로그램과 사이트가 아직 있어서 JPG로 바꿔야 할 때가 많아요." },
+      { question: "변환하면 화질이 떨어지나요?", answer: "JPG와 WebP는 저장할 때마다 조금씩 손실이 생겨요. 화질 80 안팎이면 눈으로 구분하기 어려워요. PNG로 저장하면 손실이 없지만 사진은 용량이 커져요." },
+      { question: "촬영 위치 같은 정보는 어떻게 되나요?", answer: "변환된 파일에는 촬영 위치, 기기, 시각 같은 메타데이터가 들어가지 않아요. 그림 부분만 새로 저장하기 때문이에요." },
+    ],
+    disclaimer: "아주 큰 이미지(수천만 화소)나 많은 장수는 기기 메모리에 따라 느리거나 실패할 수 있어요. 원본은 지우지 말고 따로 보관해 주세요.",
+  },
+  en: {
+    introTitle: "Change the format and shrink the file in one place",
+    intro: "For the times an iPhone photo (HEIC) will not open somewhere else, a form demands \"200 KB or less\", or a downloaded WebP has to become a PNG. Pick the format, set a quality or a target size, and convert many files in one go.",
+    factsTitle: "Which format to choose",
+    facts: [
+      { title: "JPG", body: "Right for photos. It opens on nearly every device and upload form. It cannot store transparency, so transparent areas are filled with white." },
+      { title: "WebP", body: "Smaller than JPG at the same quality; Google reports 25 to 34% smaller. Good for images on the web, though older software may not open it." },
+      { title: "PNG", body: "Loses no quality at all and keeps transparency. Right for screenshots, logos and images with text. Photos come out large." },
+    ],
+    howToTitle: "How to use it",
+    steps: ["Drop images in or choose files, up to 30 at a time.", "Pick the format to save as.", "Set the quality, or choose \"Fit a file size\" and type a target in KB. Reduce the longest side too if you need.", "Press Convert, then save files one by one or as a ZIP."],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Are my photos uploaded?", answer: "No. Converting and compressing both happen in your browser. The first time you add a HEIC file a decoder of about 1.3 MB is downloaded, but your photo is not sent anywhere." },
+      { question: "How does \"Fit a file size\" work?", answer: "It first lowers the quality step by step and keeps the best-looking result that is under the target. If the file is still too big at a fairly low quality, it starts reducing the dimensions a little at a time. If even that is not enough, you get the smallest result and a note saying so." },
+      { question: "What is HEIC?", answer: "The photo format iPhones have used by default since iOS 11 in 2017. Files are smaller than JPG, but some programs and websites still cannot open them, which is why converting to JPG is so common." },
+      { question: "Does converting reduce quality?", answer: "JPG and WebP lose a little each time they are saved. Around quality 80 the difference is hard to see. Saving as PNG loses nothing, but photos get large." },
+      { question: "What happens to location data?", answer: "The converted file carries no metadata such as location, device or time, because only the picture itself is saved again." },
+    ],
+    disclaimer: "Very large images (tens of megapixels) or many files can be slow or fail, depending on your device's memory. Keep your originals.",
+  },
+  ja: {
+    introTitle: "形式の変更と容量の削減を1つの画面で",
+    intro: "iPhoneの写真(HEIC)がほかで開けないとき、提出フォームで「200KB以下」を求められたとき、保存したWebPをPNGにしたいときのためのツールです。形式を選び、画質か目標容量を決めれば、複数枚をまとめて変換します。",
+    factsTitle: "形式の選び方",
+    facts: [
+      { title: "JPG", body: "写真向きです。ほぼすべての機器や提出フォームで開けます。透明部分は保存できないため白で塗られます。" },
+      { title: "WebP", body: "同じ画質ならJPGより小さくなります。Googleは25〜34%小さいと発表しています。ウェブ用の画像に向きますが、古いソフトでは開けないことがあります。" },
+      { title: "PNG", body: "画質がまったく落ちず、透明部分も保たれます。スクリーンショット、ロゴ、文字の多い画像向きで、写真は容量が大きくなります。" },
+    ],
+    howToTitle: "使い方",
+    steps: ["画像をドラッグするか、ファイルを選びます。一度に30枚まで入れられます。", "保存形式を選びます。", "画質を決めるか、「容量に合わせる」で目標のKBを入力します。必要なら長辺のサイズも小さくします。", "「変換する」を押し、1枚ずつ、またはZIPで保存します。"],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "写真はサーバーにアップロードされますか？", answer: "されません。変換も圧縮もブラウザーの中で行います。HEICファイルを初めて入れるときにデコーダー(約1.3MB)をダウンロードしますが、写真を送信するわけではありません。" },
+      { question: "「容量に合わせる」はどう動きますか？", answer: "まず画質を少しずつ下げ、目標より小さい中で画質がいちばん良い結果を探します。画質をかなり下げても目標より大きい場合は、そこから縦横のサイズを少しずつ小さくします。それでも届かなければ、いちばん小さい結果を出してお知らせします。" },
+      { question: "HEICとは何ですか？", answer: "iPhoneが2017年のiOS 11から標準で使っている写真形式です。JPGより容量は小さいのですが、開けないソフトやサイトがまだあり、JPGに変換する場面が多くあります。" },
+      { question: "変換すると画質は落ちますか？", answer: "JPGとWebPは保存するたびに少しずつ劣化します。画質80前後なら見た目ではほとんど区別できません。PNGで保存すれば劣化はありませんが、写真は容量が大きくなります。" },
+      { question: "撮影場所などの情報はどうなりますか？", answer: "変換後のファイルには、撮影場所・機器・日時などのメタデータは入りません。絵の部分だけを保存し直すためです。" },
+    ],
+    disclaimer: "非常に大きい画像(数千万画素)や枚数が多い場合は、端末のメモリによって遅くなったり失敗したりすることがあります。元のファイルは消さずに保管してください。",
+  },
+  zh: {
+    introTitle: "换格式和压缩大小，一个页面搞定",
+    intro: "iPhone照片(HEIC)在别处打不开、报名系统要求“200KB以内”、下载的WebP要改成PNG——这些时候都可以用它。选好格式，设定画质或目标大小，就能一次转换多张。",
+    factsTitle: "怎么选格式",
+    facts: [
+      { title: "JPG", body: "适合照片。几乎所有设备和上传系统都能打开。不能保存透明区域，透明部分会被填成白色。" },
+      { title: "WebP", body: "同等画质下比JPG更小，谷歌公布的数据是小25%到34%。适合放在网页上，但旧软件可能打不开。" },
+      { title: "PNG", body: "完全无损，并保留透明区域。适合截图、标志和带文字的图片，用来存照片体积会很大。" },
+    ],
+    howToTitle: "使用方法",
+    steps: ["拖入图片或选择文件，一次最多30张。", "选择保存格式。", "设定画质，或在“按目标大小”里填写目标KB。需要的话再缩小长边尺寸。", "点击开始转换，然后逐张保存或打包成ZIP保存。"],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "照片会上传到服务器吗？", answer: "不会。转换和压缩都在浏览器内完成。第一次加入HEIC文件时会下载一个约1.3MB的解码器，但不会发送你的照片。" },
+      { question: "“按目标大小”是怎么工作的？", answer: "先逐步降低画质，在小于目标的结果里保留画质最好的一个。如果画质降到较低仍然超标，就开始一点点缩小图片尺寸。如果还是达不到，会给出最小的结果并提示你。" },
+      { question: "HEIC是什么？", answer: "iPhone从2017年的iOS 11起默认使用的照片格式。体积比JPG小，但仍有一些软件和网站打不开，所以经常需要转成JPG。" },
+      { question: "转换会降低画质吗？", answer: "JPG和WebP每保存一次都会有少量损失。画质在80左右时肉眼很难分辨。保存为PNG没有损失，但照片体积会变大。" },
+      { question: "拍摄地点等信息会怎样？", answer: "转换后的文件不带拍摄地点、设备、时间等元数据，因为只重新保存了画面本身。" },
+    ],
+    disclaimer: "特别大的图片(几千万像素)或张数很多时，可能因设备内存不足而变慢或失败。请保留原始文件。",
+  },
+  fr: {
+    introTitle: "Changer de format et alléger le fichier au même endroit",
+    intro: "Pour les fois où une photo d’iPhone (HEIC) ne s’ouvre pas ailleurs, où un formulaire exige « 200 Ko maximum », ou quand un WebP téléchargé doit devenir un PNG. Choisissez le format, réglez une qualité ou un poids visé, et convertissez plusieurs fichiers d’un coup.",
+    factsTitle: "Quel format choisir",
+    facts: [
+      { title: "JPG", body: "Adapté aux photos. Il s’ouvre sur presque tous les appareils et formulaires. Il ne gère pas la transparence : les zones transparentes deviennent blanches." },
+      { title: "WebP", body: "Plus léger que le JPG à qualité égale ; Google annonce 25 à 34 % de moins. Bien pour le web, mais d’anciens logiciels ne l’ouvrent pas." },
+      { title: "PNG", body: "Aucune perte de qualité, et la transparence est conservée. Adapté aux captures d’écran, logos et images avec du texte. Les photos deviennent lourdes." },
+    ],
+    howToTitle: "Mode d’emploi",
+    steps: ["Déposez des images ou choisissez des fichiers, jusqu’à 30 à la fois.", "Choisissez le format de sortie.", "Réglez la qualité, ou choisissez « Viser un poids » et indiquez une valeur en Ko. Réduisez aussi le plus grand côté si besoin.", "Cliquez sur Convertir, puis enregistrez fichier par fichier ou en ZIP."],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Mes photos sont-elles envoyées sur un serveur ?", answer: "Non. La conversion et la compression se font dans votre navigateur. Au premier fichier HEIC, un décodeur d’environ 1,3 Mo est téléchargé, mais votre photo n’est envoyée nulle part." },
+      { question: "Comment fonctionne « Viser un poids » ?", answer: "L’outil baisse d’abord la qualité pas à pas et garde le meilleur résultat sous le poids visé. Si le fichier reste trop lourd à une qualité assez basse, il réduit peu à peu les dimensions. Si cela ne suffit toujours pas, vous obtenez le résultat le plus léger avec un message." },
+      { question: "Qu’est-ce que le HEIC ?", answer: "Le format photo utilisé par défaut sur iPhone depuis iOS 11, en 2017. Les fichiers sont plus légers qu’en JPG, mais certains logiciels et sites ne les ouvrent toujours pas, d’où la conversion fréquente en JPG." },
+      { question: "La conversion dégrade-t-elle la qualité ?", answer: "Le JPG et le WebP perdent un peu à chaque enregistrement. Autour de 80, la différence est difficile à voir. Le PNG ne perd rien, mais les photos deviennent lourdes." },
+      { question: "Que deviennent les données de localisation ?", answer: "Le fichier converti ne contient aucune métadonnée (lieu, appareil, heure), car seule l’image elle-même est réenregistrée." },
+    ],
+    disclaimer: "Les très grandes images (des dizaines de mégapixels) ou un grand nombre de fichiers peuvent être lents ou échouer selon la mémoire de l’appareil. Conservez vos originaux.",
+  },
+  es: {
+    introTitle: "Cambiar de formato y reducir el peso en un solo sitio",
+    intro: "Para cuando una foto del iPhone (HEIC) no se abre en otro sitio, un formulario exige «200 KB como máximo» o un WebP descargado tiene que ser PNG. Elige el formato, fija una calidad o un tamaño objetivo y convierte varios archivos de una vez.",
+    factsTitle: "Qué formato elegir",
+    facts: [
+      { title: "JPG", body: "Adecuado para fotos. Se abre en casi cualquier dispositivo y formulario. No guarda transparencia: las zonas transparentes quedan en blanco." },
+      { title: "WebP", body: "Más ligero que JPG con la misma calidad; Google indica entre un 25 y un 34 % menos. Bueno para la web, aunque el software antiguo puede no abrirlo." },
+      { title: "PNG", body: "No pierde nada de calidad y conserva la transparencia. Adecuado para capturas, logotipos e imágenes con texto. Las fotos ocupan mucho." },
+    ],
+    howToTitle: "Cómo se usa",
+    steps: ["Suelta imágenes o elige archivos, hasta 30 a la vez.", "Elige el formato de salida.", "Fija la calidad, o elige «Ajustar a un tamaño» y escribe el objetivo en KB. Reduce también el lado más largo si hace falta.", "Pulsa Convertir y guarda los archivos uno a uno o en un ZIP."],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Se suben mis fotos a un servidor?", answer: "No. La conversión y la compresión se hacen en tu navegador. La primera vez que añades un archivo HEIC se descarga un decodificador de unos 1,3 MB, pero tu foto no se envía a ningún sitio." },
+      { question: "¿Cómo funciona «Ajustar a un tamaño»?", answer: "Primero baja la calidad paso a paso y se queda con el mejor resultado por debajo del objetivo. Si el archivo sigue siendo demasiado grande con una calidad bastante baja, empieza a reducir las dimensiones poco a poco. Si aun así no llega, te da el resultado más pequeño y te avisa." },
+      { question: "¿Qué es HEIC?", answer: "El formato de foto que usa el iPhone por defecto desde iOS 11, en 2017. Ocupa menos que JPG, pero algunos programas y sitios todavía no lo abren, y por eso se convierte tanto a JPG." },
+      { question: "¿Se pierde calidad al convertir?", answer: "JPG y WebP pierden un poco cada vez que se guardan. Con calidad en torno a 80 la diferencia apenas se ve. Guardar en PNG no pierde nada, pero las fotos ocupan mucho." },
+      { question: "¿Qué pasa con los datos de ubicación?", answer: "El archivo convertido no lleva metadatos como ubicación, dispositivo u hora, porque solo se vuelve a guardar la imagen." },
+    ],
+    disclaimer: "Las imágenes muy grandes (decenas de megapíxeles) o muchos archivos pueden ir lentos o fallar según la memoria del dispositivo. Conserva los originales.",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+const c = content[locale] ?? content.en;
+const pageUrl = `${siteConfig.url}/${locale}/image-converter/`;
+
+const structuredData = toolStructuredData({
+  name: m.title,
+  description: m.description,
+  steps: c.steps,
+  faqs: c.faqs,
+  url: pageUrl,
+  webApplication: true,
+  breadcrumbs: [
+    { name: "Tools", url: `${siteConfig.url}/${locale}/tools/` },
+    { name: m.title, url: pageUrl },
+  ],
+});
+---
+
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <div class="mx-auto max-w-3xl px-4 py-5 sm:py-8">
+    <ImageConverter client:load locale={locale} />
+    <LocalOnlyNote locale={locale} />
+
+    <section class="mt-6 border-t border-border pt-5 sm:mt-10 sm:pt-8">
+      <h2 class="text-2xl font-bold text-foreground">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-foreground">{c.intro}</p>
+    </section>
+
+    <section class="mt-6 sm:mt-10">
+      <h2 class="text-xl font-bold text-foreground">{c.factsTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        {c.facts.map((item) => (
+          <article class="rounded-xl border border-border bg-card p-4">
+            <h3 class="font-semibold text-foreground">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-muted-foreground">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-6 sm:mt-10">
+      <h2 class="text-xl font-bold text-foreground">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-foreground">
+        {c.steps.map((step) => <li class="leading-7">{step}</li>)}
+      </ol>
+    </section>
+
+    <section class="mt-6 sm:mt-10">
+      <h2 class="text-xl font-bold text-foreground">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-border rounded-xl border border-border bg-card">
+        {c.faqs.map((faq) => (
+          <details class="p-4">
+            <summary class="cursor-pointer font-semibold text-foreground">{faq.question}</summary>
+            <p class="mt-3 leading-7 text-muted-foreground">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <RelatedToolLinks locale={locale} current="image-converter" slugs={["image-cropper", "image-processor", "image-grayscale", "image-pixelate", "gif-splitter", "favicon-generator", "palette-extractor", "image-metadata-viewer", "qr-code-generator"]} />
+
+    <p class="mt-5 rounded-xl border border-warning bg-warning/10 px-4 py-3 text-sm leading-6 text-foreground sm:mt-8">{c.disclaimer}</p>
+  </div>
+</BaseLayout>
