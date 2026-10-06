@@ -1,0 +1,50 @@
+---
+// YMYL notice for medicine, nursing and health articles (audit 2026-10-05 S3,
+// 2026-09-28 P0-7). Rendered by the article template rather than pasted into
+// each MDX file, so every current and future chapter in these categories
+// carries it and the class cannot regress one file at a time.
+interface Props {
+  locale: string;
+}
+
+const { locale } = Astro.props;
+
+const COPY: Record<string, { label: string; body: string }> = {
+  ko: {
+    label: "의료 정보 안내",
+    body: "이 글은 학습과 일반 정보를 위한 내용이에요. 의학적 진단이나 치료, 전문가 상담을 대신하지 않아요. 증상이 있거나 약·치료를 바꾸려면 의사나 약사 같은 의료진과 먼저 상의해 주세요. 실제 투약과 처치는 최신 진료 지침과 기관 프로토콜, 의료진 지시를 따라야 해요.",
+  },
+  en: {
+    label: "Medical information notice",
+    body: "This article is for learning and general information. It is not a substitute for medical diagnosis, treatment, or professional advice. If you have symptoms or are thinking about changing a medication or treatment, talk to a doctor, pharmacist, or other qualified clinician first. Actual drug administration and clinical care must follow current guidelines, institutional protocols, and the instructions of the care team.",
+  },
+  ja: {
+    label: "医療情報についてのご案内",
+    body: "この記事は学習と一般的な情報提供のための内容です。医学的な診断や治療、専門家への相談の代わりにはなりません。症状がある場合や、薬・治療を変えようとしている場合は、まず医師や薬剤師などの医療者にご相談ください。実際の投薬や処置は、最新の診療ガイドラインと施設のプロトコル、医療チームの指示に従ってください。",
+  },
+  zh: {
+    label: "医疗信息提示",
+    body: "本文仅用于学习和提供一般信息，不能替代医学诊断、治疗或专业咨询。如有症状，或打算更改药物或治疗方案，请先咨询医生、药师等医疗专业人员。实际用药和处置须遵循最新诊疗指南、机构规程及医疗团队的指示。",
+  },
+  fr: {
+    label: "Avertissement médical",
+    body: "Cet article a une visée pédagogique et d’information générale. Il ne remplace pas un diagnostic, un traitement ou l’avis d’un professionnel de santé. Si vous avez des symptômes ou envisagez de modifier un médicament ou un traitement, parlez-en d’abord à un médecin, un pharmacien ou un autre professionnel qualifié. L’administration des médicaments et les soins doivent suivre les recommandations en vigueur, les protocoles de l’établissement et les consignes de l’équipe soignante.",
+  },
+  es: {
+    label: "Aviso de información médica",
+    body: "Este artículo tiene fines de aprendizaje e información general. No sustituye el diagnóstico, el tratamiento ni el consejo de un profesional sanitario. Si tienes síntomas o piensas cambiar un medicamento o tratamiento, consulta primero con un médico, farmacéutico u otro profesional cualificado. La administración real de medicamentos y los cuidados clínicos deben seguir las guías vigentes, los protocolos del centro y las indicaciones del equipo sanitario.",
+  },
+};
+
+const copy = COPY[locale] ?? COPY.en;
+---
+
+<aside
+  role="note"
+  aria-label={copy.label}
+  data-medical-disclaimer
+  class="not-prose mb-8 sm:mb-12 rounded-xl border border-amber-300/60 bg-amber-50/60 px-4 py-3 text-sm leading-6 text-foreground dark:border-amber-500/40 dark:bg-amber-950/20"
+>
+  <p class="font-bold mb-1">{copy.label}</p>
+  <p>{copy.body}</p>
+</aside>
