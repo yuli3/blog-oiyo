@@ -101,13 +101,46 @@ for (let a = 7; a <= 99; a++) {
   if (e.group) milestones.push({ age: a, calYear: year + a - 1, group: e.group, explanation: e.explanation });
 }
 
-const title = `${year}년생 정보 — ${ganji}년 ${jiName}띠, 나이·궁합·생애 연표`;
+// School year. A child starts elementary school in March of the year after the one in which
+// they turn six (초·중등교육법 제13조), so the class of a birth year is fixed: birth year + 7.
+// Added 2026-10-07: searches for a birth year go on to "학년", "몇학년", "초등학교 입학",
+// "만나이" (Google's suggestions for "2018년생"), and the page answered only 띠 and 나이.
+const schoolIndex = CURRENT_YEAR - year - 6; // 1 = 초1 … 12 = 고3
+const gradeLabel =
+  schoolIndex >= 1 && schoolIndex <= 6 ? `초등학교 ${schoolIndex}학년`
+  : schoolIndex >= 7 && schoolIndex <= 9 ? `중학교 ${schoolIndex - 6}학년`
+  : schoolIndex >= 10 && schoolIndex <= 12 ? `고등학교 ${schoolIndex - 9}학년`
+  : null;
+const beforeSchool = schoolIndex < 1;
+// The school table speaks of 초등학교 and 수능. For people who went through 국민학교 and the
+// older entrance exams it would be an anachronism, so it starts with the first 수능 class.
+const showSchool = year >= 1975;
+const schoolYears = [
+  // 국민학교 became 초등학교 in 1996.
+  { label: year + 7 < 1996 ? "초등학교(당시 국민학교) 입학" : "초등학교 입학", when: year + 7 },
+  { label: "중학교 입학", when: year + 13 },
+  { label: "고등학교 입학", when: year + 16 },
+  { label: "고등학교 3학년 (수능 보는 해)", when: year + 18 },
+  { label: "고등학교 졸업", when: year + 19 },
+];
+const gradeSentence = gradeLabel
+  ? `${year}년생은 ${CURRENT_YEAR}년에 ${gradeLabel}이에요.`
+  : beforeSchool
+    ? `${year}년생은 아직 초등학교 입학 전이에요. ${year + 7}년 3월에 초등학교에 입학해요.`
+    : `${year}년생은 ${year + 7}년에 ${year + 7 < 1996 ? "국민학교(지금의 초등학교)" : "초등학교"}에 입학했고 ${year + 19}년 2월에 고등학교를 졸업한 나이예요.`;
+const manBefore = Math.max(manAge - 1, 0);
+
+const title = gradeLabel
+  ? `${year}년생 나이·띠·학년 — ${CURRENT_YEAR}년 ${gradeLabel}, ${jiName}띠`
+  : `${year}년생 나이·띠 — ${CURRENT_YEAR}년 만 ${manBefore}~${manAge}세, ${ganji}년 ${jiName}띠`;
 const description = `${year}년생은 ${ganji}년 ${jiName}띠입니다. ${CURRENT_YEAR}년 기준 한국나이 ${koreanAge}세(만 ${manAge}세), 띠 궁합, 학령·환갑 등 생애 연표를 한 번에 확인하세요.`;
 
 const prevYear = year - 1 >= START_YEAR ? year - 1 : null;
 const nextYear = year + 1 <= CURRENT_YEAR ? year + 1 : null;
 
 const faqs = [
+  ...(showSchool ? [{ question: `${year}년생은 ${CURRENT_YEAR}년에 몇 학년인가요?`, answer: `${gradeSentence} 초등학교는 만 6세가 되는 해의 다음 해 3월에 입학하므로 ${year}년생은 ${year + 7}년 입학이에요. 조기 입학이나 입학 유예를 한 경우에는 한 학년 차이가 날 수 있어요.` }] : []),
+  { question: `${year}년생의 만 나이는 몇 살인가요?`, answer: `${CURRENT_YEAR}년 기준으로 생일이 지나기 전에는 만 ${manBefore}세, 생일이 지나면 만 ${manAge}세예요. 태어난 해를 빼기만 하는 연 나이로는 ${manAge}세예요.` },
   { question: `${year}년생은 무슨 띠인가요?`, answer: `${year}년생은 ${jiName}띠이며, 60갑자로는 ${ganji}년입니다.` },
   { question: `${year}년생은 ${CURRENT_YEAR}년에 몇 살인가요?`, answer: `${CURRENT_YEAR}년 기준 한국나이로 ${koreanAge}세, 만 나이로는 생일 전 ${Math.max(koreanAge - 2, 0)}세 · 생일 후 ${manAge}세입니다.` },
   { question: "한국나이와 만 나이는 어떻게 다른가요?", answer: "한국나이는 태어난 해를 1세로 보고 해가 바뀔 때마다 한 살을 더합니다. 만 나이는 생일을 기준으로 계산하며, 2023년 6월부터 법적·행정 기준은 만 나이로 통일되었습니다." },
@@ -171,6 +204,37 @@ const compatRows = [
         </div>
       </div>
       <p class="mt-4 text-sm opacity-90">{CURRENT_YEAR}년 기준입니다. 만 나이는 생일이 지난 경우입니다.</p>
+    </section>
+
+    <!-- 나이·학년 -->
+    <section class="mt-6 sm:mt-10 rounded-2xl border border-border bg-card p-4 sm:p-6" data-manual-ad-after>
+      <h2 class="text-xl font-bold text-foreground">{year}년생 나이{showSchool ? "와 학년" : ""} ({CURRENT_YEAR}년 기준)</h2>
+      {showSchool && <p class="mt-3 leading-8 text-foreground">{gradeSentence}</p>}
+      <ul class="mt-3 grid gap-2 text-sm sm:grid-cols-3">
+        <li class="rounded-xl border border-border bg-muted p-3"><span class="block text-xs text-muted-foreground">만 나이 (생일 전 ~ 생일 후)</span><strong class="text-lg text-foreground">만 {manBefore}세 ~ {manAge}세</strong></li>
+        <li class="rounded-xl border border-border bg-muted p-3"><span class="block text-xs text-muted-foreground">연 나이 (올해 − 태어난 해)</span><strong class="text-lg text-foreground">{manAge}세</strong></li>
+        <li class="rounded-xl border border-border bg-muted p-3"><span class="block text-xs text-muted-foreground">세는 나이 (한국나이)</span><strong class="text-lg text-foreground">{koreanAge}세</strong></li>
+      </ul>
+      {showSchool && (
+      <Fragment>
+      <div class="mt-4 overflow-x-auto">
+        <table class="w-full text-left text-sm">
+          <thead>
+            <tr class="border-b border-border text-muted-foreground"><th class="py-2 pr-3 font-semibold">학교</th><th class="py-2 font-semibold">연도</th></tr>
+          </thead>
+          <tbody>
+            {schoolYears.map((row) => (
+              <tr class={`border-b border-border ${row.when === CURRENT_YEAR ? "bg-primary/10 font-bold" : ""}`}>
+                <td class="py-2 pr-3">{row.label}</td>
+                <td class="py-2">{row.when}년{row.when > CURRENT_YEAR ? " (예정)" : ""}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-3 text-xs leading-6 text-muted-foreground">초등학교는 만 6세가 되는 해의 다음 해 3월에 입학해요(초·중등교육법 제13조). 조기 입학이나 입학 유예를 했거나, 예전처럼 1~2월생이 한 해 일찍 입학한 경우(빠른년생)에는 한 학년 차이가 날 수 있어요.</p>
+      </Fragment>
+      )}
     </section>
 
     <!-- 띠 궁합 -->
