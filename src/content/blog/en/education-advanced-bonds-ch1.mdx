@@ -14,93 +14,120 @@ tags:
   - advanced-bonds
 locale: en
 author: Oiyo
+updatedDate: '2026-08-31'
 ---
 
-
 import Callout from "@/components/mdx/Callout.astro";
-import {
-  LectureTable,
-  LectureProcess,
-} from "@/features/education-common/components/LectureVisuals";
+import { LectureTable, LectureProcess } from "@/features/education-common/components/LectureVisuals";
 
 # The Gravity of Finance: Bond Pricing and Yields
 
-Bonds are the backbone of the global financial system. While stocks represent hope and growth, bonds represent <mark><strong>"Debt and Probability."</strong></mark> To master advanced bonds, one must first understand the fundamental law of the bond world: The Seesaw of Price and Yield.
+When you buy a bond, what gets fixed is the contractual interest and the repayment terms. What an investor actually earns depends on the purchase price, on whether payments are made as promised, on reinvestment rates, and on the point of sale. That is why two bonds with the same face value and the same coupon can carry different yields — the difference is what you paid.
+
+This chapter covers **fixed-rate bonds with no options**: no call, no put, no early redemption. The calculation assumes every contractual cash flow is paid and that there are no taxes or fees. Do not apply these results directly to floating-rate bonds, to bonds with material default risk, or to bonds with early-redemption terms. The examples are for learning, not a product recommendation.
+
+We keep two problems apart. Set a required return and discount the cash flows, and you get a valuation. Start from a market price and solve for the discount rate that explains it, and you get a yield to maturity. Both use the same equation; what differs is what you put in and what you take out.
 
 ---
 
-## 1. The Inverse Relationship: The Seesaw
+## 1. When Price and Yield Move in Opposite Directions
 
-The most important rule in fixed income is that price and interest rates move in opposite directions.
+Discounting the same positive cash flows at the same point in time, a **higher** discount rate produces a **lower** present value. That is the inverse relationship between the price of a fixed-rate bond and its yield. Note what "the rate" means here: it is not merely the headline policy rate in the news, but **the discount rate at which that bond's cash flows are valued**. A change in how credit risk or liquidity is assessed changes the required return too.
 
 <LectureTable
-  title="The Bond Price Seesaw"
-  headers={["Market Interest Rate", "Bond Price", "Explanation"]}
+  title="Comparison when the cash flows and valuation date are identical"
+  headers={["Discount rate moves", "Valuation", "Interpretation"]}
   rows={[
-    ["**Rising** ↑", "**Falling** ↓", "Existing bonds with lower coupons become less attractive."],
-    ["**Falling** ↓", "**Rising** ↑", "Existing bonds with higher coupons become more valuable."],
-    ["**Stable** →", "**Stable** →", "Price stays close to par if the coupon matches the market."],
+    ["**Up**", "**Down**", "The same money in the future is discounted more heavily"],
+    ["**Down**", "**Up**", "The same money in the future is discounted more lightly"],
+    ["**Unchanged**", "**Unchanged**", "Requires the same valuation date and the same cash flows"],
   ]}
-  highlightColumns={[1, 2]}
+  highlightColumns={[1]}
 />
+
+Stable rates alone do not mean a bond trades at face value. In the simple model that values a bond on its coupon payment dates, it equals par when the discount rate quoted at the same periodicity as the coupon equals the coupon rate. As time passes the remaining payment schedule changes too, so keep this distinct from the "unchanged" row above.
 
 ---
 
-## 2. Advanced Valuation: Discounted Cash Flow (DCF)
+## 2. Working Through One Bond End to End
 
-The price of a bond is simply the **Present Value (PV)** of all its future cash flows (coupons + principal repayment).
+Consider a hypothetical bond with a face value of ₩1,000, an annual coupon rate of 5%, and 2 years remaining to maturity. We are immediately after the most recent coupon was paid, and the next one arrives exactly one year from now. You receive ₩50 at the end of each year, and at the end of year 2 you receive the final ₩50 coupon together with the ₩1,000 principal. Accrued interest is currently 0.
+
+```text
+Now:      pay price P
++1 year:  receive 50
++2 years: receive 50 + principal 1,000
+
+P = 50/(1+y) + 1,050/(1+y)²
+(y is the annual effective yield)
+```
+
+| Discount rate y | PV of 50 in 1 year | PV of 1,050 in 2 years | Price P |
+|---|---:|---:|---:|
+| 3% | 48.54 | 989.73 | 1,038.27 |
+| 5% | 47.62 | 952.38 | 1,000.00 |
+| 10% | 45.45 | 867.77 | 913.22 |
+
+The table rounds the intermediate values for display while the totals are computed from unrounded figures. Even though the ₩50 coupon never changes, raising the discount rate from 5% to 10% takes the price from ₩1,000 down to roughly ₩913.22.
+
+Real bonds require you to check semiannual frequency, accrued interest, day-count conventions, and yield-quoting practice. Between payment dates, the settlement price includes accrued interest while the quoted clean price does not. When yields differ across maturities, a spot-rate curve is used to discount each payment at the rate matching its timing. The table above is simplified to annual payments and a single discount rate.
+
+---
+
+## 3. YTM Is the Discount Rate That Explains the Market Price
+
+**Yield to maturity (YTM)** is the internal rate of return that makes the present value of the contractual cash flows equal to the current price. If the market price of the bond above is exactly 50/1.1 + 1,050/1.1², the YTM is 10% per year. Plugging in a rounded figure such as the displayed 913.22 gives approximately 10% as well.
+
+A 10% YTM does not guarantee a 10% compound annual growth rate. That holds only if payments arrive as contracted, the bond is held to maturity, and coupons can be reinvested at the same yield — then the compound return on the maturity asset value matches the YTM. Early sale, default, a change in reinvestment rates, taxes and fees all change the realised return.
+
+**Current yield** is the annual coupon divided by the current market price. In this example 50/913.22314 ≈ **5.48%**. The 5% obtained by dividing by face value is the coupon rate, and it differs from the 10% YTM. Current yield is not a measure that reflects both the price difference settled at maturity and when the money actually arrives.
+
+---
+
+## 4. The Trap in Comparing a Valuation to a Market Price
+
+Take the YTM implied by the market price, discount the same cash flows at that YTM, and you land back on the original market price. **You cannot find an undervaluation this way.** You have simply re-derived the same price.
 
 <LectureProcess
   steps={[
-    {
-      label: "Cash Flow Map",
-      description:
-        "Identify the timing and amount of all future coupon payments and the final face value",
-    },
-    {
-      label: "Discounting",
-      description: "Apply the market discount rate (YTM) to each future payment",
-    },
-    {
-      label: "Summation",
-      description: "Add up all the present values to find the current 'Fair Price'",
-    },
-    {
-      label: "Comparison",
-      description:
-        "Compare the fair price with the market price to find 'Cheap' or 'Rich' opportunities",
-    },
+    { label: "Check the cash flows", description: "Confirm the interest and repayment schedule, and any options or payment risk" },
+    { label: "Estimate a required return", description: "Set a separate valuation assumption grounded in comparable bonds and their risk" },
+    { label: "Compute the valuation", description: "Discount the cash flows at the required return you set" },
+    { label: "Interpret the gap", description: "Compare with the market price, then re-examine credit, liquidity and model error" },
   ]}
 />
 
+If, for this bond, you had separately decided that the required return is 8% per year, the valuation is 50/1.08 + 1,050/1.08² ≈ **₩946.50**. That is above the market price of ₩913.22, but the gap exists **only under the assumption that an 8% required return is appropriate**. It may equally be the result of leaving out risk the market priced in, so it should not be read straight away as a risk-free gain or a buy signal.
+
 ---
 
-## 3. Understanding Yield to Maturity (YTM)
-
-**YTM** is the most widely used measure of a bond's return. It is the internal rate of return (IRR) an investor will receive if they hold the bond until maturity and all payments are made on time.
-
-- <mark><strong>"The Expected Return"</strong></mark>: YTM assumes that all coupon payments are reinvested at the same rate.
-- **Current Yield vs. YTM**: Current yield only looks at the annual interest. YTM looks at the entire journey, including the gain or loss on the price relative to the face value.
+## 5. Does a Bond Always Converge to Par as Maturity Approaches?
 
 <Callout type="note">
-  **The Pull to Par**: As a bond approaches its maturity date, its market price will naturally move
-  closer to its face value ($1,000 in most cases), regardless of whether it was trading at a
-  discount or a premium.
+  A bond that repays its contractual principal in full returns the face principal at maturity. If a final coupon is also paid, the final payment is principal plus interest. When explaining convergence to par, keep the price excluding accrued interest distinct from the price on a payment date.
 </Callout>
 
----
-
-## 4. Wrapping Up: Understanding the Core
-
-Bond pricing is not just a formula; it is the manifestation of the <mark><strong>"Time Value of Money."</strong></mark> By mastering how interest rates pull and push bond prices, you gain the ability to navigate the largest and most complex market in the world.
+In a simple model with other conditions held constant, discount and premium bonds do tend to approach par as maturity nears. That does **not** mean the actual market price moves in one direction every day. A change in rates or credit risk changes the path, and if the bond defaults the face repayment itself may never happen. Early-redemption options are a separate item to review.
 
 ---
 
-## 📖 참고문헌
-- **[Bond Markets, Analysis, and Strategies] - Frank Fabozzi**: The "Bible" of bond investing.
-- **[Fixed Income Analysis] - CFA Institute**: A comprehensive and rigorous guide to bond valuation and risk.
-- **[Interest Rate Markets] - Siddhartha Jha**: A practical look at how interest rate movements drive bond returns.
+## Check Your Understanding
+
+**Q. A 5% coupon rate, a current yield of about 5.48%, and a 10% YTM contradict each other. Do they?**
+
+> No. They are respectively an interest rate measured against face value, an annual coupon measured against the market price, and a discount rate linking the price to the entire contractual cash flow.
+
+**Q. I computed a price using the YTM derived from the market price and got the market price back. Does that prove the price is fair?**
+
+> No. It confirms an identity in the calculation. Arguing that a bond is relatively over- or undervalued requires an independent valuation basis.
+
+The next chapter covers duration and convexity, which give an **approximation** of how price responds to a change in yield. There is no formula that always guarantees exactly how many percent the price moves for a one-percentage-point move in yield.
 
 ---
 
-Next time, we will explore **Duration and Convexity**—learning how to measure exactly how sensitive a bond is to a 1% change in interest rates.
+## Sources and Scope of Review
+
+Reviewed on: **2026-08-31**. The example figures were constructed and checked directly. The overseas sources below underpin the valuation concepts; they do not stand in for Korean bond settlement, tax or disclosure practice.
+
+- CFA Institute, *2026 Curriculum — Fixed-Income Bond Valuation: Prices and Yields*, [The relationship between price, discount rate and YTM](https://www.cfainstitute.org/insights/professional-learning/refresher-readings/2026/fixed-income-bond-valuation-prices-and-yields): price and yield calculation, accrued interest, discount and premium bonds.
+- FINRA, [Understanding Bond Yield and Return](https://www.finra.org/investors/insights/bond-yield-return): coupon rate, current yield and YTM, and the gap between reinvestment and realised return.
