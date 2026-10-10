@@ -162,14 +162,53 @@ Exam problems rarely ask you to perform full induction proofs. Instead, they ask
 
 ---
 
-## Connecting the Two Methods
+## Connecting the Four Methods
 
-Both methods share the same logical structure: they work by **elimination**.
+| Method | When to use it | Structure |
+|------|---------|------|
+| **Direct proof** | When you can show P is true in a forward direction | P → Q derived directly |
+| **Proof by contradiction** | When assuming "P is false" makes a contradiction easy to see | ¬P → ⊥ |
+| **Proof by contrapositive** | When the contrapositive (¬Q → ¬P) is easier than a direct proof | ¬Q → ¬P |
+| **Mathematical induction** | When proving an infinite case over the naturals n | P(1) + P(k)→P(k+1) |
 
-- Contradiction eliminates ¬P, leaving only P.
-- Induction eliminates all finite gaps (we prove each step is reachable), leaving only "all n."
+**Contradiction vs. contrapositive:**
 
-When you face a problem where direct proof seems impossible, ask: *Can I assume the opposite and show it cannot hold?* Or: *Can I show this holds for a base case and then propagates?*
+- Contrapositive: prove "if not Q, then not P" — forward direction
+- Contradiction: assume "P and not Q" → contradiction → so if P then Q — indirect
+
+**They feel similar but their structures differ.** Do not confuse the two on the exam.
+
+---
+
+## Common Mistakes
+
+### In proof by contradiction
+
+**Mistake**: confusing the assumption with the conclusion — starting from "assume ¬P" but then using P somewhere in the proof, which is circular.
+
+**Correct check**: follow the logical flow from the assumption (¬P) and confirm it never breaks before reaching the contradiction.
+
+### In mathematical induction
+
+**Mistake**: trying to prove P(k+1) directly in the inductive step → **you must use P(k)**, or it is not induction at all.
+
+**Mistake 2**: skipping the base case — it is not always n=1; sometimes the problem starts at n=0 or n=2, so check the problem statement.
+
+---
+
+### Example 2: 2ⁿ > n (n ≥ 1)
+
+**[Base]** n = 1: 2¹ = 2 > 1 ✓
+
+**[Inductive step]** Assume 2ᵏ > k holds.
+
+$$
+2^(k+1) = 2 \cdot 2^k > 2k = k + k \geq k + 1 \quad (k \geq 1)
+$$
+
+Therefore $2^(k+1) > k+1$ ✓
+
+**Conclusion**: holds for all n ≥ 1. ■
 
 ---
 
@@ -189,7 +228,28 @@ No integer can be both even and odd. ∎
 
 </details>
 
-**Problem 2** (exam liar puzzle): Four colleagues, exactly one is lying.
+**Problem 2** (induction): Prove by mathematical induction that for every natural n,
+
+$$
+1 + 3 + 5 + ... + (2n-1) = n^2
+$$
+
+<details>
+<summary>Solution</summary>
+
+**[Base]** n = 1: left side = 1, right side = 1² = 1 ✓
+
+**[Inductive step]** Assume $1 + 3 + ... + (2k-1) = k^2$.
+
+Left side through the (k+1) term = $k^2 + (2(k+1)-1) = k^2 + 2k + 1 = (k+1)^2$ = right side ✓
+
+**Conclusion**: holds for all n. ■
+
+</details>
+
+---
+
+**Problem 3** (exam liar puzzle): Four colleagues, exactly one is lying.
 - Mia: "I am not the liar."
 - Noah: "Mia is telling the truth."
 - Olivia: "Noah is lying."
@@ -211,7 +271,7 @@ Answer: Olivia is the liar.
 
 </details>
 
-**Problem 3** (induction base case): Someone claims "For all n ≥ 1, n² + n is odd." Check the base case.
+**Problem 4** (induction base case): Someone claims "For all n ≥ 1, n² + n is odd." Check the base case.
 
 <details>
 <summary>Solution</summary>
@@ -223,4 +283,22 @@ The base case fails. The claim is false. (In fact n² + n = n(n+1), which is alw
 
 ---
 
-Contradiction and induction are among the most elegant tools in logical reasoning. When you feel stuck proving something directly, flip the question: assume the opposite or build from the ground up. The impossibility you reveal — or the propagating truth you establish — is the proof itself.
+## Key Summary
+
+- **Proof by contradiction**: ¬P → ⊥ → P
+  - "Assume the opposite and reach a contradiction → the original claim is true"
+
+**Mathematical induction**
+
+- **Base**: confirm P(1) holds
+- **Inductive step**: prove P(k) → P(k+1)
+- **Conclusion**: P(n) holds for every natural n
+
+**The difference between them**
+
+- Contradiction = indirect proof (drive to a contradiction)
+- Induction = domino proof (spread without limit)
+
+---
+
+Mathematical induction stops being hard the moment you think of dominoes. Two things are visible — the first piece falls (base), and if one falls then the next falls too (inductive step) — and you have proved infinitely many cases in exactly two steps. Proof by contradiction is the wisdom of taking the long way round a road you cannot walk directly: by showing the reverse path is blocked, you prove the direct one was the right road. The next chapter (Ch8) covers **practical logic strategies — combining contradiction, truth-value fixing, and chain reasoning**.
