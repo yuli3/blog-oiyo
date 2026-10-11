@@ -1,0 +1,96 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CrossfitWeightEquivalent from "../../components/tools/CrossfitWeightEquivalent";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
+import { RATIO, STANDARDS } from "../../lib/crossfit-weight-equivalent";
+
+// English only (2026-10-11): search test for one new URL, per company-brain
+// traffic-reports/2026-10-07-revenue-content-discovery.md (Test 2).
+// Success: 20 impressions or 3 clicks on the target phrases within 28 days of indexing.
+export async function getStaticPaths() {
+  return [{ params: { lang: "en" }, props: { locale: "en" } }];
+}
+const locale = "en";
+const pct = (Math.round(RATIO * 1000) / 10).toFixed(1);
+
+const title = "CrossFit Male to Female Weight Converter — Rx Ratio and Chart";
+const description = `Convert a CrossFit weight from men's to women's Rx or back. Uses the ${pct}% average of the benchmark standards, with the published lb and kg pairs in a chart.`;
+
+const content = {
+  en: {
+    eyebrow: "Fitness Tool",
+    introTitle: "How are CrossFit weights scaled for women?",
+    intro: `CrossFit writes most workouts with a men's and a women's Rx load, such as 95/65 lb for Fran thrusters or 225/155 lb for Diane deadlifts. Across the eight benchmark standards in the chart below, the women's load is ${pct}% of the men's on average, ranging from 66% (kettlebell) to 70% (Grace, Isabel, dumbbell, wall ball). This converter multiplies by that ratio and rounds to the nearest plate. When you type a standard load, it shows the published pair instead.`,
+    howToTitle: "How to use",
+    steps: ["Choose men's → women's or women's → men's.", "Pick lb or kg.", "Type the weight written in the workout and read the equivalent."],
+    highlightsTitle: "Highlights",
+    highlights: [
+      { title: "Published pairs first", body: "Standard loads like 95, 135 or 53 lb return the official Rx pair." },
+      { title: "Plate rounding", body: "Other weights round to 5 lb or 2.5 kg so you can load the bar." },
+      { title: "Chart included", body: "Every benchmark used for the ratio is listed in lb and kg." },
+    ],
+    relatedTitle: "Related tools",
+    related: [
+      { href: "/en/one-rep-max-calculator/", label: "One Rep Max Calculator", desc: "Estimate your 1RM from reps." },
+      { href: "/en/weight-converter/", label: "Weight Converter", desc: "Convert kg, lb and more." },
+      { href: "/en/male-to-female-running-time-converter/", label: "Male to Female Running Time Converter", desc: "Equivalent race times." },
+    ],
+    disclaimer: "Rx loads are a convention, not a measurement of equal effort. Scale to what lets you keep the intended stimulus of the workout.",
+  },
+};
+
+const faqs = {
+  en: [
+    { q: "What is the CrossFit male to female weight ratio?", a: `About ${pct}%. Most barbell standards sit near 68–70% (95/65, 135/95, 225/155) and the kettlebell is 66% (53/35 lb).` },
+    { q: "What is 95 lb for women in CrossFit?", a: "65 lb. That is the Rx thruster load in Fran (43/29 kg in metric)." },
+    { q: "What is 135 lb for women?", a: "95 lb, as in Grace and Isabel (61/43 kg)." },
+    { q: "Why are the kg numbers not exact conversions of the lb numbers?", a: "Metric loads are rounded to practical plate weights on their own, so 95 lb is written as 43 kg rather than 43.1 kg, and 53 lb kettlebells are 24 kg bells." },
+  ],
+};
+
+const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
+---
+
+<BaseLayout title={title} description={description} availableLocales={["en"]}>
+  <ToolShell
+    title={title}
+    description={description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="crossfit-male-to-female-weight-converter"
+    content={c}
+    applicationCategory="HealthApplication"
+  >
+    <div class="mx-auto max-w-2xl">
+      <CrossfitWeightEquivalent client:load />
+      <div class="mt-6 overflow-x-auto">
+        <table class="w-full text-sm">
+          <caption class="mb-2 text-left text-xs text-muted-foreground">CrossFit male and female Rx weight chart (men / women)</caption>
+          <thead>
+            <tr class="border-b border-border text-left text-muted-foreground">
+              <th class="py-2 pr-3 font-medium">Workout</th>
+              <th class="py-2 pr-3 font-medium">lb</th>
+              <th class="py-2 pr-3 font-medium">kg</th>
+              <th class="py-2 font-medium">Women / men</th>
+            </tr>
+          </thead>
+          <tbody>
+            {STANDARDS.map((row) => (
+              <tr class="border-b border-border/60 align-top">
+                <td class="py-2 pr-3"><span class="text-foreground">{row.name}</span><br /><span class="text-xs text-muted-foreground">{row.movement}</span></td>
+                <td class="py-2 pr-3 font-mono text-foreground">{row.lb.men} / {row.lb.women}</td>
+                <td class="py-2 pr-3 font-mono text-foreground">{row.kg.men} / {row.kg.women}</td>
+                <td class="py-2 font-mono text-foreground">{Math.round((row.lb.women / row.lb.men) * 100)}%</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p class="mt-3 text-xs text-muted-foreground">Loads as prescribed in the CrossFit benchmark workouts and the CrossFit Open (crossfit.com). Average ratio {pct}%.</p>
+      </div>
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
+</BaseLayout>
