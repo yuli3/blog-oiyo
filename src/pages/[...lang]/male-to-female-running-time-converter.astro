@@ -1,0 +1,143 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import RunningTimeEquivalent from "../../components/tools/RunningTimeEquivalent";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
+import { formatTime, RECORDS, RECORDS_AS_OF, ratioFor } from "../../lib/running-gender-equivalent";
+
+// English and Korean only (2026-10-11): this is a search test for one new URL, per the demand
+// note in company-brain traffic-reports/2026-10-07-revenue-content-discovery.md (Test 1).
+// Success: 20 impressions or 3 clicks on the target phrases within 28 days of indexing.
+const PAGE_LOCALES = ["en", "ko"] as const;
+type PageLocale = (typeof PAGE_LOCALES)[number];
+
+export async function getStaticPaths() {
+  return (["en", "ko"] as const).map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+const { locale } = Astro.props as { locale: PageLocale };
+
+const meta: Record<PageLocale, { title: string; description: string }> = {
+  en: {
+    title: "Male to Female Running Time Converter — 5K, 10K, Half, Marathon",
+    description: "Convert a running time to the equivalent time for the other sex at 5K, 10K, half marathon and marathon, using the ratio between the men's and women's world records.",
+  },
+  ko: {
+    title: "달리기 기록 남녀 환산기 — 5K·10K·하프·풀코스",
+    description: "남자 기록을 여자 기록으로, 여자 기록을 남자 기록으로 환산합니다. 5K·10K·하프·풀코스 남녀 세계기록의 비율을 기준으로 계산합니다.",
+  },
+};
+const m = meta[locale];
+
+const content = {
+  en: {
+    eyebrow: "Running Tool",
+    introTitle: "What does an equivalent time mean?",
+    intro: "An equivalent time is the time that sits at the same level for the other sex. This calculator scales your time by the ratio between the women's and men's world records at the same distance, so a men's 10K of 50:00 becomes about 54:15 for women. The ratio is between 8.5% and 10.6% depending on the distance, close to the gap of about 10% that studies of elite results report. It is a rough guide for comparing training partners or setting goals, not an official age-grading.",
+    howToTitle: "How to use",
+    steps: ["Pick the distance.", "Choose men's → women's or women's → men's.", "Type your time as h:mm:ss or mm:ss and read the equivalent."],
+    highlightsTitle: "Highlights",
+    highlights: [
+      { title: "Sourced ratios", body: "Every ratio comes from a world record listed below with its date." },
+      { title: "Both directions", body: "Convert a men's time to women's or the other way round." },
+      { title: "Four distances", body: "5K, 10K, half marathon and marathon." },
+    ],
+    relatedTitle: "Related tools",
+    related: [
+      { href: "/en/pace-calculator/", label: "Running Pace Calculator", desc: "Pace, speed and finish times." },
+      { href: "/en/height-converter/", label: "Male to Female Height Converter", desc: "Equivalent height for the other sex." },
+      { href: "/en/speed-converter/", label: "Speed Converter", desc: "Convert km/h, mph, m/s." },
+    ],
+    disclaimer: "World records describe the very top of each field. At recreational level the gap varies more from person to person, so treat the result as an estimate.",
+  },
+  ko: {
+    eyebrow: "러닝 도구",
+    introTitle: "같은 수준의 기록이란?",
+    intro: "다른 성별이라면 어느 기록이 같은 수준인지를 계산합니다. 같은 거리의 여자 세계기록을 남자 세계기록으로 나눈 비율을 곱하므로, 남자 10K 50:00은 여자 기록으로 약 54:15가 됩니다. 비율은 거리에 따라 8.5%에서 10.6% 사이이고, 엘리트 기록을 분석한 연구가 말하는 약 10%의 차이와 비슷합니다. 함께 뛰는 사람과 기록을 견주거나 목표를 잡을 때 쓰는 대략적인 기준이며, 공식 연령 등급표는 아닙니다.",
+    howToTitle: "사용 방법",
+    steps: ["거리를 고릅니다.", "남자 → 여자 또는 여자 → 남자를 고릅니다.", "기록을 시:분:초나 분:초로 입력하고 환산 결과를 확인합니다."],
+    highlightsTitle: "주요 특징",
+    highlights: [
+      { title: "출처가 있는 비율", body: "모든 비율은 아래 표의 세계기록과 날짜에서 나옵니다." },
+      { title: "양방향", body: "남자 기록을 여자 기록으로, 여자 기록을 남자 기록으로 바꿉니다." },
+      { title: "네 거리", body: "5K, 10K, 하프, 풀코스를 지원합니다." },
+    ],
+    relatedTitle: "관련 도구",
+    related: [
+      { href: "/ko/pace-calculator/", label: "러닝 페이스 계산기", desc: "페이스·속도·완주 시간을 계산합니다." },
+      { href: "/ko/height-converter/", label: "키 변환기", desc: "남자키 여자키를 환산합니다." },
+      { href: "/ko/speed-converter/", label: "속도 변환기", desc: "km/h·mph·m/s를 변환합니다." },
+    ],
+    disclaimer: "세계기록은 각 성별의 최상위를 보여 줍니다. 일반 러너 사이에서는 차이가 사람마다 더 크게 달라지므로 결과는 추정치로 봐 주세요.",
+  },
+};
+
+const faqs = {
+  en: [
+    { q: "What is the women's equivalent of a 4-hour marathon?", a: `About ${formatTime(4 * 3600 * ratioFor("marathon"))}, using the marathon world-record ratio.` },
+    { q: "Why use world records instead of average times?", a: "Records are public, dated and checkable. Averages from race results depend on who enters each race, which changes the gap from event to event." },
+    { q: "How big is the gap between men and women in running?", a: "Across the four distances here it is 8.5–10.6%. A study of elite results from 1983 to 2008 found a stable gap of about 10% across sports (Thibault et al., 2010)." },
+    { q: "Are women's road records set in mixed races?", a: "Yes for the records used here. World Athletics also keeps women-only road records, which are a little slower; using them would widen the gap by a few percent." },
+  ],
+  ko: [
+    { q: "남자 풀코스 4시간은 여자 기록으로 몇 시간인가요?", a: `풀코스 세계기록 비율로 약 ${formatTime(4 * 3600 * ratioFor("marathon"))}입니다.` },
+    { q: "평균 기록 대신 세계기록을 쓰는 이유는?", a: "세계기록은 공개되어 있고 날짜가 있어 누구나 확인할 수 있습니다. 대회 평균은 어떤 사람이 참가했느냐에 따라 달라져 대회마다 차이가 흔들립니다." },
+    { q: "달리기에서 남녀 차이는 얼마나 되나요?", a: "이 페이지의 네 거리에서는 8.5~10.6%입니다. 1983~2008년 엘리트 기록을 분석한 연구는 여러 종목에서 약 10%의 차이가 유지된다고 보고했습니다(Thibault 외, 2010)." },
+    { q: "여자 도로 기록은 혼성 레이스에서 나온 건가요?", a: "여기서 쓰는 기록은 그렇습니다. 세계육상연맹은 여자 단독 레이스 기록도 따로 두는데, 조금 더 느려서 그것을 쓰면 차이가 몇 % 커집니다." },
+  ],
+};
+
+const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
+const table = {
+  en: { caption: `World records used (World Athletics, as of ${RECORDS_AS_OF})`, distance: "Distance", men: "Men", women: "Women", ratio: "Gap", names: { "5k": "5K road", "10k": "10K road", half: "Half marathon", marathon: "Marathon" } },
+  ko: { caption: `사용한 세계기록 (세계육상연맹, ${RECORDS_AS_OF} 기준)`, distance: "거리", men: "남자", women: "여자", ratio: "차이", names: { "5k": "5K 도로", "10k": "10K 도로", half: "하프", marathon: "풀코스" } },
+}[locale];
+const sources = {
+  en: ["World Athletics, world records by event (worldathletics.org/records)", "Thibault V. et al. (2010). Women and Men in Sport Performance: The Gender Gap has not Evolved since 1983. Journal of Sports Science and Medicine, 9(2), 214–223."],
+  ko: ["세계육상연맹(World Athletics) 종목별 세계기록 (worldathletics.org/records)", "Thibault V. 외 (2010). Women and Men in Sport Performance: The Gender Gap has not Evolved since 1983. Journal of Sports Science and Medicine, 9(2), 214–223."],
+}[locale];
+---
+
+<BaseLayout title={m.title} description={m.description} availableLocales={[...PAGE_LOCALES]}>
+  <ToolShell
+    title={m.title}
+    description={m.description}
+    siteUrl={siteConfig.url}
+    locale={locale}
+    slug="male-to-female-running-time-converter"
+    content={c}
+    applicationCategory="HealthApplication"
+  >
+    <div class="mx-auto max-w-2xl">
+      <RunningTimeEquivalent client:load locale={locale} />
+      <div class="mt-6 overflow-x-auto">
+        <table class="w-full text-sm">
+          <caption class="mb-2 text-left text-xs text-muted-foreground">{table.caption}</caption>
+          <thead>
+            <tr class="border-b border-border text-left text-muted-foreground">
+              <th class="py-2 pr-3 font-medium">{table.distance}</th>
+              <th class="py-2 pr-3 font-medium">{table.men}</th>
+              <th class="py-2 pr-3 font-medium">{table.women}</th>
+              <th class="py-2 font-medium">{table.ratio}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {RECORDS.map((row) => (
+              <tr class="border-b border-border/60 align-top">
+                <td class="py-2 pr-3 text-foreground">{table.names[row.id]}</td>
+                <td class="py-2 pr-3"><span class="font-mono text-foreground">{formatTime(row.men.seconds)}</span><br /><span class="text-xs text-muted-foreground">{row.men.athlete} · {row.men.date}</span></td>
+                <td class="py-2 pr-3"><span class="font-mono text-foreground">{formatTime(row.women.seconds)}</span><br /><span class="text-xs text-muted-foreground">{row.women.athlete} · {row.women.date}</span></td>
+                <td class="py-2 font-mono text-foreground">+{((ratioFor(row.id) - 1) * 100).toFixed(1)}%</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <ul class="mt-3 list-disc space-y-1 pl-5 text-xs text-muted-foreground">
+          {sources.map((source) => <li>{source}</li>)}
+        </ul>
+      </div>
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
+</BaseLayout>

@@ -142,6 +142,7 @@ interface Tool {
   title: Record<Locale, string>;
   description: Record<Locale, string>;
   href?: string; // absolute override → oiyo.net canonical (tests live there)
+  locales?: readonly Locale[]; // only listed in these locales (page built for them only)
 }
 
 const converterTools: Tool[] = [
@@ -240,6 +241,13 @@ const converterTools: Tool[] = [
     emoji: "🏃",
     title: { ko: "러닝 페이스 계산기", en: "Running Pace Calculator", ja: "ランニングペース計算", fr: "Running Pace Calculator", es: "Running Pace Calculator", zh: "跑步配速计算器", },
     description: { ko: "페이스·속도·완주시간", en: "Pace, speed, finish time", ja: "ペース・速度・完走時間", fr: "Pace, speed, finish time", es: "Pace, speed, finish time", zh: "配速·速度·完成时间", },
+  },
+  {
+    slug: "male-to-female-running-time-converter",
+    emoji: "🏃‍♀️",
+    title: { ko: "달리기 기록 남녀 환산기", en: "Male to Female Running Time Converter", ja: "", fr: "", es: "", zh: "", },
+    description: { ko: "5K·10K·하프·풀 기록을 다른 성별로", en: "5K to marathon, by world-record ratio", ja: "", fr: "", es: "", zh: "", },
+    locales: ["en", "ko"],
   },
   {
     slug: "recipe-scaler",
@@ -788,6 +796,13 @@ const healthTools: Tool[] = [
     description: { ko: "원렙맥스·훈련 강도표", en: "One-rep max & %", ja: "最大挙上重量・強度", fr: "One-rep max & %", es: "One-rep max & %", zh: "单次最大重量·强度", },
   },
   {
+    slug: "crossfit-male-to-female-weight-converter",
+    emoji: "🏋️‍♀️",
+    title: { ko: "", en: "CrossFit Male to Female Weight Converter", ja: "", fr: "", es: "", zh: "", },
+    description: { ko: "", en: "Rx ratio and weight chart", ja: "", fr: "", es: "", zh: "", },
+    locales: ["en"],
+  },
+  {
     slug: "heart-rate-calculator",
     emoji: "❤️",
     title: { ko: "목표 심박수 계산기", en: "Heart Rate Calculator", ja: "目標心拍数計算機", fr: "Heart Rate Calculator", es: "Heart Rate Calculator", zh: "目标心率计算器", },
@@ -1216,6 +1231,8 @@ const categories: Category[] = [
   { id: "learning",   emoji: "📚", tools: [],              color: "text-teal-700",    bgColor: "bg-teal-50 border-teal-200" },
   { id: "lifestyle",  emoji: "🌿", tools: [],              color: "text-lime-700",    bgColor: "bg-lime-50 border-lime-200" },
 ];
+// A tool built for some locales only must not be linked from the others (it would 404).
+for (const category of categories) category.tools = category.tools.filter((tool) => !tool.locales || tool.locales.includes(locale));
 
 // ─── IA unification: merge interactive (tool-embedding articles) into the catalog ──
 // /interactive and /tools were two views of the same thing (every interactive post
