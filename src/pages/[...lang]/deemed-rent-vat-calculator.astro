@@ -1,0 +1,70 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import DeemedRentVatCalculator from "../../components/tools/DeemedRentVatCalculator";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
+import { deemedRent, VAT_RATES, VAT_RATES_AS_OF } from "../../lib/kr-vat-2026";
+
+// Korean only (2026-10-12): Korean VAT tool from the tax-practice toolkit plan
+// (company-brain projects/oiyo-ecosystem/tax-practice-toolkit-plan-2026-10-12.md, item 4).
+const PAGE_LOCALES = ["ko"] as const;
+
+export async function getStaticPaths() {
+  return [{ params: { lang: "ko" }, props: { locale: "ko" } }];
+}
+const locale = "ko";
+
+const title = "간주임대료 계산기 2026 — 상가 보증금 부가세와 회계처리";
+const description = "상가 임대보증금에 대한 간주임대료와 부가세를 과세기간 일수로 계산하고, 임대인·임차인 부담별 회계처리를 보여 줍니다. 정기예금이자율 연 3.1% 기준.";
+
+const won = (n: number) => `${n.toLocaleString("ko-KR")}원`;
+const rate = `${Number((VAT_RATES.deemedRentInterest * 100).toFixed(2))}%`;
+const sample = deemedRent({ deposit: 100_000_000, start: "2026-07-01", end: "2026-12-31" });
+
+const ko = {
+  eyebrow: "세무 실무 도구",
+  introTitle: "상가 보증금에도 부가세가 붙나요?",
+  intro: `상가를 빌려주고 보증금을 받으면, 그 보증금을 은행에 맡겼을 때 받을 이자만큼을 임대료로 보고 부가세를 매깁니다. 이것이 간주임대료입니다. 계산은 보증금 × 과세기간 안에서 빌려준 일수 × 정기예금이자율 ÷ 365(윤년 366)이고, 이자율은 현재 연 ${rate}입니다. 예를 들어 보증금 1억 원을 2026년 2기(7월 1일~12월 31일, 184일) 내내 받았다면 간주임대료는 ${won(sample.deemedRent)}, 부가세는 ${won(sample.vat)}입니다. 간주임대료에는 세금계산서를 발급하지 않으므로 임차인은 매입세액 공제를 받을 수 없고, 누가 부가세를 부담하느냐에 따라 회계처리가 달라집니다.`,
+  howToTitle: "사용 방법",
+  steps: [
+    "맨 위 칸에 \"보증금 1억 2기\"처럼 적거나 예시를 누릅니다.",
+    "보증금, 이자율, 과세기간 안의 임대 시작일·종료일을 확인합니다. 기간 중 계약이 바뀌었다면 구간별로 나눠 계산합니다.",
+    "부가세를 임대인이 부담하는지, 임차인에게 받는지 고르면 회계처리가 바뀝니다.",
+  ],
+  highlightsTitle: "주요 특징",
+  highlights: [
+    { title: "일수·윤년 자동 계산", body: "시작일과 종료일로 일수를 세고, 윤년이면 366일로 나눕니다." },
+    { title: "회계처리까지", body: "임대인 부담이면 세금과공과, 임차인에게 받으면 부가세예수금으로 분개합니다." },
+    { title: "이자율 직접 수정", body: `기본값은 연 ${rate}이며, 고시가 바뀌면 칸에서 고칠 수 있습니다.` },
+  ],
+  relatedTitle: "관련 도구",
+  related: [
+    { href: "/ko/vat-penalty-calculator/", label: "부가세 가산세 계산기", desc: "늦게 신고했을 때 가산세와 감면을 계산합니다." },
+    { href: "/ko/vat-calculator/", label: "부가세 계산기", desc: "월세 공급가액과 부가세를 나눠 봅니다." },
+    { href: "/ko/rental-yield-calculator/", label: "임대수익률 계산기", desc: "보증금·월세로 수익률을 계산합니다." },
+  ],
+  disclaimer: `일반적인 계산을 돕는 참고 도구입니다. 겸용주택의 면세 부분 안분, 임대용 부동산 건설비 차감, 전대(재임대) 특례는 반영하지 않았습니다. 이자율은 기획재정부령으로 바뀌므로 신고 전 홈택스 안내를 확인하세요. 기준일 ${VAT_RATES_AS_OF}.`,
+};
+
+const faqs = [
+  { q: "간주임대료 이자율은 얼마인가요?", a: `부가가치세법 시행규칙 제47조가 정하는 정기예금이자율을 씁니다. 이 계산기의 기본값은 연 ${rate}이고, 바뀌면 이자율 칸을 고쳐 계산할 수 있습니다.` },
+  { q: "주택 임대보증금에도 간주임대료 부가세가 붙나요?", a: "아니요. 주택 임대는 부가세 면세이므로 부가세 간주임대료는 상가 등 과세 임대에만 해당합니다. 주택 보증금의 간주임대료는 소득세(3주택 이상 등) 문제로 따로 봅니다." },
+  { q: "임차인은 간주임대료 부가세를 공제받을 수 있나요?", a: "받을 수 없습니다. 간주임대료에는 세금계산서를 발급하지 않기 때문에, 임차인이 부가세를 대신 냈더라도 매입세액 공제 대상이 아닙니다." },
+  { q: "과세기간 중간에 계약이 시작되면 어떻게 계산하나요?", a: "과세기간 안에서 실제로 보증금을 받고 빌려준 날부터 일수를 셉니다. 중간에 보증금이 바뀌었다면 바뀌기 전과 후를 나눠 각각 계산해 더합니다." },
+  { q: "신고서 어디에 적나요?", a: "부가세 신고서 과세표준의 '과세 기타(정규영수증 외 매출분)' 칸에 간주임대료를 넣고, 부동산임대공급가액명세서를 함께 제출합니다." },
+];
+
+const { content: c, faqHeading, faqItems } = buildToolShell({ en: ko, ko }, { en: faqs, ko: faqs }, locale);
+---
+
+<BaseLayout title={title} description={description} availableLocales={[...PAGE_LOCALES]}>
+  <ToolShell title={title} description={description} siteUrl={siteConfig.url} locale={locale} slug="deemed-rent-vat-calculator" content={c} applicationCategory="FinanceApplication">
+    <div class="mx-auto max-w-2xl">
+      <DeemedRentVatCalculator client:load />
+      <p class="mt-4 text-xs text-muted-foreground">근거: 부가가치세법 제29조 제10항, 같은 법 시행령 제65조(간주임대료), 시행규칙 제47조(정기예금이자율), 시행령 제71조(세금계산서 발급의무 면제). 기준일 {VAT_RATES_AS_OF}.</p>
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
+</BaseLayout>

@@ -1,0 +1,69 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import HealthInsuranceLeaverSettlement from "../../components/tools/HealthInsuranceLeaverSettlement";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
+import { leaverHealthSettlement, RATES, RATES_AS_OF } from "../../lib/kr-payroll-2026";
+
+// Korean only (2026-10-12): Korean payroll tool from the tax-practice toolkit plan
+// (company-brain projects/oiyo-ecosystem/tax-practice-toolkit-plan-2026-10-12.md, item 5).
+const PAGE_LOCALES = ["ko"] as const;
+
+export async function getStaticPaths() {
+  return [{ params: { lang: "ko" }, props: { locale: "ko" } }];
+}
+const locale = "ko";
+
+const title = "퇴사월 건강보험 정산 계산기 2026 — 퇴직정산 보험료 미리 보기";
+const description = "중도 퇴사자의 올해 보수 총액과 고지 기준 보수월액으로 퇴사월 급여에서 더 떼거나 돌려줄 건강보험·장기요양 정산액을 계산합니다. 2026년 요율 기준.";
+
+const won = (n: number) => `${n.toLocaleString("ko-KR")}원`;
+const sample = leaverHealthSettlement({ totalPay: 30_000_000, monthsWorked: 6, monthsCharged: 6, noticeMonthly: 4_500_000 });
+
+const ko = {
+  eyebrow: "인건비 도구",
+  introTitle: "퇴사하는 달 건강보험료는 왜 많이 나오나요?",
+  intro: `건강보험료는 매달 '고지 기준 보수월액'으로 걷고, 실제로 받은 보수와의 차이는 다음 해 4월 연말정산이나 퇴사할 때 한꺼번에 맞춥니다. 퇴사할 때는 올해 받은 보수 총액을 근무 달 수로 나눠 실제 보수월액을 다시 구하고, 그 기준으로 냈어야 할 보험료에서 이미 낸 보험료를 뺍니다. 올해 상반기 성과급이나 급여 인상이 있었다면 퇴사월 급여에서 꽤 큰 금액이 빠질 수 있습니다. 예를 들어 6개월 동안 3,000만 원(월 500만 원)을 받았는데 기준 보수월액이 450만 원이었다면, 근로자분 정산액은 건강보험과 장기요양을 합쳐 ${won(sample.total)}입니다. 2026년 근로자 요율은 건강보험 ${(RATES.healthEmployee * 100).toFixed(3)}%, 장기요양은 건강보험료의 ${(RATES.longTermCareOfHealth * 100).toFixed(2)}%입니다.`,
+  howToTitle: "사용 방법",
+  steps: [
+    "맨 위 칸에 \"올해 총급여 3000만원 6개월 근무 기준 보수월액 450만원\"처럼 적거나 예시를 누릅니다.",
+    "보수 총액(비과세 식대 등 제외), 보수를 받은 달 수, 보험료가 부과된 달 수, 고지 기준 보수월액을 확인합니다.",
+    "결과가 양수면 퇴사월 급여에서 더 떼고, 음수면 퇴사자에게 돌려줍니다.",
+  ],
+  highlightsTitle: "주요 특징",
+  highlights: [
+    { title: "공단 계산 방식 그대로", body: "월 보험료를 10원 미만 버림으로 구한 뒤 부과 달 수를 곱해, 공단 정산액과 같은 방식으로 맞춥니다." },
+    { title: "장기요양 함께 정산", body: "건강보험료에 비율을 곱하는 장기요양보험료도 따로 계산해 더합니다." },
+    { title: "실무 메모에서 출발", body: "세무사무소에서 급여대장에 정산액을 반영하던 방법을 도구로 옮겼습니다." },
+  ],
+  relatedTitle: "관련 도구",
+  related: [
+    { href: "/ko/severance-calculator/", label: "퇴직금 계산기", desc: "근속 기간과 평균임금으로 퇴직금을 계산합니다." },
+    { href: "/ko/salary-calculator/", label: "연봉 실수령액 계산기", desc: "4대보험과 소득세를 뺀 월급을 봅니다." },
+    { href: "/ko/daily-worker-insurance-checker/", label: "일용직·알바 4대보험 판정기", desc: "한 달 8일·60시간 기준을 확인합니다." },
+  ],
+  disclaimer: `일반적인 계산을 돕는 참고 도구입니다. 연도 중 4월에 보수월액이 바뀐 경우, 휴직·감면, 보수월액 상·하한 등은 반영하지 않았습니다. 확정 금액은 자격상실신고 후 국민건강보험공단 고지서나 EDI에서 확인하세요. 기준일 ${RATES_AS_OF}.`,
+};
+
+const faqs = [
+  { q: "퇴직정산 보험료는 언제 고지되나요?", a: "자격상실신고를 하면 공단이 정산 보험료를 계산해 사업장 고지서에 넣습니다. 보통 상실신고가 15일 이전이면 그달, 이후면 다음 달 고지서에 반영됩니다. 사업장은 퇴사월 급여에서 미리 공제해 두는 것이 안전합니다." },
+  { q: "보수 총액에는 무엇을 넣나요?", a: "올해 1월(또는 입사월)부터 퇴사월까지 받은 근로소득 중 비과세 소득(식대 월 20만 원 등)을 뺀 금액입니다. 상여금과 성과급도 포함합니다." },
+  { q: "근무 달 수와 부과 달 수가 왜 다른가요?", a: "건강보험료는 자격을 얻은 날이 속한 달의 다음 달부터 부과합니다(매월 1일 입사는 그달부터). 그래서 월 중간에 입사했다면 보수는 받았어도 그달 보험료는 없어 부과 달 수가 하나 적습니다." },
+  { q: "국민연금과 고용보험도 퇴사 때 정산하나요?", a: "국민연금은 퇴사 정산이 없습니다. 고용보험은 상실신고 때 보수총액을 신고하면 공단이 사업장 단위로 정산하므로, 급여에서 따로 떼는 경우는 드뭅니다." },
+  { q: "정산액이 마이너스면 어떻게 하나요?", a: "실제 보수가 기준보다 적었다는 뜻이라 근로자분을 퇴사자에게 돌려줍니다. 사업장은 다음 고지에서 차감되거나 환급받습니다." },
+];
+
+const { content: c, faqHeading, faqItems } = buildToolShell({ en: ko, ko }, { en: faqs, ko: faqs }, locale);
+---
+
+<BaseLayout title={title} description={description} availableLocales={[...PAGE_LOCALES]}>
+  <ToolShell title={title} description={description} siteUrl={siteConfig.url} locale={locale} slug="health-insurance-leaver-settlement" content={c} applicationCategory="FinanceApplication">
+    <div class="mx-auto max-w-2xl">
+      <HealthInsuranceLeaverSettlement client:load />
+      <p class="mt-4 text-xs text-muted-foreground">근거: 국민건강보험법 제69조(보험료), 제70조(보수월액). 2026년 건강보험료율 7.19%, 장기요양보험료율 건강보험료의 13.14%. 기준일 {RATES_AS_OF}.</p>
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
+</BaseLayout>
