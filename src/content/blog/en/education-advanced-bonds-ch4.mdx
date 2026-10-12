@@ -3,10 +3,7 @@ track: academy
 series: advanced-bonds
 chapter: 4
 title: "Credit Analysis and Spreads: The Price of Risk"
-description: >-
-  Understand how to evaluate the borrower's ability to pay you back. Master the
-  world of Credit Ratings (S&P, Moody's), and learn how 'Credit Spreads' reflect
-  the market's fear or confidence in the c...
+description: "Distinguish rating opinions, expected loss, spread components, model-dependent OAS and the discontinued TED series."
 pubDate: 2026-03-01T00:00:00.000Z
 category: Finance
 tags:
@@ -18,6 +15,7 @@ author: Oiyo
 
 
 import Callout from "@/components/mdx/Callout.astro";
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import {
   LectureTable,
   LectureProcess,
@@ -25,39 +23,15 @@ import {
 
 # Credit Analysis and Spreads: The Price of Risk
 
-Not all bonds are created equal. While government bonds (Treasuries) are often considered "Risk-Free," corporate bonds carry <mark><strong>Credit Risk</strong></mark>—the possibility that the company might not pay back its debt. To compensate for this risk, corporate bonds must pay a higher interest rate than Treasuries. This difference is known as the **"Spread."**
+Credit risk is the risk that contractual interest or principal is not paid. Government debt also differs by sovereign, currency and contract; it is not universally free of default, currency or rate risk. A spread is a difference from a stated benchmark. Align currency, maturity, options and liquidity before comparing.
 
 ---
 
 ## 1. The Language of Credit: Ratings
 
-Credit rating agencies act as the "Judges" of the bond world. They assign grades based on a company's financial health.
+A rating is an agency’s opinion about relative creditworthiness, not a fixed numerical default probability or a principal guarantee. Interpretation depends on agency, sector and assessment date.
 
-<LectureTable
-  title="Global Credit Rating Scale"
-  headers={["Category", "S&P / Fitch", "Moody's", "Description"]}
-  rows={[
-    [
-      "**Investment Grade**",
-      "AAA to BBB-",
-      "Aaa to Baa3",
-      "Highest quality; low default risk. Suitable for conservative funds.",
-    ],
-    [
-      "**Speculative (Junk)**",
-      "BB+ to B-",
-      "Ba1 to B3",
-      "High Yield; significant risk but higher potential returns.",
-    ],
-    [
-      "**Distressed / Default**",
-      "CCC to D",
-      "Caa to C",
-      "Extremely high risk; often already in default or restructuring.",
-    ],
-  ]}
-  highlightColumns={[0]}
-/>
+<LectureTable headers={["Category","S&P-style long-term symbol example","Interpretation"]} rows={[["Investment grade","AAA through BBB-","Relatively lower credit risk by rating; other losses and liquidity risk remain"],["Non-investment grade","Below BBB-","Includes CCC as well as BB and B; not synonymous with an existing default"],["Default symbol","D","Distinct from CCC; check agency-specific default and selective-default definitions"]]} />
 
 ---
 
@@ -88,31 +62,31 @@ How do institutional analysts decide if a bond is worth buying? They follow a sy
 
 ## 3. Mastering the Spreads
 
-Spreads are the most important numbers for corporate bond traders. They tell you exactly how much "Risk Premium" you are being paid.
+Wider spreads can reflect expected losses, risk compensation, liquidity, options and market supply or demand. An observed yield gap is neither a default probability nor an expected excess return by itself.
 
-- **Option-Adjusted Spread (OAS)**: The spread after removing the value of embedded options. This is the "Purest" measure of credit risk.
-- **TED Spread**: The difference between the 3-month LIBOR and the 3-month Treasury bill. It is a classic indicator of <mark><strong>Systemic Risk</strong></mark> and fear in the banking system.
-- **Credit Spread Widening**: When spreads get larger, it means the market is becoming more fearful of defaults.
+- **OAS**: A model-based spread adjusted for embedded options. Non-credit factors remain, and volatility and exercise assumptions matter. It is not pure default risk.
+- **TED spread**: A historical gap between three-month USD LIBOR and Treasury rates. FRED discontinued TEDRATE after removing its LIBOR data on January 31, 2022. Do not present it as a current real-time risk series.
+
+### A. Separate Expected Loss from the Market Spread
+
+Take a hypothetical one-year default probability PD=2%, recovery R=40% and fixed exposure at default EAD=100,000,000 currency units:
+
+<FormulaBox formula="EL = EAD \times PD \times (1-R)" />
+
+EL=100,000,000×0.02×0.60=1,200,000, or 1.2% of exposure. This simplified expected loss omits discounting, dependence, recovery timing and changing exposure. It is not a certain annual loss of 1.2%. The 120bp is not the entire bond spread, and a spread alone cannot identify PD.
 
 <Callout type="warning">
-  **The Default Trap**: High Yield (Junk) bonds offer attractive double-digit returns, but a single
-  default can wipe out the interest gains of an entire portfolio. Diversification is non-negotiable
-  in credit investing.
+A high quoted yield does not guarantee a high realized return. Diversification leaves common shocks and correlated defaults. Recovery depends on collateral, seniority and legal proceedings.
 </Callout>
 
 ---
 
 ## 4. Wrapping Up: Pricing the Uncertainty
 
-Credit analysis is the bridge between <mark><strong>Finance and Reality.</strong></mark> By learning to read ratings and spreads, you gain the ability to spot when the market is being too pessimistic (cheap bonds) or dangerously optimistic (expensive credit).
+Review cash flows and maturity payments, refinancing, collateral and guarantees, creditor priority, stress scenarios and pricing assumptions. The 5 Cs are a checklist, not a valuation model producing a fair price from a score. Operating cash flow is not EBITDA; ratings and spreads alone do not prove undervaluation.
 
----
+## Sources
 
-## 📖 참고문헌
-- **[Standard & Poor's Guide to Credit Analysis]**: A deep dive into the methodology used by the world's leading rating agency.
-- **[High Yield Bonds] - Theodore Barnhill**: Understanding the dynamics of the junk bond market.
-- **[Corporate Credit Analysis]**: Practical tools for analyzing financial statements from a lender's perspective.
-
----
-
-Next time, we will explore **Specialized Bonds and Structured Products**—learning about the exotic world of Convertible Bonds and Hybrid Securities.
+- SEC, [The ABCs of Credit Ratings](https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins/updated-8).
+- FRED, [TED Spread — DISCONTINUED](https://fred.stlouisfed.org/series/TEDRATE).
+- Antti Ilmanen, [Expected Returns on Major Asset Classes — credit risk premium, pp. 77–79; OAS assumptions and spread components, pp. 92–93](https://rpc.cfainstitute.org/sites/default/files/-/media/documents/book/rf-publication/2012/rf-v2012-n1-1-pdf.PDF#page=102).

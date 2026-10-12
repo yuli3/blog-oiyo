@@ -3,9 +3,7 @@ track: academy
 series: advanced-bonds
 chapter: 2
 title: "듀레이션과 볼록성: 민감도의 측정"
-description: >-
-  금리 리스크를 정교하게 수치화하는 법을 배웁니다. 가격 변동을 예측하는 수정 듀레이션을 마스터하고, 대규모 금리 변동 시 포트폴리오를
-  보호하는 핵심 개념인 볼록성(Convexity)을 이해합니다.
+description: "수정 듀레이션과 볼록성의 정의·단위를 구분하고, 1%포인트 충격의 가격 근사와 정확한 재평가를 비교합니다."
 pubDate: 2026-03-01T00:00:00.000Z
 category: Finance
 tags:
@@ -17,6 +15,7 @@ author: Oiyo
 
 
 import Callout from "@/components/mdx/Callout.astro";
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import {
   LectureTable,
   LectureProcess,
@@ -24,7 +23,7 @@ import {
 
 # 듀레이션과 볼록성: 민감도의 측정
 
-1장에서 금리가 변하면 채권 가격이 변한다는 것을 배웠다면, 2장에서는 **"정확히 얼마나 변하는가?"**를 다룹니다. 채권 포트폴리오를 관리하기 위해서는 리스크를 수치화할 수 있는 도구가 필요합니다. 그 핵심 도구가 바로 <mark><strong>듀레이션(Duration)</strong></mark>과 <mark><strong>볼록성(Convexity)</strong></mark>입니다.
+1장에서 금리가 변하면 채권 가격이 변한다는 것을 배웠다면, 2장에서는 **"가격 변화율을 어떤 전제 아래 근사하는가?"**를 다룹니다. 채권 포트폴리오를 관리하기 위해서는 리스크를 수치화할 수 있는 도구가 필요합니다. 그 핵심 도구가 바로 <mark><strong>듀레이션(Duration)</strong></mark>과 <mark><strong>볼록성(Convexity)</strong></mark>입니다.
 
 ---
 
@@ -38,12 +37,12 @@ import {
   rows={[
     [
       "**맥컬리 듀레이션**",
-      "모든 현금흐름을 받는 시점의 가중평균 기간",
+      "각 현금흐름의 현재가치가 채권 가격에서 차지하는 비중으로 가중한 수령 시점",
       "채권의 실질적 '평균 수명' 측정",
     ],
     [
       "**수정 듀레이션**",
-      "금리 변화율에 따른 가격 변화율을 선형적으로 계산",
+      "수익률의 절대 변화 Δy에 대한 가격의 상대 변화 민감도",
       "일상적인 리스크 관리 및 가격 예측",
     ],
     [
@@ -55,18 +54,20 @@ import {
   highlightColumns={[1]}
 />
 
+
+기본 모형은 약정 현금흐름이 고정된 채권입니다. 맥컬리 듀레이션의 가중치는 명목 지급액이 아니라 현재가치 비중입니다. 연 m회 복리 수익률 y를 쓰면 Dmod = DMac/(1+y/m)이며, 지급 주기와 수익률 단위를 맞춰야 합니다.
 ---
 
 ## 2. 선형적 예측: 듀레이션 활용
 
 듀레이션을 실전에서 활용하는 가장 대중적인 공식은 다음과 같습니다:
-<mark><strong>가격 변동률(%) ≈ -수정 듀레이션 × 금리 변동폭</strong></mark>
+<FormulaBox formula="\frac{\Delta P}{P} \approx -D_{mod}\Delta y" description="Δy는 수익률의 절대 변화를 소수로 넣어요. 결과도 소수이며 100을 곱하면 %가 돼요." />
 
 <LectureProcess
   steps={[
     { label: "시나리오 설정", description: "수정 듀레이션이 7.0인 채권을 보유 중" },
-    { label: "금리 충격", description: "시장 금리(YTM)가 1%(100bp) 상승함" },
-    { label: "계산", description: "듀레이션과 변동폭을 곱함: 7.0 * 0.01 = 0.07" },
+    { label: "금리 충격", description: "YTM이 5%에서 6%로 1%포인트(100bp) 상승함: Δy = 0.01" },
+    { label: "계산", description: "듀레이션과 변동폭을 곱함: -7.0 × 0.01 = -0.07" },
     { label: "결과 도출", description: "채권 가격은 약 7.0% 하락할 것으로 예측됨" },
   ]}
 />
@@ -77,8 +78,21 @@ import {
 
 듀레이션은 금리와 가격의 관계를 직선이라고 가정합니다. 하지만 실제로는 곡선의 형태를 띠는데, 이 곡률을 측정한 것이 <mark><strong>볼록성(Convexity)</strong></mark>입니다.
 
-- **볼록성의 이점**: 볼록성이 큰 채권은 금리가 하락할 때 가격이 더 많이 오르고, 금리가 상승할 때 가격이 덜 떨어집니다.
-- **안전장치**: 대규모 금리 변동 시 듀레이션만으로는 측정할 수 없는 오차를 볼록성이 보완하여 포트폴리오를 보호합니다.
+옵션 없는 고정금리채의 양의 볼록성은 듀레이션만 사용한 근사치에 양의 보정항을 더합니다. 다른 조건과 듀레이션이 같을 때의 비교이며, 서로 다른 채권의 성과 순위를 보장하지는 않습니다. 볼록성은 위험을 없애는 보험이 아니라 2차 근사의 계수입니다.
+
+
+### 가. 1장의 채권으로 근사 오차 확인
+
+1장의 연 1회 지급·옵션 없는 채권을 그대로 사용합니다. P(y)=50/(1+y)+1050/(1+y)²이며 y=0.10에서 P≈913.22314입니다. Dmod=−P′(y)/P≈1.77293, C=P″(y)/P≈4.79414로 계산합니다. C는 같은 수익률·복리 표시 기준의 볼록성입니다.
+
+<FormulaBox formula="\frac{\Delta P}{P} \approx -D_{mod}\Delta y + \frac{1}{2}C(\Delta y)^2" />
+
+| 수익률 변화 | 듀레이션만 | 볼록성 포함 | 정확한 재평가 |
+|---|---:|---:|---:|
+| −100bp (Δy = −0.01) | +1.77293% | +1.79690% | +1.79720% |
+| +100bp (Δy = +0.01) | −1.77293% | −1.74896% | −1.74925% |
+
+두 근사식 모두 현재 평가점 주변의 테일러 전개입니다. 볼록성을 넣어도 정확한 재평가와 같지는 않으며, 충격이 커지거나 현금흐름이 바뀌면 오차를 다시 확인해야 합니다.
 
 <Callout type="warning">
   **음(-)의 볼록성 (Negative Convexity)**: MBS(주택저당증권)나 콜러블 채권처럼 금리가 낮아질 때 조기
@@ -90,15 +104,14 @@ import {
 
 ## 4. 마무리: 리스크의 정밀 제어
 
-듀레이션이 방향과 크기를 알려준다면, 볼록성은 그 예측의 정확도를 보정해 줍니다. 이 두 개념을 이해하면 금리가 변할 때 내 자산이 어떻게 움직일지 수학적으로 확신할 수 있으며, 이로 <mark><strong>'듀레이션 중립'</strong></mark> 전략 등을 수립할 수 있게 됩니다.
+듀레이션 중립은 설정한 금리 충격에 대한 1차 민감도를 맞춘 상태이지 무위험 상태가 아닙니다. 수익률곡선이 비평행하게 움직이거나 신용스프레드·옵션 행사·현금흐름이 달라지면 손실이 생길 수 있습니다. 만기별 충격에는 키레이트 듀레이션을, 옵션부 채권에는 기준 곡선 변화에 따른 현금흐름 재평가를 고려해야 합니다.
 
 ---
 
-## 📖 참고문헌
-- **[Fixed Income Mathematics] - 프랑크 파보지**: 듀레이션과 볼록성의 수리적 원리를 파헤치는 최고의 교과서.
-- **[채권 투자 가이드]**: 기관 투자자들이 리스크 헤지를 위해 듀레이션을 어떻게 활용하는지 실무적으로 설명합니다.
-- **[투자론] - 보디, 케인, 마커스**: 채권 파트에서 듀레이션과 면역화 전략을 심도 있게 다룹니다.
+## 참고 자료
 
----
+- CFA Institute, [Yield-Based Bond Duration Measures and Properties](https://www.cfainstitute.org/insights/professional-learning/refresher-readings/2026/yield-based-bond-duration-measures-and-properties).
+- CFA Institute, [Yield-Based Bond Convexity and Portfolio Properties](https://www.cfainstitute.org/insights/professional-learning/refresher-readings/2026/yield-based-bond-convexity-and-portfolio-properties).
+- CFA Institute, [Curve-Based and Empirical Fixed-Income Risk Measures](https://www.cfainstitute.org/insights/professional-learning/refresher-readings/2026/curve-based-and-empirical-fixed-income-risk-measures).
 
-다음 시간은 **수익률 곡선 분석**—장단기 금리 차이로 미래의 경기를 예측하는 법을 배워보겠습니다.
+다음 장에서는 수익률곡선의 형태와 해석의 한계를 살펴봅니다.

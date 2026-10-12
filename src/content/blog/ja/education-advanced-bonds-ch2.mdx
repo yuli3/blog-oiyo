@@ -3,9 +3,7 @@ track: academy
 series: advanced-bonds
 chapter: 2
 title: デュレーションとコンベキシティ：感応度の測定
-description: >-
-  金利リスクを精密に数値化する方法を学びます。価格変動を予測する修正デュレーションをマスターし、大規模な金利変動時にポートフォリオを保護する核心概念であるコンベキシティ
-  (Convexity) を理解します。
+description: "デュレーションとコンベキシティの定義・単位を区別し、1パーセントポイント変化の近似と厳密な再評価を比較します。"
 pubDate: 2026-03-01T00:00:00.000Z
 category: Finance
 tags:
@@ -17,6 +15,7 @@ author: Oiyo
 
 
 import Callout from "@/components/mdx/Callout.astro";
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import {
   LectureTable,
   LectureProcess,
@@ -24,7 +23,7 @@ import {
 
 # デュレーションとコンベキシティ：感応度の測定
 
-第 1 章で金利が変化すれば債券価格が変化することを学びましたが、第 2 章では **「正確にどれほど変化するのか？」** を扱います。債券ポートフォリオを管理するためには、リスクを数値化できるツールが必要です。その核心となるツールが <mark><strong>デュレーション (Duration)</strong></mark> と <mark><strong>コンベキシティ (Convexity)</strong></mark> です。
+第 1 章で金利が変化すれば債券価格が変化することを学びましたが、第 2 章では **「どの前提の下で価格変化を近似できるのか？」** を扱います。債券ポートフォリオを管理するためには、リスクを数値化できるツールが必要です。その核心となるツールが <mark><strong>デュレーション (Duration)</strong></mark> と <mark><strong>コンベキシティ (Convexity)</strong></mark> です。
 
 ---
 
@@ -38,12 +37,12 @@ import {
   rows={[
     [
       "**マコーレー・デュレーション**",
-      "全てのキャッシュフローを受け取るまでの加重平均期間",
+      "各キャッシュフローの現在価値が債券価格に占める比率で加重した受取時点",
       "債券の実質的な「平均寿命」の測定",
     ],
     [
       "**修正デュレーション**",
-      "金利の変化率に対する価格の変化率を線形的に計算",
+      "利回りの絶対変化 Δy に対する価格の相対変化の感応度",
       "日常的なリスク管理および価格予測",
     ],
     [
@@ -55,18 +54,20 @@ import {
   highlightColumns={[1]}
 />
 
+
+基本モデルでは契約上のキャッシュフローが固定されています。マコーレーの重みは額面支払額ではなく現在価値比率です。年m回複利表示の年利回りyでは Dmod = DMac/(1+y/m)となり、支払頻度と利回りの単位をそろえます。
 ---
 
 ## 2. 線形的な予測：デュレーションの活用
 
 デュレーションを実戦で活用する最も一般的な数式は以下の通りです。
-<mark><strong>価格変動率 (%) ≈ －修正デュレーション × 金利変動幅</strong></mark>
+<FormulaBox formula="\frac{\Delta P}{P} \approx -D_{mod}\Delta y" description="Δy は利回りの絶対変化を小数で入力します。結果も小数で、100倍すると百分率になります。" />
 
 <LectureProcess
   steps={[
     { label: "シナリオ設定", description: "修正デュレーションが 7.0 の債券を保有しているとする" },
-    { label: "金利ショック", description: "市場金利 (YTM) が 1% (100bp) 上昇した" },
-    { label: "計算", description: "デュレーションと変動幅を掛ける： 7.0 * 0.01 = 0.07" },
+    { label: "金利ショック", description: "YTM が5%から6%へ1パーセントポイント（100bp）上昇：Δy = 0.01" },
+    { label: "計算", description: "デュレーションと変動幅を掛ける： -7.0 × 0.01 = -0.07" },
     { label: "結果導出", description: "債券価格は約 7.0% 下落すると予測される" },
   ]}
 />
@@ -77,8 +78,21 @@ import {
 
 デュレーションは金利と価格の関係を直線であると仮定します。しかし実際には曲線を描いており、この「曲がり具合」を測定したものが <mark><strong>コンベキシティ (Convexity)</strong></mark> です。
 
-- **コンベキシティの利点**: コンベキシティが大きい債券は、金利が低下する時に価格がより大きく上昇し、金利が上昇する時に価格の下落が抑えられます。
-- **安全装置**: 大規模な金利変動時、デュレーションだけでは測定できない誤差をコンベキシティが補完し、ポートフォリオを保護します。
+オプションのない固定利付債の正のコンベキシティは、デュレーションだけの近似に正の二次補正を加えます。デュレーションなど他の条件をそろえた比較であり、異なる債券の成績順位を保証しません。損失を防ぐ保険ではなく、二次近似の係数です。
+
+
+### A. 第1章の債券で近似誤差を確認
+
+第1章と同じ年1回払い・オプションなしの債券を使います。P(y)=50/(1+y)+1050/(1+y)²で、y=0.10では P≈913.22314です。微分すると Dmod=−P′(y)/P≈1.77293、C=P″(y)/P≈4.79414となります。Cも同じ利回り・複利表示基準で計算します。
+
+<FormulaBox formula="\frac{\Delta P}{P} \approx -D_{mod}\Delta y + \frac{1}{2}C(\Delta y)^2" />
+
+| 利回り変化 | デュレーションのみ | 二次補正あり | 厳密な再評価 |
+|---|---:|---:|---:|
+| −100bp (Δy = −0.01) | +1.77293% | +1.79690% | +1.79720% |
+| +100bp (Δy = +0.01) | −1.77293% | −1.74896% | −1.74925% |
+
+どちらも現在の評価点の周りのテイラー近似です。二次補正を加えても厳密値と一致するわけではありません。変化幅が大きい場合やキャッシュフローが変わる場合は誤差を再確認します。
 
 <Callout type="warning">
   **負のコンベキシティ (Negative Convexity)**:
@@ -89,12 +103,14 @@ import {
 
 ## 4. まとめ：リスクの精密制御
 
-デュレーションが方向と大きさを教えてくれるなら、コンベキシティはその予測の精度を補正してくれます。これら二つの概念を理解すれば、金利が変化した時に自分の資産がいかに動くかを数学的に確信できるようになり、それを通じて <mark><strong>「デュレーション・ニュートラル」</strong></mark> 戦略などを立てることが可能になります。
+デュレーション・ニュートラルは、想定する金利ショックへの一次感応度を相殺する状態であり、無リスクではありません。非平行なイールドカーブ変化、信用スプレッド、オプション行使、キャッシュフローの変化による損失は残ります。満期別の変化にはキーレート・デュレーション、オプション付き債券には基準カーブ変化によるキャッシュフローの再評価を検討します。
 
 ---
 
-## 📚 セウン教授の厳選ライブラリ
+## 参考資料
 
-- **[債券数学] - フランク・ファボッツィ**: デュレーションとコンベキシティの数理的原理を解き明かす最高の教科書。
-- **[債券ポートフォリオの管理]**: 機関投資家がリスクヘッジのためにデュレーションをいかに活用しているかを実務的に解説しています。
-- **[投資論]**: 債券のパートにおいて、デュレーションと免疫化戦略を深く扱っています。
+- CFA Institute, [Yield-Based Bond Duration Measures and Properties](https://www.cfainstitute.org/insights/professional-learning/refresher-readings/2026/yield-based-bond-duration-measures-and-properties).
+- CFA Institute, [Yield-Based Bond Convexity and Portfolio Properties](https://www.cfainstitute.org/insights/professional-learning/refresher-readings/2026/yield-based-bond-convexity-and-portfolio-properties).
+- CFA Institute, [Curve-Based and Empirical Fixed-Income Risk Measures](https://www.cfainstitute.org/insights/professional-learning/refresher-readings/2026/curve-based-and-empirical-fixed-income-risk-measures).
+
+次章ではイールドカーブの形状と解釈の限界を扱います。

@@ -3,10 +3,7 @@ track: academy
 series: advanced-bonds
 chapter: 2
 title: "Duration and Convexity: Measuring the Sensitivity"
-description: >-
-  Learn how to quantify interest rate risk with precision. Master Modified
-  Duration to predict price changes and understand Convexity, the 'Curvature'
-  that saves your portfolio during large market sh...
+description: "Distinguish duration and convexity units and compare first- and second-order price approximations with exact repricing."
 pubDate: 2026-03-01T00:00:00.000Z
 category: Finance
 tags:
@@ -18,6 +15,7 @@ author: Oiyo
 
 
 import Callout from "@/components/mdx/Callout.astro";
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import {
   LectureTable,
   LectureProcess,
@@ -25,7 +23,7 @@ import {
 
 # Duration and Convexity: Measuring the Sensitivity
 
-If Chapter 1 taught us that bond prices move when interest rates change, Chapter 2 teaches us **"By exactly how much?"** To manage a bond portfolio, we need tools that quantify this risk. These tools are <mark><strong>Duration</strong></mark> and <mark><strong>Convexity</strong></mark>.
+If Chapter 1 taught us that bond prices move when interest rates change, Chapter 2 teaches us **"Under which assumptions can we approximate the change?"** To manage a bond portfolio, we need tools that quantify this risk. These tools are <mark><strong>Duration</strong></mark> and <mark><strong>Convexity</strong></mark>.
 
 ---
 
@@ -39,12 +37,12 @@ Duration is not just time; it is a measure of a bond's price sensitivity to inte
   rows={[
     [
       "**Macaulay Duration**",
-      "The weighted average time until all cash flows are received.",
+      "Receipt times weighted by each cash flow’s present-value share of the bond price.",
       "Measuring the 'Effective Life' of a bond.",
     ],
     [
       "**Modified Duration**",
-      "Adjusted Macaulay duration that directly links % price change to % yield change.",
+      "Relative price sensitivity to an absolute yield change Δy, not a relative percentage change in yield.",
       "Day-to-day risk management.",
     ],
     [
@@ -56,18 +54,20 @@ Duration is not just time; it is a measure of a bond's price sensitivity to inte
   highlightColumns={[1]}
 />
 
+
+The basic model assumes fixed contractual cash flows. Macaulay weights are present-value shares, not nominal payment shares. With a quoted annual yield y compounded m times per year, Dmod = DMac/(1+y/m); align payment frequency and yield units.
 ---
 
 ## 2. The Linear Approximation: Using Duration
 
 The most practical application of duration is the following formula:
-<mark><strong>% Price Change ≈ -Modified Duration × Change in Yield</strong></mark>
+<FormulaBox formula="\frac{\Delta P}{P} \approx -D_{mod}\Delta y" description="Enter the absolute yield change Δy as a decimal. The result is a decimal return; multiply by 100 for percent." />
 
 <LectureProcess
   steps={[
     { label: "Scenario", description: "You hold a bond with a Modified Duration of 7.0" },
-    { label: "Shock", description: "The market interest rate (YTM) rises by 1% (100 bps)" },
-    { label: "Calculation", description: "Multiply Duration by the change: 7.0 * 0.01 = 0.07" },
+    { label: "Shock", description: "YTM rises from 5% to 6%: one percentage point (100 bps), Δy = 0.01" },
+    { label: "Calculation", description: "Multiply Duration by the change: -7.0 × 0.01 = -0.07" },
     { label: "Result", description: "Your bond price will drop by approximately 7.0%" },
   ]}
 />
@@ -78,8 +78,21 @@ The most practical application of duration is the following formula:
 
 Duration assumes that the relationship between price and yield is a straight line. But in reality, it is a curve. <mark><strong>Convexity</strong></mark> measures this curvature.
 
-- **The Benefit of Convexity**: For a "Convex" bond, the price increases _more_ when rates fall than it decreases when rates rise.
-- **The Cushion**: Convexity provides a safety buffer during large interest rate swings that duration alone cannot capture.
+Positive convexity of an option-free fixed-rate bond adds a positive second-order adjustment to the duration-only estimate. Comparisons require duration and other conditions to be held equal; this does not rank the performance of arbitrary bonds. Convexity is an approximation coefficient, not insurance against losses.
+
+
+### A. Check the approximation against Chapter 1
+
+Use the same option-free bond with annual payments: P(y)=50/(1+y)+1050/(1+y)². At y=0.10, P≈913.22314. Differentiating gives Dmod=−P′(y)/P≈1.77293 and C=P″(y)/P≈4.79414. Convexity must use the same yield and compounding convention.
+
+<FormulaBox formula="\frac{\Delta P}{P} \approx -D_{mod}\Delta y + \frac{1}{2}C(\Delta y)^2" />
+
+| Yield change | Duration only | With convexity | Exact repricing |
+|---|---:|---:|---:|
+| −100bp (Δy = −0.01) | +1.77293% | +1.79690% | +1.79720% |
+| +100bp (Δy = +0.01) | −1.77293% | −1.74896% | −1.74925% |
+
+Both estimates are Taylor approximations around the current valuation point. Adding convexity does not make them exact. Recheck errors for larger shocks or changed cash flows.
 
 <Callout type="warning">
   **Negative Convexity**: Some bonds, like Mortgage-Backed Securities (MBS) or Callable Bonds, can
@@ -91,15 +104,14 @@ Duration assumes that the relationship between price and yield is a straight lin
 
 ## 4. Wrapping Up: Mastering Risk
 
-Duration tells you the direction and the magnitude; Convexity tells you the error in that estimate. By understanding these two, you can design a <mark><strong>"Duration-Neutral"</strong></mark> portfolio or intentionally bet on the direction of interest rates with mathematical confidence.
+Duration neutrality offsets first-order sensitivity to a specified rate shock; it does not eliminate risk. Nonparallel curve shifts, credit spreads, option exercise and changed cash flows can still cause losses. Key rate duration separates maturity-specific shocks; option-bearing bonds require cash-flow revaluation under benchmark curve scenarios.
 
 ---
 
-## 📖 참고문헌
-- **[Fixed Income Mathematics] - Frank Fabozzi**: The definitive technical guide on how to calculate these metrics.
-- **[The Handbook of Fixed Income Securities]**: A deep dive into how institutional managers use duration to hedge risk.
-- **[Interest Rate Risk Management] - Various Authors**: Understanding the trade-off between yield and sensitivity.
+## Sources
 
----
+- CFA Institute, [Yield-Based Bond Duration Measures and Properties](https://www.cfainstitute.org/insights/professional-learning/refresher-readings/2026/yield-based-bond-duration-measures-and-properties).
+- CFA Institute, [Yield-Based Bond Convexity and Portfolio Properties](https://www.cfainstitute.org/insights/professional-learning/refresher-readings/2026/yield-based-bond-convexity-and-portfolio-properties).
+- CFA Institute, [Curve-Based and Empirical Fixed-Income Risk Measures](https://www.cfainstitute.org/insights/professional-learning/refresher-readings/2026/curve-based-and-empirical-fixed-income-risk-measures).
 
-Next time, we will explore **Yield Curve Analysis**—learning how to read the economy's future through the shape of interest rates across different maturities.
+The next chapter examines yield-curve shapes and the limits of interpreting them.

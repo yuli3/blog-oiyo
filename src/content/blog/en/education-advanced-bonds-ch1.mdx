@@ -18,6 +18,7 @@ updatedDate: '2026-08-31'
 ---
 
 import Callout from "@/components/mdx/Callout.astro";
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import { LectureTable, LectureProcess } from "@/features/education-common/components/LectureVisuals";
 
 # The Gravity of Finance: Bond Pricing and Yields
@@ -53,14 +54,19 @@ Stable rates alone do not mean a bond trades at face value. In the simple model 
 
 Consider a hypothetical bond with a face value of ₩1,000, an annual coupon rate of 5%, and 2 years remaining to maturity. We are immediately after the most recent coupon was paid, and the next one arrives exactly one year from now. You receive ₩50 at the end of each year, and at the end of year 2 you receive the final ₩50 coupon together with the ₩1,000 principal. Accrued interest is currently 0.
 
-```text
-Now:      pay price P
-+1 year:  receive 50
-+2 years: receive 50 + principal 1,000
+<LectureProcess
+  steps={[
+    { label: "Now", description: "Pay price P" },
+    { label: "In 1 year", description: "Receive coupon 50" },
+    { label: "In 2 years", description: "Receive coupon 50 + principal 1,000" },
+  ]}
+/>
 
-P = 50/(1+y) + 1,050/(1+y)²
-(y is the annual effective yield)
-```
+<FormulaBox
+  label="Bond price"
+  formula="P = \frac{50}{1+y} + \frac{1050}{(1+y)^2}"
+  description="y is the annual effective yield."
+/>
 
 | Discount rate y | PV of 50 in 1 year | PV of 1,050 in 2 years | Price P |
 |---|---:|---:|---:|

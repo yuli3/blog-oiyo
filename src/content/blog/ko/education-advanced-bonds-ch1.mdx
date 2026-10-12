@@ -17,6 +17,7 @@ updatedDate: '2026-08-31'
 ---
 
 import Callout from "@/components/mdx/Callout.astro";
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import { LectureTable, LectureProcess } from "@/features/education-common/components/LectureVisuals";
 
 # 금융의 중력: 채권의 가격과 수익률
@@ -48,14 +49,19 @@ import { LectureTable, LectureProcess } from "@/features/education-common/compon
 
 액면가 1,000원, 연 쿠폰율 5%, 남은 만기 2년인 가상의 채권을 생각해 봅시다. 현재는 직전 이자를 받은 직후이며 다음 이자는 정확히 1년 뒤 지급됩니다. 매년 말 50원을 받고, 2년 뒤에는 마지막 이자 50원과 원금 1,000원을 함께 받습니다. 현재 경과이자는 0입니다.
 
-```text
-현재: 가격 P를 지불
-1년 뒤: 이자 50원 수령
-2년 뒤: 이자 50원 + 원금 1,000원 수령
+<LectureProcess
+  steps={[
+    { label: "현재", description: "가격 P를 지불" },
+    { label: "1년 뒤", description: "이자 50원 수령" },
+    { label: "2년 뒤", description: "이자 50원 + 원금 1,000원 수령" },
+  ]}
+/>
 
-P = 50/(1+y) + 1,050/(1+y)²
-(y는 연 유효수익률)
-```
+<FormulaBox
+  label="채권 가격"
+  formula="P = \frac{50}{1+y} + \frac{1050}{(1+y)^2}"
+  description="y는 연 유효수익률이에요."
+/>
 
 | 할인율 y | 1년 뒤 50원의 현재가치 | 2년 뒤 1,050원의 현재가치 | 가격 P |
 |---|---:|---:|---:|

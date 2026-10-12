@@ -1,68 +1,80 @@
 ---
-locale: en
 track: academy
-title: "Finance — Cost of Capital and CAPM — Pricing the Risk"
-category: "Finance"
-author: OIYO Editorial
-tags:
-  - Education
-  - Finance
-  - Cost of Capital
-  - CAPM
-  - WACC
-description: >-
-  Understand the true nature of cost of capital — the minimum return investors
-  require for committing funds to a business. Master the Capital Asset Pricing
-  Model (CAPM) and Weighted Average Cost of Capital (WACC) with interactive
-  calculators.
+series: financial-management
+chapter: 12
+title: "Financial Management — Practical Cost of Capital and Divisional WACC"
+description: "Calculate a 7.2% WACC using market weights and after-tax debt costs, then see how a company-wide discount rate can distort divisional investment decisions."
 pubDate: 2026-04-14
+updatedDate: 2026-10-10
+category: Finance
+tags: ["financial management", "cost of capital", "divisional WACC", "beta estimation"]
+locale: en
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
 ---
 
 import { LectureTable } from "@/features/education-common/components/LectureVisuals";
 import FormulaBox from "@/components/mdx/FormulaBox.astro";
 import Callout from "@/components/mdx/Callout.astro";
-import { CAPMCalculator, WACCCalculator } from "@/features/education-calculators/AdvancedFinanceCalculators";
 
-# Cost of Capital and CAPM: The Price of Risk
+# A company-wide WACC can reject worthwhile lower-risk investments
 
-One of the most important questions in corporate management is: **"What is the minimum return investors expect in exchange for committing capital to this business?"** From the company's perspective, this is called the **Cost of Capital**. Misjudging it leads to flawed investment decisions.
+[Chapter 4](/en/education-finance-ch4/) covers CAPM and the cost of equity; [Chapter 6](/en/education-finance-ch6/) covers weighting equity and after-tax debt costs. Here we examine when those inputs do not match a project's risk.
 
----
+## 1. A regression beta of 1.2 is an estimate from one sample
 
-## 1. Cost of Equity and CAPM
-
-The cost of equity is the return required by shareholders. The most widely used model for calculating it is the **Capital Asset Pricing Model (CAPM)**.
+Assume a hypothetical risk-free rate of 3% and market risk premium of 5%. A beta of 1.2 estimated from five years of weekly returns gives $r_E=3\%+1.2×5\%=9\%$. With market-value debt weight $D/(D+E)=40\%$, pretax debt cost $r_D=6\%$, and tax rate $T_c=25\%$, the company WACC is **7.2%**. The tax rate is an example input, not a statement of current Korean tax law.
 
 <FormulaBox
-  formula="K_e = R_f + \beta (R_m - R_f)"
-  label="CAPM Formula"
-  description="Rf: risk-free rate, β: beta (systematic risk), Rm: expected market return"
-  color="#3b82f6"
+  label="Market weights and after-tax debt cost"
+  formula="WACC=0.6\times9\%+0.4\times6\%\times(1-0.25)=7.2\%"
+  description="D/V=40% differs from D/E=40%. This example assumes the interest tax shield can be used."
 />
 
-<CAPMCalculator client:visible />
+If a two-year daily-return estimate instead gives beta 0.9, the same inputs imply $r_E=7.5\%$ and WACC 6.3%. This is a hypothetical sensitivity comparison, not an observed result. Beta measures sensitivity to market returns, not total stock-price volatility.
 
-<Callout type="info">
-**What Beta (β) Means**: A beta greater than 1 means the asset is more volatile than the market; a beta less than 1 means it is more stable. The greater the risk, the higher the return ($K_e$) investors will demand.
+For a given business risk, debt leverage changes equity risk. Remove the capital-structure effect from comparable firms' equity betas, then adjust for the division's target leverage. Check whether treating debt beta as zero is appropriate. One raw regression estimate is not a definitive cost of capital.
+
+<FormulaBox
+  label="Divisional equity cost"
+  formula="r_{E,div}=r_f+\beta_{E,div}(E[R_M]-r_f)"
+  description="Adjust comparable-business betas for target leverage to estimate equity cost, then combine it with divisional debt cost and market weights. Equity cost alone is not WACC."
+/>
+
+## 2. A 7.2% company rate can reject a lower-risk positive-NPV project
+
+Suppose a lower-risk division has beta 0.7 and **no debt**. Its discount rate is $3\%+0.7×5\%=6.5\%$. A hypothetical project costs 100 today and pays 107 in one year, giving IRR 7.0%. At the risk-appropriate rate, NPV is $107/1.065-100≈0.47$. At the company's 7.2%, it is $107/1.072-100≈-0.19$, so the same project is rejected. All cash amounts use the same arbitrary unit.
+
+This example has one initial outflow followed by a positive inflow. Do not rank mutually exclusive projects or cash flows with multiple sign changes solely by IRR. Match **free cash flow to the firm (FCFF) with a risk- and financing-appropriate WACC, and free cash flow to equity (FCFE) with equity cost**. Match currency and nominal versus real assumptions too.
+
+<LectureTable
+  title="One company, different discount rates"
+  headers={["Case", "Appropriate rate", "Misapplication"]}
+  rows={[
+    ["Company-average risk and target financing", "Company WACC 7.2%", "Use only when risk and financing match"],
+    ["Unlevered lower-risk division", "Divisional rate 6.5%", "Using 7.2% rejects the example's positive NPV"],
+    ["Business risk above the company average", "Rate matched to that business", "A company rate that is too low may accept a negative-NPV project"],
+  ]}
+/>
+
+The lower-risk division is unlevered to make the financing assumption explicit. With debt, do not simply call 6.5% its WACC: recalculate leverage-adjusted equity cost and after-tax debt cost.
+
+<Callout type="warning">
+Adding country or size premia mechanically can count the same risk twice. Sparse comparables or private-company data increase estimation uncertainty. Two decimal places describe display precision, not estimation accuracy.
 </Callout>
 
----
+## Check your understanding
 
-## 2. Weighted Average Cost of Capital (WACC)
+**Problem.** Calculate the company's WACC and value the unlevered lower-risk project costing 100 and paying 107 in one year at both 6.5% and the company rate. Is the difference between IRR and the discount rate an NPV amount?
 
-Companies typically finance themselves with a mix of equity (stock) and debt (bonds/loans). WACC calculates the firm's overall average cost of capital by weighting each source according to its proportion.
+**Solution.** $0.6×9+0.4×6×0.75=7.2\%$. Divisional NPV is about +0.47; company-rate NPV is about −0.19. The 7.0% IRR is 0.5 percentage points above the divisional rate and 0.2 points below the company rate. These rate differences are not cash amounts. Correct arithmetic cannot rescue a discount rate mismatched to risk.
 
-<WACCCalculator client:visible />
+## References
 
----
-
-## 3. Practical Application: The Investment Hurdle Rate
-
-The cost of capital serves as the **discount rate** when evaluating the viability of an investment.
-
-- **IRR (Internal Rate of Return) > WACC**: The investment returns more than it costs to fund — **accept the project**
-- **ROA/ROE > WACC**: The firm's profitability exceeds the cost of using capital — **successful management**
-
----
-
-Accurately pricing risk is the foundation of financial strategy. Through CAPM and WACC, you can gain the insight needed to optimize your firm's capital structure.
+- Richard Brealey, Stewart Myers, and Franklin Allen, *Principles of Corporate Finance*, ch. 9, 19
+- Stephen Ross, Randolph Westerfield, and Jeffrey Jaffe, *Corporate Finance*, ch. 12–13
+- Eugene Brigham and Joel Houston, *Fundamentals of Financial Management*, ch. 10
+- Aswath Damodaran, NYU Stern, [Capital Structure — cost of capital and cash-flow matching](https://pages.stern.nyu.edu/~adamodar/New_Home_Page/lectures/capstr.html)
+- Aswath Damodaran, [Chapter 8 worked solutions — market weights and unlevering beta](https://pages.stern.nyu.edu/~adamodar/New_Home_Page/AppldCF/solns/ch8sol.htm)
+- Aswath Damodaran, [Chapter 5 worked solutions — IRR and NPV rankings](https://pages.stern.nyu.edu/~adamodar/New_Home_Page/AppldCF/solns/ch5sol.htm)

@@ -1,0 +1,80 @@
+---
+track: academy
+series: financial-management
+chapter: 12
+title: "Dirección financiera — Coste de capital en la práctica y WACC por división"
+description: "Calcula un WACC del 7,2 % con ponderaciones de mercado y deuda después de impuestos, y revisa cómo un tipo único puede distorsionar las decisiones de cada división."
+pubDate: 2026-04-14
+updatedDate: 2026-10-10
+category: Finance
+tags: ["dirección financiera", "coste de capital", "WACC por división", "estimación de beta"]
+locale: es
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Un WACC único puede descartar inversiones de menor riesgo que crean valor
+
+El CAPM estima el coste de los recursos propios; el coste medio ponderado de capital (WACC) combina ese coste con el de la deuda después de impuestos. Sin repetir las derivaciones básicas, aquí examinamos cuándo los parámetros utilizados no corresponden al riesgo del proyecto.
+
+## 1. Una beta de regresión de 1,2 procede de una muestra concreta
+
+Supongamos un tipo sin riesgo del 3 % y una prima de riesgo de mercado del 5 %. Una beta de 1,2 estimada con cinco años de rendimientos semanales da $r_E=3\%+1.2×5\%=9\%$. Con peso de deuda a valor de mercado $D/(D+E)=40\%$, coste de deuda antes de impuestos $r_D=6\%$ y tipo impositivo $T_c=25\%$, el WACC empresarial es **7,2 %**. El impuesto es un supuesto del ejemplo, no el tipo legal vigente en Corea.
+
+<FormulaBox
+  label="Ponderaciones de mercado y deuda después de impuestos"
+  formula="WACC=0.6\times9\%+0.4\times6\%\times(1-0.25)=7.2\%"
+  description="D/V=40 % no equivale a D/E=40 %. Se supone que puede aprovecharse el ahorro fiscal de deducir los intereses."
+/>
+
+Si dos años de rendimientos diarios producen una beta de 0,9, con los demás parámetros iguales $r_E=7.5\%$ y el WACC es 6,3 %. Es una comparación hipotética de sensibilidad al periodo de estimación, no un resultado observado. Beta mide sensibilidad a los rendimientos del mercado, no la volatilidad total del precio de la acción.
+
+Con el mismo riesgo de negocio, el apalancamiento cambia el riesgo de los recursos propios. Por eso se elimina el efecto de la estructura financiera de las betas de empresas comparables y se ajustan al endeudamiento objetivo de la división. También hay que comprobar si simplificar suponiendo beta de la deuda cero resulta apropiado. Una sola regresión no fija definitivamente el coste de capital.
+
+<FormulaBox
+  label="Coste de los recursos propios de la división"
+  formula="r_{E,div}=r_f+\beta_{E,div}(E[R_M]-r_f)"
+  description="Ajusta las betas de negocios comparables al apalancamiento objetivo y combina el coste de los recursos propios con el de la deuda y las ponderaciones de mercado. El coste de los recursos propios por sí solo no es WACC."
+/>
+
+## 2. El tipo empresarial del 7,2 % puede rechazar un VAN positivo de menor riesgo
+
+Supongamos una división con beta 0,7 y **sin deuda**. Su tipo de descuento es $3\%+0.7×5\%=6.5\%$. Un proyecto ficticio exige 100 hoy y paga 107 dentro de un año, de modo que su tasa interna de rentabilidad (TIR) es 7,0 %. Al tipo adecuado del 6,5 %, el valor actual neto (VAN) es $107/1.065-100≈0.47$. Con el 7,2 % empresarial resulta $107/1.072-100≈-0.19$, y se rechaza el mismo proyecto. Los importes utilizan una unidad común arbitraria.
+
+El ejemplo tiene un desembolso inicial seguido de una entrada positiva. No ordenes proyectos mutuamente excluyentes ni flujos que cambien varias veces de signo solo por su TIR. Deben corresponder **los flujos libres para la empresa (FCFF) con un WACC adecuado al riesgo y la financiación, y los flujos libres para los accionistas (FCFE) con el coste de los recursos propios**. También deben coincidir moneda y supuestos nominales o reales.
+
+<LectureTable
+  title="Una empresa, distintos tipos de descuento"
+  headers={["Caso", "Tipo apropiado", "Aplicación incorrecta"]}
+  rows={[
+    ["Riesgo medio y financiación objetivo", "WACC empresarial del 7,2 %", "Usarlo solo cuando riesgo y financiación coincidan"],
+    ["División de menor riesgo sin deuda", "Tipo divisional del 6,5 %", "El 7,2 % empresarial rechaza el VAN positivo del ejemplo"],
+    ["Negocio de riesgo superior a la media", "Tipo acorde con ese riesgo", "Un tipo empresarial demasiado bajo puede aceptar un VAN negativo"],
+  ]}
+/>
+
+Se supone que la división no tiene deuda para explicitar la financiación. Si está endeudada, no llames directamente WACC divisional al 6,5 %: recalcula el coste de recursos propios ajustado por apalancamiento y el coste de deuda después de impuestos.
+
+<Callout type="warning">
+Añadir mecánicamente primas de riesgo país o de tamaño puede contabilizar dos veces el mismo riesgo. Con pocos comparables o una empresa no cotizada, aumenta la incertidumbre de beta. Dos decimales indican precisión de presentación, no exactitud de la estimación.
+</Callout>
+
+## Comprueba lo aprendido
+
+**Problema.** Calcula el WACC empresarial y valora el proyecto de menor riesgo sin deuda — inversión de 100 y cobro de 107 en un año — al 6,5 % y al WACC empresarial. ¿La diferencia entre TIR y tipo de descuento es un importe de VAN?
+
+**Solución.** $0.6×9+0.4×6×0.75=7.2\%$. El VAN divisional es aproximadamente +0,47; al tipo empresarial es −0,19. La TIR del 7,0 % supera el tipo divisional en 0,5 puntos porcentuales y queda 0,2 puntos por debajo del empresarial. Esas diferencias de tipos no son importes monetarios. Una operación aritmética correcta no resuelve un descuento inadecuado al riesgo.
+
+## Referencias
+
+- Richard Brealey, Stewart Myers, and Franklin Allen, *Principles of Corporate Finance*, ch. 9, 19
+- Stephen Ross, Randolph Westerfield, and Jeffrey Jaffe, *Corporate Finance*, ch. 12–13
+- Eugene Brigham and Joel Houston, *Fundamentals of Financial Management*, ch. 10
+- Aswath Damodaran, NYU Stern, [Capital Structure — coste de capital y correspondencia de flujos](https://pages.stern.nyu.edu/~adamodar/New_Home_Page/lectures/capstr.html)
+- Aswath Damodaran, [Soluciones del capítulo 8 — ponderaciones de mercado y ajuste de beta](https://pages.stern.nyu.edu/~adamodar/New_Home_Page/AppldCF/solns/ch8sol.htm)
+- Aswath Damodaran, [Soluciones del capítulo 5 — ordenación por TIR y VAN](https://pages.stern.nyu.edu/~adamodar/New_Home_Page/AppldCF/solns/ch5sol.htm)

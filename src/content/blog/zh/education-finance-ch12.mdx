@@ -1,0 +1,80 @@
+---
+track: academy
+series: financial-management
+chapter: 12
+title: "财务管理——实际资本成本与分部WACC"
+description: "用市值权重和税后债务成本算出7.2%的WACC，复习统一使用公司折现率为何会扭曲分部投资决策。"
+pubDate: 2026-04-14
+updatedDate: 2026-10-10
+category: Finance
+tags: ["财务管理", "资本成本", "分部WACC", "贝塔估计"]
+locale: zh
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 把公司WACC用于所有分部，可能错拒低风险的好项目
+
+CAPM用于估计权益资本成本，加权平均资本成本则把权益成本与税后债务成本结合起来。本章不重新推导基础公式，而是分析实际输入与项目风险不匹配时会发生什么。
+
+## 1. 回归贝塔1.2只是一个样本的斜率
+
+假设无风险利率为3%，市场风险溢价为5%。若五年周收益率估计的贝塔为1.2，则$r_E=3\%+1.2×5\%=9\%$。市值口径的债务权重$D/(D+E)=40\%$、税前债务成本$r_D=6\%$、税率$T_c=25\%$时，公司WACC为**7.2%**。税率只是示例参数，不代表韩国现行法定税率。
+
+<FormulaBox
+  label="市值权重与税后债务成本"
+  formula="WACC=0.6\times9\%+0.4\times6\%\times(1-0.25)=7.2\%"
+  description="D/V=40%不同于D/E=40%。本例假设利息抵扣带来的税盾能够使用。"
+/>
+
+若改用两年日收益率，估计贝塔为0.9，在其他输入不变时$r_E=7.5\%$、WACC为6.3%。这是展示估计窗口敏感性的假设比较，不是实际观测结果。贝塔衡量对市场收益率的敏感度，并非股价的总波动率。
+
+即使业务风险相同，债务杠杆也会改变权益风险。因此，要先从可比公司的权益贝塔中剔除资本结构影响，再按分部的目标债务比例重新调整。同时要检查债务贝塔为零的简化是否适用。不能把一个原始回归值当作确定的资本成本。
+
+<FormulaBox
+  label="分部权益资本成本"
+  formula="r_{E,div}=r_f+\beta_{E,div}(E[R_M]-r_f)"
+  description="按目标杠杆调整类似业务的贝塔，估计权益成本，再结合分部债务成本与市值权重计算WACC。权益成本本身不等于WACC。"
+/>
+
+## 2. 公司7.2%的折现率可能错拒低风险分部的正NPV项目
+
+若低风险分部贝塔为0.7且**没有债务**，折现率为$3\%+0.7×5\%=6.5\%$。一个假设项目现在投入100，一年后收到107，IRR为7.0%。按适合其风险的6.5%折现，NPV为$107/1.065-100≈0.47$；按公司平均7.2%折现，则为$107/1.072-100≈-0.19$，同一个项目就被拒绝了。金额使用任意但一致的单位。
+
+本例只有期初支出和随后一次正的流入。现金流多次变号或项目互斥时，不能仅按IRR排序。**企业自由现金流（FCFF）应按匹配风险与资本结构的WACC折现，权益自由现金流（FCFE）应按权益资本成本折现**。币种以及名义、实际口径也必须一致。
+
+<LectureTable
+  title="同一家公司，不同的折现率"
+  headers={["对象", "适用利率", "错误应用"]}
+  rows={[
+    ["公司平均风险与目标资本结构", "公司WACC7.2%", "仅在风险与资本结构匹配时使用"],
+    ["无债务的低风险分部", "分部折现率6.5%", "用公司7.2%会拒绝示例中的正NPV项目"],
+    ["风险高于公司平均水平的业务", "与业务风险匹配的折现率", "公司7.2%过低时可能接受负NPV项目"],
+  ]}
+/>
+
+把低风险分部设为无债务，是为了明确融资假设。若有债务，不能直接把6.5%称为分部WACC，而要重新计算杠杆调整后的权益成本与税后债务成本。
+
+<Callout type="warning">
+机械地添加国家风险或规模溢价，可能重复计入同一种风险。可比公司稀少或企业未上市时，贝塔估计的不确定性更大。保留两位小数只说明显示精度，不代表估计准确度。
+</Callout>
+
+## 检验理解
+
+**问题。** 计算公司WACC，并分别按6.5%和公司WACC评价投入100、一年后收到107的无债务低风险项目。IRR与折现率之差就是NPV金额吗？
+
+**解答。** $0.6×9+0.4×6×0.75=7.2\%$。分部标准下NPV约为+0.47，公司标准下约为−0.19。IRR7.0%比分部标准高0.5个百分点，比公司标准低0.2个百分点，但这些利率差不是NPV金额。即使算式正确，折现率与风险不匹配也会导致错误决策。
+
+## 参考资料
+
+- Richard Brealey, Stewart Myers, and Franklin Allen, *Principles of Corporate Finance*, ch. 9, 19
+- Stephen Ross, Randolph Westerfield, and Jeffrey Jaffe, *Corporate Finance*, ch. 12–13
+- Eugene Brigham and Joel Houston, *Fundamentals of Financial Management*, ch. 10
+- Aswath Damodaran, NYU Stern, [Capital Structure——资本成本与现金流匹配](https://pages.stern.nyu.edu/~adamodar/New_Home_Page/lectures/capstr.html)
+- Aswath Damodaran, [第8章解答——市值权重与贝塔调整](https://pages.stern.nyu.edu/~adamodar/New_Home_Page/AppldCF/solns/ch8sol.htm)
+- Aswath Damodaran, [第5章解答——IRR与NPV排序](https://pages.stern.nyu.edu/~adamodar/New_Home_Page/AppldCF/solns/ch5sol.htm)

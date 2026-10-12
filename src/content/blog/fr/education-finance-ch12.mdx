@@ -1,0 +1,80 @@
+---
+track: academy
+series: financial-management
+chapter: 12
+title: "Gestion financière — Coût du capital en pratique et CMPC par division"
+description: "Calculez un CMPC de 7,2 % avec des pondérations de marché et un coût de dette après impôt, puis examinez les erreurs d'un taux unique appliqué à toutes les divisions."
+pubDate: 2026-04-14
+updatedDate: 2026-10-10
+category: Finance
+tags: ["gestion financière", "coût du capital", "CMPC par division", "estimation du bêta"]
+locale: fr
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# Un CMPC unique peut faire rejeter des investissements moins risqués et créateurs de valeur
+
+Le MEDAF estime le coût des capitaux propres ; le coût moyen pondéré du capital (CMPC, ou WACC) combine ce coût avec celui de la dette après impôt. Sans reprendre ces dérivations, ce chapitre examine les cas où les paramètres retenus ne correspondent pas au risque du projet.
+
+## 1. Un bêta de régression de 1,2 provient d'un échantillon particulier
+
+Supposons un taux sans risque de 3 % et une prime de risque de marché de 5 %. Un bêta de 1,2 estimé sur cinq ans de rendements hebdomadaires donne $r_E=3\%+1.2×5\%=9\%$. Avec une pondération de dette en valeur de marché $D/(D+E)=40\%$, un coût de dette avant impôt $r_D=6\%$ et un taux d'impôt $T_c=25\%$, le CMPC de l'entreprise vaut **7,2 %**. Le taux d'impôt est une hypothèse d'exemple, pas le taux légal actuellement applicable en Corée.
+
+<FormulaBox
+  label="Pondérations de marché et coût de dette après impôt"
+  formula="WACC=0.6\times9\%+0.4\times6\%\times(1-0.25)=7.2\%"
+  description="D/V=40 % n'est pas D/E=40 %. L'exemple suppose que l'économie d'impôt liée à la déduction des intérêts est utilisable."
+/>
+
+Si une estimation sur deux ans de rendements quotidiens donne plutôt un bêta de 0,9, les mêmes paramètres donnent $r_E=7.5\%$ et un CMPC de 6,3 %. C'est une comparaison hypothétique de sensibilité à la fenêtre d'estimation, non un résultat observé. Le bêta mesure la sensibilité aux rendements du marché, pas la volatilité totale du cours.
+
+À risque d'activité donné, le levier financier modifie le risque des capitaux propres. On retire donc l'effet de la structure financière des bêtas des entreprises comparables, puis on les ajuste à l'endettement cible de la division. Il faut aussi vérifier si l'hypothèse simplificatrice d'un bêta de dette nul convient. Une régression isolée ne fixe pas définitivement le coût du capital.
+
+<FormulaBox
+  label="Coût des capitaux propres de la division"
+  formula="r_{E,div}=r_f+\beta_{E,div}(E[R_M]-r_f)"
+  description="Ajustez les bêtas d'activités comparables au levier cible, puis combinez le coût des capitaux propres avec celui de la dette et les pondérations de marché. Le coût des capitaux propres seul n'est pas le CMPC."
+/>
+
+## 2. Le taux global de 7,2 % peut rejeter une VAN positive dans une division moins risquée
+
+Supposons une division de bêta 0,7 **sans dette**. Son taux d'actualisation est $3\%+0.7×5\%=6.5\%$. Un projet fictif coûte 100 aujourd'hui et rapporte 107 dans un an : son taux de rentabilité interne (TRI) vaut 7,0 %. Au taux adapté de 6,5 %, la valeur actuelle nette (VAN) est $107/1.065-100≈0.47$. Au taux global de 7,2 %, elle devient $107/1.072-100≈-0.19$, et le même projet est rejeté. Les montants emploient une unité commune arbitraire.
+
+Cet exemple comporte une sortie initiale suivie d'une entrée positive. Ne classez pas des projets mutuellement exclusifs ou des flux changeant plusieurs fois de signe sur le seul TRI. Faites correspondre **les flux disponibles pour l'entreprise (FCFF) à un CMPC adapté au risque et au financement, et les flux disponibles pour les actionnaires (FCFE) au coût des capitaux propres**. La monnaie et les hypothèses nominales ou réelles doivent également correspondre.
+
+<LectureTable
+  title="Une entreprise, plusieurs taux d'actualisation"
+  headers={["Cas", "Taux adapté", "Mauvaise application"]}
+  rows={[
+    ["Risque moyen et structure financière cible", "CMPC global de 7,2 %", "À utiliser seulement si risque et financement correspondent"],
+    ["Division moins risquée sans dette", "Taux divisionnel de 6,5 %", "Le taux global de 7,2 % rejette la VAN positive de l'exemple"],
+    ["Activité plus risquée que la moyenne", "Taux adapté à son risque", "Un taux global trop bas peut faire accepter une VAN négative"],
+  ]}
+/>
+
+La division est supposée sans dette pour rendre le financement explicite. Si elle est endettée, ne qualifiez pas directement les 6,5 % de CMPC divisionnel : recalculez le coût des capitaux propres ajusté du levier et le coût de dette après impôt.
+
+<Callout type="warning">
+Ajouter mécaniquement des primes de risque pays ou de taille peut compter deux fois le même risque. Des comparables rares ou une entreprise non cotée augmentent l'incertitude du bêta. Deux décimales décrivent la précision d'affichage, pas l'exactitude de l'estimation.
+</Callout>
+
+## Vérifiez votre compréhension
+
+**Question.** Calculez le CMPC global et évaluez le projet sans dette et moins risqué — investissement de 100, entrée de 107 dans un an — à 6,5 % puis au CMPC global. L'écart entre TRI et taux d'actualisation est-il un montant de VAN ?
+
+**Corrigé.** $0.6×9+0.4×6×0.75=7.2\%$. La VAN divisionnelle vaut environ +0,47, contre −0,19 au taux global. Le TRI de 7,0 % dépasse le taux divisionnel de 0,5 point de pourcentage et reste inférieur au taux global de 0,2 point. Ces écarts de taux ne sont pas des montants. Une arithmétique exacte ne corrige pas un taux inadapté au risque.
+
+## Références
+
+- Richard Brealey, Stewart Myers, and Franklin Allen, *Principles of Corporate Finance*, ch. 9, 19
+- Stephen Ross, Randolph Westerfield, and Jeffrey Jaffe, *Corporate Finance*, ch. 12–13
+- Eugene Brigham and Joel Houston, *Fundamentals of Financial Management*, ch. 10
+- Aswath Damodaran, NYU Stern, [Capital Structure — coût du capital et correspondance des flux](https://pages.stern.nyu.edu/~adamodar/New_Home_Page/lectures/capstr.html)
+- Aswath Damodaran, [Corrigés du chapitre 8 — pondérations de marché et ajustement du bêta](https://pages.stern.nyu.edu/~adamodar/New_Home_Page/AppldCF/solns/ch8sol.htm)
+- Aswath Damodaran, [Corrigés du chapitre 5 — classements par TRI et VAN](https://pages.stern.nyu.edu/~adamodar/New_Home_Page/AppldCF/solns/ch5sol.htm)

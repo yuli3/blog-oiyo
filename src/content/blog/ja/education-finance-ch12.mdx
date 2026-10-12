@@ -1,0 +1,80 @@
+---
+track: academy
+series: financial-management
+chapter: 12
+title: "財務管理 — 実務の資本コストと事業部別WACC"
+description: "時価の構成比と税引後負債コストからWACC7.2%を計算し、全社共通の割引率が事業部の投資判断を歪める理由を復習します。"
+pubDate: 2026-04-14
+updatedDate: 2026-10-10
+category: Finance
+tags: ["財務管理", "資本コスト", "事業部別WACC", "ベータ推定"]
+locale: ja
+author: Oiyo
+layoutVariant: lecture-series
+contentStage: review
+---
+
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
+import Callout from "@/components/mdx/Callout.astro";
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+
+# 全社のWACCを一律に使うと、低リスクの有望な投資を退けてしまう
+
+[第4章](/ja/education-finance-ch4/)ではCAPMによる株主資本コスト、[第6章](/ja/education-finance-ch6/)では株主資本と税引後負債コストの加重平均を扱います。本章では式を導き直すのではなく、実務で入力値がプロジェクトのリスクと合わなくなる場面を検討します。
+
+## 1. 回帰ベータ1.2は一つの標本から得た傾き
+
+仮に無リスク金利を3%、市場リスクプレミアムを5%とします。5年間の週次リターンから推定したベータが1.2なら、$r_E=3\%+1.2×5\%=9\%$です。時価ベースの負債構成比$D/(D+E)=40\%$、税引前負債コスト$r_D=6\%$、税率$T_c=25\%$なら、全社WACCは**7.2%**になります。税率は例示用で、韓国の現行法定税率ではありません。
+
+<FormulaBox
+  label="時価の構成比と税引後負債コスト"
+  formula="WACC=0.6\times9\%+0.4\times6\%\times(1-0.25)=7.2\%"
+  description="D/V=40%とD/E=40%は異なります。利息控除による節税効果を利用できると仮定しています。"
+/>
+
+2年間の日次リターンで推定し直してベータが0.9になれば、同じ条件で$r_E=7.5\%$、WACCは6.3%です。これは実測結果ではなく、推定期間への感応度を示す仮想比較です。ベータは市場リターンへの感応度であり、株価の総変動性そのものではありません。
+
+事業リスクが同じでも負債レバレッジによって株主資本のリスクは変わります。比較企業の株主資本ベータから資本構成の影響を除き、事業部の目標負債比率で調整し直す理由です。負債ベータをゼロとする簡略化が適切かも確認します。単一の回帰推定値を確定的な資本コストとは扱いません。
+
+<FormulaBox
+  label="事業部の株主資本コスト"
+  formula="r_{E,div}=r_f+\beta_{E,div}(E[R_M]-r_f)"
+  description="類似事業のベータを目標レバレッジで調整して株主資本コストを求め、事業部の負債コストと時価の構成比を使ってWACCを計算します。株主資本コストだけではWACCになりません。"
+/>
+
+## 2. 全社の7.2%では、低リスク事業の正のNPVを捨てることがある
+
+低リスク事業部のベータが0.7で**無借金**なら、割引率は$3\%+0.7×5\%=6.5\%$です。今100を投じ、1年後に107を受け取る仮想案件のIRRは7.0%。リスクに合う6.5%でのNPVは$107/1.065-100≈0.47$ですが、全社の7.2%では$107/1.072-100≈-0.19$となり、同じ案件を棄却します。金額は任意の共通単位です。
+
+この例は最初の支出後に正の流入が一度ある案件です。符号が何度も変わるキャッシュフローや相互排他的な案件は、IRRの順位だけで決めません。**企業全体のフリーキャッシュフロー（FCFF）にはリスクと資本構成に合うWACC、株主向けフリーキャッシュフロー（FCFE）には株主資本コスト**を使います。通貨と名目・実質の前提も揃えます。
+
+<LectureTable
+  title="同じ会社でも割引率は異なる"
+  headers={["対象", "適切な率", "誤った適用"]}
+  rows={[
+    ["全社平均のリスクと目標資本構成", "全社WACC7.2%", "リスクと資本構成が合う場合だけ使用"],
+    ["無借金の低リスク事業部", "事業部割引率6.5%", "全社7.2%では例の正のNPVを棄却"],
+    ["全社平均より高リスクの事業", "事業リスクに合う割引率", "全社7.2%が低すぎると負のNPVを採択しうる"],
+  ]}
+/>
+
+低リスク事業部を無借金としたのは資金調達の前提を明示するためです。負債があれば6.5%をそのまま事業部WACCと呼ばず、レバレッジ調整と税引後負債コストを計算し直します。
+
+<Callout type="warning">
+国別リスクや規模のプレミアムを機械的に加えると、同じリスクを二重計上しかねません。比較企業が少ない場合や非上場企業ではベータの推定誤差も大きくなります。小数点以下2桁は表示の精度であり、推定の正確さではありません。
+</Callout>
+
+## 理解を確かめる
+
+**問題。** 全社WACCを計算し、投資100・1年後の流入107という無借金の低リスク案件を6.5%と全社WACCで評価してください。IRRと割引率の差が、そのままNPVの金額になるでしょうか。
+
+**解答。** $0.6×9+0.4×6×0.75=7.2\%$です。事業部基準のNPVは約+0.47、全社基準では約−0.19。IRR7.0%は事業部基準より0.5パーセントポイント高く、全社基準より0.2ポイント低いものの、これらの率の差はNPVの金額ではありません。計算が正しくても、リスクに合わない割引率では判断を誤ります。
+
+## 参考文献
+
+- Richard Brealey, Stewart Myers, and Franklin Allen, *Principles of Corporate Finance*, ch. 9, 19
+- Stephen Ross, Randolph Westerfield, and Jeffrey Jaffe, *Corporate Finance*, ch. 12–13
+- Eugene Brigham and Joel Houston, *Fundamentals of Financial Management*, ch. 10
+- Aswath Damodaran, NYU Stern, [Capital Structure — 資本コストとキャッシュフローの対応](https://pages.stern.nyu.edu/~adamodar/New_Home_Page/lectures/capstr.html)
+- Aswath Damodaran, [第8章の解答例 — 時価の構成比とベータの調整](https://pages.stern.nyu.edu/~adamodar/New_Home_Page/AppldCF/solns/ch8sol.htm)
+- Aswath Damodaran, [第5章の解答例 — IRRとNPVの順位](https://pages.stern.nyu.edu/~adamodar/New_Home_Page/AppldCF/solns/ch5sol.htm)

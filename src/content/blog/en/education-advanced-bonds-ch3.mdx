@@ -2,11 +2,8 @@
 track: academy
 series: advanced-bonds
 chapter: 3
-title: "Yield Curve Analysis: The Macroeconomic Crystal Ball"
-description: >-
-  Learn how to read the future of the economy through the shape of interest
-  rates. Master the mechanics of Normal, Inverted, and Flat curves, and
-  understand why long-term vs. short-term spreads are t...
+title: "Yield Curves: Rate Expectations, Term Premia and Recession Signals"
+description: "Separate yield-curve observations from expectations and term premia, calculate spreads and forwards, and examine forecasting limits."
 pubDate: 2026-03-01T00:00:00.000Z
 category: Finance
 tags:
@@ -16,111 +13,51 @@ locale: en
 author: Oiyo
 ---
 
+import { LectureTable } from "@/features/education-common/components/LectureVisuals";
+import FormulaBox from "@/components/mdx/FormulaBox.astro";
 
-import Callout from "@/components/mdx/Callout.astro";
-import {
-  LectureTable,
-  LectureProcess,
-} from "@/features/education-common/components/LectureVisuals";
+# Yield Curves: Rate Expectations, Term Premia and Recession Signals
 
-# Yield Curve Analysis: The Macroeconomic Crystal Ball
+A yield curve connects rates across maturities at one valuation date. Match currency, credit risk, liquidity, embedded options and compounding conventions as far as possible. Equal credit ratings do not make different corporate bonds a single risk-free curve.
 
-The <mark><strong>Yield Curve</strong></mark> is a line that plots interest rates of bonds having equal credit quality but differing maturity dates. It is widely considered the most powerful leading indicator of the macroeconomy.
+Here we focus on nominal government rates. Coupon-bond yield to maturity, spot rates discounting single dated payments, and forward rates for future intervals are different objects. Slope is observed; attributing it solely to growth, inflation or policy expectations is an additional inference.
 
-If you can read the curve, you can see if the market is betting on growth, inflation, or a looming recession.
+## 1. Observe the Shape, Separate the Explanation
 
----
+<LectureTable headers={["Shape","Observation","Possible explanation","Not established by this alone"]} rows={[["Upward","Long > short","Expected rate rises or a term premium","A unique growth or inflation forecast"],["Inverted","Long < short","High current short rates, expected cuts or low term premia","Recession timing or certainty"],["Flat","Long ≈ short","Offsetting expectations and premia","The amount of uncertainty"],["Humped","Slope varies by segment","Maturity-specific demand and policy paths","The whole curve from one spread"]]} />
 
-## 1. Decoding the Shapes
+## 2. Expectations Are Not the Whole Long Rate
 
-The shape of the curve tells us the market's collective expectation for the future.
+In a simplified log-yield decomposition, think of a long rate as an average of expected short rates plus a term premium. Pure expectations is a restrictive benchmark that leaves out this premium. Term premia compensate for risks of holding long bonds and are estimated through models; do not assume they are always positive or constant.
 
-<LectureTable
-  title="Yield Curve Shapes and Their Meaning"
-  headers={["Shape", "Graph Description", "Economic Meaning", "Typical Phase"]}
-  rows={[
-    [
-      "**Normal Curve**",
-      "Upward sloping (Long-term > Short-term)",
-      "Investors expect growth and moderate inflation.",
-      "Economic Expansion",
-    ],
-    [
-      "**Inverted Curve**",
-      "Downward sloping (Short-term > Long-term)",
-      "Investors expect a sharp slowdown or recession.",
-      "Before a Recession",
-    ],
-    [
-      "**Flat Curve**",
-      "Horizontal line (Short-term ≈ Long-term)",
-      "The market is uncertain or transitioning between phases.",
-      "Transition Period",
-    ],
-  ]}
-  highlightColumns={[0]}
-/>
+Liquidity preference emphasizes compensation for longer holding periods. Segmentation and preferred-habitat explanations emphasize maturity-specific demand and supply, not literal independence of all maturity markets. A falling long yield alone cannot identify whether expected short rates or the premium changed.
 
----
+## 3. Calculate Spreads and a Forward Rate
 
-## 2. Why Does the Curve Invert?
+These are hypothetical annual effective yields, not live quotes. With a 10-year yield of 3.8%, a 2-year yield of 4.2% and a 3-month yield of 4.7%, 10Y−2Y is −0.4 percentage points=−40bp; 10Y−3M is −0.9 percentage points=−90bp. State dates and maturities; do not substitute one spread for another.
 
-An **Inverted Yield Curve** is rare and famous for predicting almost every recession in modern history.
+Separately, take risk-free annual-compounded spot rates s₁=4% and s₂=3.5%. Matching the two-year accumulation gives the one-year forward rate starting in one year:
 
-<LectureProcess
-  steps={[
-    {
-      label: "Expectation",
-      description: "Investors believe the economy will weaken in the future",
-    },
-    {
-      label: "Safe Haven Rush",
-      description: "Demand for long-term safe assets (like 10-year bonds) surges",
-    },
-    {
-      label: "Price Up, Yield Down",
-      description: "High demand pushes long-term prices up and their yields down",
-    },
-    {
-      label: "Tightening",
-      description: "Central banks keep short-term rates high to fight inflation",
-    },
-    {
-      label: "Inversion",
-      description: "Long-term yields fall below short-term rates, signaling a warning",
-    },
-  ]}
-/>
+<FormulaBox formula="(1+s_2)^2=(1+s_1)(1+f_{1,2})" />
 
----
+(1.035)²/1.04−1≈0.030024, or about 3.0024%. This is a no-arbitrage pricing relation, not a guarantee of the short rate actually observed next year.
 
-## 3. Theories Behind the Term Structure
+## 4. A Recession Probability Is Not a Prophecy
 
-Why do rates differ by maturity? There are three main theories:
+The New York Fed’s familiar public indicator uses the 10Y−3M spread to estimate the probability of a U.S. recession twelve months ahead. Do not treat 10Y−2Y as that model’s input. Country, sample, maturities and the target event definition matter.
 
-- **Expectations Theory**: Long-term rates are just the average of expected future short-term rates.
-- **Liquidity Preference Theory**: Investors demand a "Liquidity Premium" (higher rates) for locking their money up for longer periods.
-- **Segmented Markets Theory**: Different investors (like pension funds vs. banks) live in different parts of the curve and don't switch.
+A 2025 New York Fed research post demonstrates substantial uncertainty around estimated probabilities themselves. A point estimate can hide model and parameter uncertainty. A negative spread alone does not supply an arbitrary numerical probability or a trading date.
 
-<Callout type="important">
-  **The 10Y-2Y Spread**: The difference between the 10-year Treasury yield and the 2-year yield is
-  the most watched part of the curve. When this number turns negative, it is the classic "Recession
-  Warning."
-</Callout>
+Check date and rate definitions → maturity pair → changes in both legs → possible expectations and premium explanations → model and other evidence. Steepening driven by short rates falling differs from steepening driven by long rates rising. Portfolio returns also depend on duration, credit, currency and costs.
 
----
+## Check Your Understanding
 
-## 4. Wrapping Up: Navigating the Macro Wave
+**Q. The 10-year yield falls 20bp and the 2-year falls 40bp. What happens to the spread?**
 
-The yield curve is not just a chart for bond traders; it is the <mark><strong>"Pulse of the Economy."</strong></mark> By understanding how the curve flattens, steepens, or inverts, you can adjust your asset allocation before the rest of the world realizes a change is coming.
+Solution: Δ(10Y−2Y)=−20−(−40)=+20bp. The spread widens, but an initial −50bp becomes −30bp and remains inverted. Steepening, ending inversion and an improving economy are not identical events.
 
----
+## Sources
 
-## 📖 참고문헌
-- **[The Yield Curve] - Various Economists**: A technical exploration of how the curve influences credit availability.
-- **[Macroeconomics] - N. Gregory Mankiw**: Explains the relationship between interest rates and the broader business cycle.
-- **[A History of Interest Rates] - Sidney Homer**: Provides context on how yield curves have behaved over centuries.
-
----
-
-Next time, we will explore **Credit Analysis and Spreads**—learning how to evaluate the risk of default and why not all bonds are created equal.
+- New York Fed, [The Yield Curve as a Leading Indicator — FAQ](https://www.newyorkfed.org/medialibrary/media/research/capital_markets/ycfaq.pdf).
+- New York Fed, [Treasury Term Premia: 1961–Present](https://libertystreeteconomics.newyorkfed.org/2014/05/treasury-term-premia-1961-present/).
+- Richard Crump and Nikolay Gospodinov, [How Uncertain Is the Estimated Probability of a Future Recession?](https://libertystreeteconomics.newyorkfed.org/2025/05/how-uncertain-is-the-estimated-probability-of-a-future-recession/) (2025).
