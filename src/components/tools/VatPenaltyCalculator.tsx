@@ -133,7 +133,7 @@ export default function VatPenaltyCalculator() {
             <ResultSteps
               steps={steps}
               next={[
-                { href: "/ko/vat-calculator/", label: "부가세 계산" },
+                { href: "/ko/magazine-tax-office-deadline-night/", label: "하루 늦은 신고 vs 늦은 납부" },
                 { href: "/ko/tax-calendar/", label: "다음 신고기한 보기" },
                 { href: "/ko/academy-computerized-accounting-ch6/", label: "부가세 신고 실무 강의" },
               ]}

@@ -76,7 +76,7 @@ export default function WeeklyHolidayPayCalculator() {
               next={[
                 { href: "/ko/daily-worker-insurance-checker/", label: "알바도 4대보험 들어야 할까?" },
                 { href: "/ko/salary-calculator/", label: "월급 실수령액 계산" },
-                { href: "/ko/magazine-minimum-wage-guide/", label: "최저임금 정리" },
+                { href: "/ko/magazine-tax-office-part-time-insurance/", label: "알바 기준선 4개 정리" },
               ]}
             />
           </div>

@@ -106,7 +106,7 @@ export default function DailyWorkerInsuranceChecker() {
               next={[
                 { href: "/ko/weekly-holiday-pay-calculator/", label: "주휴수당도 줘야 할까?" },
                 { href: "/ko/4-insurance-complete-guide/", label: "4대보험 정리" },
-                { href: "/ko/magazine-minimum-wage-guide/", label: "최저임금 정리" },
+                { href: "/ko/magazine-tax-office-part-time-insurance/", label: "근로내용확인신고 기한" },
               ]}
             />
           </div>

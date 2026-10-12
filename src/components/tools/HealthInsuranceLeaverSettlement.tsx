@@ -76,7 +76,7 @@ export default function HealthInsuranceLeaverSettlement() {
               next={[
                 { href: "/ko/severance-calculator/", label: "퇴직금 계산" },
                 { href: "/ko/salary-calculator/", label: "월급 실수령액 계산" },
-                { href: "/ko/4-insurance-complete-guide/", label: "4대보험 정리" },
+                { href: "/ko/magazine-tax-office-resignation-reason/", label: "퇴사 사유와 실업급여" },
               ]}
             />
           </div>
