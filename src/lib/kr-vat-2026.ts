@@ -193,7 +193,7 @@ export function vatPeriod(year: number, half: 1 | 2): { start: string; end: stri
 const N = String.raw`\d[\d,]*(?:\.\d+)?`;
 const UNIT = String.raw`(?:억|천만|백만|만|천)`;
 /** "3억", "1억 5천만", "300만원", "1만 320원", "10,000,000" — a bare trailing number needs 원 after it. */
-const AMOUNT = String.raw`(${N}\s*${UNIT}?(?:\s*${N}\s*${UNIT})*(?:\s*${N}(?=\s*원))?)`;
+export const AMOUNT = String.raw`(${N}\s*${UNIT}?(?:\s*${N}\s*${UNIT})*(?:\s*${N}(?=\s*원))?)`;
 const UNIT_VALUE: Record<string, number> = { 억: 1e8, 천만: 1e7, 백만: 1e6, 만: 1e4, 천: 1e3 };
 
 /** 억·천만·만·천 단위가 섞인 금액을 원 단위로 읽는다. */

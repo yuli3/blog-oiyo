@@ -3,6 +3,8 @@
 // company-brain projects/oiyo-ecosystem/tax-practice-toolkit-plan-2026-10-12.md for sources.
 // When a year changes, update RATES and the tests, not the formulas.
 
+import { AMOUNT, parseKrAmount } from "./kr-vat-2026.ts";
+
 export const RATES_AS_OF = "2026-10-12";
 
 export const RATES = {
@@ -125,6 +127,83 @@ export function dailyWageTax(dailyWage: number): { incomeTax: number; localTax: 
   const incomeTax = floor10(raw);
   if (incomeTax < 1_000) return { incomeTax: 0, localTax: 0 };
   return { incomeTax, localTax: Math.floor(incomeTax / 100) * 10 };
+}
+
+export interface LeaverInput {
+  /** 정산 연도에 받은 보수 총액(비과세 제외) */
+  totalPay: number;
+  /** 보수를 받은 달 수 (보수월액 = 총액 ÷ 이 값) */
+  monthsWorked: number;
+  /** 보험료가 부과된 달 수 (월 중 입사면 다음 달부터) */
+  monthsCharged: number;
+  /** 매달 고지된 보험료의 기준 보수월액 */
+  noticeMonthly: number;
+  /** 그해 요율. 기본은 2026년 */
+  rates?: { health: number; longTermCareOfHealth: number };
+}
+
+export interface LeaverResult {
+  actualMonthly: number;
+  owedHealth: number;
+  owedCare: number;
+  paidHealth: number;
+  paidCare: number;
+  health: number;
+  care: number;
+  total: number;
+}
+
+/**
+ * 퇴사월 건강보험 정산(근로자 부담분). 보수월액 = 보수총액 ÷ 근무 월수,
+ * 월 보험료는 10원 미만 버림, 장기요양은 건강보험료 × 비율. 정산액 = (낼 보험료 − 낸 보험료) × 부과 월수.
+ * 양수면 마지막 급여에서 더 떼고, 음수면 돌려준다. 사업주도 같은 금액을 정산한다.
+ */
+export function leaverHealthSettlement({ totalPay, monthsWorked, monthsCharged, noticeMonthly, rates }: LeaverInput): LeaverResult {
+  const health = rates?.health ?? RATES.healthEmployee;
+  const careRatio = rates?.longTermCareOfHealth ?? RATES.longTermCareOfHealth;
+  const actualMonthly = Math.floor(totalPay / monthsWorked);
+  const perMonth = (monthly: number) => {
+    const h = floor10(monthly * health);
+    return { h, c: floor10(h * careRatio) };
+  };
+  const owed = perMonth(actualMonthly);
+  const paid = perMonth(noticeMonthly);
+  const result = {
+    actualMonthly,
+    owedHealth: owed.h * monthsCharged,
+    owedCare: owed.c * monthsCharged,
+    paidHealth: paid.h * monthsCharged,
+    paidCare: paid.c * monthsCharged,
+  };
+  const h = result.owedHealth - result.paidHealth;
+  const c = result.owedCare - result.paidCare;
+  return { ...result, health: h, care: c, total: h + c };
+}
+
+export interface ParsedLeaver {
+  totalPay?: number;
+  monthsWorked?: number;
+  monthsCharged?: number;
+  noticeMonthly?: number;
+}
+
+/** "올해 총급여 3000만원 6개월 근무 기준 보수월액 450만원 부과 5개월" */
+export function parseLeaverText(text: string): ParsedLeaver {
+  const t = text.replace(/\s+/g, " ");
+  const out: ParsedLeaver = {};
+  const amount = (re: RegExp) => {
+    const raw = t.match(re)?.[1];
+    const value = raw === undefined ? null : parseKrAmount(raw);
+    return value === null ? undefined : value;
+  };
+  out.totalPay = amount(new RegExp(`(?:총\\s*급여|총\\s*보수|보수\\s*총액|받은\\s*급여|급여\\s*총액)\\s*${AMOUNT}`));
+  out.noticeMonthly = amount(new RegExp(`(?:기준\\s*(?:보수월액|보수|금액|액)?|고지\\s*(?:기준)?\\s*(?:보수월액)?)\\s*${AMOUNT}`));
+  const worked = t.match(/(\d+)\s*(?:개월|달)\s*(?:근무|일함|일했)/)?.[1] ?? t.match(/근무\s*(\d+)\s*(?:개월|달)/)?.[1];
+  if (worked) out.monthsWorked = Number(worked);
+  const charged = t.match(/(?:부과|산정|고지)\s*(\d+)\s*(?:개월|달)/)?.[1] ?? t.match(/(\d+)\s*(?:개월|달)\s*(?:부과|고지)/)?.[1];
+  if (charged) out.monthsCharged = Number(charged);
+  for (const key of Object.keys(out) as (keyof ParsedLeaver)[]) if (out[key] === undefined) delete out[key];
+  return out;
 }
 
 export interface ParsedWork {

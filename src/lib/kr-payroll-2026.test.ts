@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { dailyWageTax, dailyWorkerInsurance, parseWon, parseWorkText, RATES, weeklyHolidayPay } from "./kr-payroll-2026.ts";
+import { dailyWageTax, dailyWorkerInsurance, leaverHealthSettlement, parseLeaverText, parseWon, parseWorkText, RATES, weeklyHolidayPay } from "./kr-payroll-2026.ts";
 
 test("pins the 2026 rates so a yearly change is a deliberate edit", () => {
   assert.equal(RATES.minimumWage, 10_320);
@@ -69,3 +69,41 @@ test("reads Korean amounts and one-line work descriptions", () => {
   assert.deepEqual(parseWorkText("이번 달 7일 56시간 일당 12만원"), { dailyWage: 120_000, daysPerMonth: 7, hoursPerMonth: 56 });
   assert.deepEqual(parseWorkText("월급 180만원 한 달 20일"), { monthlyPay: 1_800_000, daysPerMonth: 20 });
 });
+
+test("leaver health settlement matches a published 2023 example", () => {
+  // 2023 rates: health 3.545% employee, long-term care 12.81% of health.
+  const r = leaverHealthSettlement({
+    totalPay: 27_500_000,
+    monthsWorked: 10,
+    monthsCharged: 9,
+    noticeMonthly: 2_500_000,
+    rates: { health: 0.03545, longTermCareOfHealth: 0.1281 },
+  });
+  assert.equal(r.actualMonthly, 2_750_000);
+  assert.equal(r.paidHealth, 88_620 * 9);
+  assert.equal(r.owedHealth, 877_320);
+  assert.equal(r.health, 79_740);
+  assert.equal(r.care, 10_170);
+});
+
+test("leaver settlement reproduces the office note and runs on 2026 rates", () => {
+  // Note: (5,000,000 − 4,500,000) × 6 × 3.545% = 106,350; per-month 10-won flooring moves it by a few won.
+  const note = leaverHealthSettlement({ totalPay: 30_000_000, monthsWorked: 6, monthsCharged: 6, noticeMonthly: 4_500_000, rates: { health: 0.03545, longTermCareOfHealth: 0 } });
+  assert.ok(Math.abs(note.health - 106_350) <= 60);
+
+  const now = leaverHealthSettlement({ totalPay: 30_000_000, monthsWorked: 6, monthsCharged: 6, noticeMonthly: 4_500_000 });
+  assert.equal(now.health, (179_750 - 161_770) * 6); // 5,000,000 × 3.595% vs 4,500,000 × 3.595% (10-won floor)
+  assert.equal(now.care, (floor10(179_750 * 0.1314) - floor10(161_770 * 0.1314)) * 6);
+
+  const refund = leaverHealthSettlement({ totalPay: 24_000_000, monthsWorked: 6, monthsCharged: 6, noticeMonthly: 4_500_000 });
+  assert.ok(refund.total < 0);
+
+  assert.deepEqual(parseLeaverText("올해 총급여 3000만원 6개월 근무 기준 보수월액 450만원 부과 5개월"), {
+    totalPay: 30_000_000,
+    noticeMonthly: 4_500_000,
+    monthsWorked: 6,
+    monthsCharged: 5,
+  });
+});
+
+const floor10 = (won: number) => Math.floor(Math.round(won * 1e6) / 1e7) * 10;
