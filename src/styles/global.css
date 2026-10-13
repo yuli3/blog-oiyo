@@ -179,8 +179,42 @@
   animation: fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* 2026-10-13: 책장 메타포의 책등 글씨. 한글은 세워 쓰고 라틴 문자는 눕는다.
-   Tailwind에 writing-mode 유틸이 없어 하나만 더한다. */
+/* 2026-10-13: 홈 책장(Bookshelf.astro) 전용 토큰.
+   책장 프레임은 짙은 호두나무, 책등은 여덟 가지 색을 돌려 쓴다. 책등 위 글자는
+   흰색이라 모든 책등 색의 명도를 0.62 이하로 둔다(굵은 14px 기준 대비 확보).
+   그림자를 끈 패밀리 정책(위 @theme)은 그대로 두고, 입체감은 그라데이션과
+   테두리로만 낸다. */
+@theme inline {
+  --color-shelf-frame: var(--shelf-frame);
+  --color-shelf-back: var(--shelf-back);
+  --color-shelf-plank: var(--shelf-plank);
+  --color-shelf-ink: var(--shelf-ink);
+  --color-spine-1: var(--spine-1);
+  --color-spine-2: var(--spine-2);
+  --color-spine-3: var(--spine-3);
+  --color-spine-4: var(--spine-4);
+  --color-spine-5: var(--spine-5);
+  --color-spine-6: var(--spine-6);
+  --color-spine-7: var(--spine-7);
+  --color-spine-8: var(--spine-8);
+}
+
+:root {
+  --shelf-frame: oklch(0.36 0.045 55);
+  --shelf-back:  oklch(0.21 0.018 60);
+  --shelf-plank: oklch(0.47 0.065 58);
+  --shelf-ink:   oklch(0.93 0.025 85);
+  --spine-1: oklch(0.50 0.140 255);
+  --spine-2: oklch(0.52 0.095 195);
+  --spine-3: oklch(0.52 0.130 150);
+  --spine-4: oklch(0.60 0.140 65);
+  --spine-5: oklch(0.56 0.170 40);
+  --spine-6: oklch(0.52 0.180 20);
+  --spine-7: oklch(0.47 0.150 335);
+  --spine-8: oklch(0.48 0.160 290);
+}
+
+/* 책등 글씨. 한글은 세워 쓰고 라틴 문자는 눕는다. Tailwind에 writing-mode 유틸이 없다. */
 @utility writing-vertical {
   writing-mode: vertical-rl;
 }
