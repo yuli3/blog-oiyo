@@ -1,0 +1,70 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import YouthFutureSavingsCalculator from "../../components/tools/YouthFutureSavingsCalculator";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
+import { youthFutureSavings, YOUTH_SAVINGS_AS_OF } from "../../lib/kr-youth-savings-2026";
+
+// Korean only (2026-10-13): Korean government savings product, first tool of the
+// mrkimfighting-based topic plan (project notes topic-selection-mrkim-based-2026-10-13.md, T1).
+const PAGE_LOCALES = ["ko"] as const;
+
+export async function getStaticPaths() {
+  return [{ params: { lang: "ko" }, props: { locale: "ko" } }];
+}
+const locale = "ko";
+
+const title = "청년미래적금 계산기 2026 — 만기 수령액과 일반형·우대형 비교";
+const description = "월 납입액, 금리, 가입 유형을 넣으면 청년미래적금 3년 만기 원금·이자·정부기여금을 나눠 계산합니다. 소득 기준으로 일반형·우대형도 미리 가늠해 봅니다.";
+
+const won = (n: number) => `${n.toLocaleString("ko-KR")}원`;
+const g = youthFutureSavings({ monthly: 500_000, annualRate: 0.05, kind: "general" });
+const p = youthFutureSavings({ monthly: 500_000, annualRate: 0.05, kind: "preferred" });
+
+const ko = {
+  eyebrow: "청년 금융 도구",
+  introTitle: "청년미래적금, 3년 뒤 얼마를 받나요?",
+  intro: `청년미래적금은 2026년 6월에 나온 만 19~34세 전용 적금입니다. 3년 동안 매달 최대 50만 원을 자유롭게 넣고, 기본금리 연 5%가 3년 내내 고정됩니다. 여기에 정부가 납입액의 6%(일반형) 또는 12%(우대형)를 기여금으로 얹어 주고, 이자에는 세금이 붙지 않습니다. 매달 50만 원을 다 채우면 원금은 1,800만 원이고, 기본금리만으로 이자는 ${won(g.interest)}입니다. 일반형이면 기여금 ${won(g.contribution)}을 더해 ${won(g.total)}, 우대형이면 ${won(p.contribution)}을 더해 ${won(p.total)}을 받습니다. 은행 우대금리를 받으면 이자가 더 늘어납니다.`,
+  howToTitle: "사용 방법",
+  steps: [
+    "맨 위 칸에 \"월 50만원 우대형 금리 7%\"처럼 적거나 예시를 누릅니다.",
+    "가입 유형을 모르면 아래 '내 유형 미리 보기'에 하는 일, 작년 총급여, 가구소득 구간을 고르고 '이 유형으로 위 계산에 넣기'를 누릅니다.",
+    "결과에서 원금·이자·기여금이 각각 얼마인지, 일반 적금보다 얼마나 더 받는지 확인합니다.",
+  ],
+  highlightsTitle: "주요 특징",
+  highlights: [
+    { title: "원금·이자·기여금을 나눠서", body: "적금 단리 방식으로 이자를 구하고, 기여금은 납입액 비율로 따로 보여 줍니다." },
+    { title: "일반 적금과 비교", body: "같은 금리 일반 적금이었다면 이자에서 빠졌을 15.4% 세금을 함께 계산합니다." },
+    { title: "유형 미리 보기", body: "공개된 소득·매출·가구소득 기준으로 일반형·우대형·비과세만 구간을 가늠합니다." },
+  ],
+  relatedTitle: "관련 도구",
+  related: [
+    { href: "/ko/savings-comparison-calculator/", label: "적금 비교 계산기", desc: "여러 적금의 만기 수령액을 비교합니다." },
+    { href: "/ko/isa-calculator/", label: "ISA 계산기", desc: "ISA 비과세 한도와 절세 효과를 봅니다." },
+    { href: "/ko/salary-calculator/", label: "연봉 실수령액 계산기", desc: "월 저축 여력을 가늠할 때 씁니다." },
+  ],
+  disclaimer: `일반적인 계산을 돕는 참고 도구입니다. 이자는 매달 같은 금액을 넣었다고 보고 적금 단리로 계산했으며, 정부기여금에 붙는 이자는 넣지 않아 은행 예시보다 조금 적게 나올 수 있습니다. 유형 미리 보기는 공개 기준을 단순화한 것이고 실제 판정은 심사 결과를 따릅니다. 신청 전 서민금융진흥원과 취급 은행 공지에서 최신 조건을 확인하세요. 기준일 ${YOUTH_SAVINGS_AS_OF}.`,
+};
+
+const faqs = [
+  { q: "지금 가입할 수 있나요?", a: "2차 가입 신청은 2026년 10월 7일부터 16일까지(18:30 마감)입니다. 심사는 10월 19일~11월 13일, 통과하면 11월 16~27일에 계좌를 열어야 합니다. 그 뒤 모집 일정은 아직 발표되지 않았습니다." },
+  { q: "일반형과 우대형은 무엇이 다른가요?", a: "정부기여금 비율이 다릅니다. 일반형은 납입액의 6%(월 최대 3만 원), 우대형은 12%(월 최대 6만 원)입니다. 우대형은 총급여 3,600만 원 이하 중소기업 재직자, 입사 6개월 이내 중소기업 신규 취업자, 연 매출 1억 원 이하 소상공인 등이 대상이고 가구소득 기준도 더 엄격합니다." },
+  { q: "총급여가 6,000만 원을 넘으면 못 드나요?", a: "총급여 6,000만~7,500만 원(종합소득 4,800만~6,300만 원) 구간은 가입은 되지만 정부기여금 없이 이자 비과세만 받습니다. 7,500만 원을 넘으면 가입할 수 없습니다." },
+  { q: "청년도약계좌가 있는데 같이 들 수 있나요?", a: "두 상품은 함께 가입할 수 없습니다. 갈아타려면 청년미래적금을 먼저 신청해 승인받고, 계좌를 연 뒤 청년도약계좌를 특별중도해지해야 합니다. 이 순서를 지키면 도약계좌에서 받은 기여금과 비과세가 유지됩니다. 도약계좌를 먼저 해지하면 갈아타기로 인정받지 못합니다." },
+  { q: "매달 꼭 50만 원을 넣어야 하나요?", a: "아닙니다. 자유적립식이라 1,000원부터 50만 원까지 달마다 바꿀 수 있습니다. 다만 정부기여금은 실제로 넣은 금액에 비율을 곱해 주므로, 적게 넣은 달은 기여금도 줄어듭니다." },
+];
+
+const { content: c, faqHeading, faqItems } = buildToolShell({ en: ko, ko }, { en: faqs, ko: faqs }, locale);
+---
+
+<BaseLayout title={title} description={description} availableLocales={[...PAGE_LOCALES]}>
+  <ToolShell title={title} description={description} siteUrl={siteConfig.url} locale={locale} slug="youth-future-savings-calculator" content={c} applicationCategory="FinanceApplication">
+    <div class="mx-auto max-w-2xl">
+      <YouthFutureSavingsCalculator client:load />
+      <p class="mt-4 text-xs text-muted-foreground">근거: 금융위원회 청년미래적금 출시(2026-06-22)·2차 가입 안내(2026-09) 발표, 서민금융진흥원 상품 안내. 기준일 {YOUTH_SAVINGS_AS_OF}.</p>
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
+</BaseLayout>
