@@ -1,0 +1,111 @@
+---
+/**
+ * 과목을 책등으로 세운 책장.
+ *
+ * 2026-10-13 세운 요청: books.euiyun.com 랜딩의 "책장" 느낌을 blog·wiki에 가져온다.
+ * wiki-oiyo/src/components/Bookshelf.astro 와 같은 파일이다. 고치면 둘 다 고친다.
+ * 가져온 것은 메타포(선반마다 학문, 책등 하나가 과목, 누르면 1장)뿐이고, 그쪽의
+ * 3D 나무 책장·그림자·색 조합·문장은 옮기지 않는다(reference-books-euiyun §8.6).
+ * 패밀리는 그림자를 끈 평면 디자인이라 책등의 입체감도 그림자 대신 위아래 띠와
+ * 선반 판으로만 낸다.
+ *
+ * 높이는 장 수 구간으로 네 단계만 쓴다. 장 수를 픽셀로 바꾸면 임의값이 되고
+ * (shadcn lint), 30장짜리 시험 과목이 선반 밖으로 튀어나간다.
+ */
+export type ShelfTint = "chart-1" | "chart-2" | "chart-3" | "chart-4" | "chart-5";
+
+export interface ShelfBook {
+  title: string;
+  href: string;
+  chapters: number;
+}
+
+export interface Shelf {
+  id: string;
+  label: string;
+  href: string;
+  tint: ShelfTint;
+  books: ShelfBook[];
+  more: number;
+}
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  note: string;
+  chapterWord: string;
+  moreLabel: string;
+  shelves: Shelf[];
+}
+
+const { eyebrow, title, note, chapterWord, moreLabel, shelves } = Astro.props;
+
+const size = (chapters: number) => (chapters >= 15 ? 4 : chapters >= 10 ? 3 : chapters >= 5 ? 2 : 1);
+---
+
+<section aria-labelledby="sec-bookshelf" class="mb-10 sm:mb-14">
+  <p class="font-mono text-xs font-semibold tracking-widest text-primary">{eyebrow}</p>
+  <h2 id="sec-bookshelf" class="mt-1 text-2xl font-black tracking-tight text-foreground break-keep">{title}</h2>
+  <p class="mt-2 text-sm text-muted-foreground break-keep">{note}</p>
+
+  <div class="mt-5 grid gap-x-8 gap-y-5 rounded-xl border border-border bg-muted p-3 sm:p-5 lg:grid-cols-2">
+    {shelves.map((shelf, index) => (
+      <div class:list={["flex min-w-0 flex-col justify-end", index === shelves.length - 1 && index % 2 === 0 && "lg:col-span-2"]}>
+        <a
+          href={shelf.href}
+          class="inline-flex items-baseline gap-2 text-xs font-semibold text-muted-foreground hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+        >
+          <span class="font-mono tabular-nums">{String(index + 1).padStart(2, "0")}</span>
+          <span class="text-foreground">{shelf.label}</span>
+          <span aria-hidden="true">→</span>
+        </a>
+        <ul
+          class="mt-2 flex items-end gap-1 overflow-x-auto pb-0 pt-2 sm:flex-wrap sm:overflow-visible"
+          aria-label={shelf.label}
+        >
+          {shelf.books.map((book, bookIndex) => {
+            const s = size(book.chapters);
+            return (
+              <li class="shrink-0">
+                <a
+                  href={book.href}
+                  title={`${book.title} · ${book.chapters} ${chapterWord}`}
+                  class:list={[
+                    "group flex w-10 flex-col items-center justify-between rounded-sm border-y-4 border-foreground/15 px-1 py-2 transition-transform duration-300 motion-safe:hover:-translate-y-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring sm:w-11",
+                    bookIndex % 3 === 1 && "brightness-90",
+                    bookIndex % 3 === 2 && "brightness-105",
+                    s === 1 && "h-32",
+                    s === 2 && "h-36",
+                    s === 3 && "h-40",
+                    s === 4 && "h-44",
+                    shelf.tint === "chart-1" && "bg-chart-1 text-primary-foreground",
+                    shelf.tint === "chart-2" && "bg-chart-2 text-primary-foreground",
+                    shelf.tint === "chart-3" && "bg-chart-3 text-foreground",
+                    shelf.tint === "chart-4" && "bg-chart-4 text-primary-foreground",
+                    shelf.tint === "chart-5" && "bg-chart-5 text-primary-foreground",
+                  ]}
+                >
+                  <span class="writing-vertical line-clamp-1 min-h-0 overflow-hidden text-sm font-bold leading-none tracking-tight">
+                    {book.title}
+                  </span>
+                  <span class="font-mono text-xs tabular-nums opacity-80">{book.chapters}</span>
+                </a>
+              </li>
+            );
+          })}
+          {shelf.more > 0 && (
+            <li class="shrink-0">
+              <a
+                href={shelf.href}
+                class="flex h-32 w-10 items-center justify-center rounded-sm border border-dashed border-foreground/25 text-xs font-semibold text-muted-foreground hover:border-primary hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring sm:w-11"
+              >
+                <span class="writing-vertical">{moreLabel.replace("{count}", String(shelf.more))}</span>
+              </a>
+            </li>
+          )}
+        </ul>
+        <div class="h-2 rounded-sm bg-border" aria-hidden="true"></div>
+      </div>
+    ))}
+  </div>
+</section>

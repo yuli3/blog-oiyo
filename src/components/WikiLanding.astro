@@ -4,6 +4,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import WikiTable from "./WikiTable.astro";
 import RelatedPosts from "./RelatedPosts.astro";
 import RelatedToolLinks from "./RelatedToolLinks.astro";
+import Bookshelf from "./Bookshelf.astro";
+import type { Shelf, ShelfTint } from "./Bookshelf.astro";
 import { getTranslations } from "../lib/i18n";
 import type { Locale } from "../lib/i18n";
 import { buildSeriesIndex, groupSeriesByCategory, isRedirectStub } from "../lib/wiki-index";
@@ -112,6 +114,29 @@ const examBuckets = (() => {
   ].filter((x) => x.courses > 0);
 })();
 
+// 책장: 다섯 학문을 선반 하나씩, 과목을 책등으로 세운다(2026-10-13 세운 요청).
+// 선반이 화면 밖으로 길어지지 않게 선반마다 12권까지 세우고 나머지는 "n권 더"로 학문 페이지에 넘긴다.
+const SHELF_LIMIT = 12;
+const SHELF_TINTS: Record<string, ShelfTint> = {
+  Business: "chart-2",
+  Economics: "chart-1",
+  Accounting: "chart-4",
+  Tax: "chart-5",
+  Exam: "chart-3",
+};
+const shelves: Shelf[] = priorityCats.map(({ cat, list }) => ({
+  id: slugifyCategory(cat),
+  label: categoryNames[cat] ?? cat,
+  href: `/${locale}/category/${slugifyCategory(cat)}/`,
+  tint: SHELF_TINTS[cat] ?? "chart-1",
+  books: list.slice(0, SHELF_LIMIT).map((s) => ({
+    title: seriesDisplayName(s.key, locale, s.firstPost.data.title),
+    href: `/${locale}/${s.firstPost.slug.split("/").slice(1).join("/")}/`,
+    chapters: s.chapterCount,
+  })),
+  more: Math.max(0, list.length - SHELF_LIMIT),
+}));
+
 // Recent updates table.
 const recent = [...posts]
   .sort((a, b) => {
@@ -147,6 +172,17 @@ const otherCounts = Object.fromEntries(OTHER_GROUPS.map((group) => [
             .replace("{chapters}", String(totalChapters))}
         </p>
       </div>
+
+      {shelves.length > 0 && (
+        <Bookshelf
+          eyebrow={L("shelfEyebrow", "BOOKSHELF")}
+          title={L("shelfTitle", "Pick a course from the shelf")}
+          note={L("shelfNote", "Tap a spine to open chapter 1 of that course.")}
+          chapterWord={L("chapters", "chapters")}
+          moreLabel={L("shelfMore", "{count} more")}
+          shelves={shelves}
+        />
+      )}
 
       <!-- ── 다섯 학문 ─────────────────────────────────────────────────────── -->
       <div class="grid gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
