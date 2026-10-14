@@ -1,0 +1,71 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ElectricityBillCalculator from "../../components/tools/ElectricityBillCalculator";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
+import { electricityBill, ELECTRICITY_AS_OF } from "../../lib/kr-electricity-2026";
+
+// Korean only (2026-10-13): KEPCO residential tariff. Topic T5 of the mrkimfighting-based
+// plan (project notes topic-selection-mrkim-based-2026-10-13.md), timed for the heating season.
+const PAGE_LOCALES = ["ko"] as const;
+
+export async function getStaticPaths() {
+  return [{ params: { lang: "ko" }, props: { locale: "ko" } }];
+}
+const locale = "ko";
+
+const title = "전기요금 계산기 2026 — 누진 구간별 요금과 기기 하나 더 쓸 때 늘어나는 돈";
+const description = "한 달 사용량(kWh)을 넣으면 주택용 누진제 구간별 전기요금, 부가세, 전력기금까지 청구액을 계산합니다. 제습기·전기장판·히터를 더 쓸 때 늘어나는 요금도 봅니다.";
+
+const won = (n: number) => `${n.toLocaleString("ko-KR")}원`;
+const b300 = electricityBill(300, "other");
+const b400 = electricityBill(400, "other");
+const b450 = electricityBill(450, "other");
+
+const ko = {
+  eyebrow: "생활비 도구",
+  introTitle: "이번 달 전기요금, 왜 이만큼 나왔을까요?",
+  intro: `집에서 쓰는 전기는 쓴 만큼 단가가 올라가는 누진제로 계산합니다. 7~8월을 뺀 달에는 200kWh까지 kWh당 120원, 400kWh까지 214.6원, 그 위는 307.3원이고 기본요금도 910원·1,600원·7,300원으로 구간마다 다릅니다. 그래서 한 달 300kWh를 쓰면 청구액은 ${won(b300.total)}인데, 400kWh면 ${won(b400.total)}, 450kWh면 ${won(b450.total)}입니다. 마지막 50kWh가 그 앞 100kWh보다 비싼 셈입니다. 여기에 기후환경요금, 연료비조정요금, 부가세 10%, 전력산업기반기금 2.7%가 붙습니다. 겨울에 전기장판이나 히터를 더 켜면 사용량이 다음 구간으로 넘어가기 쉬우니, 아래에서 기기 하나를 더 쓸 때 늘어나는 금액을 먼저 확인해 보세요.`,
+  howToTitle: "사용 방법",
+  steps: [
+    "고지서나 한전ON 앱의 '사용량(kWh)'을 맨 위 칸에 적거나 예시를 누릅니다.",
+    "사용한 달을 고릅니다. 7~8월은 구간이 300·450kWh로 넓어집니다.",
+    "아래 칸에서 제습기·전기장판·히터 같은 기기를 고르고 시간을 바꾸면 늘어나는 요금이 바로 나옵니다.",
+  ],
+  highlightsTitle: "주요 특징",
+  highlights: [
+    { title: "구간별로 나눠서", body: "어느 kWh에 어떤 단가가 붙었는지 계산 과정을 그대로 보여 줍니다." },
+    { title: "다음 구간까지 남은 양", body: "몇 kWh를 더 쓰면 단계가 바뀌는지 알려 줍니다." },
+    { title: "기기별 추가 요금", body: "누진제 때문에 같은 기기도 집마다 늘어나는 돈이 다르다는 점을 숫자로 봅니다." },
+  ],
+  relatedTitle: "관련 도구",
+  related: [
+    { href: "/ko/fuel-cost-calculator/", label: "유류비 계산기", desc: "차량 연료비를 계산합니다." },
+    { href: "/ko/jeonse-vs-rent-calculator/", label: "전세 vs 월세 계산기", desc: "주거비 전체를 비교할 때 씁니다." },
+    { href: "/ko/inflation-calculator/", label: "물가 계산기", desc: "생활비가 얼마나 올랐는지 봅니다." },
+  ],
+  disclaimer: `주택용 전력(저압) 요금표를 단순화한 참고 계산입니다. 아파트 단지 일괄계약, 고압 요금, 복지·대가족 할인, 취약계층 필수사용량 보장공제, TV 수신료는 넣지 않았습니다. 원 단위 처리 때문에 고지서와 수십 원 차이가 날 수 있습니다. 요금과 연료비조정단가는 분기마다 바뀔 수 있으니 한전ON에서 최신 요금표를 확인하세요. 기준일 ${ELECTRICITY_AS_OF}.`,
+};
+
+const faqs = [
+  { q: "누진 구간은 어떻게 나뉘나요?", a: "7~8월을 뺀 달은 200kWh 이하 1단계, 201~400kWh 2단계, 400kWh 초과 3단계입니다. 7~8월에는 300kWh, 450kWh로 구간이 넓어집니다. 단가는 같고 구간만 달라집니다." },
+  { q: "슈퍼유저 요금은 무엇인가요?", a: "7~8월과 12~2월에 한 달 1,000kWh를 넘게 쓰면 넘는 부분에 kWh당 736.2원이 붙습니다. 보통 가정에서는 해당되지 않습니다." },
+  { q: "아파트인데 고지서와 다르게 나와요.", a: "아파트는 단지 전체가 한전과 계약하고 관리사무소가 세대별로 나누는 경우가 많습니다. 단지 계약 방식(단일·종합)에 따라 세대 요금이 달라질 수 있어 이 계산기와 차이가 납니다. 공용 전기료도 관리비에 따로 붙습니다." },
+  { q: "연료비조정요금은 매번 같은가요?", a: "아닙니다. 석탄·LNG 가격에 따라 분기마다 kWh당 -5원~+5원 범위에서 정해집니다. 2026년 4분기는 상한인 +5원입니다." },
+  { q: "전기장판과 보일러 중 무엇이 싼가요?", a: "전기장판 한 장은 보통 시간당 100~200Wh 정도라 한 달 내내 켜도 30~50kWh입니다. 원래 사용량이 200kWh 안쪽이면 늘어나는 돈이 작지만, 구간 경계 근처라면 단계가 바뀌어 더 늘 수 있습니다. 아래 기기 계산에서 직접 비교해 보세요." },
+];
+
+const { content: c, faqHeading, faqItems } = buildToolShell({ en: ko, ko }, { en: faqs, ko: faqs }, locale);
+---
+
+<BaseLayout title={title} description={description} availableLocales={[...PAGE_LOCALES]}>
+  <ToolShell title={title} description={description} siteUrl={siteConfig.url} locale={locale} slug="electricity-bill-calculator" content={c}>
+    <div class="mx-auto max-w-2xl">
+      <ElectricityBillCalculator client:load />
+      <p class="mt-4 text-xs text-muted-foreground">근거: 한국전력 전기요금표 주택용 전력(저압), 2023-05-16 개정 이후 동결. 2026년 4분기 연료비조정단가 +5원/kWh. 기준일 {ELECTRICITY_AS_OF}.</p>
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
+</BaseLayout>
