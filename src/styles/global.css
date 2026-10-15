@@ -375,4 +375,84 @@ pre { max-width: 100%; overflow-x: auto; }
   .katex-display > .katex { font-size: 0.86em; }
 }
 
+/* ── 단권화 치트시트 및 Active Recall 블라인드 마스킹 스타일 ── */
+.cram-sheet-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.25rem 0 2rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.cram-sheet-content th {
+  background-color: var(--color-muted);
+  font-weight: 600;
+  text-align: left;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+
+.cram-sheet-content td {
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--color-border);
+  vertical-align: top;
+}
+
+.cram-sheet-content tr:nth-child(even) td {
+  background-color: oklch(from var(--color-muted) l c h / 0.25);
+}
+
+.cram-mask {
+  border-radius: var(--radius-sm);
+  padding: 0.05rem 0.35rem;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.cram-mask-active .cram-mask {
+  background-color: var(--color-muted-foreground);
+  color: transparent !important;
+  user-select: none;
+  cursor: pointer;
+  box-shadow: 0 0 0 1px var(--color-border);
+}
+
+.cram-mask-active .cram-mask.revealed,
+.cram-mask-active .cram-mask:hover {
+  background-color: transparent !important;
+  color: inherit !important;
+  outline: 1px dashed var(--color-success);
+}
+
+@media print {
+  #cram-controls,
+  .print-hidden,
+  header,
+  footer,
+  nav {
+    display: none !important;
+  }
+
+  .cram-sheet-content table {
+    page-break-inside: auto;
+    margin: 0.5rem 0 1rem !important;
+    font-size: 8pt !important;
+  }
+
+  .cram-sheet-content tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+
+  .cram-sheet-content th,
+  .cram-sheet-content td {
+    padding: 0.3rem 0.45rem !important;
+  }
+
+  .cram-mask {
+    background: transparent !important;
+    color: black !important;
+  }
+}
+
 

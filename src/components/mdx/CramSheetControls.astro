@@ -1,0 +1,87 @@
+---
+interface Props {
+  subject: string;
+}
+
+const { subject } = Astro.props;
+---
+
+<div id="cram-controls" class="not-prose my-6 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border/60 bg-muted/20 p-3.5 sm:p-4 print:hidden">
+  <div class="flex items-center gap-2">
+    <span class="inline-flex h-2 w-2 rounded-full bg-success animate-pulse"></span>
+    <span class="text-xs sm:text-sm font-medium text-foreground/80">
+      <strong>{subject}</strong> 시험 직전 단권화 치트시트
+    </span>
+  </div>
+  <div class="flex items-center gap-2">
+    <button
+      type="button"
+      id="cram-toggle-mask-btn"
+      class="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-semibold text-foreground shadow-xs hover:bg-muted/60 transition-colors focus-visible:outline-2 focus-visible:outline-ring"
+      aria-pressed="false"
+    >
+      <svg class="h-3.5 w-3.5 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+        <circle cx="12" cy="12" r="3"></circle>
+      </svg>
+      <span id="cram-toggle-mask-text">암기 가리기 ON</span>
+    </button>
+    <button
+      type="button"
+      id="cram-print-btn"
+      class="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-semibold text-foreground shadow-xs hover:bg-muted/60 transition-colors focus-visible:outline-2 focus-visible:outline-ring"
+    >
+      <svg class="h-3.5 w-3.5 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 6 2 18 2 18 9"></polyline>
+        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+        <rect width="12" height="8" x="6" y="14"></rect>
+      </svg>
+      <span>A4 인쇄</span>
+    </button>
+  </div>
+</div>
+
+<script>
+  function setupCramSheet() {
+    const toggleBtn = document.getElementById('cram-toggle-mask-btn');
+    const toggleText = document.getElementById('cram-toggle-mask-text');
+    const printBtn = document.getElementById('cram-print-btn');
+    const container = document.querySelector('.cram-sheet-content');
+
+    if (printBtn) {
+      printBtn.onclick = () => window.print();
+    }
+
+    if (!toggleBtn || !container) return;
+
+    let isMasked = false;
+
+    toggleBtn.onclick = () => {
+      isMasked = !isMasked;
+      container.classList.toggle('cram-mask-active', isMasked);
+      toggleBtn.setAttribute('aria-pressed', isMasked ? 'true' : 'false');
+      if (toggleText) {
+        toggleText.textContent = isMasked ? '전체 정답 보기' : '암기 가리기 ON';
+      }
+    };
+
+    // Allow individual reveals by clicking
+    const masks = container.querySelectorAll('.cram-mask');
+    masks.forEach((mask) => {
+      mask.addEventListener('click', (e) => {
+        if (container.classList.contains('cram-mask-active')) {
+          e.stopPropagation();
+          mask.classList.toggle('revealed');
+        }
+      });
+    });
+  }
+
+  // Astro page transitions or direct load
+  document.addEventListener('astro:page-load', setupCramSheet);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupCramSheet);
+  } else {
+    setupCramSheet();
+  }
+</script>
