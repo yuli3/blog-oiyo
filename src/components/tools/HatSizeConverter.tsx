@@ -48,6 +48,15 @@ const ALPHA: { label: string; minCm: number; maxCm: number }[] = [
 
 const EDGE_CM = 0.5;
 
+const POPULAR_SIZES = [
+  { cm: 56, label: "56cm (S · US 7)" },
+  { cm: 57, label: "57cm (M · US 7 1/8)" },
+  { cm: 58, label: "58cm (M · US 7 1/4)" },
+  { cm: 59, label: "59cm (L · US 7 3/8)" },
+  { cm: 60, label: "60cm (L · US 7 1/2)" },
+  { cm: 61, label: "61cm (XL · US 7 5/8)" },
+];
+
 const eighth = (n: number) => Math.round(n * 8) / 8;
 const usFromCm = (cm: number) => cm / INCH / Math.PI;
 const cmFromUs = (size: number) => size * Math.PI * INCH;
@@ -77,6 +86,7 @@ type Copy = {
   subtitle: string;
   reset: string;
   fromLabel: string;
+  popularTitle: string;
   fromCm: string;
   fromIn: string;
   fromUs: string;
@@ -111,6 +121,7 @@ const COPY: Record<Locale, Copy> = {
     subtitle: "Every hat size is your head circumference in disguise. This shows the disguise.",
     reset: "Reset",
     fromLabel: "Measure by",
+    popularTitle: "Popular sizes",
     fromCm: "Circumference (cm)",
     fromIn: "Circumference (in)",
     fromUs: "US fitted size",
@@ -150,6 +161,7 @@ const COPY: Record<Locale, Copy> = {
     subtitle: "모자 사이즈는 전부 머리둘레가 옷을 갈아입은 것이에요. 그 옷을 벗겨서 보여줘요.",
     reset: "초기화",
     fromLabel: "무엇으로 재나요",
+    popularTitle: "자주 찾는 인기 호수",
     fromCm: "머리둘레 (cm)",
     fromIn: "머리둘레 (인치)",
     fromUs: "US 피티드 사이즈",
@@ -189,6 +201,7 @@ const COPY: Record<Locale, Copy> = {
     subtitle: "帽子のサイズはすべて頭囲が姿を変えたものです。その中身を見せます。",
     reset: "リセット",
     fromLabel: "何で測りますか",
+    popularTitle: "人気の定番サイズ",
     fromCm: "頭囲 (cm)",
     fromIn: "頭囲 (インチ)",
     fromUs: "US フィッテッドサイズ",
@@ -221,13 +234,14 @@ const COPY: Record<Locale, Copy> = {
     ],
     caveat:
       "頭囲と同じくらい頭の形も重要です — 頭囲が同じでも長頭型と丸型では同じ帽子が合いません。二つのサイズの間なら大きい方を選び、バンド内側にサイズテープを使ってください。",
-    sources: "US フィッテッド = 頭囲(インチ) ÷ π を 1/8 単位で四捨五入。UK = US − 1/8。EU = 頭囲 cm。50〜64cm の15行の公開換算表と照合し、全行が一致しました。",
+    sources: "US フィッテッド = 頭囲(インチ) ÷ π を 1/8 単位で四捨五入。UK = US − 1/8. EU = 頭囲 cm。50〜64cm の15行の公開換算表と照合し、全行が一致しました。",
   },
   zh: {
     title: "帽子尺寸换算 — US · UK · EU · S/M/L",
     subtitle: "所有帽子尺寸都是头围换了件衣服。这里把衣服脱下来给你看。",
     reset: "重置",
     fromLabel: "用什么测量",
+    popularTitle: "热门常见尺寸",
     fromCm: "头围 (cm)",
     fromIn: "头围 (英寸)",
     fromUs: "US 平顶帽尺寸",
@@ -267,6 +281,7 @@ const COPY: Record<Locale, Copy> = {
     subtitle: "Toutes les tailles de chapeau sont votre tour de tête déguisé. Voici le déguisement.",
     reset: "Réinitialiser",
     fromLabel: "Mesurer par",
+    popularTitle: "Tailles populaires",
     fromCm: "Tour de tête (cm)",
     fromIn: "Tour de tête (pouces)",
     fromUs: "Taille US fitted",
@@ -306,6 +321,7 @@ const COPY: Record<Locale, Copy> = {
     subtitle: "Todas las tallas de sombrero son tu perímetro craneal disfrazado. Aquí está el disfraz.",
     reset: "Reiniciar",
     fromLabel: "Medir por",
+    popularTitle: "Tallas populares",
     fromCm: "Perímetro (cm)",
     fromIn: "Perímetro (pulgadas)",
     fromUs: "Talla US fitted",
@@ -463,6 +479,24 @@ export default function HatSizeConverter({ locale = "en" }: { locale?: Locale })
           )}
         </FieldGroup>
 
+        <div className="mt-4 flex flex-wrap items-center gap-1.5 border-t border-border/60 pt-3">
+          <span className="text-muted-foreground mr-1 text-xs font-medium">{t.popularTitle}:</span>
+          {POPULAR_SIZES.map((chip) => (
+            <Button
+              key={chip.label}
+              type="button"
+              variant="outline"
+              size="xs"
+              onClick={() => {
+                setFrom("cm");
+                setCm(String(chip.cm));
+              }}
+            >
+              {chip.label}
+            </Button>
+          ))}
+        </div>
+
         {result && (
           <div className="mt-5 sm:mt-8">
             <h3 className="text-base font-semibold">{t.resultTitle}</h3>
@@ -471,33 +505,33 @@ export default function HatSizeConverter({ locale = "en" }: { locale?: Locale })
               <TableHeader>
                 <TableRow>
                   <TableHead>{t.colSystem}</TableHead>
-                  <TableHead className="text-right tabular-nums">{t.colValue}</TableHead>
+                  <TableHead className="text-right">{t.colValue}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 <TableRow>
                   <TableCell>{t.rowCm}</TableCell>
-                  <TableCell className="text-right tabular-nums">{fmt(result.circCm)} cm</TableCell>
+                  <TableCell className="text-right"><span className="tabular-nums">{fmt(result.circCm)} cm</span></TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>{t.rowIn}</TableCell>
-                  <TableCell className="text-right tabular-nums">{fmt(result.circIn, 2)} in</TableCell>
+                  <TableCell className="text-right"><span className="tabular-nums">{fmt(result.circIn, 2)} in</span></TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>{t.rowUs}</TableCell>
-                  <TableCell className="text-right font-semibold tabular-nums">{asEighths(result.usSize)}</TableCell>
+                  <TableCell className="text-right"><span className="font-semibold tabular-nums">{asEighths(result.usSize)}</span></TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>{t.rowUk}</TableCell>
-                  <TableCell className="text-right font-semibold tabular-nums">{asEighths(result.ukSize)}</TableCell>
+                  <TableCell className="text-right"><span className="font-semibold tabular-nums">{asEighths(result.ukSize)}</span></TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>{t.rowEu}</TableCell>
-                  <TableCell className="text-right font-semibold tabular-nums">{result.eu}</TableCell>
+                  <TableCell className="text-right"><span className="font-semibold tabular-nums">{result.eu}</span></TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>{t.rowAlpha}</TableCell>
-                  <TableCell className="text-right font-semibold tabular-nums">{result.band?.label ?? "—"}</TableCell>
+                  <TableCell className="text-right"><span className="font-semibold tabular-nums">{result.band?.label ?? "—"}</span></TableCell>
                 </TableRow>
               </TableBody>
             </Table>

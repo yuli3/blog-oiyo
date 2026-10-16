@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import RelatedToolLinks from "../../components/RelatedToolLinks.astro";
+import ToolsCompanionBanner from "../../components/ToolsCompanionBanner.astro";
 import HatSizeConverter from "../../components/tools/HatSizeConverter";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
@@ -264,9 +265,9 @@ const structuredData = {
   <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <div class="mx-auto max-w-3xl px-4 py-5 sm:py-8">
     <section class="mb-5 sm:mb-8 rounded-2xl border border-border bg-card p-4 sm:p-6 shadow-sm">
-      <p class="text-sm font-semibold uppercase tracking-wide text-green-600">{m.eyebrow}</p>
+      <p class="text-sm font-semibold uppercase tracking-wide text-primary">{m.eyebrow}</p>
       <h1 class="mt-2 text-3xl font-black tracking-tight text-foreground">{m.title}</h1>
-      <p class="mt-4 leading-8 text-slate-700">{c.lead}</p>
+      <p class="mt-4 leading-8 text-muted-foreground">{c.lead}</p>
     </section>
 
     <HatSizeConverter client:load locale={locale as Locale} />
@@ -277,7 +278,7 @@ const structuredData = {
         {c.formulas.map((formula) => (
           <article class="rounded-xl border border-border bg-card p-4">
             <h3 class="text-sm font-semibold text-muted-foreground">{formula.label}</h3>
-            <p class="mt-2 font-mono text-sm leading-6 text-green-700">{formula.value}</p>
+            <p class="mt-2 font-mono text-sm leading-6 text-primary">{formula.value}</p>
           </article>
         ))}
       </div>
@@ -287,23 +288,61 @@ const structuredData = {
       <h2 class="text-xl font-bold text-foreground">{c.useTitle}</h2>
       <div class="mt-4 grid gap-4 md:grid-cols-3">
         {c.useCases.map((item) => (
-          <article class="rounded-xl bg-green-50 p-4">
+          <article class="rounded-xl border border-border bg-card p-4">
             <h3 class="font-semibold text-foreground">{item.title}</h3>
-            <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+            <p class="mt-2 text-sm leading-6 text-muted-foreground">{item.body}</p>
           </article>
         ))}
       </div>
     </section>
 
+    <section class="mt-6 sm:mt-10 rounded-xl border border-border bg-card p-5">
+      <h2 class="text-xl font-bold text-foreground">
+        {locale === "ko" ? "인기 모자 종류 및 브랜드별 선택 팁" : "Cap Styles & Brand Sizing Advice"}
+      </h2>
+      <div class="mt-4 grid gap-3 sm:grid-cols-3">
+        <div class="rounded-lg border border-border/70 p-3 bg-muted/20">
+          <p class="font-semibold text-sm text-foreground">
+            {locale === "ko" ? "뉴에라 59FIFTY (피티드)" : "New Era 59FIFTY (Fitted)"}
+          </p>
+          <p class="mt-1 text-xs text-muted-foreground leading-5">
+            {locale === "ko"
+              ? "신축성이 없는 완전 고정형 모자입니다. 측정된 US 1/8 호수를 그대로 선택하되, 두상이 둥글거나 머리숱이 많다면 1호수(1/8, 약 1cm) 여유 있게 주문하는 것이 정석입니다."
+              : "Non-adjustable fixed cap. Follow your exact US 1/8 size. If you have thick hair or a rounder skull profile, sizing up by 1/8 (~1 cm) provides a far more comfortable fit."}
+          </p>
+        </div>
+        <div class="rounded-lg border border-border/70 p-3 bg-muted/20">
+          <p class="font-semibold text-sm text-foreground">
+            {locale === "ko" ? "볼캡 · 스트랩백 (프리사이즈)" : "Ball Caps & Strapbacks (OSFA)"}
+          </p>
+          <p class="mt-1 text-xs text-muted-foreground leading-5">
+            {locale === "ko"
+              ? "대부분 56cm~60cm 머리둘레를 커버합니다. 중심 호수인 58cm 전후라면 별도 고민 없이 편안하게 착용할 수 있습니다."
+              : "One-size-fits-all caps typically adjust between 56 cm and 60 cm. Anyone measuring near the standard 58 cm anchor can wear them effortlessly."}
+          </p>
+        </div>
+        <div class="rounded-lg border border-border/70 p-3 bg-muted/20">
+          <p class="font-semibold text-sm text-foreground">
+            {locale === "ko" ? "버킷햇 · 페도라 (S/M/L)" : "Bucket Hats & Fedoras (S/M/L)"}
+          </p>
+          <p class="mt-1 text-xs text-muted-foreground leading-5">
+            {locale === "ko"
+              ? "챙이 넓은 모자는 눈썹 위까지 푹 눌러쓰는 경우가 많으므로 둘레가 경계선(58cm, 60cm 등)에 걸친다면 큰 쪽을 선택하는 것이 안정적입니다."
+              : "Wider-brimmed hats sit lower on the forehead. If your circumference sits on an alpha boundary (58 cm or 60 cm), choosing the larger size is consistently safer."}
+          </p>
+        </div>
+      </div>
+    </section>
+
     <section class="mt-6 sm:mt-10">
       <h2 class="text-xl font-bold text-foreground">{c.faqTitle}</h2>
-      <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-border bg-card">
+      <div class="mt-4 divide-y divide-border rounded-xl border border-border bg-card">
         {c.faqs.map((faq) => (
           <details class="group p-4">
             <summary class="cursor-pointer list-none font-semibold text-foreground">
               {faq.question}
             </summary>
-            <p class="mt-3 text-sm leading-6 text-slate-700">{faq.answer}</p>
+            <p class="mt-3 text-sm leading-6 text-muted-foreground">{faq.answer}</p>
           </details>
         ))}
       </div>
@@ -311,9 +350,14 @@ const structuredData = {
 
     <section class="mt-6 sm:mt-10 rounded-xl border border-border bg-card p-5">
       <h2 class="text-base font-bold text-foreground">{c.sourceTitle}</h2>
-      <p class="mt-3 text-sm leading-6 text-slate-700">{c.sources}</p>
+      <p class="mt-3 text-sm leading-6 text-muted-foreground">{c.sources}</p>
       <p class="mt-3 text-sm leading-6 text-muted-foreground">{c.disclaimer}</p>
     </section>
+    
+    <div class="mt-6 sm:mt-10">
+      <ToolsCompanionBanner tool="tools-hub" />
+    </div>
+
     <RelatedToolLinks locale={locale} current="hat-size-converter" slugs={["height-converter", "shoe-size-converter", "ring-size-converter"]} />
   </div>
 </BaseLayout>

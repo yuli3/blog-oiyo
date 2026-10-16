@@ -121,6 +121,64 @@ const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, local
   >
     <div class="mx-auto max-w-2xl">
       <PaceCalculator client:load locale={locale} />
+
+      <section class="mt-8 rounded-xl border border-border bg-card p-5">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+          <h2 class="text-base font-bold text-foreground">
+            {locale === "ko" ? "5K · 10K · 하프 · 풀코스 남녀 등가 기록 조견표" : "5K · 10K · Half · Marathon Gender Equivalent Table"}
+          </h2>
+          <a
+            href={locale === "ko" ? "/ko/male-to-female-running-time-converter/" : "/en/male-to-female-running-time-converter/"}
+            class="text-xs font-medium text-primary hover:underline inline-flex items-center gap-1"
+          >
+            {locale === "ko" ? "기록 직접 환산하기 →" : "Convert custom time →"}
+          </a>
+        </div>
+        <p class="mt-2 text-xs text-muted-foreground leading-5">
+          {locale === "ko"
+            ? "세계육상연맹(World Athletics) 세계기록의 남녀 비율을 기준으로 산출한 동일 운동 수준의 등가 기록입니다."
+            : "Equivalent times at the same performance level, based on the ratio between men's and women's World Athletics records."}
+        </p>
+
+        <div class="mt-4 overflow-x-auto">
+          <table class="w-full text-xs text-left border-collapse">
+            <thead>
+              <tr class="border-b border-border bg-muted/40">
+                <th class="py-2 px-3 font-semibold text-foreground">{locale === "ko" ? "종목" : "Event"}</th>
+                <th class="py-2 px-3 font-semibold text-foreground">{locale === "ko" ? "남자 기준 기록" : "Men's Base Time"}</th>
+                <th class="py-2 px-3 font-semibold text-foreground">{locale === "ko" ? "여자 등가 기록" : "Women's Equivalent"}</th>
+                <th class="py-2 px-3 font-semibold text-foreground">{locale === "ko" ? "격차 비율" : "Ratio Gap"}</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-border">
+              <tr>
+                <td class="py-2.5 px-3 font-medium text-foreground">5K</td>
+                <td class="py-2.5 px-3 tabular-nums text-muted-foreground">20:00 / 25:00 / 30:00</td>
+                <td class="py-2.5 px-3 tabular-nums font-semibold text-primary">21:41 / 27:07 / 32:32</td>
+                <td class="py-2.5 px-3 text-muted-foreground">+8.5%</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 px-3 font-medium text-foreground">10K</td>
+                <td class="py-2.5 px-3 tabular-nums text-muted-foreground">40:00 / 50:00 / 60:00</td>
+                <td class="py-2.5 px-3 tabular-nums font-semibold text-primary">43:24 / 54:15 / 1:05:06</td>
+                <td class="py-2.5 px-3 text-muted-foreground">+8.5%</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 px-3 font-medium text-foreground">{locale === "ko" ? "하프 (21.1K)" : "Half Marathon"}</td>
+                <td class="py-2.5 px-3 tabular-nums text-muted-foreground">1:30:00 / 1:45:00 / 2:00:00</td>
+                <td class="py-2.5 px-3 tabular-nums font-semibold text-primary">1:39:35 / 1:56:11 / 2:12:47</td>
+                <td class="py-2.5 px-3 text-muted-foreground">+10.6%</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 px-3 font-medium text-foreground">{locale === "ko" ? "풀마라톤 (42.2K)" : "Full Marathon"}</td>
+                <td class="py-2.5 px-3 tabular-nums text-muted-foreground">3:00:00 / 3:30:00 / 4:00:00</td>
+                <td class="py-2.5 px-3 tabular-nums font-semibold text-primary">3:15:38 / 3:48:15 / 4:20:51</td>
+                <td class="py-2.5 px-3 text-muted-foreground">+8.7%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
     </div>
     <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
   </ToolShell>
