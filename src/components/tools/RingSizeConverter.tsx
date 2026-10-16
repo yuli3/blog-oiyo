@@ -511,6 +511,40 @@ export default function RingSizeConverter({ locale = "en" }: { locale?: Locale }
           )}
         </FieldGroup>
 
+        <div className="mt-4 pt-3 border-t border-border/60">
+          <span className="text-xs font-semibold text-muted-foreground block mb-2">
+            {locale === "ko" ? "인기 호수 빠른 선택:" : "Popular Sizes (KR/US):"}
+          </span>
+          <div className="flex flex-wrap gap-1.5">
+            {[
+              { label: locale === "ko" ? "여성 9호 (US 5)" : "Women 9 (US 5)", jp: "9", circ: "49.2", us: "5" },
+              { label: locale === "ko" ? "여성 11호 (US 6)" : "Women 11 (US 6)", jp: "11", circ: "51.3", us: "6" },
+              { label: locale === "ko" ? "여성 13호 (US 6.5)" : "Women 13 (US 6.5)", jp: "13", circ: "53.4", us: "6.5" },
+              { label: locale === "ko" ? "남성 15호 (US 7.5)" : "Men 15 (US 7.5)", jp: "15", circ: "55.5", us: "7.5" },
+              { label: locale === "ko" ? "남성 17호 (US 8.5)" : "Men 17 (US 8.5)", jp: "17", circ: "57.6", us: "8.5" },
+              { label: locale === "ko" ? "남성 19호 (US 9.5)" : "Men 19 (US 9.5)", jp: "19", circ: "59.7", us: "9.5" },
+            ].map((p) => (
+              <button
+                key={p.jp}
+                type="button"
+                onClick={() => {
+                  setFrom("jp");
+                  setJp(p.jp);
+                  setCirc(p.circ);
+                  setUs(p.us);
+                }}
+                className={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium transition-colors ${
+                  from === "jp" && jp === p.jp
+                    ? "border-primary bg-primary/10 text-primary font-bold"
+                    : "border-border bg-muted/40 text-foreground hover:border-primary/50 hover:bg-muted"
+                }`}
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {rows && (
           <div className="mt-5 sm:mt-8">
             <h3 className="text-base font-semibold">{t.resultTitle}</h3>
