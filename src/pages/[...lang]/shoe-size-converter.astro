@@ -386,16 +386,70 @@ const structuredData = {
           <tbody class="divide-y divide-border">
             {quickTableData.map((row) => (
               <tr class="transition-colors hover:bg-muted/30">
-                <td class="px-3.5 py-2.5 font-bold text-foreground">{row.menUs}</td>
+                <td class="px-3.5 py-2.5 font-bold text-foreground">
+                  {locale === "en" ? (
+                    <a href={`/en/shoe-size-converter/men-us-${row.menUs.replace(".", "-")}/`} class="text-primary hover:underline font-bold">
+                      {row.menUs}
+                    </a>
+                  ) : (
+                    row.menUs
+                  )}
+                </td>
                 <td class="px-3.5 py-2.5 text-muted-foreground">{row.womenBrannock}</td>
                 <td class="px-3.5 py-2.5 text-muted-foreground">{row.womenRetail}</td>
                 <td class="px-3.5 py-2.5 text-muted-foreground">{row.uk}</td>
                 <td class="px-3.5 py-2.5 text-muted-foreground">{row.eu}</td>
-                <td class="px-3.5 py-2.5 font-medium text-foreground">{locale === "ko" ? `${row.mm} mm (${row.cm} cm)` : `${row.cm} cm`}</td>
+                <td class="px-3.5 py-2.5 font-medium text-foreground">
+                  {locale === "ko" ? (
+                    <a href={`/ko/shoe-size-converter/${row.mm}mm/`} class="text-primary hover:underline font-bold">
+                      {row.mm} mm ({row.cm} cm)
+                    </a>
+                  ) : (
+                    `${row.cm} cm`
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
+      </div>
+
+      <!-- 주요 사이즈 바로가기 클러스터 -->
+      <div class="mt-4 rounded-xl border border-border bg-card p-4">
+        <h3 class="text-xs font-bold text-foreground mb-2">
+          {locale === "ko" ? "인기 규격별 상세 환산 가이드" : "Popular Size Conversion Guides"}
+        </h3>
+        <div class="flex flex-wrap gap-2 text-xs">
+          {locale === "ko" ? (
+            ["230", "235", "240", "245", "250", "255", "260", "265", "270", "275", "280"].map((sz) => (
+              <a
+                href={`/ko/shoe-size-converter/${sz}mm/`}
+                class="rounded-md border border-border bg-muted/60 px-2.5 py-1 font-mono font-medium text-foreground hover:border-primary hover:text-primary transition-colors"
+              >
+                {sz}mm 환산
+              </a>
+            ))
+          ) : (
+            [
+              { label: "US Men 8.0", slug: "men-us-8" },
+              { label: "US Men 8.5", slug: "men-us-8-5" },
+              { label: "US Men 9.0", slug: "men-us-9" },
+              { label: "US Men 9.5", slug: "men-us-9-5" },
+              { label: "US Men 10.0", slug: "men-us-10" },
+              { label: "US Men 10.5", slug: "men-us-10-5" },
+              { label: "US Women 7.0", slug: "women-us-7" },
+              { label: "US Women 8.0", slug: "women-us-8" },
+              { label: "US Women 9.0", slug: "women-us-9" },
+            ].map((item) => (
+              <a
+                href={`/en/shoe-size-converter/${item.slug}/`}
+                class="rounded-md border border-border bg-muted/60 px-2.5 py-1 font-medium text-foreground hover:border-primary hover:text-primary transition-colors"
+              >
+                {item.label}
+              </a>
+            ))
+          )}
+        </div>
       </div>
     </section>
 

@@ -1,0 +1,240 @@
+---
+/**
+ * Per-size landing pages under /shoe-size-converter/[size].
+ *
+ * Grounded in the Brannock device formulas and retailer conventions from
+ * ShoeSizeConverter.tsx. Answers high-volume queries like "신발 250mm us 사이즈"
+ * and "US men's size 9 to women's" directly, providing international conversions
+ * (US Men/Women, UK, EU, cm) and linking back to the interactive converter.
+ */
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { siteConfig } from "../../../config/site.config";
+import {
+  shoeSizePages,
+  type ShoeSizePage,
+} from "../../../lib/shoe-size-equivalent";
+
+export function getStaticPaths() {
+  return (["ko", "en"] as const).flatMap((lang) =>
+    shoeSizePages(lang).map((page) => ({
+      params: { lang, size: page.slug },
+      props: { locale: lang, page },
+    }))
+  );
+}
+
+const { locale, page } = Astro.props as { locale: "ko" | "en"; page: ShoeSizePage };
+const ko = locale === "ko";
+const d = page.data;
+const toolUrl = `/${locale}/shoe-size-converter/`;
+
+const allPages = shoeSizePages(locale);
+const sameSystem = allPages.filter((p) => p.system === page.system);
+const currentIndex = sameSystem.findIndex((p) => p.slug === page.slug);
+const nearbyPages = sameSystem.slice(
+  Math.max(0, currentIndex - 4),
+  Math.min(sameSystem.length, currentIndex + 5)
+);
+
+const t = ko
+  ? {
+      eyebrow: "신발 사이즈 규격 환산",
+      title: `신발 ${page.value}mm 미국(US) · 영국(UK) · 유럽(EU) 사이즈 환산`,
+      description: `${page.value}mm(25.0cm) 신발을 해외 규격으로 환산하면 US 남성 ${d.menUs}, US 여성 ${d.womenBrannock}(소매점 ${d.womenRetail}), UK ${d.uk}, EU ${d.eu}입니다. 발 길이 기준과 브랜드별 차이를 안내합니다.`,
+      crumb: "신발 사이즈 변환기",
+      answerBoxTitle: `${page.value}mm 해외 규격 환산 결과`,
+      menLabel: "US 남성 사이즈",
+      womenLabel: "US 여성 사이즈 (브래녹 / 소매점)",
+      ukLabel: "UK 영국 사이즈",
+      euLabel: "EU 유럽 사이즈",
+      cmLabel: "발 길이 기준",
+      whyDiffTitle: "미국 여성 사이즈가 두 가지로 표기되는 이유",
+      whyDiffBody: `미국 신발 표준 측정 기구인 브래녹(Brannock) 공식에 따르면 여성 사이즈는 남성 사이즈보다 1.5 크게(+1.5) 산출됩니다. 그러나 나이키 등 다수 소매 브랜드에서는 직관성을 위해 2 사이즈 크게(+2) 표기합니다. 따라서 구매 전 브랜드별 공식 실측표를 대조하는 것이 가장 안전합니다.`,
+      widthTitle: "남녀 신발 발볼(Last) 구조의 차이",
+      widthBody: `같은 발 길이더라도 여성용 신발은 뒤꿈치와 발볼(B 너비)이 좁게 제작되며, 남성용 신발은 기본 발볼(D 너비)이 넓게 제작됩니다. 따라서 남성이 여성용 신발을 신거나 여성이 남성용 신발을 신을 때는 발볼 너비도 함께 감안해야 합니다.`,
+      tableTitle: "주변 치수 비교표",
+      colBase: "한국 치수 (mm)",
+      colMen: "US 남성",
+      colWomen: "US 여성 (브래녹 / 소매점)",
+      colUk: "UK",
+      colEu: "EU",
+      colLength: "발 길이 (cm)",
+      toolCta: "신발 사이즈 양방향 변환기 열기",
+    }
+  : {
+      eyebrow: "Shoe Size Conversion",
+      title:
+        page.system === "men-us"
+          ? `US Men's Size ${page.value} in Women's, UK, EU & CM`
+          : `US Women's Size ${page.value} in Men's, UK, EU & CM`,
+      description: `Convert US ${page.system === "men-us" ? "Men's" : "Women's"} size ${page.value} to international equivalents: UK ${d.uk}, EU ${d.eu}, and ${d.cm} cm. Includes both Brannock (+1.5) and retail (+2) conversions.`,
+      crumb: "Shoe Size Converter",
+      answerBoxTitle: `US ${page.system === "men-us" ? "Men's" : "Women's"} ${page.value} Equivalents`,
+      menLabel: "US Men's",
+      womenLabel: "US Women's (Brannock / Retail)",
+      ukLabel: "UK Size",
+      euLabel: "EU (Paris Points)",
+      cmLabel: "Foot Length",
+      whyDiffTitle: "Why US Men's and Women's conversions differ",
+      whyDiffBody: `The Brannock measuring device officially places women's sizes 1.5 sizes above men's for the same foot length. However, many major retail brands publish charts adding 2 full sizes. If in doubt, sizing by actual foot length in centimeters is the most accurate benchmark.`,
+      widthTitle: "Last width & fit considerations",
+      widthBody: `Women's shoes are typically built on a narrower B-width last, while men's standard width is D. When converting across genders, expect women's models to feel snugger in the heel and forefoot than the equivalent men's shoe.`,
+      tableTitle: "Nearby Sizes Comparison Chart",
+      colBase: "Selected Size",
+      colMen: "US Men",
+      colWomen: "US Women (Brannock / Retail)",
+      colUk: "UK",
+      colEu: "EU",
+      colLength: "Length",
+      toolCta: "Open Interactive Shoe Converter",
+    };
+
+const pageUrl = `${siteConfig.url}/${locale}/shoe-size-converter/${page.slug}/`;
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: t.crumb,
+          item: `${siteConfig.url}${toolUrl}`,
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: t.title,
+          item: pageUrl,
+        },
+      ],
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: [
+        {
+          "@type": "Question",
+          name: t.whyDiffTitle,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: t.whyDiffBody,
+          },
+        },
+        {
+          "@type": "Question",
+          name: t.widthTitle,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: t.widthBody,
+          },
+        },
+      ],
+    },
+  ],
+};
+---
+
+<BaseLayout title={t.title} description={t.description} availableLocales={[locale]}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <div class="mx-auto max-w-3xl px-4 py-5 sm:py-8">
+    <nav class="text-sm text-muted-foreground" aria-label="Breadcrumb">
+      <a class="font-semibold text-primary underline-offset-4 hover:underline" href={toolUrl}>{t.crumb}</a>
+      <span aria-hidden="true"> / </span>
+      <span class="text-foreground font-medium">{ko ? `${page.value}mm` : `Size ${page.value}`}</span>
+    </nav>
+
+    <!-- Hero Card -->
+    <section class="mt-3 rounded-2xl border border-border bg-card p-4 sm:p-6 shadow-sm">
+      <p class="text-sm font-semibold uppercase tracking-wide text-primary">{t.eyebrow}</p>
+      <h1 class="mt-2 text-2xl font-black tracking-tight text-foreground sm:text-3xl">{t.title}</h1>
+      <p class="mt-3 text-sm leading-relaxed text-muted-foreground">{t.description}</p>
+
+      <!-- Key conversion numbers grid -->
+      <div class="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div class="rounded-xl border border-primary/20 bg-primary/5 p-4 text-center">
+          <span class="text-xs font-semibold text-muted-foreground">{t.menLabel}</span>
+          <p class="mt-1 text-2xl font-black text-primary font-mono">{d.menUs}</p>
+        </div>
+
+        <div class="rounded-xl border border-primary/20 bg-primary/5 p-4 text-center">
+          <span class="text-xs font-semibold text-muted-foreground">{t.womenLabel}</span>
+          <p class="mt-1 text-2xl font-black text-primary font-mono">{d.womenBrannock} <span class="text-sm font-normal text-muted-foreground">/ {d.womenRetail}</span></p>
+        </div>
+
+        <div class="rounded-xl border border-border bg-muted/40 p-4 text-center">
+          <span class="text-xs font-semibold text-muted-foreground">{t.ukLabel}</span>
+          <p class="mt-1 text-2xl font-bold text-foreground font-mono">{d.uk}</p>
+        </div>
+
+        <div class="rounded-xl border border-border bg-muted/40 p-4 text-center">
+          <span class="text-xs font-semibold text-muted-foreground">{t.euLabel}</span>
+          <p class="mt-1 text-2xl font-bold text-foreground font-mono">{d.eu}</p>
+        </div>
+      </div>
+
+      <div class="mt-4 flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-border/60 text-xs text-muted-foreground">
+        <span>{t.cmLabel}: <strong class="font-bold text-foreground font-mono">{d.cm} cm ({d.inches} inches)</strong></span>
+        <a class="inline-flex min-h-9 items-center rounded-lg bg-primary px-4 font-bold text-primary-foreground hover:bg-primary/90 transition shadow-xs" href={toolUrl}>
+          {t.toolCta} →
+        </a>
+      </div>
+    </section>
+
+    <!-- Explanations & FAQ -->
+    <section class="mt-6 rounded-2xl border border-border bg-card p-4 sm:p-6 space-y-5">
+      <div>
+        <h2 class="text-lg font-bold text-foreground">{t.whyDiffTitle}</h2>
+        <p class="mt-2 text-sm leading-relaxed text-muted-foreground">{t.whyDiffBody}</p>
+      </div>
+      <div class="pt-4 border-t border-border/60">
+        <h2 class="text-lg font-bold text-foreground">{t.widthTitle}</h2>
+        <p class="mt-2 text-sm leading-relaxed text-muted-foreground">{t.widthBody}</p>
+      </div>
+    </section>
+
+    <!-- Nearby Sizes Table -->
+    <section class="mt-6 rounded-2xl border border-border bg-card p-4 sm:p-6">
+      <h2 class="text-lg font-bold text-foreground">{t.tableTitle}</h2>
+      <div class="mt-4 overflow-x-auto">
+        <table class="w-full text-left text-sm">
+          <thead>
+            <tr class="border-b border-border text-xs font-semibold text-muted-foreground">
+              <th class="py-2.5 pr-3">{t.colBase}</th>
+              <th class="py-2.5 pr-3">{t.colMen}</th>
+              <th class="py-2.5 pr-3">{t.colWomen}</th>
+              <th class="py-2.5 pr-3">{t.colUk}</th>
+              <th class="py-2.5 pr-3">{t.colEu}</th>
+              <th class="py-2.5">{t.colLength}</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-border">
+            {nearbyPages.map((p) => {
+              const row = p.data;
+              const isCurrent = p.slug === page.slug;
+              return (
+                <tr class={`transition-colors hover:bg-muted/30 ${isCurrent ? "bg-primary/10 font-bold" : ""}`}>
+                  <td class="py-2.5 pr-3">
+                    {isCurrent ? (
+                      <span class="text-primary font-mono">{ko ? `${row.mm}mm` : `US ${p.value}`}</span>
+                    ) : (
+                      <a class="text-primary font-mono hover:underline" href={`/${locale}/shoe-size-converter/${p.slug}/`}>
+                        {ko ? `${row.mm}mm` : `US ${p.value}`}
+                      </a>
+                    )}
+                  </td>
+                  <td class="py-2.5 pr-3 font-mono">{row.menUs}</td>
+                  <td class="py-2.5 pr-3 font-mono text-muted-foreground">{row.womenBrannock} / {row.womenRetail}</td>
+                  <td class="py-2.5 pr-3 font-mono text-muted-foreground">{row.uk}</td>
+                  <td class="py-2.5 pr-3 font-mono text-muted-foreground">{row.eu}</td>
+                  <td class="py-2.5 font-mono text-muted-foreground">{row.cm} cm</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
