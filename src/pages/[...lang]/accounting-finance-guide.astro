@@ -16,30 +16,64 @@ const labLocale = locale === 'ko' ? 'ko' : 'en';
 
 const meta: Record<Locale, { title: string; description: string }> = {
   ko: {
-    title: "회계·재무 학습 허브 — 재무제표·비율분석·원가관리 도구 모음",
-    description: "재무제표 분석기, CVP 손익분기점, CAPM·WACC 계산기, 분산분석 등 회계·재무 인터랙티브 도구를 한곳에서 만나보세요.",
+    title: "회계·재무·경영 학습 허브 — 4대 단권화 치트시트 및 실무 계산기",
+    description: "회계원리, 재무관리, 경영학, 경제학 1페이지 단권화 암기 치트시트와 재무제표 분석기, CVP, CAGR 등 실무 도구를 한곳에서 만나보세요.",
   },
   en: {
-    title: "Accounting & Finance Learning Hub",
-    description: "Explore interactive tools for financial statements, CVP analysis, CAPM, WACC, and variance analysis.",
+    title: "Accounting, Finance & Business Learning Hub",
+    description: "Explore 1-page cram cheat sheets for accounting, finance, management, and economics, plus interactive calculators.",
   },
   ja: {
-    title: "会計・財務学習ハブ",
-    description: "財務諸表分析、CVP分析、CAPM・WACC計算など会計・財務のインタラクティブツールを一覧できます。",
+    title: "会計・財務・経営学習ハブ",
+    description: "会計原理・財務管理・経営学・経済学の1ページ要約シートと実践的計算ツールを一覧できます。",
   },
   fr: {
-    title: "Hub d'apprentissage Comptabilité et Finance",
-    description: "Explorez les outils interactifs pour les états financiers, l'analyse CVP, le CAPM et le WACC.",
+    title: "Hub d'apprentissage Comptabilité, Finance et Gestion",
+    description: "Fiches de synthèse 1 page et calculateurs pratiques pour la comptabilité, la finance et la gestion.",
   },
   es: {
-    title: "Hub de Aprendizaje Contabilidad y Finanzas",
-    description: "Explora herramientas interactivas para estados financieros, análisis CVP, CAPM y WACC.",
+    title: "Hub de Aprendizaje Contabilidad, Finanzas y Negocios",
+    description: "Hojas de resumen de 1 página y calculadoras prácticas de contabilidad, finanzas y economía.",
   },
   zh: {
-    title: "会计与财务学习中心",
-    description: "探索财务报表分析、CVP分析、CAPM与WACC计算等互动工具。",
+    title: "会计·财务·商业学习中心",
+    description: "一页纸浓缩复习备忘单与财务报表分析、CVP、CAGR等实务计算工具。",
   },
 };
+
+interface CramCard {
+  title: string;
+  description: string;
+  href: string;
+  category: string;
+}
+
+const cramSheets: CramCard[] = [
+  {
+    title: "회계원리·재무회계 핵심 치트시트",
+    description: "재고자산 오류 파급, 감가상각 4법, 사채 유효이자율법 상각, 자본거래, 재무비율 1페이지 단권화 복습.",
+    href: "/ko/accounting-cram-cheat-sheet/",
+    category: "회계학",
+  },
+  {
+    title: "재무관리 공식·핵심 치트시트",
+    description: "MM 법인세 제1·2명제, WACC 및 CAPM, Gordon 배당할인모형, 듀레이션·면역전략 1페이지 단권화 복습.",
+    href: "/ko/finance-cram-cheat-sheet/",
+    category: "재무관리",
+  },
+  {
+    title: "경영학 핵심 단권화 치트시트",
+    description: "테일러·페이욜 고전이론, 매슬로·허즈버그 동기부여, 마이클 포터 5 Forces, 마케팅 4P·STP 1페이지 총정리.",
+    href: "/ko/business-cram-cheat-sheet/",
+    category: "경영학",
+  },
+  {
+    title: "경제학 핵심 공식·단권화 치트시트",
+    description: "탄력성, 소비자·생산자 잉여, 시장실패, IS-LM 균형, 필립스 곡선 1페이지 단권화 총정리.",
+    href: "/ko/economics-cram-cheat-sheet/",
+    category: "경제학",
+  },
+];
 
 interface ToolCard {
   title: string;
@@ -87,47 +121,128 @@ const tools: ToolCard[] = [
   },
 ];
 
+const companionTools = [
+  {
+    title: "CAGR 연평균 복합 성장률 계산기",
+    desc: "초기 가치와 최종 가치, 기간(년)을 바탕으로 복리 수익률을 소수점 단위로 정밀 산출합니다.",
+    href: "https://tools.oiyo.net/ko/cagr-calculator/",
+  },
+  {
+    title: "부가가치세 10% 공급가액 역산 계산기",
+    desc: "합계금액(공급대가)에서 부가세 10%를 분리하거나 공급가액에 세액을 합산하는 실무 계산기입니다.",
+    href: "https://tools.oiyo.net/ko/vat-calculator/",
+  },
+  {
+    title: "법정 퇴직금 고속 계산기",
+    desc: "근로기준법 기준 3개월 평균임금과 계속근로일수로 법정 퇴직금을 즉시 산출합니다.",
+    href: "https://tools.oiyo.net/ko/severance-pay-calculator/",
+  },
+  {
+    title: "주휴수당 & 주급 계산기",
+    desc: "주 15시간 이상 근무 시 발생하는 법정 주휴수당과 주급 총액을 바로 계산합니다.",
+    href: "https://tools.oiyo.net/ko/weekly-holiday-allowance-calculator/",
+  },
+];
+
 const m = meta[locale] ?? meta.en;
 ---
 
 <BaseLayout title={m.title} description={m.description}>
   <div class="mx-auto max-w-3xl px-4 py-6 sm:py-10">
-    <div class="mb-5 sm:mb-8">
-      <div class="inline-flex items-center gap-2 bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full mb-3">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+    <div class="mb-6 sm:mb-10">
+      <div class="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-bold text-primary mb-3">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
         </svg>
-        회계·재무 학습 허브
+        회계·재무·경영 학습 허브
       </div>
-      <h1 class="text-2xl font-bold text-foreground mb-2">재무제표·비율분석·원가관리 도구 모음</h1>
+      <h1 class="text-2xl sm:text-3xl font-extrabold text-foreground mb-3">{m.title}</h1>
       <p class="text-sm text-muted-foreground leading-relaxed">
-        회계·재무 개념을 직접 조작하며 배우는 인터랙티브 도구들입니다. 이론 공부와 함께 활용하면 개념이 훨씬 빠르게 정착됩니다.
+        {m.description}
       </p>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      {tools.map((tool) => (
-        <a
-          href={tool.href}
-          class="group flex flex-col gap-2 p-5 rounded-2xl border border-border bg-card hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500"
-          aria-label={tool.title}
-        >
-          <div class="flex items-start justify-between gap-2">
-            <h2 class="text-sm font-bold text-slate-800 group-hover:text-green-700 transition-colors leading-snug">{tool.title}</h2>
-            {tool.badge && (
-              <span class="shrink-0 text-[10px] font-bold bg-green-100 text-green-700 px-2 py-0.5 rounded-full">{tool.badge}</span>
-            )}
-          </div>
-          <p class="text-xs text-muted-foreground leading-relaxed">{tool.description}</p>
-          <div class="mt-auto pt-1 flex items-center gap-1 text-xs font-bold text-green-600">
-            <span>열기</span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-            </svg>
-          </div>
-        </a>
-      ))}
-    </div>
+    {/* 섹션 1: 4대 과목 단권화 치트시트 */}
+    <section class="mb-10">
+      <div class="mb-4">
+        <h2 class="text-lg font-bold text-foreground">📝 수험생 1페이지 단권화 파이널 암기 치트시트</h2>
+        <p class="text-xs text-muted-foreground mt-1">공기업·자격시험·금융권 필기 직전 필수 공식과 핵심 이론을 한 페이지로 압축한 단권화 지도입니다.</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {cramSheets.map((sheet) => (
+          <a
+            href={sheet.href}
+            class="group flex flex-col gap-2 p-5 rounded-2xl border border-border bg-card hover:border-primary/50 hover:shadow-md transition-all duration-200"
+          >
+            <div class="flex items-start justify-between gap-2">
+              <span class="text-xs font-bold rounded-full bg-primary/10 text-primary px-2 py-0.5">{sheet.category}</span>
+              <span class="text-xs font-semibold text-primary group-hover:translate-x-0.5 transition-transform">보기 →</span>
+            </div>
+            <h3 class="text-sm font-bold text-foreground group-hover:text-primary transition-colors leading-snug">{sheet.title}</h3>
+            <p class="text-xs text-muted-foreground leading-relaxed">{sheet.description}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    {/* 섹션 2: 인터랙티브 회계·재무 실습 도구 */}
+    <section class="mb-10">
+      <div class="mb-4">
+        <h2 class="text-lg font-bold text-foreground">🧮 회계·재무 인터랙티브 실습 도구</h2>
+        <p class="text-xs text-muted-foreground mt-1">수치를 직접 조작하며 손익분기점, 비율분석, 자본비용을 직관적으로 체득할 수 있습니다.</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {tools.map((tool) => (
+          <a
+            href={tool.href}
+            class="group flex flex-col gap-2 p-5 rounded-2xl border border-border bg-card hover:border-primary/50 hover:shadow-md transition-all duration-200"
+            aria-label={tool.title}
+          >
+            <div class="flex items-start justify-between gap-2">
+              <h3 class="text-sm font-bold text-foreground group-hover:text-primary transition-colors leading-snug">{tool.title}</h3>
+              {tool.badge && (
+                <span class="shrink-0 text-xs font-bold bg-primary/10 text-primary px-2 py-0.5 rounded-full">{tool.badge}</span>
+              )}
+            </div>
+            <p class="text-xs text-muted-foreground leading-relaxed">{tool.description}</p>
+            <div class="mt-auto pt-1 flex items-center gap-1 text-xs font-bold text-primary">
+              <span>열기</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+              </svg>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    {/* 섹션 3: tools.oiyo.net 실무 계산기 연결 */}
+    <section class="mb-6 rounded-2xl border border-primary/20 bg-muted/20 p-5 sm:p-6">
+      <div class="mb-4">
+        <div class="inline-flex items-center gap-1.5 text-xs font-bold text-primary mb-1">
+          <span class="rounded bg-primary/10 px-2 py-0.5">tools.oiyo.net</span>
+          <span>공식 고속 계산기 허브</span>
+        </div>
+        <h2 class="text-lg font-bold text-foreground">🛠️ 100% 브라우저 기반 실무 계산기</h2>
+        <p class="text-xs text-muted-foreground mt-1">서버 전송 없이 클라이언트 측에서 1초 만에 법정 기준 계산을 수행합니다.</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {companionTools.map((ct) => (
+          <a
+            href={ct.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex flex-col gap-1 rounded-xl border border-border bg-card p-4 transition hover:border-primary/50 hover:shadow-sm"
+          >
+            <div class="flex items-center justify-between">
+              <h3 class="text-xs font-bold text-foreground">{ct.title}</h3>
+              <span class="text-xs text-primary">↗</span>
+            </div>
+            <p class="text-xs leading-relaxed text-muted-foreground">{ct.desc}</p>
+          </a>
+        ))}
+      </div>
+    </section>
   </div>
 </BaseLayout>
 

@@ -1,0 +1,101 @@
+---
+
+type ToolKey =
+  | "severance-pay"
+  | "weekly-holiday"
+  | "unemployment-benefit"
+  | "annual-leave"
+  | "vat"
+  | "cagr"
+  | "electricity"
+  | "pyeong-sqm";
+
+interface Props {
+  tool: ToolKey;
+}
+
+const { tool } = Astro.props as Props;
+
+interface CompanionMeta {
+  title: string;
+  desc: string;
+  href: string;
+  buttonText: string;
+}
+
+const DATA: Record<ToolKey, CompanionMeta> = {
+  "severance-pay": {
+    title: "tools.oiyo.net 법정 퇴직금 고속 계산기",
+    desc: "입사일·퇴직일과 최근 3개월 급여만 입력하면 고용노동부 법정 산식 기준으로 즉시 계산됩니다. (서버 전송 없음)",
+    href: "https://tools.oiyo.net/ko/severance-pay-calculator/",
+    buttonText: "퇴직금 계산기 열기 →",
+  },
+  "weekly-holiday": {
+    title: "tools.oiyo.net 2026 주휴수당 & 주급 계산기",
+    desc: "주 15시간 이상 근무 시 발생하는 법정 주휴수당과 주급 총액을 1초 만에 확인하세요.",
+    href: "https://tools.oiyo.net/ko/weekly-holiday-allowance-calculator/",
+    buttonText: "주휴수당 계산기 열기 →",
+  },
+  "unemployment-benefit": {
+    title: "tools.oiyo.net 실업급여(구직급여) 모의 계산기",
+    desc: "이직 전 연령과 고용보험 가입기간, 3개월 평균임금으로 예상 수급일수와 총 수급액을 산출합니다.",
+    href: "https://tools.oiyo.net/ko/unemployment-benefit-calculator/",
+    buttonText: "실업급여 계산기 열기 →",
+  },
+  "annual-leave": {
+    title: "tools.oiyo.net 연차휴가 발생일수 & 수당 계산기",
+    desc: "근로기준법 제60조 기준 연차휴가 발생 일수와 미사용 연차수당을 바로 확인하세요.",
+    href: "https://tools.oiyo.net/ko/annual-leave-calculator/",
+    buttonText: "연차수당 계산기 열기 →",
+  },
+  vat: {
+    title: "tools.oiyo.net 부가가치세 10% 공급가액 역산 계산기",
+    desc: "합계금액(공급대가)에서 부가세 10%를 분리하거나 공급가액에 세액을 합산하는 실무 계산기입니다.",
+    href: "https://tools.oiyo.net/ko/vat-calculator/",
+    buttonText: "부가세 계산기 열기 →",
+  },
+  cagr: {
+    title: "tools.oiyo.net CAGR 연평균 복합 성장률 계산기",
+    desc: "투자 초기금액, 최종금액, 투자 기간을 바탕으로 연평균 복리 수익률(CAGR)을 정밀 계산합니다.",
+    href: "https://tools.oiyo.net/ko/cagr-calculator/",
+    buttonText: "CAGR 계산기 열기 →",
+  },
+  electricity: {
+    title: "tools.oiyo.net 주택용 전기요금 누진제 계산기",
+    desc: "월간 사용량(kWh)에 따른 한전 누진 단계별 기본요금·전력량요금·기후환경요금을 산출합니다.",
+    href: "https://tools.oiyo.net/ko/electricity-cost-calculator/",
+    buttonText: "전기요금 계산기 열기 →",
+  },
+  "pyeong-sqm": {
+    title: "tools.oiyo.net 평 ↔ ㎡ 면적 양방향 변환기",
+    desc: "아파트 공급면적과 전용면적을 평(坪)과 제곱미터(㎡)로 소수점 오차 없이 변환합니다.",
+    href: "https://tools.oiyo.net/ko/pyeong-sqm-converter/",
+    buttonText: "면적 변환기 열기 →",
+  },
+};
+
+const item = DATA[tool];
+---
+
+{item && (
+  <aside class="my-6 rounded-2xl border border-primary/20 bg-muted/30 p-5 transition hover:border-primary/40">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div class="space-y-1">
+        <div class="inline-flex items-center gap-1.5 text-xs font-bold text-primary">
+          <span class="rounded bg-primary/10 px-2 py-0.5">OIYO Tools</span>
+          <span>공식 고속 계산기</span>
+        </div>
+        <h3 class="text-base font-bold text-foreground">{item.title}</h3>
+        <p class="text-xs leading-relaxed text-muted-foreground">{item.desc}</p>
+      </div>
+      <a
+        href={item.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex shrink-0 items-center justify-center rounded-xl bg-primary px-4 py-2 text-xs font-bold text-primary-foreground transition hover:opacity-90"
+      >
+        {item.buttonText}
+      </a>
+    </div>
+  </aside>
+)}
