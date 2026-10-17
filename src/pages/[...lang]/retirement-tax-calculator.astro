@@ -1,0 +1,65 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import RetirementTaxCalculator from "../../components/tools/RetirementTaxCalculator";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
+
+const PAGE_LOCALES = ["ko"] as const;
+
+export async function getStaticPaths() {
+  return [{ params: { lang: "ko" }, props: { locale: "ko" } }];
+}
+const locale = "ko";
+
+const title = "퇴직소득세 계산기 2026 — 퇴직금 실수령액 및 근속연수 공제 모의계산";
+const description = "2023~2026년 대폭 확대된 소득세법 근속연수 공제 및 환산급여 공제율을 반영하여 세전 퇴직금 대비 실납부 퇴직소득세와 실수령액을 즉시 계산합니다.";
+
+const ko = {
+  eyebrow: "급여 및 퇴직 세무",
+  introTitle: "개정 소득세법 반영, 세후 퇴직금 실수령액을 정밀하게 산출합니다",
+  intro: "퇴직소득세는 일반 근로소득세와 달리 다년간 누적된 소득을 일시에 수령하므로, 결집효과(세율 급등)를 방지하기 위해 근속연수공제와 환산급여 방식의 누진세율 완화 장치가 적용됩니다. 2023년부터 근속연수별 공제액이 대폭 상향되어 근로자의 퇴직소득세 부담이 크게 낮아졌습니다. 본 계산기로 세전 퇴직금과 근속기간에 따른 실제 입금액을 미리 계산해 보세요.",
+  howToTitle: "사용 방법",
+  steps: [
+    "근로기준법상 3개월 평균임금을 기준으로 산출된 세전 퇴직금 총액을 입력합니다.",
+    "입사일부터 퇴직일까지의 실제 만 근속연수(년)를 입력합니다.",
+    "산출된 근속연수 공제액, 환산급여, 환산공제액, 최종 국세 및 지방소득세를 확인합니다.",
+    "실제 통장으로 입금되는 세후 실수령액과 실효세율을 확인합니다.",
+  ],
+  highlightsTitle: "주요 특징",
+  highlights: [
+    { title: "최신 개정세법 완벽 반영", body: "5년·10년·20년 초과 구간별 대폭 인상된 법정 근속연수공제액을 정확하게 반영합니다." },
+    { title: "환산급여 8단계 누진세율", body: "연환산 급여에 대한 소득공제 및 기본 누진세율(6%~45%)을 세법 수식 그대로 연산합니다." },
+    { title: "IRP 계좌 절세 비교 가이드", body: "퇴직금을 일반계좌로 수령 시와 IRP로 이체하여 연금 수령 시 30~40% 세금 감면 효과를 설명합니다." },
+  ],
+  relatedTitle: "관련 도구",
+  related: [
+    { href: "/ko/severance-pay-calculator/", label: "법정 퇴직금 계산기", desc: "3개월 평균임금 기준 퇴직금을 계산합니다." },
+    { href: "/ko/net-salary-calculator/", label: "급여 실수령액 계산기", desc: "월급 4대보험 및 근로소득세를 계산합니다." },
+    { href: "/ko/dsr-mortgage-calculator/", label: "스트레스 DSR 대출 계산기", desc: "주담대 한도와 DSR을 시뮬레이션합니다." },
+  ],
+  disclaimer: "본 계산기는 소득세법 제48조 및 제55조에 따른 기본 산식을 기반으로 제작된 참고용 도구입니다. 임원 퇴직금 한도초과액에 대한 근로소득 합산 과세, 중간정산 합산 특례, 연금저축·IRP 이체 시 이연퇴직소득세 감면율 등은 실제 퇴직정산 원천징수영수증과 차이가 있을 수 있습니다.",
+};
+
+const faqs = [
+  { q: "퇴직금을 개인형 IRP 계좌로 받으면 세금이 어떻게 되나요?", a: "퇴직금을 IRP(개인형퇴직연금) 계좌로 입금하면 퇴직소득세가 즉시 원천징수되지 않고 과세이연됩니다. 이후 만 55세 이후 연금 형태로 10년 이상 분할 수령 시 퇴직소득세의 30%~40%를 감면받을 수 있습니다." },
+  { q: "근속연수 계산 시 1년 미만 단수(월/일)는 어떻게 처리되나요?", a: "세법상 근속연수는 1년 미만의 개월 수와 일수가 있는 경우 1년으로 절상하여 계산합니다. 예를 들어 4년 1개월 근무한 경우 5년 근속으로 인정받아 공제 혜택이 커집니다." },
+  { q: "중간정산을 받은 적이 있으면 어떻게 계산하나요?", a: "중간정산을 받은 경우 원칙적으로 중간정산 다음 날부터 기산합니다. 다만 퇴직소득 세액정산 특례를 신청하여 과거 중간정산 퇴직소득과 합산 정산하면 누진세율 및 근속연수 연계로 절세가 가능할 수 있습니다." },
+  { q: "퇴직소득세에도 종합소득세처럼 인적공제가 적용되나요?", a: "퇴직소득은 종합과세되지 않고 '분류과세'되므로 부양가족 인적공제, 신용카드 공제, 의료비 세액공제 등은 적용되지 않습니다. 대신 근속연수공제와 환산급여공제가 적용됩니다." },
+];
+
+const { content: c, faqHeading, faqItems } = buildToolShell({ en: ko, ko }, { en: faqs, ko: faqs }, locale);
+---
+
+<BaseLayout title={title} description={description} availableLocales={[...PAGE_LOCALES]}>
+  <ToolShell title={title} description={description} siteUrl={siteConfig.url} locale={locale} slug="retirement-tax-calculator" content={c} applicationCategory="FinanceApplication">
+    <div class="mx-auto max-w-2xl">
+      <RetirementTaxCalculator client:load />
+      <p class="mt-4 text-xs text-muted-foreground">근거: 소득세법 제48조(퇴직소득공제) 및 제55조(세율). 2026년 기준.</p>
+    </div>
+    <div slot="after-content" class="mt-12">
+      <FaqAccordion heading={faqHeading} items={faqItems} />
+    </div>
+  </ToolShell>
+</BaseLayout>

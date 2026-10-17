@@ -1,0 +1,66 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import DsrMortgageCalculator from "../../components/tools/DsrMortgageCalculator";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
+
+const PAGE_LOCALES = ["ko"] as const;
+
+export async function getStaticPaths() {
+  return [{ params: { lang: "ko" }, props: { locale: "ko" } }];
+}
+const locale = "ko";
+
+const title = "스트레스 DSR 2단계 주택담보대출 계산기 2026 — LTV 한도 및 대출 감소액 시뮬레이터";
+const description = "금융위원회 스트레스 DSR 2단계 가산금리(수도권 +1.2%p, 비수도권 +0.75%p) 및 LTV 규제를 적용하여 연소득별 최대 주택담보대출 가능 한도와 월 상환액을 즉시 계산합니다.";
+
+const ko = {
+  eyebrow: "부동산 금융 도구",
+  introTitle: "스트레스 DSR 2단계 시행, 나의 실제 주택담보대출 한도를 계산합니다",
+  intro: "2024년 9월부터 시행된 '스트레스 DSR 2단계' 규제에 따라, 변동금리 또는 혼합형 주택담보대출 실행 시 향후 금리 변동 위험을 반영한 가산금리(수도권 은행권 +1.2%p, 비수도권 +0.75%p)가 적용되어 DSR(총부채원리금상환비율) 산출 시 연간 원리금 부담이 증가하고 대출 한도가 대폭 축소됩니다. 본 계산기로 나의 연소득과 기존 대출 상황에서 실제로 받을 수 있는 최대 한도와 스트레스 금리로 인해 줄어든 대출액을 한눈에 비교해 보세요.",
+  howToTitle: "사용 방법",
+  steps: [
+    "매수할 주택의 매매가격과 본인의 연간 세전 소득을 입력합니다.",
+    "신용대출, 자동차 할부 등 보유 중인 기존 대출의 연간 원리금 상환액을 입력합니다.",
+    "대출 예상 금리와 상환 만기(20~50년)를 설정합니다.",
+    "주택 소재지(수도권 여부) 및 규제지역(투기과열지구) 여부를 선택합니다.",
+    "산출된 최종 대출 가능 한도, 스트레스 DSR로 인해 감소된 한도, 실제 월 원리금 상환액을 확인합니다.",
+  ],
+  highlightsTitle: "주요 특징",
+  highlights: [
+    { title: "스트레스 DSR 2단계 가산금리", body: "수도권 +1.2%p, 비수도권 +0.75%p 가산 규정을 완벽하게 적용하여 실제 은행 심사 한도를 산출합니다." },
+    { title: "LTV와 DSR의 교차 검증", body: "주택 가격 대비 LTV 상한(비규제 70%, 규제 50%)과 DSR 40% 한도 중 더 낮은 실제 대출 가능액을 도출합니다." },
+    { title: "한도 축소액 직관적 비교", body: "스트레스 금리 도입 전 일반 DSR 한도 대비 실제로 깎이는 대출 금액을 직관적으로 시각화합니다." },
+  ],
+  relatedTitle: "관련 도구",
+  related: [
+    { href: "/ko/first-home-tax-calculator/", label: "생애최초 취득세 감면 계산기", desc: "취득세 최대 200만원 감면을 계산합니다." },
+    { href: "/ko/jeonse-vs-monthly-calculator/", label: "전세 vs 월세 비교 계산기", desc: "주거비용 기회비용을 정밀 비교합니다." },
+    { href: "/ko/retirement-tax-calculator/", label: "퇴직소득세 계산기", desc: "세후 퇴직금 실수령액을 계산합니다." },
+  ],
+  disclaimer: "본 계산기는 금융위원회 스트레스 DSR 가이드라인 및 은행업 감독규정을 토대로 제작된 모의 시뮬레이터입니다. 주기형(5년 고정 등) 금리 상품의 스트레스 완화율, 은행별 자체 가산금리 및 우대금리, 방공제(MCI/MCG 가입 여부) 등에 따라 실제 은행 창구 심사 결과와 상이할 수 있습니다.",
+};
+
+const faqs = [
+  { q: "스트레스 DSR 2단계란 무엇인가요?", a: "향후 금리 상승 위험을 감안하여 대출 한도 산정 시 실제 적용 금리에 일정 수준의 '가산금리(스트레스 금리)'를 덧붙여 DSR을 산정하는 제도입니다. 수도권 주담대는 +1.2%p, 비수도권은 +0.75%p가 가산됩니다." },
+  { q: "스트레스 금리가 더해지면 실제 내가 내는 이자도 늘어나나요?", a: "아닙니다. 스트레스 금리는 오직 대출 한도를 산정하기 위한 가상의 금리입니다. 실제 매달 납부하는 이자는 대출 계약 시 확정된 기본 약정금리로만 청구됩니다." },
+  { q: "고정금리로 대출을 받으면 스트레스 금리가 안 붙나요?", a: "완전 고정금리(만기까지 고정) 상품은 스트레스 금리가 배제(0%)됩니다. 5년 주기형(5년마다 변동)의 경우 가산폭이 대폭 완화되어 변동금리보다 한도를 더 많이 확보할 수 있습니다." },
+  { q: "DSR 규제 비율은 몇 퍼센트인가요?", a: "제1금융권(시중은행) 주택담보대출의 DSR 한도는 40%입니다. 제2금융권(보험사, 저축은행, 상호금융)은 50%가 적용됩니다." },
+];
+
+const { content: c, faqHeading, faqItems } = buildToolShell({ en: ko, ko }, { en: faqs, ko: faqs }, locale);
+---
+
+<BaseLayout title={title} description={description} availableLocales={[...PAGE_LOCALES]}>
+  <ToolShell title={title} description={description} siteUrl={siteConfig.url} locale={locale} slug="dsr-mortgage-calculator" content={c} applicationCategory="FinanceApplication">
+    <div class="mx-auto max-w-2xl">
+      <DsrMortgageCalculator client:load />
+      <p class="mt-4 text-xs text-muted-foreground">근거: 금융위원회 가계부채 관리방안 및 스트레스 DSR 2단계 지침. 2026년 기준.</p>
+    </div>
+    <div slot="after-content" class="mt-12">
+      <FaqAccordion heading={faqHeading} items={faqItems} />
+    </div>
+  </ToolShell>
+</BaseLayout>
