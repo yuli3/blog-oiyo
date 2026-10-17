@@ -1,0 +1,298 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import RelatedToolLinks from "../../components/RelatedToolLinks.astro";
+import ToolsCompanionBanner from "../../components/ToolsCompanionBanner.astro";
+import MonitorPpiCalculator from "../../components/tools/MonitorPpiCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: ActiveLocale };
+
+const meta: Record<ActiveLocale, { title: string; description: string; eyebrow: string }> = {
+  ko: {
+    title: "모니터 PPI & 화면 크기·해상도 계산기 — 픽셀 피치 및 레티나 시청 거리",
+    description: "24·27·32인치 FHD, QHD, 4K, 5K 모니터 해상도별 PPI(인치당 픽셀수), 픽셀 피치(mm), 인간 눈 기준 레티나 시청 거리 및 macOS HiDPI 권장 배율을 정밀 계산합니다.",
+    eyebrow: "해상도와 시청 거리의 수학",
+  },
+  en: {
+    title: "Monitor PPI & Display Size Calculator — Pixel Pitch & Retina Distance",
+    description: "Calculate PPI (Pixels Per Inch), pixel pitch in mm, human 20/20 retina viewing distance, and optimal macOS/Windows scaling across 24, 27, 32-inch 1080p, 1440p, 4K, and 5K displays.",
+    eyebrow: "Math of Resolution & Distance",
+  },
+  ja: {
+    title: "モニターPPI＆画面サイズ計算機 — 画素密度・ドットピッチ・Retina距離",
+    description: "24・27・32インチのFHD・QHD・4K・5Kモニター解像度別のPPI(画素密度)、ドットピッチ(mm)、肉眼で識別不能となるRetina視認限界距離およびおすすめOSスケーリングを算出します。",
+    eyebrow: "解像度と視距離の計算",
+  },
+  zh: {
+    title: "显示器PPI与屏幕尺寸计算器 — 像素密度·点距与视网膜视距",
+    description: "精确计算24、27、32英寸等主流尺寸在FHD、2K、4K及5K下的PPI像素密度、点距(mm)、人眼视网膜极限视距以及macOS HiDPI最佳缩放比例。",
+    eyebrow: "分辨率与视距的关系",
+  },
+  fr: {
+    title: "Calculateur PPI d'écran & Taille — Pas de masque et distance Retina",
+    description: "Calculez la densité de pixels (PPI), le pitch en mm, la distance de visionnage Retina et la mise à l’échelle recommandée pour les écrans 24, 27, 32 pouces en 1080p, 1440p, 4K et 5K.",
+    eyebrow: "Résolution & distance de vision",
+  },
+  es: {
+    title: "Calculadora de PPI de Monitor y Tamaño — Pitch y Distancia Retina",
+    description: "Calcula los píxeles por pulgada (PPI), el paso de punto en mm, la distancia de visión Retina y el escalado óptimo de pantalla para monitores de 24, 27 y 32 pulgadas en 1080p, 2K, 4K y 5K.",
+    eyebrow: "Resolución y distancia visual",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  guideTitle: string;
+  guides: { title: string; body: string }[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+}> = {
+  ko: {
+    introTitle: "모니터 화질을 결정하는 진짜 기준: 해상도가 아니라 PPI입니다",
+    intro: "흔히 4K 모니터가 무조건 선명하다고 생각하지만, 43인치 4K(약 102 PPI)는 24인치 FHD(약 92 PPI)와 큰 차이가 나지 않습니다. 화면 크기 대비 픽셀 밀도(PPI)가 높아야 폰트 가장자리가 도트 튀김 없이 매끄럽게 보이며 눈의 피로가 획기적으로 줄어듭니다.",
+    guideTitle: "크기별 최적의 해상도 가이드",
+    guides: [
+      {
+        title: "24인치: FHD (1080p) ~ QHD (1440p)",
+        body: "24인치 FHD는 약 92 PPI로 텍스트 가독성이 무난하며 가성비가 가장 뛰어납니다. 24인치 4K는 183 PPI로 압도적인 선명도를 제공합니다.",
+      },
+      {
+        title: "27인치: QHD (109 PPI) 또는 4K (163 PPI)",
+        body: "27인치는 QHD가 100% 배율에서 작업 영역이 가장 넓고 쾌적하며, 4K는 macOS 사용 시 150~200% 스케일링으로 인쇄물 수준의 활자 품질을 보여줍니다.",
+      },
+      {
+        title: "32인치: 4K UHD (138 PPI)",
+        body: "32인치에는 4K가 가장 완벽한 조합입니다. 125%~150% 스케일링 시 넉넉한 다중 작업 공간과 또렷한 텍스트를 동시에 누릴 수 있습니다.",
+      },
+    ],
+    faqTitle: "자주 묻는 질문 (FAQ)",
+    faqs: [
+      {
+        question: "레티나(Retina) 디스플레이 기준 PPI는 얼마인가요?",
+        answer: "일반적인 데스크톱 모니터 시청 거리(50~70cm) 기준 약 140~220 PPI 이상이면 사람 눈의 각해상도(1분각) 한계를 넘어 픽셀이 완전히 녹아들어 보입니다.",
+      },
+      {
+        question: "macOS에서 27인치 4K를 쓰면 왜 글자가 작아지나요?",
+        answer: "27인치 4K는 163 PPI로 100% 네이티브 모드에서는 글자가 너무 작습니다. 시스템 설정의 '디스플레이'에서 '더 큰 텍스트' 또는 QHD 상당(2560x1440 HiDPI) 스케일링을 적용하면 완벽하게 선명해집니다.",
+      },
+    ],
+  },
+  en: {
+    introTitle: "The Real Measure of Display Crispness: PPI, Not Just Resolution",
+    intro: "A 43-inch 4K screen has roughly 102 PPI, comparable to a 24-inch 1080p display. True sharpness depends on pixel density relative to screen area.",
+    guideTitle: "Display Size & Resolution Sweet Spots",
+    guides: [
+      {
+        title: "24-inch: 1080p to 1440p",
+        body: "24-inch at 1080p gives ~92 PPI, ideal for basic office workflows. 1440p delivers sharper text at ~122 PPI.",
+      },
+      {
+        title: "27-inch: 1440p (109 PPI) or 4K (163 PPI)",
+        body: "27-inch 1440p is the sweet spot for 100% unscaled workspace. 4K delivers print-like text with HiDPI scaling.",
+      },
+      {
+        title: "32-inch: 4K UHD (138 PPI)",
+        body: "The ideal balance of screen real estate and clarity, perfectly suited for 125-150% scaling.",
+      },
+    ],
+    faqTitle: "Frequently Asked Questions",
+    faqs: [
+      {
+        question: "What PPI qualifies as a Retina display?",
+        answer: "At typical desktop viewing distances (20-28 inches / 50-70 cm), any display with 140+ PPI achieves retina sharpness where individual dots are invisible.",
+      },
+      {
+        question: "Why does macOS scaling matter on 4K displays?",
+        answer: "At native 100% on a 27-inch 4K monitor, UI elements are tiny. macOS renders at 5K and scales down to deliver smooth HiDPI typography.",
+      },
+    ],
+  },
+  ja: {
+    introTitle: "画質の真の指標：解像度ではなくPPI（画素密度）",
+    intro: "画面の精細感は画素密度（PPI）で決まります。視覚的な快適さと文字の読みやすさを計算してみましょう。",
+    guideTitle: "サイズ別おすすめ解像度",
+    guides: [
+      {
+        title: "24インチ：FHD〜QHD",
+        body: "24インチFHDは約92 PPIで事務作業に最適。QHDなら122 PPIで作業領域が大幅に広がります。",
+      },
+      {
+        title: "27インチ：QHD（109 PPI）または4K（163 PPI）",
+        body: "27インチQHDは等倍表示に最適。4KならHiDPI表示で印刷物のような美しさになります。",
+      },
+      {
+        title: "32インチ：4K UHD（138 PPI）",
+        body: "マルチタスクと高精細文字を両立するプロフェッショナルの標準構成です。",
+      },
+    ],
+    faqTitle: "よくある質問 (FAQ)",
+    faqs: [
+      {
+        question: "Retina品質に必要なPPIはどれくらいですか？",
+        answer: "一般的なデスクでの視距離（50〜70cm）では、約140〜200 PPI以上あればドットの粒感が完全に消えます。",
+      },
+      {
+        question: "macOSで27インチ4Kを使う際の注意点は？",
+        answer: "等倍100%では文字が小さすぎるため、ディスプレイ設定でスケーリングを有効にしてください。",
+      },
+    ],
+  },
+  zh: {
+    introTitle: "决定清晰度的关键指标：不仅看分辨率，更看像素密度(PPI)",
+    intro: "画面的真实细腻度由PPI决定。只有高PPI屏幕才能彻底告别文字彩边与锯齿感。",
+    guideTitle: "常见尺寸最佳分辨率搭配",
+    guides: [
+      {
+        title: "24英寸：1080p 至 2K",
+        body: "24寸1080p约为92 PPI，满足日常办公；若为4K则达到183 PPI的高清视网膜效果。",
+      },
+      {
+        title: "27英寸：2K (109 PPI) 或 4K (163 PPI)",
+        body: "27寸2K在100%缩放下显示区域最大；4K在配合HiDPI缩放下字体极度锐利。",
+      },
+      {
+        title: "32英寸：4K UHD (138 PPI)",
+        body: "兼顾大视野与高清晰度，是多任务并行处理的最佳选择。",
+      },
+    ],
+    faqTitle: "常见问题解答 (FAQ)",
+    faqs: [
+      {
+        question: "什么是视网膜(Retina)级清晰度？",
+        answer: "在距离屏幕50至70厘米的常规视距下，超过140 PPI即可达到人眼分辨不出单个像素点的视网膜效果。",
+      },
+      {
+        question: "Mac电脑外接27寸4K为什么需要开启缩放？",
+        answer: "100%点对点显示会导致系统界面和文字过小，开启HiDPI缩放即可获得类似5K屏的细腻文字渲染效果。",
+      },
+    ],
+  },
+  fr: {
+    introTitle: "La vraie netteté d’un écran : la densité de pixels (PPI)",
+    intro: "La netteté perçue dépend de la taille de l'écran et de sa résolution combinées en PPI.",
+    guideTitle: "Combinaisons recommandées",
+    guides: [
+      {
+        title: "24 pouces : 1080p à 1440p",
+        body: "Idéal pour les petits bureaux et la bureautique courante.",
+      },
+      {
+        title: "27 pouces : 1440p ou 4K",
+        body: "Le compromis idéal pour le multitâche et le graphisme professionnel.",
+      },
+      {
+        title: "32 pouces : 4K UHD",
+        body: "Grand confort de travail avec une mise à l'échelle de 125% à 150%.",
+      },
+    ],
+    faqTitle: "Questions Fréquentes (FAQ)",
+    faqs: [
+      {
+        question: "Quel PPI pour un affichage Retina ?",
+        answer: "À une distance de bureau normale (50-70 cm), 140 PPI ou plus garantissent une netteté totale.",
+      },
+      {
+        question: "Pourquoi utiliser la mise à l’échelle sous macOS ?",
+        answer: "À 100% sur un écran 4K de 27 pouces, l'interface est minuscule. L'échelle HiDPI résout ce problème.",
+      },
+    ],
+  },
+  es: {
+    introTitle: "La verdadera nitidez de pantalla: Píxeles por pulgada (PPI)",
+    intro: "La claridad real depende de la densidad de píxeles combinada con la distancia de visualización.",
+    guideTitle: "Combinaciones óptimas",
+    guides: [
+      {
+        title: "24 pulgadas: 1080p a 1440p",
+        body: "Estándar accesible y equilibrado para puestos de trabajo compactos.",
+      },
+      {
+        title: "27 pulgadas: 1440p o 4K",
+        body: "El punto óptimo para programadores, creadores de contenido y multitarea.",
+      },
+      {
+        title: "32 pulgadas: 4K UHD",
+        body: "Máxima área de trabajo con nitidez impecable usando escalado moderado.",
+      },
+    ],
+    faqTitle: "Preguntas Frecuentes (FAQ)",
+    faqs: [
+      {
+        question: "¿Qué PPI se considera calidad Retina?",
+        answer: "A una distancia normal de trabajo (50-70 cm), 140 PPI o más eliminan cualquier rastro de píxeles.",
+      },
+      {
+        question: "¿Por qué escalar la resolución en un 4K?",
+        answer: "A resolución nativa al 100%, la interfaz se vuelve diminuta. El escalado HiDPI preserva el confort visual.",
+      },
+    ],
+  },
+};
+
+const c = content[locale] ?? content.en;
+---
+
+<BaseLayout title={m.title} description={m.description} heading={m.title}>
+  <div class="mx-auto max-w-4xl px-4 py-8">
+    <div class="mb-6">
+      <span class="text-xs font-semibold text-primary uppercase tracking-wider">{m.eyebrow}</span>
+      <h1 class="text-2xl sm:text-3xl font-black text-foreground mt-1">{m.title}</h1>
+      <p class="text-sm text-muted-foreground mt-2">{m.description}</p>
+    </div>
+
+    <MonitorPpiCalculator client:visible locale={locale} />
+
+    <ToolsCompanionBanner
+      toolName={m.title}
+      locale={locale}
+      category="tech"
+      companionApp="hardware"
+    />
+
+    <!-- Educational Content Section -->
+    <div class="mt-12 space-y-8 rounded-2xl border border-border bg-card p-6 sm:p-8">
+      <div>
+        <h2 class="text-lg sm:text-xl font-bold text-foreground mb-3">{c.introTitle}</h2>
+        <p class="text-sm text-muted-foreground leading-relaxed">{c.intro}</p>
+      </div>
+
+      <div class="border-t border-border pt-6">
+        <h2 class="text-base font-bold text-foreground mb-4">{c.guideTitle}</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {c.guides.map((g) => (
+            <div class="rounded-xl border border-border bg-background p-4">
+              <h3 class="text-xs font-bold text-foreground mb-1">{g.title}</h3>
+              <p class="text-xs text-muted-foreground leading-relaxed">{g.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="border-t border-border pt-6">
+        <h2 class="text-base font-bold text-foreground mb-4">{c.faqTitle}</h2>
+        <div class="space-y-4">
+          {c.faqs.map((faq) => (
+            <div class="rounded-xl border border-border bg-background p-4">
+              <h3 class="text-xs font-bold text-foreground mb-1">Q. {faq.question}</h3>
+              <p class="text-xs text-muted-foreground leading-relaxed">A. {faq.answer}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-8">
+      <RelatedToolLinks currentSlug="monitor-ppi-calculator" locale={locale} />
+    </div>
+  </div>
+</BaseLayout>

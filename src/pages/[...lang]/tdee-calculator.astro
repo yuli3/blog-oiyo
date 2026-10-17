@@ -1,0 +1,275 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import RelatedToolLinks from "../../components/RelatedToolLinks.astro";
+import ToolsCompanionBanner from "../../components/ToolsCompanionBanner.astro";
+import TdeeCalculator from "../../components/tools/TdeeCalculator";
+import { locales } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: ActiveLocale };
+const pageUrl = `https://blog.oiyo.net/${locale}/tdee-calculator/`;
+
+const meta: Record<ActiveLocale, { title: string; description: string; eyebrow: string }> = {
+  ko: {
+    title: "TDEE 계산기 — 일일 총 에너지 소비량 & 기초대사량(BMR)",
+    description: "Mifflin-St Jeor 공식 기반 기초대사량(BMR) 및 활동량 계수를 반영한 일일 총 소비 칼로리(TDEE)와 다이어트·린매스업 목표별 탄단지 비율을 계산합니다.",
+    eyebrow: "유지 칼로리와 목표 섭취량",
+  },
+  en: {
+    title: "TDEE Calculator — Total Daily Energy Expenditure & BMR",
+    description: "Calculate your BMR and Total Daily Energy Expenditure (TDEE) using the Mifflin-St Jeor formula. Get target calories and macro splits for weight loss, cutting, or bulking.",
+    eyebrow: "Maintenance calories & target macros",
+  },
+  ja: {
+    title: "TDEE計算機 — 1日の総消費エネルギー＆基礎代謝量(BMR)",
+    description: "Mifflin-St Jeor式に基づいて基礎代謝量(BMR)と活動レベルに応じたTDEE(総消費カロリー)を正確に算出。減量・増量時の摂取カロリーとPFCバランスも提示します。",
+    eyebrow: "維持カロリーと目的別摂取量",
+  },
+  zh: {
+    title: "TDEE计算器 — 每日总能量消耗与基础代谢率(BMR)",
+    description: "基于 Mifflin-St Jeor 公式精确计算基础代谢率(BMR)和每日总消耗(TDEE)，提供减脂、增肌目标下的推荐摄入热量及三大营养素配比。",
+    eyebrow: "维持热量与宏量营养素",
+  },
+  fr: {
+    title: "Calculateur TDEE — Dépense Énergétique Quotidienne & BMR",
+    description: "Calculez votre métabolisme de base (BMR) et votre dépense énergétique totale (TDEE). Découvrez vos besoins caloriques pour la perte de poids ou la prise de masse.",
+    eyebrow: "Calories de maintien & macros",
+  },
+  es: {
+    title: "Calculadora TDEE — Gasto Energético Total Diario y TMB",
+    description: "Calcula tu Tasa Metabólica Basal (TMB) y Gasto Energético Total Diario (TDEE) con la fórmula Mifflin-St Jeor. Objetivos de calorías y macros para definir o ganar masa.",
+    eyebrow: "Calorías de mantenimiento y macros",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+}> = {
+  ko: {
+    introTitle: "칼로리 계산의 시작: 체중 감량과 증량은 TDEE에서 출발합니다",
+    intro: "체중을 줄이려면 TDEE보다 적게, 늘리려면 TDEE보다 많이 먹어야 합니다. 무리한 초저열량 다이어트는 근손실과 기초대사량 저하를 유발하므로, TDEE 대비 -300~-500 kcal 수준의 완만한 적자를 유지하는 것이 정석입니다.",
+    formulaTitle: "과학적으로 검증된 계산 공식",
+    formulas: [
+      {
+        title: "Mifflin-St Jeor BMR 공식",
+        body: "남성: 10×체중(kg) + 6.25×키(cm) - 5×나이 + 5 / 여성: 10×체중(kg) + 6.25×키(cm) - 5×나이 - 161",
+      },
+      {
+        title: "활동 대사량 계수 곱연산",
+        body: "BMR에 일상 활동량 및 주간 운동 빈도에 따른 계수(1.2 ~ 1.9)를 곱하여 24시간 동안 소모하는 실제 에너지를 산출합니다.",
+      },
+    ],
+    faqTitle: "자주 묻는 질문 (FAQ)",
+    faqs: [
+      {
+        question: "BMR과 TDEE는 어떻게 다른가요?",
+        answer: "BMR(기초대사량)은 하루 종일 누워서 숨만 쉴 때 심장 박동과 호흡 등 생명 유지에 필요한 최소 열량이며, TDEE는 여기에 출퇴근, 소화, 운동 등 모든 신체 활동을 더한 실제 하루 총 소모 칼로리입니다.",
+      },
+      {
+        question: "다이어트 시 하루에 몇 칼로리를 먹어야 하나요?",
+        answer: "TDEE에서 300~500 kcal를 뺀 수치를 권장합니다. 주당 약 0.3~0.5kg의 순수 체지방을 건강하게 감량할 수 있으며 요요 현상을 최소화합니다.",
+      },
+    ],
+  },
+  en: {
+    introTitle: "The Foundation of Nutrition: Energy Balance Starts with TDEE",
+    intro: "To lose weight, eat below your TDEE; to gain weight, eat above it. A moderate deficit of 300-500 kcal preserves lean muscle while shedding body fat sustainably.",
+    formulaTitle: "Scientifically Proven Formulas",
+    formulas: [
+      {
+        title: "Mifflin-St Jeor BMR Equation",
+        body: "Men: 10×wt(kg) + 6.25×ht(cm) - 5×age + 5 / Women: 10×wt(kg) + 6.25×ht(cm) - 5×age - 161",
+      },
+      {
+        title: "Physical Activity Multiplier",
+        body: "BMR is multiplied by an activity factor (1.2 to 1.9) depending on weekly exercise habits to determine total 24-hour calorie burn.",
+      },
+    ],
+    faqTitle: "Frequently Asked Questions",
+    faqs: [
+      {
+        question: "What is the difference between BMR and TDEE?",
+        answer: "BMR is the base energy required just to stay alive at rest, while TDEE includes all daily movement, digestion, walking, and training.",
+      },
+      {
+        question: "How large should my calorie deficit be for fat loss?",
+        answer: "A deficit of 300-500 kcal below your TDEE is optimal for steady, sustainable fat loss of about 0.5-1 lb per week without crashing metabolic rate.",
+      },
+    ],
+  },
+  ja: {
+    introTitle: "ボディメイクの第一歩：カロリー管理はTDEEから",
+    intro: "減量にはTDEE以下の摂取、増量にはTDEE以上の摂取が必要です。極端な食事制限は筋肉を減らすため、TDEEから300〜500 kcal引いた適正なアンダーカロリーが理想的です。",
+    formulaTitle: "信頼性の高い計算式",
+    formulas: [
+      {
+        title: "ミフリン・サン・ジェオール式 (Mifflin-St Jeor)",
+        body: "男性: 10×体重 + 6.25×身長 - 5×年齢 + 5 / 女性: 10×体重 + 6.25×身長 - 5×年齢 - 161",
+      },
+      {
+        title: "身体活動レベルの乗算",
+        body: "基礎代謝量(BMR)に活動係数(1.2〜1.9)を掛け合わせて、1日あたりの総消費エネルギーを求めます。",
+      },
+    ],
+    faqTitle: "よくある質問 (FAQ)",
+    faqs: [
+      {
+        question: "BMRとTDEEの違いは何ですか？",
+        answer: "BMRは生命維持に必要な最小限のエネルギーで、TDEEは仕事や運動など日常の全活動を含めた1日の実際の消費エネルギーです。",
+      },
+      {
+        question: "ダイエット時の適切な摂取カロリーは？",
+        answer: "TDEEマイナス300〜500 kcalを目安にしてください。無理なく健康的に体脂肪を落とすことができます。",
+      },
+    ],
+  },
+  zh: {
+    introTitle: "减脂与增肌的核心：一切始于TDEE每日总消耗",
+    intro: "制造适度的热量缺口（TDEE减去300-500大卡）是减脂的黄金法则，能有效避免代谢损伤与肌肉流失。",
+    formulaTitle: "科学计算公式",
+    formulas: [
+      {
+        title: "Mifflin-St Jeor 基础代谢公式",
+        body: "男性：10×体重(kg) + 6.25×身高(cm) - 5×年龄 + 5 / 女性：10×体重(kg) + 6.25×身高(cm) - 5×年龄 - 161",
+      },
+      {
+        title: "活动系数乘数",
+        body: "结合每周运动频率与工作类型，乘以 1.2 至 1.9 的系数，得出全天总消耗。",
+      },
+    ],
+    faqTitle: "常见问题解答 (FAQ)",
+    faqs: [
+      {
+        question: "BMR与TDEE有什么区别？",
+        answer: "BMR是完全静止状态下维持生命所需的能量，TDEE则是加上日常走动、工作和运动后的真实每日总消耗。",
+      },
+      {
+        question: "减脂期每天建议摄入多少热量？",
+        answer: "建议在TDEE的基础上减少300到500大卡，既能持续稳定减脂，又不易反弹。",
+      },
+    ],
+  },
+  fr: {
+    introTitle: "La base de la nutrition : équilibre énergétique et TDEE",
+    intro: "Pour perdre du gras sainement, maintenez un déficit modéré de 300 à 500 kcal par rapport à votre TDEE.",
+    formulaTitle: "Formule de calcul validée",
+    formulas: [
+      {
+        title: "Équation Mifflin-St Jeor",
+        body: "Hommes : 10×poids + 6.25×taille - 5×âge + 5 / Femmes : 10×poids + 6.25×taille - 5×âge - 161",
+      },
+      {
+        title: "Coefficient d'activité physique",
+        body: "Multiplication du BMR par un facteur de 1,2 à 1,9 selon la fréquence d'entraînement hebdomadaire.",
+      },
+    ],
+    faqTitle: "Questions Fréquentes (FAQ)",
+    faqs: [
+      {
+        question: "Quelle est la différence entre BMR et TDEE ?",
+        answer: "Le BMR est le métabolisme de base au repos absolu, le TDEE inclut toutes les activités physiques quotidiennes.",
+      },
+      {
+        question: "Quel déficit calorique choisir pour maigrir ?",
+        answer: "Un déficit de 300 à 500 kcal sous votre TDEE est idéal pour une perte durable sans fonte musculaire.",
+      },
+    ],
+  },
+  es: {
+    introTitle: "El pilar de la nutrición: El balance energético y el TDEE",
+    intro: "Para perder grasa de forma sostenible, mantén un déficit moderado de 300 a 500 kcal respecto a tu TDEE.",
+    formulaTitle: "Fórmula de cálculo probada",
+    formulas: [
+      {
+        title: "Ecuación Mifflin-St Jeor",
+        body: "Hombres: 10×peso + 6.25×altura - 5×edad + 5 / Mujeres: 10×peso + 6.25×altura - 5×edad - 161",
+      },
+      {
+        title: "Multiplicador de actividad física",
+        body: "Se multiplica la Tasa Metabólica Basal por un factor de 1.2 a 1.9 según el nivel de actividad.",
+      },
+    ],
+    faqTitle: "Preguntas Frecuentes (FAQ)",
+    faqs: [
+      {
+        question: "¿Cuál es la diferencia entre TMB y TDEE?",
+        answer: "La TMB es el gasto mínimo para sobrevivir en reposo, mientras que el TDEE abarca todo el movimiento y ejercicio del día.",
+      },
+      {
+        question: "¿Cuánto déficit calórico es recomendable?",
+        answer: "Un déficit de 300 a 500 kcal bajo tu TDEE es ideal para perder grasa sin perder masa muscular.",
+      },
+    ],
+  },
+};
+
+const c = content[locale] ?? content.en;
+---
+
+<BaseLayout title={m.title} description={m.description} heading={m.title}>
+  <div class="mx-auto max-w-4xl px-4 py-8">
+    <div class="mb-6">
+      <span class="text-xs font-semibold text-primary uppercase tracking-wider">{m.eyebrow}</span>
+      <h1 class="text-2xl sm:text-3xl font-black text-foreground mt-1">{m.title}</h1>
+      <p class="text-sm text-muted-foreground mt-2">{m.description}</p>
+    </div>
+
+    <TdeeCalculator client:visible locale={locale} />
+
+    <ToolsCompanionBanner
+      toolName={m.title}
+      locale={locale}
+      category="health"
+      companionApp="fitness"
+    />
+
+    <!-- Educational Content Section -->
+    <div class="mt-12 space-y-8 rounded-2xl border border-border bg-card p-6 sm:p-8">
+      <div>
+        <h2 class="text-lg sm:text-xl font-bold text-foreground mb-3">{c.introTitle}</h2>
+        <p class="text-sm text-muted-foreground leading-relaxed">{c.intro}</p>
+      </div>
+
+      <div class="border-t border-border pt-6">
+        <h2 class="text-base font-bold text-foreground mb-4">{c.formulaTitle}</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {c.formulas.map((f) => (
+            <div class="rounded-xl border border-border bg-background p-4">
+              <h3 class="text-xs font-bold text-foreground mb-1">{f.title}</h3>
+              <p class="text-xs text-muted-foreground leading-relaxed">{f.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="border-t border-border pt-6">
+        <h2 class="text-base font-bold text-foreground mb-4">{c.faqTitle}</h2>
+        <div class="space-y-4">
+          {c.faqs.map((faq) => (
+            <div class="rounded-xl border border-border bg-background p-4">
+              <h3 class="text-xs font-bold text-foreground mb-1">Q. {faq.question}</h3>
+              <p class="text-xs text-muted-foreground leading-relaxed">A. {faq.answer}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-8">
+      <RelatedToolLinks currentSlug="tdee-calculator" locale={locale} />
+    </div>
+  </div>
+</BaseLayout>
