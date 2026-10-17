@@ -1,29 +1,13 @@
 import React, { useState, useMemo } from 'react';
+import { PERSONAL_DEDUCTION_PER_PERSON, basicIncomeTax } from '../../lib/kr-payroll-2026';
+import { computePensionContribution } from '../../lib/finance/salary-calculator';
 
 function fmt(n: number) {
   return Math.round(n).toLocaleString('ko-KR');
 }
 
-// 소득세 구간 (2024년, 단위: 원)
-const TAX_BRACKETS = [
-  { limit: 14_000_000, rate: 0.06, prev: 0, prevTax: 0 },
-  { limit: 50_000_000, rate: 0.15, prev: 14_000_000, prevTax: 840_000 },
-  { limit: 88_000_000, rate: 0.24, prev: 50_000_000, prevTax: 6_240_000 },
-  { limit: 150_000_000, rate: 0.35, prev: 88_000_000, prevTax: 15_360_000 },
-  { limit: 300_000_000, rate: 0.38, prev: 150_000_000, prevTax: 37_060_000 },
-  { limit: 500_000_000, rate: 0.40, prev: 300_000_000, prevTax: 94_060_000 },
-  { limit: Infinity, rate: 0.42, prev: 500_000_000, prevTax: 174_060_000 },
-];
-
-function calcTax(taxable: number): number {
-  if (taxable <= 0) return 0;
-  for (const b of TAX_BRACKETS) {
-    if (taxable <= b.limit) {
-      return b.prevTax + (taxable - b.prev) * b.rate;
-    }
-  }
-  return 0;
-}
+// 소득세 기본세율(6~45%, 8구간)은 kr-payroll-2026.ts(SSOT)의 basicIncomeTax를 쓴다.
+const calcTax = (taxable: number): number => basicIncomeTax(Math.max(0, taxable));
 
 // 단순경비율 (업종별 상이; 기타 사업 대표값 사용)
 // 수입금액 2,400만 이하: 단순경비율 적용 가능
@@ -74,9 +58,9 @@ export default function FreelancerTaxCalculator() {
     const netIncome = Math.max(0, totalIncome - expense);
 
     // 소득공제: 기본공제(본인) 150만 + 국민건강보험(지역가입자 추정)
-    // 간이화: 기본공제 150만, 국민연금(지역) 수입 × 4.5%, 건강보험 추정
-    const nationalPensionDeduction = Math.min(netIncome * 0.045, 277_650 * 12);
-    const basicDeduction = 1_500_000;
+    // 간이화: 기본공제 150만, 국민연금 지역가입자는 9.5% 전액 본인 부담(근로자분 × 2, 기준소득월액 상·하한 적용)
+    const nationalPensionDeduction = netIncome > 0 ? computePensionContribution(netIncome / 12) * 2 * 12 : 0;
+    const basicDeduction = PERSONAL_DEDUCTION_PER_PERSON;
     const totalDeduction = nationalPensionDeduction + basicDeduction;
 
     const taxable = Math.max(0, netIncome - totalDeduction);

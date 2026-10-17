@@ -327,3 +327,20 @@ export function earnedIncomeTaxCredit(calculatedTax: number, totalPay: number): 
 
 /** 기본공제 1명당 150만 원(본인 포함). */
 export const PERSONAL_DEDUCTION_PER_PERSON = 1_500_000;
+
+/**
+ * 사업주 고용보험 고용안정·직업능력개발사업 요율(고용보험법 시행령 제12조).
+ * 150인 미만 0.25%, 150인 이상 우선지원대상 0.45%, 150~999인 0.65%, 1,000인 이상·국가 0.85%.
+ * 실업급여분(0.9%)은 근로자와 같다(RATES.employmentEmployee).
+ */
+export const EMPLOYER_EMPLOYMENT_STABILITY = {
+  under150: 0.0025,
+  priority150Plus: 0.0045,
+  from150to999: 0.0065,
+  from1000: 0.0085,
+} as const;
+
+/** 퍼센트 라벨(예: 0.03595 → "3.595%"). 화면 라벨이 요율 상수를 따라가게 한다. */
+export function ratePct(rate: number): string {
+  return `${Number((rate * 100).toFixed(4))}%`;
+}

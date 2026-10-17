@@ -1,4 +1,6 @@
 import React, { useState, useMemo } from 'react';
+import { RATES, ratePct } from '../../lib/kr-payroll-2026';
+import { computePensionContribution } from '../../lib/finance/salary-calculator';
 
 function fmt(n: number) {
   return Math.round(n).toLocaleString('ko-KR');
@@ -16,7 +18,7 @@ function parseNum(v: string): number {
 // P: 가입 기간(년)
 
 const AVG_NATIONAL_INCOME = 2_866_000; // 2024년 기준 A값 (원)
-const EMPLOYEE_RATE = 0.045;
+// 근로자 요율·기준소득월액 상·하한은 kr-payroll-2026.ts(SSOT)를 따른다.
 
 export default function PensionCalculator() {
   const [salary, setSalary] = useState('');
@@ -55,7 +57,7 @@ export default function PensionCalculator() {
     const retireAge = startAgeNum + yearsNum;
 
     // 월 납부액 (근로자 부담)
-    const monthlyContribution = Math.round(monthlyIncome * EMPLOYEE_RATE);
+    const monthlyContribution = computePensionContribution(monthlyIncome);
 
     // 총 납부액 (근로자분)
     const totalContribution = monthlyContribution * yearsNum * 12;
@@ -145,7 +147,7 @@ export default function PensionCalculator() {
             <div className="rounded-xl border border-green-200 bg-green-50/50 overflow-hidden">
               <div className="divide-y divide-green-100">
                 <div className="flex justify-between items-center px-5 py-3.5">
-                  <span className="text-sm text-muted-foreground font-medium">월 납부 보험료 (근로자 부담 4.5%)</span>
+                  <span className="text-sm text-muted-foreground font-medium">월 납부 보험료 (근로자 부담 {ratePct(RATES.pensionEmployee)})</span>
                   <span className="font-mono font-bold text-foreground">{fmt(result.monthlyContribution)} 원</span>
                 </div>
                 <div className="flex justify-between items-center px-5 py-3.5">

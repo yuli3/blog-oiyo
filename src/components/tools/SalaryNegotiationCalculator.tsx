@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { Locale } from "../../lib/i18n";
+import { computeSalaryBreakdownWon } from "../../lib/finance/salary-calculator";
 
 interface Props {
   locale: Locale;
@@ -51,7 +52,7 @@ const L: Record<Locale, {
     ],
     won: "만원",
     pct: "%",
-    note: "* 세후 월급은 근로소득세·4대보험 간이 계산 기준이에요.",
+    note: "* 세후 월급은 2026년 4대보험 요율과 근로소득세 추정치(본인 1명, 비과세 0원)로 계산했어요. 간이세액표 원천징수액과는 다를 수 있어요.",
   },
   en: {
     title: "Salary Negotiation Simulator",
@@ -76,7 +77,7 @@ const L: Record<Locale, {
     ],
     won: "₩10K",
     pct: "%",
-    note: "* Monthly net is estimated using simplified Korean income tax and insurance rates.",
+    note: "* Monthly net uses 2026 Korean social insurance rates and an estimated income tax (single filer, no tax-free pay). Actual withholding may differ.",
   },
   ja: {
     title: "給与交渉シミュレーター",
@@ -101,7 +102,7 @@ const L: Record<Locale, {
     ],
     won: "万ウォン",
     pct: "%",
-    note: "* 手取り月給は韓国の簡易所得税・保険料を基準とした概算です。",
+    note: "* 手取り月給は2026年の韓国社会保険料率と所得税の概算（本人1名・非課税0ウォン）で計算しています。実際の源泉徴収額とは異なる場合があります。",
   },
   fr: {
     title: "Simulateur de Négociation Salariale",
@@ -126,7 +127,7 @@ const L: Record<Locale, {
     ],
     won: "10K₩",
     pct: "%",
-    note: "* Le salaire net mensuel est estimé sur la base des taux coréens simplifiés.",
+    note: "* Le net mensuel utilise les taux coréens de cotisations 2026 et un impôt sur le revenu estimé (1 personne, sans part non imposable). La retenue réelle peut différer.",
   },
   es: {
     title: "Simulador de Negociación Salarial",
@@ -151,7 +152,7 @@ const L: Record<Locale, {
     ],
     won: "10K₩",
     pct: "%",
-    note: "* El salario neto mensual se estima usando tasas coreanas simplificadas.",
+    note: "* El neto mensual usa las tasas coreanas de seguros sociales de 2026 y un impuesto sobre la renta estimado (1 persona, sin ingresos exentos). La retención real puede variar.",
   },
   zh: {
     title: "薪资谈判模拟器",
@@ -176,31 +177,13 @@ const L: Record<Locale, {
     ],
     won: "万韩元",
     pct: "%",
-    note: "* 月税后薪资为韩国简易所得税及保险费概算。",
+    note: "* 月税后薪资按2026年韩国社保费率与所得税估算值（本人1人、免税0韩元）计算，可能与实际预扣额不同。",
   },
 };
 
 function calcNetMonthly(annualWon: number): number {
-  // annualWon is in KRW (not 만원)
-  const monthlyGross = annualWon / 12;
-  const nationalPension = Math.floor(monthlyGross * 0.045);
-  const healthInsurance = Math.floor(monthlyGross * 0.03545);
-  const longTermCare = Math.floor(healthInsurance * 0.1295);
-  const employmentInsurance = Math.floor(monthlyGross * 0.009);
-
-  const annualInsurance = (nationalPension + healthInsurance + longTermCare + employmentInsurance) * 12;
-  const taxableIncome = Math.max(0, annualWon - annualInsurance - 1500000);
-
-  let incomeTax = 0;
-  if (taxableIncome <= 12000000) incomeTax = Math.floor((taxableIncome * 0.06) / 12);
-  else if (taxableIncome <= 46000000) incomeTax = Math.floor((720000 + (taxableIncome - 12000000) * 0.15) / 12);
-  else if (taxableIncome <= 88000000) incomeTax = Math.floor((5820000 + (taxableIncome - 46000000) * 0.24) / 12);
-  else if (taxableIncome <= 150000000) incomeTax = Math.floor((15900000 + (taxableIncome - 88000000) * 0.35) / 12);
-  else incomeTax = Math.floor((37600000 + (taxableIncome - 150000000) * 0.38) / 12);
-
-  const localTax = Math.floor(incomeTax * 0.1);
-  const totalDeduction = nationalPension + healthInsurance + longTermCare + employmentInsurance + incomeTax + localTax;
-  return Math.floor(monthlyGross - totalDeduction);
+  // annualWon is in KRW (not 만원). 2026 요율·세율은 kr-payroll-2026.ts(SSOT)에서 온다.
+  return computeSalaryBreakdownWon(Math.round(annualWon / 12), 1, 0).net;
 }
 
 function fmt(n: number): string {
