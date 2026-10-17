@@ -18,19 +18,19 @@ const { locale } = Astro.props as { locale: Locale };
 const meta: Record<Locale, { title: string; description: string }> = {
   ko: {
     title: "월급 실수령액 계산기 — 4대 보험·소득세 공제 후 실제 수령액",
-    description: "2024년 기준 국민연금(4.5%)·건강보험(3.545%)·장기요양·고용보험·근로소득세·지방소득세를 자동 계산합니다. 세전 월급을 입력하면 실수령액이 즉시 계산됩니다.",
+    description: "2026년 요율(국민연금 4.75%·건강보험 3.595%·장기요양 13.14%·고용보험 0.9%)과 근로소득공제·기본세율 6~45%로 월급 실수령액을 추정해요. 소득세는 간이세액표가 아닌 추정값이에요.",
   },
   en: {
     title: "Korean Salary After-Tax Calculator — Take-Home Pay with 4 Social Insurances",
-    description: "Calculate your Korean take-home pay after national pension, health insurance, long-term care, employment insurance, and income tax deductions.",
+    description: "Estimate Korean take-home pay with 2026 rates: national pension 4.75%, health 3.595%, long-term care 13.14%, employment 0.9%, plus an income-tax estimate (6–45% brackets).",
   },
   ja: {
     title: "韓国給与手取り額計算機 — 4大保険・所得税後の実受取額",
-    description: "2024年基準で国民年金・健康保険・介護保険・雇用保険・勤労所得税・地方所得税を自動計算。",
+    description: "2026年料率で国民年金・健康保険・介護保険・雇用保険を計算し、勤労所得税を推定します。",
   },
-  fr: { title: "Calculateur de Salaire Net Coréen", description: "Calculez votre salaire net coréen après déduction des 4 assurances sociales et de l'impôt sur le revenu (base 2024)." },
-  es: { title: "Calculadora de Salario Neto Coreano", description: "Calcula tu salario neto coreano después de deducir los 4 seguros sociales y el impuesto sobre la renta (base 2024)." },
-  zh: { title: "韩国薪资税后计算器", description: "按2024年标准自动计算四大保险扣除后的实收薪资。" },
+  fr: { title: "Calculateur de Salaire Net Coréen", description: "Calculez votre salaire net coréen après déduction des 4 assurances sociales et de l'impôt sur le revenu (taux 2026, impôt estimé)." },
+  es: { title: "Calculadora de Salario Neto Coreano", description: "Calcula tu salario neto coreano después de deducir los 4 seguros sociales y el impuesto sobre la renta (tasas 2026, impuesto estimado)." },
+  zh: { title: "韩国薪资税后计算器", description: "按2026年费率计算四大保险，并估算所得税后的实收薪资。" },
 };
 const m = meta[locale] ?? meta.en;
 
@@ -39,14 +39,14 @@ const content = {
   ko: {
     eyebrow: "급여 계산 도구",
     introTitle: "월급 실수령액 계산기란?",
-    intro: "세전 월급에서 국민연금·건강보험·장기요양보험·고용보험과 근로소득세·지방소득세를 공제한 실제 수령액을 계산하는 도구예요. 2024년 요율 기준으로 동작해요.",
+    intro: "세전 월급에서 국민연금·건강보험·장기요양보험·고용보험과 근로소득세·지방소득세를 공제한 실제 수령액을 계산하는 도구예요. 2026년 요율(기준일 2026-10-17)로 계산하고, 근로소득세는 근로소득공제·인적공제·보험료공제·근로소득세액공제를 넣은 연간 추정액이에요. 국세청 간이세액표 값과는 다를 수 있어요.",
     howToTitle: "사용 방법",
     steps: ["세전 월급 또는 연봉을 입력합니다.", "부양가족 수 등 공제 조건을 설정합니다.", "계산을 실행하면 4대 보험과 세금이 자동 공제됩니다.", "실수령액과 항목별 공제 내역을 확인합니다."],
     highlightsTitle: "주요 특징",
     highlights: [
-      { title: "4대 보험 자동 계산", body: "국민연금 4.5%, 건강보험 3.545%, 장기요양, 고용보험을 자동 반영합니다." },
-      { title: "2024년 기준", body: "최신 요율과 과세표준을 적용합니다." },
-      { title: "즉시 계산", body: "입력 즉시 실수령액이 계산됩니다." },
+      { title: "4대 보험 2026년 요율", body: "국민연금 4.75%(기준소득월액 41만~659만 원), 건강보험 3.595%, 장기요양 13.14%(건강보험료 기준), 고용보험 0.9%를 비과세를 뺀 보수에 적용해요." },
+      { title: "소득세는 추정값", body: "2026년 근로소득공제와 기본세율 8구간(6~45%)을 쓰지만 간이세액표가 아니라서 '추정'으로 표시해요. 출처: 국세청 근로소득 안내, 국민건강보험공단 2026 보험료율." },
+      { title: "즉시 계산", body: "입력하면 바로 실수령액이 계산돼요." },
     ],
     relatedTitle: "관련 계산기",
     related: [
@@ -59,13 +59,13 @@ const content = {
   en: {
     eyebrow: "Salary Tool",
     introTitle: "What is the Korean salary after-tax calculator?",
-    intro: "It estimates your Korean take-home pay by deducting the four social insurances (national pension, health, long-term care, employment) and income/local taxes from gross salary, using 2024 rates.",
+    intro: "It estimates your Korean take-home pay by deducting the four social insurances (national pension, health, long-term care, employment) and income/local taxes from gross salary, using 2026 rates (as of 2026-10-17). Income tax is an annual estimate, not the NTS withholding table.",
     howToTitle: "How to use",
     steps: ["Enter your gross monthly or annual salary.", "Set deduction conditions such as number of dependents.", "Run the calculation to apply the four insurances and taxes automatically.", "Review your take-home pay and the itemized deductions."],
     highlightsTitle: "Highlights",
     highlights: [
-      { title: "Four insurances auto-applied", body: "National pension 4.5%, health 3.545%, long-term care, and employment insurance are applied automatically." },
-      { title: "2024 rates", body: "Uses the latest contribution rates and tax brackets." },
+      { title: "Four insurances, 2026 rates", body: "National pension 4.75% (base 410k–6.59M KRW), health 3.595%, long-term care 13.14% of health, and employment 0.9% on taxable pay." },
+      { title: "Income tax is an estimate", body: "Uses the 2026 earned-income deduction and the eight 6–45% brackets, but not the simplified withholding table." },
       { title: "Instant result", body: "Take-home pay is computed as soon as you enter your salary." },
     ],
     relatedTitle: "Related calculators",
@@ -79,13 +79,13 @@ const content = {
   ja: {
     eyebrow: "給与計算ツール",
     introTitle: "韓国給与手取り額計算機とは？",
-    intro: "税引前給与から4大保険（国民年金・健康保険・介護保険・雇用保険）と所得税・地方所得税を控除し、実際の手取り額を2024年基準で計算するツールです。",
+    intro: "税引前給与から4大保険（国民年金・健康保険・介護保険・雇用保険）と所得税・地方所得税を控除し、実際の手取り額を2026年料率で計算するツールです。所得税は簡易税額表ではなく推定値です。",
     howToTitle: "使い方",
     steps: ["税引前の月給または年収を入力します。", "扶養家族数などの控除条件を設定します。", "計算を実行すると4大保険と税金が自動控除されます。", "手取り額と項目別の控除内訳を確認します。"],
     highlightsTitle: "主な特徴",
     highlights: [
-      { title: "4大保険を自動計算", body: "国民年金4.5%、健康保険3.545%、介護保険、雇用保険を自動反映します。" },
-      { title: "2024年基準", body: "最新の料率と課税標準を適用します。" },
+      { title: "4大保険を自動計算", body: "国民年金4.75%、健康保険3.595%、介護保険（健康保険料の13.14%）、雇用保険0.9%を反映します。" },
+      { title: "所得税は推定", body: "2026年の勤労所得控除と基本税率6～45%を使った推定値です。" },
       { title: "即時計算", body: "入力するとすぐに手取り額が計算されます。" },
     ],
     relatedTitle: "関連計算機",
@@ -131,6 +131,14 @@ const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, local
   >
     <div class="mx-auto max-w-xl">
       <SalaryCalculatorComp client:visible locale={locale} />
+      <p class="mt-3 text-xs text-muted-foreground">
+        {locale === "ko" ? "기준일 2026-10-17 · 출처: " : "As of 2026-10-17 · Sources: "}
+        <a class="underline" href="https://www.nts.go.kr/nts/cm/cntnts/cntntsView.do?cntntsId=7873&mi=6437" rel="noopener" target="_blank">{locale === "ko" ? "국세청 근로소득 과세표준·세율" : "NTS earned income & tax brackets"}</a>
+        {" · "}
+        <a class="underline" href="https://www.nts.go.kr/nts/cm/cntnts/cntntsView.do?cntntsId=7875&mi=6596" rel="noopener" target="_blank">{locale === "ko" ? "국세청 근로소득세액공제" : "NTS earned income tax credit"}</a>
+        {" · "}
+        <a class="underline" href="https://www.nhis.or.kr/nhis/etc/20251204_banner_pop01.do" rel="noopener" target="_blank">{locale === "ko" ? "국민건강보험공단 2026 보험료율" : "NHIS 2026 contribution rates"}</a>
+      </p>
     </div>
     <RelatedToolLinks
       locale={locale}

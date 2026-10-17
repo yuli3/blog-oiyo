@@ -74,7 +74,7 @@ export interface InsuranceVerdict {
 }
 
 // Round to 1e-6 first: 700,000 × 0.009 is 6,299.999… in floating point and must stay 6,300.
-const floor10 = (won: number) => Math.floor(Math.round(won * 1e6) / 1e7) * 10;
+export const floor10 = (won: number) => Math.floor(Math.round(won * 1e6) / 1e7) * 10;
 
 /**
  * 일용·단시간 근로자의 4대보험 가입 여부 참고 판정.
@@ -254,3 +254,76 @@ export function parseWorkText(text: string): ParsedWork {
   for (const key of Object.keys(out) as (keyof ParsedWork)[]) if (out[key] === undefined) delete out[key];
   return out;
 }
+
+// ---------------------------------------------------------------------------
+// 근로소득 연간 세액 추정용 규칙(2026년 귀속). 확인일 2026-10-17.
+// 출처: 국세청 근로소득공제·과세표준 안내(nts.go.kr cntntsId=7871, 7873),
+// 근로소득세액공제 안내(cntntsId=7875), 소득세법 제47조·제55조·제59조.
+// 국민연금 기준소득월액 상·하한: 보건복지부 2026-07-01 적용 고시(보도자료 list_no=1488572).
+// 이 값들은 간이세액표가 아니다. 간이세액표 대조 전에는 화면에서 '추정'으로 표시한다.
+// ---------------------------------------------------------------------------
+
+export const PAYROLL_TAX_AS_OF = "2026-10-17";
+
+/** 국민연금 기준소득월액 상·하한. 2026-07-01부터 2027-06-30까지 41만~659만 원. */
+export const PENSION_BASE_LIMITS = [
+  { from: "2025-07-01", min: 400_000, max: 6_370_000 },
+  { from: "2026-07-01", min: 410_000, max: 6_590_000 },
+] as const;
+
+export function pensionBaseLimits(onDate: string = PAYROLL_TAX_AS_OF): { min: number; max: number } {
+  let current: { min: number; max: number } = PENSION_BASE_LIMITS[0];
+  for (const row of PENSION_BASE_LIMITS) if (onDate >= row.from) current = row;
+  return { min: current.min, max: current.max };
+}
+
+/** 종합소득세 기본세율(소득세법 제55조, 2023년 귀속부터 2026년 귀속까지 동일). upTo는 과세표준 상한(원). */
+export const INCOME_TAX_BRACKETS = [
+  { upTo: 14_000_000, rate: 0.06 },
+  { upTo: 50_000_000, rate: 0.15 },
+  { upTo: 88_000_000, rate: 0.24 },
+  { upTo: 150_000_000, rate: 0.35 },
+  { upTo: 300_000_000, rate: 0.38 },
+  { upTo: 500_000_000, rate: 0.4 },
+  { upTo: 1_000_000_000, rate: 0.42 },
+  { upTo: Infinity, rate: 0.45 },
+] as const;
+
+/** 과세표준(연, 원)에 기본세율을 구간별로 누적 적용한 산출세액. */
+export function basicIncomeTax(taxBase: number): number {
+  let tax = 0;
+  let lower = 0;
+  for (const { upTo, rate } of INCOME_TAX_BRACKETS) {
+    if (taxBase <= lower) break;
+    tax += (Math.min(taxBase, upTo) - lower) * rate;
+    lower = upTo;
+  }
+  return Math.round(tax);
+}
+
+/** 근로소득공제(소득세법 제47조). totalPay는 비과세를 뺀 연간 총급여액. 한도 2,000만 원. */
+export function earnedIncomeDeduction(totalPay: number): number {
+  const p = Math.max(0, totalPay);
+  let d: number;
+  if (p <= 5_000_000) d = p * 0.7;
+  else if (p <= 15_000_000) d = 3_500_000 + (p - 5_000_000) * 0.4;
+  else if (p <= 45_000_000) d = 7_500_000 + (p - 15_000_000) * 0.15;
+  else if (p <= 100_000_000) d = 12_000_000 + (p - 45_000_000) * 0.05;
+  else d = 14_750_000 + (p - 100_000_000) * 0.02;
+  return Math.round(Math.min(d, 20_000_000));
+}
+
+/** 근로소득세액공제(소득세법 제59조): 산출세액 130만 원 이하 55%, 초과분 30%. 총급여별 한도 20만~74만 원. */
+export function earnedIncomeTaxCredit(calculatedTax: number, totalPay: number): number {
+  const t = Math.max(0, calculatedTax);
+  const raw = t <= 1_300_000 ? t * 0.55 : 715_000 + (t - 1_300_000) * 0.3;
+  let limit: number;
+  if (totalPay <= 33_000_000) limit = 740_000;
+  else if (totalPay <= 70_000_000) limit = Math.max(660_000, 740_000 - (totalPay - 33_000_000) * 0.008);
+  else if (totalPay <= 120_000_000) limit = Math.max(500_000, 660_000 - (totalPay - 70_000_000) / 2);
+  else limit = Math.max(200_000, 500_000 - (totalPay - 120_000_000) / 2);
+  return Math.round(Math.min(raw, limit));
+}
+
+/** 기본공제 1명당 150만 원(본인 포함). */
+export const PERSONAL_DEDUCTION_PER_PERSON = 1_500_000;
