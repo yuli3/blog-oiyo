@@ -1,0 +1,300 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import RelatedToolLinks from "../../components/RelatedToolLinks.astro";
+import ToolsCompanionBanner from "../../components/ToolsCompanionBanner.astro";
+import LoanComparisonCalculator from "../../components/tools/LoanComparisonCalculator";
+import { locales } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const { locale } = Astro.props as { locale: ActiveLocale };
+
+const meta: Record<ActiveLocale, { title: string; description: string; eyebrow: string }> = {
+  ko: {
+    title: "대출 상환 방식 비교기 — 원리금균등 vs 원금균등 이자 절감액 계산기",
+    description: "원리금균등상환과 원금균등상환, 만기일시상환 방식의 총 이자 차이, 첫 달 및 월별 상환액 변동, 이자 절감액을 한눈에 나란히 비교합니다.",
+    eyebrow: "대출 이자와 금융 상환 플랜의 비교",
+  },
+  en: {
+    title: "Loan Repayment Method Comparison — Equal P&I vs Equal Principal Interest Savings",
+    description: "Compare equal principal & interest, equal principal amortizing, and bullet loans side-by-side. Calculate exact total interest savings and monthly payment curves.",
+    eyebrow: "Loan & Debt Optimization",
+  },
+  ja: {
+    title: "ローン返済方式比較機 — 元利均等 vs 元金均等の利息節約額シミュレーター",
+    description: "元利均等返済・元金均等返済・期日一括返済の総利息差、初回返済額と月々の返済額推移、利息節約メリットを詳細に比較計算します。",
+    eyebrow: "借入利息の最適化",
+  },
+  zh: {
+    title: "贷款还款方式对比计算器 — 等额本息 vs 等额本金 利息节省计算",
+    description: "横向对比等额本息、等额本金与按期付息到期还本的累计总利息差异、首期月供及月供递减曲线，精确计算利息节省金额。",
+    eyebrow: "还款方式与利息对比",
+  },
+  fr: {
+    title: "Comparateur de remboursement de prêt — Amortissement constant vs Mensualités constantes",
+    description: "Comparez côte à côte les mensualités constantes et l'amortissement constant du capital. Calculez les économies d'intérêts et le coût total du crédit.",
+    eyebrow: "Optimisation de Crédit",
+  },
+  es: {
+    title: "Comparador de métodos de amortización de préstamos — Francés vs Constante",
+    description: "Compara el sistema francés (cuota constante) con el sistema alemán (amortización constante). Calcula el ahorro de intereses y el coste total.",
+    eyebrow: "Finanzas y Amortización",
+  },
+};
+
+const content: Record<
+  ActiveLocale,
+  {
+    introTitle: string;
+    intro: string;
+    guideTitle: string;
+    guides: Array<{ title: string; body: string }>;
+    faqTitle: string;
+    faqs: Array<{ question: string; answer: string }>;
+  }
+> = {
+  ko: {
+    introTitle: "원리금균등 vs 원금균등의 핵심 차이",
+    intro: "원리금균등은 만기까지 매달 갚는 금액(원금+이자)이 고정되어 월급쟁이의 현금흐름 계획에 유리합니다. 반면 원금균등은 초기 월 상환액이 더 높지만, 원금이 빠르게 줄어들어 전체 대출 기간 동안 납부하는 총 이자가 수백~수천만 원 절감됩니다.",
+    guideTitle: "나에게 맞는 상환 방식 선택법",
+    guides: [
+      {
+        title: "소득 여력이 충분할 때: 원금균등",
+        body: "대출 초기에 높은 월 상환액을 감당할 수 있다면 원금균등이 무조건 유리합니다. 30년 만기 3억 대출 기준 원리금균등 대비 1,500만 원 이상의 이자를 아낄 수 있습니다.",
+      },
+      {
+        title: "고정된 월 지출을 원할 때: 원리금균등",
+        body: "가계 예산 계획을 일정하게 유지하고 싶거나 초기 자금 압박을 피하려면 원리금균등이 적합합니다. 시중 주택담보대출의 80% 이상이 이 방식을 채택합니다.",
+      },
+      {
+        title: "중도상환수수료 고려",
+        body: "대출 실행 후 3년이 지나면 대부분의 은행에서 중도상환수수료가 면제됩니다. 원리금균등으로 가입 후 여유 자금이 생길 때마다 수시로 원금을 조기 상환하는 전략도 효과적입니다.",
+      },
+    ],
+    faqTitle: "자주 묻는 질문 (FAQ)",
+    faqs: [
+      {
+        question: "대출 도중에 상환 방식을 변경할 수 있나요?",
+        answer: "은행 및 대출 상품에 따라 다르지만, 통상 상환 방식 변경은 대출 갈아타기(대환)로 간주되어 수수료나 조건 재심사가 필요할 수 있습니다.",
+      },
+      {
+        question: "거치기간을 두면 왜 총 이자가 늘어나나요?",
+        answer: "거치기간 동안에는 대출 원금이 단 1원도 줄어들지 않고 이자만 납부하므로, 원금을 상환하는 기간이 뒤로 밀려 전체 납부 이자가 커지게 됩니다.",
+      },
+    ],
+  },
+  en: {
+    introTitle: "Key Differences: Equal P&I vs Equal Principal",
+    intro: "Equal P&I features predictable fixed monthly payments. Equal Principal requires higher payments early on, but reduces principal faster, resulting in substantial total interest savings over a 20-30 year loan term.",
+    guideTitle: "Choosing the Right Method",
+    guides: [
+      {
+        title: "When Cash Flow is Strong: Equal Principal",
+        body: "If your monthly income comfortably covers higher initial payments, Equal Principal maximizes total lifetime interest savings.",
+      },
+      {
+        title: "For Predictable Budgeting: Equal P&I",
+        body: "Fixed monthly payments make household financial planning straightforward and eliminate interest payment surprises.",
+      },
+      {
+        title: "Prepayment Strategy",
+        body: "Many borrowers choose Equal P&I and make periodic principal prepayments once early prepayment penalty windows expire (typically after 3 years).",
+      },
+    ],
+    faqTitle: "Frequently Asked Questions",
+    faqs: [
+      {
+        question: "Why does Equal Principal save interest?",
+        answer: "Because principal is repaid at a faster constant rate from day one, subsequent monthly interest is calculated against a smaller remaining balance.",
+      },
+      {
+        question: "Does an interest-only grace period increase cost?",
+        answer: "Yes. During grace periods, principal balance does not decrease, causing accrued interest to accumulate over a longer effective life.",
+      },
+    ],
+  },
+  ja: {
+    introTitle: "元利均等と元金均等の違い",
+    intro: "元利均等は毎月の返済額が一定で家計管理が容易です。元金均等は当初の返済額が大きいものの、元金の減りが早く、総利息を大幅に節約できます。",
+    guideTitle: "最適な返済プランの選び方",
+    guides: [
+      {
+        title: "返済余力があるなら：元金均等",
+        body: "当初の負担を許容できる場合、30年間で数十万〜数百万円単位の利息負担を圧縮できます。",
+      },
+      {
+        title: "安定重視なら：元利均等",
+        body: "毎月同じ額を返済するため、教育費や生活費の予算立てが狂いにくいメリットがあります。",
+      },
+      {
+        title: "繰上返済の活用",
+        body: "元利均等で借入し、ボーナス時や余裕資金で適宜繰上返済を行うことで利息軽減効果を得る手法も人気です。",
+      },
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      {
+        question: "返済途中で返済方式を変更できますか？",
+        answer: "原則として借換手続きが必要となる金融機関が多いため、契約前のシミュレーションが重要です。",
+      },
+      {
+        question: "据置期間を設けると総額はどうなりますか？",
+        answer: "据置期間中は元金が減らないため、結果として総利息額は増加します。",
+      },
+    ],
+  },
+  zh: {
+    introTitle: "等额本息与等额本金核心差异",
+    intro: "等额本息每月还款金额固定，适合工薪家庭稳定规划预算；等额本金前期月供较高，但随着本金快速缩减，后续月供逐渐减少，全周期总利息大幅减少。",
+    guideTitle: "如何选择最适合的还款方式",
+    guides: [
+      {
+        title: "前期收入充足：选择等额本金",
+        body: "如果当前月收入较高，选择等额本金能最大程度节省数万甚至几十万元的总利息支出。",
+      },
+      {
+        title: "追求现金流稳定：选择等额本息",
+        body: "每月还款金额完全固定，避免前期过高的还款压力，便于进行投资与储蓄配置。",
+      },
+      {
+        title: "提前还款策略",
+        body: "许多借款人采用等额本息降低月供压力，待3年后违约金期满再通过部分提前还本降低总体利息。",
+      },
+    ],
+    faqTitle: "常见问题解答",
+    faqs: [
+      {
+        question: "等额本金为什么利息更少？",
+        answer: "因为每个月偿还相同的本金，剩余贷款本金减少得更快，计息基础更低。",
+      },
+      {
+        question: "宽限期对总利息有什么影响？",
+        answer: "宽限期只付利息不还本金，因此会延长本金计息周期，导致总利息显著增加。",
+      },
+    ],
+  },
+  fr: {
+    introTitle: "Mensualités constantes vs Amortissement constant",
+    intro: "Le remboursement à mensualité constante offre de la visibilité sur votre budget. L'amortissement constant du capital permet de payer moins d'intérêts sur la durée globale du prêt.",
+    guideTitle: "Conseils de sélection de crédit",
+    guides: [
+      {
+        title: "Capacité financière élevée : Amortissement constant",
+        body: "Permet de réduire le coût global du crédit si vous pouvez assumer des premières échéances plus élevées.",
+      },
+      {
+        title: "Stabilité budgétaire : Mensualités constantes",
+        body: "Idéal pour anticiper les dépenses récurrentes sans surprise sur les mensualités.",
+      },
+      {
+        title: "Remboursements anticipés",
+        body: "Rembourser du capital par anticipation permet d'effacer les intérêts futurs sans pénalités majeures.",
+      },
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      {
+        question: "Pourquoi l'amortissement constant coûte-t-il moins cher ?",
+        answer: "Le capital décroît plus vite, ce qui diminue plus rapidement les intérêts calculés chaque mois.",
+      },
+      {
+        question: "Quel est l'effet d'un différé d'amortissement ?",
+        answer: "Pendant le différé, vous ne remboursez que les intérêts, ce qui augmente le coût total final.",
+      },
+    ],
+  },
+  es: {
+    introTitle: "Sistema Francés vs Sistema Alemán",
+    intro: "El sistema francés mantiene cuotas fijas todos los meses. El sistema alemán amortiza capital constante desde el principio, reduciendo drásticamente los intereses totales pagados.",
+    guideTitle: "Elegir el mejor método de amortización",
+    guides: [
+      {
+        title: "Para ahorrar intereses: Amortización constante",
+        body: "Si tienes capacidad de pago holgada inicial, ahorrarás una suma significativa en intereses a 20 o 30 años.",
+      },
+      {
+        title: "Para estabilidad mensual: Cuota fija (Francés)",
+        body: "Permite planificar las finanzas familiares con total previsibilidad mes a mes.",
+      },
+      {
+        title: "Amortizaciones anticipadas",
+        body: "Realizar pagos extraordinarios al capital reduce el plazo o la cuota, minimizando el impacto de los intereses.",
+      },
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      {
+        question: "¿Por qué el sistema de capital constante ahorra dinero?",
+        answer: "Al reducir el capital principal más rápido desde el primer mes, la base sobre la que se calculan los intereses es menor.",
+      },
+      {
+        question: "¿Qué ocurre con los periodos de carencia?",
+        answer: "Durante la carencia solo se pagan intereses sin amortizar capital, encareciendo el préstamo.",
+      },
+    ],
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+const c = content[locale] ?? content.en;
+---
+
+<BaseLayout title={m.title} description={m.description}>
+  <div class="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-12">
+    <div class="mb-8 text-center">
+      <span class="inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary mb-2">
+        {m.eyebrow}
+      </span>
+      <h1 class="text-2xl sm:text-4xl font-black tracking-tight text-foreground">
+        {m.title.split("—")[0].trim()}
+      </h1>
+      <p class="text-sm text-muted-foreground mt-2 max-w-2xl mx-auto leading-relaxed">
+        {m.description}
+      </p>
+    </div>
+
+    <LoanComparisonCalculator client:visible locale={locale} />
+
+    <ToolsCompanionBanner tool="tools-hub" />
+
+    <!-- Educational Content Section -->
+    <div class="mt-12 space-y-8 rounded-2xl border border-border bg-card p-6 sm:p-8">
+      <div>
+        <h2 class="text-lg sm:text-xl font-bold text-foreground mb-3">{c.introTitle}</h2>
+        <p class="text-sm text-muted-foreground leading-relaxed">{c.intro}</p>
+      </div>
+
+      <div class="border-t border-border pt-6">
+        <h2 class="text-base font-bold text-foreground mb-4">{c.guideTitle}</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {c.guides.map((g) => (
+            <div class="rounded-xl border border-border bg-background p-4">
+              <h3 class="text-xs font-bold text-foreground mb-1">{g.title}</h3>
+              <p class="text-xs text-muted-foreground leading-relaxed">{g.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="border-t border-border pt-6">
+        <h2 class="text-base font-bold text-foreground mb-4">{c.faqTitle}</h2>
+        <div class="space-y-4">
+          {c.faqs.map((faq) => (
+            <div class="rounded-xl border border-border bg-background p-4">
+              <h3 class="text-xs font-bold text-foreground mb-1">Q. {faq.question}</h3>
+              <p class="text-xs text-muted-foreground leading-relaxed">A. {faq.answer}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-8">
+      <RelatedToolLinks locale={locale} current="loan-comparison-calculator" slugs={["early-repayment-calculator", "compound-interest-calculator", "deposit-calculator", "roi-calculator", "inflation-calculator", "jeonse-monthly-converter"]} />
+    </div>
+  </div>
+</BaseLayout>
