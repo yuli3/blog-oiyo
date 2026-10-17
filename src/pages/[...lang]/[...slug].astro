@@ -9,6 +9,8 @@ import type { Locale } from "../../lib/i18n";
 import { getRegisteredMdxComponents } from "../../lib/mdx-component-registry";
 import { getTrackFromData } from "../../lib/taxonomy";
 import { courseJsonLd } from "../../lib/seo/structured-data";
+import { isUrlSafeSeriesKey } from "../../lib/wiki-index";
+import { seriesDisplayName } from "../../data/priority-series";
 import AuthorProfile from "../../components/AuthorProfile.astro";
 import ArticleCitation from "../../components/ArticleCitation.astro";
 import MysticTrinity from "../../components/MysticTrinity.astro";
@@ -39,7 +41,7 @@ export async function getStaticPaths() {
 
   const chapterOf = (p: (typeof allPosts)[0]) =>
     p.data.chapter ?? parseInt(p.slug.match(/-ch(\d+)$/)?.[1] ?? "0", 10);
-  const isStub = (p: (typeof allPosts)[0]) => Boolean(p.data.redirectTo || p.data.redirectToBlog);
+  const isStub = (p: (typeof allPosts)[0]) => Boolean(p.data.redirectTo || p.data.redirectToBlog || p.data.noindex);
   const seriesKeyOf = (p: (typeof allPosts)[0]): string | null => {
     // 장 번호가 없는 글(같은 series 이름을 단 낱개 가이드·로드맵)은 강의 순서에 끼우지 않는다.
     if (isStub(p) || chapterOf(p) <= 0) return null;
@@ -79,45 +81,73 @@ export async function getStaticPaths() {
     }
 
 
-    // Related posts: same series > tag overlap > same category (backfill).
-    // Builds the internal link mesh that ties entries together; the category
-    // backfill guarantees coverage (no orphan with empty related). (#18)
+    // Related posts: for series chapters, ChapterSidebar and prev/next already link
+    // every chapter of the same course. Filling relatedPosts with same-series chapters
+    // isolated 87+ courses in Exam/Finance/Law from one another (2026-10-17 discovery fix).
+    // Exclude same-series chapters when seriesKey is present, prioritize chapter 1 of
+    // sibling courses in the same category/tags, and rotate deterministically by slug
+    // so every course in large categories receives incoming crawl links.
     const myTags = new Set<string>((post.data.tags ?? []) as string[]);
     const mySeries = post.data.series ?? null;
     const myCategory = post.data.category ?? null;
     const pubVal = (p: (typeof allPosts)[0]) => p.data.pubDate?.valueOf?.() ?? 0;
     const RELATED_MAX = 6;
+    let slugHash = 0;
+    for (let i = 0; i < slug.length; i++) {
+      slugHash = ((slugHash << 5) - slugHash + slug.charCodeAt(i)) | 0;
+    }
+    slugHash = Math.abs(slugHash);
 
-    const scored = (byLocale[lang] ?? [])
-      .filter((p) => p.slug !== post.slug)
+    const candidates = (byLocale[lang] ?? []).filter(
+      (p) => p.slug !== post.slug && !isStub(p) && (!seriesKey || seriesKeyOf(p) !== seriesKey),
+    );
+
+    const scored = candidates
       .map((p) => {
         let score = 0;
-        if (mySeries && p.data.series === mySeries) score += 3;
+        if (!seriesKey && mySeries && p.data.series === mySeries) score += 3;
         for (const t of (p.data.tags ?? []) as string[]) {
           if (myTags.has(t)) score += 1;
         }
         if (myCategory && p.data.category === myCategory) score += 1;
+        if (seriesKey && chapterOf(p) === 1) score += 2;
         return { p, score };
       })
       .filter((x) => x.score >= 2)
-      .sort((a, b) => b.score - a.score || pubVal(b.p) - pubVal(a.p));
+      .sort((a, b) => b.score - a.score || a.p.slug.localeCompare(b.p.slug));
 
-    const picked = scored.slice(0, RELATED_MAX).map((x) => x.p);
+    const picked: typeof allPosts = [];
+    const seenSeries = new Set<string>();
+    if (scored.length > 0) {
+      const startOffset = slugHash % scored.length;
+      for (let i = 0; i < scored.length && picked.length < RELATED_MAX; i++) {
+        const candidate = scored[(startOffset + i) % scored.length].p;
+        const candSeries = seriesKeyOf(candidate);
+        if (candSeries && seenSeries.has(candSeries)) continue;
+        if (candSeries) seenSeries.add(candSeries);
+        picked.push(candidate);
+      }
+    }
 
-    // Backfill from the same category (recent first) so every page links out.
+    // Backfill from the same category (preferring chapter 1 of distinct series, rotated by slugHash)
     if (picked.length < RELATED_MAX && myCategory) {
       const chosen = new Set(picked.map((p) => p.slug));
-      const backfill = (byLocale[lang] ?? [])
-        .filter(
-          (p) =>
-            p.slug !== post.slug &&
-            !chosen.has(p.slug) &&
-            p.data.category === myCategory,
-        )
-        .sort((a, b) => pubVal(b) - pubVal(a));
-      for (const p of backfill) {
-        if (picked.length >= RELATED_MAX) break;
-        picked.push(p);
+      const backfill = candidates
+        .filter((p) => !chosen.has(p.slug) && p.data.category === myCategory)
+        .sort((a, b) => {
+          const aEntry = chapterOf(a) <= 1 ? 0 : 1;
+          const bEntry = chapterOf(b) <= 1 ? 0 : 1;
+          return aEntry - bEntry || pubVal(b) - pubVal(a);
+        });
+      if (backfill.length > 0) {
+        const offset = slugHash % backfill.length;
+        for (let i = 0; i < backfill.length && picked.length < RELATED_MAX; i++) {
+          const p = backfill[(offset + i) % backfill.length];
+          const candSeries = seriesKeyOf(p);
+          if (candSeries && seenSeries.has(candSeries)) continue;
+          if (candSeries) seenSeries.add(candSeries);
+          picked.push(p);
+        }
       }
     }
 
@@ -188,13 +218,15 @@ const currentSeriesPosition = isSeriesPost
   : 0;
 
 // Derive series name for sidebar — prefer frontmatter `series` field over slug-derived name
-const seriesName = isSeriesPost
-  ? (post.data.series ?? post.slug
-      .replace(/-ch\d+$/, "")
-      .replace(/^[a-z]+\//, "")
-      .replace(/^education-/, "")
-      .replace(/-/g, " ")
-      .replace(/\b\w/g, (c) => c.toUpperCase()))
+const rawSeriesKey = isSeriesPost
+  ? (post.data.series ?? post.slug.split("/").slice(1).join("/").replace(/-ch\d+$/, ""))
+  : null;
+const seriesHubHref =
+  rawSeriesKey && isUrlSafeSeriesKey(rawSeriesKey) && seriesPosts && seriesPosts.length >= 2
+    ? `/${locale}/series/${rawSeriesKey}/`
+    : undefined;
+const seriesName = isSeriesPost && rawSeriesKey
+  ? seriesDisplayName(rawSeriesKey, locale, seriesPosts?.[0]?.data.title ?? post.data.title)
   : null;
 
 // Series JSON-LD for chapter posts
@@ -343,6 +375,7 @@ const redirectToBlog = post.data.redirectToBlog;
                 locale={locale}
                 seriesName={seriesName!}
                 coursesHref={coursesHref}
+                seriesHubHref={seriesHubHref}
               />
             </div>
           </div>
@@ -363,6 +396,12 @@ const redirectToBlog = post.data.redirectToBlog;
                 </>
               )}
               <a href={`/${locale}/category/${rawCategory.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`} class="py-1.5 hover:text-primary hover:underline">{displayCategory}</a>
+              {seriesHubHref && seriesName && (
+                <>
+                  <span aria-hidden="true">/</span>
+                  <a href={seriesHubHref} class="py-1.5 hover:text-primary hover:underline">{seriesName}</a>
+                </>
+              )}
               {chapter !== null && <><span aria-hidden="true">/</span><span aria-current="page">{chapterStr(chapter)}</span></>}
             </nav>
 

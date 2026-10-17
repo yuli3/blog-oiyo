@@ -134,7 +134,6 @@ import DogVisionSimulator from "../components/tools/DogVisionSimulator";
 import GrayscaleConverter from "../components/tools/GrayscaleConverter";
 import InflationCalculator from "../components/tools/InflationCalculator";
 import ImageCropper from "../components/tools/ImageCropper";
-import ImageDegrader from "../components/tools/ImageDegrader";
 import ImagePixelator from "../components/tools/ImagePixelator";
 import ImageProcessor from "../components/tools/ImageProcessor";
 import MetadataViewer from "../components/tools/MetadataViewer";
@@ -397,7 +396,6 @@ const islandComponents = {
   GrayscaleConverter,
   InflationCalculator,
   ImageCropper,
-  ImageDegrader,
   ImagePixelator,
   ImageProcessor,
   MetadataViewer,

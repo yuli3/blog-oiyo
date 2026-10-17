@@ -63,7 +63,7 @@ export const TOOL_CTA_BLOG_SLUGS: Record<string, string> = {
   "life-expectancy": "life-expectancy-calculator",
   "menstrual-tracker": "menstrual-cycle-calculator",
   "child-height": "child-height-calculator",
-  "fasting-tracker": "fasting-tracker",
+  "fasting-tracker": "fasting-timer",
   nutrition: "nutrition-calculator",
   "mbti-stress-relief": "mbti-stress-relief",
   dday: "dday-counter",
