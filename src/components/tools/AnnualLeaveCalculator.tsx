@@ -1,212 +1,284 @@
-import React, { useState, useMemo } from 'react';
-import { GameContainer } from '../ui/game/GamePrimitives';
+import { useState, useMemo } from 'react';
+import type { Locale } from '../../lib/i18n';
+import { Calendar, Clock, DollarSign, HelpCircle, Briefcase, AlertCircle } from 'lucide-react';
 
-type Locale = 'ko' | 'en' | 'ja' | 'fr' | 'es' | 'zh';
-
-interface Labels {
-  title: string; subtitle: string;
-  joinDate: string; refDate: string;
-  annualDays: string; used: string;
-  remaining: string; total: string;
-  accrued: string; note: string; noteText: string;
-  monthsWorked: string; yearsWorked: string;
-  daysLabel: string;
+interface Props {
+  locale: Locale;
 }
 
-const L: Record<Locale, Labels> = {
+const UI_TEXT: Record<Locale, {
+  title: string;
+  subtitle: string;
+  yearsService: string;
+  hourlyWage: string;
+  dailyHours: string;
+  unusedDays: string;
+  statutoryDays: string;
+  dailyWage: string;
+  totalAllowance: string;
+  formulaNote: string;
+  promotionTitle: string;
+  promotionDesc: string;
+  accountingNote: string;
+}> = {
   ko: {
-    title: '연차 계산기', subtitle: 'Annual Leave Calculator',
-    joinDate: '입사일', refDate: '기준일 (오늘)',
-    annualDays: '발생 연차', used: '사용 연차',
-    remaining: '잔여 연차', total: '총 발생 연차',
-    accrued: '발생 일수', note: '계산 근거',
-    noteText: '근로기준법 기준: 1년 미만 매월 1일(최대 11일), 1년 이상 15일, 3년 이상 2년마다 1일씩 추가(최대 25일)',
-    monthsWorked: '근속 개월', yearsWorked: '근속 연수', daysLabel: '일',
+    title: "연차 발생일수 & 미사용 연차수당 계산기",
+    subtitle: "근속연수에 따른 근로기준법 법정 연차 휴가 일수(최대 25일)와 미사용 연차에 대한 통상임금 보상 수당을 정밀 산출합니다.",
+    yearsService: "근속연수 (입사 연차)",
+    hourlyWage: "통상시급 (원)",
+    dailyHours: "1일 소정 근로시간",
+    unusedDays: "미사용 잔여 연차일수",
+    statutoryDays: "법정 발생 연차일수",
+    dailyWage: "1일 통상임금",
+    totalAllowance: "미사용 연차수당 총액",
+    formulaNote: "근로기준법 제60조: 1년 미만 매월 1일(최대 11일), 1년 이상 15일, 이후 매 2년마다 1일 가산(최대 25일).",
+    promotionTitle: "연차유급휴가 사용촉진제도 주의사항",
+    promotionDesc: "회사가 법정 절차에 따라 서면으로 연차 사용을 촉진하고 시기를 지정하였음에도 근로자가 사용하지 않은 경우, 회사는 미사용 연차수당 지급 의무가 면제됩니다.",
+    accountingNote: "회계연도 기준(1월 1일)과 입사일 기준 정산 시 퇴사 시점에는 근로자에게 더 유리한 일수를 보장해야 합니다.",
   },
   en: {
-    title: 'Annual Leave Calculator', subtitle: 'Paid Time Off Tracker',
-    joinDate: 'Join Date', refDate: 'Reference Date',
-    annualDays: 'Annual Leave Entitlement', used: 'Used Days',
-    remaining: 'Remaining', total: 'Total Accrued',
-    accrued: 'Accrued Days', note: 'Calculation Basis',
-    noteText: 'Based on Korean Labor Standards Act: <1 year = 1 day/month (max 11), 1+ year = 15 days, +1 day every 2 years after 3 years (max 25).',
-    monthsWorked: 'Months Worked', yearsWorked: 'Years Worked', daysLabel: 'days',
+    title: "Annual Paid Leave & Allowance Calculator",
+    subtitle: "Calculate your statutory annual leave entitlement (up to 25 days) and unused leave cash-out allowance based on ordinary wages.",
+    yearsService: "Years of Service",
+    hourlyWage: "Ordinary Hourly Wage",
+    dailyHours: "Contractual Daily Hours",
+    unusedDays: "Unused Leave Days",
+    statutoryDays: "Statutory Leave Entitlement",
+    dailyWage: "Daily Ordinary Wage",
+    totalAllowance: "Total Unused Leave Allowance",
+    formulaNote: "Statutory Rule: 11 days for <1 year, 15 days for year 1, +1 day every 2 years thereafter (capped at 25 days).",
+    promotionTitle: "Leave Promotion Scheme Note",
+    promotionDesc: "If the employer formally initiates the statutory leave promotion process in writing and the employee fails to use the leave, the employer may be exempt from paying cash-out allowances.",
+    accountingNote: "When calculating by fiscal year vs. hire date, the method more advantageous to the employee must be guaranteed upon departure.",
   },
   ja: {
-    title: '年次有給休暇計算機', subtitle: 'Annual Leave Calculator',
-    joinDate: '入社日', refDate: '基準日',
-    annualDays: '有給休暇付与日数', used: '取得済み日数',
-    remaining: '残日数', total: '総付与日数',
-    accrued: '付与日数', note: '計算根拠',
-    noteText: '韓国労働基準法基準：1年未満は月1日（最大11日）、1年以上15日、3年以上は2年ごとに1日追加（最大25日）',
-    monthsWorked: '勤続月数', yearsWorked: '勤続年数', daysLabel: '日',
-  },
-  fr: {
-    title: 'Calculateur de congés annuels', subtitle: 'Annual Leave Calculator',
-    joinDate: "Date d'embauche", refDate: 'Date de référence',
-    annualDays: 'Congés acquis', used: 'Jours utilisés',
-    remaining: 'Solde restant', total: 'Total acquis',
-    accrued: 'Jours acquis', note: 'Base de calcul',
-    noteText: 'Basé sur la loi du travail coréenne : moins d\'1 an = 1 jour/mois (max 11), plus d\'1 an = 15 jours, +1 jour tous les 2 ans après 3 ans (max 25).',
-    monthsWorked: 'Mois travaillés', yearsWorked: 'Années travaillées', daysLabel: 'jours',
-  },
-  es: {
-    title: 'Calculadora de vacaciones', subtitle: 'Annual Leave Calculator',
-    joinDate: 'Fecha de ingreso', refDate: 'Fecha de referencia',
-    annualDays: 'Vacaciones anuales', used: 'Días usados',
-    remaining: 'Días restantes', total: 'Total acumulado',
-    accrued: 'Días acumulados', note: 'Base de cálculo',
-    noteText: 'Basado en la ley laboral coreana: menos de 1 año = 1 día/mes (máx. 11), más de 1 año = 15 días, +1 día cada 2 años desde 3 años (máx. 25).',
-    monthsWorked: 'Meses trabajados', yearsWorked: 'Años trabajados', daysLabel: 'días',
+    title: "年次有給休暇 日数・未消化手当 計算機",
+    subtitle: "勤続年数に応じた法定有給休暇の付与日数（最大25日）と、未消化日数に応じた換算手当を計算します。",
+    yearsService: "勤続年数",
+    hourlyWage: "時間給（通常賃金）",
+    dailyHours: "1日の所定労働時間",
+    unusedDays: "未消化の有休日数",
+    statutoryDays: "法定有給付与日数",
+    dailyWage: "1日あたり通常賃金",
+    totalAllowance: "未消化有給手当 合計",
+    formulaNote: "労働基準法：1年未満最大11日、1年勤続15日、以後2年ごとに1日加算（上限25日）。",
+    promotionTitle: "有休取得促進制度の注意点",
+    promotionDesc: "企業が書面で法定の有休取得促進を行ったにもかかわらず労働者が取得しなかった場合、未消化手当の支払義務が免除される場合があります。",
+    accountingNote: "入社日基準と会計年度基準の精算において、退職時は労働者に有利な日数が保障されます。",
   },
   zh: {
-    title: '年假计算器', subtitle: 'Annual Leave Calculator',
-    joinDate: '入职日期', refDate: '计算基准日',
-    annualDays: '年假天数', used: '已使用天数',
-    remaining: '剩余天数', total: '累积天数',
-    accrued: '累积天数', note: '计算依据',
-    noteText: '依韩国劳动基准法：未满1年每月1天（最多11天），满1年15天，满3年起每2年增加1天（最多25天）',
-    monthsWorked: '服务月数', yearsWorked: '服务年数', daysLabel: '天',
+    title: "法定年假天数与未休年假折算补偿计算器",
+    subtitle: "根据工龄计算法定带薪年假天数（最高25天）以及未休年休假按日折算的全额工资补偿。",
+    yearsService: "累计工作年限（工龄）",
+    hourlyWage: "小时正常工作报酬",
+    dailyHours: "日法定工作小时数",
+    unusedDays: "未休年假天数",
+    statutoryDays: "法定应享年假天数",
+    dailyWage: "日正常工作工资",
+    totalAllowance: "未休年假工资报酬总额",
+    formulaNote: "法规标准：满1年15天，此后每满2年递增1天，最高累计不超过25天。",
+    promotionTitle: "年休假统筹与休假促进说明",
+    promotionDesc: "若用人单位依法书面发出休假促进通知且劳动者因个人原因自愿书面放弃的，单位可仅支付正常工作期间的工资。",
+    accountingNote: "入职日计算法与会计年度计算法在离职结算时，以对劳动者更为有利的核算结果为准。",
+  },
+  fr: {
+    title: "Calculateur de Congés Payés & Indemnités",
+    subtitle: "Calculez vos jours de congés légaux acquis selon l'ancienneté et le montant de l'indemnité compensatrice de congés non pris.",
+    yearsService: "Années d'Ancienneté",
+    hourlyWage: "Salaire Horaire de Base",
+    dailyHours: "Heures Journalières",
+    unusedDays: "Jours de Congés Non Pris",
+    statutoryDays: "Jours de Congés Légaux",
+    dailyWage: "Salaire Journalier de Référence",
+    totalAllowance: "Indemnité Compensatrice Totale",
+    formulaNote: "Base légale: 15 jours dès 1 an, +1 jour tous les 2 ans d'ancienneté (plafond à 25 jours).",
+    promotionTitle: "Régime d'Incitation aux Congés",
+    promotionDesc: "Lorsque l'employeur met en œuvre la procédure formelle d'incitation aux congés et que le salarié ne les pose pas, l'indemnité peut ne pas être due.",
+    accountingNote: "Le calcul doit toujours garantir la modalité la plus favorable au salarié lors de son départ.",
+  },
+  es: {
+    title: "Calculadora de Vacaciones y Compensación",
+    subtitle: "Calcula los días de vacaciones según tu antigüedad y la compensación económica por días de descanso no disfrutados.",
+    yearsService: "Años de Antigüedad",
+    hourlyWage: "Salario Ordinario por Hora",
+    dailyHours: "Horas de la Jornada Diaria",
+    unusedDays: "Días No Disfrutados",
+    statutoryDays: "Días de Vacaciones Reconocidos",
+    dailyWage: "Salario Diario Base",
+    totalAllowance: "Compensación Total por Vacaciones",
+    formulaNote: "Regla legal: 15 días tras 1 año, +1 día cada 2 años de servicio adicional (máximo 25 días).",
+    promotionTitle: "Aviso sobre Promoción del Descanso",
+    promotionDesc: "Si la empresa notifica formalmente los periodos para disfrutar las vacaciones y el trabajador no las toma, puede extinguirse la compensación económica.",
+    accountingNote: "En la liquidación final debe garantizarse siempre el criterio más beneficioso para el trabajador.",
   },
 };
 
-function toLocalDateStr(d: Date) {
-  return d.toISOString().slice(0, 10);
-}
+export default function AnnualLeaveCalculator({ locale }: Props) {
+  const [yearsService, setYearsService] = useState<number>(3);
+  const [hourlyWage, setHourlyWage] = useState<number>(12000);
+  const [dailyHours, setDailyHours] = useState<number>(8);
+  const [unusedDays, setUnusedDays] = useState<number>(5);
 
-function diffMonths(start: Date, end: Date) {
-  return (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
-}
+  const t = UI_TEXT[locale] ?? UI_TEXT.en;
 
-/** Korean Labor Standards Act annual leave entitlement */
-function calcAnnualLeaveDays(months: number): number {
-  if (months < 1) return 0;
-  if (months < 12) {
-    // 1 day per completed month, max 11
-    return Math.min(months, 11);
-  }
-  const years = Math.floor(months / 12);
-  // Base 15 days at 1 year; +1 day every 2 years after year 3, max 25
-  const extra = years >= 3 ? Math.floor((years - 1) / 2) : 0;
-  return Math.min(15 + extra, 25);
-}
+  const result = useMemo(() => {
+    const years = Math.max(0, yearsService);
+    const wage = Math.max(0, hourlyWage);
+    const hours = Math.max(1, Math.min(12, dailyHours));
+    const unused = Math.max(0, unusedDays);
 
-const AnnualLeaveCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'ko' }) => {
-  const t = L[locale] ?? L.en;
+    let statutoryDays = 0;
+    if (years < 1) {
+      statutoryDays = 11;
+    } else {
+      const extra = Math.floor((years - 1) / 2);
+      statutoryDays = Math.min(25, 15 + extra);
+    }
 
-  const todayStr = toLocalDateStr(new Date());
-  const [joinDate, setJoinDate] = useState(() => {
-    const d = new Date();
-    d.setFullYear(d.getFullYear() - 1);
-    return toLocalDateStr(d);
-  });
-  const [refDate, setRefDate] = useState(todayStr);
-  const [usedDays, setUsedDays] = useState(0);
+    const dailyWage = wage * hours;
+    const totalAllowance = Math.floor(unused * dailyWage);
 
-  const calc = useMemo(() => {
-    const start = new Date(joinDate + 'T00:00:00');
-    const ref = new Date(refDate + 'T00:00:00');
-    if (isNaN(start.getTime()) || isNaN(ref.getTime()) || ref < start) return null;
-
-    const months = diffMonths(start, ref);
-    const totalDays = calcAnnualLeaveDays(months);
-    const remaining = Math.max(0, totalDays - usedDays);
-    const years = Math.floor(months / 12);
-    const remMonths = months % 12;
-
-    return { months, years, remMonths, totalDays, remaining };
-  }, [joinDate, refDate, usedDays]);
+    return {
+      statutoryDays,
+      dailyWage,
+      totalAllowance,
+    };
+  }, [yearsService, hourlyWage, dailyHours, unusedDays]);
 
   return (
-    <GameContainer
-      title={t.title}
-      subtitle={t.subtitle}
-      onReset={() => { setUsedDays(0); }}
-    >
-      <div className="flex flex-col gap-5 sm:gap-8">
-        {/* Dates */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">{t.joinDate}</label>
-            <input
-              type="date"
-              value={joinDate}
-              max={refDate}
-              onChange={e => setJoinDate(e.target.value)}
-              className="w-full px-4 py-3 bg-muted/30 rounded-2xl border border-border font-black outline-none focus:border-primary transition-colors"
-            />
+    <div className="w-full max-w-4xl mx-auto space-y-8">
+      {/* Inputs Panel */}
+      <div className="rounded-2xl border border-border bg-card p-6 shadow-sm space-y-5">
+        <div className="grid gap-5 sm:grid-cols-2">
+          <div>
+            <label className="block text-xs font-bold text-foreground mb-1.5 flex items-center gap-1.5">
+              <Briefcase className="w-4 h-4 text-primary" />
+              <span>{t.yearsService}</span>
+            </label>
+            <div className="relative">
+              <input
+                type="number"
+                min="0"
+                max="40"
+                value={yearsService}
+                onChange={(e) => setYearsService(Math.max(0, parseInt(e.target.value) || 0))}
+                className="w-full px-3.5 py-2.5 rounded-xl border border-border bg-background text-sm text-foreground font-mono focus:outline-none focus:ring-2 focus:ring-primary/20"
+              />
+              <span className="absolute right-3.5 top-2.5 text-xs text-muted-foreground font-medium">년차</span>
+            </div>
           </div>
-          <div className="space-y-2">
-            <label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">{t.refDate}</label>
-            <input
-              type="date"
-              value={refDate}
-              min={joinDate}
-              onChange={e => setRefDate(e.target.value)}
-              className="w-full px-4 py-3 bg-muted/30 rounded-2xl border border-border font-black outline-none focus:border-primary transition-colors"
-            />
+
+          <div>
+            <label className="block text-xs font-bold text-foreground mb-1.5 flex items-center gap-1.5">
+              <DollarSign className="w-4 h-4 text-primary" />
+              <span>{t.hourlyWage}</span>
+            </label>
+            <div className="relative">
+              <input
+                type="number"
+                step="500"
+                value={hourlyWage}
+                onChange={(e) => setHourlyWage(Math.max(0, parseInt(e.target.value) || 0))}
+                className="w-full px-3.5 py-2.5 rounded-xl border border-border bg-background text-sm text-foreground font-mono focus:outline-none focus:ring-2 focus:ring-primary/20"
+              />
+              <span className="absolute right-3.5 top-2.5 text-xs text-muted-foreground font-medium">원</span>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-foreground mb-1.5 flex items-center gap-1.5">
+              <Clock className="w-4 h-4 text-primary" />
+              <span>{t.dailyHours}</span>
+            </label>
+            <select
+              value={dailyHours}
+              onChange={(e) => setDailyHours(parseInt(e.target.value) || 8)}
+              className="w-full px-3.5 py-2.5 rounded-xl border border-border bg-background text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
+            >
+              <option value="8">8시간 (전일제)</option>
+              <option value="7">7시간</option>
+              <option value="6">6시간</option>
+              <option value="5">5시간</option>
+              <option value="4">4시간 (단시간)</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-foreground mb-1.5 flex items-center gap-1.5">
+              <Calendar className="w-4 h-4 text-primary" />
+              <span>{t.unusedDays}</span>
+            </label>
+            <div className="relative">
+              <input
+                type="number"
+                min="0"
+                max="30"
+                step="0.5"
+                value={unusedDays}
+                onChange={(e) => setUnusedDays(Math.max(0, parseFloat(e.target.value) || 0))}
+                className="w-full px-3.5 py-2.5 rounded-xl border border-border bg-background text-sm text-foreground font-mono focus:outline-none focus:ring-2 focus:ring-primary/20"
+              />
+              <span className="absolute right-3.5 top-2.5 text-xs text-muted-foreground font-medium">일</span>
+            </div>
           </div>
         </div>
-
-        {/* Used days */}
-        <div className="space-y-2">
-          <label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">
-            {t.used}
-          </label>
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => setUsedDays(d => Math.max(0, d - 0.5))}
-              className="w-12 h-12 rounded-2xl bg-muted border border-border font-black text-xl hover:bg-accent transition-colors"
-            >−</button>
-            <div className="flex-1 text-center">
-              <span className="text-4xl font-black">{usedDays}</span>
-              <span className="text-sm font-bold text-muted-foreground ml-2">{t.daysLabel}</span>
-            </div>
-            <button
-              onClick={() => setUsedDays(d => d + 0.5)}
-              className="w-12 h-12 rounded-2xl bg-muted border border-border font-black text-xl hover:bg-accent transition-colors"
-            >+</button>
-          </div>
-          <p className="text-[10px] text-muted-foreground text-center">± 0.5 {t.daysLabel}</p>
-        </div>
-
-        {/* Results */}
-        {calc && (
-          <>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="p-4 rounded-2xl bg-muted/30 border border-border text-center space-y-1">
-                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{t.monthsWorked}</p>
-                <p className="text-2xl font-black">{calc.months}</p>
-              </div>
-              <div className="p-4 rounded-2xl bg-muted/30 border border-border text-center space-y-1">
-                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{t.yearsWorked}</p>
-                <p className="text-2xl font-black">{calc.years}<span className="text-sm font-bold text-muted-foreground ml-1">yr {calc.remMonths}mo</span></p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="p-4 sm:p-6 rounded-3xl bg-muted/40 border border-border text-center space-y-1">
-                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{t.annualDays}</p>
-                <p className="text-4xl font-black">{calc.totalDays}</p>
-                <p className="text-xs text-muted-foreground">{t.daysLabel}</p>
-              </div>
-              <div className={`p-4 sm:p-6 rounded-3xl border-2 text-center space-y-1 ${calc.remaining > 0 ? 'bg-success/10 border-success/40' : 'bg-muted/30 border-border'}`}>
-                <p className={`text-[10px] font-black uppercase tracking-widest ${calc.remaining > 0 ? 'text-success' : 'text-muted-foreground'}`}>{t.remaining}</p>
-                <p className={`text-4xl font-black ${calc.remaining > 0 ? 'text-success' : 'text-muted-foreground'}`}>{calc.remaining}</p>
-                <p className="text-xs text-muted-foreground">{t.daysLabel}</p>
-              </div>
-            </div>
-
-            {/* Note */}
-            <div className="p-4 rounded-2xl bg-muted/20 border border-border">
-              <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-2">{t.note}</p>
-              <p className="text-xs text-muted-foreground leading-relaxed">{t.noteText}</p>
-            </div>
-          </>
-        )}
       </div>
-    </GameContainer>
-  );
-};
 
-export default AnnualLeaveCalculator;
+      {/* Output Results */}
+      <div className="grid gap-4 sm:grid-cols-3">
+        <div className="rounded-2xl border border-border bg-card p-5 text-center shadow-sm">
+          <span className="text-xs font-bold text-muted-foreground block">{t.statutoryDays}</span>
+          <div className="mt-2 text-3xl font-black text-foreground font-mono">
+            {result.statutoryDays}
+            <span className="text-base font-bold text-muted-foreground ml-1">일</span>
+          </div>
+          <p className="mt-2 text-xs text-muted-foreground">
+            {yearsService < 1 ? "1년 미만 월차 기준" : "기본 15일 + 근속가산"}
+          </p>
+        </div>
+
+        <div className="rounded-2xl border border-border bg-card p-5 text-center shadow-sm">
+          <span className="text-xs font-bold text-muted-foreground block">{t.dailyWage}</span>
+          <div className="mt-2 text-3xl font-black text-foreground font-mono">
+            {result.dailyWage.toLocaleString()}
+            <span className="text-base font-bold text-muted-foreground ml-1">원</span>
+          </div>
+          <p className="mt-2 text-xs text-muted-foreground">
+            시급 × 1일 {dailyHours}시간
+          </p>
+        </div>
+
+        <div className="rounded-2xl border border-primary/40 bg-primary/5 p-5 text-center shadow-sm">
+          <span className="text-xs font-bold text-primary block">{t.totalAllowance}</span>
+          <div className="mt-2 text-3xl font-black text-primary font-mono">
+            {result.totalAllowance.toLocaleString()}
+            <span className="text-base font-bold text-foreground ml-1">원</span>
+          </div>
+          <p className="mt-2 text-xs text-muted-foreground">
+            잔여 {unusedDays}일 × 1일 통상임금
+          </p>
+        </div>
+      </div>
+
+      {/* Legal & Educational Card */}
+      <div className="rounded-2xl border border-border bg-card p-6 shadow-sm space-y-4">
+        <div className="flex items-start gap-3">
+          <HelpCircle className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+          <div className="space-y-1">
+            <h4 className="text-sm font-bold text-foreground">{t.promotionTitle}</h4>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              {t.promotionDesc}
+            </p>
+          </div>
+        </div>
+
+        <div className="border-t border-border/60 pt-3 flex items-start gap-3">
+          <AlertCircle className="w-5 h-5 text-warning shrink-0 mt-0.5" />
+          <p className="text-xs text-muted-foreground leading-relaxed">
+            {t.accountingNote}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,125 +1,329 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import RelatedToolLinks from "../../components/RelatedToolLinks.astro";
+import ToolsCompanionBanner from "../../components/ToolsCompanionBanner.astro";
 import KoreanAgeCalculator from "../../components/tools/KoreanAgeCalculator";
-import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
-import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
-import { buildToolShell } from "../../lib/tool-shell";
-import { siteConfig } from "../../config/site.config";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
-const { locale } = Astro.props as { locale: Locale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: { title: "만나이 계산기 — 만 나이·세는 나이·연 나이 한 번에", description: "생년월일을 입력하면 만 나이, 세는 나이, 연 나이를 즉시 계산합니다. 2023년 6월 만 나이 통일 기준." },
-  en: { title: "Korean Age Calculator — International, Counting & Year Age", description: "Enter your birth date to get Korean international age (만나이), counting age (세는나이), and year age. Based on the June 2023 unified standard." },
-  ja: { title: "韓国年齢計算機 — 満年齢・数え年・年年齢", description: "生年月日を入力すると、満年齢(만나이)、数え年(세는나이)、年年齢を即時計算します。2023年6月の満年齢統一基準。" },
-  fr: { title: "Calculateur d'Âge Coréen — international, coréen, par année", description: "Saisissez votre date de naissance pour obtenir l'âge international, coréen et par année." },
-  es: { title: "Calculadora de Edad Coreana — internacional, coreana, por año", description: "Introduce tu fecha de nacimiento para obtener la edad internacional, coreana y por año." },
-  zh: { title: "韩国年龄计算器 — 周岁·虚岁·年龄", description: "输入出生日期，即时计算周岁(만나이)、虚岁(세는나이)和年龄。基于2023年6月统一标准。" },
-};
-const m = meta[locale] ?? meta.en;
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const content = {
+const meta: Record<ActiveLocale, { title: string; description: string; eyebrow: string }> = {
   ko: {
-    eyebrow: "날짜 계산 도구",
-    introTitle: "만나이 계산기란?",
-    intro: "생년월일을 입력하면 만 나이·세는 나이·연 나이를 한 번에 계산하는 도구예요. 2023년 6월 28일부터 행정·법률상 나이는 만 나이로 통일되었어요.",
-    howToTitle: "사용 방법",
-    steps: ["생년월일(년·월·일)을 입력합니다.", "만 나이가 강조되어 표시됩니다.", "세는 나이·연 나이도 함께 확인합니다."],
-    highlightsTitle: "주요 특징",
-    highlights: [
-      { title: "만 나이 통일 기준", body: "2023년 6월 시행된 만 나이 기준으로 계산합니다." },
-      { title: "세 가지 나이", body: "만 나이·세는 나이·연 나이를 한눈에 비교합니다." },
-      { title: "생일 반영", body: "올해 생일이 지났는지에 따라 만 나이를 정확히 계산합니다." },
-    ],
-    relatedTitle: "관련 도구",
-    related: [
-      { href: "/ko/age-calculator/", label: "나이 계산기", desc: "정확한 만 나이와 일수를 계산합니다." },
-      { href: "/ko/dday-counter/", label: "D-day 계산기", desc: "기념일·디데이를 계산합니다." },
-      { href: "/ko/anniversary-calculator/", label: "기념일 계산기", desc: "사귄 날·100일 등을 계산합니다." },
-    ],
-    disclaimer: "만 나이는 생일을 기준으로 자동 계산돼요. 행정·금융 등 공식 절차의 나이 기준은 만 나이예요.",
+    title: "만 나이 & 띠 계산기 — 법정 연령·선거권·운전면허·연금 개시일 조견표",
+    description: "생년월일 기준으로 법정 표준 만 나이, 연 나이, 세는 나이, 12간지 띠와 투표권·운전면허·청소년보호법 해제·국민연금 수급 연령을 자동 판정합니다.",
+    eyebrow: "공식 법정 연령 계산기",
   },
   en: {
-    eyebrow: "Date Calculator",
-    introTitle: "What is the Korean age calculator?",
-    intro: "Enter your birth date to compute three ages used in Korea: international age (만나이), counting age (세는나이), and year age. Since June 28, 2023, official ages in Korea use the international (만) age.",
-    howToTitle: "How to use",
-    steps: ["Enter your birth year, month, and day.", "The international age (만나이) is highlighted.", "Counting age and year age are shown too."],
-    highlightsTitle: "Highlights",
-    highlights: [
-      { title: "June 2023 standard", body: "Calculates with the unified international (만) age in effect since 2023." },
-      { title: "Three ages", body: "Compare international, counting, and year age at a glance." },
-      { title: "Birthday-aware", body: "Adjusts the international age based on whether this year's birthday passed." },
-    ],
-    relatedTitle: "Related tools",
-    related: [
-      { href: "/en/age-calculator/", label: "Age Calculator", desc: "Exact age and days lived." },
-      { href: "/en/dday-counter/", label: "D-day Counter", desc: "Count down to a date." },
-      { href: "/en/anniversary-calculator/", label: "Anniversary Calculator", desc: "Dating days, 100-day, etc." },
-    ],
-    disclaimer: "International age is computed from your birthday. Official Korean procedures use the international (만) age.",
+    title: "Age & Milestone Calculator — International Age, Korean Age & Legal Rights",
+    description: "Calculate your international age, calendar year age, Chinese zodiac sign, and official legal milestone dates for voting, driving, and retirement pensions.",
+    eyebrow: "Official Age Utility",
   },
   ja: {
-    eyebrow: "日付計算ツール",
-    introTitle: "韓国年齢計算機とは？",
-    intro: "生年月日を入力すると、韓国で使われる満年齢(만나이)・数え年(세는나이)・年年齢の3つを計算するツールです。2023年6月28日から韓国の公式年齢は満年齢に統一されました。",
-    howToTitle: "使い方",
-    steps: ["生年月日(年・月・日)を入力します。", "満年齢(만나이)が強調表示されます。", "数え年・年年齢も確認できます。"],
-    highlightsTitle: "主な特徴",
-    highlights: [
-      { title: "2023年6月基準", body: "2023年施行の満年齢統一基準で計算します。" },
-      { title: "3つの年齢", body: "満年齢・数え年・年年齢を一目で比較します。" },
-      { title: "誕生日反映", body: "今年の誕生日が過ぎたかで満年齢を正確に計算します。" },
-    ],
-    relatedTitle: "関連ツール",
-    related: [
-      { href: "/ja/age-calculator/", label: "年齢計算機", desc: "正確な満年齢と日数を計算します。" },
-      { href: "/ja/dday-counter/", label: "D-day計算機", desc: "記念日・ディーデイを計算します。" },
-      { href: "/ja/anniversary-calculator/", label: "記念日計算機", desc: "交際日・100日などを計算します。" },
-    ],
-    disclaimer: "満年齢は誕生日を基準に自動計算されます。韓国の公式手続きは満年齢を使用します。",
+    title: "満年齢・干支 計算機 — 選挙権・免許・公的年金受給開始 年齢早見表",
+    description: "生年月日から国際標準の満年齢、年年齢、数え年、干支（十二支）と選挙権、免許取得、成人資格、年金受給開始年を一括判定します。",
+    eyebrow: "年齢・資格早見表",
+  },
+  zh: {
+    title: "周岁生肖速查计算器 — 法定年龄·选举权·驾照·退休养老金早见表",
+    description: "输入出生日期即刻得出法定周岁、虚岁、实岁、十二生肖属相，并自动查询选举权、考驾照及法定养老金领取年份。",
+    eyebrow: "法定年龄工具",
+  },
+  fr: {
+    title: "Calculateur d'Âge Légal & Astrologique — Majorité, Droits & Retraite",
+    description: "Calculez votre âge révolu, votre âge coréen, signe chinois et échéances légales (droit de vote, permis, retraite) en temps réel.",
+    eyebrow: "Calculateur d'Âge",
+  },
+  es: {
+    title: "Calculadora de Edad y Signo Zodiacal — Mayoría Legal, Permisos y Pensión",
+    description: "Calcula tu edad oficial, edad coreana tradicional, signo del zodíaco chino y fechas clave para votar, conducir y jubilarte.",
+    eyebrow: "Utilidad de Edad Legal",
   },
 };
 
-const faqs = {
-  ko: [
-    { q: "만 나이와 세는 나이 차이는?", a: "만 나이는 태어난 날을 0세로 시작해 생일마다 1살 더하는 국제 기준입니다. 세는 나이는 태어나면 1세, 매년 1월 1일에 1살 더하는 한국 전통 방식입니다." },
-    { q: "2023년 만 나이 통일이란?", a: "2023년 6월 28일부터 행정·법률상 나이를 만 나이로 통일했습니다. 별도 표기가 없으면 만 나이를 뜻합니다." },
-    { q: "연 나이는 무엇인가요?", a: "현재 연도에서 출생 연도를 뺀 값으로, 일부 법령(병역·청소년보호 등)에서 사용됩니다." },
-  ],
-  en: [
-    { q: "International vs counting age?", a: "International age starts at 0 at birth and adds a year each birthday. Counting age starts at 1 at birth and adds a year every January 1 (Korean tradition)." },
-    { q: "What is the 2023 unification?", a: "Since June 28, 2023, Korea's official ages use the international (만) age; absent a note, age means international age." },
-    { q: "What is year age?", a: "Current year minus birth year; used in some laws (military service, youth protection)." },
-  ],
-  ja: [
-    { q: "満年齢と数え年の違いは？", a: "満年齢は生まれた時を0歳とし誕生日ごとに1歳加える国際基準です。数え年は生まれた時1歳で毎年1月1日に1歳加える韓国の伝統方式です。" },
-    { q: "2023年の満年齢統一とは？", a: "2023年6月28日から行政・法律上の年齢を満年齢に統一しました。表記がなければ満年齢を意味します。" },
-    { q: "年年齢とは？", a: "現在の年から出生年を引いた値で、一部の法令(兵役・青少年保護など)で使われます。" },
-  ],
+const content: Record<
+  ActiveLocale,
+  {
+    introTitle: string;
+    intro: string;
+    guideTitle: string;
+    guides: { title: string; body: string }[];
+    faqTitle: string;
+    faqs: { question: string; answer: string }[];
+  }
+> = {
+  ko: {
+    introTitle: "대한민국 '만 나이 통일법'과 연령 체계 총정리",
+    intro: "2023년 6월 28일부터 행정·민사상 나이 계산이 '만 나이'로 전면 통일되었습니다. 다만 병역법과 청소년보호법(술·담배 구매)은 예외적으로 '연 나이'를 적용하므로 두 기준을 구분해야 합니다.",
+    guideTitle: "나이 계산 3대 기준의 차이",
+    guides: [
+      {
+        title: "만 나이 (법적 표준)",
+        body: "출생일을 0세로 시작하여 매년 생일마다 1세씩 더하는 국제 표준입니다. 계약, 법적 자격, 공문서의 기본 기준입니다.",
+      },
+      {
+        title: "연 나이 (병역·청소년법)",
+        body: "현재 연도에서 태어난 연도를 뺀 나이입니다. 병무청 병역판정검사(연 19세)와 술·담배 구매 가능일(연 19세가 되는 해 1월 1일)에 적용됩니다.",
+      },
+      {
+        title: "12간지 띠의 계산 기준",
+        body: "전통 띠는 입춘(양력 2월 4일경)을 기준으로 바뀌며, 일상적으로는 출생 음력/양력 연도의 12지지(자축인묘진사오미신유술해)를 따릅니다.",
+      },
+      {
+        title: "국민연금 수령 개시 연령",
+        body: "출생연도에 따라 만 60세부터 65세까지 단계적으로 늦춰지며, 1969년생 이후 출생자는 만 65세부터 정규 노령연금을 수령합니다.",
+      },
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      {
+        question: "생일이 지나지 않았을 때 만 나이는 어떻게 계산하나요?",
+        answer: "현재 연도에서 태어난 연도를 뺀 후, 올해 생일이 아직 지나지 않았다면 추가로 1살을 더 빼야 합니다.",
+      },
+      {
+        question: "만 19세가 되는 해 1월 1일부터 술과 담배 구매가 가능한가요?",
+        answer: "네, 청소년보호법은 개별 생일과 관계없이 연 나이 19세가 되는 해의 1월 1일부터 성인으로 간주하여 구매를 허용합니다.",
+      },
+    ],
+  },
+  en: {
+    introTitle: "Understanding Korean Age vs. International Age Standards",
+    intro: "While South Korea standardized on international age in June 2023, specific laws such as military enlistment and alcohol sales still utilize calendar year age formulas.",
+    guideTitle: "Core Differences in Age Systems",
+    guides: [
+      {
+        title: "International Age",
+        body: "Starts at zero on the date of birth and increases by one year on each subsequent birthday.",
+      },
+      {
+        title: "Calendar Year Age",
+        body: "Current year minus birth year. Used in special regulatory contexts like youth tobacco and alcohol laws.",
+      },
+      {
+        title: "Chinese Zodiac Signs",
+        body: "A 12-year cycle of symbolic animals repeating based on lunar and solar calendar transitions.",
+      },
+      {
+        title: "State Pension Starting Age",
+        body: "Ranging from age 60 to 65 depending on your birth cohort, reaching full maturity at age 65 for post-1969 births.",
+      },
+    ],
+    faqTitle: "Frequently Asked Questions",
+    faqs: [
+      {
+        question: "How do I calculate international age before my birthday?",
+        answer: "Subtract your birth year from the current year, then subtract one additional year if your birthday has not occurred yet this year.",
+      },
+      {
+        question: "What is traditional Korean age?",
+        answer: "Under the historical Korean age convention, a person is 1 year old at birth and gains another year on January 1st.",
+      },
+    ],
+  },
+  ja: {
+    introTitle: "満年齢と年年齢、各種法定制限の仕組み",
+    intro: "国際標準である満年齢に加え、選挙権、運転免許取得、公的年金受給開始年齢などの法的なマイルストーンを一覧できます。",
+    guideTitle: "年齢計算の基本ルール",
+    guides: [
+      {
+        title: "満年齢",
+        body: "生まれた日を0歳とし、毎年の誕生日に1歳ずつ加算する世界共通の年齢基準です。",
+      },
+      {
+        title: "数え年",
+        body: "生まれた年を1歳とし、元旦を迎えるごとに1歳加算する伝統的な東アジアの年齢です。",
+      },
+      {
+        title: "干支（十二支）の周期",
+        body: "子・丑・寅・卯・辰・巳・午・未・申・酉・戌・亥の12匹の動物が毎年順番に巡ります。",
+      },
+      {
+        title: "公的年金受給開始",
+        body: "生年別で60歳から65歳へと段階的に引き上げられており、原則65歳から老齢年金を受給できます。",
+      },
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      {
+        question: "誕生日前の満年齢の計算方法は？",
+        answer: "今年の西暦から生まれた西暦を引き、今年の誕生日がまだ来ていない場合はさらに1歳引きます。",
+      },
+      {
+        question: "選挙権は何歳から付与されますか？",
+        answer: "満18歳の誕生日の前日（法律上の年齢到達日）から投票が可能になります。",
+      },
+    ],
+  },
+  zh: {
+    introTitle: "周岁与虚岁，以及法定权利年龄速查指南",
+    intro: "根据公历出生日期，全面解析法定周岁、实岁与虚岁，并提供驾照、投票权、养老金起领等人生关键法定节点。",
+    guideTitle: "常见年龄计算标准",
+    guides: [
+      {
+        title: "周岁（法定年龄）",
+        body: "出生即为0岁，每过一个公历生日便增加1岁，是绝大多数法律行为的法定基准。",
+      },
+      {
+        title: "实岁（年份差）",
+        body: "当前公历年份直接减去出生年份，常用于特定行政或征兵法规筛选。",
+      },
+      {
+        title: "十二生肖周期",
+        body: "鼠、牛、虎、兔、龙、蛇、马、羊、猴、鸡、狗、猪十二种属相按年轮替。",
+      },
+      {
+        title: "法定退休金起领",
+        body: "根据出生年份不同，由60周岁逐步顺延至65周岁按月领取法定基本养老保险。",
+      },
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      {
+        question: "生日前和生日后周岁怎么算？",
+        answer: "当前年份减去出生年份，如果今年的生日还没到，则需要再减去1岁；生日当天起即为完整周岁。",
+      },
+      {
+        question: "考取机动车驾驶证需要满足多少岁？",
+        answer: "通常需要年满18周岁当天起，方可向有关部门申请并参加机动车驾驶考试。",
+      },
+    ],
+  },
+  fr: {
+    introTitle: "Calcul de l'Âge Légal et Échéances Juridiques",
+    intro: "Calculez précisément votre âge révolu, votre signe astrologique et les étapes clés de vos droits civiques et sociaux.",
+    guideTitle: "Repères d'Âge et Droits",
+    guides: [
+      {
+        title: "Âge Révolu",
+        body: "Calculé à partir de la date d'anniversaire précise, il confère la pleine capacité civile.",
+      },
+      {
+        title: "Signe Astrologique Chinois",
+        body: "Cycle de douze animaux régissant chaque année lunaire de naissance.",
+      },
+      {
+        title: "Majorité Électorale",
+        body: "Le droit de vote s'exerce dès l'âge de 18 ans révolus.",
+      },
+      {
+        title: "Âge de la Retraite",
+        body: "Fixé selon votre année de naissance pour l'ouverture des droits à pension de vieillesse.",
+      },
+    ],
+    faqTitle: "Questions Fréquentes",
+    faqs: [
+      {
+        question: "Comment calculer l'âge avant son anniversaire ?",
+        answer: "Soustrayez votre année de naissance de l'année en cours, puis retirez 1 an si la date d'anniversaire n'est pas encore passée.",
+      },
+      {
+        question: "À quel âge peut-on passer le permis ?",
+        answer: "L'épreuve pratique du permis de conduire s'effectue généralement dès 18 ans révolus.",
+      },
+    ],
+  },
+  es: {
+    introTitle: "Cálculo de Edad Legal y Derechos por Edad",
+    intro: "Calcula con exactitud tu edad oficial, horóscopo chino y derechos fundamentales alcanzados a lo largo de tu vida.",
+    guideTitle: "Criterios Principales de Edad",
+    guides: [
+      {
+        title: "Edad Cumplida",
+        body: "Aumenta un año en cada fecha de cumpleaños y determina la capacidad jurídica formal.",
+      },
+      {
+        title: "Horóscopo Chino",
+        body: "Ciclo de doce animales que representan cada año de nacimiento.",
+      },
+      {
+        title: "Mayoría de Edad y Voto",
+        body: "Se adquiere a los 18 años para votar y firmar contratos vinculantes.",
+      },
+      {
+        title: "Jubilación y Pensión",
+        body: "Regulada de forma progresiva según tu año de nacimiento entre los 60 y 65 años.",
+      },
+    ],
+    faqTitle: "Preguntas Frecuentes",
+    faqs: [
+      {
+        question: "¿Cómo se calcula la edad exacta antes del cumpleaños?",
+        answer: "Resta tu año de nacimiento del año actual y resta 1 año adicional si tu cumpleaños aún no ha tenido lugar.",
+      },
+      {
+        question: "¿A qué edad se puede votar?",
+        answer: "A partir de los 18 años cumplidos adquieres el derecho constitucional a votar.",
+      },
+    ],
+  },
 };
 
-const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
+const m = meta[locale] ?? meta.en;
+const c = content[locale] ?? content.en;
 ---
 
 <BaseLayout title={m.title} description={m.description}>
-  <ToolShell
-    title={m.title}
-    description={m.description}
-    siteUrl={siteConfig.url}
-    locale={locale}
-    slug="korean-age-calculator"
-    content={c}
-    applicationCategory="UtilityApplication"
-  >
-    <div class="mx-auto max-w-2xl">
-      <KoreanAgeCalculator client:load locale={locale} />
+  <div class="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-12">
+    <div class="mb-8">
+      <span class="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary mb-3">
+        {m.eyebrow}
+      </span>
+      <h1 class="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+        {m.title}
+      </h1>
+      <p class="text-sm text-muted-foreground mt-2">
+        {m.description}
+      </p>
     </div>
-    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
-  </ToolShell>
+
+    <KoreanAgeCalculator client:load locale={locale} />
+
+    <section class="mt-12 space-y-8 rounded-2xl border border-border bg-card p-6 sm:p-8">
+      <div>
+        <h2 class="text-lg font-bold text-foreground">{c.introTitle}</h2>
+        <p class="mt-2 text-sm text-muted-foreground leading-relaxed">{c.intro}</p>
+      </div>
+
+      <div>
+        <h3 class="text-base font-bold text-foreground">{c.guideTitle}</h3>
+        <div class="mt-4 grid gap-4 sm:grid-cols-2">
+          {c.guides.map((item) => (
+            <div class="rounded-xl border border-border/60 bg-muted/30 p-4">
+              <h4 class="text-sm font-semibold text-foreground">{item.title}</h4>
+              <p class="mt-1 text-xs text-muted-foreground leading-relaxed">{item.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-base font-bold text-foreground">{c.faqTitle}</h3>
+        <dl class="mt-4 space-y-4">
+          {c.faqs.map((faq) => (
+            <div class="rounded-xl border border-border/60 bg-muted/20 p-4">
+              <dt class="text-sm font-semibold text-foreground">{faq.question}</dt>
+              <dd class="mt-1 text-xs text-muted-foreground leading-relaxed">{faq.answer}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </section>
+
+    <div class="mt-8">
+      <ToolsCompanionBanner tool="tools-hub" />
+    </div>
+
+    <div class="mt-10">
+      <RelatedToolLinks
+        locale={locale}
+        slugs={["percentage-calculator", "loan-comparison-calculator", "tdee-calculator"]}
+        current="korean-age-calculator"
+      />
+    </div>
+  </div>
 </BaseLayout>
