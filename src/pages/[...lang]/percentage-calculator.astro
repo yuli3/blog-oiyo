@@ -1,125 +1,257 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import RelatedToolLinks from "../../components/RelatedToolLinks.astro";
+import ToolsCompanionBanner from "../../components/ToolsCompanionBanner.astro";
 import PercentageCalculator from "../../components/tools/PercentageCalculator";
-import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
-import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
-import { buildToolShell } from "../../lib/tool-shell";
-import { siteConfig } from "../../config/site.config";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
 
 export async function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
 }
-const { locale } = Astro.props as { locale: Locale };
 
-const meta: Record<Locale, { title: string; description: string }> = {
-  ko: { title: "퍼센트 계산기 — %, 변화율, 할인가 한 번에", description: "X의 Y%, X는 Y의 몇%, A→B 증감률, 할인가와 절약액을 한 화면에서 즉시 계산합니다." },
-  en: { title: "Percentage Calculator — Percent, Change, Discount", description: "Compute Y% of X, what percent X is of Y, A→B percent change, and discounted price with savings — all on one screen." },
-  ja: { title: "パーセント計算機 — %、変化率、割引価格を一度に", description: "Xの Y%、X は Y の何%、A→B の増減率、割引価格と節約額を一画面で即時計算します。" },
-  fr: { title: "Calculateur de Pourcentage — %, variation, remise", description: "Calculez Y% de X, le % de X par rapport à Y, la variation A→B et le prix remisé." },
-  es: { title: "Calculadora de Porcentaje — %, variación, descuento", description: "Calcula Y% de X, qué % es X de Y, la variación A→B y el precio con descuento." },
-  zh: { title: "百分比计算器 — 百分比、变化率、折扣价", description: "一屏即时计算 X 的 Y%、X 是 Y 的百分之几、A→B 变化率，以及折扣价与节省额。" },
-};
-const m = meta[locale] ?? meta.en;
+const { locale } = Astro.props as { locale: ActiveLocale };
 
-const content = {
+const meta: Record<ActiveLocale, { title: string; description: string; eyebrow: string }> = {
   ko: {
-    eyebrow: "일상 계산 도구",
-    introTitle: "퍼센트 계산기란?",
-    intro: "자주 쓰는 네 가지 퍼센트 계산을 한 화면에 모았습니다: ① X의 Y%는? ② X는 Y의 몇%? ③ A에서 B로 몇 % 증감? ④ 할인가와 절약액.",
-    howToTitle: "사용 방법",
-    steps: ["원하는 계산 항목의 값을 입력합니다.", "입력 즉시 결과가 계산됩니다.", "변화율은 증가/감소 방향까지 표시됩니다."],
-    highlightsTitle: "주요 특징",
-    highlights: [
-      { title: "4가지 모드", body: "퍼센트·비율·증감률·할인가를 한 번에 다룹니다." },
-      { title: "할인가+절약액", body: "정가와 할인율로 실제 결제 금액과 절약액을 보여줍니다." },
-      { title: "즉시 계산", body: "값을 바꾸면 바로 갱신됩니다." },
-    ],
-    relatedTitle: "관련 도구",
-    related: [
-      { href: "/ko/dutch-pay-calculator/", label: "더치페이 계산기", desc: "모임 비용을 나눕니다." },
-      { href: "/ko/percent-converter/", label: "퍼센트 변환기", desc: "분수·소수·퍼센트를 변환합니다." },
-      { href: "/ko/salary-calculator/", label: "실수령액 계산기", desc: "월급 실수령액을 계산합니다." },
-    ],
-    disclaimer: "일반적인 산술 계산이며 참고용이에요.",
+    title: "퍼센트 계산기 4종 올인원 — 비율·증감율(%)·할인율 판매가 계산",
+    description: "전체의 N% 값 구하기, 특정 수량의 비율(%), 기준값 대비 증감률(%), 할인율 적용 후 최종 가격과 할인 절약액을 실시간으로 동시 계산합니다.",
+    eyebrow: "실생활 정밀 수학 유틸리티",
   },
   en: {
-    eyebrow: "Everyday Calculator",
-    introTitle: "What is the percentage calculator?",
-    intro: "Four common percentage calculations on one screen: ① Y% of X, ② X is what percent of Y, ③ percent change from A to B, ④ discounted price and savings.",
-    howToTitle: "How to use",
-    steps: ["Enter the values for the calculation you need.", "Results compute instantly as you type.", "Percent change also shows the increase/decrease direction."],
-    highlightsTitle: "Highlights",
-    highlights: [
-      { title: "Four modes", body: "Handles percent, ratio, change, and discount at once." },
-      { title: "Discount + savings", body: "Shows the final price and how much you save." },
-      { title: "Instant", body: "Results update as you type." },
-    ],
-    relatedTitle: "Related tools",
-    related: [
-      { href: "/en/dutch-pay-calculator/", label: "Dutch Pay Calculator", desc: "Split group expenses." },
-      { href: "/en/percent-converter/", label: "Percent Converter", desc: "Convert fractions, decimals, percent." },
-      { href: "/en/salary-calculator/", label: "Salary Calculator", desc: "Compute take-home pay." },
-    ],
-    disclaimer: "General arithmetic, for reference only.",
+    title: "Percentage Calculator All-in-One — Proportion, Growth Rate & Discount Price",
+    description: "Calculate what is N% of X, what percentage X is of Y, percentage increase/decrease, and discounted price with savings in real time.",
+    eyebrow: "Practical Math Utility",
   },
   ja: {
-    eyebrow: "日常計算ツール",
-    introTitle: "パーセント計算機とは？",
-    intro: "よく使う4つのパーセント計算を一画面に集約しました: ① Xの Y%、② X は Y の何%、③ A から B への増減率、④ 割引価格と節約額。",
-    howToTitle: "使い方",
-    steps: ["必要な計算項目の値を入力します。", "入力すると即時に結果が計算されます。", "変化率は増減の方向も表示します。"],
-    highlightsTitle: "主な特徴",
-    highlights: [
-      { title: "4モード", body: "パーセント・比率・増減率・割引を一度に扱います。" },
-      { title: "割引+節約額", body: "定価と割引率から支払額と節約額を表示します。" },
-      { title: "即時計算", body: "入力するとすぐに更新されます。" },
-    ],
-    relatedTitle: "関連ツール",
-    related: [
-      { href: "/ja/dutch-pay-calculator/", label: "割り勘計算機", desc: "集まりの費用を分けます。" },
-      { href: "/ja/percent-converter/", label: "パーセント変換", desc: "分数・小数・%を変換します。" },
-      { href: "/ja/salary-calculator/", label: "手取り計算機", desc: "給与の手取りを計算します。" },
-    ],
-    disclaimer: "一般的な算術計算で、参考用です。",
+    title: "パーセント計算機 4機能統合 — 割合・増減率(%)・割引価格シミュレーター",
+    description: "全体のN%、ある値が占める割合(%)、前年比・前回比の増減率(%)、セール割引後の支払額とお得額を同時に計算します。",
+    eyebrow: "日常の数学ユーティリティ",
+  },
+  zh: {
+    title: "多功能百分比计算器 — 比例数值·占比·涨跌幅(%)·折扣到手价",
+    description: "一站式实时计算某数的百分比、部分占整体的百分比、初始值与终值的增减百分比，以及打折后的优惠价格和立省金额。",
+    eyebrow: "实用数学工具",
+  },
+  fr: {
+    title: "Calculateur de Pourcentage Tout-en-Un — Part, Évolution & Prix Remisé",
+    description: "Calculez la valeur d'un pourcentage, la proportion relative, le taux d'augmentation ou de baisse, ainsi que le prix final avec remise.",
+    eyebrow: "Outil Mathématique Quotidien",
+  },
+  es: {
+    title: "Calculadora de Porcentajes Todo en Uno — Proporción, Variación y Descuento",
+    description: "Calcula el N% de un total, qué porcentaje representa una cifra, el porcentaje de aumento o rebaja, y el precio final con descuento.",
+    eyebrow: "Utilidad Matemática Práctica",
   },
 };
 
-const faqs = {
-  ko: [
-    { q: "X의 Y%를 구하는 식은?", a: "X × Y ÷ 100 입니다. 예: 200의 15% = 30." },
-    { q: "증감률은 어떻게 계산하나요?", a: "(이후 − 이전) ÷ 이전 × 100 입니다. 예: 100→125 = +25%." },
-    { q: "할인가는?", a: "정가 × (1 − 할인%/100) 입니다. 예: 50,000원 −20% = 40,000원." },
-  ],
-  en: [
-    { q: "How do I find Y% of X?", a: "X × Y ÷ 100. For example, 15% of 200 = 30." },
-    { q: "How is percent change computed?", a: "(new − old) ÷ old × 100. For example, 100→125 = +25%." },
-    { q: "How is the discount price found?", a: "Price × (1 − discount%/100). For example, 50,000 −20% = 40,000." },
-  ],
-  ja: [
-    { q: "Xの Y%の求め方は？", a: "X × Y ÷ 100 です。例: 200の15% = 30。" },
-    { q: "変化率の計算は？", a: "(後 − 前) ÷ 前 × 100 です。例: 100→125 = +25%。" },
-    { q: "割引価格は？", a: "定価 × (1 − 割引%/100) です。例: 50,000円 −20% = 40,000円。" },
-  ],
+const content: Record<
+  ActiveLocale,
+  {
+    introTitle: string;
+    intro: string;
+    guideTitle: string;
+    guides: Array<{ title: string; body: string }>;
+    faqTitle: string;
+    faqs: Array<{ question: string; answer: string }>;
+  }
+> = {
+  ko: {
+    introTitle: "퍼센트(%) 계산이 필요한 모든 순간을 한 화면에서 해결",
+    intro: "쇼핑할 때의 세일 할인율, 주식이나 매출의 전월 대비 증감률, 전체 목표치 중 현재 달성률 등 일상과 업무에서 자주 마주치는 4대 퍼센트 수식을 한눈에 계산할 수 있습니다.",
+    guideTitle: "퍼센트 공식 및 활용 팁",
+    guides: [
+      {
+        title: "1. 전체의 N% 구하기",
+        body: "수식: 전체값 × (N / 100). 예: 50,000원의 15% 팁이나 부가세는 50,000 × 0.15 = 7,500원입니다.",
+      },
+      {
+        title: "2. 특정 값의 비중(%) 구하기",
+        body: "수식: (특정값 / 전체값) × 100. 예: 120명 중 18명이 찬성했다면 (18 / 120) × 100 = 15%입니다.",
+      },
+      {
+        title: "3. 증감률(%) 구하기",
+        body: "수식: ((변화값 - 기존값) / 기존값) × 100. 주가 변동이나 매출 신장률을 분석할 때 표준 공식입니다.",
+      },
+      {
+        title: "4. 할인 가격 구하기",
+        body: "수식: 원가 × (1 - 할인율 / 100). 백화점이나 이커머스 세일 기간에 실제 결제할 금액을 즉시 확인합니다.",
+      },
+    ],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      {
+        question: "퍼센트(%)와 퍼센트포인트(%p)의 차이는 무엇인가요?",
+        answer: "퍼센트(%)는 기존 값 대비 변화 비율을 의미하고, 퍼센트포인트(%p)는 이자율이나 지지율 등 퍼센트 단위 자체의 단순 산술적 차이를 말합니다. 예: 금리가 3%에서 4%로 오르면 1%p 상승이며, 33.3% 인상된 것입니다.",
+      },
+      {
+        question: "모바일에서도 즉시 계산되나요?",
+        answer: "네, 숫자를 입력하거나 수정하는 즉시 별도의 계산 버튼 클릭 없이 4개 영역이 실시간 자동 연산됩니다.",
+      },
+    ],
+  },
+  en: {
+    introTitle: "All Essential Percentage Calculations on One Screen",
+    intro: "Whether calculating retail discounts, investment returns, market share, or growth curves, this tool provides instant answers across all four core percentage formulas.",
+    guideTitle: "Percentage Formulas & Guide",
+    guides: [
+      {
+        title: "1. Finding N% of X",
+        body: "Formula: Total × (N / 100). Example: 15% tip on $50 is 50 × 0.15 = $7.50.",
+      },
+      {
+        title: "2. Finding the Percentage Share",
+        body: "Formula: (Part / Whole) × 100. Example: 18 out of 120 people is 15%.",
+      },
+      {
+        title: "3. Percentage Increase or Decrease",
+        body: "Formula: ((New - Old) / Old) × 100. Key for measuring revenue, traffic, or stock performance.",
+      },
+      {
+        title: "4. Discount Price Calculation",
+        body: "Formula: Price × (1 - Discount / 100). Essential for shopping and clearance sales.",
+      },
+    ],
+    faqTitle: "Frequently Asked Questions",
+    faqs: [
+      {
+        question: "What is the difference between % and percentage points (%p)?",
+        answer: "Percentage represents relative change, whereas percentage points represent the arithmetic difference between two percentage values.",
+      },
+      {
+        question: "Does it update in real time?",
+        answer: "Yes, all 4 cards update simultaneously as you type without requiring page reloads.",
+      },
+    ],
+  },
+  ja: {
+    introTitle: "パーセント計算のすべてを1画面で完結",
+    intro: "セールの割引額、売上や株価の増減率、目標達成率など、日常やビジネスで頻繁に使う4大パーセント計算をリアルタイムで提供します。",
+    guideTitle: "計算式と活用のヒント",
+    guides: [
+      { title: "1. 全体のN%", body: "計算式: 全体 × (N / 100)。消費税やチップの計算に便利です。" },
+      { title: "2. 全体に対する割合", body: "計算式: (部分 / 全体) × 100。シェアやアンケート比率の計算に最適です。" },
+      { title: "3. 増減率(%)", body: "計算式: ((変化後 - 変化前) / 変化前) × 100。売上や業績推移を分析します。" },
+      { title: "4. 割引計算", body: "計算式: 元価格 × (1 - 割引率 / 100)。お買い物時の支払額を即座に確認できます。" },
+    ],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "リアルタイムで計算されますか？", answer: "はい、数値を入力した瞬間に4つのカードが同時に自動計算されます。" },
+      { question: "%と%ポイントの違いは？", answer: "%は相対的な変化比率、%ポイントはパーセント数値同士の差分を表します。" },
+    ],
+  },
+  zh: {
+    introTitle: "一站式解决生活与办公中的全部百分比计算",
+    intro: "无论是购物折扣、销售涨跌幅、完成率还是投资收益比，本工具均提供实时精准计算。",
+    guideTitle: "百分比核心计算公式",
+    guides: [
+      { title: "1. 计算N%数值", body: "公式：总量 × (N / 100)。适用于计算服务费、税费等。" },
+      { title: "2. 计算占比份额", body: "公式：(部分 / 总量) × 100。适用于统计占比、市场占有率。" },
+      { title: "3. 涨跌幅度计算", body: "公式：((终值 - 初值) / 初值) × 100。适用于对比增长率。" },
+      { title: "4. 折扣优惠价格", body: "公式：原价 × (1 - 折扣 / 100)。即刻知晓到手价与节省金额。" },
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "是否支持实时计算？", answer: "支持，输入数字即可实时看到四个模块的换算结果。" },
+      { question: "百分比与百分点的区别？", answer: "百分比表示相对比例变动，百分点表示百分数之间的绝对差值。" },
+    ],
+  },
+  fr: {
+    introTitle: "Tous vos calculs de pourcentage sur une seule interface",
+    intro: "Pourcentage d'une somme, part relative, taux d'évolution ou remise en magasin, obtenez vos résultats instantanément.",
+    guideTitle: "Formules et astuces",
+    guides: [
+      { title: "1. Portion (N% de X)", body: "Formule : Total × (N / 100)." },
+      { title: "2. Proportion (X sur Y)", body: "Formule : (Part / Total) × 100." },
+      { title: "3. Évolution en %", body: "Formule : ((Valeur finale - Valeur initiale) / Valeur initiale) × 100." },
+      { title: "4. Prix après remise", body: "Formule : Prix d'origine × (1 - Remise / 100)." },
+    ],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Le calcul est-il instantané ?", answer: "Oui, la mise à jour se fait à la frappe sans rechargement de page." },
+      { question: "Différence entre % et point de pourcentage ?", answer: "Le % exprime une variation relative, le point exprime la différence arithmétique directe." },
+    ],
+  },
+  es: {
+    introTitle: "Todas las operaciones con porcentajes en una sola pantalla",
+    intro: "Descuentos en compras, tasas de crecimiento económico, proporciones y aumentos calculados en tiempo real.",
+    guideTitle: "Fórmulas clave de porcentaje",
+    guides: [
+      { title: "1. Parte de un total (N% de X)", body: "Fórmula: Total × (N / 100)." },
+      { title: "2. Proporción (X respecto a Y)", body: "Fórmula: (Parte / Total) × 100." },
+      { title: "3. Tasa de cambio (%)", body: "Fórmula: ((Valor final - Valor inicial) / Valor inicial) × 100." },
+      { title: "4. Precio con descuento", body: "Fórmula: Precio original × (1 - Descuento / 100)." },
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Se actualiza al instante?", answer: "Sí, todos los cálculos se realizan en tiempo real mientras escribes." },
+      { question: "¿Diferencia entre % y puntos porcentuales?", answer: "El % es la variación relativa; los puntos representan la diferencia aritmética simple entre dos porcentajes." },
+    ],
+  },
 };
 
-const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
+const m = meta[locale] ?? meta.en;
+const c = content[locale] ?? content.en;
 ---
 
 <BaseLayout title={m.title} description={m.description}>
-  <ToolShell
-    title={m.title}
-    description={m.description}
-    siteUrl={siteConfig.url}
-    locale={locale}
-    slug="percentage-calculator"
-    content={c}
-    applicationCategory="UtilityApplication"
-  >
-    <div class="mx-auto max-w-2xl">
-      <PercentageCalculator client:load locale={locale} />
+  <div class="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-12">
+    <div class="mb-8">
+      <span class="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary mb-3">
+        {m.eyebrow}
+      </span>
+      <h1 class="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+        {m.title}
+      </h1>
+      <p class="text-sm text-muted-foreground mt-2">
+        {m.description}
+      </p>
     </div>
-    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
-  </ToolShell>
+
+    <PercentageCalculator client:load locale={locale} />
+
+    <section class="mt-12 space-y-8 rounded-2xl border border-border bg-card p-6 sm:p-8">
+      <div>
+        <h2 class="text-lg font-bold text-foreground">{c.introTitle}</h2>
+        <p class="mt-2 text-sm text-muted-foreground leading-relaxed">{c.intro}</p>
+      </div>
+
+      <div>
+        <h3 class="text-base font-bold text-foreground">{c.guideTitle}</h3>
+        <div class="mt-4 grid gap-4 sm:grid-cols-2">
+          {c.guides.map((item) => (
+            <div class="rounded-xl border border-border/60 bg-muted/30 p-4">
+              <h4 class="text-sm font-semibold text-foreground">{item.title}</h4>
+              <p class="mt-1 text-xs text-muted-foreground leading-relaxed">{item.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-base font-bold text-foreground">{c.faqTitle}</h3>
+        <dl class="mt-4 space-y-4">
+          {c.faqs.map((faq) => (
+            <div class="rounded-xl border border-border/60 bg-muted/20 p-4">
+              <dt class="text-sm font-semibold text-foreground">{faq.question}</dt>
+              <dd class="mt-1 text-xs text-muted-foreground leading-relaxed">{faq.answer}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </section>
+
+    <div class="mt-8">
+      <ToolsCompanionBanner tool="tools-hub" />
+    </div>
+
+    <div class="mt-10">
+      <RelatedToolLinks
+        locale={locale}
+        slugs={["loan-comparison-calculator", "cagr-calculator", "foreign-exchange-fee-calculator"]}
+        current="percentage-calculator"
+      />
+    </div>
+  </div>
 </BaseLayout>
