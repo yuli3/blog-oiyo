@@ -36,15 +36,12 @@ export interface Shelf {
 }
 
 interface Props {
-  eyebrow: string;
-  title: string;
-  note: string;
   chapterWord: string;
   moreLabel: string;
   shelves: Shelf[];
 }
 
-const { eyebrow, title, note, chapterWord, moreLabel, shelves } = Astro.props;
+const { chapterWord, moreLabel, shelves } = Astro.props;
 
 // 긴 제목은 글자를 줄이고 키를 키워서 세로 한 줄에 들어가게 한다.
 const height = (chapters: number, title: string) =>
@@ -54,14 +51,10 @@ const width = (title: string) => (title.length >= 9 ? 3 : title.length >= 6 ? 2 
 const spine = (shelfIndex: number, bookIndex: number) => ((shelfIndex * 3 + bookIndex) % 8) + 1;
 // 책이 많은 선반은 두 칸을 다 쓴다. 반 칸에 넣으면 대부분이 가로 스크롤 뒤로 숨는다.
 const wide = (shelf: Shelf) => shelf.books.length + (shelf.more > 0 ? 1 : 0) > 10;
-const totalBooks = shelves.reduce((n, s) => n + s.books.length + s.more, 0);
 ---
 
-<section aria-labelledby="sec-bookshelf" class="mb-10 sm:mb-14">
-  <p class="font-mono text-xs font-semibold uppercase tracking-widest text-primary">{eyebrow}</p>
-  <h2 id="sec-bookshelf" class="mt-1 text-2xl font-black tracking-tight text-foreground break-keep sm:text-3xl">{title}</h2>
-
-  <div class="mt-5 rounded-xl border-4 border-shelf-frame bg-shelf-frame">
+<section class="mb-10 sm:mb-14">
+  <div class="rounded-xl border-4 border-shelf-frame bg-shelf-frame">
     <div class="grid gap-x-4 rounded-lg bg-shelf-back px-3 pb-2 pt-4 sm:px-5 lg:grid-cols-2">
       {shelves.map((shelf, shelfIndex) => (
         <div
@@ -149,10 +142,6 @@ const totalBooks = shelves.reduce((n, s) => n + s.books.length + s.more, 0);
           <div class="h-3 rounded-sm border-b-4 border-shelf-frame bg-shelf-plank" aria-hidden="true"></div>
         </div>
       ))}
-      <div class="flex flex-wrap items-baseline justify-between gap-2 border-t border-shelf-ink/15 pt-2 text-xs text-shelf-ink/70 lg:col-span-2">
-        <span class="break-keep">{note}</span>
-        <span class="font-mono tabular-nums">{totalBooks}</span>
-      </div>
     </div>
   </div>
 </section>
