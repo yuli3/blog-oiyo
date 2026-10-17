@@ -344,3 +344,73 @@ export const EMPLOYER_EMPLOYMENT_STABILITY = {
 export function ratePct(rate: number): string {
   return `${Number((rate * 100).toFixed(4))}%`;
 }
+
+// ---------------------------------------------------------------------------
+// 상속세·증여세 2026 (2026-10-17 grokbot: fbfbd518 계산기의 하드코딩 상수를 이곳으로 이관)
+// 세율·증여재산공제·혼인출산공제·일괄/배우자공제·신고세액공제는 api-oiyo src/modules/kr-rates-2026.mjs
+// KR_RATES_2026.inheritanceGift와 같은 값이어야 한다(kr-payroll-2026.test.ts가 api 체크아웃이 있으면 대조).
+// 출처: 상속세 및 증여세법 제19조·제21조·제22조·제26조·제53조·제53조의2·제69조, 시행령 제9조(장례비용).
+// 2024·2025 정부 개정안(최고세율 40%, 자녀공제 5억)은 국회를 통과하지 않아 2026에도 10~50% 5단계다.
+// ---------------------------------------------------------------------------
+
+export const INHERITANCE_GIFT_2026 = {
+  /** [과세표준 상한, 세율, 누진공제] */
+  brackets: [
+    [100_000_000, 0.1, 0],
+    [500_000_000, 0.2, 10_000_000],
+    [1_000_000_000, 0.3, 60_000_000],
+    [3_000_000_000, 0.4, 160_000_000],
+    [Infinity, 0.5, 460_000_000],
+  ] as const,
+  /** 제53조 증여재산공제(10년 합산). 키 = 수증자가 증여자에게 어떤 관계인지. */
+  giftDeductions: {
+    spouse: 600_000_000,
+    child_adult: 50_000_000,
+    child_minor: 20_000_000,
+    parent: 50_000_000,
+    other_relative: 10_000_000,
+  },
+  /** 제53조의2 혼인·출산 증여재산공제(직계존속으로부터, 평생 1억). */
+  marriageBirthDeduction: 100_000_000,
+  inheritanceLumpSum: 500_000_000,
+  spouseInheritanceMin: 500_000_000,
+  spouseInheritanceMax: 3_000_000_000,
+  filingCredit: 0.03,
+  /** 제22조 금융재산상속공제: 2천만 이하 전액, 초과 시 max(2천만, 20%) 한도 2억. (blog 전용) */
+  financialAsset: { fullUpTo: 20_000_000, minDeduction: 20_000_000, rate: 0.2, max: 200_000_000 },
+  /** 시행령 제9조 장례비용: 최소 500만, 한도 1,000만(봉안시설 500만 별도는 미반영). (blog 전용) */
+  funeral: { min: 5_000_000, max: 10_000_000 },
+} as const;
+
+/** 상속·증여세 산출세액(과세표준 × 세율 − 누진공제, 원 미만 버림). */
+export function inheritanceGiftProgressiveTax(taxBase: number): number {
+  const base = Math.max(0, taxBase);
+  if (base === 0) return 0;
+  const [, rate, deduction] = INHERITANCE_GIFT_2026.brackets.find(([upTo]) => base <= upTo)!;
+  return Math.max(0, Math.floor(base * rate - deduction));
+}
+
+/** 금융재산상속공제(제22조). */
+export function financialAssetDeduction(netFinancial: number): number {
+  const f = Math.max(0, netFinancial);
+  const r = INHERITANCE_GIFT_2026.financialAsset;
+  if (f <= r.fullUpTo) return f;
+  return Math.min(r.max, Math.max(r.minDeduction, Math.floor(f * r.rate)));
+}
+
+/** 장례비용 공제(시행령 제9조): 증빙이 없거나 적어도 500만, 많아도 1,000만. */
+export function funeralDeduction(spent: number): number {
+  const r = INHERITANCE_GIFT_2026.funeral;
+  return Math.min(r.max, Math.max(r.min, Math.max(0, spent)));
+}
+
+/** 배우자상속공제(제19조): 실제 상속액 기준 최소 5억~최대 30억(법정상속분 한도는 미반영). */
+export function spouseInheritanceDeduction(spouseInherited: number): number {
+  const r = INHERITANCE_GIFT_2026;
+  return Math.min(r.spouseInheritanceMax, Math.max(r.spouseInheritanceMin, Math.max(0, spouseInherited)));
+}
+
+/** 신고세액공제(제69조) 3%, 원 미만 버림. */
+export function filingCredit(calculatedTax: number): number {
+  return Math.floor(Math.max(0, calculatedTax) * INHERITANCE_GIFT_2026.filingCredit);
+}
