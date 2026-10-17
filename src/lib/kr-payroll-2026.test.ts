@@ -143,3 +143,53 @@ test("pension base limits switch on 2026-07-01", () => {
   assert.deepEqual(pensionBaseLimits("2026-03-01"), { min: 400_000, max: 6_370_000 });
   assert.deepEqual(pensionBaseLimits("2026-10-17"), { min: 410_000, max: 6_590_000 });
 });
+
+import { existsSync } from "node:fs";
+import { resolve } from "node:path";
+import { pathToFileURL } from "node:url";
+import {
+  INHERITANCE_GIFT_2026,
+  filingCredit,
+  financialAssetDeduction,
+  funeralDeduction,
+  inheritanceGiftProgressiveTax,
+  spouseInheritanceDeduction,
+} from "./kr-payroll-2026.ts";
+
+test("inheritance/gift brackets follow 상증법 제26조 (10~50%)", () => {
+  assert.equal(inheritanceGiftProgressiveTax(100_000_000), 10_000_000);
+  assert.equal(inheritanceGiftProgressiveTax(150_000_000), 20_000_000);
+  assert.equal(inheritanceGiftProgressiveTax(950_000_000), 225_000_000);
+  assert.equal(inheritanceGiftProgressiveTax(291_430_000), 48_286_000); // wiki 3장 사례
+  assert.equal(inheritanceGiftProgressiveTax(5_000_000_000), 2_040_000_000);
+  assert.equal(filingCredit(48_286_000), 1_448_580);
+});
+
+test("inheritance deductions: 금융재산·장례비·배우자 한도", () => {
+  assert.equal(financialAssetDeduction(15_000_000), 15_000_000);
+  assert.equal(financialAssetDeduction(50_000_000), 20_000_000);
+  assert.equal(financialAssetDeduction(300_000_000), 60_000_000);
+  assert.equal(financialAssetDeduction(2_000_000_000), 200_000_000);
+  assert.equal(funeralDeduction(0), 5_000_000);
+  assert.equal(funeralDeduction(30_000_000), 10_000_000);
+  assert.equal(spouseInheritanceDeduction(100_000_000), 500_000_000);
+  assert.equal(spouseInheritanceDeduction(5_000_000_000), 3_000_000_000);
+});
+
+test("inheritance/gift constants match the api SSOT when an api checkout exists", async (t) => {
+  const candidates = [process.env.OIYO_API_DIR, resolve(import.meta.dirname, "../../../api"), resolve(import.meta.dirname, "../../../../api")].filter(Boolean) as string[];
+  const file = candidates.map((d) => resolve(d, "src/modules/kr-rates-2026.mjs")).find((f) => existsSync(f));
+  if (!file) {
+    t.skip("api checkout not found; set OIYO_API_DIR to run");
+    return;
+  }
+  const { KR_RATES_2026 } = await import(pathToFileURL(file).href);
+  const api = KR_RATES_2026.inheritanceGift;
+  assert.deepEqual(INHERITANCE_GIFT_2026.brackets.map((b) => [...b]), api.brackets.map((b: number[]) => [...b]));
+  for (const k of ["spouse", "child_adult", "child_minor", "parent", "other_relative"] as const) {
+    assert.equal(INHERITANCE_GIFT_2026.giftDeductions[k], api.giftDeductions[k], k);
+  }
+  for (const k of ["marriageBirthDeduction", "inheritanceLumpSum", "spouseInheritanceMin", "spouseInheritanceMax", "filingCredit"] as const) {
+    assert.equal(INHERITANCE_GIFT_2026[k], api[k], k);
+  }
+});

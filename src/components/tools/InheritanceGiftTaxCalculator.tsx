@@ -1,21 +1,16 @@
 import React, { useState, useMemo } from 'react';
 
-// Statutory Inheritance & Gift Tax Rates in South Korea
-// 소득세법 및 상속세및증여세법 제26조 (동일 5단계 초과누진세율)
-function calculateBaseTax(taxBase: number): number {
-  if (taxBase <= 0) return 0;
-  if (taxBase <= 100000000) {
-    return Math.round(taxBase * 0.1);
-  } else if (taxBase <= 500000000) {
-    return Math.round(taxBase * 0.2 - 10000000);
-  } else if (taxBase <= 1000000000) {
-    return Math.round(taxBase * 0.3 - 60000000);
-  } else if (taxBase <= 3000000000) {
-    return Math.round(taxBase * 0.4 - 160000000);
-  } else {
-    return Math.round(taxBase * 0.5 - 460000000);
-  }
-}
+import {
+  INHERITANCE_GIFT_2026 as IG,
+  filingCredit,
+  financialAssetDeduction,
+  funeralDeduction,
+  inheritanceGiftProgressiveTax,
+  spouseInheritanceDeduction,
+} from '../../lib/kr-payroll-2026';
+
+// 세율·공제 숫자는 src/lib/kr-payroll-2026.ts(INHERITANCE_GIFT_2026)에서만 읽어요. api kr-rates-2026과 테스트로 대조해요.
+const man = (won: number) => (won >= 100_000_000 ? `${won / 100_000_000}억` : `${(won / 10_000).toLocaleString()}만`);
 
 export default function InheritanceGiftTaxCalculator() {
   const [mode, setMode] = useState<'inheritance' | 'gift'>('inheritance');
@@ -36,37 +31,23 @@ export default function InheritanceGiftTaxCalculator() {
   const inheritanceCalc = useMemo(() => {
     const total = Math.max(0, estateTotal);
     const debts = Math.max(0, estateDebts);
-    const funeral = Math.min(10000000, Math.max(5000000, funeralExpense)); // 최소 500만 ~ 최대 1,000만
+    const funeral = funeralDeduction(funeralExpense);
 
     const netEstate = Math.max(0, total - debts - funeral);
 
-    // 1. 일괄공제 (5억원) vs 기초공제(2억원)+인적공제
-    // 실무상 대부분 일괄공제 5억원 적용 (단, 배우자 단독 상속 시에는 일괄공제 배제되고 기초공제 2억만 적용)
-    const lumpSumDeduction = hasSpouse ? 500000000 : 500000000;
+    // 일괄공제 5억(제21조). 배우자 단독 상속이면 일괄공제를 못 받는데, 이 계산기는 자녀 등과 함께 상속하는 경우를 가정해요.
+    const lumpSumDeduction = IG.inheritanceLumpSum;
 
-    // 2. 배우자 상속공제 (법정 최소 5억원 ~ 최대 30억원)
-    let spouseDeduction = 0;
-    if (hasSpouse) {
-      // 배우자가 실제로 상속받은 금액 기준 (최소 5억원 보장)
-      spouseDeduction = Math.min(3000000000, Math.max(500000000, spouseInheritedAmount));
-    }
+    // 배우자상속공제(제19조) 최소 5억~최대 30억. 법정상속분 한도는 반영하지 않아요.
+    const spouseDeduction = hasSpouse ? spouseInheritanceDeduction(spouseInheritedAmount) : 0;
 
-    // 3. 금융재산 상속공제
-    // 2천만원 이하: 전액, 1억원 이하: 2천만원, 1억원 초과: 20% (한도 2억원)
-    let finDeduction = 0;
-    const fin = Math.max(0, financialAssets);
-    if (fin <= 20000000) {
-      finDeduction = fin;
-    } else if (fin <= 100000000) {
-      finDeduction = 20000000;
-    } else {
-      finDeduction = Math.min(200000000, Math.round(fin * 0.2));
-    }
+    // 금융재산상속공제(제22조)
+    const finDeduction = financialAssetDeduction(financialAssets);
 
     const totalDeductions = lumpSumDeduction + spouseDeduction + finDeduction;
     const taxBase = Math.max(0, netEstate - totalDeductions);
-    const rawTax = calculateBaseTax(taxBase);
-    const selfReportDiscount = Math.round(rawTax * 0.03); // 자진신고세액공제 3%
+    const rawTax = inheritanceGiftProgressiveTax(taxBase);
+    const selfReportDiscount = filingCredit(rawTax); // 신고세액공제 3%(제69조)
     const finalTax = Math.max(0, rawTax - selfReportDiscount);
     const effectiveRate = netEstate > 0 ? (finalTax / netEstate) * 100 : 0;
 
@@ -88,32 +69,20 @@ export default function InheritanceGiftTaxCalculator() {
   const giftCalc = useMemo(() => {
     const grossGift = Math.max(0, giftAmount);
 
-    let deduction = 50000000;
-    let label = '직계존속(성인 자녀)';
-
-    if (recipientRelation === 'spouse') {
-      deduction = 600000000; // 배우자 6억
-      label = '배우자 (10년 누적 6억)';
-    } else if (recipientRelation === 'child_adult') {
-      deduction = 50000000; // 성인 직계비속 5천만
-      label = '직계비속 성인 (10년 누적 5,000만)';
-    } else if (recipientRelation === 'child_minor') {
-      deduction = 20000000; // 미성년자 직계비속 2천만
-      label = '직계비속 미성년 (10년 누적 2,000만)';
-    } else if (recipientRelation === 'marriage_child') {
-      deduction = 150000000; // 혼인·출산 특별공제 1억 + 기본 5천만 = 1.5억
-      label = '혼인·출산 특별공제 (기본 5천만 + 특별 1억 = 1.5억)';
-    } else if (recipientRelation === 'parent') {
-      deduction = 50000000; // 직계존속 5천만
-      label = '직계존속 (부모님 수증 5,000만)';
-    } else if (recipientRelation === 'relative') {
-      deduction = 10000000; // 기타 친족 1천만
-      label = '기타 친족 (6촌이내 혈족·4촌이내 인척 1,000만)';
-    }
+    const D = IG.giftDeductions;
+    const table = {
+      marriage_child: [D.child_adult + IG.marriageBirthDeduction, `혼인·출산 공제 (기본 ${man(D.child_adult)} + ${man(IG.marriageBirthDeduction)})`],
+      child_adult: [D.child_adult, `직계존속에게서 받는 성년 자녀 (10년 합산 ${man(D.child_adult)})`],
+      child_minor: [D.child_minor, `직계존속에게서 받는 미성년 자녀 (10년 합산 ${man(D.child_minor)})`],
+      spouse: [D.spouse, `배우자 (10년 합산 ${man(D.spouse)})`],
+      parent: [D.parent, `직계비속에게서 받는 부모 (${man(D.parent)})`],
+      relative: [D.other_relative, `기타 친족 (6촌 이내 혈족·4촌 이내 인척 ${man(D.other_relative)})`],
+    } as const;
+    const [deduction, label] = table[recipientRelation];
 
     const taxBase = Math.max(0, grossGift - deduction);
-    const rawTax = calculateBaseTax(taxBase);
-    const selfReportDiscount = Math.round(rawTax * 0.03); // 자진신고공제 3%
+    const rawTax = inheritanceGiftProgressiveTax(taxBase);
+    const selfReportDiscount = filingCredit(rawTax); // 신고세액공제 3%
     const finalTax = Math.max(0, rawTax - selfReportDiscount);
     const effectiveRate = grossGift > 0 ? (finalTax / grossGift) * 100 : 0;
 
@@ -200,13 +169,13 @@ export default function InheritanceGiftTaxCalculator() {
                   hasSpouse ? 'bg-primary text-primary-foreground border-primary' : 'bg-background text-muted-foreground border-border'
                 }`}
               >
-                {hasSpouse ? '배우자 있음 (최소 5억 공제)' : '배우자 없음'}
+                {hasSpouse ? `배우자 있음 (최소 ${man(IG.spouseInheritanceMin)} 공제)` : '배우자 없음'}
               </button>
             </div>
 
             {hasSpouse && (
               <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1">배우자 실제 상속재산가액 (최소 5억 ~ 최대 30억 한도)</label>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">{`배우자 실제 상속재산가액 (최소 ${man(IG.spouseInheritanceMin)} ~ 최대 ${man(IG.spouseInheritanceMax)} 한도)`}</label>
                 <input
                   type="number"
                   step="10000000"
@@ -228,7 +197,7 @@ export default function InheritanceGiftTaxCalculator() {
                 onChange={(e) => setFinancialAssets(Number(e.target.value) || 0)}
                 className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm font-semibold text-foreground focus:border-primary focus:outline-hidden"
               />
-              <p className="text-xs text-muted-foreground mt-1">* 2천만~1억: 2천만 원, 1억 초과 시 20%(최대 2억 한도) 공제</p>
+              <p className="text-xs text-muted-foreground mt-1">{`* ${man(IG.financialAsset.fullUpTo)} 원 이하는 전액, 넘으면 ${man(IG.financialAsset.minDeduction)} 원과 ${IG.financialAsset.rate * 100}% 중 큰 금액(최대 ${man(IG.financialAsset.max)} 원)을 공제해요`}</p>
             </div>
 
             <div>
@@ -240,7 +209,7 @@ export default function InheritanceGiftTaxCalculator() {
                 onChange={(e) => setFuneralExpense(Number(e.target.value) || 0)}
                 className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm font-semibold text-foreground focus:border-primary focus:outline-hidden"
               />
-              <p className="text-xs text-muted-foreground mt-1">* 증빙 없어도 최소 500만 원, 최대 1,000만 원 한도</p>
+              <p className="text-xs text-muted-foreground mt-1">{`* 증빙이 없어도 최소 ${man(IG.funeral.min)} 원, 최대 ${man(IG.funeral.max)} 원까지 공제해요`}</p>
             </div>
           </div>
 
@@ -289,12 +258,12 @@ export default function InheritanceGiftTaxCalculator() {
               onChange={(e) => setRecipientRelation(e.target.value as any)}
               className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm font-semibold text-foreground focus:border-primary focus:outline-hidden"
             >
-              <option value="marriage_child">💍 혼인·출산 특별공제 성인자녀 (1.5억 공제)</option>
-              <option value="child_adult">직계비속 성인자녀 (5,000만 원 공제)</option>
-              <option value="child_minor">직계비속 미성년자녀 (2,000만 원 공제)</option>
-              <option value="spouse">배우자 (6억 원 공제)</option>
-              <option value="parent">직계존속 부모님 (5,000만 원 공제)</option>
-              <option value="relative">기타 친족 6촌이내/4촌인척 (1,000만 원 공제)</option>
+              <option value="marriage_child">{`혼인·출산 공제 성년 자녀 (${man(IG.giftDeductions.child_adult + IG.marriageBirthDeduction)} 공제)`}</option>
+              <option value="child_adult">{`성년 자녀 (${man(IG.giftDeductions.child_adult)} 원 공제)`}</option>
+              <option value="child_minor">{`미성년 자녀 (${man(IG.giftDeductions.child_minor)} 원 공제)`}</option>
+              <option value="spouse">{`배우자 (${man(IG.giftDeductions.spouse)} 원 공제)`}</option>
+              <option value="parent">{`자녀에게서 받는 부모 (${man(IG.giftDeductions.parent)} 원 공제)`}</option>
+              <option value="relative">{`기타 친족 6촌 이내 혈족·4촌 이내 인척 (${man(IG.giftDeductions.other_relative)} 원 공제)`}</option>
             </select>
           </div>
 
@@ -311,7 +280,7 @@ export default function InheritanceGiftTaxCalculator() {
               <span className="absolute right-4 top-2.5 text-xs text-muted-foreground">원</span>
             </div>
             <p className="text-xs text-muted-foreground mt-1">
-              * 동일인(직계존속은 배우자 포함)으로부터 과거 10년 이내에 증여받은 가액을 합산해야 합니다.
+              * 같은 사람(직계존속이면 그 배우자 포함)에게서 10년 안에 받은 증여는 합산해야 해요.
             </p>
           </div>
 
