@@ -1,0 +1,50 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import LegalDoc from "../../components/LegalDoc.astro";
+import { getTranslations, locales } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props;
+const t = await getTranslations(locale);
+---
+
+<BaseLayout title={t.legal.license.title} description={t.legal.license.description}>
+  <section class="py-24 md:py-32 overflow-hidden">
+    <div class="container px-4">
+      <div class="max-w-3xl mx-auto">
+        <header class="mb-8 sm:mb-16 animate-fade-up">
+          <div
+            class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest mb-5 sm:mb-8 border border-primary/20"
+          >
+            {t.legal.badge}
+          </div>
+          <h1
+            class="text-5xl md:text-6xl font-extrabold tracking-tighter mb-6 font-heading text-primary leading-tight"
+          >
+            {t.legal.license.title}
+          </h1>
+          <p class="text-xl text-muted-foreground leading-relaxed">
+            {t.legal.license.description}
+          </p>
+          <p class="text-xs font-bold uppercase tracking-widest text-muted-foreground/50 mt-4">
+            {t.legal.lastUpdated}: {t.legal.license.lastUpdatedDate}
+          </p>
+        </header>
+
+        <LegalDoc
+          doc="license"
+          sections={t.legal.license.sections}
+          locale={locale}
+          privacyLabel={t.legal.privacy.title}
+          seeLabel={t.legal.seeLabel}
+        />
+      </div>
+    </div>
+  </section>
+</BaseLayout>

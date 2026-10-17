@@ -38,10 +38,25 @@ const PRIVACY_LINKS: LinkTable = {
 };
 
 const TERMS_LINKS: LinkTable = {
+  // §3 Intellectual Property — cross-link to the license page (2026-10-17 세운 결정)
+  2: [{ label: "@@LICENSE@@", href: "@@LICENSE_HREF@@" }],
   // §9 Privacy — cross-link to the privacy page (locale-substituted)
   8: [{ label: "@@PRIVACY@@", href: "@@PRIVACY_HREF@@" }],
   // §12 Contact
   11: [{ label: CONTACT_EMAIL, href: `mailto:${CONTACT_EMAIL}` }],
+};
+
+// License page (2026-10-17 세운 승인: company-brain/thinktank/site-license-2026-10-17.md).
+// One canonical page for all OIYO sites; their footers link here.
+const LICENSE_LINKS: LinkTable = {
+  // §2 Text — CC BY-NC 4.0
+  1: [{ label: "CC BY-NC 4.0", href: "https://creativecommons.org/licenses/by-nc/4.0/" }],
+  // §3 Own data — CC BY 4.0
+  2: [{ label: "CC BY 4.0", href: "https://creativecommons.org/licenses/by/4.0/" }],
+  // §4 Trademarks excluded — CC BY 4.0 legal code §2(b)(2)
+  3: [{ label: "CC BY 4.0 Legal Code", href: "https://creativecommons.org/licenses/by/4.0/legalcode" }],
+  // §9 Contact
+  8: [{ label: CONTACT_EMAIL, href: `mailto:${CONTACT_EMAIL}` }],
 };
 
 /**
@@ -50,17 +65,28 @@ const TERMS_LINKS: LinkTable = {
  * string for the current locale (passed from the page so it stays localized).
  */
 export function legalLinks(
-  doc: "privacy" | "terms",
+  doc: "privacy" | "terms" | "license",
   sectionIndex: number,
   locale: Locale,
   privacyLabel: string,
+  licenseLabel = "License",
 ): LegalLink[] {
-  const table = doc === "privacy" ? PRIVACY_LINKS : TERMS_LINKS;
+  const table =
+    doc === "privacy" ? PRIVACY_LINKS : doc === "license" ? LICENSE_LINKS : TERMS_LINKS;
   const entries = table[sectionIndex];
   if (!entries) return [];
   return entries.map((link) => ({
-    label: link.label === "@@PRIVACY@@" ? privacyLabel : link.label,
+    label:
+      link.label === "@@PRIVACY@@"
+        ? privacyLabel
+        : link.label === "@@LICENSE@@"
+          ? licenseLabel
+          : link.label,
     href:
-      link.href === "@@PRIVACY_HREF@@" ? `/${locale}/privacy/` : link.href,
+      link.href === "@@PRIVACY_HREF@@"
+        ? `/${locale}/privacy/`
+        : link.href === "@@LICENSE_HREF@@"
+          ? `/${locale}/license/`
+          : link.href,
   }));
 }

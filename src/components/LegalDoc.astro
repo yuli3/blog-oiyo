@@ -9,22 +9,24 @@ export interface LegalSection {
 }
 
 interface Props {
-  doc: "privacy" | "terms";
+  doc: "privacy" | "terms" | "license";
   sections: LegalSection[];
   locale: Locale;
   /** Localized "Privacy Policy" label, for the terms → privacy cross-link. */
   privacyLabel: string;
   /** Localized "See:" lead-in for external link lines. */
   seeLabel: string;
+  /** Localized "License" label, for the terms → license cross-link. */
+  licenseLabel?: string;
 }
 
-const { doc, sections, locale, privacyLabel, seeLabel } = Astro.props;
+const { doc, sections, locale, privacyLabel, seeLabel, licenseLabel } = Astro.props;
 ---
 
 <div class="prose prose-stone lg:prose-lg max-w-none animate-fade-up delay-200">
   {
     sections.map((section, index) => {
-      const links = legalLinks(doc, index, locale, privacyLabel);
+      const links = legalLinks(doc, index, locale, privacyLabel, licenseLabel);
       return (
         <section>
           <h2>{section.heading}</h2>
