@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { GameContainer } from '../ui/game/GamePrimitives';
+import { RATES, ratePct } from '../../lib/kr-payroll-2026';
+import { computeSalaryBreakdownWon } from '../../lib/finance/salary-calculator';
 
 const SalaryCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
     const t = {
@@ -12,14 +14,14 @@ const SalaryCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' })
             monthlyNet: "월 실수령액",
             annualNet: "연 실수령액",
             deductions: "월 공제 내역",
-            nationalPension: "국민연금 (4.5%)",
-            healthInsurance: "건강보험 (3.545%)",
-            longTermCare: "장기요양 (0.4591%)",
-            employmentInsurance: "고용보험 (0.9%)",
-            incomeTax: "근로소득세",
+            nationalPension: `국민연금 (${ratePct(RATES.pensionEmployee)})`,
+            healthInsurance: `건강보험 (${ratePct(RATES.healthEmployee)})`,
+            longTermCare: `장기요양 (건강보험료 × ${ratePct(RATES.longTermCareOfHealth)})`,
+            employmentInsurance: `고용보험 (${ratePct(RATES.employmentEmployee)})`,
+            incomeTax: "근로소득세 (추정)",
             localTax: "지방소득세",
             totalDeduction: "총 공제액",
-            note: "* 근로소득세는 간이세액표 기준 추정치예요. 실제 납부액은 연말정산 후 확정돼요.",
+            note: "* 2026년 요율 기준이에요. 근로소득세는 간이세액표가 아니라 연간 세액(근로소득공제·인적공제·보험료공제·근로소득세액공제)을 12로 나눈 추정치예요. 실제 납부액은 연말정산 후 확정돼요.",
         },
         en: {
             title: "Salary Net Pay Calculator",
@@ -30,14 +32,14 @@ const SalaryCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' })
             monthlyNet: "Monthly Net Pay",
             annualNet: "Annual Net Pay",
             deductions: "Monthly Deductions",
-            nationalPension: "National Pension (4.5%)",
-            healthInsurance: "Health Insurance (3.545%)",
-            longTermCare: "Long-term Care (0.4591%)",
-            employmentInsurance: "Employment Insurance (0.9%)",
-            incomeTax: "Income Tax",
+            nationalPension: `National Pension (${ratePct(RATES.pensionEmployee)})`,
+            healthInsurance: `Health Insurance (${ratePct(RATES.healthEmployee)})`,
+            longTermCare: `Long-term Care (${ratePct(RATES.longTermCareOfHealth)} of health)`,
+            employmentInsurance: `Employment Insurance (${ratePct(RATES.employmentEmployee)})`,
+            incomeTax: "Income Tax (est.)",
             localTax: "Local Income Tax",
             totalDeduction: "Total Deductions",
-            note: "* Income tax is estimated based on simplified withholding table. Actual amount is finalized after year-end settlement.",
+            note: "* 2026 rates. Income tax is an annual estimate (earned income deduction, personal deduction, insurance deduction, earned income tax credit) divided by 12, not the withholding table. The actual amount is finalized at year-end settlement.",
         },
     }[locale === 'ko' ? 'ko' : 'en'];
 
@@ -45,30 +47,17 @@ const SalaryCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' })
 
     const monthlyGross = annualSalary / 12;
 
-    // 4대보험 (employee portion)
-    const nationalPension = Math.floor(monthlyGross * 0.045);
-    const healthInsurance = Math.floor(monthlyGross * 0.03545);
-    const longTermCare = Math.floor(healthInsurance * 0.1295); // 12.95% of health insurance premium
-    const employmentInsurance = Math.floor(monthlyGross * 0.009);
+    // 4대보험·근로소득세는 kr-payroll-2026.ts(SSOT) 기반 finance/salary-calculator.ts가 계산한다.
+    const r = computeSalaryBreakdownWon(Math.round(monthlyGross), 1, 0);
+    const nationalPension = r.pension;
+    const healthInsurance = r.health;
+    const longTermCare = r.ltc;
+    const employmentInsurance = r.employment;
+    const monthlyIncomeTax = r.incomeTax;
+    const monthlyLocalTax = r.localTax;
 
-    // Income tax — simplified progressive bracket on annual basis
-    const calcIncomeTax = (annual: number): number => {
-        // Simplified: deduct 4대보험 annual from gross first
-        const annualInsurance = (nationalPension + healthInsurance + longTermCare + employmentInsurance) * 12;
-        const taxableIncome = Math.max(0, annual - annualInsurance - 1500000); // 근로소득공제 simplified
-
-        if (taxableIncome <= 12000000) return Math.floor((taxableIncome * 0.06) / 12);
-        if (taxableIncome <= 46000000) return Math.floor(((720000 + (taxableIncome - 12000000) * 0.15)) / 12);
-        if (taxableIncome <= 88000000) return Math.floor(((5820000 + (taxableIncome - 46000000) * 0.24)) / 12);
-        if (taxableIncome <= 150000000) return Math.floor(((15900000 + (taxableIncome - 88000000) * 0.35)) / 12);
-        return Math.floor(((37600000 + (taxableIncome - 150000000) * 0.38)) / 12);
-    };
-
-    const monthlyIncomeTax = calcIncomeTax(annualSalary);
-    const monthlyLocalTax = Math.floor(monthlyIncomeTax * 0.1);
-
-    const totalMonthlyDeduction = nationalPension + healthInsurance + longTermCare + employmentInsurance + monthlyIncomeTax + monthlyLocalTax;
-    const monthlyNet = Math.floor(monthlyGross - totalMonthlyDeduction);
+    const totalMonthlyDeduction = r.totalDed;
+    const monthlyNet = r.net;
     const annualNet = monthlyNet * 12;
 
     const fmt = (n: number) => n.toLocaleString('ko-KR');

@@ -2,16 +2,14 @@
 
 import React, { useState } from 'react';
 
-// 2024~2025 rates (employer portion)
-const RATES = {
-  pension: 0.045,        // 국민연금 4.5%
-  health: 0.03545,       // 건강보험 3.545%
-  longTermCareRatio: 0.1295, // 장기요양 (건보의 12.95%)
-  employment: 0.009,     // 고용보험 0.9%
-  workComp: 0.015,       // 산재보험 평균 1.5%
-  pensionMaxBase: 6170000,
-  pensionMinBase: 370000,
-};
+import { EMPLOYER_EMPLOYMENT_STABILITY, PAYROLL_TAX_AS_OF, RATES, ratePct } from '../../lib/kr-payroll-2026';
+import { computeEmployerInsurance } from '../../lib/finance/salary-calculator';
+
+// 사업주 부담분. 연금·건강·장기요양·고용 요율은 kr-payroll-2026.ts(SSOT)를 따른다.
+// 산재보험은 업종마다 달라 화면 가정값으로만 둔다.
+const WORK_COMP_ASSUMED = 0.015;
+const STABILITY = EMPLOYER_EMPLOYMENT_STABILITY.under150;
+const EMPLOYMENT_LABEL = ratePct(RATES.employmentEmployee + STABILITY);
 
 const ko = {
   title: '인건비 계산기 (4대 보험 + 퇴직금)',
@@ -26,15 +24,15 @@ const ko = {
   resultTitle: '월 실부담금 분석',
   salaryPaid: '① 월 급여 (지급액)',
   insurance4: '4대보험 사부담금 합계',
-  pension: '국민연금 (4.5%)',
-  health: '건강보험 (3.545%)',
-  longTerm: '장기요양 (건보의 12.95%)',
-  employment: '고용보험 (0.9%)',
-  workComp: '산재보험 (1.5% 가정)',
+  pension: `국민연금 (${ratePct(RATES.pensionEmployee)})`,
+  health: `건강보험 (${ratePct(RATES.healthEmployee)})`,
+  longTerm: `장기요양 (건보의 ${ratePct(RATES.longTermCareOfHealth)})`,
+  employment: `고용보험 (${EMPLOYMENT_LABEL}, 150인 미만)`,
+  workComp: `산재보험 (${ratePct(WORK_COMP_ASSUMED)} 가정)`,
   severance: '② 퇴직금 적립액 (예상)',
   totalCost: '직원 1명 월 실제 비용',
   overhead: (pct: string) => `월급 대비 약 ${pct}% 추가 비용`,
-  disclaimer: '* 2024~2025년 기준 추정치예요. 산재보험은 업종마다 다르며, 실제 비용은 달라질 수 있어요.',
+  disclaimer: `* ${PAYROLL_TAX_AS_OF} 기준 2026년 요율 추정치예요. 국민연금은 기준소득월액 상·하한을 적용하고, 고용보험은 실업급여 0.9%에 150인 미만 고용안정·직업능력개발 0.25%를 더했어요. 산재보험은 업종마다 달라 실제 비용과 다를 수 있어요.`,
 };
 
 const en = {
@@ -50,15 +48,15 @@ const en = {
   resultTitle: 'Monthly Employer Cost Breakdown',
   salaryPaid: '① Salary Paid',
   insurance4: 'Total 4 Insurances (employer)',
-  pension: 'NPS (4.5%)',
-  health: 'Health Ins. (3.545%)',
-  longTerm: 'LTC (12.95% of Health)',
-  employment: 'Employment Ins. (0.9%)',
-  workComp: "Worker's Comp (1.5% est.)",
+  pension: `NPS (${ratePct(RATES.pensionEmployee)})`,
+  health: `Health Ins. (${ratePct(RATES.healthEmployee)})`,
+  longTerm: `LTC (${ratePct(RATES.longTermCareOfHealth)} of Health)`,
+  employment: `Employment Ins. (${EMPLOYMENT_LABEL}, <150 staff)`,
+  workComp: `Worker's Comp (${ratePct(WORK_COMP_ASSUMED)} est.)`,
   severance: '② Severance Accrual (est.)',
   totalCost: 'Total Monthly Cost per Employee',
   overhead: (pct: string) => `~${pct}% extra over salary`,
-  disclaimer: '* Estimated based on 2024~2025 rates. Industrial accident rates vary by sector.',
+  disclaimer: `* Estimate using 2026 rates as of ${PAYROLL_TAX_AS_OF}. Pension uses the contribution base cap/floor; employment insurance adds the 0.25% job-security levy for employers under 150 staff. Industrial accident rates vary by sector.`,
 };
 
 interface LaborResult {
@@ -88,14 +86,13 @@ const LaborCostCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko'
     if (!monthlySalary || monthlySalary <= 0) return;
 
     const taxableIncome = Math.max(0, monthlySalary - foodAllowance);
-    const pensionBase = Math.min(RATES.pensionMaxBase, Math.max(RATES.pensionMinBase, taxableIncome));
-
-    const p = Math.floor(pensionBase * RATES.pension);
-    const h = Math.floor(taxableIncome * RATES.health);
-    const l = Math.floor(h * RATES.longTermCareRatio);
-    const e = Math.floor(taxableIncome * RATES.employment);
-    const w = Math.floor(taxableIncome * RATES.workComp);
-    const insuranceTotal = p + h + l + e + w;
+    const ins = computeEmployerInsurance(taxableIncome, { stabilityRate: STABILITY, workCompRate: WORK_COMP_ASSUMED });
+    const p = ins.pension;
+    const h = ins.health;
+    const l = ins.ltc;
+    const e = ins.employment;
+    const w = ins.workComp;
+    const insuranceTotal = ins.total;
     const s = includeSeverance ? Math.floor(monthlySalary / 12) : 0;
 
     setResult({

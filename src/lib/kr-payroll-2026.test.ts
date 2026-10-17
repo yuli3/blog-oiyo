@@ -107,3 +107,39 @@ test("leaver settlement reproduces the office note and runs on 2026 rates", () =
 });
 
 const floor10 = (won: number) => Math.floor(Math.round(won * 1e6) / 1e7) * 10;
+
+import { basicIncomeTax, earnedIncomeDeduction, earnedIncomeTaxCredit, pensionBaseLimits } from "./kr-payroll-2026.ts";
+
+test("basic income tax uses all eight 2026 brackets including 42% and 45%", () => {
+  assert.equal(basicIncomeTax(0), 0);
+  assert.equal(basicIncomeTax(14_000_000), 840_000);
+  assert.equal(basicIncomeTax(20_000_000), 1_740_000); // 국세청 안내 예시
+  assert.equal(basicIncomeTax(50_000_000), 6_240_000);
+  assert.equal(basicIncomeTax(88_000_000), 15_360_000);
+  assert.equal(basicIncomeTax(150_000_000), 37_060_000);
+  assert.equal(basicIncomeTax(300_000_000), 94_060_000);
+  assert.equal(basicIncomeTax(500_000_000), 174_060_000);
+  assert.equal(basicIncomeTax(600_000_000), 216_060_000); // 42% 구간
+  assert.equal(basicIncomeTax(1_000_000_000), 384_060_000);
+  assert.equal(basicIncomeTax(1_200_000_000), 474_060_000); // 45% 구간
+});
+
+test("earned income deduction follows the statutory table and the 20M cap", () => {
+  assert.equal(earnedIncomeDeduction(5_000_000), 3_500_000);
+  assert.equal(earnedIncomeDeduction(15_000_000), 7_500_000);
+  assert.equal(earnedIncomeDeduction(50_000_000), 12_250_000);
+  assert.equal(earnedIncomeDeduction(100_000_000), 14_750_000);
+  assert.equal(earnedIncomeDeduction(400_000_000), 20_000_000);
+});
+
+test("earned income tax credit applies the 55%/30% rate and the pay-based limit", () => {
+  assert.equal(earnedIncomeTaxCredit(1_000_000, 30_000_000), 550_000);
+  assert.equal(earnedIncomeTaxCredit(3_000_000, 40_000_000), 684_000);
+  assert.equal(earnedIncomeTaxCredit(3_000_000, 60_000_000), 660_000);
+  assert.equal(earnedIncomeTaxCredit(20_000_000, 200_000_000), 200_000);
+});
+
+test("pension base limits switch on 2026-07-01", () => {
+  assert.deepEqual(pensionBaseLimits("2026-03-01"), { min: 400_000, max: 6_370_000 });
+  assert.deepEqual(pensionBaseLimits("2026-10-17"), { min: 410_000, max: 6_590_000 });
+});

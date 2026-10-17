@@ -1,5 +1,10 @@
 import React, { useState, useMemo } from 'react';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
+import { RATES, pensionBaseLimits, ratePct } from '../../lib/kr-payroll-2026';
+import { computePensionContribution } from '../../lib/finance/salary-calculator';
+
+/** 국민연금 근로자 부담 월 상한(기준소득월액 상한 × 근로자 요율, 10원 미만 절사). */
+const PENSION_MONTHLY_MAX = computePensionContribution(pensionBaseLimits().max);
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
@@ -223,7 +228,7 @@ export default function CashFlowManager({ locale = 'ko' }: { locale?: string }) 
   const setExp = (key: string, v: number) => setExpenses(p => ({ ...p, [key]: v }));
 
   const totalIncome = useMemo(() => Object.values(income).reduce((a, b) => a + b, 0), [income]);
-  const nationalPension = useMemo(() => Math.min(totalIncome * 0.045, 265_500), [totalIncome]);
+  const nationalPension = useMemo(() => computePensionContribution(totalIncome), [totalIncome]);
 
   const sectionTotals = useMemo(() => {
     const t: Record<string, number> = {};
@@ -373,7 +378,7 @@ export default function CashFlowManager({ locale = 'ko' }: { locale?: string }) 
             <span className="text-base shrink-0">🏛️</span>
             <div className="flex-1 min-w-0">
               <p className="text-xs font-bold text-foreground">국민연금 (자동계산)</p>
-              <p className="text-[10px] text-muted-foreground">소득의 4.5%, 월 최대 265,500원</p>
+              <p className="text-[10px] text-muted-foreground">소득의 {ratePct(RATES.pensionEmployee)}, 월 최대 {fmt(PENSION_MONTHLY_MAX)} (기준소득월액 상한 {fmt(pensionBaseLimits().max)})</p>
             </div>
             <span className="text-sm font-black text-success shrink-0">{fmt(nationalPension)}</span>
           </div>

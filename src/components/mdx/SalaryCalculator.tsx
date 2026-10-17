@@ -1,38 +1,9 @@
 import React, { useState, useMemo } from 'react';
+import { PAYROLL_TAX_AS_OF, RATES, ratePct } from '../../lib/kr-payroll-2026';
+import { computeSalaryBreakdownWon } from '../../lib/finance/salary-calculator';
 
 function fmt(n: number) {
   return Math.round(n).toLocaleString('ko-KR');
-}
-
-// 근로소득세 간이세액표 기반 산출 (2024년 기준)
-// 단순 계산: 연간 세금 → 월 세금
-// 소득세 산출은 근로소득공제 + 소득세 구간 적용
-const INCOME_TAX_BRACKETS = [
-  { limit: 14_000_000, rate: 0.06, prev: 0, prevTax: 0 },
-  { limit: 50_000_000, rate: 0.15, prev: 14_000_000, prevTax: 840_000 },
-  { limit: 88_000_000, rate: 0.24, prev: 50_000_000, prevTax: 6_240_000 },
-  { limit: 150_000_000, rate: 0.35, prev: 88_000_000, prevTax: 15_360_000 },
-  { limit: 300_000_000, rate: 0.38, prev: 150_000_000, prevTax: 37_060_000 },
-  { limit: Infinity, rate: 0.40, prev: 300_000_000, prevTax: 94_060_000 },
-];
-
-function calcIncomeTax(taxable: number): number {
-  if (taxable <= 0) return 0;
-  for (const b of INCOME_TAX_BRACKETS) {
-    if (taxable <= b.limit) {
-      return b.prevTax + (taxable - b.prev) * b.rate;
-    }
-  }
-  return 0;
-}
-
-// 근로소득공제 (소득세법 제47조)
-function earnedIncomeDeduction(salary: number): number {
-  if (salary <= 5_000_000) return salary * 0.7;
-  if (salary <= 15_000_000) return 3_500_000 + (salary - 5_000_000) * 0.4;
-  if (salary <= 45_000_000) return 7_500_000 + (salary - 15_000_000) * 0.15;
-  if (salary <= 100_000_000) return 12_000_000 + (salary - 45_000_000) * 0.05;
-  return 14_750_000;
 }
 
 export default function SalaryCalculator() {
@@ -52,41 +23,21 @@ export default function SalaryCalculator() {
     if (total <= 0) return null;
 
     const dep = Math.max(1, Math.min(10, parseInt(dependents) || 1));
-    const monthly = total / 12;
-
-    // 4대보험 (근로자 부담, 2024년 기준)
-    const nationalPension = Math.min(monthly, 6_170_000) * 0.045; // 4.5%, 상한 617만
-    const healthInsurance = monthly * 0.03545; // 3.545%
-    const longTermCare = healthInsurance * 0.1295; // 건강보험료의 12.95%
-    const employmentInsurance = monthly * 0.009; // 0.9%
-
-    const totalInsurance = nationalPension + healthInsurance + longTermCare + employmentInsurance;
-
-    // 소득세 계산 (연간)
-    const deduction = earnedIncomeDeduction(total);
-    const basicDeduction = 1_500_000 * dep; // 기본공제 1인당 150만
-    const insuranceDeduction = totalInsurance * 12; // 4대보험 소득공제
-    const taxable = Math.max(0, total - deduction - basicDeduction - insuranceDeduction);
-    const annualIncomeTax = calcIncomeTax(taxable);
-    const monthlyIncomeTax = annualIncomeTax / 12;
-    const localTax = monthlyIncomeTax * 0.1; // 지방소득세 10%
-
-    const totalDeductions = totalInsurance + monthlyIncomeTax + localTax;
-    const netMonthly = monthly - totalDeductions;
-    const netAnnual = netMonthly * 12;
+    // 요율·세율·공제는 kr-payroll-2026.ts(SSOT) → finance/salary-calculator.ts가 계산한다.
+    const r = computeSalaryBreakdownWon(Math.round(total / 12), dep, 0);
 
     return {
-      monthly: Math.round(monthly),
-      nationalPension: Math.round(nationalPension),
-      healthInsurance: Math.round(healthInsurance),
-      longTermCare: Math.round(longTermCare),
-      employmentInsurance: Math.round(employmentInsurance),
-      incomeTax: Math.round(monthlyIncomeTax),
-      localTax: Math.round(localTax),
-      totalDeductions: Math.round(totalDeductions),
-      netMonthly: Math.round(netMonthly),
-      netAnnual: Math.round(netAnnual),
-      effectiveRate: ((totalDeductions / monthly) * 100).toFixed(1),
+      monthly: r.gross,
+      nationalPension: r.pension,
+      healthInsurance: r.health,
+      longTermCare: r.ltc,
+      employmentInsurance: r.employment,
+      incomeTax: r.incomeTax,
+      localTax: r.localTax,
+      totalDeductions: r.totalDed,
+      netMonthly: r.net,
+      netAnnual: r.net * 12,
+      effectiveRate: r.effectiveRate,
     };
   }, [annualSalary, dependents]);
 
@@ -153,23 +104,23 @@ export default function SalaryCalculator() {
                   <span className="font-mono font-bold">{fmt(result.monthly)} 원</span>
                 </div>
                 <div className="flex justify-between items-center px-5 py-2.5">
-                  <span className="text-sm text-muted-foreground">국민연금 (4.5%)</span>
+                  <span className="text-sm text-muted-foreground">국민연금 ({ratePct(RATES.pensionEmployee)})</span>
                   <span className="font-mono text-red-600">- {fmt(result.nationalPension)} 원</span>
                 </div>
                 <div className="flex justify-between items-center px-5 py-2.5">
-                  <span className="text-sm text-muted-foreground">건강보험 (3.545%)</span>
+                  <span className="text-sm text-muted-foreground">건강보험 ({ratePct(RATES.healthEmployee)})</span>
                   <span className="font-mono text-red-600">- {fmt(result.healthInsurance)} 원</span>
                 </div>
                 <div className="flex justify-between items-center px-5 py-2.5">
-                  <span className="text-sm text-muted-foreground">장기요양보험 (건강보험료 × 12.95%)</span>
+                  <span className="text-sm text-muted-foreground">장기요양보험 (건강보험료 × {ratePct(RATES.longTermCareOfHealth)})</span>
                   <span className="font-mono text-red-600">- {fmt(result.longTermCare)} 원</span>
                 </div>
                 <div className="flex justify-between items-center px-5 py-2.5">
-                  <span className="text-sm text-muted-foreground">고용보험 (0.9%)</span>
+                  <span className="text-sm text-muted-foreground">고용보험 ({ratePct(RATES.employmentEmployee)})</span>
                   <span className="font-mono text-red-600">- {fmt(result.employmentInsurance)} 원</span>
                 </div>
                 <div className="flex justify-between items-center px-5 py-2.5">
-                  <span className="text-sm text-muted-foreground">소득세 (간이세액)</span>
+                  <span className="text-sm text-muted-foreground">근로소득세 (추정)</span>
                   <span className="font-mono text-red-600">- {fmt(result.incomeTax)} 원</span>
                 </div>
                 <div className="flex justify-between items-center px-5 py-2.5">
@@ -195,7 +146,7 @@ export default function SalaryCalculator() {
         )}
 
         <p className="text-xs text-muted-foreground text-center leading-relaxed">
-          ※ 2024년 기준 간이세액표 적용. 실제 공제액은 근무 형태, 비과세 항목, 연말정산에 따라 다를 수 있습니다.
+          ※ {PAYROLL_TAX_AS_OF} 기준 2026년 요율이에요. 비과세는 0원으로 보고, 소득세는 간이세액표가 아니라 연간 세액(근로소득공제·인적공제·보험료공제·근로소득세액공제)을 12로 나눈 추정값이에요. 실제 원천징수액과 연말정산 결과는 달라질 수 있어요.
         </p>
       </div>
     </div>
