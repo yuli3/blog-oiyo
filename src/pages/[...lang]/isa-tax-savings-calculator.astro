@@ -1,0 +1,67 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import IsaTaxSavingsCalculator from "../../components/tools/IsaTaxSavingsCalculator";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
+
+const PAGE_LOCALES = ["ko"] as const;
+
+export async function getStaticPaths() {
+  return [{ params: { lang: "ko" }, props: { locale: "ko" } }];
+}
+const locale = "ko";
+
+const title = "ISA 절세 계산기 2026 — 일반형 vs 서민형 비과세 혜택 및 손익통산 시뮬레이션";
+const description = "개인종합자산관리계좌(ISA)의 일반형(200만~500만 원) 및 서민형(400만~1,000만 원) 비과세 한도, 손익통산 순수익, 9.9% 분리과세와 일반 계좌 대비 절세액을 즉시 계산합니다.";
+
+const ko = {
+  eyebrow: "절세 계좌 및 투자 세무",
+  introTitle: "일반 증권계좌 대비 ISA의 비과세·손익통산·분리과세 절세액을 정밀 비교합니다",
+  intro: "ISA(개인종합자산관리계좌)는 하나의 계좌 안에서 국내 주식, 국내 상장 해외주식형 ETF, 펀드, 예적금, ELS, 채권 등 다양한 금융상품을 운용하면서 발생하는 이익과 손실을 통산하여 세금을 대폭 아낄 수 있는 만능 절세 계좌입니다. 일반 계좌는 손실이 나도 이익 부분에 대해 15.4%를 원천징수하지만, ISA는 순수익에 대해 비과세(200만~400만 원)를 적용하고 초과분에 대해서만 9.9% 저율 분리과세를 적용합니다. 본 계산기로 나의 실제 투자 수익에 대한 절세 효과를 시뮬레이션해 보세요.",
+  howToTitle: "사용 방법",
+  steps: [
+    "소득 요건에 따라 '일반형 ISA' 또는 '서민형/농어민형 ISA(총급여 5천만 원 이하)'를 선택합니다.",
+    "정부 개정 세법 추진안(비과세 한도 2.5배 확대)의 효과를 비교해보고 싶다면 개정안 토글을 활성화합니다.",
+    "계좌 내에서 발생한 총 이익(국내 배당금, 미국 지수 추종 ETF 매매차익 등)을 입력합니다.",
+    "계좌 내에서 발생한 손실액(매매차손)을 입력하여 손익통산 효과를 반영합니다.",
+    "일반 계좌 대비 절약되는 세금 총액과 실수령 순수익 차이를 확인합니다.",
+  ],
+  highlightsTitle: "주요 특징",
+  highlights: [
+    { title: "일반형 vs 서민형 실시간 비교", body: "일반형(200만 원)과 서민형·농어민형(400만 원)의 비과세 혜택 차이를 명확하게 비교합니다." },
+    { title: "손익통산(Net Loss Offset) 계산", body: "수익에서 손실을 차감한 순수익에만 세금을 매기는 ISA 고유의 손익통산 구조를 완전 구현합니다." },
+    { title: "금융소득종합과세 완전 방어", body: "ISA 계좌 내 분리과세(9.9%) 수익은 2,000만 원 종합과세 및 건보료 피부양자 박탈 기준 소득에서 완전 제외됩니다." },
+  ],
+  relatedTitle: "관련 도구",
+  related: [
+    { href: "/ko/inheritance-gift-tax-calculator/", label: "상속세 및 증여세 계산기", desc: "공제 한도별 상속세와 증여세를 계산합니다." },
+    { href: "/ko/retirement-tax-calculator/", label: "퇴직소득세 계산기", desc: "퇴직금 실수령액과 IRP 절세 효과를 계산합니다." },
+    { href: "/ko/global-income-tax-calculator/", label: "종합소득세 계산기", desc: "금융소득 2천만 원 초과 시 종합소득세율을 계산합니다." },
+  ],
+  disclaimer: "본 계산기는 조세특례제한법 제91조의18에 따른 개인종합자산관리계좌(ISA) 과세 특례를 기반으로 제작되었습니다. 의무가입기간(3년)을 채우지 않고 중도 해지하는 경우 비과세 및 분리과세 혜택이 취소되어 일반 이자·배당소득세(15.4%)가 추징될 수 있습니다. 직전 3개년 중 1회 이상 금융소득종합과세 대상자였던 경우 가입이 제한됩니다.",
+};
+
+const faqs = [
+  { q: "ISA 계좌는 1인 1계좌만 개설할 수 있나요?", a: "네, 전 금융기관을 통틀어 1인 1계좌만 개설할 수 있습니다. 다만 신탁형, 일임형, 중개형 중 원하는 유형으로 금융사를 변경(계좌 이전)하는 것은 언제든지 가능합니다. 국내 주식 및 국내 상장 해외 ETF 직접 매매를 위해서는 '중개형 ISA'를 선택하는 것이 일반적입니다." },
+  { q: "ISA 연간 납입한도는 얼마이며 이월이 가능한가요?", a: "ISA는 연간 최대 2,000만 원까지 납입할 수 있으며, 5년간 총 1억 원까지 납입 가능합니다. 당해 연도에 납입하지 않은 한도는 다음 연도로 이월되므로, 첫해에 0원을 넣었더라도 2년 차에 최대 4,000만 원까지 일시 납입이 가능합니다." },
+  { q: "만기 3년 후 해지해서 연금저축이나 IRP로 이전하면 추가 혜택이 있나요?", a: "네, ISA 만기 자금을 연금저축이나 IRP로 전환 입금하면 전환 금액의 10%(최대 300만 원 한도)에 대해 추가 세액공제(13.2%~16.5%) 혜택을 받을 수 있습니다. 기존 연금계좌 납입한도(연 900만 원)와 별도로 추가 인정되는 강력한 절세 루틴입니다." },
+  { q: "ISA 계좌에서 발생한 해외주식 ETF 매매수익도 건강보험료에 잡히나요?", a: "잡히지 않습니다. ISA 계좌에서 발생한 수익은 비과세 한도 초과분에 대해 9.9%로 분리과세 종결되며, 국민건강보험공단에 금융소득으로 통보되지 않으므로 건강보험료 상승이나 피부양자 자격 박탈 위험이 전혀 없습니다." },
+];
+
+const { content: c, faqHeading, faqItems } = buildToolShell({ en: ko, ko }, { en: faqs, ko: faqs }, locale);
+---
+
+<BaseLayout title={title} description={description} availableLocales={[...PAGE_LOCALES]}>
+  <ToolShell title={title} description={description} siteUrl={siteConfig.url} locale={locale} slug="isa-tax-savings-calculator" content={c} applicationCategory="FinanceApplication">
+    <div class="mx-auto max-w-2xl">
+      <IsaTaxSavingsCalculator client:load />
+      <p class="mt-4 text-xs text-muted-foreground">근거: 조세특례제한법 제91조의18(개인종합자산관리계좌에 대한 과세특례). 2026년 기준.</p>
+    </div>
+    <div class="mt-12">
+      <h2 class="text-xl font-bold tracking-tight mb-4">{faqHeading}</h2>
+      <FaqAccordion items={faqItems} />
+    </div>
+  </ToolShell>
+</BaseLayout>

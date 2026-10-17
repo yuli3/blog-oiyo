@@ -1,0 +1,66 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import InheritanceGiftTaxCalculator from "../../components/tools/InheritanceGiftTaxCalculator";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
+
+const PAGE_LOCALES = ["ko"] as const;
+
+export async function getStaticPaths() {
+  return [{ params: { lang: "ko" }, props: { locale: "ko" } }];
+}
+const locale = "ko";
+
+const title = "상속세 및 증여세 계산기 2026 — 공제 한도별 세액 모의계산 및 혼인출산 특례";
+const description = "2024~2026년 개정된 혼인·출산 증여재산 특별공제(최대 1.5억 원)와 상속세 일괄공제 5억, 배우자공제(최소 5억~최대 30억)를 적용하여 상속세와 증여세를 정밀 계산합니다.";
+
+const ko = {
+  eyebrow: "자산 승계 및 절세 세무",
+  introTitle: "상속세와 증여세의 법정 공제액을 비교하고 최적의 절세 전략을 수립합니다",
+  intro: "상속세와 증여세는 동일한 5단계 초과누진세율(10%~50%)을 적용받지만, 공제 방식과 과세 체계가 근본적으로 다릅니다. 상속세는 피상속인의 전체 유산에 대해 일괄공제(5억 원)와 배우자 상속공제(최소 5억~최대 30억 원)가 적용되는 유산세 방식이며, 증여세는 수증자가 받는 금액에 대해 10년 합산 공제와 최근 신설된 혼인·출산 특별공제(1억 원 추가)가 적용되는 유산취득세 방식입니다. 본 계산기로 세 부담을 즉시 확인해 보세요.",
+  howToTitle: "사용 방법",
+  steps: [
+    "상단 탭에서 '상속세 시뮬레이션' 또는 '증여세 시뮬레이션'을 선택합니다.",
+    "상속세의 경우 총 상속재산, 채무액, 배우자 유무 및 실제 상속액, 순금융재산을 입력합니다.",
+    "증여세의 경우 수증인과의 관계(혼인출산 특별공제, 성인자녀, 배우자 등)와 증여가액을 입력합니다.",
+    "법정 공제액 차감 후 과세표준, 누진세율, 3% 자진신고세액공제가 반영된 최종 납부세액을 확인합니다.",
+  ],
+  highlightsTitle: "주요 특징",
+  highlights: [
+    { title: "혼인·출산 증여 특례 반영", body: "직계존속으로부터 혼인 또는 출산 전후 2년 이내 증여 시 기본 5천만 원에 1억 원을 추가 공제하여 1.5억 원(부부 합산 3억 원)까지 비과세되는 제도를 반영합니다." },
+    { title: "상속세 일괄공제·배우자공제 정밀 계산", body: "기초공제+인적공제 대신 실무 표준인 일괄공제 5억 원과 배우자 법정공제(최소 5억 원 보장)를 정확히 적용합니다." },
+    { title: "금융재산 및 장례비용 법정공제", body: "순금융재산 20%(최대 2억 원) 공제와 법정 기본 장례비용 500만~1,000만 원 공제를 자동으로 합산합니다." },
+  ],
+  relatedTitle: "관련 도구",
+  related: [
+    { href: "/ko/retirement-tax-calculator/", label: "퇴직소득세 계산기", desc: "근속연수 공제와 퇴직금 실수령액을 계산합니다." },
+    { href: "/ko/property-tax-calculator/", label: "부동산 재산세 계산기", desc: "공시가격 기준 재산세 및 종부세를 계산합니다." },
+    { href: "/ko/global-income-tax-calculator/", label: "종합소득세 계산기", desc: "사업·금융·근로 종합소득세율을 계산합니다." },
+  ],
+  disclaimer: "본 계산기는 상속세 및 증여세법에 따른 기본 산식을 기반으로 제작된 모의 시뮬레이터입니다. 세대생략 할증과세(30~40%), 사전증여재산 10년(상속인 외 5년) 합산, 감정평가 수수료 공제 등 개별 사실관계에 따라 실제 신고세액과 차이가 발생할 수 있으므로 전문 세무사와의 상담을 권장합니다.",
+};
+
+const faqs = [
+  { q: "상속세에서 배우자가 있으면 최소 10억 원까지 세금이 안 나오나요?", a: "맞습니다. 상속세는 기본 일괄공제 5억 원과 배우자 상속공제 최소 5억 원이 동시에 적용되므로, 배우자와 자녀가 함께 상속받는 경우 총 상속재산이 10억 원 이하(채무 제외 순재산 기준)라면 원칙적으로 납부할 상속세가 없습니다." },
+  { q: "혼인·출산 증여재산 특별공제는 부모님과 시부모님 양쪽에서 다 받을 수 있나요?", a: "신랑과 신부 각자가 본인의 직계존속(부모님 및 조부모님)으로부터 각각 1.5억 원(기본 5,000만 원 + 특별공제 1억 원)씩 증여받아, 신혼부부 합산 최대 3억 원까지 증여세 없이 자금을 마련할 수 있습니다." },
+  { q: "증여세 10년 합산 과세 규정이란 무엇인가요?", a: "동일인(증여자가 직계존속인 경우 그 배우자 포함, 예: 아버지와 어머니)으로부터 과거 10년 이내에 증여받은 가액의 합계가 1,000만 원 이상인 경우, 이번 증여가액과 합산하여 누진세율을 적용하는 규정입니다." },
+  { q: "자진신고세액공제 3%는 언제 받을 수 있나요?", a: "상속세는 상속개시일이 속하는 달의 말일부터 6개월 이내, 증여세는 증여일이 속하는 달의 말일부터 3개월 이내에 관할 세무서에 자진 신고 및 납부하는 경우 산출세액의 3%를 공제받을 수 있습니다." },
+];
+
+const { content: c, faqHeading, faqItems } = buildToolShell({ en: ko, ko }, { en: faqs, ko: faqs }, locale);
+---
+
+<BaseLayout title={title} description={description} availableLocales={[...PAGE_LOCALES]}>
+  <ToolShell title={title} description={description} siteUrl={siteConfig.url} locale={locale} slug="inheritance-gift-tax-calculator" content={c} applicationCategory="FinanceApplication">
+    <div class="mx-auto max-w-2xl">
+      <InheritanceGiftTaxCalculator client:load />
+      <p class="mt-4 text-xs text-muted-foreground">근거: 상속세 및 증여세법 제18조~제26조, 제53조, 제53조의2. 2026년 기준.</p>
+    </div>
+    <div class="mt-12">
+      <h2 class="text-xl font-bold tracking-tight mb-4">{faqHeading}</h2>
+      <FaqAccordion items={faqItems} />
+    </div>
+  </ToolShell>
+</BaseLayout>
