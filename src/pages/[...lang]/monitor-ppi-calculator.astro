@@ -4,7 +4,6 @@ import RelatedToolLinks from "../../components/RelatedToolLinks.astro";
 import ToolsCompanionBanner from "../../components/ToolsCompanionBanner.astro";
 import MonitorPpiCalculator from "../../components/tools/MonitorPpiCalculator";
 import { locales } from "../../lib/i18n";
-import type { Locale } from "../../lib/i18n";
 
 type ActiveLocale = (typeof locales)[number];
 
@@ -252,12 +251,7 @@ const c = content[locale] ?? content.en;
 
     <MonitorPpiCalculator client:visible locale={locale} />
 
-    <ToolsCompanionBanner
-      toolName={m.title}
-      locale={locale}
-      category="tech"
-      companionApp="hardware"
-    />
+    <ToolsCompanionBanner tool="tools-hub" />
 
     <!-- Educational Content Section -->
     <div class="mt-12 space-y-8 rounded-2xl border border-border bg-card p-6 sm:p-8">
@@ -292,7 +286,7 @@ const c = content[locale] ?? content.en;
     </div>
 
     <div class="mt-8">
-      <RelatedToolLinks currentSlug="monitor-ppi-calculator" locale={locale} />
+      <RelatedToolLinks locale={locale} current="monitor-ppi-calculator" slugs={["aspect-ratio-calculator", "color-converter", "color-picker", "palette-extractor", "image-cropper", "image-metadata-viewer"]} />
     </div>
   </div>
 </BaseLayout>
