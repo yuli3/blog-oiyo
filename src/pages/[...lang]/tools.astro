@@ -1660,7 +1660,9 @@ const catalogJsonLd = JSON.stringify(
           {/* Tool grid */}
           <div class="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {cat.tools.map((tool) => {
-              const href = tool.href ?? `/${locale}/${tool.slug}/`;
+              const href = ["image-converter", "pdf-merge-split", "qr-code-generator"].includes(tool.slug)
+                ? `https://tools.oiyo.net/${locale}/${tool.slug}/`
+                : tool.href ?? `/${locale}/${tool.slug}/`;
               const title = tool.title[locale] ?? tool.title.en;
               const desc  = tool.description[locale] ?? tool.description.en;
               return (

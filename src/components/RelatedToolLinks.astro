@@ -12,6 +12,8 @@ import { OIYO_URL } from "../config/site.config";
 const BRIDGE = new Set<string>(bridgeSlugs as string[]);
 const CANON = oiyoCanonical as Record<string, string>;
 const toolHref = (locale: Locale, slug: string): string => {
+  // File utilities moved as a six-locale unit; avoid routing readers through Blog (2026-10-19).
+  if (["image-converter", "pdf-merge-split", "qr-code-generator"].includes(slug)) return `https://tools.oiyo.net/${locale}/${slug}/`;
   const canon = BRIDGE.has(slug) ? CANON[slug] : undefined;
   return canon ? `${OIYO_URL}/${locale}${canon}/` : getLocalizedPath(locale, `/${slug}`);
 };
