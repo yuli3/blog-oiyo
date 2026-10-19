@@ -37,6 +37,7 @@ export default function ElectricityBillCalculator() {
   const added = bill && withAppliance ? withAppliance.total - bill.total : 0;
   const limits = season === "summer" ? ELECTRICITY.summerLimits : ELECTRICITY.otherLimits;
   const nextLimit = bill ? limits.find((l) => kwh <= l) : undefined;
+  // 구간 상한은 포함이라(400kWh는 2단계) 다음 단계는 상한 + 1kWh부터다.
   // nextLimit exists only in tier 1 or 2, so the next tier's index is 1 or 2.
   const nextIndex = bill ? (Math.min(bill.tier, 2) as 1 | 2) : 1;
 
@@ -53,7 +54,12 @@ export default function ElectricityBillCalculator() {
     const filled: string[] = [];
     if (p.kwh !== undefined) { setKwh(p.kwh); filled.push("사용량"); }
     if (p.month !== undefined) { setSeason(seasonOf(p.month)); filled.push("계절"); }
-    if (p.watts !== undefined) { setWatts(p.watts); filled.push("소비전력"); }
+    if (p.watts !== undefined) {
+      setWatts(p.watts);
+      // 한 줄 입력의 소비전력과 맞는 기기 칩만 켠다. 맞는 게 없으면 칩을 모두 끈다.
+      setPreset(APPLIANCE_PRESETS.find((x) => x.watts === p.watts)?.id ?? "");
+      filled.push("소비전력");
+    }
     if (p.hours !== undefined) { setHours(p.hours); filled.push("사용 시간"); }
     return filled;
   };
@@ -107,7 +113,7 @@ export default function ElectricityBillCalculator() {
               </dl>
               {nextLimit !== undefined && (
                 <p className="mt-3 text-sm text-muted-foreground">
-                  {nextLimit - kwh}kWh를 더 쓰면 {bill.tier + 1}단계로 넘어가 기본요금이 {won(ELECTRICITY.basic[nextIndex])}으로 오르고, 넘는 부분은 kWh당 {ELECTRICITY.energy[nextIndex]}원이 붙습니다.
+                  {nextLimit - kwh + 1}kWh를 더 쓰면 {bill.tier + 1}단계로 넘어가 기본요금이 {won(ELECTRICITY.basic[nextIndex])}으로 오르고, 넘는 부분은 kWh당 {ELECTRICITY.energy[nextIndex]}원이 붙습니다.
                 </p>
               )}
               <ResultSteps
