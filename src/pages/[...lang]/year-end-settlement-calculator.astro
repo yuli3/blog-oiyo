@@ -2,6 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import RelatedToolLinks from "../../components/RelatedToolLinks.astro";
 import YearEndSettlementCalculatorComp from "../../components/tools/YearEndSettlementCalculator";
+import YearEndSettlementCountryCalculator from "../../components/tools/YearEndSettlementCountryCalculator";
+import type { YearEndCountry } from "../../lib/year-end-settlement-countries";
 import { locales } from "../../lib/i18n";
 
 type ActiveLocale = (typeof locales)[number];
@@ -27,6 +29,10 @@ export async function getStaticPaths() {
 
 const { locale } = Astro.props as { locale: ActiveLocale };
 
+// ja/zh/fr/es use their own country's law; ko and en use South Korea's.
+const COUNTRY_BY_LOCALE: Partial<Record<ActiveLocale, YearEndCountry>> = { ja: "jp", zh: "cn", fr: "fr", es: "es" };
+const country = COUNTRY_BY_LOCALE[locale];
+
 const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "연말정산 환급 예측기 — 내 환급액 미리 계산해보기",
@@ -37,20 +43,20 @@ const meta: Record<ActiveLocale, { title: string; description: string }> = {
     description: "Enter your salary and deduction items to predict your year-end tax refund or additional payment in Korea. Plan your tax savings strategy.",
   },
   ja: {
-    title: "韓国の年末調整還付予測ツール — 還付額を事前に計算",
-    description: "韓国の制度に基づく計算です。年俸と主要控除項目を入力して年末調整の予想還付額または追加納付税額を事前に計算します。",
+    title: "年末調整 還付金シミュレーター（令和8年分）",
+    description: "源泉徴収された所得税と年調年税額を比べて、年末調整の還付額・追加徴収額を見積もります。給与所得控除・基礎控除（令和8年分）、社会保険料、生命保険料控除、扶養控除、住宅ローン控除に対応。",
   },
   fr: {
-    title: "Estimateur de régularisation fiscale de fin d'année (Corée du Sud)",
-    description: "Estimez votre remboursement fiscal ou paiement supplémentaire de fin d'année en Corée.",
+    title: "Simulateur de régularisation du prélèvement à la source",
+    description: "Estimez l'impôt sur le revenu 2026 (revenus 2025) avec le barème, le quotient familial et la décote, puis comparez-le au prélèvement à la source déjà payé : remboursement ou solde à payer.",
   },
   es: {
-    title: "Estimador de liquidación fiscal de fin de año (Corea del Sur)",
-    description: "Estima tu reembolso fiscal o pago adicional de fin de año en Corea.",
+    title: "Simulador de la declaración de la renta (IRPF)",
+    description: "Calcula si tu declaración de la renta sale a pagar o a devolver: cuota del IRPF con la escala general 2026, el mínimo personal de 5.550 € y la reducción por rendimientos del trabajo, menos las retenciones.",
   },
   zh: {
-    title: "韩国年末结算退税预测器 — 提前计算退税金额",
-    description: "按韩国制度计算。输入年薪和主要扣除项目，提前计算年末结算预估退税金额或额外应缴税额，制定节税策略。",
+    title: "个人所得税年度汇算 退税计算器",
+    description: "按综合所得年度税率表3%–45%、每年60,000元减除费用和专项附加扣除（子女教育、赡养老人、住房租金、住房贷款利息等）计算全年应纳税额，与已预缴税额比较得出应退或应补税额。",
   },
 };
 
@@ -116,120 +122,168 @@ const content: Record<ActiveLocale, SeoContent> = {
     disclaimer: "This is a general estimate. Confirm the final amount with the tax authority or a tax professional."
   },
   ja: {
-    introTitle: "年末調整は国ごとの制度確認が必要です",
-    intro: "このページは韓国基準の年末調整を説明付きで試算します。税率や控除は国ごとに異なり毎年変わるため、申告前の参考値として扱ってください。",
-    formulaTitle: "主な計算基準",
-    formulas: [{
-      title: "基準 1",
-      body: "給与区間別控除を先に適用します。"
-    }, {
-      title: "基準 2",
-      body: "1人あたり150万ウォン控除を反映します。"
-    }, {
-      title: "基準 3",
-      body: "保険、年金、医療費などを簡易反映します。"
-    }],
+    introTitle: "年末調整は、1年間の源泉徴収税額と本来の年税額の差を精算する手続きです",
+    intro: "会社は毎月の給与から源泉徴収税額表で所得税を差し引きますが、その額は扶養や保険料控除を細かく反映していません。12月の最終給与で1年間の給与総額から年税額を計算し直し、取りすぎていれば還付、不足していれば追加で徴収します。令和8年分は給与所得控除の最低保障74万円と基礎控除の引上げが毎月の源泉徴収に反映されず、年末調整でまとめて精算されるため、還付が出やすい年です。",
+    formulaTitle: "計算基準",
+    formulas: [
+      {
+        title: "課税給与所得",
+        body: "給与 − 給与所得控除（最低74万円）− 社会保険料 − 生命保険料控除 − 基礎控除（合計所得489万円以下は104万円）− 配偶者・扶養控除。千円未満切捨て"
+      },
+      {
+        title: "年調年税額",
+        body: "（課税給与所得 × 税率 − 控除額 − 住宅借入金等特別控除）× 102.1%。百円未満切捨て"
+      },
+      {
+        title: "還付・徴収",
+        body: "1〜12月に源泉徴収された所得税 − 年調年税額。プラスなら12月か1月の給与で還付、マイナスなら追加徴収"
+      }
+    ],
     howToTitle: "使い方",
-    steps: ["必要な金額と条件を入力します。", "税金・控除・社会保険の内訳を確認します。", "申告・納付・判断前に最新の公式基準と照合します。"],
+    steps: [
+      "給与の年間支払額、源泉徴収された所得税、社会保険料を入力します。",
+      "生命保険料、配偶者・扶養親族、住宅ローン控除額を入力します。",
+      "年調年税額と還付（または追加徴収）の見込額を確認します。"
+    ],
     faqTitle: "よくある質問",
-    faqs: [{
-      question: "どの国の制度を基準にしていますか？",
-      answer: "韓国の制度です。他国の税率、控除、社会保険にはそのまま使えません。"
-    }, {
-      question: "実際の金額と異なる理由は？",
-      answer: "会社資料、国税庁資料、控除限度と要件で変わります。"
-    }, {
-      question: "制度は毎年変わりますか？",
-      answer: "はい。税率、控除限度、社会保険料率は毎年変わる可能性があります。申告や納付前に最新年度の基準を確認してください。"
-    }],
-    disclaimer: "この計算は一般的な概算です。実際の税額は税務当局または税理士に確認してください。"
+    faqs: [
+      {
+        question: "生命保険料控除はいくらになりますか？",
+        answer: "新制度（2012年以降の契約）は一般・介護医療・個人年金の区分ごとに、保険料2万円以下は全額、4万円以下は半額＋1万円、8万円以下は4分の1＋2万円、8万円超は4万円で、3区分の合計は12万円が上限です。"
+      },
+      {
+        question: "住宅ローン控除は年末調整でできますか？",
+        answer: "1年目は確定申告が必要です。2年目以降は税務署から届く証明書と金融機関の残高証明書を会社に出せば、年末調整で控除されます。所得税から引ききれない分は住民税から控除されます。"
+      },
+      {
+        question: "年末調整の対象にならない人は？",
+        answer: "給与が2,000万円を超える人、年の途中で退職して年末まで再就職しない人（一部を除く）、2か所以上から給与を受けて乙欄で源泉徴収されている人は対象外で、確定申告をします。"
+      }
+    ],
+    disclaimer: "このツールは一般的な見積もり用です。実際の年税額は会社が年末調整で計算した源泉徴収票の金額をご確認ください。"
   },
   zh: {
-    introTitle: "年末结算必须先确认适用国家的制度",
-    intro: "本页依韩国规则估算年末结算。税率、扣除与社会保险具有国别差异且可能逐年变动，结果应作为申报前的初步参考。",
-    formulaTitle: "主要计算基准",
-    formulas: [{
-      title: "规则 1",
-      body: "先按薪资级距扣除。"
-    }, {
-      title: "规则 2",
-      body: "每人反映150万韩元人身扣除。"
-    }, {
-      title: "规则 3",
-      body: "简化反映保险、退休金与医疗费等抵免。"
-    }],
+    introTitle: "个人所得税年度汇算：多退少补",
+    intro: "居民个人取得的工资薪金、劳务报酬、稿酬和特许权使用费合并为综合所得，按年计算个人所得税。平时由单位按月预扣预缴，次年3月1日至6月30日办理年度汇算，把全年收入和扣除重新算一遍：预缴多了申请退税，少了补缴。没有在预扣时享受的专项附加扣除、大病医疗和个人养老金等，都可以在汇算时补充扣除。",
+    formulaTitle: "计算规则",
+    formulas: [
+      {
+        title: "应纳税所得额",
+        body: "综合所得收入额 − 60,000元 − 专项扣除（三险一金）− 专项附加扣除 − 依法确定的其他扣除"
+      },
+      {
+        title: "专项附加扣除",
+        body: "子女教育、3岁以下婴幼儿照护 每孩每月2,000元；赡养老人 每月3,000元；住房租金 每月800–1,500元或住房贷款利息 每月1,000元；继续教育；大病医疗"
+      },
+      {
+        title: "年度税率表",
+        body: "不超过36,000元 3%，144,000元 10%，300,000元 20%，420,000元 25%，660,000元 30%，960,000元 35%，超过 45%。应退（补）税额 = 已预缴 − 应纳"
+      }
+    ],
     howToTitle: "使用方法",
-    steps: ["输入所需金额与条件。", "分别查看税金、扣除与社会保险明细。", "申报、缴纳或决策前请核对最新官方规定。"],
+    steps: [
+      "输入全年综合所得收入额、个人缴纳的三险一金和已预缴税额。",
+      "填写子女、赡养老人、住房、继续教育、大病医疗等专项附加扣除。",
+      "查看全年应纳税额以及应退或应补税额。"
+    ],
     faqTitle: "常见问题",
-    faqs: [{
-      question: "这个计算机采用哪个国家的规则？",
-      answer: "采用韩国规则，不能直接套用其他国家的税率、扣除或社会保险制度。"
-    }, {
-      question: "为什么可能和实际金额不同？",
-      answer: "公司资料、国税厅资料、扣除上限与资格会改变结果。"
-    }, {
-      question: "规则每年都会变吗？",
-      answer: "会。税率、扣除上限与社会保险费率都可能按年度调整。申报或缴纳前请确认当年度官方规定。"
-    }],
-    disclaimer: "本工具仅为一般估算。实际税额请向税务机关或税务专业人士确认。"
+    faqs: [
+      {
+        question: "哪些人可以不办年度汇算？",
+        answer: "年度汇算需补税但综合所得年收入不超过12万元的，或年度汇算需补税金额不超过400元的，以及已预缴税额与应纳税额一致或不申请退税的，可以不办理。"
+      },
+      {
+        question: "住房租金和住房贷款利息能同时扣吗？",
+        answer: "不能，两者只能选择其一。住房贷款利息限首套住房贷款，扣除期限最长240个月；住房租金按工作城市分为每月1,500元、1,100元和800元三档。"
+      },
+      {
+        question: "全年一次性奖金怎么处理？",
+        answer: "全年一次性奖金可以选择单独计税（按月换算后的税率表），也可以并入综合所得。本计算器只计算并入综合所得的部分，选择单独计税的奖金不要填入收入。"
+      }
+    ],
+    disclaimer: "本工具仅供一般估算。以个人所得税App中年度汇算的计算结果为准。"
   },
   fr: {
-    introTitle: "Régularisation fiscale de fin d'année dépend du pays concerné",
-    intro: "Cette page estime la régularisation fiscale de fin d'année selon les règles de la Corée. Les tranches, déductions et cotisations sont propres au pays et peuvent changer chaque année; utilisez le résultat comme point de départ.",
-    formulaTitle: "Bases de calcul",
-    formulas: [{
-      title: "Règle 1",
-      body: "Applique d’abord la déduction salariale par tranche."
-    }, {
-      title: "Règle 2",
-      body: "Reflète 1,5 M KRW par personne admissible."
-    }, {
-      title: "Règle 3",
-      body: "Simplifie assurance, retraite et frais médicaux."
-    }],
-    howToTitle: "Comment l'utiliser",
-    steps: ["Saisissez les montants et conditions nécessaires.", "Vérifiez séparément impôts, déductions et cotisations.", "Comparez avec les règles officielles avant déclaration, paiement ou décision."],
+    introTitle: "En France, il n'y a pas de régularisation de fin d'année : l'impôt est recalculé après la déclaration",
+    intro: "Depuis 2019, l'impôt sur le revenu est prélevé à la source chaque mois par l'employeur, au taux transmis par l'administration. Ce taux est calculé sur des revenus anciens : le vrai montant de l'impôt n'est connu qu'après la déclaration de revenus du printemps. L'avis d'impôt de l'été compare alors l'impôt dû au prélèvement déjà payé. Le trop-perçu est remboursé fin juillet ou début août ; le solde est prélevé à partir de septembre.",
+    formulaTitle: "Règles de calcul",
+    formulas: [
+      {
+        title: "Revenu imposable",
+        body: "Salaires nets imposables − abattement de 10 % pour frais professionnels (minimum 509 €, maximum 14 555 € par personne)"
+      },
+      {
+        title: "Barème 2026 (revenus 2025)",
+        body: "Par part : 0 % jusqu'à 11 600 €, 11 % jusqu'à 29 579 €, 30 % jusqu'à 84 577 €, 41 % jusqu'à 181 917 €, 45 % au-delà. Avantage du quotient familial plafonné à 1 807 € par demi-part"
+      },
+      {
+        title: "Décote et solde",
+        body: "Décote : 897 € (seul) ou 1 483 € (couple) − 45,25 % de l'impôt brut. Solde = prélèvement à la source payé − impôt dû"
+      }
+    ],
+    howToTitle: "Mode d'emploi",
+    steps: [
+      "Saisissez le cumul annuel des salaires nets imposables du foyer (bulletin de décembre).",
+      "Indiquez la situation familiale, le nombre d'enfants et le prélèvement déjà payé.",
+      "Lisez l'impôt dû et le remboursement ou le solde à payer."
+    ],
     faqTitle: "Questions fréquentes",
-    faqs: [{
-      question: "Quel pays sert de référence ?",
-      answer: "Il utilise les règles de la Corée. Ne l’appliquez pas directement à un autre système fiscal ou social."
-    }, {
-      question: "Pourquoi le montant réel peut-il différer ?",
-      answer: "Documents employeur, données fiscales, plafonds et conditions peuvent changer le résultat."
-    }, {
-      question: "Les règles changent-elles chaque année ?",
-      answer: "Oui. Les taux, plafonds de déduction et cotisations peuvent changer chaque année. Vérifiez l'année en vigueur avant de déclarer ou payer."
-    }],
-    disclaimer: "Ce calcul est une estimation générale. Confirmez le montant auprès de l'administration fiscale ou d'un fiscaliste."
+    faqs: [
+      {
+        question: "Comment sont comptées les parts ?",
+        answer: "Une part pour une personne seule, deux pour un couple marié ou pacsé, une demi-part pour chacun des deux premiers enfants et une part entière à partir du troisième. Un parent isolé a une demi-part supplémentaire, non prise en compte ici."
+      },
+      {
+        question: "Pourquoi un remboursement alors que mon taux était correct ?",
+        answer: "Les réductions et crédits d'impôt (emploi à domicile, frais de garde, dons) ne sont pas pris en compte dans le taux de prélèvement. Une avance de 60 % est versée en janvier et le reste après la déclaration."
+      },
+      {
+        question: "Comment le solde est-il payé ?",
+        answer: "Un solde inférieur ou égal à 300 € est prélevé en une fois fin septembre. Au-delà, il est prélevé en quatre fois, de septembre à décembre. En dessous de 12 €, il n'est pas réclamé."
+      }
+    ],
+    disclaimer: "Cet outil sert au calcul général. Le montant exact figure sur votre avis d'impôt ; vous pouvez aussi utiliser le simulateur officiel sur impots.gouv.fr."
   },
   es: {
-    introTitle: "Liquidación fiscal de fin de año depende del país aplicado",
-    intro: "Esta página estima la liquidación fiscal de fin de año con reglas de Corea. Los tramos, deducciones y cotizaciones son propios de cada país y pueden cambiar cada año; úsalo como estimación inicial.",
-    formulaTitle: "Bases de cálculo",
-    formulas: [{
-      title: "Regla 1",
-      body: "Aplica primero deducción laboral por tramo."
-    }, {
-      title: "Regla 2",
-      body: "Refleja 1,5 M KRW por persona elegible."
-    }, {
-      title: "Regla 3",
-      body: "Simplifica seguro, pensión y gastos médicos."
-    }],
-    howToTitle: "Cómo usarla",
-    steps: ["Introduce los importes y condiciones necesarios.", "Revisa por separado impuestos, deducciones y cotizaciones.", "Compáralo con reglas oficiales antes de declarar, pagar o tomar una decisión."],
+    introTitle: "En España, la regularización anual del IRPF es la declaración de la renta",
+    intro: "La empresa retiene cada mes una parte del sueldo a cuenta del IRPF. Entre abril y junio del año siguiente, la declaración de la renta calcula la cuota real del año con la escala general y el mínimo personal y familiar, y la compara con las retenciones: si retuvieron de más, Hacienda devuelve la diferencia; si retuvieron de menos, hay que ingresarla. La escala autonómica cambia según la comunidad, por lo que este cálculo usa la escala supletoria, igual a la estatal.",
+    formulaTitle: "Reglas de cálculo",
+    formulas: [
+      {
+        title: "Base liquidable general",
+        body: "Rendimientos del trabajo − Seguridad Social − 2.000 € de otros gastos − reducción por rendimientos del trabajo (hasta 7.302 €) − aportaciones a planes de pensiones (hasta 1.500 €)"
+      },
+      {
+        title: "Cuota íntegra",
+        body: "Escala estatal + autonómica: 19 % hasta 12.450 €, 24 % hasta 20.200 €, 30 % hasta 35.200 €, 37 % hasta 60.000 €, 45 % hasta 300.000 €, 47 % por encima, menos la misma escala aplicada al mínimo personal y familiar"
+      },
+      {
+        title: "Resultado",
+        body: "Cuota − retenciones e ingresos a cuenta. Positivo: a ingresar. Negativo: a devolver"
+      }
+    ],
+    howToTitle: "Cómo se usa",
+    steps: [
+      "Introduce los rendimientos íntegros del trabajo, la Seguridad Social y las retenciones del certificado de tu empresa.",
+      "Añade hijos, edad y aportaciones a planes de pensiones.",
+      "Consulta la cuota y si la declaración sale a pagar o a devolver."
+    ],
     faqTitle: "Preguntas frecuentes",
-    faqs: [{
-      question: "¿Qué país usa esta calculadora?",
-      answer: "Usa reglas de Corea. No lo apliques directamente a otro sistema fiscal o social."
-    }, {
-      question: "¿Por qué puede cambiar el importe final?",
-      answer: "Datos del empleador, agencia fiscal, límites y requisitos pueden cambiar el resultado."
-    }, {
-      question: "¿Las reglas cambian cada año?",
-      answer: "Sí. Los tipos, límites de deducción y cotizaciones pueden cambiar cada año. Comprueba la norma vigente antes de declarar o pagar."
-    }],
-    disclaimer: "Este cálculo es una estimación general. Confirma el importe con la autoridad fiscal o un profesional tributario."
+    faqs: [
+      {
+        question: "¿Estoy obligado a presentar la declaración?",
+        answer: "Con rendimientos del trabajo de un solo pagador no es obligatorio hasta 22.000 €. Con dos o más pagadores, el límite baja a 15.876 € si el segundo y siguientes pagaron más de 1.500 €. Aunque no estés obligado, conviene presentarla si sale a devolver."
+      },
+      {
+        question: "¿Cuál es el mínimo personal?",
+        answer: "5.550 € al año, 6.700 € desde los 65 años y 8.100 € desde los 75. Por hijos se añaden 2.400 €, 2.700 €, 4.000 € y 4.500 € (el cuarto y siguientes), más 2.800 € por cada hijo menor de 3 años, que este cálculo no incluye."
+      },
+      {
+        question: "¿Por qué mi resultado real es distinto?",
+        answer: "Cada comunidad autónoma tiene su escala y sus deducciones (alquiler, nacimiento, gastos educativos), y existen deducciones estatales como la de maternidad o por rendimientos del trabajo bajos. El programa Renta WEB las aplica con tus datos fiscales."
+      }
+    ],
+    disclaimer: "Esta herramienta es para cálculo general. El resultado oficial es el del borrador en Renta WEB de la Agencia Tributaria."
   }
 };
 
@@ -258,8 +312,7 @@ const structuredData = [
 <BaseLayout title={m.title} description={m.description} availableLocales={[...locales]} heading={m.title} intro={m.description}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <div class="mx-auto max-w-2xl px-4 py-5 sm:py-8">
-    <YearEndSettlementCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
-  
+    {country ? <YearEndSettlementCountryCalculator client:load country={country} /> : <YearEndSettlementCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />}
 
     <section class="mt-6 sm:mt-10 border-t border-border pt-5 sm:pt-8">
       <h2 class="text-2xl font-bold text-foreground">{c.introTitle}</h2>
