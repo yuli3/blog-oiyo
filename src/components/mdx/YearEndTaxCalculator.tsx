@@ -1,64 +1,34 @@
 import React, { useState, useMemo } from 'react';
+import { settleYearEnd } from '../../lib/kr-year-end-2026';
 
 function fmt(n: number) {
   return Math.round(n).toLocaleString('ko-KR');
 }
 
+// Every rate, limit and threshold lives in src/lib/kr-year-end-2026.ts (2026년 귀속, checked 2026-10-19).
+// This component only collects inputs and shows the result.
+
 interface DeductionItem {
   id: string;
   label: string;
   sublabel: string;
-  max: number;
-  rate: number; // deduction rate (0–1) applied to the entered amount
   value: string;
 }
 
 const INITIAL_DEDUCTIONS: DeductionItem[] = [
-  { id: 'insurance', label: '국민연금 보험료', sublabel: '연간 납부액', max: 0, rate: 1, value: '' },
-  { id: 'health', label: '건강보험료', sublabel: '연간 납부액 (요양보험 포함)', max: 0, rate: 1, value: '' },
-  { id: 'employment', label: '고용보험료', sublabel: '연간 납부액', max: 0, rate: 1, value: '' },
-  { id: 'credit', label: '신용카드 등 사용액', sublabel: '연간 총액 (소득공제 한도 내 15–40% 적용)', max: 3000000, rate: 0.15, value: '' },
-  { id: 'medical', label: '의료비 세액공제', sublabel: '본인·부양가족 의료비 (총급여 3% 초과분)', max: 7000000, rate: 0.15, value: '' },
-  { id: 'education', label: '교육비 세액공제', sublabel: '본인·부양가족 교육비 (15% 세액공제)', max: 9000000, rate: 0.15, value: '' },
-  { id: 'donation', label: '기부금 세액공제', sublabel: '특례·일반 기부금 (15–30% 세액공제)', max: 0, rate: 0.15, value: '' },
-  { id: 'pension_savings', label: '연금저축·IRP 세액공제', sublabel: '연간 납입액 (연금저축 600만 원, IRP 합산 900만 원 한도, 13.2–16.5% 공제)', max: 9000000, rate: 0.165, value: '' },
+  { id: 'insurance', label: '국민연금 보험료', sublabel: '연간 납부액 (전액 소득공제)', value: '' },
+  { id: 'health', label: '건강보험료', sublabel: '연간 납부액 (장기요양 포함, 전액 소득공제)', value: '' },
+  { id: 'employment', label: '고용보험료', sublabel: '연간 납부액 (전액 소득공제)', value: '' },
+  { id: 'credit', label: '신용카드 사용액', sublabel: '연간 총액 (총급여 25% 초과분 15%, 한도 300만/250만 원)', value: '' },
+  { id: 'debit', label: '체크카드·현금영수증', sublabel: '연간 총액 (25% 문턱을 넘은 금액의 30%)', value: '' },
+  { id: 'premium', label: '보장성 보험료', sublabel: '연간 납입액 (100만 원까지 12% 세액공제)', value: '' },
+  { id: 'medical', label: '의료비', sublabel: '본인·부양가족 의료비 (총급여 3% 초과분 15%, 700만 원 한도로 단순화)', value: '' },
+  { id: 'education', label: '교육비', sublabel: '본인·부양가족 교육비 (15%, 1인 한도는 단순화)', value: '' },
+  { id: 'donation', label: '기부금', sublabel: '1,000만 원 이하 15%, 초과분 30% (소득금액 한도 생략)', value: '' },
+  { id: 'pension_savings', label: '연금저축 납입액', sublabel: '연간 납입액 (600만 원 한도, 15%·12%, 지방세 별도)', value: '' },
+  { id: 'irp', label: 'IRP 납입액', sublabel: '연금저축과 합산 900만 원 한도 (총급여 5,500만 원 이하 15%, 초과 12%)', value: '' },
+  { id: 'rent', label: '월세 납부액', sublabel: '연간 합계 (무주택 세대주, 총급여 8,000만 원 이하, 1,000만 원 한도 15~17%)', value: '' },
 ];
-
-// 소득세 구간 (2023년 귀속 이후 동일, 단위: 원)
-const TAX_BRACKETS = [
-  { limit: 14000000, rate: 0.06, prev: 0, prevTax: 0 },
-  { limit: 50000000, rate: 0.15, prev: 14000000, prevTax: 840000 },
-  { limit: 88000000, rate: 0.24, prev: 50000000, prevTax: 6240000 },
-  { limit: 150000000, rate: 0.35, prev: 88000000, prevTax: 15360000 },
-  { limit: 300000000, rate: 0.38, prev: 150000000, prevTax: 37060000 },
-  { limit: 500000000, rate: 0.40, prev: 300000000, prevTax: 94060000 },
-  { limit: 1000000000, rate: 0.42, prev: 500000000, prevTax: 174060000 },
-  { limit: Infinity, rate: 0.45, prev: 1000000000, prevTax: 384060000 },
-];
-
-function calcIncomeTax(taxableIncome: number): number {
-  if (taxableIncome <= 0) return 0;
-  for (const b of TAX_BRACKETS) {
-    if (taxableIncome <= b.limit) {
-      return b.prevTax + (taxableIncome - b.prev) * b.rate;
-    }
-  }
-  return 0;
-}
-
-// 근로소득공제 (소득세법 제47조)
-function earnedIncomeDeduction(salary: number): number {
-  if (salary <= 5000000) return salary * 0.7;
-  if (salary <= 15000000) return 3500000 + (salary - 5000000) * 0.4;
-  if (salary <= 45000000) return 7500000 + (salary - 15000000) * 0.15;
-  if (salary <= 100000000) return 12000000 + (salary - 45000000) * 0.05;
-  return 14750000; // 최대 한도
-}
-
-// 기본공제 본인 150만원 + 부양가족 1인당 150만원
-function basicDeduction(dependents: number): number {
-  return 1500000 * (1 + dependents);
-}
 
 export default function YearEndTaxCalculator() {
   const [salary, setSalary] = useState('');
@@ -92,72 +62,38 @@ export default function YearEndTaxCalculator() {
   const result = useMemo(() => {
     const annualSalary = parseInt(salary) || 0;
     if (annualSalary === 0) return null;
+    const val = (id: string) => parseInt(deductions.find((d) => d.id === id)?.value || '0') || 0;
 
-    // 1. 근로소득공제
-    const earnedDeduction = earnedIncomeDeduction(annualSalary);
-    // 2. 총급여 - 근로소득공제 = 근로소득금액
-    const earnedIncome = annualSalary - earnedDeduction;
+    // 본인 1명 + 부양가족. 표준세액공제와 특별공제 중 유리한 쪽은 settleYearEnd가 고른다.
+    const r = settleYearEnd({
+      salary: annualSalary,
+      persons: 1 + dependents,
+      nationalPension: val('insurance'),
+      healthEmployment: val('health') + val('employment'),
+      card: { credit: val('credit'), debit: val('debit') },
+      insurancePremium: val('premium'),
+      medical: val('medical'),
+      education: val('education'),
+      donation: val('donation'),
+      pensionSavings: val('pension_savings'),
+      irp: val('irp'),
+      rent: val('rent'),
+    });
 
-    // 3. 소득공제 합산 (국민연금·건강보험·고용보험·신용카드)
-    const insuranceDeduction =
-      (parseInt(deductions.find(d => d.id === 'insurance')?.value || '0') || 0) +
-      (parseInt(deductions.find(d => d.id === 'health')?.value || '0') || 0) +
-      (parseInt(deductions.find(d => d.id === 'employment')?.value || '0') || 0);
-
-    const creditVal = parseInt(deductions.find(d => d.id === 'credit')?.value || '0') || 0;
-    const creditDeduction = Math.min(creditVal * 0.15, 3000000);
-
-    const personalDeduction = basicDeduction(dependents);
-
-    const totalIncomeDeduction = earnedDeduction + insuranceDeduction + creditDeduction + personalDeduction;
-
-    // 4. 과세표준
-    const taxableIncome = Math.max(0, annualSalary - totalIncomeDeduction);
-
-    // 5. 산출세액
-    const calculatedTax = calcIncomeTax(taxableIncome);
-
-    // 6. 세액공제 합산
-    const medicalVal = parseInt(deductions.find(d => d.id === 'medical')?.value || '0') || 0;
-    const educationVal = parseInt(deductions.find(d => d.id === 'education')?.value || '0') || 0;
-    const donationVal = parseInt(deductions.find(d => d.id === 'donation')?.value || '0') || 0;
-    const pensionVal = parseInt(deductions.find(d => d.id === 'pension_savings')?.value || '0') || 0;
-
-    const medicalDeduction = Math.min(Math.max(0, medicalVal - annualSalary * 0.03) * 0.15, 7000000 * 0.15);
-    const educationDeduction = Math.min(educationVal * 0.15, 9000000 * 0.15);
-    const donationDeduction = Math.min(donationVal * 0.15, calculatedTax);
-    const pensionDeduction = Math.min(pensionVal * 0.165, 9000000 * 0.165);
-
-    // 근로소득세액공제 (산출세액 130만 원 이하: 55%, 초과분 30%)
-    const earnedTaxCredit = calculatedTax <= 1300000
-      ? calculatedTax * 0.55
-      : 715000 + (calculatedTax - 1300000) * 0.3;
-    const cappedEarnedTaxCredit = Math.min(earnedTaxCredit, 740000);
-
-    const totalTaxCredit = cappedEarnedTaxCredit + medicalDeduction + educationDeduction + donationDeduction + pensionDeduction;
-
-    // 7. 결정세액 (지방소득세 10% 별도)
-    const finalTax = Math.max(0, calculatedTax - totalTaxCredit);
-    const localTax = finalTax * 0.1;
-    const totalFinalTax = finalTax + localTax;
-
-    // 8. 환급 또는 추가 납부
+    // 기납부세액은 소득세+지방소득세로 입력받으므로 지방세 포함 결정세액과 비교한다.
     const alreadyPaid = parseInt(paidTax) || 0;
-    const refundOrPay = alreadyPaid - totalFinalTax;
-
     return {
       annualSalary,
-      earnedDeduction,
-      earnedIncome,
-      totalIncomeDeduction,
-      taxableIncome,
-      calculatedTax,
-      totalTaxCredit,
-      finalTax,
-      localTax,
-      totalFinalTax,
+      earnedDeduction: r.earnedDeduction,
+      otherIncomeDeductions: r.incomeDeductions,
+      taxableIncome: r.taxBase,
+      calculatedTax: r.calculatedTax,
+      earnedTaxCredit: r.earnedTaxCredit,
+      otherTaxCredits: r.totalCredits - r.earnedTaxCredit,
+      usedStandard: r.usedStandard,
+      totalFinalTax: r.totalTax,
       alreadyPaid,
-      refundOrPay,
+      refundOrPay: alreadyPaid - r.totalTax,
     };
   }, [salary, paidTax, dependents, deductions]);
 
@@ -170,7 +106,7 @@ export default function YearEndTaxCalculator() {
           <div>
             <h3 className="font-bold text-white text-lg leading-tight">연말정산 간이 계산기</h3>
             <p className="text-green-100 text-xs mt-0.5">
-              예상 환급액·추가 납부액을 빠르게 추정 (실제와 차이 있을 수 있음)
+              2026년 귀속(2027년 1~2월 정산) 기준 간이 추정 (실제와 차이 있을 수 있음)
             </p>
           </div>
         </div>
@@ -257,10 +193,16 @@ export default function YearEndTaxCalculator() {
               {[
                 { label: '연간 총급여', value: fmt(result.annualSalary), unit: '원' },
                 { label: '근로소득공제', value: `− ${fmt(result.earnedDeduction)}`, unit: '원', muted: true },
-                { label: '소득공제 합계', value: `− ${fmt(result.totalIncomeDeduction - result.earnedDeduction)}`, unit: '원', muted: true },
+                { label: '소득공제 합계 (인적·보험료·카드)', value: `− ${fmt(result.otherIncomeDeductions)}`, unit: '원', muted: true },
                 { label: '과세표준', value: fmt(result.taxableIncome), unit: '원', bold: true },
                 { label: '산출세액', value: fmt(result.calculatedTax), unit: '원' },
-                { label: '세액공제 합계', value: `− ${fmt(result.totalTaxCredit)}`, unit: '원', muted: true },
+                { label: '근로소득세액공제', value: `− ${fmt(result.earnedTaxCredit)}`, unit: '원', muted: true },
+                {
+                  label: result.usedStandard ? '기타 세액공제 (표준세액공제 13만 원 포함)' : '기타 세액공제 (연금·특별·월세)',
+                  value: `− ${fmt(result.otherTaxCredits)}`,
+                  unit: '원',
+                  muted: true,
+                },
                 { label: '결정세액 (지방세 포함)', value: fmt(result.totalFinalTax), unit: '원', bold: true },
                 { label: '기납부세액', value: fmt(result.alreadyPaid), unit: '원', muted: true },
               ].map((row) => (
