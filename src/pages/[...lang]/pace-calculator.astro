@@ -106,7 +106,16 @@ const faqs = {
   ],
 };
 
-const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
+const { content: baseContent, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
+// 2026-10-18: the running-time search experiment exists only in ko/en.
+// Generic locale-prefix rewriting must not invent fr/es/zh translations of that tool.
+const c = {
+  ...baseContent,
+  related: baseContent.related.map((item) =>
+    !["ko", "en"].includes(locale) && item.href.endsWith("/male-to-female-running-time-converter/")
+      ? { ...item, href: "https://blog.oiyo.net/en/male-to-female-running-time-converter/", label: `${item.label} (English)` }
+      : item),
+};
 ---
 
 <BaseLayout title={m.title} description={m.description}>
