@@ -18,7 +18,8 @@ const ZODIAC_ANIMALS_EN = [
   "Dragon", "Snake", "Horse", "Goat",
 ];
 
-const UI_TEXT: Record<Locale, {
+// Korean law only: ko, plus en for people living in Korea. Other locales use AgeCountryCalculator.
+const UI_TEXT: Record<"ko" | "en", {
   title: string;
   subtitle: string;
   birthdate: string;
@@ -38,6 +39,13 @@ const UI_TEXT: Record<Locale, {
   pensionAge: string;
   eligible: string;
   remaining: string;
+  manAge: (n: number) => string;
+  yearsUnit: string;
+  toBirthday: (d: number) => string;
+  yearAgeNote: string;
+  tradAgeNote: string;
+  days: (n: string) => string;
+  baseYear: (y: number) => string;
 }> = {
   ko: {
     title: "만 나이 & 법적 연령 조견표 계산기",
@@ -59,6 +67,13 @@ const UI_TEXT: Record<Locale, {
     pensionAge: "국민연금 수령 개시 연령",
     eligible: "도달 완료",
     remaining: "년 남음",
+    manAge: (n) => `만 ${n}`,
+    yearsUnit: "세",
+    toBirthday: (d) => `다음 생일까지 ${d}일 남음`,
+    yearAgeNote: "현재 연도 - 출생 연도",
+    tradAgeNote: "한국식 태어난 해 1세 기준",
+    days: (n) => `${n}일`,
+    baseYear: (y) => `기준 연도: ${y}년`,
   },
   en: {
     title: "International & Legal Age Calculator",
@@ -80,90 +95,13 @@ const UI_TEXT: Record<Locale, {
     pensionAge: "State Pension Starting Age",
     eligible: "Reached",
     remaining: "yr left",
-  },
-  ja: {
-    title: "満年齢・法的年齢 計算機",
-    subtitle: "生年月日から満年齢、数え年、干支（十二支）、選挙権・運転免許・年金受給開始年齢を判定します。",
-    birthdate: "生年月日",
-    baseDate: "基準日",
-    internationalAge: "満年齢（国際標準）",
-    yearAge: "年年齢（該当年）",
-    traditionalAge: "数え年",
-    zodiacSign: "干支（十二支）",
-    daysAlive: "生誕からの日数",
-    nextBirthday: "次の誕生日まで",
-    milestonesTitle: "主なライフイベント・法的資格一覧",
-    elementary: "小学校入学",
-    idCard: "身分証交付（満17歳）",
-    license: "運転免許取得（満18歳）",
-    voting: "選挙権（満18歳）",
-    adultLiquor: "成人年齢・酒類購入（19歳）",
-    pensionAge: "公的年金受給開始年齢",
-    eligible: "到達済み",
-    remaining: "年後",
-  },
-  zh: {
-    title: "周岁与法定年龄速查计算器",
-    subtitle: "根据出生日期计算周岁、虚岁、生肖属性以及驾照、投票、退休金起领等法定年龄资格。",
-    birthdate: "出生日期",
-    baseDate: "基准日期",
-    internationalAge: "周岁（法定年龄）",
-    yearAge: "实岁（年份差）",
-    traditionalAge: "虚岁",
-    zodiacSign: "十二生肖",
-    daysAlive: "出生至今总天数",
-    nextBirthday: "距离下个生日",
-    milestonesTitle: "法定人生关键里程碑速查",
-    elementary: "小学入学",
-    idCard: "身份证申领（17岁）",
-    license: "驾驶证申领（18岁）",
-    voting: "选举投票权（18岁）",
-    adultLiquor: "成人购买酒品（19岁）",
-    pensionAge: "法定养老金起领年龄",
-    eligible: "已达标",
-    remaining: "年后",
-  },
-  fr: {
-    title: "Calculateur d'Âge Légal & Zodiaque",
-    subtitle: "Calculez votre âge révolu, votre âge coréen, signe astrologique chinois et vos droits légaux.",
-    birthdate: "Date de Naissance",
-    baseDate: "Date de Référence",
-    internationalAge: "Âge Révolu",
-    yearAge: "Âge Millésime",
-    traditionalAge: "Âge Traditionnel",
-    zodiacSign: "Signe Astrologique",
-    daysAlive: "Jours Vécus",
-    nextBirthday: "Prochain Anniversaire",
-    milestonesTitle: "Droits Légaux & Étapes de Vie",
-    elementary: "Entrée en Primaire",
-    idCard: "Carte d'Identité (17 ans)",
-    license: "Permis de Conduire (18 ans)",
-    voting: "Droit de Vote (18 ans)",
-    adultLiquor: "Majorité Achat (19 ans)",
-    pensionAge: "Âge Légal de la Retraite",
-    eligible: "Atteint",
-    remaining: "an(s) restant",
-  },
-  es: {
-    title: "Calculadora de Edad Legal & Zodíaco",
-    subtitle: "Calcula tu edad oficial, edad coreana, signo del horóscopo chino y derechos legales alcanzados.",
-    birthdate: "Fecha de Nacimiento",
-    baseDate: "Fecha de Referencia",
-    internationalAge: "Edad Cumplida",
-    yearAge: "Edad de Año",
-    traditionalAge: "Edad Tradicional",
-    zodiacSign: "Signo del Zodíaco",
-    daysAlive: "Días Vividos",
-    nextBirthday: "Próximo Cumpleaños",
-    milestonesTitle: "Hitos Legales y Derechos por Edad",
-    elementary: "Ingreso a Primaria",
-    idCard: "Documento de Identidad (17 años)",
-    license: "Licencia de Conducir (18 años)",
-    voting: "Derecho a Voto (18 años)",
-    adultLiquor: "Mayoría de Edad (19 años)",
-    pensionAge: "Edad de Jubilación / Pensión",
-    eligible: "Alcanzado",
-    remaining: "año(s) restante",
+    manAge: (n) => `${n}`,
+    yearsUnit: "yrs",
+    toBirthday: (d) => `${d} days to next birthday`,
+    yearAgeNote: "Current year − birth year",
+    tradAgeNote: "Counts 1 at birth, +1 every Jan 1",
+    days: (n) => `${n} days`,
+    baseYear: (y) => `Year reached: ${y}`,
   },
 };
 
@@ -173,7 +111,7 @@ export default function KoreanAgeCalculator({ locale }: Props) {
     new Date().toISOString().split("T")[0]
   );
 
-  const t = UI_TEXT[locale] ?? UI_TEXT.en;
+  const t = locale === "ko" ? UI_TEXT.ko : UI_TEXT.en;
 
   const calculations = useMemo(() => {
     const bDate = new Date(birthdateStr);
@@ -321,11 +259,11 @@ export default function KoreanAgeCalculator({ locale }: Props) {
             <div className="rounded-2xl border border-primary/40 bg-primary/5 p-5 text-center shadow-sm">
               <span className="text-xs font-bold text-primary block">{t.internationalAge}</span>
               <div className="mt-2 text-3xl sm:text-4xl font-black text-foreground font-mono">
-                만 {calculations.intAge}
-                <span className="text-base font-bold text-muted-foreground ml-1">세</span>
+                {t.manAge(calculations.intAge)}
+                <span className="text-base font-bold text-muted-foreground ml-1">{t.yearsUnit}</span>
               </div>
               <p className="mt-2 text-xs text-muted-foreground">
-                다음 생일까지 {calculations.daysToNextBday}일 남음
+                {t.toBirthday(calculations.daysToNextBday)}
               </p>
             </div>
 
@@ -333,10 +271,10 @@ export default function KoreanAgeCalculator({ locale }: Props) {
               <span className="text-xs font-bold text-muted-foreground block">{t.yearAge}</span>
               <div className="mt-2 text-3xl sm:text-4xl font-black text-foreground font-mono">
                 {calculations.yearAge}
-                <span className="text-base font-bold text-muted-foreground ml-1">세</span>
+                <span className="text-base font-bold text-muted-foreground ml-1">{t.yearsUnit}</span>
               </div>
               <p className="mt-2 text-xs text-muted-foreground">
-                현재 연도 - 출생 연도
+                {t.yearAgeNote}
               </p>
             </div>
 
@@ -344,10 +282,10 @@ export default function KoreanAgeCalculator({ locale }: Props) {
               <span className="text-xs font-bold text-muted-foreground block">{t.traditionalAge}</span>
               <div className="mt-2 text-3xl sm:text-4xl font-black text-foreground font-mono">
                 {calculations.tradAge}
-                <span className="text-base font-bold text-muted-foreground ml-1">세</span>
+                <span className="text-base font-bold text-muted-foreground ml-1">{t.yearsUnit}</span>
               </div>
               <p className="mt-2 text-xs text-muted-foreground">
-                한국식 태어난 해 1세 기준
+                {t.tradAgeNote}
               </p>
             </div>
           </div>
@@ -370,7 +308,7 @@ export default function KoreanAgeCalculator({ locale }: Props) {
                 <span className="text-xs font-bold text-foreground">{t.daysAlive}</span>
               </div>
               <span className="text-sm font-mono font-bold text-foreground">
-                {calculations.daysAlive.toLocaleString()}일
+                {t.days(calculations.daysAlive.toLocaleString())}
               </span>
             </div>
           </div>
@@ -392,7 +330,7 @@ export default function KoreanAgeCalculator({ locale }: Props) {
                     <div>
                       <span className="font-semibold text-foreground block">{m.title}</span>
                       <span className="text-muted-foreground">
-                        기준 연도: {m.year}년
+                        {t.baseYear(m.year)}
                       </span>
                     </div>
 
