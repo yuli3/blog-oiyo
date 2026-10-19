@@ -1,0 +1,70 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ParentalLeaveCalculator from "../../components/tools/ParentalLeaveCalculator";
+import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
+import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
+import { buildToolShell } from "../../lib/tool-shell";
+import { siteConfig } from "../../config/site.config";
+import { PARENTAL_AS_OF, parentalLeaveBenefit } from "../../lib/kr-parental-leave-2026";
+
+// Korean only (2026-10-19): Korea's Employment Insurance Act. Law-specific tools get one page per
+// country rather than translated copies (세운 2026-10-19).
+const PAGE_LOCALES = ["ko"] as const;
+
+export async function getStaticPaths() {
+  return [{ params: { lang: "ko" }, props: { locale: "ko" } }];
+}
+const locale = "ko";
+
+const title = "육아휴직 급여 계산기 2026 — 개월별 금액과 6+6 부모 특례";
+const description = "월 통상임금과 쉴 개월 수를 넣으면 2026년 기준 육아휴직 급여를 개월별로 계산합니다. 1~3개월 상한 250만, 4~6개월 200만, 7개월부터 80%·160만, 부모 함께 쓰면 최대 450만, 한부모 300만.";
+
+const man = (n: number) => `${(n / 10_000).toLocaleString("ko-KR")}만 원`;
+const g12 = parentalLeaveBenefit(3_000_000, 12, "general").total;
+const six = parentalLeaveBenefit(5_000_000, 6, "sixPlusSix", 6).total;
+
+const ko = {
+  eyebrow: "노동·급여 도구",
+  introTitle: "육아휴직 급여는 월급보다 '몇 개월째인지'가 금액을 정합니다",
+  intro: `육아휴직 급여는 통상임금의 100%(7개월부터 80%)를 주지만 개월마다 상한이 있습니다. 1~3개월은 250만 원, 4~6개월은 200만 원, 7개월부터는 160만 원까지입니다. 그래서 월 통상임금이 250만 원을 넘으면 1년 동안 받는 돈은 ${man(g12)}으로 모두 같습니다. 차이를 만드는 것은 부모가 함께 쓰는지입니다. 아이가 생후 18개월이 되기 전에 부모가 모두 휴직하면 첫 6개월 상한이 450만 원까지 올라가, 통상임금이 높으면 6개월에 ${man(six)}을 받습니다.`,
+  howToTitle: "사용 방법",
+  steps: [
+    "월 통상임금(기본급과 매달 고정으로 받는 수당, 세전)을 만 원 단위로 넣습니다.",
+    "이번 자녀로 쉴 전체 개월 수를 넣습니다. 나눠 쓰더라도 개월째는 누적으로 셉니다.",
+    "부모가 모두 쓰는지, 한부모인지 고르면 개월별 금액과 합계가 나옵니다.",
+  ],
+  highlightsTitle: "주요 특징",
+  highlights: [
+    { title: "개월별 표", body: "몇 개월째에 상한이 바뀌는지 한 줄씩 보여 줍니다." },
+    { title: "6+6 부모 특례", body: "배우자가 쉬는 기간까지 넣어, 특례 상한이 몇 개월째까지 적용되는지 계산합니다." },
+    { title: "한부모·1년 6개월", body: "한부모 상한 300만 원과 최대 18개월까지 반영합니다." },
+  ],
+  relatedTitle: "관련 도구",
+  related: [
+    { href: "/ko/unemployment-benefit-calculator/", label: "실업급여 계산기", desc: "퇴사 후 받는 구직급여를 계산합니다." },
+    { href: "/ko/salary-calculator/", label: "연봉 실수령액 계산기", desc: "복직 후 월급 실수령액을 봅니다." },
+    { href: "/ko/annual-leave-calculator/", label: "연차 계산기", desc: "육아휴직 기간의 연차를 확인합니다." },
+  ],
+  disclaimer: `고용보험법 시행령 제95조·제95조의3의 계산식을 단순화한 참고 계산입니다. 한 달이 다 차지 않는 달은 날수에 비례해 줄고, 휴직 중 회사에서 받은 금품이 있으면 감액될 수 있습니다. 수급 요건(자녀 만 8세·초등 2학년 이하, 휴직 전 피보험 단위기간 180일 이상, 30일 이상 휴직)과 실제 금액은 고용센터가 정합니다. 기준일 ${PARENTAL_AS_OF}.`,
+};
+
+const faqs = [
+  { q: "2026년 육아휴직 급여 상한액은 얼마인가요?", a: "통상임금의 100%를 주되 1~3개월은 월 250만 원, 4~6개월은 월 200만 원이 상한이고, 7개월부터는 80%를 월 160만 원까지 줍니다. 하한은 월 70만 원입니다. 2025년부터 사후지급금(25% 보류)이 없어져 매달 전액을 받습니다." },
+  { q: "부모가 같이 쓰면 얼마나 더 받나요?", a: "아이가 생후 18개월이 되기 전에 부모가 모두 육아휴직을 하면 각자 첫 6개월의 상한이 250·250·300·350·400·450만 원으로 올라갑니다(6+6 부모육아휴직제). 특례 상한은 두 사람 중 짧게 쉬는 기간까지만 적용됩니다. 동시에 쉬어도, 차례로 쉬어도 됩니다." },
+  { q: "육아휴직은 최대 얼마나 쓸 수 있나요?", a: "자녀 1명당 1년입니다. 부모가 각각 3개월 이상 쓰거나, 한부모이거나, 중증 장애가 있는 자녀를 키우면 6개월을 더 써서 1년 6개월까지 가능합니다." },
+  { q: "한부모는 얼마를 받나요?", a: "1~3개월은 월 300만 원, 4~6개월은 월 200만 원, 7개월부터는 80%를 월 160만 원까지 받습니다. 기간도 1년 6개월까지 쓸 수 있습니다." },
+  { q: "1~2주만 쉴 수도 있나요?", a: "2026년 8월 20일부터 단기 육아휴직이 생겨 방학, 휴원·휴교, 자녀 입원 같은 사유가 있으면 1주나 2주를 연 1회 쓸 수 있습니다. 급여도 같은 기준으로 날수만큼 받고, 분할 사용 횟수에는 들어가지 않습니다." },
+];
+
+const { content: c, faqHeading, faqItems } = buildToolShell({ en: ko, ko }, { en: faqs, ko: faqs }, locale);
+---
+
+<BaseLayout title={title} description={description} availableLocales={[...PAGE_LOCALES]}>
+  <ToolShell title={title} description={description} siteUrl={siteConfig.url} locale={locale} slug="parental-leave-pay-calculator" content={c} applicationCategory="FinanceApplication">
+    <div class="mx-auto max-w-2xl">
+      <ParentalLeaveCalculator client:load />
+      <p class="mt-4 text-xs text-muted-foreground">근거: 고용보험법 제70조(육아휴직 급여), 같은 법 시행령 제95조(급여액), 제95조의3(부모 모두 사용·한부모 특례), 남녀고용평등법 제19조(기간). 기준일 {PARENTAL_AS_OF}.</p>
+    </div>
+    <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
+  </ToolShell>
+</BaseLayout>
