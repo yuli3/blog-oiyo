@@ -2,6 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import RelatedToolLinks from "../../components/RelatedToolLinks.astro";
 import ComprehensiveIncomeTaxCalc from "../../components/tools/ComprehensiveIncomeTaxCalc";
+import ComprehensiveIncomeTaxCountryCalculator from "../../components/tools/ComprehensiveIncomeTaxCountryCalculator";
+import type { IncomeTaxCountry } from "../../lib/comprehensive-income-tax-countries";
 import { locales } from "../../lib/i18n";
 
 type ActiveLocale = (typeof locales)[number];
@@ -24,6 +26,10 @@ export async function getStaticPaths() {
 
 const { locale } = Astro.props as { locale: ActiveLocale };
 
+// ja/zh/fr/es use their own country's law; ko and en use South Korea's.
+const COUNTRY_BY_LOCALE: Partial<Record<ActiveLocale, IncomeTaxCountry>> = { ja: "jp", zh: "cn", fr: "fr", es: "es" };
+const country = COUNTRY_BY_LOCALE[locale];
+
 const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "종합소득세 계산기 — 사업·금융·근로소득 세금 비교",
@@ -34,20 +40,20 @@ const meta: Record<ActiveLocale, { title: string; description: string }> = {
     description: "Calculate Korean comprehensive income tax for 2024 across business, financial, and employment income. Visualize progressive brackets and compare with separate taxation.",
   },
   ja: {
-    title: "韓国の総合所得税計算機 — 事業・金融・勤労所得の税金比較",
-    description: "韓国の制度に基づく計算です。2024年基準で事業所得・金融所得・勤労所得の総合所得税を計算し、分離課税と比較します。累進税率をグラフで確認。",
+    title: "確定申告 所得税・住民税シミュレーター（令和8年分）— 給与＋事業所得",
+    description: "給与と事業所得・副業の所得を合算して、令和8年分の所得税・復興特別所得税と翌年度の住民税を計算します。青色申告特別控除（65万・55万・10万円）、基礎控除104万円の特例、源泉徴収税額との差額に対応。",
   },
   fr: {
-    title: "Calculateur d'Impôt Global sur le Revenu (Corée du Sud) — Comparaison des Sources de Revenus",
-    description: "Calcul selon les règles sud-coréennes. Calculez l'impôt global coréen sur le revenu pour 2024 selon les revenus d'activité, financiers et salariaux. Visualisez les tranches progressives.",
+    title: "Simulateur d'impôt sur le revenu 2026 — salaires, micro-entreprise et autres revenus",
+    description: "Calculez l'impôt sur le revenu du foyer au barème 2026 en additionnant salaires (abattement 10 %), revenus de micro-entreprise (abattement 34 %, 50 % ou 71 %) et autres revenus, avec quotient familial, plafonnement et décote.",
   },
   es: {
-    title: "Calculadora de Impuesto Global sobre la Renta (Corea del Sur) — Comparación de Fuentes de Ingreso",
-    description: "Cálculo según las normas de Corea del Sur. Calcula el impuesto global coreano sobre la renta para 2024 por ingresos de negocio, financieros y laborales. Visualiza los tramos progresivos.",
+    title: "Calculadora del IRPF 2026 — trabajo, actividades económicas y alquileres",
+    description: "Calcula la cuota del IRPF de la base general sumando rendimientos del trabajo, de actividades económicas y de alquileres con la escala 2026, el mínimo personal y familiar y la reducción por rendimientos del trabajo.",
   },
   zh: {
-    title: "韩国综合所得税计算机 — 比较事业、金融与劳动所得税",
-    description: "按韩国制度计算。依2024年标准计算事业所得、金融所得与勤劳所得的综合所得税，并与分离课税比较，图表显示累进税率。",
+    title: "个人所得税综合所得计算器 — 工资、劳务报酬、稿酬、特许权使用费",
+    description: "把工资薪金、劳务报酬、稿酬和特许权使用费合并为综合所得，按年度税率表3%–45%计算全年个人所得税，并与已预缴税额比较得出年度汇算应补或应退税额。",
   },
 };
 
@@ -113,120 +119,168 @@ const content: Record<ActiveLocale, SeoContent> = {
     disclaimer: "This is a general estimate. Confirm the final amount with the tax authority or a tax professional."
   },
   ja: {
-    introTitle: "総合所得税は国ごとの制度確認が必要です",
-    intro: "このページは韓国基準の総合所得税を説明付きで試算します。税率や控除は国ごとに異なり毎年変わるため、申告前の参考値として扱ってください。",
-    formulaTitle: "主な計算基準",
-    formulas: [{
-      title: "基準 1",
-      body: "勤労・事業・金融・その他所得を一つの課税標準に合算します。"
-    }, {
-      title: "基準 2",
-      body: "6%から45%まで累進税率を適用します。"
-    }, {
-      title: "基準 3",
-      body: "給与所得控除、150万ウォン基本控除、地方所得税10%を反映します。"
-    }],
+    introTitle: "給与以外の所得があれば、確定申告ですべての所得を合算して税額を計算します",
+    intro: "日本の所得税は、給与所得・事業所得・不動産所得・雑所得などを合計した「合計所得金額」から所得控除を引き、超過累進税率5%〜45%をかける総合課税です。会社員でも副業の所得が20万円を超えれば確定申告が必要で、個人事業主は青色申告で最大65万円の特別控除を受けられます。所得税には2.1%の復興特別所得税が加わり、同じ所得をもとに翌年度の住民税（所得割10%＋均等割）も決まります。",
+    formulaTitle: "計算基準",
+    formulas: [
+      {
+        title: "合計所得金額",
+        body: "給与所得（収入 − 給与所得控除、最低74万円）＋ 事業所得（売上 − 経費 − 青色申告特別控除）＋ その他の所得。事業の赤字は給与所得と損益通算"
+      },
+      {
+        title: "所得税",
+        body: "（合計所得 − 社会保険料 − 基礎控除 − 配偶者・扶養控除 − その他の所得控除）× 5%〜45% − 控除額。これに102.1%をかけ、源泉徴収税額・予定納税額を引いて納付・還付"
+      },
+      {
+        title: "住民税",
+        body: "所得割 10%（基礎控除43万円など住民税の控除で計算、調整控除あり）＋ 均等割5,000円。翌年6月から納付"
+      }
+    ],
     howToTitle: "使い方",
-    steps: ["必要な金額と条件を入力します。", "税金・控除・社会保険の内訳を確認します。", "申告・納付・判断前に最新の公式基準と照合します。"],
+    steps: [
+      "源泉徴収票の給与の支払金額と源泉徴収税額を入力します。",
+      "事業の売上・経費と青色申告特別控除の区分、その他の所得を入力します。",
+      "社会保険料・所得控除・扶養を入れ、所得税・住民税と申告での納付・還付額を確認します。"
+    ],
     faqTitle: "よくある質問",
-    faqs: [{
-      question: "どの国の制度を基準にしていますか？",
-      answer: "韓国の制度です。他国の税率、控除、社会保険にはそのまま使えません。"
-    }, {
-      question: "実際の金額と異なる理由は？",
-      answer: "扶養、特別控除、税額控除、実際経費で変わります。"
-    }, {
-      question: "制度は毎年変わりますか？",
-      answer: "はい。税率、控除限度、社会保険料率は毎年変わる可能性があります。申告や納付前に最新年度の基準を確認してください。"
-    }],
-    disclaimer: "この計算は一般的な概算です。実際の税額は税務当局または税理士に確認してください。"
+    faqs: [
+      {
+        question: "会社員の副業はいくらから確定申告が必要ですか？",
+        answer: "給与を1か所から受け、年末調整を受けている人は、給与以外の所得（収入から経費を引いた額）が20万円を超えると確定申告が必要です。20万円以下でも住民税の申告は必要で、医療費控除などで還付を受けるときは副業分も含めて申告します。"
+      },
+      {
+        question: "青色申告特別控除の65万円・55万円・10万円の違いは？",
+        answer: "複式簿記で記帳して貸借対照表を添付し期限内に申告すると55万円、さらにe-Taxで申告するか優良な電子帳簿保存を行うと65万円です。簡易な記帳だけなら10万円です。控除は事業所得（不動産所得を含む）の金額が上限です。"
+      },
+      {
+        question: "令和8年分は何が変わりましたか？",
+        answer: "基礎控除が本則62万円になり、合計所得489万円以下は104万円、655万円以下は67万円に上乗せされます。給与所得控除の最低保障額も74万円に上がりました。住民税の基礎控除は43万円のままです。"
+      }
+    ],
+    disclaimer: "このツールは一般的な見積もり用です。正確な税額は国税庁の確定申告書等作成コーナーやお住まいの市区町村、税理士にご確認ください。"
   },
   zh: {
-    introTitle: "综合所得税必须先确认适用国家的制度",
-    intro: "本页依韩国规则估算综合所得税。税率、扣除与社会保险具有国别差异且可能逐年变动，结果应作为申报前的初步参考。",
-    formulaTitle: "主要计算基准",
-    formulas: [{
-      title: "规则 1",
-      body: "合并薪资、事业、金融与其他所得为同一课税基础。"
-    }, {
-      title: "规则 2",
-      body: "使用6%至45%累进税率。"
-    }, {
-      title: "规则 3",
-      body: "反映薪资扣除、150万韩元基本扣除与10%地方所得税。"
-    }],
+    introTitle: "综合所得：四项劳动性所得合并按年计税",
+    intro: "居民个人取得的工资薪金、劳务报酬、稿酬和特许权使用费合并为综合所得，按纳税年度计算个人所得税。劳务报酬和特许权使用费以收入减除20%后的余额为收入额，稿酬在此基础上再减按70%计算。全年收入额减除60,000元基本减除费用、三险一金等专项扣除、专项附加扣除和其他扣除后，适用3%至45%的七级超额累进税率。平时由支付方预扣预缴，次年3月1日至6月30日办理年度汇算，多退少补。",
+    formulaTitle: "计算规则",
+    formulas: [
+      {
+        title: "收入额",
+        body: "工资薪金 + 劳务报酬×80% + 特许权使用费×80% + 稿酬×80%×70%"
+      },
+      {
+        title: "应纳税所得额",
+        body: "收入额 − 60,000元 − 专项扣除（三险一金）− 专项附加扣除 − 依法确定的其他扣除"
+      },
+      {
+        title: "年度税率表",
+        body: "不超过36,000元 3%，144,000元 10%，300,000元 20%，420,000元 25%，660,000元 30%，960,000元 35%，超过 45%。应补（退）税额 = 应纳税额 − 已预缴税额"
+      }
+    ],
     howToTitle: "使用方法",
-    steps: ["输入所需金额与条件。", "分别查看税金、扣除与社会保险明细。", "申报、缴纳或决策前请核对最新官方规定。"],
+    steps: [
+      "分别输入全年工资薪金、劳务报酬、特许权使用费和稿酬收入。",
+      "填写个人缴纳的三险一金、专项附加扣除合计和其他扣除。",
+      "输入已预扣预缴的税额，查看全年应纳税额和年度汇算应补或应退税额。"
+    ],
     faqTitle: "常见问题",
-    faqs: [{
-      question: "这个计算机采用哪个国家的规则？",
-      answer: "采用韩国规则，不能直接套用其他国家的税率、扣除或社会保险制度。"
-    }, {
-      question: "为什么可能和实际金额不同？",
-      answer: "扶养、特别扣除、抵免与实际费用会改变结果。"
-    }, {
-      question: "规则每年都会变吗？",
-      answer: "会。税率、扣除上限与社会保险费率都可能按年度调整。申报或缴纳前请确认当年度官方规定。"
-    }],
-    disclaimer: "本工具仅为一般估算。实际税额请向税务机关或税务专业人士确认。"
+    faqs: [
+      {
+        question: "劳务报酬预扣的税和年度汇算有什么不同？",
+        answer: "支付方每次按收入减除费用后适用20%–40%的预扣率预扣税款，比较高；年度汇算时劳务报酬按收入的80%并入综合所得，与工资一起适用3%–45%的税率表，所以很多人可以退税。"
+      },
+      {
+        question: "个体工商户的经营所得也算综合所得吗？",
+        answer: "不算。经营所得单独适用5%–35%的税率表，次年3月31日前办理经营所得汇算。可以使用本站的自由职业者税务计算器估算。"
+      },
+      {
+        question: "哪些情况可以不办年度汇算？",
+        answer: "综合所得年收入不超过12万元但需要补税的、补税金额不超过400元的，以及已预缴税额与应纳税额一致或不申请退税的，可以不办理年度汇算。"
+      }
+    ],
+    disclaimer: "本工具仅供一般估算。以个人所得税App年度汇算的计算结果为准。"
   },
   fr: {
-    introTitle: "Impôt global sur le revenu dépend du pays concerné",
-    intro: "Cette page estime l'impôt global sur le revenu selon les règles de la Corée. Les tranches, déductions et cotisations sont propres au pays et peuvent changer chaque année; utilisez le résultat comme point de départ.",
-    formulaTitle: "Bases de calcul",
-    formulas: [{
-      title: "Règle 1",
-      body: "Regroupe salaires, revenus professionnels, financiers et divers."
-    }, {
-      title: "Règle 2",
-      body: "Utilise des taux progressifs de 6% à 45%."
-    }, {
-      title: "Règle 3",
-      body: "Reflète déduction salariale, 1,5 M KRW de base et 10% de taxe locale."
-    }],
-    howToTitle: "Comment l'utiliser",
-    steps: ["Saisissez les montants et conditions nécessaires.", "Vérifiez séparément impôts, déductions et cotisations.", "Comparez avec les règles officielles avant déclaration, paiement ou décision."],
+    introTitle: "L'impôt sur le revenu additionne tous les revenus du foyer avant d'appliquer le barème",
+    intro: "En France, l'impôt sur le revenu est calculé par foyer fiscal. Chaque catégorie de revenus est d'abord déterminée selon ses propres règles : salaires après abattement de 10 % pour frais professionnels, bénéfices d'une micro-entreprise après abattement forfaitaire (34 % en BNC, 50 % pour les prestations BIC, 71 % pour la vente), revenus fonciers, pensions. Le revenu net global est ensuite divisé par le nombre de parts, soumis au barème progressif, puis multiplié par le nombre de parts, avec plafonnement du quotient familial et décote pour les impôts modestes.",
+    formulaTitle: "Règles de calcul",
+    formulas: [
+      {
+        title: "Revenu net imposable",
+        body: "Salaires − 10 % (min. 509 €, max. 14 555 €) + chiffre d'affaires micro − abattement forfaitaire (min. 305 €) + autres revenus nets catégoriels"
+      },
+      {
+        title: "Barème 2026",
+        body: "Par part : 0 % jusqu'à 11 600 €, 11 % jusqu'à 29 579 €, 30 % jusqu'à 84 577 €, 41 % jusqu'à 181 917 €, 45 % au-delà. Avantage plafonné à 1 807 € par demi-part"
+      },
+      {
+        title: "Décote et solde",
+        body: "Décote : 897 € (seul) ou 1 483 € (couple) − 45,25 % de l'impôt brut. Solde = impôt − prélèvement à la source et acomptes déjà payés"
+      }
+    ],
+    howToTitle: "Mode d'emploi",
+    steps: [
+      "Saisissez les salaires nets imposables et le chiffre d'affaires de la micro-entreprise, en choisissant son activité.",
+      "Ajoutez les autres revenus nets imposables, la situation familiale et le prélèvement déjà payé.",
+      "Lisez le revenu imposable, l'impôt et le solde à payer ou à rembourser."
+    ],
     faqTitle: "Questions fréquentes",
-    faqs: [{
-      question: "Quel pays sert de référence ?",
-      answer: "Il utilise les règles de la Corée. Ne l’appliquez pas directement à un autre système fiscal ou social."
-    }, {
-      question: "Pourquoi le montant réel peut-il différer ?",
-      answer: "Personnes à charge, déductions, crédits et frais réels peuvent changer le résultat."
-    }, {
-      question: "Les règles changent-elles chaque année ?",
-      answer: "Oui. Les taux, plafonds de déduction et cotisations peuvent changer chaque année. Vérifiez l'année en vigueur avant de déclarer ou payer."
-    }],
-    disclaimer: "Ce calcul est une estimation générale. Confirmez le montant auprès de l'administration fiscale ou d'un fiscaliste."
+    faqs: [
+      {
+        question: "Mon chiffre d'affaires de micro-entrepreneur est-il imposé en entier ?",
+        answer: "Non. Au régime micro-fiscal, l'administration applique un abattement forfaitaire pour frais : 71 % pour la vente de marchandises, 50 % pour les prestations de services BIC et 34 % pour les BNC, avec un minimum de 305 €. Si vous avez opté pour le versement libératoire, ce revenu n'entre pas dans ce calcul."
+      },
+      {
+        question: "Les dividendes et intérêts sont-ils inclus ?",
+        answer: "Par défaut, ils sont soumis au prélèvement forfaitaire unique : 12,8 % d'impôt sur le revenu, plus les prélèvements sociaux. L'option globale pour le barème est possible mais n'est pas modélisée ici."
+      },
+      {
+        question: "Quand l'impôt sur ces revenus est-il payé ?",
+        answer: "Les revenus non salariaux donnent lieu à des acomptes mensuels ou trimestriels prélevés par l'administration. La déclaration du printemps régularise ensuite l'ensemble : remboursement l'été ou solde prélevé de septembre à décembre."
+      }
+    ],
+    disclaimer: "Cet outil sert au calcul général. Le montant exact figure sur votre avis d'impôt ; vous pouvez aussi utiliser le simulateur officiel sur impots.gouv.fr."
   },
   es: {
-    introTitle: "Impuesto global sobre la renta depende del país aplicado",
-    intro: "Esta página estima el impuesto global sobre la renta con reglas de Corea. Los tramos, deducciones y cotizaciones son propios de cada país y pueden cambiar cada año; úsalo como estimación inicial.",
-    formulaTitle: "Bases de cálculo",
-    formulas: [{
-      title: "Regla 1",
-      body: "Agrupa empleo, negocio, rentas financieras y otras."
-    }, {
-      title: "Regla 2",
-      body: "Usa tipos progresivos del 6% al 45%."
-    }, {
-      title: "Regla 3",
-      body: "Refleja deducción laboral, 1,5 M KRW básica e impuesto local 10%."
-    }],
-    howToTitle: "Cómo usarla",
-    steps: ["Introduce los importes y condiciones necesarios.", "Revisa por separado impuestos, deducciones y cotizaciones.", "Compáralo con reglas oficiales antes de declarar, pagar o tomar una decisión."],
+    introTitle: "En el IRPF, el trabajo, las actividades y los alquileres tributan juntos en la base general",
+    intro: "El IRPF separa dos bases. La base general suma los rendimientos del trabajo, de actividades económicas (autónomos) y del capital inmobiliario, y tributa con la escala progresiva estatal más la autonómica, del 19 % al 47 %. La base del ahorro, con intereses, dividendos y ganancias por ventas, tributa aparte del 19 % al 30 %. Sobre la cuota de la base general se descuenta el mínimo personal y familiar, que tributa al 0 %, y el resultado se compara con las retenciones y pagos fraccionados en la declaración de la renta.",
+    formulaTitle: "Reglas de cálculo",
+    formulas: [
+      {
+        title: "Base liquidable general",
+        body: "Trabajo (íntegro − Seguridad Social − 2.000 € − reducción si las demás rentas no superan 6.500 €) + rendimiento neto de actividades + alquileres y otras rentas generales"
+      },
+      {
+        title: "Escala 2026",
+        body: "19 % hasta 12.450 €, 24 % hasta 20.200 €, 30 % hasta 35.200 €, 37 % hasta 60.000 €, 45 % hasta 300.000 €, 47 % por encima, menos la misma escala aplicada al mínimo personal y familiar"
+      },
+      {
+        title: "Resultado",
+        body: "Cuota − retenciones del trabajo y de facturas − pagos fraccionados (modelo 130). Positivo: a ingresar. Negativo: a devolver"
+      }
+    ],
+    howToTitle: "Cómo se usa",
+    steps: [
+      "Introduce los rendimientos del trabajo y la Seguridad Social del certificado de tu empresa.",
+      "Añade el rendimiento neto de tu actividad económica y de alquileres.",
+      "Indica retenciones, pagos fraccionados e hijos, y consulta la cuota y el resultado."
+    ],
     faqTitle: "Preguntas frecuentes",
-    faqs: [{
-      question: "¿Qué país usa esta calculadora?",
-      answer: "Usa reglas de Corea. No lo apliques directamente a otro sistema fiscal o social."
-    }, {
-      question: "¿Por qué puede cambiar el importe final?",
-      answer: "Dependientes, deducciones, créditos y gastos reales pueden cambiar el resultado."
-    }, {
-      question: "¿Las reglas cambian cada año?",
-      answer: "Sí. Los tipos, límites de deducción y cotizaciones pueden cambiar cada año. Comprueba la norma vigente antes de declarar o pagar."
-    }],
-    disclaimer: "Este cálculo es una estimación general. Confirma el importe con la autoridad fiscal o un profesional tributario."
+    faqs: [
+      {
+        question: "¿Por qué pierdo la reducción por rendimientos del trabajo?",
+        answer: "La reducción de hasta 7.302 € para sueldos bajos solo se aplica si las rentas distintas del trabajo, excluidas las exentas, no superan 6.500 €. Con una actividad o alquileres por encima de ese importe desaparece."
+      },
+      {
+        question: "¿Qué rentas no entran en esta base?",
+        answer: "Intereses, dividendos, seguros de ahorro y ganancias patrimoniales por transmisión van a la base del ahorro (19 % a 30 %). Las ganancias que no proceden de transmisiones, como premios, van a la base general."
+      },
+      {
+        question: "¿Por qué el resultado real puede ser distinto?",
+        answer: "Cada comunidad autónoma aplica su propia escala y sus deducciones, y existen deducciones estatales (maternidad, donativos, vivienda habitual anterior a 2013) no incluidas. Renta WEB las aplica con tus datos fiscales."
+      }
+    ],
+    disclaimer: "Esta herramienta es para cálculo general. El resultado oficial es el del borrador en Renta WEB de la Agencia Tributaria."
   }
 };
 
@@ -255,8 +309,7 @@ const structuredData = [
 <BaseLayout title={m.title} description={m.description} availableLocales={[...locales]} heading={m.title} intro={m.description}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <div class="mx-auto max-w-2xl px-4 py-5 sm:py-8">
-    <ComprehensiveIncomeTaxCalc client:load locale={locale === "ko" ? "ko" : "en"} />
-  
+    {country ? <ComprehensiveIncomeTaxCountryCalculator client:load country={country} /> : <ComprehensiveIncomeTaxCalc client:load locale={locale === "ko" ? "ko" : "en"} />}
 
     <section class="mt-6 sm:mt-10 border-t border-border pt-5 sm:pt-8">
       <h2 class="text-2xl font-bold text-foreground">{c.introTitle}</h2>

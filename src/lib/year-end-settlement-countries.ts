@@ -192,23 +192,33 @@ export interface FranceYearEndInput {
   withheld: number;
 }
 
-export function franceYearEnd(i: FranceYearEndInput) {
+/** Abattement de 10 % pour frais professionnels (min 509 €, max 14 555 € par salarié). */
+export function franceSalaryAbattement(netTaxable: number, earners = 1) {
   // The 10% minimum and maximum apply per earner; a couple is treated as one combined amount here.
-  const earners = i.couple ? 2 : 1;
-  const abattement = Math.min(i.netTaxable, Math.max(509, Math.min(14_555 * earners, Math.round(i.netTaxable * 0.1))));
-  const revenu = Math.max(0, i.netTaxable - abattement);
-  const parts = franceParts(i.couple, i.children);
-  const baseParts = i.couple ? 2 : 1;
-  const taxWith = (p: number) => bandTax(revenu / p, FR_BAREME_2026) * p;
+  return Math.min(netTaxable, Math.max(509, Math.min(14_555 * earners, Math.round(netTaxable * 0.1))));
+}
+
+/** Impôt sur le revenu net imposable du foyer: barème 2026, quotient familial plafonné, décote. */
+export function franceIncomeTax(revenu: number, couple: boolean, children: number) {
+  const parts = franceParts(couple, children);
+  const baseParts = couple ? 2 : 1;
+  const taxWith = (p: number) => bandTax(Math.max(0, revenu) / p, FR_BAREME_2026) * p;
   const full = taxWith(parts);
   const base = taxWith(baseParts);
   const extraHalves = (parts - baseParts) * 2;
   const brut = Math.max(full, base - extraHalves * FR_QF_CEILING_PER_HALF);
   const capped = brut > full;
-  const [ceiling, decoteBase] = i.couple ? [3_277, 1_483] : [1_982, 897];
+  const [ceiling, decoteBase] = couple ? [3_277, 1_483] : [1_982, 897];
   const decote = brut > 0 && brut < ceiling ? Math.min(brut, decoteBase - 0.4525 * brut) : 0;
   const impot = Math.max(0, Math.round(brut - Math.max(0, decote)));
-  return { abattement, revenu, parts, brut: Math.round(brut), capped, decote: Math.round(Math.max(0, decote)), impot, balance: Math.round(i.withheld - impot) };
+  return { parts, brut: Math.round(brut), capped, decote: Math.round(Math.max(0, decote)), impot };
+}
+
+export function franceYearEnd(i: FranceYearEndInput) {
+  const abattement = franceSalaryAbattement(i.netTaxable, i.couple ? 2 : 1);
+  const revenu = Math.max(0, i.netTaxable - abattement);
+  const t = franceIncomeTax(revenu, i.couple, i.children);
+  return { abattement, revenu, ...t, balance: Math.round(i.withheld - t.impot) };
 }
 
 // ── Spain ────────────────────────────────────────────────────────────────
@@ -242,13 +252,24 @@ export function spainWorkReduction(netWork: number) {
   return 0;
 }
 
+/** Mínimo personal (5.550 €, 6.700 € desde 65 años) + mínimo por descendientes. */
+export function spainPersonalMinimum(children: number, over65: boolean) {
+  let minimo = over65 ? 6_700 : 5_550;
+  for (let k = 0; k < Math.max(0, Math.floor(children)); k++) minimo += ES_DESCENDANT_MINIMUM[Math.min(k, 3)];
+  return minimo;
+}
+
+/** Cuota íntegra general: escala sobre la base menos escala sobre el mínimo personal y familiar. */
+export function spainGeneralQuota(base: number, minimo: number) {
+  return r2(Math.max(0, bandTax(base, ES_GENERAL_BANDS) - bandTax(Math.min(minimo, base), ES_GENERAL_BANDS)));
+}
+
 export function spainYearEnd(i: SpainYearEndInput) {
   const netWork = Math.max(0, i.grossSalary - i.socialSecurity - 2_000);
   const reduction = Math.min(netWork, Math.max(0, spainWorkReduction(Math.max(0, i.grossSalary - i.socialSecurity))));
   const pension = Math.min(1_500, Math.max(0, i.pensionPlan));
   const base = Math.max(0, netWork - reduction - pension);
-  let minimo = i.over65 ? 6_700 : 5_550;
-  for (let k = 0; k < Math.max(0, Math.floor(i.children)); k++) minimo += ES_DESCENDANT_MINIMUM[Math.min(k, 3)];
-  const cuota = r2(Math.max(0, bandTax(base, ES_GENERAL_BANDS) - bandTax(Math.min(minimo, base), ES_GENERAL_BANDS)));
+  const minimo = spainPersonalMinimum(i.children, i.over65);
+  const cuota = spainGeneralQuota(base, minimo);
   return { netWork, reduction: r2(reduction), pension, base: r2(base), minimo, cuota, result: r2(cuota - i.withheld) };
 }
