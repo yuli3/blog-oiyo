@@ -9,8 +9,8 @@ type FamilyParts = 1 | 2 | 2.5 | 3 | 3.5 | 4 | 4.5 | 5;
 
 const labels = {
     fr: {
-        title: 'Calculateur de salaire net France 2024',
-        desc: 'Estimez vos cotisations sociales et votre impôt sur le revenu selon le barème 2024.',
+        title: 'Calculateur de salaire net France 2026',
+        desc: 'Estimez vos cotisations sociales et votre impôt sur le revenu selon le barème 2026.',
         annualGross: 'Salaire brut annuel (€)',
         situation: 'Situation familiale',
         single: 'Célibataire (1 part)',
@@ -22,19 +22,19 @@ const labels = {
         monthlyNet: 'Net mensuel (avant IR)',
         annualNet: 'Net annuel (après IR)',
         cotisations: 'Cotisations salariales (mensuel)',
-        csgCrds: 'CSG/CRDS (9.53% × 98.25%)',
-        retraiteBase: 'Retraite de base CNAV (6.9% plafonné)',
-        retraiteCompl1: 'AGIRC-ARRCO T1 (3.15% ≤ 1×PASS)',
-        retraiteCompl2: 'AGIRC-ARRCO T2 (8.64% entre 1–8×PASS)',
+        csgCrds: 'CSG/CRDS (9,7% × 98,25%)',
+        retraiteBase: 'Retraite de base CNAV (6,9% plafonné + 0,4%)',
+        retraiteCompl1: 'AGIRC-ARRCO T1 + CEG (4,01% ≤ 1×PASS)',
+        retraiteCompl2: 'AGIRC-ARRCO T2 + CEG + CET (9,72% entre 1–8×PASS, CET 0,14%)',
         totalCotisations: 'Total cotisations',
         netBeforeIR: 'Salaire net avant impôt (mensuel)',
         irAnnual: "Impôt sur le revenu (annuel estimé)",
         irMonthly: "IR mensuel estimé",
-        note: '* Estimation basée sur le barème 2024 et le PASS 2024 (46 368 €). Le montant réel dépend de votre déclaration fiscale et des crédits d\'impôt applicables.',
+        note: '* Estimation basée sur le PASS 2026 (48 060 €), les taux de cotisations salariales 2026 et le barème de l\'impôt de la loi de finances 2026 (revenus 2025, dernier barème publié ; déduction de 10 % : min 509 €, max 14 556 €). Le barème applicable aux revenus 2026 sera fixé par la loi de finances 2027. Le montant réel dépend de votre déclaration fiscale et des crédits d\'impôt applicables.',
     },
     en: {
-        title: 'France Net Salary Calculator 2024',
-        desc: 'Estimate your social contributions and income tax under the 2024 scale.',
+        title: 'France Net Salary Calculator 2026',
+        desc: 'Estimate your social contributions and income tax under the 2026 scale.',
         annualGross: 'Annual Gross Salary (€)',
         situation: 'Family situation',
         single: 'Single (1 part)',
@@ -46,79 +46,93 @@ const labels = {
         monthlyNet: 'Monthly Net (before IR)',
         annualNet: 'Annual Net (after IR)',
         cotisations: 'Employee contributions (monthly)',
-        csgCrds: 'CSG/CRDS (9.53% × 98.25%)',
-        retraiteBase: 'Basic pension CNAV (6.9% capped)',
-        retraiteCompl1: 'AGIRC-ARRCO T1 (3.15% ≤ 1×PASS)',
-        retraiteCompl2: 'AGIRC-ARRCO T2 (8.64% 1–8×PASS)',
+        csgCrds: 'CSG/CRDS (9.7% × 98.25%)',
+        retraiteBase: 'Basic pension CNAV (6.9% capped + 0.4%)',
+        retraiteCompl1: 'AGIRC-ARRCO T1 + CEG (4.01% ≤ 1×PASS)',
+        retraiteCompl2: 'AGIRC-ARRCO T2 + CEG + CET (9.72% 1–8×PASS, CET 0.14%)',
         totalCotisations: 'Total contributions',
         netBeforeIR: 'Net salary before income tax (monthly)',
         irAnnual: 'Income tax (annual estimate)',
         irMonthly: 'IR monthly estimate',
-        note: '* Estimate based on 2024 tax scale and PASS 2024 (€46,368). The actual amount depends on your tax return and applicable credits.',
+        note: '* Estimate based on PASS 2026 (€48,060), 2026 employee contribution rates and the income tax scale of the 2026 Finance Act (2025 income, latest published scale; 10% expense deduction min €509, max €14,556). The scale for 2026 income will be set by the 2027 Finance Act. The actual amount depends on your tax return and applicable credits.',
     },
 } as const;
 
-// PASS 2024
-const PASS = 46_368;
+// PASS 2026 (arrêté du 22 décembre 2025)
+const PASS = 48_060;
 
-/** CSG/CRDS: 9.7% × 98.25% assiette = ~9.5303% */
-const CSG_CRDS_RATE = 0.097 * 0.9825;
+/** CSG (6,8% déductible + 2,4% non déductible) + CRDS 0,5% = 9,7% */
+const CSG_CRDS_RATE = 0.097;
+/** Part non déductible du revenu imposable: CSG 2,4% + CRDS 0,5% */
+const CSG_CRDS_NON_DEDUCTIBLE_RATE = 0.029;
+
+/** Assiette CSG/CRDS: 98,25% du brut jusqu'à 4×PASS, 100% au-delà */
+function csgBase(annualGross: number): number {
+    const abattu = Math.min(annualGross, PASS * 4);
+    return abattu * 0.9825 + Math.max(0, annualGross - PASS * 4);
+}
 
 /** Calcul cotisations salariales annuelles */
 function calcCotisations(annualGross: number): {
     csgCrds: number;
+    csgCrdsNonDeductible: number;
     retraiteBase: number;
     retraiteCompl1: number;
     retraiteCompl2: number;
     total: number;
 } {
-    const csgCrds = Math.round(annualGross * CSG_CRDS_RATE);
+    const assietteCsg = csgBase(annualGross);
+    const csgCrds = Math.round(assietteCsg * CSG_CRDS_RATE);
+    const csgCrdsNonDeductible = Math.round(assietteCsg * CSG_CRDS_NON_DEDUCTIBLE_RATE);
 
-    // Retraite base CNAV: 6.9% plafonné au PASS
-    const retraiteBase = Math.round(Math.min(annualGross, PASS) * 0.069);
+    // Retraite base CNAV: 6,9% plafonné au PASS + 0,4% déplafonné
+    const retraiteBase = Math.round(Math.min(annualGross, PASS) * 0.069 + annualGross * 0.004);
 
-    // AGIRC-ARRCO Tranche 1: 3.15% jusqu'à 1×PASS
-    const retraiteCompl1 = Math.round(Math.min(annualGross, PASS) * 0.0315);
+    // AGIRC-ARRCO Tranche 1: 3,15% + CEG 0,86% jusqu'à 1×PASS
+    const t1Base = Math.min(annualGross, PASS);
+    const retraiteCompl1 = Math.round(t1Base * (0.0315 + 0.0086));
 
-    // AGIRC-ARRCO Tranche 2: 8.64% entre 1× et 8×PASS
+    // AGIRC-ARRCO Tranche 2: 8,64% + CEG 1,08% entre 1× et 8×PASS
+    // CET 0,14% sur T1+T2 lorsque la rémunération dépasse 1×PASS
     const t2Base = Math.max(0, Math.min(annualGross, PASS * 8) - PASS);
-    const retraiteCompl2 = Math.round(t2Base * 0.0864);
+    const cet = annualGross > PASS ? (t1Base + t2Base) * 0.0014 : 0;
+    const retraiteCompl2 = Math.round(t2Base * (0.0864 + 0.0108) + cet);
 
     const total = csgCrds + retraiteBase + retraiteCompl1 + retraiteCompl2;
-    return { csgCrds, retraiteBase, retraiteCompl1, retraiteCompl2, total };
+    return { csgCrds, csgCrdsNonDeductible, retraiteBase, retraiteCompl1, retraiteCompl2, total };
 }
 
-/** Calcul IR 2024 avec quotient familial */
-function calcIR(annualGross: number, cotisationsTotal: number, parts: number): number {
-    // Salaire net imposable = brut - cotisations
-    const netImposable = annualGross - cotisationsTotal;
+/** Calcul IR (barème LF 2026) avec quotient familial */
+function calcIR(annualGross: number, cotisationsTotal: number, csgCrdsNonDeductible: number, parts: number): number {
+    // Salaire net imposable = brut - cotisations + CSG/CRDS non déductibles
+    const netImposable = annualGross - cotisationsTotal + csgCrdsNonDeductible;
 
-    // Abattement forfaitaire 10% (min 472, max 12 829)
-    const abattement = Math.max(472, Math.min(12_829, Math.round(netImposable * 0.1)));
+    // Déduction forfaitaire 10% (min 509, max 14 556)
+    const abattement = Math.min(netImposable, Math.max(509, Math.min(14_556, Math.round(netImposable * 0.1))));
     const revenuImposable = Math.max(0, netImposable - abattement);
 
     // Quotient familial: revenu par part
     const revenuParPart = revenuImposable / parts;
 
-    // Barème progressif 2024 (par part)
+    // Barème progressif LF 2026 (revenus 2025, par part)
     let irParPart = 0;
-    if (revenuParPart <= 11_294) {
+    if (revenuParPart <= 11_600) {
         irParPart = 0;
-    } else if (revenuParPart <= 28_797) {
-        irParPart = (revenuParPart - 11_294) * 0.11;
-    } else if (revenuParPart <= 82_341) {
-        irParPart = (28_797 - 11_294) * 0.11 + (revenuParPart - 28_797) * 0.30;
-    } else if (revenuParPart <= 177_106) {
+    } else if (revenuParPart <= 29_579) {
+        irParPart = (revenuParPart - 11_600) * 0.11;
+    } else if (revenuParPart <= 84_577) {
+        irParPart = (29_579 - 11_600) * 0.11 + (revenuParPart - 29_579) * 0.30;
+    } else if (revenuParPart <= 181_917) {
         irParPart =
-            (28_797 - 11_294) * 0.11 +
-            (82_341 - 28_797) * 0.30 +
-            (revenuParPart - 82_341) * 0.41;
+            (29_579 - 11_600) * 0.11 +
+            (84_577 - 29_579) * 0.30 +
+            (revenuParPart - 84_577) * 0.41;
     } else {
         irParPart =
-            (28_797 - 11_294) * 0.11 +
-            (82_341 - 28_797) * 0.30 +
-            (177_106 - 82_341) * 0.41 +
-            (revenuParPart - 177_106) * 0.45;
+            (29_579 - 11_600) * 0.11 +
+            (84_577 - 29_579) * 0.30 +
+            (181_917 - 84_577) * 0.41 +
+            (revenuParPart - 181_917) * 0.45;
     }
 
     return Math.max(0, Math.round(irParPart * parts));
@@ -145,7 +159,7 @@ const FranceSalaryCalculator: React.FC<Props> = ({ locale = 'fr' }) => {
     const netBeforeIRAnnual = Math.max(0, annualGross - annualCotisations);
     const netBeforeIRMonthly = Math.round(netBeforeIRAnnual / 12);
 
-    const irAnnual = calcIR(annualGross, annualCotisations, parts);
+    const irAnnual = calcIR(annualGross, annualCotisations, cotisations.csgCrdsNonDeductible, parts);
     const irMonthly = Math.round(irAnnual / 12);
 
     const annualNet = Math.max(0, netBeforeIRAnnual - irAnnual);
@@ -168,7 +182,7 @@ const FranceSalaryCalculator: React.FC<Props> = ({ locale = 'fr' }) => {
     };
 
     return (
-        <GameContainer title={t.title} subtitle="Simulateur salaire net — France 2024" onReset={handleReset}>
+        <GameContainer title={t.title} subtitle="Simulateur salaire net — France 2026" onReset={handleReset}>
             <div className="flex flex-col gap-5 sm:gap-8">
                 <p className="text-sm font-medium text-muted-foreground text-center">{t.desc}</p>
 

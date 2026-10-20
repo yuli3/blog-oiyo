@@ -7,54 +7,66 @@ interface Props {
 
 const labels = {
     ja: {
-        title: '日本の給与手取り計算機 2024',
-        desc: '所得税・社会保険・住民税を自動計算します（令和6年度）。',
+        title: '日本の給与手取り計算機 2026',
+        desc: '所得税・社会保険・住民税を自動計算します（令和8年分）。',
         annualSalary: '年収（円）',
         age40plus: '40歳以上（介護保険の対象）',
         monthlyGross: '月額総支給',
         monthlyNet: '月額手取り',
         annualNet: '年間手取り',
         deductions: '月額控除内訳',
-        healthInsurance: '健康保険 (4.985%)',
-        longTermCare: '介護保険 (0.91%)',
+        healthInsurance: '健康保険 (4.925%)',
+        childSupport: '子ども・子育て支援金 (0.115%)',
+        longTermCare: '介護保険 (0.81%)',
         pension: '厚生年金 (9.15%)',
-        employment: '雇用保険 (0.6%)',
+        employment: '雇用保険 (0.5%)',
         incomeTax: '所得税（復興税込み）',
         residentTax: '住民税（概算）',
         totalDeduction: '合計控除額',
-        note: '※ 所得税は協会けんぽ平均保険料・令和6年度税率をもとにした概算です。実際の納税額は確定申告等で確定します。住民税は前年所得をもとに課税されるため、1年遅れで変動します。',
+        note: '※ 令和8年分の概算です：協会けんぽ東京支部（健康保険9.85%・介護保険1.62%、子ども・子育て支援金0.23%は2026年4月分から）、雇用保険0.5%（令和8年度）、給与所得控除の最低保障74万円・基礎控除62万円＋特例加算（合計所得489万円以下は104万円）を反映。令和8年分の控除引上げは毎月の源泉徴収ではなく年末調整で精算されます。住民税は前年所得をもとに課税されるため、1年遅れで変動します。',
     },
     en: {
-        title: 'Japan Salary Calculator 2024',
-        desc: 'Automatically calculate income tax, social insurance, and resident tax (FY2024).',
+        title: 'Japan Salary Calculator 2026',
+        desc: 'Automatically calculate income tax, social insurance, and resident tax (2026 tax year).',
         annualSalary: 'Annual Salary (¥)',
         age40plus: 'Age 40+ (Long-term care insurance applies)',
         monthlyGross: 'Monthly Gross',
         monthlyNet: 'Monthly Net',
         annualNet: 'Annual Net',
         deductions: 'Monthly Deductions',
-        healthInsurance: 'Health Insurance (4.985%)',
-        longTermCare: 'Long-term Care Ins. (0.91%)',
+        healthInsurance: 'Health Insurance (4.925%)',
+        childSupport: 'Child & Childcare Support Levy (0.115%)',
+        longTermCare: 'Long-term Care Ins. (0.81%)',
         pension: "Employee's Pension (9.15%)",
-        employment: 'Employment Insurance (0.6%)',
+        employment: 'Employment Insurance (0.5%)',
         incomeTax: 'Income Tax (incl. reconstruction surtax)',
         residentTax: 'Resident Tax (estimate)',
         totalDeduction: 'Total Deductions',
-        note: '* Income tax is an estimate based on Kyokai Kenpo average premiums and FY2024 tax rates. Resident tax is based on prior-year income and lags by one year.',
+        note: '* 2026 estimate: Kyokai Kenpo Tokyo (health 9.85%, long-term care 1.62%, child support levy 0.23% from April 2026), employment insurance 0.5% (FY2026), employment income deduction minimum ¥740,000 and basic deduction ¥620,000 plus the 2026–27 special addition (¥1,040,000 total up to ¥4.89M total income). The 2026 deduction increases are settled at year-end adjustment rather than in monthly withholding. Resident tax is based on prior-year income and lags by one year.',
     },
 } as const;
 
-/** 給与所得控除 (令和6年度) */
+/** 給与所得控除（令和8年分: 収入220万円以下は74万円＝本則69万円＋特例5万円）*/
 function calcEmploymentIncomeDeduction(annual: number): number {
-    if (annual <= 1_625_000) return 550_000;
-    if (annual <= 1_800_000) return Math.floor(annual * 0.4 - 100_000);
+    if (annual <= 2_200_000) return Math.min(annual, 740_000);
     if (annual <= 3_600_000) return Math.floor(annual * 0.3 + 80_000);
     if (annual <= 6_600_000) return Math.floor(annual * 0.2 + 440_000);
     if (annual <= 8_500_000) return Math.floor(annual * 0.1 + 1_100_000);
     return 1_950_000;
 }
 
-/** 所得税額（基礎控除48万円込み）*/
+/** 基礎控除（令和8年分: 本則62万円＋令和8・9年の特例加算）*/
+function calcBasicDeduction(totalIncome: number): number {
+    if (totalIncome <= 4_890_000) return 1_040_000;
+    if (totalIncome <= 6_550_000) return 670_000;
+    if (totalIncome <= 23_500_000) return 620_000;
+    if (totalIncome <= 24_000_000) return 480_000;
+    if (totalIncome <= 24_500_000) return 320_000;
+    if (totalIncome <= 25_000_000) return 160_000;
+    return 0;
+}
+
+/** 所得税額（課税所得に対する速算表＋復興特別所得税）*/
 function calcIncomeTax(taxableIncome: number): number {
     if (taxableIncome <= 0) return 0;
     let base = 0;
@@ -85,33 +97,38 @@ const JapanSalaryCalculator: React.FC<Props> = ({ locale = 'ja' }) => {
 
     const monthlyGross = Math.floor(annualSalary / 12);
 
-    // 社会保険料（協会けんぽ平均、月額標準報酬 = 月額総支給で近似）
-    const healthIns = Math.floor(monthlyGross * 0.04985);
-    const longTermCareIns = age40plus ? Math.floor(monthlyGross * 0.0091) : 0;
-    const pensionIns = Math.floor(monthlyGross * 0.0915);
-    const employmentIns = Math.floor(monthlyGross * 0.006);
+    // 社会保険料（協会けんぽ東京支部 令和8年度、月額標準報酬 = 月額総支給で近似）
+    // 健康保険 9.85% / 介護保険 1.62% / 子ども・子育て支援金 0.23% / 厚生年金 18.3% を労使折半、雇用保険 0.5%
+    const healthIns = Math.floor(monthlyGross * 0.04925);
+    const childSupportIns = Math.floor(monthlyGross * 0.00115);
+    const longTermCareIns = age40plus ? Math.floor(monthlyGross * 0.0081) : 0;
+    // 厚生年金の標準報酬月額上限 65万円（2026年時点）
+    const pensionIns = Math.floor(Math.min(monthlyGross, 650_000) * 0.0915);
+    const employmentIns = Math.floor(monthlyGross * 0.005);
 
-    const annualSocialIns = (healthIns + longTermCareIns + pensionIns + employmentIns) * 12;
+    const annualSocialIns = (healthIns + childSupportIns + longTermCareIns + pensionIns + employmentIns) * 12;
 
     // 給与所得控除
     const employmentDeduction = calcEmploymentIncomeDeduction(annualSalary);
 
-    // 基礎控除（所得2400万円以下）
-    const basicDeduction = annualSalary <= 24_000_000 ? 480_000 : 0;
+    // 合計所得金額（給与所得のみ）と基礎控除
+    const employmentIncome = Math.max(0, annualSalary - employmentDeduction);
+    const basicDeduction = calcBasicDeduction(employmentIncome);
 
-    // 課税所得 = 年収 - 給与所得控除 - 社会保険料 - 基礎控除
-    const taxableIncome = Math.max(0, annualSalary - employmentDeduction - annualSocialIns - basicDeduction);
+    // 課税所得 = 給与所得 - 社会保険料 - 基礎控除
+    const taxableIncome = Math.max(0, employmentIncome - annualSocialIns - basicDeduction);
 
     // 所得税（月割り）
     const annualIncomeTax = calcIncomeTax(taxableIncome);
     const monthlyIncomeTax = Math.floor(annualIncomeTax / 12);
 
-    // 住民税: 10% + 均等割5,000円/年
-    const annualResidentTax = Math.floor(taxableIncome * 0.1) + 5_000;
+    // 住民税: 所得割10%（住民税の基礎控除43万円）+ 均等割・森林環境税5,000円/年
+    const residentTaxable = Math.max(0, employmentIncome - annualSocialIns - 430_000);
+    const annualResidentTax = residentTaxable > 0 ? Math.floor(residentTaxable * 0.1) + 5_000 : 0;
     const monthlyResidentTax = Math.floor(annualResidentTax / 12);
 
     const totalMonthlyDeduction =
-        healthIns + longTermCareIns + pensionIns + employmentIns + monthlyIncomeTax + monthlyResidentTax;
+        healthIns + childSupportIns + longTermCareIns + pensionIns + employmentIns + monthlyIncomeTax + monthlyResidentTax;
 
     const monthlyNet = Math.max(0, monthlyGross - totalMonthlyDeduction);
     const annualNet = monthlyNet * 12;
@@ -129,6 +146,7 @@ const JapanSalaryCalculator: React.FC<Props> = ({ locale = 'ja' }) => {
 
     const deductionRows = [
         { label: t.healthInsurance, value: healthIns },
+        { label: t.childSupport, value: childSupportIns },
         ...(age40plus ? [{ label: t.longTermCare, value: longTermCareIns }] : []),
         { label: t.pension, value: pensionIns },
         { label: t.employment, value: employmentIns },
@@ -137,7 +155,7 @@ const JapanSalaryCalculator: React.FC<Props> = ({ locale = 'ja' }) => {
     ];
 
     return (
-        <GameContainer title={t.title} subtitle="Net Pay Estimator — Japan 2024" onReset={handleReset}>
+        <GameContainer title={t.title} subtitle="Net Pay Estimator — Japan 2026" onReset={handleReset}>
             <div className="flex flex-col gap-5 sm:gap-8">
                 <p className="text-sm font-medium text-muted-foreground text-center">{t.desc}</p>
 

@@ -3,6 +3,8 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import RelatedToolLinks from "../../components/RelatedToolLinks.astro";
 import ToolsCompanionBanner from "../../components/ToolsCompanionBanner.astro";
 import KoreanAgeCalculator from "../../components/tools/KoreanAgeCalculator";
+import AgeCountryCalculator from "../../components/tools/AgeCountryCalculator";
+import type { AgeCountry } from "../../lib/age-milestones-countries";
 import { locales } from "../../lib/i18n";
 
 type ActiveLocale = (typeof locales)[number];
@@ -13,6 +15,11 @@ export async function getStaticPaths() {
 
 const { locale } = Astro.props as { locale: ActiveLocale };
 
+// Law-dependent tool: each locale page follows its own country's legal ages (세운 2026-10-19).
+// ko and en (people living in Korea) use Korean law.
+const COUNTRY_BY_LOCALE: Partial<Record<ActiveLocale, AgeCountry>> = { ja: "jp", zh: "cn", fr: "fr", es: "es" };
+const country = COUNTRY_BY_LOCALE[locale];
+
 const meta: Record<ActiveLocale, { title: string; description: string; eyebrow: string }> = {
   ko: {
     title: "만 나이 & 띠 계산기 — 법정 연령·선거권·운전면허·연금 개시일 조견표",
@@ -20,29 +27,29 @@ const meta: Record<ActiveLocale, { title: string; description: string; eyebrow: 
     eyebrow: "공식 법정 연령 계산기",
   },
   en: {
-    title: "Age & Milestone Calculator — International Age, Korean Age & Legal Rights",
-    description: "Calculate your international age, calendar year age, Chinese zodiac sign, and official legal milestone dates for voting, driving, and retirement pensions.",
+    title: "Korean Age Calculator — International Age, Korean Age & Legal Ages in South Korea",
+    description: "For South Korea: international (man) age, calendar-year age, traditional Korean age, zodiac sign, and the Korean legal ages for voting, driving, alcohol and the national pension.",
     eyebrow: "Official Age Utility",
   },
   ja: {
-    title: "満年齢・干支 計算機 — 選挙権・免許・公的年金受給開始 年齢早見表",
-    description: "生年月日から国際標準の満年齢、年年齢、数え年、干支（十二支）と選挙権、免許取得、成人資格、年金受給開始年を一括判定します。",
+    title: "満年齢計算機 — 日本の法律で決まる年齢（成年・選挙権・免許・飲酒・年金）",
+    description: "生年月日から日本の法律上の満年齢を計算し、早生まれの小学校入学年、成年18歳、選挙権、普通免許、飲酒・喫煙20歳、老齢基礎年金65歳に到達する日を確認できます。",
     eyebrow: "年齢・資格早見表",
   },
   zh: {
-    title: "周岁生肖速查计算器 — 法定年龄·选举权·驾照·退休养老金早见表",
-    description: "输入出生日期即刻得出法定周岁、虚岁、实岁、十二生肖属相，并自动查询选举权、考驾照及法定养老金领取年份。",
+    title: "周岁计算器 — 中国法律规定的年龄（身份证·成年·驾照·退休）",
+    description: "输入出生日期计算法定周岁，并查看申领身份证16周岁、成年18周岁、选举权、驾驶证以及逐步延迟的法定退休年龄的到达日期。",
     eyebrow: "法定年龄工具",
   },
   fr: {
-    title: "Calculateur d'Âge Légal & Astrologique — Majorité, Droits & Retraite",
-    description: "Calculez votre âge révolu, votre âge coréen, signe chinois et échéances légales (droit de vote, permis, retraite) en temps réel.",
-    eyebrow: "Calculateur d'Âge",
+    title: "Calculateur d'âge — les âges légaux en France (permis, majorité, retraite)",
+    description: "Calculez votre âge exact et la date à laquelle vous atteignez les âges fixés par la loi française : conduite accompagnée, permis B à 17 ans, majorité, vote, âge légal de la retraite.",
+    eyebrow: "Calculateur d'âge",
   },
   es: {
-    title: "Calculadora de Edad y Signo Zodiacal — Mayoría Legal, Permisos y Pensión",
-    description: "Calcula tu edad oficial, edad coreana tradicional, signo del zodíaco chino y fechas clave para votar, conducir y jubilarte.",
-    eyebrow: "Utilidad de Edad Legal",
+    title: "Calculadora de edad — edades legales en España (DNI, mayoría, carnet, jubilación)",
+    description: "Calcula tu edad exacta y cuándo alcanzas las edades fijadas por la ley española: DNI obligatorio, mayoría de edad, voto, permiso de conducir B y jubilación ordinaria.",
+    eyebrow: "Utilidad de edad legal",
   },
 };
 
@@ -126,139 +133,67 @@ const content: Record<
     ],
   },
   ja: {
-    introTitle: "満年齢と年年齢、各種法定制限の仕組み",
-    intro: "国際標準である満年齢に加え、選挙権、運転免許取得、公的年金受給開始年齢などの法的なマイルストーンを一覧できます。",
-    guideTitle: "年齢計算の基本ルール",
+    introTitle: "日本では誕生日の前日に年をとります",
+    intro: "日本の法律上の年齢は「年齢計算ニ関スル法律」で決まり、誕生日の前日が終わる時点で1歳加算されます。そのため4月1日生まれは前の学年に入る「早生まれ」になります。2022年4月から成年年齢は18歳になりましたが、飲酒・喫煙や公営競技は20歳のままです。",
+    guideTitle: "主な年齢の決まり",
     guides: [
-      {
-        title: "満年齢",
-        body: "生まれた日を0歳とし、毎年の誕生日に1歳ずつ加算する世界共通の年齢基準です。",
-      },
-      {
-        title: "数え年",
-        body: "生まれた年を1歳とし、元旦を迎えるごとに1歳加算する伝統的な東アジアの年齢です。",
-      },
-      {
-        title: "干支（十二支）の周期",
-        body: "子・丑・寅・卯・辰・巳・午・未・申・酉・戌・亥の12匹の動物が毎年順番に巡ります。",
-      },
-      {
-        title: "公的年金受給開始",
-        body: "生年別で60歳から65歳へと段階的に引き上げられており、原則65歳から老齢年金を受給できます。",
-      },
+      { title: "成年 18歳", body: "民法改正で2022年4月1日から18歳。親の同意なく契約ができます。" },
+      { title: "飲酒・喫煙 20歳", body: "二十歳未満ノ者ノ飲酒ノ禁止ニ関スル法律などにより20歳のままです。" },
+      { title: "普通自動車免許 18歳", body: "原付・小型特殊は16歳から取得できます。" },
+      { title: "老齢基礎年金 65歳", body: "原則65歳から。60歳まで繰上げ、75歳まで繰下げができます。" },
     ],
     faqTitle: "よくある質問",
     faqs: [
-      {
-        question: "誕生日前の満年齢の計算方法は？",
-        answer: "今年の西暦から生まれた西暦を引き、今年の誕生日がまだ来ていない場合はさらに1歳引きます。",
-      },
-      {
-        question: "選挙権は何歳から付与されますか？",
-        answer: "満18歳の誕生日の前日（法律上の年齢到達日）から投票が可能になります。",
-      },
+      { question: "4月1日生まれはなぜ早生まれですか？", answer: "法律上は誕生日の前日（3月31日）に満6歳になるため、その年の4月1日に始まる学年に入学します。4月2日生まれは4月1日に満6歳になるので翌年度の入学です。" },
+      { question: "数え年はもう使わないのですか？", answer: "法律上の年齢は満年齢です。数え年は厄年や七五三など行事で使われることがあります。" },
     ],
   },
   zh: {
-    introTitle: "周岁与虚岁，以及法定权利年龄速查指南",
-    intro: "根据公历出生日期，全面解析法定周岁、实岁与虚岁，并提供驾照、投票权、养老金起领等人生关键法定节点。",
-    guideTitle: "常见年龄计算标准",
+    introTitle: "法律上的年龄按周岁计算",
+    intro: "中国法律中的年龄一律按周岁计算，从出生之日起，过了生日当天才算满一岁。虚岁只在民俗中使用。成年年龄是18周岁，申领居民身份证的义务年龄是16周岁。法定退休年龄从2025年1月起按出生年月逐步延迟。",
+    guideTitle: "主要法定年龄",
     guides: [
-      {
-        title: "周岁（法定年龄）",
-        body: "出生即为0岁，每过一个公历生日便增加1岁，是绝大多数法律行为的法定基准。",
-      },
-      {
-        title: "实岁（年份差）",
-        body: "当前公历年份直接减去出生年份，常用于特定行政或征兵法规筛选。",
-      },
-      {
-        title: "十二生肖周期",
-        body: "鼠、牛、虎、兔、龙、蛇、马、羊、猴、鸡、狗、猪十二种属相按年轮替。",
-      },
-      {
-        title: "法定退休金起领",
-        body: "根据出生年份不同，由60周岁逐步顺延至65周岁按月领取法定基本养老保险。",
-      },
+      { title: "身份证 16周岁", body: "《居民身份证法》规定年满16周岁应当申领，未满16周岁可以申领。" },
+      { title: "成年 18周岁", body: "《民法典》规定18周岁以上为成年人；16周岁以上以自己劳动收入为主要生活来源的视为完全民事行为能力人。" },
+      { title: "小型汽车驾照 18周岁", body: "申请小型汽车驾驶证的年龄为18周岁以上。" },
+      { title: "法定退休年龄", body: "2025年起逐步延迟：男职工从60岁延至63岁，女职工从50岁、55岁分别延至55岁、58岁。" },
     ],
     faqTitle: "常见问题",
     faqs: [
-      {
-        question: "生日前和生日后周岁怎么算？",
-        answer: "当前年份减去出生年份，如果今年的生日还没到，则需要再减去1岁；生日当天起即为完整周岁。",
-      },
-      {
-        question: "考取机动车驾驶证需要满足多少岁？",
-        answer: "通常需要年满18周岁当天起，方可向有关部门申请并参加机动车驾驶考试。",
-      },
+      { question: "周岁和虚岁有什么区别？", answer: "周岁从0岁算起，每过一次生日加一岁；虚岁出生就算一岁，每过一次春节再加一岁。法律上使用周岁。" },
+      { question: "生肖按公历还是农历？", answer: "生肖以农历春节为界。1月或2月春节前出生的人，属上一年的生肖。" },
     ],
   },
   fr: {
-    introTitle: "Calcul de l'Âge Légal et Échéances Juridiques",
-    intro: "Calculez précisément votre âge révolu, votre signe astrologique et les étapes clés de vos droits civiques et sociaux.",
-    guideTitle: "Repères d'Âge et Droits",
+    introTitle: "En France, l'âge légal se compte en années révolues",
+    intro: "En France, on gagne un an le jour de son anniversaire. La majorité civile et le droit de vote sont fixés à 18 ans. Depuis le 1er janvier 2024, le permis B peut être obtenu dès 17 ans. L'âge légal de départ à la retraite est de 64 ans pour les générations nées à partir de 1969 ; la loi de financement de la Sécurité sociale pour 2026 l'a abaissé de quelques mois pour les générations 1964 à 1968.",
+    guideTitle: "Les principaux âges légaux",
     guides: [
-      {
-        title: "Âge Révolu",
-        body: "Calculé à partir de la date d'anniversaire précise, il confère la pleine capacité civile.",
-      },
-      {
-        title: "Signe Astrologique Chinois",
-        body: "Cycle de douze animaux régissant chaque année lunaire de naissance.",
-      },
-      {
-        title: "Majorité Électorale",
-        body: "Le droit de vote s'exerce dès l'âge de 18 ans révolus.",
-      },
-      {
-        title: "Âge de la Retraite",
-        body: "Fixé selon votre année de naissance pour l'ouverture des droits à pension de vieillesse.",
-      },
+      { title: "Conduite accompagnée 15 ans", body: "L'apprentissage anticipé de la conduite (AAC) est possible dès 15 ans." },
+      { title: "Permis B 17 ans", body: "Âge minimal abaissé de 18 à 17 ans au 1er janvier 2024." },
+      { title: "Majorité et vote 18 ans", body: "Capacité juridique complète et inscription automatique sur les listes électorales." },
+      { title: "Retraite 62 à 64 ans", body: "Selon l'année de naissance ; 64 ans pour les personnes nées à partir de 1969." },
     ],
-    faqTitle: "Questions Fréquentes",
+    faqTitle: "Questions fréquentes",
     faqs: [
-      {
-        question: "Comment calculer l'âge avant son anniversaire ?",
-        answer: "Soustrayez votre année de naissance de l'année en cours, puis retirez 1 an si la date d'anniversaire n'est pas encore passée.",
-      },
-      {
-        question: "À quel âge peut-on passer le permis ?",
-        answer: "L'épreuve pratique du permis de conduire s'effectue généralement dès 18 ans révolus.",
-      },
+      { question: "À quel âge peut-on acheter de l'alcool ou du tabac ?", answer: "La vente d'alcool et de tabac aux mineurs est interdite : il faut avoir 18 ans." },
+      { question: "L'âge légal de la retraite permet-il le taux plein ?", answer: "Pas forcément. Le taux plein dépend aussi du nombre de trimestres cotisés ; à 67 ans, il est atteint automatiquement." },
     ],
   },
   es: {
-    introTitle: "Cálculo de Edad Legal y Derechos por Edad",
-    intro: "Calcula con exactitud tu edad oficial, horóscopo chino y derechos fundamentales alcanzados a lo largo de tu vida.",
-    guideTitle: "Criterios Principales de Edad",
+    introTitle: "En España la edad se cumple el día del cumpleaños",
+    intro: "En España la edad legal se cuenta en años cumplidos. La mayoría de edad y el derecho de voto llegan a los 18 años, igual que el permiso de conducir B. El DNI es obligatorio desde los 14 años. La edad ordinaria de jubilación sube a 67 años en 2027, salvo para quienes hayan cotizado al menos 38 años y 6 meses, que pueden jubilarse a los 65.",
+    guideTitle: "Principales edades legales",
     guides: [
-      {
-        title: "Edad Cumplida",
-        body: "Aumenta un año en cada fecha de cumpleaños y determina la capacidad jurídica formal.",
-      },
-      {
-        title: "Horóscopo Chino",
-        body: "Ciclo de doce animales que representan cada año de nacimiento.",
-      },
-      {
-        title: "Mayoría de Edad y Voto",
-        body: "Se adquiere a los 18 años para votar y firmar contratos vinculantes.",
-      },
-      {
-        title: "Jubilación y Pensión",
-        body: "Regulada de forma progresiva según tu año de nacimiento entre los 60 y 65 años.",
-      },
+      { title: "DNI 14 años", body: "Obligatorio a partir de los 14 años; antes es voluntario." },
+      { title: "Mayoría y voto 18 años", body: "Plena capacidad de obrar y derecho de sufragio." },
+      { title: "Permiso B 18 años", body: "Los ciclomotores (AM) pueden conducirse desde los 15." },
+      { title: "Jubilación 65 a 67 años", body: "En 2026: 66 años y 10 meses, o 65 con 38 años y 3 meses cotizados. Desde 2027: 67, o 65 con 38 años y 6 meses." },
     ],
-    faqTitle: "Preguntas Frecuentes",
+    faqTitle: "Preguntas frecuentes",
     faqs: [
-      {
-        question: "¿Cómo se calcula la edad exacta antes del cumpleaños?",
-        answer: "Resta tu año de nacimiento del año actual y resta 1 año adicional si tu cumpleaños aún no ha tenido lugar.",
-      },
-      {
-        question: "¿A qué edad se puede votar?",
-        answer: "A partir de los 18 años cumplidos adquieres el derecho constitucional a votar.",
-      },
+      { question: "¿A qué edad se puede comprar alcohol o tabaco?", answer: "A los 18 años. La venta a menores está prohibida en todo el país." },
+      { question: "¿Puedo jubilarme antes de la edad ordinaria?", answer: "Sí, con jubilación anticipada voluntaria (hasta 2 años antes) o involuntaria (hasta 4 años antes), con coeficientes reductores y requisitos de cotización." },
     ],
   },
 };
@@ -281,7 +216,7 @@ const c = content[locale] ?? content.en;
       </p>
     </div>
 
-    <KoreanAgeCalculator client:load locale={locale} />
+    {country ? <AgeCountryCalculator client:load country={country} /> : <KoreanAgeCalculator client:load locale={locale} />}
 
     <section class="mt-12 space-y-8 rounded-2xl border border-border bg-card p-6 sm:p-8">
       <div>

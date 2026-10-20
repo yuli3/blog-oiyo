@@ -2,6 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import RelatedToolLinks from "../../components/RelatedToolLinks.astro";
 import AcquisitionTaxCalculatorComp from "../../components/tools/AcquisitionTaxCalculator";
+import AcquisitionTaxCountryCalculator from "../../components/tools/AcquisitionTaxCountryCalculator";
+import type { AcquisitionCountry } from "../../lib/acquisition-tax-countries";
 import { locales } from "../../lib/i18n";
 
 type ActiveLocale = (typeof locales)[number];
@@ -27,30 +29,34 @@ export async function getStaticPaths() {
 
 const { locale } = Astro.props as { locale: ActiveLocale };
 
+// ja/zh/fr/es use their own country's law; ko and en use South Korea's.
+const COUNTRY_BY_LOCALE: Partial<Record<ActiveLocale, AcquisitionCountry>> = { ja: "jp", zh: "cn", fr: "fr", es: "es" };
+const country = COUNTRY_BY_LOCALE[locale];
+
 const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "부동산 취득세 계산기 — 주택 매수 전 세금 미리 계산하기",
     description: "주택 가격과 취득 유형에 따른 취득세를 미리 계산하세요. 1주택·2주택·법인 등 상황별 세율을 반영합니다.",
   },
   en: {
-    title: "Real Estate Acquisition Tax Calculator",
+    title: "Real Estate Acquisition Tax Calculator (South Korea)",
     description: "Calculate acquisition tax before buying property in Korea. Supports first home, second home, and corporate purchase rates.",
   },
   ja: {
-    title: "不動産取得税計算機",
-    description: "韓国の不動産取得税を事前に計算します。1軒目・2軒目・法人など状況別の税率に対応しています。",
+    title: "不動産取得税・登録免許税 計算機（日本）",
+    description: "家を買うときの不動産取得税（土地・住宅3%、宅地1/2、新築1,200万円控除）と登録免許税（土地1.5%、住宅0.3%）を固定資産税評価額から計算します。"
   },
   fr: {
-    title: "Calculateur de taxe d'acquisition immobilière",
-    description: "Calculez la taxe d'acquisition avant d'acheter un bien immobilier en Corée.",
+    title: "Calculateur de droits de mutation (frais de notaire)",
+    description: "Calculez les droits de mutation d'un achat immobilier en France : ancien jusqu'à 6,32 % (taux départemental 5 %, 4,5 % pour les primo-accédants), neuf 0,715 %."
   },
   es: {
-    title: "Calculadora de impuesto de adquisición inmobiliaria",
-    description: "Calcula el impuesto de adquisición antes de comprar una propiedad en Corea.",
+    title: "Calculadora de ITP e impuestos de compra de vivienda",
+    description: "Calcula el ITP de una vivienda usada según tu comunidad (Madrid 6 %, Cataluña 10 %, Andalucía 7 %, C. Valenciana 9 %) o el IVA del 10 % + AJD de una obra nueva."
   },
   zh: {
-    title: "不动产取得税计算机",
-    description: "购买韩国不动产前预先计算取得税。支援首套房、二套房及法人购房税率。",
+    title: "契税计算器（首套、二套住房）",
+    description: "按《契税法》和2024年第16号公告计算购房契税：家庭唯一住房140㎡以下1%、以上1.5%，第二套1%或2%，第三套按本省3%–5%税率。"
   },
 };
 
@@ -116,120 +122,168 @@ const content: Record<ActiveLocale, SeoContent> = {
     disclaimer: "This is a general estimate. Confirm the final amount with the tax authority or a tax professional."
   },
   ja: {
-    introTitle: "不動産取得税は国ごとの制度確認が必要です",
-    intro: "このページは韓国基準の不動産取得税を説明付きで試算します。税率や控除は国ごとに異なり毎年変わるため、申告前の参考値として扱ってください。",
-    formulaTitle: "主な計算基準",
-    formulas: [{
-      title: "基準 1",
-      body: "6億ウォン以下1%、9億ウォンまで約1~3%、超過分3%で概算します。"
-    }, {
-      title: "基準 2",
-      body: "取得税の10%を地方教育税として加算します。"
-    }, {
-      title: "基準 3",
-      body: "85㎡超の住宅は0.2%の農漁村特別税を見積もります。"
-    }],
+    introTitle: "日本で家を買うときにかかる税金は、不動産取得税と登録免許税です",
+    intro: "不動産取得税は都道府県の税で、取得から数か月後に納税通知書が届きます。登録免許税は国の税で、所有権の登記のときに司法書士を通じて納めます。どちらも売買価格ではなく固定資産税評価額を基準に計算し、住宅には令和9年3月31日までの軽減特例があります。",
+    formulaTitle: "計算基準",
+    formulas: [
+      {
+        title: "不動産取得税",
+        body: "土地：評価額×1/2（宅地）×3% − 住宅用土地の減額（45,000円か、1㎡当たり価格×床面積の2倍（200㎡まで）×3%の多い方）。家屋：（評価額 − 1,200万円）×3%"
+      },
+      {
+        title: "登録免許税",
+        body: "土地の売買：評価額×1.5%（本則2%）。住宅用家屋の移転0.3%（本則2%）、新築の保存0.15%（本則0.4%）"
+      },
+      {
+        title: "住宅の要件",
+        body: "自己居住、床面積50㎡以上（不動産取得税の新築控除は40〜240㎡）、1982年以降の建築または新耐震基準適合"
+      }
+    ],
     howToTitle: "使い方",
-    steps: ["必要な金額と条件を入力します。", "税金・控除・社会保険の内訳を確認します。", "申告・納付・判断前に最新の公式基準と照合します。"],
+    steps: [
+      "固定資産税評価額（土地・家屋）と面積を入力します。",
+      "新築か中古か、宅地かどうか、住宅の軽減要件を満たすかを選びます。",
+      "不動産取得税・登録免許税と合計を確認します。"
+    ],
     faqTitle: "よくある質問",
-    faqs: [{
-      question: "どの国の制度を基準にしていますか？",
-      answer: "韓国の制度です。他国の税率、控除、社会保険にはそのまま使えません。"
-    }, {
-      question: "実際の金額と異なる理由は？",
-      answer: "多住宅者、法人、贈与、初回購入減免、規制地域は別途確認が必要です。"
-    }, {
-      question: "制度は毎年変わりますか？",
-      answer: "はい。税率、控除限度、社会保険料率は毎年変わる可能性があります。申告や納付前に最新年度の基準を確認してください。"
-    }],
-    disclaimer: "この計算は一般的な概算です。実際の税額は税務当局または税理士に確認してください。"
+    faqs: [
+      {
+        question: "評価額はどこでわかりますか？",
+        answer: "売主が持っている固定資産税の納税通知書（課税明細書）か、市区町村で取る評価証明書に載っています。新築の家屋は評価額がまだないため、法務局の認定価格や都道府県の基準で計算されます。"
+      },
+      {
+        question: "中古住宅の控除額は？",
+        answer: "その住宅が新築された時期の控除額が使われます。1997年4月1日以降に新築された住宅は1,200万円で、それより前は時期に応じて少なくなります。耐震基準に適合していることが条件です。"
+      },
+      {
+        question: "期限が過ぎたらどうなりますか？",
+        answer: "特例が延長されなければ、不動産取得税は4%、宅地の1/2特例なし、登録免許税は本則税率に戻ります。毎年の税制改正で延長されることが多いので、取得時点の規定を確認してください。"
+      }
+    ],
+    disclaimer: "このツールは一般的な計算用です。税額は都道府県税事務所（不動産取得税）と法務局・司法書士（登録免許税）でご確認ください。"
   },
   zh: {
-    introTitle: "不动产取得税必须先确认适用国家的制度",
-    intro: "本页依韩国规则估算不动产取得税。税率、扣除与社会保险具有国别差异且可能逐年变动，结果应作为申报前的初步参考。",
-    formulaTitle: "主要计算基准",
-    formulas: [{
-      title: "规则 1",
-      body: "6亿韩元以下1%，至9亿约1~3%，9亿以上3%。"
-    }, {
-      title: "规则 2",
-      body: "以取得税10%加计地方教育税。"
-    }, {
-      title: "规则 3",
-      body: "超过85㎡住宅估算0.2%农渔村特别税。"
-    }],
+    introTitle: "个人购房契税按家庭住房套数和面积确定税率",
+    intro: "《契税法》规定契税税率为3%至5%，由各省、自治区、直辖市确定。自2024年12月1日起，个人购买家庭唯一住房或第二套住房可享受减按1%至2%征收的优惠（财政部 税务总局 住房城乡建设部公告2024年第16号）。家庭成员包括购房人、配偶和未成年子女。",
+    formulaTitle: "计算规则",
+    formulas: [
+      {
+        title: "家庭唯一住房",
+        body: "140㎡及以下：1%；140㎡以上：1.5%"
+      },
+      {
+        title: "家庭第二套住房",
+        body: "140㎡及以下：1%；140㎡以上：2%（北京、上海、广州、深圳也适用）"
+      },
+      {
+        title: "第三套及以上",
+        body: "按本省规定的契税税率（3%–5%）× 成交价（不含增值税）"
+      }
+    ],
     howToTitle: "使用方法",
-    steps: ["输入所需金额与条件。", "分别查看税金、扣除与社会保险明细。", "申报、缴纳或决策前请核对最新官方规定。"],
+    steps: [
+      "输入不含增值税的成交价和住房面积。",
+      "选择家庭住房套数，必要时修改本省税率。",
+      "查看适用税率和契税金额。"
+    ],
     faqTitle: "常见问题",
-    faqs: [{
-      question: "这个计算机采用哪个国家的规则？",
-      answer: "采用韩国规则，不能直接套用其他国家的税率、扣除或社会保险制度。"
-    }, {
-      question: "为什么可能和实际金额不同？",
-      answer: "多屋、法人、赠与、首次购房减免与调整地区需另行确认。"
-    }, {
-      question: "规则每年都会变吗？",
-      answer: "会。税率、扣除上限与社会保险费率都可能按年度调整。申报或缴纳前请确认当年度官方规定。"
-    }],
-    disclaimer: "本工具仅为一般估算。实际税额请向税务机关或税务专业人士确认。"
+    faqs: [
+      {
+        question: "这个优惠有期限吗？",
+        answer: "2024年第16号公告自2024年12月1日起执行，公告本身没有规定截止日期。如有新政策，以税务机关公布为准。"
+      },
+      {
+        question: "套数怎么认定？",
+        answer: "以家庭（购房人、配偶、未成年子女）名下住房为准，一般由住房城乡建设部门出具家庭住房情况查询结果。"
+      },
+      {
+        question: "非住宅（商铺、车位）怎么算？",
+        answer: "不适用住房优惠，按本省规定的契税税率计算，请选择“第三套及以上”并填写当地税率。"
+      }
+    ],
+    disclaimer: "本工具用于一般估算。具体税率和套数认定请以当地税务机关和不动产登记中心为准。"
   },
   fr: {
-    introTitle: "Taxe d'acquisition immobilière dépend du pays concerné",
-    intro: "Cette page estime la taxe d'acquisition immobilière selon les règles de la Corée. Les tranches, déductions et cotisations sont propres au pays et peuvent changer chaque année; utilisez le résultat comme point de départ.",
-    formulaTitle: "Bases de calcul",
-    formulas: [{
-      title: "Règle 1",
-      body: "1% jusqu'à 600 M KRW, environ 1-3% jusqu'à 900 M, puis 3%."
-    }, {
-      title: "Règle 2",
-      body: "Ajoute 10% de taxe locale d'éducation."
-    }, {
-      title: "Règle 3",
-      body: "Au-dessus de 85㎡, estime 0,2% de taxe rurale spéciale."
-    }],
+    introTitle: "Les droits de mutation sont l'essentiel des « frais de notaire »",
+    intro: "Lors d'un achat immobilier en France, le notaire collecte les droits de mutation à titre onéreux pour le département, la commune et l'État. Dans l'ancien, la loi de finances 2025 permet aux départements de porter leur taux de 4,5 % à 5 % jusqu'en 2028 ; 84 départements l'ont fait. Les primo-accédants qui achètent leur résidence principale ne paient pas cette hausse. Dans le neuf, on paie surtout la TVA, incluse dans le prix, et une taxe de publicité foncière réduite.",
+    formulaTitle: "Règles de calcul",
+    formulas: [
+      {
+        title: "Ancien",
+        body: "Prix × (taux départemental + 1,2 %) + 2,37 % de la taxe départementale, soit 6,32 % à 5 % ou 5,81 % à 4,5 %"
+      },
+      {
+        title: "Primo-accédant",
+        body: "Pas de hausse de 0,5 point : le taux départemental reste à 4,5 % pour la résidence principale"
+      },
+      {
+        title: "Neuf",
+        body: "Taxe de publicité foncière : 0,715 % du prix (bien de moins de 5 ans vendu avec TVA)"
+      }
+    ],
     howToTitle: "Comment l'utiliser",
-    steps: ["Saisissez les montants et conditions nécessaires.", "Vérifiez séparément impôts, déductions et cotisations.", "Comparez avec les règles officielles avant déclaration, paiement ou décision."],
+    steps: [
+      "Saisissez le prix de vente, hors mobilier.",
+      "Choisissez ancien ou neuf, le taux de votre département et si vous êtes primo-accédant.",
+      "Lisez le détail des droits et leur pourcentage du prix."
+    ],
     faqTitle: "Questions fréquentes",
-    faqs: [{
-      question: "Quel pays sert de référence ?",
-      answer: "Il utilise les règles de la Corée. Ne l’appliquez pas directement à un autre système fiscal ou social."
-    }, {
-      question: "Pourquoi le montant réel peut-il différer ?",
-      answer: "Multipropriété, sociétés, donations, aides primo-accédant et zones réglementées exigent une vérification séparée."
-    }, {
-      question: "Les règles changent-elles chaque année ?",
-      answer: "Oui. Les taux, plafonds de déduction et cotisations peuvent changer chaque année. Vérifiez l'année en vigueur avant de déclarer ou payer."
-    }],
-    disclaimer: "Ce calcul est une estimation générale. Confirmez le montant auprès de l'administration fiscale ou d'un fiscaliste."
+    faqs: [
+      {
+        question: "Mon département applique-t-il 5 % ?",
+        answer: "84 départements sur 101 l'appliquent depuis avril à juin 2025. Restent à 4,5 % notamment l'Ain, les Hautes-Alpes, les Alpes-Maritimes, l'Ardèche, la Charente, la Drôme, l'Eure, la Lozère, l'Oise, les Hautes-Pyrénées, la Saône-et-Loire, le Tarn-et-Garonne et plusieurs départements d'outre-mer ; l'Indre et Mayotte appliquent 3,8 %."
+      },
+      {
+        question: "Qui est primo-accédant ?",
+        answer: "Une personne qui n'a pas été propriétaire de sa résidence principale au cours des deux années précédant l'achat, et qui achète pour en faire sa résidence principale."
+      },
+      {
+        question: "Pourquoi le notaire demande-t-il plus ?",
+        answer: "Les frais de notaire comprennent aussi ses émoluments réglementés, la contribution de sécurité immobilière et des débours. Ce calculateur ne compte que les droits de mutation."
+      }
+    ],
+    disclaimer: "Cet outil sert au calcul général. Votre notaire vous donnera le montant exact ; le simulateur de service-public.fr peut aussi vous aider."
   },
   es: {
-    introTitle: "Impuesto de adquisición inmobiliaria depende del país aplicado",
-    intro: "Esta página estima el impuesto de adquisición inmobiliaria con reglas de Corea. Los tramos, deducciones y cotizaciones son propios de cada país y pueden cambiar cada año; úsalo como estimación inicial.",
-    formulaTitle: "Bases de cálculo",
-    formulas: [{
-      title: "Regla 1",
-      body: "1% hasta 600 M KRW, aprox. 1-3% hasta 900 M y 3% por encima."
-    }, {
-      title: "Regla 2",
-      body: "Añade 10% de impuesto local de educación."
-    }, {
-      title: "Regla 3",
-      body: "Más de 85㎡ estima 0,2% de impuesto rural especial."
-    }],
+    introTitle: "Comprar vivienda en España: ITP si es usada, IVA y AJD si es nueva",
+    intro: "La compra de una vivienda usada paga el Impuesto sobre Transmisiones Patrimoniales (ITP), cuyo tipo fija cada comunidad autónoma. La compra de una vivienda nueva al promotor paga IVA del 10 % y, por la escritura, Actos Jurídicos Documentados (AJD) al tipo de la comunidad. La base es el precio o el valor de referencia del Catastro si es mayor.",
+    formulaTitle: "Reglas de cálculo",
+    formulas: [
+      {
+        title: "ITP (usada)",
+        body: "Madrid 6 %; Andalucía 7 %; Cataluña 10 % hasta 600.000 € y 11–13 % por encima; C. Valenciana 9 % hasta 1.000.000 € y 11 % por encima"
+      },
+      {
+        title: "Obra nueva",
+        body: "IVA 10 % + AJD: Madrid 0,75 %, Cataluña 1,5 %, Andalucía 1,2 %, C. Valenciana 1,4 %"
+      },
+      {
+        title: "Otra comunidad",
+        body: "Introduce el tipo general de ITP y de AJD de tu comunidad"
+      }
+    ],
     howToTitle: "Cómo usarla",
-    steps: ["Introduce los importes y condiciones necesarios.", "Revisa por separado impuestos, deducciones y cotizaciones.", "Compáralo con reglas oficiales antes de declarar, pagar o tomar una decisión."],
+    steps: [
+      "Introduce el precio o el valor de referencia si es mayor.",
+      "Elige vivienda usada u obra nueva y tu comunidad autónoma.",
+      "Revisa ITP, o IVA y AJD, y el total."
+    ],
     faqTitle: "Preguntas frecuentes",
-    faqs: [{
-      question: "¿Qué país usa esta calculadora?",
-      answer: "Usa reglas de Corea. No lo apliques directamente a otro sistema fiscal o social."
-    }, {
-      question: "¿Por qué puede cambiar el importe final?",
-      answer: "Varias viviendas, sociedades, donaciones, primera vivienda y zonas reguladas requieren revisión aparte."
-    }, {
-      question: "¿Las reglas cambian cada año?",
-      answer: "Sí. Los tipos, límites de deducción y cotizaciones pueden cambiar cada año. Comprueba la norma vigente antes de declarar o pagar."
-    }],
-    disclaimer: "Este cálculo es una estimación general. Confirma el importe con la autoridad fiscal o un profesional tributario."
+    faqs: [
+      {
+        question: "¿Hay tipos reducidos?",
+        answer: "Sí. Muchas comunidades aplican tipos reducidos a jóvenes, familias numerosas, personas con discapacidad o VPO, con límites de precio y renta. Esta calculadora usa el tipo general."
+      },
+      {
+        question: "¿Cambió el ITP en la Comunidad Valenciana?",
+        answer: "Desde el 1 de junio de 2026 el tipo general baja del 10 % al 9 % hasta 1.000.000 € (11 % por encima), y el AJD general del 1,5 % al 1,4 % (Ley 5/2025)."
+      },
+      {
+        question: "¿Y el País Vasco o Navarra?",
+        answer: "Tienen régimen foral propio (por ejemplo, el 4 % general en el País Vasco). Elige «Otra» e introduce el tipo de tu territorio."
+      }
+    ],
+    disclaimer: "Esta herramienta es para cálculo general. Confirma los tipos y bonificaciones en la agencia tributaria de tu comunidad autónoma o con tu notario o gestor."
   }
 };
 
@@ -258,8 +312,7 @@ const structuredData = [
 <BaseLayout title={m.title} description={m.description} availableLocales={[...locales]} heading={m.title} intro={m.description}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <div class="mx-auto max-w-2xl px-4 py-5 sm:py-8">
-    <AcquisitionTaxCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
-  
+    {country ? <AcquisitionTaxCountryCalculator client:load country={country} /> : <AcquisitionTaxCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />}
 
     <section class="mt-6 sm:mt-10 border-t border-border pt-5 sm:pt-8">
       <h2 class="text-2xl font-bold text-foreground">{c.introTitle}</h2>

@@ -7,7 +7,7 @@ const won = (n: number) => `${Math.round(n).toLocaleString("ko-KR")}원`;
 export default function FirstHomeTaxCalculator() {
   const [priceManwon, setPriceManwon] = useState(50000); // 5억
   const [areaOption, setAreaOption] = useState<"under85" | "over85">("under85");
-  const [isFirstHome, setIsFirstHome] = useState<"yes" | "no">("yes");
+  const [isFirstHome, setIsFirstHome] = useState<"yes" | "small" | "no">("yes");
 
   const price = priceManwon * 10000;
 
@@ -23,9 +23,11 @@ export default function FirstHomeTaxCalculator() {
 
   const rawAcquisitionTax = price * baseRate;
 
-  // First-home tax discount (Up to 2M KRW if price <= 1.2B KRW)
-  const isEligible = isFirstHome === "yes" && price <= 1200000000;
-  const discountAmount = isEligible ? Math.min(rawAcquisitionTax, 2000000) : 0;
+  // 생애최초 감면(지특법 제36조의3, 2028-12-31 취득분까지): 12억 이하, 한도 200만.
+  // 소형주택(전용 60㎡ 이하, 수도권 6억·비수도권 3억 이하 아파트 외 공동주택·도시형생활주택·다가구)은 300만.
+  const isEligible = isFirstHome !== "no" && price <= 1200000000;
+  const discountCap = isFirstHome === "small" ? 3000000 : 2000000;
+  const discountAmount = isEligible ? Math.min(rawAcquisitionTax, discountCap) : 0;
   const netAcquisitionTax = Math.max(0, rawAcquisitionTax - discountAmount);
 
   // Local education tax (10% of base tax)
@@ -68,11 +70,12 @@ export default function FirstHomeTaxCalculator() {
         </div>
 
         <ChoiceChips
-          legend="생애최초 주택 구입 여부 (세대원 전원 과거 무소유)"
+          legend="생애최초 주택 구입 여부 (본인·배우자 모두 주택 소유 이력 없음)"
           value={isFirstHome}
           options={[
-            { value: "yes", label: "생애최초 대상 (최대 200만원 감면)" },
-            { value: "no", label: "일반 취득 (기본 세율)" },
+            { value: "yes", label: "생애최초 (최대 200만원 감면)" },
+            { value: "small", label: "생애최초 소형주택 (최대 300만원)" },
+            { value: "no", label: "일반 취득 (1주택 기본 세율)" },
           ]}
           onChange={setIsFirstHome}
         />
@@ -136,7 +139,8 @@ export default function FirstHomeTaxCalculator() {
           <div className="font-bold text-foreground flex items-center gap-1.5">
             <span>⚠️ 생애최초 취득세 감면 필수 유지 조건</span>
           </div>
-          <p>• 매수가액 12억원 이하 주택에 한해 최대 200만원까지 감면됩니다.</p>
+          <p>• 매수가액 12억원 이하 주택에 한해 최대 200만원까지 감면됩니다. 2028년 12월 31일 취득분까지 적용돼요.</p>
+          <p>• 소형주택(전용 60㎡ 이하, 수도권 6억·비수도권 3억 이하인 아파트 외 공동주택·도시형생활주택·다가구주택)은 300만원까지 감면돼요.</p>
           <p>• 취득일로부터 3개월 이내에 상시 거주를 위한 주민등록 전입을 마쳐야 합니다.</p>
           <p>• 취득 후 3년 이내에 매도, 증여하거나 전월세 임대를 놓을 경우 감면된 세액이 추징됩니다.</p>
         </div>
