@@ -1,6 +1,8 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PensionTaxCalculatorComp from "../../components/calculators/PensionTaxCalculator";
+import PensionCountryCalculator from "../../components/tools/PensionCountryCalculator";
+import type { PensionCountry } from "../../lib/pension-countries";
 import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
 import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
 import { buildToolShell } from "../../lib/tool-shell";
@@ -14,6 +16,10 @@ export async function getStaticPaths() {
 
 const { locale } = Astro.props as { locale: Locale };
 
+// ja/zh/fr/es use their own country's private-pension scheme (opening on the withdrawal tax); ko and en use South Korea's.
+const COUNTRY_BY_LOCALE: Partial<Record<Locale, PensionCountry>> = { ja: "jp", zh: "cn", fr: "fr", es: "es" };
+const country = COUNTRY_BY_LOCALE[locale];
+
 const meta: Record<Locale, { title: string; description: string }> = {
   ko: {
     title: "연금저축 세액공제 계산기 — 환급액 계산",
@@ -24,20 +30,20 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Based on South Korean rules. Calculate your year-end tax credit refund from pension savings and IRP contributions. Applies 16.5% or 13.2% rate based on income.",
   },
   ja: {
-    title: "韓国の年金貯蓄税額控除計算機 — 年末精算還付額",
-    description: "韓国の制度に基づく計算です。年金貯蓄とIRPの納付額から受け取れる年末精算税額控除還付額を計算します。",
+    title: "iDeCo受取時の税金計算機 — 一時金の退職所得控除と所得税・住民税",
+    description: "iDeCoを一時金で受け取るときの退職所得控除（拠出年数で決定）、課税退職所得、所得税・住民税と手取りを計算します。掛金の節税額や新NISAとの配分も同じ画面で試算できます。",
   },
   fr: {
-    title: "Calculateur Crédit d'Impôt Épargne Retraite (Corée du Sud)",
-    description: "Calcul selon les règles sud-coréennes. Calculez votre remboursement d'impôt de fin d'année grâce à vos versements d'épargne retraite et IRP.",
+    title: "Fiscalité de sortie du PER 2026 — impôt sur le capital retiré",
+    description: "Calculez l'impôt sur une sortie en capital du PER : versements déduits au barème, plus-values au PFU de 12,8 % et prélèvements sociaux de 18,6 % depuis 2026, avec ou sans fractionnement du retrait.",
   },
   es: {
-    title: "Calculadora Deducción Fiscal Plan de Pensiones (Corea del Sur)",
-    description: "Cálculo según las normas de Corea del Sur. Calcula tu devolución fiscal de fin de año por aportaciones a plan de pensiones e IRP.",
+    title: "Calculadora del rescate del plan de pensiones — IRPF al cobrarlo",
+    description: "Calcula el IRPF del rescate de un plan de pensiones, que tributa como rendimiento del trabajo: en capital en un año, repartido en varios años y con la reducción del 40 % de las aportaciones anteriores a 2007.",
   },
   zh: {
-    title: "韩国养老金储蓄税收抵免计算机 — 年末退税",
-    description: "按韩国制度计算。计算养老金储蓄和IRP缴费的年末税收抵免退款，自动应用16.5%或13.2%税率。",
+    title: "个人养老金领取个税计算器 — 3%单独计税",
+    description: "计算领取个人养老金时按3%单独缴纳的个人所得税和实际到手金额，并可测算缴费时少缴的个税与长期净收益。",
   },
 };
 
@@ -85,24 +91,84 @@ const content = {
     disclaimer: "This calculator is for reference only. Actual credit/refund varies with income composition, other deductions, and tax-law changes. Consult a professional for accuracy.",
   },
   ja: {
-    eyebrow: "税金計算ツール",
-    introTitle: "年金貯蓄の税額控除計算機とは？",
-    intro: "年金貯蓄・IRPの拠出額に対する税額控除の還付額を計算するツールです。総給与に応じた控除率（13.2%または16.5%）と限度を反映します。",
+    eyebrow: "iDeCo・税金計算ツール",
+    introTitle: "iDeCoは受け取るときにも税金がかかります",
+    intro: "iDeCoは掛金が所得控除になる一方、受け取るときは課税されます。一時金で受け取ると「退職所得」になり、掛金を拠出した年数に応じた退職所得控除（20年までは1年40万円、20年を超えると1年70万円）を引いた残りの2分の1にだけ、所得税と住民税が分離課税でかかります。控除の範囲内なら税金はゼロです。年金形式なら公的年金等控除を使う雑所得になります。",
     howToTitle: "使い方",
-    steps: ["年間総給与（または総合所得）を入力します。", "年金貯蓄・IRPの拠出額を入力します。", "控除限度と適用控除率が自動反映されます。", "予想される税額控除の還付額を確認します。"],
-    highlightsTitle: "主な特徴",
+    steps: ["一時金で受け取る額を入れます。", "掛金を拠出した年数を入れます。", "退職所得控除、課税退職所得、所得税・住民税と手取りを確認します。", "「拠出時の節税」で掛金の節税額も比べます。"],
+    highlightsTitle: "知っておきたいこと",
     highlights: [
-      { title: "控除率の自動適用", body: "総給与5,500万ウォン（総合所得4,500万）基準で16.5%/13.2%を自動適用します。" },
-      { title: "限度の反映", body: "年金貯蓄・IRP合算の拠出限度を反映します。" },
-      { title: "還付額の推定", body: "年末調整で戻る見込み額を把握します。" },
+      { title: "退職金と同じ控除枠を分け合います", body: "同じ年に会社の退職金も受け取ると、退職所得控除は合算で1回分です。受け取る年をずらす計画が大切です。" },
+      { title: "令和7年度改正で調整期間が延長", body: "iDeCoの一時金を先に受け取り、後から退職金を受け取る場合、控除を調整する期間が前年以前4年内から9年内に延びました。" },
+      { title: "運用中は非課税", body: "運用益には受け取るまで税金がかかりません。課税されるのは受取時だけです。" },
     ],
     relatedTitle: "関連計算機",
     related: [
-      { href: "/ja/pension-optimizer-calculator/", label: "年金最適化計算機", desc: "年金貯蓄・IRPの拠出配分を最適化します。" },
-      { href: "/ja/fire-retirement-calculator/", label: "早期リタイア計算機", desc: "リタイア目標資金を計算します。" },
-      { href: "/ja/savings-comparison-calculator/", label: "預金比較", desc: "預金・積立の収益を比較します。" },
+      { href: "/ja/pension-calculator/", label: "iDeCo節税シミュレーター", desc: "掛金の拠出限度額と節税額を計算します。" },
+      { href: "/ja/pension-optimizer-calculator/", label: "iDeCo・NISA配分シミュレーター", desc: "積立額をiDeCoと新NISAに振り分けます。" },
+      { href: "/ja/year-end-settlement-calculator/", label: "年末調整計算機", desc: "所得控除を入れて還付額を見積もります。" },
     ],
-    disclaimer: "本計算機は参考用です。実際の控除・還付額は所得構成・他の控除・税法改正により異なります。正確な算定は専門家にご相談ください。",
+    disclaimer: "このツールは一般的な見積もり用です。退職所得の税額は国税庁（タックスアンサー No.1420）や税理士に、受取方法は運営管理機関にご確認ください。",
+  },
+  zh: {
+    eyebrow: "个税计算工具",
+    introTitle: "个人养老金领取时：全额按3%单独计税",
+    intro: "个人养老金缴费时在个税前扣除，投资收益暂不征税，到领取时才纳税：领取的全部金额（本金和收益）不并入综合所得，单独按3%计算缴纳个人所得税，由开立资金账户的商业银行代扣代缴。按月、分次还是一次性领取，税率都一样。",
+    howToTitle: "使用方法",
+    steps: ["输入领取金额。", "查看代扣的个税和实际到手金额。", "切换到「缴费节税」「长期测算」，比较缴费时少缴的税与领取时的税。"],
+    highlightsTitle: "要点",
+    highlights: [
+      { title: "税率固定3%", body: "不论领取多少、采用什么方式领取，都按3%计税，不影响综合所得的税率档次。" },
+      { title: "边际税率决定值不值", body: "缴费时按边际税率少缴税、领取时交3%，边际税率高于3%才有净节税。" },
+      { title: "领取有条件", body: "一般要达到领取基本养老金年龄、完全丧失劳动能力、出国（境）定居等情形才能领取。" },
+    ],
+    relatedTitle: "相关计算器",
+    related: [
+      { href: "/zh/pension-calculator/", label: "个人养老金节税计算器", desc: "计算12,000元扣除能少缴多少个税。" },
+      { href: "/zh/pension-optimizer-calculator/", label: "个人养老金长期测算", desc: "滚存到退休后的余额和净收益。" },
+      { href: "/zh/year-end-settlement-calculator/", label: "个税年度汇算计算器", desc: "计算综合所得的应退应补税额。" },
+    ],
+    disclaimer: "本工具仅供一般估算。以国家税务总局、人力资源社会保障部的规定和开户银行的代扣结果为准。",
+  },
+  fr: {
+    eyebrow: "Outil fiscal retraite",
+    introTitle: "Sortie du PER : ce qui est imposé dépend de l'origine de l'argent",
+    intro: "À la retraite, le PER se débloque en capital, en rente ou en combinant les deux. En capital, la part qui correspond à des versements déduits est ajoutée à vos revenus et imposée au barème, sans abattement de 10 %. Les gains (plus-values, intérêts) supportent le prélèvement forfaitaire de 12,8 % et les prélèvements sociaux, portés à 18,6 % au 1er janvier 2026. Les versements que vous n'avez pas déduits ressortent sans impôt. Fractionner le retrait sur plusieurs années évite de monter de tranche.",
+    howToTitle: "Mode d'emploi",
+    steps: ["Saisissez les versements déduits, les versements non déduits et les gains.", "Indiquez votre revenu imposable à la retraite hors PER.", "Choisissez sur combien d'années vous fractionnez le retrait.", "Lisez l'impôt sur les versements, l'impôt sur les gains et le capital net."],
+    highlightsTitle: "Points clés",
+    highlights: [
+      { title: "Barème pour les versements déduits", body: "C'est l'impôt différé de la déduction à l'entrée : il dépend de votre tranche à la retraite." },
+      { title: "PFU et 18,6 % sur les gains", body: "Depuis 2026, les gains d'une sortie en capital supportent 12,8 % d'impôt et 18,6 % de prélèvements sociaux, soit 31,4 %." },
+      { title: "Fractionner", body: "Retirer le capital sur plusieurs années répartit les versements déduits sur plusieurs barèmes." },
+    ],
+    relatedTitle: "Calculateurs liés",
+    related: [
+      { href: "/fr/pension-calculator/", label: "Simulateur PER", desc: "Plafond 2026 et économie d'impôt à l'entrée." },
+      { href: "/fr/pension-optimizer-calculator/", label: "Projection PER", desc: "PER ou placement hors PER sur la durée." },
+      { href: "/fr/year-end-settlement-calculator/", label: "Régularisation de l'impôt", desc: "Impôt sur le revenu et prélèvement à la source." },
+    ],
+    disclaimer: "Cet outil sert au calcul général. Les règles de sortie sont décrites sur service-public.fr et impots.gouv.fr ; votre gestionnaire de PER vous indique la répartition versements/gains.",
+  },
+  es: {
+    eyebrow: "Herramienta fiscal",
+    introTitle: "El rescate del plan de pensiones tributa entero como rendimiento del trabajo",
+    intro: "Cuando cobras un plan de pensiones, Hacienda no distingue entre lo que aportaste y lo que ganó el plan: todo lo cobrado ese año se suma a tu base general del IRPF como rendimiento del trabajo, junto con la pensión pública. Por eso importa cómo y cuándo lo rescatas. Cobrarlo todo de una vez puede llevarte a tramos del 37 % o 45 %; repartirlo en varios años o en forma de renta lo deja en tramos más bajos. Las aportaciones anteriores a 2007 cobradas en capital conservan una reducción del 40 %.",
+    howToTitle: "Cómo se usa",
+    steps: ["Introduce el importe que vas a rescatar y la parte que viene de aportaciones anteriores a 2007.", "Indica tu base liquidable general en la jubilación sin el plan.", "Elige en cuántos años repartes el rescate.", "Consulta el IRPF, el tipo medio y el neto."],
+    highlightsTitle: "Claves",
+    highlights: [
+      { title: "Todo suma a la base general", body: "Aportaciones y rentabilidad tributan juntas como rendimiento del trabajo, al tipo marginal del año del cobro." },
+      { title: "Reducción del 40 %", body: "Solo para la parte de aportaciones anteriores a 2007, cobrada en capital y en un único ejercicio dentro del plazo transitorio." },
+      { title: "Repartir el rescate", body: "Cobrar en varios años o como renta evita que todo el importe caiga en los tramos altos." },
+    ],
+    relatedTitle: "Calculadoras relacionadas",
+    related: [
+      { href: "/es/pension-calculator/", label: "Calculadora del plan de pensiones", desc: "Cuánto ahorras en el IRPF al aportar." },
+      { href: "/es/pension-optimizer-calculator/", label: "Plan de pensiones frente a fondo", desc: "Qué te queda neto tras impuestos." },
+      { href: "/es/year-end-settlement-calculator/", label: "Declaración de la Renta", desc: "Resultado de la renta con tus retenciones." },
+    ],
+    disclaimer: "Esta herramienta es para cálculo general. Consulta el tratamiento del rescate en el Manual práctico de Renta de la Agencia Tributaria y pide a tu gestora el desglose de aportaciones.",
   },
 };
 
@@ -118,9 +184,24 @@ const faqs = {
     { q: "When do I get the refund?", a: "Through year-end settlement or income-tax filing, credited within your computed tax." },
   ],
   ja: [
-    { q: "控除率は？", a: "総給与5,500万ウォン以下（総合所得4,500万）は16.5%、超過は13.2%です。" },
-    { q: "限度額は？", a: "年金貯蓄とIRP合算で年900万ウォンまで対象です（年金貯蓄単独は600万）。" },
-    { q: "還付はいつ？", a: "年末調整または総合所得税申告で、算出税額の範囲内で控除・還付されます。" },
+    { q: "iDeCoは一時金と年金のどちらで受け取ると得ですか？", a: "退職所得控除の範囲に収まるなら一時金は非課税です。会社の退職金が大きく控除を使い切る場合や、一時金が控除を大きく超える場合は、年金形式（公的年金等控除）や一時金との併用が有利になることがあります。" },
+    { q: "退職所得控除はいくらですか？", a: "掛金を拠出した年数が20年以下なら1年あたり40万円（最低80万円）、20年を超えると800万円＋70万円×（年数−20年）です。1年未満の端数は1年に切り上げます。" },
+    { q: "退職金と同じ年に受け取るとどうなりますか？", a: "退職所得控除は両方を合わせて1回分しか使えず、勤続期間と拠出期間の重なりも調整されます。iDeCoを先に受け取る場合、令和7年度改正で調整の対象が前年以前9年内に広がりました。" },
+  ],
+  zh: [
+    { q: "个人养老金领取时要交多少税？", a: "领取金额的3%，不并入综合所得，单独计税，由开户银行代扣代缴。" },
+    { q: "按月领取和一次性领取，税一样吗？", a: "一样，都按3%计税。领取方式只影响到账节奏，不影响税率。" },
+    { q: "什么时候可以领取？", a: "一般为达到领取基本养老金年龄、完全丧失劳动能力、出国（境）定居，以及国家规定的其他情形。具体条件以人力资源社会保障部门和开户银行的规定为准。" },
+  ],
+  fr: [
+    { q: "Comment est imposée une sortie en capital du PER ?", a: "La part des versements déduits est imposée au barème de l'impôt sur le revenu, sans abattement. Les gains sont soumis au PFU de 12,8 % (ou au barème sur option) et aux prélèvements sociaux de 18,6 %. Les versements non déduits sont exonérés." },
+    { q: "Et une sortie en rente ?", a: "La rente issue de versements déduits est imposée comme une pension (abattement de 10 %) ; une fraction de la rente issue de versements non déduits est imposée selon l'âge, comme une rente viagère à titre onéreux." },
+    { q: "Le déblocage pour acheter ma résidence principale est-il imposé ?", a: "Oui, comme une sortie en capital : versements déduits au barème, gains au PFU et aux prélèvements sociaux." },
+  ],
+  es: [
+    { q: "¿Cómo tributa el rescate de un plan de pensiones?", a: "Como rendimiento del trabajo: todo lo que cobras (aportaciones y rentabilidad) se suma a la base general del IRPF del año del cobro y tributa a la escala general." },
+    { q: "¿Me conviene rescatarlo todo de una vez?", a: "Solo si el importe es pequeño o si aprovechas la reducción del 40 % de las aportaciones anteriores a 2007. Si no, repartirlo en varios años o cobrarlo como renta suele salir más barato." },
+    { q: "¿Puedo rescatar antes de jubilarme?", a: "Sí en casos tasados: incapacidad, dependencia, paro de larga duración, enfermedad grave y, desde 2025, las aportaciones con más de diez años de antigüedad. Tributa igual que el rescate por jubilación." },
   ],
 };
 
@@ -138,7 +219,7 @@ const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, local
     applicationCategory="FinanceApplication"
   >
     <div class="mx-auto max-w-2xl">
-      <PensionTaxCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+      {country ? <PensionCountryCalculator client:load country={country} initialTab="withdrawal" /> : <PensionTaxCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />}
     </div>
     <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
   </ToolShell>

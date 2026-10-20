@@ -2,6 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import RelatedToolLinks from "../../components/RelatedToolLinks.astro";
 import PensionCalculatorComp from "../../components/tools/PensionCalculator";
+import PensionCountryCalculator from "../../components/tools/PensionCountryCalculator";
+import type { PensionCountry } from "../../lib/pension-countries";
 import { locales } from "../../lib/i18n";
 
 type ActiveLocale = (typeof locales)[number];
@@ -15,6 +17,10 @@ export async function getStaticPaths() {
 
 const { locale } = Astro.props as { locale: ActiveLocale };
 
+// ja/zh/fr/es use their own country's private-pension scheme; ko and en use South Korea's 연금저축·IRP.
+const COUNTRY_BY_LOCALE: Partial<Record<ActiveLocale, PensionCountry>> = { ja: "jp", zh: "cn", fr: "fr", es: "es" };
+const country = COUNTRY_BY_LOCALE[locale];
+
 const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "연금저축·IRP 세액공제 계산기 — 연말정산 환급액 추정",
@@ -25,20 +31,20 @@ const meta: Record<ActiveLocale, { title: string; description: string }> = {
     description: "Estimate the Korean year-end tax credit from pension savings and IRP contributions using the 13.2% or 16.5% credit rate.",
   },
   ja: {
-    title: "韓国の年金貯蓄・IRP税額控除計算機",
-    description: "韓国の制度に基づく計算です。総給与と年金貯蓄・IRPの年間拠出額から、13.2%または16.5%の税額控除額を概算します。",
+    title: "iDeCo節税シミュレーター — 掛金の拠出限度額と所得税・住民税の軽減額",
+    description: "加入区分と年収から、iDeCoの拠出限度額（2026年12月分からの新限度額にも対応）と、掛金の所得控除で下がる所得税・住民税を計算します。受取時の税金、新NISAとの配分も試算できます。",
   },
   fr: {
-    title: "Calculateur de crédit fiscal pension & IRP (Corée du Sud)",
-    description: "Calcul selon les règles sud-coréennes. Estimez le crédit fiscal coréen lié aux versements pension et IRP avec les taux de 13,2% ou 16,5%.",
+    title: "Simulateur PER 2026 — plafond de déduction et économie d'impôt",
+    description: "Calculez votre plafond épargne retraite 2026 (salarié ou indépendant), le montant déductible de vos versements PER et l'économie d'impôt selon votre tranche marginale. Fiscalité de sortie et projection incluses.",
   },
   es: {
-    title: "Calculadora de crédito fiscal pensión e IRP (Corea del Sur)",
-    description: "Cálculo según las normas de Corea del Sur. Estima el crédito fiscal coreano por aportes a pensión e IRP usando tasas de 13,2% o 16,5%.",
+    title: "Calculadora del plan de pensiones 2026 — cuánto ahorras en el IRPF",
+    description: "Calcula cuánto reduce tu aportación al plan de pensiones la base imponible del IRPF (1.500 € individuales, hasta 8.500 € más por la empresa o 4.250 € como autónomo) y el ahorro según tu tipo marginal.",
   },
   zh: {
-    title: "韩国年金储蓄·IRP税额抵免计算机",
-    description: "按韩国制度计算。根据总薪资与年金储蓄、IRP年缴金额，估算13.2%或16.5%税额抵免。",
+    title: "个人养老金节税计算器 — 12,000元扣除能少缴多少个税",
+    description: "按综合所得年度税率表计算个人养老金缴费（每年最多12,000元）能少缴的个人所得税、你的边际税率，以及领取时按3%缴税后的净收益。",
   },
 };
 
@@ -104,96 +110,80 @@ const content: Record<ActiveLocale, SeoContent> = {
     disclaimer: "This tool is a general estimate. Confirm actual tax credits and year-end settlement results with the relevant institution or tax professional.",
   },
   ja: {
-    introTitle: "これは公的年金の受給額ではなく、年金口座の税額控除を概算します",
-    intro: "韓国の年金貯蓄とIRPは老後資金づくりと年末調整の税額控除を兼ねる制度です。総給与と年間拠出額を入力すると、合算900万ウォン限度と13.2%または16.5%の控除率で概算できます。",
-    formulaTitle: "計算の前提",
+    introTitle: "iDeCoの掛金は全額が所得控除。節税額は所得税と住民税の税率で決まります",
+    intro: "iDeCo（個人型確定拠出年金）の掛金は全額が小規模企業共済等掛金控除になり、その年の所得税（復興特別所得税を含む）と翌年度の住民税（10%）が下がります。会社員で所得税率10%なら、掛金の約20%が戻る計算です。拠出限度額は加入区分で決まり、2026年12月分の掛金から会社員は月2.3万円（企業年金ありは2万円）→6.2万円、自営業は6.8万円→7.5万円に引き上げられます。12月分は翌年1月に引き落とされるので、新しい限度額が控除に効くのは2027年分からです。",
+    formulaTitle: "計算基準",
     formulas: [
-      { title: "控除対象拠出額", body: "年間拠出額と合算限度900万ウォンの小さい方を使います。" },
-      { title: "控除率", body: "総給与5,500万ウォン以下は16.5%、超過は13.2%を適用します。" },
-      { title: "予想還付効果", body: "控除対象拠出額に税額控除率を掛けます。" },
+      { title: "拠出限度額（月額）", body: "会社員（企業年金なし）2.3万→6.2万円、企業年金あり・公務員 2万円（合算5.5万円）→6.2万円−他制度掛金相当額、自営業 6.8万→7.5万円（国民年金基金と合算）、第3号 2.3万円" },
+      { title: "所得税の軽減", body: "課税所得が掛金分だけ下がり、所得税率（5%〜45%）×102.1%の分だけ税が減ります" },
+      { title: "住民税の軽減", body: "翌年度の住民税（所得割10%）が掛金×10%程度下がります" },
     ],
     howToTitle: "使い方",
-    steps: [
-      "年間総給与をウォンで入力します。",
-      "年金貯蓄とIRPへの年間拠出予定額を入力します。",
-      "適用控除率、限度、予想税額控除額を確認します。",
-    ],
+    steps: ["加入区分と、計算する年分（2026年分か2027年分以降か）を選びます。", "毎月の掛金と、給与収入・社会保険料・扶養などを入れます。", "所得税・住民税の軽減額と実質負担を確認します。"],
     faqTitle: "よくある質問",
     faqs: [
-      { question: "韓国の国民年金受給額も計算しますか？", answer: "いいえ。このツールは年金貯蓄・IRPの税額控除を計算します。公的年金の受給額には加入期間、所得、制度算式が別途必要です。" },
-      { question: "900万ウォン限度は常に同じですか？", answer: "このツールは合算限度を簡略的に適用します。口座別限度や税法は年度により変更されることがあります。" },
-      { question: "表示額がそのまま還付されますか？", answer: "十分な税額がある場合に効果があります。納税額が少ない場合や他の控除が多い場合、実際の還付は小さくなります。" },
+      { question: "2026年12月の改正で、いくらまで掛けられるようになりますか？", answer: "2026年12月分の掛金から、企業年金のない会社員と公務員以外の第2号被保険者は月6.2万円、企業年金のある会社員・公務員は6.2万円から企業年金等の掛金相当額を引いた額、自営業などの第1号被保険者は国民年金基金・付加保険料と合わせて月7.5万円になります。専業主婦・主夫（第3号）は月2.3万円のままです。" },
+      { question: "収入がなくても節税になりますか？", answer: "なりません。所得控除は所得税・住民税を減らす仕組みなので、税金がかからない人には節税効果はありません。運用益が非課税になる点は同じです。" },
+      { question: "年末調整と確定申告のどちらで控除を受けますか？", answer: "会社員は年末調整で「小規模企業共済等掛金控除」として申告します。勤務先の給与天引きなら自動で反映されます。自営業の人は確定申告で控除します。" },
     ],
-    disclaimer: "このツールは一般的な概算です。実際の税額控除と年末調整結果は関係機関または税務専門家に確認してください。",
+    disclaimer: "このツールは一般的な見積もり用です。拠出限度額はiDeCo公式サイト・厚生労働省、税額は国税庁の資料や税理士にご確認ください。",
   },
   zh: {
-    introTitle: "本工具估算年金账户税额抵免，不是国民年金领取额",
-    intro: "韩国年金储蓄和IRP既是退休准备工具，也可能产生年终结算税额抵免。输入年总薪资和年度缴纳金额后，可按合计900万韩元上限和13.2%或16.5%抵免率估算。",
-    formulaTitle: "计算依据",
+    introTitle: "个人养老金：每年12,000元以内的缴费在个税前扣除，领取时按3%纳税",
+    intro: "个人养老金自2024年起在全国实施。向个人养老金资金账户缴费，每年最多12,000元可在综合所得或经营所得中据实扣除；账户里的投资收益暂不征税；退休领取时不并入综合所得，单独按3%缴税。所以节税多少取决于你的边际税率：边际税率10%的人每年少缴1,200元，领取时每1万元交300元；边际税率3%或不用交个税的人，单看税收没有好处。",
+    formulaTitle: "计算规则",
     formulas: [
-      { title: "可抵免缴费", body: "取年度缴纳金额与合计900万韩元上限中的较小值。" },
-      { title: "抵免率", body: "总薪资5500万韩元以下按16.5%，超过部分情形按13.2%。" },
-      { title: "预计抵免", body: "可抵免缴费乘以税额抵免率，得到预计抵免效果。" },
+      { title: "可扣除金额", body: "当年个人养老金缴费与12,000元取小" },
+      { title: "少缴个税", body: "按年度税率表（3%–45%）分别计算扣除前后的应纳税额，差额即节税额" },
+      { title: "领取时纳税", body: "领取金额 × 3%，不并入综合所得" },
     ],
     howToTitle: "使用方法",
-    steps: [
-      "以韩元输入年度总薪资。",
-      "输入年金储蓄和IRP的年度缴纳金额。",
-      "查看适用抵免率、上限和预计税额抵免。",
-    ],
+    steps: ["填写全年工资薪金等收入、社保公积金和专项附加扣除。", "输入当年个人养老金缴费金额。", "查看少缴的个税、边际税率；切换到「领取纳税」「长期测算」看领取时的税和净收益。"],
     faqTitle: "常见问题",
     faqs: [
-      { question: "会计算韩国国民年金领取额吗？", answer: "不会。这里计算的是年金储蓄和IRP税额抵免。公共年金领取额需要缴费历史、收入基准和年金公式。" },
-      { question: "900万韩元上限一定适用吗？", answer: "本工具采用简化的合计抵免上限。账户类别细节和韩国税法可能每年调整。" },
-      { question: "预计金额会全部退税吗？", answer: "只有在应纳税额足够时才会完全体现。若税额较低或已有其他抵免，实际退税可能更少。" },
+      { question: "个人养老金一年最多能扣除多少？", answer: "每年12,000元。可以在预扣预缴时向单位提供缴费凭证扣除，也可以在次年年度汇算时扣除。超过12,000元的部分不能扣除。" },
+      { question: "什么人缴个人养老金划算？", answer: "边际税率越高越划算。边际税率10%及以上的人，缴费时省的税比领取时的3%多；收入在起征点附近、不用交个税或只适用3%税率的人，单看税收没有净收益，还要考虑资金要到退休才能领取。" },
+      { question: "领取时的3%包括收益吗？", answer: "包括。领取的全部金额（本金和投资收益）都按3%计税，由开户银行代扣代缴。" },
     ],
-    disclaimer: "本工具仅作一般估算。实际税额抵免和年终结算结果请向相关机构或税务专业人士确认。",
+    disclaimer: "本工具仅供一般估算。具体以国家税务总局、人力资源社会保障部的规定和个人所得税App的计算为准。",
   },
   fr: {
-    introTitle: "Ce calcul vise le crédit fiscal pension, pas la pension publique",
-    intro: "Les comptes coréens de pension et IRP peuvent préparer la retraite tout en ouvrant droit à un crédit fiscal. Entrez salaire annuel et versements pour estimer l'effet avec un plafond combiné de 9 M KRW et un taux de 13,2% ou 16,5%.",
-    formulaTitle: "Bases de calcul",
+    introTitle: "PER : chaque euro versé dans le plafond réduit votre revenu imposable",
+    intro: "Les versements volontaires sur un plan d'épargne retraite (PER individuel) se déduisent du revenu net imposable du foyer. L'économie d'impôt est donc égale au versement multiplié par votre tranche marginale d'imposition (11 %, 30 %, 41 % ou 45 %). Pour un salarié, le plafond 2026 vaut 10 % des revenus professionnels nets de 2025, au minimum 4 710 € et au maximum 37 680 €, moins les cotisations de l'employeur au PERCOL ou au PER obligatoire. Les indépendants ont un plafond plus élevé (jusqu'à 88 911 €). La loi de finances 2026 allonge le report des plafonds non utilisés à 5 ans et supprime la déduction des versements faits après 70 ans.",
+    formulaTitle: "Règles de calcul",
     formulas: [
-      { title: "Versement éligible", body: "Retient le plus petit montant entre votre versement annuel et le plafond combiné de 9 M KRW." },
-      { title: "Taux de crédit", body: "16,5% jusqu'à 55 M KRW de salaire, 13,2% au-delà." },
-      { title: "Effet estimé", body: "Le versement éligible multiplié par le taux donne le crédit fiscal estimé." },
+      { title: "Plafond salarié 2026", body: "10 % des revenus nets 2025, min 4 710 € (10 % du PASS 2025), max 37 680 € (10 % de 8 PASS), − cotisations employeur, + plafonds non utilisés" },
+      { title: "Plafond TNS 2026", body: "10 % du bénéfice (≤ 8 PASS) + 15 % de la part entre 1 et 8 PASS, min 4 806 €, max 88 911 €" },
+      { title: "Économie d'impôt", body: "Impôt au barème 2026 avant versement − impôt après déduction du versement (≈ versement × TMI)" },
     ],
-    howToTitle: "Comment l'utiliser",
-    steps: [
-      "Saisissez le salaire annuel brut en KRW.",
-      "Saisissez les versements annuels prévus sur pension et IRP.",
-      "Vérifiez taux, plafond et crédit fiscal estimé.",
-    ],
+    howToTitle: "Mode d'emploi",
+    steps: ["Choisissez votre statut et saisissez les revenus qui fixent le plafond.", "Indiquez le revenu imposable du foyer, la situation familiale et le versement prévu.", "Lisez le plafond, le montant déductible et l'économie d'impôt."],
     faqTitle: "Questions fréquentes",
     faqs: [
-      { question: "Cela calcule-t-il la pension nationale coréenne ?", answer: "Non. L'outil calcule les crédits fiscaux pension/IRP. La pension publique exige historique de cotisation, revenu assuré et formule NPS." },
-      { question: "Le plafond de 9 M KRW est-il toujours exact ?", answer: "L'outil applique un plafond combiné simplifié. Les limites par compte et les règles fiscales peuvent changer chaque année." },
-      { question: "Le montant sera-t-il entièrement remboursé ?", answer: "Seulement si l'impôt dû est suffisant. Si votre impôt est faible ou déjà réduit par d'autres crédits, le remboursement réel peut être inférieur." },
+      { question: "Où trouver mon plafond épargne retraite ?", answer: "Il figure sur votre avis d'impôt, rubrique « plafond épargne retraite », avec les plafonds non utilisés des années précédentes. Le simulateur le recalcule à partir de vos revenus si vous ne l'avez pas sous la main." },
+      { question: "Le PER est-il intéressant si je ne suis pas imposable ?", answer: "Pas pour la déduction : sans impôt, il n'y a rien à économiser. Vous pouvez alors renoncer à la déduction ; les versements non déduits ne seront pas imposés à la sortie, seuls les gains le seront." },
+      { question: "Que change la loi de finances 2026 ?", answer: "Les plafonds non utilisés à partir de 2026 se reportent sur 5 ans au lieu de 3, et les versements effectués après 70 ans ne sont plus déductibles. Les prélèvements sociaux sur les gains passent de 17,2 % à 18,6 %." },
     ],
-    disclaimer: "Cet outil fournit une estimation générale. Confirmez crédits fiscaux et régularisation avec l'institution compétente ou un fiscaliste.",
+    disclaimer: "Cet outil sert au calcul général. Vérifiez votre plafond sur votre avis d'impôt (impots.gouv.fr) et les règles du PER sur service-public.fr.",
   },
   es: {
-    introTitle: "Calcula créditos fiscales de pensión, no la pensión pública",
-    intro: "Las cuentas coreanas de pensión e IRP ayudan a preparar la jubilación y pueden generar crédito fiscal. Introduce salario anual y aportes para estimar el efecto con límite combinado de 9 M KRW y tasa de 13,2% o 16,5%.",
-    formulaTitle: "Bases de cálculo",
+    introTitle: "Plan de pensiones: lo que aportas reduce tu base del IRPF y ahorras tu tipo marginal",
+    intro: "Las aportaciones a planes de pensiones se restan de la base imponible general del IRPF. Por eso el ahorro es aproximadamente la aportación multiplicada por tu tipo marginal (del 19 % al 47 %). El límite general es de 1.500 € al año en planes individuales; se puede ampliar hasta 8.500 € más con contribuciones de la empresa a un plan de empleo (y tus aportaciones a ese plan dentro de unos coeficientes) o con 4.250 € de aportaciones como autónomo a planes de empleo simplificados. En ningún caso la reducción puede superar el 30 % de tus rendimientos netos del trabajo y actividades. Al rescatar, todo lo cobrado tributa como rendimiento del trabajo.",
+    formulaTitle: "Reglas de cálculo",
     formulas: [
-      { title: "Aporte elegible", body: "Usa el menor entre tu aporte anual y el límite combinado de 9 M KRW." },
-      { title: "Tasa de crédito", body: "16,5% hasta 55 M KRW de salario y 13,2% por encima." },
-      { title: "Efecto estimado", body: "El aporte elegible multiplicado por la tasa da el crédito fiscal estimado." },
+      { title: "Límite general", body: "1.500 € en planes individuales (incluye lo que aportes al plan de empleo por encima del coeficiente)" },
+      { title: "Incrementos", body: "Hasta 8.500 € por contribuciones empresariales y tus aportaciones al plan de empleo (×2,5 hasta 500 €, 1.250 + 25 % hasta 1.500 €, ×1 por encima, máx. 4.250 €) o 4.250 € como autónomo" },
+      { title: "Ahorro", body: "Cuota con la base sin reducción − cuota con la base reducida; nunca más del 30 % de los rendimientos netos" },
     ],
-    howToTitle: "Cómo usarla",
-    steps: [
-      "Introduce el salario bruto anual en KRW.",
-      "Introduce el aporte anual previsto a pensión e IRP.",
-      "Revisa tasa aplicada, límite y crédito fiscal estimado.",
-    ],
+    howToTitle: "Cómo se usa",
+    steps: ["Introduce tu salario bruto, cotizaciones y, si eres autónomo, el rendimiento de la actividad.", "Indica tus aportaciones individuales y, si las hay, las del plan de empleo o como autónomo.", "Consulta la reducción en la base y el ahorro en el IRPF."],
     faqTitle: "Preguntas frecuentes",
     faqs: [
-      { question: "¿Calcula la pensión nacional coreana?", answer: "No. Calcula créditos fiscales de pensión/IRP. La pensión pública requiere historial de cotización, ingreso asegurado y fórmula NPS." },
-      { question: "¿El límite de 9 M KRW siempre aplica?", answer: "La herramienta aplica un límite combinado simplificado. Los límites por cuenta y reglas fiscales pueden cambiar cada año." },
-      { question: "¿Recibiré todo como devolución?", answer: "Solo si tienes suficiente impuesto a pagar. Si tu impuesto es bajo o ya tienes otros créditos, la devolución real puede ser menor." },
+      { question: "¿Cuánto puedo aportar al plan de pensiones en 2026?", answer: "Puedes aportar lo que quieras, pero solo reducen la base 1.500 € en planes individuales, más hasta 8.500 € de planes de empleo con contribución empresarial o 4.250 € como autónomo en planes de empleo simplificados, con un máximo del 30 % de tus rendimientos netos del trabajo y actividades." },
+      { question: "¿Qué pasa si aporto por encima del límite?", answer: "El exceso no se reduce ese año, pero puedes pedir en la declaración que se aplique en los cinco ejercicios siguientes." },
+      { question: "¿Es lo mismo reducir la base que deducir de la cuota?", answer: "No. La reducción baja la base imponible, así que ahorras tu tipo marginal: con un tipo del 30 %, 1.500 € aportados ahorran unos 450 €. Al rescatar, el dinero vuelve a tributar en la base general." },
     ],
-    disclaimer: "Esta herramienta ofrece una estimación general. Confirma créditos fiscales y liquidación anual con la institución correspondiente o un profesional fiscal.",
+    disclaimer: "Esta herramienta es para cálculo general. Consulta los límites en el Manual práctico de Renta de la Agencia Tributaria y tu caso concreto en Renta WEB.",
   },
 };
 
@@ -222,7 +212,7 @@ const structuredData = [
 <BaseLayout title={m.title} description={m.description} availableLocales={[...locales]} heading={m.title} intro={m.description}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <div class="mx-auto max-w-2xl px-4 py-5 sm:py-8">
-    <PensionCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+    {country ? <PensionCountryCalculator client:load country={country} initialTab="contribution" /> : <PensionCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />}
 
     <section class="mt-6 sm:mt-10 border-t border-border pt-5 sm:pt-8">
       <h2 class="text-2xl font-bold text-foreground">{c.introTitle}</h2>
@@ -261,6 +251,6 @@ const structuredData = [
     </section>
 
     <p class="mt-5 sm:mt-8 rounded-xl border border-warning/30 bg-warning/10 px-4 py-3 text-sm leading-6 text-foreground">{c.disclaimer}</p>
-    <RelatedToolLinks locale={locale} current="pension-calculator" slugs={["compound-interest-calculator", "deposit-calculator", "roi-calculator", "brokerage-calculator", "stock-average-calculator", "isa-calculator", "pension-calculator", "fire-retirement-calculator", "inflation-calculator"]} />
+    <RelatedToolLinks locale={locale} current="pension-calculator" slugs={["pension-tax-calculator", "pension-optimizer-calculator", "compound-interest-calculator", "deposit-calculator", "roi-calculator", "isa-calculator", "pension-calculator", "fire-retirement-calculator", "inflation-calculator"]} />
   </div>
 </BaseLayout>

@@ -2,6 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import RelatedToolLinks from "../../components/RelatedToolLinks.astro";
 import PensionOptimizerCalculatorComp from "../../components/calculators/PensionOptimizerCalculator";
+import PensionCountryCalculator from "../../components/tools/PensionCountryCalculator";
+import type { PensionCountry } from "../../lib/pension-countries";
 import ToolShell from "../../components/shared/_oiyo-shared/ToolShell.astro";
 import FaqAccordion from "../../components/shared/_oiyo-shared/FaqAccordion.astro";
 import { buildToolShell } from "../../lib/tool-shell";
@@ -18,6 +20,10 @@ export async function getStaticPaths() {
 
 const { locale } = Astro.props as { locale: Locale };
 
+// ja/zh/fr/es use their own country's private-pension scheme (opening on the long-term plan); ko and en use South Korea's.
+const COUNTRY_BY_LOCALE: Partial<Record<Locale, PensionCountry>> = { ja: "jp", zh: "cn", fr: "fr", es: "es" };
+const country = COUNTRY_BY_LOCALE[locale];
+
 const meta: Record<Locale, { title: string; description: string }> = {
   ko: {
     title: "연금 최적화 계산기 — 연말정산 환급액과 노후 자산 계산",
@@ -28,20 +34,20 @@ const meta: Record<Locale, { title: string; description: string }> = {
     description: "Optimize Korean pension savings (연금저축) and IRP contributions to maximize year-end tax refunds and retirement assets.",
   },
   ja: {
-    title: "韓国の年金最適化計算機 — 年末精算還付額と老後資産を計算",
-    description: "韓国の制度に基づく計算です。年金貯蓄とIRP納入額を最適化して年末精算還付額と65歳時点の老後資産を計算します。",
+    title: "iDeCo・新NISA配分シミュレーター — 積立額の振り分けと税引後資産",
+    description: "毎月の積立予算をiDeCo（拠出限度額まで）、新NISA（年360万円・生涯1,800万円）、課税口座に振り分け、所得控除による節税額、受取時の税金、運用後の税引後資産を比べます。",
   },
   fr: {
-    title: "Optimiseur de Retraite (Corée du Sud) — Crédits Fiscaux et Épargne Retraite",
-    description: "Calcul selon les règles sud-coréennes. Optimisez vos cotisations retraite coréennes pour maximiser les remboursements fiscaux et l'épargne retraite.",
+    title: "Projection PER 2026 — PER ou placement hors PER ?",
+    description: "Répartissez votre épargne annuelle entre le PER (jusqu'au plafond de déduction) et un placement hors PER, et comparez capital, économies d'impôt cumulées et fiscalité de sortie (barème, PFU 12,8 %, prélèvements sociaux 18,6 %).",
   },
   es: {
-    title: "Optimizador de Pensión (Corea del Sur) — Créditos Fiscales y Ahorro Jubilación",
-    description: "Cálculo según las normas de Corea del Sur. Optimiza tus contribuciones al plan de pensiones coreano para maximizar devoluciones fiscales y ahorros para la jubilación.",
+    title: "Plan de pensiones o fondo de inversión — simulador a largo plazo",
+    description: "Compara aportar cada año a un plan de pensiones (reducción en el IRPF y rescate como rendimiento del trabajo) con invertir lo mismo en un fondo (ganancia en la base del ahorro al 19 %–30 %). Resultado neto tras impuestos.",
   },
   zh: {
-    title: "韩国年金最优化计算机 — 年终退税与退休资产计算",
-    description: "最优化韩国年金储蓄和IRP缴纳，计算年终退税和65岁时的退休资产。",
+    title: "个人养老金长期测算 — 缴费节税与领取3%后的净收益",
+    description: "按每年缴费、预期收益率和缴费年数，测算个人养老金账户退休时的余额、累计少缴的个税、领取时3%的税和税收净收益。",
   },
 };
 
@@ -99,29 +105,84 @@ const content = {
     disclaimer: "For reference only; your actual pension depends on contribution history, income, dependants and future reform. Get a personalised estimate from the National Pension Service using your own record.",
   },
   ja: {
-    eyebrow: "老後計算ツール",
-    introTitle: "いつから受け取るかが受給額を決めます",
-    intro: "韓国の国民年金は所定の年齢より早く受け取ると月額が減り、遅らせると増えます。早ければ少額を長く、遅ければ多額を短く受け取るため、どちらが有利かは寿命に依存します。本ツールはその損益分岐年齢を計算します。",
+    eyebrow: "資産形成ツール",
+    introTitle: "積立はiDeCoとNISAのどちらから埋めるか",
+    intro: "iDeCoは掛金が所得控除になり運用益も非課税ですが、原則60歳まで引き出せず、受取時には退職所得などとして課税されます。新NISAは掛金の控除はありませんが、運用益は非課税でいつでも売却できます（つみたて投資枠 年120万円、成長投資枠 年240万円、生涯1,800万円）。このツールは毎月の予算をiDeCo→NISA→課税口座の順に振り分け、節税額と受取時の税を含めた税引後の資産を計算します。",
     howToTitle: "使い方",
-    steps: [
-      "予想年金月額と通常の受給開始年齢を入力します。",
-      "繰上げ・繰下げの月数を選びます。",
-      "調整後の月額と累計額を確認します。",
-      "損益分岐年齢を読み、自身の見通しと照らします。",
-    ],
+    steps: ["加入区分と年分を選び、iDeCoの拠出限度額を決めます。", "毎月の積立予算、期間、想定利回り、使用済みのNISA枠を入れます。", "給与収入などを入れて、iDeCoの節税額を出します。", "口座ごとの積立額と税引後の資産を確認します。"],
     highlightsTitle: "数字だけでは見落とすこと",
     highlights: [
-      { title: "損益分岐は概ね70代半ば以降です", body: "繰下げが累計で追い越す時点はこの辺りです。それ以前に資金が必要、あるいは健康上の理由があれば繰上げは誤りではなく別の選択です。" },
-      { title: "減額は生涯続きます", body: "繰上げの減額率は一度決まると以後ずっと適用されます。一時的に少ないのではなく年金額そのものが下がります。" },
-      { title: "受給中にも税があります", body: "年金所得にも課税され、他の所得と合算されると健康保険料に影響することがあります。税引前だけで比べると差が実際より大きく見えます。" },
+      { title: "iDeCoは60歳までロック", body: "教育費・住宅購入・転職時の生活費など途中で使うお金は、いつでも売却できるNISAで持つ方が安全です。" },
+      { title: "所得税率が低いと差が小さい", body: "所得税率5%なら節税は掛金の約15%です。収入がない年は節税ゼロで、受取時の課税だけが残ります。" },
+      { title: "2026年12月から枠が広がります", body: "会社員は月6.2万円（企業年金ありは他制度の掛金を引いた額）、自営業は月7.5万円まで掛けられるようになります。" },
     ],
     relatedTitle: "関連計算機",
     related: [
-      { href: "/ja/pension-tax-calculator/", label: "年金所得税 計算機", desc: "受取時の税を確認します。" },
-      { href: "/ja/isa-vs-pension-calculator/", label: "ISA vs 年金貯蓄 計算機", desc: "積立段階の節税を比較します。" },
-      { href: "/ja/fire-retirement-calculator/", label: "退職資金 計算機", desc: "必要な老後資金を確認します。" },
+      { href: "/ja/pension-calculator/", label: "iDeCo節税シミュレーター", desc: "拠出限度額と掛金の節税額を計算します。" },
+      { href: "/ja/pension-tax-calculator/", label: "iDeCo受取時の税金計算機", desc: "一時金の退職所得控除と税額を見ます。" },
+      { href: "/ja/compound-interest-calculator/", label: "複利計算機", desc: "積立の複利効果を確認します。" },
     ],
-    disclaimer: "参考用です。実際の年金額は加入期間・所得・扶養家族や制度改正により異なります。正確な見込額は国民年金公団でご自身の記録から照会してください。",
+    disclaimer: "このツールは一般的な試算用です。運用成果は保証されません。拠出限度額はiDeCo公式サイト・厚生労働省、NISAは金融庁、税額は国税庁でご確認ください。",
+  },
+  zh: {
+    eyebrow: "养老规划工具",
+    introTitle: "个人养老金值不值：看缴费时的边际税率和领取时的3%",
+    intro: "个人养老金每年最多12,000元可以在个税前扣除，账户内投资收益暂不征税，领取时全部金额按3%单独计税。长期来看，税收上的净收益 = 每年按边际税率少缴的个税累计 − 领取时余额的3%。收益率越高、领取时余额越大，3%的税也越多；边际税率在10%及以上时，大多仍有净收益。",
+    howToTitle: "使用方法",
+    steps: ["填写收入、社保公积金和专项附加扣除，算出边际税率。", "输入每年缴费、缴费年数和预期年化收益率。", "查看退休时余额、累计少缴的个税、领取时的税和净收益。"],
+    highlightsTitle: "要点",
+    highlights: [
+      { title: "资金锁定到退休", body: "账户里的钱一般要到领取基本养老金年龄等条件满足才能取出，短期要用的钱不适合放进去。" },
+      { title: "3%也要交在收益上", body: "领取时本金和收益一起按3%计税，所以收益率越高，领取时的税也越多。" },
+      { title: "产品收益差别大", body: "可以买储蓄存款、理财、基金和商业养老保险，收益率要按所选产品估计。" },
+    ],
+    relatedTitle: "相关计算器",
+    related: [
+      { href: "/zh/pension-calculator/", label: "个人养老金节税计算器", desc: "当年缴费能少缴多少个税。" },
+      { href: "/zh/pension-tax-calculator/", label: "个人养老金领取个税计算器", desc: "领取时按3%缴税。" },
+      { href: "/zh/compound-interest-calculator/", label: "复利计算器", desc: "看长期投资的复利效果。" },
+    ],
+    disclaimer: "本工具仅供一般测算，不构成投资建议。收益不保证；政策以国家税务总局、人力资源社会保障部的规定为准。",
+  },
+  fr: {
+    eyebrow: "Outil retraite",
+    introTitle: "PER ou placement libre : la différence vient des deux tranches d'imposition",
+    intro: "Le PER fait gagner l'impôt à votre tranche marginale actuelle sur chaque versement déduit, mais cet argent sera imposé au barème à la sortie, et les gains au PFU de 12,8 % plus 18,6 % de prélèvements sociaux. Un placement hors PER (compte-titres) n'offre pas de déduction mais ne taxe que les gains. Le simulateur place d'abord votre épargne annuelle sur le PER jusqu'au plafond, le reste hors PER, et compare le capital net en ajoutant les économies d'impôt cumulées.",
+    howToTitle: "Mode d'emploi",
+    steps: ["Saisissez votre statut, vos revenus et votre revenu imposable pour obtenir le plafond et la TMI.", "Indiquez l'épargne annuelle, la durée et le rendement.", "Estimez votre revenu imposable à la retraite et le fractionnement de la sortie.", "Comparez le capital PER, le placement hors PER et le total net."],
+    highlightsTitle: "Ce que le total ne montre pas",
+    highlights: [
+      { title: "TMI d'aujourd'hui contre TMI de demain", body: "Si votre tranche à la retraite est plus basse qu'aujourd'hui, le PER gagne nettement ; si elle est identique, l'avantage se réduit." },
+      { title: "Épargne bloquée", body: "Le PER n'est disponible qu'à la retraite, sauf achat de la résidence principale et accidents de la vie." },
+      { title: "Économies non réinvesties", body: "Le total ajoute les économies d'impôt sans les faire fructifier ; les réinvestir augmente l'avantage du PER." },
+    ],
+    relatedTitle: "Calculateurs liés",
+    related: [
+      { href: "/fr/pension-calculator/", label: "Simulateur PER", desc: "Plafond 2026 et économie d'impôt." },
+      { href: "/fr/pension-tax-calculator/", label: "Fiscalité de sortie du PER", desc: "Impôt sur un retrait en capital." },
+      { href: "/fr/compound-interest-calculator/", label: "Intérêts composés", desc: "Croissance d'une épargne régulière." },
+    ],
+    disclaimer: "Cet outil sert à une simulation générale, pas à un conseil en placement. Les rendements ne sont pas garantis. Vérifiez les règles du PER sur service-public.fr et impots.gouv.fr.",
+  },
+  es: {
+    eyebrow: "Herramienta de jubilación",
+    introTitle: "Plan de pensiones o fondo: depende de tu tipo marginal hoy y al jubilarte",
+    intro: "El plan de pensiones te ahorra hoy tu tipo marginal en cada euro aportado (hasta 1.500 € en planes individuales), pero al rescatarlo tributa todo, aportaciones y rentabilidad, en la base general. Un fondo de inversión no reduce la base, pero solo tributa la ganancia y a los tipos del ahorro (19 %–30 %). El simulador reparte tu ahorro anual entre ambos y compara lo que te queda neto, sumando el ahorro de IRPF acumulado.",
+    howToTitle: "Cómo se usa",
+    steps: ["Introduce tu salario y cotizaciones para obtener tu tipo marginal.", "Indica el ahorro anual, los años hasta la jubilación y la rentabilidad.", "Estima tu base en la jubilación y en cuántos años rescatarás el plan.", "Compara el saldo y los impuestos del plan y del fondo."],
+    highlightsTitle: "Lo que el total no cuenta",
+    highlights: [
+      { title: "Liquidez", body: "El fondo se puede vender o traspasar en cualquier momento; el plan solo se rescata en los casos previstos o con más de diez años de antigüedad." },
+      { title: "Rescate repartido", body: "Cobrar el plan en varios años mantiene el rescate en tramos bajos y mejora el resultado." },
+      { title: "Ahorro no reinvertido", body: "El total suma el ahorro de IRPF sin invertirlo; si lo reinviertes, el plan sale algo mejor." },
+    ],
+    relatedTitle: "Calculadoras relacionadas",
+    related: [
+      { href: "/es/pension-calculator/", label: "Calculadora del plan de pensiones", desc: "Ahorro en el IRPF al aportar." },
+      { href: "/es/pension-tax-calculator/", label: "Rescate del plan de pensiones", desc: "IRPF al cobrar el plan." },
+      { href: "/es/compound-interest-calculator/", label: "Interés compuesto", desc: "Crecimiento de un ahorro periódico." },
+    ],
+    disclaimer: "Esta herramienta es una simulación general, no asesoramiento de inversión. Las rentabilidades no están garantizadas. Consulta la fiscalidad en la Agencia Tributaria.",
   },
 };
 
@@ -163,27 +224,70 @@ const faqs = {
     },
   ],
   ja: [
-    {
-      q: "繰上げ・繰下げの増減は何に基づきますか？",
-      a: "国民年金法が定めます。繰上げ老齢年金は繰り上げた期間に比例して減額し、繰下げ年金は繰り下げた期間に比例して加算します。いずれも月単位で適用され、最大5年の範囲で調整できます。具体的な率と上限は制度改正で変わり得るため、国民年金公団または国家法令情報センターで現行条文をご確認ください。（確認日 2026-09）",
-    },
-    {
-      q: "損益分岐年齢を超えるなら繰下げが必ず得ですか？",
-      a: "累計受給額だけで見ればそうです。ただしその年齢まで他の収入で生活できる必要があり、その間の生活費をどこから賄うかが実際のコストです。貯蓄を取り崩すなら、その機会費用も比較に含めるべきです。",
-    },
-    {
-      q: "繰上げは損ですか？",
-      a: "一概に損とは言えません。収入の空白を埋める必要がある、あるいは健康上の理由で余命が短いと見込まれる場合、後の大きい額より今の小さい額の方が役立ちます。損益分岐は確率的な目安であって正解ではありません。",
-    },
-    {
-      q: "物価上昇は反映されますか？",
-      a: "国民年金は物価に連動して調整される制度ですが、本ツールは名目額で比較します。繰上げ・繰下げの双方に同じ連動が及ぶため損益分岐時点への影響は小さいものの、絶対額を将来の購買力として読まないでください。",
-    },
+    { q: "iDeCoとNISA、どちらを優先すべきですか？", a: "所得税がかかっていて60歳まで使わないお金なら、所得控除のあるiDeCoから埋めるのが税金面では有利です。途中で使う可能性があるお金や、所得が低く節税効果が小さい場合はNISAを優先します。" },
+    { q: "NISAの生涯枠1,800万円はどう数えますか？", a: "買付時の金額（簿価）で数え、うち成長投資枠は1,200万円までです。売却すると翌年に簿価分の枠が復活します。このツールは売却による枠の復活を考慮していません。" },
+    { q: "iDeCoの節税額は毎年同じですか？", a: "所得や扶養の状況が変われば変わります。このツールは今の所得が続く前提で、年間の節税額に年数を掛けています。" },
+    { q: "受取時の税金はどう計算していますか？", a: "積立期間を拠出年数として退職所得控除を計算し、一時金で一度に受け取る前提で所得税・住民税を出しています。会社の退職金と同じ時期に受け取る場合は控除が重なるため、税金が増えることがあります。" },
+  ],
+  zh: [
+    { q: "收益率越高，个人养老金越划算吗？", a: "不一定。领取时余额（含收益）要按3%缴税，收益越高，这部分税也越多；但同样的收益在账户内免税滚存。净收益主要取决于缴费时的边际税率。" },
+    { q: "边际税率3%的人还值得缴吗？", a: "单看税收没有净收益：缴费时少缴3%，领取时再交3%（还包括收益）。如果看重强制储蓄或特定产品，可以另作考虑。" },
+    { q: "本测算假设了什么？", a: "假设每年收入和扣除不变、每年年末缴费、收益率固定，退休时一次性按3%计税。实际收益随产品而变。" },
+  ],
+  fr: [
+    { q: "Le PER est-il toujours plus rentable qu'un placement hors PER ?", a: "Non. Il l'est surtout quand votre tranche marginale pendant la vie active est plus élevée qu'à la retraite. À tranche égale, l'avantage tient au différé d'impôt et peut être faible ; pour un foyer non imposable, il est négatif." },
+    { q: "Quelles hypothèses utilise la projection ?", a: "Un versement en fin d'année, un rendement constant identique dans les deux enveloppes, une sortie en capital au barème 2026 et au PFU de 31,4 % sur les gains, et des économies d'impôt non réinvesties." },
+    { q: "Puis-je dépasser le plafond de déduction ?", a: "Oui, mais l'excédent n'est pas déductible. Le simulateur le place hors PER. Les plafonds non utilisés des années précédentes peuvent être ajoutés." },
+  ],
+  es: [
+    { q: "¿Cuándo compensa un plan de pensiones frente a un fondo?", a: "Cuando tu tipo marginal al aportar es claramente mayor que el que pagarás al rescatar. Si en la jubilación vas a estar en un tramo similar, el fondo suele ganar porque solo tributa la ganancia y a tipos del ahorro." },
+    { q: "¿Qué supone la simulación?", a: "Aportaciones a final de año, rentabilidad constante igual en ambos productos, rescate del plan repartido en los años que indiques y venta del fondo de una vez. El ahorro de IRPF se suma sin reinvertirlo." },
+    { q: "¿Puedo traspasar un fondo sin pagar impuestos?", a: "Sí, los traspasos entre fondos de inversión no tributan hasta que vendes. Los planes de pensiones también se pueden traspasar entre sí sin coste fiscal." },
   ],
 };
 
 const { content: c, faqHeading, faqItems } = buildToolShell(content, faqs, locale);
-const sourcesHeading = locale === "ko" ? "공식 출처" : locale === "ja" ? "公式情報" : "Official sources";
+const sourcesHeading = { ko: "공식 출처", en: "Official sources", ja: "公式情報", zh: "官方来源", fr: "Sources officielles", es: "Fuentes oficiales" }[locale] ?? "Official sources";
+const KR_SOURCES = {
+  links: [
+    { href: "https://www.nps.or.kr", label: "국민연금공단 — 예상연금액 조회·조기노령연금·연기연금" },
+    { href: "https://www.law.go.kr", label: "국가법령정보센터 — 국민연금법" },
+  ],
+  note: "확인일 2026-09 · 감액·가산률과 개시 연령은 제도 개정으로 달라질 수 있습니다. 본인 예상액은 가입 이력으로 조회하세요.",
+};
+const LOCAL_SOURCES: Partial<Record<Locale, typeof KR_SOURCES>> = {
+  ja: {
+    links: [
+      { href: "https://www.ideco-koushiki.jp/", label: "iDeCo公式サイト（国民年金基金連合会）— 拠出限度額・受取方法" },
+      { href: "https://www.mhlw.go.jp/content/12500000/001620594.pdf", label: "厚生労働省 — iDeCoの概要と2026年12月からの拠出限度額" },
+      { href: "https://www.fsa.go.jp/policy/nisa2/", label: "金融庁 — 新しいNISA" },
+      { href: "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1420.htm", label: "国税庁 No.1420 退職金を受け取ったとき（退職所得）" },
+    ],
+    note: "確認日 2026-10-20 · 拠出限度額は2026年12月分から改正。利回りは仮定で、運用成果は保証されません。",
+  },
+  zh: {
+    links: [
+      { href: "https://fgk.chinatax.gov.cn/zcfgk/c102416/c5237110/content.html", label: "财政部 税务总局公告2024年第21号 — 在全国范围实施个人养老金个人所得税优惠政策" },
+      { href: "https://www.mohrss.gov.cn/", label: "人力资源社会保障部 — 个人养老金" },
+    ],
+    note: "确认日期 2026-10-20 · 收益率为假设值，实际收益随所选产品变化。",
+  },
+  fr: {
+    links: [
+      { href: "https://www.service-public.gouv.fr/particuliers/vosdroits/F34982", label: "Service-public.fr — Plan d'épargne retraite (PER)" },
+      { href: "https://www.impots.gouv.fr/", label: "impots.gouv.fr — Plafond épargne retraite sur l'avis d'impôt" },
+    ],
+    note: "Vérifié le 2026-10-20 · PASS 2025 47 100 €, PASS 2026 48 060 €, prélèvements sociaux 18,6 %. Rendement supposé, non garanti.",
+  },
+  es: {
+    links: [
+      { href: "https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2025/c13-determinacion-renta-contribuyente-sujeta-gravamen/reducciones-base-imponible-general/cuadro-resumen-reducciones-base-imponible-general.html", label: "Agencia Tributaria — Manual Renta 2025: reducciones por aportaciones a sistemas de previsión social" },
+      { href: "https://www.boe.es/buscar/act.php?id=BOE-A-2006-20764", label: "BOE — Ley 35/2006 del IRPF (arts. 51 y 52)" },
+    ],
+    note: "Comprobado el 2026-10-20 · Límites de 2026 iguales a los del Manual de Renta 2025. Rentabilidad supuesta, no garantizada.",
+  },
+};
+const sources = (country && LOCAL_SOURCES[locale]) || KR_SOURCES;
 ---
 
 <BaseLayout title={m.title} description={m.description}>
@@ -197,16 +301,15 @@ const sourcesHeading = locale === "ko" ? "공식 출처" : locale === "ja" ? "�
     applicationCategory="FinanceApplication"
   >
     <div class="mx-auto max-w-2xl">
-      <PensionOptimizerCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
+      {country ? <PensionCountryCalculator client:load country={country} initialTab="plan" /> : <PensionOptimizerCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />}
       <section class="mt-5 sm:mt-8 rounded-xl border border-border bg-card p-5 text-sm leading-6 text-slate-700">
         <h2 class="mb-2 text-base font-bold text-foreground">{sourcesHeading}</h2>
         <ul class="list-disc space-y-1 pl-5">
-          <li><a class="underline" href="https://www.nps.or.kr" rel="noopener nofollow" target="_blank">국민연금공단 — 예상연금액 조회·조기노령연금·연기연금</a></li>
-          <li><a class="underline" href="https://www.law.go.kr" rel="noopener nofollow" target="_blank">국가법령정보센터 — 국민연금법</a></li>
+          {sources.links.map((l) => (<li><a class="underline" href={l.href} rel="noopener nofollow" target="_blank">{l.label}</a></li>))}
         </ul>
-        <p class="mt-3 text-xs text-muted-foreground">확인일 2026-09 · 감액·가산률과 개시 연령은 제도 개정으로 달라질 수 있습니다. 본인 예상액은 가입 이력으로 조회하세요.</p>
+        <p class="mt-3 text-xs text-muted-foreground">{sources.note}</p>
       </section>
-      <RelatedToolLinks locale={locale} current="pension-optimizer-calculator" slugs={["early-repayment-calculator", "expense-ratio-calculator", "financial-investment-tax-calculator", "isa-vs-pension-calculator", "latte-factor-calculator", "overseas-stock-saver-calculator", "compound2-calculator", "macro-economics-calculator", "compound-interest-calculator", "roi-calculator"]} />
+      <RelatedToolLinks locale={locale} current="pension-optimizer-calculator" slugs={["pension-calculator", "pension-tax-calculator", "early-repayment-calculator", "expense-ratio-calculator", "financial-investment-tax-calculator", "isa-vs-pension-calculator", "latte-factor-calculator", "overseas-stock-saver-calculator", "compound2-calculator", "macro-economics-calculator", "compound-interest-calculator", "roi-calculator"]} />
     </div>
     <FaqAccordion slot="faq" heading={faqHeading} items={faqItems} />
   </ToolShell>
