@@ -2,6 +2,11 @@ import { useState } from "react";
 import ChoiceChips from "./payroll/ChoiceChips";
 import NumberField from "./payroll/NumberField";
 
+/** 공제 대상 월세 연 한도(2025년 귀속부터 1,000만 원). */
+const RENT_CREDIT_ANNUAL_CAP = 10_000_000;
+/** 법정 전월세 전환율 상한 = min(연 10%, 기준금리 + 2%p). 기준금리 3.00%(2026-08-27 결정) 기준. */
+const LEGAL_CONVERSION_RATE = 5.0;
+
 const won = (n: number) => `${Math.round(n).toLocaleString("ko-KR")}원`;
 
 export default function JeonseVsMonthlyCalculator() {
@@ -14,7 +19,7 @@ export default function JeonseVsMonthlyCalculator() {
   // Monthly Rent state
   const [rentDepMan, setRentDepMan] = useState(3000); // 3천만
   const [monthlyRentMan, setMonthlyRentMan] = useState(100); // 100만
-  const [applyTaxCredit, setApplyTaxCredit] = useState<"yes" | "no">("yes"); // 15% credit
+  const [applyTaxCredit, setApplyTaxCredit] = useState<"17" | "15" | "no">("17");
 
   const jeonseDeposit = jeonseDepMan * 10000;
   const rentDeposit = rentDepMan * 10000;
@@ -31,8 +36,10 @@ export default function JeonseVsMonthlyCalculator() {
 
   // Monthly rent cost breakdown
   const monthlyRentEquityOppCost = (rentDeposit * (savingsRate / 100)) / 12;
-  // Tax credit: 15% up to 7.5M yearly cap (max 1.125M / year => 93,750 / mo)
-  const monthlyTaxCredit = applyTaxCredit === "yes" ? Math.min(monthlyRent * 0.15, 93750) : 0;
+  // 월세 세액공제(조특법 제95조의2, 2025년 귀속~): 총급여 8천만 이하 무주택 세대주.
+  // 공제율 17%(총급여 5,500만 이하) 또는 15%, 공제 대상 월세는 연 1,000만 원까지.
+  const creditRate = applyTaxCredit === "17" ? 0.17 : applyTaxCredit === "15" ? 0.15 : 0;
+  const monthlyTaxCredit = Math.min(monthlyRent, RENT_CREDIT_ANNUAL_CAP / 12) * creditRate;
   const totalRentMonthlyCost = monthlyRent + monthlyRentEquityOppCost - monthlyTaxCredit;
 
   // Comparison
@@ -43,7 +50,7 @@ export default function JeonseVsMonthlyCalculator() {
   // Implied jeonse conversion rate
   const depositDiff = jeonseDeposit - rentDeposit;
   const impliedConversionRate = depositDiff > 0 ? (monthlyRent * 12 / depositDiff) * 100 : 0;
-  const legalConversionRate = 5.25; // Base rate + 2.0%
+  const legalConversionRate = LEGAL_CONVERSION_RATE;
 
   return (
     <div className="space-y-6">
@@ -147,10 +154,11 @@ export default function JeonseVsMonthlyCalculator() {
           </div>
 
           <ChoiceChips
-            legend="월세 세액공제 대상 여부 (총급여 7천만 이하 무주택자)"
+            legend="월세 세액공제 (총급여 8천만 이하 무주택 세대주)"
             value={applyTaxCredit}
             options={[
-              { value: "yes", label: "공제 대상 (월 최대 약 9.3만원 환급)" },
+              { value: "17", label: "총급여 5,500만 이하 (17%)" },
+              { value: "15", label: "5,500만 초과~8,000만 (15%)" },
               { value: "no", label: "공제 미대상" },
             ]}
             onChange={setApplyTaxCredit}
@@ -165,7 +173,7 @@ export default function JeonseVsMonthlyCalculator() {
               <span>보증금 기회비용</span>
               <span className="font-semibold text-foreground">{won(monthlyRentEquityOppCost)} /월</span>
             </div>
-            {applyTaxCredit === "yes" && (
+            {applyTaxCredit !== "no" && (
               <div className="flex justify-between text-success font-semibold">
                 <span>월세 세액공제 혜택</span>
                 <span>-{won(monthlyTaxCredit)} /월</span>

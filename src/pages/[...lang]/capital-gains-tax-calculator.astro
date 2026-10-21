@@ -2,6 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import RelatedToolLinks from "../../components/RelatedToolLinks.astro";
 import CapitalGainsTaxCalculatorComp from "../../components/tools/CapitalGainsTaxCalculator";
+import CapitalGainsTaxCountryCalculator from "../../components/tools/CapitalGainsTaxCountryCalculator";
+import type { CapitalGainsCountry } from "../../lib/capital-gains-tax-countries";
 import { locales } from "../../lib/i18n";
 
 type ActiveLocale = (typeof locales)[number];
@@ -27,30 +29,34 @@ export async function getStaticPaths() {
 
 const { locale } = Astro.props as { locale: ActiveLocale };
 
+// ja/zh/fr/es use their own country's law; ko and en use South Korea's.
+const COUNTRY_BY_LOCALE: Partial<Record<ActiveLocale, CapitalGainsCountry>> = { ja: "jp", zh: "cn", fr: "fr", es: "es" };
+const country = COUNTRY_BY_LOCALE[locale];
+
 const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "양도소득세 계산기 — 부동산·주식 양도세 미리 계산하기",
     description: "부동산·국내주식·해외주식 매도 시 예상 양도소득세를 계산합니다. 보유 기간, 주택 수, 조정대상지역 여부를 반영한 정확한 세금 예측.",
   },
   en: {
-    title: "Capital Gains Tax Calculator — Real Estate & Stocks",
+    title: "Capital Gains Tax Calculator (South Korea) — Real Estate & Stocks",
     description: "Calculate estimated capital gains tax on real estate, domestic stocks, and foreign stocks in Korea. Factors in holding period and property count.",
   },
   ja: {
-    title: "譲渡所得税計算機 — 不動産・株式",
-    description: "不動産・国内株式・海外株式の売却時の予想譲渡所得税を計算します。保有期間・住宅数・調整対象地域を考慮します。",
+    title: "不動産の譲渡所得税 計算機（日本）",
+    description: "家や土地を売ったときの譲渡所得税と住民税を計算します。長期20.315%・短期39.63%、居住用の3,000万円特別控除、10年超所有の軽減税率14.21%に対応。",
   },
   fr: {
-    title: "Calculateur de plus-value — Immobilier et actions",
-    description: "Calculez la taxe sur les plus-values immobilières et boursières en Corée.",
+    title: "Calculateur d'impôt sur la plus-value immobilière",
+    description: "Calculez l'impôt sur la plus-value d'une vente immobilière en France : 19 % d'impôt sur le revenu et 17,2 % de prélèvements sociaux après abattements pour durée de détention, et surtaxe au-delà de 50 000 €.",
   },
   es: {
-    title: "Calculadora de ganancias de capital — Inmuebles y acciones",
-    description: "Calcula el impuesto sobre ganancias de capital en inmuebles y acciones en Corea.",
+    title: "Calculadora del IRPF por la venta de una vivienda",
+    description: "Calcula el IRPF de la ganancia patrimonial al vender una vivienda en España con la escala del ahorro 2026 (19 % a 30 %) y la exención por reinversión en vivienda habitual o por ser mayor de 65 años.",
   },
   zh: {
-    title: "资本利得税计算机 — 不动产与股票",
-    description: "计算韩国不动产、国内股票和海外股票卖出时的预估资本利得税，考虑持有期间和房产数量。",
+    title: "个人转让住房个人所得税计算器",
+    description: "按财产转让所得20%或核定征收1%–3%计算个人卖房的个人所得税，并判断“满五唯一”免征。",
   },
 };
 
@@ -116,120 +122,168 @@ const content: Record<ActiveLocale, SeoContent> = {
     disclaimer: "This is a general estimate. Confirm the final amount with the tax authority or a tax professional."
   },
   ja: {
-    introTitle: "譲渡所得税は国ごとの制度確認が必要です",
-    intro: "このページは韓国基準の譲渡所得税を説明付きで試算します。税率や控除は国ごとに異なり毎年変わるため、申告前の参考値として扱ってください。",
-    formulaTitle: "主な計算基準",
-    formulas: [{
-      title: "基準 1",
-      body: "譲渡価額から取得価額を差し引きます。"
-    }, {
-      title: "基準 2",
-      body: "不動産と海外株式は250万ウォン控除です。"
-    }, {
-      title: "基準 3",
-      body: "国内上場株式の少額株主は非課税扱い、海外株式は国税20%と地方税10%。"
-    }],
+    introTitle: "日本で家を売ったときの税金は、譲渡所得にかかる所得税と住民税です",
+    intro: "不動産の譲渡所得は給与などと分けて計算する分離課税で、売った翌年の2月16日から3月15日までに確定申告します。税率は売った年の1月1日時点の所有期間で決まり、5年を超えると長期（20.315%）、5年以下は短期（39.63%）です。自分が住んでいた家なら3,000万円の特別控除があり、10年を超えて所有していれば6,000万円以下の部分に軽減税率14.21%が使えます。",
+    formulaTitle: "計算基準",
+    formulas: [
+      {
+        title: "譲渡所得",
+        body: "譲渡価額 −（取得費＋譲渡費用）− 特別控除。取得費は購入代金と購入時の費用で、建物は減価償却後の額。分からなければ譲渡価額の5%"
+      },
+      {
+        title: "税率",
+        body: "長期：所得税15.315%＋住民税5%。短期：所得税30.63%＋住民税9%。10年超の居住用：6,000万円以下は所得税10.21%＋住民税4%"
+      },
+      {
+        title: "居住用の特例",
+        body: "住まなくなってから3年目の年末までに売ること、親子・夫婦間の売買でないこと、前年・前々年に同じ特例を使っていないことなどが条件"
+      }
+    ],
     howToTitle: "使い方",
-    steps: ["必要な金額と条件を入力します。", "税金・控除・社会保険の内訳を確認します。", "申告・納付・判断前に最新の公式基準と照合します。"],
+    steps: [
+      "売却価格、取得費、譲渡費用を入力します。",
+      "取得した年と売った年を入力し、長期・短期を判定します。",
+      "居住用財産の特例を使うかを選び、所得税・住民税の合計を確認します。"
+    ],
     faqTitle: "よくある質問",
-    faqs: [{
-      question: "どの国の制度を基準にしていますか？",
-      answer: "韓国の制度です。他国の税率、控除、社会保険にはそのまま使えません。"
-    }, {
-      question: "実際の金額と異なる理由は？",
-      answer: "非課税、長期控除、必要経費、大株主要件で変わります。"
-    }, {
-      question: "制度は毎年変わりますか？",
-      answer: "はい。税率、控除限度、社会保険料率は毎年変わる可能性があります。申告や納付前に最新年度の基準を確認してください。"
-    }],
-    disclaimer: "この計算は一般的な概算です。実際の税額は税務当局または税理士に確認してください。"
+    faqs: [
+      {
+        question: "所有期間はどう数えますか？",
+        answer: "取得した日から、売った年の1月1日までで数えます。たとえば2020年に買った家を2026年に売ると、2026年1月1日時点で5年を超えるので長期です。2021年に買った家は5年以下なので短期になります。"
+      },
+      {
+        question: "3,000万円控除を使うと税金はゼロですか？",
+        answer: "譲渡所得が3,000万円以下ならゼロになりますが、確定申告は必要です。買い換えた新居で住宅ローン控除を受ける場合は、入居した年の前後（前2年・後3年）に3,000万円控除を使っていると住宅ローン控除が受けられないので、どちらが有利か比べて選びます。"
+      },
+      {
+        question: "損が出たときは？",
+        answer: "居住用財産を買い換えたり、住宅ローンが残ったまま売ったりした場合は、一定の要件で譲渡損失を給与所得などと損益通算し、翌年以降3年間繰り越せる特例があります。この計算機は損失の計算を行いません。"
+      }
+    ],
+    disclaimer: "このツールは一般的な計算用です。取得費・特例の要件は国税庁のタックスアンサーや税務署、税理士にご確認ください。"
   },
   zh: {
-    introTitle: "资本利得税必须先确认适用国家的制度",
-    intro: "本页依韩国规则估算资本利得税。税率、扣除与社会保险具有国别差异且可能逐年变动，结果应作为申报前的初步参考。",
-    formulaTitle: "主要计算基准",
-    formulas: [{
-      title: "规则 1",
-      body: "以出售价格减取得价格为起点。"
-    }, {
-      title: "规则 2",
-      body: "不动产与海外股票反映250万韩元扣除。"
-    }, {
-      title: "规则 3",
-      body: "国内上市股票小股东按免税处理；海外股票区分20%国税与10%地方税。"
-    }],
+    introTitle: "个人卖房的个人所得税按财产转让所得20%计算",
+    intro: "个人转让住房取得的所得属于财产转让所得，以转让收入减除房屋原值和合理费用后的余额为应纳税所得额，适用20%的比例税率。纳税人不能提供房屋原值凭证的，税务机关按转让收入的1%–3%核定征收，具体比例由各省确定。个人转让自用5年以上、并且是家庭唯一生活用房取得的所得，免征个人所得税。",
+    formulaTitle: "计算规则",
+    formulas: [
+      {
+        title: "据实征收",
+        body: "（转让收入 − 房屋原值 − 合理费用）× 20%。原值含购房价款和购房时缴纳的契税等；合理费用含装修费（有限额）、住房贷款利息、手续费、公证费"
+      },
+      {
+        title: "核定征收",
+        body: "原值无法核实时，按转让收入 × 1%–3% 计算，由各省规定具体比例（国税发〔2006〕108号）"
+      },
+      {
+        title: "满五唯一",
+        body: "自用满5年且是家庭唯一生活用房，免征个人所得税（财税字〔1999〕278号）"
+      }
+    ],
     howToTitle: "使用方法",
-    steps: ["输入所需金额与条件。", "分别查看税金、扣除与社会保险明细。", "申报、缴纳或决策前请核对最新官方规定。"],
+    steps: [
+      "输入转让收入、房屋原值和合理费用。",
+      "选择据实征收或核定征收，核定征收时填写本地比例。",
+      "确认是否满五唯一，查看应缴个人所得税。"
+    ],
     faqTitle: "常见问题",
-    faqs: [{
-      question: "这个计算机采用哪个国家的规则？",
-      answer: "采用韩国规则，不能直接套用其他国家的税率、扣除或社会保险制度。"
-    }, {
-      question: "为什么可能和实际金额不同？",
-      answer: "非课税、长期扣除、必要费用或大股东规则会改变结果。"
-    }, {
-      question: "规则每年都会变吗？",
-      answer: "会。税率、扣除上限与社会保险费率都可能按年度调整。申报或缴纳前请确认当年度官方规定。"
-    }],
-    disclaimer: "本工具仅为一般估算。实际税额请向税务机关或税务专业人士确认。"
+    faqs: [
+      {
+        question: "“满五”从什么时候算？",
+        answer: "一般以房产证（不动产权证）登记日期或契税完税凭证日期中较早的一个起算，到出售时满5年。“唯一”指家庭（本人、配偶、未成年子女）在该地只有这一套生活用房。"
+      },
+      {
+        question: "卖房还要交哪些税？",
+        answer: "个人出售住房满2年免征增值税，不满2年按规定缴纳增值税及附加。个人转让住房暂免土地增值税，印花税也暂免。买方另需缴纳契税。本计算器只计算个人所得税。"
+      },
+      {
+        question: "装修费可以全额扣除吗？",
+        answer: "不能。装修费用需有合法凭证，并有限额：已购公有住房、经济适用房最高为原值的15%，商品房及其他住房最高为原值的10%。"
+      }
+    ],
+    disclaimer: "本工具仅供一般估算。核定征收率和扣除凭证要求请向当地税务机关或不动产登记交易中心确认。"
   },
   fr: {
-    introTitle: "Impôt sur les plus-values dépend du pays concerné",
-    intro: "Cette page estime l'impôt sur les plus-values selon les règles de la Corée. Les tranches, déductions et cotisations sont propres au pays et peuvent changer chaque année; utilisez le résultat comme point de départ.",
-    formulaTitle: "Bases de calcul",
-    formulas: [{
-      title: "Règle 1",
-      body: "Prix de cession moins coût d'acquisition."
-    }, {
-      title: "Règle 2",
-      body: "Déduction de 2,5 M KRW pour immobilier et actions étrangères."
-    }, {
-      title: "Règle 3",
-      body: "Petits actionnaires domestiques exonérés; actions étrangères: 20% national et 10% local."
-    }],
-    howToTitle: "Comment l'utiliser",
-    steps: ["Saisissez les montants et conditions nécessaires.", "Vérifiez séparément impôts, déductions et cotisations.", "Comparez avec les règles officielles avant déclaration, paiement ou décision."],
+    introTitle: "En France, la plus-value immobilière est taxée à 36,2 % avant abattements",
+    intro: "La plus-value réalisée lors de la vente d'un bien immobilier est soumise à l'impôt sur le revenu au taux de 19 % et aux prélèvements sociaux de 17,2 %. Des abattements pour durée de détention réduisent la base à partir de la 6e année : exonération d'impôt sur le revenu après 22 ans et de prélèvements sociaux après 30 ans. La vente de la résidence principale est exonérée. Le notaire calcule et paie l'impôt au moment de la vente.",
+    formulaTitle: "Règles de calcul",
+    formulas: [
+      {
+        title: "Plus-value brute",
+        body: "Prix de cession − (prix d'acquisition + frais d'acquisition réels ou forfait 7,5 % + travaux réels ou forfait 15 % après 5 ans)"
+      },
+      {
+        title: "Abattements",
+        body: "Impôt sur le revenu : 6 % par an de la 6e à la 21e année, 4 % la 22e. Prélèvements sociaux : 1,65 % par an de la 6e à la 21e, 1,60 % la 22e, 9 % par an de la 23e à la 30e"
+      },
+      {
+        title: "Surtaxe",
+        body: "Plus-value nette imposable à l'IR supérieure à 50 000 € : 2 % à 6 % selon le montant, avec un lissage entre les tranches (hors terrains à bâtir)"
+      }
+    ],
+    howToTitle: "Mode d'emploi",
+    steps: [
+      "Saisissez le prix de vente, le prix d'achat et la durée de détention.",
+      "Choisissez les forfaits ou les montants réels pour les frais et les travaux.",
+      "Indiquez s'il s'agit de votre résidence principale et lisez l'impôt total."
+    ],
     faqTitle: "Questions fréquentes",
-    faqs: [{
-      question: "Quel pays sert de référence ?",
-      answer: "Il utilise les règles de la Corée. Ne l’appliquez pas directement à un autre système fiscal ou social."
-    }, {
-      question: "Pourquoi le montant réel peut-il différer ?",
-      answer: "Exonérations, déductions, frais et statut de gros actionnaire peuvent changer le montant."
-    }, {
-      question: "Les règles changent-elles chaque année ?",
-      answer: "Oui. Les taux, plafonds de déduction et cotisations peuvent changer chaque année. Vérifiez l'année en vigueur avant de déclarer ou payer."
-    }],
-    disclaimer: "Ce calcul est une estimation générale. Confirmez le montant auprès de l'administration fiscale ou d'un fiscaliste."
+    faqs: [
+      {
+        question: "Comment compter les années de détention ?",
+        answer: "On compte les années pleines entre la date d'acquisition (acte notarié) et la date de cession. Un bien acheté le 1er mars 2014 et vendu le 15 février 2026 est détenu depuis 11 années pleines."
+      },
+      {
+        question: "Quand la résidence principale est-elle exonérée ?",
+        answer: "Le bien doit être votre résidence principale au jour de la vente. Si vous l'avez quitté, la vente doit intervenir dans un délai normal (en général un an) et le logement ne doit pas avoir été loué ou occupé entre-temps."
+      },
+      {
+        question: "Le forfait travaux de 15 % est-il automatique ?",
+        answer: "Il s'applique sans justificatif si vous détenez le bien depuis plus de 5 ans. Sinon, seuls les travaux réels justifiés par des factures d'entreprises (construction, agrandissement, amélioration) sont retenus."
+      }
+    ],
+    disclaimer: "Cet outil sert au calcul général. Le calcul définitif est établi par le notaire sur la déclaration 2048-IMM ; vérifiez les règles sur impots.gouv.fr ou auprès de votre notaire."
   },
   es: {
-    introTitle: "Impuesto sobre ganancias de capital depende del país aplicado",
-    intro: "Esta página estima el impuesto sobre ganancias de capital con reglas de Corea. Los tramos, deducciones y cotizaciones son propios de cada país y pueden cambiar cada año; úsalo como estimación inicial.",
-    formulaTitle: "Bases de cálculo",
-    formulas: [{
-      title: "Regla 1",
-      body: "Precio de venta menos adquisición."
-    }, {
-      title: "Regla 2",
-      body: "Deducción de 2,5 M KRW para inmuebles y acciones extranjeras."
-    }, {
-      title: "Regla 3",
-      body: "Pequeños accionistas nacionales exentos; extranjeras: 20% nacional y 10% local."
-    }],
-    howToTitle: "Cómo usarla",
-    steps: ["Introduce los importes y condiciones necesarios.", "Revisa por separado impuestos, deducciones y cotizaciones.", "Compáralo con reglas oficiales antes de declarar, pagar o tomar una decisión."],
+    introTitle: "En España, la ganancia por vender una vivienda tributa en la base del ahorro del IRPF",
+    intro: "La diferencia entre el valor de transmisión y el valor de adquisición es una ganancia patrimonial que se declara en la renta del año siguiente y tributa con la escala del ahorro: 19 % hasta 6.000 €, 21 % hasta 50.000 €, 23 % hasta 200.000 €, 27 % hasta 300.000 € y 30 % por encima. Si vendes tu vivienda habitual y reinviertes el importe en otra en dos años, la ganancia queda exenta en proporción a lo reinvertido; los mayores de 65 años están exentos. La plusvalía municipal es un impuesto local distinto.",
+    formulaTitle: "Reglas de cálculo",
+    formulas: [
+      {
+        title: "Ganancia patrimonial",
+        body: "(Precio de venta − gastos de venta) − (precio de compra + gastos y tributos de compra + mejoras). La plusvalía municipal pagada cuenta como gasto de venta"
+      },
+      {
+        title: "Escala del ahorro 2026",
+        body: "19 % hasta 6.000 €, 21 % hasta 50.000 €, 23 % hasta 200.000 €, 27 % hasta 300.000 € y 30 % desde 300.000 €"
+      },
+      {
+        title: "Exenciones",
+        body: "Reinversión en vivienda habitual en dos años (proporcional al importe reinvertido) y venta de la vivienda habitual por mayores de 65 años"
+      }
+    ],
+    howToTitle: "Cómo se usa",
+    steps: [
+      "Introduce el precio y los gastos de venta y de compra.",
+      "Indica si es tu vivienda habitual, tu edad y el importe reinvertido.",
+      "Consulta la ganancia exenta y el IRPF a pagar en la base del ahorro."
+    ],
     faqTitle: "Preguntas frecuentes",
-    faqs: [{
-      question: "¿Qué país usa esta calculadora?",
-      answer: "Usa reglas de Corea. No lo apliques directamente a otro sistema fiscal o social."
-    }, {
-      question: "¿Por qué puede cambiar el importe final?",
-      answer: "Exenciones, deducciones, gastos y reglas de grandes accionistas pueden cambiar el resultado."
-    }, {
-      question: "¿Las reglas cambian cada año?",
-      answer: "Sí. Los tipos, límites de deducción y cotizaciones pueden cambiar cada año. Comprueba la norma vigente antes de declarar o pagar."
-    }],
-    disclaimer: "Este cálculo es una estimación general. Confirma el importe con la autoridad fiscal o un profesional tributario."
+    faqs: [
+      {
+        question: "¿Qué es la plusvalía municipal?",
+        answer: "Es el Impuesto sobre el Incremento de Valor de los Terrenos de Naturaleza Urbana (IIVTNU), que cobra el ayuntamiento al vendedor. Se calcula por el método objetivo o el real, a elegir el más bajo, y no existe si no hubo ganancia. No está incluido en este cálculo."
+      },
+      {
+        question: "¿Cuándo es vivienda habitual?",
+        answer: "Cuando has vivido en ella de forma continuada al menos tres años, o se vende antes por circunstancias como separación, traslado laboral o un primer empleo. Debe serlo al venderla o haberlo sido hasta cualquier día de los dos años anteriores."
+      },
+      {
+        question: "¿Se aplican coeficientes por antigüedad?",
+        answer: "Los coeficientes de actualización desaparecieron en 2015. Solo quedan los coeficientes de abatimiento para inmuebles comprados antes de 1995, con un límite de 400.000 € de valor de transmisión, que este cálculo no aplica."
+      }
+    ],
+    disclaimer: "Esta herramienta es para cálculo general. Confirma el resultado con el programa Renta WEB de la Agencia Tributaria o con tu asesor fiscal."
   }
 };
 
@@ -258,8 +312,7 @@ const structuredData = [
 <BaseLayout title={m.title} description={m.description} availableLocales={[...locales]} heading={m.title} intro={m.description}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <div class="mx-auto max-w-2xl px-4 py-5 sm:py-8">
-    <CapitalGainsTaxCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />
-  
+    {country ? <CapitalGainsTaxCountryCalculator client:load country={country} /> : <CapitalGainsTaxCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />}
 
     <section class="mt-6 sm:mt-10 border-t border-border pt-5 sm:pt-8">
       <h2 class="text-2xl font-bold text-foreground">{c.introTitle}</h2>

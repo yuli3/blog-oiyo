@@ -4,6 +4,10 @@ import RelatedToolLinks from "../../components/RelatedToolLinks.astro";
 import ShoeSizeConverter from "../../components/tools/ShoeSizeConverter";
 import { locales } from "../../lib/i18n";
 import type { Locale } from "../../lib/i18n";
+import { shoeSizePages } from "../../lib/shoe-size-equivalent";
+
+// 2026-10-18: use the route generator, not display strings such as 8.0, as URL identity.
+const menSizeRoutes = new Map(shoeSizePages("en").filter((page) => page.system === "men-us").map((page) => [page.value, page.slug]));
 
 type ActiveLocale = (typeof locales)[number];
 
@@ -388,7 +392,7 @@ const structuredData = {
               <tr class="transition-colors hover:bg-muted/30">
                 <td class="px-3.5 py-2.5 font-bold text-foreground">
                   {locale === "en" ? (
-                    <a href={`/en/shoe-size-converter/men-us-${row.menUs.replace(".", "-")}/`} class="text-primary hover:underline font-bold">
+                    <a href={`/en/shoe-size-converter/${menSizeRoutes.get(Number(row.menUs))}/`} class="text-primary hover:underline font-bold">
                       {row.menUs}
                     </a>
                   ) : (
