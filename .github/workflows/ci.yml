@@ -44,7 +44,7 @@ jobs:
       # (eslint.config.mjs). Findings that predate the gate live in
       # eslint-suppressions.json, so this fails only on new violations.
       - name: shadcn lint (blocking on new violations)
-        run: npm run lint:shadcn
+        run: npm run lint
 
       - name: Validate i18n keys
         run: npm run validate:i18n
@@ -75,6 +75,12 @@ jobs:
 
       - name: Build production artifact
         run: npm run build
+
+      - name: Verify typing migration in built HTML and redirects
+        run: node --test scripts/typing-migration.test.mjs
+
+      - name: Audit built SEO and internal links
+        run: npm run audit:seo && npm run audit:links
 
       # sitemap-submit only reads dist/sitemap*.xml. Handing those over costs a
       # few hundred KB and saves that job a second full 9,384-page build.
