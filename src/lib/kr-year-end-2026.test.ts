@@ -166,3 +166,111 @@ test("small earners with only an insurance premium still get the 13만 standard 
   assert.equal(r.standardCredit, 130_000);
   assert.equal(r.insuranceCredit, 0);
 });
+
+import {
+  additionalDeduction,
+  allowedDonation,
+  birthCredit,
+  hometownCredit,
+  housingDeduction,
+  politicalCredit,
+  taxSavingPlan,
+  YOUTH_SME,
+} from "./kr-year-end-2026.ts";
+
+test("추가공제: 경로·장애인은 인원만큼, 한부모가 부녀자보다 우선, 부녀자는 종합소득금액 3,000만 이하", () => {
+  assert.equal(additionalDeduction({ seniors: 2, disabled: 1 }, 40_000_000, 4), 4_000_000);
+  assert.equal(additionalDeduction({ seniors: 9 }, 40_000_000, 2), 2_000_000); // 기본공제 인원을 넘지 않는다
+  assert.equal(additionalDeduction({ womanHead: true }, 30_000_000, 1), 500_000);
+  assert.equal(additionalDeduction({ womanHead: true }, 30_000_001, 1), 0);
+  assert.equal(additionalDeduction({ womanHead: true, singleParent: true }, 20_000_000, 2), 1_000_000);
+});
+
+test("주택자금: 임차차입금+청약 40% 합산 400만, 장기주택 이자는 그 400만을 포함한 한도까지", () => {
+  // 청약 300만 × 40% = 120만, 전세대출 원리금 1,000만 × 40% = 400만 → 합산 400만
+  const both = housingDeduction(50_000_000, { subscriptionPaid: 5_000_000, leaseRepaid: 10_000_000 }, true);
+  assert.deepEqual(both, { lease: 2_800_000, subscription: 1_200_000, mortgage: 0, total: 4_000_000 });
+  // 표준세액공제 쪽: 청약만 남는다
+  assert.equal(housingDeduction(50_000_000, { subscriptionPaid: 3_000_000, leaseRepaid: 10_000_000 }, false).total, 1_200_000);
+  // 총급여 7,000만 초과는 청약 공제 없음
+  assert.equal(housingDeduction(70_000_001, { subscriptionPaid: 3_000_000 }, true).subscription, 0);
+  // 15년 고정금리+비거치 2,000만 한도, 청약 120만을 포함
+  const m = housingDeduction(60_000_000, { subscriptionPaid: 3_000_000, mortgageInterest: 25_000_000, mortgageType: "fixedAndNoGrace15" }, true);
+  assert.equal(m.mortgage, 18_800_000);
+  assert.equal(m.total, 20_000_000);
+});
+
+test("기부금 소득금액 한도: 종교단체 없으면 30%, 있으면 10% + min(20%, 종교 외)", () => {
+  assert.equal(allowedDonation(10_000_000, 5_000_000, 0), 3_000_000);
+  assert.equal(allowedDonation(10_000_000, 0, 5_000_000), 1_000_000);
+  assert.equal(allowedDonation(10_000_000, 1_000_000, 5_000_000), 2_000_000);
+});
+
+test("정치자금·고향사랑: 10만 원까지 100/110, 고향사랑 2026년 10만 초과 20만 이하 40%", () => {
+  assert.equal(politicalCredit(100_000), 90_909);
+  assert.equal(politicalCredit(200_000), 105_909);
+  assert.equal(hometownCredit(100_000), 90_909);
+  assert.equal(hometownCredit(200_000), 130_909);
+  assert.equal(hometownCredit(300_000), 145_909);
+  assert.equal(hometownCredit(30_000_000), hometownCredit(20_000_000));
+});
+
+test("출산·입양 공제: 첫째 30만, 둘째 50만, 셋째 이상 70만", () => {
+  assert.deepEqual([0, 1, 2, 3, 5].map(birthCredit), [0, 300_000, 500_000, 700_000, 700_000]);
+});
+
+test("결혼·정치·고향사랑 공제는 표준세액공제를 골라도 남는다", () => {
+  const r = settleYearEnd({ salary: 30_000_000, persons: 1, marriage: true, politicalDonation: 100_000 });
+  assert.equal(r.usedStandard, true);
+  assert.equal(r.marriageCredit, 500_000);
+  assert.equal(r.politicalCredit, 90_909);
+});
+
+test("청년 중소기업 감면: 산출세액 90%, 연 200만 한도, 근로소득세액공제는 감면 비율만큼 줄어든다", () => {
+  const plain = settleYearEnd({ salary: 25_000_000, persons: 1 });
+  const youth = settleYearEnd({ salary: 25_000_000, persons: 1, youthSme: true });
+  assert.equal(youth.youthReduction, Math.floor(plain.calculatedTax * YOUTH_SME.rate));
+  assert.ok(youth.earnedTaxCredit < plain.earnedTaxCredit);
+  assert.ok(youth.finalTax < plain.finalTax);
+  const rich = settleYearEnd({ salary: 120_000_000, persons: 1, youthSme: true });
+  assert.equal(rich.youthReduction, YOUTH_SME.cap);
+});
+
+test("ISA 만기 전환액 10%(300만까지)가 연금 세액공제 대상에 더해진다", () => {
+  assert.equal(pensionCredit(50_000_000, 6_000_000, 3_000_000, 30_000_000), 1_800_000); // (900만 + 300만) × 15%
+  assert.equal(pensionCredit(50_000_000, 0, 0, 10_000_000), 150_000);
+});
+
+test("의료비: 3% 문턱을 일반 의료비에서 먼저 빼고, 본인·65세 이상 의료비는 한도가 없다", () => {
+  assert.equal(medicalCredit(50_000_000, 0, 20_000_000), Math.floor((20_000_000 - 1_500_000) * 0.15));
+  assert.equal(medicalCredit(50_000_000, 10_000_000, 5_000_000), Math.floor((7_000_000 + 5_000_000) * 0.15));
+});
+
+test("withheld를 넣으면 국세·지방세 환급액을 함께 낸다", () => {
+  const r = settleYearEnd({ salary: 50_000_000, persons: 1, withheld: 3_000_000 });
+  assert.ok(r.refund);
+  assert.equal(r.refund!.national, 3_000_000 - r.finalTax);
+  assert.equal(r.refund!.local, 300_000 - r.localTax);
+});
+
+test("다른 종합소득금액을 더하면 과세표준이 늘고 근로소득세액공제는 근로소득 비율만큼만 남는다", () => {
+  const wage = settleYearEnd({ salary: 50_000_000, persons: 1 });
+  const mixed = settleYearEnd({ salary: 50_000_000, persons: 1, otherIncome: 20_000_000 });
+  assert.equal(mixed.totalIncome, wage.earnedIncome + 20_000_000);
+  assert.ok(mixed.taxBase > wage.taxBase);
+  assert.ok(mixed.finalTax > wage.finalTax);
+});
+
+test("절세 계획: 연금 900만 채우기와 결제수단 바꾸기가 세금을 줄이고, 합친 결과가 가장 적다", () => {
+  const input = { salary: 50_000_000, persons: 1, card: { credit: 25_000_000 }, pensionSavings: 1_000_000, withheld: 3_000_000 };
+  const plan = taxSavingPlan(input);
+  const ids = plan.levers.map((l) => l.id);
+  assert.ok(ids.includes("pension"));
+  assert.ok(ids.includes("debit"));
+  const pension = plan.levers.find((l) => l.id === "pension")!;
+  assert.equal(pension.extraPayment, 8_000_000);
+  assert.ok(plan.bestTaxSaved >= Math.max(...plan.levers.map((l) => l.taxSaved)));
+  assert.equal(plan.best.totalTax, plan.base.totalTax - plan.bestTaxSaved);
+  // 세금이 0이면 제안할 방법이 없다
+  assert.equal(taxSavingPlan({ salary: 10_000_000, persons: 3 }).levers.length, 0);
+});
