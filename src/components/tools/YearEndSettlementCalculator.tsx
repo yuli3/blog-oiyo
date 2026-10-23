@@ -87,6 +87,7 @@ const YearEndSettlementCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
     const [irpTotal, setIrpTotal] = useState(0);
     const [medicalExpenses, setMedicalExpenses] = useState(1000000);
     const [rentTotal, setRentTotal] = useState(0);
+    const [rentEligible, setRentEligible] = useState(false);
     const [children, setChildren] = useState(0);
     const [creditChildren, setCreditChildren] = useState(0);
     const [alreadyWithheld, setAlreadyWithheld] = useState(2000000);
@@ -105,6 +106,7 @@ const YearEndSettlementCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
         pensionSavings,
         irp: irpTotal,
         rent: rentTotal,
+        rentEligible,
     });
     const personalDeductionAmt = Math.max(1, dependents) * PERSONAL_DEDUCTION_PER_PERSON;
 
@@ -170,6 +172,11 @@ const YearEndSettlementCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ local
                     <div className="flex flex-col gap-2">
                         <label className="text-sm font-bold text-foreground">{t.rentTotal}</label>
                         <input type="number" value={rentTotal} onChange={(e) => setRentTotal(Math.max(0, Number(e.target.value)))} step={100000} min={0} className={inputClass} aria-label={t.rentTotal} />
+                        <label className="text-sm">
+                            <input type="checkbox" checked={rentEligible} onChange={(e) => setRentEligible(e.target.checked)} />
+                            {locale === 'ko' ? '한국 월세 세액공제 요건을 확인했어요 (무주택 세대·주택 기준·계약·전입·지급 증빙 등)' : 'I checked the Korean rent-credit eligibility conditions (non-homeowning household, qualifying home, contract, residence registration and payment evidence).'}
+                        </label>
+                        <p className="text-sm text-muted-foreground">{locale === 'ko' ? '확인 전 적용 공제는 0이에요. 체크는 본인 확인이며 자격 자동 판정이 아니에요.' : 'No rent credit is applied before confirmation. This is self-confirmation, not an automatic eligibility decision.'}</p>
                     </div>
                     <div className="flex flex-col gap-2">
                         <label className="text-sm font-bold text-foreground">{t.children}</label>
