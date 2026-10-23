@@ -37,6 +37,7 @@ export default function YearEndTaxCalculator() {
   const [paidTaxDisplay, setPaidTaxDisplay] = useState('');
   const [dependents, setDependents] = useState(0);
   const [deductions, setDeductions] = useState(INITIAL_DEDUCTIONS);
+  const [rentEligible, setRentEligible] = useState(false);
 
   const handleSalary = (e: React.ChangeEvent<HTMLInputElement>) => {
     const raw = e.target.value.replace(/,/g, '').replace(/[^0-9]/g, '');
@@ -78,6 +79,7 @@ export default function YearEndTaxCalculator() {
       pensionSavings: val('pension_savings'),
       irp: val('irp'),
       rent: val('rent'),
+      rentEligible,
     });
 
     // 기납부세액은 소득세+지방소득세로 입력받으므로 지방세 포함 결정세액과 비교한다.
@@ -95,7 +97,7 @@ export default function YearEndTaxCalculator() {
       alreadyPaid,
       refundOrPay: alreadyPaid - r.totalTax,
     };
-  }, [salary, paidTax, dependents, deductions]);
+  }, [salary, paidTax, dependents, deductions, rentEligible]);
 
   return (
     <div className="not-prose my-5 sm:my-8 rounded-2xl border border-border bg-card shadow-sm overflow-hidden">
@@ -182,6 +184,12 @@ export default function YearEndTaxCalculator() {
             ))}
           </div>
         </div>
+
+        <label className="block text-sm">
+          <input type="checkbox" checked={rentEligible} onChange={(e) => setRentEligible(e.target.checked)} />
+          한국 월세 세액공제 요건(무주택 세대·주택 기준·계약자·전입·지급 증빙 등)을 확인했어요
+        </label>
+        <p className="text-sm text-muted-foreground">확인 전에는 입력한 월세를 공제에 적용하지 않아요. 체크는 본인 확인이며 자동 자격 판정이 아니에요. 소득 한도 등 다른 계산 조건도 충족해야 해요.</p>
 
         {/* 결과 */}
         {result && (

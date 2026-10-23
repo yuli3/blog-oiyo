@@ -1,457 +1,58 @@
-import React, { useState, useMemo } from 'react';
-import { Globe, AlertTriangle, ShieldCheck } from 'lucide-react';
+import { useState } from 'react';
+import { compareForeignExchange } from '../../lib/foreign-exchange-comparison';
 
-interface Props {
-  locale: string;
-}
+// WHY 2026-10-24: locale changes labels, never the selected billing currency or quoted rate.
+export const EXCHANGE_COPY = {
+  ko: ['해외 결제 비용 비교', '예시·사용자 입력 가정', '결제 통화', '청구 통화', '외화 금액', '입력 환율', '환율 단위', '국제 네트워크 비용 (%)', '발급사 비용 (%)', '발급사 비용 기준', '환산 기준액', '기준액 + 네트워크 비용', 'DCC 비교 방식', '비용 포함 제시 최종금액', '가정한 DCC 가산율 (%)', '환산 기준액', '네트워크 비용', '발급사 비용', '현지 통화 결제 가정 합계', 'DCC 비교금액', '차이 (DCC − 현지 결제)', '값을 모두 올바르게 입력해 주세요. 환율은 0보다 커야 해요.', '실제 청구액과 추가 비용은 카드 약관과 견적을 확인해요. 이 화면은 자동 환율 조회나 실청구 보장이 아니에요. 통화 선택은 금액을 자동 환전하지 않아요. 각 항목은 통화 최소단위로 표시 반올림되어 합계와 작은 차이가 날 수 있어요.'],
+  en: ['Foreign payment cost comparison', 'Example / entered assumptions', 'Payment currency', 'Billing currency', 'Foreign amount', 'Entered exchange rate', 'Rate unit', 'Network fee (%)', 'Issuer fee (%)', 'Issuer fee basis', 'Converted base', 'Base + network fee', 'DCC comparison mode', 'Offered final amount, fees included', 'Assumed DCC markup (%)', 'Converted base', 'Network fee', 'Issuer fee', 'Local-currency payment assumption', 'DCC comparison amount', 'Difference (DCC − local)', 'Enter valid values in every field. The exchange rate must be positive.', 'Check card terms and the quote for actual charges and extra fees. This is not a live rate or billing guarantee. Choosing currencies does not convert existing inputs. Values are rounded for display to currency minor units; displayed components may differ slightly from the total.'],
+  ja: ['海外決済コスト比較', '例・入力した仮定', '決済通貨', '請求通貨', '外貨金額', '入力為替レート', 'レート単位', 'ネットワーク手数料 (%)', '発行会社手数料 (%)', '発行会社手数料の基準', '換算基準額', '基準額 + ネットワーク手数料', 'DCC比較方式', '手数料込みの提示最終額', '仮定したDCC上乗せ率 (%)', '換算基準額', 'ネットワーク手数料', '発行会社手数料', '現地通貨決済の仮定合計', 'DCC比較金額', '差額 (DCC − 現地通貨)', '各欄に有効な値を入力してください。為替レートは正数です。', '実際の請求額と追加料金はカード規約と見積もりをご確認ください。自動レート取得や請求保証ではありません。通貨選択で入力額は自動換算されません。表示は通貨の最小単位で四捨五入するため、内訳の和と合計に小さな差が出る場合があります。'],
+  zh: ['境外支付费用比较', '示例／输入假设', '支付币种', '账单币种', '外币金额', '输入汇率', '汇率单位', '卡组织费用 (%)', '发卡行费用 (%)', '发卡行计费基数', '换算基数', '基数 + 卡组织费用', 'DCC比较方式', '含费用的最终报价', '假设DCC加价率 (%)', '换算基数', '卡组织费用', '发卡行费用', '当地币种支付假设合计', 'DCC比较金额', '差额（DCC − 当地支付）', '请在所有输入框填写有效数值，汇率必须大于零。', '实际入账和额外费用请核对卡片条款及报价。本工具不自动获取汇率，也不保证实际账单金额。选择币种不会自动换算输入值。显示按货币最小单位取整，因此分项之和可能与总额略有差异。'],
+  fr: ['Comparaison du coût des paiements étrangers', 'Exemple / hypothèses saisies', 'Devise du paiement', 'Devise de facturation', 'Montant en devise étrangère', 'Taux saisi', 'Unité du taux', 'Frais de réseau (%)', 'Frais émetteur (%)', 'Base des frais émetteur', 'Base convertie', 'Base + frais de réseau', 'Mode de comparaison DCC', 'Montant final proposé, frais inclus', 'Majoration DCC supposée (%)', 'Base convertie', 'Frais de réseau', 'Frais émetteur', 'Total supposé en devise locale', 'Montant de comparaison DCC', 'Écart (DCC − paiement local)', 'Saisissez des valeurs valides partout. Le taux doit être positif.', 'Vérifiez les conditions de votre carte et le devis pour le débit réel et les frais supplémentaires. Aucun taux en direct ni débit garanti. Changer de devise ne convertit pas les saisies. Les montants sont arrondis à l’unité monétaire minimale pour affichage ; les postes peuvent différer légèrement du total.'],
+  es: ['Comparación del coste de pagos extranjeros', 'Ejemplo / supuestos introducidos', 'Moneda de pago', 'Moneda de facturación', 'Importe extranjero', 'Tipo de cambio introducido', 'Unidad del cambio', 'Comisión de red (%)', 'Comisión del emisor (%)', 'Base de comisión del emisor', 'Base convertida', 'Base + comisión de red', 'Modo de comparación DCC', 'Importe final ofrecido, gastos incluidos', 'Recargo DCC supuesto (%)', 'Base convertida', 'Comisión de red', 'Comisión del emisor', 'Total supuesto en moneda local', 'Importe comparativo DCC', 'Diferencia (DCC − pago local)', 'Introduce valores válidos en todos los campos. El cambio debe ser positivo.', 'Consulta las condiciones de tu tarjeta y la oferta para el cargo real y costes adicionales. No hay cambio en directo ni garantía del cargo. Cambiar de moneda no convierte los datos introducidos. Los valores se redondean a la unidad monetaria mínima al mostrarse; las partidas pueden diferir ligeramente del total.'],
+} as const;
 
-const CURRENCY_PRESETS: Record<string, { symbol: string; rate: number; unit: number }> = {
-  USD: { symbol: '$', rate: 1385, unit: 1 },
-  JPY: { symbol: '¥', rate: 925, unit: 100 },
-  EUR: { symbol: '€', rate: 1510, unit: 1 },
-  GBP: { symbol: '£', rate: 1795, unit: 1 },
-  CNY: { symbol: '¥', rate: 192, unit: 1 },
-};
-
-const BRANDS: Record<string, { name: string; rate: number }> = {
-  visa: { name: 'VISA (비자)', rate: 1.1 },
-  master: { name: 'Mastercard (마스터)', rate: 1.0 },
-  amex: { name: 'American Express (아멕스)', rate: 1.4 },
-  jcb: { name: 'JCB (면제 0%)', rate: 0.0 },
-  unionpay: { name: 'UnionPay (유니온페이)', rate: 0.8 },
-};
-
-const UI_TEXT: Record<string, {
-  title: string;
-  subtitle: string;
-  currency: string;
-  amount: string;
-  exchangeRate: string;
-  cardBrand: string;
-  issuerFee: string;
-  dccMode: string;
-  localPay: string;
-  krwDccPay: string;
-  dccWarning: string;
-  baseAmount: string;
-  brandFeeAmount: string;
-  issuerFeeAmount: string;
-  totalFees: string;
-  finalBilledAmount: string;
-  tipTitle: string;
-  tipBody: string;
-}> = {
-  ko: {
-    title: "해외 결제 카드 수수료 & 실청구액 계산기",
-    subtitle: "브랜드 수수료(비자·마스터)와 국내 카드사 수수료, 환율 스프레드 및 DCC 차단 실결제액 산출",
-    currency: "결제 통화",
-    amount: "현지 결제 금액",
-    exchangeRate: "전신환 매도 환율",
-    cardBrand: "국제 브랜드 카드사",
-    issuerFee: "국내 카드사 이용 수수료",
-    dccMode: "결제 방식 (DCC 여부)",
-    localPay: "현지 통화 결제 (권장)",
-    krwDccPay: "원화(KRW) 결제 (DCC 5% 가산)",
-    dccWarning: "주의: 해외에서 원화로 결제(DCC)하면 이중 환전 수수료 3~8%가 추가되어 큰 손해를 입습니다. 반드시 현지 통화로 결제하세요!",
-    baseAmount: "순수 물품 대금 (환산 원화)",
-    brandFeeAmount: "국제 브랜드 수수료",
-    issuerFeeAmount: "국내 카드사 수수료",
-    totalFees: "총 수수료 합계",
-    finalBilledAmount: "최종 카드 명세서 청구 예상액",
-    tipTitle: "해외 직구 & 여행 카드 꿀팁",
-    tipBody: "신용카드 앱에서 '해외원화결제 차단 서비스'를 켜두면 DCC 이중 수수료를 사전에 100% 원천 차단할 수 있습니다.",
-  },
-  en: {
-    title: "Foreign Transaction Fee & Currency Exchange Calculator",
-    subtitle: "Calculate exact credit card billing with network fees (Visa/Mastercard), bank fees, and DCC comparison",
-    currency: "Payment Currency",
-    amount: "Foreign Amount",
-    exchangeRate: "Exchange Rate",
-    cardBrand: "Card Network",
-    issuerFee: "Bank / Issuer Fee",
-    dccMode: "Payment Method",
-    localPay: "Local Currency (Recommended)",
-    krwDccPay: "Dynamic Currency Conversion (DCC +5%)",
-    dccWarning: "Warning: Opting for home currency DCC incurs a 3-8% double-conversion markup. Always pay in local currency!",
-    baseAmount: "Converted Base Amount",
-    brandFeeAmount: "Network Brand Fee",
-    issuerFeeAmount: "Card Issuer Fee",
-    totalFees: "Total Fees Added",
-    finalBilledAmount: "Estimated Final Billed Amount",
-    tipTitle: "Travel & Cross-Border Shopping Tip",
-    tipBody: "Always select the local currency of the merchant or destination country to avoid redundant conversion markups.",
-  },
-  ja: {
-    title: "海外決済手数料・為替換算シミュレーター",
-    subtitle: "国際ブランド手数料（Visa/Mastercard）と発行カード会社手数料、DCC二重為替の比較計算",
-    currency: "決済通貨",
-    amount: "現地決済金額",
-    exchangeRate: "適用為替レート",
-    cardBrand: "国際ブランド",
-    issuerFee: "カード会社海外事務手数料",
-    dccMode: "決済方式 (DCC)",
-    localPay: "現地通貨決済（推奨）",
-    krwDccPay: "円建て決済 (DCC +5%加算)",
-    dccWarning: "注意: 海外で日本円決済(DCC)を選択すると、3〜8%の不当な二重為替手数料が上乗せされます。必ず現地通貨を選びましょう！",
-    baseAmount: "純粋商品代金 (円換算)",
-    brandFeeAmount: "国際ブランド手数料",
-    issuerFeeAmount: "発行会社事務手数料",
-    totalFees: "手数料合計",
-    finalBilledAmount: "最終請求予定額",
-    tipTitle: "海外決済の知恵",
-    tipBody: "海外ショッピングや通販では、必ず現地通貨で決済することで不要なマージンを回避できます。",
-  },
-  zh: {
-    title: "境外刷卡手续费与最终入账金额计算器",
-    subtitle: "包含卡组织手续费(Visa/Mastercard)、发卡行跨境费率及DCC动态货币转换对比",
-    currency: "结算币种",
-    amount: "境外消费金额",
-    exchangeRate: "参考汇率",
-    cardBrand: "国际卡组织",
-    issuerFee: "发卡行跨境交易费率",
-    dccMode: "支付通道选择",
-    localPay: "当地货币结算 (推荐)",
-    krwDccPay: "本币DCC结算 (附加5%汇损)",
-    dccWarning: "警告：如果在境外选择本币(DCC)结算，将被强制收取3%~8%的二次货币转换汇损！请务必选择消费当地货币！",
-    baseAmount: "商品换算基础本金",
-    brandFeeAmount: "卡组织手续费",
-    issuerFeeAmount: "发卡行手续费",
-    totalFees: "综合手续费总额",
-    finalBilledAmount: "最终预计账单入账金额",
-    tipTitle: "海淘与出境刷卡贴士",
-    tipBody: "在网银中关闭境外外币转本币功能，或刷卡时要求POS机选择当地币种，可省下数倍额外手续费。",
-  },
-  fr: {
-    title: "Calculateur de Frais Bancaires et Paiements Internationaux",
-    subtitle: "Frais de réseau Visa/Mastercard, commission bancaire et comparaison DCC",
-    currency: "Devise du paiement",
-    amount: "Montant étranger",
-    exchangeRate: "Taux de change",
-    cardBrand: "Réseau de carte",
-    issuerFee: "Frais de banque émettrice",
-    dccMode: "Mode de paiement",
-    localPay: "Devise locale (Recommandé)",
-    krwDccPay: "Conversion dynamique (DCC +5%)",
-    dccWarning: "Attention : Choisir votre devise d'origine (DCC) entraîne 3 à 8 % de surcoût de change. Payez toujours en devise locale !",
-    baseAmount: "Montant brut converti",
-    brandFeeAmount: "Frais de réseau",
-    issuerFeeAmount: "Commission bancaire",
-    totalFees: "Total des frais",
-    finalBilledAmount: "Montant final débité estimé",
-    tipTitle: "Conseil voyage et achat en ligne",
-    tipBody: "Refusez systématiquement la conversion dans votre devise lors du paiement par terminal à l'étranger.",
-  },
-  es: {
-    title: "Calculadora de Comisiones por Pago en el Extranjero",
-    subtitle: "Comisión de marca Visa/Mastercard, recargo bancario y comparativa de cambio DCC",
-    currency: "Moneda de pago",
-    amount: "Importe en divisa",
-    exchangeRate: "Tipo de cambio",
-    cardBrand: "Red de tarjeta",
-    issuerFee: "Comisión bancaria",
-    dccMode: "Método de cargo",
-    localPay: "Moneda local (Recomendado)",
-    krwDccPay: "Conversión de divisa (DCC +5%)",
-    dccWarning: "Aviso: Aceptar el pago en tu moneda de origen (DCC) suma entre un 3% y un 8% en comisiones dobles. ¡Paga siempre en moneda local!",
-    baseAmount: "Importe base convertido",
-    brandFeeAmount: "Comisión de red",
-    issuerFeeAmount: "Comisión del banco emisor",
-    totalFees: "Comisiones totales",
-    finalBilledAmount: "Cargo final estimado en cuenta",
-    tipTitle: "Consejo para viajes y compras online",
-    tipBody: "Solicita siempre abonar la compra en la moneda original del comercio para no pagar márgenes abusivos.",
-  },
-};
-
-export default function ForeignExchangeFeeCalculator({ locale = 'ko' }: Props) {
-  const t = UI_TEXT[locale] ?? UI_TEXT.ko;
-
-  const [curr, setCurr] = useState<string>('USD');
-  const [foreignAmount, setForeignAmount] = useState<number>(100);
-  const [rate, setRate] = useState<number>(CURRENCY_PRESETS.USD.rate);
-  const [brandKey, setBrandKey] = useState<string>('visa');
-  const [issuerRate, setIssuerRate] = useState<number>(0.2); // 0.2%
-  const [isDcc, setIsDcc] = useState<boolean>(false);
-
-  const handleCurrencyChange = (c: string) => {
-    setCurr(c);
-    const preset = CURRENCY_PRESETS[c];
-    if (preset) {
-      setRate(preset.rate);
-    }
-  };
-
-  const calculation = useMemo(() => {
-    const preset = CURRENCY_PRESETS[curr] ?? CURRENCY_PRESETS.USD;
-    // Base amount in KRW
-    const baseKrw = (foreignAmount / preset.unit) * rate;
-
-    // Brand fee (e.g. Visa 1.1% on USD)
-    const brandRate = BRANDS[brandKey]?.rate ?? 1.1;
-    const brandFeeKrw = baseKrw * (brandRate / 100);
-
-    // Issuer fee (e.g. 0.2% on total or base)
-    const issuerFeeKrw = (baseKrw + brandFeeKrw) * (issuerRate / 100);
-
-    // DCC penalty (5% average markup if DCC enabled)
-    const dccPenaltyKrw = isDcc ? baseKrw * 0.05 : 0;
-
-    const totalFeesKrw = brandFeeKrw + issuerFeeKrw + dccPenaltyKrw;
-    const finalTotalKrw = baseKrw + totalFeesKrw;
-
-    return {
-      baseKrw: Math.round(baseKrw),
-      brandFeeKrw: Math.round(brandFeeKrw),
-      issuerFeeKrw: Math.round(issuerFeeKrw),
-      dccPenaltyKrw: Math.round(dccPenaltyKrw),
-      totalFeesKrw: Math.round(totalFeesKrw),
-      finalTotalKrw: Math.round(finalTotalKrw),
-      feePercent: baseKrw > 0 ? ((totalFeesKrw / baseKrw) * 100).toFixed(2) : '0',
-    };
-  }, [curr, foreignAmount, rate, brandKey, issuerRate, isDcc]);
-
-  return (
-    <div className="w-full max-w-4xl mx-auto space-y-6">
-      {/* Header */}
-      <div className="bg-card p-6 rounded-2xl border border-border text-center shadow-sm">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold mb-2">
-          <Globe className="w-3.5 h-3.5" />
-          <span>Cross-Border Payment Simulator</span>
-        </div>
-        <h2 className="text-xl sm:text-2xl font-extrabold text-foreground tracking-tight">
-          {t.title}
-        </h2>
-        <p className="text-xs sm:text-sm text-muted-foreground mt-1 max-w-xl mx-auto">
-          {t.subtitle}
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* Controls */}
-        <div className="lg:col-span-6 bg-card border border-border rounded-2xl p-6 shadow-sm space-y-5">
-          {/* Currency & Amount */}
-          <div>
-            <label className="block text-xs font-bold text-foreground mb-1.5">
-              {t.currency} & {t.amount}
-            </label>
-            <div className="grid grid-cols-5 gap-1.5 mb-2.5">
-              {Object.keys(CURRENCY_PRESETS).map((c) => (
-                <button
-                  key={c}
-                  type="button"
-                  onClick={() => handleCurrencyChange(c)}
-                  className={`py-1.5 text-xs font-bold rounded-lg border transition-all ${
-                    curr === c
-                      ? 'bg-primary text-primary-foreground border-primary shadow-sm'
-                      : 'bg-muted text-foreground border-transparent hover:border-border'
-                  }`}
-                >
-                  {c}
-                </button>
-              ))}
-            </div>
-
-            <div className="relative">
-              <input
-                type="number"
-                min="1"
-                step="5"
-                value={foreignAmount}
-                onChange={(e) => setForeignAmount(Number(e.target.value))}
-                className="w-full rounded-xl border border-input bg-background pl-8 pr-4 py-2.5 text-base font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-              />
-              <span className="absolute left-3 top-2.5 text-sm font-bold text-muted-foreground">
-                {CURRENCY_PRESETS[curr]?.symbol}
-              </span>
-            </div>
-          </div>
-
-          {/* Exchange Rate */}
-          <div>
-            <label className="block text-xs font-bold text-foreground mb-1.5">
-              {t.exchangeRate} ({curr === 'JPY' ? '100엔당' : `1${curr}당`} KRW)
-            </label>
-            <div className="relative">
-              <input
-                type="number"
-                step="1"
-                value={rate}
-                onChange={(e) => setRate(Number(e.target.value))}
-                className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-              />
-              <span className="absolute right-4 top-2.5 text-xs text-muted-foreground">원</span>
-            </div>
-          </div>
-
-          {/* Card Network Brand */}
-          <div>
-            <label className="block text-xs font-bold text-foreground mb-1.5">
-              {t.cardBrand}
-            </label>
-            <select
-              value={brandKey}
-              onChange={(e) => setBrandKey(e.target.value)}
-              className="w-full rounded-xl border border-input bg-background px-3 py-2.5 text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-            >
-              {Object.entries(BRANDS).map(([key, item]) => (
-                <option key={key} value={key}>
-                  {item.name} (+{item.rate}%)
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Issuer Fee */}
-          <div>
-            <label className="block text-xs font-bold text-foreground mb-1.5">
-              {t.issuerFee}
-            </label>
-            <div className="grid grid-cols-4 gap-1.5">
-              <button
-                type="button"
-                onClick={() => setIssuerRate(0.0)}
-                className={`py-1.5 text-xs font-bold rounded-lg border transition-all ${
-                  issuerRate === 0.0
-                    ? 'bg-primary text-primary-foreground border-primary'
-                    : 'bg-muted text-foreground border-transparent'
-                }`}
-              >
-                0.0% (무료)
-              </button>
-              <button
-                type="button"
-                onClick={() => setIssuerRate(0.18)}
-                className={`py-1.5 text-xs font-bold rounded-lg border transition-all ${
-                  issuerRate === 0.18
-                    ? 'bg-primary text-primary-foreground border-primary'
-                    : 'bg-muted text-foreground border-transparent'
-                }`}
-              >
-                0.18% (우대)
-              </button>
-              <button
-                type="button"
-                onClick={() => setIssuerRate(0.20)}
-                className={`py-1.5 text-xs font-bold rounded-lg border transition-all ${
-                  issuerRate === 0.20
-                    ? 'bg-primary text-primary-foreground border-primary'
-                    : 'bg-muted text-foreground border-transparent'
-                }`}
-              >
-                0.20% (표준)
-              </button>
-              <button
-                type="button"
-                onClick={() => setIssuerRate(0.25)}
-                className={`py-1.5 text-xs font-bold rounded-lg border transition-all ${
-                  issuerRate === 0.25
-                    ? 'bg-primary text-primary-foreground border-primary'
-                    : 'bg-muted text-foreground border-transparent'
-                }`}
-              >
-                0.25%
-              </button>
-            </div>
-          </div>
-
-          {/* DCC Selector */}
-          <div>
-            <label className="block text-xs font-bold text-foreground mb-1.5">
-              {t.dccMode}
-            </label>
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                onClick={() => setIsDcc(false)}
-                className={`py-2 px-3 text-xs font-bold rounded-xl border flex items-center justify-center gap-1.5 ${
-                  !isDcc
-                    ? 'bg-success/10 border-success text-success'
-                    : 'bg-muted text-muted-foreground border-transparent'
-                }`}
-              >
-                <ShieldCheck className="w-4 h-4" />
-                <span>{t.localPay}</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setIsDcc(true)}
-                className={`py-2 px-3 text-xs font-bold rounded-xl border flex items-center justify-center gap-1.5 ${
-                  isDcc
-                    ? 'bg-destructive/10 border-destructive text-destructive'
-                    : 'bg-muted text-muted-foreground border-transparent'
-                }`}
-              >
-                <AlertTriangle className="w-4 h-4" />
-                <span>{t.krwDccPay}</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Results */}
-        <div className="lg:col-span-6 bg-card border border-border rounded-2xl p-6 shadow-sm flex flex-col justify-between">
-          <div>
-            <h3 className="text-base font-bold text-foreground mb-4 flex items-center justify-between">
-              <span>카드 청구 예상액 명세서</span>
-              <span className="text-xs font-semibold px-2 py-0.5 rounded bg-primary/10 text-primary">
-                총 수수료 +{calculation.feePercent}%
-              </span>
-            </h3>
-
-            <div className="space-y-3 mb-6">
-              <div className="flex items-center justify-between py-2 border-b border-border/50 text-sm">
-                <span className="text-muted-foreground">{t.baseAmount}</span>
-                <span className="font-bold text-foreground">{calculation.baseKrw.toLocaleString()}원</span>
-              </div>
-              <div className="flex items-center justify-between py-2 border-b border-border/50 text-sm">
-                <span className="text-muted-foreground">{t.brandFeeAmount} ({BRANDS[brandKey]?.name})</span>
-                <span className="font-bold text-foreground">+{calculation.brandFeeKrw.toLocaleString()}원</span>
-              </div>
-              <div className="flex items-center justify-between py-2 border-b border-border/50 text-sm">
-                <span className="text-muted-foreground">{t.issuerFeeAmount} ({issuerRate}%)</span>
-                <span className="font-bold text-foreground">+{calculation.issuerFeeKrw.toLocaleString()}원</span>
-              </div>
-              {isDcc && (
-                <div className="flex items-center justify-between py-2 border-b border-border/50 text-sm text-destructive">
-                  <span className="font-semibold">원화결제(DCC) 이중환전 수수료 (5%)</span>
-                  <span className="font-bold">+{calculation.dccPenaltyKrw.toLocaleString()}원</span>
-                </div>
-              )}
-              <div className="flex items-center justify-between py-2 border-b border-border/50 text-sm">
-                <span className="text-muted-foreground">{t.totalFees}</span>
-                <span className="font-bold text-warning">+{calculation.totalFeesKrw.toLocaleString()}원</span>
-              </div>
-            </div>
-
-            {isDcc && (
-              <div className="p-3.5 rounded-xl bg-destructive/10 border border-destructive/20 text-xs text-destructive mb-4 flex items-start gap-2">
-                <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
-                <p>{t.dccWarning}</p>
-              </div>
-            )}
-          </div>
-
-          {/* Total Final Charge Box */}
-          <div className="rounded-xl bg-primary/10 border border-primary/20 p-5 text-center mt-2">
-            <p className="text-xs font-medium text-muted-foreground mb-1">{t.finalBilledAmount}</p>
-            <p className="text-3xl font-black text-primary tracking-tight">
-              {calculation.finalTotalKrw.toLocaleString()}원
-            </p>
-            <p className="text-xs font-semibold text-muted-foreground mt-2">
-              순수 원화 대비 <span className="text-warning font-bold">+{calculation.totalFeesKrw.toLocaleString()}원</span> 추가 결제
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Tip Banner */}
-      <div className="p-5 rounded-2xl bg-muted/40 border border-border flex items-start gap-3">
-        <ShieldCheck className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-        <div className="space-y-1 text-xs">
-          <p className="font-bold text-foreground">{t.tipTitle}</p>
-          <p className="text-muted-foreground leading-relaxed">{t.tipBody}</p>
-        </div>
-      </div>
-    </div>
+export default function ForeignExchangeFeeCalculator({ locale = 'ko' }: { locale: string }) {
+  const t = EXCHANGE_COPY[locale as keyof typeof EXCHANGE_COPY] ?? EXCHANGE_COPY.en;
+  const currencies = ['USD', 'KRW', 'JPY', 'EUR', 'GBP', 'CNY'];
+  const [payment, setPayment] = useState('USD');
+  const [billing, setBilling] = useState('KRW');
+  const [amount, setAmount] = useState('100');
+  const [rate, setRate] = useState('1400');
+  const [unit, setUnit] = useState('1');
+  const [network, setNetwork] = useState('0');
+  const [issuer, setIssuer] = useState('0');
+  const [basis, setBasis] = useState<'base' | 'base_plus_network'>('base');
+  const [mode, setMode] = useState<'offered_final' | 'assumed_markup'>('offered_final');
+  const [offered, setOffered] = useState('147000');
+  const [markup, setMarkup] = useState('5');
+  const parse = (text: string) => text.trim() === '' ? NaN : Number(text);
+  let result: ReturnType<typeof compareForeignExchange> | null = null;
+  try {
+    result = compareForeignExchange({ foreignAmount: parse(amount), enteredRate: parse(rate), rateUnit: Number(unit), networkPercent: parse(network), issuerPercent: parse(issuer), issuerBasis: basis, mode, offeredFinalAmount: parse(offered), assumedDccMarkupPercent: parse(markup) });
+  } catch { /* WHY 2026-10-24: incomplete edits show an error instead of stale or invented zero amounts. */ }
+  const money = (value: number) => new Intl.NumberFormat(locale, { style: 'currency', currency: billing }).format(value);
+  const numeric = (label: string, value: string, change: (value: string) => void, suffix = '') => (
+    <label className="grid gap-1 text-sm">{label} {suffix}
+      <input type="number" min="0" step="any" value={value} onChange={(e) => change(e.target.value)} className="w-full min-w-0 rounded-md border border-input bg-background px-3 py-2" />
+    </label>
   );
+  return <section className="space-y-4 rounded-lg border border-border bg-card p-4" aria-label={t[0]}>
+    <h2 className="text-xl font-bold">{t[0]}</h2><p>{t[1]}</p>
+    <div className="grid gap-3 sm:grid-cols-2">
+      <label className="grid gap-1">{t[2]}<select value={payment} onChange={(e) => setPayment(e.target.value)}>{currencies.map((c) => <option key={c}>{c}</option>)}</select></label>
+      <label className="grid gap-1">{t[3]}<select value={billing} onChange={(e) => setBilling(e.target.value)}>{currencies.map((c) => <option key={c}>{c}</option>)}</select></label>
+      {numeric(t[4], amount, setAmount, payment)}{numeric(t[5], rate, setRate, `${billing} / ${unit} ${payment}`)}
+      <label className="grid gap-1">{t[6]}<select value={unit} onChange={(e) => setUnit(e.target.value)}><option>1</option><option>100</option></select></label>
+      {numeric(t[7], network, setNetwork)}{numeric(t[8], issuer, setIssuer)}
+      <label className="grid gap-1">{t[9]}<select value={basis} onChange={(e) => setBasis(e.target.value === 'base' ? 'base' : 'base_plus_network')}><option value="base">{t[10]}</option><option value="base_plus_network">{t[11]}</option></select></label>
+      <label className="grid gap-1">{t[12]}<select value={mode} onChange={(e) => setMode(e.target.value === 'offered_final' ? 'offered_final' : 'assumed_markup')}><option value="offered_final">{t[13]}</option><option value="assumed_markup">{t[14]}</option></select></label>
+      {mode === 'offered_final' ? numeric(t[13], offered, setOffered, billing) : numeric(t[14], markup, setMarkup)}
+    </div>
+    <div aria-live="polite">{result ? <>
+      <dl className="grid gap-2 sm:grid-cols-3">{[result.base, result.networkFee, result.issuerFee].map((value, i) => <div key={i}><dt>{t[15 + i]}</dt><dd>{money(value)}</dd></div>)}</dl>
+      <dl className="mt-4 grid gap-3 sm:grid-cols-2"><div className="rounded-md border border-border p-3"><dt>{t[18]}</dt><dd>{money(result.localScenario)}</dd></div><div className="rounded-md border border-border p-3"><dt>{t[19]}</dt><dd>{money(result.dccScenario)}</dd></div></dl>
+      <p className="mt-3 font-semibold">{t[20]}: {money(result.delta)}</p>
+    </> : <p role="alert">{t[21]}</p>}</div>
+    <p className="text-sm text-muted-foreground">{t[22]}</p>
+  </section>;
 }

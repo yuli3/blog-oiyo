@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { parseWorkText, RATES, weeklyHolidayPay, WEEKS_PER_MONTH } from "../../lib/kr-payroll-2026";
+import { parseWorkText, RATES, weeklyHolidayPay, WEEKLY_COMPARISON_WEEKS } from "../../lib/kr-payroll-2026";
 import NumberField from "./payroll/NumberField";
 import OneLineInput from "./payroll/OneLineInput";
 import ResultSteps from "./payroll/ResultSteps";
@@ -11,9 +11,12 @@ export default function WeeklyHolidayPayCalculator() {
   const [hourlyWage, setHourlyWage] = useState<number>(RATES.minimumWage);
   const [daysPerWeek, setDaysPerWeek] = useState(5);
   const [hoursPerDay, setHoursPerDay] = useState(4);
+  const [wholeWeek, setWholeWeek] = useState("unknown");
+  const [attendance, setAttendance] = useState("unknown");
+  const condition = (value: string) => value === "unknown" ? undefined : value === "yes";
 
-  const valid = hourlyWage > 0 && daysPerWeek > 0 && daysPerWeek <= 7 && hoursPerDay > 0 && hoursPerDay <= 24;
-  const r = valid ? weeklyHolidayPay({ hourlyWage, daysPerWeek, hoursPerDay }) : null;
+  const valid = [hourlyWage, daysPerWeek, hoursPerDay].every(Number.isFinite) && hourlyWage > 0 && daysPerWeek > 0 && daysPerWeek <= 7 && hoursPerDay > 0 && hoursPerDay <= 24;
+  const r = valid ? weeklyHolidayPay({ hourlyWage, daysPerWeek, hoursPerDay, employedWholeWeek: condition(wholeWeek), completedScheduledDays: condition(attendance) }) : null;
 
   const applyText = (text: string) => {
     const parsed = parseWorkText(text);
@@ -39,13 +42,28 @@ export default function WeeklyHolidayPayCalculator() {
         <NumberField label="하루 근무시간" value={hoursPerDay} onChange={setHoursPerDay} suffix="시간" step={0.5} />
       </div>
 
+      <fieldset className="mt-4 grid gap-3">
+        <legend>한국 주휴수당 요건 확인</legend>
+        <label>해당 7일 동안 근로관계가 유지됐나요?
+          <select value={wholeWeek} onChange={(e) => setWholeWeek(e.target.value)}>
+            <option value="unknown">미확인</option><option value="yes">충족</option><option value="no">미충족</option>
+          </select>
+        </label>
+        <label>근로의무가 있는 소정근로일에 개근했나요?
+          <select value={attendance} onChange={(e) => setAttendance(e.target.value)}>
+            <option value="unknown">미확인</option><option value="yes">충족</option><option value="no">미충족</option>
+          </select>
+        </label>
+        <p>시간은 4주 평균 소정근로시간(4주 미만은 해당 기간)을 입력해요. 40시간·5일 통상근로자 비교모델이며 초과근로 가산은 제외해요. 다음 주 근무 여부와 근로의무 없는 공휴일은 위 질문과 구분해요.</p>
+      </fieldset>
+
       <div aria-live="polite" className="mt-5">
         {r === null ? (
           <p className="text-sm text-muted-foreground">시급과 근무일(1~7일), 하루 근무시간을 입력해 주세요.</p>
         ) : (
           <div className="rounded-md border border-border bg-background px-4 py-4">
             <p className="text-sm text-muted-foreground">
-              {r.eligible ? `주 ${hours(r.weeklyHours)} 일하므로 주휴수당 대상입니다` : `주 ${hours(r.weeklyHours)}이라 15시간 미만, 주휴수당이 없습니다`}
+              {r.eligibilityStatus === "unknown" ? "자격 확인 전 조건부 예상액이에요. 아래 금액은 요건 충족을 가정한 비교액이에요." : r.eligible ? "입력하신 요건을 충족한다고 확인한 비교액이에요. 법적 자격을 확정하지는 않아요." : "입력한 조건이 충족되지 않아 주휴수당을 적용하지 않았어요."}
             </p>
             <p className="mt-1 font-mono text-3xl font-bold text-foreground">{won(r.holidayPay)}</p>
             <p className="text-xs text-muted-foreground">한 주 주휴수당 (결근 없이 일한 주 기준)</p>
@@ -67,11 +85,11 @@ export default function WeeklyHolidayPayCalculator() {
             <ResultSteps
               steps={[
                 `주 소정근로시간 = ${daysPerWeek}일 × ${hours(hoursPerDay)} = ${hours(r.weeklyHours)}`,
-                r.eligible
+                r.eligible !== false
                   ? `15시간 이상이므로 주휴시간 = ${r.weeklyHours >= 40 ? "40시간 이상은 8시간으로 고정" : `${hours(r.weeklyHours)} ÷ 40 × 8`} = ${hours(r.holidayHours)}`
-                  : "주 15시간 미만은 근로기준법상 주휴일이 없으므로 주휴시간 0",
+                  : "시간 또는 확인 요건 미충족으로 비교 주휴시간 0",
                 `주휴수당 = ${hours(r.holidayHours)} × ${won(hourlyWage)} = ${won(r.holidayPay)}`,
-                `월 환산 = 주급 ${won(r.weeklyPay)} × ${WEEKS_PER_MONTH.toFixed(3)}주(365 ÷ 7 ÷ 12)`,
+                `월 환산 = 주급 ${won(r.weeklyPay)} × ${WEEKLY_COMPARISON_WEEKS}주. 주급 요소별·월환산 원 미만 버림은 API 비교모델이며 법정 절사 규칙이나 확정 월급이 아니에요.`,
               ]}
               next={[
                 { href: "/ko/daily-worker-insurance-checker/", label: "알바도 4대보험 들어야 할까?" },

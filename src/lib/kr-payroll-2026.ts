@@ -21,16 +21,21 @@ export const RATES = {
 
 /** Average weeks per month used for monthly conversion (365 ÷ 7 ÷ 12). */
 export const WEEKS_PER_MONTH = 365 / 7 / 12;
+// WHY 2026-10-24: match the deployed API comparison model without changing other payroll consumers.
+export const WEEKLY_COMPARISON_WEEKS = 4.345;
 
 export interface WeeklyInput {
   hourlyWage: number;
   daysPerWeek: number;
   hoursPerDay: number;
+  employedWholeWeek?: boolean;
+  completedScheduledDays?: boolean;
 }
 
 export interface WeeklyResult {
   weeklyHours: number;
-  eligible: boolean;
+  eligible: boolean | null;
+  eligibilityStatus: "unknown" | "self_confirmed" | "conditions_not_met";
   holidayHours: number;
   holidayPay: number;
   weeklyPay: number;
@@ -39,19 +44,23 @@ export interface WeeklyResult {
 }
 
 /** 주휴수당: 주 소정근로 15시간 이상이면 (주 소정시간 ÷ 40) × 8시간분, 40시간을 넘으면 8시간분. */
-export function weeklyHolidayPay({ hourlyWage, daysPerWeek, hoursPerDay }: WeeklyInput): WeeklyResult {
+export function weeklyHolidayPay({ hourlyWage, daysPerWeek, hoursPerDay, employedWholeWeek, completedScheduledDays }: WeeklyInput): WeeklyResult {
+  if (![hourlyWage, daysPerWeek, hoursPerDay].every(Number.isFinite) || hourlyWage <= 0 || daysPerWeek <= 0 || daysPerWeek > 7 || hoursPerDay <= 0 || hoursPerDay > 24) throw new RangeError("Invalid weekly pay input");
+  if ([employedWholeWeek, completedScheduledDays].some((v) => v !== undefined && typeof v !== "boolean")) throw new TypeError("Eligibility must be boolean or omitted");
   const weeklyHours = daysPerWeek * hoursPerDay;
-  const eligible = weeklyHours >= 15;
-  const holidayHours = eligible ? (Math.min(weeklyHours, 40) / 40) * 8 : 0;
-  const holidayPay = Math.round(holidayHours * hourlyWage);
-  const weeklyPay = Math.round(weeklyHours * hourlyWage) + holidayPay;
+  const ineligible = weeklyHours < 15 || employedWholeWeek === false || completedScheduledDays === false;
+  const eligible = ineligible ? false : employedWholeWeek === true && completedScheduledDays === true ? true : null;
+  const holidayHours = !ineligible ? (Math.min(weeklyHours, 40) / 40) * 8 : 0;
+  const holidayPay = Math.floor(holidayHours * hourlyWage);
+  const weeklyPay = Math.floor(weeklyHours * hourlyWage) + holidayPay;
   return {
     weeklyHours,
     eligible,
+    eligibilityStatus: eligible === null ? "unknown" : eligible ? "self_confirmed" : "conditions_not_met",
     holidayHours,
     holidayPay,
     weeklyPay,
-    monthlyPay: Math.round(weeklyPay * WEEKS_PER_MONTH),
+    monthlyPay: Math.floor(weeklyPay * WEEKLY_COMPARISON_WEEKS),
     belowMinimumWage: hourlyWage < RATES.minimumWage,
   };
 }
