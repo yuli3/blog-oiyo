@@ -53,6 +53,9 @@ export function weeklyHolidayPay({ hourlyWage, daysPerWeek, hoursPerDay, employe
   const holidayHours = !ineligible ? (Math.min(weeklyHours, 40) / 40) * 8 : 0;
   const holidayPay = Math.floor(holidayHours * hourlyWage);
   const weeklyPay = Math.floor(weeklyHours * hourlyWage) + holidayPay;
+  const monthlyPay = Math.floor(weeklyPay * WEEKLY_COMPARISON_WEEKS);
+  // WHY 2026-10-24: finite inputs can still overflow during multiplication; never display infinity as wages.
+  if (![weeklyHours, holidayHours, holidayPay, weeklyPay, monthlyPay].every(Number.isFinite)) throw new RangeError("Weekly pay exceeds supported range");
   return {
     weeklyHours,
     eligible,
@@ -60,7 +63,7 @@ export function weeklyHolidayPay({ hourlyWage, daysPerWeek, hoursPerDay, employe
     holidayHours,
     holidayPay,
     weeklyPay,
-    monthlyPay: Math.floor(weeklyPay * WEEKLY_COMPARISON_WEEKS),
+    monthlyPay,
     belowMinimumWage: hourlyWage < RATES.minimumWage,
   };
 }

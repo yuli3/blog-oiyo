@@ -16,7 +16,10 @@ export default function WeeklyHolidayPayCalculator() {
   const condition = (value: string) => value === "unknown" ? undefined : value === "yes";
 
   const valid = [hourlyWage, daysPerWeek, hoursPerDay].every(Number.isFinite) && hourlyWage > 0 && daysPerWeek > 0 && daysPerWeek <= 7 && hoursPerDay > 0 && hoursPerDay <= 24;
-  const r = valid ? weeklyHolidayPay({ hourlyWage, daysPerWeek, hoursPerDay, employedWholeWeek: condition(wholeWeek), completedScheduledDays: condition(attendance) }) : null;
+  let r: ReturnType<typeof weeklyHolidayPay> | null = null;
+  try {
+    if (valid) r = weeklyHolidayPay({ hourlyWage, daysPerWeek, hoursPerDay, employedWholeWeek: condition(wholeWeek), completedScheduledDays: condition(attendance) });
+  } catch { /* WHY 2026-10-24: keep oversized edits in the form and show the existing error instead of crashing React. */ }
 
   const applyText = (text: string) => {
     const parsed = parseWorkText(text);
@@ -59,7 +62,7 @@ export default function WeeklyHolidayPayCalculator() {
 
       <div aria-live="polite" className="mt-5">
         {r === null ? (
-          <p className="text-sm text-muted-foreground">시급과 근무일(1~7일), 하루 근무시간을 입력해 주세요.</p>
+          <p className="text-sm text-muted-foreground">시급과 근무일(1~7일), 하루 근무시간을 입력해 주세요. 계산 범위를 넘는 큰 값은 줄여 주세요.</p>
         ) : (
           <div className="rounded-md border border-border bg-background px-4 py-4">
             <p className="text-sm text-muted-foreground">

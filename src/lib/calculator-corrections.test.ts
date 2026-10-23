@@ -31,6 +31,7 @@ test('weekly fractions, caps, low input wage and invalid values remain explicit'
   assert.equal(weeklyHolidayPay({ ...input, daysPerWeek: 6, hoursPerDay: 8 }).holidayHours, 8);
   assert.equal(weeklyHolidayPay({ ...input, hourlyWage: 9000 }).holidayPay, 27900);
   for (const value of [NaN, Infinity, 0, -1]) assert.throws(() => weeklyHolidayPay({ ...input, hourlyWage: value }));
+  assert.throws(() => weeklyHolidayPay({ ...input, hourlyWage: 1e308 }));
 });
 
 test('rent confirmation does not bypass income limits or accept truthy non-booleans', () => {
