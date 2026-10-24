@@ -1,0 +1,256 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import RelatedToolLinks from "../../components/RelatedToolLinks.astro";
+import LocalOnlyNote from "../../components/tools/LocalOnlyNote.astro";
+import MoneyPlanner from "../../components/tools/MoneyPlanner";
+import type { PlanCountry } from "../../lib/money-plan-countries";
+import { locales } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
+
+type SeoContent = {
+  introTitle: string;
+  intro: string;
+  formulaTitle: string;
+  formulas: { title: string; body: string }[];
+  howToTitle: string;
+  steps: string[];
+  faqTitle: string;
+  faqs: { question: string; answer: string }[];
+  disclaimer: string;
+};
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: ActiveLocale };
+
+// Each locale opens on its own country (ko and en on South Korea); the planner lets anyone switch.
+const COUNTRY_BY_LOCALE: Record<ActiveLocale, PlanCountry> = { ko: "kr", en: "kr", ja: "jp", zh: "cn", fr: "fr", es: "es" };
+
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
+  ko: {
+    title: "월급 나누기·저축 플래너 — 시드머니 1,000만 원은 언제? 최저임금·최저생계비까지",
+    description: "월 실수령액과 지출을 넣으면 A·B·C 세 가지 월급 나누기 안, 비상금과 100만·1,000만·5,000만 원 달성 시점, 청년미래적금·연금저축·IRP·ISA 배분, 최저임금과 최저생계비 비교, 증여세 줄이는 법을 보여 줍니다. 한국·일본·중국·프랑스·스페인 선택 가능.",
+  },
+  en: {
+    title: "Paycheck Split & Savings Planner — When Will You Hit Your Savings Goals?",
+    description: "Enter take-home pay and spending to get three ways to split your paycheck, emergency-fund and savings-goal timelines, tax-advantaged account order, minimum wage and minimum living cost checks for South Korea, Japan, China, France and Spain.",
+  },
+  ja: {
+    title: "給料の分け方・貯蓄プランナー — 100万円はいつ貯まる？最低賃金・最低生活費も",
+    description: "手取りと支出を入れると、給料の分け方A・B・C案、生活防衛資金と10万・100万・500万円の到達時期、iDeCo・NISAへの配分、令和8年度最低賃金と最低生活費の比較、贈与税を抑えるポイントがわかります。",
+  },
+  zh: {
+    title: "工资分配与储蓄规划器 — 10万元存款需要多久？含最低工资与最低生活费",
+    description: "输入到手收入和支出，查看A·B·C三种工资分配方案、应急资金和1万·10万·50万元的达成时间、个人养老金配置、上海最低工资与低保标准对比，以及赠与与遗产规划要点。",
+  },
+  fr: {
+    title: "Planificateur de budget et d’épargne — Quand atteindrez-vous 10 000 € ?",
+    description: "Saisissez votre salaire net et vos dépenses : trois façons de répartir votre salaire, délai pour l’épargne de précaution et pour 1 000 €, 10 000 € et 50 000 €, ordre Livret A, PER et PEA, comparaison avec le SMIC et le RSA, conseils de donation.",
+  },
+  es: {
+    title: "Planificador de nómina y ahorro — ¿Cuándo llegarás a 10.000 €?",
+    description: "Introduce tu sueldo neto y tus gastos: tres formas de repartir la nómina, plazo para el fondo de emergencia y para 1.000 €, 10.000 € y 50.000 €, plan de pensiones y fondos indexados, comparación con el SMI 2026 y el IMV, y claves de donaciones.",
+  },
+};
+
+const m = meta[locale] ?? meta.en;
+
+const content: Record<ActiveLocale, SeoContent> = {
+  ko: {
+    introTitle: "얼마를 모을 수 있는지는 필수지출에서 시작합니다",
+    intro: "월급을 나누는 비율보다 먼저 봐야 할 것은 줄일 수 없는 돈, 곧 주거비·식비·공과금 같은 필수지출이에요. 이 플래너는 필수지출 합계를 내 최저생계비로 보고 생계급여 기준과 최저임금 월급에 견준 다음, 남는 돈을 지금 그대로·안정형·균형형·공격형 네 가지로 나눠 비상금과 목표 금액에 닿는 시점을 계산해요. 비상금을 채운 뒤에는 나이에 맞춰 청년미래적금, 연금저축, IRP, ISA 순서로 한도까지 채우는 배분을 보여 줘요.",
+    formulaTitle: "계산 기준",
+    formulas: [
+      { title: "월급 나누기", body: "A안 필수 50·선택 30·저축 20, B안 50·20·30, C안 45·10·45. 필수지출이 비율보다 크면 선택지출과 저축을 같은 비율로 줄여요." },
+      { title: "비상금과 목표", body: "비상금 = (필수 + 선택지출) × 6개월. 목표 금액까지는 매달 저축액을 넣고 기대 수익률로 월복리 계산해요." },
+      { title: "최저임금", body: "2026년 시급 10,320원. 주 15시간 이상이면 주휴시간(최대 8시간)을 더해 월 환산(주 40시간 = 209시간, 2,156,880원)." },
+      { title: "최저생계비", body: "2026년 생계급여 선정기준(기준중위소득 32%): 1인 820,556원, 4인 2,078,316원과 비교해요." },
+    ],
+    howToTitle: "사용 방법",
+    steps: ["나라, 나이, 가구원 수, 월 실수령액을 넣습니다.", "필수지출 항목과 선택지출을 넣고 최저생계비 비교를 확인합니다.", "A·B·C안의 저축액과 목표 달성 시점, 계좌 배분을 비교하고 저장하거나 인쇄합니다."],
+    faqTitle: "자주 묻는 질문",
+    faqs: [
+      { question: "비상금은 왜 6개월치인가요?", answer: "실직이나 큰 지출이 생겨도 투자 자산을 손해 보고 팔지 않도록 생활비 6개월치를 먼저 모으는 것이 일반적인 기준이에요. 직장이 안정적이면 3개월, 소득이 불규칙하면 그 이상으로 잡으세요." },
+      { question: "연금저축과 IRP를 ISA보다 먼저 채우는 이유는요?", answer: "연금저축 600만 원, IRP를 더해 900만 원까지는 납입액의 13.2~16.5%를 세액공제로 바로 돌려받아요. 다만 55세 전에 찾으면 공제받은 만큼 다시 과세되니, 당장 쓸 돈은 ISA나 일반 계좌에 두세요." },
+      { question: "증여세를 줄이려면 언제부터 준비해야 하나요?", answer: "증여재산공제는 10년마다 다시 생겨요. 성년 자녀에게 10년마다 5,000만 원씩 일찍 나눠 주면 같은 금액을 한 번에 줄 때보다 세금이 크게 줄어요. 혼인·출산 증여공제 1억 원도 함께 활용할 수 있어요." },
+    ],
+    disclaimer: "이 플래너는 일반적인 계획용이에요. 금융상품 가입과 세금 신고 전에는 금융회사·국세청 안내나 전문가 상담으로 확인하세요.",
+  },
+  en: {
+    introTitle: "What you can save starts with what you cannot cut",
+    intro: "Before choosing a split, look at the money you cannot cut: housing, food, utilities and other essentials. The planner treats that total as your minimum living cost, compares it with the public minimum income and the full-time minimum wage, then splits what is left four ways (as now, steady, balanced, aggressive) and works out when you fill an emergency fund and reach each savings goal. Once the emergency fund is full, it fills the country's tax-advantaged accounts in order, up to their limits.",
+    formulaTitle: "How it calculates",
+    formulas: [
+      { title: "Splitting your pay", body: "Plan A needs 50 · wants 30 · save 20; B 50 · 20 · 30; C 45 · 10 · 45. If essentials exceed the share, wants and savings shrink in proportion." },
+      { title: "Emergency fund and goals", body: "Emergency fund = (needs + wants) × 6 months (3 in France and Spain). Goals compound monthly at your expected return." },
+      { title: "Minimum wage", body: "Hourly minimum × monthly hours. Korea adds paid weekly rest from 15 hours a week; China and Spain use their statutory monthly amounts for full-time work." },
+      { title: "Minimum living cost", body: "Compared with Korea's livelihood benefit line, France's RSA, Spain's IMV or Shanghai's dibao. Japan has no single figure." },
+    ],
+    howToTitle: "How to use",
+    steps: ["Choose a country and enter your age, household size and take-home pay.", "Enter essential and optional spending and check the minimum living cost comparison.", "Compare plans A, B and C, their timelines and account split, then save or print."],
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      { question: "Why six months for the emergency fund?", answer: "It keeps you from selling investments at a loss after a job loss or a big bill. Three months can be enough with a secure job; more if your income is irregular." },
+      { question: "Why does the order of accounts matter?", answer: "Tax-advantaged accounts such as Korea's pension savings and IRP, Japan's iDeCo and NISA or France's PER return part of what you pay in through tax relief, so filling them first raises your effective return. Money you may need soon should stay accessible." },
+      { question: "Can I use the result for another country?", answer: "Yes. Pick the country at the top; minimum wage, minimum income, account caps and savings goals switch to that country's rules and currency." },
+    ],
+    disclaimer: "This planner is for general planning. Confirm details with your bank, tax authority or an adviser before opening accounts or filing.",
+  },
+  ja: {
+    introTitle: "いくら貯められるかは、削れない支出から考えます",
+    intro: "給料の分け方を決める前に、住居費・食費・水道光熱費など削れない支出を確認しましょう。このプランナーは必需支出の合計を自分の最低生活費として最低賃金の月額と比べ、残りを「今のまま」「安定型」「バランス型」「積極型」の4通りに分けて、生活防衛資金と目標額に届く時期を計算します。生活防衛資金が貯まったあとは、iDeCo、NISAつみたて投資枠、成長投資枠の順に上限まで割り当てます。",
+    formulaTitle: "計算の基準",
+    formulas: [
+      { title: "給料の分け方", body: "A案 必需50・変動30・貯蓄20、B案 50・20・30、C案 45・10・45。必需支出が割合を超える場合は変動費と貯蓄を同じ比率で減らします。" },
+      { title: "生活防衛資金と目標", body: "生活防衛資金＝（必需＋変動費）×6か月。目標額までは毎月の貯蓄額を想定利回りで月複利計算します。" },
+      { title: "最低賃金", body: "令和8年度の地域別最低賃金は全国加重平均1,177円（東京1,280円）。時給×週の時間×52÷12で月額にします。" },
+      { title: "最低生活費", body: "生活保護基準は地域・年齢・世帯で異なるため、単一の数字ではなく自分の必需支出の合計を最低生活費として示します。" },
+    ],
+    howToTitle: "使い方",
+    steps: ["国・年齢・世帯人数・毎月の手取りを入力します。", "必需支出と変動費を入れ、最低生活費と最低賃金の比較を確認します。", "A・B・C案の貯蓄額、到達時期、口座の配分を比べ、保存または印刷します。"],
+    faqTitle: "よくある質問",
+    faqs: [
+      { question: "生活防衛資金はなぜ6か月分？", answer: "失業や大きな出費があっても投資を損切りせずに済むよう、生活費の6か月分を先に確保するのが一般的な目安です。会社員で収入が安定していれば3か月分でもかまいません。" },
+      { question: "iDeCoとNISAはどちらが先？", answer: "iDeCoは掛金が全額所得控除になりますが60歳まで引き出せません。すぐ使う可能性があるお金はNISAに、老後資金はiDeCoにと分けて考えましょう。" },
+      { question: "贈与税を抑えるには？", answer: "暦年贈与は受贈者1人あたり年110万円まで非課税です。相続開始前7年以内の贈与は相続財産に加算されるため、早めに計画的に贈与するのが基本です。" },
+    ],
+    disclaimer: "このプランナーは一般的な計画用です。口座開設や税務申告の前に、金融機関・税務署の案内や専門家に確認してください。",
+  },
+  zh: {
+    introTitle: "能存多少钱，先看哪些支出不能省",
+    intro: "在决定工资怎么分之前，先看住房、餐饮、水电燃气等无法削减的必要支出。本规划器把必要支出合计视为你的最低生活费，与最低工资月薪和当地低保标准比较，再把剩下的钱按保持现状、稳健型、平衡型、积极型四种方式分配，算出存够应急资金和达到储蓄目标所需的时间。存够应急资金后，先在个人养老金额度内缴存，其余再做基金定投或存款。",
+    formulaTitle: "计算规则",
+    formulas: [
+      { title: "工资分配", body: "A方案 必要50·可选30·储蓄20，B方案 50·20·30，C方案 45·10·45。必要支出超过比例时，可选支出和储蓄按比例减少。" },
+      { title: "应急资金与目标", body: "应急资金 =（必要 + 可选支出）× 6个月。达到目标金额按预期收益率每月复利计算。" },
+      { title: "最低工资", body: "以上海为例：全日制月最低工资2,740元，非全日制小时最低工资25元（2025年7月1日起）。各城市标准不同。" },
+      { title: "最低生活费", body: "与上海城乡居民最低生活保障标准每人每月1,690元（2026年7月1日起）比较。" },
+    ],
+    howToTitle: "使用方法",
+    steps: ["选择国家，输入年龄、家庭人数和每月到手收入。", "填写必要支出和可选支出，查看与最低生活费的比较。", "比较A·B·C方案的储蓄额、达成时间和账户配置，然后保存或打印。"],
+    faqTitle: "常见问题",
+    faqs: [
+      { question: "应急资金为什么是6个月？", answer: "这样在失业或出现大额支出时，不必亏本卖出投资。工作稳定可以准备3个月，收入不稳定则应准备更多。" },
+      { question: "个人养老金值得缴吗？", answer: "每年最多12,000元可在个税前扣除，领取时按3%缴税。适用税率高于3%的人缴存更划算，但资金要到退休才能领取。" },
+      { question: "中国有赠与税吗？", answer: "目前不征收遗产税和赠与税，但房产赠与涉及契税等，非直系亲属赠与房产需按20%缴纳个人所得税。" },
+    ],
+    disclaimer: "本工具仅供一般规划参考。开户或纳税申报前，请以金融机构、税务机关的说明或专业人士意见为准。",
+  },
+  fr: {
+    introTitle: "Ce que vous pouvez épargner dépend d’abord de ce que vous ne pouvez pas réduire",
+    intro: "Avant de choisir une répartition, regardez les dépenses incompressibles : logement, alimentation, énergie et autres essentiels. Le planificateur prend leur total comme votre minimum vital, le compare au RSA et au SMIC mensuel, puis répartit le reste de quatre façons (comme aujourd’hui, prudent, équilibré, ambitieux) et calcule quand vous constituez l’épargne de précaution et atteignez chaque objectif. Une fois l’épargne de précaution placée sur le Livret A, il remplit le PER puis le PEA.",
+    formulaTitle: "Règles de calcul",
+    formulas: [
+      { title: "Répartir son salaire", body: "Plan A besoins 50 · envies 30 · épargne 20 ; B 50 · 20 · 30 ; C 45 · 10 · 45. Si les besoins dépassent la part prévue, envies et épargne baissent en proportion." },
+      { title: "Épargne de précaution et objectifs", body: "Épargne de précaution = (besoins + envies) × 3 mois. Les objectifs sont calculés avec capitalisation mensuelle au rendement attendu." },
+      { title: "SMIC", body: "12,31 € brut de l’heure depuis le 1er juin 2026 ; 35 h par semaine = 151,67 h = 1 867,02 € brut par mois." },
+      { title: "Minimum vital", body: "Comparé au montant forfaitaire du RSA : 651,69 € pour une personne seule depuis avril 2026, +50 % pour la 2e personne, +30 % ensuite." },
+    ],
+    howToTitle: "Mode d’emploi",
+    steps: ["Choisissez le pays, puis saisissez votre âge, la taille du foyer et votre salaire net.", "Saisissez les dépenses essentielles et les envies, puis lisez la comparaison avec le minimum vital.", "Comparez les plans A, B et C, leurs délais et la répartition par compte, puis enregistrez ou imprimez."],
+    faqTitle: "Questions fréquentes",
+    faqs: [
+      { question: "Pourquoi 3 mois d’épargne de précaution ?", answer: "C’est un minimum courant pour un salarié en CDI. Visez 6 mois ou plus si vos revenus sont irréguliers ou si vous êtes indépendant." },
+      { question: "PER ou PEA en premier ?", answer: "Le PER réduit l’impôt l’année du versement, surtout utile si votre taux marginal est élevé, mais l’argent est bloqué jusqu’à la retraite. Le PEA reste disponible et devient exonéré d’impôt sur le revenu après 5 ans." },
+      { question: "Comment réduire les droits de donation ?", answer: "Chaque parent peut donner 100 000 € à chaque enfant tous les 15 ans sans droits, plus 31 865 € en don familial de sommes d’argent. Commencer tôt permet d’utiliser l’abattement plusieurs fois." },
+    ],
+    disclaimer: "Cet outil sert à la planification générale. Vérifiez auprès de votre banque, de l’administration fiscale ou d’un conseiller avant d’ouvrir un compte ou de déclarer.",
+  },
+  es: {
+    introTitle: "Lo que puedes ahorrar empieza por lo que no puedes recortar",
+    intro: "Antes de elegir cómo repartir el sueldo, mira los gastos que no puedes recortar: vivienda, comida, suministros y otros esenciales. El planificador toma su total como tu mínimo vital, lo compara con el SMI y el Ingreso Mínimo Vital, reparte lo que queda de cuatro formas (como ahora, estable, equilibrado y ambicioso) y calcula cuándo completas el fondo de emergencia y alcanzas cada meta. Con el fondo completo, aporta primero al plan de pensiones hasta su límite y el resto a un fondo indexado.",
+    formulaTitle: "Reglas de cálculo",
+    formulas: [
+      { title: "Repartir el sueldo", body: "Plan A necesidades 50 · caprichos 30 · ahorro 20; B 50 · 20 · 30; C 45 · 10 · 45. Si las necesidades superan la parte, caprichos y ahorro bajan en proporción." },
+      { title: "Fondo de emergencia y metas", body: "Fondo de emergencia = (necesidades + caprichos) × 3 meses. Las metas se calculan con capitalización mensual a la rentabilidad esperada." },
+      { title: "Salario mínimo", body: "SMI 2026: 1.221 € al mes en 14 pagas = 17.094 € al año a jornada completa (Real Decreto 126/2026); a tiempo parcial, en proporción a las horas." },
+      { title: "Mínimo vital", body: "Comparado con el Ingreso Mínimo Vital: unos 733,60 € para un adulto, +30 % por cada miembro adicional." },
+    ],
+    howToTitle: "Cómo se usa",
+    steps: ["Elige el país e introduce tu edad, las personas del hogar y tu sueldo neto.", "Introduce los gastos esenciales y los caprichos, y revisa la comparación con el mínimo vital.", "Compara los planes A, B y C, sus plazos y el reparto por cuentas, y guarda o imprime el resultado."],
+    faqTitle: "Preguntas frecuentes",
+    faqs: [
+      { question: "¿Por qué 3 meses de fondo de emergencia?", answer: "Es un mínimo habitual con contrato indefinido. Si tus ingresos son irregulares o eres autónomo, apunta a 6 meses o más." },
+      { question: "¿Merece la pena el plan de pensiones?", answer: "Las aportaciones de hasta 1.500 € al año reducen la base imponible del IRPF, pero el dinero tributa como rendimiento del trabajo al rescatarlo. Compensa más cuanto mayor sea tu tipo marginal hoy." },
+      { question: "¿Cómo reducir el impuesto de donaciones?", answer: "Depende de tu comunidad autónoma: varias bonifican el 99 % entre padres e hijos, pero exigen requisitos como escritura pública. Consulta la normativa de tu comunidad antes de donar." },
+    ],
+    disclaimer: "Esta herramienta es para planificación general. Confirma los detalles con tu banco, la Agencia Tributaria o un asesor antes de abrir cuentas o declarar.",
+  },
+};
+
+const c = content[locale] ?? content.en;
+// The youth future savings calculator exists only in Korean, so other locales would link to a 404.
+const relatedSlugs = ["year-end-settlement-calculator", "salary-calculator", ...(locale === "ko" ? ["youth-future-savings-calculator"] : []), "pension-calculator", "gift-tax-calculator", "inheritance-tax-calculator"];
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: m.title,
+    description: m.description,
+    step: c.steps.map((step, i) => ({ "@type": "HowToStep", position: i + 1, text: step })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+];
+---
+
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]} heading={m.title} intro={m.description}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <div class="mx-auto max-w-2xl px-4 py-5 sm:py-8">
+    <MoneyPlanner client:load locale={locale} defaultCountry={COUNTRY_BY_LOCALE[locale]} />
+    <LocalOnlyNote locale={locale} />
+
+    <section class="mt-6 sm:mt-10 border-t border-border pt-5 sm:pt-8">
+      <h2 class="text-2xl font-bold text-foreground">{c.introTitle}</h2>
+      <p class="mt-4 leading-8 text-muted-foreground">{c.intro}</p>
+    </section>
+
+    <section class="mt-6 sm:mt-10">
+      <h2 class="text-xl font-bold text-foreground">{c.formulaTitle}</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-2">
+        {c.formulas.map((item) => (
+          <article class="rounded-xl border border-border bg-card p-4">
+            <h3 class="font-semibold text-foreground">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-muted-foreground">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-6 sm:mt-10">
+      <h2 class="text-xl font-bold text-foreground">{c.howToTitle}</h2>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-muted-foreground">
+        {c.steps.map((s) => (<li class="leading-7">{s}</li>))}
+      </ol>
+    </section>
+
+    <section class="mt-6 sm:mt-10">
+      <h2 class="text-xl font-bold text-foreground">{c.faqTitle}</h2>
+      <div class="mt-4 divide-y divide-border rounded-xl border border-border bg-card">
+        {c.faqs.map((faq) => (
+          <details class="group p-4">
+            <summary class="cursor-pointer list-none font-semibold text-foreground">{faq.question}</summary>
+            <p class="mt-3 text-sm leading-6 text-muted-foreground">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-5 sm:mt-8 rounded-xl border border-warning/30 bg-warning/10 px-4 py-3 text-sm leading-6 text-foreground">{c.disclaimer}</p>
+    <RelatedToolLinks locale={locale} current="money-planner" slugs={relatedSlugs} />
+  </div>
+</BaseLayout>
