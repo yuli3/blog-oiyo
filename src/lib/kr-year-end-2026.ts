@@ -189,6 +189,8 @@ export interface YearEndInput {
   pensionSavings?: number;
   irp?: number;
   rent?: number;
+  /** Korean rent-credit eligibility was explicitly self-confirmed, not inferred from rent paid. */
+  rentEligible?: boolean;
 }
 
 export interface YearEndResult {
@@ -241,7 +243,8 @@ export function settleYearEnd(input: YearEndInput): YearEndResult {
     const med = special ? medicalCredit(salary, input.medical ?? 0) : 0;
     const edu = special ? educationCredit(input.education ?? 0) : 0;
     const don = special ? donationCredit(input.donation ?? 0) : 0;
-    const rent = special ? rentCredit(salary, earnedIncome, input.rent ?? 0) : 0;
+    // WHY 2026-10-24: paid rent alone does not establish Korean statutory eligibility.
+    const rent = special && input.rentEligible === true ? rentCredit(salary, earnedIncome, input.rent ?? 0) : 0;
     const standardCredit = special ? 0 : STANDARD_TAX_CREDIT;
     const totalCredits = earnedTaxCredit + childCredit + pension + ins + med + edu + don + rent + standardCredit;
     const finalTax = floor(calculatedTax - totalCredits);

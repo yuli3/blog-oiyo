@@ -1,237 +1,29 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import RelatedToolLinks from "../../components/RelatedToolLinks.astro";
-import ToolsCompanionBanner from "../../components/ToolsCompanionBanner.astro";
-import ForeignExchangeFeeCalculator from "../../components/tools/ForeignExchangeFeeCalculator";
+import ForeignExchangeFeeCalculator, { EXCHANGE_COPY } from "../../components/tools/ForeignExchangeFeeCalculator";
 import { locales } from "../../lib/i18n";
-
-type ActiveLocale = (typeof locales)[number];
-
-export async function getStaticPaths() {
-  return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));
-}
-
-const { locale } = Astro.props as { locale: ActiveLocale };
-
-const meta: Record<ActiveLocale, { title: string; description: string; eyebrow: string }> = {
-  ko: {
-    title: "해외 결제 카드 수수료 & 실청구액 계산기 — 비자·마스터·DCC 차단",
-    description: "해외 직구 및 여행 시 비자(1.1%)·마스터(1.0%) 국제 브랜드 수수료, 국내 카드사 수수료(0.2%), 전신환 환율 및 DCC 이중환전 수수료가 반영된 실제 원화 청구액을 실시간 계산합니다.",
-    eyebrow: "해외 결제 & 환전 최적화",
-  },
-  en: {
-    title: "Foreign Transaction Fee & Exchange Calculator — Visa, Mastercard & DCC",
-    description: "Calculate exact credit card statement charges for overseas purchases. Factor in network fees (Visa 1.1%, Mastercard 1.0%), bank fees (0.2%), exchange rates, and avoid DCC markups.",
-    eyebrow: "Cross-Border Payment Utility",
-  },
-  ja: {
-    title: "海外決済手数料・為替換算計算機 — Visa・Mastercard・DCC二重為替シミュレーター",
-    description: "海外通販や旅行でのVisa(1.1%)・Mastercard(1.0%)ブランド手数料、カード会社海外事務手数料、為替レートおよびDCC二重為替による最終請求額を正確に計算します。",
-    eyebrow: "海外決済と為替の最適化",
-  },
-  zh: {
-    title: "境外刷卡手续费与最终账单入账计算器 — Visa/Mastercard/DCC动态换汇",
-    description: "实时计算境外海淘与旅游刷卡时的卡组织费率(Visa 1.1%/Mastercard 1.0%)、发卡行跨境手续费(0.2%)、汇率折算及DCC二次货币转换汇损。",
-    eyebrow: "跨境支付与海淘实用工具",
-  },
-  fr: {
-    title: "Calculateur de Frais Bancaires et Paiements Internationaux — Visa, Mastercard & DCC",
-    description: "Calculez le montant exact prélevé sur votre relevé pour vos achats à l'étranger. Frais de réseau Visa/Mastercard, commissions bancaires et mise en garde contre le DCC.",
-    eyebrow: "Optimisation des Paiements Internationaux",
-  },
-  es: {
-    title: "Calculadora de Comisiones por Pago en el Extranjero — Visa, Mastercard y DCC",
-    description: "Calcula el cargo exacto en cuenta para compras en el extranjero. Comisiones de red (Visa/Mastercard), recargo de tu banco emisor y evita las comisiones abusivas por DCC.",
-    eyebrow: "Finanzas para Viajes y Compras Online",
-  },
-};
-
-const content: Record<
-  ActiveLocale,
-  {
-    introTitle: string;
-    intro: string;
-    guideTitle: string;
-    guides: Array<{ title: string; body: string }>;
-    faqTitle: string;
-    faqs: Array<{ question: string; answer: string }>;
-  }
-> = {
-  ko: {
-    introTitle: "해외 직구와 여행 결제 시 통장에서 실제로 얼마가 빠져나갈까?",
-    intro: "해외 가맹점에서 $100를 결제하면 단순히 네이버 매매기준율 환율을 곱한 금액이 청구되지 않습니다. 전신환매도율 환율에 비자/마스터 등 브랜드 수수료와 국내 카드사 해외이용 수수료가 합산되어 청구됩니다.",
-    guideTitle: "해외 결제 수수료 구조 및 절약 가이드",
-    guides: [
-      {
-        title: "1. 국제 브랜드 수수료 (Network Fee)",
-        body: "VISA 1.1%, Mastercard 1.0%, AMEX 1.4%, JCB 0%, UnionPay 0.8% 등 카드 브랜드사가 글로벌 결제망 사용 대가로 부과합니다.",
-      },
-      {
-        title: "2. 국내 카드사 해외이용 수수료 (Issuer Fee)",
-        body: "신한, 국민, 삼성, 현대, 롯데, 우리, 하나 등 국내 카드사가 부과하는 수수료로 보통 0.18% ~ 0.25% 수준입니다.",
-      },
-      {
-        title: "3. 적용 환율 (전신환매도율)",
-        body: "현금 살 때 환율이 아니라 '송금 보낼 때(전신환매도율)' 환율이 적용되며, 결제 시점이 아닌 카드사에 매출전표가 접수되는 날(통상 2~4일 후)의 최초 고시 환율이 적용됩니다.",
-      },
-      {
-        title: "4. 악명 높은 DCC(원화 결제) 절대 금지",
-        body: "해외 결제창에서 원화(KRW)로 결제하면 현지 가맹점-외국 환전소-카드사를 거치며 3%~8%의 바가지 환전 수수료가 붙습니다. 반드시 USD, JPY 등 현지 통화로 결제하세요.",
-      },
-    ],
-    faqTitle: "자주 묻는 질문",
-    faqs: [
-      {
-        question: "DCC를 실수로 누르지 않으려면 어떻게 하나요?",
-        answer: "카드사 앱이나 고객센터에서 '해외원화결제 차단 서비스'를 신청해 두면, 원화 결제 시도시 승인이 자동 거절되어 사전에 안전하게 예방할 수 있습니다.",
-      },
-      {
-        question: "트래블로그나 트래블월렛 같은 무료 카드는 어떤 차이가 있나요?",
-        answer: "트래블 전용 선불카드는 환율 우대 100% 및 브랜드/해외이용 수수료 전액 면제 혜택을 제공하여 본 계산기의 수수료가 0원으로 적용됩니다.",
-      },
-    ],
-  },
-  en: {
-    introTitle: "Understanding Overseas Credit Card Transaction Charges",
-    intro: "When you spend $100 abroad, the actual charge includes international network fees (Visa/Mastercard) plus your bank's foreign exchange markup.",
-    guideTitle: "Fee Structure & Cost Reduction Guide",
-    guides: [
-      { title: "1. Network Brand Fee", body: "Visa (1.1%), Mastercard (1.0%), AMEX (1.4%), UnionPay (0.8%)." },
-      { title: "2. Bank Issuer Fee", body: "0.18% - 0.25% added by domestic card issuing banks." },
-      { title: "3. Telegraphic Transfer Exchange Rate", body: "Based on bank wire selling rates on the date the transaction settles." },
-      { title: "4. Beware of DCC Markups", body: "Always pay in the merchant's local currency. Opting for home currency incurs 3% to 8% extra fees." },
-    ],
-    faqTitle: "Frequently Asked Questions",
-    faqs: [
-      { question: "How to completely prevent DCC charges?", answer: "Enable 'Block Foreign Currency Conversion' in your mobile banking app." },
-      { question: "When is the exchange rate locked in?", answer: "It is determined on the settlement day (usually 2-3 business days after the swipe)." },
-    ],
-  },
-  ja: {
-    introTitle: "海外カード決済の本当の請求額を知る",
-    intro: "海外で決済した金額には、為替レートだけでなく国際ブランド手数料とカード会社事務手数料が加算されます。",
-    guideTitle: "手数料の仕組みと節約ガイド",
-    guides: [
-      { title: "1. 国際ブランド手数料", body: "Visa 1.1%、Mastercard 1.0%、AMEX 1.4%など。" },
-      { title: "2. 発行会社海外事務手数料", body: "各カード会社により0.18%〜0.25%程度加算されます。" },
-      { title: "3. 適用為替レート", body: "カード会社に売上票が届いた日の為替レートが適用されます。" },
-      { title: "4. DCC（日本円決済）の罠", body: "現地で日本円決済を選ぶと3〜8%の為替手数料が上乗せされます。必ず現地通貨を選びましょう。" },
-    ],
-    faqTitle: "よくある質問",
-    faqs: [
-      { question: "DCC手数料を防ぐには？", answer: "カード決済端末で通貨選択画面が出たら、必ず現地通貨を選択してください。" },
-      { question: "手数料無料カードとの違いは？", answer: "手数料無料のトラベルカードなら、本ツールで計算される手数料が0円になります。" },
-    ],
-  },
-  zh: {
-    introTitle: "海外刷卡消费真实账单金额拆解",
-    intro: "境外消费账单金额由基础商品折算汇率、国际卡组织手续费以及发卡行跨境服务费共同构成。",
-    guideTitle: "跨境刷卡手续费与避坑指南",
-    guides: [
-      { title: "1. 国际卡组织手续费", body: "Visa 1.1%，Mastercard 1.0%，运通 1.4%，银联 0.8%。" },
-      { title: "2. 发卡行跨境交易费", body: "国内各大银行加收的0.18%~0.25%海外交易手续费。" },
-      { title: "3. 记账日汇率结算", body: "以商户请款入账当日的银行外汇卖出牌价为准。" },
-      { title: "4. 警惕DCC动态货币转换", body: "刷卡时若选择人民币结算，会遭遇3%~8%的高额二次汇兑损失，切勿选择本币结算！" },
-    ],
-    faqTitle: "常见问题",
-    faqs: [
-      { question: "如何避免DCC陷阱？", answer: "在境外POS机上提示货币选择时，务必按下当地货币按键。" },
-      { question: "全币种卡是否能免手续费？", answer: "部分全币种信用卡免收发卡行货币转换费，能有效降低交易成本。" },
-    ],
-  },
-  fr: {
-    introTitle: "Comprendre le coût réel de vos paiements par carte à l'étranger",
-    intro: "Découvrez les frais appliqués par les réseaux de cartes et les banques lors de vos transactions en devises.",
-    guideTitle: "Guide des frais internationaux",
-    guides: [
-      { title: "1. Frais de réseau", body: "Visa (1,1%), Mastercard (1,0%), Amex (1,4%)." },
-      { title: "2. Commission bancaire", body: "Frais de commission pour paiement hors zone euro (0,18% - 0,25%)." },
-      { title: "3. Taux de change appliqué", body: "Calculé sur la base du cours au jour du traitement bancaire." },
-      { title: "4. Refusez le DCC", body: "Ne payez jamais en euros hors de l'UE pour éviter des surcoûts de 3 à 8 %." },
-    ],
-    faqTitle: "Foire aux questions",
-    faqs: [
-      { question: "Comment éviter le surcoût de change ?", answer: "Sélectionnez toujours la devise locale du pays visité lors de l'opération." },
-    ],
-  },
-  es: {
-    introTitle: "Cuánto te cobran realmente al pagar con tarjeta en el extranjero",
-    intro: "Conoce el desglose de comisiones bancarias, tasas de red de tarjeta y el sobrecoste de la conversión dinámica.",
-    guideTitle: "Guía de comisiones internacionales",
-    guides: [
-      { title: "1. Comisión de marca", body: "Visa (1,1%), Mastercard (1,0%), Amex (1,4%)." },
-      { title: "2. Comisión bancaria emisora", body: "Recargo por transacción internacional (0,18% - 0,25%)." },
-      { title: "3. Tipo de cambio aplicable", body: "Determinado por la fecha de liquidación del pago." },
-      { title: "4. El peligro del DCC", body: "Pagar en tu propia divisa añade entre un 3% y un 8% de comisión oculta." },
-    ],
-    faqTitle: "Preguntas frecuentes",
-    faqs: [
-      { question: "¿Cómo esquivar el recargo DCC?", answer: "Elige siempre pagar en la moneda local del país o comercio." },
-    ],
-  },
-};
-
-const m = meta[locale] ?? meta.en;
-const c = content[locale] ?? content.en;
+export async function getStaticPaths() { return locales.map((lang) => ({ params: { lang }, props: { locale: lang } })); }
+const { locale } = Astro.props as { locale: keyof typeof EXCHANGE_COPY };
+const t = EXCHANGE_COPY[locale] ?? EXCHANGE_COPY.en;
+const guide = {
+  ko: ["환율 단위부터 맞춰요", "JPY 100당 KRW 1,400과 JPY 1당 KRW 14는 같은 환산액이에요. 입력 환율은 네트워크·정산일·발급사 기준에 따라 실제와 다를 수 있어요.", "제시 견적과 가정을 구분해요", "비용 포함 최종 견적은 그대로 비교해요. 견적이 없을 때만 가산율 가정을 사용하며, 두 방식을 더하지 않아요. 브랜드별 공통 고정 요율이나 보편적인 DCC 가산율은 없어요. 실제 적용 비용은 카드·가맹점 조건을 확인해요.", "비교 예시", "100 USD × 1,400 KRW/USD, 입력 비용 0이면 140,000 KRW예요. DCC 최종 견적 147,000 KRW와 차이는 7,000 KRW예요. 실제 상품 견적이 아닌 계산 예시예요."],
+  en: ["Check the rate unit first", "KRW 1,400 per JPY 100 and KRW 14 per JPY 1 produce the same conversion. Network, settlement date and issuer rules can change the actual rate.", "Separate quotes from assumptions", "Compare a fees-included final quote as given. Use an assumed markup only when no quote is available; do not add both modes. Neither network brands nor DCC have a universal fee rate. Check the card and merchant terms.", "Worked example", "100 USD at 1,400 KRW/USD with entered fees of zero gives KRW 140,000. A final DCC quote of KRW 147,000 differs by KRW 7,000. This illustrates arithmetic, not a product quote."],
+  ja: ["レートの単位を確認", "100 JPY当たり1,400 KRWと1 JPY当たり14 KRWは同じ換算額です。実際のレートはネットワーク、精算日、発行会社の規定により異なります。", "見積もりと仮定を区別", "手数料込みの提示最終額はそのまま比較します。見積もりがないときだけ仮定の上乗せ率を使い、両方式を加算しません。ブランドやDCCに普遍的な一律手数料はありません。カードと加盟店の条件をご確認ください。", "計算例", "100 USDを1,400 KRW/USD、入力手数料0で換算すると140,000 KRWです。DCC最終見積147,000 KRWとの差は7,000 KRW。商品見積もりではなく算数の例です。"],
+  zh: ["先核对汇率单位", "每100 JPY兑换1,400 KRW与每1 JPY兑换14 KRW的结果相同。实际汇率可能因卡组织、结算日和发卡行规则而异。", "区分报价与假设", "含费用的最终报价直接参与比较。仅在没有报价时使用假设加价率，两种方式不叠加。卡组织品牌和DCC都没有通用固定费率。请核对卡片及商户条款。", "算例", "100 USD按1,400 KRW/USD、输入费用0计算为140,000 KRW。与147,000 KRW的DCC最终报价相差7,000 KRW。这是数学示例，不是产品报价。"],
+  fr: ["Vérifiez l’unité du taux", "1 400 KRW pour 100 JPY et 14 KRW pour 1 JPY donnent la même conversion. Le réseau, la date de règlement et l’émetteur peuvent modifier le taux réel.", "Séparez devis et hypothèses", "Comparez directement le devis final frais inclus. Sans devis, utilisez une majoration supposée ; ne cumulez pas les modes. Les marques de réseau et le DCC n’ont aucun tarif universel. Vérifiez les conditions de la carte et du commerçant.", "Exemple chiffré", "100 USD à 1 400 KRW/USD avec des frais saisis à zéro donnent 140 000 KRW. Un devis final DCC de 147 000 KRW présente un écart de 7 000 KRW. C’est un exemple de calcul, pas une offre commerciale."],
+  es: ["Comprueba la unidad del cambio", "1.400 KRW por 100 JPY y 14 KRW por 1 JPY dan la misma conversión. La red, la fecha de liquidación y el emisor pueden modificar el cambio real.", "Distingue ofertas y supuestos", "Compara directamente la oferta final con gastos incluidos. Sin oferta, usa un recargo supuesto; no sumes ambos modos. Ni las marcas de red ni el DCC tienen una tarifa universal. Consulta las condiciones de la tarjeta y del comercio.", "Ejemplo numérico", "100 USD a 1.400 KRW/USD con comisiones introducidas de cero dan 140.000 KRW. Una oferta final DCC de 147.000 KRW supone una diferencia de 7.000 KRW. Es un ejemplo aritmético, no una oferta comercial."],
+}[locale];
 ---
-
-<BaseLayout title={m.title} description={m.description}>
-  <div class="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-12">
-    <div class="mb-8">
-      <span class="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary mb-3">
-        {m.eyebrow}
-      </span>
-      <h1 class="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
-        {m.title}
-      </h1>
-      <p class="text-sm text-muted-foreground mt-2">
-        {m.description}
-      </p>
-    </div>
-
+<BaseLayout title={t[0]} description={t[22]}>
+  <div class="mx-auto max-w-4xl space-y-6 px-4 py-6">
+    <h1 class="text-2xl font-bold">{t[0]}</h1>
+    <p>{t[22]}</p>
     <ForeignExchangeFeeCalculator client:load locale={locale} />
-
-    <section class="mt-12 space-y-8 rounded-2xl border border-border bg-card p-6 sm:p-8">
-      <div>
-        <h2 class="text-lg font-bold text-foreground">{c.introTitle}</h2>
-        <p class="mt-2 text-sm text-muted-foreground leading-relaxed">{c.intro}</p>
-      </div>
-
-      <div>
-        <h3 class="text-base font-bold text-foreground">{c.guideTitle}</h3>
-        <div class="mt-4 grid gap-4 sm:grid-cols-2">
-          {c.guides.map((item) => (
-            <div class="rounded-xl border border-border/60 bg-muted/30 p-4">
-              <h4 class="text-sm font-semibold text-foreground">{item.title}</h4>
-              <p class="mt-1 text-xs text-muted-foreground leading-relaxed">{item.body}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div>
-        <h3 class="text-base font-bold text-foreground">{c.faqTitle}</h3>
-        <dl class="mt-4 space-y-4">
-          {c.faqs.map((faq) => (
-            <div class="rounded-xl border border-border/60 bg-muted/20 p-4">
-              <dt class="text-sm font-semibold text-foreground">{faq.question}</dt>
-              <dd class="mt-1 text-xs text-muted-foreground leading-relaxed">{faq.answer}</dd>
-            </div>
-          ))}
-        </dl>
-      </div>
+    <section class="space-y-4 rounded-lg border border-border p-4">
+      {[0, 2, 4].map((i) => <div><h2 class="text-lg font-semibold">{guide[i]}</h2><p>{guide[i + 1]}</p></div>)}
+      <a class="underline" href="https://www.visa.co.uk/travel-with-visa/dynamic-currency-conversion.html">Visa — Dynamic Currency Conversion</a>
     </section>
-
-    <div class="mt-8">
-      <ToolsCompanionBanner tool="tools-hub" />
-    </div>
-
-    <div class="mt-10">
-      <RelatedToolLinks
-        locale={locale}
-        slugs={["percentage-calculator", "loan-comparison-calculator", "cagr-calculator"]}
-        current="foreign-exchange-fee-calculator"
-      />
-    </div>
+    <RelatedToolLinks locale={locale} slugs={["percentage-calculator", "loan-comparison-calculator", "cagr-calculator"]} current="foreign-exchange-fee-calculator" />
   </div>
 </BaseLayout>
