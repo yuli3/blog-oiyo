@@ -10,3 +10,16 @@ test('loan owner migrates all six locales without wildcard redirects',()=>{
  assert.match(read('astro.config.mjs'),/"monitor-ppi-calculator", "loan-comparison-calculator"/);
  for(const p of ['src/components/RelatedToolLinks.astro','src/pages/[...lang]/tools.astro']) assert.match(read(p),/"loan-comparison-calculator"\].includes\(/);
 });
+
+test('built loan bridges preserve exact locale canonical, noindex and refresh',()=>{
+ const sitemap=Array.from({length:3},(_,i)=>read('dist/sitemap-'+i+'.xml')).join('');
+ for(const l of ['ko','en','ja','zh','fr','es']){
+  const target='https://tools.oiyo.net/'+l+'/loan-comparison-calculator/';
+  const html=read('dist/'+l+'/loan-comparison-calculator/index.html');
+  assert.ok(html.includes('<meta name="robots" content="noindex'));
+  assert.ok(html.includes('<link rel="canonical" href="'+target+'"'));
+  assert.match(html, /<meta http-equiv="refresh" content="0;\s*url=https:\/\/tools\.oiyo\.net\//);
+  assert.ok(html.includes('url='+target+'"'));
+  assert.ok(!sitemap.includes('https://blog.oiyo.net/'+l+'/loan-comparison-calculator/'));
+ }
+});
