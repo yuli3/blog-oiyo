@@ -8,7 +8,7 @@ test('loan owner migrates all six locales without wildcard redirects',()=>{
  const route=read('src/pages/[...lang]/loan-comparison-calculator.astro');
  assert.ok(route.includes('Astro.redirect(')); assert.ok(route.includes('loan-comparison-calculator/')); assert.ok(!route.includes('LoanComparisonCalculator'));
  assert.match(read('astro.config.mjs'),/"monitor-ppi-calculator", "loan-comparison-calculator"/);
- for(const p of ['src/components/RelatedToolLinks.astro','src/pages/[...lang]/tools.astro']) assert.match(read(p),/"loan-comparison-calculator"\].includes\(/);
+ for(const p of ['src/components/RelatedToolLinks.astro','src/pages/[...lang]/tools.astro']) assert.match(read(p),/"loan-comparison-calculator"(, "[a-z-]+")*\].includes\(/);
 });
 
 test('built loan bridges preserve exact locale canonical, noindex and refresh',()=>{

@@ -1,29 +1,8 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import RelatedToolLinks from "../../components/RelatedToolLinks.astro";
-import ForeignExchangeFeeCalculator, { EXCHANGE_COPY } from "../../components/tools/ForeignExchangeFeeCalculator";
 import { locales } from "../../lib/i18n";
-export async function getStaticPaths() { return locales.map((lang) => ({ params: { lang }, props: { locale: lang } })); }
-const { locale } = Astro.props as { locale: keyof typeof EXCHANGE_COPY };
-const t = EXCHANGE_COPY[locale] ?? EXCHANGE_COPY.en;
-const guide = {
-  ko: ["환율 단위부터 맞춰요", "JPY 100당 KRW 1,400과 JPY 1당 KRW 14는 같은 환산액이에요. 입력 환율은 네트워크·정산일·발급사 기준에 따라 실제와 다를 수 있어요.", "제시 견적과 가정을 구분해요", "비용 포함 최종 견적은 그대로 비교해요. 견적이 없을 때만 가산율 가정을 사용하며, 두 방식을 더하지 않아요. 브랜드별 공통 고정 요율이나 보편적인 DCC 가산율은 없어요. 실제 적용 비용은 카드·가맹점 조건을 확인해요.", "비교 예시", "100 USD × 1,400 KRW/USD, 입력 비용 0이면 140,000 KRW예요. DCC 최종 견적 147,000 KRW와 차이는 7,000 KRW예요. 실제 상품 견적이 아닌 계산 예시예요."],
-  en: ["Check the rate unit first", "KRW 1,400 per JPY 100 and KRW 14 per JPY 1 produce the same conversion. Network, settlement date and issuer rules can change the actual rate.", "Separate quotes from assumptions", "Compare a fees-included final quote as given. Use an assumed markup only when no quote is available; do not add both modes. Neither network brands nor DCC have a universal fee rate. Check the card and merchant terms.", "Worked example", "100 USD at 1,400 KRW/USD with entered fees of zero gives KRW 140,000. A final DCC quote of KRW 147,000 differs by KRW 7,000. This illustrates arithmetic, not a product quote."],
-  ja: ["レートの単位を確認", "100 JPY当たり1,400 KRWと1 JPY当たり14 KRWは同じ換算額です。実際のレートはネットワーク、精算日、発行会社の規定により異なります。", "見積もりと仮定を区別", "手数料込みの提示最終額はそのまま比較します。見積もりがないときだけ仮定の上乗せ率を使い、両方式を加算しません。ブランドやDCCに普遍的な一律手数料はありません。カードと加盟店の条件をご確認ください。", "計算例", "100 USDを1,400 KRW/USD、入力手数料0で換算すると140,000 KRWです。DCC最終見積147,000 KRWとの差は7,000 KRW。商品見積もりではなく算数の例です。"],
-  zh: ["先核对汇率单位", "每100 JPY兑换1,400 KRW与每1 JPY兑换14 KRW的结果相同。实际汇率可能因卡组织、结算日和发卡行规则而异。", "区分报价与假设", "含费用的最终报价直接参与比较。仅在没有报价时使用假设加价率，两种方式不叠加。卡组织品牌和DCC都没有通用固定费率。请核对卡片及商户条款。", "算例", "100 USD按1,400 KRW/USD、输入费用0计算为140,000 KRW。与147,000 KRW的DCC最终报价相差7,000 KRW。这是数学示例，不是产品报价。"],
-  fr: ["Vérifiez l’unité du taux", "1 400 KRW pour 100 JPY et 14 KRW pour 1 JPY donnent la même conversion. Le réseau, la date de règlement et l’émetteur peuvent modifier le taux réel.", "Séparez devis et hypothèses", "Comparez directement le devis final frais inclus. Sans devis, utilisez une majoration supposée ; ne cumulez pas les modes. Les marques de réseau et le DCC n’ont aucun tarif universel. Vérifiez les conditions de la carte et du commerçant.", "Exemple chiffré", "100 USD à 1 400 KRW/USD avec des frais saisis à zéro donnent 140 000 KRW. Un devis final DCC de 147 000 KRW présente un écart de 7 000 KRW. C’est un exemple de calcul, pas une offre commerciale."],
-  es: ["Comprueba la unidad del cambio", "1.400 KRW por 100 JPY y 14 KRW por 1 JPY dan la misma conversión. La red, la fecha de liquidación y el emisor pueden modificar el cambio real.", "Distingue ofertas y supuestos", "Compara directamente la oferta final con gastos incluidos. Sin oferta, usa un recargo supuesto; no sumes ambos modos. Ni las marcas de red ni el DCC tienen una tarifa universal. Consulta las condiciones de la tarjeta y del comercio.", "Ejemplo numérico", "100 USD a 1.400 KRW/USD con comisiones introducidas de cero dan 140.000 KRW. Una oferta final DCC de 147.000 KRW supone una diferencia de 7.000 KRW. Es un ejemplo aritmético, no una oferta comercial."],
-}[locale];
+export function getStaticPaths() {
+  return locales.map(lang => ({params:{lang}}));
+}
+// WHY 2026-10-25: Tools is the approved canonical owner; retain old bookmarks.
+return Astro.redirect(`https://tools.oiyo.net/${Astro.params.lang}/foreign-exchange-fee-calculator/`, 301);
 ---
-<BaseLayout title={t[0]} description={t[22]}>
-  <div class="mx-auto max-w-4xl space-y-6 px-4 py-6">
-    <h1 class="text-2xl font-bold">{t[0]}</h1>
-    <p>{t[22]}</p>
-    <ForeignExchangeFeeCalculator client:load locale={locale} />
-    <section class="space-y-4 rounded-lg border border-border p-4">
-      {[0, 2, 4].map((i) => <div><h2 class="text-lg font-semibold">{guide[i]}</h2><p>{guide[i + 1]}</p></div>)}
-      <a class="underline" href="https://www.visa.co.uk/travel-with-visa/dynamic-currency-conversion.html">Visa — Dynamic Currency Conversion</a>
-    </section>
-    <RelatedToolLinks locale={locale} slugs={["percentage-calculator", "loan-comparison-calculator", "cagr-calculator"]} current="foreign-exchange-fee-calculator" />
-  </div>
-</BaseLayout>

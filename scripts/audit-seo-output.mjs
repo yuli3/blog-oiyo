@@ -79,12 +79,12 @@ for (const file of listHtmlFiles(dist)) {
   // Bridge stubs are noindex and canonicalize cross-domain to the family
   // canonical host — any OIYO family canonical is valid there.
   const isNoindex = /<meta name="robots" content="noindex/.test(html);
-  // 2026-10-24: accept only the 30 approved Tools bridges, with matching locale,
+  // 2026-10-24: accept only the 42 approved Tools bridges, with matching locale,
   // slug and refresh. Do not allow arbitrary cross-domain canonical URLs.
   const routeParts = rel.split(path.sep);
   const toolsBridgeTarget = routeParts.length === 3 && routeParts[2] === "index.html"
     && ["ko", "en", "ja", "zh", "fr", "es"].includes(routeParts[0])
-    && ["image-converter", "pdf-merge-split", "qr-code-generator", "monitor-ppi-calculator", "loan-comparison-calculator"].includes(routeParts[1])
+    && ["image-converter", "pdf-merge-split", "qr-code-generator", "monitor-ppi-calculator", "loan-comparison-calculator", "currency-converter", "foreign-exchange-fee-calculator"].includes(routeParts[1])
     ? `https://tools.oiyo.net/${routeParts[0]}/${routeParts[1]}/` : null;
   const validToolsBridge = isNoindex && toolsBridgeTarget !== null
     && html.match(/<link rel="canonical" href="([^"]+)"/)?.[1] === toolsBridgeTarget

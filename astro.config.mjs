@@ -117,7 +117,7 @@ export default defineConfig({
         // Exclude noindex bridge stubs (canonical lives on oiyo.net)
         const segs = path.split("/").filter(Boolean);
         // Redirect shells are not canonical content after the Tools migration (2026-10-19).
-        if (segs.length === 2 && ["image-converter", "pdf-merge-split", "qr-code-generator", "monitor-ppi-calculator", "loan-comparison-calculator"].includes(segs[1])) return false;
+        if (segs.length === 2 && ["image-converter", "pdf-merge-split", "qr-code-generator", "monitor-ppi-calculator", "loan-comparison-calculator", "currency-converter", "foreign-exchange-fee-calculator"].includes(segs[1])) return false;
         if (segs.length === 2 && BRIDGE_SLUGS.has(segs[1])) return false;
         // Exclude noindex embed widgets (canonical is the full tool page)
         if (segs.includes("embed")) return false;
