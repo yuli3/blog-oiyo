@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {readFileSync} from 'node:fs';
+import {readFileSync,readdirSync} from 'node:fs';
 const read=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
 test('loan owner migrates all six locales without wildcard redirects',()=>{
  const redirects=read('public/_redirects').split('\n');
@@ -12,7 +12,9 @@ test('loan owner migrates all six locales without wildcard redirects',()=>{
 });
 
 test('built loan bridges preserve exact locale canonical, noindex and refresh',()=>{
- const sitemap=Array.from({length:3},(_,i)=>read('dist/sitemap-'+i+'.xml')).join('');
+ const shards=readdirSync(new URL('../dist/',import.meta.url)).filter(n=>/^sitemap-\d+\.xml$/.test(n));
+ assert.ok(shards.length>0,'built sitemap shards must exist');
+ const sitemap=shards.map(n=>read('dist/'+n)).join('');
  for(const l of ['ko','en','ja','zh','fr','es']){
   const target='https://tools.oiyo.net/'+l+'/loan-comparison-calculator/';
   const html=read('dist/'+l+'/loan-comparison-calculator/index.html');
