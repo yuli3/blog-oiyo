@@ -261,7 +261,7 @@ test("다른 종합소득금액을 더하면 과세표준이 늘고 근로소득
   assert.ok(mixed.finalTax > wage.finalTax);
 });
 
-test("절세 계획: 연금 900만 채우기와 결제수단 바꾸기가 세금을 줄이고, 합친 결과가 가장 적다", () => {
+test("절세 계획: 세금이 크면 연금 한도까지가 최소 금액이고, 결제수단 바꾸기와 합친 결과가 가장 적다", () => {
   const input = { salary: 50_000_000, persons: 1, card: { credit: 25_000_000 }, pensionSavings: 1_000_000, withheld: 3_000_000 };
   const plan = taxSavingPlan(input);
   const ids = plan.levers.map((l) => l.id);
@@ -273,4 +273,23 @@ test("절세 계획: 연금 900만 채우기와 결제수단 바꾸기가 세금
   assert.equal(plan.best.totalTax, plan.base.totalTax - plan.bestTaxSaved);
   // 세금이 0이면 제안할 방법이 없다
   assert.equal(taxSavingPlan({ salary: 10_000_000, persons: 3 }).levers.length, 0);
+});
+
+test("절세 계획: 세금이 적으면 한도까지가 아니라 결정세액을 0으로 만드는 최소 금액만 제안한다", () => {
+  // 세운 2026-10-25 조건: 총급여 2,400만 원, 1인. 연금 900만 원 한도 중 일부만 넣어도 세금이 0이 된다.
+  const input = { salary: 24_000_000, persons: 1, nationalPension: 1_140_000, healthEmployment: 1_192_176 };
+  const plan = taxSavingPlan(input);
+  const pension = plan.levers.find((l) => l.id === "pension")!;
+  assert.equal(pension.capExtra, 9_000_000);
+  assert.ok(pension.extraPayment < pension.capExtra);
+  assert.equal(pension.extraPayment % 10_000, 0);
+  assert.equal(pension.taxSaved, plan.base.totalTax); // 세금 전부
+  assert.equal(pension.keepsMoney, true);
+  // 만 원 덜 넣으면 세금이 남는다 = 정말 최소 금액
+  const less = settleYearEnd({ ...input, irp: pension.extraPayment - 10_000 });
+  assert.ok(less.totalTax > 0);
+  // 합치기는 내 돈이 남는 연금부터 쌓으므로 기부 없이 연금만으로 끝난다
+  assert.equal(plan.bestExtraPayment, pension.extraPayment);
+  assert.equal(plan.best.totalTax, 0);
+  assert.equal(plan.levers.find((l) => l.id === "hometown")?.keepsMoney, false);
 });

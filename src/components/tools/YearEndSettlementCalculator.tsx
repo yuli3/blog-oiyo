@@ -268,13 +268,16 @@ const COPY = {
             ratio: '낸 돈 대비',
             all: '모두 적용하면',
             names: {
-                pension: '연금저축+IRP를 900만 원까지 채우기',
-                subscription: '청약저축 연 300만 원까지 채우기',
+                pension: '연금저축·IRP에 더 넣기',
+                subscription: '청약저축에 더 넣기 (연 300만 원 한도)',
                 political: '정치후원금 10만 원',
                 hometown: '고향사랑기부 20만 원 (답례품 30% 별도)',
                 debit: '신용카드 대신 체크카드·현금영수증 쓰기',
             } as Record<SavingLeverId, string>,
-            caution: '연금은 55세 전에 찾으면 기타소득세 16.5%를 다시 내요. 기부·청약은 요건을 먼저 확인하세요.',
+            caution: '더 낼 돈은 줄일 수 있는 세금을 다 받는 최소 금액(만 원 단위)이에요. 세액공제는 결정세액이 0이 되면 더 돌려주지 않아요. 연금은 55세 전에 찾으면 기타소득세 16.5%를 다시 내요. 기부·청약은 요건을 먼저 확인하세요.',
+            keeps: '내 자산으로 남아요',
+            spends: '기부라 돌아오지 않아요',
+            capNote: (cap: string) => `한도(${cap})까지 넣어도 세금은 더 줄지 않아요`,
         },
         actions: { save: '이 브라우저에 저장', load: '불러오기', export: '파일로 내보내기', import: '파일 가져오기', print: '인쇄·PDF', reset: '초기화' },
         saved: '저장했어요.',
@@ -387,13 +390,16 @@ const COPY = {
             ratio: 'Per won paid',
             all: 'All combined',
             names: {
-                pension: 'Top up pension savings + IRP to ₩9M',
-                subscription: 'Top up housing subscription to ₩3M a year',
+                pension: 'Pay more into pension savings or IRP',
+                subscription: 'Pay more into housing subscription (₩3M a year cap)',
                 political: 'Political donation of ₩100,000',
                 hometown: 'Hometown Love donation of ₩200,000 (plus 30% gift)',
                 debit: 'Pay by debit card or cash receipt instead of credit card',
             } as Record<SavingLeverId, string>,
-            caution: 'Pension withdrawals before 55 are taxed 16.5% again. Check eligibility before donating or saving.',
+            caution: 'Extra outlay is the smallest amount (in ₩10,000 steps) that captures the full saving; credits stop once your tax reaches zero. Pension withdrawals before 55 are taxed 16.5% again. Check eligibility before donating or saving.',
+            keeps: 'Stays your money',
+            spends: 'Donation, not returned',
+            capNote: (cap: string) => `Paying up to the cap (${cap}) saves no more tax`,
         },
         actions: { save: 'Save in this browser', load: 'Load', export: 'Export file', import: 'Import file', print: 'Print / PDF', reset: 'Reset' },
         saved: 'Saved.',
@@ -650,34 +656,26 @@ const YearEndSettlementCalculator: React.FC<{ locale?: Locale }> = ({ locale = '
                         <p className="text-sm text-muted-foreground">{t.plan.empty}</p>
                     ) : (
                         <>
-                            <div className="overflow-x-auto">
-                                <table className="w-full text-left text-sm">
-                                    <thead>
-                                        <tr className="border-b border-border text-muted-foreground">
-                                            <th className="py-2 pr-3 font-medium">{t.plan.lever}</th>
-                                            <th className="py-2 pr-3 text-right font-medium">{t.plan.extra}</th>
-                                            <th className="py-2 pr-3 text-right font-medium">{t.plan.saved}</th>
-                                            <th className="py-2 text-right font-medium">{t.plan.ratio}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {plan.levers.map((l) => (
-                                            <tr key={l.id} className="border-b border-border">
-                                                <td className="py-2 pr-3 text-foreground">{t.plan.names[l.id]}</td>
-                                                <td className="py-2 pr-3 text-right text-foreground">₩{fmt(l.extraPayment)}</td>
-                                                <td className="py-2 pr-3 text-right font-bold text-success">₩{fmt(l.taxSaved)}</td>
-                                                <td className="py-2 text-right text-muted-foreground">{l.extraPayment > 0 ? `${Math.round((l.taxSaved / l.extraPayment) * 100)}%` : '—'}</td>
-                                            </tr>
-                                        ))}
-                                        <tr>
-                                            <td className="py-2 pr-3 font-bold text-foreground">{t.plan.all}</td>
-                                            <td className="py-2 pr-3 text-right font-bold text-foreground">₩{fmt(plan.bestExtraPayment)}</td>
-                                            <td className="py-2 pr-3 text-right font-bold text-success">₩{fmt(plan.bestTaxSaved)}</td>
-                                            <td className="py-2 text-right text-muted-foreground">{plan.bestExtraPayment > 0 ? `${Math.round((plan.bestTaxSaved / plan.bestExtraPayment) * 100)}%` : '—'}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                            {/* Card list instead of a table so the move name gets the full width on a phone. */}
+                            <ul className="flex flex-col divide-y divide-border">
+                                {[
+                                    ...plan.levers.map((l) => ({ key: l.id, name: t.plan.names[l.id], extra: l.extraPayment, saved: l.taxSaved, lever: l, total: false })),
+                                    { key: 'all', name: t.plan.all, extra: plan.bestExtraPayment, saved: plan.bestTaxSaved, lever: null, total: true },
+                                ].map(({ key, name, extra, saved, lever, total }) => (
+                                    <li key={key} className="flex flex-col gap-2 py-3">
+                                        <div className="flex flex-col">
+                                            <span className={`text-sm text-foreground ${total ? 'font-bold' : 'font-medium'}`}>{name}</span>
+                                            {lever && lever.extraPayment > 0 && <span className={`text-xs ${lever.keepsMoney ? 'text-success' : 'text-warning'}`}>{lever.keepsMoney ? t.plan.keeps : t.plan.spends}</span>}
+                                            {lever && lever.capExtra > lever.extraPayment && <span className="text-xs text-muted-foreground">{t.plan.capNote(`₩${fmt(lever.capExtra)}`)}</span>}
+                                        </div>
+                                        <dl className="grid grid-cols-3 gap-2 text-sm">
+                                            <div><dt className="text-xs text-muted-foreground">{t.plan.extra}</dt><dd className="font-medium text-foreground">₩{fmt(extra)}</dd></div>
+                                            <div><dt className="text-xs text-muted-foreground">{t.plan.saved}</dt><dd className="font-bold text-success">₩{fmt(saved)}</dd></div>
+                                            <div><dt className="text-xs text-muted-foreground">{t.plan.ratio}</dt><dd className="text-muted-foreground">{extra > 0 ? `${Math.round((saved / extra) * 100)}%` : '—'}</dd></div>
+                                        </dl>
+                                    </li>
+                                ))}
+                            </ul>
                             <p className="text-xs text-muted-foreground">{t.plan.caution}</p>
                         </>
                     )}

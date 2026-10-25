@@ -499,10 +499,14 @@ export type SavingLeverId = "pension" | "subscription" | "political" | "hometown
 
 export interface SavingLever {
   id: SavingLeverId;
-  /** 이 방법을 쓰려고 더 내야 하는 돈(카드 결제수단 바꾸기는 0) */
+  /** 이 방법으로 줄일 수 있는 세금을 전부 받는 데 필요한 최소 추가 납입액(만 원 단위, 카드 결제수단 바꾸기는 0) */
   extraPayment: number;
+  /** 공제 한도까지 채울 때의 추가 납입액. extraPayment보다 크면 그 차이만큼은 세금이 더 줄지 않아요 */
+  capExtra: number;
   /** 줄어드는 결정세액 + 지방소득세 */
   taxSaved: number;
+  /** true면 낸 돈이 연금·청약 계좌에 내 자산으로 남는다(기부는 false) */
+  keepsMoney: boolean;
 }
 
 export interface SavingPlan {
@@ -514,43 +518,101 @@ export interface SavingPlan {
   bestTaxSaved: number;
 }
 
+/** 납입액은 만 원 단위로 안내한다. */
+const PAYMENT_STEP = 10_000;
+
+interface Lever {
+  id: SavingLeverId;
+  /** 공제 한도까지 채우는 추가 납입액 */
+  cap: (i: YearEndInput) => number;
+  apply: (i: YearEndInput, extra: number) => YearEndInput;
+}
+
+const LEVERS: Lever[] = [
+  // 돈이 들지 않는 것 → 내 자산으로 남는 저축(연금·청약) → 돌아오지 않는 기부 순서로 쌓는다(세운 2026-10-25).
+  // 기부를 먼저 고르면 같은 세금을 더 적은 "납입액"으로 줄이는 것처럼 보이지만 그 돈은 내 것이 아니게 된다.
+  {
+    id: "debit",
+    cap: (i) => ((i.card?.credit ?? 0) > 0 ? 0 : -1),
+    apply: (i) => ({ ...i, card: { ...i.card, credit: 0, debit: (i.card?.debit ?? 0) + (i.card?.credit ?? 0) } }),
+  },
+  {
+    id: "pension",
+    cap: (i) => Math.max(0, PENSION.totalCap - Math.min(Math.max(0, i.pensionSavings ?? 0), PENSION.savingsCap) - Math.max(0, i.irp ?? 0)),
+    apply: (i, x) => ({ ...i, irp: (i.irp ?? 0) + x }),
+  },
+  {
+    id: "subscription",
+    cap: (i) => (i.salary <= HOUSING.subscriptionSalaryMax ? Math.max(0, HOUSING.subscriptionPayCap - (i.housing?.subscriptionPaid ?? 0)) : 0),
+    apply: (i, x) => ({ ...i, housing: { ...i.housing, subscriptionPaid: (i.housing?.subscriptionPaid ?? 0) + x } }),
+  },
+  {
+    id: "political",
+    cap: (i) => Math.max(0, POLITICAL.fullCap - (i.politicalDonation ?? 0)),
+    apply: (i, x) => ({ ...i, politicalDonation: (i.politicalDonation ?? 0) + x }),
+  },
+  {
+    id: "hometown",
+    cap: (i) => Math.max(0, HOMETOWN.midCap - (i.hometownDonation ?? 0)),
+    apply: (i, x) => ({ ...i, hometownDonation: (i.hometownDonation ?? 0) + x }),
+  },
+];
+
 /**
- * 지금 입력에서 세금을 더 줄일 수 있는 방법을 하나씩, 그리고 모두 합쳐 다시 계산한다. 공제 한도까지만 채우며,
+ * 한도까지 채웠을 때 줄어드는 세금을 다 받는 가장 적은 추가 납입액을 만 원 단위로 찾는다.
+ * 세액공제는 결정세액이 0이 되면 더 돌려주지 않으므로, 세금이 적은 사람은 한도보다 훨씬 적게 내도 된다
+ * (세운 2026-10-25: 총급여 2,400만 원이면 연금 약 117만 원으로 결정세액 0).
+ */
+function minimalExtra(input: YearEndInput, lever: Lever, cap: number, baseTax: number): { extra: number; saved: number } {
+  const taxAt = (x: number) => settleYearEnd(lever.apply(input, x)).totalTax;
+  const fullTax = taxAt(cap);
+  const saved = baseTax - fullTax;
+  if (saved <= 0 || cap <= 0) return { extra: 0, saved: Math.max(0, saved) };
+  let lo = 0;
+  let hi = Math.ceil(cap / PAYMENT_STEP);
+  while (lo < hi) {
+    const mid = Math.floor((lo + hi) / 2);
+    if (taxAt(Math.min(cap, mid * PAYMENT_STEP)) <= fullTax) hi = mid;
+    else lo = mid + 1;
+  }
+  return { extra: Math.min(cap, lo * PAYMENT_STEP), saved };
+}
+
+/**
+ * 지금 입력에서 세금을 더 줄일 수 있는 방법을 하나씩, 그리고 모두 합쳐 다시 계산한다. 각 방법은 세금을 다 줄이는
+ * 최소 금액만 제안하고, 합친 결과는 LEVERS 순서대로 쌓아 앞의 방법으로 이미 세금이 0이 됐으면 뒤 방법을 뺀다.
  * 청약은 총급여 7,000만 이하일 때만 제안한다(무주택 세대주 요건은 사용자가 확인).
  */
 export function taxSavingPlan(input: YearEndInput): SavingPlan {
   const base = settleYearEnd(input);
-  const pensionBase = Math.min(Math.max(0, input.pensionSavings ?? 0), PENSION.savingsCap) + Math.max(0, input.irp ?? 0);
-  const changes: { id: SavingLeverId; extra: number; apply: (i: YearEndInput) => YearEndInput }[] = [];
-
-  const pensionExtra = Math.max(0, PENSION.totalCap - pensionBase);
-  changes.push({ id: "pension", extra: pensionExtra, apply: (i) => ({ ...i, irp: (i.irp ?? 0) + pensionExtra }) });
-
-  if (input.salary <= HOUSING.subscriptionSalaryMax) {
-    const paid = input.housing?.subscriptionPaid ?? 0;
-    const subExtra = Math.max(0, HOUSING.subscriptionPayCap - paid);
-    changes.push({ id: "subscription", extra: subExtra, apply: (i) => ({ ...i, housing: { ...i.housing, subscriptionPaid: (i.housing?.subscriptionPaid ?? 0) + subExtra } }) });
+  const levers: SavingLever[] = [];
+  for (const lever of LEVERS) {
+    const cap = lever.cap(input);
+    if (cap < 0) continue;
+    if (lever.id === "debit") {
+      const saved = base.totalTax - settleYearEnd(lever.apply(input, 0)).totalTax;
+      if (saved > 0) levers.push({ id: lever.id, extraPayment: 0, capExtra: 0, taxSaved: saved, keepsMoney: true });
+      continue;
+    }
+    const { extra, saved } = minimalExtra(input, lever, cap, base.totalTax);
+    if (saved > 0) levers.push({ id: lever.id, extraPayment: extra, capExtra: cap, taxSaved: saved, keepsMoney: lever.id === "pension" || lever.id === "subscription" });
   }
 
-  const politicalExtra = Math.max(0, POLITICAL.fullCap - (input.politicalDonation ?? 0));
-  changes.push({ id: "political", extra: politicalExtra, apply: (i) => ({ ...i, politicalDonation: (i.politicalDonation ?? 0) + politicalExtra }) });
-
-  const hometownExtra = Math.max(0, HOMETOWN.midCap - (input.hometownDonation ?? 0));
-  changes.push({ id: "hometown", extra: hometownExtra, apply: (i) => ({ ...i, hometownDonation: (i.hometownDonation ?? 0) + hometownExtra }) });
-
-  const credit = input.card?.credit ?? 0;
-  changes.push({ id: "debit", extra: 0, apply: (i) => ({ ...i, card: { ...i.card, credit: 0, debit: (i.card?.debit ?? 0) + (i.card?.credit ?? 0) } }) });
-
-  const levers: SavingLever[] = [];
   let combined = input;
   let bestExtraPayment = 0;
-  for (const c of changes) {
-    if (c.id === "debit" ? credit <= 0 : c.extra <= 0) continue;
-    const saved = base.totalTax - settleYearEnd(c.apply(input)).totalTax;
+  for (const lever of LEVERS) {
+    const cap = lever.cap(combined);
+    if (cap < 0) continue;
+    const tax = settleYearEnd(combined).totalTax;
+    if (lever.id === "debit") {
+      const next = lever.apply(combined, 0);
+      if (settleYearEnd(next).totalTax < tax) combined = next;
+      continue;
+    }
+    const { extra, saved } = minimalExtra(combined, lever, cap, tax);
     if (saved <= 0) continue;
-    levers.push({ id: c.id, extraPayment: c.extra, taxSaved: saved });
-    combined = c.apply(combined);
-    bestExtraPayment += c.extra;
+    combined = lever.apply(combined, extra);
+    bestExtraPayment += extra;
   }
   const best = settleYearEnd(combined);
   return { base, levers, best, bestExtraPayment, bestTaxSaved: base.totalTax - best.totalTax };
