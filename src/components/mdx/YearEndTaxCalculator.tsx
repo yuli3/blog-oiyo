@@ -31,7 +31,7 @@ const INITIAL_DEDUCTIONS: DeductionItem[] = [
   { id: 'rent', label: '월세 납부액', sublabel: '연간 합계 (무주택 세대주, 총급여 8,000만 원 이하, 1,000만 원 한도 15~17%)', value: '' },
 ];
 
-export default function YearEndTaxCalculator() {
+export default function YearEndTaxCalculator({ locale = 'ko' }: { locale?: 'ko' | 'en' } = {}) {
   const [salary, setSalary] = useState('');
   const [salaryDisplay, setSalaryDisplay] = useState('');
   const [paidTax, setPaidTax] = useState('');
@@ -124,14 +124,14 @@ export default function YearEndTaxCalculator() {
               inputMode="numeric"
               value={salaryDisplay}
               onChange={handleSalary}
-              aria-label="연간 총급여 (원)"
+              aria-label={locale === 'en' ? 'Annual gross salary (KRW)' : '연간 총급여 (원)'}
               aria-invalid={salary.trim() !== '' && parseYearEndSalary(salary) === null}
               aria-describedby="year-end-salary-error"
               placeholder="예: 50,000,000"
               className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-right font-mono font-semibold focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20"
             />
             {salary.trim() !== '' && parseYearEndSalary(salary) === null && (
-              <p id="year-end-salary-error" role="alert" className="mt-2 text-sm text-destructive">총급여는 0 이상의 원 단위 정수로 입력해 주세요. 쉼표는 세 자리마다 쓸 수 있어요. 잘못된 값으로 결과를 계산하지 않아요.</p>
+              <p id="year-end-salary-error" role="alert" className="mt-2 text-sm text-destructive">{locale === 'en' ? 'Enter a non-negative whole amount in KRW. Commas may separate groups of three digits. No result is calculated from an invalid value.' : '총급여는 0 이상의 원 단위 정수로 입력해 주세요. 쉼표는 세 자리마다 쓸 수 있어요. 잘못된 값으로 결과를 계산하지 않아요.'}</p>
             )}
           </div>
           <div>
