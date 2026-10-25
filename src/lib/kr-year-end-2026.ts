@@ -351,6 +351,8 @@ export interface YearEndInput {
   /** 올해 연금계좌로 옮긴 ISA 만기금 */
   isaTransfer?: number;
   rent?: number;
+  /** Korean rent-credit eligibility was explicitly self-confirmed, not inferred from rent paid. */
+  rentEligible?: boolean;
   /** 2024~2026년 혼인신고(생애 1회, 아직 받지 않은 경우) */
   marriage?: boolean;
   /** 중소기업 취업 청년 감면 대상 */
@@ -441,7 +443,8 @@ export function settleYearEnd(input: YearEndInput): YearEndResult {
     const med = special ? medicalCredit(salary, input.medical ?? 0, input.medicalSpecific ?? 0) : 0;
     const edu = special ? educationCredit(input.education ?? 0, input.educationSelf ?? 0) : 0;
     const don = special ? donationCredit(allowedDonation(totalIncome, input.donation ?? 0, input.religiousDonation ?? 0)) : 0;
-    const rent = special ? rentCredit(salary, totalIncome, input.rent ?? 0) : 0;
+    // WHY 2026-10-24: paid rent alone does not establish Korean statutory eligibility.
+    const rent = special && input.rentEligible === true ? rentCredit(salary, totalIncome, input.rent ?? 0) : 0;
     const standardCredit = special ? 0 : STANDARD_TAX_CREDIT;
     const totalCredits =
       earnedTaxCredit + childCredit + birth + pension + ins + med + edu + don + political + hometown + marriage + rent + standardCredit;

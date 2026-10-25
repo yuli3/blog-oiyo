@@ -139,7 +139,7 @@ test("end-to-end: the review note's 김씨 example (총급여 4,800만, 월세 �
   // 월세 = 780만 × 17% (총급여 5,500만 이하, 근로소득금액 4,500만 이하) = 1,326,000
   // 특별공제·월세 쪽: 3,892,500 − 660,000 − 450,000 − 1,326,000 = 1,456,500 (지방세 145,650 → 1,602,150)
   // 표준세액공제 쪽: 3,892,500 − 660,000 − 450,000 − 130,000 = 2,652,500 → 월세 쪽이 유리
-  const r = settleYearEnd({ salary: 48_000_000, persons: 1, irp: 3_000_000, rent: 7_800_000 });
+  const r = settleYearEnd({ salary: 48_000_000, persons: 1, irp: 3_000_000, rent: 7_800_000, rentEligible: true });
   assert.equal(r.earnedIncome, 35_850_000);
   assert.equal(r.taxBase, 34_350_000);
   assert.equal(r.calculatedTax, 3_892_500);

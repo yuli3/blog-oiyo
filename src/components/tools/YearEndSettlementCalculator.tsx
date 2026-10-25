@@ -31,6 +31,7 @@ interface FormState {
     birthOrder: number;
     marriage: boolean;
     youthSme: boolean;
+    rentEligible: boolean;
     nationalPension: number;
     healthEmployment: number;
     credit: number;
@@ -74,6 +75,7 @@ const DEFAULTS: FormState = {
     birthOrder: 0,
     marriage: false,
     youthSme: false,
+    rentEligible: false,
     nationalPension: 2_250_000,
     healthEmployment: 2_150_000,
     credit: 10_000_000,
@@ -156,6 +158,7 @@ function toInput(f: FormState): YearEndInput {
         irp: f.irp,
         isaTransfer: f.isaTransfer,
         rent: f.rent,
+        rentEligible: f.rentEligible,
         marriage: f.marriage,
         youthSme: f.youthSme && f.age <= YOUTH_SME.maxAge + 6,
     };
@@ -203,6 +206,8 @@ const COPY = {
             market: '전통시장',
             transit: '대중교통',
             rent: '월세 (무주택 세대주, 연 합계)',
+            rentEligible: '한국 월세 세액공제 요건을 확인했어요 (무주택 세대·주택 기준·계약·전입·지급 증빙 등)',
+            rentEligibleNote: '확인 전 적용 공제는 0이에요. 체크는 본인 확인이며 자격 자동 판정이 아니에요.',
             leaseRepaid: '전세대출 원리금 상환액',
             subscriptionPaid: '주택청약종합저축 납입액 (총급여 7,000만 이하 무주택 세대주)',
             mortgageInterest: '주택담보대출 이자 상환액',
@@ -320,6 +325,8 @@ const COPY = {
             market: 'Traditional markets',
             transit: 'Public transit',
             rent: 'Monthly rent (homeless household head, annual total)',
+            rentEligible: 'I checked the Korean rent-credit eligibility conditions (non-homeowning household, qualifying home, contract, residence registration and payment evidence).',
+            rentEligibleNote: 'No rent credit is applied before confirmation. This is self-confirmation, not an automatic eligibility decision.',
             leaseRepaid: 'Jeonse loan principal + interest repaid',
             subscriptionPaid: 'Housing subscription savings paid (salary ≤ ₩70M, homeless head)',
             mortgageInterest: 'Mortgage interest paid',
@@ -481,7 +488,7 @@ const YearEndSettlementCalculator: React.FC<{ locale?: Locale }> = ({ locale = '
             />
         </div>
     );
-    const check = (key: 'womanHead' | 'singleParent' | 'marriage' | 'youthSme', label: string) => (
+    const check = (key: 'womanHead' | 'singleParent' | 'marriage' | 'youthSme' | 'rentEligible', label: string) => (
         <label key={key} className="flex min-h-11 items-start gap-3 text-sm font-medium text-foreground">
             <input type="checkbox" checked={form[key]} onChange={(e) => set(key, e.target.checked)} className="mt-1 size-5" />
             <span>{label}</span>
@@ -571,6 +578,10 @@ const YearEndSettlementCalculator: React.FC<{ locale?: Locale }> = ({ locale = '
 
                 {section(t.sections.housing, <>
                     {num('rent', t.f.rent)}
+                    <div className="flex flex-col gap-1">
+                        {check('rentEligible', t.f.rentEligible)}
+                        <p className="text-xs text-muted-foreground">{t.f.rentEligibleNote}</p>
+                    </div>
                     {num('leaseRepaid', t.f.leaseRepaid)}
                     {num('subscriptionPaid', t.f.subscriptionPaid)}
                     {num('mortgageInterest', t.f.mortgageInterest)}

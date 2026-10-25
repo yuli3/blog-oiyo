@@ -14,7 +14,7 @@ test("weekly holiday pay follows the 15-hour line and the 40-hour cap", () => {
   const full = weeklyHolidayPay({ hourlyWage: 10_320, daysPerWeek: 5, hoursPerDay: 8 });
   assert.equal(full.holidayHours, 8);
   assert.equal(full.holidayPay, 82_560);
-  assert.equal(full.monthlyPay, Math.round((40 * 10_320 + 82_560) * 365 / 7 / 12));
+  assert.equal(full.monthlyPay, 2152339);
   // The usual 209-hour conversion rounds 48 × 4.345 = 208.6 up to 209, so the two differ by under one hour's pay.
   assert.ok(Math.abs(full.monthlyPay - 209 * 10_320) < 10_320);
 

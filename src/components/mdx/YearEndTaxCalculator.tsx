@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { settleYearEnd } from '../../lib/kr-year-end-2026';
+import { parseYearEndSalary } from '../../lib/year-end-salary-input';
 
 function fmt(n: number) {
   return Math.round(n).toLocaleString('ko-KR');
@@ -37,12 +38,12 @@ export default function YearEndTaxCalculator() {
   const [paidTaxDisplay, setPaidTaxDisplay] = useState('');
   const [dependents, setDependents] = useState(0);
   const [deductions, setDeductions] = useState(INITIAL_DEDUCTIONS);
+  const [rentEligible, setRentEligible] = useState(false);
 
   const handleSalary = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const raw = e.target.value.replace(/,/g, '').replace(/[^0-9]/g, '');
+    const raw = e.target.value;
     setSalary(raw);
-    const num = parseInt(raw) || 0;
-    setSalaryDisplay(num > 0 ? num.toLocaleString('ko-KR') : raw);
+    setSalaryDisplay(raw);
   };
 
   const handlePaidTax = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,8 +61,8 @@ export default function YearEndTaxCalculator() {
   };
 
   const result = useMemo(() => {
-    const annualSalary = parseInt(salary) || 0;
-    if (annualSalary === 0) return null;
+    const annualSalary = parseYearEndSalary(salary);
+    if (annualSalary === null || annualSalary === 0) return null;
     const val = (id: string) => parseInt(deductions.find((d) => d.id === id)?.value || '0') || 0;
 
     // 본인 1명 + 부양가족. 표준세액공제와 특별공제 중 유리한 쪽은 settleYearEnd가 고른다.
@@ -78,6 +79,7 @@ export default function YearEndTaxCalculator() {
       pensionSavings: val('pension_savings'),
       irp: val('irp'),
       rent: val('rent'),
+      rentEligible,
     });
 
     // 기납부세액은 소득세+지방소득세로 입력받으므로 지방세 포함 결정세액과 비교한다.
@@ -95,7 +97,7 @@ export default function YearEndTaxCalculator() {
       alreadyPaid,
       refundOrPay: alreadyPaid - r.totalTax,
     };
-  }, [salary, paidTax, dependents, deductions]);
+  }, [salary, paidTax, dependents, deductions, rentEligible]);
 
   return (
     <div className="not-prose my-5 sm:my-8 rounded-2xl border border-border bg-card shadow-sm overflow-hidden">
@@ -122,9 +124,15 @@ export default function YearEndTaxCalculator() {
               inputMode="numeric"
               value={salaryDisplay}
               onChange={handleSalary}
+              aria-label="연간 총급여 (원)"
+              aria-invalid={salary.trim() !== '' && parseYearEndSalary(salary) === null}
+              aria-describedby="year-end-salary-error"
               placeholder="예: 50,000,000"
               className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-right font-mono font-semibold focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20"
             />
+            {salary.trim() !== '' && parseYearEndSalary(salary) === null && (
+              <p id="year-end-salary-error" role="alert" className="mt-2 text-sm text-destructive">총급여는 0 이상의 원 단위 정수로 입력해 주세요. 쉼표는 세 자리마다 쓸 수 있어요. 잘못된 값으로 결과를 계산하지 않아요.</p>
+            )}
           </div>
           <div>
             <label className="block text-sm font-semibold mb-1.5">기납부 세액 (원)</label>
@@ -182,6 +190,12 @@ export default function YearEndTaxCalculator() {
             ))}
           </div>
         </div>
+
+        <label className="block text-sm">
+          <input type="checkbox" checked={rentEligible} onChange={(e) => setRentEligible(e.target.checked)} />
+          한국 월세 세액공제 요건(무주택 세대·주택 기준·계약자·전입·지급 증빙 등)을 확인했어요
+        </label>
+        <p className="text-sm text-muted-foreground">확인 전에는 입력한 월세를 공제에 적용하지 않아요. 체크는 본인 확인이며 자동 자격 판정이 아니에요. 소득 한도 등 다른 계산 조건도 충족해야 해요.</p>
 
         {/* 결과 */}
         {result && (
