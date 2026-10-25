@@ -51,3 +51,17 @@ test('DCC final offer is not charged twice and 1/100 rate units agree', () => {
   assert.equal(compareForeignExchange({ ...input, networkPercent: 1, issuerPercent: 1, issuerBasis: 'base_plus_network' }).issuerFee, 1414);
   for (const value of [NaN, Infinity, 0, -1]) assert.throws(() => compareForeignExchange({ ...input, enteredRate: value }));
 });
+
+import { parseYearEndSalary } from './year-end-salary-input.ts';
+
+test('year-end salary accepts won amounts without changing their meaning', () => {
+  assert.equal(parseYearEndSalary('50,000,000'), 50_000_000);
+  assert.equal(parseYearEndSalary('50000000'), 50_000_000);
+  assert.equal(parseYearEndSalary('0'), 0);
+});
+
+test('year-end salary does not turn signs, decimals or invalid text into another amount', () => {
+  for (const value of ['', '-50000000', '50e6', 'NaN', 'Infinity', '50.5', '50만원', '50,00', '999999999999999999999']) {
+    assert.equal(parseYearEndSalary(value), null, value);
+  }
+});

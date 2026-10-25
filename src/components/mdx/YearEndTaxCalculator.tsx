@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { settleYearEnd } from '../../lib/kr-year-end-2026';
+import { parseYearEndSalary } from '../../lib/year-end-salary-input';
 
 function fmt(n: number) {
   return Math.round(n).toLocaleString('ko-KR');
@@ -40,10 +41,9 @@ export default function YearEndTaxCalculator() {
   const [rentEligible, setRentEligible] = useState(false);
 
   const handleSalary = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const raw = e.target.value.replace(/,/g, '').replace(/[^0-9]/g, '');
+    const raw = e.target.value;
     setSalary(raw);
-    const num = parseInt(raw) || 0;
-    setSalaryDisplay(num > 0 ? num.toLocaleString('ko-KR') : raw);
+    setSalaryDisplay(raw);
   };
 
   const handlePaidTax = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,8 +61,8 @@ export default function YearEndTaxCalculator() {
   };
 
   const result = useMemo(() => {
-    const annualSalary = parseInt(salary) || 0;
-    if (annualSalary === 0) return null;
+    const annualSalary = parseYearEndSalary(salary);
+    if (annualSalary === null || annualSalary === 0) return null;
     const val = (id: string) => parseInt(deductions.find((d) => d.id === id)?.value || '0') || 0;
 
     // 본인 1명 + 부양가족. 표준세액공제와 특별공제 중 유리한 쪽은 settleYearEnd가 고른다.
@@ -124,9 +124,15 @@ export default function YearEndTaxCalculator() {
               inputMode="numeric"
               value={salaryDisplay}
               onChange={handleSalary}
+              aria-label="연간 총급여 (원)"
+              aria-invalid={salary.trim() !== '' && parseYearEndSalary(salary) === null}
+              aria-describedby="year-end-salary-error"
               placeholder="예: 50,000,000"
               className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-right font-mono font-semibold focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20"
             />
+            {salary.trim() !== '' && parseYearEndSalary(salary) === null && (
+              <p id="year-end-salary-error" role="alert" className="mt-2 text-sm text-destructive">총급여는 0 이상의 원 단위 정수로 입력해 주세요. 쉼표는 세 자리마다 쓸 수 있어요. 잘못된 값으로 결과를 계산하지 않아요.</p>
+            )}
           </div>
           <div>
             <label className="block text-sm font-semibold mb-1.5">기납부 세액 (원)</label>
