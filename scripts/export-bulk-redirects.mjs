@@ -259,7 +259,9 @@ extraStaticText.split(/\r?\n/).forEach((raw, index) => {
     errors.push(`Source already redirected elsewhere at ${where}: ${source}`);
     return;
   }
-  extraStaticRules.push({ source, raw: `${source}  ${target}  301` });
+  // 2026-10-25: preserve validated source spelling; existing migration contracts
+  // compare exact lines, so regeneration must not change separator whitespace.
+  extraStaticRules.push({ source, raw: line });
 });
 
 const chainSources = new Set(dedupedExportable.map((item) => `https://${item.redirect.source_url}`));
@@ -391,3 +393,4 @@ console.log(
     `capacity=${manifest.remaining_capacity}`,
   ].join(" | "),
 );
+
