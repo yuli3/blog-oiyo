@@ -35,12 +35,12 @@ const country = COUNTRY_BY_LOCALE[locale];
 
 const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
-    title: "연말정산 환급 예측기 — 내 환급액 미리 계산해보기",
-    description: "연봉과 주요 공제 항목을 입력해 연말정산 예상 환급액 또는 추가 납부 세액을 미리 계산합니다. 절세 전략 수립에 활용하세요.",
+    title: "연말정산·종합소득세 시뮬레이터 (2026년 귀속) — 환급액과 최대 절세액",
+    description: "연봉, 자녀·한부모·장애인·경로우대, 월세·전세대출·주담대, 연금저축·IRP·ISA, 기부금까지 넣어 2026년 귀속 연말정산 환급액과 더 줄일 수 있는 세금을 계산합니다. 저장·파일 내보내기·인쇄 지원.",
   },
   en: {
-    title: "Year-End Tax Settlement Estimator (South Korea) — Predict Your Refund",
-    description: "Enter your salary and deduction items to predict your year-end tax refund or additional payment in Korea. Plan your tax savings strategy.",
+    title: "Korea Year-End Tax Simulator (Tax Year 2026) — Refund and Maximum Savings",
+    description: "Estimate your 2026 Korean year-end tax refund with family, housing, pension, IRP, ISA and donation inputs, then see which moves cut your tax most. Save, export and print your result.",
   },
   ja: {
     title: "年末調整 還付金シミュレーター（令和8年分）",
@@ -76,6 +76,9 @@ const content: Record<ActiveLocale, SeoContent> = {
     }, {
       title: "기준 3",
       body: "보험료, 연금저축, 의료비 등 주요 세액공제를 간이 반영합니다."
+    }, {
+      title: "기준 4",
+      body: "연금저축+IRP 900만 원, 청약 300만 원, 정치후원 10만 원, 고향사랑 20만 원을 채웠을 때 줄어드는 세금을 따로 계산합니다."
     }],
     howToTitle: "사용 방법",
     steps: ["계산에 필요한 금액과 조건을 입력합니다.", "결과 카드의 세금·공제·부담액 항목을 나누어 확인합니다.", "신고·납부 또는 의사결정 전에 최신 공식 기준과 비교합니다."],
@@ -105,6 +108,9 @@ const content: Record<ActiveLocale, SeoContent> = {
     }, {
       title: "Rule 3",
       body: "Simplifies key credits such as insurance, pension savings, and medical expenses."
+    }, {
+      title: "Rule 4",
+      body: "Separately computes the tax saved by topping up pension + IRP to ₩9M, housing subscription to ₩3M, a ₩100,000 political donation and a ₩200,000 Hometown Love donation."
     }],
     howToTitle: "How to use",
     steps: ["Enter the required amounts and conditions.", "Review the tax, deduction, and contribution lines separately.", "Compare with current official rules before filing, paying, or making a decision."],
@@ -321,7 +327,7 @@ const structuredData = [
 
     <section class="mt-6 sm:mt-10">
       <h2 class="text-xl font-bold text-foreground">{c.formulaTitle}</h2>
-      <div class="mt-4 grid gap-4 md:grid-cols-3">
+      <div class="mt-4 grid gap-4 md:grid-cols-2">
         {c.formulas.map((item) => (
           <article class="rounded-xl border border-border bg-card p-4">
             <h3 class="font-semibold text-foreground">{item.title}</h3>
