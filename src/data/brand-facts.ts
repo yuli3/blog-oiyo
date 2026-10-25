@@ -31,12 +31,6 @@ export const brandFacts = {
       role: "curation",
       knowledgeManifest: null,
     },
-    {
-      name: "OIYO AI",
-      url: "https://ai.oiyo.net/",
-      role: "ax-showcase",
-      knowledgeManifest: null,
-    },
         {
       name: "Oiyo Blog",
       url: "https://blog.oiyo.net/",
