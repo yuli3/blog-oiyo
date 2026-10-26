@@ -193,3 +193,20 @@ test("inheritance/gift constants match the api SSOT when an api checkout exists"
     assert.equal(INHERITANCE_GIFT_2026[k], api[k], k);
   }
 });
+
+import {severanceBoundary} from './kr-severance-boundary.ts';
+const severanceFixture={start:'2023-01-01',exit:'2024-01-01',threeMonthWages:9000000,annualBonus:0,annualLeavePay:0,ordinaryDaily:80000,confirmed:true};
+test('severance civil boundaries and ordinary-wage floor',()=>{
+ const r=severanceBoundary(severanceFixture);assert.ok(r.ok);assert.equal(r.periodDays,92);assert.equal(r.serviceDays,365);assert.equal(r.periodStart,'2023-10-01');
+ const f=severanceBoundary({...severanceFixture,ordinaryDaily:110000});assert.ok(f.ok);assert.equal(f.daily,110000);
+});
+test('leap year is not an automatic one-year eligibility finding at day365',()=>{
+ assert.equal(severanceBoundary({...severanceFixture,start:'2024-01-01',exit:'2024-12-31'}).ok,false);
+ const r=severanceBoundary({...severanceFixture,start:'2024-01-01',exit:'2025-01-01'});assert.ok(r.ok);assert.equal(r.serviceDays,366);
+});
+test('month-end clamps the three-month start instead of overflowing',()=>{
+ const r=severanceBoundary({...severanceFixture,exit:'2026-05-31'});assert.ok(r.ok);assert.equal(r.periodStart,'2026-02-28');assert.equal(r.periodDays,92);
+});
+test('severance malformed, reversed, missing and unknown inputs never return a figure',()=>{
+ for(const patch of [{start:'2023-02-30'},{exit:''},{exit:'2022-01-01'},{threeMonthWages:NaN},{annualBonus:-1},{ordinaryDaily:0},{confirmed:false},{start:'2024-02-29',exit:'2026-03-01'}])assert.equal(severanceBoundary({...severanceFixture,...patch}).ok,false);
+});

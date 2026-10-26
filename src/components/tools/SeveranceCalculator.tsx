@@ -1,79 +1,19 @@
-import React, { useState } from 'react';
-import { GameContainer } from '../ui/game/GamePrimitives';
-
-const SeveranceCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
-    const t = {
-        ko: { title: "퇴직금 계산기", desc: "평균 임금과 재직 기간을 바탕으로 예상 퇴직금을 계산합니다. (퇴직소득세 미포함)", join: "입사일", exit: "퇴직일", wage: "월 평균 급여 (원)", bonus: "연간 상여금 (원)", result: "예상 퇴직금 합계", base: "평균 임금 (일)", days: "총 재직 일수", taxDesc: "* 실제 수령액은 퇴직소득세 부과에 따라 달라질 수 있습니다.", dayUnit: "일", short: "계속근로 1년 미만은 법정 퇴직금이 없어요" },
-        en: { title: "Severance Pay Calculator", desc: "Estimate South Korean statutory severance pay from average wage and tenure.", join: "Join Date", exit: "Exit Date", wage: "Avg Monthly Pay", bonus: "Annual Bonus", result: "Total Severance Pay", base: "Avg Daily Wage", days: "Total Tenure Days", taxDesc: "* South Korean rules. Actual payout may vary after retirement income tax.", dayUnit: " days", short: "No statutory severance below one year of continuous service" }
-    }[locale === 'ko' ? 'ko' : 'en'];
-
-    const [joinDate, setJoinDate] = useState('2020-01-01');
-    const [exitDate, setExitDate] = useState(new Date().toISOString().split('T')[0]);
-    const [monthlyWage, setMonthlyWage] = useState(4000000);
-    const [annualBonus, setAnnualBonus] = useState(10000000);
-
-    const start = new Date(joinDate);
-    const end = new Date(exitDate);
-    const diffTime = Math.max(0, end.getTime() - start.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-    // 평균임금 = 퇴직 전 3개월 임금총액(상여금은 3/12 산입) ÷ 그 3개월의 총일수 (근로기준법 제2조)
-    // 퇴직금 = 평균임금 × 30 × 재직일수 / 365, 계속근로 1년 이상만 (근로자퇴직급여 보장법 제8조)
-    const threeMonthsBefore = new Date(end.getFullYear(), end.getMonth() - 3, end.getDate());
-    const days3 = Math.max(1, Math.round((end.getTime() - threeMonthsBefore.getTime()) / (1000 * 60 * 60 * 24)));
-    const avgDailyWage = (monthlyWage * 3 + (annualBonus * 3) / 12) / days3;
-    const eligible = diffDays >= 365;
-    const severance = eligible ? (avgDailyWage * 30 * diffDays) / 365 : 0;
-
-    return (
-        <GameContainer title={t.title} subtitle="Employment Exit Strategy" onReset={() => { setJoinDate('2020-01-01'); setMonthlyWage(4000000); setAnnualBonus(10000000); }}>
-            <div className="flex flex-col gap-6 sm:gap-10">
-                <p className="text-sm font-medium text-muted-foreground text-center">{t.desc}</p>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8">
-                    <div className="space-y-4">
-                        <div className="space-y-2">
-                             <label className="text-[10px] font-black text-muted-foreground uppercase">{t.join}</label>
-                            <input type="date" value={joinDate} onChange={(e) => setJoinDate(e.target.value)} className="w-full p-4 bg-muted/30 rounded-2xl border border-border font-black" />
-                        </div>
-                        <div className="space-y-2">
-                             <label className="text-[10px] font-black text-muted-foreground uppercase">{t.exit}</label>
-                            <input type="date" value={exitDate} onChange={(e) => setExitDate(e.target.value)} className="w-full p-4 bg-muted/30 rounded-2xl border border-border font-black" />
-                        </div>
-                    </div>
-                    <div className="space-y-4">
-                        <div className="space-y-2">
-                             <label className="text-[10px] font-black text-muted-foreground uppercase">{t.wage}</label>
-                            <input type="number" value={monthlyWage} onChange={(e) => setMonthlyWage(Number(e.target.value))} className="w-full p-4 bg-muted/30 rounded-2xl border border-border font-black" />
-                        </div>
-                        <div className="space-y-2">
-                             <label className="text-[10px] font-black text-muted-foreground uppercase">{t.bonus}</label>
-                            <input type="number" value={annualBonus} onChange={(e) => setAnnualBonus(Number(e.target.value))} className="w-full p-4 bg-muted/30 rounded-2xl border border-border font-black" />
-                        </div>
-                    </div>
-                </div>
-
-                <div className="p-5 sm:p-10 bg-foreground rounded-[40px] text-background animate-in slide-in-from-bottom-6 shadow-2xl relative overflow-hidden">
-                    <p className="text-[10px] font-black text-background/60 uppercase tracking-widest text-center mb-4">{t.result}</p>
-                    <h2 className="text-5xl font-black text-center text-primary mb-6 sm:mb-10">₩{Math.round(severance).toLocaleString()}</h2>
-                    
-                    <div className="grid grid-cols-2 gap-5 sm:gap-8 border-t border-background/15 pt-5 sm:pt-8">
-                        <div className="text-center">
-                            <p className="text-[10px] text-background/60 uppercase mb-1">{t.days}</p>
-                            <p className="text-xl font-bold">{diffDays}{t.dayUnit}</p>
-                        </div>
-                        <div className="text-center">
-                            <p className="text-[10px] text-background/60 uppercase mb-1">{t.base}</p>
-                            <p className="text-xl font-bold">₩{Math.round(avgDailyWage).toLocaleString()}</p>
-                        </div>
-                    </div>
-                </div>
-                
-                {!eligible && <p className="text-sm text-center font-semibold text-foreground">{t.short}</p>}
-                <p className="text-xs text-center text-muted-foreground italic">{t.taxDesc}</p>
-            </div>
-        </GameContainer>
-    );
-};
-
-export default SeveranceCalculator;
+import {useState,useId} from 'react';
+import {severanceBoundary} from '../../lib/kr-severance-boundary';
+export default function SeveranceCalculator({locale='ko'}:{locale?:'ko'|'en'}){
+ const ko=locale==='ko',id=useId(),[confirmed,setConfirmed]=useState(false);
+ const [values,setValues]=useState<Record<string,string>>({start:'2023-01-01',exit:'2026-01-01',threeMonthWages:'9000000',annualBonus:'0',annualLeavePay:'0',ordinaryDaily:'100000'});
+ const fields=[['start',ko?'입사일':'Employment start','date'],['exit',ko?'퇴직일: 마지막 근무일의 다음 날':'Exit date: day after last working day','date'],['threeMonthWages',ko?'아래 3개월 기간의 실제 임금 총액 (원)':'Actual wages in the three-month window (KRW)','number'],['annualBonus',ko?'산입 확인된 연간 상여금 (원)':'Confirmed includable annual bonus (KRW)','number'],['annualLeavePay',ko?'산입 확인된 연간 연차수당 (원)':'Confirmed includable annual leave pay (KRW)','number'],['ordinaryDaily',ko?'확인된 1일 통상임금 (원)':'Confirmed ordinary daily wage (KRW)','number']];
+ const number=(key:string)=>values[key]?.trim()?Number(values[key]):NaN;
+ const result=severanceBoundary({start:values.start,exit:values.exit,threeMonthWages:number('threeMonthWages'),annualBonus:number('annualBonus'),annualLeavePay:number('annualLeavePay'),ordinaryDaily:number('ordinaryDaily'),confirmed});
+ const won=(n:number)=>new Intl.NumberFormat(ko?'ko-KR':'en-KR',{style:'currency',currency:'KRW',maximumFractionDigits:0}).format(n);
+ return <section className="space-y-3 rounded-lg border border-border p-4" aria-label={ko?'퇴직금 기간·입금액 비교':'Korean severance period and amount comparison'}>
+ <p className="text-sm leading-relaxed">{ko?'한국 근로자퇴직급여 보장법의 일반적인 퇴직금 산식 비교예요. 날짜만으로 자격을 확정하지 않아요. 계속근로·4주 평균 주 15시간 이상 요건과 임금 산입을 먼저 확인해 주세요.':'South Korean general severance arithmetic only. Dates do not establish entitlement. First confirm continuous service, the four-week average 15-hour threshold and included wage items.'}</p>
+ <ol className="grid gap-2 sm:grid-cols-3">{(ko?['입사일은 포함하고 퇴직일은 제외해요','직전 3개월의 달력 일수와 실제 임금을 맞춰요','평균임금과 통상임금을 비교한 뒤 근속일수를 반영해요']:['Start included; exit date excluded','Match actual wages to the preceding three calendar months','Compare average and ordinary daily wages, then apply tenure']).map(x=><li key={x} className="rounded-lg border border-border p-3 text-sm">{x}</li>)}</ol>
+ <div className="grid gap-3 sm:grid-cols-2">{fields.map(([key,label,type])=><label key={key} htmlFor={id+key} className="block space-y-1 text-sm"><span>{label}</span><input id={id+key} type={type} min={type==='number'?'0':undefined} step={type==='number'?'any':undefined} value={values[key]} onInput={type==='date'?e=>{const value=e.currentTarget.value;setValues(v=>({...v,[key]:value}));}:undefined} onChange={e=>setValues(v=>({...v,[key]:e.target.value}))} className="min-h-11 w-full rounded-lg border border-input bg-background px-3 py-2"/></label>)}</div>
+ <label className="flex min-h-11 items-start gap-3 text-sm leading-relaxed"><input type="checkbox" checked={confirmed} onChange={e=>setConfirmed(e.target.checked)} className="mt-1 h-5 w-5 shrink-0"/>{ko?'일반 퇴직금 대상과 계속근로 1년 이상을 확인했고, 산정 제외기간·계속근로 제외기간·특수계약이 없으며 임금 항목과 통상임금을 확인했어요.':'I confirmed ordinary statutory severance coverage, at least one complete year of continuous service, wage classifications and ordinary daily wage, with no excluded averaging/service periods or special arrangements.'}</label>
+ <div role="status" aria-live="polite">{result.ok?<div className="space-y-2 rounded-lg border border-border p-3"><h2 className="text-lg font-semibold">{ko?'공제 전 산술 비교액':'Before-tax arithmetic comparison'}: {won(result.amount)}</h2><table className="w-full text-left text-sm"><caption className="mb-2 text-left">{ko?'기간과 계산 근거':'Period and calculation breakdown'}</caption><tbody>{[[ko?'직전 3개월 시작 (포함)':'Three-month start (included)',result.periodStart],[ko?'퇴직일 (제외)':'Exit date (excluded)',values.exit],[ko?'직전 3개월 달력 일수':'Three-month calendar days',String(result.periodDays)],[ko?'재직일수':'Service days',String(result.serviceDays)],[ko?'1일 평균임금':'Average daily wage',won(result.average)],[ko?'적용 비교 일급':'Daily wage used',won(result.daily)]].map(([label,value])=><tr key={label} className="border-t border-border"><th className="p-2 font-medium">{label}</th><td className="p-2 tabular-nums">{value}</td></tr>)}</tbody></table></div>:<p className="text-sm text-muted-foreground">{!confirmed?(ko?'전제를 확인하면 비교액을 보여드려요.':'Confirm scope to show the comparison.'):(ko?'날짜·금액을 확인해 주세요. 1년 미만·2월 29일 입사·제외기간이 있는 경우는 이 비교 범위 밖이에요. 이전 결과는 표시하지 않아요.':'Check dates and amounts. Under-one-year service, February-29 starts and excluded periods are outside this version. Previous results are removed.')}</p>}</div>
+ <p className="text-xs leading-relaxed text-muted-foreground">{ko?'산식: max(평균임금, 확인된 통상임금) × 30 × 재직일수 ÷ 365. 평균임금의 분모는 90일 고정이 아니에요. 연간 상여금·연차수당은 산입 대상임을 확인한 금액의 3/12만 더해요. 퇴직소득세·퇴직연금 DB/DC·지급기한·개별 청구액은 계산하지 않아요. 표시 반올림은 법정 급여 처리 지시가 아니에요.':'Formula: max(average wage, confirmed ordinary daily wage) × 30 × service days ÷ 365. The averaging denominator is not fixed at 90 days. Add 3/12 of confirmed includable annual bonus and annual leave pay. No retirement income tax, pension-plan benefits, payment deadline or individual claim is determined. Display rounding is not a payroll instruction.'}</p>
+ <a className="inline-flex min-h-11 items-center text-sm text-primary underline" href="https://www.moel.go.kr/retirementpayCal.do">{ko?'고용노동부: 퇴직일·산정기간·공식 계산 예시':'MOEL: official dates, periods and worked example'}</a>
+ </section>;
+}
