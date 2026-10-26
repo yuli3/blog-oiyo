@@ -21,6 +21,44 @@ updatedDate: 2026-10-26
 
 정부가 운영하는 **주택도시기금**을 재원으로 시중 금리보다 낮은 이율로 제공하는 정책 대출입니다. 전세 자금은 **버팀목**, 주택 구입 자금은 **디딤돌**이 대표적입니다.
 
+> 🇰🇷 **대한민국 기준**이에요. 국토교통부 주택도시기금 상품 안내(2026-10-26 확인)를 바탕으로 썼습니다. 다른 나라의 공공 주택금융은 제도와 기준이 전혀 다릅니다.
+
+<DecisionTree
+  title="나는 버팀목·디딤돌 중 무엇을, 얼마까지 받을 수 있을까?"
+  country={{ flag: "🇰🇷", name: "대한민국" }}
+  asOf="2026-10-26"
+  start="house"
+  nodes={[
+    { id: "house", question: "세대원 중 집을 가진 사람이 있나요?", hint: "버팀목·디딤돌은 세대원 전원이 무주택인 세대주가 대상이에요.", yes: "r-owner", no: "baby" },
+    { id: "baby", question: "최근 2년 안에 아이를 낳거나 입양했나요?", hint: "2023년 1월 1일 이후 출생아부터 해당돼요.", yes: "r-newborn", no: "purpose" },
+    { id: "purpose", question: "집을 사려고 하나요?", hint: "아니오를 고르면 전세 자금(버팀목) 기준으로 이어집니다.", yes: "buy-asset", no: "lease-asset" },
+    { id: "lease-asset", question: "부부 합산 순자산이 3.45억 원 이하인가요?", yes: "lease-group", no: "r-over" },
+    { id: "lease-group", question: "어느 가구에 해당하나요?", options: [{ label: "신혼가구", next: "lease-inc-n" }, { label: "2자녀 이상", next: "lease-inc-c" }, { label: "해당 없음 (일반)", next: "lease-inc-g" }] },
+    { id: "lease-inc-n", question: "부부 합산 연소득이 7,500만 원 이하인가요?", yes: "r-lease-plus", no: "r-over" },
+    { id: "lease-inc-c", question: "부부 합산 연소득이 6,000만 원 이하인가요?", yes: "r-lease-plus", no: "r-over" },
+    { id: "lease-inc-g", question: "부부 합산 연소득이 5,000만 원 이하인가요?", yes: "r-lease-g", no: "r-over" },
+    { id: "buy-asset", question: "부부 합산 순자산이 5.11억 원 이하인가요?", yes: "buy-group", no: "r-over" },
+    { id: "buy-group", question: "어느 가구에 해당하나요?", hint: "여러 개에 해당하면 위쪽(한도가 큰 쪽)을 고르세요.", options: [{ label: "신혼가구", next: "buy-inc-n" }, { label: "2자녀 이상", next: "buy-inc-c" }, { label: "생애최초 구입", next: "buy-inc-f" }, { label: "해당 없음 (일반)", next: "buy-inc-g" }] },
+    { id: "buy-inc-n", question: "부부 합산 연소득이 8,500만 원 이하인가요?", yes: "buy-price-6", no: "r-over" },
+    { id: "buy-inc-c", question: "부부 합산 연소득이 7,000만 원 이하인가요?", yes: "buy-price-6", no: "r-over" },
+    { id: "buy-inc-f", question: "부부 합산 연소득이 7,000만 원 이하인가요?", yes: "buy-price-5f", no: "r-over" },
+    { id: "buy-inc-g", question: "부부 합산 연소득이 6,000만 원 이하인가요?", yes: "buy-price-5g", no: "r-over" },
+    { id: "buy-price-6", question: "사려는 집의 평가액이 6억 원 이하이고 전용 85㎡ 이하인가요?", hint: "수도권 밖 읍·면은 100㎡까지 돼요.", yes: "r-buy-32", no: "r-price" },
+    { id: "buy-price-5f", question: "사려는 집의 평가액이 5억 원 이하이고 전용 85㎡ 이하인가요?", hint: "수도권 밖 읍·면은 100㎡까지 돼요.", yes: "r-buy-24", no: "r-price" },
+    { id: "buy-price-5g", question: "사려는 집의 평가액이 5억 원 이하이고 전용 85㎡ 이하인가요?", hint: "수도권 밖 읍·면은 100㎡까지 돼요.", yes: "r-buy-20", no: "r-price" },
+    { id: "r-owner", result: { tone: "stop", title: "버팀목·디딤돌 대상이 아니에요", body: "두 상품 모두 무주택 세대주만 받을 수 있어요. 대출을 받는 중에 집을 사도 버팀목은 유지되지 않습니다." } },
+    { id: "r-newborn", result: { tone: "go", title: "신생아 특례 대출부터 보세요", body: "출산·입양 후 2년 안이면 소득 1.3억 원(맞벌이 2억 원)까지, 구입 최대 4억 원·전세 최대 2.4억 원의 특례 상품이 있어요. 일반 버팀목·디딤돌보다 기준이 넓습니다.", links: [{ label: "신생아 특례 대출 가이드", href: "/ko/magazine-newborn-loan-guide/" }] } },
+    { id: "r-lease-plus", result: { tone: "go", title: "버팀목 (신혼·2자녀 기준) 대상이에요", body: "보증금 수도권 4억·그 외 3억 원 이하 집에서 보증금의 80%, 수도권 최대 2.5억·그 외 1.6억 원까지예요. 금리는 연 2.5~3.5%에 자녀 수에 따라 0.3~0.7%p 낮아집니다.", links: [{ label: "주택도시기금 누리집", href: "https://nhuf.molit.go.kr" }] } },
+    { id: "r-lease-g", result: { tone: "go", title: "버팀목 (일반) 대상이에요", body: "보증금 수도권 3억·그 외 2억 원 이하 집에서 보증금의 70%, 수도권 최대 1.2억·그 외 8천만 원까지예요. 청년이라면 청년 전용 버팀목 조건도 따로 비교해 보세요.", links: [{ label: "주택도시기금 누리집", href: "https://nhuf.molit.go.kr" }] } },
+    { id: "r-buy-32", result: { tone: "go", title: "디딤돌 최대 3.2억 원 대상이에요", body: "LTV 70%(생애최초 80%, 수도권·규제지역은 70%)와 DTI 60% 안에서 최대 3.2억 원이에요. 금리는 연 2.85~4.15%이고 지방 주택은 0.2%p 더 낮아요.", links: [{ label: "주택도시기금 누리집", href: "https://nhuf.molit.go.kr" }] } },
+    { id: "r-buy-24", result: { tone: "go", title: "디딤돌 최대 2.4억 원 대상이에요", body: "생애최초는 LTV 80%(수도권·규제지역은 70%)와 DTI 60% 안에서 최대 2.4억 원이에요. 30세 이상 미혼 단독세대주는 60㎡·3억 원 이하 집, 한도 2억 원으로 줄어요.", links: [{ label: "주택도시기금 누리집", href: "https://nhuf.molit.go.kr" }] } },
+    { id: "r-buy-20", result: { tone: "go", title: "디딤돌 최대 2억 원 대상이에요", body: "LTV 70%와 DTI 60% 안에서 최대 2억 원이에요. 30세 이상 미혼 단독세대주는 60㎡·3억 원 이하 집, 한도 1.5억 원으로 줄어요.", links: [{ label: "주택도시기금 누리집", href: "https://nhuf.molit.go.kr" }] } },
+    { id: "r-price", result: { tone: "caution", title: "집값·면적 기준을 넘어요", body: "디딤돌은 기준을 넘는 집에는 쓸 수 없어요. 한국주택금융공사 보금자리론처럼 기준이 다른 정책 상품을 비교해 보세요.", links: [{ label: "한국주택금융공사", href: "https://www.hf.go.kr" }] } },
+    { id: "r-over", result: { tone: "caution", title: "기금 대출 소득·자산 기준을 넘어요", body: "주택도시기금 상품은 받기 어려워요. 한국주택금융공사 상품이나 은행 대출의 조건을 비교하고, 대출 전 DSR(총부채원리금상환비율) 한도도 함께 확인하세요.", links: [{ label: "한국주택금융공사", href: "https://www.hf.go.kr" }] } }
+  ]}
+  note="기준 출처: 국토교통부 주택도시기금 개인상품 안내(2026-10-26 확인). 한도는 호당 한도·보증금(LTV) 비율·보증기관 한도 중 가장 작은 금액이고, 2025년 6월 27일 이후 계약분 기준입니다. 신청 전 누리집 자가진단으로 다시 확인하세요."
+/>
+
 ---
 
 ## 버팀목 전세자금 대출

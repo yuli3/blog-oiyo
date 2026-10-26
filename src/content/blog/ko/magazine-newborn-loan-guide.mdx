@@ -21,6 +21,36 @@ updatedDate: 2026-10-26
 
 2024년 1월 출산 가구의 주거 부담을 낮추려고 도입된 주택도시기금 저금리 정책 대출입니다. 구입 자금 대출과 전세 자금 대출 두 가지로 운영됩니다.
 
+> 🇰🇷 **대한민국 기준**이에요. 국토교통부 주택도시기금 상품 안내(2026-10-26 확인)를 바탕으로 썼습니다. 다른 나라의 출산 가구 주거 지원은 제도가 다릅니다.
+
+<DecisionTree
+  title="신생아 특례 대출, 우리 집은 받을 수 있을까?"
+  country={{ flag: "🇰🇷", name: "대한민국" }}
+  asOf="2026-10-26"
+  start="birth"
+  nodes={[
+    { id: "birth", question: "대출 접수일 기준 2년 안에 아이를 낳거나 입양했나요?", hint: "2023년 1월 1일 이후 출생아부터예요. 임신 중인 태아는 아직 해당되지 않아요.", yes: "home", no: "r-nobirth" },
+    { id: "home", question: "지금 집이 있나요?", yes: "refi", no: "income" },
+    { id: "refi", question: "그 한 채를 사면서 받은 주택담보대출이 있고, 집 평가액이 9억 원 이하인가요?", hint: "1주택 세대주는 기존 대출을 신생아 특례로 갈아타는(대환) 길만 있어요.", yes: "r-refi", no: "r-owner" },
+    { id: "income", question: "부부 합산 연소득이 1.3억 원 이하인가요?", yes: "purpose", no: "dual" },
+    { id: "dual", question: "맞벌이이고, 각자 1.3억 원 이하이면서 합산 2억 원 이하인가요?", yes: "purpose", no: "r-income" },
+    { id: "purpose", question: "집을 사려고 하나요?", hint: "아니오를 고르면 전세(버팀목) 기준으로 이어집니다.", yes: "buy-asset", no: "lease-asset" },
+    { id: "buy-asset", question: "부부 합산 순자산이 5.11억 원 이하인가요?", yes: "buy-price", no: "r-asset" },
+    { id: "buy-price", question: "사려는 집의 평가액이 9억 원 이하이고 전용 85㎡ 이하인가요?", hint: "수도권 밖 읍·면은 100㎡까지 돼요.", yes: "r-buy", no: "r-price" },
+    { id: "lease-asset", question: "부부 합산 순자산이 3.45억 원 이하인가요?", yes: "lease-deposit", no: "r-asset" },
+    { id: "lease-deposit", question: "전세 보증금이 수도권 5억 원, 그 외 지역 4억 원 이하인가요?", yes: "r-lease", no: "r-price" },
+    { id: "r-nobirth", result: { tone: "caution", title: "신생아 특례 대상이 아니에요", body: "출산·입양 후 2년이 지났거나 아직 출산 전이라면 일반 버팀목·디딤돌 기준을 보세요. 자녀가 있으면 금리 우대를 받을 수 있어요.", links: [{ label: "버팀목·디딤돌 가이드", href: "/ko/magazine-government-housing-loan-guide/" }] } },
+    { id: "r-owner", result: { tone: "stop", title: "새로 받는 신생아 특례는 어려워요", body: "구입·전세 특례는 무주택 세대주가 대상이고, 1주택자는 기존 구입 자금 대출을 대환하는 경우만 가능해요. 2주택 이상이면 대상이 아닙니다." } },
+    { id: "r-refi", result: { tone: "go", title: "대환(갈아타기)을 검토해 보세요", body: "소득·순자산 기준(1.3억 원, 맞벌이 2억 원 / 5.11억 원)을 충족하면 기존 주택담보대출을 신생아 특례로 바꿀 수 있어요. 대환은 신청 시기 제한이 없고, 기존 대출의 중도상환수수료는 따로 확인하세요.", links: [{ label: "주택도시기금 누리집", href: "https://nhuf.molit.go.kr" }] } },
+    { id: "r-income", result: { tone: "caution", title: "소득 기준을 넘어요", body: "신생아 특례는 받기 어려워요. 은행 대출을 알아볼 때는 DSR 한도를 먼저 확인하세요." } },
+    { id: "r-asset", result: { tone: "caution", title: "순자산 기준을 넘어요", body: "구입은 5.11억 원, 전세는 3.45억 원이 순자산 기준이에요. 기준을 넘으면 신생아 특례를 받을 수 없어요." } },
+    { id: "r-price", result: { tone: "caution", title: "집값·보증금 기준을 넘어요", body: "구입은 평가액 9억 원·전용 85㎡, 전세는 보증금 수도권 5억·그 외 4억 원까지예요. 이보다 큰 집은 특례 대상이 아닙니다." } },
+    { id: "r-buy", result: { tone: "go", title: "구입 특례 최대 4억 원 대상이에요", body: "LTV 70%(생애최초 80%, 수도권·규제지역은 70%)와 DTI 60% 안에서 최대 4억 원, 금리 연 1.8~4.5%예요. 특례금리는 5년이고 2년 안에 아이가 더 태어나면 1명당 5년 연장(최장 15년)됩니다.", links: [{ label: "주택도시기금 누리집", href: "https://nhuf.molit.go.kr" }] } },
+    { id: "r-lease", result: { tone: "go", title: "전세 특례 최대 2.4억 원 대상이에요", body: "신규 계약은 보증금의 80% 안에서 최대 2.4억 원, 금리 연 1.3~4.3%예요. 특례금리는 4년이고 추가 출산 시 1명당 4년 연장(최장 12년)됩니다.", links: [{ label: "주택도시기금 누리집", href: "https://nhuf.molit.go.kr" }] } }
+  ]}
+  note="기준 출처: 국토교통부 주택도시기금 신생아 특례 구입·전세자금 대출 안내(2026-10-26 확인). 한도는 2025년 6월 27일 이후 계약분 기준입니다. 신청 전 누리집 자가진단으로 다시 확인하세요."
+/>
+
 ---
 
 ## 핵심 특징
