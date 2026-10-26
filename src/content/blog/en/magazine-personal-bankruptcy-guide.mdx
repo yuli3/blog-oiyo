@@ -16,7 +16,10 @@ description: >-
   cannot be discharged, what property you keep, how bankruptcy affects your credit,
   and how to rebuild after a discharge.
 pubDate: '2026-05-05'
+updatedDate: 2026-10-26
 ---
+
+> 🇺🇸 **United States rules.** This guide covers the federal Bankruptcy Code (Title 11). Exemptions and median-income figures also depend on your state. Other countries use completely different systems.
 
 ## Debt Is Not a Moral Failure
 
@@ -62,7 +65,7 @@ Chapter 13 allows you to keep your assets while repaying debts under a **3-to-5-
 
 | Requirement | Details |
 |---|---|
-| Debt limits (2025) | Secured debt under ~\$1.4 million; unsecured debt under ~\$465,000 |
+| Debt limits (from April 1, 2025) | Secured debt under \$1,580,125; unsecured debt under \$526,700 |
 | Income | Must have regular income sufficient to fund the repayment plan |
 | Filing history | Cannot have had a Chapter 13 dismissed within 180 days for willful failure |
 
@@ -101,13 +104,13 @@ If you don't pass the means test, Chapter 7 is not available to you (Chapter 13 
 
 Federal and state law protects certain assets from liquidation. You keep these regardless of bankruptcy:
 
-| Asset | Federal Exemption (approximate) |
+| Asset | Federal exemption (11 U.S.C. 522(d), from April 1, 2025) |
 |---|---|
-| Home equity (homestead) | Up to ~$27,900 (varies significantly by state; some states are unlimited) |
-| Vehicle | Up to ~$4,450 in equity |
-| Household goods | Up to ~\$700 per item, ~\$14,875 total |
+| Home equity (homestead) | Up to \$31,575 (state exemptions vary widely; some are unlimited) |
+| Vehicle | Up to \$5,025 in equity |
+| Household goods | Up to \$800 per item, \$16,850 total |
 | Retirement accounts (401k, IRA) | Largely unlimited — protected under ERISA |
-| Tools of trade | Up to ~$2,800 |
+| Tools of trade | Up to \$3,175 |
 | Wages | Typically 75% of disposable earnings |
 
 **Note**: Many states allow you to choose between federal exemptions and state-specific exemptions — whichever is more favorable. Some state exemptions (Texas, Florida homestead) are extremely generous.
@@ -132,6 +135,35 @@ Your discharge can be denied if the court finds:
 | Mortgage/foreclosure | Cannot cure arrears | Can catch up and save home |
 | Student loans | Generally not dischargeable | Same |
 | Best for | Low/no income, no home equity to protect | Regular income, behind on secured debts |
+
+---
+
+## Follow Your Situation: Yes/No Flowchart
+
+Answer one question at a time to see which path to look at first. It is a guide, not legal advice: the court and your attorney decide what you actually qualify for.
+
+<DecisionTree
+  title="Chapter 7, Chapter 13, or something else?"
+  country={{ flag: "🇺🇸", name: "United States" }}
+  asOf="2026-10-26"
+  start="nondischarge"
+  nodes={[
+    { id: "nondischarge", question: "Is most of your debt child support, alimony, recent income taxes, student loans, or criminal fines?", hint: "Bankruptcy generally does not erase these debts.", yes: "r-nondischarge", no: "secured" },
+    { id: "secured", question: "Are you behind on a mortgage or car loan for a home or car you want to keep?", hint: "Chapter 7 cannot spread missed payments over time; Chapter 13 can.", yes: "income", no: "median" },
+    { id: "median", question: "Is your household income below your state's median income for your household size?", hint: "This is the first step of the Chapter 7 means test (Form 122A-1).", yes: "prior7", no: "disposable" },
+    { id: "disposable", question: "After the means-test expense deductions, is little or nothing left over to pay unsecured creditors?", yes: "prior7", no: "income" },
+    { id: "prior7", question: "Did you get a Chapter 7 discharge in a case filed within the last 8 years?", hint: "11 U.S.C. 727(a)(8) bars a second Chapter 7 discharge within 8 years.", yes: "income", no: "assets" },
+    { id: "assets", question: "Do you own property worth more than your exemptions protect?", hint: "For example, home equity above your homestead exemption (federal: $31,575; states differ).", yes: "income", no: "r-ch7" },
+    { id: "income", question: "Do you have regular income that can fund a 3 to 5 year repayment plan?", yes: "limits", no: "r-counsel" },
+    { id: "limits", question: "Are your debts under the Chapter 13 limits: $526,700 unsecured and $1,580,125 secured?", hint: "11 U.S.C. 109(e), amounts in effect from April 1, 2025.", yes: "r-ch13", no: "r-ch11" },
+    { id: "r-nondischarge", result: { tone: "caution", title: "Bankruptcy alone will not clear these debts", body: "Support, most recent taxes, most student loans and criminal fines usually survive a discharge. Chapter 13 can still stop collection and let you pay priority debts over the plan. For federal student loans, look at income-driven repayment first, and talk to a legal aid office or bankruptcy attorney.", links: [{ label: "U.S. Courts: Bankruptcy basics", href: "https://www.uscourts.gov/services-forms/bankruptcy/bankruptcy-basics" }] } },
+    { id: "r-ch7", result: { tone: "go", title: "Chapter 7 is likely the path to check first", body: "You pass the income side of the means test and your property looks covered by exemptions, so a Chapter 7 discharge in roughly 3 to 6 months may be possible. You must finish credit counseling with an approved agency within 180 days before filing.", links: [{ label: "U.S. Courts: Chapter 7", href: "https://www.uscourts.gov/services-forms/bankruptcy/bankruptcy-basics/chapter-7-bankruptcy-basics" }] } },
+    { id: "r-ch13", result: { tone: "go", title: "Chapter 13 is likely the better fit", body: "A 3 to 5 year plan lets you keep your home or car, catch up on missed payments, and discharge what is left of unsecured debt at the end. No Chapter 13 discharge is granted within 4 years of a Chapter 7 case or 2 years of an earlier Chapter 13 case.", links: [{ label: "U.S. Courts: Chapter 13", href: "https://www.uscourts.gov/services-forms/bankruptcy/bankruptcy-basics/chapter-13-bankruptcy-basics" }] } },
+    { id: "r-ch11", result: { tone: "stop", title: "Your debts are above the Chapter 13 limits", body: "Individuals above the limits usually look at Chapter 11, which is far more complex and expensive. Get a bankruptcy attorney before you file anything." } },
+    { id: "r-counsel", result: { tone: "caution", title: "Neither chapter clearly fits yet", body: "Without income for a plan, Chapter 13 is hard, and the earlier answers point away from Chapter 7. Talk to legal aid or a bankruptcy attorney, and ask a nonprofit credit counselor about hardship plans and settlement before deciding." } }
+  ]}
+  note="Sources: 11 U.S.C. 109(e), 522(d), 727(a)(8), 1328(f); dollar amounts from the Federal Register notice of 2025-02-04, effective 2025-04-01. Amounts adjust every three years."
+/>
 
 ---
 
