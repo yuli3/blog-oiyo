@@ -1,0 +1,172 @@
+---
+/**
+ * DecisionTree — 예/아니오로 갈라지는 선택형 흐름도.
+ *
+ * 2026-10-26 세운 요청: 기존 FlowChart 는 한 줄 순서만 보여 줘서
+ * "자산이 ○○ 이상입니까? 예 → / 아니오 ←" 처럼 갈라지는 판단을 따라갈 수 없었다.
+ * 법·제도 글은 나라마다 기준이 달라 국가 표기(country)와 기준일(asOf)을 필수로 둔다.
+ *
+ * 각 노드는 질문(yes/no 또는 options) 이거나 결과(result) 다.
+ * JS 가 없으면 모든 노드가 펼쳐진 채로 보이고(검색·인쇄용), JS 가 있으면 한 번에 한 질문만 보인다.
+ */
+import { inlineMd } from "../../lib/utils";
+import { getLocaleFromPath, type Locale } from "../../lib/i18n";
+
+interface Option { label: string; next: string }
+interface Result {
+  title: string;
+  body?: string;
+  tone?: "go" | "caution" | "stop";
+  links?: { label: string; href: string }[];
+}
+interface Node {
+  id: string;
+  question?: string;
+  hint?: string;
+  yes?: string;
+  no?: string;
+  options?: Option[];
+  result?: Result;
+}
+interface Props {
+  title: string;
+  country: { flag: string; name: string };
+  asOf: string;
+  start: string;
+  nodes: Node[];
+  note?: string;
+}
+
+const { title, country, asOf, start, nodes, note } = Astro.props;
+const locale = getLocaleFromPath(Astro.url.pathname);
+const words: Record<Locale, { yes: string; no: string; back: string; restart: string; basis: string; checked: string; outline: string; path: string }> = {
+  ko: { yes: "예", no: "아니오", back: "이전 질문", restart: "처음부터", basis: "기준", checked: "확인", outline: "흐름 전체 보기", path: "지금까지 고른 답" },
+  en: { yes: "Yes", no: "No", back: "Back", restart: "Start over", basis: "rules", checked: "checked", outline: "See the whole flow", path: "Your answers so far" },
+  ja: { yes: "はい", no: "いいえ", back: "前の質問", restart: "最初から", basis: "基準", checked: "確認", outline: "全体の流れを見る", path: "これまでの回答" },
+  zh: { yes: "是", no: "否", back: "上一题", restart: "重新开始", basis: "标准", checked: "核对", outline: "查看完整流程", path: "已选择的回答" },
+  fr: { yes: "Oui", no: "Non", back: "Question précédente", restart: "Recommencer", basis: "règles", checked: "vérifié", outline: "Voir tout le parcours", path: "Vos réponses" },
+  es: { yes: "Sí", no: "No", back: "Pregunta anterior", restart: "Empezar de nuevo", basis: "normas", checked: "verificado", outline: "Ver todo el flujo", path: "Tus respuestas" },
+};
+const w = words[locale];
+const byId = new Map(nodes.map((n) => [n.id, n]));
+const choices = (n: Node): Option[] =>
+  n.options ?? [
+    ...(n.no ? [{ label: `← ${w.no}`, next: n.no }] : []),
+    ...(n.yes ? [{ label: `${w.yes} →`, next: n.yes }] : []),
+  ];
+const toneClass = {
+  go: "border-primary bg-primary/10",
+  caution: "border-accent bg-accent/30",
+  stop: "border-destructive bg-destructive/10",
+};
+// 흐름 전체 보기: 시작 노드에서 내려가며 중첩 목록을 만든다. 같은 노드로 다시 오면 이름만 적는다.
+const outline = (id: string, seen: Set<string>): string => {
+  const n = byId.get(id);
+  if (!n) return "";
+  if (n.result) return `<strong>${inlineMd(n.result.title)}</strong>`;
+  if (seen.has(id)) return `↺ ${inlineMd(n.question ?? "")}`;
+  const next = new Set(seen).add(id);
+  const items = choices(n)
+    .map((c) => `<li><span class="font-semibold text-primary">${inlineMd(c.label.replace(/[←→]/g, "").trim())}</span>: ${outline(c.next, next)}</li>`)
+    .join("");
+  return `${inlineMd(n.question ?? "")}<ul class="ml-4 mt-1 list-disc">${items}</ul>`;
+};
+---
+
+<div class="my-6 rounded-3xl border border-border/40 bg-muted/20 p-4 sm:my-10 sm:p-8" data-decision-tree data-start={start}>
+  <div class="mb-4 flex flex-wrap items-center gap-2">
+    <span class="inline-flex items-center gap-1 rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-sm font-semibold text-primary">
+      <span aria-hidden="true">{country.flag}</span>{country.name} {w.basis}
+    </span>
+    <span class="text-xs text-muted-foreground">{asOf} {w.checked}</span>
+  </div>
+  <h3 class="mb-4 text-lg font-bold tracking-tight" set:html={inlineMd(title)} />
+
+  <ol class="mb-3 hidden flex-wrap gap-1 text-xs text-muted-foreground" data-dt-path aria-label={w.path}></ol>
+
+  {nodes.map((n) => (
+    <section class="mb-4 rounded-2xl border border-border/40 bg-background p-4" data-dt-node={n.id} aria-live="polite">
+      {n.result ? (
+        <div class={`rounded-xl border-l-4 p-4 ${toneClass[n.result.tone ?? "go"]}`}>
+          <p class="text-base font-bold" set:html={inlineMd(n.result.title)} />
+          {n.result.body && <p class="mt-2 text-sm leading-relaxed" set:html={inlineMd(n.result.body)} />}
+          {n.result.links && (
+            <ul class="mt-3 flex flex-wrap gap-2">
+              {n.result.links.map((l) => (
+                <li><a class="inline-flex min-h-11 items-center rounded-lg border border-border px-3 text-sm font-medium text-primary hover:bg-muted" href={l.href}>{l.label}</a></li>
+              ))}
+            </ul>
+          )}
+        </div>
+      ) : (
+        <>
+          <p class="text-base font-bold leading-snug" set:html={inlineMd(n.question ?? "")} />
+          {n.hint && <p class="mt-1 text-sm text-muted-foreground" set:html={inlineMd(n.hint)} />}
+          <div class="mt-4 flex flex-wrap gap-2">
+            {choices(n).map((c) => (
+              <button type="button" class="min-h-11 min-w-24 flex-1 rounded-xl border border-primary/40 bg-primary/5 px-4 text-base font-semibold text-primary transition-colors hover:bg-primary hover:text-primary-foreground" data-dt-next={c.next} data-dt-label={c.label.replace(/[←→]/g, "").trim()} set:html={inlineMd(c.label)} />
+            ))}
+          </div>
+        </>
+      )}
+    </section>
+  ))}
+
+  <div class="hidden flex-wrap gap-2" data-dt-controls>
+    <button type="button" class="min-h-11 rounded-lg border border-border px-4 text-sm hover:bg-muted" data-dt-back>{w.back}</button>
+    <button type="button" class="min-h-11 rounded-lg border border-border px-4 text-sm hover:bg-muted" data-dt-restart>{w.restart}</button>
+  </div>
+
+  <details class="mt-4 text-sm">
+    <summary class="min-h-11 cursor-pointer py-2 font-medium text-primary">{w.outline}</summary>
+    <div class="mt-2 leading-relaxed" set:html={outline(start, new Set())} />
+  </details>
+  {note && <p class="mt-3 text-xs text-muted-foreground" set:html={inlineMd(note)} />}
+</div>
+
+<script>
+  function setup(root: HTMLElement) {
+    const nodes = Array.from(root.querySelectorAll<HTMLElement>("[data-dt-node]"));
+    const pathEl = root.querySelector<HTMLElement>("[data-dt-path]");
+    const controls = root.querySelector<HTMLElement>("[data-dt-controls]");
+    const start = root.dataset.start ?? "";
+    const history: { id: string; answer: string; question: string }[] = [];
+    let current = start;
+    const show = (id: string, focus: boolean) => {
+      current = id;
+      for (const n of nodes) n.hidden = n.dataset.dtNode !== id;
+      if (pathEl) {
+        pathEl.replaceChildren(
+          ...history.map((h) => {
+            const li = document.createElement("li");
+            li.className = "rounded-full border border-border px-2 py-0.5";
+            li.textContent = `${h.question.slice(0, 24)}${h.question.length > 24 ? "…" : ""} → ${h.answer}`;
+            return li;
+          }),
+        );
+        pathEl.classList.toggle("hidden", history.length === 0);
+        pathEl.classList.toggle("flex", history.length > 0);
+      }
+      controls?.classList.toggle("hidden", history.length === 0);
+      controls?.classList.toggle("flex", history.length > 0);
+      if (focus) root.querySelector<HTMLElement>(`[data-dt-node="${CSS.escape(id)}"] button, [data-dt-node="${CSS.escape(id)}"] p`)?.focus({ preventScroll: true });
+    };
+    root.addEventListener("click", (event) => {
+      const target = event.target as HTMLElement;
+      const next = target.closest<HTMLElement>("[data-dt-next]");
+      if (next) {
+        const node = next.closest<HTMLElement>("[data-dt-node]");
+        history.push({ id: current, answer: next.dataset.dtLabel ?? "", question: node?.querySelector("p")?.textContent ?? "" });
+        show(next.dataset.dtNext ?? start, true);
+      } else if (target.closest("[data-dt-back]")) {
+        const prev = history.pop();
+        show(prev?.id ?? start, true);
+      } else if (target.closest("[data-dt-restart]")) {
+        history.length = 0;
+        show(start, true);
+      }
+    });
+    show(start, false);
+  }
+  document.querySelectorAll<HTMLElement>("[data-decision-tree]").forEach(setup);
+</script>
