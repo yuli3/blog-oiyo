@@ -13,6 +13,7 @@ import PieChart from "../components/mdx/PieChart.astro";
 import FlowChart from "../components/mdx/FlowChart.astro";
 import StepFlow from "../components/mdx/StepFlow.astro";
 import CompareTable from "../components/mdx/CompareTable.astro";
+import DecisionTree from "../components/mdx/DecisionTree.astro";
 import Fraction from "../components/mdx/Fraction.astro";
 import FormulaBox from "../components/mdx/FormulaBox.astro";
 import LineChart from "../components/mdx/LineChart.astro";
@@ -266,6 +267,7 @@ const diagramComponents = {
   // 있었다. 등록해 두면 다른 도식 컴포넌트처럼 그냥 쓸 수 있다.
   StepFlow,
   CompareTable,
+  DecisionTree,
   Timeline,
   ProgressBar,
   StatCards,
