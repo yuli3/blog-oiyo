@@ -25,8 +25,8 @@ test('the shared migrated list and alias map cover every W4 slug', () => {
 });
 test('Blog pages link the moved finance tools on Tools', () => {
   assert.ok(read('dist/ko/stock-yield-calculator/index.html').includes('https://tools.oiyo.net/ko/dividend-tracker/'));
-  assert.ok(read('dist/en/calculator/index.html').includes('https://tools.oiyo.net/en/latte-factor-calculator/'));
-  assert.ok(!read('dist/en/calculator/index.html').includes('href="/en/caffelatte-calculator/"'));
+  assert.ok(read('dist/en/compound2-calculator/index.html').includes('https://tools.oiyo.net/en/latte-factor-calculator/'));
+  assert.ok(!read('dist/en/compound2-calculator/index.html').includes('href="/en/caffelatte-calculator/"'));
 });
 test('the dividend calendar no longer lists a total-return ETF as a payer', () => {
   assert.ok(!read('src/components/tools/DividendCalendar.tsx').includes('ticker: "KODEX 미국S&P500TR"'));
