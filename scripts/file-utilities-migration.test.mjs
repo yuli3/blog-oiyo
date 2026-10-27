@@ -26,9 +26,10 @@ for (const locale of locales) for (const slug of slugs) {
 }
 test('related links go directly to Tools in every locale', () => {
   for (const locale of locales) {
-    const html = read(`dist/${locale}/word-counter/index.html`);
-    assert.ok(html.includes(`href="https://tools.oiyo.net/${locale}/qr-code-generator/"`));
-    assert.ok(!html.includes(`href="/${locale}/qr-code-generator/"`));
+    // word-counter itself moved in W7, so a page that still lives on Blog carries the sample.
+    const html = read(`dist/${locale}/sleep-calculator/index.html`);
+    assert.ok(html.includes(`href="https://tools.oiyo.net/${locale}/hours-calculator/"`));
+    assert.ok(!html.includes(`href="/${locale}/hours-calculator/"`));
   }
 });
 test('public SEO audit accepts only exact noindex Tools bridges, not arbitrary host exceptions', () => {
