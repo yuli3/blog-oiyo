@@ -5,6 +5,7 @@ import { getLocalizedPath, type Locale } from "../lib/i18n";
 import bridgeSlugs from "../config/bridge-slugs.json";
 import toolsMigratedSlugs from "../config/tools-migrated-slugs.json";
 import toolsMigratedAliases from "../config/tools-migrated-aliases.json";
+import toolsKoOnly from "../config/tools-migrated-ko-only.json";
 import oiyoCanonical from "../data/oiyo-canonical-map.json";
 import { OIYO_URL } from "../config/site.config";
 
@@ -14,12 +15,15 @@ import { OIYO_URL } from "../config/site.config";
 const BRIDGE = new Set<string>(bridgeSlugs as string[]);
 const TOOLS_MIGRATED = new Set<string>(toolsMigratedSlugs as string[]);
 const CANON = oiyoCanonical as Record<string, string>;
+// Korean-law tools live only at tools.oiyo.net/ko/ (W8), whatever the reader's locale.
+const KO_ONLY = new Set<string>(toolsKoOnly as string[]);
+const toolsUrl = (locale: Locale, slug: string) => `https://tools.oiyo.net/${KO_ONLY.has(slug) ? "ko" : locale}/${slug}/`;
 const toolHref = (locale: Locale, slug: string): string => {
   // Tools-migrated utilities (2026-10-19~): link straight to tools.oiyo.net, never through a Blog 301.
-  if (TOOLS_MIGRATED.has(slug)) return `https://tools.oiyo.net/${locale}/${slug}/`;
+  if (TOOLS_MIGRATED.has(slug)) return toolsUrl(locale, slug);
   // Renamed on the way (e.g. caffelatte-calculator → latte-factor-calculator, 2026-10-27).
   const alias = (toolsMigratedAliases as Record<string, string>)[slug];
-  if (alias) return `https://tools.oiyo.net/${locale}/${alias}/`;
+  if (alias) return toolsUrl(locale, alias);
   const canon = BRIDGE.has(slug) ? CANON[slug] : undefined;
   return canon ? `${OIYO_URL}/${locale}${canon}/` : getLocalizedPath(locale, `/${slug}`);
 };

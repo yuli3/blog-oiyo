@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import toolsMigratedSlugs from "../../config/tools-migrated-slugs.json";
 import toolsMigratedAliases from "../../config/tools-migrated-aliases.json";
+import toolsKoOnly from "../../config/tools-migrated-ko-only.json";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import RelatedPosts from "../../components/RelatedPosts.astro";
 import RelatedToolLinks from "../../components/RelatedToolLinks.astro";
@@ -1436,7 +1437,7 @@ const m = meta[locale] ?? meta.en;
 // Moved tools link straight to Tools; an alias (random-menu → menu-roulette) uses the Tools slug.
 const toolsHref = (slug: string) => {
   const dest = toolsMigratedSlugs.includes(slug) ? slug : (toolsMigratedAliases as Record<string, string>)[slug];
-  return dest ? `https://tools.oiyo.net/${locale}/${dest}/` : null;
+  return dest ? `https://tools.oiyo.net/${toolsKoOnly.includes(dest) ? "ko" : locale}/${dest}/` : null;
 };
 const catalogJsonLd = JSON.stringify(
   collectionPageJsonLd({

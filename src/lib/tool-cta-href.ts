@@ -5,6 +5,7 @@
 import { BLOG_URL, GAME_URL, OIYO_URL } from "../config/site.config.ts";
 import toolsMigratedSlugs from "../config/tools-migrated-slugs.json" with { type: "json" };
 import toolsMigratedAliases from "../config/tools-migrated-aliases.json" with { type: "json" };
+import toolsKoOnly from "../config/tools-migrated-ko-only.json" with { type: "json" };
 
 const UTM = "utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta";
 
@@ -83,7 +84,8 @@ export function toolCtaHref(tool: string, locale: string = "ko"): string {
   if (slug) {
     // 2026-10-27: pages moved to tools.oiyo.net are linked there directly, not through a Blog 301.
     const moved = (toolsMigratedSlugs as string[]).includes(slug) ? slug : (toolsMigratedAliases as Record<string, string>)[slug];
-    if (moved) return `https://tools.oiyo.net/${locale}/${moved}/?${UTM}`;
+    // Korean-law tools (W8) exist only at /ko/ on Tools.
+    if (moved) return `https://tools.oiyo.net/${(toolsKoOnly as string[]).includes(moved) ? "ko" : locale}/${moved}/?${UTM}`;
     return `${BLOG_URL}/${locale}/${slug}/?${UTM}`;
   }
 
