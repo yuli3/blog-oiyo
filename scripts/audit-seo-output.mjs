@@ -5,6 +5,8 @@ import path from "node:path";
 const toolsMigratedSlugs = JSON.parse(fs.readFileSync(new URL("../src/config/tools-migrated-slugs.json", import.meta.url), "utf8"));
 // Old Blog slug -> Tools slug when a move also merged duplicates (W2: grayscale-converter -> image-grayscale).
 const toolsMigratedAliases = JSON.parse(fs.readFileSync(new URL("../src/config/tools-migrated-aliases.json", import.meta.url), "utf8"));
+// Korean-law tools exist only at tools.oiyo.net/ko/ (W8); every locale bridges there.
+const toolsKoOnly = JSON.parse(fs.readFileSync(new URL("../src/config/tools-migrated-ko-only.json", import.meta.url), "utf8"));
 
 const root = process.cwd();
 const dist = path.join(root, "dist");
@@ -91,7 +93,10 @@ for (const file of listHtmlFiles(dist)) {
   const toolsBridgeTarget = routeParts.length >= 3 && routeParts.at(-1) === "index.html"
     && ["ko", "en", "ja", "zh", "fr", "es"].includes(routeParts[0])
     && (toolsMigratedSlugs.includes(routeParts[1]) || routeParts[1] in toolsMigratedAliases)
-    ? `https://tools.oiyo.net/${[routeParts[0], toolsMigratedAliases[routeParts[1]] ?? routeParts[1], ...routeParts.slice(2, -1)].join("/")}/` : null;
+    ? (() => {
+      const dest = toolsMigratedAliases[routeParts[1]] ?? routeParts[1];
+      return `https://tools.oiyo.net/${[toolsKoOnly.includes(dest) ? "ko" : routeParts[0], dest, ...routeParts.slice(2, -1)].join("/")}/`;
+    })() : null;
   const validToolsBridge = isNoindex && toolsBridgeTarget !== null
     && html.match(/<link rel="canonical" href="([^"]+)"/)?.[1] === toolsBridgeTarget
     && html.match(/<meta http-equiv="refresh" content="0;\s*url=([^"]+)"/)?.[1] === toolsBridgeTarget;
