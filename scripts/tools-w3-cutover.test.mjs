@@ -25,7 +25,7 @@ test('the shared migrated list and alias map cover every W3 slug', () => {
   for (const [slug, dest] of Object.entries(W3)) assert.ok(slug === dest ? list.includes(slug) : aliases[slug] === dest);
 });
 test('Blog pages link the moved tax calendar on Tools', () => {
-  assert.ok(read('dist/ko/vat-penalty-calculator/index.html').includes('https://tools.oiyo.net/ko/tax-calendar/'));
+  assert.ok(read('dist/ko/magazine-tax-office-first-month-guide/index.html').includes('https://tools.oiyo.net/ko/tax-calendar/'));
   // The Blog tools index no longer carries moved tools as cards (2026-10-27).
   assert.ok(!read('dist/ko/tools/index.html').includes('https://tools.oiyo.net/ko/menu-roulette/'));
 });
