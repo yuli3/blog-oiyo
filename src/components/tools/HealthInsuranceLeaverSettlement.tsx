@@ -74,8 +74,8 @@ export default function HealthInsuranceLeaverSettlement() {
                 `정산액 = ${won(r.health)} + ${won(r.care)} = ${won(r.total)}`,
               ]}
               next={[
-                { href: "/ko/severance-calculator/", label: "퇴직금 계산" },
-                { href: "/ko/salary-calculator/", label: "월급 실수령액 계산" },
+                { href: "https://tools.oiyo.net/ko/severance-calculator/", label: "퇴직금 계산" },
+                { href: "https://tools.oiyo.net/ko/salary-calculator/", label: "월급 실수령액 계산" },
                 { href: "/ko/magazine-tax-office-resignation-reason/", label: "퇴사 사유와 실업급여" },
               ]}
             />

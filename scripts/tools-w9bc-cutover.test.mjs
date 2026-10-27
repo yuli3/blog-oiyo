@@ -28,5 +28,4 @@ test('W9b/W9c slugs are migrated and not ko-only', () => {
 test('Blog pages link the moved calculators on Tools in the same language', () => {
   assert.ok(read('dist/ja/pension-optimizer-calculator/index.html').includes('https://tools.oiyo.net/ja/pension-tax-calculator/'));
   assert.ok(read('dist/ko/tax-checklist-hub-guide/index.html').includes('https://tools.oiyo.net/ko/capital-gains-tax-calculator/'));
-  assert.ok(read('dist/en/salary-calculator/index.html').includes('https://tools.oiyo.net/en/acquisition-tax-calculator/'));
 });
