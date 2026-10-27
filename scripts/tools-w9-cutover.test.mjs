@@ -37,7 +37,7 @@ test('W9a slugs are in the migrated list or aliases, Korean-law ones ko-only', (
   assert.ok(!KO_ONLY.includes('overseas-stock-tax'));
 });
 test('Blog pages link the moved tools on Tools', () => {
-  assert.ok(read('dist/en/salary-calculator/index.html').includes('https://tools.oiyo.net/ko/auto-tax-calculator/'));
+  // salary-calculator, the last Blog page linking auto-tax, moved to Tools in W10b.
   assert.ok(read('dist/ja/isa-vs-pension-calculator/index.html').includes('https://tools.oiyo.net/ja/overseas-stock-tax/'));
   assert.ok(read('dist/ko/magazine-tax-office-deadline-night/index.html').includes('https://tools.oiyo.net/ko/vat-penalty-calculator/'));
   assert.ok(!existsSync(join(root, 'dist/en/vat-penalty-calculator/index.html')));
