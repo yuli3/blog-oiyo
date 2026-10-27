@@ -101,26 +101,26 @@ export default function SalaryCalculator({ locale }: Props) {
           <label className="text-sm font-medium">{l.grossLabel}</label>
           <div className="flex items-center gap-3">
             <input type="range" min={100} max={2000} step={10} value={gross}
-              onChange={e => setGross(+e.target.value)} className="flex-1 accent-primary" />
+              onChange={e => setGross(+e.target.value)} className="min-w-0 flex-1 accent-primary" />
             <span className="text-base font-bold w-20 text-right">{gross}<span className="text-xs text-muted-foreground ml-1">{l.incomeUnit}</span></span>
           </div>
           <p className="text-xs text-muted-foreground text-right">{locale === 'ko' ? `연봉 ${(gross * 12).toLocaleString()}만원` : `Annual: ${(gross * 12).toLocaleString()}${l.incomeUnit}`}</p>
         </div>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="space-y-1">
             <label className="text-xs font-medium text-muted-foreground">{l.dependentsLabel}</label>
             <div className="flex items-center gap-2">
               <input type="range" min={1} max={6} step={1} value={dependents}
-                onChange={e => setDependents(+e.target.value)} className="flex-1 accent-primary" />
-              <span className="text-sm font-bold w-6">{dependents}</span>
+                onChange={e => setDependents(+e.target.value)} className="min-w-0 flex-1 accent-primary" />
+              <span className="text-sm font-bold w-6 shrink-0">{dependents}</span>
             </div>
           </div>
           <div className="space-y-1">
             <label className="text-xs font-medium text-muted-foreground">{l.nonTaxableLabel}</label>
             <div className="flex items-center gap-2">
               <input type="range" min={0} max={30} step={1} value={nonTaxable}
-                onChange={e => setNonTaxable(+e.target.value)} className="flex-1 accent-primary" />
-              <span className="text-sm font-bold w-8">{nonTaxable}</span>
+                onChange={e => setNonTaxable(+e.target.value)} className="min-w-0 flex-1 accent-primary" />
+              <span className="text-sm font-bold w-8 shrink-0">{nonTaxable}</span>
             </div>
           </div>
         </div>

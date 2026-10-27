@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
+  educationCredit,
   basicIncomeTax,
   CARD,
   cardDeduction,
@@ -180,7 +181,7 @@ import {
 
 test("추가공제: 경로·장애인은 인원만큼, 한부모가 부녀자보다 우선, 부녀자는 종합소득금액 3,000만 이하", () => {
   assert.equal(additionalDeduction({ seniors: 2, disabled: 1 }, 40_000_000, 4), 4_000_000);
-  assert.equal(additionalDeduction({ seniors: 9 }, 40_000_000, 2), 2_000_000); // 기본공제 인원을 넘지 않는다
+  assert.throws(() => additionalDeduction({ seniors: 9 }, 40_000_000, 2), RangeError); // 모순 인원을 조용히 축소하지 않는다
   assert.equal(additionalDeduction({ womanHead: true }, 30_000_000, 1), 500_000);
   assert.equal(additionalDeduction({ womanHead: true }, 30_000_001, 1), 0);
   assert.equal(additionalDeduction({ womanHead: true, singleParent: true }, 20_000_000, 2), 1_000_000);
@@ -292,4 +293,24 @@ test("절세 계획: 세금이 적으면 한도까지가 아니라 결정세액�
   assert.equal(plan.bestExtraPayment, pension.extraPayment);
   assert.equal(plan.best.totalTax, 0);
   assert.equal(plan.levers.find((l) => l.id === "hometown")?.keepsMoney, false);
+});
+
+test('public year-end functions reject invalid money and contradictory counts',()=>{
+  for(const salary of [NaN,Infinity,-1])assert.throws(()=>settleYearEnd({salary,persons:1}),RangeError);
+  for(const persons of [0,1.5,Infinity])assert.throws(()=>settleYearEnd({salary:48000000,persons}),RangeError);
+  assert.throws(()=>settleYearEnd({salary:48000000,persons:1,creditChildren:10}),RangeError);
+  assert.throws(()=>settleYearEnd({salary:48000000,persons:1,education:NaN}),RangeError);
+  assert.throws(()=>cardDeduction(-100,{}),RangeError);
+  assert.throws(()=>childTaxCredit(Infinity),RangeError);
+});
+test('education uses already eligible individually capped bases, not one college cap',()=>{
+  assert.equal(educationCredit(3000000),450000);
+  assert.equal(educationCredit(18000000),2700000);
+  assert.equal(educationCredit(3000000,2000000),750000);
+});
+
+test('prototype mortgage keys and boolean-looking strings are not accepted',()=>{
+ assert.throws(()=>housingDeduction(48000000,{mortgageType:'toString' as never,mortgageInterest:1000000},true),RangeError);
+ for(const key of ['marriage','youthSme','rentEligible'])assert.throws(()=>settleYearEnd({salary:48000000,persons:1,[key]:'false'} as never),RangeError);
+ assert.throws(()=>settleYearEnd({salary:48000000,persons:1,additional:{singleParent:'false' as never}}),RangeError);
 });

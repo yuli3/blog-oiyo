@@ -24,7 +24,7 @@ const INITIAL_DEDUCTIONS: DeductionItem[] = [
   { id: 'debit', label: '체크카드·현금영수증', sublabel: '연간 총액 (25% 문턱을 넘은 금액의 30%)', value: '' },
   { id: 'premium', label: '보장성 보험료', sublabel: '연간 납입액 (100만 원까지 12% 세액공제)', value: '' },
   { id: 'medical', label: '의료비', sublabel: '본인·부양가족 의료비 (총급여 3% 초과분 15%, 700만 원 한도로 단순화)', value: '' },
-  { id: 'education', label: '교육비', sublabel: '본인·부양가족 교육비 (15%, 1인 한도는 단순화)', value: '' },
+  { id: 'education', label: '교육비', sublabel: '개인별 자격·한도를 적용한 공제대상 교육비 합계 (15%)', value: '' },
   { id: 'donation', label: '기부금', sublabel: '1,000만 원 이하 15%, 초과분 30% (소득금액 한도 생략)', value: '' },
   { id: 'pension_savings', label: '연금저축 납입액', sublabel: '연간 납입액 (600만 원 한도, 15%·12%, 지방세 별도)', value: '' },
   { id: 'irp', label: 'IRP 납입액', sublabel: '연금저축과 합산 900만 원 한도 (총급여 5,500만 원 이하 15%, 초과 12%)', value: '' },
@@ -47,14 +47,14 @@ export default function YearEndTaxCalculator({ locale = 'ko' }: { locale?: 'ko' 
   };
 
   const handlePaidTax = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const raw = e.target.value.replace(/,/g, '').replace(/[^0-9]/g, '');
+    const raw = e.target.value.replace(/,/g, '');
     setPaidTax(raw);
     const num = parseInt(raw) || 0;
     setPaidTaxDisplay(num > 0 ? num.toLocaleString('ko-KR') : raw);
   };
 
   const handleDeduction = (id: string, raw: string) => {
-    const cleaned = raw.replace(/,/g, '').replace(/[^0-9]/g, '');
+    const cleaned = raw.replace(/,/g, '');
     setDeductions((prev) =>
       prev.map((d) => (d.id === id ? { ...d, value: cleaned } : d))
     );
@@ -63,9 +63,13 @@ export default function YearEndTaxCalculator({ locale = 'ko' }: { locale?: 'ko' 
   const result = useMemo(() => {
     const annualSalary = parseYearEndSalary(salary);
     if (annualSalary === null || annualSalary === 0) return null;
-    const val = (id: string) => parseInt(deductions.find((d) => d.id === id)?.value || '0') || 0;
+    const valueOf = (raw: string) => raw === '' ? 0 : /^\d+$/.test(raw) && Number.isSafeInteger(Number(raw)) ? Number(raw) : NaN;
+    const val = (id: string) => valueOf(deductions.find((d) => d.id === id)?.value ?? '');
+    const alreadyPaid = valueOf(paidTax);
+    if (!Number.isFinite(alreadyPaid)) return null;
 
     // 본인 1명 + 부양가족. 표준세액공제와 특별공제 중 유리한 쪽은 settleYearEnd가 고른다.
+    try {
     const r = settleYearEnd({
       salary: annualSalary,
       persons: 1 + dependents,
@@ -83,7 +87,7 @@ export default function YearEndTaxCalculator({ locale = 'ko' }: { locale?: 'ko' 
     });
 
     // 기납부세액은 소득세+지방소득세로 입력받으므로 지방세 포함 결정세액과 비교한다.
-    const alreadyPaid = parseInt(paidTax) || 0;
+
     return {
       annualSalary,
       earnedDeduction: r.earnedDeduction,
@@ -97,6 +101,7 @@ export default function YearEndTaxCalculator({ locale = 'ko' }: { locale?: 'ko' 
       alreadyPaid,
       refundOrPay: alreadyPaid - r.totalTax,
     };
+    } catch { return null; }
   }, [salary, paidTax, dependents, deductions, rentEligible]);
 
   return (
@@ -198,6 +203,7 @@ export default function YearEndTaxCalculator({ locale = 'ko' }: { locale?: 'ko' 
         <p className="text-sm text-muted-foreground">확인 전에는 입력한 월세를 공제에 적용하지 않아요. 체크는 본인 확인이며 자동 자격 판정이 아니에요. 소득 한도 등 다른 계산 조건도 충족해야 해요.</p>
 
         {/* 결과 */}
+        {!result && <p role="status" className="px-4 py-3 text-sm">총급여·인원·금액을 확인해 주세요. 교육비는 사람별 자격·한도를 적용한 확인된 대상액만 입력해요. 이전 결과는 표시하지 않아요.</p>}
         {result && (
           <div className="rounded-xl border border-border overflow-hidden">
             <div className="bg-muted/40 px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-muted-foreground">
