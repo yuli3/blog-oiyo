@@ -16,7 +16,8 @@ for(const lang of ['ko','en','ja','zh','fr','es']) test(`${lang}: PPI bookmark r
   assert.match(html, /<meta name="robots" content="noindex"/);
   assert.ok(!sitemap.includes(`https://blog.oiyo.net/${lang}/monitor-ppi-calculator/`));
   const redirects = read('dist/_redirects').split('\n');
-  for(const suffix of ['/','']) assert.ok(redirects.some(line=>{
+  // The stub page exists, so Pages 308s the slash-less URL to the slash rule (2026-10-27 compaction).
+  for(const suffix of ['/']) assert.ok(redirects.some(line=>{
     const [src,dest,status]=line.trim().split(/\s+/);
     return src===`/${lang}/monitor-ppi-calculator${suffix}` && dest===target && status==='301';
   }));
