@@ -1,7 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import RelatedToolLinks from "../../components/RelatedToolLinks.astro";
-import ToolsCompanionBanner from "../../components/ToolsCompanionBanner.astro";
 import SeveranceCalculatorComp from "../../components/tools/SeveranceCalculator";
 import SeveranceCountryCalculator from "../../components/tools/SeveranceCountryCalculator";
 import type { SeveranceCountry } from "../../lib/severance-countries";
@@ -25,7 +24,7 @@ const country = COUNTRY_BY_LOCALE[locale];
 const meta: Record<ActiveLocale, { title: string; description: string }> = {
   ko: {
     title: "퇴직금 계산기 — 예상 퇴직금 미리 계산하기",
-    description: "입사일, 퇴직일, 평균 임금을 입력해 예상 퇴직금을 계산합니다. 근로기준법 기준의 정확한 퇴직금 산출.",
+    description: "확인된 퇴직금 대상과 실제 직전 3개월 임금·통상임금으로 공제 전 산술 비교액을 계산해요. 개별 자격·퇴직소득세는 판정하지 않아요.",
   },
   en: {
     title: "South Korea Severance Pay Calculator",
@@ -64,19 +63,19 @@ const content: Record<ActiveLocale, {
 }> = {
   ko: {
     introTitle: "퇴직금은 평균임금과 계속근로기간을 기준으로 추정합니다",
-    intro: "이 계산기는 입사일, 퇴직일, 월 평균 급여, 연간 상여금을 입력해 예상 퇴직금을 계산해요. 한국 퇴직금 산식의 기본 구조를 이해하는 데 도움을 주지만, 실제 평균임금 산정에는 수당, 상여, 미사용 연차, 퇴직소득세 등 세부 항목이 반영될 수 있어요.",
+    intro: "퇴직금 대상과 임금 항목을 확인한 뒤, 입사일·마지막 근무일 다음 날·직전 3개월 실제 임금 총액·산입 대상 상여와 연차수당·1일 통상임금을 넣어 비교해요. 월급에 무조건 3을 곱하는 방식이 아니에요. 제외기간과 특수계약은 이 화면의 범위 밖이며, 공제 전 비교액이지 확정 청구액은 아니에요.",
     formulaTitle: "계산 기준",
     formulas: [
-      { title: "평균임금(1일)", body: "평균임금 = (최근 3개월 임금 + 연상여×3/12) ÷ 3개월 총일수" },
+      { title: "평균임금(1일)", body: "평균임금 = (실제 3개월 임금 + 산입 확인된 연간 상여·연차수당×3/12) ÷ 해당 달력 일수" },
       { title: "계속근로일수", body: "근로일수 = 퇴직일 - 입사일" },
-      { title: "퇴직금", body: "퇴직금 = 평균임금 × 30 × 근로일수 / 365 (1년 이상)" },
+      { title: "퇴직금", body: "비교액 = max(평균임금, 확인된 통상임금) × 30 × 재직일수 / 365" },
     ],
     howToTitle: "사용 방법",
-    steps: ["입사일과 퇴직 예정일을 입력합니다.", "월 평균 급여와 연간 상여금을 입력합니다.", "예상 퇴직금, 평균일임금, 재직일수를 확인합니다."],
+    steps: ["입사일과 퇴직 예정일을 입력합니다.", "직전 3개월 실제 임금 총액, 산입 확인된 연간 상여·연차수당과 1일 통상임금을 입력해요.", "예상 퇴직금, 평균일임금, 재직일수를 확인합니다."],
     faqTitle: "자주 묻는 질문",
     faqs: [
       { question: "한국 퇴직금 기준인가요?", answer: "네. 이 페이지는 한국 근로기준법상 퇴직금 구조를 단순화해 설명합니다. 다른 국가의 severance 제도와 다릅니다." },
-      { question: "1년 미만 근무도 계산되나요?", answer: "아니요. 계속근로기간이 1년 이상이고 4주 평균 주 15시간 이상 일해야 법정 퇴직금이 생겨요. 1년 미만이면 계산기는 0원으로 보여줘요." },
+      { question: "1년 미만 근무도 계산되나요?", answer: "아니요. 계속근로기간이 1년 이상이고 4주 평균 주 15시간 이상 일해야 법정 퇴직금이 생겨요. 이 화면은 1년 미만과 미확인 조건에서 금액을 표시하지 않아요. 날짜만으로 전체 자격을 판정하지 않아요." },
       { question: "세후 실수령액인가요?", answer: "아닙니다. 퇴직소득세와 실제 평균임금 산입 항목에 따라 수령액은 달라질 수 있습니다." },
     ],
     disclaimer: "이 도구는 일반적인 계산용이에요. 공식 퇴직금과 세액은 고용노동부·국세청 또는 노무전문가 기준을 확인하세요.",
@@ -190,7 +189,6 @@ const structuredData = [
   <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <div class="mx-auto max-w-3xl px-4 py-6 sm:py-10">
     {country ? <SeveranceCountryCalculator client:load country={country} /> : <SeveranceCalculatorComp client:load locale={locale === 'ko' ? 'ko' : 'en'} />}
-    {locale === "ko" && <ToolsCompanionBanner tool="severance-pay" />}
 
     <section class="mt-6 sm:mt-10 border-t border-border pt-5 sm:pt-8">
       <h2 class="text-2xl font-bold text-foreground">{c.introTitle}</h2>
