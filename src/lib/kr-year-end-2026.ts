@@ -19,7 +19,26 @@ import {
 
 export { basicIncomeTax, earnedIncomeDeduction, earnedIncomeTaxCredit, INCOME_TAX_BRACKETS, PERSONAL_DEDUCTION_PER_PERSON };
 
-export const YEAR_END_AS_OF = "2026-10-19";
+export const YEAR_END_AS_OF = "2026-10-27";
+// WHY 2026-10-27: public callers bypass form constraints. Reject unknown,
+// nonfinite amounts and contradictory counts rather than silently clamping tax inputs.
+function amount(name: string, value: number, integer = false, min = 0): void {
+  if (typeof value !== 'number' || !Number.isFinite(value) || value < min || value > Number.MAX_SAFE_INTEGER || (integer && !Number.isInteger(value))) throw new RangeError(name);
+}
+function amounts(values: Record<string, number | undefined>): void {
+  for (const [key,value] of Object.entries(values)) if (value !== undefined) amount(key,value);
+}
+function validateInput(input: YearEndInput): void {
+  for(const key of ['marriage','youthSme','rentEligible'] as const) if(input[key]!==undefined&&typeof input[key]!=='boolean') throw new RangeError(key);
+  if(input.additional)for(const key of ['womanHead','singleParent'] as const)if(input.additional[key]!==undefined&&typeof input.additional[key]!=='boolean')throw new RangeError(key);
+  amount('salary',input.salary); amount('persons',input.persons,true,1);
+  for (const [key,value] of Object.entries(input)) if (value !== undefined && !['additional','housing','card','rentEligible','marriage','youthSme'].includes(key)) amount(key,value as number,['persons','creditChildren','cardChildren','birthOrder'].includes(key));
+  if ((input.creditChildren ?? 0) > input.persons - 1) throw new RangeError('creditChildren exceeds dependents');
+  if(input.additional){
+    for(const key of ['seniors','disabled'] as const){const n=input.additional[key];if(n!==undefined){amount(key,n,true);if(n>input.persons)throw new RangeError(key+' exceeds persons');}}
+  }
+}
+
 export const YEAR_END_TAX_YEAR = 2026;
 
 /** 지방소득세 = 결정세액 × 10% */
@@ -60,7 +79,7 @@ export const RENT = {
 /** 의료비 세액공제(소득세법 제59조의4 ②). 계산기는 입력 전액을 일반 부양가족 의료비로 보고 700만 원 한도를 건다. */
 export const MEDICAL = { floorRate: 0.03, rate: 0.15, generalCap: 7_000_000 } as const;
 
-/** 교육비 세액공제(소득세법 제59조의4 ③). 계산기는 1인 한도를 따로 나누지 않고 합계에 대학생 한도를 건다. */
+/** 교육비 세액공제(소득세법 제59조의4 ③). 개인별 자격·한도를 적용한 확인된 대상액을 입력받는다. */
 export const EDUCATION = { rate: 0.15, schoolCap: 3_000_000, collegeCap: 9_000_000 } as const;
 
 /** 기부금 세액공제(소득세법 제59조의4 ④): 1,000만 원 이하 15%, 초과분 30%. 소득금액 한도는 계산기에서 생략. */
@@ -147,6 +166,7 @@ export interface CardDeductionResult {
  * 공제분 안에서 추가한도까지 더 인정한다.
  */
 export function cardDeduction(salary: number, spend: CardSpending, children = 0): CardDeductionResult {
+  amount('salary',salary); amount('children',children,true); amounts({...spend});
   const le70 = salary <= CARD.salaryCut;
   const r = CARD.rates;
   // 총급여 7천만 초과자의 문화체육 지출은 별도 공제율이 없어 신용카드로 본다(결제수단에 따라 달라질 수 있음).
@@ -177,11 +197,13 @@ export function cardDeduction(salary: number, spend: CardSpending, children = 0)
 }
 
 export function insuranceCredit(premium: number): number {
+  amount('premium',premium);
   return floor(Math.min(Math.max(0, premium), INSURANCE.cap) * INSURANCE.rate);
 }
 
 /** 연금계좌 세액공제(국세). 연금저축은 600만, IRP를 더해 900만까지. */
 export function pensionCredit(salary: number, savings: number, irp: number, isaTransfer = 0): number {
+  amounts({salary,savings,irp,isaTransfer});
   const base = Math.min(Math.min(Math.max(0, savings), PENSION.savingsCap) + Math.max(0, irp), PENSION.totalCap);
   const isa = Math.min(Math.max(0, isaTransfer) * ISA_TRANSFER.rate, ISA_TRANSFER.cap);
   return floor((base + isa) * (salary <= PENSION.salaryCut ? PENSION.rateLe55m : PENSION.rateGt55m));
@@ -189,6 +211,7 @@ export function pensionCredit(salary: number, savings: number, irp: number, isaT
 
 /** 월세액 세액공제(국세). earnedIncome은 근로소득금액(근로소득만 있으면 종합소득금액과 같다). */
 export function rentCredit(salary: number, earnedIncome: number, rentPaid: number): number {
+  amounts({salary,earnedIncome,rentPaid});
   if (salary > RENT.salaryMax || earnedIncome > RENT.incomeMax) return 0;
   const high = salary <= RENT.highRateSalaryMax && earnedIncome <= RENT.highRateIncomeMax;
   return floor(Math.min(Math.max(0, rentPaid), RENT.cap) * (high ? RENT.rateHigh : RENT.rateLow));
@@ -199,24 +222,28 @@ export function rentCredit(salary: number, earnedIncome: number, rentPaid: numbe
  * 장애인·6세 이하 의료비. 총급여 3% 문턱은 일반 의료비에서 먼저 빼고, 모자라면 specific에서 뺀다.
  */
 export function medicalCredit(salary: number, general: number, specific = 0): number {
+  amounts({salary,general,specific});
   const over = Math.max(0, general) - salary * MEDICAL.floorRate;
   const generalPart = Math.min(Math.max(0, over), MEDICAL.generalCap);
   const specificPart = Math.max(0, Math.max(0, specific) + Math.min(0, over));
   return floor((generalPart + specificPart) * MEDICAL.rate);
 }
 
-/** 교육비 세액공제. 부양가족 교육비는 대학생 한도 900만을 합계에 걸고, 본인 교육비(self)는 한도가 없다. */
+/** 교육비 세액공제. spent는 개인별 자격·한도 적용을 마친 확인된 부양가족 공제대상 합계이며 self는 확인된 본인 공제대상액이다. */
 export function educationCredit(spent: number, self = 0): number {
-  return floor((Math.min(Math.max(0, spent), EDUCATION.collegeCap) + Math.max(0, self)) * EDUCATION.rate);
+  amounts({spent,self});
+  return floor((spent + self) * EDUCATION.rate);
 }
 
 export function donationCredit(given: number): number {
+  amount('given',given);
   const g = Math.max(0, given);
   return floor(Math.min(g, DONATION.pivot) * DONATION.rate + Math.max(0, g - DONATION.pivot) * DONATION.highRate);
 }
 
-/** 자녀세액공제(9세 이상 20세 이하 기본공제 대상 자녀 수) */
+/** 자녀세액공제(2026년 기본공제 대상 중 연령·2017년생 제외를 확인한 인원) */
 export function childTaxCredit(children: number): number {
+  amount('children',children,true);
   const n = Math.max(0, Math.floor(children));
   if (n === 0) return 0;
   if (n === 1) return CHILD_CREDIT.one;
@@ -237,6 +264,7 @@ export interface AdditionalPersons {
 
 /** 추가공제 합계. totalIncome은 종합소득금액(부녀자 3,000만 요건에 쓴다). */
 export function additionalDeduction(p: AdditionalPersons, totalIncome: number, persons: number): number {
+  for(const key of ['womanHead','singleParent'] as const)if(p[key]!==undefined&&typeof p[key]!=='boolean')throw new RangeError(key);amount('totalIncome',totalIncome);amount('persons',persons,true,1);for(const key of ['seniors','disabled'] as const){const n=p[key];if(n!==undefined){amount(key,n,true);if(n>persons)throw new RangeError(key);}}
   const cap = Math.max(1, Math.floor(persons));
   const count = (n?: number) => Math.min(Math.max(0, Math.floor(n ?? 0)), cap);
   let total = count(p.seniors) * ADDITIONAL.senior + count(p.disabled) * ADDITIONAL.disabled;
@@ -267,6 +295,7 @@ export interface HousingResult {
  * 특별소득공제라 special=true일 때만 들어간다.
  */
 export function housingDeduction(salary: number, h: HousingInput, special: boolean): HousingResult {
+  amount('salary',salary);amounts({leaseRepaid:h.leaseRepaid,subscriptionPaid:h.subscriptionPaid,mortgageInterest:h.mortgageInterest});if(h.mortgageType!==undefined&&!Object.hasOwn(HOUSING.mortgageCaps,h.mortgageType))throw new RangeError('mortgageType');
   const sub = salary <= HOUSING.subscriptionSalaryMax ? Math.min(Math.max(0, h.subscriptionPaid ?? 0), HOUSING.subscriptionPayCap) * HOUSING.rate : 0;
   const lease = special ? Math.max(0, h.leaseRepaid ?? 0) * HOUSING.rate : 0;
   const pair = Math.min(sub + lease, HOUSING.leaseSubscriptionCap);
@@ -278,6 +307,7 @@ export function housingDeduction(salary: number, h: HousingInput, special: boole
 
 /** 일반기부금 중 소득금액 한도 안에서 인정되는 금액 */
 export function allowedDonation(income: number, general: number, religious: number): number {
+  amounts({income,general,religious});
   const g = Math.max(0, general);
   const r = Math.max(0, religious);
   const i = Math.max(0, income);
@@ -287,6 +317,7 @@ export function allowedDonation(income: number, general: number, religious: numb
 
 /** 정치자금 기부금 세액공제(국세). 10만 원까지 100/110 */
 export function politicalCredit(given: number): number {
+  amount('given',given);
   const g = Math.max(0, given);
   const full = Math.min(g, POLITICAL.fullCap);
   const mid = Math.min(Math.max(0, g - full), POLITICAL.pivot - POLITICAL.fullCap);
@@ -296,6 +327,7 @@ export function politicalCredit(given: number): number {
 
 /** 고향사랑기부금 세액공제(국세, 2026.1.1 기부분부터). 10만 원까지 100/110, 20만까지 40%, 그 위 15% */
 export function hometownCredit(given: number): number {
+  amount('given',given);
   const g = Math.min(Math.max(0, given), HOMETOWN.cap);
   const full = Math.min(g, HOMETOWN.fullCap);
   const mid = Math.min(Math.max(0, g - HOMETOWN.fullCap), HOMETOWN.midCap - HOMETOWN.fullCap);
@@ -305,6 +337,7 @@ export function hometownCredit(given: number): number {
 
 /** 출산·입양 세액공제. order는 올해 태어난(입양한) 자녀가 몇째인지(0이면 없음) */
 export function birthCredit(order: number): number {
+  amount('order',order,true);
   const o = Math.floor(order);
   if (o <= 0) return 0;
   return BIRTH_CREDIT[Math.min(o, BIRTH_CREDIT.length) - 1];
@@ -326,7 +359,7 @@ export interface YearEndInput {
   card?: CardSpending;
   /** 신용카드 한도 상향에 쓰는 자녀 수 */
   cardChildren?: number;
-  /** 자녀세액공제 대상 자녀 수(2026년 귀속 9세 이상 20세 이하) */
+  /** 자녀세액공제 대상 자녀 수(2026년 연령요건·2017년생 제외·기본공제 자격 확인) */
   creditChildren?: number;
   /** 올해 출생·입양한 자녀가 몇째인지(0이면 없음) */
   birthOrder?: number;
@@ -336,9 +369,9 @@ export interface YearEndInput {
   medical?: number;
   /** 본인·65세 이상·장애인·6세 이하 의료비(한도 없음) */
   medicalSpecific?: number;
-  /** 부양가족 교육비 */
+  /** 개인별 자격·한도를 적용한 확인된 부양가족 교육비 공제대상 합계 */
   education?: number;
-  /** 본인 교육비(한도 없음) */
+  /** 본인 교육비 공제대상액(지원항목 확인) */
   educationSelf?: number;
   /** 일반(지정)기부금 중 종교단체 외 */
   donation?: number;
@@ -405,6 +438,7 @@ export interface YearEndResult {
  * 근로소득세액공제와 청년 감면은 산출세액 중 근로소득금액 비율만큼만 계산한다.
  */
 export function settleYearEnd(input: YearEndInput): YearEndResult {
+  validateInput(input);
   const salary = Math.max(0, input.salary);
   const earnedDeduction = earnedIncomeDeduction(salary);
   const earnedIncome = Math.max(0, salary - earnedDeduction);

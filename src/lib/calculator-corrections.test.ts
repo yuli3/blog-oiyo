@@ -36,8 +36,8 @@ test('weekly fractions, caps, low input wage and invalid values remain explicit'
 
 test('rent confirmation does not bypass income limits or accept truthy non-booleans', () => {
   const input = { salary: 48_000_000, persons: 1, rent: 7_800_000 };
-  assert.equal(settleYearEnd({ ...input, rentEligible: JSON.parse('"true"') }).rentCredit, 0);
-  assert.equal(settleYearEnd({ ...input, rentEligible: JSON.parse('1') }).rentCredit, 0);
+  assert.throws(() => settleYearEnd({ ...input, rentEligible: JSON.parse('"true"') }), RangeError);
+  assert.throws(() => settleYearEnd({ ...input, rentEligible: JSON.parse('1') }), RangeError);
   assert.equal(settleYearEnd({ ...input, salary: 81_000_000, rentEligible: true }).rentCredit, 0);
 });
 

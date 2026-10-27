@@ -103,7 +103,7 @@ const DEFAULTS: FormState = {
     mortgageType: '',
 };
 
-const STORAGE_KEY = 'oiyo.year-end-2026.v1';
+const STORAGE_KEY = 'oiyo.year-end-2026.v2';
 const MORTGAGE_TYPES = Object.keys(HOUSING.mortgageCaps) as MortgageType[];
 
 /** Keep only known keys with the right type, so a stale or hand-edited file can't break the form. */
@@ -192,7 +192,7 @@ const COPY = {
             womanHead: '부녀자 공제 (배우자 있음 또는 부양가족 있는 여성 세대주)',
             singleParent: '한부모 (배우자 없이 자녀 부양)',
             cardChildren: '기본공제 자녀 수 (카드 한도 상향)',
-            creditChildren: '자녀세액공제 대상 (9~20세)',
+            creditChildren: '자녀세액공제: 9~20세·2017년생 제외·기본공제 확인',
             birthOrder: '올해 출생·입양한 자녀',
             birthNone: '없음',
             birthNth: (n: number) => (n >= 3 ? '셋째 이상' : n === 2 ? '둘째' : '첫째'),
@@ -226,7 +226,7 @@ const COPY = {
             disabledInsurance: '장애인전용 보장성 보험료',
             medical: '부양가족 의료비 (700만 한도)',
             medicalSpecific: '본인·65세 이상·장애인·6세 이하 의료비 (한도 없음)',
-            education: '부양가족 교육비',
+            education: '부양가족 교육비: 개인별 자격·한도 적용 후 확인된 합계',
             educationSelf: '본인 교육비',
             donation: '일반 기부금 (종교단체 외)',
             religiousDonation: '종교단체 기부금',
@@ -285,7 +285,7 @@ const COPY = {
         importFailed: '파일을 읽지 못했어요.',
         storageOff: '이 브라우저에서는 저장을 쓸 수 없어요.',
         privacy: '입력값은 서버로 보내지 않아요. 저장은 이 브라우저에만, 내보내기는 내 기기 파일로만 남아요.',
-        note: `* 2026년 귀속(2027년 1~2월 정산) 간이 계산이에요(법령 확인 ${YEAR_END_AS_OF}, 주택·기부·청년 감면 2026-10-23). 특별공제와 표준세액공제 13만 원 중 유리한 쪽을 골라요. 교육비 1인 한도, 난임·미숙아 의료비, 기부금 이월, 2026 세제개편안은 반영하지 않았어요. 정확한 세액은 홈택스에서 확인하세요.`,
+        note: `* 2026년 귀속(2027년 1~2월 정산) 간이 계산이에요(법령 확인 ${YEAR_END_AS_OF}, 주택·기부·청년 감면 2026-10-23). 특별공제와 표준세액공제 13만 원 중 유리한 쪽을 골라요. 교육비는 개인별 자격·한도를 적용한 공제대상액만 입력해요. 난임·미숙아 의료비, 기부금 이월, 2026 세제개편안은 반영하지 않았어요. 정확한 세액은 홈택스에서 확인하세요.`,
     },
     en: {
         title: 'Korea Year-End Tax & Income Tax Simulator',
@@ -314,7 +314,7 @@ const COPY = {
             womanHead: 'Working-woman deduction (married, or female head with dependents)',
             singleParent: 'Single parent',
             cardChildren: 'Dependent children (raises card limit)',
-            creditChildren: 'Children eligible for child credit (age 9–20)',
+            creditChildren: 'Confirmed child-credit dependents (9–20; born in 2017 excluded)',
             birthOrder: 'Child born or adopted this year',
             birthNone: 'None',
             birthNth: (n: number) => (n >= 3 ? 'Third or later' : n === 2 ? 'Second' : 'First'),
@@ -348,7 +348,7 @@ const COPY = {
             disabledInsurance: 'Disability-only insurance premiums',
             medical: 'Dependents’ medical expenses (₩7M cap)',
             medicalSpecific: 'Medical for you, 65+, disabled, under 6 (no cap)',
-            education: 'Dependents’ education',
+            education: 'Confirmed dependents’ education base after individual eligibility and caps',
             educationSelf: 'Your own education',
             donation: 'General donations (non-religious)',
             religiousDonation: 'Religious donations',
@@ -407,7 +407,7 @@ const COPY = {
         importFailed: 'Could not read that file.',
         storageOff: 'Saving is not available in this browser.',
         privacy: 'Nothing is sent to a server. Saving stays in this browser; exporting writes a file to your device.',
-        note: `* Simplified estimate under Korean rules for tax year 2026 (settled Jan–Feb 2027; law checked ${YEAR_END_AS_OF}, housing/donation/youth items 2026-10-23). Picks the better of itemized credits or the ₩130,000 standard credit. Per-person education caps, infertility medical rates, donation carry-forward and the 2026 tax reform bill are not included. Use NTS Hometax for exact figures.`,
+        note: `* Simplified estimate under Korean rules for tax year 2026 (settled Jan–Feb 2027; law checked ${YEAR_END_AS_OF}, housing/donation/youth items 2026-10-23). Picks the better of itemized credits or the ₩130,000 standard credit. Enter education amounts only after individual eligibility and caps are confirmed. Infertility medical rates, donation carry-forward and the 2026 tax reform bill are not included. Use NTS Hometax for exact figures.`,
     },
 };
 
@@ -424,7 +424,12 @@ const YearEndSettlementCalculator: React.FC<{ locale?: Locale }> = ({ locale = '
 
     const set = <K extends keyof FormState>(key: K, value: FormState[K]) => setForm((f) => ({ ...f, [key]: value }));
 
-    const plan = useMemo(() => taxSavingPlan(toInput(form)), [form]);
+    const checkedPlan = useMemo(() => {
+        try { return taxSavingPlan(toInput(form)); } catch { return null; }
+    }, [form]);
+    // WHY 2026-10-27: keep the form editable, but never render fallback or stale tax results.
+    const plan = checkedPlan ?? taxSavingPlan(toInput(DEFAULTS));
+    const inputError = !checkedPlan;
     const r = plan.base;
     const refund = r.refund?.total ?? 0;
     const isRefund = refund >= 0;
@@ -437,6 +442,7 @@ const YearEndSettlementCalculator: React.FC<{ locale?: Locale }> = ({ locale = '
     }, [status]);
 
     const save = () => {
+        if (inputError) return;
         try {
             window.localStorage.setItem(STORAGE_KEY, JSON.stringify(form));
             setStatus(t.saved);
@@ -456,7 +462,8 @@ const YearEndSettlementCalculator: React.FC<{ locale?: Locale }> = ({ locale = '
         }
     };
     const exportFile = () => {
-        const blob = new Blob([JSON.stringify({ kind: 'oiyo.year-end-2026.v1', form }, null, 2)], { type: 'application/json' });
+        if (inputError) return;
+        const blob = new Blob([JSON.stringify({ kind: 'oiyo.year-end-2026.v2', form }, null, 2)], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -468,6 +475,7 @@ const YearEndSettlementCalculator: React.FC<{ locale?: Locale }> = ({ locale = '
         if (!file) return;
         try {
             const parsed = JSON.parse(await file.text());
+            if (parsed?.kind !== 'oiyo.year-end-2026.v2') throw new Error('Reconfirm education bases before importing legacy records');
             setForm({ ...DEFAULTS, ...sanitize(parsed?.form ?? parsed) });
             setStatus(t.loaded);
         } catch {
@@ -482,13 +490,13 @@ const YearEndSettlementCalculator: React.FC<{ locale?: Locale }> = ({ locale = '
                 id={`ye-${key}`}
                 type="number"
                 inputMode="numeric"
-                value={form[key] as number}
+                value={Number.isFinite(form[key] as number) ? form[key] as number : ''}
                 min={0}
                 max={opts.max}
                 step={opts.step ?? 100000}
                 onChange={(e) => {
-                    const v = Math.max(0, Number(e.target.value) || 0);
-                    set(key, (opts.max !== undefined ? Math.min(v, opts.max) : v) as never);
+                    const v = e.target.value === '' ? NaN : Number(e.target.value);
+                    set(key, v as never);
                 }}
                 className={inputClass}
             />
@@ -611,6 +619,7 @@ const YearEndSettlementCalculator: React.FC<{ locale?: Locale }> = ({ locale = '
                     {num('disabledInsurance', t.f.disabledInsurance)}
                     {num('medical', t.f.medical)}
                     {num('medicalSpecific', t.f.medicalSpecific)}
+                    <p className="text-sm text-muted-foreground md:col-span-2">{locale === 'ko' ? '교육비: 사람별 자격 확인 → 해당 한도 적용 → 확인된 합계 입력. 일반 학원비를 모두 넣지 마세요. 초등 예체능은 연령·학년·시설·과정 조건을 따로 확인해요. 특별재난지역 고향사랑 특례와 주택 차입 경과규정은 자동 판정하지 않아요. 기존 v1 저장본은 보존하지만 이 화면에 자동 불러오지 않아요.' : 'Education: verify each person → apply their limit → enter the confirmed combined base. Not all academy fees qualify. Elementary arts/sports require separate age/grade, provider and course checks. Special-disaster donations and historical housing-loan rules are not determined. Existing v1 records are preserved, not automatically reinterpreted.'}</p>
                     {num('education', t.f.education)}
                     {num('educationSelf', t.f.educationSelf)}
                 </>)}
@@ -622,6 +631,7 @@ const YearEndSettlementCalculator: React.FC<{ locale?: Locale }> = ({ locale = '
                     {num('hometownDonation', t.f.hometownDonation, { step: 10000 })}
                 </>)}
 
+                {inputError ? <p role="alert" className="rounded-lg border border-border p-3 text-sm">{locale === 'ko' ? '입력값을 확인해 주세요. 금액은 유한한 0 이상 숫자, 인원은 정수여야 하며 공제자녀는 본인을 제외한 기본공제 인원을 넘을 수 없어요. 이전 결과는 표시하지 않아요.' : 'Check the inputs: finite non-negative amounts, whole person counts, and eligible children no greater than dependents excluding yourself. Previous results are hidden.'}</p> : <>
                 <div className={`rounded-2xl border-2 p-4 text-center sm:p-6 print:break-inside-avoid ${isRefund ? 'border-success bg-success/10' : 'border-warning bg-warning/10'}`} aria-live="polite">
                     <p className={`mb-2 text-sm font-bold uppercase tracking-wide ${isRefund ? 'text-success' : 'text-warning'}`}>{isRefund ? t.refund : t.additionalTax}</p>
                     <p className={`text-4xl font-bold ${isRefund ? 'text-success' : 'text-warning'}`}>{isRefund ? '+' : '-'}₩{fmt(refund)}</p>
@@ -681,6 +691,7 @@ const YearEndSettlementCalculator: React.FC<{ locale?: Locale }> = ({ locale = '
                     )}
                 </div>
 
+                </>}
                 <div className="flex flex-col gap-3 print:hidden">
                     <div className="flex flex-wrap justify-center gap-2">
                         <button type="button" onClick={save} className={buttonClass}>{t.actions.save}</button>
@@ -694,6 +705,7 @@ const YearEndSettlementCalculator: React.FC<{ locale?: Locale }> = ({ locale = '
                 </div>
 
                 <p className="text-center text-xs text-muted-foreground">{t.note}</p>
+                <nav aria-label={locale==='ko'?'공식 근거':'Official sources'} className="flex flex-wrap gap-3 text-sm"><a className="min-h-11 text-primary underline" href="https://law.go.kr/LSW/lsRvsDocListP.do?lsId=001565">{locale==='ko'?'소득세법 개정·자녀 출생연도 예외':'Income Tax Act: child birth-year exception'}</a><a className="min-h-11 text-primary underline" href="https://www.law.go.kr/법령/소득세법/제59조의4">{locale==='ko'?'교육비 자격·한도':'Education eligibility and limits'}</a><a className="min-h-11 text-primary underline" href="https://www.law.go.kr/법령/조세특례제한법/제58조">{locale==='ko'?'고향사랑 일반·특례 구분':'Hometown donation rules'}</a></nav>
             </div>
         </GameContainer>
     );
