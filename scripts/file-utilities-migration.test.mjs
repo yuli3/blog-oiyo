@@ -21,7 +21,10 @@ for (const locale of locales) for (const slug of slugs) {
     assert.match(html, /http-equiv="refresh"/);
     assert.match(html, /noindex/);
     assert.ok(!sitemap.includes(`https://blog.oiyo.net${path}`));
-    assert.ok(read(`dist/${locale}/tools/index.html`).includes(`href="${target}"`));
+    // 2026-10-27: the Blog tools index lists only Blog-owned tools and links Tools once.
+    const index = read(`dist/${locale}/tools/index.html`);
+    assert.ok(!index.includes(`href="${target}"`));
+    assert.ok(index.includes(`href="https://tools.oiyo.net/${locale}/"`));
   });
 }
 test('related links go directly to Tools in every locale', () => {

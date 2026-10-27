@@ -25,5 +25,6 @@ test('the shared migrated list and alias map cover every W3 slug', () => {
 });
 test('Blog pages link the moved tax calendar on Tools', () => {
   assert.ok(read('dist/ko/vat-penalty-calculator/index.html').includes('https://tools.oiyo.net/ko/tax-calendar/'));
-  assert.ok(read('dist/ko/tools/index.html').includes('https://tools.oiyo.net/ko/menu-roulette/'));
+  // The Blog tools index no longer carries moved tools as cards (2026-10-27).
+  assert.ok(!read('dist/ko/tools/index.html').includes('https://tools.oiyo.net/ko/menu-roulette/'));
 });
