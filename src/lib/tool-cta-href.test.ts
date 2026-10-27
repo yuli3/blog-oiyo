@@ -23,7 +23,7 @@ test('maps used calculators to live blog tool slugs', () => {
   );
   assert.equal(
     toolCtaHref('compound', 'en'),
-    'https://blog.oiyo.net/en/compound-interest-calculator/?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta',
+    'https://tools.oiyo.net/en/compound-interest-calculator/?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta',
   );
   assert.equal(
     toolCtaHref('calorie', 'ko'),
@@ -31,7 +31,7 @@ test('maps used calculators to live blog tool slugs', () => {
   );
   assert.equal(
     toolCtaHref('savings', 'ko'),
-    'https://blog.oiyo.net/ko/deposit-calculator/?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta',
+    'https://tools.oiyo.net/ko/deposit-calculator/?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta',
   );
 });
 
