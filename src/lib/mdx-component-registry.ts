@@ -130,7 +130,6 @@ import EtfRecommender from "../components/tools/EtfRecommender";
 import AutoTaxCalculator from "../components/tools/AutoTaxCalculator";
 import AsciiArtGenerator from "../components/tools/AsciiArtGenerator";
 import Base64Converter from "../components/tools/Base64Converter";
-import CaffelatteCalculator from "../components/tools/CaffelatteCalculator";
 import DogVisionSimulator from "../components/tools/DogVisionSimulator";
 import GrayscaleConverter from "../components/tools/GrayscaleConverter";
 import InflationCalculator from "../components/tools/InflationCalculator";
@@ -217,7 +216,6 @@ import ProblemSolverTest from "../components/tests/ProblemSolverTest";
 // Batch-1 finance calculators (2026-05-16)
 import FireRetirementCalculator from "../components/calculators/FireRetirementCalculator";
 import JeonsevsBuyCalculator from "../components/calculators/JeonsevsBuyCalculator";
-import LatteFactorCalculator from "../components/calculators/LatteFactorCalculator";
 import DutchPayCalculator from "../components/calculators/DutchPayCalculator";
 import GiftTaxCalculator from "../components/calculators/GiftTaxCalculator";
 import SavingsComparisonCalculator from "../components/calculators/SavingsComparisonCalculator";
@@ -234,7 +232,6 @@ import LifePlanningCalculator from "../components/calculators/LifePlanningCalcul
 import WeddingPlanningCalculator from "../components/calculators/WeddingPlanningCalculator";
 import JeonseVsRentCalculator from "../components/calculators/JeonseVsRentCalculator";
 import IncorporationCalculator from "../components/calculators/IncorporationCalculator";
-import SeparateVsComprehensiveTaxCalc from "../components/tools/SeparateVsComprehensiveTaxCalc";
 import ComprehensiveIncomeTaxCalc from "../components/tools/ComprehensiveIncomeTaxCalc";
 
 // Batch-2 finance calculators (2026-05-16)
@@ -393,7 +390,6 @@ const islandComponents = {
   AutoTaxCalculator,
   AsciiArtGenerator,
   Base64Converter,
-  CaffelatteCalculator,
   DogVisionSimulator,
   GrayscaleConverter,
   InflationCalculator,
@@ -473,7 +469,6 @@ const islandComponents = {
   // Batch-1 finance calculators
   FireRetirementCalculator,
   JeonsevsBuyCalculator,
-  LatteFactorCalculator,
   DutchPayCalculator,
   GiftTaxCalculator,
   SavingsComparisonCalculator,
@@ -501,7 +496,6 @@ const islandComponents = {
   JeonseVsRentCalculator,
   IncorporationCalculator,
   // Tax tools batch (2026-06-01)
-  SeparateVsComprehensiveTaxCalc,
   ComprehensiveIncomeTaxCalc,
 };
 
