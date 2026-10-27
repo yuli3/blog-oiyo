@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 // there; duplicates (dsr-mortgage, jeonse-vs-monthly, isa-tax-savings, inheritance-gift, financial-ratios)
 // land on the merged Tools slug.
 const root = fileURLToPath(new URL('../', import.meta.url));
+// A stub page means Pages 308s the slash-less URL to the slash rule, so only the slash rule is kept.
 const read = p => readFileSync(join(root,p),'utf8');
 const LOCALES = ['ko','en','ja','zh','fr','es'];
 const KO_ONLY = JSON.parse(read('src/config/tools-migrated-ko-only.json'));
@@ -24,7 +25,7 @@ const sitemap = readdirSync(join(root,'dist')).filter(p=>/^sitemap.*xml$/.test(p
 const redirects = read('dist/_redirects').split('\n').map(l=>l.trim().split(/\s+/));
 for (const slug of Object.keys(W8)) for (const lang of LOCALES) test(`${lang}/${slug} 301s to Tools`, () => {
   const dest = target(lang, slug);
-  for (const suffix of ['/','']) assert.ok(redirects.some(([src,d,status])=>src===`/${lang}/${slug}${suffix}` && d===dest && status==='301'));
+  for (const suffix of ['/', ...(existsSync(join(root, 'dist', lang, slug, 'index.html')) ? [] : [''])]) assert.ok(redirects.some(([src,d,status])=>src===`/${lang}/${slug}${suffix}` && d===dest && status==='301'));
   assert.ok(!sitemap.includes(`https://blog.oiyo.net/${lang}/${slug}/`));
   const file = `dist/${lang}/${slug}/index.html`;
   if (existsSync(join(root, file))) {
