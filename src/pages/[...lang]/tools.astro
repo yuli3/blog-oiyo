@@ -1431,13 +1431,27 @@ for (const cat of categories) {
   cat.tools = cat.tools.filter((tool) => !canonicalMap[tool.slug]);
 }
 
-const totalCount = categories.reduce((sum, c) => sum + c.tools.length, 0);
-const m = meta[locale] ?? meta.en;
-
 // Moved tools link straight to Tools; an alias (random-menu → menu-roulette) uses the Tools slug.
 const toolsHref = (slug: string) => {
   const dest = toolsMigratedSlugs.includes(slug) ? slug : (toolsMigratedAliases as Record<string, string>)[slug];
   return dest ? `https://tools.oiyo.net/${toolsKoOnly.includes(dest) ? "ko" : locale}/${dest}/` : null;
+};
+// WHY 2026-10-27: 세운 지시 — Blog 도구 목록에는 Blog에만 있는 도구만 남긴다. 옮긴 도구는
+// 카드 대신 위쪽 안내 한 줄로 tools.oiyo.net 전체를 가리킨다.
+for (const cat of categories) {
+  cat.tools = cat.tools.filter((tool) => !toolsHref(tool.slug));
+}
+const visibleCategories = categories.filter((c) => c.tools.length > 0);
+
+const totalCount = categories.reduce((sum, c) => sum + c.tools.length, 0);
+const m = meta[locale] ?? meta.en;
+const toolsHubNote: Record<string, string> = {
+  ko: "단위 변환·이미지·개발·날짜·세금 계산기 같은 범용 도구는 OIYO Tools로 옮겼어요",
+  en: "Converters, image, developer, date and tax tools now live on OIYO Tools",
+  ja: "単位変換・画像・開発・日付・税金などの汎用ツールは OIYO Tools に移りました",
+  zh: "单位换算、图片、开发、日期和税务等通用工具已移至 OIYO Tools",
+  fr: "Les convertisseurs et outils image, développeur, date et fiscalité sont désormais sur OIYO Tools",
+  es: "Los conversores y las herramientas de imagen, desarrollo, fechas e impuestos están ahora en OIYO Tools",
 };
 const catalogJsonLd = JSON.stringify(
   collectionPageJsonLd({
@@ -1457,8 +1471,6 @@ const catalogJsonLd = JSON.stringify(
 ---
 
 <BaseLayout title={m.title} description={m.description}>
-  {locale === 'ko' && <nav aria-label="ISA 과세손익 비교" class="mx-auto max-w-5xl px-4 pt-4 text-sm"><a href="/ko/isa-tax-savings-calculator/" class="inline-flex min-h-11 items-center text-primary underline">ISA 절세: 확인된 과세손익·통산대상 손실 비교</a></nav>}
-
   <script is:inline type="application/ld+json" set:html={catalogJsonLd} />
   <section class="py-16 md:py-24">
     <div class="container px-4">
@@ -1475,6 +1487,11 @@ const catalogJsonLd = JSON.stringify(
           {heroSubtitle[locale]}
         </p>
         <p class="mt-2 text-sm text-muted-foreground/50">{totalCount} tools</p>
+        <p class="mt-3 text-sm">
+          <a class="inline-flex min-h-11 items-center font-semibold text-primary hover:underline" href={`https://tools.oiyo.net/${locale}/`}>
+            {toolsHubNote[locale] ?? toolsHubNote.en} →
+          </a>
+        </p>
         {locale === "ko" && (
           <p class="mt-3 text-sm">
             <a class="font-semibold text-primary hover:underline" href="/ko/year/">
@@ -1634,7 +1651,7 @@ const catalogJsonLd = JSON.stringify(
 
       {/* ── Category quick-nav ── */}
       <nav aria-label="Tool categories" class="flex flex-wrap gap-2 mb-8 sm:mb-16">
-        {categories.map((cat) => (
+        {visibleCategories.map((cat) => (
           <a
             href={`#category-${cat.id}`}
             class={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-semibold transition-colors hover:bg-secondary/10 ${cat.bgColor} ${cat.color}`}
@@ -1647,7 +1664,7 @@ const catalogJsonLd = JSON.stringify(
       </nav>
 
       {/* ── Category sections ── */}
-      {categories.map((cat) => (
+      {visibleCategories.map((cat) => (
         <section id={`category-${cat.id}`} class="mb-10 sm:mb-20 scroll-mt-8" aria-labelledby={`heading-${cat.id}`}>
 
           {/* Category header */}
