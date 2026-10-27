@@ -119,7 +119,8 @@ export default defineConfig({
         // Exclude noindex bridge stubs (canonical lives on oiyo.net)
         const segs = path.split("/").filter(Boolean);
         // Redirect shells are not canonical content after the Tools migration (2026-10-19).
-        if (segs.length === 2 && (toolsMigratedSlugs.includes(segs[1]) || segs[1] in toolsMigratedAliases)) return false;
+        // segs.length > 2 covers subpages that moved with their tool (W6b shoe sizes).
+        if (segs.length >= 2 && (toolsMigratedSlugs.includes(segs[1]) || segs[1] in toolsMigratedAliases)) return false;
         if (segs.length === 2 && BRIDGE_SLUGS.has(segs[1])) return false;
         // Exclude noindex embed widgets (canonical is the full tool page)
         if (segs.includes("embed")) return false;

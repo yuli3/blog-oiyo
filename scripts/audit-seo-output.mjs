@@ -87,10 +87,11 @@ for (const file of listHtmlFiles(dist)) {
   // 2026-10-27: accept only the approved Tools bridges (src/config/tools-migrated-slugs.json), with matching locale,
   // slug and refresh. Do not allow arbitrary cross-domain canonical URLs.
   const routeParts = rel.split(path.sep);
-  const toolsBridgeTarget = routeParts.length === 3 && routeParts[2] === "index.html"
+  // Subpaths under a moved slug (W6b shoe sizes) keep the same subpath on Tools.
+  const toolsBridgeTarget = routeParts.length >= 3 && routeParts.at(-1) === "index.html"
     && ["ko", "en", "ja", "zh", "fr", "es"].includes(routeParts[0])
     && (toolsMigratedSlugs.includes(routeParts[1]) || routeParts[1] in toolsMigratedAliases)
-    ? `https://tools.oiyo.net/${routeParts[0]}/${toolsMigratedAliases[routeParts[1]] ?? routeParts[1]}/` : null;
+    ? `https://tools.oiyo.net/${[routeParts[0], toolsMigratedAliases[routeParts[1]] ?? routeParts[1], ...routeParts.slice(2, -1)].join("/")}/` : null;
   const validToolsBridge = isNoindex && toolsBridgeTarget !== null
     && html.match(/<link rel="canonical" href="([^"]+)"/)?.[1] === toolsBridgeTarget
     && html.match(/<meta http-equiv="refresh" content="0;\s*url=([^"]+)"/)?.[1] === toolsBridgeTarget;
