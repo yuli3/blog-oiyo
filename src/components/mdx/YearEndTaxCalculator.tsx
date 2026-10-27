@@ -47,14 +47,14 @@ export default function YearEndTaxCalculator({ locale = 'ko' }: { locale?: 'ko' 
   };
 
   const handlePaidTax = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const raw = e.target.value.replace(/,/g, '');
+    const raw = e.target.value;
     setPaidTax(raw);
     const num = parseYearEndSalary(raw) ?? NaN;
     setPaidTaxDisplay(num > 0 ? num.toLocaleString('ko-KR') : raw);
   };
 
   const handleDeduction = (id: string, raw: string) => {
-    const cleaned = raw.replace(/,/g, '');
+    const cleaned = raw;
     setDeductions((prev) =>
       prev.map((d) => (d.id === id ? { ...d, value: cleaned } : d))
     );
