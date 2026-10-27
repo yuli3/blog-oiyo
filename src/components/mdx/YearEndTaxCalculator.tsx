@@ -49,7 +49,7 @@ export default function YearEndTaxCalculator({ locale = 'ko' }: { locale?: 'ko' 
   const handlePaidTax = (e: React.ChangeEvent<HTMLInputElement>) => {
     const raw = e.target.value.replace(/,/g, '');
     setPaidTax(raw);
-    const num = /^\d+$/.test(raw) && Number.isSafeInteger(Number(raw)) ? Number(raw) : NaN;
+    const num = parseYearEndSalary(raw) ?? NaN;
     setPaidTaxDisplay(num > 0 ? num.toLocaleString('ko-KR') : raw);
   };
 
@@ -63,7 +63,7 @@ export default function YearEndTaxCalculator({ locale = 'ko' }: { locale?: 'ko' 
   const result = useMemo(() => {
     const annualSalary = parseYearEndSalary(salary);
     if (annualSalary === null || annualSalary === 0) return null;
-    const valueOf = (raw: string) => raw === '' ? 0 : /^\d+$/.test(raw) && Number.isSafeInteger(Number(raw)) ? Number(raw) : NaN;
+    const valueOf = (raw: string) => raw === '' ? 0 : (parseYearEndSalary(raw) ?? NaN);
     const val = (id: string) => valueOf(deductions.find((d) => d.id === id)?.value ?? '');
     const alreadyPaid = valueOf(paidTax);
     if (!Number.isFinite(alreadyPaid)) return null;
