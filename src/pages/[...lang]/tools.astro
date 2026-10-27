@@ -1,6 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import toolsMigratedSlugs from "../../config/tools-migrated-slugs.json";
+import toolsMigratedAliases from "../../config/tools-migrated-aliases.json";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import RelatedPosts from "../../components/RelatedPosts.astro";
 import RelatedToolLinks from "../../components/RelatedToolLinks.astro";
@@ -1437,6 +1438,11 @@ for (const cat of categories) {
 const totalCount = categories.reduce((sum, c) => sum + c.tools.length, 0);
 const m = meta[locale] ?? meta.en;
 
+// Moved tools link straight to Tools; an alias (random-menu → menu-roulette) uses the Tools slug.
+const toolsHref = (slug: string) => {
+  const dest = toolsMigratedSlugs.includes(slug) ? slug : (toolsMigratedAliases as Record<string, string>)[slug];
+  return dest ? `https://tools.oiyo.net/${locale}/${dest}/` : null;
+};
 const catalogJsonLd = JSON.stringify(
   collectionPageJsonLd({
     name: m.title,
@@ -1446,7 +1452,7 @@ const catalogJsonLd = JSON.stringify(
     items: categories.flatMap((c) =>
       c.tools.map((tool) => ({
         name: tool.title[locale] ?? tool.title.en,
-        url: toolsMigratedSlugs.includes(tool.slug) ? `https://tools.oiyo.net/${locale}/${tool.slug}/` : tool.href ?? `${siteConfig.url}/${locale}/${tool.slug}/`,
+        url: toolsHref(tool.slug) ?? tool.href ?? `${siteConfig.url}/${locale}/${tool.slug}/`,
       })),
     ),
   }),
@@ -1661,9 +1667,7 @@ const catalogJsonLd = JSON.stringify(
           {/* Tool grid */}
           <div class="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {cat.tools.map((tool) => {
-              const href = toolsMigratedSlugs.includes(tool.slug)
-                ? `https://tools.oiyo.net/${locale}/${tool.slug}/`
-                : tool.href ?? `/${locale}/${tool.slug}/`;
+              const href = toolsHref(tool.slug) ?? tool.href ?? `/${locale}/${tool.slug}/`;
               const title = tool.title[locale] ?? tool.title.en;
               const desc  = tool.description[locale] ?? tool.description.en;
               return (
