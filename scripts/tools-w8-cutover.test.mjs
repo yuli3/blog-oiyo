@@ -35,7 +35,8 @@ for (const slug of Object.keys(W8)) for (const lang of LOCALES) test(`${lang}/${
   }
 });
 test('the Korean-law tools are ko-only and all W8 slugs are in the migrated list or aliases', () => {
-  assert.deepEqual([...KO_ONLY].sort(), ['dsr-calculator','gift-tax-calculator','inheritance-tax-calculator','isa-calculator','jeonse-vs-rent-calculator','retirement-tax-calculator','youth-future-savings-calculator']);
+  // Later waves add more ko-only slugs; W8's own must stay listed.
+  for (const s of ['dsr-calculator','gift-tax-calculator','inheritance-tax-calculator','isa-calculator','jeonse-vs-rent-calculator','retirement-tax-calculator','youth-future-savings-calculator']) assert.ok(KO_ONLY.includes(s), s);
   const list = JSON.parse(read('src/config/tools-migrated-slugs.json'));
   const aliases = JSON.parse(read('src/config/tools-migrated-aliases.json'));
   for (const [slug, dest] of Object.entries(W8)) assert.ok(slug === dest ? list.includes(slug) : aliases[slug] === dest, slug);
