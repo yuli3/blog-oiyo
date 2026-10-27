@@ -4,6 +4,7 @@
 import { getLocalizedPath, type Locale } from "../lib/i18n";
 import bridgeSlugs from "../config/bridge-slugs.json";
 import toolsMigratedSlugs from "../config/tools-migrated-slugs.json";
+import toolsMigratedAliases from "../config/tools-migrated-aliases.json";
 import oiyoCanonical from "../data/oiyo-canonical-map.json";
 import { OIYO_URL } from "../config/site.config";
 
@@ -16,6 +17,9 @@ const CANON = oiyoCanonical as Record<string, string>;
 const toolHref = (locale: Locale, slug: string): string => {
   // Tools-migrated utilities (2026-10-19~): link straight to tools.oiyo.net, never through a Blog 301.
   if (TOOLS_MIGRATED.has(slug)) return `https://tools.oiyo.net/${locale}/${slug}/`;
+  // Renamed on the way (e.g. caffelatte-calculator → latte-factor-calculator, 2026-10-27).
+  const alias = (toolsMigratedAliases as Record<string, string>)[slug];
+  if (alias) return `https://tools.oiyo.net/${locale}/${alias}/`;
   const canon = BRIDGE.has(slug) ? CANON[slug] : undefined;
   return canon ? `${OIYO_URL}/${locale}${canon}/` : getLocalizedPath(locale, `/${slug}`);
 };

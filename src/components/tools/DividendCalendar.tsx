@@ -19,12 +19,7 @@ type DividendStock = {
 
 // ─── Static data ──────────────────────────────────────────────────────────────
 const DIVIDEND_DATA: DividendStock[] = [
-  // 한국 ETF (월배당)
-  {
-    ticker: "KODEX 미국S&P500TR",
-    name: { ko: "KODEX 미국S&P500TR", en: "KODEX US S&P500TR", ja: "KODEX 米国S&P500TR", fr: "KODEX US S&P500TR", es: "KODEX US S&P500TR", zh: "KODEX 美国S&P500TR", },
-    type: "kr-etf", frequency: "monthly", exDivDays: [25], dividendYield: "1.2%", currency: "KRW",
-  },
+  // 한국 ETF (월배당). 2026-10-27: KODEX 미국S&P500TR removed — a TR fund reinvests and pays no distribution.
   {
     ticker: "TIGER 미국배당다우존스",
     name: { ko: "TIGER 미국배당다우존스", en: "TIGER US Dividend Dow Jones", ja: "TIGER 米国配当ダウジョーンズ", fr: "TIGER US Dividende Dow Jones", es: "TIGER Dividendo US Dow Jones", zh: "TIGER 美国股息道琼斯", },

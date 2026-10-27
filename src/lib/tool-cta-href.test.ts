@@ -12,7 +12,7 @@ test('never points at ahoxy.com', () => {
   for (const tool of samples) {
     const href = toolCtaHref(tool, 'ko');
     assert.equal(href.includes('ahoxy.com'), false, href);
-    assert.match(href, /^https:\/\/((blog|game)\.)?oiyo\.net\//, href);
+    assert.match(href, /^https:\/\/((blog|game|tools)\.)?oiyo\.net\//, href);
   }
 });
 
@@ -42,4 +42,8 @@ test('keeps oiyo/game overrides and hubs unknown tools', () => {
     toolCtaHref('crypto-tax-calculator', 'ko'),
     'https://blog.oiyo.net/ko/tools/?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta',
   );
+});
+
+test('tools moved to tools.oiyo.net link there directly, renamed ones included', () => {
+  assert.ok(toolCtaHref('latte-factor', 'en').startsWith('https://tools.oiyo.net/en/latte-factor-calculator/?'));
 });
