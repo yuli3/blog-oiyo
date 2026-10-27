@@ -7,8 +7,9 @@ test('loan owner migrates all six locales without wildcard redirects',()=>{
  for(const l of ['ko','en','ja','zh','fr','es']) for(const slash of ['','/']) assert.ok(redirects.includes('/'+l+'/loan-comparison-calculator'+slash+' https://tools.oiyo.net/'+l+'/loan-comparison-calculator/ 301'));
  const route=read('src/pages/[...lang]/loan-comparison-calculator.astro');
  assert.ok(route.includes('Astro.redirect(')); assert.ok(route.includes('loan-comparison-calculator/')); assert.ok(!route.includes('LoanComparisonCalculator'));
- assert.match(read('astro.config.mjs'),/"monitor-ppi-calculator", "loan-comparison-calculator"/);
- for(const p of ['src/components/RelatedToolLinks.astro','src/pages/[...lang]/tools.astro']) assert.match(read(p),/"loan-comparison-calculator"(, "[a-z-]+")*\].includes\(/);
+ // 2026-10-27: migrated slugs live in one shared list read by config, links and the SEO audit.
+ assert.ok(JSON.parse(read('src/config/tools-migrated-slugs.json')).includes('loan-comparison-calculator'));
+ for(const p of ['astro.config.mjs','src/components/RelatedToolLinks.astro','src/pages/[...lang]/tools.astro','scripts/audit-seo-output.mjs']) assert.match(read(p),/tools-migrated-slugs\.json/);
 });
 
 test('built loan bridges preserve exact locale canonical, noindex and refresh',()=>{

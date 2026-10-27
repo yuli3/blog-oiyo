@@ -1,5 +1,6 @@
 ---
 import { getCollection } from "astro:content";
+import toolsMigratedSlugs from "../../config/tools-migrated-slugs.json";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import RelatedPosts from "../../components/RelatedPosts.astro";
 import RelatedToolLinks from "../../components/RelatedToolLinks.astro";
@@ -1445,7 +1446,7 @@ const catalogJsonLd = JSON.stringify(
     items: categories.flatMap((c) =>
       c.tools.map((tool) => ({
         name: tool.title[locale] ?? tool.title.en,
-        url: ["loan-comparison-calculator", "currency-converter", "foreign-exchange-fee-calculator"].includes(tool.slug) ? `https://tools.oiyo.net/${locale}/${tool.slug}/` : tool.href ?? `${siteConfig.url}/${locale}/${tool.slug}/`,
+        url: toolsMigratedSlugs.includes(tool.slug) ? `https://tools.oiyo.net/${locale}/${tool.slug}/` : tool.href ?? `${siteConfig.url}/${locale}/${tool.slug}/`,
       })),
     ),
   }),
@@ -1660,7 +1661,7 @@ const catalogJsonLd = JSON.stringify(
           {/* Tool grid */}
           <div class="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {cat.tools.map((tool) => {
-              const href = ["image-converter", "pdf-merge-split", "qr-code-generator", "loan-comparison-calculator", "currency-converter", "foreign-exchange-fee-calculator"].includes(tool.slug)
+              const href = toolsMigratedSlugs.includes(tool.slug)
                 ? `https://tools.oiyo.net/${locale}/${tool.slug}/`
                 : tool.href ?? `/${locale}/${tool.slug}/`;
               const title = tool.title[locale] ?? tool.title.en;
