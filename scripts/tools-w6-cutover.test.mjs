@@ -24,6 +24,6 @@ test('the shared migrated list covers every W6 slug', () => {
   for (const slug of W6) assert.ok(list.includes(slug), slug);
 });
 test('Blog pages link the moved converters on Tools', () => {
-  assert.ok(read('dist/ko/pace-calculator/index.html').includes('https://tools.oiyo.net/ko/speed-converter/'));
+  assert.ok(read('dist/ko/pace-calculator/index.html').includes('https://tools.oiyo.net/ko/pace-calculator/'));
   assert.ok(!read('dist/en/recipe-scaler/index.html').match(/href="\/en\/(volume|weight)-converter\/"/));
 });
