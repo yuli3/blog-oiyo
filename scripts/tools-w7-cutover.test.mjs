@@ -24,6 +24,6 @@ test('the shared migrated list covers every W7 slug', () => {
   for (const slug of W7) assert.ok(list.includes(slug), slug);
 });
 test('Blog pages link the moved calculators on Tools', () => {
-  assert.ok(read('dist/ko/final-grade-calculator/index.html').includes('https://tools.oiyo.net/ko/percentage-calculator/'));
+  assert.ok(read('dist/ko/final-grade-calculator/index.html').includes('https://tools.oiyo.net/ko/final-grade-calculator/'));
   assert.ok(read('dist/ko/electricity-bill-calculator/index.html').includes('https://tools.oiyo.net/ko/fuel-cost-calculator/'));
 });
