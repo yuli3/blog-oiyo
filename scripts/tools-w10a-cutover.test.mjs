@@ -36,6 +36,7 @@ test('W10a slugs are migrated and ko-only', () => {
 test('Blog pages link the moved tools on Tools', () => {
   assert.ok(read('dist/ko/magazine-tax-office-part-time-insurance/index.html').includes('https://tools.oiyo.net/ko/weekly-holiday-pay-calculator/'));
   assert.ok(read('dist/ko/health-insurance-leaver-settlement/index.html').includes('https://tools.oiyo.net/ko/daily-worker-insurance-checker/'));
-  assert.ok(read('dist/en/insurance-premium-calculator/index.html').includes('https://tools.oiyo.net/ko/legal-interest-calculator/'));
+  // WHY 2026-10-28: W12/W13 moved this page itself; its redirect must reach the same-language Tools owner.
+  assert.ok(read('dist/en/insurance-premium-calculator/index.html').includes('https://tools.oiyo.net/en/insurance-premium-calculator/'));
   assert.ok(!existsSync(join(root, 'dist/en/weekly-holiday-pay-calculator/index.html')));
 });
