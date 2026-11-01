@@ -16,7 +16,7 @@ export default function CrossfitWeightEquivalent() {
   const exact = valid ? equivalentWeight(value, direction) : 0;
   const matches = valid ? matchingStandards(value, unit, direction) : [];
   const to = direction === "toWomen" ? "women" : "men";
-  const published = matches.length > 0 ? matches[0][unit][to] : null;
+
   const pct = Math.round(RATIO * 1000) / 10;
 
   return (
@@ -61,13 +61,15 @@ export default function CrossfitWeightEquivalent() {
           <p className="text-sm text-muted-foreground">Enter a weight, for example 95 or 135.</p>
         ) : (
           <div className="rounded-md border border-border bg-background px-4 py-3">
-            <p className="text-sm text-muted-foreground">Equivalent {to}'s weight</p>
-            <p className="mt-1 font-mono text-3xl font-bold text-foreground">
-              {formatWeight(published ?? roundToStep(exact, unit))} {unit}
-            </p>
+            <p className="text-sm text-muted-foreground">{matches.length ? `Listed ${to}'s Rx loads by movement` : `Estimated ${to}'s load`}</p>
+            {/* WHY 2026-11-01: 35 lb can mean 53 lb kettlebell or 50 lb dumbbell; never choose the first match. */}
+            {matches.length ? <ul className="mt-2 space-y-2">{matches.map(row => <li key={row.id} className="flex flex-wrap items-baseline justify-between gap-2 border-b border-border pb-2">
+              <span className="text-sm">{row.name} — {row.movement}</span>
+              <strong className="font-mono text-2xl">{formatWeight(row[unit][to])} {unit}</strong>
+            </li>)}</ul> : <p className="mt-1 font-mono text-3xl font-bold text-foreground">{formatWeight(roundToStep(exact, unit))} {unit}</p>}
             <p className="mt-2 text-xs text-muted-foreground">
-              {published !== null
-                ? `Published Rx pair (${matches.map((row) => row.name).join(", ")}). The ${pct}% ratio gives ${formatWeight(Math.round(exact * 10) / 10)} ${unit}.`
+              {matches.length > 0
+                ? `Choose the movement and the event's current prescription. Different movements can have different paired loads. The dataset-average ${pct}% estimate is ${formatWeight(Math.round(exact * 10) / 10)} ${unit}; it is not a universal ability ratio.`
                 : `${formatWeight(Math.round(exact * 10) / 10)} ${unit} at the ${pct}% ratio, rounded to the nearest ${unit === "lb" ? "5 lb" : "2.5 kg"}.`}
             </p>
           </div>
