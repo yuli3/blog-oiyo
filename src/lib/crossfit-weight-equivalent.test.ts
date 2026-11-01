@@ -26,3 +26,7 @@ test("finds the published pair when the input is a standard load", () => {
   assert.equal(formatWeight(22.5), "22.5");
   assert.equal(formatWeight(70), "70");
 });
+
+test("35 lb inverse conversion preserves both movement-specific targets", () => {
+  assert.deepEqual(matchingStandards(35, "lb", "toMen").map(row=>({id:row.id,load:row.lb.men})), [{id:"kettlebell",load:53},{id:"dumbbell",load:50}]);
+});

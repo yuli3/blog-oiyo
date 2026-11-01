@@ -19,13 +19,13 @@ const LABELS: Record<"en" | "ko", UiLabels> = {
   en: {
     distance: "Distance", direction: "Convert", toWomen: "Men's → women's", toMen: "Women's → men's",
     time: "Your time (h:mm:ss or mm:ss)", placeholder: "e.g. 25:00", invalid: "Enter a time such as 25:00 or 1:45:30",
-    result: (from, to) => `${from} time → equivalent ${to} time`, gap: (pct) => `Women's record is ${pct}% slower at this distance`,
+    result: (from, to) => `${from} time → reference ${to} time using world-record ratios`, gap: (pct) => `Women's record is ${pct}% slower at this distance`,
     races: { "5k": "5K", "10k": "10K", half: "Half marathon", marathon: "Marathon" },
   },
   ko: {
     distance: "거리", direction: "환산 방향", toWomen: "남자 → 여자", toMen: "여자 → 남자",
     time: "기록 (시:분:초 또는 분:초)", placeholder: "예: 25:00", invalid: "25:00이나 1:45:30처럼 입력해 주세요",
-    result: (from, to) => `${from} 기록 → 같은 수준의 ${to} 기록`, gap: (pct) => `이 거리에서 여자 세계기록은 남자보다 ${pct}% 길어요`,
+    result: (from, to) => `${from} 기록 → 세계기록 비율로 환산한 ${to} 참고 기록`, gap: (pct) => `이 거리에서 여자 세계기록은 남자보다 ${pct}% 길어요`,
     races: { "5k": "5K", "10k": "10K", half: "하프", marathon: "풀코스" },
   },
 };
@@ -94,6 +94,7 @@ export default function RunningTimeEquivalent({ locale }: { locale: Locale }) {
             <p className="text-sm text-muted-foreground">{t.result(from, to)}</p>
             <p className="mt-1 font-mono text-3xl font-bold text-foreground">{formatTime(result)}</p>
             <p className="mt-2 text-xs text-muted-foreground">{t.gap(pct)}</p>
+            <p className="mt-2 text-xs text-muted-foreground">{lang === "ko" ? "최상위 기록의 비율을 일반 러너에게 적용한 참고값이에요. 나이·훈련·코스·날씨를 통제한 동등 능력이나 공식 연령 보정 점수가 아니에요." : "This extrapolates elite record ratios to your time. It is not an ability equivalence or an official age-grading score, and does not adjust for age, training, course or weather."}</p>
           </div>
         )}
       </div>
