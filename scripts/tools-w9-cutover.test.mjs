@@ -38,7 +38,8 @@ test('W9a slugs are in the migrated list or aliases, Korean-law ones ko-only', (
 });
 test('Blog pages link the moved tools on Tools', () => {
   // salary-calculator, the last Blog page linking auto-tax, moved to Tools in W10b.
-  assert.ok(read('dist/ja/isa-vs-pension-calculator/index.html').includes('https://tools.oiyo.net/ja/overseas-stock-tax/'));
+  // 2026-11-01: the linking page itself moved to Tools in W14/W15 (no indexable Blog page links this tool any more).
+  assert.ok(read('dist/ja/isa-vs-pension-calculator/index.html').includes('<link rel="canonical" href="https://tools.oiyo.net/ko/isa-vs-pension-calculator/"'));
   assert.ok(read('dist/ko/magazine-tax-office-deadline-night/index.html').includes('https://tools.oiyo.net/ko/vat-penalty-calculator/'));
   assert.ok(!existsSync(join(root, 'dist/en/vat-penalty-calculator/index.html')));
 });

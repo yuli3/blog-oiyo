@@ -25,5 +25,6 @@ test('the shared migrated list covers every W7 slug', () => {
 });
 test('Blog pages link the moved calculators on Tools', () => {
   assert.ok(read('dist/ko/final-grade-calculator/index.html').includes('https://tools.oiyo.net/ko/final-grade-calculator/'));
-  assert.ok(read('dist/ko/electricity-bill-calculator/index.html').includes('https://tools.oiyo.net/ko/fuel-cost-calculator/'));
+  // 2026-11-01: the linking page itself moved to Tools in W14/W15 (no indexable Blog page links this tool any more).
+  assert.ok(read('dist/ko/electricity-bill-calculator/index.html').includes('<link rel="canonical" href="https://tools.oiyo.net/ko/electricity-bill-calculator/"'));
 });

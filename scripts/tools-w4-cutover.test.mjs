@@ -25,7 +25,8 @@ test('the shared migrated list and alias map cover every W4 slug', () => {
   for (const [slug, dest] of Object.entries(W4)) assert.ok(slug === dest ? list.includes(slug) : aliases[slug] === dest);
 });
 test('Blog pages link the moved finance tools on Tools', () => {
-  assert.ok(read('dist/ko/stock-yield-calculator/index.html').includes('https://tools.oiyo.net/ko/dividend-tracker/'));
+  // 2026-11-01: the linking page itself moved to Tools in W14/W15 (no indexable Blog page links this tool any more).
+  assert.ok(read('dist/ko/stock-yield-calculator/index.html').includes('<link rel="canonical" href="https://tools.oiyo.net/ko/stock-average-calculator/"'));
   // compound2-calculator itself moved in W11; a guide still carries the link.
   assert.ok(read('dist/en/latte-factor-spending-habits/index.html').includes('https://tools.oiyo.net/en/latte-factor-calculator/'));
   assert.ok(!read('dist/en/latte-factor-spending-habits/index.html').includes('href="/en/caffelatte-calculator/"'));

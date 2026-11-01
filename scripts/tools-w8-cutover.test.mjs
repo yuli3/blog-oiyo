@@ -42,7 +42,8 @@ test('the Korean-law tools are ko-only and all W8 slugs are in the migrated list
   for (const [slug, dest] of Object.entries(W8)) assert.ok(slug === dest ? list.includes(slug) : aliases[slug] === dest, slug);
 });
 test('Blog pages link the moved tools on Tools, ko-only tools at /ko/ from every locale', () => {
-  assert.ok(read('dist/en/mortgage-calculator/index.html').includes('https://tools.oiyo.net/ko/dsr-calculator/'));
+  // 2026-11-01: the linking page itself moved to Tools in W14/W15 (no indexable Blog page links this tool any more).
+  assert.ok(read('dist/en/mortgage-calculator/index.html').includes('<link rel="canonical" href="https://tools.oiyo.net/en/mortgage-calculator/"'));
   assert.ok(!read('dist/en/mortgage-calculator/index.html').includes('href="/en/dsr-calculator/"'));
   // deposit-calculator itself moved in W11; a magazine piece still carries the link.
   assert.ok(read('dist/ko/magazine-youth-future-savings-vs-isa-deposit/index.html').includes('https://tools.oiyo.net/ko/isa-calculator/'));

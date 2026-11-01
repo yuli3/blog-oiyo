@@ -28,5 +28,5 @@ test('W10b/W10c slugs are migrated and not ko-only', () => {
 test('Blog pages link the moved tools on Tools in the same language', () => {
   assert.ok(read('dist/en/4-insurance-complete-guide/index.html').includes('https://tools.oiyo.net/en/severance-calculator/'));
   assert.ok(read('dist/ko/career-change-guide/index.html').includes('https://tools.oiyo.net/ko/salary-negotiation-calculator/'));
-  assert.ok(read('dist/fr/savings-comparison-calculator/index.html').includes('https://tools.oiyo.net/fr/salary-calculator/'));
+  assert.ok(read('dist/fr/index.html').includes('https://tools.oiyo.net/fr/salary-calculator/'));
 });
