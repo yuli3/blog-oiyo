@@ -26,6 +26,6 @@ test('W9b/W9c slugs are migrated and not ko-only', () => {
   for (const s of SLUGS) { assert.ok(list.includes(s), s); assert.ok(!koOnly.includes(s), s); }
 });
 test('Blog pages link the moved calculators on Tools in the same language', () => {
-  assert.ok(read('dist/ja/pension-optimizer-calculator/index.html').includes('https://tools.oiyo.net/ja/pension-tax-calculator/'));
+  assert.ok(read('dist/ko/4-insurance-complete-guide/index.html').includes('https://tools.oiyo.net/ko/pension-tax-calculator/'));
   assert.ok(read('dist/ko/tax-checklist-hub-guide/index.html').includes('https://tools.oiyo.net/ko/capital-gains-tax-calculator/'));
 });
