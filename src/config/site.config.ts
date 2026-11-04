@@ -42,7 +42,7 @@ export const siteConfig = {
   // blog first). enabled:false removes every unit; an empty slot id removes that one spot.
   // Ids are the ad units created in AdSense on 2026-10-06. See components/ads/ManualAds.astro.
   manualAds: {
-    enabled: true,
+    enabled: false, // off 2026-11-04: fill 2-8% over 10/07-11/03 trial, below the pre-registered 50% (company-brain direct-ads review §3)
     slots: {
       articleMid: "4081985236", // oiyo-blog-article-mid (in-article)
       articleEnd: "2768903568", // oiyo-blog-article-end (display, responsive)
