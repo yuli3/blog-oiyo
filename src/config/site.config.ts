@@ -44,8 +44,10 @@ export const siteConfig = {
   manualAds: {
     enabled: true,
     slots: {
-      articleMid: "4081985236", // oiyo-blog-article-mid (in-article)
-      articleEnd: "2768903568", // oiyo-blog-article-end (display, responsive)
+      // Off (세운 2026-11-04): articles rely on Auto ads; only interactive pages keep a direct slot.
+      // Former ids: article-mid 4081985236, article-end 2768903568.
+      articleMid: "", // oiyo-blog-article-mid (in-article) — off
+      articleEnd: "", // oiyo-blog-article-end (display, responsive) — off
       toolResult: "4737600514", // oiyo-blog-tool-result (display, responsive)
     },
     // A mid-article unit only in articles long enough to have a middle.
