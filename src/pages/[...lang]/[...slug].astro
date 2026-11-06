@@ -1,4 +1,6 @@
 ---
+import generatedHeroImages from "../../data/generated-hero-images.json";
+import generatedSeriesCovers from "../../data/generated-series-covers.json";
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ChapterSidebar from "../../components/ChapterSidebar.astro";
@@ -191,6 +193,9 @@ const RELATED_HEADING: Record<string, string> = {
 };
 const { post, locale, prevPost, nextPost, seriesPosts, availableLocales, relatedPosts } = Astro.props;
 const { Content } = await post.render();
+// 2026-11-06: route-specific artwork avoids replacing unrelated existing heroes.
+const generatedHero = (generatedHeroImages as Record<string, string>)[post.slug.split("/").slice(1).join("/")];
+const heroImage = generatedHero ?? post.data.heroImage;
 const showCitation = locale === "ko" && [
   "ko/academy-tax-law-basic-ch1",
   "ko/academy-accounting-basics-ch2",
@@ -228,6 +233,10 @@ const seriesHubHref =
 const seriesName = isSeriesPost && rawSeriesKey
   ? seriesDisplayName(rawSeriesKey, locale, seriesPosts?.[0]?.data.title ?? post.data.title)
   : null;
+
+// 2026-11-06: the course cover accompanies its existing chapter navigation; chapter heroes remain distinct.
+const seriesCover = seriesPosts?.some((entry: { slug: string }) => entry.slug.endsWith("/academy-writing-skills-ch1"))
+  ? generatedSeriesCovers["academy-writing-skills-ch1"] : undefined;
 
 // Series JSON-LD for chapter posts
 let seriesJsonLd: string | null = null;
@@ -328,7 +337,7 @@ const redirectToBlog = post.data.redirectToBlog;
 <BaseLayout
   title={displayTitle}
   description={post.data.description}
-  image={post.data.heroImage}
+  image={heroImage}
   type="article"
   pubDate={post.data.pubDate}
   updatedDate={post.data.updatedDate}
@@ -368,6 +377,7 @@ const redirectToBlog = post.data.redirectToBlog;
         {isSeriesPost && (
           <div class="hidden lg:block">
             <div class="sticky top-28">
+              {seriesCover && <img src={seriesCover} alt="" width="1280" height="854" loading="lazy" decoding="async" class="mb-3 h-auto w-full rounded-lg" />}
               <ChapterSidebar
                 seriesPosts={seriesPosts!}
                 currentChapter={chapter!}
@@ -536,10 +546,10 @@ const redirectToBlog = post.data.redirectToBlog;
           </header>
 
           <!-- Hero image -->
-          {post.data.heroImage && (
+          {heroImage && (
             <div class="mb-8 sm:mb-16 rounded-2xl overflow-hidden border border-border/40 aspect-[16/9]">
               <img
-                src={post.data.heroImage}
+                src={heroImage}
                 alt={post.data.title}
                 class="w-full h-full object-cover"
               />
