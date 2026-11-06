@@ -3,7 +3,6 @@
  * Academy category series card (B2, 2026-09-11).
  * Fields: display name, chapterCount, primary CTA — no chapter peer rows.
  */
-import generatedSeriesCovers from "../data/generated-series-covers.json";
 import type { SeriesEntry } from "../lib/wiki-index";
 import { isUrlSafeSeriesKey } from "../lib/wiki-index";
 import { seriesDisplayName } from "../data/priority-series";
@@ -24,8 +23,6 @@ const displayName = seriesDisplayName(
 );
 
 const firstSlug = series.firstPost.slug.split("/").slice(1).join("/");
-// 2026-11-06: a course cover belongs to its series card, separate from chapter-specific illustrations.
-const seriesCover = (generatedSeriesCovers as Record<string, string>)[firstSlug];
 const href =
   isUrlSafeSeriesKey(series.key) && series.chapterCount >= 2
     ? `/${locale}/series/${series.key}/`
@@ -33,7 +30,6 @@ const href =
 ---
 
 <article class="flex flex-col justify-between gap-4 rounded-xl border border-border bg-card p-5 shadow-sm transition-colors hover:border-primary/40 hover:bg-primary/5">
-  {seriesCover && <img src={seriesCover} alt="" width="1280" height="854" loading="lazy" decoding="async" class="h-auto w-full rounded-lg" />}
   <div class="min-w-0 space-y-2">
     <h2 class="text-lg font-bold tracking-tight text-foreground">
       <a href={href} class="hover:text-primary transition-colors">

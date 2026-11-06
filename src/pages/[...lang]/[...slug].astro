@@ -1,5 +1,6 @@
 ---
 import generatedHeroImages from "../../data/generated-hero-images.json";
+import generatedSeriesCovers from "../../data/generated-series-covers.json";
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ChapterSidebar from "../../components/ChapterSidebar.astro";
@@ -233,6 +234,10 @@ const seriesName = isSeriesPost && rawSeriesKey
   ? seriesDisplayName(rawSeriesKey, locale, seriesPosts?.[0]?.data.title ?? post.data.title)
   : null;
 
+// 2026-11-06: the course cover accompanies its existing chapter navigation; chapter heroes remain distinct.
+const seriesCover = seriesPosts?.some((entry: { slug: string }) => entry.slug.endsWith("/academy-writing-skills-ch1"))
+  ? generatedSeriesCovers["academy-writing-skills-ch1"] : undefined;
+
 // Series JSON-LD for chapter posts
 let seriesJsonLd: string | null = null;
 if (isSeriesPost && chapter !== null) {
@@ -372,6 +377,7 @@ const redirectToBlog = post.data.redirectToBlog;
         {isSeriesPost && (
           <div class="hidden lg:block">
             <div class="sticky top-28">
+              {seriesCover && <img src={seriesCover} alt="" width="1280" height="854" loading="lazy" decoding="async" class="mb-3 h-auto w-full rounded-lg" />}
               <ChapterSidebar
                 seriesPosts={seriesPosts!}
                 currentChapter={chapter!}
