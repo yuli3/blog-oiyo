@@ -203,3 +203,93 @@ export function LecturePieChart(props: any) {
     </div>
   );
 }
+
+// ── LectureConceptGrid ──────────────────────────────────────────────────
+// 2026-11-08: 슬라이싱된 6개 과목 개념 은유 아이콘을 한 장에 맥락 없이 일괄 나열하면
+// 본문에 없는 후속 장 개념이 섞이고 다크 모드에서 알파 경계 색번짐이 보일 수 있다
+// (remaining-application-plan-20261107.md). 각 개념이 '본 장(current)'인지
+// '후속 장 연결(href·chapterLabel)'인지 명시하고, 아이콘 썸네일은 밝은 뉴트럴 패드 위에
+// 렌더링해 다크 모드 경계 아티팩트를 방지한다.
+export interface ConceptGridItem {
+  icon: string;
+  label: string;
+  chapterLabel?: string;
+  href?: string;
+  current?: boolean;
+  description: string;
+}
+
+export function LectureConceptGrid({
+  title,
+  subtitle,
+  items,
+}: {
+  title?: string;
+  subtitle?: string;
+  items: ConceptGridItem[];
+}) {
+  if (!Array.isArray(items) || !items.length) return null;
+  return (
+    <figure className="my-6 rounded-3xl border border-border/40 bg-card p-4 shadow-sm sm:my-10 sm:p-6">
+      {(title || subtitle) && (
+        <figcaption className="mb-4 border-b border-border/30 pb-3 sm:mb-5">
+          {title && <div className="text-base font-bold text-foreground sm:text-lg">{title}</div>}
+          {subtitle && <p className="mt-1 mb-0 text-xs leading-relaxed text-muted-foreground sm:text-sm">{subtitle}</p>}
+        </figcaption>
+      )}
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {items.map((item, idx) => {
+          const inner = (
+            <div
+              className={`flex h-full items-start gap-3.5 rounded-2xl border p-3.5 transition-colors ${
+                item.current
+                  ? "border-primary/40 bg-primary/5"
+                  : "border-border/40 bg-muted/15 hover:border-primary/30 hover:bg-muted/30"
+              }`}
+            >
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-border/40 bg-background p-1.5 shadow-xs">
+                <img
+                  src={item.icon}
+                  alt={item.label}
+                  width={48}
+                  height={48}
+                  loading="lazy"
+                  decoding="async"
+                  className="h-11 w-11 object-contain"
+                />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <strong className="text-sm font-bold text-foreground">{item.label}</strong>
+                  {item.chapterLabel && (
+                    <span
+                      className={`rounded-md px-1.5 py-0.5 text-xs font-semibold ${
+                        item.current
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-muted text-muted-foreground"
+                      }`}
+                    >
+                      {item.chapterLabel}
+                    </span>
+                  )}
+                </div>
+                <p
+                  className="mt-1 mb-0 text-xs leading-relaxed text-muted-foreground"
+                  dangerouslySetInnerHTML={md(item.description)}
+                />
+              </div>
+            </div>
+          );
+          return item.href ? (
+            <a key={idx} href={item.href} className="block no-underline">
+              {inner}
+            </a>
+          ) : (
+            <div key={idx}>{inner}</div>
+          );
+        })}
+      </div>
+    </figure>
+  );
+}
+
