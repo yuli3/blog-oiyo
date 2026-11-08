@@ -8,6 +8,8 @@ import IntentBundles from "./IntentBundles.astro";
 import { siteConfig } from "../config/site.config";
 import { getTranslations } from "../lib/i18n";
 import type { Locale } from "../lib/i18n";
+import CategoryHubOverview from "./CategoryHubOverview.astro";
+import type { CategoryHubData } from "../lib/seo/category-hub-builder";
 
 interface PageData {
   data: CollectionEntry<"blog">[];
@@ -27,9 +29,10 @@ interface Props {
   jsonLd?: string;
   noindex?: boolean;
   showCategoryCloud?: boolean;
+  hubData?: CategoryHubData;
 }
 
-const { page, locale, baseUrl, title, subtitle, activeCategory, showIntentBundles = false, showCategoryCloud = true, jsonLd, noindex } = Astro.props;
+const { page, locale, baseUrl, title, subtitle, activeCategory, showIntentBundles = false, showCategoryCloud = true, jsonLd, noindex, hubData } = Astro.props;
 const paginationEnabled = siteConfig.features.pagination;
 const t = await getTranslations(locale as Locale);
 ---
@@ -55,6 +58,10 @@ const t = await getTranslations(locale as Locale);
           {subtitle}
         </p>
       </div>
+
+      {page.currentPage === 1 && hubData && (
+        <CategoryHubOverview data={hubData} locale={locale as Locale} />
+      )}
 
       {showIntentBundles
         ? <IntentBundles locale={locale} />

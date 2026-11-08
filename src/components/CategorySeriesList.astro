@@ -4,7 +4,10 @@
  */
 import BaseLayout from "../layouts/BaseLayout.astro";
 import SeriesCardGrid from "./SeriesCardGrid.astro";
+import CategoryHubOverview from "./CategoryHubOverview.astro";
 import type { SeriesEntry } from "../lib/wiki-index";
+import type { CategoryHubData } from "../lib/seo/category-hub-builder";
+import type { Locale } from "../lib/i18n";
 
 interface Props {
   locale: string;
@@ -21,6 +24,7 @@ interface Props {
   availableLocales?: string[];
   jsonLd?: string;
   noindex?: boolean;
+  hubData?: CategoryHubData;
 }
 
 const {
@@ -37,6 +41,7 @@ const {
   availableLocales,
   jsonLd,
   noindex,
+  hubData,
 } = Astro.props;
 ---
 
@@ -52,6 +57,8 @@ const {
           {subtitle}
         </p>
       </div>
+
+      {hubData && <CategoryHubOverview data={hubData} locale={locale as Locale} />}
 
       {seriesList.length > 0 && (
         <>

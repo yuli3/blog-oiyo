@@ -1,0 +1,44 @@
+---
+import type { CategoryHubData } from "../lib/seo/category-hub-builder";
+import type { Locale } from "../lib/i18n";
+
+interface Props {
+  data: CategoryHubData;
+  locale: Locale;
+}
+
+const { data, locale } = Astro.props;
+const faqTitle = {
+  ko: "자주 묻는 질문",
+  en: "Frequently Asked Questions",
+  ja: "よくある質問",
+  zh: "常见问题",
+  fr: "Foire aux questions",
+  es: "Preguntas frecuentes",
+}[locale] ?? "FAQ";
+---
+
+<script is:inline type="application/ld+json" set:html={JSON.stringify(data.faqJsonLd)} />
+
+<div class="mb-10 rounded-2xl border border-border bg-muted/30 p-6 md:p-8 space-y-6">
+  <div class="space-y-3 text-sm md:text-base leading-relaxed text-muted-foreground">
+    {data.overviewParagraphs.map((paragraph) => (
+      <p>{paragraph}</p>
+    ))}
+  </div>
+
+  <div class="pt-4 border-t border-border/60">
+    <h2 class="text-base font-bold text-foreground mb-3">{faqTitle}</h2>
+    <div class="divide-y divide-border/60 rounded-xl border border-border/60 bg-background/60">
+      {data.faqs.map((f) => (
+        <details class="group p-4">
+          <summary class="cursor-pointer list-none text-sm font-semibold text-foreground flex items-center justify-between">
+            <span>{f.q}</span>
+            <span class="ml-2 text-xs text-muted-foreground transition-transform group-open:rotate-180">▼</span>
+          </summary>
+          <p class="mt-2 text-sm leading-relaxed text-muted-foreground">{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</div>

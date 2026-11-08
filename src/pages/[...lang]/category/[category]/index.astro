@@ -14,6 +14,8 @@ import {
 } from "../../../../lib/wiki-index";
 import { seriesDisplayName } from "../../../../data/priority-series";
 import { isOtherArticle } from "../../../../lib/other-articles";
+import { buildCategoryHubData } from "../../../../lib/seo/category-hub-builder";
+import type { Locale } from "../../../../lib/i18n";
 
 export async function getStaticPaths() {
   const allPosts = await getCollection(
@@ -151,6 +153,15 @@ const catalogJsonLd = JSON.stringify(
         })),
   }),
 );
+
+// 2026-11-08: AIEO & SEO 씬 콘텐츠 해소 (300~500자 개요문 및 FAQPage JSON-LD 구조화 데이터)
+const hubData = buildCategoryHubData({
+  category: originalCategory,
+  displayName,
+  locale: locale as Locale,
+  track,
+  itemCount: posts.length,
+});
 ---
 
 {isAcademySeriesMode ? (
@@ -166,8 +177,9 @@ const catalogJsonLd = JSON.stringify(
     chaptersLabel={chaptersLabel}
     ctaLabel={ctaLabel}
     availableLocales={availableLocales}
-    noindex={true}
+    noindex={false}
     jsonLd={catalogJsonLd}
+    hubData={hubData}
   />
 ) : (
   <BlogList
@@ -178,8 +190,9 @@ const catalogJsonLd = JSON.stringify(
     subtitle={displaySubtitle}
     activeCategory={category}
     availableLocales={availableLocales}
-    noindex={true}
+    noindex={false}
     showCategoryCloud={false}
     jsonLd={catalogJsonLd}
+    hubData={hubData}
   />
 )}
