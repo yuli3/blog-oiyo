@@ -4,6 +4,7 @@ import { getAuthor } from "../lib/authors";
 import deindexedLocales from "../config/deindexed-locales.json";
 import deindexExceptionSlugs from "../config/deindexed-locale-exceptions.json";
 import { resolveOgImage } from "../lib/og-image";
+import { buildBlogMetaDescription } from "../lib/seo/meta-description";
 
 // Locale deindex list — see astro.config.mjs. Empty since 2026-09-24 (all six
 // locales indexable); a listed locale would leave the index and the
@@ -62,6 +63,14 @@ const supportedLocales = siteConfig.locales;
 const currentLocale = supportedLocales.includes(currentPathname.split("/")[1])
   ? currentPathname.split("/")[1]
   : siteConfig.locale;
+const resolvedDescription = buildBlogMetaDescription({
+  title,
+  description,
+  locale: currentLocale,
+  pathname: currentPathname,
+  category,
+  track,
+});
 // Multilingual hreflang logic.
 // Article routes pass availableLocales from actual content siblings.
 // Pages generated from the full locale list (home, static tool/listing slugs
@@ -192,7 +201,7 @@ const hreflangMap: Record<string, string> = {
 <!-- Primary Meta Tags -->
 <title>{siteTitle}</title>
 <meta name="title" content={siteTitle} />
-<meta name="description" content={description} />
+<meta name="description" content={resolvedDescription} />
 <meta name="author" content={author} />
 {tags && tags.length > 0 && <meta name="keywords" content={tags.join(", ")} />}
 
@@ -201,13 +210,13 @@ const hreflangMap: Record<string, string> = {
 <meta property="og:url" content={Astro.url} />
 <meta property="og:site_name" content={siteConfig.name} />
 <meta property="og:title" content={siteTitle} />
-<meta property="og:description" content={description} />
+<meta property="og:description" content={resolvedDescription} />
 <meta property="og:image" content={resolvedImage} />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={siteTitle} />
-<meta name="twitter:description" content={description} />
+<meta name="twitter:description" content={resolvedDescription} />
 <meta name="twitter:image" content={resolvedImage} />
 <!-- og:locale uses BCP-47 with underscore notation -->
 <meta property="og:locale" content={(hreflangMap[currentLocale] ?? "en").replace("-", "_")} />
@@ -233,7 +242,7 @@ const hreflangMap: Record<string, string> = {
 <meta property="twitter:card" content="summary_large_image" />
 <meta property="twitter:url" content={Astro.url} />
 <meta property="twitter:title" content={siteTitle} />
-<meta property="twitter:description" content={description} />
+<meta property="twitter:description" content={resolvedDescription} />
 <meta property="twitter:image" content={resolvedImage} />
 <meta property="twitter:image:alt" content={title} />
 {
