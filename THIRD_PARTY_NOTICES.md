@@ -16,6 +16,12 @@ are covered by their own license files and `package-lock.json`.
 | Inter (`@fontsource-variable/inter`, `@fontsource/inter`) | Rasmus Andersson | SIL Open Font License 1.1 | https://github.com/rsms/inter |
 | KaTeX fonts (`katex/dist/katex.min.css`) | KaTeX contributors | MIT (font files: SIL OFL 1.1) | https://github.com/KaTeX/KaTeX |
 
+## Images
+
+| Asset | Author | License | Source |
+|---|---|---|---|
+| Planet, Sun, Moon, Saturn ring and Milky Way maps (`src/features/space-science/textures/*.webp`, resized WebP) | Solar System Scope (INOVE), based on NASA imagery | CC BY 4.0 | https://www.solarsystemscope.com/textures/ |
+
 ## Loaded from CDN
 
 | Library | License | Source |
@@ -33,6 +39,9 @@ are covered by their own license files and `package-lock.json`.
 | `@fontsource-variable/inter` | 5.2.8 | OFL-1.1 | runtime |
 | `@fontsource/inter` | 5.2.8 | OFL-1.1 | runtime |
 | `@number-flow/react` | 0.6.2 | MIT | runtime |
+| `@react-three/drei` | 10.7.9 | MIT | runtime |
+| `@react-three/fiber` | 9.8.2 | MIT | runtime |
+| `@react-three/postprocessing` | 3.2.2 | MIT | runtime |
 | `@tailwindcss/vite` | 4.3.0 | MIT | runtime |
 | `@types/canvas-confetti` | 1.9.0 | MIT | runtime |
 | `@types/dompurify` | 3.0.5 | MIT | runtime |
@@ -40,6 +49,7 @@ are covered by their own license files and `package-lock.json`.
 | `@types/react-dom` | 19.2.3 | MIT | runtime |
 | `astro` | 5.18.1 | MIT | runtime |
 | `astro-robots-txt` | 1.0.0 | MIT | runtime |
+| `astronomy-engine` | 2.1.19 | MIT | runtime |
 | `canvas-confetti` | 1.9.4 | ISC | runtime |
 | `class-variance-authority` | 0.7.1 | Apache-2.0 | runtime |
 | `clsx` | 2.1.1 | MIT | runtime |
@@ -50,6 +60,7 @@ are covered by their own license files and `package-lock.json`.
 | `heic2any` | 0.0.4 | MIT | runtime |
 | `lucide-react` | 0.563.0 | ISC | runtime |
 | `pdf-lib` | 1.17.1 | MIT | runtime |
+| `postprocessing` | 6.39.6 | Zlib | runtime |
 | `qrcode` | 1.5.4 | MIT | runtime |
 | `radix-ui` | 1.4.3 | MIT | runtime |
 | `react` | 19.2.6 | MIT | runtime |
@@ -64,6 +75,7 @@ are covered by their own license files and `package-lock.json`.
 | `shadcn` | 4.7.0 | MIT | runtime |
 | `tailwind-merge` | 3.6.0 | MIT | runtime |
 | `tailwindcss` | 4.3.0 | MIT | runtime |
+| `three` | 0.185.1 | MIT | runtime |
 | `@astrojs/check` | 0.9.9 | MIT | dev |
 | `@shadcn/lint` | 0.2.0 | MIT | dev |
 | `@tailwindcss/typography` | 0.5.19 | MIT | dev |
