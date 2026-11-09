@@ -33,6 +33,8 @@ are covered by their own license files and `package-lock.json`.
 | `@fontsource-variable/inter` | 5.2.8 | OFL-1.1 | runtime |
 | `@fontsource/inter` | 5.2.8 | OFL-1.1 | runtime |
 | `@number-flow/react` | 0.6.2 | MIT | runtime |
+| `@react-three/drei` | 10.7.9 | MIT | runtime |
+| `@react-three/fiber` | 9.8.2 | MIT | runtime |
 | `@tailwindcss/vite` | 4.3.0 | MIT | runtime |
 | `@types/canvas-confetti` | 1.9.0 | MIT | runtime |
 | `@types/dompurify` | 3.0.5 | MIT | runtime |
@@ -40,6 +42,7 @@ are covered by their own license files and `package-lock.json`.
 | `@types/react-dom` | 19.2.3 | MIT | runtime |
 | `astro` | 5.18.1 | MIT | runtime |
 | `astro-robots-txt` | 1.0.0 | MIT | runtime |
+| `astronomy-engine` | 2.1.19 | MIT | runtime |
 | `canvas-confetti` | 1.9.4 | ISC | runtime |
 | `class-variance-authority` | 0.7.1 | Apache-2.0 | runtime |
 | `clsx` | 2.1.1 | MIT | runtime |
@@ -64,6 +67,7 @@ are covered by their own license files and `package-lock.json`.
 | `shadcn` | 4.7.0 | MIT | runtime |
 | `tailwind-merge` | 3.6.0 | MIT | runtime |
 | `tailwindcss` | 4.3.0 | MIT | runtime |
+| `three` | 0.185.1 | MIT | runtime |
 | `@astrojs/check` | 0.9.9 | MIT | dev |
 | `@shadcn/lint` | 0.2.0 | MIT | dev |
 | `@tailwindcss/typography` | 0.5.19 | MIT | dev |
