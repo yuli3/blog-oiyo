@@ -109,4 +109,8 @@ export const SCENE = {
   space: "#05070f",
   orbit: "#475569",
   label: "#cbd5e1",
+  atmosphere: "#5aa9ff",
+  asteroid: "#8b8378",
+  /** multiplier for the Milky Way backdrop so it stays behind the planets */
+  skyDim: "#626878",
 } as const;

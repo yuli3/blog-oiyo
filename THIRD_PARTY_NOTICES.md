@@ -16,6 +16,12 @@ are covered by their own license files and `package-lock.json`.
 | Inter (`@fontsource-variable/inter`, `@fontsource/inter`) | Rasmus Andersson | SIL Open Font License 1.1 | https://github.com/rsms/inter |
 | KaTeX fonts (`katex/dist/katex.min.css`) | KaTeX contributors | MIT (font files: SIL OFL 1.1) | https://github.com/KaTeX/KaTeX |
 
+## Images
+
+| Asset | Author | License | Source |
+|---|---|---|---|
+| Planet, Sun, Moon, Saturn ring and Milky Way maps (`src/features/space-science/textures/*.webp`, resized WebP) | Solar System Scope (INOVE), based on NASA imagery | CC BY 4.0 | https://www.solarsystemscope.com/textures/ |
+
 ## Loaded from CDN
 
 | Library | License | Source |
@@ -35,6 +41,7 @@ are covered by their own license files and `package-lock.json`.
 | `@number-flow/react` | 0.6.2 | MIT | runtime |
 | `@react-three/drei` | 10.7.9 | MIT | runtime |
 | `@react-three/fiber` | 9.8.2 | MIT | runtime |
+| `@react-three/postprocessing` | 3.2.2 | MIT | runtime |
 | `@tailwindcss/vite` | 4.3.0 | MIT | runtime |
 | `@types/canvas-confetti` | 1.9.0 | MIT | runtime |
 | `@types/dompurify` | 3.0.5 | MIT | runtime |
@@ -53,6 +60,7 @@ are covered by their own license files and `package-lock.json`.
 | `heic2any` | 0.0.4 | MIT | runtime |
 | `lucide-react` | 0.563.0 | ISC | runtime |
 | `pdf-lib` | 1.17.1 | MIT | runtime |
+| `postprocessing` | 6.39.6 | Zlib | runtime |
 | `qrcode` | 1.5.4 | MIT | runtime |
 | `radix-ui` | 1.4.3 | MIT | runtime |
 | `react` | 19.2.6 | MIT | runtime |

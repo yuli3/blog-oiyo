@@ -2,7 +2,8 @@ import { Component, Suspense, lazy, useEffect, useMemo, useRef, useState, type R
 import Play from "lucide-react/dist/esm/icons/play";
 import Pause from "lucide-react/dist/esm/icons/pause";
 import CalendarDays from "lucide-react/dist/esm/icons/calendar-days";
-import { Ecliptic, Elongation, GeoVector, HelioVector } from "astronomy-engine";
+import Orbit from "lucide-react/dist/esm/icons/orbit";
+import { Body, Ecliptic, Elongation, GeoVector, HelioVector } from "astronomy-engine";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
@@ -18,7 +19,7 @@ import {
   type PlanetId,
   type SpaceLocale,
 } from "./data";
-import type { ScenePlanet } from "./OrreryScene";
+import type { SceneMoon, ScenePlanet } from "./OrreryScene";
 
 const REFERENCE_DATE = "2026-01-01T12:00:00Z";
 
@@ -27,7 +28,7 @@ const OrreryScene = lazy(() => import("./OrreryScene"));
 const COPY: Record<SpaceLocale, Record<string, string>> = {
   ko: {
     title: "날짜로 움직이는 태양계 3D",
-    lead: "행성 위치는 천체력 계산(astronomy-engine)으로 고른 날짜의 실제 배치예요. 드래그해서 돌려 보고, 행성을 누르면 지구에서의 거리와 오늘 밤 보이는지 알려 줘요.",
+    lead: "행성 위치는 천체력 계산(astronomy-engine)으로 고른 날짜의 실제 배치예요. 드래그해서 돌려 보고, 행성을 누르면 카메라가 날아가 가까이 보여 주고, 지구에서의 거리와 오늘 밤 보이는지 알려 줘요.",
     date: "날짜",
     today: "오늘",
     play: "시간 흐르게",
@@ -54,10 +55,12 @@ const COPY: Record<SpaceLocale, Record<string, string>> = {
     loading: "3D 장면을 불러오는 중",
     tableCaption: "고른 날짜의 행성 위치 요약",
     name: "행성",
+    overview: "전체 보기",
+    credit: "행성 표면 이미지: Solar System Scope (CC BY 4.0, NASA 자료 기반). 달 위치는 실제 방향이고 거리는 줄였어요. 소행성대는 분포를 보여 주는 그림이에요.",
   },
   en: {
     title: "3D Solar System on Any Date",
-    lead: "Planet positions are computed from an ephemeris (astronomy-engine) for the date you pick. Drag to rotate, and tap a planet to see its distance from Earth and whether it is up tonight.",
+    lead: "Planet positions are computed from an ephemeris (astronomy-engine) for the date you pick. Drag to rotate, and tap a planet to fly in for a close look and see its distance from Earth and whether it is up tonight.",
     date: "Date",
     today: "Today",
     play: "Run time",
@@ -84,6 +87,8 @@ const COPY: Record<SpaceLocale, Record<string, string>> = {
     loading: "Loading 3D scene",
     tableCaption: "Planet positions on the selected date",
     name: "Planet",
+    overview: "Whole system",
+    credit: "Planet surface maps: Solar System Scope (CC BY 4.0, based on NASA data). The Moon points in its true direction at a reduced distance; the asteroid belt is illustrative.",
   },
 };
 
@@ -118,6 +123,11 @@ export function SolarSystemOrrery({ locale: rawLocale }: { locale?: string }) {
   const [running, setRunning] = useState(false);
   const [trueScale, setTrueScale] = useState(false);
   const [selected, setSelected] = useState<PlanetId | null>("earth");
+  const [focus, setFocus] = useState<PlanetId | null>(null);
+  const choose = (id: PlanetId) => {
+    setSelected(id);
+    setFocus(id);
+  };
   const [webgl, setWebgl] = useState<boolean | null>(null);
   const last = useRef<number | null>(null);
 
@@ -150,6 +160,11 @@ export function SolarSystemOrrery({ locale: rawLocale }: { locale?: string }) {
       }),
     [date],
   );
+
+  const moon: SceneMoon = useMemo(() => {
+    const e = Ecliptic(GeoVector(Body.Moon, date, true));
+    return { elon: e.elon, elat: e.elat };
+  }, [date]);
 
   const rows = useMemo(
     () =>
@@ -268,17 +283,32 @@ export function SolarSystemOrrery({ locale: rawLocale }: { locale?: string }) {
       {webgl === false ? (
         <p className="rounded-lg border border-border bg-muted p-3 text-sm text-muted-foreground">{t.noWebgl}</p>
       ) : (
-        <div className="aspect-square w-full overflow-hidden rounded-xl border border-border bg-muted sm:aspect-video">
+        <div className="relative aspect-square w-full overflow-hidden rounded-xl border border-border bg-muted sm:aspect-video">
           {webgl && (
             <SceneBoundary fallback={<p className="p-4 text-sm text-muted-foreground">{t.noWebgl}</p>}>
               <Suspense fallback={loadingBox}>
-                <OrreryScene planets={planets} names={names} selected={selected} onSelect={setSelected} trueScale={trueScale} />
+                <OrreryScene
+                  planets={planets}
+                  moon={moon}
+                  names={names}
+                  selected={selected}
+                  focus={focus}
+                  onSelect={choose}
+                  trueScale={trueScale}
+                />
               </Suspense>
             </SceneBoundary>
+          )}
+          {webgl && focus && (
+            <Button variant="secondary" size="lg" className="absolute top-3 right-3" onClick={() => setFocus(null)}>
+              <Orbit aria-hidden="true" />
+              {t.overview}
+            </Button>
           )}
         </div>
       )}
       <p className="text-xs text-muted-foreground">{t.note}</p>
+      <p className="text-xs text-muted-foreground">{t.credit}</p>
 
       <div className="grid gap-4 md:grid-cols-2">
         <div className="rounded-xl border border-border bg-muted p-4" aria-live="polite">
@@ -322,7 +352,7 @@ export function SolarSystemOrrery({ locale: rawLocale }: { locale?: string }) {
                 <li key={r.p.id}>
                   <button
                     type="button"
-                    onClick={() => setSelected(r.p.id)}
+                    onClick={() => choose(r.p.id)}
                     className="flex min-h-11 w-full items-center justify-between rounded-lg px-2 text-left hover:bg-muted"
                   >
                     <span className="font-medium text-foreground">{names[r.p.id]}</span>
