@@ -235,8 +235,12 @@ const seriesName = isSeriesPost && rawSeriesKey
   : null;
 
 // 2026-11-06: the course cover accompanies its existing chapter navigation; chapter heroes remain distinct.
-const seriesCover = seriesPosts?.some((entry: { slug: string }) => entry.slug.endsWith("/academy-writing-skills-ch1"))
-  ? generatedSeriesCovers["academy-writing-skills-ch1"] : undefined;
+// 2026-11-11: any chapter listed in generated-series-covers.json lends its cover to the whole series.
+const seriesCoverMap = generatedSeriesCovers as Record<string, string>;
+const seriesCoverKey = seriesPosts
+  ?.map((entry: { slug: string }) => entry.slug.split("/").slice(1).join("/"))
+  .find((key: string) => key in seriesCoverMap);
+const seriesCover = seriesCoverKey ? seriesCoverMap[seriesCoverKey] : undefined;
 
 // Series JSON-LD for chapter posts
 let seriesJsonLd: string | null = null;
