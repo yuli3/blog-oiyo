@@ -195,7 +195,24 @@ const { post, locale, prevPost, nextPost, seriesPosts, availableLocales, related
 const { Content } = await post.render();
 // 2026-11-06: route-specific artwork avoids replacing unrelated existing heroes.
 const generatedHero = (generatedHeroImages as Record<string, string>)[post.slug.split("/").slice(1).join("/")];
-const heroImage = generatedHero ?? post.data.heroImage;
+// 2026-11-11: course covers are keyed by a chapter slug; its "-chN"-less prefix names the course.
+// frontmatter series can merge two courses (labor-law) or be absent (economics-core), so the
+// post's own prefix wins, and a chapter outside any series without its own hero shows the cover.
+const seriesCoverMap = generatedSeriesCovers as Record<string, string>;
+const coursePrefix = (key: string) => key.replace(/-ch\d+$/, "");
+// Prefixes shared by several covers (education-economics → micro/macro/international) are left
+// out; those courses resolve through their frontmatter series below.
+const prefixCounts = Object.keys(seriesCoverMap).reduce<Record<string, number>>((acc, key) => {
+  acc[coursePrefix(key)] = (acc[coursePrefix(key)] ?? 0) + 1;
+  return acc;
+}, {});
+const coverByPrefix: Record<string, string> = Object.fromEntries(
+  Object.entries(seriesCoverMap)
+    .filter(([key]) => prefixCounts[coursePrefix(key)] === 1)
+    .map(([key, src]) => [coursePrefix(key), src]),
+);
+const ownCourseCover = coverByPrefix[coursePrefix(post.slug.split("/").slice(1).join("/"))];
+const heroImage = generatedHero ?? post.data.heroImage ?? (seriesPosts ? undefined : ownCourseCover);
 const showCitation = locale === "ko" && [
   "ko/academy-tax-law-basic-ch1",
   "ko/academy-accounting-basics-ch2",
@@ -235,8 +252,15 @@ const seriesName = isSeriesPost && rawSeriesKey
   : null;
 
 // 2026-11-06: the course cover accompanies its existing chapter navigation; chapter heroes remain distinct.
-const seriesCover = seriesPosts?.some((entry: { slug: string }) => entry.slug.endsWith("/academy-writing-skills-ch1"))
-  ? generatedSeriesCovers["academy-writing-skills-ch1"] : undefined;
+// 2026-11-11: any chapter listed in generated-series-covers.json lends its cover to the whole series.
+const seriesCoverKeys = (seriesPosts ?? [])
+  .map((entry: { slug: string }) => entry.slug.split("/").slice(1).join("/"))
+  .filter((key: string) => key in seriesCoverMap);
+const ownPrefix = coursePrefix(post.slug.split("/").slice(1).join("/"));
+const seriesCoverKey = seriesCoverKeys.find((key: string) => coursePrefix(key) === ownPrefix) ?? seriesCoverKeys[0];
+const seriesCover = (seriesCoverKey && coursePrefix(seriesCoverKey) === ownPrefix ? seriesCoverMap[seriesCoverKey] : undefined)
+  ?? ownCourseCover
+  ?? (seriesCoverKey ? seriesCoverMap[seriesCoverKey] : undefined);
 
 // Series JSON-LD for chapter posts
 let seriesJsonLd: string | null = null;
