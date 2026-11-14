@@ -42,6 +42,10 @@ test('maps used calculators to live blog tool slugs', () => {
     'https://blog.oiyo.net/en/llm-cost-simulator/?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta',
   );
   assert.equal(
+    toolCtaHref('aieo-audit', 'ko'),
+    'https://blog.oiyo.net/ko/aieo-readiness-audit/?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta',
+  );
+  assert.equal(
     toolCtaHref('compound', 'en'),
     'https://tools.oiyo.net/en/compound-interest-calculator/?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta',
   );

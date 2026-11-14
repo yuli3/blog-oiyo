@@ -80,6 +80,7 @@ export const TOOL_CTA_BLOG_SLUGS: Record<string, string> = {
   "json-schema-guard": "json-schema-guard",
   "housing-loan": "housing-loan-simulator",
   "llm-cost": "llm-cost-simulator",
+  "aieo-audit": "aieo-readiness-audit",
 };
 
 export function toolCtaHref(tool: string, locale: string = "ko"): string {
