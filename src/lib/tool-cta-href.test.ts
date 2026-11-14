@@ -19,7 +19,15 @@ test('never points at ahoxy.com', () => {
 test('maps used calculators to live blog tool slugs', () => {
   assert.equal(
     toolCtaHref('bmi', 'ko'),
-    'https://blog.oiyo.net/ko/bmi-calculator/?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta',
+    'https://tools.oiyo.net/ko/bmi-calculator/?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta',
+  );
+  assert.equal(
+    toolCtaHref('cron-expression', 'ko'),
+    'https://blog.oiyo.net/ko/cron-expression-calculator/?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta',
+  );
+  assert.equal(
+    toolCtaHref('markdown-table', 'ko'),
+    'https://blog.oiyo.net/ko/markdown-table-formatter/?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta',
   );
   assert.equal(
     toolCtaHref('compound', 'en'),
@@ -27,7 +35,7 @@ test('maps used calculators to live blog tool slugs', () => {
   );
   assert.equal(
     toolCtaHref('calorie', 'ko'),
-    'https://blog.oiyo.net/ko/nutrition-calculator/?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta',
+    'https://tools.oiyo.net/ko/nutrition-calculator/?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta',
   );
   assert.equal(
     toolCtaHref('savings', 'ko'),

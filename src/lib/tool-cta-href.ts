@@ -74,6 +74,8 @@ export const TOOL_CTA_BLOG_SLUGS: Record<string, string> = {
   tip: "tip-calculator",
   "global-etf": "etf-recommender",
   "legal-interest": "legal-interest-calculator",
+  "cron-expression": "cron-expression-calculator",
+  "markdown-table": "markdown-table-formatter",
 };
 
 export function toolCtaHref(tool: string, locale: string = "ko"): string {
