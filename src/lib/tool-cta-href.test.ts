@@ -30,6 +30,14 @@ test('maps used calculators to live blog tool slugs', () => {
     'https://blog.oiyo.net/ko/markdown-table-formatter/?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta',
   );
   assert.equal(
+    toolCtaHref('diff-visualizer', 'ko'),
+    'https://blog.oiyo.net/ko/diff-visualizer/?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta',
+  );
+  assert.equal(
+    toolCtaHref('json-schema-guard', 'en'),
+    'https://blog.oiyo.net/en/json-schema-guard/?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta',
+  );
+  assert.equal(
     toolCtaHref('compound', 'en'),
     'https://tools.oiyo.net/en/compound-interest-calculator/?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta',
   );

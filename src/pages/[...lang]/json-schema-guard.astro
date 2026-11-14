@@ -1,0 +1,75 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import JsonSchemaGuard from "../../components/tools/JsonSchemaGuard";
+import { locales } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: ActiveLocale };
+
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
+  ko: {
+    title: "AI 에이전트 JSON 스키마 검증기 — 실시간 구조화 출력 어설션 도구",
+    description: "LLM 도구 호출 및 구조화된 JSON 출력을 0.1ms 내에 실시간 검증합니다. 외부 라이브러리 없는 순수 클라이언트 사이드 스키마 가드.",
+  },
+  en: {
+    title: "AI Agent JSON Schema Guard — Sub-Millisecond Output Validator",
+    description: "Validate LLM tool calls and structured JSON responses against schemas in under 0.1ms with zero dependencies.",
+  },
+  ja: {
+    title: "JSON スキーマ ガード — AIエージェント構造化データ検証ツール",
+    description: "LLMのツール呼び出しやJSON出力を0.1ms以下で高速アサーションする軽量スキーマバリデータです。",
+  },
+  fr: {
+    title: "Garde de Schéma JSON — Validateur de Données pour Agents IA",
+    description: "Validez instantanément les sorties JSON structurées et les appels d'outils LLM en moins de 0.1ms sans dépendance externe.",
+  },
+  es: {
+    title: "Guardián de Esquema JSON — Validador Rápido de Salidas IA",
+    description: "Valida respuestas JSON estructuradas de agentes IA en sub-milisegundos sin dependencias externas.",
+  },
+  zh: {
+    title: "JSON 模式断言卫士 — 毫秒级 AI 结构化输出校验工具",
+    description: "在浏览器中以亚毫秒级速度验证 LLM 工具调用和结构化 JSON 数据模式。",
+  },
+};
+
+const currentMeta = meta[locale] ?? meta.en;
+---
+
+<BaseLayout
+  title={currentMeta.title}
+  description={currentMeta.description}
+  availableLocales={[...locales]}
+>
+  <main class="container mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto mb-8 text-center">
+      <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">
+        {currentMeta.title}
+      </h1>
+      <p class="mt-3 text-lg text-muted-foreground">
+        {currentMeta.description}
+      </p>
+    </div>
+
+    <JsonSchemaGuard client:load />
+
+    <section class="max-w-4xl mx-auto mt-12 space-y-6 text-sm text-muted-foreground border-t border-border pt-8">
+      <h2 class="text-lg font-semibold text-foreground">
+        {locale === "ko" ? "왜 서브밀리초 JSON 스키마 가드가 필요한가요?" : "Why Sub-Millisecond Schema Guard?"}
+      </h2>
+      <p>
+        {locale === "ko"
+          ? "멀티 에이전트 시스템에서 수백 개의 도구 호출과 구조화된 JSON 결과를 Zod나 Ajv 같은 수백 KB 규모의 무거운 외부 라이브러리 없이 0.1ms 이내로 검증하여 CPU 병목을 없애고 런타임 신뢰성을 극대화합니다. Powered by @oiyonet/json-schema-guard."
+          : "Validate hundreds of agent tool calls without heavyweight runtime dependencies in under 0.1ms. Powered by @oiyonet/json-schema-guard."}
+      </p>
+    </section>
+  </main>
+</BaseLayout>

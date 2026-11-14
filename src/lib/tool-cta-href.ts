@@ -76,6 +76,8 @@ export const TOOL_CTA_BLOG_SLUGS: Record<string, string> = {
   "legal-interest": "legal-interest-calculator",
   "cron-expression": "cron-expression-calculator",
   "markdown-table": "markdown-table-formatter",
+  "diff-visualizer": "diff-visualizer",
+  "json-schema-guard": "json-schema-guard",
 };
 
 export function toolCtaHref(tool: string, locale: string = "ko"): string {

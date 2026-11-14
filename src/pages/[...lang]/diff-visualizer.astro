@@ -1,0 +1,75 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import DiffVisualizer from "../../components/tools/DiffVisualizer";
+import { locales } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: ActiveLocale };
+
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
+  ko: {
+    title: "AI 에이전트 코드 디프 시각화기 — Side-by-Side 터미널 Diff 도구",
+    description: "코드 변경 전후를 실시간으로 비교하고, 추가/삭제 라인을 터미널 하이라이트 스타일로 즉시 확인하는 무료 개발자 도구입니다.",
+  },
+  en: {
+    title: "AI Agent Diff Visualizer — Side-by-Side Terminal Diff Inspector",
+    description: "Compare code changes side-by-side with zero latency. Visual terminal-style diff inspection and unified diff generator.",
+  },
+  ja: {
+    title: "Diff ビジュアライザー — ターミナル風 Side-by-Side コード比較",
+    description: "変更前後のソースコードをリアルタイムで比較し、ターミナルスタイルの差分表示を提供する無料ツールです。",
+  },
+  fr: {
+    title: "Visualiseur Diff — Inspecteur de Différence de Code Terminal",
+    description: "Comparez les modifications de code côte à côte avec une inspection de style terminal réactive.",
+  },
+  es: {
+    title: "Visualizador de Diff — Inspector de Código Estilo Terminal",
+    description: "Compara cambios de código lado a lado en tiempo real con resaltado visual estilo terminal.",
+  },
+  zh: {
+    title: "代码差异对比器 — 实时终端风格 Diff 检查工具",
+    description: "实时对比代码修改前后差异，提供并排终端高亮与统一差异格式导出。",
+  },
+};
+
+const currentMeta = meta[locale] ?? meta.en;
+---
+
+<BaseLayout
+  title={currentMeta.title}
+  description={currentMeta.description}
+  availableLocales={[...locales]}
+>
+  <main class="container mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto mb-8 text-center">
+      <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">
+        {currentMeta.title}
+      </h1>
+      <p class="mt-3 text-lg text-muted-foreground">
+        {currentMeta.description}
+      </p>
+    </div>
+
+    <DiffVisualizer client:load />
+
+    <section class="max-w-4xl mx-auto mt-12 space-y-6 text-sm text-muted-foreground border-t border-border pt-8">
+      <h2 class="text-lg font-semibold text-foreground">
+        {locale === "ko" ? "왜 에이전트 디프 시각화가 중요한가요?" : "Why Visual Diff Matters"}
+      </h2>
+      <p>
+        {locale === "ko"
+          ? "AI 코딩 에이전트가 생성한 패치나 대규모 리팩토링 커밋을 브라우저에서 바로 비교 검증할 수 있습니다. 외부 서버 통신이 전혀 없는 100% 클라이언트 사이드 엔진(@oiyonet/diff-visualizer)으로 작동하여 코드 유출 위험이 없습니다."
+          : "Verify AI-generated code patches and refactor diffs instantly in your browser with zero server roundtrips. Powered by @oiyonet/diff-visualizer."}
+      </p>
+    </section>
+  </main>
+</BaseLayout>
