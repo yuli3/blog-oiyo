@@ -1,0 +1,87 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ParentalLeaveCalculator from "../../components/tools/ParentalLeaveCalculator";
+import { locales } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: ActiveLocale };
+
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
+  ko: {
+    title: "2026 육아휴직 급여 계산기 — 상한 250만원 및 6+6 부모휴직 특례 반영",
+    description: "2025~2026년 개정된 고용보험법(월 최대 250만 원 인상, 사후지급금 폐지)을 반영하여 매월 실제 통장에 입금되는 육아휴직 급여를 1초 만에 계산합니다.",
+  },
+  en: {
+    title: "Korea Parental Leave Benefit Calculator 2026 — Maternity & Paternity Allowance",
+    description: "Calculate official parental leave benefits in Korea with updated 2026 ceilings (up to 2.5M KRW/month) and 6+6 co-parenting bonuses.",
+  },
+  ja: {
+    title: "韓国 育児休업給付金 計算機 2026 — 上限250万ウォン・両親特例シミュレーター",
+    description: "韓国の最新雇用保険法（月最大250万ウォン・事後支給金廃止）を反映した育児休業給付金のリアルタイム計算ツールです。",
+  },
+  fr: {
+    title: "Calculateur d'Indemnités de Congé Parental en Corée 2026 — Simulation en Ligne",
+    description: "Simulez vos allocations mensuelles de congé parental en Corée selon les nouveaux plafonds de 2026.",
+  },
+  es: {
+    title: "Calculadora de Permiso Parental en Corea 2026 — Subsidio por Maternidad y Paternidad",
+    description: "Calcula los pagos mensuales por permiso parental en Corea según los límites actualizados de 2026.",
+  },
+  zh: {
+    title: "韩国育儿休职津贴计算器 2026 — 上限250万韩元与父母同休特例测算",
+    description: "根据韩国2026年最新修订法律（取消事后支付、初期每月最高250万韩元），一键计算育儿假每月实际到账金额。",
+  },
+};
+
+const currentMeta = meta[locale] ?? meta.ko;
+---
+
+<BaseLayout
+  title={currentMeta.title}
+  description={currentMeta.description}
+  availableLocales={[...locales]}
+>
+  <main class="container mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto mb-8 text-center">
+      <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">
+        {currentMeta.title}
+      </h1>
+      <p class="mt-3 text-lg text-muted-foreground">
+        {currentMeta.description}
+      </p>
+    </div>
+
+    <ParentalLeaveCalculator client:load />
+
+    <section class="max-w-4xl mx-auto mt-12 space-y-6 text-sm text-muted-foreground border-t border-border pt-8">
+      <h2 class="text-lg font-semibold text-foreground">
+        {locale === "ko" ? "2026년 달라진 육아휴직 급여 핵심 3가지" : "Key Regulatory Changes in 2026"}
+      </h2>
+      <div class="space-y-3 leading-relaxed">
+        <p>
+          {locale === "ko"
+            ? "1. 초기 소득 보장 대폭 강화: 기존 일률 150만 원 상한에서 벗어나, 휴직 초기(1~3개월차)에는 월 최대 250만 원, 4~6개월차는 200만 원, 7개월 이후는 160만 원으로 상향되어 소득 공백 부담을 줄였습니다."
+            : "1. Concentrated Initial Support: Ceilings are raised to 2.5M KRW (Months 1–3), 2.0M KRW (Months 4–6), and 1.6M KRW afterwards."}
+        </p>
+        <p>
+          {locale === "ko"
+            ? "2. 사후지급금 제도 완전 폐지: 과거 복직 후 6개월 이상 근무해야 받을 수 있었던 25% 사후지급금이 폐지되어, 휴직 기간 중 전액(100%) 매월 실지급됩니다."
+            : "2. Abolition of Retention Holdback: The 25% post-reinstatement holdback has been eliminated; 100% of benefits are now disbursed monthly during leave."}
+        </p>
+        <p>
+          {locale === "ko"
+            ? "3. 6+6 부모육아휴직제 확대: 부모가 자녀 생후 18개월 내에 함께 휴직을 사용할 경우, 첫 6개월 동안 부모 각자에게 최고 월 450만 원(첫 달 200만 원부터 매달 50만 원씩 증가)까지 특례 지원됩니다."
+            : "3. Expanded 6+6 Co-Parenting Allowance: When both parents take leave within the child's first 18 months, maximum ceilings escalate up to 4.5M KRW/month per parent."}
+        </p>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
