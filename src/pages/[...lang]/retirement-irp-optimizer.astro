@@ -1,0 +1,82 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import RetirementIrpOptimizer from "../../components/tools/RetirementIrpOptimizer";
+import { locales } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: ActiveLocale };
+
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
+  ko: {
+    title: "퇴직금 & IRP 연금 절세 시뮬레이터 — 일시금 vs 연금 수령 세금 감면 계산기",
+    description: "퇴직금을 일시금으로 수령할 때와 IRP 계좌를 통해 10년 이상 연금으로 수령할 때의 퇴직소득세 30~40% 감면액과 월 실수령액을 즉시 비교합니다.",
+  },
+  en: {
+    title: "Severance Pay & IRP Pension Tax Optimizer — Lump Sum vs Annuity Calculator",
+    description: "Compare retirement lump-sum income taxes with IRP pension distribution tax discounts (30-40% savings) in Korea.",
+  },
+  ja: {
+    title: "退職金＆IRP年金 節税シミュレーター — 一時金 vs 分割受取 税金比較計算機",
+    description: "退職金を一時金で受け取る場合とIRP年金として分割受取する場合の退職所得税30〜40％減免効果を計算します。",
+  },
+  zh: {
+    title: "退休金与 IRP 年金节税测算器 — 一次性领取对比年金领取税收优惠计算器",
+    description: "实时对比韩国退职金一次性领取与通过 IRP 账户分期领取的 30%~40% 退职所得税减免与每月实际到账金额。",
+  },
+  fr: {
+    title: "Simulateur d'Optimisation Fiscale Retraite et IRP — Indemnité vs Rente",
+    description: "Comparez les impôts sur le versement forfaitaire et la rente IRP en Corée avec 30 à 40 % d'exonération fiscale.",
+  },
+  es: {
+    title: "Simulador de Impuestos de Jubilación e IRP — Pago Único vs Renta Periódica",
+    description: "Calcula los ahorros fiscales del 30-40% al recibir la indemnización por despido a través de cuentas IRP en Corea.",
+  },
+};
+
+const currentMeta = meta[locale] ?? meta.ko;
+---
+
+<BaseLayout
+  title={currentMeta.title}
+  description={currentMeta.description}
+  availableLocales={[...locales]}
+>
+  <main class="container mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto mb-8 text-center">
+      <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">
+        {currentMeta.title}
+      </h1>
+      <p class="mt-3 text-lg text-muted-foreground">
+        {currentMeta.description}
+      </p>
+    </div>
+
+    <RetirementIrpOptimizer client:load />
+
+    <section class="max-w-4xl mx-auto mt-12 space-y-6 text-sm text-muted-foreground border-t border-border pt-8">
+      <h2 class="text-lg font-semibold text-foreground">
+        {locale === "ko" ? "퇴직금 IRP 수령 시 핵심 절세 원리" : "Key Pension Tax Rules"}
+      </h2>
+      <div class="space-y-3 leading-relaxed">
+        <p>
+          {locale === "ko"
+            ? "1. 30%~40% 세금 직접 감면: 퇴직금을 IRP 계좌로 이체한 후 10년 이하 기간 동안 연금으로 수령하면 원래 내야 할 퇴직소득세의 30%가 감면(70%만 과세)되며, 11년 차 이후 수령분부터는 40%가 감면(60%만 과세)됩니다."
+            : "1. 30% to 40% Direct Tax Discount: Withdrawing severance via an IRP account cuts your retirement income tax by 30% (Years 1–10) and 40% (Year 11 onwards)."}
+        </p>
+        <p>
+          {locale === "ko"
+            ? "2. 과세이연 효과: 퇴직 시점에 수천만 원의 세금을 떼이지 않고 원금 전체가 IRP 계좌로 입금되므로, 정기예금이나 안전자산에 재투자되어 세전 복리 이자 수익을 누릴 수 있습니다."
+            : "2. Tax Deferral Compounding: The entire gross severance principal is transferred to your IRP without upfront withholding, enabling compounding investment gains."}
+        </p>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

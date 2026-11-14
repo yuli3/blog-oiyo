@@ -50,6 +50,10 @@ test('maps used calculators to live blog tool slugs', () => {
     'https://blog.oiyo.net/ko/parental-leave-calculator/?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta',
   );
   assert.equal(
+    toolCtaHref('pension-irp', 'ko'),
+    'https://blog.oiyo.net/ko/retirement-irp-optimizer/?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta',
+  );
+  assert.equal(
     toolCtaHref('compound', 'en'),
     'https://tools.oiyo.net/en/compound-interest-calculator/?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta',
   );

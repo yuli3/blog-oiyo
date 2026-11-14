@@ -82,6 +82,7 @@ export const TOOL_CTA_BLOG_SLUGS: Record<string, string> = {
   "llm-cost": "llm-cost-simulator",
   "aieo-audit": "aieo-readiness-audit",
   "parental-leave": "parental-leave-calculator",
+  "pension-irp": "retirement-irp-optimizer",
 };
 
 export function toolCtaHref(tool: string, locale: string = "ko"): string {
