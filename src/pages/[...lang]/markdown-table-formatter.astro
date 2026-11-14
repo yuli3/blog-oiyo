@@ -1,0 +1,72 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import MarkdownTableCalculator from "../../components/tools/MarkdownTableCalculator";
+import { locales } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: ActiveLocale };
+
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
+  ko: {
+    title: "마크다운 테이블 포맷터 — 한글·동아시아 전각 문자 너비 자동 정렬기",
+    description: "한글, 한자, 일본어(2칸 너비)가 섞여 깨지는 마크다운 표를 고정폭 폰트 기준으로 완벽하게 정렬하고 파이프 라인을 정렬합니다.",
+  },
+  en: {
+    title: "Markdown Table Formatter — East Asian Double-Width Pipe Aligner",
+    description: "Format and align misaligned Markdown tables with pixel-perfect column widths. Fully supports CJK and East Asian wide character displays.",
+  },
+  ja: {
+    title: "Markdown 表 フォーマッター — 日本語 全角文字 幅自動整列",
+    description: "全角文字（日本語、漢字、ハングル）を含むマークダウンテーブルを綺麗に整列し、崩れたパイプ線を修復します。",
+  },
+  fr: {
+    title: "Formateur de Tableau Markdown — Alignement Parfait des Colonnes",
+    description: "Formatez et alignez vos tableaux Markdown avec des largeurs de colonnes précises et élégantes.",
+  },
+  es: {
+    title: "Formateador de Tablas Markdown — Alineación Perfecta de Columnas",
+    description: "Formatea y alinea tablas Markdown fácilmente manteniendo el espaciado correcto en cada celda.",
+  },
+  zh: {
+    title: "Markdown 表格格式化工具 — 中日韩全角字符对齐",
+    description: "自动修复错位的 Markdown 表格，完美支持中文汉字等全角字符宽度，一键生成规整表格。",
+  },
+};
+
+const m = meta[locale] || meta.ko;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: m.title,
+    description: m.description,
+    applicationCategory: "DeveloperApplication",
+    operatingSystem: "Any",
+  },
+];
+---
+
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]} heading={m.title} intro={m.description}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <div class="mx-auto max-w-2xl px-4 py-5 sm:py-8">
+    <MarkdownTableCalculator client:load locale={locale} />
+
+    <section class="mt-8 sm:mt-12 border-t border-border pt-6 sm:pt-8 space-y-4">
+      <h2 class="text-xl font-bold text-foreground">마크다운 표 정렬 원리와 동아시아 문자 너비(East Asian Width)</h2>
+      <p class="text-sm leading-7 text-muted-foreground">
+        대부분의 마크다운 포맷터는 문자열의 길이(length)를 단순히 글자 수(1글자 = 1폭)로 계산합니다.
+        하지만 <strong>한글, 한자, 일본어(CJK)</strong> 문자는 터미널과 고정폭(Monospace) 에디터에서 영문/숫자의 정확히 <strong>2배 폭(2 Columns)</strong>을 차지합니다.
+        본 도구는 유니코드 East Asian Width 표준 오프셋을 수학적으로 연산하여 영문과 한글이 섞인 복잡한 표도 세로 파이프(|)가 칼같이 일치하도록 정렬합니다.
+      </p>
+    </section>
+  </div>
+</BaseLayout>

@@ -1,0 +1,111 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CronHumanCalculator from "../../components/tools/CronHumanCalculator";
+import { locales } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: ActiveLocale };
+
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
+  ko: {
+    title: "크론식 변환기 — Crontab 표현식 자연어 양방향 해석기",
+    description: "복잡한 5필드 크론 표현식을 한글/영어로 즉시 풀이하고, '매 15분마다', '평일 오전 9시' 같은 일정을 크론식으로 역변환합니다.",
+  },
+  en: {
+    title: "Cron Expression Calculator — Crontab to Human Readable Schedule",
+    description: "Translate complex 5-field cron schedules into plain English, or convert natural language schedules into valid cron syntax instantly.",
+  },
+  ja: {
+    title: "Cron式 計算機 — クーロン式 自然言語 相互変換",
+    description: "Cron式を自然言語でわかりやすく解説し、実行スケジュールからCron式を即座に生成します。",
+  },
+  fr: {
+    title: "Calculateur Cron — Expression Crontab en Langage Naturel",
+    description: "Traduisez les expressions cron en langage clair et convertissez les fréquences en syntaxe crontab valide.",
+  },
+  es: {
+    title: "Calculadora de Expresiones Cron — Traductor Crontab",
+    description: "Traduce expresiones cron a lenguaje natural y genera sintaxis crontab fácilmente.",
+  },
+  zh: {
+    title: "Cron 表达式转换器 — 定时任务自然语言双向转换",
+    description: "将复杂的 Cron 表达式转换为通俗易懂的自然语言，或通过定时描述快速生成 Cron 语法。",
+  },
+};
+
+const m = meta[locale] || meta.ko;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: m.title,
+    description: m.description,
+    applicationCategory: "DeveloperApplication",
+    operatingSystem: "Any",
+  },
+];
+---
+
+<BaseLayout title={m.title} description={m.description} availableLocales={[...locales]} heading={m.title} intro={m.description}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  <div class="mx-auto max-w-2xl px-4 py-5 sm:py-8">
+    <CronHumanCalculator client:load locale={locale} />
+
+    <section class="mt-8 sm:mt-12 border-t border-border pt-6 sm:pt-8 space-y-4">
+      <h2 class="text-xl font-bold text-foreground">5필드 크론 표현식 구조 안내</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs font-mono border border-border rounded-xl">
+          <thead class="bg-muted/50 text-foreground">
+            <tr>
+              <th class="p-3 text-left border-b border-border">필드</th>
+              <th class="p-3 text-left border-b border-border">의미</th>
+              <th class="p-3 text-left border-b border-border">허용 범위</th>
+              <th class="p-3 text-left border-b border-border">특수 문자</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-border text-muted-foreground">
+            <tr>
+              <td class="p-3 font-bold text-foreground">1 (분)</td>
+              <td class="p-3">Minute</td>
+              <td class="p-3">0 - 59</td>
+              <td class="p-3">* , - /</td>
+            </tr>
+            <tr>
+              <td class="p-3 font-bold text-foreground">2 (시)</td>
+              <td class="p-3">Hour</td>
+              <td class="p-3">0 - 23</td>
+              <td class="p-3">* , - /</td>
+            </tr>
+            <tr>
+              <td class="p-3 font-bold text-foreground">3 (일)</td>
+              <td class="p-3">Day of Month</td>
+              <td class="p-3">1 - 31</td>
+              <td class="p-3">* , - /</td>
+            </tr>
+            <tr>
+              <td class="p-3 font-bold text-foreground">4 (월)</td>
+              <td class="p-3">Month</td>
+              <td class="p-3">1 - 12</td>
+              <td class="p-3">* , - /</td>
+            </tr>
+            <tr>
+              <td class="p-3 font-bold text-foreground">5 (요일)</td>
+              <td class="p-3">Day of Week</td>
+              <td class="p-3">0 - 6 (0=일요일)</td>
+              <td class="p-3">* , - /</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
