@@ -34,8 +34,8 @@ test('maps used calculators to live blog tool slugs', () => {
     'https://blog.oiyo.net/ko/diff-visualizer/?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta',
   );
   assert.equal(
-    toolCtaHref('json-schema-guard', 'en'),
-    'https://blog.oiyo.net/en/json-schema-guard/?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta',
+    toolCtaHref('housing-loan', 'ko'),
+    'https://blog.oiyo.net/ko/housing-loan-simulator/?utm_source=blog_oiyo&utm_medium=referral&utm_campaign=tool_cta',
   );
   assert.equal(
     toolCtaHref('compound', 'en'),

@@ -1,0 +1,82 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import HousingLoanSimulator from "../../components/tools/HousingLoanSimulator";
+import { locales } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: ActiveLocale };
+
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
+  ko: {
+    title: "정부 주거지원 대출 자격 판별기 — 신생아특례·신혼부부·청년 버팀목/디딤돌 계산기",
+    description: "2026/2027 완화된 소득 기준(신생아특례 2.5억 등)을 반영하여 청년, 신혼부부, 출산가구의 디딤돌·버팀목 대출 자격과 예상 금리, 월 상환액을 즉시 진단합니다.",
+  },
+  en: {
+    title: "Korea Housing Loan Eligibility Simulator — Didimdol & Beotimdok Calculator",
+    description: "Check eligibility and monthly payments for government housing loans in Korea (Newborn, Newlywed, Youth) based on 2026 guidelines.",
+  },
+  ja: {
+    title: "韓国 住宅支援ローン 資格診断機 — 新生児特例・新婚・青年 貸付金利計算機",
+    description: "韓国の政府住宅支援融資（ディディムドル・ポティムモク）の資格判定と月々の返済額を即座にシミュレーションします。",
+  },
+  fr: {
+    title: "Simulateur de Prêt Immobilier Public en Corée — Calculateur d'Éligibilité",
+    description: "Vérifiez votre éligibilité aux prêts immobiliers subventionnés en Corée pour jeunes couples et familles avec nouveau-né.",
+  },
+  es: {
+    title: "Simulador de Préstamos para Vivienda en Corea — Calculadora de Elegibilidad",
+    description: "Evalúa tu elegibilidad para préstamos hipotecarios y de alquiler con respaldo gubernamental en Corea según las normas de 2026.",
+  },
+  zh: {
+    title: "韩国政府住房贷款资格测算器 — 新生儿特例·新婚·青年购房全税贷款计算器",
+    description: "根据2026年最新放宽政策，一键测算韩国政府低息住房贷款（垫脚石、顶梁柱）资格与每月还款额。",
+  },
+};
+
+const currentMeta = meta[locale] ?? meta.ko;
+---
+
+<BaseLayout
+  title={currentMeta.title}
+  description={currentMeta.description}
+  availableLocales={[...locales]}
+>
+  <main class="container mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto mb-8 text-center">
+      <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">
+        {currentMeta.title}
+      </h1>
+      <p class="mt-3 text-lg text-muted-foreground">
+        {currentMeta.description}
+      </p>
+    </div>
+
+    <HousingLoanSimulator client:load />
+
+    <section class="max-w-4xl mx-auto mt-12 space-y-6 text-sm text-muted-foreground border-t border-border pt-8">
+      <h2 class="text-lg font-semibold text-foreground">
+        {locale === "ko" ? "정부 정책 대출 체크포인트" : "Key Policy Highlights"}
+      </h2>
+      <div class="space-y-3 leading-relaxed">
+        <p>
+          {locale === "ko"
+            ? "1. 신생아 특례 대출은 대출 신청일 기준 2년 이내 출산(또는 입양)한 무주택 가구를 대상으로 하며, 2025~2026년부터 부부합산 소득 기준이 최대 2.5억 원으로 대폭 상향되었습니다."
+            : "1. Newborn Special Loan applies to households who had a baby within 2 years, with annual income limit increased up to 250M KRW."}
+        </p>
+        <p>
+          {locale === "ko"
+            ? "2. 청년전용 버팀목 전세자금대출은 만 34세 이하 단독 세대주를 대상으로 하며, 보증금 3억 원 이하 주택에 대해 최대 2억 원(보증금의 80%)까지 연 1.5%~2.4%의 최저 금리로 지원됩니다."
+            : "2. Youth Beotimdok Loan supports youth under 34 years old up to 200M KRW with ultra-low interest rates starting from 1.5%."}
+        </p>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
