@@ -1,0 +1,82 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import LlmCostSimulator from "../../components/tools/LlmCostSimulator";
+import { locales } from "../../lib/i18n";
+
+type ActiveLocale = (typeof locales)[number];
+
+export async function getStaticPaths() {
+  return locales.map((lang) => ({
+    params: { lang },
+    props: { locale: lang },
+  }));
+}
+
+const { locale } = Astro.props as { locale: ActiveLocale };
+
+const meta: Record<ActiveLocale, { title: string; description: string }> = {
+  ko: {
+    title: "AI 에이전트 LLM 토큰 & API 비용 계산기 — Claude, Gemini, GPT 예상 청구액 시뮬레이터",
+    description: "멀티턴 에이전트 루프와 프롬프트 캐싱을 반영하여 Claude 3.5 Sonnet, Gemini 1.5, GPT-4o, DeepSeek의 실제 월간 API 청구액을 1초 만에 무료로 예측합니다.",
+  },
+  en: {
+    title: "AI Agent LLM Token & API Cost Simulator — Claude, Gemini, GPT Pricing Calculator",
+    description: "Simulate monthly LLM API bills with multi-turn agent iterations and prompt caching. Compare Claude, Gemini, GPT-4o, and DeepSeek pricing in real time.",
+  },
+  ja: {
+    title: "AIエージェント LLMトークン＆API料金シミュレーター — Claude・Gemini・GPT 費用計算",
+    description: "プロンプトキャッシングとマルチターンループを反映したLLM APIの月額請求見積もり計算ツールです。",
+  },
+  fr: {
+    title: "Simulateur de Coût API LLM pour Agents IA — Calculateur de Tokens et Tarifs",
+    description: "Estimez vos factures mensuelles d'API LLM pour Claude, Gemini et GPT avec mise en cache des requêtes et boucles d'agents autonomes.",
+  },
+  es: {
+    title: "Calculadora de Costos de API LLM para Agentes IA — Estimador de Tokens",
+    description: "Calcula los costos mensuales de API para Claude, Gemini y GPT con soporte para bucles de agentes y almacenamiento en caché de prompts.",
+  },
+  zh: {
+    title: "AI 智能体 LLM Token 与 API 成本测算器 — Claude·Gemini·GPT 账单模拟",
+    description: "实时测算多轮 Agent 工具调用与 Prompt 缓存下的月度 LLM API 账单，对比主流大模型性价比。",
+  },
+};
+
+const currentMeta = meta[locale] ?? meta.ko;
+---
+
+<BaseLayout
+  title={currentMeta.title}
+  description={currentMeta.description}
+  availableLocales={[...locales]}
+>
+  <main class="container mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto mb-8 text-center">
+      <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">
+        {currentMeta.title}
+      </h1>
+      <p class="mt-3 text-lg text-muted-foreground">
+        {currentMeta.description}
+      </p>
+    </div>
+
+    <LlmCostSimulator client:load />
+
+    <section class="max-w-4xl mx-auto mt-12 space-y-6 text-sm text-muted-foreground border-t border-border pt-8">
+      <h2 class="text-lg font-semibold text-foreground">
+        {locale === "ko" ? "AI 에이전트 비용 최적화 핵심 팁" : "Key Optimization Strategies"}
+      </h2>
+      <div class="space-y-3 leading-relaxed">
+        <p>
+          {locale === "ko"
+            ? "1. 프롬프트 캐싱(Prompt Caching) 필수 활용: 고정된 시스템 프롬프트나 방대한 컨텍스트는 캐시를 적용하면 입력 비용의 최대 75%~90%를 절감할 수 있습니다 (Anthropic, Gemini, OpenAI 모두 지원)."
+            : "1. Leverage Prompt Caching: Reusing static system prompts and large codebase contexts reduces input token costs by up to 75%–90%."}
+        </p>
+        <p>
+          {locale === "ko"
+            ? "2. 라우팅 하이브리드 아키텍처: 단순 분류나 스키마 검증은 Gemini 1.5 Flash나 GPT-4o mini 같은 저비용 모델로 처리하고, 고난도 추론과 코드 생성만 Claude 3.5 Sonnet이나 Gemini 1.5 Pro로 위임하면 비용을 1/5 수준으로 낮출 수 있습니다."
+            : "2. Hybrid Routing Architecture: Route trivial classification tasks to lightweight models like Gemini 1.5 Flash, reserving frontier models only for deep reasoning and code generation."}
+        </p>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

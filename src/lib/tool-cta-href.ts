@@ -79,6 +79,7 @@ export const TOOL_CTA_BLOG_SLUGS: Record<string, string> = {
   "diff-visualizer": "diff-visualizer",
   "json-schema-guard": "json-schema-guard",
   "housing-loan": "housing-loan-simulator",
+  "llm-cost": "llm-cost-simulator",
 };
 
 export function toolCtaHref(tool: string, locale: string = "ko"): string {
