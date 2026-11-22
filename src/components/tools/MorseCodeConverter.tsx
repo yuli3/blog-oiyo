@@ -101,7 +101,7 @@ const MorseCodeConverter: React.FC<{ locale?: Locale }> = ({ locale = 'en' }) =>
             </button>
           </div>
           <div className="w-full min-h-[100px] px-4 py-3 bg-muted/20 rounded-2xl border border-border font-mono text-sm break-all select-all whitespace-pre-wrap">
-            {output || <span className="text-muted-foreground/50 select-none">—</span>}
+            {output || <span className="text-muted-foreground select-none">—</span>}
           </div>
         </div>
 

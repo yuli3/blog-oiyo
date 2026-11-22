@@ -391,7 +391,7 @@ const InsurancePremiumCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'e
           </ul>
         </div>
 
-        <p className="text-[10px] text-muted-foreground/60">
+        <p className="text-[10px] text-muted-foreground">
           {locale === 'ko' ? '실제 보험료는 보험사·상품·건강검진 결과에 따라 다를 수 있습니다. 본 계산기는 참고용입니다.' :
            'Actual premiums vary by insurer, product, and underwriting. This calculator is for reference only.'}
         </p>

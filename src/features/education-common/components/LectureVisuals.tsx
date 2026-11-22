@@ -125,7 +125,7 @@ export function LectureBarChart(props: any) {
   return (
     <div className="my-7 sm:my-12 rounded-3xl border border-border/40 bg-muted/20 p-4 sm:p-8">
       {props.title && (
-        <h3 className="mb-2 text-center text-sm font-bold uppercase tracking-[0.2em] text-primary/60">{props.title}</h3>
+        <h3 className="mb-2 text-center text-sm font-bold uppercase tracking-[0.2em] text-primary">{props.title}</h3>
       )}
       {props.description && (
         <p
@@ -146,7 +146,7 @@ export function LectureBarChart(props: any) {
                 </div>
               </div>
             </div>
-            <span className="w-full truncate text-center text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70">
+            <span className="w-full truncate text-center text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
               {r.name}
             </span>
           </div>
@@ -167,7 +167,7 @@ export function LecturePieChart(props: any) {
   return (
     <div className="my-7 sm:my-12 rounded-3xl border border-border/40 bg-muted/20 p-4 sm:p-8">
       {props.title && (
-        <h3 className="mb-2 text-center text-sm font-bold uppercase tracking-[0.2em] text-primary/60">{props.title}</h3>
+        <h3 className="mb-2 text-center text-sm font-bold uppercase tracking-[0.2em] text-primary">{props.title}</h3>
       )}
       {props.description && (
         <p
@@ -266,7 +266,7 @@ export function LectureConceptGrid({
                       className={`rounded-md px-1.5 py-0.5 text-xs font-semibold ${
                         item.current
                           ? "bg-primary text-primary-foreground"
-                          : "bg-muted text-muted-foreground"
+                          : "bg-muted text-foreground"
                       }`}
                     >
                       {item.chapterLabel}

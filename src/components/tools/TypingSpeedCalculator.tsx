@@ -132,7 +132,7 @@ export default function TypingSpeedCalculator({ locale = 'ko' }: Props) {
         </div>
         <div className="p-4 rounded-xl border border-border bg-muted/40 font-mono text-base sm:text-lg leading-relaxed tracking-wide select-none">
           {targetText.split('').map((char, idx) => {
-            let color = "text-muted-foreground/60";
+            let color = "text-muted-foreground";
             let bg = "";
             if (idx < userInput.length) {
               if (userInput[idx] === char) {

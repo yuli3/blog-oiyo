@@ -72,7 +72,7 @@ const PetAgeCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' })
                     <p className="text-[10px] font-black text-primary uppercase tracking-widest mb-4">{t.result}</p>
                     <div className="flex items-center justify-center gap-4">
                         <h2 className="text-6xl font-black text-primary">{humanAge}</h2>
-                        <span className="text-2xl font-black text-primary/60">세</span>
+                        <span className="text-2xl font-black text-primary">세</span>
                     </div>
                     <p className="mt-6 text-sm font-medium text-muted-foreground">
                         {humanAge >= 60 ? "중장년기에 접어들었습니다. 정기적인 건강 검진이 필요합니다." : humanAge >= 20 ? "청년기입니다. 왕성한 활동을 즐길 시기입니다." : "성장기입니다. 풍부한 영양과 사회화가 중요합니다."}

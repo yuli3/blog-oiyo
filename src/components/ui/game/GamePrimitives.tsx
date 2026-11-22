@@ -24,7 +24,7 @@ export const PlayingCard: React.FC<PlayingCardProps> = ({ suit, value, isFaceUp 
         className={`w-16 h-24 sm:w-20 sm:h-32 bg-primary/20 border-2 border-primary/40 rounded-xl flex items-center justify-center cursor-pointer hover:scale-105 transition-transform ${className}`}
       >
         <div className="w-12 h-20 sm:w-14 sm:h-24 border border-primary/20 rounded-lg flex items-center justify-center">
-            <span className="text-primary/40 font-black text-2xl">OIYO</span>
+            <span className="text-primary font-black text-2xl">OIYO</span>
         </div>
       </div>
     );

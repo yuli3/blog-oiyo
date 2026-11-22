@@ -417,7 +417,7 @@ const FinancialInvestmentTaxCalculator: React.FC<{ locale?: Locale }> = ({ local
           <p className="text-xs text-muted-foreground leading-relaxed">{t.tipText}</p>
         </div>
 
-        <p className="text-[10px] text-muted-foreground/60 leading-relaxed">{t.note}</p>
+        <p className="text-[10px] text-muted-foreground leading-relaxed">{t.note}</p>
       </div>
     </div>
   );
