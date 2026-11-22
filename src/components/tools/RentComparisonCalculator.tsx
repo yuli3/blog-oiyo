@@ -48,16 +48,16 @@ const RentComparisonCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale =
                         <h5 className="text-xs font-black text-primary uppercase tracking-widest">{t.wolse}</h5>
                         <div className="space-y-4">
                             <div>
-                                <label className="text-[10px] font-black text-primary/50 block mb-1">{t.deposit}</label>
+                                <label className="text-[10px] font-black text-primary block mb-1">{t.deposit}</label>
                                 <input type="number" value={wolseDep} onChange={(e) => setWolseDep(Number(e.target.value))} className="w-full p-4 bg-background border border-primary/20 rounded-2xl font-black text-md outline-none" />
                             </div>
                             <div>
-                                <label className="text-[10px] font-black text-primary/50 block mb-1">{t.rent}</label>
+                                <label className="text-[10px] font-black text-primary block mb-1">{t.rent}</label>
                                 <input type="number" value={wolseRent} onChange={(e) => setWolseRent(Number(e.target.value))} className="w-full p-4 bg-background border border-primary/20 rounded-2xl font-black text-md outline-none" />
                             </div>
                         </div>
                         <div className="pt-4 border-t border-primary/10">
-                            <p className="text-[10px] text-primary/60 uppercase">{locale === 'ko' ? '월 총 비용' : 'Monthly Total Cost'}</p>
+                            <p className="text-[10px] text-primary uppercase">{locale === 'ko' ? '월 총 비용' : 'Monthly Total Cost'}</p>
                             <p className="text-xl font-black text-primary">₩{Math.round(wolseCost).toLocaleString()}</p>
                         </div>
                     </div>

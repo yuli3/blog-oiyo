@@ -85,7 +85,7 @@ const TentsAndTrees: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) =>
                                     className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg flex items-center justify-center transition-all ${
                                         cell.type === 'tree' ? 'bg-emerald-100 text-emerald-700 cursor-default' :
                                         cell.type === 'tent' ? 'bg-rose-100 text-rose-700 shadow-md transform -translate-y-0.5' :
-                                        cell.type === 'grass' ? 'bg-muted/50 text-muted-foreground/30' : 'bg-background hover:bg-muted/20'
+                                        cell.type === 'grass' ? 'bg-muted/50 text-muted-foreground' : 'bg-background hover:bg-muted/20'
                                     } border border-border/40`}
                                 >
                                     {cell.type === 'tree' && <span className="text-xl">🌲</span>}

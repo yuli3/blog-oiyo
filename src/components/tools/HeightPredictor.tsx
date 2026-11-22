@@ -44,7 +44,7 @@ const HeightPredictor: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) 
                     <p className="text-[10px] font-black text-primary uppercase tracking-[0.3em] mb-4">{t.result}</p>
                     <div className="flex items-center justify-center gap-4">
                         <h2 className="text-7xl font-black text-primary">{predictedHeight.toFixed(1)}</h2>
-                        <span className="text-2xl font-black text-primary/60">cm</span>
+                        <span className="text-2xl font-black text-primary">cm</span>
                     </div>
                     
                     {/* Visual ruler-like element */}

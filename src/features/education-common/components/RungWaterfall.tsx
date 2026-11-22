@@ -104,7 +104,7 @@ export default function RungWaterfall({ title, description, steps, unitLabel = "
   return (
     <figure className="my-7 sm:my-12 rounded-3xl border border-border/40 bg-muted/20 p-4 sm:p-8">
       {title && (
-        <h3 className="mb-2 text-center text-sm font-bold uppercase tracking-[0.2em] text-primary/60">{title}</h3>
+        <h3 className="mb-2 text-center text-sm font-bold uppercase tracking-[0.2em] text-primary">{title}</h3>
       )}
       {description && (
         <p

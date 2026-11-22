@@ -233,7 +233,7 @@ const ComprehensiveIncomeTaxCalc: React.FC<{ locale?: Locale }> = ({ locale = 'k
         </div>
       </div>
 
-      <p className="text-[10px] text-muted-foreground/60 leading-relaxed">{t.note}</p>
+      <p className="text-[10px] text-muted-foreground leading-relaxed">{t.note}</p>
     </div>
   );
 };

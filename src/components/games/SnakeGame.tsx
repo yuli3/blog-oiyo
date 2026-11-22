@@ -154,7 +154,7 @@ const SnakeGame: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = 'ko' }) => {
                 )}
             </div>
 
-            <div className="mt-5 sm:mt-8 flex justify-between text-[10px] font-bold text-muted-foreground/50 uppercase tracking-widest">
+            <div className="mt-5 sm:mt-8 flex justify-between text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
                 <span>Directing with arrows</span>
                 <span>Best Career: {best}</span>
             </div>

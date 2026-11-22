@@ -48,11 +48,11 @@ const StockAverageCalculator: React.FC<{ locale?: 'ko' | 'en' }> = ({ locale = '
                         </div>
                         <div className="space-y-3">
                             <div>
-                                <label className="text-[10px] font-black text-primary/50 block mb-1">{t.price}</label>
+                                <label className="text-[10px] font-black text-primary block mb-1">{t.price}</label>
                                 <input type="number" value={addPrice} onChange={(e) => setAddPrice(Number(e.target.value))} className="w-full p-3 bg-background border border-primary/20 rounded-xl font-black outline-none focus:ring-1 focus:ring-primary" />
                             </div>
                             <div>
-                                <label className="text-[10px] font-black text-primary/50 block mb-1">{t.quantity}</label>
+                                <label className="text-[10px] font-black text-primary block mb-1">{t.quantity}</label>
                                 <input type="number" value={addQty} onChange={(e) => setAddQty(Number(e.target.value))} className="w-full p-3 bg-background border border-primary/20 rounded-xl font-black outline-none focus:ring-1 focus:ring-primary" />
                             </div>
                         </div>

@@ -336,7 +336,7 @@ const GlobalIncomeTaxCalculator: React.FC<{ locale?: Locale }> = ({ locale = 'en
           )}
 
           {/* Note */}
-          <p className="text-[10px] text-muted-foreground/60 leading-relaxed">{t.disclaimer} {config.notes[locale]}</p>
+          <p className="text-[10px] text-muted-foreground leading-relaxed">{t.disclaimer} {config.notes[locale]}</p>
         </div>
       )}
     </div>
