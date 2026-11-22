@@ -56,8 +56,8 @@ export const GET: APIRoute = async () => {
   const sameAsMap = new Map<string, Record<string, string>>();
 
   for (const p of posts) {
-    const locale = p.data.locale ?? p.slug.split("/")[0];
-    const concept = p.slug.split("/").slice(1).join("/");
+    const locale = p.data.locale ?? p.id.split("/")[0];
+    const concept = p.id.split("/").slice(1).join("/");
 
     if (p.data.series) {
       const key = `series:${locale}:${p.data.series}`;
@@ -66,11 +66,11 @@ export const GET: APIRoute = async () => {
         s = { id: key, kind: "series", locale, name: p.data.series, members: [] };
         setMap.set(key, s);
       }
-      s.members.push(p.slug);
+      s.members.push(p.id);
     }
 
     const tuple = sameAsMap.get(concept) ?? {};
-    tuple[locale] = url(p.slug);
+    tuple[locale] = url(p.id);
     sameAsMap.set(concept, tuple);
 
     // count this guide toward any hub topic it is tagged with (once per topic)

@@ -28,12 +28,12 @@ const publishedCollectionFilter = ({
   data.draft !== true && !isRedirectStub(data);
 
 const chapterOf = (post: CollectionEntry<"blog">): number =>
-  post.data.chapter ?? parseInt(post.slug.match(/-ch(\d+)$/)?.[1] ?? "0", 10);
+  post.data.chapter ?? parseInt(post.id.match(/-ch(\d+)$/)?.[1] ?? "0", 10);
 
 export function seriesKeyOf(post: CollectionEntry<"blog">): string {
   // frontmatter series is authoritative when present (e.g. myth-dictionary
   // chapters live under meaning-of-myth-* slugs); slug prefix otherwise.
-  return post.data.series || post.slug.split("/").slice(1).join("/").replace(/-ch\d+$/, "");
+  return post.data.series || post.id.split("/").slice(1).join("/").replace(/-ch\d+$/, "");
 }
 
 /**

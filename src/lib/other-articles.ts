@@ -37,7 +37,7 @@ const LIFE_MONEY_ARTICLE_OVERRIDES = new Set([
 ]);
 
 export function otherGroupOf(post: CollectionEntry<"blog">): OtherGroup {
-  const base = post.slug.split("/").at(-1) ?? "";
+  const base = post.id.split("/").at(-1) ?? "";
   if (CAREER_ARTICLE_OVERRIDES.has(base) || CAREER_SLUG_PREFIXES.some((prefix) => base.startsWith(prefix))) return "career-credentials";
   if (LIFE_MONEY_ARTICLE_OVERRIDES.has(base) || LIFE_MONEY_SLUG_PREFIXES.some((prefix) => base.startsWith(prefix))) return "life-money";
   if (CAREER_SERIES.has(String(post.data.series ?? ""))) return "career-credentials";

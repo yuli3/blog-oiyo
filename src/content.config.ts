@@ -1,6 +1,9 @@
 import { defineCollection, z } from 'astro:content';
+import { glob } from 'astro/loaders';
 
 const blog = defineCollection({
+  // Astro 6+ removed legacy collections; the glob loader keeps the same ids (= old slugs).
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/blog' }),
   schema: z.object({
     // The corpus now includes guide-style and localization-aware titles/descriptions.
     // Keep minimum quality gates, but allow a wider editorial envelope for stable builds.
