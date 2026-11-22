@@ -14,12 +14,12 @@ const translations = await getTranslations(locale as Locale);
 
 // Build a serializable search index at build time
 const allPosts = await getCollection("blog", (post) => {
-  const postLocale = post.slug.split("/")[0];
+  const postLocale = post.id.split("/")[0];
   return !post.data.draft && postLocale === locale;
 });
 
 const searchIndex = allPosts.map((post) => {
-  const parts = post.slug.split("/");
+  const parts = post.id.split("/");
   const slug = parts.slice(1).join("/");
   return {
     slug: `/${locale}/${slug}/`,

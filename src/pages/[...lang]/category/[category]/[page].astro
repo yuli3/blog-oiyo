@@ -58,8 +58,8 @@ export async function getStaticPaths() {
       );
 
       categoryPosts.sort((a, b) => {
-        const aMatch = a.slug.match(/-ch(\d+)$/);
-        const bMatch = b.slug.match(/-ch(\d+)$/);
+        const aMatch = a.id.match(/-ch(\d+)$/);
+        const bMatch = b.id.match(/-ch(\d+)$/);
         if (aMatch && bMatch) {
           return parseInt(aMatch[1], 10) - parseInt(bMatch[1], 10);
         }
@@ -122,7 +122,7 @@ const catalogJsonLd = JSON.stringify(
     inLanguage: locale,
     items: pageData.map((p: (typeof pageData)[number]) => ({
       name: p.data.title,
-      url: `${siteConfig.url}/${locale}/${p.slug.split("/").slice(1).join("/")}/`,
+      url: `${siteConfig.url}/${locale}/${p.id.split("/").slice(1).join("/")}/`,
     })),
   }),
 );

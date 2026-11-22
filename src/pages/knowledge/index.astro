@@ -17,7 +17,7 @@ const locales = siteConfig.locales;
 const norm = (s: string) => s.toLowerCase().trim().replace(/[^\p{L}\p{N}]+/gu, "-").replace(/^-|-$/g, "");
 const enGuideTagCount = new Map<string, number>();
 for (const p of posts) {
-  if ((p.data.locale ?? p.slug.split("/")[0]) !== "en") continue;
+  if ((p.data.locale ?? p.id.split("/")[0]) !== "en") continue;
   for (const tag of p.data.tags ?? []) {
     enGuideTagCount.set(norm(tag), (enGuideTagCount.get(norm(tag)) ?? 0) + 1);
   }

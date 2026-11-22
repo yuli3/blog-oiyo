@@ -1,7 +1,7 @@
 ---
 import generatedHeroImages from "../../data/generated-hero-images.json";
 import generatedSeriesCovers from "../../data/generated-series-covers.json";
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ChapterSidebar from "../../components/ChapterSidebar.astro";
 import BlogCTA from "../../components/BlogCTA.astro";
@@ -26,7 +26,7 @@ export async function getStaticPaths() {
   // Group by locale for non-series navigation
   const byLocale: Record<string, typeof allPosts> = {};
   for (const post of allPosts) {
-    const lang = post.slug.split("/")[0];
+    const lang = post.id.split("/")[0];
     (byLocale[lang] ??= []).push(post);
   }
   for (const list of Object.values(byLocale)) {
@@ -36,24 +36,24 @@ export async function getStaticPaths() {
   // Keep sibling metadata: legacy slugs can name different courses by locale.
   const siblingsByBaseSlug: Record<string, typeof allPosts> = {};
   for (const post of allPosts) {
-    const parts = post.slug.split("/");
+    const parts = post.id.split("/");
     const baseSlug = parts.slice(1).join("/");
     (siblingsByBaseSlug[baseSlug] ??= []).push(post);
   }
 
   const chapterOf = (p: (typeof allPosts)[0]) =>
-    p.data.chapter ?? parseInt(p.slug.match(/-ch(\d+)$/)?.[1] ?? "0", 10);
+    p.data.chapter ?? parseInt(p.id.match(/-ch(\d+)$/)?.[1] ?? "0", 10);
   const isStub = (p: (typeof allPosts)[0]) => Boolean(p.data.redirectTo || p.data.redirectToBlog || p.data.noindex);
   const seriesKeyOf = (p: (typeof allPosts)[0]): string | null => {
     // 장 번호가 없는 글(같은 series 이름을 단 낱개 가이드·로드맵)은 강의 순서에 끼우지 않는다.
     if (isStub(p) || chapterOf(p) <= 0) return null;
-    const locale = p.slug.split("/")[0];
+    const locale = p.id.split("/")[0];
     if (p.data.series) return `${locale}::${p.data.series}`;
-    return /-ch\d+$/.test(p.slug) ? p.slug.replace(/-ch\d+$/, "") : null;
+    return /-ch\d+$/.test(p.id) ? p.id.replace(/-ch\d+$/, "") : null;
   };
 
   return allPosts.map((post) => {
-    const parts = post.slug.split("/");
+    const parts = post.id.split("/");
     const lang = parts[0];
     const slug = parts.slice(1).join("/");
 
@@ -70,9 +70,9 @@ export async function getStaticPaths() {
     if (seriesKey) {
       const sorted = allPosts
         .filter((p) => seriesKeyOf(p) === seriesKey)
-        .sort((a, b) => chapterOf(a) - chapterOf(b) || a.slug.localeCompare(b.slug));
+        .sort((a, b) => chapterOf(a) - chapterOf(b) || a.id.localeCompare(b.id));
       seriesPosts = sorted;
-      const idx = sorted.findIndex((p) => p.slug === post.slug);
+      const idx = sorted.findIndex((p) => p.id === post.id);
       prevPost = idx > 0 ? sorted[idx - 1] : null;
       nextPost = idx < sorted.length - 1 ? sorted[idx + 1] : null;
     } else {
@@ -101,7 +101,7 @@ export async function getStaticPaths() {
     slugHash = Math.abs(slugHash);
 
     const candidates = (byLocale[lang] ?? []).filter(
-      (p) => p.slug !== post.slug && !isStub(p) && (!seriesKey || seriesKeyOf(p) !== seriesKey),
+      (p) => p.id !== post.id && !isStub(p) && (!seriesKey || seriesKeyOf(p) !== seriesKey),
     );
 
     const scored = candidates
@@ -116,7 +116,7 @@ export async function getStaticPaths() {
         return { p, score };
       })
       .filter((x) => x.score >= 2)
-      .sort((a, b) => b.score - a.score || a.p.slug.localeCompare(b.p.slug));
+      .sort((a, b) => b.score - a.score || a.p.id.localeCompare(b.p.id));
 
     const picked: typeof allPosts = [];
     const seenSeries = new Set<string>();
@@ -133,9 +133,9 @@ export async function getStaticPaths() {
 
     // Backfill from the same category (preferring chapter 1 of distinct series, rotated by slugHash)
     if (picked.length < RELATED_MAX && myCategory) {
-      const chosen = new Set(picked.map((p) => p.slug));
+      const chosen = new Set(picked.map((p) => p.id));
       const backfill = candidates
-        .filter((p) => !chosen.has(p.slug) && p.data.category === myCategory)
+        .filter((p) => !chosen.has(p.id) && p.data.category === myCategory)
         .sort((a, b) => {
           const aEntry = chapterOf(a) <= 1 ? 0 : 1;
           const bEntry = chapterOf(b) <= 1 ? 0 : 1;
@@ -154,7 +154,7 @@ export async function getStaticPaths() {
     }
 
     const relatedPosts = picked.map((p) => ({
-      slug: p.slug.split("/").slice(1).join("/"),
+      slug: p.id.split("/").slice(1).join("/"),
       title: p.data.title,
     }));
 
@@ -166,7 +166,7 @@ export async function getStaticPaths() {
     // here, and leave unresolved display-name mappings for the content audit.
     const availableLocales = (siblingsByBaseSlug[slug] ?? [post])
       .filter((sibling) => {
-        if (sibling.slug === post.slug) return true;
+        if (sibling.id === post.id) return true;
         const academic = getTrackFromData(post.data) === "academy" ||
           getTrackFromData(sibling.data) === "academy";
         if (!academic) return true;
@@ -178,7 +178,7 @@ export async function getStaticPaths() {
         }
         return true;
       })
-      .map((sibling) => sibling.slug.split("/")[0]);
+      .map((sibling) => sibling.id.split("/")[0]);
 
     return {
       params: { lang, slug },
@@ -192,9 +192,9 @@ const RELATED_HEADING: Record<string, string> = {
   zh: "相关文章", fr: "Articles liés", es: "Artículos relacionados",
 };
 const { post, locale, prevPost, nextPost, seriesPosts, availableLocales, relatedPosts } = Astro.props;
-const { Content } = await post.render();
+const { Content } = await render(post);
 // 2026-11-06: route-specific artwork avoids replacing unrelated existing heroes.
-const generatedHero = (generatedHeroImages as Record<string, string>)[post.slug.split("/").slice(1).join("/")];
+const generatedHero = (generatedHeroImages as Record<string, string>)[post.id.split("/").slice(1).join("/")];
 // 2026-11-11: course covers are keyed by a chapter slug; its "-chN"-less prefix names the course.
 // frontmatter series can merge two courses (labor-law) or be absent (economics-core), so the
 // post's own prefix wins, and a chapter outside any series without its own hero shows the cover.
@@ -211,12 +211,12 @@ const coverByPrefix: Record<string, string> = Object.fromEntries(
     .filter(([key]) => prefixCounts[coursePrefix(key)] === 1)
     .map(([key, src]) => [coursePrefix(key), src]),
 );
-const ownCourseCover = coverByPrefix[coursePrefix(post.slug.split("/").slice(1).join("/"))];
+const ownCourseCover = coverByPrefix[coursePrefix(post.id.split("/").slice(1).join("/"))];
 const heroImage = generatedHero ?? post.data.heroImage ?? (seriesPosts ? undefined : ownCourseCover);
 const showCitation = locale === "ko" && [
   "ko/academy-tax-law-basic-ch1",
   "ko/academy-accounting-basics-ch2",
-].includes(post.slug);
+].includes(post.id);
 const t = await getTranslations(locale as Locale);
 const categoryNames = (t.category.names ?? {}) as Record<string, string>;
 // Strip surrounding quotes that some frontmatter values may carry (e.g. category: "Psychology")
@@ -229,19 +229,19 @@ const MEDICAL_CATEGORIES = new Set(["medicine", "nursing", "health"]);
 const showMedicalDisclaimer = MEDICAL_CATEGORIES.has(rawCategory.trim().toLowerCase());
 const mdxComponents = getRegisteredMdxComponents(track);
 
-const chMatch = post.slug.match(/-ch(\d+)$/);
+const chMatch = post.id.match(/-ch(\d+)$/);
 // 장 번호는 frontmatter chapter 가 정본, 없으면 슬러그의 -chN.
-const chapterNumOf = (p: { slug: string; data: { chapter?: number } }): number | null =>
-  p.data.chapter ?? (p.slug.match(/-ch(\d+)$/) ? parseInt(p.slug.match(/-ch(\d+)$/)![1], 10) : null);
+const chapterNumOf = (p: { id: string; data: { chapter?: number } }): number | null =>
+  p.data.chapter ?? (p.id.match(/-ch(\d+)$/) ? parseInt(p.id.match(/-ch(\d+)$/)![1], 10) : null);
 const chapter = post.data.chapter ?? (chMatch ? parseInt(chMatch[1], 10) : null);
 const isSeriesPost = chapter !== null && seriesPosts !== null && seriesPosts.length > 0;
 const currentSeriesPosition = isSeriesPost
-  ? seriesPosts!.findIndex((seriesPost) => seriesPost.slug === post.slug) + 1
+  ? seriesPosts!.findIndex((seriesPost) => seriesPost.id === post.id) + 1
   : 0;
 
 // Derive series name for sidebar — prefer frontmatter `series` field over slug-derived name
 const rawSeriesKey = isSeriesPost
-  ? (post.data.series ?? post.slug.split("/").slice(1).join("/").replace(/-ch\d+$/, ""))
+  ? (post.data.series ?? post.id.split("/").slice(1).join("/").replace(/-ch\d+$/, ""))
   : null;
 const seriesHubHref =
   rawSeriesKey && isUrlSafeSeriesKey(rawSeriesKey) && seriesPosts && seriesPosts.length >= 2
@@ -254,9 +254,9 @@ const seriesName = isSeriesPost && rawSeriesKey
 // 2026-11-06: the course cover accompanies its existing chapter navigation; chapter heroes remain distinct.
 // 2026-11-11: any chapter listed in generated-series-covers.json lends its cover to the whole series.
 const seriesCoverKeys = (seriesPosts ?? [])
-  .map((entry: { slug: string }) => entry.slug.split("/").slice(1).join("/"))
+  .map((entry: { id: string }) => entry.id.split("/").slice(1).join("/"))
   .filter((key: string) => key in seriesCoverMap);
-const ownPrefix = coursePrefix(post.slug.split("/").slice(1).join("/"));
+const ownPrefix = coursePrefix(post.id.split("/").slice(1).join("/"));
 const seriesCoverKey = seriesCoverKeys.find((key: string) => coursePrefix(key) === ownPrefix) ?? seriesCoverKeys[0];
 const seriesCover = (seriesCoverKey && coursePrefix(seriesCoverKey) === ownPrefix ? seriesCoverMap[seriesCoverKey] : undefined)
   ?? ownCourseCover
@@ -276,11 +276,11 @@ if (isSeriesPost && chapter !== null) {
       name: `${seriesName} Course`,
       description: `A ${totalChapters}-chapter educational series on ${seriesName}.`,
       // 과정 첫 장의 실제 주소 — 슬러그 규칙(-ch1)이 아니라 정렬된 첫 장을 쓴다.
-      url: `${siteConfig.url}/${locale}/${seriesPosts![0].slug.split("/").slice(1).join("/")}/`,
+      url: `${siteConfig.url}/${locale}/${seriesPosts![0].id.split("/").slice(1).join("/")}/`,
     },
     position: currentSeriesPosition,
     numberOfItems: totalChapters,
-    url: `${siteConfig.url}/${locale}/${post.slug.split("/").slice(1).join("/")}/`,
+    url: `${siteConfig.url}/${locale}/${post.id.split("/").slice(1).join("/")}/`,
   });
 }
 
@@ -289,7 +289,7 @@ if (isSeriesPost && chapter !== null) {
 let courseLandingJsonLd: string | null = null;
 if (isSeriesPost && chapter === 1 && seriesName && track === "academy") {
   const chapterUrl = (p: (typeof seriesPosts)[number]) =>
-    `${siteConfig.url}/${locale}/${p.slug.split("/").slice(1).join("/")}/`;
+    `${siteConfig.url}/${locale}/${p.id.split("/").slice(1).join("/")}/`;
   const totalWords = seriesPosts!.reduce(
     (sum, p) => sum + (p.body ?? "").split(/\s+/).filter(Boolean).length,
     0,
@@ -495,7 +495,7 @@ const redirectToBlog = post.data.redirectToBlog;
               {isSeriesPost && (
                 <div class="ml-auto lg:hidden flex items-center gap-2">
                   {prevPost && (() => {
-                    const ps = prevPost.slug.split("/");
+                    const ps = prevPost.id.split("/");
                     return (
                       <a
                         href={`/${locale}/${ps.slice(1).join("/")}/`}
@@ -508,7 +508,7 @@ const redirectToBlog = post.data.redirectToBlog;
                   })()}
                   <span class="text-[10px] font-black text-muted-foreground">{currentSeriesPosition}/{seriesPosts!.length}</span>
                   {nextPost && (() => {
-                    const ns = nextPost.slug.split("/");
+                    const ns = nextPost.id.split("/");
                     return (
                       <a
                         href={`/${locale}/${ns.slice(1).join("/")}/`}
@@ -541,7 +541,7 @@ const redirectToBlog = post.data.redirectToBlog;
                 <!-- Quick prev/next for desktop -->
                 <div class="flex items-center gap-1.5 flex-shrink-0">
                   {prevPost && (() => {
-                    const ps = prevPost.slug.split("/");
+                    const ps = prevPost.id.split("/");
                     return (
                       <a
                         href={`/${locale}/${ps.slice(1).join("/")}/`}
@@ -553,7 +553,7 @@ const redirectToBlog = post.data.redirectToBlog;
                     );
                   })()}
                   {nextPost && (() => {
-                    const ns = nextPost.slug.split("/");
+                    const ns = nextPost.id.split("/");
                     return (
                       <a
                         href={`/${locale}/${ns.slice(1).join("/")}/`}
@@ -600,7 +600,7 @@ const redirectToBlog = post.data.redirectToBlog;
           <!-- Author Profile Component for E-E-A-T SEO -->
           <AuthorProfile authorName={post.data.author} locale={locale} />
 
-          <MysticTrinity slug={post.slug.split("/").slice(1).join("/")} locale={locale} />
+          <MysticTrinity slug={post.id.split("/").slice(1).join("/")} locale={locale} />
 
           {relatedPosts && relatedPosts.length > 0 && (
             <aside class="mt-6 sm:mt-10 not-prose" aria-label="Related articles">
@@ -626,7 +626,7 @@ const redirectToBlog = post.data.redirectToBlog;
           {(prevPost || nextPost) && (
             <nav class="mt-8 sm:mt-16 grid grid-cols-2 gap-4 not-prose" aria-label="Article navigation">
               {prevPost ? (() => {
-                const prevParts = prevPost.slug.split("/");
+                const prevParts = prevPost.id.split("/");
                 const prevSlug = prevParts.slice(1).join("/");
                 const prevCh = chapterNumOf(prevPost);
                 return (
@@ -646,7 +646,7 @@ const redirectToBlog = post.data.redirectToBlog;
                 );
               })() : <div />}
               {nextPost ? (() => {
-                const nextParts = nextPost.slug.split("/");
+                const nextParts = nextPost.id.split("/");
                 const nextSlug = nextParts.slice(1).join("/");
                 const nextCh = chapterNumOf(nextPost);
                 return (

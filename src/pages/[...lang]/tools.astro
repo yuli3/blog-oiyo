@@ -1381,7 +1381,7 @@ const curatedSlugs = new Set(categories.flatMap((c) => c.tools.map((t) => t.slug
 const consolidatedAliases = new Set(["grayscale-converter", "image-grayscale", "percent-converter"]);
 const interactiveByBucket = new Map<string, Tool[]>();
 for (const post of interactivePosts) {
-  const slug = post.slug.split("/").slice(1).join("/");
+  const slug = post.id.split("/").slice(1).join("/");
   if (!slug || curatedSlugs.has(slug) || consolidatedAliases.has(slug) || oiyoOnlyInteractive.has(slug)) continue;
   if (EXCLUDED_CATEGORIES.has(post.data.category ?? "")) continue;
   // redirectTo 를 가진 interactive 글은 oiyo 정본으로 접힌 중복이다 — 카드째

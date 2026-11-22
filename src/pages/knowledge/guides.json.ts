@@ -13,13 +13,13 @@ export const GET: APIRoute = async () => {
 
   const guides = posts
     .map((p) => {
-      const localeFromSlug = p.slug.split("/")[0];
-      const concept = p.slug.split("/").slice(1).join("/");
+      const localeFromSlug = p.id.split("/")[0];
+      const concept = p.id.split("/").slice(1).join("/");
       const modified = p.data.updatedDate ?? p.data.pubDate;
       return {
-        id: p.slug,
+        id: p.id,
         concept,
-        url: new URL(`/${p.slug}/`, siteConfig.url).href,
+        url: new URL(`/${p.id}/`, siteConfig.url).href,
         title: p.data.title,
         summary: p.data.description,
         track: p.data.track ?? null,

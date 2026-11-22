@@ -4,7 +4,7 @@
  */
 
 export type RelatedPostLike = {
-  slug: string;
+  id: string;
   data: {
     draft?: boolean;
     tags?: string[];
@@ -33,9 +33,9 @@ export function resolveCuratedPosts<T extends RelatedPostLike>(
   const byFree = new Map<string, T>();
   for (const post of allPosts) {
     if (post.data.draft) continue;
-    const parts = post.slug.split("/");
+    const parts = post.id.split("/");
     if (parts[0] !== locale) continue;
-    byFree.set(localeFreeSlug(post.slug), post);
+    byFree.set(localeFreeSlug(post.id), post);
   }
   const out: T[] = [];
   for (const s of slugs) {
@@ -62,8 +62,8 @@ export function scoreRelatedPosts<T extends RelatedPostLike>(
   const { locale, currentSlug, tags = [], category, maxItems = 3 } = opts;
   return allPosts
     .filter((post) => !post.data.draft)
-    .filter((post) => post.slug !== currentSlug)
-    .filter((post) => post.slug.split("/")[0] === locale)
+    .filter((post) => post.id !== currentSlug)
+    .filter((post) => post.id.split("/")[0] === locale)
     .map((post) => {
       const sharedTags = (post.data.tags ?? []).filter((t) => tags.includes(t));
       const categoryBonus = category && post.data.category === category ? 2 : 0;
@@ -77,10 +77,10 @@ export function scoreRelatedPosts<T extends RelatedPostLike>(
 
 /** Pick first-chapter locale-free slugs from priority series entries. */
 export function firstChapterSlugs(
-  series: { firstPost: { slug: string } }[],
+  series: { firstPost: { id: string } }[],
   maxItems = 3,
 ): string[] {
-  return series.slice(0, maxItems).map((s) => localeFreeSlug(s.firstPost.slug));
+  return series.slice(0, maxItems).map((s) => localeFreeSlug(s.firstPost.id));
 }
 
 export const NEXT_READ_LABELS: Record<string, string> = {

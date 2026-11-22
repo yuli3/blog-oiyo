@@ -21,12 +21,12 @@ export const GET: APIRoute = async () => {
   >();
 
   for (const post of posts) {
-    const locale = post.data.locale ?? post.slug.split("/")[0] ?? "en";
+    const locale = post.data.locale ?? post.id.split("/")[0] ?? "en";
     if (locale !== "en" && locale !== "ko") continue;
     const category = post.data.category ?? "General";
     const list = byCategory.get(category) ?? [];
     list.push({
-      slug: post.slug,
+      slug: post.id,
       title: post.data.title,
       summary: post.data.description ?? "",
       locale,
