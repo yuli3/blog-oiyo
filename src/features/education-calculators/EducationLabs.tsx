@@ -3,12 +3,27 @@ import { Card } from "@/components/ui/card";
 import Target from 'lucide-react/dist/esm/icons/target'
 import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
 import { CVPChart } from "@/features/education-calculators/FinancialCharts";
+import { drawSampleRates } from "@/lib/sampling-lab";
+
+type Lang = "ko" | "en";
+
+const CVP_COPY = {
+  ko: { title: "CVP 손익분기점 실험실", p: "단위당 판매가격 (P)", vc: "단위당 변동원가 (VC)", fc: "총 고정원가 (FC)", key: "핵심 지표", cm: "단위당 공헌이익", cmr: "공헌이익률", bep: "손익분기 판매량", won: (v: number) => `${v.toLocaleString("ko-KR")}원`, units: (v: number) => `${v.toLocaleString("ko-KR")}개`, viz: "손익분기점 시각화" },
+  en: { title: "CVP break-even lab", p: "Selling price per unit (P)", vc: "Variable cost per unit (VC)", fc: "Total fixed cost (FC)", key: "Key figures", cm: "Contribution margin per unit", cmr: "Contribution margin ratio", bep: "Break-even volume", won: (v: number) => `₩${v.toLocaleString("en-US")}`, units: (v: number) => `${v.toLocaleString("en-US")} units`, viz: "Break-even chart" },
+} as const;
+
+const SAMPLING_COPY = {
+  ko: { title: "표본오차 실험실", rate: "모집단 비율 (예: 찬성률, %)", n: "표본 크기 (n)", trials: "반복 횟수", summary: "결과 요약", avg: "평균 추정치", spread: "변동성 (표준편차)", dist: "표본별 추정치 분포", redraw: "다시 뽑기", note: "* 표본 크기가 커질수록 평균은 안정되고 변동성이 줄어듭니다." },
+  en: { title: "Sampling error lab", rate: "Population rate (e.g. approval, %)", n: "Sample size (n)", trials: "Repetitions", summary: "Summary", avg: "Average estimate", spread: "Spread (standard deviation)", dist: "Estimate from each sample", redraw: "Draw again", note: "* As the sample grows, the average settles and the spread shrinks." },
+} as const;
+
 
 /**
  * CVP Light Lab (Education Magazine)
  * Focused on break-even intuition with live chart
  */
-export const CVPLab: React.FC = () => {
+export const CVPLab: React.FC<{ lang?: Lang }> = ({ lang = "ko" }) => {
+  const c = CVP_COPY[lang];
   const [sellingPrice, setSellingPrice] = useState<number>(1200);
   const [variableCost, setVariableCost] = useState<number>(700);
   const [fixedCost, setFixedCost] = useState<number>(500000);
@@ -28,13 +43,13 @@ export const CVPLab: React.FC = () => {
     <Card className="p-4 sm:p-6 bg-card border-border shadow-xl mt-5 sm:mt-8">
       <div className="flex items-center gap-2 mb-6 text-foreground border-b pb-4">
         <Target className="text-green-500" />
-        <h3 className="text-xl font-bold">CVP 손익분기점 라보</h3>
+        <h3 className="text-xl font-bold">{c.title}</h3>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="space-y-4 lg:col-span-1">
           <div className="p-4 rounded-xl border border-border bg-card">
-            <label className="text-xs font-bold text-muted-foreground block mb-2">단위당 판매가격 (P)</label>
+            <label className="text-xs font-bold text-muted-foreground block mb-2">{c.p}</label>
             <input
               type="number"
               value={sellingPrice}
@@ -43,7 +58,7 @@ export const CVPLab: React.FC = () => {
             />
           </div>
           <div className="p-4 rounded-xl border border-border bg-card">
-            <label className="text-xs font-bold text-muted-foreground block mb-2">단위당 변동원가 (VC)</label>
+            <label className="text-xs font-bold text-muted-foreground block mb-2">{c.vc}</label>
             <input
               type="number"
               value={variableCost}
@@ -52,7 +67,7 @@ export const CVPLab: React.FC = () => {
             />
           </div>
           <div className="p-4 rounded-xl border border-border bg-card">
-            <label className="text-xs font-bold text-muted-foreground block mb-2">총 고정원가 (FC)</label>
+            <label className="text-xs font-bold text-muted-foreground block mb-2">{c.fc}</label>
             <input
               type="number"
               value={fixedCost}
@@ -62,26 +77,26 @@ export const CVPLab: React.FC = () => {
           </div>
 
           <div className="p-4 rounded-xl border border-green-200 bg-green-50/50">
-            <div className="text-[10px] font-black uppercase tracking-widest text-green-500 mb-3">
-              핵심 지표
+            <div className="text-[10px] font-black uppercase tracking-widest text-green-700 mb-3">
+              {c.key}
             </div>
             <div className="space-y-3 text-sm">
               <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">단위당 공헌이익</span>
+                <span className="text-muted-foreground">{c.cm}</span>
                 <span className="font-mono font-bold text-foreground">
-                  {contributionMargin.toLocaleString()}원
+                  {c.won(contributionMargin)}
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">공헌이익률</span>
+                <span className="text-muted-foreground">{c.cmr}</span>
                 <span className="font-mono font-bold text-foreground">
                   {contributionMarginRatio.toFixed(1)}%
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">손익분기 판매량</span>
-                <span className="font-mono font-bold text-green-600">
-                  {breakEvenPoint.toLocaleString()} units
+                <span className="text-muted-foreground">{c.bep}</span>
+                <span className="font-mono font-bold text-green-700">
+                  {c.units(breakEvenPoint)}
                 </span>
               </div>
             </div>
@@ -90,13 +105,14 @@ export const CVPLab: React.FC = () => {
 
         <div className="lg:col-span-2">
           <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3">
-            <TrendingUp className="text-green-500" size={14} /> 손익분기점 시각화
+            <TrendingUp className="text-green-500" size={14} /> {c.viz}
           </div>
           <CVPChart
             sellingPrice={sellingPrice}
             variableCost={variableCost}
             fixedCost={fixedCost}
             maxVolume={Math.max(1200, breakEvenPoint * 1.6)}
+            lang={lang}
           />
         </div>
       </div>
@@ -108,23 +124,17 @@ export const CVPLab: React.FC = () => {
  * Sampling Error Lab (Statistics Magazine)
  * Demonstrates how sample size affects estimate stability
  */
-export const SamplingErrorLab: React.FC = () => {
+export const SamplingErrorLab: React.FC<{ lang?: Lang }> = ({ lang = "ko" }) => {
+  const c = SAMPLING_COPY[lang];
+  const [seed, setSeed] = useState<number>(1);
   const [populationRate, setPopulationRate] = useState<number>(55);
   const [sampleSize, setSampleSize] = useState<number>(30);
   const [trials, setTrials] = useState<number>(50);
 
-  const results = useMemo(() => {
-    const p = populationRate / 100;
-    const sampleResults: number[] = [];
-    for (let t = 0; t < trials; t += 1) {
-      let success = 0;
-      for (let i = 0; i < sampleSize; i += 1) {
-        if (Math.random() < p) success += 1;
-      }
-      sampleResults.push((success / sampleSize) * 100);
-    }
-    return sampleResults;
-  }, [populationRate, sampleSize, trials]);
+  const results = useMemo(
+    () => drawSampleRates(populationRate, sampleSize, trials, seed),
+    [populationRate, sampleSize, trials, seed],
+  );
 
   const avg = useMemo(() => {
     if (!results.length) return 0;
@@ -142,13 +152,13 @@ export const SamplingErrorLab: React.FC = () => {
     <Card className="p-4 sm:p-6 bg-card border-border shadow-xl mt-5 sm:mt-8">
       <div className="flex items-center gap-2 mb-6 text-foreground border-b pb-4">
         <Target className="text-green-500" />
-        <h3 className="text-xl font-bold">표본오차 실험실</h3>
+        <h3 className="text-xl font-bold">{c.title}</h3>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="space-y-4 lg:col-span-1">
           <div className="p-4 rounded-xl border border-border bg-card">
-            <label className="text-xs font-bold text-muted-foreground block mb-2">모집단 비율 (예: 찬성률, %)</label>
+            <label className="text-xs font-bold text-muted-foreground block mb-2">{c.rate}</label>
             <input
               type="number"
               value={populationRate}
@@ -157,7 +167,7 @@ export const SamplingErrorLab: React.FC = () => {
             />
           </div>
           <div className="p-4 rounded-xl border border-border bg-card">
-            <label className="text-xs font-bold text-muted-foreground block mb-2">표본 크기 (n)</label>
+            <label className="text-xs font-bold text-muted-foreground block mb-2">{c.n}</label>
             <input
               type="number"
               value={sampleSize}
@@ -166,7 +176,7 @@ export const SamplingErrorLab: React.FC = () => {
             />
           </div>
           <div className="p-4 rounded-xl border border-border bg-card">
-            <label className="text-xs font-bold text-muted-foreground block mb-2">반복 횟수</label>
+            <label className="text-xs font-bold text-muted-foreground block mb-2">{c.trials}</label>
             <input
               type="number"
               value={trials}
@@ -175,19 +185,19 @@ export const SamplingErrorLab: React.FC = () => {
             />
           </div>
           <div className="p-4 rounded-xl border border-green-200 bg-green-50/50">
-            <div className="text-[10px] font-black uppercase tracking-widest text-green-500 mb-3">
-              결과 요약
+            <div className="text-[10px] font-black uppercase tracking-widest text-green-700 mb-3">
+              {c.summary}
             </div>
             <div className="space-y-3 text-sm">
               <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">평균 추정치</span>
+                <span className="text-muted-foreground">{c.avg}</span>
                 <span className="font-mono font-bold text-foreground">
                   {avg.toFixed(1)}%
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">변동성 (표준편차)</span>
-                <span className="font-mono font-bold text-green-600">
+                <span className="text-muted-foreground">{c.spread}</span>
+                <span className="font-mono font-bold text-green-700">
                   {spread.toFixed(1)}
                 </span>
               </div>
@@ -197,7 +207,7 @@ export const SamplingErrorLab: React.FC = () => {
 
         <div className="lg:col-span-2">
           <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3">
-            표본별 추정치 분포
+            {c.dist}
           </div>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
             {results.map((value, idx) => (
@@ -210,8 +220,15 @@ export const SamplingErrorLab: React.FC = () => {
             ))}
           </div>
           <p className="text-xs text-muted-foreground mt-4 italic">
-            * 표본 크기가 커질수록 평균은 안정되고 변동성이 줄어듭니다.
+            {c.note}
           </p>
+          <button
+            type="button"
+            onClick={() => setSeed((v) => v + 1)}
+            className="mt-3 min-h-11 rounded-lg border border-border bg-card px-4 text-sm font-semibold text-foreground hover:bg-muted"
+          >
+            {c.redraw}
+          </button>
         </div>
       </div>
     </Card>
